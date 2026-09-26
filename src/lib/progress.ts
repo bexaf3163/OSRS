@@ -5,7 +5,7 @@ import type { GameMode, Progress, StepStatus } from '../types/index.ts';
 
 export const STORAGE_KEY = 'osrs-put:progress';
 export const EXPORT_APP = 'osrs-put';
-export const PROGRESS_VERSION = 2;
+export const PROGRESS_VERSION = 3;
 const MAX_NOTE = 5000;
 
 export interface Known {
@@ -14,25 +14,40 @@ export interface Known {
 }
 
 /**
- * Старый маршрут (V1, по osrs-guide.md) → V2. Шаг V2 считается сделанным, если сделаны все перечисленные шаги V1.
+ * Старый маршрут (V1, по osrs-guide.md) → текущий. Шаг считается сделанным, если сделаны все перечисленные шаги V1.
  * Переносится только то, где условие «Готово, когда» по сути совпадает. Остальное лежит в progress.legacy.
  */
 export const V2_FROM_V1: Record<string, string[]> = {
   'S1-01': ['S1-01'], 'S1-02': ['S1-02'], 'S1-03': ['S1-03'], 'S1-04': ['S1-04'], 'S1-05': ['S1-05'],
-  'S1-07': ['S1-06'], 'S1-08': ['S1-07'], 'S1-09': ['S1-10'], 'S1-10': ['S2-02'], 'S1-11': ['S1-09'],
+  'S1-06': ['S1-06'], 'S1-07': ['S1-07'], 'S1-08': ['S1-10'], 'S1-09': ['S2-02'], 'S1-11': ['S1-09'], 'S1-12': ['S1-11'],
   'S2-01': ['S2-03'], 'S2-02': ['S2-07'], 'S2-03': ['S2-09'], 'S2-05': ['S2-04'], 'S2-06': ['S2-01'],
   'S2-07': ['S3-03'], 'S2-08': ['S3-05'], 'S2-09': ['S2-05'], 'S2-10': ['S2-06'], 'S2-11': ['S2-08'],
   'S2-12': ['S2-10'], 'S2-13': ['S2-12'],
   'S3-01': ['S3-01'], 'S3-02': ['S3-06'], 'S3-03': ['S3-08'], 'S3-04': ['S3-09'], 'S3-05': ['S3-07'],
-  'S3-07': ['S3-10'], 'S3-08': ['S4-05'],
+  'S3-08': ['S3-10'], 'S3-09': ['S4-05'],
   'S4-01': ['S4-01'], 'S4-02': ['S4-02'], 'S4-03': ['S4-03'], 'S4-04': ['S4-06'], 'S4-05': ['S4-07', 'S4-08'],
   'S5-01': ['S5-01'], 'S5-02': ['S5-03'], 'S5-03': ['S5-04'], 'S5-04': ['S5-05'], 'S5-05': ['S5-06'],
   'S5-06': ['S5-07'], 'S5-07': ['S5-08'], 'S5-08': ['S5-10'], 'S5-09': ['S5-11'],
   'S6-04': ['S6-06'],
 };
 
+/**
+ * Маршрут V2 (2.0.0) → V2.1: шаги с тем же содержанием получили новые номера — деньги до покупок,
+ * требования квестов подписки по порядку. Сохранения версии 2 переименовываются этой таблицей.
+ */
+export const V3_FROM_V2: Record<string, string> = {
+  'S1-06': 'S1-10', 'S1-07': 'S1-06', 'S1-08': 'S1-07', 'S1-09': 'S1-08', 'S1-10': 'S1-09',
+  'S3-06': 'S3-07', 'S3-07': 'S3-08', 'S3-08': 'S3-09',
+  'S7-04': 'S7-05', 'S8-01': 'S8-03', 'S8-02': 'S8-01', 'S8-03': 'S9-02', 'S8-04': 'S9-03',
+  'S9-02': 'S9-04', 'S9-03': 'S9-05',
+};
+
+function renamed<T>(map: Record<string, T>): Record<string, T> {
+  return Object.fromEntries(Object.entries(map).map(([id, v]) => [V3_FROM_V2[id] ?? id, v]));
+}
+
 export function emptyProgress(): Progress {
-  return { version: 2, steps: {}, levels: {}, notes: {}, updatedAt: new Date().toISOString() };
+  return { version: 3, steps: {}, levels: {}, notes: {}, updatedAt: new Date().toISOString() };
 }
 
 const isObject = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -70,11 +85,11 @@ export interface Normalized {
   progress: Progress;
   /** Сколько записей отброшено: неизвестные шаги, навыки или неверные значения. */
   dropped: number;
-  /** Сохранение было старого формата и перенесено в V2. */
+  /** Сохранение первой версии маршрута (V1) — отметки перенесены по таблице. */
   migrated: boolean;
 }
 
-/** Приводит похожее на прогресс к правильной форме V2. null — если это не прогресс вовсе. */
+/** Приводит похожее на прогресс к текущей форме. null — если это не прогресс вовсе. */
 export function normalizeProgress(raw: unknown, known: Known): Normalized | null {
   if (!isObject(raw)) return null;
   if (!isObject(raw.steps) && !isObject(raw.levels) && !isObject(raw.notes)) return null;
@@ -83,10 +98,14 @@ export function normalizeProgress(raw: unknown, known: Known): Normalized | null
 
   let steps = statusMap(raw.steps);
   let notes = stringMap(raw.notes);
-  const migrated = raw.version !== 2;
+  const fromV2 = raw.version === 2;
+  const migrated = raw.version !== PROGRESS_VERSION && !fromV2;
   if (migrated) {
     p.legacy = { steps, notes };
     ({ steps, notes } = migrateV1(steps, notes));
+  } else if (fromV2) {
+    steps = renamed(steps);
+    notes = renamed(notes);
   }
 
   const rawStepCount = isObject(raw.steps) ? Object.keys(raw.steps).length : 0;
@@ -111,7 +130,9 @@ export function normalizeProgress(raw: unknown, known: Known): Normalized | null
 
   if (!migrated) {
     if (raw.gameMode === 'f2p' || raw.gameMode === 'members') p.gameMode = raw.gameMode;
-    const ids = (v: unknown) => (Array.isArray(v) ? [...new Set(v.filter((x): x is string => typeof x === 'string' && known.stepIds.has(x)))] : []);
+    const ids = (v: unknown) => (Array.isArray(v)
+      ? [...new Set(v.filter((x): x is string => typeof x === 'string').map((x) => (fromV2 ? V3_FROM_V2[x] ?? x : x)).filter((x) => known.stepIds.has(x)))]
+      : []);
     const reviewed = ids(raw.reviewedV2Steps);
     if (reviewed.length) p.reviewedV2Steps = reviewed;
     const kept = ids(raw.qpKept);

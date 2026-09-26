@@ -59,9 +59,42 @@ describe('квесты из маршрута', () => {
 
   it('вступление без очков со своим квестом — отдельная запись', () => {
     const quests = deriveQuests(allSteps);
-    const intro = quests.find((q) => q.stepId === 'S8-04')!;
+    const intro = quests.find((q) => q.stepId === 'S9-03')!;
     expect(intro.qp).toBe(0);
     expect(intro.parts).toEqual([]);
+  });
+});
+
+describe('требования квестов идут раньше самих квестов', () => {
+  const index = new Map(allSteps.map((s, i) => [s.id, i]));
+  const before = (a: string, b: string) => expect(index.get(a)!, `${a} раньше ${b}`).toBeLessThan(index.get(b)!);
+
+  it('деньги — до покупок', () => {
+    before('S1-09', 'S1-10'); // Stronghold → Chronicle
+    before('S1-13', 'S2-01'); // шкуры → закупки на бирже
+    before('S3-06', 'S3-07'); // руда → адамант
+  });
+
+  it('навыки — до квестов, которые их требуют', () => {
+    before('S1-12', 'S2-07'); // Mining 10 → The Knight's Sword
+    before('S7-04', 'S7-05'); // Agility 25 → The Grand Tree
+    before('S8-04', 'S8-05'); // Ranged 30, Slayer 18, Crafting 19 → Animal Magnetism
+    before('S8-04', 'S9-01'); // Crafting 31 → Lost City
+  });
+
+  it('квесты подписки — после своих квестов-требований', () => {
+    before('S8-01', 'S8-02'); // Priest in Peril → Nature Spirit
+    before('S9-01', 'S9-02'); // Lost City → Fairytale I
+    before('S8-02', 'S9-02'); // Nature Spirit → Fairytale I
+    before('S9-02', 'S9-03'); // Fairytale I → вступление Fairytale II
+    before('S7-05', 'S9-04'); // The Grand Tree → Monkey Madness I
+    expect(allSteps.find((s) => s.id === 'S9-02')!.requires).toEqual(expect.arrayContaining(['S9-01', 'S8-02']));
+  });
+
+  it('навыки-требования указаны целями в названии шага', () => {
+    expect(titleTargets(allSteps.find((s) => s.id === 'S8-04')!.title)).toEqual([
+      { skill: 'ranged', level: 30 }, { skill: 'slayer', level: 18 }, { skill: 'crafting', level: 31 },
+    ]);
   });
 });
 

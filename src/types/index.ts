@@ -238,7 +238,7 @@ export interface Quest {
 export type StepStatus = 'done' | 'skipped';
 
 export interface Progress {
-  version: 2;
+  version: 3;
   steps: Record<string, StepStatus>;
   levels: Record<string, number>;
   notes: Record<string, string>;

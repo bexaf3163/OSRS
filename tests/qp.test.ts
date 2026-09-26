@@ -14,16 +14,16 @@ describe('очки квестов', () => {
     expect(questPoints(f2p, emptyProgress(), BASE_QP)).toBe(1);
   });
 
-  it('F2P — 46 очков, с подпиской — 66', () => {
+  it('F2P — 46 очков, с подпиской — 69', () => {
     expect(maxQpFor('f2p')).toBe(46);
-    expect(maxQpFor('members')).toBe(66);
+    expect(maxQpFor('members')).toBe(69);
     const all = Object.fromEntries(f2p.map((s) => [s.id, 'done' as const]));
     expect(questPoints(f2p, withSteps(all), BASE_QP)).toBe(46);
   });
 
   it('сделанные квесты добавляют свои очки, не-квесты — ничего', () => {
     // Romeo & Juliet 5, Pirate's Treasure 2, Stronghold of Security (подготовка) 0.
-    expect(questPoints(f2p, withSteps({ 'S2-05': 'done', 'S2-09': 'done', 'S1-10': 'done' }), BASE_QP)).toBe(8);
+    expect(questPoints(f2p, withSteps({ 'S2-05': 'done', 'S2-09': 'done', 'S1-09': 'done' }), BASE_QP)).toBe(8);
   });
 
   it('пропущенный квест очков не даёт и снижает максимум', () => {

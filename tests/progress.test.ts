@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { allSteps, known, stepById } from '../src/data';
 import {
   emptyProgress, exportFileName, exportProgress, gameModeOf, importProgress, loadProgress, normalizeProgress, saveProgress, STORAGE_KEY,
-  V2_FROM_V1, withGameMode, withLevel, withNote, withReviewed, withStep,
+  V2_FROM_V1, V3_FROM_V2, withGameMode, withLevel, withNote, withReviewed, withStep,
 } from '../src/lib/progress';
 import { needsReview, pendingReview } from '../src/lib/review';
 
@@ -52,13 +52,13 @@ describe('прогресс: экспорт и импорт', () => {
   });
 
   it('файл новой версии отклоняется', () => {
-    const r = importProgress(JSON.stringify({ app: 'osrs-put', version: 3, steps: {} }), known);
+    const r = importProgress(JSON.stringify({ app: 'osrs-put', version: 4, steps: {} }), known);
     expect(r).toEqual({ ok: false, error: expect.stringContaining('новой версией') });
   });
 
   it('неизвестные шаги, навыки и неверные значения отбрасываются', () => {
     const r = importProgress(JSON.stringify({
-      version: 2,
+      version: 3,
       steps: { 'S1-01': 'done', 'S9-99': 'done', 'S1-02': 'maybe' },
       levels: { fishing: 120, cooking: '15', sailing: 50, mining: 'много' },
       notes: { 'S1-01': 'ок', 'S9-99': 'нет', 'S1-02': 5 },
@@ -112,11 +112,11 @@ describe('прогресс: переход с V1 на V2', () => {
   it('отметки переезжают по таблице, старый прогресс целиком остаётся в legacy', () => {
     const n = normalizeProgress(v1, known)!;
     expect(n.migrated).toBe(true);
-    expect(n.progress.version).toBe(2);
-    // V1 S1-06 (The Restless Ghost) — это V2 S1-07; V1 S2-03 (закупки на бирже) — V2 S2-01;
+    expect(n.progress.version).toBe(3);
+    // V1 S1-06 (The Restless Ghost) — это S1-06 и сейчас; V1 S2-03 (закупки на бирже) — S2-01;
     // V2 S4-05 (закупки к дракону) собран из двух шагов V1 и засчитан, только когда сделаны оба.
-    expect(n.progress.steps).toEqual({ 'S1-03': 'done', 'S1-07': 'done', 'S2-01': 'done', 'S4-05': 'done', 'S3-05': 'skipped' });
-    expect(n.progress.notes).toEqual({ 'S1-07': 'дух у кладбища' });
+    expect(n.progress.steps).toEqual({ 'S1-03': 'done', 'S1-06': 'done', 'S2-01': 'done', 'S4-05': 'done', 'S3-05': 'skipped' });
+    expect(n.progress.notes).toEqual({ 'S1-06': 'дух у кладбища' });
     // Шаг, которого в V2 нет, не теряется: он в резервной копии.
     expect(n.progress.legacy).toEqual({ steps: v1.steps, notes: v1.notes });
     expect(n.progress.levels).toEqual({ fishing: 30 });
@@ -145,6 +145,37 @@ describe('прогресс: переход с V1 на V2', () => {
     expect(n.migrated).toBe(false);
     expect(n.progress).toEqual(p);
     expect(gameModeOf(n.progress)).toBe('members');
+  });
+});
+
+describe('прогресс: переход с V2 (2.0.0) на V2.1', () => {
+  const v2 = {
+    app: 'osrs-put', version: 2, updatedAt: '2026-09-26T12:00:00.000Z',
+    // V2: S1-06 — книга Chronicle, S1-10 — Stronghold, S8-03 — Fairytale I, S7-04 — The Grand Tree.
+    steps: { 'S1-06': 'done', 'S1-10': 'done', 'S8-03': 'done', 'S7-04': 'done', 'S2-01': 'done' },
+    notes: { 'S1-06': 'книга в инвентаре' },
+    reviewedV2Steps: ['S2-01'],
+    qpKept: ['S8-03'],
+    gameMode: 'members',
+  };
+
+  it('шаги переезжают на новые номера вместе с заметками, проверками и сохранёнными очками', () => {
+    const n = normalizeProgress(v2, known)!;
+    expect(n.migrated).toBe(false);
+    expect(n.dropped).toBe(0);
+    expect(n.progress.steps).toEqual({ 'S1-10': 'done', 'S1-09': 'done', 'S9-02': 'done', 'S7-05': 'done', 'S2-01': 'done' });
+    expect(n.progress.notes).toEqual({ 'S1-10': 'книга в инвентаре' });
+    expect(n.progress.qpKept).toEqual(['S9-02']);
+    expect(n.progress.reviewedV2Steps).toEqual(['S2-01']);
+    expect(n.progress.gameMode).toBe('members');
+    expect(stepById.get('S1-10')!.title).toContain('Chronicle');
+    expect(stepById.get('S9-02')!.title).toContain('Fairytale I');
+  });
+
+  it('таблица переименований — перестановка: каждый новый номер занят одним старым шагом', () => {
+    const targets = Object.values(V3_FROM_V2);
+    expect(new Set(targets).size).toBe(targets.length);
+    for (const id of targets) expect(stepById.has(id), id).toBe(true);
   });
 });
 
