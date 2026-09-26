@@ -1,0 +1,72 @@
+[
+  {
+    "id": "attack",
+    "name": "Атака",
+    "skill": "ME"
+  },
+  {
+    "id": "strength",
+    "name": "Сила",
+    "skill": "ME"
+  },
+  {
+    "id": "defence",
+    "name": "Защита",
+    "skill": "ME"
+  },
+  {
+    "id": "ranged",
+    "name": "Дальний бой",
+    "skill": "RA"
+  },
+  {
+    "id": "magic",
+    "name": "Магия",
+    "skill": "MA"
+  },
+  {
+    "id": "prayer",
+    "name": "Молитва",
+    "skill": "PR"
+  },
+  {
+    "id": "woodcutting",
+    "name": "Рубка",
+    "skill": "WC"
+  },
+  {
+    "id": "firemaking",
+    "name": "Костры",
+    "skill": "FM"
+  },
+  {
+    "id": "fishing",
+    "name": "Рыбалка",
+    "skill": "FI"
+  },
+  {
+    "id": "cooking",
+    "name": "Готовка",
+    "skill": "CO"
+  },
+  {
+    "id": "mining",
+    "name": "Добыча руды",
+    "skill": "MI"
+  },
+  {
+    "id": "smithing",
+    "name": "Кузнечное дело",
+    "skill": "SM"
+  },
+  {
+    "id": "crafting",
+    "name": "Ремесло",
+    "skill": "CR"
+  },
+  {
+    "id": "runecraft",
+    "name": "Создание рун",
+    "skill": "RC"
+  }
+]

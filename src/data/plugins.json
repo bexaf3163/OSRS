@@ -1,0 +1,250 @@
+{
+  "title": "Плагины RuneLite",
+  "intro": [
+    {
+      "t": "p",
+      "text": "Встроенные плагины включаются в настройках (значок гаечного ключа), плагины из Plugin Hub ставятся там же кнопкой «Plugin Hub». Начни с первой таблицы, остальное добавляй по мере надобности."
+    }
+  ],
+  "groups": [
+    {
+      "title": "Главные",
+      "plugins": [
+        {
+          "name": "Quest Helper",
+          "source": "hub",
+          "sourceLabel": "Hub",
+          "why": "Пошагово ведёт по квестам, почти снимает проблему английского"
+        },
+        {
+          "name": "Shortest Path",
+          "source": "hub",
+          "sourceLabel": "Hub",
+          "why": "Рисует маршрут до выбранной точки на карте"
+        },
+        {
+          "name": "Idle Notifier",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Уведомляет, когда персонаж бездействует"
+        },
+        {
+          "name": "Item Prices",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Цена предмета при наведении"
+        },
+        {
+          "name": "Ground Items",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Названия и цены предметов на земле"
+        },
+        {
+          "name": "Wiki",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Кнопка поиска по вики"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "title": "Удобство и интерфейс",
+      "plugins": [
+        {
+          "name": "GPU",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Плавная картинка, дальняя прорисовка (не вместе с 117 HD)"
+        },
+        {
+          "name": "117 HD",
+          "source": "hub",
+          "sourceLabel": "Hub",
+          "why": "Красивая графика (не вместе с GPU)"
+        },
+        {
+          "name": "FPS Control",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Лимит кадров, особенно в фоне"
+        },
+        {
+          "name": "Key Remapping",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Камера на клавишах WASD"
+        },
+        {
+          "name": "Camera",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Более далёкое отдаление камеры"
+        },
+        {
+          "name": "Anti Drag",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Защита от случайного перетаскивания предметов"
+        },
+        {
+          "name": "Mouse Tooltips",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Подсказка у курсора, что будет нажато"
+        },
+        {
+          "name": "Resource Packs",
+          "source": "hub",
+          "sourceLabel": "Hub",
+          "why": "Другое оформление интерфейса"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "title": "Прокачка",
+      "plugins": [
+        {
+          "name": "XP Tracker",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Опыт в час и сколько до уровня"
+        },
+        {
+          "name": "XP Globes",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Индикаторы прогресса навыка"
+        },
+        {
+          "name": "Skill Calculator",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Сколько действий до нужного уровня"
+        },
+        {
+          "name": "Skills Tab Progress Bars",
+          "source": "hub",
+          "sourceLabel": "Hub",
+          "why": "Полоски прогресса во вкладке навыков"
+        },
+        {
+          "name": "Woodcutting, Fishing, Mining, Cooking",
+          "source": "builtin",
+          "sourceLabel": "Встроенные",
+          "why": "Статистика сессии, подсветка мест"
+        },
+        {
+          "name": "Screenshot",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Скриншоты уровней и квестов"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "title": "Бой",
+      "plugins": [
+        {
+          "name": "Opponent Information",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Здоровье противника"
+        },
+        {
+          "name": "Status Bars",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Полоски здоровья и молитвы"
+        },
+        {
+          "name": "Boosts Information",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Бусты от зелий и еды"
+        },
+        {
+          "name": "Timers",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Таймеры эффектов"
+        },
+        {
+          "name": "NPC Indicators",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Подсветка нужных монстров"
+        },
+        {
+          "name": "Loot Tracker",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Что выпало и сколько стоит"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "title": "Банк и вещи",
+      "plugins": [
+        {
+          "name": "Bank",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Стоимость банка и поиск"
+        },
+        {
+          "name": "Bank Tags",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Вкладки в банке"
+        },
+        {
+          "name": "Inventory Setups",
+          "source": "hub",
+          "sourceLabel": "Hub",
+          "why": "Сохранённые наборы экипировки"
+        },
+        {
+          "name": "Dude, Where's My Stuff?",
+          "source": "hub",
+          "sourceLabel": "Hub",
+          "why": "Где лежат твои вещи"
+        }
+      ],
+      "notes": []
+    },
+    {
+      "title": "Мир и навигация",
+      "plugins": [
+        {
+          "name": "World Map",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Доп. значки на карте"
+        },
+        {
+          "name": "Object Markers, Tile Indicators",
+          "source": "builtin",
+          "sourceLabel": "Встроенные",
+          "why": "Пометки объектов и клеток"
+        },
+        {
+          "name": "Default World",
+          "source": "builtin",
+          "sourceLabel": "Встроенный",
+          "why": "Запоминает привычный мир"
+        }
+      ],
+      "notes": [
+        {
+          "t": "p",
+          "text": "**Menu Entry Swapper** меняет действия по левому клику. Он полезный, но включай его, когда освоишься, иначе можно запутаться."
+        }
+      ]
+    }
+  ]
+}
