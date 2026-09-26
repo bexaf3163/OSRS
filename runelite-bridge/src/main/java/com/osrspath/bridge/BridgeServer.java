@@ -1,0 +1,450 @@
+package com.osrspath.bridge;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonParseException;
+import com.sun.net.httpserver.Headers;
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpServer;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Pattern;
+import lombok.extern.slf4j.Slf4j;
+
+/**
+ * Локальный HTTP-мост для приложения «OSRS Путь». Слушает только 127.0.0.1.
+ *
+ * <pre>
+ * GET  /status       {"status":"ok","inGame":true,"activeStepId":"S1-03"}
+ * POST /active-step  цель шага (ActiveTarget) — стрелка, подсветка, автоотметка
+ * POST /clear        убрать всё
+ * GET  /events       text/event-stream: STATUS, STEP_AUTO_COMPLETED и пинг каждые 15 секунд
+ * </pre>
+ *
+ * Защита от чужих сайтов в браузере: Host только локальный (против DNS rebinding), Origin — только
+ * localhost или адреса из настроек, POST — только с заголовком X-OSRS-Path (его не отправить без
+ * разрешённого CORS-запроса). Программа для ПК ходит сюда из главного процесса, без Origin.
+ *
+ * Сервер не зависит от RuneLite — его можно проверить обычным тестом.
+ */
+@Slf4j
+public final class BridgeServer
+{
+	public static final int DEFAULT_PORT = 38282;
+	public static final String HEADER = "X-OSRS-Path";
+	static final int MAX_BODY = 64 * 1024;
+	static final int MAX_STREAMS = 8;
+	static final long PING_SECONDS = 15;
+
+	private static final Pattern LOCAL_ORIGIN = Pattern.compile("^http://(localhost|127\\.0\\.0\\.1)(:\\d{1,5})?$");
+
+	public interface Listener
+	{
+		/** Пришла новая цель. Вызывается в потоке сервера — дальше передавать в поток клиента. */
+		void onActiveTarget(ActiveTarget target);
+
+		void onClear();
+	}
+
+	private final int requestedPort;
+	private final Gson gson;
+	private final Listener listener;
+	private final Set<String> extraOrigins;
+	private final List<Stream> streams = new CopyOnWriteArrayList<>();
+
+	private HttpServer server;
+	private ExecutorService executor;
+	private ScheduledExecutorService pinger;
+	private volatile boolean inGame;
+	private volatile String activeStepId;
+
+	public BridgeServer(int port, Gson gson, Listener listener, Collection<String> extraOrigins)
+	{
+		this.requestedPort = port;
+		this.gson = gson;
+		this.listener = listener;
+		this.extraOrigins = new HashSet<>(extraOrigins);
+	}
+
+	public void start() throws IOException
+	{
+		server = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), requestedPort), 16);
+		executor = Executors.newCachedThreadPool(daemon("osrs-path-bridge-http"));
+		server.setExecutor(executor);
+		server.createContext("/", this::handle);
+		server.start();
+		pinger = Executors.newSingleThreadScheduledExecutor(daemon("osrs-path-bridge-ping"));
+		pinger.scheduleAtFixedRate(() -> sendAll(": ping\n\n"), PING_SECONDS, PING_SECONDS, TimeUnit.SECONDS);
+		log.info("OSRS Path Bridge слушает http://127.0.0.1:{}", getPort());
+	}
+
+	public void stop()
+	{
+		for (Stream s : streams)
+		{
+			s.close();
+		}
+		streams.clear();
+		if (server != null)
+		{
+			server.stop(0);
+			server = null;
+		}
+		if (pinger != null)
+		{
+			pinger.shutdownNow();
+			pinger = null;
+		}
+		if (executor != null)
+		{
+			executor.shutdownNow();
+			executor = null;
+		}
+	}
+
+	/** Фактический порт — в тестах сервер берёт свободный (порт 0). */
+	public int getPort()
+	{
+		return server == null ? requestedPort : server.getAddress().getPort();
+	}
+
+	public void setInGame(boolean value)
+	{
+		if (inGame == value)
+		{
+			return;
+		}
+		inGame = value;
+		broadcast(statusEvent());
+	}
+
+	public void setActiveStepId(String stepId)
+	{
+		activeStepId = stepId;
+	}
+
+	public void stepCompleted(String stepId)
+	{
+		Map<String, Object> e = new LinkedHashMap<>();
+		e.put("type", "STEP_AUTO_COMPLETED");
+		e.put("stepId", stepId);
+		broadcast(e);
+	}
+
+	int streamCount()
+	{
+		return streams.size();
+	}
+
+	private Map<String, Object> statusEvent()
+	{
+		Map<String, Object> e = new LinkedHashMap<>();
+		e.put("type", "STATUS");
+		e.put("inGame", inGame);
+		return e;
+	}
+
+	private void broadcast(Object event)
+	{
+		sendAll("data: " + gson.toJson(event) + "\n\n");
+	}
+
+	private void sendAll(String frame)
+	{
+		for (Stream s : streams)
+		{
+			if (!s.send(frame))
+			{
+				streams.remove(s);
+			}
+		}
+	}
+
+	private void handle(HttpExchange ex)
+	{
+		boolean keepOpen = false;
+		try
+		{
+			String method = ex.getRequestMethod();
+			String path = ex.getRequestURI().getPath();
+			Headers req = ex.getRequestHeaders();
+			if (!hostAllowed(req.getFirst("Host")))
+			{
+				json(ex, 403, error("host"));
+				return;
+			}
+			String origin = req.getFirst("Origin");
+			if (origin != null && !originAllowed(origin))
+			{
+				json(ex, 403, error("origin"));
+				return;
+			}
+			cors(ex, origin);
+
+			if ("OPTIONS".equals(method))
+			{
+				Headers h = ex.getResponseHeaders();
+				h.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+				h.set("Access-Control-Allow-Headers", "Content-Type, " + HEADER);
+				h.set("Access-Control-Max-Age", "600");
+				// Chrome спрашивает разрешение, когда сайт из интернета обращается к адресу в этом компьютере.
+				if ("true".equals(req.getFirst("Access-Control-Request-Private-Network")))
+				{
+					h.set("Access-Control-Allow-Private-Network", "true");
+				}
+				ex.sendResponseHeaders(204, -1);
+				return;
+			}
+
+			switch (path)
+			{
+				case "/status":
+					if (!"GET".equals(method))
+					{
+						json(ex, 405, error("method"));
+						return;
+					}
+					Map<String, Object> status = new LinkedHashMap<>();
+					status.put("status", "ok");
+					status.put("inGame", inGame);
+					status.put("activeStepId", activeStepId);
+					json(ex, 200, status);
+					return;
+				case "/active-step":
+				{
+					if (!postAllowed(ex, method))
+					{
+						return;
+					}
+					String body = readBody(ex.getRequestBody());
+					if (body == null)
+					{
+						json(ex, 413, error("body too large"));
+						return;
+					}
+					ActiveTarget target;
+					try
+					{
+						target = gson.fromJson(body, ActiveTarget.class);
+					}
+					catch (JsonParseException e)
+					{
+						json(ex, 400, error("bad json"));
+						return;
+					}
+					String problem = target == null ? "empty" : target.prepare();
+					if (problem != null)
+					{
+						json(ex, 400, error(problem));
+						return;
+					}
+					activeStepId = target.getStepId();
+					listener.onActiveTarget(target);
+					json(ex, 200, ok());
+					return;
+				}
+				case "/clear":
+					if (!postAllowed(ex, method))
+					{
+						return;
+					}
+					activeStepId = null;
+					listener.onClear();
+					json(ex, 200, ok());
+					return;
+				case "/events":
+					if (!"GET".equals(method))
+					{
+						json(ex, 405, error("method"));
+						return;
+					}
+					openStream(ex);
+					keepOpen = true;
+					return;
+				default:
+					json(ex, 404, error("not found"));
+			}
+		}
+		catch (IOException | RuntimeException e)
+		{
+			log.debug("Запрос к мосту не обработан", e);
+		}
+		finally
+		{
+			if (!keepOpen)
+			{
+				ex.close();
+			}
+		}
+	}
+
+	private boolean postAllowed(HttpExchange ex, String method) throws IOException
+	{
+		if (!"POST".equals(method))
+		{
+			json(ex, 405, error("method"));
+			return false;
+		}
+		if (!"1".equals(ex.getRequestHeaders().getFirst(HEADER)))
+		{
+			json(ex, 403, error("header " + HEADER + " required"));
+			return false;
+		}
+		return true;
+	}
+
+	private void openStream(HttpExchange ex) throws IOException
+	{
+		Headers h = ex.getResponseHeaders();
+		h.set("Content-Type", "text/event-stream; charset=utf-8");
+		h.set("Cache-Control", "no-cache");
+		ex.sendResponseHeaders(200, 0);
+		Stream s = new Stream(ex);
+		// Лишние соединения (забытые вкладки) закрываем, начиная со старых.
+		while (streams.size() >= MAX_STREAMS)
+		{
+			Stream old = streams.remove(0);
+			old.close();
+		}
+		streams.add(s);
+		if (!s.send("retry: 5000\n\ndata: " + gson.toJson(statusEvent()) + "\n\n"))
+		{
+			streams.remove(s);
+		}
+	}
+
+	static boolean hostAllowed(String host)
+	{
+		if (host == null)
+		{
+			return false;
+		}
+		String name = host.replaceFirst(":\\d{1,5}$", "");
+		return name.equals("127.0.0.1") || name.equals("localhost") || name.equals("[::1]");
+	}
+
+	boolean originAllowed(String origin)
+	{
+		return LOCAL_ORIGIN.matcher(origin).matches() || extraOrigins.contains(origin);
+	}
+
+	private static void cors(HttpExchange ex, String origin)
+	{
+		if (origin != null)
+		{
+			ex.getResponseHeaders().set("Access-Control-Allow-Origin", origin);
+			ex.getResponseHeaders().set("Vary", "Origin");
+		}
+	}
+
+	private void json(HttpExchange ex, int code, Object body) throws IOException
+	{
+		byte[] bytes = gson.toJson(body).getBytes(StandardCharsets.UTF_8);
+		ex.getResponseHeaders().set("Content-Type", "application/json; charset=utf-8");
+		ex.getResponseHeaders().set("Cache-Control", "no-store");
+		ex.sendResponseHeaders(code, bytes.length);
+		try (OutputStream os = ex.getResponseBody())
+		{
+			os.write(bytes);
+		}
+	}
+
+	/** Тело запроса целиком, но не больше MAX_BODY; null — если больше. */
+	static String readBody(InputStream in) throws IOException
+	{
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		byte[] buf = new byte[8192];
+		int n;
+		while ((n = in.read(buf)) != -1)
+		{
+			if (out.size() + n > MAX_BODY)
+			{
+				return null;
+			}
+			out.write(buf, 0, n);
+		}
+		return out.toString(StandardCharsets.UTF_8);
+	}
+
+	private static Map<String, Object> ok()
+	{
+		Map<String, Object> m = new LinkedHashMap<>();
+		m.put("status", "ok");
+		return m;
+	}
+
+	private static Map<String, Object> error(String message)
+	{
+		Map<String, Object> m = new LinkedHashMap<>();
+		m.put("status", "error");
+		m.put("error", message);
+		return m;
+	}
+
+	private static ThreadFactory daemon(String name)
+	{
+		return r ->
+		{
+			Thread t = new Thread(r, name);
+			t.setDaemon(true);
+			return t;
+		};
+	}
+
+	/** Открытый поток событий одного клиента. */
+	private static final class Stream
+	{
+		private final HttpExchange exchange;
+		private final OutputStream out;
+
+		Stream(HttpExchange exchange)
+		{
+			this.exchange = exchange;
+			this.out = exchange.getResponseBody();
+		}
+
+		synchronized boolean send(String frame)
+		{
+			try
+			{
+				out.write(frame.getBytes(StandardCharsets.UTF_8));
+				out.flush();
+				return true;
+			}
+			catch (IOException e)
+			{
+				close();
+				return false;
+			}
+		}
+
+		void close()
+		{
+			try
+			{
+				out.close();
+			}
+			catch (IOException ignored)
+			{
+				// Клиент уже ушёл.
+			}
+			exchange.close();
+		}
+	}
+}

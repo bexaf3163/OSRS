@@ -5,7 +5,9 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Step } from '../types';
 import { stepById } from '../data';
 import { useStore } from '../store';
-import { blockerParts, blockersOf, currentStage, firstOpen, isClosed, nextStep } from '../lib/next-step';
+import { blockerParts, blockersOf, currentStage, firstOpen, isClosed, nextStep, openAfter } from '../lib/next-step';
+import { useBridge } from '../bridge';
+import { flashDone } from '../lib/flash';
 import { needsReview, pendingReview } from '../lib/review';
 import { IconCheck, IconChevron, IconLock, TypeIcon, TYPE_LABEL } from '../components/Icons';
 import { StepBody } from '../components/StepCard';
@@ -15,6 +17,7 @@ const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matche
 
 export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey: number }) {
   const { progress, qp, steps, stages, setStep, review, reactivate } = useStore();
+  const { advance } = useBridge();
   const suggested = nextStep(steps, progress, qp) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
   const [selectedId, setSelectedId] = useState(() => focusStep ?? suggested.id);
   const selected = steps.find((s) => s.id === selectedId) ?? suggested;
@@ -47,11 +50,16 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
     return n;
   });
 
-  const nextAfter = (id: string): Step | undefined => {
-    const at = steps.findIndex((s) => s.id === id);
-    const open = (s: Step) => s.id !== id && !isClosed(progress, s.id);
-    return steps.slice(at + 1).find(open) ?? steps.slice(0, at).find(open);
-  };
+  const nextAfter = (id: string): Step | undefined => openAfter(steps, progress, id);
+
+  // Шаг выполнен в игре (RuneLite): как после кнопки «Отметить выполненным» — в центре следующий.
+  const seenAdvance = useRef(advance?.nonce);
+  useEffect(() => {
+    if (!advance || advance.nonce === seenAdvance.current) return;
+    seenAdvance.current = advance.nonce;
+    flashDone(`rail-${advance.from}`);
+    if (advance.to && steps.some((s) => s.id === advance.to)) select(advance.to);
+  }, [advance, steps, select]);
 
   /** «Отметить выполненным»: шаг закрывается, в центре сразу следующий незакрытый. */
   const complete = (id: string) => {

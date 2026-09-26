@@ -1,0 +1,4 @@
+# Скрипты Gradle: .bat — с CRLF для Windows, gradlew — с LF для Linux и macOS.
+*.bat text eol=crlf
+gradlew text eol=lf
+*.jar binary

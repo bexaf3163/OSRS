@@ -39,3 +39,10 @@ export function blockerParts(b: Blockers): string[] {
   if (b.qp) parts.push(`очки квестов ${b.qp.need} (сейчас ${b.qp.have})`);
   return parts;
 }
+
+/** Следующий незакрытый шаг после id (по кругу с начала списка) — его открывает «Отметить выполненным». */
+export function openAfter(steps: Step[], p: Progress, id: string): Step | undefined {
+  const at = steps.findIndex((s) => s.id === id);
+  const open = (s: Step) => s.id !== id && !isClosed(p, s.id);
+  return steps.slice(at + 1).find(open) ?? steps.slice(0, Math.max(0, at)).find(open);
+}

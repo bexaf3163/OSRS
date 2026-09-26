@@ -1,0 +1,63 @@
+// Плагин RuneLite «OSRS Path Bridge»: мост между приложением «OSRS Путь» и игрой.
+// Сборка повторяет официальный шаблон github.com/runelite/example-plugin.
+
+plugins {
+	id 'java'
+}
+
+repositories {
+	mavenLocal()
+	maven {
+		url = 'https://repo.runelite.net'
+		content {
+			includeGroupByRegex('net\\.runelite.*')
+		}
+	}
+	mavenCentral()
+}
+
+// Версия клиента, против которой проверен плагин (совпадает с установленным RuneLite).
+// Шаблон RuneLite пишет 'latest.release'; здесь версия закреплена, чтобы сборка не менялась сама.
+def runeLiteVersion = '1.12.39'
+def pluginMainClass = 'com.osrspath.bridge.OsrsPathBridgeTest'
+
+dependencies {
+	// Gson, Guice, OkHttp и API игры приходят вместе с клиентом — в плагин их не упаковываем.
+	compileOnly group: 'net.runelite', name: 'client', version: runeLiteVersion
+
+	compileOnly 'org.projectlombok:lombok:1.18.30'
+	annotationProcessor 'org.projectlombok:lombok:1.18.30'
+
+	testImplementation 'junit:junit:4.13.2'
+	testImplementation group: 'net.runelite', name: 'client', version: runeLiteVersion
+	testImplementation group: 'net.runelite', name: 'jshell', version: runeLiteVersion
+}
+
+group = 'com.osrspath'
+version = '1.0.0'
+
+tasks.withType(JavaCompile).configureEach {
+	options.encoding = 'UTF-8'
+	// Собирается JDK 17; байткод — Java 11, как требует шаблон RuneLite и Plugin Hub.
+	// Клиент RuneLite работает на Java 17 и такой плагин загружает.
+	options.release.set(11)
+	// Устаревшие API RuneLite (WidgetInfo и т. п.) не используем — компилятор скажет, если что-то проскочит.
+	options.compilerArgs << '-Xlint:deprecation'
+}
+
+// Тесты читают маршрут приложения, чтобы проверить названия квестов и шаблоны сообщений.
+test {
+	systemProperty 'osrsPath.steps', file('../src/data/steps.json').absolutePath
+}
+
+// Клиент RuneLite в режиме разработчика с этим плагином: ./gradlew run
+// -PruneliteHome=<папка> — отдельная папка настроек вместо ~/.runelite (RuneLite берёт её из user.home).
+tasks.register('run', JavaExec) {
+	classpath = sourceSets.test.runtimeClasspath
+	mainClass = pluginMainClass
+	jvmArgs '-ea'
+	if (project.hasProperty('runeliteHome')) {
+		jvmArgs "-Duser.home=${project.property('runeliteHome')}"
+	}
+	args '--developer-mode', '--debug'
+}

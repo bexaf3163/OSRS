@@ -3,3 +3,7 @@ dist/
 release/
 *.log
 .DS_Store
+
+# RuneLite bridge (Gradle)
+runelite-bridge/build/
+runelite-bridge/.gradle/

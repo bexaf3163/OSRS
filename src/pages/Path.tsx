@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { BASE_QP, stepById } from '../data';
 import { useStore } from '../store';
-import { currentStage, isClosed } from '../lib/next-step';
+import { currentStage, isClosed, openAfter } from '../lib/next-step';
+import { useBridge } from '../bridge';
+import { flashDone } from '../lib/flash';
 import { reachableQuestPoints } from '../lib/qp';
 import { pendingReview } from '../lib/review';
 import { NextStepCard } from '../components/NextStepCard';
@@ -43,6 +45,7 @@ export function PathPage(props: { focusStep?: string; focusKey: number }) {
 /** Узкий экран и телефон: этапы списком, шаги раскрываются на месте. */
 function PathNarrow({ focusStep, focusKey }: { focusStep?: string; focusKey: number }) {
   const { progress, qp, maxQp, steps, stages, mode, setStep, review, reactivate } = useStore();
+  const { advance } = useBridge();
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
   const [stageOpen, setStageOpen] = useState<Record<number, boolean>>({});
   const followTimer = useRef<number>(undefined);
@@ -96,12 +99,8 @@ function PathNarrow({ focusStep, focusKey }: { focusStep?: string; focusKey: num
     return next;
   });
 
-  /** «Отметить выполненным» в карточке: свернуть её и раскрыть следующий незакрытый шаг. */
-  const completeInList = useCallback((id: string) => {
-    setStep(id, 'done');
-    const at = steps.findIndex((s) => s.id === id);
-    const openAfter = (s: (typeof steps)[number]) => s.id !== id && !isClosed(progress, s.id);
-    const next = steps.slice(at + 1).find(openAfter) ?? steps.slice(0, at).find(openAfter);
+  /** Свернуть выполненный шаг и раскрыть следующий незакрытый. */
+  const advanceFrom = useCallback((id: string, next: (typeof steps)[number] | undefined) => {
     setExpanded((e) => {
       const n = new Set(e);
       n.delete(id);
@@ -111,7 +110,22 @@ function PathNarrow({ focusStep, focusKey }: { focusStep?: string; focusKey: num
     if (!next) return;
     setStageOpen((o) => ({ ...o, [next.stage]: true }));
     reveal(next.id, { scroll: 'if-hidden', delay: reduceMotion() ? SETTLE_MS : COLLAPSE_MS });
-  }, [steps, progress, setStep, reveal]);
+  }, [reveal]);
+
+  /** «Отметить выполненным» в карточке: свернуть её и раскрыть следующий незакрытый шаг. */
+  const completeInList = useCallback((id: string) => {
+    setStep(id, 'done');
+    advanceFrom(id, openAfter(steps, progress, id));
+  }, [steps, progress, setStep, advanceFrom]);
+
+  // Шаг выполнен в игре (RuneLite): то же, что кнопка в карточке, только отметку уже поставил мост.
+  const seenAdvance = useRef(advance?.nonce);
+  useEffect(() => {
+    if (!advance || advance.nonce === seenAdvance.current) return;
+    seenAdvance.current = advance.nonce;
+    flashDone(`step-${advance.from}`);
+    advanceFrom(advance.from, steps.find((s) => s.id === advance.to));
+  }, [advance, steps, advanceFrom]);
 
   /** Из «Что делать сейчас» — только отметка: карточка сверху сама покажет следующий шаг. */
   const completeFromTop = useCallback((id: string) => {

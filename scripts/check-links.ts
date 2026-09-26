@@ -4,6 +4,7 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import type { Step, WikiItemDetail } from '../src/types/index.ts';
+import { MAP_VERSION, tileUrl } from '../src/lib/map.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const steps = JSON.parse(readFileSync(`${root}src/data/steps.json`, 'utf8')) as Step[];
@@ -52,8 +53,24 @@ for (let i = 0; i < titles.length; i += 50) {
   await new Promise((r) => setTimeout(r, 400));
 }
 
+// Тайлы карты: превью и карта мира берут их с maps.runescape.wiki по версии рендера из src/lib/map.ts.
+const mapProblems: string[] = [];
+const planes = new Set(steps.flatMap((s) => [s.mapLocation, ...(s.resourceSpots ?? [])]).filter(Boolean).map((p) => p!.plane));
+for (const plane of planes) {
+  // Тайл Lumbridge на масштабе 2 — есть на любом этаже.
+  const res = await fetch(tileUrl(2, plane, 50, 50), { headers: { 'User-Agent': UA } });
+  if (!res.ok || !res.headers.get('content-type')?.startsWith('image/')) mapProblems.push(`тайл этажа ${plane}: HTTP ${res.status}`);
+}
+// Вики сама рисует превью карт из тайлов своей текущей версии — сверяемся с ней.
+const page = await (await fetch('https://oldschool.runescape.wiki/w/Lumbridge', { headers: { 'User-Agent': UA } })).text();
+const current = page.match(/maps\.runescape\.wiki\/osrs\/versions\/([\w-]+)\/tiles/)?.[1];
+console.log(`Тайлы карты: версия ${MAP_VERSION}, на вики сейчас ${current ?? 'не найдена'}, этажей в маршруте ${planes.size}`);
+if (mapProblems.length) for (const m of mapProblems) console.log(`  ✗ ${m}`);
+else console.log('  ✓ тайлы отдаются');
+if (current && current !== MAP_VERSION) console.log(`  ! вики перешла на ${current} — обнови MAP_VERSION в src/lib/map.ts (старые тайлы пока работают)`);
+
 console.log(`Проверено ссылок на вики: ${titles.length}`);
-if (missing.length) {
+if (missing.length || mapProblems.length) {
   for (const t of missing) {
     const from = [...(refs.get(t) ?? refs.get(t.replace(/^File:/, 'File:')) ?? [])].join(', ');
     console.log(`  ✗ нет на вики: ${t}${from ? ` — ${from}` : ''}`);

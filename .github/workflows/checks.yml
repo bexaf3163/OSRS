@@ -22,3 +22,19 @@ jobs:
       - run: npm run check-data
       - run: npm test
       - run: npm run build
+
+  runelite-bridge:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: runelite-bridge
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+      # Плагин компилируется против RuneLite 1.12.39; тесты сверяют названия квестов маршрута с API клиента.
+      - run: chmod +x gradlew && ./gradlew --no-daemon test

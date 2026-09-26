@@ -5,6 +5,7 @@
 const { app, BrowserWindow, Menu, ipcMain, nativeTheme, session, shell } = require('electron');
 const fs = require('node:fs');
 const path = require('node:path');
+const { registerBridge } = require('./runelite-bridge.cjs');
 
 const DIST = path.join(__dirname, '..', 'dist');
 const isWeb = (url) => /^https?:\/\//i.test(url);
@@ -136,6 +137,7 @@ if (!app.requestSingleInstanceLock()) {
   });
   ipcMain.on('app:data-dir', (e) => { e.returnValue = app.getPath('userData'); });
   ipcMain.on('app:is-portable', (e) => { e.returnValue = Boolean(portableDir); });
+  registerBridge(ipcMain);
 
   function createWindow() {
     const saved = windowState();
@@ -243,7 +245,7 @@ if (!app.requestSingleInstanceLock()) {
   app.whenReady().then(() => {
     // OSRS Wiki просит представляться в запросах к API; из окна браузера заголовок не задать.
     session.defaultSession.webRequest.onBeforeSendHeaders(
-      { urls: ['https://oldschool.runescape.wiki/*', 'https://prices.runescape.wiki/*'] },
+      { urls: ['https://oldschool.runescape.wiki/*', 'https://prices.runescape.wiki/*', 'https://maps.runescape.wiki/*'] },
       (details, callback) => {
         details.requestHeaders['User-Agent'] = `OSRS-Put/${app.getVersion()} (https://github.com/bexaf3163/OSRS)`;
         callback({ requestHeaders: details.requestHeaders });

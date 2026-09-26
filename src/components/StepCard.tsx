@@ -13,6 +13,8 @@ import { Inline } from './Inline';
 import { LevelInput } from './LevelInput';
 import { RangeHints } from './RangeHints';
 import { StepImage } from './StepImage';
+import { StepMap } from './StepMap';
+import { InGamePanel } from './InGamePanel';
 import { ItemIcon, useWiki } from './WikiDrawer';
 
 const WARN_LABELS = new Set(['Опасно', 'Внимание', 'Бой']);
@@ -88,6 +90,7 @@ function ItemChip({ item }: { item: StepItemRequirement }) {
           <ItemIcon src={item.iconUrl} alt="" />
           <span className="item-chip-name">
             <strong>{item.nameEn}</strong> <span className="muted">({item.nameRu})</span> <strong className="item-amount">{amountText(item.amount)}</strong>
+            {item.heals ? <span className="badge badge-heal" title={`Восстанавливает ${item.heals} очков здоровья`}>+{item.heals} HP</span> : null}
           </span>
           <span className="item-chip-lens" aria-hidden="true">🔍</span>
         </span>
@@ -116,7 +119,7 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
   const links = [
     step.wikiUrl && { href: step.wikiUrl, label: 'Wiki' },
     step.quickGuideUrl && { href: step.quickGuideUrl, label: 'Quick Guide' },
-    step.mapUrl && { href: step.mapUrl, label: '🗺️ Карта' },
+    step.mapUrl && { href: step.mapUrl, label: 'Карта вики' },
   ].filter(Boolean) as { href: string; label: string }[];
 
   return (
@@ -163,12 +166,16 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
       ) : null}
       {step.npc && step.where && <p><Inline text={step.where} /></p>}
 
+      {step.warning && <div className="plaque plaque-warning" role="note"><Inline text={step.warning} /></div>}
+      <StepMap step={step} />
+      <InGamePanel step={step} />
+
       {step.how && <p className="step-how"><Inline text={step.how} /></p>}
       {step.bring && <p className="small"><span className="muted">Взять: </span><Inline text={step.bring} /></p>}
 
       {step.itemsRequired && step.itemsRequired.length > 0 && (
         <section className="step-section">
-          <h4 className="subhead">Что взять с собой</h4>
+          <h4 className="subhead">Требуемые предметы и еда</h4>
           <ul className="item-grid">{step.itemsRequired.map((it, i) => <ItemChip key={`${it.nameEn}-${i}`} item={it} />)}</ul>
         </section>
       )}

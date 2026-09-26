@@ -22,6 +22,11 @@ export interface DesktopBridge {
   /** Где лежат данные программы — для подсказки в настройках. */
   dataDir(): string;
   isPortable(): boolean;
+  /** Мост к плагину RuneLite через главный процесс (src/services/runeliteBridge.ts). В старых сборках его нет. */
+  bridge?: {
+    request(method: string, path: string, body?: unknown): Promise<{ ok: boolean; status: number; data?: unknown }>;
+    openEvents(onEvent: (data: string) => void, onState: (state: 'open' | 'closed') => void): () => void;
+  };
 }
 
 export function desktop(): DesktopBridge | undefined {

@@ -24,7 +24,8 @@ interface StoreValue {
   stages: Stage[];
   qp: number;
   maxQp: number;
-  setStep: (id: string, status: StepStatus | null) => void;
+  /** message — своя подпись в сообщении внизу (например, «выполнено в игре»). */
+  setStep: (id: string, status: StepStatus | null, message?: string) => void;
   setLevel: (id: string, level: number) => void;
   setNote: (id: string, note: string) => void;
   setMode: (mode: GameMode) => void;
@@ -104,13 +105,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setToast({ id: ++toastId.current, message, undo });
   }, []);
 
-  const setStep = useCallback((id: string, status: StepStatus | null) => {
+  const setStep = useCallback((id: string, status: StepStatus | null, message?: string) => {
     const before = current.current;
     let next = withStep(before, id, status);
     // Шаг, отмеченный уже по тексту V2, проверять повторно не нужно.
     if (status === 'done' && stepById.get(id)?.updatedInV2) next = withReviewed(next, [id]);
     setProgress(next);
-    show(status === 'done' ? `Отмечено ${id}` : status === 'skipped' ? `Пропущено ${id}` : `Снята отметка ${id}`, before);
+    show(message ?? (status === 'done' ? `Отмечено ${id}` : status === 'skipped' ? `Пропущено ${id}` : `Снята отметка ${id}`), before);
   }, [show]);
 
   const setLevel = useCallback((id: string, level: number) => {

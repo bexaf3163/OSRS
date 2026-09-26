@@ -6,6 +6,7 @@ import { IconBook, IconGoals, IconPath, IconQuests, IconSearch, IconSettings, Ic
 import { SearchBox } from './components/SearchBox';
 import { ModeToggle } from './components/ModeToggle';
 import { HeaderProgress } from './components/HeaderProgress';
+import { BridgeIndicator } from './components/BridgeIndicator';
 import { ToastView } from './components/ToastView';
 import { PathPage } from './pages/Path';
 import { SkillsPage } from './pages/Skills';
@@ -88,6 +89,7 @@ export function App() {
           </nav>
           <div className="topbar-actions">
             <HeaderProgress />
+            <BridgeIndicator />
             <ModeToggle />
             <button type="button" className="search-trigger" onClick={() => setSearchOpen(true)} aria-label="Поиск" aria-keyshortcuts="/">
               <IconSearch />

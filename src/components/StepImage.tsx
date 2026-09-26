@@ -29,7 +29,7 @@ export function StepImage({ src, caption }: { src: string; caption?: string }) {
   );
 }
 
-function ImageModal({ src, alt, caption, onClose }: { src: string; alt: string; caption?: string; onClose: () => void }) {
+export function ImageModal({ src, alt, caption, onClose }: { src: string; alt: string; caption?: string; onClose: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
     dialog.current?.showModal();

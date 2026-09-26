@@ -1158,6 +1158,18 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Anti-dragon_shield"
   },
   {
+    "id": 2446,
+    "nameEn": "Antipoison(4)",
+    "nameRu": "Противоядие",
+    "examine": "4 doses of antipoison potion.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Antipoison(4).png",
+    "value": 360,
+    "highAlch": 216,
+    "lowAlch": 144,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Antipoison"
+  },
+  {
     "id": 592,
     "nameEn": "Ashes",
     "nameRu": "Пепел",
@@ -3763,6 +3775,21 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Coins"
+  },
+  {
+    "id": 2140,
+    "nameEn": "Cooked chicken",
+    "nameRu": "Жареная курица",
+    "examine": "Mmm this looks tasty.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Cooked_chicken.png",
+    "value": 4,
+    "highAlch": 2,
+    "lowAlch": 1,
+    "freeSpawns": [
+      "Falador - Cassie's Shield Shop. (1st floor (2-й этаж))"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Cooked_chicken"
   },
   {
     "id": 2142,
@@ -9436,6 +9463,60 @@
       }
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Pot_of_flour"
+  },
+  {
+    "id": 2434,
+    "nameEn": "Prayer potion(4)",
+    "nameRu": "Зелье молитвы",
+    "examine": "4 doses of Prayer restore potion.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Prayer_potion(4).png",
+    "value": 190,
+    "highAlch": 114,
+    "lowAlch": 76,
+    "dropSources": [
+      {
+        "monster": "Scurrius#MVP",
+        "combatLevel": null,
+        "rate": "6/100"
+      },
+      {
+        "monster": "Grotesque Guardians",
+        "combatLevel": null,
+        "rate": "4/142"
+      },
+      {
+        "monster": "Araxxor",
+        "combatLevel": 890,
+        "rate": "1/8"
+      },
+      {
+        "monster": "Kalphite Queen",
+        "combatLevel": 333,
+        "rate": "1/9"
+      },
+      {
+        "monster": "Mad Angel",
+        "combatLevel": 270,
+        "rate": "12/150"
+      },
+      {
+        "monster": "Commander Zilyana",
+        "combatLevel": 596,
+        "rate": "8/127"
+      },
+      {
+        "monster": "Crazy archaeologist",
+        "combatLevel": 204,
+        "rate": "8/128"
+      },
+      {
+        "monster": "Chaos Fanatic",
+        "combatLevel": 202,
+        "rate": "8/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Prayer_potion"
   },
   {
     "id": 300,

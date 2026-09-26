@@ -22,6 +22,12 @@
     "title": "Разбор инвентаря в банке Lumbridge",
     "requires": [],
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3208,3219,2",
+    "mapLocation": {
+      "x": 3208,
+      "y": 3219,
+      "plane": 2,
+      "label": "Банк Lumbridge Castle (верхний этаж)"
+    },
     "floor": "2nd floor (3-й этаж)",
     "where": "Банк Lumbridge Castle, верхняя площадка замка.",
     "how": "Оставь в инвентаре только топор, кирку, сеть и огниво — остальное положи в банк.",
@@ -30,7 +36,7 @@
         "nameEn": "Bronze axe",
         "nameRu": "Бронзовый топор",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Выдают на обучающем острове. Потерял — купи у Bob's Brilliant Axes на юге Lumbridge за 16 gp или подбери у дома фермера Фреда.",
         "wikiItemId": 1351,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
       },
@@ -38,7 +44,7 @@
         "nameEn": "Bronze pickaxe",
         "nameRu": "Бронзовая кирка",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Выдают на обучающем острове. Потерял — купи у Bob's Brilliant Axes в Lumbridge за 1 gp.",
         "wikiItemId": 1265,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
       },
@@ -46,7 +52,7 @@
         "nameEn": "Small fishing net",
         "nameRu": "Маленькая сеть",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Выдают на обучающем острове. Потерял — одна лежит у Fishing Tutor на болоте Lumbridge Swamp (появляется снова) или купи у Gerrant в Port Sarim за 5 gp.",
         "wikiItemId": 303,
         "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png"
       },
@@ -54,7 +60,7 @@
         "nameEn": "Tinderbox",
         "nameRu": "Огниво",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Выдают на обучающем острове. Потерял — купи в Lumbridge General Store (к северо-востоку от замка) за 1 gp.",
         "wikiItemId": 590,
         "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
       }
@@ -72,12 +78,18 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Cook's_Assistant",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Cook's_Assistant/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3208,3214,0",
+    "mapLocation": {
+      "x": 3208,
+      "y": 3214,
+      "plane": 0,
+      "label": "Кухня повара в Lumbridge Castle"
+    },
     "npc": {
       "nameEn": "Cook",
       "nameRu": "Повар",
       "location": "Кухня в южном крыле Lumbridge Castle",
       "floor": "Ground floor (1-й этаж / земля)",
-      "dialogue": "1 → 1 (\"What's wrong?\" → \"I'm always happy to help a cook in distress.\")",
+      "dialogue": "1 → 1 (\"What's wrong?\" → \"Can I help?\")",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Cook"
     },
     "itemsRequired": [
@@ -119,13 +131,48 @@
     "quickSteps": [
       "Собери пшеницу на поле, молоко на ферме и яйцо в курятнике.",
       "Смели муку на мельнице Lumbridge Windmill.",
-      "Поговори с поваром на кухне замка (диалог 1 → 1) и сдай ингредиенты."
+      "Поговори с поваром на кухне замка: «What's wrong?» → «Can I help?» — и сдай ингредиенты."
     ],
     "proTip": "Готовь еду первых уровней на плите кухни замка (Cook's range) — здесь еда сгорает значительно реже!",
     "reward": "1 QP, 300 XP Cooking, доступ к плите замка.",
     "doneWhen": "Квест в списке стал зелёным.",
     "updatedInV2": true,
-    "v2ChangesSummary": "В V2 добавлена заготовка 1 дополнительного горшка муки (Pot of flour) для квеста Prince Ali Rescue. Проверь банк!"
+    "v2ChangesSummary": "В V2 добавлена заготовка 1 дополнительного горшка муки (Pot of flour) для квеста Prince Ali Rescue. Проверь банк!",
+    "inGame": {
+      "worldPoint": {
+        "x": 3208,
+        "y": 3214,
+        "plane": 0,
+        "label": "Кухня повара в Lumbridge Castle"
+      },
+      "npcNames": [
+        "Cook",
+        "Dairy cow"
+      ],
+      "objectNames": [
+        "Cooking range",
+        "Wheat",
+        "Hopper",
+        "Hopper controls",
+        "Flour bin"
+      ],
+      "dialogChoices": [
+        "What's wrong?",
+        "Can I help?"
+      ],
+      "highlightItems": [
+        "Pot of flour",
+        "Bucket of milk",
+        "Egg",
+        "Pot",
+        "Bucket",
+        "Grain"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Cook's Assistant"
+      }
+    }
   },
   {
     "id": "S1-04",
@@ -138,12 +185,18 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Sheep_Shearer",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Sheep_Shearer/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3189,3272,0",
+    "mapLocation": {
+      "x": 3189,
+      "y": 3272,
+      "plane": 0,
+      "label": "Дом фермера Фреда"
+    },
     "npc": {
       "nameEn": "Fred the Farmer",
       "nameRu": "Фермер Фред",
       "location": "Дом к северо-западу от Lumbridge, сразу за мельницей",
       "floor": "Ground floor (1-й этаж / земля)",
-      "dialogue": "1 → 1 (\"I'm looking for a quest.\" → \"Yes, okay. I can do that.\")",
+      "dialogue": "1 → 1 (\"I'm looking for a quest.\" → \"Yes.\")",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Fred_the_Farmer"
     },
     "itemsRequired": [
@@ -166,7 +219,7 @@
     ],
     "quickSteps": [
       "Возьми ножницы со стола в доме фермера Фреда.",
-      "Поговори с Фредом (диалог 1 → 1).",
+      "Поговори с Фредом: «I'm looking for a quest.» → «Yes.»",
       "Состриги 23 шерсти (Wool) в загоне к югу от дома.",
       "Иди в замок Lumbridge, поднимись на 1st floor (2-й этаж) и спряди 23 клубка на прялке (Spinning wheel).",
       "Вернись к Фреду и сдай ровно 20 клубков.",
@@ -176,7 +229,35 @@
     "reward": "1 QP, 150 XP Crafting, 60 Coins.",
     "doneWhen": "Квест стал зелёным, в банке лежат 3 клубка шерсти (Ball of wool).",
     "updatedInV2": true,
-    "v2ChangesSummary": "В V2 добавлено требование: состричь 23 шерсти и сохранить ровно 3 клубка (Ball of wool) в банке для квеста Prince Ali Rescue. Проверь банк!"
+    "v2ChangesSummary": "В V2 добавлено требование: состричь 23 шерсти и сохранить ровно 3 клубка (Ball of wool) в банке для квеста Prince Ali Rescue. Проверь банк!",
+    "inGame": {
+      "worldPoint": {
+        "x": 3189,
+        "y": 3272,
+        "plane": 0,
+        "label": "Дом фермера Фреда"
+      },
+      "npcNames": [
+        "Fred the Farmer",
+        "Sheep"
+      ],
+      "objectNames": [
+        "Spinning wheel"
+      ],
+      "dialogChoices": [
+        "I'm looking for a quest.",
+        "Yes."
+      ],
+      "highlightItems": [
+        "Shears",
+        "Wool",
+        "Ball of wool"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Sheep Shearer"
+      }
+    }
   },
   {
     "id": "S1-05",
@@ -189,12 +270,44 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/X_Marks_the_Spot",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/X_Marks_the_Spot/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3224,3240,0",
+    "mapLocation": {
+      "x": 3224,
+      "y": 3240,
+      "plane": 0,
+      "label": "Паб The Sheared Ram (Veos)"
+    },
+    "resourceSpots": [
+      {
+        "x": 3230,
+        "y": 3210,
+        "plane": 0,
+        "label": "Клад 1: у Bob's Brilliant Axes"
+      },
+      {
+        "x": 3203,
+        "y": 3212,
+        "plane": 0,
+        "label": "Клад 2: за кухней замка"
+      },
+      {
+        "x": 3108,
+        "y": 3264,
+        "plane": 0,
+        "label": "Клад 3: у тюрьмы Draynor"
+      },
+      {
+        "x": 3077,
+        "y": 3260,
+        "plane": 0,
+        "label": "Клад 4: свинарник Draynor"
+      }
+    ],
     "npc": {
       "nameEn": "Veos",
       "nameRu": "Веос",
       "location": "Паб The Sheared Ram в Lumbridge",
       "floor": "Ground floor (1-й этаж / земля)",
-      "dialogue": "1 → 1 (\"I'm looking for a quest.\" → \"Sounds great, what can I do?\")",
+      "dialogue": "1 → 1 (\"I'm looking for a quest.\" → \"Sounds good, what do I do?\")",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Veos"
     },
     "itemsRequired": [
@@ -208,16 +321,67 @@
       }
     ],
     "quickSteps": [
-      "Поговори с Veos в пабе The Sheared Ram в Lumbridge и возьми свиток сокровищ (Treasure scroll).",
+      "Поговори с Veos в пабе The Sheared Ram в Lumbridge: «I'm looking for a quest.» → «Sounds good, what do I do?» — и возьми свиток сокровищ (Treasure scroll).",
       "Клад 1: у магазина топоров Bob's Brilliant Axes — клетка к северу от северо-западного окна дома.",
       "Клад 2: за замком Lumbridge у задней двери кухни — клетка к юго-западу от большого ящика. Выкопаешь Mysterious orb.",
       "Клад 3: к востоку от Draynor Village, к югу от пшеничного поля у тюрьмы — «Потрогай» шар (Feel), он теплеет ближе к месту; копай в 4 клетках к северу от куста.",
       "Клад 4: шифр ESBZOPS QJH QFO означает DRAYNOR PIG PEN — копай в центре свинарника к северу от рынка Draynor Village.",
-      "Отнеси Ancient casket Veos на северный причал Port Sarim (у паба The Rusty Anchor)."
+      "Отнеси Ancient casket Veos на причал Port Sarim к югу от паба The Rusty Anchor."
     ],
     "proTip": "Лампу на 300 XP вложи в молитву (Prayer): в F2P это самый медленный и дорогой навык. Вместе с The Restless Ghost молитва сразу станет 11-й.",
     "reward": "1 QP, 200 Coins, лампа опыта на 300 XP в любой навык.",
-    "doneWhen": "Квест зелёный, лампа вложена в Prayer."
+    "doneWhen": "Квест зелёный, лампа вложена в Prayer.",
+    "inGame": {
+      "worldPoint": {
+        "x": 3228,
+        "y": 3242,
+        "plane": 0,
+        "label": "Veos в пабе The Sheared Ram"
+      },
+      "groundTiles": [
+        {
+          "x": 3230,
+          "y": 3210,
+          "plane": 0,
+          "label": "Копай здесь (клад 1)"
+        },
+        {
+          "x": 3203,
+          "y": 3212,
+          "plane": 0,
+          "label": "Копай здесь (клад 2)"
+        },
+        {
+          "x": 3108,
+          "y": 3264,
+          "plane": 0,
+          "label": "Копай здесь (клад 3)"
+        },
+        {
+          "x": 3077,
+          "y": 3260,
+          "plane": 0,
+          "label": "Копай здесь (клад 4)"
+        }
+      ],
+      "npcNames": [
+        "Veos"
+      ],
+      "dialogChoices": [
+        "I'm looking for a quest.",
+        "Sounds good, what do I do?"
+      ],
+      "highlightItems": [
+        "Spade",
+        "Treasure scroll",
+        "Mysterious orb",
+        "Ancient casket"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "X Marks the Spot"
+      }
+    }
   },
   {
     "id": "S1-06",
@@ -230,15 +394,20 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/The_Restless_Ghost",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Restless_Ghost/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3243,3206,0",
+    "mapLocation": {
+      "x": 3243,
+      "y": 3206,
+      "plane": 0,
+      "label": "Церковь Лумбриджа (Father Aereck)"
+    },
     "npc": {
       "nameEn": "Father Aereck",
       "nameRu": "Отец Эрек",
       "location": "Церковь Lumbridge",
       "floor": "Ground floor (1-й этаж / земля)",
-      "dialogue": "3 → 1 (\"I'm looking for a quest.\" → \"Let me help you.\")",
+      "dialogue": "3 → 1 (\"I'm looking for a quest!\" → \"Ok, let me help then.\")",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Father_Aereck"
     },
-    "bring": "5 штук еды.",
     "itemsRequired": [
       {
         "nameEn": "Ghostspeak amulet",
@@ -249,15 +418,70 @@
         "iconUrl": "https://oldschool.runescape.wiki/images/Ghostspeak_amulet.png"
       }
     ],
+    "itemsRecommended": [
+      {
+        "nameEn": "Cooked chicken",
+        "nameRu": "Жареная курица",
+        "amount": 5,
+        "howToGet": "Перейди мост к востоку от замка Lumbridge и иди на север вдоль реки до курятника фермы (Lumbridge East Farm). Убей куриц (1 уровень, почти не бьют), подбери Raw chicken и зажарь на плите кухни замка (Cook's range): после Cook's Assistant еда на ней подгорает реже. Бери на пару кур больше — на 1-м уровне готовки часть сгорит. Перья (Feather) тоже подбирай. На бирже ≈ 65 gp.",
+        "wikiItemId": 2140,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Cooked_chicken.png",
+        "heals": 3
+      },
+      {
+        "nameEn": "Shrimps",
+        "nameRu": "Креветки",
+        "amount": 5,
+        "howToGet": "Вместо курицы: лови сетью Small fishing net на берегу болота Lumbridge Swamp у Fishing Tutor (точки на карте шага S1-11) и жарь на плите кухни замка или на костре (топор + огниво). На бирже ≈ 23 gp.",
+        "wikiItemId": 315,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Shrimps.png",
+        "heals": 3
+      }
+    ],
     "quickSteps": [
-      "Поговори с Father Aereck в церкви к юго-востоку от замка Lumbridge.",
-      "Сходи к Father Urhney в хижину на болоте Lumbridge Swamp и получи Ghostspeak amulet.",
-      "Надень амулет и поговори с призраком в гробу на кладбище у церкви.",
-      "Спустись в подвал Wizards' Tower к югу от Draynor и забери череп с алтаря — появится Skeleton 13 уровня; с едой его можно убить, а можно просто убежать.",
-      "Положи череп в гроб на кладбище."
+      "Поговори с Father Aereck в церкви к юго-востоку от замка Lumbridge: «I'm looking for a quest!» → «Ok, let me help then.»",
+      "Сходи к Father Urhney в хижину на болоте Lumbridge Swamp: «Father Aereck sent me to talk to you.» → «He's got a ghost haunting his graveyard.» — получишь Ghostspeak amulet.",
+      "Надень амулет, открой гроб (Coffin) на кладбище у церкви и поговори с призраком: «Yep, now tell me what the problem is.»",
+      "Спустись в подвал Wizards' Tower к югу от Draynor и забери череп с алтаря (Altar) — появится Skeleton 13 уровня. С 5 курицами его можно убить (ешь, когда здоровье ниже 7), а можно просто убежать наверх.",
+      "Положи череп (Ghost's skull) в гроб на кладбище."
     ],
     "reward": "1 QP, 1 125 XP Prayer — с нуля это 9-й уровень молитвы, а вместе с лампой из X Marks the Spot — 11-й.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "worldPoint": {
+        "x": 3243,
+        "y": 3206,
+        "plane": 0,
+        "label": "Father Aereck, церковь Лумбриджа"
+      },
+      "npcNames": [
+        "Father Aereck",
+        "Father Urhney",
+        "Restless ghost",
+        "Skeleton"
+      ],
+      "objectNames": [
+        "Coffin",
+        "Altar"
+      ],
+      "dialogChoices": [
+        "I'm looking for a quest!",
+        "Ok, let me help then.",
+        "Father Aereck sent me to talk to you.",
+        "He's got a ghost haunting his graveyard.",
+        "Yep, now tell me what the problem is."
+      ],
+      "highlightItems": [
+        "Ghostspeak amulet",
+        "Ghost's skull",
+        "Cooked chicken",
+        "Shrimps"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Restless Ghost"
+      }
+    }
   },
   {
     "id": "S1-07",
@@ -270,12 +494,19 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Misthalin_Mystery",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Misthalin_Mystery/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3234,3139,0",
+    "mapLocation": {
+      "x": 3234,
+      "y": 3139,
+      "plane": 0,
+      "label": "Особняк Misthalin Mystery (Abigale)"
+    },
     "npc": {
       "nameEn": "Abigale",
       "nameRu": "Абигейл",
       "location": "Юго-восточный угол болота Lumbridge Swamp, у рыболовных мест",
       "floor": "Ground floor (1-й этаж / земля)",
-      "wikiUrl": "https://oldschool.runescape.wiki/w/Abigale"
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Abigale",
+      "dialogue": "1 → 1 (\"What has happened here?\" → \"What do you want me to do?\")"
     },
     "fields": [
       {
@@ -284,7 +515,26 @@
       }
     ],
     "reward": "1 QP, 600 XP Crafting, неогранённые рубин, изумруд и сапфир (продай их на бирже).",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "worldPoint": {
+        "x": 3234,
+        "y": 3139,
+        "plane": 0,
+        "label": "Abigale у лодки на болоте"
+      },
+      "npcNames": [
+        "Abigale"
+      ],
+      "dialogChoices": [
+        "What has happened here?",
+        "What do you want me to do?"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Misthalin Mystery"
+      }
+    }
   },
   {
     "id": "S1-08",
@@ -293,14 +543,36 @@
     "title": "Рубка дерева до 15 и костры до 15",
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Canoe",
+    "mapLocation": {
+      "x": 3190,
+      "y": 3222,
+      "plane": 0,
+      "label": "Деревья за западной стеной замка"
+    },
+    "resourceSpots": [
+      {
+        "x": 3190,
+        "y": 3222,
+        "plane": 0,
+        "label": "Деревья за западной стеной замка",
+        "note": "Обычные деревья (Tree) в 15–20 клетках к западу от ворот замка. До 15 рубки — только они; дубы (Oak) — с 15."
+      },
+      {
+        "x": 3241,
+        "y": 3235,
+        "plane": 0,
+        "label": "Станция каноэ на реке Lum",
+        "note": "Восточный берег реки Lum, примерно в 10 клетках к северу от моста у замка. Нужен топор в инвентаре."
+      }
+    ],
     "floor": "Ground floor (1-й этаж / земля)",
-    "where": "Деревья к западу от замка Lumbridge.",
+    "where": "Обычные деревья (Tree) сразу за западной стеной замка Lumbridge: выйди из ворот замка на запад и пройди 15–20 клеток — там рощица. Руби и тут же жги брёвна, банк не нужен.",
     "itemsRequired": [
       {
         "nameEn": "Bronze axe",
         "nameRu": "Бронзовый топор",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Выдают на обучающем острове. Потерял — купи у Bob's Brilliant Axes на юге Lumbridge за 16 gp.",
         "wikiItemId": 1351,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
       },
@@ -308,7 +580,7 @@
         "nameEn": "Tinderbox",
         "nameRu": "Огниво",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Выдают на обучающем острове. Потерял — купи в Lumbridge General Store за 1 gp.",
         "wikiItemId": 590,
         "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
       }
@@ -316,14 +588,43 @@
     "fields": [
       {
         "label": "Каноэ",
-        "text": "Срубленным каноэ можно плыть по реке Lum. Уровень рубки решает, сколько остановок проплывёшь: 12 — одна (Lumbridge ↔ Champions' Guild), 27 — две (до Barbarian Village), 42 — три (до Edgeville). Остановки по реке: Lumbridge → Champions' Guild → Barbarian Village → Edgeville."
+        "text": "Уровень рубки решает, сколько остановок проплывёшь: 12 — одна (Lumbridge ↔ Champions' Guild), 27 — две (до Barbarian Village), 42 — три (до Edgeville). Остановки по реке: Lumbridge → Champions' Guild → Barbarian Village → Edgeville. После поездки каноэ исчезает — на каждую поездку рубишь новое."
       },
       {
         "label": "Как быстрее",
         "text": "До 15 руби обычные деревья (Tree) у замка и сразу жги брёвна огнивом. С 15 уровня переходи на дубы (Oak)."
+      },
+      {
+        "label": "Сохрани",
+        "text": "1 пепел (Ashes) в банке — для Prince Ali Rescue. Пепел остаётся на земле, когда костёр догорает."
       }
     ],
-    "doneWhen": "Woodcutting 15, Firemaking 15."
+    "doneWhen": "Woodcutting 15, Firemaking 15.",
+    "quickSteps": [
+      "Выйди из замка Lumbridge через западные ворота и руби обычные деревья (Tree) в рощице за стеной.",
+      "Каждое бревно сразу жги: огниво (Tinderbox) на бревно (Logs). Двигайся вдоль ряда деревьев — на месте костра новый не разжечь.",
+      "Подбери 1 пепел (Ashes) после костра и положи в банк — он нужен для пасты в Prince Ali Rescue (S2-10).",
+      "С 15 рубки переходи на дубы (Oak) там же, а с 15 костров — жги дубовые брёвна.",
+      "С 12 рубки попробуй каноэ: станция на восточном берегу реки Lum, ≈ 10 клеток к северу от моста у замка. «Chop-down» — срубить, «Shape-Canoe» — выбрать Log canoe, «Float» — спустить, «Paddle» — выбрать остановку."
+    ],
+    "inGame": {
+      "worldPoint": {
+        "x": 3190,
+        "y": 3222,
+        "plane": 0,
+        "label": "Деревья за западной стеной замка"
+      },
+      "objectNames": [
+        "Tree",
+        "Canoe Station"
+      ],
+      "highlightItems": [
+        "Bronze axe",
+        "Tinderbox",
+        "Logs",
+        "Ashes"
+      ]
+    }
   },
   {
     "id": "S1-09",
@@ -333,16 +634,42 @@
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Stronghold_of_Security",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3081,3420,0",
-    "where": "Дыра в земле в центре Barbarian Village (к северу от Draynor и к западу от Varrock). Дойди пешком: на каноэ от Lumbridge туда можно доплыть только с 27 рубкой.",
-    "bring": "5–10 штук еды (креветки или хлеб).",
-    "fields": [
+    "mapLocation": {
+      "x": 3081,
+      "y": 3420,
+      "plane": 0,
+      "label": "Вход в Stronghold of Security, Barbarian Village"
+    },
+    "where": "Дыра в земле (Entrance) в центре Barbarian Village — у шахты, к северу от Draynor и к западу от Varrock.",
+    "warning": "Сначала включи двухфакторную защиту Jagex Account — без неё сундуки с деньгами не откроются. Со 2-го этажа монстры агрессивны и бьют сами: держи еду под рукой и ешь, когда здоровье ниже 7.",
+    "itemsRecommended": [
       {
-        "label": "Обязательно",
-        "text": "Включи двухфакторную защиту Jagex Account до входа — без неё сундуки не открываются."
+        "nameEn": "Cooked chicken",
+        "nameRu": "Жареная курица",
+        "amount": "15–20",
+        "howToGet": "Перейди мост к востоку от замка Lumbridge и иди на север вдоль реки до курятника фермы (Lumbridge East Farm). Убей куриц (1 уровень, почти не бьют), подбери Raw chicken и зажарь на плите кухни замка (Cook's range): после Cook's Assistant еда на ней подгорает реже. Бери на пару кур больше — на 1-м уровне готовки часть сгорит. Перья (Feather) тоже подбирай. На бирже ≈ 65 gp.",
+        "wikiItemId": 2140,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Cooked_chicken.png",
+        "heals": 3
       },
       {
-        "label": "Как проходить",
-        "text": "На каждой двери отвечай на вопрос о безопасности аккаунта: правильный ответ всегда про то, что пароль и коды никому не сообщают. Монстры внутри агрессивные, а на нижних этажах бывают выше 100 уровня — не дерись, пробегай от двери к двери и возьми 5–10 штук еды."
+        "nameEn": "Shrimps",
+        "nameRu": "Креветки",
+        "amount": "15–20",
+        "howToGet": "Вместо курицы: лови сетью Small fishing net на берегу болота Lumbridge Swamp у Fishing Tutor (точки на карте шага S1-11) и жарь на плите кухни замка или на костре (топор + огниво). На бирже ≈ 23 gp.",
+        "wikiItemId": 315,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Shrimps.png",
+        "heals": 3
+      }
+    ],
+    "fields": [
+      {
+        "label": "Где лечиться",
+        "text": "Ешь в безопасном коридоре между дверями. Сундук Box of Health на 3-м этаже полностью восстанавливает здоровье. Кончилась еда — выйди наверх: здоровье восстанавливается само, 1 очко в минуту."
+      },
+      {
+        "label": "Монстры",
+        "text": "Этаж 1 — гоблины и минотавры до 27 уровня (зона группового боя), этаж 2 — зомби до 53, этаж 3 — пауки и катаблепоны до 68, этаж 4 — анку и тени. Со 2-го этажа они нападают сами — не останавливайся."
       },
       {
         "label": "Награды",
@@ -350,7 +677,41 @@
       }
     ],
     "reward": "10 000 Coins (2 000 + 3 000 + 5 000), сапоги (Fancy boots или Fighting boots) и 4 эмоции.",
-    "doneWhen": "Открыты все 4 сундука, 10 000 монет в банке."
+    "doneWhen": "Открыты все 4 сундука, 10 000 монет в банке.",
+    "quickSteps": [
+      "Быстрее всего: поговори с Count Check на кладбище Лумбриджа (у церкви) — один раз за аккаунт он бесплатно телепортирует прямо ко входу.",
+      "Без телепорта: каноэ при 12–26 рубке довезёт от Lumbridge только до Champions' Guild (1 остановка), дальше пешком на северо-запад вдоль реки ≈ 2 минуты. С 27 рубкой каноэ идёт прямо до Barbarian Village.",
+      "Найди дыру (Entrance) в центре деревни у шахты и спустись.",
+      "Включи бег (иконка ботинка у мини-карты) и не нападай на монстров — пробегай от двери к двери.",
+      "Двери идут парами. Между ними — пустой коридор, где тебя никто не бьёт: здесь ешь и восстанавливайся. На второй двери бывает вопрос о безопасности: правильный ответ всегда — пароль, PIN и коды никому не сообщают и ссылкам в чате не верят.",
+      "Этаж 1 (Vault of War): в конце Gift of Peace — 2 000 монет. Дальше вниз по лестнице.",
+      "Этаж 2 (Catacomb of Famine): здесь монстры уже агрессивны. В конце Grain of Plenty — 3 000 монет.",
+      "Этаж 3 (Pit of Pestilence): Box of Health — 5 000 монет и полное восстановление здоровья.",
+      "Этаж 4 (Sepulchre of Death): Cradle of Life — сапоги Fighting boots или Fancy boots на выбор.",
+      "Выход — Home Teleport (Lumbridge) из книги заклинаний: он бесплатный, раз в 30 минут."
+    ],
+    "inGame": {
+      "worldPoint": {
+        "x": 3081,
+        "y": 3420,
+        "plane": 0,
+        "label": "Вход в Stronghold of Security"
+      },
+      "npcNames": [
+        "Count Check"
+      ],
+      "objectNames": [
+        "Entrance",
+        "Gift of Peace",
+        "Grain of Plenty",
+        "Box of Health",
+        "Cradle of Life"
+      ],
+      "highlightItems": [
+        "Cooked chicken",
+        "Shrimps"
+      ]
+    }
   },
   {
     "id": "S1-10",
@@ -360,6 +721,12 @@
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Chronicle",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3082,3248,0",
+    "mapLocation": {
+      "x": 3082,
+      "y": 3248,
+      "plane": 0,
+      "label": "Рыночная площадь Draynor Village (Diango)"
+    },
     "npc": {
       "nameEn": "Diango",
       "nameRu": "Дьянго",
@@ -404,13 +771,37 @@
     "title": "Рыбалка до 20 и готовка до 15",
     "requires": [],
     "floor": "Ground floor (1-й этаж / земля)",
-    "where": "Берег Draynor Village (к югу от банка) или юго-восток болота Lumbridge Swamp: креветки, с 15 — анчоусы.",
+    "mapLocation": {
+      "x": 3244,
+      "y": 3150,
+      "plane": 0,
+      "label": "Точка 1: река Lum у Fishing Tutor",
+      "note": "Берег реки Lum, от церкви Лумбриджа ≈ 55 клеток на юг вдоль восточного края болота, у NPC Fishing Tutor. Не заходи вглубь болотных топей — рыба водится только в речной воде у берега."
+    },
+    "resourceSpots": [
+      {
+        "x": 3244,
+        "y": 3150,
+        "plane": 0,
+        "label": "Точка 1: река Lum у Fishing Tutor",
+        "note": "Берег реки Lum, от церкви Лумбриджа ≈ 55 клеток на юг вдоль восточного края болота, у NPC Fishing Tutor. Не заходи вглубь болотных топей — рыба водится только в речной воде у берега."
+      },
+      {
+        "x": 3086,
+        "y": 3227,
+        "plane": 0,
+        "label": "Точка 2: берег Draynor Village",
+        "note": "Берег Draynor Village примерно в 15 клетках к югу от банка. Рыбу удобно сразу складывать в этот банк."
+      }
+    ],
+    "where": "Два места с креветками, выбери ближнее. С 15 рыбалки там же ловятся анчоусы (Anchovies).",
+    "warning": "⚠️ Важно: в зелёных лужах внутри болота рыбалки нет. Ищи пузыри на воде строго на берегу реки у маркера.",
     "itemsRequired": [
       {
         "nameEn": "Small fishing net",
         "nameRu": "Маленькая сеть",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Выдают на обучающем острове. Потерял — одна лежит у Fishing Tutor на болоте Lumbridge Swamp (появляется снова) или купи у Gerrant в Port Sarim за 5 gp.",
         "wikiItemId": 303,
         "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png"
       }
@@ -418,10 +809,49 @@
     "fields": [
       {
         "label": "Где готовить",
-        "text": "Плита кухни замка Lumbridge (Cook-o-matic 100 — после Cook's Assistant еда на ней подгорает реже) или костёр рядом с местом ловли."
+        "text": "Плита кухни замка Lumbridge (Cook's range — после Cook's Assistant еда на ней подгорает реже) или костёр рядом с местом ловли."
+      },
+      {
+        "label": "RuneLite",
+        "text": "Плагин Fishing подсвечивает активные места ловли — так пузыри на воде легче заметить."
       }
     ],
-    "doneWhen": "Fishing 20, Cooking 15, в банке 50+ приготовленных креветок или анчоусов."
+    "doneWhen": "Fishing 20, Cooking 15, в банке 50+ приготовленных креветок или анчоусов.",
+    "titleRu": "Ловля креветок (Shrimp) сетью Small fishing net",
+    "inGame": {
+      "worldPoint": {
+        "x": 3244,
+        "y": 3150,
+        "plane": 0,
+        "label": "Креветки у Fishing Tutor"
+      },
+      "groundTiles": [
+        {
+          "x": 3244,
+          "y": 3150,
+          "plane": 0,
+          "label": "Fishing spot"
+        },
+        {
+          "x": 3086,
+          "y": 3227,
+          "plane": 0,
+          "label": "Fishing spot"
+        }
+      ],
+      "npcNames": [
+        "Fishing spot",
+        "Fishing tutor"
+      ],
+      "objectNames": [
+        "Cooking range"
+      ],
+      "highlightItems": [
+        "Small fishing net",
+        "Raw shrimps",
+        "Raw anchovies"
+      ]
+    }
   },
   {
     "id": "S1-12",
@@ -431,8 +861,14 @@
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Free-to-play_Mining_training",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3286,3365,0",
+    "mapLocation": {
+      "x": 3286,
+      "y": 3365,
+      "plane": 0,
+      "label": "Шахта к юго-востоку от Varrock"
+    },
     "floor": "Ground floor (1-й этаж / земля)",
-    "where": "Шахта к юго-востоку от Varrock (South-east Varrock mine): медь, олово и железо в одном месте, банк Varrock East рядом. От книги Chronicle — пара минут на восток.",
+    "where": "Шахта к юго-востоку от Varrock (South-east Varrock mine): медь, олово и железо в одном месте, банк Varrock East — ≈ 60 клеток на северо-запад. От книги Chronicle (Champions' Guild) — ≈ 1 минута пешком на восток.",
     "how": "До 15 копай медь (Copper) и олово (Tin) и выбрасывай лишнее (Shift + клик). С 15 уровня переходи на железо (Iron).",
     "itemsRequired": [
       {
@@ -464,6 +900,12 @@
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Cowhide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3257,3272,0",
+    "mapLocation": {
+      "x": 3257,
+      "y": 3272,
+      "plane": 0,
+      "label": "Коровье поле к востоку от Lumbridge"
+    },
     "floor": "Ground floor (1-й этаж / земля)",
     "where": "Коровье поле к северо-востоку от замка Lumbridge, за рекой (Lumbridge cow field).",
     "how": "Убивай коров (2 уровень) и подбирай шкуры (Cowhide). Полный инвентарь — 28 шкур. Банк — в замке Lumbridge (2nd floor) или продавай сразу на Grand Exchange.",
@@ -491,6 +933,12 @@
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Grand_Exchange",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3164,3487,0",
+    "mapLocation": {
+      "x": 3164,
+      "y": 3487,
+      "plane": 0,
+      "label": "Биржа Grand Exchange"
+    },
     "how": "Телепортируйся книгой Chronicle к Champions' Guild и иди на север к Grand Exchange. Сначала продай шкуры, потом покупай. Цены — примерные, на 26.09.2026; точную цену покажет инспектор (клик по предмету).",
     "itemsRequired": [
       {
@@ -669,6 +1117,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Imp_Catcher",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Imp_Catcher/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3103,3163,2",
+    "mapLocation": {
+      "x": 3103,
+      "y": 3163,
+      "plane": 2,
+      "label": "Wizard Mizgog, Wizards' Tower"
+    },
     "npc": {
       "nameEn": "Wizard Mizgog",
       "nameRu": "Волшебник Мизгог",
@@ -728,12 +1182,18 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Witch's_Potion",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Witch's_Potion/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2968,3204,0",
+    "mapLocation": {
+      "x": 2968,
+      "y": 3204,
+      "plane": 0,
+      "label": "Дом ведьмы Hetty в Rimmington"
+    },
     "npc": {
       "nameEn": "Hetty",
       "nameRu": "Хетти",
       "location": "Деревня Rimmington",
       "floor": "Ground floor (1-й этаж / земля)",
-      "dialogue": "1 → 1",
+      "dialogue": "1 → 1 (\"I am in search of a quest.\" → \"Yes, help me become one with my darker side.\")",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Hetty"
     },
     "itemsRequired": [
@@ -825,7 +1285,13 @@
         "text": "Fire Strike стоит 3 руны огня, 2 воздуха и 1 разума (≈ 30 gp). С посохом огня (Staff of fire) руны огня не нужны — ≈ 15 gp за заклинание. От 10 до 25 уровня — около 500–650 заклинаний, то есть 8–10 тысяч gp."
       }
     ],
-    "doneWhen": "Magic 25."
+    "doneWhen": "Magic 25.",
+    "inGame": {
+      "completionTrigger": {
+        "type": "CHAT_MESSAGE",
+        "chatPattern": "^Congratulations, you've just advanced your Magic level\\. You are now level (2[5-9]|[3-9]\\d)\\."
+      }
+    }
   },
   {
     "id": "S2-05",
@@ -838,6 +1304,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Romeo_%26_Juliet",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Romeo_%26_Juliet/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3211,3422,0",
+    "mapLocation": {
+      "x": 3211,
+      "y": 3422,
+      "plane": 0,
+      "label": "Romeo на площади Varrock"
+    },
     "npc": {
       "nameEn": "Romeo",
       "nameRu": "Ромео",
@@ -892,6 +1364,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Rune_Mysteries",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Rune_Mysteries/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3210,3221,1",
+    "mapLocation": {
+      "x": 3210,
+      "y": 3221,
+      "plane": 1,
+      "label": "Duke Horacio, Lumbridge Castle"
+    },
     "npc": {
       "nameEn": "Duke Horacio",
       "nameRu": "Герцог Гораций",
@@ -939,6 +1417,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/The_Knight's_Sword",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Knight's_Sword/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2978,3341,0",
+    "mapLocation": {
+      "x": 2978,
+      "y": 3341,
+      "plane": 0,
+      "label": "Squire, White Knights' Castle"
+    },
     "npc": {
       "nameEn": "Squire",
       "nameRu": "Оруженосец",
@@ -946,7 +1430,6 @@
       "floor": "Ground floor (1-й этаж / земля)",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Squire"
     },
-    "bring": "10 штук еды.",
     "itemsRequired": [
       {
         "nameEn": "Redberry pie",
@@ -968,7 +1451,7 @@
         "nameEn": "Bronze pickaxe",
         "nameRu": "Кирка",
         "amount": 1,
-        "howToGet": "Подойдёт любая кирка.",
+        "howToGet": "Любая кирка из банка — бронзовая с обучающего острова подходит.",
         "wikiItemId": 1265,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
       },
@@ -979,6 +1462,26 @@
         "howToGet": "Добудь в Asgarnian Ice Dungeon у Mudskipper Point.",
         "wikiItemId": 668,
         "iconUrl": "https://oldschool.runescape.wiki/images/Blurite_ore.png"
+      }
+    ],
+    "itemsRecommended": [
+      {
+        "nameEn": "Trout",
+        "nameRu": "Форель",
+        "amount": 10,
+        "howToGet": "Лови нахлыстом (Fly fishing rod + Feather из S2-01, с 20 рыбалки) на реке к востоку от Barbarian Village и жарь тут же на вечном костре (Fire) у реки — готовка 15. Или купи на бирже ≈ 24 gp.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7
+      },
+      {
+        "nameEn": "Salmon",
+        "nameRu": "Лосось",
+        "amount": "или 8",
+        "howToGet": "Купи на бирже ≈ 30 gp. Сам — с 30 рыбалки и 25 готовки нахлыстом там же, где форель (Barbarian Village).",
+        "wikiItemId": 329,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
+        "heals": 9
       }
     ],
     "quickSteps": [
@@ -996,7 +1499,7 @@
       },
       {
         "label": "Опасно",
-        "text": "Синюю руду (Blurite ore) добывают в Asgarnian Ice Dungeon — вход у Mudskipper Point к югу от Port Sarim. Там ледяные гиганты (53 ур.) и ледяные воины (57 ур.): забеги, скопай руду и сразу уходи."
+        "text": "Синюю руду (Blurite ore) добывают в Asgarnian Ice Dungeon — вход у Mudskipper Point к югу от Port Sarim. Там ледяные гиганты (53 ур.) и ледяные воины (57 ур.): забеги, скопай руду и сразу уходи. Ешь форель, когда здоровье ниже половины."
       }
     ],
     "reward": "1 QP и 12 725 XP Smithing — навык мгновенно взлетает с 1 сразу до 29 уровня без ручной плавки!",
@@ -1013,6 +1516,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Vampyre_Slayer",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Vampyre_Slayer/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3098,3268,0",
+    "mapLocation": {
+      "x": 3098,
+      "y": 3268,
+      "plane": 0,
+      "label": "Дом Моргана в Draynor Village"
+    },
     "npc": {
       "nameEn": "Morgan",
       "nameRu": "Морган",
@@ -1020,7 +1529,6 @@
       "floor": "Ground floor (1-й этаж / земля)",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Morgan"
     },
-    "bring": "Еда.",
     "itemsRequired": [
       {
         "nameEn": "Hammer",
@@ -1055,6 +1563,26 @@
         "iconUrl": "https://oldschool.runescape.wiki/images/Garlic.png"
       }
     ],
+    "itemsRecommended": [
+      {
+        "nameEn": "Trout",
+        "nameRu": "Форель",
+        "amount": 10,
+        "howToGet": "Лови нахлыстом (Fly fishing rod + Feather из S2-01, с 20 рыбалки) на реке к востоку от Barbarian Village и жарь тут же на вечном костре (Fire) у реки — готовка 15. Или купи на бирже ≈ 24 gp.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7
+      },
+      {
+        "nameEn": "Salmon",
+        "nameRu": "Лосось",
+        "amount": "или 8",
+        "howToGet": "Купи на бирже ≈ 30 gp. Сам — с 30 рыбалки и 25 готовки нахлыстом там же, где форель (Barbarian Village).",
+        "wikiItemId": 329,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
+        "heals": 9
+      }
+    ],
     "imageUrl": "https://oldschool.runescape.wiki/images/Count_draynor_safespot.png",
     "imageCaption": "Безопасная точка (safespot) против Count Draynor",
     "quickSteps": [
@@ -1070,9 +1598,41 @@
         "text": "Count Draynor, 34 уровень."
       }
     ],
-    "safespot": "Чеснок в инвентаре ослабляет вампира. Встань за стулом (safespot) и бей Fire Strike либо забей его в упор мечом, подлечиваясь лососем.",
+    "safespot": "Чеснок в инвентаре ослабляет вампира. Встань за стулом (safespot) и бей Fire Strike либо забей его в упор мечом, подлечиваясь форелью (+7) или лососем (+9).",
     "reward": "3 QP и 4 825 XP Attack — уровень атаки мгновенно поднимается с 1 до 20!",
-    "doneWhen": "Квест зелёный, Attack 20+. Надет Mithril scimitar из шага S2-01."
+    "doneWhen": "Квест зелёный, Attack 20+. Надет Mithril scimitar из шага S2-01.",
+    "inGame": {
+      "worldPoint": {
+        "x": 3098,
+        "y": 3268,
+        "plane": 0,
+        "label": "Дом Моргана в Draynor Village"
+      },
+      "npcNames": [
+        "Morgan",
+        "Dr Harlow",
+        "Count Draynor"
+      ],
+      "objectNames": [
+        "Coffin"
+      ],
+      "dialogChoices": [
+        "Yes",
+        "I need your help dealing with a vampyre."
+      ],
+      "highlightItems": [
+        "Stake",
+        "Hammer",
+        "Garlic",
+        "Beer",
+        "Trout",
+        "Salmon"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Vampyre Slayer"
+      }
+    }
   },
   {
     "id": "S2-09",
@@ -1085,6 +1645,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Pirate's_Treasure",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Pirate's_Treasure/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3053,3251,0",
+    "mapLocation": {
+      "x": 3053,
+      "y": 3251,
+      "plane": 0,
+      "label": "Redbeard Frank, Port Sarim"
+    },
     "npc": {
       "nameEn": "Redbeard Frank",
       "nameRu": "Рыжебородый Фрэнк",
@@ -1152,6 +1718,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Prince_Ali_Rescue",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Prince_Ali_Rescue/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3298,3163,0",
+    "mapLocation": {
+      "x": 3298,
+      "y": 3163,
+      "plane": 0,
+      "label": "Hassan, дворец Al Kharid"
+    },
     "npc": {
       "nameEn": "Hassan",
       "nameRu": "Хассан",
@@ -1290,6 +1862,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Ernest_the_Chicken",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Ernest_the_Chicken/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3110,3328,0",
+    "mapLocation": {
+      "x": 3110,
+      "y": 3328,
+      "plane": 0,
+      "label": "Veronica у Draynor Manor"
+    },
     "npc": {
       "nameEn": "Veronica",
       "nameRu": "Вероника",
@@ -1331,6 +1909,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Goblin_Diplomacy",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Goblin_Diplomacy/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2958,3512,0",
+    "mapLocation": {
+      "x": 2958,
+      "y": 3512,
+      "plane": 0,
+      "label": "General Bentnoze, Goblin Village"
+    },
     "npc": {
       "nameEn": "General Bentnoze",
       "nameRu": "Генерал Бентноуз",
@@ -1379,8 +1963,31 @@
     "title": "Рыбалка и готовка до 30 уровня",
     "requires": [],
     "floor": "Ground floor (1-й этаж / земля)",
-    "where": "Река в Barbarian Village.",
-    "how": "Лови форель (Trout, с 20) и лосося (Salmon, с 30) нахлыстом на реке у Barbarian Village. Готовь прямо на вечном костре в центре деревни.",
+    "mapLocation": {
+      "x": 3104,
+      "y": 3424,
+      "plane": 0,
+      "label": "Точка 1: у моста Barbarian Village",
+      "note": "Южное место ловли, у моста через реку к востоку от деревни."
+    },
+    "resourceSpots": [
+      {
+        "x": 3104,
+        "y": 3424,
+        "plane": 0,
+        "label": "Точка 1: у моста Barbarian Village",
+        "note": "Южное место ловли, у моста через реку к востоку от деревни."
+      },
+      {
+        "x": 3110,
+        "y": 3434,
+        "plane": 0,
+        "label": "Точка 2: к северу, у вечного костра",
+        "note": "Северное место ловли; вечный костёр (Fire) — в нескольких клетках к западу, на берегу."
+      }
+    ],
+    "where": "Река к востоку от Barbarian Village: два места ловли нахлыстом (Rod Fishing spot), вечный костёр (Fire) — прямо у реки.",
+    "how": "Лови форель (Trout, с 20) и лосося (Salmon, с 30) нахлыстом и готовь тут же на вечном костре у реки. Лишнее можно выбрасывать или сдавать в банк Edgeville к северу.",
     "itemsRequired": [
       {
         "nameEn": "Fly fishing rod",
@@ -1394,7 +2001,7 @@
         "nameEn": "Feather",
         "nameRu": "Перо",
         "amount": "Сколько есть",
-        "howToGet": "Наживка для нахлыста, 1 перо на рыбу.",
+        "howToGet": "Наживка для нахлыста: 1 перо на рыбу. Из S2-01 (500 штук) или 2 gp в Port Sarim у Gerrant.",
         "wikiItemId": 314,
         "iconUrl": "https://oldschool.runescape.wiki/images/Feather.png"
       }
@@ -1412,6 +2019,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Doric's_Quest",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Doric's_Quest/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2952,3450,0",
+    "mapLocation": {
+      "x": 2952,
+      "y": 3450,
+      "plane": 0,
+      "label": "Дом гнома Doric"
+    },
     "npc": {
       "nameEn": "Doric",
       "nameRu": "Дорик",
@@ -1462,6 +2075,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Black_Knights'_Fortress",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Black_Knights'_Fortress/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2960,3339,2",
+    "mapLocation": {
+      "x": 2960,
+      "y": 3339,
+      "plane": 2,
+      "label": "Sir Amik Varze, White Knights' Castle"
+    },
     "npc": {
       "nameEn": "Sir Amik Varze",
       "nameRu": "Сэр Амик Варз",
@@ -1495,6 +2114,17 @@
         "iconUrl": "https://oldschool.runescape.wiki/images/Cabbage.png"
       }
     ],
+    "itemsRecommended": [
+      {
+        "nameEn": "Trout",
+        "nameRu": "Форель",
+        "amount": 5,
+        "howToGet": "Лови нахлыстом (Fly fishing rod + Feather из S2-01, с 20 рыбалки) на реке к востоку от Barbarian Village и жарь тут же на вечном костре (Fire) у реки — готовка 15. Или купи на бирже ≈ 24 gp.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7
+      }
+    ],
     "quickSteps": [
       "Поговори с Sir Amik Varze на 2nd floor (3-й этаж) западной башни замка Falador.",
       "Надень Iron chainbody и Bronze med helm и войди в Black Knights' Fortress к северу от Falador.",
@@ -1504,7 +2134,7 @@
     "fields": [
       {
         "label": "Маскировка",
-        "text": "Надень железную кольчугу и бронзовый шлем — стражник пустит тебя в крепость. Чёрные рыцари (33 ур.) внутри нападают, возьми еду."
+        "text": "Надень железную кольчугу и бронзовый шлем — стражник пустит тебя в крепость. Чёрные рыцари (33 ур.) внутри нападают — возьми 5 форелей."
       }
     ],
     "reward": "3 QP, 2 500 Coins.",
@@ -1521,6 +2151,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Demon_Slayer",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Demon_Slayer/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3203,3424,0",
+    "mapLocation": {
+      "x": 3203,
+      "y": 3424,
+      "plane": 0,
+      "label": "Gypsy Aris, площадь Varrock"
+    },
     "npc": {
       "nameEn": "Gypsy Aris",
       "nameRu": "Цыганка Арис",
@@ -1584,6 +2220,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Below_Ice_Mountain",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Below_Ice_Mountain/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3002,3436,0",
+    "mapLocation": {
+      "x": 3002,
+      "y": 3436,
+      "plane": 0,
+      "label": "Willow у Ice Mountain"
+    },
     "npc": {
       "nameEn": "Willow",
       "nameRu": "Уиллоу",
@@ -1646,6 +2288,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Shield_of_Arrav",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Shield_of_Arrav/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3210,3494,0",
+    "mapLocation": {
+      "x": 3210,
+      "y": 3494,
+      "plane": 0,
+      "label": "Reldo, библиотека дворца Varrock"
+    },
     "npc": {
       "nameEn": "Reldo",
       "nameRu": "Рельдо",
@@ -1670,6 +2318,12 @@
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_iron_ore",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3286,3365,0",
+    "mapLocation": {
+      "x": 3286,
+      "y": 3365,
+      "plane": 0,
+      "label": "Шахта к юго-востоку от Varrock (железо)"
+    },
     "floor": "Ground floor (1-й этаж / земля)",
     "where": "Шахта к юго-востоку от Varrock (3 железные жилы) или шахта Al Kharid (после Prince Ali проход бесплатный). Банк — Varrock East или Al Kharid.",
     "how": "Копай железо (Iron ore) и продавай на бирже. Заодно качается добыча — к 60 уровню она понадобится в S6-03.",
@@ -1791,7 +2445,13 @@
         "text": "Varrock Teleport (35 XP) до 31 уровня, затем Lumbridge Teleport (41 XP) до 33 — около 260 телепортов по ≈ 130 gp (руна закона ≈ 120 gp) — примерно 34 000 gp. Бери посох воздуха (Staff of air), чтобы не тратить руны воздуха."
       }
     ],
-    "doneWhen": "Magic 33."
+    "doneWhen": "Magic 33.",
+    "inGame": {
+      "completionTrigger": {
+        "type": "CHAT_MESSAGE",
+        "chatPattern": "^Congratulations, you've just advanced your Magic level\\. You are now level (3[3-9]|[4-9]\\d)\\."
+      }
+    }
   },
   {
     "id": "S4-01",
@@ -1804,6 +2464,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/The_Corsair_Curse",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Corsair_Curse/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3030,3273,0",
+    "mapLocation": {
+      "x": 3030,
+      "y": 3273,
+      "plane": 0,
+      "label": "Captain Tock к северу от Port Sarim"
+    },
     "npc": {
       "nameEn": "Captain Tock",
       "nameRu": "Капитан Ток",
@@ -1816,9 +2482,10 @@
         "nameEn": "Salmon",
         "nameRu": "Лосось",
         "amount": 10,
-        "howToGet": "Еда для боя.",
+        "howToGet": "Лови нахлыстом у Barbarian Village (с 30 рыбалки, шаг S2-13) и готовь на вечном костре, или купи на бирже ≈ 30 gp.",
         "wikiItemId": 329,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
+        "heals": 9
       }
     ],
     "quickSteps": [
@@ -1830,7 +2497,7 @@
     "fields": [
       {
         "label": "Бой",
-        "text": "Ithoi the Navigator (35 ур.) — бей его в ближнем бою или магией. Возьми 10 лососей."
+        "text": "Ithoi the Navigator (35 ур.) — бей его в ближнем бою или магией. Ешь лосося, когда здоровье ниже 15."
       }
     ],
     "reward": "2 QP, доступ к банку Yusuf в Corsair Cove и к пещере Corsair Cove Dungeon.",
@@ -1847,6 +2514,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/The_Ides_of_Milk",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Ides_of_Milk/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3168,3275,0",
+    "mapLocation": {
+      "x": 3168,
+      "y": 3275,
+      "plane": 0,
+      "label": "Cassius у пруда Lumbridge"
+    },
     "npc": {
       "nameEn": "Cassius",
       "nameRu": "Кассиус",
@@ -1854,10 +2527,21 @@
       "floor": "Ground floor (1-й этаж / земля)",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Cassius"
     },
+    "itemsRecommended": [
+      {
+        "nameEn": "Salmon",
+        "nameRu": "Лосось",
+        "amount": 5,
+        "howToGet": "Из шага S2-13 или на бирже ≈ 30 gp.",
+        "wikiItemId": 329,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
+        "heals": 9
+      }
+    ],
     "fields": [
       {
         "label": "Бой",
-        "text": "В конце нужно победить быка — возьми еду."
+        "text": "В конце нужно победить быка — возьми 5 лососей."
       }
     ],
     "reward": "1 QP, доступ к боссу-корове Brutus, лампа на 1 000 XP в любой боевой навык или молитву (вложи в Prayer) и Cowbell amulet от Gillie Groats.",
@@ -1870,6 +2554,12 @@
     "title": "Бой до 40 / 40 / 40",
     "requires": [],
     "where": "Моховые великаны (Moss giant, 42 ур.) в канализации Varrock Sewers — люк сразу к востоку от дворца Varrock. Путь перегорожен паутиной: разрежь её ятаганом или ножом. Альтернатива — Flesh Crawler на 2-м этаже Stronghold of Security.",
+    "mapLocation": {
+      "x": 3237,
+      "y": 3458,
+      "plane": 0,
+      "label": "Люк в канализацию Varrock Sewers"
+    },
     "itemsRequired": [
       {
         "nameEn": "Rune scimitar",
@@ -1912,12 +2602,21 @@
         "howToGet": "Нужна 40 защита. ≈ 32 000 gp.",
         "wikiItemId": 1201,
         "iconUrl": "https://oldschool.runescape.wiki/images/Rune_kiteshield.png"
+      },
+      {
+        "nameEn": "Salmon",
+        "nameRu": "Лосось",
+        "amount": 20,
+        "howToGet": "Из шага S2-13 или на бирже ≈ 30 gp (20 штук ≈ 600). С 40 рыбалки — омары (шаг S4-04).",
+        "wikiItemId": 329,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
+        "heals": 9
       }
     ],
     "fields": [
       {
         "label": "Заработок",
-        "text": "С великанов падают большие кости (Big bones, ≈ 310 gp) и руны природы (≈ 140 gp) — подбирай и продавай: инвентарь костей ≈ 8 700 gp. Канализация — зона группового боя, бери еду с запасом."
+        "text": "С великанов падают большие кости (Big bones, ≈ 310 gp) и руны природы (≈ 140 gp) — подбирай и продавай: инвентарь костей ≈ 8 700 gp. Канализация — зона группового боя: бери 20 лососей и ешь, когда здоровье ниже 20."
       },
       {
         "label": "Оружие",
@@ -1938,6 +2637,29 @@
     "title": "Рыбалка и готовка до 40 (омары)",
     "requires": [],
     "floor": "Ground floor (1-й этаж / земля)",
+    "mapLocation": {
+      "x": 2923,
+      "y": 3180,
+      "plane": 0,
+      "label": "С 40: омары у Musa Point",
+      "note": "Причал Musa Point на Karamja: лодка из Port Sarim за 30 gp, дальше на восток по берегу. Ловушка Lobster pot, место ловли с опциями Cage/Harpoon."
+    },
+    "resourceSpots": [
+      {
+        "x": 3104,
+        "y": 3424,
+        "plane": 0,
+        "label": "До 40: нахлыст у Barbarian Village",
+        "note": "Форель и лосось до 40 рыбалки, вечный костёр у реки."
+      },
+      {
+        "x": 2923,
+        "y": 3180,
+        "plane": 0,
+        "label": "С 40: омары у Musa Point",
+        "note": "Причал Musa Point на Karamja: лодка из Port Sarim за 30 gp, дальше на восток по берегу. Ловушка Lobster pot, место ловли с опциями Cage/Harpoon."
+      }
+    ],
     "where": "До 40 — нахлыст на реке у Barbarian Village (форель и лосось). С 40 — омары на причале Musa Point на острове Karamja (лодка из Port Sarim, 30 gp).",
     "itemsRequired": [
       {
@@ -1952,7 +2674,7 @@
         "nameEn": "Lobster pot",
         "nameRu": "Ловушка для омаров",
         "amount": 1,
-        "howToGet": "С 40 рыбалки. Купи в рыболовном магазине или на бирже (≈ 110 gp).",
+        "howToGet": "С 40 рыбалки. 20 gp в магазине Gerrant's Fishy Business в Port Sarim или ≈ 110 gp на бирже.",
         "wikiItemId": 301,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png"
       }
@@ -1998,7 +2720,7 @@
         "nameEn": "Hammer",
         "nameRu": "Молот",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Купи в Lumbridge General Store за 1 gp.",
         "wikiItemId": 2347,
         "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
       },
@@ -2030,7 +2752,7 @@
         "nameEn": "Lobster pot",
         "nameRu": "Ловушка для омаров",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Купи у Gerrant в Port Sarim за 20 gp или на бирже ≈ 110 gp. Нужен Оракулу (S5-04) — не путай с ловушкой для рыбалки, хватит и одной на оба дела.",
         "wikiItemId": 301,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png"
       },
@@ -2055,6 +2777,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Dragon_Slayer_I",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Dragon_Slayer_I/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3191,3358,0",
+    "mapLocation": {
+      "x": 3191,
+      "y": 3358,
+      "plane": 0,
+      "label": "Guildmaster, Champions' Guild"
+    },
     "npc": {
       "nameEn": "Guildmaster",
       "nameRu": "Мастер гильдии",
@@ -2085,6 +2813,12 @@
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Anti-dragon_shield",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3210,3221,1",
+    "mapLocation": {
+      "x": 3210,
+      "y": 3221,
+      "plane": 1,
+      "label": "Duke Horacio, Lumbridge Castle"
+    },
     "npc": {
       "nameEn": "Duke Horacio",
       "nameRu": "Герцог Гораций",
@@ -2106,6 +2840,12 @@
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Melzar's_Maze",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2941,3248,0",
+    "mapLocation": {
+      "x": 2941,
+      "y": 3248,
+      "plane": 0,
+      "label": "Melzar's Maze к северу от Rimmington"
+    },
     "floor": "Ground floor (1-й этаж / земля)",
     "where": "Лабиринт Melzar's Maze к северо-западу от Rimmington.",
     "itemsRequired": [
@@ -2151,7 +2891,7 @@
         "nameEn": "Silk",
         "nameRu": "Шёлк",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Из S4-05: у торговца шёлком в Al Kharid за 3 gp.",
         "wikiItemId": 950,
         "iconUrl": "https://oldschool.runescape.wiki/images/Silk.png"
       },
@@ -2167,7 +2907,7 @@
         "nameEn": "Unfired bowl",
         "nameRu": "Сырая миска",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Из S4-05: на бирже ≈ 190 gp.",
         "wikiItemId": 1791,
         "iconUrl": "https://oldschool.runescape.wiki/images/Unfired_bowl.png"
       },
@@ -2175,7 +2915,7 @@
         "nameEn": "Lobster pot",
         "nameRu": "Ловушка для омаров",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Из S4-05: у Gerrant в Port Sarim за 20 gp.",
         "wikiItemId": 301,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png"
       }
@@ -2231,7 +2971,7 @@
         "nameEn": "Plank",
         "nameRu": "Доски",
         "amount": 3,
-        "howToGet": "",
+        "howToGet": "Из S4-05: на бирже ≈ 145 gp за штуку.",
         "wikiItemId": 960,
         "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png"
       },
@@ -2239,7 +2979,7 @@
         "nameEn": "Steel nails",
         "nameRu": "Стальные гвозди",
         "amount": 90,
-        "howToGet": "",
+        "howToGet": "Из S4-05: на бирже ≈ 30 gp за штуку.",
         "wikiItemId": 1539,
         "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png"
       },
@@ -2247,7 +2987,7 @@
         "nameEn": "Hammer",
         "nameRu": "Молот",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Из S4-05: Lumbridge General Store, 1 gp.",
         "wikiItemId": 2347,
         "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
       },
@@ -2255,7 +2995,7 @@
         "nameEn": "Coins",
         "nameRu": "Монеты",
         "amount": 2000,
-        "howToGet": "",
+        "howToGet": "Klarense берёт ровно 2 000 монет.",
         "wikiItemId": 995,
         "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
       }
@@ -2321,15 +3061,16 @@
         "nameEn": "Lobster",
         "nameRu": "Омар",
         "amount": "20+",
-        "howToGet": "",
+        "howToGet": "Купи на бирже ≈ 105 gp (20 штук ≈ 2 100). Или лови сам с 40 рыбалки ловушкой Lobster pot (20 gp в магазине Gerrant's Fishy Business в Port Sarim) у причала Musa Point на Karamja — лодка из Port Sarim 30 gp — и готовь с 40 готовки на плите в Al Kharid.",
         "wikiItemId": 379,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
+        "heals": 12
       },
       {
         "nameEn": "Energy potion(4)",
         "nameRu": "Зелье энергии",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Из S2-01 или на бирже ≈ 170 gp. Восстанавливает запас бега на подъёме к вулкану.",
         "wikiItemId": 3008,
         "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png"
       }
@@ -2341,7 +3082,7 @@
       },
       {
         "label": "Инвентарь",
-        "text": "20+ омаров (Lobster), 1 Energy potion, телепорт в Varrock."
+        "text": "20+ омаров (Lobster, +12 здоровья каждый), 1 Energy potion, телепорт в Varrock. Больше омаров — меньше риска: остальное место тоже можно занять ими."
       },
       {
         "label": "Путь",
@@ -2385,7 +3126,33 @@
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Corsair_Cove_Dungeon",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2012,9004,0",
+    "mapLocation": {
+      "x": 2012,
+      "y": 9004,
+      "plane": 0,
+      "label": "Corsair Cove Dungeon"
+    },
     "where": "Пещера Corsair Cove Dungeon (открыта после квеста The Corsair Curse).",
+    "itemsRecommended": [
+      {
+        "nameEn": "Swordfish",
+        "nameRu": "Рыба-меч",
+        "amount": 20,
+        "howToGet": "Лови гарпуном с 50 рыбалки у Musa Point (шаг S6-02) или купи на бирже.",
+        "wikiItemId": 373,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Swordfish.png",
+        "heals": 14
+      },
+      {
+        "nameEn": "Lobster",
+        "nameRu": "Омар",
+        "amount": 20,
+        "howToGet": "Купи на бирже ≈ 105 gp (20 штук ≈ 2 100). Или лови сам с 40 рыбалки ловушкой Lobster pot (20 gp в магазине Gerrant's Fishy Business в Port Sarim) у причала Musa Point на Karamja — лодка из Port Sarim 30 gp — и готовь с 40 готовки на плите в Al Kharid.",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
+        "heals": 12
+      }
+    ],
     "fields": [
       {
         "label": "Зачем",
@@ -2393,7 +3160,7 @@
       },
       {
         "label": "Как",
-        "text": "Огрессы бьют сильно — на 40–50 боя бей их луком или магией из безопасных точек (safespot), в упор — только с рунической бронёй и едой."
+        "text": "Огрессы бьют сильно — на 40–50 боя бей их луком или магией из безопасных точек (safespot), в упор — только с рунической бронёй и 20 омарами или рыбой-меч."
       }
     ],
     "doneWhen": "Боевые навыки 50–60, в банке растёт запас монет на подписку."
@@ -2468,7 +3235,13 @@
         "iconUrl": "https://oldschool.runescape.wiki/images/Nature_rune.png"
       }
     ],
-    "doneWhen": "Magic 55."
+    "doneWhen": "Magic 55.",
+    "inGame": {
+      "completionTrigger": {
+        "type": "CHAT_MESSAGE",
+        "chatPattern": "^Congratulations, you've just advanced your Magic level\\. You are now level (5[5-9]|[6-9]\\d)\\."
+      }
+    }
   },
   {
     "id": "S6-05",
@@ -2483,7 +3256,7 @@
         "nameEn": "Old school bond",
         "nameRu": "Облигация Old School Bond",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Купи на бирже ≈ 11,5 млн gp (цена на 26.09.2026). Даёт 14 дней подписки — используй на себя.",
         "wikiItemId": 13190,
         "iconUrl": "https://oldschool.runescape.wiki/images/Old_school_bond.png"
       }
@@ -2502,6 +3275,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Waterfall_Quest",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Waterfall_Quest/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2520,3495,0",
+    "mapLocation": {
+      "x": 2520,
+      "y": 3495,
+      "plane": 0,
+      "label": "Дом Almera у Baxtorian Falls"
+    },
     "npc": {
       "nameEn": "Almera",
       "nameRu": "Альмера",
@@ -2509,13 +3288,12 @@
       "floor": "Ground floor (1-й этаж / земля)",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Almera"
     },
-    "bring": "Еда.",
     "itemsRequired": [
       {
         "nameEn": "Rope",
         "nameRu": "Верёвка",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Купи у Ned в Draynor Village за 16 gp или на бирже ≈ 65 gp.",
         "wikiItemId": 954,
         "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
       },
@@ -2552,6 +3330,17 @@
         "iconUrl": "https://oldschool.runescape.wiki/images/Glarial's_pebble.png"
       }
     ],
+    "itemsRecommended": [
+      {
+        "nameEn": "Lobster",
+        "nameRu": "Омар",
+        "amount": 10,
+        "howToGet": "Купи на бирже ≈ 105 gp (20 штук ≈ 2 100). Или лови сам с 40 рыбалки ловушкой Lobster pot (20 gp в магазине Gerrant's Fishy Business в Port Sarim) у причала Musa Point на Karamja — лодка из Port Sarim 30 gp — и готовь с 40 готовки на плите в Al Kharid.",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
+        "heals": 12
+      }
+    ],
     "quickSteps": [
       "Поговори с Almera и садись на плот на реке.",
       "Поговори с Hudon, спрыгни в водоворот, осмотри ящики и забери ключ.",
@@ -2562,7 +3351,7 @@
     "fields": [
       {
         "label": "Особенности",
-        "text": "Боевых требований нет, но в подземелье водопада — огненные великаны (Fire giant, 86 ур.), а в гробнице Глариал — Moss Guardian (84 ур.). В гробницу нельзя брать оружие и броню: только еда и руны. Пробегай мимо врагов."
+        "text": "Боевых требований нет, но в подземелье водопада — огненные великаны (Fire giant, 86 ур.), а в гробнице Глариал — Moss Guardian (84 ур.). В гробницу нельзя брать оружие и броню: только 10 омаров и руны. Пробегай мимо врагов."
       }
     ],
     "reward": "1 QP, 13 750 XP Attack и 13 750 XP Strength — уровень ближнего боя с 1 мгновенно подскакивает до 30+!",
@@ -2580,6 +3369,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Fight_Arena",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Fight_Arena/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2566,3199,0",
+    "mapLocation": {
+      "x": 2566,
+      "y": 3199,
+      "plane": 0,
+      "label": "Lady Servil у Fight Arena"
+    },
     "npc": {
       "nameEn": "Lady Servil",
       "nameRu": "Леди Сервил",
@@ -2587,7 +3382,7 @@
       "floor": "Ground floor (1-й этаж / земля)",
       "wikiUrl": "https://oldschool.runescape.wiki/w/Lady_Servil"
     },
-    "bring": "Лук или руны для магии, еда, 5 gp на Khali brew.",
+    "bring": "Лук со стрелами или руны для магии и 5 gp на Khali brew.",
     "itemsRequired": [
       {
         "nameEn": "Khazard helmet",
@@ -2614,6 +3409,17 @@
         "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
       }
     ],
+    "itemsRecommended": [
+      {
+        "nameEn": "Lobster",
+        "nameRu": "Омар",
+        "amount": 10,
+        "howToGet": "Купи на бирже ≈ 105 gp (20 штук ≈ 2 100). Или лови сам с 40 рыбалки ловушкой Lobster pot (20 gp в магазине Gerrant's Fishy Business в Port Sarim) у причала Musa Point на Karamja — лодка из Port Sarim 30 gp — и готовь с 40 готовки на плите в Al Kharid.",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
+        "heals": 12
+      }
+    ],
     "safespot": "Всех противников — скорпиона (44), огра (63) и Bouncer (137) — можно бить из укрытия луком или магией: все они дерутся только вплотную. General Khazard (142) — по желанию, для квеста его убивать не нужно.",
     "reward": "2 QP, 12 175 XP Attack, 2 175 XP Thieving, 1 000 Coins.",
     "doneWhen": "Квест зелёный."
@@ -2630,6 +3436,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Tree_Gnome_Village",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Tree_Gnome_Village/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2542,3169,0",
+    "mapLocation": {
+      "x": 2542,
+      "y": 3169,
+      "plane": 0,
+      "label": "King Bolren, Tree Gnome Village"
+    },
     "npc": {
       "nameEn": "King Bolren",
       "nameRu": "Король Болрен",
@@ -2660,6 +3472,12 @@
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Agility_training",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2474,3438,0",
+    "mapLocation": {
+      "x": 2474,
+      "y": 3438,
+      "plane": 0,
+      "label": "Трасса ловкости Gnome Stronghold"
+    },
     "floor": "Ground floor (1-й этаж / земля)",
     "where": "1–10 — Gnome Stronghold Agility Course (Tree Gnome Stronghold, рядом со стартом The Grand Tree). 10–25 — Draynor Village Rooftop Course.",
     "fields": [
@@ -2672,7 +3490,19 @@
         "text": "На крышах трасс появляются Mark of Grace — подбирай: из них потом собирается сет Graceful (S8-03)."
       }
     ],
-    "doneWhen": "Agility 25."
+    "doneWhen": "Agility 25.",
+    "inGame": {
+      "worldPoint": {
+        "x": 2474,
+        "y": 3438,
+        "plane": 0,
+        "label": "Трасса ловкости Gnome Stronghold"
+      },
+      "completionTrigger": {
+        "type": "CHAT_MESSAGE",
+        "chatPattern": "^Congratulations, you've just advanced your Agility level\\. You are now level (2[5-9]|[3-9]\\d)\\."
+      }
+    }
   },
   {
     "id": "S7-05",
@@ -2688,6 +3518,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/The_Grand_Tree",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Grand_Tree/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2466,3491,0",
+    "mapLocation": {
+      "x": 2466,
+      "y": 3491,
+      "plane": 0,
+      "label": "King Narnode Shareen, Grand Tree"
+    },
     "npc": {
       "nameEn": "King Narnode Shareen",
       "nameRu": "Король Нарноуд Шарин",
@@ -2717,6 +3553,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Priest_in_Peril",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Priest_in_Peril/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3220,3474,0",
+    "mapLocation": {
+      "x": 3220,
+      "y": 3474,
+      "plane": 0,
+      "label": "King Roald, дворец Varrock"
+    },
     "npc": {
       "nameEn": "King Roald",
       "nameRu": "Король Роальд",
@@ -2766,6 +3608,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Nature_Spirit",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Nature_Spirit/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3440,9894,0",
+    "mapLocation": {
+      "x": 3440,
+      "y": 9894,
+      "plane": 0,
+      "label": "Drezel под храмом Paterdomus"
+    },
     "npc": {
       "nameEn": "Drezel",
       "nameRu": "Дрезель",
@@ -2791,6 +3639,17 @@
         "iconUrl": "https://oldschool.runescape.wiki/images/Ghostspeak_amulet.png"
       }
     ],
+    "itemsRecommended": [
+      {
+        "nameEn": "Lobster",
+        "nameRu": "Омар",
+        "amount": 15,
+        "howToGet": "Купи на бирже ≈ 105 gp (20 штук ≈ 2 100). Или лови сам с 40 рыбалки ловушкой Lobster pot (20 gp в магазине Gerrant's Fishy Business в Port Sarim) у причала Musa Point на Karamja — лодка из Port Sarim 30 gp — и готовь с 40 готовки на плите в Al Kharid.",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
+        "heals": 12
+      }
+    ],
     "quickSteps": [
       "Поговори с Drezel в подвале храма Paterdomus.",
       "Найди друида Filliman Tarlock в болоте Mort Myre (надень Ghostspeak amulet).",
@@ -2805,7 +3664,7 @@
       },
       {
         "label": "Бой",
-        "text": "Три гаста (Ghast, 30 ур.) в болоте Mort Myre — их видно только после благословения. Гасты портят еду в инвентаре, возьми её с запасом."
+        "text": "Три гаста (Ghast, 30 ур.) в болоте Mort Myre — их видно только после благословения. Гасты превращают еду в инвентаре в гниль — бери 15 омаров с запасом."
       }
     ],
     "reward": "2 QP, 3 000 XP Crafting, 2 000 XP Defence, 2 000 XP Hitpoints, доступ в болото Mort Myre.",
@@ -2911,7 +3770,7 @@
         "nameEn": "Hammer",
         "nameRu": "Молот",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Купи в любом General Store за 1 gp.",
         "wikiItemId": 2347,
         "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
       },
@@ -2980,6 +3839,12 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Lost_City",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Lost_City/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3150,3205,0",
+    "mapLocation": {
+      "x": 3150,
+      "y": 3205,
+      "plane": 0,
+      "label": "Лагерь искателей Lost City"
+    },
     "npc": {
       "nameEn": "Warrior",
       "nameRu": "Воин",
@@ -3060,7 +3925,7 @@
         "nameEn": "Spade",
         "nameRu": "Лопата",
         "amount": 1,
-        "howToGet": "",
+        "howToGet": "Купи в Lumbridge General Store за 3 gp.",
         "wikiItemId": 952,
         "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
       },
@@ -3081,6 +3946,17 @@
         "iconUrl": "https://oldschool.runescape.wiki/images/Dramen_staff.png"
       }
     ],
+    "itemsRecommended": [
+      {
+        "nameEn": "Lobster",
+        "nameRu": "Омар",
+        "amount": 10,
+        "howToGet": "Купи на бирже ≈ 105 gp (20 штук ≈ 2 100). Или лови сам с 40 рыбалки ловушкой Lobster pot (20 gp в магазине Gerrant's Fishy Business в Port Sarim) у причала Musa Point на Karamja — лодка из Port Sarim 30 gp — и готовь с 40 готовки на плите в Al Kharid.",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
+        "heals": 12
+      }
+    ],
     "quickSteps": [
       "Поговори с Martin the Master Gardener у свинарника в Draynor Village.",
       "Войди в Zanaris с Dramen staff и поговори с Fairy Godfather.",
@@ -3094,7 +3970,7 @@
       },
       {
         "label": "Бой",
-        "text": "Tanglefoot (111 ур.) — урон по нему наносят только волшебным секатором (Magic secateurs), который дают по ходу квеста. Возьми еду."
+        "text": "Tanglefoot (111 ур.) — урон по нему наносят только волшебным секатором (Magic secateurs), который дают по ходу квеста. Возьми 10 омаров."
       }
     ],
     "reward": "2 QP, волшебный секатор (Magic secateurs), 3 500 XP Farming, 2 000 XP Attack, 1 000 XP Magic.",
@@ -3149,6 +4025,33 @@
       "floor": "Ground floor (1-й этаж / земля)",
       "wikiUrl": "https://oldschool.runescape.wiki/w/King_Narnode_Shareen"
     },
+    "itemsRecommended": [
+      {
+        "nameEn": "Prayer potion(4)",
+        "nameRu": "Зелье молитвы",
+        "amount": 4,
+        "howToGet": "На бирже. Держит Protect from Melee против обезьян и демона.",
+        "wikiItemId": 2434,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Prayer_potion(4).png"
+      },
+      {
+        "nameEn": "Antipoison(4)",
+        "nameRu": "Противоядие",
+        "amount": 1,
+        "howToGet": "На бирже. На острове ядовитые змеи и пауки.",
+        "wikiItemId": 2446,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Antipoison(4).png"
+      },
+      {
+        "nameEn": "Lobster",
+        "nameRu": "Омар",
+        "amount": 15,
+        "howToGet": "Купи на бирже ≈ 105 gp (20 штук ≈ 2 100). Или лови сам с 40 рыбалки ловушкой Lobster pot (20 gp в магазине Gerrant's Fishy Business в Port Sarim) у причала Musa Point на Karamja — лодка из Port Sarim 30 gp — и готовь с 40 готовки на плите в Al Kharid.",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
+        "heals": 12
+      }
+    ],
     "fields": [
       {
         "label": "Требования",
@@ -3156,7 +4059,7 @@
       },
       {
         "label": "Рекомендуется",
-        "text": "Боевой уровень 65+ и молитва 43 для Protect from Melee — на острове Ape Atoll много сильных обезьян в зоне группового боя. Противоядие, еда, зелья молитвы."
+        "text": "Боевой уровень 65+ и молитва 43 для Protect from Melee — на острове Ape Atoll много сильных обезьян в зоне группового боя. С собой: 4 зелья молитвы, противоядие и 15 омаров."
       }
     ],
     "safespot": "Jungle demon (195 ур.) бьёт в ближнем бою и магией — включи Protect from Magic или Protect from Melee и бей его магией или дальним боем с дальней стороны.",

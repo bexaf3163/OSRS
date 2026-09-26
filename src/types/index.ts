@@ -44,6 +44,43 @@ export interface StepItemRequirement {
   iconUrl?: string;
   /** ID предмета на OSRS Wiki и в API цен. */
   wikiItemId?: number;
+  /** Сколько очков здоровья восстанавливает — у еды. */
+  heals?: number;
+}
+
+/** Точка на карте мира в игровых координатах (как в RuneLite и на карте OSRS Wiki). */
+export interface MapLocation {
+  x: number;
+  y: number;
+  /** 0 — Ground floor (земля), 1 — 1st floor, 2 — 2nd floor, 3 — 3rd floor. */
+  plane: number;
+  label: string;
+  /** Масштаб карты вики: от −3 (весь мир) до 3 (клетки крупно). По умолчанию 2. */
+  zoom?: number;
+  /** Как найти место на месте: ориентиры, чего избегать. Показывается под переключателем точек. */
+  note?: string;
+}
+
+/** Что показать в игре через плагин RuneLite «OSRS Path Bridge». */
+export interface InGameTarget {
+  worldPoint?: { x: number; y: number; plane: number; label?: string };
+  groundTiles?: { x: number; y: number; plane: number; label: string; color?: string }[];
+  npcNames?: string[];
+  npcIds?: number[];
+  objectNames?: string[];
+  objectIds?: number[];
+  /** Точный текст вариантов в диалоге, которые нужно выбрать. */
+  dialogChoices?: string[];
+  /** Названия предметов (как в игре, по-английски) — подсветка в инвентаре и банке. */
+  highlightItems?: string[];
+  /** Только проверенные условия: название квеста из игры, точный текст сообщения или varbit со значением. */
+  completionTrigger?: {
+    type: 'QUEST_COMPLETED' | 'CHAT_MESSAGE' | 'VARBIT_CHANGED';
+    questName?: string;
+    chatPattern?: string;
+    varbitId?: number;
+    targetValue?: number;
+  };
 }
 
 /** NPC или точка старта шага. */
@@ -82,6 +119,17 @@ export interface Step {
   imageUrl?: string;
   imageCaption?: string;
   proTip?: string;
+
+  /** Где начинается шаг: превью карты в карточке и карта мира. */
+  mapLocation?: MapLocation;
+  /** Несколько равноценных мест (рыбалка, руда): переключаются на карте. */
+  resourceSpots?: MapLocation[];
+  /** Готовая картинка вместо превью из тайлов карты. */
+  mapPreviewImage?: string;
+  /** Главное предупреждение шага — жёлтая плашка над прохождением. */
+  warning?: string;
+  /** Подсветка в игре и автоотметка через RuneLite. */
+  inGame?: InGameTarget;
 
   where?: string;
   bring?: string;

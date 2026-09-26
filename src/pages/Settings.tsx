@@ -5,6 +5,8 @@ import { exportFileName, exportProgress, importProgress, type ImportResult } fro
 import { applyTheme, loadTheme, type Theme } from '../lib/theme';
 import { desktop, type ZoomState } from '../lib/desktop';
 import { applyTextScale, loadTextScale, percent, stepScale, TEXT_EVENT, TEXT_STEPS, ZOOM_STEPS } from '../lib/ui-scale';
+import { useBridge } from '../bridge';
+import { BRIDGE_ORIGIN } from '../services/runeliteBridge';
 
 /** Программа для ПК открывает сборку с диска (file://). */
 const isDesktop = location.protocol === 'file:';
@@ -59,6 +61,7 @@ export function SettingsPage() {
       </header>
 
       <Appearance />
+      <RuneLiteBridge />
 
       <section className="card section-card">
         <h2 className="card-title">Перенос прогресса</h2>
@@ -239,6 +242,35 @@ function Appearance() {
           </label>
         </div>
       )}
+    </section>
+  );
+}
+
+function RuneLiteBridge() {
+  const { enabled, setEnabled, state, inGame, activeStepId, clear } = useBridge();
+  const status = state === 'off' ? 'выключена'
+    : state === 'online' ? `🟢 плагин на связи${inGame ? ', персонаж в игре' : ', персонаж не в игре'}`
+      : state === 'connecting' ? 'подключение…' : '⚪ плагин не отвечает';
+  return (
+    <section className="card section-card">
+      <h2 className="card-title">RuneLite</h2>
+      <p className="muted">
+        Плагин OSRS Path Bridge для RuneLite показывает текущий шаг прямо в игре: стрелка к месту, подсветка NPC, объектов,
+        клеток, нужного варианта в диалоге и предметов в инвентаре — и сам отмечает шаг, когда квест засчитан.
+        Связь только внутри компьютера: <code className="code">{BRIDGE_ORIGIN}</code>.
+      </p>
+      <div className="setting">
+        <label className="switch">
+          <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />
+          <span>Связь с RuneLite</span>
+        </label>
+        <p className="muted small">Сейчас: {status}.{activeStepId && <> В игре показан шаг <code className="code">{activeStepId}</code>.</>}</p>
+        {activeStepId && <div className="actions"><button type="button" className="btn" onClick={() => void clear()}>Убрать подсказки из игры</button></div>}
+        <p className="muted small">
+          Как установить плагин и запустить RuneLite с ним — в README репозитория, раздел «RuneLite bridge».
+          Когда связь включена, в шапке виден индикатор, а в шагах — кнопка «🧭 Указать в игре».
+        </p>
+      </div>
     </section>
   );
 }

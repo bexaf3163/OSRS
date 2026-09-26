@@ -27,6 +27,20 @@ const TYPOS: [RegExp, string][] = [
   [/Karamja rum/, 'Karamjan rum'],
 ];
 
+/** Еда маршрута и сколько очков здоровья она восстанавливает (OSRS Wiki). */
+const FOOD = new Map([
+  ['Cooked chicken', 3], ['Shrimps', 3], ['Trout', 7], ['Salmon', 9], ['Lobster', 12], ['Swordfish', 14],
+]);
+
+/** Еда без названия и количества — новичок не знает, что брать. */
+const VAGUE = /(\d+(–\d+)?\s+(штук\s+)?еды|возьми еду|^еда\.?$|еда для боя)/i;
+
+/** Клетка карты мира: поверхность и подземелья OSRS укладываются в эти границы. */
+function badPoint(p: { x: number; y: number; plane: number }): boolean {
+  const int = (n: unknown) => Number.isInteger(n);
+  return !int(p.x) || !int(p.y) || !int(p.plane) || p.x < 1000 || p.x > 4200 || p.y < 2400 || p.y > 13000 || p.plane < 0 || p.plane > 3;
+}
+
 /** Тексты шага, которые видит пользователь, с подписью, где они. */
 function userTexts(s: Step): [string, string][] {
   const out: [string, string][] = [];
@@ -34,7 +48,9 @@ function userTexts(s: Step): [string, string][] {
   add('Где', s.where); add('Как', s.how); add('Взять', s.bring); add('Награда', s.reward); add('Готово, когда', s.doneWhen);
   add('Pro-tip', s.proTip); add('Safespot', s.safespot); add('Подпись к схеме', s.imageCaption);
   add('Что изменилось в V2', s.v2ChangesSummary); add('С подпиской', s.membersAlternative);
-  add('NPC: место', s.npc?.location); add('NPC: диалог', s.npc?.dialogue);
+  add('NPC: место', s.npc?.location); add('NPC: диалог', s.npc?.dialogue); add('Предупреждение', s.warning);
+  add('Точка на карте', s.mapLocation?.label);
+  s.resourceSpots?.forEach((p, i) => { add(`Точка ${i + 1}`, p.label); add(`Точка ${i + 1}: пояснение`, p.note); });
   s.quickSteps?.forEach((q, i) => add(`Шаг ${i + 1}`, q));
   s.fields?.forEach((f) => add(f.label, f.text));
   s.tips?.forEach((t) => add('Совет', t));
@@ -145,13 +161,64 @@ export function validate(d: GuideData | null, route: Route): Report {
   check(items.length >= 120, `В базе предметов ${items.length} позиций (нужно 120+)`, `В базе только ${items.length} предметов, нужно 120+`);
   const itemGaps = items.filter((i) => !i.examine || !i.iconUrl || !i.wikiUrl).map((i) => i.nameEn);
   check(!itemGaps.length, 'У каждого предмета базы есть описание, иконка и ссылка на вики', `Неполные предметы: ${itemGaps.join(', ')}`);
+  const noHow = stepItems.filter(({ it }) => !it.howToGet.trim()).map(({ s, it }) => `${s}:${it.nameEn}`);
+  check(!noHow.length, 'У каждого предмета шага сказано, где его взять', `Не сказано, где взять: ${noHow.join(', ')}`);
+  const food = stepItems.filter(({ it }) => FOOD.has(it.nameEn));
+  const noHeal = food.filter(({ it }) => it.heals !== FOOD.get(it.nameEn)).map(({ s, it }) => `${s}:${it.nameEn} (${it.heals ?? 'нет'} вместо ${FOOD.get(it.nameEn)})`);
+  check(!noHeal.length, `У еды в шагах (${food.length}) указано, сколько она лечит`, `Неверное или пустое «лечит»: ${noHeal.join(', ')}`);
   // Подпись картинки — это и alt для экранного чтения; без неё схема безымянна.
   const noCaption = steps.filter((s) => s.imageUrl && !s.imageCaption).map((s) => s.id);
   if (noCaption.length) warn(`Картинка без подписи: ${noCaption.join(', ')}`);
   else ok('У всех картинок шагов есть подпись');
 
+  // --- Карта и подсветка в игре ---
+  lines.push('Карта и RuneLite');
+  const located = steps.filter((s) => s.mapLocation);
+  const points = steps.flatMap((s) => [
+    ...(s.mapLocation ? [{ s: s.id, p: s.mapLocation }] : []),
+    ...(s.resourceSpots ?? []).map((p) => ({ s: s.id, p })),
+  ]);
+  const badPoints = points.filter(({ p }) => badPoint(p) || !p.label?.trim() || (p.zoom !== undefined && (!Number.isInteger(p.zoom) || p.zoom < -3 || p.zoom > 3)));
+  check(!badPoints.length, `Точек на карте ${points.length} (шагов с картой ${located.length}): координаты, этаж и подпись в порядке`,
+    `Неверная точка: ${badPoints.map(({ s, p }) => `${s} ${p.x},${p.y},${p.plane}`).join('; ')}`);
+  // Ссылка «Карта» на вики и точка превью — одно и то же место: расхождение значит, что поправили только одно.
+  const drift = steps.filter((s) => {
+    const m = s.mapUrl?.match(/#\/m=(\d+),(\d+),(\d+)/);
+    return m && s.mapLocation && (Number(m[1]) !== s.mapLocation.x || Number(m[2]) !== s.mapLocation.y || Number(m[3]) !== s.mapLocation.plane);
+  }).map((s) => s.id);
+  check(!drift.length, 'Точка превью совпадает со ссылкой на карту вики', `Точка и ссылка на карту расходятся: ${drift.join(', ')}`);
+  const lonelySpots = steps.filter((s) => s.resourceSpots && s.resourceSpots.length < 2).map((s) => s.id);
+  check(!lonelySpots.length, 'Переключатель точек — только там, где их две и больше', `Одна точка в resourceSpots: ${lonelySpots.join(', ')}`);
+
+  const TRIGGERS = new Set(['QUEST_COMPLETED', 'CHAT_MESSAGE', 'VARBIT_CHANGED']);
+  const badGame: string[] = [];
+  for (const s of steps) {
+    const g = s.inGame;
+    if (!g) continue;
+    if (g.worldPoint && badPoint(g.worldPoint)) badGame.push(`${s.id}: worldPoint`);
+    for (const t of g.groundTiles ?? []) if (badPoint(t) || !t.label.trim()) badGame.push(`${s.id}: клетка ${t.x},${t.y}`);
+    for (const key of ['npcNames', 'objectNames', 'dialogChoices', 'highlightItems'] as const) {
+      if (g[key]?.some((n) => !n.trim())) badGame.push(`${s.id}: пустое имя в ${key}`);
+    }
+    const t = g.completionTrigger;
+    if (!t) continue;
+    if (!TRIGGERS.has(t.type)) badGame.push(`${s.id}: неизвестный триггер ${t.type}`);
+    // Квест засчитывается по названию из игры; название шага-квеста и есть это название.
+    if (t.type === 'QUEST_COMPLETED' && (s.type !== 'quest' || t.questName !== s.title)) badGame.push(`${s.id}: questName «${t.questName}» не совпадает с квестом шага`);
+    if (t.type === 'CHAT_MESSAGE') {
+      try { new RegExp(t.chatPattern ?? ''); } catch { badGame.push(`${s.id}: chatPattern не регулярное выражение`); }
+      if (!t.chatPattern) badGame.push(`${s.id}: нет chatPattern`);
+    }
+    if (t.type === 'VARBIT_CHANGED' && (!Number.isInteger(t.varbitId) || !Number.isInteger(t.targetValue))) badGame.push(`${s.id}: varbitId и targetValue обязательны`);
+  }
+  const withGame = steps.filter((s) => s.inGame);
+  const auto = withGame.filter((s) => s.inGame!.completionTrigger);
+  check(!badGame.length, `Подсветка в игре у ${withGame.length} шагов, автоотметка у ${auto.length}: поля в порядке`, `Ошибки подсветки: ${badGame.join('; ')}`);
+
   // --- Текст ---
   lines.push('Текст');
+  const vague = steps.flatMap((s) => userTexts(s).filter(([, t]) => VAGUE.test(t)).map(([where]) => `${s.id} «${where}»`));
+  check(!vague.length, 'Еда везде названа и посчитана', `Еда без названия или количества: ${vague.join(', ')}`);
   const lower: string[] = [];
   const typos: string[] = [];
   const unbalanced: string[] = [];
