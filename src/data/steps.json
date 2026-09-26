@@ -3,2227 +3,2463 @@
     "id": "S1-01",
     "stage": 1,
     "type": "prep",
-    "title": "Настрой клиент",
-    "shortTitle": "Настрой клиент",
-    "doneWhen": "во вкладке квестов справа видна панель Quest Helper.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "RuneLite через Jagex Launcher.",
-        "key": "where"
-      },
-      {
-        "label": "Взять",
-        "text": "включи плагины Quest Helper, Idle Notifier, Item Prices, Ground Items и GPU (или 117 HD).",
-        "key": "bring"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "во вкладке квестов справа видна панель Quest Helper.",
-        "key": "doneWhen"
-      }
-    ],
+    "title": "Настройка клиента RuneLite",
     "requires": [],
-    "where": "RuneLite через Jagex Launcher.",
-    "bring": "включи плагины Quest Helper, Idle Notifier, Item Prices, Ground Items и GPU (или 117 HD)."
+    "where": "Клиент RuneLite через Jagex Launcher.",
+    "how": "Включи плагины Quest Helper, Ground Items, Item Prices, Idle Notifier и GPU (или 117 HD).",
+    "doneWhen": "Панель Quest Helper видна в правой вкладке клиента."
   },
   {
     "id": "S1-02",
     "stage": 1,
     "type": "prep",
-    "title": "Разбери инвентарь",
-    "shortTitle": "Разбери инвентарь",
-    "doneWhen": "в инвентаре только инструменты и есть место для добычи.",
-    "fields": [
+    "title": "Разбор инвентаря в банке Lumbridge",
+    "requires": [],
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3208,3219,2",
+    "floor": "2nd floor (3-й этаж)",
+    "where": "Банк Lumbridge Castle, верхняя площадка замка.",
+    "how": "Оставь в инвентаре только топор, кирку, сеть и огниво — остальное положи в банк.",
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "банк на верхнем этаже замка Лумбридж.",
-        "key": "where"
+        "nameEn": "Bronze axe",
+        "nameRu": "Бронзовый топор",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1351,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
       },
       {
-        "label": "Взять",
-        "text": "при себе оставь топор, кирку, маленькую сеть и огниво, остальное положи в банк.",
-        "key": "bring"
+        "nameEn": "Bronze pickaxe",
+        "nameRu": "Бронзовая кирка",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1265,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
       },
       {
-        "label": "Готово, когда",
-        "text": "в инвентаре только инструменты и есть место для добычи.",
-        "key": "doneWhen"
+        "nameEn": "Small fishing net",
+        "nameRu": "Маленькая сеть",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 303,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png"
+      },
+      {
+        "nameEn": "Tinderbox",
+        "nameRu": "Огниво",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
       }
     ],
-    "requires": [],
-    "where": "банк на верхнем этаже замка Лумбридж.",
-    "bring": "при себе оставь топор, кирку, маленькую сеть и огниво, остальное положи в банк."
+    "doneWhen": "Инвентарь свободен для квестов и добычи."
   },
   {
     "id": "S1-03",
     "stage": 1,
     "type": "quest",
     "title": "Cook's Assistant",
-    "shortTitle": "Cook's Assistant",
-    "doneWhen": "квест в журнале зелёный.",
-    "fields": [
+    "titleRu": "Помощник повара",
+    "qp": 1,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Cook's_Assistant",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Cook's_Assistant/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3208,3214,0",
+    "npc": {
+      "nameEn": "Cook",
+      "nameRu": "Повар",
+      "location": "Кухня в южном крыле Lumbridge Castle",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "dialogue": "1 → 1 (\"What's wrong?\" → \"I'm always happy to help a cook in distress.\")",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Cook"
+    },
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "повар на кухне замка Лумбридж.",
-        "key": "where"
+        "nameEn": "Pot of flour",
+        "nameRu": "Горшок муки",
+        "amount": 1,
+        "howToGet": "Сорви пшеницу (Wheat) на поле к северу от замка, засыпь её в бункер на 2nd floor (3-й этаж) мельницы Lumbridge Windmill, дёрни рычаг и забери муку в горшок (Pot) на Ground floor (1-й этаж).",
+        "wikiItemId": 1933,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pot_of_flour.png"
       },
       {
-        "label": "Взять",
-        "text": "яйцо (ферма с курами), ведро молока (молочная корова, пустое ведро из общего магазина), горшок муки (пшеница с поля → мельница к северу от Лумбриджа).",
-        "key": "bring"
+        "nameEn": "Bucket of milk",
+        "nameRu": "Ведро молока",
+        "amount": 1,
+        "howToGet": "Купи ведро (Bucket) в General Store за 2 gp и подои молочную корову (Dairy cow) на ферме к северо-востоку от замка.",
+        "wikiItemId": 1927,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_milk.png"
       },
       {
-        "label": "Совет",
-        "text": "сделай ещё 2 горшка муки — для пирога в S3-03 и хлеба в S3-09."
-      },
-      {
-        "label": "Награда",
-        "text": "1 очко квестов, 300 опыта готовки, плита на кухне замка, где еда реже подгорает.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест в журнале зелёный.",
-        "key": "doneWhen"
+        "nameEn": "Egg",
+        "nameRu": "Яйцо",
+        "amount": 1,
+        "howToGet": "Подбери в курятнике фермы Groats к северу от замка.",
+        "wikiItemId": 1944,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Egg.png"
       }
     ],
-    "requires": [],
-    "where": "повар на кухне замка Лумбридж.",
-    "bring": "яйцо (ферма с курами), ведро молока (молочная корова, пустое ведро из общего магазина), горшок муки (пшеница с поля → мельница к северу от Лумбриджа).",
-    "reward": "1 очко квестов, 300 опыта готовки, плита на кухне замка, где еда реже подгорает.",
-    "qp": 1
+    "itemsRecommended": [
+      {
+        "nameEn": "Pot of flour",
+        "nameRu": "Горшок муки",
+        "amount": 2,
+        "howToGet": "Сделай на мельнице сразу ещё 2 горшка муки — они понадобятся для The Knight's Sword и Below Ice Mountain.",
+        "wikiItemId": 1933,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pot_of_flour.png"
+      }
+    ],
+    "quickSteps": [
+      "Собери пшеницу на поле, молоко на ферме и яйцо в курятнике.",
+      "Смели муку на мельнице Lumbridge Windmill.",
+      "Поговори с поваром на кухне замка (диалог 1 → 1) и сдай ингредиенты."
+    ],
+    "proTip": "Готовь еду первых уровней на плите кухни замка (Cook's range) — здесь еда сгорает значительно реже!",
+    "reward": "1 QP, 300 XP Cooking, доступ к плите замка.",
+    "doneWhen": "Квест в списке стал зелёным.",
+    "updatedInV2": true,
+    "v2ChangesSummary": "В V2 добавлена заготовка 2 дополнительных горшков муки (Pot of flour) для будущих квестов. Проверь банк!"
   },
   {
     "id": "S1-04",
     "stage": 1,
     "type": "quest",
     "title": "Sheep Shearer",
-    "shortTitle": "Sheep Shearer",
-    "doneWhen": "квест зелёный, в банке 3 клубка шерсти (Ball of wool).",
-    "fields": [
+    "titleRu": "Стрижка овец",
+    "qp": 1,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Sheep_Shearer",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Sheep_Shearer/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3189,3272,0",
+    "npc": {
+      "nameEn": "Fred the Farmer",
+      "nameRu": "Фермер Фред",
+      "location": "Дом к северо-западу от Lumbridge, сразу за мельницей",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "dialogue": "1 → 1 (\"I'm looking for a quest.\" → \"Yes, okay. I can do that.\")",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Fred_the_Farmer"
+    },
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "фермер Fred к северо-западу от Лумбриджа.",
-        "key": "where"
+        "nameEn": "Shears",
+        "nameRu": "Ножницы",
+        "amount": 1,
+        "howToGet": "Возьми бесплатно со стола в доме Фреда или купи в General Store за 1 gp.",
+        "wikiItemId": 1735,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Shears.png"
       },
       {
-        "label": "Взять",
-        "text": "ножницы (Shears) — даст сам квест или общий магазин. Состриги 23 овцы и спряди шерсть на прялке на втором этаже замка.",
-        "key": "bring"
-      },
-      {
-        "label": "Совет",
-        "text": "отдай 20 клубков шерсти, а 3 лишних оставь — они понадобятся в S2-06."
-      },
-      {
-        "label": "Награда",
-        "text": "1 очко квестов, опыт ремесла, 60 монет.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный, в банке 3 клубка шерсти (Ball of wool).",
-        "key": "doneWhen"
+        "nameEn": "Ball of wool",
+        "nameRu": "Клубок шерсти",
+        "amount": "23 (20 сдать, 3 в банк)",
+        "howToGet": "Состриги 23 шерсти (Wool) с овец в загоне и спряди на прялке (Spinning wheel) на 1st floor (2-й этаж) замка Lumbridge.",
+        "wikiItemId": 1759,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ball_of_wool.png"
       }
     ],
-    "requires": [],
-    "where": "фермер Fred к северо-западу от Лумбриджа.",
-    "bring": "ножницы (Shears) — даст сам квест или общий магазин. Состриги 23 овцы и спряди шерсть на прялке на втором этаже замка.",
-    "reward": "1 очко квестов, опыт ремесла, 60 монет.",
-    "qp": 1
+    "quickSteps": [
+      "Возьми ножницы со стола в доме фермера Фреда.",
+      "Поговори с Фредом (диалог 1 → 1).",
+      "Состриги 23 шерсти (Wool) в загоне к югу от дома.",
+      "Иди в замок Lumbridge, поднимись на 1st floor (2-й этаж) и спряди 23 клубка на прялке (Spinning wheel).",
+      "Вернись к Фреду и сдай ровно 20 клубков.",
+      "3 оставшихся клубка положи в банк на 2nd floor (3-й этаж) — они понадобятся для квеста Prince Ali Rescue."
+    ],
+    "proTip": "Не отдавай Фреду больше 20 клубков! Ровно 3 штуки положи в банк — сэкономишь кучу времени на квесте Prince Ali Rescue.",
+    "reward": "1 QP, 150 XP Crafting, 60 Coins.",
+    "doneWhen": "Квест стал зелёным, в банке лежат 3 клубка шерсти (Ball of wool).",
+    "updatedInV2": true,
+    "v2ChangesSummary": "В V2 добавлено требование: состричь 23 шерсти и сохранить ровно 3 клубка (Ball of wool) в банке для квеста Prince Ali Rescue. Проверь банк!"
   },
   {
     "id": "S1-05",
     "stage": 1,
     "type": "quest",
     "title": "X Marks the Spot",
-    "shortTitle": "X Marks the Spot",
-    "doneWhen": "квест зелёный, лампа использована.",
-    "fields": [
+    "titleRu": "Крестом отмечено место",
+    "qp": 1,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/X_Marks_the_Spot",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/X_Marks_the_Spot/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3224,3240,0",
+    "npc": {
+      "nameEn": "Veos",
+      "nameRu": "Веос",
+      "location": "Паб The Sheared Ram в Lumbridge",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "dialogue": "1 → 1 (\"I'm looking for a quest.\" → \"Sounds great, what can I do?\")",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Veos"
+    },
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "Veos в пабе Лумбриджа (The Sheared Ram).",
-        "key": "where"
-      },
-      {
-        "label": "Взять",
-        "text": "лопату (Spade) из общего магазина.",
-        "key": "bring"
-      },
-      {
-        "label": "Награда",
-        "text": "1 очко квестов и лампа на 300 опыта — используй её на молитву (Prayer).",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный, лампа использована.",
-        "key": "doneWhen"
+        "nameEn": "Spade",
+        "nameRu": "Лопата",
+        "amount": 1,
+        "howToGet": "Купи в General Store или подбери в доме к северо-востоку от замка.",
+        "wikiItemId": 952,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
       }
     ],
-    "requires": [],
-    "where": "Veos в пабе Лумбриджа (The Sheared Ram).",
-    "bring": "лопату (Spade) из общего магазина.",
-    "reward": "1 очко квестов и лампа на 300 опыта — используй её на молитву (Prayer).",
-    "qp": 1
+    "quickSteps": [
+      "Поговори с Veos и забери свиток сокровищ (Treasure scroll).",
+      "Копай лопатой по 4 точкам: за домом Боба, у курятника, на поле свиней и у причала Port Sarim.",
+      "Отдай сундук Veos на причале Port Sarim."
+    ],
+    "proTip": "Используй лампу на 300 XP на молитву (Prayer) — это самый медленный и дорогой навык в F2P!",
+    "reward": "1 QP, 200 Coins, лампа опыта на 300 XP.",
+    "doneWhen": "Квест зелёный, лампа вложена в Prayer."
   },
   {
     "id": "S1-06",
     "stage": 1,
-    "type": "quest",
-    "title": "The Restless Ghost",
-    "shortTitle": "The Restless Ghost",
-    "doneWhen": "квест зелёный.",
-    "fields": [
+    "type": "prep",
+    "title": "Покупка книги Chronicle в Draynor Village",
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Chronicle",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3082,3248,0",
+    "npc": {
+      "nameEn": "Diango",
+      "nameRu": "Дьянго",
+      "location": "Рыночная площадь Draynor Village",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Diango"
+    },
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "священник Father Aereck в церкви Лумбриджа.",
-        "key": "where"
+        "nameEn": "Chronicle",
+        "nameRu": "Книга «Хроника»",
+        "amount": 1,
+        "howToGet": "Купи у Diango за 300 gp.",
+        "wikiItemId": 13660,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chronicle.png"
       },
       {
-        "label": "Взять",
-        "text": "ничего особого. Череп лежит в подвале башни волшебников к югу от Draynor, там нападёт скелет — возьми 5 штук еды.",
-        "key": "bring"
-      },
-      {
-        "label": "Награда",
-        "text": "1 очко квестов, 1 125 опыта молитвы — сразу около 9–11 уровня.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный.",
-        "key": "doneWhen"
+        "nameEn": "Teleport card",
+        "nameRu": "Карта телепорта",
+        "amount": 10,
+        "howToGet": "Купи у Diango по 150 gp за штуку.",
+        "wikiItemId": 13658,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Teleport_card.png"
       }
     ],
-    "requires": [],
-    "where": "священник Father Aereck в церкви Лумбриджа.",
-    "bring": "ничего особого. Череп лежит в подвале башни волшебников к югу от Draynor, там нападёт скелет — возьми 5 штук еды.",
-    "reward": "1 очко квестов, 1 125 опыта молитвы — сразу около 9–11 уровня.",
-    "qp": 1
+    "fields": [
+      {
+        "label": "Зачем",
+        "text": "Даёт моментальный телепорт к южным воротам Varrock (Champions' Guild). Это главный способ быстрого перемещения между городами на раннем этапе F2P!"
+      }
+    ],
+    "doneWhen": "Chronicle заряжена 10 картами и лежит в инвентаре."
   },
   {
     "id": "S1-07",
     "stage": 1,
     "type": "quest",
-    "title": "Misthalin Mystery",
-    "shortTitle": "Misthalin Mystery",
-    "doneWhen": "квест зелёный.",
-    "fields": [
+    "title": "The Restless Ghost",
+    "titleRu": "Неупокоенный призрак",
+    "qp": 1,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Restless_Ghost",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Restless_Ghost/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3243,3206,0",
+    "npc": {
+      "nameEn": "Father Aereck",
+      "nameRu": "Отец Эрек",
+      "location": "Церковь Lumbridge",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "dialogue": "3 → 1 (\"I'm looking for a quest.\" → \"Let me help you.\")",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Father_Aereck"
+    },
+    "bring": "5 штук еды.",
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "Abigale у болота к югу от Лумбриджа.",
-        "key": "where"
-      },
-      {
-        "label": "Взять",
-        "text": "ничего. Это детектив в особняке без боя.",
-        "key": "bring"
-      },
-      {
-        "label": "Награда",
-        "text": "1 очко квестов, ремесло около 7 уровня.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный.",
-        "key": "doneWhen"
+        "nameEn": "Ghostspeak amulet",
+        "nameRu": "Амулет разговора с духами",
+        "amount": 1,
+        "howToGet": "Выдаст отец Urhney в хижине на болоте Lumbridge Swamp. Надень его на шею.",
+        "wikiItemId": 552,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ghostspeak_amulet.png"
       }
     ],
-    "requires": [],
-    "where": "Abigale у болота к югу от Лумбриджа.",
-    "bring": "ничего. Это детектив в особняке без боя.",
-    "reward": "1 очко квестов, ремесло около 7 уровня.",
-    "qp": 1
+    "quickSteps": [
+      "Поговори с Father Aereck в церкви.",
+      "Сходи к отцу Urhney в хижину на болоте Lumbridge Swamp и получи Ghostspeak amulet.",
+      "Надень амулет и поговори с призраком на кладбище Lumbridge.",
+      "Спустись в подвал башни волшебников (Wizards' Tower) и забери череп — нападёт Skeleton 13 уровня, возьми еду и убегай.",
+      "Верни череп в гроб на кладбище."
+    ],
+    "reward": "1 QP, 1 125 XP Prayer (сразу поднимает молитву до 9–11 уровня!).",
+    "doneWhen": "Квест зелёный."
   },
   {
     "id": "S1-08",
     "stage": 1,
-    "type": "skill",
-    "title": "Бой до 10 / 10 / 10",
-    "shortTitle": "Бой до 10/10/10",
-    "doneWhen": "атака, сила и защита по 10, в банке 25+ коровьих шкур (Cowhide).",
+    "type": "quest",
+    "title": "Misthalin Mystery",
+    "titleRu": "Тайна Мисталина",
+    "qp": 1,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Misthalin_Mystery",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Misthalin_Mystery/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3234,3139,0",
+    "npc": {
+      "nameEn": "Abigale",
+      "nameRu": "Абигейл",
+      "location": "У тропинки к югу от Lumbridge Swamp",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Abigale"
+    },
     "fields": [
       {
-        "label": "Где",
-        "text": "курицы и коровы на фермах вокруг Лумбриджа.",
-        "key": "where"
-      },
-      {
-        "label": "Как",
-        "text": "стиль Accurate до 10 атаки → Aggressive до 10 силы → Defensive до 10 защиты. Закапывай кости, коровьи шкуры собирай в банк.",
-        "key": "how"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "атака, сила и защита по 10, в банке 25+ коровьих шкур (Cowhide).",
-        "key": "doneWhen"
+        "label": "Особенности",
+        "text": "Квест-детектив в заброшенном особняке без боя. Следуй подсказкам Quest Helper."
       }
     ],
-    "requires": [],
-    "where": "курицы и коровы на фермах вокруг Лумбриджа.",
-    "how": "стиль Accurate до 10 атаки → Aggressive до 10 силы → Defensive до 10 защиты. Закапывай кости, коровьи шкуры собирай в банк.",
-    "targets": [
-      {
-        "skill": "attack",
-        "level": 10
-      },
-      {
-        "skill": "strength",
-        "level": 10
-      },
-      {
-        "skill": "defence",
-        "level": 10
-      }
-    ]
+    "reward": "1 QP, 600 XP Crafting.",
+    "doneWhen": "Квест зелёный."
   },
   {
     "id": "S1-09",
     "stage": 1,
     "type": "skill",
-    "title": "Рыбалка до 20 и готовка до 15",
-    "shortTitle": "Рыбалка 20, готовка 15",
-    "doneWhen": "рыбалка 20, готовка 15, в банке 50+ готовых креветок или анчоусов.",
-    "fields": [
+    "title": "Рубка дерева до 15 и костры до 15",
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Canoe",
+    "floor": "Ground floor (1-й этаж / земля)",
+    "where": "Деревья к западу от замка Lumbridge.",
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "креветки в болоте к югу от замка или на берегу у Draynor; готовка на плите в кухне замка.",
-        "key": "where"
+        "nameEn": "Bronze axe",
+        "nameRu": "Бронзовый топор",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1351,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
       },
       {
-        "label": "Готово, когда",
-        "text": "рыбалка 20, готовка 15, в банке 50+ готовых креветок или анчоусов.",
-        "key": "doneWhen"
+        "nameEn": "Tinderbox",
+        "nameRu": "Огниво",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 590,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
       }
     ],
-    "requires": [],
-    "where": "креветки в болоте к югу от замка или на берегу у Draynor; готовка на плите в кухне замка.",
-    "targets": [
+    "fields": [
       {
-        "skill": "fishing",
-        "level": 20
-      },
-      {
-        "skill": "cooking",
-        "level": 15
+        "label": "Важно",
+        "text": "На 12 уровне рубки (Woodcutting) открывается система каноэ (Canoe System) на станциях у реки Lum! Срубив дерево на станции, можно мгновенно доплыть до Barbarian Village и Edgeville без пешей ходьбы."
       }
-    ]
+    ],
+    "doneWhen": "Woodcutting 15, Firemaking 15."
   },
   {
     "id": "S1-10",
     "stage": 1,
-    "type": "skill",
-    "title": "Рубка и костры до 15",
-    "shortTitle": "Рубка и костры 15",
-    "doneWhen": "рубка 15, костры 15.",
+    "type": "prep",
+    "title": "Stronghold of Security — стартовый капитал 10 000 Coins",
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Stronghold_of_Security",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3081,3420,0",
+    "where": "Дыра в центре Barbarian Village (доплыви на каноэ от Lumbridge!).",
     "fields": [
       {
-        "label": "Где",
-        "text": "обычные деревья к западу от замка Лумбридж.",
-        "key": "where"
-      },
-      {
-        "label": "Как",
-        "text": "руби и сразу жги брёвна огнивом. До 15 нужно около 100 брёвен.",
-        "key": "how"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "рубка 15, костры 15.",
-        "key": "doneWhen"
+        "label": "Правила",
+        "text": "4 этажа с вопросами о безопасности аккаунта. Не сражайся с монстрами, просто пробегай между дверями. Забери награду в центре каждого этажа."
       }
     ],
-    "requires": [],
-    "where": "обычные деревья к западу от замка Лумбридж.",
-    "how": "руби и сразу жги брёвна огнивом. До 15 нужно около 100 брёвен.",
-    "targets": [
-      {
-        "skill": "woodcutting",
-        "level": 15
-      },
-      {
-        "skill": "firemaking",
-        "level": 15
-      }
-    ]
+    "reward": "10 000 Coins и сапоги (Fancy boots или Fighting boots).",
+    "doneWhen": "Забрал 10 000 Coins из сундука на 4-м этаже."
   },
   {
     "id": "S1-11",
     "stage": 1,
     "type": "skill",
-    "title": "Добыча руды до 15",
-    "shortTitle": "Добыча 15",
-    "doneWhen": "добыча 15, в банке 4 медной руды и 15+ бронзовых слитков.",
-    "fields": [
+    "title": "Рыбалка до 20 и готовка до 15",
+    "requires": [],
+    "floor": "Ground floor (1-й этаж / земля)",
+    "where": "Болото Lumbridge Swamp или берег Draynor Village: креветки и анчоусы.",
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "шахта на болоте к юго-востоку от Лумбриджа (медь и олово).",
-        "key": "where"
-      },
-      {
-        "label": "Как",
-        "text": "копай медь и олово поровну. Отложи 4 медной руды для S3-01. Остальное выплавь в бронзу в печи Лумбриджа.",
-        "key": "how"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "добыча 15, в банке 4 медной руды и 15+ бронзовых слитков.",
-        "key": "doneWhen"
+        "nameEn": "Small fishing net",
+        "nameRu": "Маленькая сеть",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 303,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png"
       }
     ],
-    "requires": [],
-    "where": "шахта на болоте к юго-востоку от Лумбриджа (медь и олово).",
-    "how": "копай медь и олово поровну. Отложи 4 медной руды для S3-01. Остальное выплавь в бронзу в печи Лумбриджа.",
-    "targets": [
+    "fields": [
       {
-        "skill": "mining",
-        "level": 15
+        "label": "Где готовить",
+        "text": "Плита кухни замка Lumbridge Castle (Cook's range)."
       }
-    ]
+    ],
+    "doneWhen": "Fishing 20, Cooking 15, в банке 50+ приготовленных креветок или анчоусов."
   },
   {
     "id": "S2-01",
     "stage": 2,
-    "type": "quest",
-    "title": "Rune Mysteries",
-    "shortTitle": "Rune Mysteries",
-    "doneWhen": "квест зелёный.",
-    "fields": [
+    "type": "gear",
+    "title": "Большие закупки на Grand Exchange",
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Grand_Exchange",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3164,3487,0",
+    "how": "Используй телепорт книги Chronicle к Champions' Guild и пройди на север к Grand Exchange.",
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "герцог Duke Horacio на втором этаже замка Лумбридж.",
-        "key": "where"
+        "nameEn": "Red bead",
+        "nameRu": "Красная бусина",
+        "amount": 1,
+        "howToGet": "Для Imp Catcher.",
+        "wikiItemId": 1470,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Red_bead.png"
       },
       {
-        "label": "Как",
-        "text": "отнеси талисман магу Sedridor в подвал башни волшебников к югу от Draynor, потом посылку (Research package) — магу Aubury в магазин рун Варрока, и обратно.",
-        "key": "how"
+        "nameEn": "Yellow bead",
+        "nameRu": "Жёлтая бусина",
+        "amount": 1,
+        "howToGet": "Для Imp Catcher.",
+        "wikiItemId": 1472,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_bead.png"
       },
       {
-        "label": "Награда",
-        "text": "1 очко квестов, открывается создание рун.",
-        "key": "reward"
+        "nameEn": "Black bead",
+        "nameRu": "Чёрная бусина",
+        "amount": 1,
+        "howToGet": "Для Imp Catcher.",
+        "wikiItemId": 1474,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Black_bead.png"
       },
       {
-        "label": "Готово, когда",
-        "text": "квест зелёный.",
-        "key": "doneWhen"
+        "nameEn": "White bead",
+        "nameRu": "Белая бусина",
+        "amount": 1,
+        "howToGet": "Для Imp Catcher.",
+        "wikiItemId": 1476,
+        "iconUrl": "https://oldschool.runescape.wiki/images/White_bead.png"
+      },
+      {
+        "nameEn": "Amulet of strength",
+        "nameRu": "Амулет силы",
+        "amount": 1,
+        "howToGet": "Даёт +10 к силе удара, ускоряет прокачку ближнего боя в 1,5 раза!",
+        "wikiItemId": 1725,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_strength.png"
+      },
+      {
+        "nameEn": "Fly fishing rod",
+        "nameRu": "Удочка нахлыстом",
+        "amount": 1,
+        "howToGet": "Для быстрой прокачки рыбалки.",
+        "wikiItemId": 309,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Fly_fishing_rod.png"
+      },
+      {
+        "nameEn": "Feather",
+        "nameRu": "Перо",
+        "amount": 500,
+        "howToGet": "Для быстрой прокачки рыбалки.",
+        "wikiItemId": 314,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Feather.png"
+      },
+      {
+        "nameEn": "Energy potion(4)",
+        "nameRu": "Зелье энергии",
+        "amount": 5,
+        "howToGet": "Восстанавливает бег во время квестов.",
+        "wikiItemId": 3008,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png"
+      },
+      {
+        "nameEn": "Redberry pie",
+        "nameRu": "Пирог с красными ягодами",
+        "amount": 1,
+        "howToGet": "Для квеста The Knight's Sword.",
+        "wikiItemId": 2325,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Redberry_pie.png"
+      },
+      {
+        "nameEn": "Iron scimitar",
+        "nameRu": "Железный ятаган",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1323,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_scimitar.png"
+      },
+      {
+        "nameEn": "Steel scimitar",
+        "nameRu": "Стальной ятаган",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1325,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_scimitar.png"
+      },
+      {
+        "nameEn": "Pink skirt",
+        "nameRu": "Розовая юбка",
+        "amount": 1,
+        "howToGet": "Или купи у Thessalia в Varrock за 2 gp.",
+        "wikiItemId": 1013,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pink_skirt.png"
+      },
+      {
+        "nameEn": "Clay",
+        "nameRu": "Глина",
+        "amount": 7,
+        "howToGet": "Для Prince Ali Rescue и Doric's Quest.",
+        "wikiItemId": 434,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Clay.png"
       }
     ],
-    "requires": [],
-    "where": "герцог Duke Horacio на втором этаже замка Лумбридж.",
-    "how": "отнеси талисман магу Sedridor в подвал башни волшебников к югу от Draynor, потом посылку (Research package) — магу Aubury в магазин рун Варрока, и обратно.",
-    "reward": "1 очко квестов, открывается создание рун.",
-    "qp": 1
+    "doneWhen": "Все предметы куплены и лежат в банке Grand Exchange.",
+    "updatedInV2": true,
+    "v2ChangesSummary": "В V2 список закупок расширен: Amulet of strength, Energy potion, Redberry pie, ятаганы, Pink skirt и глина. Проверь банк!"
   },
   {
     "id": "S2-02",
     "stage": 2,
-    "type": "prep",
-    "title": "Stronghold of Security",
-    "shortTitle": "Stronghold of Security",
-    "doneWhen": "забрал награды на всех 4 этажах.",
-    "fields": [
+    "type": "quest",
+    "title": "Imp Catcher",
+    "titleRu": "Ловец бесов",
+    "qp": 1,
+    "requires": [
+      "S2-01"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Imp_Catcher",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Imp_Catcher/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3103,3163,2",
+    "npc": {
+      "nameEn": "Wizard Mizgog",
+      "nameRu": "Волшебник Мизгог",
+      "location": "Wizards' Tower, верхушка башни",
+      "floor": "2nd floor (3-й этаж)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Wizard_Mizgog"
+    },
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "дыра в земле посреди Barbarian Village.",
-        "key": "where"
+        "nameEn": "Red bead",
+        "nameRu": "Красная бусина",
+        "amount": 1,
+        "howToGet": "Из шага S2-01.",
+        "wikiItemId": 1470,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Red_bead.png"
       },
       {
-        "label": "Как",
-        "text": "4 этажа, у каждой двери вопрос о безопасности аккаунта (правильный ответ почти всегда «никому не давать пароль и не верить подаркам»). Монстры внизу сильнее тебя — не дерись, пробегай от двери к двери.",
-        "key": "how"
+        "nameEn": "Yellow bead",
+        "nameRu": "Жёлтая бусина",
+        "amount": 1,
+        "howToGet": "Из шага S2-01.",
+        "wikiItemId": 1472,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_bead.png"
       },
       {
-        "label": "Награда",
-        "text": "10 000 монет и сапоги. Этих денег хватит на все покупки для квестов.",
-        "key": "reward"
+        "nameEn": "Black bead",
+        "nameRu": "Чёрная бусина",
+        "amount": 1,
+        "howToGet": "Из шага S2-01.",
+        "wikiItemId": 1474,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Black_bead.png"
       },
       {
-        "label": "Готово, когда",
-        "text": "забрал награды на всех 4 этажах.",
-        "key": "doneWhen"
+        "nameEn": "White bead",
+        "nameRu": "Белая бусина",
+        "amount": 1,
+        "howToGet": "Из шага S2-01.",
+        "wikiItemId": 1476,
+        "iconUrl": "https://oldschool.runescape.wiki/images/White_bead.png"
       }
     ],
-    "requires": [],
-    "where": "дыра в земле посреди Barbarian Village.",
-    "how": "4 этажа, у каждой двери вопрос о безопасности аккаунта (правильный ответ почти всегда «никому не давать пароль и не верить подаркам»). Монстры внизу сильнее тебя — не дерись, пробегай от двери к двери.",
-    "reward": "10 000 монет и сапоги. Этих денег хватит на все покупки для квестов."
+    "reward": "1 QP, 875 XP Magic, Amulet of accuracy.",
+    "doneWhen": "Квест зелёный."
   },
   {
     "id": "S2-03",
     "stage": 2,
-    "type": "gear",
-    "title": "Покупки на Grand Exchange",
-    "shortTitle": "Покупки на GE",
-    "doneWhen": "всё куплено и лежит в банке.",
-    "fields": [
+    "type": "quest",
+    "title": "Witch's Potion",
+    "titleRu": "Зелье ведьмы",
+    "qp": 1,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Witch's_Potion",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Witch's_Potion/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2968,3204,0",
+    "npc": {
+      "nameEn": "Hetty",
+      "nameRu": "Хетти",
+      "location": "Деревня Rimmington",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "dialogue": "1 → 1",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Hetty"
+    },
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "Grand Exchange на северо-западе Варрока.",
-        "key": "where"
+        "nameEn": "Onion",
+        "nameRu": "Лук",
+        "amount": 1,
+        "howToGet": "Сорви на грядке рядом.",
+        "wikiItemId": 1957,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Onion.png"
       },
       {
-        "label": "Взять",
-        "text": "4 бусины для Imp Catcher (красная, жёлтая, чёрная, белая — около 6 000 монет вместе), стальной ятаган (Steel scimitar, нужна атака 5), удочку для нахлыста (Fly fishing rod) и 500 перьев.",
-        "key": "bring"
+        "nameEn": "Eye of newt",
+        "nameRu": "Глаз тритона",
+        "amount": 1,
+        "howToGet": "Купи в магазине Betty в Port Sarim за 3 gp.",
+        "wikiItemId": 221,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Eye_of_newt.png"
       },
       {
-        "label": "Готово, когда",
-        "text": "всё куплено и лежит в банке.",
-        "key": "doneWhen"
+        "nameEn": "Rat's tail",
+        "nameRu": "Крысиный хвост",
+        "amount": 1,
+        "howToGet": "Убей крысу в доме.",
+        "wikiItemId": 300,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rat's_tail.png"
+      },
+      {
+        "nameEn": "Burnt meat",
+        "nameRu": "Подгоревшее мясо",
+        "amount": 1,
+        "howToGet": "Поджарь сырое мясо на костре до черноты.",
+        "wikiItemId": 2146,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Burnt_meat.png"
       }
     ],
-    "requires": [
-      "S2-02"
-    ],
-    "where": "Grand Exchange на северо-западе Варрока.",
-    "bring": "4 бусины для Imp Catcher (красная, жёлтая, чёрная, белая — около 6 000 монет вместе), стальной ятаган (Steel scimitar, нужна атака 5), удочку для нахлыста (Fly fishing rod) и 500 перьев."
+    "reward": "1 QP, 325 XP Magic.",
+    "doneWhen": "Квест зелёный."
   },
   {
     "id": "S2-04",
     "stage": 2,
-    "type": "quest",
-    "title": "Romeo & Juliet",
-    "shortTitle": "Romeo & Juliet",
-    "doneWhen": "квест зелёный, в банке ягоды, юбка и глина.",
-    "fields": [
+    "type": "skill",
+    "title": "Магия до 25 уровня (Varrock Teleport)",
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Varrock_Teleport",
+    "how": "Бей гоблинов или коров заклинанием Fire Strike (посох Staff of air экономит руны воздуха).",
+    "itemsRecommended": [
       {
-        "label": "Где",
-        "text": "Ромео на площади Варрока.",
-        "key": "where"
-      },
-      {
-        "label": "Как",
-        "text": "беготня между Ромео, Джульеттой (к западу от Варрока), отцом Лоуренсом и аптекарем; ягоды Cadava — у кустов у шахты к юго-востоку от Варрока.",
-        "key": "how"
-      },
-      {
-        "label": "Заодно",
-        "text": "там же собери 4+ красных ягод (Redberries), в магазине одежды Thessalia на площади купи розовую юбку (Pink skirt), в шахте к юго-западу от Варрока добудь 7 глины (Clay)."
-      },
-      {
-        "label": "Награда",
-        "text": "5 очков квестов.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный, в банке ягоды, юбка и глина.",
-        "key": "doneWhen"
+        "nameEn": "Staff of air",
+        "nameRu": "Посох воздуха",
+        "amount": 1,
+        "howToGet": "Экономит руны воздуха.",
+        "wikiItemId": 1381,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_air.png"
       }
     ],
-    "requires": [],
-    "where": "Ромео на площади Варрока.",
-    "how": "беготня между Ромео, Джульеттой (к западу от Варрока), отцом Лоуренсом и аптекарем; ягоды Cadava — у кустов у шахты к юго-востоку от Варрока.",
-    "reward": "5 очков квестов.",
-    "qp": 5
+    "fields": [
+      {
+        "label": "Зачем",
+        "text": "На 25 уровне открывается Varrock Teleport — теперь перемещение в столицу занимает 1 секунду."
+      }
+    ],
+    "doneWhen": "Magic 25."
   },
   {
     "id": "S2-05",
     "stage": 2,
     "type": "quest",
-    "title": "Pirate's Treasure",
-    "shortTitle": "Pirate's Treasure",
-    "doneWhen": "квест зелёный.",
-    "fields": [
+    "title": "Romeo & Juliet",
+    "titleRu": "Ромео и Джульетта",
+    "qp": 5,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Romeo_%26_Juliet",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Romeo_%26_Juliet/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3211,3422,0",
+    "npc": {
+      "nameEn": "Romeo",
+      "nameRu": "Ромео",
+      "location": "Центральная площадь Varrock",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Romeo"
+    },
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "пират Redbeard Frank в Port Sarim.",
-        "key": "where"
-      },
-      {
-        "label": "Взять",
-        "text": "60 монет на лодки, лопату.",
-        "key": "bring"
-      },
-      {
-        "label": "Как",
-        "text": "на Karamja поработай на банановой плантации и тайком провези ром в ящике, ключ открывает сундук в пабе Blue Moon в Варроке, клад — в парке Фаладора (садовник нападёт, он слабый).",
-        "key": "how"
-      },
-      {
-        "label": "Заодно",
-        "text": "на Karamja купи 3 пива у Zembo (для S2-06), в Port Sarim убей крысу ради сырого мяса (для S2-09)."
-      },
-      {
-        "label": "Награда",
-        "text": "2 очка квестов, золотое кольцо, изумруд, монеты.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный.",
-        "key": "doneWhen"
+        "nameEn": "Cadava berries",
+        "nameRu": "Ягоды кадавы",
+        "amount": 1,
+        "howToGet": "Сорви у кустов к юго-востоку от Varrock.",
+        "wikiItemId": 753,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Cadava_berries.png"
       }
     ],
-    "requires": [],
-    "where": "пират Redbeard Frank в Port Sarim.",
-    "bring": "60 монет на лодки, лопату.",
-    "how": "на Karamja поработай на банановой плантации и тайком провези ром в ящике, ключ открывает сундук в пабе Blue Moon в Варроке, клад — в парке Фаладора (садовник нападёт, он слабый).",
-    "reward": "2 очка квестов, золотое кольцо, изумруд, монеты.",
-    "qp": 2
+    "itemsRecommended": [
+      {
+        "nameEn": "Energy potion(4)",
+        "nameRu": "Зелье энергии",
+        "amount": 1,
+        "howToGet": "Пей во время беготни между Ромео, Джульеттой и отцом Лоуренсом.",
+        "wikiItemId": 3008,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png"
+      }
+    ],
+    "fields": [
+      {
+        "label": "Особенности",
+        "text": "Пей Energy potion во время беготни между Ромео, Джульеттой и отцом Лоуренсом. Ягоды Cadava сорви у кустов к юго-востоку от города."
+      }
+    ],
+    "reward": "5 QP.",
+    "doneWhen": "Квест зелёный."
   },
   {
     "id": "S2-06",
     "stage": 2,
     "type": "quest",
-    "title": "Prince Ali Rescue",
-    "shortTitle": "Prince Ali Rescue",
-    "doneWhen": "квест зелёный.",
-    "fields": [
+    "title": "Rune Mysteries",
+    "titleRu": "Тайны рун",
+    "qp": 1,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Rune_Mysteries",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Rune_Mysteries/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3210,3221,1",
+    "npc": {
+      "nameEn": "Duke Horacio",
+      "nameRu": "Герцог Гораций",
+      "location": "Lumbridge Castle",
+      "floor": "1st floor (2-й этаж)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Duke_Horacio"
+    },
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "Hassan во дворце Al Kharid (вход через ворота за 10 монет).",
-        "key": "where"
+        "nameEn": "Air talisman",
+        "nameRu": "Талисман воздуха",
+        "amount": 1,
+        "howToGet": "Выдаст герцог Horacio.",
+        "wikiItemId": 1438,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_talisman.png"
       },
       {
-        "label": "Взять",
-        "text": "4 лука, 4 красных ягоды, 15 монет, пепел (Ashes), горшок муки, ведро воды, 3 клубка шерсти, мягкую глину (глина + вода), бронзовый слиток, розовую юбку, 3 пива.",
-        "key": "bring"
-      },
-      {
-        "label": "Как",
-        "text": "парик у Ned в Draynor, мазь и красители у ведьмы Aggie в Draynor, отпечаток ключа у Lady Keli. Quest Helper ведёт по всем точкам.",
-        "key": "how"
-      },
-      {
-        "label": "Заодно",
-        "text": "у Aggie купи 1 красный и 2 жёлтых красителя, смешай красный с жёлтым — получится оранжевый для S2-10."
-      },
-      {
-        "label": "Награда",
-        "text": "3 очка квестов, 700 монет, ворота в Al Kharid бесплатны навсегда.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный.",
-        "key": "doneWhen"
+        "nameEn": "Research package",
+        "nameRu": "Посылка с исследованиями",
+        "amount": 1,
+        "howToGet": "Выдаст маг Sedridor.",
+        "wikiItemId": 290,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Research_package.png"
       }
     ],
-    "requires": [
-      "S1-04",
-      "S1-11",
-      "S2-04",
-      "S2-05"
+    "quickSteps": [
+      "Возьми Air talisman у герцога.",
+      "Отнеси талисман магу Sedridor в подвал Wizards' Tower.",
+      "Отнеси Research package магу Aubury в магазин рун Varrock (к югу от восточного банка).",
+      "Вернись к Sedridor."
     ],
-    "where": "Hassan во дворце Al Kharid (вход через ворота за 10 монет).",
-    "bring": "4 лука, 4 красных ягоды, 15 монет, пепел (Ashes), горшок муки, ведро воды, 3 клубка шерсти, мягкую глину (глина + вода), бронзовый слиток, розовую юбку, 3 пива.",
-    "how": "парик у Ned в Draynor, мазь и красители у ведьмы Aggie в Draynor, отпечаток ключа у Lady Keli. Quest Helper ведёт по всем точкам.",
-    "reward": "3 очка квестов, 700 монет, ворота в Al Kharid бесплатны навсегда.",
-    "qp": 3
+    "reward": "1 QP, открывает доступ к добыче Rune Essence.",
+    "doneWhen": "Квест зелёный."
   },
   {
     "id": "S2-07",
     "stage": 2,
     "type": "quest",
-    "title": "Imp Catcher",
-    "shortTitle": "Imp Catcher",
-    "doneWhen": "квест зелёный.",
-    "fields": [
+    "title": "The Knight's Sword",
+    "titleRu": "Меч рыцаря",
+    "qp": 1,
+    "requires": [
+      "S2-01"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Knight's_Sword",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Knight's_Sword/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2978,3341,0",
+    "npc": {
+      "nameEn": "Squire",
+      "nameRu": "Оруженосец",
+      "location": "Двор замка White Knights' Castle в Falador",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Squire"
+    },
+    "bring": "10 штук еды.",
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "маг Mizgog на верхнем этаже башни волшебников.",
-        "key": "where"
+        "nameEn": "Redberry pie",
+        "nameRu": "Пирог с красными ягодами",
+        "amount": 1,
+        "howToGet": "Из шага S2-01.",
+        "wikiItemId": 2325,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Redberry_pie.png"
       },
       {
-        "label": "Взять",
-        "text": "4 бусины из S2-03.",
-        "key": "bring"
+        "nameEn": "Iron bar",
+        "nameRu": "Железный слиток",
+        "amount": 2,
+        "howToGet": "",
+        "wikiItemId": 2351,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_bar.png"
       },
       {
-        "label": "Награда",
-        "text": "1 очко квестов, 875 опыта магии.",
-        "key": "reward"
+        "nameEn": "Bronze pickaxe",
+        "nameRu": "Кирка",
+        "amount": 1,
+        "howToGet": "Подойдёт любая кирка.",
+        "wikiItemId": 1265,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
       },
       {
-        "label": "Готово, когда",
-        "text": "квест зелёный.",
-        "key": "doneWhen"
+        "nameEn": "Blurite ore",
+        "nameRu": "Синяя руда",
+        "amount": 1,
+        "howToGet": "Добудь в Ice Underground к югу от Port Sarim.",
+        "wikiItemId": 668,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Blurite_ore.png"
       }
     ],
-    "requires": [
-      "S2-03"
+    "fields": [
+      {
+        "label": "Опасно",
+        "text": "Синюю руду (Blurite ore) нужно добыть в Ice Underground к югу от Port Sarim. Там ледяные гиганты 53 уровня. Забеги с киркой, скопай руду и сразу телепортируйся!"
+      }
     ],
-    "where": "маг Mizgog на верхнем этаже башни волшебников.",
-    "bring": "4 бусины из S2-03.",
-    "reward": "1 очко квестов, 875 опыта магии.",
-    "qp": 1
+    "reward": "1 QP и 12 725 XP Smithing — навык мгновенно взлетает с 1 сразу до 29 уровня без ручной плавки!",
+    "doneWhen": "Квест зелёный, кузнечное дело 29."
   },
   {
     "id": "S2-08",
     "stage": 2,
     "type": "quest",
-    "title": "Ernest the Chicken",
-    "shortTitle": "Ernest the Chicken",
-    "doneWhen": "квест зелёный, шлем в банке.",
-    "fields": [
+    "title": "Vampyre Slayer",
+    "titleRu": "Истребитель вампиров",
+    "qp": 3,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Vampyre_Slayer",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Vampyre_Slayer/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3098,3268,0",
+    "npc": {
+      "nameEn": "Morgan",
+      "nameRu": "Морган",
+      "location": "Дом в Draynor Village",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Morgan"
+    },
+    "bring": "Еда.",
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "Veronica у особняка Draynor Manor.",
-        "key": "where"
+        "nameEn": "Hammer",
+        "nameRu": "Молот",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
       },
       {
-        "label": "Как",
-        "text": "головоломка с рычагами в подвале и три детали машины. Quest Helper подскажет порядок рычагов.",
-        "key": "how"
+        "nameEn": "Stake",
+        "nameRu": "Кол",
+        "amount": 1,
+        "howToGet": "Выдаст доктор Harlow в пабе Blue Moon в Varrock — угости его пивом (Beer) за 2 gp.",
+        "wikiItemId": 1549,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Stake.png"
       },
       {
-        "label": "Заодно",
-        "text": "на выходе из особняка забери бронзовый средний шлем (Bronze med helm) — нужен в S3-06."
+        "nameEn": "Beer",
+        "nameRu": "Пиво",
+        "amount": 1,
+        "howToGet": "Для доктора Harlow.",
+        "wikiItemId": 1917,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Beer.png"
       },
       {
-        "label": "Награда",
-        "text": "4 очка квестов, 300 монет.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный, шлем в банке.",
-        "key": "doneWhen"
+        "nameEn": "Garlic",
+        "nameRu": "Чеснок",
+        "amount": 1,
+        "howToGet": "Из шкафа на 1st floor (2-й этаж) в доме Моргана.",
+        "wikiItemId": 1550,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Garlic.png"
       }
     ],
-    "requires": [],
-    "where": "Veronica у особняка Draynor Manor.",
-    "how": "головоломка с рычагами в подвале и три детали машины. Quest Helper подскажет порядок рычагов.",
-    "reward": "4 очка квестов, 300 монет.",
-    "qp": 4
+    "imageUrl": "https://oldschool.runescape.wiki/images/Count_draynor_safespot.png",
+    "imageCaption": "Безопасная точка (safespot) против Count Draynor",
+    "fields": [
+      {
+        "label": "Бой",
+        "text": "Count Draynor, 34 уровень."
+      }
+    ],
+    "safespot": "Чеснок в инвентаре ослабляет вампира. Встань за стулом (safespot) и бей Fire Strike либо забей его в упор мечом, подлечиваясь лососем.",
+    "reward": "3 QP и 4 825 XP Attack — уровень атаки мгновенно поднимается с 1 до 20!",
+    "doneWhen": "Квест зелёный, Attack 20+. Надень купленный Mithril scimitar."
   },
   {
     "id": "S2-09",
     "stage": 2,
     "type": "quest",
-    "title": "Witch's Potion",
-    "shortTitle": "Witch's Potion",
-    "doneWhen": "квест зелёный.",
-    "fields": [
+    "title": "Pirate's Treasure",
+    "titleRu": "Пиратское сокровище",
+    "qp": 2,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Pirate's_Treasure",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Pirate's_Treasure/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3053,3251,0",
+    "npc": {
+      "nameEn": "Redbeard Frank",
+      "nameRu": "Рыжебородый Фрэнк",
+      "location": "Причал Port Sarim",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Redbeard_Frank"
+    },
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "ведьма Hetty в Rimmington.",
-        "key": "where"
+        "nameEn": "Coins",
+        "nameRu": "Монеты",
+        "amount": 30,
+        "howToGet": "Лодка до Karamja.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
       },
       {
-        "label": "Взять",
-        "text": "лук, глаз тритона (Eye of newt, магазин Betty в Port Sarim), подгоревшее мясо (сожги сырое на костре), крысиный хвост (с крысы рядом).",
-        "key": "bring"
+        "nameEn": "Karamjan rum",
+        "nameRu": "Карамджийский ром",
+        "amount": 1,
+        "howToGet": "Купи на Karamja и тайком провези в ящике с бананами.",
+        "wikiItemId": 431,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Karamjan_rum.png"
       },
       {
-        "label": "Награда",
-        "text": "1 очко квестов, опыт магии.",
-        "key": "reward"
+        "nameEn": "White apron",
+        "nameRu": "Белый фартук",
+        "amount": 1,
+        "howToGet": "Нужен, чтобы забрать ром в подвале магазина в Port Sarim.",
+        "wikiItemId": 1005,
+        "iconUrl": "https://oldschool.runescape.wiki/images/White_apron.png"
       },
       {
-        "label": "Готово, когда",
-        "text": "квест зелёный.",
-        "key": "doneWhen"
+        "nameEn": "Spade",
+        "nameRu": "Лопата",
+        "amount": 1,
+        "howToGet": "Для клада в парке Falador.",
+        "wikiItemId": 952,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
       }
     ],
-    "requires": [
-      "S2-05"
+    "quickSteps": [
+      "Плыви на Karamja за 30 gp, устройся на банановую плантацию и спрячь Karamjan rum в ящик с бананами.",
+      "Забери ром в подвале магазина в Port Sarim с помощью фартука (White apron).",
+      "Отдай ром Фрэнку и забери ключ от сундука в пабе Blue Moon в Varrock.",
+      "Выкопай клад в парке Falador."
     ],
-    "where": "ведьма Hetty в Rimmington.",
-    "bring": "лук, глаз тритона (Eye of newt, магазин Betty в Port Sarim), подгоревшее мясо (сожги сырое на костре), крысиный хвост (с крысы рядом).",
-    "reward": "1 очко квестов, опыт магии.",
-    "qp": 1
+    "reward": "2 QP, золотое кольцо, изумруд.",
+    "doneWhen": "Квест зелёный."
   },
   {
     "id": "S2-10",
     "stage": 2,
     "type": "quest",
-    "title": "Goblin Diplomacy",
-    "shortTitle": "Goblin Diplomacy",
-    "doneWhen": "квест зелёный.",
-    "fields": [
+    "title": "Prince Ali Rescue",
+    "titleRu": "Спасение принца Али",
+    "qp": 3,
+    "requires": [
+      "S1-04",
+      "S2-01"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Prince_Ali_Rescue",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Prince_Ali_Rescue/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3298,3163,0",
+    "npc": {
+      "nameEn": "Hassan",
+      "nameRu": "Хассан",
+      "location": "Дворец Al Kharid",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Hassan"
+    },
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "деревня гоблинов к северу от Фаладора.",
-        "key": "where"
+        "nameEn": "Ball of wool",
+        "nameRu": "Клубок шерсти",
+        "amount": 3,
+        "howToGet": "Сохранённые из S1-04!",
+        "wikiItemId": 1759,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ball_of_wool.png"
       },
       {
-        "label": "Взять",
-        "text": "оранжевый краситель из S2-06, синий краситель (листья Woad у садовника в парке Фаладора → Aggie), 3 гоблинские кольчуги (Goblin mail) с гоблинов в деревне.",
-        "key": "bring"
+        "nameEn": "Soft clay",
+        "nameRu": "Мягкая глина",
+        "amount": 1,
+        "howToGet": "Глина + вода.",
+        "wikiItemId": 1761,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Soft_clay.png"
       },
       {
-        "label": "Награда",
-        "text": "5 очков квестов, опыт ремесла, золотой слиток.",
-        "key": "reward"
+        "nameEn": "Bronze bar",
+        "nameRu": "Бронзовый слиток",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 2349,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_bar.png"
       },
       {
-        "label": "Готово, когда",
-        "text": "квест зелёный.",
-        "key": "doneWhen"
+        "nameEn": "Pink skirt",
+        "nameRu": "Розовая юбка",
+        "amount": 1,
+        "howToGet": "Из шага S2-01.",
+        "wikiItemId": 1013,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pink_skirt.png"
+      },
+      {
+        "nameEn": "Yellow dye",
+        "nameRu": "Жёлтый краситель",
+        "amount": 1,
+        "howToGet": "Смешай с Red dye в Orange dye.",
+        "wikiItemId": 1765,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_dye.png"
+      },
+      {
+        "nameEn": "Red dye",
+        "nameRu": "Красный краситель",
+        "amount": 1,
+        "howToGet": "Смешай с Yellow dye в Orange dye.",
+        "wikiItemId": 1763,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Red_dye.png"
+      },
+      {
+        "nameEn": "Ashes",
+        "nameRu": "Пепел",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 592,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ashes.png"
+      },
+      {
+        "nameEn": "Pot of flour",
+        "nameRu": "Горшок муки",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1933,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pot_of_flour.png"
+      },
+      {
+        "nameEn": "Bucket of water",
+        "nameRu": "Ведро воды",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1929,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_water.png"
+      },
+      {
+        "nameEn": "Beer",
+        "nameRu": "Пиво",
+        "amount": 3,
+        "howToGet": "",
+        "wikiItemId": 1917,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Beer.png"
+      },
+      {
+        "nameEn": "Rope",
+        "nameRu": "Верёвка",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 954,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
       }
     ],
-    "requires": [
-      "S2-06"
-    ],
-    "where": "деревня гоблинов к северу от Фаладора.",
-    "bring": "оранжевый краситель из S2-06, синий краситель (листья Woad у садовника в парке Фаладора → Aggie), 3 гоблинские кольчуги (Goblin mail) с гоблинов в деревне.",
-    "reward": "5 очков квестов, опыт ремесла, золотой слиток.",
-    "qp": 5
+    "reward": "3 QP, 700 Coins, бесплатный вечный проход через ворота Al Kharid.",
+    "doneWhen": "Квест зелёный."
   },
   {
     "id": "S2-11",
     "stage": 2,
-    "type": "skill",
-    "title": "Бой до 20 / 20 / 20",
-    "shortTitle": "Бой до 20/20/20",
-    "doneWhen": "атака, сила и защита по 20, в руках мифриловый ятаган.",
+    "type": "quest",
+    "title": "Ernest the Chicken",
+    "titleRu": "Цыплёнок Эрнест",
+    "qp": 4,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ernest_the_Chicken",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Ernest_the_Chicken/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3110,3328,0",
+    "npc": {
+      "nameEn": "Veronica",
+      "nameRu": "Вероника",
+      "location": "У ворот особняка Draynor Manor",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Veronica"
+    },
+    "imageUrl": "https://oldschool.runescape.wiki/images/Ernest_the_Chicken_-_Oil_can_map.png",
+    "imageCaption": "Схема рычагов подвала A, B, C, D, E, F",
     "fields": [
       {
-        "label": "Где",
-        "text": "гоблины к востоку от Лумбриджа → воины во дворце Al Kharid (после S2-06 вход бесплатный).",
-        "key": "where"
+        "label": "Головоломка",
+        "text": "Рычаги A, B, C, D, E, F в подвале решаются строго по стрелкам Quest Helper."
       },
       {
-        "label": "Как",
-        "text": "тот же порядок стилей — атака, сила, защита. С 20 атаки купи мифриловый ятаган (Mithril scimitar).",
-        "key": "how"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "атака, сила и защита по 20, в руках мифриловый ятаган.",
-        "key": "doneWhen"
+        "label": "Важно",
+        "text": "На выходе из особняка подбери на полу Bronze med helm — он понадобится для квеста Black Knights' Fortress!"
       }
     ],
-    "requires": [
-      "S2-06"
-    ],
-    "where": "гоблины к востоку от Лумбриджа → воины во дворце Al Kharid (после S2-06 вход бесплатный).",
-    "how": "тот же порядок стилей — атака, сила, защита. С 20 атаки купи мифриловый ятаган (Mithril scimitar).",
-    "targets": [
-      {
-        "skill": "attack",
-        "level": 20
-      },
-      {
-        "skill": "strength",
-        "level": 20
-      },
-      {
-        "skill": "defence",
-        "level": 20
-      }
-    ]
+    "reward": "4 QP, 300 Coins.",
+    "doneWhen": "Квест зелёный, шлем в банке."
   },
   {
     "id": "S2-12",
     "stage": 2,
-    "type": "skill",
-    "title": "Рыбалка до 30, готовка до 30",
-    "shortTitle": "Рыбалка и готовка 30",
-    "doneWhen": "рыбалка 30, готовка 30, в банке 100+ приготовленного лосося или форели.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "форель и лосось нахлыстом на реке в Barbarian Village или на реке у Лумбриджа.",
-        "key": "where"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "рыбалка 30, готовка 30, в банке 100+ приготовленного лосося или форели.",
-        "key": "doneWhen"
-      }
-    ],
+    "type": "quest",
+    "title": "Goblin Diplomacy",
+    "titleRu": "Гоблинская дипломатия",
+    "qp": 5,
     "requires": [
-      "S2-03"
+      "S2-10"
     ],
-    "where": "форель и лосось нахлыстом на реке в Barbarian Village или на реке у Лумбриджа.",
-    "targets": [
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Goblin_Diplomacy",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Goblin_Diplomacy/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2958,3512,0",
+    "npc": {
+      "nameEn": "General Bentnoze",
+      "nameRu": "Генерал Бентноуз",
+      "location": "Goblin Village к северу от Falador, рядом с General Wartface",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/General_Bentnoze"
+    },
+    "itemsRequired": [
       {
-        "skill": "fishing",
-        "level": 30
+        "nameEn": "Goblin mail",
+        "nameRu": "Гоблинская кольчуга",
+        "amount": 3,
+        "howToGet": "Падает с гоблинов рядом.",
+        "wikiItemId": 288,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Goblin_mail.png"
       },
       {
-        "skill": "cooking",
-        "level": 30
+        "nameEn": "Orange dye",
+        "nameRu": "Оранжевый краситель",
+        "amount": 1,
+        "howToGet": "Из шага S2-10.",
+        "wikiItemId": 1769,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Orange_dye.png"
+      },
+      {
+        "nameEn": "Blue dye",
+        "nameRu": "Синий краситель",
+        "amount": 1,
+        "howToGet": "Купи листья Woad у садовника Wyson в парке Falador за 20 gp и отдай ведьме Aggie в Draynor.",
+        "wikiItemId": 1767,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Blue_dye.png"
       }
-    ]
+    ],
+    "reward": "5 QP, золотой слиток.",
+    "doneWhen": "Квест зелёный."
   },
   {
     "id": "S2-13",
     "stage": 2,
     "type": "skill",
-    "title": "Рубка и костры до 30",
-    "shortTitle": "Рубка и костры 30",
-    "doneWhen": "рубка 30, костры 30.",
-    "fields": [
+    "title": "Рыбалка и готовка до 30 уровня",
+    "requires": [],
+    "floor": "Ground floor (1-й этаж / земля)",
+    "where": "Река в Barbarian Village.",
+    "how": "Лови форель (Trout) и лосося (Salmon) нахлыстом. Готовь прямо на вечном костре в центре деревни.",
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "дубы у банка Draynor или к юго-западу от западного банка Варрока. От 15 до 30 нужно около 300 дубов.",
-        "key": "where"
+        "nameEn": "Fly fishing rod",
+        "nameRu": "Удочка нахлыстом",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 309,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Fly_fishing_rod.png"
       },
       {
-        "label": "Готово, когда",
-        "text": "рубка 30, костры 30.",
-        "key": "doneWhen"
+        "nameEn": "Feather",
+        "nameRu": "Перо",
+        "amount": "Сколько есть",
+        "howToGet": "Наживка для нахлыста.",
+        "wikiItemId": 314,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Feather.png"
       }
     ],
-    "requires": [
-      "S1-10"
-    ],
-    "where": "дубы у банка Draynor или к юго-западу от западного банка Варрока. От 15 до 30 нужно около 300 дубов.",
-    "targets": [
-      {
-        "skill": "woodcutting",
-        "level": 30
-      },
-      {
-        "skill": "firemaking",
-        "level": 30
-      }
-    ]
-  },
-  {
-    "id": "S2-14",
-    "stage": 2,
-    "type": "skill",
-    "title": "Добыча руды до 20",
-    "shortTitle": "Добыча 20",
-    "doneWhen": "добыча 20, в банке 2 железной руды.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "железо в шахте к юго-востоку от Варрока.",
-        "key": "where"
-      },
-      {
-        "label": "Как",
-        "text": "отложи 2 железной руды для S3-01.",
-        "key": "how"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "добыча 20, в банке 2 железной руды.",
-        "key": "doneWhen"
-      }
-    ],
-    "requires": [
-      "S1-11"
-    ],
-    "where": "железо в шахте к юго-востоку от Варрока.",
-    "how": "отложи 2 железной руды для S3-01.",
-    "targets": [
-      {
-        "skill": "mining",
-        "level": 20
-      }
-    ]
+    "doneWhen": "Fishing 30, Cooking 30."
   },
   {
     "id": "S3-01",
     "stage": 3,
     "type": "quest",
     "title": "Doric's Quest",
-    "shortTitle": "Doric's Quest",
-    "doneWhen": "квест зелёный.",
-    "fields": [
+    "titleRu": "Задание Дорика",
+    "qp": 1,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Doric's_Quest",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Doric's_Quest/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2952,3450,0",
+    "npc": {
+      "nameEn": "Doric",
+      "nameRu": "Дорик",
+      "location": "Хижина к северу от Falador",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Doric"
+    },
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "гном Doric к северу от Фаладора.",
-        "key": "where"
+        "nameEn": "Clay",
+        "nameRu": "Глина",
+        "amount": 6,
+        "howToGet": "Из шага S2-01.",
+        "wikiItemId": 434,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Clay.png"
       },
       {
-        "label": "Взять",
-        "text": "6 глины, 4 медной руды, 2 железной руды (всё уже в банке с прошлых этапов).",
-        "key": "bring"
+        "nameEn": "Copper ore",
+        "nameRu": "Медная руда",
+        "amount": 4,
+        "howToGet": "",
+        "wikiItemId": 436,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Copper_ore.png"
       },
       {
-        "label": "Заодно",
-        "text": "по дороге сорви капусту на ферме у Фаладора — нужна в S3-06. Капуста из Draynor Manor не подходит."
-      },
-      {
-        "label": "Награда",
-        "text": "1 очко квестов, опыт добычи руды, доступ к наковальням Дорика.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный.",
-        "key": "doneWhen"
+        "nameEn": "Iron ore",
+        "nameRu": "Железная руда",
+        "amount": 2,
+        "howToGet": "",
+        "wikiItemId": 440,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_ore.png"
       }
     ],
-    "requires": [
-      "S1-11",
-      "S2-04",
-      "S2-14"
-    ],
-    "where": "гном Doric к северу от Фаладора.",
-    "bring": "6 глины, 4 медной руды, 2 железной руды (всё уже в банке с прошлых этапов).",
-    "reward": "1 очко квестов, опыт добычи руды, доступ к наковальням Дорика.",
-    "qp": 1
+    "reward": "1 QP, 1 300 XP Mining, доступ к наковальням Дорика.",
+    "doneWhen": "Квест зелёный."
   },
   {
     "id": "S3-02",
     "stage": 3,
-    "type": "skill",
-    "title": "Добыча руды до 30",
-    "shortTitle": "Добыча 30",
-    "doneWhen": "добыча 30, в банке 50+ железной руды.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "железо к юго-востоку от Варрока или в Al Kharid.",
-        "key": "where"
-      },
-      {
-        "label": "Как",
-        "text": "копай железо, стоя между 2–3 камнями, и выбрасывай руду, когда инвентарь полный (быстрее всего), или складывай в банк для кузнечки.",
-        "key": "how"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "добыча 30, в банке 50+ железной руды.",
-        "key": "doneWhen"
-      }
-    ],
+    "type": "quest",
+    "title": "Black Knights' Fortress",
+    "titleRu": "Крепость Чёрных рыцарей",
+    "qp": 3,
+    "minQp": 12,
     "requires": [
-      "S2-14"
+      "S2-11"
     ],
-    "where": "железо к юго-востоку от Варрока или в Al Kharid.",
-    "how": "копай железо, стоя между 2–3 камнями, и выбрасывай руду, когда инвентарь полный (быстрее всего), или складывай в банк для кузнечки.",
-    "targets": [
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Black_Knights'_Fortress",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Black_Knights'_Fortress/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2960,3339,2",
+    "npc": {
+      "nameEn": "Sir Amik Varze",
+      "nameRu": "Сэр Амик Варз",
+      "location": "White Knights' Castle в Falador",
+      "floor": "2nd floor (3-й этаж)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Sir_Amik_Varze"
+    },
+    "itemsRequired": [
       {
-        "skill": "mining",
-        "level": 30
+        "nameEn": "Iron chainbody",
+        "nameRu": "Железная кольчуга",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1101,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_chainbody.png"
+      },
+      {
+        "nameEn": "Bronze med helm",
+        "nameRu": "Бронзовый средний шлем",
+        "amount": 1,
+        "howToGet": "Из шага S2-11.",
+        "wikiItemId": 1139,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_med_helm.png"
+      },
+      {
+        "nameEn": "Cabbage",
+        "nameRu": "Капуста",
+        "amount": 1,
+        "howToGet": "Сорви на капустном поле к югу от Falador — капуста из Draynor Manor не сработает!",
+        "wikiItemId": 1965,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Cabbage.png"
       }
-    ]
+    ],
+    "reward": "3 QP, 2 500 Coins.",
+    "doneWhen": "Квест зелёный."
   },
   {
     "id": "S3-03",
     "stage": 3,
     "type": "quest",
-    "title": "The Knight's Sword",
-    "shortTitle": "The Knight's Sword",
-    "doneWhen": "квест зелёный, кузнечное дело 29.",
+    "title": "Demon Slayer",
+    "titleRu": "Истребитель демонов",
+    "qp": 3,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Demon_Slayer",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Demon_Slayer/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3203,3424,0",
+    "npc": {
+      "nameEn": "Gypsy Aris",
+      "nameRu": "Цыганка Арис",
+      "location": "Палатка на площади Varrock",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Gypsy_Aris"
+    },
     "fields": [
       {
-        "label": "Где",
-        "text": "оруженосец во дворе замка Фаладора.",
-        "key": "where"
-      },
-      {
-        "label": "Нужно",
-        "text": "добыча 10, готовка 10 (чтобы испечь пирог) — или купи пирог на GE."
-      },
-      {
-        "label": "Взять",
-        "text": "пирог из красных ягод (Redberry pie), 2 железных слитка, кирку, еду. Портрет лежит в шкафу Sir Vyvin наверху замка — бери, когда он не смотрит.",
-        "key": "bring"
-      },
-      {
-        "label": "Опасно",
-        "text": "синюю руду (Blurite ore) копаешь в ледяном подземелье к югу от Port Sarim. Там ледяные воины и великаны сильнее тебя — возьми 10 штук еды, скопай руду и сразу уходи."
-      },
-      {
-        "label": "Награда",
-        "text": "1 очко квестов, 12 725 опыта кузнечного дела — сразу 29 уровень.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный, кузнечное дело 29.",
-        "key": "doneWhen"
+        "label": "Бой",
+        "text": "Демон Delrith (27 ур.) у каменного круга к югу от Varrock. Добивай только мечом Silverlight, произнеся заклинание от цыганки."
       }
     ],
-    "requires": [
-      "S1-09",
-      "S1-11"
-    ],
-    "where": "оруженосец во дворе замка Фаладора.",
-    "bring": "пирог из красных ягод (Redberry pie), 2 железных слитка, кирку, еду. Портрет лежит в шкафу Sir Vyvin наверху замка — бери, когда он не смотрит.",
-    "reward": "1 очко квестов, 12 725 опыта кузнечного дела — сразу 29 уровень.",
-    "qp": 1
+    "reward": "3 QP, меч Silverlight.",
+    "doneWhen": "Квест зелёный."
   },
   {
     "id": "S3-04",
     "stage": 3,
-    "type": "gear",
-    "title": "Кузнечное дело до 34 и свой железный комплект",
-    "shortTitle": "Кузнечное дело 34, железный комплект",
-    "doneWhen": "кузнечное дело 34, железный комплект надет или в банке.",
-    "fields": [
+    "type": "quest",
+    "title": "Below Ice Mountain",
+    "titleRu": "Под Ледяной горой",
+    "qp": 1,
+    "minQp": 16,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Below_Ice_Mountain",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Below_Ice_Mountain/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3001,3483,0",
+    "floor": "Ground floor (1-й этаж / земля)",
+    "where": "Вершина Ice Mountain к западу от Edgeville.",
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "наковальня к югу от западного банка Варрока (ближайшая к банку).",
-        "key": "where"
+        "nameEn": "Cooked meat",
+        "nameRu": "Жареное мясо",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 2142,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Cooked_meat.png"
       },
       {
-        "label": "Как",
-        "text": "29 → 33 — бронзовые нагрудники из запаса бронзы; с 33 выкуй себе железный комплект: полный шлем, кайтовый щит, поножи, нагрудник. Железо выплавляй в Эдгвилле (ближайшая к банку печь), слиток выходит примерно в половине случаев.",
-        "key": "how"
+        "nameEn": "Bread",
+        "nameRu": "Хлеб",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 2309,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bread.png"
       },
       {
-        "label": "Зачем 34",
-        "text": "с этого уровня можно сковать стальные гвозди для Dragon Slayer I."
-      },
-      {
-        "label": "Готово, когда",
-        "text": "кузнечное дело 34, железный комплект надет или в банке.",
-        "key": "doneWhen"
+        "nameEn": "Knife",
+        "nameRu": "Нож",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 946,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Knife.png"
       }
     ],
-    "requires": [
-      "S3-03"
-    ],
-    "where": "наковальня к югу от западного банка Варрока (ближайшая к банку).",
-    "how": "29 → 33 — бронзовые нагрудники из запаса бронзы; с 33 выкуй себе железный комплект: полный шлем, кайтовый щит, поножи, нагрудник. Железо выплавляй в Эдгвилле (ближайшая к банку печь), слиток выходит примерно в половине случаев.",
-    "targets": [
-      {
-        "skill": "smithing",
-        "level": 34
-      }
-    ]
+    "reward": "1 QP, доступ в подземный город гномов Camdozaal.",
+    "doneWhen": "Квест зелёный."
   },
   {
     "id": "S3-05",
     "stage": 3,
     "type": "quest",
-    "title": "Vampyre Slayer",
-    "shortTitle": "Vampyre Slayer",
-    "doneWhen": "квест зелёный.",
+    "title": "Shield of Arrav",
+    "titleRu": "Щит Аррава",
+    "qp": 1,
+    "requires": [],
+    "optional": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Shield_of_Arrav",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Shield_of_Arrav/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3210,3494,0",
+    "npc": {
+      "nameEn": "Reldo",
+      "nameRu": "Рельдо",
+      "location": "Библиотека дворца Varrock",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Reldo"
+    },
     "fields": [
       {
-        "label": "Где",
-        "text": "Morgan в Draynor Village.",
-        "key": "where"
-      },
-      {
-        "label": "Взять",
-        "text": "молот, кол от Dr Harlow в пабе Blue Moon в Варроке (угости его пивом), чеснок из шкафа наверху в доме Morgan, 10+ лосося.",
-        "key": "bring"
-      },
-      {
-        "label": "Опасно",
-        "text": "граф Draynor уровня 34. Если бой тяжёлый, используй безопасную точку (safespot) — Quest Helper её покажет."
-      },
-      {
-        "label": "Награда",
-        "text": "3 очка квестов, 4 825 опыта атаки.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный.",
-        "key": "doneWhen"
+        "label": "Особенность",
+        "text": "Кооперативный квест (Phoenix Gang против Black Arm Gang). Зайди в чат-канал (Grouping → Clan chat → osrs soa) и найди напарника. Либо пропусти — очков для дракона хватит и без него."
       }
     ],
-    "requires": [
-      "S2-11"
-    ],
-    "where": "Morgan в Draynor Village.",
-    "bring": "молот, кол от Dr Harlow в пабе Blue Moon в Варроке (угости его пивом), чеснок из шкафа наверху в доме Morgan, 10+ лосося.",
-    "reward": "3 очка квестов, 4 825 опыта атаки.",
-    "qp": 3
+    "reward": "1 QP, 600 Coins.",
+    "doneWhen": "Квест зелёный (или осознанно пропущен)."
   },
   {
     "id": "S3-06",
     "stage": 3,
-    "type": "quest",
-    "title": "Black Knights' Fortress",
-    "shortTitle": "Black Knights' Fortress",
-    "doneWhen": "квест зелёный.",
-    "fields": [
+    "type": "gear",
+    "title": "Покупка адамантового снаряжения на GE",
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Grand_Exchange",
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "Sir Amik Varze в замке Фаладора. Нужно 12 очков квестов.",
-        "key": "where"
+        "nameEn": "Adamant scimitar",
+        "nameRu": "Адамантовый ятаган",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1331,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_scimitar.png"
       },
       {
-        "label": "Взять",
-        "text": "железную кольчугу (Iron chainbody — можно выковать самому), бронзовый средний шлем из S2-08, капусту из S3-01.",
-        "key": "bring"
+        "nameEn": "Adamant platelegs",
+        "nameRu": "Адамантовые поножи",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1073,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_platelegs.png"
       },
       {
-        "label": "Награда",
-        "text": "3 очка квестов, 2 500 монет.",
-        "key": "reward"
+        "nameEn": "Adamant kiteshield",
+        "nameRu": "Адамантовый кайтовый щит",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1199,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_kiteshield.png"
       },
       {
-        "label": "Готово, когда",
-        "text": "квест зелёный.",
-        "key": "doneWhen"
+        "nameEn": "Adamant full helm",
+        "nameRu": "Адамантовый полный шлем",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1161,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_full_helm.png"
+      },
+      {
+        "nameEn": "Amulet of power",
+        "nameRu": "Амулет мощи",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1731,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_power.png"
       }
     ],
-    "requires": [
-      "S2-08",
-      "S3-01"
-    ],
-    "where": "Sir Amik Varze в замке Фаладора. Нужно 12 очков квестов.",
-    "bring": "железную кольчугу (Iron chainbody — можно выковать самому), бронзовый средний шлем из S2-08, капусту из S3-01.",
-    "reward": "3 очка квестов, 2 500 монет.",
-    "minQp": 12,
-    "qp": 3
+    "doneWhen": "Экипировка в банке или надета."
   },
   {
     "id": "S3-07",
     "stage": 3,
-    "type": "quest",
-    "title": "Shield of Arrav",
-    "shortTitle": "Shield of Arrav (необязательный)",
-    "doneWhen": "квест зелёный или осознанно пропущен.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "Reldo в библиотеке дворца Варрока.",
-        "key": "where"
-      },
-      {
-        "label": "Внимание",
-        "text": "исторически квест требует второго игрока из другой банды. Проверь условия в Quest Helper; если напарника нет — пропусти, для Dragon Slayer I очков хватает и без него."
-      },
-      {
-        "label": "Награда",
-        "text": "1 очко квестов, 600 монет.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный или осознанно пропущен.",
-        "key": "doneWhen"
-      }
-    ],
+    "type": "skill",
+    "title": "Бой до 30 / 30 / 30 (атака, сила, защита)",
     "requires": [],
-    "where": "Reldo в библиотеке дворца Варрока.",
-    "reward": "1 очко квестов, 600 монет.",
-    "qp": 1,
-    "optional": true
+    "floor": "Ground floor (1-й этаж / земля)",
+    "where": "Воины во дворце Al Kharid (Al Kharid warrior, 9 ур.). Банк рядом.",
+    "membersAlternative": "👑 С подпиской: не бей мобов вручную — пройди Waterfall Quest за 15 минут и сразу получи 30 Attack и 30 Strength!",
+    "doneWhen": "Attack 30, Strength 30, Defence 30. Надет полный адамант."
   },
   {
     "id": "S3-08",
     "stage": 3,
-    "type": "quest",
-    "title": "Demon Slayer",
-    "shortTitle": "Demon Slayer",
-    "doneWhen": "квест зелёный.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "гадалка Gypsy Aris на площади Варрока.",
-        "key": "where"
-      },
-      {
-        "label": "Как",
-        "text": "три ключа для меча Silverlight — у капитана Rovin (дворец Варрока), в водостоке кухни дворца (вылей туда ведро воды) и у мага Traiborn (просит 25 костей).",
-        "key": "how"
-      },
-      {
-        "label": "Опасно",
-        "text": "демон Delrith уровня 27 у каменного круга к югу от Варрока. Бей только мечом Silverlight и возьми 10 штук еды."
-      },
-      {
-        "label": "Награда",
-        "text": "3 очка квестов, меч Silverlight.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный.",
-        "key": "doneWhen"
-      }
-    ],
-    "requires": [
-      "S2-11"
-    ],
-    "where": "гадалка Gypsy Aris на площади Варрока.",
-    "how": "три ключа для меча Silverlight — у капитана Rovin (дворец Варрока), в водостоке кухни дворца (вылей туда ведро воды) и у мага Traiborn (просит 25 костей).",
-    "reward": "3 очка квестов, меч Silverlight.",
-    "qp": 3
-  },
-  {
-    "id": "S3-09",
-    "stage": 3,
-    "type": "quest",
-    "title": "Below Ice Mountain",
-    "shortTitle": "Below Ice Mountain",
-    "doneWhen": "квест зелёный.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "на Ice Mountain к западу от монастыря Эдгвилля, Quest Helper покажет точку. Нужно 16 очков квестов.",
-        "key": "where"
-      },
-      {
-        "label": "Взять",
-        "text": "хлеб (из муки S1-03), приготовленное мясо, нож (Knife).",
-        "key": "bring"
-      },
-      {
-        "label": "Награда",
-        "text": "1 очко квестов, доступ к шахтам Camdozaal.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный.",
-        "key": "doneWhen"
-      }
-    ],
-    "requires": [
-      "S1-03"
-    ],
-    "where": "на Ice Mountain к западу от монастыря Эдгвилля, Quest Helper покажет точку. Нужно 16 очков квестов.",
-    "bring": "хлеб (из муки S1-03), приготовленное мясо, нож (Knife).",
-    "reward": "1 очко квестов, доступ к шахтам Camdozaal.",
-    "minQp": 16,
-    "qp": 1
-  },
-  {
-    "id": "S3-10",
-    "stage": 3,
     "type": "skill",
-    "title": "Бой до 30 / 30 / 30",
-    "shortTitle": "Бой до 30/30/30",
-    "doneWhen": "атака, сила и защита по 30, надет адамант.",
+    "title": "Магия до 33 уровня (Telekinetic Grab)",
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Telekinetic_Grab",
+    "how": "Телепорты в Varrock до 31 уровня, затем Lumbridge Teleport до 33 уровня.",
     "fields": [
       {
-        "label": "Где",
-        "text": "воины во дворце Al Kharid.",
-        "key": "where"
-      },
-      {
-        "label": "Как",
-        "text": "с 30 атаки — адамантовый ятаган, с 30 защиты — адамантовая броня (купи на GE: своя кузнечка до адаманта не дорастёт).",
-        "key": "how"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "атака, сила и защита по 30, надет адамант.",
-        "key": "doneWhen"
+        "label": "Зачем",
+        "text": "Заклинание Telekinetic Grab (33 ур.) позволяет бесплатно забрать кусок карты из тюрьмы Port Sarim в квесте Dragon Slayer I и сэкономить 10 000 Coins!"
       }
     ],
-    "requires": [
-      "S2-11"
-    ],
-    "where": "воины во дворце Al Kharid.",
-    "how": "с 30 атаки — адамантовый ятаган, с 30 защиты — адамантовая броня (купи на GE: своя кузнечка до адаманта не дорастёт).",
-    "targets": [
-      {
-        "skill": "attack",
-        "level": 30
-      },
-      {
-        "skill": "strength",
-        "level": 30
-      },
-      {
-        "skill": "defence",
-        "level": 30
-      }
-    ]
-  },
-  {
-    "id": "S3-11",
-    "stage": 3,
-    "type": "skill",
-    "title": "Магия до 20",
-    "shortTitle": "Магия 20",
-    "doneWhen": "магия 20.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "коровы или гоблины у Лумбриджа.",
-        "key": "where"
-      },
-      {
-        "label": "Как",
-        "text": "Wind Strike → Water → Earth → Fire Strike, каждое новое заклинание сразу меняй. Руны у Aubury в Варроке, посох воздуха (Staff of air) экономит руны воздуха.",
-        "key": "how"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "магия 20.",
-        "key": "doneWhen"
-      }
-    ],
-    "requires": [
-      "S2-07"
-    ],
-    "where": "коровы или гоблины у Лумбриджа.",
-    "how": "Wind Strike → Water → Earth → Fire Strike, каждое новое заклинание сразу меняй. Руны у Aubury в Варроке, посох воздуха (Staff of air) экономит руны воздуха.",
-    "targets": [
-      {
-        "skill": "magic",
-        "level": 20
-      }
-    ]
-  },
-  {
-    "id": "S3-12",
-    "stage": 3,
-    "type": "skill",
-    "title": "Молитва до 25 и ремесло до 10",
-    "shortTitle": "Молитва 25, ремесло 10",
-    "doneWhen": "молитва 25 (открыта Protect Item), ремесло 10.",
-    "fields": [
-      {
-        "label": "Как",
-        "text": "закапывай все кости из боя. Шкуры из S1-08 выдели у кожевника Ellis в Al Kharid и сшей перчатки и сапоги иглой с нитками (магазин ремесла в Rimmington).",
-        "key": "how"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "молитва 25 (открыта Protect Item), ремесло 10.",
-        "key": "doneWhen"
-      }
-    ],
-    "requires": [
-      "S1-08"
-    ],
-    "how": "закапывай все кости из боя. Шкуры из S1-08 выдели у кожевника Ellis в Al Kharid и сшей перчатки и сапоги иглой с нитками (магазин ремесла в Rimmington).",
-    "targets": [
-      {
-        "skill": "prayer",
-        "level": 25
-      },
-      {
-        "skill": "crafting",
-        "level": 10
-      }
-    ]
+    "doneWhen": "Magic 33."
   },
   {
     "id": "S4-01",
     "stage": 4,
     "type": "quest",
     "title": "The Corsair Curse",
-    "shortTitle": "The Corsair Curse",
-    "doneWhen": "квест зелёный.",
-    "fields": [
+    "titleRu": "Проклятие корсаров",
+    "qp": 2,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Corsair_Curse",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Corsair_Curse/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3028,3218,0",
+    "npc": {
+      "nameEn": "Captain Tock",
+      "nameRu": "Капитан Ток",
+      "location": "Южный причал Port Sarim",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Captain_Tock"
+    },
+    "itemsRecommended": [
       {
-        "label": "Где",
-        "text": "капитан Tock в Port Sarim, Quest Helper покажет точку. Плывёшь в бухту корсаров.",
-        "key": "where"
-      },
-      {
-        "label": "Опасно",
-        "text": "в конце бой с Ithoi the Navigator. Бери 10+ лосося."
-      },
-      {
-        "label": "Награда",
-        "text": "2 очка квестов, доступ в Corsair Cove.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный.",
-        "key": "doneWhen"
+        "nameEn": "Salmon",
+        "nameRu": "Лосось",
+        "amount": 10,
+        "howToGet": "Еда для боя.",
+        "wikiItemId": 329,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png"
       }
     ],
-    "requires": [
-      "S3-10"
+    "fields": [
+      {
+        "label": "Бой",
+        "text": "Ithoi the Navigator (маг). Возьми 10 лососей."
+      }
     ],
-    "where": "капитан Tock в Port Sarim, Quest Helper покажет точку. Плывёшь в бухту корсаров.",
-    "reward": "2 очка квестов, доступ в Corsair Cove.",
-    "qp": 2
+    "reward": "2 QP, доступ в бухту Corsair Cove.",
+    "doneWhen": "Квест зелёный."
   },
   {
     "id": "S4-02",
     "stage": 4,
     "type": "quest",
     "title": "The Ides of Milk",
-    "shortTitle": "The Ides of Milk",
-    "doneWhen": "квест зелёный, лампа использована.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "точку старта покажет Quest Helper (квест добавлен в 2026 году).",
-        "key": "where"
-      },
-      {
-        "label": "Награда",
-        "text": "1 очко квестов и лампа опыта — используй её на молитву.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный, лампа использована.",
-        "key": "doneWhen"
-      }
-    ],
+    "titleRu": "Молочные иды",
+    "qp": 1,
     "requires": [],
-    "where": "точку старта покажет Quest Helper (квест добавлен в 2026 году).",
-    "reward": "1 очко квестов и лампа опыта — используй её на молитву.",
-    "qp": 1
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Ides_of_Milk",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Ides_of_Milk/Quick_guide",
+    "floor": "Ground floor (1-й этаж / земля)",
+    "where": "Молочная ферма к северу от Lumbridge.",
+    "reward": "1 QP, лампа опыта (используй на Prayer).",
+    "doneWhen": "Квест зелёный."
   },
   {
     "id": "S4-03",
     "stage": 4,
     "type": "skill",
     "title": "Бой до 40 / 40 / 40",
-    "shortTitle": "Бой до 40/40/40",
-    "doneWhen": "атака, сила и защита по 40, рунический меч в банке.",
+    "requires": [],
+    "where": "Flesh Crawler (2-й этаж Stronghold of Security) или моховые великаны (Moss giant) в канализации Varrock.",
+    "itemsRequired": [
+      {
+        "nameEn": "Rune scimitar",
+        "nameRu": "Рунический ятаган",
+        "amount": 1,
+        "howToGet": "Купи на GE для прокачки.",
+        "wikiItemId": 1333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_scimitar.png"
+      },
+      {
+        "nameEn": "Rune sword",
+        "nameRu": "Рунический меч",
+        "amount": 1,
+        "howToGet": "Купи на GE специально для дракона Elvarg: колющий удар.",
+        "wikiItemId": 1289,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_sword.png"
+      },
+      {
+        "nameEn": "Rune full helm",
+        "nameRu": "Рунический полный шлем",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1163,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_full_helm.png"
+      },
+      {
+        "nameEn": "Rune platelegs",
+        "nameRu": "Рунические поножи",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1079,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_platelegs.png"
+      },
+      {
+        "nameEn": "Rune kiteshield",
+        "nameRu": "Рунический кайтовый щит",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1201,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_kiteshield.png"
+      }
+    ],
     "fields": [
       {
-        "label": "Где",
-        "text": "Flesh Crawler на втором этаже Stronghold of Security, потом моховые великаны (Moss giant) в канализации Варрока.",
-        "key": "where"
+        "label": "Оружие",
+        "text": "Купи на GE Rune scimitar для прокачки и Rune sword (меч с колющим уроном) специально для дракона Elvarg!"
       },
       {
-        "label": "Как",
-        "text": "с 40 атаки купи рунический ятаган (Rune scimitar) для прокачки и рунический меч (Rune sword) для дракона — Elvarg слаб к колющим ударам. С 40 защиты — рунические шлем, поножи и кайтовый щит.",
-        "key": "how"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "атака, сила и защита по 40, рунический меч в банке.",
-        "key": "doneWhen"
+        "label": "Броня",
+        "text": "Купи рунические шлем, поножи и щит (Rune full helm, Rune platelegs, Rune kiteshield). Нагрудник пока надеть нельзя — он откроется победой над драконом."
       }
     ],
-    "requires": [
-      "S3-10"
-    ],
-    "where": "Flesh Crawler на втором этаже Stronghold of Security, потом моховые великаны (Moss giant) в канализации Варрока.",
-    "how": "с 40 атаки купи рунический ятаган (Rune scimitar) для прокачки и рунический меч (Rune sword) для дракона — Elvarg слаб к колющим ударам. С 40 защиты — рунические шлем, поножи и кайтовый щит.",
-    "targets": [
-      {
-        "skill": "attack",
-        "level": 40
-      },
-      {
-        "skill": "strength",
-        "level": 40
-      },
-      {
-        "skill": "defence",
-        "level": 40
-      }
-    ]
+    "membersAlternative": "👑 С подпиской: не бей мобов вручную — пройди Waterfall Quest за 15 минут и сразу получи 30 Attack и 30 Strength!",
+    "doneWhen": "Attack 40, Strength 40, Defence 40."
   },
   {
     "id": "S4-04",
     "stage": 4,
     "type": "skill",
-    "title": "Молитва до 37 (рекомендуется)",
-    "shortTitle": "Молитва 37",
-    "doneWhen": "молитва 37. Если выходит слишком долго — можно идти на дракона и без неё, с боем 45+ и хорошей едой.",
+    "title": "Рыбалка и готовка до 40 (омары)",
+    "requires": [],
+    "floor": "Ground floor (1-й этаж / земля)",
+    "where": "Ловля омаров на причале Musa Point на острове Karamja (лодка за 30 gp).",
+    "itemsRequired": [
+      {
+        "nameEn": "Lobster pot",
+        "nameRu": "Ловушка для омаров",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 301,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png"
+      }
+    ],
     "fields": [
       {
-        "label": "Как",
-        "text": "закапывай кости из боя, большие кости (Big bones) с моховых и холмовых великанов дают 15 опыта вместо 4,5. Можно докупить большие кости на GE.",
-        "key": "how"
-      },
-      {
-        "label": "Зачем",
-        "text": "на 37 открывается Protect from Magic — с ней и щитом Elvarg бьёт огнём максимум на 7 вместо 10."
-      },
-      {
-        "label": "Готово, когда",
-        "text": "молитва 37. Если выходит слишком долго — можно идти на дракона и без неё, с боем 45+ и хорошей едой.",
-        "key": "doneWhen"
+        "label": "Где готовить",
+        "text": "Плита в Al Kharid рядом с банком."
       }
     ],
-    "requires": [
-      "S3-12"
-    ],
-    "how": "закапывай кости из боя, большие кости (Big bones) с моховых и холмовых великанов дают 15 опыта вместо 4,5. Можно докупить большие кости на GE.",
-    "targets": [
-      {
-        "skill": "prayer",
-        "level": 37
-      }
-    ]
+    "doneWhen": "Fishing 40, Cooking 40, в банке лежит 30+ готовых омаров (Lobster)."
   },
   {
     "id": "S4-05",
     "stage": 4,
-    "type": "skill",
-    "title": "Магия до 33 (рекомендуется)",
-    "shortTitle": "Магия 33",
-    "doneWhen": "магия 33 или отложено 10 000 монет.",
-    "fields": [
-      {
-        "label": "Как",
-        "text": "Fire Strike по монстрам до 25, дальше телепорты в Варрок (25) и Лумбридж (31).",
-        "key": "how"
-      },
-      {
-        "label": "Зачем",
-        "text": "на 33 открывается Telekinetic Grab — им забираешь третий кусок карты в S5-06. Без магии 33 кусок стоит 10 000 монет."
-      },
-      {
-        "label": "Готово, когда",
-        "text": "магия 33 или отложено 10 000 монет.",
-        "key": "doneWhen"
-      }
-    ],
-    "requires": [
-      "S3-11"
-    ],
-    "how": "Fire Strike по монстрам до 25, дальше телепорты в Варрок (25) и Лумбридж (31).",
-    "targets": [
-      {
-        "skill": "magic",
-        "level": 33
-      }
-    ]
-  },
-  {
-    "id": "S4-06",
-    "stage": 4,
-    "type": "skill",
-    "title": "Рыбалка и готовка до 40",
-    "shortTitle": "Рыбалка и готовка 40",
-    "doneWhen": "рыбалка 40, готовка 40, в банке 25+ омаров.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "омары (Lobster) на Karamja, лодка из Port Sarim за 30 монет, ловушка для омаров (Lobster pot). Готовь в Al Kharid.",
-        "key": "where"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "рыбалка 40, готовка 40, в банке 25+ омаров.",
-        "key": "doneWhen"
-      }
-    ],
-    "requires": [
-      "S2-12"
-    ],
-    "where": "омары (Lobster) на Karamja, лодка из Port Sarim за 30 монет, ловушка для омаров (Lobster pot). Готовь в Al Kharid.",
-    "targets": [
-      {
-        "skill": "fishing",
-        "level": 40
-      },
-      {
-        "skill": "cooking",
-        "level": 40
-      }
-    ]
-  },
-  {
-    "id": "S4-07",
-    "stage": 4,
     "type": "gear",
-    "title": "Стальные гвозди",
-    "shortTitle": "Стальные гвозди",
-    "doneWhen": "в банке 90 стальных гвоздей.",
-    "fields": [
+    "title": "Покупка всех материалов для дракона на Grand Exchange",
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Dragon_Slayer_I",
+    "how": "Не куй гвозди вручную! Купи всё на бирже за пару тысяч монет.",
+    "itemsRequired": [
       {
-        "label": "Как",
-        "text": "выплавь 6 стальных слитков (железо + 2 угля) и выкуй из них 90 стальных гвоздей (Steel nails) на наковальне — нужно кузнечное дело 34. Или купи гвозди на GE.",
-        "key": "how"
+        "nameEn": "Steel nails",
+        "nameRu": "Стальные гвозди",
+        "amount": 90,
+        "howToGet": "",
+        "wikiItemId": 1539,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png"
       },
       {
-        "label": "Готово, когда",
-        "text": "в банке 90 стальных гвоздей.",
-        "key": "doneWhen"
+        "nameEn": "Plank",
+        "nameRu": "Доски",
+        "amount": 3,
+        "howToGet": "",
+        "wikiItemId": 960,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png"
+      },
+      {
+        "nameEn": "Hammer",
+        "nameRu": "Молот",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      },
+      {
+        "nameEn": "Unfired bowl",
+        "nameRu": "Сырая миска",
+        "amount": 1,
+        "howToGet": "Или слепи из глины на гончарном круге в Barbarian Village.",
+        "wikiItemId": 1791,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Unfired_bowl.png"
+      },
+      {
+        "nameEn": "Wizard's mind bomb",
+        "nameRu": "Wizard's mind bomb",
+        "amount": 1,
+        "howToGet": "Купи в пабе Rising Sun в Falador за 3 gp.",
+        "wikiItemId": 1907,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Wizard's_mind_bomb.png"
+      },
+      {
+        "nameEn": "Silk",
+        "nameRu": "Шёлк",
+        "amount": 1,
+        "howToGet": "Купи на рынке Al Kharid за 3 gp.",
+        "wikiItemId": 950,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Silk.png"
+      },
+      {
+        "nameEn": "Lobster pot",
+        "nameRu": "Ловушка для омаров",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 301,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png"
+      },
+      {
+        "nameEn": "Coins",
+        "nameRu": "Монеты",
+        "amount": 2000,
+        "howToGet": "Для покупки корабля Lady Lumbridge.",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
       }
     ],
-    "requires": [
-      "S3-02",
-      "S3-04"
-    ],
-    "how": "выплавь 6 стальных слитков (железо + 2 угля) и выкуй из них 90 стальных гвоздей (Steel nails) на наковальне — нужно кузнечное дело 34. Или купи гвозди на GE."
-  },
-  {
-    "id": "S4-08",
-    "stage": 4,
-    "type": "prep",
-    "title": "Предметы для Dragon Slayer I",
-    "shortTitle": "Предметы для Dragon Slayer I",
-    "doneWhen": "всё перечисленное лежит в банке.",
-    "fields": [
-      {
-        "label": "Сырая миска (Unfired bowl)",
-        "text": "мягкая глина на гончарном круге в Barbarian Village, нужно ремесло 8."
-      },
-      {
-        "label": "Бутылка Wizard's mind bomb",
-        "text": "паб Rising Sun в Фаладоре."
-      },
-      {
-        "label": "",
-        "text": "Ловушка для омаров (Lobster pot) — у тебя уже есть."
-      },
-      {
-        "label": "Шёлк (Silk)",
-        "text": "лавка в Al Kharid за 3 монеты или у Thessalia в Варроке."
-      },
-      {
-        "label": "3 доски (Plank)",
-        "text": "GE или лесопилка к северо-востоку от Варрока (оператор продаёт после покупки корабля)."
-      },
-      {
-        "label": "",
-        "text": "Молот, 2 000 монет на корабль, руны закона и воздуха для Telekinetic Grab (или 10 000 монет)."
-      },
-      {
-        "label": "Готово, когда",
-        "text": "всё перечисленное лежит в банке.",
-        "key": "doneWhen"
-      }
-    ],
-    "requires": [
-      "S3-12",
-      "S4-06"
-    ]
+    "doneWhen": "Все предметы сложены в банке."
   },
   {
     "id": "S5-01",
     "stage": 5,
     "type": "quest",
-    "title": "Начало в Champions' Guild",
-    "shortTitle": "Начало в Champions' Guild",
-    "doneWhen": "в инвентаре ключ от лабиринта, все вопросы заданы.",
+    "title": "Старт в Champions' Guild",
+    "minQp": 32,
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Dragon_Slayer_I",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Dragon_Slayer_I/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3191,3358,0",
+    "npc": {
+      "nameEn": "Guildmaster",
+      "nameRu": "Мастер гильдии",
+      "location": "Champions' Guild к югу от ворот Varrock (телепорт книгой Chronicle)",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Guildmaster"
+    },
+    "how": "Поговори с мастером гильдии, затем иди к Oziach в Edgeville. Вернись к Guildmaster и задай абсолютно все вопросы по очереди (про дракона, корабль и защиту от огня) — он выдаст ключ от лабиринта (Maze key).",
     "fields": [
       {
-        "label": "Где",
-        "text": "мастер гильдии (Guildmaster) в Champions' Guild сразу к югу от южных ворот Варрока.",
-        "key": "where"
-      },
-      {
-        "label": "Как",
-        "text": "он отправит к Oziach. Вернувшись, **задай мастеру все вопросы подряд** — про карту, корабль и защиту от огня. Каждый вопрос открывает часть квеста, а за вопрос о карте он даст ключ от лабиринта (Maze key). Нужно свободное место в инвентаре.",
-        "key": "how"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "в инвентаре ключ от лабиринта, все вопросы заданы.",
-        "key": "doneWhen"
+        "label": "Требование",
+        "text": "32 QP (у тебя уже будет 44 QP)."
       }
     ],
-    "requires": [],
-    "where": "мастер гильдии (Guildmaster) в Champions' Guild сразу к югу от южных ворот Варрока.",
-    "how": "он отправит к Oziach. Вернувшись, **задай мастеру все вопросы подряд** — про карту, корабль и защиту от огня. Каждый вопрос открывает часть квеста, а за вопрос о карте он даст ключ от лабиринта (Maze key). Нужно свободное место в инвентаре.",
-    "minQp": 32
+    "doneWhen": "Получен Maze key."
   },
   {
     "id": "S5-02",
     "stage": 5,
-    "type": "quest",
-    "title": "Разговор с Oziach",
-    "shortTitle": "Разговор с Oziach",
-    "doneWhen": "Oziach дал задание убить дракона.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "северо-западный угол Эдгвилля, у рва Wilderness рядом с монастырём.",
-        "key": "where"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "Oziach дал задание убить дракона.",
-        "key": "doneWhen"
-      }
-    ],
+    "type": "gear",
+    "title": "Получение Anti-dragon shield",
     "requires": [
       "S5-01"
     ],
-    "where": "северо-западный угол Эдгвилля, у рва Wilderness рядом с монастырём."
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Anti-dragon_shield",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3210,3221,1",
+    "npc": {
+      "nameEn": "Duke Horacio",
+      "nameRu": "Герцог Гораций",
+      "location": "Lumbridge Castle",
+      "floor": "1st floor (2-й этаж)",
+      "dialogue": "Скажи, что собираешься убить дракона, — он бесплатно выдаст Anti-dragon shield.",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Duke_Horacio"
+    },
+    "proTip": "Выброси щит на пол, поговори с герцогом ещё раз и возьми второй — запасной щит пригодится, если тебя убьют на острове!",
+    "doneWhen": "Anti-dragon shield в банке."
   },
   {
     "id": "S5-03",
     "stage": 5,
-    "type": "gear",
-    "title": "Щит от драконьего огня",
-    "shortTitle": "Щит от драконьего огня",
-    "doneWhen": "Anti-dragon shield в банке.",
-    "fields": [
+    "type": "quest",
+    "title": "Кусок карты 1 — Melzar's Maze",
+    "requires": [
+      "S5-01"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Melzar's_Maze",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2941,3248,0",
+    "floor": "Ground floor (1-й этаж / земля)",
+    "where": "Лабиринт Melzar's Maze к северо-западу от Rimmington.",
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "герцог Duke Horacio на втором этаже замка Лумбридж, бесплатно. Или GE за копейки.",
-        "key": "where"
-      },
-      {
-        "label": "Совет",
-        "text": "возьми запасной — если погибнешь в бою, щит понадобится сразу при входе."
-      },
-      {
-        "label": "Готово, когда",
-        "text": "Anti-dragon shield в банке.",
-        "key": "doneWhen"
+        "nameEn": "Maze key",
+        "nameRu": "Ключ от лабиринта",
+        "amount": 1,
+        "howToGet": "Из шага S5-01.",
+        "wikiItemId": 1542,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Maze_key.png"
       }
     ],
-    "requires": [
-      "S5-02"
+    "imageUrl": "https://oldschool.runescape.wiki/images/Melzar%27s_Maze_map.png",
+    "imageCaption": "Карта комнат и цветных дверей Melzar's Maze",
+    "fields": [
+      {
+        "label": "Враги по комнатам",
+        "text": "Зомби-крыса (красный ключ) → призрак (оранжевый) → скелет (жёлтый) → зомби (синий) → Melzar the Mad, 43 ур. (фиолетовый) → Lesser demon, 82 ур. (зелёный ключ)."
+      }
     ],
-    "where": "герцог Duke Horacio на втором этаже замка Лумбридж, бесплатно. Или GE за копейки."
+    "safespot": "Малого демона расстреливай издалека магией или луком из-за угла фиолетовой двери!",
+    "doneWhen": "Кусок карты взят из сундука."
   },
   {
     "id": "S5-04",
     "stage": 5,
     "type": "quest",
-    "title": "Кусок карты 1 — Melzar's Maze",
-    "shortTitle": "Карта: Melzar's Maze",
-    "doneWhen": "из сундука за зелёной дверью забран первый кусок карты.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "лабиринт к северо-западу от Rimmington.",
-        "key": "where"
-      },
-      {
-        "label": "Взять",
-        "text": "ключ, боевое снаряжение, 15+ омаров.",
-        "key": "bring"
-      },
-      {
-        "label": "Ключи по порядку",
-        "text": "красный — с крысы-зомби с длинным хвостом; оранжевый — с призрака в топе без плаща (уязвим к воздушным заклинаниям); жёлтый — со скелета с маленьким круглым щитом (уязвим к земляным); синий — с зомби (уязвимы к огненным); фиолетовый — с Melzar the Mad (уровень 43); зелёный — с малого демона (уровень 82)."
-      },
-      {
-        "label": "Опасно",
-        "text": "малого демона можно бить из безопасной точки магией или луком — стой на клетку восточнее фиолетовой двери. **Не выходи через обычную дверь после синего ключа** — вернёт в начало."
-      },
-      {
-        "label": "Готово, когда",
-        "text": "из сундука за зелёной дверью забран первый кусок карты.",
-        "key": "doneWhen"
-      }
-    ],
+    "title": "Кусок карты 2 — загадка Оракула на Ice Mountain",
     "requires": [
       "S5-01",
-      "S4-03"
+      "S4-05"
     ],
-    "where": "лабиринт к северо-западу от Rimmington.",
-    "bring": "ключ, боевое снаряжение, 15+ омаров."
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Oracle",
+    "npc": {
+      "nameEn": "Oracle",
+      "nameRu": "Оракул",
+      "location": "Вершина Ice Mountain",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Oracle"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Silk",
+        "nameRu": "Шёлк",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 950,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Silk.png"
+      },
+      {
+        "nameEn": "Wizard's mind bomb",
+        "nameRu": "Wizard's mind bomb",
+        "amount": 1,
+        "howToGet": "Не выпей!",
+        "wikiItemId": 1907,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Wizard's_mind_bomb.png"
+      },
+      {
+        "nameEn": "Unfired bowl",
+        "nameRu": "Сырая миска",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1791,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Unfired_bowl.png"
+      },
+      {
+        "nameEn": "Lobster pot",
+        "nameRu": "Ловушка для омаров",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 301,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png"
+      }
+    ],
+    "quickSteps": [
+      "Поговори с Oracle на вершине Ice Mountain.",
+      "Спустись в гномью шахту Dwarven Mine под горой.",
+      "Найди магическую дверь на северо-востоке.",
+      "Примени на дверь 4 предмета: Silk, Wizard's mind bomb, Unfired bowl, Lobster pot.",
+      "Забери второй кусок карты из сундука."
+    ],
+    "doneWhen": "Второй кусок карты в инвентаре."
   },
   {
     "id": "S5-05",
     "stage": 5,
     "type": "quest",
-    "title": "Кусок карты 2 — Thalzar",
-    "shortTitle": "Карта: Thalzar",
-    "doneWhen": "второй кусок карты в инвентаре.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "Оракул на вершине Ice Mountain, потом комната в северо-восточном углу Dwarven Mine.",
-        "key": "where"
-      },
-      {
-        "label": "Взять",
-        "text": "шёлк, Wizard's mind bomb (не выпей!), сырую миску, ловушку для омаров. Используй все четыре предмета на магической двери.",
-        "key": "bring"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "второй кусок карты в инвентаре.",
-        "key": "doneWhen"
-      }
-    ],
+    "title": "Кусок карты 3 — вор Wormbrain в тюрьме Port Sarim",
     "requires": [
       "S5-01",
-      "S4-08"
+      "S3-08"
     ],
-    "where": "Оракул на вершине Ice Mountain, потом комната в северо-восточном углу Dwarven Mine.",
-    "bring": "шёлк, Wizard's mind bomb (не выпей!), сырую миску, ловушку для омаров. Используй все четыре предмета на магической двери."
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Wormbrain",
+    "npc": {
+      "nameEn": "Wormbrain",
+      "nameRu": "Вормбрейн",
+      "location": "Тюрьма Port Sarim, третья камера",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Wormbrain"
+    },
+    "how": "Выстрели в вора заклинанием Wind Strike или Fire Strike (у него 5 HP) и притяни выпавший кусок карты заклинанием Telekinetic Grab (Magic 33). Не плати ему 10 000 монет!",
+    "doneWhen": "Три куска соединены в единую карту острова (Crandor map)."
   },
   {
     "id": "S5-06",
     "stage": 5,
     "type": "quest",
-    "title": "Кусок карты 3 — Lozar",
-    "shortTitle": "Карта: Lozar",
-    "doneWhen": "в инвентаре целая карта Crandor (Crandor map).",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "гоблин Wormbrain, третья камера тюрьмы Port Sarim.",
-        "key": "where"
-      },
-      {
-        "label": "Как",
-        "text": "заплати 10 000 монет или ударь его магией/луком (у него 5 здоровья) и подбери кусок заклинанием Telekinetic Grab (магия 33, руны закона и воздуха). Потом соедини три куска в карту Crandor.",
-        "key": "how"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "в инвентаре целая карта Crandor (Crandor map).",
-        "key": "doneWhen"
-      }
-    ],
+    "title": "Покупка и починка корабля Lady Lumbridge",
     "requires": [
-      "S5-01",
       "S4-05"
     ],
-    "where": "гоблин Wormbrain, третья камера тюрьмы Port Sarim.",
-    "how": "заплати 10 000 монет или ударь его магией/луком (у него 5 здоровья) и подбери кусок заклинанием Telekinetic Grab (магия 33, руны закона и воздуха). Потом соедини три куска в карту Crandor."
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Lady_Lumbridge",
+    "npc": {
+      "nameEn": "Klarense",
+      "nameRu": "Кларенс",
+      "location": "Южный причал Port Sarim",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Klarense"
+    },
+    "how": "Купи разбитый корабль за 2 000 Coins.",
+    "itemsRequired": [
+      {
+        "nameEn": "Plank",
+        "nameRu": "Доски",
+        "amount": 3,
+        "howToGet": "",
+        "wikiItemId": 960,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png"
+      },
+      {
+        "nameEn": "Steel nails",
+        "nameRu": "Стальные гвозди",
+        "amount": 90,
+        "howToGet": "",
+        "wikiItemId": 1539,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png"
+      },
+      {
+        "nameEn": "Hammer",
+        "nameRu": "Молот",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 2347,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+      },
+      {
+        "nameEn": "Coins",
+        "nameRu": "Монеты",
+        "amount": 2000,
+        "howToGet": "",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+      }
+    ],
+    "fields": [
+      {
+        "label": "Ремонт",
+        "text": "Спустись в трюм с 3 досками (Plank), 90 гвоздями (Steel nails) и молотом. Кликни три раза по пробоине в корпусе."
+      }
+    ],
+    "doneWhen": "Пробоина заделана."
   },
   {
     "id": "S5-07",
     "stage": 5,
     "type": "quest",
-    "title": "Корабль Lady Lumbridge",
-    "shortTitle": "Корабль Lady Lumbridge",
-    "doneWhen": "дыра заделана.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "моряк Klarense на втором с юга причале Port Sarim, корабль стоит 2 000 монет.",
-        "key": "where"
-      },
-      {
-        "label": "Как",
-        "text": "спустись в трюм и заделай дыру: кликни по ней 3 раза с 3 досками, 90 гвоздями и молотом.",
-        "key": "how"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "дыра заделана.",
-        "key": "doneWhen"
-      }
-    ],
+    "title": "Капитан Ned",
     "requires": [
-      "S4-07",
-      "S4-08"
+      "S5-03",
+      "S5-04",
+      "S5-05",
+      "S5-06"
     ],
-    "where": "моряк Klarense на втором с юга причале Port Sarim, корабль стоит 2 000 монет.",
-    "how": "спустись в трюм и заделай дыру: кликни по ней 3 раза с 3 досками, 90 гвоздями и молотом."
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ned",
+    "npc": {
+      "nameEn": "Ned",
+      "nameRu": "Нед",
+      "location": "Дом Неда в Draynor Village",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Ned"
+    },
+    "how": "Отдай Неду карту Crandor map — он согласится вести корабль.",
+    "doneWhen": "Ned поднялся на борт Lady Lumbridge."
   },
   {
     "id": "S5-08",
     "stage": 5,
     "type": "quest",
-    "title": "Капитан Ned",
-    "shortTitle": "Капитан Ned",
-    "doneWhen": "Ned согласился плыть на Crandor.",
-    "fields": [
+    "title": "Битва с драконом Elvarg",
+    "requires": [
+      "S5-07",
+      "S5-02"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Elvarg",
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "дом Ned в Draynor Village, к северо-востоку от дома Wise Old Man. Отдай ему карту.",
-        "key": "where"
+        "nameEn": "Anti-dragon shield",
+        "nameRu": "Щит от драконьего огня",
+        "amount": 1,
+        "howToGet": "Надет.",
+        "wikiItemId": 1540,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Anti-dragon_shield.png"
       },
       {
-        "label": "Готово, когда",
-        "text": "Ned согласился плыть на Crandor.",
-        "key": "doneWhen"
+        "nameEn": "Rune sword",
+        "nameRu": "Рунический меч",
+        "amount": 1,
+        "howToGet": "Колющий удар в стиле Stab.",
+        "wikiItemId": 1289,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_sword.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "nameRu": "Омар",
+        "amount": "20+",
+        "howToGet": "",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      },
+      {
+        "nameEn": "Energy potion(4)",
+        "nameRu": "Зелье энергии",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 3008,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png"
       }
     ],
-    "requires": [
-      "S5-04",
-      "S5-05",
-      "S5-06",
-      "S5-07"
+    "fields": [
+      {
+        "label": "Экипировка",
+        "text": "Надет Anti-dragon shield, Rune sword (колющий удар в стиле Stab), адамантовая или руническая броня, Amulet of strength или Amulet of power."
+      },
+      {
+        "label": "Инвентарь",
+        "text": "20+ омаров (Lobster), 1 Energy potion, телепорт в Varrock."
+      },
+      {
+        "label": "Путь",
+        "text": "Приплыви на Crandor → поднимись на вершину горы → спустись в вулкан → первым делом открой секретную дверь в южной стене (это срезка из пещеры скелетов Karamja, если дракон тебя убьёт!)."
+      },
+      {
+        "label": "Тактика боя",
+        "text": "Включи стиль Stab на Rune sword. Ешь омара каждый раз, когда здоровье падает ниже 20 HP. Держи щит надетым неотрывно!"
+      }
     ],
-    "where": "дом Ned в Draynor Village, к северо-востоку от дома Wise Old Man. Отдай ему карту."
+    "doneWhen": "Дракон обезглавлен, голова Elvarg в инвентаре."
   },
   {
     "id": "S5-09",
     "stage": 5,
-    "type": "prep",
-    "title": "Сбор перед боем",
-    "shortTitle": "Сбор перед боем",
-    "doneWhen": "всё надето, инвентарь заполнен едой.",
-    "fields": [
-      {
-        "label": "Надеть",
-        "text": "щит от драконьего огня, рунический меч, лучшую броню (адамант или руна)."
-      },
-      {
-        "label": "Взять",
-        "text": "20+ омаров, руны телепорта в Варрок или Лумбридж.",
-        "key": "bring"
-      },
-      {
-        "label": "Включить",
-        "text": "Protect from Magic (если молитва 37)."
-      },
-      {
-        "label": "Готово, когда",
-        "text": "всё надето, инвентарь заполнен едой.",
-        "key": "doneWhen"
-      }
-    ],
-    "requires": [
-      "S5-03",
-      "S4-06"
-    ],
-    "bring": "20+ омаров, руны телепорта в Варрок или Лумбридж."
-  },
-  {
-    "id": "S5-10",
-    "stage": 5,
     "type": "quest",
-    "title": "Бой с Elvarg",
-    "shortTitle": "Бой с Elvarg",
-    "doneWhen": "дракон побеждён.",
-    "fields": [
-      {
-        "label": "Путь",
-        "text": "поговори с Ned на корабле → после крушения иди на вершину вулкана Crandor → в подземелье сначала открой стену на юге (это короткий путь с Karamja, если придётся вернуться) → иди к дракону."
-      },
-      {
-        "label": "Бой",
-        "text": "Elvarg — уровень 83. Ешь, когда здоровье ниже половины; удобно есть, стоя прямо под драконом. Если еда кончается — телепортируйся, пополнись и возвращайся через Karamja."
-      },
-      {
-        "label": "Готово, когда",
-        "text": "дракон побеждён.",
-        "key": "doneWhen"
-      }
-    ],
+    "title": "Триумф у Oziach",
+    "qp": 2,
     "requires": [
-      "S5-08",
-      "S5-09"
-    ]
-  },
-  {
-    "id": "S5-11",
-    "stage": 5,
-    "type": "quest",
-    "title": "Награда у Oziach",
-    "shortTitle": "Награда у Oziach",
-    "doneWhen": "квест зелёный, рунический нагрудник надет.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "Oziach в Эдгвилле.",
-        "key": "where"
-      },
-      {
-        "label": "Награда",
-        "text": "2 очка квестов, по 18 650 опыта силы и защиты, право носить рунический нагрудник (Rune platebody) и куртку из зелёной драконьей кожи (Green d'hide body), доступ в Crandor и Corsair Cove Resource Area.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "квест зелёный, рунический нагрудник надет.",
-        "key": "doneWhen"
-      }
+      "S5-08"
     ],
-    "requires": [
-      "S5-10"
-    ],
-    "where": "Oziach в Эдгвилле.",
-    "reward": "2 очка квестов, по 18 650 опыта силы и защиты, право носить рунический нагрудник (Rune platebody) и куртку из зелёной драконьей кожи (Green d'hide body), доступ в Crandor и Corsair Cove Resource Area.",
-    "qp": 2
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Dragon_Slayer_I",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Dragon_Slayer_I/Quick_guide",
+    "npc": {
+      "nameEn": "Oziach",
+      "nameRu": "Озиах",
+      "location": "Хижина в северо-западной части Edgeville",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Oziach"
+    },
+    "reward": "2 QP, по 18 650 XP в Defence и Strength, право носить Rune platebody и куртку из зелёной драконьей кожи (Green d'hide body). Все 46 очков F2P-квестов набраны!",
+    "doneWhen": "Надет Rune platebody."
   },
   {
     "id": "S6-01",
     "stage": 6,
     "type": "skill",
-    "title": "Бой до 50 / 50 / 50",
-    "shortTitle": "Бой до 50/50/50",
-    "doneWhen": "атака, сила и защита по 50.",
+    "title": "Бой до 50–60 уровня на Ogress Warriors / Shamans",
+    "requires": [
+      "S4-01"
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Corsair_Cove_Dungeon",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2012,9004,0",
+    "where": "Пещера Corsair Cove Dungeon (открыта после квеста The Corsair Curse).",
     "fields": [
       {
-        "label": "Где",
-        "text": "моховые великаны в канализации Варрока, гигантские лягушки на болоте Лумбриджа, холмовые великаны в Edgeville Dungeon.",
-        "key": "where"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "атака, сила и защита по 50.",
-        "key": "doneWhen"
+        "label": "Зачем",
+        "text": "Это лучшее место для прокачки и заработка во всей F2P-игре! Огрессы роняют рунические шлемы (Rune med helm), рунические секиры (Rune battleaxe), сотни рун природы (Nature rune) и драгоценные камни. Фарми их с безопасных точек луком или магией либо в упор, подлечиваясь рыбой."
       }
     ],
-    "requires": [
-      "S5-11"
-    ],
-    "where": "моховые великаны в канализации Варрока, гигантские лягушки на болоте Лумбриджа, холмовые великаны в Edgeville Dungeon.",
-    "targets": [
-      {
-        "skill": "attack",
-        "level": 50
-      },
-      {
-        "skill": "strength",
-        "level": 50
-      },
-      {
-        "skill": "defence",
-        "level": 50
-      }
-    ]
+    "doneWhen": "Боевые навыки 50–60, в банке сотни тысяч монет."
   },
   {
     "id": "S6-02",
     "stage": 6,
     "type": "skill",
-    "title": "Молитва до 43",
-    "shortTitle": "Молитва 43",
-    "doneWhen": "молитва 43.",
-    "fields": [
+    "title": "Рыбалка до 50 и готовка до 50",
+    "requires": [],
+    "floor": "Ground floor (1-й этаж / земля)",
+    "where": "Гарпунная ловля рыбы-меч (Swordfish) на Karamja (Musa Point).",
+    "itemsRequired": [
       {
-        "label": "Как",
-        "text": "большие кости с великанов закапывай все.",
-        "key": "how"
-      },
-      {
-        "label": "Награда",
-        "text": "Protect from Melee — сильно облегчает бой с великанами.",
-        "key": "reward"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "молитва 43.",
-        "key": "doneWhen"
+        "nameEn": "Harpoon",
+        "nameRu": "Гарпун",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 311,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Harpoon.png"
       }
     ],
-    "requires": [
-      "S4-04"
-    ],
-    "how": "большие кости с великанов закапывай все.",
-    "reward": "Protect from Melee — сильно облегчает бой с великанами.",
-    "targets": [
-      {
-        "skill": "prayer",
-        "level": 43
-      }
-    ]
+    "doneWhen": "Fishing 50, Cooking 50."
   },
   {
     "id": "S6-03",
     "stage": 6,
     "type": "skill",
-    "title": "Рыбалка до 50, готовка до 45",
-    "shortTitle": "Рыбалка 50, готовка 45",
-    "doneWhen": "рыбалка 50, готовка 45, рыба-меч — основная еда.",
+    "title": "Добыча до 60 (Mining Guild) и рубка до 60 (тисы)",
+    "requires": [],
     "fields": [
       {
-        "label": "Где",
-        "text": "рыба-меч (Swordfish) гарпуном на Karamja.",
-        "key": "where"
+        "label": "Добыча",
+        "text": "С 60 уровня открывается Mining Guild под Falador с огромным количеством угля и мифрила."
       },
       {
-        "label": "Готово, когда",
-        "text": "рыбалка 50, готовка 45, рыба-меч — основная еда.",
-        "key": "doneWhen"
+        "label": "Рубка",
+        "text": "Тисы (Yew) у южной стены Edgeville или дворца Varrock — лучший пассивный заработок на брёвнах."
       }
     ],
-    "requires": [
-      "S4-06"
-    ],
-    "where": "рыба-меч (Swordfish) гарпуном на Karamja.",
-    "targets": [
-      {
-        "skill": "fishing",
-        "level": 50
-      },
-      {
-        "skill": "cooking",
-        "level": 45
-      }
-    ]
+    "doneWhen": "Mining 60, Woodcutting 60."
   },
   {
     "id": "S6-04",
     "stage": 6,
     "type": "skill",
-    "title": "Рубка до 60",
-    "shortTitle": "Рубка 60",
-    "doneWhen": "рубка 60.",
-    "fields": [
+    "title": "Магия до 55 (High Level Alchemy)",
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/High_Level_Alchemy",
+    "how": "Покупай или выбивай с огресс руническую экипировку и превращай её в чистое золото заклинанием High Level Alchemy прямо на месте боя.",
+    "itemsRequired": [
       {
-        "label": "Где",
-        "text": "с 45 — клёны (Maple) в Corsair Cove Resource Area (открылся после S5-11), с 60 — тисы к югу от банка Эдгвилля или к северу от дворца Варрока.",
-        "key": "where"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "рубка 60.",
-        "key": "doneWhen"
+        "nameEn": "Nature rune",
+        "nameRu": "Руна природы",
+        "amount": "По одной на заклинание",
+        "howToGet": "",
+        "wikiItemId": 561,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Nature_rune.png"
       }
     ],
-    "requires": [
-      "S5-11"
-    ],
-    "where": "с 45 — клёны (Maple) в Corsair Cove Resource Area (открылся после S5-11), с 60 — тисы к югу от банка Эдгвилля или к северу от дворца Варрока.",
-    "targets": [
-      {
-        "skill": "woodcutting",
-        "level": 60
-      }
-    ]
+    "doneWhen": "Magic 55."
   },
   {
     "id": "S6-05",
     "stage": 6,
-    "type": "skill",
-    "title": "Добыча до 55 и кузнечное дело до 50",
-    "shortTitle": "Добыча 55, кузнечное дело 50",
-    "doneWhen": "добыча 55, кузнечное дело 50.",
-    "fields": [
-      {
-        "label": "Где",
-        "text": "уголь и мифрил, с 60 добычи — Mining Guild под Фаладором. Сталь и мифрил плавь в Эдгвилле, куй в Варроке.",
-        "key": "where"
-      },
-      {
-        "label": "Цель",
-        "text": "свой стальной комплект с 48 кузнечного дела, мифриловый — с 68."
-      },
-      {
-        "label": "Готово, когда",
-        "text": "добыча 55, кузнечное дело 50.",
-        "key": "doneWhen"
-      }
-    ],
-    "requires": [
-      "S4-07"
-    ],
-    "where": "уголь и мифрил, с 60 добычи — Mining Guild под Фаладором. Сталь и мифрил плавь в Эдгвилле, куй в Варроке.",
-    "targets": [
-      {
-        "skill": "mining",
-        "level": 55
-      },
-      {
-        "skill": "smithing",
-        "level": 50
-      }
-    ]
-  },
-  {
-    "id": "S6-06",
-    "stage": 6,
-    "type": "skill",
-    "title": "Магия до 55",
-    "shortTitle": "Магия 55",
-    "doneWhen": "магия 55.",
-    "fields": [
-      {
-        "label": "Как",
-        "text": "с 43 — Superheat Item на железе (всегда 100% успеха) или стали, с 55 — High Level Alchemy на выкованных нагрудниках.",
-        "key": "how"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "магия 55.",
-        "key": "doneWhen"
-      }
-    ],
-    "requires": [
-      "S4-05"
-    ],
-    "how": "с 43 — Superheat Item на железе (всегда 100% успеха) или стали, с 55 — High Level Alchemy на выкованных нагрудниках.",
-    "targets": [
-      {
-        "skill": "magic",
-        "level": 55
-      }
-    ]
-  },
-  {
-    "id": "S6-07",
-    "stage": 6,
     "type": "prep",
-    "title": "Решение о подписке",
-    "shortTitle": "Решение о подписке",
-    "doneWhen": "решение принято.",
-    "fields": [
+    "title": "Покупка Old School Bond на бирже",
+    "requires": [],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Old_school_bond",
+    "how": "Накопив золото с огресс и тисов, купи Old School Bond на Grand Exchange и активируй 14 дней полноценной подписки (membership)!",
+    "itemsRequired": [
       {
-        "label": "Как",
-        "text": "если хочется новых мест, квестов и навыков — возьми месяц подписки (см. «Бесплатная версия или подписка»). Первым делом после подписки обычно проходят Waterfall Quest и качают Agility.",
-        "key": "how"
-      },
-      {
-        "label": "Готово, когда",
-        "text": "решение принято.",
-        "key": "doneWhen"
+        "nameEn": "Old school bond",
+        "nameRu": "Облигация Old School Bond",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 13190,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Old_school_bond.png"
       }
     ],
-    "requires": [
-      "S5-11"
+    "doneWhen": "Подписка активирована."
+  },
+  {
+    "id": "S7-01",
+    "stage": 7,
+    "type": "quest",
+    "title": "Waterfall Quest",
+    "titleRu": "Квест водопада",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Waterfall_Quest",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Waterfall_Quest/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2520,3495,0",
+    "npc": {
+      "nameEn": "Almera",
+      "nameRu": "Альмера",
+      "location": "Дом к югу от Baxtorian Falls",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Almera"
+    },
+    "bring": "Еда.",
+    "itemsRequired": [
+      {
+        "nameEn": "Rope",
+        "nameRu": "Верёвка",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 954,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
+      },
+      {
+        "nameEn": "Glarial's pebble",
+        "nameRu": "Камешек Глариал",
+        "amount": 1,
+        "howToGet": "Найдёшь в подземелье Tree Gnome Village по ходу квеста.",
+        "wikiItemId": 294,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Glarial's_pebble.png"
+      },
+      {
+        "nameEn": "Spade",
+        "nameRu": "Лопата",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 952,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
+      }
     ],
-    "how": "если хочется новых мест, квестов и навыков — возьми месяц подписки (см. «Бесплатная версия или подписка»). Первым делом после подписки обычно проходят Waterfall Quest и качают Agility."
+    "quickSteps": [
+      "Поговори с Almera и садись на плот на реке.",
+      "Поговори с Hudon, спрыгни в водоворот, осмотри ящики и забери ключ.",
+      "Сходи в лабиринт Tree Gnome Village, спустись в подземелье и найди Glarial's pebble.",
+      "Иди к могиле Glarial (без оружия и брони!), забери амулет и урну.",
+      "Вернись к водопаду, надень амулет, зайди в гробницу и поставь урну на алтарь."
+    ],
+    "fields": [
+      {
+        "label": "Особенности",
+        "text": "Квест не требует боевых навыков, но в пещере будут бить Fire giant (86 ур.) — возьми еду и просто беги мимо них!"
+      }
+    ],
+    "reward": "1 QP, 13 750 XP Attack и 13 750 XP Strength — уровень ближнего боя с 1 мгновенно подскакивает до 30+!",
+    "doneWhen": "Квест зелёный, Attack и Strength 30+."
+  },
+  {
+    "id": "S7-02",
+    "stage": 7,
+    "type": "quest",
+    "title": "Fight Arena",
+    "titleRu": "Бойцовская арена",
+    "qp": 2,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Fight_Arena",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Fight_Arena/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2616,3145,0",
+    "npc": {
+      "nameEn": "Lady Servil",
+      "nameRu": "Леди Сервил",
+      "location": "К северо-востоку от Fight Arena (к югу от Ardougne)",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Lady_Servil"
+    },
+    "bring": "Лук или руны для магии, еда.",
+    "itemsRequired": [
+      {
+        "nameEn": "Khazard helmet",
+        "nameRu": "Шлем Хазарда",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 74,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Khazard_helmet.png"
+      },
+      {
+        "nameEn": "Khazard armour",
+        "nameRu": "Доспех Хазарда",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 75,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Khazard_armour.png"
+      }
+    ],
+    "safespot": "В бою с Bouncer (137 ур.) и General Khazard (142 ур.) прячься за скелетом в углу арены и расстреливай их магией без получения урона!",
+    "reward": "2 QP, 12 175 XP Attack (поднимает атаку до 35+), 2 175 XP Thieving.",
+    "doneWhen": "Квест зелёный."
+  },
+  {
+    "id": "S7-03",
+    "stage": 7,
+    "type": "quest",
+    "title": "Tree Gnome Village",
+    "titleRu": "Деревня древесных гномов",
+    "qp": 2,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Tree_Gnome_Village",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Tree_Gnome_Village/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2515,3160,0",
+    "npc": {
+      "nameEn": "King Bolren",
+      "nameRu": "Король Болрен",
+      "location": "Центр лабиринта Tree Gnome Village",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/King_Bolren"
+    },
+    "safespot": "Босса Khazard warlord (112 ур.) можно застрять за деревьями и расстрелять магией.",
+    "reward": "2 QP, 11 450 XP Attack, доступ к сети телепортов Spirit trees (деревья духов).",
+    "doneWhen": "Квест зелёный."
+  },
+  {
+    "id": "S7-04",
+    "stage": 7,
+    "type": "quest",
+    "title": "The Grand Tree",
+    "titleRu": "Великое дерево",
+    "qp": 5,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/The_Grand_Tree",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Grand_Tree/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2466,3491,0",
+    "npc": {
+      "nameEn": "King Narnode Shareen",
+      "nameRu": "Король Нарноуд Шарин",
+      "location": "Tree Gnome Stronghold",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/King_Narnode_Shareen"
+    },
+    "safespot": "В бою с Black demon (172 ур.) используй safespot за камнями.",
+    "reward": "5 QP, 18 400 XP Attack, 7 900 XP Agility, 2 150 XP Magic. Открывает доступ к Gnome gliders (воздушным планерам гномов).",
+    "doneWhen": "Квест зелёный, Attack 40+."
+  },
+  {
+    "id": "S8-01",
+    "stage": 8,
+    "type": "skill",
+    "title": "Ловкость (Agility) до 40 уровня и сбор Graceful outfit",
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Rooftop_Agility",
+    "itemsRecommended": [
+      {
+        "nameEn": "Mark of Grace",
+        "nameRu": "Знак грации",
+        "amount": "Сколько найдёшь",
+        "howToGet": "Подбирай на крышах трасс.",
+        "wikiItemId": 11849,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mark_of_Grace.png"
+      }
+    ],
+    "fields": [
+      {
+        "label": "Трассы",
+        "text": "1–20 — Draynor Village Rooftop Course; 20–30 — Al Kharid Rooftop Course; 30–40 — Varrock Rooftop Course; 40+ — Canifis Rooftop Course."
+      },
+      {
+        "label": "Зачем",
+        "text": "Graceful outfit покупается у Grace в Rogues' Den. Снижает вес до нуля и ускоряет восстановление энергии бега на 30%."
+      }
+    ],
+    "doneWhen": "Agility 40, надеты хотя бы 2–3 части сета Graceful."
+  },
+  {
+    "id": "S8-02",
+    "stage": 8,
+    "type": "quest",
+    "title": "Priest in Peril",
+    "titleRu": "Священник в опасности",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Priest_in_Peril",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Priest_in_Peril/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3220,3474,0",
+    "npc": {
+      "nameEn": "King Roald",
+      "nameRu": "Король Роальд",
+      "location": "Замок Varrock",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/King_Roald"
+    },
+    "reward": "1 QP, доступ в регион Morytania и город Canifis.",
+    "doneWhen": "Квест зелёный."
+  },
+  {
+    "id": "S8-03",
+    "stage": 8,
+    "type": "quest",
+    "title": "Fairytale I - Growing Pains",
+    "titleRu": "Сказка фей I: трудности роста",
+    "qp": 2,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Fairytale_I_-_Growing_Pains",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Fairytale_I_-_Growing_Pains/Quick_guide",
+    "npc": {
+      "nameEn": "Martin the Master Gardener",
+      "nameRu": "Мастер-садовник Мартин",
+      "location": "Рынок Draynor Village",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Martin_the_Master_Gardener"
+    },
+    "reward": "2 QP, волшебный секатор (Magic secateurs).",
+    "doneWhen": "Квест зелёный."
+  },
+  {
+    "id": "S8-04",
+    "stage": 8,
+    "type": "quest",
+    "title": "Fairytale II - Cure a Queen (только вступление)",
+    "titleRu": "Сказка фей II: исцеление королевы",
+    "requires": [
+      "S8-03"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Fairytale_II_-_Cure_a_Queen",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Fairytale_II_-_Cure_a_Queen/Quick_guide",
+    "npc": {
+      "nameEn": "Martin the Master Gardener",
+      "nameRu": "Мастер-садовник Мартин",
+      "location": "Рынок Draynor Village (после первой части)",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Martin_the_Master_Gardener"
+    },
+    "fields": [
+      {
+        "label": "Важно",
+        "text": "Проходить весь квест не нужно! Достаточно поговорить с Мартином и получить доступ в Zanaris к Fairy Godfather."
+      }
+    ],
+    "reward": "Доступ к портальной сети Fairy rings! Надев Dramen staff, можно телепортироваться по всему материку Gielinor за пару секунд.",
+    "doneWhen": "Совершён первый телепорт через кольцо фей."
+  },
+  {
+    "id": "S8-05",
+    "stage": 8,
+    "type": "quest",
+    "title": "Animal Magnetism",
+    "titleRu": "Животный магнетизм",
+    "qp": 1,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Animal_Magnetism",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Animal_Magnetism/Quick_guide",
+    "npc": {
+      "nameEn": "Ava",
+      "nameRu": "Эйва",
+      "location": "Draynor Manor",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Ava"
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Mithril axe",
+        "nameRu": "Мифриловый топор",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1355,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_axe.png"
+      },
+      {
+        "nameEn": "Holy symbol",
+        "nameRu": "Святой символ",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1718,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Holy_symbol.png"
+      },
+      {
+        "nameEn": "Polished buttons",
+        "nameRu": "Полированные пуговицы",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 10496,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Polished_buttons.png"
+      },
+      {
+        "nameEn": "Hard leather",
+        "nameRu": "Жёсткая кожа",
+        "amount": 1,
+        "howToGet": "",
+        "wikiItemId": 1743,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hard_leather.png"
+      }
+    ],
+    "fields": [
+      {
+        "label": "Требования",
+        "text": "18 Slayer, 19 Crafting, 30 Ranged, 35 Woodcutting."
+      }
+    ],
+    "proTip": "Это лучший плащ лучника в ранней и средней игре. Он автоматически возвращает 72% выпущенных стрел прямо в инвентарь!",
+    "reward": "1 QP, Ava's accumulator.",
+    "doneWhen": "Ava's accumulator надет."
+  },
+  {
+    "id": "S9-01",
+    "stage": 9,
+    "type": "quest",
+    "title": "Lost City",
+    "titleRu": "Затерянный город",
+    "qp": 3,
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Lost_City",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Lost_City/Quick_guide",
+    "floor": "Ground floor (1-й этаж / земля)",
+    "where": "Лагерь искателей приключений в Lumbridge Swamp.",
+    "fields": [
+      {
+        "label": "Требования",
+        "text": "31 Crafting, 36 Woodcutting."
+      }
+    ],
+    "safespot": "Tree spirit (101 ур.) можно убить, спрятавшись за грибом и используя лук или магию.",
+    "reward": "3 QP, право носить Dragon dagger (DDS) и Dragon longsword (нужно 60 Attack), доступ в скрытый город Zanaris.",
+    "doneWhen": "Квест зелёный."
+  },
+  {
+    "id": "S9-02",
+    "stage": 9,
+    "type": "quest",
+    "title": "Monkey Madness I",
+    "titleRu": "Обезьянье безумие I",
+    "qp": 3,
+    "requires": [
+      "S7-03",
+      "S7-04"
+    ],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Monkey_Madness_I",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Monkey_Madness_I/Quick_guide",
+    "npc": {
+      "nameEn": "King Narnode Shareen",
+      "nameRu": "Король Нарноуд Шарин",
+      "location": "Tree Gnome Stronghold",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/King_Narnode_Shareen"
+    },
+    "fields": [
+      {
+        "label": "Требования",
+        "text": "43 Prayer (обязательно для Protect from Melee), The Grand Tree, Tree Gnome Village."
+      }
+    ],
+    "safespot": "Для финального босса Jungle demon (195 ур.) используй мост как укрытие и позволь гномам снести ему HP, после чего добей магией.",
+    "reward": "3 QP, огромный бонус опыта, право носить Dragon scimitar (D-scim).",
+    "doneWhen": "Квест зелёный, Dragon scimitar в руке."
+  },
+  {
+    "id": "S9-03",
+    "stage": 9,
+    "type": "quest",
+    "title": "Recipe for Disaster (начало)",
+    "titleRu": "Рецепт катастрофы",
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster",
+    "quickGuideUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster/Quick_guide",
+    "npc": {
+      "nameEn": "Cook",
+      "nameRu": "Повар",
+      "location": "Кухня замка Lumbridge",
+      "floor": "Ground floor (1-й этаж / земля)",
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Cook"
+    },
+    "how": "Пройди вводную часть квеста (Cook's room) и открой сундук (Culinaromancer's chest).",
+    "reward": "Доступ к покупке перчаток в сундуке: начиная с Bronze gloves, по мере спасения рыцарей будут открываться вплоть до топовых Barrows gloves.",
+    "doneWhen": "Вводная часть закрыта."
   }
 ]

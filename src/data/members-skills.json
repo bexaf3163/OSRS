@@ -1,0 +1,10 @@
+[
+  { "id": "agility", "name": "Ловкость", "nameEn": "Agility", "wiki": "https://oldschool.runescape.wiki/w/Agility" },
+  { "id": "thieving", "name": "Воровство", "nameEn": "Thieving", "wiki": "https://oldschool.runescape.wiki/w/Thieving" },
+  { "id": "slayer", "name": "Истребление", "nameEn": "Slayer", "wiki": "https://oldschool.runescape.wiki/w/Slayer" },
+  { "id": "farming", "name": "Фермерство", "nameEn": "Farming", "wiki": "https://oldschool.runescape.wiki/w/Farming" },
+  { "id": "herblore", "name": "Травничество", "nameEn": "Herblore", "wiki": "https://oldschool.runescape.wiki/w/Herblore" },
+  { "id": "hunter", "name": "Охота", "nameEn": "Hunter", "wiki": "https://oldschool.runescape.wiki/w/Hunter" },
+  { "id": "construction", "name": "Строительство", "nameEn": "Construction", "wiki": "https://oldschool.runescape.wiki/w/Construction" },
+  { "id": "fletching", "name": "Изготовление луков", "nameEn": "Fletching", "wiki": "https://oldschool.runescape.wiki/w/Fletching" }
+]

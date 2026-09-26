@@ -1,25 +1,16 @@
-// Разбор osrs-guide.md в структуры src/types.ts. Чистые функции без файлов:
-// их вызывают parse-guide.ts (пишет JSON) и check-data.ts (сверяет JSON с гайдом).
+// Разбор osrs-guide.md: навыки, цели по этапам, опыт, плагины и справка.
+// Маршрут (шаги и этапы) с V2 живёт отдельно — src/data/steps.json и stages.json.
+// Чистые функции без файлов: их вызывают parse-guide.ts (пишет JSON) и check-data.ts (сверяет JSON с гайдом).
 //
 // Правило: ничего не дописывать от себя. Всё, что не берётся из гайда напрямую,
 // собрано в константах ниже и подписано, откуда оно.
 
 import type {
-  Block, Field, FieldKey, GoalsData, GoalValue, LevelSkill, ListItem, PluginsData, QuestsData,
-  Quest, ReferenceData, RefSection, Skill, SkillRange, Stage, StagesData, Step, StepType, Target, XpData,
-} from '../src/types.ts';
+  Block, GoalsData, GoalValue, LevelSkill, ListItem, PluginsData, ReferenceData, RefSection, Skill, SkillRange, XpData,
+} from '../src/types/index.ts';
 
 // ---------------------------------------------------------------------------
 // Данные не из гайда
-
-/** Очки квестов за шаги — таблица из задания на программу. Гайд пишет их только текстом в «Награде». */
-export const QP_BY_STEP: Record<string, number> = {
-  'S1-03': 1, 'S1-04': 1, 'S1-05': 1, 'S1-06': 1, 'S1-07': 1,
-  'S2-01': 1, 'S2-04': 5, 'S2-05': 2, 'S2-06': 3, 'S2-07': 1, 'S2-08': 4, 'S2-09': 1, 'S2-10': 5,
-  'S3-01': 1, 'S3-03': 1, 'S3-05': 3, 'S3-06': 3, 'S3-07': 1, 'S3-08': 3, 'S3-09': 1,
-  'S4-01': 2, 'S4-02': 1,
-  'S5-11': 2,
-};
 
 /** Строки таблицы «Цели по этапам» → id уровня и код раздела навыка. Коды — из раздела «Коды». */
 const LEVEL_SKILLS: { id: string; row: string; skill: string }[] = [
@@ -39,32 +30,6 @@ const LEVEL_SKILLS: { id: string; row: string; skill: string }[] = [
   { id: 'runecraft', row: 'Создание рун', skill: 'RC' },
 ];
 const QP_ROW = 'Очки квестов';
-
-/** Слова в названиях шагов «Рыбалка до 20 и готовка до 15» → уровни навыков. */
-const TITLE_SKILL_WORDS: [RegExp, string[]][] = [
-  [/^бой$/, ['attack', 'strength', 'defence']],
-  [/^рыбалк/, ['fishing']],
-  [/^готовк/, ['cooking']],
-  [/^рубк/, ['woodcutting']],
-  [/^костр/, ['firemaking']],
-  [/^добыч/, ['mining']],
-  [/^кузнечн/, ['smithing']],
-  [/^маги/, ['magic']],
-  [/^молитв/, ['prayer']],
-  [/^ремесл/, ['crafting']],
-  [/^создани/, ['runecraft']],
-];
-
-const TYPE_BY_LABEL: Record<string, StepType> = {
-  'Квест': 'quest', 'Навык': 'skill', 'Снаряжение': 'gear', 'Подготовка': 'prep',
-};
-
-const FIELD_KEYS: Record<string, FieldKey> = {
-  'Где': 'where', 'Взять': 'bring', 'Как': 'how', 'Награда': 'reward', 'Готово, когда': 'doneWhen',
-};
-
-/** Подписи, которые иногда стоят внутри одной строки: «Где: лабиринт… Взять: ключ…». */
-const INLINE_LABELS = ['Где', 'Взять', 'Как', 'Награда', 'Готово, когда', 'Совет', 'Опасно', 'Заодно', 'Внимание', 'Нужно', 'Зачем'];
 
 // ---------------------------------------------------------------------------
 // Markdown → блоки
@@ -213,153 +178,12 @@ function flatten(sec: MdSection): Block[] {
 }
 
 // ---------------------------------------------------------------------------
-// Шаги и этапы
+// Числа
 
 export function parseNumber(s: string): number {
-  const n = Number(s.replace(/[\s  ]/g, '').replace(',', '.'));
+  const n = Number(s.replace(/[\s\u00a0\u202f]/g, '').replace(',', '.'));
   if (!Number.isFinite(n)) throw new Error(`Не число: «${s}»`);
   return n;
-}
-
-function stripPeriod(s: string): string {
-  return s.trim().replace(/\.$/, '');
-}
-
-/** «**Старт:** … **Время:** …» → { Старт: '…', Время: '…' } */
-function boldFields(text: string): Record<string, string> {
-  const re = /\*\*([^*]+?):\*\*\s*/g;
-  const marks: { label: string; start: number; end: number }[] = [];
-  let m: RegExpExecArray | null;
-  while ((m = re.exec(text))) marks.push({ label: m[1], start: m.index, end: re.lastIndex });
-  const out: Record<string, string> = {};
-  marks.forEach((mk, k) => {
-    out[mk.label] = text.slice(mk.end, k + 1 < marks.length ? marks[k + 1].start : undefined).trim();
-  });
-  return out;
-}
-
-function parseField(text: string): Field[] {
-  const m = text.match(/^([^:]{1,40}):\s+(.*)$/);
-  if (!m) return [{ label: '', text }];
-  const labels = INLINE_LABELS.map((l) => l.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|');
-  const parts = m[2].split(new RegExp(`(?<=\\.)\\s+(?=(?:${labels}):\\s)`));
-  const out: Field[] = [{ label: m[1], text: parts[0] }];
-  for (const part of parts.slice(1)) {
-    const pm = part.match(/^([^:]+):\s+(.*)$/)!;
-    out.push({ label: pm[1], text: pm[2] });
-  }
-  return out;
-}
-
-function titleTargets(title: string): Target[] {
-  const out: Target[] = [];
-  let pending: string[] = [];
-  for (const m of title.matchAll(/до (\d+)|(\p{L}+)/gu)) {
-    if (m[1]) {
-      for (const skill of pending) out.push({ skill, level: Number(m[1]) });
-      pending = [];
-      continue;
-    }
-    const word = m[2].toLowerCase();
-    const hit = TITLE_SKILL_WORDS.find(([re]) => re.test(word));
-    if (hit) pending.push(...hit[1]);
-  }
-  return out;
-}
-
-interface DepRow { id: string; type: string; title: string; requires: string[]; minQp?: number }
-
-function parseDeps(doc: MdSection): DepRow[] {
-  const t = firstTable(need(need(doc, 'Для программы-трекера'), 'Все шаги и зависимости'));
-  return t.rows.map(([id, type, title, deps]) => {
-    const row: DepRow = { id, type, title, requires: [] };
-    if (deps !== '—') {
-      for (const d of deps.split(',').map((s) => s.trim())) {
-        const qp = d.match(/^QP\s*≥\s*(\d+)$/);
-        if (/^S\d-\d{2}$/.test(d)) row.requires.push(d);
-        else if (qp) row.minQp = Number(qp[1]);
-        else throw new Error(`Непонятная зависимость «${d}» у ${id}`);
-      }
-    }
-    return row;
-  });
-}
-
-function parseStages(doc: MdSection, deps: DepRow[]): { stages: StagesData; steps: Step[] } {
-  const plan = need(doc, 'Пошаговый план');
-  const depById = new Map(deps.map((d) => [d.id, d]));
-  const stages: Stage[] = [];
-  const steps: Step[] = [];
-
-  for (const sec of plan.children) {
-    const sm = sec.title.match(/^Этап (\d+)\.\s+(.+)$/);
-    if (!sm) continue;
-    const stageId = Number(sm[1]);
-    const head = sec.blocks.find((b) => b.t === 'p' && b.text.startsWith('**Старт:**'));
-    const tail = sec.blocks.find((b) => b.t === 'p' && b.text.startsWith('**Итог этапа:**'));
-    if (!head || head.t !== 'p') throw new Error(`У этапа ${stageId} нет строки «Старт»`);
-    const f = boldFields(head.text);
-    const stage: Stage = { id: stageId, title: sm[2], start: stripPeriod(f['Старт']) };
-    if (tail && tail.t === 'p') stage.summary = boldFields(tail.text)['Итог этапа'];
-    if (f['Время']) stage.time = stripPeriod(f['Время']);
-    if (f['Очки квестов в конце']) {
-      const qm = stripPeriod(f['Очки квестов в конце']).match(/^(\d+)\s*(?:—\s*(.+))?$/);
-      if (!qm) throw new Error(`Этап ${stageId}: не разобрал очки квестов в конце`);
-      stage.qpAtEnd = Number(qm[1]);
-      if (qm[2]) stage.qpNote = stripPeriod(qm[2]);
-    }
-    stages.push(stage);
-
-    for (const block of sec.blocks) {
-      if (block.t !== 'ul') continue;
-      for (const item of block.items) {
-        if (item.checked === undefined) continue;
-        const m = item.text.match(/^\*\*(S(\d)-\d{2})\s*·\s*\[([^\]]+)\]\s+(.+)\*\*$/);
-        if (!m) throw new Error(`Не разобрал шаг: ${item.text}`);
-        const [, id, stageDigit, typeLabel, rawTitle] = m;
-        const type = TYPE_BY_LABEL[typeLabel];
-        if (!type) throw new Error(`${id}: неизвестный тип «${typeLabel}»`);
-        if (Number(stageDigit) !== stageId) throw new Error(`${id} лежит в этапе ${stageId}`);
-        const optional = /\s*\(необязательный\)$/.test(rawTitle);
-        const title = rawTitle.replace(/\s*\(необязательный\)$/, '');
-
-        const fields: Field[] = [];
-        for (const child of item.children ?? []) {
-          if (child.t !== 'ul') continue;
-          for (const li of child.items) fields.push(...parseField(li.text));
-        }
-        const step: Step = { id, stage: stageId, type, title, shortTitle: '', doneWhen: '', fields, requires: [] };
-        for (const field of fields) {
-          const key = FIELD_KEYS[field.label];
-          if (key && !step[key]) {
-            field.key = key;
-            step[key] = field.text;
-          }
-        }
-        const dep = depById.get(id);
-        if (dep) {
-          step.shortTitle = dep.title;
-          step.requires = dep.requires;
-          if (dep.minQp !== undefined) step.minQp = dep.minQp;
-        }
-        if (QP_BY_STEP[id]) step.qp = QP_BY_STEP[id];
-        if (optional) step.optional = true;
-        if (type === 'skill' || type === 'gear') {
-          const targets = titleTargets(title);
-          if (targets.length) step.targets = targets;
-        }
-        steps.push(step);
-      }
-    }
-  }
-
-  const codes = need(need(doc, 'Для программы-трекера'), 'Коды');
-  const codesText = flatten(codes).map((b) => (b.t === 'ul' ? b.items.map((i) => i.text).join(' ') : '')).join(' ');
-  const dm = codesText.match(/(\d+) этап\p{L}*, (\d+) шаг/u);
-  if (!dm) throw new Error('В разделе «Коды» не найдено «N этапов, M шагов»');
-
-  const intro = plan.blocks;
-  return { stages: { intro, stages, declared: { stages: Number(dm[1]), steps: Number(dm[2]) } }, steps };
 }
 
 // ---------------------------------------------------------------------------
@@ -542,69 +366,29 @@ function parseReference(doc: MdSection, training: RefSection): ReferenceData {
   };
 }
 
-function parseQuests(doc: MdSection, steps: Step[], stages: Stage[]): QuestsData {
-  const plan = need(doc, 'Пошаговый план');
-  const text = flatten(need(plan, 'Как читать шаги')).map((b) => (b.t === 'p' ? b.text : '')).join(' ');
-  const decl = text.match(/(\d+) квест\p{L}* на (\d+) очк/u);
-  const base = text.match(/Первый, ([^,]+), —[^()]*\((\d+) очк/);
-  if (!decl || !base) throw new Error('В «Как читать шаги» не найдено число квестов или первый квест');
-
-  const quests: Quest[] = [];
-  let parts: string[] = [];
-  let partsStage = 0;
-  for (const step of steps) {
-    if (step.type !== 'quest') continue;
-    if (step.stage !== partsStage) { parts = []; partsStage = step.stage; }
-    if (!step.qp) { parts.push(step.id); continue; }
-    // Квест из нескольких шагов назван по этапу: «Этап 5. Dragon Slayer I».
-    const title = parts.length ? stages.find((s) => s.id === step.stage)!.title : step.title;
-    quests.push({ stepId: step.id, title, stage: step.stage, qp: step.qp, parts: parts.length ? [...parts, step.id] : [] });
-    parts = [];
-  }
-  return {
-    base: { title: base[1].trim(), qp: Number(base[2]) },
-    quests,
-    declared: { count: Number(decl[1]), qp: Number(decl[2]) },
-  };
-}
-
 // ---------------------------------------------------------------------------
 
 export interface GuideData {
-  steps: Step[];
-  stages: StagesData;
   skills: Skill[];
   levels: LevelSkill[];
   goals: GoalsData;
   xp: XpData;
   plugins: PluginsData;
   reference: ReferenceData;
-  quests: QuestsData;
 }
 
 export function parseGuide(markdown: string): GuideData {
   const root = toTree(tokenize(markdown));
   const doc = root.children.find((c) => c.level === 1);
   if (!doc) throw new Error('В гайде нет заголовка первого уровня');
-  const deps = parseDeps(doc);
-  const { stages, steps } = parseStages(doc, deps);
   const { goals, levels } = parseGoals(doc);
   const { xp, training } = parseXp(doc);
   return {
-    steps,
-    stages,
     skills: parseSkills(doc),
     levels,
     goals,
     xp,
     plugins: parsePlugins(doc),
     reference: parseReference(doc, training),
-    quests: parseQuests(doc, steps, stages.stages),
   };
-}
-
-/** Строки таблицы зависимостей — для проверки, что она и шаги совпадают. */
-export function dependencyRows(markdown: string): DepRow[] {
-  const root = toTree(tokenize(markdown));
-  return parseDeps(root.children.find((c) => c.level === 1)!);
 }

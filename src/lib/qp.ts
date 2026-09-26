@@ -2,9 +2,13 @@
 
 import type { Progress, Step } from '../types';
 
-/** Набранные очки: база (Learning the Ropes) плюс сделанные шаги. Пропущенный шаг очков не даёт. */
+/**
+ * Набранные очки: база (Learning the Ropes) плюс сделанные шаги и шаги, возвращённые в активные
+ * после V2 Review (их очки уже получены в игре). Пропущенный шаг очков не даёт.
+ */
 export function questPoints(steps: Step[], p: Progress, base: number): number {
-  return steps.reduce((sum, s) => sum + (p.steps[s.id] === 'done' ? s.qp ?? 0 : 0), base);
+  const kept = new Set(p.qpKept ?? []);
+  return steps.reduce((sum, s) => sum + (p.steps[s.id] === 'done' || kept.has(s.id) ? s.qp ?? 0 : 0), base);
 }
 
 /** Сколько очков вообще можно набрать с учётом пропущенных шагов. */
