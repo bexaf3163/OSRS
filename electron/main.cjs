@@ -148,7 +148,7 @@ if (!app.requestSingleInstanceLock()) {
       minHeight: 560,
       title: 'OSRS Путь',
       icon: path.join(DIST, 'icon-512.png'),
-      backgroundColor: nativeTheme.shouldUseDarkColors ? '#111214' : '#f5f2ec',
+      backgroundColor: nativeTheme.shouldUseDarkColors ? '#111214' : '#f4f5f7',
       autoHideMenuBar: true,
       alwaysOnTop: ui.alwaysOnTop,
       show: false,

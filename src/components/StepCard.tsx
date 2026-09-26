@@ -106,7 +106,8 @@ function FieldRow({ field }: { field: Field }) {
   );
 }
 
-export function StepBody({ step, onDone }: { step: Step; onDone: (id: string) => void }) {
+/** Подробности шага. nextId — какой шаг откроется после отметки (подпись на кнопке в широкой раскладке). */
+export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: string) => void; nextId?: string }) {
   const { progress, qp, mode, setStep, setNote, review, reactivate } = useStore();
   const { openNpc } = useWiki();
   const status = progress.steps[step.id];
@@ -246,7 +247,7 @@ export function StepBody({ step, onDone }: { step: Step; onDone: (id: string) =>
       <div className="actions">
         {status === 'done'
           ? <button type="button" className="btn" onClick={() => setStep(step.id, null)}>Снять отметку</button>
-          : <button type="button" className="btn btn-primary btn-lg" onClick={() => onDone(step.id)}><IconCheck /> Отметить выполненным</button>}
+          : <button type="button" className="btn btn-primary btn-lg" onClick={() => onDone(step.id)}><IconCheck /> Отметить выполненным{nextId && <span className="btn-next"> → {nextId}</span>}</button>}
         {step.optional && (status === 'skipped'
           ? <button type="button" className="btn" onClick={() => setStep(step.id, null)}>Вернуть в план</button>
           : status !== 'done' && <button type="button" className="btn" onClick={() => setStep(step.id, 'skipped')}>Пропустить</button>)}

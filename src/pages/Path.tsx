@@ -7,6 +7,8 @@ import { pendingReview } from '../lib/review';
 import { NextStepCard } from '../components/NextStepCard';
 import { ProgressBar } from '../components/ProgressBar';
 import { StageSection } from '../components/StageSection';
+import { useMediaQuery, WIDE } from '../lib/media';
+import { PathWide } from './PathWide';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 /** Время сворачивания карточки (как transition у .collapse) — после него раскладка устоялась. */
@@ -33,7 +35,13 @@ function settled(el: HTMLElement): boolean {
   });
 }
 
-export function PathPage({ focusStep, focusKey }: { focusStep?: string; focusKey: number }) {
+export function PathPage(props: { focusStep?: string; focusKey: number }) {
+  const wide = useMediaQuery(WIDE);
+  return wide ? <PathWide {...props} /> : <PathNarrow {...props} />;
+}
+
+/** Узкий экран и телефон: этапы списком, шаги раскрываются на месте. */
+function PathNarrow({ focusStep, focusKey }: { focusStep?: string; focusKey: number }) {
   const { progress, qp, maxQp, steps, stages, mode, setStep, review, reactivate } = useStore();
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
   const [stageOpen, setStageOpen] = useState<Record<number, boolean>>({});

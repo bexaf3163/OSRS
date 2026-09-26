@@ -5,6 +5,7 @@ import { useRoute, type Page } from './lib/router';
 import { IconBook, IconGoals, IconPath, IconQuests, IconSearch, IconSettings, IconSkills } from './components/Icons';
 import { SearchBox } from './components/SearchBox';
 import { ModeToggle } from './components/ModeToggle';
+import { HeaderProgress } from './components/HeaderProgress';
 import { ToastView } from './components/ToastView';
 import { PathPage } from './pages/Path';
 import { SkillsPage } from './pages/Skills';
@@ -86,6 +87,7 @@ export function App() {
             ))}
           </nav>
           <div className="topbar-actions">
+            <HeaderProgress />
             <ModeToggle />
             <button type="button" className="search-trigger" onClick={() => setSearchOpen(true)} aria-label="Поиск" aria-keyshortcuts="/">
               <IconSearch />

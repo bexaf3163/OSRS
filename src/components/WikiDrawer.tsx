@@ -1,7 +1,10 @@
-// Встроенный инспектор вики: выдвижная панель справа с досье предмета или NPC.
+// Встроенный инспектор вики: досье предмета или NPC.
+// На широком экране «Пути» — закреплённая третья колонка, иначе — выдвижная панель справа.
 // Открывается кликом по предмету/NPC в карточке шага или из поиска; закрывается ✕, кликом по фону или Escape.
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
+import { DOCK, useMediaQuery } from '../lib/media';
 import type { StepNpcInfo, WikiItemDetail } from '../types';
 import { findLocalItem, getItemDetail, getNpcDetail } from '../services/wikiService';
 import type { NpcInfo } from '../services/wikiApi';
@@ -15,6 +18,8 @@ type Target =
 interface WikiContextValue {
   openItem: (query: string | number, label?: string) => void;
   openNpc: (npc: StepNpcInfo) => void;
+  /** Место для закреплённой колонки: страница регистрирует элемент, пока она на экране. */
+  setDock: (el: HTMLElement | null) => void;
 }
 
 const WikiContext = createContext<WikiContextValue | null>(null);
@@ -27,14 +32,45 @@ export function useWiki(): WikiContextValue {
 
 export function WikiProvider({ children }: { children: ReactNode }) {
   const [target, setTarget] = useState<Target | null>(null);
+  const [dock, setDock] = useState<HTMLElement | null>(null);
+  const wide = useMediaQuery(DOCK);
   const openItem = useCallback((query: string | number, label?: string) => setTarget({ kind: 'item', query, label }), []);
   const openNpc = useCallback((npc: StepNpcInfo) => setTarget({ kind: 'npc', npc }), []);
-  const value = useMemo(() => ({ openItem, openNpc }), [openItem, openNpc]);
+  const value = useMemo(() => ({ openItem, openNpc, setDock }), [openItem, openNpc]);
+  const docked = wide && dock !== null;
+  const close = useCallback(() => setTarget(null), []);
   return (
     <WikiContext.Provider value={value}>
       {children}
-      <WikiDrawer target={target} onClose={() => setTarget(null)} />
+      {docked
+        ? createPortal(<DockedInspector target={target} onClose={close} />, dock)
+        : <WikiDrawer target={target} onClose={close} />}
     </WikiContext.Provider>
+  );
+}
+
+/** Место под закреплённое досье. Пока оно на экране, инспектор рисуется здесь. */
+export function WikiDock({ className }: { className?: string }) {
+  const { setDock } = useWiki();
+  return <aside className={className} ref={setDock} aria-label="Инспектор OSRS Wiki" />;
+}
+
+function DockedInspector({ target, onClose }: { target: Target | null; onClose: () => void }) {
+  if (!target) {
+    return (
+      <div className="dock-empty">
+        <p className="dock-empty-title">Досье OSRS Wiki</p>
+        <p className="muted small">Нажми на предмет или NPC в шаге — здесь появятся цена на бирже, магазины, дроп и где взять бесплатно.</p>
+      </div>
+    );
+  }
+  return (
+    <div className="dock-panel" key={target.kind === 'item' ? String(target.query) : target.npc.nameEn}>
+      <button type="button" className="icon-btn drawer-close" onClick={onClose} aria-label="Закрыть досье">
+        <IconClose />
+      </button>
+      {target.kind === 'item' ? <ItemView query={target.query} label={target.label} /> : <NpcView npc={target.npc} />}
+    </div>
   );
 }
 
