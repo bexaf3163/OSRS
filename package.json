@@ -2,7 +2,7 @@
   "name": "osrs-put",
   "productName": "OSRS Путь",
   "private": true,
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Личный трекер прогресса в Old School RuneScape (бесплатная версия)",
   "author": "Mark",
   "type": "module",
@@ -19,7 +19,9 @@
     "check-data": "node scripts/check-data.ts",
     "icons": "node scripts/make-icons.ts",
     "desktop": "npm run build && electron .",
-    "dist:win": "npm run build && electron-builder --win nsis portable --publish never"
+    "dist:win": "npm run build && electron-builder --win nsis portable --publish never",
+    "build-items": "node scripts/build-items.ts",
+    "check-links": "node scripts/check-links.ts"
   },
   "devDependencies": {
     "@types/node": "^26.6.3",
