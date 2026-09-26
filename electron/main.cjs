@@ -6,6 +6,7 @@ const { app, BrowserWindow, Menu, ipcMain, nativeTheme, session, shell } = requi
 const fs = require('node:fs');
 const path = require('node:path');
 const { registerBridge } = require('./runelite-bridge.cjs');
+const { createLauncher } = require('./runelite-launcher.cjs');
 
 const DIST = path.join(__dirname, '..', 'dist');
 const isWeb = (url) => /^https?:\/\//i.test(url);
@@ -138,6 +139,10 @@ if (!app.requestSingleInstanceLock()) {
   ipcMain.on('app:data-dir', (e) => { e.returnValue = app.getPath('userData'); });
   ipcMain.on('app:is-portable', (e) => { e.returnValue = Boolean(portableDir); });
   registerBridge(ipcMain);
+  // RuneLite с плагином: окно решает, запускать ли его вместе с программой (настройка там же).
+  const runelite = createLauncher({ logFile: file('runelite-launch.log') });
+  ipcMain.handle('runelite:check', () => runelite.check());
+  ipcMain.handle('runelite:launch', () => runelite.launch());
 
   function createWindow() {
     const saved = windowState();

@@ -3,7 +3,7 @@ import { known } from '../data';
 import { useStore } from '../store';
 import { exportFileName, exportProgress, importProgress, type ImportResult } from '../lib/progress';
 import { applyTheme, loadTheme, type Theme } from '../lib/theme';
-import { desktop, type ZoomState } from '../lib/desktop';
+import { desktop, type RuneliteCheck, type ZoomState } from '../lib/desktop';
 import { applyTextScale, loadTextScale, percent, stepScale, TEXT_EVENT, TEXT_STEPS, ZOOM_STEPS } from '../lib/ui-scale';
 import { useBridge } from '../bridge';
 import { BRIDGE_ORIGIN } from '../services/runeliteBridge';
@@ -247,10 +247,21 @@ function Appearance() {
 }
 
 function RuneLiteBridge() {
-  const { enabled, setEnabled, state, inGame, activeStepId, clear } = useBridge();
+  const { enabled, setEnabled, state, inGame, activeStepId, clear, canLaunch, launchRuneLite, autoLaunch, setAutoLaunch } = useBridge();
+  const [check, setCheck] = useState<RuneliteCheck | null>(null);
+  const [launching, setLaunching] = useState(false);
+  useEffect(() => {
+    if (canLaunch) void desktop()?.runelite?.check().then(setCheck).catch(() => setCheck(null));
+  }, [canLaunch, state]);
+
   const status = state === 'off' ? 'выключена'
     : state === 'online' ? `🟢 плагин на связи${inGame ? ', персонаж в игре' : ', персонаж не в игре'}`
       : state === 'connecting' ? 'подключение…' : '⚪ плагин не отвечает';
+  const launch = async () => {
+    setLaunching(true);
+    await launchRuneLite();
+    setLaunching(false);
+  };
   return (
     <section className="card section-card">
       <h2 className="card-title">RuneLite</h2>
@@ -266,11 +277,56 @@ function RuneLiteBridge() {
         </label>
         <p className="muted small">Сейчас: {status}.{activeStepId && <> В игре показан шаг <code className="code">{activeStepId}</code>.</>}</p>
         {activeStepId && <div className="actions"><button type="button" className="btn" onClick={() => void clear()}>Убрать подсказки из игры</button></div>}
-        <p className="muted small">
-          Как установить плагин и запустить RuneLite с ним — в README репозитория, раздел «RuneLite bridge».
-          Когда связь включена, в шапке виден индикатор, а в шагах — кнопка «🧭 Указать в игре».
-        </p>
       </div>
+
+      {canLaunch ? (
+        <div className="setting">
+          <label className="switch">
+            <input type="checkbox" checked={autoLaunch} disabled={!enabled} onChange={(e) => setAutoLaunch(e.target.checked)} />
+            <span>Запускать RuneLite вместе с OSRS Путь</span>
+          </label>
+          <div className="actions">
+            <button type="button" className="btn btn-primary" onClick={launch} disabled={launching || !check?.ok || state === 'online'}>
+              🎮 {state === 'online' ? 'RuneLite с мостом запущен' : 'Запустить RuneLite с мостом'}
+            </button>
+          </div>
+          {check && (
+            <ul className="runelite-checks small">
+              {check.ok
+                ? <li className="is-ok">✓ RuneLite {check.clientVersion} найден — плагин запустится вместе с ним</li>
+                : check.problems.map((p) => <li key={p} className="is-bad">✗ {p}</li>)}
+              {check.credentials
+                ? <li className="is-ok">✓ Вход с Jagex Account сохранён</li>
+                : <li className="is-warn">! Вход с Jagex Account не сохранён — см. ниже</li>}
+            </ul>
+          )}
+          {check && !check.credentials && (
+            <details className="runelite-help">
+              <summary>Как входить с Jagex Account (один раз)</summary>
+              <p className="small">
+                RuneLite, запущенный не из Jagex Launcher, не знает твою сессию. Её можно сохранить один раз — так RuneLite
+                советует разработчикам:
+              </p>
+              <ol className="small">
+                <li>В меню «Пуск» открой <strong>RuneLite (configure)</strong>.</li>
+                <li>В поле <strong>Client arguments</strong> впиши <code className="code">--insecure-write-credentials</code> и нажми Save.</li>
+                <li>Запусти RuneLite через <strong>Jagex Launcher</strong> как обычно и закрой его, когда откроется.</li>
+                <li>Верни поле Client arguments пустым — дальше RuneLite с мостом будет входить сам.</li>
+              </ol>
+              <p className="small muted">
+                Сессия хранится в файле <code className="code">%USERPROFILE%\.runelite\credentials.properties</code> — он даёт вход
+                в аккаунт, никому его не отправляй. Отозвать: «End sessions» в настройках Jagex Account или удалить файл.
+                Старые аккаунты без Jagex Account входят логином и паролем прямо в окне RuneLite.
+              </p>
+            </details>
+          )}
+        </div>
+      ) : (
+        <p className="muted small">
+          В программе для ПК RuneLite с плагином запускается одной кнопкой (или сам, вместе с программой).
+          В браузере — вручную, как описано в README репозитория, раздел «RuneLite bridge».
+        </p>
+      )}
     </section>
   );
 }

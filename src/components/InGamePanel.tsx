@@ -20,7 +20,7 @@ const GROUPS: [keyof InGameTarget, string][] = [
 ];
 
 export function InGamePanel({ step }: { step: Step }) {
-  const { enabled, state, activeStepId, pointInGame, clear } = useBridge();
+  const { enabled, state, activeStepId, pointInGame, clear, canLaunch, launchRuneLite } = useBridge();
   const [notice, setNotice] = useState<'' | 'sending' | 'offline'>('');
   if (!enabled || !toInGameTarget(step)) return null;
   const active = activeStepId === step.id;
@@ -46,7 +46,10 @@ export function InGamePanel({ step }: { step: Step }) {
       </div>
       {notice === 'offline' && (
         <p className="muted small" id={`ingame-${step.id}`} role="status">
-          RuneLite мост оффлайн{state === 'online' ? ' или отказал' : ''}: запусти RuneLite с плагином OSRS Path Bridge (как — в README, раздел «RuneLite bridge»).
+          RuneLite мост оффлайн{state === 'online' ? ' или отказал' : ''}
+          {canLaunch
+            ? <>. <button type="button" className="btn btn-sm" onClick={() => void launchRuneLite()}>🎮 Запустить RuneLite</button> — через ~10 секунд нажми «Указать в игре» ещё раз.</>
+            : <>: запусти RuneLite с плагином OSRS Path Bridge (как — в README, раздел «RuneLite bridge»).</>}
         </p>
       )}
       {trigger && <p className="muted small">Шаг отметится сам, когда {TRIGGER_TEXT[trigger.type]}.</p>}

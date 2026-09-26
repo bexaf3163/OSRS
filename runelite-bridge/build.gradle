@@ -50,6 +50,14 @@ test {
 	systemProperty 'osrsPath.steps', file('../src/data/steps.json').absolutePath
 }
 
+// Плагин одним файлом: его кладёт в exe программа «OSRS Путь» и запускает с установленным RuneLite.
+jar {
+	archiveFileName = 'osrs-path-bridge.jar'
+	manifest {
+		attributes('Implementation-Title': 'OSRS Path Bridge', 'Implementation-Version': project.version)
+	}
+}
+
 // Клиент RuneLite в режиме разработчика с этим плагином: ./gradlew run
 // -PruneliteHome=<папка> — отдельная папка настроек вместо ~/.runelite (RuneLite берёт её из user.home).
 tasks.register('run', JavaExec) {

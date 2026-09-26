@@ -2,7 +2,7 @@
   "name": "osrs-put",
   "productName": "OSRS Путь",
   "private": true,
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Личный трекер прогресса в Old School RuneScape (бесплатная версия)",
   "author": "Mark",
   "type": "module",
@@ -18,10 +18,11 @@
     "parse-guide": "node scripts/parse-guide.ts",
     "check-data": "node scripts/check-data.ts",
     "icons": "node scripts/make-icons.ts",
-    "desktop": "npm run build && electron .",
-    "dist:win": "npm run build && electron-builder --win nsis portable --publish never",
+    "desktop": "npm run build && node scripts/build-bridge-jar.ts --optional && electron .",
+    "dist:win": "npm run build && npm run bridge:jar && electron-builder --win nsis portable --publish never",
     "build-items": "node scripts/build-items.ts",
-    "check-links": "node scripts/check-links.ts"
+    "check-links": "node scripts/check-links.ts",
+    "bridge:jar": "node scripts/build-bridge-jar.ts"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.22",
@@ -68,6 +69,12 @@
     },
     "portable": {
       "artifactName": "OSRS-Put-${version}-portable.exe"
-    }
+    },
+    "extraResources": [
+      {
+        "from": "runelite-bridge/build/libs/osrs-path-bridge.jar",
+        "to": "runelite-bridge/osrs-path-bridge.jar"
+      }
+    ]
   }
 }

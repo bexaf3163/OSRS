@@ -17,6 +17,11 @@ contextBridge.exposeInMainWorld('osrsDesktop', {
   saveProgressFile: (json) => ipcRenderer.send('progress:save', String(json)),
   dataDir: () => ipcRenderer.sendSync('app:data-dir'),
   isPortable: () => ipcRenderer.sendSync('app:is-portable'),
+  // Запуск RuneLite с плагином OSRS Path Bridge (electron/runelite-launcher.cjs).
+  runelite: {
+    check: () => ipcRenderer.invoke('runelite:check'),
+    launch: () => ipcRenderer.invoke('runelite:launch'),
+  },
   // Плагин RuneLite на 127.0.0.1:38282: запросы и поток событий идут через главный процесс.
   bridge: {
     request: (method, path, body) => ipcRenderer.invoke('bridge:request', { method: String(method), path: String(path), body }),

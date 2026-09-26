@@ -34,6 +34,8 @@ interface StoreValue {
   replace: (p: Progress, message: string) => void;
   reset: () => void;
   toast: Toast | null;
+  /** Сообщение внизу без отмены. */
+  notify: (message: string) => void;
   undo: () => void;
   dismissToast: () => void;
 }
@@ -158,6 +160,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const dismissToast = useCallback(() => setToast(null), []);
+  const notify = useCallback((message: string) => show(message), [show]);
 
   const mode = gameModeOf(progress);
   const steps = useMemo(() => stepsFor(mode), [mode]);
@@ -166,8 +169,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const maxQp = useMemo(() => maxQpFor(mode), [mode]);
 
   const value = useMemo<StoreValue>(
-    () => ({ progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setNote, setMode, review, reactivate, replace, reset, toast, undo, dismissToast }),
-    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setNote, setMode, review, reactivate, replace, reset, toast, undo, dismissToast],
+    () => ({ progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setNote, setMode, review, reactivate, replace, reset, toast, notify, undo, dismissToast }),
+    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setNote, setMode, review, reactivate, replace, reset, toast, notify, undo, dismissToast],
   );
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }

@@ -117,11 +117,29 @@ cd runelite-bridge
 маршрута с этой версией RuneLite — каждое название квеста для автоотметки есть в `net.runelite.api.Quest`.
 На Windows вместо `./gradlew` — `gradlew.bat`.
 
-### Запуск
+### Запуск — в программе для ПК ничего делать не нужно
 
-Обычный RuneLite из лаунчера сторонние плагины не загружает: в 1.12.39 папка `~/.runelite/sideloaded-plugins`
-читается только в режиме разработчика, а он включается, лишь когда клиент запущен **без** лаунчера.
-Поэтому плагин запускается так же, как в официальном шаблоне RuneLite, — клиентом для разработки:
+Открываешь «OSRS Путь» — и RuneLite с плагином запускается сам (секунд 10–20, индикатор в шапке станет
+зелёным). Выключается в «Настройки → RuneLite → Запускать RuneLite вместе с OSRS Путь»; там же кнопка
+«🎮 Запустить RuneLite с мостом». Закрытие «OSRS Путь» игру не закрывает.
+
+Как это устроено: Java берётся из установленного RuneLite (`%LOCALAPPDATA%\RuneLite\jre`), классы клиента —
+из его кэша `~/.runelite/repository2` (их скачивает лаунчер RuneLite), плагин — `osrs-path-bridge.jar` внутри программы
+(40 КБ, только наш код). Ничего не скачивается. Нужно одно: RuneLite установлен и хотя бы раз запускался
+через Jagex Launcher. Журнал запуска — `runelite-launch.log` в папке данных программы.
+
+Обычный RuneLite из лаунчера сторонние плагины не загружает (в 1.12.39 папка `~/.runelite/sideloaded-plugins`
+читается только в режиме разработчика, а он включается, лишь когда клиент запущен **без** лаунчера), поэтому
+программа запускает клиент напрямую, как официальный шаблон плагинов RuneLite.
+
+**Вход с Jagex Account.** RuneLite, запущенный не из Jagex Launcher, не знает твою сессию. Один раз:
+«Пуск → RuneLite (configure)» → в поле *Client arguments* вписать `--insecure-write-credentials` → Save →
+запустить RuneLite через Jagex Launcher и закрыть → вернуть поле пустым. Сессия сохранится в
+`%USERPROFILE%\.runelite\credentials.properties` — файл даёт вход в аккаунт, никому его не отправляй
+(отозвать — «End sessions» в настройках Jagex Account). Старые аккаунты без Jagex Account входят логином
+и паролем в окне RuneLite. Программа показывает в настройках, сохранён ли вход.
+
+### Запуск из репозитория (для разработки)
 
 ```bash
 cd runelite-bridge
@@ -134,7 +152,7 @@ cd runelite-bridge
 
 Порядок:
 
-1. Запустить RuneLite с плагином (`./gradlew run`).
+1. Запустить RuneLite с плагином: программа для ПК делает это сама, из репозитория — `./gradlew run`.
 2. Плагин OSRS Path Bridge включён сам (в списке плагинов RuneLite — его настройки: порт, цвет, стрелка, звук).
 3. Запустить приложение «OSRS Путь» (программа для ПК или `npm run dev`).
 4. В шапке — `🟢 RuneLite мост активен`. В программе для ПК связь включена сразу; в браузере — «Настройки → RuneLite».
@@ -205,7 +223,8 @@ npm run dev
 | `npm run check-links` | Проверить все ссылки и картинки вики в данных и тайлы карты (нужен интернет) |
 | `npm run icons` | Перерисовать иконки в `public/` |
 | `npm run desktop` | Собрать и открыть программу для ПК (Electron) |
-| `npm run dist:win` | Собрать exe: установщик и переносную версию в `release/` |
+| `npm run dist:win` | Собрать exe: установщик и переносную версию в `release/` (вместе с jar плагина RuneLite) |
+| `npm run bridge:jar` | Собрать только jar плагина (нужен JDK 17: `JAVA_HOME` или `~/.jdks`) |
 | `cd runelite-bridge && ./gradlew testClasses` | Собрать плагин RuneLite и его тесты (нужен JDK 17) |
 | `cd runelite-bridge && ./gradlew test` | Тесты плагина |
 | `cd runelite-bridge && ./gradlew run` | RuneLite с плагином OSRS Path Bridge |
@@ -217,7 +236,7 @@ npm run dev
 3. Закоммитить, запушить и выложить exe:
 
 ```bash
-gh release create v2.2.0 release/OSRS-Put-Setup-2.2.0.exe release/OSRS-Put-2.2.0-portable.exe --title "OSRS Путь 2.2.0" --notes "Что изменилось"
+gh release create v2.3.0 release/OSRS-Put-Setup-2.3.0.exe release/OSRS-Put-2.3.0-portable.exe --title "OSRS Путь 2.3.0" --notes "Что изменилось"
 ```
 
 При каждом пуше GitHub Actions прогоняет `check-data`, тесты и сборку, а отдельно — тесты плагина RuneLite
@@ -311,7 +330,7 @@ src/components/        карточка шага, карта шага и кар�
                        поиск, переключатель режима, прогресс и индикатор RuneLite в шапке
 src/pages/             Путь (узкий и широкий в три колонки), Навыки, Навык, Цели, Квесты, Справка, Настройки
 tests/                 юнит-тесты
-electron/              окно программы для ПК, мост к нему (preload) и связь с плагином RuneLite
+electron/              окно программы для ПК, мост к нему (preload), связь с плагином RuneLite и его запуск
 runelite-bridge/       плагин RuneLite «OSRS Path Bridge»: HTTP/SSE-мост, подсветка, автоотметка
 vite.config.ts         сборка и генерация service worker (без workbox)
 ```

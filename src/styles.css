@@ -1195,3 +1195,10 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 @media (prefers-reduced-motion: reduce) {
   .map-marker::after, .map-pin.is-active span::after, .is-just-done { animation: none; }
 }
+
+.runelite-checks { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.runelite-checks .is-ok { color: var(--done); }
+.runelite-checks .is-bad { color: var(--danger); }
+.runelite-checks .is-warn { color: var(--warn); }
+.runelite-help > summary { cursor: pointer; font-weight: 600; font-size: 0.9rem; }
+.runelite-help ol { margin: 6px 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }

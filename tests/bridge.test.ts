@@ -199,3 +199,41 @@ describe('разбор потока событий в программе для 
     expect(out).toEqual(['{"type":"STATUS","inGame":true}', 'a\nb']);
   });
 });
+
+describe('запуск RuneLite из программы для ПК', () => {
+  const require = createRequire(import.meta.url);
+  const { findClient, versionOf } = require('../electron/runelite-launcher.cjs') as {
+    findClient: (dir: string) => { version: string; jars: string[] } | null;
+    versionOf: (name: string) => number[];
+  };
+  const { mkdtempSync, writeFileSync } = require('node:fs') as typeof import('node:fs');
+  const { tmpdir } = require('node:os') as typeof import('node:os');
+  const { join, basename } = require('node:path') as typeof import('node:path');
+
+  const repo = (names: string[]) => {
+    const dir = mkdtempSync(join(tmpdir(), 'rl-repo-'));
+    for (const n of names) writeFileSync(join(dir, n), '');
+    return dir;
+  };
+
+  it('версия из имени файла', () => {
+    expect(versionOf('client-1.12.39.jar')).toEqual([1, 12, 39]);
+    expect(versionOf('runelite-api-1.12.39-runtime.jar')).toEqual([1, 12, 39]);
+    expect(versionOf('lwjgl-opengl-3.3.2-natives-windows.jar')).toEqual([3, 3, 2]);
+  });
+
+  it('берёт все библиотеки, а из двух версий одной — новую', () => {
+    const dir = repo(['client-1.12.39.jar', 'client-1.12.40.jar', 'injected-client-1.12.40.jar', 'injected-client-1.12.39.jar',
+      'runelite-api-1.12.40-runtime.jar', 'gson-2.8.5.jar', 'lwjgl-3.3.2.jar', 'lwjgl-3.3.2-natives-windows.jar']);
+    const c = findClient(dir)!;
+    expect(c.version).toBe('1.12.40');
+    expect(c.jars.map((j) => basename(j)).sort()).toEqual(['client-1.12.40.jar', 'gson-2.8.5.jar', 'injected-client-1.12.40.jar',
+      'lwjgl-3.3.2-natives-windows.jar', 'lwjgl-3.3.2.jar', 'runelite-api-1.12.40-runtime.jar']);
+  });
+
+  it('без клиента или с клиентом другой версии — не запускаем', () => {
+    expect(findClient(repo(['gson-2.8.5.jar']))).toBeNull();
+    expect(findClient(repo(['client-1.12.40.jar', 'injected-client-1.12.39.jar']))).toBeNull();
+    expect(findClient(join(tmpdir(), 'нет-такой-папки'))).toBeNull();
+  });
+});
