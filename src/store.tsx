@@ -1,10 +1,14 @@
-// Состояние прогресса: один источник на всё приложение, сохранение в localStorage, отмена.
+// Состояние прогресса: один источник на всё приложение, сохранение (localStorage + файл в программе для ПК), отмена.
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import type { Progress, StepStatus } from './types';
-import { BASE_QP, known, steps } from './data';
-import { emptyProgress, loadProgress, saveProgress, STORAGE_KEY, withLevel, withNote, withStep } from './lib/progress';
+import type { GameMode, Progress, Stage, Step, StepStatus } from './types';
+import { BASE_QP, known, maxQpFor, stagesFor, stepById, stepsFor } from './data';
+import {
+  emptyProgress, gameModeOf, loadProgress, normalizeProgress, saveProgress, STORAGE_KEY,
+  withGameMode, withLevel, withNote, withReactivated, withReviewed, withStep,
+} from './lib/progress';
 import { questPoints } from './lib/qp';
+import { desktop } from './lib/desktop';
 
 export interface Toast {
   id: number;
@@ -14,10 +18,18 @@ export interface Toast {
 
 interface StoreValue {
   progress: Progress;
+  mode: GameMode;
+  /** Шаги и этапы, видимые в текущем режиме. */
+  steps: Step[];
+  stages: Stage[];
   qp: number;
+  maxQp: number;
   setStep: (id: string, status: StepStatus | null) => void;
   setLevel: (id: string, level: number) => void;
   setNote: (id: string, note: string) => void;
+  setMode: (mode: GameMode) => void;
+  review: (ids: string[]) => void;
+  reactivate: (ids: string[]) => void;
   replace: (p: Progress, message: string) => void;
   reset: () => void;
   toast: Toast | null;
@@ -35,8 +47,35 @@ function storage(): Storage | undefined {
   }
 }
 
+/** localStorage или файл программы для ПК — что свежее. Файл спасает, если хранилище браузера пропало. */
+function initialProgress(): Progress {
+  const ls = storage();
+  let hasLocal = false;
+  try { hasLocal = Boolean(ls?.getItem(STORAGE_KEY)); } catch { /* нет хранилища */ }
+  const local = loadProgress(ls, known);
+  try {
+    const text = desktop()?.loadProgressFile();
+    const fromFile = text ? normalizeProgress(JSON.parse(text), known)?.progress : undefined;
+    if (fromFile && (!hasLocal || Date.parse(fromFile.updatedAt) > Date.parse(local.updatedAt))) return fromFile;
+  } catch {
+    // Битый файл — остаёмся на localStorage.
+  }
+  return local;
+}
+
+function persist(p: Progress) {
+  saveProgress(storage(), p);
+  try {
+    desktop()?.saveProgressFile(JSON.stringify(p));
+  } catch {
+    // Файл не записался — localStorage всё равно сохранён.
+  }
+}
+
+const qpOf = (id: string) => stepById.get(id)?.qp ?? 0;
+
 export function StoreProvider({ children }: { children: ReactNode }) {
-  const [progress, setProgress] = useState<Progress>(() => loadProgress(storage(), known));
+  const [progress, setProgress] = useState<Progress>(initialProgress);
   const [toast, setToast] = useState<Toast | null>(null);
   const current = useRef(progress);
   current.current = progress;
@@ -48,10 +87,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const fromOtherTab = useRef(false);
   useEffect(() => {
     if (fromOtherTab.current) fromOtherTab.current = false;
-    else saveProgress(storage(), progress);
+    else persist(progress);
   }, [progress]);
 
-  // Прогресс, изменённый в другой вкладке.
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
       if (e.key !== STORAGE_KEY) return;
@@ -68,7 +106,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const setStep = useCallback((id: string, status: StepStatus | null) => {
     const before = current.current;
-    setProgress(withStep(before, id, status));
+    let next = withStep(before, id, status);
+    // Шаг, отмеченный уже по тексту V2, проверять повторно не нужно.
+    if (status === 'done' && stepById.get(id)?.updatedInV2) next = withReviewed(next, [id]);
+    setProgress(next);
     show(status === 'done' ? `Отмечено ${id}` : status === 'skipped' ? `Пропущено ${id}` : `Снята отметка ${id}`, before);
   }, [show]);
 
@@ -80,6 +121,22 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setProgress((p) => ((p.notes[id] ?? '') === note ? p : withNote(p, id, note)));
   }, []);
 
+  const setMode = useCallback((mode: GameMode) => {
+    setProgress((p) => (gameModeOf(p) === mode ? p : withGameMode(p, mode)));
+  }, []);
+
+  const review = useCallback((ids: string[]) => {
+    const before = current.current;
+    setProgress(withReviewed(before, ids));
+    show(ids.length > 1 ? 'Обновления V2 отмечены проверенными' : `${ids[0]} проверен`, before);
+  }, [show]);
+
+  const reactivate = useCallback((ids: string[]) => {
+    const before = current.current;
+    setProgress(withReactivated(before, ids, qpOf));
+    show(ids.length > 1 ? `Возвращено в активные: ${ids.join(', ')}` : `${ids[0]} снова в плане`, before);
+  }, [show]);
+
   const replace = useCallback((p: Progress, message: string) => {
     const before = current.current;
     setProgress(p);
@@ -88,7 +145,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const reset = useCallback(() => {
     const before = current.current;
-    setProgress(emptyProgress());
+    // Режим игры — настройка, а не прогресс: сброс его не трогает.
+    setProgress({ ...emptyProgress(), ...(before.gameMode ? { gameMode: before.gameMode } : {}) });
     show('Прогресс сброшен', before);
   }, [show]);
 
@@ -100,11 +158,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const dismissToast = useCallback(() => setToast(null), []);
 
-  const qp = useMemo(() => questPoints(steps, progress, BASE_QP), [progress]);
+  const mode = gameModeOf(progress);
+  const steps = useMemo(() => stepsFor(mode), [mode]);
+  const stages = useMemo(() => stagesFor(mode), [mode]);
+  const qp = useMemo(() => questPoints(steps, progress, BASE_QP), [steps, progress]);
+  const maxQp = useMemo(() => maxQpFor(mode), [mode]);
 
   const value = useMemo<StoreValue>(
-    () => ({ progress, qp, setStep, setLevel, setNote, replace, reset, toast, undo, dismissToast }),
-    [progress, qp, setStep, setLevel, setNote, replace, reset, toast, undo, dismissToast],
+    () => ({ progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setNote, setMode, review, reactivate, replace, reset, toast, undo, dismissToast }),
+    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setNote, setMode, review, reactivate, replace, reset, toast, undo, dismissToast],
   );
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }

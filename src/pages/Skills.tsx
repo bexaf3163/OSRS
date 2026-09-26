@@ -1,4 +1,4 @@
-import { goals, levelById, reference, skills, steps, xpData } from '../data';
+import { goals, levelById, membersSkills, reference, skills, xpData, type MembersSkill } from '../data';
 import { useStore } from '../store';
 import { currentStage } from '../lib/next-step';
 import { goalFor, formatXp, isReached } from '../lib/goals';
@@ -12,7 +12,7 @@ import { LevelInput } from '../components/LevelInput';
 import { Table } from '../components/Table';
 
 export function SkillsPage() {
-  const { progress } = useStore();
+  const { progress, steps, mode } = useStore();
   const stage = currentStage(steps, progress);
   return (
     <div className="page">
@@ -34,7 +34,36 @@ export function SkillsPage() {
       <div className="skill-grid">
         {skills.map((s) => <SkillCard key={s.id} skill={s} stage={stage} />)}
       </div>
+
+      {mode === 'members' && (
+        <section className="section" aria-labelledby="members-skills">
+          <h2 id="members-skills">Навыки подписки <span className="badge badge-members">Members</span></h2>
+          <p className="muted">Плана прокачки по ним в гайде нет — уровень, калькулятор опыта и ссылка на гайд OSRS Wiki.</p>
+          <div className="skill-grid">
+            {membersSkills.map((m) => <MembersSkillCard key={m.id} skill={m} />)}
+          </div>
+        </section>
+      )}
     </div>
+  );
+}
+
+function MembersSkillCard({ skill }: { skill: MembersSkill }) {
+  return (
+    <article className="skill-card card is-members">
+      <a className="skill-card-link" href={`#/skills/${skill.id}`}>
+        <span>
+          <span className="skill-name">{skill.name}</span>
+          <span className="skill-en">{skill.nameEn}</span>
+        </span>
+        <IconChevron className="chevron" />
+      </a>
+      <div className="skill-levels">
+        <div className="skill-level">
+          <LevelInput id={skill.id} label={`Уровень: ${skill.name}`} hideLabel compact />
+        </div>
+      </div>
+    </article>
   );
 }
 

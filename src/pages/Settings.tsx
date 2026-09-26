@@ -1,8 +1,10 @@
-import { useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { known } from '../data';
 import { useStore } from '../store';
 import { exportFileName, exportProgress, importProgress, type ImportResult } from '../lib/progress';
 import { applyTheme, loadTheme, type Theme } from '../lib/theme';
+import { desktop, type ZoomState } from '../lib/desktop';
+import { applyTextScale, loadTextScale, percent, stepScale, TEXT_EVENT, TEXT_STEPS, ZOOM_STEPS } from '../lib/ui-scale';
 
 /** Программа для ПК открывает сборку с диска (file://). */
 const isDesktop = location.protocol === 'file:';
@@ -22,11 +24,11 @@ function download(name: string, text: string) {
 
 export function SettingsPage() {
   const { progress, replace, reset } = useStore();
-  const [theme, setTheme] = useState<Theme>(loadTheme);
   const [pending, setPending] = useState<Extract<ImportResult, { ok: true }> | null>(null);
   const [importError, setImportError] = useState('');
   const [confirmReset, setConfirmReset] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+  const bridge = desktop();
 
   const done = Object.values(progress.steps).filter((s) => s === 'done').length;
   const file = () => new File([exportProgress(progress)], exportFileName(), { type: 'application/json' });
@@ -50,16 +52,13 @@ export function SettingsPage() {
     if (fileRef.current) fileRef.current.value = '';
   };
 
-  const pickTheme = (t: Theme) => {
-    setTheme(t);
-    applyTheme(t);
-  };
-
   return (
     <div className="page">
       <header className="page-head">
         <h1>Настройки</h1>
       </header>
+
+      <Appearance />
 
       <section className="card section-card">
         <h2 className="card-title">Перенос прогресса</h2>
@@ -72,6 +71,12 @@ export function SettingsPage() {
           <p className="muted">
             Прогресс хранится только в этом браузере. Чтобы перенести его между ноутбуком и телефоном, сохрани файл здесь
             и загрузи его там. На iPhone приложение с экрана «Домой» хранит данные отдельно от Safari — переносить тоже файлом.
+          </p>
+        )}
+        {bridge && (
+          <p className="muted small">
+            {bridge.isPortable() ? 'Переносная версия: данные лежат рядом с программой, в папке ' : 'Копия прогресса лежит в папке '}
+            <code className="code code-path">{bridge.dataDir()}</code>
           </p>
         )}
         <p className="small">Сейчас: {done} шагов сделано, изменено {new Date(progress.updatedAt).toLocaleString('ru-RU')}.</p>
@@ -90,6 +95,7 @@ export function SettingsPage() {
             <p>
               В файле: сделано {pending.stats.done}, пропущено {pending.stats.skipped}, уровней {pending.stats.levels},
               заметок {pending.stats.notes}; сохранён {new Date(pending.progress.updatedAt).toLocaleString('ru-RU')}.
+              {pending.stats.migrated && ' Файл от первой версии маршрута — отметки перенесены на V2, старые сохранены внутри.'}
               {pending.stats.dropped > 0 && ` Неизвестных записей отброшено: ${pending.stats.dropped}.`}
             </p>
             <p>Текущий прогресс на этом устройстве будет заменён.</p>
@@ -101,17 +107,6 @@ export function SettingsPage() {
             </div>
           </div>
         )}
-      </section>
-
-      <section className="card section-card">
-        <h2 className="card-title" id="theme-h">Тема</h2>
-        <div className="segmented" role="group" aria-labelledby="theme-h">
-          {THEMES.map(([t, label]) => (
-            <button key={t} type="button" aria-pressed={theme === t} className={`seg ${theme === t ? 'is-active' : ''}`} onClick={() => pickTheme(t)}>
-              {label}
-            </button>
-          ))}
-        </div>
       </section>
 
       <section className="card section-card">
@@ -131,9 +126,119 @@ export function SettingsPage() {
 
       <p className="muted small">
         OSRS Путь {__APP_VERSION__}
-        {isDesktop ? ' · программа для ПК' : ''}
+        {isDesktop ? ` · программа для ПК${bridge?.isPortable() ? ', переносная' : ''}` : ''}
         {' · '}<a href="https://github.com/bexaf3163/OSRS/releases/latest" target="_blank" rel="noopener noreferrer">Новые версии</a>
       </p>
     </div>
+  );
+}
+
+function Stepper({ id, label, value, steps, onChange }: { id: string; label: string; value: number; steps: number[]; onChange: (v: number) => void }) {
+  return (
+    <div className="scale-setting" role="group" aria-labelledby={id}>
+      <span className="setting-label" id={id}>{label}</span>
+      <span className="scale-row">
+        <span className="stepper">
+          <button type="button" className="stepper-btn" onClick={() => onChange(stepScale(steps, value, -1))}
+            disabled={value <= steps[0]} aria-label={`${label}: меньше`}>−</button>
+          <output className="stepper-value" aria-live="polite">{percent(value)}</output>
+          <button type="button" className="stepper-btn" onClick={() => onChange(stepScale(steps, value, 1))}
+            disabled={value >= steps[steps.length - 1]} aria-label={`${label}: больше`}>+</button>
+        </span>
+        {value !== 1 && <button type="button" className="btn btn-ghost" onClick={() => onChange(1)}>Сбросить до 100%</button>}
+      </span>
+    </div>
+  );
+}
+
+function Appearance() {
+  const bridge = desktop();
+  const [theme, setTheme] = useState<Theme>(loadTheme);
+  const [text, setText] = useState(loadTextScale);
+  const [zoom, setZoom] = useState<ZoomState | null>(null);
+  const ids = { theme: useId(), text: useId(), zoom: useId() };
+
+  useEffect(() => {
+    if (!bridge) return;
+    let alive = true;
+    bridge.getZoom().then((z) => alive && setZoom(z));
+    const off = bridge.onZoom(setZoom);
+    return () => { alive = false; off(); };
+  }, [bridge]);
+
+  // Размер шрифта мог поменяться клавишами — держим переключатель в согласии.
+  useEffect(() => {
+    const on = () => setText(loadTextScale());
+    window.addEventListener(TEXT_EVENT, on);
+    return () => window.removeEventListener(TEXT_EVENT, on);
+  }, []);
+
+  const pickTheme = (t: Theme) => {
+    setTheme(t);
+    applyTheme(t);
+  };
+  const pickText = (v: number) => {
+    setText(v);
+    applyTextScale(v);
+  };
+  const pickZoom = (next: { zoom?: number; autoZoom?: boolean }) => {
+    if (!bridge || !zoom) return;
+    const z = { zoom: next.zoom ?? zoom.zoom, autoZoom: next.autoZoom ?? zoom.autoZoom };
+    setZoom({ ...zoom, ...z });
+    bridge.setZoom(z);
+  };
+
+  return (
+    <section className="card section-card">
+      <h2 className="card-title">Внешний вид</h2>
+
+      <div className="setting">
+        <span className="setting-label" id={ids.theme}>Тема</span>
+        <div className="segmented" role="group" aria-labelledby={ids.theme}>
+          {THEMES.map(([t, label]) => (
+            <button key={t} type="button" aria-pressed={theme === t} className={`seg ${theme === t ? 'is-active' : ''}`} onClick={() => pickTheme(t)}>
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {bridge && zoom ? (
+        <div className="setting">
+          <Stepper id={ids.zoom} label="Масштаб интерфейса" value={zoom.zoom} steps={ZOOM_STEPS} onChange={(v) => pickZoom({ zoom: v })} />
+          <label className="switch">
+            <input type="checkbox" checked={zoom.autoZoom} onChange={(e) => pickZoom({ autoZoom: e.target.checked })} />
+            <span>Подстраивать под размер окна</span>
+          </label>
+          <p className="muted small">
+            Сейчас {percent(zoom.effective)}{zoom.autoZoom && Math.abs(zoom.effective - zoom.zoom) > 0.005 ? ' с учётом ширины окна' : ''}.
+            Клавиши: <kbd>Ctrl</kbd> + <kbd>+</kbd> / <kbd>−</kbd>, <kbd>Ctrl</kbd> + <kbd>0</kbd> — сброс, или <kbd>Ctrl</kbd> + колесо мыши.
+          </p>
+        </div>
+      ) : (
+        <div className="setting">
+          <span className="setting-label">Масштаб интерфейса</span>
+          <p className="muted small">
+            В браузере масштаб меняется его средствами: <kbd>Ctrl</kbd> + <kbd>+</kbd> / <kbd>−</kbd>, <kbd>Ctrl</kbd> + <kbd>0</kbd> — сброс.
+            В программе для ПК масштаб ещё и подстраивается под размер окна.
+          </p>
+        </div>
+      )}
+
+      <div className="setting">
+        <Stepper id={ids.text} label="Размер шрифта" value={text} steps={TEXT_STEPS} onChange={pickText} />
+        <p className="muted small">Меняет только текст — отступы и раскладка остаются прежними.</p>
+      </div>
+
+      {bridge && zoom && (
+        <div className="setting">
+          <label className="switch">
+            <input type="checkbox" checked={zoom.alwaysOnTop}
+              onChange={(e) => { setZoom({ ...zoom, alwaysOnTop: e.target.checked }); bridge.setAlwaysOnTop(e.target.checked); }} />
+            <span>Поверх всех окон — удобно держать рядом с игрой</span>
+          </label>
+        </div>
+      )}
+    </section>
   );
 }

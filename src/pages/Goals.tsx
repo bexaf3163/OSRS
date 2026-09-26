@@ -1,4 +1,4 @@
-import { BASE_QP, goals, levelSkills, steps } from '../data';
+import { BASE_QP, goals, levelSkills } from '../data';
 import { useStore } from '../store';
 import { currentStage } from '../lib/next-step';
 import { isReached } from '../lib/goals';
@@ -7,7 +7,7 @@ import { stageQuestPoints } from '../lib/qp';
 import { IconCheck } from '../components/Icons';
 
 export function GoalsPage() {
-  const { progress, qp } = useStore();
+  const { progress, qp, steps } = useStore();
   const stage = currentStage(steps, progress);
   const levelRows = goals.rows.filter((r) => r.id !== 'qp');
   const qpRow = goals.rows.find((r) => r.id === 'qp');
@@ -61,15 +61,17 @@ export function GoalsPage() {
             {qpRow && (
               <tr className="qp-row">
                 <th scope="row">{qpRow.label}<span className="row-level">{qp}</span></th>
-                {qpRow.values.map((v, i) => {
+                {goals.stages.map((_, i) => {
+                  // Цель по очкам считается из маршрута V2: сумма очков квестов до конца этапа.
                   // Пропущенный необязательный квест снижает цель: его очки взять негде.
-                  const effective = Math.min(v.min, stageQuestPoints(steps, i + 1, BASE_QP, progress));
+                  const planned = stageQuestPoints(steps, i + 1, BASE_QP);
+                  const effective = stageQuestPoints(steps, i + 1, BASE_QP, progress);
                   const ok = qp >= effective;
-                  const lowered = effective < v.min;
+                  const lowered = effective < planned;
                   return (
                     <td key={i} className={`goal ${ok ? 'is-reached' : ''} ${i + 1 === stage ? 'is-current-col' : ''}`}
                       title={lowered ? `С учётом пропущенного квеста — ${effective}` : undefined}>
-                      {v.raw}{lowered && <sup>*</sup>}{ok && <IconCheck />}
+                      {planned}{lowered && <sup>*</sup>}{ok && <IconCheck />}
                       <span className="visually-hidden">{ok ? ', достигнуто' : ', не достигнуто'}{lowered ? `, с учётом пропуска цель ${effective}` : ''}</span>
                     </td>
                   );
@@ -83,6 +85,7 @@ export function GoalsPage() {
         <p className="muted small">* Цель по очкам снижена на очки пропущенного необязательного квеста.</p>
       )}
       {goals.note && <p className="muted">{goals.note}</p>}
+      <p className="muted small">Очки квестов посчитаны по маршруту V2; уровни — ориентир из гайда для этапов 1–6 (F2P).</p>
       <p className="muted small">Цель вида «50–60» считается достигнутой с нижней границы. Уровни вводятся на вкладке «Навыки» или прямо в шагах.</p>
     </div>
   );

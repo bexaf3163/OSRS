@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { Progress, Quest } from '../types';
-import { questsData, stepById } from '../data';
+import { allQuests, BASE_QP, BASE_QUEST, stepById } from '../data';
 import { useStore } from '../store';
 import { blockerParts, blockersOf, isClosed } from '../lib/next-step';
 import { IconCheck, IconChevron, IconLock } from '../components/Icons';
@@ -41,9 +41,9 @@ function questRow(q: Quest, p: Progress, qp: number): Row {
 const matches = (f: Filter, s: Status) => f === 'all' || f === s || (f === 'done' && s === 'skipped');
 
 export function QuestsPage() {
-  const { progress, qp } = useStore();
+  const { progress, qp, mode } = useStore();
   const [filter, setFilter] = useState<Filter>('all');
-  const rows = questsData.quests.map((q) => questRow(q, progress, qp));
+  const rows = allQuests.filter((q) => mode === 'members' || !q.membersOnly).map((q) => questRow(q, progress, qp));
   const base: Status = 'done';
   const count = (f: Filter) => rows.filter((r) => matches(f, r.status)).length + (matches(f, base) ? 1 : 0);
   const visible = rows.filter((r) => matches(filter, r.status));
@@ -70,8 +70,8 @@ export function QuestsPage() {
             <div className="quest-link is-static">
               <span className="quest-status"><IconCheck /></span>
               <span className="quest-body">
-                <span className="quest-title">{questsData.base.title}</span>
-                <span className="quest-meta">Обучающий остров · +{questsData.base.qp} QP · уже пройден</span>
+                <span className="quest-title">{BASE_QUEST}</span>
+                <span className="quest-meta">Обучающий остров · +{BASE_QP} QP · уже пройден</span>
               </span>
             </div>
           </li>
@@ -84,8 +84,9 @@ export function QuestsPage() {
               </span>
               <span className="quest-body">
                 <span className="quest-title">{r.quest.title}</span>
+                {r.quest.titleRu && <span className="quest-ru">{r.quest.titleRu}</span>}
                 <span className="quest-meta">
-                  Этап {r.quest.stage} · +{r.quest.qp} QP
+                  Этап {r.quest.stage}{r.quest.membersOnly && ' · Members'}{r.quest.qp > 0 && ` · +${r.quest.qp} QP`}
                   {r.quest.parts.length > 0 && ` · шагов ${r.partsDone} / ${r.quest.parts.length}`}
                   {' · '}
                   <span className="quest-state">{{ done: 'сделан', skipped: 'пропущен', available: 'доступен', blocked: 'заблокирован' }[r.status]}</span>

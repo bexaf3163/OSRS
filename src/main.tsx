@@ -2,12 +2,18 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { StoreProvider } from './store';
+import { WikiProvider } from './components/WikiDrawer';
+import { applyTextScale, loadTextScale } from './lib/ui-scale';
 import './styles.css';
+
+applyTextScale(loadTextScale());
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <StoreProvider>
-      <App />
+      <WikiProvider>
+        <App />
+      </WikiProvider>
     </StoreProvider>
   </StrictMode>,
 );

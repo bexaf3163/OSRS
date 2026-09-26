@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>OSRS Путь</title>
-    <meta name="description" content="Личный трекер прогресса в Old School RuneScape (бесплатная версия)" />
+    <meta name="description" content="Личный трекер прогресса в Old School RuneScape: маршрут F2P и Members, база предметов OSRS Wiki" />
     <meta name="theme-color" content="#f5f2ec" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#111214" media="(prefers-color-scheme: dark)" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -15,10 +15,13 @@
     <link rel="icon" href="./icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <script>
-      // Тема до первой отрисовки, чтобы не мигало светлым.
+      // Тема и размер шрифта до первой отрисовки, чтобы не мигало.
       try {
         var t = localStorage.getItem('osrs-put:theme');
         if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+        // Размер шрифта тоже до отрисовки — иначе текст прыгнет после загрузки.
+        var s = Number(localStorage.getItem('osrs-put:text-scale'));
+        if (s >= 0.9 && s <= 1.5) document.documentElement.style.setProperty('--text-scale', String(s));
       } catch (e) {}
     </script>
   </head>

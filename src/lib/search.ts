@@ -1,9 +1,9 @@
-// Глобальный поиск по шагам, навыкам, строкам прокачки и справке.
+// Глобальный поиск по шагам, базе предметов, навыкам, строкам прокачки и справке.
 
-import type { Block, PluginsData, ReferenceData, Skill, Step } from '../types';
+import type { Block, PluginsData, ReferenceData, Skill, Step, WikiItemDetail } from '../types';
 import { fold, stripMd } from './md';
 
-export type SearchKind = 'step' | 'range' | 'skill' | 'ref' | 'plugin';
+export type SearchKind = 'step' | 'item' | 'range' | 'skill' | 'ref' | 'plugin';
 
 export interface SearchItem {
   kind: SearchKind;
@@ -15,6 +15,9 @@ export interface SearchItem {
   text: string;
   folded: string;
   foldedTitle: string;
+  /** Предмет базы: открывается в инспекторе вики, а не по ссылке. */
+  itemId?: number;
+  icon?: string;
 }
 
 export interface SearchHit {
@@ -44,14 +47,35 @@ export interface SearchSources {
   skills: Skill[];
   reference: ReferenceData;
   plugins: PluginsData;
+  items?: WikiItemDetail[];
   typeLabel: Record<string, string>;
 }
 
-export function buildIndex({ steps, skills, reference, plugins, typeLabel }: SearchSources): SearchItem[] {
+/** Весь текст шага: названия, NPC, предметы, действия и советы — чтобы находить шаг по любому из них. */
+export function stepText(s: Step): string {
+  const itemsText = [...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])].map((i) => `${i.nameEn} ${i.nameRu}`);
+  const parts = [
+    s.titleRu,
+    s.npc && `${s.npc.nameEn} ${s.npc.nameRu} ${s.npc.location}`,
+    s.where, s.bring, s.how,
+    ...itemsText,
+    ...(s.quickSteps ?? []),
+    s.proTip, s.safespot, s.reward,
+    ...(s.fields ?? []).map((f) => (f.label ? `${f.label}: ${f.text}` : f.text)),
+    ...(s.tips ?? []),
+    `Готово, когда: ${s.doneWhen}`,
+  ];
+  return stripMd(parts.filter(Boolean).join('\n'));
+}
+
+export function buildIndex({ steps, skills, reference, plugins, items = [], typeLabel }: SearchSources): SearchItem[] {
   const out: SearchItem[] = [];
   for (const s of steps) {
-    const text = stripMd(s.fields.map((f) => (f.label ? `${f.label}: ${f.text}` : f.text)).join('\n'));
-    out.push(item('step', s.title, `${typeLabel[s.type]} · этап ${s.stage}`, `#/step/${s.id}`, text, s.id));
+    out.push(item('step', s.title, `${typeLabel[s.type]} · этап ${s.stage}${s.membersOnly ? ' · Members' : ''}`, `#/step/${s.id}`, stepText(s), s.id));
+  }
+  for (const it of items) {
+    const row = item('item', it.nameEn, it.nameRu ?? 'Предмет', `item:${it.id}`, it.nameRu ?? '');
+    out.push({ ...row, itemId: it.id, icon: it.iconUrl });
   }
   for (const sk of skills) {
     for (const r of sk.plan.ranges) {
@@ -96,7 +120,7 @@ export function search(index: SearchItem[], query: string, limit = 30): SearchHi
     else if (it.foldedTitle.startsWith(q)) score += 200;
     else if (it.foldedTitle.includes(q)) score += 120;
     score += tokens.filter((t) => it.foldedTitle.includes(t)).length * 30;
-    score += { step: 12, range: 8, skill: 10, ref: 4, plugin: 6 }[it.kind];
+    score += { step: 12, item: 9, range: 8, skill: 10, ref: 4, plugin: 6 }[it.kind];
     const inTitle = tokens.every((t) => it.foldedTitle.includes(t) || (it.code && fold(it.code).includes(t)));
     hits.push({ item: it, score, snippet: inTitle ? undefined : snippet(it.text, tokens.find((t) => !it.foldedTitle.includes(t)) ?? tokens[0]) });
   }

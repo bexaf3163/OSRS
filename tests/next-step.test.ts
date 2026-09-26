@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest';
-import type { Progress, Step, StepStatus } from '../src/types';
-import { BASE_QP, steps } from '../src/data';
+import type { GameMode, Progress, Step, StepStatus } from '../src/types';
+import { BASE_QP, stepsFor } from '../src/data';
 import { blockersOf, currentStage, nextStep } from '../src/lib/next-step';
 import { emptyProgress } from '../src/lib/progress';
 import { questPoints } from '../src/lib/qp';
+
+const f2p = stepsFor('f2p');
 
 function progressWith(statuses: Record<string, StepStatus>): Progress {
   return { ...emptyProgress(), steps: statuses };
@@ -11,7 +13,7 @@ function progressWith(statuses: Record<string, StepStatus>): Progress {
 
 function allBefore(id: string, status: StepStatus = 'done'): Record<string, StepStatus> {
   const out: Record<string, StepStatus> = {};
-  for (const s of steps) {
+  for (const s of f2p) {
     if (s.id === id) break;
     out[s.id] = status;
   }
@@ -19,28 +21,28 @@ function allBefore(id: string, status: StepStatus = 'done'): Record<string, Step
 }
 
 const step = (over: Partial<Step> & { id: string }): Step => ({
-  stage: 1, type: 'quest', title: over.id, shortTitle: over.id, doneWhen: '—', fields: [], requires: [], ...over,
+  stage: 1, type: 'quest', title: over.id, doneWhen: '—', requires: [], ...over,
 });
 
 describe('«Что делать сейчас»', () => {
   it('в начале — первый шаг', () => {
     const p = emptyProgress();
-    expect(nextStep(steps, p, questPoints(steps, p, BASE_QP))?.id).toBe('S1-01');
+    expect(nextStep(f2p, p, questPoints(f2p, p, BASE_QP))?.id).toBe('S1-01');
   });
 
   it('пропускает закрытые шаги', () => {
     const p = progressWith({ 'S1-01': 'done', 'S1-02': 'done' });
-    expect(nextStep(steps, p, questPoints(steps, p, BASE_QP))?.id).toBe('S1-03');
+    expect(nextStep(f2p, p, questPoints(f2p, p, BASE_QP))?.id).toBe('S1-03');
   });
 
   it('не выбирает шаг с невыполненной зависимостью', () => {
-    // Всё до S2-03 сделано, кроме S2-02 — а S2-03 зависит от S2-02.
-    const done = allBefore('S2-03');
-    delete done['S2-02'];
+    // Всё до S2-02 сделано, кроме S2-01 — а Imp Catcher ждёт закупок на бирже.
+    const done = allBefore('S2-02');
+    delete done['S2-01'];
     const p = progressWith(done);
-    const qp = questPoints(steps, p, BASE_QP);
-    expect(nextStep(steps, p, qp)?.id).toBe('S2-02');
-    expect(blockersOf(steps.find((s) => s.id === 'S2-03')!, p, qp)).toEqual({ steps: ['S2-02'] });
+    const qp = questPoints(f2p, p, BASE_QP);
+    expect(nextStep(f2p, p, qp)?.id).toBe('S2-01');
+    expect(blockersOf(f2p.find((s) => s.id === 'S2-02')!, p, qp)).toEqual({ steps: ['S2-01'] });
   });
 
   it('обходит заблокированный шаг и берёт следующий доступный', () => {
@@ -57,9 +59,9 @@ describe('«Что делать сейчас»', () => {
     expect(nextStep(list, after, questPoints(list, after, 1))?.id).toBe('A');
   });
 
-  it('S3-09 ждёт 16 очков квестов, даже когда S1-03 сделан', () => {
-    const s = steps.find((x) => x.id === 'S3-09')!;
-    const p = progressWith({ 'S1-03': 'done' });
+  it('Below Ice Mountain (S3-04) ждёт 16 очков квестов', () => {
+    const s = f2p.find((x) => x.id === 'S3-04')!;
+    const p = emptyProgress();
     expect(blockersOf(s, p, 15)?.qp).toEqual({ need: 16, have: 15 });
     expect(blockersOf(s, p, 16)).toBeNull();
   });
@@ -71,18 +73,21 @@ describe('«Что делать сейчас»', () => {
     expect(nextStep(list, p, 0)?.id).toBe('B');
   });
 
-  it('когда всё закрыто — null', () => {
-    const all = Object.fromEntries(steps.map((s) => [s.id, 'done' as const]));
-    const p = progressWith(all);
-    expect(nextStep(steps, p, questPoints(steps, p, BASE_QP))).toBeNull();
-    expect(currentStage(steps, p)).toBe(6);
+  it('когда всё закрыто — null; последний этап F2P — 6, Members — 9', () => {
+    for (const [mode, last] of [['f2p', 6], ['members', 9]] as [GameMode, number][]) {
+      const steps = stepsFor(mode);
+      const p = progressWith(Object.fromEntries(steps.map((s) => [s.id, 'done' as const])));
+      expect(nextStep(steps, p, questPoints(steps, p, BASE_QP))).toBeNull();
+      expect(currentStage(steps, p)).toBe(last);
+    }
   });
 
   it('текущий этап — этап первого незакрытого шага', () => {
-    expect(currentStage(steps, progressWith(allBefore('S3-01')))).toBe(3);
+    expect(currentStage(f2p, progressWith(allBefore('S3-01')))).toBe(3);
   });
 
-  it('проход по плану всегда даёт следующий шаг — план без тупиков', () => {
+  it.each(['f2p', 'members'] as GameMode[])('проход по плану (%s) всегда даёт следующий шаг — план без тупиков', (mode) => {
+    const steps = stepsFor(mode);
     let p = emptyProgress();
     const order: string[] = [];
     for (;;) {

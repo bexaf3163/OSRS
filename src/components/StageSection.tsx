@@ -1,11 +1,12 @@
 import { useId } from 'react';
 import type { Stage, Step } from '../types';
+import { BASE_QP } from '../data';
 import { useStore } from '../store';
 import { isClosed } from '../lib/next-step';
+import { stageQuestPoints } from '../lib/qp';
 import { IconCheck, IconChevron } from './Icons';
-import { Inline } from './Inline';
 import { ProgressBar } from './ProgressBar';
-import { StepItem } from './StepItem';
+import { StepCard } from './StepCard';
 
 interface Props {
   stage: Stage;
@@ -15,45 +16,41 @@ interface Props {
   onToggle: () => void;
   expanded: Set<string>;
   onToggleStep: (id: string) => void;
+  onDone: (id: string) => void;
 }
 
-export function StageSection({ stage, steps, open, current, onToggle, expanded, onToggleStep }: Props) {
-  const { progress } = useStore();
+export function StageSection({ stage, steps, open, current, onToggle, expanded, onToggleStep, onDone }: Props) {
+  const { progress, steps: all } = useStore();
   const closed = steps.filter((s) => isClosed(progress, s.id)).length;
   const complete = closed === steps.length;
+  const qpAtEnd = stageQuestPoints(all, stage.id, BASE_QP);
   const bodyId = useId();
 
   return (
-    <section className={`stage ${complete ? 'is-complete' : ''} ${current ? 'is-current' : ''}`} aria-labelledby={`${bodyId}-h`}>
+    <section className={`stage ${complete ? 'is-complete' : ''} ${current ? 'is-current' : ''} ${stage.membersOnly ? 'is-members' : ''}`}
+      id={`stage-${stage.id}`} aria-labelledby={`${bodyId}-h`}>
       <h2 className="stage-head" id={`${bodyId}-h`}>
         <button type="button" className="stage-toggle" aria-expanded={open} aria-controls={bodyId} onClick={onToggle}>
           <span className="stage-num">{complete ? <IconCheck /> : stage.id}</span>
           <span className="stage-name">
-            <span className="stage-kicker">Этап {stage.id}{current && ' · сейчас'}</span>
+            <span className="stage-kicker">
+              Этап {stage.id}{stage.membersOnly && ' · 👑 Members'}{current && ' · сейчас'}
+            </span>
             <span className="stage-title">{stage.title}</span>
           </span>
           <span className="stage-count">{closed} / {steps.length}<span className="visually-hidden"> шагов</span></span>
           <IconChevron className="chevron" />
         </button>
       </h2>
-      <ProgressBar value={closed / steps.length} label={`Этап ${stage.id}: выполнено шагов`} />
+      <ProgressBar value={steps.length ? closed / steps.length : 0} label={`Этап ${stage.id}: выполнено шагов`} />
       <div className={`collapse ${open ? 'is-open' : ''}`} id={bodyId} inert={!open}>
         <div className="collapse-inner">
-          <dl className="stage-meta">
-            <div><dt>Старт</dt><dd><Inline text={stage.start} /></dd></div>
-            {stage.time && <div><dt>Время</dt><dd>{stage.time}</dd></div>}
-            {stage.qpAtEnd !== undefined && (
-              <div><dt>Очки квестов в конце</dt><dd>{stage.qpAtEnd}{stage.qpNote && ` — ${stage.qpNote}`}</dd></div>
-            )}
-          </dl>
           <ol className="steps">
             {steps.map((s) => (
-              <StepItem key={s.id} step={s} open={expanded.has(s.id)} onToggle={() => onToggleStep(s.id)} />
+              <StepCard key={s.id} step={s} open={expanded.has(s.id)} onToggle={() => onToggleStep(s.id)} onDone={onDone} />
             ))}
           </ol>
-          {stage.summary && (
-            <p className="stage-summary"><strong>Итог этапа:</strong> <Inline text={stage.summary} /></p>
-          )}
+          <p className="stage-summary muted small">Очки квестов к концу этапа: {qpAtEnd}</p>
         </div>
       </div>
     </section>

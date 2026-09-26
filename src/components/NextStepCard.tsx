@@ -1,14 +1,13 @@
 // «Что делать сейчас» — главный элемент экрана «Путь».
 
-import { steps } from '../data';
 import { useStore } from '../store';
 import { blockerParts, blockersOf, firstOpen, nextStep } from '../lib/next-step';
 import { TypeIcon, TYPE_LABEL } from './Icons';
 import { Inline } from './Inline';
 import { RangeHints } from './RangeHints';
 
-export function NextStepCard() {
-  const { progress, qp, setStep } = useStore();
+export function NextStepCard({ onDone }: { onDone: (id: string) => void }) {
+  const { progress, qp, steps, mode, setStep } = useStore();
   const step = nextStep(steps, progress, qp);
 
   if (!step) {
@@ -18,7 +17,11 @@ export function NextStepCard() {
         <section className="next card is-finished" aria-label="Что делать сейчас">
           <p className="eyebrow">Путь пройден</p>
           <h2 className="next-title">Все {steps.length} шагов закрыты</h2>
-          <p className="muted">Дальше — свободная игра. Цели и навыки остаются под рукой.</p>
+          <p className="muted">
+            {mode === 'f2p'
+              ? 'F2P-маршрут закончен. Если купил Bond — переключись на Members в шапке: откроются этапы 7–9.'
+              : 'Дальше — свободная игра. Цели и навыки остаются под рукой.'}
+          </p>
         </section>
       );
     }
@@ -35,14 +38,10 @@ export function NextStepCard() {
     );
   }
 
-  const main: [string, string | undefined][] = [
-    ['Где', step.where],
-    ['Взять', step.bring],
-    ['Готово, когда', step.doneWhen],
-  ];
+  const where = step.npc ? `${step.npc.nameEn} — ${step.npc.location}` : step.where;
 
   return (
-    <section className="next card" aria-labelledby="next-title">
+    <section className={`next card ${step.membersOnly ? 'is-members' : ''}`} aria-labelledby="next-title">
       <p className="eyebrow">Что делать сейчас</p>
       <div className="next-meta">
         <code className="code">{step.id}</code>
@@ -50,17 +49,18 @@ export function NextStepCard() {
         <span className="muted">{TYPE_LABEL[step.type]} · этап {step.stage}{step.qp ? ` · +${step.qp} QP` : ''}</span>
       </div>
       <h2 className="next-title" id="next-title">{step.title}</h2>
+      {step.titleRu && <p className="next-title-ru">{step.titleRu}</p>}
       <dl className="fields">
-        {main.filter(([, v]) => v).map(([label, v]) => (
-          <div key={label} className={`field ${label === 'Готово, когда' ? 'is-done-when' : ''}`}>
-            <dt>{label}</dt>
-            <dd><Inline text={v!} /></dd>
-          </div>
-        ))}
+        {where && <div className="field"><dt>Где</dt><dd><Inline text={where} /></dd></div>}
+        {step.npc && <div className="field"><dt>Этаж</dt><dd>{step.npc.floor}</dd></div>}
+        {step.itemsRequired && step.itemsRequired.length > 0 && (
+          <div className="field"><dt>Взять</dt><dd>{step.itemsRequired.map((i) => i.nameEn).join(', ')}</dd></div>
+        )}
+        <div className="field is-done-when"><dt>Готово, когда</dt><dd><Inline text={step.doneWhen} /></dd></div>
       </dl>
       <RangeHints step={step} />
       <div className="actions">
-        <button type="button" className="btn btn-primary btn-lg" onClick={() => setStep(step.id, 'done')}>Сделано</button>
+        <button type="button" className="btn btn-primary btn-lg" onClick={() => onDone(step.id)}>Отметить выполненным</button>
         {step.optional && (
           <button type="button" className="btn btn-lg" onClick={() => setStep(step.id, 'skipped')}>Пропустить</button>
         )}

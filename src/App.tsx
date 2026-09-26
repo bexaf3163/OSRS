@@ -1,8 +1,10 @@
 import { useEffect, useState, type ComponentType } from 'react';
-import { skillById, reference } from './data';
+import { membersSkills, skillById, reference } from './data';
+import { useStore } from './store';
 import { useRoute, type Page } from './lib/router';
 import { IconBook, IconGoals, IconPath, IconQuests, IconSearch, IconSettings, IconSkills } from './components/Icons';
-import { SearchDialog } from './components/SearchDialog';
+import { SearchBox } from './components/SearchBox';
+import { ModeToggle } from './components/ModeToggle';
 import { ToastView } from './components/ToastView';
 import { PathPage } from './pages/Path';
 import { SkillsPage } from './pages/Skills';
@@ -21,7 +23,7 @@ const TABS: { page: Page; href: string; label: string; Icon: ComponentType<{ cla
 ];
 
 function pageTitle(page: Page, param?: string): string {
-  if (page === 'skills' && param) return skillById.get(param)?.name ?? 'Навыки';
+  if (page === 'skills' && param) return skillById.get(param)?.name ?? membersSkills.find((m) => m.id === param)?.name ?? 'Навыки';
   if (page === 'reference' && param) return reference.sections.find((s) => s.id === param)?.title ?? 'Справка';
   if (page === 'settings') return 'Настройки';
   return TABS.find((t) => t.page === page)!.label;
@@ -29,6 +31,7 @@ function pageTitle(page: Page, param?: string): string {
 
 export function App() {
   const route = useRoute();
+  const { mode } = useStore();
   const [searchOpen, setSearchOpen] = useState(false);
 
   // «/» открывает поиск, если фокус не в поле ввода.
@@ -43,6 +46,10 @@ export function App() {
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, []);
+
+  useEffect(() => {
+    document.documentElement.dataset.mode = mode;
+  }, [mode]);
 
   useEffect(() => {
     document.title = `${pageTitle(route.page, route.param)} — OSRS Путь`;
@@ -79,6 +86,7 @@ export function App() {
             ))}
           </nav>
           <div className="topbar-actions">
+            <ModeToggle />
             <button type="button" className="search-trigger" onClick={() => setSearchOpen(true)} aria-label="Поиск" aria-keyshortcuts="/">
               <IconSearch />
               <span className="search-trigger-text">Поиск</span>
@@ -105,7 +113,7 @@ export function App() {
       </nav>
 
       <ToastView />
-      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <SearchBox open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );
 }

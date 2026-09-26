@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from 'react';
 import type { Skill } from '../types';
-import { goals, levelById, skillById, steps } from '../data';
+import { goals, levelById, membersSkills, skillById, type MembersSkill } from '../data';
 import { useStore } from '../store';
 import { currentStage, isClosed } from '../lib/next-step';
 import { formatXp, goalFor } from '../lib/goals';
@@ -14,6 +14,8 @@ import { Table } from '../components/Table';
 
 export function SkillDetailPage({ id }: { id: string }) {
   const skill = skillById.get(id);
+  const members = membersSkills.find((m) => m.id === id);
+  if (members) return <MembersSkillView skill={members} />;
   if (!skill) {
     return (
       <div className="page">
@@ -26,8 +28,29 @@ export function SkillDetailPage({ id }: { id: string }) {
   return <SkillView skill={skill} />;
 }
 
+/** Навык подписки: гайда по нему нет — уровень, калькулятор опыта и статья вики. */
+function MembersSkillView({ skill }: { skill: MembersSkill }) {
+  const { mode } = useStore();
+  return (
+    <div className="page">
+      <a className="back" href="#/skills"><IconBack />Навыки</a>
+      <header className="page-head">
+        <h1>{skill.name} <span className="badge badge-members">Members</span></h1>
+        <p className="muted">
+          {skill.nameEn} · <a href={skill.wiki} target="_blank" rel="noopener noreferrer">Гайд по прокачке на вики <IconExternal /></a>
+        </p>
+      </header>
+      {mode === 'f2p' && <p className="notice">Навык доступен только с подпиской. Переключи режим на Members в шапке, чтобы увидеть этапы 7–9.</p>}
+      <section className="card levels-card" aria-label="Уровень">
+        <div className="levels-row"><LevelInput id={skill.id} label={skill.name} /></div>
+      </section>
+      <Calculator levelIds={[skill.id]} suggest={(_, level) => Math.min(MAX_LEVEL, level + 1)} />
+    </div>
+  );
+}
+
 function SkillView({ skill }: { skill: Skill }) {
-  const { progress } = useStore();
+  const { progress, steps } = useStore();
   const level = skillLevel(skill, progress);
   const hit = rangeForLevel(skill.plan.ranges, level);
   const related = steps.filter((s) => s.targets?.some((t) => levelById.get(t.skill)?.skill === skill.id));
@@ -58,7 +81,7 @@ function SkillView({ skill }: { skill: Skill }) {
         )}
       </section>
 
-      <Calculator skill={skill} />
+      <Calculator levelIds={skill.levelSkills} suggest={(lid, level, stage) => defaultTarget(skill, lid, level, stage)} />
 
       {related.length > 0 && (
         <section className="section">
@@ -110,20 +133,27 @@ function defaultTarget(skill: Skill, levelId: string, level: number, stage: numb
   return Math.min(MAX_LEVEL, level + 1);
 }
 
-function Calculator({ skill }: { skill: Skill }) {
-  const { progress } = useStore();
+interface CalcProps {
+  levelIds: string[];
+  /** Цель по умолчанию: цель этапа или конец текущей строки плана. */
+  suggest: (levelId: string, level: number, stage: number) => number;
+}
+
+function Calculator({ levelIds, suggest }: CalcProps) {
+  const { progress, steps } = useStore();
   const stage = currentStage(steps, progress);
-  const [which, setWhich] = useState(skill.levelSkills[0]);
+  const [which, setWhich] = useState(levelIds[0]);
   const level = levelOf(progress, which);
-  const [target, setTarget] = useState(() => String(defaultTarget(skill, which, level, stage)));
+  const [target, setTarget] = useState(() => String(suggest(which, level, stage)));
   const [xpNow, setXpNow] = useState('');
   const ids = { which: useId(), target: useId(), xp: useId() };
 
   // Новый навык или уровень — новая цель по умолчанию.
   useEffect(() => {
-    setTarget(String(defaultTarget(skill, which, level, stage)));
+    setTarget(String(suggest(which, level, stage)));
     setXpNow('');
-  }, [skill, which, level, stage]);
+    // suggest и массив пересоздаются на каждом рендере — цель пересчитывается только при смене навыка или уровня.
+  }, [levelIds.join(), which, level, stage]);
 
   const targetLevel = clampLevel(Number(target) || 1);
   const exact = xpNow.trim() ? Number(xpNow.replace(/\D/g, '')) : NaN;
@@ -136,11 +166,11 @@ function Calculator({ skill }: { skill: Skill }) {
     <section className="card calc" aria-labelledby={`${ids.which}-h`}>
       <h2 className="card-title" id={`${ids.which}-h`}>Сколько опыта осталось</h2>
       <div className="calc-grid">
-        {skill.levelSkills.length > 1 && (
+        {levelIds.length > 1 && (
           <div className="calc-field">
             <label htmlFor={ids.which}>Навык</label>
             <select id={ids.which} value={which} onChange={(e) => setWhich(e.target.value)}>
-              {skill.levelSkills.map((lid) => <option key={lid} value={lid}>{levelById.get(lid)!.name}</option>)}
+              {levelIds.map((lid) => <option key={lid} value={lid}>{levelById.get(lid)!.name}</option>)}
             </select>
           </div>
         )}

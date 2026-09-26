@@ -73,4 +73,7 @@ export default defineConfig({
   base: './',
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   plugins: [react(), serviceWorker()],
+  // Большая часть сборки — база предметов (~190 досье с магазинами и дропом). Она нужна офлайн и
+  // кэшируется service worker целиком, поэтому дробить её на куски смысла нет.
+  build: { chunkSizeWarningLimit: 900 },
 });
