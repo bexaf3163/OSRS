@@ -4,6 +4,9 @@ import { useStore } from '../store';
 import { exportFileName, exportProgress, importProgress, type ImportResult } from '../lib/progress';
 import { applyTheme, loadTheme, type Theme } from '../lib/theme';
 
+/** Программа для ПК открывает сборку с диска (file://). */
+const isDesktop = location.protocol === 'file:';
+
 const THEMES: [Theme, string][] = [['light', 'Светлая'], ['dark', 'Тёмная'], ['system', 'Системная']];
 
 function download(name: string, text: string) {
@@ -60,10 +63,17 @@ export function SettingsPage() {
 
       <section className="card section-card">
         <h2 className="card-title">Перенос прогресса</h2>
-        <p className="muted">
-          Прогресс хранится только в этом браузере. Чтобы перенести его между ноутбуком и телефоном, сохрани файл здесь
-          и загрузи его там. На iPhone приложение с экрана «Домой» хранит данные отдельно от Safari — переносить тоже файлом.
-        </p>
+        {isDesktop ? (
+          <p className="muted">
+            Прогресс хранится в этой программе на компьютере — отдельно от браузера и телефона. Чтобы перенести его,
+            сохрани файл здесь и загрузи его на другом устройстве.
+          </p>
+        ) : (
+          <p className="muted">
+            Прогресс хранится только в этом браузере. Чтобы перенести его между ноутбуком и телефоном, сохрани файл здесь
+            и загрузи его там. На iPhone приложение с экрана «Домой» хранит данные отдельно от Safari — переносить тоже файлом.
+          </p>
+        )}
         <p className="small">Сейчас: {done} шагов сделано, изменено {new Date(progress.updatedAt).toLocaleString('ru-RU')}.</p>
         <div className="actions">
           <button type="button" className="btn btn-primary" onClick={() => download(exportFileName(), exportProgress(progress))}>
@@ -118,6 +128,12 @@ export function SettingsPage() {
           </div>
         )}
       </section>
+
+      <p className="muted small">
+        OSRS Путь {__APP_VERSION__}
+        {isDesktop ? ' · программа для ПК' : ''}
+        {' · '}<a href="https://github.com/bexaf3163/OSRS/releases/latest" target="_blank" rel="noopener noreferrer">Новые версии</a>
+      </p>
     </div>
   );
 }

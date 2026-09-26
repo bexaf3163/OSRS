@@ -1,4 +1,5 @@
-/* OSRS Путь — минимализм: тёплый нейтральный фон, один акцент (приглушённое золото), границы 1px. */
+/* OSRS Путь — минимализм: тёплый нейтральный фон, один акцент (приглушённое золото), границы 1px.
+   Тёмная тема — нейтральный графит без жёлто-коричневого оттенка; золото только в акцентах. */
 
 :root {
   --bg: #f5f2ec;
@@ -33,45 +34,45 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #15130f;
-    --surface: #1d1b16;
-    --surface-2: #26231d;
-    --text: #ece7de;
-    --muted: #a39c8f;
-    --border: #322e26;
-    --border-strong: #464034;
+    --bg: #111214;
+    --surface: #191a1d;
+    --surface-2: #222327;
+    --text: #e9e9ec;
+    --muted: #9d9fa6;
+    --border: #2c2e33;
+    --border-strong: #3d4046;
     --accent: #c99a3e;
-    --accent-ink: #d9ae5a;
-    --accent-soft: #3a2f1b;
-    --on-accent: #15130f;
-    --done: #74b384;
-    --done-soft: #1f3025;
+    --accent-ink: #d8ad5c;
+    --accent-soft: #2a261d;
+    --on-accent: #111214;
+    --done: #6fb382;
+    --done-soft: #1b2a20;
     --warn: #e39a6c;
-    --warn-soft: #3a2519;
-    --focus: #d9ae5a;
-    --toast-accent: #7a5510;
+    --warn-soft: #33221a;
+    --focus: #d8ad5c;
+    --toast-accent: #8a6420;
     color-scheme: dark;
   }
 }
 
 :root[data-theme="dark"] {
-  --bg: #15130f;
-  --surface: #1d1b16;
-  --surface-2: #26231d;
-  --text: #ece7de;
-  --muted: #a39c8f;
-  --border: #322e26;
-  --border-strong: #464034;
+  --bg: #111214;
+  --surface: #191a1d;
+  --surface-2: #222327;
+  --text: #e9e9ec;
+  --muted: #9d9fa6;
+  --border: #2c2e33;
+  --border-strong: #3d4046;
   --accent: #c99a3e;
-  --accent-ink: #d9ae5a;
-  --accent-soft: #3a2f1b;
-  --on-accent: #15130f;
-  --done: #74b384;
-  --done-soft: #1f3025;
+  --accent-ink: #d8ad5c;
+  --accent-soft: #2a261d;
+  --on-accent: #111214;
+  --done: #6fb382;
+  --done-soft: #1b2a20;
   --warn: #e39a6c;
-  --warn-soft: #3a2519;
-  --focus: #d9ae5a;
-  --toast-accent: #7a5510;
+  --warn-soft: #33221a;
+  --focus: #d8ad5c;
+  --toast-accent: #8a6420;
   color-scheme: dark;
 }
 

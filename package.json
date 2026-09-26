@@ -1,8 +1,15 @@
 {
   "name": "osrs-put",
+  "productName": "OSRS Путь",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "description": "Личный трекер прогресса в Old School RuneScape (бесплатная версия)",
+  "author": "Mark",
   "type": "module",
+  "main": "electron/main.cjs",
+  "engines": {
+    "node": ">=22.18"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
@@ -10,22 +17,53 @@
     "test": "vitest run",
     "parse-guide": "node scripts/parse-guide.ts",
     "check-data": "node scripts/check-data.ts",
-    "icons": "node scripts/make-icons.ts"
-  },
-  "dependencies": {
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0"
+    "icons": "node scripts/make-icons.ts",
+    "desktop": "npm run build && electron .",
+    "dist:win": "npm run build && electron-builder --win nsis portable --publish never"
   },
   "devDependencies": {
     "@types/node": "^26.6.3",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react": "^6.1.1",
+    "electron": "^44.4.5",
+    "electron-builder": "^26.15.3",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
     "typescript": "^7.0.2",
     "vite": "^8.3.1",
     "vitest": "^5.0.2"
   },
-  "engines": {
-    "node": ">=22.18"
+  "build": {
+    "appId": "com.bexaf3163.osrsput",
+    "productName": "OSRS Путь",
+    "copyright": "Mark",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "win": {
+      "icon": "public/icon-512.png",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "OSRS Путь",
+      "artifactName": "OSRS-Put-Setup-${version}.exe"
+    },
+    "portable": {
+      "artifactName": "OSRS-Put-${version}-portable.exe"
+    }
   }
 }
