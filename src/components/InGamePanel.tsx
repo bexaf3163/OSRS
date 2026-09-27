@@ -7,7 +7,9 @@ import { useBridge } from '../bridge';
 import { toInGameTarget } from '../services/runeliteBridge';
 import { PreflightPanel } from './PreflightPanel';
 import { PacingLine } from './PacingLine';
+import { PluginUpdateNote } from './PluginUpdateNote';
 import { triggerText } from '../lib/triggers';
+import { plural } from '../lib/shopping';
 
 const GROUPS: [keyof InGameTarget, string][] = [
   ['npcNames', 'NPC'],
@@ -17,7 +19,7 @@ const GROUPS: [keyof InGameTarget, string][] = [
 ];
 
 export function InGamePanel({ step }: { step: Step }) {
-  const { enabled, state, activeStepId, pointInGame, clear, canLaunch, launchRuneLite, shortestPath } = useBridge();
+  const { enabled, state, activeStepId, pointInGame, clear, canLaunch, launchRuneLite, shortestPath, plugin } = useBridge();
   const [notice, setNotice] = useState<'' | 'sending' | 'offline'>('');
   if (!enabled || !toInGameTarget(step)) return null;
   const active = activeStepId === step.id;
@@ -54,13 +56,20 @@ export function InGamePanel({ step }: { step: Step }) {
             : <>: запусти RuneLite с плагином OSRS Path Bridge (как — в README, раздел «RuneLite bridge»).</>}
         </p>
       )}
+      {active && <PluginUpdateNote />}
+      {live && plugin?.compat === 'ok' && (
+        <p className="muted small">
+          🖱 В игре слева сверху, под плашкой шага, — список «Что нужно»: что с собой, чего нет и где взять. Клик по строке с
+          местом — стрелка и путь туда, NPC подсветится; клик по заголовку — свернуть.
+        </p>
+      )}
       <PacingLine step={step} />
       {trigger && <p className="muted small">Шаг отметится сам, когда {triggerText(trigger)}.</p>}
       {active && (
         <p className="muted small">
           {shortestPath
             ? '🗺 Путь по земле прокладывает Shortest Path — с учётом стен и дверей.'
-            : waypoints.length ? `🗺 Маршрут по ${waypoints.length} точкам: стрелка и HUD ведут от точки к точке. Путь с учётом стен рисует плагин Shortest Path из Plugin Hub.`
+            : waypoints.length ? `🗺 Маршрут по ${waypoints.length} ${plural(waypoints.length, 'точке', 'точкам', 'точкам')}: стрелка и HUD ведут от точки к точке. Путь с учётом стен рисует плагин Shortest Path из Plugin Hub.`
               : '🗺 Стрелка показывает направление по прямой. Путь с учётом стен рисует плагин Shortest Path из Plugin Hub.'}
         </p>
       )}

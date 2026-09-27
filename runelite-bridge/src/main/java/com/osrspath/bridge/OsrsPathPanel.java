@@ -39,10 +39,8 @@ class OsrsPathPanel extends PluginPanel
 		void back();
 	}
 
-	static final Color GOOD = new Color(90, 220, 120);
-	static final Color BANK = new Color(255, 190, 70);
-	static final Color MISSING = new Color(255, 110, 90);
-	static final Color IN_STEP = new Color(120, 210, 255);
+	private static final Color GOOD = StepGuide.GOOD;
+	private static final Color BANK = StepGuide.BANK;
 	private static final Color TEXT = new Color(225, 225, 225);
 	private static final Color MUTED = new Color(160, 160, 160);
 
@@ -100,7 +98,7 @@ class OsrsPathPanel extends PluginPanel
 			{
 				JPanel card = card();
 				card.add(text(i.getTitle(), regular(), TEXT));
-				card.add(text(i.getStatus(), small(), colorOf(i.getHave())));
+				card.add(text(i.getStatus(), small(), StepGuide.color(i.getHave())));
 				if (i.getWhere() != null && i.getHave() != StepGuide.Have.BAG)
 				{
 					card.add(text("Где взять: " + i.getWhere(), small(), MUTED));
@@ -116,11 +114,17 @@ class OsrsPathPanel extends PluginPanel
 		}
 		if (!v.getPlaces().isEmpty())
 		{
-			header("Точки шага");
+			// Как в списке на экране игры: «Куда идти» — точка шага, откуда предметы и NPC квеста.
+			header("Куда идти");
 			for (StepGuide.PlaceLine p : v.getPlaces())
 			{
 				JPanel card = card();
 				card.add(text(p.getLabel(), regular(), TEXT));
+				// Как в списке в игре: NPC подписываем у мест без предметов (места с предметами подписаны по предмету).
+				if (p.getNpc() != null && !p.isItems() && !p.getLabel().toLowerCase().contains(p.getNpc().toLowerCase()))
+				{
+					card.add(text("NPC: " + p.getNpc(), small(), MUTED));
+				}
 				card.add(p.isActive() ? text("● Стрелка ведёт сюда", small(), GOOD)
 					: button("Путь сюда", () -> actions.go(p.getIndex())));
 				add(card);
@@ -151,23 +155,6 @@ class OsrsPathPanel extends PluginPanel
 	private static Font bold()
 	{
 		return OverlayText.font(FontManager.getRunescapeBoldFont(), 1f);
-	}
-
-	static Color colorOf(StepGuide.Have h)
-	{
-		switch (h)
-		{
-			case BAG:
-				return GOOD;
-			case BANK:
-				return BANK;
-			case NONE:
-				return MISSING;
-			case IN_STEP:
-				return IN_STEP;
-			default:
-				return MUTED;
-		}
 	}
 
 	private void add(JPanel card)
@@ -255,6 +242,29 @@ class OsrsPathPanel extends PluginPanel
 		b.setAlignmentX(Component.LEFT_ALIGNMENT);
 		b.addActionListener(e -> r.run());
 		return b;
+	}
+
+	private static BufferedImage mapIcon;
+
+	/** Метка на карте мира: золотой круг со стрелкой — видна и на суше, и на воде. */
+	static synchronized BufferedImage mapIcon()
+	{
+		if (mapIcon != null)
+		{
+			return mapIcon;
+		}
+		BufferedImage img = new BufferedImage(20, 20, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = img.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g.setColor(new Color(20, 20, 20));
+		g.fillOval(0, 0, 20, 20);
+		g.setColor(OsrsPathHudOverlay.TITLE);
+		g.fillOval(2, 2, 16, 16);
+		g.setColor(new Color(20, 20, 20));
+		g.fillPolygon(ArrowGeometry.arrow(10, 10, 6.5, -Math.PI / 2));
+		g.dispose();
+		mapIcon = img;
+		return img;
 	}
 
 	/** Значок кнопки на боковой полосе: стрелка, как большая стрелка в игре. */

@@ -6,8 +6,12 @@ import { useState } from 'react';
 import { useBridge } from '../bridge';
 import type { NavTargetPayload } from '../services/runeliteBridge';
 
+// Цель узнаётся по месту, NPC и предмету, а не по подписи: цель, выбранную в игре (список «Что нужно»), плагин
+// подписывает по-своему — у точки шага подпись в игре и на карте программы бывает разной. NPC сравнивается: та же
+// клетка без подсветки NPC — другая цель, её можно отправить.
+const npcKey = (t: NavTargetPayload) => (t.npcNames ?? []).join('|');
 const same = (a: NavTargetPayload | null, b: NavTargetPayload) =>
-  !!a && a.x === b.x && a.y === b.y && a.plane === b.plane && a.label === b.label && a.itemName === b.itemName;
+  !!a && a.x === b.x && a.y === b.y && a.plane === b.plane && (a.itemName ?? null) === (b.itemName ?? null) && npcKey(a) === npcKey(b);
 
 interface Props {
   target: NavTargetPayload;

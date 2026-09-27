@@ -25,5 +25,8 @@ export function dataFiles(d: GuideData): [string, string][] {
 /** Маршрут V2 — ведётся прямо в JSON. */
 export function readRoute(): Route {
   const read = (name: string) => JSON.parse(readFileSync(`${DATA_DIR}/${name}`, 'utf8'));
-  return { steps: read('steps.json'), stages: read('stages.json'), items: read('f2p-items.json'), monsters: read('monsters.json') };
+  return {
+    steps: read('steps.json'), stages: read('stages.json'), items: read('f2p-items.json'), monsters: read('monsters.json'),
+    npcs: read('npcLocations.json').npcs, places: read('majorLocations.json').locations,
+  };
 }

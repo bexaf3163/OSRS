@@ -1,6 +1,7 @@
 package com.osrspath.bridge;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
@@ -39,7 +40,7 @@ import lombok.extern.slf4j.Slf4j;
  * POST /nav-target    временная цель поверх шага (NavTarget): место с карты или магазин; {"clear":true} — снять
  * POST /bank-tags     предметы этапа для мягкой подсветки в банке (BankTags)
  * POST /gear-hint     совет по снаряжению (GearHint): строка HUD, что спросить у банка и что подсветить; {"clear":true} — снять
- * GET  /events        text/event-stream: STATUS, STATS, OWNED, GEAR, PACING, NAV_DONE, STEP_AUTO_COMPLETED
+ * GET  /events        text/event-stream: STATUS, STATS, OWNED, GEAR, PACING, NAV_SET, NAV_DONE, STEP_AUTO_COMPLETED
  *                      и пинг каждые 15 секунд
  *
  * STATS, OWNED, GEAR и PACING уходят только при изменении (не чаще раза за игровой тик) и повторяются
@@ -60,12 +61,14 @@ public final class BridgeServer
 	public static final int DEFAULT_PORT = 38282;
 	/**
 	 * Версия протокола моста. 1 — до 2.9 (поля не было: приложение считает такой плагин старым); 2 — с 2.9:
-	 * стоимость предметов в снаряжении и рукопожатие версий; 3 — с 2.10: guide в шаге для боковой панели.
-	 * Растёт вместе с адресами и полями.
+	 * стоимость предметов в снаряжении и рукопожатие версий; 3 — с 2.10: guide в шаге для боковой панели;
+	 * 4 — с 2.11: guide рисуется и списком «Что нужно» на экране игры (кликабельным) — программа просит
+	 * перезапустить RuneLite, если в нём остался плагин 2.10. Растёт вместе с адресами, полями и тем, что плагин
+	 * делает с ними.
 	 */
-	static final int PROTOCOL = 3;
+	static final int PROTOCOL = 4;
 	/** Версия плагина — та же, что у программы, с которой он едет в одном exe. */
-	static final String PLUGIN_VERSION = "2.10.0";
+	static final String PLUGIN_VERSION = "2.11.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	static final int MAX_STREAMS = 8;
@@ -114,6 +117,8 @@ public final class BridgeServer
 	/** Уровни навыков: {"magic": 25, …}; null — не в игре или передача выключена. */
 	private volatile Map<String, Integer> stats;
 	private volatile boolean shortestPath;
+	/** Текущая временная цель (как NAV_SET) или null — для /status. */
+	private volatile JsonObject navTarget;
 	/** Последнее событие OWNED — повторяется новым подключениям. */
 	private volatile Map<String, Object> lastOwned;
 	/** Снаряжение, сумка и монеты: {"equipment":[…],"inventory":[…],"coins":…,"bankCoins":…}; null — неизвестно. */
@@ -247,9 +252,35 @@ public final class BridgeServer
 		broadcast(e);
 	}
 
+	/**
+	 * Временная цель поставлена — программой (/nav-target) или игроком в игре (список «Что нужно», боковая панель).
+	 * Программа показывает ту же цель («● Стрелка ведёт сюда», метка на карте), даже если её выбрали в игре.
+	 */
+	public void navSet(NavTarget t)
+	{
+		JsonObject target = navJson(t);
+		navTarget = target;
+		Map<String, Object> e = new LinkedHashMap<>();
+		e.put("type", "NAV_SET");
+		e.put("target", target);
+		broadcast(e);
+	}
+
+	/**
+	 * Цель в том же виде, в каком программа шлёт её на /nav-target (те же поля NavTarget), — программа сравнивает её со
+	 * своими кнопками. Служебный clear не нужен.
+	 */
+	private JsonObject navJson(NavTarget t)
+	{
+		JsonObject o = gson.toJsonTree(t).getAsJsonObject();
+		o.remove("clear");
+		return o;
+	}
+
 	/** Временная цель снята: arrived — дошёл, obtained — предмет получен, cleared — снята настройкой или /clear. */
 	public void navDone(String reason, NavTarget t)
 	{
+		navTarget = null;
 		Map<String, Object> e = new LinkedHashMap<>();
 		e.put("type", "NAV_DONE");
 		e.put("reason", reason);
@@ -347,6 +378,8 @@ public final class BridgeServer
 					status.put("activeStepId", activeStepId);
 					status.put("stats", stats);
 					status.put("shortestPath", shortestPath);
+					// Куда сейчас ведёт временная цель — программа после перезапуска показывает ту же, что в игре.
+					status.put("navTarget", navTarget);
 					Map<String, Object> g = gear;
 					status.put("equipment", g == null ? null : g.get("equipment"));
 					status.put("inventory", g == null ? null : g.get("inventory"));

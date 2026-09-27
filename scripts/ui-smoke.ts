@@ -179,12 +179,76 @@ async function run(browser: Browser) {
       await page.context().close();
     }
 
-    // Старый плагин без поля protocol — просьба обновить.
+    // Старый плагин без поля protocol — просьба перезапустить RuneLite.
     {
       const { page } = await open(browser, width, {}, '#/settings');
-      expect((await text(page, '.plaque-warning')).includes('устарел'), 'настройки: плагин без рукопожатия — «устарел»');
+      const t = await text(page, '.plaque-warning');
+      expect(t.includes('старый плагин') && t.includes('перезапусти RuneLite'), 'настройки: плагин без рукопожатия — «старый плагин, перезапусти RuneLite»');
       await page.context().close();
     }
+
+    // Плагин 2.10 (протокол 3) при программе 2.11: на карточке шага — что его нет и что сделать; с новым — подсказка о списке.
+    {
+      const { page } = await open(browser, width, {
+        localStorage: { 'osrs-put:active-step': 'S2-03' }, progress: progressBefore('S2-03'),
+        status: { activeStepId: 'S2-03', protocol: 3, pluginVersion: '2.10.0' },
+      }, '#/step/S2-03');
+      const t = await text(page, '.ingame');
+      expect(t.includes('старый плагин 2.10.0') && t.includes('список «Что нужно» на экране игры'), 'шаг: плагин 2.10 — «перезапусти RuneLite», без списка в игре');
+      await page.context().close();
+      const fresh = await open(browser, width, {
+        localStorage: { 'osrs-put:active-step': 'S2-03' }, progress: progressBefore('S2-03'),
+        status: { activeStepId: 'S2-03', protocol: 4, pluginVersion: '2.11.0' },
+      }, '#/step/S2-03');
+      const f = await text(fresh.page, '.ingame');
+      expect(f.includes('список «Что нужно»') && !f.includes('старый плагин'), 'шаг: плагин 2.11 — подсказка, где в игре список «Что нужно»');
+      expect(!fresh.errors.length, `шаг: ошибок в консоли нет ${fresh.errors.join('; ')}`);
+      await fresh.page.context().close();
+    }
+
+    // Квест с NPC: на карте шага — точки NPC и откуда предметы, как в списке в игре.
+    {
+      const { page, errors } = await open(browser, width, { progress: progressBefore('S2-10') }, '#/step/S2-10');
+      const chips = await page.locator('.spot-chip').allInnerTexts();
+      expect(chips.some((c) => c.includes('Ned')) && chips.some((c) => c.includes('Lady Keli')) && chips.some((c) => c.includes('Prince Ali')),
+        `карта шага: NPC квеста точками (${chips.length})`);
+      await page.getByRole('radio', { name: /Ned — дом в Draynor Village/ }).click();
+      await page.getByRole('button', { name: '🧭 Вести сюда в игре' }).click();
+      await page.waitForTimeout(500);
+      const nav = await page.evaluate(() => (window as unknown as { __posts: { path: string; body: Record<string, unknown> }[] }).__posts
+        .filter((p) => p.path === '/nav-target').pop()?.body);
+      expect(JSON.stringify(nav?.npcNames) === '["Ned"]' && nav?.x === 3099, 'карта шага: «Вести сюда в игре» к Ned с подсветкой');
+      expect(await noOverflow(page), 'карта шага с NPC: без горизонтальной прокрутки');
+      expect(!errors.length, `карта шага с NPC: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+  }
+
+  // Все страницы: шаги, навыки, справка — открываются без ошибок в консоли, без падения и горизонтальной прокрутки.
+  console.log('Все страницы');
+  const skillIds = [
+    ...(JSON.parse(readFileSync(new URL('../src/data/skills.json', import.meta.url), 'utf8')) as { id: string }[]).map((x) => x.id),
+    ...(JSON.parse(readFileSync(new URL('../src/data/members-skills.json', import.meta.url), 'utf8')) as { skills: { id: string }[] }).skills.map((x) => x.id),
+  ];
+  const routes = ['#/', '#/skills', '#/goals', '#/quests', '#/reference', '#/settings', '#/shopping', '#/gear',
+    ...steps.map((x) => `#/step/${x.id}`), ...skillIds.map((id) => `#/skills/${id}`)];
+  for (const width of [390, 1280]) {
+    const { page, errors } = await open(browser, width, { progress: progressBefore('S2-10') }, '#/');
+    const bad: string[] = [];
+    for (const r of routes) {
+      const before = errors.length;
+      await page.evaluate((h) => { location.hash = h; }, r);
+      await page.waitForTimeout(120);
+      const info = await page.evaluate(() => ({
+        overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+        crashed: !!document.querySelector('.page-error'),
+      }));
+      if (info.overflow > 0) bad.push(`${r}: прокрутка ${info.overflow}px`);
+      if (info.crashed) bad.push(`${r}: страница упала`);
+      if (errors.length > before) bad.push(`${r}: ${errors.slice(before).join('; ').slice(0, 200)}`);
+    }
+    expect(!bad.length, `${routes.length} страниц на ${width} точках — без ошибок и прокрутки ${bad.slice(0, 5).join(' | ')}`);
+    await page.context().close();
   }
 
   // Шапка помещается на любой ширине, когда RuneLite на связи (раньше вылезала на 11–193 точки).

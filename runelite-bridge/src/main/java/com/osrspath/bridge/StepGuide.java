@@ -1,13 +1,15 @@
 package com.osrspath.bridge;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.Value;
 
 /**
- * Что показывает боковая панель «OSRS Путь»: предметы шага — есть ли (сумка, банк), где взять и к какой точке
- * повести стрелку, — и точки шага. Чистая логика: плагин считает её на потоке клиента, панель только рисует.
+ * Что показывают список «Что нужно» в игре и боковая панель «OSRS Путь»: предметы шага — есть ли (сумка, банк),
+ * где взять и к какой точке повести стрелку, — и точки шага. Чистая логика: плагин считает её на потоке клиента,
+ * список и панель только рисуют.
  */
 final class StepGuide
 {
@@ -25,15 +27,29 @@ final class StepGuide
 		IN_STEP,
 	}
 
+	static final Color GOOD = new Color(90, 220, 120);
+	static final Color BANK = new Color(255, 190, 70);
+	static final Color MISSING = new Color(255, 110, 90);
+	static final Color IN_STEP = new Color(120, 210, 255);
+	static final Color UNKNOWN = new Color(170, 170, 170);
+
 	@Value
 	static class ItemLine
 	{
+		/** Для панели: «Lobster ×5 (Омар)». */
 		String title;
+		/** Для панели: «в банке — возьми (1+9/5)». */
 		String status;
 		Have have;
 		String where;
 		/** Номер точки, где берут этот предмет; -1 — такой точки нет. */
 		int place;
+		/** Для списка в игре: английское название, как в сумке, — «Lobster ×5». */
+		String name;
+		/** Русское название или null. */
+		String ru;
+		/** Для списка в игре: коротко справа — «есть», «в банке», «нет», «2/5», «по ходу», «в банке?». */
+		String tag;
 	}
 
 	@Value
@@ -43,6 +59,10 @@ final class StepGuide
 		int index;
 		/** Стрелка сейчас ведёт сюда. */
 		boolean active;
+		/** NPC у точки (подсветится, когда стрелка ведёт сюда) или null. */
+		String npc;
+		/** Здесь берут предметы шага — подпись о предмете («Лук — грядка»), а не о NPC. */
+		boolean items;
 	}
 
 	@Value
@@ -65,8 +85,25 @@ final class StepGuide
 	{
 	}
 
+	static Color color(Have h)
+	{
+		switch (h)
+		{
+			case BAG:
+				return GOOD;
+			case BANK:
+				return BANK;
+			case NONE:
+				return MISSING;
+			case IN_STEP:
+				return IN_STEP;
+			default:
+				return UNKNOWN;
+		}
+	}
+
 	/**
-	 * Строки панели. carried — сумка и надетое (с банкнотами), bank — null, если банк не открывали.
+	 * Строки панели и списка. carried — сумка и надетое (с банкнотами), bank — null, если банк не открывали.
 	 * navLabel — подпись временной цели или null; navX/navY — её клетка, чтобы отметить активную точку.
 	 */
 	static View view(ActiveTarget t, ItemCounts carried, ItemCounts bank, String navLabel, int navX, int navY, int navPlane)
@@ -90,7 +127,8 @@ final class StepGuide
 		{
 			ActiveTarget.GuidePlace p = places.get(i);
 			boolean active = navLabel != null && p.getX() == navX && p.getY() == navY && p.getPlane() == navPlane;
-			placeLines.add(new PlaceLine(p.getLabel(), i, active));
+			String npc = p.getNpc() == null || p.getNpc().isEmpty() ? null : p.getNpc();
+			placeLines.add(new PlaceLine(p.getLabel(), i, active, npc, p.getItems() != null && !p.getItems().isEmpty()));
 		}
 		String title = "[" + t.getStepId() + "] " + (t.getTitle() == null ? "" : t.getTitle());
 		String note = g == null ? "Программа старше плагина: списка «что нужно» от неё не пришло. Обнови программу «OSRS Путь»." : null;
@@ -104,34 +142,41 @@ final class StepGuide
 		int inBank = bank == null ? -1 : bank.count(i.getId(), i.getName());
 		Have h;
 		String status;
+		String tag;
 		if (have >= need)
 		{
 			h = Have.BAG;
 			status = "✓ в сумке" + (need > 1 ? " " + have + "/" + need : "");
+			tag = need > 1 ? have + "/" + need : "есть";
 		}
 		else if (inBank >= 0 && have + inBank >= need)
 		{
 			h = Have.BANK;
 			status = "в банке — возьми" + (need > 1 ? " (" + have + "+" + inBank + "/" + need + ")" : "");
+			tag = "в банке";
 		}
 		else if (i.isInStep())
 		{
 			h = Have.IN_STEP;
 			status = "добудешь по ходу шага" + (have > 0 ? " (" + have + "/" + need + ")" : "");
+			tag = have > 0 ? have + "/" + need : "по ходу";
 		}
 		else if (inBank < 0)
 		{
 			h = Have.UNKNOWN;
 			status = (have > 0 ? "в сумке " + have + "/" + need + ", " : "") + "банк не открывали";
+			tag = have > 0 ? have + "/" + need + " · в банке?" : "в банке?";
 		}
 		else
 		{
 			h = Have.NONE;
 			status = "нет" + (have + inBank > 0 ? " — есть " + (have + inBank) + " из " + need : "");
+			tag = have + inBank > 0 ? (have + inBank) + "/" + need : "нет";
 		}
-		String title = i.getName() + (i.getCount() != null && need > 1 ? " ×" + need : "")
-			+ (i.getNameRu() != null ? " (" + i.getNameRu() + ")" : "");
-		return new ItemLine(title, status, h, i.getWhere(), placeOf(i.getName(), places));
+		String name = i.getName() + (i.getCount() != null && need > 1 ? " ×" + need : "");
+		String ru = i.getNameRu() == null || i.getNameRu().isEmpty() ? null : i.getNameRu();
+		String title = name + (ru != null ? " (" + ru + ")" : "");
+		return new ItemLine(title, status, h, i.getWhere(), placeOf(i.getName(), places), name, ru, tag);
 	}
 
 	/** Временная цель к точке шага номер index; null — точки нет. Предмет не задаётся: цель снимется по приходу. */

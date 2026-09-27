@@ -4,9 +4,10 @@ import { allSteps, stepsFor } from '../src/data';
 import { emptyProgress, withStep } from '../src/lib/progress';
 import { ownedText, triggerText } from '../src/lib/triggers';
 import {
-  APP_PROTOCOL, backoffMs, BRIDGE_PATHS, clearActiveStep, connectEvents, parseEvent, planAutoComplete, pluginCompat, syncActiveStep, toInGameTarget,
-  type BridgeEvent, type BridgeTransport,
+  APP_PROTOCOL, backoffMs, BRIDGE_PATHS, checkStatus, clearActiveStep, connectEvents, missingWithPlugin, parseEvent, parseNavTarget, planAutoComplete,
+  pluginCompat, syncActiveStep, toInGameTarget, type BridgeEvent, type BridgeTransport,
 } from '../src/services/runeliteBridge';
+import { mapPlaces, stepPlaces } from '../src/lib/stepPlaces';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;
 const f2p = stepsFor('f2p');
@@ -308,6 +309,55 @@ describe('рукопожатие версий программы и плагин
     expect(pluginCompat(APP_PROTOCOL - 1)).toBe('older');
     expect(pluginCompat(APP_PROTOCOL)).toBe('ok');
     expect(pluginCompat(APP_PROTOCOL + 1)).toBe('newer');
+  });
+});
+
+describe('цель стрелки, выбранная в игре (протокол 4)', () => {
+  it('NAV_SET и /status: цель принимается только целиком и проверенной', () => {
+    expect(parseNavTarget({ label: 'Ned — дом в Draynor Village', x: 3099, y: 3259, plane: 0, npcNames: ['Ned'], stepId: 'S2-10' }))
+      .toEqual({ label: 'Ned — дом в Draynor Village', x: 3099, y: 3259, plane: 0, npcNames: ['Ned'], stepId: 'S2-10' });
+    expect(parseNavTarget(null)).toBeNull();
+    expect(parseNavTarget({ label: '', x: 1, y: 2, plane: 0 })).toBeNull();
+    expect(parseNavTarget({ label: 'X', x: 1.5, y: 2, plane: 0 })).toBeNull();
+    expect(parseNavTarget({ label: 'X', x: 1, y: 2, plane: 0, npcNames: [5] })).toEqual({ label: 'X', x: 1, y: 2, plane: 0 });
+  });
+
+  it('/status: цель в игре — в состоянии программы; у старого плагина поля нет', async () => {
+    const t = (data: unknown): BridgeTransport => ({ request: async () => ({ ok: true, status: 200, data }), openEvents: () => () => {} });
+    const now = await checkStatus(t({ status: 'ok', protocol: 4, pluginVersion: '2.11.0', navTarget: { label: 'Joe', x: 3124, y: 3244, plane: 0 } }));
+    expect(now.navTarget).toEqual({ label: 'Joe', x: 3124, y: 3244, plane: 0 });
+    expect((await checkStatus(t({ status: 'ok', protocol: 3 }))).navTarget).toBeNull();
+  });
+
+  it('старый плагин: программа говорит, чего с ним нет', () => {
+    expect(missingWithPlugin(3)).toEqual(['список «Что нужно» на экране игры (клик по строке — стрелка и путь туда)']);
+    expect(missingWithPlugin(null)).toHaveLength(3);
+    expect(missingWithPlugin(APP_PROTOCOL)).toEqual([]);
+  });
+});
+
+describe('места шага: откуда предметы и NPC квеста — одни и те же в программе и в игре', () => {
+  it('Prince Ali Rescue: NPC квеста и Ned за верёвкой, точка шага первой', () => {
+    const p = stepPlaces(step('S2-10'));
+    expect(p[0]).toMatchObject({ npc: 'Chancellor Hassan', x: 3298, y: 3163 });
+    expect(p.find((q) => q.npc === 'Ned')).toMatchObject({ x: 3099, y: 3259, items: ['Rope'] });
+    expect(p.map((q) => q.npc)).toEqual(['Chancellor Hassan', 'Ned', 'Osman', 'Aggie', 'Lady Keli', 'Leela', 'Joe', 'Prince Ali']);
+    expect(mapPlaces(step('S2-10')).map((q) => q.label)).toEqual(p.map((q) => q.label));
+  });
+
+  it('предмет от NPC самого шага — в его точке, а не второй точкой рядом; одно имя — разные NPC по шагам', () => {
+    const horacio = stepPlaces(step('S2-06'));
+    expect(horacio[0]).toMatchObject({ npc: 'Duke Horacio', items: ['Air talisman'] });
+    expect(horacio.filter((q) => q.npc === 'Duke Horacio')).toHaveLength(1);
+    // Cook в Below Ice Mountain — повар паба Blue Moon Inn в Varrock, а не повар замка Lumbridge.
+    expect(stepPlaces(step('S3-04')).find((q) => q.npc === 'Cook')).toMatchObject({ x: 3230, y: 3400 });
+    // Drezel в Priest in Peril — в камере наверху храма, в Nature Spirit — под храмом.
+    expect(stepPlaces(step('S8-01')).find((q) => q.npc === 'Drezel')).toMatchObject({ x: 3416, y: 3487, plane: 2 });
+  });
+
+  it('у магазина из словаря продавец — Shop keeper; карта шага сохраняет прежний порядок точек', () => {
+    expect(stepPlaces(step('S1-02')).find((q) => q.items?.includes('Tinderbox'))).toMatchObject({ label: 'Lumbridge General Store', npc: 'Shop keeper' });
+    expect(mapPlaces(step('S4-04')).slice(0, 2).map((q) => q.label)).toEqual(['До 40: нахлыст у Barbarian Village', 'С 40: омары у Musa Point']);
   });
 });
 

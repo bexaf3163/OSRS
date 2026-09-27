@@ -336,13 +336,14 @@ main {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 4px; padding: 4px;
   background: var(--surface-2); border-radius: var(--radius);
 }
+/* Длинная подпись («Заблокированные 7») на узком окне переносится внутри кнопки, а не вылезает за экран. */
 .seg {
-  min-height: 40px; padding: 0 12px;
+  min-height: 40px; min-width: 0; padding: 4px 12px; line-height: 1.2;
   border: 1px solid transparent; border-radius: var(--radius-sm);
-  background: none; color: var(--muted); font-weight: 600; cursor: pointer; white-space: nowrap;
+  background: none; color: var(--muted); font-weight: 600; cursor: pointer;
 }
 .seg.is-active { background: var(--surface); color: var(--text); border-color: var(--border); }
-.seg-count { font-weight: 500; color: var(--muted); margin-left: 2px; }
+.seg-count { font-weight: 500; color: var(--muted); margin-left: 2px; white-space: nowrap; }
 
 /* ---------- Текст гайда ---------- */
 

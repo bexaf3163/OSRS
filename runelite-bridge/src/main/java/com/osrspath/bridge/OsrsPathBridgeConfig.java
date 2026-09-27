@@ -37,9 +37,20 @@ public interface OsrsPathBridgeConfig extends Config
 		keyName = "hintArrow",
 		name = "Стрелка к месту шага",
 		description = "Жёлтая стрелка игры над точкой текущего шага",
-		position = 3
+		position = 2
 	)
 	default boolean hintArrow()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "worldMapMarker",
+		name = "Метка на карте мира",
+		description = "Куда ведёт стрелка — меткой на карте мира игры. Далеко — метка у края карты; клик по ней — карта туда",
+		position = 3
+	)
+	default boolean worldMapMarker()
 	{
 		return true;
 	}
@@ -79,6 +90,30 @@ public interface OsrsPathBridgeConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "showGuide",
+		name = "Список «Что нужно»",
+		description = "Под HUD: предметы шага (есть, в банке, нет) с «где взять» и места шага с NPC. "
+			+ "Клик по строке — стрелка и путь туда, клик по заголовку — свернуть. Перетаскивается с Alt",
+		section = companion,
+		position = 12
+	)
+	default boolean showGuide()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "guideCollapsed",
+		name = "",
+		description = "Список «Что нужно» свёрнут в одну строку — меняется кликом по его заголовку",
+		hidden = true
+	)
+	default boolean guideCollapsed()
+	{
+		return false;
+	}
+
 	@Range(min = 20, max = 100)
 	@Units(Units.PERCENT)
 	@ConfigItem(
@@ -86,7 +121,7 @@ public interface OsrsPathBridgeConfig extends Config
 		name = "Фон HUD",
 		description = "Непрозрачность фона у плашек помощника, в процентах",
 		section = companion,
-		position = 12
+		position = 13
 	)
 	default int hudOpacity()
 	{
@@ -98,7 +133,7 @@ public interface OsrsPathBridgeConfig extends Config
 		name = "Крупный текст HUD",
 		description = "Увеличить текст и ширину плашек помощника на четверть",
 		section = companion,
-		position = 13
+		position = 14
 	)
 	default boolean hudLarge()
 	{
@@ -110,7 +145,7 @@ public interface OsrsPathBridgeConfig extends Config
 		name = "Проверка вылета у банка",
 		description = "При открытом банке: что из предметов шага уже в сумке, а что взять. Нужное подсвечивается в банке",
 		section = companion,
-		position = 14
+		position = 15
 	)
 	default boolean showChecklist()
 	{
@@ -145,7 +180,7 @@ public interface OsrsPathBridgeConfig extends Config
 		name = "Большая стрелка",
 		description = "Крупная стрелка вверху экрана: поворачивается вместе с камерой и показывает, куда идти и сколько клеток. Перетаскивается с Alt",
 		section = companion,
-		position = 15
+		position = 16
 	)
 	default boolean bigArrow()
 	{
@@ -159,7 +194,7 @@ public interface OsrsPathBridgeConfig extends Config
 		name = "Размер",
 		description = "Размер большой стрелки: маленькая, средняя или крупная — под размер окна и экрана",
 		section = companion,
-		position = 16
+		position = 17
 	)
 	default ArrowSize arrowSize()
 	{
@@ -171,7 +206,7 @@ public interface OsrsPathBridgeConfig extends Config
 		name = "Через Shortest Path",
 		description = "Если установлен плагин Shortest Path (Plugin Hub), передавать ему цель шага — он проложит путь с учётом стен и дверей",
 		section = companion,
-		position = 17
+		position = 18
 	)
 	default boolean useShortestPath()
 	{
@@ -183,7 +218,7 @@ public interface OsrsPathBridgeConfig extends Config
 		name = "Подсказка на бирже",
 		description = "При открытой Grand Exchange: оптовый список покупок из приложения. Сам ничего не покупает",
 		section = companion,
-		position = 18
+		position = 19
 	)
 	default boolean showGeHelper()
 	{
@@ -195,7 +230,7 @@ public interface OsrsPathBridgeConfig extends Config
 		name = "Варианты по уровням",
 		description = "Передавать приложению уровни навыков, чтобы оно предлагало телепорты, каноэ и срезки",
 		section = companion,
-		position = 19
+		position = 20
 	)
 	default boolean shareStats()
 	{

@@ -9,8 +9,8 @@ import { levelById } from '../data';
 import locationsJson from '../data/majorLocations.json';
 import { isClosed, blockersOf } from './next-step';
 import { nameKey, preflightItems, type OwnedState } from './checklist';
-import { holdingFor } from './shopping';
 import type { GearState, NavTargetPayload } from '../services/runeliteBridge';
+import { holdingFor, plural } from './shopping';
 
 export type ReadinessStatus =
   | 'READY'
@@ -121,7 +121,7 @@ export function stepReadiness(input: ReadinessInput): StepReadiness {
   }
   if (b?.qp) {
     reqs.push({
-      kind: 'qp', label: `${b.qp.need} очков квестов`, state: 'MISSING', hard: true, detail: `сейчас ${b.qp.have}, не хватает ${b.qp.need - b.qp.have}`, source: 'route',
+      kind: 'qp', label: `${b.qp.need} ${plural(b.qp.need, 'очко', 'очка', 'очков')} квестов`, state: 'MISSING', hard: true, detail: `сейчас ${b.qp.have}, не хватает ${b.qp.need - b.qp.have}`, source: 'route',
       action: { kind: 'link', label: 'Квесты', href: '#/quests' },
     });
   }

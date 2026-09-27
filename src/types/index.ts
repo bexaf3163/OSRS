@@ -41,6 +41,11 @@ export interface StepItemRequirement {
   amount: string | number;
   /** Где именно взять предмет; пусто, если маршрут не уточняет. */
   howToGet: string;
+  /**
+   * Откуда предмет: NPC из npcLocations.json («Betty») или место из majorLocations.json («Lumbridge General Store»).
+   * Место становится точкой на карте шага и кнопкой у предмета в списке «Что нужно» в игре.
+   */
+  from?: string;
   iconUrl?: string;
   /** ID предмета на OSRS Wiki и в API цен. */
   wikiItemId?: number;

@@ -70,12 +70,15 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.events.PluginChanged;
 import net.runelite.client.events.PluginMessage;
 import net.runelite.client.game.ItemManager;
+import net.runelite.client.input.MouseManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginManager;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
+import net.runelite.client.ui.overlay.worldmap.WorldMapPoint;
+import net.runelite.client.ui.overlay.worldmap.WorldMapPointManager;
 
 @Slf4j
 @PluginDescriptor(
@@ -135,15 +138,36 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private OsrsPathArrowOverlay arrowOverlay;
 
 	@Inject
+	private OsrsPathGuideOverlay guideOverlay;
+
+	@Inject
+	private MouseManager mouseManager;
+
+	@Inject
+	private ConfigManager configManager;
+
+	@Inject
+	private WorldMapPointManager worldMapPointManager;
+
+	@Inject
 	private ClientToolbar clientToolbar;
 
 	/** Боковая панель «OSRS Путь»: что нужно на шаг, где взять, «Путь сюда». */
 	private OsrsPathPanel panel;
 	private NavigationButton panelButton;
-	/** Последний вид панели — Swing перестраивается, только когда он изменился. */
+	/** Клики по списку «Что нужно» на экране игры. */
+	private GuideMouse guideMouse;
+	/**
+	 * Что нужно на шаг и куда идти — для списка в игре и боковой панели. Считается в потоке клиента при смене
+	 * шага, цели, сумки и банка; Swing-панель перестраивается, только когда вид изменился.
+	 */
+	@Getter
+	private volatile StepGuide.View guideView;
 	private StepGuide.View panelView;
-	/** Сообщение в панели после нажатия, например «навигация выключена»; снимается сменой шага. */
-	private String panelMessage;
+	/** Сообщение в списке и панели после нажатия, например «навигация выключена»; снимается сменой шага. */
+	private String guideMessage;
+	/** Метка на карте мира: куда ведёт стрелка. */
+	private WorldMapPoint mapPoint;
 
 	@Inject
 	private ItemManager itemManager;
@@ -259,6 +283,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		overlayManager.add(geOverlay);
 		overlayManager.add(dangerOverlay);
 		overlayManager.add(arrowOverlay);
+		overlayManager.add(guideOverlay);
+		guideMouse = new GuideMouse(client, guideOverlay, a -> clientThread.invokeLater(() -> guideAction(a)));
+		mouseManager.registerMouseListener(guideMouse);
 		panel = new OsrsPathPanel(new OsrsPathPanel.Actions()
 		{
 			@Override
@@ -276,6 +303,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		panelButton = NavigationButton.builder().tooltip("OSRS Путь: что нужно и куда идти").icon(OsrsPathPanel.icon()).priority(6).panel(panel).build();
 		clientToolbar.addNavigation(panelButton);
 		panelView = null;
+		guideView = null;
 		clientThread.invokeLater(() ->
 		{
 			boolean loggedIn = client.getGameState() == GameState.LOGGED_IN;
@@ -311,6 +339,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		overlayManager.remove(geOverlay);
 		overlayManager.remove(dangerOverlay);
 		overlayManager.remove(arrowOverlay);
+		overlayManager.remove(guideOverlay);
+		mouseManager.unregisterMouseListener(guideMouse);
 		clientToolbar.removeNavigation(panelButton);
 		clientThread.invoke(() ->
 		{
@@ -319,6 +349,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			danger = DangerRadar.QUIET;
 			dangerNpcs.clear();
 			applyTarget(null);
+			setMapPoint(null, null);
 		});
 		completion = null;
 		plan = null;
@@ -376,8 +407,16 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			stopServer();
 			startServer();
+			// Новый мост ничего не знает — сообщаем ему текущую временную цель, иначе программа её сбросит.
+			clientThread.invokeLater(() ->
+			{
+				if (server != null && navTarget != null)
+				{
+					server.navSet(navTarget);
+				}
+			});
 		}
-		if ("hintArrow".equals(e.getKey()))
+		if ("hintArrow".equals(e.getKey()) || "worldMapMarker".equals(e.getKey()))
 		{
 			clientThread.invokeLater(this::updateNavigation);
 		}
@@ -538,7 +577,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private void applyTarget(ActiveTarget t)
 	{
 		target = t;
-		panelMessage = null;
+		guideMessage = null;
 		if (completion != null)
 		{
 			completion.setTarget(t);
@@ -561,24 +600,21 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		updateHud();
 	}
 
-	// ---------- Боковая панель ----------
+	// ---------- Что нужно и куда: список в игре и боковая панель ----------
 
-	/** Пересчитать панель (поток клиента) и отдать её Swing, если вид изменился. */
-	private void refreshPanel()
+	/** Пересчитать вид (поток клиента): его рисует список в игре, а панели он уходит, только если изменился. */
+	private void refreshGuide()
 	{
-		OsrsPathPanel p = panel;
-		if (p == null)
-		{
-			return;
-		}
 		NavTarget n = navTarget;
 		StepGuide.View v = StepGuide.view(target, ItemCounts.sum(carried, noted), bank,
 			n == null ? null : n.getLabel(), n == null ? 0 : n.getX(), n == null ? 0 : n.getY(), n == null ? 0 : n.getPlane());
-		if (panelMessage != null)
+		if (guideMessage != null)
 		{
-			v = new StepGuide.View(v.getTitle(), v.getGoal(), v.getItems(), v.getPlaces(), v.getDetour(), panelMessage);
+			v = new StepGuide.View(v.getTitle(), v.getGoal(), v.getItems(), v.getPlaces(), v.getDetour(), guideMessage);
 		}
-		if (v.equals(panelView))
+		guideView = v;
+		OsrsPathPanel p = panel;
+		if (p == null || v.equals(panelView))
 		{
 			return;
 		}
@@ -587,7 +623,26 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		SwingUtilities.invokeLater(() -> p.show(shown));
 	}
 
-	/** «Путь сюда» из панели: временная цель к точке шага — стрелка, Shortest Path и подсветка NPC точки. */
+	/** Клик по списку в игре (поток клиента). */
+	private void guideAction(GuideList.Action a)
+	{
+		switch (a.getKind())
+		{
+			case TOGGLE:
+				configManager.setConfiguration(OsrsPathBridgeConfig.GROUP, "guideCollapsed", !config.guideCollapsed());
+				break;
+			case PLACE:
+				goToPlace(a.getPlace());
+				break;
+			case BACK:
+				applyNav(null);
+				break;
+			default:
+				break;
+		}
+	}
+
+	/** «Путь сюда»: временная цель к точке шага — стрелка, Shortest Path и подсветка NPC точки. */
 	private void goToPlace(int index)
 	{
 		ActiveTarget t = target;
@@ -598,11 +653,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		if (!config.autoNavigation())
 		{
-			panelMessage = "Навигация к местам выключена: RuneLite → OSRS Path Bridge → «Стрелка к местам».";
-			refreshPanel();
+			guideMessage = "Навигация к местам выключена: RuneLite → OSRS Path Bridge → «Стрелка к местам».";
+			refreshGuide();
 			return;
 		}
-		panelMessage = null;
+		guideMessage = null;
 		applyNav(n);
 	}
 
@@ -622,6 +677,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		near = false;
 		lastPosition = null;
 		scanNavNpcs();
+		if (server != null)
+		{
+			// Программа узнаёт цель, даже если её выбрали в игре (список «Что нужно», панель), — и показывает ту же.
+			server.navSet(t);
+		}
 		if (t.isPurchase() && hasNavItem())
 		{
 			// Предмет уже есть — вести некуда.
@@ -915,12 +975,18 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			return new WorldPoint(navTarget.getX(), navTarget.getY(), navTarget.getPlane());
 		}
+		ActiveTarget.WorldPointDto p = stepPoint();
+		return p == null ? null : new WorldPoint(p.getX(), p.getY(), p.getPlane());
+	}
+
+	/** Точка шага без временной цели: текущая путевая точка или точка шага. null — шага нет или маршрут пройден. */
+	private ActiveTarget.WorldPointDto stepPoint()
+	{
 		if (target == null)
 		{
 			return null;
 		}
-		ActiveTarget.WorldPointDto p = breadcrumbs != null ? breadcrumbs.current() : target.getWorldPoint();
-		return p == null ? null : new WorldPoint(p.getX(), p.getY(), p.getPlane());
+		return breadcrumbs != null ? breadcrumbs.current() : target.getWorldPoint();
 	}
 
 	/**
@@ -946,6 +1012,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			arrowSet = true;
 		}
 
+		setMapPoint(loggedIn && config.worldMapMarker() ? nav : null, navLabel());
+
 		boolean spActive = shortestPathActive();
 		if (server != null)
 		{
@@ -969,6 +1037,48 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
+	/** Подпись текущей цели для метки на карте: временная цель, точка маршрута, точка шага или название шага. */
+	private String navLabel()
+	{
+		if (navTarget != null)
+		{
+			return navTarget.getLabel();
+		}
+		if (target == null)
+		{
+			return null;
+		}
+		// Та же точка, что у стрелки (stepPoint), — подпись метки не разойдётся с её местом.
+		ActiveTarget.WorldPointDto p = stepPoint();
+		if (p != null && p.getLabel() != null && !p.getLabel().isEmpty())
+		{
+			return p.getLabel();
+		}
+		return target.getGoal() != null && !target.getGoal().isEmpty() ? target.getGoal() : target.getTitle();
+	}
+
+	/** Метка на карте мира игры: одна, наша; другие метки (Shortest Path, квесты) не трогаем. */
+	private void setMapPoint(WorldPoint at, String label)
+	{
+		String tooltip = at == null ? null : "OSRS Путь: " + (label == null ? "сюда ведёт стрелка" : label);
+		if (mapPoint != null && at != null && at.equals(mapPoint.getWorldPoint()) && tooltip.equals(mapPoint.getTooltip()))
+		{
+			return;
+		}
+		if (mapPoint != null)
+		{
+			worldMapPointManager.remove(mapPoint);
+			mapPoint = null;
+		}
+		if (at != null)
+		{
+			// Название — для меню игры, а в шрифте игры нет кириллицы.
+			mapPoint = WorldMapPoint.builder().worldPoint(at).image(OsrsPathPanel.mapIcon()).tooltip(tooltip)
+				.snapToEdge(true).jumpOnClick(true).name("OSRS Path").build();
+			worldMapPointManager.add(mapPoint);
+		}
+	}
+
 	private boolean shortestPathActive()
 	{
 		if (!shortestPathLooked)
@@ -983,7 +1093,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	private void updateHud()
 	{
-		refreshPanel();
+		refreshGuide();
 		boolean dangerShown = warned(danger);
 		GearHint h = gearHint;
 		// Совет по снаряжению — пока не идём за покупкой (тогда заголовок и так «Купи …»).

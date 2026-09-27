@@ -21,6 +21,7 @@ import { GearPrompt } from './GearPrompt';
 import { ReadinessPanel } from './ReadinessPanel';
 import { MoneyGoal } from './MoneyGoal';
 import { ItemIcon, useWiki } from './WikiDrawer';
+import { plural } from '../lib/shopping';
 
 const WARN_LABELS = new Set(['Опасно', 'Внимание', 'Бой']);
 
@@ -95,7 +96,7 @@ function ItemChip({ item }: { item: StepItemRequirement }) {
           <ItemIcon src={item.iconUrl} alt="" />
           <span className="item-chip-name">
             <strong>{item.nameEn}</strong> <span className="muted">({item.nameRu})</span> <strong className="item-amount">{amountText(item.amount)}</strong>
-            {item.heals ? <span className="badge badge-heal" title={`Восстанавливает ${item.heals} очков здоровья`}>+{item.heals} HP</span> : null}
+            {item.heals ? <span className="badge badge-heal" title={`Восстанавливает ${item.heals} ${plural(item.heals, 'очко', 'очка', 'очков')} здоровья`}>+{item.heals} HP</span> : null}
           </span>
           <span className="item-chip-lens" aria-hidden="true">🔍</span>
         </span>

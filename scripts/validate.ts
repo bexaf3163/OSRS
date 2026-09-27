@@ -14,6 +14,10 @@ export interface Route {
   items: WikiItemDetail[];
   /** Противники шагов (monsters.json): для темпа боя — здоровье, от него опыт за противника. */
   monsters?: FoeData;
+  /** Где стоят NPC шагов (npcLocations.json) — для «Куда идти» и точек на карте шага. */
+  npcs?: Record<string, { x: number; y: number; plane: number; area: string; page: string; steps?: string[] }[]>;
+  /** Словарь мест (majorLocations.json): магазины и места, откуда предметы. */
+  places?: Record<string, { x: number; y: number; plane: number; label: string }>;
 }
 
 export interface Report {
@@ -51,6 +55,9 @@ const FOOD = new Map([
 
 /** Еда без названия и количества — новичок не знает, что брать. */
 const VAGUE = /(\d+(–\d+)?\s+(штук\s+)?еды|возьми еду|^еда\.?$|еда для боя)/i;
+
+/** Имя NPC как в игре (латиница): по нему плагин находит и подсвечивает NPC. */
+const NPC_NAME = /^[A-Z][A-Za-z' .-]{1,40}$/;
 
 /** Клетка карты мира: поверхность и подземелья OSRS укладываются в эти границы. */
 function badPoint(p: { x: number; y: number; plane: number }): boolean {
@@ -244,17 +251,49 @@ export function validate(d: GuideData | null, route: Route): Report {
   const badSpotItems = steps.flatMap((s) => (s.resourceSpots ?? []).flatMap((p) => (p.items ?? [])
     .filter((n) => ![...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])].some((i) => i.nameEn === n))
     .map((n) => `${s.id} «${p.label}»: ${n}`)));
-  const badSpotNpc = steps.flatMap((s) => (s.resourceSpots ?? []).filter((p) => p.npc !== undefined && !/^[A-Z][A-Za-z' .-]{1,40}$/.test(p.npc)).map((p) => `${s.id} «${p.label}»`));
+  const badSpotNpc = steps.flatMap((s) => (s.resourceSpots ?? []).filter((p) => p.npc !== undefined && !NPC_NAME.test(p.npc)).map((p) => `${s.id} «${p.label}»`));
   check(!badSpotItems.length && !badSpotNpc.length, 'Предметы и NPC у точек карты — из шага и с английскими именами',
     `Точки карты: ${[...badSpotItems, ...badSpotNpc].join('; ')}`);
+  // Откуда предметы (from) и где NPC шагов: у предмета место находится, у NPC — точка на карте, имена как в игре.
+  if (route.npcs && route.places) {
+    const npcs = route.npcs;
+    const places = route.places;
+    const ids = new Set(steps.map((s) => s.id));
+    const npcAt = (name: string, stepId: string) => npcs[name]?.find((r) => r.steps?.includes(stepId)) ?? npcs[name]?.find((r) => !r.steps);
+    const badFrom = steps.flatMap((s) => [...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])]
+      .filter((i) => i.from !== undefined && !npcAt(i.from, s.id) && !places[i.from]).map((i) => `${s.id} ${i.nameEn} ← ${i.from}`));
+    const badNpc = Object.entries(npcs).flatMap(([name, rows]) => {
+      const general = rows.filter((r) => !r.steps).length;
+      return [
+      ...(!NPC_NAME.test(name) ? [`имя «${name}»`] : []),
+      ...(general !== 1 ? [`${name}: общих записей ${general} (нужна одна)`] : []),
+      ...rows.flatMap((r) => [
+        ...(badPoint(r) ? [`${name}: клетка ${r.x},${r.y},${r.plane}`] : []),
+        ...(!r.area?.trim() || !r.page?.trim() ? [`${name}: нет места или статьи`] : []),
+        ...(r.steps ?? []).filter((id) => !ids.has(id)).map((id) => `${name}: шага ${id} нет`),
+      ]),
+      ];
+    });
+    check(!badFrom.length && !badNpc.length, 'Откуда предметы и где NPC шагов — места есть на карте',
+      `Места: ${[...badFrom, ...badNpc].join('; ')}`);
+    const used = new Set(steps.flatMap((s) => [...(s.inGame?.npcNames ?? []), ...(s.itemsRequired ?? []).map((i) => i.from ?? '')]));
+    const unused = Object.keys(npcs).filter((n) => !used.has(n));
+    if (unused.length) warn(`NPC из npcLocations.json не нужны ни одному шагу: ${unused.join(', ')}`);
+  }
   // Ссылка «Карта» на вики и точка превью — одно и то же место: расхождение значит, что поправили только одно.
   const drift = steps.filter((s) => {
     const m = s.mapUrl?.match(/#\/m=(\d+),(\d+),(\d+)/);
     return m && s.mapLocation && (Number(m[1]) !== s.mapLocation.x || Number(m[2]) !== s.mapLocation.y || Number(m[3]) !== s.mapLocation.plane);
   }).map((s) => s.id);
   check(!drift.length, 'Точка превью совпадает со ссылкой на карту вики', `Точка и ссылка на карту расходятся: ${drift.join(', ')}`);
-  const lonelySpots = steps.filter((s) => s.resourceSpots && s.resourceSpots.length < 2).map((s) => s.id);
-  check(!lonelySpots.length, 'Переключатель точек — только там, где их две и больше', `Одна точка в resourceSpots: ${lonelySpots.join(', ')}`);
+  // Переключатель — точка шага и места с карты вместе: одно место и одна точка шага в другой клетке — уже две.
+  const lonelySpots = steps.filter((s) => {
+    if (!s.resourceSpots) return false;
+    const start = s.mapLocation;
+    const apart = start && !s.resourceSpots.some((p) => p.x === start.x && p.y === start.y && p.plane === start.plane);
+    return s.resourceSpots.length + (apart ? 1 : 0) < 2;
+  }).map((s) => s.id);
+  check(!lonelySpots.length, 'Переключатель точек — только там, где их две и больше', `Одна точка на карте шага: ${lonelySpots.join(', ')}`);
 
   const TRIGGERS = new Set(['QUEST_COMPLETED', 'SKILL_LEVEL', 'ITEM_OWNED', 'CHAT_MESSAGE', 'VARBIT_CHANGED']);
   // Название квеста у RuneLite: как у шага (тире в названии — дефис) или как у статьи вики шага

@@ -1,0 +1,935 @@
+{
+  "source": "Карты {{Map}} статей NPC на OSRS Wiki (Delrith — центр каменного круга по LocLine тёмных магов). Сверено по шагам маршрута 27.09.2026.",
+  "note": "Где стоят NPC шагов — для «Куда идти» в списке «Что нужно» в игре и точек на карте шага. Запись со steps — только для этих шагов (одно имя — разные NPC: Cook в Lumbridge и в Blue Moon Inn).",
+  "npcs": {
+    "Cook": [
+      {
+        "x": 3209,
+        "y": 3214,
+        "plane": 0,
+        "area": "кухня замка Lumbridge",
+        "page": "Cook (Lumbridge)"
+      },
+      {
+        "x": 3230,
+        "y": 3400,
+        "plane": 0,
+        "area": "восточная комната паба Blue Moon Inn, Varrock",
+        "page": "Cook (Blue Moon Inn)",
+        "steps": [
+          "S3-04"
+        ]
+      }
+    ],
+    "Fred the Farmer": [
+      {
+        "x": 3189,
+        "y": 3273,
+        "plane": 0,
+        "area": "дом фермера к северу от Lumbridge",
+        "page": "Fred the Farmer"
+      }
+    ],
+    "Father Aereck": [
+      {
+        "x": 3243,
+        "y": 3210,
+        "plane": 0,
+        "area": "церковь Lumbridge",
+        "page": "Father Aereck"
+      }
+    ],
+    "Father Urhney": [
+      {
+        "x": 3148,
+        "y": 3176,
+        "plane": 0,
+        "area": "хижина на болоте Lumbridge Swamp",
+        "page": "Father Urhney"
+      }
+    ],
+    "Restless ghost": [
+      {
+        "x": 3250,
+        "y": 3193,
+        "plane": 0,
+        "area": "гроб на кладбище у церкви Lumbridge",
+        "page": "Restless ghost"
+      }
+    ],
+    "Abigale": [
+      {
+        "x": 3236,
+        "y": 3155,
+        "plane": 0,
+        "area": "лодка на юго-востоке Lumbridge Swamp",
+        "page": "Abigale"
+      }
+    ],
+    "Count Check": [
+      {
+        "x": 3240,
+        "y": 3199,
+        "plane": 0,
+        "area": "Lumbridge, к югу от церкви — телепортирует к Stronghold of Security",
+        "page": "Count Check"
+      }
+    ],
+    "Fishing tutor": [
+      {
+        "x": 3244,
+        "y": 3157,
+        "plane": 0,
+        "area": "болото Lumbridge Swamp",
+        "page": "Fishing tutor"
+      }
+    ],
+    "Duke Horacio": [
+      {
+        "x": 3211,
+        "y": 3223,
+        "plane": 1,
+        "area": "Lumbridge Castle, 1st floor (2-й этаж)",
+        "page": "Duke Horacio"
+      }
+    ],
+    "Shamus": [
+      {
+        "x": 3138,
+        "y": 3211,
+        "plane": 0,
+        "area": "дерево на болоте Lumbridge Swamp",
+        "page": "Shamus"
+      }
+    ],
+    "Cassius": [
+      {
+        "x": 3170,
+        "y": 3279,
+        "plane": 0,
+        "area": "к югу от мельницы Mill Lane Mill",
+        "page": "Cassius"
+      }
+    ],
+    "Gillie Groats": [
+      {
+        "x": 3253,
+        "y": 3275,
+        "plane": 0,
+        "area": "коровник к востоку от Lumbridge",
+        "page": "Gillie Groats"
+      }
+    ],
+    "Bob": [
+      {
+        "x": 3229,
+        "y": 3204,
+        "plane": 0,
+        "area": "магазин топоров на юге Lumbridge",
+        "page": "Bob"
+      }
+    ],
+    "Diango": [
+      {
+        "x": 3081,
+        "y": 3247,
+        "plane": 0,
+        "area": "рынок Draynor Village",
+        "page": "Diango"
+      }
+    ],
+    "Morgan": [
+      {
+        "x": 3099,
+        "y": 3269,
+        "plane": 0,
+        "area": "дом в Draynor Village",
+        "page": "Morgan"
+      }
+    ],
+    "Ned": [
+      {
+        "x": 3099,
+        "y": 3259,
+        "plane": 0,
+        "area": "дом в Draynor Village",
+        "page": "Ned"
+      }
+    ],
+    "Aggie": [
+      {
+        "x": 3086,
+        "y": 3259,
+        "plane": 0,
+        "area": "дом ведьмы в Draynor Village",
+        "page": "Aggie"
+      }
+    ],
+    "Leela": [
+      {
+        "x": 3113,
+        "y": 3262,
+        "plane": 0,
+        "area": "Draynor Village, к северу от тюрьмы",
+        "page": "Leela"
+      }
+    ],
+    "Lady Keli": [
+      {
+        "x": 3128,
+        "y": 3244,
+        "plane": 0,
+        "area": "тюрьма Draynor",
+        "page": "Lady Keli"
+      }
+    ],
+    "Joe": [
+      {
+        "x": 3124,
+        "y": 3244,
+        "plane": 0,
+        "area": "стражник у тюрьмы Draynor",
+        "page": "Joe (jail)"
+      }
+    ],
+    "Prince Ali": [
+      {
+        "x": 3126,
+        "y": 3243,
+        "plane": 0,
+        "area": "камера тюрьмы Draynor",
+        "page": "Prince Ali"
+      }
+    ],
+    "Veronica": [
+      {
+        "x": 3110,
+        "y": 3330,
+        "plane": 0,
+        "area": "у ворот Draynor Manor",
+        "page": "Veronica"
+      }
+    ],
+    "Professor Oddenstein": [
+      {
+        "x": 3111,
+        "y": 3367,
+        "plane": 2,
+        "area": "Draynor Manor, 2nd floor (3-й этаж)",
+        "page": "Professor Oddenstein"
+      }
+    ],
+    "Ava": [
+      {
+        "x": 3094,
+        "y": 3357,
+        "plane": 0,
+        "area": "Draynor Manor",
+        "page": "Ava"
+      }
+    ],
+    "Martin the Master Gardener": [
+      {
+        "x": 3078,
+        "y": 3258,
+        "plane": 0,
+        "area": "рынок Draynor Village",
+        "page": "Martin the Master Gardener"
+      }
+    ],
+    "Wizard Mizgog": [
+      {
+        "x": 3104,
+        "y": 3164,
+        "plane": 2,
+        "area": "Wizards' Tower, 2nd floor (3-й этаж)",
+        "page": "Wizard Mizgog"
+      }
+    ],
+    "Wizard Traiborn": [
+      {
+        "x": 3112,
+        "y": 3157,
+        "plane": 1,
+        "area": "Wizards' Tower, 1st floor (2-й этаж)",
+        "page": "Wizard Traiborn"
+      }
+    ],
+    "Archmage Sedridor": [
+      {
+        "x": 3103,
+        "y": 9571,
+        "plane": 0,
+        "area": "подвал Wizards' Tower",
+        "page": "Archmage Sedridor"
+      }
+    ],
+    "Hetty": [
+      {
+        "x": 2968,
+        "y": 3206,
+        "plane": 0,
+        "area": "дом ведьмы в Rimmington",
+        "page": "Hetty"
+      }
+    ],
+    "Betty": [
+      {
+        "x": 3013,
+        "y": 3259,
+        "plane": 0,
+        "area": "магазин магии в Port Sarim",
+        "page": "Betty"
+      }
+    ],
+    "Redbeard Frank": [
+      {
+        "x": 3052,
+        "y": 3250,
+        "plane": 0,
+        "area": "причал Port Sarim",
+        "page": "Redbeard Frank"
+      }
+    ],
+    "Wydin": [
+      {
+        "x": 3013,
+        "y": 3207,
+        "plane": 0,
+        "area": "продуктовый магазин в Port Sarim",
+        "page": "Wydin"
+      }
+    ],
+    "Gerrant": [
+      {
+        "x": 3013,
+        "y": 3226,
+        "plane": 0,
+        "area": "рыболовный магазин в Port Sarim",
+        "page": "Gerrant"
+      }
+    ],
+    "Klarense": [
+      {
+        "x": 3047,
+        "y": 3204,
+        "plane": 0,
+        "area": "южный причал Port Sarim",
+        "page": "Klarense"
+      }
+    ],
+    "Captain Tock": [
+      {
+        "x": 3030,
+        "y": 3273,
+        "plane": 0,
+        "area": "к северу от Port Sarim",
+        "page": "Captain Tock"
+      }
+    ],
+    "Frizzy Skernip": [
+      {
+        "x": 3057,
+        "y": 3259,
+        "plane": 0,
+        "area": "огород к северу от Port Sarim",
+        "page": "Frizzy Skernip"
+      }
+    ],
+    "Thurgo": [
+      {
+        "x": 3001,
+        "y": 3144,
+        "plane": 0,
+        "area": "Mudskipper Point, к югу от Port Sarim",
+        "page": "Thurgo"
+      }
+    ],
+    "Zembo": [
+      {
+        "x": 2927,
+        "y": 3145,
+        "plane": 0,
+        "area": "Musa Point, Karamja",
+        "page": "Zembo"
+      }
+    ],
+    "Luthas": [
+      {
+        "x": 2939,
+        "y": 3154,
+        "plane": 0,
+        "area": "банановая плантация, Musa Point",
+        "page": "Luthas"
+      }
+    ],
+    "Customs officer": [
+      {
+        "x": 2950,
+        "y": 3151,
+        "plane": 0,
+        "area": "причал Musa Point, Karamja",
+        "page": "Customs officer"
+      }
+    ],
+    "Romeo": [
+      {
+        "x": 3211,
+        "y": 3425,
+        "plane": 0,
+        "area": "площадь Varrock",
+        "page": "Romeo"
+      }
+    ],
+    "Juliet": [
+      {
+        "x": 3159,
+        "y": 3426,
+        "plane": 1,
+        "area": "особняк к западу от Varrock, 1st floor (2-й этаж)",
+        "page": "Juliet"
+      }
+    ],
+    "Father Lawrence": [
+      {
+        "x": 3254,
+        "y": 3485,
+        "plane": 0,
+        "area": "церковь Varrock",
+        "page": "Father Lawrence"
+      }
+    ],
+    "Apothecary": [
+      {
+        "x": 3195,
+        "y": 3404,
+        "plane": 0,
+        "area": "аптека на юго-западе Varrock",
+        "page": "Apothecary"
+      }
+    ],
+    "Aubury": [
+      {
+        "x": 3253,
+        "y": 3402,
+        "plane": 0,
+        "area": "магазин рун в Varrock",
+        "page": "Aubury"
+      }
+    ],
+    "Reldo": [
+      {
+        "x": 3210,
+        "y": 3495,
+        "plane": 0,
+        "area": "библиотека дворца Varrock",
+        "page": "Reldo"
+      }
+    ],
+    "Dr Harlow": [
+      {
+        "x": 3222,
+        "y": 3397,
+        "plane": 0,
+        "area": "паб Blue Moon Inn, Varrock",
+        "page": "Dr Harlow"
+      }
+    ],
+    "Aris": [
+      {
+        "x": 3204,
+        "y": 3425,
+        "plane": 0,
+        "area": "шатёр на площади Varrock",
+        "page": "Aris"
+      }
+    ],
+    "Sir Prysin": [
+      {
+        "x": 3203,
+        "y": 3472,
+        "plane": 0,
+        "area": "дворец Varrock, западное крыло",
+        "page": "Sir Prysin"
+      }
+    ],
+    "Captain Rovin": [
+      {
+        "x": 3204,
+        "y": 3497,
+        "plane": 2,
+        "area": "дворец Varrock, 2nd floor (3-й этаж)",
+        "page": "Captain Rovin"
+      }
+    ],
+    "Delrith": [
+      {
+        "x": 3227,
+        "y": 3369,
+        "plane": 0,
+        "area": "каменный круг к югу от Varrock — там тёмные маги",
+        "page": "Delrith"
+      }
+    ],
+    "King Roald": [
+      {
+        "x": 3222,
+        "y": 3472,
+        "plane": 0,
+        "area": "тронный зал дворца Varrock",
+        "page": "King Roald"
+      }
+    ],
+    "Thessalia": [
+      {
+        "x": 3206,
+        "y": 3416,
+        "plane": 0,
+        "area": "магазин одежды в Varrock",
+        "page": "Thessalia"
+      }
+    ],
+    "Guildmaster": [
+      {
+        "x": 3191,
+        "y": 3360,
+        "plane": 0,
+        "area": "Champions' Guild",
+        "page": "Guildmaster"
+      }
+    ],
+    "Squire": [
+      {
+        "x": 2977,
+        "y": 3342,
+        "plane": 0,
+        "area": "двор White Knights' Castle",
+        "page": "Squire"
+      }
+    ],
+    "Sir Vyvin": [
+      {
+        "x": 2984,
+        "y": 3339,
+        "plane": 2,
+        "area": "White Knights' Castle, 2nd floor (3-й этаж)",
+        "page": "Sir Vyvin"
+      }
+    ],
+    "Sir Amik Varze": [
+      {
+        "x": 2960,
+        "y": 3337,
+        "plane": 2,
+        "area": "White Knights' Castle, 2nd floor (3-й этаж)",
+        "page": "Sir Amik Varze"
+      }
+    ],
+    "Doric": [
+      {
+        "x": 2952,
+        "y": 3452,
+        "plane": 0,
+        "area": "дом к северу от Falador",
+        "page": "Doric"
+      }
+    ],
+    "Burntof": [
+      {
+        "x": 2957,
+        "y": 3367,
+        "plane": 0,
+        "area": "паб Rising Sun Inn, Falador",
+        "page": "Burntof"
+      }
+    ],
+    "Heskel": [
+      {
+        "x": 3004,
+        "y": 3374,
+        "plane": 0,
+        "area": "парк Falador",
+        "page": "Heskel"
+      }
+    ],
+    "Malignius Mortifer": [
+      {
+        "x": 2990,
+        "y": 3268,
+        "plane": 0,
+        "area": "к югу от Falador",
+        "page": "Malignius Mortifer"
+      }
+    ],
+    "Elstan": [
+      {
+        "x": 3053,
+        "y": 3305,
+        "plane": 0,
+        "area": "огород к югу от Falador",
+        "page": "Elstan"
+      }
+    ],
+    "Sarah": [
+      {
+        "x": 3036,
+        "y": 3294,
+        "plane": 0,
+        "area": "магазин фермера к югу от Falador",
+        "page": "Sarah"
+      }
+    ],
+    "Wayne": [
+      {
+        "x": 2972,
+        "y": 3312,
+        "plane": 0,
+        "area": "магазин кольчуг на юге Falador",
+        "page": "Wayne"
+      }
+    ],
+    "Peksa": [
+      {
+        "x": 3075,
+        "y": 3430,
+        "plane": 0,
+        "area": "магазин шлемов в Barbarian Village",
+        "page": "Peksa"
+      }
+    ],
+    "General Bentnoze": [
+      {
+        "x": 2959,
+        "y": 3513,
+        "plane": 0,
+        "area": "Goblin Village",
+        "page": "General Bentnoze"
+      }
+    ],
+    "Oracle": [
+      {
+        "x": 3011,
+        "y": 3501,
+        "plane": 0,
+        "area": "вершина Ice Mountain",
+        "page": "Oracle"
+      }
+    ],
+    "Oziach": [
+      {
+        "x": 3070,
+        "y": 3517,
+        "plane": 0,
+        "area": "хижина к северо-западу от Edgeville",
+        "page": "Oziach"
+      }
+    ],
+    "Checkal": [
+      {
+        "x": 3087,
+        "y": 3415,
+        "plane": 0,
+        "area": "Barbarian Village, у гончарной печи",
+        "page": "Checkal"
+      }
+    ],
+    "Atlas": [
+      {
+        "x": 3075,
+        "y": 3439,
+        "plane": 0,
+        "area": "таверна The Long Hall, Barbarian Village",
+        "page": "Atlas"
+      }
+    ],
+    "Marley": [
+      {
+        "x": 3088,
+        "y": 3472,
+        "plane": 0,
+        "area": "руины к югу от банка Edgeville",
+        "page": "Marley"
+      }
+    ],
+    "Chancellor Hassan": [
+      {
+        "x": 3302,
+        "y": 3163,
+        "plane": 0,
+        "area": "дворец Al Kharid",
+        "page": "Chancellor Hassan"
+      }
+    ],
+    "Osman": [
+      {
+        "x": 3286,
+        "y": 3180,
+        "plane": 0,
+        "area": "Al Kharid, к северу от дворца",
+        "page": "Osman"
+      }
+    ],
+    "Silk trader": [
+      {
+        "x": 3298,
+        "y": 3202,
+        "plane": 0,
+        "area": "рынок Al Kharid",
+        "page": "Silk trader"
+      }
+    ],
+    "Ithoi the Navigator": [
+      {
+        "x": 2529,
+        "y": 2839,
+        "plane": 1,
+        "area": "Corsair Cove, 1st floor (2-й этаж)",
+        "page": "Ithoi the Navigator"
+      }
+    ],
+    "Gnocci the Cook": [
+      {
+        "x": 2546,
+        "y": 2862,
+        "plane": 0,
+        "area": "Corsair Cove",
+        "page": "Gnocci the Cook"
+      }
+    ],
+    "Arsen the Thief": [
+      {
+        "x": 2557,
+        "y": 2857,
+        "plane": 0,
+        "area": "Corsair Cove",
+        "page": "Arsen the Thief"
+      }
+    ],
+    "Chief Tess": [
+      {
+        "x": 2013,
+        "y": 9006,
+        "plane": 0,
+        "area": "подземелье Corsair Cove",
+        "page": "Chief Tess"
+      }
+    ],
+    "Almera": [
+      {
+        "x": 2522,
+        "y": 3498,
+        "plane": 0,
+        "area": "дом у Baxtorian Falls",
+        "page": "Almera"
+      }
+    ],
+    "Hudon": [
+      {
+        "x": 2510,
+        "y": 3484,
+        "plane": 0,
+        "area": "река у Baxtorian Falls",
+        "page": "Hudon"
+      }
+    ],
+    "Lady Servil": [
+      {
+        "x": 2566,
+        "y": 3199,
+        "plane": 0,
+        "area": "у Fight Arena",
+        "page": "Lady Servil"
+      }
+    ],
+    "Khazard Barman": [
+      {
+        "x": 2568,
+        "y": 3144,
+        "plane": 0,
+        "area": "бар в юго-западном углу Fight Arena",
+        "page": "Khazard Barman"
+      }
+    ],
+    "King Bolren": [
+      {
+        "x": 2542,
+        "y": 3170,
+        "plane": 0,
+        "area": "Tree Gnome Village",
+        "page": "King Bolren"
+      }
+    ],
+    "Commander Montai": [
+      {
+        "x": 2520,
+        "y": 3213,
+        "plane": 0,
+        "area": "поле боя у Tree Gnome Village",
+        "page": "Commander Montai"
+      }
+    ],
+    "King Narnode Shareen": [
+      {
+        "x": 2466,
+        "y": 3496,
+        "plane": 0,
+        "area": "Grand Tree",
+        "page": "King Narnode Shareen"
+      }
+    ],
+    "Glough": [
+      {
+        "x": 2478,
+        "y": 3463,
+        "plane": 1,
+        "area": "дом в Tree Gnome Stronghold, 1st floor (2-й этаж)",
+        "page": "Glough"
+      }
+    ],
+    "Anita": [
+      {
+        "x": 2390,
+        "y": 3514,
+        "plane": 1,
+        "area": "дом в Tree Gnome Stronghold, 1st floor (2-й этаж)",
+        "page": "Anita"
+      }
+    ],
+    "Bolongo": [
+      {
+        "x": 2477,
+        "y": 3447,
+        "plane": 0,
+        "area": "Tree Gnome Stronghold",
+        "page": "Bolongo"
+      }
+    ],
+    "Prissy Scilla": [
+      {
+        "x": 2436,
+        "y": 3415,
+        "plane": 0,
+        "area": "Tree Gnome Stronghold",
+        "page": "Prissy Scilla"
+      }
+    ],
+    "Daero": [
+      {
+        "x": 2484,
+        "y": 3487,
+        "plane": 1,
+        "area": "Grand Tree, 1st floor (2-й этаж)",
+        "page": "Daero"
+      }
+    ],
+    "Waydar": [
+      {
+        "x": 2894,
+        "y": 2727,
+        "plane": 0,
+        "area": "Crash Island",
+        "page": "Waydar"
+      }
+    ],
+    "Drezel": [
+      {
+        "x": 3416,
+        "y": 3487,
+        "plane": 2,
+        "area": "камера на верхнем этаже храма Paterdomus (2nd floor, 3-й этаж)",
+        "page": "Drezel",
+        "steps": [
+          "S8-01"
+        ]
+      },
+      {
+        "x": 3440,
+        "y": 9895,
+        "plane": 0,
+        "area": "под храмом Paterdomus",
+        "page": "Drezel"
+      }
+    ],
+    "Filliman Tarlock": [
+      {
+        "x": 3441,
+        "y": 3337,
+        "plane": 0,
+        "area": "Nature Grotto, Mort Myre",
+        "page": "Filliman Tarlock"
+      }
+    ],
+    "Mazchna": [
+      {
+        "x": 3511,
+        "y": 3509,
+        "plane": 0,
+        "area": "Canifis",
+        "page": "Mazchna"
+      }
+    ],
+    "Alice": [
+      {
+        "x": 3628,
+        "y": 3526,
+        "plane": 0,
+        "area": "ферма к западу от Port Phasmatys",
+        "page": "Alice"
+      }
+    ],
+    "Old crone": [
+      {
+        "x": 3463,
+        "y": 3558,
+        "plane": 0,
+        "area": "к востоку от Slayer Tower",
+        "page": "Old crone"
+      }
+    ],
+    "Turael": [
+      {
+        "x": 2931,
+        "y": 3536,
+        "plane": 0,
+        "area": "Burthorpe",
+        "page": "Turael"
+      }
+    ],
+    "Grace": [
+      {
+        "x": 3050,
+        "y": 4961,
+        "plane": 0,
+        "area": "Rogues' Den",
+        "page": "Grace"
+      }
+    ],
+    "Fairy Godfather": [
+      {
+        "x": 2447,
+        "y": 4428,
+        "plane": 0,
+        "area": "тронный зал Zanaris",
+        "page": "Fairy Godfather"
+      }
+    ],
+    "Co-ordinator": [
+      {
+        "x": 2452,
+        "y": 4450,
+        "plane": 0,
+        "area": "Zanaris",
+        "page": "Co-ordinator"
+      }
+    ],
+    "Fairy Fixit": [
+      {
+        "x": 2413,
+        "y": 4434,
+        "plane": 0,
+        "area": "Zanaris",
+        "page": "Fairy Fixit"
+      }
+    ]
+  }
+}

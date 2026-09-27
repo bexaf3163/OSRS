@@ -3,7 +3,8 @@
 
 import { lazy, Suspense, useState } from 'react';
 import type { MapLocation, Step } from '../types';
-import { DEFAULT_ZOOM, floorLabel, initialPoint, isUnderground, stepPoints, tilesAround } from '../lib/map';
+import { DEFAULT_ZOOM, floorLabel, initialPoint, isUnderground, tilesAround } from '../lib/map';
+import { mapPlaces } from '../lib/stepPlaces';
 import { Inline } from './Inline';
 import { useBridge } from '../bridge';
 import { navigationTarget } from '../lib/navigation';
@@ -19,7 +20,8 @@ const PREVIEW_H = 132;
 const ANCHOR_Y = 0.42;
 
 export function StepMap({ step }: { step: Step }) {
-  const points = stepPoints(step);
+  // Точки карты шага, откуда предметы и NPC квеста — те же места, что в списке «Что нужно» в игре.
+  const points = mapPlaces(step);
   const [active, setActive] = useState(() => initialPoint(step));
   const [open, setOpen] = useState(false);
   const [zoomed, setZoomed] = useState(false);

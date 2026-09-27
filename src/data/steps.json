@@ -37,6 +37,7 @@
         "nameRu": "Бронзовый топор",
         "amount": 1,
         "howToGet": "Выдают на обучающем острове. Потерял — купи у Bob's Brilliant Axes на юге Lumbridge за 16 gp или подбери у дома фермера Фреда.",
+        "from": "Bob",
         "wikiItemId": 1351,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
       },
@@ -45,6 +46,7 @@
         "nameRu": "Бронзовая кирка",
         "amount": 1,
         "howToGet": "Выдают на обучающем острове. Потерял — купи у Bob's Brilliant Axes в Lumbridge за 1 gp.",
+        "from": "Bob",
         "wikiItemId": 1265,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
       },
@@ -53,6 +55,7 @@
         "nameRu": "Маленькая сеть",
         "amount": 1,
         "howToGet": "Выдают на обучающем острове. Потерял — одна лежит у Fishing Tutor на болоте Lumbridge Swamp (появляется снова) или купи у Gerrant в Port Sarim за 5 gp.",
+        "from": "Fishing tutor",
         "wikiItemId": 303,
         "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png"
       },
@@ -61,6 +64,7 @@
         "nameRu": "Огниво",
         "amount": 1,
         "howToGet": "Выдают на обучающем острове. Потерял — купи в Lumbridge General Store (к северо-востоку от замка) за 1 gp.",
+        "from": "Lumbridge General Store",
         "wikiItemId": 590,
         "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
       }
@@ -92,6 +96,38 @@
       "plane": 0,
       "label": "Кухня повара в Lumbridge Castle"
     },
+    "resourceSpots": [
+      {
+        "x": 3163,
+        "y": 3289,
+        "plane": 0,
+        "label": "Мука — пшеничное поле у мельницы Mill Lane Mill",
+        "note": "Сорви пшеницу, поднимись к бункеру (Hopper) на 2nd floor (3-й этаж) мельницы, дёрни рычаг и спустись к ларю с мукой — нужен пустой горшок (Pot).",
+        "items": [
+          "Pot of flour"
+        ]
+      },
+      {
+        "x": 3177,
+        "y": 3315,
+        "plane": 0,
+        "label": "Молоко — пастбище с молочными коровами к северу от мельницы",
+        "note": "Молочная корова (Dairy cow) — с колокольчиком; используй на неё пустое ведро.",
+        "items": [
+          "Bucket of milk"
+        ],
+        "npc": "Dairy cow"
+      },
+      {
+        "x": 3181,
+        "y": 3288,
+        "plane": 0,
+        "label": "Яйцо — курятник к северо-западу от дома фермера Фреда",
+        "items": [
+          "Egg"
+        ]
+      }
+    ],
     "npc": {
       "nameEn": "Cook",
       "nameRu": "Повар",
@@ -114,7 +150,7 @@
         "nameEn": "Bucket of milk",
         "nameRu": "Ведро молока",
         "amount": 1,
-        "howToGet": "Купи ведро (Bucket) в General Store за 2 gp и подои молочную корову (Dairy cow) на ферме к северо-востоку от замка.",
+        "howToGet": "Купи ведро (Bucket) в General Store за 2 gp и подои молочную корову (Dairy cow, с колокольчиком) на пастбище к северу от мельницы.",
         "wikiItemId": 1927,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_milk.png",
         "inStep": true
@@ -123,7 +159,7 @@
         "nameEn": "Egg",
         "nameRu": "Яйцо",
         "amount": 1,
-        "howToGet": "Подбери в курятнике фермы Groats к северу от замка.",
+        "howToGet": "Подбери в курятнике к северо-западу от дома фермера Фреда (к северу от замка).",
         "wikiItemId": 1944,
         "iconUrl": "https://oldschool.runescape.wiki/images/Egg.png",
         "inStep": true
@@ -202,6 +238,18 @@
       "plane": 0,
       "label": "Дом фермера Фреда"
     },
+    "resourceSpots": [
+      {
+        "x": 3209,
+        "y": 3213,
+        "plane": 1,
+        "label": "Прялка — Lumbridge Castle, 1st floor (2-й этаж)",
+        "note": "Шерсть состриги с овец в загоне у дома Фреда, потом спряди здесь.",
+        "items": [
+          "Ball of wool"
+        ]
+      }
+    ],
     "npc": {
       "nameEn": "Fred the Farmer",
       "nameRu": "Фермер Фред",
@@ -216,6 +264,7 @@
         "nameRu": "Ножницы",
         "amount": 1,
         "howToGet": "Возьми бесплатно со стола в доме Фреда или купи в General Store за 1 gp.",
+        "from": "Fred the Farmer",
         "wikiItemId": 1735,
         "iconUrl": "https://oldschool.runescape.wiki/images/Shears.png",
         "inStep": true
@@ -329,6 +378,7 @@
         "nameRu": "Лопата",
         "amount": 1,
         "howToGet": "Купи в General Store или подбери в доме к северо-востоку от замка.",
+        "from": "Lumbridge General Store",
         "wikiItemId": 952,
         "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
       }
@@ -427,6 +477,7 @@
         "nameRu": "Амулет разговора с духами",
         "amount": 1,
         "howToGet": "Выдаст отец Urhney в хижине на болоте Lumbridge Swamp. Надень его на шею.",
+        "from": "Father Urhney",
         "wikiItemId": 552,
         "iconUrl": "https://oldschool.runescape.wiki/images/Ghostspeak_amulet.png",
         "inStep": true
@@ -626,6 +677,7 @@
         "nameRu": "Бронзовый топор",
         "amount": 1,
         "howToGet": "Выдают на обучающем острове. Потерял — купи у Bob's Brilliant Axes на юге Lumbridge за 16 gp.",
+        "from": "Bob",
         "wikiItemId": 1351,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
       },
@@ -634,6 +686,7 @@
         "nameRu": "Огниво",
         "amount": 1,
         "howToGet": "Выдают на обучающем острове. Потерял — купи в Lumbridge General Store за 1 gp.",
+        "from": "Lumbridge General Store",
         "wikiItemId": 590,
         "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
       }
@@ -853,6 +906,7 @@
         "nameRu": "Хроника",
         "amount": 1,
         "howToGet": "Купи у Diango (магазин игрушек на рынке Draynor Village) за 300 gp.",
+        "from": "Diango",
         "wikiItemId": 13660,
         "iconUrl": "https://oldschool.runescape.wiki/images/Chronicle.png",
         "inStep": true
@@ -862,6 +916,7 @@
         "nameRu": "Карта телепортации",
         "amount": 10,
         "howToGet": "Купи у Diango от 150 gp за штуку и используй на книгу — в неё влезает до 1 000 зарядов.",
+        "from": "Diango",
         "wikiItemId": 13658,
         "iconUrl": "https://oldschool.runescape.wiki/images/Teleport_card.png",
         "inStep": true
@@ -940,6 +995,7 @@
         "nameRu": "Маленькая сеть",
         "amount": 1,
         "howToGet": "Выдают на обучающем острове. Потерял — одна лежит у Fishing Tutor на болоте Lumbridge Swamp (появляется снова) или купи у Gerrant в Port Sarim за 5 gp.",
+        "from": "Fishing tutor",
         "wikiItemId": 303,
         "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png"
       }
@@ -1036,6 +1092,7 @@
         "nameRu": "Бронзовая кирка",
         "amount": 1,
         "howToGet": "Выдают на обучающем острове. Кирка получше (Steel pickaxe) копает быстрее.",
+        "from": "Bob",
         "wikiItemId": 1265,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
       }
@@ -1334,6 +1391,7 @@
         "nameRu": "Розовая юбка",
         "amount": 1,
         "howToGet": "Для Prince Ali Rescue. Дешевле всего — у Thessalia в Varrock за 2 gp.",
+        "from": "Thessalia",
         "wikiItemId": 1013,
         "iconUrl": "https://oldschool.runescape.wiki/images/Pink_skirt.png",
         "inStep": true
@@ -1794,6 +1852,17 @@
       "plane": 0,
       "label": "Romeo на площади Varrock"
     },
+    "resourceSpots": [
+      {
+        "x": 3271,
+        "y": 3367,
+        "plane": 0,
+        "label": "Cadava berries — кусты к западу от шахты на юго-востоке Varrock",
+        "items": [
+          "Cadava berries"
+        ]
+      }
+    ],
     "npc": {
       "nameEn": "Romeo",
       "nameRu": "Ромео",
@@ -1909,6 +1978,7 @@
         "nameRu": "Талисман воздуха",
         "amount": 1,
         "howToGet": "Выдаст герцог Horacio.",
+        "from": "Duke Horacio",
         "wikiItemId": 1438,
         "iconUrl": "https://oldschool.runescape.wiki/images/Air_talisman.png",
         "inStep": true
@@ -1918,6 +1988,7 @@
         "nameRu": "Посылка с исследованиями",
         "amount": 1,
         "howToGet": "Выдаст маг Sedridor.",
+        "from": "Archmage Sedridor",
         "wikiItemId": 290,
         "iconUrl": "https://oldschool.runescape.wiki/images/Research_package.png",
         "inStep": true
@@ -2020,6 +2091,7 @@
         "nameRu": "Синяя руда",
         "amount": 1,
         "howToGet": "Добудь в Asgarnian Ice Dungeon у Mudskipper Point.",
+        "from": "Asgarnian Ice Dungeon",
         "wikiItemId": 668,
         "iconUrl": "https://oldschool.runescape.wiki/images/Blurite_ore.png",
         "inStep": true
@@ -2113,6 +2185,17 @@
       "plane": 0,
       "label": "Дом Моргана в Draynor Village"
     },
+    "resourceSpots": [
+      {
+        "x": 3096,
+        "y": 3270,
+        "plane": 1,
+        "label": "Чеснок — шкаф на 1st floor (2-й этаж) дома Morgan",
+        "items": [
+          "Garlic"
+        ]
+      }
+    ],
     "npc": {
       "nameEn": "Morgan",
       "nameRu": "Морган",
@@ -2126,6 +2209,7 @@
         "nameRu": "Молот",
         "amount": 1,
         "howToGet": "Купи в General Store к северу от паба Blue Moon Inn в Varrock за 1 gp.",
+        "from": "Varrock General Store",
         "wikiItemId": 2347,
         "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
       },
@@ -2134,6 +2218,7 @@
         "nameRu": "Кол",
         "amount": 1,
         "howToGet": "Выдаст доктор Harlow в пабе Blue Moon Inn — угости его пивом.",
+        "from": "Dr Harlow",
         "wikiItemId": 1549,
         "iconUrl": "https://oldschool.runescape.wiki/images/Stake.png",
         "inStep": true
@@ -2143,6 +2228,7 @@
         "nameRu": "Пиво",
         "amount": 1,
         "howToGet": "Купи у бармена Blue Moon Inn за 2 gp.",
+        "from": "Dr Harlow",
         "wikiItemId": 1917,
         "iconUrl": "https://oldschool.runescape.wiki/images/Beer.png",
         "inStep": true
@@ -2269,6 +2355,7 @@
         "nameRu": "Карамджийский ром",
         "amount": 1,
         "howToGet": "Купи у Zembo на Karamja за 30 gp и провези в ящике с бананами.",
+        "from": "Zembo",
         "wikiItemId": 431,
         "iconUrl": "https://oldschool.runescape.wiki/images/Karamjan_rum.png",
         "inStep": true
@@ -2278,6 +2365,7 @@
         "nameRu": "Белый фартук",
         "amount": 1,
         "howToGet": "Лежит в рыболовном магазине Gerrant в Port Sarim.",
+        "from": "Gerrant's Fishy Business",
         "wikiItemId": 1005,
         "iconUrl": "https://oldschool.runescape.wiki/images/White_apron.png",
         "inStep": true
@@ -2446,6 +2534,7 @@
         "nameRu": "Верёвка",
         "amount": 1,
         "howToGet": "Купи у Ned за 18 gp.",
+        "from": "Ned",
         "wikiItemId": 954,
         "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
       },
@@ -2640,6 +2729,7 @@
         "nameRu": "Синий краситель",
         "amount": 1,
         "howToGet": "Из шага S2-01 или у ведьмы Aggie: 2 листа Woad (садовник Wyson в парке Falador, 20 gp) + 5 gp.",
+        "from": "Aggie",
         "wikiItemId": 1767,
         "iconUrl": "https://oldschool.runescape.wiki/images/Blue_dye.png"
       }
@@ -2729,6 +2819,7 @@
         "nameRu": "Перо",
         "amount": "Сколько есть",
         "howToGet": "Наживка для нахлыста: 1 перо на рыбу. Из S2-01 (500 штук) или 2 gp в Port Sarim у Gerrant.",
+        "from": "Gerrant",
         "wikiItemId": 314,
         "iconUrl": "https://oldschool.runescape.wiki/images/Feather.png"
       }
@@ -2851,6 +2942,18 @@
       "plane": 2,
       "label": "Sir Amik Varze, White Knights' Castle"
     },
+    "resourceSpots": [
+      {
+        "x": 3043,
+        "y": 3294,
+        "plane": 0,
+        "label": "Капуста — поле фермы к югу от Falador",
+        "note": "Капуста из Draynor Manor для квеста не подойдёт.",
+        "items": [
+          "Cabbage"
+        ]
+      }
+    ],
     "npc": {
       "nameEn": "Sir Amik Varze",
       "nameRu": "Сэр Амик Варз",
@@ -2864,6 +2967,7 @@
         "nameRu": "Железная кольчуга",
         "amount": 1,
         "howToGet": "Купи у Horvik в Varrock или у Wayne в Falador.",
+        "from": "Wayne",
         "wikiItemId": 1101,
         "iconUrl": "https://oldschool.runescape.wiki/images/Iron_chainbody.png"
       },
@@ -2872,6 +2976,7 @@
         "nameRu": "Бронзовый средний шлем",
         "amount": 1,
         "howToGet": "Из шага S2-11 или купи в магазине шлемов в Barbarian Village.",
+        "from": "Peksa",
         "wikiItemId": 1139,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_med_helm.png"
       },
@@ -3101,6 +3206,7 @@
         "nameRu": "Нож",
         "amount": 1,
         "howToGet": "Лежит в доме к северо-западу от замка Lumbridge или в General Store.",
+        "from": "Lumbridge General Store",
         "wikiItemId": 946,
         "iconUrl": "https://oldschool.runescape.wiki/images/Knife.png"
       },
@@ -3804,6 +3910,7 @@
         "nameRu": "Ловушка для омаров",
         "amount": 1,
         "howToGet": "С 40 рыбалки. 20 gp в магазине Gerrant's Fishy Business в Port Sarim или ≈ 110 gp на бирже.",
+        "from": "Gerrant",
         "wikiItemId": 301,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png"
       }
@@ -3890,6 +3997,7 @@
         "nameRu": "Молот",
         "amount": 1,
         "howToGet": "Купи в Lumbridge General Store за 1 gp.",
+        "from": "Lumbridge General Store",
         "wikiItemId": 2347,
         "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png",
         "inStep": true
@@ -3908,6 +4016,7 @@
         "nameRu": "Бомба разума",
         "amount": 1,
         "howToGet": "Купи в пабе Rising Sun в Falador за 3 gp.",
+        "from": "Rising Sun Inn",
         "wikiItemId": 1907,
         "iconUrl": "https://oldschool.runescape.wiki/images/Wizard's_mind_bomb.png",
         "inStep": true
@@ -3917,6 +4026,7 @@
         "nameRu": "Шёлк",
         "amount": 1,
         "howToGet": "Купи у торговца шёлком в Al Kharid за 3 gp.",
+        "from": "Silk trader",
         "wikiItemId": 950,
         "iconUrl": "https://oldschool.runescape.wiki/images/Silk.png",
         "inStep": true
@@ -3926,6 +4036,7 @@
         "nameRu": "Ловушка для омаров",
         "amount": 1,
         "howToGet": "Купи у Gerrant в Port Sarim за 20 gp или на бирже ≈ 110 gp. Нужен Оракулу (S5-04) — не путай с ловушкой для рыбалки, хватит и одной на оба дела.",
+        "from": "Gerrant",
         "wikiItemId": 301,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png",
         "inStep": true
@@ -4225,6 +4336,7 @@
         "nameRu": "Шёлк",
         "amount": 1,
         "howToGet": "Из S4-05: у торговца шёлком в Al Kharid за 3 gp.",
+        "from": "Silk trader",
         "wikiItemId": 950,
         "iconUrl": "https://oldschool.runescape.wiki/images/Silk.png"
       },
@@ -4249,6 +4361,7 @@
         "nameRu": "Ловушка для омаров",
         "amount": 1,
         "howToGet": "Из S4-05: у Gerrant в Port Sarim за 20 gp.",
+        "from": "Gerrant",
         "wikiItemId": 301,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png"
       }
@@ -4382,6 +4495,7 @@
         "nameRu": "Молот",
         "amount": 1,
         "howToGet": "Из S4-05: Lumbridge General Store, 1 gp.",
+        "from": "Lumbridge General Store",
         "wikiItemId": 2347,
         "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
       },
@@ -4866,6 +4980,7 @@
         "nameRu": "Верёвка",
         "amount": 1,
         "howToGet": "Купи у Ned в Draynor Village за 16 gp или на бирже ≈ 65 gp.",
+        "from": "Ned",
         "wikiItemId": 954,
         "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
       },
@@ -5250,6 +5365,7 @@
         "nameRu": "Руническая сущность",
         "amount": 50,
         "howToGet": "Накопай у Aubury в Varrock (после Rune Mysteries) или купи на бирже (≈ 12 gp). Можно нести частями.",
+        "from": "Aubury",
         "wikiItemId": 1436,
         "iconUrl": "https://oldschool.runescape.wiki/images/Rune_essence.png"
       },
@@ -5258,6 +5374,7 @@
         "nameRu": "Ведро",
         "amount": 1,
         "howToGet": "В General Store Varrock за 2 gp.",
+        "from": "Varrock General Store",
         "wikiItemId": 1925,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bucket.png"
       }
@@ -5603,6 +5720,7 @@
         "nameRu": "Молот",
         "amount": 1,
         "howToGet": "Купи в любом General Store за 1 gp.",
+        "from": "Lumbridge General Store",
         "wikiItemId": 2347,
         "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
       },
@@ -5839,6 +5957,7 @@
         "nameRu": "Секатор",
         "amount": 1,
         "howToGet": "У Sarah в магазине фермера к северо-западу от старта квеста за 5 gp.",
+        "from": "Sarah",
         "wikiItemId": 5329,
         "iconUrl": "https://oldschool.runescape.wiki/images/Secateurs.png"
       },
@@ -5847,6 +5966,7 @@
         "nameRu": "Лопата",
         "amount": 1,
         "howToGet": "Купи в Lumbridge General Store за 3 gp.",
+        "from": "Lumbridge General Store",
         "wikiItemId": 952,
         "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png"
       },
@@ -6140,6 +6260,7 @@
         "nameRu": "Глаз тритона",
         "amount": 1,
         "howToGet": "Купи в магазине Betty в Port Sarim.",
+        "from": "Betty",
         "wikiItemId": 221,
         "iconUrl": "https://oldschool.runescape.wiki/images/Eye_of_newt.png"
       },

@@ -8,7 +8,7 @@ import type { PlayerStats, Step, StepBranch } from './types';
 import { useStore } from './store';
 import { desktop, type RuneliteLaunch } from './lib/desktop';
 import {
-  checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseGear, parsePacing, parseStats, planAutoComplete, setNavTarget,
+  checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseGear, parseNavTarget, parsePacing, parseStats, planAutoComplete, setNavTarget,
   syncActiveStep, syncBankTags, syncShoppingPlan, toInGameTarget,
   pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type ShoppingPlanPayload,
 } from './services/runeliteBridge';
@@ -168,6 +168,17 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const features = useFeatures();
   /** Какие предметы этапа уже в плагине — чтобы не слать одно и то же при каждой отрисовке. */
   const bankSent = useRef('');
+  /**
+   * Цель стрелки знает плагин (с 2.11 он сообщает её: NAV_SET, NAV_DONE, /status). Номер растёт с каждым событием о
+   * цели — ответ /status, отправленный до события, её уже не перетрёт.
+   */
+  const navSeq = useRef(0);
+  /** Протокол плагина на связи — с 4 программа не ставит цель сама, а ждёт NAV_SET. */
+  const pluginProtocol = useRef<number | null>(null);
+  const setNavFromPlugin = useCallback((t: NavTargetPayload | null) => {
+    navSeq.current++;
+    setNavTargetState(t);
+  }, []);
 
   // Обработчик событий живёт дольше отрисовки — свежие данные берёт из ссылок.
   const latest = useRef({ progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear });
@@ -207,7 +218,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   /** Временная цель снята в игре: дошёл до места, получил предмет или её сняли. Шаг снова ведёт стрелку. */
   const onNavDone = useCallback((e: BridgeEvent) => {
     const { reason, label, itemName } = e as { reason?: unknown; label?: unknown; itemName?: unknown };
-    setNavTargetState(null);
+    setNavFromPlugin(null);
     const say = latest.current.notify;
     if (reason === 'obtained') say(`✓ ${typeof itemName === 'string' ? itemName : 'Предмет'} получен — стрелка снова ведёт к шагу`);
     else if (reason === 'arrived') say(`📍 На месте${typeof label === 'string' ? `: ${label}` : ''} — стрелка снова ведёт к шагу`);
@@ -215,7 +226,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     const { activeStepId: active, steps: list, branchChoice: choice } = latest.current;
     const step = active ? list.find((s) => s.id === active) : undefined;
     if (step && reason !== 'cleared') void sendStep(step, chosenBranch(step, choice));
-  }, [sendStep]);
+  }, [sendStep, setNavFromPlugin]);
 
   useEffect(() => {
     try {
@@ -236,7 +247,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       setPacing(null);
       setPlugin(null);
       // RuneLite закрыли — временной цели там больше нет.
-      setNavTargetState(null);
+      setNavFromPlugin(null);
+      pluginProtocol.current = null;
       bankSent.current = '';
     };
     if (!enabled) {
@@ -246,12 +258,21 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     }
     setState('connecting');
     let alive = true;
-    const refresh = (resync = false) => void checkStatus().then((s) => {
+    const refresh = (resync = false) => {
+      const seq = navSeq.current;
+      void checkStatus().then((s) => onStatus(s, resync, seq));
+    };
+    const onStatus = (s: Awaited<ReturnType<typeof checkStatus>>, resync: boolean, seq: number) => {
       if (!alive) return;
       setState(s.online ? 'online' : 'offline');
       setInGame(s.inGame);
       setShortestPath(s.shortestPath);
       setPlugin(s.online ? { protocol: s.protocol, version: s.pluginVersion, compat: pluginCompat(s.protocol) } : null);
+      pluginProtocol.current = s.online ? s.protocol : null;
+      // Цель стрелки — какая в игре сейчас (её могли выбрать в игре или до перезапуска программы). Старый плагин
+      // (до 2.11) цель не сообщает — тогда оставляем ту, что знает программа. Пришло событие о цели, пока ждали
+      // ответа, — оно новее ответа.
+      if (s.online && s.protocol !== null && s.protocol >= 4 && seq === navSeq.current) setNavTargetState(s.navTarget);
       if (s.stats) setStats(s.stats);
       setGear(s.gear);
       // RuneLite перезапустили (или программу) — плагин шага не знает: отправляем снова. Тот же шаг не
@@ -261,7 +282,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
         const step = latest.current.steps.find((x) => x.id === want);
         if (step) void sendStep(step, chosenBranch(step, latest.current.branchChoice));
       }
-    });
+    };
     const onEvent = (e: BridgeEvent) => {
       if (e.type === 'STATUS') {
         setInGame(Boolean((e as { inGame?: unknown }).inGame));
@@ -271,6 +292,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       else if (e.type === 'OWNED') setOwned(parseOwned(e));
       else if (e.type === 'GEAR') setGear(parseGear((e as { gear?: unknown }).gear));
       else if (e.type === 'PACING') setPacing(parsePacing(e));
+      else if (e.type === 'NAV_SET') setNavFromPlugin(parseNavTarget((e as { target?: unknown }).target));
       else if (e.type === 'NAV_DONE') onNavDone(e);
       else if (e.type === 'STEP_AUTO_COMPLETED' && typeof (e as { stepId?: unknown }).stepId === 'string') onCompleted((e as { stepId: string }).stepId);
     };
@@ -292,7 +314,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       alive = false;
       handle.close();
     };
-  }, [enabled, onCompleted, onNavDone, sendStep]);
+  }, [enabled, onCompleted, onNavDone, sendStep, setNavFromPlugin]);
 
   // Предметы этапа показанного в игре шага — плагину, для мягкой подсветки в банке.
   // Уходят при смене шага (и этапа), после переподключения и когда функцию включили; выключили — подсветка снимается.
@@ -388,14 +410,16 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const navigate = useCallback(async (target: NavTargetPayload) => {
     if (!enabled) return { ok: false as const, reason: 'off' as const };
     const r = await setNavTarget(target);
-    if (r.ok) setNavTargetState(target);
+    // Плагин 2.11+ сам сообщит цель (NAV_SET) — и снимет её, если предмет уже в сумке (NAV_DONE): ставить её здесь
+    // значит рисковать вернуть уже снятую. Старый плагин не сообщает — тогда запоминаем сами.
+    if (r.ok && (pluginProtocol.current ?? 0) < 4) setNavTargetState(target);
     return r;
   }, [enabled]);
 
   const clearNav = useCallback(async () => {
     await clearNavTarget();
-    setNavTargetState(null);
-  }, []);
+    setNavFromPlugin(null);
+  }, [setNavFromPlugin]);
 
   const value = useMemo<BridgeValue>(
     () => ({

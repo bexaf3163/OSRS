@@ -5,11 +5,13 @@ import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import type { Step, WikiItemDetail } from '../src/types/index.ts';
 import { MAP_VERSION, tileUrl } from '../src/lib/map.ts';
+import type { NpcSpot } from '../src/lib/stepPlaces.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const steps = JSON.parse(readFileSync(`${root}src/data/steps.json`, 'utf8')) as Step[];
 const items = JSON.parse(readFileSync(`${root}src/data/f2p-items.json`, 'utf8')) as WikiItemDetail[];
 const guide = readFileSync(`${root}osrs-guide.md`, 'utf8');
+const npcs = (JSON.parse(readFileSync(`${root}src/data/npcLocations.json`, 'utf8')) as { npcs: Record<string, NpcSpot[]> }).npcs;
 const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 const API = 'https://oldschool.runescape.wiki/api.php';
 
@@ -42,6 +44,8 @@ for (const i of items) {
   add(`предмет ${i.nameEn}`, i.wikiUrl);
   add(`иконка ${i.nameEn}`, i.iconUrl);
 }
+// Где стоят NPC шагов: статья вики, с карты которой взята точка.
+for (const [name, rows] of Object.entries(npcs)) for (const r of rows) add(`NPC ${name}`, `https://oldschool.runescape.wiki/w/${encodeURIComponent(r.page.replace(/ /g, '_'))}`);
 // Гайд: ссылки в тексте — на навыки (и подписки), квесты, гайды прокачки, по которым сверялся план.
 for (const [, url] of guide.matchAll(/\]\((https:\/\/oldschool\.runescape\.wiki\/[^)\s]+)\)/g)) add('гайд', url);
 
@@ -58,7 +62,8 @@ for (let i = 0; i < titles.length; i += 50) {
 
 // Тайлы карты: превью и карта мира берут их с maps.runescape.wiki по версии рендера из src/lib/map.ts.
 const mapProblems: string[] = [];
-const planes = new Set(steps.flatMap((s) => [s.mapLocation, ...(s.resourceSpots ?? [])]).filter(Boolean).map((p) => p!.plane));
+const planes = new Set([...steps.flatMap((s) => [s.mapLocation, ...(s.resourceSpots ?? [])]).filter(Boolean).map((p) => p!.plane),
+  ...Object.values(npcs).flat().map((r) => r.plane)]);
 for (const plane of planes) {
   // Тайл Lumbridge на масштабе 2 — есть на любом этаже.
   const res = await fetch(tileUrl(2, plane, 50, 50), { headers: { 'User-Agent': UA } });

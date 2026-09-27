@@ -7,6 +7,7 @@ import { desktop } from '../lib/desktop';
 import { isClosed, openAfter } from '../lib/next-step';
 import { parseAmount, preflightItems } from '../lib/checklist';
 import { watchedItems } from '../lib/branching';
+import { stepPlaces } from '../lib/stepPlaces';
 
 export const BRIDGE_ORIGIN = 'http://127.0.0.1:38282';
 /** Заголовок, без которого плагин не принимает POST. Его ставит главный процесс Electron (electron/runelite-bridge.cjs). */
@@ -26,13 +27,26 @@ export interface BridgeStatus {
   /** Версия протокола моста; null — плагин до 2.9 (поля нет). */
   protocol: number | null;
   pluginVersion: string | null;
+  /** Куда ведёт временная цель в игре (с 2.11); null — к шагу или плагин не сообщает. */
+  navTarget: NavTargetPayload | null;
 }
 
 /**
  * Протокол, который ждёт программа. Плагин старше — программа просит его обновить: новые адреса и поля он не
  * знает. Плагин без поля protocol — до 2.9: работает (основные адреса те же), но без новых функций.
+ * 4 (2.11) — список «Что нужно» на экране игры; у плагина 2.10 (протокол 3) его нет.
  */
-export const APP_PROTOCOL = 3;
+export const APP_PROTOCOL = 4;
+
+/** Чего нет у старого плагина — для предупреждения «обнови плагин»: с какого протокола что появилось. */
+export function missingWithPlugin(protocol: number | null): string[] {
+  const p = protocol ?? 1;
+  const out: string[] = [];
+  if (p < 4) out.push('список «Что нужно» на экране игры (клик по строке — стрелка и путь туда)');
+  if (p < 3) out.push('боковая панель «OSRS Путь» в RuneLite');
+  if (p < 2) out.push('большая стрелка и оценка предметов в банке');
+  return out;
+}
 
 export type PluginCompat = 'ok' | 'legacy' | 'older' | 'newer';
 
@@ -156,7 +170,7 @@ export interface StepGuidePayload {
 }
 
 /** Панель RuneLite: предметы шага с «где взять» и точки — главная (NPC, старт) и места из карты шага. */
-export function stepGuide(step: Step, branch?: StepBranch): StepGuidePayload | undefined {
+export function stepGuide(step: Step, branch?: StepBranch): StepGuidePayload {
   const items = (step.itemsRequired ?? []).map((i) => {
     const n = parseAmount(i.amount);
     return {
@@ -168,22 +182,12 @@ export function stepGuide(step: Step, branch?: StepBranch): StepGuidePayload | u
       ...(i.inStep ? { inStep: true } : {}),
     };
   });
-  const places: StepGuidePayload['places'] = [];
-  const main = branch?.replacementTarget ?? step.inGame?.worldPoint ?? step.mapLocation;
-  if (main) {
-    places.push({
-      x: main.x, y: main.y, plane: main.plane, label: main.label ?? step.title,
-      ...(step.npc && !branch ? { npc: step.npc.nameEn } : {}),
-    });
-  }
-  for (const p of step.resourceSpots ?? []) {
-    const same = places.findIndex((q) => Math.abs(q.x - p.x) <= 1 && Math.abs(q.y - p.y) <= 1 && q.plane === p.plane);
-    const place = { x: p.x, y: p.y, plane: p.plane, label: p.label, ...(p.npc ? { npc: p.npc } : {}), ...(p.items?.length ? { items: p.items } : {}) };
-    // Точка шага и первое место карты часто одно и то же — оставляем одну, с подписью места.
-    if (same >= 0) places[same] = { ...places[same], ...place, npc: place.npc ?? places[same].npc };
-    else places.push(place);
-  }
-  if (!items.length && places.length < 2) return undefined;
+  // Места — те же, что точки на карте шага в программе: точка шага, места с карты, откуда предметы, NPC квеста.
+  const places: StepGuidePayload['places'] = stepPlaces(step, branch).map((p) => ({
+    x: p.x, y: p.y, plane: p.plane, label: p.label, ...(p.npc ? { npc: p.npc } : {}), ...(p.items?.length ? { items: p.items } : {}),
+  }));
+  // Отправляется всегда, даже пустой: без guide плагин считает программу старой и просит её обновить
+  // (в 2.10 шаги без предметов и с одной точкой уходили без него — панель зря писала «Обнови программу»).
   return { items: items.slice(0, 64), places: places.slice(0, 64) };
 }
 
@@ -227,9 +231,11 @@ export function toInGameTarget(step: Step, branch?: StepBranch): ActiveStepPaylo
   if (watch.length) payload.watchItems = watch;
   if (step.pacing) payload.pacing = step.pacing;
   const guide = stepGuide(step, branch);
-  if (guide) payload.guide = guide;
+  payload.guide = guide;
+  // Шаг без точки, но с предметами (закупка) — тоже в игру: список «Что нужно» с «где взять» там полезен.
   const empty = !worldPoint && !groundTiles?.length && !g.npcNames?.length && !g.objectNames?.length
-    && !g.dialogChoices?.length && !g.highlightItems?.length && !g.completionTrigger && !checklist.length && !step.pacing;
+    && !g.dialogChoices?.length && !g.highlightItems?.length && !g.completionTrigger && !checklist.length && !step.pacing
+    && !guide.items.length && !guide.places.length;
   return empty ? null : payload;
 }
 
@@ -335,7 +341,10 @@ export function defaultTransport(): BridgeTransport {
 
 export async function checkStatus(t: BridgeTransport = defaultTransport()): Promise<BridgeStatus> {
   const res = await t.request('GET', '/status');
-  const d = res.data as { status?: string; inGame?: boolean; stats?: unknown; shortestPath?: unknown; activeStepId?: unknown; protocol?: unknown; pluginVersion?: unknown } | undefined;
+  const d = res.data as {
+    status?: string; inGame?: boolean; stats?: unknown; shortestPath?: unknown; activeStepId?: unknown; protocol?: unknown; pluginVersion?: unknown;
+    navTarget?: unknown;
+  } | undefined;
   const online = res.ok && d?.status === 'ok';
   return {
     online,
@@ -346,7 +355,25 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
     activeStepId: online && typeof d?.activeStepId === 'string' ? d.activeStepId : null,
     protocol: online && typeof d?.protocol === 'number' && Number.isInteger(d.protocol) && d.protocol > 0 ? d.protocol : null,
     pluginVersion: online && typeof d?.pluginVersion === 'string' && d.pluginVersion.length <= 20 ? d.pluginVersion : null,
+    navTarget: online ? parseNavTarget(d?.navTarget) : null,
   };
+}
+
+/**
+ * Временная цель из плагина (NAV_SET, /status): её могли выбрать в игре — в списке «Что нужно» или в панели.
+ * Только проверенные поля; что-то не так — null (программа тогда просто не отмечает цель).
+ */
+export function parseNavTarget(raw: unknown): NavTargetPayload | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const r = raw as Record<string, unknown>;
+  const int = (v: unknown) => typeof v === 'number' && Number.isInteger(v);
+  if (typeof r.label !== 'string' || !r.label || r.label.length > 200 || !int(r.x) || !int(r.y) || !int(r.plane)) return null;
+  const out: NavTargetPayload = { label: r.label, x: r.x as number, y: r.y as number, plane: r.plane as number };
+  if (Array.isArray(r.npcNames) && r.npcNames.every((n) => typeof n === 'string')) out.npcNames = r.npcNames as string[];
+  if (typeof r.itemName === 'string') out.itemName = r.itemName;
+  if (int(r.itemId)) out.itemId = r.itemId as number;
+  if (typeof r.stepId === 'string') out.stepId = r.stepId;
+  return out;
 }
 
 export const getBridgeStatus = checkStatus;

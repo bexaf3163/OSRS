@@ -559,4 +559,79 @@ public class OverlayLayoutTest
 		}
 		assertTrue("вылезает за рамку:\n" + String.join("\n", bad), bad.isEmpty());
 	}
+
+	@Test
+	public void списокЧтоНужноНеВылезаетЗаРамку() throws IOException
+	{
+		// Цели ровно такими, какими их шлёт программа (active-steps.json), — со всеми местами и NPC.
+		List<StepGuide.View> views = new ArrayList<>();
+		for (ActiveStepsTest.Sent sent : ActiveStepsTest.all())
+		{
+			ActiveTarget t = sent.target;
+			assertTrue(sent.name, t.prepare() == null);
+			// Банк не открывали; открывали и пусто; всё с собой; стрелка ведёт к первой точке (есть «← к шагу»).
+			views.add(StepGuide.view(t, new ItemCounts(), null, null, 0, 0, 0));
+			views.add(StepGuide.view(t, new ItemCounts(), new ItemCounts(), null, 0, 0, 0));
+			ItemCounts all = new ItemCounts();
+			for (ActiveTarget.GuideItem i : t.getGuide().getItems())
+			{
+				all.add(i.getId() == null ? -1 : i.getId(), ActiveTarget.nameKey(i.getName()), 10_000);
+			}
+			views.add(StepGuide.view(t, all, null, null, 0, 0, 0));
+			if (!t.getGuide().getPlaces().isEmpty())
+			{
+				ActiveTarget.GuidePlace p = t.getGuide().getPlaces().get(0);
+				views.add(StepGuide.view(t, new ItemCounts(), new ItemCounts(), p.getLabel(), p.getX(), p.getY(), p.getPlane()));
+			}
+		}
+		views.removeIf(v -> !GuideList.worthShowing(v));
+		assertTrue("мало шагов со списком: " + views.size(), views.size() > 100);
+		List<String> bad = new ArrayList<>();
+		Set<String> saved = new LinkedHashSet<>();
+		Graphics2D scratch = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics();
+		for (Font base : fonts())
+		{
+			for (boolean large : new boolean[]{false, true})
+			{
+				float scale = large ? OsrsPathHudOverlay.LARGE : 1f;
+				Font font = OverlayText.font(base, scale);
+				Font small = OverlayText.font(base, scale * OsrsPathGuideOverlay.SMALL);
+				FontMetrics smallFm = scratch.getFontMetrics(small);
+				int standard = Math.round(OsrsPathGuideOverlay.WIDTH * scale);
+				for (int width : new int[]{standard, 170})
+				{
+					for (StepGuide.View v : views)
+					{
+						// Мышь над первой кнопкой после заголовка — с подсказкой внизу; и свёрнутый.
+						List<GuideList.Row> rows = GuideList.rows(v, false, scratch.getFontMetrics(font), smallFm, width);
+						int hover = -1;
+						for (int i = 1; i < rows.size() && hover < 0; i++)
+						{
+							hover = rows.get(i).getAction().isClickable() ? i : -1;
+						}
+						for (int mode = 0; mode < 3; mode++)
+						{
+							boolean collapsed = mode == 2;
+							int h = mode == 1 ? hover : -1;
+							String save = null;
+							String id = v.getTitle().substring(1, 6);
+							String name = "guide-" + id + "-" + (collapsed ? "collapsed" : h >= 0 ? "hover" : "list") + "-" + fontName(base) + (large ? "-large" : "");
+							// Для глаза — первый вид (банк не открывали): S2-03 как у игрока на снимке, квест с множеством NPC и Cook's Assistant.
+							if (width == standard && (id.equals("S2-03") || id.equals("S2-10") || id.equals("S1-03")) && v.getDetour() == null && saved.add(name))
+							{
+								save = name;
+							}
+							int out = overflow((panel, fm, w) -> OsrsPathGuideOverlay.build(panel, v, collapsed, h, fm, smallFm, font, small, w, 70),
+								font, width, save);
+							if (out > 0)
+							{
+								bad.add(fontName(base) + (large ? " крупный" : "") + " " + width + "px " + v.getTitle() + " режим " + mode + " — " + out + " точек (" + lastWhere + ")");
+							}
+						}
+					}
+				}
+			}
+		}
+		assertTrue("вылезает за рамку (" + bad.size() + "):\n" + String.join("\n", bad.subList(0, Math.min(20, bad.size()))), bad.isEmpty());
+	}
 }

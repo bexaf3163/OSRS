@@ -556,6 +556,31 @@ public class BridgeServerTest
 	}
 
 	@Test
+	public void цельВыбраннаяВИгре_событиеNavSetИВStatus() throws Exception
+	{
+		assertFalse("цели нет — поля нет", get("/status").body().contains("\"navTarget\""));
+		NavTarget t = new NavTarget();
+		t.setLabel("Ned — дом в Draynor Village");
+		t.setX(3099);
+		t.setY(3259);
+		t.setNpcNames(Collections.singletonList("Ned"));
+		t.setStepId("S2-10");
+		BlockingQueue<String> lines = new LinkedBlockingQueue<>();
+		try (Socket s = openEvents(lines))
+		{
+			assertTrue(lines.poll(3, TimeUnit.SECONDS).contains("STATUS"));
+			server.navSet(t);
+			assertEquals("{\"type\":\"NAV_SET\",\"target\":{\"label\":\"Ned — дом в Draynor Village\",\"x\":3099,\"y\":3259,\"plane\":0,"
+				+ "\"npcNames\":[\"Ned\"],\"stepId\":\"S2-10\"}}", lines.poll(3, TimeUnit.SECONDS));
+			// Программа, запущенная позже, узнаёт цель из /status.
+			assertTrue(get("/status").body().contains("\"navTarget\":{\"label\":\"Ned — дом в Draynor Village\",\"x\":3099"));
+			server.navDone("arrived", t);
+			assertTrue(lines.poll(3, TimeUnit.SECONDS).startsWith("{\"type\":\"NAV_DONE\",\"reason\":\"arrived\""));
+		}
+		assertFalse("дошёл — цели снова нет", get("/status").body().contains("\"navTarget\""));
+	}
+
+	@Test
 	public void остановкаЗакрываетПорт() throws Exception
 	{
 		int port = server.getPort();

@@ -19,7 +19,7 @@ public class StepGuideTest
 	private static final Gson GSON = new Gson();
 
 	/** S2-03 Witch's Potion — как его присылает программа 2.10 (stepGuide в runeliteBridge.ts). */
-	private static ActiveTarget witchsPotion()
+	static ActiveTarget witchsPotion()
 	{
 		ActiveTarget t = GSON.fromJson("{\"stepId\":\"S2-03\",\"title\":\"Witch's Potion\",\"goal\":\"Дом ведьмы Hetty\","
 			+ "\"guide\":{\"items\":["
@@ -35,7 +35,7 @@ public class StepGuideTest
 		return t;
 	}
 
-	private static ItemCounts counts(Object... idNameQty)
+	static ItemCounts counts(Object... idNameQty)
 	{
 		ItemCounts c = new ItemCounts();
 		for (int i = 0; i < idNameQty.length; i += 3)

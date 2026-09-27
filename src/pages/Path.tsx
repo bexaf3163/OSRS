@@ -12,6 +12,7 @@ import { ProgressBar } from '../components/ProgressBar';
 import { StageSection } from '../components/StageSection';
 import { useMediaQuery, WIDE } from '../lib/media';
 import { PathWide } from './PathWide';
+import { plural } from '../lib/shopping';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 /** Время сворачивания карточки (как transition у .collapse) — после него раскладка устоялась. */
@@ -170,7 +171,7 @@ function PathNarrow({ focusStep, focusKey }: { focusStep?: string; focusKey: num
           <div className="stat">
             <span className="stat-label">Выполнено</span>
             <span className="stat-value">{Math.round((closed / steps.length) * 100)}%</span>
-            <span className="stat-sub">{closed} из {steps.length} шагов · {mode === 'members' ? 'Members' : 'F2P'}</span>
+            <span className="stat-sub">{closed} из {steps.length} {plural(steps.length, 'шага', 'шагов', 'шагов')} · {mode === 'members' ? 'Members' : 'F2P'}</span>
           </div>
           <div className="stat">
             <span className="stat-label">Очки квестов</span>

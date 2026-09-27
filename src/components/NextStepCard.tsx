@@ -6,6 +6,7 @@ import { TypeIcon, TYPE_LABEL } from './Icons';
 import { Inline } from './Inline';
 import { RangeHints } from './RangeHints';
 import { ReadinessLine } from './ReadinessPanel';
+import { plural } from '../lib/shopping';
 
 export function NextStepCard({ onDone }: { onDone: (id: string) => void }) {
   const { progress, qp, steps, mode, setStep } = useStore();
@@ -17,7 +18,7 @@ export function NextStepCard({ onDone }: { onDone: (id: string) => void }) {
       return (
         <section className="next card is-finished" aria-label="Что делать сейчас">
           <p className="eyebrow">Путь пройден</p>
-          <h2 className="next-title">Все {steps.length} шагов закрыты</h2>
+          <h2 className="next-title">Все {steps.length} {plural(steps.length, 'шаг закрыт', 'шага закрыты', 'шагов закрыты')}</h2>
           <p className="muted">
             {mode === 'f2p'
               ? 'F2P-маршрут закончен. Если купил Bond — переключись на Members в шапке: откроются этапы 7–9.'
