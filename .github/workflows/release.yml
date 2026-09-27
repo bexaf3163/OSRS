@@ -1,0 +1,39 @@
+name: Выпуск
+
+# Тег vX.Y.Z → GitHub собирает переносной exe на Windows (вместе с jar плагина RuneLite) и выкладывает релиз
+# с описанием из release-notes/vX.Y.Z.md.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+      - run: npm ci
+      - run: npm run check-data
+      - run: npm test
+      - run: npm run dist:win
+      - id: v
+        shell: bash
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+      - uses: softprops/action-gh-release@v2
+        with:
+          name: OSRS Путь ${{ steps.v.outputs.version }}
+          body_path: release-notes/${{ github.ref_name }}.md
+          files: release/*.exe
+          fail_on_unmatched_files: true
