@@ -1,4 +1,4 @@
-// Inline-разметка гайда в React без innerHTML: **жирный**, `код`, [ссылка](url) и коды шагов → ссылки.
+// Inline-разметка гайда в React без innerHTML: **жирный**, `код`, [ссылка](url или #/страница) и коды шагов → ссылки.
 
 import type { ReactNode } from 'react';
 import { stepById } from '../data';
@@ -24,9 +24,13 @@ function render(text: string, linkSteps: boolean): ReactNode[] {
     } else if (tok.startsWith('[')) {
       const lm = tok.match(/^\[([^\]]+)\]\(([^)]+)\)$/)!;
       const external = /^https?:\/\//.test(lm[2]);
+      // «#/reference/transport» — страница самой программы: открывается здесь же, без новой вкладки.
+      const internal = lm[2].startsWith('#/');
       out.push(external
         ? <a key={key++} href={lm[2]} target="_blank" rel="noopener noreferrer">{lm[1]}</a>
-        : <span key={key++}>{lm[1]}</span>);
+        : internal
+          ? <a key={key++} href={lm[2]}>{lm[1]}</a>
+          : <span key={key++}>{lm[1]}</span>);
     } else if (linkSteps && stepById.has(tok)) {
       out.push(<a key={key++} className="step-ref" href={`#/step/${tok}`}>{tok}</a>);
     } else {

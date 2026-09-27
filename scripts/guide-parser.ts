@@ -357,6 +357,7 @@ function parseReference(doc: MdSection, training: RefSection): ReferenceData {
       section('membership', need(doc, 'Бесплатная версия или подписка')),
       { id: 'skill-graph', title: graphSec.title, blocks: graphSec.blocks.filter((b) => b.t !== 'code') },
       section('stuck', need(plan, 'Если не знаешь, что делать')),
+      section('transport', need(doc, 'Телепорты, каноэ и лодки')),
       { id: 'plugins', title: need(doc, 'Плагины RuneLite').title, blocks: [] },
       section('tips', need(doc, 'Советы и безопасность')),
       section('wiki', need(doc, 'Ссылки на вики')),

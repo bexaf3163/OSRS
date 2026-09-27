@@ -600,7 +600,7 @@
         "y": 3235,
         "plane": 0,
         "label": "Станция каноэ на реке Lum",
-        "note": "Восточный берег реки Lum, примерно в 10 клетках к северу от моста у замка. Нужен топор в инвентаре."
+        "note": "Восточный берег реки Lum, примерно в 10 клетках к северу от моста у замка. Нужен топор: в сумке, в руках или сданный мастеру Barfy Bill (Store-axe)."
       }
     ],
     "pacing": {
@@ -633,7 +633,7 @@
     "fields": [
       {
         "label": "Каноэ",
-        "text": "Уровень рубки решает, сколько остановок проплывёшь: 12 — одна (Lumbridge ↔ Champions' Guild), 27 — две (до Barbarian Village), 42 — три (до Edgeville). Остановки по реке: Lumbridge → Champions' Guild → Barbarian Village → Edgeville. После поездки каноэ исчезает — на каждую поездку рубишь новое."
+        "text": "Уровень рубки решает, сколько остановок проплывёшь: 12 — одна (Lumbridge ↔ Champions' Guild), 27 — две (до Barbarian Village), 42 — три (до Edgeville). Остановки по реке: Lumbridge → Champions' Guild → Barbarian Village → Edgeville. После поездки каноэ исчезает — на каждую поездку рубишь новое. Как плавать по шагам — в справке [Телепорты, каноэ и лодки](#/reference/transport)."
       },
       {
         "label": "Как быстрее",
@@ -650,7 +650,7 @@
       "Каждое бревно сразу жги: огниво (Tinderbox) на бревно (Logs). Двигайся вдоль ряда деревьев — на месте костра новый не разжечь.",
       "Подбери 1 пепел (Ashes) после костра и положи в банк — он нужен для пасты в Prince Ali Rescue (S2-10).",
       "С 15 рубки переходи на дубы (Oak) там же, а с 15 костров — жги дубовые брёвна.",
-      "С 12 рубки попробуй каноэ: станция на восточном берегу реки Lum, ≈ 10 клеток к северу от моста у замка. «Chop-down» — срубить, «Shape-Canoe» — выбрать Log canoe, «Float» — спустить, «Paddle» — выбрать остановку."
+      "С 12 рубки попробуй каноэ: станция на восточном берегу реки Lum, ≈ 10 клеток к северу от моста у замка. «Chop-down» — срубить дерево, «Shape-Canoe» — выбрать Log, «Float Log» — спустить на воду, «Paddle Log» — выбрать остановку."
     ],
     "inGame": {
       "worldPoint": {
@@ -724,7 +724,7 @@
     "reward": "10 000 Coins (2 000 + 3 000 + 5 000), сапоги (Fancy boots или Fighting boots) и 4 эмоции.",
     "doneWhen": "Открыты все 4 сундука, 10 000 монет в банке.",
     "quickSteps": [
-      "Быстрее всего: поговори с Count Check на кладбище Лумбриджа (у церкви) — один раз за аккаунт он бесплатно телепортирует прямо ко входу.",
+      "Быстрее всего — Count Check на кладбище Лумбриджа, к югу от церкви: Talk-to → «Where can I learn more about security?» → «Yes». Он бесплатно телепортирует прямо ко входу, но один раз и только если ты ещё ни разу не был в Stronghold.",
       "Без телепорта: каноэ при 12–26 рубке довезёт от Lumbridge только до Champions' Guild (1 остановка), дальше пешком на северо-запад вдоль реки ≈ 2 минуты. С 27 рубкой каноэ идёт прямо до Barbarian Village.",
       "Найди дыру (Entrance) в центре деревни у шахты и спустись.",
       "Включи бег (иконка ботинка у мини-карты) и не нападай на монстров — пробегай от двери к двери.",
@@ -733,7 +733,7 @@
       "Этаж 2 (Catacomb of Famine): здесь монстры уже агрессивны. В конце Grain of Plenty — 3 000 монет.",
       "Этаж 3 (Pit of Pestilence): Box of Health — 5 000 монет и полное восстановление здоровья.",
       "Этаж 4 (Sepulchre of Death): Cradle of Life — сапоги Fighting boots или Fancy boots на выбор.",
-      "Выход — Home Teleport (Lumbridge) из книги заклинаний: он бесплатный, раз в 30 минут."
+      "Выход — Home Teleport: вкладка магии → Lumbridge Home Teleport (первый значок), и около 14 секунд ничего не нажимай. Он бесплатный, раз в 30 минут."
     ],
     "inGame": {
       "worldPoint": {
@@ -766,7 +766,7 @@
           "skill": "woodcutting",
           "minLevel": 12
         },
-        "replacementText": "На станции каноэ Lumbridge (Barfy Bill, берег Lum к северу от замка) сделай **Log canoe** — нужен топор. Он идёт одну остановку, до Champions' Guild (Tarquin); оттуда пешком на северо-запад до Barbarian Village.",
+        "replacementText": "На станции каноэ Lumbridge (Barfy Bill, восточный берег Lum к северу от моста) сделай **Log canoe**: «Chop-down» → «Shape-Canoe» → «Float Log» → «Paddle Log». Нужен топор. Каноэ идёт одну остановку, до Champions' Guild (Tarquin); оттуда пешком на северо-запад до Barbarian Village.",
         "replacementTarget": {
           "x": 3243,
           "y": 3238,
@@ -782,7 +782,7 @@
           "skill": "woodcutting",
           "minLevel": 27
         },
-        "replacementText": "**Dugout canoe** идёт две остановки — прямо до станции Barbarian Village (Sigurd), в паре шагов от входа в Stronghold.",
+        "replacementText": "**Dugout canoe** идёт две остановки — прямо до станции Barbarian Village (Sigurd); оттуда до входа в Stronghold ≈ 30 клеток на запад. Действия те же, только «Float Canoe» и «Paddle Canoe».",
         "replacementTarget": {
           "x": 3243,
           "y": 3238,
@@ -836,14 +836,21 @@
     "fields": [
       {
         "label": "Зачем",
-        "text": "Книга мгновенно переносит к Champions' Guild у южного края Varrock — оттуда пара минут до Grand Exchange. Главный быстрый транспорт F2P до Varrock Teleport (Magic 25)."
+        "text": "Книга за пару секунд переносит к Champions' Guild у южного края Varrock — оттуда пара минут до Grand Exchange. Главный быстрый транспорт F2P до Varrock Teleport (Magic 25)."
       },
       {
         "label": "Бюджет",
-        "text": "Около 1 800 gp: книга 300, каждая карта от 150 (цена у Diango растёт, если скупать много сразу). Деньги — из Stronghold of Security (S1-09)."
+        "text": "Около 1 900 gp: книга 300, каждая карта от 150 (цена у Diango растёт, если скупать много сразу). Деньги — из Stronghold of Security (S1-09)."
       }
     ],
-    "doneWhen": "Chronicle заряжена 10 картами и лежит в инвентаре."
+    "doneWhen": "Chronicle заряжена 10 картами и лежит в инвентаре.",
+    "quickSteps": [
+      "Иди на рынок Draynor Village к Diango: правый клик по нему → Trade.",
+      "Купи книгу Chronicle (300 gp) и 10 карт Teleport card (от 150 gp).",
+      "Заряди книгу: выбери карту (Use) и кликни по книге. Уйдут все карты из сумки — 10 карт дают 10 телепортов.",
+      "Телепорт — правый клик по книге → Teleport. Обычный клик не переносит, а надевает книгу в слот щита.",
+      "Сколько зарядов осталось — правый клик → Check charges. Когда выгоднее книга, а когда каноэ или Varrock Teleport — в справке [Телепорты, каноэ и лодки](#/reference/transport)."
+    ]
   },
   {
     "id": "S1-11",
@@ -956,7 +963,7 @@
       "label": "Шахта к юго-востоку от Varrock"
     },
     "floor": "Ground floor (1-й этаж / земля)",
-    "where": "Шахта к юго-востоку от Varrock (South-east Varrock mine): медь, олово и железо в одном месте, банк Varrock East — ≈ 60 клеток на северо-запад. От книги Chronicle (Champions' Guild) — ≈ 1 минута пешком на восток.",
+    "where": "Шахта к юго-востоку от Varrock (South-east Varrock mine): медь, олово и железо в одном месте, банк Varrock East — ≈ 60 клеток на северо-запад. От книги Chronicle (Champions' Guild) — ≈ 1 минута пешком на восток. По пути держись южнее каменного круга с тёмными магами (Dark wizard): они нападают сами и больно бьют новичков.",
     "how": "До 15 копай медь (Copper) и олово (Tin) и выбрасывай лишнее (Shift + клик). С 15 уровня переходи на железо (Iron).",
     "itemsRequired": [
       {
@@ -1034,7 +1041,7 @@
       "plane": 0,
       "label": "Биржа Grand Exchange"
     },
-    "how": "Телепортируйся книгой Chronicle к Champions' Guild и иди на север к Grand Exchange. Сначала продай шкуры, потом покупай. Цены — примерные, на 26.09.2026; точную цену покажет инспектор (клик по предмету).",
+    "how": "Телепортируйся книгой Chronicle (правый клик по книге → Teleport) к Champions' Guild и иди на север к Grand Exchange, подальше от каменного круга тёмных магов к северо-востоку. Сначала продай шкуры, потом покупай. Цены — примерные, на 26.09.2026; точную цену покажет инспектор (клик по предмету).",
     "itemsRequired": [
       {
         "nameEn": "Red bead",
@@ -1225,7 +1232,7 @@
           "type": "ITEM_OWNED",
           "itemName": "Chronicle"
         },
-        "replacementText": "Rub книги Chronicle (тратит заряд Teleport card) — окажешься у Champions' Guild, оттуда к бирже пешком на север через Varrock.",
+        "replacementText": "Правый клик по книге Chronicle → Teleport (тратит 1 заряд) — окажешься у Champions' Guild, оттуда к бирже пешком на север через Varrock. Каменный круг с тёмными магами к северо-востоку обходи стороной.",
         "replacementTarget": {
           "x": 3201,
           "y": 3355,
@@ -1412,7 +1419,7 @@
     "fields": [
       {
         "label": "Зачем",
-        "text": "На 25 уровне открывается Varrock Teleport — перемещение в столицу за секунду."
+        "text": "На 25 уровне открывается Varrock Teleport: вкладка магии → Varrock Teleport, на каждый 1 Law, 3 Air и 1 Fire rune — и через пару секунд ты на площади в центре Varrock. Когда он выгоднее книги и каноэ — в справке [Телепорты, каноэ и лодки](#/reference/transport)."
       },
       {
         "label": "Бюджет",
@@ -1496,7 +1503,7 @@
           "skill": "magic",
           "minLevel": 25
         },
-        "replacementText": "Телепорт на площадь Varrock: 1 **Law rune**, 3 **Air rune**, 1 **Fire rune**. Romeo стоит прямо на площади.",
+        "replacementText": "Вкладка магии → Varrock Teleport (1 **Law rune**, 3 **Air rune**, 1 **Fire rune**) — и ты на площади у фонтана. Romeo стоит прямо на площади.",
         "replacementTarget": {
           "x": 3213,
           "y": 3424,
@@ -1830,7 +1837,7 @@
         "nameEn": "Karamjan rum",
         "nameRu": "Карамджийский ром",
         "amount": 1,
-        "howToGet": "Купи у Zambo на Karamja за 30 gp и провези в ящике с бананами.",
+        "howToGet": "Купи у Zembo на Karamja за 30 gp и провези в ящике с бананами.",
         "wikiItemId": 431,
         "iconUrl": "https://oldschool.runescape.wiki/images/Karamjan_rum.png",
         "inStep": true
@@ -1855,9 +1862,9 @@
     ],
     "quickSteps": [
       "Поговори с Redbeard Frank на северном причале Port Sarim.",
-      "Плыви на Karamja с моряками на причале (30 gp) и купи Karamjan rum у Zambo (30 gp).",
+      "Плыви на Karamja: поговори с моряком на причале (Captain Tobias, Seaman Lorris или Seaman Thresnor) → «Yes please», 30 gp. Купи Karamjan rum у Zembo в баре (30 gp).",
       "Устройся к Luthas на банановую плантацию: собери 10 бананов в ящик и положи туда ром.",
-      "Вернись в Port Sarim (30 gp), купи белый фартук (White apron) в рыболовном магазине Gerrant и наденься его.",
+      "Вернись в Port Sarim у таможенника (Customs officer) на причале — 30 gp. Возьми белый фартук (White apron) с крючка в глубине рыболовного магазина Gerrant и надень его.",
       "Устройся в продуктовый магазин Wydin и забери ром из ящика в подсобке.",
       "Отдай ром Frank, получи ключ и открой сундук на 1st floor (2-й этаж) паба Blue Moon Inn в Varrock.",
       "Выкопай клад в парке Falador — на тебя нападёт садовник (4 ур.)."
@@ -2386,7 +2393,7 @@
           "skill": "magic",
           "minLevel": 25
         },
-        "replacementText": "Телепорт на площадь Varrock: 1 **Law rune**, 3 **Air rune**, 1 **Fire rune**. Gypsy Aris — в шатре на той же площади.",
+        "replacementText": "Вкладка магии → Varrock Teleport (1 **Law rune**, 3 **Air rune**, 1 **Fire rune**) — и ты на площади у фонтана. Gypsy Aris — в шатре на той же площади.",
         "replacementTarget": {
           "x": 3213,
           "y": 3424,
@@ -2506,7 +2513,7 @@
           "skill": "magic",
           "minLevel": 25
         },
-        "replacementText": "Телепорт на площадь Varrock: 1 **Law rune**, 3 **Air rune**, 1 **Fire rune**. Библиотека дворца — к северу от площади.",
+        "replacementText": "Вкладка магии → Varrock Teleport (1 **Law rune**, 3 **Air rune**, 1 **Fire rune**) — и ты на площади у фонтана. Библиотека дворца — к северу от площади.",
         "replacementTarget": {
           "x": 3213,
           "y": 3424,
@@ -2632,7 +2639,7 @@
           "skill": "magic",
           "minLevel": 25
         },
-        "replacementText": "Телепорт на площадь Varrock: 1 **Law rune**, 3 **Air rune**, 1 **Fire rune**. Grand Exchange — к северо-западу от площади.",
+        "replacementText": "Вкладка магии → Varrock Teleport (1 **Law rune**, 3 **Air rune**, 1 **Fire rune**) — и ты на площади у фонтана. Grand Exchange — к северо-западу от площади.",
         "replacementTarget": {
           "x": 3213,
           "y": 3424,
@@ -2872,7 +2879,7 @@
       "y": 3180,
       "plane": 0,
       "label": "С 40: омары у Musa Point",
-      "note": "Причал Musa Point на Karamja: лодка из Port Sarim за 30 gp, дальше на восток по берегу. Ловушка Lobster pot, место ловли с опциями Cage/Harpoon."
+      "note": "Musa Point на Karamja: лодка из Port Sarim за 30 gp, от причала ≈ 35 клеток на северо-запад. Ловушка Lobster pot, место ловли с опциями Cage/Harpoon."
     },
     "resourceSpots": [
       {
@@ -2887,10 +2894,10 @@
         "y": 3180,
         "plane": 0,
         "label": "С 40: омары у Musa Point",
-        "note": "Причал Musa Point на Karamja: лодка из Port Sarim за 30 gp, дальше на восток по берегу. Ловушка Lobster pot, место ловли с опциями Cage/Harpoon."
+        "note": "Musa Point на Karamja: лодка из Port Sarim за 30 gp, от причала ≈ 35 клеток на северо-запад. Ловушка Lobster pot, место ловли с опциями Cage/Harpoon."
       }
     ],
-    "where": "До 40 — нахлыст на реке у Barbarian Village (форель и лосось). С 40 — омары на причале Musa Point на острове Karamja (лодка из Port Sarim, 30 gp).",
+    "where": "До 40 — нахлыст на реке у Barbarian Village (форель и лосось). С 40 — омары у Musa Point на острове Karamja (лодка из Port Sarim, 30 gp).",
     "itemsRequired": [
       {
         "nameEn": "Fly fishing rod",
@@ -3013,7 +3020,7 @@
           "skill": "magic",
           "minLevel": 25
         },
-        "replacementText": "Телепорт на площадь Varrock: 1 **Law rune**, 3 **Air rune**, 1 **Fire rune**. Grand Exchange — к северо-западу от площади.",
+        "replacementText": "Вкладка магии → Varrock Teleport (1 **Law rune**, 3 **Air rune**, 1 **Fire rune**) — и ты на площади у фонтана. Grand Exchange — к северо-западу от площади.",
         "replacementTarget": {
           "x": 3213,
           "y": 3424,

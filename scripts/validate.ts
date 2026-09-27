@@ -25,6 +25,11 @@ const TYPOS: [RegExp, string][] = [
   [/Перемещёни/i, 'Перемещени'], [/пещёр/i, 'пещер'], [/убьет/i, 'убьёт'], [/\bШелк/i, 'Шёлк'], [/бревнах/i, 'брёвнах'],
   [/Пей омар/i, 'Ешь омара'], [/\s->\s/, '→ вместо ->'], [/ {2,}/, 'двойной пробел'], [/\s[,.;:!?](?!\d)/, 'пробел перед знаком препинания'],
   [/Karamja rum/, 'Karamjan rum'],
+  // Названия из игры (кэш клиента и OSRS Wiki): бармен на Karamja — Zembo; у книги Chronicle
+  // действия Wield, Teleport, Check charges — «Rub» нет; у станции каноэ «Float Log / Float Canoe»
+  // и «Paddle Log / Paddle Canoe», голых «Float» и «Paddle» в меню нет.
+  [/\bZambo\b/, 'Zembo'], [/\bRub\b/, 'у Chronicle нет действия Rub — правый клик → Teleport'],
+  [/«(Float|Paddle)»/, '«Float Log» или «Float Canoe», «Paddle Log» или «Paddle Canoe»'],
 ];
 
 /** Еда маршрута и сколько очков здоровья она восстанавливает (OSRS Wiki). */
@@ -55,6 +60,7 @@ function userTexts(s: Step): [string, string][] {
   s.fields?.forEach((f) => add(f.label, f.text));
   s.tips?.forEach((t) => add('Совет', t));
   for (const it of [...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])]) add(`Где взять ${it.nameEn}`, it.howToGet);
+  s.branches?.forEach((b) => add(`Быстрый вариант «${b.label}»`, b.replacementText));
   return out;
 }
 
