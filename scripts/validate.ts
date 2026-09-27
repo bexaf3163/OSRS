@@ -178,6 +178,11 @@ export function validate(d: GuideData | null, route: Route): Report {
       }
     }
   });
+  // Цель шага-заработка совпадает с «Готово, когда»: «В банке 20 000+ монет» ↔ moneyGoal 20000.
+  for (const s of steps.filter((x) => x.moneyGoal !== undefined)) {
+    const n = Number((s.doneWhen.match(/(\d{1,3}(?:[  ]\d{3})+|\d+)\+? монет/)?.[1] ?? '').replace(/[  ]/g, ''));
+    if (!Number.isInteger(s.moneyGoal) || s.moneyGoal! <= 0 || n !== s.moneyGoal) badReq.push(`${s.id}: moneyGoal ${s.moneyGoal} не совпадает с «Готово, когда»`);
+  }
   const withReq = steps.filter((s) => s.requirements?.length).length;
   check(!badReq.length, `Требования шагов (${withReq}): навыки и уровни верные, квесты — с маршрута и раньше шага, совпадают с полем «Требования»`, `Требования шагов: ${badReq.join('; ')}`);
 

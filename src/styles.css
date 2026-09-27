@@ -1202,6 +1202,7 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 }
 .bridge-indicator:hover { background: var(--surface-2); color: var(--text); }
 .bridge-indicator.is-online { color: var(--done); }
+.bridge-indicator.is-stale { color: var(--warn); }
 .bridge-dot { font-size: 0.7rem; }
 /* Надпись у значка связи — только на очень широком окне: иначе шапка вылезала за экран (на 1400 px — на 193 px). */
 @media (max-width: 1719px) { .bridge-label { display: none; } }
@@ -1383,3 +1384,9 @@ th .place-link { font-weight: inherit; }
   .ready-action { grid-column: 2; justify-self: start; }
 }
 .readiness-detour { color: var(--gold-ink); }
+
+/* 💰 Цель шага-заработка. */
+.money-goal { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; background: var(--surface-3); box-shadow: inset 3px 0 0 var(--gold); }
+.money-goal p { margin: 0; }
+.money-bar { height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.money-bar > span { display: block; height: 100%; background: var(--gold); border-radius: inherit; }

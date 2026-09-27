@@ -148,6 +148,30 @@ public class BridgeServerTest
 	}
 
 	@Test
+	public void statusСообщаетВерсииДляРукопожатия() throws Exception
+	{
+		String body = get("/status").body();
+		assertTrue(body, body.contains("\"protocol\":" + BridgeServer.PROTOCOL));
+		assertTrue(body, body.contains("\"pluginVersion\":\"" + BridgeServer.PLUGIN_VERSION + "\""));
+	}
+
+	@Test
+	public void statusОтдаётОценкуПредметов() throws Exception
+	{
+		java.util.Map<String, Object> gear = new java.util.LinkedHashMap<>();
+		gear.put("equipment", new java.util.ArrayList<>());
+		gear.put("inventory", new java.util.ArrayList<>());
+		gear.put("coins", 10);
+		gear.put("bankCoins", 500);
+		gear.put("carriedValue", 1200L);
+		gear.put("bankValue", 34000L);
+		server.setGear(gear);
+		String body = get("/status").body();
+		assertTrue(body, body.contains("\"carriedValue\":1200"));
+		assertTrue(body, body.contains("\"bankValue\":34000"));
+	}
+
+	@Test
 	public void слушаетТолькоLoopback()
 	{
 		assertTrue(InetAddress.getLoopbackAddress().isLoopbackAddress());

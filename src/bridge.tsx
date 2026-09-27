@@ -10,7 +10,7 @@ import { desktop, type RuneliteLaunch } from './lib/desktop';
 import {
   checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseGear, parsePacing, parseStats, planAutoComplete, setNavTarget,
   syncActiveStep, syncBankTags, syncShoppingPlan, toInGameTarget,
-  type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type ShoppingPlanPayload,
+  pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type ShoppingPlanPayload,
 } from './services/runeliteBridge';
 import { parseOwned, type OwnedState } from './lib/checklist';
 import { stageBankItemIds } from './lib/bankTags';
@@ -76,6 +76,8 @@ interface BridgeValue {
   /** Поставить временную цель. Без связи или при отказе плагина — ответ с причиной. */
   navigate: (target: NavTargetPayload) => Promise<NavResult | { ok: false; reason: 'off' }>;
   clearNav: () => Promise<void>;
+  /** Версия плагина и совместимость с программой; null — нет связи. */
+  plugin: { protocol: number | null; version: string | null; compat: PluginCompat } | null;
 }
 
 const BridgeContext = createContext<BridgeValue | null>(null);
@@ -162,6 +164,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const [gear, setGear] = useState<GearState | null>(null);
   const [pacing, setPacing] = useState<PacingState | null>(null);
   const [navTarget, setNavTargetState] = useState<NavTargetPayload | null>(null);
+  const [plugin, setPlugin] = useState<BridgeValue['plugin']>(null);
   const features = useFeatures();
   /** Какие предметы этапа уже в плагине — чтобы не слать одно и то же при каждой отрисовке. */
   const bankSent = useRef('');
@@ -231,6 +234,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       setShortestPath(false);
       setGear(null);
       setPacing(null);
+      setPlugin(null);
       // RuneLite закрыли — временной цели там больше нет.
       setNavTargetState(null);
       bankSent.current = '';
@@ -247,6 +251,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       setState(s.online ? 'online' : 'offline');
       setInGame(s.inGame);
       setShortestPath(s.shortestPath);
+      setPlugin(s.online ? { protocol: s.protocol, version: s.pluginVersion, compat: pluginCompat(s.protocol) } : null);
       if (s.stats) setStats(s.stats);
       setGear(s.gear);
       // RuneLite перезапустили (или программу) — плагин шага не знает: отправляем снова. Тот же шаг не
@@ -396,10 +401,10 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     () => ({
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, plugin,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav],
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, plugin],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;
 }

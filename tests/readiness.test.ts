@@ -102,6 +102,7 @@ describe('готовность к шагу', () => {
     expect(coins(need, 0).status).toBe('READY');
     expect(coins(0, need).problems[0]).toMatchObject({ kind: 'coins', state: 'BANK' });
     expect(coins(0, 0).status).toBe('MISSING_MONEY');
+    expect(coins(0, 0).problems[0].action).toMatchObject({ kind: 'link', href: expect.stringMatching(/^#\/step\/S(1-13|3-06)$/) });
     expect(coins(0, null).unknown[0]).toMatchObject({ kind: 'coins', state: 'UNKNOWN' });
   });
 

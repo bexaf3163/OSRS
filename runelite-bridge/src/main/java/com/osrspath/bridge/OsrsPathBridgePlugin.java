@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import lombok.Getter;
@@ -778,6 +779,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		g.put("inventory", inventory);
 		g.put("coins", bag == null ? null : coins);
 		g.put("bankCoins", bank == null ? null : bank.count(ItemID.COINS, "Coins"));
+		// Оценка предметов по ценам биржи (без монет): в сумке и на себе — и в банке, если его открывали.
+		// Это не деньги, а сколько выручишь, продав: приложение показывает её отдельно от монет, с «~».
+		IntUnaryOperator price = itemManager::getItemPrice;
+		g.put("carriedValue", carried.value(price, ItemID.COINS) + noted.value(price, ItemID.COINS));
+		g.put("bankValue", bank == null ? null : bank.value(price, ItemID.COINS));
 		return g;
 	}
 

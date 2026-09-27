@@ -30,7 +30,9 @@ import lombok.extern.slf4j.Slf4j;
  * <pre>
  * GET  /status        {"status":"ok","inGame":true,"activeStepId":"S1-03","stats":{"magic":25,…},"shortestPath":true,
  *                      "equipment":[{"id":1351,"name":"Bronze axe"}],"inventory":[{"id":995,"name":"Coins","count":250}],
- *                      "coins":250,"bankCoins":null}   — снаряжение null, пока не в игре или подсказки апгрейда выключены
+ *                      "coins":250,"bankCoins":null,"carriedValue":1200,"bankValue":null,"protocol":2,"pluginVersion":"2.9.0"}
+ *                      — снаряжение null, пока не в игре или подсказки апгрейда выключены; стоимость предметов — оценка
+ *                      по ценам биржи без монет; protocol растёт, когда меняются адреса или поля моста
  * POST /active-step   цель шага (ActiveTarget) — стрелка, подсветка, HUD, проверка вылета, путь, темп, автоотметка
  * POST /clear         убрать всё
  * POST /shopping-plan оптовый список Grand Exchange (ShoppingPlan) — подсказка на бирже
@@ -56,6 +58,13 @@ import lombok.extern.slf4j.Slf4j;
 public final class BridgeServer
 {
 	public static final int DEFAULT_PORT = 38282;
+	/**
+	 * Версия протокола моста. 1 — до 2.9 (поля не было: приложение считает такой плагин старым); 2 — с 2.9:
+	 * стоимость предметов в снаряжении и рукопожатие версий. Растёт вместе с адресами и полями.
+	 */
+	static final int PROTOCOL = 2;
+	/** Версия плагина — та же, что у программы, с которой он едет в одном exe. */
+	static final String PLUGIN_VERSION = "2.9.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	static final int MAX_STREAMS = 8;
@@ -342,6 +351,11 @@ public final class BridgeServer
 					status.put("inventory", g == null ? null : g.get("inventory"));
 					status.put("coins", g == null ? null : g.get("coins"));
 					status.put("bankCoins", g == null ? null : g.get("bankCoins"));
+					status.put("carriedValue", g == null ? null : g.get("carriedValue"));
+					status.put("bankValue", g == null ? null : g.get("bankValue"));
+					// Рукопожатие версий: приложение сверяет протокол и просит обновить плагин, если он старше.
+					status.put("protocol", PROTOCOL);
+					status.put("pluginVersion", PLUGIN_VERSION);
 					json(ex, 200, status);
 					return;
 				case "/active-step":

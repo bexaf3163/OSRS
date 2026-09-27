@@ -262,6 +262,8 @@ export interface Step {
   tips?: string[];
   reward?: string;
   doneWhen: string;
+  /** Шаг-заработок: сколько монет должно быть к концу шага (в сумке и банке). Прогресс — lib/wealth.ts. */
+  moneyGoal?: number;
   /** Прочие подписанные строки: «Зачем», «Важно», «Опасно», «Бой», «Требования». */
   fields?: Field[];
   targets?: Target[];

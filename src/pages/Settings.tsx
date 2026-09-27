@@ -7,7 +7,7 @@ import { desktop, type RuneliteCheck, type ZoomState } from '../lib/desktop';
 import { applyTextScale, loadTextScale, percent, stepScale, TEXT_EVENT, TEXT_STEPS, ZOOM_STEPS } from '../lib/ui-scale';
 import { useBridge } from '../bridge';
 import { setFeatures, useFeatures, type Features } from '../lib/features';
-import { BRIDGE_ORIGIN } from '../services/runeliteBridge';
+import { APP_PROTOCOL, BRIDGE_ORIGIN } from '../services/runeliteBridge';
 
 const THEMES: [Theme, string][] = [['light', 'Светлая'], ['dark', 'Тёмная'], ['system', 'Системная']];
 
@@ -249,7 +249,7 @@ function Helpers() {
 }
 
 function RuneLiteBridge() {
-  const { enabled, setEnabled, state, inGame, activeStepId, clear, canLaunch, launchRuneLite, autoLaunch, setAutoLaunch } = useBridge();
+  const { enabled, setEnabled, state, inGame, activeStepId, clear, canLaunch, launchRuneLite, autoLaunch, setAutoLaunch, plugin } = useBridge();
   const [check, setCheck] = useState<RuneliteCheck | null>(null);
   const [launching, setLaunching] = useState(false);
   useEffect(() => {
@@ -281,6 +281,22 @@ function RuneLiteBridge() {
           ? <> В игре показан шаг <code className="code">{activeStepId}</code>.</>
           : <> Шаг <code className="code">{activeStepId}</code> вернётся в игру, когда RuneLite подключится.</>)}</p>
         {activeStepId && <div className="actions"><button type="button" className="btn" onClick={() => void clear()}>Убрать подсказки из игры</button></div>}
+        {plugin && (plugin.compat === 'ok'
+          ? <p className="muted small">✓ Плагин {plugin.version ?? ''} совместим с программой {__APP_VERSION__} (протокол {plugin.protocol}).</p>
+          : (
+            <div className="plaque plaque-warning" role="note">
+              <p><strong>⚠️ Плагин OSRS Path Bridge {plugin.compat === 'newer' ? 'новее программы' : 'устарел'}</strong></p>
+              <p className="small">
+                Программа: {__APP_VERSION__} (протокол моста {APP_PROTOCOL}) · Плагин: {plugin.version ?? 'до 2.9'}
+                {plugin.protocol !== null ? ` (протокол ${plugin.protocol})` : ''}.
+              </p>
+              <p className="small">
+                {plugin.compat === 'newer'
+                  ? 'Обнови программу «OSRS Путь»: плагин ждёт то, чего эта версия не умеет.'
+                  : 'Шаги, стрелка и подсказки работают, но новых функций (оценка предметов в банке, большая стрелка) у старого плагина нет. Обнови плагин: закрой RuneLite и запусти его кнопкой ниже — программа подложит плагин из своей папки. Если ставил плагин вручную — замени jar на новый из папки программы.'}
+              </p>
+            </div>
+          ))}
       </div>
 
       {canLaunch ? (

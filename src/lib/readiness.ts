@@ -179,7 +179,13 @@ export function stepReadiness(input: ReadinessInput): StepReadiness {
       } else if (inBank === null) {
         reqs.push({ kind: 'coins', label, state: 'UNKNOWN', hard: true, detail: `в сумке ${gp(bag)}; банк в этой сессии не открывали` });
       } else {
-        reqs.push({ kind: 'coins', label, state: 'MISSING', hard: true, detail: `всего ${gp(bag + inBank)}, не хватает ${gp(it.count - bag - inBank)}`, source: 'game' });
+        // Где заработать: ближайший шаг-заработок маршрута (коровьи шкуры, железная руда) — не дальше этого шага.
+        const at = steps.findIndex((x) => x.id === step.id);
+        const earn = steps.slice(0, at >= 0 ? at + 1 : steps.length).filter((x) => x.moneyGoal).pop() ?? steps.find((x) => x.moneyGoal);
+        reqs.push({
+          kind: 'coins', label, state: 'MISSING', hard: true, detail: `всего ${gp(bag + inBank)}, не хватает ${gp(it.count - bag - inBank)}`, source: 'game',
+          ...(earn ? { action: { kind: 'link' as const, label: `💰 Заработать — ${earn.id}`, href: `#/step/${earn.id}` } } : {}),
+        });
       }
       continue;
     }

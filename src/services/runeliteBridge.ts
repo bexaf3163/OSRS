@@ -23,6 +23,23 @@ export interface BridgeStatus {
   gear: GearState | null;
   /** Шаг, который сейчас показывает плагин; null — никакого (например, RuneLite только что перезапустили). */
   activeStepId: string | null;
+  /** Версия протокола моста; null — плагин до 2.9 (поля нет). */
+  protocol: number | null;
+  pluginVersion: string | null;
+}
+
+/**
+ * Протокол, который ждёт программа. Плагин старше — программа просит его обновить: новые адреса и поля он не
+ * знает. Плагин без поля protocol — до 2.9: работает (основные адреса те же), но без новых функций.
+ */
+export const APP_PROTOCOL = 2;
+
+export type PluginCompat = 'ok' | 'legacy' | 'older' | 'newer';
+
+export function pluginCompat(protocol: number | null): PluginCompat {
+  if (protocol === null) return 'legacy';
+  if (protocol < APP_PROTOCOL) return 'older';
+  return protocol > APP_PROTOCOL ? 'newer' : 'ok';
 }
 
 /** Предмет из игры: надетый или в сумке. */
@@ -41,6 +58,12 @@ export interface GearState {
   coins: number | null;
   /** Монеты в банке; null — банк в этой сессии не открывали. */
   bankCoins: number | null;
+  /**
+   * Оценка предметов по ценам биржи (без монет) — сколько выручишь, продав: в сумке и на себе, и в банке.
+   * null — неизвестно (банк не открывали или плагин до 2.9). Это не деньги: показывается отдельно, с «~».
+   */
+  carriedValue?: number | null;
+  bankValue?: number | null;
 }
 
 /** Темп прокачки шага из игры (событие PACING). */
@@ -196,7 +219,12 @@ function gearItems(raw: unknown): GearItem[] | null {
 export function parseGear(raw: unknown): GearState | null {
   if (!raw || typeof raw !== 'object') return null;
   const o = raw as Record<string, unknown>;
-  const g: GearState = { equipment: gearItems(o.equipment), inventory: gearItems(o.inventory), coins: int(o.coins), bankCoins: int(o.bankCoins) };
+  const g: GearState = {
+    equipment: gearItems(o.equipment), inventory: gearItems(o.inventory), coins: int(o.coins), bankCoins: int(o.bankCoins),
+    // Оценки нет у плагина до 2.9 и пока банк не открывали (Gson не пишет null) — поле тогда не заводим.
+    ...(int(o.carriedValue) !== null ? { carriedValue: int(o.carriedValue) } : {}),
+    ...(int(o.bankValue) !== null ? { bankValue: int(o.bankValue) } : {}),
+  };
   return g.equipment || g.inventory || g.coins !== null ? g : null;
 }
 
@@ -263,7 +291,7 @@ export function defaultTransport(): BridgeTransport {
 
 export async function checkStatus(t: BridgeTransport = defaultTransport()): Promise<BridgeStatus> {
   const res = await t.request('GET', '/status');
-  const d = res.data as { status?: string; inGame?: boolean; stats?: unknown; shortestPath?: unknown; activeStepId?: unknown } | undefined;
+  const d = res.data as { status?: string; inGame?: boolean; stats?: unknown; shortestPath?: unknown; activeStepId?: unknown; protocol?: unknown; pluginVersion?: unknown } | undefined;
   const online = res.ok && d?.status === 'ok';
   return {
     online,
@@ -272,6 +300,8 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
     shortestPath: Boolean(online && d?.shortestPath === true),
     gear: online ? parseGear(d) : null,
     activeStepId: online && typeof d?.activeStepId === 'string' ? d.activeStepId : null,
+    protocol: online && typeof d?.protocol === 'number' && Number.isInteger(d.protocol) && d.protocol > 0 ? d.protocol : null,
+    pluginVersion: online && typeof d?.pluginVersion === 'string' && d.pluginVersion.length <= 20 ? d.pluginVersion : null,
   };
 }
 

@@ -5,6 +5,7 @@
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
 import { formatGp } from '../lib/shopping';
+import { wealthOf } from '../lib/wealth';
 import { useGearAdvice } from '../lib/gearAdvice';
 import {
   actionNav, gainText, SLOT_LABEL, SLOTS, statsText, WINDOW, type GearAction, type LockedItem, type MeleeResult,
@@ -123,13 +124,14 @@ function lockGroups(locked: LockedItem[]): LockedItem[][] {
 }
 
 export function GearPage() {
-  const { state, stats } = useBridge();
+  const { state, stats, gear } = useBridge();
   const { mode, steps } = useStore();
   const { advice, fightStep, pricesReady, pricesFailed } = useGearAdvice();
   const places = usePlaceMap();
   const lv = advice.levels;
   const fromGame = Boolean(stats?.attack);
   const coins = advice.coins;
+  const wealth = wealthOf(gear);
 
   const bridgeNote = !advice.live
     ? state === 'off'
@@ -175,7 +177,12 @@ export function GearPage() {
           <p><strong>Сейчас:</strong> что в руке, программа не видит — нужна связь с RuneLite.</p>
         )}
         {coins.total !== null && (
-          <p><strong>Монеты:</strong> {formatGp(coins.total)} gp <span className="muted">(в сумке {formatGp(coins.bag ?? 0)}{coins.bank !== null ? `, в банке ${formatGp(coins.bank)}` : ', банк ещё не открывали'})</span></p>
+          <p>
+            <strong>Монеты:</strong> {formatGp(coins.total)} gp <span className="muted">(в сумке {formatGp(coins.bag ?? 0)}{coins.bank !== null ? `, в банке ${formatGp(coins.bank)}` : ', банк ещё не открывали'})</span>
+            {wealth?.items.total != null && wealth.items.total > 0 && (
+              <span className="muted"> · предметы ~{formatGp(wealth.items.total)} gp по ценам биржи (оценка, не деньги)</span>
+            )}
+          </p>
         )}
         <p className="muted small">
           {bridgeNote}

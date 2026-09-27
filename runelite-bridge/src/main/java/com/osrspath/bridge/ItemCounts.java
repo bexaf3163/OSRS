@@ -2,6 +2,7 @@ package com.osrspath.bridge;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.IntUnaryOperator;
 
 /**
  * Сколько каких предметов в контейнере (сумка, надетое, банк). Считается один раз на событие
@@ -72,5 +73,22 @@ final class ItemCounts
 	boolean isEmpty()
 	{
 		return byId.isEmpty();
+	}
+
+	/**
+	 * Оценка стоимости по ценам биржи: price(id) — цена одного, у неторгуемых 0. Монеты (skip) не входят —
+	 * они считаются отдельно, как точные деньги. Каждый предмет — один раз: ID, а не имя.
+	 */
+	long value(IntUnaryOperator price, int skip)
+	{
+		long sum = 0;
+		for (Map.Entry<Integer, Integer> e : byId.entrySet())
+		{
+			if (e.getKey() != skip)
+			{
+				sum += (long) Math.max(0, price.applyAsInt(e.getKey())) * e.getValue();
+			}
+		}
+		return sum;
 	}
 }

@@ -1130,6 +1130,7 @@
       }
     ],
     "doneWhen": "В банке 20 000+ монет (вместе с остатком от Stronghold).",
+    "moneyGoal": 20000,
     "inGame": {
       "npcNames": [
         "Cow"
@@ -3198,6 +3199,7 @@
       }
     ],
     "doneWhen": "В банке 30 000+ монет.",
+    "moneyGoal": 30000,
     "inGame": {
       "objectNames": [
         "Iron rocks"
