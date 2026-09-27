@@ -1,0 +1,1182 @@
+{
+  "source": "OSRS Wiki, шаблон {{Map}} в статье",
+  "updated": "2026-09-27",
+  "locations": {
+    "Lumbridge": {
+      "x": 3188,
+      "y": 3220,
+      "plane": 0,
+      "label": "Lumbridge",
+      "kind": "city",
+      "page": "Lumbridge"
+    },
+    "Lumbridge Castle": {
+      "x": 3217,
+      "y": 3219,
+      "plane": 0,
+      "label": "Lumbridge Castle",
+      "kind": "landmark",
+      "aliases": [
+        "Lumbridge castle"
+      ],
+      "page": "Lumbridge Castle"
+    },
+    "Lumbridge Swamp": {
+      "x": 3197,
+      "y": 3166,
+      "plane": 0,
+      "label": "Lumbridge Swamp",
+      "kind": "landmark",
+      "aliases": [
+        "Lumbridge swamp"
+      ],
+      "page": "Lumbridge Swamp"
+    },
+    "Varrock": {
+      "x": 3210,
+      "y": 3448,
+      "plane": 0,
+      "label": "Varrock",
+      "kind": "city",
+      "page": "Varrock"
+    },
+    "Varrock Square": {
+      "x": 3213,
+      "y": 3429,
+      "plane": 0,
+      "label": "Varrock Square",
+      "kind": "landmark",
+      "aliases": [
+        "Varrock Center",
+        "Varrock centre",
+        "Varrock town square"
+      ],
+      "page": "Varrock Square"
+    },
+    "Grand Exchange": {
+      "x": 3165,
+      "y": 3490,
+      "plane": 0,
+      "label": "Grand Exchange",
+      "kind": "landmark",
+      "aliases": [
+        "GE",
+        "Grand exchange"
+      ],
+      "page": "Grand Exchange"
+    },
+    "Falador": {
+      "x": 3000,
+      "y": 3360,
+      "plane": 0,
+      "label": "Falador",
+      "kind": "city",
+      "page": "Falador"
+    },
+    "Draynor Village": {
+      "x": 3103,
+      "y": 3265,
+      "plane": 0,
+      "label": "Draynor Village",
+      "kind": "city",
+      "aliases": [
+        "Draynor"
+      ],
+      "page": "Draynor Village"
+    },
+    "Draynor Manor": {
+      "x": 3108,
+      "y": 3358,
+      "plane": 0,
+      "label": "Draynor Manor",
+      "kind": "landmark",
+      "page": "Draynor Manor"
+    },
+    "Port Sarim": {
+      "x": 3029,
+      "y": 3221,
+      "plane": 0,
+      "label": "Port Sarim",
+      "kind": "city",
+      "page": "Port Sarim"
+    },
+    "Rimmington": {
+      "x": 2956,
+      "y": 3232,
+      "plane": 0,
+      "label": "Rimmington",
+      "kind": "city",
+      "page": "Rimmington"
+    },
+    "Al Kharid": {
+      "x": 3290,
+      "y": 3185,
+      "plane": 0,
+      "label": "Al Kharid",
+      "kind": "city",
+      "aliases": [
+        "Al-Kharid"
+      ],
+      "page": "Al Kharid"
+    },
+    "Edgeville": {
+      "x": 3080,
+      "y": 3492,
+      "plane": 0,
+      "label": "Edgeville",
+      "kind": "city",
+      "page": "Edgeville"
+    },
+    "Barbarian Village": {
+      "x": 3080,
+      "y": 3427,
+      "plane": 0,
+      "label": "Barbarian Village",
+      "kind": "city",
+      "page": "Barbarian Village"
+    },
+    "Musa Point": {
+      "x": 2904,
+      "y": 3162,
+      "plane": 0,
+      "label": "Musa Point",
+      "kind": "city",
+      "aliases": [
+        "Musa Point (Karamja)",
+        "Karamja"
+      ],
+      "page": "Musa Point"
+    },
+    "Brimhaven": {
+      "x": 2760,
+      "y": 3195,
+      "plane": 0,
+      "label": "Brimhaven",
+      "kind": "city",
+      "page": "Brimhaven"
+    },
+    "Catherby": {
+      "x": 2814,
+      "y": 3443,
+      "plane": 0,
+      "label": "Catherby",
+      "kind": "city",
+      "page": "Catherby"
+    },
+    "Seers' Village": {
+      "x": 2710,
+      "y": 3485,
+      "plane": 0,
+      "label": "Seers' Village",
+      "kind": "city",
+      "aliases": [
+        "Seers Village"
+      ],
+      "page": "Seers' Village"
+    },
+    "Camelot": {
+      "x": 2758,
+      "y": 3507,
+      "plane": 0,
+      "label": "Camelot",
+      "kind": "city",
+      "aliases": [
+        "Camelot Castle"
+      ],
+      "page": "Camelot"
+    },
+    "Taverley": {
+      "x": 2910,
+      "y": 3451,
+      "plane": 0,
+      "label": "Taverley",
+      "kind": "city",
+      "page": "Taverley"
+    },
+    "Burthorpe": {
+      "x": 2870,
+      "y": 3544,
+      "plane": 0,
+      "label": "Burthorpe",
+      "kind": "city",
+      "page": "Burthorpe"
+    },
+    "East Ardougne": {
+      "x": 2624,
+      "y": 3300,
+      "plane": 0,
+      "label": "East Ardougne",
+      "kind": "city",
+      "aliases": [
+        "Ardougne"
+      ],
+      "page": "East Ardougne"
+    },
+    "West Ardougne": {
+      "x": 2500,
+      "y": 3305,
+      "plane": 0,
+      "label": "West Ardougne",
+      "kind": "city",
+      "page": "West Ardougne"
+    },
+    "Yanille": {
+      "x": 2577,
+      "y": 3090,
+      "plane": 0,
+      "label": "Yanille",
+      "kind": "city",
+      "page": "Yanille"
+    },
+    "Canifis": {
+      "x": 3493,
+      "y": 3488,
+      "plane": 0,
+      "label": "Canifis",
+      "kind": "city",
+      "page": "Canifis"
+    },
+    "Rellekka": {
+      "x": 2658,
+      "y": 3677,
+      "plane": 0,
+      "label": "Rellekka",
+      "kind": "city",
+      "page": "Rellekka"
+    },
+    "Entrana": {
+      "x": 2840,
+      "y": 3358,
+      "plane": 0,
+      "label": "Entrana",
+      "kind": "city",
+      "page": "Entrana"
+    },
+    "Tree Gnome Stronghold": {
+      "x": 2440,
+      "y": 3460,
+      "plane": 0,
+      "label": "Tree Gnome Stronghold",
+      "kind": "city",
+      "aliases": [
+        "Gnome Stronghold"
+      ],
+      "page": "Tree Gnome Stronghold"
+    },
+    "Tree Gnome Village": {
+      "x": 2511,
+      "y": 3250,
+      "plane": 0,
+      "label": "Tree Gnome Village",
+      "kind": "city",
+      "page": "Tree Gnome Village"
+    },
+    "Shilo Village": {
+      "x": 2922,
+      "y": 3000,
+      "plane": 0,
+      "label": "Shilo Village",
+      "kind": "city",
+      "page": "Shilo Village"
+    },
+    "Pollnivneach": {
+      "x": 3358,
+      "y": 2974,
+      "plane": 0,
+      "label": "Pollnivneach",
+      "kind": "city",
+      "page": "Pollnivneach"
+    },
+    "Nardah": {
+      "x": 3427,
+      "y": 2911,
+      "plane": 0,
+      "label": "Nardah",
+      "kind": "city",
+      "page": "Nardah"
+    },
+    "Shantay Pass": {
+      "x": 3304,
+      "y": 3123,
+      "plane": 0,
+      "label": "Shantay Pass",
+      "kind": "landmark",
+      "page": "Shantay Pass"
+    },
+    "Ferox Enclave": {
+      "x": 3137,
+      "y": 3623,
+      "plane": 0,
+      "label": "Ferox Enclave",
+      "kind": "city",
+      "page": "Ferox Enclave"
+    },
+    "Corsair Cove": {
+      "x": 2573,
+      "y": 2856,
+      "plane": 0,
+      "label": "Corsair Cove",
+      "kind": "city",
+      "page": "Corsair Cove"
+    },
+    "Wizards' Tower": {
+      "x": 3109,
+      "y": 3160,
+      "plane": 0,
+      "label": "Wizards' Tower",
+      "kind": "landmark",
+      "aliases": [
+        "Wizards Tower",
+        "Wizard's Tower"
+      ],
+      "page": "Wizards' Tower"
+    },
+    "Ice Mountain": {
+      "x": 3010,
+      "y": 3486,
+      "plane": 0,
+      "label": "Ice Mountain",
+      "kind": "landmark",
+      "page": "Ice Mountain"
+    },
+    "Goblin Village": {
+      "x": 2958,
+      "y": 3510,
+      "plane": 0,
+      "label": "Goblin Village",
+      "kind": "city",
+      "page": "Goblin Village"
+    },
+    "Edgeville Monastery": {
+      "x": 3052,
+      "y": 3490,
+      "plane": 0,
+      "label": "Edgeville Monastery",
+      "kind": "landmark",
+      "aliases": [
+        "Monastery"
+      ],
+      "page": "Edgeville Monastery"
+    },
+    "Mudskipper Point": {
+      "x": 2999,
+      "y": 3122,
+      "plane": 0,
+      "label": "Mudskipper Point",
+      "kind": "landmark",
+      "page": "Mudskipper Point"
+    },
+    "Crandor": {
+      "x": 2836,
+      "y": 3271,
+      "plane": 0,
+      "label": "Crandor",
+      "kind": "landmark",
+      "page": "Crandor"
+    },
+    "Draynor jail": {
+      "x": 3125,
+      "y": 3244,
+      "plane": 0,
+      "label": "Draynor jail",
+      "kind": "landmark",
+      "aliases": [
+        "Draynor Village jail",
+        "Draynor Jail"
+      ],
+      "page": "Draynor jail"
+    },
+    "Port Sarim jail": {
+      "x": 3014,
+      "y": 3186,
+      "plane": 0,
+      "label": "Port Sarim jail",
+      "kind": "landmark",
+      "aliases": [
+        "Port Sarim Jail"
+      ],
+      "page": "Port Sarim jail"
+    },
+    "Lighthouse": {
+      "x": 2509,
+      "y": 3641,
+      "plane": 0,
+      "label": "Lighthouse",
+      "kind": "landmark",
+      "page": "Lighthouse"
+    },
+    "Champions' Guild": {
+      "x": 3191,
+      "y": 3357,
+      "plane": 0,
+      "label": "Champions' Guild",
+      "kind": "guild",
+      "aliases": [
+        "Champions Guild"
+      ],
+      "page": "Champions' Guild"
+    },
+    "Cooks' Guild": {
+      "x": 3144,
+      "y": 3450,
+      "plane": 0,
+      "label": "Cooks' Guild",
+      "kind": "guild",
+      "aliases": [
+        "Cooking Guild",
+        "Cook's Guild"
+      ],
+      "page": "Cooks' Guild"
+    },
+    "Crafting Guild": {
+      "x": 2932,
+      "y": 3281,
+      "plane": 0,
+      "label": "Crafting Guild",
+      "kind": "guild",
+      "page": "Crafting Guild"
+    },
+    "Mining Guild": {
+      "x": 3032,
+      "y": 9728,
+      "plane": 0,
+      "label": "Mining Guild",
+      "kind": "guild",
+      "page": "Mining Guild"
+    },
+    "Fishing Guild": {
+      "x": 2609,
+      "y": 3424,
+      "plane": 0,
+      "label": "Fishing Guild",
+      "kind": "guild",
+      "page": "Fishing Guild"
+    },
+    "Ranging Guild": {
+      "x": 2665,
+      "y": 3432,
+      "plane": 0,
+      "label": "Ranging Guild",
+      "kind": "guild",
+      "page": "Ranging Guild"
+    },
+    "Warriors' Guild": {
+      "x": 2864,
+      "y": 3544,
+      "plane": 0,
+      "label": "Warriors' Guild",
+      "kind": "guild",
+      "aliases": [
+        "Warriors Guild"
+      ],
+      "page": "Warriors' Guild"
+    },
+    "Wizards' Guild": {
+      "x": 2591,
+      "y": 3088,
+      "plane": 0,
+      "label": "Wizards' Guild",
+      "kind": "guild",
+      "aliases": [
+        "Wizards Guild"
+      ],
+      "page": "Wizards' Guild"
+    },
+    "Woodcutting Guild": {
+      "x": 1565,
+      "y": 3499,
+      "plane": 0,
+      "label": "Woodcutting Guild",
+      "kind": "guild",
+      "page": "Woodcutting Guild"
+    },
+    "Farming Guild": {
+      "x": 1249,
+      "y": 3737,
+      "plane": 0,
+      "label": "Farming Guild",
+      "kind": "guild",
+      "page": "Farming Guild"
+    },
+    "Dwarven Mine": {
+      "x": 3018,
+      "y": 3450,
+      "plane": 0,
+      "label": "Dwarven Mine",
+      "kind": "dungeon",
+      "aliases": [
+        "Dwarven Mines"
+      ],
+      "page": "Dwarven Mine"
+    },
+    "Edgeville Dungeon": {
+      "x": 3116,
+      "y": 9908,
+      "plane": 0,
+      "label": "Edgeville Dungeon",
+      "kind": "dungeon",
+      "page": "Edgeville Dungeon"
+    },
+    "Asgarnian Ice Dungeon": {
+      "x": 3008,
+      "y": 3150,
+      "plane": 0,
+      "label": "Asgarnian Ice Dungeon",
+      "kind": "dungeon",
+      "page": "Asgarnian Ice Dungeon"
+    },
+    "Varrock West Bank": {
+      "x": 3185,
+      "y": 3440,
+      "plane": 0,
+      "label": "Varrock West Bank",
+      "kind": "bank",
+      "page": "Varrock west bank"
+    },
+    "Varrock East Bank": {
+      "x": 3254,
+      "y": 3420,
+      "plane": 0,
+      "label": "Varrock East Bank",
+      "kind": "bank",
+      "page": "Varrock east bank"
+    },
+    "Falador East Bank": {
+      "x": 3017,
+      "y": 3356,
+      "plane": 0,
+      "label": "Falador East Bank",
+      "kind": "bank",
+      "page": "Falador east bank"
+    },
+    "Falador West Bank": {
+      "x": 2947,
+      "y": 3366,
+      "plane": 0,
+      "label": "Falador West Bank",
+      "kind": "bank",
+      "page": "Falador west bank"
+    },
+    "Draynor Bank": {
+      "x": 3093,
+      "y": 3243,
+      "plane": 0,
+      "label": "Draynor Bank",
+      "kind": "bank",
+      "aliases": [
+        "Draynor Village bank"
+      ],
+      "page": "Draynor bank"
+    },
+    "Al Kharid Bank": {
+      "x": 3269,
+      "y": 3167,
+      "plane": 0,
+      "label": "Al Kharid Bank",
+      "kind": "bank",
+      "page": "Al Kharid bank"
+    },
+    "Edgeville Bank": {
+      "x": 3093,
+      "y": 3495,
+      "plane": 0,
+      "label": "Edgeville Bank",
+      "kind": "bank",
+      "page": "Edgeville bank"
+    },
+    "Bob's Brilliant Axes": {
+      "x": 3229,
+      "y": 3204,
+      "plane": 0,
+      "label": "Bob's Brilliant Axes",
+      "kind": "shop",
+      "aliases": [
+        "Bob's Brilliant Axes."
+      ],
+      "page": "Bob's Brilliant Axes."
+    },
+    "Lumbridge General Store": {
+      "x": 3212,
+      "y": 3247,
+      "plane": 0,
+      "label": "Lumbridge General Store",
+      "kind": "shop",
+      "page": "Lumbridge General Store"
+    },
+    "Gerrant's Fishy Business": {
+      "x": 3015,
+      "y": 3225,
+      "plane": 0,
+      "label": "Gerrant's Fishy Business",
+      "kind": "shop",
+      "aliases": [
+        "Gerrant's Fishy Business."
+      ],
+      "page": "Gerrant's Fishy Business."
+    },
+    "Zeke's Superior Scimitars": {
+      "x": 3288,
+      "y": 3190,
+      "plane": 0,
+      "label": "Zeke's Superior Scimitars",
+      "kind": "shop",
+      "aliases": [
+        "Zeke's Superior Scimitars."
+      ],
+      "page": "Zeke's Superior Scimitars."
+    },
+    "Nurmof's Pickaxe Shop": {
+      "x": 2998,
+      "y": 9845,
+      "plane": 0,
+      "label": "Nurmof's Pickaxe Shop",
+      "kind": "shop",
+      "aliases": [
+        "Nurmof's Pickaxe Shop."
+      ],
+      "page": "Nurmof's Pickaxe Shop."
+    },
+    "Varrock General Store": {
+      "x": 3216,
+      "y": 3417,
+      "plane": 0,
+      "label": "Varrock General Store",
+      "kind": "shop",
+      "page": "Varrock General Store"
+    },
+    "Horvik's Armour Shop": {
+      "x": 3230,
+      "y": 3437,
+      "plane": 0,
+      "label": "Horvik's Armour Shop",
+      "kind": "shop",
+      "aliases": [
+        "Horvik's Armour Shop."
+      ],
+      "page": "Horvik's Armour Shop."
+    },
+    "Aubury's Rune Shop": {
+      "x": 3253,
+      "y": 3402,
+      "plane": 0,
+      "label": "Aubury's Rune Shop",
+      "kind": "shop",
+      "aliases": [
+        "Aubury's Rune Shop."
+      ],
+      "page": "Aubury's Rune Shop."
+    },
+    "Betty's Magic Emporium": {
+      "x": 3014,
+      "y": 3259,
+      "plane": 0,
+      "label": "Betty's Magic Emporium",
+      "kind": "shop",
+      "aliases": [
+        "Betty's Magic Emporium."
+      ],
+      "page": "Betty's Magic Emporium"
+    },
+    "Diango's Toy Store": {
+      "x": 3081,
+      "y": 3246,
+      "plane": 0,
+      "label": "Diango's Toy Store",
+      "kind": "shop",
+      "page": "Diango's Toy Store"
+    },
+    "Wydin's Food Store": {
+      "x": 3013,
+      "y": 3207,
+      "plane": 0,
+      "label": "Wydin's Food Store",
+      "kind": "shop",
+      "page": "Food Store"
+    },
+    "Brian's Archery Supplies": {
+      "x": 2957,
+      "y": 3204,
+      "plane": 0,
+      "label": "Brian's Archery Supplies",
+      "kind": "shop",
+      "aliases": [
+        "Brian's Archery Supplies."
+      ],
+      "page": "Brian's Archery Supplies."
+    },
+    "Lowe's Archery Emporium": {
+      "x": 3236,
+      "y": 3425,
+      "plane": 0,
+      "label": "Lowe's Archery Emporium",
+      "kind": "shop",
+      "aliases": [
+        "Lowe's Archery Emporium."
+      ],
+      "page": "Lowe's Archery Emporium"
+    },
+    "Thessalia's Fine Clothes": {
+      "x": 3207,
+      "y": 3415,
+      "plane": 0,
+      "label": "Thessalia's Fine Clothes",
+      "kind": "shop",
+      "page": "Thessalia's Fine Clothes."
+    },
+    "Herquin's Gems": {
+      "x": 2945,
+      "y": 3335,
+      "plane": 0,
+      "label": "Herquin's Gems",
+      "kind": "shop",
+      "page": "Herquin's Gems."
+    },
+    "Wayne's Chains": {
+      "x": 2972,
+      "y": 3312,
+      "plane": 0,
+      "label": "Wayne's Chains",
+      "kind": "shop",
+      "aliases": [
+        "Wayne's Chains - Chainmail Specialist"
+      ],
+      "page": "Wayne's Chains! - Chainmail specialist."
+    },
+    "Cassie's Shield Shop": {
+      "x": 2976,
+      "y": 3385,
+      "plane": 0,
+      "label": "Cassie's Shield Shop",
+      "kind": "shop",
+      "page": "Cassie's Shield Shop."
+    },
+    "Peksa's Helmet Shop": {
+      "x": 3075,
+      "y": 3429,
+      "plane": 0,
+      "label": "Peksa's Helmet Shop",
+      "kind": "shop",
+      "page": "Helmet Shop."
+    },
+    "Dommik's Crafting Store": {
+      "x": 3321,
+      "y": 3194,
+      "plane": 0,
+      "label": "Dommik's Crafting Store",
+      "kind": "shop",
+      "page": "Dommik's Crafting Store."
+    },
+    "Louie's Armoured Legs Bazaar": {
+      "x": 3316,
+      "y": 3175,
+      "plane": 0,
+      "label": "Louie's Armoured Legs Bazaar",
+      "kind": "shop",
+      "page": "Louie's Armoured Legs Bazaar."
+    },
+    "Ranael's Super Skirt Store": {
+      "x": 3316,
+      "y": 3163,
+      "plane": 0,
+      "label": "Ranael's Super Skirt Store",
+      "kind": "shop",
+      "page": "Ranael's Super Skirt Store."
+    },
+    "Al Kharid General Store": {
+      "x": 3315,
+      "y": 3182,
+      "plane": 0,
+      "label": "Al Kharid General Store",
+      "kind": "shop",
+      "page": "Al Kharid General Store"
+    },
+    "Varrock Swordshop": {
+      "x": 3207,
+      "y": 3400,
+      "plane": 0,
+      "label": "Varrock Swordshop",
+      "kind": "shop",
+      "aliases": [
+        "Varrock Sword Shop"
+      ],
+      "page": "Varrock Swordshop"
+    },
+    "Zaff's Superior Staffs!": {
+      "x": 3203,
+      "y": 3434,
+      "plane": 0,
+      "label": "Zaff's Superior Staffs!",
+      "kind": "shop",
+      "aliases": [
+        "Zaff's Superior Staffs"
+      ],
+      "page": "Zaff's Superior Staffs!"
+    },
+    "Grum's Gold Exchange": {
+      "x": 3013,
+      "y": 3247,
+      "plane": 0,
+      "label": "Grum's Gold Exchange",
+      "kind": "shop",
+      "page": "Grum's Gold Exchange."
+    },
+    "Blue Moon Inn": {
+      "x": 3224,
+      "y": 3398,
+      "plane": 0,
+      "label": "Blue Moon Inn",
+      "kind": "shop",
+      "page": "Blue Moon Inn"
+    },
+    "Rising Sun Inn": {
+      "x": 2958,
+      "y": 3372,
+      "plane": 0,
+      "label": "Rising Sun Inn",
+      "kind": "shop",
+      "page": "Rising Sun Inn"
+    },
+    "Jolly Boar Inn": {
+      "x": 3282,
+      "y": 3497,
+      "plane": 0,
+      "label": "Jolly Boar Inn",
+      "kind": "shop",
+      "page": "Jolly Boar Inn"
+    },
+    "Fishing tutor": {
+      "x": 3244,
+      "y": 3157,
+      "plane": 0,
+      "label": "Fishing tutor",
+      "kind": "npc",
+      "aliases": [
+        "Fishing Tutor"
+      ],
+      "page": "Fishing tutor"
+    },
+    "Father Aereck": {
+      "x": 3243,
+      "y": 3210,
+      "plane": 0,
+      "label": "Father Aereck",
+      "kind": "npc",
+      "page": "Father Aereck"
+    },
+    "Father Urhney": {
+      "x": 3148,
+      "y": 3176,
+      "plane": 0,
+      "label": "Father Urhney",
+      "kind": "npc",
+      "page": "Father Urhney"
+    },
+    "Fred the Farmer": {
+      "x": 3189,
+      "y": 3273,
+      "plane": 0,
+      "label": "Fred the Farmer",
+      "kind": "npc",
+      "page": "Fred the Farmer"
+    },
+    "Bob": {
+      "x": 3229,
+      "y": 3204,
+      "plane": 0,
+      "label": "Bob",
+      "kind": "npc",
+      "aliases": [
+        "Bob (Lumbridge)"
+      ],
+      "page": "Bob"
+    },
+    "Zeke": {
+      "x": 3288,
+      "y": 3190,
+      "plane": 0,
+      "label": "Zeke",
+      "kind": "npc",
+      "page": "Zeke"
+    },
+    "Nurmof": {
+      "x": 2998,
+      "y": 9844,
+      "plane": 0,
+      "label": "Nurmof",
+      "kind": "npc",
+      "page": "Nurmof"
+    },
+    "Gerrant": {
+      "x": 3013,
+      "y": 3226,
+      "plane": 0,
+      "label": "Gerrant",
+      "kind": "npc",
+      "page": "Gerrant"
+    },
+    "Aubury": {
+      "x": 3253,
+      "y": 3402,
+      "plane": 0,
+      "label": "Aubury",
+      "kind": "npc",
+      "page": "Aubury"
+    },
+    "Hans": {
+      "x": 3212,
+      "y": 3219,
+      "plane": 0,
+      "label": "Hans",
+      "kind": "npc",
+      "page": "Hans"
+    },
+    "Duke Horacio": {
+      "x": 3211,
+      "y": 3223,
+      "plane": 1,
+      "label": "Duke Horacio",
+      "kind": "npc",
+      "page": "Duke Horacio"
+    },
+    "Sedridor": {
+      "x": 3103,
+      "y": 9571,
+      "plane": 0,
+      "label": "Sedridor",
+      "kind": "npc",
+      "aliases": [
+        "Archmage Sedridor"
+      ],
+      "page": "Archmage Sedridor"
+    },
+    "Ned": {
+      "x": 3099,
+      "y": 3259,
+      "plane": 0,
+      "label": "Ned",
+      "kind": "npc",
+      "page": "Ned"
+    },
+    "Count Check": {
+      "x": 3240,
+      "y": 3199,
+      "plane": 0,
+      "label": "Count Check",
+      "kind": "npc",
+      "page": "Count Check"
+    },
+    "Veos": {
+      "x": 3054,
+      "y": 3245,
+      "plane": 0,
+      "label": "Veos",
+      "kind": "npc",
+      "page": "Veos"
+    },
+    "Diango": {
+      "x": 3081,
+      "y": 3247,
+      "plane": 0,
+      "label": "Diango",
+      "kind": "npc",
+      "page": "Diango"
+    },
+    "Horvik": {
+      "x": 3230,
+      "y": 3437,
+      "plane": 0,
+      "label": "Horvik",
+      "kind": "npc",
+      "page": "Horvik"
+    },
+    "Thessalia": {
+      "x": 3206,
+      "y": 3416,
+      "plane": 0,
+      "label": "Thessalia",
+      "kind": "npc",
+      "page": "Thessalia"
+    },
+    "Barfy Bill": {
+      "x": 3243,
+      "y": 3238,
+      "plane": 0,
+      "label": "Barfy Bill",
+      "kind": "transport",
+      "aliases": [
+        "Lumbridge canoe station"
+      ],
+      "page": "Barfy Bill"
+    },
+    "Tarquin": {
+      "x": 3203,
+      "y": 3344,
+      "plane": 0,
+      "label": "Tarquin",
+      "kind": "transport",
+      "aliases": [
+        "Champions' Guild canoe station"
+      ],
+      "page": "Tarquin"
+    },
+    "Sigurd": {
+      "x": 3112,
+      "y": 3409,
+      "plane": 0,
+      "label": "Sigurd",
+      "kind": "transport",
+      "aliases": [
+        "Barbarian Village canoe station"
+      ],
+      "page": "Sigurd"
+    },
+    "South-east Varrock mine": {
+      "x": 3287,
+      "y": 3365,
+      "plane": 0,
+      "label": "South-east Varrock mine",
+      "kind": "mine",
+      "aliases": [
+        "Varrock east mine",
+        "Varrock East Mine"
+      ],
+      "page": "South-east Varrock mine"
+    },
+    "South-west Varrock mine": {
+      "x": 3177,
+      "y": 3370,
+      "plane": 0,
+      "label": "South-west Varrock mine",
+      "kind": "mine",
+      "aliases": [
+        "Varrock west mine",
+        "Varrock West Mine"
+      ],
+      "page": "South-west Varrock mine"
+    },
+    "Al Kharid mine": {
+      "x": 3298,
+      "y": 3293,
+      "plane": 0,
+      "label": "Al Kharid mine",
+      "kind": "mine",
+      "aliases": [
+        "Al Kharid Mine"
+      ],
+      "page": "Al Kharid mine"
+    },
+    "Rimmington mine": {
+      "x": 2978,
+      "y": 3239,
+      "plane": 0,
+      "label": "Rimmington mine",
+      "kind": "mine",
+      "aliases": [
+        "Rimmington Mine"
+      ],
+      "page": "Rimmington mine"
+    },
+    "Barbarian Village mine": {
+      "x": 3080,
+      "y": 3430,
+      "plane": 0,
+      "label": "Barbarian Village mine",
+      "kind": "mine",
+      "page": "Barbarian Village mine"
+    },
+    "Lumbridge Swamp fishing spots": {
+      "x": 3243,
+      "y": 3150,
+      "plane": 0,
+      "label": "Lumbridge Swamp fishing spots",
+      "kind": "fishing",
+      "aliases": [
+        "Lumbridge Swamp by Fishing tutor",
+        "Lumbridge Swamp fishing"
+      ],
+      "page": "Fishing spot (small net, bait)"
+    },
+    "Draynor Village fishing spots": {
+      "x": 3086,
+      "y": 3229,
+      "plane": 0,
+      "label": "Draynor Village fishing spots",
+      "kind": "fishing",
+      "aliases": [
+        "Draynor fishing",
+        "Draynor Village fishing"
+      ],
+      "page": "Fishing spot (small net, bait)"
+    },
+    "Al Kharid fishing spots": {
+      "x": 3271,
+      "y": 3144,
+      "plane": 0,
+      "label": "Al Kharid fishing spots",
+      "kind": "fishing",
+      "aliases": [
+        "Al Kharid fishing"
+      ],
+      "page": "Fishing spot (small net, bait)"
+    },
+    "Barbarian Village fishing spots": {
+      "x": 3107,
+      "y": 3429,
+      "plane": 0,
+      "label": "Barbarian Village fishing spots",
+      "kind": "fishing",
+      "aliases": [
+        "Barbarian Village fly fishing",
+        "Barbarian Village fishing"
+      ],
+      "page": "Rod Fishing spot (lure, bait)"
+    },
+    "River Lum fishing spots": {
+      "x": 3239,
+      "y": 3247,
+      "plane": 0,
+      "label": "River Lum fishing spots",
+      "kind": "fishing",
+      "aliases": [
+        "Lumbridge in the river Lum",
+        "River Lum fishing"
+      ],
+      "page": "Rod Fishing spot (lure, bait)"
+    },
+    "Musa Point fishing spots": {
+      "x": 2925,
+      "y": 3180,
+      "plane": 0,
+      "label": "Musa Point fishing spots",
+      "kind": "fishing",
+      "aliases": [
+        "Musa Point fishing",
+        "Karamja fishing"
+      ],
+      "page": "Fishing spot (cage, harpoon)"
+    },
+    "Catherby fishing spots": {
+      "x": 2853,
+      "y": 3426,
+      "plane": 0,
+      "label": "Catherby fishing spots",
+      "kind": "fishing",
+      "aliases": [
+        "Catherby fishing"
+      ],
+      "page": "Fishing spot (big net, harpoon)"
+    },
+    "East Lumbridge Swamp mine": {
+      "x": 3229,
+      "y": 3146,
+      "plane": 0,
+      "label": "East Lumbridge Swamp mine",
+      "kind": "mine",
+      "aliases": [
+        "Lumbridge Swamp mine",
+        "Lumbridge swamp mine"
+      ],
+      "page": "Copper rocks"
+    }
+  }
+}

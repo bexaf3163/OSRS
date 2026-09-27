@@ -3,7 +3,7 @@
 // строк в консоли, когда RuneLite выключен. В браузере — fetch и EventSource напрямую.
 // Удалённого сервера нет: мост слушает только loopback.
 
-import type { InGameTarget, PlayerStats, Progress, Step, StepBranch } from '../types';
+import type { InGameTarget, PacingSkill, PlayerStats, Progress, Step, StepBranch, StepPacing } from '../types';
 import { desktop } from '../lib/desktop';
 import { isClosed, openAfter } from '../lib/next-step';
 import { preflightItems } from '../lib/checklist';
@@ -20,7 +20,61 @@ export interface BridgeStatus {
   stats: PlayerStats | null;
   /** Установлен и включён плагин Shortest Path — маршрут по земле рисует он. */
   shortestPath: boolean;
+  /** Снаряжение, сумка и монеты; null — не в игре, плагин старый или подсказки апгрейда выключены. */
+  gear: GearState | null;
 }
+
+/** Предмет из игры: надетый или в сумке. */
+export interface GearItem {
+  id: number;
+  name: string;
+  count?: number;
+}
+
+/** Снаряжение и монеты для подсказки апгрейда. null в поле — этот контейнер игра ещё не прислала. */
+export interface GearState {
+  equipment: GearItem[] | null;
+  inventory: GearItem[] | null;
+  coins: number | null;
+  /** Монеты в банке; null — банк в этой сессии не открывали. */
+  bankCoins: number | null;
+}
+
+/** Темп прокачки шага из игры (событие PACING). */
+export interface PacingState {
+  stepId: string;
+  skill: PacingSkill;
+  targetLevel: number;
+  xp: number;
+  remainingXp: number;
+  actionsLeft: number;
+  /** null — замеров мало, время не выдумываем. */
+  actionsPerMinute: number | null;
+  etaSeconds: number | null;
+  /** Время — первая оценка из данных шага, а не замер. */
+  estimated: boolean;
+  almost: boolean;
+  done: boolean;
+}
+
+/** Временная цель поверх шага: место с карты или магазин для апгрейда. */
+export interface NavTargetPayload {
+  label: string;
+  x: number;
+  y: number;
+  plane: number;
+  npcNames?: string[];
+  /** Предмет, за которым идём: цель снимется, когда он окажется в сумке или надет. */
+  itemName?: string;
+  itemId?: number;
+  stepId?: string;
+}
+
+export type NavResult =
+  | { ok: true }
+  | { ok: false; reason: 'offline' }
+  /** Плагин ответил, но отказал: функция выключена в его настройках или старая версия плагина. */
+  | { ok: false; reason: 'refused'; message: string };
 
 export type BridgeEvent =
   | { type: 'STEP_AUTO_COMPLETED'; stepId: string }
@@ -29,7 +83,7 @@ export type BridgeEvent =
   | { type: 'OWNED'; bankSeen: boolean; items: unknown[] }
   | { type: string; [key: string]: unknown };
 
-export type BridgePath = '/status' | '/active-step' | '/clear' | '/shopping-plan';
+export type BridgePath = '/status' | '/active-step' | '/clear' | '/shopping-plan' | '/nav-target' | '/bank-tags';
 
 export interface BridgeResponse {
   ok: boolean;
@@ -58,6 +112,7 @@ export type ActiveStepPayload = InGameTarget & {
   title: string;
   checklist?: ChecklistPayloadItem[];
   watchItems?: string[];
+  pacing?: StepPacing;
 };
 
 /** Оптовый список для подсказки на бирже: name — английское название, count — сколько нужно всего. */
@@ -98,8 +153,9 @@ export function toInGameTarget(step: Step, branch?: StepBranch): ActiveStepPaylo
   if (checklist.length) payload.checklist = checklist;
   const watch = watchedItems(step);
   if (watch.length) payload.watchItems = watch;
+  if (step.pacing) payload.pacing = step.pacing;
   const empty = !worldPoint && !groundTiles?.length && !g.npcNames?.length && !g.objectNames?.length
-    && !g.dialogChoices?.length && !g.highlightItems?.length && !g.completionTrigger && !checklist.length;
+    && !g.dialogChoices?.length && !g.highlightItems?.length && !g.completionTrigger && !checklist.length && !step.pacing;
   return empty ? null : payload;
 }
 
@@ -111,6 +167,48 @@ export function parseStats(raw: unknown): PlayerStats | null {
     if (typeof v === 'number' && Number.isInteger(v) && v >= 1 && v <= 126) out[k] = v;
   }
   return Object.keys(out).length ? out : null;
+}
+
+const int = (v: unknown, min = 0): number | null => (typeof v === 'number' && Number.isInteger(v) && v >= min ? v : null);
+
+function gearItems(raw: unknown): GearItem[] | null {
+  if (!Array.isArray(raw)) return null;
+  const out: GearItem[] = [];
+  for (const r of raw) {
+    const o = r as { id?: unknown; name?: unknown; count?: unknown } | null;
+    const id = int(o?.id, 1);
+    if (id === null || typeof o?.name !== 'string') continue;
+    const count = int(o.count, 1);
+    out.push({ id, name: o.name, ...(count !== null ? { count } : {}) });
+  }
+  return out;
+}
+
+/** Снаряжение из /status или события GEAR. null — ничего не известно (Gson плагина не пишет null-поля). */
+export function parseGear(raw: unknown): GearState | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const o = raw as Record<string, unknown>;
+  const g: GearState = { equipment: gearItems(o.equipment), inventory: gearItems(o.inventory), coins: int(o.coins), bankCoins: int(o.bankCoins) };
+  return g.equipment || g.inventory || g.coins !== null ? g : null;
+}
+
+const PACING_SKILLS = new Set<PacingSkill>(['fishing', 'woodcutting', 'cooking', 'mining']);
+
+/** Событие PACING. null — у шага нет темпа или он выключен в плагине. */
+export function parsePacing(e: unknown): PacingState | null {
+  const o = e as { stepId?: unknown; pacing?: Record<string, unknown> | null } | null;
+  const p = o?.pacing;
+  if (!p || typeof o?.stepId !== 'string' || !PACING_SKILLS.has(p.skill as PacingSkill)) return null;
+  const xp = int(p.xp);
+  const remainingXp = int(p.remainingXp);
+  const actionsLeft = int(p.actionsLeft);
+  const targetLevel = int(p.targetLevel, 1);
+  if (xp === null || remainingXp === null || actionsLeft === null || targetLevel === null) return null;
+  const apm = typeof p.actionsPerMinute === 'number' && p.actionsPerMinute > 0 ? p.actionsPerMinute : null;
+  return {
+    stepId: o.stepId, skill: p.skill as PacingSkill, targetLevel, xp, remainingXp, actionsLeft,
+    actionsPerMinute: apm, etaSeconds: int(p.etaSeconds), estimated: p.estimated === true, almost: p.almost === true, done: p.done === true,
+  };
 }
 
 // ---------- Транспорты ----------
@@ -195,6 +293,7 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
     inGame: Boolean(online && d?.inGame),
     stats: online ? parseStats(d?.stats) : null,
     shortestPath: Boolean(online && d?.shortestPath === true),
+    gear: online ? parseGear(d) : null,
   };
 }
 
@@ -219,6 +318,32 @@ export async function syncShoppingPlan(plan: ShoppingPlanPayload, t: BridgeTrans
 
 export async function clearActiveStep(t: BridgeTransport = defaultTransport()): Promise<boolean> {
   return (await t.request('POST', '/clear')).ok;
+}
+
+/**
+ * Временная цель в игру: стрелка, маршрут Shortest Path и HUD ведут к месту, шаг возвращается сам,
+ * когда игрок дошёл или получил предмет. Координаты — только из поиска мест, не «на глаз».
+ */
+export async function setNavTarget(target: NavTargetPayload, t: BridgeTransport = defaultTransport()): Promise<NavResult> {
+  const res = await t.request('POST', '/nav-target', target);
+  if (res.ok) return { ok: true };
+  if (res.status === 0) return { ok: false, reason: 'offline' };
+  const message = (res.data as { error?: unknown } | undefined)?.error;
+  return {
+    ok: false,
+    reason: 'refused',
+    message: typeof message === 'string' ? message
+      : res.status === 404 ? 'плагин OSRS Path Bridge старой версии — обнови его' : `плагин ответил ${res.status}`,
+  };
+}
+
+export async function clearNavTarget(t: BridgeTransport = defaultTransport()): Promise<boolean> {
+  return (await t.request('POST', '/nav-target', { clear: true })).ok;
+}
+
+/** Предметы этапа — для мягкой подсветки в банке. Пустой список снимает подсветку. */
+export async function syncBankTags(stageId: string, itemIds: number[], t: BridgeTransport = defaultTransport()): Promise<boolean> {
+  return (await t.request('POST', '/bank-tags', { stageId, itemIds })).ok;
 }
 
 // ---------- Поток событий с переподключением ----------

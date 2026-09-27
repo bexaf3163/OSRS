@@ -74,7 +74,10 @@ export function createPriceService(fetchFn: Fetcher, now: () => number = Date.no
   };
 }
 
-const prices = createPriceService((url) => fetch(url));
+// Без предела зависшее соединение держало бы общий запрос цен вечно — и вместе с ним каждое досье, которое ждёт
+// цену. Файл цен большой (~1,5 МБ), поэтому запас щедрый.
+const PRICES_TIMEOUT_MS = 20_000;
+const prices = createPriceService((url) => fetch(url, { signal: AbortSignal.timeout(PRICES_TIMEOUT_MS) }));
 
 /** Актуальная цена предмета на Grand Exchange или null, если предмет не торгуется. */
 export function getGePrice(itemId: number): Promise<GePrice | null> {

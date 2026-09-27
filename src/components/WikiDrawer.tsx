@@ -1,6 +1,7 @@
 // Встроенный инспектор вики: досье предмета или NPC.
 // На широком экране «Пути» — закреплённая третья колонка, иначе — выдвижная панель справа.
 // Открывается кликом по предмету/NPC в карточке шага или из поиска; закрывается ✕, кликом по фону или Escape.
+// Места в досье (где лежит бесплатно, магазины, продавцы, города, место NPC) — «📍» на карту мира и «🧭» в игру.
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
@@ -10,6 +11,8 @@ import { findLocalItem, getItemDetail, getNpcDetail } from '../services/wikiServ
 import type { NpcInfo } from '../services/wikiApi';
 import { formatXp } from '../lib/goals';
 import { IconClose, IconExternal } from './Icons';
+import { useFeatures } from '../lib/features';
+import { PlaceButton, PlaceMapView, PlaceNavButton, usePlaceMap, type PlaceQuery } from './PlaceMap';
 
 type Target =
   | { kind: 'item'; query: string | number; label?: string }
@@ -101,7 +104,9 @@ function WikiDrawer({ target, onClose }: { target: Target | null; onClose: () =>
 
   return (
     <dialog ref={dialog} className={`drawer ${closing ? 'is-closing' : ''}`} aria-label="Инспектор OSRS Wiki"
-      onCancel={(e) => { e.preventDefault(); close(); }}
+      // Карта мира из досье — отдельное окно в портале, но события React всплывают по дереву компонентов:
+      // Escape в карте закрывает только карту, а не досье под ней.
+      onCancel={(e) => { if (e.target !== dialog.current) return; e.preventDefault(); close(); }}
       onClick={(e) => { if (e.target === dialog.current) close(); }}>
       <div className="drawer-panel">
         <button type="button" className="icon-btn drawer-close" onClick={close} aria-label="Закрыть">
@@ -128,6 +133,8 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
   const local = findLocalItem(query);
   const [item, setItem] = useState<WikiItemDetail | null | undefined>(local);
   const [status, setStatus] = useState<'loading' | 'ready' | 'offline' | 'missing'>('loading');
+  const places = usePlaceMap();
+  const { autoLocation } = useFeatures();
 
   useEffect(() => {
     let alive = true;
@@ -173,7 +180,7 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
               <span className="tile-sub">обновлено {timeAgo(item.gePrice.updatedAt)}</span>
             </>
           ) : (
-            <span className="tile-sub">{status === 'loading' ? 'Загружаю цену…' : status === 'offline' ? 'Нет связи — цена недоступна' : 'Не продаётся на бирже'}</span>
+            <span className="tile-sub">{status === 'loading' ? 'Загружаю цену…' : status === 'offline' || item.priceUnavailable ? 'Нет связи — цена недоступна' : 'Не продаётся на бирже'}</span>
           )}
         </div>
         <div className="tile">
@@ -191,7 +198,18 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
       {item.freeSpawns && item.freeSpawns.length > 0 && (
         <section className="drawer-section">
           <h3>Где взять бесплатно</h3>
-          <ul className="drawer-list">{item.freeSpawns.map((s) => <li key={s}>{s}</li>)}</ul>
+          <ul className={`drawer-list ${autoLocation ? 'is-places' : ''}`}>
+            {item.freeSpawns.map((s) => {
+              if (!autoLocation) return <li key={s}>{s}</li>;
+              const q: PlaceQuery = { kind: 'spawn', location: s, item };
+              return (
+                <li key={s} className="place-row">
+                  <PlaceButton query={q} onShow={places.show}>{s}</PlaceButton>
+                  <PlaceNavButton query={q} />
+                </li>
+              );
+            })}
+          </ul>
         </section>
       )}
 
@@ -202,15 +220,30 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
             <table className="table table-compact">
               <thead><tr><th scope="col">Магазин</th><th scope="col">NPC</th><th scope="col">Город</th><th scope="col">Цена</th><th scope="col">Запас</th></tr></thead>
               <tbody>
-                {item.buyLocations.map((b) => (
-                  <tr key={b.shopName}>
-                    <th scope="row">{b.shopName}{b.members && <span className="badge badge-members badge-sm">M</span>}</th>
-                    <td>{b.owner ?? '—'}</td>
-                    <td>{b.location || '—'}</td>
-                    <td className="num">{gp(b.price)}</td>
-                    <td className="num">{b.stock}</td>
-                  </tr>
-                ))}
+                {item.buyLocations.map((b) => {
+                  const shop: PlaceQuery = { kind: 'shop', location: b.location, shop: b.shopName, npc: b.owner };
+                  return (
+                    <tr key={b.shopName}>
+                      <th scope="row">
+                        {autoLocation ? <PlaceButton query={shop} onShow={places.show}>{b.shopName}</PlaceButton> : b.shopName}
+                        {b.members && <span className="badge badge-members badge-sm">M</span>}
+                        {autoLocation && <PlaceNavButton query={shop} />}
+                      </th>
+                      <td>
+                        {b.owner && autoLocation
+                          ? <PlaceButton query={{ ...shop, kind: 'npc' }} onShow={places.show}>{b.owner}</PlaceButton>
+                          : b.owner ?? '—'}
+                      </td>
+                      <td>
+                        {b.location && autoLocation
+                          ? <PlaceButton query={{ kind: 'city', location: b.location }} onShow={places.show}>{b.location}</PlaceButton>
+                          : b.location || '—'}
+                      </td>
+                      <td className="num">{gp(b.price)}</td>
+                      <td className="num">{b.stock}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -239,12 +272,16 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
           Открыть полную статью на OSRS Wiki <IconExternal />
         </a>
       </footer>
+      <PlaceMapView view={places.view} onClose={places.close} />
     </div>
   );
 }
 
 function NpcView({ npc }: { npc: StepNpcInfo }) {
   const [info, setInfo] = useState<NpcInfo | null | undefined>(undefined);
+  const places = usePlaceMap();
+  const { autoLocation } = useFeatures();
+  const here: PlaceQuery = { kind: 'npc', location: info?.location || npc.location, npc: npc.nameEn };
   useEffect(() => {
     let alive = true;
     getNpcDetail(npc.nameEn).then((d) => alive && setInfo(d)).catch(() => alive && setInfo(null));
@@ -268,6 +305,12 @@ function NpcView({ npc }: { npc: StepNpcInfo }) {
         {npc.dialogue && <div className="field"><dt>Диалог</dt><dd>{npc.dialogue}</dd></div>}
         {info?.location && <div className="field"><dt>По вики</dt><dd>{info.location}</dd></div>}
       </dl>
+      {autoLocation && (
+        <p className="place-row">
+          <PlaceButton query={here} onShow={places.show}>{npc.nameEn} на карте мира</PlaceButton>
+          <PlaceNavButton query={here} />
+        </p>
+      )}
       {info === undefined && <p className="muted drawer-state" aria-live="polite">Загружаю с OSRS Wiki…</p>}
       <p className="muted small">Этажи в игре считаются по-британски: Ground floor — 1-й этаж (земля), 1st floor — 2-й, 2nd floor — 3-й.</p>
       <footer className="drawer-footer">
@@ -275,6 +318,7 @@ function NpcView({ npc }: { npc: StepNpcInfo }) {
           Открыть статью на OSRS Wiki <IconExternal />
         </a>
       </footer>
+      <PlaceMapView view={places.view} onClose={places.close} />
     </div>
   );
 }

@@ -454,7 +454,7 @@
     "buyLocations": [
       {
         "shopName": "Valaine's Shop of Champions.",
-        "location": "1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93; of Champions' Guild",
+        "location": "1st floor (2-й этаж) of Champions' Guild",
         "owner": "Valaine",
         "price": 21632,
         "stock": 1,
@@ -2040,7 +2040,7 @@
       },
       {
         "shopName": "Bolkoy's Village Shop",
-        "location": "Tree Gnome Village, 1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93;",
+        "location": "Tree Gnome Village, 1st floor (2-й этаж)",
         "owner": "Bolkoy",
         "price": 1,
         "stock": 30,
@@ -2056,7 +2056,7 @@
       },
       {
         "shopName": "Gulluck and Sons",
-        "location": "Grand Tree, 2nd&nbsp;floor&#91;UK&#93;3rd&nbsp;floor&#91;US&#93;",
+        "location": "Grand Tree, 2nd floor (3-й этаж)",
         "owner": "Gulluck",
         "price": 1,
         "stock": 200,
@@ -2417,7 +2417,7 @@
       },
       {
         "shopName": "Warrior Guild Armoury",
-        "location": "1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93; of Warriors' Guild",
+        "location": "1st floor (2-й этаж) of Warriors' Guild",
         "owner": "Anton",
         "price": 28,
         "stock": 5,
@@ -2549,7 +2549,7 @@
       },
       {
         "shopName": "Bolkoy's Village Shop",
-        "location": "Tree Gnome Village, 1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93;",
+        "location": "Tree Gnome Village, 1st floor (2-й этаж)",
         "owner": "Bolkoy",
         "price": 1,
         "stock": 5,
@@ -3820,7 +3820,7 @@
       },
       {
         "shopName": "Bolkoy's Village Shop",
-        "location": "Tree Gnome Village, 1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93;",
+        "location": "Tree Gnome Village, 1st floor (2-й этаж)",
         "owner": "Bolkoy",
         "price": 5,
         "stock": 2,
@@ -4602,7 +4602,7 @@
       },
       {
         "shopName": "Myths' Guild Herbalist",
-        "location": "Myths' Guild, 1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93;",
+        "location": "Myths' Guild, 1st floor (2-й этаж)",
         "owner": "Primula",
         "price": 3,
         "stock": 50,
@@ -6245,7 +6245,7 @@
       },
       {
         "shopName": "Gulluck and Sons",
-        "location": "Grand Tree, 2nd&nbsp;floor&#91;UK&#93;3rd&nbsp;floor&#91;US&#93;",
+        "location": "Grand Tree, 2nd floor (3-й этаж)",
         "owner": "Gulluck",
         "price": 56,
         "stock": 5,
@@ -6460,7 +6460,7 @@
       },
       {
         "shopName": "Warrior Guild Armoury",
-        "location": "1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93; of Warriors' Guild",
+        "location": "1st floor (2-й этаж) of Warriors' Guild",
         "owner": "Anton",
         "price": 252,
         "stock": 3,
@@ -7813,7 +7813,7 @@
     "buyLocations": [
       {
         "shopName": "Legends Guild Shop of Useful Items.",
-        "location": "2nd&nbsp;floor&#91;UK&#93;3rd&nbsp;floor&#91;US&#93; of Legends' Guild (west side)",
+        "location": "2nd floor (3-й этаж) of Legends' Guild (west side)",
         "owner": "Siegfried Erkle",
         "price": 1,
         "stock": 3,
@@ -9286,7 +9286,7 @@
       },
       {
         "shopName": "Bolkoy's Village Shop",
-        "location": "Tree Gnome Village, 1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93;",
+        "location": "Tree Gnome Village, 1st floor (2-й этаж)",
         "owner": "Bolkoy",
         "price": 1,
         "stock": 3,
@@ -12079,7 +12079,7 @@
       },
       {
         "shopName": "Bolkoy's Village Shop",
-        "location": "Tree Gnome Village, 1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93;",
+        "location": "Tree Gnome Village, 1st floor (2-й этаж)",
         "owner": "Bolkoy",
         "price": 1,
         "stock": 2,
@@ -12139,7 +12139,7 @@
       },
       {
         "shopName": "Gulluck and Sons",
-        "location": "Grand Tree, 2nd&nbsp;floor&#91;UK&#93;3rd&nbsp;floor&#91;US&#93;",
+        "location": "Grand Tree, 2nd floor (3-й этаж)",
         "owner": "Gulluck",
         "price": 50,
         "stock": 4,
@@ -13110,7 +13110,7 @@
       },
       {
         "shopName": "Legends Guild General Store.",
-        "location": "1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93; of Legends' Guild",
+        "location": "1st floor (2-й этаж) of Legends' Guild",
         "owner": "Fionella",
         "price": 18,
         "stock": 500,
@@ -13185,7 +13185,7 @@
       },
       {
         "shopName": "Gulluck and Sons",
-        "location": "Grand Tree, 2nd&nbsp;floor&#91;UK&#93;3rd&nbsp;floor&#91;US&#93;",
+        "location": "Grand Tree, 2nd floor (3-й этаж)",
         "owner": "Gulluck",
         "price": 200,
         "stock": 3,
@@ -13737,7 +13737,7 @@
       },
       {
         "shopName": "Legends Guild General Store.",
-        "location": "1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93; of Legends' Guild",
+        "location": "1st floor (2-й этаж) of Legends' Guild",
         "owner": "Fionella",
         "price": 124,
         "stock": 20,
@@ -14233,7 +14233,7 @@
       },
       {
         "shopName": "Warrior Guild Food Shop",
-        "location": "Ground&nbsp;floor&#91;UK&#93;1st&nbsp;floor&#91;US&#93; of Warriors' Guild",
+        "location": "Ground floor (1-й этаж) of Warriors' Guild",
         "owner": "Lidio",
         "price": 12,
         "stock": 10,

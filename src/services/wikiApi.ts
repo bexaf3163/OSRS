@@ -47,9 +47,19 @@ const UK_FLOOR: Record<string, string> = {
   '0': 'Ground floor (1-й этаж)', '1': '1st floor (2-й этаж)', '2': '2nd floor (3-й этаж)', '3': '3rd floor (4-й этаж)',
 };
 
-/** Вики-разметка в простой текст: [[A|B]] → B, {{FloorNumber|uk=1}} → «1st floor (2-й этаж)». */
+const ENTITIES: Record<string, string> = { nbsp: ' ', amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", '#91': '[', '#93': ']', '#39': "'" };
+const US_FLOOR: Record<string, string> = { Ground: '1', '1st': '2', '2nd': '3', '3rd': '4', '4th': '5' };
+
+/**
+ * Вики-разметка в простой текст: [[A|B]] → B, {{FloorNumber|uk=1}} → «1st floor (2-й этаж)».
+ * Bucket отдаёт уже развёрнутые шаблоны с HTML-сущностями: «1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93;»
+ * — это тоже приводится к «1st floor (2-й этаж)».
+ */
 export function cleanWikiText(s: string): string {
   return s
+    .replace(/&(#\d+|[a-z]+);/gi, (m, e: string) => ENTITIES[e.toLowerCase()] ?? m)
+    .replace(/\b(Ground|\d+(?:st|nd|rd|th)) floor\[UK\](?:Ground|\d+(?:st|nd|rd|th)) floor\[US\]/g,
+      (_m, uk: string) => `${uk} floor (${US_FLOOR[uk] ?? '?'}-й этаж)`)
     .replace(/\{\{FloorNumber\|(?:[^}]*?\|)?uk=(\d)[^}]*\}\}/gi, (_m, n: string) => UK_FLOOR[n] ?? `${n} floor`)
     .replace(/\{\{[^{}]*\}\}/g, '')
     .replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, '$1')
@@ -263,4 +273,147 @@ export async function fetchItemDetail(
     ...(dropSources.length ? { dropSources: dropSources.map(({ monster, combatLevel, rate }) => ({ monster, combatLevel, rate })) } : {}),
     wikiUrl: wikiPageUrl(box.pageName),
   };
+}
+
+// ---------- Координаты из статей: шаблоны {{Map}} и {{ItemSpawnLine}} ----------
+
+/** Клетка мира в координатах игры (как в RuneLite): x, y, этаж. */
+export interface WikiPoint {
+  x: number;
+  y: number;
+  plane: number;
+}
+
+/** Шаблоны с именем name и всё внутри них — с учётом вложенных {{…}}. */
+export function templates(text: string, name: string): string[] {
+  const out: string[] = [];
+  const open = new RegExp(`\\{\\{\\s*${name}\\s*\\|`, 'gi');
+  for (let m = open.exec(text); m; m = open.exec(text)) {
+    let depth = 0;
+    for (let i = m.index; i < text.length - 1; i++) {
+      if (text[i] === '{' && text[i + 1] === '{') { depth++; i++; continue; }
+      if (text[i] === '}' && text[i + 1] === '}') {
+        depth--;
+        i++;
+        if (depth === 0) { out.push(text.slice(m.index + m[0].length, i - 1)); break; }
+      }
+    }
+  }
+  return out;
+}
+
+/** Параметры шаблона верхнего уровня: разделитель | вне вложенных шаблонов и ссылок. */
+function templateParams(body: string): string[] {
+  const out: string[] = [];
+  let depth = 0;
+  let cur = '';
+  for (let i = 0; i < body.length; i++) {
+    const two = body.slice(i, i + 2);
+    if (two === '{{' || two === '[[') { depth++; cur += two; i++; continue; }
+    if (two === '}}' || two === ']]') { depth--; cur += two; i++; continue; }
+    if (body[i] === '|' && depth === 0) { out.push(cur.trim()); cur = ''; continue; }
+    cur += body[i];
+  }
+  out.push(cur.trim());
+  return out;
+}
+
+const PAIR = /^(\d{3,5})\s*,\s*(\d{3,5})(?:\s*,\s*(\d))?$/;
+const COLON = /x:\s*(\d{3,5})\s*,\s*y:\s*(\d{3,5})(?:\s*,\s*plane:\s*(\d))?/gi;
+
+/**
+ * Точки одного шаблона карты: «3144,3178», «x:3190,y:3273,plane:1» или x=/y=/plane=.
+ * Если заданы x= и y= — это и есть точка (остальное — контур). mapID у подземелий свой (Dwarven Mine — 6),
+ * но координаты и там мировые — те же, что у RuneLite, поэтому они подходят.
+ */
+export function mapTemplatePoints(body: string): WikiPoint[] {
+  const params = templateParams(body);
+  const named = new Map<string, string>();
+  for (const p of params) {
+    const eq = p.indexOf('=');
+    if (eq > 0 && /^[a-z_]+$/i.test(p.slice(0, eq).trim())) named.set(p.slice(0, eq).trim().toLowerCase(), p.slice(eq + 1).trim());
+  }
+  const plane = Number(named.get('plane') ?? 0) || 0;
+  const nx = Number(named.get('x'));
+  const ny = Number(named.get('y'));
+  if (Number.isInteger(nx) && Number.isInteger(ny) && nx > 0 && ny > 0) return [{ x: nx, y: ny, plane }];
+  return paramPoints(params, plane);
+}
+
+/**
+ * Точки из параметров шаблона в обеих записях вики: «3244,3159» и «x:3190,y:3273,plane:1».
+ * Строки спавнов пишут и так, и так (у Small fishing net — «3244,3159|3245,3156»).
+ */
+function paramPoints(params: string[], plane: number): WikiPoint[] {
+  const pts: WikiPoint[] = [];
+  for (const p of params) {
+    const m = p.match(PAIR);
+    if (m) { pts.push({ x: Number(m[1]), y: Number(m[2]), plane: m[3] ? Number(m[3]) : plane }); continue; }
+    for (const c of p.matchAll(COLON)) pts.push({ x: Number(c[1]), y: Number(c[2]), plane: c[3] ? Number(c[3]) : plane });
+  }
+  return pts;
+}
+
+/**
+ * Одна точка из нескольких: середина, если все рядом (контур дома, место спавна), иначе первая —
+ * у NPC с точками по всему миру середина оказалась бы в чистом поле.
+ */
+export function representativePoint(points: WikiPoint[], spread = 40): WikiPoint | null {
+  if (!points.length) return null;
+  const cx = Math.round(points.reduce((s, p) => s + p.x, 0) / points.length);
+  const cy = Math.round(points.reduce((s, p) => s + p.y, 0) / points.length);
+  const compact = points.every((p) => Math.abs(p.x - cx) <= spread && Math.abs(p.y - cy) <= spread && p.plane === points[0].plane);
+  return compact ? { x: cx, y: cy, plane: points[0].plane } : points[0];
+}
+
+/** Точка статьи: первый шаблон {{Map}} с точками — карта в карточке NPC, магазина или места. */
+export function articleMapPoint(wikitext: string): WikiPoint | null {
+  for (const body of templates(wikitext, 'Map')) {
+    const p = representativePoint(mapTemplatePoints(body));
+    if (p) return p;
+  }
+  return null;
+}
+
+/** Точка спавна предмета из {{ItemSpawnLine}} с тем же местом (сравнение — по очищенному тексту). */
+export function spawnPoint(wikitext: string, itemName: string, location: string): WikiPoint | null {
+  const want = cleanWikiText(location).toLowerCase();
+  for (const body of templates(wikitext, 'ItemSpawnLine')) {
+    const params = templateParams(body);
+    const get = (k: string) => params.find((p) => p.toLowerCase().startsWith(`${k}=`))?.slice(k.length + 1).trim() ?? '';
+    const name = get('name');
+    if (name && name !== itemName) continue;
+    if (cleanWikiText(get('location')).toLowerCase() !== want) continue;
+    const point = representativePoint(paramPoints(params, Number(get('plane')) || 0));
+    if (point) return point;
+  }
+  return null;
+}
+
+/**
+ * Точка места из {{ObjectLocLine}}/{{LocLine}} с тем же местом: так на вики отмечены места ловли и руды
+ * («Fishing spot (small net, bait)» → «Lumbridge Swamp»). Сравнение — по очищенному тексту без регистра.
+ */
+export function locLinePoint(wikitext: string, location: string): WikiPoint | null {
+  const want = cleanWikiText(location).toLowerCase();
+  for (const name of ['ObjectLocLine', 'LocLine']) {
+    for (const body of templates(wikitext, name)) {
+      const params = templateParams(body);
+      const loc = params.find((p) => /^location\s*=/i.test(p))?.replace(/^location\s*=/i, '') ?? '';
+      if (cleanWikiText(loc).toLowerCase() !== want) continue;
+      const plane = Number(params.find((p) => /^plane\s*=/i.test(p))?.replace(/^plane\s*=/i, '')) || 0;
+      const point = representativePoint(paramPoints(params, plane));
+      if (point) return point;
+    }
+  }
+  return null;
+}
+
+/** Вики-разметка статьи (с переходом по перенаправлению). null — статьи нет. */
+export async function fetchWikitext(fetchFn: FetchFn, page: string): Promise<{ title: string; text: string } | null> {
+  const data = await getJson(fetchFn, { action: 'parse', page, prop: 'wikitext', redirects: '1', formatversion: '2' });
+  if (data.error) return null;
+  const parse = data.parse as { title?: string; wikitext?: string } | undefined;
+  if (!parse?.wikitext) return null;
+  return { title: parse.title ?? page, text: parse.wikitext };
 }

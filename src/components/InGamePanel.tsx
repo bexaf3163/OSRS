@@ -6,6 +6,7 @@ import type { InGameTarget, Step } from '../types';
 import { useBridge } from '../bridge';
 import { toInGameTarget } from '../services/runeliteBridge';
 import { PreflightPanel } from './PreflightPanel';
+import { PacingLine } from './PacingLine';
 
 const TRIGGER_TEXT: Record<NonNullable<InGameTarget['completionTrigger']>['type'], string> = {
   QUEST_COMPLETED: 'квест засчитается в игре',
@@ -54,6 +55,7 @@ export function InGamePanel({ step }: { step: Step }) {
             : <>: запусти RuneLite с плагином OSRS Path Bridge (как — в README, раздел «RuneLite bridge»).</>}
         </p>
       )}
+      <PacingLine step={step} />
       {trigger && <p className="muted small">Шаг отметится сам, когда {TRIGGER_TEXT[trigger.type]}.</p>}
       {active && (
         <p className="muted small">

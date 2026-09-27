@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -57,6 +58,7 @@ import net.runelite.api.events.VarbitChanged;
 import net.runelite.api.events.WallObjectDespawned;
 import net.runelite.api.events.WallObjectSpawned;
 import net.runelite.api.gameval.InventoryID;
+import net.runelite.api.gameval.ItemID;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
@@ -81,6 +83,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	/** Плагин Shortest Path (Plugin Hub): его открытый API — PluginMessage с пространством имён «shortestpath». */
 	static final String SHORTEST_PATH_CLASS = "shortestpath.ShortestPathPlugin";
 	static final String SHORTEST_PATH_NS = "shortestpath";
+	/** Ближе стольких клеток к месту временной цели — дошёл. */
+	static final int NAV_ARRIVED = 3;
 
 	/** Квесты RuneLite по названию из игры: «Cook's Assistant» → Quest.COOKS_ASSISTANT. */
 	private static final Map<String, Quest> QUESTS = Arrays.stream(Quest.values())
@@ -121,6 +125,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	@Inject
 	private OsrsPathBreadcrumbOverlay breadcrumbOverlay;
+
+	@Inject
+	private OsrsPathDangerOverlay dangerOverlay;
 
 	@Inject
 	private ItemManager itemManager;
@@ -179,6 +186,32 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private final Map<String, Integer> stats = new LinkedHashMap<>();
 	private boolean statsDirty;
 	private boolean ownedDirty;
+	private boolean gearDirty;
+	private boolean pacingDirty;
+
+	/** Временная цель поверх шага: место с карты приложения или магазин для апгрейда. */
+	@Getter
+	private NavTarget navTarget;
+
+	/** Продавец или NPC временной цели рядом — собирается по событиям, как NPC шага. */
+	@Getter
+	private final List<NPC> navNpcs = new ArrayList<>();
+
+	/** Предметы этапа для мягкой подсветки в банке (POST /bank-tags). Пишется из потока сервера. */
+	private volatile Set<Integer> bankTagIds = Collections.emptySet();
+
+	private DangerRadar radar;
+
+	/** Ближайшая опасная зона и насколько игрок к ней подошёл. Меняется при смене клетки. */
+	@Getter
+	private DangerRadar.Reading danger = DangerRadar.QUIET;
+
+	/** Опасные NPC рядом — ищутся, только пока игрок в зоне предупреждения. */
+	@Getter
+	private final List<NPC> dangerNpcs = new ArrayList<>();
+
+	/** Темп прокачки текущего шага; null — у шага его нет или он выключен. */
+	private PacingTracker pacing;
 
 	private Plugin shortestPath;
 	private boolean shortestPathLooked;
@@ -195,6 +228,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	protected void startUp()
 	{
 		completion = new AutoCompletionManager(this::isQuestFinished, this::onStepCompleted);
+		radar = DangerRadar.load(gson);
 		startServer();
 		overlayManager.add(worldOverlay);
 		overlayManager.add(widgetOverlay);
@@ -203,6 +237,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		overlayManager.add(checklistOverlay);
 		overlayManager.add(geOverlay);
 		overlayManager.add(breadcrumbOverlay);
+		overlayManager.add(dangerOverlay);
 		clientThread.invokeLater(() ->
 		{
 			boolean loggedIn = client.getGameState() == GameState.LOGGED_IN;
@@ -237,10 +272,19 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		overlayManager.remove(checklistOverlay);
 		overlayManager.remove(geOverlay);
 		overlayManager.remove(breadcrumbOverlay);
-		clientThread.invoke(() -> applyTarget(null));
+		overlayManager.remove(dangerOverlay);
+		clientThread.invoke(() ->
+		{
+			navTarget = null;
+			navNpcs.clear();
+			danger = DangerRadar.QUIET;
+			dangerNpcs.clear();
+			applyTarget(null);
+		});
 		completion = null;
 		plan = null;
 		shopping = Collections.emptyList();
+		bankTagIds = Collections.emptySet();
 	}
 
 	private void startServer()
@@ -299,6 +343,49 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			clientThread.invokeLater(this::updateNavigation);
 		}
+		switch (e.getKey())
+		{
+			case "autoNavigation":
+			case "upgradeRouter":
+				clientThread.invokeLater(() ->
+				{
+					// Выключили — временная цель снимается сразу, а не «когда-нибудь».
+					if (navTarget != null && (!config.autoNavigation() || (navTarget.isPurchase() && !config.upgradeRouter())))
+					{
+						finishNav("cleared");
+					}
+					gearDirty = true;
+				});
+				break;
+			case "bankTagsHelper":
+				if (!config.bankTagsHelper())
+				{
+					bankTagIds = Collections.emptySet();
+				}
+				break;
+			case "dangerRadar":
+				clientThread.invokeLater(() ->
+				{
+					radar.reset();
+					danger = DangerRadar.QUIET;
+					dangerNpcs.clear();
+					lastPosition = null;
+					updateHud();
+				});
+				break;
+			case "smartPacing":
+				clientThread.invokeLater(() ->
+				{
+					setupPacing();
+					updateHud();
+				});
+				break;
+			case "hudPacing":
+				clientThread.invokeLater(this::updateHud);
+				break;
+			default:
+				break;
+		}
 	}
 
 	@Subscribe
@@ -319,7 +406,49 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	@Override
 	public void onClear()
 	{
-		clientThread.invokeLater(() -> applyTarget(null));
+		clientThread.invokeLater(() ->
+		{
+			if (navTarget != null)
+			{
+				finishNav("cleared");
+			}
+			applyTarget(null);
+		});
+	}
+
+	@Override
+	public String onNavTarget(NavTarget t)
+	{
+		if (!t.isClear())
+		{
+			if (!config.autoNavigation())
+			{
+				return "навигация к местам выключена в настройках плагина OSRS Path Bridge";
+			}
+			if (t.isPurchase() && !config.upgradeRouter())
+			{
+				return "подсказки апгрейда выключены в настройках плагина OSRS Path Bridge";
+			}
+		}
+		clientThread.invokeLater(() -> applyNav(t.isClear() ? null : t));
+		return null;
+	}
+
+	@Override
+	public String onBankTags(BankTags t)
+	{
+		if (!config.bankTagsHelper())
+		{
+			return "предметы этапа из приложения выключены в настройках плагина OSRS Path Bridge";
+		}
+		bankTagIds = t.getIdSet();
+		return null;
+	}
+
+	/** Нужен ли предмет этапу — для мягкой рамки в банке. */
+	boolean isBankTagged(int itemId)
+	{
+		return bankTagIds.contains(itemId);
 	}
 
 	@Override
@@ -353,15 +482,272 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		rescan();
 		recomputeChecklist();
 		ownedDirty = true;
+		setupPacing();
 		updateNavigation();
 		updateHud();
 	}
 
+	// ---------- Временная цель: место с карты или магазин ----------
+
+	private void applyNav(NavTarget t)
+	{
+		if (t == null)
+		{
+			if (navTarget != null)
+			{
+				finishNav("cleared");
+			}
+			return;
+		}
+		navTarget = t;
+		near = false;
+		lastPosition = null;
+		scanNavNpcs();
+		if (t.isPurchase() && hasNavItem())
+		{
+			// Предмет уже есть — вести некуда.
+			finishNav("obtained");
+			return;
+		}
+		updateNavigation();
+		updateHud();
+	}
+
+	/** Снять временную цель: стрелка и HUD возвращаются к шагу, приложение узнаёт почему. */
+	private void finishNav(String reason)
+	{
+		NavTarget done = navTarget;
+		navTarget = null;
+		navNpcs.clear();
+		near = false;
+		lastPosition = null;
+		if (server != null && done != null)
+		{
+			server.navDone(reason, done);
+		}
+		updateNavigation();
+		updateHud();
+	}
+
+	private boolean hasNavItem()
+	{
+		NavTarget t = navTarget;
+		return t != null && t.isPurchase() && carried.count(t.getItemId(), t.getItemName()) > 0;
+	}
+
+	/** Дошёл до места (для цели без предмета): та же клетка этажа, не дальше трёх клеток. */
+	private boolean arrived(WorldPoint pos)
+	{
+		NavTarget t = navTarget;
+		return t != null && !t.isPurchase() && pos.getPlane() == t.getPlane()
+			&& DangerRadar.distanceSq(pos.getX(), pos.getY(), t.getX(), t.getY()) <= NAV_ARRIVED * NAV_ARRIVED;
+	}
+
+	private boolean navMatches(NPC npc)
+	{
+		NavTarget t = navTarget;
+		if (t == null || npc == null || t.getNpcNameSet().isEmpty())
+		{
+			return false;
+		}
+		NPCComposition c = npc.getTransformedComposition();
+		String name = c != null ? c.getName() : npc.getName();
+		return name != null && t.getNpcNameSet().contains(ActiveTarget.nameKey(name));
+	}
+
+	private void scanNavNpcs()
+	{
+		navNpcs.clear();
+		if (navTarget == null || navTarget.getNpcNameSet().isEmpty() || client.getGameState() != GameState.LOGGED_IN)
+		{
+			return;
+		}
+		for (NPC npc : client.getTopLevelWorldView().npcs())
+		{
+			if (navMatches(npc))
+			{
+				navNpcs.add(npc);
+			}
+		}
+	}
+
+	// ---------- Радар опасности ----------
+
+	private static boolean warned(DangerRadar.Reading r)
+	{
+		return r.getLevel() == DangerRadar.Level.WARNING || r.getLevel() == DangerRadar.Level.INSIDE;
+	}
+
+	/** Новая клетка игрока: какая зона рядом, звук при входе, опасные NPC — только в зоне предупреждения. */
+	private void updateDanger(WorldPoint pos)
+	{
+		if (!config.dangerRadar() || radar == null)
+		{
+			danger = DangerRadar.QUIET;
+			dangerNpcs.clear();
+			return;
+		}
+		DangerRadar.Reading before = danger;
+		danger = radar.update(pos.getX(), pos.getY(), pos.getPlane());
+		if (!warned(danger))
+		{
+			dangerNpcs.clear();
+		}
+		else if (!warned(before) || before.getZone() != danger.getZone())
+		{
+			scanDangerNpcs();
+		}
+		if (danger.isEntered() && config.dangerSound())
+		{
+			client.playSoundEffect(SoundEffectID.PRAYER_DEPLETE_TWINKLE);
+		}
+	}
+
+	private boolean dangerMatches(NPC npc)
+	{
+		DangerRadar.Zone zone = danger.getZone();
+		if (zone == null || npc == null || !warned(danger) || zone.getNpcNameSet().isEmpty())
+		{
+			return false;
+		}
+		NPCComposition c = npc.getTransformedComposition();
+		String name = c != null ? c.getName() : npc.getName();
+		return name != null && zone.getNpcNameSet().contains(ActiveTarget.nameKey(name));
+	}
+
+	private void scanDangerNpcs()
+	{
+		dangerNpcs.clear();
+		if (client.getGameState() != GameState.LOGGED_IN)
+		{
+			return;
+		}
+		for (NPC npc : client.getTopLevelWorldView().npcs())
+		{
+			if (dangerMatches(npc))
+			{
+				dangerNpcs.add(npc);
+			}
+		}
+	}
+
+	// ---------- Темп прокачки ----------
+
+	/** Темп шага заново: новый шаг, включили настройку или сменился персонаж. */
+	private void setupPacing()
+	{
+		ActiveTarget.Pacing p = target == null ? null : target.getPacing();
+		pacing = p == null || !config.smartPacing() ? null : new PacingTracker(p);
+		if (pacing != null && client.getGameState() == GameState.LOGGED_IN)
+		{
+			pacing.update(client.getSkillExperience(pacingSkill(p)), System.currentTimeMillis());
+		}
+		pacingDirty = true;
+	}
+
+	private static Skill pacingSkill(ActiveTarget.Pacing p)
+	{
+		return Skill.valueOf(p.getSkill().toUpperCase(Locale.ROOT));
+	}
+
+	private Map<String, Object> pacingReport()
+	{
+		if (pacing == null || !pacing.hasXp())
+		{
+			return null;
+		}
+		PacingTracker.Snapshot s = pacing.snapshot();
+		ActiveTarget.Pacing p = pacing.getPacing();
+		Map<String, Object> m = new LinkedHashMap<>();
+		m.put("skill", p.getSkill());
+		m.put("targetLevel", p.getTargetLevel());
+		m.put("targetExp", p.getTargetExp());
+		m.put("xp", s.getXp());
+		m.put("remainingXp", s.getRemainingXp());
+		m.put("actionsLeft", s.getActionsLeft());
+		m.put("actionsPerMinute", s.getActionsPerMinute() == null ? null : Math.round(s.getActionsPerMinute() * 10) / 10.0);
+		m.put("etaSeconds", s.getEtaSeconds());
+		m.put("estimated", s.isEstimated());
+		m.put("almost", s.isAlmost());
+		m.put("done", s.isDone());
+		return m;
+	}
+
+	// ---------- Снаряжение и монеты для подсказки апгрейда ----------
+
+	/** Надетое, сумка и монеты. null — не в игре или подсказки апгрейда выключены; контейнер не пришёл — его поле null. */
+	private Map<String, Object> gearReport()
+	{
+		if (!config.upgradeRouter() || client.getGameState() != GameState.LOGGED_IN)
+		{
+			return null;
+		}
+		ItemContainer worn = client.getItemContainer(InventoryID.WORN);
+		ItemContainer bag = client.getItemContainer(InventoryID.INV);
+		List<Map<String, Object>> equipment = null;
+		if (worn != null)
+		{
+			equipment = new ArrayList<>();
+			for (Item it : worn.getItems())
+			{
+				if (it.getId() > 0 && it.getQuantity() > 0)
+				{
+					equipment.add(itemRow(it.getId(), null));
+				}
+			}
+		}
+		List<Map<String, Object>> inventory = null;
+		int coins = 0;
+		if (bag != null)
+		{
+			Map<Integer, Integer> stacks = new LinkedHashMap<>();
+			for (Item it : bag.getItems())
+			{
+				if (it.getId() > 0 && it.getQuantity() > 0)
+				{
+					stacks.merge(it.getId(), it.getQuantity(), Integer::sum);
+				}
+			}
+			inventory = new ArrayList<>();
+			for (Map.Entry<Integer, Integer> e : stacks.entrySet())
+			{
+				inventory.add(itemRow(e.getKey(), e.getValue()));
+			}
+			coins = stacks.getOrDefault(ItemID.COINS, 0);
+		}
+		Map<String, Object> g = new LinkedHashMap<>();
+		g.put("equipment", equipment);
+		g.put("inventory", inventory);
+		g.put("coins", bag == null ? null : coins);
+		g.put("bankCoins", bank == null ? null : bank.count(ItemID.COINS, "Coins"));
+		return g;
+	}
+
+	private Map<String, Object> itemRow(int id, Integer count)
+	{
+		Map<String, Object> row = new LinkedHashMap<>();
+		row.put("id", id);
+		ItemComposition c = itemManager.getItemComposition(id);
+		row.put("name", c == null ? "" : c.getName());
+		if (count != null)
+		{
+			row.put("count", count);
+		}
+		return row;
+	}
+
 	// ---------- Куда идти: стрелка, Shortest Path, HUD ----------
 
-	/** Текущая точка пути: следующая путевая точка или точка шага. null — идти некуда или маршрут пройден. */
+	/**
+	 * Текущая точка пути: временная цель, иначе следующая путевая точка или точка шага.
+	 * null — идти некуда или маршрут пройден.
+	 */
 	private WorldPoint navTarget()
 	{
+		if (navTarget != null)
+		{
+			return new WorldPoint(navTarget.getX(), navTarget.getY(), navTarget.getPlane());
+		}
 		if (target == null)
 		{
 			return null;
@@ -436,19 +822,41 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	private void updateHud()
 	{
-		if (target == null)
+		boolean dangerShown = warned(danger);
+		if (target == null && navTarget == null && !dangerShown)
 		{
 			hud = null;
 			return;
 		}
-		String title = "[" + target.getStepId() + "] " + (target.getTitle() == null ? "" : target.getTitle());
-		String goal = target.getGoal();
-		if (breadcrumbs != null)
+		String stepTitle = target == null ? null : "[" + target.getStepId() + "] " + (target.getTitle() == null ? "" : target.getTitle());
+		String title;
+		String goal;
+		if (navTarget != null)
 		{
-			ActiveTarget.WorldPointDto c = breadcrumbs.current();
-			goal = c == null
-				? "Маршрут пройден" + (goal != null ? " · " + goal : "")
-				: "Точка " + (breadcrumbs.index() + 1) + "/" + breadcrumbs.size() + (c.getLabel() != null ? ": " + c.getLabel() : "");
+			// Временная цель поверх шага: сначала она, шаг — строкой ниже, чтобы не потерялся.
+			List<String> sellers = navTarget.getNpcNames();
+			title = navTarget.isPurchase()
+				? "Купи " + (navTarget.getItemName() != null ? navTarget.getItemName() : navTarget.getLabel())
+					+ (sellers != null && !sellers.isEmpty() ? " у " + sellers.get(0) : "")
+				: "К месту: " + navTarget.getLabel();
+			goal = stepTitle == null ? null : "Потом — шаг " + stepTitle;
+		}
+		else if (target != null)
+		{
+			title = stepTitle;
+			goal = target.getGoal();
+			if (breadcrumbs != null)
+			{
+				ActiveTarget.WorldPointDto c = breadcrumbs.current();
+				goal = c == null
+					? "Маршрут пройден" + (goal != null ? " · " + goal : "")
+					: "Точка " + (breadcrumbs.index() + 1) + "/" + breadcrumbs.size() + (c.getLabel() != null ? ": " + c.getLabel() : "");
+			}
+		}
+		else
+		{
+			title = "OSRS Путь";
+			goal = null;
 		}
 		String distance = null;
 		WorldPoint nav = navTarget();
@@ -467,7 +875,17 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				? "Сумка готова к выходу"
 				: "Сумка: не хватает " + checklist.missing() + " из " + checklist.getRows().size();
 		}
-		hud = new OsrsPathHudOverlay.State(title, goal, distance, near, bag, checklist.isReady());
+		String pace = null;
+		boolean paceGood = false;
+		if (pacing != null && pacing.hasXp() && config.hudPacing())
+		{
+			PacingTracker.Snapshot s = pacing.snapshot();
+			pace = pacing.hudLine(s);
+			paceGood = s.isAlmost() || s.isDone();
+		}
+		String dangerText = dangerShown ? danger.getZone().hudText() : null;
+		boolean inside = danger.getLevel() == DangerRadar.Level.INSIDE;
+		hud = new OsrsPathHudOverlay.State(title, goal, distance, near, bag, checklist.isReady(), dangerText, inside, pace, paceGood);
 	}
 
 	// ---------- Кого подсвечивать ----------
@@ -574,29 +992,47 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		objects.remove(o);
 	}
 
+	/** NPC появился или сменил облик: шага, временной цели или опасный — в свой список. */
+	private void trackNpc(NPC npc)
+	{
+		if (matches(npc))
+		{
+			npcs.add(npc);
+		}
+		if (navMatches(npc))
+		{
+			navNpcs.add(npc);
+		}
+		if (dangerMatches(npc))
+		{
+			dangerNpcs.add(npc);
+		}
+	}
+
+	private void untrackNpc(NPC npc)
+	{
+		npcs.remove(npc);
+		navNpcs.remove(npc);
+		dangerNpcs.remove(npc);
+	}
+
 	@Subscribe
 	public void onNpcSpawned(NpcSpawned e)
 	{
-		if (matches(e.getNpc()))
-		{
-			npcs.add(e.getNpc());
-		}
+		trackNpc(e.getNpc());
 	}
 
 	@Subscribe
 	public void onNpcChanged(NpcChanged e)
 	{
-		npcs.remove(e.getNpc());
-		if (matches(e.getNpc()))
-		{
-			npcs.add(e.getNpc());
-		}
+		untrackNpc(e.getNpc());
+		trackNpc(e.getNpc());
 	}
 
 	@Subscribe
 	public void onNpcDespawned(NpcDespawned e)
 	{
-		npcs.remove(e.getNpc());
+		untrackNpc(e.getNpc());
 	}
 
 	@Subscribe
@@ -667,22 +1103,34 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		else if (state == GameState.LOGIN_SCREEN || state == GameState.HOPPING)
 		{
 			npcs.clear();
+			navNpcs.clear();
+			dangerNpcs.clear();
 			objects.clear();
 			arrowSet = false;
 			pathSent = null;
 		}
 		if (state == GameState.LOGIN_SCREEN)
 		{
-			// Другой персонаж — другие уровни, сумка и банк.
+			// Другой персонаж — другие уровни, сумка, банк, опыт и место.
 			stats.clear();
 			statsDirty = true;
 			carried = ItemCounts.EMPTY;
 			noted = ItemCounts.EMPTY;
 			bank = null;
+			radar.reset();
+			danger = DangerRadar.QUIET;
+			lastPosition = null;
+			setupPacing();
 			containersChanged();
 		}
 		if (state == GameState.LOGGED_IN)
 		{
+			if (pacing != null && !pacing.hasXp())
+			{
+				pacing.update(client.getSkillExperience(pacingSkill(pacing.getPacing())), System.currentTimeMillis());
+				pacingDirty = true;
+			}
+			gearDirty = true;
 			updateNavigation();
 		}
 	}
@@ -697,13 +1145,20 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			completion.onGameTick();
 		}
 		Player me = client.getLocalPlayer();
-		if (target != null && me != null)
+		if (me != null && client.getGameState() == GameState.LOGGED_IN)
 		{
 			WorldPoint pos = me.getWorldLocation();
+			// Всё про место игрока — только когда он сменил клетку, а не каждый тик.
 			if (!pos.equals(lastPosition))
 			{
 				lastPosition = pos;
-				if (breadcrumbs != null && breadcrumbs.update(pos.getX(), pos.getY(), pos.getPlane()))
+				updateDanger(pos);
+				if (arrived(pos))
+				{
+					finishNav("arrived");
+				}
+				else if (target != null && navTarget == null && breadcrumbs != null
+					&& breadcrumbs.update(pos.getX(), pos.getY(), pos.getPlane()))
 				{
 					updateNavigation();
 				}
@@ -729,6 +1184,16 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			ownedDirty = false;
 			server.owned(bank != null, ownedReport());
+		}
+		if (gearDirty)
+		{
+			gearDirty = false;
+			server.setGear(gearReport());
+		}
+		if (pacingDirty)
+		{
+			pacingDirty = false;
+			server.pacing(target == null ? null : target.getStepId(), pacingReport());
 		}
 	}
 
@@ -756,6 +1221,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (old == null || old != e.getLevel())
 		{
 			statsDirty = true;
+		}
+		if (pacing != null && e.getSkill() == pacingSkill(pacing.getPacing())
+			&& pacing.update(e.getXp(), System.currentTimeMillis()))
+		{
+			pacingDirty = true;
+			updateHud();
 		}
 	}
 
@@ -826,6 +1297,13 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		recomputeChecklist();
 		recomputeShopping();
 		ownedDirty = true;
+		gearDirty = true;
+		if (hasNavItem())
+		{
+			// Купил или получил предмет апгрейда — временная цель снимается, шаг возвращается сам.
+			finishNav("obtained");
+			return;
+		}
 		updateHud();
 	}
 

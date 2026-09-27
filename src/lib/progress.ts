@@ -137,6 +137,8 @@ export function normalizeProgress(raw: unknown, known: Known): Normalized | null
     if (reviewed.length) p.reviewedV2Steps = reviewed;
     const kept = ids(raw.qpKept);
     if (kept.length) p.qpKept = kept;
+    const dismissed = ids(raw.upgradeDismissedForSteps);
+    if (dismissed.length) p.upgradeDismissedForSteps = dismissed;
     if (isObject(raw.legacy)) p.legacy = { steps: statusMap(raw.legacy.steps), notes: stringMap(raw.legacy.notes) };
   }
   return { progress: p, dropped, migrated };
@@ -238,6 +240,17 @@ export function withNote(p: Progress, id: string, note: string): Progress {
 
 export function withGameMode(p: Progress, mode: GameMode): Progress {
   return touch({ ...p, gameMode: mode });
+}
+
+/** «✕ Пропустить» у подсказки апгрейда: на этом шаге она больше не показывается. Прогресс шага не трогается. */
+export function withUpgradeDismissed(p: Progress, stepId: string, dismissed = true): Progress {
+  const set = new Set(p.upgradeDismissedForSteps ?? []);
+  if (dismissed) set.add(stepId);
+  else set.delete(stepId);
+  const next: Progress = { ...p };
+  if (set.size) next.upgradeDismissedForSteps = [...set];
+  else delete next.upgradeDismissedForSteps;
+  return touch(next);
 }
 
 /** V2 Review: шаг проверен, предупреждение скрывается, отметка остаётся. */

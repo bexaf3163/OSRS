@@ -45,6 +45,13 @@ tasks.withType(JavaCompile).configureEach {
 	options.compilerArgs << '-Xlint:deprecation'
 }
 
+// Зоны опасности — одни данные с приложением: src/data/dangerZones.json кладётся в jar рядом с классами.
+processResources {
+	from('../src/data/dangerZones.json') {
+		into 'com/osrspath/bridge'
+	}
+}
+
 // Тесты читают маршрут приложения, чтобы проверить названия квестов и шаблоны сообщений.
 test {
 	systemProperty 'osrsPath.steps', file('../src/data/steps.json').absolutePath

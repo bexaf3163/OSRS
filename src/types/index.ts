@@ -100,6 +100,42 @@ export interface InGameTarget {
   };
 }
 
+/** Навыки, у которых шаг считает темп: столько действий до цели и столько минут. */
+export type PacingSkill = 'fishing' | 'woodcutting' | 'cooking' | 'mining';
+
+/**
+ * Темп прокачки шага. Плагин RuneLite считает по опыту из игры, сколько действий осталось
+ * до targetExp и сколько это займёт; без замеров время не выдумывается.
+ */
+export interface StepPacing {
+  skill: PacingSkill;
+  targetLevel: number;
+  /** Опыт на targetLevel по таблице опыта игры. */
+  targetExp: number;
+  /** Действие формами для 1, 2–4 и 5+: «креветка|креветки|креветок». Одна форма тоже годится. */
+  actionName: string;
+  /** Опыт за одно действие (улов, бревно, руда, приготовленная рыба). */
+  expPerAction: number;
+  /** Секунд на действие — первая оценка до своих замеров. */
+  secondsPerAction?: number;
+}
+
+/** Опасное место для радара в RuneLite (src/data/dangerZones.json). */
+export interface DangerZone {
+  id: string;
+  name: string;
+  center: { x: number; y: number; plane: number };
+  radius: number;
+  warningRadius?: number;
+  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
+  message: string;
+  /** Коротко для микро-HUD. */
+  hud?: string;
+  npcNames?: string[];
+  /** Откуда данные: статья вики и её точки. */
+  source?: string;
+}
+
 /** NPC или точка старта шага. */
 export interface StepNpcInfo {
   nameEn: string;
@@ -180,6 +216,8 @@ export interface Step {
   inGame?: InGameTarget;
   /** Быстрые варианты для статов игрока: телепорт, каноэ, срезка. */
   branches?: StepBranch[];
+  /** Темп прокачки навыка шага (рыбалка, рубка, готовка, добыча). */
+  pacing?: StepPacing;
 
   where?: string;
   bring?: string;
@@ -215,6 +253,8 @@ export interface WikiItemDetail {
   highAlch?: number;
   lowAlch?: number;
   gePrice?: { buyPrice: number; sellPrice: number; updatedAt: string };
+  /** Цену узнать не удалось (нет связи, таймаут). Только во время работы, в данных не бывает. */
+  priceUnavailable?: boolean;
   buyLocations?: { shopName: string; location: string; owner?: string; price: number; stock: number | string; members?: boolean }[];
   freeSpawns?: string[];
   dropSources?: { monster: string; combatLevel: number | null; rate: string }[];
@@ -348,4 +388,6 @@ export interface Progress {
   qpKept?: string[];
   /** Полная копия прогресса старого маршрута (V1) до переноса в V2 — чтобы ничего не потерять. */
   legacy?: { steps: Record<string, StepStatus>; notes: Record<string, string> };
+  /** Шаги, где игрок нажал «✕ Пропустить» у подсказки апгрейда снаряжения. */
+  upgradeDismissedForSteps?: string[];
 }

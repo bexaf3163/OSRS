@@ -1,0 +1,53 @@
+{
+  "source": "OSRS Wiki: {{LocLine}} и карты статей Dark wizard, Undead tree, Vine (Draynor Manor), Jail guard (проверено 2026-09-27)",
+  "zones": [
+    {
+      "id": "dark-wizards-varrock",
+      "name": "Dark Wizards Circle",
+      "center": { "x": 3227, "y": 3369, "plane": 0 },
+      "radius": 12,
+      "warningRadius": 15,
+      "severity": "CRITICAL",
+      "message": "ОПАСНО: тёмные маги 7 и 20 уровня у каменного круга к югу от Варрока нападают сами и бьют магией. Обходи круг стороной.",
+      "hud": "Зона тёмных магов! Обходи круг стороной.",
+      "npcNames": ["Dark wizard"],
+      "source": "Dark wizard — LocLine «Varrock stone circle», 11 точек 3223–3232 × 3363–3374; aggressive = Yes"
+    },
+    {
+      "id": "dark-wizards-draynor",
+      "name": "Dark Wizards behind Draynor bank",
+      "center": { "x": 3085, "y": 3237, "plane": 0 },
+      "radius": 4,
+      "warningRadius": 7,
+      "severity": "MEDIUM",
+      "message": "Осторожно: за банком Draynor стоят тёмные маги 7 уровня — нападают сами. Место ловли креветок рядом, лови южнее.",
+      "hud": "Тёмные маги за банком Draynor.",
+      "npcNames": ["Dark wizard"],
+      "source": "Dark wizard — LocLine «Behind Draynor Village bank», 3084,3236 и 3085,3238"
+    },
+    {
+      "id": "draynor-manor-trees",
+      "name": "Draynor Manor Undead Trees",
+      "center": { "x": 3111, "y": 3343, "plane": 0 },
+      "radius": 10,
+      "warningRadius": 13,
+      "severity": "HIGH",
+      "message": "ОПАСНО: во дворе Draynor Manor ожившие деревья бьют проходящих мимо, а невидимые лозы у юго-восточного угла жалят каждые 3 секунды. Не беги через двор напрямик.",
+      "hud": "Ожившие деревья Draynor Manor!",
+      "npcNames": ["Undead tree"],
+      "source": "Undead tree — карта статьи, 10 точек двора 3103–3122 × 3335–3348; Vine (Draynor Manor) — 3118,3342, r=7"
+    },
+    {
+      "id": "draynor-jail-guards",
+      "name": "Draynor Jail Guards",
+      "center": { "x": 3119, "y": 3243, "plane": 0 },
+      "radius": 9,
+      "warningRadius": 13,
+      "severity": "MEDIUM",
+      "message": "Осторожно: тюремные стражники 26 уровня у тюрьмы Draynor агрессивны и догоняют на дороге. Обходи тюрьму стороной.",
+      "hud": "Стражники тюрьмы Draynor (26 ур.)",
+      "npcNames": ["Jail guard"],
+      "source": "Jail guard — LocLine «Draynor Village jail», 3109–3127 × 3237–3249; aggressive2–4 = Yes"
+    }
+  ]
+}

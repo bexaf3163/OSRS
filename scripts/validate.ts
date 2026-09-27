@@ -254,6 +254,29 @@ export function validate(d: GuideData | null, route: Route): Report {
   check(!recInStep.length, `Предметы «по ходу шага» помечены у ${steps.filter((s) => s.itemsRequired?.some((i) => i.inStep)).length} шагов`,
     `inStep у рекомендуемых предметов: ${recInStep.join(', ')}`);
 
+  // Темп прокачки: навык и уровень — те же, что в названии шага; опыт до уровня — по формуле игры.
+  const PACING_SKILLS = new Set(['fishing', 'woodcutting', 'cooking', 'mining']);
+  const badPacing = steps.flatMap((s) => {
+    const p = s.pacing;
+    if (!p) return [];
+    const out: string[] = [];
+    if (!PACING_SKILLS.has(p.skill)) out.push(`${s.id}: навык ${p.skill}`);
+    if (p.targetExp !== xpForLevel(p.targetLevel)) out.push(`${s.id}: опыт ${p.targetExp} ≠ ${xpForLevel(p.targetLevel)} для ${p.targetLevel}`);
+    if (!(p.expPerAction > 0)) out.push(`${s.id}: опыт за действие ${p.expPerAction}`);
+    const forms = p.actionName.split('|');
+    if (!(forms.length === 1 || forms.length === 3) || forms.some((f) => !f.trim())) out.push(`${s.id}: формы действия «${p.actionName}»`);
+    if (!titleTargets(s.title).some((t) => t.skill === p.skill && t.level === p.targetLevel)) out.push(`${s.id}: цели ${p.skill} ${p.targetLevel} нет в названии`);
+    if (p.secondsPerAction !== undefined && !(p.secondsPerAction > 0)) out.push(`${s.id}: секунд на действие ${p.secondsPerAction}`);
+    return out;
+  });
+  const paced = steps.filter((s) => s.pacing).length;
+  check(!badPacing.length, `Темп прокачки у ${paced} шагов: навык, уровень и опыт сходятся с названием и формулой`, `Темп прокачки: ${badPacing.join('; ')}`);
+
+  // Разметка вики в базе предметов: HTML-сущности и «[UK]/[US]» — признак старой очистки текста.
+  const entities = items.flatMap((i) => [...(i.buyLocations ?? []).map((b) => b.location), ...(i.freeSpawns ?? [])]
+    .filter((t) => /&(#\d+|[a-z]+);|\[(UK|US)\]/i.test(t)).map((t) => `${i.nameEn}: ${t}`));
+  check(!entities.length, 'В местах магазинов и спавнов нет HTML-сущностей и пометок [UK]/[US]', `Неочищенный текст вики: ${entities.slice(0, 5).join('; ')}`);
+
   // --- Текст ---
   lines.push('Текст');
   const vague = steps.flatMap((s) => userTexts(s).filter(([, t]) => VAGUE.test(t)).map(([where]) => `${s.id} «${where}»`));

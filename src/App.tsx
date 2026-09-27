@@ -8,6 +8,7 @@ import { ModeToggle } from './components/ModeToggle';
 import { HeaderProgress } from './components/HeaderProgress';
 import { BridgeIndicator } from './components/BridgeIndicator';
 import { ToastView } from './components/ToastView';
+import { PageBoundary } from './components/PageBoundary';
 import { PathPage } from './pages/Path';
 import { SkillsPage } from './pages/Skills';
 import { SkillDetailPage } from './pages/SkillDetail';
@@ -112,7 +113,9 @@ export function App() {
         </div>
       </header>
 
-      <main id="main" tabIndex={-1}>{content}</main>
+      <main id="main" tabIndex={-1}>
+        <PageBoundary resetKey={`${route.page}/${route.param ?? ''}`}>{content}</PageBoundary>
+      </main>
 
       <nav className="tabs tabs-bottom" aria-label="Разделы">
         {TABS.map(({ page, href, label, Icon }) => (

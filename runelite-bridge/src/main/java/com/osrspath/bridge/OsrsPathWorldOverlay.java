@@ -50,13 +50,18 @@ class OsrsPathWorldOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D g)
 	{
+		WorldView wv = client.getTopLevelWorldView();
+		NavTarget nav = plugin.getNavTarget();
+		if (nav != null && wv != null)
+		{
+			renderNav(g, wv, nav);
+		}
 		ActiveTarget target = plugin.getTarget();
-		if (target == null)
+		if (target == null || wv == null)
 		{
 			return null;
 		}
 		Color color = config.highlightColor();
-		WorldView wv = client.getTopLevelWorldView();
 
 		for (NPC npc : plugin.getNpcs())
 		{
@@ -100,6 +105,32 @@ class OsrsPathWorldOverlay extends Overlay
 			drawTile(g, wv, wp.getX(), wp.getY(), wp.getPlane(), wp.getLabel(), color);
 		}
 		return null;
+	}
+
+	/**
+	 * Временная цель: золотой контур продавца с подписью «[Купи: Steel axe]» (или его имя) и клетка места.
+	 * Продавца нет рядом — остаются клетка, стрелка и HUD.
+	 */
+	private void renderNav(Graphics2D g, WorldView wv, NavTarget nav)
+	{
+		Color gold = OsrsPathHudOverlay.TITLE;
+		String buy = nav.isPurchase() && config.upgradeRouter()
+			? "[Купи: " + (nav.getItemName() != null ? nav.getItemName() : nav.getLabel()) + "]"
+			: null;
+		for (NPC npc : plugin.getNavNpcs())
+		{
+			outline.drawOutline(npc, OUTLINE_WIDTH + 1, gold, OUTLINE_FEATHER);
+			String text = buy != null ? buy : npc.getName();
+			if (text != null)
+			{
+				Point p = npc.getCanvasTextLocation(g, text, npc.getLogicalHeight() + 40);
+				if (p != null)
+				{
+					OverlayUtil.renderTextLocation(g, p, text, gold);
+				}
+			}
+		}
+		drawTile(g, wv, nav.getX(), nav.getY(), nav.getPlane(), plugin.getNavNpcs().isEmpty() ? nav.getLabel() : null, gold);
 	}
 
 	/** Клетка мира: контур и подпись. Вне загруженной области или на другом этаже — ничего. */

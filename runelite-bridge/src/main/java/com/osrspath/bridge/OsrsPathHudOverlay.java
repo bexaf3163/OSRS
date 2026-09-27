@@ -30,6 +30,8 @@ class OsrsPathHudOverlay extends OverlayPanel
 	static final Color DISTANCE = new Color(120, 210, 255);
 	static final Color GOOD = new Color(90, 220, 120);
 	static final Color WARN = new Color(255, 170, 60);
+	/** «Почти готово» — золотисто-зелёный. */
+	static final Color ALMOST = new Color(200, 225, 90);
 
 	/** Всё, что показывает HUD. Неизменяемое: плагин заменяет его целиком. */
 	@Value
@@ -42,6 +44,14 @@ class OsrsPathHudOverlay extends OverlayPanel
 		/** «Сумка: не хватает 2» / «Сумка готова» — если у шага есть проверка вылета. */
 		String bag;
 		boolean bagReady;
+		/** Предупреждение радара опасности; null — рядом опасного нет. */
+		String danger;
+		/** Игрок уже внутри опасной зоны, а не на подходе. */
+		boolean dangerInside;
+		/** «34 креветки до 20 Fishing (~7 мин)»; null — у шага нет темпа. */
+		String pacing;
+		/** Темп: почти готово или цель достигнута — строка зелёная. */
+		boolean pacingGood;
 	}
 
 	private final OsrsPathBridgePlugin plugin;
@@ -86,6 +96,15 @@ class OsrsPathHudOverlay extends OverlayPanel
 		panelComponent.setPreferredSize(new Dimension(large ? WIDTH * 5 / 4 : WIDTH, 0));
 		panelComponent.setBackgroundColor(background(config.hudOpacity()));
 		panelComponent.getChildren().add(TitleComponent.builder().text(s.getTitle()).color(TITLE).build());
+		if (s.getDanger() != null)
+		{
+			// Опасность — сразу под названием, выше цели: её нельзя пропустить.
+			panelComponent.getChildren().add(LineComponent.builder()
+				.left(s.isDangerInside() ? "⚠ ОПАСНО — ты в зоне!" : "⚠ ВНИМАНИЕ")
+				.leftColor(OsrsPathDangerOverlay.DANGER).leftFont(font).build());
+			panelComponent.getChildren().add(LineComponent.builder().left(s.getDanger())
+				.leftColor(OsrsPathDangerOverlay.DANGER).leftFont(font).build());
+		}
 		if (s.getGoal() != null && !s.getGoal().isEmpty())
 		{
 			panelComponent.getChildren().add(LineComponent.builder().left(s.getGoal()).leftColor(TEXT).leftFont(font).build());
@@ -94,6 +113,11 @@ class OsrsPathHudOverlay extends OverlayPanel
 		{
 			panelComponent.getChildren().add(LineComponent.builder().left(s.getDistance())
 				.leftColor(s.isNear() ? GOOD : DISTANCE).leftFont(font).build());
+		}
+		if (s.getPacing() != null)
+		{
+			panelComponent.getChildren().add(LineComponent.builder().left(s.getPacing())
+				.leftColor(s.isPacingGood() ? ALMOST : TEXT).leftFont(font).build());
 		}
 		if (s.getBag() != null)
 		{

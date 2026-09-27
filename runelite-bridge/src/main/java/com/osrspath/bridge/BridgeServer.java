@@ -32,14 +32,20 @@ import lombok.extern.slf4j.Slf4j;
  * Локальный HTTP-мост для приложения «OSRS Путь». Слушает только 127.0.0.1.
  *
  * <pre>
- * GET  /status        {"status":"ok","inGame":true,"activeStepId":"S1-03","stats":{"magic":25,…},"shortestPath":true}
- * POST /active-step   цель шага (ActiveTarget) — стрелка, подсветка, HUD, проверка вылета, путь, автоотметка
+ * GET  /status        {"status":"ok","inGame":true,"activeStepId":"S1-03","stats":{"magic":25,…},"shortestPath":true,
+ *                      "equipment":[{"id":1351,"name":"Bronze axe"}],"inventory":[{"id":995,"name":"Coins","count":250}],
+ *                      "coins":250,"bankCoins":null}   — снаряжение null, пока не в игре или подсказки апгрейда выключены
+ * POST /active-step   цель шага (ActiveTarget) — стрелка, подсветка, HUD, проверка вылета, путь, темп, автоотметка
  * POST /clear         убрать всё
  * POST /shopping-plan оптовый список Grand Exchange (ShoppingPlan) — подсказка на бирже
- * GET  /events        text/event-stream: STATUS, STATS, OWNED, STEP_AUTO_COMPLETED и пинг каждые 15 секунд
+ * POST /nav-target    временная цель поверх шага (NavTarget): место с карты или магазин; {"clear":true} — снять
+ * POST /bank-tags     предметы этапа для мягкой подсветки в банке (BankTags)
+ * GET  /events        text/event-stream: STATUS, STATS, OWNED, GEAR, PACING, NAV_DONE, STEP_AUTO_COMPLETED
+ *                      и пинг каждые 15 секунд
  *
- * STATS и OWNED уходят только при изменении (не чаще раза за игровой тик) и повторяются
- * новому подключению, чтобы приложению не ждать следующего изменения.
+ * STATS, OWNED, GEAR и PACING уходят только при изменении (не чаще раза за игровой тик) и повторяются
+ * новому подключению, чтобы приложению не ждать следующего изменения. Выключенная в настройках функция
+ * отвечает 409 с объяснением — приложение показывает его, а не молчит.
  * </pre>
  *
  * Защита от чужих сайтов в браузере: Host только локальный (против DNS rebinding), Origin — только
@@ -69,6 +75,18 @@ public final class BridgeServer
 		default void onShoppingPlan(ShoppingPlan plan)
 		{
 		}
+
+		/** Временная цель. Возвращает причину отказа (функция выключена) или null. */
+		default String onNavTarget(NavTarget target)
+		{
+			return "не поддерживается";
+		}
+
+		/** Предметы этапа для подсветки в банке. Возвращает причину отказа или null. */
+		default String onBankTags(BankTags tags)
+		{
+			return "не поддерживается";
+		}
 	}
 
 	private final int requestedPort;
@@ -87,6 +105,10 @@ public final class BridgeServer
 	private volatile boolean shortestPath;
 	/** Последнее событие OWNED — повторяется новым подключениям. */
 	private volatile Map<String, Object> lastOwned;
+	/** Снаряжение, сумка и монеты: {"equipment":[…],"inventory":[…],"coins":…,"bankCoins":…}; null — неизвестно. */
+	private volatile Map<String, Object> gear;
+	/** Последнее событие PACING — повторяется новым подключениям. */
+	private volatile Map<String, Object> lastPacing;
 
 	public BridgeServer(int port, Gson gson, Listener listener, Collection<String> extraOrigins)
 	{
@@ -188,6 +210,46 @@ public final class BridgeServer
 		broadcast(e);
 	}
 
+	/** Снаряжение и монеты для подсказки апгрейда. null — неизвестно (не в игре или функция выключена). */
+	public void setGear(Map<String, Object> value)
+	{
+		Map<String, Object> copy = value == null ? null : new LinkedHashMap<>(value);
+		if (Objects.equals(gear, copy))
+		{
+			return;
+		}
+		gear = copy;
+		broadcast(gearEvent());
+	}
+
+	/** Темп прокачки шага; value null — у шага темпа нет или он выключен. */
+	public void pacing(String stepId, Map<String, Object> value)
+	{
+		Map<String, Object> e = new LinkedHashMap<>();
+		e.put("type", "PACING");
+		e.put("stepId", stepId);
+		e.put("pacing", value);
+		if (e.equals(lastPacing))
+		{
+			return;
+		}
+		lastPacing = e;
+		broadcast(e);
+	}
+
+	/** Временная цель снята: arrived — дошёл, obtained — предмет получен, cleared — снята настройкой или /clear. */
+	public void navDone(String reason, NavTarget t)
+	{
+		Map<String, Object> e = new LinkedHashMap<>();
+		e.put("type", "NAV_DONE");
+		e.put("reason", reason);
+		e.put("label", t == null ? null : t.getLabel());
+		e.put("stepId", t == null ? null : t.getStepId());
+		e.put("itemId", t == null ? null : t.getItemId());
+		e.put("itemName", t == null ? null : t.getItemName());
+		broadcast(e);
+	}
+
 	public void stepCompleted(String stepId)
 	{
 		Map<String, Object> e = new LinkedHashMap<>();
@@ -214,6 +276,14 @@ public final class BridgeServer
 		Map<String, Object> e = new LinkedHashMap<>();
 		e.put("type", "STATS");
 		e.put("stats", stats);
+		return e;
+	}
+
+	private Map<String, Object> gearEvent()
+	{
+		Map<String, Object> e = new LinkedHashMap<>();
+		e.put("type", "GEAR");
+		e.put("gear", gear);
 		return e;
 	}
 
@@ -283,6 +353,11 @@ public final class BridgeServer
 					status.put("activeStepId", activeStepId);
 					status.put("stats", stats);
 					status.put("shortestPath", shortestPath);
+					Map<String, Object> g = gear;
+					status.put("equipment", g == null ? null : g.get("equipment"));
+					status.put("inventory", g == null ? null : g.get("inventory"));
+					status.put("coins", g == null ? null : g.get("coins"));
+					status.put("bankCoins", g == null ? null : g.get("bankCoins"));
 					json(ex, 200, status);
 					return;
 				case "/active-step":
@@ -350,6 +425,40 @@ public final class BridgeServer
 					json(ex, 200, ok());
 					return;
 				}
+				case "/nav-target":
+				{
+					NavTarget nav = readJson(ex, method, NavTarget.class);
+					if (nav == null)
+					{
+						return;
+					}
+					String problem = nav.prepare();
+					if (problem != null)
+					{
+						json(ex, 400, error(problem));
+						return;
+					}
+					String refused = listener.onNavTarget(nav);
+					json(ex, refused == null ? 200 : 409, refused == null ? ok() : error(refused));
+					return;
+				}
+				case "/bank-tags":
+				{
+					BankTags tags = readJson(ex, method, BankTags.class);
+					if (tags == null)
+					{
+						return;
+					}
+					String problem = tags.prepare();
+					if (problem != null)
+					{
+						json(ex, 400, error(problem));
+						return;
+					}
+					String refused = listener.onBankTags(tags);
+					json(ex, refused == null ? 200 : 409, refused == null ? ok() : error(refused));
+					return;
+				}
 				case "/clear":
 					if (!postAllowed(ex, method))
 					{
@@ -383,6 +492,38 @@ public final class BridgeServer
 				ex.close();
 			}
 		}
+	}
+
+	/**
+	 * POST с JSON-телом нужного вида. null — ответ об ошибке уже отправлен (метод, заголовок, размер, разбор).
+	 */
+	private <T> T readJson(HttpExchange ex, String method, Class<T> type) throws IOException
+	{
+		if (!postAllowed(ex, method))
+		{
+			return null;
+		}
+		String body = readBody(ex.getRequestBody());
+		if (body == null)
+		{
+			json(ex, 413, error("body too large"));
+			return null;
+		}
+		T value;
+		try
+		{
+			value = gson.fromJson(body, type);
+		}
+		catch (JsonParseException e)
+		{
+			json(ex, 400, error("bad json"));
+			return null;
+		}
+		if (value == null)
+		{
+			json(ex, 400, error("empty"));
+		}
+		return value;
 	}
 
 	private boolean postAllowed(HttpExchange ex, String method) throws IOException
@@ -423,6 +564,15 @@ public final class BridgeServer
 		if (owned != null)
 		{
 			hello.append("data: ").append(gson.toJson(owned)).append("\n\n");
+		}
+		if (gear != null)
+		{
+			hello.append("data: ").append(gson.toJson(gearEvent())).append("\n\n");
+		}
+		Map<String, Object> pace = lastPacing;
+		if (pace != null)
+		{
+			hello.append("data: ").append(gson.toJson(pace)).append("\n\n");
 		}
 		if (!s.send(hello.toString()))
 		{

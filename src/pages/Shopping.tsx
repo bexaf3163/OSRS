@@ -10,6 +10,7 @@ import { ownedTotal } from '../lib/checklist';
 import { aggregateShopping, formatGp, plural, shoppingText, type ShoppingLine } from '../lib/shopping';
 import { getGePrice, getMapping, type GePrice } from '../services/pricesApi';
 import { ItemIcon } from '../components/WikiDrawer';
+import { copyText as copy } from '../lib/clipboard';
 
 const RANGE_KEY = 'osrs-put:shopping-range';
 
@@ -19,9 +20,17 @@ interface Range {
   openOnly: boolean;
 }
 
+/** Сохранённый диапазон; `null`, массив и прочий мусор в хранилище — как будто ничего не сохраняли. */
 function loadRange(): Partial<Range> {
   try {
-    return JSON.parse(localStorage.getItem(RANGE_KEY) ?? '{}') as Partial<Range>;
+    const data = JSON.parse(localStorage.getItem(RANGE_KEY) ?? '{}') as unknown;
+    if (!data || typeof data !== 'object' || Array.isArray(data)) return {};
+    const r = data as Record<string, unknown>;
+    return {
+      from: typeof r.from === 'number' ? r.from : undefined,
+      to: typeof r.to === 'number' ? r.to : undefined,
+      openOnly: typeof r.openOnly === 'boolean' ? r.openOnly : undefined,
+    };
   } catch {
     return {};
   }
@@ -33,26 +42,6 @@ interface Row {
   have: number | null;
   buy: number;
   price?: GePrice | null;
-}
-
-async function copy(text: string): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(text);
-    return true;
-  } catch {
-    // Буфер обмена закрыт (нет фокуса, старый браузер) — старый способ через выделение текста.
-    const area = document.createElement('textarea');
-    area.value = text;
-    area.setAttribute('readonly', '');
-    area.style.position = 'fixed';
-    area.style.opacity = '0';
-    document.body.append(area);
-    area.select();
-    let ok = false;
-    try { ok = document.execCommand('copy'); } catch { ok = false; }
-    area.remove();
-    return ok;
-  }
 }
 
 export function ShoppingPage() {

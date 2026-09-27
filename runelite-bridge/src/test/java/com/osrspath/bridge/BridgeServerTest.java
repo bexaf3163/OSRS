@@ -35,6 +35,10 @@ public class BridgeServerTest
 	private final List<ActiveTarget> targets = new CopyOnWriteArrayList<>();
 	private final List<String> clears = new CopyOnWriteArrayList<>();
 	private final List<ShoppingPlan> plans = new CopyOnWriteArrayList<>();
+	private final List<NavTarget> navs = new CopyOnWriteArrayList<>();
+	private final List<BankTags> bankTags = new CopyOnWriteArrayList<>();
+	/** Не null — слушатель отказывает с этой причиной (функция выключена в настройках). */
+	private volatile String refuse;
 	private final HttpClient http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build();
 	private BridgeServer server;
 	private String base;
@@ -60,6 +64,28 @@ public class BridgeServerTest
 			public void onShoppingPlan(ShoppingPlan plan)
 			{
 				plans.add(plan);
+			}
+
+			@Override
+			public String onNavTarget(NavTarget target)
+			{
+				if (refuse != null)
+				{
+					return refuse;
+				}
+				navs.add(target);
+				return null;
+			}
+
+			@Override
+			public String onBankTags(BankTags tags)
+			{
+				if (refuse != null)
+				{
+					return refuse;
+				}
+				bankTags.add(tags);
+				return null;
 			}
 		}, Collections.singletonList("https://osrs-put.example"));
 		server.start();
@@ -333,6 +359,119 @@ public class BridgeServerTest
 		assertEquals(400, post("/shopping-plan", "{\"items\":[{\"name\":\"Rope\",\"count\":-1}]}", BridgeServer.HEADER, "1").statusCode());
 		assertEquals(400, post("/shopping-plan", "{}", BridgeServer.HEADER, "1").statusCode());
 		assertEquals(1, plans.size());
+	}
+
+	@Test
+	public void navTargetПроверяетсяПередаётсяИОтказываетВыключенной() throws Exception
+	{
+		String place = "{\"label\":\"Port Sarim\",\"x\":3029,\"y\":3221,\"plane\":0}";
+		String shop = "{\"label\":\"Bob's Brilliant Axes\",\"x\":3229,\"y\":3204,\"plane\":0,\"npcNames\":[\"Bob\"],"
+			+ "\"itemName\":\"Steel axe\",\"itemId\":1353,\"stepId\":\"S1-08\"}";
+		assertEquals(403, post("/nav-target", place).statusCode());
+		assertEquals(200, post("/nav-target", place, BridgeServer.HEADER, "1").statusCode());
+		assertEquals(200, post("/nav-target", shop, BridgeServer.HEADER, "1").statusCode());
+		assertEquals(200, post("/nav-target", "{\"clear\":true}", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(3, navs.size());
+		assertFalse(navs.get(0).isPurchase());
+		assertTrue(navs.get(1).isPurchase());
+		assertTrue(navs.get(1).getNpcNameSet().contains("bob"));
+		assertTrue(navs.get(2).isClear());
+
+		// Без подписи, вне мира, чужой этаж, мусор — отказ до слушателя.
+		assertEquals(400, post("/nav-target", "{\"x\":3029,\"y\":3221,\"plane\":0}", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(400, post("/nav-target", "{\"label\":\"X\",\"x\":-5,\"y\":3221,\"plane\":0}", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(400, post("/nav-target", "{\"label\":\"X\",\"x\":3029,\"y\":3221,\"plane\":7}", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(400, post("/nav-target", "{\"label\":\"X\",\"x\":3029,\"y\":3221,\"plane\":0,\"itemId\":-1}", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(400, post("/nav-target", "{\"label\":\"X\",\"x\":3029,\"y\":3221,\"plane\":0,\"stepId\":\"hack\"}", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(400, post("/nav-target", "{broken", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(400, post("/nav-target", "", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(405, get("/nav-target").statusCode());
+		assertEquals(3, navs.size());
+
+		refuse = "навигация выключена";
+		HttpResponse<String> off = post("/nav-target", place, BridgeServer.HEADER, "1");
+		assertEquals(409, off.statusCode());
+		assertTrue(off.body().contains("навигация выключена"));
+		assertEquals(3, navs.size());
+	}
+
+	@Test
+	public void bankTagsПроверяютсяИПередаются() throws Exception
+	{
+		assertEquals(200, post("/bank-tags", "{\"stageId\":\"stage-1\",\"itemIds\":[995,1351,1351,590]}", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(3, bankTags.get(0).getIdSet().size());
+		// Пустой список — снять подсветку, это не ошибка.
+		assertEquals(200, post("/bank-tags", "{\"stageId\":\"stage-1\",\"itemIds\":[]}", BridgeServer.HEADER, "1").statusCode());
+		assertTrue(bankTags.get(1).getIdSet().isEmpty());
+		assertEquals(400, post("/bank-tags", "{\"itemIds\":[995]}", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(400, post("/bank-tags", "{\"stageId\":\"s\"}", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(400, post("/bank-tags", "{\"stageId\":\"s\",\"itemIds\":[0]}", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(400, post("/bank-tags", "{\"stageId\":\"s\",\"itemIds\":[\"x\"]}", BridgeServer.HEADER, "1").statusCode());
+		StringBuilder many = new StringBuilder("{\"stageId\":\"s\",\"itemIds\":[1");
+		for (int i = 0; i < BankTags.MAX_ITEMS; i++)
+		{
+			many.append(",1");
+		}
+		assertEquals(400, post("/bank-tags", many.append("]}").toString(), BridgeServer.HEADER, "1").statusCode());
+		assertEquals(2, bankTags.size());
+		refuse = "выключено";
+		assertEquals(409, post("/bank-tags", "{\"stageId\":\"s\",\"itemIds\":[995]}", BridgeServer.HEADER, "1").statusCode());
+	}
+
+	@Test
+	public void statusСнаряжениеИСобытияТемпаИЦели() throws Exception
+	{
+		// Пока снаряжение неизвестно — поля есть, но null: старый клиент их просто не читает.
+		String before = get("/status").body();
+		assertTrue(before.contains("\"status\":\"ok\""));
+		assertFalse(before.contains("\"coins\":"));
+
+		java.util.Map<String, Object> axe = new java.util.LinkedHashMap<>();
+		axe.put("id", 1351);
+		axe.put("name", "Bronze axe");
+		java.util.Map<String, Object> gear = new java.util.LinkedHashMap<>();
+		gear.put("equipment", Collections.singletonList(axe));
+		gear.put("inventory", new java.util.ArrayList<>());
+		gear.put("coins", 250);
+		gear.put("bankCoins", null);
+
+		BlockingQueue<String> lines = new LinkedBlockingQueue<>();
+		try (Socket s = openEvents(lines))
+		{
+			assertTrue(lines.poll(3, TimeUnit.SECONDS).contains("STATUS"));
+			server.setGear(gear);
+			assertEquals("{\"type\":\"GEAR\",\"gear\":{\"equipment\":[{\"id\":1351,\"name\":\"Bronze axe\"}],\"inventory\":[],\"coins\":250}}",
+				lines.poll(3, TimeUnit.SECONDS));
+			server.setGear(new java.util.LinkedHashMap<>(gear));
+			java.util.Map<String, Object> pace = new java.util.LinkedHashMap<>();
+			pace.put("actionsLeft", 34);
+			server.pacing("S1-11", pace);
+			assertEquals("{\"type\":\"PACING\",\"stepId\":\"S1-11\",\"pacing\":{\"actionsLeft\":34}}", lines.poll(3, TimeUnit.SECONDS));
+			server.pacing("S1-11", new java.util.LinkedHashMap<>(pace));
+			assertNull(lines.poll(300, TimeUnit.MILLISECONDS));
+
+			NavTarget t = new NavTarget();
+			t.setLabel("Bob's Brilliant Axes");
+			t.setItemName("Steel axe");
+			t.setItemId(1353);
+			t.setStepId("S1-08");
+			server.navDone("obtained", t);
+			String done = lines.poll(3, TimeUnit.SECONDS);
+			assertTrue(done.startsWith("{\"type\":\"NAV_DONE\",\"reason\":\"obtained\""));
+			assertTrue(done.contains("\"itemId\":1353"));
+		}
+		String after = get("/status").body();
+		assertTrue(after.contains("\"equipment\":[{\"id\":1351,\"name\":\"Bronze axe\"}]"));
+		assertTrue(after.contains("\"coins\":250"));
+
+		// Новое подключение сразу получает снаряжение и темп.
+		BlockingQueue<String> again = new LinkedBlockingQueue<>();
+		try (Socket s = openEvents(again))
+		{
+			assertTrue(again.poll(3, TimeUnit.SECONDS).contains("STATUS"));
+			assertTrue(again.poll(3, TimeUnit.SECONDS).contains("GEAR"));
+			assertTrue(again.poll(3, TimeUnit.SECONDS).contains("PACING"));
+		}
 	}
 
 	@Test

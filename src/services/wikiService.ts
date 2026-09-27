@@ -7,7 +7,9 @@ import { fold } from '../lib/md';
 import { getGePrice, getMapping } from './pricesApi';
 import { fetchItemDetail, fetchNpc, openSearch, type FetchFn, type NpcInfo } from './wikiApi';
 
-const fetchFn: FetchFn = (url) => fetch(url);
+/** Зависший запрос к вики не должен оставлять досье «загружается» навсегда. */
+const WIKI_TIMEOUT_MS = 12_000;
+const fetchFn: FetchFn = (url) => fetch(url, { signal: AbortSignal.timeout(WIKI_TIMEOUT_MS) });
 
 export function findLocalItem(query: string | number): WikiItemDetail | undefined {
   if (typeof query === 'number') return itemById.get(query);
@@ -32,12 +34,13 @@ export function searchLocalItems(query: string, limit = 8): WikiItemDetail[] {
   return scored.slice(0, limit).map((x) => x.i);
 }
 
+/** Досье с ценой биржи. Цены нет, потому что не торгуется, и цены нет, потому что нет связи, — разные вещи. */
 async function withPrice(d: WikiItemDetail): Promise<WikiItemDetail> {
   try {
     const p = await getGePrice(d.id);
     return p ? { ...d, gePrice: p } : d;
   } catch {
-    return d;
+    return { ...d, priceUnavailable: true };
   }
 }
 

@@ -16,7 +16,8 @@ import net.runelite.client.ui.overlay.WidgetItemOverlay;
 
 /**
  * Предметы шага в инвентаре и банке: рамка по краю ячейки с мягкой пульсацией, сам предмет не закрывается.
- * В банке ещё зелёная заливка у того, что по проверке вылета надо взять в сумку.
+ * В банке ещё зелёная заливка у того, что по проверке вылета надо взять в сумку, и тихая золотистая
+ * рамка у предметов всего этапа (POST /bank-tags) — как вкладка Bank Tags, но без её создания.
  * WidgetItemOverlay — штатный способ RuneLite рисовать поверх ячеек предметов.
  */
 class OsrsPathItemOverlay extends WidgetItemOverlay
@@ -27,6 +28,9 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 	/** Имя по ID предмета: getItemComposition не бесплатен, а рисуется каждый кадр. */
 	private final Map<Integer, String> names = new HashMap<>();
 	private static final Color WANTED_FILL = new Color(90, 220, 120, 55);
+	/** Предмет этапа в банке: тихая золотистая рамка без пульсации — фон, а не призыв. */
+	private static final Color BANK_TAG = new Color(255, 210, 90, 150);
+	private static final BasicStroke BANK_TAG_STROKE = new BasicStroke(1.5f);
 
 	@Inject
 	OsrsPathItemOverlay(OsrsPathBridgePlugin plugin, OsrsPathBridgeConfig config, ItemManager itemManager)
@@ -42,23 +46,28 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 	public void renderItemOverlay(Graphics2D g, int itemId, WidgetItem item)
 	{
 		ActiveTarget target = plugin.getTarget();
-		if (target == null)
-		{
-			return;
-		}
 		boolean inBank = isBank(item.getWidget());
-		boolean wanted = inBank && config.showChecklist() && plugin.isWantedFromBank(itemId);
-		if (!wanted && target.getItemNameSet().isEmpty())
+		// Предметы этапа (Bank Tags) — только в банке, мягкой рамкой, и даже без шага.
+		boolean tagged = inBank && config.bankHighlight() && plugin.isBankTagged(itemId);
+		if (target == null && !tagged)
 		{
 			return;
 		}
-		String name = names.computeIfAbsent(itemId, id ->
+		boolean checklist = target != null && inBank && config.showChecklist();
+		boolean wanted = checklist && plugin.isWantedFromBank(itemId);
+		boolean named = target != null && !target.getItemNameSet().isEmpty();
+		boolean stepItem = false;
+		if (!wanted && (named || checklist))
 		{
-			ItemComposition c = itemManager.getItemComposition(id);
-			return c == null ? "" : ActiveTarget.nameKey(c.getName());
-		});
-		wanted |= inBank && config.showChecklist() && plugin.isWantedFromBank(name);
-		if (!wanted && !target.getItemNameSet().contains(name))
+			String name = names.computeIfAbsent(itemId, id ->
+			{
+				ItemComposition c = itemManager.getItemComposition(id);
+				return c == null ? "" : ActiveTarget.nameKey(c.getName());
+			});
+			wanted = checklist && plugin.isWantedFromBank(name);
+			stepItem = named && target.getItemNameSet().contains(name);
+		}
+		if (!wanted && !stepItem && !tagged)
 		{
 			return;
 		}
@@ -76,9 +85,16 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 			g.drawRoundRect(b.x - 1, b.y - 1, b.width + 1, b.height + 1, 6, 6);
 			return;
 		}
-		g.setColor(OsrsPathWidgetOverlay.pulse(config.highlightColor()));
-		g.setStroke(new BasicStroke(2f));
-		g.drawRoundRect(b.x - 1, b.y - 1, b.width + 1, b.height + 1, 6, 6);
+		if (stepItem)
+		{
+			g.setColor(OsrsPathWidgetOverlay.pulse(config.highlightColor()));
+			g.setStroke(new BasicStroke(2f));
+			g.drawRoundRect(b.x - 1, b.y - 1, b.width + 1, b.height + 1, 6, 6);
+			return;
+		}
+		g.setColor(BANK_TAG);
+		g.setStroke(BANK_TAG_STROKE);
+		g.drawRoundRect(b.x, b.y, b.width - 1, b.height - 1, 6, 6);
 	}
 
 	/** Ячейка из окна банка (а не из сумки): группа виджета — BANKMAIN. */

@@ -42,6 +42,8 @@ public class ActiveTarget
 	private List<WorldPointDto> pathWaypoints;
 	/** Ещё предметы, про которые приложению нужно знать, сколько их есть (условия быстрых вариантов). */
 	private List<String> watchItems;
+	/** Темп прокачки навыка шага: сколько действий до цели и сколько это займёт. */
+	private Pacing pacing;
 
 	private transient Set<String> npcNameSet = Collections.emptySet();
 	private transient Set<Integer> npcIdSet = Collections.emptySet();
@@ -77,6 +79,43 @@ public class ActiveTarget
 		private int count;
 		/** Сколько здоровья лечит — у еды. */
 		private Integer heals;
+	}
+
+	/** То же, что StepPacing в src/types/index.ts. */
+	@Data
+	public static class Pacing
+	{
+		static final Set<String> SKILLS = Set.of("fishing", "woodcutting", "cooking", "mining");
+
+		private String skill;
+		private int targetLevel;
+		private int targetExp;
+		/** Название действия формами для 1, 2–4 и 5+: «креветка|креветки|креветок». Одна форма тоже годится. */
+		private String actionName;
+		private double expPerAction;
+		/** Сколько секунд на действие — первая оценка, пока нет своих замеров. */
+		private Double secondsPerAction;
+
+		String problem()
+		{
+			if (skill == null || !SKILLS.contains(skill))
+			{
+				return "неизвестный навык темпа";
+			}
+			if (targetLevel < 2 || targetLevel > 99 || targetExp < 1 || targetExp > 13_034_431)
+			{
+				return "неверная цель темпа";
+			}
+			if (!(expPerAction > 0 && expPerAction <= 10_000) || actionName == null || actionName.isEmpty() || tooLong(actionName))
+			{
+				return "неверное действие темпа";
+			}
+			if (secondsPerAction != null && !(secondsPerAction > 0 && secondsPerAction <= 600))
+			{
+				return "неверное время действия";
+			}
+			return null;
+		}
 	}
 
 	@Data
@@ -140,6 +179,10 @@ public class ActiveTarget
 				}
 			}
 		}
+		if (pacing != null && pacing.problem() != null)
+		{
+			return pacing.problem();
+		}
 		for (List<String> list : List.of(nonNull(npcNames), nonNull(objectNames), nonNull(dialogChoices), nonNull(highlightItems), nonNull(watchItems)))
 		{
 			for (String s : list)
@@ -196,7 +239,7 @@ public class ActiveTarget
 		return list == null ? Collections.emptyList() : list;
 	}
 
-	private static boolean tooLong(String s)
+	static boolean tooLong(String s)
 	{
 		return s != null && s.length() > MAX_TEXT;
 	}

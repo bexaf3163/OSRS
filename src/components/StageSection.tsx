@@ -7,6 +7,7 @@ import { stageQuestPoints } from '../lib/qp';
 import { IconCheck, IconChevron } from './Icons';
 import { ProgressBar } from './ProgressBar';
 import { StepCard } from './StepCard';
+import { BankTagButton } from './BankTagButton';
 
 interface Props {
   stage: Stage;
@@ -45,6 +46,7 @@ export function StageSection({ stage, steps, open, current, onToggle, expanded, 
       <ProgressBar value={steps.length ? closed / steps.length : 0} label={`Этап ${stage.id}: выполнено шагов`} />
       <div className={`collapse ${open ? 'is-open' : ''}`} id={bodyId} inert={!open}>
         <div className="collapse-inner">
+          <BankTagButton stage={stage.id} />
           <ol className="steps">
             {steps.map((s) => (
               <StepCard key={s.id} step={s} open={expanded.has(s.id)} onToggle={() => onToggleStep(s.id)} onDone={onDone} />

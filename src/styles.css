@@ -148,6 +148,8 @@ p { margin: 0; }
 .muted { color: var(--muted); }
 .small { font-size: 0.875rem; }
 .empty { padding: 24px 0; text-align: center; }
+.page-error { display: grid; gap: 10px; margin-top: 16px; }
+.page-error-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 
 .icon { width: 20px; height: 20px; flex: none; }
 
@@ -1147,7 +1149,7 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
   background: rgb(20 22 26 / 0.92); color: #e9e9ec;
 }
 .map-modal-offline p { margin: 0; }
-.map-modal-foot { margin: 0; text-align: right; }
+.map-modal-foot { margin: 0; display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px 16px; }
 .map-modal-foot .icon { width: 13px; height: 13px; }
 /* Метки Leaflet: div-иконки без картинок, активная крупнее и пульсирует. */
 .map-pin span {
@@ -1207,6 +1209,10 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 .icon-btn-emoji { font-size: 1.05rem; line-height: 1; }
 /* На телефоне в шапке нет места — список открывается из карточки «Что делать сейчас» и из шагов-закупок. */
 @media (max-width: 480px) { .icon-btn-emoji { display: none; } }
+/* 320 px: шапка не помещалась на 16 px и срезала настройки — название прячется, значок остаётся ссылкой домой. */
+@media (max-width: 359px) {
+  .brand > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
 .next-shop { margin: 8px 0 0; }
 .ingame-route { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 2px; font-size: 0.86rem; }
 
@@ -1259,3 +1265,53 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
   .shop-row { grid-template-columns: 20px 1fr auto; }
   .shop-row > .btn { grid-column: 2 / -1; justify-self: start; }
 }
+
+/* Места из досье вики: «📍 место» открывает карту, «🧭» ведёт стрелку в игре. */
+.drawer-list.is-places { list-style: none; padding-left: 0; gap: 2px; }
+.place-row { display: flex; align-items: center; gap: 2px; margin: 0; }
+.place-link {
+  font: inherit; color: var(--accent-ink); background: none; border: 0; border-radius: 6px; padding: 3px 6px; margin-left: -6px;
+  text-align: left; cursor: pointer; text-decoration: underline dotted color-mix(in srgb, var(--accent-ink) 45%, transparent);
+  text-underline-offset: 3px; transition: background var(--ease);
+}
+.place-link:hover { background: var(--accent-soft); text-decoration-style: solid; }
+th .place-link { font-weight: inherit; }
+.icon-btn.nav-btn { width: 30px; height: 30px; flex: none; font-size: 0.95rem; vertical-align: middle; }
+.icon-btn.nav-btn:hover { background: var(--gold-soft); }
+.icon-btn.nav-btn:disabled { opacity: 0.5; cursor: progress; }
+.nav-state { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.nav-offline { color: var(--warn); }
+.map-source { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px; }
+.map-source-badge {
+  display: inline-block; padding: 2px 10px; border-radius: 999px; font-weight: 600;
+  background: var(--gold-soft); color: var(--gold-ink); border: 1px solid color-mix(in srgb, var(--gold) 40%, transparent);
+}
+.map-modal-status { inset: 50% 12px auto; transform: translateY(-50%); max-width: 460px; margin: 0 auto; text-align: center; display: flex; flex-direction: column; gap: 6px; align-items: center; }
+
+/* Bank Tags этапа: кнопка над шагами этапа (и в левой колонке широкого экрана). */
+.banktag { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0 0 10px; }
+.banktag.is-compact { margin: 4px 0 8px 34px; }
+.banktag-help { flex-basis: 100%; margin: 0; }
+
+/* Темп прокачки из игры. */
+.pacing { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 0; font-size: 0.92rem; }
+.pacing-main { font-weight: 600; font-variant-numeric: tabular-nums; }
+.pacing-eta { color: var(--accent-ink); font-variant-numeric: tabular-nums; }
+.pacing.is-good .pacing-main { color: var(--done); }
+
+/* ⚡ Скоростной апгрейд: игровая плашка с янтарным акцентом, без мигания. */
+.upgrade {
+  display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: var(--radius-sm);
+  border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); background: var(--gold-soft);
+  box-shadow: inset 3px 0 0 var(--gold);
+}
+.upgrade p { margin: 0; }
+.upgrade-kicker { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--gold-ink); }
+.upgrade-title { font-size: 1rem; }
+.upgrade-where .place-link { margin-left: 0; }
+.upgrade-cash { border-top: 1px dashed color-mix(in srgb, var(--gold) 45%, transparent); padding-top: 6px; margin-top: 2px; }
+.upgrade-cash ul { margin: 2px 0 0; padding-left: 1.2rem; }
+.upgrade-going { color: var(--done); font-weight: 600; }
+.upgrade-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 4px; }
+.upgrade.is-poor { box-shadow: inset 3px 0 0 var(--warn); }
+

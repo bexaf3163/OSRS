@@ -1,0 +1,27 @@
+{
+  "source": "Требования к уровню — игры; ID, магазины и цены — база предметов проекта (f2p-items.json с OSRS Wiki), координаты магазинов — словарь мест (majorLocations.json)",
+  "woodcutting": [
+    { "tier": "Bronze axe", "itemId": 1351, "levelReq": 1, "shop": { "npc": "Bob", "store": "Bob's Brilliant Axes", "city": "Lumbridge" } },
+    { "tier": "Iron axe", "itemId": 1349, "levelReq": 1, "minor": true, "shop": { "npc": "Bob", "store": "Bob's Brilliant Axes", "city": "Lumbridge" } },
+    { "tier": "Steel axe", "itemId": 1353, "levelReq": 6, "geAlternative": true, "shop": { "npc": "Bob", "store": "Bob's Brilliant Axes", "city": "Lumbridge" } },
+    { "tier": "Mithril axe", "itemId": 1355, "levelReq": 21, "geOnly": true },
+    { "tier": "Adamant axe", "itemId": 1357, "levelReq": 31, "geOnly": true },
+    { "tier": "Rune axe", "itemId": 1359, "levelReq": 41, "geOnly": true }
+  ],
+  "mining": [
+    { "tier": "Bronze pickaxe", "itemId": 1265, "levelReq": 1, "shop": { "npc": "Bob", "store": "Bob's Brilliant Axes", "city": "Lumbridge" } },
+    { "tier": "Iron pickaxe", "itemId": 1267, "levelReq": 1, "minor": true, "shop": { "npc": "Nurmof", "store": "Nurmof's Pickaxe Shop", "city": "Dwarven Mine" } },
+    { "tier": "Steel pickaxe", "itemId": 1269, "levelReq": 6, "geAlternative": true, "shop": { "npc": "Nurmof", "store": "Nurmof's Pickaxe Shop", "city": "Dwarven Mine" } },
+    { "tier": "Mithril pickaxe", "itemId": 1273, "levelReq": 21, "geAlternative": true, "shop": { "npc": "Nurmof", "store": "Nurmof's Pickaxe Shop", "city": "Dwarven Mine" } },
+    { "tier": "Adamant pickaxe", "itemId": 1271, "levelReq": 31, "geAlternative": true, "shop": { "npc": "Nurmof", "store": "Nurmof's Pickaxe Shop", "city": "Dwarven Mine" } },
+    { "tier": "Rune pickaxe", "itemId": 1275, "levelReq": 41, "geAlternative": true, "shop": { "npc": "Nurmof", "store": "Nurmof's Pickaxe Shop", "city": "Dwarven Mine" } }
+  ],
+  "melee": [
+    { "tier": "Bronze scimitar", "itemId": 1321, "levelReq": 1, "shop": { "npc": "Zeke", "store": "Zeke's Superior Scimitars", "city": "Al Kharid" } },
+    { "tier": "Iron scimitar", "itemId": 1323, "levelReq": 1, "shop": { "npc": "Zeke", "store": "Zeke's Superior Scimitars", "city": "Al Kharid" } },
+    { "tier": "Steel scimitar", "itemId": 1325, "levelReq": 5, "shop": { "npc": "Zeke", "store": "Zeke's Superior Scimitars", "city": "Al Kharid" } },
+    { "tier": "Mithril scimitar", "itemId": 1329, "levelReq": 20, "geAlternative": true, "shop": { "npc": "Zeke", "store": "Zeke's Superior Scimitars", "city": "Al Kharid" } },
+    { "tier": "Adamant scimitar", "itemId": 1331, "levelReq": 30, "geOnly": true },
+    { "tier": "Rune scimitar", "itemId": 1333, "levelReq": 40, "geOnly": true }
+  ]
+}

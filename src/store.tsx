@@ -5,7 +5,7 @@ import type { GameMode, Progress, Stage, Step, StepStatus } from './types';
 import { BASE_QP, known, maxQpFor, stagesFor, stepById, stepsFor } from './data';
 import {
   emptyProgress, gameModeOf, loadProgress, normalizeProgress, saveProgress, STORAGE_KEY,
-  withGameMode, withLevel, withNote, withReactivated, withReviewed, withStep,
+  withGameMode, withLevel, withNote, withReactivated, withReviewed, withStep, withUpgradeDismissed,
 } from './lib/progress';
 import { questPoints } from './lib/qp';
 import { desktop } from './lib/desktop';
@@ -31,6 +31,8 @@ interface StoreValue {
   setMode: (mode: GameMode) => void;
   review: (ids: string[]) => void;
   reactivate: (ids: string[]) => void;
+  /** «✕ Пропустить» подсказку апгрейда на шаге (dismissed=false — вернуть). */
+  dismissUpgrade: (stepId: string, dismissed?: boolean) => void;
   replace: (p: Progress, message: string) => void;
   reset: () => void;
   toast: Toast | null;
@@ -140,6 +142,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     show(ids.length > 1 ? `Возвращено в активные: ${ids.join(', ')}` : `${ids[0]} снова в плане`, before);
   }, [show]);
 
+  const dismissUpgrade = useCallback((stepId: string, dismissed = true) => {
+    setProgress((p) => ((p.upgradeDismissedForSteps ?? []).includes(stepId) === dismissed ? p : withUpgradeDismissed(p, stepId, dismissed)));
+  }, []);
+
   const replace = useCallback((p: Progress, message: string) => {
     const before = current.current;
     setProgress(p);
@@ -169,8 +175,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const maxQp = useMemo(() => maxQpFor(mode), [mode]);
 
   const value = useMemo<StoreValue>(
-    () => ({ progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setNote, setMode, review, reactivate, replace, reset, toast, notify, undo, dismissToast }),
-    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setNote, setMode, review, reactivate, replace, reset, toast, notify, undo, dismissToast],
+    () => ({
+      progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setNote, setMode, review, reactivate, dismissUpgrade, replace, reset,
+      toast, notify, undo, dismissToast,
+    }),
+    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setNote, setMode, review, reactivate, dismissUpgrade, replace, reset,
+      toast, notify, undo, dismissToast],
   );
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }

@@ -6,6 +6,7 @@ import { applyTheme, loadTheme, type Theme } from '../lib/theme';
 import { desktop, type RuneliteCheck, type ZoomState } from '../lib/desktop';
 import { applyTextScale, loadTextScale, percent, stepScale, TEXT_EVENT, TEXT_STEPS, ZOOM_STEPS } from '../lib/ui-scale';
 import { useBridge } from '../bridge';
+import { setFeatures, useFeatures, type Features } from '../lib/features';
 import { BRIDGE_ORIGIN } from '../services/runeliteBridge';
 
 /** Программа для ПК открывает сборку с диска (file://). */
@@ -62,6 +63,7 @@ export function SettingsPage() {
 
       <Appearance />
       <RuneLiteBridge />
+      <Helpers />
 
       <section className="card section-card">
         <h2 className="card-title">Перенос прогресса</h2>
@@ -242,6 +244,35 @@ function Appearance() {
           </label>
         </div>
       )}
+    </section>
+  );
+}
+
+const HELPERS: { key: keyof Features; title: string; text: string }[] = [
+  { key: 'autoLocation', title: '📍 Места на карте', text: 'Места в досье вики (где лежит бесплатно, магазины, продавцы, города) открываются на карте мира, а 🧭 ведёт туда стрелку в игре.' },
+  { key: 'bankTags', title: '🏷️ Bank Tags для этапа', text: 'Кнопка со строкой импорта для плагина Bank Tags и мягкая подсветка предметов этапа в банке через плагин OSRS Path Bridge.' },
+  { key: 'pacing', title: '⏱ Темп прокачки', text: 'Сколько действий и минут осталось до цели шага — по опыту из игры. Без замеров время не придумывается.' },
+  { key: 'upgradeRouter', title: '⚡ Скоростной апгрейд', text: 'Подсказка купить инструмент или оружие получше перед долгой прокачкой, если уровень уже позволяет. Сама ничего не покупает.' },
+];
+
+function Helpers() {
+  const features = useFeatures();
+  return (
+    <section className="card section-card">
+      <h2 className="card-title">Помощник: места, банк, темп, апгрейды</h2>
+      <p className="muted small">
+        Выключенная функция не только прячется, но и ничего не делает. То, что рисуется в самой игре (радар опасности,
+        подсветка, звук), настраивается ещё и в плагине OSRS Path Bridge: RuneLite → настройки плагина → «Места, банк, опасность, темп».
+      </p>
+      {HELPERS.map((h) => (
+        <div className="setting" key={h.key}>
+          <label className="switch">
+            <input type="checkbox" checked={features[h.key]} onChange={(e) => setFeatures({ [h.key]: e.target.checked })} />
+            <span>{h.title}</span>
+          </label>
+          <p className="muted small">{h.text}</p>
+        </div>
+      ))}
     </section>
   );
 }

@@ -1,16 +1,20 @@
 // Состояние связи с RuneLite: включена ли она, есть ли плагин, какой шаг показан в игре.
 // Автоотметка из игры идёт сюда: шаг отмечается, в игру уходит следующий, страницы открывают его у себя.
-// Отсюда же уровни навыков (быстрые варианты), счёт предметов (проверка вылета) и оптовый список для биржи.
+// Отсюда же уровни навыков (быстрые варианты), счёт предметов (проверка вылета) и оптовый список для биржи,
+// временная цель «🧭 к месту / в магазин», предметы этапа для банка, снаряжение и темп прокачки из игры.
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { PlayerStats, Step, StepBranch } from './types';
 import { useStore } from './store';
 import { desktop, type RuneliteLaunch } from './lib/desktop';
 import {
-  checkStatus, clearActiveStep, connectEvents, parseStats, planAutoComplete, syncActiveStep, syncShoppingPlan, toInGameTarget,
-  type BridgeEvent, type ShoppingPlanPayload,
+  checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseGear, parsePacing, parseStats, planAutoComplete, setNavTarget,
+  syncActiveStep, syncBankTags, syncShoppingPlan, toInGameTarget,
+  type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type ShoppingPlanPayload,
 } from './services/runeliteBridge';
 import { parseOwned, type OwnedState } from './lib/checklist';
+import { stageBankItemIds } from './lib/bankTags';
+import { useFeatures } from './lib/features';
 
 const ENABLED_KEY = 'osrs-put:runelite-bridge';
 const AUTOLAUNCH_KEY = 'osrs-put:runelite-autolaunch';
@@ -59,6 +63,15 @@ interface BridgeValue {
   chooseBranch: (step: Step, branchId: string | null) => void;
   /** Оптовый список — в подсказку на бирже (и запомнить до следующего запуска RuneLite). */
   syncPlan: (plan: ShoppingPlanPayload) => Promise<boolean>;
+  /** Снаряжение, сумка и монеты из игры; null — неизвестно. */
+  gear: GearState | null;
+  /** Темп прокачки шага, показанного в игре. */
+  pacing: PacingState | null;
+  /** Временная цель в игре (место или магазин); null — стрелка ведёт к шагу. */
+  navTarget: NavTargetPayload | null;
+  /** Поставить временную цель. Без связи или при отказе плагина — ответ с причиной. */
+  navigate: (target: NavTargetPayload) => Promise<NavResult | { ok: false; reason: 'off' }>;
+  clearNav: () => Promise<void>;
 }
 
 const BridgeContext = createContext<BridgeValue | null>(null);
@@ -74,14 +87,22 @@ function loadEnabled(): boolean {
   return Boolean(desktop()?.bridge);
 }
 
-function loadJson<T>(key: string, fallback: T): T {
+/** Только объект: `null`, массив, строка в хранилище — как будто ничего не сохраняли. */
+function loadJson<T extends object>(key: string, fallback: T | null): T | null {
   try {
     const raw = localStorage.getItem(key);
-    if (raw) return JSON.parse(raw) as T;
+    const data = raw ? (JSON.parse(raw) as unknown) : null;
+    if (data && typeof data === 'object' && !Array.isArray(data)) return data as T;
   } catch {
     // Нет хранилища или мусор — по умолчанию.
   }
   return fallback;
+}
+
+/** Выбор ветки по шагам: берём только пары «шаг → строка». */
+function loadBranchChoice(): Record<string, string> {
+  const data = loadJson<Record<string, unknown>>(BRANCH_KEY, {}) ?? {};
+  return Object.fromEntries(Object.entries(data).filter((e): e is [string, string] => typeof e[1] === 'string'));
 }
 
 function saveJson(key: string, value: unknown): void {
@@ -109,7 +130,7 @@ const LAUNCH_TEXT: Partial<Record<RuneliteLaunch['state'], string>> = {
 };
 
 export function BridgeProvider({ children }: { children: ReactNode }) {
-  const { progress, steps, setStep, notify } = useStore();
+  const { progress, steps, setStep, notify, mode } = useStore();
   const [enabled, setEnabledState] = useState(loadEnabled);
   const [autoLaunch, setAutoLaunchState] = useState(loadAutoLaunch);
   const runelite = desktop()?.runelite;
@@ -120,11 +141,17 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const [stats, setStats] = useState<PlayerStats | null>(null);
   const [owned, setOwned] = useState<OwnedState | null>(null);
   const [shortestPath, setShortestPath] = useState(false);
-  const [branchChoice, setBranchChoice] = useState<Record<string, string>>(() => loadJson(BRANCH_KEY, {}));
+  const [branchChoice, setBranchChoice] = useState<Record<string, string>>(loadBranchChoice);
+  const [gear, setGear] = useState<GearState | null>(null);
+  const [pacing, setPacing] = useState<PacingState | null>(null);
+  const [navTarget, setNavTargetState] = useState<NavTargetPayload | null>(null);
+  const features = useFeatures();
+  /** Какие предметы этапа уже в плагине — чтобы не слать одно и то же при каждой отрисовке. */
+  const bankSent = useRef('');
 
   // Обработчик событий живёт дольше отрисовки — свежие данные берёт из ссылок.
-  const latest = useRef({ progress, steps, setStep, activeStepId, branchChoice });
-  latest.current = { progress, steps, setStep, activeStepId, branchChoice };
+  const latest = useRef({ progress, steps, setStep, activeStepId, branchChoice, notify });
+  latest.current = { progress, steps, setStep, activeStepId, branchChoice, notify };
   /** Уже обработанные автоотметки: одно событие не отмечает шаг дважды и не двигает маршрут дважды. */
   const handled = useRef(new Set<string>());
   const nonce = useRef(0);
@@ -151,12 +178,30 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  /** Временная цель снята в игре: дошёл до места, получил предмет или её сняли. Шаг снова ведёт стрелку. */
+  const onNavDone = useCallback((e: BridgeEvent) => {
+    const { reason, label, itemName } = e as { reason?: unknown; label?: unknown; itemName?: unknown };
+    setNavTargetState(null);
+    const say = latest.current.notify;
+    if (reason === 'obtained') say(`✓ ${typeof itemName === 'string' ? itemName : 'Предмет'} получен — стрелка снова ведёт к шагу`);
+    else if (reason === 'arrived') say(`📍 На месте${typeof label === 'string' ? `: ${label}` : ''} — стрелка снова ведёт к шагу`);
+    // Шаг заново — HUD и цель в игре точно те же, что до отклонения.
+    const { activeStepId: active, steps: list, branchChoice: choice } = latest.current;
+    const step = active ? list.find((s) => s.id === active) : undefined;
+    if (step && reason !== 'cleared') void syncActiveStep(step, undefined, chosenBranch(step, choice));
+  }, []);
+
   useEffect(() => {
     const forget = () => {
       setInGame(false);
       setStats(null);
       setOwned(null);
       setShortestPath(false);
+      setGear(null);
+      setPacing(null);
+      // RuneLite закрыли — временной цели там больше нет.
+      setNavTargetState(null);
+      bankSent.current = '';
     };
     if (!enabled) {
       setState('off');
@@ -171,6 +216,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       setInGame(s.inGame);
       setShortestPath(s.shortestPath);
       if (s.stats) setStats(s.stats);
+      setGear(s.gear);
     });
     const onEvent = (e: BridgeEvent) => {
       if (e.type === 'STATUS') {
@@ -179,6 +225,9 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
         refresh();
       } else if (e.type === 'STATS') setStats(parseStats((e as { stats?: unknown }).stats));
       else if (e.type === 'OWNED') setOwned(parseOwned(e));
+      else if (e.type === 'GEAR') setGear(parseGear((e as { gear?: unknown }).gear));
+      else if (e.type === 'PACING') setPacing(parsePacing(e));
+      else if (e.type === 'NAV_DONE') onNavDone(e);
       else if (e.type === 'STEP_AUTO_COMPLETED' && typeof (e as { stepId?: unknown }).stepId === 'string') onCompleted((e as { stepId: string }).stepId);
     };
     const handle = connectEvents(onEvent, (online) => {
@@ -191,14 +240,26 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       // Поток открыт — сверяемся с /status: индикатор должен показывать то, что отвечает плагин.
       refresh();
       // RuneLite могли перезапустить — оптовый список для биржи отправляем снова.
-      const plan = loadJson<ShoppingPlanPayload | null>(PLAN_KEY, null);
-      if (plan?.items?.length) void syncShoppingPlan(plan);
+      const plan = loadJson<ShoppingPlanPayload>(PLAN_KEY, null);
+      if (Array.isArray(plan?.items) && plan.items.length) void syncShoppingPlan(plan);
     });
     return () => {
       alive = false;
       handle.close();
     };
-  }, [enabled, onCompleted]);
+  }, [enabled, onCompleted, onNavDone]);
+
+  // Предметы этапа показанного в игре шага — плагину, для мягкой подсветки в банке.
+  // Уходят при смене шага (и этапа), после переподключения и когда функцию включили; выключили — подсветка снимается.
+  useEffect(() => {
+    if (state !== 'online') return;
+    const step = activeStepId ? steps.find((s) => s.id === activeStepId) : undefined;
+    const ids = features.bankTags && step ? stageBankItemIds(step.stage, mode) : [];
+    const key = `${step?.stage ?? '-'}|${mode}|${ids.join(',')}`;
+    if (key === bankSent.current || (!ids.length && !bankSent.current)) return;
+    bankSent.current = key;
+    void syncBankTags(step ? `stage-${step.stage}` : 'none', ids);
+  }, [state, activeStepId, steps, mode, features.bankTags]);
 
   const setAutoLaunch = useCallback((on: boolean) => {
     setAutoLaunchState(on);
@@ -259,14 +320,26 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     return syncShoppingPlan(plan);
   }, []);
 
+  const navigate = useCallback(async (target: NavTargetPayload) => {
+    if (!enabled) return { ok: false as const, reason: 'off' as const };
+    const r = await setNavTarget(target);
+    if (r.ok) setNavTargetState(target);
+    return r;
+  }, [enabled]);
+
+  const clearNav = useCallback(async () => {
+    await clearNavTarget();
+    setNavTargetState(null);
+  }, []);
+
   const value = useMemo<BridgeValue>(
     () => ({
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan],
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;
 }

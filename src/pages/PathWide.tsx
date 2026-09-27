@@ -11,6 +11,7 @@ import { flashDone } from '../lib/flash';
 import { needsReview, pendingReview } from '../lib/review';
 import { IconCheck, IconChevron, IconLock, TypeIcon, TYPE_LABEL } from '../components/Icons';
 import { StepBody } from '../components/StepCard';
+import { BankTagButton } from '../components/BankTagButton';
 import { WikiDock } from '../components/WikiDrawer';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -125,6 +126,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
                     })}
                   </ol>
                 )}
+                {open && <BankTagButton stage={st.id} compact />}
               </li>
             );
           })}

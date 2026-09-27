@@ -1,19 +1,37 @@
 // Карта мира на весь экран: тайлы OSRS Wiki в Leaflet, метки точек шага, переключение точек и этажей.
 // Грузится отдельным куском только по кнопке «Карта мира» — Leaflet не утяжеляет запуск.
 // Встроить страницу карты вики нельзя (X-Frame-Options: DENY), поэтому рендер свой — из тех же тайлов.
+//
+// Та же карта показывает и одно место из досье вики (target): где лежит предмет, магазин, NPC.
+// Пока место ищется — «Ищу место…», не нашлось — ссылка на поиск вики, а кнопка «🧭» ведёт туда стрелку в игре.
 
 import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { MapLocation } from '../types';
 import { DEFAULT_ZOOM, floorLabel, isUnderground, MAP_ATTRIBUTION, MAX_ZOOM, MIN_ZOOM, tileUrl } from '../lib/map';
+import type { NavTargetPayload } from '../services/runeliteBridge';
+import { NavigateButton } from './NavigateButton';
+import { sourceBadge, type MapTarget } from '../lib/places';
+
+export type { MapTarget } from '../lib/places';
 import { IconClose, IconExternal } from './Icons';
+
+export type MapStatus = 'loading' | 'error' | 'fallback';
 
 interface Props {
   title: string;
-  points: MapLocation[];
-  active: number;
-  onActive: (i: number) => void;
+  /** Точки шага; для одного места из досье — target. */
+  points?: MapLocation[];
+  active?: number;
+  onActive?: (i: number) => void;
+  target?: MapTarget | null;
+  /** Место ещё ищется, поиск не удался или точной точки нет — вместо метки сообщение. */
+  status?: MapStatus;
+  /** Поиск по вики, когда точки нет. */
+  searchUrl?: string;
+  /** Временная цель для RuneLite; без неё кнопки «🧭» нет. */
+  navigate?: NavTargetPayload;
   wikiUrl?: string;
   onClose: () => void;
 }
@@ -32,27 +50,34 @@ function pinIcon(active: boolean): L.DivIcon {
   return L.divIcon({ className: `map-pin ${active ? 'is-active' : ''}`, html: '<span></span>', iconSize: [22, 22], iconAnchor: [11, 11] });
 }
 
-export default function WorldMapModal({ title, points, active, onActive, wikiUrl, onClose }: Props) {
+const noop = () => {};
+
+export default function WorldMapModal({
+  title, points: stepPoints = [], active = 0, onActive = noop, target, status, searchUrl, navigate, wikiUrl, onClose,
+}: Props) {
   const dialog = useRef<HTMLDialogElement>(null);
   const holder = useRef<HTMLDivElement>(null);
   const map = useRef<L.Map | null>(null);
   const tiles = useRef<L.TileLayer | null>(null);
   const markers = useRef<L.Marker[]>([]);
-  const point = points[Math.min(active, points.length - 1)];
+  const points: MapLocation[] = target ? [{ x: target.x, y: target.y, plane: target.plane, label: target.label }] : stepPoints;
+  const point: MapLocation | undefined = status ? undefined : points[Math.min(active, points.length - 1)];
   // Точки приходят новыми объектами при каждой отрисовке — эффекты завязаны на координаты, иначе карта
   // возвращалась бы к метке, пока её двигают.
-  const pointKey = `${point.x},${point.y},${point.plane},${point.zoom ?? ''}`;
+  const pointKey = point ? `${point.x},${point.y},${point.plane},${point.zoom ?? ''}` : '';
   const pointsKey = points.map((p) => `${p.x},${p.y},${p.plane},${p.label}`).join(';');
-  const [plane, setPlane] = useState(point.plane);
+  const [plane, setPlane] = useState(point?.plane ?? 0);
   const [offline, setOffline] = useState(false);
 
   useEffect(() => {
-    dialog.current?.showModal();
+    const d = dialog.current;
+    if (d && !d.open) d.showModal();
   }, []);
 
-  // Карта создаётся один раз; точки и этаж дальше меняются без пересоздания.
+  // Карта создаётся один раз — когда появилась первая точка (у места из досье её сначала ищут).
+  const hasPoint = Boolean(point);
   useEffect(() => {
-    if (!holder.current) return;
+    if (!holder.current || !point) return;
     const m = L.map(holder.current, {
       crs: L.CRS.Simple,
       minZoom: MIN_ZOOM,
@@ -80,6 +105,7 @@ export default function WorldMapModal({ title, points, active, onActive, wikiUrl
     layer.on('tileerror', () => { failed++; if (!loaded && failed >= 4) setOffline(true); });
     layer.addTo(m);
     m.setView(center(point), point.zoom ?? DEFAULT_ZOOM);
+    setPlane(point.plane);
     map.current = m;
     tiles.current = layer;
     // Размер окна известен только после showModal.
@@ -91,7 +117,7 @@ export default function WorldMapModal({ title, points, active, onActive, wikiUrl
       tiles.current = null;
       markers.current = [];
     };
-  }, []); // Карта создаётся один раз.
+  }, [hasPoint]); // Карта создаётся один раз на появление точки.
 
   // Метки всех точек: активная — крупнее и пульсирует, подпись видна всегда.
   useEffect(() => {
@@ -105,12 +131,12 @@ export default function WorldMapModal({ title, points, active, onActive, wikiUrl
       if (p.plane === plane) mk.addTo(m);
       return mk;
     });
-  }, [pointsKey, active, plane, onActive]);
+  }, [pointsKey, active, plane, onActive, hasPoint]);
 
   // Переключение точки: центр, масштаб и этаж точки.
   useEffect(() => {
     const m = map.current;
-    if (!m) return;
+    if (!m || !point) return;
     setPlane(point.plane);
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     m.setView(center(point), point.zoom ?? Math.max(m.getZoom(), DEFAULT_ZOOM), { animate: !reduce });
@@ -124,6 +150,7 @@ export default function WorldMapModal({ title, points, active, onActive, wikiUrl
   }, [plane]);
 
   const close = () => dialog.current?.close();
+  const badge = target ? sourceBadge(target) : null;
 
   return (
     <dialog ref={dialog} className="map-modal" aria-label={`Карта мира: ${title}`}
@@ -132,13 +159,21 @@ export default function WorldMapModal({ title, points, active, onActive, wikiUrl
         <header className="map-modal-head">
           <div className="map-modal-title">
             <strong>🗺️ {title}</strong>
-            <span className="muted small">{point.label} · {isUnderground(point) ? 'подземелье' : floorLabel(point.plane)} · клетка {point.x}, {point.y}</span>
+            {point
+              ? <span className="muted small">{point.label} · {isUnderground(point) ? 'подземелье' : floorLabel(point.plane)} · клетка {point.x}, {point.y}</span>
+              : <span className="muted small">{status === 'loading' ? 'Ищу место…' : 'Место без точной точки'}</span>}
           </div>
           <button type="button" className="icon-btn" onClick={close} aria-label="Закрыть карту">
             <IconClose />
           </button>
         </header>
-        {points.length > 1 && (
+        {(badge || target?.origin) && point && (
+          <p className="map-source small">
+            {badge && <span className="map-source-badge">{badge}</span>}
+            {target?.origin && <span className="muted"> · координаты: {target.origin}</span>}
+          </p>
+        )}
+        {points.length > 1 && !target && (
           <div className="spot-switch" role="radiogroup" aria-label="Точки на карте">
             {points.map((p, i) => (
               <button key={`${p.x},${p.y},${p.plane}`} type="button" role="radio" aria-checked={i === active}
@@ -150,25 +185,46 @@ export default function WorldMapModal({ title, points, active, onActive, wikiUrl
         )}
         <div className="map-modal-body">
           <div ref={holder} className="map-canvas" />
-          <div className="map-floors" role="radiogroup" aria-label="Этаж">
-            {[0, 1, 2, 3].map((f) => (
-              <button key={f} type="button" role="radio" aria-checked={plane === f} className={`map-floor ${plane === f ? 'is-active' : ''}`}
-                onClick={() => setPlane(f)} title={floorLabel(f)}>
-                {f + 1}
-              </button>
-            ))}
-          </div>
-          {offline && (
+          {point && (
+            <div className="map-floors" role="radiogroup" aria-label="Этаж">
+              {[0, 1, 2, 3].map((f) => (
+                <button key={f} type="button" role="radio" aria-checked={plane === f} className={`map-floor ${plane === f ? 'is-active' : ''}`}
+                  onClick={() => setPlane(f)} title={floorLabel(f)}>
+                  {f + 1}
+                </button>
+              ))}
+            </div>
+          )}
+          {status === 'loading' && (
+            <div className="map-modal-offline map-modal-status" role="status" aria-live="polite">
+              <p><strong>Ищу место на карте…</strong></p>
+              <p className="small muted">Сначала словарь мест, потом страница на OSRS Wiki.</p>
+            </div>
+          )}
+          {(status === 'fallback' || status === 'error') && (
+            <div className="map-modal-offline map-modal-status" role="status">
+              <p><strong>Точную координату автоматически определить не удалось.</strong></p>
+              <p className="small">
+                {status === 'error' ? 'OSRS Wiki не ответила, а в словаре мест такого нет. ' : ''}
+                Место можно найти поиском на OSRS Wiki — там статья и её карта.
+              </p>
+              {searchUrl && (
+                <p><a className="btn btn-sm" href={searchUrl} target="_blank" rel="noopener noreferrer">Открыть поиск на OSRS Wiki <IconExternal /></a></p>
+              )}
+            </div>
+          )}
+          {offline && point && (
             <div className="map-modal-offline" role="status">
               <p><strong>Карта не загрузилась.</strong> Тайлы карты берутся с maps.runescape.wiki — нужен интернет.</p>
               <p className="small">Место: {point.label}, клетка {point.x}, {point.y}, {floorLabel(point.plane)}.</p>
             </div>
           )}
         </div>
-        {wikiUrl && (
-          <p className="map-modal-foot small">
-            <a href={wikiUrl} target="_blank" rel="noopener noreferrer">Открыть место на карте вики <IconExternal /></a>
-          </p>
+        {((navigate && point) || wikiUrl) && (
+          <div className="map-modal-foot small">
+            {navigate && point && <NavigateButton target={navigate} />}
+            {wikiUrl && <a href={wikiUrl} target="_blank" rel="noopener noreferrer">Открыть место на карте вики <IconExternal /></a>}
+          </div>
         )}
       </div>
     </dialog>

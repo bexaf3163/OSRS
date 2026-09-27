@@ -6,7 +6,7 @@ const http = require('node:http');
 
 const HOST = '127.0.0.1';
 const PORT = 38282;
-const PATHS = new Set(['/status', '/active-step', '/clear', '/shopping-plan']);
+const PATHS = new Set(['/status', '/active-step', '/clear', '/shopping-plan', '/nav-target', '/bank-tags']);
 const REQUEST_TIMEOUT_MS = 1500;
 /** Плагин шлёт пинг каждые 15 секунд; тишина дольше — соединение мёртвое. */
 const IDLE_TIMEOUT_MS = 45_000;

@@ -176,4 +176,110 @@ public interface OsrsPathBridgeConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigSection(
+		name = "Места, банк, опасность, темп",
+		description = "Навигация к местам и магазинам из приложения, предметы этапа в банке, радар опасных мест и темп прокачки",
+		position = 20
+	)
+	String helpers = "helpers";
+
+	@ConfigItem(
+		keyName = "autoNavigation",
+		name = "Навигация к местам из приложения",
+		description = "Кнопка 🧭 в приложении ставит стрелку (и маршрут Shortest Path) к месту с карты. "
+			+ "Дошёл — стрелка возвращается к шагу. Выключено — приложение получает отказ",
+		section = helpers,
+		position = 21
+	)
+	default boolean autoNavigation()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "upgradeRouter",
+		name = "Подсказки апгрейда снаряжения",
+		description = "Передавать приложению снаряжение и монеты, чтобы оно предлагало быстрый апгрейд. "
+			+ "По кнопке «Направить в магазин» — продавец и нужный предмет в магазине подсвечиваются. Сам ничего не покупает",
+		section = helpers,
+		position = 22
+	)
+	default boolean upgradeRouter()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "bankTagsHelper",
+		name = "Предметы этапа из приложения",
+		description = "Принимать от приложения список предметов этапа — тот же, что в строке Bank Tags",
+		section = helpers,
+		position = 23
+	)
+	default boolean bankTagsHelper()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "bankHighlight",
+		name = "Подсветка предметов этапа в банке",
+		description = "Мягкая золотистая рамка у предметов этапа в основном окне банка — даже без отдельной вкладки Bank Tags",
+		section = helpers,
+		position = 24
+	)
+	default boolean bankHighlight()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "dangerRadar",
+		name = "Радар опасности",
+		description = "Красная граница опасных мест (тёмные маги, ожившие деревья, агрессивные стражники), "
+			+ "контур опасных NPC и предупреждение в HUD. Выключено — ничего не считается",
+		section = helpers,
+		position = 25
+	)
+	default boolean dangerRadar()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "dangerSound",
+		name = "Звук при входе в опасную зону",
+		description = "Один раз при входе в зону; снова — только если вышел и зашёл опять",
+		section = helpers,
+		position = 26
+	)
+	default boolean dangerSound()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "smartPacing",
+		name = "Темп прокачки",
+		description = "Считать по опыту, сколько действий осталось до цели шага и сколько это займёт, и передавать приложению",
+		section = helpers,
+		position = 27
+	)
+	default boolean smartPacing()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "hudPacing",
+		name = "Темп в микро-HUD",
+		description = "Строка вида «34 креветки до 20 Fishing (~7 мин)» в плашке шага",
+		section = helpers,
+		position = 28
+	)
+	default boolean hudPacing()
+	{
+		return true;
+	}
 }
