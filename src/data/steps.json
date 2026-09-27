@@ -98,7 +98,7 @@
       "location": "Кухня в южном крыле Lumbridge Castle",
       "floor": "Ground floor (1-й этаж / земля)",
       "dialogue": "1 → 1 (\"What's wrong?\" → \"Can I help?\")",
-      "wikiUrl": "https://oldschool.runescape.wiki/w/Cook"
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Cook_(Lumbridge)"
     },
     "itemsRequired": [
       {
@@ -539,12 +539,12 @@
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Misthalin_Mystery",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Misthalin_Mystery/Quick_guide",
-    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3234,3139,0",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3236,3155,0",
     "mapLocation": {
-      "x": 3234,
-      "y": 3139,
+      "x": 3236,
+      "y": 3155,
       "plane": 0,
-      "label": "Особняк Misthalin Mystery (Abigale)"
+      "label": "Abigale у лодки — юго-восток Lumbridge Swamp"
     },
     "npc": {
       "nameEn": "Abigale",
@@ -564,8 +564,8 @@
     "doneWhen": "Квест зелёный.",
     "inGame": {
       "worldPoint": {
-        "x": 3234,
-        "y": 3139,
+        "x": 3236,
+        "y": 3155,
         "plane": 0,
         "label": "Abigale у лодки на болоте"
       },
@@ -1590,6 +1590,38 @@
       "plane": 0,
       "label": "Дом ведьмы Hetty в Rimmington"
     },
+    "resourceSpots": [
+      {
+        "x": 2968,
+        "y": 3204,
+        "plane": 0,
+        "label": "Hetty — дом в Rimmington"
+      },
+      {
+        "x": 2957,
+        "y": 3204,
+        "plane": 0,
+        "label": "Крыса — Brian's Archery Supplies"
+      },
+      {
+        "x": 2950,
+        "y": 3251,
+        "plane": 0,
+        "label": "Лук — грядка к северу от Rimmington"
+      },
+      {
+        "x": 3014,
+        "y": 3259,
+        "plane": 0,
+        "label": "Eye of newt — Betty, Port Sarim"
+      },
+      {
+        "x": 2997,
+        "y": 3192,
+        "plane": 0,
+        "label": "Giant rat — у часовни Port Sarim"
+      }
+    ],
     "npc": {
       "nameEn": "Hetty",
       "nameRu": "Хетти",
@@ -1621,7 +1653,7 @@
         "nameEn": "Rat's tail",
         "nameRu": "Крысиный хвост",
         "amount": 1,
-        "howToGet": "Убей крысу у дома Hetty — хвост падает только после начала квеста.",
+        "howToGet": "Убей крысу в лавке Brian's Archery Supplies, к западу от дома Hetty, — хвост падает только после начала квеста.",
         "wikiItemId": 300,
         "iconUrl": "https://oldschool.runescape.wiki/images/Rat's_tail.png",
         "inStep": true
@@ -1630,18 +1662,18 @@
         "nameEn": "Burnt meat",
         "nameRu": "Горелое мясо",
         "amount": 1,
-        "howToGet": "Зажарь сырое мясо дважды, пока не сгорит.",
+        "howToGet": "Raw rat meat с гигантской крысы у часовни Port Sarim (или Raw beef) — используй на камине Hetty дважды, пока не сгорит.",
         "wikiItemId": 2146,
         "iconUrl": "https://oldschool.runescape.wiki/images/Burnt_meat.png"
       }
     ],
     "quickSteps": [
       "Поговори с Hetty в её доме в Rimmington.",
-      "Сорви лук на грядке к северу от Rimmington.",
+      "Убей крысу (Rat) в лавке лука Brian's Archery Supplies — сразу к западу от дома Hetty — и забери хвост (Rat's tail). Хвост падает только после начала квеста.",
       "Купи Eye of newt в магазине Betty в Port Sarim за 3 gp.",
-      "Приготовь сырое мясо (Raw beef или Raw rat meat) и зажарь его ещё раз, пока не сгорит, — получится Burnt meat.",
-      "Убей крысу рядом с домом Hetty и забери хвост (Rat's tail) — он падает только после начала квеста.",
-      "Отдай всё Hetty и выпей из котла."
+      "Для Burnt meat: убей гигантскую крысу (Giant rat) к северу от часовни Port Sarim, возьми Raw rat meat и используй его на камине в доме Hetty — дважды, пока мясо не сгорит. Подойдёт и сырая говядина (Raw beef).",
+      "Сорви лук (Onion) на грядке к северу от Rimmington.",
+      "Отдай всё Hetty и выпей из котла (Drink From)."
     ],
     "reward": "1 QP, 325 XP Magic.",
     "doneWhen": "Квест зелёный.",
@@ -3028,7 +3060,7 @@
       "nameRu": "Уиллоу",
       "location": "Тропа к югу от Ice Mountain",
       "floor": "Ground floor (1-й этаж / земля)",
-      "wikiUrl": "https://oldschool.runescape.wiki/w/Willow"
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Willow_(Below_Ice_Mountain)"
     },
     "itemsRequired": [
       {
@@ -6082,7 +6114,7 @@
       "nameRu": "Повар",
       "location": "Кухня замка Lumbridge",
       "floor": "Ground floor (1-й этаж / земля)",
-      "wikiUrl": "https://oldschool.runescape.wiki/w/Cook"
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Cook_(Lumbridge)"
     },
     "how": "Пройди первую главу — Another Cook's Quest: принеси повару 4 предмета, затем войди в обеденный зал и посмотри сценку. После неё в подвале замка появляется сундук Culinaromancer's Chest.",
     "itemsRequired": [
