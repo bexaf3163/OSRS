@@ -1314,4 +1314,21 @@ th .place-link { font-weight: inherit; }
 .upgrade-going { color: var(--done); font-weight: 600; }
 .upgrade-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; margin-top: 4px; }
 .upgrade.is-poor { box-shadow: inset 3px 0 0 var(--warn); }
+.gear-more { margin: 2px 0 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 2px; }
+.gear-ok { margin: 0; color: var(--done); }
+.gear-ok a { color: inherit; }
+
+/* ⚔️ Снаряжение */
+.gear-page { gap: 12px; }
+.gear-summary { display: flex; flex-direction: column; gap: 6px; }
+.gear-summary p { margin: 0; }
+.gear-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.gear-row { display: grid; grid-template-columns: 28px minmax(0, 1fr) auto; gap: 10px; align-items: start; }
+.gear-row .item-icon { margin-top: 2px; }
+.gear-main { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.gear-main p { margin: 0; overflow-wrap: anywhere; }
+.gear-plain { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 4px; }
+.gear-slots { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px 16px; }
+.gear-slots li { display: flex; flex-direction: column; gap: 1px; }
+.gear-slots li > span:last-child { display: inline-flex; align-items: center; gap: 6px; }
 

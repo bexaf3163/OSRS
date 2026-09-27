@@ -756,6 +756,9 @@
       "plane": 0,
       "label": "Peksa's Helmet Shop",
       "kind": "shop",
+      "aliases": [
+        "Helmet Shop"
+      ],
       "page": "Helmet Shop."
     },
     "Dommik's Crafting Store": {

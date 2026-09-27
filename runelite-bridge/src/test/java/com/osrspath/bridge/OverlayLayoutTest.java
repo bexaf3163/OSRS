@@ -94,6 +94,12 @@ public class OverlayLayoutTest
 		return wp != null ? wp : str(obj(step, "mapLocation"), "label");
 	}
 
+	/** Цена как в приложении: «1 234 567 gp» (разряды через пробел). */
+	private static String gp(int n)
+	{
+		return String.format(java.util.Locale.ROOT, "%,d", n).replace(',', ' ') + " gp";
+	}
+
 	/** Самые длинные строки расстояния, какие умеет Navigation. */
 	private static List<String> distances()
 	{
@@ -156,12 +162,12 @@ public class OverlayLayoutTest
 			String d = dist.get(n % dist.size());
 			String zone = danger.get(n % danger.size());
 			out.add(new OsrsPathHudOverlay.State(title, goal, d, false, "Сумка: не хватает 12 из 14", false,
-				null, false, pace.isEmpty() ? null : pace.get(0), false));
+				null, false, pace.isEmpty() ? null : pace.get(0), false, null));
 			out.add(new OsrsPathHudOverlay.State(title, goal, "✓ Рядом", true, "Сумка готова к выходу", true,
-				zone, n % 2 == 0, pace.isEmpty() ? null : pace.get(pace.size() - 1), true));
+				zone, n % 2 == 0, pace.isEmpty() ? null : pace.get(pace.size() - 1), true, null));
 			for (String p : pace)
 			{
-				out.add(new OsrsPathHudOverlay.State(title, goal, d, false, null, false, null, false, p, false));
+				out.add(new OsrsPathHudOverlay.State(title, goal, d, false, null, false, null, false, p, false, null));
 			}
 			for (JsonElement b : arr(step, "branches"))
 			{
@@ -171,7 +177,7 @@ public class OverlayLayoutTest
 				if (alt != null)
 				{
 					String g = alt.startsWith(label) ? alt : label + ": " + alt;
-					out.add(new OsrsPathHudOverlay.State(title, g, d, false, null, false, null, false, null, false));
+					out.add(new OsrsPathHudOverlay.State(title, g, d, false, null, false, null, false, null, false, null));
 				}
 			}
 			JsonArray way = arr(obj(step, "inGame"), "pathWaypoints");
@@ -179,11 +185,11 @@ public class OverlayLayoutTest
 			{
 				String label = str(way.get(i).getAsJsonObject(), "label");
 				String g = "Точка " + (i + 1) + "/" + way.size() + (label != null ? ": " + label : "");
-				out.add(new OsrsPathHudOverlay.State(title, g, d, false, null, false, null, false, null, false));
+				out.add(new OsrsPathHudOverlay.State(title, g, d, false, null, false, null, false, null, false, null));
 			}
 			if (way.size() > 0)
 			{
-				out.add(new OsrsPathHudOverlay.State(title, "Маршрут пройден · " + goal, d, false, null, false, null, false, null, false));
+				out.add(new OsrsPathHudOverlay.State(title, "Маршрут пройден · " + goal, d, false, null, false, null, false, null, false, null));
 			}
 			n++;
 		}
@@ -201,7 +207,27 @@ public class OverlayLayoutTest
 				JsonObject tier = t.getAsJsonObject();
 				String seller = str(obj(tier, "shop"), "npc");
 				String title = "Купи " + str(tier, "tier") + " у " + (seller != null ? seller : "Grand Exchange Clerk");
-				out.add(new OsrsPathHudOverlay.State(title, then, dist.get(1), false, null, false, null, false, null, false));
+				out.add(new OsrsPathHudOverlay.State(title, then, dist.get(1), false, null, false, null, false, null, false, null));
+			}
+		}
+		// Снаряжение (gear.json): покупка у продавца и на бирже, совет в HUD — как их пишет приложение
+		// (gearAdvisor.hudHint): «⚡ Надень …», «⚡ Сильнее: … у … (…), … gp», «⚡ Сильнее: … на бирже, ~… gp».
+		for (JsonElement e : read("gear.json").getAsJsonObject().getAsJsonArray("items"))
+		{
+			JsonObject item = e.getAsJsonObject();
+			String name = str(item, "name");
+			out.add(new OsrsPathHudOverlay.State("Купи " + name + " у Grand Exchange Clerk", then, dist.get(1), false, null, false, null, false, null, false, null));
+			out.add(new OsrsPathHudOverlay.State(longestTitle, "Коровье поле к востоку от Lumbridge", dist.get(0), false, null, false, null, false, null, false,
+				"⚡ Надень " + name + " — он в банке"));
+			out.add(new OsrsPathHudOverlay.State(longestTitle, "Коровье поле к востоку от Lumbridge", dist.get(0), false, null, false, null, false, null, false,
+				"⚡ Сильнее: " + name + " на бирже, ~" + gp(1_234_567)));
+			for (JsonElement sh : arr(item, "shops"))
+			{
+				JsonObject shop = sh.getAsJsonObject();
+				String seller = str(shop, "owner") != null ? str(shop, "owner") : str(shop, "shop");
+				out.add(new OsrsPathHudOverlay.State("Купи " + name + " у " + seller, then, dist.get(1), false, null, false, null, false, null, false, null));
+				out.add(new OsrsPathHudOverlay.State(longestTitle, "Коровье поле к востоку от Lumbridge", dist.get(0), false, "Сумка: не хватает 12 из 14", false,
+					null, false, null, false, "⚡ Сильнее: " + name + " у " + seller + " (" + str(shop, "location") + "), " + gp(shop.get("price").getAsInt())));
 			}
 		}
 		// «К месту: …» — места словаря и их другие имена, магазины и города из досье предметов.
@@ -230,7 +256,7 @@ public class OverlayLayoutTest
 		places.remove(null);
 		for (String place : places)
 		{
-			out.add(new OsrsPathHudOverlay.State("К месту: " + place, then, dist.get(0), false, null, false, null, false, null, false));
+			out.add(new OsrsPathHudOverlay.State("К месту: " + place, then, dist.get(0), false, null, false, null, false, null, false, null));
 		}
 		return out;
 	}
@@ -387,7 +413,7 @@ public class OverlayLayoutTest
 		for (Font base : fonts())
 		{
 			Font f = OverlayText.font(base, 1f);
-			assertEquals("кириллица в " + f, -1, new Font(f.getFamily(), f.getStyle(), f.getSize()).canDisplayUpTo("Коровье поле ~62 клетки ↓ ⚠ ✓ ≈ ▶ ✗ …"));
+			assertEquals("кириллица в " + f, -1, new Font(f.getFamily(), f.getStyle(), f.getSize()).canDisplayUpTo("Коровье поле ~62 клетки ↓ ⚠ ✓ ≈ ▶ ✗ … ⚡"));
 			assertEquals(base.getStyle(), f.getStyle());
 		}
 		assertNotEquals(FontManager.getRunescapeFont().getFamily(), OverlayText.font(FontManager.getRunescapeFont(), 1f).getFamily());

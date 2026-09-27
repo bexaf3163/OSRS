@@ -17,6 +17,7 @@ import { StepMap } from './StepMap';
 import { InGamePanel } from './InGamePanel';
 import { BranchSuggestions } from './BranchSuggestions';
 import { UpgradePrompt } from './UpgradePrompt';
+import { GearPrompt } from './GearPrompt';
 import { ItemIcon, useWiki } from './WikiDrawer';
 
 const WARN_LABELS = new Set(['Опасно', 'Внимание', 'Бой']);
@@ -170,6 +171,7 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
 
       {step.warning && <div className="plaque plaque-warning" role="note"><Inline text={step.warning} /></div>}
       <UpgradePrompt step={step} />
+      <GearPrompt step={step} />
       <StepMap step={step} />
       <InGamePanel step={step} />
       <BranchSuggestions step={step} />

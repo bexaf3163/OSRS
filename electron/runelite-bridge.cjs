@@ -1,12 +1,13 @@
 // Связь окна с плагином RuneLite «OSRS Path Bridge» (http://127.0.0.1:38282) через главный процесс.
 // Окно не ходит на localhost само: так нет CORS, а выключенный RuneLite не сыплет ошибками в консоль.
-// Только loopback и только три адреса — окно не может попросить главный процесс сходить куда-то ещё.
+// Только loopback и только адреса из списка — окно не может попросить главный процесс сходить куда-то ещё.
+// Список сверяется с BRIDGE_PATHS приложения (tests/bridge.test.ts): новый адрес без него молча не работал бы в exe.
 
 const http = require('node:http');
 
 const HOST = '127.0.0.1';
 const PORT = 38282;
-const PATHS = new Set(['/status', '/active-step', '/clear', '/shopping-plan', '/nav-target', '/bank-tags']);
+const PATHS = new Set(['/status', '/active-step', '/clear', '/shopping-plan', '/nav-target', '/bank-tags', '/gear-hint']);
 const REQUEST_TIMEOUT_MS = 1500;
 /** Плагин шлёт пинг каждые 15 секунд; тишина дольше — соединение мёртвое. */
 const IDLE_TIMEOUT_MS = 45_000;
@@ -121,4 +122,4 @@ function registerBridge(ipcMain) {
   ipcMain.on('bridge:events-close', (event) => closeStream(event.sender.id));
 }
 
-module.exports = { registerBridge, sseParser };
+module.exports = { registerBridge, sseParser, PATHS };

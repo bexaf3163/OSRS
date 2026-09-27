@@ -1,0 +1,106 @@
+{
+  "source": "OSRS Wiki: карточки монстров (Bucket infobox_monster) — противники из шагов маршрута (поле foes в steps.json)",
+  "updated": "2026-09-27",
+  "foes": [
+    {
+      "name": "Cow",
+      "version": "1",
+      "combat": 2,
+      "hitpoints": 8,
+      "defenceLevel": 1,
+      "defence": {
+        "stab": -21,
+        "slash": -21,
+        "crush": -21
+      },
+      "members": false
+    },
+    {
+      "name": "Count Draynor",
+      "combat": 34,
+      "hitpoints": 35,
+      "defenceLevel": 30,
+      "defence": {
+        "stab": 2,
+        "slash": 1,
+        "crush": 3
+      },
+      "members": false
+    },
+    {
+      "name": "Al Kharid warrior",
+      "combat": 9,
+      "hitpoints": 19,
+      "defenceLevel": 4,
+      "defence": {
+        "stab": 12,
+        "slash": 15,
+        "crush": 10
+      },
+      "members": false
+    },
+    {
+      "name": "Flesh Crawler",
+      "version": "Level 28",
+      "combat": 28,
+      "hitpoints": 25,
+      "defenceLevel": 10,
+      "defence": {
+        "stab": 15,
+        "slash": 15,
+        "crush": 15
+      },
+      "members": false
+    },
+    {
+      "name": "Ithoi the Navigator",
+      "combat": 35,
+      "hitpoints": 55,
+      "defenceLevel": 30,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "members": false
+    },
+    {
+      "name": "Brutus",
+      "combat": 30,
+      "hitpoints": 58,
+      "defenceLevel": 10,
+      "defence": {
+        "stab": -7,
+        "slash": -7,
+        "crush": -7
+      },
+      "members": false
+    },
+    {
+      "name": "Moss giant",
+      "version": "Level 42",
+      "combat": 42,
+      "hitpoints": 60,
+      "defenceLevel": 30,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "members": false
+    },
+    {
+      "name": "Ghast",
+      "version": "Level 30",
+      "combat": 30,
+      "hitpoints": 45,
+      "defenceLevel": 18,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "members": true
+    }
+  ]
+}

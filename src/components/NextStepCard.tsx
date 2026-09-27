@@ -67,6 +67,9 @@ export function NextStepCard({ onDone }: { onDone: (id: string) => void }) {
         <a className="btn btn-ghost btn-lg" href={`#/step/${step.id}`}>Подробнее</a>
       </div>
       <p className="next-shop muted small"><a href="#/shopping">🛒 Оптовый список Grand Exchange</a> — закупка сразу на несколько этапов.</p>
+      {step.foes?.length ? (
+        <p className="next-shop muted small"><a href="#/gear">⚔️ Снаряжение</a> — что надеть и купить, чтобы бить быстрее на этом шаге.</p>
+      ) : null}
     </section>
   );
 }

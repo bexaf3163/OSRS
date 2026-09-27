@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-export type Page = 'path' | 'skills' | 'goals' | 'quests' | 'reference' | 'settings' | 'shopping';
+export type Page = 'path' | 'skills' | 'goals' | 'quests' | 'reference' | 'settings' | 'shopping' | 'gear';
 
 export interface Route {
   page: Page;
@@ -29,6 +29,7 @@ function parsePath(hash: string): Omit<Route, 'key'> {
     case 'reference': return { page: 'reference', param: second };
     case 'settings': return { page: 'settings' };
     case 'shopping': return { page: 'shopping' };
+    case 'gear': return { page: 'gear' };
     default: return { page: 'path' };
   }
 }

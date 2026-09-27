@@ -18,6 +18,7 @@ import net.runelite.client.ui.overlay.WidgetItemOverlay;
  * Предметы шага в инвентаре и банке: рамка по краю ячейки с мягкой пульсацией, сам предмет не закрывается.
  * В банке ещё зелёная заливка у того, что по проверке вылета надо взять в сумку, и тихая золотистая
  * рамка у предметов всего этапа (POST /bank-tags) — как вкладка Bank Tags, но без её создания.
+ * Предмет из совета по снаряжению (POST /gear-hint: «надень — он в банке») — янтарная пульсирующая рамка.
  * WidgetItemOverlay — штатный способ RuneLite рисовать поверх ячеек предметов.
  */
 class OsrsPathItemOverlay extends WidgetItemOverlay
@@ -49,7 +50,8 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 		boolean inBank = isBank(item.getWidget());
 		// Предметы этапа (Bank Tags) — только в банке, мягкой рамкой, и даже без шага.
 		boolean tagged = inBank && config.bankHighlight() && plugin.isBankTagged(itemId);
-		if (target == null && !tagged)
+		boolean upgrades = plugin.hasUpgradeItems();
+		if (target == null && !tagged && !upgrades)
 		{
 			return;
 		}
@@ -57,7 +59,8 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 		boolean wanted = checklist && plugin.isWantedFromBank(itemId);
 		boolean named = target != null && !target.getItemNameSet().isEmpty();
 		boolean stepItem = false;
-		if (!wanted && (named || checklist))
+		boolean upgrade = false;
+		if (!wanted && (named || checklist || upgrades))
 		{
 			String name = names.computeIfAbsent(itemId, id ->
 			{
@@ -66,8 +69,9 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 			});
 			wanted = checklist && plugin.isWantedFromBank(name);
 			stepItem = named && target.getItemNameSet().contains(name);
+			upgrade = upgrades && plugin.isUpgradeItem(name);
 		}
-		if (!wanted && !stepItem && !tagged)
+		if (!wanted && !stepItem && !tagged && !upgrade)
 		{
 			return;
 		}
@@ -85,9 +89,9 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 			g.drawRoundRect(b.x - 1, b.y - 1, b.width + 1, b.height + 1, 6, 6);
 			return;
 		}
-		if (stepItem)
+		if (stepItem || upgrade)
 		{
-			g.setColor(OsrsPathWidgetOverlay.pulse(config.highlightColor()));
+			g.setColor(OsrsPathWidgetOverlay.pulse(stepItem ? config.highlightColor() : OsrsPathHudOverlay.UPGRADE));
 			g.setStroke(new BasicStroke(2f));
 			g.drawRoundRect(b.x - 1, b.y - 1, b.width + 1, b.height + 1, 6, 6);
 			return;

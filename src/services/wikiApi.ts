@@ -100,6 +100,80 @@ export async function fetchItemInfobox(fetchFn: FetchFn, name: string): Promise<
   };
 }
 
+/** Бонусы снаряжения из карточки {{Infobox Bonuses}}: атака и защита по типам, сила, скорость, слот. */
+export interface ItemBonuses {
+  attack: { stab: number; slash: number; crush: number; magic: number; ranged: number };
+  defence: { stab: number; slash: number; crush: number; magic: number; ranged: number };
+  strength: number;
+  prayer: number;
+  /** Слот вики: weapon, 2h, head, body, legs, shield, neck… */
+  slot: string;
+  /** Тиков между ударами (у оружия). */
+  speed?: number;
+}
+
+/** Бонусы пачкой по названиям статей: статья → бонусы (первая версия, если их несколько). */
+export async function fetchBonuses(fetchFn: FetchFn, pages: string[]): Promise<Map<string, ItemBonuses>> {
+  const out = new Map<string, ItemBonuses>();
+  const n = (r: Record<string, unknown>, k: string) => num(r[k]) ?? 0;
+  for (let i = 0; i < pages.length; i += 20) {
+    const where = pages.slice(i, i + 20).map((p) => `{'page_name',${quote(p)}}`).join(',');
+    const rows = await bucket(fetchFn,
+      `bucket('infobox_bonuses').select('page_name','stab_attack_bonus','slash_attack_bonus','crush_attack_bonus','magic_attack_bonus','range_attack_bonus','stab_defence_bonus','slash_defence_bonus','crush_defence_bonus','magic_defence_bonus','range_defence_bonus','strength_bonus','prayer_bonus','equipment_slot','weapon_attack_speed').where(bucket.Or(${where})).limit(100).run()`);
+    for (const r of rows) {
+      const page = first(r.page_name);
+      if (out.has(page)) continue;
+      out.set(page, {
+        attack: { stab: n(r, 'stab_attack_bonus'), slash: n(r, 'slash_attack_bonus'), crush: n(r, 'crush_attack_bonus'), magic: n(r, 'magic_attack_bonus'), ranged: n(r, 'range_attack_bonus') },
+        defence: { stab: n(r, 'stab_defence_bonus'), slash: n(r, 'slash_defence_bonus'), crush: n(r, 'crush_defence_bonus'), magic: n(r, 'magic_defence_bonus'), ranged: n(r, 'range_defence_bonus') },
+        strength: n(r, 'strength_bonus'),
+        prayer: n(r, 'prayer_bonus'),
+        slot: first(r.equipment_slot).toLowerCase(),
+        ...(num(r.weapon_attack_speed) !== undefined ? { speed: num(r.weapon_attack_speed) } : {}),
+      });
+    }
+  }
+  return out;
+}
+
+/** Защита монстра из карточки {{Infobox Monster}}: у статьи бывает несколько версий (уровней). */
+export interface MonsterStats {
+  page: string;
+  version?: string;
+  combat: number;
+  hitpoints: number;
+  defenceLevel: number;
+  defence: { stab: number; slash: number; crush: number };
+  members: boolean;
+}
+
+/** Все версии монстров пачкой по названиям статей: статья → версии. */
+export async function fetchMonsters(fetchFn: FetchFn, pages: string[]): Promise<Map<string, MonsterStats[]>> {
+  const out = new Map<string, MonsterStats[]>();
+  const n = (r: Record<string, unknown>, k: string) => num(r[k]) ?? 0;
+  for (let i = 0; i < pages.length; i += 20) {
+    const where = pages.slice(i, i + 20).map((p) => `{'page_name',${quote(p)}}`).join(',');
+    const rows = await bucket(fetchFn,
+      `bucket('infobox_monster').select('page_name','version_anchor','combat_level','hitpoints','defence_level','stab_defence_bonus','slash_defence_bonus','crush_defence_bonus','is_members_only').where(bucket.Or(${where})).limit(200).run()`);
+    for (const r of rows) {
+      const page = first(r.page_name);
+      const version = first(r.version_anchor);
+      const list = out.get(page) ?? [];
+      list.push({
+        page,
+        ...(version ? { version } : {}),
+        combat: n(r, 'combat_level'),
+        hitpoints: n(r, 'hitpoints'),
+        defenceLevel: n(r, 'defence_level'),
+        defence: { stab: n(r, 'stab_defence_bonus'), slash: n(r, 'slash_defence_bonus'), crush: n(r, 'crush_defence_bonus') },
+        members: flag(r, 'is_members_only'),
+      });
+      out.set(page, list);
+    }
+  }
+  return out;
+}
+
 type Store = NonNullable<WikiItemDetail['buyLocations']>[number];
 
 /** Магазины, где продаётся предмет: цена, запас, город и владелец. */

@@ -105,7 +105,7 @@ const PLACES: [string, Kind, string[], string?][] = [
   ["Herquin's Gems", 'shop', []],
   ["Wayne's Chains", 'shop', ["Wayne's Chains - Chainmail Specialist"]],
   ["Cassie's Shield Shop", 'shop', []],
-  ["Peksa's Helmet Shop", 'shop', []],
+  ["Peksa's Helmet Shop", 'shop', ['Helmet Shop']],
   ["Dommik's Crafting Store", 'shop', []],
   ["Louie's Armoured Legs Bazaar", 'shop', []],
   ["Ranael's Super Skirt Store", 'shop', []],

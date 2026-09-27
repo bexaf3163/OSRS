@@ -89,6 +89,10 @@ export function buildIndex({ steps, skills, reference, plugins, items = [], type
     out.push(item('ref', sec.title, 'Справка', `#/reference/${sec.id}`, blocksText(sec.blocks)));
   }
   out.push(item('ref', reference.training.title, 'Навыки', '#/skills', blocksText(reference.training.blocks)));
+  // Разбор снаряжения — страница программы, а не раздел гайда: находится по словам, которыми его ищут.
+  out.push(item('ref', 'Снаряжение: оружие, амулет, броня', 'Что надеть и купить, чтобы бить быстрее', '#/gear',
+    'Разбор снаряжения: оружие, амулет, броня, экипировка, апгрейд, усиление. Ятаган (scimitar), меч, амулет силы — '
+    + 'что лучше при твоих уровнях, где купить, сколько накопить. Equipment, gear, weapon, armour, upgrade.'));
   for (const g of plugins.groups) {
     for (const pl of g.plugins) {
       out.push(item('plugin', pl.name, `Плагин · ${pl.sourceLabel} · ${g.title}`, `#/reference/plugins`, pl.why));

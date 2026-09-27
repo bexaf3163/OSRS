@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { allSteps, stepsFor } from '../src/data';
 import { emptyProgress, withStep } from '../src/lib/progress';
 import {
-  backoffMs, clearActiveStep, connectEvents, parseEvent, planAutoComplete, syncActiveStep, toInGameTarget,
+  backoffMs, BRIDGE_PATHS, clearActiveStep, connectEvents, parseEvent, planAutoComplete, syncActiveStep, toInGameTarget,
   type BridgeEvent, type BridgeTransport,
 } from '../src/services/runeliteBridge';
 
@@ -190,6 +190,11 @@ describe('автоотметка из игры', () => {
 describe('разбор потока событий в программе для ПК', () => {
   const require = createRequire(import.meta.url);
   const { sseParser } = require('../electron/runelite-bridge.cjs') as { sseParser: (on: (d: string) => void) => (chunk: string) => void };
+
+  it('главный процесс пропускает к плагину все адреса приложения, и только их', () => {
+    const { PATHS } = require('../electron/runelite-bridge.cjs') as { PATHS: Set<string> };
+    expect([...PATHS].sort()).toEqual([...BRIDGE_PATHS].sort());
+  });
 
   it('события по кускам, CRLF, пинги-комментарии и многострочные данные', () => {
     const out: string[] = [];

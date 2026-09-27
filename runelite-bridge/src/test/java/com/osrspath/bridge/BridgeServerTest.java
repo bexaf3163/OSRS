@@ -37,6 +37,7 @@ public class BridgeServerTest
 	private final List<ShoppingPlan> plans = new CopyOnWriteArrayList<>();
 	private final List<NavTarget> navs = new CopyOnWriteArrayList<>();
 	private final List<BankTags> bankTags = new CopyOnWriteArrayList<>();
+	private final List<GearHint> gearHints = new CopyOnWriteArrayList<>();
 	/** Не null — слушатель отказывает с этой причиной (функция выключена в настройках). */
 	private volatile String refuse;
 	private final HttpClient http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build();
@@ -85,6 +86,17 @@ public class BridgeServerTest
 					return refuse;
 				}
 				bankTags.add(tags);
+				return null;
+			}
+
+			@Override
+			public String onGearHint(GearHint hint)
+			{
+				if (refuse != null && !hint.isClear())
+				{
+					return refuse;
+				}
+				gearHints.add(hint);
 				return null;
 			}
 		}, Collections.singletonList("https://osrs-put.example"));
@@ -416,6 +428,52 @@ public class BridgeServerTest
 		assertEquals(2, bankTags.size());
 		refuse = "выключено";
 		assertEquals(409, post("/bank-tags", "{\"stageId\":\"s\",\"itemIds\":[995]}", BridgeServer.HEADER, "1").statusCode());
+	}
+
+	@Test
+	public void gearHintПроверяетсяИПередаётся() throws Exception
+	{
+		String hint = "{\"text\":\"⚡ Сильнее: Steel scimitar у Zeke (Al Kharid), 400 gp\","
+			+ "\"watchItems\":[\"Steel scimitar\",\"Iron scimitar\"],\"highlightItems\":[\"Iron scimitar\"]}";
+		// Без заголовка приложения — как любой чужой запрос.
+		assertEquals(403, post("/gear-hint", hint).statusCode());
+		assertEquals(200, post("/gear-hint", hint, BridgeServer.HEADER, "1").statusCode());
+		GearHint got = gearHints.get(0);
+		assertEquals(2, got.watched().size());
+		assertTrue(got.getHighlightSet().contains(ActiveTarget.nameKey("Iron scimitar")));
+		assertFalse(got.getHighlightSet().contains(ActiveTarget.nameKey("Steel scimitar")));
+		// Только вопрос к банку, без строки в HUD, — тоже можно.
+		assertEquals(200, post("/gear-hint", "{\"watchItems\":[\"Mithril scimitar\"]}", BridgeServer.HEADER, "1").statusCode());
+		assertNull(gearHints.get(1).getText());
+		assertEquals(200, post("/gear-hint", "{\"clear\":true}", BridgeServer.HEADER, "1").statusCode());
+		assertTrue(gearHints.get(2).isClear());
+
+		assertEquals(400, post("/gear-hint", "{\"text\":\"\"}", BridgeServer.HEADER, "1").statusCode());
+		StringBuilder longText = new StringBuilder("{\"text\":\"");
+		for (int i = 0; i < 300; i++)
+		{
+			longText.append('x');
+		}
+		assertEquals(400, post("/gear-hint", longText.append("\"}").toString(), BridgeServer.HEADER, "1").statusCode());
+		assertEquals(400, post("/gear-hint", "{\"watchItems\":[\"\"]}", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(400, post("/gear-hint", "{\"highlightItems\":[null]}", BridgeServer.HEADER, "1").statusCode());
+		StringBuilder many = new StringBuilder("{\"watchItems\":[\"a\"");
+		for (int i = 0; i < GearHint.MAX_ITEMS; i++)
+		{
+			many.append(",\"a\"");
+		}
+		assertEquals(400, post("/gear-hint", many.append("]}").toString(), BridgeServer.HEADER, "1").statusCode());
+		assertEquals(400, post("/gear-hint", "{broken", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(405, get("/gear-hint").statusCode());
+		assertEquals(3, gearHints.size());
+
+		// Подсказки выключены в настройках — 409 с причиной, а снять старую всё равно можно.
+		refuse = "подсказки апгрейда выключены";
+		HttpResponse<String> off = post("/gear-hint", hint, BridgeServer.HEADER, "1");
+		assertEquals(409, off.statusCode());
+		assertTrue(off.body().contains("подсказки апгрейда выключены"));
+		assertEquals(200, post("/gear-hint", "{\"clear\":true}", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(4, gearHints.size());
 	}
 
 	@Test

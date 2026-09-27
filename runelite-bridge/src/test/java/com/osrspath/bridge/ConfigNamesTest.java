@@ -57,10 +57,12 @@ public class ConfigNamesTest
 			{
 				bad.add("«" + item.name() + "» " + w + " > " + budget);
 			}
-			// Всплывающая подсказка — шрифтом Swing: эмодзи там выходят квадратиком.
-			if (item.description().codePoints().anyMatch(c -> c >= 0x1F000))
+			// Всплывающая подсказка — шрифтом RuneLite с подстановкой системного: чего он не умеет, выходит
+			// квадратиком (так было с 🧭 в 2.5.1). Запрета на значки нет — ⚡, ✓ и стрелки он рисует.
+			int missing = FontManager.getRunescapeFont().canDisplayUpTo(item.description());
+			if (missing >= 0)
 			{
-				bad.add("эмодзи в подсказке «" + item.name() + "»");
+				bad.add("«" + new String(Character.toChars(item.description().codePointAt(missing))) + "» не рисуется в подсказке «" + item.name() + "»");
 			}
 		}
 		int sections = 0;

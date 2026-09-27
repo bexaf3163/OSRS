@@ -1,5 +1,6 @@
-// Умный апгрейд инструмента или оружия перед долгой прокачкой: у игрока уже 6+ Woodcutting, а в руках
+// Умный апгрейд инструмента перед долгой прокачкой: у игрока уже 6+ Woodcutting, а в руках
 // бронзовый топор — предложить Steel axe у Bob в Lumbridge за ~200 gp и вернуть к шагу, когда топор куплен.
+// Оружие и броня — не здесь: их сравнивает по урону и защите разбор снаряжения (gearAdvisor.ts).
 //
 // Только советует и ведёт: ничего не покупает, не тратит и не продаёт. Решение — чистая функция от шага,
 // уровней, снаряжения и монет; сравнение — по порядку ступеней из toolProgression.json, а не по словам
@@ -12,7 +13,7 @@ import { itemById } from '../data';
 import { matchStrict } from './locationResolver';
 import type { GearState, NavTargetPayload } from './runeliteBridge';
 
-export type UpgradeCategory = 'woodcutting' | 'mining' | 'melee';
+export type UpgradeCategory = 'woodcutting' | 'mining';
 
 export type UpgradeStatus = 'NO_UPGRADE' | 'UPGRADE_AVAILABLE' | 'UPGRADE_OWNED' | 'UPGRADE_NOT_AFFORDABLE' | 'SKIPPED' | 'UNKNOWN';
 
@@ -67,22 +68,18 @@ export interface RouterInput {
   item?: (id: number) => WikiItemDetail | undefined;
 }
 
-const LEVEL_SKILL: Record<UpgradeCategory, string> = { woodcutting: 'woodcutting', mining: 'mining', melee: 'attack' };
-
 const BOOST: Record<UpgradeCategory, string> = {
   woodcutting: 'Топор металлом выше срубает чаще — больше брёвен в минуту на том же уровне.',
   mining: 'Кирка металлом выше добывает чаще — больше руды в минуту на том же уровне.',
-  melee: 'У оружия металлом выше больше бонусы атаки и силы — бой быстрее и безопаснее.',
 };
 
-/** Какие категории апгрейда у шага: по навыкам прокачки шага. Квесты и закупки — без подсказки. */
+/** Какие категории апгрейда у шага: по навыкам прокачки шага. Квесты, закупки и бой — без этой подсказки. */
 export function stepUpgradeCategories(step: Step): UpgradeCategory[] {
   if (step.type !== 'skill') return [];
   const skills = new Set([...(step.targets ?? []).map((t) => t.skill), ...(step.pacing ? [step.pacing.skill] : [])]);
   const out: UpgradeCategory[] = [];
   if (skills.has('woodcutting')) out.push('woodcutting');
   if (skills.has('mining')) out.push('mining');
-  if (skills.has('attack') || skills.has('strength') || skills.has('defence')) out.push('melee');
   return out;
 }
 
@@ -113,14 +110,12 @@ export function recommendFor(category: UpgradeCategory, input: RouterInput): Upg
   const tiers = data[category];
   const base: UpgradeRecommendation = { status: 'UNKNOWN', skill: category };
   if (!input.gear || (!input.gear.equipment && !input.gear.inventory)) return { ...base, reason: 'Нет данных о снаряжении — RuneLite не подключён' };
-  const level = input.levels[LEVEL_SKILL[category]];
+  const level = input.levels[category];
   if (!level) return { ...base, reason: 'Неизвестен уровень навыка' };
 
-  const equipped = bestOwned(tiers, input.gear.equipment);
-  const owned = Math.max(equipped, bestOwned(tiers, input.gear.inventory));
-  // Инструмент рубки и добычи работает и из сумки; оружие — только в руке.
-  const current = category === 'melee' ? equipped : owned;
-  const currentItem = current >= 0 ? tiers[current].tier : undefined;
+  // Топор и кирка работают и из сумки — считается лучший, что при себе.
+  const owned = Math.max(bestOwned(tiers, input.gear.equipment), bestOwned(tiers, input.gear.inventory));
+  const currentItem = owned >= 0 ? tiers[owned].tier : undefined;
 
   let best = -1;
   tiers.forEach((t, i) => {
@@ -129,7 +124,7 @@ export function recommendFor(category: UpgradeCategory, input: RouterInput): Upg
     if (!t.shop && !t.geOnly) return;
     best = i;
   });
-  if (best < 0 || best <= current) return { ...base, status: 'NO_UPGRADE', currentItem };
+  if (best < 0 || best <= owned) return { ...base, status: 'NO_UPGRADE', currentItem };
   const target = tiers[best];
   const rec: UpgradeRecommendation = {
     ...base,

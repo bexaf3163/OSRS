@@ -9,6 +9,7 @@ import { HeaderProgress } from './components/HeaderProgress';
 import { BridgeIndicator } from './components/BridgeIndicator';
 import { ToastView } from './components/ToastView';
 import { PageBoundary } from './components/PageBoundary';
+import { GearHintSync } from './components/GearHintSync';
 import { PathPage } from './pages/Path';
 import { SkillsPage } from './pages/Skills';
 import { SkillDetailPage } from './pages/SkillDetail';
@@ -17,6 +18,7 @@ import { QuestsPage } from './pages/Quests';
 import { ReferencePage } from './pages/Reference';
 import { SettingsPage } from './pages/Settings';
 import { ShoppingPage } from './pages/Shopping';
+import { GearPage } from './pages/Gear';
 
 const TABS: { page: Page; href: string; label: string; Icon: ComponentType<{ className?: string }> }[] = [
   { page: 'path', href: '#/', label: 'Путь', Icon: IconPath },
@@ -31,6 +33,7 @@ function pageTitle(page: Page, param?: string): string {
   if (page === 'reference' && param) return reference.sections.find((s) => s.id === param)?.title ?? 'Справка';
   if (page === 'settings') return 'Настройки';
   if (page === 'shopping') return 'Оптовый список GE';
+  if (page === 'gear') return 'Снаряжение';
   return TABS.find((t) => t.page === page)!.label;
 }
 
@@ -70,6 +73,7 @@ export function App() {
     case 'reference': content = <ReferencePage key={route.param ?? ''} section={route.param} />; break;
     case 'settings': content = <SettingsPage />; break;
     case 'shopping': content = <ShoppingPage />; break;
+    case 'gear': content = <GearPage />; break;
   }
 
   return (
@@ -100,6 +104,11 @@ export function App() {
               <span className="search-trigger-text">Поиск</span>
               <kbd>/</kbd>
             </button>
+            <a href="#/gear" className={`icon-btn icon-btn-emoji ${route.page === 'gear' ? 'is-active' : ''}`}
+              aria-label="Снаряжение: что надеть и купить, чтобы бить быстрее" title="Снаряжение: что надеть и купить, чтобы бить быстрее"
+              aria-current={route.page === 'gear' ? 'page' : undefined}>
+              <span aria-hidden="true">⚔️</span>
+            </a>
             <a href="#/shopping" className={`icon-btn icon-btn-emoji ${route.page === 'shopping' ? 'is-active' : ''}`}
               aria-label="Оптовый список Grand Exchange" title="Оптовый список Grand Exchange"
               aria-current={route.page === 'shopping' ? 'page' : undefined}>
@@ -128,6 +137,7 @@ export function App() {
       </nav>
 
       <ToastView />
+      <GearHintSync />
       <SearchBox open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );

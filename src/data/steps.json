@@ -1009,6 +1009,9 @@
       "label": "Коровье поле к востоку от Lumbridge"
     },
     "floor": "Ground floor (1-й этаж / земля)",
+    "foes": [
+      "Cow"
+    ],
     "where": "Коровье поле к северо-востоку от замка Lumbridge, за рекой (Lumbridge cow field).",
     "how": "Убивай коров (2 уровень) и подбирай шкуры (Cowhide). Полный инвентарь — 28 шкур. Банк — в замке Lumbridge (2nd floor) или продавай сразу на Grand Exchange.",
     "fields": [
@@ -1765,6 +1768,9 @@
       }
     ],
     "safespot": "Чеснок в инвентаре ослабляет вампира. Встань за стулом (safespot) и бей Fire Strike либо забей его в упор мечом, подлечиваясь форелью (+7) или лососем (+9).",
+    "foes": [
+      "Count Draynor"
+    ],
     "reward": "3 QP и 4 825 XP Attack — уровень атаки мгновенно поднимается с 1 до 20!",
     "doneWhen": "Квест зелёный, Attack 20+. Надет Mithril scimitar из шага S2-01.",
     "inGame": {
@@ -2656,6 +2662,10 @@
     "title": "Бой до 30 / 30 / 30 (атака, сила, защита)",
     "requires": [],
     "floor": "Ground floor (1-й этаж / земля)",
+    "foes": [
+      "Al Kharid warrior",
+      "Flesh Crawler"
+    ],
     "where": "Воины во дворце Al Kharid (Al Kharid warrior, 9 ур.) — банк рядом. С 20+ боя — Flesh Crawler на 2-м этаже Stronghold of Security.",
     "how": "Качай навыки по очереди: переключай стиль атаки (Accurate — атака, Aggressive — сила, Defensive — защита). Сначала атаку до 30, потом силу, потом защиту.",
     "membersAlternative": "👑 С подпиской: не бей мобов вручную — пройди Waterfall Quest за 15 минут и сразу получи 30 Attack и 30 Strength!",
@@ -2737,6 +2747,9 @@
         "text": "Ithoi the Navigator (35 ур.) — бей его в ближнем бою или магией. Ешь лосося, когда здоровье ниже 15."
       }
     ],
+    "foes": [
+      "Ithoi the Navigator"
+    ],
     "reward": "2 QP, доступ к банку Yusuf в Corsair Cove и к пещере Corsair Cove Dungeon.",
     "doneWhen": "Квест зелёный."
   },
@@ -2781,6 +2794,9 @@
         "text": "В конце нужно победить быка — возьми 5 лососей."
       }
     ],
+    "foes": [
+      "Brutus"
+    ],
     "reward": "1 QP, доступ к боссу-корове Brutus, лампа на 1 000 XP в любой боевой навык или молитву (вложи в Prayer) и Cowbell amulet от Gillie Groats.",
     "doneWhen": "Квест зелёный."
   },
@@ -2790,6 +2806,10 @@
     "type": "skill",
     "title": "Бой до 40 / 40 / 40",
     "requires": [],
+    "foes": [
+      "Moss giant",
+      "Flesh Crawler"
+    ],
     "where": "Моховые великаны (Moss giant, 42 ур.) в канализации Varrock Sewers — люк сразу к востоку от дворца Varrock. Путь перегорожен паутиной: разрежь её ятаганом или ножом. Альтернатива — Flesh Crawler на 2-м этаже Stronghold of Security.",
     "mapLocation": {
       "x": 3237,
@@ -3934,6 +3954,9 @@
         "label": "Бой",
         "text": "Три гаста (Ghast, 30 ур.) в болоте Mort Myre — их видно только после благословения. Гасты превращают еду в инвентаре в гниль — бери 15 омаров с запасом."
       }
+    ],
+    "foes": [
+      "Ghast"
     ],
     "reward": "2 QP, 3 000 XP Crafting, 2 000 XP Defence, 2 000 XP Hitpoints, доступ в болото Mort Myre.",
     "doneWhen": "Квест зелёный."

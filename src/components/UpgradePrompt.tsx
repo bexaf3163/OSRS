@@ -1,4 +1,5 @@
-// «⚡ СКОРОСТНОЙ АПГРЕЙД»: перед долгой прокачкой — дешёвый инструмент или оружие получше, если уровень уже позволяет.
+// «⚡ СКОРОСТНОЙ АПГРЕЙД»: перед долгой прокачкой — дешёвый инструмент получше, если уровень уже позволяет.
+// Оружие и броню на шагах с боем советует GearPrompt (разбор снаряжения).
 // Кнопка ведёт стрелку в игре к продавцу (временная цель): он подсвечен с подписью «[Купи: …]», предмет — в окне
 // магазина. Когда предмет оказался в сумке или надет, цель снимается сама и стрелка снова ведёт к шагу.
 // Ничего не покупает и не тратит — только подсказывает. «✕ Пропустить» прячет подсказку на этом шаге.
@@ -15,7 +16,7 @@ import { recommendUpgrade, showsPrompt, stepUpgradeCategories, upgradeNav } from
 import { NavigateButton } from './NavigateButton';
 import { PlaceButton, PlaceMapView, usePlaceMap } from './PlaceMap';
 
-const SKILL_LABEL = { woodcutting: 'Woodcutting', mining: 'Mining', melee: 'Attack' } as const;
+const SKILL_LABEL = { woodcutting: 'Woodcutting', mining: 'Mining' } as const;
 
 export function UpgradePrompt({ step }: { step: Step }) {
   const { upgradeRouter } = useFeatures();
@@ -46,7 +47,7 @@ export function UpgradePrompt({ step }: { step: Step }) {
   if (!showsPrompt(rec)) return null;
   const nav = upgradeNav(rec, step.id);
   const going = navTarget?.itemName === rec.recommendedItem && navTarget?.stepId === step.id;
-  const level = (stats ?? {})[rec.skill === 'melee' ? 'attack' : rec.skill] ?? progress.levels[rec.skill === 'melee' ? 'attack' : rec.skill];
+  const level = (stats ?? {})[rec.skill] ?? progress.levels[rec.skill];
   const skillName = SKILL_LABEL[rec.skill];
   const where = rec.shop ? `${rec.shop} • ${rec.city}` : 'Grand Exchange';
   const s1_09 = step.stage === 1 && !isClosed(progress, 'S1-09');

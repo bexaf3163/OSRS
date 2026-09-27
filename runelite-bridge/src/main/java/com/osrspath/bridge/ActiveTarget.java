@@ -224,7 +224,7 @@ public class ActiveTarget
 		return TRAILING_PUNCT.matcher(t).replaceAll("").trim();
 	}
 
-	private static Set<String> names(List<String> list)
+	static Set<String> names(List<String> list)
 	{
 		Set<String> out = new HashSet<>();
 		for (String s : nonNull(list))

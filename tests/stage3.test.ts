@@ -5,7 +5,7 @@ import { emptyProgress, normalizeProgress, withUpgradeDismissed } from '../src/l
 import { bankTagName, generateBankTag, generateStageBankTag, stageBankItemIds, stepBankItemIds, uniqueIds } from '../src/lib/bankTags';
 import { DEFAULT_FEATURES, parseFeatures } from '../src/lib/features';
 import {
-  checkStatus, clearNavTarget, parseGear, parsePacing, setNavTarget, syncBankTags, toInGameTarget, type BridgeTransport, type GearState,
+  checkStatus, clearNavTarget, parseGear, parsePacing, setGearHint, setNavTarget, syncBankTags, toInGameTarget, type BridgeTransport, type GearState,
 } from '../src/services/runeliteBridge';
 import {
   recommendFor, recommendUpgrade, showsPrompt, stepUpgradeCategories, toolProgression, upgradeNav, type RouterInput, type ToolProgression,
@@ -82,10 +82,11 @@ const wc = step('S1-08');
 const input = (over: Partial<RouterInput> = {}): RouterInput => ({ step: wc, mode: 'f2p', levels: { woodcutting: 6 }, gear: gear(), ...over });
 
 describe('Smart Tool & Gear Upgrade Router', () => {
-  it('категории шага: рубка, добыча, бой; квест — без подсказки', () => {
+  it('категории шага: рубка и добыча; квест и бой — без этой подсказки', () => {
     expect(stepUpgradeCategories(step('S1-08'))).toEqual(['woodcutting']);
     expect(stepUpgradeCategories(step('S1-12'))).toEqual(['mining']);
-    expect(stepUpgradeCategories(step('S3-08'))).toEqual(['melee']);
+    // Оружие на шагах с боем сравнивает разбор снаряжения (tests/gear.test.ts), а не ступени инструментов.
+    expect(stepUpgradeCategories(step('S3-08'))).toEqual([]);
     expect(stepUpgradeCategories(step('S1-03'))).toEqual([]);
   });
 
@@ -111,13 +112,9 @@ describe('Smart Tool & Gear Upgrade Router', () => {
     expect(showsPrompt(inBag)).toBe(false);
   });
 
-  it('оружие в сумке, но не в руке — «уже есть», магазин не нужен', () => {
-    const r = recommendFor('melee', {
-      step: step('S3-08'), mode: 'f2p', levels: { attack: 20 },
-      gear: { equipment: [{ id: 1325, name: 'Steel scimitar' }], inventory: [{ id: 1329, name: 'Mithril scimitar' }], coins: 5000, bankCoins: null },
-    });
-    expect(r.status).toBe('UPGRADE_OWNED');
-    expect(showsPrompt(r)).toBe(false);
+  it('топор в сумке считается: он рубит и оттуда', () => {
+    const r = recommendFor('woodcutting', input({ levels: { woodcutting: 21 }, gear: gear({ equipment: [], inventory: [{ id: 1355, name: 'Mithril axe' }] }) }));
+    expect(r).toMatchObject({ status: 'NO_UPGRADE', currentItem: 'Mithril axe' });
   });
 
   it('4. Монет мало → UPGRADE_NOT_AFFORDABLE, банк считается', () => {
@@ -170,11 +167,6 @@ describe('Smart Tool & Gear Upgrade Router', () => {
 
   it('слабые ступени (Iron axe) — не повод идти в магазин', () => {
     expect(showsPrompt(recommendUpgrade(input({ levels: { woodcutting: 3 } })))).toBe(false);
-  });
-
-  it('бой: Attack 20 и Steel scimitar → Mithril scimitar у Zeke', () => {
-    const r = recommendUpgrade({ step: step('S3-08'), mode: 'f2p', levels: { attack: 20 }, gear: { equipment: [{ id: 1325, name: 'Steel scimitar' }], inventory: [], coins: 10000, bankCoins: null } })!;
-    expect(r).toMatchObject({ status: 'UPGRADE_AVAILABLE', recommendedItem: 'Mithril scimitar', npc: 'Zeke', shopPrice: 1040 });
   });
 
   it('только с биржи → стрелка к Grand Exchange, с предметом для автоснятия', () => {
@@ -271,6 +263,24 @@ describe('Мост: новые запросы и события', () => {
     const b = transport({ ok: true, status: 200 });
     expect(await syncBankTags('stage-1', [995, 1351], b.t)).toBe(true);
     expect(b.calls[0]).toEqual({ method: 'POST', path: '/bank-tags', body: { stageId: 'stage-1', itemIds: [995, 1351] } });
+  });
+
+  it('совет по снаряжению — в /gear-hint; снять — clear; старый плагин и выключенная функция — не ошибка', async () => {
+    const hint = { text: '⚡ Сильнее: Steel scimitar у Zeke (Al Kharid), 400 gp', watchItems: ['Steel scimitar'], highlightItems: [] };
+    const ok = transport({ ok: true, status: 200 });
+    expect(await setGearHint(hint, ok.t)).toBe('ok');
+    expect(ok.calls[0]).toEqual({ method: 'POST', path: '/gear-hint', body: hint });
+    const clr = transport({ ok: true, status: 200 });
+    await setGearHint(null, clr.t);
+    expect(clr.calls[0].body).toEqual({ clear: true });
+    expect(await setGearHint(hint, transport({ ok: false, status: 0 }).t)).toBe('offline');
+    expect(await setGearHint(hint, transport({ ok: false, status: 404 }).t)).toBe('old');
+    expect(await setGearHint(hint, transport({ ok: false, status: 409, data: { status: 'error', error: 'выключено' } }).t)).toBe('off');
+  });
+
+  it('снаряжение: слот надетого из игры, неизвестный слот — без него', () => {
+    expect(parseGear({ equipment: [{ id: 1291, name: 'Bronze sword', slot: 'weapon' }, { id: 1540, name: 'Anti-dragon shield', slot: 'Shield!' }] })!.equipment)
+      .toEqual([{ id: 1291, name: 'Bronze sword', slot: 'weapon' }, { id: 1540, name: 'Anti-dragon shield' }]);
   });
 
   it('снаряжение: пропущенные поля — неизвестно, мусор отбрасывается', () => {

@@ -7,6 +7,7 @@ import { flashDone } from '../lib/flash';
 import { reachableQuestPoints } from '../lib/qp';
 import { pendingReview } from '../lib/review';
 import { NextStepCard } from '../components/NextStepCard';
+import { GearBanner } from '../components/GearPrompt';
 import { ProgressBar } from '../components/ProgressBar';
 import { StageSection } from '../components/StageSection';
 import { useMediaQuery, WIDE } from '../lib/media';
@@ -190,6 +191,7 @@ function PathNarrow({ focusStep, focusKey }: { focusStep?: string; focusKey: num
       </section>
 
       <NextStepCard onDone={completeFromTop} />
+      <GearBanner />
 
       <div className="stages">
         {stages.map((st) => (

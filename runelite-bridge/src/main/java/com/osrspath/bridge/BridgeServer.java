@@ -40,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
  * POST /shopping-plan оптовый список Grand Exchange (ShoppingPlan) — подсказка на бирже
  * POST /nav-target    временная цель поверх шага (NavTarget): место с карты или магазин; {"clear":true} — снять
  * POST /bank-tags     предметы этапа для мягкой подсветки в банке (BankTags)
+ * POST /gear-hint     совет по снаряжению (GearHint): строка HUD, что спросить у банка и что подсветить; {"clear":true} — снять
  * GET  /events        text/event-stream: STATUS, STATS, OWNED, GEAR, PACING, NAV_DONE, STEP_AUTO_COMPLETED
  *                      и пинг каждые 15 секунд
  *
@@ -84,6 +85,12 @@ public final class BridgeServer
 
 		/** Предметы этапа для подсветки в банке. Возвращает причину отказа или null. */
 		default String onBankTags(BankTags tags)
+		{
+			return "не поддерживается";
+		}
+
+		/** Совет по снаряжению. Возвращает причину отказа (функция выключена) или null. */
+		default String onGearHint(GearHint hint)
 		{
 			return "не поддерживается";
 		}
@@ -456,6 +463,23 @@ public final class BridgeServer
 						return;
 					}
 					String refused = listener.onBankTags(tags);
+					json(ex, refused == null ? 200 : 409, refused == null ? ok() : error(refused));
+					return;
+				}
+				case "/gear-hint":
+				{
+					GearHint hint = readJson(ex, method, GearHint.class);
+					if (hint == null)
+					{
+						return;
+					}
+					String problem = hint.prepare();
+					if (problem != null)
+					{
+						json(ex, 400, error(problem));
+						return;
+					}
+					String refused = listener.onGearHint(hint);
 					json(ex, refused == null ? 200 : 409, refused == null ? ok() : error(refused));
 					return;
 				}

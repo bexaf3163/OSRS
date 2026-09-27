@@ -38,6 +38,8 @@ class OsrsPathHudOverlay extends OverlayPanel
 	static final Color WARN = new Color(255, 170, 60);
 	/** «Почти готово» — золотисто-зелёный. */
 	static final Color ALMOST = new Color(200, 225, 90);
+	/** Совет по снаряжению: янтарный, как «⚡ Скоростной апгрейд» в приложении. */
+	static final Color UPGRADE = new Color(255, 190, 70);
 
 	/** Всё, что показывает HUD. Неизменяемое: плагин заменяет его целиком. */
 	@Value
@@ -58,6 +60,8 @@ class OsrsPathHudOverlay extends OverlayPanel
 		String pacing;
 		/** Темп: почти готово или цель достигнута — строка зелёная. */
 		boolean pacingGood;
+		/** «⚡ Надень Iron scimitar — он в банке»; null — совета нет или подсказки апгрейда выключены. */
+		String upgrade;
 	}
 
 	private final OsrsPathBridgePlugin plugin;
@@ -136,6 +140,10 @@ class OsrsPathHudOverlay extends OverlayPanel
 		if (s.getBag() != null)
 		{
 			OverlayText.line(c, s.getBag(), s.isBagReady() ? GOOD : WARN, fm, inner);
+		}
+		if (s.getUpgrade() != null)
+		{
+			OverlayText.line(c, s.getUpgrade(), UPGRADE, fm, inner);
 		}
 	}
 

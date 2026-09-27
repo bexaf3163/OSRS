@@ -25,6 +25,7 @@ import net.runelite.api.GrandExchangeOffer;
 import net.runelite.api.GrandExchangeOfferState;
 import net.runelite.api.Item;
 import net.runelite.api.ItemComposition;
+import net.runelite.api.EquipmentInventorySlot;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.NPC;
 import net.runelite.api.NPCComposition;
@@ -193,6 +194,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	@Getter
 	private NavTarget navTarget;
 
+	/** Совет приложения по снаряжению (POST /gear-hint): строка HUD, что спросить у банка, что подсветить. */
+	private volatile GearHint gearHint;
+
 	/** Продавец или NPC временной цели рядом — собирается по событиям, как NPC шага. */
 	@Getter
 	private final List<NPC> navNpcs = new ArrayList<>();
@@ -285,6 +289,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		plan = null;
 		shopping = Collections.emptyList();
 		bankTagIds = Collections.emptySet();
+		gearHint = null;
 	}
 
 	private void startServer()
@@ -354,7 +359,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 					{
 						finishNav("cleared");
 					}
+					if (!config.upgradeRouter())
+					{
+						gearHint = null;
+					}
 					gearDirty = true;
+					updateHud();
 				});
 				break;
 			case "bankTagsHelper":
@@ -432,6 +442,36 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		clientThread.invokeLater(() -> applyNav(t.isClear() ? null : t));
 		return null;
+	}
+
+	@Override
+	public String onGearHint(GearHint h)
+	{
+		if (!h.isClear() && !config.upgradeRouter())
+		{
+			return "подсказки апгрейда выключены в настройках плагина OSRS Path Bridge";
+		}
+		clientThread.invokeLater(() ->
+		{
+			gearHint = h.isClear() ? null : h;
+			// Новые предметы для счёта в банке — событие OWNED уйдёт с ними.
+			ownedDirty = true;
+			updateHud();
+		});
+		return null;
+	}
+
+	/** Предмет из совета по снаряжению — подсветить в сумке и банке. name — ключ ActiveTarget.nameKey. */
+	boolean isUpgradeItem(String name)
+	{
+		GearHint h = gearHint;
+		return h != null && config.upgradeRouter() && h.getHighlightSet().contains(name);
+	}
+
+	boolean hasUpgradeItems()
+	{
+		GearHint h = gearHint;
+		return h != null && config.upgradeRouter() && !h.getHighlightSet().isEmpty();
 	}
 
 	@Override
@@ -688,11 +728,19 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (worn != null)
 		{
 			equipment = new ArrayList<>();
-			for (Item it : worn.getItems())
+			Item[] items = worn.getItems();
+			for (int i = 0; i < items.length; i++)
 			{
+				Item it = items[i];
 				if (it.getId() > 0 && it.getQuantity() > 0)
 				{
-					equipment.add(itemRow(it.getId(), null));
+					Map<String, Object> row = itemRow(it.getId(), null);
+					String slot = slotName(i);
+					if (slot != null)
+					{
+						row.put("slot", slot);
+					}
+					equipment.add(row);
 				}
 			}
 		}
@@ -721,6 +769,19 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		g.put("coins", bag == null ? null : coins);
 		g.put("bankCoins", bank == null ? null : bank.count(ItemID.COINS, "Coins"));
 		return g;
+	}
+
+	/** Слот по номеру ячейки надетого: weapon, head, amulet… (EquipmentInventorySlot). null — неизвестная ячейка. */
+	static String slotName(int index)
+	{
+		for (EquipmentInventorySlot s : EquipmentInventorySlot.values())
+		{
+			if (s.getSlotIdx() == index)
+			{
+				return s.name().toLowerCase(java.util.Locale.ROOT);
+			}
+		}
+		return null;
 	}
 
 	private Map<String, Object> itemRow(int id, Integer count)
@@ -823,7 +884,10 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private void updateHud()
 	{
 		boolean dangerShown = warned(danger);
-		if (target == null && navTarget == null && !dangerShown)
+		GearHint h = gearHint;
+		// Совет по снаряжению — пока не идём за покупкой (тогда заголовок и так «Купи …»).
+		String upgrade = navTarget == null && h != null && h.getText() != null && config.upgradeRouter() ? h.getText() : null;
+		if (target == null && navTarget == null && !dangerShown && upgrade == null)
 		{
 			hud = null;
 			return;
@@ -885,7 +949,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		String dangerText = dangerShown ? danger.getZone().hudText() : null;
 		boolean inside = danger.getLevel() == DangerRadar.Level.INSIDE;
-		hud = new OsrsPathHudOverlay.State(title, goal, distance, near, bag, checklist.isReady(), dangerText, inside, pace, paceGood);
+		hud = new OsrsPathHudOverlay.State(title, goal, distance, near, bag, checklist.isReady(), dangerText, inside, pace, paceGood, upgrade);
 	}
 
 	// ---------- Кого подсвечивать ----------
@@ -1405,6 +1469,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			for (ShoppingPlan.Item i : plan.getItems())
 			{
 				report(out, i.getName(), i.getId());
+			}
+		}
+		GearHint h = gearHint;
+		if (h != null)
+		{
+			for (String name : h.watched())
+			{
+				report(out, name, null);
 			}
 		}
 		return new ArrayList<>(out.values());

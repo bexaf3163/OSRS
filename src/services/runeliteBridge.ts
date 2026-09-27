@@ -31,6 +31,8 @@ export interface GearItem {
   id: number;
   name: string;
   count?: number;
+  /** Слот надетого предмета, как в RuneLite (EquipmentInventorySlot): weapon, head, amulet… Старый плагин его не шлёт. */
+  slot?: string;
 }
 
 /** Снаряжение и монеты для подсказки апгрейда. null в поле — этот контейнер игра ещё не прислала. */
@@ -85,7 +87,9 @@ export type BridgeEvent =
   | { type: 'OWNED'; bankSeen: boolean; items: unknown[] }
   | { type: string; [key: string]: unknown };
 
-export type BridgePath = '/status' | '/active-step' | '/clear' | '/shopping-plan' | '/nav-target' | '/bank-tags';
+/** Все адреса плагина, к которым ходит приложение. Программа для ПК пропускает только их (electron/runelite-bridge.cjs). */
+export const BRIDGE_PATHS = ['/status', '/active-step', '/clear', '/shopping-plan', '/nav-target', '/bank-tags', '/gear-hint'] as const;
+export type BridgePath = typeof BRIDGE_PATHS[number];
 
 export interface BridgeResponse {
   ok: boolean;
@@ -177,11 +181,12 @@ function gearItems(raw: unknown): GearItem[] | null {
   if (!Array.isArray(raw)) return null;
   const out: GearItem[] = [];
   for (const r of raw) {
-    const o = r as { id?: unknown; name?: unknown; count?: unknown } | null;
+    const o = r as { id?: unknown; name?: unknown; count?: unknown; slot?: unknown } | null;
     const id = int(o?.id, 1);
     if (id === null || typeof o?.name !== 'string') continue;
     const count = int(o.count, 1);
-    out.push({ id, name: o.name, ...(count !== null ? { count } : {}) });
+    const slot = typeof o.slot === 'string' && /^[a-z]{2,10}$/.test(o.slot) ? o.slot : undefined;
+    out.push({ id, name: o.name, ...(count !== null ? { count } : {}), ...(slot ? { slot } : {}) });
   }
   return out;
 }
@@ -347,6 +352,24 @@ export async function clearNavTarget(t: BridgeTransport = defaultTransport()): P
 /** Предметы этапа — для мягкой подсветки в банке. Пустой список снимает подсветку. */
 export async function syncBankTags(stageId: string, itemIds: number[], t: BridgeTransport = defaultTransport()): Promise<boolean> {
   return (await t.request('POST', '/bank-tags', { stageId, itemIds })).ok;
+}
+
+/** Совет по снаряжению для плагина: строка HUD, про какие предметы сказать счёт в банке, что подсветить. */
+export interface GearHintPayload {
+  text?: string;
+  watchItems: string[];
+  highlightItems: string[];
+}
+
+/**
+ * Совет по снаряжению — в игру (POST /gear-hint). 'old' — плагин старой версии (404): он совета не знает,
+ * это не ошибка; 'off' — подсказки апгрейда выключены в настройках плагина (409).
+ */
+export async function setGearHint(hint: GearHintPayload | null, t: BridgeTransport = defaultTransport()): Promise<'ok' | 'offline' | 'old' | 'off'> {
+  const res = await t.request('POST', '/gear-hint', hint ?? { clear: true });
+  if (res.ok) return 'ok';
+  if (res.status === 0) return 'offline';
+  return res.status === 404 ? 'old' : 'off';
 }
 
 // ---------- Поток событий с переподключением ----------

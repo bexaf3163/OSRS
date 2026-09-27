@@ -218,6 +218,11 @@ export interface Step {
   branches?: StepBranch[];
   /** Темп прокачки навыка шага (рыбалка, рубка, готовка, добыча). */
   pacing?: StepPacing;
+  /**
+   * С кем шаг дерётся в ближнем бою — названия статей вики (monsters.json). По ним разбор снаряжения
+   * сравнивает оружие и показывает совет на шаге. Нет у шагов, где бьют особым оружием или магией.
+   */
+  foes?: string[];
 
   where?: string;
   bring?: string;
@@ -259,6 +264,61 @@ export interface WikiItemDetail {
   freeSpawns?: string[];
   dropSources?: { monster: string; combatLevel: number | null; rate: string }[];
   wikiUrl: string;
+}
+
+/** Слоты снаряжения, которые разбирает советник: оружие, шлем, торс, ноги, щит, амулет. */
+export type GearSlot = 'weapon' | 'head' | 'body' | 'legs' | 'shield' | 'neck';
+
+export interface GearStats { stab: number; slash: number; crush: number; magic: number; ranged: number }
+
+/** Предмет снаряжения с OSRS Wiki (gear.json): бонусы, требование, магазины. */
+export interface GearPiece {
+  id: number;
+  name: string;
+  nameRu: string;
+  slot: GearSlot;
+  /** Вид: scimitar, sword, platebody, amulet… */
+  kind: string;
+  metal?: 'bronze' | 'iron' | 'steel' | 'black' | 'mithril' | 'adamant' | 'rune';
+  twoHanded?: boolean;
+  /** Уровень, с которого можно надеть: { attack: 5 }, { defence: 20 }, у молотов { strength: 5 }. Нет — с первого. */
+  req?: { attack?: number; defence?: number; strength?: number };
+  /** Требование не нашлось в статье (взято по металлу): такой предмет не советуем, только узнаём на персонаже. */
+  reqUnverified?: boolean;
+  members: boolean;
+  tradeable: boolean;
+  attack: GearStats;
+  defence: GearStats;
+  strength: number;
+  prayer?: number;
+  /** Тиков между ударами (у оружия; тик — 0,6 с). */
+  speed?: number;
+  /** Магазины бесплатной версии: цена при полном запасе. */
+  shops?: { shop: string; location: string; price: number; owner?: string }[];
+  iconUrl: string;
+}
+
+export interface GearData {
+  source: string;
+  updated: string;
+  items: GearPiece[];
+}
+
+/** Противник из карточки монстра на вики: с ним сравнивается оружие. Версия — самая низкоуровневая у статьи. */
+export interface Foe {
+  name: string;
+  version?: string;
+  combat: number;
+  hitpoints: number;
+  defenceLevel: number;
+  defence: { stab: number; slash: number; crush: number };
+  members: boolean;
+}
+
+export interface FoeData {
+  source: string;
+  updated: string;
+  foes: Foe[];
 }
 
 export interface SkillRange {

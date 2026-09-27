@@ -13,6 +13,7 @@ import { IconCheck, IconChevron, IconLock, TypeIcon, TYPE_LABEL } from '../compo
 import { StepBody } from '../components/StepCard';
 import { BankTagButton } from '../components/BankTagButton';
 import { WikiDock } from '../components/WikiDrawer';
+import { GearBanner } from '../components/GearPrompt';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -149,6 +150,8 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
           </div>
         )}
 
+        {/* У шага с боем свой совет в карточке — баннер его не повторяет. */}
+        {!selected.foes?.length && <GearBanner />}
         <article className={`step-view ${selected.membersOnly ? 'is-members' : ''}`} key={selected.id}>
           <header className="step-view-head">
             <p className="step-view-kicker">
