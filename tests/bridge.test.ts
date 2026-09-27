@@ -139,7 +139,7 @@ describe('триггеры автоотметки в маршруте', () => {
 });
 
 describe('запросы к мосту', () => {
-  it('«Указать в игре» — POST /active-step с целью шага', async () => {
+  it('«Показать в игре» — POST /active-step с целью шага', async () => {
     const { t, calls } = fakeTransport();
     expect(await syncActiveStep(step('S1-06'), t)).toBe(true);
     expect(calls).toEqual([{ method: 'POST', path: '/active-step', body: toInGameTarget(step('S1-06')) }]);

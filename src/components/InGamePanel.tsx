@@ -1,4 +1,4 @@
-// «🧭 Указать в игре»: шаг уходит в плагин RuneLite — стрелка, подсветка NPC, объектов, клеток,
+// «🧭 Показать в игре»: шаг уходит в плагин RuneLite — стрелка, подсветка NPC, объектов, клеток,
 // нужных вариантов диалога и предметов. Ниже — что именно подсветится.
 
 import { useState } from 'react';
@@ -50,7 +50,7 @@ export function InGamePanel({ step }: { step: Step }) {
         <p className="muted small" id={`ingame-${step.id}`} role="status">
           RuneLite мост оффлайн{state === 'online' ? ' или отказал' : ''}
           {canLaunch
-            ? <>. <button type="button" className="btn btn-sm" onClick={() => void launchRuneLite()}>🎮 Запустить RuneLite</button> — через ~10 секунд нажми «Указать в игре» ещё раз.</>
+            ? <>. <button type="button" className="btn btn-sm" onClick={() => void launchRuneLite()}>🎮 Запустить RuneLite</button> — через ~10 секунд нажми «Показать в игре» ещё раз.</>
             : <>: запусти RuneLite с плагином OSRS Path Bridge (как — в README, раздел «RuneLite bridge»).</>}
         </p>
       )}

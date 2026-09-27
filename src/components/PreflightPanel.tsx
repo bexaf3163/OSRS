@@ -1,5 +1,5 @@
 // «🧳 Проверка вылета»: что из предметов шага уже в сумке — по данным RuneLite, без ручного обновления.
-// Шаг проверяется, когда он показан в игре («Указать в игре»): плагин считает сумку и банк именно для него.
+// Шаг проверяется, когда он показан в игре («Показать в игре»): плагин считает сумку и банк именно для него.
 
 import type { Step } from '../types';
 import { useBridge } from '../bridge';
@@ -12,7 +12,7 @@ export function PreflightPanel({ step }: { step: Step }) {
 
   let body;
   if (activeStepId !== step.id) {
-    body = <p className="muted small">Нажми «Указать в игре» — сумка для этого шага проверится сама.</p>;
+    body = <p className="muted small">Нажми «Показать в игре» — сумка для этого шага проверится сама.</p>;
   } else if (!inGame || !owned) {
     body = <p className="muted small">Войди в игру в RuneLite — сумка проверится сама.</p>;
   } else {
