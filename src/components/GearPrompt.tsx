@@ -88,6 +88,7 @@ export function GearPrompt({ step }: { step: Step }) {
 
 function GearPromptBody({ step }: { step: Step }) {
   const { dismissUpgrade } = useStore();
+  const { state } = useBridge();
   const { advice } = useGearAdvice(step);
   const places = usePlaceMap();
   const top = advice.actions[0];
@@ -108,7 +109,9 @@ function GearPromptBody({ step }: { step: Step }) {
         <p className="small">
           Лучшее оружие по твоему уровню Attack ({advice.levels.attack}) — <strong>{best.item.name}</strong>
           {best.source.kind !== 'bag' && best.source.kind !== 'bank' ? <> ({sourceText(best.source)})</> : null}.
-          {' '}Включи связь с RuneLite — программа увидит, что надето и сколько монет, и скажет, стоит ли менять.
+          {' '}{state === 'online'
+            ? 'Войди в игру в RuneLite — программа увидит, что надето и сколько монет, и скажет, стоит ли менять.'
+            : 'Включи связь с RuneLite — программа увидит, что надето и сколько монет, и скажет, стоит ли менять.'}
         </p>
         <div className="upgrade-actions">
           <a className="btn btn-sm" href="#/gear">Весь разбор снаряжения</a>

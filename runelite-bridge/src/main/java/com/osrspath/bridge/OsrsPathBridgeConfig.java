@@ -152,12 +152,14 @@ public interface OsrsPathBridgeConfig extends Config
 		return true;
 	}
 
+	// Название короткое: рядом с выпадающим списком места меньше, чем рядом с галочкой, — «Размер стрелки»
+	// в живом клиенте обрезался до «Размер ст…». Стоит сразу под «Большая стрелка», поэтому понятно, чего размер.
 	@ConfigItem(
 		keyName = "arrowSize",
-		name = "Размер стрелки",
-		description = "Маленькая, средняя или крупная — под размер окна и экрана",
+		name = "Размер",
+		description = "Размер большой стрелки: маленькая, средняя или крупная — под размер окна и экрана",
 		section = companion,
-		position = 19
+		position = 16
 	)
 	default ArrowSize arrowSize()
 	{
@@ -169,7 +171,7 @@ public interface OsrsPathBridgeConfig extends Config
 		name = "Через Shortest Path",
 		description = "Если установлен плагин Shortest Path (Plugin Hub), передавать ему цель шага — он проложит путь с учётом стен и дверей",
 		section = companion,
-		position = 16
+		position = 17
 	)
 	default boolean useShortestPath()
 	{
@@ -181,7 +183,7 @@ public interface OsrsPathBridgeConfig extends Config
 		name = "Подсказка на бирже",
 		description = "При открытой Grand Exchange: оптовый список покупок из приложения. Сам ничего не покупает",
 		section = companion,
-		position = 17
+		position = 18
 	)
 	default boolean showGeHelper()
 	{
@@ -193,7 +195,7 @@ public interface OsrsPathBridgeConfig extends Config
 		name = "Варианты по уровням",
 		description = "Передавать приложению уровни навыков, чтобы оно предлагало телепорты, каноэ и срезки",
 		section = companion,
-		position = 18
+		position = 19
 	)
 	default boolean shareStats()
 	{

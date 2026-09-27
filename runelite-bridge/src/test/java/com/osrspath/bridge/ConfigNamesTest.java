@@ -40,6 +40,8 @@ public class ConfigNamesTest
 		int spinner = small.stringWidth("Непрозрачност");
 		int color = small.stringWidth("Цвет подсветки");
 		int section = bold.stringWidth("Места, банк, опасност");
+		// Выпадающий список шире галочки: в живом клиенте «Размер стрелки» рядом с ним обрезался до «Размер ст…».
+		int dropdown = small.stringWidth("Размер ст…");
 		List<String> bad = new ArrayList<>();
 		int items = 0;
 		for (Method m : OsrsPathBridgeConfig.class.getDeclaredMethods())
@@ -51,7 +53,7 @@ public class ConfigNamesTest
 			}
 			items++;
 			Class<?> type = m.getReturnType();
-			int budget = type == int.class ? spinner : type == Color.class ? color : checkbox;
+			int budget = type == int.class ? spinner : type == Color.class ? color : type.isEnum() ? dropdown : checkbox;
 			int w = small.stringWidth(item.name());
 			if (w > budget)
 			{
