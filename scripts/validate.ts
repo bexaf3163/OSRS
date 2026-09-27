@@ -32,7 +32,17 @@ const TYPOS: [RegExp, string][] = [
   // и «Paddle Log / Paddle Canoe», голых «Float» и «Paddle» в меню нет.
   [/\bZambo\b/, 'Zembo'], [/\bRub\b/, 'у Chronicle нет действия Rub — правый клик → Teleport'],
   [/«(Float|Paddle)»/, '«Float Log» или «Float Canoe», «Paddle Log» или «Paddle Canoe»'],
+  // Один город — одно написание: в текстах «Фаладор» (Falador), «Фалладор» встречался один раз.
+  [/Фалладор/, 'Фаладор'],
 ];
+
+/** Все строки объекта — для проверки текстов из гайда (справка, навыки, цели). */
+function strings(o: unknown, out: string[] = []): string[] {
+  if (typeof o === 'string') out.push(o);
+  else if (Array.isArray(o)) o.forEach((x) => strings(x, out));
+  else if (o && typeof o === 'object') Object.values(o).forEach((x) => strings(x, out));
+  return out;
+}
 
 /** Еда маршрута и сколько очков здоровья она восстанавливает (OSRS Wiki). */
 const FOOD = new Map([
@@ -387,6 +397,10 @@ export function validate(d: GuideData | null, route: Route): Report {
   check(!unbalanced.length, 'Скобки и кавычки закрыты', `Незакрытые скобки или кавычки: ${unbalanced.join(', ')}`);
 
   if (d) {
+    // Опечатки и те же правила написания — и в текстах из гайда: справка, навыки, цели, плагины.
+    const guideTypos = strings(d).flatMap((t) => TYPOS.filter(([re, hint]) => re.test(t) && !/двойной пробел|пробел перед/.test(hint)).map(([, hint]) => `«${t.slice(0, 40)}…»: ${hint}`));
+    check(!guideTypos.length, 'В текстах из гайда известных опечаток нет', `Опечатки в гайде: ${guideTypos.join('; ')}`);
+
     // --- Из гайда ---
     lines.push('Навыки, цели и опыт (osrs-guide.md)');
     check(d.skills.length === EXPECTED.skills, `Навыков ${d.skills.length}: ${d.skills.map((s) => `${s.id}(${s.plan.ranges.length})`).join(' ')}`, `Ожидалось ${EXPECTED.skills} навыков, найдено ${d.skills.length}`);
