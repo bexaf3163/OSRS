@@ -306,7 +306,9 @@ function RuneLiteBridge() {
           <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />
           <span>Связь с RuneLite</span>
         </label>
-        <p className="muted small">Сейчас: {status}.{activeStepId && <> В игре показан шаг <code className="code">{activeStepId}</code>.</>}</p>
+        <p className="muted small">Сейчас: {status}.{activeStepId && (state === 'online'
+          ? <> В игре показан шаг <code className="code">{activeStepId}</code>.</>
+          : <> Шаг <code className="code">{activeStepId}</code> вернётся в игру, когда RuneLite подключится.</>)}</p>
         {activeStepId && <div className="actions"><button type="button" className="btn" onClick={() => void clear()}>Убрать подсказки из игры</button></div>}
       </div>
 

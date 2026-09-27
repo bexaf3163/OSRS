@@ -22,6 +22,8 @@ export interface BridgeStatus {
   shortestPath: boolean;
   /** Снаряжение, сумка и монеты; null — не в игре, плагин старый или подсказки апгрейда выключены. */
   gear: GearState | null;
+  /** Шаг, который сейчас показывает плагин; null — никакого (например, RuneLite только что перезапустили). */
+  activeStepId: string | null;
 }
 
 /** Предмет из игры: надетый или в сумке. */
@@ -286,7 +288,7 @@ export function defaultTransport(): BridgeTransport {
 
 export async function checkStatus(t: BridgeTransport = defaultTransport()): Promise<BridgeStatus> {
   const res = await t.request('GET', '/status');
-  const d = res.data as { status?: string; inGame?: boolean; stats?: unknown; shortestPath?: unknown } | undefined;
+  const d = res.data as { status?: string; inGame?: boolean; stats?: unknown; shortestPath?: unknown; activeStepId?: unknown } | undefined;
   const online = res.ok && d?.status === 'ok';
   return {
     online,
@@ -294,6 +296,7 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
     stats: online ? parseStats(d?.stats) : null,
     shortestPath: Boolean(online && d?.shortestPath === true),
     gear: online ? parseGear(d) : null,
+    activeStepId: online && typeof d?.activeStepId === 'string' ? d.activeStepId : null,
   };
 }
 

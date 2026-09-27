@@ -26,6 +26,8 @@ export function InGamePanel({ step }: { step: Step }) {
   const [notice, setNotice] = useState<'' | 'sending' | 'offline'>('');
   if (!enabled || !toInGameTarget(step)) return null;
   const active = activeStepId === step.id;
+  // Без связи шаг не «активен в RuneLite», а ждёт подключения — вернётся туда сам.
+  const live = active && state === 'online';
   const g = step.inGame;
   const trigger = g?.completionTrigger;
   const waypoints = g?.pathWaypoints ?? [];
@@ -44,7 +46,8 @@ export function InGamePanel({ step }: { step: Step }) {
           aria-describedby={notice === 'offline' ? `ingame-${step.id}` : undefined}>
           🧭 {active ? 'Обновить в игре' : 'Указать в игре'}
         </button>
-        {active && <span className="badge badge-ingame">● Активно в RuneLite</span>}
+        {live && <span className="badge badge-ingame">● Активно в RuneLite</span>}
+        {active && !live && <span className="badge">○ Вернётся в игру, когда RuneLite подключится</span>}
         {active && <button type="button" className="btn btn-ghost btn-sm" onClick={() => void clear()}>Убрать из игры</button>}
       </div>
       {notice === 'offline' && (

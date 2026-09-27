@@ -15,6 +15,7 @@ import {
 import { parseOwned, type OwnedState } from './lib/checklist';
 import { stageBankItemIds } from './lib/bankTags';
 import { useFeatures } from './lib/features';
+import { isClosed } from './lib/next-step';
 
 const ENABLED_KEY = 'osrs-put:runelite-bridge';
 const AUTOLAUNCH_KEY = 'osrs-put:runelite-autolaunch';
@@ -22,6 +23,8 @@ const AUTOLAUNCH_KEY = 'osrs-put:runelite-autolaunch';
 const BRANCH_KEY = 'osrs-put:branch-choice';
 /** Последний оптовый список — уходит в игру снова, когда RuneLite перезапустили. */
 const PLAN_KEY = 'osrs-put:shopping-plan';
+/** Шаг, показанный в игре: после перезапуска программы или RuneLite он возвращается в игру сам. */
+const ACTIVE_KEY = 'osrs-put:active-step';
 /** Автозапуск — один раз за запуск программы (в разработке StrictMode вызывает эффекты дважды). */
 let autoLaunchDone = false;
 
@@ -115,6 +118,15 @@ function chosenBranch(step: Step, choice: Record<string, string>): StepBranch | 
   return id ? step.branches?.find((b) => b.id === id) : undefined;
 }
 
+function loadActiveStep(): string | null {
+  try {
+    const v = localStorage.getItem(ACTIVE_KEY);
+    return v && v.length <= 16 ? v : null;
+  } catch {
+    return null;
+  }
+}
+
 function loadAutoLaunch(): boolean {
   try {
     return localStorage.getItem(AUTOLAUNCH_KEY) !== '0';
@@ -136,7 +148,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const runelite = desktop()?.runelite;
   const [state, setState] = useState<BridgeState>(enabled ? 'connecting' : 'off');
   const [inGame, setInGame] = useState(false);
-  const [activeStepId, setActiveStepId] = useState<string | null>(null);
+  // Показанный в игре шаг переживает перезапуск программы, если он ещё не выполнен.
+  const [activeStepId, setActiveStepId] = useState<string | null>(() => {
+    const id = loadActiveStep();
+    return id && steps.some((s) => s.id === id) && !isClosed(progress, id) ? id : null;
+  });
   const [advance, setAdvance] = useState<AutoAdvance | null>(null);
   const [stats, setStats] = useState<PlayerStats | null>(null);
   const [owned, setOwned] = useState<OwnedState | null>(null);
@@ -192,6 +208,15 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    try {
+      if (activeStepId) localStorage.setItem(ACTIVE_KEY, activeStepId);
+      else localStorage.removeItem(ACTIVE_KEY);
+    } catch {
+      // Хранилище недоступно — шаг просто не вернётся после перезапуска.
+    }
+  }, [activeStepId]);
+
+  useEffect(() => {
     const forget = () => {
       setInGame(false);
       setStats(null);
@@ -210,13 +235,20 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     }
     setState('connecting');
     let alive = true;
-    const refresh = () => void checkStatus().then((s) => {
+    const refresh = (resync = false) => void checkStatus().then((s) => {
       if (!alive) return;
       setState(s.online ? 'online' : 'offline');
       setInGame(s.inGame);
       setShortestPath(s.shortestPath);
       if (s.stats) setStats(s.stats);
       setGear(s.gear);
+      // RuneLite перезапустили (или программу) — плагин шага не знает: отправляем снова. Тот же шаг не
+      // шлём повторно, чтобы не сбросить в плагине путевые точки и замер темпа.
+      const want = latest.current.activeStepId;
+      if (resync && s.online && want && s.activeStepId !== want) {
+        const step = latest.current.steps.find((x) => x.id === want);
+        if (step) void syncActiveStep(step, undefined, chosenBranch(step, latest.current.branchChoice));
+      }
     });
     const onEvent = (e: BridgeEvent) => {
       if (e.type === 'STATUS') {
@@ -237,8 +269,9 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
         forget();
         return;
       }
-      // Поток открыт — сверяемся с /status: индикатор должен показывать то, что отвечает плагин.
-      refresh();
+      // Поток открыт — сверяемся с /status: индикатор должен показывать то, что отвечает плагин,
+      // а шаг, показанный в игре, должен быть и в плагине.
+      refresh(true);
       // RuneLite могли перезапустить — оптовый список для биржи отправляем снова.
       const plan = loadJson<ShoppingPlanPayload>(PLAN_KEY, null);
       if (Array.isArray(plan?.items) && plan.items.length) void syncShoppingPlan(plan);

@@ -5,7 +5,7 @@ import { emptyProgress, normalizeProgress, withUpgradeDismissed } from '../src/l
 import { bankTagName, generateBankTag, generateStageBankTag, stageBankItemIds, stepBankItemIds, uniqueIds } from '../src/lib/bankTags';
 import { DEFAULT_FEATURES, parseFeatures } from '../src/lib/features';
 import {
-  clearNavTarget, parseGear, parsePacing, setNavTarget, syncBankTags, toInGameTarget, type BridgeTransport, type GearState,
+  checkStatus, clearNavTarget, parseGear, parsePacing, setNavTarget, syncBankTags, toInGameTarget, type BridgeTransport, type GearState,
 } from '../src/services/runeliteBridge';
 import {
   recommendFor, recommendUpgrade, showsPrompt, stepUpgradeCategories, toolProgression, upgradeNav, type RouterInput, type ToolProgression,
@@ -238,6 +238,15 @@ describe('Совместимость сохранений', () => {
 // ---------- Мост: временная цель, банк, снаряжение, темп ----------
 
 describe('Мост: новые запросы и события', () => {
+  it('/status говорит, какой шаг сейчас в плагине: после перезапуска RuneLite — никакого', async () => {
+    const live = await checkStatus(transport({ ok: true, status: 200, data: { status: 'ok', inGame: true, activeStepId: 'S1-13' } }).t);
+    expect(live.activeStepId).toBe('S1-13');
+    // Gson плагина не пишет пустые поля: шага нет — поля нет.
+    expect((await checkStatus(transport({ ok: true, status: 200, data: { status: 'ok', inGame: false } }).t)).activeStepId).toBeNull();
+    expect((await checkStatus(transport({ ok: true, status: 200, data: { status: 'ok', activeStepId: 42 } }).t)).activeStepId).toBeNull();
+    expect((await checkStatus(transport({ ok: false, status: 0 }).t)).activeStepId).toBeNull();
+  });
+
   it('шаг с темпом уходит в игру вместе с темпом', () => {
     const p = toInGameTarget(step('S1-12'))!;
     expect(p.pacing).toMatchObject({ skill: 'mining', targetLevel: 15, targetExp: 2411, expPerAction: 17.5 });
