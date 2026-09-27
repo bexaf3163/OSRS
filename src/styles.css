@@ -1174,6 +1174,12 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
   animation: map-pulse 1.6s ease-out infinite;
 }
 .leaflet-tooltip.map-tip { font: 600 0.8rem/1.3 var(--font); padding: 3px 8px; }
+.map-arrow-pin span {
+  display: grid; place-items: center; width: 30px; height: 30px; margin: 2px; border-radius: 50%; font-size: 17px; line-height: 1;
+  background: #1f6feb; border: 2px solid #fff; box-shadow: 0 0 0 3px rgb(31 111 235 / 0.45), 0 2px 6px rgb(0 0 0 / 0.5);
+}
+.leaflet-tooltip.map-tip-arrow { background: #1f6feb; color: #fff; border-color: #1f6feb; }
+.leaflet-tooltip.map-tip-arrow::before { border-bottom-color: #1f6feb; }
 
 .ingame { gap: 6px; }
 .ingame-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }

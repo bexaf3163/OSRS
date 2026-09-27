@@ -5,6 +5,8 @@ import { lazy, Suspense, useState } from 'react';
 import type { MapLocation, Step } from '../types';
 import { DEFAULT_ZOOM, floorLabel, initialPoint, isUnderground, stepPoints, tilesAround } from '../lib/map';
 import { Inline } from './Inline';
+import { useBridge } from '../bridge';
+import { navigationTarget } from '../lib/navigation';
 import { ImageModal } from './StepImage';
 
 const WorldMapModal = lazy(() => import('./WorldMapModal'));
@@ -20,6 +22,9 @@ export function StepMap({ step }: { step: Step }) {
   const [active, setActive] = useState(() => initialPoint(step));
   const [open, setOpen] = useState(false);
   const [zoomed, setZoomed] = useState(false);
+  const { navTarget, activeStepId, branchChoice } = useBridge();
+  const branch = step.branches?.find((b) => b.id === branchChoice[step.id]);
+  const arrow = navigationTarget(step, { branch, navTarget, activeStepId });
   if (!points.length) return null;
   const point = points[Math.min(active, points.length - 1)];
 
@@ -56,7 +61,7 @@ export function StepMap({ step }: { step: Step }) {
       {open && (
         <Suspense fallback={null}>
           <WorldMapModal title={`${step.id} · ${step.title}`} points={points} active={active} onActive={setActive}
-            wikiUrl={step.mapUrl} onClose={() => setOpen(false)} />
+            arrow={arrow} arrowLive={activeStepId === step.id} wikiUrl={step.mapUrl} onClose={() => setOpen(false)} />
         </Suspense>
       )}
     </section>

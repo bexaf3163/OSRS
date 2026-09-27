@@ -117,6 +117,53 @@ public interface OsrsPathBridgeConfig extends Config
 		return true;
 	}
 
+	/** Размер большой стрелки: диаметр круга в точках экрана. */
+	enum ArrowSize
+	{
+		SMALL("Маленькая", 48),
+		MEDIUM("Средняя", 68),
+		LARGE("Крупная", 92);
+
+		private final String label;
+		final int diameter;
+
+		ArrowSize(String label, int diameter)
+		{
+			this.label = label;
+			this.diameter = diameter;
+		}
+
+		@Override
+		public String toString()
+		{
+			return label;
+		}
+	}
+
+	@ConfigItem(
+		keyName = "bigArrow",
+		name = "Большая стрелка",
+		description = "Крупная стрелка вверху экрана: поворачивается вместе с камерой и показывает, куда идти и сколько клеток. Перетаскивается с Alt",
+		section = companion,
+		position = 15
+	)
+	default boolean bigArrow()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "arrowSize",
+		name = "Размер стрелки",
+		description = "Маленькая, средняя или крупная — под размер окна и экрана",
+		section = companion,
+		position = 19
+	)
+	default ArrowSize arrowSize()
+	{
+		return ArrowSize.MEDIUM;
+	}
+
 	@ConfigItem(
 		keyName = "useShortestPath",
 		name = "Через Shortest Path",

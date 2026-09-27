@@ -128,6 +128,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private OsrsPathDangerOverlay dangerOverlay;
 
 	@Inject
+	private OsrsPathArrowOverlay arrowOverlay;
+
+	@Inject
 	private ItemManager itemManager;
 
 	@Inject
@@ -240,6 +243,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		overlayManager.add(checklistOverlay);
 		overlayManager.add(geOverlay);
 		overlayManager.add(dangerOverlay);
+		overlayManager.add(arrowOverlay);
 		clientThread.invokeLater(() ->
 		{
 			boolean loggedIn = client.getGameState() == GameState.LOGGED_IN;
@@ -274,6 +278,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		overlayManager.remove(checklistOverlay);
 		overlayManager.remove(geOverlay);
 		overlayManager.remove(dangerOverlay);
+		overlayManager.remove(arrowOverlay);
 		clientThread.invoke(() ->
 		{
 			navTarget = null;
@@ -803,6 +808,18 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	}
 
 	// ---------- Куда идти: стрелка, Shortest Path, HUD ----------
+
+	/** Для большой стрелки: текущая точка пути, пока игрок в игре; null — стрелку не рисовать. */
+	WorldPoint arrowTarget()
+	{
+		return client.getGameState() == GameState.LOGGED_IN ? navTarget() : null;
+	}
+
+	/** «✓ Рядом» из HUD — с той же защитой от мигания на границе. */
+	boolean isNavNear()
+	{
+		return near;
+	}
 
 	/**
 	 * Текущая точка пути: временная цель, иначе следующая путевая точка или точка шага.

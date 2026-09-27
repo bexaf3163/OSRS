@@ -13,6 +13,7 @@ import { DEFAULT_ZOOM, floorLabel, isUnderground, MAP_ATTRIBUTION, MAX_ZOOM, MIN
 import type { NavTargetPayload } from '../services/runeliteBridge';
 import { NavigateButton } from './NavigateButton';
 import { sourceBadge, type MapTarget } from '../lib/places';
+import { SOURCE_TEXT, type NavigationTarget } from '../lib/navigation';
 
 export type { MapTarget } from '../lib/places';
 import { IconClose, IconExternal } from './Icons';
@@ -32,6 +33,10 @@ interface Props {
   searchUrl?: string;
   /** Временная цель для RuneLite; без неё кнопки «🧭» нет. */
   navigate?: NavTargetPayload;
+  /** Куда ведёт стрелка в игре для этого шага — своя метка 🧭, даже если это не точка шага. */
+  arrow?: NavigationTarget | null;
+  /** Шаг показан в игре: карта открывается на цели стрелки. */
+  arrowLive?: boolean;
   wikiUrl?: string;
   onClose: () => void;
 }
@@ -50,10 +55,15 @@ function pinIcon(active: boolean): L.DivIcon {
   return L.divIcon({ className: `map-pin ${active ? 'is-active' : ''}`, html: '<span></span>', iconSize: [22, 22], iconAnchor: [11, 11] });
 }
 
+/** Метка цели стрелки: крупная, со значком компаса — видна на любом масштабе. */
+const arrowIcon = L.divIcon({ className: 'map-arrow-pin', html: '<span>🧭</span>', iconSize: [34, 34], iconAnchor: [17, 17] });
+const samePoint = (a: { x: number; y: number; plane: number }, b: { x: number; y: number; plane: number }) =>
+  Math.abs(a.x - b.x) <= 1 && Math.abs(a.y - b.y) <= 1 && a.plane === b.plane;
+
 const noop = () => {};
 
 export default function WorldMapModal({
-  title, points: stepPoints = [], active = 0, onActive = noop, target, status, searchUrl, navigate, wikiUrl, onClose,
+  title, points: stepPoints = [], active = 0, onActive = noop, target, status, searchUrl, navigate, arrow, arrowLive, wikiUrl, onClose,
 }: Props) {
   const dialog = useRef<HTMLDialogElement>(null);
   const holder = useRef<HTMLDivElement>(null);
@@ -68,6 +78,10 @@ export default function WorldMapModal({
   const pointsKey = points.map((p) => `${p.x},${p.y},${p.plane},${p.label}`).join(';');
   const [plane, setPlane] = useState(point?.plane ?? 0);
   const [offline, setOffline] = useState(false);
+  const arrowMarker = useRef<L.Marker | null>(null);
+  /** Цель стрелки не совпадает ни с одной точкой шага — у неё своя кнопка «показать». */
+  const arrowApart = Boolean(arrow && !target && !points.some((p) => samePoint(p, arrow)));
+  const arrowKey = arrow ? `${arrow.x},${arrow.y},${arrow.plane},${arrow.label}` : '';
 
   useEffect(() => {
     const d = dialog.current;
@@ -104,8 +118,10 @@ export default function WorldMapModal({
     // Нет связи — пустое окно не оставляем: сообщение поверх и ссылка на вики.
     layer.on('tileerror', () => { failed++; if (!loaded && failed >= 4) setOffline(true); });
     layer.addTo(m);
-    m.setView(center(point), point.zoom ?? DEFAULT_ZOOM);
-    setPlane(point.plane);
+    // Шаг показан в игре, а стрелка ведёт не к точке шага — карта открывается там, куда ведёт стрелка.
+    const start = arrowLive && arrow && arrowApart ? { ...arrow, zoom: undefined as number | undefined } : point;
+    m.setView(center(start), start.zoom ?? DEFAULT_ZOOM);
+    setPlane(start.plane);
     map.current = m;
     tiles.current = layer;
     // Размер окна известен только после showModal.
@@ -132,6 +148,27 @@ export default function WorldMapModal({
       return mk;
     });
   }, [pointsKey, active, plane, onActive, hasPoint]);
+
+  // Метка цели стрелки — поверх точек шага, с подписью «куда ведёт стрелка».
+  useEffect(() => {
+    const m = map.current;
+    arrowMarker.current?.remove();
+    arrowMarker.current = null;
+    if (!m || !arrow || target) return;
+    const tip = `🧭 ${arrowLive ? 'Стрелка в игре ведёт сюда' : 'Сюда поведёт стрелка'}: ${arrow.label}`;
+    const mk = L.marker(center(arrow), { icon: arrowIcon, keyboard: false, zIndexOffset: 2000, title: tip })
+      .bindTooltip(tip, { direction: 'bottom', offset: [0, 14], permanent: arrowApart, className: 'map-tip map-tip-arrow' });
+    if (arrow.plane === plane) mk.addTo(m);
+    arrowMarker.current = mk;
+    return () => { mk.remove(); };
+  }, [arrowKey, arrowLive, arrowApart, plane, hasPoint]);
+
+  const showArrow = () => {
+    const m = map.current;
+    if (!m || !arrow) return;
+    setPlane(arrow.plane);
+    m.setView(center(arrow), Math.max(m.getZoom(), DEFAULT_ZOOM));
+  };
 
   // Переключение точки: центр, масштаб и этаж точки.
   useEffect(() => {
@@ -171,6 +208,12 @@ export default function WorldMapModal({
           <p className="map-source small">
             {badge && <span className="map-source-badge">{badge}</span>}
             {target?.origin && <span className="muted"> · координаты: {target.origin}</span>}
+          </p>
+        )}
+        {arrow && !target && (
+          <p className="map-source small">
+            🧭 {arrowLive ? 'Стрелка в игре ведёт' : 'Стрелка поведёт'} к «{arrow.label}» <span className="muted">({SOURCE_TEXT[arrow.source]}, клетка {arrow.x}, {arrow.y})</span>
+            {arrowApart && <> {' '}<button type="button" className="link-btn" onClick={showArrow}>Показать на карте</button></>}
           </p>
         )}
         {points.length > 1 && !target && (
