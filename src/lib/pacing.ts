@@ -2,8 +2,13 @@
 
 import type { PacingState } from '../services/runeliteBridge';
 
-export const PACING_ICON: Record<PacingState['skill'], string> = { fishing: '🐟', woodcutting: '🪵', cooking: '🍖', mining: '⛏️' };
-export const PACING_SKILL: Record<PacingState['skill'], string> = { fishing: 'Fishing', woodcutting: 'Woodcutting', cooking: 'Cooking', mining: 'Mining' };
+export const PACING_ICON: Record<PacingState['skill'], string> = {
+  fishing: '🐟', woodcutting: '🪵', cooking: '🍖', mining: '⛏️', attack: '⚔️', strength: '💪', defence: '🛡️',
+};
+/** Как навык называется во вкладке навыков игры — так же пишет плагин. */
+export const PACING_SKILL: Record<PacingState['skill'], string> = {
+  fishing: 'Fishing', woodcutting: 'Woodcutting', cooking: 'Cooking', mining: 'Mining', attack: 'Attack', strength: 'Strength', defence: 'Defence',
+};
 
 /** Форма слова для числа из «креветка|креветки|креветок»; одна форма — как есть. */
 export function actionForm(forms: string, n: number): string {
@@ -23,8 +28,20 @@ export function etaText(p: Pick<PacingState, 'etaSeconds' | 'estimated'>): strin
   return `${p.estimated ? 'примерно ' : '≈ '}${min < 1 ? 'меньше минуты' : `${min} мин`}`;
 }
 
-export function pacingText(p: PacingState, actionName: string): string {
-  if (p.done) return `✓ Целевой уровень достигнут: ${p.targetLevel} ${PACING_SKILL[p.skill]}`;
+/**
+ * «34 креветки до 20 Fishing». Бой (несколько навыков с одной целью): когда показанный навык дошёл до цели,
+ * а другие нет — «✓ 30 Attack — дальше Strength: смени стиль атаки»; все готовы — все названы.
+ */
+export function pacingText(p: PacingState, actionName: string, all: readonly PacingState['skill'][] = [p.skill]): string {
+  if (p.done && p.left.length) return `✓ ${p.targetLevel} ${PACING_SKILL[p.skill]} — дальше ${PACING_SKILL[p.left[0]]}: смени стиль атаки`;
+  if (p.done) return `✓ Целевой уровень достигнут: ${p.targetLevel} ${(all.length > 1 ? all : [p.skill]).map((k) => PACING_SKILL[k]).join(', ')}`;
   const line = `${p.actionsLeft} ${actionForm(actionName, p.actionsLeft)} до ${p.targetLevel} ${PACING_SKILL[p.skill]}`;
   return p.almost ? `✓ Почти готово: ${line}` : line;
+}
+
+/** «потом Strength и Defence» — что ещё качать на этом шаге боя после показанного навыка. */
+export function pacingNext(p: PacingState): string {
+  if (p.done || !p.left.length) return '';
+  const names = p.left.map((k) => PACING_SKILL[k]);
+  return `потом ${names.length > 1 ? `${names.slice(0, -1).join(', ')} и ${names[names.length - 1]}` : names[0]}`;
 }

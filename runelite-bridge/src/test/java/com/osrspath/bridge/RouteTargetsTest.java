@@ -67,7 +67,8 @@ public class RouteTargetsTest
 			assertNotNull("квест «" + name + "» (" + g.get("stepId").getAsString() + ") не найден в net.runelite.api.Quest",
 				OsrsPathBridgePlugin.knownQuests().get(ActiveTarget.nameKey(name)));
 		}
-		assertTrue(quests >= 5);
+		// 34 квеста маршрута засчитываются сами (2.7); меньше — значит, автоотметка пропала из данных.
+		assertTrue("квестов с автоотметкой " + quests, quests >= 30);
 	}
 
 	@Test

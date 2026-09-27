@@ -10,12 +10,17 @@ import lombok.Value;
  * Темп меряется по последним пяти прибавкам опыта: опыт между первой и последней из них, делённый на время.
  * Пока прибавок меньше трёх, время не выдумывается — только первая оценка из данных шага (secondsPerAction),
  * если она есть. Пауза дольше трёх минут начинает замер заново: перерыв на банк — не темп.
+ * В бою опыт приходит за каждый удар, а действие — целый противник, поэтому там окно шире: последние
+ * 30 прибавок, и замер начинается с восьми — иначе темп одного боя без ходьбы между противниками выходил бы
+ * слишком быстрым.
  * Без RuneLite: чистый расчёт, проверяется обычным тестом.
  */
 final class PacingTracker
 {
 	static final int HISTORY = 5;
 	static final int MIN_GAINS = 3;
+	static final int COMBAT_HISTORY = 30;
+	static final int COMBAT_MIN_GAINS = 8;
 	static final long PAUSE_MS = 3 * 60_000L;
 	/** Меньше стольких действий — «почти готово». */
 	static final int ALMOST = 5;
@@ -36,12 +41,36 @@ final class PacingTracker
 	}
 
 	private final ActiveTarget.Pacing pacing;
-	private final Deque<long[]> gains = new ArrayDeque<>(HISTORY);
+	/** Навык этого замера: у шага боя их несколько, у каждого свой. */
+	private final String skill;
+	private final int history;
+	private final int minGains;
+	private final Deque<long[]> gains = new ArrayDeque<>();
 	private int xp = -1;
 
 	PacingTracker(ActiveTarget.Pacing pacing)
 	{
+		this(pacing, pacing.getSkill());
+	}
+
+	PacingTracker(ActiveTarget.Pacing pacing, String skill)
+	{
 		this.pacing = pacing;
+		this.skill = skill;
+		boolean combat = ActiveTarget.Pacing.COMBAT.contains(skill);
+		history = combat ? COMBAT_HISTORY : HISTORY;
+		minGains = combat ? COMBAT_MIN_GAINS : MIN_GAINS;
+	}
+
+	String getSkill()
+	{
+		return skill;
+	}
+
+	/** Опыт навыка; -1 — ещё не знаем. */
+	int getXp()
+	{
+		return xp;
 	}
 
 	ActiveTarget.Pacing getPacing()
@@ -68,7 +97,7 @@ final class PacingTracker
 				gains.clear();
 			}
 			gains.addLast(new long[]{nowMs, currentXp - xp});
-			while (gains.size() > HISTORY)
+			while (gains.size() > history)
 			{
 				gains.removeFirst();
 			}
@@ -89,7 +118,7 @@ final class PacingTracker
 		boolean done = xp >= 0 && remaining == 0;
 		Double perMinute = null;
 		boolean estimated = false;
-		if (gains.size() >= MIN_GAINS)
+		if (gains.size() >= minGains)
 		{
 			long span = gains.peekLast()[0] - gains.peekFirst()[0];
 			long gained = 0;
@@ -120,18 +149,24 @@ final class PacingTracker
 	/** Строка для HUD: «34 креветки до 20 Fishing (~7 мин)», «Почти готово», «Целевой уровень достигнут». */
 	String hudLine(Snapshot s)
 	{
-		String skill = Character.toUpperCase(pacing.getSkill().charAt(0)) + pacing.getSkill().substring(1);
+		String name = skillName(skill);
 		if (s.isDone())
 		{
-			return "✓ Целевой уровень достигнут: " + pacing.getTargetLevel() + " " + skill;
+			return "✓ Целевой уровень достигнут: " + pacing.getTargetLevel() + " " + name;
 		}
 		String line = s.getActionsLeft() + " " + actionForm(pacing.getActionName(), s.getActionsLeft())
-			+ " до " + pacing.getTargetLevel() + " " + skill;
+			+ " до " + pacing.getTargetLevel() + " " + name;
 		if (s.isAlmost())
 		{
 			return "✓ Почти готово: " + line;
 		}
 		return line + " (" + eta(s) + ")";
+	}
+
+	/** «fishing» → «Fishing»: как навык называется во вкладке навыков игры. */
+	static String skillName(String skill)
+	{
+		return Character.toUpperCase(skill.charAt(0)) + skill.substring(1);
 	}
 
 	static String eta(Snapshot s)
@@ -141,7 +176,9 @@ final class PacingTracker
 			return "время рассчитывается…";
 		}
 		long min = Math.round(s.getEtaSeconds() / 60.0);
-		return min < 1 ? "<1 мин" : "~" + min + " мин";
+		String time = min < 1 ? "<1 мин" : "~" + min + " мин";
+		// Оценка из данных шага, а не замер, — так и написано: в бою она не учитывает ходьбу между противниками.
+		return s.isEstimated() ? "оценка " + time : time;
 	}
 
 	/** Форма слова для числа: «креветка|креветки|креветок». */

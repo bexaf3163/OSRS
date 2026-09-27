@@ -1,4 +1,4 @@
-// Рисует иконки приложения (PNG для iPhone и манифеста, SVG для вкладки) без библиотек.
+// Рисует иконки программы без библиотек: PNG 512 — значок окна и exe, SVG — логотип в шапке.
 // Запуск: npm run icons. Результат лежит в public/ и хранится в репозитории.
 
 import { writeFileSync } from 'node:fs';
@@ -89,8 +89,6 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
 `;
 
 const out = new URL('../public/', import.meta.url);
-writeFileSync(new URL('icon-192.png', out), png(192));
 writeFileSync(new URL('icon-512.png', out), png(512));
-writeFileSync(new URL('apple-touch-icon.png', out), png(180));
 writeFileSync(new URL('icon.svg', out), svg);
 console.log('Иконки записаны в public/');

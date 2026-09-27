@@ -142,6 +142,36 @@ export function meleeValue(lv: Levels, weapon: GearPiece | null, neck: GearPiece
 
 const defenceSum = (p: GearPiece | null) => (p ? p.defence.stab + p.defence.slash + p.defence.crush : 0);
 
+/**
+ * Первая оценка темпа шага боя: секунд на одного противника — его здоровье, делённое на урон в секунду
+ * нынешнего оружия и амулета при нынешних уровнях (против первого противника шага). Ходьба между боями
+ * не входит, поэтому оценка скорее быстрая — в игре её сменит замер. null — у шага нет противника,
+ * снаряжение из игры не пришло или оружие в руке программе неизвестно: время тогда не выдумываем.
+ */
+export function killSeconds(step: Pick<Step, 'foes'>, levels: Partial<Record<string, number>>, gear: GearState | null, data: GearData = gearData): number | null {
+  const foe = stepFoes(step)[0];
+  if (!foe || !gear?.equipment) return null;
+  const equipped = equippedBySlot(gear, data);
+  if (equipped.weapon && !equipped.weapon.piece) return null;
+  const r = meleeWith(levelsOf(levels), equipped.weapon?.piece ?? null, equipped.neck?.piece ?? null, {}, foe);
+  return r.dps > 0 ? foe.hitpoints / r.dps : null;
+}
+
+const COMBAT = new Set(['attack', 'strength', 'defence']);
+
+/**
+ * Шаг для игры с первой оценкой темпа боя: секунд на противника по нынешнему оружию и уровням (killSeconds).
+ * Плагин показывает её с пометкой «оценка», пока не накопит своих замеров. Оценки нет — шаг как есть.
+ */
+export function withKillEstimate(step: Step, levels: Partial<Record<string, number>>, gear: GearState | null): Step {
+  const p = step.pacing;
+  if (!p || !COMBAT.has(p.skill) || p.secondsPerAction !== undefined) return step;
+  const sec = killSeconds(step, levels, gear);
+  // Плагин принимает до 10 минут на действие; дольше — это не темп, а неподходящее оружие.
+  if (sec === null || !(sec > 0) || sec > 600) return step;
+  return { ...step, pacing: { ...p, secondsPerAction: Math.round(sec * 10) / 10 } };
+}
+
 // ---------------------------------------------------------------------------
 // Разбор
 

@@ -86,22 +86,44 @@ export interface InGameTarget {
   /** Текущая цель одной строкой для микро-HUD; без неё — подпись точки шага. */
   goal?: string;
   /**
-   * Остановки по порядку: калитка → мост → лестница → NPC. В игре — метки на земле, а если установлен
-   * Shortest Path — он ведёт к текущей остановке настоящим путём.
+   * Остановки по порядку: калитка → мост → лестница → NPC. В игре стрелка и HUD («Точка 2/5») ведут к текущей
+   * остановке, а если установлен Shortest Path — он ведёт к ней настоящим путём.
    */
   pathWaypoints?: GamePoint[];
-  /** Только проверенные условия: название квеста из игры, точный текст сообщения или varbit со значением. */
-  completionTrigger?: {
-    type: 'QUEST_COMPLETED' | 'CHAT_MESSAGE' | 'VARBIT_CHANGED';
-    questName?: string;
-    chatPattern?: string;
-    varbitId?: number;
-    targetValue?: number;
-  };
+  /**
+   * Только проверенные условия: квест из игры, настоящие уровни навыков, предметы у игрока, точный текст
+   * сообщения или varbit со значением.
+   */
+  completionTrigger?: CompletionTrigger;
+}
+
+export interface CompletionTrigger {
+  type: 'QUEST_COMPLETED' | 'SKILL_LEVEL' | 'ITEM_OWNED' | 'CHAT_MESSAGE' | 'VARBIT_CHANGED';
+  /** QUEST_COMPLETED: название квеста, как его знает RuneLite (net.runelite.api.Quest). */
+  questName?: string;
+  /** SKILL_LEVEL: настоящие уровни (без зелий), все сразу. Совпадают с целями из названия шага. */
+  levels?: Target[];
+  /** ITEM_OWNED — сами предметы; у QUEST_COMPLETED и SKILL_LEVEL — ещё одно условие вдобавок. */
+  items?: OwnedItem[];
+  chatPattern?: string;
+  varbitId?: number;
+  targetValue?: number;
+}
+
+/**
+ * Предмет для автоотметки: сколько его должно быть у игрока — в сумке, на нём, банкнотами и в банке вместе
+ * (банк — если его открывали в этой сессии игры).
+ */
+export interface OwnedItem {
+  /** Названия как в игре. Несколько — считаются вместе: «Shrimps» и «Anchovies», любые части Graceful. */
+  names: string[];
+  /** Только этот ID — когда у разных предметов одно название (куски карты Dragon Slayer I). */
+  id?: number;
+  count: number;
 }
 
 /** Навыки, у которых шаг считает темп: столько действий до цели и столько минут. */
-export type PacingSkill = 'fishing' | 'woodcutting' | 'cooking' | 'mining';
+export type PacingSkill = 'fishing' | 'woodcutting' | 'cooking' | 'mining' | 'attack' | 'strength' | 'defence';
 
 /**
  * Темп прокачки шага. Плагин RuneLite считает по опыту из игры, сколько действий осталось
@@ -109,12 +131,17 @@ export type PacingSkill = 'fishing' | 'woodcutting' | 'cooking' | 'mining';
  */
 export interface StepPacing {
   skill: PacingSkill;
+  /**
+   * Ещё навыки с той же целью — только бой: сила и защита вслед за атакой. Их качают по очереди, меняя стиль
+   * атаки; темп показывает тот, что сейчас растёт.
+   */
+  also?: PacingSkill[];
   targetLevel: number;
   /** Опыт на targetLevel по таблице опыта игры. */
   targetExp: number;
   /** Действие формами для 1, 2–4 и 5+: «креветка|креветки|креветок». Одна форма тоже годится. */
   actionName: string;
-  /** Опыт за одно действие (улов, бревно, руда, приготовленная рыба). */
+  /** Опыт за одно действие (улов, бревно, руда, приготовленная рыба; в бою — 4 × здоровье противника). */
   expPerAction: number;
   /** Секунд на действие — первая оценка до своих замеров. */
   secondsPerAction?: number;
@@ -353,6 +380,15 @@ export interface Skill {
   sections: SkillSection[];
   plan: { head: string[]; ranges: SkillRange[]; sectionIndex: number };
   wiki?: string;
+  /** Навык подписки (раздел «Навыки подписки» гайда). */
+  membersOnly?: true;
+}
+
+/** Раздел гайда «Навыки подписки (Members)» — src/data/members-skills.json. */
+export interface MembersSkillsData {
+  title: string;
+  intro: Block[];
+  skills: Skill[];
 }
 
 /** Навык с отдельным уровнем — строка таблицы «Цели по этапам». */

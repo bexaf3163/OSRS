@@ -4,7 +4,7 @@
 // База предметов — f2p-items.json с OSRS Wiki (npm run build-items).
 
 import type {
-  GameMode, GoalsData, LevelSkill, PluginsData, ReferenceData, Skill, Stage, Step, WikiItemDetail, XpData,
+  GameMode, GoalsData, LevelSkill, MembersSkillsData, PluginsData, ReferenceData, Skill, Stage, Step, WikiItemDetail, XpData,
 } from '../types';
 import { titleTargets } from '../lib/targets';
 import { deriveQuests } from '../lib/quests';
@@ -26,10 +26,12 @@ export const allSteps: Step[] = (stepsJson as Step[]).map((s) => {
   return targets.length ? { ...s, targets } : s;
 });
 export const allStages = stagesJson as Stage[];
+/** Бесплатные навыки из гайда. */
 export const skills = skillsJson as Skill[];
 export const levelSkills = levelsJson as LevelSkill[];
-export interface MembersSkill { id: string; name: string; nameEn: string; wiki: string }
-export const membersSkills = membersSkillsJson as MembersSkill[];
+/** Раздел гайда «Навыки подписки»: вступление и восемь навыков с планами прокачки. */
+export const membersGuide = membersSkillsJson as MembersSkillsData;
+export const membersSkills = membersGuide.skills;
 export const goals = goalsJson as GoalsData;
 export const xpData = xpJson as XpData;
 export const plugins = pluginsJson as PluginsData;
@@ -37,15 +39,24 @@ export const reference = referenceJson as ReferenceData;
 export const items = itemsJson as WikiItemDetail[];
 
 export const stepById = new Map(allSteps.map((s) => [s.id, s]));
-export const skillById = new Map(skills.map((s) => [s.id, s]));
+/** Разделы навыков по коду: WC, ME… и навыки подписки AG, SL… */
+export const skillById = new Map([...skills, ...membersSkills].map((s) => [s.id, s]));
 export const itemById = new Map(items.map((i) => [i.id, i]));
 
-/** Все навыки с уровнями: F2P из гайда и Members из ТЗ. */
+/** Все навыки с уровнями: бесплатные и подписки. skill — код раздела навыка в гайде. */
 export const allLevelSkills: (LevelSkill & { membersOnly?: boolean })[] = [
   ...levelSkills,
-  ...membersSkills.map((m) => ({ id: m.id, name: m.name, skill: m.id, membersOnly: true })),
+  ...membersSkills.map((m) => ({ id: m.levelSkills[0], name: m.name, skill: m.id, membersOnly: true })),
 ];
 export const levelById = new Map(allLevelSkills.map((l) => [l.id, l]));
+
+/**
+ * Раздел навыка по коду («AG») или по id уровня («agility», «attack»). Старые ссылки #/skills/agility
+ * ведут туда же, куда новые #/skills/AG.
+ */
+export function findSkill(id: string): Skill | undefined {
+  return skillById.get(id) ?? skillById.get(levelById.get(id)?.skill ?? '');
+}
 
 /** Очки за Learning the Ropes — обучающий остров, всегда засчитан. */
 export const BASE_QP = 1;

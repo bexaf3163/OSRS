@@ -51,6 +51,24 @@ final class ItemCounts
 		return Math.max(n, byName.getOrDefault(ActiveTarget.nameKey(name), 0));
 	}
 
+	/**
+	 * Для автоотметки: с ID — только этот предмет (у кусков карты Dragon Slayer I одно название на троих),
+	 * без ID — все названия вместе.
+	 */
+	int count(ActiveTarget.ItemNeed need)
+	{
+		if (need.getId() != null)
+		{
+			return byId.getOrDefault(need.getId(), 0);
+		}
+		int n = 0;
+		for (String name : need.getNames())
+		{
+			n += byName.getOrDefault(ActiveTarget.nameKey(name), 0);
+		}
+		return n;
+	}
+
 	boolean isEmpty()
 	{
 		return byId.isEmpty();

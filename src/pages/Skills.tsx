@@ -1,4 +1,4 @@
-import { goals, levelById, membersSkills, reference, skills, xpData, type MembersSkill } from '../data';
+import { goals, levelById, membersGuide, membersSkills, reference, skills, xpData } from '../data';
 import { useStore } from '../store';
 import { currentStage } from '../lib/next-step';
 import { goalFor, formatXp, isReached } from '../lib/goals';
@@ -38,32 +38,16 @@ export function SkillsPage() {
       {mode === 'members' && (
         <section className="section" aria-labelledby="members-skills">
           <h2 id="members-skills">Навыки подписки <span className="badge badge-members">Members</span></h2>
-          <p className="muted">Плана прокачки по ним в гайде нет — уровень, калькулятор опыта и ссылка на гайд OSRS Wiki.</p>
+          <details className="disclosure card">
+            <summary>Как устроены планы навыков подписки</summary>
+            <div className="prose"><Blocks blocks={membersGuide.intro} /></div>
+          </details>
           <div className="skill-grid">
-            {membersSkills.map((m) => <MembersSkillCard key={m.id} skill={m} />)}
+            {membersSkills.map((m) => <SkillCard key={m.id} skill={m} stage={stage} />)}
           </div>
         </section>
       )}
     </div>
-  );
-}
-
-function MembersSkillCard({ skill }: { skill: MembersSkill }) {
-  return (
-    <article className="skill-card card is-members">
-      <a className="skill-card-link" href={`#/skills/${skill.id}`}>
-        <span>
-          <span className="skill-name">{skill.name}</span>
-          <span className="skill-en">{skill.nameEn}</span>
-        </span>
-        <IconChevron className="chevron" />
-      </a>
-      <div className="skill-levels">
-        <div className="skill-level">
-          <LevelInput id={skill.id} label={`Уровень: ${skill.name}`} hideLabel compact />
-        </div>
-      </div>
-    </article>
   );
 }
 
@@ -81,7 +65,7 @@ function SkillCard({ skill, stage }: { skill: Skill; stage: number }) {
   const hit = skillRange(skill, progress);
   const many = skill.levelSkills.length > 1;
   return (
-    <article className="skill-card card">
+    <article className={`skill-card card ${skill.membersOnly ? 'is-members' : ''}`}>
       <a className="skill-card-link" href={`#/skills/${skill.id}`}>
         <span>
           <span className="skill-name">{skill.name}</span>

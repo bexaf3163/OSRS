@@ -65,7 +65,15 @@
         "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png"
       }
     ],
-    "doneWhen": "Инвентарь свободен для квестов и добычи."
+    "doneWhen": "Инвентарь свободен для квестов и добычи.",
+    "inGame": {
+      "highlightItems": [
+        "Bronze axe",
+        "Bronze pickaxe",
+        "Small fishing net",
+        "Tinderbox"
+      ]
+    }
   },
   {
     "id": "S1-03",
@@ -661,6 +669,7 @@
       },
       "objectNames": [
         "Tree",
+        "Oak tree",
         "Canoe Station"
       ],
       "highlightItems": [
@@ -668,7 +677,20 @@
         "Tinderbox",
         "Logs",
         "Ashes"
-      ]
+      ],
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "woodcutting",
+            "level": 15
+          },
+          {
+            "skill": "firemaking",
+            "level": 15
+          }
+        ]
+      }
     }
   },
   {
@@ -755,7 +777,19 @@
       "highlightItems": [
         "Cooked chicken",
         "Shrimps"
-      ]
+      ],
+      "completionTrigger": {
+        "type": "ITEM_OWNED",
+        "items": [
+          {
+            "names": [
+              "Fighting boots",
+              "Fancy boots"
+            ],
+            "count": 1
+          }
+        ]
+      }
     },
     "branches": [
       {
@@ -850,7 +884,16 @@
       "Заряди книгу: выбери карту (Use) и кликни по книге. Уйдут все карты из сумки — 10 карт дают 10 телепортов.",
       "Телепорт — правый клик по книге → Teleport. Обычный клик не переносит, а надевает книгу в слот щита.",
       "Сколько зарядов осталось — правый клик → Check charges. Когда выгоднее книга, а когда каноэ или Varrock Teleport — в справке [Телепорты, каноэ и лодки](#/reference/transport)."
-    ]
+    ],
+    "inGame": {
+      "npcNames": [
+        "Diango"
+      ],
+      "highlightItems": [
+        "Chronicle",
+        "Teleport card"
+      ]
+    }
   },
   {
     "id": "S1-11",
@@ -945,7 +988,29 @@
         "Small fishing net",
         "Raw shrimps",
         "Raw anchovies"
-      ]
+      ],
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "fishing",
+            "level": 20
+          },
+          {
+            "skill": "cooking",
+            "level": 15
+          }
+        ],
+        "items": [
+          {
+            "names": [
+              "Shrimps",
+              "Anchovies"
+            ],
+            "count": 50
+          }
+        ]
+      }
     }
   },
   {
@@ -992,6 +1057,42 @@
       "targetExp": 2411,
       "actionName": "руда|руды|руд",
       "expPerAction": 17.5
+    },
+    "inGame": {
+      "objectNames": [
+        "Copper rocks",
+        "Tin rocks",
+        "Iron rocks"
+      ],
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "mining",
+            "level": 15
+          }
+        ],
+        "items": [
+          {
+            "names": [
+              "Copper ore"
+            ],
+            "count": 5
+          },
+          {
+            "names": [
+              "Tin ore"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Iron ore"
+            ],
+            "count": 2
+          }
+        ]
+      }
     }
   },
   {
@@ -1028,7 +1129,26 @@
         "text": "Заодно поднимаются атака, сила и защита, а из коров падают кости — закопай их для молитвы."
       }
     ],
-    "doneWhen": "В банке 20 000+ монет (вместе с остатком от Stronghold)."
+    "doneWhen": "В банке 20 000+ монет (вместе с остатком от Stronghold).",
+    "inGame": {
+      "npcNames": [
+        "Cow"
+      ],
+      "highlightItems": [
+        "Cowhide"
+      ],
+      "completionTrigger": {
+        "type": "ITEM_OWNED",
+        "items": [
+          {
+            "names": [
+              "Coins"
+            ],
+            "count": 20000
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S2-01",
@@ -1243,7 +1363,128 @@
           "label": "Выход у Champions' Guild (Chronicle)"
         }
       }
-    ]
+    ],
+    "inGame": {
+      "completionTrigger": {
+        "type": "ITEM_OWNED",
+        "items": [
+          {
+            "names": [
+              "Red bead"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Yellow bead"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Black bead"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "White bead"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Amulet of strength"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Iron scimitar"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Steel scimitar"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Mithril scimitar"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Fly fishing rod"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Feather"
+            ],
+            "count": 500
+          },
+          {
+            "names": [
+              "Energy potion(4)"
+            ],
+            "count": 5
+          },
+          {
+            "names": [
+              "Redberry pie"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Iron bar"
+            ],
+            "count": 2
+          },
+          {
+            "names": [
+              "Clay"
+            ],
+            "count": 7
+          },
+          {
+            "names": [
+              "Redberries"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Yellow dye"
+            ],
+            "count": 2
+          },
+          {
+            "names": [
+              "Red dye"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Blue dye"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Pink skirt"
+            ],
+            "count": 1
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S2-02",
@@ -1310,7 +1551,26 @@
       "Поговори с Wizard Mizgog и отдай ему четыре бусины."
     ],
     "reward": "1 QP, 875 XP Magic, Amulet of accuracy.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "Wizard Mizgog"
+      ],
+      "dialogChoices": [
+        "Give me a quest please.",
+        "Yes."
+      ],
+      "highlightItems": [
+        "Red bead",
+        "Yellow bead",
+        "Black bead",
+        "White bead"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Imp Catcher"
+      }
+    }
   },
   {
     "id": "S2-03",
@@ -1383,7 +1643,28 @@
       "Отдай всё Hetty и выпей из котла."
     ],
     "reward": "1 QP, 325 XP Magic.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "Hetty",
+        "Betty",
+        "Rat"
+      ],
+      "dialogChoices": [
+        "I am in search of a quest.",
+        "Yes, help me become one with my darker side."
+      ],
+      "highlightItems": [
+        "Onion",
+        "Eye of newt",
+        "Rat's tail",
+        "Burnt meat"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Witch's Potion"
+      }
+    }
   },
   {
     "id": "S2-04",
@@ -1431,9 +1712,18 @@
     ],
     "doneWhen": "Magic 25.",
     "inGame": {
+      "npcNames": [
+        "Cow",
+        "Goblin"
+      ],
       "completionTrigger": {
-        "type": "CHAT_MESSAGE",
-        "chatPattern": "^Congratulations, you've just advanced your Magic level\\. You are now level (2[5-9]|[3-9]\\d)\\."
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "magic",
+            "level": 25
+          }
+        ]
       }
     }
   },
@@ -1514,7 +1804,30 @@
           "label": "Varrock Teleport — площадь у фонтана"
         }
       }
-    ]
+    ],
+    "inGame": {
+      "npcNames": [
+        "Romeo",
+        "Juliet",
+        "Father Lawrence",
+        "Apothecary"
+      ],
+      "dialogChoices": [
+        "Perhaps I could help to find her for you?",
+        "Yes, ok, I'll let her know.",
+        "Talk about something else.",
+        "Talk about Romeo & Juliet."
+      ],
+      "highlightItems": [
+        "Cadava berries",
+        "Message",
+        "Cadava potion"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Romeo & Juliet"
+      }
+    }
   },
   {
     "id": "S2-06",
@@ -1567,7 +1880,30 @@
       "Вернись с заметками Aubury к Sedridor."
     ],
     "reward": "1 QP, открывает доступ к добыче Rune Essence.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "Duke Horacio",
+        "Archmage Sedridor",
+        "Aubury"
+      ],
+      "dialogChoices": [
+        "Have you any quests for me?",
+        "Yes.",
+        "Okay, here you are.",
+        "Actually, I'm not interested.",
+        "Yes, certainly.",
+        "I've been sent here with a package for you."
+      ],
+      "highlightItems": [
+        "Air talisman",
+        "Research package"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Rune Mysteries"
+      }
+    }
   },
   {
     "id": "S2-07",
@@ -1669,7 +2005,37 @@
       }
     ],
     "reward": "1 QP и 12 725 XP Smithing — навык мгновенно взлетает с 1 сразу до 29 уровня без ручной плавки!",
-    "doneWhen": "Квест зелёный, кузнечное дело 29."
+    "doneWhen": "Квест зелёный, кузнечное дело 29.",
+    "inGame": {
+      "npcNames": [
+        "Squire",
+        "Reldo",
+        "Thurgo",
+        "Sir Vyvin"
+      ],
+      "dialogChoices": [
+        "And how is life as a squire?",
+        "I can make a new sword if you like...",
+        "So would these dwarves make another one?",
+        "Ok, I'll give it a go.",
+        "What do you know about the Imcando dwarfs?",
+        "Would you like a redberry pie?",
+        "Something else.",
+        "About that sword...",
+        "Can you make that replacement sword now?"
+      ],
+      "highlightItems": [
+        "Redberry pie",
+        "Iron bar",
+        "Blurite ore",
+        "Portrait",
+        "Blurite sword"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Knight's Sword"
+      }
+    }
   },
   {
     "id": "S2-08",
@@ -1876,7 +2242,37 @@
       "Выкопай клад в парке Falador — на тебя нападёт садовник (4 ур.)."
     ],
     "reward": "2 QP, сундук с золотым кольцом (Gold ring), изумрудом (Emerald) и 450 Coins.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "Redbeard Frank",
+        "Zembo",
+        "Luthas",
+        "Wydin",
+        "Customs officer"
+      ],
+      "dialogChoices": [
+        "I'm in search of treasure.",
+        "Ok, I will bring you some rum",
+        "That customs officer is annoying isn't she?",
+        "Could you offer me employment on your plantation?",
+        "Can I journey on this ship?",
+        "Search away, I have nothing to hide.",
+        "Well, can I get a job here?",
+        "Ok thanks, I'll go and get it."
+      ],
+      "highlightItems": [
+        "Karamjan rum",
+        "White apron",
+        "Spade",
+        "Banana",
+        "Pirate message"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Pirate's Treasure"
+      }
+    }
   },
   {
     "id": "S2-10",
@@ -1896,14 +2292,14 @@
       "x": 3298,
       "y": 3163,
       "plane": 0,
-      "label": "Hassan, дворец Al Kharid"
+      "label": "Chancellor Hassan, дворец Al Kharid"
     },
     "npc": {
-      "nameEn": "Hassan",
+      "nameEn": "Chancellor Hassan",
       "nameRu": "Хассан",
       "location": "Дворец Al Kharid",
       "floor": "Ground floor (1-й этаж / земля)",
-      "wikiUrl": "https://oldschool.runescape.wiki/w/Hassan"
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Chancellor_Hassan"
     },
     "itemsRequired": [
       {
@@ -2004,13 +2400,13 @@
       }
     ],
     "quickSteps": [
-      "Поговори с Hassan во дворце Al Kharid, затем с Osman к северу от дворца. Проход через ворота Al Kharid стоит 10 gp.",
+      "Поговори с Chancellor Hassan во дворце Al Kharid, затем с Osman к северу от дворца. Проход через ворота Al Kharid стоит 10 gp.",
       "Ned в Draynor Village сделает парик из 3 клубков шерсти — покрась его жёлтым красителем.",
       "Ведьма Aggie в Draynor сделает пасту для кожи из пепла, красных ягод, муки и воды.",
       "Отнеси мягкую глину Lady Keli в тюрьме к северу от Draynor Village и получи отпечаток ключа; отдай его Osman вместе с бронзовым слитком.",
       "Поговори с Leela у тюрьмы — у неё ключ. Напои стражника Joe тремя кружками пива.",
       "Свяжи Lady Keli верёвкой, открой камеру и отдай принцу Али парик, юбку, пасту и ключ.",
-      "Вернись к Hassan."
+      "Вернись к Chancellor Hassan."
     ],
     "fields": [
       {
@@ -2023,7 +2419,53 @@
       }
     ],
     "reward": "3 QP, 700 Coins, бесплатный вечный проход через ворота Al Kharid.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "Chancellor Hassan",
+        "Osman",
+        "Ned",
+        "Aggie",
+        "Lady Keli",
+        "Leela",
+        "Joe",
+        "Prince Ali"
+      ],
+      "dialogChoices": [
+        "Is there anything I can help you with?",
+        "What is the first thing I must do?",
+        "What is the second thing you need?",
+        "Okay, I better find some things.",
+        "Could you make other things apart from rope?",
+        "How about some sort of wig?",
+        "I have them here. Please make me a wig.",
+        "Can you make skin paste?",
+        "Yes please. Mix me some skin paste.",
+        "Heard of you? You're famous in Gielinor!",
+        "What is your latest plan then?",
+        "How do you know someone won't try to free him?",
+        "Could I see the key please?",
+        "Could I touch the key for a moment please?",
+        "I have some beer here, fancy one?"
+      ],
+      "highlightItems": [
+        "Ball of wool",
+        "Yellow dye",
+        "Soft clay",
+        "Bronze bar",
+        "Pink skirt",
+        "Ashes",
+        "Redberries",
+        "Pot of flour",
+        "Bucket of water",
+        "Beer",
+        "Rope"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Prince Ali Rescue"
+      }
+    }
   },
   {
     "id": "S2-11",
@@ -2068,7 +2510,27 @@
       }
     ],
     "reward": "4 QP, 300 Coins.",
-    "doneWhen": "Квест зелёный, шлем в банке."
+    "doneWhen": "Квест зелёный, шлем в банке.",
+    "inGame": {
+      "npcNames": [
+        "Veronica",
+        "Professor Oddenstein"
+      ],
+      "dialogChoices": [
+        "Aha, sounds like a quest. I'll help.",
+        "I'm looking for a guy called Ernest.",
+        "Change him back this instant!"
+      ],
+      "highlightItems": [
+        "Pressure gauge",
+        "Rubber tube",
+        "Oil can"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Ernest the Chicken"
+      }
+    }
   },
   {
     "id": "S2-12",
@@ -2129,7 +2591,31 @@
       "Показывай генералам кольчуги по одной, пока они не договорятся."
     ],
     "reward": "5 QP, 200 XP Crafting, золотой слиток.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "General Bentnoze",
+        "General Wartface"
+      ],
+      "dialogChoices": [
+        "Do you want me to pick an armour colour for you?",
+        "Start the quest?",
+        "What about a different colour?",
+        "I have some blue armour here",
+        "I have some brown armour here"
+      ],
+      "highlightItems": [
+        "Goblin mail",
+        "Orange dye",
+        "Blue dye",
+        "Orange goblin mail",
+        "Blue goblin mail"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Goblin Diplomacy"
+      }
+    }
   },
   {
     "id": "S2-13",
@@ -2188,7 +2674,32 @@
         "iconUrl": "https://oldschool.runescape.wiki/images/Feather.png"
       }
     ],
-    "doneWhen": "Fishing 30, Cooking 30."
+    "doneWhen": "Fishing 30, Cooking 30.",
+    "inGame": {
+      "npcNames": [
+        "Rod Fishing spot"
+      ],
+      "objectNames": [
+        "Fire"
+      ],
+      "highlightItems": [
+        "Fly fishing rod",
+        "Feather"
+      ],
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "fishing",
+            "level": 30
+          },
+          {
+            "skill": "cooking",
+            "level": 30
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S3-01",
@@ -2241,7 +2752,25 @@
       }
     ],
     "reward": "1 QP, 1 300 XP Mining, 180 Coins, доступ к наковальням Дорика.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "Doric"
+      ],
+      "dialogChoices": [
+        "I wanted to use your anvils.",
+        "Yes, I will get you the materials."
+      ],
+      "highlightItems": [
+        "Clay",
+        "Copper ore",
+        "Iron ore"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Doric's Quest"
+      }
+    }
   },
   {
     "id": "S3-02",
@@ -2321,7 +2850,27 @@
       }
     ],
     "reward": "3 QP, 2 500 Coins.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "Sir Amik Varze"
+      ],
+      "dialogChoices": [
+        "I seek a quest!",
+        "I laugh in the face of danger!",
+        "Ok, I'll do my best.",
+        "I don't care. I'm going in anyway."
+      ],
+      "highlightItems": [
+        "Iron chainbody",
+        "Bronze med helm",
+        "Cabbage"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Black Knights' Fortress"
+      }
+    }
   },
   {
     "id": "S3-03",
@@ -2338,14 +2887,14 @@
       "x": 3203,
       "y": 3424,
       "plane": 0,
-      "label": "Gypsy Aris, площадь Varrock"
+      "label": "Цыганка Aris, площадь Varrock"
     },
     "npc": {
-      "nameEn": "Gypsy Aris",
+      "nameEn": "Aris",
       "nameRu": "Цыганка Арис",
       "location": "Палатка на площади Varrock",
       "floor": "Ground floor (1-й этаж / земля)",
-      "wikiUrl": "https://oldschool.runescape.wiki/w/Gypsy_Aris"
+      "wikiUrl": "https://oldschool.runescape.wiki/w/Aris"
     },
     "itemsRequired": [
       {
@@ -2399,7 +2948,7 @@
           "skill": "magic",
           "minLevel": 25
         },
-        "replacementText": "Вкладка магии → Varrock Teleport (1 **Law rune**, 3 **Air rune**, 1 **Fire rune**) — и ты на площади у фонтана. Gypsy Aris — в шатре на той же площади.",
+        "replacementText": "Вкладка магии → Varrock Teleport (1 **Law rune**, 3 **Air rune**, 1 **Fire rune**) — и ты на площади у фонтана. Цыганка Aris — в шатре на той же площади.",
         "replacementTarget": {
           "x": 3213,
           "y": 3424,
@@ -2407,7 +2956,44 @@
           "label": "Varrock Teleport — площадь у фонтана"
         }
       }
-    ]
+    ],
+    "inGame": {
+      "npcNames": [
+        "Aris",
+        "Sir Prysin",
+        "Captain Rovin",
+        "Wizard Traiborn",
+        "Delrith"
+      ],
+      "dialogChoices": [
+        "Yes.",
+        "Okay, where is he? I'll kill him for you!",
+        "So how did Wally kill Delrith?",
+        "Where can I find Silverlight?",
+        "Aris said I should come and talk to you.",
+        "I need to find Silverlight.",
+        "He's back and unfortunately I've got to deal with him.",
+        "And why is this a problem?",
+        "Yes I know, but this is important.",
+        "There's a demon who wants to invade this city.",
+        "Yes, very.",
+        "It's not them who are going to fight the demon, it's me.",
+        "Sir Prysin said you would give me the key.",
+        "Why did he give you one of the keys then?",
+        "Talk about Demon Slayer.",
+        "Well, have you got any keys knocking around?",
+        "I'll get the bones for you."
+      ],
+      "highlightItems": [
+        "Bones",
+        "Bucket of water",
+        "Silverlight"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Demon Slayer"
+      }
+    }
   },
   {
     "id": "S3-04",
@@ -2470,12 +3056,42 @@
     ],
     "quickSteps": [
       "Поговори с Willow на тропе к югу от Ice Mountain.",
-      "Уговори троих: Checkal у Champions' Guild — повтори за ним эмоцию Flex; Marley в Varrock — принеси ему Steak sandwich (хлеб + приготовленное мясо, нарезать ножом); Burntof в Falador — угости пивом.",
+      "Checkal — в Barbarian Village у гончарной печи. Сначала пройди тренировку у Atlas в таверне The Long Hall (мясо и пиво лежат там же на столах), потом повтори за Checkal эмоцию Flex.",
+      "Marley — в Edgeville у тисов. Поговори с ним, возьми рецепт у повара (Cook) в восточной комнате Blue Moon Inn в Varrock и принеси Marley Steak sandwich: хлеб и приготовленное мясо, нарежь ножом.",
+      "Burntof — в пабе Rising Sun Inn в Falador. Угости его пивом и сыграй в «камень, ножницы, бумага» — подойдёт любой ход.",
       "Вернись к Willow и войди в руины Camdozaal.",
       "Убей Ancient Guardian (25 ур.) или разбери его киркой с Mining 10."
     ],
     "reward": "1 QP, 2 000 Coins, доступ в руины Camdozaal, эмоция Flex.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "Willow",
+        "Checkal",
+        "Atlas",
+        "Marley",
+        "Cook",
+        "Burntof",
+        "Ancient Guardian"
+      ],
+      "dialogChoices": [
+        "Yes.",
+        "I was wondering if you'd be able to make me a Steak sandwich?",
+        "What ales are you serving?",
+        "One Asgarnian Ale, please."
+      ],
+      "highlightItems": [
+        "Cooked meat",
+        "Bread",
+        "Knife",
+        "Beer",
+        "Steak sandwich"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Below Ice Mountain"
+      }
+    }
   },
   {
     "id": "S3-05",
@@ -2527,7 +3143,19 @@
           "label": "Varrock Teleport — площадь у фонтана"
         }
       }
-    ]
+    ],
+    "inGame": {
+      "npcNames": [
+        "Reldo"
+      ],
+      "dialogChoices": [
+        "I'm in search of a quest."
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Shield of Arrav"
+      }
+    }
   },
   {
     "id": "S3-06",
@@ -2560,7 +3188,23 @@
         "text": "Коровьи шкуры → кожа у Ellis в Al Kharid (≈ 260 gp за кожу), а с 30+ боя — большие кости (Big bones, ≈ 310 gp) с моховых великанов (шаг S4-03)."
       }
     ],
-    "doneWhen": "В банке 30 000+ монет."
+    "doneWhen": "В банке 30 000+ монет.",
+    "inGame": {
+      "objectNames": [
+        "Iron rocks"
+      ],
+      "completionTrigger": {
+        "type": "ITEM_OWNED",
+        "items": [
+          {
+            "names": [
+              "Coins"
+            ],
+            "count": 30000
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S3-07",
@@ -2569,6 +3213,12 @@
     "title": "Покупка адамантового снаряжения на GE",
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Grand_Exchange",
+    "mapLocation": {
+      "x": 3164,
+      "y": 3487,
+      "plane": 0,
+      "label": "Биржа Grand Exchange"
+    },
     "itemsRequired": [
       {
         "nameEn": "Adamant scimitar",
@@ -2653,7 +3303,50 @@
           "label": "Varrock Teleport — площадь у фонтана"
         }
       }
-    ]
+    ],
+    "inGame": {
+      "completionTrigger": {
+        "type": "ITEM_OWNED",
+        "items": [
+          {
+            "names": [
+              "Adamant scimitar"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Adamant platebody"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Adamant platelegs"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Adamant kiteshield"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Adamant full helm"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Amulet of power"
+            ],
+            "count": 1
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S3-08",
@@ -2666,10 +3359,50 @@
       "Al Kharid warrior",
       "Flesh Crawler"
     ],
+    "pacing": {
+      "skill": "attack",
+      "also": [
+        "strength",
+        "defence"
+      ],
+      "targetLevel": 30,
+      "targetExp": 13363,
+      "actionName": "воин|воина|воинов",
+      "expPerAction": 76
+    },
+    "mapLocation": {
+      "x": 3292,
+      "y": 3169,
+      "plane": 0,
+      "label": "Воины во дворце Al Kharid"
+    },
     "where": "Воины во дворце Al Kharid (Al Kharid warrior, 9 ур.) — банк рядом. С 20+ боя — Flesh Crawler на 2-м этаже Stronghold of Security.",
     "how": "Качай навыки по очереди: переключай стиль атаки (Accurate — атака, Aggressive — сила, Defensive — защита). Сначала атаку до 30, потом силу, потом защиту.",
     "membersAlternative": "👑 С подпиской: не бей мобов вручную — пройди Waterfall Quest за 15 минут и сразу получи 30 Attack и 30 Strength!",
-    "doneWhen": "Attack 30, Strength 30, Defence 30. Надет полный адамант."
+    "doneWhen": "Attack 30, Strength 30, Defence 30. Надет полный адамант.",
+    "inGame": {
+      "npcNames": [
+        "Al Kharid warrior",
+        "Flesh Crawler"
+      ],
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "attack",
+            "level": 30
+          },
+          {
+            "skill": "strength",
+            "level": 30
+          },
+          {
+            "skill": "defence",
+            "level": 30
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S3-09",
@@ -2695,8 +3428,13 @@
     "doneWhen": "Magic 33.",
     "inGame": {
       "completionTrigger": {
-        "type": "CHAT_MESSAGE",
-        "chatPattern": "^Congratulations, you've just advanced your Magic level\\. You are now level (3[3-9]|[4-9]\\d)\\."
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "magic",
+            "level": 33
+          }
+        ]
       }
     }
   },
@@ -2751,7 +3489,43 @@
       "Ithoi the Navigator"
     ],
     "reward": "2 QP, доступ к банку Yusuf в Corsair Cove и к пещере Corsair Cove Dungeon.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "Captain Tock",
+        "Ithoi the Navigator",
+        "Gnocci the Cook",
+        "Arsen the Thief",
+        "Cabin Boy Colin",
+        "Chief Tess"
+      ],
+      "dialogChoices": [
+        "What kind of help do you need?",
+        "Sure, I'll try to help with your curse.",
+        "Okay, I'm ready to go to Corsair Cove.",
+        "I hear you've been cursed.",
+        "Arsen says he gave you a sacred ogre relic.",
+        "I've come to return what Arsen stole.",
+        "I've ruled out all the Corsairs' theories...",
+        "So what do I do now?",
+        "I hear it happened straight after dinner.",
+        "I hear Ithoi cooked the meal you ate that night.",
+        "What is the mission Francois is doing?",
+        "I hear the Captain's thinking of firing Ithoi.",
+        "I hear you cooked the meal they ate before getting sick.",
+        "Maybe because the Captain's thinking of firing you.",
+        "I know you've faked the curse.",
+        "I bet I can prove you're well enough to get up.",
+        "I saw you running around! You're not sick!",
+        "I've seen Ithoi running around. He's not sick at all.",
+        "I'll be back.",
+        "I've killed Ithoi for poisoning your crew."
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Corsair Curse"
+      }
+    }
   },
   {
     "id": "S4-02",
@@ -2798,7 +3572,22 @@
       "Brutus"
     ],
     "reward": "1 QP, доступ к боссу-корове Brutus, лампа на 1 000 XP в любой боевой навык или молитву (вложи в Prayer) и Cowbell amulet от Gillie Groats.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "Cassius",
+        "Gillie Groats",
+        "Brutus"
+      ],
+      "dialogChoices": [
+        "Yes.",
+        "Can you share what makes your cows so productive?"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Ides of Milk"
+      }
+    }
   },
   {
     "id": "S4-03",
@@ -2810,6 +3599,17 @@
       "Moss giant",
       "Flesh Crawler"
     ],
+    "pacing": {
+      "skill": "attack",
+      "also": [
+        "strength",
+        "defence"
+      ],
+      "targetLevel": 40,
+      "targetExp": 37224,
+      "actionName": "великан|великана|великанов",
+      "expPerAction": 240
+    },
     "where": "Моховые великаны (Moss giant, 42 ур.) в канализации Varrock Sewers — люк сразу к востоку от дворца Varrock. Путь перегорожен паутиной: разрежь её ятаганом или ножом. Альтернатива — Flesh Crawler на 2-м этаже Stronghold of Security.",
     "mapLocation": {
       "x": 3237,
@@ -2885,7 +3685,30 @@
       }
     ],
     "membersAlternative": "👑 С подпиской: не бей мобов вручную — пройди Waterfall Quest за 15 минут и сразу получи 30 Attack и 30 Strength!",
-    "doneWhen": "Attack 40, Strength 40, Defence 40."
+    "doneWhen": "Attack 40, Strength 40, Defence 40.",
+    "inGame": {
+      "npcNames": [
+        "Moss giant",
+        "Flesh Crawler"
+      ],
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "attack",
+            "level": 40
+          },
+          {
+            "skill": "strength",
+            "level": 40
+          },
+          {
+            "skill": "defence",
+            "level": 40
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S4-04",
@@ -2946,7 +3769,39 @@
         "text": "Лосося — на вечном костре в Barbarian Village. Омаров — на плите в Al Kharid рядом с банком."
       }
     ],
-    "doneWhen": "Fishing 40, Cooking 40, в банке 30+ приготовленных омаров (Lobster)."
+    "doneWhen": "Fishing 40, Cooking 40, в банке 30+ приготовленных омаров (Lobster).",
+    "inGame": {
+      "npcNames": [
+        "Rod Fishing spot",
+        "Fishing spot"
+      ],
+      "highlightItems": [
+        "Fly fishing rod",
+        "Feather",
+        "Lobster pot"
+      ],
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "fishing",
+            "level": 40
+          },
+          {
+            "skill": "cooking",
+            "level": 40
+          }
+        ],
+        "items": [
+          {
+            "names": [
+              "Lobster"
+            ],
+            "count": 30
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S4-05",
@@ -2955,6 +3810,12 @@
     "title": "Покупка всех материалов для дракона на Grand Exchange",
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Dragon_Slayer_I",
+    "mapLocation": {
+      "x": 3164,
+      "y": 3487,
+      "plane": 0,
+      "label": "Биржа Grand Exchange"
+    },
     "how": "Не куй гвозди вручную (для этого нужна кузнечное дело 34)! Купи всё на бирже — выйдет около 5 000 gp вместе с 2 000 монет на корабль.",
     "itemsRequired": [
       {
@@ -3048,7 +3909,62 @@
           "label": "Varrock Teleport — площадь у фонтана"
         }
       }
-    ]
+    ],
+    "inGame": {
+      "completionTrigger": {
+        "type": "ITEM_OWNED",
+        "items": [
+          {
+            "names": [
+              "Steel nails"
+            ],
+            "count": 90
+          },
+          {
+            "names": [
+              "Plank"
+            ],
+            "count": 3
+          },
+          {
+            "names": [
+              "Hammer"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Unfired bowl"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Wizard's mind bomb"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Silk"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Lobster pot"
+            ],
+            "count": 1
+          },
+          {
+            "names": [
+              "Coins"
+            ],
+            "count": 2000
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S5-01",
@@ -3084,7 +4000,42 @@
         "text": "Боевой уровень 45+, магия 33 (Telekinetic Grab), молитва 37 для Protect from Magic — дракон бьёт и магией."
       }
     ],
-    "doneWhen": "Получен Maze key."
+    "doneWhen": "Получен Maze key.",
+    "inGame": {
+      "npcNames": [
+        "Guildmaster",
+        "Oziach"
+      ],
+      "dialogChoices": [
+        "Can I have a quest?",
+        "Can you sell me a rune platebody?",
+        "The Guildmaster of the Champions' Guild told me.",
+        "I thought you were going to give me a quest.",
+        "A dragon, that sounds like fun.",
+        "I talked to Oziach...",
+        "How can I find the route to Crandor?",
+        "Where is Melzar's map piece?",
+        "Where is Thalzar's map piece?",
+        "Where is Lozar's map piece?",
+        "Where can I find the right ship?",
+        "How can I protect myself from the dragon's breath?",
+        "Okay, I'll get going!"
+      ],
+      "highlightItems": [
+        "Maze key"
+      ],
+      "completionTrigger": {
+        "type": "ITEM_OWNED",
+        "items": [
+          {
+            "names": [
+              "Maze key"
+            ],
+            "count": 1
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S5-02",
@@ -3111,7 +4062,32 @@
       "wikiUrl": "https://oldschool.runescape.wiki/w/Duke_Horacio"
     },
     "proTip": "Выброси щит на пол, поговори с герцогом ещё раз и возьми второй — запасной щит пригодится, если тебя убьют на острове!",
-    "doneWhen": "Anti-dragon shield в банке."
+    "doneWhen": "Anti-dragon shield в банке.",
+    "inGame": {
+      "npcNames": [
+        "Duke Horacio"
+      ],
+      "dialogChoices": [
+        "I seek a shield that will protect me from dragonbreath.",
+        "Elvarg, the dragon of Crandor island!",
+        "Yes",
+        "So, are you going to give me the shield or not?"
+      ],
+      "highlightItems": [
+        "Anti-dragon shield"
+      ],
+      "completionTrigger": {
+        "type": "ITEM_OWNED",
+        "items": [
+          {
+            "names": [
+              "Anti-dragon shield"
+            ],
+            "count": 1
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S5-03",
@@ -3150,7 +4126,25 @@
       }
     ],
     "safespot": "Малого демона расстреливай издалека магией или луком из-за угла фиолетовой двери!",
-    "doneWhen": "Кусок карты взят из сундука."
+    "doneWhen": "Кусок карты взят из сундука.",
+    "inGame": {
+      "highlightItems": [
+        "Maze key",
+        "Map part"
+      ],
+      "completionTrigger": {
+        "type": "ITEM_OWNED",
+        "items": [
+          {
+            "names": [
+              "Map part"
+            ],
+            "id": 1535,
+            "count": 1
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S5-04",
@@ -3162,6 +4156,13 @@
       "S4-05"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Oracle",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3011,3501,0",
+    "mapLocation": {
+      "x": 3011,
+      "y": 3501,
+      "plane": 0,
+      "label": "Oracle на вершине Ice Mountain"
+    },
     "npc": {
       "nameEn": "Oracle",
       "nameRu": "Оракул",
@@ -3210,7 +4211,34 @@
       "Примени на дверь 4 предмета: Silk, Wizard's mind bomb, Unfired bowl, Lobster pot.",
       "Забери второй кусок карты из сундука."
     ],
-    "doneWhen": "Второй кусок карты в инвентаре."
+    "doneWhen": "Второй кусок карты в инвентаре.",
+    "inGame": {
+      "npcNames": [
+        "Oracle"
+      ],
+      "dialogChoices": [
+        "I seek a piece of the map to the island of Crandor."
+      ],
+      "highlightItems": [
+        "Silk",
+        "Wizard's mind bomb",
+        "Unfired bowl",
+        "Lobster pot",
+        "Map part"
+      ],
+      "completionTrigger": {
+        "type": "ITEM_OWNED",
+        "items": [
+          {
+            "names": [
+              "Map part"
+            ],
+            "id": 1537,
+            "count": 1
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S5-05",
@@ -3222,6 +4250,13 @@
       "S3-09"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Wormbrain",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3014,3189,0",
+    "mapLocation": {
+      "x": 3014,
+      "y": 3189,
+      "plane": 0,
+      "label": "Wormbrain в тюрьме Port Sarim"
+    },
     "npc": {
       "nameEn": "Wormbrain",
       "nameRu": "Вормбрейн",
@@ -3230,7 +4265,27 @@
       "wikiUrl": "https://oldschool.runescape.wiki/w/Wormbrain"
     },
     "how": "Выстрели в вора заклинанием Wind Strike или Fire Strike (у него 5 HP) и притяни выпавший кусок карты заклинанием Telekinetic Grab (Magic 33). Не плати ему 10 000 монет!",
-    "doneWhen": "Три куска соединены в единую карту острова (Crandor map)."
+    "doneWhen": "Три куска соединены в единую карту острова (Crandor map).",
+    "inGame": {
+      "npcNames": [
+        "Wormbrain"
+      ],
+      "highlightItems": [
+        "Map part",
+        "Crandor map"
+      ],
+      "completionTrigger": {
+        "type": "ITEM_OWNED",
+        "items": [
+          {
+            "names": [
+              "Crandor map"
+            ],
+            "count": 1
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S5-06",
@@ -3241,6 +4296,13 @@
       "S4-05"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Lady_Lumbridge",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3047,3204,0",
+    "mapLocation": {
+      "x": 3047,
+      "y": 3204,
+      "plane": 0,
+      "label": "Klarense на южном причале Port Sarim"
+    },
     "npc": {
       "nameEn": "Klarense",
       "nameRu": "Кларенс",
@@ -3289,7 +4351,21 @@
         "text": "Спустись в трюм с 3 досками (Plank), 90 гвоздями (Steel nails) и молотом. Кликни три раза по пробоине в корпусе."
       }
     ],
-    "doneWhen": "Пробоина заделана."
+    "doneWhen": "Пробоина заделана.",
+    "inGame": {
+      "npcNames": [
+        "Klarense"
+      ],
+      "dialogChoices": [
+        "I'd like to buy her.",
+        "Yep, sounds good."
+      ],
+      "highlightItems": [
+        "Plank",
+        "Steel nails",
+        "Hammer"
+      ]
+    }
   },
   {
     "id": "S5-07",
@@ -3303,6 +4379,13 @@
       "S5-06"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Ned",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3099,3259,0",
+    "mapLocation": {
+      "x": 3099,
+      "y": 3259,
+      "plane": 0,
+      "label": "Дом Ned в Draynor Village"
+    },
     "npc": {
       "nameEn": "Ned",
       "nameRu": "Нед",
@@ -3311,7 +4394,18 @@
       "wikiUrl": "https://oldschool.runescape.wiki/w/Ned"
     },
     "how": "Отдай Неду карту Crandor map — он согласится вести корабль.",
-    "doneWhen": "Ned поднялся на борт Lady Lumbridge."
+    "doneWhen": "Ned поднялся на борт Lady Lumbridge.",
+    "inGame": {
+      "npcNames": [
+        "Ned"
+      ],
+      "dialogChoices": [
+        "You're a sailor? Could you take me to Crandor?"
+      ],
+      "highlightItems": [
+        "Crandor map"
+      ]
+    }
   },
   {
     "id": "S5-08",
@@ -3376,7 +4470,33 @@
         "text": "Elvarg — 83 уровень, 80 здоровья. Включи стиль Stab на Rune sword. Ешь омара, когда здоровье падает ниже 20. Щит не снимай ни на секунду!"
       }
     ],
-    "doneWhen": "Дракон обезглавлен, голова Elvarg в инвентаре."
+    "doneWhen": "Дракон обезглавлен, голова Elvarg в инвентаре.",
+    "inGame": {
+      "npcNames": [
+        "Captain Ned",
+        "Elvarg"
+      ],
+      "dialogChoices": [
+        "Yep, sounds good."
+      ],
+      "highlightItems": [
+        "Anti-dragon shield",
+        "Rune sword",
+        "Lobster",
+        "Energy potion(4)"
+      ],
+      "completionTrigger": {
+        "type": "ITEM_OWNED",
+        "items": [
+          {
+            "names": [
+              "Elvarg's head"
+            ],
+            "count": 1
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S5-09",
@@ -3389,6 +4509,13 @@
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Dragon_Slayer_I",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Dragon_Slayer_I/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3070,3517,0",
+    "mapLocation": {
+      "x": 3070,
+      "y": 3517,
+      "plane": 0,
+      "label": "Oziach в Edgeville"
+    },
     "npc": {
       "nameEn": "Oziach",
       "nameRu": "Озиах",
@@ -3397,7 +4524,27 @@
       "wikiUrl": "https://oldschool.runescape.wiki/w/Oziach"
     },
     "reward": "2 QP, по 18 650 XP в Defence и Strength, право носить Rune platebody и куртку из зелёной драконьей кожи (Green d'hide body). Все 46 очков F2P-квестов набраны!",
-    "doneWhen": "Надет Rune platebody."
+    "doneWhen": "Надет Rune platebody.",
+    "inGame": {
+      "npcNames": [
+        "Oziach"
+      ],
+      "highlightItems": [
+        "Elvarg's head"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Dragon Slayer I",
+        "items": [
+          {
+            "names": [
+              "Rune platebody"
+            ],
+            "count": 1
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S6-01",
@@ -3446,7 +4593,30 @@
         "text": "Огрессы бьют сильно — на 40–50 боя бей их луком или магией из безопасных точек (safespot), в упор — только с рунической бронёй и 20 омарами или рыбой-меч."
       }
     ],
-    "doneWhen": "Боевые навыки 50–60, в банке растёт запас монет на подписку."
+    "doneWhen": "Боевые навыки 50–60, в банке растёт запас монет на подписку.",
+    "inGame": {
+      "npcNames": [
+        "Ogress Warrior",
+        "Ogress Shaman"
+      ],
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "attack",
+            "level": 50
+          },
+          {
+            "skill": "strength",
+            "level": 50
+          },
+          {
+            "skill": "defence",
+            "level": 50
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S6-02",
@@ -3455,6 +4625,12 @@
     "title": "Рыбалка до 50 и готовка до 50",
     "requires": [],
     "floor": "Ground floor (1-й этаж / земля)",
+    "mapLocation": {
+      "x": 2923,
+      "y": 3180,
+      "plane": 0,
+      "label": "Омары и рыба-меч у Musa Point"
+    },
     "where": "40–50 — омары на Musa Point (Karamja). С 50 — рыба-меч (Swordfish) гарпуном там же. Готовь на плите в Al Kharid.",
     "itemsRequired": [
       {
@@ -3480,7 +4656,32 @@
         "text": "Рыба-меч ловится только с 50 рыбалки, готовится — с 45 готовки. До этого — омары (с 40) или тунец гарпуном (с 35)."
       }
     ],
-    "doneWhen": "Fishing 50, Cooking 50."
+    "doneWhen": "Fishing 50, Cooking 50.",
+    "inGame": {
+      "npcNames": [
+        "Fishing spot"
+      ],
+      "objectNames": [
+        "Range"
+      ],
+      "highlightItems": [
+        "Lobster pot",
+        "Harpoon"
+      ],
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "fishing",
+            "level": 50
+          },
+          {
+            "skill": "cooking",
+            "level": 50
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S6-03",
@@ -3498,7 +4699,29 @@
         "text": "До 60 — ивы (Willow, с 30) у Draynor Village. Тисы (Yew) рубятся только с 60: у Edgeville, Varrock Palace и к югу от Falador. Тисовые брёвна ≈ 105 gp — хороший пассивный заработок."
       }
     ],
-    "doneWhen": "Mining 60, Woodcutting 60."
+    "doneWhen": "Mining 60, Woodcutting 60.",
+    "inGame": {
+      "objectNames": [
+        "Iron rocks",
+        "Coal rocks",
+        "Mithril rocks",
+        "Willow tree",
+        "Yew tree"
+      ],
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "mining",
+            "level": 60
+          },
+          {
+            "skill": "woodcutting",
+            "level": 60
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S6-04",
@@ -3521,8 +4744,13 @@
     "doneWhen": "Magic 55.",
     "inGame": {
       "completionTrigger": {
-        "type": "CHAT_MESSAGE",
-        "chatPattern": "^Congratulations, you've just advanced your Magic level\\. You are now level (5[5-9]|[6-9]\\d)\\."
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "magic",
+            "level": 55
+          }
+        ]
       }
     }
   },
@@ -3533,6 +4761,12 @@
     "title": "Покупка Old School Bond на бирже",
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Old_school_bond",
+    "mapLocation": {
+      "x": 3164,
+      "y": 3487,
+      "plane": 0,
+      "label": "Биржа Grand Exchange"
+    },
     "how": "Old School Bond стоит около 11,9 млн gp (цена на 26.09.2026) и даёт 14 дней подписки. Для F2P это много: копи на огрессах и тисах или оплати подписку деньгами — прогресс не зависит от способа.",
     "itemsRequired": [
       {
@@ -3545,7 +4779,12 @@
         "inStep": true
       }
     ],
-    "doneWhen": "Подписка активирована."
+    "doneWhen": "Подписка активирована.",
+    "inGame": {
+      "highlightItems": [
+        "Old school bond"
+      ]
+    }
   },
   {
     "id": "S7-01",
@@ -3640,7 +4879,29 @@
       }
     ],
     "reward": "1 QP, 13 750 XP Attack и 13 750 XP Strength — уровень ближнего боя с 1 мгновенно подскакивает до 30+!",
-    "doneWhen": "Квест зелёный, Attack и Strength 30+."
+    "doneWhen": "Квест зелёный, Attack и Strength 30+.",
+    "inGame": {
+      "npcNames": [
+        "Almera",
+        "Hudon"
+      ],
+      "dialogChoices": [
+        "How can I help?"
+      ],
+      "highlightItems": [
+        "Rope",
+        "Air rune",
+        "Earth rune",
+        "Water rune",
+        "Glarial's pebble",
+        "Glarial's amulet",
+        "Glarial's urn"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Waterfall Quest"
+      }
+    }
   },
   {
     "id": "S7-02",
@@ -3709,7 +4970,26 @@
     ],
     "safespot": "Всех противников — скорпиона (44), огра (63) и Bouncer (137) — можно бить из укрытия луком или магией: все они дерутся только вплотную. General Khazard (142) — по желанию, для квеста его убивать не нужно.",
     "reward": "2 QP, 12 175 XP Attack, 2 175 XP Thieving, 1 000 Coins.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "Lady Servil",
+        "Khazard Barman"
+      ],
+      "dialogChoices": [
+        "Can I help you?",
+        "I'd like a Khali brew please."
+      ],
+      "highlightItems": [
+        "Khazard helmet",
+        "Khazard armour",
+        "Khali brew"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Fight Arena"
+      }
+    }
   },
   {
     "id": "S7-03",
@@ -3748,7 +5028,28 @@
     ],
     "safespot": "Босса Khazard warlord (112 ур.) можно застрять за деревьями и расстрелять магией.",
     "reward": "2 QP, 11 450 XP Attack, амулет гномов (Gnome amulet), доступ к сети телепортов Spirit trees (деревья духов).",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "King Bolren",
+        "Commander Montai",
+        "Khazard warlord"
+      ],
+      "dialogChoices": [
+        "Can I help at all?",
+        "I would be glad to help.",
+        "Ok, I'll gather some wood.",
+        "I'll try my best.",
+        "I will find the warlord and bring back the orbs."
+      ],
+      "highlightItems": [
+        "Logs"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Tree Gnome Village"
+      }
+    }
   },
   {
     "id": "S7-04",
@@ -3766,11 +5067,11 @@
       "label": "Трасса ловкости Gnome Stronghold"
     },
     "floor": "Ground floor (1-й этаж / земля)",
-    "where": "1–10 — Gnome Stronghold Agility Course (Tree Gnome Stronghold, рядом со стартом The Grand Tree). 10–25 — Draynor Village Rooftop Course.",
+    "where": "1–25 — Gnome Stronghold Agility Course (Tree Gnome Stronghold, рядом со стартом The Grand Tree): падений нет, еда не нужна. Или Draynor Village Rooftop Course — она тоже открыта с 1 уровня. Обе дают около 10 тыс. опыта в час.",
     "fields": [
       {
         "label": "Зачем",
-        "text": "The Grand Tree требует 25 ловкости. Сам квест даст ещё 7 900 XP Agility — это сразу около 32 уровня."
+        "text": "The Grand Tree требует 25 ловкости. Сам квест даст ещё 7 900 XP Agility — с 25 уровня это сразу около 31."
       },
       {
         "label": "Mark of Grace",
@@ -3786,8 +5087,13 @@
         "label": "Трасса ловкости Gnome Stronghold"
       },
       "completionTrigger": {
-        "type": "CHAT_MESSAGE",
-        "chatPattern": "^Congratulations, you've just advanced your Agility level\\. You are now level (2[5-9]|[3-9]\\d)\\."
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "agility",
+            "level": 25
+          }
+        ]
       }
     }
   },
@@ -3826,7 +5132,34 @@
     ],
     "safespot": "В бою с Black demon (172 ур.) используй safespot за камнями.",
     "reward": "5 QP, 18 400 XP Attack, 7 900 XP Agility, 2 150 XP Magic. Открывает доступ к Gnome gliders (воздушным планерам гномов).",
-    "doneWhen": "Квест зелёный, Attack 40+."
+    "doneWhen": "Квест зелёный, Attack 40+.",
+    "inGame": {
+      "npcNames": [
+        "King Narnode Shareen",
+        "Glough",
+        "Anita"
+      ],
+      "dialogChoices": [
+        "You seem worried, what's up?",
+        "I'd be happy to help!",
+        "I think so.",
+        "None of the above.",
+        "A man came to me with the King's seal.",
+        "I gave the man Daconia rocks.",
+        "And Daconia rocks will kill the tree!",
+        "Glough sent me.",
+        "Ka.",
+        "Lu.",
+        "Min.",
+        "Sadly his wife is no longer with us!",
+        "He loves worm holes.",
+        "Anita."
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "The Grand Tree"
+      }
+    }
   },
   {
     "id": "S8-01",
@@ -3873,13 +5206,36 @@
     ],
     "quickSteps": [
       "Поговори с King Roald во дворце Varrock.",
-      "Иди к храму Paterdomus на востоке, постучи в дверь и убей пса-стража (Temple guardian, 30 ур.) в склепе под храмом.",
+      "Иди к храму Paterdomus на востоке, постучи в дверь и убей пса-стража (Temple Guardian, 30 ур.) в склепе под храмом.",
       "Вернись к королю, затем снова в храм: поговори с Drezel в тюрьме на верхнем этаже.",
       "Набери ведро воды из колодца в склепе и освяти его у Drezel, вылей на гроб вампира.",
       "Принеси Drezel 50 рун сущности (Rune essence), чтобы очистить храм."
     ],
     "reward": "1 QP, 1 406 XP Prayer, кинжал Wolfbane, доступ в регион Morytania и город Canifis.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "King Roald",
+        "Drezel",
+        "Temple Guardian"
+      ],
+      "dialogChoices": [
+        "I'm looking for a quest!",
+        "Yes, I think I've heard of it.",
+        "Yes.",
+        "I'll get going.",
+        "King Roald sent me to check on Drezel.",
+        "What do we do?"
+      ],
+      "highlightItems": [
+        "Rune essence",
+        "Bucket"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Priest in Peril"
+      }
+    }
   },
   {
     "id": "S8-02",
@@ -3959,7 +5315,32 @@
       "Ghast"
     ],
     "reward": "2 QP, 3 000 XP Crafting, 2 000 XP Defence, 2 000 XP Hitpoints, доступ в болото Mort Myre.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "Drezel",
+        "Filliman Tarlock",
+        "Ghast"
+      ],
+      "dialogChoices": [
+        "Well, what is it, I may be able to help?",
+        "Yes.",
+        "I'd better get going.",
+        "How long have you been a ghost?",
+        "How can I help?",
+        "I think I've solved the puzzle!"
+      ],
+      "highlightItems": [
+        "Silver sickle",
+        "Ghostspeak amulet",
+        "Mort myre fungus",
+        "Druid pouch"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Nature Spirit"
+      }
+    }
   },
   {
     "id": "S8-03",
@@ -3982,14 +5363,41 @@
     "fields": [
       {
         "label": "Трассы",
-        "text": "1–10 — Gnome Stronghold Agility Course; 10–20 — Draynor Village Rooftop Course; 20–30 — Al Kharid Rooftop Course; 30–40 — Varrock Rooftop Course; с 40 — Canifis Rooftop Course (нужен Priest in Peril)."
+        "text": "1–20 — Gnome Stronghold Agility Course или Draynor Village Rooftop Course (обе с 1 уровня); 20–30 — Al Kharid Rooftop Course; 30–40 — Varrock Rooftop Course; с 40 — Canifis Rooftop Course (нужен Priest in Peril). Весь план до 99 — на странице навыка «Ловкость»."
       },
       {
         "label": "Graceful",
         "text": "Сет покупается у Grace в Rogues' Den под пабом в Burthorpe за Mark of Grace: весь сет — 260 марок. Весит почти ноль, а полный сет ускоряет восстановление бега на 30%. Больше всего марок — на трассе Canifis."
       }
     ],
-    "doneWhen": "Agility 40, куплены хотя бы 2–3 части сета Graceful."
+    "doneWhen": "Agility 40, куплены хотя бы 2–3 части сета Graceful.",
+    "inGame": {
+      "npcNames": [
+        "Grace"
+      ],
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "agility",
+            "level": 40
+          }
+        ],
+        "items": [
+          {
+            "names": [
+              "Graceful hood",
+              "Graceful top",
+              "Graceful legs",
+              "Graceful gloves",
+              "Graceful boots",
+              "Graceful cape"
+            ],
+            "count": 2
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S8-04",
@@ -4010,14 +5418,38 @@
       },
       {
         "label": "Истребление",
-        "text": "Бери задания у мастера Turael в Burthorpe — они простые и быстрые."
+        "text": "Быстрый старт: викторина в подвале Varrock Museum (поговори с Orlando Smith) — 1 000 опыта, и короткий квест A Porcine of Interest (доска объявлений в Draynor Village) — ещё 1 000. Это 13 уровень. До 18 хватит одного-двух заданий мастера Mazchna в Canifis (после Priest in Peril); у Turael в Burthorpe задания короче, но опыта за них мало."
       },
       {
         "label": "Ремесло",
         "text": "Nature Spirit уже дал 3 000 XP. Дальше — кожаные вещи из кожи (Leather), затем золотые кольца и амулеты из золотых слитков в любой печи."
       }
     ],
-    "doneWhen": "Ranged 30, Slayer 18, Crafting 31."
+    "doneWhen": "Ranged 30, Slayer 18, Crafting 31.",
+    "inGame": {
+      "npcNames": [
+        "Orlando Smith",
+        "Mazchna",
+        "Turael"
+      ],
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "ranged",
+            "level": 30
+          },
+          {
+            "skill": "slayer",
+            "level": 18
+          },
+          {
+            "skill": "crafting",
+            "level": 31
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S8-05",
@@ -4033,6 +5465,13 @@
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Animal_Magnetism",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Animal_Magnetism/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3094,3357,0",
+    "mapLocation": {
+      "x": 3094,
+      "y": 3357,
+      "plane": 0,
+      "label": "Ava в Draynor Manor"
+    },
     "npc": {
       "nameEn": "Ava",
       "nameRu": "Эйва",
@@ -4115,7 +5554,40 @@
     ],
     "proTip": "С 50 стрельбой (Ranged) награда — Ava's accumulator: возвращает 72% выпущенных стрел прямо в колчан. Ниже 50 дают Ava's attractor — он хуже. Если стрельба почти 50, докачай её до сдачи квеста.",
     "reward": "1 QP, 1 000 XP Crafting, 1 000 XP Fletching, 1 000 XP Slayer, 2 500 XP Woodcutting, Ava's accumulator (с 50 Ranged) или Ava's attractor.",
-    "doneWhen": "Ava's accumulator или attractor надет."
+    "doneWhen": "Ava's accumulator или attractor надет.",
+    "inGame": {
+      "npcNames": [
+        "Ava",
+        "Alice",
+        "Old crone",
+        "Malcolm",
+        "Turael"
+      ],
+      "dialogChoices": [
+        "I would be happy to make your home into a better place.",
+        "I'm here about a quest.",
+        "I'm here about the farmers east of here.",
+        "Okay, you need it more than I do, I suppose.",
+        "Could I buy those chickens now?",
+        "Could I buy two chickens?",
+        "Hello, I'm here about those trees again.",
+        "I'd love one, thanks."
+      ],
+      "highlightItems": [
+        "Mithril axe",
+        "Iron bar",
+        "Hammer",
+        "Ghostspeak amulet",
+        "Holy symbol",
+        "Polished buttons",
+        "Hard leather",
+        "Ecto-token"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Animal Magnetism"
+      }
+    }
   },
   {
     "id": "S9-01",
@@ -4181,7 +5653,31 @@
     ],
     "safespot": "Tree spirit (101 ур.) можно убить, спрятавшись за грибом и используя лук или магию.",
     "reward": "3 QP, доступ в скрытый город Zanaris (Dramen staff), право носить Dragon dagger и Dragon longsword (с 60 атакой), создание космических рун.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "Warrior",
+        "Shamus",
+        "Tree spirit"
+      ],
+      "dialogChoices": [
+        "What are you camped here for?",
+        "Who's Zanaris?",
+        "If it's hidden how are you planning to find it?",
+        "Looks like you don't know either.",
+        "How does it fit in a shed then?"
+      ],
+      "highlightItems": [
+        "Knife",
+        "Bronze axe",
+        "Dramen branch",
+        "Dramen staff"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Lost City"
+      }
+    }
   },
   {
     "id": "S9-02",
@@ -4197,6 +5693,13 @@
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Fairytale_I_-_Growing_Pains",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Fairytale_I_-_Growing_Pains/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3078,3258,0",
+    "mapLocation": {
+      "x": 3078,
+      "y": 3258,
+      "plane": 0,
+      "label": "Martin the Master Gardener, рынок Draynor Village"
+    },
     "npc": {
       "nameEn": "Martin the Master Gardener",
       "nameRu": "Мастер-садовник Мартин",
@@ -4266,7 +5769,38 @@
       }
     ],
     "reward": "2 QP, волшебный секатор (Magic secateurs), 3 500 XP Farming, 2 000 XP Attack, 1 000 XP Magic.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "inGame": {
+      "npcNames": [
+        "Martin the Master Gardener",
+        "Fairy Godfather",
+        "Malignius Mortifer",
+        "Elstan",
+        "Frizzy Skernip",
+        "Bolongo",
+        "Prissy Scilla",
+        "Heskel"
+      ],
+      "dialogChoices": [
+        "Quest.",
+        "Anything I can help with?",
+        "Now that I think about it, you're right!",
+        "Are you a member of the Group of Advanced Gardeners?",
+        "Where's the Fairy Queen?",
+        "I need help with fighting a Tanglefoot."
+      ],
+      "highlightItems": [
+        "Secateurs",
+        "Spade",
+        "Ghostspeak amulet",
+        "Dramen staff",
+        "Magic secateurs"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Fairytale I - Growing Pains"
+      }
+    }
   },
   {
     "id": "S9-03",
@@ -4280,6 +5814,13 @@
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Fairytale_II_-_Cure_a_Queen",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Fairytale_II_-_Cure_a_Queen/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3078,3258,0",
+    "mapLocation": {
+      "x": 3078,
+      "y": 3258,
+      "plane": 0,
+      "label": "Martin the Master Gardener, рынок Draynor Village"
+    },
     "npc": {
       "nameEn": "Martin the Master Gardener",
       "nameRu": "Мастер-садовник Мартин",
@@ -4294,7 +5835,27 @@
       }
     ],
     "reward": "Доступ к портальной сети Fairy rings! Надев Dramen staff, можно телепортироваться по всему материку Gielinor за пару секунд.",
-    "doneWhen": "Совершён первый телепорт через кольцо фей."
+    "doneWhen": "Совершён первый телепорт через кольцо фей.",
+    "inGame": {
+      "npcNames": [
+        "Martin the Master Gardener",
+        "Fairy Godfather",
+        "Co-ordinator",
+        "Fairy Fixit"
+      ],
+      "objectNames": [
+        "Fairy ring"
+      ],
+      "dialogChoices": [
+        "Quest.",
+        "I suppose I'd better go see what the problem is then.",
+        "Where is the Fairy Queen?",
+        "Where could she have been taken to?",
+        "Yes, okay.",
+        "The fairy rings.",
+        "Why are you carrying that toolbox?"
+      ]
+    }
   },
   {
     "id": "S9-04",
@@ -4310,6 +5871,13 @@
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Monkey_Madness_I",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Monkey_Madness_I/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2466,3496,0",
+    "mapLocation": {
+      "x": 2466,
+      "y": 3496,
+      "plane": 0,
+      "label": "King Narnode Shareen, Grand Tree"
+    },
     "npc": {
       "nameEn": "King Narnode Shareen",
       "nameRu": "Король Нарноуд Шарин",
@@ -4356,7 +5924,42 @@
     ],
     "safespot": "Jungle demon (195 ур.) бьёт в ближнем бою и магией — включи Protect from Magic или Protect from Melee и бей его магией или дальним боем с дальней стороны.",
     "reward": "3 QP, 10 000 Coins, 3 алмаза, тренировка у Daero: 35 000 XP в атаку и защиту + 20 000 в силу и здоровье (или наоборот), право носить Dragon scimitar (с 60 атакой).",
-    "doneWhen": "Квест зелёный, Dragon scimitar куплен (надевается с 60 атакой)."
+    "doneWhen": "Квест зелёный, Dragon scimitar куплен (надевается с 60 атакой).",
+    "inGame": {
+      "npcNames": [
+        "King Narnode Shareen",
+        "Daero",
+        "Waydar"
+      ],
+      "dialogChoices": [
+        "Yes",
+        "Talk about the journey...",
+        "Return to previous menu",
+        "Talk about the 1-th squad...",
+        "Talk about Caranock...",
+        "Leave...",
+        "Who is it?",
+        "I cannot convince Lumdo to take us to the island.",
+        "Yes, I'm sure.",
+        "Well I'll be a monkey's uncle!",
+        "How many bananas did Aunty want?",
+        "I've lost that toy you gave me...",
+        "Wow - can I borrow it?",
+        "Ok, I promise!"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Monkey Madness I",
+        "items": [
+          {
+            "names": [
+              "Dragon scimitar"
+            ],
+            "count": 1
+          }
+        ]
+      }
+    }
   },
   {
     "id": "S9-05",
@@ -4369,6 +5972,13 @@
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster/Quick_guide",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3208,3214,0",
+    "mapLocation": {
+      "x": 3208,
+      "y": 3214,
+      "plane": 0,
+      "label": "Кухня повара в Lumbridge Castle"
+    },
     "npc": {
       "nameEn": "Cook",
       "nameRu": "Повар",
@@ -4426,6 +6036,28 @@
       }
     ],
     "reward": "1 QP, доступ к Culinaromancer's Chest: чем больше глав Recipe for Disaster пройдено, тем лучше перчатки в сундуке — вплоть до Barrows gloves после всех глав.",
-    "doneWhen": "Первая глава закрыта, сундук в подвале замка открыт."
+    "doneWhen": "Первая глава закрыта, сундук в подвале замка открыт.",
+    "inGame": {
+      "npcNames": [
+        "Cook"
+      ],
+      "dialogChoices": [
+        "Do you have any other quests for me?",
+        "Angry! It makes me angry!",
+        "What seems to be the problem?",
+        "YES"
+      ],
+      "highlightItems": [
+        "Eye of newt",
+        "Greenman's ale",
+        "Rotten tomato",
+        "Fruit blast",
+        "Ashes"
+      ],
+      "completionTrigger": {
+        "type": "QUEST_COMPLETED",
+        "questName": "Recipe for Disaster - Another Cook's Quest"
+      }
+    }
   }
 ]

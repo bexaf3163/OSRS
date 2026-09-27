@@ -16,6 +16,7 @@ import { parseOwned, type OwnedState } from './lib/checklist';
 import { stageBankItemIds } from './lib/bankTags';
 import { useFeatures } from './lib/features';
 import { isClosed } from './lib/next-step';
+import { withKillEstimate } from './services/gearAdvisor';
 
 const ENABLED_KEY = 'osrs-put:runelite-bridge';
 const AUTOLAUNCH_KEY = 'osrs-put:runelite-autolaunch';
@@ -79,7 +80,7 @@ interface BridgeValue {
 
 const BridgeContext = createContext<BridgeValue | null>(null);
 
-/** По умолчанию связь включена в программе для ПК и выключена в браузере и на телефоне. */
+/** По умолчанию связь включена; без программы для ПК (страница при разработке) — выключена, моста там нет. */
 function loadEnabled(): boolean {
   try {
     const v = localStorage.getItem(ENABLED_KEY);
@@ -166,11 +167,17 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const bankSent = useRef('');
 
   // Обработчик событий живёт дольше отрисовки — свежие данные берёт из ссылок.
-  const latest = useRef({ progress, steps, setStep, activeStepId, branchChoice, notify });
-  latest.current = { progress, steps, setStep, activeStepId, branchChoice, notify };
+  const latest = useRef({ progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear });
+  latest.current = { progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear };
   /** Уже обработанные автоотметки: одно событие не отмечает шаг дважды и не двигает маршрут дважды. */
   const handled = useRef(new Set<string>());
   const nonce = useRef(0);
+
+  /** Шаг в игру. У шага боя — с первой оценкой времени на противника по нынешнему оружию и уровням. */
+  const sendStep = useCallback((step: Step, branch?: StepBranch) => {
+    const { progress: p, stats: live, gear: g } = latest.current;
+    return syncActiveStep(withKillEstimate(step, { ...p.levels, ...(live ?? {}) }, g), undefined, branch);
+  }, []);
 
   const setEnabled = useCallback((on: boolean) => {
     setEnabledState(on);
@@ -187,12 +194,12 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     setAdvance({ from: id, to: next?.id, nonce: ++nonce.current });
     if (plan.inGame === 'sync-next' && next) {
       handled.current.delete(next.id);
-      void syncActiveStep(next, undefined, chosenBranch(next, latest.current.branchChoice)).then((ok) => setActiveStepId(ok ? next.id : null));
+      void sendStep(next, chosenBranch(next, latest.current.branchChoice)).then((ok) => setActiveStepId(ok ? next.id : null));
     } else if (plan.inGame === 'clear') {
       void clearActiveStep();
       setActiveStepId(null);
     }
-  }, []);
+  }, [sendStep]);
 
   /** Временная цель снята в игре: дошёл до места, получил предмет или её сняли. Шаг снова ведёт стрелку. */
   const onNavDone = useCallback((e: BridgeEvent) => {
@@ -204,8 +211,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     // Шаг заново — HUD и цель в игре точно те же, что до отклонения.
     const { activeStepId: active, steps: list, branchChoice: choice } = latest.current;
     const step = active ? list.find((s) => s.id === active) : undefined;
-    if (step && reason !== 'cleared') void syncActiveStep(step, undefined, chosenBranch(step, choice));
-  }, []);
+    if (step && reason !== 'cleared') void sendStep(step, chosenBranch(step, choice));
+  }, [sendStep]);
 
   useEffect(() => {
     try {
@@ -247,7 +254,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       const want = latest.current.activeStepId;
       if (resync && s.online && want && s.activeStepId !== want) {
         const step = latest.current.steps.find((x) => x.id === want);
-        if (step) void syncActiveStep(step, undefined, chosenBranch(step, latest.current.branchChoice));
+        if (step) void sendStep(step, chosenBranch(step, latest.current.branchChoice));
       }
     });
     const onEvent = (e: BridgeEvent) => {
@@ -280,7 +287,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       alive = false;
       handle.close();
     };
-  }, [enabled, onCompleted, onNavDone]);
+  }, [enabled, onCompleted, onNavDone, sendStep]);
 
   // Предметы этапа показанного в игре шага — плагину, для мягкой подсветки в банке.
   // Уходят при смене шага (и этапа), после переподключения и когда функцию включили; выключили — подсветка снимается.
@@ -319,13 +326,13 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const pointInGame = useCallback(async (step: Step): Promise<PointResult> => {
     const branch = chosenBranch(step, latest.current.branchChoice);
     if (!toInGameTarget(step, branch)) return 'empty';
-    const ok = await syncActiveStep(step, undefined, branch);
+    const ok = await sendStep(step, branch);
     if (!ok) return 'offline';
     // Шаг снова в игре — его новая автоотметка должна сработать, даже если раньше уже была.
     handled.current.delete(step.id);
     setActiveStepId(step.id);
     return 'ok';
-  }, []);
+  }, [sendStep]);
 
   const clear = useCallback(async () => {
     await clearActiveStep();
@@ -344,9 +351,9 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     // Шаг уже показан в игре — обновляем цель сразу, без повторного нажатия.
     if (latest.current.activeStepId === step.id) {
       const branch = branchId ? step.branches?.find((b) => b.id === branchId) : undefined;
-      void syncActiveStep(step, undefined, branch);
+      void sendStep(step, branch);
     }
-  }, []);
+  }, [sendStep]);
 
   const syncPlan = useCallback(async (plan: ShoppingPlanPayload) => {
     saveJson(PLAN_KEY, plan);

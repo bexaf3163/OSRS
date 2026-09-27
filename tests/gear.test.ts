@@ -5,8 +5,8 @@ import { fightStepFor } from '../src/lib/gearAdvice';
 import { buildIndex, search } from '../src/lib/search';
 import { parseHash } from '../src/lib/router';
 import {
-  actionNav, adviseGear, canWear, DEFAULT_FOE, foeData, gainText, gearById, gearData, hudHint, meleeHit, meleeValue, meleeWith, routeNeeds,
-  sourceText, statsText, stepFoes, watchNames, WINDOW,
+  actionNav, adviseGear, canWear, DEFAULT_FOE, foeData, gainText, gearById, gearData, hudHint, killSeconds, meleeHit, meleeValue, meleeWith, routeNeeds,
+  sourceText, statsText, stepFoes, watchNames, withKillEstimate, WINDOW,
   type AdvisorInput,
 } from '../src/services/gearAdvisor';
 import { matchStrict } from '../src/services/locationResolver';
@@ -299,6 +299,37 @@ describe('противники шагов (monsters.json)', () => {
   it('без шага сравнение идёт с коровой', () => {
     expect(DEFAULT_FOE).toMatchObject({ name: 'Cow', combat: 2, defenceLevel: 1 });
     expect(adviseGear(input()).foes).toEqual([DEFAULT_FOE]);
+  });
+});
+
+describe('первая оценка темпа боя', () => {
+  const s308 = allSteps.find((s) => s.id === 'S3-08')!;
+  const warrior = foeData.foes.find((f) => f.name === 'Al Kharid warrior')!;
+  const lv = { attack: 20, strength: 20, defence: 20 };
+  const iron: GearState = { equipment: [{ id: 1323, name: 'Iron scimitar', slot: 'weapon' }], inventory: [], coins: 0, bankCoins: null };
+
+  it('секунд на противника — его здоровье / урон в секунду нынешнего оружия', () => {
+    const dps = meleeWith(lv, gearById.get(1323)!, null, {}, warrior).dps;
+    expect(killSeconds(s308, lv, iron)).toBeCloseTo(warrior.hitpoints / dps, 6);
+    // Без оружия — кулаки: медленнее, но оценка есть.
+    const fists = killSeconds(s308, lv, { ...iron, equipment: [] })!;
+    expect(fists).toBeGreaterThan(killSeconds(s308, lv, iron)!);
+  });
+
+  it('неизвестно, что в руке, или нет снаряжения из игры — времени не выдумываем', () => {
+    expect(killSeconds(s308, lv, null)).toBeNull();
+    expect(killSeconds(s308, lv, { ...iron, equipment: null })).toBeNull();
+    expect(killSeconds(s308, lv, { ...iron, equipment: [{ id: 99999, name: 'Mystery blade', slot: 'weapon' }] })).toBeNull();
+    expect(killSeconds({ foes: undefined }, lv, iron)).toBeNull();
+  });
+
+  it('в игру уходит шаг с оценкой, у остальных шагов ничего не меняется', () => {
+    const sent = withKillEstimate(s308, lv, iron);
+    expect(sent.pacing!.secondsPerAction).toBe(Math.round(killSeconds(s308, lv, iron)! * 10) / 10);
+    expect(s308.pacing!.secondsPerAction).toBeUndefined();
+    expect(withKillEstimate(s308, lv, null)).toBe(s308);
+    const fishing = allSteps.find((s) => s.id === 'S2-13')!;
+    expect(withKillEstimate(fishing, lv, iron)).toBe(fishing);
   });
 });
 

@@ -1,4 +1,4 @@
-// Проверяет, что все ссылки на вики из steps.json и f2p-items.json ведут на существующие статьи и файлы.
+// Проверяет, что все ссылки на вики из steps.json, f2p-items.json и osrs-guide.md ведут на существующие статьи и файлы.
 // Нужна сеть. Запуск: npm run check-links
 
 import { readFileSync } from 'node:fs';
@@ -9,6 +9,7 @@ import { MAP_VERSION, tileUrl } from '../src/lib/map.ts';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const steps = JSON.parse(readFileSync(`${root}src/data/steps.json`, 'utf8')) as Step[];
 const items = JSON.parse(readFileSync(`${root}src/data/f2p-items.json`, 'utf8')) as WikiItemDetail[];
+const guide = readFileSync(`${root}osrs-guide.md`, 'utf8');
 const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 const API = 'https://oldschool.runescape.wiki/api.php';
 
@@ -41,6 +42,8 @@ for (const i of items) {
   add(`предмет ${i.nameEn}`, i.wikiUrl);
   add(`иконка ${i.nameEn}`, i.iconUrl);
 }
+// Гайд: ссылки в тексте — на навыки (и подписки), квесты, гайды прокачки, по которым сверялся план.
+for (const [, url] of guide.matchAll(/\]\((https:\/\/oldschool\.runescape\.wiki\/[^)\s]+)\)/g)) add('гайд', url);
 
 const titles = [...refs.keys()];
 const missing: string[] = [];

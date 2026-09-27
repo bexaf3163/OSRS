@@ -1,6 +1,6 @@
 import { useEffect, useId, useState } from 'react';
 import type { Skill } from '../types';
-import { goals, levelById, membersSkills, skillById, type MembersSkill } from '../data';
+import { findSkill, goals, levelById } from '../data';
 import { useStore } from '../store';
 import { currentStage, isClosed } from '../lib/next-step';
 import { formatXp, goalFor } from '../lib/goals';
@@ -13,9 +13,7 @@ import { LevelInput } from '../components/LevelInput';
 import { Table } from '../components/Table';
 
 export function SkillDetailPage({ id }: { id: string }) {
-  const skill = skillById.get(id);
-  const members = membersSkills.find((m) => m.id === id);
-  if (members) return <MembersSkillView skill={members} />;
+  const skill = findSkill(id);
   if (!skill) {
     return (
       <div className="page">
@@ -28,29 +26,8 @@ export function SkillDetailPage({ id }: { id: string }) {
   return <SkillView skill={skill} />;
 }
 
-/** Навык подписки: гайда по нему нет — уровень, калькулятор опыта и статья вики. */
-function MembersSkillView({ skill }: { skill: MembersSkill }) {
-  const { mode } = useStore();
-  return (
-    <div className="page">
-      <a className="back" href="#/skills"><IconBack />Навыки</a>
-      <header className="page-head">
-        <h1>{skill.name} <span className="badge badge-members">Members</span></h1>
-        <p className="muted">
-          {skill.nameEn} · <a href={skill.wiki} target="_blank" rel="noopener noreferrer">Гайд по прокачке на вики <IconExternal /></a>
-        </p>
-      </header>
-      {mode === 'f2p' && <p className="notice">Навык доступен только с подпиской. Переключи режим на Members в шапке, чтобы увидеть этапы 7–9.</p>}
-      <section className="card levels-card" aria-label="Уровень">
-        <div className="levels-row"><LevelInput id={skill.id} label={skill.name} /></div>
-      </section>
-      <Calculator levelIds={[skill.id]} suggest={(_, level) => Math.min(MAX_LEVEL, level + 1)} />
-    </div>
-  );
-}
-
 function SkillView({ skill }: { skill: Skill }) {
-  const { progress, steps } = useStore();
+  const { progress, steps, mode } = useStore();
   const level = skillLevel(skill, progress);
   const hit = rangeForLevel(skill.plan.ranges, level);
   const related = steps.filter((s) => s.targets?.some((t) => levelById.get(t.skill)?.skill === skill.id));
@@ -59,12 +36,15 @@ function SkillView({ skill }: { skill: Skill }) {
     <div className="page">
       <a className="back" href="#/skills"><IconBack />Навыки</a>
       <header className="page-head">
-        <h1>{skill.name}</h1>
+        <h1>{skill.name}{skill.membersOnly && <> <span className="badge badge-members">Members</span></>}</h1>
         <p className="muted">
           {skill.nameEn ?? skill.subtitle}
           {skill.wiki && <> · <a href={skill.wiki} target="_blank" rel="noopener noreferrer">Вики <IconExternal /></a></>}
         </p>
       </header>
+      {skill.membersOnly && mode === 'f2p' && (
+        <p className="notice">Навык качается только с подпиской. Переключи режим на Members в шапке, чтобы увидеть этапы 7–9.</p>
+      )}
 
       <section className="card levels-card" aria-label="Уровни">
         <div className="levels-row">

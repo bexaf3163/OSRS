@@ -1,5 +1,5 @@
 import { useEffect, useState, type ComponentType } from 'react';
-import { membersSkills, skillById, reference } from './data';
+import { findSkill, reference } from './data';
 import { useStore } from './store';
 import { useRoute, type Page } from './lib/router';
 import { IconBook, IconGoals, IconPath, IconQuests, IconSearch, IconSettings, IconSkills } from './components/Icons';
@@ -29,7 +29,7 @@ const TABS: { page: Page; href: string; label: string; Icon: ComponentType<{ cla
 ];
 
 function pageTitle(page: Page, param?: string): string {
-  if (page === 'skills' && param) return skillById.get(param)?.name ?? membersSkills.find((m) => m.id === param)?.name ?? 'Навыки';
+  if (page === 'skills' && param) return findSkill(param)?.name ?? 'Навыки';
   if (page === 'reference' && param) return reference.sections.find((s) => s.id === param)?.title ?? 'Справка';
   if (page === 'settings') return 'Настройки';
   if (page === 'shopping') return 'Оптовый список GE';

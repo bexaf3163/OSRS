@@ -13,6 +13,7 @@ export function dataFiles(d: GuideData): [string, string][] {
   const json = (v: unknown) => JSON.stringify(v, null, 2) + '\n';
   return [
     ['skills.json', d.skills],
+    ['members-skills.json', d.members],
     ['levels.json', d.levels],
     ['goals.json', d.goals],
     ['xp.json', d.xp],
@@ -24,5 +25,5 @@ export function dataFiles(d: GuideData): [string, string][] {
 /** Маршрут V2 — ведётся прямо в JSON. */
 export function readRoute(): Route {
   const read = (name: string) => JSON.parse(readFileSync(`${DATA_DIR}/${name}`, 'utf8'));
-  return { steps: read('steps.json'), stages: read('stages.json'), items: read('f2p-items.json') };
+  return { steps: read('steps.json'), stages: read('stages.json'), items: read('f2p-items.json'), monsters: read('monsters.json') };
 }

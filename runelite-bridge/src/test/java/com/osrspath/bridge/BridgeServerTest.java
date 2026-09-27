@@ -99,7 +99,7 @@ public class BridgeServerTest
 				gearHints.add(hint);
 				return null;
 			}
-		}, Collections.singletonList("https://osrs-put.example"));
+		});
 		server.start();
 		base = "http://127.0.0.1:" + server.getPort();
 	}
@@ -184,32 +184,31 @@ public class BridgeServerTest
 	}
 
 	@Test
-	public void чужойOriginОтклоняетсяСвойИЛокальныйПускаются() throws Exception
+	public void любойБраузерОтклоняетсяПрограммаДляПКПускается() throws Exception
 	{
-		assertEquals(403, get("/status", "Origin", "https://evil.example").statusCode());
-		assertEquals(403, post("/active-step", COOK, BridgeServer.HEADER, "1", "Origin", "https://evil.example").statusCode());
+		// Веб-версии нет: запрос с Origin — это страница в браузере, даже с localhost.
+		for (String origin : new String[]{"https://evil.example", "http://localhost:5173", "http://127.0.0.1:38282", "null"})
+		{
+			assertEquals(origin, 403, get("/status", "Origin", origin).statusCode());
+			assertEquals(origin, 403, post("/active-step", COOK, BridgeServer.HEADER, "1", "Origin", origin).statusCode());
+		}
 		assertTrue(targets.isEmpty());
 
-		HttpResponse<String> local = get("/status", "Origin", "http://localhost:5173");
-		assertEquals(200, local.statusCode());
-		assertEquals("http://localhost:5173", local.headers().firstValue("Access-Control-Allow-Origin").orElse(null));
-		assertEquals(200, get("/status", "Origin", "https://osrs-put.example").statusCode());
-	}
-
-	@Test
-	public void preflightРазрешаетЗаголовокИЛокальнуюСеть() throws Exception
-	{
-		HttpRequest req = HttpRequest.newBuilder(URI.create(base + "/active-step"))
+		// Предзапрос CORS тоже отклоняется — браузер не получит разрешения на X-OSRS-Path.
+		HttpRequest pre = HttpRequest.newBuilder(URI.create(base + "/active-step"))
 			.method("OPTIONS", HttpRequest.BodyPublishers.noBody())
-			.header("Origin", "https://osrs-put.example")
+			.header("Origin", "http://localhost:5173")
 			.header("Access-Control-Request-Method", "POST")
 			.header("Access-Control-Request-Headers", "content-type, x-osrs-path")
-			.header("Access-Control-Request-Private-Network", "true")
 			.build();
-		HttpResponse<String> r = http.send(req, HttpResponse.BodyHandlers.ofString());
-		assertEquals(204, r.statusCode());
-		assertTrue(r.headers().firstValue("Access-Control-Allow-Headers").orElse("").contains(BridgeServer.HEADER));
-		assertEquals("true", r.headers().firstValue("Access-Control-Allow-Private-Network").orElse(null));
+		HttpResponse<String> r = http.send(pre, HttpResponse.BodyHandlers.ofString());
+		assertEquals(403, r.statusCode());
+		assertTrue(r.headers().firstValue("Access-Control-Allow-Origin").isEmpty());
+
+		// Программа для ПК (главный процесс Electron) Origin не присылает.
+		HttpResponse<String> app = get("/status");
+		assertEquals(200, app.statusCode());
+		assertTrue(app.headers().firstValue("Access-Control-Allow-Origin").isEmpty());
 	}
 
 	@Test

@@ -169,13 +169,12 @@ p { margin: 0; }
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
-  padding-top: env(safe-area-inset-top);
 }
 
 .topbar-inner {
   max-width: 1080px; margin: 0 auto; height: var(--topbar-h);
   display: flex; align-items: center; gap: 12px;
-  padding: 0 max(var(--gutter), env(safe-area-inset-right)) 0 max(var(--gutter), env(safe-area-inset-left));
+  padding: 0 var(--gutter);
 }
 
 .brand {
@@ -207,7 +206,7 @@ kbd {
 
 main {
   max-width: 1080px; margin: 0 auto;
-  padding: 16px max(var(--gutter), env(safe-area-inset-right)) calc(var(--bottombar-h) + 32px + env(safe-area-inset-bottom)) max(var(--gutter), env(safe-area-inset-left));
+  padding: 16px var(--gutter) calc(var(--bottombar-h) + 32px) var(--gutter);
   outline: none;
 }
 
@@ -225,7 +224,7 @@ main {
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
   border-top: 1px solid var(--border);
-  padding: 0 env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  padding: 0;
 }
 
 .tab {
@@ -680,7 +679,7 @@ a.quest-link:hover { border-color: var(--border-strong); }
 
 .search-dialog {
   width: min(640px, calc(100vw - 24px)); max-height: min(640px, calc(100dvh - 48px));
-  margin: max(12px, env(safe-area-inset-top)) auto auto; padding: 0;
+  margin: 12px auto auto; padding: 0;
   border: 1px solid var(--border-strong); border-radius: var(--radius);
   background: var(--surface); color: var(--text);
   flex-direction: column; overflow: hidden;
@@ -866,7 +865,7 @@ a.quest-link:hover { border-color: var(--border-strong); }
 @keyframes drawer-out { from { transform: none; } to { transform: translateX(100%); } }
 .drawer-panel { position: relative; height: 100%; overflow-y: auto; overscroll-behavior: contain; }
 .drawer-close { position: absolute; top: 8px; right: 8px; z-index: 1; }
-.drawer-body { display: flex; flex-direction: column; gap: 16px; padding: 20px 20px calc(24px + env(safe-area-inset-bottom)); }
+.drawer-body { display: flex; flex-direction: column; gap: 16px; padding: 20px 20px 24px; }
 .drawer-hero { display: flex; align-items: flex-start; gap: 14px; padding-right: 44px; }
 .drawer-icon {
   flex: none; display: grid; place-items: center; width: 56px; height: 56px;
@@ -1041,7 +1040,7 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 
 .toast-region {
   position: fixed; left: 0; right: 0; z-index: 30; pointer-events: none;
-  bottom: calc(var(--bottombar-h) + 12px + env(safe-area-inset-bottom));
+  bottom: calc(var(--bottombar-h) + 12px);
   display: flex; justify-content: center; padding: 0 var(--gutter);
 }
 .toast {
@@ -1207,7 +1206,7 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 
 /* ---------- V2.4: помощник в игре — проверка вылета, быстрые варианты, оптовый список ---------- */
 .icon-btn-emoji { font-size: 1.05rem; line-height: 1; }
-/* На телефоне в шапке нет места — список открывается из карточки «Что делать сейчас» и из шагов-закупок. */
+/* В узком окне в шапке нет места — список открывается из карточки «Что делать сейчас» и из шагов-закупок. */
 @media (max-width: 480px) { .icon-btn-emoji { display: none; } }
 /* 320 px: шапка не помещалась на 16 px и срезала настройки — название прячется, значок остаётся ссылкой домой. */
 @media (max-width: 359px) {
@@ -1289,9 +1288,6 @@ th .place-link { font-weight: inherit; }
 .map-modal-status { inset: 50% 12px auto; transform: translateY(-50%); max-width: 460px; margin: 0 auto; text-align: center; display: flex; flex-direction: column; gap: 6px; align-items: center; }
 
 /* Bank Tags этапа: кнопка над шагами этапа (и в левой колонке широкого экрана). */
-.banktag { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; margin: 0 0 10px; }
-.banktag.is-compact { margin: 4px 0 8px 34px; }
-.banktag-help { flex-basis: 100%; margin: 0; }
 
 /* Темп прокачки из игры. */
 .pacing { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 0; font-size: 0.92rem; }

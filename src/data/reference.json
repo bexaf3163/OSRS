@@ -494,6 +494,9 @@
               "text": "[Атака](https://oldschool.runescape.wiki/w/Attack), [Дальний бой](https://oldschool.runescape.wiki/w/Ranged), [Магия](https://oldschool.runescape.wiki/w/Magic), [Молитва](https://oldschool.runescape.wiki/w/Prayer), [Создание рун](https://oldschool.runescape.wiki/w/Runecraft)"
             },
             {
+              "text": "С подпиской: [Ловкость](https://oldschool.runescape.wiki/w/Agility), [Воровство](https://oldschool.runescape.wiki/w/Thieving), [Истребление](https://oldschool.runescape.wiki/w/Slayer), [Фермерство](https://oldschool.runescape.wiki/w/Farming), [Травничество](https://oldschool.runescape.wiki/w/Herblore), [Охота](https://oldschool.runescape.wiki/w/Hunter), [Строительство](https://oldschool.runescape.wiki/w/Construction), [Изготовление луков](https://oldschool.runescape.wiki/w/Fletching)"
+            },
+            {
               "text": "[Интерактивная карта мира](https://oldschool.runescape.wiki/w/World_map)"
             }
           ]
@@ -513,6 +516,9 @@
             },
             {
               "text": "[Прокачка рубки](https://oldschool.runescape.wiki/w/Free-to-play_Woodcutting_training) и [кузнечного дела](https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training) в бесплатной версии"
+            },
+            {
+              "text": "Навыки подписки: гайды прокачки [ловкости](https://oldschool.runescape.wiki/w/Agility_training), [воровства](https://oldschool.runescape.wiki/w/Thieving_training), [истребления](https://oldschool.runescape.wiki/w/Slayer_training), [фермерства](https://oldschool.runescape.wiki/w/Farming_training), [травничества](https://oldschool.runescape.wiki/w/Herblore_training), [охоты](https://oldschool.runescape.wiki/w/Hunter_training), [строительства](https://oldschool.runescape.wiki/w/Construction_training) и [изготовления луков](https://oldschool.runescape.wiki/w/Fletching_training), а ещё [крыши для ловкости](https://oldschool.runescape.wiki/w/Rooftop_Agility_Courses), [мастера истребления](https://oldschool.runescape.wiki/w/Slayer_Master) и [опыт за квесты](https://oldschool.runescape.wiki/w/Quest_experience_rewards)"
             }
           ]
         }
@@ -525,7 +531,7 @@
     "blocks": [
       {
         "t": "p",
-        "text": "Разделы ниже — справочник к пошаговому плану. Все написаны для бесплатной версии, то, что открывается только с подпиской, помечено отдельно."
+        "text": "Разделы ниже — справочник к пошаговому плану. Бесплатные навыки написаны для бесплатной версии, то, что открывается только с подпиской, помечено отдельно. Восемь навыков подписки собраны в конце, в разделе «Навыки подписки (Members)»."
       },
       {
         "t": "ul",

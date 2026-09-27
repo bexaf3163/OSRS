@@ -79,7 +79,8 @@ public class ConfigNamesTest
 				bad.add("раздел «" + s.name() + "» " + bold.stringWidth(s.name()) + " > " + section);
 			}
 		}
-		assertTrue("пунктов: " + items, items >= 20);
+		// 2.7: 19 пунктов — убраны «Путевые точки на земле» и «Разрешённые сайты» (веб-версии больше нет).
+		assertTrue("пунктов: " + items, items >= 19);
 		assertTrue("разделов: " + sections, sections >= 2);
 		assertTrue("не влезает в панель RuneLite:\n" + String.join("\n", bad), bad.isEmpty());
 	}

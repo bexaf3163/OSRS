@@ -1,5 +1,6 @@
 package com.osrspath.bridge;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -7,6 +8,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.regex.Pattern;
 import lombok.Data;
+import net.runelite.api.Skill;
 
 /**
  * Текущий шаг, присланный приложением: то же, что InGameTarget в src/types/index.ts, плюс код и название шага.
@@ -85,9 +87,13 @@ public class ActiveTarget
 	@Data
 	public static class Pacing
 	{
-		static final Set<String> SKILLS = Set.of("fishing", "woodcutting", "cooking", "mining");
+		/** Навыки ближнего боя: у них действие — побеждённый противник, а опыт идёт за каждый удар. */
+		static final Set<String> COMBAT = Set.of("attack", "strength", "defence");
+		static final Set<String> SKILLS = Set.of("fishing", "woodcutting", "cooking", "mining", "attack", "strength", "defence");
 
 		private String skill;
+		/** Ещё навыки с той же целью — только бой: сила и защита вслед за атакой. Показывается тот, что растёт. */
+		private List<String> also;
 		private int targetLevel;
 		private int targetExp;
 		/** Название действия формами для 1, 2–4 и 5+: «креветка|креветки|креветок». Одна форма тоже годится. */
@@ -96,11 +102,41 @@ public class ActiveTarget
 		/** Сколько секунд на действие — первая оценка, пока нет своих замеров. */
 		private Double secondsPerAction;
 
+		/** Навык шага и следом навыки из also — в том порядке, в каком их советует качать шаг. */
+		List<String> skills()
+		{
+			List<String> out = new ArrayList<>();
+			out.add(skill);
+			for (String s : nonNull(also))
+			{
+				if (!out.contains(s))
+				{
+					out.add(s);
+				}
+			}
+			return out;
+		}
+
 		String problem()
 		{
 			if (skill == null || !SKILLS.contains(skill))
 			{
 				return "неизвестный навык темпа";
+			}
+			if (also != null)
+			{
+				// Несколько навыков с одной целью бывает только в бою: их качают по очереди, меняя стиль атаки.
+				if (also.size() > 2 || !COMBAT.contains(skill))
+				{
+					return "неверный список навыков темпа";
+				}
+				for (String s : also)
+				{
+					if (s == null || !COMBAT.contains(s) || s.equals(skill))
+					{
+						return "неверный список навыков темпа";
+					}
+				}
 			}
 			if (targetLevel < 2 || targetLevel > 99 || targetExp < 1 || targetExp > 13_034_431)
 			{
@@ -123,9 +159,108 @@ public class ActiveTarget
 	{
 		private String type;
 		private String questName;
+		/** SKILL_LEVEL: эти настоящие уровни (без зелий) — все сразу. */
+		private List<LevelNeed> levels;
+		/** ITEM_OWNED — сами предметы; у QUEST_COMPLETED и SKILL_LEVEL — ещё одно условие вдобавок. */
+		private List<ItemNeed> items;
 		private String chatPattern;
 		private Integer varbitId;
 		private Integer targetValue;
+
+		String problem()
+		{
+			if (levels != null)
+			{
+				if (levels.size() > MAX_LIST)
+				{
+					return "слишком длинный список";
+				}
+				for (LevelNeed l : levels)
+				{
+					if (l == null || skillOf(l.skill) == null || l.level < 1 || l.level > 99)
+					{
+						return "неверный уровень автоотметки";
+					}
+				}
+			}
+			if (items != null)
+			{
+				if (items.size() > MAX_LIST)
+				{
+					return "слишком длинный список";
+				}
+				for (ItemNeed i : items)
+				{
+					if (i == null || i.problem() != null)
+					{
+						return "неверный предмет автоотметки";
+					}
+				}
+			}
+			return null;
+		}
+	}
+
+	/** Уровень навыка для автоотметки: ключ как в приложении («attack», «fishing») и уровень. */
+	@Data
+	public static class LevelNeed
+	{
+		private String skill;
+		private int level;
+	}
+
+	/**
+	 * Предмет для автоотметки: сколько его должно быть у игрока — в сумке, на нём, банкнотами и в банке вместе.
+	 * Несколько названий считаются вместе («Shrimps» и «Anchovies»). ID — когда у разных предметов одно
+	 * название (куски карты Dragon Slayer I): тогда считается только он.
+	 */
+	@Data
+	public static class ItemNeed
+	{
+		private List<String> names;
+		private Integer id;
+		private int count;
+
+		String problem()
+		{
+			if (names == null || names.isEmpty() || names.size() > MAX_LIST)
+			{
+				return "нужны названия";
+			}
+			for (String n : names)
+			{
+				if (n == null || n.trim().isEmpty() || tooLong(n))
+				{
+					return "неверное название";
+				}
+			}
+			if (id != null && (id <= 0 || id >= NavTarget.MAX_ITEM_ID))
+			{
+				return "неверный ID";
+			}
+			if (count < 1 || count > ShoppingPlan.MAX_COUNT)
+			{
+				return "неверное количество";
+			}
+			return null;
+		}
+	}
+
+	/** Навык по ключу приложения («attack», «fishing») — так же, как OsrsPathBridgePlugin.skillKey. null — нет такого. */
+	static Skill skillOf(String key)
+	{
+		if (key == null)
+		{
+			return null;
+		}
+		for (Skill s : Skill.values())
+		{
+			if (!"OVERALL".equals(s.name()) && s.getName().toLowerCase(Locale.ROOT).equals(key))
+			{
+				return s;
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -182,6 +317,10 @@ public class ActiveTarget
 		if (pacing != null && pacing.problem() != null)
 		{
 			return pacing.problem();
+		}
+		if (completionTrigger != null && completionTrigger.problem() != null)
+		{
+			return completionTrigger.problem();
 		}
 		for (List<String> list : List.of(nonNull(npcNames), nonNull(objectNames), nonNull(dialogChoices), nonNull(highlightItems), nonNull(watchItems)))
 		{

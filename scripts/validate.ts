@@ -2,16 +2,18 @@
 // Общие для parse-guide.ts и check-data.ts. Без сети.
 
 import type { GuideData } from './guide-parser.ts';
-import type { Stage, Step, WikiItemDetail } from '../src/types/index.ts';
+import type { FoeData, Stage, Step, WikiItemDetail } from '../src/types/index.ts';
 import { xpForLevel } from '../src/lib/xp.ts';
 import { titleTargets } from '../src/lib/targets.ts';
 
-export const EXPECTED = { skills: 12, f2pQp: 46, baseQp: 1 };
+export const EXPECTED = { skills: 12, members: 8, f2pQp: 46, baseQp: 1 };
 
 export interface Route {
   steps: Step[];
   stages: Stage[];
   items: WikiItemDetail[];
+  /** Противники шагов (monsters.json): для темпа боя — здоровье, от него опыт за противника. */
+  monsters?: FoeData;
 }
 
 export interface Report {
@@ -196,7 +198,12 @@ export function validate(d: GuideData | null, route: Route): Report {
   const lonelySpots = steps.filter((s) => s.resourceSpots && s.resourceSpots.length < 2).map((s) => s.id);
   check(!lonelySpots.length, 'Переключатель точек — только там, где их две и больше', `Одна точка в resourceSpots: ${lonelySpots.join(', ')}`);
 
-  const TRIGGERS = new Set(['QUEST_COMPLETED', 'CHAT_MESSAGE', 'VARBIT_CHANGED']);
+  const TRIGGERS = new Set(['QUEST_COMPLETED', 'SKILL_LEVEL', 'ITEM_OWNED', 'CHAT_MESSAGE', 'VARBIT_CHANGED']);
+  // Название квеста у RuneLite: как у шага (тире в названии — дефис) или как у статьи вики шага
+  // («Триумф у Oziach» — последний этап Dragon Slayer I). Есть ли он в RuneLite — проверяет RouteTargetsTest.
+  const questNamesOf = (s: Step) => [s.title.replace(/ — /g, ' - '),
+    ...(s.wikiUrl ? [decodeURIComponent(s.wikiUrl.replace(/^.*\/w\//, '')).replace(/_/g, ' ')] : [])];
+  const triggerQuests = new Map<string, string>();
   const badGame: string[] = [];
   for (const s of steps) {
     const g = s.inGame;
@@ -210,7 +217,25 @@ export function validate(d: GuideData | null, route: Route): Report {
     if (!t) continue;
     if (!TRIGGERS.has(t.type)) badGame.push(`${s.id}: неизвестный триггер ${t.type}`);
     // Квест засчитывается по названию из игры; название шага-квеста и есть это название.
-    if (t.type === 'QUEST_COMPLETED' && (s.type !== 'quest' || t.questName !== s.title)) badGame.push(`${s.id}: questName «${t.questName}» не совпадает с квестом шага`);
+    if (t.type === 'QUEST_COMPLETED') {
+      if (s.type !== 'quest' || !questNamesOf(s).includes(t.questName ?? '')) badGame.push(`${s.id}: questName «${t.questName}» не совпадает с квестом шага`);
+      const twin = triggerQuests.get(t.questName ?? '');
+      if (twin) badGame.push(`${s.id}: квест «${t.questName}» уже отмечает ${twin} — оба шага закрылись бы разом`);
+      triggerQuests.set(t.questName ?? '', s.id);
+    }
+    // Уровни — ровно цели из названия шага: иначе шаг закрылся бы раньше или позже, чем написано.
+    if (t.type === 'SKILL_LEVEL') {
+      const want = titleTargets(s.title).map((x) => `${x.skill} ${x.level}`).sort().join(', ');
+      const got = (t.levels ?? []).map((x) => `${x.skill} ${x.level}`).sort().join(', ');
+      if (!t.levels?.length || want !== got) badGame.push(`${s.id}: уровни автоотметки «${got}» ≠ цели из названия «${want}»`);
+    } else if (t.levels) badGame.push(`${s.id}: уровни бывают только у SKILL_LEVEL`);
+    if (t.type === 'ITEM_OWNED' && !t.items?.length) badGame.push(`${s.id}: ITEM_OWNED без предметов`);
+    if (t.items && !['QUEST_COMPLETED', 'SKILL_LEVEL', 'ITEM_OWNED'].includes(t.type)) badGame.push(`${s.id}: предметы бывают только у условий-состояний`);
+    for (const i of t.items ?? []) {
+      if (!i.names?.length || i.names.some((n) => !n.trim())) badGame.push(`${s.id}: предмет автоотметки без названия`);
+      if (!Number.isInteger(i.count) || i.count < 1) badGame.push(`${s.id}: количество ${i.names?.join('/')} — ${i.count}`);
+      if (i.id !== undefined && (!Number.isInteger(i.id) || i.id <= 0)) badGame.push(`${s.id}: ID ${i.id}`);
+    }
     if (t.type === 'CHAT_MESSAGE') {
       try { new RegExp(t.chatPattern ?? ''); } catch { badGame.push(`${s.id}: chatPattern не регулярное выражение`); }
       if (!t.chatPattern) badGame.push(`${s.id}: нет chatPattern`);
@@ -221,7 +246,7 @@ export function validate(d: GuideData | null, route: Route): Report {
   const auto = withGame.filter((s) => s.inGame!.completionTrigger);
   check(!badGame.length, `Подсветка в игре у ${withGame.length} шагов, автоотметка у ${auto.length}: поля в порядке`, `Ошибки подсветки: ${badGame.join('; ')}`);
 
-  // Путевые точки: по порядку, с подписью (её показывает HUD и метка на земле).
+  // Путевые точки: по порядку, с подписью (её показывает HUD: «Точка 2/5: мост»).
   const badRoute = steps.flatMap((s) => (s.inGame?.pathWaypoints ?? [])
     .filter((p) => badPoint(p) || !p.label?.trim())
     .map((p) => `${s.id} ${p.x},${p.y}`));
@@ -261,7 +286,9 @@ export function validate(d: GuideData | null, route: Route): Report {
     `inStep у рекомендуемых предметов: ${recInStep.join(', ')}`);
 
   // Темп прокачки: навык и уровень — те же, что в названии шага; опыт до уровня — по формуле игры.
-  const PACING_SKILLS = new Set(['fishing', 'woodcutting', 'cooking', 'mining']);
+  const COMBAT = new Set(['attack', 'strength', 'defence']);
+  const PACING_SKILLS = new Set(['fishing', 'woodcutting', 'cooking', 'mining', ...COMBAT]);
+  const foeHp = new Map((route.monsters?.foes ?? []).map((f) => [f.name, f.hitpoints]));
   const badPacing = steps.flatMap((s) => {
     const p = s.pacing;
     if (!p) return [];
@@ -271,7 +298,19 @@ export function validate(d: GuideData | null, route: Route): Report {
     if (!(p.expPerAction > 0)) out.push(`${s.id}: опыт за действие ${p.expPerAction}`);
     const forms = p.actionName.split('|');
     if (!(forms.length === 1 || forms.length === 3) || forms.some((f) => !f.trim())) out.push(`${s.id}: формы действия «${p.actionName}»`);
-    if (!titleTargets(s.title).some((t) => t.skill === p.skill && t.level === p.targetLevel)) out.push(`${s.id}: цели ${p.skill} ${p.targetLevel} нет в названии`);
+    for (const skill of [p.skill, ...(p.also ?? [])]) {
+      if (!titleTargets(s.title).some((t) => t.skill === skill && t.level === p.targetLevel)) out.push(`${s.id}: цели ${skill} ${p.targetLevel} нет в названии`);
+    }
+    // Несколько навыков — только бой: их качают по очереди, меняя стиль атаки.
+    if (p.also && (!COMBAT.has(p.skill) || p.also.some((a) => !COMBAT.has(a) || a === p.skill) || new Set(p.also).size !== p.also.length)) {
+      out.push(`${s.id}: also ${p.also.join(', ')}`);
+    }
+    // Бой: действие — противник, опыт навыка стиля — 4 за единицу урона, то есть 4 × его здоровье.
+    if (COMBAT.has(p.skill)) {
+      const hp = foeHp.get(s.foes?.[0] ?? '');
+      if (hp === undefined) out.push(`${s.id}: темп боя без противника из monsters.json`);
+      else if (p.expPerAction !== 4 * hp) out.push(`${s.id}: опыт за противника ${p.expPerAction} ≠ 4 × ${hp}`);
+    }
     if (p.secondsPerAction !== undefined && !(p.secondsPerAction > 0)) out.push(`${s.id}: секунд на действие ${p.secondsPerAction}`);
     return out;
   });
@@ -316,6 +355,23 @@ export function validate(d: GuideData | null, route: Route): Report {
       if (bad.length) { planErrors++; fail(`${s.id}: неправильные строки плана ${bad.map((r) => r.code).join(', ')}`); }
     }
     if (!planErrors) ok('У каждого навыка план прокачки с кодами по порядку');
+
+    // Навыки подписки: строка плана должна найтись для любого уровня 1–99, иначе «Сейчас по плану» пропадёт.
+    const ms = d.members.skills;
+    check(ms.length === EXPECTED.members, `Навыков подписки ${ms.length}: ${ms.map((s) => `${s.id}(${s.plan.ranges.length})`).join(' ')}`,
+      `Ожидалось ${EXPECTED.members} навыков подписки, найдено ${ms.length}`);
+    const holes = ms.filter((s) => {
+      const r = s.plan.ranges;
+      return r[0].from !== 1 || r[r.length - 1].to !== null
+        || r.some((x, i) => x.code !== `${s.id}-${i + 1}` || (i > 0 && r[i - 1].to !== x.from) || (x.to !== null && x.to <= x.from));
+    }).map((s) => s.id);
+    check(!holes.length, 'Планы навыков подписки идут с 1 уровня без пропусков, коды по порядку',
+      `План навыка подписки не с 1 уровня, с пропуском или не по порядку: ${holes.join(', ')}`);
+    const f2pLevels = new Set(d.levels.map((l) => l.id));
+    const badMembers = ms.filter((s) => s.membersOnly !== true || s.levelSkills.length !== 1 || f2pLevels.has(s.levelSkills[0])
+      || d.skills.some((f) => f.id === s.id) || s.wiki !== `https://oldschool.runescape.wiki/w/${s.nameEn}`).map((s) => s.id);
+    check(!badMembers.length, 'У навыков подписки свой уровень, свой код и ссылка на вики',
+      `Навык подписки без своего уровня, с чужим кодом или без ссылки на вики: ${badMembers.join(', ')}`);
     const goalRows = d.goals.rows.filter((r) => r.id !== 'qp');
     check(goalRows.length === d.levels.length, `«Цели по этапам»: ${goalRows.length} навыков × ${d.goals.stages.length} этапов`, '«Цели по этапам» неполные');
     const xpBad = d.xp.points.filter((p) => xpForLevel(p.level) !== p.xp).map((p) => `${p.level}: ${p.xp} ≠ ${xpForLevel(p.level)}`);

@@ -1,4 +1,4 @@
-// Разбор osrs-guide.md: навыки, цели по этапам, опыт, плагины и справка.
+// Разбор osrs-guide.md: навыки (бесплатные и подписки), цели по этапам, опыт, плагины и справка.
 // Маршрут (шаги и этапы) с V2 живёт отдельно — src/data/steps.json и stages.json.
 // Чистые функции без файлов: их вызывают parse-guide.ts (пишет JSON) и check-data.ts (сверяет JSON с гайдом).
 //
@@ -6,7 +6,8 @@
 // собрано в константах ниже и подписано, откуда оно.
 
 import type {
-  Block, GoalsData, GoalValue, LevelSkill, ListItem, PluginsData, ReferenceData, RefSection, Skill, SkillRange, XpData,
+  Block, GoalsData, GoalValue, LevelSkill, ListItem, MembersSkillsData, PluginsData, ReferenceData, RefSection, Skill, SkillRange,
+  XpData,
 } from '../src/types/index.ts';
 
 // ---------------------------------------------------------------------------
@@ -30,6 +31,15 @@ const LEVEL_SKILLS: { id: string; row: string; skill: string }[] = [
   { id: 'runecraft', row: 'Создание рун', skill: 'RC' },
 ];
 const QP_ROW = 'Очки квестов';
+
+/**
+ * Навыки подписки: код раздела → id уровня. Id — как у RuneLite (Skill.getName().toLowerCase()): по нему
+ * приходят уровни из игры и хранится прогресс, поэтому менять нельзя. Коды — из раздела «Коды».
+ */
+const MEMBERS_LEVELS: Record<string, string> = {
+  AG: 'agility', TH: 'thieving', SL: 'slayer', FA: 'farming', HE: 'herblore', HU: 'hunter', CN: 'construction', FL: 'fletching',
+};
+const MEMBERS_SECTION = 'Навыки подписки';
 
 // ---------------------------------------------------------------------------
 // Markdown → блоки
@@ -201,57 +211,90 @@ function column(head: string[], re: RegExp): number {
   return head.findIndex((h) => re.test(h));
 }
 
+/**
+ * Раздел навыка: вступление, подразделы и таблица «План прокачки» с колонками «Код» и «Уровни».
+ * Раздел без плана — не навык (null). Уровни навыка даёт levelSkills по коду из таблицы.
+ */
+function parseSkill(sec: MdSection, levelSkills: (id: string) => string[]): Skill | null {
+  const planIndex = sec.children.findIndex((c) => c.title === 'План прокачки');
+  if (planIndex < 0) return null;
+  const table = firstTable(sec.children[planIndex]);
+  if (table.head[0] !== 'Код' || table.head[1] !== 'Уровни') {
+    throw new Error(`«${sec.title}»: план прокачки должен начинаться с колонок «Код» и «Уровни»`);
+  }
+  const whereCol = column(table.head, /^Где$/);
+  const notesCol = column(table.head, /^Заметки$/);
+  const amountCol = column(table.head, /^Сколько/);
+  const ranges: SkillRange[] = table.rows.map((cells) => ({
+    code: cells[0],
+    ...parseRange(cells[1]),
+    levels: cells[1],
+    what: cells[2],
+    ...(whereCol >= 0 && cells[whereCol] && cells[whereCol] !== '—' ? { where: cells[whereCol] } : {}),
+    ...(amountCol >= 0 && cells[amountCol] && cells[amountCol] !== '—' ? { amount: cells[amountCol] } : {}),
+    ...(notesCol >= 0 && cells[notesCol] && cells[notesCol] !== '—' ? { notes: cells[notesCol] } : {}),
+    cells,
+  }));
+  const id = ranges[0].code.split('-')[0];
+
+  const withEn = sec.title.match(/^(.+?)\s+\(([^)]+)\)$/);
+  const withSub = sec.title.match(/^(.+?):\s+(.+)$/);
+  const skill: Skill = {
+    id,
+    title: sec.title,
+    name: withEn ? withEn[1] : withSub ? withSub[1] : sec.title,
+    levelSkills: levelSkills(id),
+    intro: sec.blocks,
+    sections: sec.children.map((c) => ({ title: c.title, blocks: flatten(c) })),
+    plan: { head: table.head, ranges, sectionIndex: planIndex },
+  };
+  if (withEn) skill.nameEn = withEn[2];
+  else if (withSub) skill.subtitle = withSub[2];
+  return skill;
+}
+
+/** Ссылки из раздела «Ссылки на вики»: [текст, адрес]. */
+function wikiLinks(doc: MdSection): [string, string][] {
+  const wiki = need(doc, 'Ссылки на вики');
+  return flatten(wiki).flatMap((b) => (b.t === 'ul' ? b.items.map((i) => i.text) : []))
+    .flatMap((t) => [...t.matchAll(/\[([^\]]+)\]\(([^)]+)\)/g)])
+    .map(([, text, url]) => [text, url] as [string, string]);
+}
+
 function parseSkills(doc: MdSection): Skill[] {
   const skills: Skill[] = [];
   for (const sec of doc.children) {
-    const planIndex = sec.children.findIndex((c) => c.title === 'План прокачки');
-    if (planIndex < 0) continue;
-    const table = firstTable(sec.children[planIndex]);
-    if (table.head[0] !== 'Код' || table.head[1] !== 'Уровни') {
-      throw new Error(`«${sec.title}»: план прокачки должен начинаться с колонок «Код» и «Уровни»`);
-    }
-    const whereCol = column(table.head, /^Где$/);
-    const notesCol = column(table.head, /^Заметки$/);
-    const amountCol = column(table.head, /^Сколько/);
-    const ranges: SkillRange[] = table.rows.map((cells) => ({
-      code: cells[0],
-      ...parseRange(cells[1]),
-      levels: cells[1],
-      what: cells[2],
-      ...(whereCol >= 0 && cells[whereCol] && cells[whereCol] !== '—' ? { where: cells[whereCol] } : {}),
-      ...(amountCol >= 0 && cells[amountCol] && cells[amountCol] !== '—' ? { amount: cells[amountCol] } : {}),
-      ...(notesCol >= 0 && cells[notesCol] && cells[notesCol] !== '—' ? { notes: cells[notesCol] } : {}),
-      cells,
-    }));
-    const id = ranges[0].code.split('-')[0];
-
-    const withEn = sec.title.match(/^(.+?)\s+\(([^)]+)\)$/);
-    const withSub = sec.title.match(/^(.+?):\s+(.+)$/);
-    const skill: Skill = {
-      id,
-      title: sec.title,
-      name: withEn ? withEn[1] : withSub ? withSub[1] : sec.title,
-      levelSkills: LEVEL_SKILLS.filter((l) => l.skill === id).map((l) => l.id),
-      intro: sec.blocks,
-      sections: sec.children.map((c) => ({ title: c.title, blocks: flatten(c) })),
-      plan: { head: table.head, ranges, sectionIndex: planIndex },
-    };
-    if (withEn) skill.nameEn = withEn[2];
-    else if (withSub) skill.subtitle = withSub[2];
-    if (!skill.levelSkills.length) throw new Error(`Навык ${id} не сопоставлен ни с одной строкой «Целей по этапам»`);
+    const skill = parseSkill(sec, (id) => LEVEL_SKILLS.filter((l) => l.skill === id).map((l) => l.id));
+    if (!skill) continue;
+    if (!skill.levelSkills.length) throw new Error(`Навык ${skill.id} не сопоставлен ни с одной строкой «Целей по этапам»`);
     skills.push(skill);
   }
 
   // Ссылки на вики: текст ссылки совпадает с названием строки в «Целях по этапам».
-  const wiki = need(doc, 'Ссылки на вики');
-  const links = flatten(wiki).flatMap((b) => (b.t === 'ul' ? b.items.map((i) => i.text) : []))
-    .flatMap((t) => [...t.matchAll(/\[([^\]]+)\]\(([^)]+)\)/g)]);
-  for (const [, text, url] of links) {
+  for (const [text, url] of wikiLinks(doc)) {
     const ls = LEVEL_SKILLS.find((l) => l.row === text);
     const skill = ls && skills.find((s) => s.id === ls.skill);
     if (skill && !skill.wiki) skill.wiki = url;
   }
   return skills;
+}
+
+/**
+ * «Навыки подписки (Members)»: раздел второго уровня, внутри — навыки третьего уровня с тем же устройством,
+ * что у бесплатных (подразделы четвёртого уровня, «План прокачки»). Вступление раздела — для страницы «Навыки».
+ */
+function parseMembersSkills(doc: MdSection): MembersSkillsData {
+  const sec = need(doc, MEMBERS_SECTION);
+  const links = wikiLinks(doc);
+  const skills = sec.children.map((child) => {
+    const skill = parseSkill(child, (id) => (MEMBERS_LEVELS[id] ? [MEMBERS_LEVELS[id]] : []));
+    if (!skill) throw new Error(`«${child.title}»: у навыка подписки нет «Плана прокачки»`);
+    if (!skill.levelSkills.length) throw new Error(`Навык подписки ${skill.id} не сопоставлен с уровнем (MEMBERS_LEVELS)`);
+    // Ссылка на вики: текст ссылки совпадает с названием навыка («Ловкость»).
+    const link = links.find(([text]) => text === skill.name);
+    return { ...skill, ...(link ? { wiki: link[1] } : {}), membersOnly: true as const };
+  });
+  return { title: sec.title, intro: sec.blocks, skills };
 }
 
 function parseGoal(raw: string): GoalValue {
@@ -371,6 +414,8 @@ function parseReference(doc: MdSection, training: RefSection): ReferenceData {
 
 export interface GuideData {
   skills: Skill[];
+  /** Навыки подписки — src/data/members-skills.json. */
+  members: MembersSkillsData;
   levels: LevelSkill[];
   goals: GoalsData;
   xp: XpData;
@@ -386,6 +431,7 @@ export function parseGuide(markdown: string): GuideData {
   const { xp, training } = parseXp(doc);
   return {
     skills: parseSkills(doc),
+    members: parseMembersSkills(doc),
     levels,
     goals,
     xp,

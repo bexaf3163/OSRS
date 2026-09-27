@@ -2,6 +2,7 @@ import { createRequire } from 'node:module';
 import { describe, expect, it } from 'vitest';
 import { allSteps, stepsFor } from '../src/data';
 import { emptyProgress, withStep } from '../src/lib/progress';
+import { ownedText, triggerText } from '../src/lib/triggers';
 import {
   backoffMs, BRIDGE_PATHS, clearActiveStep, connectEvents, parseEvent, planAutoComplete, syncActiveStep, toInGameTarget,
   type BridgeEvent, type BridgeTransport,
@@ -39,10 +40,18 @@ describe('цель шага для игры', () => {
   });
 
   it('без inGame — стрелка к старту и клетки мест сбора из карты шага', () => {
-    const p = toInGameTarget(step('S2-13'))!;
+    const p = toInGameTarget({ ...step('S2-13'), inGame: undefined })!;
     expect(p.worldPoint).toMatchObject({ x: 3104, y: 3424, plane: 0 });
     expect(p.groundTiles).toHaveLength(2);
     expect(p.completionTrigger).toBeUndefined();
+  });
+
+  it('inGame без точки — точка и клетки всё равно с карты шага, подсветка и автоотметка из inGame', () => {
+    const p = toInGameTarget(step('S2-13'))!;
+    expect(p.worldPoint).toMatchObject({ x: 3104, y: 3424, plane: 0 });
+    expect(p.groundTiles).toHaveLength(2);
+    expect(p.npcNames).toEqual(['Rod Fishing spot']);
+    expect(p.completionTrigger).toEqual({ type: 'SKILL_LEVEL', levels: [{ skill: 'fishing', level: 30 }, { skill: 'cooking', level: 30 }] });
   });
 
   it('у шага без карты и подсветки показывать в игре нечего', () => {
@@ -56,34 +65,76 @@ describe('цель шага для игры', () => {
   });
 });
 
+describe('объяснение автоотметки', () => {
+  it('одна фраза на любое условие', () => {
+    expect(triggerText({ type: 'QUEST_COMPLETED', questName: "Cook's Assistant" })).toBe('квест засчитается в игре');
+    expect(triggerText({ type: 'SKILL_LEVEL', levels: [{ skill: 'fishing', level: 30 }, { skill: 'cooking', level: 30 }] }))
+      .toBe('в игре будет Fishing 30 и Cooking 30');
+    expect(triggerText({ type: 'SKILL_LEVEL', levels: [{ skill: 'fishing', level: 20 }, { skill: 'cooking', level: 15 }], items: [{ names: ['Shrimps', 'Anchovies'], count: 50 }] }))
+      .toBe('в игре будет Fishing 20 и Cooking 15, и у тебя будет 50 × Shrimps или Anchovies (сумка, надетое и банк вместе)');
+    expect(triggerText({ type: 'ITEM_OWNED', items: [{ names: ['Coins'], count: 20000 }] })).toBe('у тебя будет 20\u00a0000 × Coins (сумка, надетое и банк вместе)');
+    expect(triggerText({ type: 'QUEST_COMPLETED', questName: 'Monkey Madness I', items: [{ names: ['Dragon scimitar'], count: 1 }] }))
+      .toBe('квест засчитается в игре, и у тебя будет Dragon scimitar (сумка, надетое и банк вместе)');
+    expect(ownedText({ names: ['Map part'], id: 1535, count: 1 })).toBe('Map part');
+  });
+});
+
 describe('триггеры автоотметки в маршруте', () => {
   const triggers = allSteps.filter((s) => s.inGame?.completionTrigger).map((s) => ({ s, t: s.inGame!.completionTrigger! }));
 
   it('квест засчитывается по его названию из игры', () => {
     const quests = triggers.filter(({ t }) => t.type === 'QUEST_COMPLETED');
-    expect(quests.length).toBeGreaterThanOrEqual(5);
-    for (const { s, t } of quests) expect(t.questName).toBe(s.title);
+    expect(quests.length).toBeGreaterThanOrEqual(30);
+    for (const { s, t } of quests) {
+      // Как у шага (тире — дефис, как у RuneLite) или как у статьи вики шага: «Триумф у Oziach» — это Dragon Slayer I.
+      const article = decodeURIComponent((s.wikiUrl ?? '').replace(/^.*\/w\//, '')).replace(/_/g, ' ');
+      expect([s.title.replace(/ — /g, ' - '), article]).toContain(t.questName);
+    }
+    const names = quests.map(({ t }) => t.questName);
+    expect(new Set(names).size).toBe(names.length);
+    expect(step('S5-09').inGame!.completionTrigger).toEqual({ type: 'QUEST_COMPLETED', questName: 'Dragon Slayer I', items: [{ names: ['Rune platebody'], count: 1 }] });
+    expect(step('S9-05').inGame!.completionTrigger!.questName).toBe("Recipe for Disaster - Another Cook's Quest");
+  });
+
+  it('этапы Dragon Slayer I — по своим предметам, куски карты по ID', () => {
+    expect(step('S5-01').inGame!.completionTrigger).toEqual({ type: 'ITEM_OWNED', items: [{ names: ['Maze key'], count: 1 }] });
+    expect(step('S5-03').inGame!.completionTrigger!.items).toEqual([{ names: ['Map part'], id: 1535, count: 1 }]);
+    expect(step('S5-04').inGame!.completionTrigger!.items).toEqual([{ names: ['Map part'], id: 1537, count: 1 }]);
+    expect(step('S5-05').inGame!.completionTrigger!.items).toEqual([{ names: ['Crandor map'], count: 1 }]);
+    expect(step('S5-08').inGame!.completionTrigger!.items).toEqual([{ names: ["Elvarg's head"], count: 1 }]);
+    // Оплату Wormbrain в 10 000 монет шаг не советует — и в игре её не подсвечиваем.
+    expect(step('S5-05').inGame!.dialogChoices ?? []).toEqual([]);
   });
 
   it('VARBIT_CHANGED без проверенных varbit не используется', () => {
     expect(triggers.filter(({ t }) => t.type === 'VARBIT_CHANGED')).toEqual([]);
   });
 
-  it('сообщение о новом уровне: срабатывает на цели и выше, но не ниже', () => {
-    const re = (id: string) => new RegExp(step(id).inGame!.completionTrigger!.chatPattern!);
-    const msg = (skill: string, n: number) => `Congratulations, you've just advanced your ${skill} level. You are now level ${n}.`;
-    expect(re('S2-04').test(msg('Magic', 25))).toBe(true);
-    expect(re('S2-04').test(msg('Magic', 31))).toBe(true);
-    expect(re('S2-04').test(msg('Magic', 98))).toBe(true);
-    expect(re('S2-04').test(msg('Magic', 24))).toBe(false);
-    expect(re('S2-04').test(msg('Magic', 2))).toBe(false);
-    expect(re('S2-04').test(msg('Agility', 25))).toBe(false);
-    expect(re('S3-09').test(msg('Magic', 33))).toBe(true);
-    expect(re('S3-09').test(msg('Magic', 32))).toBe(false);
-    expect(re('S6-04').test(msg('Magic', 55))).toBe(true);
-    expect(re('S6-04').test(msg('Magic', 5))).toBe(false);
-    expect(re('S7-04').test(msg('Agility', 25))).toBe(true);
-    expect(re('S7-04').test(msg('Agility', 20))).toBe(false);
+  it('уровни засчитываются по настоящим уровням, ровно целям из названия шага', () => {
+    const levels = triggers.filter(({ t }) => t.type === 'SKILL_LEVEL');
+    expect(levels.length).toBeGreaterThanOrEqual(15);
+    for (const { s, t } of levels) expect(t.levels).toEqual(s.targets);
+    // Сообщение о новом уровне не приходит, если уровень взят до показа шага, — уровни проверяются напрямую.
+    expect(triggers.filter(({ t }) => t.type === 'CHAT_MESSAGE')).toEqual([]);
+    expect(step('S2-04').inGame!.completionTrigger).toEqual({ type: 'SKILL_LEVEL', levels: [{ skill: 'magic', level: 25 }] });
+  });
+
+  it('«Готово, когда» с предметами — предметы тоже в условии', () => {
+    expect(step('S1-11').inGame!.completionTrigger!.items).toEqual([{ names: ['Shrimps', 'Anchovies'], count: 50 }]);
+    expect(step('S1-12').inGame!.completionTrigger!.items).toEqual([
+      { names: ['Copper ore'], count: 5 }, { names: ['Tin ore'], count: 1 }, { names: ['Iron ore'], count: 2 },
+    ]);
+    expect(step('S4-04').inGame!.completionTrigger!.items).toEqual([{ names: ['Lobster'], count: 30 }]);
+    expect(step('S1-13').inGame!.completionTrigger).toEqual({ type: 'ITEM_OWNED', items: [{ names: ['Coins'], count: 20000 }] });
+  });
+
+  it('шаги закупок засчитываются, когда куплено всё из списка шага', () => {
+    for (const id of ['S2-01', 'S3-07', 'S4-05']) {
+      const s = step(id);
+      const t = s.inGame!.completionTrigger!;
+      expect(t.type).toBe('ITEM_OWNED');
+      expect(t.items!.map((i) => i.names[0])).toEqual(s.itemsRequired!.map((i) => i.nameEn));
+    }
   });
 });
 

@@ -43,7 +43,7 @@ export function PathPage(props: { focusStep?: string; focusKey: number }) {
   return wide ? <PathWide {...props} /> : <PathNarrow {...props} />;
 }
 
-/** Узкий экран и телефон: этапы списком, шаги раскрываются на месте. */
+/** Узкое окно: этапы списком, шаги раскрываются на месте. */
 function PathNarrow({ focusStep, focusKey }: { focusStep?: string; focusKey: number }) {
   const { progress, qp, maxQp, steps, stages, mode, setStep, review, reactivate } = useStore();
   const { advance } = useBridge();

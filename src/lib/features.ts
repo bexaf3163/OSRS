@@ -7,7 +7,7 @@ import { useSyncExternalStore } from 'react';
 export interface Features {
   /** 📍 у мест в досье вики: карта и стрелка в игре. */
   autoLocation: boolean;
-  /** Строка Bank Tags для этапа и подсветка предметов этапа в банке. */
+  /** Подсветка предметов этапа в банке (плагин OSRS Path Bridge). Ключ прежний — сохранённый выбор не теряется. */
   bankTags: boolean;
   /** Темп прокачки из игры в карточке шага. */
   pacing: boolean;

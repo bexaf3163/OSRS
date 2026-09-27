@@ -7,12 +7,7 @@ import { useBridge } from '../bridge';
 import { toInGameTarget } from '../services/runeliteBridge';
 import { PreflightPanel } from './PreflightPanel';
 import { PacingLine } from './PacingLine';
-
-const TRIGGER_TEXT: Record<NonNullable<InGameTarget['completionTrigger']>['type'], string> = {
-  QUEST_COMPLETED: 'квест засчитается в игре',
-  CHAT_MESSAGE: 'в чате игры появится сообщение о нужном уровне',
-  VARBIT_CHANGED: 'игра засчитает этот этап',
-};
+import { triggerText } from '../lib/triggers';
 
 const GROUPS: [keyof InGameTarget, string][] = [
   ['npcNames', 'NPC'],
@@ -59,12 +54,12 @@ export function InGamePanel({ step }: { step: Step }) {
         </p>
       )}
       <PacingLine step={step} />
-      {trigger && <p className="muted small">Шаг отметится сам, когда {TRIGGER_TEXT[trigger.type]}.</p>}
+      {trigger && <p className="muted small">Шаг отметится сам, когда {triggerText(trigger)}.</p>}
       {active && (
         <p className="muted small">
           {shortestPath
             ? '🗺 Путь по земле прокладывает Shortest Path — с учётом стен и дверей.'
-            : waypoints.length ? `🗺 Маршрут по ${waypoints.length} точкам — метки на земле. Точнее ведёт плагин Shortest Path из Plugin Hub.`
+            : waypoints.length ? `🗺 Маршрут по ${waypoints.length} точкам: стрелка и HUD ведут от точки к точке. Путь с учётом стен рисует плагин Shortest Path из Plugin Hub.`
               : '🗺 Стрелка показывает направление по прямой. Путь с учётом стен рисует плагин Shortest Path из Plugin Hub.'}
         </p>
       )}

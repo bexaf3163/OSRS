@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { allSteps, itemById, known, stepsFor } from '../src/data';
 import type { Step } from '../src/types';
 import { emptyProgress, normalizeProgress, withUpgradeDismissed } from '../src/lib/progress';
-import { bankTagName, generateBankTag, generateStageBankTag, stageBankItemIds, stepBankItemIds, uniqueIds } from '../src/lib/bankTags';
+import { stageBankItemIds, stepBankItemIds, uniqueIds } from '../src/lib/bankTags';
 import { DEFAULT_FEATURES, parseFeatures } from '../src/lib/features';
 import {
   checkStatus, clearNavTarget, parseGear, parsePacing, setGearHint, setNavTarget, syncBankTags, toInGameTarget, type BridgeTransport, type GearState,
@@ -11,7 +11,8 @@ import {
   recommendFor, recommendUpgrade, showsPrompt, stepUpgradeCategories, toolProgression, upgradeNav, type RouterInput, type ToolProgression,
 } from '../src/services/gearUpgradeRouter';
 import { matchStrict } from '../src/services/locationResolver';
-import { actionForm, etaText, pacingText } from '../src/lib/pacing';
+import { actionForm, etaText, pacingNext, pacingText } from '../src/lib/pacing';
+import { foeData } from '../src/services/gearAdvisor';
 import { mapTarget, navPayload, pageFromUrl, sourceBadge } from '../src/lib/places';
 
 import dangerZones from '../src/data/dangerZones.json';
@@ -31,23 +32,9 @@ function transport(reply: { ok: boolean; status: number; data?: unknown }) {
   return { t, calls };
 }
 
-describe('Bank Tags', () => {
-  it('формат импорта RuneLite: banktags, версия, имя, значок, предметы', () => {
-    expect(generateBankTag('osrspath_stage1', [995, 315, 1351, 1265, 590])).toBe('banktags,1,osrspath_stage1,995,995,315,1351,1265,590');
-  });
-
+describe('Предметы этапа для подсветки в банке', () => {
   it('повторы и мусор убираются, порядок сохраняется', () => {
     expect(uniqueIds([1351, 590, 1351, 0, -4, 2.5, 590, 995])).toEqual([1351, 590, 995]);
-    expect(generateBankTag('x', [1351, 1351, 590])).toBe('banktags,1,x,1351,1351,590');
-  });
-
-  it('пустой список или имя — пустая строка, а не строка, которую плагин отвергнет', () => {
-    expect(generateBankTag('stage', [])).toBe('');
-    expect(generateBankTag('<:>', [995])).toBe('');
-  });
-
-  it('из имени убираются символы, которые плагин выкидывает или принимает за разделитель', () => {
-    expect(bankTagName('a<b>c:d,e')).toBe('abcde');
   });
 
   it('этап 1 в F2P: предметы из банка, без выдаваемых по ходу шага', () => {
@@ -59,9 +46,6 @@ describe('Bank Tags', () => {
       .flatMap((s) => (s.itemsRequired ?? []).filter((i) => i.inStep && i.wikiItemId).map((i) => i.wikiItemId!));
     const alsoFromBank = new Set(stepsFor('f2p').filter((s) => s.stage === 1).flatMap(stepBankItemIds));
     for (const id of inStep) if (!alsoFromBank.has(id)) expect(ids).not.toContain(id);
-    const tag = generateStageBankTag(1, 'f2p');
-    expect(tag.startsWith('banktags,1,osrspath_stage1,')).toBe(true);
-    expect(tag.split(',').slice(4).map(Number)).toEqual(ids);
   });
 
   it('F2P без предметов Members, Members — со всеми', () => {
@@ -305,6 +289,27 @@ describe('Мост: новые запросы и события', () => {
     expect(actionForm('бревно|бревна|брёвен', 11)).toBe('брёвен');
     expect(actionForm('бревно|бревна|брёвен', 21)).toBe('бревно');
   });
+
+  it('темп боя: показан растущий навык, остальные — «потом», готовый навык подсказывает сменить стиль', () => {
+    const e = { type: 'PACING', stepId: 'S3-08', pacing: {
+      skill: 'strength', targetLevel: 30, xp: 5000, remainingXp: 8363, actionsLeft: 111, estimated: true, almost: false, done: false,
+      actionsPerMinute: 3.2, etaSeconds: 2081, left: ['defence', 'magic', 'attack'],
+    } };
+    const p = parsePacing(e)!;
+    // Незнакомые навыки в left отбрасываются.
+    expect(p.left).toEqual(['defence', 'attack']);
+    const all = ['attack', 'strength', 'defence'] as const;
+    expect(pacingText(p, 'воин|воина|воинов', all)).toBe('111 воинов до 30 Strength');
+    expect(etaText(p)).toBe('примерно 35 мин');
+    expect(pacingNext(p)).toBe('потом Defence и Attack');
+    expect(pacingNext({ ...p, left: ['defence'] })).toBe('потом Defence');
+    const doneOne = { ...p, done: true, actionsLeft: 0, left: ['defence' as const] };
+    expect(pacingText(doneOne, 'воин|воина|воинов', all)).toBe('✓ 30 Strength — дальше Defence: смени стиль атаки');
+    expect(pacingNext(doneOne)).toBe('');
+    expect(pacingText({ ...doneOne, left: [] }, 'воин|воина|воинов', all)).toBe('✓ Целевой уровень достигнут: 30 Attack, Strength, Defence');
+    // Старый плагин не шлёт left — это просто пустой список.
+    expect(parsePacing({ ...e, pacing: { ...e.pacing, left: undefined } })!.left).toEqual([]);
+  });
 });
 
 // ---------- Досье → карта → игра ----------
@@ -358,7 +363,18 @@ describe('Радар опасности: данные', () => {
 describe('Шаги с темпом', () => {
   it('темп только у шагов прокачки', () => {
     const paced: Step[] = allSteps.filter((s) => s.pacing);
-    expect(paced.map((s) => s.id)).toEqual(['S1-08', 'S1-11', 'S1-12', 'S2-13']);
+    expect(paced.map((s) => s.id)).toEqual(['S1-08', 'S1-11', 'S1-12', 'S2-13', 'S3-08', 'S4-03']);
     for (const s of paced) expect(s.type).toBe('skill');
+  });
+
+  it('темп боя: три навыка до одной цели, опыт за противника — 4 × его здоровье', () => {
+    const hp = new Map(foeData.foes.map((f) => [f.name, f.hitpoints]));
+    for (const id of ['S3-08', 'S4-03']) {
+      const s = allSteps.find((x) => x.id === id)!;
+      expect(s.pacing!.skill).toBe('attack');
+      expect(s.pacing!.also).toEqual(['strength', 'defence']);
+      expect(s.pacing!.expPerAction).toBe(4 * hp.get(s.foes![0])!);
+      expect(s.pacing!.secondsPerAction).toBeUndefined();
+    }
   });
 });

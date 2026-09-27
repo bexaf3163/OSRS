@@ -9,9 +9,6 @@ import { useBridge } from '../bridge';
 import { setFeatures, useFeatures, type Features } from '../lib/features';
 import { BRIDGE_ORIGIN } from '../services/runeliteBridge';
 
-/** Программа для ПК открывает сборку с диска (file://). */
-const isDesktop = location.protocol === 'file:';
-
 const THEMES: [Theme, string][] = [['light', 'Светлая'], ['dark', 'Тёмная'], ['system', 'Системная']];
 
 function download(name: string, text: string) {
@@ -34,16 +31,6 @@ export function SettingsPage() {
   const bridge = desktop();
 
   const done = Object.values(progress.steps).filter((s) => s === 'done').length;
-  const file = () => new File([exportProgress(progress)], exportFileName(), { type: 'application/json' });
-  const canShare = typeof navigator.canShare === 'function' && navigator.canShare({ files: [file()] });
-
-  const share = async () => {
-    try {
-      await navigator.share({ files: [file()], title: 'Прогресс OSRS Путь' });
-    } catch {
-      // Отмена в окне «Поделиться» — не ошибка.
-    }
-  };
 
   const onFile = async (f: File | undefined) => {
     setImportError('');
@@ -67,17 +54,10 @@ export function SettingsPage() {
 
       <section className="card section-card">
         <h2 className="card-title">Перенос прогресса</h2>
-        {isDesktop ? (
-          <p className="muted">
-            Прогресс хранится в этой программе на компьютере — отдельно от браузера и телефона. Чтобы перенести его,
-            сохрани файл здесь и загрузи его на другом устройстве.
-          </p>
-        ) : (
-          <p className="muted">
-            Прогресс хранится только в этом браузере. Чтобы перенести его между ноутбуком и телефоном, сохрани файл здесь
-            и загрузи его там. На iPhone приложение с экрана «Домой» хранит данные отдельно от Safari — переносить тоже файлом.
-          </p>
-        )}
+        <p className="muted">
+          Прогресс хранится в этой программе и копией — файлом <code className="code">progress.json</code> в папке данных.
+          Чтобы перенести его на другой компьютер, сохрани файл здесь и загрузи его там.
+        </p>
         {bridge && (
           <p className="muted small">
             {bridge.isPortable() ? 'Переносная версия: данные лежат рядом с программой, в папке ' : 'Копия прогресса лежит в папке '}
@@ -89,7 +69,6 @@ export function SettingsPage() {
           <button type="button" className="btn btn-primary" onClick={() => download(exportFileName(), exportProgress(progress))}>
             Экспорт прогресса
           </button>
-          {canShare && <button type="button" className="btn" onClick={share}>Поделиться файлом</button>}
           <button type="button" className="btn" onClick={() => fileRef.current?.click()}>Импорт прогресса</button>
           <input ref={fileRef} type="file" accept="application/json,.json" hidden onChange={(e) => onFile(e.target.files?.[0])} />
         </div>
@@ -131,7 +110,7 @@ export function SettingsPage() {
 
       <p className="muted small">
         OSRS Путь {__APP_VERSION__}
-        {isDesktop ? ` · программа для ПК${bridge?.isPortable() ? ', переносная' : ''}` : ''}
+        {bridge?.isPortable() ? ' · переносная версия' : ''}
         {' · '}<a href="https://github.com/bexaf3163/OSRS/releases/latest" target="_blank" rel="noopener noreferrer">Новые версии</a>
       </p>
     </div>
@@ -208,7 +187,7 @@ function Appearance() {
         </div>
       </div>
 
-      {bridge && zoom ? (
+      {bridge && zoom && (
         <div className="setting">
           <Stepper id={ids.zoom} label="Масштаб интерфейса" value={zoom.zoom} steps={ZOOM_STEPS} onChange={(v) => pickZoom({ zoom: v })} />
           <label className="switch">
@@ -218,14 +197,6 @@ function Appearance() {
           <p className="muted small">
             Сейчас {percent(zoom.effective)}{zoom.autoZoom && Math.abs(zoom.effective - zoom.zoom) > 0.005 ? ' с учётом ширины окна' : ''}.
             Клавиши: <kbd>Ctrl</kbd> + <kbd>+</kbd> / <kbd>−</kbd>, <kbd>Ctrl</kbd> + <kbd>0</kbd> — сброс, или <kbd>Ctrl</kbd> + колесо мыши.
-          </p>
-        </div>
-      ) : (
-        <div className="setting">
-          <span className="setting-label">Масштаб интерфейса</span>
-          <p className="muted small">
-            В браузере масштаб меняется его средствами: <kbd>Ctrl</kbd> + <kbd>+</kbd> / <kbd>−</kbd>, <kbd>Ctrl</kbd> + <kbd>0</kbd> — сброс.
-            В программе для ПК масштаб ещё и подстраивается под размер окна.
           </p>
         </div>
       )}
@@ -250,7 +221,7 @@ function Appearance() {
 
 const HELPERS: { key: keyof Features; title: string; text: string }[] = [
   { key: 'autoLocation', title: '📍 Места на карте', text: 'Места в досье вики (где лежит бесплатно, магазины, продавцы, города) открываются на карте мира, а 🧭 ведёт туда стрелку в игре.' },
-  { key: 'bankTags', title: '🏷️ Bank Tags для этапа', text: 'Кнопка со строкой импорта для плагина Bank Tags и мягкая подсветка предметов этапа в банке через плагин OSRS Path Bridge.' },
+  { key: 'bankTags', title: '🏦 Предметы этапа в банке', text: 'Пока шаг этапа показан в игре, плагин OSRS Path Bridge мягко подсвечивает в основном окне банка всё, что понадобится на этом этапе. Отдельную вкладку и строку импорта делать не нужно.' },
   { key: 'pacing', title: '⏱ Темп прокачки', text: 'Сколько действий и минут осталось до цели шага — по опыту из игры. Без замеров время не придумывается.' },
   { key: 'upgradeRouter', title: '⚡ Апгрейды и снаряжение', text: 'Перед долгой прокачкой — топор или кирка получше, если уровень уже позволяет. На шагах с боем — оружие, амулет и броня получше по формулам урона OSRS Wiki, против противника шага; совет — и строкой в HUD игры. Сама ничего не покупает и не надевает.' },
 ];
@@ -356,8 +327,8 @@ function RuneLiteBridge() {
         </div>
       ) : (
         <p className="muted small">
-          В программе для ПК RuneLite с плагином запускается одной кнопкой (или сам, вместе с программой).
-          В браузере — вручную, как описано в README репозитория, раздел «RuneLite bridge».
+          RuneLite с плагином запускается одной кнопкой (или сам, вместе с программой) — эта сборка запущена не как
+          программа для ПК, поэтому кнопки здесь нет.
         </p>
       )}
     </section>

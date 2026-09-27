@@ -34,18 +34,6 @@ public interface OsrsPathBridgeConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "allowedOrigins",
-		name = "Разрешённые сайты",
-		description = "Адреса веб-версии «OSRS Путь» через запятую, например https://example.github.io. "
-			+ "Программа для ПК и http://localhost работают без этого.",
-		position = 2
-	)
-	default String allowedOrigins()
-	{
-		return "";
-	}
-
-	@ConfigItem(
 		keyName = "hintArrow",
 		name = "Стрелка к месту шага",
 		description = "Жёлтая стрелка игры над точкой текущего шага",
@@ -130,18 +118,6 @@ public interface OsrsPathBridgeConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "showBreadcrumbs",
-		name = "Путевые точки на земле",
-		description = "Метки маршрута шага на земле, если Shortest Path не ведёт к цели сам",
-		section = companion,
-		position = 15
-	)
-	default boolean showBreadcrumbs()
-	{
-		return true;
-	}
-
-	@ConfigItem(
 		keyName = "useShortestPath",
 		name = "Через Shortest Path",
 		description = "Если установлен плагин Shortest Path (Plugin Hub), передавать ему цель шага — он проложит путь с учётом стен и дверей",
@@ -214,7 +190,7 @@ public interface OsrsPathBridgeConfig extends Config
 	@ConfigItem(
 		keyName = "bankTagsHelper",
 		name = "Предметы этапа",
-		description = "Принимать от приложения список предметов этапа — тот же, что в строке Bank Tags",
+		description = "Принимать от приложения список предметов этапа — для подсветки в банке",
 		section = helpers,
 		position = 23
 	)
@@ -226,7 +202,7 @@ public interface OsrsPathBridgeConfig extends Config
 	@ConfigItem(
 		keyName = "bankHighlight",
 		name = "Подсветка в банке",
-		description = "Мягкая золотистая рамка у предметов этапа в основном окне банка — даже без отдельной вкладки Bank Tags",
+		description = "Мягкая золотистая рамка у предметов этапа в основном окне банка — вкладка Bank Tags не нужна",
 		section = helpers,
 		position = 24
 	)

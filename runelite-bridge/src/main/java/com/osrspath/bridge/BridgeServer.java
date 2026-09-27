@@ -12,20 +12,16 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -49,9 +45,10 @@ import lombok.extern.slf4j.Slf4j;
  * отвечает 409 с объяснением — приложение показывает его, а не молчит.
  * </pre>
  *
- * Защита от чужих сайтов в браузере: Host только локальный (против DNS rebinding), Origin — только
- * localhost или адреса из настроек, POST — только с заголовком X-OSRS-Path (его не отправить без
- * разрешённого CORS-запроса). Программа для ПК ходит сюда из главного процесса, без Origin.
+ * Защита от сайтов в браузере: Host только локальный (против DNS rebinding), любой запрос с заголовком
+ * Origin отклоняется, POST — только с заголовком X-OSRS-Path. Мост слушает одну программу для ПК: она ходит
+ * сюда из главного процесса Electron, без Origin. Веб-версии больше нет, поэтому и CORS не нужен: браузер
+ * без разрешения CORS не прочитает ответ и не отправит X-OSRS-Path.
  *
  * Сервер не зависит от RuneLite — его можно проверить обычным тестом.
  */
@@ -63,8 +60,6 @@ public final class BridgeServer
 	static final int MAX_BODY = 64 * 1024;
 	static final int MAX_STREAMS = 8;
 	static final long PING_SECONDS = 15;
-
-	private static final Pattern LOCAL_ORIGIN = Pattern.compile("^http://(localhost|127\\.0\\.0\\.1)(:\\d{1,5})?$");
 
 	public interface Listener
 	{
@@ -99,7 +94,6 @@ public final class BridgeServer
 	private final int requestedPort;
 	private final Gson gson;
 	private final Listener listener;
-	private final Set<String> extraOrigins;
 	private final List<Stream> streams = new CopyOnWriteArrayList<>();
 
 	private HttpServer server;
@@ -117,12 +111,11 @@ public final class BridgeServer
 	/** Последнее событие PACING — повторяется новым подключениям. */
 	private volatile Map<String, Object> lastPacing;
 
-	public BridgeServer(int port, Gson gson, Listener listener, Collection<String> extraOrigins)
+	public BridgeServer(int port, Gson gson, Listener listener)
 	{
 		this.requestedPort = port;
 		this.gson = gson;
 		this.listener = listener;
-		this.extraOrigins = new HashSet<>(extraOrigins);
 	}
 
 	public void start() throws IOException
@@ -323,26 +316,10 @@ public final class BridgeServer
 				json(ex, 403, error("host"));
 				return;
 			}
-			String origin = req.getFirst("Origin");
-			if (origin != null && !originAllowed(origin))
+			// Origin присылает только браузер. Программа для ПК ходит из главного процесса — без него.
+			if (req.getFirst("Origin") != null)
 			{
 				json(ex, 403, error("origin"));
-				return;
-			}
-			cors(ex, origin);
-
-			if ("OPTIONS".equals(method))
-			{
-				Headers h = ex.getResponseHeaders();
-				h.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-				h.set("Access-Control-Allow-Headers", "Content-Type, " + HEADER);
-				h.set("Access-Control-Max-Age", "600");
-				// Chrome спрашивает разрешение, когда сайт из интернета обращается к адресу в этом компьютере.
-				if ("true".equals(req.getFirst("Access-Control-Request-Private-Network")))
-				{
-					h.set("Access-Control-Allow-Private-Network", "true");
-				}
-				ex.sendResponseHeaders(204, -1);
 				return;
 			}
 
@@ -612,20 +589,6 @@ public final class BridgeServer
 		}
 		String name = host.replaceFirst(":\\d{1,5}$", "");
 		return name.equals("127.0.0.1") || name.equals("localhost") || name.equals("[::1]");
-	}
-
-	boolean originAllowed(String origin)
-	{
-		return LOCAL_ORIGIN.matcher(origin).matches() || extraOrigins.contains(origin);
-	}
-
-	private static void cors(HttpExchange ex, String origin)
-	{
-		if (origin != null)
-		{
-			ex.getResponseHeaders().set("Access-Control-Allow-Origin", origin);
-			ex.getResponseHeaders().set("Vary", "Origin");
-		}
 	}
 
 	private void json(HttpExchange ex, int code, Object body) throws IOException

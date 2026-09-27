@@ -1,4 +1,4 @@
-// Мост к программе для ПК (electron/preload.cjs). В браузере его нет — всё работает и без него.
+// Мост к программе для ПК (electron/preload.cjs). Без него (страница при разработке) всё работает, только без RuneLite и файла прогресса.
 
 export interface ZoomState {
   /** Масштаб, выбранный вручную. */
@@ -54,4 +54,3 @@ export function desktop(): DesktopBridge | undefined {
   return (window as Window & { osrsDesktop?: DesktopBridge }).osrsDesktop;
 }
 
-export const isDesktop = () => typeof location !== 'undefined' && location.protocol === 'file:';

@@ -1,7 +1,6 @@
 // Связь с плагином RuneLite «OSRS Path Bridge» на этом компьютере: http://127.0.0.1:38282.
-// В программе для ПК запросы идут через главный процесс Electron (preload → ipc): без CORS и без красных
-// строк в консоли, когда RuneLite выключен. В браузере — fetch и EventSource напрямую.
-// Удалённого сервера нет: мост слушает только loopback.
+// Запросы идут через главный процесс Electron (preload → ipc): плагин принимает только их, а запрос
+// со страницы в браузере (с заголовком Origin) отклоняет. Удалённого сервера нет: мост слушает только loopback.
 
 import type { InGameTarget, PacingSkill, PlayerStats, Progress, Step, StepBranch, StepPacing } from '../types';
 import { desktop } from '../lib/desktop';
@@ -10,7 +9,7 @@ import { preflightItems } from '../lib/checklist';
 import { watchedItems } from '../lib/branching';
 
 export const BRIDGE_ORIGIN = 'http://127.0.0.1:38282';
-/** Заголовок, без которого плагин не принимает POST: чужой сайт не сможет отправить его без разрешения CORS. */
+/** Заголовок, без которого плагин не принимает POST. Его ставит главный процесс Electron (electron/runelite-bridge.cjs). */
 export const BRIDGE_HEADER = 'X-OSRS-Path';
 
 export interface BridgeStatus {
@@ -59,6 +58,8 @@ export interface PacingState {
   estimated: boolean;
   almost: boolean;
   done: boolean;
+  /** Бой: навыки шага, которые ещё не дошли до цели, кроме показанного. У одного навыка — пусто. */
+  left: PacingSkill[];
 }
 
 /** Временная цель поверх шага: место с карты или магазин для апгрейда. */
@@ -97,7 +98,7 @@ export interface BridgeResponse {
   data?: unknown;
 }
 
-/** Способ достучаться до моста: через Electron или напрямую из браузера. */
+/** Способ достучаться до моста: через главный процесс Electron; в тестах — подменный. */
 export interface BridgeTransport {
   request(method: 'GET' | 'POST', path: BridgePath, body?: unknown): Promise<BridgeResponse>;
   /** Поток событий. Возвращает функцию закрытия. onError — поток оборвался или не открылся. */
@@ -199,7 +200,7 @@ export function parseGear(raw: unknown): GearState | null {
   return g.equipment || g.inventory || g.coins !== null ? g : null;
 }
 
-const PACING_SKILLS = new Set<PacingSkill>(['fishing', 'woodcutting', 'cooking', 'mining']);
+const PACING_SKILLS = new Set<PacingSkill>(['fishing', 'woodcutting', 'cooking', 'mining', 'attack', 'strength', 'defence']);
 
 /** Событие PACING. null — у шага нет темпа или он выключен в плагине. */
 export function parsePacing(e: unknown): PacingState | null {
@@ -212,9 +213,10 @@ export function parsePacing(e: unknown): PacingState | null {
   const targetLevel = int(p.targetLevel, 1);
   if (xp === null || remainingXp === null || actionsLeft === null || targetLevel === null) return null;
   const apm = typeof p.actionsPerMinute === 'number' && p.actionsPerMinute > 0 ? p.actionsPerMinute : null;
+  const left = Array.isArray(p.left) ? p.left.filter((k): k is PacingSkill => PACING_SKILLS.has(k as PacingSkill)) : [];
   return {
     stepId: o.stepId, skill: p.skill as PacingSkill, targetLevel, xp, remainingXp, actionsLeft,
-    actionsPerMinute: apm, etaSeconds: int(p.etaSeconds), estimated: p.estimated === true, almost: p.almost === true, done: p.done === true,
+    actionsPerMinute: apm, etaSeconds: int(p.etaSeconds), estimated: p.estimated === true, almost: p.almost === true, done: p.done === true, left,
   };
 }
 
@@ -243,50 +245,18 @@ function desktopTransport(api: DesktopBridgeApi): BridgeTransport {
   };
 }
 
-const TIMEOUT_MS = 1500;
-
-function browserTransport(): BridgeTransport {
-  return {
-    async request(method, path, body) {
-      try {
-        const res = await fetch(BRIDGE_ORIGIN + path, {
-          method,
-          headers: { [BRIDGE_HEADER]: '1', ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
-          body: body === undefined ? undefined : JSON.stringify(body),
-          signal: AbortSignal.timeout(TIMEOUT_MS),
-          cache: 'no-store',
-        });
-        let data: unknown;
-        try { data = await res.json(); } catch { data = undefined; }
-        return { ok: res.ok, status: res.status, data };
-      } catch {
-        return { ok: false, status: 0 };
-      }
-    },
-    openEvents(onEvent, onOpen, onError) {
-      if (typeof EventSource === 'undefined') {
-        onError();
-        return () => {};
-      }
-      const es = new EventSource(`${BRIDGE_ORIGIN}/events`);
-      let done = false;
-      es.onopen = () => onOpen();
-      es.onmessage = (m) => { const e = parseEvent(String(m.data)); if (e) onEvent(e); };
-      // Переподключение ведём сами (с паузами), а не встроенным EventSource — он долбит без остановки.
-      es.onerror = () => {
-        if (done) return;
-        done = true;
-        es.close();
-        onError();
-      };
-      return () => { done = true; es.close(); };
-    },
-  };
-}
+/** Без программы для ПК (страница в браузере при разработке) моста нет: всё работает, плагин «не отвечает». */
+const offlineTransport: BridgeTransport = {
+  request: async () => ({ ok: false, status: 0 }),
+  openEvents(_onEvent, _onOpen, onError) {
+    const timer = setTimeout(onError, 0);
+    return () => clearTimeout(timer);
+  },
+};
 
 export function defaultTransport(): BridgeTransport {
   const api = (desktop() as unknown as { bridge?: DesktopBridgeApi } | undefined)?.bridge;
-  return api ? desktopTransport(api) : browserTransport();
+  return api ? desktopTransport(api) : offlineTransport;
 }
 
 // ---------- Запросы ----------

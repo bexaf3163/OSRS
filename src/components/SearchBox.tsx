@@ -2,7 +2,7 @@
 // Результаты по группам: шаги прохождения, база предметов (с ценой биржи), навыки и справка, OSRS Wiki.
 
 import { Fragment, useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
-import { items, plugins, reference, skills } from '../data';
+import { items, membersSkills, plugins, reference, skills } from '../data';
 import { useStore } from '../store';
 import { buildIndex, search, type SearchHit, type SearchKind } from '../lib/search';
 import { formatXp } from '../lib/goals';
@@ -30,7 +30,7 @@ interface Group {
 const WIKI_ROW = 'wiki';
 
 export function SearchBox({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const { steps } = useStore();
+  const { steps, mode } = useStore();
   const { openItem } = useWiki();
   const dialog = useRef<HTMLDialogElement>(null);
   const input = useRef<HTMLInputElement>(null);
@@ -38,7 +38,10 @@ export function SearchBox({ open, onClose }: { open: boolean; onClose: () => voi
   const [active, setActive] = useState(0);
   const [prices, setPrices] = useState<Record<number, number | null>>({});
   const listId = useId();
-  const index = useMemo(() => buildIndex({ steps, skills, reference, plugins, items, typeLabel: TYPE_LABEL }), [steps]);
+  // Навыки подписки ищутся только в режиме Members — как и шаги этапов 7–9.
+  const index = useMemo(() => buildIndex({
+    steps, skills: mode === 'members' ? [...skills, ...membersSkills] : skills, reference, plugins, items, typeLabel: TYPE_LABEL,
+  }), [steps, mode]);
 
   const groups = useMemo<Group[]>(() => {
     const hits = search(index, query, 400);

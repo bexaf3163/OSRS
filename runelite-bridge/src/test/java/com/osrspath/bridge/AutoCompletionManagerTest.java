@@ -5,7 +5,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.Test;
 
 public class AutoCompletionManagerTest
@@ -14,11 +16,41 @@ public class AutoCompletionManagerTest
 	private Boolean questFinished = false;
 	private int questChecks;
 
+	/** Уровни из игры по ключу навыка; нет ключа — уровень неизвестен (не в игре). */
+	private final Map<String, Integer> levels = new HashMap<>();
+	/** Предметы у игрока: по названию и по ID. */
+	private final Map<String, Integer> byName = new HashMap<>();
+	private final Map<Integer, Integer> byId = new HashMap<>();
+
 	private final AutoCompletionManager manager = new AutoCompletionManager(name ->
 	{
 		questChecks++;
-		return "Cook's Assistant".equals(name) ? questFinished : null;
+		return "Cook's Assistant".equals(name) || "Monkey Madness I".equals(name) ? questFinished : null;
+	}, levels::get, need ->
+	{
+		if (need.getId() != null)
+		{
+			return byId.getOrDefault(need.getId(), 0);
+		}
+		return need.getNames().stream().mapToInt(n -> byName.getOrDefault(n, 0)).sum();
 	}, completed::add);
+
+	private static ActiveTarget.LevelNeed level(String skill, int level)
+	{
+		ActiveTarget.LevelNeed l = new ActiveTarget.LevelNeed();
+		l.setSkill(skill);
+		l.setLevel(level);
+		return l;
+	}
+
+	private static ActiveTarget.ItemNeed item(Integer id, int count, String... names)
+	{
+		ActiveTarget.ItemNeed i = new ActiveTarget.ItemNeed();
+		i.setNames(List.of(names));
+		i.setId(id);
+		i.setCount(count);
+		return i;
+	}
 
 	private static ActiveTarget target(String stepId, String type)
 	{
@@ -128,6 +160,122 @@ public class AutoCompletionManagerTest
 		assertFalse(manager.isArmed());
 		manager.onChatMessage("You are now level 25.");
 		assertEquals(2, completed.size());
+	}
+
+	@Test
+	public void уровниВсеСразуИТолькоНастоящие()
+	{
+		ActiveTarget t = target("S2-13", "SKILL_LEVEL");
+		t.getCompletionTrigger().setLevels(List.of(level("fishing", 30), level("cooking", 30)));
+		manager.setTarget(t);
+		manager.onGameTick();
+		assertTrue("уровни ещё неизвестны — не в игре", completed.isEmpty());
+
+		levels.put("fishing", 31);
+		levels.put("cooking", 29);
+		manager.onStateChanged();
+		manager.onGameTick();
+		assertTrue("готовка 29 — рано", completed.isEmpty());
+
+		levels.put("cooking", 30);
+		manager.onStateChanged();
+		manager.onGameTick();
+		assertEquals(List.of("S2-13"), completed);
+		manager.onStateChanged();
+		manager.onGameTick();
+		assertEquals("второй раз не шлём", 1, completed.size());
+	}
+
+	@Test
+	public void уровниУжеЕстьКПоказуШага()
+	{
+		levels.put("magic", 40);
+		ActiveTarget t = target("S2-04", "SKILL_LEVEL");
+		t.getCompletionTrigger().setLevels(List.of(level("magic", 25)));
+		manager.setTarget(t);
+		manager.onGameTick();
+		assertEquals(List.of("S2-04"), completed);
+	}
+
+	@Test
+	public void безИзмененийСостояниеПроверяетсяРедко()
+	{
+		ActiveTarget t = target("S2-04", "SKILL_LEVEL");
+		t.getCompletionTrigger().setLevels(List.of(level("magic", 25)));
+		manager.setTarget(t);
+		manager.onGameTick();
+		// Уровень поменялся без события (так не бывает, но проверка всё равно дойдёт) — не позже чем через QUEST_POLL_TICKS.
+		levels.put("magic", 25);
+		for (int i = 0; i < AutoCompletionManager.QUEST_POLL_TICKS - 2; i++)
+		{
+			manager.onGameTick();
+		}
+		assertTrue(completed.isEmpty());
+		manager.onGameTick();
+		assertEquals(List.of("S2-04"), completed);
+	}
+
+	@Test
+	public void уровниИПредметыВместе()
+	{
+		// S1-11: рыбалка 20, готовка 15 и 50 креветок или анчоусов — вместе.
+		ActiveTarget t = target("S1-11", "SKILL_LEVEL");
+		t.getCompletionTrigger().setLevels(List.of(level("fishing", 20), level("cooking", 15)));
+		t.getCompletionTrigger().setItems(List.of(item(null, 50, "Shrimps", "Anchovies")));
+		manager.setTarget(t);
+		levels.put("fishing", 20);
+		levels.put("cooking", 15);
+		byName.put("Shrimps", 30);
+		manager.onStateChanged();
+		manager.onGameTick();
+		assertTrue("30 креветок — мало", completed.isEmpty());
+		byName.put("Anchovies", 20);
+		manager.onStateChanged();
+		manager.onGameTick();
+		assertEquals("креветки и анчоусы считаются вместе", List.of("S1-11"), completed);
+	}
+
+	@Test
+	public void предметПоIdНеПутаетсяСТезками()
+	{
+		// Три куска карты Dragon Slayer I называются одинаково «Map part»: нужен именно кусок Melzar (1535).
+		ActiveTarget t = target("S5-03", "ITEM_OWNED");
+		t.getCompletionTrigger().setItems(List.of(item(1535, 1, "Map part")));
+		manager.setTarget(t);
+		byName.put("Map part", 1);
+		byId.put(1537, 1);
+		manager.onStateChanged();
+		manager.onGameTick();
+		assertTrue("чужой кусок карты не засчитывается", completed.isEmpty());
+		byId.put(1535, 1);
+		manager.onStateChanged();
+		manager.onGameTick();
+		assertEquals(List.of("S5-03"), completed);
+	}
+
+	@Test
+	public void квестИПредметВдобавок()
+	{
+		ActiveTarget t = target("S9-04", "QUEST_COMPLETED");
+		t.getCompletionTrigger().setQuestName("Monkey Madness I");
+		t.getCompletionTrigger().setItems(List.of(item(null, 1, "Dragon scimitar")));
+		manager.setTarget(t);
+		questFinished = true;
+		manager.onGameTick();
+		assertTrue("квест есть, ятагана ещё нет", completed.isEmpty());
+		byName.put("Dragon scimitar", 1);
+		manager.onStateChanged();
+		manager.onGameTick();
+		assertEquals(List.of("S9-04"), completed);
+	}
+
+	@Test
+	public void пустыеУсловияНеВзводят()
+	{
+		manager.setTarget(target("S2-13", "SKILL_LEVEL"));
+		assertFalse("SKILL_LEVEL без уровней", manager.isArmed());
+		manager.setTarget(target("S5-02", "ITEM_OWNED"));
+		assertFalse("ITEM_OWNED без предметов", manager.isArmed());
 	}
 
 	@Test

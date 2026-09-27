@@ -125,9 +125,6 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private GrandExchangeHelperOverlay geOverlay;
 
 	@Inject
-	private OsrsPathBreadcrumbOverlay breadcrumbOverlay;
-
-	@Inject
 	private OsrsPathDangerOverlay dangerOverlay;
 
 	@Inject
@@ -154,8 +151,10 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	@Getter
 	private OsrsPathHudOverlay.State hud;
 
-	/** Путевые точки текущего шага; null — у шага их нет. */
-	@Getter
+	/**
+	 * Остановки маршрута текущего шага (калитка → мост → лестница → NPC); null — у шага их нет. На земле
+	 * они не рисуются: к текущей остановке ведут стрелка, HUD («Точка 2/5») и Shortest Path.
+	 */
 	private Navigation.Breadcrumbs breadcrumbs;
 
 	@Getter
@@ -215,7 +214,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private final List<NPC> dangerNpcs = new ArrayList<>();
 
 	/** Темп прокачки текущего шага; null — у шага его нет или он выключен. */
-	private PacingTracker pacing;
+	private PacingSet pacing;
 
 	private Plugin shortestPath;
 	private boolean shortestPathLooked;
@@ -231,7 +230,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	@Override
 	protected void startUp()
 	{
-		completion = new AutoCompletionManager(this::isQuestFinished, this::onStepCompleted);
+		completion = new AutoCompletionManager(this::isQuestFinished, stats::get, this::ownedCount, this::onStepCompleted);
 		radar = DangerRadar.load(gson);
 		startServer();
 		overlayManager.add(worldOverlay);
@@ -240,7 +239,6 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		overlayManager.add(hudOverlay);
 		overlayManager.add(checklistOverlay);
 		overlayManager.add(geOverlay);
-		overlayManager.add(breadcrumbOverlay);
 		overlayManager.add(dangerOverlay);
 		clientThread.invokeLater(() ->
 		{
@@ -275,7 +273,6 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		overlayManager.remove(hudOverlay);
 		overlayManager.remove(checklistOverlay);
 		overlayManager.remove(geOverlay);
-		overlayManager.remove(breadcrumbOverlay);
 		overlayManager.remove(dangerOverlay);
 		clientThread.invoke(() ->
 		{
@@ -294,9 +291,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	private void startServer()
 	{
-		List<String> origins = Arrays.stream(config.allowedOrigins().split(","))
-			.map(String::trim).filter(s -> !s.isEmpty()).collect(Collectors.toList());
-		BridgeServer s = new BridgeServer(config.port(), gson, this, origins);
+		BridgeServer s = new BridgeServer(config.port(), gson, this);
 		try
 		{
 			s.start();
@@ -335,11 +330,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			statsDirty = true;
 		}
-		if ("useShortestPath".equals(e.getKey()) || "showBreadcrumbs".equals(e.getKey()))
+		if ("useShortestPath".equals(e.getKey()))
 		{
 			clientThread.invokeLater(this::updateNavigation);
 		}
-		if ("port".equals(e.getKey()) || "allowedOrigins".equals(e.getKey()))
+		if ("port".equals(e.getKey()))
 		{
 			stopServer();
 			startServer();
@@ -677,17 +672,22 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private void setupPacing()
 	{
 		ActiveTarget.Pacing p = target == null ? null : target.getPacing();
-		pacing = p == null || !config.smartPacing() ? null : new PacingTracker(p);
+		pacing = p == null || !config.smartPacing() ? null : new PacingSet(p);
 		if (pacing != null && client.getGameState() == GameState.LOGGED_IN)
 		{
-			pacing.update(client.getSkillExperience(pacingSkill(p)), System.currentTimeMillis());
+			readPacingXp();
 		}
 		pacingDirty = true;
 	}
 
-	private static Skill pacingSkill(ActiveTarget.Pacing p)
+	/** Опыт всех навыков темпа из клиента: при входе в игру и при новом шаге. */
+	private void readPacingXp()
 	{
-		return Skill.valueOf(p.getSkill().toUpperCase(Locale.ROOT));
+		long now = System.currentTimeMillis();
+		for (String skill : pacing.skills())
+		{
+			pacing.update(skill, client.getSkillExperience(ActiveTarget.skillOf(skill)), now);
+		}
 	}
 
 	private Map<String, Object> pacingReport()
@@ -699,7 +699,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		PacingTracker.Snapshot s = pacing.snapshot();
 		ActiveTarget.Pacing p = pacing.getPacing();
 		Map<String, Object> m = new LinkedHashMap<>();
-		m.put("skill", p.getSkill());
+		m.put("skill", pacing.getActive());
 		m.put("targetLevel", p.getTargetLevel());
 		m.put("targetExp", p.getTargetExp());
 		m.put("xp", s.getXp());
@@ -710,6 +710,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		m.put("estimated", s.isEstimated());
 		m.put("almost", s.isAlmost());
 		m.put("done", s.isDone());
+		// Бой: какие навыки шага ещё не дошли до цели, кроме показанного.
+		if (pacing.skills().size() > 1)
+		{
+			m.put("left", pacing.left());
+		}
 		return m;
 	}
 
@@ -778,7 +783,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			if (s.getSlotIdx() == index)
 			{
-				return s.name().toLowerCase(java.util.Locale.ROOT);
+				return s.name().toLowerCase(Locale.ROOT);
 			}
 		}
 		return null;
@@ -861,12 +866,6 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			eventBus.post(new PluginMessage(SHORTEST_PATH_NS, "clear"));
 			pathSent = null;
 		}
-	}
-
-	/** Shortest Path сейчас ведёт к нашей цели — свои метки на земле тогда не нужны. */
-	boolean isShortestPathLeading()
-	{
-		return pathSent != null;
 	}
 
 	private boolean shortestPathActive()
@@ -1191,7 +1190,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			if (pacing != null && !pacing.hasXp())
 			{
-				pacing.update(client.getSkillExperience(pacingSkill(pacing.getPacing())), System.currentTimeMillis());
+				readPacingXp();
 				pacingDirty = true;
 			}
 			gearDirty = true;
@@ -1271,7 +1270,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	static String skillKey(Skill skill)
 	{
-		return skill.getName().toLowerCase(java.util.Locale.ROOT);
+		return skill.getName().toLowerCase(Locale.ROOT);
 	}
 
 	@Subscribe
@@ -1281,13 +1280,17 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			return;
 		}
-		Integer old = stats.put(skillKey(e.getSkill()), e.getLevel());
+		String key = skillKey(e.getSkill());
+		Integer old = stats.put(key, e.getLevel());
 		if (old == null || old != e.getLevel())
 		{
 			statsDirty = true;
+			if (completion != null)
+			{
+				completion.onStateChanged();
+			}
 		}
-		if (pacing != null && e.getSkill() == pacingSkill(pacing.getPacing())
-			&& pacing.update(e.getXp(), System.currentTimeMillis()))
+		if (pacing != null && pacing.tracks(key) && pacing.update(key, e.getXp(), System.currentTimeMillis()))
 		{
 			pacingDirty = true;
 			updateHud();
@@ -1358,6 +1361,10 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	private void containersChanged()
 	{
+		if (completion != null)
+		{
+			completion.onStateChanged();
+		}
 		recomputeChecklist();
 		recomputeShopping();
 		ownedDirty = true;
@@ -1444,6 +1451,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			offerSlots[slot] = null;
 		}
 		recomputeShopping();
+	}
+
+	/** Для автоотметки: сколько предмета у игрока — сумка, надетое, банкноты и банк, если его открывали. */
+	private int ownedCount(ActiveTarget.ItemNeed need)
+	{
+		return ItemCounts.sum(carried, noted, bank).count(need);
 	}
 
 	/** Сколько есть предметов, о которых спрашивает приложение: проверка вылета, условия вариантов и список закупок. */

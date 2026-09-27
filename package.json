@@ -2,7 +2,7 @@
   "name": "osrs-put",
   "productName": "OSRS Путь",
   "private": true,
-  "version": "2.6.0",
+  "version": "2.7.0",
   "description": "Личный трекер прогресса в Old School RuneScape (бесплатная версия)",
   "author": "Mark",
   "type": "module",
@@ -19,7 +19,7 @@
     "check-data": "node scripts/check-data.ts",
     "icons": "node scripts/make-icons.ts",
     "desktop": "npm run build && node scripts/build-bridge-jar.ts --optional && electron .",
-    "dist:win": "npm run build && npm run bridge:jar && electron-builder --win nsis portable --publish never",
+    "dist:win": "npm run build && npm run bridge:jar && electron-builder --win portable --publish never",
     "build-items": "node scripts/build-items.ts",
     "build-locations": "node scripts/build-locations.ts",
     "build-gear": "node scripts/build-gear.ts",
@@ -57,18 +57,8 @@
     "win": {
       "icon": "public/icon-512.png",
       "target": [
-        "nsis",
         "portable"
       ]
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": false,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "OSRS Путь",
-      "artifactName": "OSRS-Put-Setup-${version}.exe"
     },
     "portable": {
       "artifactName": "OSRS-Put-${version}-portable.exe"
