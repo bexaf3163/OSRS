@@ -173,13 +173,15 @@ async function run(browser: Browser) {
   }
 }
 
-const server = spawn(process.execPath, ['node_modules/vite/bin/vite.js', 'preview', '--port', String(PORT), '--strictPort'], { stdio: 'ignore' });
+// Адрес задан явно: без --host сервер на части машин (CI GitHub) слушает только IPv6 ::1, и 127.0.0.1 не отвечает.
+const server = spawn(process.execPath, ['node_modules/vite/bin/vite.js', 'preview', '--host', '127.0.0.1', '--port', String(PORT), '--strictPort'], { stdio: 'ignore' });
 try {
-  for (let i = 0; i < 50; i++) {
-    const up = await fetch(BASE).then((r) => r.ok).catch(() => false);
-    if (up) break;
-    await new Promise((r) => setTimeout(r, 200));
+  let up = false;
+  for (let i = 0; i < 150 && !up; i++) {
+    up = await fetch(BASE).then((r) => r.ok).catch(() => false);
+    if (!up) await new Promise((r) => setTimeout(r, 200));
   }
+  if (!up) throw new Error(`Сервер предпросмотра не поднялся на ${BASE} — сначала npm run build`);
   const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
   try {
     await run(browser);
