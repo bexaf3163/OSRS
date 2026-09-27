@@ -240,6 +240,13 @@ export function validate(d: GuideData | null, route: Route): Report {
   const badPoints = points.filter(({ p }) => badPoint(p) || !p.label?.trim() || (p.zoom !== undefined && (!Number.isInteger(p.zoom) || p.zoom < -3 || p.zoom > 3)));
   check(!badPoints.length, `Точек на карте ${points.length} (шагов с картой ${located.length}): координаты, этаж и подпись в порядке`,
     `Неверная точка: ${badPoints.map(({ s, p }) => `${s} ${p.x},${p.y},${p.plane}`).join('; ')}`);
+  // Точки карты с предметами: предмет — из списка шага (иначе в панели RuneLite «Путь сюда» повиснет в воздухе).
+  const badSpotItems = steps.flatMap((s) => (s.resourceSpots ?? []).flatMap((p) => (p.items ?? [])
+    .filter((n) => ![...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])].some((i) => i.nameEn === n))
+    .map((n) => `${s.id} «${p.label}»: ${n}`)));
+  const badSpotNpc = steps.flatMap((s) => (s.resourceSpots ?? []).filter((p) => p.npc !== undefined && !/^[A-Z][A-Za-z' .-]{1,40}$/.test(p.npc)).map((p) => `${s.id} «${p.label}»`));
+  check(!badSpotItems.length && !badSpotNpc.length, 'Предметы и NPC у точек карты — из шага и с английскими именами',
+    `Точки карты: ${[...badSpotItems, ...badSpotNpc].join('; ')}`);
   // Ссылка «Карта» на вики и точка превью — одно и то же место: расхождение значит, что поправили только одно.
   const drift = steps.filter((s) => {
     const m = s.mapUrl?.match(/#\/m=(\d+),(\d+),(\d+)/);

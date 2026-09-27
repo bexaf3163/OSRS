@@ -60,11 +60,12 @@ public final class BridgeServer
 	public static final int DEFAULT_PORT = 38282;
 	/**
 	 * Версия протокола моста. 1 — до 2.9 (поля не было: приложение считает такой плагин старым); 2 — с 2.9:
-	 * стоимость предметов в снаряжении и рукопожатие версий. Растёт вместе с адресами и полями.
+	 * стоимость предметов в снаряжении и рукопожатие версий; 3 — с 2.10: guide в шаге для боковой панели.
+	 * Растёт вместе с адресами и полями.
 	 */
-	static final int PROTOCOL = 2;
+	static final int PROTOCOL = 3;
 	/** Версия плагина — та же, что у программы, с которой он едет в одном exe. */
-	static final String PLUGIN_VERSION = "2.9.0";
+	static final String PLUGIN_VERSION = "2.10.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	static final int MAX_STREAMS = 8;

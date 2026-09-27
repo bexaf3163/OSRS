@@ -46,6 +46,8 @@ public class ActiveTarget
 	private List<String> watchItems;
 	/** Темп прокачки навыка шага: сколько действий до цели и сколько это займёт. */
 	private Pacing pacing;
+	/** Для боковой панели: что нужно на шаг, где взять и куда можно повести стрелку (с протокола 3). */
+	private Guide guide;
 
 	private transient Set<String> npcNameSet = Collections.emptySet();
 	private transient Set<Integer> npcIdSet = Collections.emptySet();
@@ -71,6 +73,72 @@ public class ActiveTarget
 		private int plane;
 		private String label;
 		private String color;
+	}
+
+	/** Боковая панель «OSRS Путь»: предметы шага с подсказкой «где взять» и точки шага. */
+	@Data
+	public static class Guide
+	{
+		/** «Где взять» бывает длиннее обычной подписи — целое предложение из маршрута. */
+		static final int MAX_WHERE = 500;
+
+		private List<GuideItem> items;
+		private List<GuidePlace> places;
+
+		String problem()
+		{
+			for (List<?> list : new List<?>[]{items, places})
+			{
+				if (list != null && list.size() > MAX_LIST)
+				{
+					return "слишком длинный список";
+				}
+			}
+			for (GuideItem i : nonNull(items))
+			{
+				if (i == null || i.name == null || i.name.isEmpty() || tooLong(i.name) || tooLong(i.nameRu)
+					|| (i.where != null && i.where.length() > MAX_WHERE) || (i.count != null && (i.count < 1 || i.count > ShoppingPlan.MAX_COUNT)))
+				{
+					return "неверный предмет панели";
+				}
+			}
+			for (GuidePlace p : nonNull(places))
+			{
+				if (p == null || p.label == null || p.label.trim().isEmpty() || tooLong(p.label) || tooLong(p.npc)
+					|| p.x <= 0 || p.y <= 0 || p.x >= NavTarget.MAX_COORD || p.y >= NavTarget.MAX_COORD || p.plane < 0 || p.plane > 3
+					|| (p.items != null && (p.items.size() > MAX_LIST || p.items.stream().anyMatch(n -> n == null || tooLong(n)))))
+				{
+					return "неверная точка панели";
+				}
+			}
+			return null;
+		}
+	}
+
+	@Data
+	public static class GuideItem
+	{
+		private String name;
+		private String nameRu;
+		private Integer id;
+		/** null — количество в маршруте не числом («сколько есть»): хватит одного. */
+		private Integer count;
+		private String where;
+		/** Добывается по ходу самого шага, брать заранее не нужно. */
+		private boolean inStep;
+	}
+
+	@Data
+	public static class GuidePlace
+	{
+		private int x;
+		private int y;
+		private int plane;
+		private String label;
+		/** NPC в этой точке — подсветится, когда стрелка приведёт. */
+		private String npc;
+		/** Какие предметы шага берут здесь (английские названия). */
+		private List<String> items;
 	}
 
 	@Data
@@ -317,6 +385,10 @@ public class ActiveTarget
 		if (pacing != null && pacing.problem() != null)
 		{
 			return pacing.problem();
+		}
+		if (guide != null && guide.problem() != null)
+		{
+			return guide.problem();
 		}
 		if (completionTrigger != null && completionTrigger.problem() != null)
 		{

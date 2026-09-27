@@ -310,3 +310,37 @@ describe('рукопожатие версий программы и плагин
     expect(pluginCompat(APP_PROTOCOL + 1)).toBe('newer');
   });
 });
+
+describe('панель «OSRS Путь» в RuneLite: что нужно и точки шага (протокол 3)', () => {
+  it('S2-03: предметы с «где взять», точки с NPC и предметами, точка шага не дублируется', () => {
+    const g = toInGameTarget(step('S2-03'))!.guide!;
+    expect(g.items.map((i) => i.name)).toEqual(['Onion', 'Eye of newt', "Rat's tail", 'Burnt meat']);
+    expect(g.items.find((i) => i.name === 'Eye of newt')).toMatchObject({ nameRu: 'Глаз тритона', id: 221, count: 1, inStep: true });
+    expect(g.items.every((i) => i.where)).toBe(true);
+    expect(g.places.map((p) => p.label)).toEqual([
+      'Hetty — дом в Rimmington', "Крыса — Brian's Archery Supplies", 'Лук — грядка к северу от Rimmington',
+      'Eye of newt — Betty, Port Sarim', 'Giant rat — у часовни Port Sarim',
+    ]);
+    expect(g.places[0]).toMatchObject({ npc: 'Hetty', x: 2968, y: 3204 });
+    expect(g.places[3]).toMatchObject({ npc: 'Betty', items: ['Eye of newt'] });
+  });
+
+  it('у каждого шага с предметами или несколькими точками панель есть; ограничения плагина соблюдены', () => {
+    for (const s of allSteps) {
+      const g = toInGameTarget(s)?.guide;
+      if ((s.itemsRequired?.length ?? 0) > 0) expect(g, s.id).toBeTruthy();
+      if (!g) continue;
+      expect(g.items.length).toBeLessThanOrEqual(64);
+      for (const i of g.items) expect((i.where ?? '').length, `${s.id} ${i.name}`).toBeLessThanOrEqual(500);
+      for (const p of g.places) expect(p.label.length).toBeLessThanOrEqual(200);
+    }
+  });
+
+  it('быстрый вариант меняет главную точку и не приписывает ей NPC шага', () => {
+    const s = step('S2-05');
+    const branch = s.branches!.find((b) => b.id === 'varrock-teleport')!;
+    const g = toInGameTarget(s, branch)!.guide!;
+    expect(g.places[0]).toMatchObject({ x: branch.replacementTarget!.x, y: branch.replacementTarget!.y });
+    expect(g.places[0].npc).toBeUndefined();
+  });
+});

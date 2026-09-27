@@ -7,6 +7,7 @@ import { DEFAULT_ZOOM, floorLabel, initialPoint, isUnderground, stepPoints, tile
 import { Inline } from './Inline';
 import { useBridge } from '../bridge';
 import { navigationTarget } from '../lib/navigation';
+import { NavigateButton } from './NavigateButton';
 import { ImageModal } from './StepImage';
 
 const WorldMapModal = lazy(() => import('./WorldMapModal'));
@@ -53,6 +54,10 @@ export function StepMap({ step }: { step: Step }) {
 
       <div className="map-actions">
         <button type="button" className="btn btn-ghost btn-sm" onClick={() => setOpen(true)}>🗺️ Карта мира</button>
+        {/* Выбранная точка — в игру: стрелка и Shortest Path ведут туда, NPC точки подсвечивается, по приходу
+            стрелка возвращается к шагу. То же делает «Путь сюда» в панели «OSRS Путь» в RuneLite. */}
+        <NavigateButton label="🧭 Вести сюда в игре"
+          target={{ label: point.label, x: point.x, y: point.y, plane: point.plane, ...(point.npc ? { npcNames: [point.npc] } : {}), stepId: step.id }} />
       </div>
 
       {zoomed && step.mapPreviewImage && (

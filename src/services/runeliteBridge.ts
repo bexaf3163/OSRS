@@ -5,7 +5,7 @@
 import type { InGameTarget, PacingSkill, PlayerStats, Progress, Step, StepBranch, StepPacing } from '../types';
 import { desktop } from '../lib/desktop';
 import { isClosed, openAfter } from '../lib/next-step';
-import { preflightItems } from '../lib/checklist';
+import { parseAmount, preflightItems } from '../lib/checklist';
 import { watchedItems } from '../lib/branching';
 
 export const BRIDGE_ORIGIN = 'http://127.0.0.1:38282';
@@ -32,7 +32,7 @@ export interface BridgeStatus {
  * Протокол, который ждёт программа. Плагин старше — программа просит его обновить: новые адреса и поля он не
  * знает. Плагин без поля protocol — до 2.9: работает (основные адреса те же), но без новых функций.
  */
-export const APP_PROTOCOL = 2;
+export const APP_PROTOCOL = 3;
 
 export type PluginCompat = 'ok' | 'legacy' | 'older' | 'newer';
 
@@ -143,7 +143,49 @@ export type ActiveStepPayload = InGameTarget & {
   checklist?: ChecklistPayloadItem[];
   watchItems?: string[];
   pacing?: StepPacing;
+  guide?: StepGuidePayload;
 };
+
+/**
+ * Для боковой панели «OSRS Путь» в RuneLite (с протокола 3): что нужно на шаг и где это взять, и точки шага —
+ * «Путь сюда» ставит временную цель, стрелка и Shortest Path ведут туда, по приходу стрелка возвращается к шагу.
+ */
+export interface StepGuidePayload {
+  items: { name: string; nameRu?: string; id?: number; count?: number; where?: string; inStep?: boolean }[];
+  places: { x: number; y: number; plane: number; label: string; npc?: string; items?: string[] }[];
+}
+
+/** Панель RuneLite: предметы шага с «где взять» и точки — главная (NPC, старт) и места из карты шага. */
+export function stepGuide(step: Step, branch?: StepBranch): StepGuidePayload | undefined {
+  const items = (step.itemsRequired ?? []).map((i) => {
+    const n = parseAmount(i.amount);
+    return {
+      name: i.nameEn,
+      ...(i.nameRu && i.nameRu !== i.nameEn ? { nameRu: i.nameRu } : {}),
+      ...(i.wikiItemId !== undefined ? { id: i.wikiItemId } : {}),
+      ...(n !== null ? { count: n } : {}),
+      ...(i.howToGet ? { where: i.howToGet } : {}),
+      ...(i.inStep ? { inStep: true } : {}),
+    };
+  });
+  const places: StepGuidePayload['places'] = [];
+  const main = branch?.replacementTarget ?? step.inGame?.worldPoint ?? step.mapLocation;
+  if (main) {
+    places.push({
+      x: main.x, y: main.y, plane: main.plane, label: main.label ?? step.title,
+      ...(step.npc && !branch ? { npc: step.npc.nameEn } : {}),
+    });
+  }
+  for (const p of step.resourceSpots ?? []) {
+    const same = places.findIndex((q) => Math.abs(q.x - p.x) <= 1 && Math.abs(q.y - p.y) <= 1 && q.plane === p.plane);
+    const place = { x: p.x, y: p.y, plane: p.plane, label: p.label, ...(p.npc ? { npc: p.npc } : {}), ...(p.items?.length ? { items: p.items } : {}) };
+    // Точка шага и первое место карты часто одно и то же — оставляем одну, с подписью места.
+    if (same >= 0) places[same] = { ...places[same], ...place, npc: place.npc ?? places[same].npc };
+    else places.push(place);
+  }
+  if (!items.length && places.length < 2) return undefined;
+  return { items: items.slice(0, 64), places: places.slice(0, 64) };
+}
 
 /** Оптовый список для подсказки на бирже: name — английское название, count — сколько нужно всего. */
 export interface ShoppingPlanPayload {
@@ -184,6 +226,8 @@ export function toInGameTarget(step: Step, branch?: StepBranch): ActiveStepPaylo
   const watch = watchedItems(step);
   if (watch.length) payload.watchItems = watch;
   if (step.pacing) payload.pacing = step.pacing;
+  const guide = stepGuide(step, branch);
+  if (guide) payload.guide = guide;
   const empty = !worldPoint && !groundTiles?.length && !g.npcNames?.length && !g.objectNames?.length
     && !g.dialogChoices?.length && !g.highlightItems?.length && !g.completionTrigger && !checklist.length && !step.pacing;
   return empty ? null : payload;

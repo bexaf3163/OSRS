@@ -146,6 +146,29 @@ async function run(browser: Browser) {
       await page.context().close();
     }
 
+    // Точка шага → игра: «Вести сюда в игре» ставит цель с NPC точки; «Показать в игре» отдаёт панели RuneLite
+    // «что нужно / где взять / точки шага».
+    {
+      const { page, errors } = await open(browser, width, { progress: progressBefore('S2-03') }, '#/step/S2-03');
+      await page.getByRole('radio', { name: /Eye of newt — Betty/ }).click();
+      await page.getByRole('button', { name: '🧭 Вести сюда в игре' }).click();
+      await page.waitForTimeout(500);
+      type Post = { path: string; body: Record<string, unknown> };
+      const posts = () => page.evaluate(() => (window as unknown as { __posts: Post[] }).__posts);
+      const nav = (await posts()).filter((p) => p.path === '/nav-target').pop()?.body;
+      expect(nav?.x === 3014 && JSON.stringify(nav?.npcNames) === '["Betty"]' && nav?.stepId === 'S2-03',
+        'карта шага: «Вести сюда в игре» — цель у Betty с подсветкой NPC');
+      await page.getByRole('button', { name: '🧭 Показать в игре' }).first().click();
+      await page.waitForTimeout(500);
+      const guide = (await posts()).filter((p) => p.path === '/active-step').pop()?.body.guide as
+        { items: { name: string; where?: string }[]; places: { label: string; items?: string[] }[] } | undefined;
+      expect(guide?.items.length === 4 && guide.items.every((i) => i.where) && guide.places.length === 5,
+        'показать в игре: панели RuneLite уходят 4 предмета с «где взять» и 5 точек');
+      expect(await noOverflow(page), 'карта шага: без горизонтальной прокрутки');
+      expect(!errors.length, `карта шага: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
     // Шаг-заработок: монеты против цели.
     {
       const gear = { equipment: [], inventory: [], coins: 300, bankCoins: 12000, carriedValue: 4200, bankValue: 5000 };

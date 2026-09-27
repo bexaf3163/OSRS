@@ -1595,31 +1595,47 @@
         "x": 2968,
         "y": 3204,
         "plane": 0,
-        "label": "Hetty — дом в Rimmington"
+        "label": "Hetty — дом в Rimmington",
+        "npc": "Hetty"
       },
       {
         "x": 2957,
         "y": 3204,
         "plane": 0,
-        "label": "Крыса — Brian's Archery Supplies"
+        "label": "Крыса — Brian's Archery Supplies",
+        "items": [
+          "Rat's tail"
+        ],
+        "npc": "Rat"
       },
       {
         "x": 2950,
         "y": 3251,
         "plane": 0,
-        "label": "Лук — грядка к северу от Rimmington"
+        "label": "Лук — грядка к северу от Rimmington",
+        "items": [
+          "Onion"
+        ]
       },
       {
         "x": 3014,
         "y": 3259,
         "plane": 0,
-        "label": "Eye of newt — Betty, Port Sarim"
+        "label": "Eye of newt — Betty, Port Sarim",
+        "items": [
+          "Eye of newt"
+        ],
+        "npc": "Betty"
       },
       {
         "x": 2997,
         "y": 3192,
         "plane": 0,
-        "label": "Giant rat — у часовни Port Sarim"
+        "label": "Giant rat — у часовни Port Sarim",
+        "items": [
+          "Burnt meat"
+        ],
+        "npc": "Giant rat"
       }
     ],
     "npc": {
@@ -1664,7 +1680,8 @@
         "amount": 1,
         "howToGet": "Raw rat meat с гигантской крысы у часовни Port Sarim (или Raw beef) — используй на камине Hetty дважды, пока не сгорит.",
         "wikiItemId": 2146,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Burnt_meat.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Burnt_meat.png",
+        "inStep": true
       }
     ],
     "quickSteps": [

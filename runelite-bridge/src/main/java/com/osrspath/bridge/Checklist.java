@@ -48,6 +48,36 @@ final class Checklist
 
 	static final Result NONE = new Result(Collections.emptyList(), false);
 
+	/**
+	 * Строка HUD: чего не хватает — по названиям, а не «не хватает 1 из 1». Одна вещь в банке — «возьми из банка»;
+	 * больше двух — первые две и «и ещё N» (весь список — в панели «OSRS Путь»).
+	 */
+	static String hudLine(Result r)
+	{
+		List<String> names = new ArrayList<>();
+		Row only = null;
+		for (Row row : r.getRows())
+		{
+			if (row.getState() != State.IN_BAG_READY)
+			{
+				names.add(row.getNeed() > 1 ? row.getName() + " " + row.getHave() + "/" + row.getNeed() : row.getName());
+				only = row;
+			}
+		}
+		if (names.isEmpty())
+		{
+			return "Сумка готова к выходу";
+		}
+		if (names.size() == 1)
+		{
+			return only.getState() == State.MISSING_FROM_BAG && only.getInBank() > 0
+				? "Сумка: " + names.get(0) + " — возьми из банка"
+				: "Сумка: нет " + names.get(0);
+		}
+		String head = "Сумка: нет " + names.get(0) + ", " + names.get(1);
+		return names.size() == 2 ? head : head + " и ещё " + (names.size() - 2);
+	}
+
 	private Checklist()
 	{
 	}

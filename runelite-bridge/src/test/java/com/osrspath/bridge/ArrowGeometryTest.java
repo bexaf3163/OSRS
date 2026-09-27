@@ -141,7 +141,7 @@ public class ArrowGeometryTest
 							BufferedImage img = new BufferedImage(600, 300, BufferedImage.TYPE_INT_ARGB);
 							Graphics2D g = img.createGraphics();
 							Font f = OverlayText.font(font, 1f);
-							Dimension d = OsrsPathArrowOverlay.draw(g, f, state, 0.7, layer, text, size.diameter, 75);
+							Dimension d = OsrsPathArrowOverlay.draw(g, f, state, 0.7, layer, text, size.diameter);
 							g.dispose();
 							for (int y = 0; y < img.getHeight(); y++)
 							{

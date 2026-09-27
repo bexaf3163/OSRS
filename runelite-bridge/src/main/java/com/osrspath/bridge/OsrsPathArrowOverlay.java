@@ -74,7 +74,7 @@ class OsrsPathArrowOverlay extends Overlay
 		OsrsPathHudOverlay.State hud = plugin.getHud();
 		String text = hud != null ? label(hud.getDistance()) : null;
 		Font font = OverlayText.font(g.getFont(), config.hudLarge() ? OsrsPathHudOverlay.LARGE : 1f);
-		return draw(g, font, state, angle, layer, text, config.arrowSize().diameter, config.hudOpacity());
+		return draw(g, font, state, angle, layer, text, config.arrowSize().diameter);
 	}
 
 	/**
@@ -83,7 +83,7 @@ class OsrsPathArrowOverlay extends Overlay
 	 * ±2 — на поверхности / под землёй (тогда вместо стрелки — шеврон вверх или вниз: направление по карте
 	 * между поверхностью и подземельем ничего не значит).
 	 */
-	static Dimension draw(Graphics2D g, Font font, ArrowGeometry.State state, double angle, int layer, String text, int diameter, int opacity)
+	static Dimension draw(Graphics2D g, Font font, ArrowGeometry.State state, double angle, int layer, String text, int diameter)
 	{
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
@@ -94,8 +94,7 @@ class OsrsPathArrowOverlay extends Overlay
 		int width = Math.max(diameter, textW) + 2 * PAD;
 		int height = diameter + 2 * PAD + (label == null ? 0 : TEXT_GAP + fm.getHeight());
 
-		g.setColor(OsrsPathHudOverlay.background(opacity));
-		g.fillRoundRect(0, 0, width, height, 12, 12);
+		// Без плашки: стрелка с тёмным контуром и подпись с обводкой видны и на траве, и на снегу, и в темноте.
 
 		double cx = width / 2.0;
 		double cy = PAD + diameter / 2.0;
@@ -130,8 +129,12 @@ class OsrsPathArrowOverlay extends Overlay
 		{
 			int baseline = PAD + diameter + TEXT_GAP + fm.getAscent();
 			int x = (int) Math.round(cx - textW / 2.0);
-			g.setColor(Color.BLACK);
-			g.drawString(label, x + 1, baseline + 1);
+			// Обводка в четыре стороны и тень: без плашки подпись должна читаться на любом фоне.
+			g.setColor(new Color(0, 0, 0, 230));
+			for (int[] d : new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {1, 1}})
+			{
+				g.drawString(label, x + d[0], baseline + d[1]);
+			}
 			g.setColor(state == ArrowGeometry.State.VERY_CLOSE ? NEAR : Color.WHITE);
 			g.drawString(label, x, baseline);
 		}
