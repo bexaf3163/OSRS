@@ -3,28 +3,34 @@ package com.osrspath.bridge;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import javax.inject.Inject;
 import lombok.Value;
+import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.components.ComponentConstants;
-import net.runelite.client.ui.overlay.components.LineComponent;
-import net.runelite.client.ui.overlay.components.TitleComponent;
+import net.runelite.client.ui.overlay.components.LayoutableRenderableEntity;
+import net.runelite.client.ui.overlay.components.PanelComponent;
 
 /**
  * Микро-HUD: код и название шага, текущая цель и расстояние до неё. Слева сверху, под окнами игры,
  * перетаскивается мышью с зажатым Alt (как любая плашка RuneLite).
  *
  * Строки плагин считает раз за игровой тик ({@link State}); здесь панель пересобирается, только
- * когда состояние или настройки изменились, — в обычном кадре ничего не создаётся.
+ * когда состояние или настройки изменились, — в обычном кадре ничего не создаётся. Длинные строки,
+ * включая название шага, переносятся по ширине плашки ({@link OverlayText}).
  */
 class OsrsPathHudOverlay extends OverlayPanel
 {
 	static final int WIDTH = 190;
+	/** Крупный HUD: шрифт и ширина больше на четверть. */
+	static final float LARGE = 1.25f;
 	static final Color TITLE = new Color(255, 210, 90);
 	static final Color TEXT = new Color(230, 230, 230);
 	static final Color DISTANCE = new Color(120, 210, 255);
@@ -79,50 +85,57 @@ class OsrsPathHudOverlay extends OverlayPanel
 		{
 			return null;
 		}
-		Object key = Arrays.asList(s, config.hudOpacity(), config.hudLarge(), g.getFont());
+		boolean large = config.hudLarge();
+		Font font = OverlayText.font(g.getFont(), large ? LARGE : 1f);
+		g.setFont(font);
+		int width = panelWidth(this, large ? Math.round(WIDTH * LARGE) : WIDTH);
+		Object key = Arrays.asList(s, config.hudOpacity(), font, width);
 		if (!Objects.equals(key, builtFor))
 		{
-			build(s, g.getFont());
+			build(panelComponent, s, g.getFontMetrics(font), width, config.hudOpacity());
 			builtFor = key;
 		}
 		return super.render(g);
 	}
 
-	private void build(State s, Font base)
+	/** Ширина плашки: своя или та, что игрок задал, растянув её мышью с Alt. */
+	static int panelWidth(Overlay overlay, int standard)
 	{
-		boolean large = config.hudLarge();
-		Font font = large ? base.deriveFont(base.getSize2D() * 1.25f) : base;
-		panelComponent.getChildren().clear();
-		panelComponent.setPreferredSize(new Dimension(large ? WIDTH * 5 / 4 : WIDTH, 0));
-		panelComponent.setBackgroundColor(background(config.hudOpacity()));
-		panelComponent.getChildren().add(TitleComponent.builder().text(s.getTitle()).color(TITLE).build());
+		Dimension d = overlay.getPreferredSize();
+		return d != null && d.width > 0 ? d.width : standard;
+	}
+
+	/** Содержимое HUD. Статическое — чтобы тест мог отрисовать его настоящими шрифтами без клиента. */
+	static void build(PanelComponent panel, State s, FontMetrics fm, int width, int opacity)
+	{
+		int inner = OverlayText.inner(width);
+		List<LayoutableRenderableEntity> c = panel.getChildren();
+		c.clear();
+		panel.setPreferredSize(new Dimension(width, 0));
+		panel.setBackgroundColor(background(opacity));
+		OverlayText.frame(panel, fm);
+		OverlayText.title(c, s.getTitle(), TITLE, fm, inner);
 		if (s.getDanger() != null)
 		{
 			// Опасность — сразу под названием, выше цели: её нельзя пропустить.
-			panelComponent.getChildren().add(LineComponent.builder()
-				.left(s.isDangerInside() ? "⚠ ОПАСНО — ты в зоне!" : "⚠ ВНИМАНИЕ")
-				.leftColor(OsrsPathDangerOverlay.DANGER).leftFont(font).build());
-			panelComponent.getChildren().add(LineComponent.builder().left(s.getDanger())
-				.leftColor(OsrsPathDangerOverlay.DANGER).leftFont(font).build());
+			OverlayText.line(c, s.isDangerInside() ? "⚠ ОПАСНО — ты в зоне!" : "⚠ ВНИМАНИЕ", OsrsPathDangerOverlay.DANGER, fm, inner);
+			OverlayText.line(c, s.getDanger(), OsrsPathDangerOverlay.DANGER, fm, inner);
 		}
 		if (s.getGoal() != null && !s.getGoal().isEmpty())
 		{
-			panelComponent.getChildren().add(LineComponent.builder().left(s.getGoal()).leftColor(TEXT).leftFont(font).build());
+			OverlayText.line(c, s.getGoal(), TEXT, fm, inner);
 		}
 		if (s.getDistance() != null)
 		{
-			panelComponent.getChildren().add(LineComponent.builder().left(s.getDistance())
-				.leftColor(s.isNear() ? GOOD : DISTANCE).leftFont(font).build());
+			OverlayText.line(c, s.getDistance(), s.isNear() ? GOOD : DISTANCE, fm, inner);
 		}
 		if (s.getPacing() != null)
 		{
-			panelComponent.getChildren().add(LineComponent.builder().left(s.getPacing())
-				.leftColor(s.isPacingGood() ? ALMOST : TEXT).leftFont(font).build());
+			OverlayText.line(c, s.getPacing(), s.isPacingGood() ? ALMOST : TEXT, fm, inner);
 		}
 		if (s.getBag() != null)
 		{
-			panelComponent.getChildren().add(LineComponent.builder().left(s.getBag())
-				.leftColor(s.isBagReady() ? GOOD : WARN).leftFont(font).build());
+			OverlayText.line(c, s.getBag(), s.isBagReady() ? GOOD : WARN, fm, inner);
 		}
 	}
 

@@ -57,6 +57,8 @@ class OsrsPathBreadcrumbOverlay extends Overlay
 		{
 			return null;
 		}
+		// Подпись точки — одним шрифтом с кириллицей, как и плашки ({@link OverlayText}).
+		g.setFont(OverlayText.font(g.getFont(), 1f));
 		Color base = config.highlightColor();
 		List<ActiveTarget.WorldPointDto> points = route.points();
 		int last = Math.min(points.size(), route.index() + AHEAD);

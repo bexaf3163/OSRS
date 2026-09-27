@@ -55,6 +55,10 @@ processResources {
 // Тесты читают маршрут приложения, чтобы проверить названия квестов и шаблоны сообщений.
 test {
 	systemProperty 'osrsPath.steps', file('../src/data/steps.json').absolutePath
+	// Шрифты RuneLite (FontManager) при загрузке создают папку ~/.runelite/fonts — в тестах она своя,
+	// настоящая папка RuneLite игрока не трогается. Картинки рисуются без окна.
+	systemProperty 'user.home', layout.buildDirectory.dir('test-home').get().asFile.absolutePath
+	systemProperty 'java.awt.headless', 'true'
 }
 
 // Плагин одним файлом: его кладёт в exe программа «OSRS Путь» и запускает с установленным RuneLite.

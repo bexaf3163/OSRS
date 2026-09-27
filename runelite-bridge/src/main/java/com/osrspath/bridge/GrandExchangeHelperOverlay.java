@@ -2,6 +2,8 @@ package com.osrspath.bridge;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.util.Arrays;
 import java.util.List;
@@ -12,8 +14,8 @@ import net.runelite.api.gameval.InterfaceID;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.components.LineComponent;
-import net.runelite.client.ui.overlay.components.TitleComponent;
+import net.runelite.client.ui.overlay.components.LayoutableRenderableEntity;
+import net.runelite.client.ui.overlay.components.PanelComponent;
 
 /**
  * Подсказка на Grand Exchange: оптовый список из приложения, что уже есть, что в ордере и что
@@ -56,25 +58,36 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 		{
 			return null;
 		}
-		Object key = Arrays.asList(rows, config.hudOpacity(), config.hudLarge());
+		boolean large = config.hudLarge();
+		Font font = OverlayText.font(g.getFont(), large ? OsrsPathHudOverlay.LARGE : 1f);
+		g.setFont(font);
+		int width = OsrsPathHudOverlay.panelWidth(this, standardWidth(large));
+		Object key = Arrays.asList(rows, config.hudOpacity(), font, width);
 		if (!Objects.equals(key, builtFor))
 		{
-			build(rows);
+			build(panelComponent, rows, g.getFontMetrics(font), width, config.hudOpacity());
 			builtFor = key;
 		}
 		return super.render(g);
 	}
 
-	private void build(List<ShoppingPlan.Row> rows)
+	static int standardWidth(boolean large)
 	{
-		int width = config.hudLarge() ? OsrsPathHudOverlay.WIDTH * 5 / 4 + 30 : OsrsPathHudOverlay.WIDTH + 30;
-		panelComponent.getChildren().clear();
-		panelComponent.setPreferredSize(new Dimension(width, 0));
-		panelComponent.setBackgroundColor(OsrsPathHudOverlay.background(Math.max(config.hudOpacity(), 85)));
+		return Math.round((OsrsPathHudOverlay.WIDTH + 30) * (large ? OsrsPathHudOverlay.LARGE : 1f));
+	}
+
+	/** Содержимое панели. Статическое — тест отрисовывает его настоящими шрифтами без клиента. */
+	static void build(PanelComponent panel, List<ShoppingPlan.Row> rows, FontMetrics fm, int width, int opacity)
+	{
+		int inner = OverlayText.inner(width);
+		List<LayoutableRenderableEntity> c = panel.getChildren();
+		c.clear();
+		panel.setPreferredSize(new Dimension(width, 0));
+		panel.setBackgroundColor(OsrsPathHudOverlay.background(Math.max(opacity, 85)));
+		OverlayText.frame(panel, fm);
 		long left = rows.stream().filter(r -> r.getState() != ShoppingPlan.RowState.HAVE).count();
-		panelComponent.getChildren().add(TitleComponent.builder()
-			.text(left == 0 ? "Оптовый список: всё есть" : "Оптовый список · купить " + left)
-			.color(left == 0 ? OsrsPathHudOverlay.GOOD : OsrsPathHudOverlay.TITLE).build());
+		OverlayText.title(c, left == 0 ? "Оптовый список: всё есть" : "Оптовый список · купить " + left,
+			left == 0 ? OsrsPathHudOverlay.GOOD : OsrsPathHudOverlay.TITLE, fm, inner);
 		// Сначала то, что осталось купить: готовое уходит вниз.
 		List<ShoppingPlan.Row> ordered = rows.stream()
 			.sorted((a, b) -> Boolean.compare(a.getState() == ShoppingPlan.RowState.HAVE, b.getState() == ShoppingPlan.RowState.HAVE))
@@ -84,31 +97,30 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 		{
 			if (shown++ == MAX_ROWS)
 			{
-				panelComponent.getChildren().add(LineComponent.builder().left("…и ещё " + (rows.size() - MAX_ROWS)).leftColor(MUTED).build());
+				OverlayText.line(c, "…и ещё " + (rows.size() - MAX_ROWS), MUTED, fm, inner);
 				break;
 			}
-			panelComponent.getChildren().add(line(r));
+			line(c, r, fm, inner);
 		}
-		panelComponent.getChildren().add(LineComponent.builder()
-			.left("Название — кнопкой «Копировать» в OSRS Путь").leftColor(MUTED).build());
+		OverlayText.line(c, "Название — кнопкой «Копировать» в OSRS Путь", MUTED, fm, inner);
 	}
 
-	private static LineComponent line(ShoppingPlan.Row r)
+	private static void line(List<LayoutableRenderableEntity> c, ShoppingPlan.Row r, FontMetrics fm, int inner)
 	{
 		String amount = r.getNeed() > 0 ? r.getHave() + "/" + r.getNeed() : (r.getHave() > 0 ? "есть " + r.getHave() : "по ситуации");
 		switch (r.getState())
 		{
 			case HAVE:
-				return LineComponent.builder().left("✓ " + r.getName()).leftColor(OsrsPathHudOverlay.GOOD)
-					.right(amount).rightColor(OsrsPathHudOverlay.GOOD).build();
+				OverlayText.pair(c, "✓ " + r.getName(), OsrsPathHudOverlay.GOOD, amount, OsrsPathHudOverlay.GOOD, fm, inner);
+				return;
 			case BOUGHT:
 			case BUYING:
-				return LineComponent.builder().left("… " + r.getName()).leftColor(OsrsPathHudOverlay.TEXT)
-					.right(r.getOffer()).rightColor(r.getState() == ShoppingPlan.RowState.BOUGHT ? OsrsPathHudOverlay.GOOD : MUTED).build();
+				OverlayText.pair(c, "… " + r.getName(), OsrsPathHudOverlay.TEXT, r.getOffer() == null ? "" : r.getOffer(),
+					r.getState() == ShoppingPlan.RowState.BOUGHT ? OsrsPathHudOverlay.GOOD : MUTED, fm, inner);
+				return;
 			default:
-				Color c = r.isNext() ? NEXT : OsrsPathHudOverlay.TEXT;
-				return LineComponent.builder().left((r.isNext() ? "▶ " : "• ") + r.getName()).leftColor(c)
-					.right(amount).rightColor(c).build();
+				Color color = r.isNext() ? NEXT : OsrsPathHudOverlay.TEXT;
+				OverlayText.pair(c, (r.isNext() ? "▶ " : "• ") + r.getName(), color, amount, color, fm, inner);
 		}
 	}
 }

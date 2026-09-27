@@ -52,6 +52,8 @@ class OsrsPathWorldOverlay extends Overlay
 	{
 		WorldView wv = client.getTopLevelWorldView();
 		NavTarget nav = plugin.getNavTarget();
+		// Подписи над NPC и клетками — одним шрифтом с кириллицей: иначе «[Купи: » крупно, а «Steel axe]» мелко.
+		g.setFont(OverlayText.font(g.getFont(), 1f));
 		if (nav != null && wv != null)
 		{
 			renderNav(g, wv, nav);

@@ -2,8 +2,11 @@ package com.osrspath.bridge;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import javax.inject.Inject;
 import net.runelite.api.Client;
@@ -12,8 +15,8 @@ import net.runelite.api.widgets.Widget;
 import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.components.LineComponent;
-import net.runelite.client.ui.overlay.components.TitleComponent;
+import net.runelite.client.ui.overlay.components.LayoutableRenderableEntity;
+import net.runelite.client.ui.overlay.components.PanelComponent;
 
 /**
  * Проверка вылета при открытом банке: «✓ Rope 1/1», «✗ Cooked chicken 2/5 · +3 HP», «нет в банке».
@@ -61,33 +64,43 @@ class InventoryCheckOverlay extends OverlayPanel
 		{
 			return null;
 		}
-		Object key = Arrays.asList(r, target.getStepId(), config.hudOpacity(), config.hudLarge());
+		boolean large = config.hudLarge();
+		Font font = OverlayText.font(g.getFont(), large ? OsrsPathHudOverlay.LARGE : 1f);
+		g.setFont(font);
+		int width = OsrsPathHudOverlay.panelWidth(this, standardWidth(large));
+		Object key = Arrays.asList(r, target.getStepId(), config.hudOpacity(), font, width);
 		if (!Objects.equals(key, builtFor))
 		{
-			build(r, target.getStepId());
+			build(panelComponent, r, target.getStepId(), g.getFontMetrics(font), width, config.hudOpacity());
 			builtFor = key;
 		}
 		return super.render(g);
 	}
 
-	private void build(Checklist.Result r, String stepId)
+	static int standardWidth(boolean large)
 	{
-		int width = config.hudLarge() ? OsrsPathHudOverlay.WIDTH * 5 / 4 + 20 : OsrsPathHudOverlay.WIDTH + 20;
-		panelComponent.getChildren().clear();
-		panelComponent.setPreferredSize(new Dimension(width, 0));
-		panelComponent.setBackgroundColor(OsrsPathHudOverlay.background(Math.max(config.hudOpacity(), 85)));
-		panelComponent.getChildren().add(TitleComponent.builder().text("Проверка вылета · " + stepId)
-			.color(OsrsPathHudOverlay.TITLE).build());
+		return Math.round((OsrsPathHudOverlay.WIDTH + 20) * (large ? OsrsPathHudOverlay.LARGE : 1f));
+	}
+
+	/** Содержимое панели. Статическое — тест отрисовывает его настоящими шрифтами без клиента. */
+	static void build(PanelComponent panel, Checklist.Result r, String stepId, FontMetrics fm, int width, int opacity)
+	{
+		int inner = OverlayText.inner(width);
+		List<LayoutableRenderableEntity> c = panel.getChildren();
+		c.clear();
+		panel.setPreferredSize(new Dimension(width, 0));
+		panel.setBackgroundColor(OsrsPathHudOverlay.background(Math.max(opacity, 85)));
+		OverlayText.frame(panel, fm);
+		OverlayText.title(c, "Проверка вылета · " + stepId, OsrsPathHudOverlay.TITLE, fm, inner);
 		int shown = 0;
 		for (Checklist.Row row : r.getRows())
 		{
 			if (shown++ == MAX_ROWS)
 			{
-				panelComponent.getChildren().add(LineComponent.builder()
-					.left("…и ещё " + (r.getRows().size() - MAX_ROWS)).leftColor(MUTED).build());
+				OverlayText.line(c, "…и ещё " + (r.getRows().size() - MAX_ROWS), MUTED, fm, inner);
 				break;
 			}
-			panelComponent.getChildren().add(line(row));
+			line(c, row, fm, inner);
 		}
 		String footer;
 		Color color;
@@ -106,10 +119,10 @@ class InventoryCheckOverlay extends OverlayPanel
 			footer = "Возьми из банка подсвеченное";
 			color = OsrsPathHudOverlay.WARN;
 		}
-		panelComponent.getChildren().add(LineComponent.builder().left(footer).leftColor(color).build());
+		OverlayText.line(c, footer, color, fm, inner);
 	}
 
-	private static LineComponent line(Checklist.Row row)
+	private static void line(List<LayoutableRenderableEntity> c, Checklist.Row row, FontMetrics fm, int inner)
 	{
 		String mark;
 		Color color;
@@ -134,6 +147,6 @@ class InventoryCheckOverlay extends OverlayPanel
 				}
 		}
 		String name = row.getName() + (row.getHeals() != null ? " · +" + row.getHeals() + " HP" : "");
-		return LineComponent.builder().left(mark + name).leftColor(color).right(right).rightColor(color).build();
+		OverlayText.pair(c, mark + name, color, right, color, fm, inner);
 	}
 }

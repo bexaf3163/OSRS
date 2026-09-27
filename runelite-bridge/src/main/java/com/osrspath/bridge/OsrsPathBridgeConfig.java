@@ -70,7 +70,7 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "completionSound",
-		name = "Звук при выполнении шага",
+		name = "Звук: шаг выполнен",
 		description = "Короткий звук интерфейса, когда шаг засчитан автоматически",
 		position = 5
 	)
@@ -95,8 +95,8 @@ public interface OsrsPathBridgeConfig extends Config
 	@Units(Units.PERCENT)
 	@ConfigItem(
 		keyName = "hudOpacity",
-		name = "Непрозрачность HUD",
-		description = "Насколько плотный фон у плашек помощника",
+		name = "Фон HUD",
+		description = "Непрозрачность фона у плашек помощника, в процентах",
 		section = companion,
 		position = 12
 	)
@@ -143,7 +143,7 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "useShortestPath",
-		name = "Маршрут через Shortest Path",
+		name = "Через Shortest Path",
 		description = "Если установлен плагин Shortest Path (Plugin Hub), передавать ему цель шага — он проложит путь с учётом стен и дверей",
 		section = companion,
 		position = 16
@@ -167,7 +167,7 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "shareStats",
-		name = "Быстрые варианты по уровням",
+		name = "Варианты по уровням",
 		description = "Передавать приложению уровни навыков, чтобы оно предлагало телепорты, каноэ и срезки",
 		section = companion,
 		position = 18
@@ -178,7 +178,7 @@ public interface OsrsPathBridgeConfig extends Config
 	}
 
 	@ConfigSection(
-		name = "Места, банк, опасность, темп",
+		name = "Места, радар, темп",
 		description = "Навигация к местам и магазинам из приложения, предметы этапа в банке, радар опасных мест и темп прокачки",
 		position = 20
 	)
@@ -186,8 +186,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "autoNavigation",
-		name = "Навигация к местам из приложения",
-		description = "Кнопка 🧭 в приложении ставит стрелку (и маршрут Shortest Path) к месту с карты. "
+		name = "Стрелка к местам",
+		description = "Кнопка «Направить стрелку в игре» в приложении ставит стрелку (и маршрут Shortest Path) к месту с карты. "
 			+ "Дошёл — стрелка возвращается к шагу. Выключено — приложение получает отказ",
 		section = helpers,
 		position = 21
@@ -199,7 +199,7 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "upgradeRouter",
-		name = "Подсказки апгрейда снаряжения",
+		name = "Подсказки апгрейдов",
 		description = "Передавать приложению снаряжение и монеты, чтобы оно предлагало быстрый апгрейд. "
 			+ "По кнопке «Направить в магазин» — продавец и нужный предмет в магазине подсвечиваются. Сам ничего не покупает",
 		section = helpers,
@@ -212,7 +212,7 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "bankTagsHelper",
-		name = "Предметы этапа из приложения",
+		name = "Предметы этапа",
 		description = "Принимать от приложения список предметов этапа — тот же, что в строке Bank Tags",
 		section = helpers,
 		position = 23
@@ -224,7 +224,7 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "bankHighlight",
-		name = "Подсветка предметов этапа в банке",
+		name = "Подсветка в банке",
 		description = "Мягкая золотистая рамка у предметов этапа в основном окне банка — даже без отдельной вкладки Bank Tags",
 		section = helpers,
 		position = 24
@@ -249,7 +249,7 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "dangerSound",
-		name = "Звук при входе в опасную зону",
+		name = "Звук у опасной зоны",
 		description = "Один раз при входе в зону; снова — только если вышел и зашёл опять",
 		section = helpers,
 		position = 26
