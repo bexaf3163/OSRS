@@ -4,7 +4,7 @@ import { allSteps, stepsFor } from '../src/data';
 import { emptyProgress, withStep } from '../src/lib/progress';
 import { ownedText, triggerText } from '../src/lib/triggers';
 import {
-  backoffMs, BRIDGE_PATHS, clearActiveStep, connectEvents, parseEvent, planAutoComplete, syncActiveStep, toInGameTarget,
+  APP_PROTOCOL, backoffMs, BRIDGE_PATHS, clearActiveStep, connectEvents, parseEvent, planAutoComplete, pluginCompat, syncActiveStep, toInGameTarget,
   type BridgeEvent, type BridgeTransport,
 } from '../src/services/runeliteBridge';
 
@@ -291,5 +291,22 @@ describe('запуск RuneLite из программы для ПК', () => {
     expect(findClient(repo(['gson-2.8.5.jar']))).toBeNull();
     expect(findClient(repo(['client-1.12.40.jar', 'injected-client-1.12.39.jar']))).toBeNull();
     expect(findClient(join(tmpdir(), 'нет-такой-папки'))).toBeNull();
+  });
+});
+
+describe('рукопожатие версий программы и плагина', () => {
+  it('плагин едет с той же версией и протоколом, что ждёт программа', async () => {
+    const { readFileSync } = await import('node:fs');
+    const java = readFileSync(new URL('../runelite-bridge/src/main/java/com/osrspath/bridge/BridgeServer.java', import.meta.url), 'utf8');
+    const pkg = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8')) as { version: string };
+    expect(java.match(/PLUGIN_VERSION = "([^"]+)"/)?.[1]).toBe(pkg.version);
+    expect(Number(java.match(/int PROTOCOL = (\d+);/)?.[1])).toBe(APP_PROTOCOL);
+  });
+
+  it('совместимость: без поля — старый плагин, меньше — устарел, больше — новее программы', () => {
+    expect(pluginCompat(null)).toBe('legacy');
+    expect(pluginCompat(APP_PROTOCOL - 1)).toBe('older');
+    expect(pluginCompat(APP_PROTOCOL)).toBe('ok');
+    expect(pluginCompat(APP_PROTOCOL + 1)).toBe('newer');
   });
 });
