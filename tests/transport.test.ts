@@ -34,6 +34,19 @@ describe('справка «Телепорты, каноэ и лодки»', () =
     ]) expect(transportText, fact).toContain(fact);
   });
 
+  it('Home Teleport: что это, где, при каком условии и что делать, если он недоступен (§70)', () => {
+    for (const fact of [
+      'Standard spellbook', 'руны и уровень магии не нужны', 'первый значок', '14 секунд', 'раз в 30 минут',
+      'В бою не работает', 'Глубже 20-го уровня Wilderness', 'Если значок серый', 'Lumbridge Teleport за руны',
+      'Use Home Teleport spells',
+    ]) expect(transportText, fact).toContain(fact);
+    // У шага, где маршрут на него рассчитывает, есть запасной выход.
+    const s109 = stepsFor('f2p').find((s) => s.id === 'S1-09')!;
+    const exit = s109.quickSteps!.find((q) => q.includes('Lumbridge Home Teleport'))!;
+    expect(exit).toContain('значок серый');
+    expect(exit).toContain('Climb-up');
+  });
+
   it('находится поиском', () => {
     const index = buildIndex({ steps: stepsFor('f2p'), skills, reference, plugins, items, typeLabel: {} });
     for (const q of ['Home Teleport', 'каноэ', 'Customs officer']) {
