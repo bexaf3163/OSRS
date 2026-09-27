@@ -1354,3 +1354,26 @@ th .place-link { font-weight: inherit; }
 .gear-locked .lock-missing { margin-top: 2px; }
 .lock-note { margin: 0; color: var(--warn); }
 
+
+/* Готовность к шагу: светофор и действия. */
+.readiness { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; background: var(--surface-3); }
+.readiness p { margin: 0; }
+.readiness.is-ready { box-shadow: inset 3px 0 0 var(--done); }
+.readiness.is-minor_prep { box-shadow: inset 3px 0 0 var(--gold); }
+.readiness.is-missing_item, .readiness.is-missing_money, .readiness.is-missing_stats { box-shadow: inset 3px 0 0 var(--warn); }
+.readiness.is-missing_quest, .readiness.is-blocked { box-shadow: inset 3px 0 0 var(--danger); }
+.readiness.is-unknown { box-shadow: inset 3px 0 0 var(--border-strong); }
+.ready-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.ready-row { display: grid; grid-template-columns: 18px minmax(0, 1fr) auto; gap: 6px; align-items: baseline; font-size: 0.88rem; }
+.ready-row.is-missing .ready-mark, .ready-row.is-partial .ready-mark { color: var(--warn); }
+.ready-row.is-ok .ready-mark { color: var(--done); }
+.ready-text { overflow-wrap: anywhere; }
+.ready-action { justify-self: end; }
+.ready-ok { color: var(--done); }
+.ready-unknown > summary { cursor: pointer; width: fit-content; color: var(--muted); }
+.readiness-line { margin: 8px 0 0; font-size: 0.9rem; }
+@media (max-width: 560px) {
+  .ready-row { grid-template-columns: 18px minmax(0, 1fr); }
+  .ready-action { grid-column: 2; justify-self: start; }
+}
+.readiness-detour { color: var(--gold-ink); }

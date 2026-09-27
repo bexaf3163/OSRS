@@ -214,6 +214,11 @@ export interface Step {
   qp?: number;
   minQp?: number;
   requires: string[];
+  /**
+   * Требования, которые проверяются по состоянию игрока (уровни, квесты), — из статьи квеста на OSRS Wiki.
+   * Готовность шага (lib/readiness.ts) сверяет их с уровнями из игры или профиля и с отметками квестов.
+   */
+  requirements?: StepRequirement[];
   optional?: boolean;
 
   wikiUrl?: string;
@@ -266,6 +271,11 @@ export interface Step {
   membersOnly?: boolean;
   membersAlternative?: string;
 }
+
+/** Требование шага. when: 'during' — нужно по ходу квеста, начать можно и без него. */
+export type StepRequirement =
+  | { type: 'skill'; skill: string; min: number; when?: 'start' | 'during'; boostable?: boolean }
+  | { type: 'quest'; quest: string };
 
 export interface Stage {
   id: number;

@@ -1915,6 +1915,15 @@
     "requires": [
       "S2-01"
     ],
+    "requirements": [
+      {
+        "type": "skill",
+        "skill": "mining",
+        "min": 10,
+        "when": "during",
+        "boostable": true
+      }
+    ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/The_Knight's_Sword",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Knight's_Sword/Quick_guide",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2978,3341,0",
@@ -5096,6 +5105,15 @@
     "requires": [
       "S7-04"
     ],
+    "requirements": [
+      {
+        "type": "skill",
+        "skill": "agility",
+        "min": 25,
+        "when": "during",
+        "boostable": true
+      }
+    ],
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/The_Grand_Tree",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/The_Grand_Tree/Quick_guide",
@@ -5235,6 +5253,16 @@
     "qp": 2,
     "requires": [
       "S8-01"
+    ],
+    "requirements": [
+      {
+        "type": "quest",
+        "quest": "Priest in Peril"
+      },
+      {
+        "type": "quest",
+        "quest": "The Restless Ghost"
+      }
     ],
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Nature_Spirit",
@@ -5451,6 +5479,40 @@
       "S8-01",
       "S8-04"
     ],
+    "requirements": [
+      {
+        "type": "quest",
+        "quest": "The Restless Ghost"
+      },
+      {
+        "type": "quest",
+        "quest": "Ernest the Chicken"
+      },
+      {
+        "type": "quest",
+        "quest": "Priest in Peril"
+      },
+      {
+        "type": "skill",
+        "skill": "slayer",
+        "min": 18
+      },
+      {
+        "type": "skill",
+        "skill": "crafting",
+        "min": 19
+      },
+      {
+        "type": "skill",
+        "skill": "ranged",
+        "min": 30
+      },
+      {
+        "type": "skill",
+        "skill": "woodcutting",
+        "min": 35
+      }
+    ],
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Animal_Magnetism",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Animal_Magnetism/Quick_guide",
@@ -5588,6 +5650,20 @@
     "requires": [
       "S8-04"
     ],
+    "requirements": [
+      {
+        "type": "skill",
+        "skill": "crafting",
+        "min": 31,
+        "boostable": true
+      },
+      {
+        "type": "skill",
+        "skill": "woodcutting",
+        "min": 36,
+        "boostable": true
+      }
+    ],
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Lost_City",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Lost_City/Quick_guide",
@@ -5678,6 +5754,16 @@
     "requires": [
       "S9-01",
       "S8-02"
+    ],
+    "requirements": [
+      {
+        "type": "quest",
+        "quest": "Lost City"
+      },
+      {
+        "type": "quest",
+        "quest": "Nature Spirit"
+      }
     ],
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Fairytale_I_-_Growing_Pains",
@@ -5857,6 +5943,16 @@
       "S7-03",
       "S7-05"
     ],
+    "requirements": [
+      {
+        "type": "quest",
+        "quest": "The Grand Tree"
+      },
+      {
+        "type": "quest",
+        "quest": "Tree Gnome Village"
+      }
+    ],
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Monkey_Madness_I",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Monkey_Madness_I/Quick_guide",
@@ -5958,6 +6054,17 @@
     "titleRu": "Рецепт катастрофы",
     "qp": 1,
     "requires": [],
+    "requirements": [
+      {
+        "type": "skill",
+        "skill": "cooking",
+        "min": 10
+      },
+      {
+        "type": "quest",
+        "quest": "Cook's Assistant"
+      }
+    ],
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster",
     "quickGuideUrl": "https://oldschool.runescape.wiki/w/Recipe_for_Disaster/Quick_guide",

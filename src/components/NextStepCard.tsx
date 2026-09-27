@@ -5,6 +5,7 @@ import { blockerParts, blockersOf, firstOpen, nextStep } from '../lib/next-step'
 import { TypeIcon, TYPE_LABEL } from './Icons';
 import { Inline } from './Inline';
 import { RangeHints } from './RangeHints';
+import { ReadinessLine } from './ReadinessPanel';
 
 export function NextStepCard({ onDone }: { onDone: (id: string) => void }) {
   const { progress, qp, steps, mode, setStep } = useStore();
@@ -59,6 +60,7 @@ export function NextStepCard({ onDone }: { onDone: (id: string) => void }) {
         <div className="field is-done-when"><dt>Готово, когда</dt><dd><Inline text={step.doneWhen} /></dd></div>
       </dl>
       <RangeHints step={step} />
+      <ReadinessLine step={step} />
       <div className="actions">
         <button type="button" className="btn btn-primary btn-lg" onClick={() => onDone(step.id)}>Отметить выполненным</button>
         {step.optional && (

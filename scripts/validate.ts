@@ -145,6 +145,42 @@ export function validate(d: GuideData | null, route: Route): Report {
     return (m ? Number(m[1]) : 0) !== (s.qp ?? 0) && !(s.qp === undefined && !m);
   }).map((s) => `${s.id} (qp ${s.qp ?? 0}, в «Награде» ${s.reward?.match(/(\d+) QP/)?.[1] ?? 0})`);
   check(!qpMismatch.length, 'Очки каждого квеста совпадают с текстом «Награды»', `Не совпадают с «Наградой»: ${qpMismatch.join('; ')}`);
+  // --- Требования шага (готовность): уровни и квесты из статьи квеста ---
+  const REQ_SKILLS = new Set(['attack', 'strength', 'defence', 'ranged', 'prayer', 'magic', 'runecraft', 'hitpoints', 'crafting', 'mining',
+    'smithing', 'fishing', 'cooking', 'firemaking', 'woodcutting', 'agility', 'herblore', 'thieving', 'fletching', 'slayer', 'farming',
+    'construction', 'hunter', 'sailing']);
+  const questAt = new Map(steps.flatMap((s, i) => (s.inGame?.completionTrigger?.type === 'QUEST_COMPLETED' ? [[s.inGame.completionTrigger.questName ?? '', i] as const] : [])));
+  const badReq: string[] = [];
+  const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
+  steps.forEach((s, i) => {
+    const text = (s.fields ?? []).filter((f) => f.label.startsWith('Требован')).map((f) => f.text).join(' ');
+    for (const r of s.requirements ?? []) {
+      if (r.type === 'skill') {
+        if (!REQ_SKILLS.has(r.skill) || !Number.isInteger(r.min) || r.min < 1 || r.min > 99) badReq.push(`${s.id}: ${r.skill} ${r.min}`);
+        else if (!text.includes(`${cap(r.skill)} ${r.min}`)) badReq.push(`${s.id}: «${cap(r.skill)} ${r.min}» нет в поле «Требования»`);
+      } else {
+        const at = questAt.get(r.quest);
+        if (at === undefined) badReq.push(`${s.id}: квест «${r.quest}» не из маршрута`);
+        else if (at >= i) badReq.push(`${s.id}: квест «${r.quest}» на маршруте позже шага`);
+        else if (steps[at].membersOnly && !s.membersOnly) badReq.push(`${s.id}: F2P-шаг требует квест Members «${r.quest}»`);
+        if (!text.includes(r.quest)) badReq.push(`${s.id}: «${r.quest}» нет в поле «Требования»`);
+      }
+    }
+    // Обратно: всё, что поле «Требования» называет уровнем или квестом маршрута, записано и в requirements.
+    for (const m of text.matchAll(/\b([A-Z][a-z]+) (\d{1,2})\b/g)) {
+      if (REQ_SKILLS.has(m[1].toLowerCase()) && !(s.requirements ?? []).some((r) => r.type === 'skill' && r.skill === m[1].toLowerCase() && r.min === Number(m[2]))) {
+        badReq.push(`${s.id}: «${m[0]}» из поля «Требования» нет в requirements`);
+      }
+    }
+    for (const q of questAt.keys()) {
+      if (q && text.includes(q) && !(s.requirements ?? []).some((r) => r.type === 'quest' && r.quest === q) && !text.includes(`(а значит, ${q}`) && !text.match(new RegExp(`а значит[^)]*${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`))) {
+        badReq.push(`${s.id}: квест «${q}» из поля «Требования» нет в requirements`);
+      }
+    }
+  });
+  const withReq = steps.filter((s) => s.requirements?.length).length;
+  check(!badReq.length, `Требования шагов (${withReq}): навыки и уровни верные, квесты — с маршрута и раньше шага, совпадают с полем «Требования»`, `Требования шагов: ${badReq.join('; ')}`);
+
   let running = EXPECTED.baseQp;
   const unreachable: string[] = [];
   for (const s of f2p) {
