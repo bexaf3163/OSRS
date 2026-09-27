@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
@@ -31,10 +32,14 @@ import lombok.extern.slf4j.Slf4j;
  * Локальный HTTP-мост для приложения «OSRS Путь». Слушает только 127.0.0.1.
  *
  * <pre>
- * GET  /status       {"status":"ok","inGame":true,"activeStepId":"S1-03"}
- * POST /active-step  цель шага (ActiveTarget) — стрелка, подсветка, автоотметка
- * POST /clear        убрать всё
- * GET  /events       text/event-stream: STATUS, STEP_AUTO_COMPLETED и пинг каждые 15 секунд
+ * GET  /status        {"status":"ok","inGame":true,"activeStepId":"S1-03","stats":{"magic":25,…},"shortestPath":true}
+ * POST /active-step   цель шага (ActiveTarget) — стрелка, подсветка, HUD, проверка вылета, путь, автоотметка
+ * POST /clear         убрать всё
+ * POST /shopping-plan оптовый список Grand Exchange (ShoppingPlan) — подсказка на бирже
+ * GET  /events        text/event-stream: STATUS, STATS, OWNED, STEP_AUTO_COMPLETED и пинг каждые 15 секунд
+ *
+ * STATS и OWNED уходят только при изменении (не чаще раза за игровой тик) и повторяются
+ * новому подключению, чтобы приложению не ждать следующего изменения.
  * </pre>
  *
  * Защита от чужих сайтов в браузере: Host только локальный (против DNS rebinding), Origin — только
@@ -60,6 +65,10 @@ public final class BridgeServer
 		void onActiveTarget(ActiveTarget target);
 
 		void onClear();
+
+		default void onShoppingPlan(ShoppingPlan plan)
+		{
+		}
 	}
 
 	private final int requestedPort;
@@ -73,6 +82,11 @@ public final class BridgeServer
 	private ScheduledExecutorService pinger;
 	private volatile boolean inGame;
 	private volatile String activeStepId;
+	/** Уровни навыков: {"magic": 25, …}; null — не в игре или передача выключена. */
+	private volatile Map<String, Integer> stats;
+	private volatile boolean shortestPath;
+	/** Последнее событие OWNED — повторяется новым подключениям. */
+	private volatile Map<String, Object> lastOwned;
 
 	public BridgeServer(int port, Gson gson, Listener listener, Collection<String> extraOrigins)
 	{
@@ -139,6 +153,41 @@ public final class BridgeServer
 		activeStepId = stepId;
 	}
 
+	/** Новые уровни навыков. Одинаковые не рассылаются. */
+	public void setStats(Map<String, Integer> value)
+	{
+		Map<String, Integer> copy = value == null ? null : new LinkedHashMap<>(value);
+		if (Objects.equals(stats, copy))
+		{
+			return;
+		}
+		stats = copy;
+		broadcast(statsEvent());
+	}
+
+	public void setShortestPath(boolean value)
+	{
+		shortestPath = value;
+	}
+
+	/**
+	 * Сколько есть нужных предметов: carried — в сумке и надето, noted — банкнотами в сумке,
+	 * bank — в банке (null, пока банк в этой сессии не открывали). Одинаковое не рассылается.
+	 */
+	public void owned(boolean bankSeen, List<Map<String, Object>> items)
+	{
+		Map<String, Object> e = new LinkedHashMap<>();
+		e.put("type", "OWNED");
+		e.put("bankSeen", bankSeen);
+		e.put("items", items);
+		if (e.equals(lastOwned))
+		{
+			return;
+		}
+		lastOwned = e;
+		broadcast(e);
+	}
+
 	public void stepCompleted(String stepId)
 	{
 		Map<String, Object> e = new LinkedHashMap<>();
@@ -157,6 +206,14 @@ public final class BridgeServer
 		Map<String, Object> e = new LinkedHashMap<>();
 		e.put("type", "STATUS");
 		e.put("inGame", inGame);
+		return e;
+	}
+
+	private Map<String, Object> statsEvent()
+	{
+		Map<String, Object> e = new LinkedHashMap<>();
+		e.put("type", "STATS");
+		e.put("stats", stats);
 		return e;
 	}
 
@@ -224,6 +281,8 @@ public final class BridgeServer
 					status.put("status", "ok");
 					status.put("inGame", inGame);
 					status.put("activeStepId", activeStepId);
+					status.put("stats", stats);
+					status.put("shortestPath", shortestPath);
 					json(ex, 200, status);
 					return;
 				case "/active-step":
@@ -256,6 +315,38 @@ public final class BridgeServer
 					}
 					activeStepId = target.getStepId();
 					listener.onActiveTarget(target);
+					json(ex, 200, ok());
+					return;
+				}
+				case "/shopping-plan":
+				{
+					if (!postAllowed(ex, method))
+					{
+						return;
+					}
+					String body = readBody(ex.getRequestBody());
+					if (body == null)
+					{
+						json(ex, 413, error("body too large"));
+						return;
+					}
+					ShoppingPlan plan;
+					try
+					{
+						plan = gson.fromJson(body, ShoppingPlan.class);
+					}
+					catch (JsonParseException e)
+					{
+						json(ex, 400, error("bad json"));
+						return;
+					}
+					String problem = plan == null ? "empty" : plan.prepare();
+					if (problem != null)
+					{
+						json(ex, 400, error(problem));
+						return;
+					}
+					listener.onShoppingPlan(plan);
 					json(ex, 200, ok());
 					return;
 				}
@@ -323,7 +414,17 @@ public final class BridgeServer
 			old.close();
 		}
 		streams.add(s);
-		if (!s.send("retry: 5000\n\ndata: " + gson.toJson(statusEvent()) + "\n\n"))
+		StringBuilder hello = new StringBuilder("retry: 5000\n\ndata: ").append(gson.toJson(statusEvent())).append("\n\n");
+		if (stats != null)
+		{
+			hello.append("data: ").append(gson.toJson(statsEvent())).append("\n\n");
+		}
+		Map<String, Object> owned = lastOwned;
+		if (owned != null)
+		{
+			hello.append("data: ").append(gson.toJson(owned)).append("\n\n");
+		}
+		if (!s.send(hello.toString()))
 		{
 			streams.remove(s);
 		}

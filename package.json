@@ -2,7 +2,7 @@
   "name": "osrs-put",
   "productName": "OSRS Путь",
   "private": true,
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "Личный трекер прогресса в Old School RuneScape (бесплатная версия)",
   "author": "Mark",
   "type": "module",
@@ -43,6 +43,7 @@
     "appId": "com.bexaf3163.osrsput",
     "productName": "OSRS Путь",
     "copyright": "Mark",
+    "electronDist": "node_modules/electron/dist",
     "directories": {
       "output": "release"
     },

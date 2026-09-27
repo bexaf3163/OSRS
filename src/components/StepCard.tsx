@@ -15,6 +15,7 @@ import { RangeHints } from './RangeHints';
 import { StepImage } from './StepImage';
 import { StepMap } from './StepMap';
 import { InGamePanel } from './InGamePanel';
+import { BranchSuggestions } from './BranchSuggestions';
 import { ItemIcon, useWiki } from './WikiDrawer';
 
 const WARN_LABELS = new Set(['Опасно', 'Внимание', 'Бой']);
@@ -169,6 +170,7 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
       {step.warning && <div className="plaque plaque-warning" role="note"><Inline text={step.warning} /></div>}
       <StepMap step={step} />
       <InGamePanel step={step} />
+      <BranchSuggestions step={step} />
 
       {step.how && <p className="step-how"><Inline text={step.how} /></p>}
       {step.bring && <p className="small"><span className="muted">Взять: </span><Inline text={step.bring} /></p>}
@@ -185,6 +187,9 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
           <ul className="item-grid">{step.itemsRecommended.map((it, i) => <ItemChip key={`${it.nameEn}-${i}`} item={it} />)}</ul>
         </section>
       )}
+      {step.type === 'gear' && step.itemsRequired?.length ? (
+        <p className="muted small"><a href="#/shopping">🛒 Оптовый список Grand Exchange</a> — закупка сразу на несколько этапов вперёд.</p>
+      ) : null}
 
       {step.imageUrl && <StepImage src={step.imageUrl} caption={step.imageCaption} />}
 

@@ -5,6 +5,7 @@ import { useState } from 'react';
 import type { InGameTarget, Step } from '../types';
 import { useBridge } from '../bridge';
 import { toInGameTarget } from '../services/runeliteBridge';
+import { PreflightPanel } from './PreflightPanel';
 
 const TRIGGER_TEXT: Record<NonNullable<InGameTarget['completionTrigger']>['type'], string> = {
   QUEST_COMPLETED: 'квест засчитается в игре',
@@ -20,12 +21,13 @@ const GROUPS: [keyof InGameTarget, string][] = [
 ];
 
 export function InGamePanel({ step }: { step: Step }) {
-  const { enabled, state, activeStepId, pointInGame, clear, canLaunch, launchRuneLite } = useBridge();
+  const { enabled, state, activeStepId, pointInGame, clear, canLaunch, launchRuneLite, shortestPath } = useBridge();
   const [notice, setNotice] = useState<'' | 'sending' | 'offline'>('');
   if (!enabled || !toInGameTarget(step)) return null;
   const active = activeStepId === step.id;
   const g = step.inGame;
   const trigger = g?.completionTrigger;
+  const waypoints = g?.pathWaypoints ?? [];
   const chips = GROUPS.flatMap(([key, kind]) => ((g?.[key] as string[] | undefined) ?? []).map((name) => ({ kind, name })));
 
   const point = async () => {
@@ -53,6 +55,21 @@ export function InGamePanel({ step }: { step: Step }) {
         </p>
       )}
       {trigger && <p className="muted small">Шаг отметится сам, когда {TRIGGER_TEXT[trigger.type]}.</p>}
+      {active && (
+        <p className="muted small">
+          {shortestPath
+            ? '🗺 Путь по земле прокладывает Shortest Path — с учётом стен и дверей.'
+            : waypoints.length ? `🗺 Маршрут по ${waypoints.length} точкам — метки на земле. Точнее ведёт плагин Shortest Path из Plugin Hub.`
+              : '🗺 Стрелка показывает направление по прямой. Путь с учётом стен рисует плагин Shortest Path из Plugin Hub.'}
+        </p>
+      )}
+      <PreflightPanel step={step} />
+      {waypoints.length > 0 && (
+        <details className="ingame-details">
+          <summary className="subhead">Маршрут · {waypoints.length} {waypoints.length < 5 ? 'точки' : 'точек'}</summary>
+          <ol className="ingame-route">{waypoints.map((w, i) => <li key={i}>{w.label ?? `${w.x}, ${w.y}`}</li>)}</ol>
+        </details>
+      )}
       {chips.length > 0 && (
         <details className="ingame-details">
           <summary className="subhead">Подсвечено в игре · {chips.length}</summary>

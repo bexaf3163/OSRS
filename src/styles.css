@@ -1202,3 +1202,60 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 .runelite-checks .is-warn { color: var(--warn); }
 .runelite-help > summary { cursor: pointer; font-weight: 600; font-size: 0.9rem; }
 .runelite-help ol { margin: 6px 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+
+/* ---------- V2.4: помощник в игре — проверка вылета, быстрые варианты, оптовый список ---------- */
+.icon-btn-emoji { font-size: 1.05rem; line-height: 1; }
+/* На телефоне в шапке нет места — список открывается из карточки «Что делать сейчас» и из шагов-закупок. */
+@media (max-width: 480px) { .icon-btn-emoji { display: none; } }
+.next-shop { margin: 8px 0 0; }
+.ingame-route { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 2px; font-size: 0.86rem; }
+
+.preflight { border-top: 1px dashed var(--border); padding-top: 8px; margin-top: 2px; }
+.preflight-list { list-style: none; margin: 0 0 6px; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.preflight-row { display: grid; grid-template-columns: 18px 1fr auto; align-items: baseline; gap: 6px; font-size: 0.88rem; }
+.preflight-mark { font-weight: 700; text-align: center; }
+.preflight-row.is-ok .preflight-mark { color: var(--done); }
+.preflight-row.is-missing .preflight-mark { color: var(--danger); }
+.preflight-row.is-absent .preflight-mark { color: var(--warn); }
+.preflight-count { font-variant-numeric: tabular-nums; white-space: nowrap; text-align: right; }
+.preflight-row.is-ok .preflight-count { color: var(--done); }
+.preflight-verdict { margin: 0; font-weight: 600; color: var(--warn); }
+.preflight-verdict.is-ready { color: var(--done); }
+
+.branches { gap: 6px; }
+.branch-list, .branch-locked { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.branch {
+  border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; background: var(--surface-3);
+  display: flex; flex-direction: column; gap: 4px; align-items: flex-start;
+}
+.branch.is-available { border-color: color-mix(in srgb, var(--gold) 55%, transparent); background: var(--gold-soft); }
+.branch.is-chosen { box-shadow: inset 3px 0 0 var(--done); }
+.branch.is-unknown { opacity: 0.85; }
+.branch p { margin: 0; }
+.branch-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; }
+.branch-text { font-size: 0.88rem; }
+.branch-locked li { padding-left: 2px; }
+
+.shop-page { gap: 12px; }
+.shop-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.shop-controls select { margin-left: 4px; min-height: 34px; padding: 0 8px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: var(--surface); color: var(--text); font: inherit; }
+.shop-check { display: inline-flex; align-items: center; gap: 6px; }
+.shop-summary { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.shop-summary p { margin: 0; }
+.shop-group > summary { display: list-item; cursor: pointer; width: fit-content; }
+.shop-group[open] > summary { margin-bottom: 6px; }
+.shop-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.shop-row {
+  display: grid; grid-template-columns: 20px 1fr auto auto; align-items: center; gap: 10px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); padding: 8px 10px;
+}
+.shop-row.is-have { opacity: 0.7; }
+.shop-row.is-quest { grid-template-columns: 20px 1fr; }
+.shop-main { min-width: 0; }
+.shop-main p { margin: 0; }
+.shop-name { font-size: 0.92rem; }
+.shop-count { display: flex; flex-direction: column; align-items: flex-end; font-variant-numeric: tabular-nums; white-space: nowrap; }
+@media (max-width: 560px) {
+  .shop-row { grid-template-columns: 20px 1fr auto; }
+  .shop-row > .btn { grid-column: 2 / -1; justify-self: start; }
+}

@@ -34,6 +34,7 @@ public class BridgeServerTest
 	private final Gson gson = new Gson();
 	private final List<ActiveTarget> targets = new CopyOnWriteArrayList<>();
 	private final List<String> clears = new CopyOnWriteArrayList<>();
+	private final List<ShoppingPlan> plans = new CopyOnWriteArrayList<>();
 	private final HttpClient http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build();
 	private BridgeServer server;
 	private String base;
@@ -53,6 +54,12 @@ public class BridgeServerTest
 			public void onClear()
 			{
 				clears.add("clear");
+			}
+
+			@Override
+			public void onShoppingPlan(ShoppingPlan plan)
+			{
+				plans.add(plan);
 			}
 		}, Collections.singletonList("https://osrs-put.example"));
 		server.start();
@@ -248,6 +255,84 @@ public class BridgeServerTest
 		{
 			s.close();
 		}
+	}
+
+	/** Открыть /events и складывать строки data: в очередь. */
+	private Socket openEvents(BlockingQueue<String> lines) throws IOException
+	{
+		Socket s = new Socket(InetAddress.getLoopbackAddress(), server.getPort());
+		OutputStream out = s.getOutputStream();
+		out.write(("GET /events HTTP/1.1\r\nHost: 127.0.0.1:" + server.getPort() + "\r\nAccept: text/event-stream\r\n\r\n").getBytes(StandardCharsets.US_ASCII));
+		out.flush();
+		BufferedReader in = new BufferedReader(new InputStreamReader(s.getInputStream(), StandardCharsets.UTF_8));
+		Thread reader = new Thread(() ->
+		{
+			try
+			{
+				String line;
+				while ((line = in.readLine()) != null)
+				{
+					if (line.startsWith("data: "))
+					{
+						lines.add(line.substring(6));
+					}
+				}
+			}
+			catch (IOException ignored)
+			{
+				// Сокет закрыт в конце теста.
+			}
+		});
+		reader.setDaemon(true);
+		reader.start();
+		return s;
+	}
+
+	@Test
+	public void уровниИПредметыРассылаютсяПриИзмененииИПовторяютсяНовомуПодключению() throws Exception
+	{
+		BlockingQueue<String> lines = new LinkedBlockingQueue<>();
+		try (Socket s = openEvents(lines))
+		{
+			assertEquals("{\"type\":\"STATUS\",\"inGame\":false}", lines.poll(3, TimeUnit.SECONDS));
+			java.util.Map<String, Integer> stats = new java.util.LinkedHashMap<>();
+			stats.put("magic", 25);
+			stats.put("woodcutting", 12);
+			server.setStats(stats);
+			assertEquals("{\"type\":\"STATS\",\"stats\":{\"magic\":25,\"woodcutting\":12}}", lines.poll(3, TimeUnit.SECONDS));
+			// Те же уровни второй раз не уходят.
+			server.setStats(new java.util.LinkedHashMap<>(stats));
+			java.util.Map<String, Object> rope = new java.util.LinkedHashMap<>();
+			rope.put("name", "Rope");
+			rope.put("carried", 1);
+			server.owned(false, Collections.singletonList(rope));
+			assertEquals("{\"type\":\"OWNED\",\"bankSeen\":false,\"items\":[{\"name\":\"Rope\",\"carried\":1}]}", lines.poll(3, TimeUnit.SECONDS));
+			server.owned(false, Collections.singletonList(rope));
+			assertNull(lines.poll(300, TimeUnit.MILLISECONDS));
+		}
+		assertTrue(get("/status").body().contains("\"stats\":{\"magic\":25,\"woodcutting\":12}"));
+
+		BlockingQueue<String> again = new LinkedBlockingQueue<>();
+		try (Socket s = openEvents(again))
+		{
+			assertTrue(again.poll(3, TimeUnit.SECONDS).contains("STATUS"));
+			assertTrue(again.poll(3, TimeUnit.SECONDS).contains("\"magic\":25"));
+			assertTrue(again.poll(3, TimeUnit.SECONDS).contains("\"Rope\""));
+		}
+	}
+
+	@Test
+	public void shoppingPlanПроверяетсяИПередаётся() throws Exception
+	{
+		String ok = "{\"items\":[{\"name\":\"Rope\",\"id\":954,\"count\":2},{\"name\":\"Hammer\",\"count\":1}]}";
+		assertEquals(403, post("/shopping-plan", ok).statusCode());
+		assertEquals(200, post("/shopping-plan", ok, BridgeServer.HEADER, "1").statusCode());
+		assertEquals(1, plans.size());
+		assertEquals(2, plans.get(0).getItems().get(0).getCount());
+		assertEquals(400, post("/shopping-plan", "{\"items\":[{\"name\":\"\",\"count\":1}]}", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(400, post("/shopping-plan", "{\"items\":[{\"name\":\"Rope\",\"count\":-1}]}", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(400, post("/shopping-plan", "{}", BridgeServer.HEADER, "1").statusCode());
+		assertEquals(1, plans.size());
 	}
 
 	@Test

@@ -34,6 +34,14 @@ public class ActiveTarget
 	private List<String> dialogChoices;
 	private List<String> highlightItems;
 	private Trigger completionTrigger;
+	/** Текущая цель одной строкой — для микро-HUD. */
+	private String goal;
+	/** Что должно быть в сумке перед выходом из банка (проверка вылета). */
+	private List<ChecklistItem> checklist;
+	/** Путевые точки по порядку: калитка → мост → лестница → NPC. */
+	private List<WorldPointDto> pathWaypoints;
+	/** Ещё предметы, про которые приложению нужно знать, сколько их есть (условия быстрых вариантов). */
+	private List<String> watchItems;
 
 	private transient Set<String> npcNameSet = Collections.emptySet();
 	private transient Set<Integer> npcIdSet = Collections.emptySet();
@@ -62,6 +70,16 @@ public class ActiveTarget
 	}
 
 	@Data
+	public static class ChecklistItem
+	{
+		private String name;
+		private Integer id;
+		private int count;
+		/** Сколько здоровья лечит — у еды. */
+		private Integer heals;
+	}
+
+	@Data
 	public static class Trigger
 	{
 		private String type;
@@ -81,11 +99,11 @@ public class ActiveTarget
 		{
 			return "stepId должен быть вида S1-03";
 		}
-		if (tooLong(title) || (worldPoint != null && tooLong(worldPoint.label)))
+		if (tooLong(title) || tooLong(goal) || (worldPoint != null && tooLong(worldPoint.label)))
 		{
 			return "слишком длинный текст";
 		}
-		for (List<?> list : new List<?>[]{groundTiles, npcNames, npcIds, objectNames, objectIds, dialogChoices, highlightItems})
+		for (List<?> list : new List<?>[]{groundTiles, npcNames, npcIds, objectNames, objectIds, dialogChoices, highlightItems, checklist, pathWaypoints, watchItems})
 		{
 			if (list != null && list.size() > MAX_LIST)
 			{
@@ -102,7 +120,27 @@ public class ActiveTarget
 				}
 			}
 		}
-		for (List<String> list : List.of(nonNull(npcNames), nonNull(objectNames), nonNull(dialogChoices), nonNull(highlightItems)))
+		if (pathWaypoints != null)
+		{
+			for (WorldPointDto p : pathWaypoints)
+			{
+				if (p == null || tooLong(p.label) || p.plane < 0 || p.plane > 3)
+				{
+					return "неверная путевая точка";
+				}
+			}
+		}
+		if (checklist != null)
+		{
+			for (ChecklistItem i : checklist)
+			{
+				if (i == null || i.name == null || i.name.isEmpty() || tooLong(i.name) || i.count < 1 || i.count > ShoppingPlan.MAX_COUNT)
+				{
+					return "неверный предмет проверки";
+				}
+			}
+		}
+		for (List<String> list : List.of(nonNull(npcNames), nonNull(objectNames), nonNull(dialogChoices), nonNull(highlightItems), nonNull(watchItems)))
 		{
 			for (String s : list)
 			{

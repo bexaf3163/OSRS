@@ -46,6 +46,8 @@ export interface StepItemRequirement {
   wikiItemId?: number;
   /** Сколько очков здоровья восстанавливает — у еды. */
   heals?: number;
+  /** Добывается по ходу самого шага (выдаст NPC, подберёшь, купишь на месте): у банка не проверяется. */
+  inStep?: boolean;
 }
 
 /** Точка на карте мира в игровых координатах (как в RuneLite и на карте OSRS Wiki). */
@@ -61,9 +63,17 @@ export interface MapLocation {
   note?: string;
 }
 
+/** Точка в игре без подписи на карте: цель, путевая точка. */
+export interface GamePoint {
+  x: number;
+  y: number;
+  plane: number;
+  label?: string;
+}
+
 /** Что показать в игре через плагин RuneLite «OSRS Path Bridge». */
 export interface InGameTarget {
-  worldPoint?: { x: number; y: number; plane: number; label?: string };
+  worldPoint?: GamePoint;
   groundTiles?: { x: number; y: number; plane: number; label: string; color?: string }[];
   npcNames?: string[];
   npcIds?: number[];
@@ -73,6 +83,13 @@ export interface InGameTarget {
   dialogChoices?: string[];
   /** Названия предметов (как в игре, по-английски) — подсветка в инвентаре и банке. */
   highlightItems?: string[];
+  /** Текущая цель одной строкой для микро-HUD; без неё — подпись точки шага. */
+  goal?: string;
+  /**
+   * Остановки по порядку: калитка → мост → лестница → NPC. В игре — метки на земле, а если установлен
+   * Shortest Path — он ведёт к текущей остановке настоящим путём.
+   */
+  pathWaypoints?: GamePoint[];
   /** Только проверенные условия: название квеста из игры, точный текст сообщения или varbit со значением. */
   completionTrigger?: {
     type: 'QUEST_COMPLETED' | 'CHAT_MESSAGE' | 'VARBIT_CHANGED';
@@ -92,6 +109,37 @@ export interface StepNpcInfo {
   floor: string;
   dialogue?: string;
   wikiUrl?: string;
+}
+
+/** Уровни навыков по ключам RuneLite: { magic: 25, woodcutting: 12 }. */
+export type PlayerStats = Record<string, number>;
+
+export type BranchConditionType = 'SKILL_LEVEL' | 'QUEST_COMPLETED' | 'ITEM_OWNED';
+
+/** Условие быстрого варианта. Проверяется по уровням из RuneLite (или введённым вручную), прогрессу и предметам. */
+export interface BranchCondition {
+  type: BranchConditionType;
+  /** Ключ навыка RuneLite: magic, woodcutting, agility… */
+  skill?: string;
+  minLevel?: number;
+  /** Название квеста как в игре — засчитан, если его шаг отмечен выполненным. */
+  questName?: string;
+  /** Предмет (как в игре, по-английски) — есть в сумке, надет или в банке. */
+  itemName?: string;
+}
+
+/** Быстрый вариант шага для текущих статов: основной путь не заменяет, а дополняет. */
+export interface StepBranch {
+  id: string;
+  /** Короткий заголовок: «Varrock Teleport». */
+  label: string;
+  condition: BranchCondition;
+  /** Как сделать по-быстрому. */
+  replacementText?: string;
+  /** Куда ведёт быстрый вариант — эта точка уходит в игру, если выбрать его. */
+  replacementTarget?: MapLocation;
+  /** Экономия времени, только если она проверена. */
+  timeSavingSeconds?: number;
 }
 
 export interface Step {
@@ -130,6 +178,8 @@ export interface Step {
   warning?: string;
   /** Подсветка в игре и автоотметка через RuneLite. */
   inGame?: InGameTarget;
+  /** Быстрые варианты для статов игрока: телепорт, каноэ, срезка. */
+  branches?: StepBranch[];
 
   where?: string;
   bring?: string;

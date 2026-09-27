@@ -1,16 +1,23 @@
 // Состояние связи с RuneLite: включена ли она, есть ли плагин, какой шаг показан в игре.
 // Автоотметка из игры идёт сюда: шаг отмечается, в игру уходит следующий, страницы открывают его у себя.
+// Отсюда же уровни навыков (быстрые варианты), счёт предметов (проверка вылета) и оптовый список для биржи.
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import type { Step } from './types';
+import type { PlayerStats, Step, StepBranch } from './types';
 import { useStore } from './store';
 import { desktop, type RuneliteLaunch } from './lib/desktop';
 import {
-  checkStatus, clearActiveStep, connectEvents, planAutoComplete, syncActiveStep, toInGameTarget, type BridgeEvent,
+  checkStatus, clearActiveStep, connectEvents, parseStats, planAutoComplete, syncActiveStep, syncShoppingPlan, toInGameTarget,
+  type BridgeEvent, type ShoppingPlanPayload,
 } from './services/runeliteBridge';
+import { parseOwned, type OwnedState } from './lib/checklist';
 
 const ENABLED_KEY = 'osrs-put:runelite-bridge';
 const AUTOLAUNCH_KEY = 'osrs-put:runelite-autolaunch';
+/** Выбранные быстрые варианты: { 'S2-05': 'varrock-teleport' }. */
+const BRANCH_KEY = 'osrs-put:branch-choice';
+/** Последний оптовый список — уходит в игру снова, когда RuneLite перезапустили. */
+const PLAN_KEY = 'osrs-put:shopping-plan';
 /** Автозапуск — один раз за запуск программы (в разработке StrictMode вызывает эффекты дважды). */
 let autoLaunchDone = false;
 
@@ -41,6 +48,17 @@ interface BridgeValue {
   /** Запускать RuneLite вместе с программой. */
   autoLaunch: boolean;
   setAutoLaunch: (on: boolean) => void;
+  /** Уровни из игры; null — нет связи или передача выключена в плагине. */
+  stats: PlayerStats | null;
+  /** Сколько есть предметов шага и списка закупок (сумка, банкноты, банк). */
+  owned: OwnedState | null;
+  /** В игре установлен Shortest Path — путь по земле рисует он. */
+  shortestPath: boolean;
+  /** Выбранный быстрый вариант шага (id) — с ним шаг уходит в игру. */
+  branchChoice: Record<string, string>;
+  chooseBranch: (step: Step, branchId: string | null) => void;
+  /** Оптовый список — в подсказку на бирже (и запомнить до следующего запуска RuneLite). */
+  syncPlan: (plan: ShoppingPlanPayload) => Promise<boolean>;
 }
 
 const BridgeContext = createContext<BridgeValue | null>(null);
@@ -54,6 +72,26 @@ function loadEnabled(): boolean {
     // Хранилище недоступно — значение по умолчанию.
   }
   return Boolean(desktop()?.bridge);
+}
+
+function loadJson<T>(key: string, fallback: T): T {
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw) return JSON.parse(raw) as T;
+  } catch {
+    // Нет хранилища или мусор — по умолчанию.
+  }
+  return fallback;
+}
+
+function saveJson(key: string, value: unknown): void {
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* запомнится до перезапуска */ }
+}
+
+/** Выбранный быстрый вариант шага, если он у шага ещё есть. */
+function chosenBranch(step: Step, choice: Record<string, string>): StepBranch | undefined {
+  const id = choice[step.id];
+  return id ? step.branches?.find((b) => b.id === id) : undefined;
 }
 
 function loadAutoLaunch(): boolean {
@@ -79,10 +117,14 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const [inGame, setInGame] = useState(false);
   const [activeStepId, setActiveStepId] = useState<string | null>(null);
   const [advance, setAdvance] = useState<AutoAdvance | null>(null);
+  const [stats, setStats] = useState<PlayerStats | null>(null);
+  const [owned, setOwned] = useState<OwnedState | null>(null);
+  const [shortestPath, setShortestPath] = useState(false);
+  const [branchChoice, setBranchChoice] = useState<Record<string, string>>(() => loadJson(BRANCH_KEY, {}));
 
   // Обработчик событий живёт дольше отрисовки — свежие данные берёт из ссылок.
-  const latest = useRef({ progress, steps, setStep, activeStepId });
-  latest.current = { progress, steps, setStep, activeStepId };
+  const latest = useRef({ progress, steps, setStep, activeStepId, branchChoice });
+  latest.current = { progress, steps, setStep, activeStepId, branchChoice };
   /** Уже обработанные автоотметки: одно событие не отмечает шаг дважды и не двигает маршрут дважды. */
   const handled = useRef(new Set<string>());
   const nonce = useRef(0);
@@ -102,7 +144,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     setAdvance({ from: id, to: next?.id, nonce: ++nonce.current });
     if (plan.inGame === 'sync-next' && next) {
       handled.current.delete(next.id);
-      void syncActiveStep(next).then((ok) => setActiveStepId(ok ? next.id : null));
+      void syncActiveStep(next, undefined, chosenBranch(next, latest.current.branchChoice)).then((ok) => setActiveStepId(ok ? next.id : null));
     } else if (plan.inGame === 'clear') {
       void clearActiveStep();
       setActiveStepId(null);
@@ -110,30 +152,47 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    const forget = () => {
+      setInGame(false);
+      setStats(null);
+      setOwned(null);
+      setShortestPath(false);
+    };
     if (!enabled) {
       setState('off');
-      setInGame(false);
+      forget();
       return;
     }
     setState('connecting');
     let alive = true;
+    const refresh = () => void checkStatus().then((s) => {
+      if (!alive) return;
+      setState(s.online ? 'online' : 'offline');
+      setInGame(s.inGame);
+      setShortestPath(s.shortestPath);
+      if (s.stats) setStats(s.stats);
+    });
     const onEvent = (e: BridgeEvent) => {
-      if (e.type === 'STATUS') setInGame(Boolean((e as { inGame?: unknown }).inGame));
+      if (e.type === 'STATUS') {
+        setInGame(Boolean((e as { inGame?: unknown }).inGame));
+        // Вход в игру и выход — повод заново спросить про Shortest Path.
+        refresh();
+      } else if (e.type === 'STATS') setStats(parseStats((e as { stats?: unknown }).stats));
+      else if (e.type === 'OWNED') setOwned(parseOwned(e));
       else if (e.type === 'STEP_AUTO_COMPLETED' && typeof (e as { stepId?: unknown }).stepId === 'string') onCompleted((e as { stepId: string }).stepId);
     };
     const handle = connectEvents(onEvent, (online) => {
       if (!alive) return;
       if (!online) {
         setState('offline');
-        setInGame(false);
+        forget();
         return;
       }
       // Поток открыт — сверяемся с /status: индикатор должен показывать то, что отвечает плагин.
-      void checkStatus().then((s) => {
-        if (!alive) return;
-        setState(s.online ? 'online' : 'offline');
-        setInGame(s.inGame);
-      });
+      refresh();
+      // RuneLite могли перезапустить — оптовый список для биржи отправляем снова.
+      const plan = loadJson<ShoppingPlanPayload | null>(PLAN_KEY, null);
+      if (plan?.items?.length) void syncShoppingPlan(plan);
     });
     return () => {
       alive = false;
@@ -164,8 +223,9 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   }, [runelite, enabled, autoLaunch, launchRuneLite]);
 
   const pointInGame = useCallback(async (step: Step): Promise<PointResult> => {
-    if (!toInGameTarget(step)) return 'empty';
-    const ok = await syncActiveStep(step);
+    const branch = chosenBranch(step, latest.current.branchChoice);
+    if (!toInGameTarget(step, branch)) return 'empty';
+    const ok = await syncActiveStep(step, undefined, branch);
     if (!ok) return 'offline';
     // Шаг снова в игре — его новая автоотметка должна сработать, даже если раньше уже была.
     handled.current.delete(step.id);
@@ -178,12 +238,35 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     setActiveStepId(null);
   }, []);
 
+  const chooseBranch = useCallback((step: Step, branchId: string | null) => {
+    setBranchChoice((prev) => {
+      const next = { ...prev };
+      if (branchId) next[step.id] = branchId;
+      else delete next[step.id];
+      saveJson(BRANCH_KEY, next);
+      latest.current.branchChoice = next;
+      return next;
+    });
+    // Шаг уже показан в игре — обновляем цель сразу, без повторного нажатия.
+    if (latest.current.activeStepId === step.id) {
+      const branch = branchId ? step.branches?.find((b) => b.id === branchId) : undefined;
+      void syncActiveStep(step, undefined, branch);
+    }
+  }, []);
+
+  const syncPlan = useCallback(async (plan: ShoppingPlanPayload) => {
+    saveJson(PLAN_KEY, plan);
+    return syncShoppingPlan(plan);
+  }, []);
+
   const value = useMemo<BridgeValue>(
     () => ({
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan,
     }),
-    [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch],
+    [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;
 }

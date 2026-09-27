@@ -15,6 +15,7 @@ import { GoalsPage } from './pages/Goals';
 import { QuestsPage } from './pages/Quests';
 import { ReferencePage } from './pages/Reference';
 import { SettingsPage } from './pages/Settings';
+import { ShoppingPage } from './pages/Shopping';
 
 const TABS: { page: Page; href: string; label: string; Icon: ComponentType<{ className?: string }> }[] = [
   { page: 'path', href: '#/', label: 'Путь', Icon: IconPath },
@@ -28,6 +29,7 @@ function pageTitle(page: Page, param?: string): string {
   if (page === 'skills' && param) return skillById.get(param)?.name ?? membersSkills.find((m) => m.id === param)?.name ?? 'Навыки';
   if (page === 'reference' && param) return reference.sections.find((s) => s.id === param)?.title ?? 'Справка';
   if (page === 'settings') return 'Настройки';
+  if (page === 'shopping') return 'Оптовый список GE';
   return TABS.find((t) => t.page === page)!.label;
 }
 
@@ -66,6 +68,7 @@ export function App() {
     case 'quests': content = <QuestsPage />; break;
     case 'reference': content = <ReferencePage key={route.param ?? ''} section={route.param} />; break;
     case 'settings': content = <SettingsPage />; break;
+    case 'shopping': content = <ShoppingPage />; break;
   }
 
   return (
@@ -96,6 +99,11 @@ export function App() {
               <span className="search-trigger-text">Поиск</span>
               <kbd>/</kbd>
             </button>
+            <a href="#/shopping" className={`icon-btn icon-btn-emoji ${route.page === 'shopping' ? 'is-active' : ''}`}
+              aria-label="Оптовый список Grand Exchange" title="Оптовый список Grand Exchange"
+              aria-current={route.page === 'shopping' ? 'page' : undefined}>
+              <span aria-hidden="true">🛒</span>
+            </a>
             <a href="#/settings" className={`icon-btn ${route.page === 'settings' ? 'is-active' : ''}`} aria-label="Настройки"
               aria-current={route.page === 'settings' ? 'page' : undefined}>
               <IconSettings />

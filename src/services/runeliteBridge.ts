@@ -3,9 +3,11 @@
 // строк в консоли, когда RuneLite выключен. В браузере — fetch и EventSource напрямую.
 // Удалённого сервера нет: мост слушает только loopback.
 
-import type { InGameTarget, Progress, Step } from '../types';
+import type { InGameTarget, PlayerStats, Progress, Step, StepBranch } from '../types';
 import { desktop } from '../lib/desktop';
 import { isClosed, openAfter } from '../lib/next-step';
+import { preflightItems } from '../lib/checklist';
+import { watchedItems } from '../lib/branching';
 
 export const BRIDGE_ORIGIN = 'http://127.0.0.1:38282';
 /** Заголовок, без которого плагин не принимает POST: чужой сайт не сможет отправить его без разрешения CORS. */
@@ -14,12 +16,20 @@ export const BRIDGE_HEADER = 'X-OSRS-Path';
 export interface BridgeStatus {
   online: boolean;
   inGame: boolean;
+  /** Уровни навыков из игры; null — не в игре, плагин старый или передача выключена в его настройках. */
+  stats: PlayerStats | null;
+  /** Установлен и включён плагин Shortest Path — маршрут по земле рисует он. */
+  shortestPath: boolean;
 }
 
 export type BridgeEvent =
   | { type: 'STEP_AUTO_COMPLETED'; stepId: string }
   | { type: 'STATUS'; inGame: boolean }
+  | { type: 'STATS'; stats?: PlayerStats | null }
+  | { type: 'OWNED'; bankSeen: boolean; items: unknown[] }
   | { type: string; [key: string]: unknown };
+
+export type BridgePath = '/status' | '/active-step' | '/clear' | '/shopping-plan';
 
 export interface BridgeResponse {
   ok: boolean;
@@ -29,13 +39,31 @@ export interface BridgeResponse {
 
 /** Способ достучаться до моста: через Electron или напрямую из браузера. */
 export interface BridgeTransport {
-  request(method: 'GET' | 'POST', path: '/status' | '/active-step' | '/clear', body?: unknown): Promise<BridgeResponse>;
+  request(method: 'GET' | 'POST', path: BridgePath, body?: unknown): Promise<BridgeResponse>;
   /** Поток событий. Возвращает функцию закрытия. onError — поток оборвался или не открылся. */
   openEvents(onEvent: (e: BridgeEvent) => void, onOpen: () => void, onError: () => void): () => void;
 }
 
-/** Что уходит в плагин: цель шага плюс код и название для подписи в игре. */
-export type ActiveStepPayload = InGameTarget & { stepId: string; title: string };
+/** Предмет для проверки вылета у банка. */
+export interface ChecklistPayloadItem {
+  name: string;
+  id?: number;
+  count: number;
+  heals?: number;
+}
+
+/** Что уходит в плагин: цель шага плюс код, название, проверка вылета и предметы из условий быстрых вариантов. */
+export type ActiveStepPayload = InGameTarget & {
+  stepId: string;
+  title: string;
+  checklist?: ChecklistPayloadItem[];
+  watchItems?: string[];
+};
+
+/** Оптовый список для подсказки на бирже: name — английское название, count — сколько нужно всего. */
+export interface ShoppingPlanPayload {
+  items: { name: string; id?: number; count: number }[];
+}
 
 export function parseEvent(text: string): BridgeEvent | null {
   try {
@@ -50,18 +78,39 @@ export function parseEvent(text: string): BridgeEvent | null {
 /**
  * Цель шага для игры. Явный inGame из маршрута главнее; без него — точка старта и места сбора с карты шага,
  * чтобы стрелка и клетки работали и у шагов, для которых подсветку ещё не расписали.
+ * branch — выбранный быстрый вариант: его точка заменяет точку шага, а путевые точки обычного пути не нужны.
  */
-export function toInGameTarget(step: Step): ActiveStepPayload | null {
+export function toInGameTarget(step: Step, branch?: StepBranch): ActiveStepPayload | null {
   const g = step.inGame ?? {};
   const start = step.mapLocation;
-  const worldPoint = g.worldPoint ?? (start ? { x: start.x, y: start.y, plane: start.plane, label: start.label } : undefined);
+  const alt = branch?.replacementTarget;
+  const worldPoint = alt
+    ? { x: alt.x, y: alt.y, plane: alt.plane, label: alt.label }
+    : g.worldPoint ?? (start ? { x: start.x, y: start.y, plane: start.plane, label: start.label } : undefined);
   const groundTiles = g.groundTiles ?? step.resourceSpots?.map((p) => ({ x: p.x, y: p.y, plane: p.plane, label: p.label }));
   const payload: ActiveStepPayload = { ...g, stepId: step.id, title: step.title };
   if (worldPoint) payload.worldPoint = worldPoint;
   if (groundTiles?.length) payload.groundTiles = groundTiles;
+  if (alt) delete payload.pathWaypoints;
+  const goal = alt ? (alt.label.startsWith(branch!.label) ? alt.label : `${branch!.label}: ${alt.label}`) : g.goal ?? worldPoint?.label;
+  if (goal) payload.goal = goal;
+  const checklist = preflightItems(step).map((i) => ({ name: i.nameEn, id: i.id, count: i.count, heals: i.heals }));
+  if (checklist.length) payload.checklist = checklist;
+  const watch = watchedItems(step);
+  if (watch.length) payload.watchItems = watch;
   const empty = !worldPoint && !groundTiles?.length && !g.npcNames?.length && !g.objectNames?.length
-    && !g.dialogChoices?.length && !g.highlightItems?.length && !g.completionTrigger;
+    && !g.dialogChoices?.length && !g.highlightItems?.length && !g.completionTrigger && !checklist.length;
   return empty ? null : payload;
+}
+
+/** Уровни из события или ответа /status: только числа, только осмысленные. */
+export function parseStats(raw: unknown): PlayerStats | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const out: PlayerStats = {};
+  for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
+    if (typeof v === 'number' && Number.isInteger(v) && v >= 1 && v <= 126) out[k] = v;
+  }
+  return Object.keys(out).length ? out : null;
 }
 
 // ---------- Транспорты ----------
@@ -139,15 +188,33 @@ export function defaultTransport(): BridgeTransport {
 
 export async function checkStatus(t: BridgeTransport = defaultTransport()): Promise<BridgeStatus> {
   const res = await t.request('GET', '/status');
-  const d = res.data as { status?: string; inGame?: boolean } | undefined;
-  return { online: res.ok && d?.status === 'ok', inGame: Boolean(res.ok && d?.inGame) };
+  const d = res.data as { status?: string; inGame?: boolean; stats?: unknown; shortestPath?: unknown } | undefined;
+  const online = res.ok && d?.status === 'ok';
+  return {
+    online,
+    inGame: Boolean(online && d?.inGame),
+    stats: online ? parseStats(d?.stats) : null,
+    shortestPath: Boolean(online && d?.shortestPath === true),
+  };
+}
+
+export const getBridgeStatus = checkStatus;
+
+/** Уровни навыков из игры или null. Для живых обновлений есть событие STATS. */
+export async function getPlayerStats(t: BridgeTransport = defaultTransport()): Promise<PlayerStats | null> {
+  return (await checkStatus(t)).stats;
 }
 
 /** Отправить шаг в игру. false — моста нет или у шага нечего показывать. */
-export async function syncActiveStep(step: Step, t: BridgeTransport = defaultTransport()): Promise<boolean> {
-  const payload = toInGameTarget(step);
+export async function syncActiveStep(step: Step, t: BridgeTransport = defaultTransport(), branch?: StepBranch): Promise<boolean> {
+  const payload = toInGameTarget(step, branch);
   if (!payload) return false;
   return (await t.request('POST', '/active-step', payload)).ok;
+}
+
+/** Оптовый список — в подсказку на бирже. Пустой список убирает подсказку. */
+export async function syncShoppingPlan(plan: ShoppingPlanPayload, t: BridgeTransport = defaultTransport()): Promise<boolean> {
+  return (await t.request('POST', '/shopping-plan', plan)).ok;
 }
 
 export async function clearActiveStep(t: BridgeTransport = defaultTransport()): Promise<boolean> {

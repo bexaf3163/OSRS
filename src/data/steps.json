@@ -99,7 +99,8 @@
         "amount": 1,
         "howToGet": "Сорви пшеницу (Wheat) на поле к северу от замка, засыпь её в бункер на 2nd floor (3-й этаж) мельницы Lumbridge Windmill, дёрни рычаг и забери муку в горшок (Pot) на Ground floor (1-й этаж).",
         "wikiItemId": 1933,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Pot_of_flour.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pot_of_flour.png",
+        "inStep": true
       },
       {
         "nameEn": "Bucket of milk",
@@ -107,7 +108,8 @@
         "amount": 1,
         "howToGet": "Купи ведро (Bucket) в General Store за 2 gp и подои молочную корову (Dairy cow) на ферме к северо-востоку от замка.",
         "wikiItemId": 1927,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_milk.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_milk.png",
+        "inStep": true
       },
       {
         "nameEn": "Egg",
@@ -115,7 +117,8 @@
         "amount": 1,
         "howToGet": "Подбери в курятнике фермы Groats к северу от замка.",
         "wikiItemId": 1944,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Egg.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Egg.png",
+        "inStep": true
       }
     ],
     "itemsRecommended": [
@@ -206,7 +209,8 @@
         "amount": 1,
         "howToGet": "Возьми бесплатно со стола в доме Фреда или купи в General Store за 1 gp.",
         "wikiItemId": 1735,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Shears.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Shears.png",
+        "inStep": true
       },
       {
         "nameEn": "Ball of wool",
@@ -214,7 +218,8 @@
         "amount": "23 (20 сдать, 3 в банк)",
         "howToGet": "Состриги 23 шерсти (Wool) с овец в загоне и спряди на прялке (Spinning wheel) на 1st floor (2-й этаж) замка Lumbridge.",
         "wikiItemId": 1759,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Ball_of_wool.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ball_of_wool.png",
+        "inStep": true
       }
     ],
     "quickSteps": [
@@ -415,7 +420,8 @@
         "amount": 1,
         "howToGet": "Выдаст отец Urhney в хижине на болоте Lumbridge Swamp. Надень его на шею.",
         "wikiItemId": 552,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Ghostspeak_amulet.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ghostspeak_amulet.png",
+        "inStep": true
       }
     ],
     "itemsRecommended": [
@@ -480,7 +486,39 @@
       "completionTrigger": {
         "type": "QUEST_COMPLETED",
         "questName": "The Restless Ghost"
-      }
+      },
+      "pathWaypoints": [
+        {
+          "x": 3243,
+          "y": 3210,
+          "plane": 0,
+          "label": "Father Aereck в церкви"
+        },
+        {
+          "x": 3148,
+          "y": 3175,
+          "plane": 0,
+          "label": "Father Urhney в хижине на болоте"
+        },
+        {
+          "x": 3250,
+          "y": 3193,
+          "plane": 0,
+          "label": "Гроб на кладбище у церкви"
+        },
+        {
+          "x": 3109,
+          "y": 3160,
+          "plane": 0,
+          "label": "Wizards' Tower — спустись в подвал к алтарю"
+        },
+        {
+          "x": 3250,
+          "y": 3193,
+          "plane": 0,
+          "label": "Верни череп в гроб"
+        }
+      ]
     }
   },
   {
@@ -711,7 +749,41 @@
         "Cooked chicken",
         "Shrimps"
       ]
-    }
+    },
+    "branches": [
+      {
+        "id": "canoe-log",
+        "label": "Каноэ до Champions' Guild",
+        "condition": {
+          "type": "SKILL_LEVEL",
+          "skill": "woodcutting",
+          "minLevel": 12
+        },
+        "replacementText": "На станции каноэ Lumbridge (Barfy Bill, берег Lum к северу от замка) сделай **Log canoe** — нужен топор. Он идёт одну остановку, до Champions' Guild (Tarquin); оттуда пешком на северо-запад до Barbarian Village.",
+        "replacementTarget": {
+          "x": 3243,
+          "y": 3238,
+          "plane": 0,
+          "label": "Станция каноэ Lumbridge (Barfy Bill)"
+        }
+      },
+      {
+        "id": "canoe-dugout",
+        "label": "Каноэ прямо до Barbarian Village",
+        "condition": {
+          "type": "SKILL_LEVEL",
+          "skill": "woodcutting",
+          "minLevel": 27
+        },
+        "replacementText": "**Dugout canoe** идёт две остановки — прямо до станции Barbarian Village (Sigurd), в паре шагов от входа в Stronghold.",
+        "replacementTarget": {
+          "x": 3243,
+          "y": 3238,
+          "plane": 0,
+          "label": "Станция каноэ Lumbridge (Barfy Bill)"
+        }
+      }
+    ]
   },
   {
     "id": "S1-10",
@@ -741,7 +813,8 @@
         "amount": 1,
         "howToGet": "Купи у Diango (магазин игрушек на рынке Draynor Village) за 300 gp.",
         "wikiItemId": 13660,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Chronicle.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chronicle.png",
+        "inStep": true
       },
       {
         "nameEn": "Teleport card",
@@ -749,7 +822,8 @@
         "amount": 10,
         "howToGet": "Купи у Diango от 150 gp за штуку и используй на книгу — в неё влезает до 1 000 зарядов.",
         "wikiItemId": 13658,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Teleport_card.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Teleport_card.png",
+        "inStep": true
       }
     ],
     "fields": [
@@ -947,7 +1021,8 @@
         "amount": 1,
         "howToGet": "Для Imp Catcher, ≈ 2 000 gp.",
         "wikiItemId": 1470,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Red_bead.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Red_bead.png",
+        "inStep": true
       },
       {
         "nameEn": "Yellow bead",
@@ -955,7 +1030,8 @@
         "amount": 1,
         "howToGet": "Для Imp Catcher, ≈ 1 200 gp.",
         "wikiItemId": 1472,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_bead.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_bead.png",
+        "inStep": true
       },
       {
         "nameEn": "Black bead",
@@ -963,7 +1039,8 @@
         "amount": 1,
         "howToGet": "Для Imp Catcher, ≈ 1 150 gp.",
         "wikiItemId": 1474,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Black_bead.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Black_bead.png",
+        "inStep": true
       },
       {
         "nameEn": "White bead",
@@ -971,7 +1048,8 @@
         "amount": 1,
         "howToGet": "Для Imp Catcher, ≈ 1 700 gp.",
         "wikiItemId": 1476,
-        "iconUrl": "https://oldschool.runescape.wiki/images/White_bead.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/White_bead.png",
+        "inStep": true
       },
       {
         "nameEn": "Amulet of strength",
@@ -979,7 +1057,8 @@
         "amount": 1,
         "howToGet": "+10 к силе удара: бьёшь сильнее, ближний бой качается заметно быстрее. ≈ 1 350 gp.",
         "wikiItemId": 1725,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_strength.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_strength.png",
+        "inStep": true
       },
       {
         "nameEn": "Iron scimitar",
@@ -987,7 +1066,8 @@
         "amount": 1,
         "howToGet": "Можно носить сразу. ≈ 60 gp.",
         "wikiItemId": 1323,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_scimitar.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_scimitar.png",
+        "inStep": true
       },
       {
         "nameEn": "Steel scimitar",
@@ -995,7 +1075,8 @@
         "amount": 1,
         "howToGet": "Надень с 5 атакой. ≈ 100 gp.",
         "wikiItemId": 1325,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_scimitar.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_scimitar.png",
+        "inStep": true
       },
       {
         "nameEn": "Mithril scimitar",
@@ -1003,7 +1084,8 @@
         "amount": 1,
         "howToGet": "Надень с 20 атакой — после Vampyre Slayer. ≈ 400 gp.",
         "wikiItemId": 1329,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_scimitar.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_scimitar.png",
+        "inStep": true
       },
       {
         "nameEn": "Fly fishing rod",
@@ -1011,7 +1093,8 @@
         "amount": 1,
         "howToGet": "Для форели и лосося с 20 рыбалки. На бирже ≈ 100 gp, в рыболовном магазине Port Sarim дешевле.",
         "wikiItemId": 309,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Fly_fishing_rod.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Fly_fishing_rod.png",
+        "inStep": true
       },
       {
         "nameEn": "Feather",
@@ -1019,7 +1102,8 @@
         "amount": 500,
         "howToGet": "Наживка для нахлыста, ≈ 2–3 gp за штуку.",
         "wikiItemId": 314,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Feather.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Feather.png",
+        "inStep": true
       },
       {
         "nameEn": "Energy potion(4)",
@@ -1027,7 +1111,8 @@
         "amount": 5,
         "howToGet": "Восстанавливает бег во время квестов, ≈ 170 gp.",
         "wikiItemId": 3008,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png",
+        "inStep": true
       },
       {
         "nameEn": "Redberry pie",
@@ -1035,7 +1120,8 @@
         "amount": 1,
         "howToGet": "Для The Knight's Sword, ≈ 70 gp.",
         "wikiItemId": 2325,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Redberry_pie.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Redberry_pie.png",
+        "inStep": true
       },
       {
         "nameEn": "Iron bar",
@@ -1043,7 +1129,8 @@
         "amount": 2,
         "howToGet": "Для The Knight's Sword, ≈ 200 gp за штуку.",
         "wikiItemId": 2351,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_bar.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_bar.png",
+        "inStep": true
       },
       {
         "nameEn": "Clay",
@@ -1051,7 +1138,8 @@
         "amount": 7,
         "howToGet": "6 — для Doric's Quest, 1 — размочи в воде для Prince Ali Rescue. ≈ 80 gp за штуку.",
         "wikiItemId": 434,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Clay.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Clay.png",
+        "inStep": true
       },
       {
         "nameEn": "Redberries",
@@ -1059,7 +1147,8 @@
         "amount": 1,
         "howToGet": "Для пасты в Prince Ali Rescue, ≈ 50 gp.",
         "wikiItemId": 1951,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Redberries.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Redberries.png",
+        "inStep": true
       },
       {
         "nameEn": "Yellow dye",
@@ -1067,7 +1156,8 @@
         "amount": 2,
         "howToGet": "Один — для парика в Prince Ali Rescue, второй — для оранжевого красителя в Goblin Diplomacy. ≈ 230 gp.",
         "wikiItemId": 1765,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_dye.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_dye.png",
+        "inStep": true
       },
       {
         "nameEn": "Red dye",
@@ -1075,7 +1165,8 @@
         "amount": 1,
         "howToGet": "Смешай с жёлтым в оранжевый для Goblin Diplomacy, ≈ 290 gp.",
         "wikiItemId": 1763,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Red_dye.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Red_dye.png",
+        "inStep": true
       },
       {
         "nameEn": "Blue dye",
@@ -1083,7 +1174,8 @@
         "amount": 1,
         "howToGet": "Для Goblin Diplomacy, ≈ 290 gp.",
         "wikiItemId": 1767,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Blue_dye.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Blue_dye.png",
+        "inStep": true
       },
       {
         "nameEn": "Pink skirt",
@@ -1091,7 +1183,8 @@
         "amount": 1,
         "howToGet": "Для Prince Ali Rescue. Дешевле всего — у Thessalia в Varrock за 2 gp.",
         "wikiItemId": 1013,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Pink_skirt.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pink_skirt.png",
+        "inStep": true
       }
     ],
     "fields": [
@@ -1102,7 +1195,24 @@
     ],
     "doneWhen": "Все предметы куплены и лежат в банке Grand Exchange.",
     "updatedInV2": true,
-    "v2ChangesSummary": "В V2 список закупок расширен: Amulet of strength, Energy potion, Redberry pie, ятаганы, железные слитки, красители и глина. Проверь банк!"
+    "v2ChangesSummary": "В V2 список закупок расширен: Amulet of strength, Energy potion, Redberry pie, ятаганы, железные слитки, красители и глина. Проверь банк!",
+    "branches": [
+      {
+        "id": "chronicle",
+        "label": "Телепорт книгой Chronicle",
+        "condition": {
+          "type": "ITEM_OWNED",
+          "itemName": "Chronicle"
+        },
+        "replacementText": "Rub книги Chronicle (тратит заряд Teleport card) — окажешься у Champions' Guild, оттуда к бирже пешком на север через Varrock.",
+        "replacementTarget": {
+          "x": 3201,
+          "y": 3355,
+          "plane": 0,
+          "label": "Выход у Champions' Guild (Chronicle)"
+        }
+      }
+    ]
   },
   {
     "id": "S2-02",
@@ -1203,7 +1313,8 @@
         "amount": 1,
         "howToGet": "Сорви на грядке к северу от Rimmington.",
         "wikiItemId": 1957,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Onion.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Onion.png",
+        "inStep": true
       },
       {
         "nameEn": "Eye of newt",
@@ -1211,7 +1322,8 @@
         "amount": 1,
         "howToGet": "Купи в магазине Betty в Port Sarim за 3 gp.",
         "wikiItemId": 221,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Eye_of_newt.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Eye_of_newt.png",
+        "inStep": true
       },
       {
         "nameEn": "Rat's tail",
@@ -1219,7 +1331,8 @@
         "amount": 1,
         "howToGet": "Убей крысу у дома Hetty — хвост падает только после начала квеста.",
         "wikiItemId": 300,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Rat's_tail.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rat's_tail.png",
+        "inStep": true
       },
       {
         "nameEn": "Burnt meat",
@@ -1324,7 +1437,8 @@
         "amount": 1,
         "howToGet": "Сорви у кустов к юго-востоку от Varrock.",
         "wikiItemId": 753,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Cadava_berries.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Cadava_berries.png",
+        "inStep": true
       }
     ],
     "itemsRecommended": [
@@ -1351,7 +1465,25 @@
       }
     ],
     "reward": "5 QP.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "branches": [
+      {
+        "id": "varrock-teleport",
+        "label": "Varrock Teleport",
+        "condition": {
+          "type": "SKILL_LEVEL",
+          "skill": "magic",
+          "minLevel": 25
+        },
+        "replacementText": "Телепорт на площадь Varrock: 1 **Law rune**, 3 **Air rune**, 1 **Fire rune**. Romeo стоит прямо на площади.",
+        "replacementTarget": {
+          "x": 3213,
+          "y": 3424,
+          "plane": 0,
+          "label": "Varrock Teleport — площадь у фонтана"
+        }
+      }
+    ]
   },
   {
     "id": "S2-06",
@@ -1384,7 +1516,8 @@
         "amount": 1,
         "howToGet": "Выдаст герцог Horacio.",
         "wikiItemId": 1438,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Air_talisman.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_talisman.png",
+        "inStep": true
       },
       {
         "nameEn": "Research package",
@@ -1392,7 +1525,8 @@
         "amount": 1,
         "howToGet": "Выдаст маг Sedridor.",
         "wikiItemId": 290,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Research_package.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Research_package.png",
+        "inStep": true
       }
     ],
     "quickSteps": [
@@ -1461,7 +1595,8 @@
         "amount": 1,
         "howToGet": "Добудь в Asgarnian Ice Dungeon у Mudskipper Point.",
         "wikiItemId": 668,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Blurite_ore.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Blurite_ore.png",
+        "inStep": true
       }
     ],
     "itemsRecommended": [
@@ -1544,7 +1679,8 @@
         "amount": 1,
         "howToGet": "Выдаст доктор Harlow в пабе Blue Moon Inn — угости его пивом.",
         "wikiItemId": 1549,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Stake.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Stake.png",
+        "inStep": true
       },
       {
         "nameEn": "Beer",
@@ -1552,7 +1688,8 @@
         "amount": 1,
         "howToGet": "Купи у бармена Blue Moon Inn за 2 gp.",
         "wikiItemId": 1917,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Beer.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Beer.png",
+        "inStep": true
       },
       {
         "nameEn": "Garlic",
@@ -1560,7 +1697,8 @@
         "amount": 1,
         "howToGet": "Из шкафа на 1st floor (2-й этаж) в доме Morgan.",
         "wikiItemId": 1550,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Garlic.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Garlic.png",
+        "inStep": true
       }
     ],
     "itemsRecommended": [
@@ -1673,7 +1811,8 @@
         "amount": 1,
         "howToGet": "Купи у Zambo на Karamja за 30 gp и провези в ящике с бананами.",
         "wikiItemId": 431,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Karamjan_rum.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Karamjan_rum.png",
+        "inStep": true
       },
       {
         "nameEn": "White apron",
@@ -1681,7 +1820,8 @@
         "amount": 1,
         "howToGet": "Лежит в рыболовном магазине Gerrant в Port Sarim.",
         "wikiItemId": 1005,
-        "iconUrl": "https://oldschool.runescape.wiki/images/White_apron.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/White_apron.png",
+        "inStep": true
       },
       {
         "nameEn": "Spade",
@@ -1929,7 +2069,8 @@
         "amount": 3,
         "howToGet": "Падает с гоблинов в Goblin Village.",
         "wikiItemId": 288,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Goblin_mail.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Goblin_mail.png",
+        "inStep": true
       },
       {
         "nameEn": "Orange dye",
@@ -2111,7 +2252,8 @@
         "amount": 1,
         "howToGet": "Сорви на капустном поле к югу от Falador — капуста из Draynor Manor не сработает!",
         "wikiItemId": 1965,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Cabbage.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Cabbage.png",
+        "inStep": true
       }
     ],
     "itemsRecommended": [
@@ -2206,7 +2348,25 @@
       }
     ],
     "reward": "3 QP, меч Silverlight.",
-    "doneWhen": "Квест зелёный."
+    "doneWhen": "Квест зелёный.",
+    "branches": [
+      {
+        "id": "varrock-teleport",
+        "label": "Varrock Teleport",
+        "condition": {
+          "type": "SKILL_LEVEL",
+          "skill": "magic",
+          "minLevel": 25
+        },
+        "replacementText": "Телепорт на площадь Varrock: 1 **Law rune**, 3 **Air rune**, 1 **Fire rune**. Gypsy Aris — в шатре на той же площади.",
+        "replacementTarget": {
+          "x": 3213,
+          "y": 3424,
+          "plane": 0,
+          "label": "Varrock Teleport — площадь у фонтана"
+        }
+      }
+    ]
   },
   {
     "id": "S3-04",
@@ -2308,7 +2468,25 @@
       }
     ],
     "reward": "1 QP, 600 Coins.",
-    "doneWhen": "Квест зелёный (или осознанно пропущен)."
+    "doneWhen": "Квест зелёный (или осознанно пропущен).",
+    "branches": [
+      {
+        "id": "varrock-teleport",
+        "label": "Varrock Teleport",
+        "condition": {
+          "type": "SKILL_LEVEL",
+          "skill": "magic",
+          "minLevel": 25
+        },
+        "replacementText": "Телепорт на площадь Varrock: 1 **Law rune**, 3 **Air rune**, 1 **Fire rune**. Библиотека дворца — к северу от площади.",
+        "replacementTarget": {
+          "x": 3213,
+          "y": 3424,
+          "plane": 0,
+          "label": "Varrock Teleport — площадь у фонтана"
+        }
+      }
+    ]
   },
   {
     "id": "S3-06",
@@ -2357,7 +2535,8 @@
         "amount": 1,
         "howToGet": "Нужна 30 атака.",
         "wikiItemId": 1331,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_scimitar.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_scimitar.png",
+        "inStep": true
       },
       {
         "nameEn": "Adamant platebody",
@@ -2365,7 +2544,8 @@
         "amount": 1,
         "howToGet": "Нужна 30 защита. Рунический нагрудник откроется только после Dragon Slayer I.",
         "wikiItemId": 1123,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_platebody.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_platebody.png",
+        "inStep": true
       },
       {
         "nameEn": "Adamant platelegs",
@@ -2373,7 +2553,8 @@
         "amount": 1,
         "howToGet": "Нужна 30 защита.",
         "wikiItemId": 1073,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_platelegs.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_platelegs.png",
+        "inStep": true
       },
       {
         "nameEn": "Adamant kiteshield",
@@ -2381,7 +2562,8 @@
         "amount": 1,
         "howToGet": "Нужна 30 защита.",
         "wikiItemId": 1199,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_kiteshield.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_kiteshield.png",
+        "inStep": true
       },
       {
         "nameEn": "Adamant full helm",
@@ -2389,7 +2571,8 @@
         "amount": 1,
         "howToGet": "Нужна 30 защита.",
         "wikiItemId": 1161,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_full_helm.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_full_helm.png",
+        "inStep": true
       },
       {
         "nameEn": "Amulet of power",
@@ -2397,7 +2580,8 @@
         "amount": 1,
         "howToGet": "+6 к атаке, силе, защите и магии — лучший амулет F2P для ближнего боя.",
         "wikiItemId": 1731,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_power.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_power.png",
+        "inStep": true
       }
     ],
     "fields": [
@@ -2410,7 +2594,25 @@
         "text": "Около 19 000 gp по ценам на 26.09.2026: нагрудник ≈ 9 400, поножи ≈ 3 500, щит ≈ 2 900, шлем ≈ 1 850, ятаган ≈ 1 400, Amulet of power ≈ 2 350."
       }
     ],
-    "doneWhen": "Снаряжение куплено и лежит в банке."
+    "doneWhen": "Снаряжение куплено и лежит в банке.",
+    "branches": [
+      {
+        "id": "varrock-teleport",
+        "label": "Varrock Teleport",
+        "condition": {
+          "type": "SKILL_LEVEL",
+          "skill": "magic",
+          "minLevel": 25
+        },
+        "replacementText": "Телепорт на площадь Varrock: 1 **Law rune**, 3 **Air rune**, 1 **Fire rune**. Grand Exchange — к северо-западу от площади.",
+        "replacementTarget": {
+          "x": 3213,
+          "y": 3424,
+          "plane": 0,
+          "label": "Varrock Teleport — площадь у фонтана"
+        }
+      }
+    ]
   },
   {
     "id": "S3-08",
@@ -2706,7 +2908,8 @@
         "amount": 90,
         "howToGet": "30 гвоздей на каждую доску, ≈ 30 gp за штуку.",
         "wikiItemId": 1539,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png",
+        "inStep": true
       },
       {
         "nameEn": "Plank",
@@ -2714,7 +2917,8 @@
         "amount": 3,
         "howToGet": "Только обычные доски, ≈ 140 gp.",
         "wikiItemId": 960,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png",
+        "inStep": true
       },
       {
         "nameEn": "Hammer",
@@ -2722,7 +2926,8 @@
         "amount": 1,
         "howToGet": "Купи в Lumbridge General Store за 1 gp.",
         "wikiItemId": 2347,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png",
+        "inStep": true
       },
       {
         "nameEn": "Unfired bowl",
@@ -2730,7 +2935,8 @@
         "amount": 1,
         "howToGet": "Купи на бирже или слепи из мягкой глины на гончарном круге (Crafting 8) в Barbarian Village.",
         "wikiItemId": 1791,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Unfired_bowl.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Unfired_bowl.png",
+        "inStep": true
       },
       {
         "nameEn": "Wizard's mind bomb",
@@ -2738,7 +2944,8 @@
         "amount": 1,
         "howToGet": "Купи в пабе Rising Sun в Falador за 3 gp.",
         "wikiItemId": 1907,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Wizard's_mind_bomb.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Wizard's_mind_bomb.png",
+        "inStep": true
       },
       {
         "nameEn": "Silk",
@@ -2746,7 +2953,8 @@
         "amount": 1,
         "howToGet": "Купи у торговца шёлком в Al Kharid за 3 gp.",
         "wikiItemId": 950,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Silk.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Silk.png",
+        "inStep": true
       },
       {
         "nameEn": "Lobster pot",
@@ -2754,7 +2962,8 @@
         "amount": 1,
         "howToGet": "Купи у Gerrant в Port Sarim за 20 gp или на бирже ≈ 110 gp. Нужен Оракулу (S5-04) — не путай с ловушкой для рыбалки, хватит и одной на оба дела.",
         "wikiItemId": 301,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png",
+        "inStep": true
       },
       {
         "nameEn": "Coins",
@@ -2762,10 +2971,29 @@
         "amount": 2000,
         "howToGet": "Для покупки корабля Lady Lumbridge.",
         "wikiItemId": 995,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png",
+        "inStep": true
       }
     ],
-    "doneWhen": "Все предметы сложены в банке."
+    "doneWhen": "Все предметы сложены в банке.",
+    "branches": [
+      {
+        "id": "varrock-teleport",
+        "label": "Varrock Teleport",
+        "condition": {
+          "type": "SKILL_LEVEL",
+          "skill": "magic",
+          "minLevel": 25
+        },
+        "replacementText": "Телепорт на площадь Varrock: 1 **Law rune**, 3 **Air rune**, 1 **Fire rune**. Grand Exchange — к северо-западу от площади.",
+        "replacementTarget": {
+          "x": 3213,
+          "y": 3424,
+          "plane": 0,
+          "label": "Varrock Teleport — площадь у фонтана"
+        }
+      }
+    ]
   },
   {
     "id": "S5-01",
@@ -3258,7 +3486,8 @@
         "amount": 1,
         "howToGet": "Купи на бирже ≈ 11,5 млн gp (цена на 26.09.2026). Даёт 14 дней подписки — используй на себя.",
         "wikiItemId": 13190,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Old_school_bond.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Old_school_bond.png",
+        "inStep": true
       }
     ],
     "doneWhen": "Подписка активирована."
@@ -3327,7 +3556,8 @@
         "amount": 1,
         "howToGet": "Выдаст гном Golrie в подземелье Tree Gnome Village по ходу квеста.",
         "wikiItemId": 294,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Glarial's_pebble.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Glarial's_pebble.png",
+        "inStep": true
       }
     ],
     "itemsRecommended": [
@@ -3390,7 +3620,8 @@
         "amount": 1,
         "howToGet": "Возьми в сундуке оружейной арены по ходу квеста.",
         "wikiItemId": 74,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Khazard_helmet.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Khazard_helmet.png",
+        "inStep": true
       },
       {
         "nameEn": "Khazard armour",
@@ -3398,7 +3629,8 @@
         "amount": 1,
         "howToGet": "Возьми в сундуке оружейной арены по ходу квеста.",
         "wikiItemId": 75,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Khazard_armour.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Khazard_armour.png",
+        "inStep": true
       },
       {
         "nameEn": "Coins",
@@ -3628,7 +3860,8 @@
         "amount": 1,
         "howToGet": "Купи на бирже (≈ 150–250 gp) или отлей из серебряного слитка по форме Sickle mould (Crafting 18).",
         "wikiItemId": 2961,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Silver_sickle.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Silver_sickle.png",
+        "inStep": true
       },
       {
         "nameEn": "Ghostspeak amulet",
@@ -3796,7 +4029,8 @@
         "amount": 1,
         "howToGet": "Падают в канализации H.A.M. или купи на бирже.",
         "wikiItemId": 10496,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Polished_buttons.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Polished_buttons.png",
+        "inStep": true
       },
       {
         "nameEn": "Hard leather",

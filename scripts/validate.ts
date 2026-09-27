@@ -215,6 +215,45 @@ export function validate(d: GuideData | null, route: Route): Report {
   const auto = withGame.filter((s) => s.inGame!.completionTrigger);
   check(!badGame.length, `Подсветка в игре у ${withGame.length} шагов, автоотметка у ${auto.length}: поля в порядке`, `Ошибки подсветки: ${badGame.join('; ')}`);
 
+  // Путевые точки: по порядку, с подписью (её показывает HUD и метка на земле).
+  const badRoute = steps.flatMap((s) => (s.inGame?.pathWaypoints ?? [])
+    .filter((p) => badPoint(p) || !p.label?.trim())
+    .map((p) => `${s.id} ${p.x},${p.y}`));
+  const routed = steps.filter((s) => s.inGame?.pathWaypoints?.length);
+  const shortRoute = routed.filter((s) => s.inGame!.pathWaypoints!.length < 2).map((s) => s.id);
+  check(!badRoute.length && !shortRoute.length, `Путевые точки у ${routed.length} шагов: координаты и подписи в порядке`,
+    `Путевые точки: ${[...badRoute, ...shortRoute.map((id) => `${id}: одна точка — это просто worldPoint`)].join('; ')}`);
+
+  // Быстрые варианты: известный навык и уровень 1–99, квест из маршрута, предмет с названием, точка на карте.
+  const SKILLS = new Set(['attack', 'strength', 'defence', 'ranged', 'prayer', 'magic', 'runecraft', 'hitpoints', 'crafting', 'mining',
+    'smithing', 'fishing', 'cooking', 'firemaking', 'woodcutting', 'agility', 'herblore', 'thieving', 'fletching', 'slayer', 'farming',
+    'construction', 'hunter', 'sailing']);
+  const questTitles = new Set(steps.filter((s) => s.type === 'quest').map((s) => s.title));
+  const badBranch: string[] = [];
+  for (const s of steps) {
+    const ids = new Set<string>();
+    for (const b of s.branches ?? []) {
+      const c = b.condition;
+      if (!b.id || ids.has(b.id)) badBranch.push(`${s.id}: повтор или пустой id варианта`);
+      ids.add(b.id);
+      if (!b.label?.trim()) badBranch.push(`${s.id}/${b.id}: нет label`);
+      if (c.type === 'SKILL_LEVEL' && (!SKILLS.has(c.skill ?? '') || !Number.isInteger(c.minLevel) || c.minLevel! < 1 || c.minLevel! > 99)) badBranch.push(`${s.id}/${b.id}: навык или уровень`);
+      if (c.type === 'QUEST_COMPLETED' && !questTitles.has(c.questName ?? '')) badBranch.push(`${s.id}/${b.id}: квест «${c.questName}» не из маршрута`);
+      if (c.type === 'ITEM_OWNED' && !c.itemName?.trim()) badBranch.push(`${s.id}/${b.id}: нет itemName`);
+      if (!['SKILL_LEVEL', 'QUEST_COMPLETED', 'ITEM_OWNED'].includes(c.type)) badBranch.push(`${s.id}/${b.id}: неизвестное условие ${c.type}`);
+      if (b.replacementTarget && (badPoint(b.replacementTarget) || !b.replacementTarget.label?.trim())) badBranch.push(`${s.id}/${b.id}: точка`);
+      if (b.timeSavingSeconds !== undefined && !(b.timeSavingSeconds > 0)) badBranch.push(`${s.id}/${b.id}: timeSavingSeconds`);
+    }
+  }
+  const branched = steps.filter((s) => s.branches?.length);
+  check(!badBranch.length, `Быстрые варианты у ${branched.length} шагов: условия и точки в порядке`, `Быстрые варианты: ${badBranch.join('; ')}`);
+
+  // Проверка вылета: у шага, где всё добывается по ходу, проверять у банка нечего — это нормально, но
+  // inStep только у обязательных предметов (рекомендуемые у банка и так не проверяются).
+  const recInStep = steps.flatMap((s) => (s.itemsRecommended ?? []).filter((i) => i.inStep).map((i) => `${s.id} ${i.nameEn}`));
+  check(!recInStep.length, `Предметы «по ходу шага» помечены у ${steps.filter((s) => s.itemsRequired?.some((i) => i.inStep)).length} шагов`,
+    `inStep у рекомендуемых предметов: ${recInStep.join(', ')}`);
+
   // --- Текст ---
   lines.push('Текст');
   const vague = steps.flatMap((s) => userTexts(s).filter(([, t]) => VAGUE.test(t)).map(([where]) => `${s.id} «${where}»`));
