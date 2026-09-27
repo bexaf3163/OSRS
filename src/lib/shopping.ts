@@ -150,3 +150,84 @@ export function shoppingText(title: string, lines: CopyLine[], coins: number): s
   if (coins > 0) out.push(`Coins ~${formatGp(coins)} gp (на сами шаги)`);
   return out.join('\n');
 }
+
+// ---------------------------------------------------------------------------
+// «У меня уже есть»: сколько предмета уже есть и сколько осталось купить.
+//
+// Источники по старшинству: данные из игры, если они полные (банк открывали в этой сессии RuneLite), →
+// отметка игрока «у меня есть N» → неизвестно. «Неизвестно» — не ноль: без банка сумка говорит только о
+// сумке, и программа не делает вывод, что остального нет.
+
+/** MISSING — нет совсем, PARTIAL — часть, SUFFICIENT — хватает, UNKNOWN — неизвестно, UNAVAILABLE — не продаётся на бирже. */
+export type ShoppingItemStatus = 'MISSING' | 'PARTIAL' | 'SUFFICIENT' | 'UNKNOWN' | 'UNAVAILABLE';
+
+export interface Holding {
+  required: number;
+  /** Сколько есть — по лучшему источнику; null — неизвестно. */
+  owned: number | null;
+  /** Сколько купить. При неизвестном — всё, что не подтверждено (верхняя оценка). */
+  buy: number;
+  status: ShoppingItemStatus;
+  source: 'live' | 'manual' | 'bag' | 'none';
+  /** Из игры: в сумке (с банкнотами) и в банке; bank null — банк в этой сессии не открывали. */
+  carried?: number;
+  bank?: number | null;
+  /** Отметка игрока, если есть. */
+  manual?: number;
+  /** Игрок отметил больше, чем подтверждает игра с открытым банком: отметка устарела. */
+  stale?: boolean;
+}
+
+/** Ключ строки списка для ручной отметки: по ID предмета, у предметов без ID — по имени (§97.18). */
+export const lineKey = (line: Pick<ShoppingLine, 'key'>) => line.key;
+
+export function holdingFor(
+  line: Pick<ShoppingLine, 'nameEn' | 'count' | 'exact'>,
+  owned: { bankSeen: boolean; items: Map<string, { carried: number; noted: number; bank?: number }> } | null,
+  manual?: number,
+  onGe = true,
+): Holding {
+  const required = line.count;
+  const o = owned?.items.get(nameKey(line.nameEn));
+  const carried = o ? o.carried + o.noted : undefined;
+  const bank = o ? (owned!.bankSeen ? o.bank ?? 0 : null) : undefined;
+  const base = {
+    required,
+    ...(carried !== undefined ? { carried, bank } : {}),
+    ...(manual !== undefined ? { manual } : {}),
+  };
+  const status = (have: number | null): ShoppingItemStatus => {
+    if (!onGe) return 'UNAVAILABLE';
+    if (have === null) return 'UNKNOWN';
+    if (have >= required) return 'SUFFICIENT';
+    return have > 0 ? 'PARTIAL' : 'MISSING';
+  };
+  // Игра знает всё: и сумку, и банк.
+  if (o && owned!.bankSeen) {
+    const total = carried! + (bank ?? 0);
+    return {
+      ...base, owned: total, buy: Math.max(0, required - total), status: status(total), source: 'live',
+      ...(manual !== undefined && manual > total ? { stale: true } : {}),
+    };
+  }
+  // Отметка игрока: сумка из игры её не опровергает (остальное может лежать в банке).
+  if (manual !== undefined) {
+    const have = Math.max(manual, carried ?? 0);
+    return { ...base, owned: have, buy: Math.max(0, required - have), status: status(have), source: 'manual' };
+  }
+  // Банк неизвестен: хватает того, что в сумке, — известно; не хватает — неизвестно, а не «нет».
+  if (carried !== undefined) {
+    if (carried >= required) return { ...base, owned: carried, buy: 0, status: status(carried), source: 'bag' };
+    return { ...base, owned: null, buy: required - carried, status: status(null), source: 'bag' };
+  }
+  return { ...base, owned: null, buy: required, status: status(null), source: 'none' };
+}
+
+/**
+ * Сколько просить у плагина для подсказки на бирже. Плагин сам вычитает то, что видит в игре; ручная отметка
+ * ему неизвестна — её вычитаем здесь, не считая дважды то, что он и так видит в сумке.
+ */
+export function pluginCount(h: Holding): number {
+  if (h.source !== 'manual') return h.required;
+  return h.buy + (h.carried ?? 0);
+}

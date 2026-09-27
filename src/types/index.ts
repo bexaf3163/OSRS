@@ -500,4 +500,15 @@ export interface Progress {
   legacy?: { steps: Record<string, StepStatus>; notes: Record<string, string> };
   /** Шаги, где игрок нажал «✕ Пропустить» у подсказки апгрейда снаряжения. */
   upgradeDismissedForSteps?: string[];
+  /**
+   * «У меня уже есть» в оптовой закупке: сколько предмета есть по словам игрока. Ключ — строка списка
+   * (`id:1725` по ID предмета, `name:…` у предметов без ID). Данные из игры главнее, если они полные.
+   */
+  ownedManual?: Record<string, ManualOwned>;
+}
+
+export interface ManualOwned {
+  count: number;
+  /** Когда игрок указал количество (ISO). */
+  updatedAt: string;
 }

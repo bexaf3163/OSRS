@@ -73,7 +73,12 @@ function MissingLine({ m, steps }: { m: MissingRequirement; steps: Step[] }) {
   );
 }
 
-function LockedRow({ l, live, steps }: { l: LockedItem; live: boolean; steps: Step[] }) {
+/**
+ * Замок: одно требование — одна строка. Три стальных предмета «нужно 5 Defence» — одной строкой с тремя
+ * названиями, а не тремя одинаковыми карточками. Предмет, который уже лежит в банке, — всегда отдельно.
+ */
+function LockedRow({ group, live, steps }: { group: LockedItem[]; live: boolean; steps: Step[] }) {
+  const l = group[0];
   const skills = l.missing.filter((m) => m.kind === 'skill');
   const title = skills.length
     ? `нужно ${skills.map((m) => `${m.need} ${SKILL_EN[m.skill]}`).join(' и ')}`
@@ -83,19 +88,38 @@ function LockedRow({ l, live, steps }: { l: LockedItem; live: boolean; steps: St
       <ItemIcon src={l.item.iconUrl} alt="" size={28} />
       <div className="gear-main">
         <p>
-          <span className="lock-chip">🔒 {title}</span> <strong>{l.item.name}</strong>{' '}
-          <span className="muted small">({l.item.nameRu}, {SLOT_LABEL[l.slot].toLowerCase()})</span>
+          <span className="lock-chip">🔒 {title}</span>{' '}
+          {group.map((g, i) => (
+            <span key={g.item.id}>
+              {i > 0 && ', '}<strong>{g.item.name}</strong>{' '}
+              <span className="muted small">({g.item.nameRu}, {SLOT_LABEL[g.slot].toLowerCase()})</span>
+            </span>
+          ))}
         </p>
         {l.owned && (
           <p className="small"><strong>Уже {l.owned === 'bank' ? 'лежит в банке' : 'в сумке'}, но надеть его пока нельзя.</strong> Не продавай — пригодится.</p>
         )}
-        <p className="small">{capital(live ? gainText(l) : statsText(l))} — когда откроется.</p>
+        {group.length === 1 && <p className="small">{capital(live ? gainText(l) : statsText(l))} — когда откроется.</p>}
         <ul className="small gear-plain lock-missing">
           {l.missing.map((m) => <MissingLine key={m.kind === 'skill' ? m.skill : m.quest} m={m} steps={steps} />)}
         </ul>
       </div>
     </li>
   );
+}
+
+function lockGroups(locked: LockedItem[]): LockedItem[][] {
+  const out: LockedItem[][] = [];
+  const byKey = new Map<string, LockedItem[]>();
+  for (const l of locked) {
+    if (l.owned) { out.push([l]); continue; }
+    const key = JSON.stringify(l.missing);
+    const g = byKey.get(key);
+    if (g) g.push(l);
+    else { const n = [l]; byKey.set(key, n); out.push(n); }
+  }
+  // Сначала то, что уже есть, — его нельзя пропустить.
+  return out.sort((a, b) => Number(Boolean(b[0].owned)) - Number(Boolean(a[0].owned)));
 }
 
 export function GearPage() {
@@ -195,7 +219,7 @@ export function GearPage() {
           <p className="small muted">
             Требования — уровни и квесты — с OSRS Wiki. Такие предметы программа не советует покупать, пока требования не выполнены.
           </p>
-          <ul className="gear-list">{advice.locked.map((l) => <LockedRow key={`${l.slot}-${l.item.id}`} l={l} live={advice.live} steps={steps} />)}</ul>
+          <ul className="gear-list">{lockGroups(advice.locked).map((g) => <LockedRow key={g.map((l) => l.item.id).join('-')} group={g} live={advice.live} steps={steps} />)}</ul>
         </section>
       )}
 

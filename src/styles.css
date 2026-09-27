@@ -250,6 +250,19 @@ main {
   main { padding-top: 24px; padding-bottom: 48px; }
   .toast-region { bottom: 24px !important; }
 }
+/* 900–1180 px с RuneLite на связи: в шапке ещё значок связи — вкладки ужимаются, иначе шапка вылезала на 11 px. */
+/* 900–1320 px: вкладки и значки шапки не помещались (на 900 px — на 145 px): вкладки — одними значками
+   с подсказкой, поиск — значком. Название вкладки остаётся для экранного диктора. */
+@media (min-width: 900px) and (max-width: 1319px) {
+  .topbar-inner { gap: 8px; }
+  .tabs-top { margin-left: 4px; }
+  .tabs-top .tab { padding: 0 10px; }
+  .tabs-top .tab-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
+@media (min-width: 900px) and (max-width: 1719px) {
+  .search-trigger { min-width: 44px; padding: 0 10px; justify-content: center; }
+  .search-trigger-text, .search-trigger kbd { display: none; }
+}
 
 /* ---------- Карточки, кнопки ---------- */
 
@@ -1184,7 +1197,8 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 .bridge-indicator:hover { background: var(--surface-2); color: var(--text); }
 .bridge-indicator.is-online { color: var(--done); }
 .bridge-dot { font-size: 0.7rem; }
-@media (max-width: 1239px) { .bridge-label { display: none; } }
+/* Надпись у значка связи — только на очень широком окне: иначе шапка вылезала за экран (на 1400 px — на 193 px). */
+@media (max-width: 1719px) { .bridge-label { display: none; } }
 
 /* Шаг выполнен в игре — короткая зелёная вспышка на строке. */
 .is-just-done { animation: just-done 1.6s ease-out; }
@@ -1251,19 +1265,28 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 .shop-group[open] > summary { margin-bottom: 6px; }
 .shop-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
 .shop-row {
-  display: grid; grid-template-columns: 20px 1fr auto auto; align-items: center; gap: 10px;
+  display: grid; grid-template-columns: 20px minmax(0, 1fr) auto; align-items: center; gap: 4px 10px;
   border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); padding: 8px 10px;
 }
-.shop-row.is-have { opacity: 0.7; }
+.shop-row.is-sufficient { opacity: 0.75; }
+.shop-row.is-partial { box-shadow: inset 3px 0 0 var(--gold); }
+.shop-actions { grid-column: 2 / -1; display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.owned-input { display: inline-flex; align-items: center; gap: 4px; }
+.owned-input input {
+  width: 5.5em; min-height: 32px; padding: 0 6px; text-align: center; font: inherit; font-variant-numeric: tabular-nums;
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--surface); color: var(--text);
+}
+.shop-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.shop-filter { width: 100%; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); }
+.shop-tally { margin: 0; }
+.warn-text { color: var(--warn); }
+.ok-text { color: var(--done); }
 .shop-row.is-quest { grid-template-columns: 20px 1fr; }
 .shop-main { min-width: 0; }
 .shop-main p { margin: 0; }
 .shop-name { font-size: 0.92rem; }
 .shop-count { display: flex; flex-direction: column; align-items: flex-end; font-variant-numeric: tabular-nums; white-space: nowrap; }
-@media (max-width: 560px) {
-  .shop-row { grid-template-columns: 20px 1fr auto; }
-  .shop-row > .btn { grid-column: 2 / -1; justify-self: start; }
-}
+
 
 /* Места из досье вики: «📍 место» открывает карту, «🧭» ведёт стрелку в игре. */
 .drawer-list.is-places { list-style: none; padding-left: 0; gap: 2px; }

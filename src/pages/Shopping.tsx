@@ -6,13 +6,39 @@ import { useEffect, useMemo, useState } from 'react';
 import { useStore } from '../store';
 import { useBridge } from '../bridge';
 import { isClosed, currentStage } from '../lib/next-step';
-import { ownedTotal } from '../lib/checklist';
-import { aggregateShopping, formatGp, plural, shoppingText, type ShoppingLine } from '../lib/shopping';
+import { parseAmount } from '../lib/checklist';
+import {
+  aggregateShopping, formatGp, holdingFor, plural, pluginCount, shoppingText, type Holding, type ShoppingItemStatus, type ShoppingLine,
+} from '../lib/shopping';
+import { MAX_OWNED } from '../lib/progress';
 import { getGePrice, getMapping, type GePrice } from '../services/pricesApi';
 import { ItemIcon } from '../components/WikiDrawer';
 import { copyText as copy } from '../lib/clipboard';
 
 const RANGE_KEY = 'osrs-put:shopping-range';
+const FILTER_KEY = 'osrs-put:shopping-filter';
+
+/** Что показывать: по умолчанию — то, что ещё надо купить (и что неизвестно), чтобы список не рос от купленного. */
+type Filter = 'need' | 'partial' | 'have' | 'all';
+const FILTERS: { id: Filter; label: string }[] = [
+  { id: 'need', label: 'Нужно купить' },
+  { id: 'partial', label: 'Частично есть' },
+  { id: 'have', label: 'Уже есть' },
+  { id: 'all', label: 'Все' },
+];
+const shows = (f: Filter, st: ShoppingItemStatus) => (f === 'all' ? true
+  : f === 'have' ? st === 'SUFFICIENT'
+    : f === 'partial' ? st === 'PARTIAL'
+      : st !== 'SUFFICIENT');
+
+function loadFilter(): Filter {
+  try {
+    const v = localStorage.getItem(FILTER_KEY);
+    return FILTERS.some((f) => f.id === v) ? (v as Filter) : 'need';
+  } catch {
+    return 'need';
+  }
+}
 
 interface Range {
   from: number;
@@ -38,14 +64,52 @@ function loadRange(): Partial<Range> {
 
 interface Row {
   line: ShoppingLine;
-  /** Сколько уже есть у игрока; null — неизвестно (нет связи с RuneLite). */
-  have: number | null;
-  buy: number;
+  /** Сколько есть, откуда это известно и сколько купить. */
+  h: Holding;
   price?: GePrice | null;
 }
 
+/** Где что лежит: «в сумке 5 · в банке 8», «отмечено вручную», «? банк не открыт». */
+function sourceNote(h: Holding): string {
+  const parts: string[] = [];
+  if (h.source === 'live') parts.push(`в сумке ${h.carried ?? 0} · в банке ${h.bank ?? 0}`);
+  else if (h.source === 'manual') {
+    parts.push(`отмечено вручную: ${h.manual}`);
+    if (h.carried) parts.push(`в сумке ${h.carried}`);
+  } else if (h.source === 'bag') parts.push(`в сумке ${h.carried ?? 0} · ? банк не открыт`);
+  return parts.join(' · ');
+}
+
+/** Поле «уже есть»: −, число, +. Мусор (буквы, минус, дробь) не сохраняется — поле возвращается к прежнему. */
+function OwnedInput({ value, max, name, onSet }: { value: number; max: number; name: string; onSet: (n: number) => void }) {
+  const [draft, setDraft] = useState(String(value));
+  useEffect(() => setDraft(String(value)), [value]);
+  const commit = () => {
+    const n = Number(draft.trim());
+    if (draft.trim() !== '' && Number.isInteger(n) && n >= 0 && n <= MAX_OWNED) onSet(n);
+    else setDraft(String(value));
+  };
+  return (
+    <span className="owned-input">
+      <button type="button" className="btn btn-ghost btn-sm" onClick={() => onSet(Math.max(0, value - 1))} disabled={value <= 0}
+        aria-label={`${name}: на один меньше`}>−</button>
+      <input type="text" inputMode="numeric" value={draft} aria-label={`${name}: сколько уже есть`}
+        onChange={(e) => setDraft(e.target.value.replace(/[^\d]/g, ''))} onBlur={commit}
+        onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }} />
+      <button type="button" className="btn btn-ghost btn-sm" onClick={() => onSet(Math.min(MAX_OWNED, value + 1))}
+        aria-label={`${name}: на один больше`}>+</button>
+      <span className="muted small">из {max}</span>
+    </span>
+  );
+}
+
 export function ShoppingPage() {
-  const { steps, stages, progress, notify } = useStore();
+  const { steps, stages, progress, notify, setOwnedManual } = useStore();
+  const [filter, setFilterState] = useState<Filter>(loadFilter);
+  const setFilter = (f: Filter) => {
+    setFilterState(f);
+    try { localStorage.setItem(FILTER_KEY, f); } catch { /* до перезапуска */ }
+  };
   const { state, owned, syncPlan } = useBridge();
   const stageIds = useMemo(() => stages.map((s) => s.id).filter((id) => steps.some((st) => st.stage === id)), [stages, steps]);
   const [range, setRange] = useState<Range>(() => {
@@ -93,33 +157,57 @@ export function ShoppingPage() {
   }, [idsKey]);
 
   const onGe = (l: ShoppingLine) => tradeable === null || l.id === undefined || tradeable.has(l.id);
-  const toRow = (line: ShoppingLine): Row => {
-    const have = ownedTotal(owned, line.nameEn);
-    return { line, have, buy: Math.max(0, line.count - (have ?? 0)), price: line.id !== undefined ? prices.get(line.id) : undefined };
-  };
+  const manual = progress.ownedManual ?? {};
+  const toRow = (line: ShoppingLine): Row => ({
+    line,
+    h: holdingFor(line, owned, manual[line.key]?.count, onGe(line)),
+    price: line.id !== undefined ? prices.get(line.id) : undefined,
+  });
   const buyRows = list.required.filter((l) => !l.inStepOnly && onGe(l)).map(toRow);
   const gatherRows = list.required.filter((l) => l.inStepOnly && onGe(l)).map(toRow);
   const notGeRows = list.required.filter((l) => !onGe(l)).map(toRow);
   const recRows = list.recommended.filter(onGe).map(toRow);
 
-  const budget = buyRows.reduce((sum, r) => sum + (r.price ? r.price.buyPrice * r.buy : 0), 0);
-  const unpriced = buyRows.filter((r) => r.buy > 0 && !r.price).length;
-  const left = buyRows.filter((r) => r.buy > 0).length;
+  const budget = buyRows.reduce((sum, r) => sum + (r.price ? r.price.buyPrice * r.h.buy : 0), 0);
+  const unpriced = buyRows.filter((r) => r.h.buy > 0 && !r.price).length;
+  const count = (st: ShoppingItemStatus) => buyRows.filter((r) => r.h.status === st).length;
+  const have = count('SUFFICIENT');
+  const partial = count('PARTIAL');
+  const missing = count('MISSING');
+  const unknown = count('UNKNOWN');
+  const left = buyRows.filter((r) => r.h.buy > 0).length;
+  const stale = [...buyRows, ...gatherRows, ...recRows].filter((r) => r.h.stale);
 
-  // Список — в подсказку на бирже в RuneLite (плагин сам считает, что уже есть). Не на каждое нажатие — с паузой.
-  const planKey = buyRows.map((r) => `${r.line.key}:${r.line.count}`).join('|');
+  // Список — в подсказку на бирже в RuneLite. Плагин сам вычитает то, что видит в игре; ручные отметки — вычтены здесь.
+  // Количество 0 у плагина значит «сколько по ситуации» — отмеченное вручную как имеющееся в список не идёт.
+  const planItems = buyRows.map((r) => ({ name: r.line.nameEn, id: r.line.id, count: pluginCount(r.h) })).filter((i) => i.count > 0);
+  const planKey = planItems.map((i) => `${i.name}:${i.count}`).join('|');
   useEffect(() => {
     if (state !== 'online') return;
     const timer = setTimeout(() => {
-      void syncPlan({ items: buyRows.map((r) => ({ name: r.line.nameEn, id: r.line.id, count: r.line.count })) });
+      void syncPlan({ items: planItems });
     }, 400);
     return () => clearTimeout(timer);
-    // buyRows пересчитывается каждую отрисовку — следим за его содержимым через planKey.
+    // planItems пересчитывается каждую отрисовку — следим за его содержимым через planKey.
   }, [planKey, state, syncPlan]);
+
+  const syncFromGame = () => {
+    if (state !== 'online') {
+      notify('RuneLite не подключён — укажи, что уже есть, вручную в строках списка');
+      return;
+    }
+    if (!owned?.bankSeen) {
+      notify('Открой банк в игре — программа посчитает, что там лежит, и обновит список');
+      return;
+    }
+    const live = [...buyRows, ...gatherRows, ...recRows].filter((r) => r.h.source === 'live' && r.h.manual !== undefined);
+    for (const r of live) setOwnedManual(r.line.key, null);
+    notify(live.length ? `Взято из игры: ${live.length} ${plural(live.length, 'позиция', 'позиции', 'позиций')} — ручные отметки заменены` : 'Список уже по данным игры: сумка и банк учтены');
+  };
 
   const title = `Grand Exchange — этап${range.from === range.to ? ` ${range.from}` : `ы ${range.from}–${range.to}`}`;
   const copyAll = async () => {
-    const text = shoppingText(title, buyRows.map((r) => ({ nameEn: r.line.nameEn, buy: r.buy, exact: r.line.exact })), list.coins);
+    const text = shoppingText(title, buyRows.map((r) => ({ nameEn: r.line.nameEn, buy: r.h.buy, exact: r.line.exact })), list.coins);
     notify(await copy(text) ? '📋 Список скопирован — вставь его в заметку рядом с игрой' : 'Не удалось скопировать — браузер запретил доступ к буферу обмена');
   };
   const copyName = async (name: string) => {
@@ -130,32 +218,69 @@ export function ShoppingPage() {
     ? owned
       ? owned.bankSeen ? 'Учтено, что уже лежит в сумке и в банке (RuneLite).' : 'Учтена сумка. Открой банк в игре — учту и его.'
       : 'Войди в игру в RuneLite — учту то, что уже есть.'
-    : state === 'off' ? null : 'RuneLite не подключён — показано полное количество.';
+    : state === 'off' ? 'Что уже есть — отмечай в строках вручную.' : 'RuneLite не подключён — что уже есть, отмечай в строках вручную.';
 
-  const rowView = (r: Row) => (
-    <li key={r.line.key} className={`shop-row ${r.buy === 0 ? 'is-have' : ''}`}>
-      <ItemIcon src={r.line.iconUrl} alt="" />
-      <div className="shop-main">
-        <p className="shop-name"><strong>{r.line.nameEn}</strong> <span className="muted">({r.line.nameRu})</span></p>
-        <p className="shop-src muted small">
-          {r.line.sources.map((s, i) => (
-            <span key={`${s.stepId}-${i}`}>
-              {i > 0 && ', '}
-              <a href={`#/step/${s.stepId}`}>{s.stepId}</a>{s.carryOver ? ' (тот же)' : ''}
-            </span>
-          ))}
-          {r.line.reusable && r.line.sources.length > 1 ? ' · инструмент: одного хватит' : ''}
-        </p>
-      </div>
-      <div className="shop-count">
-        <strong>×{r.line.count}{r.line.exact ? '' : '+'}</strong>
-        {r.have !== null && r.have > 0 && <span className="muted small">{r.buy === 0 ? '✓ есть' : `есть ${r.have} · купить ${r.buy}`}</span>}
-        {r.price && r.buy > 0 && <span className="muted small">≈ {formatGp(r.price.buyPrice * r.buy)} gp</span>}
-      </div>
-      <button type="button" className="btn btn-ghost btn-sm" onClick={() => void copyName(r.line.nameEn)}
-        aria-label={`Копировать название ${r.line.nameEn}`}>📋 Копировать название</button>
-    </li>
-  );
+  const rowView = (r: Row) => {
+    const { line, h } = r;
+    const single = line.count === 1 || line.reusable;
+    const setManual = (n: number | null) => setOwnedManual(line.key, n);
+    const note = sourceNote(h);
+    return (
+      <li key={line.key} className={`shop-row is-${h.status.toLowerCase()}`}>
+        <ItemIcon src={line.iconUrl} alt="" />
+        <div className="shop-main">
+          <p className="shop-name"><strong>{line.nameEn}</strong> <span className="muted">({line.nameRu})</span></p>
+          <p className="shop-src muted small">
+            {line.sources.map((s, i) => {
+              const n = parseAmount(s.amount);
+              return (
+                <span key={`${s.stepId}-${i}`}>
+                  {i > 0 && ', '}
+                  <a href={`#/step/${s.stepId}`}>{s.stepId}</a>{n !== null && n > 1 && !s.carryOver ? ` ×${n}` : ''}{s.carryOver ? ' (тот же)' : ''}
+                </span>
+              );
+            })}
+            {line.reusable && line.sources.length > 1 ? ' · инструмент: одного хватит' : ''}
+          </p>
+          {note && <p className="muted small">{note}</p>}
+          {h.stale && (
+            <p className="small warn-text">
+              ⚠️ Игра больше не подтверждает отметку «есть {h.manual}» — считаю по игре.{' '}
+              <button type="button" className="link-btn" onClick={() => setManual(null)}>Убрать отметку</button>
+            </p>
+          )}
+        </div>
+        <div className="shop-count">
+          {h.status === 'SUFFICIENT'
+            ? <strong className="ok-text">✓ {h.owned ?? 0} / {line.count}{line.exact ? '' : '+'}</strong>
+            : <strong>×{line.count}{line.exact ? '' : '+'}</strong>}
+          {h.status === 'PARTIAL' && <span className="small">есть {h.owned} · купить {h.buy}</span>}
+          {h.status === 'UNKNOWN' && h.source === 'bag' && <span className="muted small">купить до {h.buy}</span>}
+          {r.price && h.buy > 0 && <span className="muted small">≈ {formatGp(r.price.buyPrice * h.buy)} gp</span>}
+          {r.price === null && h.buy > 0 && !pricesError && <span className="muted small">цена неизвестна</span>}
+        </div>
+        <div className="shop-actions">
+          {h.source === 'live' ? (
+            // Сумка и банк известны из игры — ручная отметка ничего бы не изменила.
+            <span className="muted small">✓ по данным игры</span>
+          ) : single ? (
+            h.manual !== undefined && h.manual > 0
+              ? <button type="button" className="btn btn-ghost btn-sm" onClick={() => setManual(null)}>↺ Снять «уже есть»</button>
+              : h.status !== 'SUFFICIENT' && <button type="button" className="btn btn-sm" onClick={() => setManual(line.count)}>✓ Уже есть</button>
+          ) : (
+            <>
+              <OwnedInput value={h.manual ?? h.owned ?? 0} max={line.count} name={line.nameEn} onSet={setManual} />
+              {h.status !== 'SUFFICIENT' && <button type="button" className="btn btn-sm" onClick={() => setManual(line.count)}>✓ Есть все</button>}
+              {h.manual !== undefined && <button type="button" className="btn btn-ghost btn-sm" onClick={() => setManual(null)}>↺ Снять отметку</button>}
+            </>
+          )}
+          <button type="button" className="btn btn-ghost btn-sm" onClick={() => void copyName(line.nameEn)}
+            aria-label={`Копировать название ${line.nameEn}`}>📋 Название</button>
+        </div>
+      </li>
+    );
+  };
+  const visible = (rows: Row[]) => rows.filter((r) => shows(filter, r.h.status));
 
   return (
     <div className="page shop-page">
@@ -181,38 +306,65 @@ export function ShoppingPage() {
       </div>
 
       <div className="card shop-summary">
-        <p>
-          <strong>{left ? `Купить: ${left} ${plural(left, 'позицию', 'позиции', 'позиций')}` : buyRows.length ? 'Всё уже есть' : 'Покупать нечего'}</strong>
-          {budget > 0 && <> · бюджет ≈ <strong>{formatGp(budget)} gp</strong></>}
-          {list.coins > 0 && <> · ещё {formatGp(list.coins)} gp монетами на сами шаги</>}
-        </p>
+        {buyRows.length > 0 && left === 0 ? (
+          <p><strong>🟢 Всё уже подготовлено</strong> — покупки не требуются.</p>
+        ) : (
+          <p>
+            <strong>{left ? `Купить: ${left} ${plural(left, 'позицию', 'позиции', 'позиций')}` : 'Покупать нечего'}</strong>
+            {budget > 0 && <> · бюджет оставшихся покупок ≈ <strong>{formatGp(budget)} gp</strong></>}
+            {list.coins > 0 && <> · ещё {formatGp(list.coins)} gp монетами на сами шаги</>}
+          </p>
+        )}
+        {buyRows.length > 0 && (
+          <p className="small shop-tally">
+            {buyRows.length} {plural(buyRows.length, 'позиция', 'позиции', 'позиций')}:
+            {' '}✓ уже есть {have}
+            {partial > 0 && <> · 🟡 частично {partial}</>}
+            {missing > 0 && <> · ✗ нет {missing}</>}
+            {unknown > 0 && <> · ? неизвестно {unknown}</>}
+            {notGeRows.length > 0 && <> · не продаётся на бирже {notGeRows.length}</>}
+          </p>
+        )}
         <p className="muted small">
           {pricesError ? 'Цены сейчас недоступны (нет интернета?) — список работает и без них.'
             : `Цены — справочно, с prices.runescape.wiki${unpriced ? `; без цены: ${unpriced}` : ''}.`}
           {bridgeNote && <> {bridgeNote}</>}
           {state === 'online' && ' Список показан и в игре — открой биржу.'}
         </p>
-        <button type="button" className="btn btn-primary" onClick={() => void copyAll()} disabled={!buyRows.length}>
-          📋 Скопировать список для биржи
-        </button>
+        {stale.length > 0 && <p className="small warn-text">⚠️ Игра не подтверждает {stale.length} {plural(stale.length, 'ручную отметку', 'ручные отметки', 'ручных отметок')} — они помечены в списке.</p>}
+        <div className="shop-buttons">
+          <button type="button" className="btn btn-primary" onClick={() => void copyAll()} disabled={!left}>
+            📋 Скопировать список для биржи
+          </button>
+          <button type="button" className="btn" onClick={syncFromGame}>✓ Синхронизировать с моим банком</button>
+        </div>
+        <div className="segmented shop-filter" role="group" aria-label="Что показывать">
+          {FILTERS.map((f) => (
+            <button key={f.id} type="button" className={`seg ${filter === f.id ? 'is-active' : ''}`} aria-pressed={filter === f.id} onClick={() => setFilter(f.id)}>
+              {f.label} <span className="seg-count">{buyRows.filter((r) => shows(f.id, r.h.status)).length}</span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {buyRows.length > 0 && (
         <section className="shop-group">
-          <h2 className="subhead">Купить на бирже · {buyRows.length}</h2>
-          <ul className="shop-list">{buyRows.map(rowView)}</ul>
+          <h2 className="subhead">Купить на бирже · {visible(buyRows).length} из {buyRows.length}</h2>
+          {visible(buyRows).length
+            ? <ul className="shop-list">{visible(buyRows).map(rowView)}</ul>
+            : <p className="muted small">В этом фильтре пусто — выбери «Все».</p>}
         </section>
       )}
       {gatherRows.length > 0 && (
         <details className="shop-group">
           <summary className="subhead">Добудешь по ходу шагов — можно купить, чтобы не собирать · {gatherRows.length}</summary>
-          <ul className="shop-list">{gatherRows.map(rowView)}</ul>
+          <ul className="shop-list">{visible(gatherRows).map(rowView)}</ul>
         </details>
       )}
       {recRows.length > 0 && (
         <details className="shop-group">
           <summary className="subhead">Рекомендуется, не обязательно · {recRows.length}</summary>
-          <ul className="shop-list">{recRows.map(rowView)}</ul>
+          <ul className="shop-list">{visible(recRows).map(rowView)}</ul>
         </details>
       )}
       {notGeRows.length > 0 && (

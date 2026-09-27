@@ -89,9 +89,9 @@ export function App() {
           </a>
           <nav className="tabs tabs-top" aria-label="Разделы">
             {TABS.map(({ page, href, label, Icon }) => (
-              <a key={page} href={href} className={`tab ${route.page === page ? 'is-active' : ''}`}
+              <a key={page} href={href} className={`tab ${route.page === page ? 'is-active' : ''}`} title={label}
                 aria-current={route.page === page ? 'page' : undefined}>
-                <Icon />{label}
+                <Icon /><span className="tab-label">{label}</span>
               </a>
             ))}
           </nav>

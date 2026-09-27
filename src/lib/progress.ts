@@ -1,7 +1,7 @@
 // Прогресс: хранение, экспорт и импорт JSON, миграция старых сохранений, чистые обновления.
 // Без относительных импортов значений: модуль используют и тесты, и приложение.
 
-import type { GameMode, Progress, StepStatus } from '../types/index.ts';
+import type { GameMode, ManualOwned, Progress, StepStatus } from '../types/index.ts';
 
 export const STORAGE_KEY = 'osrs-put:progress';
 export const EXPORT_APP = 'osrs-put';
@@ -139,6 +139,8 @@ export function normalizeProgress(raw: unknown, known: Known): Normalized | null
     if (kept.length) p.qpKept = kept;
     const dismissed = ids(raw.upgradeDismissedForSteps);
     if (dismissed.length) p.upgradeDismissedForSteps = dismissed;
+    const manual = ownedManualOf(raw.ownedManual);
+    if (Object.keys(manual).length) p.ownedManual = manual;
     if (isObject(raw.legacy)) p.legacy = { steps: statusMap(raw.legacy.steps), notes: stringMap(raw.legacy.notes) };
   }
   return { progress: p, dropped, migrated };
@@ -251,6 +253,45 @@ export function withUpgradeDismissed(p: Progress, stepId: string, dismissed = tr
   if (set.size) next.upgradeDismissedForSteps = [...set];
   else delete next.upgradeDismissedForSteps;
   return touch(next);
+}
+
+/** Сколько предмета игрок может указать вручную: больше в игре не бывает (стопка — до 2 147 483 647). */
+export const MAX_OWNED = 2_147_483_647;
+const OWNED_KEY = /^(id:\d{1,9}|name:.{1,200})$/;
+
+/** Ручные «уже есть» из сохранения: только правильные ключи и целые количества от 0; остальное отбрасывается. */
+export function ownedManualOf(v: unknown): Record<string, ManualOwned> {
+  const out: Record<string, ManualOwned> = {};
+  if (!isObject(v)) return out;
+  for (const [key, raw] of Object.entries(v)) {
+    if (!OWNED_KEY.test(key) || !isObject(raw)) continue;
+    const count = raw.count;
+    if (typeof count !== 'number' || !Number.isInteger(count) || count < 0 || count > MAX_OWNED) continue;
+    const at = typeof raw.updatedAt === 'string' && !Number.isNaN(Date.parse(raw.updatedAt)) ? raw.updatedAt : new Date(0).toISOString();
+    out[key] = { count, updatedAt: at };
+  }
+  return out;
+}
+
+/**
+ * «У меня уже есть»: сколько предмета у игрока, по его словам. null — убрать отметку (снова считать по игре).
+ * Мусор (NaN, дробь, минус, бесконечность) не сохраняется — прогресс не меняется.
+ */
+export function withOwnedManual(p: Progress, key: string, count: number | null): Progress {
+  const next: Record<string, ManualOwned> = { ...(p.ownedManual ?? {}) };
+  if (count === null) {
+    if (!(key in next)) return p;
+    delete next[key];
+  } else {
+    if (!OWNED_KEY.test(key) || !Number.isFinite(count) || count < 0) return p;
+    const n = Math.min(MAX_OWNED, Math.floor(count));
+    if (next[key]?.count === n) return p;
+    next[key] = { count: n, updatedAt: new Date().toISOString() };
+  }
+  const out: Progress = { ...p };
+  if (Object.keys(next).length) out.ownedManual = next;
+  else delete out.ownedManual;
+  return touch(out);
 }
 
 /** V2 Review: шаг проверен, предупреждение скрывается, отметка остаётся. */
