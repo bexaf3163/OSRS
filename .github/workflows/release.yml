@@ -44,6 +44,9 @@ jobs:
           cache: gradle
       - if: steps.v.outputs.exists == 'false'
         run: npm ci
+      # npm 11 не запускает установочные скрипты пакетов сам — Electron для сборки exe скачиваем явно.
+      - if: steps.v.outputs.exists == 'false'
+        run: node node_modules/electron/install.js
       - if: steps.v.outputs.exists == 'false'
         run: npm run check-data
       - if: steps.v.outputs.exists == 'false'
