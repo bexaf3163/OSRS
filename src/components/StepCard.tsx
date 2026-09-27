@@ -114,7 +114,7 @@ function FieldRow({ field }: { field: Field }) {
 
 /** Подробности шага. nextId — какой шаг откроется после отметки (подпись на кнопке в широкой раскладке). */
 export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: string) => void; nextId?: string }) {
-  const { progress, qp, mode, setStep, setNote, review, reactivate } = useStore();
+  const { progress, qp, mode, setStep, review, reactivate } = useStore();
   const { openNpc } = useWiki();
   const status = progress.steps[step.id];
   const blockers = isClosed(progress, step.id) ? null : blockersOf(step, progress, qp);
@@ -252,13 +252,6 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
       )}
 
       <div className="plaque plaque-done"><strong>Готово, когда:</strong> <Inline text={step.doneWhen} /></div>
-
-      <div className="note">
-        <label htmlFor={`note-${step.id}`} className="subhead">Моя заметка</label>
-        <textarea id={`note-${step.id}`} rows={2} value={progress.notes[step.id] ?? ''}
-          placeholder="Например: в банке 12 шкур из 25"
-          onChange={(e) => setNote(step.id, e.target.value)} />
-      </div>
 
       <div className="actions">
         {status === 'done'

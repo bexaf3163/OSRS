@@ -9,6 +9,7 @@
       "slot": "weapon",
       "kind": "dagger",
       "metal": "bronze",
+      "reqFrom": "Bronze dagger",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -44,6 +45,7 @@
       "slot": "weapon",
       "kind": "sword",
       "metal": "bronze",
+      "reqFrom": "Bronze equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -79,6 +81,7 @@
       "slot": "weapon",
       "kind": "scimitar",
       "metal": "bronze",
+      "reqFrom": "Bronze scimitar",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -114,6 +117,7 @@
       "slot": "weapon",
       "kind": "longsword",
       "metal": "bronze",
+      "reqFrom": "Bronze longsword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -149,6 +153,7 @@
       "slot": "weapon",
       "kind": "mace",
       "metal": "bronze",
+      "reqFrom": "Bronze mace",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -185,6 +190,7 @@
       "slot": "weapon",
       "kind": "warhammer",
       "metal": "bronze",
+      "reqFrom": "Bronze equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -212,6 +218,7 @@
       "slot": "weapon",
       "kind": "battleaxe",
       "metal": "bronze",
+      "reqFrom": "Bronze battleaxe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -248,6 +255,7 @@
       "kind": "2h sword",
       "metal": "bronze",
       "twoHanded": true,
+      "reqFrom": "Bronze 2h sword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -275,6 +283,7 @@
       "slot": "weapon",
       "kind": "axe",
       "metal": "bronze",
+      "reqFrom": "Bronze axe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -316,6 +325,7 @@
       "slot": "weapon",
       "kind": "pickaxe",
       "metal": "bronze",
+      "reqFrom": "Bronze equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -375,6 +385,7 @@
       "slot": "head",
       "kind": "full helm",
       "metal": "bronze",
+      "reqFrom": "Bronze full helm",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -409,6 +420,7 @@
       "slot": "head",
       "kind": "med helm",
       "metal": "bronze",
+      "reqFrom": "Bronze equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -443,6 +455,7 @@
       "slot": "body",
       "kind": "platebody",
       "metal": "bronze",
+      "reqFrom": "Bronze platebody",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -477,6 +490,7 @@
       "slot": "body",
       "kind": "chainbody",
       "metal": "bronze",
+      "reqFrom": "Bronze chainbody",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -517,6 +531,7 @@
       "slot": "legs",
       "kind": "platelegs",
       "metal": "bronze",
+      "reqFrom": "Bronze platelegs",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -551,6 +566,7 @@
       "slot": "legs",
       "kind": "plateskirt",
       "metal": "bronze",
+      "reqFrom": "Bronze equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -585,6 +601,7 @@
       "slot": "shield",
       "kind": "kiteshield",
       "metal": "bronze",
+      "reqFrom": "Bronze kiteshield",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -619,6 +636,7 @@
       "slot": "shield",
       "kind": "sq shield",
       "metal": "bronze",
+      "reqFrom": "Bronze equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -653,6 +671,7 @@
       "slot": "weapon",
       "kind": "dagger",
       "metal": "iron",
+      "reqFrom": "Iron equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -688,6 +707,7 @@
       "slot": "weapon",
       "kind": "sword",
       "metal": "iron",
+      "reqFrom": "Iron equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -723,6 +743,7 @@
       "slot": "weapon",
       "kind": "scimitar",
       "metal": "iron",
+      "reqFrom": "Iron equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -758,6 +779,7 @@
       "slot": "weapon",
       "kind": "longsword",
       "metal": "iron",
+      "reqFrom": "Iron longsword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -793,6 +815,7 @@
       "slot": "weapon",
       "kind": "mace",
       "metal": "iron",
+      "reqFrom": "Iron mace",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -829,6 +852,7 @@
       "slot": "weapon",
       "kind": "warhammer",
       "metal": "iron",
+      "reqFrom": "Iron warhammer",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -856,6 +880,7 @@
       "slot": "weapon",
       "kind": "battleaxe",
       "metal": "iron",
+      "reqFrom": "Iron battleaxe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -898,6 +923,7 @@
       "kind": "2h sword",
       "metal": "iron",
       "twoHanded": true,
+      "reqFrom": "Iron 2h sword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -925,6 +951,7 @@
       "slot": "weapon",
       "kind": "axe",
       "metal": "iron",
+      "reqFrom": "Iron equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -960,6 +987,7 @@
       "slot": "weapon",
       "kind": "pickaxe",
       "metal": "iron",
+      "reqFrom": "Iron equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1001,6 +1029,7 @@
       "slot": "head",
       "kind": "full helm",
       "metal": "iron",
+      "reqFrom": "Iron full helm",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1035,6 +1064,7 @@
       "slot": "head",
       "kind": "med helm",
       "metal": "iron",
+      "reqFrom": "Iron equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1069,6 +1099,7 @@
       "slot": "body",
       "kind": "platebody",
       "metal": "iron",
+      "reqFrom": "Iron platebody",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1103,6 +1134,7 @@
       "slot": "body",
       "kind": "chainbody",
       "metal": "iron",
+      "reqFrom": "Iron chainbody",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1143,6 +1175,7 @@
       "slot": "legs",
       "kind": "platelegs",
       "metal": "iron",
+      "reqFrom": "Iron platelegs",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1183,6 +1216,7 @@
       "slot": "legs",
       "kind": "plateskirt",
       "metal": "iron",
+      "reqFrom": "Iron equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1217,6 +1251,7 @@
       "slot": "shield",
       "kind": "kiteshield",
       "metal": "iron",
+      "reqFrom": "Iron kiteshield",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1251,6 +1286,7 @@
       "slot": "shield",
       "kind": "sq shield",
       "metal": "iron",
+      "reqFrom": "Iron equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1288,6 +1324,7 @@
       "req": {
         "attack": 5
       },
+      "reqFrom": "Steel dagger",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1326,6 +1363,7 @@
       "req": {
         "attack": 5
       },
+      "reqFrom": "Steel sword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1364,6 +1402,7 @@
       "req": {
         "attack": 5
       },
+      "reqFrom": "Steel scimitar",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1402,6 +1441,7 @@
       "req": {
         "attack": 5
       },
+      "reqFrom": "Steel longsword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1440,6 +1480,7 @@
       "req": {
         "attack": 5
       },
+      "reqFrom": "Steel mace",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1479,6 +1520,7 @@
       "req": {
         "strength": 5
       },
+      "reqFrom": "Steel warhammer",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1509,6 +1551,7 @@
       "req": {
         "attack": 5
       },
+      "reqFrom": "Steel battleaxe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1554,6 +1597,7 @@
       "req": {
         "attack": 5
       },
+      "reqFrom": "Steel 2h sword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1584,6 +1628,7 @@
       "req": {
         "attack": 5
       },
+      "reqFrom": "Steel axe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1622,6 +1667,7 @@
       "req": {
         "attack": 5
       },
+      "reqFrom": "Steel pickaxe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1666,6 +1712,7 @@
       "req": {
         "defence": 5
       },
+      "reqFrom": "Steel full helm",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1703,6 +1750,7 @@
       "req": {
         "defence": 5
       },
+      "reqFrom": "Steel med helm",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1740,6 +1788,7 @@
       "req": {
         "defence": 5
       },
+      "reqFrom": "Steel platebody",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1777,6 +1826,7 @@
       "req": {
         "defence": 5
       },
+      "reqFrom": "Steel chainbody",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1820,6 +1870,7 @@
       "req": {
         "defence": 5
       },
+      "reqFrom": "Steel platelegs",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1857,6 +1908,7 @@
       "req": {
         "defence": 5
       },
+      "reqFrom": "Steel plateskirt",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1894,6 +1946,7 @@
       "req": {
         "defence": 5
       },
+      "reqFrom": "Steel kiteshield",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1931,6 +1984,7 @@
       "req": {
         "defence": 5
       },
+      "reqFrom": "Steel sq shield",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -1968,6 +2022,7 @@
       "req": {
         "attack": 10
       },
+      "reqFrom": "Black dagger",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2006,6 +2061,7 @@
       "req": {
         "attack": 10
       },
+      "reqFrom": "Black sword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2044,6 +2100,7 @@
       "req": {
         "attack": 10
       },
+      "reqFrom": "Black scimitar",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2074,6 +2131,7 @@
       "req": {
         "attack": 10
       },
+      "reqFrom": "Black longsword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2112,6 +2170,7 @@
       "req": {
         "attack": 10
       },
+      "reqFrom": "Black mace",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2143,6 +2202,7 @@
       "req": {
         "strength": 10
       },
+      "reqFrom": "Black warhammer",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2173,6 +2233,7 @@
       "req": {
         "attack": 10
       },
+      "reqFrom": "Black battleaxe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2212,6 +2273,7 @@
       "req": {
         "attack": 10
       },
+      "reqFrom": "Black 2h sword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2242,6 +2304,7 @@
       "req": {
         "attack": 10
       },
+      "reqFrom": "Black axe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2272,6 +2335,7 @@
       "req": {
         "attack": 10
       },
+      "reqFrom": "Black pickaxe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2302,6 +2366,7 @@
       "req": {
         "defence": 10
       },
+      "reqFrom": "Black full helm",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2339,6 +2404,7 @@
       "req": {
         "defence": 10
       },
+      "reqFrom": "Black med helm",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2368,6 +2434,7 @@
       "req": {
         "defence": 10
       },
+      "reqFrom": "Black platebody",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2405,6 +2472,7 @@
       "req": {
         "defence": 10
       },
+      "reqFrom": "Black chainbody",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2442,6 +2510,7 @@
       "req": {
         "defence": 10
       },
+      "reqFrom": "Black platelegs",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2485,6 +2554,7 @@
       "req": {
         "defence": 10
       },
+      "reqFrom": "Black plateskirt",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2522,6 +2592,7 @@
       "req": {
         "defence": 10
       },
+      "reqFrom": "Black kiteshield",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2551,6 +2622,7 @@
       "req": {
         "defence": 10
       },
+      "reqFrom": "Black sq shield",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2580,6 +2652,7 @@
       "req": {
         "attack": 20
       },
+      "reqFrom": "Mithril dagger",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2618,6 +2691,7 @@
       "req": {
         "attack": 20
       },
+      "reqFrom": "Mithril sword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2656,6 +2730,7 @@
       "req": {
         "attack": 20
       },
+      "reqFrom": "Mithril scimitar",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2694,6 +2769,7 @@
       "req": {
         "attack": 20
       },
+      "reqFrom": "Mithril longsword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2732,6 +2808,7 @@
       "req": {
         "attack": 20
       },
+      "reqFrom": "Mithril mace",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2771,6 +2848,7 @@
       "req": {
         "strength": 20
       },
+      "reqFrom": "Mithril warhammer",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2801,6 +2879,7 @@
       "req": {
         "attack": 20
       },
+      "reqFrom": "Mithril battleaxe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2846,6 +2925,7 @@
       "req": {
         "attack": 20
       },
+      "reqFrom": "Mithril 2h sword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2876,6 +2956,7 @@
       "req": {
         "attack": 20
       },
+      "reqFrom": "Mithril axe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2906,6 +2987,7 @@
       "req": {
         "attack": 20
       },
+      "reqFrom": "Mithril pickaxe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2950,6 +3032,7 @@
       "req": {
         "defence": 20
       },
+      "reqFrom": "Mithril full helm",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -2987,6 +3070,7 @@
       "req": {
         "defence": 20
       },
+      "reqFrom": "Mithril med helm",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3024,6 +3108,7 @@
       "req": {
         "defence": 20
       },
+      "reqFrom": "Mithril platebody",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3061,6 +3146,7 @@
       "req": {
         "defence": 20
       },
+      "reqFrom": "Mithril chainbody",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3104,6 +3190,7 @@
       "req": {
         "defence": 20
       },
+      "reqFrom": "Mithril platelegs",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3141,6 +3228,7 @@
       "req": {
         "defence": 20
       },
+      "reqFrom": "Mithril plateskirt",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3178,6 +3266,7 @@
       "req": {
         "defence": 20
       },
+      "reqFrom": "Mithril kiteshield",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3207,6 +3296,7 @@
       "req": {
         "defence": 20
       },
+      "reqFrom": "Mithril sq shield",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3244,7 +3334,7 @@
       "req": {
         "attack": 30
       },
-      "reqUnverified": true,
+      "reqFrom": "Adamant equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3283,6 +3373,7 @@
       "req": {
         "attack": 30
       },
+      "reqFrom": "Adamant sword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3321,6 +3412,7 @@
       "req": {
         "attack": 30
       },
+      "reqFrom": "Adamant scimitar",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3351,6 +3443,7 @@
       "req": {
         "attack": 30
       },
+      "reqFrom": "Adamant longsword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3389,6 +3482,7 @@
       "req": {
         "attack": 30
       },
+      "reqFrom": "Adamant mace",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3428,6 +3522,7 @@
       "req": {
         "strength": 30
       },
+      "reqFrom": "Adamant warhammer",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3458,6 +3553,7 @@
       "req": {
         "attack": 30
       },
+      "reqFrom": "Adamant battleaxe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3497,6 +3593,7 @@
       "req": {
         "attack": 30
       },
+      "reqFrom": "Adamant 2h sword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3527,6 +3624,7 @@
       "req": {
         "attack": 30
       },
+      "reqFrom": "Adamant axe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3557,6 +3655,7 @@
       "req": {
         "attack": 30
       },
+      "reqFrom": "Adamant pickaxe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3601,6 +3700,7 @@
       "req": {
         "defence": 30
       },
+      "reqFrom": "Adamant full helm",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3638,6 +3738,7 @@
       "req": {
         "defence": 30
       },
+      "reqFrom": "Adamant med helm",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3675,6 +3776,7 @@
       "req": {
         "defence": 30
       },
+      "reqFrom": "Adamant platebody",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3712,6 +3814,7 @@
       "req": {
         "defence": 30
       },
+      "reqFrom": "Adamant chainbody",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3749,6 +3852,7 @@
       "req": {
         "defence": 30
       },
+      "reqFrom": "Adamant platelegs",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3786,6 +3890,7 @@
       "req": {
         "defence": 30
       },
+      "reqFrom": "Adamant plateskirt",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3823,6 +3928,7 @@
       "req": {
         "defence": 30
       },
+      "reqFrom": "Adamant kiteshield",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3852,6 +3958,7 @@
       "req": {
         "defence": 30
       },
+      "reqFrom": "Adamant sq shield",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3881,6 +3988,7 @@
       "req": {
         "attack": 40
       },
+      "reqFrom": "Rune dagger",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3911,6 +4019,7 @@
       "req": {
         "attack": 40
       },
+      "reqFrom": "Rune sword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3949,6 +4058,7 @@
       "req": {
         "attack": 40
       },
+      "reqFrom": "Rune scimitar",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -3979,6 +4089,7 @@
       "req": {
         "attack": 40
       },
+      "reqFrom": "Rune longsword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4017,6 +4128,7 @@
       "req": {
         "attack": 40
       },
+      "reqFrom": "Rune mace",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4056,6 +4168,7 @@
       "req": {
         "strength": 40
       },
+      "reqFrom": "Rune warhammer",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4086,6 +4199,7 @@
       "req": {
         "attack": 40
       },
+      "reqFrom": "Rune battleaxe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4117,6 +4231,7 @@
       "req": {
         "attack": 40
       },
+      "reqFrom": "Rune 2h sword",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4147,6 +4262,7 @@
       "req": {
         "attack": 40
       },
+      "reqFrom": "Rune axe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4177,6 +4293,7 @@
       "req": {
         "attack": 40
       },
+      "reqFrom": "Rune pickaxe",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4221,6 +4338,7 @@
       "req": {
         "defence": 40
       },
+      "reqFrom": "Rune full helm",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4250,6 +4368,7 @@
       "req": {
         "defence": 40
       },
+      "reqFrom": "Rune med helm",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4277,8 +4396,12 @@
       "kind": "platebody",
       "metal": "rune",
       "req": {
-        "defence": 40
+        "defence": 40,
+        "quests": [
+          "Dragon Slayer I"
+        ]
       },
+      "reqFrom": "Rune platebody",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4316,6 +4439,7 @@
       "req": {
         "defence": 40
       },
+      "reqFrom": "Rune chainbody",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4353,6 +4477,7 @@
       "req": {
         "defence": 40
       },
+      "reqFrom": "Rune platelegs",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4390,6 +4515,7 @@
       "req": {
         "defence": 40
       },
+      "reqFrom": "Rune plateskirt",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4427,6 +4553,7 @@
       "req": {
         "defence": 40
       },
+      "reqFrom": "Rune kiteshield",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4456,6 +4583,7 @@
       "req": {
         "defence": 40
       },
+      "reqFrom": "Rune sq shield",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4481,6 +4609,7 @@
       "nameRu": "Амулет точности",
       "slot": "neck",
       "kind": "amulet",
+      "reqFrom": "Free-to-play PvP equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4506,6 +4635,7 @@
       "nameRu": "Амулет защиты",
       "slot": "neck",
       "kind": "amulet",
+      "reqFrom": "Free-to-play PvP equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4531,6 +4661,7 @@
       "nameRu": "Амулет силы",
       "slot": "neck",
       "kind": "amulet",
+      "reqFrom": "Free-to-play PvP equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4556,6 +4687,7 @@
       "nameRu": "Амулет мощи",
       "slot": "neck",
       "kind": "amulet",
+      "reqFrom": "Amulet of power",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4582,6 +4714,7 @@
       "nameRu": "Деревянный щит",
       "slot": "shield",
       "kind": "shield",
+      "reqFrom": "Free-to-play PvP equipment",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4615,6 +4748,7 @@
       "nameRu": "Кожаная куртка",
       "slot": "body",
       "kind": "leather",
+      "reqFrom": "Leather body",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4648,6 +4782,7 @@
       "nameRu": "Кожаные штаны",
       "slot": "legs",
       "kind": "leather",
+      "reqFrom": "Leather armour",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4673,6 +4808,10 @@
       "nameRu": "Капюшон",
       "slot": "head",
       "kind": "leather",
+      "req": {
+        "ranged": 20
+      },
+      "reqFrom": "Coif",
       "members": false,
       "tradeable": true,
       "attack": {
@@ -4709,6 +4848,7 @@
       "req": {
         "defence": 10
       },
+      "reqFrom": "Hardleather body",
       "members": false,
       "tradeable": true,
       "attack": {

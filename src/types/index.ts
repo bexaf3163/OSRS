@@ -299,6 +299,18 @@ export type GearSlot = 'weapon' | 'head' | 'body' | 'legs' | 'shield' | 'neck';
 export interface GearStats { stab: number; slash: number; crush: number; magic: number; ranged: number }
 
 /** Предмет снаряжения с OSRS Wiki (gear.json): бонусы, требование, магазины. */
+/** Требования к надеванию. Уровень 1 не пишется — это не требование. */
+export interface GearRequirements {
+  attack?: number;
+  strength?: number;
+  defence?: number;
+  ranged?: number;
+  magic?: number;
+  prayer?: number;
+  /** Квесты, без которых предмет не надеть: Rune platebody — Dragon Slayer I. */
+  quests?: string[];
+}
+
 export interface GearPiece {
   id: number;
   name: string;
@@ -308,9 +320,11 @@ export interface GearPiece {
   kind: string;
   metal?: 'bronze' | 'iron' | 'steel' | 'black' | 'mithril' | 'adamant' | 'rune';
   twoHanded?: boolean;
-  /** Уровень, с которого можно надеть: { attack: 5 }, { defence: 20 }, у молотов { strength: 5 }. Нет — с первого. */
-  req?: { attack?: number; defence?: number; strength?: number };
-  /** Требование не нашлось в статье (взято по металлу): такой предмет не советуем, только узнаём на персонаже. */
+  /** Что нужно, чтобы надеть: { attack: 5 }, у молотов { strength: 5 }, у Coif { ranged: 20 }, квесты. Нет — требований нет (если есть reqFrom). */
+  req?: GearRequirements;
+  /** Статья вики, где сказано о требованиях (или об их отсутствии). */
+  reqFrom?: string;
+  /** Вики о требованиях молчит: такой предмет не советуем, только узнаём на персонаже. */
   reqUnverified?: boolean;
   members: boolean;
   tradeable: boolean;

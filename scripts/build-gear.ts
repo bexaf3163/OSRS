@@ -3,14 +3,16 @@
 // с которыми сравнивается оружие. Нужна сеть. Запуск: npm run build-gear (около минуты).
 //
 // Данные — только с вики: ID, бонусы и скорость (Bucket infobox_bonuses), магазины и цены (storeline),
-// требование к уровню — из текста статьи, монстры — Bucket infobox_monster. От себя здесь лишь список
-// предметов и русские названия.
+// требования — из текста статьи предмета, а если она молчит — из статьи набора («Adamant equipment») или обзора
+// «Free-to-play PvP equipment» (scripts/gear-requirements.ts), монстры — Bucket infobox_monster. От себя здесь лишь
+// список предметов и русские названия.
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { fetchBonuses, fetchItemInfobox, fetchMonsters, fetchStores, fetchWikitext, type ItemBonuses } from '../src/services/wikiApi.ts';
-import type { Foe, FoeData, GearData, GearPiece, GearSlot, Step } from '../src/types/index.ts';
+import type { Foe, FoeData, GearData, GearPiece, GearRequirements, GearSlot, Step } from '../src/types/index.ts';
+import { listedWithoutRequirements, requirementsFromText, setRule } from './gear-requirements.ts';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const OUT = `${root}src/data/gear.json`;
@@ -52,14 +54,14 @@ const KINDS: { kind: string; en: string; slot: GearSlot; g: 0 | 1 | 2; ru: strin
 ];
 
 /** Без металла: амулеты и вещи с обучающего острова и из начала пути. */
-const EXTRA: { name: string; ru: string; kind: string }[] = [
+const EXTRA: { name: string; ru: string; kind: string; set?: string }[] = [
   { name: 'Amulet of accuracy', ru: 'Амулет точности', kind: 'amulet' },
   { name: 'Amulet of defence', ru: 'Амулет защиты', kind: 'amulet' },
   { name: 'Amulet of strength', ru: 'Амулет силы', kind: 'amulet' },
   { name: 'Amulet of power', ru: 'Амулет мощи', kind: 'amulet' },
   { name: 'Wooden shield', ru: 'Деревянный щит', kind: 'shield' },
-  { name: 'Leather body', ru: 'Кожаная куртка', kind: 'leather' },
-  { name: 'Leather chaps', ru: 'Кожаные штаны', kind: 'leather' },
+  { name: 'Leather body', ru: 'Кожаная куртка', kind: 'leather', set: 'Leather armour' },
+  { name: 'Leather chaps', ru: 'Кожаные штаны', kind: 'leather', set: 'Leather armour' },
   { name: 'Coif', ru: 'Капюшон', kind: 'leather' },
   { name: 'Hardleather body', ru: 'Куртка из жёсткой кожи', kind: 'leather' },
 ];
@@ -80,42 +82,27 @@ const fetchFn = async (url: string) => {
   }
 };
 
-const CACHE = `${root}node_modules/.cache/osrs-put-gear.json`;
+// v2: требования всех боевых навыков и квесты (reqFrom) — старый кэш их не знает.
+const CACHE = `${root}node_modules/.cache/osrs-put-gear-v2.json`;
 const cache: Record<string, GearPiece> = (() => {
   if (process.argv.includes('--fresh') || !existsSync(CACHE)) return {};
   try { return JSON.parse(readFileSync(CACHE, 'utf8')); } catch { return {}; }
 })();
 const saveCache = () => { mkdirSync(dirname(CACHE), { recursive: true }); writeFileSync(CACHE, JSON.stringify(cache)); };
 
-type ReqSkill = 'attack' | 'defence' | 'strength';
-
-/**
- * Требование из текста статьи: «requires 5 [[Strength]]», «requires an [[Attack]] level of 20»,
- * «at least level 30 in [[Defence]]», «{{SCP|Defence|20}}». Только обычные абзацы — не карточки,
- * не таблицы и не списки изменений («now require level 5 Strength» — история, а не правило).
- */
-export function requirementFromText(text: string): { skill: ReqSkill; level: number } | null {
-  const prose = text.split('\n').filter((l) => l.trim() && !/^\s*[|{}!*#:]/.test(l)).join('\n');
-  const S = '(Attack|Defence|Strength)';
-  const patterns: [RegExp, number, number][] = [
-    [new RegExp(`\\{\\{SCP\\|${S}\\|(\\d+)`, 'i'), 1, 2],
-    [new RegExp(`(\\d+)\\s*\\[\\[${S}(?:\\|[^\\]]*)?\\]\\]`, 'i'), 2, 1],
-    [new RegExp(`\\[\\[${S}(?:\\|[^\\]]*)?\\]\\]\\s+level\\s+of\\s+(\\d+)`, 'i'), 1, 2],
-    [new RegExp(`level\\s+(\\d+)\\s+in\\s+\\[\\[${S}`, 'i'), 2, 1],
-  ];
-  let best: { at: number; skill: ReqSkill; level: number } | null = null;
-  for (const [re, si, li] of patterns) {
-    const m = prose.match(re);
-    if (m && (!best || m.index! < best.at)) best = { at: m.index!, skill: m[si].toLowerCase() as ReqSkill, level: Number(m[li]) };
-  }
-  return best && { skill: best.skill, level: best.level };
+const OVERVIEW = 'Free-to-play PvP equipment';
+const pages = new Map<string, string | null>();
+/** Статья набора или обзора — одна загрузка на все предметы. */
+async function pageText(name: string): Promise<string | null> {
+  if (!pages.has(name)) pages.set(name, (await fetchWikitext(fetchFn, name))?.text ?? null);
+  return pages.get(name)!;
 }
 
-const wanted: { name: string; ru: string; kind: string; metal?: Metal; slot?: GearSlot }[] = [
+const wanted: { name: string; ru: string; kind: string; metal?: Metal; slot?: GearSlot; set?: string }[] = [
   ...METALS.flatMap((metal) => KINDS.map((k) => ({
     name: `${metal[0].toUpperCase()}${metal.slice(1)} ${k.en}`,
     ru: `${METAL_RU[metal][k.g]} ${k.ru}`,
-    kind: k.kind, metal, slot: k.slot,
+    kind: k.kind, metal, slot: k.slot, set: `${metal[0].toUpperCase()}${metal.slice(1)} equipment`,
   }))),
   ...EXTRA,
 ];
@@ -140,21 +127,24 @@ for (const w of wanted) {
   if (!b) { problems.push(`${w.name}: нет бонусов`); continue; }
   const slot = SLOT[b.slot];
   if (!slot || (w.slot && w.slot !== slot)) { problems.push(`${w.name}: слот «${b.slot}»`); continue; }
+  // Требования: статья предмета → статья набора → обзор бесплатного снаряжения. Нигде нет — «не проверено».
   const page = await fetchWikitext(fetchFn, box.pageName);
-  const found = page ? requirementFromText(page.text) : null;
-  const expected = w.metal ? METAL_LEVEL[w.metal] : 1;
-  let skill: ReqSkill = slot === 'weapon' ? 'attack' : 'defence';
-  let level = expected;
-  // Статья главнее правила металла: у молотов, например, требование к силе, а не к атаке.
-  let unverified = false;
-  if (found) {
-    if (found.skill !== skill || found.level !== expected) problems.push(`${w.name}: в статье ${found.level} ${found.skill}, по металлу ${expected} ${skill}`);
-    skill = found.skill;
-    level = found.level;
-  } else if (expected > 1) {
-    unverified = true;
-    problems.push(`${w.name}: требование не найдено в статье, по металлу ${expected} ${skill} — в советы не пойдёт`);
+  const own = page ? requirementsFromText(page.text) : null;
+  let req: GearRequirements | null = own === 'none' ? {} : own;
+  let reqFrom = req ? box.pageName : undefined;
+  if (!req && w.set) {
+    const set = await pageText(w.set);
+    const r = set ? setRule(set, slot === 'weapon' ? 'weapons' : 'armour', w.kind) : null;
+    if (r) { req = r === 'none' ? {} : r; reqFrom = w.set; }
   }
+  if (!req) {
+    const overview = await pageText(OVERVIEW);
+    if (overview && listedWithoutRequirements(overview, box.name)) { req = {}; reqFrom = OVERVIEW; }
+  }
+  if (!req) problems.push(`${w.name}: требования не найдены ни в статье, ни в статье набора — в советы не пойдёт`);
+  // Сверка с правилом металла («Players require 5 Attack to wield steel weapons»): расхождение — на проверку.
+  const top = Math.max(1, ...Object.entries(req ?? {}).filter(([k]) => k !== 'quests').map(([, v]) => v as number));
+  if (req && w.metal && top !== METAL_LEVEL[w.metal]) problems.push(`${w.name}: в статье ${JSON.stringify(req)}, по металлу ${METAL_LEVEL[w.metal]}`);
   const stores = (await fetchStores(fetchFn, box.name).catch(() => [])).filter((s) => !s.members);
   const item: GearPiece = {
     id: box.id,
@@ -164,8 +154,8 @@ for (const w of wanted) {
     kind: w.kind,
     ...(w.metal ? { metal: w.metal } : {}),
     ...(b.slot === '2h' ? { twoHanded: true } : {}),
-    ...(level > 1 ? { req: { [skill]: level } } : {}),
-    ...(unverified ? { reqUnverified: true } : {}),
+    ...(req && Object.keys(req).length ? { req } : {}),
+    ...(req ? { reqFrom } : { reqUnverified: true }),
     members: box.members,
     tradeable: box.tradeable,
     attack: b.attack,

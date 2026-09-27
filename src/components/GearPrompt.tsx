@@ -39,7 +39,7 @@ export function ActionSource({ a, onShow }: { a: GearAction; onShow: ReturnType<
           <PlaceButton query={{ kind: 'shop', location: s.location, shop: s.shop, npc: s.npc }} onShow={onShow}>{s.shop} • {s.location}</PlaceButton>
           {s.npc && <span className="muted"> · продавец {s.npc}</span>}
           <> · {formatGp(s.price)} gp</>
-          {s.toll ? <span className="muted"> (+{s.toll} gp за шлагбаум)</span> : null}
+          {s.toll ? <span className="muted"> (+{s.toll} gp за проход в Al Kharid)</span> : null}
         </>
       ) : (
         <>Grand Exchange{s.kind === 'ge' && s.price !== undefined ? <> · ~{formatGp(s.price)} gp</> : <span className="muted"> · цена не загрузилась</span>}</>

@@ -41,7 +41,7 @@ export function stepFoes(step: Pick<Step, 'foes'>): Foe[] {
   return (step.foes ?? []).map((n) => foeByName.get(n)).filter((f): f is Foe => Boolean(f));
 }
 
-export interface Levels { attack: number; strength: number; defence: number; prayer?: number }
+export interface Levels { attack: number; strength: number; defence: number; prayer?: number; ranged?: number; magic?: number }
 
 // ---------------------------------------------------------------------------
 // Урон (OSRS Wiki, Damage per second/Melee)
@@ -246,6 +246,8 @@ export interface AdvisorInput {
   routeNeeds?: ReadonlyMap<string, string>;
   /** Противники шага (stepFoes): с ними сравнивается оружие. Пусто — корова. */
   foes?: readonly Foe[];
+  /** Выполненные квесты. Предмет с квестом в требованиях (Rune platebody — Dragon Slayer I) без него не советуем. */
+  questsDone?: ReadonlySet<string>;
   data?: GearData;
 }
 
@@ -255,12 +257,42 @@ export const TOLL = 10;
 /** Уровни с запасом: без данных — 1 (так советы не обещают то, что ещё нельзя надеть). */
 function levelsOf(raw: Partial<Record<string, number>>): Levels {
   const n = (k: string) => (typeof raw[k] === 'number' && raw[k]! >= 1 ? raw[k]! : 1);
-  return { attack: n('attack'), strength: n('strength'), defence: n('defence'), ...(raw.prayer ? { prayer: raw.prayer } : {}) };
+  const opt = (k: 'prayer' | 'ranged' | 'magic') => (typeof raw[k] === 'number' && raw[k]! >= 1 ? { [k]: raw[k] } : {});
+  return { attack: n('attack'), strength: n('strength'), defence: n('defence'), ...opt('prayer'), ...opt('ranged'), ...opt('magic') };
 }
 
-export function canWear(p: GearPiece, lv: Levels): boolean {
+const REQ_SKILLS = ['attack', 'strength', 'defence', 'ranged', 'magic', 'prayer'] as const;
+const SKILL_EN: Record<(typeof REQ_SKILLS)[number], string> = {
+  attack: 'Attack', strength: 'Strength', defence: 'Defence', ranged: 'Ranged', magic: 'Magic', prayer: 'Prayer',
+};
+
+export type MissingRequirement =
+  | { kind: 'skill'; skill: (typeof REQ_SKILLS)[number]; need: number; have: number }
+  | { kind: 'quest'; quest: string };
+
+/**
+ * Чего не хватает, чтобы надеть: уровни всех боевых навыков и квесты. Неизвестный уровень считается первым,
+ * неизвестный квест — невыполненным: совет не должен обещать то, что может не надеться.
+ */
+export function missingRequirements(p: GearPiece, lv: Levels, quests: ReadonlySet<string> = new Set()): MissingRequirement[] {
   const r = p.req ?? {};
-  return (r.attack ?? 1) <= lv.attack && (r.defence ?? 1) <= lv.defence && (r.strength ?? 1) <= lv.strength;
+  const out: MissingRequirement[] = [];
+  for (const skill of REQ_SKILLS) {
+    const need = r[skill] ?? 1;
+    const have = lv[skill] ?? 1;
+    if (need > have) out.push({ kind: 'skill', skill, need, have });
+  }
+  for (const quest of r.quests ?? []) if (!quests.has(quest)) out.push({ kind: 'quest', quest });
+  return out;
+}
+
+export function canWear(p: GearPiece, lv: Levels, quests?: ReadonlySet<string>): boolean {
+  return missingRequirements(p, lv, quests).length === 0;
+}
+
+/** «20 Ranged (сейчас 17), квест Dragon Slayer I» — чего не хватает до предмета. */
+export function missingText(missing: MissingRequirement[]): string {
+  return missing.map((m) => (m.kind === 'skill' ? `${m.need} ${SKILL_EN[m.skill]} (сейчас ${m.have})` : `квест ${m.quest}`)).join(', ');
 }
 
 function pieceOf(id: number, name: string, data: GearData): GearPiece | null {
@@ -304,7 +336,7 @@ function sourcesOf(p: GearPiece, input: AdvisorInput): Source[] {
   const ge: Source[] = p.tradeable ? [{ kind: 'ge', ...(input.gePrices?.has(p.id) ? { price: input.gePrices.get(p.id) } : {}) }] : [];
   const priced = [...shops, ...ge].sort((a, b) => priceOf(a, Infinity) - priceOf(b, Infinity));
   // Магазин немногим дороже биржи — сначала магазин: цена точная, сделку ждать не надо, и в начале пути
-  // он обычно рядом (Zeke — у коровника за шлагбаумом, биржа — в Varrock). Биржа остаётся «или …».
+  // он обычно рядом (Zeke — у коровника за воротами Al Kharid, биржа — в Varrock). Биржа остаётся «или …».
   const cheapest = priced[0];
   if (cheapest?.kind === 'ge' && cheapest.price !== undefined) {
     const shop = priced.find((s) => s.kind === 'shop' && priceOf(s, Infinity) - cheapest.price! < SAVE_GP);
@@ -313,15 +345,15 @@ function sourcesOf(p: GearPiece, input: AdvisorInput): Source[] {
   return [...out, ...priced];
 }
 
-/** Цена источника: у магазина — с шлагбаумом; бесплатно — 0; неизвестно — fallback. */
+/** Цена источника: у магазина — с платой за проход; бесплатно — 0; неизвестно — fallback. */
 function priceOf(s: Source, fallback: number): number {
   if (s.kind === 'bag' || s.kind === 'bank') return 0;
   if (s.kind === 'shop') return s.price + (s.toll ?? 0);
   return s.price ?? fallback;
 }
 
-function allowed(p: GearPiece, lv: Levels, mode: GameMode): boolean {
-  return (!p.members || mode === 'members') && !p.reqUnverified && canWear(p, lv);
+function allowed(p: GearPiece, lv: Levels, mode: GameMode, quests?: ReadonlySet<string>): boolean {
+  return (!p.members || mode === 'members') && !p.reqUnverified && canWear(p, lv, quests);
 }
 
 /** Молитвы на атаку и силу по уровню молитвы (OSRS Wiki: уровень и множитель каждой). */
@@ -363,7 +395,7 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
 
   // Оружие: лучший урон в секунду при твоих уровнях. Неизвестное программе оружие в руке сравнить нельзя —
   // тогда урон «сейчас» считается без него, а текст совета говорит только о новом оружии (gainText).
-  const weapons = data.items.filter((p) => p.slot === 'weapon' && WEAPON_KINDS.has(p.kind) && allowed(p, lv, input.mode));
+  const weapons = data.items.filter((p) => p.slot === 'weapon' && WEAPON_KINDS.has(p.kind) && allowed(p, lv, input.mode, input.questsDone));
   for (const p of weapons) {
     if (weapon && p.id === weapon.id) continue;
     const ratio = meleeValue(lv, p, neckPiece, foes) / valueNow;
@@ -373,7 +405,7 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   }
 
   // Амулет: урон с оружием в руке; защита — для амулета защиты и мощи.
-  for (const p of data.items.filter((i) => i.slot === 'neck' && allowed(i, lv, input.mode))) {
+  for (const p of data.items.filter((i) => i.slot === 'neck' && allowed(i, lv, input.mode, input.questsDone))) {
     if (equipped.neck && p.id === equipped.neck.id) continue;
     const after = meleeWith(lv, weaponPiece, p, {}, foes[0]);
     const ratio = meleeValue(lv, weaponPiece, p, foes) / valueNow;
@@ -388,7 +420,7 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   for (const slot of ['head', 'body', 'legs', 'shield'] as const) {
     const cur = equipped[slot];
     const before = defenceSum(cur?.piece ?? null);
-    for (const p of data.items.filter((i) => i.slot === slot && allowed(i, lv, input.mode))) {
+    for (const p of data.items.filter((i) => i.slot === slot && allowed(i, lv, input.mode, input.questsDone))) {
       if (cur && p.id === cur.id) continue;
       const after = defenceSum(p);
       if (after - before < WORTH.defence) continue;
@@ -544,7 +576,7 @@ export function sourceText(s: Source): string {
   if (s.kind === 'bag') return 'уже в сумке';
   if (s.kind === 'bank') return 'лежит в банке';
   if (s.kind === 'ge') return s.price !== undefined ? `на бирже ~${gp(s.price)} gp` : 'на бирже (цена не загрузилась)';
-  return `${s.npc ? `у ${s.npc} ` : ''}в ${s.shop} (${s.location}) — ${gp(s.price)} gp${s.toll ? ` + ${s.toll} gp за шлагбаум` : ''}`;
+  return `${s.npc ? `у ${s.npc} ` : ''}в ${s.shop} (${s.location}) — ${gp(s.price)} gp${s.toll ? ` + ${s.toll} gp за проход в Al Kharid` : ''}`;
 }
 
 /** Короткая строка для HUD в игре: одно главное действие. */
@@ -587,7 +619,7 @@ export function watchNames(input: AdvisorInput, limit = 3): string[] {
       return known.get(p)!;
     };
     const list = data.items
-      .filter((p) => p.slot === slot && (slot !== 'weapon' || WEAPON_KINDS.has(p.kind)) && allowed(p, lv, input.mode) && value(p) > value(cur))
+      .filter((p) => p.slot === slot && (slot !== 'weapon' || WEAPON_KINDS.has(p.kind)) && allowed(p, lv, input.mode, input.questsDone) && value(p) > value(cur))
       .sort((a, b) => value(b) - value(a))
       .slice(0, limit)
       .map((p) => p.name);

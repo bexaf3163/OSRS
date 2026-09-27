@@ -15,7 +15,7 @@ import {
 import { parseOwned, type OwnedState } from './lib/checklist';
 import { stageBankItemIds } from './lib/bankTags';
 import { useFeatures } from './lib/features';
-import { isClosed } from './lib/next-step';
+import { isClosed, openAfter } from './lib/next-step';
 import { withKillEstimate } from './services/gearAdvisor';
 
 const ENABLED_KEY = 'osrs-put:runelite-bridge';
@@ -322,6 +322,26 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     autoLaunchDone = true;
     void launchRuneLite(true);
   }, [runelite, enabled, autoLaunch, launchRuneLite]);
+
+  // Шаг, который ведёт в игре, отметили в программе (кнопкой или галочкой) — в игру сразу уходит следующий
+  // открытый шаг. Автоотметку из игры это не повторяет: её шаг уже в handled, и onCompleted двигает сам.
+  // Только переход «был открыт → закрыт»: уже пройденный шаг, показанный в игре вручную, остаётся на месте.
+  const activeWasOpen = useRef<string | null>(null);
+  useEffect(() => {
+    if (!activeStepId) return;
+    if (!isClosed(progress, activeStepId)) { activeWasOpen.current = activeStepId; return; }
+    if (activeWasOpen.current !== activeStepId || handled.current.has(activeStepId)) return;
+    const next = openAfter(steps, progress, activeStepId);
+    const branch = next ? chosenBranch(next, latest.current.branchChoice) : undefined;
+    if (!next || !toInGameTarget(next, branch)) {
+      void clearActiveStep();
+      setActiveStepId(null);
+      return;
+    }
+    handled.current.delete(next.id);
+    setActiveStepId(next.id);
+    void sendStep(next, branch);
+  }, [activeStepId, progress, steps, sendStep]);
 
   const pointInGame = useCallback(async (step: Step): Promise<PointResult> => {
     const branch = chosenBranch(step, latest.current.branchChoice);

@@ -100,7 +100,7 @@ describe('разбор снаряжения', () => {
     expect(first.routeStep).toBe('S2-01');
     expect(first.current?.name).toBe('Bronze sword');
     expect(gainText(first)).toMatch(/урона в секунду \+\d+%/);
-    expect(sourceText(first.source)).toBe("у Zeke в Zeke's Superior Scimitars (Al Kharid) — 400 gp + 10 gp за шлагбаум");
+    expect(sourceText(first.source)).toBe("у Zeke в Zeke's Superior Scimitars (Al Kharid) — 400 gp + 10 gp за проход в Al Kharid");
     expect(hudHint(first)).toBe('⚡ Сильнее: Steel scimitar у Zeke (Al Kharid), 400 gp');
     // Монеты — сумка и банк вместе.
     expect(a.coins).toEqual({ bag: 100, bank: 8400, total: 8500 });
@@ -229,10 +229,11 @@ describe('разбор снаряжения', () => {
   });
 
   it('предмет с непроверенным требованием не советуем', () => {
-    const dagger = byName('Adamant dagger');
-    expect(dagger.reqUnverified).toBe(true);
+    // С 2.8 требования у всех предметов подтверждены статьями; защиту проверяем на предмете, помеченном вручную.
+    const { reqFrom: _from, ...dagger } = byName('Adamant dagger');
+    const data: GearData = { ...gearData, items: gearData.items.map((i) => (i.id === dagger.id ? { ...dagger, reqUnverified: true } : i)) };
     const lv = { attack: 99, strength: 99, defence: 99 };
-    const a = adviseGear(input({ levels: lv, gear: gear({ coins: 10_000_000 }) }));
+    const a = adviseGear(input({ levels: lv, data, gear: gear({ coins: 10_000_000 }) }));
     expect([...a.actions, ...a.goals].some((x) => x.item.name === 'Adamant dagger')).toBe(false);
   });
 

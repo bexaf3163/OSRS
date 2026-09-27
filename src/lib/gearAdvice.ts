@@ -22,7 +22,15 @@ export function fightStepFor(steps: Step[], p: Progress, step?: Step | null): St
   return steps.find((s) => s.foes?.length && !isClosed(p, s.id)) ?? null;
 }
 
-/** Шлагбаум Al Kharid бесплатный после Prince Ali Rescue — по названию, а не по коду шага. */
+/** Квесты, отмеченные выполненными на пути (автоотметка шага по квесту): открывают, например, Rune platebody. */
+function questsDone(steps: Step[], p: Progress): Set<string> {
+  return new Set(steps.flatMap((s) => {
+    const t = s.inGame?.completionTrigger;
+    return t?.type === 'QUEST_COMPLETED' && t.questName && p.steps[s.id] === 'done' ? [t.questName] : [];
+  }));
+}
+
+/** Проход в Al Kharid бесплатный после Prince Ali Rescue — по названию, а не по коду шага. */
 function freeToll(steps: Step[], p: Progress): boolean {
   const quest = steps.find((s) => s.title === 'Prince Ali Rescue');
   return Boolean(quest && isClosed(p, quest.id));
@@ -63,6 +71,7 @@ export function useGearAdvice(step?: Step | null): GearAdviceView {
     freeToll: freeToll(steps, progress),
     routeNeeds: routeNeeds(steps, (id) => isClosed(progress, id)),
     foes: fightStep ? stepFoes(fightStep) : [],
+    questsDone: questsDone(steps, progress),
   }), [progress, stats, gear, owned, mode, prices, steps, fightStep]);
   const advice = useMemo(() => adviseGear(input), [input]);
   return { advice, input, fightStep, pricesReady: prices.size > 0, pricesFailed };

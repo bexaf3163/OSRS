@@ -38,8 +38,9 @@ export function InGamePanel({ step }: { step: Step }) {
     <section className="step-section ingame" aria-label="Подсказки в игре">
       <div className="ingame-row">
         <button type="button" className={`btn ${active ? 'btn-ingame-active' : ''}`} onClick={point} disabled={notice === 'sending'}
+          title={active ? 'Шаг уже ведёт тебя в игре. Нажми, чтобы отправить его ещё раз' : undefined}
           aria-describedby={notice === 'offline' ? `ingame-${step.id}` : undefined}>
-          🧭 {active ? 'Обновить в игре' : 'Указать в игре'}
+          {active ? '✓ Показан в игре' : '🧭 Показать в игре'}
         </button>
         {live && <span className="badge badge-ingame">● Активно в RuneLite</span>}
         {active && !live && <span className="badge">○ Вернётся в игру, когда RuneLite подключится</span>}
