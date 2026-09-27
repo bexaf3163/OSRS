@@ -208,6 +208,24 @@ export interface GearAction {
 
 export interface Unlock { item: GearPiece; skill: 'attack' | 'defence' | 'strength'; level: number; have: number }
 
+/**
+ * Предмет лучше надетого, который пока нельзя надеть: не хватает уровней или квеста. Показывается замком
+ * «🔒 нужно 20 Ranged (сейчас 17)» — вместо молчания или совета, который не наденется.
+ */
+export interface LockedItem {
+  slot: GearSlot;
+  item: GearPiece;
+  current: GearPiece | null;
+  currentName?: string;
+  gain: Gain;
+  missing: MissingRequirement[];
+  /** Уже лежит в сумке или банке, но надеть его пока нельзя. */
+  owned?: 'bag' | 'bank';
+}
+
+/** Замок показываем, если до предмета не больше стольких уровней (или он уже есть) — это ближняя цель, а не мечта. */
+export const LOCK_NEAR = 10;
+
 export interface Equipped { piece: GearPiece | null; id: number; name: string }
 
 export interface GearAdvice {
@@ -229,6 +247,8 @@ export interface GearAdvice {
   /** Лучше, чем можно сейчас: не хватает монет. */
   goals: GearAction[];
   unlocks: Unlock[];
+  /** Лучше надетого, но пока нельзя надеть: по одному на слот, сначала то, что уже есть в сумке или банке. */
+  locked: LockedItem[];
   /** Молитвы на силу и атаку, которые уже открыты. */
   prayers: { name: string; level: number; effect: string; maxHit?: number }[];
 }
@@ -326,6 +346,19 @@ function shopsOf(p: GearPiece, freeToll: boolean): Extract<Source, { kind: 'shop
   return out.sort((a, b) => a.price - b.price);
 }
 
+/** Где уже лежит предмет: в сумке или в банке (по счёту из плагина). Неизвестно или нет — undefined. */
+function ownedWhere(p: GearPiece, input: AdvisorInput): 'bag' | 'bank' | undefined {
+  if (input.gear?.inventory?.some((i) => i.id === p.id || nameKey(i.name) === nameKey(p.name))) return 'bag';
+  const bank = input.owned?.items.get(nameKey(p.name))?.bank;
+  return bank && bank > 0 ? 'bank' : undefined;
+}
+
+/** Сравнение рангов по порядку чисел: a раньше b. */
+function lexLess(a: number[], b: number[]): boolean {
+  for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return a[i] < b[i];
+  return false;
+}
+
 /** Откуда взять предмет: сумка, банк, магазины, биржа — сначала бесплатное, потом дешёвое. */
 function sourcesOf(p: GearPiece, input: AdvisorInput): Source[] {
   const out: Source[] = [];
@@ -395,41 +428,42 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
 
   // Оружие: лучший урон в секунду при твоих уровнях. Неизвестное программе оружие в руке сравнить нельзя —
   // тогда урон «сейчас» считается без него, а текст совета говорит только о новом оружии (gainText).
-  const weapons = data.items.filter((p) => p.slot === 'weapon' && WEAPON_KINDS.has(p.kind) && allowed(p, lv, input.mode, input.questsDone));
-  for (const p of weapons) {
-    if (weapon && p.id === weapon.id) continue;
-    const ratio = meleeValue(lv, p, neckPiece, foes) / valueNow;
-    if (ratio < WORTH.dps) continue;
-    const after = meleeWith(lv, p, neckPiece, {}, foes[0]);
-    candidates.push(action('weapon', p, weapon, { kind: 'dps', before: weaponNow, after, ratio }, input, route(p)));
-  }
-
-  // Амулет: урон с оружием в руке; защита — для амулета защиты и мощи.
-  for (const p of data.items.filter((i) => i.slot === 'neck' && allowed(i, lv, input.mode, input.questsDone))) {
-    if (equipped.neck && p.id === equipped.neck.id) continue;
-    const after = meleeWith(lv, weaponPiece, p, {}, foes[0]);
-    const ratio = meleeValue(lv, weaponPiece, p, foes) / valueNow;
-    const defBefore = defenceSum(neckPiece);
-    const defAfter = defenceSum(p);
-    // Амулет ради защиты — только если урон не падает: совет про скорость, а не про то, чтобы бить слабее.
-    if (!(ratio >= WORTH.dps || (ratio >= 0.999 && defAfter - defBefore >= WORTH.defence))) continue;
-    candidates.push(action('neck', p, equipped.neck, { kind: 'dps', before: weaponNow, after, ratio, defenceBefore: defBefore, defenceAfter: defAfter }, input, route(p)));
-  }
-
-  // Броня: сумма защиты от колющих, режущих и дробящих ударов.
-  for (const slot of ['head', 'body', 'legs', 'shield'] as const) {
-    const cur = equipped[slot];
+  /**
+   * Чем предмет лучше надетого в слоте — или null, если не лучше по порогам совета. Оружие — урон в секунду;
+   * амулет — урон с оружием в руке, а ради защиты — только если урон не падает; броня — сумма защиты от
+   * колющих, режущих и дробящих ударов.
+   */
+  function gainOf(slot: GearSlot, p: GearPiece, cur: Equipped | undefined): Gain | null {
+    if (slot === 'weapon') {
+      const ratio = meleeValue(lv, p, neckPiece, foes) / valueNow;
+      return ratio < WORTH.dps ? null : { kind: 'dps', before: weaponNow, after: meleeWith(lv, p, neckPiece, {}, foes[0]), ratio };
+    }
+    if (slot === 'neck') {
+      const ratio = meleeValue(lv, weaponPiece, p, foes) / valueNow;
+      const defBefore = defenceSum(neckPiece);
+      const defAfter = defenceSum(p);
+      if (!(ratio >= WORTH.dps || (ratio >= 0.999 && defAfter - defBefore >= WORTH.defence))) return null;
+      return { kind: 'dps', before: weaponNow, after: meleeWith(lv, weaponPiece, p, {}, foes[0]), ratio, defenceBefore: defBefore, defenceAfter: defAfter };
+    }
     const before = defenceSum(cur?.piece ?? null);
-    for (const p of data.items.filter((i) => i.slot === slot && allowed(i, lv, input.mode, input.questsDone))) {
+    const after = defenceSum(p);
+    return after - before < WORTH.defence ? null : { kind: 'defence', before, after };
+  }
+
+  for (const slot of SLOTS) {
+    const cur = equipped[slot];
+    for (const p of data.items) {
+      if (p.slot !== slot || (slot === 'weapon' && !WEAPON_KINDS.has(p.kind)) || !allowed(p, lv, input.mode, input.questsDone)) continue;
       if (cur && p.id === cur.id) continue;
-      const after = defenceSum(p);
-      if (after - before < WORTH.defence) continue;
-      candidates.push(action(slot, p, cur, { kind: 'defence', before, after }, input, route(p)));
+      const gain = gainOf(slot, p, cur);
+      if (gain) candidates.push(action(slot, p, cur, gain, input, route(p)));
     }
   }
 
   // В каждом слоте — одно лучшее «надеть» (бесплатно) и одна лучшая покупка по деньгам.
-  const score = (a: GearAction) => (a.gain.kind === 'dps' ? a.gain.ratio * 1000 + (a.gain.defenceAfter ?? 0) : a.gain.after);
+  // Урон главнее защиты: защита амулета решает только при равном уроне. Иначе +6 защиты Amulet of power
+  // перевешивали 3% урона Amulet of strength, и совет по амулету зависел от случайных цифр.
+  const score = (a: GearAction) => (a.gain.kind === 'dps' ? Math.round(a.gain.ratio * 1000) * 1000 + (a.gain.defenceAfter ?? 0) : a.gain.after);
   /** b заметно лучше a — по тем же порогам, что и совет вообще. Иначе за разницу платить незачем. */
   const better = (b: GearAction, a: GearAction) => (b.gain.kind === 'dps' && a.gain.kind === 'dps'
     ? b.gain.ratio >= a.gain.ratio * WORTH.dps
@@ -493,6 +527,43 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   const plate = nextOf('platebody', 'defence');
   if (plate) unlocks.push({ item: plate, skill: 'defence', level: plate.req!.defence!, have: lv.defence });
 
+  // Замки: лучше надетого по тем же порогам, что и совет, но требования не выполнены. Предмет, которого нет
+  // в базе требований (reqUnverified) или нет в режиме игры, замком не показываем — про него ничего не известно.
+  const locked: LockedItem[] = [];
+  const lockBeats = (lock: Gain, g: Gain) => (lock.kind === 'dps' && g.kind === 'dps'
+    ? lock.ratio >= g.ratio * WORTH.dps
+    : lock.kind === 'defence' && g.kind === 'defence' ? lock.after - g.after >= WORTH.defence : true);
+  for (const slot of order) {
+    const cur = equipped[slot];
+    const open = candidates.filter((c) => c.slot === slot);
+    let pick: LockedItem | null = null;
+    let pickRank: number[] = [];
+    for (const p of data.items) {
+      if (p.slot !== slot || p.reqUnverified || (p.members && input.mode !== 'members')) continue;
+      if (slot === 'weapon' && !WEAPON_KINDS.has(p.kind)) continue;
+      if (cur && p.id === cur.id) continue;
+      const missing = missingRequirements(p, lv, input.questsDone);
+      if (!missing.length) continue;
+      const gain = gainOf(slot, p, cur);
+      if (!gain) continue;
+      const owned = ownedWhere(p, input);
+      // Не из сумки или банка — только если он заметно лучше того, что можно надеть или купить уже сейчас:
+      // замок на предмет, равный доступному, — лишний шум.
+      if (!owned && open.some((a) => !lockBeats(gain, a.gain))) continue;
+      const gap = missing.reduce((s, m) => s + (m.kind === 'skill' ? m.need - m.have : 0), 0);
+      if (!owned && gap > LOCK_NEAR) continue;
+      // Сначала то, что уже есть, потом ближайшее по уровням, из равных — сильнейшее.
+      const rank = [owned ? 0 : 1, gap, -(gain.kind === 'dps' ? gain.ratio * 1000 : gain.after)];
+      if (pick && !lexLess(rank, pickRank)) continue;
+      pick = {
+        slot, item: p, current: cur?.piece ?? null, ...(cur && !cur.piece ? { currentName: cur.name } : {}),
+        gain, missing, ...(owned ? { owned } : {}),
+      };
+      pickRank = rank;
+    }
+    if (pick) locked.push(pick);
+  }
+
   // Молитвы: лучшая открытая на силу и на атаку; сколько даёт к удару с оружием в руке.
   const prayers: GearAdvice['prayers'] = [];
   for (const kind of ['strength', 'attack'] as const) {
@@ -514,6 +585,7 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
     armour,
     goals,
     unlocks,
+    locked,
     prayers,
   };
 
@@ -542,7 +614,7 @@ const gp = (n: number) => n.toLocaleString('ru-RU').replace(/ /g, ' ');
 const pct = (r: number) => `${Math.round((r - 1) * 100)}%`;
 
 /** «удар до 3 вместо 2, урона в секунду +45%» — чем действие лучше. */
-export function gainText(a: GearAction): string {
+export function gainText(a: Pick<GearAction, 'gain' | 'slot' | 'currentName'>): string {
   const g = a.gain;
   if (g.kind === 'defence') return `защита +${g.after - g.before} (${g.before} → ${g.after})`;
   // Что в руке сейчас — программе неизвестно: сравнивать не с чем, говорим только про новое оружие.
@@ -558,7 +630,7 @@ export function gainText(a: GearAction): string {
 }
 
 /** Сам предмет, без сравнения: когда неизвестно, что надето сейчас (нет связи с игрой). */
-export function statsText(a: GearAction): string {
+export function statsText(a: Pick<GearAction, 'gain' | 'slot' | 'item'>): string {
   const g = a.gain;
   if (g.kind === 'defence') return `защита ${g.after}`;
   if (a.slot === 'neck') {

@@ -7,8 +7,10 @@ import { useStore } from '../store';
 import { formatGp } from '../lib/shopping';
 import { useGearAdvice } from '../lib/gearAdvice';
 import {
-  actionNav, gainText, SLOT_LABEL, SLOTS, statsText, WINDOW, type GearAction, type MeleeResult,
+  actionNav, gainText, SLOT_LABEL, SLOTS, statsText, WINDOW, type GearAction, type LockedItem, type MeleeResult,
+  type MissingRequirement,
 } from '../services/gearAdvisor';
+import type { Step } from '../types';
 import { ItemIcon } from '../components/WikiDrawer';
 import { NavigateButton } from '../components/NavigateButton';
 import { PlaceMapView, usePlaceMap } from '../components/PlaceMap';
@@ -44,9 +46,61 @@ function ActionRow({ a, stepId, live, onShow }: { a: GearAction; stepId?: string
   );
 }
 
+/** Куда вести за недостающим: страница навыка (план прокачки) или шаг с квестом. */
+const SKILL_PAGE = { attack: 'ME', strength: 'ME', defence: 'ME', ranged: 'RA', magic: 'MA', prayer: 'PR' } as const;
+const SKILL_EN = { attack: 'Attack', strength: 'Strength', defence: 'Defence', ranged: 'Ranged', magic: 'Magic', prayer: 'Prayer' } as const;
+
+export function questStep(steps: Step[], quest: string): Step | undefined {
+  return steps.find((s) => s.inGame?.completionTrigger?.type === 'QUEST_COMPLETED' && s.inGame.completionTrigger.questName === quest);
+}
+
+function MissingLine({ m, steps }: { m: MissingRequirement; steps: Step[] }) {
+  if (m.kind === 'skill') {
+    const left = m.need - m.have;
+    return (
+      <li>
+        ✗ {m.need} {SKILL_EN[m.skill]} <span className="muted">— сейчас {m.have}, не хватает {left}</span>
+        {' '}<a href={`#/skills/${SKILL_PAGE[m.skill]}`}>⚡ как добрать</a>
+      </li>
+    );
+  }
+  const step = questStep(steps, m.quest);
+  return (
+    <li>
+      ✗ квест {m.quest}
+      {step ? <> {' '}<a href={`#/step/${step.id}`}>🧭 к шагу {step.id}</a></> : <span className="muted"> — на маршруте его нет</span>}
+    </li>
+  );
+}
+
+function LockedRow({ l, live, steps }: { l: LockedItem; live: boolean; steps: Step[] }) {
+  const skills = l.missing.filter((m) => m.kind === 'skill');
+  const title = skills.length
+    ? `нужно ${skills.map((m) => `${m.need} ${SKILL_EN[m.skill]}`).join(' и ')}`
+    : 'нужен квест';
+  return (
+    <li className="gear-row gear-locked">
+      <ItemIcon src={l.item.iconUrl} alt="" size={28} />
+      <div className="gear-main">
+        <p>
+          <span className="lock-chip">🔒 {title}</span> <strong>{l.item.name}</strong>{' '}
+          <span className="muted small">({l.item.nameRu}, {SLOT_LABEL[l.slot].toLowerCase()})</span>
+        </p>
+        {l.owned && (
+          <p className="small"><strong>Уже {l.owned === 'bank' ? 'лежит в банке' : 'в сумке'}, но надеть его пока нельзя.</strong> Не продавай — пригодится.</p>
+        )}
+        <p className="small">{capital(live ? gainText(l) : statsText(l))} — когда откроется.</p>
+        <ul className="small gear-plain lock-missing">
+          {l.missing.map((m) => <MissingLine key={m.kind === 'skill' ? m.skill : m.quest} m={m} steps={steps} />)}
+        </ul>
+      </div>
+    </li>
+  );
+}
+
 export function GearPage() {
   const { state, stats } = useBridge();
-  const { mode } = useStore();
+  const { mode, steps } = useStore();
   const { advice, fightStep, pricesReady, pricesFailed } = useGearAdvice();
   const places = usePlaceMap();
   const lv = advice.levels;
@@ -74,6 +128,8 @@ export function GearPage() {
       <section className="card gear-summary" aria-label="Сейчас">
         <p>
           <strong>Уровни {fromGame ? 'из игры' : 'из профиля'}:</strong> Attack {lv.attack} · Strength {lv.strength} · Defence {lv.defence}
+          {lv.ranged ? <> · Ranged {lv.ranged}</> : null}
+          {lv.magic ? <> · Magic {lv.magic}</> : null}
           {lv.prayer ? <> · Prayer {lv.prayer}</> : null}
           {!fromGame && <span className="muted"> — вводятся на странице <a href="#/skills">Навыки</a></span>}
         </p>
@@ -130,6 +186,16 @@ export function GearPage() {
             Бой она не ускоряет — бережёт здоровье и еду. В закупки маршрута не входит: деньги на шаги (S2-01, S2-04) важнее.
           </p>
           <ul className="gear-list">{advice.armour.map((a) => <ActionRow key={`${a.slot}-${a.item.id}`} a={a} stepId={fightStep?.id} live={advice.live} onShow={places.show} />)}</ul>
+        </section>
+      )}
+
+      {advice.locked.length > 0 && (
+        <section className="card section-card" aria-labelledby="gear-locked">
+          <h2 id="gear-locked" className="card-title">🔒 Лучше, но пока нельзя надеть</h2>
+          <p className="small muted">
+            Требования — уровни и квесты — с OSRS Wiki. Такие предметы программа не советует покупать, пока требования не выполнены.
+          </p>
+          <ul className="gear-list">{advice.locked.map((l) => <LockedRow key={`${l.slot}-${l.item.id}`} l={l} live={advice.live} steps={steps} />)}</ul>
         </section>
       )}
 

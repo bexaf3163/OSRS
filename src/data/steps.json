@@ -3264,15 +3264,6 @@
         "wikiItemId": 1161,
         "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_full_helm.png",
         "inStep": true
-      },
-      {
-        "nameEn": "Amulet of power",
-        "nameRu": "Амулет мощи",
-        "amount": 1,
-        "howToGet": "+6 к атаке, силе, защите и магии — лучший амулет F2P для ближнего боя.",
-        "wikiItemId": 1731,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_power.png",
-        "inStep": true
       }
     ],
     "fields": [
@@ -3282,7 +3273,11 @@
       },
       {
         "label": "Бюджет",
-        "text": "Около 19 000 gp по ценам на 26.09.2026: нагрудник ≈ 9 400, поножи ≈ 3 500, щит ≈ 2 900, шлем ≈ 1 850, ятаган ≈ 1 400, Amulet of power ≈ 2 350."
+        "text": "Около 19 000 gp по ценам на 26.09.2026: нагрудник ≈ 9 400, поножи ≈ 3 500, щит ≈ 2 900, шлем ≈ 1 850, ятаган ≈ 1 400."
+      },
+      {
+        "label": "Амулет",
+        "text": "Второй амулет не нужен: Amulet of strength из S2-01 по формулам урона бьёт быстрее Amulet of power на всех шагах с боем (сила +10 против +6). Amulet of power (+6 к точности, силе и защите) бери, только если амулета силы нет: почти та же скорость и немного защиты."
       }
     ],
     "doneWhen": "Снаряжение куплено и лежит в банке.",
@@ -3335,12 +3330,6 @@
           {
             "names": [
               "Adamant full helm"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Amulet of power"
             ],
             "count": 1
           }
@@ -4455,7 +4444,7 @@
     "fields": [
       {
         "label": "Экипировка",
-        "text": "Надет Anti-dragon shield — без него огонь дракона бьёт до 70, со щитом — до 10. Rune sword в стиле Stab (у Elvarg слабее всего защита от колющего удара), адамантовая или руническая броня, Amulet of power или Amulet of strength."
+        "text": "Надет Anti-dragon shield — без него огонь дракона бьёт до 70, со щитом — до 10. Rune sword в стиле Stab (у Elvarg слабее всего защита от колющего удара), адамантовая или руническая броня, Amulet of strength (из S2-01; если его нет — Amulet of power)."
       },
       {
         "label": "Инвентарь",

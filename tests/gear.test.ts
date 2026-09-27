@@ -380,3 +380,54 @@ describe('данные gear.json', () => {
     expect(zeke).toEqual([['Bronze scimitar', 32], ['Iron scimitar', 112], ['Steel scimitar', 400], ['Mithril scimitar', 1040]]);
   });
 });
+
+describe('амулеты: Amulet of strength и Amulet of power не спорят (§69)', () => {
+  const s308 = allSteps.find((s) => s.id === 'S3-08')!;
+  const s403 = allSteps.find((s) => s.id === 'S4-03')!;
+  const lv30 = { attack: 30, strength: 30, defence: 30 };
+  const wearing = (...names: string[]) => gear({ equipment: names.map((n) => item(n, byName(n).slot === 'neck' ? 'amulet' : byName(n).slot)), coins: 50_000, bankCoins: 0 });
+  const neckAdvice = (a: ReturnType<typeof adviseGear>) => [...a.actions, ...a.goals].filter((x) => x.slot === 'neck').map((x) => x.item.name);
+
+  it('на всех шагах с боем амулет силы бьёт быстрее амулета мощи', () => {
+    for (const step of allSteps.filter((s) => s.foes?.length)) {
+      const foes = stepFoes(step);
+      if (!foes.length) continue;
+      const lv = { attack: 30, strength: 30, defence: 30 };
+      expect(meleeValue(lv, byName('Adamant scimitar'), byName('Amulet of strength'), foes), step.id)
+        .toBeGreaterThan(meleeValue(lv, byName('Adamant scimitar'), byName('Amulet of power'), foes));
+    }
+  });
+
+  it('надет амулет силы — амулет мощи не советуется, и наоборот: разница меньше порога', () => {
+    for (const step of [s308, s403]) {
+      const foes = stepFoes(step);
+      expect(neckAdvice(adviseGear(input({ levels: lv30, foes, gear: wearing('Adamant scimitar', 'Amulet of strength') })))).toEqual([]);
+      expect(neckAdvice(adviseGear(input({ levels: lv30, foes, gear: wearing('Adamant scimitar', 'Amulet of power') })))).toEqual([]);
+    }
+  });
+
+  it('без амулета — один главный совет, и это амулет силы, на любом шаге с боем', () => {
+    for (const step of [s308, s403]) {
+      const a = adviseGear(input({ levels: lv30, foes: stepFoes(step), gear: wearing('Adamant scimitar') }));
+      expect(neckAdvice(a)).toEqual(['Amulet of strength']);
+    }
+  });
+
+  it('амулет силы в банке — «надень», а не поход на биржу; HUD говорит то же, что программа', () => {
+    const a = adviseGear(input({ levels: lv30, foes: stepFoes(s308), gear: wearing('Adamant scimitar'), owned: owned({ 'Amulet of strength': 1 }) }));
+    const neck = a.actions.find((x) => x.slot === 'neck')!;
+    expect(neck).toMatchObject({ how: 'wear', source: { kind: 'bank' }, item: { name: 'Amulet of strength' } });
+    expect(hudHint(neck)).toBe('⚡ Надень Amulet of strength — он в банке');
+    expect(a.actions.some((x) => x.item.name === 'Amulet of power')).toBe(false);
+  });
+
+  it('маршрут покупает один амулет: второй не попадает ни в закупки, ни в автоотметку', () => {
+    const buys = allSteps.flatMap((s) => (s.itemsRequired ?? []).filter((i) => /^Amulet of (strength|power)$/.test(i.nameEn)).map((i) => `${s.id}:${i.nameEn}`));
+    expect(buys).toEqual(['S2-01:Amulet of strength']);
+    const needs = routeNeeds(allSteps, () => false);
+    expect(needs.get('amulet of power')).toBeUndefined();
+    const s307 = allSteps.find((s) => s.id === 'S3-07')!;
+    const trig = s307.inGame?.completionTrigger;
+    expect(JSON.stringify(trig)).not.toContain('Amulet');
+  });
+});

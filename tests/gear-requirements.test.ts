@@ -1,6 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { listedWithoutRequirements, requirementsFromText, setRule } from '../scripts/gear-requirements';
-import { canWear, gearData, missingRequirements, missingText, watchNames } from '../src/services/gearAdvisor';
+import { adviseGear, canWear, gearData, missingRequirements, missingText, watchNames } from '../src/services/gearAdvisor';
+import { questStep } from '../src/pages/Gear';
+import { allSteps } from '../src/data';
 
 const item = (name: string) => gearData.items.find((i) => i.name === name)!;
 const lv = (o: Record<string, number>) => ({ attack: 1, strength: 1, defence: 1, ...o });
@@ -66,5 +68,53 @@ describe('требования в gear.json и советы', () => {
     expect(names(strong)).toContain('Rune chainbody');
     expect(names(strong, new Set(['Dragon Slayer I']))).toContain('Rune platebody');
     expect(missingText(missingRequirements(item('Rune platebody'), lv(strong)))).toBe('квест Dragon Slayer I');
+  });
+});
+
+describe('замок «🔒 нужно …»: лучше, но пока нельзя надеть', () => {
+  const base = { mode: 'f2p' as const, gear: { equipment: [] as { id: number; name: string; slot?: string }[], inventory: [], coins: 0, bankCoins: 0 } };
+  const bankOf = (names: string[]) => ({
+    bankSeen: true,
+    items: new Map(names.map((n) => [n.toLowerCase(), { name: n, carried: 0, noted: 0, bank: 1 }])),
+  });
+
+  it('Steel full helm при 1 Defence — замок «нужно 5 Defence»: он заметно крепче Iron full helm, который можно уже сейчас', () => {
+    const a = adviseGear({ ...base, levels: { defence: 1 } });
+    expect(a.locked.find((l) => l.slot === 'head')).toMatchObject({ item: { name: 'Steel full helm' }, missing: [{ kind: 'skill', skill: 'defence', need: 5, have: 1 }] });
+    // Coif (защита 18) не крепче Iron full helm (18) — замок на него был бы шумом.
+    expect(adviseGear({ ...base, levels: { ranged: 17, defence: 1 } }).locked.some((l) => l.item.name === 'Coif')).toBe(false);
+    expect(adviseGear({ ...base, levels: { defence: 5 } }).locked.some((l) => l.item.name === 'Steel full helm')).toBe(false);
+  });
+
+  it('Coif в банке при 17 Ranged: «есть, но надеть нельзя», а не «надень»', () => {
+    const a = adviseGear({ ...base, levels: { ranged: 17 }, owned: bankOf(['Coif']) });
+    expect(a.locked.find((l) => l.slot === 'head')).toMatchObject({ item: { name: 'Coif' }, owned: 'bank', missing: [{ kind: 'skill', skill: 'ranged', need: 20, have: 17 }] });
+    expect([...a.actions, ...a.armour, ...a.goals].some((x) => x.item.name === 'Coif')).toBe(false);
+    // С 20 Ranged — уже не замок, а «надень, он в банке».
+    const at20 = adviseGear({ ...base, levels: { ranged: 20 }, owned: bankOf(['Coif']) });
+    expect(at20.locked.some((l) => l.item.name === 'Coif')).toBe(false);
+    expect(at20.actions.some((x) => x.item.name === 'Coif' && x.how === 'wear')).toBe(true);
+  });
+
+  it('далёкий предмет без него в банке не показываем, а в банке — показываем при любом разрыве', () => {
+    const lv1 = { attack: 1, strength: 1, defence: 1 };
+    const far = adviseGear({ ...base, levels: lv1, gear: { ...base.gear, equipment: [] } });
+    expect(far.locked.some((l) => l.item.name === 'Rune scimitar')).toBe(false);
+    const inBank = adviseGear({ ...base, levels: lv1, gear: { ...base.gear, equipment: [] }, owned: bankOf(['Rune scimitar']) });
+    expect(inBank.locked.find((l) => l.slot === 'weapon')).toMatchObject({ item: { name: 'Rune scimitar' }, owned: 'bank' });
+  });
+
+  it('Rune platebody при 40 Defence без Dragon Slayer I — замок по квесту', () => {
+    const lv40 = { attack: 40, strength: 40, defence: 40 };
+    const a = adviseGear({ ...base, levels: lv40, owned: bankOf(['Rune platebody']) });
+    const body = a.locked.find((l) => l.slot === 'body');
+    expect(body).toMatchObject({ item: { name: 'Rune platebody' }, missing: [{ kind: 'quest', quest: 'Dragon Slayer I' }] });
+    const done = adviseGear({ ...base, levels: lv40, owned: bankOf(['Rune platebody']), questsDone: new Set(['Dragon Slayer I']) });
+    expect(done.locked.some((l) => l.item.name === 'Rune platebody')).toBe(false);
+    expect(done.actions.some((x) => x.item.name === 'Rune platebody')).toBe(true);
+  });
+
+  it('квестовый замок ведёт к шагу с этим квестом', () => {
+    expect(questStep(allSteps, 'Dragon Slayer I')?.id).toBe('S5-09');
   });
 });

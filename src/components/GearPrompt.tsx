@@ -10,7 +10,7 @@ import { useFeatures } from '../lib/features';
 import { isClosed } from '../lib/next-step';
 import { formatGp } from '../lib/shopping';
 import { useGearAdvice } from '../lib/gearAdvice';
-import { actionNav, gainText, sourceText, type GearAction, type Source } from '../services/gearAdvisor';
+import { actionNav, gainText, missingText, sourceText, type GearAction, type GearAdvice, type Source } from '../services/gearAdvisor';
 import type { Foe } from '../types';
 import { NavigateButton } from './NavigateButton';
 import { PlaceButton, PlaceMapView, usePlaceMap } from './PlaceMap';
@@ -63,6 +63,21 @@ export function ActionNotes({ a }: { a: GearAction }) {
   );
 }
 
+/** «⚠️ Coif есть в банке, но надеть его пока нельзя: 20 Ranged (сейчас 17)» — чтобы не принять его за готовый. */
+export function LockedOwnedNote({ advice }: { advice: GearAdvice }) {
+  const owned = advice.locked.filter((l) => l.owned);
+  if (!owned.length) return null;
+  return (
+    <>
+      {owned.map((l) => (
+        <p key={l.item.id} className="small lock-note">
+          ⚠️ <strong>{l.item.name}</strong> {l.owned === 'bank' ? 'есть в банке' : 'есть в сумке'}, но надеть его пока нельзя: нужно {missingText(l.missing)}.
+        </p>
+      ))}
+    </>
+  );
+}
+
 export function GearPrompt({ step }: { step: Step }) {
   const { upgradeRouter } = useFeatures();
   const { progress } = useStore();
@@ -105,11 +120,14 @@ function GearPromptBody({ step }: { step: Step }) {
 
   if (!top) {
     return (
-      <p className="small gear-ok">
-        ✓ Оружие — лучшее, что можно при твоих уровнях {vs}
-        {goal ? <>; дальше — {goal.item.name}{goal.short !== undefined ? <>, не хватает {formatGp(goal.short)} gp</> : null}</> : null}.
-        {' '}<a href="#/gear">Разбор снаряжения</a>
-      </p>
+      <>
+        <p className="small gear-ok">
+          ✓ Оружие — лучшее, что можно при твоих уровнях {vs}
+          {goal ? <>; дальше — {goal.item.name}{goal.short !== undefined ? <>, не хватает {formatGp(goal.short)} gp</> : null}</> : null}.
+          {' '}<a href="#/gear">Разбор снаряжения</a>
+        </p>
+        <LockedOwnedNote advice={advice} />
+      </>
     );
   }
 
@@ -136,6 +154,7 @@ function GearPromptBody({ step }: { step: Step }) {
           {goal.short !== undefined ? <>, не хватает {formatGp(goal.short)} gp</> : <>, цена неизвестна</>}.
         </p>
       )}
+      <LockedOwnedNote advice={advice} />
       <div className="upgrade-actions">
         {nav && <NavigateButton target={nav} label={`🧭 Направить ${seller === 'Grand Exchange' ? 'на Grand Exchange' : `к ${seller}`}`} />}
         <a className="btn btn-ghost btn-sm" href="#/gear">Весь разбор</a>
