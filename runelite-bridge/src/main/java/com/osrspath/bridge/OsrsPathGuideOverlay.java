@@ -121,7 +121,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		return d;
 	}
 
-	/** Строка под мышью по прошлому кадру; -1 — мышь не над списком или открыто меню игры. */
+	/** Строка под мышью по прошлому кадру; -1 — мышь не над списком, открыто меню игры или над списком окно игры. */
 	private int hovered()
 	{
 		if (client.isMenuOpen())
@@ -129,7 +129,13 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			return -1;
 		}
 		net.runelite.api.Point m = client.getMouseCanvasPosition();
-		return m == null ? -1 : hits.rowAt(m.getX(), m.getY());
+		// Над списком окно игры (банк, магазин, карта мира) — строка под ним не подсвечивается и не подсказывает.
+		if (m == null || GuideMouse.windowUnderMouse(client.getMenu().getMenuEntries())
+			|| GuideMouse.mapCovers(client.getWidget(net.runelite.api.gameval.InterfaceID.Worldmap.WINDOW), new java.awt.Point(m.getX(), m.getY())))
+		{
+			return -1;
+		}
+		return hits.rowAt(m.getX(), m.getY());
 	}
 
 	/** Прямоугольники строк на холсте: при отрисовке плашка уже стоит на своём месте (getBounds). */

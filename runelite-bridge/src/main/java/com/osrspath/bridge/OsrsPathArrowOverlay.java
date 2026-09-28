@@ -57,7 +57,8 @@ class OsrsPathArrowOverlay extends Overlay
 	{
 		WorldPoint target = config.bigArrow() ? plugin.arrowTarget() : null;
 		Player me = client.getLocalPlayer();
-		if (target == null || me == null)
+		// Открыта карта мира: стрелка рисуется над окнами и легла бы на карту — там цель показывает метка.
+		if (target == null || me == null || InventoryCheckOverlay.visible(client.getWidget(net.runelite.api.gameval.InterfaceID.Worldmap.WINDOW)))
 		{
 			angle = Double.NaN;
 			return null;

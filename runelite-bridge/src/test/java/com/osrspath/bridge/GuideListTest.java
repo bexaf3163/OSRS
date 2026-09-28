@@ -342,4 +342,30 @@ public class GuideListTest
 		assertTrue("Withdraw-1 — окно банка", GuideMouse.windowUnderMouse(new MenuEntry[]{entry(null), entry(widget())}));
 		assertSame(GuideList.Action.NONE, GuideList.Action.NONE);
 	}
+
+	/** Пункт меню над списком — латиницей (шрифт игры без кириллицы) и по действию строки. */
+	@Test
+	public void menuOptionOverListIsLatin()
+	{
+		assertEquals("Arrow to", GuideMouse.menuOption(GuideList.Action.place(0)));
+		assertEquals("Arrow back to step", GuideMouse.menuOption(GuideList.Action.BACK));
+		assertEquals("Collapse / expand", GuideMouse.menuOption(GuideList.Action.TOGGLE));
+		assertEquals("List", GuideMouse.menuOption(GuideList.Action.NONE));
+	}
+
+	/** Открытая карта мира над списком: клик по её метке — карте, а не строке под ней. */
+	@Test
+	public void картаМираНадСписком_кликУходитКарте()
+	{
+		Widget map = (Widget) Proxy.newProxyInstance(Widget.class.getClassLoader(), new Class<?>[]{Widget.class}, (p, m, a) ->
+			"isHidden".equals(m.getName()) ? Boolean.FALSE : "getBounds".equals(m.getName()) ? new Rectangle(0, 0, 500, 400) : null);
+		Client world = client(false, false, entry(null));
+		Client withMap = (Client) Proxy.newProxyInstance(Client.class.getClassLoader(), new Class<?>[]{Client.class}, (p, m, a) ->
+			"getWidget".equals(m.getName()) ? map : m.invoke(world, a));
+		List<GuideList.Action> done = new ArrayList<>();
+		assertFalse(new GuideMouse(withMap, overlay(withMap, System.nanoTime()), done::add)
+			.mousePressed(press(50, 105, MouseEvent.BUTTON1, InputEvent.BUTTON1_DOWN_MASK)).isConsumed());
+		assertTrue(done.isEmpty());
+		assertFalse("карта закрыта", GuideMouse.mapCovers(null, new java.awt.Point(50, 105)));
+	}
 }

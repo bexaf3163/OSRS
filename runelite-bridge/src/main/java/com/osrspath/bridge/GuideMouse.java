@@ -5,6 +5,8 @@ import java.util.function.Consumer;
 import javax.swing.SwingUtilities;
 import net.runelite.api.Client;
 import net.runelite.api.MenuEntry;
+import net.runelite.api.gameval.InterfaceID;
+import net.runelite.api.widgets.Widget;
 import net.runelite.client.input.MouseAdapter;
 
 /**
@@ -41,7 +43,7 @@ class GuideMouse extends MouseAdapter
 			return e;
 		}
 		GuideList.Action a = overlay.actionAt(e.getPoint());
-		if (a == null || windowUnderMouse(client.getMenu().getMenuEntries()))
+		if (a == null || windowUnderMouse(client.getMenu().getMenuEntries()) || mapCovers(client.getWidget(InterfaceID.Worldmap.WINDOW), e.getPoint()))
 		{
 			return e;
 		}
@@ -72,6 +74,31 @@ class GuideMouse extends MouseAdapter
 			e.consume();
 		}
 		return e;
+	}
+
+	/**
+	 * Над списком открыта карта мира: её метки и кнопки дают пункты меню без виджета (RuneLite «Focus on»),
+	 * поэтому windowUnderMouse её не видит. Клик — карте, а не невидимой строке под ней.
+	 */
+	static boolean mapCovers(Widget map, java.awt.Point p)
+	{
+		return InventoryCheckOverlay.visible(map) && map.getBounds() != null && map.getBounds().contains(p);
+	}
+
+	/** Пункт меню игры над списком (латиницей — шрифт игры без кириллицы). */
+	static String menuOption(GuideList.Action a)
+	{
+		switch (a.getKind())
+		{
+			case PLACE:
+				return "Arrow to";
+			case BACK:
+				return "Arrow back to step";
+			case TOGGLE:
+				return "Collapse / expand";
+			default:
+				return "List";
+		}
 	}
 
 	/**

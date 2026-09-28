@@ -42,7 +42,9 @@ import net.runelite.api.Tile;
 import net.runelite.api.TileObject;
 import net.runelite.api.WorldView;
 import net.runelite.api.coords.WorldPoint;
+import net.runelite.api.MenuAction;
 import net.runelite.api.events.ChatMessage;
+import net.runelite.api.events.PostMenuSort;
 import net.runelite.api.events.DecorativeObjectDespawned;
 import net.runelite.api.events.DecorativeObjectSpawned;
 import net.runelite.api.events.GameObjectDespawned;
@@ -1289,6 +1291,33 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		npcs.remove(npc);
 		navNpcs.remove(npc);
 		dangerNpcs.remove(npc);
+	}
+
+	/**
+	 * Мышь над списком «Что нужно»: верхним пунктом меню игры становится строка списка. Иначе игра пишет в левом
+	 * верхнем углу действие того, что под плашкой («Chop down Yew tree»), и обводит его, будто клик уйдёт туда.
+	 * Остальные пункты остаются: правый клик по-прежнему открывает меню игры. Текст — латиницей: шрифт игры
+	 * не рисует кириллицу.
+	 */
+	@Subscribe
+	public void onPostMenuSort(PostMenuSort e)
+	{
+		if (guideOverlay == null || client.isMenuOpen() || client.isWidgetSelected())
+		{
+			return;
+		}
+		net.runelite.api.Point m = client.getMouseCanvasPosition();
+		GuideList.Action a = m == null ? null : guideOverlay.actionAt(new java.awt.Point(m.getX(), m.getY()));
+		if (a == null || GuideMouse.windowUnderMouse(client.getMenu().getMenuEntries())
+			|| GuideMouse.mapCovers(client.getWidget(net.runelite.api.gameval.InterfaceID.Worldmap.WINDOW), new java.awt.Point(m.getX(), m.getY())))
+		{
+			return;
+		}
+		client.getMenu().createMenuEntry(-1)
+			.setOption(GuideMouse.menuOption(a))
+			.setTarget("<col=ff9040>OSRS Path</col>")
+			.setType(MenuAction.RUNELITE)
+			.onClick(x -> guideAction(a));
 	}
 
 	@Subscribe
