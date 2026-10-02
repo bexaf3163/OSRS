@@ -921,10 +921,42 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		g.put("bankCoins", bank == null ? null : bank.count(ItemID.COINS, "Coins"));
 		// Оценка предметов по ценам биржи (без монет): в сумке и на себе — и в банке, если его открывали.
 		// Это не деньги, а сколько выручишь, продав: приложение показывает её отдельно от монет, с «~».
-		IntUnaryOperator price = itemManager::getItemPrice;
+		IntUnaryOperator price = this::itemPrice;
 		g.put("carriedValue", carried.value(price, ItemID.COINS) + noted.value(price, ItemID.COINS));
 		g.put("bankValue", bank == null ? null : bank.value(price, ItemID.COINS));
 		return g;
+	}
+
+	private java.lang.reflect.Method priceMethod;
+	private boolean priceBroken;
+
+	/**
+	 * Цена предмета на бирже. В RuneLite 1.13 getItemPrice(int) вернул long вместо int — вызов, собранный под 1.12,
+	 * падал с NoSuchMethodError и ронял плагин при входе в игру. Метод ищется по имени, результат — любое число;
+	 * любая ошибка — цена 0 (оценка предметов необязательна), клиент не страдает.
+	 */
+	private int itemPrice(int id)
+	{
+		if (priceBroken)
+		{
+			return 0;
+		}
+		try
+		{
+			if (priceMethod == null)
+			{
+				priceMethod = ItemManager.class.getMethod("getItemPrice", int.class);
+			}
+			Object r = priceMethod.invoke(itemManager, id);
+			long v = r instanceof Number ? ((Number) r).longValue() : 0;
+			return (int) Math.max(0, Math.min(Integer.MAX_VALUE, v));
+		}
+		catch (Throwable t)
+		{
+			priceBroken = true;
+			log.warn("OSRS Path Bridge: цены предметов недоступны в этой версии RuneLite — оценка предметов отключена", t);
+			return 0;
+		}
 	}
 
 	/** Слот по номеру ячейки надетого: weapon, head, amulet… (EquipmentInventorySlot). null — неизвестная ячейка. */
