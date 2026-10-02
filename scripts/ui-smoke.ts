@@ -251,6 +251,25 @@ async function run(browser: Browser) {
     await page.context().close();
   }
 
+  // Content-Security-Policy собранной страницы: мета-тег есть, чужой встроенный скрипт не выполняется, а страница
+  // с нашим скриптом темы и сетью только к вики работает (ошибок в консоли нет).
+  console.log('CSP');
+  {
+    const { page, errors } = await open(browser, 1280, {}, '#/');
+    expect(await page.evaluate(() => document.querySelector('meta[http-equiv="Content-Security-Policy"]')?.getAttribute('content')?.includes("default-src 'none'") ?? false), 'CSP: политика в странице');
+    const blocked = await page.evaluate(() => new Promise<boolean>((res) => {
+      const s = document.createElement('script');
+      s.textContent = 'window.__injected = 1';
+      document.head.appendChild(s);
+      setTimeout(() => res(!(window as unknown as Record<string, unknown>).__injected), 100);
+    }));
+    expect(blocked, 'CSP: чужой встроенный скрипт заблокирован');
+    // Одно нарушение — наше же испытание выше; остальных быть не должно.
+    const own = errors.filter((e) => /Content Security Policy|Refused/.test(e));
+    expect(own.length === 1 && own[0].includes('inline script'), `CSP: наша страница не нарушает свою политику ${own.join('; ')}`);
+    await page.context().close();
+  }
+
   // Шапка помещается на любой ширине, когда RuneLite на связи (раньше вылезала на 11–193 точки).
   console.log('Шапка');
   for (const width of [320, 390, 900, 1000, 1100, 1280, 1400, 1600, 1720, 1920]) {

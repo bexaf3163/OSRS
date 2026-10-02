@@ -355,6 +355,14 @@ describe('места шага: откуда предметы и NPC квеста
     expect(stepPlaces(step('S8-01')).find((q) => q.npc === 'Drezel')).toMatchObject({ x: 3416, y: 3487, plane: 2 });
   });
 
+  it('предметы «добыть в мире» из 2.11.2 имеют место: Goblin mail, кости, pebble Глариала; NPC квестов — по карте вики', () => {
+    const at = (id: string, name: string) => stepPlaces(step(id)).find((q) => q.items?.includes(name));
+    expect(at('S2-12', 'Goblin mail')).toMatchObject({ label: 'Goblin Village', plane: 0 });
+    expect(at('S3-03', 'Bones')).toMatchObject({ x: 3257, y: 3272, npc: 'Cow' });
+    expect(at('S7-01', "Glarial's pebble")).toMatchObject({ npc: 'Golrie', x: 2515, y: 9581 });
+    expect(stepPlaces(step('S8-05')).find((q) => q.npc === 'Malcolm')).toMatchObject({ x: 3629, y: 3528 });
+  });
+
   it('у магазина из словаря продавец — Shop keeper; карта шага сохраняет прежний порядок точек', () => {
     expect(stepPlaces(step('S1-02')).find((q) => q.items?.includes('Tinderbox'))).toMatchObject({ label: 'Lumbridge General Store', npc: 'Shop keeper' });
     expect(mapPlaces(step('S4-04')).slice(0, 2).map((q) => q.label)).toEqual(['До 40: нахлыст у Barbarian Village', 'С 40: омары у Musa Point']);

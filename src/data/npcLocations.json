@@ -930,6 +930,42 @@
         "area": "Zanaris",
         "page": "Fairy Fixit"
       }
+    ],
+    "General Wartface": [
+      {
+        "x": 2959,
+        "y": 3513,
+        "plane": 0,
+        "area": "северный дом Goblin Village",
+        "page": "General Wartface"
+      }
+    ],
+    "Cabin Boy Colin": [
+      {
+        "x": 2557,
+        "y": 2857,
+        "plane": 0,
+        "area": "причал Corsair Cove",
+        "page": "Cabin Boy Colin"
+      }
+    ],
+    "Malcolm": [
+      {
+        "x": 3629,
+        "y": 3528,
+        "plane": 0,
+        "area": "ферма Alice у Port Phasmatys",
+        "page": "Malcolm"
+      }
+    ],
+    "Golrie": [
+      {
+        "x": 2515,
+        "y": 9581,
+        "plane": 0,
+        "area": "подземелье Tree Gnome Village (камера Golrie)",
+        "page": "Golrie"
+      }
     ]
   }
 }

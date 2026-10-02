@@ -7,6 +7,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { registerBridge } = require('./runelite-bridge.cjs');
 const { createLauncher } = require('./runelite-launcher.cjs');
+const { backupProgress, readProgress } = require('./progress-files.cjs');
 
 const DIST = path.join(__dirname, '..', 'dist');
 const isWeb = (url) => /^https?:\/\//i.test(url);
@@ -107,8 +108,14 @@ if (!app.requestSingleInstanceLock()) {
   // Прогресс пишется при каждом изменении (заметка — на каждую букву), поэтому с задержкой.
   let pendingProgress = null;
   let progressTimer = null;
+  let backedUp = false;
   function flushProgress() {
     clearTimeout(progressTimer);
+    if (pendingProgress !== null && !backedUp) {
+      // Первая запись сеанса: прежний целый файл остаётся копией (progress.bak.json).
+      backedUp = true;
+      backupProgress(app.getPath('userData'));
+    }
     if (pendingProgress !== null) writeAtomic('progress.json', pendingProgress);
     pendingProgress = null;
   }
@@ -125,11 +132,7 @@ if (!app.requestSingleInstanceLock()) {
     win?.webContents.send('zoom:changed', zoomState());
   });
   ipcMain.on('progress:load', (e) => {
-    try {
-      e.returnValue = fs.readFileSync(file('progress.json'), 'utf8');
-    } catch {
-      e.returnValue = null;
-    }
+    e.returnValue = readProgress(app.getPath('userData'));
   });
   ipcMain.on('progress:save', (_e, json) => {
     pendingProgress = json;

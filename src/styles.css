@@ -754,7 +754,7 @@ a.quest-link:hover { border-color: var(--border-strong); }
   padding: 1px 8px; border-radius: 999px; white-space: nowrap;
   background: var(--surface-2); color: var(--muted); border: 1px solid var(--border);
 }
-.badge-sm { padding: 0 5px; margin-left: 6px; font-size: 0.65rem; }
+.badge-sm { padding: 0 5px; margin-left: 6px; font-size: 0.72rem; }
 .badge-qp { background: var(--gold-soft); color: var(--gold-ink); border-color: color-mix(in srgb, var(--gold) 35%, transparent); }
 .badge-review { background: var(--warn-soft); color: var(--warn); border-color: color-mix(in srgb, var(--warn) 40%, transparent); }
 .badge-f2p { background: var(--done-soft); color: var(--done); border-color: color-mix(in srgb, var(--done) 35%, transparent); }
@@ -942,15 +942,15 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .header-progress:hover { background: var(--surface-2); }
 .ring {
   --p: 0%;
-  width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; flex: none;
+  width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; flex: none;
   background: conic-gradient(var(--accent) var(--p), var(--border) 0);
 }
 .ring-value {
-  width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center;
-  background: var(--bg); font-size: 0.62rem; font-weight: 800; letter-spacing: -0.02em;
+  width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center;
+  background: var(--bg); font-size: 0.7rem; font-weight: 800; letter-spacing: -0.03em;
 }
 .header-qp { display: flex; flex-direction: column; line-height: 1.15; }
-.header-qp-label { font-size: 0.68rem; color: var(--muted); font-weight: 600; }
+.header-qp-label { font-size: 0.72rem; color: var(--muted); font-weight: 600; }
 .header-qp-value { font-size: 0.85rem; color: var(--muted); white-space: nowrap; }
 .header-qp-value b { color: var(--gold-ink); font-size: 1rem; font-weight: 800; }
 @media (min-width: 640px) { .header-progress { display: inline-flex; } }
@@ -1195,7 +1195,7 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
   border: 1px solid var(--border); background: var(--surface-2); font-size: 0.82rem;
 }
 .ingame-chip.is-dialog { background: var(--accent-soft); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
-.ingame-kind { font-size: 0.68rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.ingame-kind { font-size: 0.72rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
 
 .bridge-indicator {
   display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 10px; border-radius: 999px;
