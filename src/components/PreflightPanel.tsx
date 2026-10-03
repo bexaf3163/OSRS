@@ -3,15 +3,24 @@
 
 import type { Step } from '../types';
 import { useBridge } from '../bridge';
+import { useStore } from '../store';
+import { nameKey } from '../lib/checklist';
 import { evaluatePreflight, preflightItems } from '../lib/checklist';
 
 export function PreflightPanel({ step }: { step: Step }) {
-  const { state, inGame, activeStepId, owned } = useBridge();
+  const { state, inGame, activeStepId, owned, questsDone } = useBridge();
+  const { progress } = useStore();
   const items = preflightItems(step);
   if (items.length === 0 || state !== 'online') return null;
 
+  // Квест сдан (отметка в программе или список квестов из игры) — сумку проверять уже не нужно: предметы потрачены или отданы.
+  const finished = progress.steps[step.id] === 'done'
+    || (step.type === 'quest' && (questsDone ?? []).some((q) => nameKey(q) === nameKey(step.title)));
+
   let body;
-  if (activeStepId !== step.id) {
+  if (finished) {
+    body = <p className="small preflight-verdict is-ready" role="status">✓ Шаг выполнен — проверка вылета больше не нужна.</p>;
+  } else if (activeStepId !== step.id) {
     body = <p className="muted small">Нажми «Показать в игре» — сумка для этого шага проверится сама.</p>;
   } else if (!inGame || !owned) {
     body = <p className="muted small">Войди в игру в RuneLite — сумка проверится сама.</p>;

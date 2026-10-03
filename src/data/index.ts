@@ -9,6 +9,7 @@ import type {
 import { titleTargets } from '../lib/targets';
 import { deriveQuests } from '../lib/quests';
 import stepsJson from './steps.json';
+import questStagesJson from './questStages.json';
 import stagesJson from './stages.json';
 import skillsJson from './skills.json';
 import levelsJson from './levels.json';
@@ -20,7 +21,18 @@ import referenceJson from './reference.json';
 import itemsJson from './f2p-items.json';
 
 /** Все шаги V2, включая Members. Цели по уровням вычисляются из названий. */
-export const allSteps: Step[] = (stepsJson as Step[]).map((s) => {
+const stagesByStep = (questStagesJson as unknown as { quests: Record<string, Step['questStages']> }).quests;
+
+/** «Прохождение» квеста из разделов Quest Helper: по порядку, без заголовков разделов. */
+function routeSteps(q: Step['questStages']): string[] | undefined {
+  const flat = (q?.route ?? []).flatMap((p) => p.steps);
+  return flat.length ? flat : undefined;
+}
+
+export const allSteps: Step[] = (stepsJson as Step[]).map((s0) => {
+  const q = stagesByStep[s0.id];
+  // У квеста с полным маршрутом «Прохождение» берётся из него: прежние пункты пропускали ходы (подняться по лестнице и т. п.).
+  const s: Step = q ? { ...s0, questStages: q, ...(routeSteps(q) ? { quickSteps: routeSteps(q) } : {}) } : s0;
   if (s.type !== 'skill' && s.type !== 'gear') return s;
   const targets = titleTargets(s.title);
   return targets.length ? { ...s, targets } : s;

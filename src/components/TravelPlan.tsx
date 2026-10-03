@@ -42,8 +42,8 @@ export function TravelPlan({ step }: { step: Step }) {
           📍 Где я? Как добраться
         </button>
         {places.length > 1 && (
-          <label className="small">
-            до:{' '}
+          <label className="small select-field">
+            <span className="muted">до</span>
             <select value={to} onChange={(e) => setTo(Number(e.target.value))} aria-label="Куда добираться">
               {places.map((p, i) => <option key={`${p.x},${p.y},${i}`} value={i}>{p.label}</option>)}
             </select>
@@ -63,11 +63,11 @@ export function TravelPlan({ step }: { step: Step }) {
           <ul className="travel-list">
             {options.slice(0, 4).map((o) => (
               <li key={o.id} className={`travel-option is-${o.availability}`}>
-                <p>
-                  <strong>{o.title}</strong>
-                  <span className="muted small"> · пешком {walkText(o.walkTiles)}</span>
-                  <span className={`badge ${o.availability === 'ready' ? 'badge-ingame' : ''}`}> {BADGE[o.availability]}</span>
-                </p>
+                <div className="travel-head">
+                  <strong className="travel-title">{o.title}</strong>
+                  <span className={`badge travel-badge is-${o.availability}`}>{BADGE[o.availability]}</span>
+                </div>
+                <p className="muted small travel-walk">пешком {walkText(o.walkTiles)}</p>
                 {o.legs.length > 1 && <p className="muted small">{o.legs.map((l) => l.label).join(' → ')}</p>}
                 {o.needs.filter((n) => n.ok !== true).length > 0 && (
                   <p className="small">

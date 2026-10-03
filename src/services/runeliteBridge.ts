@@ -8,7 +8,7 @@ import { isClosed, openAfter } from '../lib/next-step';
 import { parseAmount, preflightItems } from '../lib/checklist';
 import { watchedItems } from '../lib/branching';
 import { stepMaxHit } from '../lib/foodAdvice';
-import { stepPlaces } from '../lib/stepPlaces';
+import { npcSpot, stepPlaces } from '../lib/stepPlaces';
 
 export const BRIDGE_ORIGIN = 'http://127.0.0.1:38282';
 /** Заголовок, без которого плагин не принимает POST. Его ставит главный процесс Electron (electron/runelite-bridge.cjs). */
@@ -184,6 +184,14 @@ export interface StepGuidePayload {
   places: { x: number; y: number; plane: number; label: string; npc?: string; items?: string[] }[];
   /** Быстрый путь шага по порядку: когда всё собрано, игра покажет последний пункт («Отдай всё Hetty…»). */
   steps?: string[];
+  /** Этапы квеста: плагин читает переменную квеста и показывает только текущий этап. */
+  stage?: StagePayload;
+}
+
+export interface StagePayload {
+  kind: 'varp' | 'varbit';
+  id: number;
+  stages: { at: number; steps: { t: string; x?: number; y?: number; plane?: number }[]; /** Номер точки в places. */ go?: number; items?: { name: string; nameRu?: string; id?: number; count?: number; where?: string; inStep?: boolean }[] }[];
 }
 
 /** Панель RuneLite: предметы шага с «где взять» и точки — главная (NPC, старт) и места из карты шага. */
@@ -205,8 +213,51 @@ export function stepGuide(step: Step, branch?: StepBranch): StepGuidePayload {
   }));
   // Отправляется всегда, даже пустой: без guide плагин считает программу старой и просит её обновить
   // (в 2.10 шаги без предметов и с одной точкой уходили без него — панель зря писала «Обнови программу»).
-  const steps = (step.quickSteps ?? []).filter((q) => q.length > 0 && q.length <= 500).slice(0, 16);
-  return { items: items.slice(0, 64), places: places.slice(0, 64), ...(steps.length ? { steps } : {}) };
+  const all = (step.quickSteps ?? []).filter((q) => q.length > 0 && q.length <= 500);
+  // Длинный маршрут: плагину нужен только последний пункт («Дальше»), а список ограничен — первые пятнадцать и последний.
+  const steps = all.length > 16 ? [...all.slice(0, 15), all[all.length - 1]] : all;
+  const stage = stagePayload(step, places);
+  return { items: items.slice(0, 64), places: places.slice(0, 64), ...(steps.length ? { steps } : {}), ...(stage ? { stage } : {}) };
+}
+
+const near = (a: { x: number; y: number; plane: number }, b: { x: number; y: number; plane: number }) =>
+  a.plane === b.plane && Math.abs(a.x - b.x) <= 1 && Math.abs(a.y - b.y) <= 1;
+
+/**
+ * Этапы квеста для игры. Точка этапа (NPC по имени или явная) встаёт в places — той же строкой «Куда идти», по которой
+ * стрелка и Shortest Path уже умеют вести; этап ссылается на неё номером. Неизвестный NPC — этап без точки.
+ */
+export function stagePayload(step: Step, places: StepGuidePayload['places']): StagePayload | undefined {
+  const qs = step.questStages;
+  if (!qs || !qs.stages.length) return undefined;
+  const stages: StagePayload['stages'] = [];
+  for (const st of [...qs.stages].sort((a, b) => a.at - b.at).slice(0, 40)) {
+    let go: number | undefined;
+    if (st.go) {
+      let p: StepGuidePayload['places'][number] | undefined;
+      if (typeof st.go === 'string') {
+        const n = npcSpot(st.go, step.id);
+        if (n) p = { x: n.x, y: n.y, plane: n.plane, label: `${st.go} — ${n.area}`, npc: st.go };
+      } else {
+        p = { x: st.go.x, y: st.go.y, plane: st.go.plane, label: st.go.label, ...(st.go.npc ? { npc: st.go.npc } : {}) };
+      }
+      if (p) {
+        let at = places.findIndex((q) => near(q, p!));
+        if (at >= 0) {
+          if (p.npc && !places[at].npc) places[at] = { ...places[at], npc: p.npc };
+        } else if (places.length < 64) {
+          places.push(p);
+          at = places.length - 1;
+        }
+        if (at >= 0) go = at;
+      }
+    }
+    stages.push({
+      at: st.at, steps: st.do.slice(0, 40).map((l) => ({ t: l.t, ...(l.at ? { x: l.at[0], y: l.at[1], plane: l.at[2] } : {}) })), ...(go !== undefined ? { go } : {}),
+      ...(st.items ? { items: st.items.slice(0, 12).map((i) => ({ ...i })) } : {}),
+    });
+  }
+  return { kind: qs.var[0], id: qs.var[1], stages };
 }
 
 /** Оптовый список для подсказки на бирже: name — английское название, count — сколько нужно всего. */

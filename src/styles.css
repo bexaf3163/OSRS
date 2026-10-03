@@ -595,8 +595,9 @@ main {
 .calc-field label, .calc-label { font-size: 0.78rem; font-weight: 600; color: var(--muted); }
 .calc-field input, .calc-field select {
   height: 44px; padding: 0 12px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
-  background: var(--surface); font-variant-numeric: tabular-nums; min-width: 0; width: 100%;
+  background-color: var(--surface); font-variant-numeric: tabular-nums; min-width: 0; width: 100%;
 }
+.calc-field select { padding-right: 32px; }
 .calc-field input:focus, .calc-field select:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 1px var(--accent); }
 .calc-static { height: 44px; display: flex; align-items: center; font-weight: 650; font-size: 1.05rem; }
 .calc-result { font-size: 1.05rem; }
@@ -1265,7 +1266,7 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 
 .shop-page { gap: 12px; }
 .shop-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
-.shop-controls select { margin-left: 4px; min-height: 34px; padding: 0 8px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: var(--surface); color: var(--text); font: inherit; }
+.shop-controls select { margin-left: 4px; }
 .shop-check { display: inline-flex; align-items: center; gap: 6px; }
 .shop-summary { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .shop-summary p { margin: 0; }
@@ -1418,3 +1419,30 @@ th .place-link { font-weight: inherit; }
 .travel-option p { margin: 0; }
 .travel-option.is-locked { opacity: 0.75; }
 .travel-option.is-ready { border-color: var(--accent); }
+
+/* Выпадающие списки: общий вид вместо системного окошка — в тон полям и кнопкам программы. */
+select {
+  appearance: none; -webkit-appearance: none;
+  min-height: 34px; padding: 0 32px 0 12px; max-width: 100%;
+  border: 1px solid var(--border-strong); border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5' fill='none' stroke='%239d9fa6' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 11px center;
+  color: var(--text); cursor: pointer;
+  transition: border-color var(--ease), box-shadow var(--ease), background-color var(--ease);
+}
+select:hover { border-color: var(--accent); background-color: var(--surface-2); }
+select:focus-visible { outline: none; border-color: var(--accent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent); }
+select:disabled { opacity: 0.55; cursor: not-allowed; }
+select option { background: var(--surface); color: var(--text); }
+.select-field { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; min-width: 0; }
+.select-field select { min-width: 0; text-overflow: ellipsis; }
+
+/* Способы добраться: название слева, отметка справа, строка пешком — отдельно, без наезда текста. */
+.travel-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px; }
+.travel-title { font-size: 1rem; min-width: 0; overflow-wrap: anywhere; }
+.travel-walk { margin-top: 2px; }
+.travel-badge.is-ready { background: var(--done-soft); color: var(--done); border-color: color-mix(in srgb, var(--done) 35%, transparent); }
+.travel-badge.is-maybe { background: var(--gold-soft); color: var(--gold-ink); border-color: color-mix(in srgb, var(--gold) 35%, transparent); }
+.travel-badge.is-locked { background: var(--surface-2); color: var(--muted); }
+.travel-option p + p { margin-top: 2px; }

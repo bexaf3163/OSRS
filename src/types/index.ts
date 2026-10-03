@@ -289,14 +289,16 @@ export interface Step {
   doneWhen: string;
   /** Шаг-заработок: сколько монет должно быть к концу шага (в сумке и банке). Прогресс — lib/wealth.ts. */
   moneyGoal?: number;
-  /** Показать расчёт «сколько стоит дойти до цели Magic боевыми заклинаниями» (S2-04). */
   /** Противники без боевой карточки в foes (босс, квестовый монстр): ключи threats.json — для совета по еде. */
   threats?: string[];
   /** Показать, что носить для магии или стрельбы (рекомендации вики) под уровни и монеты игрока. */
   styleGear?: 'magic' | 'ranged';
   /** «Use X на Y»: в игре HUD напомнит действие, а предмет и цель подсветятся. kind — object (по умолчанию), npc или item. */
   useOn?: { item: string; target: string; kind?: 'object' | 'npc' | 'item' }[];
+  /** Показать расчёт «сколько стоит дойти до цели Magic боевыми заклинаниями» (S2-04). */
   magicPlan?: { target: number; /** С какого уровня начинаешь по маршруту — если игра и страница навыков молчат. */ from: number };
+  /** Этапы квеста по переменной игры: что делать и куда идти именно сейчас (src/data/questStages.json). */
+  questStages?: QuestStages;
   /** Прочие подписанные строки: «Зачем», «Важно», «Опасно», «Бой», «Требования». */
   fields?: Field[];
   targets?: Target[];
@@ -305,6 +307,48 @@ export interface Step {
   v2ChangesSummary?: string;
   membersOnly?: boolean;
   membersAlternative?: string;
+}
+
+/** Предмет, нужный на этапе квеста. */
+export interface QuestStageItem {
+  name: string;
+  nameRu?: string;
+  id?: number;
+  count?: number;
+  where?: string;
+  /** Добывается по ходу этапа — заранее не нужен. */
+  inStep?: boolean;
+}
+
+/** Точка этапа: NPC из словаря мест или явные клетки. */
+export type QuestStageGo = string | { x: number; y: number; plane: number; label: string; npc?: string };
+
+/** Шаг этапа: что сделать и (если есть) где — по месту игрок проходит шаги, плагин сам отмечает пройденные. */
+export interface QuestStageLine {
+  t: string;
+  /** x, y, plane — клетка шага (Quest Helper). */
+  at?: [number, number, number];
+}
+
+/** Один этап квеста: действует, пока переменная квеста не меньше at и не дошла до следующего этапа. */
+export interface QuestStage {
+  at: number;
+  /** Что делать на этом этапе — шаги по порядку, как в Quest Helper (идти, подняться, поговорить, диалог). */
+  do: QuestStageLine[];
+  go?: QuestStageGo;
+  /** Что нужно именно на этом этапе. Нет поля — список предметов шага; [] — ничего. */
+  items?: QuestStageItem[];
+}
+
+/**
+ * Переменная квеста в игре (varp или varbit, номера из Quest Helper) и этапы по её значениям. Плагин читает значение
+ * и показывает в списке «Что нужно» только текущий этап. Квест пройден — по Quest.getState, не по значению.
+ */
+export interface QuestStages {
+  var: ['varp' | 'varbit', number];
+  stages: QuestStage[];
+  /** Весь квест по разделам (как панель Quest Helper): из него строится «Прохождение» шага. */
+  route?: { title: string; steps: string[] }[];
 }
 
 /** Требование шага. when: 'during' — нужно по ходу квеста, начать можно и без него. */

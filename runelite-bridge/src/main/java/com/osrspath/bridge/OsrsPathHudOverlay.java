@@ -88,6 +88,8 @@ class OsrsPathHudOverlay extends OverlayPanel
 	private final OsrsPathBridgePlugin plugin;
 	private final OsrsPathBridgeConfig config;
 	private Object builtFor;
+	/** Размер плашки в прошлом кадре — по нему рисуется карточка. */
+	private Dimension last = new Dimension();
 
 	@Inject
 	OsrsPathHudOverlay(OsrsPathBridgePlugin plugin, OsrsPathBridgeConfig config)
@@ -120,7 +122,20 @@ class OsrsPathHudOverlay extends OverlayPanel
 			build(panelComponent, s, g.getFontMetrics(font), width, config.hudOpacity());
 			builtFor = key;
 		}
-		return super.render(g);
+		OverlayCard.paint(g, last.width, last.height, accent(s), config.hudOpacity());
+		Dimension d = super.render(g);
+		last = d == null ? new Dimension() : d;
+		return d;
+	}
+
+	/** Цвет полоски: опасность — красный, цель рядом — зелёный, остальное — золото. */
+	static Color accent(State s)
+	{
+		if (s.getDanger() != null || s.isHealthCritical())
+		{
+			return OverlayCard.RED;
+		}
+		return s.isNear() ? OverlayCard.GREEN : OverlayCard.GOLD;
 	}
 
 	/** Ширина плашки: своя или та, что игрок задал, растянув её мышью с Alt. */
@@ -137,7 +152,6 @@ class OsrsPathHudOverlay extends OverlayPanel
 		List<LayoutableRenderableEntity> c = panel.getChildren();
 		c.clear();
 		panel.setPreferredSize(new Dimension(width, 0));
-		panel.setBackgroundColor(background(opacity));
 		OverlayText.frame(panel, fm);
 		OverlayText.title(c, s.getTitle(), TITLE, fm, inner);
 		if (s.getDanger() != null)

@@ -601,6 +601,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			gotItems.clear();
 			gotStep = stepId;
+			stageKey = null;
 		}
 		target = t;
 		guideMessage = null;
@@ -631,12 +632,16 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	/** Пересчитать вид (поток клиента): его рисует список в игре, а панели он уходит, только если изменился. */
 	private void refreshGuide()
 	{
+		ActiveTarget.Stage stage = stageOf(target);
+		trackStageCursor(stage);
+		followStage();
 		NavTarget n = navTarget;
 		StepGuide.View v = StepGuide.view(target, ItemCounts.sum(carried, noted), bank,
-			n == null ? null : n.getLabel(), n == null ? 0 : n.getX(), n == null ? 0 : n.getY(), n == null ? 0 : n.getPlane(), gotItems);
+			n == null ? null : n.getLabel(), n == null ? 0 : n.getX(), n == null ? 0 : n.getY(), n == null ? 0 : n.getPlane(), gotItems,
+			stage == null ? null : stageValue(stage), stage != null && questDone(target), stageCursor);
 		if (guideMessage != null)
 		{
-			v = new StepGuide.View(v.getTitle(), v.getGoal(), v.getItems(), v.getPlaces(), v.getDetour(), guideMessage, v.getNext(), v.getFinale());
+			v = v.withNote(guideMessage);
 		}
 		guideView = v;
 		OsrsPathPanel p = panel;
@@ -647,6 +652,136 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		panelView = v;
 		StepGuide.View shown = v;
 		SwingUtilities.invokeLater(() -> p.show(shown));
+	}
+
+	// ---------- Этапы квеста ----------
+
+	/** Текущий шаг этапа (с нуля) и для какого этапа он посчитан: смена этапа или шага — отсчёт заново. */
+	private int stageCursor;
+	private String cursorKey;
+
+	/** Сдвинуть текущий шаг этапа по положению игрока (StepGuide.advance). Поток клиента. */
+	private void trackStageCursor(ActiveTarget.Stage st)
+	{
+		if (st == null)
+		{
+			cursorKey = null;
+			stageCursor = 0;
+			return;
+		}
+		Integer value = stageValue(st);
+		if (value == null)
+		{
+			return;
+		}
+		int idx = st.indexFor(value);
+		String key = target.getStepId() + "#" + idx;
+		boolean fresh = !key.equals(cursorKey);
+		if (fresh)
+		{
+			cursorKey = key;
+			stageCursor = 0;
+		}
+		Player me = client.getLocalPlayer();
+		if (me != null)
+		{
+			WorldPoint pos = me.getWorldLocation();
+			List<ActiveTarget.StageLine> lines = st.getStages().get(idx).getSteps();
+			stageCursor = StepGuide.advance(lines, stageCursor, pos.getX(), pos.getY(), pos.getPlane(), fresh ? lines.size() : StepGuide.STEP_WINDOW);
+		}
+	}
+
+	/** Какой этап показан и ведёт ли к нему стрелка: ключ «шаг#этап»; смена ключа — стрелка к новому этапу. */
+	private String stageKey;
+	/** Стрелку поставил этап, а не игрок: дошёл — она остаётся у NPC (не прыгает назад к шагу), пока этап не сменится. */
+	private boolean navSticky;
+
+	private static ActiveTarget.Stage stageOf(ActiveTarget t)
+	{
+		return t == null || t.getGuide() == null ? null : t.getGuide().getStage();
+	}
+
+	/** Значение переменной квеста; null — не в игре. Поток клиента. */
+	private Integer stageValue(ActiveTarget.Stage st)
+	{
+		if (client.getGameState() != GameState.LOGGED_IN)
+		{
+			return null;
+		}
+		return st.isVarp() ? client.getVarpValue(st.getId()) : client.getVarbitValue(st.getId());
+	}
+
+	/** Квест шага пройден по данным игры (шаг с триггером «квест пройден»). */
+	private boolean questDone(ActiveTarget t)
+	{
+		ActiveTarget.Trigger trig = t == null ? null : t.getCompletionTrigger();
+		if (trig == null || trig.getQuestName() == null || client.getGameState() != GameState.LOGGED_IN)
+		{
+			return false;
+		}
+		return Boolean.TRUE.equals(isQuestFinished(trig.getQuestName()));
+	}
+
+	/**
+	 * Этап квеста сменился (или шаг только что показали) — стрелка и маршрут к NPC нового этапа. Своя цель игрока
+	 * (клик по месту) не трогается, пока этап прежний. Квест пройден — стрелка этапа снимается.
+	 */
+	private void followStage()
+	{
+		ActiveTarget t = target;
+		ActiveTarget.Stage st = stageOf(t);
+		if (st == null)
+		{
+			stageKey = null;
+			return;
+		}
+		Integer value = stageValue(st);
+		if (value == null)
+		{
+			return;
+		}
+		boolean done = questDone(t);
+		int idx = st.indexFor(value);
+		List<ActiveTarget.StageLine> lines = st.getStages().get(idx).getSteps();
+		// Стрелка идёт за текущим шагом этапа, если у него есть клетка; нет — к точке этапа.
+		ActiveTarget.StageLine now = done || lines.isEmpty() ? null : lines.get(Math.max(0, Math.min(stageCursor, lines.size() - 1)));
+		boolean byStep = now != null && now.hasPoint();
+		String stageOnly = t.getStepId() + "#" + (done ? "done" : String.valueOf(idx));
+		String key = byStep ? stageOnly + "@" + Math.max(0, Math.min(stageCursor, lines.size() - 1)) : stageOnly;
+		if (key.equals(stageKey))
+		{
+			return;
+		}
+		boolean sameStage = stageKey != null && stageKey.startsWith(stageOnly) && (stageKey.length() == stageOnly.length() || stageKey.charAt(stageOnly.length()) == '@');
+		stageKey = key;
+		if (done)
+		{
+			if (navSticky)
+			{
+				applyNav(null);
+			}
+			return;
+		}
+		if (!config.stageFollow() || !config.autoNavigation())
+		{
+			return;
+		}
+		if (sameStage && navTarget != null && !navSticky)
+		{
+			// Шаг сменился, а стрелку к своему месту поставил игрок — не трогаем.
+			return;
+		}
+		Integer go = st.getStages().get(idx).getGo();
+		NavTarget n = byStep ? StepGuide.navToLine(t, now) : go == null ? null : StepGuide.navTo(t, go);
+		if (n == null && go != null)
+		{
+			n = StepGuide.navTo(t, go);
+		}
+		if (n != null)
+		{
+			applyNav(n);
+			navSticky = true;
+		}
 	}
 
 	/** Клик по списку в игре (поток клиента). */
@@ -663,6 +798,18 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			case BACK:
 				applyNav(null);
 				break;
+			case NEXT:
+			{
+				ActiveTarget.Stage st = stageOf(target);
+				Integer value = st == null ? null : stageValue(st);
+				if (value != null)
+				{
+					int size = st.getStages().get(st.indexFor(value)).getSteps().size();
+					stageCursor = Math.min(stageCursor + 1, size - 1);
+					refreshGuide();
+				}
+				break;
+			}
 			default:
 				break;
 		}
@@ -691,6 +838,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	private void applyNav(NavTarget t)
 	{
+		navSticky = false;
 		if (t == null)
 		{
 			if (navTarget != null)
@@ -722,6 +870,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private void finishNav(String reason)
 	{
 		NavTarget done = navTarget;
+		navSticky = false;
 		navTarget = null;
 		navNpcs.clear();
 		near = false;
@@ -744,7 +893,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private boolean arrived(WorldPoint pos)
 	{
 		NavTarget t = navTarget;
-		return t != null && !t.isPurchase() && pos.getPlane() == t.getPlane()
+		return t != null && !navSticky && !t.isPurchase() && pos.getPlane() == t.getPlane()
 			&& DangerRadar.distanceSq(pos.getX(), pos.getY(), t.getX(), t.getY()) <= NAV_ARRIVED * NAV_ARRIVED;
 	}
 
@@ -1797,7 +1946,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	private void recomputeChecklist()
 	{
-		List<ActiveTarget.ChecklistItem> items = target == null ? null : target.getChecklist();
+		// Квест сдан — предметы потрачены или отданы, «не хватает» уже ни о чём: проверка вылета пустеет.
+		List<ActiveTarget.ChecklistItem> items = target == null || questDone(target) ? null : target.getChecklist();
 		checklist = Checklist.evaluate(items, carried, bank);
 		Set<Integer> ids = new HashSet<>();
 		Set<String> names = new HashSet<>();
@@ -1950,6 +2100,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			completion.onVarbitChanged(e.getVarbitId(), e.getValue());
 		}
+		ActiveTarget.Stage st = stageOf(target);
+		if (st != null && (st.isVarp() ? e.getVarpId() == st.getId() : e.getVarbitId() == st.getId()))
+		{
+			updateHud();
+		}
 	}
 
 	/** Вызывается в потоке клиента (из onGameTick). */
@@ -1971,6 +2126,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		// По-английски: в шрифте игры нет кириллицы.
 		client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "OSRS Path: step " + stepId + " complete", null);
+		recomputeChecklist();
+		updateHud();
 		if (server != null)
 		{
 			server.stepCompleted(stepId);

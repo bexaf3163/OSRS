@@ -109,9 +109,19 @@ public class ActiveTarget
 		private List<GuidePlace> places;
 		/** Быстрый путь шага по порядку: последний пункт показывается, когда всё собрано. */
 		private List<String> steps;
+		/** Этапы квеста по переменной игры: что делать и куда идти именно сейчас. null — шаг без этапов. */
+		private Stage stage;
 
 		String problem()
 		{
+			if (stage != null)
+			{
+				String bad = stage.problem(places == null ? 0 : places.size());
+				if (bad != null)
+				{
+					return bad;
+				}
+			}
 			for (List<?> list : new List<?>[]{items, places, steps})
 			{
 				if (list != null && list.size() > MAX_LIST)
@@ -145,6 +155,110 @@ public class ActiveTarget
 			}
 			return null;
 		}
+	}
+
+	/** Переменная квеста (varp или varbit) и этапы по её значениям — как StagePayload в программе. */
+	@Data
+	public static class Stage
+	{
+		static final int MAX_STAGES = 40;
+		static final int MAX_STAGE_STEPS = 40;
+
+		/** «varp» или «varbit». */
+		private String kind;
+		private int id;
+		private List<StageStep> stages;
+
+		boolean isVarp()
+		{
+			return "varp".equals(kind);
+		}
+
+		/** Номер этапа (с нуля) для значения переменной: последний, у которого at не больше значения; нет такого — первый. */
+		int indexFor(int value)
+		{
+			int found = 0;
+			for (int i = 0; i < stages.size(); i++)
+			{
+				if (stages.get(i).getAt() <= value)
+				{
+					found = i;
+				}
+			}
+			return found;
+		}
+
+		String problem(int placeCount)
+		{
+			if (!isVarp() && !"varbit".equals(kind))
+			{
+				return "неизвестный вид переменной квеста";
+			}
+			if (id < 1 || id > 100_000 || stages == null || stages.isEmpty() || stages.size() > MAX_STAGES)
+			{
+				return "неверные этапы квеста";
+			}
+			int last = -1;
+			for (StageStep s : stages)
+			{
+				if (s == null || s.steps == null || s.steps.isEmpty() || s.steps.size() > MAX_STAGE_STEPS || s.at < 0 || s.at > 100_000
+					|| s.at <= last || (s.go != null && (s.go < 0 || s.go >= placeCount)))
+				{
+					return "неверный этап квеста";
+				}
+				for (StageLine line : s.steps)
+				{
+					if (line == null || line.t == null || line.t.trim().isEmpty() || line.t.length() > Guide.MAX_WHERE
+						|| (line.x != null && (line.y == null || line.plane == null || line.x <= 0 || line.y <= 0 || line.x >= NavTarget.MAX_COORD
+						|| line.y >= NavTarget.MAX_COORD || line.plane < 0 || line.plane > 3)))
+					{
+						return "неверный шаг этапа квеста";
+					}
+				}
+				last = s.at;
+				if (s.items != null && s.items.size() > MAX_LIST)
+				{
+					return "слишком длинный список";
+				}
+				for (GuideItem i : nonNull(s.items))
+				{
+					if (i == null || i.name == null || i.name.isEmpty() || tooLong(i.name) || tooLong(i.nameRu)
+						|| (i.where != null && i.where.length() > Guide.MAX_WHERE) || (i.count != null && (i.count < 1 || i.count > ShoppingPlan.MAX_COUNT)))
+					{
+						return "неверный предмет этапа";
+					}
+				}
+			}
+			return null;
+		}
+	}
+
+	/** Шаг этапа: текст и, если известно, клетка — по ней плагин понимает, что игрок дошёл до шага. */
+	@Data
+	public static class StageLine
+	{
+		private String t;
+		private Integer x;
+		private Integer y;
+		private Integer plane;
+
+		boolean hasPoint()
+		{
+			return x != null && y != null && plane != null;
+		}
+	}
+
+	@Data
+	public static class StageStep
+	{
+		/** С какого значения переменной действует этап. */
+		private int at;
+		/** Что делать на этапе — шаги по порядку (как в Quest Helper), у каждого — клетка, если она известна. */
+		private List<StageLine> steps;
+		/** Номер точки в places guide, куда идти; null — места нет. */
+		private Integer go;
+		/** Что нужно на этом этапе; null — предметы шага, пустой список — ничего. */
+		private List<GuideItem> items;
 	}
 
 	@Data

@@ -83,6 +83,48 @@ final class StepGuide
 		String next;
 		/** Последний пункт быстрого пути шага — всегда (с кем закончить); null — пунктов нет. */
 		String finale;
+		/** Этап квеста по переменной игры; null — у шага этапов нет или игра переменную не отдала. */
+		StageView stage;
+
+		View(String title, String goal, List<ItemLine> items, List<PlaceLine> places, String detour, String note, String next, String finale)
+		{
+			this(title, goal, items, places, detour, note, next, finale, null);
+		}
+
+		View(String title, String goal, List<ItemLine> items, List<PlaceLine> places, String detour, String note, String next,
+			String finale, StageView stage)
+		{
+			this.title = title;
+			this.goal = goal;
+			this.items = items;
+			this.places = places;
+			this.detour = detour;
+			this.note = note;
+			this.next = next;
+			this.finale = finale;
+			this.stage = stage;
+		}
+
+		/** То же с другим сообщением (guideMessage плагина). */
+		View withNote(String message)
+		{
+			return new View(title, goal, items, places, detour, message, next, finale, stage);
+		}
+	}
+
+	/** Где игрок в квесте: этап k из n, что делать сейчас и пройден ли квест. */
+	@Value
+	static class StageView
+	{
+		/** С единицы. */
+		int index;
+		int total;
+		/** Что делать на этапе — шаги по порядку. */
+		List<ActiveTarget.StageLine> steps;
+		/** Номер шага, на котором игрок сейчас (с нуля): до него — сделано. */
+		int cursor;
+		/** Квест пройден (Quest.getState) — этапы больше не нужны. */
+		boolean finished;
 	}
 
 	static final View EMPTY = new View(null, null, Collections.emptyList(), Collections.emptyList(), null,
@@ -125,31 +167,114 @@ final class StepGuide
 	 */
 	static View view(ActiveTarget t, ItemCounts carried, ItemCounts bank, String navLabel, int navX, int navY, int navPlane, Set<String> got)
 	{
+		return view(t, carried, bank, navLabel, navX, navY, navPlane, got, null, false);
+	}
+
+	/**
+	 * stageValue — значение переменной квеста из игры (null — не знаем), questDone — Quest.getState == FINISHED.
+	 * У шага с этапами показывается только текущий: что делать, предметы этого этапа и одна точка. Квест пройден —
+	 * только «пройден». Нет значения или этапов — список шага целиком, как раньше.
+	 */
+	static View view(ActiveTarget t, ItemCounts carried, ItemCounts bank, String navLabel, int navX, int navY, int navPlane, Set<String> got,
+		Integer stageValue, boolean questDone)
+	{
+		return view(t, carried, bank, navLabel, navX, navY, navPlane, got, stageValue, questDone, 0);
+	}
+
+	/** Радиус «дошёл до шага», клеток. */
+	static final int STEP_RADIUS = 4;
+	/** Насколько вперёд от текущего шага ищем следующий: пройденный по дороге чужой шаг не перескакивает полэтапа. */
+	static final int STEP_WINDOW = 4;
+
+	/**
+	 * Куда сдвинуть текущий шаг этапа по положению игрока. Стоит у своего шага — остаётся; дошёл до одного из ближайших
+	 * следующих — переходит на него. Шаги без клетки (подумать, подождать) перескакиваются, когда игрок дошёл дальше.
+	 */
+	static int advance(List<ActiveTarget.StageLine> lines, int cursor, int x, int y, int plane)
+	{
+		return advance(lines, cursor, x, y, plane, STEP_WINDOW);
+	}
+
+	/**
+	 * window — насколько вперёд искать. Этап открыт впервые (курсор в нуле, игрок мог уже пройти часть шагов — например,
+	 * у этапа весь маршрут целиком): ищем по всему списку, первый подходящий.
+	 */
+	static int advance(List<ActiveTarget.StageLine> lines, int cursor, int x, int y, int plane, int window)
+	{
+		if (lines == null || lines.isEmpty())
+		{
+			return 0;
+		}
+		int at = Math.max(0, Math.min(cursor, lines.size() - 1));
+		if (near(lines.get(at), x, y, plane))
+		{
+			return at;
+		}
+		for (int i = at + 1; i < lines.size() && i <= at + window; i++)
+		{
+			if (near(lines.get(i), x, y, plane))
+			{
+				return i;
+			}
+		}
+		return at;
+	}
+
+	private static boolean near(ActiveTarget.StageLine l, int x, int y, int plane)
+	{
+		return l.hasPoint() && l.getPlane() == plane && Math.abs(l.getX() - x) <= STEP_RADIUS && Math.abs(l.getY() - y) <= STEP_RADIUS;
+	}
+
+	/** cursor — текущий шаг этапа (advance); вне диапазона — ближайший допустимый. */
+	static View view(ActiveTarget t, ItemCounts carried, ItemCounts bank, String navLabel, int navX, int navY, int navPlane, Set<String> got,
+		Integer stageValue, boolean questDone, int cursor)
+	{
 		if (t == null)
 		{
 			return EMPTY;
 		}
 		ActiveTarget.Guide g = t.getGuide();
 		List<ActiveTarget.GuidePlace> places = g == null || g.getPlaces() == null ? Collections.emptyList() : g.getPlaces();
-		List<ItemLine> items = new ArrayList<>();
-		if (g != null && g.getItems() != null)
+		ActiveTarget.Stage stage = g == null ? null : g.getStage();
+		StageView stageView = null;
+		ActiveTarget.StageStep cur = null;
+		List<ActiveTarget.GuideItem> source = g == null || g.getItems() == null ? Collections.emptyList() : g.getItems();
+		if (stage != null && (stageValue != null || questDone))
 		{
-			for (ActiveTarget.GuideItem i : g.getItems())
+			int idx = stageValue == null ? stage.getStages().size() - 1 : stage.indexFor(stageValue);
+			cur = stage.getStages().get(idx);
+			stageView = new StageView(idx + 1, stage.getStages().size(), cur.getSteps(), Math.max(0, Math.min(cursor, cur.getSteps().size() - 1)), questDone);
+			if (questDone)
 			{
-				items.add(remembered(item(i, places, carried, bank), i.getName(), got));
+				source = Collections.emptyList();
 			}
+			else if (cur.getItems() != null)
+			{
+				source = cur.getItems();
+			}
+		}
+		List<ItemLine> items = new ArrayList<>();
+		for (ActiveTarget.GuideItem i : source)
+		{
+			items.add(remembered(item(i, places, carried, bank), i.getName(), got));
 		}
 		List<PlaceLine> placeLines = new ArrayList<>();
 		for (int i = 0; i < places.size(); i++)
 		{
+			if (stageView != null && (stageView.isFinished() || cur.getGo() == null || cur.getGo() != i))
+			{
+				// У этапа одна точка — куда идти сейчас; остальные места шага к нему не относятся.
+				continue;
+			}
 			ActiveTarget.GuidePlace p = places.get(i);
 			boolean active = navLabel != null && p.getX() == navX && p.getY() == navY && p.getPlane() == navPlane;
 			String npc = p.getNpc() == null || p.getNpc().isEmpty() ? null : p.getNpc();
-			placeLines.add(new PlaceLine(p.getLabel(), i, active, npc, p.getItems() != null && !p.getItems().isEmpty()));
+			placeLines.add(new PlaceLine(p.getLabel(), i, active, npc, stageView == null && p.getItems() != null && !p.getItems().isEmpty()));
 		}
 		String title = "[" + t.getStepId() + "] " + (t.getTitle() == null ? "" : t.getTitle());
 		String note = g == null ? "Программа старше плагина: списка «что нужно» от неё не пришло. Обнови программу «OSRS Путь»." : null;
-		return new View(title, t.getGoal(), items, placeLines, navLabel, note, next(g, items), finale(g));
+		boolean staged = stageView != null;
+		return new View(title, t.getGoal(), items, placeLines, navLabel, note, staged ? null : next(g, items), staged ? null : finale(g), stageView);
 	}
 
 	/**
@@ -259,6 +384,29 @@ final class StepGuide
 		{
 			n.setNpcNames(Collections.singletonList(p.getNpc()));
 		}
+		n.setStepId(t.getStepId());
+		return n.prepare() == null ? n : null;
+	}
+
+	/** Цель стрелки — клетка шага этапа; подпись — первое предложение его текста. null — у шага нет клетки. */
+	static NavTarget navToLine(ActiveTarget t, ActiveTarget.StageLine line)
+	{
+		if (t == null || line == null || !line.hasPoint())
+		{
+			return null;
+		}
+		String text = line.getT().trim();
+		int dot = text.indexOf(". ");
+		String label = dot > 0 ? text.substring(0, dot) : text;
+		if (label.length() > 60)
+		{
+			label = label.substring(0, 59) + "…";
+		}
+		NavTarget n = new NavTarget();
+		n.setLabel(label);
+		n.setX(line.getX());
+		n.setY(line.getY());
+		n.setPlane(line.getPlane());
 		n.setStepId(t.getStepId());
 		return n.prepare() == null ? n : null;
 	}

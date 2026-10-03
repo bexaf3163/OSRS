@@ -334,6 +334,9 @@ public class OverlayLayoutTest
 		Graphics2D g = img.createGraphics();
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g.setFont(font);
+		g.translate(MARGIN, MARGIN);
+		OverlayCard.paint(g, size.width, size.height, OverlayCard.GOLD, 85);
+		g.translate(-MARGIN, -MARGIN);
 		Dimension d = panel.render(g);
 		g.dispose();
 		int[] px = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
@@ -583,6 +586,20 @@ public class OverlayLayoutTest
 				ActiveTarget.GuidePlace p = t.getGuide().getPlaces().get(0);
 				views.add(StepGuide.view(t, new ItemCounts(), new ItemCounts(), p.getLabel(), p.getX(), p.getY(), p.getPlane()));
 			}
+			ActiveTarget.Stage st = t.getGuide().getStage();
+			if (st != null)
+			{
+				// Этапы квеста: каждый этап с первым, серединным и последним шагом, и «квест пройден».
+				for (ActiveTarget.StageStep ss : st.getStages())
+				{
+					int n = ss.getSteps().size();
+					for (int cursor : new int[]{0, n / 2, n - 1})
+					{
+						views.add(StepGuide.view(t, new ItemCounts(), new ItemCounts(), null, 0, 0, 0, null, ss.getAt(), false, cursor));
+					}
+				}
+				views.add(StepGuide.view(t, new ItemCounts(), new ItemCounts(), null, 0, 0, 0, null, null, true, 0));
+			}
 		}
 		views.removeIf(v -> !GuideList.worthShowing(v));
 		assertTrue("мало шагов со списком: " + views.size(), views.size() > 100);
@@ -615,9 +632,9 @@ public class OverlayLayoutTest
 							int h = mode == 1 ? hover : -1;
 							String save = null;
 							String id = v.getTitle().substring(1, 6);
-							String name = "guide-" + id + "-" + (collapsed ? "collapsed" : h >= 0 ? "hover" : "list") + "-" + fontName(base) + (large ? "-large" : "");
+							String name = "guide-" + id + (v.getStage() != null ? "-stage" + v.getStage().getIndex() + "c" + v.getStage().getCursor() : "") + "-" + (collapsed ? "collapsed" : h >= 0 ? "hover" : "list") + "-" + fontName(base) + (large ? "-large" : "");
 							// Для глаза — первый вид (банк не открывали): S2-03 как у игрока на снимке, квест с множеством NPC и Cook's Assistant.
-							if (width == standard && (id.equals("S2-03") || id.equals("S2-10") || id.equals("S1-03")) && v.getDetour() == null && saved.add(name))
+							if (width == standard && (id.equals("S2-03") || id.equals("S2-10") || id.equals("S1-03") || (id.equals("S2-07") && v.getStage() != null && v.getStage().getCursor() > 0)) && v.getDetour() == null && saved.add(name))
 							{
 								save = name;
 							}

@@ -78,6 +78,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	private Object builtFor;
 	private List<RowComponent> components = Collections.emptyList();
 	private volatile Hits hits = Hits.NONE;
+	private Dimension last = new Dimension();
 
 	@Inject
 	OsrsPathGuideOverlay(Client client, OsrsPathBridgePlugin plugin, OsrsPathBridgeConfig config)
@@ -116,9 +117,22 @@ class OsrsPathGuideOverlay extends OverlayPanel
 				font, small, width, config.hudOpacity());
 			builtFor = key;
 		}
+		OverlayCard.paint(g, last.width, last.height, accent(v), config.hudOpacity());
 		Dimension d = super.render(g);
+		last = d == null ? new Dimension() : d;
 		remember(d);
 		return d;
+	}
+
+	/** Цвет полоски: квест пройден — зелёный, идёт по этапам — голубой, иначе золото. */
+	static Color accent(StepGuide.View v)
+	{
+		StepGuide.StageView s = v.getStage();
+		if (s != null)
+		{
+			return s.isFinished() ? OverlayCard.GREEN : OverlayCard.BLUE;
+		}
+		return OverlayCard.GOLD;
 	}
 
 	/** Строка под мышью по прошлому кадру; -1 — мышь не над списком, открыто меню игры или над списком окно игры. */
@@ -190,7 +204,6 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		List<LayoutableRenderableEntity> c = panel.getChildren();
 		c.clear();
 		panel.setPreferredSize(new Dimension(width, 0));
-		panel.setBackgroundColor(OsrsPathHudOverlay.background(opacity));
 		OverlayText.frame(panel, fm);
 		List<GuideList.Row> rows = GuideList.rows(v, collapsed, fm, smallFm, width);
 		List<RowComponent> out = new ArrayList<>();
@@ -200,6 +213,13 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			RowComponent rc = new RowComponent(r, i == hovered && r.getAction().isClickable(), false, font, small);
 			out.add(rc);
 			c.add(rc);
+			if (i == 0 && !collapsed && v.getStage() != null && v.getStage().getTotal() > 0)
+			{
+				// Под заголовком этапа — полоска прохождения квеста.
+				StepGuide.StageView sv = v.getStage();
+				c.add(new OverlayCard.Bar(sv.isFinished() ? 1 : (double) (sv.getIndex() - 1) / sv.getTotal(),
+					sv.isFinished() ? OverlayCard.GREEN : OverlayCard.BLUE));
+			}
 		}
 		if (hovered >= 0 && hovered < rows.size() && rows.get(hovered).getHint() != null)
 		{
@@ -260,7 +280,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 				}
 				// Подсветка — в пределах рамки панели (4 точки с каждой стороны): за плашку ничего не вылезает.
 				g.setColor(HOVER);
-				g.fillRect(x - 2, y + 1, width + 4, h + 1);
+				g.fillRoundRect(x - 4, y + 1, width + 8, h + 1, 8, 8);
 			}
 			int at = y;
 			for (LineComponent l : lines)

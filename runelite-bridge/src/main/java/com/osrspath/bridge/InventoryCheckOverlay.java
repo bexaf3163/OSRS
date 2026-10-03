@@ -33,6 +33,7 @@ class InventoryCheckOverlay extends OverlayPanel
 	private final OsrsPathBridgePlugin plugin;
 	private final OsrsPathBridgeConfig config;
 	private Object builtFor;
+	private Dimension last = new Dimension();
 
 	@Inject
 	InventoryCheckOverlay(Client client, OsrsPathBridgePlugin plugin, OsrsPathBridgeConfig config)
@@ -74,7 +75,32 @@ class InventoryCheckOverlay extends OverlayPanel
 			build(panelComponent, r, target.getStepId(), g.getFontMetrics(font), width, config.hudOpacity());
 			builtFor = key;
 		}
-		return super.render(g);
+		OverlayCard.paint(g, last.width, last.height, accent(r), Math.max(config.hudOpacity(), 85));
+		Dimension d = super.render(g);
+		last = d == null ? new Dimension() : d;
+		return d;
+	}
+
+	/** Доля собранного: готовых строк из всех. */
+	static double progress(Checklist.Result r)
+	{
+		int total = r.getRows().size();
+		if (total == 0)
+		{
+			return 0;
+		}
+		long ready = r.getRows().stream().filter(x -> x.getState() == Checklist.State.IN_BAG_READY).count();
+		return (double) ready / total;
+	}
+
+	/** Готов — зелёный; чего-то нет и в банке — янтарный; иначе красный: нужно взять из банка. */
+	static Color accent(Checklist.Result r)
+	{
+		if (r.isReady())
+		{
+			return OverlayCard.GREEN;
+		}
+		return r.getRows().stream().anyMatch(x -> x.getState() == Checklist.State.NOT_FOUND_IN_BANK) ? OverlayCard.AMBER : OverlayCard.RED;
 	}
 
 	static int standardWidth(boolean large)
@@ -89,9 +115,9 @@ class InventoryCheckOverlay extends OverlayPanel
 		List<LayoutableRenderableEntity> c = panel.getChildren();
 		c.clear();
 		panel.setPreferredSize(new Dimension(width, 0));
-		panel.setBackgroundColor(OsrsPathHudOverlay.background(Math.max(opacity, 85)));
 		OverlayText.frame(panel, fm);
 		OverlayText.title(c, "Проверка вылета · " + stepId, OsrsPathHudOverlay.TITLE, fm, inner);
+		c.add(new OverlayCard.Bar(progress(r), accent(r)));
 		int shown = 0;
 		for (Checklist.Row row : r.getRows())
 		{

@@ -301,7 +301,44 @@ async function run(browser: Browser) {
       const t = await text(page, '.travel-plan');
       expect(t.includes('Телепорт в Varrock') && t.includes('можно сейчас'), 'как добраться: Varrock Teleport с рунами — «можно сейчас»');
       expect(t.includes('3222, 3218'), 'как добраться: показано положение из игры');
+      // Текст не налезает на плашку статуса: у каждого варианта название и плашка не пересекаются.
+      const overlaps = await page.evaluate(() => {
+        const bad: string[] = [];
+        document.querySelectorAll('.travel-option').forEach((o) => {
+          const a = o.querySelector('.travel-title')?.getBoundingClientRect();
+          const b = o.querySelector('.travel-badge')?.getBoundingClientRect();
+          if (a && b && a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom) bad.push(o.textContent?.slice(0, 40) ?? '');
+        });
+        return bad;
+      });
+      expect(overlaps.length === 0, `как добраться: название не налезает на плашку (${overlaps.join(' | ')})`);
+      // Выпадающий список в стиле приложения, а не системный белый.
+      const sel = await page.evaluate(() => {
+        const el = document.querySelector('.travel-plan select') as HTMLSelectElement | null;
+        if (!el) return null;
+        const cs = getComputedStyle(el);
+        const probe = document.createElement('div');
+        probe.style.backgroundColor = 'var(--surface)';
+        document.body.appendChild(probe);
+        const surface = getComputedStyle(probe).backgroundColor;
+        probe.remove();
+        return { appearance: cs.appearance, bg: cs.backgroundColor, surface };
+      });
+      expect(sel !== null && sel.appearance === 'none' && sel.bg === sel.surface, `как добраться: select в стиле приложения (${JSON.stringify(sel)})`);
       expect(!errors.length, `как добраться: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
+    // Квест сдан — «Проверка вылета» не требует предметов, которых уже нет.
+    {
+      const { page, errors } = await open(browser, width, {
+        progress: progressBefore('S2-10'),
+        status: { protocol: 5, questsDone: ['Prince Ali Rescue'], pluginVersion: '2.13.0', pos: { x: 3222, y: 3218, plane: 0 }, stats: {}, coins: 0, equipment: [], inventory: [] },
+      }, '#/step/S2-10');
+      await page.waitForTimeout(500);
+      const t = await text(page, '.preflight-verdict');
+      expect(t.includes('Шаг выполнен') && !/Не готов|не хватает/i.test(t), `сданный квест: проверка вылета не ругается на пустую сумку (${t.slice(0, 80)})`);
+      expect(!errors.length, `сданный квест: ошибок в консоли нет ${errors.join('; ')}`);
       await page.context().close();
     }
 

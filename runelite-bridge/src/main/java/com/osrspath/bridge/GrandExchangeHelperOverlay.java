@@ -35,6 +35,7 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 	private final OsrsPathBridgePlugin plugin;
 	private final OsrsPathBridgeConfig config;
 	private Object builtFor;
+	private Dimension last = new Dimension();
 
 	@Inject
 	GrandExchangeHelperOverlay(Client client, OsrsPathBridgePlugin plugin, OsrsPathBridgeConfig config)
@@ -68,7 +69,25 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 			build(panelComponent, rows, g.getFontMetrics(font), width, config.hudOpacity());
 			builtFor = key;
 		}
-		return super.render(g);
+		OverlayCard.paint(g, last.width, last.height, accent(rows), Math.max(config.hudOpacity(), 85));
+		Dimension d = super.render(g);
+		last = d == null ? new Dimension() : d;
+		return d;
+	}
+
+	/** Доля готового: строки «есть» из всех. */
+	static double progress(List<ShoppingPlan.Row> rows)
+	{
+		if (rows.isEmpty())
+		{
+			return 0;
+		}
+		return (double) rows.stream().filter(r -> r.getState() == ShoppingPlan.RowState.HAVE).count() / rows.size();
+	}
+
+	static Color accent(List<ShoppingPlan.Row> rows)
+	{
+		return rows.stream().allMatch(r -> r.getState() == ShoppingPlan.RowState.HAVE) ? OverlayCard.GREEN : OverlayCard.GOLD;
 	}
 
 	static int standardWidth(boolean large)
@@ -83,11 +102,11 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 		List<LayoutableRenderableEntity> c = panel.getChildren();
 		c.clear();
 		panel.setPreferredSize(new Dimension(width, 0));
-		panel.setBackgroundColor(OsrsPathHudOverlay.background(Math.max(opacity, 85)));
 		OverlayText.frame(panel, fm);
 		long left = rows.stream().filter(r -> r.getState() != ShoppingPlan.RowState.HAVE).count();
 		OverlayText.title(c, left == 0 ? "Оптовый список: всё есть" : "Оптовый список · купить " + left,
 			left == 0 ? OsrsPathHudOverlay.GOOD : OsrsPathHudOverlay.TITLE, fm, inner);
+		c.add(new OverlayCard.Bar(progress(rows), left == 0 ? OverlayCard.GREEN : OverlayCard.GOLD));
 		// Сначала то, что осталось купить: готовое уходит вниз.
 		List<ShoppingPlan.Row> ordered = rows.stream()
 			.sorted((a, b) -> Boolean.compare(a.getState() == ShoppingPlan.RowState.HAVE, b.getState() == ShoppingPlan.RowState.HAVE))

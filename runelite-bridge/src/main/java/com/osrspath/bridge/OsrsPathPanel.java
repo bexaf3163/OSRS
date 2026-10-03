@@ -91,9 +91,29 @@ class OsrsPathPanel extends PluginPanel
 			gap(6);
 			add(text(v.getNote(), small(), MUTED));
 		}
+		StepGuide.StageView stage = v.getStage();
+		if (stage != null)
+		{
+			header(GuideList.stageTitle(stage));
+			JPanel card = card();
+			if (stage.isFinished())
+			{
+				card.add(text("Квест пройден — шаг отметится сам.", regular(), GOOD));
+			}
+			else
+			{
+				for (int i = 0; i < stage.getSteps().size(); i++)
+				{
+					boolean now = i == stage.getCursor() && stage.getSteps().size() > 1;
+					String mark = stage.getSteps().size() == 1 ? "" : i < stage.getCursor() ? "✓ " : now ? "▶ " : (i + 1) + ". ";
+					card.add(text(mark + stage.getSteps().get(i).getT(), regular(), i < stage.getCursor() ? GOOD : now ? new Color(255, 210, 90) : TEXT));
+				}
+			}
+			add(card);
+		}
 		if (!v.getItems().isEmpty())
 		{
-			header("Что нужно");
+			header(stage != null ? "Нужно сейчас" : "Что нужно");
 			for (StepGuide.ItemLine i : v.getItems())
 			{
 				JPanel card = card();

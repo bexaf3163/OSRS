@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import net.runelite.client.ui.overlay.components.ComponentConstants;
 import net.runelite.client.ui.overlay.components.LayoutableRenderableEntity;
 import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
@@ -76,10 +75,15 @@ final class OverlayText
 		return f;
 	}
 
-	/** Ширина текста внутри панели шириной width (рамка PanelComponent — по 4 точки с каждой стороны). */
+	/** Поля карточки ({@link OverlayCard}): слева шире — там цветная полоска. */
+	static final int PAD_LEFT = OverlayCard.BAR + 7;
+	static final int PAD_RIGHT = 8;
+	static final int PAD_TOP = 6;
+
+	/** Ширина текста внутри панели шириной width. */
 	static int inner(int width)
 	{
-		return width - 2 * ComponentConstants.STANDARD_BORDER;
+		return width - PAD_LEFT - PAD_RIGHT;
 	}
 
 	/**
@@ -89,8 +93,9 @@ final class OverlayText
 	 */
 	static void frame(PanelComponent panel, FontMetrics fm)
 	{
-		int b = ComponentConstants.STANDARD_BORDER;
-		panel.setBorder(new Rectangle(b, b, b, Math.max(b, fm.getDescent() + 1)));
+		panel.setBorder(new Rectangle(PAD_LEFT, PAD_TOP, PAD_RIGHT, Math.max(PAD_TOP, fm.getDescent() + 3)));
+		// Фон — карточка OverlayCard, её рисует плашка до панели.
+		panel.setBackgroundColor(null);
 	}
 
 	/**

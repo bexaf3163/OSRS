@@ -27,6 +27,8 @@ final class GuideList
 		PLACE,
 		/** Стрелку — снова к шагу. */
 		BACK,
+		/** Текущий шаг этапа сделан — перейти к следующему. */
+		NEXT,
 	}
 
 	@Value
@@ -35,6 +37,7 @@ final class GuideList
 		static final Action NONE = new Action(Kind.NONE, -1);
 		static final Action TOGGLE = new Action(Kind.TOGGLE, -1);
 		static final Action BACK = new Action(Kind.BACK, -1);
+		static final Action NEXT = new Action(Kind.NEXT, -1);
 
 		Kind kind;
 		/** Номер точки шага для PLACE. */
@@ -95,7 +98,7 @@ final class GuideList
 	static boolean worthShowing(StepGuide.View v)
 	{
 		return v != null && v.getTitle() != null
-			&& (!v.getItems().isEmpty() || v.getPlaces().size() > 1 || v.getDetour() != null || v.getNote() != null);
+			&& (!v.getItems().isEmpty() || v.getPlaces().size() > 1 || v.getDetour() != null || v.getNote() != null || v.getStage() != null);
 	}
 
 	/** Строки списка. fm — обычный шрифт, small — мелкий; width — ширина плашки. */
@@ -104,8 +107,11 @@ final class GuideList
 		int inner = OverlayText.inner(width);
 		List<Row> out = new ArrayList<>();
 		// Предметов у шага нет — это список мест: заголовок «Куда идти», без второго такого же ниже.
-		boolean placesOnly = v.getItems().isEmpty();
-		out.add(new Row(pair(collapsed ? summary(v) : placesOnly ? "Куда идти" : "Что нужно", TITLE, collapsed ? "▼" : "▲", MUTED, fm, inner, false),
+		StepGuide.StageView stage = v.getStage();
+		boolean placesOnly = v.getItems().isEmpty() && stage == null;
+		String heading = stage != null ? stageTitle(stage) : placesOnly ? "Куда идти" : "Что нужно";
+		out.add(new Row(pair(collapsed ? summary(v) : heading, stage != null && stage.isFinished() ? StepGuide.GOOD : TITLE,
+			collapsed ? "▼" : "▲", MUTED, fm, inner, false),
 			Action.TOGGLE, collapsed ? "Клик — развернуть: что нужно и куда идти." : "Клик — свернуть список в одну строку."));
 		if (collapsed)
 		{
@@ -120,9 +126,22 @@ final class GuideList
 			out.add(new Row(text("← Стрелку — снова к шагу", StepGuide.BANK, fm, inner, false), Action.BACK,
 				"Сейчас стрелка ведёт: " + v.getDetour() + ". Клик — стрелка и путь снова к шагу."));
 		}
+		if (stage != null)
+		{
+			if (stage.isFinished())
+			{
+				out.add(new Row(text("Квест пройден — шаг отметится сам.", StepGuide.GOOD, fm, inner, false), Action.NONE, null));
+				return out;
+			}
+			stageRows(out, stage, fm, small, inner);
+		}
 		// Длинный список (Prince Ali Rescue — 12 предметов и 8 NPC) не должен закрывать полэкрана: «где взять» и места —
 		// в одну строку, целиком — в подсказке при наведении. Чего не хватает — сверху, что уже в сумке — вниз.
 		List<StepGuide.ItemLine> items = ordered(v.getItems());
+		if (stage != null && !items.isEmpty())
+		{
+			out.add(new Row(text("Нужно сейчас", MUTED, small, inner, true), Action.NONE, null));
+		}
 		int whereLines = items.size() > COMPACT_ITEMS ? 1 : WHERE_LINES;
 		for (int i = 0; i < Math.min(items.size(), MAX_ITEMS); i++)
 		{
@@ -150,7 +169,11 @@ final class GuideList
 		}
 		if (!places.isEmpty())
 		{
-			if (!placesOnly)
+			if (stage != null)
+			{
+				out.add(new Row(text("Куда идти", MUTED, small, inner, true), Action.NONE, null));
+			}
+			else if (!placesOnly)
 			{
 				out.add(new Row(text("Куда идти", TITLE, fm, inner, false), Action.NONE, null));
 			}
@@ -228,9 +251,57 @@ final class GuideList
 		return new Row(text(text, TEXT, small, OverlayText.inner(width), true), Action.NONE, null);
 	}
 
+	/** Шагов впереди текущего, которые показываются; остальные — в панели справа. */
+	static final int STAGE_AHEAD = 2;
+
+	/**
+	 * Шаги этапа: сделанные — одной строкой «✓ сделано: k», текущий — ярко (клик — шаг сделан, дальше), следующие
+	 * два — обычно, остальное — счётчиком. Один шаг на этапе — просто текст.
+	 */
+	static void stageRows(List<Row> out, StepGuide.StageView stage, FontMetrics fm, FontMetrics small, int inner)
+	{
+		List<ActiveTarget.StageLine> lines = stage.getSteps();
+		if (lines.size() == 1)
+		{
+			out.add(new Row(text(lines.get(0).getT(), TEXT, fm, inner, false), Action.NONE, lines.get(0).getT()));
+			return;
+		}
+		int cur = stage.getCursor();
+		if (cur > 0)
+		{
+			out.add(new Row(text("✓ сделано шагов: " + cur, StepGuide.GOOD, small, inner, true), Action.NONE, null));
+		}
+		String now = lines.get(cur).getT();
+		out.add(new Row(text("▶ " + now, TITLE, fm, inner, false), Action.NEXT, now + " Клик — шаг сделан, показать следующий."));
+		int shown = Math.min(lines.size(), cur + 1 + STAGE_AHEAD);
+		for (int i = cur + 1; i < shown; i++)
+		{
+			out.add(new Row(clip("", "• " + lines.get(i).getT(), MUTED, small, inner, 2, true), Action.NONE, lines.get(i).getT()));
+		}
+		if (lines.size() > shown)
+		{
+			out.add(new Row(text("… ещё шагов: " + (lines.size() - shown) + " — в панели «OSRS Путь» справа", MUTED, small, inner, true), Action.NONE, null));
+		}
+	}
+
+	static String stageTitle(StepGuide.StageView s)
+	{
+		return s.isFinished() ? "Квест пройден ✓" : "Этап " + s.getIndex() + " из " + s.getTotal();
+	}
+
 	/** Свёрнутый список — одной строкой: «Что нужно: нет 2 · в банке 1». */
 	static String summary(StepGuide.View v)
 	{
+		if (v.getStage() != null)
+		{
+			String base = stageTitle(v.getStage());
+			if (v.getStage().isFinished() || v.getItems().isEmpty())
+			{
+				return base;
+			}
+			long missing = v.getItems().stream().filter(i -> !got(i) && i.getHave() != StepGuide.Have.IN_STEP).count();
+			return missing > 0 ? base + " · не хватает " + missing : base + " · всё с собой";
+		}
 		if (v.getItems().isEmpty())
 		{
 			int n = v.getPlaces().size();

@@ -355,4 +355,17 @@ public interface OsrsPathBridgeConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigItem(
+		keyName = "stageFollow",
+		name = "Стрелка по этапам",
+		description = "У квестов с этапами список «Что нужно» показывает текущий этап, а стрелка сама ведёт к его NPC и сдвигается, "
+			+ "когда квест перешёл на следующий этап. Выключено — стрелка остаётся у шага, список всё равно показывает этап",
+		section = helpers,
+		position = 30
+	)
+	default boolean stageFollow()
+	{
+		return true;
+	}
 }
