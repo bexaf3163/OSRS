@@ -84,6 +84,7 @@ export function qa(input: QaInput): QaIssue[] {
 
   // --- Этапы квестов ---
   const ids = new Set(input.steps.map((s) => s.id));
+  const stepItems = new Map(input.steps.map((s) => [s.id, (s.itemsRequired ?? []).map((i) => ({ name: i.nameEn, ru: i.nameRu }))]));
   for (const [id, q] of Object.entries(input.questStages.quests)) {
     if (!ids.has(id)) add('stages-step', id, 'нет такого шага в маршруте');
     if (!['varp', 'varbit'].includes(q.var[0]) || !Number.isInteger(q.var[1]) || q.var[1] < 1) add('stages-var', id, `переменная ${q.var.join(' ')}`);
@@ -95,16 +96,24 @@ export function qa(input: QaInput): QaIssue[] {
       for (const [n, l] of st.do.entries()) {
         const c = firstChar(l.t);
         // «Отдай/Верни/Отнеси X» не первым шагом этапа: без условия «X в сумке» стоящий рядом с NPC игрок считался бы уже дошедшим.
-        if (n > 0 && l.at && !l.has && !l.need && /^(Отдай|Верни|Отнеси|Принеси)/.test(l.t)) {
-          const text = l.t.toLowerCase();
-          const item = (st.items ?? []).find((it) => text.includes(it.name.toLowerCase()));
+        // Предметы — этапа и всего шага: «Купи Beer» может быть шагом этапа, где Beer среди предметов не значится (он у Dr. Harlow).
+        const pool = [...(st.items ?? []).map((it) => ({ name: it.name, ru: (it as { nameRu?: string }).nameRu })), ...(stepItems.get(id) ?? [])];
+        const mentions = (text: string, it: { name: string; ru?: string }) => text.includes(it.name.toLowerCase()) || Boolean(it.ru && it.ru.length > 3 && text.includes(it.ru.toLowerCase()));
+        // Что строка говорит о предметах: без пометок «(нужен Spade)» — инструмент нужен, но не добывается и не сдаётся.
+        // Списки («Возьми еду, противоядие, зелья…») и «можно частями» одним условием не описать — их ведут положение и этап.
+        const tools = l.t.toLowerCase().replace(/\([^)]*(нужен|нужна|нужно|с собой)[^)]*\)/g, '');
+        const listed = (tools.match(/,/g) ?? []).length >= 2 || /частями|по частям/.test(tools);
+        // Отдать можно и «Снова поговори с Dr. Harlow и отдай пиво»: глагол не обязан стоять первым.
+        if (n > 0 && l.at && !l.has && !l.need && !listed && /(^|[\s,;:—(])(Отдай|отдай|Верни|верни|Отнеси|отнеси|Принеси|принеси|Передай|передай)/.test(l.t)) {
+          const text = tools;
+          const item = pool.find((it) => mentions(text, it));
           if (item) add('stages-need-missing', `${id}#${st.at}`, `шаг «${l.t.slice(0, 40)}…» отдаёт «${item.name}» — нужно условие need`);
         }
         // «Накопай/Возьми/Сорви/Купи X» (не последний шаг): без has шаг не засчитывается, когда X уже в сумке, — игрок добыл руду,
         // а список всё ещё просит её копать (S2-07). Один предмет этапа в тексте — его и надо указать; два и больше — has не годится.
-        if (n < st.do.length - 1 && !l.has && !l.need && /^(Накопай|Возьми|Сорви|Купи|Подбери|Добудь|Нарви|Набери|Выкопай|Срежь|Состриги)/.test(l.t)) {
-          const text = l.t.toLowerCase();
-          const named = (st.items ?? []).filter((it) => text.includes(it.name.toLowerCase()));
+        if (n < st.do.length - 1 && !l.has && !l.need && !listed && /^(Накопай|Возьми|Сорви|Купи|Подбери|Добудь|Нарви|Набери|Выкопай|Срежь|Состриги)/.test(l.t)) {
+          const text = tools;
+          const named = [...new Map(pool.filter((it) => mentions(text, it)).map((it) => [it.name, it])).values()];
           if (named.length === 1) add('stages-has-missing', `${id}#${st.at}`, `шаг «${l.t.slice(0, 40)}…» добывает «${named[0].name}» — нужно условие has`);
         }
         // Короткий текст для игры: одна строка, без диалога, с заглавной.
@@ -114,7 +123,7 @@ export function qa(input: QaInput): QaIssue[] {
         }
         if (!c || c !== c.toUpperCase() || /\s{2,}/.test(l.t) || /\s$/.test(l.t)) add('text', `${id}#${st.at}`, `текст шага: «${l.t.slice(0, 50)}»`);
         if (l.at && badPoint(l.at)) add('stages-point', `${id}#${st.at}`, `клетка ${l.at.join(',')} вне карты`);
-        if (l.need && !(st.items ?? []).some((it) => it.name === l.need) && !st.do.some((o) => o.has === l.need)) add('stages-need', `${id}#${st.at}`, `условие «${l.need}» не среди предметов этапа и не в has его шагов`);
+        if (l.need && !pool.some((it) => it.name === l.need) && !st.do.some((o) => o.has === l.need)) add('stages-need', `${id}#${st.at}`, `условие «${l.need}» не среди предметов этапа и шага и не в has его шагов`);
       }
     }
     for (const p of q.route ?? []) {

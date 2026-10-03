@@ -331,11 +331,13 @@ describe('цель стрелки, выбранная в игре (проток�
 
   it('старый плагин: программа говорит, чего с ним нет', () => {
     expect(missingWithPlugin(3)).toEqual([
+      'единый снимок состояния и план подготовки на экране игры (процент готовности, «не бери сейчас», режим восстановления)',
       'опыт, квесты и имя персонажа из игры (синхронизация с аккаунтом, профили, время до цели)',
       'список «Что нужно» на экране игры (клик по строке — стрелка и путь туда)',
     ]);
-    expect(missingWithPlugin(4)).toHaveLength(1);
-    expect(missingWithPlugin(null)).toHaveLength(4);
+    expect(missingWithPlugin(4)).toHaveLength(2);
+    expect(missingWithPlugin(5)).toHaveLength(1);
+    expect(missingWithPlugin(null)).toHaveLength(5);
     expect(missingWithPlugin(APP_PROTOCOL)).toEqual([]);
   });
 });

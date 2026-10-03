@@ -8,7 +8,7 @@ const http = require('node:http');
 const HOST = '127.0.0.1';
 // Порт можно подменить только для проверок (scripts/e2e-electron.ts): заглушка на свободном порту, а не живой плагин игрока.
 const PORT = Number(process.env.OSRS_PUT_BRIDGE_PORT) || 38282;
-const PATHS = new Set(['/status', '/active-step', '/clear', '/shopping-plan', '/nav-target', '/bank-tags', '/gear-hint']);
+const PATHS = new Set(['/status', '/active-step', '/clear', '/shopping-plan', '/nav-target', '/bank-tags', '/gear-hint', '/prep-plan']);
 const REQUEST_TIMEOUT_MS = 1500;
 /** Плагин шлёт пинг каждые 15 секунд; тишина дольше — соединение мёртвое. */
 const IDLE_TIMEOUT_MS = 45_000;

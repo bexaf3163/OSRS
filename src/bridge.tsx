@@ -13,7 +13,7 @@ import { useStore } from './store';
 import { desktop, type RuneliteLaunch } from './lib/desktop';
 import {
   checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseGear, parseNavTarget, parseMove, parsePacing, parsePlayer, parseQuests, parseStats, parseXp, planAutoComplete, setNavTarget,
-  syncActiveStep, syncBankTags, syncShoppingPlan, toInGameTarget,
+  postPrepPlan, supportsSnapshot, syncActiveStep, syncBankTags, syncShoppingPlan, toInGameTarget,
   pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type ShoppingPlanPayload,
 } from './services/runeliteBridge';
 import { parseOwned, preflightItems, type OwnedState } from './lib/checklist';
@@ -23,6 +23,7 @@ import { stageBankItemIds } from './lib/bankTags';
 import { useFeatures } from './lib/features';
 import { isClosed, openAfter } from './lib/next-step';
 import { withKillEstimate } from './services/gearAdvisor';
+import { buildEnvelope, EMPTY_PARTS, envelopeKey, nextSeq, type SnapshotParts } from './lib/prepEnvelope';
 
 const ENABLED_KEY = 'osrs-put:runelite-bridge';
 const AUTOLAUNCH_KEY = 'osrs-put:runelite-autolaunch';
@@ -93,6 +94,11 @@ interface BridgeValue {
   questsDone: string[] | null;
   /** Имя персонажа из игры (протокол 5). */
   player: string | null;
+  /**
+   * Часть снимка для игры (протокол 6): совет по снаряжению, предметы для банка, план подготовки. Уходит в плагин вместе
+   * со всем остальным одним запросом; у плагина старше протокола 6 вызов ничего не делает — там свои отдельные запросы.
+   */
+  setPrepPart: <K extends 'gearHint' | 'bankTags' | 'plan'>(key: K, value: SnapshotParts[K]) => void;
   /** Какой профиль и персонаж сейчас: можно ли писать в профиль уровни и отметки из игры. */
   gate: ProfileGate;
   /** Опыта в час по навыку по замерам этого сеанса; null — замеров мало. */
@@ -231,6 +237,12 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const navSeq = useRef(0);
   /** Протокол плагина на связи — с 4 программа не ставит цель сама, а ждёт NAV_SET. */
   const pluginProtocol = useRef<number | null>(null);
+  /**
+   * Снимок состояния для игры (протокол 6): всё, что программа хочет видеть в игре, — одним сообщением. parts — что
+   * должно быть там сейчас; sentKey — что плагин уже получил (то же не шлём); synced — снимок можно слать: шаг в parts
+   * соответствует тому, что показывает программа (иначе пустой шаг снял бы в плагине шаг, о котором программа ещё не знает).
+   */
+  const snapshot = useRef({ parts: { ...EMPTY_PARTS } as SnapshotParts, seq: 0, sentKey: null as string | null, synced: false, timer: null as ReturnType<typeof setTimeout> | null });
   const setNavFromPlugin = useCallback((t: NavTargetPayload | null) => {
     navSeq.current++;
     setNavTargetState(t);
@@ -243,13 +255,53 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const handled = useRef(new Set<string>());
   const nonce = useRef(0);
 
+  /** Отправить снимок сейчас. true — плагин получил его (или то же уже было у него). */
+  const flushSnapshot = useCallback(async (): Promise<boolean> => {
+    const sn = snapshot.current;
+    if (sn.timer) { clearTimeout(sn.timer); sn.timer = null; }
+    const key = envelopeKey(sn.parts);
+    if (key === sn.sentKey) return true;
+    const seq = nextSeq(sn.seq);
+    sn.seq = seq;
+    const r = await postPrepPlan(buildEnvelope(sn.parts, seq));
+    if (!r.ok) { if (sn.seq === seq) sn.sentKey = null; return false; }
+    // Ответ запоздавшего снимка не должен затереть то, что отправлено после него.
+    if (sn.seq === seq) sn.sentKey = key;
+    return true;
+  }, []);
+
+  const setPrepPart = useCallback(<K extends 'gearHint' | 'bankTags' | 'plan'>(key: K, value: SnapshotParts[K]) => {
+    const sn = snapshot.current;
+    sn.parts = { ...sn.parts, [key]: value };
+    if (!supportsSnapshot(pluginProtocol.current) || !sn.synced) return;
+    // Сумка и уровни меняются очередью событий — отправляем, когда всё улеглось.
+    if (sn.timer) clearTimeout(sn.timer);
+    sn.timer = setTimeout(() => { sn.timer = null; void flushSnapshot(); }, 350);
+  }, [flushSnapshot]);
+
   /** Шаг в игру. У шага боя — с первой оценкой времени на противника по нынешнему оружию и уровням. */
-  const sendStep = useCallback((step: Step, branch?: StepBranch) => {
+  const sendStep = useCallback(async (step: Step, branch?: StepBranch): Promise<boolean> => {
     const { progress: p, stats: live, gear: g, steps: list } = latest.current;
     // Предметы текущего и ближайших шагов — плагин считает их заранее: «одна ходка» знает, что уже есть.
     const ahead = tripWindow(list, p, step.id).slice(1).flatMap((s) => preflightItems(s).map((i) => i.nameEn));
-    return syncActiveStep(withKillEstimate(step, { ...p.levels, ...(live ?? {}) }, g), undefined, branch, ahead);
-  }, []);
+    const target = withKillEstimate(step, { ...p.levels, ...(live ?? {}) }, g);
+    if (!supportsSnapshot(pluginProtocol.current)) return syncActiveStep(target, undefined, branch, ahead);
+    const payload = toInGameTarget(target, branch, ahead);
+    if (!payload) return false;
+    const sn = snapshot.current;
+    sn.parts = { ...sn.parts, step: payload };
+    sn.synced = true;
+    return flushSnapshot();
+  }, [flushSnapshot]);
+
+  /** Снять шаг в игре: при снимке — частью снимка, иначе — отдельным запросом. */
+  const clearStep = useCallback(async (): Promise<void> => {
+    if (!supportsSnapshot(pluginProtocol.current)) { await clearActiveStep(); return; }
+    const sn = snapshot.current;
+    sn.parts = { ...sn.parts, step: null, plan: null };
+    sn.synced = true;
+    await flushSnapshot();
+  }, [flushSnapshot]);
 
   const setEnabled = useCallback((on: boolean) => {
     setEnabledState(on);
@@ -270,10 +322,10 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       handled.current.delete(next.id);
       void sendStep(next, chosenBranch(next, latest.current.branchChoice)).then((ok) => setActiveStepId(ok ? next.id : null));
     } else if (plan.inGame === 'clear') {
-      void clearActiveStep();
+      void clearStep();
       setActiveStepId(null);
     }
-  }, [sendStep]);
+  }, [sendStep, clearStep]);
 
   /** Временная цель снята в игре: дошёл до места, получил предмет или её сняли. Шаг снова ведёт стрелку. */
   const onNavDone = useCallback((e: BridgeEvent) => {
@@ -314,6 +366,10 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       setNavFromPlugin(null);
       pluginProtocol.current = null;
       bankSent.current = '';
+      // RuneLite закрыли — в новом плагине ничего нет: снимок уйдёт заново, когда программа снова свяжется.
+      snapshot.current.sentKey = null;
+      snapshot.current.synced = false;
+      if (snapshot.current.timer) { clearTimeout(snapshot.current.timer); snapshot.current.timer = null; }
     };
     if (!enabled) {
       setState('off');
@@ -345,9 +401,26 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       // RuneLite перезапустили (или программу) — плагин шага не знает: отправляем снова. Тот же шаг не
       // шлём повторно, чтобы не сбросить в плагине путевые точки и замер темпа.
       const want = latest.current.activeStepId;
-      if (resync && s.online && want && s.activeStepId !== want) {
-        const step = latest.current.steps.find((x) => x.id === want);
-        if (step) void sendStep(step, chosenBranch(step, latest.current.branchChoice));
+      if (s.online && supportsSnapshot(s.protocol)) {
+        // Протокол 6: снимок полный и плагин не пересбрасывает тот же шаг — после перезапуска любой из сторон просто
+        // отправляем всё заново: шаг, закупки, подсветку банка, совет и план.
+        const sn = snapshot.current;
+        if (!sn.synced || resync) {
+          const step = want ? latest.current.steps.find((x) => x.id === want) : undefined;
+          sn.synced = true;
+          if (!sn.parts.shopping) sn.parts = { ...sn.parts, shopping: loadJson<ShoppingPlanPayload>(PLAN_KEY, null) };
+          sn.sentKey = null;
+          if (step) void sendStep(step, chosenBranch(step, latest.current.branchChoice));
+          else void flushSnapshot();
+        }
+      } else if (resync && s.online) {
+        if (want && s.activeStepId !== want) {
+          const step = latest.current.steps.find((x) => x.id === want);
+          if (step) void sendStep(step, chosenBranch(step, latest.current.branchChoice));
+        }
+        // RuneLite могли перезапустить — оптовый список для биржи отправляем снова (протокол 6 шлёт его в снимке).
+        const plan = loadJson<ShoppingPlanPayload>(PLAN_KEY, null);
+        if (Array.isArray(plan?.items) && plan.items.length) void syncShoppingPlan(plan);
       }
     };
     const onEvent = (e: BridgeEvent) => {
@@ -391,15 +464,12 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       // Поток открыт — сверяемся с /status: индикатор должен показывать то, что отвечает плагин,
       // а шаг, показанный в игре, должен быть и в плагине.
       refresh(true);
-      // RuneLite могли перезапустить — оптовый список для биржи отправляем снова.
-      const plan = loadJson<ShoppingPlanPayload>(PLAN_KEY, null);
-      if (Array.isArray(plan?.items) && plan.items.length) void syncShoppingPlan(plan);
     });
     return () => {
       alive = false;
       handle.close();
     };
-  }, [enabled, onCompleted, onNavDone, sendStep, setNavFromPlugin]);
+  }, [enabled, onCompleted, onNavDone, sendStep, setNavFromPlugin, flushSnapshot]);
 
   // Предметы этапа показанного в игре шага — плагину, для мягкой подсветки в банке.
   // Уходят при смене шага (и этапа), после переподключения и когда функцию включили; выключили — подсветка снимается.
@@ -407,11 +477,13 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     if (state !== 'online') return;
     const step = activeStepId ? steps.find((s) => s.id === activeStepId) : undefined;
     const ids = features.bankTags && step ? stageBankItemIds(step.stage, mode) : [];
-    const key = `${step?.stage ?? '-'}|${mode}|${ids.join(',')}`;
+    const snap = supportsSnapshot(plugin?.protocol ?? null);
+    const key = `${snap ? 'v6' : 'v5'}|${step?.stage ?? '-'}|${mode}|${ids.join(',')}`;
     if (key === bankSent.current || (!ids.length && !bankSent.current)) return;
     bankSent.current = key;
-    void syncBankTags(step ? `stage-${step.stage}` : 'none', ids);
-  }, [state, activeStepId, steps, mode, features.bankTags]);
+    if (snap) setPrepPart('bankTags', ids.length ? { stageId: step ? `stage-${step.stage}` : 'none', itemIds: ids } : null);
+    else void syncBankTags(step ? `stage-${step.stage}` : 'none', ids);
+  }, [state, activeStepId, steps, mode, features.bankTags, plugin?.protocol, setPrepPart]);
 
   const setAutoLaunch = useCallback((on: boolean) => {
     setAutoLaunchState(on);
@@ -446,14 +518,14 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     const next = openAfter(steps, progress, activeStepId);
     const branch = next ? chosenBranch(next, latest.current.branchChoice) : undefined;
     if (!next || !toInGameTarget(next, branch)) {
-      void clearActiveStep();
+      void clearStep();
       setActiveStepId(null);
       return;
     }
     handled.current.delete(next.id);
     setActiveStepId(next.id);
     void sendStep(next, branch);
-  }, [activeStepId, progress, steps, sendStep]);
+  }, [activeStepId, progress, steps, sendStep, clearStep]);
 
   const pointInGame = useCallback(async (step: Step): Promise<PointResult> => {
     const branch = chosenBranch(step, latest.current.branchChoice);
@@ -467,9 +539,9 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   }, [sendStep]);
 
   const clear = useCallback(async () => {
-    await clearActiveStep();
+    await clearStep();
     setActiveStepId(null);
-  }, []);
+  }, [clearStep]);
 
   const chooseBranch = useCallback((step: Step, branchId: string | null) => {
     setBranchChoice((prev) => {
@@ -489,8 +561,12 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
 
   const syncPlan = useCallback(async (plan: ShoppingPlanPayload) => {
     saveJson(PLAN_KEY, plan);
-    return syncShoppingPlan(plan);
-  }, []);
+    if (!supportsSnapshot(pluginProtocol.current)) return syncShoppingPlan(plan);
+    const sn = snapshot.current;
+    sn.parts = { ...sn.parts, shopping: plan };
+    // Шаг в снимке ещё не известен (программа только запустилась) — снимок уйдёт, когда он будет; список сохранён.
+    return sn.synced ? flushSnapshot() : true;
+  }, [flushSnapshot]);
 
   const navigate = useCallback(async (target: NavTargetPayload) => {
     if (!enabled) return { ok: false as const, reason: 'off' as const };
@@ -570,11 +646,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
       stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, userClearedAt, plugin,
-      xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves,
+      xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
       stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, userClearedAt, plugin,
-      xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves],
+      xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;
 }

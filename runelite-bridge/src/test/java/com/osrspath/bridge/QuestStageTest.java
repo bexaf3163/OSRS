@@ -208,7 +208,8 @@ public class QuestStageTest
 		assertFalse("дальше одного не показываем: " + all, all.contains("C-again") || all.contains("• "));
 		assertFalse("«сделано шагов» и отсылка к панели убраны: " + all, all.contains("сделано шагов") || all.contains("в панели"));
 		assertTrue("шаг не первый — есть «Назад»: " + all, all.contains("◀ Назад: B"));
-		assertEquals("текущий шаг — кнопка «сделано»", GuideList.Action.NEXT, rows.get(0).getAction());
+		assertEquals("текущий шаг не кнопка: вперёд по клику не пропустить", GuideList.Action.NONE, rows.get(0).getAction());
+		assertFalse("нет «К текущему» вне просмотра: " + all, all.contains("К текущему"));
 		assertEquals("назад — кнопка", GuideList.Action.PREV, rows.get(rows.size() - 1).getAction());
 	}
 
@@ -239,13 +240,33 @@ public class QuestStageTest
 	}
 
 	@Test
-	public void предупреждениеИРучнойРежим_виднЫВСписке()
+	public void кнопкаСделано_естьТолькоУШаговКоторыхИграНеВидит()
+	{
+		// manor(): A (3100,3300), B без места, C (3110,3300)… — после A следующий шаг без места: игра его не покажет.
+		StepGuide.StageView manual = new StepGuide.StageView(1, 1, manor(), 0, false, null, false, true);
+		java.util.ArrayList<GuideList.Row> rows = new java.util.ArrayList<>();
+		GuideList.stageRows(rows, manual, FM, FM, 220);
+		GuideList.Row next = rows.stream().filter(r -> r.getAction().equals(GuideList.Action.NEXT)).findFirst().orElse(null);
+		assertNotNull("у шага, которого игра не видит, есть «Сделано — дальше»: " + text(rows), next);
+		assertTrue(text(java.util.Collections.singletonList(next)), text(java.util.Collections.singletonList(next)).contains("Сделано — дальше"));
+		assertEquals("текущий шаг сам — не кнопка", GuideList.Action.NONE, rows.get(0).getAction());
+		java.util.ArrayList<GuideList.Row> auto = new java.util.ArrayList<>();
+		GuideList.stageRows(auto, new StepGuide.StageView(1, 1, manor(), 0, false), FM, FM, 220);
+		assertTrue("у шага, который игра видит, кнопки нет: " + text(auto), auto.stream().noneMatch(r -> r.getAction().equals(GuideList.Action.NEXT)));
+	}
+
+	@Test
+	public void предупреждениеИПросмотр_видныВСписке()
 	{
 		StepGuide.StageView sv = new StepGuide.StageView(1, 1, manor(), 2, false, "Blurite ore ещё в сумке — сначала: Верни Thurgo", true);
 		java.util.ArrayList<GuideList.Row> rows = new java.util.ArrayList<>();
 		GuideList.stageRows(rows, sv, FM, FM, 220);
 		assertTrue("предупреждение — первой строкой: " + text(rows.subList(0, 1)), text(rows.subList(0, 1)).contains("⚠ Blurite ore ещё в сумке — сначала: Верни Thurgo"));
-		assertTrue(text(rows), text(rows).contains("вручную"));
+		assertTrue(text(rows), text(rows).contains("просмотр"));
+		assertFalse("слова «вручную» больше нет", text(rows).contains("вручную"));
+		GuideList.Row resume = rows.stream().filter(r -> r.getAction().equals(GuideList.Action.RESUME)).findFirst().orElse(null);
+		assertNotNull("в просмотре есть «К текущему шагу»", resume);
+		assertTrue(text(java.util.Collections.singletonList(resume)), text(java.util.Collections.singletonList(resume)).contains("К текущему шагу"));
 	}
 
 	@Test

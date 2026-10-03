@@ -27,10 +27,12 @@ final class GuideList
 		PLACE,
 		/** Стрелку — снова к шагу. */
 		BACK,
-		/** Текущий шаг этапа сделан — перейти к следующему. */
+		/** Шаг, которого игра сама не увидит (подряд на одном месте), сделан — показать следующий. */
 		NEXT,
-		/** Шаг этапа отмечен зря — вернуться на шаг назад. */
+		/** Посмотреть предыдущий шаг этапа (ненадолго: дальше курсор снова ведут факты в игре). */
 		PREV,
+		/** Закончить просмотр: курсор снова по фактам. */
+		RESUME,
 	}
 
 	@Value
@@ -41,6 +43,7 @@ final class GuideList
 		static final Action BACK = new Action(Kind.BACK, -1);
 		static final Action NEXT = new Action(Kind.NEXT, -1);
 		static final Action PREV = new Action(Kind.PREV, -1);
+		static final Action RESUME = new Action(Kind.RESUME, -1);
 
 		Kind kind;
 		/** Номер точки шага для PLACE. */
@@ -139,7 +142,7 @@ final class GuideList
 		String heading = stage != null ? stageTitle(stage) : placesOnly ? "Куда идти" : "Что нужно";
 		// Код шага — впереди: HUD с названием шага убран, а в какой ты задаче, видно должно быть всегда.
 		String code = code(v);
-		out.add(new Row(pair(code + (collapsed ? summary(v) : heading), stage != null && stage.isFinished() ? StepGuide.GOOD : TITLE,
+		out.add(new Row(pair(code + (collapsed ? summary(v) : heading) + percent(v), stage != null && stage.isFinished() ? StepGuide.GOOD : TITLE,
 			collapsed ? "▼" : "▲", MUTED, fm, inner, false),
 			Action.TOGGLE, (v.getTitle() == null ? "" : v.getTitle() + ". ")
 				+ (collapsed ? "Клик — развернуть: что нужно и куда идти." : "Клик — свернуть список в одну строку.")));
@@ -147,6 +150,7 @@ final class GuideList
 		{
 			return out;
 		}
+		recoveryRows(out, v.getPrep(), fm, small, inner);
 		if (v.getNote() != null)
 		{
 			out.add(new Row(text(v.getNote(), MUTED, small, inner, true), Action.NONE, null));
@@ -177,7 +181,7 @@ final class GuideList
 		int whereLines = terse || items.size() > COMPACT_ITEMS ? 1 : WHERE_LINES;
 		for (int i = 0; i < Math.min(items.size(), maxItems); i++)
 		{
-			out.add(item(items.get(i), v.getPlaces(), fm, small, inner, whereLines));
+			out.add(item(items.get(i), v.getPlaces(), fm, small, inner, whereLines, v.getPrep()));
 		}
 		if (items.size() > maxItems)
 		{
@@ -224,7 +228,69 @@ final class GuideList
 				out.add(new Row(text("… ещё " + (places.size() - maxPlaces), MUTED, small, inner, true), Action.NONE, "Остальное — в панели «OSRS Путь» справа."));
 			}
 		}
+		adviceRows(out, v.getPrep(), small, inner);
 		return out;
+	}
+
+	/** « · 82%» в заголовке: насколько шаг подготовлен по плану программы; готов на сто — не пишем. */
+	static String percent(StepGuide.View v)
+	{
+		Integer p = v.getPrep() == null ? null : v.getPrep().pendingPercent();
+		return p == null ? "" : " · " + p + "%";
+	}
+
+	/**
+	 * Режим восстановления (план программы): ты умер или телепортировался посреди шага — что сделать по порядку. Считает
+	 * программа (знает сумку, банк, шаг и где ты); плагин только рисует: заголовок янтарным и до трёх пунктов.
+	 */
+	static void recoveryRows(List<Row> out, PrepPlan prep, FontMetrics fm, FontMetrics small, int inner)
+	{
+		if (prep == null || !prep.hasRecovery())
+		{
+			return;
+		}
+		String title = prep.getRecovery().getTitle() == null || prep.getRecovery().getTitle().isEmpty()
+			? "Режим восстановления" : prep.getRecovery().getTitle();
+		out.add(new Row(text("⚠ " + title, StepGuide.BANK, fm, inner, false), Action.NONE, String.join(" ", prep.getRecovery().getSteps())));
+		List<String> steps = prep.getRecovery().getSteps();
+		for (int i = 0; i < Math.min(steps.size(), RECOVERY_SHOWN); i++)
+		{
+			out.add(new Row(clip("", (i + 1) + ") " + steps.get(i), TEXT, small, inner, 2, true), Action.NONE, steps.get(i)));
+		}
+	}
+
+	static final int RECOVERY_SHOWN = 3;
+
+	/**
+	 * Советы программы под списком: «Не бери сейчас» (понадобится позже — место в сумке не занимать), вес и бег, сумка не
+	 * вмещает, нельзя по уровню или квесту. Каждая — одна-две мелкие строки; полный текст — в подсказке.
+	 */
+	static void adviceRows(List<Row> out, PrepPlan prep, FontMetrics small, int inner)
+	{
+		if (prep == null)
+		{
+			return;
+		}
+		if (prep.getBlockers() != null)
+		{
+			for (String b : prep.getBlockers())
+			{
+				out.add(new Row(clip("", "⚠ " + b, StepGuide.MISSING, small, inner, 2, true), Action.NONE, b));
+			}
+		}
+		if (prep.getSlots() != null && !prep.getSlots().isEmpty())
+		{
+			out.add(new Row(clip("", "⚠ " + prep.getSlots(), StepGuide.BANK, small, inner, 2, true), Action.NONE, prep.getSlots()));
+		}
+		if (prep.getLater() != null && !prep.getLater().isEmpty())
+		{
+			String all = String.join(", ", prep.getLater());
+			out.add(new Row(clip("", "Не бери сейчас: " + all, MUTED, small, inner, 2, true), Action.NONE, "Понадобится позже: " + all + "."));
+		}
+		if (prep.getWeight() != null && !prep.getWeight().isEmpty())
+		{
+			out.add(new Row(clip("", "Вес: " + prep.getWeight(), MUTED, small, inner, 2, true), Action.NONE, prep.getWeight()));
+		}
 	}
 
 	/** Сначала то, чего не хватает (в порядке маршрута), потом — что уже в сумке. */
@@ -315,9 +381,12 @@ final class GuideList
 	static final int STAGE_AHEAD = 1;
 
 	/**
-	 * Шаги этапа: текущий — ярко, справа «3/4» (клик — шаг сделан), под ним одной серой строкой «Дальше» (справа — сколько
-	 * ещё после него) и, если шаг не первый, «◀ Назад» — вернуться, если нажато зря. Тексты — короткие (StageLine.shown),
-	 * полный текст — в подсказке при наведении. Предупреждение («Blurite ore ещё в сумке») — янтарным сверху.
+	 * Шаги этапа: текущий — ярко, справа «3/4», под ним одной серой строкой «Дальше» (справа — сколько ещё после него) и,
+	 * если шаг не первый, «◀ Назад» — перечитать прежний шаг. Вперёд кликом пропустить нельзя: текущий шаг определяется по
+	 * тому, что происходит в игре (положение, предметы), — его нельзя «прощёлкать» и запутаться. Исключение — «✓ Сделано —
+	 * дальше» у шагов, которых игра сама не видит (подряд на одном месте): без неё список застрял бы. Пока смотришь прежний
+	 * шаг, появляется «▶ К текущему шагу». Тексты — короткие (StageLine.shown), полный текст — в подсказке при
+	 * наведении. Предупреждение («Blurite ore ещё в сумке») — янтарным сверху.
 	 */
 	static void stageRows(List<Row> out, StepGuide.StageView stage, FontMetrics fm, FontMetrics small, int inner)
 	{
@@ -333,9 +402,8 @@ final class GuideList
 		}
 		int cur = Math.max(0, Math.min(stage.getCursor(), lines.size() - 1));
 		ActiveTarget.StageLine now = lines.get(cur);
-		String count = (stage.isHeld() ? "вручную · " : "") + (cur + 1) + "/" + lines.size();
-		out.add(new Row(pair("▶ " + now.shown(), TITLE, count, MUTED, fm, inner, false), Action.NEXT,
-			now.getT() + " Клик — шаг сделан, показать следующий." + (stage.isHeld() ? " Шаг выбран вручную: сам он не перейдёт, пока не нажмёшь." : "")));
+		String count = (stage.isPeeking() ? "просмотр · " : "") + (cur + 1) + "/" + lines.size();
+		out.add(new Row(pair("▶ " + now.shown(), stage.isPeeking() ? MUTED : TITLE, count, MUTED, fm, inner, false), Action.NONE, now.getT()));
 		for (int i = cur + 1; i < Math.min(lines.size(), cur + 1 + STAGE_AHEAD); i++)
 		{
 			int after = lines.size() - i - 1;
@@ -343,11 +411,21 @@ final class GuideList
 			List<Line> row = after > 0 ? pair(next, MUTED, "+" + after, MUTED, small, inner, true) : clip("", next, MUTED, small, inner, 1, true);
 			out.add(new Row(row, Action.NONE, lines.get(i).getT() + (after > 0 ? " Ещё шагов после него: " + after + " — в панели «OSRS Путь» справа." : "")));
 		}
+		if (stage.isManual() && cur < lines.size() - 1)
+		{
+			out.add(new Row(text("✓ Сделано — дальше", LINK, small, inner, true), Action.NEXT,
+				"Клик — этот шаг сделан, показать следующий. Кнопка только у шагов, которые игра сама не видит: подряд на одном месте."));
+		}
+		if (stage.isPeeking())
+		{
+			out.add(new Row(text("▶ К текущему шагу", LINK, small, inner, true), Action.RESUME,
+				"Клик — вернуться к шагу, на котором ты сейчас по игре. Сам вернётся через минуту."));
+		}
 		if (cur > 0)
 		{
 			ActiveTarget.StageLine prev = lines.get(cur - 1);
 			out.add(new Row(clip("", "◀ Назад: " + prev.shown(), MUTED, small, inner, 1, true), Action.PREV,
-				"Клик — вернуться на шаг назад: " + prev.getT() + " Автоматика не уйдёт вперёд, пока не нажмёшь «шаг сделан»."));
+				"Клик — посмотреть предыдущий шаг: " + prev.getT() + " Через минуту список сам вернётся к текущему."));
 		}
 	}
 
@@ -460,14 +538,27 @@ final class GuideList
 
 	static Row item(StepGuide.ItemLine i, List<StepGuide.PlaceLine> places, FontMetrics fm, FontMetrics small, int inner, int whereLines)
 	{
+		return item(i, places, fm, small, inner, whereLines, null);
+	}
+
+	/**
+	 * Предмет с пометками плана программы: вместо общего «где взять» — что сделать именно тебе («Забери из банка», «Купи у
+	 * Betty — 3 gp»), а у расходника, которого мало, — «мало» вместо «есть».
+	 */
+	static Row item(StepGuide.ItemLine i, List<StepGuide.PlaceLine> places, FontMetrics fm, FontMetrics small, int inner, int whereLines,
+		PrepPlan prep)
+	{
+		PrepPlan.Line planned = prep == null ? null : prep.line(i.getName());
 		boolean bag = got(i);
 		StepGuide.PlaceLine at = i.getPlace() >= 0 && i.getPlace() < places.size() ? places.get(i.getPlace()) : null;
 		boolean go = !bag && at != null && !at.isActive();
-		List<Line> lines = pair(mark(i.getHave()) + " " + i.getName(), bag ? StepGuide.GOOD : TEXT, i.getTag(),
-			StepGuide.color(i.getHave()), fm, inner, false);
-		if (!bag && i.getWhere() != null && !i.getWhere().isEmpty())
+		boolean low = bag && planned != null && planned.lowSupply();
+		String where = !bag && planned != null && planned.getAction() != null && !planned.getAction().isEmpty() ? planned.getAction() : i.getWhere();
+		List<Line> lines = pair(mark(i.getHave()) + " " + i.getName(), bag ? StepGuide.GOOD : TEXT, low ? "мало" : i.getTag(),
+			low ? StepGuide.BANK : StepGuide.color(i.getHave()), fm, inner, false);
+		if (!bag && where != null && !where.isEmpty())
 		{
-			lines.addAll(clip(INDENT, i.getWhere(), go ? LINK : MUTED, small, inner, whereLines, true));
+			lines.addAll(clip(INDENT, where, go ? LINK : MUTED, small, inner, whereLines, true));
 		}
 		if (!bag && at != null && at.isActive())
 		{
@@ -478,6 +569,14 @@ final class GuideList
 		if (i.getWhere() != null && !i.getWhere().isEmpty())
 		{
 			hint.add("Где взять: " + i.getWhere());
+		}
+		if (planned != null && planned.getAction() != null && !planned.getAction().isEmpty() && !planned.getAction().equals(i.getWhere()))
+		{
+			hint.add("Совет: " + planned.getAction() + ".");
+		}
+		if (low)
+		{
+			hint.add("Расходника мало — пополни запас.");
 		}
 		if (go)
 		{

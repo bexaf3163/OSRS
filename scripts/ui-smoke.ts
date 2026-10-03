@@ -346,10 +346,10 @@ async function run(browser: Browser) {
       await page.context().close();
       const fresh = await open(browser, width, {
         localStorage: { 'osrs-put:active-step': 'S2-03' }, progress: progressBefore('S2-03'),
-        status: { activeStepId: 'S2-03', protocol: 5, pluginVersion: '2.12.0' },
+        status: { activeStepId: 'S2-03', protocol: 6, pluginVersion: '2.22.0' },
       }, '#/step/S2-03');
       const f = await text(fresh.page, '.ingame');
-      expect(f.includes('список «Что нужно»') && !f.includes('старый плагин'), 'шаг: плагин 2.12 — подсказка, где в игре список «Что нужно»');
+      expect(f.includes('список «Что нужно»') && !f.includes('старый плагин'), 'шаг: плагин 2.22 — подсказка, где в игре список «Что нужно»');
       expect(!fresh.errors.length, `шаг: ошибок в консоли нет ${fresh.errors.join('; ')}`);
       await fresh.page.context().close();
     }
@@ -535,6 +535,26 @@ async function run(browser: Browser) {
       await page.getByRole('button', { name: 'Это не срыв — продолжить' }).click();
       await page.waitForFunction(() => !document.querySelector('.prep-recovery'), null, { timeout: 5000 });
       expect(!errors.length, `восстановление: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
+    // Протокол 6: шаг, закупки, подсветка банка, совет и план уходят в игру одним снимком /prep-plan — отдельных запросов нет.
+    {
+      const { page, errors } = await open(browser, width, {
+        zen: true, localStorage: { 'osrs-put:active-step': 'S2-07', 'osrs-put:shopping-plan': '{"items":[{"name":"Iron bar","count":2}]}' }, progress: progressBefore('S2-07'),
+        status: { protocol: 6, pluginVersion: '2.22.0', stats: {}, coins: 0, bankCoins: 0, equipment: [], inventory: [] },
+      }, '#/step/S2-07');
+      await page.waitForTimeout(1500);
+      const sent = await page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts);
+      const snaps = sent.filter((p) => p.path === '/prep-plan');
+      expect(snaps.length > 0, 'протокол 6: снимок /prep-plan отправлен');
+      const last = snaps[snaps.length - 1]?.body;
+      expect(last?.v === 6 && last?.step?.stepId === 'S2-07', 'протокол 6: в снимке шаг S2-07');
+      expect(last?.plan?.stepId === 'S2-07' && Array.isArray(last?.plan?.lines) && last.plan.lines.length > 0, 'протокол 6: в снимке план подготовки с предметами');
+      expect(last?.shopping?.items?.[0]?.name === 'Iron bar', 'протокол 6: закупки — в том же снимке');
+      expect(!sent.some((p) => ['/active-step', '/gear-hint', '/bank-tags', '/shopping-plan'].includes(p.path)), 'протокол 6: пяти отдельных запросов нет');
+      expect(snaps.every((p, i) => i === 0 || p.body.seq > snaps[i - 1].body.seq), 'протокол 6: номера снимков растут');
+      expect(!errors.length, `протокол 6: ошибок в консоли нет ${errors.join('; ')}`);
       await page.context().close();
     }
 

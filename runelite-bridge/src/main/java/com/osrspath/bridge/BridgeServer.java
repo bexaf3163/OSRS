@@ -1,8 +1,10 @@
 package com.osrspath.bridge;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
@@ -65,13 +67,16 @@ public final class BridgeServer
 	 * стоимость предметов в снаряжении и рукопожатие версий; 3 — с 2.10: guide в шаге для боковой панели;
 	 * 4 — с 2.11: guide рисуется и списком «Что нужно» на экране игры (кликабельным) — программа просит
 	 * перезапустить RuneLite, если в нём остался плагин 2.10. Растёт вместе с адресами, полями и тем, что плагин
-	 * делает с ними.
+	 * делает с ними. 6 — с 2.22: один снимок состояния /prep-plan вместо пяти запросов (шаг, закупки, подсветка банка, совет
+	 * по снаряжению, план подготовки с процентом готовности); старые адреса остаются для программы с протоколом 5.
 	 */
-	static final int PROTOCOL = 5;
+	static final int PROTOCOL = 6;
 	/** Версия плагина — та же, что у программы, с которой он едет в одном exe. */
-	static final String PLUGIN_VERSION = "2.21.0";
+	static final String PLUGIN_VERSION = "2.22.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
+	/** Снимок целиком — шаг с этапами квеста, закупки и план в одном теле. */
+	static final int MAX_SNAPSHOT = 384 * 1024;
 	static final int MAX_STREAMS = 8;
 	static final long PING_SECONDS = 15;
 
@@ -102,6 +107,28 @@ public final class BridgeServer
 		default String onGearHint(GearHint hint)
 		{
 			return "не поддерживается";
+		}
+
+		/**
+		 * Снимок состояния (протокол 6). bad — части, не прошедшие проверку: их не применять, прежнее остаётся. Возвращает
+		 * итог: запоздавший снимок и отказы по частям (функция выключена в настройках).
+		 */
+		default PrepResult onPrepPlan(PrepEnvelope envelope, Map<String, String> bad)
+		{
+			return new PrepResult(false, Map.of("all", "не поддерживается"));
+		}
+	}
+
+	/** Итог применения снимка: stale — пришёл более старый, чем уже применённый; rejected — части, которые не применены. */
+	public static final class PrepResult
+	{
+		final boolean stale;
+		final Map<String, String> rejected;
+
+		PrepResult(boolean stale, Map<String, String> rejected)
+		{
+			this.stale = stale;
+			this.rejected = rejected;
 		}
 	}
 
@@ -612,6 +639,60 @@ public final class BridgeServer
 					json(ex, refused == null ? 200 : 409, refused == null ? ok() : error(refused));
 					return;
 				}
+				case "/prep-plan":
+				{
+					if (!postAllowed(ex, method))
+					{
+						return;
+					}
+					String body = readBody(ex.getRequestBody(), MAX_SNAPSHOT);
+					if (body == null)
+					{
+						json(ex, 413, error("body too large"));
+						return;
+					}
+					PrepEnvelope env;
+					try
+					{
+						JsonElement root = new JsonParser().parse(body);
+						if (!root.isJsonObject())
+						{
+							json(ex, 400, error("bad json"));
+							return;
+						}
+						env = gson.fromJson(root, PrepEnvelope.class);
+						JsonElement stepJson = root.getAsJsonObject().get("step");
+						if (env != null && stepJson != null && !stepJson.isJsonNull())
+						{
+							env.setStepKey(stepJson.toString());
+						}
+					}
+					catch (JsonParseException e)
+					{
+						json(ex, 400, error("bad json"));
+						return;
+					}
+					String versionProblem = env == null ? "empty" : env.versionProblem();
+					if (versionProblem != null)
+					{
+						json(ex, 400, error(versionProblem));
+						return;
+					}
+					Map<String, String> bad = env.prepare();
+					PrepResult result = listener.onPrepPlan(env, bad);
+					if (!result.stale && !bad.containsKey(PrepEnvelope.STEP))
+					{
+						activeStepId = env.getStep() == null ? null : env.getStep().getStepId();
+					}
+					Map<String, String> rejected = new LinkedHashMap<>(bad);
+					rejected.putAll(result.rejected);
+					Map<String, Object> answer = ok();
+					answer.put("seq", env.getSeq());
+					answer.put("stale", result.stale);
+					answer.put("rejected", rejected);
+					json(ex, 200, answer);
+					return;
+				}
 				case "/clear":
 					if (!postAllowed(ex, method))
 					{
@@ -766,12 +847,18 @@ public final class BridgeServer
 	/** Тело запроса целиком, но не больше MAX_BODY; null — если больше. */
 	static String readBody(InputStream in) throws IOException
 	{
+		return readBody(in, MAX_BODY);
+	}
+
+	/** Тело запроса целиком, но не больше limit; null — если больше. */
+	static String readBody(InputStream in, int limit) throws IOException
+	{
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		byte[] buf = new byte[8192];
 		int n;
 		while ((n = in.read(buf)) != -1)
 		{
-			if (out.size() + n > MAX_BODY)
+			if (out.size() + n > limit)
 			{
 				return null;
 			}

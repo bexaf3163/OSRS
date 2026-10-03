@@ -73,7 +73,8 @@
         3177,
         3296,
         0
-       ]
+       ],
+       "has": "Egg"
       },
       {
        "t": "Сорви пшеницу (Wheat) на поле к северу от Lumbridge.",
@@ -332,7 +333,8 @@
         3190,
         3273,
         0
-       ]
+       ],
+       "has": "Shears"
       },
       {
        "t": "Состриги шерсть (Wool) с овец (Sheep) на ближнем поле — нужно 20 штук.",
@@ -2859,7 +2861,8 @@
      "do": [
       {
        "t": "Купи пиво (Beer) у бармена в Blue Moon Inn. Диалог: «A glass of your finest ale please».",
-       "s": "Купи Beer у бармена Blue Moon Inn"
+       "s": "Купи Beer у бармена Blue Moon Inn",
+       "has": "Beer"
       },
       {
        "t": "Снова поговори с Dr. Harlow и отдай пиво — он даст кол (Stake). Диалог: «Yes. Here you go».",
@@ -2868,7 +2871,9 @@
         3222,
         3399,
         0
-       ]
+       ],
+       "has": "Stake",
+       "need": "Beer"
       },
       {
        "t": "Подготовься к бою с Count Draynor (34 ур.) и войди в Draynor Manor.",
@@ -3332,7 +3337,8 @@
         3227,
         3256,
         0
-       ]
+       ],
+       "need": "Bronze bar"
       },
       {
        "t": "Поговори с Leela к востоку от Draynor Village.",

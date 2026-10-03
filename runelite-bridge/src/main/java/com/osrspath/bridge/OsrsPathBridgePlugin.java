@@ -373,6 +373,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		shopping = Collections.emptyList();
 		bankTagIds = Collections.emptySet();
 		gearHint = null;
+		prep = null;
+		snapshotStepKey = null;
+		synchronized (snapshotLock)
+		{
+			lastSnapshot = -1;
+		}
 	}
 
 	private void startServer()
@@ -552,6 +558,93 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return null;
 	}
 
+	// ---------- Снимок состояния от программы (протокол 6) ----------
+
+	/** Номер последнего применённого снимка: запоздавший, более старый, отбрасывается. */
+	private final Object snapshotLock = new Object();
+	private long lastSnapshot = -1;
+	/** Шаг последнего снимка (JSON): тот же шаг не перезапускает цель и стрелку. null — шаг не из снимка или снят. */
+	private String snapshotStepKey;
+	/** План подготовки от программы; null — не присылала. Рисует его список «Что нужно». */
+	private volatile PrepPlan prep;
+
+	@Override
+	public BridgeServer.PrepResult onPrepPlan(PrepEnvelope e, Map<String, String> bad)
+	{
+		synchronized (snapshotLock)
+		{
+			if (e.getSeq() <= lastSnapshot)
+			{
+				return new BridgeServer.PrepResult(true, Collections.emptyMap());
+			}
+			lastSnapshot = e.getSeq();
+		}
+		// Часть, которую игрок выключил в настройках плагина, не применяется — остальные применяются.
+		Map<String, String> refused = new LinkedHashMap<>();
+		GearHint hint = e.getGearHint();
+		if (!bad.containsKey(PrepEnvelope.GEAR_HINT) && hint != null && !hint.isClear() && !config.upgradeRouter())
+		{
+			refused.put(PrepEnvelope.GEAR_HINT, "подсказки апгрейда выключены в настройках плагина OSRS Path Bridge");
+		}
+		if (!bad.containsKey(PrepEnvelope.BANK_TAGS) && e.getBankTags() != null && !config.bankTagsHelper())
+		{
+			refused.put(PrepEnvelope.BANK_TAGS, "предметы этапа из приложения выключены в настройках плагина OSRS Path Bridge");
+		}
+		clientThread.invokeLater(() -> applySnapshot(e, bad, refused));
+		return new BridgeServer.PrepResult(false, refused);
+	}
+
+	/**
+	 * Применить снимок целиком за один проход клиентского потока. Негодные и выключенные части не трогаем — остаётся
+	 * прежнее; остальные заменяются, а чего в снимке нет — снимается (снимок полный).
+	 */
+	private void applySnapshot(PrepEnvelope e, Map<String, String> bad, Map<String, String> refused)
+	{
+		if (!bad.containsKey(PrepEnvelope.STEP))
+		{
+			ActiveTarget t = e.getStep();
+			if (t == null)
+			{
+				if (target != null || navTarget != null)
+				{
+					if (navTarget != null)
+					{
+						finishNav("cleared");
+					}
+					applyTarget(null);
+				}
+				snapshotStepKey = null;
+			}
+			else if (!Objects.equals(e.getStepKey(), snapshotStepKey) || target == null)
+			{
+				applyTarget(t);
+				snapshotStepKey = e.getStepKey();
+			}
+		}
+		if (!bad.containsKey(PrepEnvelope.SHOPPING))
+		{
+			ShoppingPlan p = e.getShopping();
+			plan = p == null || p.getItems().isEmpty() ? null : p;
+			recomputeShopping();
+			ownedDirty = true;
+		}
+		if (!bad.containsKey(PrepEnvelope.BANK_TAGS) && !refused.containsKey(PrepEnvelope.BANK_TAGS))
+		{
+			bankTagIds = e.getBankTags() == null ? Collections.emptySet() : e.getBankTags().getIdSet();
+		}
+		if (!bad.containsKey(PrepEnvelope.GEAR_HINT) && !refused.containsKey(PrepEnvelope.GEAR_HINT))
+		{
+			GearHint h = e.getGearHint();
+			gearHint = h == null || h.isClear() ? null : h;
+			ownedDirty = true;
+		}
+		if (!bad.containsKey(PrepEnvelope.PLAN))
+		{
+			prep = e.getPlan();
+		}
+		updateHud();
+	}
+
 	/** Предмет из совета по снаряжению — подсветить в сумке и банке. name — ключ ActiveTarget.nameKey. */
 	boolean isUpgradeItem(String name)
 	{
@@ -607,6 +700,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			stageKey = null;
 		}
 		target = t;
+		snapshotStepKey = null;
 		guideMessage = null;
 		if (completion != null)
 		{
@@ -650,10 +744,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		StepGuide.View v = StepGuide.view(target, ItemCounts.sum(carried, noted), bank,
 			n == null ? null : n.getLabel(), n == null ? 0 : n.getX(), n == null ? 0 : n.getY(), n == null ? 0 : n.getPlane(), gotItems,
 			stage == null ? null : stageValue(stage), stage != null && questDone(target), stageTracker.cursor());
-		if (v.getStage() != null && (stageTracker.warning() != null || stageTracker.held()))
+		if (v.getStage() != null)
 		{
-			v = v.withStage(v.getStage().with(stageTracker.warning(), stageTracker.held()));
+			v = v.withStage(v.getStage().with(stageTracker.warning(), stageTracker.peeking(), stageTracker.canStepForward(v.getStage().getSteps())));
 		}
+		v = StepGuide.withPlanFor(v, prep, target);
 		if (guideMessage != null)
 		{
 			v = v.withNote(guideMessage);
@@ -809,22 +904,22 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			case BACK:
 				applyNav(null);
 				break;
-			case NEXT:
 			case PREV:
+				// Вперёд по клику нельзя: курсор ведут факты в игре. Назад — посмотреть прежний шаг.
+				stageTracker.back();
+				refreshGuide();
+				break;
+			case RESUME:
+				stageTracker.resume();
+				refreshGuide();
+				break;
+			case NEXT:
 			{
+				// Только шаг, который игра сама не видит (подряд на одном месте); остальные пропустить нельзя.
 				ActiveTarget.Stage st = stageOf(target);
 				Integer value = st == null ? null : stageValue(st);
-				if (value != null)
+				if (value != null && stageTracker.forward(st.getStages().get(st.indexFor(value)).getSteps()))
 				{
-					List<ActiveTarget.StageLine> lines = st.getStages().get(st.indexFor(value)).getSteps();
-					if (a.getKind() == GuideList.Kind.NEXT)
-					{
-						stageTracker.next(lines, ItemCounts.sum(carried, noted));
-					}
-					else
-					{
-						stageTracker.back();
-					}
 					refreshGuide();
 				}
 				break;

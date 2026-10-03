@@ -85,15 +85,24 @@ final class StepGuide
 		String finale;
 		/** Этап квеста по переменной игры; null — у шага этапов нет или игра переменную не отдала. */
 		StageView stage;
+		/** План подготовки от программы (протокол 6): процент, важность, «не бери сейчас», восстановление; null — программа плана не прислала. */
+		PrepPlan prep;
 
 		View(String title, String goal, List<ItemLine> items, List<PlaceLine> places, String detour, String note, String next, String finale)
 		{
-			this(title, goal, items, places, detour, note, next, finale, null);
+			this(title, goal, items, places, detour, note, next, finale, null, null);
 		}
 
 		View(String title, String goal, List<ItemLine> items, List<PlaceLine> places, String detour, String note, String next,
 			String finale, StageView stage)
 		{
+			this(title, goal, items, places, detour, note, next, finale, stage, null);
+		}
+
+		View(String title, String goal, List<ItemLine> items, List<PlaceLine> places, String detour, String note, String next,
+			String finale, StageView stage, PrepPlan prep)
+		{
+			this.prep = prep;
 			this.title = title;
 			this.goal = goal;
 			this.items = items;
@@ -108,13 +117,19 @@ final class StepGuide
 		/** То же с другим состоянием этапа (предупреждение и «вручную»). */
 		View withStage(StageView s)
 		{
-			return new View(title, goal, items, places, detour, note, next, finale, s);
+			return new View(title, goal, items, places, detour, note, next, finale, s, prep);
+		}
+
+		/** То же с планом подготовки от программы. */
+		View withPrep(PrepPlan p)
+		{
+			return new View(title, goal, items, places, detour, note, next, finale, stage, p);
 		}
 
 		/** То же с другим сообщением (guideMessage плагина). */
 		View withNote(String message)
 		{
-			return new View(title, goal, items, places, detour, message, next, finale, stage);
+			return new View(title, goal, items, places, detour, message, next, finale, stage, prep);
 		}
 	}
 
@@ -133,29 +148,44 @@ final class StepGuide
 		boolean finished;
 		/** Что не так с шагом («Blurite ore ещё в сумке — сначала: …»); null — всё в порядке. */
 		String warning;
-		/** Игрок вернул шаг сам — автоматика не двигает его, пока не нажато «сделано». */
-		boolean held;
+		/** Игрок смотрит прежний шаг (кнопка «назад») — автоматика не двигает курсор, пока просмотр не кончится. */
+		boolean peeking;
+		/** Текущий шаг игра сама не увидит (подряд на одном месте) — тогда есть кнопка «сделано»; на остальных шагах её нет. */
+		boolean manual;
 
 		StageView(int index, int total, List<ActiveTarget.StageLine> steps, int cursor, boolean finished)
 		{
-			this(index, total, steps, cursor, finished, null, false);
+			this(index, total, steps, cursor, finished, null, false, false);
 		}
 
-		StageView(int index, int total, List<ActiveTarget.StageLine> steps, int cursor, boolean finished, String warning, boolean held)
+		StageView(int index, int total, List<ActiveTarget.StageLine> steps, int cursor, boolean finished, String warning, boolean peeking)
 		{
+			this(index, total, steps, cursor, finished, warning, peeking, false);
+		}
+
+		StageView(int index, int total, List<ActiveTarget.StageLine> steps, int cursor, boolean finished, String warning, boolean peeking,
+			boolean manual)
+		{
+			this.manual = manual;
 			this.index = index;
 			this.total = total;
 			this.steps = steps;
 			this.cursor = cursor;
 			this.finished = finished;
 			this.warning = warning;
-			this.held = held;
+			this.peeking = peeking;
 		}
 
-		StageView with(String warning, boolean held)
+		StageView with(String warning, boolean peeking, boolean manual)
 		{
-			return new StageView(index, total, steps, cursor, finished, warning, held);
+			return new StageView(index, total, steps, cursor, finished, warning, peeking, manual);
 		}
+	}
+
+	/** План программы — только к своему шагу: план прежнего шага не должен рисоваться на новом, пока программа не прислала свежий. */
+	static View withPlanFor(View v, PrepPlan plan, ActiveTarget target)
+	{
+		return plan != null && target != null && plan.getStepId() != null && plan.getStepId().equals(target.getStepId()) ? v.withPrep(plan) : v;
 	}
 
 	static final View EMPTY = new View(null, null, Collections.emptyList(), Collections.emptyList(), null,

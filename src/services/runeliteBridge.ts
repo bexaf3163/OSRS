@@ -3,6 +3,7 @@
 // со страницы в браузере (с заголовком Origin) отклоняет. Удалённого сервера нет: мост слушает только loopback.
 
 import type { MoveEvent } from '../lib/recovery';
+import type { PrepEnvelope } from '../lib/prepEnvelope';
 import type { InGameTarget, PacingSkill, PlayerStats, Progress, Step, StepBranch, StepPacing } from '../types';
 import { desktop } from '../lib/desktop';
 import { isClosed, openAfter } from '../lib/next-step';
@@ -46,18 +47,25 @@ export interface BridgeStatus {
  * Протокол, который ждёт программа. Плагин старше — программа просит его обновить: новые адреса и поля он не
  * знает. Плагин без поля protocol — до 2.9: работает (основные адреса те же), но без новых функций.
  * 4 (2.11) — список «Что нужно» на экране игры; у плагина 2.10 (протокол 3) его нет.
+ * 6 (2.22) — один снимок состояния /prep-plan вместо пяти запросов, план подготовки на экране игры.
  */
-export const APP_PROTOCOL = 5;
+export const APP_PROTOCOL = 6;
 
 /** Чего нет у старого плагина — для предупреждения «обнови плагин»: с какого протокола что появилось. */
 export function missingWithPlugin(protocol: number | null): string[] {
   const p = protocol ?? 1;
   const out: string[] = [];
+  if (p < 6) out.push('единый снимок состояния и план подготовки на экране игры (процент готовности, «не бери сейчас», режим восстановления)');
   if (p < 5) out.push('опыт, квесты и имя персонажа из игры (синхронизация с аккаунтом, профили, время до цели)');
   if (p < 4) out.push('список «Что нужно» на экране игры (клик по строке — стрелка и путь туда)');
   if (p < 3) out.push('боковая панель «OSRS Путь» в RuneLite');
   if (p < 2) out.push('большая стрелка и оценка предметов в банке');
   return out;
+}
+
+/** Плагин понимает единый снимок /prep-plan (протокол 6). */
+export function supportsSnapshot(protocol: number | null): boolean {
+  return protocol !== null && protocol >= 6;
 }
 
 export type PluginCompat = 'ok' | 'legacy' | 'older' | 'newer';
@@ -144,7 +152,7 @@ export type BridgeEvent =
   | { type: string; [key: string]: unknown };
 
 /** Все адреса плагина, к которым ходит приложение. Программа для ПК пропускает только их (electron/runelite-bridge.cjs). */
-export const BRIDGE_PATHS = ['/status', '/active-step', '/clear', '/shopping-plan', '/nav-target', '/bank-tags', '/gear-hint'] as const;
+export const BRIDGE_PATHS = ['/status', '/active-step', '/clear', '/shopping-plan', '/nav-target', '/bank-tags', '/gear-hint', '/prep-plan'] as const;
 export type BridgePath = typeof BRIDGE_PATHS[number];
 
 export interface BridgeResponse {
@@ -525,6 +533,27 @@ export async function syncActiveStep(step: Step, t: BridgeTransport = defaultTra
   const payload = toInGameTarget(step, branch, extraWatch);
   if (!payload) return false;
   return (await t.request('POST', '/active-step', payload)).ok;
+}
+
+/** Итог снимка: какие части плагин не принял (негодные или выключенные в его настройках) и не запоздал ли снимок. */
+export interface SnapshotResult {
+  ok: boolean;
+  stale: boolean;
+  rejected: Record<string, string>;
+}
+
+/**
+ * Снимок состояния в игру (протокол 6): шаг, закупки, подсветка банка, совет по снаряжению и план — одним запросом.
+ * ok false — моста нет или плагин ответил ошибкой (старый плагин не знает адреса: 404).
+ */
+export async function postPrepPlan(envelope: PrepEnvelope, t: BridgeTransport = defaultTransport()): Promise<SnapshotResult & { status: number }> {
+  const res = await t.request('POST', '/prep-plan', envelope);
+  const d = (res.data ?? {}) as { stale?: unknown; rejected?: unknown };
+  const rejected: Record<string, string> = {};
+  if (d.rejected && typeof d.rejected === 'object') {
+    for (const [k, v] of Object.entries(d.rejected as Record<string, unknown>)) if (typeof v === 'string') rejected[k] = v;
+  }
+  return { ok: res.ok, stale: d.stale === true, rejected, status: res.status };
 }
 
 /** Оптовый список — в подсказку на бирже. Пустой список убирает подсказку. */
