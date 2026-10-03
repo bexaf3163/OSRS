@@ -2,6 +2,7 @@
 // Варианты слота у вики идут от лучшего к доступному. Берём лучший из подходящих, который уже есть, иначе — по карману.
 
 import styleJson from '../data/styleGear.json';
+import { nameKey } from './checklist';
 
 export interface StyleReq { skill: string; level: number }
 export interface StyleOption { names: string[]; reqs: StyleReq[]; quests: string[]; note?: string }
@@ -53,7 +54,8 @@ export function unmet(o: StyleOption, levels: StyleInput['levels'], quests: Read
     // Неизвестный уровень не блокирует: сомнительное значение — «показывать».
     if (have !== undefined && have < r.level) missing.push(`${cap(r.skill)} ${r.level}`);
   }
-  for (const q of o.quests) if (!quests.has(q)) missing.push(q);
+  const done = new Set([...quests].map(nameKey));
+  for (const q of o.quests) if (!done.has(nameKey(q))) missing.push(q);
   return missing;
 }
 
@@ -90,7 +92,10 @@ export function adviseStyle(inp: StyleInput): SlotPick[] {
       if (have) { chosen = { slot, name: have, status: inp.worn.has(have) ? 'worn' : 'bag', price: null }; break; }
       const priced = o.names.map((n) => ({ name: n, price: inp.price(n) })).filter((x): x is { name: string; price: number } => x.price !== null);
       if (!priced.length) { chosen = { slot, name: o.names[0], status: 'find', price: null, note: 'на бирже не продаётся — добывается в игре' }; break; }
-      const best = priced.reduce((a, b) => (b.price < a.price ? b : a));
+      let best = priced.reduce((a, b) => (b.price < a.price ? b : a));
+      // С Fire Strike (Magic 13) посох огня заменяет три руны огня на каждый удар — берём его, если по карману, а не самый дешёвый из четырёх.
+      const fire = priced.find((x) => x.name === 'Staff of fire');
+      if (inp.style === 'magic' && slot === 'weapon' && fire && (inp.levels.magic ?? 99) >= 13 && (inp.cash === null || fire.price <= inp.cash)) best = fire;
       if (!cheapest || best.price < cheapest.price) cheapest = best;
       if (inp.cash === null || best.price <= inp.cash) { chosen = { slot, name: best.name, status: 'buy', price: best.price }; break; }
       better ??= { name: best.name, why: `≈ ${best.price.toLocaleString('ru-RU')} gp — пока не по карману` };

@@ -271,6 +271,28 @@ public class BridgeServerTest
 	}
 
 	@Test
+	public void новыеПоляШагаПроверяютсяПоПроводу() throws Exception
+	{
+		String[] bad = {
+			"{\"stepId\":\"S5-08\",\"title\":\"x\",\"maxHit\":0}",
+			"{\"stepId\":\"S5-08\",\"title\":\"x\",\"maxHit\":201}",
+			"{\"stepId\":\"S5-08\",\"title\":\"x\",\"maxHit\":\"много\"}",
+			"{\"stepId\":\"S2-03\",\"title\":\"x\",\"useOn\":[null]}",
+			"{\"stepId\":\"S2-03\",\"title\":\"x\",\"useOn\":[{\"item\":\"Bones\"}]}",
+			"{\"stepId\":\"S2-03\",\"title\":\"x\",\"useOn\":[{\"item\":\"Bones\",\"target\":\"Cow\",\"kind\":\"hack\"}]}",
+			"{\"stepId\":\"S2-03\",\"title\":\"x\",\"useOn\":[{\"item\":\"a\",\"target\":\"b\"},{\"item\":\"a\",\"target\":\"b\"},{\"item\":\"a\",\"target\":\"b\"},{\"item\":\"a\",\"target\":\"b\"},{\"item\":\"a\",\"target\":\"b\"},{\"item\":\"a\",\"target\":\"b\"},{\"item\":\"a\",\"target\":\"b\"},{\"item\":\"a\",\"target\":\"b\"},{\"item\":\"a\",\"target\":\"b\"}]}",
+		};
+		for (String body : bad)
+		{
+			assertEquals(body, 400, post("/active-step", body, BridgeServer.HEADER, "1").statusCode());
+		}
+		assertTrue(targets.isEmpty());
+		String good = "{\"stepId\":\"S5-08\",\"title\":\"Elvarg\",\"maxHit\":10,\"useOn\":[{\"item\":\"Bones\",\"target\":\"Cow\",\"kind\":\"npc\"}]}";
+		assertEquals(200, post("/active-step", good, BridgeServer.HEADER, "1").statusCode());
+		assertEquals(1, targets.size());
+	}
+
+	@Test
 	public void eventsОтдаётСтатусИАвтоотметку() throws Exception
 	{
 		BlockingQueue<String> lines = new LinkedBlockingQueue<>();

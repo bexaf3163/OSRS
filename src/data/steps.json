@@ -1291,7 +1291,7 @@
         "nameEn": "Yellow bead",
         "nameRu": "Жёлтая бусина",
         "amount": 1,
-        "howToGet": "Для Imp Catcher, ≈ 1 200 gp.",
+        "howToGet": "Для Imp Catcher, ≈ 900 gp.",
         "wikiItemId": 1472,
         "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_bead.png",
         "inStep": true
@@ -1300,7 +1300,7 @@
         "nameEn": "Black bead",
         "nameRu": "Чёрная бусина",
         "amount": 1,
-        "howToGet": "Для Imp Catcher, ≈ 1 150 gp.",
+        "howToGet": "Для Imp Catcher, ≈ 1 200 gp.",
         "wikiItemId": 1474,
         "iconUrl": "https://oldschool.runescape.wiki/images/Black_bead.png",
         "inStep": true
@@ -1309,7 +1309,7 @@
         "nameEn": "White bead",
         "nameRu": "Белая бусина",
         "amount": 1,
-        "howToGet": "Для Imp Catcher, ≈ 1 700 gp.",
+        "howToGet": "Для Imp Catcher, ≈ 1 150 gp.",
         "wikiItemId": 1476,
         "iconUrl": "https://oldschool.runescape.wiki/images/White_bead.png",
         "inStep": true
@@ -1354,7 +1354,7 @@
         "nameEn": "Fly fishing rod",
         "nameRu": "Удочка нахлыстом",
         "amount": 1,
-        "howToGet": "Для форели и лосося с 20 рыбалки. На бирже ≈ 100 gp, в рыболовном магазине Port Sarim дешевле.",
+        "howToGet": "Для форели и лосося с 20 рыбалки. В рыболовном магазине Gerrant в Port Sarim — 5 gp (на бирже ≈ 350 gp).",
         "wikiItemId": 309,
         "iconUrl": "https://oldschool.runescape.wiki/images/Fly_fishing_rod.png",
         "inStep": true
@@ -1454,7 +1454,7 @@
     "fields": [
       {
         "label": "Бюджет",
-        "text": "Около 12 000 gp, из них 6 000 — бусины для Imp Catcher. Сэкономить: розовую юбку купи у Thessalia в Varrock за 2 gp, а красители сделай у ведьмы Aggie в Draynor (5 gp + 2 лука, 3 красные ягоды или 2 листа Woad)."
+        "text": "Около 12 000 gp, из них ≈ 5 300 — бусины для Imp Catcher. Сэкономить: розовую юбку купи у Thessalia в Varrock за 2 gp, а красители сделай у ведьмы Aggie в Draynor (5 gp + 2 лука, 3 красные ягоды или 2 листа Woad)."
       }
     ],
     "doneWhen": "Все предметы куплены и лежат в банке Grand Exchange.",
@@ -4232,7 +4232,7 @@
         "nameEn": "Lobster pot",
         "nameRu": "Ловушка для омаров",
         "amount": 1,
-        "howToGet": "С 40 рыбалки. 20 gp в магазине Gerrant's Fishy Business в Port Sarim или ≈ 110 gp на бирже.",
+        "howToGet": "С 40 рыбалки. 20 gp в магазине Gerrant's Fishy Business в Port Sarim (на бирже дороже — ≈ 500 gp).",
         "from": "Gerrant",
         "wikiItemId": 301,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png"
@@ -4358,7 +4358,7 @@
         "nameEn": "Lobster pot",
         "nameRu": "Ловушка для омаров",
         "amount": 1,
-        "howToGet": "Купи у Gerrant в Port Sarim за 20 gp или на бирже ≈ 110 gp. Нужен Оракулу (S5-04) — не путай с ловушкой для рыбалки, хватит и одной на оба дела.",
+        "howToGet": "Купи у Gerrant в Port Sarim за 20 gp (на бирже дороже — ≈ 500 gp). Нужен Оракулу (S5-04) — не путай с ловушкой для рыбалки, хватит и одной на оба дела.",
         "from": "Gerrant",
         "wikiItemId": 301,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png",
@@ -4724,7 +4724,7 @@
         "nameEn": "Unfired bowl",
         "nameRu": "Сырая миска",
         "amount": 1,
-        "howToGet": "Из S4-05: на бирже ≈ 190 gp.",
+        "howToGet": "Из S4-05: на бирже ≈ 135 gp.",
         "wikiItemId": 1791,
         "iconUrl": "https://oldschool.runescape.wiki/images/Unfired_bowl.png"
       },
@@ -5218,7 +5218,7 @@
         "nameEn": "Harpoon",
         "nameRu": "Гарпун",
         "amount": 1,
-        "howToGet": "Для тунца и рыбы-меч. ≈ 100 gp.",
+        "howToGet": "Для тунца и рыбы-меч. У Gerrant в Port Sarim — 5 gp (на бирже ≈ 450 gp).",
         "wikiItemId": 311,
         "iconUrl": "https://oldschool.runescape.wiki/images/Harpoon.png"
       }
@@ -6160,7 +6160,7 @@
         "nameEn": "Holy symbol",
         "nameRu": "Святой символ",
         "amount": 1,
-        "howToGet": "≈ 250 gp на бирже.",
+        "howToGet": "≈ 170 gp на бирже.",
         "wikiItemId": 1718,
         "iconUrl": "https://oldschool.runescape.wiki/images/Holy_symbol.png"
       },
@@ -6714,7 +6714,7 @@
         "nameEn": "Greenman's ale",
         "nameRu": "Эль Гринмена",
         "amount": 1,
-        "howToGet": "Купи в пабе Dragon Inn в Yanille или на бирже (≈ 250 gp).",
+        "howToGet": "Купи в пабе Dragon Inn в Yanille или на бирже (≈ 150 gp).",
         "wikiItemId": 1909,
         "iconUrl": "https://oldschool.runescape.wiki/images/Greenman's_ale.png"
       },

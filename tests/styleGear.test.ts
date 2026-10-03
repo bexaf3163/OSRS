@@ -47,6 +47,10 @@ describe('советник по экипировке', () => {
     expect(unmet(o, { ranged: 30 }, new Set(['Dragon Slayer I']))).toEqual(['Ranged 40']);
     expect(unmet(o, { ranged: 40 }, new Set(['Dragon Slayer I']))).toEqual([]);
   });
+  it('квест сверяется без учёта регистра и пробелов', () => {
+    const o = { names: ['x'], reqs: [], quests: ['Dragon Slayer I'] };
+    expect(unmet(o, {}, new Set(['  dragon slayer i ']))).toEqual([]);
+  });
   it('низкий уровень: лук по уровню, а лучшие варианты названы как «лучше»', () => {
     const picks = adviseStyle(base({ levels: { ranged: 22, defence: 12 } }));
     expect(pick(picks, 'weapon').name).toBe('Willow shortbow');
@@ -95,6 +99,13 @@ describe('советник по экипировке', () => {
     const plain = adviseStyle(base({ levels: { ranged: 1 } }));
     expect(pick(plain, 'weapon').name).toBe('Shortbow');
     expect(pick(plain, 'ammo').name).toBe('Iron arrow');
+  });
+  it('магия с 13 уровня: посох огня, а не самый дешёвый элементный; до 13 — самый дешёвый', () => {
+    const prices: Record<string, number> = { 'Staff of fire': 900, 'Staff of earth': 600, 'Staff of water': 700, 'Staff of air': 650 };
+    const at = (magic: number, cash: number | null) => pick(adviseStyle(base({ style: 'magic', levels: { magic, attack: 1 }, cash, price: (n) => prices[n] ?? 50 })), 'weapon');
+    expect(at(20, 5000)).toMatchObject({ name: 'Staff of fire', status: 'buy' });
+    expect(at(8, 5000).name).toBe('Staff of earth');
+    expect(at(20, 700).name).toBe('Staff of earth');
   });
   it('цена неизвестна (null) — деньги не отсекают', () => {
     const picks = adviseStyle(base({ levels: { ranged: 40 }, cash: null }));
