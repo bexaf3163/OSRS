@@ -744,8 +744,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			return;
 		}
-		lastShotAt = now;
-		shots++;
+		// Снимок по горячей клавише не тратит лимит автоматических: игрок жмёт его сам и знает, зачем.
+		if (auto)
+		{
+			lastShotAt = now;
+			shots++;
+		}
 		String state = DebugView.plain(DebugView.rows(buildDebugState()));
 		String stamp = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
 		String name = "shot-" + stamp + "-" + why.replaceAll("[^A-Za-z0-9_]+", "_") + ".png";
