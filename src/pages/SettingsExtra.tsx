@@ -7,6 +7,8 @@ import { desktop, type BackupState } from '../lib/desktop';
 import { addProfile, MAIN_ID, readProfiles, removeProfile, renameProfile, switchProfile, useProfiles, writeProfiles } from '../lib/profiles';
 import { sessionSummary } from '../lib/session';
 import { useStore } from '../store';
+import { usePlayerState } from '../playerStateContext';
+import { formatGp } from '../lib/shopping';
 
 export function ProfilesSection() {
   const profiles = useProfiles();
@@ -113,7 +115,34 @@ export function SessionSection() {
           ))}
         </ul>
       )}
+      <LedgerBlock />
     </section>
+  );
+}
+
+/** Журнал ресурсов: хранится между сеансами (30 дней) отдельно для каждого персонажа; здесь его можно очистить. */
+function LedgerBlock() {
+  const { summary, session, since, clearLedger } = usePlayerState();
+  const [confirm, setConfirm] = useState(false);
+  if (!summary.entries) {
+    return <p className="muted small">Журнал ресурсов пуст: он наполняется, пока RuneLite подключён, и хранится между сеансами.</p>;
+  }
+  return (
+    <div className="ledger-block">
+      <p className="small">
+        <strong>Журнал ресурсов</strong> — записей {summary.entries}{since !== null ? `, с ${new Date(since).toLocaleDateString('ru-RU')}` : ''}. Монеты +{formatGp(summary.coinsEarned)}, потрачено {formatGp(summary.coinsSpent)}
+        {summary.estimatedLootValue > 0 ? `, добыча ≈${formatGp(summary.estimatedLootValue)} gp (оценка, не деньги)` : ''}.
+        {session.entries > 0 && summary.entries > session.entries ? ` За этот сеанс — ${session.entries}.` : ''}
+      </p>
+      {confirm ? (
+        <div className="actions">
+          <button type="button" className="btn btn-danger" onClick={() => { clearLedger(); setConfirm(false); }}>Да, очистить журнал</button>
+          <button type="button" className="btn" onClick={() => setConfirm(false)}>Отмена</button>
+        </div>
+      ) : (
+        <button type="button" className="btn btn-sm" onClick={() => setConfirm(true)}>Очистить журнал</button>
+      )}
+    </div>
   );
 }
 

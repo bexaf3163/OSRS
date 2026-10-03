@@ -1,10 +1,12 @@
 // Единое состояние игрока для экранов: один снимок на всех (готовность, закупки, подготовка, одна ходка, цели) и
 // журнал ресурсов сеанса. Пересчитывается только когда меняется отпечаток — не на каждый рендер.
 
-import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { items } from './data';
 import { useBridge } from './bridge';
 import { useStore } from './store';
+import { useProfiles } from './lib/profiles';
+import { ledgerKey, LEDGER_LIMIT, loadLedger, saveLedger, since } from './lib/ledgerStore';
 import { nameKey } from './lib/checklist';
 import { buildPlayerState, diffPlayerState, type PlayerState, type StateChange } from './lib/playerState';
 import { entriesFor, summarize, type LedgerEntry, type LedgerSummary } from './lib/ledger';
@@ -16,8 +18,13 @@ interface PlayerStateValue {
   /** Что изменилось в последний раз (уровни, предметы, монеты, квесты). */
   changes: StateChange[];
   ledger: LedgerEntry[];
-  /** Итоги по текущим ценам: оценка добычи пересчитывается при каждом обновлении цен. */
+  /** Итоги всего журнала (между сеансами, до 30 дней) по текущим ценам: оценка добычи пересчитывается при обновлении цен. */
   summary: LedgerSummary;
+  /** Итоги только за этот сеанс — с момента запуска программы. */
+  session: LedgerSummary;
+  /** Начало журнала (первая запись) и очистка: журнал хранится между сеансами, и игрок может начать заново. */
+  since: number | null;
+  clearLedger: () => void;
   /** Откуда цены: свежие с биржи или из базы проекта. */
   prices: PriceBook;
 }
@@ -52,11 +59,16 @@ function useLivePrices(needed: boolean): PriceBook {
   return book;
 }
 
-const LEDGER_LIMIT = 500;
+const SESSION_START = Date.now();
+
+function ls(): Storage | undefined {
+  try { return window.localStorage; } catch { return undefined; }
+}
 
 export function PlayerStateProvider({ children }: { children: ReactNode }) {
   const { progress, mode } = useStore();
   const { stats, owned, gear, questsDone, player, state: link } = useBridge();
+  const profiles = useProfiles();
   const next = useMemo(
     () => buildPlayerState({ mode, stats, progress, owned, gear, questsDone, player, connected: link === 'online' }),
     [mode, stats, progress, owned, gear, questsDone, player, link],
@@ -67,18 +79,21 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
   const state = stable.current;
 
   const [changes, setChanges] = useState<StateChange[]>([]);
-  const [ledger, setLedger] = useState<LedgerEntry[]>([]);
+  // Журнал привязан к ключу «профиль + персонаж»: смена ключа загружает чужой журнал, а не дописывает в прежний.
+  const key = ledgerKey(profiles.active, player);
+  const [book, setBook] = useState<{ key: string; entries: LedgerEntry[] }>(() => ({ key, entries: loadLedger(ls(), key, Date.now()) }));
+  if (book.key !== key) setBook({ key, entries: loadLedger(ls(), key, Date.now()) });
+  const ledger = book.key === key ? book.entries : [];
   const prices = useLivePrices(ledger.some((e) => e.name !== 'Coins' && (e.reason === 'LOOT' || e.reason === 'PICKUP')));
   const priceRef = useRef(prices);
   priceRef.current = prices;
   const prev = useRef<PlayerState | null>(null);
   const prevPlayer = useRef<string | null>(null);
   useEffect(() => {
-    // Другой персонаж — новая запись: старые прибавки к нему не относятся.
+    // Другой персонаж — отсчёт заново: снимок «до» принадлежал не ему.
     if (prevPlayer.current !== (player ?? null)) {
       prevPlayer.current = player ?? null;
       prev.current = state;
-      setLedger([]);
       setChanges([]);
       return;
     }
@@ -90,11 +105,28 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
     // В журнал — только пока связь живая: без неё «изменений» нет, есть пропавшие данные.
     if (!before || !before.connected || !state.connected) return;
     const entries = entriesFor(before, state, diff, Date.now(), priceRef.current.priceOf);
-    if (entries.length) setLedger((l) => [...l, ...entries].slice(-LEDGER_LIMIT));
-  }, [state, player]);
+    if (!entries.length) return;
+    setBook((b) => {
+      if (b.key !== key) return b;
+      const merged = [...b.entries, ...entries].slice(-LEDGER_LIMIT);
+      saveLedger(ls(), b.key, merged);
+      return { key: b.key, entries: merged };
+    });
+  }, [state, player, key]);
 
-  const summary = useMemo(() => summarize(reprice(ledger, prices)), [ledger, prices]);
-  const value = useMemo(() => ({ state, changes, ledger, summary, prices }), [state, changes, ledger, summary, prices]);
+  const clearLedger = useCallback(() => {
+    saveLedger(ls(), key, []);
+    setBook({ key, entries: [] });
+  }, [key]);
+
+  const priced = useMemo(() => reprice(ledger, prices), [ledger, prices]);
+  const summary = useMemo(() => summarize(priced), [priced]);
+  const session = useMemo(() => summarize(since(priced, SESSION_START)), [priced]);
+  const first = ledger.length ? ledger[0].timestamp : null;
+  const value = useMemo(
+    () => ({ state, changes, ledger, summary, session, since: first, clearLedger, prices }),
+    [state, changes, ledger, summary, session, first, clearLedger, prices],
+  );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 

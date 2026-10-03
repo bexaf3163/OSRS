@@ -378,6 +378,31 @@ async function run(browser: Browser) {
       await ok.page.context().close();
     }
 
+    // 2.19.2: журнал ресурсов живёт между сеансами — записи прежнего запуска на месте, чужого персонажа не видно, очистка работает.
+    {
+      const profiles = JSON.stringify({ active: 'main', list: [{ id: 'main', name: 'Основной', player: 'Alpha One' }] });
+      const now = Date.now();
+      const rows = [
+        { name: 'Coins', quantityDelta: 5000, reason: 'LOOT', timestamp: now - 3 * 24 * 3600_000, estimatedGpValue: 5000 },
+        { name: 'Cowhide', quantityDelta: 10, reason: 'LOOT', timestamp: now - 3 * 24 * 3600_000, estimatedGpValue: 1000 },
+      ];
+      const key = (who: string) => `osrs-put:ledger:main:${who}`;
+      const { page, errors } = await open(browser, width, {
+        localStorage: { 'osrs-put:profiles': profiles, [key('alpha one')]: JSON.stringify(rows), [key('beta two')]: JSON.stringify(rows.slice(0, 1)) },
+        status: { protocol: 5, pluginVersion: '2.19.2', player: 'Alpha One' },
+      }, '#/settings');
+      await page.waitForSelector('.ledger-block', { timeout: 5000 });
+      const t = await text(page, '.ledger-block');
+      expect(t.includes('записей 2') && t.includes('Монеты +'), 'журнал: записи прежнего запуска на месте');
+      await page.getByRole('button', { name: 'Очистить журнал' }).click();
+      await page.getByRole('button', { name: 'Да, очистить журнал' }).click();
+      await page.waitForFunction(() => document.body.innerText.includes('Журнал ресурсов пуст'), null, { timeout: 5000 });
+      const left = await page.evaluate((k) => ({ a: localStorage.getItem(k.a), b: localStorage.getItem(k.b) }), { a: key('alpha one'), b: key('beta two') });
+      expect(left.a === null && left.b !== null, 'журнал: очистка стирает журнал этого персонажа и не трогает чужой');
+      expect(!errors.length, `журнал: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
     // 2.12.1: Magic 25 есть, а рун нет — быстрый Varrock Teleport не выдаётся за готовый, а говорит, чего не хватает.
     {
       const { page, errors } = await open(browser, width, {

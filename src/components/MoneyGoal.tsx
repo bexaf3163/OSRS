@@ -11,7 +11,7 @@ import { priceNote } from '../lib/priceBook';
 
 export function MoneyGoal({ step }: { step: Step }) {
   const { gear, state } = useBridge();
-  const { ledger, summary, prices } = usePlayerState();
+  const { ledger, summary, session: now, since: from, prices } = usePlayerState();
   if (!step.moneyGoal) return null;
   const w = wealthOf(gear);
   const p = moneyGoalProgress(step.moneyGoal, w);
@@ -45,11 +45,17 @@ export function MoneyGoal({ step }: { step: Step }) {
   // За сеанс: известные монеты и оценка добычи — раздельно; время — только по достаточным замерам.
   const rate = ratePerMinute(ledger, Date.now(), (e) => (e.name === 'Coins' ? e.quantityDelta : e.estimatedGpValue ?? 0));
   const g = p ? resourceGoal('Монеты', p.cash, p.goal, { estimated: summary.estimatedLootValue > 0 ? summary.estimatedLootValue : undefined, ratePerMinute: rate }) : null;
-  const session = summary.entries > 0 && (summary.coinsEarned > 0 || summary.estimatedLootValue > 0) ? (
+  const session = now.entries > 0 && (now.coinsEarned > 0 || now.estimatedLootValue > 0) ? (
     <p className="small muted">
-      За этот сеанс: монет +{formatGp(summary.coinsEarned)}{summary.estimatedLootValue > 0 ? <>, добыча ≈{formatGp(summary.estimatedLootValue)} gp (оценка, не деньги; {priceNote(prices)})</> : null}
+      За этот сеанс: монет +{formatGp(now.coinsEarned)}{now.estimatedLootValue > 0 ? <>, добыча ≈{formatGp(now.estimatedLootValue)} gp (оценка, не деньги; {priceNote(prices)})</> : null}
       {g?.estimatedProgress !== undefined && !g.done ? <> · с добычей ≈{formatGp(g.estimatedProgress)} из {goal}</> : null}
       {g?.etaMinutes ? <> · при таком темпе ≈{g.etaMinutes} мин</> : null}.
+    </p>
+  ) : null;
+  // Журнал хранится между сеансами: если в нём есть и прежние дни, итог за всё время — отдельной строкой.
+  const total = from !== null && summary.entries > now.entries && (summary.coinsEarned > 0 || summary.estimatedLootValue > 0) ? (
+    <p className="small muted">
+      С {new Date(from).toLocaleDateString('ru-RU')}: монет +{formatGp(summary.coinsEarned)}{summary.estimatedLootValue > 0 ? <>, добыча ≈{formatGp(summary.estimatedLootValue)} gp</> : null}.
     </p>
   ) : null;
   return (
@@ -57,6 +63,7 @@ export function MoneyGoal({ step }: { step: Step }) {
       <p className="readiness-head">💰 <strong>Цель шага: {goal} gp</strong></p>
       {body}
       {session}
+      {total}
     </section>
   );
 }
