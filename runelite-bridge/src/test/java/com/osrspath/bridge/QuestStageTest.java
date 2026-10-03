@@ -210,6 +210,54 @@ public class QuestStageTest
 		assertEquals("текущий шаг — кнопка «сделано»", GuideList.Action.NEXT, rows.get(1).getAction());
 	}
 
+	private static ActiveTarget sword()
+	{
+		return GSON.fromJson("{\"stepId\":\"S2-07\",\"title\":\"The Knight's Sword\",\"guide\":{\"items\":[],\"places\":["
+			+ "{\"x\":2994,\"y\":3341,\"plane\":0,\"label\":\"Лестница\"},{\"x\":3000,\"y\":3145,\"plane\":0,\"label\":\"Thurgo\"}],"
+			+ "\"stage\":{\"kind\":\"varp\",\"id\":122,\"stages\":[{\"at\":0,\"steps\":["
+			+ "{\"t\":\"Лестница\",\"x\":2994,\"y\":3341,\"plane\":0,\"has\":\"Portrait\"},"
+			+ "{\"t\":\"Шкаф\",\"x\":2985,\"y\":3336,\"plane\":2,\"has\":\"Portrait\"},"
+			+ "{\"t\":\"Отнеси Thurgo\",\"x\":3000,\"y\":3145,\"plane\":0}],\"go\":0}]}}}", ActiveTarget.class);
+	}
+
+	@Test
+	public void шагДоПредметаПропускаетсяКогдаПредметУжеВСумке()
+	{
+		ActiveTarget t = sword();
+		assertNull(t.prepare());
+		List<ActiveTarget.StageLine> lines = t.getGuide().getStage().getStages().get(0).getSteps();
+		assertEquals("нет портрета — остаёмся", 0, StepGuide.skipDone(lines, 0, new ItemCounts()));
+		ItemCounts bag = new ItemCounts();
+		bag.add(666, ActiveTarget.nameKey("Portrait"), 1);
+		assertEquals("портрет в сумке — к Thurgo", 2, StepGuide.skipDone(lines, 0, bag));
+		assertEquals("последний шаг не пропускается", 2, StepGuide.skipDone(lines, 2, bag));
+	}
+
+	@Test
+	public void стрелкаЭтапаНеОбъездИКнопкиВернутьНет()
+	{
+		ActiveTarget t = sword();
+		assertNull(t.prepare());
+		// Стрелка стоит на клетке текущего шага (шкаф) — «Стрелку снова к шагу» не нужно.
+		StepGuide.View v = StepGuide.view(t, new ItemCounts(), null, "Шкаф", 2985, 3336, 2, new HashSet<>(), 0, false, 1);
+		assertNull(v.getDetour());
+		// Игрок выбрал своё место — это объезд.
+		StepGuide.View own = StepGuide.view(t, new ItemCounts(), null, "Банк", 3185, 3436, 0, new HashSet<>(), 0, false, 1);
+		assertEquals("Банк", own.getDetour());
+	}
+
+	@Test
+	public void лучшийИнструментЗасчитываетсяВместоХудшего()
+	{
+		ItemCounts bag = new ItemCounts();
+		bag.add(1267, ActiveTarget.nameKey("Iron pickaxe"), 1);
+		assertEquals("Iron вместо Bronze", 1, bag.count(1265, "Bronze pickaxe"));
+		assertEquals("Iron вместо Iron", 1, bag.count(1267, "Iron pickaxe"));
+		assertEquals("Steel хуже нет — Iron не заменяет Steel", 0, bag.count(1269, "Steel pickaxe"));
+		assertEquals("кирка не заменяет топор", 0, bag.count(1351, "Bronze axe"));
+		assertEquals("Rune platebody не инструмент", 0, bag.count(1127, "Bronze platebody"));
+	}
+
 	private static String text(List<GuideList.Row> rows)
 	{
 		// Строки одной записи склеены пробелом: длинный текст переносится по ширине, а проверяется целиком.

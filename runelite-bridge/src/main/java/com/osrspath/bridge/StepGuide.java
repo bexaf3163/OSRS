@@ -220,6 +220,25 @@ final class StepGuide
 		return at;
 	}
 
+	/**
+	 * Шаги, которые по предметам уже сделаны: у шага указан предмет (has), и он в сумке — идём дальше. Последний шаг
+	 * этапа не пропускается: этап кончится сам, когда игра сменит значение переменной.
+	 */
+	static int skipDone(List<ActiveTarget.StageLine> lines, int cursor, ItemCounts carried)
+	{
+		if (lines == null || lines.isEmpty() || carried == null)
+		{
+			return cursor;
+		}
+		int at = Math.max(0, Math.min(cursor, lines.size() - 1));
+		while (at < lines.size() - 1 && lines.get(at).getHas() != null && !lines.get(at).getHas().isEmpty()
+			&& carried.count(null, lines.get(at).getHas()) > 0)
+		{
+			at++;
+		}
+		return at;
+	}
+
 	private static boolean near(ActiveTarget.StageLine l, int x, int y, int plane)
 	{
 		return l.hasPoint() && l.getPlane() == plane && Math.abs(l.getX() - x) <= STEP_RADIUS && Math.abs(l.getY() - y) <= STEP_RADIUS;
@@ -274,7 +293,20 @@ final class StepGuide
 		String title = "[" + t.getStepId() + "] " + (t.getTitle() == null ? "" : t.getTitle());
 		String note = g == null ? "Программа старше плагина: списка «что нужно» от неё не пришло. Обнови программу «OSRS Путь»." : null;
 		boolean staged = stageView != null;
-		return new View(title, t.getGoal(), items, placeLines, navLabel, note, staged ? null : next(g, items), staged ? null : finale(g), stageView);
+		// Стрелка этапа (к текущему шагу или к точке этапа) — не «объезд»: «Стрелку снова к шагу» нужно только после выбора своего места.
+		String detour = navLabel;
+		if (staged && !stageView.isFinished() && navLabel != null)
+		{
+			ActiveTarget.StageLine now = stageView.getSteps().get(stageView.getCursor());
+			boolean atStep = now.hasPoint() && now.getX() == navX && now.getY() == navY && now.getPlane() == navPlane;
+			boolean atGo = cur.getGo() != null && cur.getGo() >= 0 && cur.getGo() < places.size()
+				&& places.get(cur.getGo()).getX() == navX && places.get(cur.getGo()).getY() == navY && places.get(cur.getGo()).getPlane() == navPlane;
+			if (atStep || atGo)
+			{
+				detour = null;
+			}
+		}
+		return new View(title, t.getGoal(), items, placeLines, detour, note, staged ? null : next(g, items), staged ? null : finale(g), stageView);
 	}
 
 	/**

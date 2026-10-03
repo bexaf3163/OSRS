@@ -63,6 +63,17 @@ describe('этапы квестов (Quest Helper)', () => {
     expect(route.indexOf('Squire')).toBeLessThan(route.indexOf('Thurgo', route.indexOf('Squire')));
   });
 
+  it('Knight’s Sword: шаги до портрета пропускаются, когда Portrait уже в сумке; на этапе добычи нужна кирка', () => {
+    const q = quests['S2-07'];
+    const stage = q.stages.find((s) => s.do.some((l) => l.has === 'Portrait'))!;
+    expect(stage.do.filter((l) => l.has === 'Portrait').length).toBe(3);
+    expect(stage.do[stage.do.length - 1].has).toBeUndefined();
+    const mining = q.stages.find((s) => s.items?.some((i) => i.name === 'Bronze pickaxe'));
+    expect(mining, 'кирка названа на этапе добычи Blurite').toBeDefined();
+    const sent = stepGuide(allSteps.find((s) => s.id === 'S2-07')!).stage!;
+    expect(sent.stages.some((st) => st.steps.some((l) => l.has === 'Portrait'))).toBe(true);
+  });
+
   it('полезная нагрузка для плагина укладывается в лимит тела запроса и содержит этапы', () => {
     for (const s of withStages) {
       const g = stepGuide(s);

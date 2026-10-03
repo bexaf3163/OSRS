@@ -46,10 +46,43 @@ final class ItemCounts
 		return out;
 	}
 
+	/** Ступени инструментов по возрастанию: Iron pickaxe годится вместо Bronze pickaxe. */
+	private static final String[] TIERS = {"bronze", "iron", "steel", "black", "mithril", "adamant", "rune", "dragon"};
+
 	int count(Integer id, String name)
 	{
 		int n = id == null ? 0 : byId.getOrDefault(id, 0);
-		return Math.max(n, byName.getOrDefault(ActiveTarget.nameKey(name), 0));
+		String key = ActiveTarget.nameKey(name);
+		int own = Math.max(n, byName.getOrDefault(key, 0));
+		return Math.max(own, betterToolCount(key));
+	}
+
+	/**
+	 * Топор или кирка не хуже названной: нужен Bronze pickaxe — Iron, Steel и выше тоже подходят. Сумма по ступеням от
+	 * названной и выше; не инструмент — 0. Боевые «Black axe» и прочие названия вне шаблона не затрагиваются.
+	 */
+	private int betterToolCount(String key)
+	{
+		for (String kind : new String[]{" pickaxe", " axe"})
+		{
+			if (!key.endsWith(kind))
+			{
+				continue;
+			}
+			String tier = key.substring(0, key.length() - kind.length());
+			int from = java.util.Arrays.asList(TIERS).indexOf(tier);
+			if (from < 0)
+			{
+				return 0;
+			}
+			int total = 0;
+			for (int i = from; i < TIERS.length; i++)
+			{
+				total += byName.getOrDefault(TIERS[i] + kind, 0);
+			}
+			return total;
+		}
+		return 0;
 	}
 
 	/**

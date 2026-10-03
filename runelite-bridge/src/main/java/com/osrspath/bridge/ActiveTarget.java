@@ -210,7 +210,7 @@ public class ActiveTarget
 				{
 					if (line == null || line.t == null || line.t.trim().isEmpty() || line.t.length() > Guide.MAX_WHERE
 						|| (line.x != null && (line.y == null || line.plane == null || line.x <= 0 || line.y <= 0 || line.x >= NavTarget.MAX_COORD
-						|| line.y >= NavTarget.MAX_COORD || line.plane < 0 || line.plane > 3)))
+						|| line.y >= NavTarget.MAX_COORD || line.plane < 0 || line.plane > 3)) || tooLong(line.has))
 					{
 						return "неверный шаг этапа квеста";
 					}
@@ -241,6 +241,8 @@ public class ActiveTarget
 		private Integer x;
 		private Integer y;
 		private Integer plane;
+		/** Предмет: он уже в сумке — шаг сделан (портрет найден — искать его уже не надо). null — по предметам не определяется. */
+		private String has;
 
 		boolean hasPoint()
 		{

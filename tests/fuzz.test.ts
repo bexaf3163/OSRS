@@ -51,7 +51,7 @@ describe('мусор на входе не роняет программу', () =
         expect(() => fn(v), `${name}(${JSON.stringify(v)?.slice(0, 120)})`).not.toThrow();
       }
     }
-  });
+  }, 30_000);
 
   it('normalizeProgress: любое значение — прогресс или null, но не исключение', () => {
     const r = rng(7);

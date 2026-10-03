@@ -634,6 +634,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	{
 		ActiveTarget.Stage stage = stageOf(target);
 		trackStageCursor(stage);
+		String stageNow = stage == null ? null : cursorKey + "|" + questDone(target);
+		if (!Objects.equals(stageNow, checklistStage))
+		{
+			// Этап сменился (или квест сдан): проверка вылета и строка «Сумка» считаются по предметам нового этапа.
+			checklistStage = stageNow;
+			recomputeChecklist();
+			updateHud();
+		}
 		followStage();
 		NavTarget n = navTarget;
 		StepGuide.View v = StepGuide.view(target, ItemCounts.sum(carried, noted), bank,
@@ -688,6 +696,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			WorldPoint pos = me.getWorldLocation();
 			List<ActiveTarget.StageLine> lines = st.getStages().get(idx).getSteps();
 			stageCursor = StepGuide.advance(lines, stageCursor, pos.getX(), pos.getY(), pos.getPlane(), fresh ? lines.size() : StepGuide.STEP_WINDOW);
+			stageCursor = StepGuide.skipDone(lines, stageCursor, ItemCounts.sum(carried, noted));
 		}
 	}
 
@@ -1944,10 +1953,39 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		updateHud();
 	}
 
+	/** Для какого этапа посчитана проверка вылета. */
+	private String checklistStage;
+
+	/** Предметы текущего этапа квеста; null — этапов нет или у этапа свой список не задан (тогда — предметы шага). */
+	private List<ActiveTarget.GuideItem> stageItems()
+	{
+		ActiveTarget.Stage st = stageOf(target);
+		Integer value = st == null ? null : stageValue(st);
+		return value == null ? null : st.getStages().get(st.indexFor(value)).getItems();
+	}
+
 	private void recomputeChecklist()
 	{
 		// Квест сдан — предметы потрачены или отданы, «не хватает» уже ни о чём: проверка вылета пустеет.
 		List<ActiveTarget.ChecklistItem> items = target == null || questDone(target) ? null : target.getChecklist();
+		List<ActiveTarget.GuideItem> forStage = items == null ? null : stageItems();
+		if (forStage != null)
+		{
+			// Нужно сейчас только то, что названо у этапа: вчерашние предметы (пирог, кирка) уже не ждут.
+			List<ActiveTarget.ChecklistItem> kept = new ArrayList<>();
+			for (ActiveTarget.ChecklistItem c : items)
+			{
+				for (ActiveTarget.GuideItem g : forStage)
+				{
+					if (ActiveTarget.nameKey(g.getName()).equals(ActiveTarget.nameKey(c.getName())) || (g.getId() != null && g.getId().equals(c.getId())))
+					{
+						kept.add(c);
+						break;
+					}
+				}
+			}
+			items = kept;
+		}
 		checklist = Checklist.evaluate(items, carried, bank);
 		Set<Integer> ids = new HashSet<>();
 		Set<String> names = new HashSet<>();
