@@ -2,7 +2,7 @@
   "name": "osrs-put",
   "productName": "OSRS Путь",
   "private": true,
-  "version": "2.22.0",
+  "version": "2.23.0",
   "description": "Личный трекер прогресса в Old School RuneScape (бесплатная версия)",
   "author": "Mark",
   "type": "module",
@@ -31,6 +31,7 @@
     "test:ui": "node scripts/ui-smoke.ts",
     "test:e2e": "node scripts/e2e-electron.ts",
     "check-runelite": "node scripts/check-runelite-compat.ts",
+    "telemetry": "node scripts/analyze-telemetry.ts",
     "build-weights": "node scripts/build-weights.ts"
   },
   "devDependencies": {

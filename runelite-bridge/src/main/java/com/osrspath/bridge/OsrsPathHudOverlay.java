@@ -119,6 +119,7 @@ class OsrsPathHudOverlay extends OverlayPanel
 		State s = plugin.getHud();
 		if (!config.showHud() || s == null)
 		{
+			plugin.hudShown(false);
 			return null;
 		}
 		// Умное проявление: в пути и на бирже — одна строка (действие и расстояние), остальное в игре не нужно.
@@ -132,6 +133,7 @@ class OsrsPathHudOverlay extends OverlayPanel
 			s = lean(s, GuideList.shown(config.showGuide(), config.guideCollapsed(), plugin.getGuideView(), config.smartOverlays(), plugin.overlayContext()));
 			if (s == null)
 			{
+				plugin.hudShown(false);
 				return null;
 			}
 		}
@@ -144,7 +146,9 @@ class OsrsPathHudOverlay extends OverlayPanel
 		{
 			build(panelComponent, s, g.getFontMetrics(font), width, config.hudOpacity());
 			builtFor = key;
+			plugin.uiShown("hud", plain(s));
 		}
+		plugin.hudShown(true);
 		OverlayCard.paint(g, last.width, last.height, accent(s), config.hudOpacity());
 		Dimension d = super.render(g);
 		last = d == null ? new Dimension() : d;
@@ -170,6 +174,20 @@ class OsrsPathHudOverlay extends OverlayPanel
 		}
 		return new State(title, goal, distance, s.isNear(), bag, s.isBagReady(), s.getDanger(), s.isDangerInside(), s.getPacing(),
 			s.isPacingGood(), s.getUpgrade(), s.getHealth(), s.isHealthCritical(), s.getAction(), s.getTiles());
+	}
+
+	/** Текст плашки строками — для журнала отладки: что игрок видит наверху. */
+	static String plain(State s)
+	{
+		java.util.List<String> lines = new java.util.ArrayList<>();
+		for (String t : new String[] {s.getTitle(), s.getDanger(), s.getHealth(), s.getGoal(), s.getAction(), s.getDistance(), s.getPacing(), s.getBag(), s.getUpgrade()})
+		{
+			if (!isBlank(t))
+			{
+				lines.add(t);
+			}
+		}
+		return String.join("\n", lines);
 	}
 
 	private static boolean isBlank(String s)

@@ -63,6 +63,28 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
+	public void описаниеУсловияДляПлашкиРазработчика()
+	{
+		assertTrue("без шага условия нет", manager.describe().isEmpty());
+		ActiveTarget t = target("S2-07", "ITEM_OWNED");
+		t.getCompletionTrigger().setItems(List.of(item(1535, 5, "Lobster")));
+		manager.setTarget(t);
+		assertEquals(List.of("Item(Lobster ×5) = FALSE 0/5"), manager.describe());
+		byId.put(1535, 5);
+		assertEquals(List.of("Item(Lobster ×5) = TRUE 5/5"), manager.describe());
+
+		ActiveTarget q = target("S1-03", "QUEST_COMPLETED");
+		q.getCompletionTrigger().setQuestName("Cook's Assistant");
+		manager.setTarget(q);
+		questFinished = false;
+		assertEquals(List.of("Quest(Cook's Assistant) = FALSE"), manager.describe());
+		questFinished = true;
+		assertEquals(List.of("Quest(Cook's Assistant) = TRUE"), manager.describe());
+		questFinished = null;
+		assertEquals("квест неизвестен — вопрос, а не FALSE", List.of("Quest(Cook's Assistant) = ?"), manager.describe());
+	}
+
+	@Test
 	public void квестПроверяетсяСразуИПотомРедко()
 	{
 		ActiveTarget t = target("S1-03", "QUEST_COMPLETED");

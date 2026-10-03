@@ -43,6 +43,7 @@ import lombok.extern.slf4j.Slf4j;
  * POST /nav-target    временная цель поверх шага (NavTarget): место с карты или магазин; {"clear":true} — снять
  * POST /bank-tags     предметы этапа для мягкой подсветки в банке (BankTags)
  * POST /gear-hint     совет по снаряжению (GearHint): строка HUD, что спросить у банка и что подсветить; {"clear":true} — снять
+ * GET  /telemetry     сводка журнала отладки: файл, счётчики, странности и последние события (с протокола 6; {"enabled":false}, если журнал выключен)
  * GET  /events        text/event-stream: STATUS (с player), STATS, XP, QUESTS (с протокола 5), OWNED, GEAR, PACING, NAV_SET, NAV_DONE, STEP_AUTO_COMPLETED
  *                      и пинг каждые 15 секунд
  *
@@ -72,7 +73,7 @@ public final class BridgeServer
 	 */
 	static final int PROTOCOL = 6;
 	/** Версия плагина — та же, что у программы, с которой он едет в одном exe. */
-	static final String PLUGIN_VERSION = "2.22.0";
+	static final String PLUGIN_VERSION = "2.23.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	/** Снимок целиком — шаг с этапами квеста, закупки и план в одном теле. */
@@ -116,6 +117,12 @@ public final class BridgeServer
 		default PrepResult onPrepPlan(PrepEnvelope envelope, Map<String, String> bad)
 		{
 			return new PrepResult(false, Map.of("all", "не поддерживается"));
+		}
+
+		/** Сводка журнала отладки для программы (GET /telemetry): {"enabled":false} или счётчики, странности и последние события. */
+		default Map<String, Object> onTelemetry()
+		{
+			return Map.of("enabled", false);
 		}
 	}
 
@@ -693,6 +700,14 @@ public final class BridgeServer
 					json(ex, 200, answer);
 					return;
 				}
+				case "/telemetry":
+					if (!"GET".equals(method))
+					{
+						json(ex, 405, error("method"));
+						return;
+					}
+					json(ex, 200, listener.onTelemetry());
+					return;
 				case "/clear":
 					if (!postAllowed(ex, method))
 					{

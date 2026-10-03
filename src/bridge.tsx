@@ -12,7 +12,7 @@ import { gateAllows, linkPlayer, profileGate, readProfiles, useProfiles, writePr
 import { useStore } from './store';
 import { desktop, type RuneliteLaunch } from './lib/desktop';
 import {
-  checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseGear, parseNavTarget, parseMove, parsePacing, parsePlayer, parseQuests, parseStats, parseXp, planAutoComplete, setNavTarget,
+  checkStatus, clearActiveStep, clearNavTarget, connectEvents, getTelemetry, parseGear, parseNavTarget, parseMove, parsePacing, parsePlayer, parseQuests, parseStats, parseXp, planAutoComplete, setNavTarget,
   postPrepPlan, supportsSnapshot, syncActiveStep, syncBankTags, syncShoppingPlan, toInGameTarget,
   pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type ShoppingPlanPayload,
 } from './services/runeliteBridge';
@@ -625,6 +625,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
 
   const diagnostics = useCallback(async () => {
     const st = await checkStatus();
+    // Журнал плагина (с 2.23.0): сколько записано и какие странности нашёл сторож; подробности — npm run telemetry.
+    const log = st.online ? await getTelemetry() : null;
     const done = Object.values(latest.current.progress.steps).filter((v) => v === 'done').length;
     const report = {
       программа: __APP_VERSION__,
@@ -634,6 +636,9 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
         онлайн: st.online, протокол: st.protocol, версия: st.pluginVersion, шагУПлагина: st.activeStepId,
         уровней: st.stats ? Object.keys(st.stats).length : 0, опыт: Boolean(st.xp), квестов: st.questsDone?.length ?? null, персонаж: Boolean(st.player),
       },
+      журналПлагина: log === null ? null : log.enabled
+        ? { файл: log.file, событий: log.events, странностей: log.anomalies, обрезан: log.truncated, последнийСнимок: log.lastShot, последниеСтранности: log.recentAnomalies.map((x) => `${x.code}: ${x.message}`) }
+        : { включён: false },
       настройки: { автозапуск: autoLaunch, возможности: features, режим: latest.current.progress.gameMode ?? null, профиль: gate.kind },
       прогресс: { выполнено: done, всего: latest.current.steps.length },
       события: eventLog.current.slice(-100).map((x) => `${new Date(x.t).toLocaleTimeString('ru-RU')} ${x.text}`),

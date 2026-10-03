@@ -1,5 +1,6 @@
 package com.osrspath.bridge;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.IntUnaryOperator;
@@ -106,6 +107,35 @@ final class ItemCounts
 	boolean isEmpty()
 	{
 		return byId.isEmpty();
+	}
+
+	/** Что изменилось с прошлого раза: название → разница (положительная — прибавилось). Для журнала отладки. */
+	Map<String, Integer> deltaFrom(ItemCounts before)
+	{
+		Map<String, Integer> out = new java.util.TreeMap<>();
+		Map<String, Integer> prev = before == null ? Collections.emptyMap() : before.byName;
+		for (Map.Entry<String, Integer> e : byName.entrySet())
+		{
+			int d = e.getValue() - prev.getOrDefault(e.getKey(), 0);
+			if (d != 0)
+			{
+				out.put(e.getKey(), d);
+			}
+		}
+		for (Map.Entry<String, Integer> e : prev.entrySet())
+		{
+			if (!byName.containsKey(e.getKey()))
+			{
+				out.put(e.getKey(), -e.getValue());
+			}
+		}
+		return out;
+	}
+
+	/** Число, которое меняется вместе с содержимым: сторожу движка нужно знать только «менялась ли сумка». */
+	int fingerprint()
+	{
+		return byName.hashCode();
 	}
 
 	/**

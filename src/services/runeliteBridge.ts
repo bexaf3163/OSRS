@@ -12,6 +12,7 @@ import { watchedItems } from '../lib/branching';
 import { stepMaxHit } from '../lib/foodAdvice';
 import { npcSpot, stepPlaces } from '../lib/stepPlaces';
 import { shortLine } from '../lib/shortText';
+import { summarizeBridge, type BridgeTelemetry } from '../lib/telemetryReport';
 
 export const BRIDGE_ORIGIN = 'http://127.0.0.1:38282';
 /** Заголовок, без которого плагин не принимает POST. Его ставит главный процесс Electron (electron/runelite-bridge.cjs). */
@@ -152,7 +153,7 @@ export type BridgeEvent =
   | { type: string; [key: string]: unknown };
 
 /** Все адреса плагина, к которым ходит приложение. Программа для ПК пропускает только их (electron/runelite-bridge.cjs). */
-export const BRIDGE_PATHS = ['/status', '/active-step', '/clear', '/shopping-plan', '/nav-target', '/bank-tags', '/gear-hint', '/prep-plan'] as const;
+export const BRIDGE_PATHS = ['/status', '/active-step', '/clear', '/shopping-plan', '/nav-target', '/bank-tags', '/gear-hint', '/prep-plan', '/telemetry'] as const;
 export type BridgePath = typeof BRIDGE_PATHS[number];
 
 export interface BridgeResponse {
@@ -554,6 +555,12 @@ export async function postPrepPlan(envelope: PrepEnvelope, t: BridgeTransport = 
     for (const [k, v] of Object.entries(d.rejected as Record<string, unknown>)) if (typeof v === 'string') rejected[k] = v;
   }
   return { ok: res.ok, stale: d.stale === true, rejected, status: res.status };
+}
+
+/** Сводка журнала отладки плагина (с 2.23.0; старый плагин отвечает 404 — null). */
+export async function getTelemetry(t: BridgeTransport = defaultTransport()): Promise<BridgeTelemetry | null> {
+  const res = await t.request('GET', '/telemetry');
+  return res.ok ? summarizeBridge(res.data) : null;
 }
 
 /** Оптовый список — в подсказку на бирже. Пустой список убирает подсказку. */

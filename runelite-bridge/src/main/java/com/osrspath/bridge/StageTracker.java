@@ -43,6 +43,8 @@ final class StageTracker
 	/** До какого момента держится просмотр прежнего шага (мс по часам); 0 — не просматриваем. */
 	private long peekUntil;
 	private String warning;
+	/** Почему курсор сдвинулся в последний раз: «POSITION», «ITEM», «DELIVERED», «CLAMP», «BACK», «MANUAL», «RESET» и подробности. */
+	private String reason = "";
 
 	StageTracker()
 	{
@@ -71,6 +73,18 @@ final class StageTracker
 		return warning;
 	}
 
+	/** Причина последнего сдвига курсора — для журнала отладки: «POSITION: дошёл до шага 3», «DELIVERED: Blurite ore». */
+	/** Предмет текущей строки уже сдан — для плашки разработчика. */
+	boolean delivered()
+	{
+		return delivered.contains(cursor);
+	}
+
+	String reason()
+	{
+		return reason;
+	}
+
 	/** Игрок смотрит прежний шаг (кнопка «назад»): автоматика пока не двигает курсор. */
 	boolean peeking()
 	{
@@ -85,6 +99,7 @@ final class StageTracker
 		delivered.clear();
 		peekUntil = 0;
 		warning = null;
+		reason = "";
 	}
 
 	/**
@@ -114,6 +129,7 @@ final class StageTracker
 		{
 			peekUntil = 0;
 		}
+		int c0 = cursor;
 		observe(lines, x, y, plane, bag);
 		if (peeking())
 		{
@@ -121,9 +137,28 @@ final class StageTracker
 			return cursor;
 		}
 		int window = fresh ? StepGuide.freshWindow(changed, lines.size()) : StepGuide.STEP_WINDOW;
+		int c1 = cursor;
 		cursor = StepGuide.advance(lines, cursor, x, y, plane, window, bag);
+		if (cursor != c1)
+		{
+			reason = "POSITION: дошёл до шага " + (cursor + 1) + " «" + lines.get(cursor).shown() + "»";
+		}
+		int c2 = cursor;
 		cursor = skip(lines, cursor, bag);
+		if (cursor != c2)
+		{
+			reason = "ITEM: шаги " + (c2 + 1) + "–" + cursor + " сделаны по предметам, дальше «" + lines.get(cursor).shown() + "»";
+		}
+		int c3 = cursor;
 		clamp(lines, bag);
+		if (cursor != c3)
+		{
+			reason = "CLAMP: " + warning;
+		}
+		if (fresh && cursor != c0 && reason.isEmpty())
+		{
+			reason = "RESET";
+		}
 		return cursor;
 	}
 
@@ -158,7 +193,12 @@ final class StageTracker
 				peak.put(name, have);
 				if (!peeking())
 				{
+					int before = cursor;
 					cursor = Math.max(cursor, Math.min(i + 1, last));
+					if (cursor != before)
+					{
+						reason = "DELIVERED: " + l.getNeed() + " ушёл у шага " + (i + 1) + " «" + l.shown() + "»";
+					}
 				}
 			}
 		}
@@ -284,6 +324,7 @@ final class StageTracker
 		cursor--;
 		peekUntil = clock.getAsLong() + PEEK_MS;
 		warning = null;
+		reason = "BACK: просмотр шага " + (cursor + 1);
 	}
 
 	/**
@@ -327,6 +368,7 @@ final class StageTracker
 		}
 		cursor++;
 		warning = null;
+		reason = "MANUAL: «сделано» на шаге " + cursor + " (игра его сама не видит)";
 		return true;
 	}
 
@@ -334,5 +376,6 @@ final class StageTracker
 	void resume()
 	{
 		peekUntil = 0;
+		reason = "RESUME";
 	}
 }

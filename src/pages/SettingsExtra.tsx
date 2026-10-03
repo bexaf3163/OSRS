@@ -164,7 +164,7 @@ export function DiagnosticsSection() {
     <section className="card section-card">
       <h2 className="card-title">Диагностика</h2>
       <p className="muted small">
-        Если что-то работает не так: нажми — программа соберёт версии, состояние связи с RuneLite и последние события моста.
+        Если что-то работает не так: нажми — программа соберёт версии, состояние связи с RuneLite, последние события моста и сводку журнала плагина (сколько записано, какие странности нашёл сторож).
         Сумки, банка и заметок в отчёте нет.
       </p>
       <div className="actions"><button type="button" className="btn" onClick={() => void collect()}>Скопировать отчёт</button></div>

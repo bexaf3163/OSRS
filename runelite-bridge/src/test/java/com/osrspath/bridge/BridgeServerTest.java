@@ -655,6 +655,17 @@ public class BridgeServerTest
 	}
 
 	@Test
+	public void telemetryОтдаётСводкуЖурналаИЗащищёнКакОстальныеАдреса() throws Exception
+	{
+		// Слушатель по умолчанию — журнал выключен.
+		HttpResponse<String> r = get("/telemetry");
+		assertEquals(200, r.statusCode());
+		assertEquals("{\"enabled\":false}", r.body());
+		assertEquals("только GET", 405, post("/telemetry", "{}", "X-OSRS-Path", "1").statusCode());
+		assertEquals("запрос из браузера отклонён", 403, get("/telemetry", "Origin", "https://evil.example").statusCode());
+	}
+
+	@Test
 	public void остановкаЗакрываетПорт() throws Exception
 	{
 		int port = server.getPort();

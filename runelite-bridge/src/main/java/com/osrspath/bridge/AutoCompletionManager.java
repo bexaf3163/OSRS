@@ -158,6 +158,48 @@ public class AutoCompletionManager
 		return type != null && !fired;
 	}
 
+	/**
+	 * Условие автоотметки шага — для плашки разработчика и журнала: строки вида «Item(Lobster ×5) = 3/5 FALSE». Пусто —
+	 * у шага нет условия. Только читает: готовность проверяет onGameTick.
+	 */
+	public List<String> describe()
+	{
+		List<String> out = new java.util.ArrayList<>();
+		if (type == null)
+		{
+			return out;
+		}
+		if (fired)
+		{
+			out.add(type + " сработало");
+			return out;
+		}
+		if (questName != null)
+		{
+			Boolean finished = quests.isFinished(questName);
+			out.add("Quest(" + questName + ") = " + (finished == null ? "?" : String.valueOf(finished).toUpperCase()));
+		}
+		for (ActiveTarget.LevelNeed l : needLevels)
+		{
+			Integer level = levels.level(l.getSkill());
+			out.add("Skill(" + l.getSkill() + " ≥ " + l.getLevel() + ") = " + (level == null ? "?" : level >= l.getLevel() ? "TRUE" : "FALSE (" + level + ")"));
+		}
+		for (ActiveTarget.ItemNeed i : needItems)
+		{
+			int have = items.owned(i);
+			out.add("Item(" + (i.getNames() != null && !i.getNames().isEmpty() ? String.join("/", i.getNames()) : String.valueOf(i.getId())) + " ×" + i.getCount() + ") = " + (have >= i.getCount() ? "TRUE" : "FALSE") + " " + have + "/" + i.getCount());
+		}
+		if (chatPattern != null)
+		{
+			out.add("Chat(" + chatPattern.pattern() + ") = ждём сообщение");
+		}
+		if ("VARBIT_CHANGED".equals(type))
+		{
+			out.add("Varbit(" + varbitId + ") == " + targetValue + " = ждём");
+		}
+		return out;
+	}
+
 	/** Условие — состояние игры (квест, уровни, предметы), а не событие. */
 	private boolean stateful()
 	{

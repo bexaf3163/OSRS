@@ -103,6 +103,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		if (!GuideList.shown(config.showGuide(), false, v, config.smartOverlays(), plugin.overlayContext()))
 		{
 			hits = Hits.NONE;
+			plugin.guideShown(false);
 			return null;
 		}
 		float scale = config.hudLarge() ? OsrsPathHudOverlay.LARGE : 1f;
@@ -118,11 +119,22 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			components = build(panelComponent, v, config.guideCollapsed(), hovered, g.getFontMetrics(font), g.getFontMetrics(small),
 				font, small, width, config.hudOpacity(), terse);
 			builtFor = key;
+			// Что именно видит игрок — в журнал отладки (только когда плашка пересобрана, не каждый кадр).
+			List<GuideList.Row> shown = new ArrayList<>();
+			for (RowComponent rc : components)
+			{
+				if (!rc.isHint())
+				{
+					shown.add(rc.getRow());
+				}
+			}
+			plugin.uiShown("guide", GuideList.plain(shown));
 		}
 		OverlayCard.paint(g, last.width, last.height, accent(v), config.hudOpacity());
 		Dimension d = super.render(g);
 		last = d == null ? new Dimension() : d;
 		remember(d);
+		plugin.guideShown(true);
 		return d;
 	}
 

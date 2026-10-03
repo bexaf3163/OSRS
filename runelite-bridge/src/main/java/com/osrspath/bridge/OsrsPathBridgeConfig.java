@@ -1,11 +1,14 @@
 package com.osrspath.bridge;
 
 import java.awt.Color;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import net.runelite.client.config.Alpha;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
 import net.runelite.client.config.ConfigSection;
+import net.runelite.client.config.Keybind;
 import net.runelite.client.config.Range;
 import net.runelite.client.config.Units;
 
@@ -393,5 +396,63 @@ public interface OsrsPathBridgeConfig extends Config
 	default boolean stageFollow()
 	{
 		return true;
+	}
+
+	@ConfigSection(
+		name = "Для разработчика",
+		description = "Плашка со статусом движка, журнал и скриншоты для разбора ошибок",
+		position = 90,
+		closedByDefault = true
+	)
+	String developer = "developer";
+
+	@ConfigItem(
+		keyName = "telemetry",
+		name = "Журнал для отладки",
+		description = "Пишет в папку osrs-path-telemetry рядом с настройками RuneLite, что делал плагин: смена шага и этапа, куда сдвинулся курсор и почему, "
+			+ "клики, сумка, смерть и телепорт, текст плашек и «странности». Только на этом компьютере, никуда не отправляется. До 8 файлов по 6 МБ",
+		section = developer,
+		position = 91
+	)
+	default boolean telemetry()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "telemetryShots",
+		name = "Снимок при странности",
+		description = "Когда плагин заметил странность (шаг не меняется, пустой экран), сохраняет скриншот игры в папку osrs-path-telemetry/shots. "
+			+ "Не чаще раза в 20 секунд и не больше 12 за сеанс. На снимке видно всё, что на экране игры, включая чат",
+		section = developer,
+		position = 92
+	)
+	default boolean telemetryShots()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "debugKey",
+		name = "Плашка разработчика",
+		description = "Горячая клавиша: показать или скрыть поверх экрана статус движка — шаг, курсор, условия, снимок программы, странности",
+		section = developer,
+		position = 93
+	)
+	default Keybind debugKey()
+	{
+		return new Keybind(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
+	}
+
+	@ConfigItem(
+		keyName = "shotKey",
+		name = "Скриншот для отладки",
+		description = "Горячая клавиша: сохранить скриншот игры в osrs-path-telemetry/shots и отметить его в журнале",
+		section = developer,
+		position = 94
+	)
+	default Keybind shotKey()
+	{
+		return new Keybind(KeyEvent.VK_K, InputEvent.CTRL_DOWN_MASK | InputEvent.SHIFT_DOWN_MASK);
 	}
 }

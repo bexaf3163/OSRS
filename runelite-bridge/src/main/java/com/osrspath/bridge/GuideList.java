@@ -232,6 +232,28 @@ final class GuideList
 		return out;
 	}
 
+	/** Текст строк списка подряд, как его видит игрок, — для журнала отладки и тестов: «левое ~правое», строки через перевод строки. */
+	static String plain(List<Row> rows)
+	{
+		StringBuilder sb = new StringBuilder();
+		for (Row r : rows)
+		{
+			for (Line l : r.getLines())
+			{
+				if (sb.length() > 0)
+				{
+					sb.append('\n');
+				}
+				sb.append(l.getLeft());
+				if (l.getRight() != null)
+				{
+					sb.append(" ~").append(l.getRight());
+				}
+			}
+		}
+		return sb.toString();
+	}
+
 	/** « · 82%» в заголовке: насколько шаг подготовлен по плану программы; готов на сто — не пишем. */
 	static String percent(StepGuide.View v)
 	{

@@ -3,6 +3,10 @@ package com.osrspath.bridge;
 import com.google.gson.Gson;
 import com.google.inject.Provides;
 import java.io.IOException;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,7 +18,9 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.function.IntUnaryOperator;
+import javax.imageio.ImageIO;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
 import javax.swing.SwingUtilities;
@@ -67,6 +73,7 @@ import net.runelite.api.events.WallObjectDespawned;
 import net.runelite.api.events.WallObjectSpawned;
 import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.gameval.ItemID;
+import net.runelite.client.RuneLite;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.EventBus;
@@ -75,11 +82,14 @@ import net.runelite.client.events.ConfigChanged;
 import net.runelite.client.events.PluginChanged;
 import net.runelite.client.events.PluginMessage;
 import net.runelite.client.game.ItemManager;
+import net.runelite.client.util.HotkeyListener;
+import net.runelite.client.input.KeyManager;
 import net.runelite.client.input.MouseManager;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.PluginManager;
 import net.runelite.client.ui.ClientToolbar;
+import net.runelite.client.ui.DrawManager;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.OverlayManager;
 import net.runelite.client.ui.overlay.worldmap.WorldMapPoint;
@@ -156,6 +166,18 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	@Inject
 	private ClientToolbar clientToolbar;
+
+	@Inject
+	private OsrsPathDebugOverlay debugOverlay;
+
+	@Inject
+	private KeyManager keyManager;
+
+	@Inject
+	private DrawManager drawManager;
+
+	@Inject
+	private ScheduledExecutorService executor;
 
 	/** Боковая панель «OSRS Путь»: что нужно на шаг, где взять, «Путь сюда». */
 	private OsrsPathPanel panel;
@@ -289,7 +311,27 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	{
 		completion = new AutoCompletionManager(this::isQuestFinished, stats::get, this::ownedCount, this::onStepCompleted);
 		radar = DangerRadar.load(gson);
+		startTelemetry();
 		startServer();
+		overlayManager.add(debugOverlay);
+		debugHotkey = new HotkeyListener(() -> config.debugKey())
+		{
+			@Override
+			public void hotkeyPressed()
+			{
+				clientThread.invokeLater(OsrsPathBridgePlugin.this::toggleDebug);
+			}
+		};
+		shotHotkey = new HotkeyListener(() -> config.shotKey())
+		{
+			@Override
+			public void hotkeyPressed()
+			{
+				clientThread.invokeLater(() -> takeShot("hotkey"));
+			}
+		};
+		keyManager.registerKeyListener(debugHotkey);
+		keyManager.registerKeyListener(shotHotkey);
 		overlayManager.add(worldOverlay);
 		overlayManager.add(widgetOverlay);
 		overlayManager.add(itemOverlay);
@@ -347,6 +389,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	@Override
 	protected void shutDown()
 	{
+		keyManager.unregisterKeyListener(debugHotkey);
+		keyManager.unregisterKeyListener(shotHotkey);
+		overlayManager.remove(debugOverlay);
+		debugVisible = false;
+		stopTelemetry();
 		stopServer();
 		overlayManager.remove(worldOverlay);
 		overlayManager.remove(widgetOverlay);
@@ -490,6 +537,16 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			case "smartView":
 				clientThread.invokeLater(this::updateHud);
 				break;
+			case "telemetry":
+				if (config.telemetry())
+				{
+					startTelemetry();
+				}
+				else
+				{
+					stopTelemetry();
+				}
+				break;
 			default:
 				break;
 		}
@@ -558,6 +615,317 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return null;
 	}
 
+	// ---------- Журнал отладки, плашка разработчика, скриншоты ----------
+
+	/** Журнал событий движка; null — выключен в настройках. */
+	private volatile Telemetry telemetry;
+	private final EngineWatchdog watchdog = new EngineWatchdog();
+	/** Что показывает плашка разработчика; пересобирается раз в тик, пока плашка открыта. */
+	@Getter
+	private volatile DebugView.State debugState;
+	@Getter
+	private volatile boolean debugVisible;
+	private HotkeyListener debugHotkey;
+	private HotkeyListener shotHotkey;
+	private volatile boolean hudOnScreen;
+	private volatile boolean guideOnScreen;
+	private final Map<String, String> lastUi = new HashMap<>();
+	private int shots;
+	private long lastShotAt;
+	private volatile String lastShotName;
+	private volatile long lastSnapshotAt;
+	private volatile long lastSnapshotSeq;
+	private volatile Integer planPercent;
+	private int tickCount;
+	private long lastBeat;
+	private ItemCounts lastBag = ItemCounts.EMPTY;
+	private String lastStageKey;
+	private int lastStageCursor = -1;
+	private Integer lastStageVar;
+	private String lastWarning;
+
+	static final int SHOTS_PER_SESSION = 12;
+	static final long SHOT_GAP_MS = 20_000;
+	static final int SHOTS_KEPT = 40;
+	static final long HEARTBEAT_MS = 30_000;
+	static final int WATCH_TICKS = 5;
+
+	/** Событие в журнал — если он включён. */
+	private void tel(String kind, Object... pairs)
+	{
+		Telemetry t = telemetry;
+		if (t != null)
+		{
+			try
+			{
+				t.event(kind, pairs);
+			}
+			catch (RuntimeException ex)
+			{
+				// Журнал нужен для разбора, а не для работы: его сбой не должен задеть подсказки в игре.
+				log.debug("Событие журнала не записано: {}", ex.toString());
+			}
+		}
+	}
+
+	private void startTelemetry()
+	{
+		if (telemetry != null || !config.telemetry())
+		{
+			return;
+		}
+		telemetry = new Telemetry(new File(RuneLite.RUNELITE_DIR, "osrs-path-telemetry"), gson, System::currentTimeMillis);
+		Map<String, Object> cfg = new LinkedHashMap<>();
+		cfg.put("smartView", config.smartOverlays());
+		cfg.put("hudLean", config.hudLean());
+		cfg.put("showHud", config.showHud());
+		cfg.put("showGuide", config.showGuide());
+		cfg.put("hudLarge", config.hudLarge());
+		cfg.put("stageFollow", config.stageFollow());
+		cfg.put("autoNavigation", config.autoNavigation());
+		tel("session", "plugin", BridgeServer.PLUGIN_VERSION, "protocol", BridgeServer.PROTOCOL, "java", System.getProperty("java.version"),
+			"os", System.getProperty("os.name"), "config", cfg);
+	}
+
+	private void stopTelemetry()
+	{
+		Telemetry t = telemetry;
+		telemetry = null;
+		if (t != null)
+		{
+			t.event("end");
+			t.close();
+		}
+	}
+
+	/** Плашки сообщают, что нарисовали: сторож движка ловит «шаг есть, а на экране пусто». */
+	void hudShown(boolean shown)
+	{
+		hudOnScreen = shown;
+	}
+
+	void guideShown(boolean shown)
+	{
+		guideOnScreen = shown;
+	}
+
+	/** Что игрок видит (текст плашки или списка): в журнал — только когда изменилось. */
+	void uiShown(String view, String text)
+	{
+		Telemetry t = telemetry;
+		if (t == null || text == null || text.equals(lastUi.put(view, text)))
+		{
+			return;
+		}
+		t.event("ui", "view", view, "text", text);
+	}
+
+	private void toggleDebug()
+	{
+		debugVisible = !debugVisible;
+		tel("debug", "visible", debugVisible);
+		if (debugVisible)
+		{
+			debugState = buildDebugState();
+		}
+	}
+
+	/** Скриншот игры в папку журнала; пара «картинка — состояние движка» записывается в журнал. */
+	private void takeShot(String why)
+	{
+		Telemetry t = telemetry;
+		if (t == null)
+		{
+			return;
+		}
+		long now = System.currentTimeMillis();
+		boolean auto = why.startsWith("anomaly");
+		if (auto && (shots >= SHOTS_PER_SESSION || now - lastShotAt < SHOT_GAP_MS))
+		{
+			return;
+		}
+		lastShotAt = now;
+		shots++;
+		String state = DebugView.plain(DebugView.rows(buildDebugState()));
+		String stamp = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
+		String name = "shot-" + stamp + "-" + why.replaceAll("[^A-Za-z0-9_]+", "_") + ".png";
+		lastShotName = name;
+		File dir = new File(t.dir(), "shots");
+		drawManager.requestNextFrameListener(image -> executor.execute(() -> writeShot(image, dir, name, why, state)));
+	}
+
+	private void writeShot(Image image, File dir, String name, String why, String state)
+	{
+		try
+		{
+			BufferedImage out = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
+			out.getGraphics().drawImage(image, 0, 0, null);
+			java.nio.file.Files.createDirectories(dir.toPath());
+			ImageIO.write(out, "png", new File(dir, name));
+			pruneShots(dir);
+			tel("shot", "file", name, "why", why, "state", state);
+		}
+		catch (IOException | RuntimeException ex)
+		{
+			log.warn("Скриншот для отладки не сохранён: {}", ex.toString());
+		}
+	}
+
+	/** В папке остаются только свежие скриншоты. */
+	private static void pruneShots(File dir)
+	{
+		File[] files = dir.listFiles((d, n) -> n.startsWith("shot-") && n.endsWith(".png"));
+		if (files == null || files.length <= SHOTS_KEPT)
+		{
+			return;
+		}
+		Arrays.sort(files, java.util.Comparator.comparing(File::getName));
+		for (int i = 0; i < files.length - SHOTS_KEPT; i++)
+		{
+			if (!files[i].delete())
+			{
+				log.debug("Старый скриншот не удалён: {}", files[i]);
+			}
+		}
+	}
+
+	/** Сводка журнала для приложения (GET /telemetry): путь, счётчики, последние странности и события. */
+	@Override
+	public Map<String, Object> onTelemetry()
+	{
+		Telemetry t = telemetry;
+		if (t == null)
+		{
+			Map<String, Object> off = new LinkedHashMap<>();
+			off.put("enabled", false);
+			return off;
+		}
+		Map<String, Object> m = t.summary(30);
+		m.put("enabled", true);
+		m.put("lastShot", lastShotName);
+		return m;
+	}
+
+	/** Раз в тик: пульс, сторож движка, состояние плашки разработчика. Поток клиента. */
+	private void debugTick(Player me)
+	{
+		try
+		{
+			debugTickUnsafe(me);
+		}
+		catch (RuntimeException ex)
+		{
+			// Отладочная часть не должна ломать игровой тик: сбой — в лог RuneLite, подсказки работают дальше.
+			log.warn("Сбой плашки разработчика или сторожа: {}", ex.toString());
+		}
+	}
+
+	private void debugTickUnsafe(Player me)
+	{
+		tickCount++;
+		long now = System.currentTimeMillis();
+		Telemetry t = telemetry;
+		if (t != null && now - lastBeat >= HEARTBEAT_MS)
+		{
+			lastBeat = now;
+			WorldPoint p = me.getWorldLocation();
+			t.event("beat", "step", target == null ? null : target.getStepId(), "stage", lastStageKey, "cursor", lastStageCursor,
+				"pos", new int[] {p.getX(), p.getY(), p.getPlane()}, "tick", tickCount, "hud", hudOnScreen, "guide", guideOnScreen);
+		}
+		if (t != null && tickCount % WATCH_TICKS == 0)
+		{
+			ActiveTarget.Stage st = stageOf(target);
+			StepGuide.View v = guideView;
+			WorldPoint p = me.getWorldLocation();
+			List<ActiveTarget.StageLine> lines = currentLines(st);
+			int cur = stageTracker.cursor();
+			boolean manual = lines != null && StageTracker.needsManualStep(lines, cur);
+			StepGuide.StageView sv = v == null ? null : v.getStage();
+			EngineWatchdog.Observation o = new EngineWatchdog.Observation(now, target == null ? null : target.getStepId(),
+				st == null ? null : stageTracker.key(), cur, lines == null ? 0 : lines.size(), manual, stageTracker.peeking(), stageTracker.warning() != null,
+				p.getX(), p.getY(), p.getPlane(), carried.fingerprint(), hudOnScreen, guideOnScreen, st != null && questDone(target),
+				sv != null && sv.isFinished(), client.getGameState() == GameState.LOGGED_IN);
+			for (EngineWatchdog.Finding f : watchdog.observe(o))
+			{
+				if (t.anomaly(f.getCode(), f.getKey(), f.getMessage(), "step", target == null ? null : target.getStepId()) && config.telemetryShots())
+				{
+					takeShot("anomaly_" + f.getCode());
+				}
+			}
+		}
+		if (debugVisible)
+		{
+			debugState = buildDebugState();
+		}
+	}
+
+	private List<ActiveTarget.StageLine> currentLines(ActiveTarget.Stage st)
+	{
+		Integer value = st == null ? null : stageValue(st);
+		return value == null ? null : st.getStages().get(st.indexFor(value)).getSteps();
+	}
+
+	/** Состояние движка для плашки разработчика и для скриншота. Поток клиента. */
+	private DebugView.State buildDebugState()
+	{
+		ActiveTarget.Stage st = stageOf(target);
+		Integer value = st == null ? null : stageValue(st);
+		List<ActiveTarget.StageLine> lines = currentLines(st);
+		int cur = stageTracker.cursor();
+		ActiveTarget.StageLine line = lines == null || lines.isEmpty() ? null : lines.get(Math.max(0, Math.min(cur, lines.size() - 1)));
+		ItemCounts bag = ItemCounts.sum(carried, noted);
+		List<String> conditions = new ArrayList<>();
+		if (line != null && line.hasHas())
+		{
+			conditions.add("has " + line.getHas() + " = " + (bag.count(null, line.getHas()) > 0 ? "TRUE" : "FALSE"));
+		}
+		if (line != null && line.hasNeed())
+		{
+			conditions.add("need " + line.getNeed() + " (сдан) = " + (stageTracker.delivered() ? "TRUE" : "FALSE"));
+		}
+		int queue = -1;
+		PrepPlan pp = prep;
+		if (pp != null && pp.getLines() != null && target != null && pp.getStepId().equals(target.getStepId()))
+		{
+			queue = (int) pp.getLines().stream().filter(l -> "NOW".equals(l.getTiming()) && ("MISSING".equals(l.getWhere()) || "BANK".equals(l.getWhere()))).count();
+		}
+		long now = System.currentTimeMillis();
+		Player me = client.getLocalPlayer();
+		WorldPoint p = me == null ? null : me.getWorldLocation();
+		int used = 0;
+		ItemContainer inv = client.getItemContainer(InventoryID.INV);
+		if (inv != null)
+		{
+			for (Item it : inv.getItems())
+			{
+				if (it.getId() > 0 && it.getQuantity() > 0)
+				{
+					used++;
+				}
+			}
+		}
+		List<String> an = new ArrayList<>();
+		Telemetry t = telemetry;
+		if (t != null)
+		{
+			Map<String, Object> sum = t.summary(0);
+			@SuppressWarnings("unchecked")
+			List<Map<String, Object>> recent = (List<Map<String, Object>>) sum.get("recentAnomalies");
+			for (int i = Math.max(0, recent.size() - 3); i < recent.size(); i++)
+			{
+				an.add(recent.get(i).get("code") + ": " + recent.get(i).get("message"));
+			}
+		}
+		return new DebugView.State(target == null ? null : target.getStepId(),
+			st == null || value == null ? null : (st.indexFor(value) + 1) + "/" + st.getStages().size(), value, cur, lines == null ? 0 : lines.size(),
+			line == null ? null : line.shown(), lines != null && StageTracker.needsManualStep(lines, cur), stageTracker.peeking(), stageTracker.warning(),
+			conditions, completion == null ? new ArrayList<>() : completion.describe(), queue,
+			lastSnapshotAt == 0 ? null : "seq " + lastSnapshotSeq + ", " + Math.max(0, (now - lastSnapshotAt) / 1000) + " с назад", planPercent,
+			stageTracker.reason(), used + "/28", p == null ? "—" : p.getX() + "," + p.getY() + "," + p.getPlane(), tickCount, hudOnScreen, guideOnScreen,
+			t != null, t == null || t.file() == null ? null : t.file().getName(), t == null ? 0 : t.events(), t == null ? 0 : t.anomalyCount(), an,
+			lastShotName);
+	}
+
 	// ---------- Снимок состояния от программы (протокол 6) ----------
 
 	/** Номер последнего применённого снимка: запоздавший, более старый, отбрасывается. */
@@ -575,6 +943,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			if (e.getSeq() <= lastSnapshot)
 			{
+				tel("snapshot", "seq", e.getSeq(), "stale", true);
 				return new BridgeServer.PrepResult(true, Collections.emptyMap());
 			}
 			lastSnapshot = e.getSeq();
@@ -589,6 +958,21 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (!bad.containsKey(PrepEnvelope.BANK_TAGS) && e.getBankTags() != null && !config.bankTagsHelper())
 		{
 			refused.put(PrepEnvelope.BANK_TAGS, "предметы этапа из приложения выключены в настройках плагина OSRS Path Bridge");
+		}
+		lastSnapshotAt = System.currentTimeMillis();
+		lastSnapshotSeq = e.getSeq();
+		planPercent = e.getPlan() == null || e.getPlan().getScore() == null ? null : e.getPlan().getScore().getPercent();
+		Map<String, String> allRejected = new LinkedHashMap<>(bad);
+		allRejected.putAll(refused);
+		tel("snapshot", "seq", e.getSeq(), "step", e.getStep() == null ? null : e.getStep().getStepId(), "plan", e.getPlan() != null, "percent", planPercent,
+			"shopping", e.getShopping() != null, "bankTags", e.getBankTags() != null, "gearHint", e.getGearHint() != null, "rejected", allRejected.isEmpty() ? null : allRejected);
+		Telemetry t = telemetry;
+		if (t != null)
+		{
+			for (Map.Entry<String, String> r : bad.entrySet())
+			{
+				t.anomaly("SNAPSHOT_REJECT", r.getKey(), "Часть снимка «" + r.getKey() + "» отклонена: " + r.getValue());
+			}
 		}
 		clientThread.invokeLater(() -> applySnapshot(e, bad, refused));
 		return new BridgeServer.PrepResult(false, refused);
@@ -693,6 +1077,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private void applyTarget(ActiveTarget t)
 	{
 		String stepId = t == null ? null : t.getStepId();
+		tel("step", "stepId", stepId, "title", t == null ? null : t.getTitle(), "goal", t == null ? null : t.getGoal(),
+			"stage", t != null && stageOf(t) != null);
 		if (!Objects.equals(stepId, gotStep))
 		{
 			gotItems.clear();
@@ -792,8 +1178,61 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			return;
 		}
 		WorldPoint pos = me.getWorldLocation();
-		stageTracker.update(target.getStepId(), idx, st.getStages().get(idx).getSteps(), pos.getX(), pos.getY(), pos.getPlane(),
-			ItemCounts.sum(carried, noted));
+		List<ActiveTarget.StageLine> lines = st.getStages().get(idx).getSteps();
+		stageTracker.update(target.getStepId(), idx, lines, pos.getX(), pos.getY(), pos.getPlane(), ItemCounts.sum(carried, noted));
+		logStage(st, idx, value, lines, pos);
+	}
+
+	/** Журнал: вход в этап, смена переменной квеста, куда и почему сдвинулся курсор, предупреждения. */
+	private void logStage(ActiveTarget.Stage st, int idx, int value, List<ActiveTarget.StageLine> lines, WorldPoint pos)
+	{
+		if (telemetry == null)
+		{
+			return;
+		}
+		try
+		{
+			logStageUnsafe(st, idx, value, lines, pos);
+		}
+		catch (RuntimeException ex)
+		{
+			log.debug("Этап не записан в журнал: {}", ex.toString());
+		}
+	}
+
+	private void logStageUnsafe(ActiveTarget.Stage st, int idx, int value, List<ActiveTarget.StageLine> lines, WorldPoint pos)
+	{
+		String key = stageTracker.key();
+		int cur = stageTracker.cursor();
+		ActiveTarget.StageLine line = lines.isEmpty() ? null : lines.get(Math.max(0, Math.min(cur, lines.size() - 1)));
+		int[] at = {pos.getX(), pos.getY(), pos.getPlane()};
+		if (!Objects.equals(lastStageVar, value))
+		{
+			tel("var", "id", st.getId(), "what", st.isVarp() ? "varp" : "varbit", "from", lastStageVar, "to", value, "step", target.getStepId());
+			lastStageVar = value;
+		}
+		if (!Objects.equals(key, lastStageKey))
+		{
+			lastStageKey = key;
+			lastStageCursor = cur;
+			tel("stage", "event", "enter", "key", key, "stage", idx + 1, "of", st.getStages().size(), "cursor", cur + 1, "size", lines.size(),
+				"line", line == null ? null : line.shown(), "reason", stageTracker.reason(), "pos", at);
+		}
+		else if (cur != lastStageCursor)
+		{
+			tel("stage", "event", "cursor", "key", key, "from", lastStageCursor + 1, "to", cur + 1, "size", lines.size(), "line", line == null ? null : line.shown(),
+				"reason", stageTracker.reason(), "pos", at, "manual", StageTracker.needsManualStep(lines, cur));
+			lastStageCursor = cur;
+		}
+		String warning = stageTracker.warning();
+		if (!Objects.equals(warning, lastWarning))
+		{
+			lastWarning = warning;
+			if (warning != null)
+			{
+				tel("warning", "text", warning, "cursor", cur + 1);
+			}
+		}
 	}
 
 	/** Какой этап показан и ведёт ли к нему стрелка: ключ «шаг#этап»; смена ключа — стрелка к новому этапу. */
@@ -893,6 +1332,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	/** Клик по списку в игре (поток клиента). */
 	private void guideAction(GuideList.Action a)
 	{
+		tel("click", "what", a.getKind().name(), "place", a.getKind() == GuideList.Kind.PLACE ? a.getPlace() : null,
+			"cursor", stageTracker.cursor() + 1, "step", target == null ? null : target.getStepId());
 		switch (a.getKind())
 		{
 			case TOGGLE:
@@ -962,6 +1403,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			return;
 		}
 		navTarget = t;
+		tel("nav", "event", "set", "label", t.getLabel(), "x", t.getX(), "y", t.getY(), "plane", t.getPlane(), "purchase", t.isPurchase());
 		near = false;
 		lastPosition = null;
 		scanNavNpcs();
@@ -984,6 +1426,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private void finishNav(String reason)
 	{
 		NavTarget done = navTarget;
+		tel("nav", "event", "done", "reason", reason, "label", done == null ? null : done.getLabel());
 		navSticky = false;
 		navTarget = null;
 		navNpcs.clear();
@@ -1840,6 +2283,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			return;
 		}
 		WorldPoint at = me.getWorldLocation();
+		tel("moved", "what", "DEATH", "at", at == null ? null : new int[] {at.getX(), at.getY(), at.getPlane()});
 		server.moved("DEATH", at == null ? null : new int[] {at.getX(), at.getY(), at.getPlane()}, null);
 	}
 
@@ -1864,6 +2308,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				if (before != null && server != null && config.shareStats()
 					&& MoveDetector.isJump(before.getX(), before.getY(), pos.getX(), pos.getY()))
 				{
+					tel("moved", "what", "TELEPORT", "from", new int[] {before.getX(), before.getY(), before.getPlane()}, "to", new int[] {pos.getX(), pos.getY(), pos.getPlane()});
 					server.moved("TELEPORT", new int[] {before.getX(), before.getY(), before.getPlane()}, new int[] {pos.getX(), pos.getY(), pos.getPlane()});
 				}
 				if (server != null && config.shareStats())
@@ -1882,6 +2327,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				}
 				updateHud();
 			}
+			debugTick(me);
 		}
 		flush();
 	}
@@ -2042,6 +2488,15 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		ItemCounts n = new ItemCounts();
 		count(client.getItemContainer(InventoryID.INV), c, n);
 		count(client.getItemContainer(InventoryID.WORN), c, n);
+		if (telemetry != null)
+		{
+			Map<String, Integer> delta = c.deltaFrom(lastBag);
+			if (!delta.isEmpty() && delta.size() <= 24)
+			{
+				tel("bag", "delta", delta, "step", target == null ? null : target.getStepId());
+			}
+			lastBag = c;
+		}
 		carried = c;
 		noted = n;
 		containersChanged();

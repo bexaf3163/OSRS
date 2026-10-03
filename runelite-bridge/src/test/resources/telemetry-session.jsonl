@@ -1,0 +1,12 @@
+{"t":1700000000000,"kind":"session","plugin":"2.23.0","protocol":6,"java":"17","os":"Windows 11","config":{"hudLean":true}}
+{"t":1700000000100,"kind":"step","stepId":"S2-07","title":"The Knight\u0027s Sword","goal":"Добудь руду","stage":true}
+{"t":1700000000200,"kind":"snapshot","seq":1,"step":"S2-07","plan":true,"percent":80,"shopping":false}
+{"t":1700000000200,"kind":"stage","event":"enter","key":"S2-07#3","stage":3,"of":9,"cursor":1,"size":5,"line":"Возьми кирку ↓","reason":"POSITION: дошёл","pos":[3000,3000,0]}
+{"t":1700000005200,"kind":"stage","event":"cursor","key":"S2-07#3","from":1,"to":2,"size":5,"line":"Добудь руду","reason":"ITEM: шаг 1 сделан","pos":[3001,3000,0],"manual":false}
+{"t":1700000009200,"kind":"click","what":"NEXT","cursor":2,"step":"S2-07"}
+{"t":1700000009200,"kind":"stage","event":"cursor","key":"S2-07#3","from":2,"to":3,"size":5,"line":"Отнеси","reason":"MANUAL: «сделано» на шаге 2","pos":[3001,3000,0],"manual":true}
+{"t":1700000009200,"kind":"bag","delta":{"Iron ore":1},"step":"S2-07"}
+{"t":1700000009200,"kind":"ui","view":"guide","text":"S2-07 · Этап 3 из 9\n▶ Отнеси"}
+{"t":1700000189200,"kind":"anomaly","step":"S2-07","code":"STUCK","message":"Шаг 3/5 этапа S2-07#3 не меняется 180 с"}
+{"t":1700000189200,"kind":"shot","file":"shot-20240101-000000-anomaly_STUCK.png","why":"anomaly_STUCK"}
+{"t":1700000189200,"kind":"end"}
