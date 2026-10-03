@@ -247,7 +247,9 @@ public class PrepSnapshotTest
 	@Test
 	public void планРисуетсяВСписке_процентПриоритетМалоНеБериСейчас()
 	{
-		String all = text(rows(cook(plan())));
+		// Ширина с запасом: что где обрывается строкой, зависит от шрифта машины (на Linux-раннере кириллица шире, чем на Windows),
+		// а здесь проверяется только, что строки плана вообще нарисованы. Перенос по ширине проверяют остальные тесты.
+		String all = text(GuideList.rows(cook(plan()), false, FM, FM, 4000));
 		assertTrue("процент в заголовке: " + all, all.contains("S1-03 · Что нужно · 62%"));
 		assertTrue("совет программы вместо общего «где взять»: " + all, all.contains("Возьми на ферме севернее"));
 		assertFalse("общий текст заменён: " + all, all.contains("Курятник"));
