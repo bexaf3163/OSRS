@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { App } from './App';
 import { StoreProvider } from './store';
 import { BridgeProvider } from './bridge';
+import { PlayerStateProvider } from './playerStateContext';
 import { WikiProvider } from './components/WikiDrawer';
 import { applyTextScale, loadTextScale } from './lib/ui-scale';
 import './styles.css';
@@ -13,9 +14,11 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <StoreProvider>
       <BridgeProvider>
-        <WikiProvider>
-          <App />
-        </WikiProvider>
+        <PlayerStateProvider>
+          <WikiProvider>
+            <App />
+          </WikiProvider>
+        </PlayerStateProvider>
       </BridgeProvider>
     </StoreProvider>
   </StrictMode>,

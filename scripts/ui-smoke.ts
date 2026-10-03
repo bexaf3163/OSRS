@@ -93,6 +93,16 @@ async function run(browser: Browser) {
       const t = await text(page, '.readiness');
       expect(t.includes('Нужна короткая подготовка') && t.includes('Добрать Crafting'), 'готовность: не хватает Crafting 31 — «⚡ Добрать Crafting»');
       expect(t.includes('К банку'), 'готовность: Knife в банке — «🧭 К банку»');
+      // Маршрут подготовки: одно главное, кнопка начала, возврат к шагу; заход переживает перезагрузку страницы.
+      const prep = await text(page, '.prep-route');
+      expect(prep.includes('Подготовка к S9-01') && prep.includes('Начать подготовку') && prep.includes('вернёмся к S9-01'), 'подготовка: главное, кнопка и возврат к шагу');
+      await page.getByRole('button', { name: /Начать подготовку/ }).click();
+      await page.waitForTimeout(300);
+      const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:prep') ?? '{}') as { stack?: { sourceStepId: string }[] });
+      expect(saved.stack?.length === 1 && saved.stack[0].sourceStepId === 'S9-01', 'подготовка: заход запомнился в хранилище');
+      await page.reload();
+      await page.waitForTimeout(1200);
+      expect((await text(page, '.prep-route')).includes('Подготовка идёт'), 'подготовка: после перезагрузки заход всё ещё идёт');
       expect(await noOverflow(page), 'шаг: без горизонтальной прокрутки');
       expect(!errors.length, `шаг: ошибок в консоли нет ${errors.join('; ')}`);
       await page.context().close();
@@ -326,6 +336,24 @@ async function run(browser: Browser) {
       });
       expect(sel !== null && sel.appearance === 'none' && sel.bg === sel.surface, `как добраться: select в стиле приложения (${JSON.stringify(sel)})`);
       expect(!errors.length, `как добраться: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
+    // «Одна ходка»: банк открыт, предметов шага и ближайших нет — что взять сейчас, заодно и потом; неизвестное — отдельно.
+    {
+      const route = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; amount: string | number; inStep?: boolean }[] }[];
+      const at = route.findIndex((x) => x.id === 'S2-10');
+      const names = route.slice(at, at + 4).flatMap((x) => (x.itemsRequired ?? []).filter((i) => !i.inStep).map((i) => i.nameEn));
+      const { page, errors } = await open(browser, width, {
+        progress: progressBefore('S2-10'),
+        status: { protocol: 5, pluginVersion: '2.13.0', pos: { x: 3222, y: 3218, plane: 0 }, stats: {}, coins: 100, bankCoins: 0, equipment: [], inventory: [] },
+        events: [{ type: 'OWNED', bankSeen: true, items: [...new Set(names)].map((n) => ({ name: n, carried: 0, noted: 0, bank: 0 })) }],
+      }, '#/step/S2-10');
+      await page.waitForSelector('.one-trip', { timeout: 5000 });
+      const trip = await text(page, '.one-trip');
+      expect(trip.includes('Возьми за один заход') && trip.includes('Сейчас') && trip.includes('Открыть закупки'), 'одна ходка: список «Сейчас» и ссылка на закупки');
+      expect(await noOverflow(page), 'одна ходка: без горизонтальной прокрутки');
+      expect(!errors.length, `одна ходка: ошибок в консоли нет ${errors.join('; ')}`);
       await page.context().close();
     }
 

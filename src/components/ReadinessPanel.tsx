@@ -8,6 +8,7 @@ import { useBridge } from '../bridge';
 import { isClosed } from '../lib/next-step';
 import { fixChain, stepReadiness, STATUS_TEXT, type ReadinessAction, type RequirementStatus, type StepReadiness } from '../lib/readiness';
 import { NavigateButton } from './NavigateButton';
+import { PrepRouteBlock } from './PrepRoute';
 
 /** Готовность шага; пересчёт — только когда меняются уровни, предметы, монеты, отметки или шаг. */
 export function useReadiness(step: Step | null): StepReadiness | null {
@@ -103,9 +104,7 @@ export function ReadinessPanel({ step }: { step: Step }) {
           <button type="button" className="link-btn" onClick={() => void clearNav()}>Вернуться к шагу сейчас</button>
         </p>
       )}
-      {r.problems.length > 1 && (
-        <p className="small muted">План подготовки — по порядку: {r.problems.map((x) => x.label).join(' → ')} → вернуться к {step.id}.</p>
-      )}
+      <PrepRouteBlock step={step} r={r} />
       {r.problems.length > 0 && <ul className="ready-list">{r.problems.map((x) => <Row key={`${x.kind}-${x.label}`} r={x} />)}</ul>}
       <Chain step={step} />
       {r.unknown.length > 0 && (

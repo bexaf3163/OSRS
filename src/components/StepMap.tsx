@@ -8,6 +8,7 @@ import { mapPlaces } from '../lib/stepPlaces';
 import { Inline } from './Inline';
 import { useBridge } from '../bridge';
 import { navigationTarget } from '../lib/navigation';
+import { usePrep } from '../lib/usePrep';
 import { NavigateButton } from './NavigateButton';
 import { ImageModal } from './StepImage';
 
@@ -27,7 +28,8 @@ export function StepMap({ step }: { step: Step }) {
   const [zoomed, setZoomed] = useState(false);
   const { navTarget, activeStepId, branchChoice } = useBridge();
   const branch = step.branches?.find((b) => b.id === branchChoice[step.id]);
-  const arrow = navigationTarget(step, { branch, navTarget, activeStepId });
+  const { prep } = usePrep();
+  const arrow = navigationTarget(step, { branch, navTarget, activeStepId, detourActive: prep.stack.some((f) => f.sourceStepId === step.id) });
   if (!points.length) return null;
   const point = points[Math.min(active, points.length - 1)];
 

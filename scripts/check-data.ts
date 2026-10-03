@@ -4,6 +4,7 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { parseGuide, type GuideData } from './guide-parser.ts';
 import { validate } from './validate.ts';
+import { qa, qaLines } from './qa.ts';
 import { GUIDE_PATH, DATA_DIR, dataFiles, readRoute } from './paths.ts';
 
 const read = (name: string) => JSON.parse(readFileSync(`${DATA_DIR}/${name}.json`, 'utf8'));
@@ -25,6 +26,10 @@ const report = validate(stored, route);
 console.log('Проверка src/data');
 console.log(report.lines.join('\n'));
 
+const consistency = qaLines(qa({ steps: route.steps, gear: read('gear'), questStages: read('questStages') }));
+console.log('\nСогласованность данных');
+console.log(consistency.lines.join('\n'));
+
 let stale: string[] = [];
 if (existsSync(GUIDE_PATH)) {
   const fresh = dataFiles(parseGuide(readFileSync(GUIDE_PATH, 'utf8')));
@@ -36,4 +41,4 @@ if (existsSync(GUIDE_PATH)) {
   console.log('\n  ! osrs-guide.md не найден, сверка с гайдом пропущена');
 }
 
-if (report.errors || stale.length) process.exit(1);
+if (report.errors || consistency.errors || stale.length) process.exit(1);

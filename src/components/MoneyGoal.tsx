@@ -5,9 +5,12 @@ import type { Step } from '../types';
 import { useBridge } from '../bridge';
 import { formatGp } from '../lib/shopping';
 import { moneyGoalProgress, wealthOf } from '../lib/wealth';
+import { usePlayerState } from '../playerStateContext';
+import { ratePerMinute, resourceGoal } from '../lib/ledger';
 
 export function MoneyGoal({ step }: { step: Step }) {
   const { gear, state } = useBridge();
+  const { ledger, summary } = usePlayerState();
   if (!step.moneyGoal) return null;
   const w = wealthOf(gear);
   const p = moneyGoalProgress(step.moneyGoal, w);
@@ -38,10 +41,21 @@ export function MoneyGoal({ step }: { step: Step }) {
       </>
     );
   }
+  // За сеанс: известные монеты и оценка добычи — раздельно; время — только по достаточным замерам.
+  const rate = ratePerMinute(ledger, Date.now(), (e) => (e.name === 'Coins' ? e.quantityDelta : e.estimatedGpValue ?? 0));
+  const g = p ? resourceGoal('Монеты', p.cash, p.goal, { estimated: summary.estimatedLootValue > 0 ? summary.estimatedLootValue : undefined, ratePerMinute: rate }) : null;
+  const session = summary.entries > 0 && (summary.coinsEarned > 0 || summary.estimatedLootValue > 0) ? (
+    <p className="small muted">
+      За этот сеанс: монет +{formatGp(summary.coinsEarned)}{summary.estimatedLootValue > 0 ? <>, добыча ≈{formatGp(summary.estimatedLootValue)} gp (оценка по ценам, не деньги)</> : null}
+      {g?.estimatedProgress !== undefined && !g.done ? <> · с добычей ≈{formatGp(g.estimatedProgress)} из {goal}</> : null}
+      {g?.etaMinutes ? <> · при таком темпе ≈{g.etaMinutes} мин</> : null}.
+    </p>
+  ) : null;
   return (
     <section className="money-goal" aria-label="Цель по монетам">
       <p className="readiness-head">💰 <strong>Цель шага: {goal} gp</strong></p>
       {body}
+      {session}
     </section>
   );
 }

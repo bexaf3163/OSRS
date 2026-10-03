@@ -11,8 +11,11 @@ export interface NavigationTarget {
   y: number;
   plane: number;
   label: string;
-  /** step — точка шага; branch — быстрый вариант; shop — за предметом (банк, магазин); wiki — место из досье. */
-  source: 'step' | 'branch' | 'shop' | 'wiki';
+  /**
+   * step — точка шага; branch — быстрый вариант; shop — за предметом (банк, магазин); wiki — место из досье;
+   * npc — к NPC (за разговором, продавцу); resource — к месту добычи (руда, рыба, дрова); detour — заход подготовки.
+   */
+  source: 'step' | 'branch' | 'shop' | 'wiki' | 'npc' | 'resource' | 'detour';
 }
 
 export const SOURCE_TEXT: Record<NavigationTarget['source'], string> = {
@@ -20,6 +23,9 @@ export const SOURCE_TEXT: Record<NavigationTarget['source'], string> = {
   branch: 'быстрый вариант',
   shop: 'за предметом',
   wiki: 'место из досье',
+  npc: 'к NPC',
+  resource: 'место добычи',
+  detour: 'подготовка к шагу',
 };
 
 /**
@@ -28,11 +34,14 @@ export const SOURCE_TEXT: Record<NavigationTarget['source'], string> = {
  */
 export function navigationTarget(
   step: Step,
-  opts: { branch?: StepBranch; navTarget?: NavTargetPayload | null; activeStepId?: string | null } = {},
+  opts: { branch?: StepBranch; navTarget?: NavTargetPayload | null; activeStepId?: string | null; detourActive?: boolean } = {},
 ): NavigationTarget | null {
   const nav = opts.navTarget;
   if (nav && (nav.stepId === step.id || (!nav.stepId && opts.activeStepId === step.id))) {
-    return { stepId: step.id, x: nav.x, y: nav.y, plane: nav.plane, label: nav.label, source: nav.itemName ? 'shop' : 'wiki' };
+    // Заход подготовки главнее: стрелка ведёт за подготовкой, и во всех местах (карта, HUD, игра) это одна цель.
+    const source: NavigationTarget['source'] = opts.detourActive ? 'detour' : nav.itemName ? 'shop' : nav.npcNames?.length ? 'npc'
+      : step.resourceSpots?.some((p) => p.x === nav.x && p.y === nav.y && p.plane === nav.plane) ? 'resource' : 'wiki';
+    return { stepId: step.id, x: nav.x, y: nav.y, plane: nav.plane, label: nav.label, source };
   }
   const wp = toInGameTarget(step, opts.branch)?.worldPoint;
   if (!wp) return null;

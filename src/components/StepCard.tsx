@@ -22,6 +22,7 @@ import { BranchSuggestions } from './BranchSuggestions';
 import { UpgradePrompt } from './UpgradePrompt';
 import { GearPrompt } from './GearPrompt';
 import { ReadinessPanel } from './ReadinessPanel';
+import { OneTripCard } from './OneTripCard';
 import { MoneyGoal } from './MoneyGoal';
 import { MagicPlan } from './MagicPlan';
 import { MoneyPlan } from './MoneyPlan';
@@ -180,6 +181,7 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
 
       {step.warning && <div className="plaque plaque-warning" role="note"><Inline text={step.warning} /></div>}
       <ReadinessPanel step={step} />
+      <OneTripCard step={step} />
       <MoneyGoal step={step} />
       <MagicPlan step={step} />
       <MoneyPlan step={step} />

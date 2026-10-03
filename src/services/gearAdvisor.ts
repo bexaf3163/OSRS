@@ -405,7 +405,7 @@ const PRAYERS: { name: string; level: number; kind: 'attack' | 'strength'; mult:
  */
 const WORTH = { dps: 1.03, defence: 3 };
 /** Из почти равных дешёвое берём, если оно хотя бы вдвое дешевле и экономит не меньше этого. */
-const SAVE_GP = 100;
+export const SAVE_GP = 100;
 
 export function adviseGear(input: AdvisorInput): GearAdvice {
   const data = input.data ?? gearData;

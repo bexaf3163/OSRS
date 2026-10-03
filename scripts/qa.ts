@@ -1,0 +1,109 @@
+// Проверка согласованности данных и текстов: один набор правил для `npm run check-data` и для тестов.
+// Правила ловят то, что уже ломало программу: Coif без требования 20 Ranged, два «главных» амулета в одном маршруте,
+// «телепорт домой» без оговорки про перезарядку, этапы квестов с битыми шагами и клетками, тексты со строчной буквы.
+// Новое правило — функция rule(...) ниже; дубликаты проверок из validate.ts не заводим.
+
+import type { Step } from '../src/types/index.ts';
+
+export interface QaInput {
+  steps: Step[];
+  gear: { items: { id: number; name: string; slot?: string; members?: boolean; req?: Record<string, unknown> }[] };
+  questStages: { quests: Record<string, {
+    var: [string, number];
+    route?: { title: string; steps: string[] }[];
+    stages: { at: number; do: { t: string; at?: number[]; has?: string }[]; go?: unknown; items?: { name: string }[] }[];
+  }> };
+}
+
+export interface QaIssue {
+  rule: string;
+  where: string;
+  message: string;
+}
+
+const SKILLS = new Set(['attack', 'strength', 'defence', 'ranged', 'magic', 'prayer', 'quests']);
+/** Известные требования надевания: проверяем, что они не потерялись (источник — OSRS Wiki). */
+const KNOWN_REQ: Record<string, Record<string, number>> = { Coif: { ranged: 20 } };
+
+const firstChar = (t: string) => t.match(/[\p{L}\p{N}]/u)?.[0];
+
+function badPoint(p: number[]): boolean {
+  const [x, y, z] = p;
+  return !Number.isInteger(x) || !Number.isInteger(y) || !Number.isInteger(z) || x < 1000 || x > 4200 || y < 2400 || y > 13000 || z < 0 || z > 3;
+}
+
+export function qa(input: QaInput): QaIssue[] {
+  const out: QaIssue[] = [];
+  const add = (rule: string, where: string, message: string) => out.push({ rule, where, message });
+
+  // --- Снаряжение: уникальные id, осмысленные требования, известные требования на месте ---
+  const seen = new Set<number>();
+  for (const g of input.gear.items) {
+    if (seen.has(g.id)) add('gear-duplicate', g.name, `повтор id ${g.id}`);
+    seen.add(g.id);
+    for (const [k, v] of Object.entries(g.req ?? {})) {
+      if (k === 'quests') {
+        if (!Array.isArray(v) || v.some((q) => typeof q !== 'string' || !q)) add('gear-req', g.name, 'quests — не список названий');
+      } else if (!SKILLS.has(k) || !Number.isInteger(v) || (v as number) < 2 || (v as number) > 99) {
+        add('gear-req', g.name, `требование ${k}=${String(v)} не по правилам (навык из списка, уровень 2–99)`);
+      }
+    }
+  }
+  for (const [name, req] of Object.entries(KNOWN_REQ)) {
+    const g = input.gear.items.find((x) => x.name === name);
+    if (!g) continue;
+    for (const [k, v] of Object.entries(req)) {
+      if (g.req?.[k] !== v) add('gear-known-req', name, `должно требовать ${k} ${v}, в данных: ${String(g.req?.[k] ?? 'нет')}`);
+    }
+  }
+
+  // --- Амулеты: одна главная рекомендация на маршрут (силы), а не силы и мощи вместе ---
+  const required = (s: Step, name: string) => (s.itemsRequired ?? []).some((i) => i.nameEn.toLowerCase() === name);
+  const strengthAt = input.steps.findIndex((s) => required(s, 'amulet of strength'));
+  input.steps.forEach((s, i) => {
+    if (required(s, 'amulet of power') && strengthAt >= 0 && strengthAt <= i) {
+      add('amulet-consistency', s.id, 'в «Требуемых» Amulet of power, хотя маршрут уже требует Amulet of strength: два главных амулета');
+    }
+    if (required(s, 'amulet of power') && required(s, 'amulet of strength')) add('amulet-consistency', s.id, 'в «Требуемых» оба амулета сразу');
+  });
+
+  // --- Телепорт домой: не обещаем без оговорки про перезарядку (раз в 30 минут) ---
+  for (const s of input.steps) {
+    const texts = [s.where, s.how, s.bring, s.warning, s.proTip, ...(s.quickSteps ?? []), ...(s.tips ?? [])].filter((t): t is string => Boolean(t));
+    for (const t of texts) {
+      if (/home teleport/i.test(t) && !/перезаряж|раз в 30|каждые 30|30 минут|серый/i.test(t)) {
+        add('home-teleport', s.id, `«Home Teleport» без оговорки про перезарядку: ${t.slice(0, 70)}…`);
+      }
+    }
+  }
+
+  // --- Этапы квестов ---
+  const ids = new Set(input.steps.map((s) => s.id));
+  for (const [id, q] of Object.entries(input.questStages.quests)) {
+    if (!ids.has(id)) add('stages-step', id, 'нет такого шага в маршруте');
+    if (!['varp', 'varbit'].includes(q.var[0]) || !Number.isInteger(q.var[1]) || q.var[1] < 1) add('stages-var', id, `переменная ${q.var.join(' ')}`);
+    let last = -1;
+    for (const st of q.stages) {
+      if (st.at <= last) add('stages-order', id, `этап ${st.at} не по возрастанию`);
+      last = st.at;
+      if (!st.do.length) add('stages-empty', id, `этап ${st.at} без шагов`);
+      for (const l of st.do) {
+        const c = firstChar(l.t);
+        if (!c || c !== c.toUpperCase() || /\s{2,}/.test(l.t) || /\s$/.test(l.t)) add('text', `${id}#${st.at}`, `текст шага: «${l.t.slice(0, 50)}»`);
+        if (l.at && badPoint(l.at)) add('stages-point', `${id}#${st.at}`, `клетка ${l.at.join(',')} вне карты`);
+      }
+    }
+    for (const p of q.route ?? []) {
+      for (const t of p.steps) {
+        const c = firstChar(t);
+        if (!c || c !== c.toUpperCase() || /\s{2,}/.test(t)) add('text', `${id}: ${p.title}`, `текст маршрута: «${t.slice(0, 50)}»`);
+      }
+    }
+  }
+  return out;
+}
+
+export function qaLines(issues: QaIssue[]): { lines: string[]; errors: number } {
+  if (!issues.length) return { lines: ['  ✓ Согласованность: снаряжение, амулеты, телепорт домой, этапы квестов — без замечаний'], errors: 0 };
+  return { lines: issues.map((i) => `  ✗ [${i.rule}] ${i.where}: ${i.message}`), errors: issues.length };
+}

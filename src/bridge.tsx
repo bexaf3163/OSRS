@@ -16,7 +16,8 @@ import {
   syncActiveStep, syncBankTags, syncShoppingPlan, toInGameTarget,
   pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type ShoppingPlanPayload,
 } from './services/runeliteBridge';
-import { parseOwned, type OwnedState } from './lib/checklist';
+import { parseOwned, preflightItems, type OwnedState } from './lib/checklist';
+import { tripWindow } from './lib/oneTrip';
 import { stageBankItemIds } from './lib/bankTags';
 import { useFeatures } from './lib/features';
 import { isClosed, openAfter } from './lib/next-step';
@@ -236,8 +237,10 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
 
   /** Шаг в игру. У шага боя — с первой оценкой времени на противника по нынешнему оружию и уровням. */
   const sendStep = useCallback((step: Step, branch?: StepBranch) => {
-    const { progress: p, stats: live, gear: g } = latest.current;
-    return syncActiveStep(withKillEstimate(step, { ...p.levels, ...(live ?? {}) }, g), undefined, branch);
+    const { progress: p, stats: live, gear: g, steps: list } = latest.current;
+    // Предметы текущего и ближайших шагов — плагин считает их заранее: «одна ходка» знает, что уже есть.
+    const ahead = tripWindow(list, p, step.id).slice(1).flatMap((s) => preflightItems(s).map((i) => i.nameEn));
+    return syncActiveStep(withKillEstimate(step, { ...p.levels, ...(live ?? {}) }, g), undefined, branch, ahead);
   }, []);
 
   const setEnabled = useCallback((on: boolean) => {

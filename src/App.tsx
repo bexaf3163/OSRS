@@ -8,6 +8,7 @@ import { ModeToggle } from './components/ModeToggle';
 import { HeaderProgress } from './components/HeaderProgress';
 import { BridgeIndicator } from './components/BridgeIndicator';
 import { ToastView } from './components/ToastView';
+import { PrepWatcher } from './components/PrepRoute';
 import { PageBoundary } from './components/PageBoundary';
 import { GearHintSync } from './components/GearHintSync';
 import { PathPage } from './pages/Path';
@@ -138,6 +139,7 @@ export function App() {
         ))}
       </nav>
 
+      <PrepWatcher />
       <ToastView />
       <GearHintSync />
       <SearchBox open={searchOpen} onClose={() => setSearchOpen(false)} />

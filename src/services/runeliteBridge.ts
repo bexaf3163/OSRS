@@ -280,7 +280,7 @@ export function parseEvent(text: string): BridgeEvent | null {
  * чтобы стрелка и клетки работали и у шагов, для которых подсветку ещё не расписали.
  * branch — выбранный быстрый вариант: его точка заменяет точку шага, а путевые точки обычного пути не нужны.
  */
-export function toInGameTarget(step: Step, branch?: StepBranch): ActiveStepPayload | null {
+export function toInGameTarget(step: Step, branch?: StepBranch, extraWatch: string[] = []): ActiveStepPayload | null {
   const g = step.inGame ?? {};
   const start = step.mapLocation;
   const alt = branch?.replacementTarget;
@@ -296,7 +296,8 @@ export function toInGameTarget(step: Step, branch?: StepBranch): ActiveStepPaylo
   if (goal) payload.goal = goal;
   const checklist = preflightItems(step).map((i) => ({ name: i.nameEn, id: i.id, count: i.count, heals: i.heals }));
   if (checklist.length) payload.checklist = checklist;
-  const watch = watchedItems(step);
+  // Ещё — предметы ближайших шагов (одна ходка): плагин сообщает, сколько их есть, и их видно заранее.
+  const watch = [...new Set([...watchedItems(step), ...extraWatch])].slice(0, 40);
   if (watch.length) payload.watchItems = watch;
   if (step.pacing) payload.pacing = step.pacing;
   const hit = stepMaxHit(step);
@@ -490,8 +491,8 @@ export async function getPlayerStats(t: BridgeTransport = defaultTransport()): P
 }
 
 /** Отправить шаг в игру. false — моста нет или у шага нечего показывать. */
-export async function syncActiveStep(step: Step, t: BridgeTransport = defaultTransport(), branch?: StepBranch): Promise<boolean> {
-  const payload = toInGameTarget(step, branch);
+export async function syncActiveStep(step: Step, t: BridgeTransport = defaultTransport(), branch?: StepBranch, extraWatch: string[] = []): Promise<boolean> {
+  const payload = toInGameTarget(step, branch, extraWatch);
   if (!payload) return false;
   return (await t.request('POST', '/active-step', payload)).ok;
 }
