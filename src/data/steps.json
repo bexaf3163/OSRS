@@ -1953,7 +1953,8 @@
       "Продолжай до Magic 25 — откроется Varrock Teleport. Руны докупай на выручку от шкур."
     ],
     "magicPlan": {
-      "target": 25
+      "target": 25,
+      "from": 10
     }
   },
   {
@@ -3872,7 +3873,18 @@
           }
         ]
       }
-    }
+    },
+    "magicPlan": {
+      "target": 33,
+      "from": 25
+    },
+    "how": "Магию с 25 до 33 можно качать теми же заклинаниями-ударами по коровам и гоблинам или телепортами Varrock/Lumbridge — расчёт под твой опыт и цены биржи ниже. Дёшево — Fire Strike с посохом огня; быстро — телепорты, но дороже: руна закона ≈ 120 gp за каждый.",
+    "quickSteps": [
+      "Выбери способ по тому, чего не хватает — монет или времени (расчёт в блоке «Сколько стоит дойти до Magic 33»).",
+      "Дёшево: Fire Strike с автозаклинанием и посохом огня по коровам у Lumbridge или гоблинам; шкуры окупают руны.",
+      "Быстро: Varrock Teleport (Magic 25, 35 опыта) до 31 уровня, затем Lumbridge Teleport (31, 41 опыта): 1 руна закона + 3 воздуха + 1 огня/земли за каст; посох воздуха экономит руны воздуха.",
+      "Дойди до Magic 33 — откроется Telekinetic Grab (1 руна закона + 1 воздуха), он понадобится для куска карты Wormbrain (S5-05)."
+    ]
   },
   {
     "id": "S4-01",
@@ -5031,7 +5043,7 @@
       "wikiUrl": "https://oldschool.runescape.wiki/w/Oziach"
     },
     "reward": "2 QP, по 18 650 XP в Defence и Strength, право носить Rune platebody и куртку из зелёной драконьей кожи (Green d'hide body). Все 46 очков F2P-квестов набраны!",
-    "doneWhen": "Надет Rune platebody.",
+    "doneWhen": "Надет Rune platebody (84 500 gp у Oziach, Defence 40).",
     "inGame": {
       "npcNames": [
         "Oziach"
@@ -5051,7 +5063,22 @@
           }
         ]
       }
-    }
+    },
+    "quickSteps": [
+      "Убедись, что голова Elvarg (Elvarg's head) у тебя в сумке — её отдают как доказательство.",
+      "Иди к Oziach в Edgeville (хижина южнее Wilderness ditch) и поговори с ним — Dragon Slayer I пройден.",
+      "Купи у Oziach Rune platebody — шаг засчитывается, когда она при тебе. Она стоит 84 500 gp (130% от 65 000) и требует Defence 40: если денег пока нет, отметь шаг пропущенным и вернись, когда накопишь — квест от этого не отменяется."
+    ],
+    "itemsRequired": [
+      {
+        "nameEn": "Rune platebody",
+        "nameRu": "Руническая кираса",
+        "amount": 1,
+        "howToGet": "Лавка Oziach в Edgeville после квеста: 84 500 gp (130% от стоимости 65 000), нужна Defence 40. Дорого — копи на S6-01 и дальше; пока денег нет, шаг можно пропустить.",
+        "wikiItemId": 1127,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_platebody.png"
+      }
+    ]
   },
   {
     "id": "S6-01",

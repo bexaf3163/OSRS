@@ -33,6 +33,9 @@ export const OPTIONS: PlanOption[] = [
   { id: 'wind-staff', label: 'Wind Strike + посох воздуха', spells: ['wind-strike'], staff: 'air' },
   { id: 'best', label: 'Лучший удар по уровню (Earth, потом Fire)', spells: ['wind-strike', 'water-strike', 'earth-strike', 'fire-strike'] },
   { id: 'best-fire', label: 'Лучший удар + посох огня', spells: ['wind-strike', 'water-strike', 'earth-strike', 'fire-strike'], staff: 'fire' },
+  // С 25 уровня: телепорты дают втрое больше опыта за каст, но каждый стоит руну закона.
+  { id: 'tele', label: 'Телепорты Varrock → Lumbridge', spells: ['varrock-teleport', 'lumbridge-teleport'] },
+  { id: 'tele-air', label: 'Телепорты + посох воздуха', spells: ['varrock-teleport', 'lumbridge-teleport'], staff: 'air' },
 ];
 
 /** Цена одного заклинания; null — цены какой-то нужной руны нет. Руны стихии посоха не считаются. */

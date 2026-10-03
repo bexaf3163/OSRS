@@ -14,7 +14,9 @@ const opt = (id: string) => OPTIONS.find((o) => o.id === id)!;
 
 describe('план магии', () => {
   it('таблица заклинаний — как на вики', () => {
-    expect(SPELLS.map((s) => [s.name, s.level, s.xp])).toEqual([['Wind Strike', 1, 5.5], ['Water Strike', 5, 7.5], ['Earth Strike', 9, 9.5], ['Fire Strike', 13, 11.5]]);
+    expect(SPELLS.map((s) => [s.name, s.level, s.xp])).toEqual([
+      ['Wind Strike', 1, 5.5], ['Water Strike', 5, 7.5], ['Earth Strike', 9, 9.5], ['Fire Strike', 13, 11.5], ['Varrock Teleport', 25, 35], ['Lumbridge Teleport', 31, 41],
+    ]);
     expect(spell('fire-strike').runes).toEqual({ fire: 3, air: 2, mind: 1 });
   });
   it('цена удара: посох убирает руны своей стихии', () => {
@@ -37,6 +39,16 @@ describe('план магии', () => {
     // Опыт за все удары покрывает нужное.
     const gained = best.steps.reduce((s, x) => s + x.casts * x.spell.xp, 0);
     expect(gained).toBeGreaterThanOrEqual(xpForLevel(25) - from);
+  });
+  it('с 25 до 33: телепорты Varrock до 31 уровня, потом Lumbridge; дороже ударов, но вдвое-втрое меньше заклинаний', () => {
+    const tp = new Map(prices).set(RUNE_IDS.law, 120);
+    const tele = planFor(opt('tele'), xpForLevel(25), 33, tp)!;
+    const best = planFor(opt('best-fire'), xpForLevel(25), 33, tp)!;
+    expect(tele.steps.map((s) => s.spell.id)).toEqual(['varrock-teleport', 'lumbridge-teleport']);
+    expect(tele.casts).toBeLessThan(best.casts / 2);
+    expect(tele.total).toBeGreaterThan(best.total);
+    // До 25 уровня телепортов нет — вариант не считается.
+    expect(planFor(opt('tele'), xpForLevel(10), 25, tp)).toBeNull();
   });
   it('уже есть посох — он ничего не стоит; цены нет — плана нет', () => {
     expect(planFor(opt('best-fire'), xpForLevel(10), 25, prices, true)!.staffCost).toBe(0);
@@ -156,7 +168,7 @@ describe('данные 2.13', () => {
   });
   it('S2-04: описан подробно — предметы, быстрый путь с покупкой рун и расчёт магии', () => {
     const s = allSteps.find((x) => x.id === 'S2-04')!;
-    expect(s.magicPlan).toEqual({ target: 25 });
+    expect(s.magicPlan).toEqual({ target: 25, from: 10 });
     expect(s.itemsRequired?.map((i) => i.nameEn)).toEqual(['Staff', 'Air rune', 'Mind rune']);
     expect(s.quickSteps!.length).toBeGreaterThanOrEqual(5);
     expect(s.quickSteps!.join(' ')).toContain("Aubury's Rune Shop");

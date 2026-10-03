@@ -39,8 +39,8 @@ export function MagicPlan({ step }: { step: Step }) {
   const level = stats?.magic ?? progress.levels.magic;
   const gameXp = xp?.magic;
   // Опыт: точный из игры; иначе начало введённого уровня; иначе — после Imp Catcher и Witch's Potion (875 + 325) уровень 10.
-  const fromXp = gameXp ?? (level !== undefined ? xpForLevel(level) : 1200);
-  const basis = gameXp !== undefined ? 'опыт из игры' : level !== undefined ? `Magic ${level}, опыт с начала уровня` : 'Magic 10 — после Imp Catcher и Witch’s Potion';
+  const fromXp = gameXp ?? (level !== undefined ? xpForLevel(level) : xpForLevel(plan.from));
+  const basis = gameXp !== undefined ? 'опыт из игры' : level !== undefined ? `Magic ${level}, опыт с начала уровня` : `Magic ${plan.from} — как по маршруту, твой уровень неизвестен`;
   const w = wealthOf(gear);
   const cash = w ? (w.cash.total ?? w.cash.bag ?? 0) : null;
   const has = (name: string) => [...(gear?.equipment ?? []), ...(gear?.inventory ?? [])].some((i) => i.name === name)
@@ -110,7 +110,7 @@ export function MagicPlan({ step }: { step: Step }) {
 function SpellTable() {
   return (
     <details className="small">
-      <summary>Заклинания-удары: уровень, опыт, руны</summary>
+      <summary>Заклинания: уровень, опыт, руны</summary>
       <ul>
         {SPELLS.map((s) => (
           <li key={s.id}><strong>{s.name}</strong> — Magic {s.level}, {s.xp} опыта; {Object.entries(s.runes).map(([r, n]) => `${n} ${r}`).join(' + ')}</li>
