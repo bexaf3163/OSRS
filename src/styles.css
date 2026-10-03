@@ -1410,3 +1410,11 @@ th .place-link { font-weight: inherit; }
 .money-list { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; }
 .money-method { padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); }
 .money-method p { margin: 0; }
+
+/* 2.14: как добраться */
+.travel-plan { margin-top: 12px; }
+.travel-list { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; }
+.travel-option { padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); }
+.travel-option p { margin: 0; }
+.travel-option.is-locked { opacity: 0.75; }
+.travel-option.is-ready { border-color: var(--accent); }

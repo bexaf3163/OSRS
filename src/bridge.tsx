@@ -96,6 +96,8 @@ interface BridgeValue {
   session: SessionBase;
   /** Текст для отчёта об ошибке: версии, связь, последние события моста. */
   diagnostics: () => Promise<string>;
+  /** Где персонаж сейчас: свежий запрос к плагину (протокол 5); null — нет связи, не в игре или плагин не сообщает. */
+  locate: () => Promise<{ x: number; y: number; plane: number } | null>;
 }
 
 const BridgeContext = createContext<BridgeValue | null>(null);
@@ -517,6 +519,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
 
   const xpRate = useCallback((skill: string) => tracker.current.rate(skill), []);
 
+  const locate = useCallback(async () => {
+    const st = await checkStatus();
+    return st.online && st.inGame ? st.pos : null;
+  }, []);
+
   const diagnostics = useCallback(async () => {
     const st = await checkStatus();
     const done = Object.values(latest.current.progress.steps).filter((v) => v === 'done').length;
@@ -540,11 +547,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
       stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, plugin,
-      xp, questsDone, player, gate, xpRate, session, diagnostics,
+      xp, questsDone, player, gate, xpRate, session, diagnostics, locate,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
       stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, plugin,
-      xp, questsDone, player, gate, xpRate, session, diagnostics],
+      xp, questsDone, player, gate, xpRate, session, diagnostics, locate],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;
 }

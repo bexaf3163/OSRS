@@ -1,0 +1,202 @@
+{
+  "source": "https://oldschool.runescape.wiki/w/Teleportation",
+  "checked": "2026-10-03",
+  "note": "Точки и условия — со статей вики: карточки заклинаний (Infobox Spell, Map), Chronicle, Canoe и Canoe Station. Время и клетки считаются по прямой, преграды программа не знает.",
+  "teleports": [
+    {
+      "id": "lumbridge-home",
+      "kind": "home",
+      "name": "Lumbridge Home Teleport",
+      "nameRu": "Домашний телепорт в Lumbridge",
+      "dest": {
+        "x": 3221,
+        "y": 3218,
+        "plane": 0,
+        "label": "замок Lumbridge"
+      },
+      "cooldownMin": 30,
+      "note": "Бесплатно, без рун и уровня; читается ≈ 14 секунд, раз в 30 минут, в бою не работает."
+    },
+    {
+      "id": "lumbridge-teleport",
+      "kind": "spell",
+      "name": "Lumbridge Teleport",
+      "nameRu": "Телепорт в Lumbridge",
+      "magic": 31,
+      "runes": {
+        "law": 1,
+        "air": 3,
+        "earth": 1
+      },
+      "dest": {
+        "x": 3221,
+        "y": 3218,
+        "plane": 0,
+        "label": "замок Lumbridge"
+      },
+      "note": "Быстро, не прерывается боем."
+    },
+    {
+      "id": "varrock-teleport",
+      "kind": "spell",
+      "name": "Varrock Teleport",
+      "nameRu": "Телепорт в Varrock",
+      "magic": 25,
+      "runes": {
+        "law": 1,
+        "air": 3,
+        "fire": 1
+      },
+      "dest": {
+        "x": 3213,
+        "y": 3424,
+        "plane": 0,
+        "label": "площадь Varrock у фонтана"
+      }
+    },
+    {
+      "id": "falador-teleport",
+      "kind": "spell",
+      "name": "Falador Teleport",
+      "nameRu": "Телепорт в Falador",
+      "magic": 37,
+      "runes": {
+        "law": 1,
+        "water": 1,
+        "air": 3
+      },
+      "dest": {
+        "x": 2964,
+        "y": 3378,
+        "plane": 0,
+        "label": "Falador"
+      }
+    },
+    {
+      "id": "chronicle",
+      "kind": "item",
+      "name": "Chronicle",
+      "nameRu": "Книга Chronicle",
+      "items": [
+        "Chronicle"
+      ],
+      "dest": {
+        "x": 3201,
+        "y": 3355,
+        "plane": 0,
+        "label": "у Champions' Guild"
+      },
+      "note": "Правый клик по книге → Teleport; заряды — Check charges."
+    }
+  ],
+  "canoe": {
+    "stations": [
+      {
+        "id": "lumbridge",
+        "name": "Lumbridge",
+        "x": 3241,
+        "y": 3235,
+        "plane": 0
+      },
+      {
+        "id": "champions",
+        "name": "Champions' Guild",
+        "x": 3200,
+        "y": 3341,
+        "plane": 0
+      },
+      {
+        "id": "barbarian",
+        "name": "Barbarian Village",
+        "x": 3110,
+        "y": 3409,
+        "plane": 0
+      },
+      {
+        "id": "edgeville",
+        "name": "Edgeville",
+        "x": 3130,
+        "y": 3508,
+        "plane": 0
+      },
+      {
+        "id": "ferox",
+        "name": "Ferox Enclave",
+        "x": 3155,
+        "y": 3628,
+        "plane": 0,
+        "wakaOnly": true
+      }
+    ],
+    "types": [
+      {
+        "name": "Log",
+        "level": 12,
+        "stops": 1
+      },
+      {
+        "name": "Dugout",
+        "level": 27,
+        "stops": 2
+      },
+      {
+        "name": "Stable Dugout",
+        "level": 42,
+        "stops": 3
+      },
+      {
+        "name": "Waka",
+        "level": 57,
+        "stops": 4
+      }
+    ],
+    "axes": [
+      "Bronze axe",
+      "Iron axe",
+      "Steel axe",
+      "Black axe",
+      "Mithril axe",
+      "Adamant axe",
+      "Rune axe",
+      "Dragon axe"
+    ]
+  },
+  "boats": [
+    {
+      "id": "karamja-boat",
+      "name": "Лодка Port Sarim → Karamja",
+      "from": {
+        "x": 3028,
+        "y": 3218,
+        "plane": 0,
+        "label": "пристань Port Sarim (Captain Tobias, Seaman Lorris)"
+      },
+      "to": {
+        "x": 2950,
+        "y": 3151,
+        "plane": 0,
+        "label": "Musa Point, Karamja"
+      },
+      "cost": 30,
+      "note": "30 gp (15 в перчатках Karamja, бесплатно с Ring of Charos(a))."
+    },
+    {
+      "id": "port-sarim-boat",
+      "name": "Лодка Karamja → Port Sarim",
+      "from": {
+        "x": 2950,
+        "y": 3151,
+        "plane": 0,
+        "label": "Musa Point, Karamja (Customs officer)"
+      },
+      "to": {
+        "x": 3028,
+        "y": 3218,
+        "plane": 0,
+        "label": "пристань Port Sarim"
+      },
+      "cost": 30,
+      "note": "30 gp; Customs officer конфискует Karamjan rum."
+    }
+  ]
+}

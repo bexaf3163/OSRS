@@ -269,6 +269,24 @@ async function run(browser: Browser) {
       await page.context().close();
     }
 
+    // 2.14: «Где я? Как добраться» — положение из игры, варианты до Varrock (S2-05) и их доступность.
+    {
+      const { page, errors } = await open(browser, width, {
+        progress: progressBefore('S2-05'),
+        status: {
+          protocol: 5, pluginVersion: '2.13.0', pos: { x: 3222, y: 3218, plane: 0 }, stats: { magic: 25, woodcutting: 20 },
+          coins: 500, equipment: [], inventory: [{ id: 563, name: 'Law rune', count: 1 }, { id: 556, name: 'Air rune', count: 3 }, { id: 554, name: 'Fire rune', count: 1 }],
+        },
+      }, '#/step/S2-05');
+      await page.getByRole('button', { name: /Где я/ }).click();
+      await page.waitForSelector('.travel-option', { timeout: 5000 });
+      const t = await text(page, '.travel-plan');
+      expect(t.includes('Телепорт в Varrock') && t.includes('можно сейчас'), 'как добраться: Varrock Teleport с рунами — «можно сейчас»');
+      expect(t.includes('3222, 3218'), 'как добраться: показано положение из игры');
+      expect(!errors.length, `как добраться: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
     // Квест с NPC: на карте шага — точки NPC и откуда предметы, как в списке в игре.
     {
       const { page, errors } = await open(browser, width, { progress: progressBefore('S2-10') }, '#/step/S2-10');

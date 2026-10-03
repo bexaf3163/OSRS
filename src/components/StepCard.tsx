@@ -15,6 +15,7 @@ import { RangeHints } from './RangeHints';
 import { StepImage } from './StepImage';
 import { StepMap } from './StepMap';
 import { InGamePanel } from './InGamePanel';
+import { TravelPlan } from './TravelPlan';
 import { BranchSuggestions } from './BranchSuggestions';
 import { UpgradePrompt } from './UpgradePrompt';
 import { GearPrompt } from './GearPrompt';
@@ -184,6 +185,7 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
       <GearPrompt step={step} />
       <StepMap step={step} />
       <InGamePanel step={step} />
+      <TravelPlan step={step} />
       <BranchSuggestions step={step} />
 
       {step.how && <p className="step-how"><Inline text={step.how} /></p>}
