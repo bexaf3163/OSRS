@@ -29,6 +29,14 @@ export interface BridgeStatus {
   pluginVersion: string | null;
   /** Куда ведёт временная цель в игре (с 2.11); null — к шагу или плагин не сообщает. */
   navTarget: NavTargetPayload | null;
+  /** Опыт по навыкам (протокол 5); null — не в игре, плагин старый или передача выключена. */
+  xp: PlayerStats | null;
+  /** Названия завершённых квестов (протокол 5); null — неизвестно. */
+  questsDone: string[] | null;
+  /** Имя персонажа (протокол 5); null — не в игре или плагин не сообщает. */
+  player: string | null;
+  /** Где стоит персонаж (протокол 5): координаты игры; null — неизвестно. */
+  pos: { x: number; y: number; plane: number } | null;
 }
 
 /**
@@ -36,12 +44,13 @@ export interface BridgeStatus {
  * знает. Плагин без поля protocol — до 2.9: работает (основные адреса те же), но без новых функций.
  * 4 (2.11) — список «Что нужно» на экране игры; у плагина 2.10 (протокол 3) его нет.
  */
-export const APP_PROTOCOL = 4;
+export const APP_PROTOCOL = 5;
 
 /** Чего нет у старого плагина — для предупреждения «обнови плагин»: с какого протокола что появилось. */
 export function missingWithPlugin(protocol: number | null): string[] {
   const p = protocol ?? 1;
   const out: string[] = [];
+  if (p < 5) out.push('опыт, квесты и имя персонажа из игры (синхронизация с аккаунтом, профили, время до цели)');
   if (p < 4) out.push('список «Что нужно» на экране игры (клик по строке — стрелка и путь туда)');
   if (p < 3) out.push('боковая панель «OSRS Путь» в RuneLite');
   if (p < 2) out.push('большая стрелка и оценка предметов в банке');
@@ -120,7 +129,9 @@ export type NavResult =
 
 export type BridgeEvent =
   | { type: 'STEP_AUTO_COMPLETED'; stepId: string }
-  | { type: 'STATUS'; inGame: boolean }
+  | { type: 'STATUS'; inGame: boolean; player?: string | null }
+  | { type: 'XP'; xp?: PlayerStats | null }
+  | { type: 'QUESTS'; done?: string[] | null }
   | { type: 'STATS'; stats?: PlayerStats | null }
   | { type: 'OWNED'; bankSeen: boolean; items: unknown[] }
   | { type: string; [key: string]: unknown };
@@ -249,6 +260,36 @@ export function parseStats(raw: unknown): PlayerStats | null {
   return Object.keys(out).length ? out : null;
 }
 
+/** Опыт из события XP или ответа /status: целые числа от 0 до 200 млн по навыкам. */
+export function parseXp(raw: unknown): PlayerStats | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const out: PlayerStats = {};
+  for (const [k, v] of Object.entries(raw as Record<string, unknown>)) {
+    if (/^[a-z]{3,16}$/.test(k) && typeof v === 'number' && Number.isInteger(v) && v >= 0 && v <= 200_000_000) out[k] = v;
+  }
+  return Object.keys(out).length ? out : null;
+}
+
+/** Названия завершённых квестов: строки до 80 знаков, не больше 300 штук. */
+export function parseQuests(raw: unknown): string[] | null {
+  if (!Array.isArray(raw)) return null;
+  const out = raw.filter((q): q is string => typeof q === 'string' && q.length > 0 && q.length <= 80).slice(0, 300);
+  return out;
+}
+
+/** Положение персонажа из /status: три целых числа в пределах карты игры. */
+export function parsePos(raw: unknown): { x: number; y: number; plane: number } | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const r = raw as Record<string, unknown>;
+  const ok = (v: unknown, lo: number, hi: number): v is number => typeof v === 'number' && Number.isInteger(v) && v >= lo && v <= hi;
+  return ok(r.x, 0, 20000) && ok(r.y, 0, 20000) && ok(r.plane, 0, 3) ? { x: r.x, y: r.y, plane: r.plane } : null;
+}
+
+/** Имя персонажа: до 12 знаков (так в игре), без управляющих символов. */
+export function parsePlayer(raw: unknown): string | null {
+  return typeof raw === 'string' && /^[\w \-\u00a0]{1,12}$/.test(raw) ? raw.replace(/\u00a0/g, ' ') : null;
+}
+
 const int = (v: unknown, min = 0): number | null => (typeof v === 'number' && Number.isInteger(v) && v >= min ? v : null);
 
 function gearItems(raw: unknown): GearItem[] | null {
@@ -343,7 +384,7 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
   const res = await t.request('GET', '/status');
   const d = res.data as {
     status?: string; inGame?: boolean; stats?: unknown; shortestPath?: unknown; activeStepId?: unknown; protocol?: unknown; pluginVersion?: unknown;
-    navTarget?: unknown;
+    navTarget?: unknown; xp?: unknown; questsDone?: unknown; player?: unknown; pos?: unknown;
   } | undefined;
   const online = res.ok && d?.status === 'ok';
   return {
@@ -356,6 +397,10 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
     protocol: online && typeof d?.protocol === 'number' && Number.isInteger(d.protocol) && d.protocol > 0 ? d.protocol : null,
     pluginVersion: online && typeof d?.pluginVersion === 'string' && d.pluginVersion.length <= 20 ? d.pluginVersion : null,
     navTarget: online ? parseNavTarget(d?.navTarget) : null,
+    xp: online ? parseXp(d?.xp) : null,
+    questsDone: online ? parseQuests(d?.questsDone) : null,
+    player: online ? parsePlayer(d?.player) : null,
+    pos: online ? parsePos(d?.pos) : null,
   };
 }
 

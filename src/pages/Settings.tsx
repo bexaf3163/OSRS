@@ -10,6 +10,8 @@ import { setFeatures, useFeatures, type Features } from '../lib/features';
 import { BRIDGE_ORIGIN } from '../services/runeliteBridge';
 import { PluginUpdateNote } from '../components/PluginUpdateNote';
 import { plural } from '../lib/shopping';
+import { AccountSync } from '../components/AccountSync';
+import { BackupSection, DiagnosticsSection, ProfilesSection, SessionSection } from './SettingsExtra';
 
 const THEMES: [Theme, string][] = [['light', 'Светлая'], ['dark', 'Тёмная'], ['system', 'Системная']];
 
@@ -52,7 +54,12 @@ export function SettingsPage() {
 
       <Appearance />
       <RuneLiteBridge />
+      <ProfilesSection />
+      <AccountSync />
+      <SessionSection />
       <Helpers />
+      <BackupSection />
+      <DiagnosticsSection />
 
       <section className="card section-card">
         <h2 className="card-title">Перенос прогресса</h2>
@@ -225,6 +232,7 @@ const HELPERS: { key: keyof Features; title: string; text: string }[] = [
   { key: 'autoLocation', title: '📍 Места на карте', text: 'Места в досье вики (где лежит бесплатно, магазины, продавцы, города) открываются на карте мира, а 🧭 ведёт туда стрелку в игре.' },
   { key: 'bankTags', title: '🏦 Предметы этапа в банке', text: 'Пока шаг этапа показан в игре, плагин OSRS Path Bridge мягко подсвечивает в основном окне банка всё, что понадобится на этом этапе. Отдельную вкладку и строку импорта делать не нужно.' },
   { key: 'pacing', title: '⏱ Темп прокачки', text: 'Сколько действий и минут осталось до цели шага — по опыту из игры. Без замеров время не придумывается.' },
+  { key: 'levelsFromGame', title: '📈 Уровни из игры', text: 'Уровни навыков из игры сами попадают в поля уровней на страницах навыков и шагов (ручной ввод остаётся, когда игры рядом нет). Пишутся только в профиль того персонажа, который в игре.' },
   { key: 'upgradeRouter', title: '⚡ Апгрейды и снаряжение', text: 'Перед долгой прокачкой — топор или кирка получше, если уровень уже позволяет. На шагах с боем — оружие, амулет и броня получше по формулам урона OSRS Wiki, против противника шага; совет — и строкой в HUD игры. Сама ничего не покупает и не надевает.' },
 ];
 

@@ -5,10 +5,14 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { PlayerStats, Step, StepBranch } from './types';
+import { levelById } from './data';
+import { XpTracker } from './lib/xpRate';
+import type { SessionBase } from './lib/session';
+import { gateAllows, linkPlayer, profileGate, readProfiles, useProfiles, writeProfiles, type ProfileGate } from './lib/profiles';
 import { useStore } from './store';
 import { desktop, type RuneliteLaunch } from './lib/desktop';
 import {
-  checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseGear, parseNavTarget, parsePacing, parseStats, planAutoComplete, setNavTarget,
+  checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseGear, parseNavTarget, parsePacing, parsePlayer, parseQuests, parseStats, parseXp, planAutoComplete, setNavTarget,
   syncActiveStep, syncBankTags, syncShoppingPlan, toInGameTarget,
   pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type ShoppingPlanPayload,
 } from './services/runeliteBridge';
@@ -78,6 +82,20 @@ interface BridgeValue {
   clearNav: () => Promise<void>;
   /** Версия плагина и совместимость с программой; null — нет связи. */
   plugin: { protocol: number | null; version: string | null; compat: PluginCompat } | null;
+  /** Опыт по навыкам из игры (протокол 5); null — нет связи, старый плагин или передача выключена. */
+  xp: PlayerStats | null;
+  /** Названия завершённых квестов (протокол 5); null — неизвестно. */
+  questsDone: string[] | null;
+  /** Имя персонажа из игры (протокол 5). */
+  player: string | null;
+  /** Какой профиль и персонаж сейчас: можно ли писать в профиль уровни и отметки из игры. */
+  gate: ProfileGate;
+  /** Опыта в час по навыку по замерам этого сеанса; null — замеров мало. */
+  xpRate: (skill: string) => number | null;
+  /** Сеанс: когда начался и с чего (первые уровни и опыт, закрытые шаги) — для сводки. */
+  session: SessionBase;
+  /** Текст для отчёта об ошибке: версии, связь, последние события моста. */
+  diagnostics: () => Promise<string>;
 }
 
 const BridgeContext = createContext<BridgeValue | null>(null);
@@ -115,6 +133,21 @@ function saveJson(key: string, value: unknown): void {
   try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* запомнится до перезапуска */ }
 }
 
+/** Одна строка о событии моста для отчёта: без содержимого сумки и банка. */
+function logEvent(log: { t: number; text: string }[], e: BridgeEvent): void {
+  const d = e as Record<string, unknown>;
+  const n = (v: unknown) => (Array.isArray(v) ? v.length : v && typeof v === 'object' ? Object.keys(v).length : v === null ? 0 : '?');
+  let text: string = e.type;
+  if (e.type === 'STEP_AUTO_COMPLETED') text += ` ${String(d.stepId)}`;
+  else if (e.type === 'STATUS') text += ` inGame=${String(d.inGame)}${d.player ? ' player=да' : ''}`;
+  else if (e.type === 'STATS' || e.type === 'XP') text += ` навыков=${n(d.stats ?? d.xp)}`;
+  else if (e.type === 'QUESTS') text += ` квестов=${n(d.done)}`;
+  else if (e.type === 'OWNED') text += ` предметов=${n(d.items)} банк=${String(d.bankSeen)}`;
+  else if (e.type === 'PACING') text += ` ${String(d.stepId ?? '')}`;
+  log.push({ t: Date.now(), text });
+  if (log.length > 200) log.splice(0, log.length - 200);
+}
+
 /** Выбранный быстрый вариант шага, если он у шага ещё есть. */
 function chosenBranch(step: Step, choice: Record<string, string>): StepBranch | undefined {
   const id = choice[step.id];
@@ -145,7 +178,7 @@ const LAUNCH_TEXT: Partial<Record<RuneliteLaunch['state'], string>> = {
 };
 
 export function BridgeProvider({ children }: { children: ReactNode }) {
-  const { progress, steps, setStep, notify, mode } = useStore();
+  const { progress, steps, setStep, setLevels, notify, mode } = useStore();
   const [enabled, setEnabledState] = useState(loadEnabled);
   const [autoLaunch, setAutoLaunchState] = useState(loadAutoLaunch);
   const runelite = desktop()?.runelite;
@@ -163,6 +196,18 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const [branchChoice, setBranchChoice] = useState<Record<string, string>>(loadBranchChoice);
   const [gear, setGear] = useState<GearState | null>(null);
   const [pacing, setPacing] = useState<PacingState | null>(null);
+  const [xp, setXp] = useState<PlayerStats | null>(null);
+  const [questsDone, setQuestsDone] = useState<string[] | null>(null);
+  const [player, setPlayer] = useState<string | null>(null);
+  const [session, setSession] = useState<SessionBase>(() => ({
+    startedAt: Date.now(), levels0: null, xp0: null,
+    closed0: Object.entries(progress.steps).filter(([, v]) => v === 'done' || v === 'skipped').map(([k]) => k),
+  }));
+  const tracker = useRef(new XpTracker());
+  /** Последние события моста — для кнопки «Диагностика». */
+  const eventLog = useRef<{ t: number; text: string }[]>([]);
+  const profiles = useProfiles();
+  const gate = useMemo(() => profileGate(profiles, player), [profiles, player]);
   const [navTarget, setNavTargetState] = useState<NavTargetPayload | null>(null);
   const [plugin, setPlugin] = useState<BridgeValue['plugin']>(null);
   const features = useFeatures();
@@ -181,8 +226,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // Обработчик событий живёт дольше отрисовки — свежие данные берёт из ссылок.
-  const latest = useRef({ progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear });
-  latest.current = { progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear };
+  const latest = useRef({ progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear, gate });
+  latest.current = { progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear, gate };
   /** Уже обработанные автоотметки: одно событие не отмечает шаг дважды и не двигает маршрут дважды. */
   const handled = useRef(new Set<string>());
   const nonce = useRef(0);
@@ -200,6 +245,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
 
   const onCompleted = useCallback((id: string) => {
     const { progress: p, steps: list, setStep: mark, activeStepId: active } = latest.current;
+    // В игре другой персонаж, чем в этом профиле, — его квесты и уровни сюда не пишем.
+    if (!gateAllows(latest.current.gate)) return;
     const plan = planAutoComplete(list, p, id, active, handled.current);
     handled.current.add(id);
     if (!plan.mark) return;
@@ -245,6 +292,10 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       setShortestPath(false);
       setGear(null);
       setPacing(null);
+      setXp(null);
+      setQuestsDone(null);
+      setPlayer(null);
+      tracker.current.reset();
       setPlugin(null);
       // RuneLite закрыли — временной цели там больше нет.
       setNavFromPlugin(null);
@@ -274,6 +325,9 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       // ответа, — оно новее ответа.
       if (s.online && s.protocol !== null && s.protocol >= 4 && seq === navSeq.current) setNavTargetState(s.navTarget);
       if (s.stats) setStats(s.stats);
+      if (s.xp) { setXp(s.xp); tracker.current.push(s.xp, Date.now()); }
+      if (s.questsDone) setQuestsDone(s.questsDone);
+      setPlayer(s.player);
       setGear(s.gear);
       // RuneLite перезапустили (или программу) — плагин шага не знает: отправляем снова. Тот же шаг не
       // шлём повторно, чтобы не сбросить в плагине путевые точки и замер темпа.
@@ -284,7 +338,15 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       }
     };
     const onEvent = (e: BridgeEvent) => {
-      if (e.type === 'STATUS') {
+      logEvent(eventLog.current, e);
+      if (e.type === 'XP') {
+        const next = parseXp((e as { xp?: unknown }).xp);
+        setXp(next);
+        if (next) tracker.current.push(next, Date.now());
+        else tracker.current.reset();
+      } else if (e.type === 'QUESTS') setQuestsDone(parseQuests((e as { done?: unknown }).done));
+      else if (e.type === 'STATUS') {
+        setPlayer(parsePlayer((e as { player?: unknown }).player));
         setInGame(Boolean((e as { inGame?: unknown }).inGame));
         // Вход в игру и выход — повод заново спросить про Shortest Path.
         refresh();
@@ -421,14 +483,68 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     setNavFromPlugin(null);
   }, [setNavFromPlugin]);
 
+  // Уровни из игры сами попадают в поля уровней — только когда персонаж тот же, что в профиле.
+  useEffect(() => {
+    if (!features.levelsFromGame || !stats || !gateAllows(gate)) return;
+    const known: Record<string, number> = {};
+    for (const [id, v] of Object.entries(stats)) if (levelById.has(id)) known[id] = v;
+    setLevels(known);
+  }, [stats, features.levelsFromGame, gate, setLevels]);
+
+  // Первый увиденный персонаж привязывается к профилю без имени.
+  useEffect(() => {
+    if (gate.kind !== 'link') return;
+    const s = readProfiles();
+    writeProfiles(linkPlayer(s, s.active, gate.player));
+  }, [gate]);
+
+  // Сводка сеанса считается от первых полученных значений; другой персонаж — новый сеанс.
+  const sessionPlayer = useRef<string | null>(null);
+  useEffect(() => {
+    if (player && sessionPlayer.current && sessionPlayer.current !== player) {
+      setSession({ startedAt: Date.now(), levels0: null, xp0: null, closed0: Object.entries(latest.current.progress.steps).filter(([, v]) => v === 'done' || v === 'skipped').map(([k]) => k) });
+      tracker.current.reset();
+    }
+    if (player) sessionPlayer.current = player;
+  }, [player]);
+  useEffect(() => {
+    setSession((s) => {
+      const levels0 = s.levels0 ?? stats;
+      const xp0 = s.xp0 ?? xp;
+      return levels0 === s.levels0 && xp0 === s.xp0 ? s : { ...s, levels0, xp0 };
+    });
+  }, [stats, xp]);
+
+  const xpRate = useCallback((skill: string) => tracker.current.rate(skill), []);
+
+  const diagnostics = useCallback(async () => {
+    const st = await checkStatus();
+    const done = Object.values(latest.current.progress.steps).filter((v) => v === 'done').length;
+    const report = {
+      программа: __APP_VERSION__,
+      окно: typeof navigator === 'undefined' ? '' : navigator.userAgent,
+      связь: { включена: enabled, состояние: state, вИгре: inGame, плагин: plugin, шагВИгре: activeStepId },
+      ответПлагина: {
+        онлайн: st.online, протокол: st.protocol, версия: st.pluginVersion, шагУПлагина: st.activeStepId,
+        уровней: st.stats ? Object.keys(st.stats).length : 0, опыт: Boolean(st.xp), квестов: st.questsDone?.length ?? null, персонаж: Boolean(st.player),
+      },
+      настройки: { автозапуск: autoLaunch, возможности: features, режим: latest.current.progress.gameMode ?? null, профиль: gate.kind },
+      прогресс: { выполнено: done, всего: latest.current.steps.length },
+      события: eventLog.current.slice(-100).map((x) => `${new Date(x.t).toLocaleTimeString('ru-RU')} ${x.text}`),
+    };
+    return JSON.stringify(report, null, 2);
+  }, [enabled, state, inGame, plugin, activeStepId, autoLaunch, features, gate.kind]);
+
   const value = useMemo<BridgeValue>(
     () => ({
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
       stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, plugin,
+      xp, questsDone, player, gate, xpRate, session, diagnostics,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, plugin],
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, plugin,
+      xp, questsDone, player, gate, xpRate, session, diagnostics],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;
 }

@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.IntUnaryOperator;
 import java.util.stream.Collectors;
@@ -229,6 +230,16 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	private final Map<String, Integer> stats = new LinkedHashMap<>();
 	private boolean statsDirty;
+	/** Опыт по навыкам (уходит в программу не чаще раза в три секунды — он меняется с каждым действием). */
+	private final Map<String, Integer> xp = new LinkedHashMap<>();
+	private boolean xpDirty;
+	private int xpTicks;
+	/** Завершённые квесты, как они были отправлены; проверка — раз в двадцать тиков. */
+	private List<String> questsSent;
+	private int questTicks;
+	private String playerSent;
+	private static final int XP_EVERY_TICKS = 5;
+	private static final int QUESTS_EVERY_TICKS = 20;
 	private boolean ownedDirty;
 	private boolean gearDirty;
 	private boolean pacingDirty;
@@ -321,9 +332,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 					if (!isOverall(skill))
 					{
 						stats.put(skillKey(skill), client.getRealSkillLevel(skill));
+						xp.put(skillKey(skill), client.getSkillExperience(skill));
 					}
 				}
 				statsDirty = true;
+				xpDirty = true;
 				rebuildCarried();
 			}
 		});
@@ -400,6 +413,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if ("shareStats".equals(e.getKey()))
 		{
 			statsDirty = true;
+			xpDirty = true;
 		}
 		if ("useShortestPath".equals(e.getKey()))
 		{
@@ -1450,6 +1464,16 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			// Другой персонаж — другие уровни, сумка, банк, опыт и место.
 			stats.clear();
 			statsDirty = true;
+			xp.clear();
+			xpDirty = true;
+			questsSent = null;
+			playerSent = null;
+			if (server != null)
+			{
+				server.setQuests(null);
+				server.setPlayer(null);
+				server.setPos(null, null, null);
+			}
 			carried = ItemCounts.EMPTY;
 			noted = ItemCounts.EMPTY;
 			bank = null;
@@ -1483,11 +1507,16 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		Player me = client.getLocalPlayer();
 		if (me != null && client.getGameState() == GameState.LOGGED_IN)
 		{
+			shareAccount(me);
 			WorldPoint pos = me.getWorldLocation();
 			// Всё про место игрока — только когда он сменил клетку, а не каждый тик.
 			if (!pos.equals(lastPosition))
 			{
 				lastPosition = pos;
+				if (server != null && config.shareStats())
+				{
+					server.setPos(pos.getX(), pos.getY(), pos.getPlane());
+				}
 				updateDanger(pos);
 				if (arrived(pos))
 				{
@@ -1516,6 +1545,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			statsDirty = false;
 			server.setStats(config.shareStats() && !stats.isEmpty() ? stats : null);
 		}
+		if (xpDirty && (xp.isEmpty() || ++xpTicks >= XP_EVERY_TICKS))
+		{
+			xpDirty = false;
+			xpTicks = 0;
+			server.setXp(config.shareStats() && !xp.isEmpty() ? xp : null);
+		}
 		if (ownedDirty)
 		{
 			ownedDirty = false;
@@ -1531,6 +1566,55 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			pacingDirty = false;
 			server.pacing(target == null ? null : target.getStepId(), pacingReport());
 		}
+	}
+
+	/** Имя персонажа и завершённые квесты — программе, если передача данных включена. Поток клиента (onGameTick). */
+	private void shareAccount(Player me)
+	{
+		if (server == null)
+		{
+			return;
+		}
+		boolean share = config.shareStats();
+		String name = share ? me.getName() : null;
+		if (!Objects.equals(name, playerSent))
+		{
+			playerSent = name;
+			server.setPlayer(name);
+		}
+		if (!share)
+		{
+			if (questsSent != null)
+			{
+				questsSent = null;
+				server.setQuests(null);
+			}
+			return;
+		}
+		if (questsSent == null || ++questTicks >= QUESTS_EVERY_TICKS)
+		{
+			questTicks = 0;
+			List<String> done = completedQuests();
+			if (!done.equals(questsSent))
+			{
+				questsSent = done;
+				server.setQuests(done);
+			}
+		}
+	}
+
+	/** Названия квестов в состоянии FINISHED (так их называет и сама игра). */
+	List<String> completedQuests()
+	{
+		List<String> done = new ArrayList<>();
+		for (Quest quest : Quest.values())
+		{
+			if (quest.getState(client) == QuestState.FINISHED)
+			{
+				done.add(quest.getName());
+			}
+		}
+		return done;
 	}
 
 	// ---------- Уровни ----------
@@ -1554,6 +1638,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			return;
 		}
 		String key = skillKey(e.getSkill());
+		Integer oldXp = xp.put(key, e.getXp());
+		if (oldXp == null || oldXp != e.getXp())
+		{
+			xpDirty = true;
+		}
 		Integer old = stats.put(key, e.getLevel());
 		if (old == null || old != e.getLevel())
 		{

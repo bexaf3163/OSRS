@@ -11,6 +11,7 @@ import { Blocks } from '../components/Blocks';
 import { IconBack, IconCheck, IconExternal, TypeIcon } from '../components/Icons';
 import { LevelInput } from '../components/LevelInput';
 import { Table } from '../components/Table';
+import { LiveXp } from '../components/LiveXp';
 
 export function SkillDetailPage({ id }: { id: string }) {
   const skill = findSkill(id);
@@ -50,6 +51,7 @@ function SkillView({ skill }: { skill: Skill }) {
         <div className="levels-row">
           {skill.levelSkills.map((lid) => <LevelInput key={lid} id={lid} label={levelById.get(lid)!.name} />)}
         </div>
+        <LiveXp targets={skill.levelSkills.map((lid) => ({ skill: lid, level: Math.min(99, levelOf(progress, lid) + 1) }))} />
         {hit && (
           <p className="current-range">
             Сейчас по плану:{' '}

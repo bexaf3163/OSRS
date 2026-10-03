@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +41,7 @@ import lombok.extern.slf4j.Slf4j;
  * POST /nav-target    временная цель поверх шага (NavTarget): место с карты или магазин; {"clear":true} — снять
  * POST /bank-tags     предметы этапа для мягкой подсветки в банке (BankTags)
  * POST /gear-hint     совет по снаряжению (GearHint): строка HUD, что спросить у банка и что подсветить; {"clear":true} — снять
- * GET  /events        text/event-stream: STATUS, STATS, OWNED, GEAR, PACING, NAV_SET, NAV_DONE, STEP_AUTO_COMPLETED
+ * GET  /events        text/event-stream: STATUS (с player), STATS, XP, QUESTS (с протокола 5), OWNED, GEAR, PACING, NAV_SET, NAV_DONE, STEP_AUTO_COMPLETED
  *                      и пинг каждые 15 секунд
  *
  * STATS, OWNED, GEAR и PACING уходят только при изменении (не чаще раза за игровой тик) и повторяются
@@ -66,9 +67,9 @@ public final class BridgeServer
 	 * перезапустить RuneLite, если в нём остался плагин 2.10. Растёт вместе с адресами, полями и тем, что плагин
 	 * делает с ними.
 	 */
-	static final int PROTOCOL = 4;
+	static final int PROTOCOL = 5;
 	/** Версия плагина — та же, что у программы, с которой он едет в одном exe. */
-	static final String PLUGIN_VERSION = "2.11.3";
+	static final String PLUGIN_VERSION = "2.12.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	static final int MAX_STREAMS = 8;
@@ -116,6 +117,14 @@ public final class BridgeServer
 	private volatile String activeStepId;
 	/** Уровни навыков: {"magic": 25, …}; null — не в игре или передача выключена. */
 	private volatile Map<String, Integer> stats;
+	/** Опыт по навыкам: {"magic": 1234, …}; null — не в игре или передача выключена. С протокола 5. */
+	private volatile Map<String, Integer> xp;
+	/** Названия завершённых квестов; null — не в игре или передача выключена. С протокола 5. */
+	private volatile List<String> questsDone;
+	/** Имя персонажа — программа переключает профиль по нему; null — не в игре. С протокола 5. */
+	private volatile String player;
+	/** Где стоит персонаж: {"x":…,"y":…,"plane":…}; только в /status (не рассылается — меняется с каждым шагом). С протокола 5. */
+	private volatile Map<String, Integer> pos;
 	private volatile boolean shortestPath;
 	/** Текущая временная цель (как NAV_SET) или null — для /status. */
 	private volatile JsonObject navTarget;
@@ -200,6 +209,56 @@ public final class BridgeServer
 		}
 		stats = copy;
 		broadcast(statsEvent());
+	}
+
+	/** Опыт по навыкам (с протокола 5). Одинаковый не рассылается. */
+	public void setXp(Map<String, Integer> value)
+	{
+		Map<String, Integer> copy = value == null ? null : new LinkedHashMap<>(value);
+		if (Objects.equals(xp, copy))
+		{
+			return;
+		}
+		xp = copy;
+		broadcast(xpEvent());
+	}
+
+	/** Завершённые квесты (с протокола 5). Тот же список не рассылается. */
+	public void setQuests(List<String> value)
+	{
+		List<String> copy = value == null ? null : new ArrayList<>(value);
+		if (Objects.equals(questsDone, copy))
+		{
+			return;
+		}
+		questsDone = copy;
+		broadcast(questsEvent());
+	}
+
+	/** Где стоит персонаж (с протокола 5): отвечает /status, событий нет. */
+	public void setPos(Integer x, Integer y, Integer plane)
+	{
+		if (x == null || y == null || plane == null)
+		{
+			pos = null;
+			return;
+		}
+		Map<String, Integer> p = new LinkedHashMap<>();
+		p.put("x", x);
+		p.put("y", y);
+		p.put("plane", plane);
+		pos = p;
+	}
+
+	/** Имя персонажа (с протокола 5); приходит в событии STATUS. */
+	public void setPlayer(String value)
+	{
+		if (Objects.equals(player, value))
+		{
+			return;
+		}
+		player = value;
+		broadcast(statusEvent());
 	}
 
 	public void setShortestPath(boolean value)
@@ -309,6 +368,23 @@ public final class BridgeServer
 		Map<String, Object> e = new LinkedHashMap<>();
 		e.put("type", "STATUS");
 		e.put("inGame", inGame);
+		e.put("player", player);
+		return e;
+	}
+
+	private Map<String, Object> xpEvent()
+	{
+		Map<String, Object> e = new LinkedHashMap<>();
+		e.put("type", "XP");
+		e.put("xp", xp);
+		return e;
+	}
+
+	private Map<String, Object> questsEvent()
+	{
+		Map<String, Object> e = new LinkedHashMap<>();
+		e.put("type", "QUESTS");
+		e.put("done", questsDone);
 		return e;
 	}
 
@@ -377,6 +453,10 @@ public final class BridgeServer
 					status.put("inGame", inGame);
 					status.put("activeStepId", activeStepId);
 					status.put("stats", stats);
+					status.put("xp", xp);
+					status.put("questsDone", questsDone);
+					status.put("player", player);
+					status.put("pos", pos);
 					status.put("shortestPath", shortestPath);
 					// Куда сейчас ведёт временная цель — программа после перезапуска показывает ту же, что в игре.
 					status.put("navTarget", navTarget);
@@ -608,6 +688,14 @@ public final class BridgeServer
 		if (stats != null)
 		{
 			hello.append("data: ").append(gson.toJson(statsEvent())).append("\n\n");
+		}
+		if (xp != null)
+		{
+			hello.append("data: ").append(gson.toJson(xpEvent())).append("\n\n");
+		}
+		if (questsDone != null)
+		{
+			hello.append("data: ").append(gson.toJson(questsEvent())).append("\n\n");
 		}
 		Map<String, Object> owned = lastOwned;
 		if (owned != null)

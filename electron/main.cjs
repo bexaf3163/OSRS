@@ -2,12 +2,12 @@
 // Данные — в папке программы (%APPDATA%\OSRS Путь), а у переносной версии — рядом с exe (OSRS-Put-data).
 // Прогресс хранится дважды: в localStorage окна и файлом progress.json — файл переживает сброс хранилища.
 
-const { app, BrowserWindow, Menu, ipcMain, nativeTheme, session, shell } = require('electron');
+const { app, BrowserWindow, Menu, dialog, ipcMain, nativeTheme, session, shell } = require('electron');
 const fs = require('node:fs');
 const path = require('node:path');
 const { registerBridge } = require('./runelite-bridge.cjs');
 const { createLauncher } = require('./runelite-launcher.cjs');
-const { backupProgress, readProgress } = require('./progress-files.cjs');
+const { backupProgress, dailyBackup, readProgress } = require('./progress-files.cjs');
 
 const DIST = path.join(__dirname, '..', 'dist');
 const isWeb = (url) => /^https?:\/\//i.test(url);
@@ -106,18 +106,22 @@ if (!app.requestSingleInstanceLock()) {
   }
 
   // Прогресс пишется при каждом изменении (заметка — на каждую букву), поэтому с задержкой.
-  let pendingProgress = null;
+  const pending = new Map();
+  const backedUp = new Set();
   let progressTimer = null;
-  let backedUp = false;
+  /** Файл прогресса профиля: у основного прежний progress.json. Идентификатор — только из букв и цифр. */
+  const progressFile = (id) => (/^[a-z0-9]{1,12}$/.test(String(id)) && id !== 'main' ? `progress-${id}.json` : 'progress.json');
   function flushProgress() {
     clearTimeout(progressTimer);
-    if (pendingProgress !== null && !backedUp) {
-      // Первая запись сеанса: прежний целый файл остаётся копией (progress.bak.json).
-      backedUp = true;
-      backupProgress(app.getPath('userData'));
+    for (const [name, json] of pending) {
+      if (!backedUp.has(name)) {
+        // Первая запись сеанса: прежний целый файл остаётся копией (progress.bak.json).
+        backedUp.add(name);
+        backupProgress(app.getPath('userData'), name);
+      }
+      writeAtomic(name, json);
     }
-    if (pendingProgress !== null) writeAtomic('progress.json', pendingProgress);
-    pendingProgress = null;
+    pending.clear();
   }
 
   ipcMain.handle('zoom:get', () => zoomState());
@@ -131,14 +135,47 @@ if (!app.requestSingleInstanceLock()) {
     win?.setAlwaysOnTop(ui.alwaysOnTop);
     win?.webContents.send('zoom:changed', zoomState());
   });
-  ipcMain.on('progress:load', (e) => {
-    e.returnValue = readProgress(app.getPath('userData'));
+  ipcMain.on('progress:load', (e, profileId) => {
+    flushProgress();
+    e.returnValue = readProgress(app.getPath('userData'), new Date(), progressFile(profileId));
   });
-  ipcMain.on('progress:save', (_e, json) => {
-    pendingProgress = json;
+  ipcMain.on('progress:save', (_e, json, profileId) => {
+    pending.set(progressFile(profileId), json);
     clearTimeout(progressTimer);
     progressTimer = setTimeout(flushProgress, 400);
   });
+
+  // Копия прогресса раз в сутки в папку, выбранную игроком (настройки программы).
+  const backupState = (error = null) => ({ dir: ui.backupDir || null, last: ui.backupLast || null, error });
+  function runBackup() {
+    if (!ui.backupDir) return backupState();
+    flushProgress();
+    try {
+      dailyBackup(app.getPath('userData'), ui.backupDir);
+      ui.backupLast = new Date().toISOString();
+      saveUi();
+      return backupState();
+    } catch (err) {
+      return backupState(String(err && err.code ? err.code : 'ошибка записи'));
+    }
+  }
+  ipcMain.handle('backup:get', () => backupState());
+  ipcMain.handle('backup:choose', async () => {
+    const r = await dialog.showOpenDialog(win ?? undefined, { title: 'Папка для копий прогресса', properties: ['openDirectory', 'createDirectory'] });
+    if (r.canceled || !r.filePaths[0]) return backupState();
+    ui.backupDir = r.filePaths[0];
+    saveUi();
+    return runBackup();
+  });
+  ipcMain.handle('backup:now', () => runBackup());
+  ipcMain.handle('backup:clear', () => {
+    delete ui.backupDir;
+    delete ui.backupLast;
+    saveUi();
+    return backupState();
+  });
+  setTimeout(runBackup, 15_000);
+  setInterval(runBackup, 60 * 60_000).unref();
   ipcMain.on('app:data-dir', (e) => { e.returnValue = app.getPath('userData'); });
   ipcMain.on('app:is-portable', (e) => { e.returnValue = Boolean(portableDir); });
   registerBridge(ipcMain);

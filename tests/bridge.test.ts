@@ -330,8 +330,12 @@ describe('цель стрелки, выбранная в игре (проток�
   });
 
   it('старый плагин: программа говорит, чего с ним нет', () => {
-    expect(missingWithPlugin(3)).toEqual(['список «Что нужно» на экране игры (клик по строке — стрелка и путь туда)']);
-    expect(missingWithPlugin(null)).toHaveLength(3);
+    expect(missingWithPlugin(3)).toEqual([
+      'опыт, квесты и имя персонажа из игры (синхронизация с аккаунтом, профили, время до цели)',
+      'список «Что нужно» на экране игры (клик по строке — стрелка и путь туда)',
+    ]);
+    expect(missingWithPlugin(4)).toHaveLength(1);
+    expect(missingWithPlugin(null)).toHaveLength(4);
     expect(missingWithPlugin(APP_PROTOCOL)).toEqual([]);
   });
 });

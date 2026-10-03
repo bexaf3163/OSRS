@@ -22,6 +22,7 @@ import { ReadinessPanel } from './ReadinessPanel';
 import { MoneyGoal } from './MoneyGoal';
 import { ItemIcon, useWiki } from './WikiDrawer';
 import { plural } from '../lib/shopping';
+import { LiveXp } from './LiveXp';
 
 const WARN_LABELS = new Set(['Опасно', 'Внимание', 'Бой']);
 
@@ -252,6 +253,7 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
               );
             })}
           </div>
+          <LiveXp targets={step.targets} />
           <RangeHints step={step} />
         </div>
       )}

@@ -13,10 +13,12 @@ export interface Features {
   pacing: boolean;
   /** Подсказка быстрого апгрейда инструмента или оружия. */
   upgradeRouter: boolean;
+  /** Уровни навыков из игры сами попадают в поля уровней (протокол плагина 2+; 2.12). */
+  levelsFromGame: boolean;
 }
 
 export const FEATURES_KEY = 'osrs-put:features';
-export const DEFAULT_FEATURES: Features = { autoLocation: true, bankTags: true, pacing: true, upgradeRouter: true };
+export const DEFAULT_FEATURES: Features = { autoLocation: true, bankTags: true, pacing: true, upgradeRouter: true, levelsFromGame: true };
 
 /** Сохранённое, а незнакомое и битое — по умолчанию (новая функция включена). */
 export function parseFeatures(raw: string | null): Features {

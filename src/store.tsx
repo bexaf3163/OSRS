@@ -5,8 +5,9 @@ import type { GameMode, Progress, Stage, Step, StepStatus } from './types';
 import { BASE_QP, known, maxQpFor, stagesFor, stepById, stepsFor } from './data';
 import {
   emptyProgress, gameModeOf, loadProgress, normalizeProgress, saveProgress, STORAGE_KEY,
-  withGameMode, withLevel, withNote, withReactivated, withReviewed, withStep, withUpgradeDismissed, withOwnedManual,
+  withGameMode, withLevel, withLevels, withNote, withReactivated, withReviewed, withStep, withUpgradeDismissed, withOwnedManual,
 } from './lib/progress';
+import { profileStorageKey, readProfiles } from './lib/profiles';
 import { questPoints } from './lib/qp';
 import { desktop } from './lib/desktop';
 
@@ -27,6 +28,8 @@ interface StoreValue {
   /** message — своя подпись в сообщении внизу (например, «выполнено в игре»). */
   setStep: (id: string, status: StepStatus | null, message?: string) => void;
   setLevel: (id: string, level: number) => void;
+  /** Несколько уровней сразу — уровни из игры. */
+  setLevels: (levels: Record<string, number>) => void;
   setNote: (id: string, note: string) => void;
   setMode: (mode: GameMode) => void;
   review: (ids: string[]) => void;
@@ -58,10 +61,10 @@ function storage(): Storage | undefined {
 function initialProgress(): Progress {
   const ls = storage();
   let hasLocal = false;
-  try { hasLocal = Boolean(ls?.getItem(STORAGE_KEY)); } catch { /* нет хранилища */ }
-  const local = loadProgress(ls, known);
+  try { hasLocal = Boolean(ls?.getItem(progressKey())); } catch { /* нет хранилища */ }
+  const local = loadProgress(ls, known, progressKey());
   try {
-    const text = desktop()?.loadProgressFile();
+    const text = desktop()?.loadProgressFile(readProfiles().active);
     const fromFile = text ? normalizeProgress(JSON.parse(text), known)?.progress : undefined;
     if (fromFile && (!hasLocal || Date.parse(fromFile.updatedAt) > Date.parse(local.updatedAt))) return fromFile;
   } catch {
@@ -70,10 +73,15 @@ function initialProgress(): Progress {
   return local;
 }
 
+/** Ключ прогресса активного профиля: у основного прежний. */
+function progressKey(): string {
+  return profileStorageKey(STORAGE_KEY, readProfiles().active);
+}
+
 function persist(p: Progress) {
-  saveProgress(storage(), p);
+  saveProgress(storage(), p, progressKey());
   try {
-    desktop()?.saveProgressFile(JSON.stringify(p));
+    desktop()?.saveProgressFile(JSON.stringify(p), readProfiles().active);
   } catch {
     // Файл не записался — localStorage всё равно сохранён.
   }
@@ -99,9 +107,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
-      if (e.key !== STORAGE_KEY) return;
+      if (e.key !== progressKey()) return;
       fromOtherTab.current = true;
-      setProgress(loadProgress(storage(), known));
+      setProgress(loadProgress(storage(), known, progressKey()));
     };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
@@ -122,6 +130,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const setLevel = useCallback((id: string, level: number) => {
     setProgress((p) => (p.levels[id] === level ? p : withLevel(p, id, level)));
+  }, []);
+
+  const setLevels = useCallback((levels: Record<string, number>) => {
+    setProgress((p) => withLevels(p, levels));
   }, []);
 
   const setNote = useCallback((id: string, note: string) => {
@@ -182,10 +194,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<StoreValue>(
     () => ({
-      progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setNote, setMode, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
+      progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
       toast, notify, undo, dismissToast,
     }),
-    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setNote, setMode, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
+    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
       toast, notify, undo, dismissToast],
   );
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

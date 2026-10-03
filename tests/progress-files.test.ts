@@ -45,3 +45,47 @@ describe('файл прогресса', () => {
     expect(readFileSync(join(d, 'progress.bak.json'), 'utf8')).toBe('{"version":3,"ok":1}');
   });
 });
+
+describe('профили и копия по расписанию', () => {
+  const api = createRequire(import.meta.url)('../electron/progress-files.cjs') as {
+    readProgress: (dir: string, now?: Date, name?: string) => string | null;
+    backupProgress: (dir: string, name?: string) => void;
+    dailyBackup: (dir: string, target: string, now?: Date) => number;
+  };
+
+  it('у каждого профиля свой файл, битый откладывается под своим именем', () => {
+    const d = tmp();
+    writeFileSync(join(d, 'progress-ab12.json'), '{"x":1}');
+    expect(api.readProgress(d, new Date(), 'progress-ab12.json')).toBe('{"x":1}');
+    expect(api.readProgress(d, new Date(), 'progress.json')).toBeNull();
+    writeFileSync(join(d, 'progress-ab12.json'), '{"x":');
+    expect(api.readProgress(d, new Date(Date.UTC(2026, 9, 2, 1, 2, 3)), 'progress-ab12.json')).toBeNull();
+    expect(readdirSync(d).filter((n) => n.includes('broken'))).toEqual(['progress-ab12.broken-20261002T010203.json']);
+    writeFileSync(join(d, 'progress-ab12.json'), '{"x":2}');
+    api.backupProgress(d, 'progress-ab12.json');
+    expect(readFileSync(join(d, 'progress-ab12.bak.json'), 'utf8')).toBe('{"x":2}');
+  });
+
+  it('копия по расписанию: раз в сутки, по файлу на профиль, сегодняшняя не затирается, хранятся 14', () => {
+    const d = tmp();
+    const out = join(tmp(), 'копии');
+    writeFileSync(join(d, 'progress.json'), '{"a":1}');
+    writeFileSync(join(d, 'progress-xy.json'), '{"b":2}');
+    writeFileSync(join(d, 'progress.bak.json'), '{"old":1}');
+    writeFileSync(join(d, 'ui.json'), '{}');
+    expect(api.dailyBackup(d, out, new Date(2026, 9, 2))).toBe(2);
+    expect(readdirSync(out).sort()).toEqual(['osrs-put-progress-20261002.json', 'osrs-put-progress-xy-20261002.json']);
+    writeFileSync(join(d, 'progress.json'), '{"a":99}');
+    expect(api.dailyBackup(d, out, new Date(2026, 9, 2))).toBe(0);
+    expect(readFileSync(join(out, 'osrs-put-progress-20261002.json'), 'utf8')).toBe('{"a":1}');
+    for (let day = 3; day <= 20; day++) api.dailyBackup(d, out, new Date(2026, 9, day));
+    const main = readdirSync(out).filter((n) => /^osrs-put-progress-\d{8}\.json$/.test(n));
+    expect(main).toHaveLength(14);
+    expect(main[0]).toBe('osrs-put-progress-20261007.json');
+    // Профиль «xy» не съеден основным при удалении старых.
+    expect(readdirSync(out).filter((n) => n.startsWith('osrs-put-progress-xy-'))).toHaveLength(14);
+    // Битый файл не копируется.
+    writeFileSync(join(d, 'progress.json'), '{"a":');
+    expect(api.dailyBackup(d, out, new Date(2026, 9, 21))).toBe(1);
+  });
+});

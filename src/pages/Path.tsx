@@ -13,6 +13,7 @@ import { StageSection } from '../components/StageSection';
 import { useMediaQuery, WIDE } from '../lib/media';
 import { PathWide } from './PathWide';
 import { plural } from '../lib/shopping';
+import { AccountSync } from '../components/AccountSync';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 /** Время сворачивания карточки (как transition у .collapse) — после него раскладка устоялась. */
@@ -191,6 +192,7 @@ function PathNarrow({ focusStep, focusKey }: { focusStep?: string; focusKey: num
         <ProgressBar value={closed / steps.length} label="Выполнено шагов" />
       </section>
 
+      <AccountSync compact />
       <NextStepCard onDone={completeFromTop} />
       <GearBanner />
 

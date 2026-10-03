@@ -198,12 +198,36 @@ async function run(browser: Browser) {
       await page.context().close();
       const fresh = await open(browser, width, {
         localStorage: { 'osrs-put:active-step': 'S2-03' }, progress: progressBefore('S2-03'),
-        status: { activeStepId: 'S2-03', protocol: 4, pluginVersion: '2.11.0' },
+        status: { activeStepId: 'S2-03', protocol: 5, pluginVersion: '2.12.0' },
       }, '#/step/S2-03');
       const f = await text(fresh.page, '.ingame');
-      expect(f.includes('список «Что нужно»') && !f.includes('старый плагин'), 'шаг: плагин 2.11 — подсказка, где в игре список «Что нужно»');
+      expect(f.includes('список «Что нужно»') && !f.includes('старый плагин'), 'шаг: плагин 2.12 — подсказка, где в игре список «Что нужно»');
       expect(!fresh.errors.length, `шаг: ошибок в консоли нет ${fresh.errors.join('; ')}`);
       await fresh.page.context().close();
+    }
+
+    // 2.12: чужой персонаж не пишет в активный профиль и получает предложение; опыт из игры виден на странице навыка.
+    {
+      const profiles = JSON.stringify({ active: 'main', list: [{ id: 'main', name: 'Основной', player: 'Alpha One' }] });
+      const { page, errors } = await open(browser, width, {
+        localStorage: { 'osrs-put:profiles': profiles },
+        status: { protocol: 5, pluginVersion: '2.12.0', player: 'Beta Two', xp: { woodcutting: 10, strength: 0 } },
+      }, '#/skills/WC');
+      await page.waitForSelector('.plaque-warning', { timeout: 5000 });
+      const t = await text(page, '.plaque-warning');
+      expect(t.includes('новый персонаж') && t.includes('Beta Two'), 'профиль: чужой персонаж — предложение создать профиль');
+      expect(!errors.length, `профиль: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+
+      const ok = await open(browser, width, {
+        localStorage: { 'osrs-put:profiles': profiles },
+        status: { protocol: 5, pluginVersion: '2.12.0', player: 'Alpha One', xp: { woodcutting: 10 } },
+      }, '#/skills/WC');
+      await ok.page.waitForSelector('.live-xp', { timeout: 5000 });
+      const x = await text(ok.page, '.live-xp');
+      expect(x.includes('до ') && x.includes('опыта'), 'навык: опыт из игры — «до уровня ещё N опыта»');
+      expect((await ok.page.locator('.plaque-warning').count()) === 0, 'профиль: свой персонаж — без предупреждения');
+      await ok.page.context().close();
     }
 
     // Квест с NPC: на карте шага — точки NPC и откуда предметы, как в списке в игре.

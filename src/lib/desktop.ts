@@ -27,14 +27,30 @@ export interface RuneliteLaunch {
   clientVersion?: string;
 }
 
+export interface BackupState {
+  /** Папка для копий или null — копии выключены. */
+  dir: string | null;
+  /** Когда сделана последняя копия (ISO) или null. */
+  last: string | null;
+  /** Чем кончилась последняя попытка: ok, ошибка или null. */
+  error: string | null;
+}
+
 export interface DesktopBridge {
   getZoom(): Promise<ZoomState>;
   setZoom(settings: { zoom: number; autoZoom: boolean }): void;
   setAlwaysOnTop(on: boolean): void;
   onZoom(callback: (state: ZoomState) => void): () => void;
   /** Прогресс файлом рядом с данными программы (в переносной версии — рядом с exe). */
-  loadProgressFile(): string | null;
-  saveProgressFile(json: string): void;
+  loadProgressFile(profileId?: string): string | null;
+  saveProgressFile(json: string, profileId?: string): void;
+  /** Копия прогресса по расписанию (раз в сутки в выбранную папку). В старых сборках её нет. */
+  backup?: {
+    get(): Promise<BackupState>;
+    choose(): Promise<BackupState>;
+    now(): Promise<BackupState>;
+    clear(): Promise<BackupState>;
+  };
   /** Где лежат данные программы — для подсказки в настройках. */
   dataDir(): string;
   isPortable(): boolean;

@@ -350,6 +350,58 @@ public class BridgeServerTest
 	}
 
 	@Test
+	public void опытКвестыИИмяПерсонажа_протокол5()
+	{
+		try
+		{
+			BlockingQueue<String> lines = new LinkedBlockingQueue<>();
+			try (Socket s = openEvents(lines))
+			{
+				assertEquals("{\"type\":\"STATUS\",\"inGame\":false}", lines.poll(3, TimeUnit.SECONDS));
+				java.util.Map<String, Integer> xp = new java.util.LinkedHashMap<>();
+				xp.put("magic", 1234);
+				server.setXp(xp);
+				assertEquals("{\"type\":\"XP\",\"xp\":{\"magic\":1234}}", lines.poll(3, TimeUnit.SECONDS));
+				server.setXp(new java.util.LinkedHashMap<>(xp));
+				server.setQuests(java.util.Arrays.asList("Rune Mysteries", "Imp Catcher"));
+				assertEquals("{\"type\":\"QUESTS\",\"done\":[\"Rune Mysteries\",\"Imp Catcher\"]}", lines.poll(3, TimeUnit.SECONDS));
+				server.setQuests(java.util.Arrays.asList("Rune Mysteries", "Imp Catcher"));
+				server.setPlayer("Bexqq");
+				assertEquals("{\"type\":\"STATUS\",\"inGame\":false,\"player\":\"Bexqq\"}", lines.poll(3, TimeUnit.SECONDS));
+				assertNull("повторы не рассылаются", lines.poll(300, TimeUnit.MILLISECONDS));
+			}
+			String status = get("/status").body();
+			assertTrue(status, status.contains("\"xp\":{\"magic\":1234}"));
+			assertTrue(status, status.contains("\"questsDone\":[\"Rune Mysteries\",\"Imp Catcher\"]"));
+			assertTrue(status, status.contains("\"player\":\"Bexqq\""));
+			server.setPos(3213, 3424, 0);
+			assertTrue(get("/status").body(), get("/status").body().contains("\"pos\":{\"x\":3213,\"y\":3424,\"plane\":0}"));
+			server.setPos(null, null, null);
+			assertTrue(!get("/status").body().contains("\"pos\""));
+			// Новое подключение получает всё это сразу.
+			BlockingQueue<String> again = new LinkedBlockingQueue<>();
+			try (Socket s = openEvents(again))
+			{
+				StringBuilder all = new StringBuilder();
+				for (int i = 0; i < 3; i++)
+				{
+					all.append(again.poll(3, TimeUnit.SECONDS));
+				}
+				assertTrue(all.toString(), all.toString().contains("\"player\":\"Bexqq\"") && all.toString().contains("\"type\":\"XP\"") && all.toString().contains("\"type\":\"QUESTS\""));
+			}
+			// Выход из игры — всё снимается.
+			server.setXp(null);
+			server.setQuests(null);
+			server.setPlayer(null);
+			assertTrue(get("/status").body(), !get("/status").body().contains("Bexqq"));
+		}
+		catch (Exception e)
+		{
+			throw new AssertionError(e);
+		}
+	}
+
+	@Test
 	public void уровниИПредметыРассылаютсяПриИзмененииИПовторяютсяНовомуПодключению() throws Exception
 	{
 		BlockingQueue<String> lines = new LinkedBlockingQueue<>();

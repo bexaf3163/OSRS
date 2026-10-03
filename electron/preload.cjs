@@ -13,8 +13,15 @@ contextBridge.exposeInMainWorld('osrsDesktop', {
     return () => ipcRenderer.removeListener('zoom:changed', listener);
   },
   // Синхронно: прогресс нужен до первой отрисовки, иначе мелькнёт пустой.
-  loadProgressFile: () => ipcRenderer.sendSync('progress:load'),
-  saveProgressFile: (json) => ipcRenderer.send('progress:save', String(json)),
+  loadProgressFile: (profileId) => ipcRenderer.sendSync('progress:load', String(profileId ?? 'main')),
+  saveProgressFile: (json, profileId) => ipcRenderer.send('progress:save', String(json), String(profileId ?? 'main')),
+  // Копия прогресса раз в сутки в выбранную папку.
+  backup: {
+    get: () => ipcRenderer.invoke('backup:get'),
+    choose: () => ipcRenderer.invoke('backup:choose'),
+    now: () => ipcRenderer.invoke('backup:now'),
+    clear: () => ipcRenderer.invoke('backup:clear'),
+  },
   dataDir: () => ipcRenderer.sendSync('app:data-dir'),
   isPortable: () => ipcRenderer.sendSync('app:is-portable'),
   // Запуск RuneLite с плагином OSRS Path Bridge (electron/runelite-launcher.cjs).

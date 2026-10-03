@@ -146,9 +146,9 @@ export function normalizeProgress(raw: unknown, known: Known): Normalized | null
   return { progress: p, dropped, migrated };
 }
 
-export function loadProgress(storage: Pick<Storage, 'getItem'> | undefined, known: Known): Progress {
+export function loadProgress(storage: Pick<Storage, 'getItem'> | undefined, known: Known, key: string = STORAGE_KEY): Progress {
   try {
-    const text = storage?.getItem(STORAGE_KEY);
+    const text = storage?.getItem(key);
     if (text) return normalizeProgress(JSON.parse(text), known)?.progress ?? emptyProgress();
   } catch {
     // Повреждённая запись или недоступное хранилище — начинаем с чистого листа.
@@ -156,9 +156,9 @@ export function loadProgress(storage: Pick<Storage, 'getItem'> | undefined, know
   return emptyProgress();
 }
 
-export function saveProgress(storage: Pick<Storage, 'setItem'> | undefined, p: Progress): boolean {
+export function saveProgress(storage: Pick<Storage, 'setItem'> | undefined, p: Progress, key: string = STORAGE_KEY): boolean {
   try {
-    storage?.setItem(STORAGE_KEY, JSON.stringify(p));
+    storage?.setItem(key, JSON.stringify(p));
     return true;
   } catch {
     return false;
@@ -231,6 +231,17 @@ export function withStep(p: Progress, id: string, status: StepStatus | null): Pr
 
 export function withLevel(p: Progress, id: string, level: number): Progress {
   return touch({ ...p, levels: { ...p.levels, [id]: clampLevel(level) } });
+}
+
+/** Несколько уровней сразу (уровни из игры). Без изменений возвращает тот же объект — запись в файл не нужна. */
+export function withLevels(p: Progress, levels: Readonly<Record<string, number>>): Progress {
+  const next = { ...p.levels };
+  let changed = false;
+  for (const [id, level] of Object.entries(levels)) {
+    const v = clampLevel(level);
+    if (next[id] !== v) { next[id] = v; changed = true; }
+  }
+  return changed ? touch({ ...p, levels: next }) : p;
 }
 
 export function withNote(p: Progress, id: string, note: string): Progress {
