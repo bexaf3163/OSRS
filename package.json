@@ -27,7 +27,8 @@
     "check-links": "node scripts/check-links.ts",
     "bridge:jar": "node scripts/build-bridge-jar.ts",
     "test:ui": "node scripts/ui-smoke.ts",
-    "test:e2e": "node scripts/e2e-electron.ts"
+    "test:e2e": "node scripts/e2e-electron.ts",
+    "check-runelite": "node scripts/check-runelite-compat.ts"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.22",
