@@ -105,6 +105,12 @@ final class StepGuide
 			this.stage = stage;
 		}
 
+		/** То же с другим состоянием этапа (предупреждение и «вручную»). */
+		View withStage(StageView s)
+		{
+			return new View(title, goal, items, places, detour, note, next, finale, s);
+		}
+
 		/** То же с другим сообщением (guideMessage плагина). */
 		View withNote(String message)
 		{
@@ -125,6 +131,31 @@ final class StepGuide
 		int cursor;
 		/** Квест пройден (Quest.getState) — этапы больше не нужны. */
 		boolean finished;
+		/** Что не так с шагом («Blurite ore ещё в сумке — сначала: …»); null — всё в порядке. */
+		String warning;
+		/** Игрок вернул шаг сам — автоматика не двигает его, пока не нажато «сделано». */
+		boolean held;
+
+		StageView(int index, int total, List<ActiveTarget.StageLine> steps, int cursor, boolean finished)
+		{
+			this(index, total, steps, cursor, finished, null, false);
+		}
+
+		StageView(int index, int total, List<ActiveTarget.StageLine> steps, int cursor, boolean finished, String warning, boolean held)
+		{
+			this.index = index;
+			this.total = total;
+			this.steps = steps;
+			this.cursor = cursor;
+			this.finished = finished;
+			this.warning = warning;
+			this.held = held;
+		}
+
+		StageView with(String warning, boolean held)
+		{
+			return new StageView(index, total, steps, cursor, finished, warning, held);
+		}
 	}
 
 	static final View EMPTY = new View(null, null, Collections.emptyList(), Collections.emptyList(), null,
@@ -456,9 +487,7 @@ final class StepGuide
 		{
 			return null;
 		}
-		String text = line.getT().trim();
-		int dot = text.indexOf(". ");
-		String label = dot > 0 ? text.substring(0, dot) : text;
+		String label = line.shown();
 		if (label.length() > 60)
 		{
 			label = label.substring(0, 59) + "…";

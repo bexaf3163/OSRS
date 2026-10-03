@@ -100,6 +100,18 @@ export function qa(input: QaInput): QaIssue[] {
           const item = (st.items ?? []).find((it) => text.includes(it.name.toLowerCase()));
           if (item) add('stages-need-missing', `${id}#${st.at}`, `шаг «${l.t.slice(0, 40)}…» отдаёт «${item.name}» — нужно условие need`);
         }
+        // «Накопай/Возьми/Сорви/Купи X» (не последний шаг): без has шаг не засчитывается, когда X уже в сумке, — игрок добыл руду,
+        // а список всё ещё просит её копать (S2-07). Один предмет этапа в тексте — его и надо указать; два и больше — has не годится.
+        if (n < st.do.length - 1 && !l.has && !l.need && /^(Накопай|Возьми|Сорви|Купи|Подбери|Добудь|Нарви|Набери|Выкопай|Срежь|Состриги)/.test(l.t)) {
+          const text = l.t.toLowerCase();
+          const named = (st.items ?? []).filter((it) => text.includes(it.name.toLowerCase()));
+          if (named.length === 1) add('stages-has-missing', `${id}#${st.at}`, `шаг «${l.t.slice(0, 40)}…» добывает «${named[0].name}» — нужно условие has`);
+        }
+        // Короткий текст для игры: одна строка, без диалога, с заглавной.
+        const sc = l.s ? firstChar(l.s) : '';
+        if (!l.s || l.s.length > 72 || /Диалог/.test(l.s) || !sc || sc !== sc.toUpperCase() || /\s{2,}/.test(l.s) || /\s$/.test(l.s)) {
+          add('stages-short', `${id}#${st.at}`, `короткий текст шага: «${(l.s ?? '').slice(0, 50)}» — нужен s до 72 знаков без диалога`);
+        }
         if (!c || c !== c.toUpperCase() || /\s{2,}/.test(l.t) || /\s$/.test(l.t)) add('text', `${id}#${st.at}`, `текст шага: «${l.t.slice(0, 50)}»`);
         if (l.at && badPoint(l.at)) add('stages-point', `${id}#${st.at}`, `клетка ${l.at.join(',')} вне карты`);
         if (l.need && !(st.items ?? []).some((it) => it.name === l.need) && !st.do.some((o) => o.has === l.need)) add('stages-need', `${id}#${st.at}`, `условие «${l.need}» не среди предметов этапа и не в has его шагов`);

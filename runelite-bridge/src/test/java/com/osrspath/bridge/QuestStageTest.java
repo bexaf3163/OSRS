@@ -138,7 +138,7 @@ public class QuestStageTest
 		StepGuide.View v = view(3, false, new ItemCounts());
 		String all = text(GuideList.rows(v, false, FM, FM, 240));
 		assertTrue(all, all.contains("Этап 3 из 4"));
-		assertTrue(all, all.contains("Отнеси Research package Aubury."));
+		assertTrue(all, all.contains("Отнеси Research package Aubury"));
 		assertTrue(all, all.contains("Research package"));
 		assertTrue(all, all.contains("Aubury"));
 		assertFalse("предметы других этапов не показываются: " + all, all.contains("Air talisman"));
@@ -195,19 +195,115 @@ public class QuestStageTest
 	}
 
 	@Test
-	public void строкиЭтапа_сделаноТекущийСледующиеИСчётчик()
+	public void строкиЭтапа_текущийСчётчикДальшеИНазад()
 	{
 		StepGuide.StageView sv = new StepGuide.StageView(1, 1, manor(), 2, false);
 		java.util.ArrayList<GuideList.Row> rows = new java.util.ArrayList<>();
 		GuideList.stageRows(rows, sv, FM, FM, 220);
 		String all = text(rows);
-		assertTrue(all, all.contains("сделано шагов: 2"));
 		assertTrue(all, all.contains("▶ C"));
-		assertTrue(all, all.contains("• D"));
-		assertTrue(all, all.contains("• C-again"));
-		assertFalse("дальше двух не показываем: " + all, all.contains("• E"));
-		assertTrue(all, all.contains("ещё шагов: 1"));
-		assertEquals("текущий шаг — кнопка «сделано»", GuideList.Action.NEXT, rows.get(1).getAction());
+		assertTrue("счётчик справа: шаг 3 из 6", all.contains("3/6"));
+		assertTrue("одна строка «Дальше» вместо двух серых пунктов: " + all, all.contains("Дальше: D"));
+		assertTrue("сколько ещё после него", all.contains("+2"));
+		assertFalse("дальше одного не показываем: " + all, all.contains("C-again") || all.contains("• "));
+		assertFalse("«сделано шагов» и отсылка к панели убраны: " + all, all.contains("сделано шагов") || all.contains("в панели"));
+		assertTrue("шаг не первый — есть «Назад»: " + all, all.contains("◀ Назад: B"));
+		assertEquals("текущий шаг — кнопка «сделано»", GuideList.Action.NEXT, rows.get(0).getAction());
+		assertEquals("назад — кнопка", GuideList.Action.PREV, rows.get(rows.size() - 1).getAction());
+	}
+
+	@Test
+	public void строкиЭтапа_первыйШагБезНазад_последнийБезДальше()
+	{
+		java.util.ArrayList<GuideList.Row> first = new java.util.ArrayList<>();
+		GuideList.stageRows(first, new StepGuide.StageView(1, 1, manor(), 0, false), FM, FM, 220);
+		assertFalse(text(first), text(first).contains("Назад"));
+		java.util.ArrayList<GuideList.Row> last = new java.util.ArrayList<>();
+		GuideList.stageRows(last, new StepGuide.StageView(1, 1, manor(), 5, false), FM, FM, 220);
+		assertFalse(text(last), text(last).contains("Дальше"));
+		assertTrue(text(last), text(last).contains("6/6"));
+	}
+
+	@Test
+	public void строкиЭтапа_короткийТекстВСпискеИПолныйВПодсказке()
+	{
+		List<ActiveTarget.StageLine> l = GSON.fromJson("[{\"t\":\"Поговори с Squire во дворе замка White Knights в Falador. Диалог: «Yes».\",\"s\":\"Поговори с Squire (Falador)\"},{\"t\":\"Второй шаг. Подробно.\"}]",
+			new com.google.gson.reflect.TypeToken<List<ActiveTarget.StageLine>>() { }.getType());
+		java.util.ArrayList<GuideList.Row> rows = new java.util.ArrayList<>();
+		GuideList.stageRows(rows, new StepGuide.StageView(1, 1, l, 0, false), FM, FM, 220);
+		assertTrue(text(rows), text(rows).contains("▶ Поговори с Squire (Falador)"));
+		assertFalse("диалог в список не попадает", text(rows).contains("Диалог"));
+		assertTrue("полный текст — в подсказке", rows.get(0).getHint().contains("White Knights"));
+		assertTrue("шаг без короткого текста сокращается сам", text(rows).contains("Дальше: Второй шаг"));
+		assertFalse(text(rows), text(rows).contains("Подробно"));
+	}
+
+	@Test
+	public void предупреждениеИРучнойРежим_виднЫВСписке()
+	{
+		StepGuide.StageView sv = new StepGuide.StageView(1, 1, manor(), 2, false, "Blurite ore ещё в сумке — сначала: Верни Thurgo", true);
+		java.util.ArrayList<GuideList.Row> rows = new java.util.ArrayList<>();
+		GuideList.stageRows(rows, sv, FM, FM, 220);
+		assertTrue("предупреждение — первой строкой: " + text(rows.subList(0, 1)), text(rows.subList(0, 1)).contains("⚠ Blurite ore ещё в сумке — сначала: Верни Thurgo"));
+		assertTrue(text(rows), text(rows).contains("вручную"));
+	}
+
+	@Test
+	public void наЭтапеВзятоеИСданноеСкрыто_осталосьТолькоНужное()
+	{
+		java.util.ArrayList<StepGuide.ItemLine> items = new java.util.ArrayList<>();
+		items.add(new StepGuide.ItemLine("a", "", StepGuide.Have.DONE, null, -1, "Iron bar ×2", null, "готово"));
+		items.add(new StepGuide.ItemLine("b", "", StepGuide.Have.BAG, null, -1, "Bronze pickaxe", null, "есть"));
+		items.add(new StepGuide.ItemLine("c", "", StepGuide.Have.NONE, null, -1, "Tinderbox", null, "нет"));
+		List<StepGuide.ItemLine> pending = GuideList.pending(items);
+		assertEquals(1, pending.size());
+		assertEquals("Tinderbox", pending.get(0).getName());
+		assertTrue("всё взято — пусто", GuideList.pending(items.subList(0, 2)).isEmpty());
+	}
+
+	/** S2-07, этап 7 из 7: как в игре — руда и прутья сданы Thurgo, остался меч для Squire. */
+	static ActiveTarget thurgoOre()
+	{
+		ActiveTarget t = GSON.fromJson("{\"stepId\":\"S2-07\",\"title\":\"The Knight's Sword\",\"guide\":{\"items\":[],\"places\":["
+			+ "{\"x\":3008,\"y\":3150,\"plane\":0,\"label\":\"Вход в Asgarnian Ice Dungeon\"}],"
+			+ "\"stage\":{\"kind\":\"varp\",\"id\":122,\"stages\":[{\"at\":6,\"go\":0,\"items\":["
+			+ "{\"name\":\"Iron bar\",\"id\":2351,\"count\":2},{\"name\":\"Bronze pickaxe\",\"id\":1265},{\"name\":\"Blurite ore\",\"id\":668}],\"steps\":["
+			+ "{\"t\":\"Спустись в Asgarnian Ice Dungeon к югу от Port Sarim.\",\"s\":\"Спустись в Asgarnian Ice Dungeon\",\"x\":3008,\"y\":3150,\"plane\":0},"
+			+ "{\"t\":\"Накопай Blurite ore.\",\"s\":\"Накопай Blurite ore\",\"x\":3049,\"y\":9566,\"plane\":0,\"has\":\"Blurite ore\"},"
+			+ "{\"t\":\"Верни Thurgo Blurite ore и два Iron bar.\",\"s\":\"Верни Thurgo Blurite ore и 2 Iron bar\",\"x\":3000,\"y\":3145,\"plane\":0,\"need\":\"Blurite ore\"},"
+			+ "{\"t\":\"Отнеси меч оруженосцу (Squire) — квест пройден.\",\"s\":\"Отнеси меч Squire\",\"x\":2978,\"y\":3341,\"plane\":0}]}]}}}", ActiveTarget.class);
+		assertNull(t.prepare());
+		return t;
+	}
+
+	@Test
+	public void этапСдан_блокНужноСейчасНеРисуется_осталсяТолькоШаг()
+	{
+		ActiveTarget t = thurgoOre();
+		// Прутья и руда сданы (были в сумке, теперь нет), кирка в сумке: всё нужное уже сделано.
+		HashSet<String> got = new HashSet<>(java.util.Arrays.asList(ActiveTarget.nameKey("Iron bar"), ActiveTarget.nameKey("Blurite ore")));
+		ItemCounts bag = new ItemCounts();
+		bag.add(1265, ActiveTarget.nameKey("Bronze pickaxe"), 1);
+		String all = text(GuideList.rows(StepGuide.view(t, bag, null, null, 0, 0, 0, got, 6, false, 3), false, FM, FM, 240));
+		assertFalse("«Нужно сейчас» не рисуется, когда нужного нет: " + all, all.contains("Нужно сейчас"));
+		assertFalse("взятое и сданное не перечисляется: " + all, all.contains("✓") || all.contains("Iron bar ×") || all.contains("Bronze pickaxe"));
+		assertTrue(all, all.contains("▶ Отнеси меч Squire"));
+		assertTrue(all, all.contains("4/4"));
+		assertTrue("код шага вместо HUD с названием: " + all, all.contains("S2-07 · Этап 1 из 1"));
+		assertTrue("можно вернуться: " + all, all.contains("◀ Назад: Верни Thurgo"));
+		assertFalse("шаг сам говорит, куда идти, — точки этапа («вход в подземелье») нет: " + all, all.contains("Куда идти") || all.contains("Ice Dungeon"));
+	}
+
+	@Test
+	public void этап_остаётсяТолькоЧегоНеХватает()
+	{
+		ActiveTarget t = thurgoOre();
+		ItemCounts bag = new ItemCounts();
+		bag.add(1265, ActiveTarget.nameKey("Bronze pickaxe"), 1);
+		String all = text(GuideList.rows(StepGuide.view(t, bag, new ItemCounts(), null, 0, 0, 0, new HashSet<>(), 6, false, 0), false, FM, FM, 240));
+		assertTrue(all, all.contains("Нужно сейчас"));
+		assertTrue("руды и прутьев нет — они в списке: " + all, all.contains("Blurite ore") && all.contains("Iron bar"));
+		assertFalse("кирка уже в сумке — её нет в списке: " + all, all.contains("Bronze pickaxe"));
 	}
 
 	private static ActiveTarget sword()

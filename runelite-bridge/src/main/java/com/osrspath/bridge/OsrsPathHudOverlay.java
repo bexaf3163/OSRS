@@ -126,6 +126,15 @@ class OsrsPathHudOverlay extends OverlayPanel
 		{
 			s = SmartView.compact(s);
 		}
+		else if (config.hudLean())
+		{
+			// Компактный HUD: шаг, цель, расстояние и «сумка» — уже в списке «Что нужно»; плашка остаётся, только если ей есть что сказать.
+			s = lean(s, GuideList.shown(config.showGuide(), config.guideCollapsed(), plugin.getGuideView(), config.smartOverlays(), plugin.overlayContext()));
+			if (s == null)
+			{
+				return null;
+			}
+		}
 		boolean large = config.hudLarge();
 		Font font = OverlayText.font(g.getFont(), large ? LARGE : 1f);
 		g.setFont(font);
@@ -140,6 +149,32 @@ class OsrsPathHudOverlay extends OverlayPanel
 		Dimension d = super.render(g);
 		last = d == null ? new Dimension() : d;
 		return d;
+	}
+
+	/**
+	 * Компактный HUD. Рядом список «Что нужно» — шаг, цель, расстояние и «сумка» в HUD дублируют его (и стрелку с миникартой),
+	 * остаются только предупреждения: опасность, здоровье, действие, темп, совет по снаряжению. Списка нет — HUD единственный
+	 * источник: название и цель остаются, а «Сумка готова» — нет (хорошая новость не нужна, плохая — «Сумка: нет X» — остаётся).
+	 * null — показывать нечего: плашки нет совсем.
+	 */
+	static State lean(State s, boolean guideShown)
+	{
+		String title = guideShown ? null : s.getTitle();
+		String goal = guideShown ? null : s.getGoal();
+		String distance = guideShown ? null : s.getDistance();
+		String bag = guideShown || s.isBagReady() ? null : s.getBag();
+		if (isBlank(title) && isBlank(goal) && isBlank(distance) && isBlank(bag) && isBlank(s.getDanger()) && isBlank(s.getHealth())
+			&& isBlank(s.getAction()) && isBlank(s.getPacing()) && isBlank(s.getUpgrade()))
+		{
+			return null;
+		}
+		return new State(title, goal, distance, s.isNear(), bag, s.isBagReady(), s.getDanger(), s.isDangerInside(), s.getPacing(),
+			s.isPacingGood(), s.getUpgrade(), s.getHealth(), s.isHealthCritical(), s.getAction(), s.getTiles());
+	}
+
+	private static boolean isBlank(String s)
+	{
+		return s == null || s.isEmpty();
 	}
 
 	/** Цвет полоски: опасность — красный, цель рядом — зелёный, остальное — золото. */
@@ -167,7 +202,10 @@ class OsrsPathHudOverlay extends OverlayPanel
 		c.clear();
 		panel.setPreferredSize(new Dimension(width, 0));
 		OverlayText.frame(panel, fm);
-		OverlayText.title(c, s.getTitle(), TITLE, fm, inner);
+		if (!isBlank(s.getTitle()))
+		{
+			OverlayText.title(c, s.getTitle(), TITLE, fm, inner);
+		}
 		if (s.getDanger() != null)
 		{
 			// Опасность — сразу под названием, выше цели: её нельзя пропустить.

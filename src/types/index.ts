@@ -326,6 +326,8 @@ export type QuestStageGo = string | { x: number; y: number; plane: number; label
 /** Шаг этапа: что сделать и (если есть) где — по месту игрок проходит шаги, плагин сам отмечает пройденные. */
 export interface QuestStageLine {
   t: string;
+  /** Короткий текст для строки списка в игре (до ~70 знаков, без диалога); полный t — в подсказке и панели. */
+  s?: string;
   /** x, y, plane — клетка шага (Quest Helper). */
   at?: [number, number, number];
   /** Предмет: он уже в сумке — шаг сделан (плагин сам идёт к следующему шагу). */

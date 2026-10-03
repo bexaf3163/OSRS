@@ -104,6 +104,19 @@ public interface OsrsPathBridgeConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "hudLean",
+		name = "Компактный HUD",
+		description = "Не повторять в HUD то, что уже есть в списке «Что нужно»: название шага, цель, расстояние и «Сумка готова». "
+			+ "Плашка остаётся, только когда есть предупреждение (опасность, здоровье, действие, темп) или списка нет",
+		section = companion,
+		position = 11
+	)
+	default boolean hudLean()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "showGuide",
 		name = "Список «Что нужно»",
 		description = "Под HUD: предметы шага (есть, в банке, нет) с «где взять» и места шага с NPC. "

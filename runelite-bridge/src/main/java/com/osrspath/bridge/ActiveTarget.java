@@ -208,7 +208,7 @@ public class ActiveTarget
 				}
 				for (StageLine line : s.steps)
 				{
-					if (line == null || line.t == null || line.t.trim().isEmpty() || line.t.length() > Guide.MAX_WHERE
+					if (line == null || line.t == null || line.t.trim().isEmpty() || line.t.length() > Guide.MAX_WHERE || (line.s != null && line.s.length() > Guide.MAX_WHERE)
 						|| (line.x != null && (line.y == null || line.plane == null || line.x <= 0 || line.y <= 0 || line.x >= NavTarget.MAX_COORD
 						|| line.y >= NavTarget.MAX_COORD || line.plane < 0 || line.plane > 3)) || tooLong(line.has))
 					{
@@ -238,6 +238,8 @@ public class ActiveTarget
 	public static class StageLine
 	{
 		private String t;
+		/** Короткий текст для строки списка в игре (до ~70 знаков); null — программа его не прислала, строка сократится сама. */
+		private String s;
 		private Integer x;
 		private Integer y;
 		private Integer plane;
@@ -252,6 +254,22 @@ public class ActiveTarget
 		boolean hasPoint()
 		{
 			return x != null && y != null && plane != null;
+		}
+
+		boolean hasNeed()
+		{
+			return need != null && !need.isEmpty();
+		}
+
+		boolean hasHas()
+		{
+			return has != null && !has.isEmpty();
+		}
+
+		/** Текст для строки в игре: короткий от программы, а нет его — первое предложение полного. */
+		String shown()
+		{
+			return s != null && !s.trim().isEmpty() ? s.trim() : ShortText.of(t);
 		}
 	}
 

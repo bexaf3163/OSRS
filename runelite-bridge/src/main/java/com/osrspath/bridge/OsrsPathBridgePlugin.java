@@ -637,7 +637,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	{
 		ActiveTarget.Stage stage = stageOf(target);
 		trackStageCursor(stage);
-		String stageNow = stage == null ? null : cursorKey + "|" + questDone(target);
+		String stageNow = stage == null ? null : stageTracker.key() + "|" + questDone(target);
 		if (!Objects.equals(stageNow, checklistStage))
 		{
 			// Этап сменился (или квест сдан): проверка вылета и строка «Сумка» считаются по предметам нового этапа.
@@ -649,7 +649,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		NavTarget n = navTarget;
 		StepGuide.View v = StepGuide.view(target, ItemCounts.sum(carried, noted), bank,
 			n == null ? null : n.getLabel(), n == null ? 0 : n.getX(), n == null ? 0 : n.getY(), n == null ? 0 : n.getPlane(), gotItems,
-			stage == null ? null : stageValue(stage), stage != null && questDone(target), stageCursor);
+			stage == null ? null : stageValue(stage), stage != null && questDone(target), stageTracker.cursor());
+		if (v.getStage() != null && (stageTracker.warning() != null || stageTracker.held()))
+		{
+			v = v.withStage(v.getStage().with(stageTracker.warning(), stageTracker.held()));
+		}
 		if (guideMessage != null)
 		{
 			v = v.withNote(guideMessage);
@@ -667,17 +671,18 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	// ---------- Этапы квеста ----------
 
-	/** Текущий шаг этапа (с нуля) и для какого этапа он посчитан: смена этапа или шага — отсчёт заново. */
-	private int stageCursor;
-	private String cursorKey;
+	/**
+	 * Текущий шаг этапа и всё, что его двигает: положение игрока, предметы шага (has, need), клики «сделано» и «назад».
+	 * Считается заново каждый тик (StageTracker.update) — не один раз, как раньше.
+	 */
+	private final StageTracker stageTracker = new StageTracker();
 
-	/** Сдвинуть текущий шаг этапа по положению игрока (StepGuide.advance). Поток клиента. */
+	/** Пересчитать текущий шаг этапа по положению игрока и предметам. Поток клиента. */
 	private void trackStageCursor(ActiveTarget.Stage st)
 	{
 		if (st == null)
 		{
-			cursorKey = null;
-			stageCursor = 0;
+			stageTracker.reset();
 			return;
 		}
 		Integer value = stageValue(st);
@@ -686,24 +691,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			return;
 		}
 		int idx = st.indexFor(value);
-		String key = target.getStepId() + "#" + idx;
-		boolean fresh = !key.equals(cursorKey);
-		// Этап сменился у нас на глазах: тот же шаг, прежде был другой этап.
-		boolean changed = fresh && cursorKey != null && cursorKey.startsWith(target.getStepId() + "#");
-		if (fresh)
-		{
-			cursorKey = key;
-			stageCursor = 0;
-		}
 		Player me = client.getLocalPlayer();
-		if (me != null)
+		if (me == null)
 		{
-			WorldPoint pos = me.getWorldLocation();
-			List<ActiveTarget.StageLine> lines = st.getStages().get(idx).getSteps();
-			ItemCounts bag = ItemCounts.sum(carried, noted);
-			stageCursor = StepGuide.advance(lines, stageCursor, pos.getX(), pos.getY(), pos.getPlane(), fresh ? StepGuide.freshWindow(changed, lines.size()) : StepGuide.STEP_WINDOW, bag);
-			stageCursor = StepGuide.skipDone(lines, stageCursor, bag);
+			return;
 		}
+		WorldPoint pos = me.getWorldLocation();
+		stageTracker.update(target.getStepId(), idx, st.getStages().get(idx).getSteps(), pos.getX(), pos.getY(), pos.getPlane(),
+			ItemCounts.sum(carried, noted));
 	}
 
 	/** Какой этап показан и ведёт ли к нему стрелка: ключ «шаг#этап»; смена ключа — стрелка к новому этапу. */
@@ -759,10 +754,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		int idx = st.indexFor(value);
 		List<ActiveTarget.StageLine> lines = st.getStages().get(idx).getSteps();
 		// Стрелка идёт за текущим шагом этапа, если у него есть клетка; нет — к точке этапа.
-		ActiveTarget.StageLine now = done || lines.isEmpty() ? null : lines.get(Math.max(0, Math.min(stageCursor, lines.size() - 1)));
+		int cursor = Math.max(0, Math.min(stageTracker.cursor(), lines.size() - 1));
+		ActiveTarget.StageLine now = done || lines.isEmpty() ? null : lines.get(cursor);
 		boolean byStep = now != null && now.hasPoint();
 		String stageOnly = t.getStepId() + "#" + (done ? "done" : String.valueOf(idx));
-		String key = byStep ? stageOnly + "@" + Math.max(0, Math.min(stageCursor, lines.size() - 1)) : stageOnly;
+		String key = byStep ? stageOnly + "@" + cursor : stageOnly;
 		if (key.equals(stageKey))
 		{
 			return;
@@ -814,13 +810,21 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				applyNav(null);
 				break;
 			case NEXT:
+			case PREV:
 			{
 				ActiveTarget.Stage st = stageOf(target);
 				Integer value = st == null ? null : stageValue(st);
 				if (value != null)
 				{
-					int size = st.getStages().get(st.indexFor(value)).getSteps().size();
-					stageCursor = Math.min(stageCursor + 1, size - 1);
+					List<ActiveTarget.StageLine> lines = st.getStages().get(st.indexFor(value)).getSteps();
+					if (a.getKind() == GuideList.Kind.NEXT)
+					{
+						stageTracker.next(lines, ItemCounts.sum(carried, noted));
+					}
+					else
+					{
+						stageTracker.back();
+					}
 					refreshGuide();
 				}
 				break;

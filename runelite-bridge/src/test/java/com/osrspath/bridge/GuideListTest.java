@@ -68,7 +68,7 @@ public class GuideListTest
 	{
 		List<GuideList.Row> rows = rows(witchsPotion(null, 0, 0), false);
 		assertEquals(GuideList.Kind.TOGGLE, rows.get(0).getAction().getKind());
-		assertEquals("Что нужно | ▲", text(rows.get(0)));
+		assertEquals("S2-03 · Что нужно | ▲", text(rows.get(0)));
 
 		// Чего не хватает — сверху, лук уже в сумке — вниз.
 		GuideList.Row onion = rows.get(3);
@@ -122,11 +122,11 @@ public class GuideListTest
 	{
 		List<GuideList.Row> rows = rows(witchsPotion(null, 0, 0), true);
 		assertEquals(1, rows.size());
-		assertEquals("Что нужно: нет 1 · по ходу 1 | ▼", text(rows.get(0)));
+		assertEquals("S2-03 · Что нужно: нет 1 · по ходу 1 | ▼", text(rows.get(0)));
 		assertEquals(GuideList.Action.TOGGLE, rows.get(0).getAction());
 		StepGuide.View allIn = StepGuide.view(StepGuideTest.witchsPotion(),
 			StepGuideTest.counts(1957, "Onion", 1, 221, "Eye of newt", 1, 379, "Lobster", 5), null, null, 0, 0, 0);
-		assertEquals("Что нужно: всё с собой | ▼", text(rows(allIn, true).get(0)));
+		assertEquals("S2-03 · Что нужно: всё с собой | ▼", text(rows(allIn, true).get(0)));
 	}
 
 	@Test
@@ -167,10 +167,10 @@ public class GuideListTest
 			+ "{\"x\":3159,\"y\":3426,\"plane\":1,\"label\":\"Juliet — особняк\",\"npc\":\"Juliet\"}]}}", ActiveTarget.class);
 		assertNull(t.prepare());
 		List<GuideList.Row> rows = rows(StepGuide.view(t, StepGuideTest.counts(), null, null, 0, 0, 0), false);
-		assertEquals("Куда идти | ▲", text(rows.get(0)));
+		assertEquals("S2-05 · Куда идти | ▲", text(rows.get(0)));
 		assertEquals("без второго заголовка", 3, rows.size());
 		assertEquals("► Juliet — особняк", text(rows.get(2)));
-		assertEquals("Куда идти: 2 места | ▼", text(rows(StepGuide.view(t, StepGuideTest.counts(), null, null, 0, 0, 0), true).get(0)));
+		assertEquals("S2-05 · Куда идти: 2 места | ▼", text(rows(StepGuide.view(t, StepGuideTest.counts(), null, null, 0, 0, 0), true).get(0)));
 	}
 
 	@Test

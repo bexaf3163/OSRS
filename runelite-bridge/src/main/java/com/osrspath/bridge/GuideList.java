@@ -29,6 +29,8 @@ final class GuideList
 		BACK,
 		/** Текущий шаг этапа сделан — перейти к следующему. */
 		NEXT,
+		/** Шаг этапа отмечен зря — вернуться на шаг назад. */
+		PREV,
 	}
 
 	@Value
@@ -38,6 +40,7 @@ final class GuideList
 		static final Action TOGGLE = new Action(Kind.TOGGLE, -1);
 		static final Action BACK = new Action(Kind.BACK, -1);
 		static final Action NEXT = new Action(Kind.NEXT, -1);
+		static final Action PREV = new Action(Kind.PREV, -1);
 
 		Kind kind;
 		/** Номер точки шага для PLACE. */
@@ -94,6 +97,15 @@ final class GuideList
 	{
 	}
 
+	/**
+	 * Виден ли список на экране сейчас: включён, не свёрнут (свёрнутый — одна строка, подробностей в нём нет), есть что
+	 * показать и, в умном виде, подходит момент (в пути и на бирже он закрывал бы обзор).
+	 */
+	static boolean shown(boolean enabled, boolean collapsed, StepGuide.View v, boolean smart, SmartView.Context context)
+	{
+		return enabled && !collapsed && worthShowing(v) && !(smart && !SmartView.showsGuide(context));
+	}
+
 	/** Показывать ли список: есть предметы, несколько мест, временная цель или сообщение. Иначе хватает HUD. */
 	static boolean worthShowing(StepGuide.View v)
 	{
@@ -125,9 +137,12 @@ final class GuideList
 		StepGuide.StageView stage = v.getStage();
 		boolean placesOnly = v.getItems().isEmpty() && stage == null;
 		String heading = stage != null ? stageTitle(stage) : placesOnly ? "Куда идти" : "Что нужно";
-		out.add(new Row(pair(collapsed ? summary(v) : heading, stage != null && stage.isFinished() ? StepGuide.GOOD : TITLE,
+		// Код шага — впереди: HUD с названием шага убран, а в какой ты задаче, видно должно быть всегда.
+		String code = code(v);
+		out.add(new Row(pair(code + (collapsed ? summary(v) : heading), stage != null && stage.isFinished() ? StepGuide.GOOD : TITLE,
 			collapsed ? "▼" : "▲", MUTED, fm, inner, false),
-			Action.TOGGLE, collapsed ? "Клик — развернуть: что нужно и куда идти." : "Клик — свернуть список в одну строку."));
+			Action.TOGGLE, (v.getTitle() == null ? "" : v.getTitle() + ". ")
+				+ (collapsed ? "Клик — развернуть: что нужно и куда идти." : "Клик — свернуть список в одну строку.")));
 		if (collapsed)
 		{
 			return out;
@@ -152,7 +167,9 @@ final class GuideList
 		}
 		// Длинный список (Prince Ali Rescue — 12 предметов и 8 NPC) не должен закрывать полэкрана: «где взять» и места —
 		// в одну строку, целиком — в подсказке при наведении. Чего не хватает — сверху, что уже в сумке — вниз.
-		List<StepGuide.ItemLine> items = ordered(v.getItems());
+		List<StepGuide.ItemLine> all = ordered(v.getItems());
+		// На этапе — только то, что ещё нужно: взятое и сданное («✓ готово», «✓ есть») уже не просят внимания и место занимают зря.
+		List<StepGuide.ItemLine> items = stage != null ? pending(all) : all;
 		if (stage != null && !items.isEmpty())
 		{
 			out.add(new Row(text("Нужно сейчас", MUTED, small, inner, true), Action.NONE, null));
@@ -164,20 +181,25 @@ final class GuideList
 		}
 		if (items.size() > maxItems)
 		{
-			out.add(new Row(text("… ещё " + (items.size() - maxItems) + " — в панели «OSRS Путь» справа", MUTED, small, inner, true),
-				Action.NONE, null));
+			out.add(new Row(text("… ещё " + (items.size() - maxItems), MUTED, small, inner, true), Action.NONE, "Остальное — в панели «OSRS Путь» справа."));
 		}
 		// Всё собрано — что делать дальше: последний пункт быстрого пути шага («Отдай всё Hetty…»).
 		if (v.getNext() != null)
 		{
-			out.add(new Row(text("▶ Дальше: " + v.getNext(), StepGuide.GOOD, fm, inner, true), Action.NONE, "Дальше: " + v.getNext()));
+			out.add(new Row(text("▶ Дальше: " + ShortText.of(v.getNext()), StepGuide.GOOD, fm, inner, true), Action.NONE, "Дальше: " + v.getNext()));
 		}
 		// Места, где берут предметы из списка выше, — уже кнопки в строках предметов: второй раз не показываем.
 		// Кроме первой — точки самого шага (NPC квеста): она в «Куда идти» всегда, даже если он выдаёт предмет.
 		List<StepGuide.PlaceLine> places = new ArrayList<>();
 		for (StepGuide.PlaceLine p : v.getPlaces())
 		{
-			if (p.getIndex() == 0 || !itemPlace(items, p, v.getFinale(), maxItems))
+			// Этап из нескольких шагов с клеткой: куда идти, говорит текущий шаг (стрелка уже ведёт к нему); точка этапа
+			// в целом («вход в подземелье») к концу этапа устаревает и только мешает.
+			if (leadsByStep(stage))
+			{
+				break;
+			}
+			if (p.getIndex() == 0 || !itemPlace(all, p, v.getFinale(), maxItems))
 			{
 				places.add(p);
 			}
@@ -199,8 +221,7 @@ final class GuideList
 			}
 			if (places.size() > maxPlaces)
 			{
-				out.add(new Row(text("… ещё " + (places.size() - maxPlaces) + " — в панели «OSRS Путь» справа", MUTED, small, inner, true),
-					Action.NONE, null));
+				out.add(new Row(text("… ещё " + (places.size() - maxPlaces), MUTED, small, inner, true), Action.NONE, "Остальное — в панели «OSRS Путь» справа."));
 			}
 		}
 		return out;
@@ -220,6 +241,30 @@ final class GuideList
 		for (StepGuide.ItemLine i : items)
 		{
 			if (got(i))
+			{
+				out.add(i);
+			}
+		}
+		return out;
+	}
+
+	/** Текущий шаг этапа сам говорит, куда идти: шагов несколько и у текущего есть клетка. */
+	static boolean leadsByStep(StepGuide.StageView stage)
+	{
+		if (stage == null || stage.isFinished() || stage.getSteps().size() < 2)
+		{
+			return false;
+		}
+		return stage.getSteps().get(Math.max(0, Math.min(stage.getCursor(), stage.getSteps().size() - 1))).hasPoint();
+	}
+
+	/** Предметы, которых ещё нет с собой: не взятые и не сданные. */
+	static List<StepGuide.ItemLine> pending(List<StepGuide.ItemLine> items)
+	{
+		List<StepGuide.ItemLine> out = new ArrayList<>();
+		for (StepGuide.ItemLine i : items)
+		{
+			if (!got(i))
 			{
 				out.add(i);
 			}
@@ -266,37 +311,56 @@ final class GuideList
 		return new Row(text(text, TEXT, small, OverlayText.inner(width), true), Action.NONE, null);
 	}
 
-	/** Шагов впереди текущего, которые показываются; остальные — в панели справа. */
-	static final int STAGE_AHEAD = 2;
+	/** Шагов впереди текущего, которые показываются: один — «Дальше», остальные — счётчиком; полный список — в панели справа. */
+	static final int STAGE_AHEAD = 1;
 
 	/**
-	 * Шаги этапа: сделанные — одной строкой «✓ сделано: k», текущий — ярко (клик — шаг сделан, дальше), следующие
-	 * два — обычно, остальное — счётчиком. Один шаг на этапе — просто текст.
+	 * Шаги этапа: текущий — ярко, справа «3/4» (клик — шаг сделан), под ним одной серой строкой «Дальше» (справа — сколько
+	 * ещё после него) и, если шаг не первый, «◀ Назад» — вернуться, если нажато зря. Тексты — короткие (StageLine.shown),
+	 * полный текст — в подсказке при наведении. Предупреждение («Blurite ore ещё в сумке») — янтарным сверху.
 	 */
 	static void stageRows(List<Row> out, StepGuide.StageView stage, FontMetrics fm, FontMetrics small, int inner)
 	{
 		List<ActiveTarget.StageLine> lines = stage.getSteps();
+		if (stage.getWarning() != null)
+		{
+			out.add(new Row(text("⚠ " + stage.getWarning(), StepGuide.BANK, small, inner, true), Action.NONE, stage.getWarning()));
+		}
 		if (lines.size() == 1)
 		{
-			out.add(new Row(text(lines.get(0).getT(), TEXT, fm, inner, false), Action.NONE, lines.get(0).getT()));
+			out.add(new Row(clip("", lines.get(0).shown(), TEXT, fm, inner, 2, false), Action.NONE, lines.get(0).getT()));
 			return;
 		}
-		int cur = stage.getCursor();
+		int cur = Math.max(0, Math.min(stage.getCursor(), lines.size() - 1));
+		ActiveTarget.StageLine now = lines.get(cur);
+		String count = (stage.isHeld() ? "вручную · " : "") + (cur + 1) + "/" + lines.size();
+		out.add(new Row(pair("▶ " + now.shown(), TITLE, count, MUTED, fm, inner, false), Action.NEXT,
+			now.getT() + " Клик — шаг сделан, показать следующий." + (stage.isHeld() ? " Шаг выбран вручную: сам он не перейдёт, пока не нажмёшь." : "")));
+		for (int i = cur + 1; i < Math.min(lines.size(), cur + 1 + STAGE_AHEAD); i++)
+		{
+			int after = lines.size() - i - 1;
+			String next = "Дальше: " + lines.get(i).shown();
+			List<Line> row = after > 0 ? pair(next, MUTED, "+" + after, MUTED, small, inner, true) : clip("", next, MUTED, small, inner, 1, true);
+			out.add(new Row(row, Action.NONE, lines.get(i).getT() + (after > 0 ? " Ещё шагов после него: " + after + " — в панели «OSRS Путь» справа." : "")));
+		}
 		if (cur > 0)
 		{
-			out.add(new Row(text("✓ сделано шагов: " + cur, StepGuide.GOOD, small, inner, true), Action.NONE, null));
+			ActiveTarget.StageLine prev = lines.get(cur - 1);
+			out.add(new Row(clip("", "◀ Назад: " + prev.shown(), MUTED, small, inner, 1, true), Action.PREV,
+				"Клик — вернуться на шаг назад: " + prev.getT() + " Автоматика не уйдёт вперёд, пока не нажмёшь «шаг сделан»."));
 		}
-		String now = lines.get(cur).getT();
-		out.add(new Row(text("▶ " + now, TITLE, fm, inner, false), Action.NEXT, now + " Клик — шаг сделан, показать следующий."));
-		int shown = Math.min(lines.size(), cur + 1 + STAGE_AHEAD);
-		for (int i = cur + 1; i < shown; i++)
+	}
+
+	/** «S2-07 · » из заголовка вида «[S2-07] Название»; пусто — кода нет. */
+	static String code(StepGuide.View v)
+	{
+		String t = v.getTitle();
+		if (t == null || !t.startsWith("["))
 		{
-			out.add(new Row(clip("", "• " + lines.get(i).getT(), MUTED, small, inner, 2, true), Action.NONE, lines.get(i).getT()));
+			return "";
 		}
-		if (lines.size() > shown)
-		{
-			out.add(new Row(text("… ещё шагов: " + (lines.size() - shown) + " — в панели «OSRS Путь» справа", MUTED, small, inner, true), Action.NONE, null));
-		}
+		int end = t.indexOf(']');
+		return end > 1 ? t.substring(1, end) + " · " : "";
 	}
 
 	static String stageTitle(StepGuide.StageView s)

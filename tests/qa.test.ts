@@ -63,12 +63,12 @@ describe('проверка согласованности данных', () => {
         },
         'S2-08': {
           var: ['varp', 5],
-          stages: [{ at: 0, do: [{ t: 'Поговори.' }, { t: 'Отдай Beer ему.', at: [3000, 3000, 0] }], items: [{ name: 'Beer' }] }],
+          stages: [{ at: 0, do: [{ t: 'Поговори.' }, { t: 'Отдай Beer ему.', at: [3000, 3000, 0] }, { t: 'Накопай Beer в шахте.', at: [3001, 3001, 0] }, { t: 'Последний.', s: 'Поговори. Диалог: «x»' }], items: [{ name: 'Beer' }] }],
         },
       },
     };
     const rules = qa({ ...base, questStages: bad }).map((i) => i.rule);
-    expect(rules).toEqual(expect.arrayContaining(['stages-step', 'stages-var', 'stages-order', 'stages-empty', 'text', 'stages-point', 'stages-need', 'stages-need-missing']));
+    expect(rules).toEqual(expect.arrayContaining(['stages-step', 'stages-var', 'stages-order', 'stages-empty', 'text', 'stages-point', 'stages-need', 'stages-need-missing', 'stages-has-missing', 'stages-short']));
   });
 
   it('способы прокачки: повтор, диапазон, скорость, неизвестное место и навык, чужая ссылка — ловятся', () => {

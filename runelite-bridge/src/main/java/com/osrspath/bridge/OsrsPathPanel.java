@@ -95,6 +95,10 @@ class OsrsPathPanel extends PluginPanel
 		if (stage != null)
 		{
 			header(GuideList.stageTitle(stage));
+			if (stage.getWarning() != null)
+			{
+				add(text("⚠ " + stage.getWarning(), small(), StepGuide.BANK));
+			}
 			JPanel card = card();
 			if (stage.isFinished())
 			{

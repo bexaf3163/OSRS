@@ -10,6 +10,7 @@ import { parseAmount, preflightItems } from '../lib/checklist';
 import { watchedItems } from '../lib/branching';
 import { stepMaxHit } from '../lib/foodAdvice';
 import { npcSpot, stepPlaces } from '../lib/stepPlaces';
+import { shortLine } from '../lib/shortText';
 
 export const BRIDGE_ORIGIN = 'http://127.0.0.1:38282';
 /** Заголовок, без которого плагин не принимает POST. Его ставит главный процесс Electron (electron/runelite-bridge.cjs). */
@@ -196,7 +197,7 @@ export interface StepGuidePayload {
 export interface StagePayload {
   kind: 'varp' | 'varbit';
   id: number;
-  stages: { at: number; steps: { t: string; x?: number; y?: number; plane?: number; has?: string; need?: string }[]; /** Номер точки в places. */ go?: number; items?: { name: string; nameRu?: string; id?: number; count?: number; where?: string; inStep?: boolean }[] }[];
+  stages: { at: number; steps: { t: string; s?: string; x?: number; y?: number; plane?: number; has?: string; need?: string }[]; /** Номер точки в places. */ go?: number; items?: { name: string; nameRu?: string; id?: number; count?: number; where?: string; inStep?: boolean }[] }[];
 }
 
 /** Панель RuneLite: предметы шага с «где взять» и точки — главная (NPC, старт) и места из карты шага. */
@@ -232,6 +233,12 @@ const near = (a: { x: number; y: number; plane: number }, b: { x: number; y: num
  * Этапы квеста для игры. Точка этапа (NPC по имени или явная) встаёт в places — той же строкой «Куда идти», по которой
  * стрелка и Shortest Path уже умеют вести; этап ссылается на неё номером. Неизвестный NPC — этап без точки.
  */
+/** Короткий текст строки для игры: готовый s из данных, иначе сокращение; не шлём, если он не короче полного. */
+function shortOf(l: { t: string; s?: string }): { s?: string } {
+  const short = l.s?.trim() || shortLine(l.t);
+  return short && short !== l.t ? { s: short } : {};
+}
+
 export function stagePayload(step: Step, places: StepGuidePayload['places']): StagePayload | undefined {
   const qs = step.questStages;
   if (!qs || !qs.stages.length) return undefined;
@@ -258,7 +265,7 @@ export function stagePayload(step: Step, places: StepGuidePayload['places']): St
       }
     }
     stages.push({
-      at: st.at, steps: st.do.slice(0, 40).map((l) => ({ t: l.t, ...(l.at ? { x: l.at[0], y: l.at[1], plane: l.at[2] } : {}), ...(l.has ? { has: l.has } : {}), ...(l.need ? { need: l.need } : {}) })), ...(go !== undefined ? { go } : {}),
+      at: st.at, steps: st.do.slice(0, 40).map((l) => ({ t: l.t, ...shortOf(l), ...(l.at ? { x: l.at[0], y: l.at[1], plane: l.at[2] } : {}), ...(l.has ? { has: l.has } : {}), ...(l.need ? { need: l.need } : {}) })), ...(go !== undefined ? { go } : {}),
       ...(st.items ? { items: st.items.slice(0, 12).map((i) => ({ ...i })) } : {}),
     });
   }

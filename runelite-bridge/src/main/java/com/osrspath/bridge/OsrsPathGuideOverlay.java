@@ -99,9 +99,8 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	public Dimension render(Graphics2D g)
 	{
 		StepGuide.View v = plugin.getGuideView();
-		if (!config.showGuide() || !GuideList.worthShowing(v)
-			// Умное проявление: в пути и на бирже список шага закрывал бы обзор — он нужен у банка и рядом со шагом.
-			|| (config.smartOverlays() && !SmartView.showsGuide(plugin.overlayContext())))
+		// Умное проявление: в пути и на бирже список шага закрывал бы обзор — он нужен у банка и рядом со шагом.
+		if (!GuideList.shown(config.showGuide(), false, v, config.smartOverlays(), plugin.overlayContext()))
 		{
 			hits = Hits.NONE;
 			return null;
