@@ -16,6 +16,8 @@ interface Mock {
   status?: Record<string, unknown>;
   events?: unknown[];
   localStorage?: Record<string, string>;
+  /** Цены биржи по ID предмета: подменяют ответ prices.runescape.wiki (без них сеть к вики закрыта). */
+  prices?: Record<number, number>;
 }
 
 /** Прогресс: всё до шага закрыто. */
@@ -58,6 +60,10 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
   page.on('pageerror', (e) => errors.push(String(e)));
   page.on('console', (msg) => { if (msg.type() === 'error' && !/Failed to load resource|net::/.test(msg.text())) errors.push(msg.text()); });
   await page.route(/runescape\.wiki/, (r) => r.abort());
+  if (mock.prices) {
+    const data = Object.fromEntries(Object.entries(mock.prices).map(([id, p]) => [id, { high: p, highTime: 1, low: p, lowTime: 1 }]));
+    await page.route(/prices\.runescape\.wiki\/api\/v1\/osrs\/latest/, (r) => r.fulfill({ json: { data } }));
+  }
   await page.goto(BASE + hash);
   await page.waitForTimeout(1200);
   return { page, errors };
@@ -241,6 +247,25 @@ async function run(browser: Browser) {
       expect(t.includes('Не хватает') && t.includes('Law rune'), 'быстрый вариант: нет рун — «не хватает Law rune»');
       expect((await page.locator('.branch button:has-text("Вести в игре")').count()) === 0, 'быстрый вариант: без рун не ведёт в игре телепортом');
       expect(!errors.length, `быстрый вариант: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
+    // 2.13: S2-04 — расчёт магии по ценам биржи и «как добрать деньги» под уровни игрока.
+    {
+      const prices = { 556: 6, 558: 3, 555: 6, 557: 6, 554: 6, 563: 120, 1381: 1542, 1383: 1500, 1385: 1500, 1387: 940, 1739: 125 };
+      const { page, errors } = await open(browser, width, {
+        progress: progressBefore('S2-04'), prices,
+        events: [{ type: 'STATS', stats: { magic: 10, mining: 1, attack: 5, strength: 5, defence: 5 } }, { type: 'XP', xp: { magic: 1200 } }],
+      }, '#/step/S2-04');
+      await page.waitForSelector('.magic-plan table', { timeout: 6000 });
+      const t = await text(page, '.magic-plan');
+      expect(t.includes('Только Wind Strike') && t.includes('посох огня') && t.includes('Magic 25'), 'S2-04: расчёт магии — варианты и посох огня');
+      expect(t.includes('шкур'), 'S2-04: сколько шкур окупает руны');
+      await page.locator('.money-plan summary').click();
+      const m = await text(page, '.money-plan');
+      expect(m.includes('Как добрать деньги') && m.includes('gp/ч'), 'S2-04: «Как добрать деньги» — способы с выручкой в час');
+      expect((await page.locator('.money-method').count()) > 0, 'S2-04: у блока денег есть способы');
+      expect(!errors.length, `S2-04: ошибок в консоли нет ${errors.join('; ')}`);
       await page.context().close();
     }
 

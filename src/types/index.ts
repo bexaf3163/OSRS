@@ -289,6 +289,8 @@ export interface Step {
   doneWhen: string;
   /** Шаг-заработок: сколько монет должно быть к концу шага (в сумке и банке). Прогресс — lib/wealth.ts. */
   moneyGoal?: number;
+  /** Показать расчёт «сколько стоит дойти до цели Magic боевыми заклинаниями» (S2-04). */
+  magicPlan?: { target: number };
   /** Прочие подписанные строки: «Зачем», «Важно», «Опасно», «Бой», «Требования». */
   fields?: Field[];
   targets?: Target[];
@@ -548,4 +550,39 @@ export interface ManualOwned {
   count: number;
   /** Когда игрок указал количество (ISO). */
   updatedAt: string;
+}
+
+/** Уровень, нужный (required) или советуемый для способа заработка; combat — боевой уровень, plus — «и выше». */
+export interface MoneyReq {
+  skill: string;
+  level: number;
+  required: boolean;
+  plus?: boolean;
+}
+
+/** Способ заработка из «Money making guide/Free-to-play» на вики (scripts/build-money.ts). */
+export interface MoneyMethod {
+  id: string;
+  title: string;
+  url: string;
+  /** Выручка в час по ценам биржи на дату снимка. */
+  profit: number;
+  intensity: string;
+  category: string;
+  skills: MoneyReq[];
+  quests?: string;
+  items?: string;
+  other?: string;
+  /** Слова вики о боевой подготовке («Decent and recommended…»), которые числами не выразить. */
+  skillsNote?: string;
+  /** Стартовый капитал, который вики называет явно (gp). */
+  capital?: number;
+  /** Что покупают или несут с собой, кроме монет. */
+  inputs?: string[];
+}
+
+export interface MoneyData {
+  generatedAt: string;
+  source: string;
+  methods: MoneyMethod[];
 }

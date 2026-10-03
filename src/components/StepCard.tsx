@@ -20,6 +20,8 @@ import { UpgradePrompt } from './UpgradePrompt';
 import { GearPrompt } from './GearPrompt';
 import { ReadinessPanel } from './ReadinessPanel';
 import { MoneyGoal } from './MoneyGoal';
+import { MagicPlan } from './MagicPlan';
+import { MoneyPlan } from './MoneyPlan';
 import { ItemIcon, useWiki } from './WikiDrawer';
 import { plural } from '../lib/shopping';
 import { LiveXp } from './LiveXp';
@@ -176,6 +178,8 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
       {step.warning && <div className="plaque plaque-warning" role="note"><Inline text={step.warning} /></div>}
       <ReadinessPanel step={step} />
       <MoneyGoal step={step} />
+      <MagicPlan step={step} />
+      <MoneyPlan step={step} />
       <UpgradePrompt step={step} />
       <GearPrompt step={step} />
       <StepMap step={step} />

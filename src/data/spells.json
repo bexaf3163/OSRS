@@ -1,0 +1,19 @@
+{
+  "source": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
+  "checked": "2026-10-03",
+  "note": "Уровень, опыт и руны — из карточек заклинаний вики (Infobox Spell). Заклинания одного яруса бьют одинаково, выбор не влияет на меткость.",
+  "spells": [
+    { "id": "wind-strike", "name": "Wind Strike", "level": 1, "xp": 5.5, "runes": { "air": 1, "mind": 1 }, "element": "air" },
+    { "id": "water-strike", "name": "Water Strike", "level": 5, "xp": 7.5, "runes": { "water": 1, "air": 1, "mind": 1 }, "element": "water" },
+    { "id": "earth-strike", "name": "Earth Strike", "level": 9, "xp": 9.5, "runes": { "earth": 2, "air": 1, "mind": 1 }, "element": "earth" },
+    { "id": "fire-strike", "name": "Fire Strike", "level": 13, "xp": 11.5, "runes": { "fire": 3, "air": 2, "mind": 1 }, "element": "fire" }
+  ],
+  "runeIds": { "air": 556, "mind": 558, "water": 555, "earth": 557, "fire": 554, "law": 563 },
+  "staffs": {
+    "air": { "name": "Staff of air", "nameRu": "Посох воздуха", "id": 1381 },
+    "water": { "name": "Staff of water", "nameRu": "Посох воды", "id": 1383 },
+    "earth": { "name": "Staff of earth", "nameRu": "Посох земли", "id": 1385 },
+    "fire": { "name": "Staff of fire", "nameRu": "Посох огня", "id": 1387 }
+  },
+  "cowhideId": 1739
+}

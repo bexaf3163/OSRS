@@ -12840,6 +12840,98 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Spade"
   },
   {
+    "id": 1379,
+    "nameEn": "Staff",
+    "nameRu": "Посох",
+    "examine": "It's a slightly magical stick.",
+    "members": false,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Staff.png",
+    "value": 15,
+    "highAlch": 9,
+    "lowAlch": 6,
+    "buyLocations": [
+      {
+        "shopName": "Zaff's Superior Staffs!",
+        "location": "Varrock",
+        "owner": "Zaff",
+        "price": 15,
+        "stock": 5,
+        "members": false
+      },
+      {
+        "shopName": "Filamina's Wares",
+        "location": "Arceuus",
+        "owner": "Filamina",
+        "price": 15,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Elgan's Exceptional Staffs!",
+        "location": "Prifddinas",
+        "owner": "Elgan",
+        "price": 15,
+        "stock": 5,
+        "members": true
+      },
+      {
+        "shopName": "Sebamo's Sublime Staffs",
+        "location": "Auburnvale",
+        "owner": "Sebamo",
+        "price": 15,
+        "stock": 5,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Giants' Plateau",
+      "West of Ralos' Rise (только для подписки)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Dark wizard#Low level",
+        "combatLevel": null,
+        "rate": "8/128"
+      },
+      {
+        "monster": "Wizard",
+        "combatLevel": 9,
+        "rate": "8/128"
+      },
+      {
+        "monster": "Dark wizard#High level",
+        "combatLevel": null,
+        "rate": "4/128"
+      },
+      {
+        "monster": "Barbarian#Low level",
+        "combatLevel": null,
+        "rate": "4/128"
+      },
+      {
+        "monster": "Barbarian (Barbarian Camp)#Low level",
+        "combatLevel": null,
+        "rate": "4/128"
+      },
+      {
+        "monster": "Infernal Mage",
+        "combatLevel": 66,
+        "rate": "8/128"
+      },
+      {
+        "monster": "Necromancer",
+        "combatLevel": 26,
+        "rate": "8/128"
+      },
+      {
+        "monster": "Malevolent Mage",
+        "combatLevel": 162,
+        "rate": "8/128"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Staff"
+  },
+  {
     "id": 1381,
     "nameEn": "Staff of air",
     "nameRu": "Посох воздуха",

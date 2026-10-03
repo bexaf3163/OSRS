@@ -1,0 +1,1776 @@
+{
+ "generatedAt": "2026-10-03",
+ "source": "https://oldschool.runescape.wiki/w/Money_making_guide/Free-to-play",
+ "methods": [
+  {
+   "id": "smithing-rune-items-player-to-player-trading",
+   "title": "Smithing rune items (Player-to-player trading)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smithing_rune_items_(Player-to-player_trading)",
+   "profit": 1093000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "smithing",
+     "level": 99,
+     "required": true
+    }
+   ],
+   "items": "* Hammer * + coins * Smiths' Uniform (optional)",
+   "capital": 30000000,
+   "inputs": [
+    "Runite bar"
+   ]
+  },
+  {
+   "id": "selling-archery-supplies",
+   "title": "Selling archery supplies",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Selling_archery_supplies",
+   "profit": 758000,
+   "intensity": "Moderate",
+   "category": "Collecting",
+   "skills": [],
+   "items": "+ recommended",
+   "capital": 100000,
+   "inputs": [
+    "Mithril arrow",
+    "Adamant arrow",
+    "Oak longbow",
+    "Willow shortbow",
+    "Willow longbow",
+    "Maple shortbow",
+    "Maple longbow"
+   ]
+  },
+  {
+   "id": "smelting-runite-bars-superheat-item",
+   "title": "Smelting runite bars (Superheat Item)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_runite_bars_(Superheat_Item)",
+   "profit": 618000,
+   "intensity": "Moderate",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "smithing",
+     "level": 85,
+     "required": true
+    },
+    {
+     "skill": "magic",
+     "level": 43,
+     "required": true
+    }
+   ],
+   "items": "Staff of fire",
+   "inputs": [
+    "Runite ore",
+    "Coal",
+    "Nature rune"
+   ],
+   "other": "Starting bankroll to buy materials (recommended ~), (Optional: Dwarven Stout if you are only Smithing 84)"
+  },
+  {
+   "id": "smelting-adamantite-bars-superheat-item",
+   "title": "Smelting adamantite bars (Superheat Item)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_adamantite_bars_(Superheat_Item)",
+   "profit": 580000,
+   "intensity": "Moderate",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "smithing",
+     "level": 70,
+     "required": true
+    },
+    {
+     "skill": "magic",
+     "level": 43,
+     "required": true
+    }
+   ],
+   "items": "Staff of fire",
+   "inputs": [
+    "Adamantite ore",
+    "Coal",
+    "Nature rune"
+   ],
+   "other": "Starting bankroll to buy materials (recommended ~)"
+  },
+  {
+   "id": "smithing-rune-items",
+   "title": "Smithing rune items",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smithing_rune_items",
+   "profit": 539000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "smithing",
+     "level": 99,
+     "required": true
+    }
+   ],
+   "items": "* Hammer * coins * Recommended: * Smiths' Uniform",
+   "capital": 30000000,
+   "inputs": [
+    "Runite bar"
+   ]
+  },
+  {
+   "id": "high-alching-profitable-free-to-play-items",
+   "title": "High alching profitable free-to-play items",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/High_alching_profitable_free-to-play_items",
+   "profit": 473000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "magic",
+     "level": 55,
+     "required": true
+    }
+   ],
+   "items": "* Staff of fire * coins (recommended)",
+   "capital": 20000000,
+   "inputs": [
+    "Nature rune"
+   ]
+  },
+  {
+   "id": "mining-runite-ore-free-to-play",
+   "title": "Mining runite ore (free-to-play)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_runite_ore_(free-to-play)",
+   "profit": 398000,
+   "intensity": "Moderate",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "mining",
+     "level": 85,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "attack",
+     "level": 40,
+     "required": false
+    },
+    {
+     "skill": "defence",
+     "level": 40,
+     "required": false,
+     "plus": true
+    },
+    {
+     "skill": "magic",
+     "level": 25,
+     "required": false
+    }
+   ],
+   "items": "Rune pickaxe, Rune armour (optional), Runes for teleportation spells, Bladed weapon for cutting maze webs",
+   "other": "Anchovy pizza or Swordfish"
+  },
+  {
+   "id": "stringing-amulets",
+   "title": "Stringing amulets",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stringing_amulets",
+   "profit": 363000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "crafting",
+     "level": 1,
+     "required": true
+    }
+   ],
+   "items": "(recommended)",
+   "inputs": [
+    "Ball of wool"
+   ]
+  },
+  {
+   "id": "tanning-cowhide",
+   "title": "Tanning cowhide",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Tanning_cowhide",
+   "profit": 333000,
+   "intensity": "Low",
+   "category": "Processing",
+   "skills": [],
+   "items": "* + * Weight-reducing clothing * Energy potions (optional) * Cowhides",
+   "capital": 400000,
+   "inputs": [
+    "Cowhide",
+    "Energy potion(4)"
+   ]
+  },
+  {
+   "id": "crafting-diamond-jewellery",
+   "title": "Crafting diamond jewellery",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_diamond_jewellery",
+   "profit": 281000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "crafting",
+     "level": 56,
+     "required": true
+    }
+   ],
+   "inputs": [
+    "Gold bar",
+    "Diamond"
+   ]
+  },
+  {
+   "id": "smelting-runite-bars",
+   "title": "Smelting runite bars",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_runite_bars",
+   "profit": 269000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "smithing",
+     "level": 85,
+     "required": true
+    }
+   ],
+   "items": "Coal, runite ore, energy potion (optional)",
+   "inputs": [
+    "Runite ore",
+    "Coal"
+   ]
+  },
+  {
+   "id": "crafting-ruby-jewellery",
+   "title": "Crafting ruby jewellery",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_ruby_jewellery",
+   "profit": 263000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "crafting",
+     "level": 50,
+     "required": true
+    }
+   ],
+   "inputs": [
+    "Gold bar",
+    "Ruby"
+   ]
+  },
+  {
+   "id": "collecting-anti-dragon-shields-free-to-play",
+   "title": "Collecting anti-dragon shields (free-to-play)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_anti-dragon_shields_(free-to-play)",
+   "profit": 256000,
+   "intensity": "Moderate",
+   "category": "Collecting",
+   "skills": [],
+   "quests": "Dragon Slayer I",
+   "items": "+ recommended",
+   "capital": 30000,
+   "inputs": [
+    "Energy potion(4)"
+   ]
+  },
+  {
+   "id": "collecting-steel-platebodies-high-alchemy",
+   "title": "Collecting steel platebodies (High Alchemy)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_steel_platebodies_(High_Alchemy)",
+   "profit": 256000,
+   "intensity": "Moderate",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "magic",
+     "level": 55,
+     "required": true
+    },
+    {
+     "skill": "prayer",
+     "level": 43,
+     "required": false
+    }
+   ],
+   "skillsNote": "55 for High Level Alchemy Decent and 43 + recommended for Protect from Melee",
+   "items": "* Staff of fire and nature runes for High Level Alchemy * Armour (optional) * Knife or a slash weapon (required to cut the web) * Food to survive attacks from hostile NPCs and PKers * Law and air runes to teleport to Varrock * Energy potions",
+   "inputs": [
+    "Nature rune"
+   ]
+  },
+  {
+   "id": "grinding-chocolate-bars",
+   "title": "Grinding chocolate bars",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Grinding_chocolate_bars",
+   "profit": 252000,
+   "intensity": "Moderate",
+   "category": "Processing",
+   "skills": [],
+   "items": "+ recommended, Pestle and mortar or a knife",
+   "inputs": [
+    "Chocolate bar"
+   ]
+  },
+  {
+   "id": "crafting-emerald-jewellery",
+   "title": "Crafting emerald jewellery",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_emerald_jewellery",
+   "profit": 250000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "crafting",
+     "level": 29,
+     "required": true
+    }
+   ],
+   "inputs": [
+    "Gold bar",
+    "Emerald"
+   ]
+  },
+  {
+   "id": "buying-feather-packs",
+   "title": "Buying feather packs",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_feather_packs",
+   "profit": 236000,
+   "intensity": "Low",
+   "category": "Collecting",
+   "skills": [],
+   "items": "recommended",
+   "capital": 550000
+  },
+  {
+   "id": "buying-jug-packs",
+   "title": "Buying jug packs",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_jug_packs",
+   "profit": 232000,
+   "intensity": "Low",
+   "category": "Collecting",
+   "skills": [],
+   "items": "recommended",
+   "capital": 300000
+  },
+  {
+   "id": "casting-bones-to-bananas",
+   "title": "Casting Bones to Bananas",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Casting_Bones_to_Bananas",
+   "profit": 232000,
+   "intensity": "High",
+   "category": "Processing",
+   "skills": [
+    {
+     "skill": "magic",
+     "level": 15,
+     "required": true
+    }
+   ],
+   "items": "Mud battlestaff, Water staff (F2P)",
+   "inputs": [
+    "Bones",
+    "Nature rune"
+   ]
+  },
+  {
+   "id": "making-pie-shells",
+   "title": "Making pie shells",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_pie_shells",
+   "profit": 230000,
+   "intensity": "Low",
+   "category": "Processing",
+   "skills": [],
+   "items": "+",
+   "capital": 100000,
+   "inputs": [
+    "Pastry dough",
+    "Pie dish"
+   ]
+  },
+  {
+   "id": "crafting-sapphire-jewellery",
+   "title": "Crafting sapphire jewellery",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_sapphire_jewellery",
+   "profit": 228000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "crafting",
+     "level": 22,
+     "required": true
+    }
+   ],
+   "inputs": [
+    "Gold bar",
+    "Sapphire"
+   ]
+  },
+  {
+   "id": "collecting-steel-platebodies",
+   "title": "Collecting steel platebodies",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_steel_platebodies",
+   "profit": 225000,
+   "intensity": "Moderate",
+   "category": "Collecting",
+   "skills": [
+    {
+     "skill": "prayer",
+     "level": 43,
+     "required": false
+    },
+    {
+     "skill": "magic",
+     "level": 25,
+     "required": true
+    }
+   ],
+   "skillsNote": "Decent and recommended 43 recommended for Protect from Melee 25 for Varrock Teleport",
+   "items": "* Armour (optional) * Knife or a slash weapon (required to cut the web) * Food to survive attacks from hostile NPCs and PKers * Law and air runes to teleport to Varrock * Energy potions",
+   "inputs": [
+    "Fire rune",
+    "Law rune"
+   ]
+  },
+  {
+   "id": "collecting-ruby-rings",
+   "title": "Collecting ruby rings",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_ruby_rings",
+   "profit": 221000,
+   "intensity": "Moderate",
+   "category": "Collecting",
+   "skills": [],
+   "items": "Ruby Ring",
+   "other": "Completed steps to obtain the Robes of Ruin."
+  },
+  {
+   "id": "collecting-bronze-pickaxes",
+   "title": "Collecting bronze pickaxes",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_bronze_pickaxes",
+   "profit": 208000,
+   "intensity": "High",
+   "category": "Collecting",
+   "skills": [],
+   "quests": "Below Ice Mountain",
+   "items": "Bronze pickaxe"
+  },
+  {
+   "id": "making-pastry-dough",
+   "title": "Making pastry dough",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_pastry_dough",
+   "profit": 202000,
+   "intensity": "Moderate",
+   "category": "Processing",
+   "skills": [],
+   "items": "+ recommended",
+   "capital": 100000,
+   "inputs": [
+    "Pot of flour"
+   ]
+  },
+  {
+   "id": "buying-team-capes",
+   "title": "Buying team capes",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_team_capes",
+   "profit": 200000,
+   "intensity": "Low",
+   "category": "Collecting",
+   "skills": [],
+   "items": "+ recommended",
+   "capital": 25000,
+   "inputs": [
+    "Energy potion(4)"
+   ]
+  },
+  {
+   "id": "collecting-nature-runes",
+   "title": "Collecting nature runes",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_nature_runes",
+   "profit": 185000,
+   "intensity": "Moderate",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "prayer",
+     "level": 43,
+     "required": false
+    },
+    {
+     "skill": "magic",
+     "level": 33,
+     "required": true
+    }
+   ],
+   "skillsNote": "Decent and recommended 43 recommended for protection prayers 33 required to cast Telekinetic Grab",
+   "items": "* Staff of air and law runes to cast Telekinetic Grab * Fire runes to teleport to Varrock * Food to survive attacks from the lesser demons and PKers",
+   "inputs": [
+    "Law rune"
+   ],
+   "other": "This guide assumes that you are getting both spawns before hopping worlds. Some decent armour that provides some defence bonus."
+  },
+  {
+   "id": "collecting-cosmic-runes",
+   "title": "Collecting cosmic runes",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_cosmic_runes",
+   "profit": 180000,
+   "intensity": "Moderate",
+   "category": "Collecting",
+   "skills": [
+    {
+     "skill": "prayer",
+     "level": 43,
+     "required": false
+    }
+   ],
+   "skillsNote": "Decent and recommended 43 recommended for protection prayers",
+   "items": "* Armour (optional) * Water, law, and air runes for Falador Teleport * Food to survive attacks from the icy creatures and PKers * Energy potions"
+  },
+  {
+   "id": "collecting-tinderboxes",
+   "title": "Collecting tinderboxes",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_tinderboxes",
+   "profit": 180000,
+   "intensity": "High",
+   "category": "Collecting",
+   "skills": []
+  },
+  {
+   "id": "smelting-steel-bars",
+   "title": "Smelting steel bars",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_steel_bars",
+   "profit": 170000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "smithing",
+     "level": 30,
+     "required": true,
+     "plus": true
+    }
+   ],
+   "items": "Coal, iron ore, energy potion (optional)",
+   "inputs": [
+    "Iron ore",
+    "Coal"
+   ]
+  },
+  {
+   "id": "cooking-plain-pizzas",
+   "title": "Cooking plain pizzas",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_plain_pizzas",
+   "profit": 165000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "cooking",
+     "level": 35,
+     "required": false
+    }
+   ],
+   "items": "+",
+   "inputs": [
+    "Pizza base",
+    "Tomato",
+    "Cheese"
+   ]
+  },
+  {
+   "id": "collecting-chaos-runes",
+   "title": "Collecting chaos runes",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_chaos_runes",
+   "profit": 153000,
+   "intensity": "Moderate",
+   "category": "Collecting",
+   "skills": [
+    {
+     "skill": "magic",
+     "level": 25,
+     "required": true
+    }
+   ],
+   "skillsNote": "Decent recommended 25 to teleport to Varrock",
+   "items": "* Armour (optional) * Food to survive attacks from hostile NPCs and PKers * Law and air runes to teleport to Varrock * Energy potions"
+  },
+  {
+   "id": "killing-ogress-shamans",
+   "title": "Killing ogress shamans",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_ogress_shamans",
+   "profit": 150000,
+   "intensity": "Moderate",
+   "category": "Combat/High",
+   "skills": [
+    {
+     "skill": "ranged",
+     "level": 40,
+     "required": false
+    }
+   ],
+   "quests": "The Corsair Curse, Dragon Slayer I",
+   "items": "Coif, cape, leather boots, amulet of power, green d'hide armour (body, chaps, and vambraces), rune scimitar, 3-5x strength potion (4), chisel (optional)",
+   "inputs": [
+    "Lobster",
+    "Nature rune",
+    "Fire rune"
+   ],
+   "other": "Magic 55 for High Level Alchemy (optional)"
+  },
+  {
+   "id": "crafting-gold-jewellery",
+   "title": "Crafting gold jewellery",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Crafting_gold_jewellery",
+   "profit": 143000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "crafting",
+     "level": 6,
+     "required": true
+    }
+   ],
+   "inputs": [
+    "Gold bar"
+   ]
+  },
+  {
+   "id": "making-uncooked-apple-pies",
+   "title": "Making uncooked apple pies",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_uncooked_apple_pies",
+   "profit": 135000,
+   "intensity": "Low",
+   "category": "Processing",
+   "skills": [
+    {
+     "skill": "cooking",
+     "level": 30,
+     "required": true
+    }
+   ],
+   "items": "+",
+   "capital": 400000,
+   "inputs": [
+    "Pie shell",
+    "Cooking apple"
+   ]
+  },
+  {
+   "id": "collecting-monk-s-robes",
+   "title": "Collecting monk's robes",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_monk's_robes",
+   "profit": 130000,
+   "intensity": "Low",
+   "category": "Collecting",
+   "skills": [
+    {
+     "skill": "prayer",
+     "level": 31,
+     "required": true
+    }
+   ]
+  },
+  {
+   "id": "cutting-yew-logs-free-to-play",
+   "title": "Cutting yew logs (free-to-play)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cutting_yew_logs_(free-to-play)",
+   "profit": 127000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "woodcutting",
+     "level": 60,
+     "required": true
+    }
+   ],
+   "items": "Rune axe"
+  },
+  {
+   "id": "collecting-fish-food",
+   "title": "Collecting fish food",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_fish_food",
+   "profit": 120000,
+   "intensity": "Moderate",
+   "category": "Collecting",
+   "skills": []
+  },
+  {
+   "id": "making-dyes",
+   "title": "Making dyes",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_dyes",
+   "profit": 109000,
+   "intensity": "High",
+   "category": "Processing",
+   "skills": [],
+   "items": "+ recommended",
+   "capital": 50000,
+   "inputs": [
+    "Energy potion(4)"
+   ]
+  },
+  {
+   "id": "making-uncooked-berry-pies",
+   "title": "Making uncooked berry pies",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_uncooked_berry_pies",
+   "profit": 108000,
+   "intensity": "Low",
+   "category": "Processing",
+   "skills": [
+    {
+     "skill": "cooking",
+     "level": 10,
+     "required": true
+    }
+   ],
+   "items": "+",
+   "capital": 400000,
+   "inputs": [
+    "Pie shell",
+    "Redberries"
+   ]
+  },
+  {
+   "id": "making-anchovy-pizzas",
+   "title": "Making anchovy pizzas",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_anchovy_pizzas",
+   "profit": 105000,
+   "intensity": "Moderate",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "cooking",
+     "level": 55,
+     "required": true
+    }
+   ],
+   "items": "+ recommended",
+   "inputs": [
+    "Plain pizza",
+    "Anchovies"
+   ]
+  },
+  {
+   "id": "smelting-iron-bars",
+   "title": "Smelting iron bars",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_iron_bars",
+   "profit": 102000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "smithing",
+     "level": 15,
+     "required": true
+    }
+   ],
+   "items": "* Ring of forging * Iron ore * Varrock armour (optional but gives 10% chance of smelting two bars at once)",
+   "inputs": [
+    "Iron ore",
+    "Ring of forging"
+   ]
+  },
+  {
+   "id": "making-pizza-bases",
+   "title": "Making pizza bases",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_pizza_bases",
+   "profit": 91000,
+   "intensity": "High",
+   "category": "Processing",
+   "skills": [],
+   "items": "+",
+   "capital": 100000,
+   "inputs": [
+    "Jug of water",
+    "Pot of flour"
+   ]
+  },
+  {
+   "id": "killing-ogress-warriors",
+   "title": "Killing ogress warriors",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_ogress_warriors",
+   "profit": 91000,
+   "intensity": "Low",
+   "category": "Combat/Mid",
+   "skills": [
+    {
+     "skill": "ranged",
+     "level": 40,
+     "required": false
+    }
+   ],
+   "quests": "Start The Corsair Curse",
+   "items": "Coif, Amulet of power, Green d'hide body, Green d'hide chaps, Green d'hide vambraces, Maple Shortbow / Maple Longbow",
+   "inputs": [
+    "Iron arrow"
+   ],
+   "other": "Magic 55 for High Level Alchemy (Optional)"
+  },
+  {
+   "id": "mining-coal-and-superheating-runite-bars",
+   "title": "Mining coal and superheating Runite bars",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_coal_and_superheating_Runite_bars",
+   "profit": 90000,
+   "intensity": "Moderate",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "mining",
+     "level": 30,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "mining",
+     "level": 60,
+     "required": false,
+     "plus": true
+    },
+    {
+     "skill": "smithing",
+     "level": 85,
+     "required": true
+    },
+    {
+     "skill": "magic",
+     "level": 43,
+     "required": true
+    }
+   ],
+   "items": "* Rune pickaxe * Staff of Fire",
+   "inputs": [
+    "Runite ore",
+    "Nature rune"
+   ]
+  },
+  {
+   "id": "buying-ale-from-the-rising-sun-inn",
+   "title": "Buying ale from the Rising Sun Inn",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_ale_from_the_Rising_Sun_Inn",
+   "profit": 87000,
+   "intensity": "High",
+   "category": "Collecting",
+   "skills": [],
+   "items": "+",
+   "capital": 1000
+  },
+  {
+   "id": "collecting-and-tanning-cowhide",
+   "title": "Collecting and tanning cowhide",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_and_tanning_cowhide",
+   "profit": 85000,
+   "intensity": "Low",
+   "category": "Collecting",
+   "skills": [],
+   "quests": "Prince Ali Rescue strongly recommended",
+   "items": "* Amulet of glory and/or Ring of dueling (recommended) * Weight-reducing clothing (recommended) * (Super) energy or Stamina potions (recommended)"
+  },
+  {
+   "id": "collecting-wine-of-zamorak-free-to-play",
+   "title": "Collecting wine of zamorak (free-to-play)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_wine_of_zamorak_(free-to-play)",
+   "profit": 84000,
+   "intensity": "Low",
+   "category": "Collecting",
+   "skills": [
+    {
+     "skill": "magic",
+     "level": 37,
+     "required": true
+    }
+   ],
+   "items": "* Staff of air * Zamorak monk top * Zamorak monk bottom",
+   "inputs": [
+    "Law rune",
+    "Water rune"
+   ],
+   "other": "At least 500 total level (in free-to-play skills)"
+  },
+  {
+   "id": "making-chocolate-cake",
+   "title": "Making chocolate cake",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_chocolate_cake",
+   "profit": 80000,
+   "intensity": "Moderate",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "cooking",
+     "level": 50,
+     "required": true
+    }
+   ],
+   "items": "+ recommended",
+   "capital": 100000,
+   "inputs": [
+    "Cake",
+    "Chocolate bar"
+   ]
+  },
+  {
+   "id": "killing-cows-and-tanning-cowhide",
+   "title": "Killing cows and tanning cowhide",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_cows_and_tanning_cowhide",
+   "profit": 74000,
+   "intensity": "Low",
+   "category": "Combat/Low",
+   "skills": [
+    {
+     "skill": "combat",
+     "level": 20,
+     "required": false,
+     "plus": true
+    }
+   ],
+   "quests": "Prince Ali Rescue and The Ides of Milk strongly recommended",
+   "items": "Mithril equipment or better, Cowbell amulet"
+  },
+  {
+   "id": "mining-coal-and-superheating-adamantite-bars",
+   "title": "Mining coal and superheating Adamantite bars",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_coal_and_superheating_Adamantite_bars",
+   "profit": 69000,
+   "intensity": "Moderate",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "mining",
+     "level": 30,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "mining",
+     "level": 60,
+     "required": false,
+     "plus": true
+    },
+    {
+     "skill": "smithing",
+     "level": 70,
+     "required": true
+    },
+    {
+     "skill": "magic",
+     "level": 43,
+     "required": true
+    }
+   ],
+   "items": "* Rune pickaxe * Staff of Fire",
+   "inputs": [
+    "Adamantite ore",
+    "Nature rune"
+   ]
+  },
+  {
+   "id": "blessing-unblessed-symbols",
+   "title": "Blessing unblessed symbols",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Blessing_unblessed_symbols",
+   "profit": 67000,
+   "intensity": "Low",
+   "category": "Processing",
+   "skills": [
+    {
+     "skill": "prayer",
+     "level": 31,
+     "required": true,
+     "plus": true
+    }
+   ],
+   "items": "+ recommended",
+   "capital": 10000,
+   "inputs": [
+    "Unblessed symbol"
+   ]
+  },
+  {
+   "id": "mining-adamantite-ore-free-to-play",
+   "title": "Mining adamantite ore (free-to-play)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_adamantite_ore_(free-to-play)",
+   "profit": 67000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "mining",
+     "level": 70,
+     "required": true,
+     "plus": true
+    }
+   ],
+   "items": "* Rune pickaxe",
+   "other": "Access to the Mining Guild (below Falador)"
+  },
+  {
+   "id": "killing-chaos-dwarves",
+   "title": "Killing chaos dwarves",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_chaos_dwarves",
+   "profit": 66000,
+   "intensity": "Low",
+   "category": "Combat/Mid",
+   "skills": [
+    {
+     "skill": "combat",
+     "level": 60,
+     "required": false,
+     "plus": true
+    }
+   ],
+   "items": "Emergency teleport, armour, a weapon",
+   "inputs": [
+    "Swordfish"
+   ]
+  },
+  {
+   "id": "killing-hill-giants",
+   "title": "Killing hill giants",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_hill_giants",
+   "profit": 66000,
+   "intensity": "Moderate",
+   "category": "Combat/Low",
+   "skills": [
+    {
+     "skill": "attack",
+     "level": 30,
+     "required": false,
+     "plus": true
+    },
+    {
+     "skill": "strength",
+     "level": 30,
+     "required": false,
+     "plus": true
+    },
+    {
+     "skill": "defence",
+     "level": 30,
+     "required": false,
+     "plus": true
+    }
+   ],
+   "items": "Brass key, melee armour and a weapon (adamant or better), amulet of strength",
+   "inputs": [
+    "Tuna"
+   ]
+  },
+  {
+   "id": "collecting-big-bones-from-the-bone-yard",
+   "title": "Collecting big bones from the Bone Yard",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_big_bones_from_the_Bone_Yard",
+   "profit": 66000,
+   "intensity": "Moderate",
+   "category": "Collecting",
+   "skills": [
+    {
+     "skill": "prayer",
+     "level": 25,
+     "required": false
+    }
+   ],
+   "skillsNote": "Decent and recommended 25 recommended for Protect Item",
+   "items": "* Adamant armour (helm, platebody and legs/skirt) or better * Amulet of glory and Games necklace (or an Air staff with 6 law and 6 fire runes to cast Varrock Teleport) * Looting bag * (Super) Energy potion or Stamina potion (optional)",
+   "inputs": [
+    "Law rune",
+    "Fire rune"
+   ],
+   "other": "Magic 25 recommended for Varrock Teleport (optional)"
+  },
+  {
+   "id": "smelting-silver-bars",
+   "title": "Smelting silver bars",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_silver_bars",
+   "profit": 65000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "smithing",
+     "level": 20,
+     "required": true
+    }
+   ],
+   "items": "+",
+   "inputs": [
+    "Silver ore"
+   ]
+  },
+  {
+   "id": "collecting-air-talismans",
+   "title": "Collecting air talismans",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_air_talismans",
+   "profit": 64000,
+   "intensity": "Moderate",
+   "category": "Collecting",
+   "skills": [],
+   "quests": "Do not do Rune Mysteries past the point you talk to Duke Horacio at the beginning."
+  },
+  {
+   "id": "catching-sardines-herring",
+   "title": "Catching sardines & herring",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_sardines_&_herring",
+   "profit": 62000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "fishing",
+     "level": 10,
+     "required": false
+    },
+    {
+     "skill": "combat",
+     "level": 15,
+     "required": false,
+     "plus": true
+    }
+   ],
+   "items": "Fishing rod",
+   "inputs": [
+    "Fishing bait"
+   ]
+  },
+  {
+   "id": "collecting-red-spiders-eggs-free-to-play",
+   "title": "Collecting red spiders' eggs (free-to-play)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_red_spiders'_eggs_(free-to-play)",
+   "profit": 59000,
+   "intensity": "Moderate",
+   "category": "Collecting",
+   "skills": [
+    {
+     "skill": "combat",
+     "level": 69,
+     "required": false,
+     "plus": true
+    }
+   ],
+   "items": "Staff of air",
+   "inputs": [
+    "Law rune",
+    "Fire rune",
+    "Energy potion(4)"
+   ]
+  },
+  {
+   "id": "killing-imps",
+   "title": "Killing imps",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_imps",
+   "profit": 58000,
+   "intensity": "Low",
+   "category": "Combat/Low",
+   "skills": [
+    {
+     "skill": "combat",
+     "level": 30,
+     "required": false,
+     "plus": true
+    }
+   ],
+   "items": "A weapon"
+  },
+  {
+   "id": "mining-coal-and-superheating-mithril-bars",
+   "title": "Mining coal and superheating Mithril bars",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_coal_and_superheating_Mithril_bars",
+   "profit": 57000,
+   "intensity": "Moderate",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "mining",
+     "level": 30,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "mining",
+     "level": 60,
+     "required": false,
+     "plus": true
+    },
+    {
+     "skill": "smithing",
+     "level": 50,
+     "required": true
+    },
+    {
+     "skill": "magic",
+     "level": 43,
+     "required": true
+    }
+   ],
+   "items": "* Rune pickaxe * Staff of Fire",
+   "inputs": [
+    "Mithril ore",
+    "Nature rune"
+   ]
+  },
+  {
+   "id": "buying-kebabs-in-al-kharid",
+   "title": "Buying kebabs in Al Kharid",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_kebabs_in_Al_Kharid",
+   "profit": 56000,
+   "intensity": "High",
+   "category": "Collecting",
+   "skills": [],
+   "items": "+",
+   "capital": 1000
+  },
+  {
+   "id": "making-dough-at-cooks-guild",
+   "title": "Making dough at Cooks' Guild",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_dough_at_Cooks'_Guild",
+   "profit": 55000,
+   "intensity": "High",
+   "category": "Processing",
+   "skills": [
+    {
+     "skill": "cooking",
+     "level": 32,
+     "required": true
+    }
+   ],
+   "items": "* Chef's hat * Pot * Jug"
+  },
+  {
+   "id": "firecycling",
+   "title": "Firecycling",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Firecycling",
+   "profit": 55000,
+   "intensity": "Moderate",
+   "category": "Collecting",
+   "skills": []
+  },
+  {
+   "id": "mining-clay",
+   "title": "Mining clay",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_clay",
+   "profit": 54000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [],
+   "items": "Rune pickaxe or lower",
+   "inputs": [
+    "Teleport card"
+   ]
+  },
+  {
+   "id": "cutting-oak-logs",
+   "title": "Cutting oak logs",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cutting_oak_logs",
+   "profit": 51000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "woodcutting",
+     "level": 15,
+     "required": false
+    }
+   ],
+   "items": "Steel axe (Rune axe or higher recommended)"
+  },
+  {
+   "id": "collecting-spades",
+   "title": "Collecting spades",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_spades",
+   "profit": 50000,
+   "intensity": "Moderate",
+   "category": "Collecting",
+   "skills": []
+  },
+  {
+   "id": "killing-bryophyta-free-to-play",
+   "title": "Killing Bryophyta (free-to-play)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_Bryophyta_(free-to-play)",
+   "profit": 50000,
+   "intensity": "Moderate",
+   "category": "Combat/Mid",
+   "skills": [
+    {
+     "skill": "attack",
+     "level": 50,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "strength",
+     "level": 50,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "defence",
+     "level": 50,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "prayer",
+     "level": 43,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "woodcutting",
+     "level": 57,
+     "required": true,
+     "plus": true
+    }
+   ],
+   "items": "Bronze axe or better, Full rune (rune chainbody, rune platelegs, rune kiteshield), Cheap armour for in wilderness (leather chaps, leather cowl, black sq shield), Rune scimitar, Amulet of power, red cape, leather boots, leather gloves.",
+   "inputs": [
+    "Swordfish",
+    "Strength potion(4)"
+   ]
+  },
+  {
+   "id": "killing-monkeys",
+   "title": "Killing monkeys",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_monkeys",
+   "profit": 49000,
+   "intensity": "Low",
+   "category": "Combat/Low",
+   "skills": [
+    {
+     "skill": "combat",
+     "level": 5,
+     "required": false,
+     "plus": true
+    }
+   ],
+   "items": "Combat equipment, coins"
+  },
+  {
+   "id": "collecting-iron-ore",
+   "title": "Collecting iron ore",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_iron_ore",
+   "profit": 44000,
+   "intensity": "Low",
+   "category": "Collecting",
+   "skills": [],
+   "other": "Prince Ali Rescue for free players coming to and from Lumbridge"
+  },
+  {
+   "id": "mining-iron-ore-free-to-play",
+   "title": "Mining iron ore (free-to-play)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_iron_ore_(free-to-play)",
+   "profit": 41000,
+   "intensity": "High",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "mining",
+     "level": 15,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "combat",
+     "level": 13,
+     "required": false,
+     "plus": true
+    }
+   ],
+   "items": "Rune pickaxe"
+  },
+  {
+   "id": "mining-iron-and-superheating-iron-bars",
+   "title": "Mining iron and superheating Iron bars",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_iron_and_superheating_Iron_bars",
+   "profit": 38000,
+   "intensity": "High",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "mining",
+     "level": 15,
+     "required": false,
+     "plus": true
+    },
+    {
+     "skill": "smithing",
+     "level": 15,
+     "required": true
+    },
+    {
+     "skill": "magic",
+     "level": 43,
+     "required": true
+    }
+   ],
+   "items": "* Rune pickaxe * Staff of Fire",
+   "inputs": [
+    "Nature rune"
+   ]
+  },
+  {
+   "id": "making-uncooked-meat-pies",
+   "title": "Making uncooked meat pies",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_uncooked_meat_pies",
+   "profit": 34000,
+   "intensity": "Low",
+   "category": "Processing",
+   "skills": [
+    {
+     "skill": "cooking",
+     "level": 20,
+     "required": true
+    }
+   ],
+   "items": "+",
+   "capital": 400000,
+   "inputs": [
+    "Pie shell",
+    "Cooked meat"
+   ]
+  },
+  {
+   "id": "stealing-wydin-s-bananas",
+   "title": "Stealing Wydin's bananas",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Stealing_Wydin's_bananas",
+   "profit": 34000,
+   "intensity": "High",
+   "category": "Collecting",
+   "skills": [],
+   "quests": "Pirate's Treasure",
+   "items": "White apron"
+  },
+  {
+   "id": "filling-water-containers",
+   "title": "Filling water containers",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Filling_water_containers",
+   "profit": 34000,
+   "intensity": "Low",
+   "category": "Processing",
+   "skills": [],
+   "items": "+",
+   "inputs": [
+    "Jug"
+   ]
+  },
+  {
+   "id": "mining-coal-free-to-play",
+   "title": "Mining coal (free-to-play)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_coal_(free-to-play)",
+   "profit": 32000,
+   "intensity": "Moderate",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "mining",
+     "level": 35,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "mining",
+     "level": 41,
+     "required": false,
+     "plus": true
+    }
+   ],
+   "items": "* Rune pickaxe"
+  },
+  {
+   "id": "killing-elemental-wizards",
+   "title": "Killing elemental wizards",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_elemental_wizards",
+   "profit": 32000,
+   "intensity": "Low",
+   "category": "Combat/Low",
+   "skills": [
+    {
+     "skill": "combat",
+     "level": 31,
+     "required": false,
+     "plus": true
+    },
+    {
+     "skill": "ranged",
+     "level": 30,
+     "required": false,
+     "plus": true
+    }
+   ],
+   "items": "Any shortbow, green dragonhide armour, amulet of power",
+   "inputs": [
+    "Mithril arrow",
+    "Jug of wine"
+   ]
+  },
+  {
+   "id": "killing-ankou-free-to-play",
+   "title": "Killing ankou (free-to-play)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_ankou_(free-to-play)",
+   "profit": 31000,
+   "intensity": "Moderate",
+   "category": "Combat/Mid",
+   "skills": [
+    {
+     "skill": "combat",
+     "level": 60,
+     "required": false,
+     "plus": true
+    },
+    {
+     "skill": "attack",
+     "level": 60,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "strength",
+     "level": 60,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "defence",
+     "level": 60,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "prayer",
+     "level": 43,
+     "required": false,
+     "plus": true
+    },
+    {
+     "skill": "magic",
+     "level": 60,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "ranged",
+     "level": 60,
+     "required": true,
+     "plus": true
+    }
+   ],
+   "items": "* Rune armour (chainbody, platelegs/skirt) for melee * Green d'hide armour for Ranged * Boots, leather gloves or green d'hide vambraces and any cape * Amulet of power * Chisel (to cut left skull halves into bone fragments",
+   "inputs": [
+    "Tuna"
+   ]
+  },
+  {
+   "id": "cooking-raw-chicken",
+   "title": "Cooking raw chicken",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cooking_raw_chicken",
+   "profit": 30000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "cooking",
+     "level": 1,
+     "required": false
+    }
+   ],
+   "items": "* + recommended",
+   "capital": 10000,
+   "inputs": [
+    "Raw chicken"
+   ]
+  },
+  {
+   "id": "collecting-ashes",
+   "title": "Collecting ashes",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_ashes",
+   "profit": 28000,
+   "intensity": "Low",
+   "category": "Collecting",
+   "skills": [
+    {
+     "skill": "firemaking",
+     "level": 30,
+     "required": false
+    }
+   ],
+   "items": "* Tinderbox * Maple logs (recommended) or * Willow logs",
+   "inputs": [
+    "Maple logs"
+   ]
+  },
+  {
+   "id": "killing-wizards",
+   "title": "Killing wizards",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_wizards",
+   "profit": 27000,
+   "intensity": "Low",
+   "category": "Combat/Low",
+   "skills": [
+    {
+     "skill": "combat",
+     "level": 20,
+     "required": false,
+     "plus": true
+    }
+   ],
+   "items": "Equipment with high magic defence such as studded or green dragonhide armour",
+   "inputs": [
+    "Trout"
+   ]
+  },
+  {
+   "id": "catching-lobsters",
+   "title": "Catching lobsters",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_lobsters",
+   "profit": 26000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "fishing",
+     "level": 40,
+     "required": false,
+     "plus": true
+    }
+   ],
+   "items": "Lobster pot, per trip back and forth if fishing at Musa Point",
+   "capital": 60,
+   "other": "Fishing 68 (or Fishing 63 with Admiral pie) for Fishing Guild (optional)"
+  },
+  {
+   "id": "killing-zamorak-monks",
+   "title": "Killing Zamorak monks",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_Zamorak_monks",
+   "profit": 24000,
+   "intensity": "Moderate",
+   "category": "Combat/Low",
+   "skills": [
+    {
+     "skill": "ranged",
+     "level": 40,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "defence",
+     "level": 20,
+     "required": true,
+     "plus": true
+    },
+    {
+     "skill": "magic",
+     "level": 37,
+     "required": false
+    }
+   ],
+   "quests": "Dragon Slayer I to use dhide body (optional)",
+   "items": "Green dragonhide armour, Studded body if Dragon Slayer I is not completed, Food (Optional), Law rune, Air runes, and Water runes, for Falador Teleport (optional)",
+   "inputs": [
+    "Iron arrow"
+   ]
+  },
+  {
+   "id": "making-flour",
+   "title": "Making flour",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_flour",
+   "profit": 24000,
+   "intensity": "Low",
+   "category": "Processing",
+   "skills": [
+    {
+     "skill": "cooking",
+     "level": 32,
+     "required": false
+    }
+   ],
+   "items": "* Chronicle * Chef's hat",
+   "inputs": [
+    "Pot",
+    "Grain"
+   ]
+  },
+  {
+   "id": "catching-tuna-swordfish-free-to-play",
+   "title": "Catching tuna & swordfish (free-to-play)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_tuna_&_swordfish_(free-to-play)",
+   "profit": 21000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "fishing",
+     "level": 50,
+     "required": false,
+     "plus": true
+    }
+   ],
+   "quests": "None, Pirate's Treasure recommended",
+   "items": "* Harpoon * ~ for ferry",
+   "capital": 480
+  },
+  {
+   "id": "killing-bears",
+   "title": "Killing bears",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_bears",
+   "profit": 20000,
+   "intensity": "Moderate",
+   "category": "Combat/Mid",
+   "skills": [
+    {
+     "skill": "combat",
+     "level": 30,
+     "required": false,
+     "plus": true
+    }
+   ],
+   "items": "Combat equipment"
+  },
+  {
+   "id": "taking-from-the-infinite-money-bag-while-picking-up-coin-spawns-in-varrock-west-bank",
+   "title": "Taking from the infinite money bag while picking up coin spawns in Varrock West bank",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Taking_from_the_infinite_money_bag_while_picking_up_coin_spawns_in_Varrock_West_bank",
+   "profit": 19000,
+   "intensity": "High",
+   "category": "Collecting",
+   "skills": [],
+   "quests": "Crack the Clue III",
+   "items": "Infinite money bag"
+  },
+  {
+   "id": "collecting-beer-glasses",
+   "title": "Collecting beer glasses",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_beer_glasses",
+   "profit": 19000,
+   "intensity": "Low",
+   "category": "Collecting",
+   "skills": []
+  },
+  {
+   "id": "collecting-garlic",
+   "title": "Collecting garlic",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_garlic",
+   "profit": 17000,
+   "intensity": "Moderate",
+   "category": "Collecting",
+   "skills": []
+  },
+  {
+   "id": "catching-lobsters-free-to-play",
+   "title": "Catching lobsters (free-to-play)",
+   "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_lobsters_(free-to-play)",
+   "profit": 17000,
+   "intensity": "Low",
+   "category": "Skilling",
+   "skills": [
+    {
+     "skill": "fishing",
+     "level": 40,
+     "required": true,
+     "plus": true
+    }
+   ],
+   "quests": "The Corsair Curse, Dragon Slayer I",
+   "items": "Lobster pot"
+  }
+ ]
+}

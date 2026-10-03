@@ -214,3 +214,10 @@ describe('кеш мест в localStorage', () => {
     expect(Object.keys(pruneStore(data, 2)).sort()).toEqual(['b', 'd']);
   });
 });
+
+describe('cleanWikiText: неразрывный пробел вики', () => {
+  it('«1st floor[UK]2nd floor[US]» с U+00A0 приводится к «1st floor (2-й этаж)»', () => {
+    expect(cleanWikiText('1st floor[UK]2nd floor[US] of Champions\' Guild')).toBe("1st floor (2-й этаж) of Champions' Guild");
+    expect(cleanWikiText('Grand Tree, 2nd&#160;floor&#91;UK&#93;3rd&#160;floor&#91;US&#93;')).toBe('Grand Tree, 2nd floor (3-й этаж)');
+  });
+});

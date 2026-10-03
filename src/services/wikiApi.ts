@@ -58,6 +58,8 @@ const US_FLOOR: Record<string, string> = { Ground: '1', '1st': '2', '2nd': '3', 
 export function cleanWikiText(s: string): string {
   return s
     .replace(/&(#\d+|[a-z]+);/gi, (m, e: string) => ENTITIES[e.toLowerCase()] ?? m)
+    // Вики иногда отдаёт неразрывный пробел (U+00A0 или &#160;): без замены «floor[UK]» не узнавался.
+    .replace(/&#160;|\u00a0/g, ' ')
     .replace(/\b(Ground|\d+(?:st|nd|rd|th)) floor\[UK\](?:Ground|\d+(?:st|nd|rd|th)) floor\[US\]/g,
       (_m, uk: string) => `${uk} floor (${US_FLOOR[uk] ?? '?'}-й этаж)`)
     .replace(/\{\{FloorNumber\|(?:[^}]*?\|)?uk=(\d)[^}]*\}\}/gi, (_m, n: string) => UK_FLOOR[n] ?? `${n} floor`)

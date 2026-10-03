@@ -1403,3 +1403,10 @@ th .place-link { font-weight: inherit; }
 .profile.is-active { border-color: var(--accent); }
 .profile-actions { display: flex; flex-wrap: wrap; gap: 6px; }
 .diag { width: 100%; margin-top: 8px; font: 0.8rem/1.4 ui-monospace, Consolas, monospace; resize: vertical; }
+
+/* 2.13: расчёт магии и «как добрать деньги» */
+.magic-plan, .money-plan { margin-top: 12px; }
+.money-plan > summary { cursor: pointer; }
+.money-list { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; }
+.money-method { padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); }
+.money-method p { margin: 0; }

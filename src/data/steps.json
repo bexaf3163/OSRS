@@ -631,7 +631,16 @@
         "type": "QUEST_COMPLETED",
         "questName": "Misthalin Mystery"
       }
-    }
+    },
+    "quickSteps": [
+      "Поговори с Abigale на юго-востоке болота Lumbridge Swamp, согласись помочь: «What has happened here?» → «What do you want me to do?».",
+      "Поплыви на лодке (rowboat) южнее. Ведро (bucket) возьми у фонтана к западу, если его нет.",
+      "Иди к западной стороне особняка и вылей ведро (Use) на бочку с дождевой водой — на дне лежит ключ от особняка (manor key). Открой им двери.",
+      "Загадка 1: возьми нож (knife) со стола, прочти записку у двери с розовой ручкой, в юго-западной комнате разрежь ножом картину с мрачной долиной на восточной стене — в ней рубиновый ключ (ruby key). В юго-восточной комнате возьми огниво (tinderbox) с полок, зажги четыре свечи, затем бочку с запалом и выйди из комнаты — прогремит взрыв.",
+      "Загадка 2: войди в юго-восточную комнату, перелезь через пролом в стене, иди на север и на запад и нажми «observe» на дерево напротив Lacey. Ответ убийцы любой. Прочти записку, на пианино в северо-восточном углу особняка сыграй D-E-A-D и осмотри пианино — изумрудный ключ (emerald key).",
+      "Загадка 3: вернись через пролом, открой дверь с зелёной ручкой севернее входа, попробуй открыть западную дверь (там Bandos godsword) и прочти записку. В комнате севернее юго-восточной разрежь ножом незажжённый камин, осмотри его и введи камни по порядку: Sapphire, Diamond, Zenyte, Emerald, Onyx, Ruby. Осмотри камин ещё раз — сапфировый ключ (sapphire key).",
+      "Финал: открой западную дверь с синей ручкой в комнате, где резал картину. Убийца прячется в шкафах и бросает ножи: шкаф, где он, на миг темнеет — поверни зеркало к нему до броска и повторяй до ролика. Возьми нож убийцы (killer's knife), держи его в руке и атакуй Abigale, выйди из комнаты и поговори с Mandy снаружи — квест пройден."
+    ]
   },
   {
     "id": "S1-08",
@@ -1813,31 +1822,31 @@
     "title": "Магия до 25 уровня (Varrock Teleport)",
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Varrock_Teleport",
-    "how": "После Imp Catcher и Witch's Potion у тебя около 10-го уровня магии. Бей монстров заклинаниями по порядку: Earth Strike (9), с 13 уровня — Fire Strike. Лучшие цели — коровы и гоблины: они не опасны и не убегают. Опыт идёт и в магию, и в здоровье.",
+    "how": "После Imp Catcher (875 опыта) и Witch's Potion (325) у тебя Magic 10 без единого заклинания. Дальше — боевые заклинания-удары по коровам в Lumbridge: у коровы 8 здоровья, а шкура падает с каждой, так что опыт идёт вместе с деньгами. Заклинания одного яруса бьют одинаково и одинаково метко — отличаются опытом и рунами: Wind Strike (Magic 1) — 5,5 опыта, Water Strike (5) — 7,5, Earth Strike (9) — 9,5, Fire Strike (13) — 11,5. Опыт идёт и в магию, и в здоровье.",
     "itemsRecommended": [
       {
         "nameEn": "Staff of fire",
         "nameRu": "Посох огня",
         "amount": 1,
-        "howToGet": "Заменяет руны огня — главная экономия на Fire Strike. ≈ 900 gp на бирже.",
+        "howToGet": "Вместо обычного Staff: заменяет руны огня на Fire Strike (3 руны на удар). В Zaff's Superior Staffs ≈ 1 500 gp, на бирже ≈ 940 gp. Окупается — см. расчёт ниже.",
         "wikiItemId": 1387,
         "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
       },
       {
-        "nameEn": "Air rune",
-        "nameRu": "Руна воздуха",
-        "amount": 1300,
-        "howToGet": "2 руны на заклинание, ≈ 6 gp.",
-        "wikiItemId": 556,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+        "nameEn": "Earth rune",
+        "nameRu": "Руна земли",
+        "amount": "100+",
+        "howToGet": "Earth Strike (Magic 9–12) тратит 2 руны земли на удар. Если пойдёшь сразу на Fire Strike — не нужна.",
+        "wikiItemId": 557,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Earth_rune.png"
       },
       {
-        "nameEn": "Mind rune",
-        "nameRu": "Руна разума",
-        "amount": 650,
-        "howToGet": "1 руна на заклинание, ≈ 3 gp.",
-        "wikiItemId": 558,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Mind_rune.png"
+        "nameEn": "Fire rune",
+        "nameRu": "Руна огня",
+        "amount": "300+",
+        "howToGet": "Fire Strike (с Magic 13) тратит 3 руны огня на удар — если нет посоха огня.",
+        "wikiItemId": 554,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Fire_rune.png"
       }
     ],
     "fields": [
@@ -1847,14 +1856,17 @@
       },
       {
         "label": "Бюджет",
-        "text": "Fire Strike стоит 3 руны огня, 2 воздуха и 1 разума (≈ 30 gp). С посохом огня (Staff of fire) руны огня не нужны — ≈ 15 gp за заклинание. От 10 до 25 уровня — около 500–650 заклинаний, то есть 8–10 тысяч gp."
+        "text": "Точный расчёт — в блоке «Сколько стоит дойти до Magic 25» ниже: он берёт твой опыт из игры и цены биржи. Дороже всего Fire Strike без посоха — 3 руны огня, 2 воздуха и 1 разума на удар."
+      },
+      {
+        "label": "Если не хватает денег",
+        "text": "Начни с того, что есть: пара сотен рун и обычный Staff стоят меньше 1 500 gp. Шкуры с коров, на которых ты тренируешься, возвращают траты: на бирже шкура ≈ 120 gp. Дальше — блок «Как добрать деньги» ниже с советами под твои уровни."
       }
     ],
     "doneWhen": "Magic 25.",
     "inGame": {
       "npcNames": [
-        "Cow",
-        "Goblin"
+        "Cow"
       ],
       "completionTrigger": {
         "type": "SKILL_LEVEL",
@@ -1864,7 +1876,84 @@
             "level": 25
           }
         ]
+      },
+      "highlightItems": [
+        "Cowhide"
+      ]
+    },
+    "mapLocation": {
+      "x": 3257,
+      "y": 3272,
+      "plane": 0,
+      "label": "Коровье поле к востоку от Lumbridge"
+    },
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3257,3272,0",
+    "resourceSpots": [
+      {
+        "x": 3257,
+        "y": 3272,
+        "plane": 0,
+        "label": "Коровье поле — бей коров, шкуры падают с каждой",
+        "npc": "Cow"
+      },
+      {
+        "x": 3253,
+        "y": 3402,
+        "plane": 0,
+        "label": "Aubury's Rune Shop — руны Air и Mind",
+        "items": [
+          "Air rune",
+          "Mind rune"
+        ],
+        "npc": "Aubury"
+      },
+      {
+        "x": 3203,
+        "y": 3434,
+        "plane": 0,
+        "label": "Zaff's Superior Staffs — посох",
+        "items": [
+          "Staff"
+        ],
+        "npc": "Zaff"
       }
+    ],
+    "itemsRequired": [
+      {
+        "nameEn": "Staff",
+        "nameRu": "Посох",
+        "amount": 1,
+        "howToGet": "Купи у Zaff в Zaff's Superior Staffs (Varrock) за ≈ 15 gp — с посохом заклинание ставится на автоповтор. Staff of fire (ниже) годится вместо него.",
+        "wikiItemId": 1379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Staff.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "nameRu": "Руна воздуха",
+        "amount": "300+",
+        "howToGet": "Нужна на каждый удар (1–2 штуки). В Aubury's Rune Shop (Varrock) стоит 4 gp, на бирже ≈ 6 gp. На старт — 300, потом докупишь на шкурах.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      },
+      {
+        "nameEn": "Mind rune",
+        "nameRu": "Руна разума",
+        "amount": "300+",
+        "howToGet": "Нужна на каждый удар (1 штука). В Aubury's Rune Shop — 3 gp. На старт — 300.",
+        "wikiItemId": 558,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mind_rune.png"
+      }
+    ],
+    "quickSteps": [
+      "Купи руны Air и Mind в Aubury's Rune Shop в Varrock (на старт по 300): в магазине они по 4 и 3 gp, на бирже Air ≈ 6 gp.",
+      "Купи посох у Zaff в Zaff's Superior Staffs (Varrock): обычный Staff — ≈ 15 gp, этого хватит для автоповтора заклинания. Staff of fire дороже, но заменяет руны огня.",
+      "Надень посох, открой вкладку боя (Combat Options), нажми кнопку заклинания и выбери автозаклинание: сначала Wind Strike.",
+      "Иди на коровье поле у Lumbridge и бей коров: у каждой 8 здоровья, а шкура (Cowhide) падает всегда. Подбирай шкуры, полный инвентарь — на банк или на биржу.",
+      "Меняй автозаклинание по уровню: Magic 5 — Water Strike, 9 — Earth Strike, 13 — Fire Strike. Fire Strike даёт больше всего опыта за удар.",
+      "Продолжай до Magic 25 — откроется Varrock Teleport. Руны докупай на выручку от шкур."
+    ],
+    "magicPlan": {
+      "target": 25
     }
   },
   {
@@ -3470,7 +3559,14 @@
         "type": "QUEST_COMPLETED",
         "questName": "Shield of Arrav"
       }
-    }
+    },
+    "quickSteps": [
+      "Поговори с Reldo в библиотеке дворца Varrock: «I'm in search of a quest.». Найди книгу на верхней полке книжного шкафа с ярко-синей книгой и прочти её, затем снова поговори с Reldo.",
+      "Выбери банду: Phoenix Gang или Black Arm Gang. Твой напарник берёт другую, так что договорись заранее (чат-канал «osrs soa»). Обе половины щита собираются у двоих.",
+      "Phoenix Gang: спроси у меховщика Baraek на площади Varrock, где найти Phoenix Gang (заплати 20 монет). Иди в убежище в юго-восточной части города — дом с лестницей в подвал, к западу от алтаря Mage of Zamorak. Поговори со Straven («I know who you are!» → «I'd like to offer you my services.»), убей Jonny the beard в таверне Blue Moon Inn и принеси Straven Intel report. Открой сундук в юго-западном углу убежища — половина щита. Передай напарнику ключ (Weapon store key).",
+      "Black Arm Gang: поговори с Charlie the Tramp у южного входа в Varrock, зайди в переулок на запад и в штаб Black Arm Gang, поговори с Katrine («I want to become a member of your gang.»). Возьми у напарника ключ (Weapon store key), открой им дверь в юго-восточном углу города (рядом с зданием с Chaos Altar) и поднимись по лестнице. Убей Weaponsmaster или возьми Telekinetic Grab двух Phoenix crossbow, отнеси оба арбалета Katrine. Наверху штаба открой шкаф южнее лестницы — вторая половина щита.",
+      "Отнеси свою половину щита куратору Haig Halen в музее Varrock, обменяйся с напарником половинками сертификата, соедини обе (Use друг на друга) и отдай сертификат королю Roald в замке — квест пройден."
+    ]
   },
   {
     "id": "S3-06",
@@ -3927,7 +4023,16 @@
         "type": "QUEST_COMPLETED",
         "questName": "The Ides of Milk"
       }
-    }
+    },
+    "quickSteps": [
+      "Поговори с Cassius у пруда в Lumbridge, к югу от мельницы: «Yes.».",
+      "Поговори с Gillie Groats на коровьем поле Lumbridge, у входа: «Can you share what makes your cows so productive?».",
+      "Поговори с Seth Groats в доме у курятника, к северо-западу от коровьего поля, и осмотри полки (Search) на южной стене — книга «The groats principles».",
+      "Верни книгу Cassius, получишь молочную пробу (milk sample): выпей её при нём и поговори снова — он даст вторую пробу для Duke Horacio.",
+      "Поговори с Duke Horacio наверху замка Lumbridge про разрешение, затем вернись к Gillie Groats и выпей пробу, когда попросит.",
+      "Открой ворота северо-восточнее Gillie и победи быка (Brutus). Обычные удары в квесте тебя не убьют, а особые — до 19, молитвой не блокируются. Когда он «snorts» — отойди на две клетки в сторону или на одну назад, когда «growls» — на две клетки в сторону. Бери еду, например 5 лососей.",
+      "Поговори с Gillie Groats про быка и вернись к Cassius — квест пройден. Потом ещё раз зайди к Gillie Groats за остальными наградами."
+    ]
   },
   {
     "id": "S4-03",
@@ -4415,7 +4520,13 @@
           }
         ]
       }
-    }
+    },
+    "quickSteps": [
+      "Поговори с Guildmaster в Champions' Guild: «Can I have a quest?».",
+      "Иди к Oziach в Edgeville: «Can you sell me a rune platebody?» → «The Guildmaster of the Champions' Guild told me.» → «I thought you were going to give me a quest.» → «A dragon, that sounds like fun.».",
+      "Вернись к Guildmaster и спроси про всё по очереди: «How can I find the route to Crandor?», «Where is Melzar's map piece?» (так получишь Maze key), «Where is Thalzar's map piece?», «Where is Lozar's map piece?», «Where can I find the right ship?», «How can I protect myself from the dragon's breath?».",
+      "Ключ от лабиринта (Maze key) у тебя — шаг закончен; дальше собирай три куска карты и щит."
+    ]
   },
   {
     "id": "S5-02",
@@ -4467,7 +4578,11 @@
           }
         ]
       }
-    }
+    },
+    "quickSteps": [
+      "Иди в замок Lumbridge к Duke Horacio на втором этаже (1-й этаж по нумерации вики): «I seek a shield that will protect me from dragonbreath.» → «Elvarg, the dragon of Crandor island!» → «Yes» → «So, are you going to give me the shield or not?».",
+      "Забери Anti-dragon shield. Если потерял — Oziach в Edgeville продаёт такие же (после начала Dragon Slayer I)."
+    ]
   },
   {
     "id": "S5-03",
@@ -4667,7 +4782,12 @@
           }
         ]
       }
-    }
+    },
+    "quickSteps": [
+      "Поговори с Guildmaster, если ещё не спрашивал про кусок карты Lozar: «Where is Lozar's map piece?».",
+      "Иди в тюрьму Port Sarim к Wormbrain. Убей его заклинанием (Wind Strike или Fire Strike), стрелой или алебардой и притяни выпавший кусок карты заклинанием Telekinetic Grab (Magic 33) — платить ему 10 000 монет не нужно.",
+      "Когда все три куска у тебя, соедини их (Use друг на друга) — получится Crandor map."
+    ]
   },
   {
     "id": "S5-06",
@@ -4788,7 +4908,11 @@
       "highlightItems": [
         "Crandor map"
       ]
-    }
+    },
+    "quickSteps": [
+      "Убедись, что в сумке Crandor map (все три куска соединены).",
+      "Иди в Draynor Village к Ned: «You're a sailor? Could you take me to Crandor?» — он согласится вести корабль."
+    ]
   },
   {
     "id": "S5-08",
