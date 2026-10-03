@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import lombok.Value;
 
 /**
@@ -25,6 +26,8 @@ final class StepGuide
 		UNKNOWN,
 		/** Добывается по ходу шага, заранее брать не нужно. */
 		IN_STEP,
+		/** Уже было в сумке в этом шаге, а теперь нет — отдали, съели или использовали. Снова искать не надо. */
+		DONE,
 	}
 
 	static final Color GOOD = new Color(90, 220, 120);
@@ -76,10 +79,14 @@ final class StepGuide
 		String detour;
 		/** Сообщение вместо шага: «шаг не выбран», «навигация выключена»… */
 		String note;
+		/** Что делать дальше, когда всё нужное уже собрано (последний пункт быстрого пути шага); null — рано. */
+		String next;
+		/** Последний пункт быстрого пути шага — всегда (с кем закончить); null — пунктов нет. */
+		String finale;
 	}
 
 	static final View EMPTY = new View(null, null, Collections.emptyList(), Collections.emptyList(), null,
-		"Шаг не выбран. В программе «OSRS Путь» нажми «Показать в игре» у шага — здесь появится, что нужно и куда идти.");
+		"Шаг не выбран. В программе «OSRS Путь» нажми «Показать в игре» у шага — здесь появится, что нужно и куда идти.", null, null);
 
 	private StepGuide()
 	{
@@ -90,6 +97,7 @@ final class StepGuide
 		switch (h)
 		{
 			case BAG:
+			case DONE:
 				return GOOD;
 			case BANK:
 				return BANK;
@@ -108,6 +116,15 @@ final class StepGuide
 	 */
 	static View view(ActiveTarget t, ItemCounts carried, ItemCounts bank, String navLabel, int navX, int navY, int navPlane)
 	{
+		return view(t, carried, bank, navLabel, navX, navY, navPlane, null);
+	}
+
+	/**
+	 * got — предметы шага, которые уже побывали в сумке (ключи nameKey). Они пополняются здесь же: то, что взяли и потом
+	 * отдали (Hetty, котёл, лавка), в списке остаётся отмеченным, а не просится в сумку заново. null — без памяти.
+	 */
+	static View view(ActiveTarget t, ItemCounts carried, ItemCounts bank, String navLabel, int navX, int navY, int navPlane, Set<String> got)
+	{
 		if (t == null)
 		{
 			return EMPTY;
@@ -119,7 +136,7 @@ final class StepGuide
 		{
 			for (ActiveTarget.GuideItem i : g.getItems())
 			{
-				items.add(item(i, places, carried, bank));
+				items.add(remembered(item(i, places, carried, bank), i.getName(), got));
 			}
 		}
 		List<PlaceLine> placeLines = new ArrayList<>();
@@ -132,7 +149,52 @@ final class StepGuide
 		}
 		String title = "[" + t.getStepId() + "] " + (t.getTitle() == null ? "" : t.getTitle());
 		String note = g == null ? "Программа старше плагина: списка «что нужно» от неё не пришло. Обнови программу «OSRS Путь»." : null;
-		return new View(title, t.getGoal(), items, placeLines, navLabel, note);
+		return new View(title, t.getGoal(), items, placeLines, navLabel, note, next(g, items), finale(g));
+	}
+
+	/**
+	 * Взято ли уже: в сумке — запоминаем; было, а теперь нет — «готово». Добываемое по ходу шага (IN_STEP) тоже помнится,
+	 * но только когда оно действительно побывало в сумке.
+	 */
+	private static ItemLine remembered(ItemLine l, String rawName, Set<String> got)
+	{
+		if (got == null)
+		{
+			return l;
+		}
+		String key = ActiveTarget.nameKey(rawName);
+		if (l.getHave() == Have.BAG)
+		{
+			got.add(key);
+			return l;
+		}
+		if (got.contains(key))
+		{
+			return new ItemLine(l.getTitle(), "✓ уже было — отдано или использовано", Have.DONE, l.getWhere(), l.getPlace(), l.getName(), l.getRu(), "готово");
+		}
+		return l;
+	}
+
+	private static String finale(ActiveTarget.Guide g)
+	{
+		return g == null || g.getSteps() == null || g.getSteps().isEmpty() ? null : g.getSteps().get(g.getSteps().size() - 1);
+	}
+
+	/** Последний пункт быстрого пути шага, когда всё нужное уже собрано; иначе null — списка предметов достаточно. */
+	private static String next(ActiveTarget.Guide g, List<ItemLine> items)
+	{
+		if (g == null || g.getSteps() == null || g.getSteps().isEmpty() || items.isEmpty())
+		{
+			return null;
+		}
+		for (ItemLine i : items)
+		{
+			if (i.getHave() != Have.BAG && i.getHave() != Have.DONE)
+			{
+				return null;
+			}
+		}
+		return g.getSteps().get(g.getSteps().size() - 1);
 	}
 
 	static ItemLine item(ActiveTarget.GuideItem i, List<ActiveTarget.GuidePlace> places, ItemCounts carried, ItemCounts bank)

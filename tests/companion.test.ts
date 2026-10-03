@@ -266,3 +266,54 @@ describe('что уходит в плагин', () => {
     expect(p?.checklist).toEqual([{ name: 'Rope', id: undefined, count: 1, heals: undefined }]);
   });
 });
+
+describe('быстрый вариант проверяет, что нужное есть при себе (руны Varrock Teleport)', () => {
+  const real = stepsFor('f2p').find((s) => s.id === 'S2-05')!;
+  const ctx = (o: OwnedState | null): BranchContext => ({ stats: { magic: 25 }, progress: progress(), steps: [], owned: o });
+  const runes = (law: number, air: number, fire: number, bankSeen = true) => owned(bankSeen, [
+    { name: 'Law rune', carried: law }, { name: 'Air rune', carried: air }, { name: 'Fire rune', carried: fire },
+    { name: 'Staff of air' }, { name: 'Staff of fire' },
+  ]);
+
+  it('в данных: у каждого Varrock Teleport есть руны, у каноэ — топор', () => {
+    const all = stepsFor('members').concat(stepsFor('f2p'));
+    const tele = all.flatMap((s) => (s.branches ?? []).filter((b) => b.id === 'varrock-teleport'));
+    expect(tele.length).toBeGreaterThanOrEqual(5);
+    for (const b of tele) expect(b.needs?.map((n) => n.label)).toEqual(['Law rune', 'Air rune', 'Fire rune']);
+    const canoe = all.flatMap((s) => (s.branches ?? []).filter((b) => b.id.startsWith('canoe')));
+    for (const b of canoe) expect(b.needs?.[0].label).toBe('любой топор');
+  });
+
+  it('Magic 25, но рун нет и банк открывали — не хватает, точно', () => {
+    const r = evaluateBranches(real, ctx(runes(0, 0, 0)))[0];
+    expect(r.status).toBe('available');
+    expect(r.missing).toEqual([
+      { label: 'Law rune', have: 0, need: 1, certain: true },
+      { label: 'Air rune', have: 0, need: 3, certain: true },
+      { label: 'Fire rune', have: 0, need: 1, certain: true },
+    ]);
+  });
+
+  it('банк не открывали — «возможно в банке», не точно', () => {
+    const r = evaluateBranches(real, ctx(runes(0, 3, 1, false)))[0];
+    expect(r.missing).toEqual([{ label: 'Law rune', have: 0, need: 1, certain: false }]);
+  });
+
+  it('руны есть — предупреждения нет; посох воздуха заменяет руны воздуха', () => {
+    expect(evaluateBranches(real, ctx(runes(1, 3, 1)))[0].missing).toBeUndefined();
+    const staff = owned(true, [{ name: 'Law rune', carried: 1 }, { name: 'Air rune' }, { name: 'Fire rune', carried: 1 }, { name: 'Staff of air', carried: 1 }]);
+    expect(evaluateBranches(real, ctx(staff))[0].missing).toBeUndefined();
+  });
+
+  it('без моста предметы не придумываем: вариант доступен без отметки «не хватает»', () => {
+    const r = evaluateBranches(real, ctx(null))[0];
+    expect(r.status).toBe('available');
+    expect(r.missing).toBeUndefined();
+  });
+
+  it('плагину уходят и руны, и посохи — чтобы он их посчитал', () => {
+    const w = watchedItems(real);
+    expect(w).toEqual(expect.arrayContaining(['Law rune', 'Air rune', 'Fire rune', 'Staff of air']));
+    expect(toInGameTarget(real)!.watchItems).toEqual(w);
+  });
+});

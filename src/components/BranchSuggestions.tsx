@@ -32,7 +32,16 @@ export function BranchSuggestions({ step }: { step: Step }) {
           {branch.timeSavingSeconds ? <span className="badge badge-qp">экономия {formatSaving(branch.timeSavingSeconds)}</span> : null}
         </p>
         {branch.replacementText && <p className="branch-text"><Inline text={branch.replacementText} /></p>}
-        {kind === 'available' && enabled && branch.replacementTarget && (
+        {r.missing?.length ? (
+          <p className="branch-missing small" role="note">
+            {r.missing.every((m) => m.certain)
+              ? <>⚠ Не хватает: {r.missing.map((m) => `${m.label} (есть ${m.have} из ${m.need})`).join(', ')}. Возьми или купи, пока вариант не сработает.</>
+              : <>⚠ В сумке не вижу: {r.missing.map((m) => `${m.label} (${m.have} из ${m.need})`).join(', ')}. Может лежать в банке — открой банк, и я проверю.</>}
+          </p>
+        ) : branch.needs?.length ? (
+          <p className="muted small">Нужно с собой: {branch.needs.map((n) => `${n.label}${n.count > 1 ? ` ×${n.count}` : ''}`).join(', ')}.</p>
+        ) : null}
+        {kind === 'available' && enabled && branch.replacementTarget && !r.missing?.some((m) => m.certain) && (
           <button type="button" className={`btn btn-sm ${isChosen ? 'btn-ingame-active' : ''}`}
             onClick={() => chooseBranch(step, isChosen ? null : branch.id)} aria-pressed={isChosen}>
             {isChosen ? '✓ В игре ведёт этот вариант — вернуть обычный' : '🧭 Вести в игре этим путём'}

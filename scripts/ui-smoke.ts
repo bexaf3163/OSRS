@@ -230,6 +230,20 @@ async function run(browser: Browser) {
       await ok.page.context().close();
     }
 
+    // 2.12.1: Magic 25 есть, а рун нет — быстрый Varrock Teleport не выдаётся за готовый, а говорит, чего не хватает.
+    {
+      const { page, errors } = await open(browser, width, {
+        progress: progressBefore('S2-05'),
+        events: [{ type: 'STATS', stats: { magic: 25 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Law rune', carried: 0, noted: 0, bank: 0 }, { name: 'Air rune', carried: 0, noted: 0, bank: 0 }] }],
+      }, '#/step/S2-05');
+      await page.waitForSelector('.branch-missing', { timeout: 5000 });
+      const t = await text(page, '.branch-missing');
+      expect(t.includes('Не хватает') && t.includes('Law rune'), 'быстрый вариант: нет рун — «не хватает Law rune»');
+      expect((await page.locator('.branch button:has-text("Вести в игре")').count()) === 0, 'быстрый вариант: без рун не ведёт в игре телепортом');
+      expect(!errors.length, `быстрый вариант: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
     // Квест с NPC: на карте шага — точки NPC и откуда предметы, как в списке в игре.
     {
       const { page, errors } = await open(browser, width, { progress: progressBefore('S2-10') }, '#/step/S2-10');

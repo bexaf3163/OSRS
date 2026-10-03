@@ -2,7 +2,7 @@
 // Уровни берутся из RuneLite, а без него — введённые вручную на странице навыков.
 // Основной путь не прячется: вариант только дополняет его.
 
-import type { BranchCondition, PlayerStats, Progress, Step, StepBranch } from '../types';
+import type { BranchCondition, BranchNeed, PlayerStats, Progress, Step, StepBranch } from '../types';
 import { nameKey, ownedTotal, type OwnedState } from './checklist';
 
 /** available — условие выполнено; locked — точно не выполнено; unknown — данных нет (RuneLite выключен, уровень не введён). */
@@ -25,8 +25,18 @@ export interface ConditionResult {
   source?: 'runelite' | 'manual' | 'progress';
 }
 
+/** Чего не хватает для варианта: has — сколько есть, certain — точно ли (банк открывали или предмет в сумке известен). */
+export interface MissingNeed {
+  label: string;
+  have: number;
+  need: number;
+  certain: boolean;
+}
+
 export interface BranchResult extends ConditionResult {
   branch: StepBranch;
+  /** Уровень есть, а предметов не хватает (certain) или не видно (не certain: банк не открывали). */
+  missing?: MissingNeed[];
 }
 
 export const SKILL_NAMES: Record<string, string> = {
@@ -68,8 +78,34 @@ export function evaluateCondition(c: BranchCondition, ctx: BranchContext): Condi
   }
 }
 
+/**
+ * Хватает ли предметов: null — сказать нельзя (мост выключен, предмет не отслеживается). Есть всё — пустой список.
+ * Не хватает — недостающее: certain, если банк открывали или хоть что-то из предмета лежит в сумке; иначе «возможно в банке».
+ */
+export function missingNeeds(needs: readonly BranchNeed[] | undefined, owned: OwnedState | null): MissingNeed[] | null {
+  if (!needs?.length) return [];
+  if (!owned) return null;
+  const out: MissingNeed[] = [];
+  let anyKnown = false;
+  for (const n of needs) {
+    if ((n.unless ?? []).some((u) => (ownedTotal(owned, u) ?? 0) > 0)) { anyKnown = true; continue; }
+    const totals = n.items.map((name) => ownedTotal(owned, name));
+    if (totals.every((t) => t === null)) continue; // плагин про этот предмет ничего не сообщал
+    anyKnown = true;
+    const have = totals.reduce<number>((s, t) => s + (t ?? 0), 0);
+    if (have >= n.count) continue;
+    out.push({ label: n.label, have, need: n.count, certain: Boolean(owned.bankSeen) });
+  }
+  return out.length || anyKnown ? out : null;
+}
+
 export function evaluateBranches(step: Step, ctx: BranchContext): BranchResult[] {
-  return (step.branches ?? []).map((branch) => ({ branch, ...evaluateCondition(branch.condition, ctx) }));
+  return (step.branches ?? []).map((branch) => {
+    const r = evaluateCondition(branch.condition, ctx);
+    if (r.status !== 'available' || !branch.needs?.length) return { branch, ...r };
+    const missing = missingNeeds(branch.needs, ctx.owned);
+    return missing && missing.length ? { branch, ...r, missing } : { branch, ...r };
+  });
 }
 
 /** Подпись условия: «Magic 25», «после Lost City», «есть Chronicle». */
@@ -104,7 +140,11 @@ export function reasonLabel(r: ConditionResult & { branch: StepBranch }): string
 
 /** Предметы из условий шага — о них плагин должен сообщать, сколько их есть. */
 export function watchedItems(step: Step): string[] {
-  return (step.branches ?? []).flatMap((b) => (b.condition.type === 'ITEM_OWNED' && b.condition.itemName ? [b.condition.itemName] : []));
+  const names = (step.branches ?? []).flatMap((b) => [
+    ...(b.condition.type === 'ITEM_OWNED' && b.condition.itemName ? [b.condition.itemName] : []),
+    ...(b.needs ?? []).flatMap((n) => [...n.items, ...(n.unless ?? [])]),
+  ]);
+  return [...new Set(names)].slice(0, 40);
 }
 
 /** «~2 мин» из секунд. */

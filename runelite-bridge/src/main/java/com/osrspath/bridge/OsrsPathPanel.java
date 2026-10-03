@@ -99,11 +99,11 @@ class OsrsPathPanel extends PluginPanel
 				JPanel card = card();
 				card.add(text(i.getTitle(), regular(), TEXT));
 				card.add(text(i.getStatus(), small(), StepGuide.color(i.getHave())));
-				if (i.getWhere() != null && i.getHave() != StepGuide.Have.BAG)
+				if (i.getWhere() != null && !GuideList.got(i))
 				{
 					card.add(text("Где взять: " + i.getWhere(), small(), MUTED));
 				}
-				if (i.getPlace() >= 0 && i.getHave() != StepGuide.Have.BAG)
+				if (i.getPlace() >= 0 && !GuideList.got(i))
 				{
 					StepGuide.PlaceLine p = v.getPlaces().get(i.getPlace());
 					card.add(p.isActive() ? text("● Стрелка ведёт сюда", small(), GOOD)
@@ -111,6 +111,13 @@ class OsrsPathPanel extends PluginPanel
 				}
 				add(card);
 			}
+		}
+		if (v.getNext() != null)
+		{
+			header("Дальше");
+			JPanel card = card();
+			card.add(text(v.getNext(), regular(), GOOD));
+			add(card);
 		}
 		if (!v.getPlaces().isEmpty())
 		{

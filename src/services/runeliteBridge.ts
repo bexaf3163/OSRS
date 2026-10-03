@@ -178,6 +178,8 @@ export type ActiveStepPayload = InGameTarget & {
 export interface StepGuidePayload {
   items: { name: string; nameRu?: string; id?: number; count?: number; where?: string; inStep?: boolean }[];
   places: { x: number; y: number; plane: number; label: string; npc?: string; items?: string[] }[];
+  /** Быстрый путь шага по порядку: когда всё собрано, игра покажет последний пункт («Отдай всё Hetty…»). */
+  steps?: string[];
 }
 
 /** Панель RuneLite: предметы шага с «где взять» и точки — главная (NPC, старт) и места из карты шага. */
@@ -199,7 +201,8 @@ export function stepGuide(step: Step, branch?: StepBranch): StepGuidePayload {
   }));
   // Отправляется всегда, даже пустой: без guide плагин считает программу старой и просит её обновить
   // (в 2.10 шаги без предметов и с одной точкой уходили без него — панель зря писала «Обнови программу»).
-  return { items: items.slice(0, 64), places: places.slice(0, 64) };
+  const steps = (step.quickSteps ?? []).filter((q) => q.length > 0 && q.length <= 500).slice(0, 16);
+  return { items: items.slice(0, 64), places: places.slice(0, 64), ...(steps.length ? { steps } : {}) };
 }
 
 /** Оптовый список для подсказки на бирже: name — английское название, count — сколько нужно всего. */

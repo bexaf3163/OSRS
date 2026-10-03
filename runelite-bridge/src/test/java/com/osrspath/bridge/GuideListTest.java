@@ -2,6 +2,7 @@ package com.osrspath.bridge;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
@@ -190,6 +191,76 @@ public class GuideListTest
 			.stream().map(GuideListTest::text).collect(Collectors.toList());
 		assertTrue(after.toString(), after.stream().anyMatch(r -> r.startsWith("► Archmage Sedridor")));
 		assertFalse(after.toString(), after.stream().anyMatch(r -> r.startsWith("► Лук")));
+	}
+
+	/** S2-03 как её присылает программа 2.12: четыре предмета «по ходу», места Betty и крысы, финал — «Отдай всё Hetty». */
+	private static ActiveTarget hetty()
+	{
+		ActiveTarget t = new com.google.gson.Gson().fromJson("{\"stepId\":\"S2-03\",\"title\":\"Witch's Potion\",\"guide\":{"
+			+ "\"items\":[{\"name\":\"Onion\",\"inStep\":true},{\"name\":\"Eye of newt\",\"inStep\":true},{\"name\":\"Rat's tail\",\"inStep\":true}],"
+			+ "\"places\":["
+			+ "{\"x\":2968,\"y\":3204,\"plane\":0,\"label\":\"Hetty — дом в Rimmington\",\"npc\":\"Hetty\"},"
+			+ "{\"x\":2957,\"y\":3204,\"plane\":0,\"label\":\"Крыса — Brian's Archery Supplies\",\"npc\":\"Rat\",\"items\":[\"Rat's tail\"]},"
+			+ "{\"x\":3014,\"y\":3259,\"plane\":0,\"label\":\"Eye of newt — Betty, Port Sarim\",\"npc\":\"Betty\",\"items\":[\"Eye of newt\"]},"
+			+ "{\"x\":2950,\"y\":3251,\"plane\":0,\"label\":\"Лук — грядка\",\"items\":[\"Onion\"]}],"
+			+ "\"steps\":[\"Поговори с Hetty.\",\"Сорви лук.\",\"Отдай всё Hetty и выпей из котла (Drink From).\"]}}", ActiveTarget.class);
+		assertNull(t.prepare());
+		return t;
+	}
+
+	private static List<String> shown(StepGuide.View v)
+	{
+		return rows(v, false).stream().map(GuideListTest::text).collect(Collectors.toList());
+	}
+
+	@Test
+	public void всёСобрано_местаСобранногоУходят_ПоказаноЧтоДелатьДальше()
+	{
+		ActiveTarget t = hetty();
+		java.util.Set<String> got = new java.util.HashSet<>();
+		StepGuide.View partial = StepGuide.view(t, StepGuideTest.counts(1957, "Onion", 1), StepGuideTest.counts(), null, 0, 0, 0, got);
+		List<String> before = shown(partial);
+		assertNull(partial.getNext());
+		assertTrue(before.toString(), before.stream().noneMatch(r -> r.startsWith("▶")));
+		assertTrue("Betty ещё нужна: Eye of newt нет — ведёт строка предмета", before.stream().anyMatch(r -> r.contains("Eye of newt")));
+
+		StepGuide.View all = StepGuide.view(t, StepGuideTest.counts(1957, "Onion", 1, 221, "Eye of newt", 1, 300, "Rat's tail", 1),
+			StepGuideTest.counts(), null, 0, 0, 0, got);
+		List<String> after = shown(all);
+		assertTrue(after.toString(), after.stream().anyMatch(r -> r.startsWith("▶ Дальше: Отдай всё Hetty")));
+		assertTrue("Hetty — главная точка остаётся", after.stream().anyMatch(r -> r.startsWith("► Hetty")));
+		assertTrue("Betty и крыса уже не нужны: " + after, after.stream().noneMatch(r -> r.startsWith("► Eye of newt") || r.startsWith("► Крыса")));
+	}
+
+	@Test
+	public void отдалиПредметы_списокНеПроситИхСнова()
+	{
+		ActiveTarget t = hetty();
+		java.util.Set<String> got = new java.util.HashSet<>();
+		StepGuide.view(t, StepGuideTest.counts(1957, "Onion", 1, 221, "Eye of newt", 1, 300, "Rat's tail", 1), StepGuideTest.counts(), null, 0, 0, 0, got);
+		// Отдали Hetty: сумка пуста, банк открывали — раньше список снова писал «нет».
+		StepGuide.View handed = StepGuide.view(t, StepGuideTest.counts(), StepGuideTest.counts(), null, 0, 0, 0, got);
+		for (StepGuide.ItemLine i : handed.getItems())
+		{
+			assertEquals(i.getName(), StepGuide.Have.DONE, i.getHave());
+			assertEquals("готово", i.getTag());
+		}
+		assertNotNull("и подсказка «что дальше» остаётся", handed.getNext());
+		// Без памяти (старое поведение) — как раньше.
+		assertEquals(StepGuide.Have.IN_STEP, StepGuide.view(t, StepGuideTest.counts(), StepGuideTest.counts(), null, 0, 0, 0).getItems().get(0).getHave());
+	}
+
+	@Test
+	public void NpcМестаУПоследнегоШага_остаётся()
+	{
+		// «Отдай Brian…» — NPC места упомянут в финале: место не прячем, даже когда всё оттуда взято.
+		ActiveTarget t = new com.google.gson.Gson().fromJson("{\"stepId\":\"S2-06\",\"title\":\"T\",\"guide\":{\"items\":[{\"name\":\"Package\"}],\"places\":["
+			+ "{\"x\":3210,\"y\":3221,\"plane\":1,\"label\":\"Duke\",\"npc\":\"Duke\"},"
+			+ "{\"x\":3103,\"y\":9571,\"plane\":0,\"label\":\"Sedridor — подвал\",\"npc\":\"Sedridor\",\"items\":[\"Package\"]}],"
+			+ "\"steps\":[\"Отнеси Package к Sedridor.\"]}}", ActiveTarget.class);
+		assertNull(t.prepare());
+		List<String> r = shown(StepGuide.view(t, StepGuideTest.counts(-1, "Package", 1), null, null, 0, 0, 0, new java.util.HashSet<>()));
+		assertTrue(r.toString(), r.stream().anyMatch(x -> x.startsWith("► Sedridor")));
 	}
 
 	@Test

@@ -590,8 +590,18 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		});
 	}
 
+	/** Предметы текущего шага, которые уже были в сумке: отданные Hetty или использованные не просятся в сумку снова. */
+	private final Set<String> gotItems = new HashSet<>();
+	private String gotStep;
+
 	private void applyTarget(ActiveTarget t)
 	{
+		String stepId = t == null ? null : t.getStepId();
+		if (!Objects.equals(stepId, gotStep))
+		{
+			gotItems.clear();
+			gotStep = stepId;
+		}
 		target = t;
 		guideMessage = null;
 		if (completion != null)
@@ -623,10 +633,10 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	{
 		NavTarget n = navTarget;
 		StepGuide.View v = StepGuide.view(target, ItemCounts.sum(carried, noted), bank,
-			n == null ? null : n.getLabel(), n == null ? 0 : n.getX(), n == null ? 0 : n.getY(), n == null ? 0 : n.getPlane());
+			n == null ? null : n.getLabel(), n == null ? 0 : n.getX(), n == null ? 0 : n.getY(), n == null ? 0 : n.getPlane(), gotItems);
 		if (guideMessage != null)
 		{
-			v = new StepGuide.View(v.getTitle(), v.getGoal(), v.getItems(), v.getPlaces(), v.getDetour(), guideMessage);
+			v = new StepGuide.View(v.getTitle(), v.getGoal(), v.getItems(), v.getPlaces(), v.getDetour(), guideMessage, v.getNext(), v.getFinale());
 		}
 		guideView = v;
 		OsrsPathPanel p = panel;

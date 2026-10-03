@@ -84,14 +84,23 @@ public class ActiveTarget
 
 		private List<GuideItem> items;
 		private List<GuidePlace> places;
+		/** Быстрый путь шага по порядку: последний пункт показывается, когда всё собрано. */
+		private List<String> steps;
 
 		String problem()
 		{
-			for (List<?> list : new List<?>[]{items, places})
+			for (List<?> list : new List<?>[]{items, places, steps})
 			{
 				if (list != null && list.size() > MAX_LIST)
 				{
 					return "слишком длинный список";
+				}
+			}
+			for (String s : nonNull(steps))
+			{
+				if (s == null || s.length() > MAX_WHERE)
+				{
+					return "неверный пункт быстрого пути";
 				}
 			}
 			for (GuideItem i : nonNull(items))

@@ -133,12 +133,17 @@ final class GuideList
 			out.add(new Row(text("… ещё " + (items.size() - MAX_ITEMS) + " — в панели «OSRS Путь» справа", MUTED, small, inner, true),
 				Action.NONE, null));
 		}
+		// Всё собрано — что делать дальше: последний пункт быстрого пути шага («Отдай всё Hetty…»).
+		if (v.getNext() != null)
+		{
+			out.add(new Row(text("▶ Дальше: " + v.getNext(), StepGuide.GOOD, fm, inner, true), Action.NONE, "Дальше: " + v.getNext()));
+		}
 		// Места, где берут предметы из списка выше, — уже кнопки в строках предметов: второй раз не показываем.
 		// Кроме первой — точки самого шага (NPC квеста): она в «Куда идти» всегда, даже если он выдаёт предмет.
 		List<StepGuide.PlaceLine> places = new ArrayList<>();
 		for (StepGuide.PlaceLine p : v.getPlaces())
 		{
-			if (p.getIndex() == 0 || !itemPlace(items, p))
+			if (p.getIndex() == 0 || !itemPlace(items, p, v.getFinale()))
 			{
 				places.add(p);
 			}
@@ -169,14 +174,14 @@ final class GuideList
 		List<StepGuide.ItemLine> out = new ArrayList<>();
 		for (StepGuide.ItemLine i : items)
 		{
-			if (i.getHave() != StepGuide.Have.BAG)
+			if (!got(i))
 			{
 				out.add(i);
 			}
 		}
 		for (StepGuide.ItemLine i : items)
 		{
-			if (i.getHave() == StepGuide.Have.BAG)
+			if (got(i))
 			{
 				out.add(i);
 			}
@@ -184,14 +189,21 @@ final class GuideList
 		return out;
 	}
 
+	/** Предмет уже получен: сейчас в сумке или был в ней в этом шаге (отдан, использован). */
+	static boolean got(StepGuide.ItemLine i)
+	{
+		return i.getHave() == StepGuide.Have.BAG || i.getHave() == StepGuide.Have.DONE;
+	}
+
 	/**
-	 * Место не нужно в «Куда идти»: туда ведёт строка показанного предмета (он ещё не в сумке — строка кнопка или
-	 * «● ведёт туда»), или там только берут предметы, и всё уже с собой (грядка лука). Место с NPC, где всё уже
-	 * взято, снова в «Куда идти»: к этому NPC ещё может быть дело по квесту.
+	 * Место не нужно в «Куда идти», если там берут показанный предмет: пока его нет — туда ведёт строка предмета
+	 * (кнопка или «● ведёт туда»), когда он получен — идти туда незачем (Betty, крыса, грядка лука). Главная точка шага
+	 * (index 0, NPC квеста) остаётся всегда — там дело по квесту.
 	 */
-	private static boolean itemPlace(List<StepGuide.ItemLine> items, StepGuide.PlaceLine place)
+	private static boolean itemPlace(List<StepGuide.ItemLine> items, StepGuide.PlaceLine place, String finale)
 	{
 		boolean linked = false;
+		boolean pending = false;
 		for (int i = 0; i < Math.min(items.size(), MAX_ITEMS); i++)
 		{
 			if (items.get(i).getPlace() != place.getIndex())
@@ -199,12 +211,15 @@ final class GuideList
 				continue;
 			}
 			linked = true;
-			if (items.get(i).getHave() != StepGuide.Have.BAG)
-			{
-				return true;
-			}
+			pending |= !got(items.get(i));
 		}
-		return linked && place.getNpc() == null;
+		if (!linked || pending || place.getNpc() == null)
+		{
+			return linked;
+		}
+		// Всё отсюда взято, а у места есть NPC: он ещё нужен, только если им заканчивается шаг («Отдай всё Hetty…»).
+		// Пунктов быстрого пути нет — не гадаем, оставляем место: лишняя строка лучше пропавшей.
+		return finale != null && !finale.toLowerCase().contains(place.getNpc().toLowerCase());
 	}
 
 	/** Подсказка под списком для строки под мышью — мелким шрифтом, целиком. */
@@ -273,6 +288,7 @@ final class GuideList
 		switch (h)
 		{
 			case BAG:
+			case DONE:
 				return "✓";
 			case NONE:
 				return "✗";
@@ -294,7 +310,7 @@ final class GuideList
 
 	static Row item(StepGuide.ItemLine i, List<StepGuide.PlaceLine> places, FontMetrics fm, FontMetrics small, int inner, int whereLines)
 	{
-		boolean bag = i.getHave() == StepGuide.Have.BAG;
+		boolean bag = got(i);
 		StepGuide.PlaceLine at = i.getPlace() >= 0 && i.getPlace() < places.size() ? places.get(i.getPlace()) : null;
 		boolean go = !bag && at != null && !at.isActive();
 		List<Line> lines = pair(mark(i.getHave()) + " " + i.getName(), bag ? StepGuide.GOOD : TEXT, i.getTag(),
