@@ -11,7 +11,7 @@ export interface QaInput {
   questStages: { quests: Record<string, {
     var: [string, number];
     route?: { title: string; steps: string[] }[];
-    stages: { at: number; do: { t: string; at?: number[]; has?: string; need?: string }[]; go?: unknown; items?: { name: string }[] }[];
+    stages: { at: number; do: { t: string; s?: string; at?: number[]; has?: string; need?: string }[]; go?: unknown; items?: { name: string }[] }[];
   }> };
   /** Способы прокачки (src/data/trainingMethods.json) и словарь мест — для правил роутера способов. Нет — правила не применяются. */
   training?: { methods: { id: string; skill: string | string[]; from: number; to?: number | null; name: string; where: string; place?: string; url: string; xph?: number[]; xpa?: number; kind?: string; xpTotal?: number }[] };
