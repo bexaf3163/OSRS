@@ -389,7 +389,7 @@ async function run(browser: Browser) {
       const key = (who: string) => `osrs-put:ledger:main:${who}`;
       const { page, errors } = await open(browser, width, {
         localStorage: { 'osrs-put:profiles': profiles, [key('alpha one')]: JSON.stringify(rows), [key('beta two')]: JSON.stringify(rows.slice(0, 1)) },
-        status: { protocol: 5, pluginVersion: '2.19.3', player: 'Alpha One' },
+        status: { protocol: 5, pluginVersion: '2.19.4', player: 'Alpha One' },
       }, '#/settings');
       await page.waitForSelector('.ledger-block', { timeout: 5000 });
       const t = await text(page, '.ledger-block');

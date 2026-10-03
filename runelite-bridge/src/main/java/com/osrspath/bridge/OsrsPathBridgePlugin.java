@@ -480,7 +480,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				});
 				break;
 			case "hudPacing":
-			case "smartOverlays":
+			case "smartView":
 				clientThread.invokeLater(this::updateHud);
 				break;
 			default:

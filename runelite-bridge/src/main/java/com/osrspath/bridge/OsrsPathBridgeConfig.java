@@ -79,7 +79,7 @@ public interface OsrsPathBridgeConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "smartOverlays",
+		keyName = "smartView",
 		name = "Умное проявление",
 		description = "Выключено по умолчанию: список «Что нужно» и HUD видны всегда. Включишь — в пути останется только стрелка и "
 			+ "одна строка HUD, список появится у банка и рядом с местом шага, оптовый — на бирже, радар — когда ты уже в зоне",
