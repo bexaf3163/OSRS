@@ -244,7 +244,7 @@ main {
   .tabs-top .tab .icon { width: 18px; height: 18px; }
   .tabs-top .tab:hover { color: var(--text); background: var(--surface-2); }
   .tabs-top .tab.is-active { color: var(--text); background: var(--surface-2); }
-  .search-trigger { padding: 0 8px 0 12px; min-width: 180px; justify-content: flex-start; }
+  .search-trigger { padding: 0 8px 0 12px; min-width: 128px; justify-content: flex-start; }
   .search-trigger-text { display: inline; margin-right: auto; }
   .search-trigger kbd { display: inline; }
   main { padding-top: 24px; padding-bottom: 48px; }
