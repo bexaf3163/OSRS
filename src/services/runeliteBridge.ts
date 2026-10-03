@@ -2,6 +2,7 @@
 // Запросы идут через главный процесс Electron (preload → ipc): плагин принимает только их, а запрос
 // со страницы в браузере (с заголовком Origin) отклоняет. Удалённого сервера нет: мост слушает только loopback.
 
+import type { MoveEvent } from '../lib/recovery';
 import type { InGameTarget, PacingSkill, PlayerStats, Progress, Step, StepBranch, StepPacing } from '../types';
 import { desktop } from '../lib/desktop';
 import { isClosed, openAfter } from '../lib/next-step';
@@ -79,6 +80,10 @@ export interface GearItem {
 export interface GearState {
   equipment: GearItem[] | null;
   inventory: GearItem[] | null;
+  /** Занятых ячеек сумки (из 28); нет у плагина до 2.20 — тогда место проверить нечем. */
+  inventorySlots?: number | null;
+  /** Вес сумки и надетого, кг (client.getWeight); нет у плагина до 2.20. */
+  weight?: number | null;
   coins: number | null;
   /** Монеты в банке; null — банк в этой сессии не открывали. */
   bankCoins: number | null;
@@ -374,6 +379,8 @@ export function parseGear(raw: unknown): GearState | null {
   const o = raw as Record<string, unknown>;
   const g: GearState = {
     equipment: gearItems(o.equipment), inventory: gearItems(o.inventory), coins: int(o.coins), bankCoins: int(o.bankCoins),
+    ...(int(o.inventorySlots) !== null && (o.inventorySlots as number) <= 28 ? { inventorySlots: int(o.inventorySlots) } : {}),
+    ...(typeof o.weight === 'number' && Number.isFinite(o.weight) && o.weight >= -64 && o.weight <= 1100 ? { weight: o.weight } : {}),
     // Оценки нет у плагина до 2.9 и пока банк не открывали (Gson не пишет null) — поле тогда не заводим.
     ...(int(o.carriedValue) !== null ? { carriedValue: int(o.carriedValue) } : {}),
     ...(int(o.bankValue) !== null ? { bankValue: int(o.bankValue) } : {}),
@@ -464,6 +471,22 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
     player: online ? parsePlayer(d?.player) : null,
     pos: online ? parsePos(d?.pos) : null,
   };
+}
+
+/** Событие MOVED из плагина: телепорт (скачок на 20+ клеток) или смерть. Мусор — null. */
+export function parseMove(raw: unknown): Omit<MoveEvent, 'at'> | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const o = raw as Record<string, unknown>;
+  if (o.kind !== 'DEATH' && o.kind !== 'TELEPORT') return null;
+  const point = (v: unknown): { x: number; y: number; plane: number } | null => {
+    if (!v || typeof v !== 'object') return null;
+    const p = v as Record<string, unknown>;
+    return Number.isInteger(p.x) && Number.isInteger(p.y) && Number.isInteger(p.plane)
+      && (p.x as number) > 0 && (p.x as number) < 20000 && (p.y as number) > 0 && (p.y as number) < 20000 && (p.plane as number) >= 0 && (p.plane as number) <= 3
+      ? { x: p.x as number, y: p.y as number, plane: p.plane as number }
+      : null;
+  };
+  return { kind: o.kind, from: point(o.from), to: point(o.to) };
 }
 
 /**

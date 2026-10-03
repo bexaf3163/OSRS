@@ -114,6 +114,8 @@ export interface ReadinessContext {
   qp: number;
   mode: GameMode;
   state: PlayerState;
+  /** Срыв на показанном в игре шаге (смерть, телепорт): план подготовки переходит в режим восстановления. */
+  recovery?: { stepId: string; recovery: import('./recovery').Recovery } | null;
 }
 
 /** Контекст из «сырых» данных (тесты и места, где единого состояния ещё нет). */

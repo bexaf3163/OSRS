@@ -58,6 +58,15 @@ export interface SourceInput {
   freeToll?: boolean;
 }
 
+/**
+ * Место, где предмет лежит, но игроку он не достанется: подписочная зона в режиме F2P, добыча только телекинезом
+ * или в недоступном месте, зона заданий. Такие места не выдаём за «бери бесплатно рядом».
+ */
+export function unusableSpawn(spawn: string, mode: 'f2p' | 'members'): boolean {
+  if (/inaccessible|telegrab|telekinetic|task-only/i.test(spawn)) return true;
+  return mode === 'f2p' && /только для подписки/.test(spawn);
+}
+
 export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
   const here = s.position.known ? s.position.value : undefined;
   const held = heldOf(s, input.name, input.manualKey);
@@ -84,6 +93,7 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
     }
     : null;
   for (const spawn of d?.freeSpawns ?? []) {
+    if (unusableSpawn(spawn, s.mode)) continue;
     const p = matchStrict(spawn);
     out.push({
       kind: 'free', label: `Бесплатно: ${spawn}`, price: 0,

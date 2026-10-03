@@ -69,7 +69,7 @@ public final class BridgeServer
 	 */
 	static final int PROTOCOL = 5;
 	/** Версия плагина — та же, что у программы, с которой он едет в одном exe. */
-	static final String PLUGIN_VERSION = "2.19.4";
+	static final String PLUGIN_VERSION = "2.20.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	static final int MAX_STREAMS = 8;
@@ -348,6 +348,30 @@ public final class BridgeServer
 		e.put("itemId", t == null ? null : t.getItemId());
 		e.put("itemName", t == null ? null : t.getItemName());
 		broadcast(e);
+	}
+
+	/**
+	 * Персонаж резко переместился (с плагина 2.20): kind — TELEPORT (скачок на 20+ клеток за тик: телепорт, возрождение)
+	 * или DEATH (персонаж умер; fromX/fromY — где). Программа по этим событиям включает режим восстановления.
+	 */
+	public void moved(String kind, int[] from, int[] to)
+	{
+		Map<String, Object> e = new LinkedHashMap<>();
+		e.put("type", "MOVED");
+		e.put("kind", kind);
+		e.put("from", from == null ? null : point(from));
+		e.put("to", to == null ? null : point(to));
+		e.put("ts", System.currentTimeMillis());
+		broadcast(e);
+	}
+
+	private static Map<String, Integer> point(int[] p)
+	{
+		Map<String, Integer> m = new LinkedHashMap<>();
+		m.put("x", p[0]);
+		m.put("y", p[1]);
+		m.put("plane", p[2]);
+		return m;
 	}
 
 	public void stepCompleted(String stepId)

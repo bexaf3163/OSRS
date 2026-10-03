@@ -389,7 +389,7 @@ async function run(browser: Browser) {
       const key = (who: string) => `osrs-put:ledger:main:${who}`;
       const { page, errors } = await open(browser, width, {
         localStorage: { 'osrs-put:profiles': profiles, [key('alpha one')]: JSON.stringify(rows), [key('beta two')]: JSON.stringify(rows.slice(0, 1)) },
-        status: { protocol: 5, pluginVersion: '2.19.4', player: 'Alpha One' },
+        status: { protocol: 5, pluginVersion: '2.20.0', player: 'Alpha One' },
       }, '#/settings');
       await page.waitForSelector('.ledger-block', { timeout: 5000 });
       const t = await text(page, '.ledger-block');
@@ -508,9 +508,33 @@ async function run(browser: Browser) {
       }, '#/step/S2-10');
       await page.waitForSelector('.one-trip', { timeout: 5000 });
       const trip = await text(page, '.one-trip');
-      expect(trip.includes('Возьми за один заход') && trip.includes('Сейчас') && trip.includes('Открыть закупки'), 'одна ходка: список «Сейчас» и ссылка на закупки');
+      expect(trip.includes('Что нужно') && trip.includes('Нужно сейчас') && trip.includes('Открыть закупки'), 'что нужно: список «Нужно сейчас» и ссылка на закупки');
+      expect(/готово \d+%/.test(trip) && trip.includes('критично'), 'что нужно: готовность в процентах и число критичных');
+      expect(trip.includes('нет') && /Купи|Забери|Добудешь|заработай/.test(trip), 'что нужно: у каждой вещи — что с ней сделать');
+      if (process.env.UI_SHOTS) await page.locator('.one-trip').screenshot({ path: `${process.env.UI_SHOTS}/prep-plan-${width}.png` }).catch(() => {});
       expect(await noOverflow(page), 'одна ходка: без горизонтальной прокрутки');
       expect(!errors.length, `одна ходка: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
+    // Режим восстановления: умер в подземелье и возродился в Lumbridge — вместо «бей зомби» план «забери вещи, вернись».
+    {
+      const { page, errors } = await open(browser, width, {
+        zen: true, localStorage: { 'osrs-put:active-step': 'S2-07' }, progress: progressBefore('S2-07'),
+        status: { activeStepId: 'S2-07', protocol: 5, pluginVersion: '2.20.0', stats: {}, coins: 0, bankCoins: 0, equipment: [], inventory: [] },
+        events: [
+          { type: 'MOVED', kind: 'DEATH', from: { x: 3049, y: 9566, plane: 0 }, to: null },
+          { type: 'MOVED', kind: 'TELEPORT', from: { x: 3049, y: 9566, plane: 0 }, to: { x: 3222, y: 3218, plane: 0 } },
+        ],
+      }, '#/step/S2-07');
+      await page.waitForSelector('.prep-recovery', { timeout: 5000 });
+      const t = await text(page, '.prep-recovery');
+      expect(t.includes('Режим восстановления') && t.includes('умер') && t.includes('Забери вещи') && t.includes('Вернись к шагу S2-07'), 'восстановление: умер — вещи, недостающее, возвращение');
+      expect((await text(page, '.step-status')).includes('режим восстановления'), 'восстановление: статус шага говорит о режиме');
+      expect(await noOverflow(page), 'восстановление: без горизонтальной прокрутки');
+      await page.getByRole('button', { name: 'Это не срыв — продолжить' }).click();
+      await page.waitForFunction(() => !document.querySelector('.prep-recovery'), null, { timeout: 5000 });
+      expect(!errors.length, `восстановление: ошибок в консоли нет ${errors.join('; ')}`);
       await page.context().close();
     }
 

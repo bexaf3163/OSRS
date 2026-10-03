@@ -12,12 +12,13 @@ import { gateAllows, linkPlayer, profileGate, readProfiles, useProfiles, writePr
 import { useStore } from './store';
 import { desktop, type RuneliteLaunch } from './lib/desktop';
 import {
-  checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseGear, parseNavTarget, parsePacing, parsePlayer, parseQuests, parseStats, parseXp, planAutoComplete, setNavTarget,
+  checkStatus, clearActiveStep, clearNavTarget, connectEvents, parseGear, parseNavTarget, parseMove, parsePacing, parsePlayer, parseQuests, parseStats, parseXp, planAutoComplete, setNavTarget,
   syncActiveStep, syncBankTags, syncShoppingPlan, toInGameTarget,
   pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type ShoppingPlanPayload,
 } from './services/runeliteBridge';
 import { parseOwned, preflightItems, type OwnedState } from './lib/checklist';
 import { tripWindow } from './lib/oneTrip';
+import type { MoveEvent } from './lib/recovery';
 import { stageBankItemIds } from './lib/bankTags';
 import { useFeatures } from './lib/features';
 import { isClosed, openAfter } from './lib/next-step';
@@ -29,6 +30,7 @@ const AUTOLAUNCH_KEY = 'osrs-put:runelite-autolaunch';
 const BRANCH_KEY = 'osrs-put:branch-choice';
 /** Последний оптовый список — уходит в игру снова, когда RuneLite перезапустили. */
 const PLAN_KEY = 'osrs-put:shopping-plan';
+const MOVES_KEY = 'osrs-put:moves';
 /** Шаг, показанный в игре: после перезапуска программы или RuneLite он возвращается в игру сам. */
 const ACTIVE_KEY = 'osrs-put:active-step';
 /** Автозапуск — один раз за запуск программы (в разработке StrictMode вызывает эффекты дважды). */
@@ -99,6 +101,8 @@ interface BridgeValue {
   session: SessionBase;
   /** Текст для отчёта об ошибке: версии, связь, последние события моста. */
   diagnostics: () => Promise<string>;
+  /** Недавние скачки персонажа (смерть, телепорт) — по ним включается режим восстановления. */
+  moves: MoveEvent[];
   /** Где персонаж сейчас: свежий запрос к плагину (протокол 5); null — нет связи, не в игре или плагин не сообщает. */
   locate: () => Promise<{ x: number; y: number; plane: number } | null>;
 }
@@ -203,6 +207,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const [pacing, setPacing] = useState<PacingState | null>(null);
   const [xp, setXp] = useState<PlayerStats | null>(null);
   const [questsDone, setQuestsDone] = useState<string[] | null>(null);
+  // Скачки персонажа (смерть, телепорт): хранятся короткое время — после перезапуска программы режим восстановления не теряется.
+  const [moves, setMoves] = useState<MoveEvent[]>(() => (loadJson<{ list: MoveEvent[] }>(MOVES_KEY, null)?.list ?? []).filter((m) => m && typeof m.at === 'number' && Date.now() - m.at < 3_600_000).slice(-8));
   const [player, setPlayer] = useState<string | null>(null);
   const [session, setSession] = useState<SessionBase>(() => ({
     startedAt: Date.now(), levels0: null, xp0: null,
@@ -361,6 +367,16 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       else if (e.type === 'OWNED') setOwned(parseOwned(e));
       else if (e.type === 'GEAR') setGear(parseGear((e as { gear?: unknown }).gear));
       else if (e.type === 'PACING') setPacing(parsePacing(e));
+      else if (e.type === 'MOVED') {
+        const m = parseMove(e);
+        if (m) {
+          setMoves((prev) => {
+            const next = [...prev, { ...m, at: Date.now() }].slice(-8);
+            saveJson(MOVES_KEY, { list: next });
+            return next;
+          });
+        }
+      }
       else if (e.type === 'NAV_SET') setNavFromPlugin(parseNavTarget((e as { target?: unknown }).target));
       else if (e.type === 'NAV_DONE') onNavDone(e);
       else if (e.type === 'STEP_AUTO_COMPLETED' && typeof (e as { stepId?: unknown }).stepId === 'string') onCompleted((e as { stepId: string }).stepId);
@@ -554,11 +570,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
       stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, userClearedAt, plugin,
-      xp, questsDone, player, gate, xpRate, session, diagnostics, locate,
+      xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
       stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, userClearedAt, plugin,
-      xp, questsDone, player, gate, xpRate, session, diagnostics, locate],
+      xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;
 }

@@ -1482,4 +1482,25 @@ select option { background: var(--surface); color: var(--text); }
 .one-trip { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; background: var(--surface-3); box-shadow: inset 3px 0 0 var(--gold); }
 .one-trip p, .one-trip ul { margin: 0; }
 .one-trip ul { padding-left: 18px; display: flex; flex-direction: column; gap: 2px; }
-.trip-line.is-bank { color: var(--text); }
+.prep-title { margin-top: 2px; }
+.prep-score { font-weight: 600; }
+.prep-score.is-ready { color: var(--ok, #2e8b57); }
+.prep-score.is-not_ready { color: var(--warn); }
+.prep-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.prep-chip { border: 1px solid var(--border); border-radius: 999px; padding: 1px 8px; background: var(--surface); }
+.prep-chip.is-critical { border-color: var(--warn); }
+.prep-line { list-style: none; margin-left: -18px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 4px; }
+.prep-where { width: 1.4em; text-align: center; flex: none; }
+.prep-line.is-missing .prep-where { color: var(--warn); }
+.prep-line.is-bank .prep-where { color: var(--gold); }
+.prep-line.is-inventory .prep-where, .prep-line.is-equipped .prep-where { color: var(--ok, #2e8b57); }
+.prep-why { flex-basis: 100%; padding-left: calc(1.4em + 4px); }
+.prep-supply.is-low { color: var(--gold); }
+.prep-supply.is-critical { color: var(--warn); font-weight: 600; }
+.prep-weight { border-left: 3px solid var(--border); padding-left: 8px; display: flex; flex-direction: column; gap: 2px; }
+.prep-weight.is-heavy { border-left-color: var(--warn); }
+.prep-recovery { border: 1px solid var(--warn); border-radius: var(--radius-sm); padding: 8px 10px; background: var(--surface); display: flex; flex-direction: column; gap: 4px; }
+.prep-recovery p, .prep-recovery ol { margin: 0; }
+.prep-recovery ol { padding-left: 20px; }
+.prep-recovery-actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.prep-action { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; }

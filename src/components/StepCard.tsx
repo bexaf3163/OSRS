@@ -23,6 +23,7 @@ import { UpgradePrompt } from './UpgradePrompt';
 import { GearPrompt } from './GearPrompt';
 import { ReadinessPanel } from './ReadinessPanel';
 import { OneTripCard } from './OneTripCard';
+import { useReadinessEngine } from '../readinessContext';
 import { MoneyGoal } from './MoneyGoal';
 import { StepTraining } from './TrainingCard';
 import { StepStatus } from './StepStatus';
@@ -130,6 +131,7 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
   const { progress, qp, mode, setStep, review, reactivate } = useStore();
   const { openNpc } = useWiki();
   const zen = !useFeatures().inspector;
+  const recovering = useReadinessEngine().ctx.recovery?.stepId === step.id;
   const status = progress.steps[step.id];
   const blockers = isClosed(progress, step.id) ? null : blockersOf(step, progress, qp);
   const reviewing = needsReview(step, progress);
@@ -321,8 +323,10 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
         {warning}
         {fieldList(fieldsWarn)}
         <StepStatus step={step} />
-        {how}
-        {quick}
+        {recovering ? (
+          // После срыва «что делать на шаге» — потом: сначала вернуться. Текст остаётся под рукой, но не кричит.
+          <details className="zen-more"><summary className="small">Что делать на шаге — после возвращения</summary>{how}{quick}</details>
+        ) : <>{how}{quick}</>}
         {doneWhen}
         {actions}
         <details className="zen-more">

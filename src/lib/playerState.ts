@@ -24,6 +24,12 @@ export interface PlayerState {
   player: string | null;
   levels: Record<string, Known<number>>;
   coins: { bag: Known<number>; bank: Known<number> };
+  /** Занятых ячеек сумки (из 28): неизвестно, пока плагин не прислал. */
+  bagSlots: Known<number>;
+  /** Вес сумки и надетого, кг (из игры); неизвестен, пока плагин не прислал. */
+  weight: Known<number>;
+  /** Что лежит в сумке (все предметы, не только отслеживаемые) — для веса и лишнего; неизвестно, пока плагин не прислал. */
+  bagItems: Known<{ name: string; count: number }[]>;
   /** Названия квестов, засчитанных в игре. */
   quests: Known<string[]>;
   position: Known<WorldPoint>;
@@ -74,6 +80,9 @@ export function buildPlayerState(i: PlayerStateInput): PlayerState {
     player: i.player ?? null,
     levels: levelsOf(i.stats, i.progress.levels ?? {}),
     coins,
+    bagSlots: i.gear && typeof i.gear.inventorySlots === 'number' ? known(i.gear.inventorySlots, 'game') : unknown,
+    weight: i.gear && typeof i.gear.weight === 'number' ? known(i.gear.weight, 'game') : unknown,
+    bagItems: i.gear?.inventory ? known(i.gear.inventory.map((g) => ({ name: g.name, count: g.count ?? 1 })), 'game') : unknown,
     quests: i.questsDone ? known(i.questsDone, 'game') : unknown,
     position: i.position ? known(i.position, 'game') : unknown,
     bankSeen: i.owned?.bankSeen === true,
@@ -93,7 +102,7 @@ function fingerprintOf(s: PlayerState): string {
   const q = s.quests.known ? s.quests.value.length : '?';
   const eq = Object.entries(s.equipment).map(([k, v]) => `${k}=${v}`).sort().join(',');
   const man = Object.entries(s.manual).map(([k, v]) => `${k}=${v}`).sort().join(',');
-  return [s.mode, s.connected ? 1 : 0, s.bankSeen ? 1 : 0, lv, c(s.coins.bag), c(s.coins.bank), q, eq, man, items].join('|');
+  return [s.mode, s.connected ? 1 : 0, s.bankSeen ? 1 : 0, lv, c(s.coins.bag), c(s.coins.bank), c(s.bagSlots), c(s.weight), s.bagItems.known ? s.bagItems.value.map((b) => `${b.name}:${b.count}`).sort().join(',') : '?', q, eq, man, items].join('|');
 }
 
 /** Уровень навыка; undefined — неизвестен. */

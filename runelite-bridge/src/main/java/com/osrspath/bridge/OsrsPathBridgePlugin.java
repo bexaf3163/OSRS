@@ -45,6 +45,7 @@ import net.runelite.api.TileObject;
 import net.runelite.api.WorldView;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.MenuAction;
+import net.runelite.api.events.ActorDeath;
 import net.runelite.api.events.ChatMessage;
 import net.runelite.api.events.PostMenuSort;
 import net.runelite.api.events.DecorativeObjectDespawned;
@@ -1084,6 +1085,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		List<Map<String, Object>> inventory = null;
 		int coins = 0;
+		// Занятых ячеек сумки: предметы в списке сложены по ID, а подготовке нужно знать, влезет ли ещё что-то.
+		int slotsUsed = 0;
 		if (bag != null)
 		{
 			Map<Integer, Integer> stacks = new LinkedHashMap<>();
@@ -1092,6 +1095,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				if (it.getId() > 0 && it.getQuantity() > 0)
 				{
 					stacks.merge(it.getId(), it.getQuantity(), Integer::sum);
+					slotsUsed++;
 				}
 			}
 			inventory = new ArrayList<>();
@@ -1105,6 +1109,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		g.put("equipment", equipment);
 		g.put("inventory", inventory);
 		g.put("coins", bag == null ? null : coins);
+		g.put("inventorySlots", bag == null ? null : slotsUsed);
+		// Вес сумки и надетого — как в игре (client.getWeight): от него зависит, как быстро тает бег.
+		g.put("weight", bag == null ? null : client.getWeight());
 		g.put("bankCoins", bank == null ? null : bank.count(ItemID.COINS, "Coins"));
 		// Оценка предметов по ценам биржи (без монет): в сумке и на себе — и в банке, если его открывали.
 		// Это не деньги, а сколько выручишь, продав: приложение показывает её отдельно от монет, с «~».
@@ -1726,6 +1733,18 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	// ---------- Автоотметка ----------
 
 	@Subscribe
+	public void onActorDeath(ActorDeath e)
+	{
+		Player me = client.getLocalPlayer();
+		if (me == null || e.getActor() != me || server == null || !config.shareStats())
+		{
+			return;
+		}
+		WorldPoint at = me.getWorldLocation();
+		server.moved("DEATH", at == null ? null : new int[] {at.getX(), at.getY(), at.getPlane()}, null);
+	}
+
+	@Subscribe
 	public void onGameTick(GameTick e)
 	{
 		if (completion != null && client.getGameState() == GameState.LOGGED_IN)
@@ -1740,7 +1759,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			// Всё про место игрока — только когда он сменил клетку, а не каждый тик.
 			if (!pos.equals(lastPosition))
 			{
+				WorldPoint before = lastPosition;
 				lastPosition = pos;
+				// Скачок на 20+ клеток за тик — телепорт или возрождение: программа включает режим восстановления.
+				if (before != null && server != null && config.shareStats()
+					&& MoveDetector.isJump(before.getX(), before.getY(), pos.getX(), pos.getY()))
+				{
+					server.moved("TELEPORT", new int[] {before.getX(), before.getY(), before.getPlane()}, new int[] {pos.getX(), pos.getY(), pos.getPlane()});
+				}
 				if (server != null && config.shareStats())
 				{
 					server.setPos(pos.getX(), pos.getY(), pos.getPlane());

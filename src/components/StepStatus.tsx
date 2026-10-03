@@ -13,10 +13,12 @@ import { toInGameTarget } from '../services/runeliteBridge';
 import { isClosed } from '../lib/next-step';
 import { STATUS_TEXT } from '../lib/readiness';
 import { plural } from '../lib/shopping';
-import { useReadiness } from '../readinessContext';
+import { useReadiness, useReadinessEngine } from '../readinessContext';
+import { useFeatures } from '../lib/features';
+import { styleOf } from '../lib/playStyle';
 import { usePrepFix } from './PrepRoute';
 import { ReadinessPanel } from './ReadinessPanel';
-import { OneTripCard } from './OneTripCard';
+import { OneTripCard, RecoveryBanner } from './OneTripCard';
 import { MoneyGoal } from './MoneyGoal';
 import { MoneyPlan } from './MoneyPlan';
 import { MagicPlan } from './MagicPlan';
@@ -70,6 +72,9 @@ export function StepStatus({ step }: { step: Step }) {
   const { progress } = useStore();
   const { enabled, activeStepId, navTarget, pointInGame, state: link } = useBridge();
   const r = useReadiness(step);
+  const planNow = useReadinessEngine().plan(step, { ahead: styleOf(useFeatures()).lookAhead });
+  const percent = planNow.score.percent;
+  const recovering = planNow.recovery;
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<TabKey>('prep');
   const [sent, setSent] = useState<'' | 'sending' | 'offline'>('');
@@ -95,8 +100,9 @@ export function StepStatus({ step }: { step: Step }) {
   const text = ready ? 'Готов к выходу'
     : prep ? `Требуется подготовка (${n} ${plural(n, 'пункт', 'пункта', 'пунктов')})`
       : r.status === 'UNKNOWN' ? 'Проверено не всё' : s.text;
-  const icon = ready ? '🟢' : prep ? '🟡' : s.icon;
-  const tone = ready ? 'is-ready' : prep ? 'is-prep' : r.status === 'UNKNOWN' ? 'is-unknown' : 'is-blocked';
+  const shown = recovering ? (recovering.recovery.reason === 'DEATH' ? 'Ты умер — режим восстановления' : 'Срыв маршрута — режим восстановления') : !ready && percent !== null && prep ? `${text} · готово ${percent}%` : text;
+  const icon = recovering ? '🔁' : ready ? '🟢' : prep ? '🟡' : s.icon;
+  const tone = recovering ? 'is-prep' : ready ? 'is-ready' : prep ? 'is-prep' : r.status === 'UNKNOWN' ? 'is-unknown' : 'is-blocked';
   const hasTarget = enabled && !!toInGameTarget(step);
   const active = activeStepId === step.id;
   const detour = navTarget?.stepId === step.id ? navTarget : null;
@@ -118,14 +124,14 @@ export function StepStatus({ step }: { step: Step }) {
   return (
     <section className={`step-status ${tone}`} aria-label="Статус шага">
       <div className="status-line">
-        <span className="status-text" role="status"><span aria-hidden="true">{icon}</span> <strong>{text}</strong></span>
+        <span className="status-text" role="status"><span aria-hidden="true">{icon}</span> <strong>{shown}</strong></span>
         <span className="status-actions">
-          {prep && canFix && (
+          {prep && !recovering && canFix && (
             <button type="button" className="btn btn-primary btn-sm" onClick={() => void fix()} disabled={underway}>
               {underway ? '⚡ Подготовка идёт' : '▶ Исправить'}
             </button>
           )}
-          {!prep && hasTarget && (ready || r.status === 'UNKNOWN') && (
+          {!prep && !recovering && hasTarget && (ready || r.status === 'UNKNOWN') && (
             <button type="button" className={`btn btn-sm ${active ? 'btn-ingame-active' : 'btn-primary'}`} onClick={() => void start()} disabled={sent === 'sending'}>
               {active ? '✓ Показан в игре' : '▶ Начать шаг'}
             </button>
@@ -135,6 +141,7 @@ export function StepStatus({ step }: { step: Step }) {
           </button>
         </span>
       </div>
+      {recovering && <RecoveryBanner step={step} rec={recovering} />}
       {sent === 'offline' && <p className="small muted" role="status">RuneLite мост оффлайн{link === 'online' ? ' или отказал' : ''}. Запусти RuneLite с плагином OSRS Path Bridge.</p>}
       {detour ? (
         <p className="small status-arrow">🧭 Стрелка ведёт: {detour.label}</p>
@@ -151,7 +158,7 @@ export function StepStatus({ step }: { step: Step }) {
           ))}
         </div>
       )}
-      {panel('prep', <><ReadinessPanel step={step} /><OneTripCard step={step} /><MoneyGoal step={step} /><MoneyPlan step={step} /><MagicPlan step={step} /></>)}
+      {panel('prep', <><ReadinessPanel step={step} /><OneTripCard step={step} inStatus /><MoneyGoal step={step} /><MoneyPlan step={step} /><MagicPlan step={step} /></>)}
       {panel('gear', <><UpgradePrompt step={step} /><GearPrompt step={step} /><StyleGear step={step} /></>)}
       {panel('food', <FoodAdvice step={step} />)}
       {open && current === 'route' && (

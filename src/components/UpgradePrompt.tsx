@@ -12,18 +12,18 @@ import { useFeatures } from '../lib/features';
 import { isClosed } from '../lib/next-step';
 import { formatGp } from '../lib/shopping';
 import { getGePrice } from '../services/pricesApi';
-import { recommendUpgrade, showsPrompt, stepUpgradeCategories, upgradeNav } from '../services/gearUpgradeRouter';
+import { recommendUpgrade, showsPrompt, stepUpgradeCategories, upgradeNav, type UpgradeRecommendation } from '../services/gearUpgradeRouter';
 import { NavigateButton } from './NavigateButton';
 import { PlaceButton, PlaceMapView, usePlaceMap } from './PlaceMap';
 
 const SKILL_LABEL = { woodcutting: 'Woodcutting', mining: 'Mining' } as const;
 
-export function UpgradePrompt({ step }: { step: Step }) {
+/** Совет по инструменту для шага (gearUpgradeRouter): общий для подсказки и для плана подготовки. */
+export function useUpgradeRecommendation(step: Step): UpgradeRecommendation | null {
   const { upgradeRouter } = useFeatures();
-  const { progress, mode, dismissUpgrade } = useStore();
-  const { gear, stats, navTarget, clearNav } = useBridge();
+  const { progress, mode } = useStore();
+  const { gear, stats } = useBridge();
   const [prices, setPrices] = useState<ReadonlyMap<number, number>>(new Map());
-  const places = usePlaceMap();
   const relevant = upgradeRouter && stepUpgradeCategories(step).length > 0 && !isClosed(progress, step.id);
 
   const rec = useMemo(() => {
@@ -43,6 +43,14 @@ export function UpgradePrompt({ step }: { step: Step }) {
     }).catch(() => {});
     return () => { alive = false; };
   }, [wantPrice, prices]);
+  return rec;
+}
+
+export function UpgradePrompt({ step }: { step: Step }) {
+  const { progress, dismissUpgrade } = useStore();
+  const { stats, navTarget, clearNav } = useBridge();
+  const places = usePlaceMap();
+  const rec = useUpgradeRecommendation(step);
 
   if (!showsPrompt(rec)) return null;
   const nav = upgradeNav(rec, step.id);
