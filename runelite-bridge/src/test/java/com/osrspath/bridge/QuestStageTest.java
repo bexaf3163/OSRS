@@ -220,6 +220,39 @@ public class QuestStageTest
 			+ "{\"t\":\"Отнеси Thurgo\",\"x\":3000,\"y\":3145,\"plane\":0}],\"go\":0}]}}}", ActiveTarget.class);
 	}
 
+	/** S2-07, этап «Выковать меч»: Thurgo послал за рудой, игрок стоит у него же. */
+	private static List<ActiveTarget.StageLine> ore()
+	{
+		String json = "[{\"t\":\"Спустись в Ice Dungeon\",\"x\":3008,\"y\":3150,\"plane\":0},"
+			+ "{\"t\":\"Накопай Blurite ore\",\"x\":3049,\"y\":9566,\"plane\":0},"
+			+ "{\"t\":\"Верни Thurgo руду\",\"x\":3000,\"y\":3145,\"plane\":0,\"need\":\"Blurite ore\"},"
+			+ "{\"t\":\"Отнеси меч Squire\",\"x\":2978,\"y\":3341,\"plane\":0}]";
+		return GSON.fromJson(json, new com.google.gson.reflect.TypeToken<List<ActiveTarget.StageLine>>() { }.getType());
+	}
+
+	@Test
+	public void послеThurgoСтрелкаВедётВПодземелье_неОстаётсяУThurgo()
+	{
+		List<ActiveTarget.StageLine> l = ore();
+		ItemCounts empty = new ItemCounts();
+		assertEquals("у Thurgo без руды — к входу в подземелье, а не «верни руду»", 0, StepGuide.advance(l, 0, 3000, 3145, 0, l.size(), empty));
+		ItemCounts bag = new ItemCounts();
+		bag.add(668, ActiveTarget.nameKey("Blurite ore"), 1);
+		assertEquals("руда в сумке — «верни руду»", 2, StepGuide.advance(l, 0, 3000, 3145, 0, l.size(), bag));
+		assertEquals("в пещере у руды — копать", 1, StepGuide.advance(l, 0, 3049, 9566, 0, l.size(), empty));
+		assertEquals("предметы неизвестны — условие не проверяется", 2, StepGuide.advance(l, 0, 3000, 3145, 0, l.size()));
+	}
+
+	@Test
+	public void этапСменилсяНаГлазах_отсчётСПервогоШага_входВНачатыйЭтап_поВсемуСписку()
+	{
+		List<ActiveTarget.StageLine> l = manor();
+		// Игрок у шага E (последний) в момент, когда этап только что сменился: шаги этапа ещё не сделаны — начало.
+		assertEquals(0, StepGuide.advance(l, 0, 3200, 3300, 0, StepGuide.freshWindow(true, l.size())));
+		// Тот же игрок входит в игру посреди этапа: ищем по всему списку.
+		assertEquals(5, StepGuide.advance(l, 0, 3200, 3300, 0, StepGuide.freshWindow(false, l.size())));
+	}
+
 	@Test
 	public void шагДоПредметаПропускаетсяКогдаПредметУжеВСумке()
 	{

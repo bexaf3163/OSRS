@@ -687,6 +687,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		int idx = st.indexFor(value);
 		String key = target.getStepId() + "#" + idx;
 		boolean fresh = !key.equals(cursorKey);
+		// Этап сменился у нас на глазах: тот же шаг, прежде был другой этап.
+		boolean changed = fresh && cursorKey != null && cursorKey.startsWith(target.getStepId() + "#");
 		if (fresh)
 		{
 			cursorKey = key;
@@ -697,8 +699,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			WorldPoint pos = me.getWorldLocation();
 			List<ActiveTarget.StageLine> lines = st.getStages().get(idx).getSteps();
-			stageCursor = StepGuide.advance(lines, stageCursor, pos.getX(), pos.getY(), pos.getPlane(), fresh ? lines.size() : StepGuide.STEP_WINDOW);
-			stageCursor = StepGuide.skipDone(lines, stageCursor, ItemCounts.sum(carried, noted));
+			ItemCounts bag = ItemCounts.sum(carried, noted);
+			stageCursor = StepGuide.advance(lines, stageCursor, pos.getX(), pos.getY(), pos.getPlane(), fresh ? StepGuide.freshWindow(changed, lines.size()) : StepGuide.STEP_WINDOW, bag);
+			stageCursor = StepGuide.skipDone(lines, stageCursor, bag);
 		}
 	}
 

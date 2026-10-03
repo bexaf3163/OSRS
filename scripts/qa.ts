@@ -11,7 +11,7 @@ export interface QaInput {
   questStages: { quests: Record<string, {
     var: [string, number];
     route?: { title: string; steps: string[] }[];
-    stages: { at: number; do: { t: string; at?: number[]; has?: string }[]; go?: unknown; items?: { name: string }[] }[];
+    stages: { at: number; do: { t: string; at?: number[]; has?: string; need?: string }[]; go?: unknown; items?: { name: string }[] }[];
   }> };
   /** Способы прокачки (src/data/trainingMethods.json) и словарь мест — для правил роутера способов. Нет — правила не применяются. */
   training?: { methods: { id: string; skill: string | string[]; from: number; to?: number | null; name: string; where: string; place?: string; url: string; xph?: number[]; xpa?: number; kind?: string; xpTotal?: number }[] };
@@ -92,10 +92,17 @@ export function qa(input: QaInput): QaIssue[] {
       if (st.at <= last) add('stages-order', id, `этап ${st.at} не по возрастанию`);
       last = st.at;
       if (!st.do.length) add('stages-empty', id, `этап ${st.at} без шагов`);
-      for (const l of st.do) {
+      for (const [n, l] of st.do.entries()) {
         const c = firstChar(l.t);
+        // «Отдай/Верни/Отнеси X» не первым шагом этапа: без условия «X в сумке» стоящий рядом с NPC игрок считался бы уже дошедшим.
+        if (n > 0 && l.at && !l.has && !l.need && /^(Отдай|Верни|Отнеси|Принеси)/.test(l.t)) {
+          const text = l.t.toLowerCase();
+          const item = (st.items ?? []).find((it) => text.includes(it.name.toLowerCase()));
+          if (item) add('stages-need-missing', `${id}#${st.at}`, `шаг «${l.t.slice(0, 40)}…» отдаёт «${item.name}» — нужно условие need`);
+        }
         if (!c || c !== c.toUpperCase() || /\s{2,}/.test(l.t) || /\s$/.test(l.t)) add('text', `${id}#${st.at}`, `текст шага: «${l.t.slice(0, 50)}»`);
         if (l.at && badPoint(l.at)) add('stages-point', `${id}#${st.at}`, `клетка ${l.at.join(',')} вне карты`);
+        if (l.need && !(st.items ?? []).some((it) => it.name === l.need) && !st.do.some((o) => o.has === l.need)) add('stages-need', `${id}#${st.at}`, `условие «${l.need}» не среди предметов этапа и не в has его шагов`);
       }
     }
     for (const p of q.route ?? []) {

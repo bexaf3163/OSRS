@@ -196,28 +196,57 @@ final class StepGuide
 	}
 
 	/**
+	 * Насколько вперёд искать шаг, когда этап только что показали. Этап сменился на глазах (игрок поговорил с NPC, и игра
+	 * перевела квест дальше) — ни один шаг нового этапа ещё не сделан, начинаем с первого: иначе стоящий у NPC игрок
+	 * «уже дошёл» до шага «верни ему предмет» дальше по списку, и стрелка ведёт туда, где он и так стоит. Этап открыт
+	 * впервые (вход в игру, новый шаг): игрок мог пройти часть шагов — ищем по всему списку.
+	 */
+	static int freshWindow(boolean changedWhileWatching, int size)
+	{
+		return changedWhileWatching ? 0 : size;
+	}
+
+	/**
 	 * window — насколько вперёд искать. Этап открыт впервые (курсор в нуле, игрок мог уже пройти часть шагов — например,
 	 * у этапа весь маршрут целиком): ищем по всему списку, первый подходящий.
 	 */
 	static int advance(List<ActiveTarget.StageLine> lines, int cursor, int x, int y, int plane, int window)
+	{
+		return advance(lines, cursor, x, y, plane, window, null);
+	}
+
+	/**
+	 * carried — что в сумке: шаг с условием need («верни руду») засчитывается по месту, только если предмет есть.
+	 * null — предметы неизвестны, условия не проверяются.
+	 */
+	static int advance(List<ActiveTarget.StageLine> lines, int cursor, int x, int y, int plane, int window, ItemCounts carried)
 	{
 		if (lines == null || lines.isEmpty())
 		{
 			return 0;
 		}
 		int at = Math.max(0, Math.min(cursor, lines.size() - 1));
-		if (near(lines.get(at), x, y, plane))
+		if (reached(lines.get(at), x, y, plane, carried))
 		{
 			return at;
 		}
 		for (int i = at + 1; i < lines.size() && i <= at + window; i++)
 		{
-			if (near(lines.get(i), x, y, plane))
+			if (reached(lines.get(i), x, y, plane, carried))
 			{
 				return i;
 			}
 		}
 		return at;
+	}
+
+	private static boolean reached(ActiveTarget.StageLine l, int x, int y, int plane, ItemCounts carried)
+	{
+		if (!near(l, x, y, plane))
+		{
+			return false;
+		}
+		return carried == null || l.getNeed() == null || l.getNeed().isEmpty() || carried.count(null, l.getNeed()) > 0;
 	}
 
 	/**
