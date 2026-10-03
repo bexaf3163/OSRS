@@ -12,6 +12,7 @@ import { IconBack, IconCheck, IconExternal, TypeIcon } from '../components/Icons
 import { LevelInput } from '../components/LevelInput';
 import { Table } from '../components/Table';
 import { LiveXp } from '../components/LiveXp';
+import { TrainingCard } from '../components/TrainingCard';
 
 export function SkillDetailPage({ id }: { id: string }) {
   const skill = findSkill(id);
@@ -32,6 +33,10 @@ function SkillView({ skill }: { skill: Skill }) {
   const level = skillLevel(skill, progress);
   const hit = rangeForLevel(skill.plan.ranges, level);
   const related = steps.filter((s) => s.targets?.some((t) => levelById.get(t.skill)?.skill === skill.id));
+  // «Чем качать»: у ближнего боя — отстающий из трёх навыков; цель — как в калькуляторе ниже.
+  const stage = currentStage(steps, progress);
+  const lagging = [...skill.levelSkills].sort((a, b) => levelOf(progress, a) - levelOf(progress, b))[0];
+  const trainTarget = defaultTarget(skill, lagging, levelOf(progress, lagging), stage);
 
   return (
     <div className="page">
@@ -62,6 +67,8 @@ function SkillView({ skill }: { skill: Skill }) {
           </p>
         )}
       </section>
+
+      <TrainingCard skill={lagging} target={trainTarget} />
 
       <Calculator levelIds={skill.levelSkills} suggest={(lid, level, stage) => defaultTarget(skill, lid, level, stage)} />
 

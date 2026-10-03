@@ -13,6 +13,11 @@ export interface QaInput {
     route?: { title: string; steps: string[] }[];
     stages: { at: number; do: { t: string; at?: number[]; has?: string }[]; go?: unknown; items?: { name: string }[] }[];
   }> };
+  /** Способы прокачки (src/data/trainingMethods.json) и словарь мест — для правил роутера способов. Нет — правила не применяются. */
+  training?: { methods: { id: string; skill: string | string[]; from: number; to?: number | null; name: string; where: string; place?: string; url: string; xph?: number[]; xpa?: number; kind?: string; xpTotal?: number }[] };
+  places?: { locations: Record<string, unknown> };
+  /** Идентификаторы навыков с уровнями (levels.json + навыки подписки). */
+  skillIds?: string[];
 }
 
 export interface QaIssue {
@@ -100,10 +105,31 @@ export function qa(input: QaInput): QaIssue[] {
       }
     }
   }
+
+  // --- Способы прокачки: уникальные id, осмысленные уровни и скорости, места из словаря, ссылки на вики ---
+  if (input.training) {
+    const known = input.skillIds ? new Set(input.skillIds) : null;
+    const seenIds = new Set<string>();
+    for (const m of input.training.methods) {
+      if (seenIds.has(m.id)) add('training-id', m.id, 'повтор идентификатора');
+      seenIds.add(m.id);
+      const skills = Array.isArray(m.skill) ? m.skill : [m.skill];
+      if (known) for (const s of skills) if (!known.has(s)) add('training-skill', m.id, `неизвестный навык ${s}`);
+      if (!Number.isInteger(m.from) || m.from < 1 || m.from > 98) add('training-range', m.id, `уровень входа ${m.from}`);
+      if (m.to !== null && m.to !== undefined && (!Number.isInteger(m.to) || m.to <= m.from || m.to > 99)) add('training-range', m.id, `диапазон ${m.from}–${m.to}`);
+      if (m.xph && (m.xph.length !== 2 || !(m.xph[0] > 0) || m.xph[1] < m.xph[0])) add('training-rate', m.id, `скорость ${JSON.stringify(m.xph)}`);
+      if (m.xpa !== undefined && !(m.xpa > 0)) add('training-rate', m.id, `опыт за действие ${m.xpa}`);
+      if (m.kind === 'quest' && !(m.xpTotal && m.xpTotal > 0)) add('training-rate', m.id, 'квест без награды опытом');
+      if (!/^https:\/\/oldschool\.runescape\.wiki\/w\//.test(m.url)) add('training-url', m.id, `ссылка не на вики: ${m.url}`);
+      if (input.places && m.place && !(m.place in input.places.locations)) add('training-place', m.id, `места «${m.place}» нет в словаре мест`);
+      const c = firstChar(m.name);
+      if (!c || c !== c.toUpperCase() || !m.where.trim()) add('text', m.id, `название или место способа: «${m.name.slice(0, 40)}»`);
+    }
+  }
   return out;
 }
 
 export function qaLines(issues: QaIssue[]): { lines: string[]; errors: number } {
-  if (!issues.length) return { lines: ['  ✓ Согласованность: снаряжение, амулеты, телепорт домой, этапы квестов — без замечаний'], errors: 0 };
+  if (!issues.length) return { lines: ['  ✓ Согласованность: снаряжение, амулеты, телепорт домой, этапы квестов, способы прокачки — без замечаний'], errors: 0 };
   return { lines: issues.map((i) => `  ✗ [${i.rule}] ${i.where}: ${i.message}`), errors: issues.length };
 }

@@ -26,7 +26,8 @@ const report = validate(stored, route);
 console.log('Проверка src/data');
 console.log(report.lines.join('\n'));
 
-const consistency = qaLines(qa({ steps: route.steps, gear: read('gear'), questStages: read('questStages') }));
+const levelSkillIds = [...(read('levels') as { id: string }[]).map((l) => l.id), ...(read('members-skills') as { skills: { levelSkills: string[] }[] }).skills.flatMap((s) => s.levelSkills)];
+const consistency = qaLines(qa({ steps: route.steps, gear: read('gear'), questStages: read('questStages'), training: read('trainingMethods'), places: read('majorLocations'), skillIds: levelSkillIds }));
 console.log('\nСогласованность данных');
 console.log(consistency.lines.join('\n'));
 

@@ -2,7 +2,8 @@
 // Предметы собираются из itemsRequired выбранных шагов, одинаковые складываются по ID (без ID — по имени).
 
 import type { Step, StepItemRequirement } from '../types';
-import { nameKey, parseAmount } from './checklist';
+import { nameKey, parseAmount, type OwnedState } from './checklist';
+import { heldOf } from './playerState';
 
 /**
  * Инструменты и снаряжение: не тратятся, поэтому одного хватает на все шаги — берётся наибольшее
@@ -188,9 +189,11 @@ export function holdingFor(
   onGe = true,
 ): Holding {
   const required = line.count;
-  const o = owned?.items.get(nameKey(line.nameEn));
-  const carried = o ? o.carried + o.noted : undefined;
-  const bank = o ? (owned!.bankSeen ? o.bank ?? 0 : null) : undefined;
+  // Один и тот же расчёт «сколько есть», что и у готовности шага и единых требований (playerState.heldOf).
+  const h = heldOf({ owned: owned as OwnedState | null, equipment: {}, manual: manual !== undefined ? { m: manual } : {}, bankSeen: owned?.bankSeen === true }, line.nameEn, manual !== undefined ? 'm' : undefined);
+  const inGame = h.bag !== null;
+  const carried = inGame ? (h.bag ?? 0) + h.noted : undefined;
+  const bank = inGame ? h.bank : undefined;
   const base = {
     required,
     ...(carried !== undefined ? { carried, bank } : {}),
@@ -203,16 +206,16 @@ export function holdingFor(
     return have > 0 ? 'PARTIAL' : 'MISSING';
   };
   // Игра знает всё: и сумку, и банк.
-  if (o && owned!.bankSeen) {
-    const total = carried! + (bank ?? 0);
+  if (h.source === 'game' && h.bank !== null) {
+    const total = h.total ?? 0;
     return {
       ...base, owned: total, buy: Math.max(0, required - total), status: status(total), source: 'live',
       ...(manual !== undefined && manual > total ? { stale: true } : {}),
     };
   }
   // Отметка игрока: сумка из игры её не опровергает (остальное может лежать в банке).
-  if (manual !== undefined) {
-    const have = Math.max(manual, carried ?? 0);
+  if (h.source === 'manual') {
+    const have = h.total ?? 0;
     return { ...base, owned: have, buy: Math.max(0, required - have), status: status(have), source: 'manual' };
   }
   // Банк неизвестен: хватает того, что в сумке, — известно; не хватает — неизвестно, а не «нет».

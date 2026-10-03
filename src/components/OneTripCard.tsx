@@ -8,7 +8,10 @@ import { itemById } from '../data';
 import { useStore } from '../store';
 import { usePlayerState } from '../playerStateContext';
 import { isClosed } from '../lib/next-step';
-import { planOneTrip, type TripLine } from '../lib/oneTrip';
+import type { TripLine } from '../lib/oneTrip';
+import { useReadinessEngine } from '../readinessContext';
+import { useFeatures } from '../lib/features';
+import { styleOf } from '../lib/playStyle';
 import { planSources } from '../lib/sourceRouter';
 import { formatGp } from '../lib/shopping';
 
@@ -32,9 +35,9 @@ function Line({ t }: { t: TripLine }) {
 }
 
 export function OneTripCard({ step }: { step: Step }) {
-  const { progress, steps } = useStore();
-  const { state } = usePlayerState();
-  const plan = useMemo(() => planOneTrip(steps, progress, step.id, state), [steps, progress, step.id, state]);
+  const { progress } = useStore();
+  const profile = styleOf(useFeatures());
+  const plan = useReadinessEngine().trip(step.id, profile.lookAhead);
   if (isClosed(progress, step.id)) return null;
   const coinsShort = plan.coins.missing !== null && plan.coins.missing > 0;
   if (!plan.now.length && !plan.soon.length && !coinsShort) return null;
@@ -55,7 +58,7 @@ export function OneTripCard({ step }: { step: Step }) {
         </>
       )}
       {coinsShort && <p className="small">💰 Монеты на шаги: не хватает {formatGp(plan.coins.missing!)} gp из {formatGp(plan.coins.need)}.</p>}
-      {plan.later.length > 0 && (
+      {profile.showLater && plan.later.length > 0 && (
         <details className="small">
           <summary className="muted">Позже: {plan.later.length}</summary>
           <ul>{plan.later.map((t) => <Line key={t.line.key} t={t} />)}</ul>

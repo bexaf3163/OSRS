@@ -2,9 +2,14 @@ import { describe, expect, it } from 'vitest';
 import { qa, type QaInput } from '../scripts/qa';
 import gear from '../src/data/gear.json';
 import questStages from '../src/data/questStages.json';
-import { allSteps } from '../src/data';
+import trainingMethods from '../src/data/trainingMethods.json';
+import majorLocations from '../src/data/majorLocations.json';
+import { allSteps, allLevelSkills } from '../src/data';
 
-const real = (): QaInput => ({ steps: allSteps, gear: gear as unknown as QaInput['gear'], questStages: questStages as unknown as QaInput['questStages'] });
+const real = (): QaInput => ({
+  steps: allSteps, gear: gear as unknown as QaInput['gear'], questStages: questStages as unknown as QaInput['questStages'],
+  training: trainingMethods as unknown as QaInput['training'], places: majorLocations as unknown as QaInput['places'], skillIds: allLevelSkills.map((l) => l.id),
+});
 
 describe('проверка согласованности данных', () => {
   it('настоящие данные — без замечаний', () => {
@@ -60,5 +65,25 @@ describe('проверка согласованности данных', () => {
     };
     const rules = qa({ ...base, questStages: bad }).map((i) => i.rule);
     expect(rules).toEqual(expect.arrayContaining(['stages-step', 'stages-var', 'stages-order', 'stages-empty', 'text', 'stages-point']));
+  });
+
+  it('способы прокачки: повтор, диапазон, скорость, неизвестное место и навык, чужая ссылка — ловятся', () => {
+    const base = real();
+    const ok = base.training!.methods[0];
+    const bad: QaInput['training'] = {
+      methods: [
+        ok,
+        { ...ok },
+        { ...ok, id: 'x1', from: 30, to: 20 },
+        { ...ok, id: 'x2', xph: [500, 100] },
+        { ...ok, id: 'x3', place: 'Нет такого места' },
+        { ...ok, id: 'x4', skill: 'basketweaving' },
+        { ...ok, id: 'x5', url: 'https://example.com/guide' },
+        { ...ok, id: 'x6', name: 'без заглавной' },
+        { ...ok, id: 'x7', kind: 'quest' },
+      ],
+    };
+    const rules = qa({ ...base, training: bad }).map((i) => i.rule);
+    expect(rules).toEqual(expect.arrayContaining(['training-id', 'training-range', 'training-rate', 'training-place', 'training-skill', 'training-url', 'text']));
   });
 });

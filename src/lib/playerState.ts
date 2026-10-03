@@ -51,7 +51,7 @@ export interface PlayerStateInput {
 }
 
 /** Уровни из игры главнее введённых вручную; нет ни тех ни других — неизвестно. */
-function levelsOf(stats: PlayerStats | null, profile: Record<string, number>): Record<string, Known<number>> {
+export function levelsOf(stats: PlayerStats | null, profile: Record<string, number>): Record<string, Known<number>> {
   const out: Record<string, Known<number>> = {};
   for (const [k, v] of Object.entries(profile)) if (typeof v === 'number' && Number.isFinite(v)) out[k] = known(v, 'profile');
   if (stats) for (const [k, v] of Object.entries(stats)) if (typeof v === 'number' && Number.isFinite(v)) out[k] = known(v, 'game');
@@ -119,22 +119,28 @@ export interface Held {
 }
 
 /**
- * Сколько предмета у игрока. Банк неизвестен и в сумке есть — известно «есть»; в сумке нет — UNKNOWN, не MISSING.
- * Ручная отметка «уже есть» считается, если игра не знает об предмете ничего.
+ * Сколько предмета у игрока. Игра знает и сумку, и банк — это главное. Банк неизвестен: слова игрока («у меня уже есть N»)
+ * считаются, сумка их не опровергает; иначе в сумке есть — известно «есть», а нет — UNKNOWN, не MISSING.
  */
-export function heldOf(s: PlayerState, nameEn: string, manualKey?: string): Held {
+export function heldOf(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'>, nameEn: string, manualKey?: string): Held {
   const o = s.owned?.items.get(nameKey(nameEn));
   const equipped = Object.values(s.equipment).filter((n) => nameKey(n) === nameKey(nameEn)).length;
   const manual = manualKey ? s.manual[manualKey] : undefined;
-  if (o) {
+  // Игра знает всё — и сумку, и банк: отметки игрока не нужны.
+  if (o && s.bankSeen) {
     const bag = o.carried;
-    const bank = s.bankSeen ? o.bank ?? 0 : null;
-    const total = bank === null ? null : bag + o.noted + bank;
-    const present = bag + o.noted > 0 || (bank ?? 0) > 0;
-    if (present) return { presence: 'PRESENT', bag, noted: o.noted, bank, equipped, total: total ?? bag + o.noted, source: 'game' };
-    if (bank !== null) return { presence: 'MISSING', bag, noted: o.noted, bank, equipped, total: 0, source: 'game' };
+    const bank = o.bank ?? 0;
+    const total = bag + o.noted + bank;
+    return { presence: total > 0 ? 'PRESENT' : 'MISSING', bag, noted: o.noted, bank, equipped, total, source: 'game' };
   }
-  if (manual !== undefined && manual > 0) return { presence: 'PRESENT', bag: o ? o.carried : null, noted: o?.noted ?? 0, bank: null, equipped, total: manual, source: 'manual' };
+  // Отметка игрока: сумка из игры её не опровергает (остальное может лежать в банке), но и не уменьшает.
+  // «У меня 0» — тоже слово игрока: нет, а не «не знаю».
+  if (manual !== undefined) {
+    const total = Math.max(manual, (o?.carried ?? 0) + (o?.noted ?? 0));
+    return { presence: total > 0 ? 'PRESENT' : 'MISSING', bag: o ? o.carried : null, noted: o?.noted ?? 0, bank: null, equipped, total, source: 'manual' };
+  }
+  // Банк неизвестен: что лежит в сумке — известно, а нет в сумке — «не проверено», не «нет».
+  if (o && o.carried + o.noted > 0) return { presence: 'PRESENT', bag: o.carried, noted: o.noted, bank: null, equipped, total: o.carried + o.noted, source: 'game' };
   // Плагин присылает только предметы, за которыми следит (шаг, закупки): нет записи — не «нет предмета», а «не следили».
   return { presence: 'UNKNOWN', bag: o ? o.carried : null, noted: o?.noted ?? 0, bank: null, equipped, total: null, source: 'none' };
 }

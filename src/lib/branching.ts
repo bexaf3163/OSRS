@@ -4,6 +4,7 @@
 
 import type { BranchCondition, BranchNeed, PlayerStats, Progress, Step, StepBranch } from '../types';
 import { nameKey, ownedTotal, type OwnedState } from './checklist';
+import { heldOf, levelsOf } from './playerState';
 
 /** available — условие выполнено; locked — точно не выполнено; unknown — данных нет (RuneLite выключен, уровень не введён). */
 export type BranchStatus = 'available' | 'locked' | 'unknown';
@@ -52,12 +53,10 @@ export function evaluateCondition(c: BranchCondition, ctx: BranchContext): Condi
     case 'SKILL_LEVEL': {
       if (!c.skill || !c.minLevel) return { status: 'unknown' };
       const need = c.minLevel;
-      const fromGame = ctx.stats?.[c.skill];
-      if (typeof fromGame === 'number') return { status: fromGame >= need ? 'available' : 'locked', have: fromGame, need, source: 'runelite' };
-      // Уровень, введённый вручную, — только если его действительно вводили (по умолчанию уровня нет).
-      const manual = ctx.progress.levels[c.skill];
-      if (typeof manual === 'number') return { status: manual >= need ? 'available' : 'locked', have: manual, need, source: 'manual' };
-      return { status: 'unknown', need };
+      // Тот же расчёт уровня, что у готовности шага: игра главнее введённого вручную; нет ни того ни другого — неизвестно.
+      const lv = levelsOf(ctx.stats, ctx.progress.levels ?? {})[c.skill];
+      if (!lv?.known) return { status: 'unknown', need };
+      return { status: lv.value >= need ? 'available' : 'locked', have: lv.value, need, source: lv.source === 'game' ? 'runelite' : 'manual' };
     }
     case 'QUEST_COMPLETED': {
       if (!c.questName) return { status: 'unknown' };
@@ -67,11 +66,12 @@ export function evaluateCondition(c: BranchCondition, ctx: BranchContext): Condi
     }
     case 'ITEM_OWNED': {
       if (!c.itemName) return { status: 'unknown' };
-      const have = ownedTotal(ctx.owned, c.itemName);
-      if (have === null) return { status: 'unknown' };
+      // Тот же расчёт наличия, что у готовности и закупок: «нет ни в сумке, ни в банке» — только когда банк открывали.
+      const h = heldOf({ owned: ctx.owned, equipment: {}, manual: {}, bankSeen: ctx.owned?.bankSeen === true }, c.itemName);
+      if (h.bag === null) return { status: 'unknown' };
+      const have = (h.bag ?? 0) + h.noted + (h.bank ?? 0);
       if (have > 0) return { status: 'available', have, source: 'runelite' };
-      // Нет ни в сумке, ни в банке — но без открытого банка это ещё не «нет».
-      return { status: ctx.owned?.bankSeen ? 'locked' : 'unknown', have, source: 'runelite' };
+      return { status: h.presence === 'MISSING' ? 'locked' : 'unknown', have, source: 'runelite' };
     }
     default:
       return { status: 'unknown' };

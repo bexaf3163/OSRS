@@ -81,6 +81,8 @@ interface BridgeValue {
   /** Поставить временную цель. Без связи или при отказе плагина — ответ с причиной. */
   navigate: (target: NavTargetPayload) => Promise<NavResult | { ok: false; reason: 'off' }>;
   clearNav: () => Promise<void>;
+  /** Когда игрок сам снял цель стрелки (мс); 0 — не снимал. Автоподготовка после этого не перехватывает стрелку. */
+  userClearedAt: number;
   /** Версия плагина и совместимость с программой; null — нет связи. */
   plugin: { protocol: number | null; version: string | null; compat: PluginCompat } | null;
   /** Опыт по навыкам из игры (протокол 5); null — нет связи, старый плагин или передача выключена. */
@@ -483,7 +485,9 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     return r;
   }, [enabled]);
 
+  const [userClearedAt, setUserClearedAt] = useState(0);
   const clearNav = useCallback(async () => {
+    setUserClearedAt(Date.now());
     await clearNavTarget();
     setNavFromPlugin(null);
   }, [setNavFromPlugin]);
@@ -549,11 +553,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     () => ({
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, plugin,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, userClearedAt, plugin,
       xp, questsDone, player, gate, xpRate, session, diagnostics, locate,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, plugin,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, userClearedAt, plugin,
       xp, questsDone, player, gate, xpRate, session, diagnostics, locate],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;

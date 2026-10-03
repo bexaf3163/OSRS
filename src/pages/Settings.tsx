@@ -57,6 +57,7 @@ export function SettingsPage() {
       <ProfilesSection />
       <AccountSync />
       <SessionSection />
+      <PlayStyleSection />
       <Helpers />
       <BackupSection />
       <DiagnosticsSection />
@@ -235,6 +236,42 @@ const HELPERS: { key: keyof Features; title: string; text: string }[] = [
   { key: 'levelsFromGame', title: '📈 Уровни из игры', text: 'Уровни навыков из игры сами попадают в поля уровней на страницах навыков и шагов (ручной ввод остаётся, когда игры рядом нет). Пишутся только в профиль того персонажа, который в игре.' },
   { key: 'upgradeRouter', title: '⚡ Апгрейды и снаряжение', text: 'Перед долгой прокачкой — топор или кирка получше, если уровень уже позволяет. На шагах с боем — оружие, амулет и броня получше по формулам урона OSRS Wiki, против противника шага; совет — и строкой в HUD игры. Сама ничего не покупает и не надевает.' },
 ];
+
+function PlayStyleSection() {
+  const features = useFeatures();
+  return (
+    <section className="card section-card" aria-label="Стиль игры">
+      <h2 className="card-title">Стиль игры и подготовка</h2>
+      <div className="setting">
+        <div className="mode-toggle style-toggle" role="group" aria-label="Стиль игры">
+          {([['chill', '🌿', 'Спокойно'], ['efficient', '⚡', 'Эффективно']] as const).map(([k, icon, label]) => {
+            const on = (k === 'efficient') === features.efficient;
+            return (
+              <button key={k} type="button" className={`mode-btn ${on ? 'is-active' : ''}`} aria-pressed={on} onClick={() => setFeatures({ efficient: k === 'efficient' })}>
+                <span aria-hidden="true">{icon}</span> <span className="style-label">{label}</span>
+              </button>
+            );
+          })}
+        </div>
+        <p className="muted small">
+          <strong>Спокойно</strong> — меньше на экране, ничего не навязывается; способы прокачки — без риска и без лишних кликов; сообщения только о главном.
+          {' '}<strong>Эффективно</strong> — больше подсказок и сравнений; способы — самые быстрые из доступных, с оценкой времени; в «одной ходке» видно дальше. Требования шагов и безопасность от стиля не зависят.
+        </p>
+      </div>
+      <div className="setting">
+        <label className="switch">
+          <input type="checkbox" checked={features.autoPrep} onChange={(e) => setFeatures({ autoPrep: e.target.checked })} />
+          <span>🧭 Автоподготовка к шагу</span>
+        </label>
+        <p className="muted small">
+          Приложение само выстраивает, что взять или сделать до шага, и ведёт стрелку в игре: к банку за предметом, к бирже за покупкой, к месту прокачки.
+          Когда задача выполнена, ведёт к следующей, а в конце возвращает к шагу. Стрелку не перехватывает, если в игре уже стоит цель, и замолкает, если снять её самому.
+          Ничего не покупает и не делает за тебя.
+        </p>
+      </div>
+    </section>
+  );
+}
 
 function Helpers() {
   const features = useFeatures();

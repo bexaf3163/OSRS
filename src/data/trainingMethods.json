@@ -1,0 +1,1368 @@
+{
+  "source": "OSRS Wiki: страницы «Free-to-play/Pay-to-play <Skill> training» (сверено 2026-10-03) и таблицы «План прокачки» этого гайда. Скорость (xph) — ориентир из вики, зависит от уровня, инвентаря и топора/кирки; в расчёты времени она не входит: время считается только по замерам игрока. Опыт за действие (xpa) — точные игровые значения.",
+  "methods": [
+    {
+      "id": "wc-tree",
+      "skill": "woodcutting",
+      "from": 1,
+      "to": 15,
+      "name": "Обычные деревья",
+      "members": false,
+      "needs": [
+        {
+          "type": "tool",
+          "skill": "woodcutting"
+        }
+      ],
+      "xph": [
+        12500,
+        18750
+      ],
+      "xpa": 25,
+      "act": "бревно|бревна|брёвен",
+      "effort": "afk",
+      "cost": "free",
+      "risk": "none",
+      "where": "Любое место, где растут обычные деревья (например, у замка Лумбридж)",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Woodcutting_training",
+      "place": "Lumbridge"
+    },
+    {
+      "id": "wc-oak",
+      "skill": "woodcutting",
+      "from": 15,
+      "to": 30,
+      "name": "Дубы",
+      "members": false,
+      "needs": [
+        {
+          "type": "tool",
+          "skill": "woodcutting"
+        }
+      ],
+      "xpa": 37.5,
+      "act": "бревно|бревна|брёвен",
+      "effort": "afk",
+      "cost": "free",
+      "risk": "none",
+      "where": "У банка Draynor, западнее банка Варрока, Port Sarim, Rimmington",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Woodcutting_training",
+      "place": "Draynor Bank"
+    },
+    {
+      "id": "wc-willow",
+      "skill": "woodcutting",
+      "from": 30,
+      "to": 60,
+      "name": "Ивы",
+      "members": false,
+      "needs": [
+        {
+          "type": "tool",
+          "skill": "woodcutting"
+        }
+      ],
+      "xph": [
+        30000,
+        45000
+      ],
+      "xpa": 67.5,
+      "act": "бревно|бревна|брёвен",
+      "effort": "afk",
+      "cost": "free",
+      "risk": "none",
+      "where": "Draynor Village (банк рядом), Port Sarim, Edgeville",
+      "note": "Скорость зависит от топора и от мира; у ив Draynor рядом бродят тёмные маги.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Woodcutting_training",
+      "place": "Draynor Village"
+    },
+    {
+      "id": "wc-oak-p2p",
+      "skill": "woodcutting",
+      "from": 15,
+      "to": 35,
+      "name": "Дубы у Seers' Village или Hosidius",
+      "members": true,
+      "needs": [
+        {
+          "type": "tool",
+          "skill": "woodcutting"
+        }
+      ],
+      "xpa": 37.5,
+      "act": "бревно|бревна|брёвен",
+      "effort": "afk",
+      "cost": "free",
+      "risk": "none",
+      "where": "Seers' Village, Hosidius",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Woodcutting_training",
+      "note": "По вики лучший до 35 уровня с подпиской; ивы тоже подходят.",
+      "place": "Seers' Village"
+    },
+    {
+      "id": "wc-teak",
+      "skill": "woodcutting",
+      "from": 35,
+      "to": 65,
+      "name": "Тик (Teak)",
+      "members": true,
+      "needs": [
+        {
+          "type": "tool",
+          "skill": "woodcutting"
+        }
+      ],
+      "xph": [
+        34000,
+        93000
+      ],
+      "xpa": 85,
+      "act": "бревно|бревна|брёвен",
+      "effort": "low",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Ape Atoll, Fossil Island, Isle of Souls, Prifddinas",
+      "note": "Нижняя граница — обычная рубка, верхняя — быстрые приёмы с тиками: они требуют внимания.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Woodcutting_training"
+    },
+    {
+      "id": "fi-shrimp",
+      "skill": "fishing",
+      "from": 1,
+      "to": 20,
+      "name": "Креветки и анчоусы сетью",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Small fishing net"
+        }
+      ],
+      "xph": [
+        1500,
+        7500
+      ],
+      "act": "рыба|рыбы|рыб",
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Al Kharid, Draynor Village, болото у Лумбриджа",
+      "note": "Рыбу можно выбрасывать (Shift + клик) и не ходить в банк.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Fishing_training",
+      "place": "Draynor Village fishing spots"
+    },
+    {
+      "id": "fi-bait",
+      "skill": "fishing",
+      "from": 5,
+      "to": 20,
+      "name": "Сардины и сельдь на наживку",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Fishing rod"
+        },
+        {
+          "type": "item",
+          "name": "Fishing bait"
+        }
+      ],
+      "xph": [
+        3000,
+        8000
+      ],
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Те же места, что и сетью",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Fishing_training",
+      "place": "Draynor Village fishing spots"
+    },
+    {
+      "id": "fi-fly",
+      "skill": "fishing",
+      "from": 20,
+      "to": 40,
+      "name": "Форель и лосось нахлыстом",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Fly fishing rod"
+        },
+        {
+          "type": "item",
+          "name": "Feather"
+        }
+      ],
+      "xph": [
+        13000,
+        50000
+      ],
+      "act": "рыба|рыбы|рыб",
+      "effort": "afk",
+      "cost": "free",
+      "risk": "none",
+      "where": "Barbarian Village, река у Лумбриджа",
+      "note": "Форель — 50 опыта, лосось — 70. Нужно много перьев (Feather): 600 примерно на 20–40.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Fishing_training",
+      "place": "Barbarian Village fishing spots"
+    },
+    {
+      "id": "fi-lobster",
+      "skill": "fishing",
+      "from": 40,
+      "to": 50,
+      "name": "Омары в ловушки",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Lobster pot"
+        }
+      ],
+      "xph": [
+        12600,
+        17360
+      ],
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Musa Point на Karamja (проезд 30 монет)",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Fishing_training",
+      "place": "Musa Point fishing spots"
+    },
+    {
+      "id": "fi-harpoon",
+      "skill": "fishing",
+      "from": 50,
+      "to": 99,
+      "name": "Тунец и меч-рыба гарпуном",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Harpoon"
+        }
+      ],
+      "xph": [
+        17160,
+        21099
+      ],
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Musa Point на Karamja",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Fishing_training",
+      "place": "Musa Point fishing spots"
+    },
+    {
+      "id": "fi-monk",
+      "skill": "fishing",
+      "from": 62,
+      "to": 99,
+      "name": "Монкфиш",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Small fishing net"
+        },
+        {
+          "type": "quest",
+          "quest": "Swan Song"
+        }
+      ],
+      "xph": [
+        35800,
+        38500
+      ],
+      "effort": "afk",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Piscatoris Fishing Colony",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+    },
+    {
+      "id": "fi-karambwan",
+      "skill": "fishing",
+      "from": 65,
+      "to": 99,
+      "name": "Карамбвани",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Karambwan vessel"
+        },
+        {
+          "type": "item",
+          "name": "Raw karambwanji"
+        }
+      ],
+      "xph": [
+        29000,
+        32900
+      ],
+      "effort": "afk",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Рядом с кольцом фей DKP",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fishing_training"
+    },
+    {
+      "id": "mi-ore",
+      "skill": "mining",
+      "from": 1,
+      "to": 15,
+      "name": "Медь и олово",
+      "members": false,
+      "needs": [
+        {
+          "type": "tool",
+          "skill": "mining"
+        }
+      ],
+      "xph": [
+        15000,
+        20000
+      ],
+      "xpa": 17.5,
+      "act": "руда|руды|руд",
+      "effort": "afk",
+      "cost": "free",
+      "risk": "none",
+      "where": "Болото к юго-востоку от Лумбриджа, Dwarven Mine",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Mining_training",
+      "place": "East Lumbridge Swamp mine"
+    },
+    {
+      "id": "mi-iron",
+      "skill": "mining",
+      "from": 15,
+      "to": 99,
+      "name": "Железо, руду выбрасывать",
+      "members": false,
+      "needs": [
+        {
+          "type": "tool",
+          "skill": "mining"
+        }
+      ],
+      "xph": [
+        45000,
+        55000
+      ],
+      "xpa": 35,
+      "act": "руда|руды|руд",
+      "effort": "medium",
+      "cost": "free",
+      "risk": "none",
+      "where": "Al Kharid, юго-восток Варрока, Rimmington",
+      "note": "Три близких камня, руду выбрасывать; Rune pickaxe ускоряет с 41.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Mining_training",
+      "place": "Al Kharid mine"
+    },
+    {
+      "id": "mi-motherlode",
+      "skill": "mining",
+      "from": 30,
+      "to": 75,
+      "name": "Motherlode Mine",
+      "members": true,
+      "needs": [
+        {
+          "type": "tool",
+          "skill": "mining"
+        }
+      ],
+      "xph": [
+        45000,
+        55000
+      ],
+      "effort": "afk",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Motherlode Mine (Falador)",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Mining_training"
+    },
+    {
+      "id": "ag-gnome",
+      "skill": "agility",
+      "from": 1,
+      "to": 20,
+      "name": "Трасса гномов или крыши Draynor",
+      "members": true,
+      "xph": [
+        10000,
+        10000
+      ],
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Tree Gnome Stronghold; Draynor Village",
+      "note": "На трассе гномов падений нет, еда не нужна.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Agility_training",
+      "place": "Tree Gnome Stronghold"
+    },
+    {
+      "id": "ag-alkharid",
+      "skill": "agility",
+      "from": 20,
+      "to": 30,
+      "name": "Крыши Al Kharid",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "agility",
+          "min": 20
+        }
+      ],
+      "xph": [
+        12000,
+        12000
+      ],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "low",
+      "where": "Al Kharid",
+      "note": "Падения возможны; падают знаки грации (Mark of Grace).",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Agility_training",
+      "place": "Al Kharid"
+    },
+    {
+      "id": "ag-brimhaven",
+      "skill": "agility",
+      "from": 20,
+      "to": 47,
+      "name": "Brimhaven Agility Arena",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "agility",
+          "min": 20
+        }
+      ],
+      "xph": [
+        30000,
+        50000
+      ],
+      "effort": "medium",
+      "cost": "free",
+      "risk": "low",
+      "where": "Karamja (Brimhaven)",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Agility_training",
+      "place": "Brimhaven"
+    },
+    {
+      "id": "ck-meat",
+      "skill": "cooking",
+      "from": 1,
+      "to": 20,
+      "name": "Сырая говядина и птица",
+      "members": false,
+      "xpa": 30,
+      "act": "порция|порции|порций",
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Кухня замка Лумбридж (мясо с ферм)",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
+      "place": "Lumbridge Castle"
+    },
+    {
+      "id": "ck-trout",
+      "skill": "cooking",
+      "from": 20,
+      "to": 30,
+      "name": "Форель",
+      "members": false,
+      "xpa": 70,
+      "act": "рыба|рыбы|рыб",
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Плита в Barbarian Village, Al Kharid или кухня Лумбриджа",
+      "note": "Форель дают те, кто качает рыбалку; своя рыба — это бесплатно.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
+      "place": "Barbarian Village"
+    },
+    {
+      "id": "ck-tuna",
+      "skill": "cooking",
+      "from": 30,
+      "to": 35,
+      "name": "Тунец",
+      "members": false,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "fishing",
+          "min": 35
+        }
+      ],
+      "xpa": 100,
+      "act": "рыба|рыбы|рыб",
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Musa Point на Karamja",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
+      "place": "Musa Point"
+    },
+    {
+      "id": "ck-wine",
+      "skill": "cooking",
+      "from": 35,
+      "to": 99,
+      "name": "Вино (кувшин с виноградом)",
+      "members": false,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "cooking",
+          "min": 35
+        }
+      ],
+      "xpa": 200,
+      "act": "кувшин|кувшина|кувшинов",
+      "effort": "low",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Банк рядом с плитой (Al Kharid, Cooks' Guild)",
+      "note": "Быстрее всех, но платно: виноград и кувшины покупаются.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
+      "place": "Cooks' Guild"
+    },
+    {
+      "id": "fm-normal",
+      "skill": "firemaking",
+      "from": 1,
+      "to": 15,
+      "name": "Обычные брёвна",
+      "members": false,
+      "xpa": 40,
+      "act": "бревно|бревна|брёвен",
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Рядом с банком (например, у Grand Exchange)",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Firemaking_training",
+      "place": "Grand Exchange"
+    },
+    {
+      "id": "fm-oak",
+      "skill": "firemaking",
+      "from": 15,
+      "to": 30,
+      "name": "Дубовые брёвна",
+      "members": false,
+      "xpa": 60,
+      "act": "бревно|бревна|брёвен",
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Рядом с банком",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Firemaking_training",
+      "place": "Grand Exchange"
+    },
+    {
+      "id": "fm-willow",
+      "skill": "firemaking",
+      "from": 30,
+      "to": 45,
+      "name": "Ивовые брёвна",
+      "members": false,
+      "xpa": 90,
+      "act": "бревно|бревна|брёвен",
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Рядом с банком",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Firemaking_training",
+      "place": "Grand Exchange"
+    },
+    {
+      "id": "fm-maple",
+      "skill": "firemaking",
+      "from": 45,
+      "to": 60,
+      "name": "Кленовые брёвна",
+      "members": false,
+      "xpa": 135,
+      "act": "бревно|бревна|брёвен",
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Рядом с банком",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Firemaking_training",
+      "place": "Grand Exchange"
+    },
+    {
+      "id": "fm-yew",
+      "skill": "firemaking",
+      "from": 60,
+      "to": 99,
+      "name": "Тисовые брёвна",
+      "members": false,
+      "xpa": 202.5,
+      "act": "бревно|бревна|брёвен",
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Рядом с банком",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Firemaking_training",
+      "place": "Grand Exchange"
+    },
+    {
+      "id": "sm-bronze",
+      "skill": "smithing",
+      "from": 18,
+      "to": 33,
+      "name": "Бронзовые нагрудники",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Hammer"
+        }
+      ],
+      "xpa": 62.5,
+      "act": "нагрудник|нагрудника|нагрудников",
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Наковальня у западного банка Варрока",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training",
+      "place": "Varrock West Bank"
+    },
+    {
+      "id": "sm-iron",
+      "skill": "smithing",
+      "from": 33,
+      "to": 48,
+      "name": "Железные нагрудники",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Hammer"
+        }
+      ],
+      "xpa": 125,
+      "act": "нагрудник|нагрудника|нагрудников",
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Наковальня у западного банка Варрока",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training",
+      "place": "Varrock West Bank"
+    },
+    {
+      "id": "sm-steel",
+      "skill": "smithing",
+      "from": 48,
+      "to": 68,
+      "name": "Стальные нагрудники",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Hammer"
+        }
+      ],
+      "xpa": 187.5,
+      "act": "нагрудник|нагрудника|нагрудников",
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Наковальня у западного банка Варрока",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training",
+      "place": "Varrock West Bank"
+    },
+    {
+      "id": "cr-leather",
+      "skill": "crafting",
+      "from": 1,
+      "to": 9,
+      "name": "Кожаные перчатки и сапоги",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Needle"
+        },
+        {
+          "type": "item",
+          "name": "Thread"
+        }
+      ],
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "У банка (кожа из Al Kharid)",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Crafting_training",
+      "place": "Al Kharid Bank"
+    },
+    {
+      "id": "cr-gold",
+      "skill": "crafting",
+      "from": 5,
+      "to": 20,
+      "name": "Золотые украшения",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Ring mould"
+        }
+      ],
+      "xph": [
+        20250,
+        40500
+      ],
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Печь Edgeville или Al Kharid",
+      "note": "По вики окупается; считай по ценам биржи.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Crafting_training",
+      "place": "Edgeville"
+    },
+    {
+      "id": "cr-gems",
+      "skill": "crafting",
+      "from": 20,
+      "to": 43,
+      "name": "Огранка камней (сапфиры с 20, изумруды с 27, рубины с 34)",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Chisel"
+        }
+      ],
+      "effort": "low",
+      "cost": "cost",
+      "risk": "none",
+      "where": "У банка",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Crafting_training",
+      "place": "Grand Exchange"
+    },
+    {
+      "id": "ma-strike",
+      "skill": "magic",
+      "from": 1,
+      "to": 17,
+      "name": "Wind Strike по коровам и курам",
+      "members": false,
+      "xph": [
+        7200,
+        7200
+      ],
+      "effort": "high",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Фермы у Лумбриджа",
+      "note": "Шкуры коров можно продать.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
+      "place": "Lumbridge"
+    },
+    {
+      "id": "ma-splash",
+      "skill": "magic",
+      "from": 1,
+      "to": 59,
+      "name": "Сплэш (Splash) — заклинания по слабым монстрам",
+      "members": false,
+      "xph": [
+        7200,
+        41100
+      ],
+      "effort": "afk",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Гоблины/другие безобидные монстры",
+      "note": "Нужны руны и отрицательная атака магии; без урона по цели. Чаще всего сеансы ~20 минут без кликов.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training"
+    },
+    {
+      "id": "ma-alch",
+      "skill": "magic",
+      "from": 21,
+      "to": 99,
+      "name": "Low Level Alchemy",
+      "members": false,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "magic",
+          "min": 21
+        }
+      ],
+      "xph": [
+        31000,
+        60000
+      ],
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Где угодно",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training"
+    },
+    {
+      "id": "ma-superheat",
+      "skill": "magic",
+      "from": 43,
+      "to": 99,
+      "name": "Superheat Item (железная руда)",
+      "members": false,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "magic",
+          "min": 43
+        },
+        {
+          "type": "skill",
+          "skill": "smithing",
+          "min": 15
+        }
+      ],
+      "xph": [
+        97000,
+        97000
+      ],
+      "xpa": 53,
+      "act": "заклинание|заклинания|заклинаний",
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "У банка",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
+      "place": "Varrock West Bank"
+    },
+    {
+      "id": "ma-halch",
+      "skill": "magic",
+      "from": 55,
+      "to": 99,
+      "name": "High Level Alchemy",
+      "members": false,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "magic",
+          "min": 55
+        }
+      ],
+      "xph": [
+        78000,
+        78000
+      ],
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Где угодно",
+      "note": "Убыток или прибыль зависят от предметов — считай по ценам биржи.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training"
+    },
+    {
+      "id": "pr-ghost",
+      "skill": "prayer",
+      "from": 1,
+      "to": 9,
+      "name": "Квест The Restless Ghost",
+      "members": false,
+      "kind": "quest",
+      "xpTotal": 1125,
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Lumbridge",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training",
+      "place": "Father Aereck"
+    },
+    {
+      "id": "pr-bury",
+      "skill": "prayer",
+      "from": 1,
+      "to": 99,
+      "name": "Закапывать кости из боя",
+      "members": false,
+      "xph": [
+        43500,
+        43500
+      ],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Там, где дерёшься (кости из гигантских лягушек, гигантов)",
+      "note": "Прокачивается заодно с боем; по вики ~43 тыс./ч с большими костями.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training"
+    },
+    {
+      "id": "pr-camdozaal",
+      "skill": "prayer",
+      "from": 7,
+      "to": 99,
+      "name": "Camdozaal: подношение рыбы",
+      "members": false,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "Below Ice Mountain"
+        }
+      ],
+      "xph": [
+        2400,
+        2400
+      ],
+      "effort": "medium",
+      "cost": "free",
+      "risk": "none",
+      "where": "Ruins of Camdozaal",
+      "note": "Заодно качаются Fishing и Cooking.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Prayer_training"
+    },
+    {
+      "id": "rc-air",
+      "skill": "runecraft",
+      "from": 1,
+      "to": 9,
+      "name": "Руны воздуха",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Air talisman"
+        },
+        {
+          "type": "item",
+          "name": "Pure essence"
+        }
+      ],
+      "xph": [
+        3000,
+        3000
+      ],
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Алтарь воздуха к югу от Falador",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training"
+    },
+    {
+      "id": "rc-earth",
+      "skill": "runecraft",
+      "from": 9,
+      "to": 14,
+      "name": "Руны земли",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Earth talisman"
+        },
+        {
+          "type": "item",
+          "name": "Pure essence"
+        }
+      ],
+      "xph": [
+        6911,
+        6911
+      ],
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Алтарь земли к северо-востоку от Варрока",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training"
+    },
+    {
+      "id": "rc-fire",
+      "skill": "runecraft",
+      "from": 14,
+      "to": 20,
+      "name": "Руны огня",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Fire talisman"
+        },
+        {
+          "type": "item",
+          "name": "Pure essence"
+        }
+      ],
+      "xph": [
+        6533,
+        6533
+      ],
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Алтарь огня к западу от Emir's Arena",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training"
+    },
+    {
+      "id": "rc-body",
+      "skill": "runecraft",
+      "from": 20,
+      "to": 99,
+      "name": "Руны тела",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Body talisman"
+        },
+        {
+          "type": "item",
+          "name": "Pure essence"
+        }
+      ],
+      "xph": [
+        8000,
+        10000
+      ],
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Алтарь тела",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Runecraft_training"
+    },
+    {
+      "id": "ra-lumb",
+      "skill": "ranged",
+      "from": 1,
+      "to": 20,
+      "name": "Куры, коровы и гоблины у Лумбриджа",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Shortbow"
+        },
+        {
+          "type": "item",
+          "name": "Bronze arrow"
+        }
+      ],
+      "effort": "medium",
+      "cost": "free",
+      "risk": "low",
+      "where": "Фермы вокруг Лумбриджа",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
+      "place": "Lumbridge"
+    },
+    {
+      "id": "ra-monk",
+      "skill": "ranged",
+      "from": 5,
+      "to": 25,
+      "name": "Монахи Edgeville Monastery",
+      "members": false,
+      "effort": "medium",
+      "cost": "free",
+      "risk": "low",
+      "where": "Edgeville Monastery",
+      "note": "Монахи лечат, поэтому безопаснее.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
+      "place": "Edgeville Monastery"
+    },
+    {
+      "id": "ra-frog",
+      "skill": "ranged",
+      "from": 26,
+      "to": 56,
+      "name": "Гигантские лягушки",
+      "members": false,
+      "effort": "medium",
+      "cost": "free",
+      "risk": "low",
+      "where": "Lumbridge Swamp",
+      "note": "Заодно кости для Prayer.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
+      "place": "Lumbridge Swamp"
+    },
+    {
+      "id": "ra-crawler",
+      "skill": "ranged",
+      "from": 40,
+      "to": 99,
+      "name": "Flesh Crawlers",
+      "members": false,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "defence",
+          "min": 40
+        }
+      ],
+      "effort": "afk",
+      "cost": "cost",
+      "risk": "low",
+      "where": "Stronghold of Security",
+      "note": "Окна по ~10 минут без кликов.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training"
+    },
+    {
+      "id": "me-cow",
+      "skill": [
+        "attack",
+        "strength",
+        "defence"
+      ],
+      "from": 1,
+      "to": 20,
+      "name": "Куры и коровы",
+      "members": false,
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Фермы вокруг Лумбриджа",
+      "note": "Кости и шкуры падают заодно.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Melee_training",
+      "place": "Lumbridge"
+    },
+    {
+      "id": "me-gc",
+      "skill": [
+        "attack",
+        "strength",
+        "defence"
+      ],
+      "from": 30,
+      "to": 55,
+      "name": "Gemstone Crab (Tlati Rainforest)",
+      "members": true,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "Children of the Sun"
+        }
+      ],
+      "xph": [
+        50000,
+        50000
+      ],
+      "effort": "afk",
+      "cost": "free",
+      "risk": "none",
+      "where": "Tlati Rainforest",
+      "note": "Еда не нужна: у краба «бесконечное» здоровье.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Melee_training"
+    },
+    {
+      "id": "th-man",
+      "skill": "thieving",
+      "from": 1,
+      "to": 5,
+      "name": "Карманные кражи у мужчин и женщин",
+      "members": true,
+      "effort": "medium",
+      "cost": "free",
+      "risk": "low",
+      "where": "Лумбридж, Draynor, Варрок",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Thieving_training",
+      "place": "Lumbridge"
+    },
+    {
+      "id": "th-bakery",
+      "skill": "thieving",
+      "from": 5,
+      "to": 25,
+      "name": "Прилавок пекаря (East Ardougne)",
+      "members": true,
+      "xph": [
+        19000,
+        19000
+      ],
+      "xpa": 16,
+      "act": "кража|кражи|краж",
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "low",
+      "where": "Рынок East Ardougne",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Thieving_training",
+      "place": "East Ardougne"
+    },
+    {
+      "id": "th-blackjack",
+      "skill": "thieving",
+      "from": 45,
+      "to": 65,
+      "name": "Blackjack в Pollnivneach",
+      "members": true,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "The Feud"
+        }
+      ],
+      "xph": [
+        99000,
+        103000
+      ],
+      "effort": "high",
+      "cost": "profit",
+      "risk": "low",
+      "where": "Pollnivneach",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Thieving_training",
+      "place": "Pollnivneach"
+    },
+    {
+      "id": "fl-shaft",
+      "skill": "fletching",
+      "from": 1,
+      "to": 5,
+      "name": "Древки стрел",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Knife"
+        }
+      ],
+      "effort": "low",
+      "cost": "cost",
+      "risk": "none",
+      "where": "У банка",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fletching_training"
+    },
+    {
+      "id": "fl-shortbow",
+      "skill": "fletching",
+      "from": 5,
+      "to": 20,
+      "name": "Короткие луки",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Knife"
+        }
+      ],
+      "xph": [
+        9000,
+        9000
+      ],
+      "effort": "afk",
+      "cost": "cost",
+      "risk": "none",
+      "where": "У банка",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fletching_training"
+    },
+    {
+      "id": "fl-oak-willow",
+      "skill": "fletching",
+      "from": 20,
+      "to": 40,
+      "name": "Дубовые и ивовые луки",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Knife"
+        }
+      ],
+      "xph": [
+        29700,
+        59940
+      ],
+      "effort": "afk",
+      "cost": "cost",
+      "risk": "none",
+      "where": "У банка",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fletching_training"
+    },
+    {
+      "id": "he-quests",
+      "skill": "herblore",
+      "from": 3,
+      "to": 19,
+      "name": "Квесты Jungle Potion, Recruitment Drive и The Dig Site",
+      "members": true,
+      "kind": "quest",
+      "xpTotal": 8025,
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Разные места",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Herblore_training"
+    },
+    {
+      "id": "he-potions",
+      "skill": "herblore",
+      "from": 3,
+      "to": 60,
+      "name": "Варка зелий (Attack, Antipoison, Defence, Prayer, Super attack)",
+      "members": true,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "Druidic Ritual"
+        }
+      ],
+      "xph": [
+        62500,
+        300000
+      ],
+      "effort": "low",
+      "cost": "cost",
+      "risk": "none",
+      "where": "У банка",
+      "note": "Скорость растёт со ступенью зелья; стоимость тоже.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Herblore_training"
+    },
+    {
+      "id": "fa-allot",
+      "skill": "farming",
+      "from": 1,
+      "to": 15,
+      "name": "Огороды (аллотменты)",
+      "members": true,
+      "xph": [
+        5000,
+        15000
+      ],
+      "effort": "low",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Грядки Falador, Catherby, Ardougne, Port Phasmatys",
+      "note": "Растёт по реальному времени: сажаешь и возвращаешься.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Farming_training",
+      "place": "Falador"
+    },
+    {
+      "id": "fa-tithe",
+      "skill": "farming",
+      "from": 34,
+      "to": 99,
+      "name": "Tithe Farm",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "farming",
+          "min": 34
+        }
+      ],
+      "xph": [
+        90000,
+        100000
+      ],
+      "effort": "medium",
+      "cost": "free",
+      "risk": "none",
+      "where": "Tithe Farm (Hosidius)",
+      "note": "Цифры вики — для 74+ уровня; на 34 заметно медленнее.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Farming_training"
+    }
+  ]
+}

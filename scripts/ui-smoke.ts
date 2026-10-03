@@ -83,12 +83,14 @@ async function run(browser: Browser) {
   for (const width of [390, 1100]) {
     console.log(`Ширина ${width}`);
 
-    // Готовность к шагу: не хватает уровня — действие «добрать»; предмет в банке — «к банку».
+    // Готовность к шагу: не хватает уровня — действие «добрать»; предмет в банке — «к банку». Автоподготовка выключена —
+    // заход начинается кнопкой (автоочередь проверяется ниже).
     {
       const { page, errors } = await open(browser, width, {
         progress: progressBefore('S9-01'),
         status: { stats: { crafting: 28, woodcutting: 40 } },
         events: [{ type: 'STATS', stats: { crafting: 28, woodcutting: 40 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Knife', carried: 0, noted: 0, bank: 1 }] }],
+        localStorage: { 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
       }, '#/step/S9-01');
       const t = await text(page, '.readiness');
       expect(t.includes('Нужна короткая подготовка') && t.includes('Добрать Crafting'), 'готовность: не хватает Crafting 31 — «⚡ Добрать Crafting»');
@@ -105,6 +107,80 @@ async function run(browser: Browser) {
       expect((await text(page, '.prep-route')).includes('Подготовка идёт'), 'подготовка: после перезагрузки заход всё ещё идёт');
       expect(await noOverflow(page), 'шаг: без горизонтальной прокрутки');
       expect(!errors.length, `шаг: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
+    // Автоочередь подготовки: сама ставит стрелку к банку за Knife, запоминает заход, переживает перезагрузку;
+    // игрок снял стрелку — очередь на паузе, «Продолжить» возвращает.
+    {
+      const { page, errors } = await open(browser, width, {
+        progress: progressBefore('S9-01'),
+        status: { stats: { crafting: 40, woodcutting: 40 } },
+        events: [{ type: 'STATS', stats: { crafting: 40, woodcutting: 40 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Knife', carried: 0, noted: 0, bank: 1 }] }],
+      }, '#/step/S9-01');
+      type Post = { path: string; body: Record<string, unknown> };
+      const posts = () => page.evaluate(() => (window as unknown as { __posts: Post[] }).__posts);
+      // Связь с игрой и банк приходят не мгновенно — ждём, пока очередь начнёт заход.
+      await page.waitForFunction(() => (window as unknown as { __posts: Post[] }).__posts.some((p) => p.path === '/nav-target'), null, { timeout: 10000 }).catch(() => undefined);
+      await page.waitForTimeout(300);
+      const nav = (await posts()).filter((p) => p.path === '/nav-target').pop()?.body;
+      expect(nav?.itemName === 'Knife' && nav?.stepId === 'S9-01', 'автоочередь: стрелка сама ведёт к банку за Knife');
+      const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:prep') ?? '{}') as { stack?: { sourceStepId: string; detourId: string }[] });
+      expect(saved.stack?.length === 1 && saved.stack[0].detourId === 'bank', 'автоочередь: заход начат сам и запомнился');
+      expect((await text(page, '.prep-route')).includes('Подготовка идёт'), 'автоочередь: в блоке подготовки — «Подготовка идёт»');
+      const navCount = (await posts()).filter((p) => p.path === '/nav-target').length;
+      await page.waitForTimeout(800);
+      expect((await posts()).filter((p) => p.path === '/nav-target').length === navCount, 'автоочередь: стрелку не дёргает по кругу');
+      await page.reload();
+      await page.waitForTimeout(1200);
+      expect((await text(page, '.prep-route')).includes('Подготовка идёт'), 'автоочередь: после перезагрузки заход всё ещё идёт');
+      expect(!errors.length, `автоочередь: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
+    // Игрок сам снял стрелку — очередь на паузе и больше её не ставит.
+    {
+      const target = { label: 'Банк: взять Knife', x: 3185, y: 3436, plane: 0, itemName: 'Knife', stepId: 'S9-01' };
+      const { page, errors } = await open(browser, width, {
+        progress: progressBefore('S9-01'),
+        status: { protocol: 5, stats: { crafting: 40, woodcutting: 40 }, navTarget: target },
+        events: [{ type: 'STATS', stats: { crafting: 40, woodcutting: 40 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Knife', carried: 0, noted: 0, bank: 1 }] }],
+        localStorage: { 'osrs-put:prep': JSON.stringify({ stack: [{ sourceStepId: 'S9-01', detourId: 'bank', reason: 'Забери из банка', startedAt: 1, returnCondition: 'готово' }], done: [] }) },
+      }, '#/step/S9-01');
+      await page.getByRole('button', { name: /Вернуться к шагу сейчас/ }).click();
+      await page.waitForTimeout(700);
+      expect((await text(page, '.prep-route')).includes('Продолжить подготовку'), 'пауза: после снятия стрелки — «Продолжить подготовку»');
+      type Post = { path: string };
+      const navs = (await page.evaluate(() => (window as unknown as { __posts: Post[] }).__posts)).filter((p) => p.path === '/nav-target').length;
+      await page.waitForTimeout(800);
+      const after = (await page.evaluate(() => (window as unknown as { __posts: Post[] }).__posts)).filter((p) => p.path === '/nav-target').length;
+      expect(navs === after, 'пауза: стрелку больше не ставит');
+      expect(!errors.length, `пауза: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
+    // Стиль игры и «чем качать»: спокойный по умолчанию; переключение в настройках; карточка способа на странице навыка.
+    {
+      const { page, errors } = await open(browser, width, {
+        progress: progressBefore('S1-08', { levels: { woodcutting: 32 } }),
+        status: { stats: { woodcutting: 32 } },
+        events: [{ type: 'STATS', stats: { woodcutting: 32 } }],
+      }, '#/skills/WC');
+      await page.waitForSelector('.training', { timeout: 5000 });
+      const calm = await text(page, '.training');
+      expect(calm.includes('Чем качать') && calm.includes('Ивы') && !calm.includes('по вики — ориентир') && calm.includes('Стиль: 🌿 Спокойно'), 'чем качать: на 32 уровне — ивы, спокойный стиль без оценки времени');
+      expect(await noOverflow(page), 'чем качать: без горизонтальной прокрутки');
+      await page.goto(`${BASE}#/settings`);
+      await page.waitForTimeout(400);
+      await page.getByRole('button', { name: /Эффективно/ }).click();
+      await page.waitForTimeout(200);
+      const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { efficient?: boolean });
+      expect(feat.efficient === true, 'стиль: «Эффективно» запомнилось в настройках');
+      await page.goto(`${BASE}#/skills/WC`);
+      await page.waitForSelector('.training', { timeout: 5000 });
+      const fast = await text(page, '.training');
+      expect(fast.includes('Стиль: ⚡ Эффективно') && /из вики/.test(fast), 'чем качать: эффективный стиль показывает время и скорость «по вики»');
+      expect(!errors.length, `чем качать: ошибок в консоли нет ${errors.join('; ')}`);
       await page.context().close();
     }
 

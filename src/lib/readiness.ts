@@ -10,7 +10,9 @@ import locationsJson from '../data/majorLocations.json';
 import { isClosed, blockersOf } from './next-step';
 import { nameKey, preflightItems, type OwnedState } from './checklist';
 import type { GearState, NavTargetPayload } from '../services/runeliteBridge';
-import { holdingFor, plural } from './shopping';
+import { plural } from './shopping';
+import { buildPlayerState, coinsOf, heldOf, questOf, type PlayerState } from './playerState';
+import { evaluate } from './requirements';
 
 export type ReadinessStatus =
   | 'READY'
@@ -42,6 +44,10 @@ export interface RequirementStatus {
   /** Откуда известно: игра, профиль (введено вручную), отметка «уже есть», отметки шагов. */
   source?: 'game' | 'profile' | 'manual' | 'route';
   action?: ReadinessAction;
+  /** У строки уровня: навык и нужный уровень (для «чем качать»). */
+  stat?: { skill: string; min: number };
+  /** У строки предмета: английское название — по нему ищут в банке, на бирже и в магазине. */
+  item?: string;
 }
 
 export interface StepReadiness {
@@ -90,12 +96,10 @@ export function questStepOf(steps: Step[], quest: string): Step | undefined {
   return steps.find((s) => s.inGame?.completionTrigger?.type === 'QUEST_COMPLETED' && s.inGame.completionTrigger.questName === quest);
 }
 
-/** Уровень навыка: из игры, иначе введённый в профиле, иначе неизвестен. */
-function levelOf(skill: string, stats: PlayerStats | null, p: Progress): { level: number; source: 'game' | 'profile' } | null {
-  const live = stats?.[skill];
-  if (typeof live === 'number') return { level: live, source: 'game' };
-  const own = p.levels[skill];
-  return typeof own === 'number' ? { level: own, source: 'profile' } : null;
+/** Уровень навыка из единого состояния: из игры, иначе введённый в профиле, иначе неизвестен. */
+function levelFrom(state: PlayerState, skill: string): { level: number; source: 'game' | 'profile' } | null {
+  const l = state.levels[skill];
+  return l?.known ? { level: l.value, source: l.source === 'game' ? 'game' : 'profile' } : null;
 }
 
 /** Как во вкладке навыков игры: Mining, Agility. */
@@ -103,8 +107,33 @@ const skillName = (id: string) => id.charAt(0).toUpperCase() + id.slice(1);
 const skillPage = (id: string) => levelById.get(id)?.skill;
 const gp = (n: number) => Math.round(n).toLocaleString('ru-RU').replace(/ /g, ' ');
 
+/** Всё, что нужно расчёту готовности: маршрут, отметки и единое состояние игрока (playerState.ts). */
+export interface ReadinessContext {
+  steps: Step[];
+  progress: Progress;
+  qp: number;
+  mode: GameMode;
+  state: PlayerState;
+}
+
+/** Контекст из «сырых» данных (тесты и места, где единого состояния ещё нет). */
+export function contextOf(i: ReadinessInput): ReadinessContext {
+  return {
+    steps: i.steps, progress: i.progress, qp: i.qp, mode: i.mode,
+    state: buildPlayerState({ mode: i.mode, stats: i.stats, progress: i.progress, owned: i.owned, gear: i.gear, questsDone: null }),
+  };
+}
+
 export function stepReadiness(input: ReadinessInput): StepReadiness {
-  const { step, steps, progress: p, qp, mode, stats, owned, gear } = input;
+  return readinessOf(input.step, contextOf(input));
+}
+
+/**
+ * Готовность шага. Исходы («есть / в банке / часть / нет / неизвестно») даёт единая проверка требований
+ * (requirements.ts) по единому состоянию игрока; здесь — только порядок, подписи и действия.
+ */
+export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
+  const { steps, progress: p, qp, mode, state } = ctx;
   const reqs: RequirementStatus[] = [];
 
   // Режим игры и шаги до этого.
@@ -129,35 +158,42 @@ export function stepReadiness(input: ReadinessInput): StepReadiness {
   // Уровни и квесты из статьи квеста.
   for (const r of step.requirements ?? []) {
     if (r.type === 'skill') {
-      const have = levelOf(r.skill, stats, p);
+      const res = evaluate({ type: 'skill', skill: r.skill, min: r.min }, state);
+      const have = levelFrom(state, r.skill);
       const label = `${skillName(r.skill)} ${r.min}`;
       const page = skillPage(r.skill);
       const action: ReadinessAction | undefined = page ? { kind: 'link', label: `⚡ Добрать ${skillName(r.skill)}`, href: `#/skills/${page}` } : undefined;
       const hard = r.when !== 'during';
       const note = r.when === 'during' ? ' Нужен по ходу квеста — начать можно и без него.' : '';
       const boost = r.boostable ? ' Можно поднять временно (boost).' : '';
-      if (!have) {
-        reqs.push({ kind: 'skill', label, state: 'UNKNOWN', hard, detail: `уровень неизвестен — войди в игру с RuneLite или введи его на странице навыка.${note}` });
-      } else if (have.level >= r.min) {
-        reqs.push({ kind: 'skill', label, state: 'OK', hard, detail: `${have.level} ≥ ${r.min}`, source: have.source });
+      if (res.state === 'UNKNOWN') {
+        reqs.push({ kind: 'skill', label, state: 'UNKNOWN', hard, stat: { skill: r.skill, min: r.min }, detail: `уровень неизвестен — войди в игру с RuneLite или введи его на странице навыка.${note}` });
+      } else if (res.state === 'OK') {
+        reqs.push({ kind: 'skill', label, state: 'OK', hard, stat: { skill: r.skill, min: r.min }, detail: `${res.have} ≥ ${r.min}`, ...(have ? { source: have.source } : {}) });
       } else {
         reqs.push({
-          kind: 'skill', label, state: 'MISSING', hard, source: have.source,
-          detail: `сейчас ${have.level}, не хватает ${r.min - have.level}.${note}${boost}`,
+          kind: 'skill', label, state: 'MISSING', hard, stat: { skill: r.skill, min: r.min }, ...(have ? { source: have.source } : {}),
+          detail: `сейчас ${res.have}, не хватает ${res.missing}.${note}${boost}`,
           ...(action ? { action } : {}),
         });
       }
     } else {
       const qs = questStepOf(steps, r.quest);
-      if (!qs) {
-        reqs.push({ kind: 'quest', label: r.quest, state: 'UNKNOWN', hard: true, detail: 'квеста нет на маршруте — отметить его выполнение программа не может' });
-      } else if (isClosed(p, qs.id)) {
+      const game = questOf(state, r.quest);
+      if (qs && isClosed(p, qs.id)) {
         reqs.push({ kind: 'quest', label: r.quest, state: 'OK', hard: true, detail: `шаг ${qs.id} отмечен`, source: 'route' });
-      } else {
+      } else if (game === 'DONE') {
+        // Игра знает лучше отметок: квест засчитан, даже если шаг на пути ещё не закрыт.
+        reqs.push({ kind: 'quest', label: r.quest, state: 'OK', hard: true, detail: 'засчитан в игре', source: 'game' });
+      } else if (qs) {
         reqs.push({
           kind: 'quest', label: r.quest, state: 'MISSING', hard: true, detail: `шаг ${qs.id} ещё не отмечен`, source: 'route',
           action: { kind: 'link', label: `🧭 К квесту — ${qs.id}`, href: `#/step/${qs.id}` },
         });
+      } else if (game === 'NOT_DONE') {
+        reqs.push({ kind: 'quest', label: r.quest, state: 'MISSING', hard: true, detail: 'квеста нет на маршруте, и в игре он не засчитан', source: 'game' });
+      } else {
+        reqs.push({ kind: 'quest', label: r.quest, state: 'UNKNOWN', hard: true, detail: 'квеста нет на маршруте — отметить его выполнение программа не может' });
       }
     }
   }
@@ -167,60 +203,58 @@ export function stepReadiness(input: ReadinessInput): StepReadiness {
   for (const it of preflightItems(step)) {
     const isCoins = it.id === COINS_ID || nameKey(it.nameEn) === 'coins';
     if (isCoins) {
-      const bag = gear?.coins ?? null;
-      const inBank = gear?.bankCoins ?? null;
+      const res = evaluate({ type: 'money', amount: it.count }, state);
+      const c = coinsOf(state);
       const label = `${gp(it.count)} gp`;
-      if (bag === null) {
+      if (res.state === 'UNKNOWN' && c.bag === null) {
         reqs.push({ kind: 'coins', label, state: 'UNKNOWN', hard: true, detail: 'сколько монет — видно только из игры с RuneLite' });
-      } else if (bag >= it.count) {
-        reqs.push({ kind: 'coins', label, state: 'OK', hard: true, detail: `в сумке ${gp(bag)}`, source: 'game' });
-      } else if (inBank !== null && bag + inBank >= it.count) {
-        reqs.push({ kind: 'coins', label, state: 'BANK', hard: true, detail: `в сумке ${gp(bag)}, остальное в банке — возьми`, source: 'game', ...(bank ? { action: bankNav(bank, step, 'Coins') } : {}) });
-      } else if (inBank === null) {
-        reqs.push({ kind: 'coins', label, state: 'UNKNOWN', hard: true, detail: `в сумке ${gp(bag)}; банк в этой сессии не открывали` });
+      } else if (res.state === 'OK') {
+        reqs.push({ kind: 'coins', label, state: 'OK', hard: true, detail: `в сумке ${gp(c.bag!)}`, source: 'game' });
+      } else if (res.state === 'BANK') {
+        reqs.push({ kind: 'coins', label, state: 'BANK', hard: true, detail: `в сумке ${gp(c.bag!)}, остальное в банке — возьми`, source: 'game', ...(bank ? { action: bankNav(bank, step, 'Coins') } : {}) });
+      } else if (res.state === 'UNKNOWN') {
+        reqs.push({ kind: 'coins', label, state: 'UNKNOWN', hard: true, detail: `в сумке ${gp(c.bag!)}; банк в этой сессии не открывали` });
       } else {
         // Где заработать: ближайший шаг-заработок маршрута (коровьи шкуры, железная руда) — не дальше этого шага.
         const at = steps.findIndex((x) => x.id === step.id);
         const earn = steps.slice(0, at >= 0 ? at + 1 : steps.length).filter((x) => x.moneyGoal).pop() ?? steps.find((x) => x.moneyGoal);
         reqs.push({
-          kind: 'coins', label, state: 'MISSING', hard: true, detail: `всего ${gp(bag + inBank)}, не хватает ${gp(it.count - bag - inBank)}`, source: 'game',
+          kind: 'coins', label, state: 'MISSING', hard: true, detail: `всего ${gp(c.total ?? c.bag ?? 0)}, не хватает ${gp(res.missing ?? it.count)}`, source: 'game',
           ...(earn ? { action: { kind: 'link' as const, label: `💰 Заработать — ${earn.id}`, href: `#/step/${earn.id}` } } : {}),
         });
       }
       continue;
     }
     const key = it.id !== undefined ? `id:${it.id}` : `name:${nameKey(it.nameEn)}`;
-    const manual = p.ownedManual?.[key]?.count;
-    const h = holdingFor({ nameEn: it.nameEn, count: it.count, exact: it.exact }, owned, manual);
+    const res = evaluate({ type: 'item', name: it.nameEn, count: it.count, manualKey: key, ...(it.id !== undefined ? { id: it.id } : {}) }, state);
+    const h = heldOf(state, it.nameEn, key);
     const label = `${it.nameEn}${it.count > 1 ? ` ×${it.count}${it.exact ? '' : '+'}` : ''}`;
     const shop: ReadinessAction = { kind: 'link', label: '🛒 В закупки', href: '#/shopping' };
-    const carried = h.carried ?? 0;
-    if (h.source === 'live' || h.source === 'bag') {
-      if (carried >= it.count) {
-        reqs.push({ kind: 'item', label, state: 'OK', hard: true, detail: 'в сумке', source: 'game' });
-      } else if (h.status === 'SUFFICIENT') {
-        reqs.push({
-          kind: 'item', label, state: 'BANK', hard: true, source: 'game',
-          detail: `в сумке ${carried}, в банке ${h.bank ?? 0} — возьми из банка`,
-          ...(bank ? { action: bankNav(bank, step, it.nameEn) } : {}),
-        });
-      } else if (h.status === 'UNKNOWN') {
-        reqs.push({ kind: 'item', label, state: 'UNKNOWN', hard: true, detail: `в сумке ${carried}; банк в этой сессии не открывали` });
-      } else {
-        reqs.push({
-          kind: 'item', label, state: h.status === 'PARTIAL' ? 'PARTIAL' : 'MISSING', hard: true, source: 'game',
-          detail: h.owned ? `есть ${h.owned}, не хватает ${h.buy}` : 'нет ни в сумке, ни в банке', action: shop,
-        });
-      }
-    } else if (h.source === 'manual') {
+    const manual = h.source === 'manual';
+    const source: RequirementStatus['source'] = manual ? 'manual' : 'game';
+    if (res.state === 'OK') {
       reqs.push({
-        kind: 'item', label, hard: true, source: 'manual',
-        state: h.status === 'SUFFICIENT' ? 'OK' : h.status === 'PARTIAL' ? 'PARTIAL' : 'MISSING',
-        detail: h.status === 'SUFFICIENT' ? `отмечено «уже есть: ${h.manual}»` : `отмечено ${h.manual}, не хватает ${h.buy}`,
-        ...(h.status === 'SUFFICIENT' ? {} : { action: shop }),
+        kind: 'item', label, item: it.nameEn, state: 'OK', hard: true, source,
+        detail: manual ? `отмечено «уже есть: ${state.manual[key]}»` : 'в сумке',
+      });
+    } else if (res.state === 'BANK') {
+      reqs.push({
+        kind: 'item', label, item: it.nameEn, state: 'BANK', hard: true, source: 'game',
+        detail: `в сумке ${(h.bag ?? 0) + h.noted}, в банке ${h.bank ?? 0} — возьми из банка`,
+        ...(bank ? { action: bankNav(bank, step, it.nameEn) } : {}),
+      });
+    } else if (res.state === 'UNKNOWN') {
+      reqs.push({
+        kind: 'item', label, item: it.nameEn, state: 'UNKNOWN', hard: true,
+        detail: h.bag !== null ? `в сумке ${h.bag + h.noted}; банк в этой сессии не открывали` : 'не проверено — нужна связь с RuneLite или отметка «уже есть» в закупках',
       });
     } else {
-      reqs.push({ kind: 'item', label, state: 'UNKNOWN', hard: true, detail: 'не проверено — нужна связь с RuneLite или отметка «уже есть» в закупках' });
+      const have = res.have ?? 0;
+      reqs.push({
+        kind: 'item', label, item: it.nameEn, state: res.state, hard: true, source,
+        detail: manual ? `отмечено ${state.manual[key]}, не хватает ${res.missing}` : have ? `есть ${have}, не хватает ${res.missing}` : 'нет ни в сумке, ни в банке',
+        action: shop,
+      });
     }
   }
 
@@ -232,7 +266,7 @@ export function stepReadiness(input: ReadinessInput): StepReadiness {
   const trig = step.inGame?.completionTrigger;
   let goalMet: StepReadiness['goalMet'];
   if (trig?.type === 'SKILL_LEVEL' && trig.levels?.length && !trig.items?.length) {
-    const have = trig.levels.map((l) => ({ ...l, lv: levelOf(l.skill, stats, p) }));
+    const have = trig.levels.map((l) => ({ ...l, lv: levelFrom(state, l.skill) }));
     if (have.every((h) => h.lv && h.lv.level >= h.level)) {
       goalMet = have.map((h) => ({ skill: skillName(h.skill), level: h.level, have: h.lv!.level, source: h.lv!.source }));
     }
@@ -252,28 +286,38 @@ const stepOfHref = (a?: ReadinessAction): string | null => (a?.kind === 'link' ?
 /**
  * «Починить всё»: цепочка шагов до готовности. Идём по тому, что мешает (не пройденные шаги и квесты), вглубь не больше
  * maxDepth звеньев, и собираем в порядке выполнения: самое глубокое звено первым, сам шаг — последним. Цикл не вечен:
- * каждый шаг берётся один раз. Пусто — шагу ничего не предшествует.
+ * каждый шаг берётся один раз. Пусто — шагу ничего не предшествует. `readiness` — общий расчёт с памятью (движок),
+ * чтобы звенья цепочки не пересчитывались заново.
  */
-export function fixChain(input: ReadinessInput, maxDepth = 3): ChainLink[] {
-  const seen = new Set<string>([input.step.id]);
+export function fixChainOf(
+  step: Step,
+  ctx: ReadinessContext,
+  maxDepth = 3,
+  readiness: (s: Step) => StepReadiness = (s) => readinessOf(s, ctx),
+): ChainLink[] {
+  const seen = new Set<string>([step.id]);
   const out: ChainLink[] = [];
-  const visit = (step: Step, depth: number) => {
-    const r = stepReadiness({ ...input, step });
-    const before = r.problems.map((p) => stepOfHref(p.action)).filter((id): id is string => id !== null && id !== input.step.id);
+  const visit = (cur: Step, depth: number) => {
+    const r = readiness(cur);
+    const before = r.problems.map((p) => stepOfHref(p.action)).filter((id): id is string => id !== null && id !== step.id);
     if (depth < maxDepth) {
       for (const id of before) {
         if (seen.has(id)) continue;
         seen.add(id);
-        const s = input.steps.find((x) => x.id === id);
-        if (s && !isClosed(input.progress, id)) visit(s, depth + 1);
+        const s = ctx.steps.find((x) => x.id === id);
+        if (s && !isClosed(ctx.progress, id)) visit(s, depth + 1);
       }
     }
-    if (step.id !== input.step.id) {
-      out.push({ step, why: r.problems.filter((p) => p.kind !== 'step' && p.kind !== 'quest' && p.kind !== 'qp' && p.kind !== 'mode') });
+    if (cur.id !== step.id) {
+      out.push({ step: cur, why: r.problems.filter((p) => p.kind !== 'step' && p.kind !== 'quest' && p.kind !== 'qp' && p.kind !== 'mode') });
     }
   };
-  visit(input.step, 0);
+  visit(step, 0);
   return out;
+}
+
+export function fixChain(input: ReadinessInput, maxDepth = 3): ChainLink[] {
+  return fixChainOf(input.step, contextOf(input), maxDepth);
 }
 
 function bankNav(bank: Place, step: Step, itemName: string): ReadinessAction {

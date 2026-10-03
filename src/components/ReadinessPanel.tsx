@@ -1,24 +1,16 @@
 // «Готовность к шагу»: светофор и что сделать до выхода — у каждой проблемы своё действие.
 // Расчёт — lib/readiness.ts; здесь только показ. Шаг без требований и предметов панели не получает.
 
-import { useMemo } from 'react';
 import type { Step } from '../types';
 import { useStore } from '../store';
 import { useBridge } from '../bridge';
 import { isClosed } from '../lib/next-step';
-import { fixChain, stepReadiness, STATUS_TEXT, type ReadinessAction, type RequirementStatus, type StepReadiness } from '../lib/readiness';
+import { STATUS_TEXT, type ReadinessAction, type RequirementStatus, type StepReadiness } from '../lib/readiness';
+import { useReadiness, useReadinessEngine } from '../readinessContext';
 import { NavigateButton } from './NavigateButton';
 import { PrepRouteBlock } from './PrepRoute';
 
-/** Готовность шага; пересчёт — только когда меняются уровни, предметы, монеты, отметки или шаг. */
-export function useReadiness(step: Step | null): StepReadiness | null {
-  const { progress, qp, mode, steps } = useStore();
-  const { stats, owned, gear } = useBridge();
-  return useMemo(
-    () => (step ? stepReadiness({ step, steps, progress, qp, mode, stats, owned, gear }) : null),
-    [step, steps, progress, qp, mode, stats, owned, gear],
-  );
-}
+export { useReadiness };
 
 const MARK: Record<RequirementStatus['state'], string> = { OK: '✓', BANK: '🏦', PARTIAL: '◐', MISSING: '✗', UNKNOWN: '?' };
 
@@ -63,9 +55,7 @@ function GoalMet({ step, r }: { step: Step; r: StepReadiness }) {
 
 /** «🧩 Цепочка до готовности»: что пройти по порядку, чтобы шаг открылся (до трёх звеньев вглубь). */
 function Chain({ step }: { step: Step }) {
-  const { progress, qp, mode, steps } = useStore();
-  const { stats, owned, gear } = useBridge();
-  const chain = useMemo(() => fixChain({ step, steps, progress, qp, mode, stats, owned, gear }), [step, steps, progress, qp, mode, stats, owned, gear]);
+  const chain = useReadinessEngine().chain(step);
   if (!chain.length) return null;
   return (
     <details className="ready-chain" open>
@@ -104,7 +94,7 @@ export function ReadinessPanel({ step }: { step: Step }) {
           <button type="button" className="link-btn" onClick={() => void clearNav()}>Вернуться к шагу сейчас</button>
         </p>
       )}
-      <PrepRouteBlock step={step} r={r} />
+      <PrepRouteBlock step={step} />
       {r.problems.length > 0 && <ul className="ready-list">{r.problems.map((x) => <Row key={`${x.kind}-${x.label}`} r={x} />)}</ul>}
       <Chain step={step} />
       {r.unknown.length > 0 && (

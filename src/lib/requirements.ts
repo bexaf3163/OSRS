@@ -53,6 +53,11 @@ export function evaluate(req: Requirement, s: PlayerState): ReqResult {
       }
       const bag = (h.bag ?? 0) + h.noted;
       const total = h.total ?? bag;
+      // Слова игрока («у меня уже есть»): не «в банке», а просто есть — забирать нечего.
+      if (h.source === 'manual') {
+        if (total >= req.count) return { state: 'OK', have: total, need: req.count, missing: 0, detail: 'отмечено «уже есть»' };
+        return { state: total > 0 ? 'PARTIAL' : 'MISSING', have: total, need: req.count, missing: req.count - total, detail: `отмечено ${total}, не хватает ${req.count - total}` };
+      }
       if (bag >= req.count) return { state: 'OK', have: bag, need: req.count, missing: 0, detail: 'в сумке' };
       // Банк не открывали: остальное могло лежать там — это «неизвестно», а не «не хватает».
       if (h.bank === null && h.source === 'game') return { state: 'UNKNOWN', have: bag, need: req.count, detail: `в сумке ${bag}, банк не открывали` };

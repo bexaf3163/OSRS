@@ -24,6 +24,7 @@ import { GearPrompt } from './GearPrompt';
 import { ReadinessPanel } from './ReadinessPanel';
 import { OneTripCard } from './OneTripCard';
 import { MoneyGoal } from './MoneyGoal';
+import { StepTraining } from './TrainingCard';
 import { MagicPlan } from './MagicPlan';
 import { MoneyPlan } from './MoneyPlan';
 import { ItemIcon, useWiki } from './WikiDrawer';
@@ -183,6 +184,7 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
       <ReadinessPanel step={step} />
       <OneTripCard step={step} />
       <MoneyGoal step={step} />
+      <StepTraining step={step} />
       <MagicPlan step={step} />
       <MoneyPlan step={step} />
       <UpgradePrompt step={step} />

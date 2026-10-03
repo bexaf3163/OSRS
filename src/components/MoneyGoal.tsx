@@ -7,10 +7,11 @@ import { formatGp } from '../lib/shopping';
 import { moneyGoalProgress, wealthOf } from '../lib/wealth';
 import { usePlayerState } from '../playerStateContext';
 import { ratePerMinute, resourceGoal } from '../lib/ledger';
+import { priceNote } from '../lib/priceBook';
 
 export function MoneyGoal({ step }: { step: Step }) {
   const { gear, state } = useBridge();
-  const { ledger, summary } = usePlayerState();
+  const { ledger, summary, prices } = usePlayerState();
   if (!step.moneyGoal) return null;
   const w = wealthOf(gear);
   const p = moneyGoalProgress(step.moneyGoal, w);
@@ -46,7 +47,7 @@ export function MoneyGoal({ step }: { step: Step }) {
   const g = p ? resourceGoal('Монеты', p.cash, p.goal, { estimated: summary.estimatedLootValue > 0 ? summary.estimatedLootValue : undefined, ratePerMinute: rate }) : null;
   const session = summary.entries > 0 && (summary.coinsEarned > 0 || summary.estimatedLootValue > 0) ? (
     <p className="small muted">
-      За этот сеанс: монет +{formatGp(summary.coinsEarned)}{summary.estimatedLootValue > 0 ? <>, добыча ≈{formatGp(summary.estimatedLootValue)} gp (оценка по ценам, не деньги)</> : null}
+      За этот сеанс: монет +{formatGp(summary.coinsEarned)}{summary.estimatedLootValue > 0 ? <>, добыча ≈{formatGp(summary.estimatedLootValue)} gp (оценка, не деньги; {priceNote(prices)})</> : null}
       {g?.estimatedProgress !== undefined && !g.done ? <> · с добычей ≈{formatGp(g.estimatedProgress)} из {goal}</> : null}
       {g?.etaMinutes ? <> · при таком темпе ≈{g.etaMinutes} мин</> : null}.
     </p>

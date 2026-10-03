@@ -5,6 +5,9 @@ import { activeOf, profileStorageKey, useProfiles } from './profiles';
 import { emptyPrep, parsePrep, PREP_KEY, type PrepState } from './prepRoute';
 
 const EMPTY = emptyPrep();
+
+/** Отказы игрока в этом сеансе («шаг:задача»): автоочередь не предлагает то же снова, пока окно не закрыто. */
+export const declined = new Set<string>();
 const listeners = new Set<() => void>();
 const cache = new Map<string, PrepState>();
 

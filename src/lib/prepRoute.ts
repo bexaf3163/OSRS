@@ -24,6 +24,10 @@ export interface PrepTask {
   need: Need;
   urgency: Urgency;
   action?: ReadinessAction;
+  /** Для задачи «добери уровень»: навык и цель — по ним подбирается способ прокачки. */
+  stat?: { skill: string; min: number };
+  /** Для задач «забрать» и «купить»: английские названия предметов по порядку. */
+  items?: string[];
   /** Из каких строк готовности собрана задача. */
   from: RequirementStatus[];
 }
@@ -68,7 +72,7 @@ export function buildPrepRoute(r: StepReadiness, step: Pick<Step, 'id'>): PrepRo
     } else if (p.kind === 'coins') {
       tasks.push({ id: 'money', kind: 'money', label: `Монеты: ${p.label}`, detail: p.detail, priority: 3, need: 'REQUIRED', urgency: 'NOW', ...(p.action ? { action: p.action } : {}), from: [p] });
     } else if (p.kind === 'skill') {
-      tasks.push({ id: `stat:${p.label.toLowerCase()}`, kind: 'stat', label: p.label, detail: p.detail, priority: priorityOf(p), need: needOf(p), urgency: p.hard ? 'NOW' : 'LATER', ...(p.action ? { action: p.action } : {}), from: [p] });
+      tasks.push({ id: `stat:${p.label.toLowerCase()}`, kind: 'stat', label: p.label, detail: p.detail, priority: priorityOf(p), need: needOf(p), urgency: p.hard ? 'NOW' : 'LATER', ...(p.action ? { action: p.action } : {}), ...(p.stat ? { stat: p.stat } : {}), from: [p] });
     } else if (p.kind === 'quest' || p.kind === 'step' || p.kind === 'qp' || p.kind === 'mode') {
       tasks.push({ id: `${p.kind}:${p.label.toLowerCase()}`, kind: p.kind === 'quest' ? 'quest' : 'block', label: p.label, detail: p.detail, priority: priorityOf(p), need: needOf(p), urgency: 'NOW', ...(p.action ? { action: p.action } : {}), from: [p] });
     } else {
@@ -80,14 +84,14 @@ export function buildPrepRoute(r: StepReadiness, step: Pick<Step, 'id'>): PrepRo
     const nav = bank.find((b) => b.action?.kind === 'nav')?.action;
     tasks.push({
       id: 'bank', kind: 'bank', label: `Забери из банка: ${bank.map((b) => b.label).join(', ')}`, priority: 3, need: 'REQUIRED', urgency: 'NOW',
-      ...(nav ? { action: nav } : {}), from: bank,
+      ...(nav ? { action: nav } : {}), items: bank.flatMap((b) => (b.item ? [b.item] : [])), from: bank,
     });
   }
   // Всё, что надо купить, — одна закупка.
   if (buy.length) {
     tasks.push({
       id: 'buy', kind: 'buy', label: `Купи: ${buy.map((b) => b.label).join(', ')}`, priority: 3, need: 'REQUIRED', urgency: 'NOW',
-      action: { kind: 'link', label: '🛒 В закупки', href: '#/shopping' }, from: buy,
+      action: { kind: 'link', label: '🛒 В закупки', href: '#/shopping' }, items: buy.flatMap((b) => (b.item ? [b.item] : [])), from: buy,
     });
   }
   tasks.sort((a, b) => a.priority - b.priority || (a.id < b.id ? -1 : 1));
@@ -133,6 +137,8 @@ export interface DetourFrame {
   startedAt: number;
   /** Человеческое условие возврата: «Fishing 20 достигнут». */
   returnCondition: string;
+  /** Игрок сам снял стрелку: автоподготовка её больше не ставит, пока он не нажмёт «Продолжить». */
+  paused?: boolean;
 }
 
 export interface PrepState {

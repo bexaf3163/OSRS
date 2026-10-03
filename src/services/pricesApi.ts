@@ -19,6 +19,8 @@ type Fetcher = (url: string) => Promise<{ ok: boolean; status: number; json(): P
 
 export interface PriceService {
   getGePrice(itemId: number): Promise<GePrice | null>;
+  /** Все цены разом (один запрос, общий с getGePrice) и время их получения — для журнала ресурсов. */
+  getAllPrices(): Promise<{ at: number; prices: Map<number, GePrice> }>;
   getMapping(): Promise<Map<number, MappingRow>>;
   clear(): void;
 }
@@ -45,16 +47,28 @@ export function createPriceService(fetchFn: Fetcher, now: () => number = Date.no
     return inflight;
   }
 
+  const toPrice = (row: LatestRow | undefined): GePrice | null => {
+    if (!row || (row.high == null && row.low == null)) return null;
+    const time = Math.max(row.highTime ?? 0, row.lowTime ?? 0);
+    return {
+      buyPrice: row.high ?? row.low!,
+      sellPrice: row.low ?? row.high!,
+      updatedAt: new Date(time * 1000).toISOString(),
+    };
+  };
+
   return {
     async getGePrice(itemId) {
-      const row = (await loadLatest()).get(itemId);
-      if (!row || (row.high == null && row.low == null)) return null;
-      const time = Math.max(row.highTime ?? 0, row.lowTime ?? 0);
-      return {
-        buyPrice: row.high ?? row.low!,
-        sellPrice: row.low ?? row.high!,
-        updatedAt: new Date(time * 1000).toISOString(),
-      };
+      return toPrice((await loadLatest()).get(itemId));
+    },
+    async getAllPrices() {
+      const rows = await loadLatest();
+      const prices = new Map<number, GePrice>();
+      for (const [id, row] of rows) {
+        const p = toPrice(row);
+        if (p) prices.set(id, p);
+      }
+      return { at: latest?.at ?? now(), prices };
     },
     getMapping() {
       if (!mapping) {
@@ -86,4 +100,8 @@ export function getGePrice(itemId: number): Promise<GePrice | null> {
 
 export function getMapping(): Promise<Map<number, MappingRow>> {
   return prices.getMapping();
+}
+
+export function getAllPrices(): Promise<{ at: number; prices: Map<number, GePrice> }> {
+  return prices.getAllPrices();
 }
