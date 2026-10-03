@@ -439,4 +439,22 @@ public class GuideListTest
 		assertTrue(done.isEmpty());
 		assertFalse("карта закрыта", GuideMouse.mapCovers(null, new java.awt.Point(50, 105)));
 	}
+
+	@Test
+	public void краткийВид_теЖеКнопкиИТеЖеДействия_строкиНеДлиннее()
+	{
+		StepGuide.View v = witchsPotion(null, 0, 0);
+		List<GuideList.Row> normal = GuideList.rows(v, false, FM, SMALL, OsrsPathGuideOverlay.WIDTH);
+		List<GuideList.Row> terse = GuideList.rows(v, false, FM, SMALL, OsrsPathGuideOverlay.WIDTH, true);
+		assertEquals("кнопки те же — краткий вид не отнимает действий", normal.stream().map(GuideList.Row::getAction).collect(Collectors.toList()),
+			terse.stream().map(GuideList.Row::getAction).collect(Collectors.toList()));
+		int normalLines = normal.stream().mapToInt(r -> r.getLines().size()).sum();
+		int terseLines = terse.stream().mapToInt(r -> r.getLines().size()).sum();
+		assertTrue("строк не больше (" + terseLines + " против " + normalLines + ")", terseLines <= normalLines);
+		// Полное описание не пропадает — оно в подсказке при наведении.
+		for (int i = 0; i < normal.size(); i++)
+		{
+			assertEquals("подсказка строки " + i, normal.get(i).getHint(), terse.get(i).getHint());
+		}
+	}
 }

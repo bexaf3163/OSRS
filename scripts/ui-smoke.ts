@@ -16,6 +16,8 @@ interface Mock {
   status?: Record<string, unknown>;
   events?: unknown[];
   localStorage?: Record<string, string>;
+  /** Режим «Дзен» (по умолчанию в тестах включён «Инспектор»: все блоки шага развёрнуты, как проверялось раньше). */
+  zen?: boolean;
   /** Цены биржи по ID предмета: подменяют ответ prices.runescape.wiki (без них сеть к вики закрыта). */
   prices?: Record<number, number>;
 }
@@ -31,6 +33,11 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
   const ctx = await browser.newContext({ viewport: { width, height: 900 }, colorScheme: width < 600 ? 'light' : 'dark' });
   await ctx.addInitScript((m: Mock) => {
     for (const [k, v] of Object.entries(m.localStorage ?? {})) localStorage.setItem(k, v);
+    try {
+      const f = JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as Record<string, unknown>;
+      if (f.inspector === undefined) f.inspector = !m.zen;
+      localStorage.setItem('osrs-put:features', JSON.stringify(f));
+    } catch { /* нет хранилища */ }
     const w = window as unknown as Record<string, unknown>;
     const posts: unknown[] = [];
     w.__posts = posts;
@@ -181,6 +188,55 @@ async function run(browser: Browser) {
       const fast = await text(page, '.training');
       expect(fast.includes('Стиль: ⚡ Эффективно') && /из вики/.test(fast), 'чем качать: эффективный стиль показывает время и скорость «по вики»');
       expect(!errors.length, `чем качать: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
+    // «Дзен»: вместо стопки плашек — одна строка статуса; подробности — по кнопке, вкладками; готов — «Начать шаг».
+    {
+      const { page, errors } = await open(browser, width, {
+        zen: true,
+        progress: progressBefore('S9-01'),
+        status: { stats: { crafting: 28, woodcutting: 40 } },
+        events: [{ type: 'STATS', stats: { crafting: 28, woodcutting: 40 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Knife', carried: 0, noted: 0, bank: 1 }] }],
+        localStorage: { 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
+      }, '#/step/S9-01');
+      await page.waitForSelector('.step-status', { timeout: 8000 });
+      const line = await text(page, '.status-line');
+      expect(/Требуется подготовка \(\d/.test(line) && line.includes('Исправить') && line.includes('Подробнее'), `дзен: одна строка статуса с подготовкой и кнопками (${line.replace(/\s+/g, ' ').slice(0, 90)})`);
+      expect(!(await page.locator('.readiness').first().isVisible()), 'дзен: панель готовности свёрнута, на экране её нет');
+      expect((await text(page, '.step-details')).includes('Сделано'), 'дзен: кнопка «Сделано» на месте');
+      expect(await page.locator('.zen-more').count() === 1, 'дзен: прочее — в «Подробнее о шаге»');
+      await page.getByRole('button', { name: /Подробнее ▾/ }).click();
+      await page.waitForTimeout(300);
+      const open1 = await text(page, '.readiness');
+      expect(open1.includes('Добрать Crafting') && open1.includes('К банку'), 'дзен: по «Подробнее» раскрывается вся прежняя панель подготовки');
+      expect(await page.locator('.status-tab').count() >= 2, 'дзен: вкладки подробностей (подготовка, путь и игра…)');
+      expect(await noOverflow(page), 'дзен: без горизонтальной прокрутки');
+      expect(!errors.length, `дзен: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
+    {
+      const { page, errors } = await open(browser, width, {
+        zen: true,
+        progress: progressBefore('S1-04'),
+        status: { stats: {} },
+      }, '#/step/S1-04');
+      await page.waitForSelector('.step-status', { timeout: 8000 });
+      const line = await text(page, '.status-line');
+      expect(line.includes('Готов к выходу') && line.includes('Начать шаг') && !line.includes('Исправить'), `дзен: готов — «Готов к выходу · Начать шаг» (${line.replace(/\s+/g, ' ').slice(0, 80)})`);
+      expect(await noOverflow(page), 'дзен (готов): без горизонтальной прокрутки');
+      // Переключатель в шапке: «Инспектор» возвращает все блоки.
+      // На узком окне значок в шапке скрыт (как ⚔️ и 🛒) — переключатель всегда есть в Настройках.
+      if (width > 480) await page.getByRole('button', { name: /переключить на «Инспектор»/ }).click();
+      else {
+        await page.goto(`${BASE}#/settings`);
+        await page.getByRole('button', { name: /^Инспектор$/ }).click();
+      }
+      await page.waitForTimeout(300);
+      const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { inspector?: boolean });
+      expect(feat.inspector === true && await page.locator('.step-status').count() === 0, 'инспектор: переключатель в шапке разворачивает блоки и прячет строку статуса');
+      expect(!errors.length, `дзен (готов): ошибок в консоли нет ${errors.join('; ')}`);
       await page.context().close();
     }
 

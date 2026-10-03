@@ -64,6 +64,11 @@ class OsrsPathDangerOverlay extends Overlay
 			return null;
 		}
 		boolean close = r.getLevel() == DangerRadar.Level.WARNING || r.getLevel() == DangerRadar.Level.INSIDE;
+		// Умное проявление: бледная граница вдали — шум; рисуем зону, только когда она близко или игрок уже в ней.
+		if (config.smartOverlays() && !close)
+		{
+			return null;
+		}
 		Color edge = close ? OsrsPathWidgetOverlay.pulse(DANGER) : EDGE_FAR;
 		Color fill = r.getLevel() == DangerRadar.Level.INSIDE ? FILL_NEAR : FILL_FAR;
 		for (int[] t : zone.getBoundary())

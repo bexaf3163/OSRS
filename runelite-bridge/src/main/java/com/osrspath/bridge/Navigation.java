@@ -30,6 +30,20 @@ final class Navigation
 	{
 		String text;
 		boolean near;
+		/** Расстояние по прямой в клетках на этом этаже; -1 — не считается (другой этаж или под землёй). */
+		int tiles;
+
+		Readout(String text, boolean near)
+		{
+			this(text, near, -1);
+		}
+
+		Readout(String text, boolean near, int tiles)
+		{
+			this.text = text;
+			this.near = near;
+			this.tiles = tiles;
+		}
 	}
 
 	static int distance(int x1, int y1, int x2, int y2)
@@ -93,9 +107,9 @@ final class Navigation
 		}
 		if (d < NEAR || (wasNear && d < NEAR_EXIT))
 		{
-			return new Readout("✓ Рядом", true);
+			return new Readout("✓ Рядом", true, d);
 		}
-		return new Readout("~" + tiles(d) + " " + arrow(tx - px, ty - py), false);
+		return new Readout("~" + tiles(d) + " " + arrow(tx - px, ty - py), false, d);
 	}
 
 	/**

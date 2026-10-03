@@ -25,6 +25,8 @@ import { ReadinessPanel } from './ReadinessPanel';
 import { OneTripCard } from './OneTripCard';
 import { MoneyGoal } from './MoneyGoal';
 import { StepTraining } from './TrainingCard';
+import { StepStatus } from './StepStatus';
+import { useFeatures } from '../lib/features';
 import { MagicPlan } from './MagicPlan';
 import { MoneyPlan } from './MoneyPlan';
 import { ItemIcon, useWiki } from './WikiDrawer';
@@ -127,6 +129,7 @@ function FieldRow({ field }: { field: Field }) {
 export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: string) => void; nextId?: string }) {
   const { progress, qp, mode, setStep, review, reactivate } = useStore();
   const { openNpc } = useWiki();
+  const zen = !useFeatures().inspector;
   const status = progress.steps[step.id];
   const blockers = isClosed(progress, step.id) ? null : blockersOf(step, progress, qp);
   const reviewing = needsReview(step, progress);
@@ -136,31 +139,34 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
     step.mapUrl && { href: step.mapUrl, label: 'Карта вики' },
   ].filter(Boolean) as { href: string; label: string }[];
 
-  return (
-    <div className="step-details">
-      <div className="step-meta-row">
-        <span className="muted small">{TYPE_LABEL[step.type]} · этап {step.stage}</span>
-        {links.length > 0 && (
-          <span className="link-chips">
-            {links.map((l) => (
-              <a key={l.label} className="link-chip" href={l.href} target="_blank" rel="noopener noreferrer">
-                {l.label} <IconExternal />
-              </a>
-            ))}
-          </span>
-        )}
-      </div>
-
-      {reviewing && (
-        <div className="plaque plaque-review" role="note">
-          <p><strong>⚠️ Новое в версии V2:</strong> {step.v2ChangesSummary}</p>
-          <div className="actions">
-            <button type="button" className="btn" onClick={() => reactivate([step.id])}>Сбросить в активные</button>
-            <button type="button" className="btn btn-primary" onClick={() => review([step.id])}>Подтвердить и закрыть</button>
-          </div>
-        </div>
+  // Блоки по смыслу; «Дзен» и «Инспектор» собирают их по-разному — расчёты в обоих режимах одинаковые.
+  const metaRow = (
+    <div className="step-meta-row">
+      <span className="muted small">{TYPE_LABEL[step.type]} · этап {step.stage}</span>
+      {links.length > 0 && (
+        <span className="link-chips">
+          {links.map((l) => (
+            <a key={l.label} className="link-chip" href={l.href} target="_blank" rel="noopener noreferrer">
+              {l.label} <IconExternal />
+            </a>
+          ))}
+        </span>
       )}
+    </div>
+  );
 
+  const reviewPlaque = reviewing && (
+    <div className="plaque plaque-review" role="note">
+      <p><strong>⚠️ Новое в версии V2:</strong> {step.v2ChangesSummary}</p>
+      <div className="actions">
+        <button type="button" className="btn" onClick={() => reactivate([step.id])}>Сбросить в активные</button>
+        <button type="button" className="btn btn-primary" onClick={() => review([step.id])}>Подтвердить и закрыть</button>
+      </div>
+    </div>
+  );
+
+  const where = (
+    <>
       {step.npc ? (
         <section className="plaque plaque-npc" aria-label="NPC и точка старта">
           <button type="button" className="npc-name" onClick={() => openNpc(step.npc!)} title="Открыть в инспекторе OSRS Wiki">
@@ -179,8 +185,13 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
         </section>
       ) : null}
       {step.npc && step.where && <p><Inline text={step.where} /></p>}
+    </>
+  );
 
-      {step.warning && <div className="plaque plaque-warning" role="note"><Inline text={step.warning} /></div>}
+  const warning = step.warning && <div className="plaque plaque-warning" role="note"><Inline text={step.warning} /></div>;
+
+  const helpers = (
+    <>
       <ReadinessPanel step={step} />
       <OneTripCard step={step} />
       <MoneyGoal step={step} />
@@ -195,10 +206,14 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
       <FoodAdvice step={step} />
       <StyleGear step={step} />
       <BranchSuggestions step={step} />
+    </>
+  );
 
-      {step.how && <p className="step-how"><Inline text={step.how} /></p>}
-      {step.bring && <p className="small"><span className="muted">Взять: </span><Inline text={step.bring} /></p>}
+  const how = step.how && <p className="step-how"><Inline text={step.how} /></p>;
+  const bring = step.bring && <p className="small"><span className="muted">Взять: </span><Inline text={step.bring} /></p>;
 
+  const items = (
+    <>
       {step.itemsRequired && step.itemsRequired.length > 0 && (
         <section className="step-section">
           <h4 className="subhead">Требуемые предметы и еда</h4>
@@ -214,27 +229,37 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
       {step.type === 'gear' && step.itemsRequired?.length ? (
         <p className="muted small"><a href="#/shopping">🛒 Оптовый список Grand Exchange</a> — закупка сразу на несколько этапов вперёд.</p>
       ) : null}
+    </>
+  );
 
-      {step.imageUrl && <StepImage src={step.imageUrl} caption={step.imageCaption} />}
+  const image = step.imageUrl && <StepImage src={step.imageUrl} caption={step.imageCaption} />;
 
-      {step.quickSteps && step.quickSteps.length > 0 && (
-        <section className="step-section">
-          <h4 className="subhead">Прохождение</h4>
-          <ol className="quick-steps">{step.quickSteps.map((q, i) => <li key={i}><Inline text={q} /></li>)}</ol>
-        </section>
-      )}
+  const quick = step.quickSteps && step.quickSteps.length > 0 && (
+    <section className="step-section">
+      <h4 className="subhead">Прохождение</h4>
+      <ol className="quick-steps">{step.quickSteps.map((q, i) => <li key={i}><Inline text={q} /></li>)}</ol>
+    </section>
+  );
 
-      {step.fields && step.fields.length > 0 && (
-        <dl className="fields">{step.fields.map((f, i) => <FieldRow key={i} field={f} />)}</dl>
-      )}
+  // Критичные предупреждения полей («Опасно», «Внимание», «Бой») видны всегда, остальные поля — в подробностях.
+  const fieldsAll = step.fields ?? [];
+  const fieldsWarn = fieldsAll.filter((f) => WARN_LABELS.has(f.label));
+  const fieldsRest = fieldsAll.filter((f) => !WARN_LABELS.has(f.label));
+  const fieldList = (list: Field[]) => list.length > 0 && <dl className="fields">{list.map((f, i) => <FieldRow key={i} field={f} />)}</dl>;
 
+  const notes = (
+    <>
       {step.proTip && <div className="plaque plaque-tip"><strong>Совет:</strong> <Inline text={step.proTip} /></div>}
       {step.safespot && <div className="plaque plaque-safespot"><strong>🛡️ Safespot:</strong> <Inline text={step.safespot} /></div>}
       {mode === 'members' && step.membersAlternative && (
         <div className="plaque plaque-members"><Inline text={step.membersAlternative} /></div>
       )}
       {step.reward && <p className="step-reward"><span className="muted">Награда: </span><Inline text={step.reward} /></p>}
+    </>
+  );
 
+  const requires = (
+    <>
       {(step.requires.length > 0 || step.minQp !== undefined) && (
         <p className="requires small">
           <span className="muted">Зависит от: </span>
@@ -251,37 +276,89 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
         </p>
       )}
       {blockers && <p className="notice small">Шаг можно отметить и сейчас, но по плану сначала: {blockerParts(blockers).join(', ')}.</p>}
+    </>
+  );
 
-      {step.targets && step.targets.length > 0 && (
-        <div className="targets">
-          <h4 className="subhead">Уровни</h4>
-          <div className="targets-grid">
-            {step.targets.map((t) => {
-              const name = levelById.get(t.skill)?.name ?? t.skill;
-              const reached = levelOf(progress, t.skill) >= t.level;
-              return (
-                <div key={t.skill} className={`target ${reached ? 'is-reached' : ''}`}>
-                  <LevelInput id={t.skill} label={name} compact />
-                  <span className="target-goal">цель {t.level}{reached && <IconCheck />}</span>
-                </div>
-              );
-            })}
-          </div>
-          <LiveXp targets={step.targets} />
-          <RangeHints step={step} />
-        </div>
-      )}
-
-      <div className="plaque plaque-done"><strong>Готово, когда:</strong> <Inline text={step.doneWhen} /></div>
-
-      <div className="actions">
-        {status === 'done'
-          ? <button type="button" className="btn" onClick={() => setStep(step.id, null)}>Снять отметку</button>
-          : <button type="button" className="btn btn-primary btn-lg" onClick={() => onDone(step.id)}><IconCheck /> Отметить выполненным{nextId && <span className="btn-next"> → {nextId}</span>}</button>}
-        {step.optional && (status === 'skipped'
-          ? <button type="button" className="btn" onClick={() => setStep(step.id, null)}>Вернуть в план</button>
-          : status !== 'done' && <button type="button" className="btn" onClick={() => setStep(step.id, 'skipped')}>Пропустить</button>)}
+  const targets = step.targets && step.targets.length > 0 && (
+    <div className="targets">
+      <h4 className="subhead">Уровни</h4>
+      <div className="targets-grid">
+        {step.targets.map((t) => {
+          const name = levelById.get(t.skill)?.name ?? t.skill;
+          const reached = levelOf(progress, t.skill) >= t.level;
+          return (
+            <div key={t.skill} className={`target ${reached ? 'is-reached' : ''}`}>
+              <LevelInput id={t.skill} label={name} compact />
+              <span className="target-goal">цель {t.level}{reached && <IconCheck />}</span>
+            </div>
+          );
+        })}
       </div>
+      <LiveXp targets={step.targets} />
+      <RangeHints step={step} />
+    </div>
+  );
+
+  const doneWhen = <div className="plaque plaque-done"><strong>Готово, когда:</strong> <Inline text={step.doneWhen} /></div>;
+
+  const actions = (
+    <div className="actions">
+      {status === 'done'
+        ? <button type="button" className="btn" onClick={() => setStep(step.id, null)}>Снять отметку</button>
+        : <button type="button" className="btn btn-primary btn-lg" onClick={() => onDone(step.id)}><IconCheck /> {zen ? 'Сделано' : 'Отметить выполненным'}{nextId && <span className="btn-next"> → {nextId}</span>}</button>}
+      {step.optional && (status === 'skipped'
+        ? <button type="button" className="btn" onClick={() => setStep(step.id, null)}>Вернуть в план</button>
+        : status !== 'done' && <button type="button" className="btn" onClick={() => setStep(step.id, 'skipped')}>Пропустить</button>)}
+    </div>
+  );
+
+  if (zen) {
+    // «Дзен»: текущий шаг, статус одной строкой, что делать, кнопка «Сделано» и критичные предупреждения. Остальное — в «Подробнее».
+    return (
+      <div className="step-details is-zen">
+        {reviewPlaque}
+        {where}
+        {warning}
+        {fieldList(fieldsWarn)}
+        <StepStatus step={step} />
+        {how}
+        {quick}
+        {doneWhen}
+        {actions}
+        <details className="zen-more">
+          <summary className="small">Подробнее о шаге</summary>
+          {metaRow}
+          {bring}
+          {items}
+          {image}
+          {fieldList(fieldsRest)}
+          {notes}
+          {requires}
+          {targets}
+        </details>
+      </div>
+    );
+  }
+
+  // «Инспектор»: всё развёрнуто, как раньше.
+  return (
+    <div className="step-details">
+      {metaRow}
+      {reviewPlaque}
+      {where}
+      {warning}
+      {helpers}
+      {how}
+      {bring}
+      {items}
+      {image}
+      {quick}
+      {fieldList(fieldsAll)}
+      {notes}
+      {requires}
+      {targets}
+      {doneWhen}
+      {actions}
     </div>
   );
 }

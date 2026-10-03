@@ -5,6 +5,7 @@ import { useRoute, type Page } from './lib/router';
 import { IconBook, IconGoals, IconPath, IconQuests, IconSearch, IconSettings, IconSkills } from './components/Icons';
 import { SearchBox } from './components/SearchBox';
 import { ModeToggle } from './components/ModeToggle';
+import { DensityToggle } from './components/DensityToggle';
 import { HeaderProgress } from './components/HeaderProgress';
 import { BridgeIndicator } from './components/BridgeIndicator';
 import { ToastView } from './components/ToastView';
@@ -100,6 +101,7 @@ export function App() {
           <div className="topbar-actions">
             <HeaderProgress />
             <BridgeIndicator />
+            <DensityToggle />
             <ModeToggle />
             <button type="button" className="search-trigger" onClick={() => setSearchOpen(true)} aria-label="Поиск" aria-keyshortcuts="/">
               <IconSearch />

@@ -101,9 +101,24 @@ final class GuideList
 			&& (!v.getItems().isEmpty() || v.getPlaces().size() > 1 || v.getDetour() != null || v.getNote() != null || v.getStage() != null);
 	}
 
+	/** В кратком виде («умное проявление»): «где взять» и места — одной строкой, длинные списки короче. */
+	static final int TERSE_ITEMS = 5;
+	static final int TERSE_PLACES = 3;
+
 	/** Строки списка. fm — обычный шрифт, small — мелкий; width — ширина плашки. */
 	static List<Row> rows(StepGuide.View v, boolean collapsed, FontMetrics fm, FontMetrics small, int width)
 	{
+		return rows(v, collapsed, fm, small, width, false);
+	}
+
+	/**
+	 * Строки списка. terse — краткий вид для игры: описания «где достать» не растягиваются на несколько строк, а целиком
+	 * остаются в подсказке при наведении и в окне программы.
+	 */
+	static List<Row> rows(StepGuide.View v, boolean collapsed, FontMetrics fm, FontMetrics small, int width, boolean terse)
+	{
+		final int maxItems = terse ? TERSE_ITEMS : MAX_ITEMS;
+		final int maxPlaces = terse ? TERSE_PLACES : MAX_PLACES;
 		int inner = OverlayText.inner(width);
 		List<Row> out = new ArrayList<>();
 		// Предметов у шага нет — это список мест: заголовок «Куда идти», без второго такого же ниже.
@@ -142,14 +157,14 @@ final class GuideList
 		{
 			out.add(new Row(text("Нужно сейчас", MUTED, small, inner, true), Action.NONE, null));
 		}
-		int whereLines = items.size() > COMPACT_ITEMS ? 1 : WHERE_LINES;
-		for (int i = 0; i < Math.min(items.size(), MAX_ITEMS); i++)
+		int whereLines = terse || items.size() > COMPACT_ITEMS ? 1 : WHERE_LINES;
+		for (int i = 0; i < Math.min(items.size(), maxItems); i++)
 		{
 			out.add(item(items.get(i), v.getPlaces(), fm, small, inner, whereLines));
 		}
-		if (items.size() > MAX_ITEMS)
+		if (items.size() > maxItems)
 		{
-			out.add(new Row(text("… ещё " + (items.size() - MAX_ITEMS) + " — в панели «OSRS Путь» справа", MUTED, small, inner, true),
+			out.add(new Row(text("… ещё " + (items.size() - maxItems) + " — в панели «OSRS Путь» справа", MUTED, small, inner, true),
 				Action.NONE, null));
 		}
 		// Всё собрано — что делать дальше: последний пункт быстрого пути шага («Отдай всё Hetty…»).
@@ -162,7 +177,7 @@ final class GuideList
 		List<StepGuide.PlaceLine> places = new ArrayList<>();
 		for (StepGuide.PlaceLine p : v.getPlaces())
 		{
-			if (p.getIndex() == 0 || !itemPlace(items, p, v.getFinale()))
+			if (p.getIndex() == 0 || !itemPlace(items, p, v.getFinale(), maxItems))
 			{
 				places.add(p);
 			}
@@ -177,14 +192,14 @@ final class GuideList
 			{
 				out.add(new Row(text("Куда идти", TITLE, fm, inner, false), Action.NONE, null));
 			}
-			int placeLines = places.size() > COMPACT_PLACES ? 1 : PLACE_LINES;
-			for (int i = 0; i < Math.min(places.size(), MAX_PLACES); i++)
+			int placeLines = terse || places.size() > COMPACT_PLACES ? 1 : PLACE_LINES;
+			for (int i = 0; i < Math.min(places.size(), maxPlaces); i++)
 			{
 				out.add(place(places.get(i), fm, inner, placeLines));
 			}
-			if (places.size() > MAX_PLACES)
+			if (places.size() > maxPlaces)
 			{
-				out.add(new Row(text("… ещё " + (places.size() - MAX_PLACES) + " — в панели «OSRS Путь» справа", MUTED, small, inner, true),
+				out.add(new Row(text("… ещё " + (places.size() - maxPlaces) + " — в панели «OSRS Путь» справа", MUTED, small, inner, true),
 					Action.NONE, null));
 			}
 		}
@@ -223,11 +238,11 @@ final class GuideList
 	 * (кнопка или «● ведёт туда»), когда он получен — идти туда незачем (Betty, крыса, грядка лука). Главная точка шага
 	 * (index 0, NPC квеста) остаётся всегда — там дело по квесту.
 	 */
-	private static boolean itemPlace(List<StepGuide.ItemLine> items, StepGuide.PlaceLine place, String finale)
+	private static boolean itemPlace(List<StepGuide.ItemLine> items, StepGuide.PlaceLine place, String finale, int shownItems)
 	{
 		boolean linked = false;
 		boolean pending = false;
-		for (int i = 0; i < Math.min(items.size(), MAX_ITEMS); i++)
+		for (int i = 0; i < Math.min(items.size(), shownItems); i++)
 		{
 			if (items.get(i).getPlace() != place.getIndex())
 			{

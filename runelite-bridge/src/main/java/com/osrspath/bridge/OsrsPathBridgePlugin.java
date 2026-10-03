@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import javax.swing.SwingUtilities;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.gameval.InterfaceID;
 import net.runelite.api.ChatMessageType;
 import net.runelite.api.Client;
 import net.runelite.api.GameObject;
@@ -479,6 +480,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				});
 				break;
 			case "hudPacing":
+			case "smartOverlays":
 				clientThread.invokeLater(this::updateHud);
 				break;
 			default:
@@ -1307,10 +1309,23 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return shortestPath != null && pluginManager.isPluginActive(shortestPath);
 	}
 
+	/**
+	 * Что показывать в игре сейчас: путь, шаг, банк или биржа ({@link SmartView}). Окна банка и биржи читаются здесь,
+	 * в кадре, — так оверлеи не расходятся между собой.
+	 */
+	SmartView.Context overlayContext()
+	{
+		OsrsPathHudOverlay.State h = hud;
+		return SmartView.of(
+			InventoryCheckOverlay.visible(client.getWidget(InterfaceID.Bankmain.ITEMS_CONTAINER)),
+			InventoryCheckOverlay.visible(client.getWidget(InterfaceID.GeOffers.UNIVERSE)),
+			h == null ? -1 : h.getTiles());
+	}
+
 	private void updateHud()
 	{
 		refreshGuide();
-		boolean dangerShown = warned(danger);
+		boolean dangerShown = SmartView.dangerVisible(config.smartOverlays(), danger.getLevel());
 		GearHint h = gearHint;
 		// Совет по снаряжению — пока не идём за покупкой (тогда заголовок и так «Купи …»).
 		String upgrade = navTarget == null && h != null && h.getText() != null && config.upgradeRouter() ? h.getText() : null;
@@ -1350,6 +1365,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			goal = null;
 		}
 		String distance = null;
+		int tiles = -1;
 		WorldPoint nav = navTarget();
 		Player me = client.getLocalPlayer();
 		if (nav != null && me != null && client.getGameState() == GameState.LOGGED_IN)
@@ -1358,6 +1374,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			Navigation.Readout r = Navigation.readout(pos.getX(), pos.getY(), pos.getPlane(), nav.getX(), nav.getY(), nav.getPlane(), near);
 			near = r.isNear();
 			distance = r.getText();
+			tiles = r.getTiles();
 		}
 		String bag = null;
 		if (!checklist.getRows().isEmpty())
@@ -1381,7 +1398,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		String health = config.hudHealth() && target != null ? healthLine(hp, hpMax, target.getMaxHit()) : null;
 		boolean critical = health != null && target.getMaxHit() != null && hp <= target.getMaxHit();
 		hud = new OsrsPathHudOverlay.State(title, goal, distance, near, bag, checklist.isReady(), dangerText, inside, pace, paceGood, upgrade,
-			health, critical, navTarget == null ? useLine(target, ItemCounts.sum(carried, noted)) : null);
+			health, critical, navTarget == null ? useLine(target, ItemCounts.sum(carried, noted)) : null, tiles);
 	}
 
 	/**

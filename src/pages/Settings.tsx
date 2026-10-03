@@ -7,6 +7,7 @@ import { desktop, type RuneliteCheck, type ZoomState } from '../lib/desktop';
 import { applyTextScale, loadTextScale, percent, stepScale, TEXT_EVENT, TEXT_STEPS, ZOOM_STEPS } from '../lib/ui-scale';
 import { useBridge } from '../bridge';
 import { setFeatures, useFeatures, type Features } from '../lib/features';
+import { DensityPills } from '../components/DensityToggle';
 import { BRIDGE_ORIGIN } from '../services/runeliteBridge';
 import { PluginUpdateNote } from '../components/PluginUpdateNote';
 import { plural } from '../lib/shopping';
@@ -242,6 +243,14 @@ function PlayStyleSection() {
   return (
     <section className="card section-card" aria-label="Стиль игры">
       <h2 className="card-title">Стиль игры и подготовка</h2>
+      <div className="setting">
+        <DensityPills />
+        <p className="muted small">
+          <strong>Дзен</strong> — на экране шаг, одна строка статуса, кнопка «Сделано» и критичные предупреждения; остальное — по «Подробнее».
+          {' '}<strong>Инспектор</strong> — все блоки шага развёрнуты: формулы, калькуляторы опыта, ветки, досье предметов, экономика.
+          В игре то же делает настройка плагина «Умное проявление»: в пути — стрелка и одна строка, список — у банка, оптовый список — на бирже.
+        </p>
+      </div>
       <div className="setting">
         <div className="mode-toggle style-toggle" role="group" aria-label="Стиль игры">
           {([['chill', '🌿', 'Спокойно'], ['efficient', '⚡', 'Эффективно']] as const).map(([k, icon, label]) => {

@@ -99,7 +99,9 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	public Dimension render(Graphics2D g)
 	{
 		StepGuide.View v = plugin.getGuideView();
-		if (!config.showGuide() || !GuideList.worthShowing(v))
+		if (!config.showGuide() || !GuideList.worthShowing(v)
+			// Умное проявление: в пути и на бирже список шага закрывал бы обзор — он нужен у банка и рядом со шагом.
+			|| (config.smartOverlays() && !SmartView.showsGuide(plugin.overlayContext())))
 		{
 			hits = Hits.NONE;
 			return null;
@@ -110,11 +112,12 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		g.setFont(font);
 		int width = OsrsPathHudOverlay.panelWidth(this, Math.round(WIDTH * scale));
 		int hovered = hovered();
-		Object key = Arrays.asList(v, config.guideCollapsed(), hovered, config.hudOpacity(), font, small, width);
+		boolean terse = config.smartOverlays();
+		Object key = Arrays.asList(v, config.guideCollapsed(), hovered, config.hudOpacity(), font, small, width, terse);
 		if (!key.equals(builtFor))
 		{
 			components = build(panelComponent, v, config.guideCollapsed(), hovered, g.getFontMetrics(font), g.getFontMetrics(small),
-				font, small, width, config.hudOpacity());
+				font, small, width, config.hudOpacity(), terse);
 			builtFor = key;
 		}
 		OverlayCard.paint(g, last.width, last.height, accent(v), config.hudOpacity());
@@ -201,11 +204,18 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	static List<RowComponent> build(PanelComponent panel, StepGuide.View v, boolean collapsed, int hovered, FontMetrics fm,
 		FontMetrics smallFm, Font font, Font small, int width, int opacity)
 	{
+		return build(panel, v, collapsed, hovered, fm, smallFm, font, small, width, opacity, false);
+	}
+
+	/** terse — краткий вид для игры (умное проявление): подробности остаются в подсказке и в окне программы. */
+	static List<RowComponent> build(PanelComponent panel, StepGuide.View v, boolean collapsed, int hovered, FontMetrics fm,
+		FontMetrics smallFm, Font font, Font small, int width, int opacity, boolean terse)
+	{
 		List<LayoutableRenderableEntity> c = panel.getChildren();
 		c.clear();
 		panel.setPreferredSize(new Dimension(width, 0));
 		OverlayText.frame(panel, fm);
-		List<GuideList.Row> rows = GuideList.rows(v, collapsed, fm, smallFm, width);
+		List<GuideList.Row> rows = GuideList.rows(v, collapsed, fm, smallFm, width, terse);
 		List<RowComponent> out = new ArrayList<>();
 		for (int i = 0; i < rows.size(); i++)
 		{

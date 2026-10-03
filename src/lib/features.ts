@@ -19,10 +19,12 @@ export interface Features {
   autoPrep: boolean;
   /** Стиль «эффективно» (по умолчанию — «спокойно»): lib/playStyle.ts. */
   efficient: boolean;
+  /** Режим «Инспектор»: все блоки карточки шага развёрнуты (по умолчанию — «Дзен»: одна строка статуса и кнопка «Сделано»). */
+  inspector: boolean;
 }
 
 export const FEATURES_KEY = 'osrs-put:features';
-export const DEFAULT_FEATURES: Features = { autoLocation: true, bankTags: true, pacing: true, upgradeRouter: true, levelsFromGame: true, autoPrep: true, efficient: false };
+export const DEFAULT_FEATURES: Features = { autoLocation: true, bankTags: true, pacing: true, upgradeRouter: true, levelsFromGame: true, autoPrep: true, efficient: false, inspector: false };
 
 /** Сохранённое, а незнакомое и битое — по умолчанию (новая функция включена). */
 export function parseFeatures(raw: string | null): Features {

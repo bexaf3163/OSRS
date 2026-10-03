@@ -70,18 +70,27 @@ class OsrsPathHudOverlay extends OverlayPanel
 		boolean healthCritical;
 		/** «Use Raw rat meat на Fireplace»: что сделать сейчас по шагу; null — нечего напоминать. */
 		String action;
+		/** Расстояние до цели в клетках по прямой; -1 — не известно (цели нет, другой этаж, под землёй). */
+		int tiles;
 
 		/** Без предупреждения о здоровье и действия — как было до 2.15. */
 		State(String title, String goal, String distance, boolean near, String bag, boolean bagReady, String danger,
 			boolean dangerInside, String pacing, boolean pacingGood, String upgrade)
 		{
-			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, null, false, null);
+			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, null, false, null, -1);
 		}
 
 		State(String title, String goal, String distance, boolean near, String bag, boolean bagReady, String danger,
 			boolean dangerInside, String pacing, boolean pacingGood, String upgrade, String health, boolean healthCritical)
 		{
-			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, health, healthCritical, null);
+			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, health, healthCritical, null, -1);
+		}
+
+		/** Без расстояния в клетках — как было до 2.19. */
+		State(String title, String goal, String distance, boolean near, String bag, boolean bagReady, String danger,
+			boolean dangerInside, String pacing, boolean pacingGood, String upgrade, String health, boolean healthCritical, String action)
+		{
+			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, health, healthCritical, action, -1);
 		}
 	}
 
@@ -111,6 +120,11 @@ class OsrsPathHudOverlay extends OverlayPanel
 		if (!config.showHud() || s == null)
 		{
 			return null;
+		}
+		// Умное проявление: в пути и на бирже — одна строка (действие и расстояние), остальное в игре не нужно.
+		if (config.smartOverlays() && SmartView.compactHud(plugin.overlayContext()))
+		{
+			s = SmartView.compact(s);
 		}
 		boolean large = config.hudLarge();
 		Font font = OverlayText.font(g.getFont(), large ? LARGE : 1f);

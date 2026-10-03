@@ -25,6 +25,38 @@ function TaskAction({ a }: { a: ReadinessAction }) {
   return <a className="btn btn-ghost btn-sm" href={a.href}>{a.label}</a>;
 }
 
+/**
+ * «Исправить» одной кнопкой: начать подготовку к шагу (стрелка к банку, бирже или месту прокачки). Если у главной задачи
+ * места нет (квест, уровень без точки на карте) — ничего не уходит из окна: onDetails раскрывает подробности подготовки.
+ */
+export function usePrepFix(step: Step, onDetails: () => void): { available: boolean; underway: boolean; fix: () => Promise<void> } {
+  const profile = styleOf(useFeatures());
+  const queue = useReadinessEngine().queue(step, profile.style);
+  const { prep, set } = usePrep();
+  const { navigate } = useBridge();
+  const { notify } = useStore();
+  const primary: QueueTask | undefined = queue.tasks[0];
+  const underway = !!primary && prep.stack.some((f) => f.sourceStepId === step.id && f.detourId === primary.id);
+  const fix = async () => {
+    if (!primary) return;
+    const res = startDetour(prep, {
+      sourceStepId: step.id, detourId: primary.id, reason: primary.label, startedAt: Date.now(),
+      returnCondition: `${primary.label} — готово`,
+    });
+    if (!res.ok) {
+      if (res.reason === 'DEPTH') notify('Подготовка уже в три захода — сделай по списку, потом новые.');
+      onDetails();
+      return;
+    }
+    declined.delete(`${step.id}:${primary.id}`);
+    set(res.state);
+    const go = primary.guide ?? primary.action;
+    if (go?.kind === 'nav') await navigate(go.target);
+    else onDetails();
+  };
+  return { available: !queue.ready && !!primary, underway, fix };
+}
+
 export function PrepRouteBlock({ step }: { step: Step }) {
   const features = useFeatures();
   const profile = styleOf(features);

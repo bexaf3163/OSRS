@@ -737,6 +737,7 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .mode-btn.is-active { background: var(--surface); color: var(--text); box-shadow: 0 0 0 1px var(--border); }
 .mode-btn.is-members.is-active { color: var(--members); box-shadow: 0 0 0 1px color-mix(in srgb, var(--members) 45%, transparent); }
 .mode-label { display: none; }
+.density-btn { width: 40px; height: 40px; }
 @media (min-width: 520px) and (max-width: 899px), (min-width: 1180px) { .mode-label { display: inline; } }
 @media (min-width: 900px) and (max-width: 1179px) {
   .search-trigger { min-width: 44px !important; padding: 0 10px !important; justify-content: center !important; }
@@ -1454,6 +1455,25 @@ select option { background: var(--surface); color: var(--text); }
 .prep-primary .actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .prep-next { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
 .style-toggle .style-label { display: inline; }
+/* Единый статус шага («Дзен»): одна строка, подробности — по кнопке. */
+.step-status { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; display: flex; flex-direction: column; gap: 8px; background: var(--surface-3); box-shadow: inset 3px 0 0 var(--border-strong); }
+.step-status.is-ready { box-shadow: inset 3px 0 0 var(--done); }
+.step-status.is-prep { box-shadow: inset 3px 0 0 var(--gold); }
+.step-status.is-blocked { box-shadow: inset 3px 0 0 var(--danger); }
+.status-line { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; justify-content: space-between; }
+.status-text { min-width: 0; }
+.status-actions { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.status-arrow { margin: 0; }
+.status-tabs { display: flex; flex-wrap: wrap; gap: 4px; padding-top: 6px; border-top: 1px solid var(--border); }
+.status-tab { border: 1px solid var(--border); background: var(--surface); color: var(--muted); border-radius: 999px; padding: 4px 10px; font: inherit; font-size: 0.85rem; cursor: pointer; }
+.status-tab:hover { color: var(--text); }
+.status-tab.is-active { color: var(--text); border-color: var(--border-strong); box-shadow: 0 0 0 1px var(--border-strong); font-weight: 600; }
+.status-panel { display: flex; flex-direction: column; gap: 8px; }
+.status-panel[hidden] { display: none; }
+.zen-more { border-top: 1px dashed var(--border); padding-top: 6px; }
+.zen-more > summary { cursor: pointer; color: var(--muted); }
+.zen-more[open] > summary { margin-bottom: 8px; }
+.zen-more[open] { display: flex; flex-direction: column; gap: 14px; }
 .prep-more { margin: 0; }
 .training { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; background: var(--surface-3); box-shadow: inset 3px 0 0 var(--accent, var(--gold)); }
 .training p, .training ul { margin: 0; }

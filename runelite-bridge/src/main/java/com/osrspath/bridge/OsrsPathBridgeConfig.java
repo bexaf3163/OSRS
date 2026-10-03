@@ -79,6 +79,19 @@ public interface OsrsPathBridgeConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "smartOverlays",
+		name = "Умное проявление",
+		description = "В пути — только стрелка и одна строка HUD (действие и расстояние). Список «Что нужно» — у банка и рядом "
+			+ "с местом шага, оптовый список — на бирже, предупреждение радара — когда ты уже в зоне. Выключено — всё видно всегда",
+		section = companion,
+		position = 10
+	)
+	default boolean smartOverlays()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "showHud",
 		name = "Показывать микро-HUD",
 		description = "Текущий шаг, цель и расстояние до неё. Плашку можно перетащить с зажатым Alt",
