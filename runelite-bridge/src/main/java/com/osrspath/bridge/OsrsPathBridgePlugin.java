@@ -1218,7 +1218,47 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		String dangerText = dangerShown ? danger.getZone().hudText() : null;
 		boolean inside = danger.getLevel() == DangerRadar.Level.INSIDE;
-		hud = new OsrsPathHudOverlay.State(title, goal, distance, near, bag, checklist.isReady(), dangerText, inside, pace, paceGood, upgrade);
+		int hp = client.getGameState() == GameState.LOGGED_IN ? client.getBoostedSkillLevel(Skill.HITPOINTS) : 0;
+		int hpMax = client.getGameState() == GameState.LOGGED_IN ? client.getRealSkillLevel(Skill.HITPOINTS) : 0;
+		String health = config.hudHealth() && target != null ? healthLine(hp, hpMax, target.getMaxHit()) : null;
+		boolean critical = health != null && target.getMaxHit() != null && hp <= target.getMaxHit();
+		hud = new OsrsPathHudOverlay.State(title, goal, distance, near, bag, checklist.isReady(), dangerText, inside, pace, paceGood, upgrade,
+			health, critical, navTarget == null ? useLine(target, ItemCounts.sum(carried, noted)) : null);
+	}
+
+	/**
+	 * Напоминание «Use X на Y» по первому действию шага, предмет которого уже в сумке. null — действий нет или
+	 * предмета ещё нет (тогда сначала его надо получить, это показывает список «Что нужно»).
+	 */
+	static String useLine(ActiveTarget t, ItemCounts bag)
+	{
+		if (t == null || t.getUseOn() == null || bag == null)
+		{
+			return null;
+		}
+		for (ActiveTarget.UseOn u : t.getUseOn())
+		{
+			if (bag.count(null, u.getItem()) > 0)
+			{
+				return "Use " + u.getItem() + " на " + u.getTarget();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Строка о здоровье: показывается, когда HP ниже двух максимальных ударов противника шага (по вики), а у игрока
+	 * здоровье известно. null — всё в порядке, удар неизвестен или игрок не в игре.
+	 */
+	static String healthLine(int hp, int hpMax, Integer maxHit)
+	{
+		if (maxHit == null || hp <= 0 || hpMax <= 0 || hp >= 2 * maxHit)
+		{
+			return null;
+		}
+		return hp <= maxHit
+			? "HP " + hp + "/" + hpMax + " — ЕШЬ СЕЙЧАС! Бьёт до " + maxHit
+			: "HP " + hp + "/" + hpMax + " — пора есть. Бьёт до " + maxHit;
 	}
 
 	// ---------- Кого подсвечивать ----------
@@ -1661,6 +1701,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			{
 				completion.onStateChanged();
 			}
+		}
+		if (e.getSkill() == Skill.HITPOINTS && target != null && target.getMaxHit() != null)
+		{
+			// Здоровье меняется каждый удар: строка о нём пересчитывается сразу, а не раз в игровой тик.
+			updateHud();
 		}
 		if (pacing != null && pacing.tracks(key) && pacing.update(key, e.getXp(), System.currentTimeMillis()))
 		{

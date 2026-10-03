@@ -240,6 +240,42 @@ export function stepReadiness(input: ReadinessInput): StepReadiness {
   return { stepId: step.id, status: statusOf(reqs), requirements: sorted, problems, unknown, ...(goalMet ? { goalMet } : {}) };
 }
 
+export interface ChainLink {
+  step: Step;
+  /** Что мешает именно этому звену, кроме шагов до него: уровни, предметы, монеты. */
+  why: RequirementStatus[];
+}
+
+/** Номер шага из ссылки действия «#/step/S2-03»; null — ссылка не на шаг. */
+const stepOfHref = (a?: ReadinessAction): string | null => (a?.kind === 'link' ? /^#\/step\/(S\d-\d{2})$/.exec(a.href)?.[1] ?? null : null);
+
+/**
+ * «Починить всё»: цепочка шагов до готовности. Идём по тому, что мешает (не пройденные шаги и квесты), вглубь не больше
+ * maxDepth звеньев, и собираем в порядке выполнения: самое глубокое звено первым, сам шаг — последним. Цикл не вечен:
+ * каждый шаг берётся один раз. Пусто — шагу ничего не предшествует.
+ */
+export function fixChain(input: ReadinessInput, maxDepth = 3): ChainLink[] {
+  const seen = new Set<string>([input.step.id]);
+  const out: ChainLink[] = [];
+  const visit = (step: Step, depth: number) => {
+    const r = stepReadiness({ ...input, step });
+    const before = r.problems.map((p) => stepOfHref(p.action)).filter((id): id is string => id !== null && id !== input.step.id);
+    if (depth < maxDepth) {
+      for (const id of before) {
+        if (seen.has(id)) continue;
+        seen.add(id);
+        const s = input.steps.find((x) => x.id === id);
+        if (s && !isClosed(input.progress, id)) visit(s, depth + 1);
+      }
+    }
+    if (step.id !== input.step.id) {
+      out.push({ step, why: r.problems.filter((p) => p.kind !== 'step' && p.kind !== 'quest' && p.kind !== 'qp' && p.kind !== 'mode') });
+    }
+  };
+  visit(input.step, 0);
+  return out;
+}
+
 function bankNav(bank: Place, step: Step, itemName: string): ReadinessAction {
   // Цель снимется сама, когда предмет окажется в сумке, — стрелка вернётся к шагу.
   return { kind: 'nav', label: `🧭 К банку — ${bank.label}`, target: { label: `${bank.label}: взять ${itemName}`, x: bank.x, y: bank.y, plane: bank.plane, itemName, stepId: step.id } };

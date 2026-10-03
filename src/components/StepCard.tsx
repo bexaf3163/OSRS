@@ -16,6 +16,8 @@ import { StepImage } from './StepImage';
 import { StepMap } from './StepMap';
 import { InGamePanel } from './InGamePanel';
 import { TravelPlan } from './TravelPlan';
+import { FoodAdvice } from './FoodAdvice';
+import { StyleGear } from './StyleGear';
 import { BranchSuggestions } from './BranchSuggestions';
 import { UpgradePrompt } from './UpgradePrompt';
 import { GearPrompt } from './GearPrompt';
@@ -186,6 +188,8 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
       <StepMap step={step} />
       <InGamePanel step={step} />
       <TravelPlan step={step} />
+      <FoodAdvice step={step} />
+      <StyleGear step={step} />
       <BranchSuggestions step={step} />
 
       {step.how && <p className="step-how"><Inline text={step.how} /></p>}

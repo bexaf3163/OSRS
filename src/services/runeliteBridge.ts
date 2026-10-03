@@ -7,6 +7,7 @@ import { desktop } from '../lib/desktop';
 import { isClosed, openAfter } from '../lib/next-step';
 import { parseAmount, preflightItems } from '../lib/checklist';
 import { watchedItems } from '../lib/branching';
+import { stepMaxHit } from '../lib/foodAdvice';
 import { stepPlaces } from '../lib/stepPlaces';
 
 export const BRIDGE_ORIGIN = 'http://127.0.0.1:38282';
@@ -169,6 +170,9 @@ export type ActiveStepPayload = InGameTarget & {
   watchItems?: string[];
   pacing?: StepPacing;
   guide?: StepGuidePayload;
+  /** Самый сильный обычный удар противников шага (вики): HUD предупредит о здоровье ниже двух таких ударов. */
+  maxHit?: number;
+  useOn?: { item: string; target: string; kind?: string }[];
 };
 
 /**
@@ -244,6 +248,9 @@ export function toInGameTarget(step: Step, branch?: StepBranch): ActiveStepPaylo
   const watch = watchedItems(step);
   if (watch.length) payload.watchItems = watch;
   if (step.pacing) payload.pacing = step.pacing;
+  const hit = stepMaxHit(step);
+  if (hit) payload.maxHit = hit;
+  if (step.useOn?.length) payload.useOn = step.useOn.slice(0, 8);
   const guide = stepGuide(step, branch);
   payload.guide = guide;
   // Шаг без точки, но с предметами (закупка) — тоже в игру: список «Что нужно» с «где взять» там полезен.

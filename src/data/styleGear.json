@@ -1,0 +1,571 @@
+{
+ "source": "OSRS Wiki: «Recommended equipment» в статьях Free-to-play Magic training и Free-to-play Ranged training",
+ "generatedAt": "2026-10-03",
+ "magic": {
+  "head": [
+   {
+    "names": [
+     "Shaman mask",
+     "Wizard hat",
+     "Blue wizard hat"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Leather cowl"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Castlewars hood (Saradomin)",
+     "Castlewars hood (Zamorak)"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ],
+  "neck": [
+   {
+    "names": [
+     "Amulet of magic"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Amulet of power"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Amulet of accuracy"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Amulet of defence",
+     "Holy symbol"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ],
+  "cape": [
+   {
+    "names": [
+     "Black cape",
+     "Cabbage cape",
+     "Team-1 cape"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ],
+  "body": [
+   {
+    "names": [
+     "Black robe",
+     "Blue wizard robe"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Zamorak monk top"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Monk's robe top"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Shade robe top"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Priest gown (top)"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ],
+  "legs": [
+   {
+    "names": [
+     "Zamorak monk bottom"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Leather chaps",
+     "Monk's robe"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Shade robe"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Priest gown (bottom)"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ],
+  "weapon": [
+   {
+    "names": [
+     "Bryophyta's staff"
+    ],
+    "reqs": [
+     {
+      "skill": "attack",
+      "level": 30
+     },
+     {
+      "skill": "magic",
+      "level": 30
+     }
+    ],
+    "quests": []
+   },
+   {
+    "names": [
+     "Staff of fire",
+     "Staff of earth",
+     "Staff of water",
+     "Staff of air"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Magic staff",
+     "Skull sceptre (i)"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Staff",
+     "Skull sceptre"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ],
+  "shield": [
+   {
+    "names": [
+     "Anti-dragon shield"
+    ],
+    "reqs": [],
+    "quests": [
+     "Dragon Slayer I"
+    ]
+   },
+   {
+    "names": [
+     "Wooden shield",
+     "Training shield"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ],
+  "hands": [
+   {
+    "names": [
+     "Leather vambraces",
+     "Leather gloves"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ],
+  "feet": [
+   {
+    "names": [
+     "Leather boots"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ]
+ },
+ "ranged": {
+  "head": [
+   {
+    "names": [
+     "Coif"
+    ],
+    "reqs": [
+     {
+      "skill": "ranged",
+      "level": 20
+     }
+    ],
+    "quests": []
+   },
+   {
+    "names": [
+     "Leather cowl"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Rune med helm"
+    ],
+    "reqs": [
+     {
+      "skill": "defence",
+      "level": 40
+     }
+    ],
+    "quests": []
+   },
+   {
+    "names": [
+     "Adamant med helm"
+    ],
+    "reqs": [
+     {
+      "skill": "defence",
+      "level": 30
+     }
+    ],
+    "quests": []
+   },
+   {
+    "names": [
+     "Mithril med helm"
+    ],
+    "reqs": [
+     {
+      "skill": "defence",
+      "level": 20
+     }
+    ],
+    "quests": []
+   }
+  ],
+  "neck": [
+   {
+    "names": [
+     "Amulet of power"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Amulet of accuracy"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Amulet of defence",
+     "Holy symbol"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ],
+  "cape": [
+   {
+    "names": [
+     "Black cape",
+     "Cabbage cape",
+     "Team-1 cape"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ],
+  "body": [
+   {
+    "names": [
+     "Gilded d'hide body"
+    ],
+    "reqs": [
+     {
+      "skill": "ranged",
+      "level": 40
+     },
+     {
+      "skill": "defence",
+      "level": 40
+     }
+    ],
+    "quests": [
+     "Dragon Slayer I"
+    ]
+   },
+   {
+    "names": [
+     "Green d'hide body"
+    ],
+    "reqs": [
+     {
+      "skill": "ranged",
+      "level": 40
+     },
+     {
+      "skill": "defence",
+      "level": 40
+     }
+    ],
+    "quests": [
+     "Dragon Slayer I"
+    ]
+   },
+   {
+    "names": [
+     "Studded body"
+    ],
+    "reqs": [
+     {
+      "skill": "ranged",
+      "level": 20
+     },
+     {
+      "skill": "defence",
+      "level": 20
+     }
+    ],
+    "quests": []
+   },
+   {
+    "names": [
+     "Hardleather body"
+    ],
+    "reqs": [
+     {
+      "skill": "defence",
+      "level": 10
+     }
+    ],
+    "quests": []
+   },
+   {
+    "names": [
+     "Leather body"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ],
+  "legs": [
+   {
+    "names": [
+     "Gilded d'hide chaps"
+    ],
+    "reqs": [
+     {
+      "skill": "ranged",
+      "level": 40
+     }
+    ],
+    "quests": []
+   },
+   {
+    "names": [
+     "Green d'hide chaps"
+    ],
+    "reqs": [
+     {
+      "skill": "ranged",
+      "level": 40
+     }
+    ],
+    "quests": []
+   },
+   {
+    "names": [
+     "Studded chaps"
+    ],
+    "reqs": [
+     {
+      "skill": "ranged",
+      "level": 20
+     }
+    ],
+    "quests": []
+   },
+   {
+    "names": [
+     "Leather chaps"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ],
+  "weapon": [
+   {
+    "names": [
+     "Maple shortbow"
+    ],
+    "reqs": [
+     {
+      "skill": "ranged",
+      "level": 30
+     }
+    ],
+    "quests": []
+   },
+   {
+    "names": [
+     "Willow shortbow"
+    ],
+    "reqs": [
+     {
+      "skill": "ranged",
+      "level": 20
+     }
+    ],
+    "quests": []
+   },
+   {
+    "names": [
+     "Oak shortbow"
+    ],
+    "reqs": [
+     {
+      "skill": "ranged",
+      "level": 5
+     }
+    ],
+    "quests": []
+   },
+   {
+    "names": [
+     "Shortbow"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ],
+  "ammo": [
+   {
+    "names": [
+     "Adamant arrow"
+    ],
+    "reqs": [],
+    "quests": [],
+    "note": "(Maple shortbow only)"
+   },
+   {
+    "names": [
+     "Mithril arrow"
+    ],
+    "reqs": [],
+    "quests": [],
+    "note": "(Willow shortbow or higher)"
+   },
+   {
+    "names": [
+     "Steel arrow"
+    ],
+    "reqs": [],
+    "quests": [],
+    "note": "(Oak shortbow or higher)"
+   },
+   {
+    "names": [
+     "Iron arrow"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Bronze arrow"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ],
+  "hands": [
+   {
+    "names": [
+     "Gilded d'hide vambraces"
+    ],
+    "reqs": [
+     {
+      "skill": "ranged",
+      "level": 40
+     }
+    ],
+    "quests": []
+   },
+   {
+    "names": [
+     "Green d'hide vambraces"
+    ],
+    "reqs": [
+     {
+      "skill": "ranged",
+      "level": 40
+     }
+    ],
+    "quests": []
+   },
+   {
+    "names": [
+     "Leather vambraces"
+    ],
+    "reqs": [],
+    "quests": []
+   },
+   {
+    "names": [
+     "Leather gloves"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ],
+  "feet": [
+   {
+    "names": [
+     "Leather boots"
+    ],
+    "reqs": [],
+    "quests": []
+   }
+  ]
+ }
+}

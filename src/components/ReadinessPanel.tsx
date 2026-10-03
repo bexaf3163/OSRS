@@ -6,7 +6,7 @@ import type { Step } from '../types';
 import { useStore } from '../store';
 import { useBridge } from '../bridge';
 import { isClosed } from '../lib/next-step';
-import { stepReadiness, STATUS_TEXT, type ReadinessAction, type RequirementStatus, type StepReadiness } from '../lib/readiness';
+import { fixChain, stepReadiness, STATUS_TEXT, type ReadinessAction, type RequirementStatus, type StepReadiness } from '../lib/readiness';
 import { NavigateButton } from './NavigateButton';
 
 /** Готовность шага; пересчёт — только когда меняются уровни, предметы, монеты, отметки или шаг. */
@@ -60,6 +60,28 @@ function GoalMet({ step, r }: { step: Step; r: StepReadiness }) {
   );
 }
 
+/** «🧩 Цепочка до готовности»: что пройти по порядку, чтобы шаг открылся (до трёх звеньев вглубь). */
+function Chain({ step }: { step: Step }) {
+  const { progress, qp, mode, steps } = useStore();
+  const { stats, owned, gear } = useBridge();
+  const chain = useMemo(() => fixChain({ step, steps, progress, qp, mode, stats, owned, gear }), [step, steps, progress, qp, mode, stats, owned, gear]);
+  if (!chain.length) return null;
+  return (
+    <details className="ready-chain" open>
+      <summary className="small">🧩 Цепочка до готовности: {chain.length + 1} {chain.length === 1 ? 'шаг' : 'шага'}</summary>
+      <ol className="small">
+        {chain.map((l) => (
+          <li key={l.step.id}>
+            <a href={`#/step/${l.step.id}`}><strong>{l.step.id}</strong> {l.step.title}</a>
+            {l.why.length > 0 && <span className="muted"> — ещё нужно: {l.why.map((w) => w.label).join(', ')}</span>}
+          </li>
+        ))}
+        <li><strong>{step.id}</strong> {step.title} — этот шаг</li>
+      </ol>
+    </details>
+  );
+}
+
 export function ReadinessPanel({ step }: { step: Step }) {
   const { progress } = useStore();
   const { navTarget, clearNav } = useBridge();
@@ -85,6 +107,7 @@ export function ReadinessPanel({ step }: { step: Step }) {
         <p className="small muted">План подготовки — по порядку: {r.problems.map((x) => x.label).join(' → ')} → вернуться к {step.id}.</p>
       )}
       {r.problems.length > 0 && <ul className="ready-list">{r.problems.map((x) => <Row key={`${x.kind}-${x.label}`} r={x} />)}</ul>}
+      <Chain step={step} />
       {r.unknown.length > 0 && (
         <details className="ready-unknown">
           <summary className="small">⚪ Не проверено: {r.unknown.length}</summary>

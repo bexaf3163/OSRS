@@ -343,4 +343,16 @@ public interface OsrsPathBridgeConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigItem(
+		keyName = "hudHealth",
+		name = "Здоровье в HUD",
+		description = "Красная строка в плашке шага, когда здоровье упало ниже двух максимальных ударов противника шага",
+		section = helpers,
+		position = 29
+	)
+	default boolean hudHealth()
+	{
+		return true;
+	}
 }

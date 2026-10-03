@@ -1,0 +1,233 @@
+{
+ "source": "OSRS Wiki: карточки монстров (Bucket infobox_monster) и статьи еды",
+ "generatedAt": "2026-10-03",
+ "threats": {
+  "Count Draynor": {
+   "page": "Count Draynor",
+   "hits": [
+    {
+     "n": 3,
+     "label": ""
+    }
+   ],
+   "speedTicks": 4,
+   "hitpoints": 35,
+   "combat": 34
+  },
+  "Al Kharid warrior": {
+   "page": "Al Kharid warrior",
+   "hits": [
+    {
+     "n": 2,
+     "label": ""
+    }
+   ],
+   "speedTicks": 4,
+   "hitpoints": 19,
+   "combat": 9
+  },
+  "Flesh Crawler": {
+   "page": "Flesh Crawler",
+   "version": "Level 28",
+   "hits": [
+    {
+     "n": 1,
+     "label": ""
+    }
+   ],
+   "speedTicks": 3,
+   "hitpoints": 25,
+   "combat": 28
+  },
+  "Ithoi the Navigator": {
+   "page": "Ithoi the Navigator",
+   "hits": [
+    {
+     "n": 6,
+     "label": ""
+    }
+   ],
+   "speedTicks": 5,
+   "hitpoints": 55,
+   "combat": 35
+  },
+  "Brutus": {
+   "page": "Brutus",
+   "hits": [
+    {
+     "n": 3,
+     "label": "melee"
+    },
+    {
+     "n": 19,
+     "label": "special"
+    }
+   ],
+   "speedTicks": 5,
+   "hitpoints": 58,
+   "combat": 30
+  },
+  "Moss giant": {
+   "page": "Moss giant",
+   "version": "Level 42",
+   "hits": [
+    {
+     "n": 6,
+     "label": ""
+    }
+   ],
+   "speedTicks": 6,
+   "hitpoints": 60,
+   "combat": 42
+  },
+  "Ghast": {
+   "page": "Ghast",
+   "version": "Level 30",
+   "hits": [
+    {
+     "n": 3,
+     "label": ""
+    }
+   ],
+   "speedTicks": 4,
+   "hitpoints": 45,
+   "combat": 30
+  },
+  "Melzar the Mad": {
+   "page": "Melzar the Mad",
+   "hits": [
+    {
+     "n": 5,
+     "label": ""
+    }
+   ],
+   "speedTicks": 4,
+   "hitpoints": 44,
+   "combat": 43
+  },
+  "Lesser demon": {
+   "page": "Lesser demon",
+   "version": "Level 82",
+   "hits": [
+    {
+     "n": 8,
+     "label": ""
+    }
+   ],
+   "speedTicks": 4,
+   "hitpoints": 79,
+   "combat": 82
+  },
+  "Elvarg": {
+   "page": "Elvarg",
+   "hits": [
+    {
+     "n": 8,
+     "label": "Slash"
+    },
+    {
+     "n": 70,
+     "label": "Dragonfire"
+    },
+    {
+     "n": 10,
+     "label": "with anti-dragon shield"
+    }
+   ],
+   "speedTicks": 4,
+   "hitpoints": 80,
+   "combat": 83
+  },
+  "Ogress warrior": {
+   "page": "Ogress warrior",
+   "version": "1",
+   "hits": [
+    {
+     "n": 8,
+     "label": ""
+    }
+   ],
+   "speedTicks": 4,
+   "hitpoints": 82,
+   "combat": 82
+  },
+  "Ogress shaman": {
+   "page": "Ogress shaman",
+   "hits": [
+    {
+     "n": 8,
+     "label": ""
+    }
+   ],
+   "speedTicks": 4,
+   "hitpoints": 82,
+   "combat": 82
+  }
+ },
+ "foods": [
+  {
+   "name": "Shrimps",
+   "heals": 3
+  },
+  {
+   "name": "Anchovies",
+   "heals": 1
+  },
+  {
+   "name": "Sardine",
+   "heals": 4
+  },
+  {
+   "name": "Herring",
+   "heals": 5
+  },
+  {
+   "name": "Mackerel",
+   "heals": 6
+  },
+  {
+   "name": "Trout",
+   "heals": 7
+  },
+  {
+   "name": "Cod",
+   "heals": 7
+  },
+  {
+   "name": "Pike",
+   "heals": 8
+  },
+  {
+   "name": "Salmon",
+   "heals": 9
+  },
+  {
+   "name": "Tuna",
+   "heals": 10
+  },
+  {
+   "name": "Lobster",
+   "heals": 12
+  },
+  {
+   "name": "Bass",
+   "heals": 13
+  },
+  {
+   "name": "Swordfish",
+   "heals": 14
+  },
+  {
+   "name": "Cooked chicken",
+   "heals": 3
+  },
+  {
+   "name": "Cooked meat",
+   "heals": 3
+  },
+  {
+   "name": "Bread",
+   "heals": 5
+  }
+ ]
+}

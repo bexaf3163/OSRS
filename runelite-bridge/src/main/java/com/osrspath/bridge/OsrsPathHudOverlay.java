@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import javax.inject.Inject;
+import lombok.AllArgsConstructor;
 import lombok.Value;
 import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
@@ -43,6 +44,7 @@ class OsrsPathHudOverlay extends OverlayPanel
 
 	/** Всё, что показывает HUD. Неизменяемое: плагин заменяет его целиком. */
 	@Value
+	@AllArgsConstructor
 	static class State
 	{
 		String title;
@@ -62,6 +64,25 @@ class OsrsPathHudOverlay extends OverlayPanel
 		boolean pacingGood;
 		/** «⚡ Надень Iron scimitar — он в банке»; null — совета нет или подсказки апгрейда выключены. */
 		String upgrade;
+		/** «HP 12/40 — ешь! Бьёт до 8»; null — здоровье в порядке или у шага нет противника с известным ударом. */
+		String health;
+		/** Здоровье не выше одного максимального удара: следующий удар может убить. */
+		boolean healthCritical;
+		/** «Use Raw rat meat на Fireplace»: что сделать сейчас по шагу; null — нечего напоминать. */
+		String action;
+
+		/** Без предупреждения о здоровье и действия — как было до 2.15. */
+		State(String title, String goal, String distance, boolean near, String bag, boolean bagReady, String danger,
+			boolean dangerInside, String pacing, boolean pacingGood, String upgrade)
+		{
+			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, null, false, null);
+		}
+
+		State(String title, String goal, String distance, boolean near, String bag, boolean bagReady, String danger,
+			boolean dangerInside, String pacing, boolean pacingGood, String upgrade, String health, boolean healthCritical)
+		{
+			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, health, healthCritical, null);
+		}
 	}
 
 	private final OsrsPathBridgePlugin plugin;
@@ -125,9 +146,17 @@ class OsrsPathHudOverlay extends OverlayPanel
 			OverlayText.line(c, s.isDangerInside() ? "⚠ ОПАСНО — ты в зоне!" : "⚠ ВНИМАНИЕ", OsrsPathDangerOverlay.DANGER, fm, inner);
 			OverlayText.line(c, s.getDanger(), OsrsPathDangerOverlay.DANGER, fm, inner);
 		}
+		if (s.getHealth() != null)
+		{
+			OverlayText.line(c, s.getHealth(), s.isHealthCritical() ? OsrsPathDangerOverlay.DANGER : WARN, fm, inner);
+		}
 		if (s.getGoal() != null && !s.getGoal().isEmpty())
 		{
 			OverlayText.line(c, s.getGoal(), TEXT, fm, inner);
+		}
+		if (s.getAction() != null)
+		{
+			OverlayText.line(c, s.getAction(), GOOD, fm, inner);
 		}
 		if (s.getDistance() != null)
 		{

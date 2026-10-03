@@ -182,3 +182,65 @@ describe('данные 2.13', () => {
     }
   });
 });
+
+import { foodInBag, foodsCovering, threatKeys, typicalHit, viewThreat, FOODS, THREATS } from '../src/lib/foodAdvice';
+
+describe('еда на бой', () => {
+  it('данные вики: Elvarg — щит снижает пламя до 10; Brutus — особый удар 19; еда лечит как на вики', () => {
+    expect(THREATS.Elvarg.hits.map((h) => h.n)).toEqual([8, 70, 10]);
+    expect(THREATS.Brutus.hits.find((h) => h.label === 'special')!.n).toBe(19);
+    expect(Object.fromEntries(FOODS.map((f) => [f.name, f.heals]))).toMatchObject({ Lobster: 12, Swordfish: 14, Shrimps: 3, Trout: 7 });
+  });
+  it('порог: пламя без щита в расчёт не входит, но показывается отдельно', () => {
+    const t = typicalHit(THREATS.Elvarg);
+    expect(t).toMatchObject({ typical: 10, worst: 70 });
+    expect(t.excluded?.label).toBe('Dragonfire');
+    const v = viewThreat('Elvarg', 40);
+    expect(v.eatBelow).toBe(20);
+    expect(v.survives).toBe(3);
+    expect(v.everySeconds).toBe(2.4);
+    expect(viewThreat('Melzar the Mad', undefined).survives).toBeNull();
+  });
+  it('ключи противников: foes и threats, без тех, о ком данных нет', () => {
+    expect(threatKeys({ foes: ['Cow', 'Count Draynor'], threats: ['Elvarg'] })).toEqual(['Count Draynor', 'Elvarg']);
+    expect(threatKeys({})).toEqual([]);
+    expect(threatKeys(allSteps.find((s) => s.id === 'S5-08')!)).toEqual(['Elvarg']);
+  });
+  it('еда из сумки по лечению и еда, которая перекрывает удар', () => {
+    const bag = foodInBag([{ name: 'Trout', count: 3 }, { name: 'Lobster' }, { name: 'Coins', count: 50 }]);
+    expect(bag.map((b) => [b.food.name, b.count])).toEqual([['Lobster', 1], ['Trout', 3]]);
+    expect(foodInBag(null)).toEqual([]);
+    expect(foodsCovering(10)[0].name).toBe('Tuna');
+    expect(foodsCovering(99)).toEqual([]);
+  });
+});
+
+import { fixChain } from '../src/lib/readiness';
+import { toInGameTarget } from '../src/services/runeliteBridge';
+
+describe('цепочка до готовности (§12) и данные в игру', () => {
+  const s = (id: string, requires: string[] = [], extra: Partial<Step> = {}): Step =>
+    ({ id, stage: 1, type: 'skill', title: id, requires, doneWhen: '', ...extra }) as Step;
+  const input = (steps: Step[], target: string, done: string[] = []) => ({
+    step: steps.find((x) => x.id === target)!, steps,
+    progress: { version: 3, steps: Object.fromEntries(done.map((d) => [d, 'done'])), levels: {}, notes: {}, updatedAt: '' } as never,
+    qp: 0, mode: 'members' as const, stats: null, owned: null, gear: null,
+  });
+  it('S1-03 ← S1-02 ← S1-01: звенья по порядку выполнения, сам шаг не входит', () => {
+    const steps = [s('S1-01'), s('S1-02', ['S1-01']), s('S1-03', ['S1-02'])];
+    expect(fixChain(input(steps, 'S1-03')).map((l) => l.step.id)).toEqual(['S1-01', 'S1-02']);
+    expect(fixChain(input(steps, 'S1-03', ['S1-01'])).map((l) => l.step.id)).toEqual(['S1-02']);
+    expect(fixChain(input(steps, 'S1-03', ['S1-01', 'S1-02']))).toEqual([]);
+  });
+  it('глубина ограничена тремя, цикл не зацикливает', () => {
+    const chain = [s('S1-01'), s('S1-02', ['S1-01']), s('S1-03', ['S1-02']), s('S1-04', ['S1-03']), s('S1-05', ['S1-04'])];
+    expect(fixChain(input(chain, 'S1-05')).map((l) => l.step.id)).toEqual(['S1-02', 'S1-03', 'S1-04']);
+    const loop = [s('S1-01', ['S1-02']), s('S1-02', ['S1-01'])];
+    expect(fixChain(input(loop, 'S1-01')).map((l) => l.step.id)).toEqual(['S1-02']);
+  });
+  it('в игру уходят максимальный удар и «use X на Y»', () => {
+    expect(toInGameTarget(allSteps.find((x) => x.id === 'S5-08')!)!.maxHit).toBe(10);
+    expect(toInGameTarget(allSteps.find((x) => x.id === 'S2-03')!)!.useOn).toEqual([{ item: 'Raw rat meat', target: 'Fireplace' }]);
+    expect(toInGameTarget(allSteps.find((x) => x.id === 'S1-13')!)!.maxHit).toBeUndefined();
+  });
+});

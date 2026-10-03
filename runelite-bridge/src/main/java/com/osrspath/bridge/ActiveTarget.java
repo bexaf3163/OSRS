@@ -48,6 +48,10 @@ public class ActiveTarget
 	private Pacing pacing;
 	/** Для боковой панели: что нужно на шаг, где взять и куда можно повести стрелку (с протокола 3). */
 	private Guide guide;
+	/** Самый сильный обычный удар противников шага (по вики): HUD предупредит, когда здоровье ниже двух таких ударов. */
+	private Integer maxHit;
+	/** «Use X на Y»: предмет из сумки и то, на что его применяют. HUD напомнит действие, а цель подсветится. */
+	private List<UseOn> useOn;
 
 	private transient Set<String> npcNameSet = Collections.emptySet();
 	private transient Set<Integer> npcIdSet = Collections.emptySet();
@@ -55,6 +59,25 @@ public class ActiveTarget
 	private transient Set<Integer> objectIdSet = Collections.emptySet();
 	private transient Set<String> dialogSet = Collections.emptySet();
 	private transient Set<String> itemNameSet = Collections.emptySet();
+
+	@Data
+	public static class UseOn
+	{
+		private String item;
+		private String target;
+		/** object, npc или item; пусто — object. */
+		private String kind;
+
+		boolean isNpc()
+		{
+			return "npc".equals(kind);
+		}
+
+		boolean isObject()
+		{
+			return kind == null || kind.isEmpty() || "object".equals(kind);
+		}
+	}
 
 	@Data
 	public static class WorldPointDto
@@ -391,6 +414,25 @@ public class ActiveTarget
 				}
 			}
 		}
+		if (useOn != null)
+		{
+			if (useOn.size() > 8)
+			{
+				return "слишком длинный список";
+			}
+			for (UseOn u : useOn)
+			{
+				if (u == null || u.item == null || u.item.isEmpty() || u.target == null || u.target.isEmpty() || tooLong(u.item) || tooLong(u.target)
+					|| (u.kind != null && !u.kind.matches("object|npc|item|")))
+				{
+					return "неверное действие «use»";
+				}
+			}
+		}
+		if (maxHit != null && (maxHit < 1 || maxHit > 200))
+		{
+			return "неверный максимальный удар";
+		}
 		if (pacing != null && pacing.problem() != null)
 		{
 			return pacing.problem();
@@ -416,6 +458,23 @@ public class ActiveTarget
 		npcNameSet = names(npcNames);
 		objectNameSet = names(objectNames);
 		itemNameSet = names(highlightItems);
+		// Цель и предмет действия «use» подсвечиваются так же, как остальное из шага.
+		for (UseOn u : nonNull(useOn))
+		{
+			itemNameSet.add(nameKey(u.item));
+			if (u.isObject())
+			{
+				objectNameSet.add(nameKey(u.target));
+			}
+			else if (u.isNpc())
+			{
+				npcNameSet.add(nameKey(u.target));
+			}
+			else
+			{
+				itemNameSet.add(nameKey(u.target));
+			}
+		}
 		dialogSet = new HashSet<>();
 		for (String d : nonNull(dialogChoices))
 		{

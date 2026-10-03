@@ -265,7 +265,25 @@ async function run(browser: Browser) {
       const m = await text(page, '.money-plan');
       expect(m.includes('Как добрать деньги') && m.includes('gp/ч'), 'S2-04: «Как добрать деньги» — способы с выручкой в час');
       expect((await page.locator('.money-method').count()) > 0, 'S2-04: у блока денег есть способы');
+      await page.locator('.style-gear summary').click();
+      await page.waitForSelector('.style-row', { timeout: 6000 });
+      const sg = await text(page, '.style-gear');
+      expect(sg.includes('Что носить для магии') && sg.includes('Оружие:') && sg.includes('Рекомендации OSRS Wiki'), 'S2-04: «Что носить для магии» — слоты и источник');
+      expect(await noOverflow(page), 'S2-04: экипировка без горизонтальной прокрутки');
       expect(!errors.length, `S2-04: ошибок в консоли нет ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
+    // 2.15: бой с драконом (S5-08) — «Еда на бой»: удары Elvarg по вики и совет по еде.
+    {
+      const { page, errors } = await open(browser, width, {
+        progress: progressBefore('S5-08'),
+        events: [{ type: 'STATS', stats: { hitpoints: 40 } }],
+      }, '#/step/S5-08');
+      const f = await text(page, '.food-advice');
+      expect(f.includes('Еда на бой') && f.includes('Elvarg') && f.includes('Ешь, когда HP ниже'), 'S5-08: «Еда на бой» — удары Elvarg и порог еды');
+      expect(await noOverflow(page), 'S5-08: без горизонтальной прокрутки');
+      expect(!errors.length, `S5-08: ошибок в консоли нет ${errors.join('; ')}`);
       await page.context().close();
     }
 
