@@ -81,14 +81,14 @@ public interface OsrsPathBridgeConfig extends Config
 	@ConfigItem(
 		keyName = "smartOverlays",
 		name = "Умное проявление",
-		description = "В пути — только стрелка и одна строка HUD (действие и расстояние). Список «Что нужно» — у банка и рядом "
-			+ "с местом шага, оптовый список — на бирже, предупреждение радара — когда ты уже в зоне. Выключено — всё видно всегда",
+		description = "Выключено по умолчанию: список «Что нужно» и HUD видны всегда. Включишь — в пути останется только стрелка и "
+			+ "одна строка HUD, список появится у банка и рядом с местом шага, оптовый — на бирже, радар — когда ты уже в зоне",
 		section = companion,
 		position = 10
 	)
 	default boolean smartOverlays()
 	{
-		return true;
+		return false;
 	}
 
 	@ConfigItem(
