@@ -44,29 +44,13 @@ Prefer focused surgical diffs. Do not rewrite whole files when only a small sect
 
 ## 3. LANGUAGE RULES
 
-All player-facing UI must remain natural, grammatical Russian:
+All player-facing UI, RuneLite HUD, overlays, dialogs, warnings, and recommendations must be in native English:
 
-- desktop UI;
-- RuneLite HUD;
-- overlays;
-- warnings;
-- buttons;
-- tooltips;
-- dialogs;
-- recommendations;
-- checklists.
+- Match official OSRS Wiki and Quest Helper terminology exactly.
+- Eliminate Cyrillic fonts and dual-naming conventions ("Русское название (English Name)"). Use canonical in-game English names only.
+- Code comments, commit messages, and internal documentation remain strictly in English.
 
-Preserve the naming convention:
-
-`Русское название (English Name)`
-
-Example:
-
-`Удочка нахлыстом (Fly fishing rod)`
-
-Do not translate or clean up existing Russian comments, docstrings, or localized test names unless specifically required.
-
-New developer comments, internal documentation, commit messages, and internal type keys should be English unless the project structure requires otherwise.
+(Amended 2026-10-04 by the user; replaces the earlier "natural Russian UI" rule. Existing Russian UI text is converted only when a task explicitly asks for it; all new or changed player-facing text is English.)
 
 ## 4. CORE ARCHITECTURAL INVARIANTS
 
