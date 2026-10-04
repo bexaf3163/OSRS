@@ -3779,7 +3779,8 @@
         "npc": [
          13655
         ]
-       }
+       },
+       "has": "Karamjan rum"
       },
       {
        "t": "Нарви 10 бананов рядом и поговори с Luthas, чтобы наняться на плантацию. Диалог: «Could you offer me employment on your plantation?» → «Will you pay me for another crate full?».",
@@ -3813,7 +3814,8 @@
         "item": [
          "Karamjan rum"
         ]
-       }
+       },
+       "need": "Karamjan rum"
       },
       {
        "t": "Заполни ящик бананами (правый клик по ящику — «Fill»), затем поговори с Luthas.",

@@ -50,6 +50,28 @@ public class StageTravelTest
 		}
 	}
 
+	/** Живая игра: пробегая в семи клетках от Zembo и в восьми от Luthas, игрок «побывал» у обоих, и курсор прыгнул на «положи ром в ящик». */
+	@Test
+	public void s209_пробежалМимоZemboИLuthas_шагиНеПерепрыгнуты()
+	{
+		List<ActiveTarget.StageLine> lines = stage("S2-09", 1);
+		StageTracker t = new StageTracker();
+		at(t, "S2-09", 1, lines, 3040, 3235);
+		at(t, "S2-09", 1, lines, 3028, 3220);
+		assertEquals("приплыл — «купи ром»", 1, at(t, "S2-09", 1, lines, 2956, 3146));
+		assertEquals("в 13 клетках от Zembo — ещё «купи ром»", 1, at(t, "S2-09", 1, lines, 2942, 3146));
+		assertEquals("в семи от Zembo, мимо — ром не куплен, курсор на нём", 1, at(t, "S2-09", 1, lines, 2936, 3146));
+		assertTrue(t.reason(), t.reason().startsWith("BLOCK"));
+		assertEquals("зашёл к Zembo — шаг на месте, ждёт покупки", 1, at(t, "S2-09", 1, lines, 2930, 3145));
+		assertEquals("ром не куплен, к Luthas — курсор остаётся на «купи ром»", 1, at(t, "S2-09", 1, lines, 2938, 3154));
+		ItemCounts rum = new ItemCounts();
+		rum.add(431, ActiveTarget.nameKey("Karamjan rum"), 1);
+		assertEquals("ром куплен — «нарви бананы, поговори с Luthas»", 2, t.update("S2-09", 1, lines, 2938, 3154, 0, rum));
+		// Положил ром в ящик (ром ушёл из сумки у ящика) — шаг сдан сам, кнопка «сделано» не нужна.
+		assertEquals("у ящика с ромом в сумке — «положи ром в ящик»", 3, t.update("S2-09", 1, lines, 2939, 3149, 0, rum));
+		assertEquals("ром лежит в ящике — «заполни ящик»", 4, t.update("S2-09", 1, lines, 2939, 3149, 0, new ItemCounts()));
+	}
+
 	@Test
 	public void s208_подготовилсяИВошёлВДом_стрелкаНаПодвалСразу()
 	{
