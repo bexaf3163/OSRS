@@ -127,9 +127,10 @@ class OsrsPathPanel extends PluginPanel
 				{
 					card.add(text("Где взять: " + i.getWhere(), small(), MUTED));
 				}
-				if (i.getPlace() >= 0 && !GuideList.got(i))
+				// Как в списке в игре: номер места мог не попасть в показанный список — тогда кнопки просто нет (раньше падало).
+				StepGuide.PlaceLine p = placeFor(v, i);
+				if (p != null && !GuideList.got(i))
 				{
-					StepGuide.PlaceLine p = v.getPlaces().get(i.getPlace());
 					card.add(p.isActive() ? text("● Стрелка ведёт сюда", small(), GOOD)
 						: button("Путь сюда", () -> actions.go(i.getPlace())));
 				}
@@ -296,6 +297,12 @@ class OsrsPathPanel extends PluginPanel
 		g.dispose();
 		mapIcon = img;
 		return img;
+	}
+
+	/** Место, к которому ведёт предмет; null — номера нет в показанном списке мест (так упала панель в живой игре). */
+	static StepGuide.PlaceLine placeFor(StepGuide.View v, StepGuide.ItemLine i)
+	{
+		return i.getPlace() >= 0 && i.getPlace() < v.getPlaces().size() ? v.getPlaces().get(i.getPlace()) : null;
 	}
 
 	/** Значок кнопки на боковой полосе: стрелка, как большая стрелка в игре. */

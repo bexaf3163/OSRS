@@ -138,6 +138,20 @@ public class StepGuideTest
 	}
 
 	@Test
+	public void панельНеПадаетКогдаНомераМестаНетВСпискеМест()
+	{
+		// В живой игре (S2-08, 2.23.0) у предмета был номер места 1, а в показанном списке место одно: панель падала с IndexOutOfBounds.
+		StepGuide.ItemLine item = new StepGuide.ItemLine("Beer", "нет", StepGuide.Have.NONE, null, 1, "Beer", null, "нет");
+		StepGuide.PlaceLine place = new StepGuide.PlaceLine("Blue Moon Inn", 0, false, null, true);
+		StepGuide.View v = new StepGuide.View("t", "g", Collections.singletonList(item), Collections.singletonList(place), null, null, null, null);
+		assertNull(OsrsPathPanel.placeFor(v, item));
+		StepGuide.ItemLine ok = new StepGuide.ItemLine("Beer", "нет", StepGuide.Have.NONE, null, 0, "Beer", null, "нет");
+		assertEquals("Blue Moon Inn", OsrsPathPanel.placeFor(v, ok).getLabel());
+		StepGuide.ItemLine none = new StepGuide.ItemLine("Beer", "нет", StepGuide.Have.NONE, null, -1, "Beer", null, "нет");
+		assertNull(OsrsPathPanel.placeFor(v, none));
+	}
+
+	@Test
 	public void значокПанелиРисуется()
 	{
 		assertEquals(16, OsrsPathPanel.icon().getWidth());
