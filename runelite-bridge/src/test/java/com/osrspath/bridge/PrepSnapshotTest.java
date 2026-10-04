@@ -254,9 +254,33 @@ public class PrepSnapshotTest
 		assertTrue("совет программы вместо общего «где взять»: " + all, all.contains("Возьми на ферме севернее"));
 		assertFalse("общий текст заменён: " + all, all.contains("Курятник"));
 		assertTrue("расходника мало: " + all, all.contains("~мало"));
-		assertTrue("не бери сейчас: " + all, all.contains("Не бери сейчас: Rune scimitar, Lobster ×20"));
-		assertTrue("вес: " + all, all.contains("Вес: Сними железную броню в банк"));
-		assertTrue("сумка: " + all, all.contains("⚠ Не влезет на 3 ячейки"));
+		// Советы программы — на отдельной вкладке: на вкладке «Шаги» их нет, только полоска вкладок с числом советов.
+		assertTrue("вкладка с числом советов: " + all, all.contains("Шаги ~Совет · 3"));
+		assertFalse("не бери сейчас — не на вкладке шагов: " + all, all.contains("Не бери сейчас"));
+		assertFalse("вес — не на вкладке шагов: " + all, all.contains("Вес:"));
+		assertFalse("сумка — не на вкладке шагов: " + all, all.contains("Не влезет"));
+	}
+
+	@Test
+	public void советыПрограммы_навкладкеСовет_шагиНаВкладкеШагов()
+	{
+		StepGuide.View v = cook(plan());
+		String adv = text(GuideList.rows(v.withAdviceTab(true), false, FM, FM, 4000));
+		assertTrue("не бери сейчас: " + adv, adv.contains("Не бери сейчас: Rune scimitar, Lobster ×20"));
+		assertTrue("вес: " + adv, adv.contains("Вес: Сними железную броню в банк"));
+		assertTrue("сумка: " + adv, adv.contains("⚠ Не влезет на 3 ячейки"));
+		assertTrue("вкладка «Совет» активна, «Шаги» рядом: " + adv, adv.contains("Шаги ~Совет · 3"));
+		assertFalse("предметов шага на вкладке совета нет: " + adv, adv.contains("Возьми на ферме севернее"));
+		List<GuideList.Row> rows = GuideList.rows(v.withAdviceTab(true), false, FM, FM, 4000);
+		assertTrue("полоска вкладок — кнопка", rows.stream().anyMatch(r -> r.getAction().getKind() == GuideList.Kind.TAB));
+	}
+
+	@Test
+	public void безСоветов_вкладкиНет_иОткрытаяСоветВернётВШаги()
+	{
+		String all = text(GuideList.rows(cook(null).withAdviceTab(true), false, FM, FM, 4000));
+		assertFalse("нет советов — нет вкладок: " + all, all.contains("Совет ·"));
+		assertTrue("список шагов на месте: " + all, all.contains("Курятник"));
 	}
 
 	@Test

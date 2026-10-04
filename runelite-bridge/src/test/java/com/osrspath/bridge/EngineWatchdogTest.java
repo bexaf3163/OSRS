@@ -67,6 +67,25 @@ public class EngineWatchdogTest
 	}
 
 	@Test
+	public void походилПотомОтошёл_этоНеЗастревание()
+	{
+		w.observe(ok(0, 1, 3000, 3000, 1));
+		// Первые две минуты — ходит и меняет сумку, затем замер и стоит; сторож не должен сыпать находками весь простой.
+		for (long t = 5_000; t <= 120_000; t += 5_000)
+		{
+			w.observe(ok(t, 1, 3000 + (int) (t / 1000), 3000, (int) t));
+		}
+		for (long t = 125_000; t <= 4 * EngineWatchdog.STUCK_MS; t += 5_000)
+		{
+			List<EngineWatchdog.Finding> f = w.observe(ok(t, 1, 3120, 3000, 120_000));
+			if (t - 120_000 >= EngineWatchdog.IDLE_MS)
+			{
+				assertTrue("игрок отошёл — не странность, t=" + t, f.isEmpty());
+			}
+		}
+	}
+
+	@Test
 	public void шагНаРучнойОтметкеИПросмотрНазадНеСчитаютсяЗастреванием()
 	{
 		w.observe(at(0, 1, 5, true, 3000, 3000, 0, true, true));

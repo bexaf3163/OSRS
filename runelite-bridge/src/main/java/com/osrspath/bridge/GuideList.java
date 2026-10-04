@@ -33,6 +33,8 @@ final class GuideList
 		PREV,
 		/** Закончить просмотр: курсор снова по фактам. */
 		RESUME,
+		/** Переключить вкладку списка: «Шаги» / «Совет». */
+		TAB,
 	}
 
 	@Value
@@ -44,6 +46,7 @@ final class GuideList
 		static final Action NEXT = new Action(Kind.NEXT, -1);
 		static final Action PREV = new Action(Kind.PREV, -1);
 		static final Action RESUME = new Action(Kind.RESUME, -1);
+		static final Action TAB = new Action(Kind.TAB, -1);
 
 		Kind kind;
 		/** Номер точки шага для PLACE. */
@@ -151,6 +154,18 @@ final class GuideList
 			return out;
 		}
 		recoveryRows(out, v.getPrep(), fm, small, inner);
+		// Советы программы («Не бери сейчас», вес, сумка) — на отдельной вкладке: на экране игры им не место среди шагов.
+		int advice = adviceCount(v.getPrep());
+		boolean onAdvice = v.isAdviceTab() && advice > 0;
+		if (advice > 0)
+		{
+			out.add(tabRow(onAdvice, advice, fm, inner));
+		}
+		if (onAdvice)
+		{
+			adviceRows(out, v.getPrep(), small, inner);
+			return out;
+		}
 		if (v.getNote() != null)
 		{
 			out.add(new Row(text(v.getNote(), MUTED, small, inner, true), Action.NONE, null));
@@ -173,7 +188,9 @@ final class GuideList
 		// в одну строку, целиком — в подсказке при наведении. Чего не хватает — сверху, что уже в сумке — вниз.
 		List<StepGuide.ItemLine> all = ordered(v.getItems());
 		// На этапе — только то, что ещё нужно: взятое и сданное («✓ готово», «✓ есть») уже не просят внимания и место занимают зря.
-		List<StepGuide.ItemLine> items = stage != null ? pending(all) : all;
+		// «По ходу» (получишь сам в этом квесте) среди «Нужно сейчас» не показываем: это не то, что надо взять сейчас, а в строках этапа
+		// и подсвеченных предметах оно и так видно.
+		List<StepGuide.ItemLine> items = stage != null ? pendingNow(all) : all;
 		if (stage != null && !items.isEmpty())
 		{
 			out.add(new Row(text("Нужно сейчас", MUTED, small, inner, true), Action.NONE, null));
@@ -228,8 +245,28 @@ final class GuideList
 				out.add(new Row(text("… ещё " + (places.size() - maxPlaces), MUTED, small, inner, true), Action.NONE, "Остальное — в панели «OSRS Путь» справа."));
 			}
 		}
-		adviceRows(out, v.getPrep(), small, inner);
 		return out;
+	}
+
+	/** Сколько советов у программы для шага: блокеры, «не влезет», «не бери сейчас», вес. */
+	static int adviceCount(PrepPlan prep)
+	{
+		if (prep == null)
+		{
+			return 0;
+		}
+		return (prep.getBlockers() == null ? 0 : prep.getBlockers().size())
+			+ (prep.getSlots() != null && !prep.getSlots().isEmpty() ? 1 : 0)
+			+ (prep.getLater() != null && !prep.getLater().isEmpty() ? 1 : 0)
+			+ (prep.getWeight() != null && !prep.getWeight().isEmpty() ? 1 : 0);
+	}
+
+	/** Полоска вкладок: «Шаги» слева, «Совет · N» справа; активная — золотом, вторая — серым. Клик по любой — переключить. */
+	static Row tabRow(boolean onAdvice, int advice, FontMetrics fm, int inner)
+	{
+		List<Line> lines = new ArrayList<>();
+		lines.add(new Line("Шаги", onAdvice ? MUTED : TITLE, "Совет · " + advice, onAdvice ? TITLE : StepGuide.BANK, true));
+		return new Row(lines, Action.TAB, onAdvice ? "Клик — вернуться к шагам." : "Клик — советы программы: что не брать сейчас, вес, сумка.");
 	}
 
 	/** Текст строк списка подряд, как его видит игрок, — для журнала отладки и тестов: «левое ~правое», строки через перевод строки. */
@@ -353,6 +390,20 @@ final class GuideList
 		for (StepGuide.ItemLine i : items)
 		{
 			if (!got(i))
+			{
+				out.add(i);
+			}
+		}
+		return out;
+	}
+
+	/** Предметы, которые надо взять именно сейчас: ещё не получены и не «по ходу» квеста. */
+	static List<StepGuide.ItemLine> pendingNow(List<StepGuide.ItemLine> items)
+	{
+		List<StepGuide.ItemLine> out = new ArrayList<>();
+		for (StepGuide.ItemLine i : pending(items))
+		{
+			if (i.getHave() != StepGuide.Have.IN_STEP)
 			{
 				out.add(i);
 			}

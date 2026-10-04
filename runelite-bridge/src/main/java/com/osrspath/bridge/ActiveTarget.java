@@ -210,7 +210,8 @@ public class ActiveTarget
 				{
 					if (line == null || line.t == null || line.t.trim().isEmpty() || line.t.length() > Guide.MAX_WHERE || (line.s != null && line.s.length() > Guide.MAX_WHERE)
 						|| (line.x != null && (line.y == null || line.plane == null || line.x <= 0 || line.y <= 0 || line.x >= NavTarget.MAX_COORD
-						|| line.y >= NavTarget.MAX_COORD || line.plane < 0 || line.plane > 3)) || tooLong(line.has))
+						|| line.y >= NavTarget.MAX_COORD || line.plane < 0 || line.plane > 3)) || tooLong(line.has)
+						|| (line.hl != null && line.hl.problem() != null))
 					{
 						return "неверный шаг этапа квеста";
 					}
@@ -233,6 +234,72 @@ public class ActiveTarget
 		}
 	}
 
+	/** Подсветка шага этапа: NPC и объекты по ID, объекты по имени (когда ID нет или облик меняется), предметы в сумке. */
+	@Data
+	public static class Highlight
+	{
+		static final int MAX = 8;
+		static final int MAX_ID = 200_000;
+
+		private List<Integer> npc;
+		private List<Integer> obj;
+		private List<String> on;
+		private List<String> item;
+
+		String problem()
+		{
+			for (List<Integer> ids : List.of(nonNull(npc), nonNull(obj)))
+			{
+				if (ids.size() > MAX || ids.stream().anyMatch(i -> i == null || i < 1 || i > MAX_ID))
+				{
+					return "неверная подсветка шага";
+				}
+			}
+			for (List<String> names : List.of(nonNull(on), nonNull(item)))
+			{
+				if (names.size() > MAX || names.stream().anyMatch(n -> n == null || n.isEmpty() || tooLong(n)))
+				{
+					return "неверная подсветка шага";
+				}
+			}
+			return null;
+		}
+	}
+
+	/** То, что подсвечивается на текущем шаге этапа, готовое к сравнению: множества ID и имён. */
+	static final class LineHighlight
+	{
+		static final LineHighlight NONE = new LineHighlight(null);
+
+		final Set<Integer> npcIds = new HashSet<>();
+		final Set<Integer> objectIds = new HashSet<>();
+		final Set<String> objectNames = new HashSet<>();
+		final Set<String> itemNames = new HashSet<>();
+
+		LineHighlight(Highlight h)
+		{
+			if (h == null)
+			{
+				return;
+			}
+			npcIds.addAll(nonNull(h.npc));
+			objectIds.addAll(nonNull(h.obj));
+			for (String n : nonNull(h.on))
+			{
+				objectNames.add(nameKey(n));
+			}
+			for (String n : nonNull(h.item))
+			{
+				itemNames.add(nameKey(n));
+			}
+		}
+
+		boolean isEmpty()
+		{
+			return npcIds.isEmpty() && objectIds.isEmpty() && objectNames.isEmpty() && itemNames.isEmpty();
+		}
+	}
+
 	/** Шаг этапа: текст и, если известно, клетка — по ней плагин понимает, что игрок дошёл до шага. */
 	@Data
 	public static class StageLine
@@ -250,6 +317,8 @@ public class ActiveTarget
 		 * оттого, что игрок стоит рядом с Thurgo. null — условий нет.
 		 */
 		private String need;
+		/** Что подсвечивать в игре на этом шаге (по Quest Helper); null — только стрелка к клетке. */
+		private Highlight hl;
 
 		boolean hasPoint()
 		{

@@ -71,6 +71,19 @@ describe('проверка согласованности данных', () => {
     expect(rules).toEqual(expect.arrayContaining(['stages-step', 'stages-var', 'stages-order', 'stages-empty', 'text', 'stages-point', 'stages-need', 'stages-need-missing', 'stages-has-missing', 'stages-short']));
   });
 
+  it('подсветка шага: неверные ID, пустые и повторяющиеся списки, чужие поля — ловятся; правильная — нет', () => {
+    const base = real();
+    const stage = (hl: unknown) => ({
+      quests: { 'S2-08': { var: ['varp', 5] as [string, number], stages: [{ at: 0, do: [{ t: 'Поговори с кем-то.', s: 'Поговори с кем-то', at: [3000, 3000, 0], hl: hl as never }, { t: 'Второй.', s: 'Второй', at: [3001, 3001, 0] }] }] } },
+    });
+    const bad = (hl: unknown) => qa({ ...base, questStages: stage(hl) }).filter((i) => i.rule === 'stages-hl').length;
+    expect(bad({ npc: [3647], obj: [2072], on: ['Banana tree'], item: ['Karamjan rum'] })).toBe(0);
+    for (const hl of [{}, { npc: [] }, { npc: [0] }, { npc: [1.5] }, { npc: [3647, 3647] }, { npc: [300000] }, { obj: 'x' }, { on: [''] }, { item: [7] }, { foo: [1] },
+      { npc: [1, 2, 3, 4, 5, 6, 7, 8, 9] }]) {
+      expect(bad(hl), JSON.stringify(hl)).toBe(1);
+    }
+  });
+
   it('способы прокачки: повтор, диапазон, скорость, неизвестное место и навык, чужая ссылка — ловятся', () => {
     const base = real();
     const ok = base.training!.methods[0];

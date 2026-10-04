@@ -87,6 +87,8 @@ final class StepGuide
 		StageView stage;
 		/** План подготовки от программы (протокол 6): процент, важность, «не бери сейчас», восстановление; null — программа плана не прислала. */
 		PrepPlan prep;
+		/** В списке в игре открыта вкладка «Совет» (красное и серое от программы: «Не бери сейчас», вес, сумка), а не «Шаги». */
+		boolean adviceTab;
 
 		View(String title, String goal, List<ItemLine> items, List<PlaceLine> places, String detour, String note, String next, String finale)
 		{
@@ -102,6 +104,13 @@ final class StepGuide
 		View(String title, String goal, List<ItemLine> items, List<PlaceLine> places, String detour, String note, String next,
 			String finale, StageView stage, PrepPlan prep)
 		{
+			this(title, goal, items, places, detour, note, next, finale, stage, prep, false);
+		}
+
+		View(String title, String goal, List<ItemLine> items, List<PlaceLine> places, String detour, String note, String next,
+			String finale, StageView stage, PrepPlan prep, boolean adviceTab)
+		{
+			this.adviceTab = adviceTab;
 			this.prep = prep;
 			this.title = title;
 			this.goal = goal;
@@ -117,19 +126,25 @@ final class StepGuide
 		/** То же с другим состоянием этапа (предупреждение и «вручную»). */
 		View withStage(StageView s)
 		{
-			return new View(title, goal, items, places, detour, note, next, finale, s, prep);
+			return new View(title, goal, items, places, detour, note, next, finale, s, prep, adviceTab);
 		}
 
 		/** То же с планом подготовки от программы. */
 		View withPrep(PrepPlan p)
 		{
-			return new View(title, goal, items, places, detour, note, next, finale, stage, p);
+			return new View(title, goal, items, places, detour, note, next, finale, stage, p, adviceTab);
 		}
 
 		/** То же с другим сообщением (guideMessage плагина). */
 		View withNote(String message)
 		{
-			return new View(title, goal, items, places, detour, message, next, finale, stage, prep);
+			return new View(title, goal, items, places, detour, message, next, finale, stage, prep, adviceTab);
+		}
+
+		/** То же с открытой вкладкой «Совет» (или «Шаги»). */
+		View withAdviceTab(boolean on)
+		{
+			return new View(title, goal, items, places, detour, note, next, finale, stage, prep, on);
 		}
 	}
 

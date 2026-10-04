@@ -193,6 +193,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	 */
 	@Getter
 	private volatile StepGuide.View guideView;
+	/** В списке открыта вкладка «Совет». Сбрасывается, когда советов нет. */
+	private boolean adviceTab;
 	private StepGuide.View panelView;
 	/** Сообщение в списке и панели после нажатия, например «навигация выключена»; снимается сменой шага. */
 	private String guideMessage;
@@ -1115,6 +1117,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			stageKey = null;
 		}
 		target = t;
+		lineHlKey = null;
+		lineHl = ActiveTarget.LineHighlight.NONE;
 		snapshotStepKey = null;
 		guideMessage = null;
 		if (completion != null)
@@ -1164,6 +1168,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			v = v.withStage(v.getStage().with(stageTracker.warning(), stageTracker.peeking(), stageTracker.canStepForward(v.getStage().getSteps())));
 		}
 		v = StepGuide.withPlanFor(v, prep, target);
+		v = v.withAdviceTab(adviceTab);
 		if (guideMessage != null)
 		{
 			v = v.withNote(guideMessage);
@@ -1198,6 +1203,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		// Квест пройден — шаги этапа больше не двигаем и не сверяем с сумкой: «Beer ещё в сумке» в миг сдачи квеста — ложная тревога.
 		if (questDone(target))
 		{
+			applyLineHighlight(null, null);
 			return;
 		}
 		Integer value = stageValue(st);
@@ -1215,6 +1221,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		List<ActiveTarget.StageLine> lines = st.getStages().get(idx).getSteps();
 		stageTracker.update(target.getStepId(), idx, lines, pos.getX(), pos.getY(), pos.getPlane(), ItemCounts.sum(carried, noted));
 		logStage(st, idx, value, lines, pos);
+		int at = Math.max(0, Math.min(stageTracker.cursor(), lines.size() - 1));
+		applyLineHighlight(target.getStepId() + "#" + idx + "@" + at, lines.get(at).getHl());
 	}
 
 	/** Журнал: вход в этап, смена переменной квеста, куда и почему сдвинулся курсор, предупреждения. */
@@ -1375,6 +1383,10 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				break;
 			case PLACE:
 				goToPlace(a.getPlace());
+				break;
+			case TAB:
+				adviceTab = !adviceTab;
+				refreshGuide();
 				break;
 			case BACK:
 				applyNav(null);
@@ -2068,13 +2080,41 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
+	/** Что подсвечивать на текущем шаге этапа квеста (по Quest Helper): NPC, объекты, предметы в сумке. Меняется вместе с курсором. */
+	private volatile ActiveTarget.LineHighlight lineHl = ActiveTarget.LineHighlight.NONE;
+	private String lineHlKey;
+
+	boolean hasLineItems()
+	{
+		return !lineHl.itemNames.isEmpty();
+	}
+
+	boolean isLineItem(String nameKey)
+	{
+		return lineHl.itemNames.contains(nameKey);
+	}
+
+	/** Курсор встал на другой шаг — подсветка этого шага; прежняя гаснет. Поток клиента. */
+	private void applyLineHighlight(String key, ActiveTarget.Highlight hl)
+	{
+		if (Objects.equals(key, lineHlKey))
+		{
+			return;
+		}
+		lineHlKey = key;
+		lineHl = hl == null ? ActiveTarget.LineHighlight.NONE : new ActiveTarget.LineHighlight(hl);
+		tel("highlight", "key", key, "npc", hl == null ? null : hl.getNpc(), "obj", hl == null ? null : hl.getObj(), "on", hl == null ? null : hl.getOn(),
+			"item", hl == null ? null : hl.getItem());
+		rescan();
+	}
+
 	private boolean matches(NPC npc)
 	{
 		if (target == null || npc == null)
 		{
 			return false;
 		}
-		if (target.getNpcIdSet().contains(npc.getId()))
+		if (target.getNpcIdSet().contains(npc.getId()) || lineHl.npcIds.contains(npc.getId()))
 		{
 			return true;
 		}
@@ -2108,13 +2148,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			return;
 		}
-		if (target.getObjectIdSet().isEmpty() && target.getObjectNameSet().isEmpty())
+		ActiveTarget.LineHighlight line = lineHl;
+		if (target.getObjectIdSet().isEmpty() && target.getObjectNameSet().isEmpty() && line.objectIds.isEmpty() && line.objectNames.isEmpty())
 		{
 			return;
 		}
 		String name = objectName(o);
-		boolean byId = target.getObjectIdSet().contains(o.getId());
-		boolean byName = name != null && target.getObjectNameSet().contains(ActiveTarget.nameKey(name));
+		boolean byId = target.getObjectIdSet().contains(o.getId()) || line.objectIds.contains(o.getId());
+		boolean byName = name != null && (target.getObjectNameSet().contains(ActiveTarget.nameKey(name)) || line.objectNames.contains(ActiveTarget.nameKey(name)));
 		if (byId || byName)
 		{
 			objects.put(o, name == null ? "" : name);

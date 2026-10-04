@@ -8,7 +8,7 @@ import lombok.Value;
  * Сторож движка: ищет в том, что видит игрок, состояния, которых быть не должно, — их и пишет в журнал и на плашку
  * разработчика. Не чинит и ничего не меняет, только замечает:
  *
- *  — {@code STUCK}: шаг этапа не меняется три минуты, хотя игрок ходил и менял сумку, а шаг не из «ручных»;
+ *  — {@code STUCK}: шаг этапа не меняется три минуты, хотя игрок ходил и менял сумку (и ещё не отошёл от игры), а шаг не из «ручных»;
  *  — {@code CLAMP}: предупреждение «предмет ещё в сумке» висит больше полутора минут (список может держать зря);
  *  — {@code EMPTY}: шаг выбран, а на экране нет ни плашки, ни списка — игрок остался без подсказок;
  *  — {@code QUEST_DONE}: квест пройден, а список этапов это не показывает.
@@ -25,6 +25,8 @@ final class EngineWatchdog
 	static final int MOVED_TILES = 40;
 	/** Сколько раз должна измениться сумка, чтобы считать, что игрок «что-то делал». */
 	static final int BAG_CHANGES = 3;
+	/** Игрок стоит и ничего не меняет дольше этого — отошёл от компьютера; застреванием шага это уже не считаем. */
+	static final long IDLE_MS = 60_000;
 
 	/** Что видно сейчас. stageKey null — у шага этапов нет. */
 	@Value
@@ -70,6 +72,8 @@ final class EngineWatchdog
 	private int walked;
 	private int bagHash;
 	private int bagChanges;
+	/** Когда игрок последний раз сдвинулся или поменял сумку. */
+	private long lastActive;
 	/** Когда началось условие; -1 — не идёт. Ноль — настоящее время для тестов, поэтому не годится в метки. */
 	private long warnSince = -1;
 	private long emptySince = -1;
@@ -91,17 +95,16 @@ final class EngineWatchdog
 		}
 		else
 		{
-			if (o.getPlane() == lastPlane)
+			int step = o.getPlane() == lastPlane ? Math.max(Math.abs(o.getX() - lastX), Math.abs(o.getY() - lastY)) : MOVED_TILES;
+			walked += step;
+			if (step > 0)
 			{
-				walked += Math.max(Math.abs(o.getX() - lastX), Math.abs(o.getY() - lastY));
-			}
-			else
-			{
-				walked += MOVED_TILES;
+				lastActive = o.getNow();
 			}
 			if (o.getBagHash() != bagHash)
 			{
 				bagChanges++;
+				lastActive = o.getNow();
 			}
 		}
 		lastX = o.getX();
@@ -110,7 +113,7 @@ final class EngineWatchdog
 		bagHash = o.getBagHash();
 
 		if (o.getStageKey() != null && o.getSize() > 1 && !o.isManualOnly() && !o.isPeeking()
-			&& o.getCursor() < o.getSize() - 1 && o.getNow() - cursorSince >= STUCK_MS && (walked >= MOVED_TILES || bagChanges >= BAG_CHANGES))
+			&& o.getCursor() < o.getSize() - 1 && o.getNow() - cursorSince >= STUCK_MS && o.getNow() - lastActive < IDLE_MS && (walked >= MOVED_TILES || bagChanges >= BAG_CHANGES))
 		{
 			out.add(new Finding("STUCK", o.getStageKey() + "@" + o.getCursor(), "Шаг " + (o.getCursor() + 1) + "/" + o.getSize() + " этапа "
 				+ o.getStageKey() + " не меняется " + (o.getNow() - cursorSince) / 1000 + " с, хотя пройдено ~" + walked + " клеток и сумка менялась "
@@ -171,6 +174,7 @@ final class EngineWatchdog
 		stageKey = o.getStageKey();
 		cursor = o.getCursor();
 		cursorSince = o.getNow();
+		lastActive = o.getNow();
 		walked = 0;
 		bagChanges = 0;
 		bagHash = o.getBagHash();

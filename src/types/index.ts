@@ -334,6 +334,17 @@ export interface QuestStageLine {
   has?: string;
   /** Предмет, без которого шаг по положению не засчитывается («верни Thurgo руду» — не оттого, что стоишь рядом с ним). */
   need?: string;
+  /** Что подсвечивать в игре на этом шаге, как Quest Helper: NPC и объекты по ID, объекты по имени, предметы в сумке. */
+  hl?: StageHighlight;
+}
+
+/** Подсветка шага этапа: по исходникам Quest Helper (scripts вне репозитория, данные — questStages.json). */
+export interface StageHighlight {
+  npc?: number[];
+  obj?: number[];
+  /** Имена объектов — когда ID у Quest Helper нет или объект меняет облик («Banana tree»). */
+  on?: string[];
+  item?: string[];
 }
 
 /** Один этап квеста: действует, пока переменная квеста не меньше at и не дошла до следующего этапа. */

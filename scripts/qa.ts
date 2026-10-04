@@ -11,7 +11,7 @@ export interface QaInput {
   questStages: { quests: Record<string, {
     var: [string, number];
     route?: { title: string; steps: string[] }[];
-    stages: { at: number; do: { t: string; s?: string; at?: number[]; has?: string; need?: string }[]; go?: unknown; items?: { name: string }[] }[];
+    stages: { at: number; do: { t: string; s?: string; at?: number[]; has?: string; need?: string; hl?: { npc?: unknown; obj?: unknown; on?: unknown; item?: unknown } }[]; go?: unknown; items?: { name: string }[] }[];
   }> };
   /** Способы прокачки (src/data/trainingMethods.json) и словарь мест — для правил роутера способов. Нет — правила не применяются. */
   training?: { methods: { id: string; skill: string | string[]; from: number; to?: number | null; name: string; where: string; place?: string; url: string; xph?: number[]; xpa?: number; kind?: string; xpTotal?: number }[] };
@@ -122,6 +122,17 @@ export function qa(input: QaInput): QaIssue[] {
           add('stages-short', `${id}#${st.at}`, `короткий текст шага: «${(l.s ?? '').slice(0, 50)}» — нужен s до 72 знаков без диалога`);
         }
         if (!c || c !== c.toUpperCase() || /\s{2,}/.test(l.t) || /\s$/.test(l.t)) add('text', `${id}#${st.at}`, `текст шага: «${l.t.slice(0, 50)}»`);
+        // Подсветка шага (как у Quest Helper): ID — целые в пределах игры, не больше восьми, имена непустые, без повторов.
+        if (l.hl) {
+          const bad = (['npc', 'obj'] as const).some((k) => {
+            const v = l.hl![k];
+            return v !== undefined && (!Array.isArray(v) || v.length === 0 || v.length > 8 || new Set(v).size !== v.length || v.some((n) => !Number.isInteger(n) || n < 1 || n > 200000));
+          }) || (['on', 'item'] as const).some((k) => {
+            const v = l.hl![k];
+            return v !== undefined && (!Array.isArray(v) || v.length === 0 || v.length > 8 || new Set(v).size !== v.length || v.some((n) => typeof n !== 'string' || !n.trim() || n.length > 80));
+          }) || Object.keys(l.hl).some((k) => !['npc', 'obj', 'on', 'item'].includes(k)) || Object.keys(l.hl).length === 0;
+          if (bad) add('stages-hl', `${id}#${st.at}`, `подсветка шага «${(l.s ?? '').slice(0, 40)}» неверная`);
+        }
         if (l.at && badPoint(l.at)) add('stages-point', `${id}#${st.at}`, `клетка ${l.at.join(',')} вне карты`);
         if (l.need && !pool.some((it) => it.name === l.need) && !st.do.some((o) => o.has === l.need)) add('stages-need', `${id}#${st.at}`, `условие «${l.need}» не среди предметов этапа и шага и не в has его шагов`);
       }

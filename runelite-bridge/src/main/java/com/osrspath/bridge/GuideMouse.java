@@ -96,6 +96,8 @@ class GuideMouse extends MouseAdapter
 				return "Arrow back to step";
 			case TOGGLE:
 				return "Collapse / expand";
+			case TAB:
+				return "Steps / advice";
 			default:
 				return "List";
 		}
