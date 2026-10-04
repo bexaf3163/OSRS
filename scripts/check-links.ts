@@ -1,4 +1,4 @@
-// Проверяет, что все ссылки на вики из steps.json, f2p-items.json и osrs-guide.md ведут на существующие статьи и файлы.
+// Проверяет, что все ссылки на вики из steps.json, f2p-items.json и reference.json ведут на существующие статьи и файлы.
 // Нужна сеть. Запуск: npm run check-links
 
 import { readFileSync } from 'node:fs';
@@ -10,7 +10,7 @@ import type { NpcSpot } from '../src/lib/stepPlaces.ts';
 const root = fileURLToPath(new URL('..', import.meta.url));
 const steps = JSON.parse(readFileSync(`${root}src/data/steps.json`, 'utf8')) as Step[];
 const items = JSON.parse(readFileSync(`${root}src/data/f2p-items.json`, 'utf8')) as WikiItemDetail[];
-const guide = readFileSync(`${root}osrs-guide.md`, 'utf8');
+const reference = readFileSync(`${root}src/data/reference.json`, 'utf8');
 const npcs = (JSON.parse(readFileSync(`${root}src/data/npcLocations.json`, 'utf8')) as { npcs: Record<string, NpcSpot[]> }).npcs;
 const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 const API = 'https://oldschool.runescape.wiki/api.php';
@@ -47,7 +47,7 @@ for (const i of items) {
 // Где стоят NPC шагов: статья вики, с карты которой взята точка.
 for (const [name, rows] of Object.entries(npcs)) for (const r of rows) add(`NPC ${name}`, `https://oldschool.runescape.wiki/w/${encodeURIComponent(r.page.replace(/ /g, '_'))}`);
 // Гайд: ссылки в тексте — на навыки (и подписки), квесты, гайды прокачки, по которым сверялся план.
-for (const [, url] of guide.matchAll(/\]\((https:\/\/oldschool\.runescape\.wiki\/[^)\s]+)\)/g)) add('гайд', url);
+for (const [, url] of reference.matchAll(/\]\((https:\/\/oldschool\.runescape\.wiki\/[^)\s]+)\)/g)) add('reference', url);
 
 const titles = [...refs.keys()];
 const missing: string[] = [];

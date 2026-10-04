@@ -1,10 +1,22 @@
 // Проверки данных: маршрут V2 (steps.json, stages.json, f2p-items.json) и то, что перенесено из osrs-guide.md.
 // Общие для parse-guide.ts и check-data.ts. Без сети.
 
-import type { GuideData } from './guide-parser.ts';
-import type { FoeData, Stage, Step, WikiItemDetail } from '../src/types/index.ts';
+import type {
+  FoeData, GoalsData, LevelSkill, MembersSkillsData, PluginsData, ReferenceData, Skill, Stage, Step, WikiItemDetail, XpData,
+} from '../src/types/index.ts';
 import { xpForLevel } from '../src/lib/xp.ts';
 import { titleTargets } from '../src/lib/targets.ts';
+
+export interface GuideData {
+  skills: Skill[];
+  /** Навыки подписки — src/data/members-skills.json. */
+  members: MembersSkillsData;
+  levels: LevelSkill[];
+  goals: GoalsData;
+  xp: XpData;
+  plugins: PluginsData;
+  reference: ReferenceData;
+}
 
 export const EXPECTED = { skills: 12, members: 8, f2pQp: 46, baseQp: 1 };
 

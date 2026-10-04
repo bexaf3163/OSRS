@@ -15,7 +15,6 @@
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run --testTimeout=30000",
-    "parse-guide": "node scripts/parse-guide.ts",
     "check-data": "node scripts/check-data.ts",
     "icons": "node scripts/make-icons.ts",
     "desktop": "npm run build && node scripts/build-bridge-jar.ts --optional && electron .",
