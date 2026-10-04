@@ -276,7 +276,18 @@ public class StageTrackerTest
 	{
 		StageTracker t = new StageTracker();
 		assertEquals(0, update(t, FAR, bag(0, 0)));
-		assertEquals("у Squire без руды — шаг Squire", 3, update(t, SQUIRE, bag(0, 0)));
+		assertEquals("у входа в подземелье — первый шаг", 0, update(t, DUNGEON, bag(0, 0)));
+		assertEquals("в пещере — шаг добычи", 1, update(t, CAVE, bag(0, 0)));
+	}
+
+	@Test
+	public void добежалДоSquireБезРуды_шагДобычиНеПерепрыгивается()
+	{
+		StageTracker t = new StageTracker();
+		assertEquals(0, update(t, DUNGEON, bag(0, 0)));
+		// Раньше курсор уходил на Squire и стрелка вела к мечу, которого нет; теперь он ждёт на шаге, который не сделан.
+		assertEquals("добыча руды не сделана — курсор на ней, а не у Squire", 1, update(t, SQUIRE, bag(0, 0)));
+		assertTrue(t.reason(), t.reason().startsWith("BLOCK"));
 	}
 
 	// ---------- S2-08 Vampire Slayer: этап из пяти шагов, как в данных программы ----------
@@ -402,5 +413,37 @@ public class StageTrackerTest
 		StageTracker t = new StageTracker();
 		t.update("S", 0, l, 3108, 3353, 0, beer);
 		assertEquals("пиво не отдано — уйти недостаточно", 0, t.update("S", 0, l, 3102, 3360, 0, beer));
+	}
+
+	/** S2-09 (по скриншоту игрока): «положи ром в ящик» и «наполни ящик» на одном месте, потом Luthas в пяти клетках. */
+	private static List<ActiveTarget.StageLine> crate()
+	{
+		return new Gson().fromJson("[{\"t\":\"Положи ром\",\"x\":2939,\"y\":3149,\"plane\":0},{\"t\":\"Наполни ящик\",\"x\":2939,\"y\":3149,\"plane\":0},"
+			+ "{\"t\":\"Скажи Luthas\",\"x\":2938,\"y\":3156,\"plane\":0},{\"t\":\"Вернись\",\"x\":3027,\"y\":3222,\"plane\":0}]", new TypeToken<List<ActiveTarget.StageLine>>() {}.getType());
+	}
+
+	private static int crate(StageTracker t, int x, int y)
+	{
+		return t.update("S2-09", 1, crate(), x, y, 0, new ItemCounts());
+	}
+
+	@Test
+	public void шагКоторыйИграНеУвидит_непрепрыгиваетсяПоПоложению()
+	{
+		StageTracker t = new StageTracker();
+		assertEquals("у ящика — «положи ром»", 0, crate(t, 2939, 3150));
+		// Ушёл к Luthas, не отметив «положи ром»: раньше курсор перепрыгивал сразу на «Скажи Luthas», пропустив «наполни ящик».
+		assertEquals("рядом с Luthas курсор всё равно ждёт на шаге без признаков", 0, crate(t, 2938, 3155));
+		assertTrue(t.reason(), t.reason().startsWith("GATE"));
+		assertTrue("кнопка «сделано» на нём есть — тупика нет", t.canStepForward(crate()));
+		assertTrue(t.forward(crate()));
+		assertEquals("«наполни ящик»: следующий шаг у Luthas, он различим по месту — идём дальше сами", 2, crate(t, 2938, 3155));
+	}
+
+	@Test
+	public void входПосредиЭтапа_свободноСтановитсяНаБлижайшийШаг()
+	{
+		StageTracker t = new StageTracker();
+		assertEquals("зашёл в игру у Luthas — шаги у ящика уже позади", 2, crate(t, 2938, 3155));
 	}
 }

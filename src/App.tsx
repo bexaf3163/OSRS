@@ -23,6 +23,7 @@ import { SettingsPage } from './pages/Settings';
 import { ShoppingPage } from './pages/Shopping';
 import { GearPage } from './pages/Gear';
 import { ProfileBanner } from './components/ProfileBanner';
+import { UpdateBanner } from './components/UpdateBanner';
 
 const TABS: { page: Page; href: string; label: string; Icon: ComponentType<{ className?: string }> }[] = [
   { page: 'path', href: '#/', label: 'Путь', Icon: IconPath },
@@ -128,6 +129,7 @@ export function App() {
       </header>
 
       <main id="main" tabIndex={-1}>
+        <UpdateBanner />
         <ProfileBanner />
         <PageBoundary resetKey={`${route.page}/${route.param ?? ''}`}>{content}</PageBoundary>
       </main>

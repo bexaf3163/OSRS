@@ -34,6 +34,13 @@ final class StageTracker
 	static final long PEEK_MS = 45_000;
 	/** Побывав у точки шага, отошёл дальше этого — шаг сделан (путь в доме петляет: прямо к следующей точке игрок не идёт). */
 	static final int LEAVE_RADIUS = 6;
+	/** Игрок «был у шага», если подходил к его точке ближе этого: NPC и объекты стоят не ровно на точке из данных. */
+	static final int VISIT_RADIUS = 8;
+	/** Шаг-переход: дойти — значит сделать; в отличие от «положи», «наполни», «убей», где пройти мимо — не значит сделать. */
+	private static final java.util.regex.Pattern MOVE = java.util.regex.Pattern.compile(
+		"^(?:Иди|Идти|Войди|Зайди|Спустись|Поднимись|Поднимайся|Спускайся|Плыви|Проплыви|Отправляйся|Направляйся|Вернись|Доберись|Пройди|Выйди|Выберись|"
+			+ "Телепортируйся|Беги|Залезь|Перейди|Поезжай|Лети|Обойди|Следуй|Прыгни|Пройдись)(?![\\p{L}])",
+		java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.UNICODE_CASE);
 
 	private final LongSupplier clock;
 	private String key;
@@ -47,6 +54,8 @@ final class StageTracker
 	private String warning;
 	/** Игрок побывал у точки текущего шага (visitedAt — у какого именно): уйдя к следующей точке, он считается сделавшим этот шаг. */
 	private boolean visited;
+	/** Шаги, к точке которых игрок подходил в этом этапе (в пределах {@link #VISIT_RADIUS}). */
+	private final Set<Integer> seen = new HashSet<>();
 	private int visitedAt = -1;
 	/** Почему курсор сдвинулся в последний раз: «POSITION», «ITEM», «DELIVERED», «CLAMP», «BACK», «MANUAL», «RESET» и подробности. */
 	private String reason = "";
@@ -108,6 +117,7 @@ final class StageTracker
 		reason = "";
 		visited = false;
 		visitedAt = -1;
+		seen.clear();
 	}
 
 	/**
@@ -147,7 +157,39 @@ final class StageTracker
 		int window = fresh ? StepGuide.freshWindow(changed, lines.size()) : StepGuide.STEP_WINDOW;
 		int c1 = cursor;
 		cursor = StepGuide.advance(lines, cursor, x, y, plane, window, bag);
-		if (cursor != c1)
+		for (int i = 0; i < lines.size(); i++)
+		{
+			ActiveTarget.StageLine l = lines.get(i);
+			if (l.hasPoint() && l.getPlane() == plane && Math.abs(l.getX() - x) <= VISIT_RADIUS && Math.abs(l.getY() - y) <= VISIT_RADIUS)
+			{
+				seen.add(i);
+			}
+		}
+		boolean gated = false;
+		if (!fresh && cursor > c1)
+		{
+			// По положению нельзя перепрыгнуть шаг, который сделать надо, а увидеть нечем: игрок, добежав до следующей точки, не
+			// отметил «положи ром в ящик» и «наполни ящик» — они пропускались молча (S2-09). Курсор встаёт на первом таком шаге:
+			// на «сделано» (игра его не покажет) или с возвратом к его месту (там ещё не были).
+			for (int g = c1; g < cursor; g++)
+			{
+				boolean gate = needsManualStep(lines, g);
+				if (gate || !passable(lines, g, bag))
+				{
+					cursor = g;
+					gated = true;
+					ActiveTarget.StageLine stop = lines.get(g);
+					if (bag != null && stop.hasNeed() && !delivered.contains(g) && bag.count(null, stop.getNeed()) > 0)
+					{
+						warning = stop.getNeed() + " ещё в сумке — сначала: " + stop.shown();
+					}
+					reason = (gate ? "GATE: шаг " + (g + 1) + " «" + lines.get(g).shown() + "» игра сама не увидит — отметь «сделано»"
+						: "BLOCK: шаг " + (g + 1) + " «" + lines.get(g).shown() + "» не сделан — вернись к его месту");
+					break;
+				}
+			}
+		}
+		if (cursor != c1 && !gated)
 		{
 			reason = "POSITION: дошёл до шага " + (cursor + 1) + " «" + lines.get(cursor).shown() + "»";
 		}
@@ -336,6 +378,27 @@ final class StageTracker
 		reason = "BACK: просмотр шага " + (cursor + 1);
 	}
 
+	/** Шаг-переход («Войди в…», «Спустись…», «Вернись в…»): дойти до места — значит сделать. */
+	static boolean isMove(ActiveTarget.StageLine l)
+	{
+		return !l.hasHas() && !l.hasNeed() && MOVE.matcher(l.shown().trim()).find();
+	}
+
+	/** Можно ли пройти этот шаг по положению: это переход, он подтверждён предметом или игрок был у его точки. */
+	private boolean passable(List<ActiveTarget.StageLine> lines, int j, ItemCounts bag)
+	{
+		ActiveTarget.StageLine l = lines.get(j);
+		if (isMove(l) || satisfied(lines, j, bag))
+		{
+			return true;
+		}
+		if (l.hasHas() || l.hasNeed())
+		{
+			return false;
+		}
+		return l.hasPoint() && seen.contains(j);
+	}
+
 	/**
 	 * Побывал у точки шага и ушёл от неё (дальше {@link #LEAVE_RADIUS} клеток или ближе к следующей) — шаг сделан. Без этого курсор стоял на «войди в дом», пока игрок не
 	 * подойдёт к следующей точке на четыре клетки: внутри дома стрелка оставалась у двери, куда он уже дошёл (S2-08, подвал
@@ -350,6 +413,11 @@ final class StageTracker
 			visited = false;
 		}
 		ActiveTarget.StageLine cur = lines.get(cursor);
+		if (!isMove(cur))
+		{
+			// Отойти от «наполни ящик» — не значит наполнить: только переходы закрываются уходом.
+			return;
+		}
 		if (cur.hasPoint() && cur.getPlane() == plane && Math.abs(cur.getX() - x) <= StepGuide.STEP_RADIUS && Math.abs(cur.getY() - y) <= StepGuide.STEP_RADIUS)
 		{
 			visited = true;
@@ -359,8 +427,8 @@ final class StageTracker
 			return;
 		}
 		ActiveTarget.StageLine nx = lines.get(cursor + 1);
-		if (!cur.hasPoint() || !nx.hasPoint() || cur.hasNeed() || cur.hasHas() || nx.hasNeed() || nx.hasHas()
-			|| cur.getPlane() != plane || nx.getPlane() != plane || sameSpot(cur, nx))
+		// У следующего шага могут быть свои условия (предмет в сумке): это не мешает закончить переход — он закончен, когда ушёл.
+		if (!cur.hasPoint() || !nx.hasPoint() || cur.hasNeed() || cur.hasHas() || cur.getPlane() != plane || nx.getPlane() != plane || sameSpot(cur, nx))
 		{
 			return;
 		}
@@ -389,6 +457,11 @@ final class StageTracker
 		if (nx.hasHas() || nx.hasNeed())
 		{
 			return false;
+		}
+		// Шаг без клетки и без предмета ничем не подтвердить: «Нарви бананов», «Используй X на Y» — только отметкой.
+		if (!cur.hasPoint() && !cur.hasHas() && !cur.hasNeed())
+		{
+			return true;
 		}
 		return !(nx.hasPoint() && !(cur.hasPoint() && sameSpot(cur, nx)));
 	}

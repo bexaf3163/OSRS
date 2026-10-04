@@ -73,7 +73,7 @@ public final class BridgeServer
 	 */
 	static final int PROTOCOL = 6;
 	/** Версия плагина — та же, что у программы, с которой он едет в одном exe. */
-	static final String PLUGIN_VERSION = "2.24.0";
+	static final String PLUGIN_VERSION = "2.25.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	/** Снимок целиком — шаг с этапами квеста, закупки и план в одном теле. */

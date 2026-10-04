@@ -36,6 +36,22 @@ export interface BackupState {
   error: string | null;
 }
 
+export interface UpdateState {
+  /** idle — не проверяли, checking, current — свежая, available — есть новая, downloading, ready — скачана, error. */
+  state: 'idle' | 'checking' | 'current' | 'available' | 'downloading' | 'ready' | 'error';
+  current: string;
+  latest: string | null;
+  /** Первая строка описания выпуска. */
+  notes: string;
+  /** Доля скачанного, 0–1. */
+  progress: number;
+  error: string | null;
+  /** Можно ли поставить обновление: только переносная версия (exe). Иначе программа лишь сообщает о новой. */
+  canInstall: boolean;
+  /** Проверять в фоне при запуске и раз в несколько часов. */
+  auto?: boolean;
+}
+
 export interface DesktopBridge {
   getZoom(): Promise<ZoomState>;
   setZoom(settings: { zoom: number; autoZoom: boolean }): void;
@@ -54,6 +70,15 @@ export interface DesktopBridge {
   /** Где лежат данные программы — для подсказки в настройках. */
   dataDir(): string;
   isPortable(): boolean;
+  /** Автообновление переносной версии. В старых сборках его нет. */
+  updates?: {
+    get(): Promise<UpdateState>;
+    check(): Promise<UpdateState>;
+    download(): Promise<UpdateState>;
+    install(): Promise<boolean>;
+    setAuto(on: boolean): void;
+    onState(callback: (state: UpdateState) => void): () => void;
+  };
   /** Запуск RuneLite с плагином OSRS Path Bridge из установленного RuneLite. */
   runelite?: {
     check(): Promise<RuneliteCheck>;

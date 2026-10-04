@@ -7,6 +7,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { registerBridge } = require('./runelite-bridge.cjs');
 const { createLauncher } = require('./runelite-launcher.cjs');
+const { createUpdater } = require('./updater.cjs');
 const { backupProgress, dailyBackup, readProgress } = require('./progress-files.cjs');
 
 const DIST = path.join(__dirname, '..', 'dist');
@@ -183,6 +184,25 @@ if (!app.requestSingleInstanceLock()) {
   const runelite = createLauncher({ logFile: file('runelite-launch.log') });
   ipcMain.handle('runelite:check', () => runelite.check());
   ipcMain.handle('runelite:launch', () => runelite.launch());
+
+  // Обновление переносной версии: проверка в фоне (можно выключить), скачивание и установка — по кнопке в настройках.
+  const updater = createUpdater({
+    version: app.getVersion(),
+    env: process.env,
+    userData: app.getPath('userData'),
+    onState: (s) => win?.webContents.send('update:state', s),
+    quit: () => app.quit(),
+  });
+  ipcMain.handle('update:get', () => ({ ...updater.state, auto: ui.autoUpdate !== false }));
+  ipcMain.handle('update:check', () => updater.check());
+  ipcMain.handle('update:download', () => updater.download());
+  ipcMain.handle('update:install', () => updater.install());
+  ipcMain.on('update:auto', (_e, on) => {
+    ui.autoUpdate = Boolean(on);
+    saveUi();
+  });
+  updater.cleanup();
+  updater.schedule(() => ui.autoUpdate !== false);
 
   function createWindow() {
     const saved = windowState();

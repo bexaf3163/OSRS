@@ -24,6 +24,19 @@ contextBridge.exposeInMainWorld('osrsDesktop', {
   },
   dataDir: () => ipcRenderer.sendSync('app:data-dir'),
   isPortable: () => ipcRenderer.sendSync('app:is-portable'),
+  // Обновление переносной версии (electron/updater.cjs): проверка, скачивание, перезапуск в новую версию.
+  updates: {
+    get: () => ipcRenderer.invoke('update:get'),
+    check: () => ipcRenderer.invoke('update:check'),
+    download: () => ipcRenderer.invoke('update:download'),
+    install: () => ipcRenderer.invoke('update:install'),
+    setAuto: (on) => ipcRenderer.send('update:auto', Boolean(on)),
+    onState: (callback) => {
+      const listener = (_event, state) => callback(state);
+      ipcRenderer.on('update:state', listener);
+      return () => ipcRenderer.removeListener('update:state', listener);
+    },
+  },
   // Запуск RuneLite с плагином OSRS Path Bridge (electron/runelite-launcher.cjs).
   runelite: {
     check: () => ipcRenderer.invoke('runelite:check'),

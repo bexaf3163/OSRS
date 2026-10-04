@@ -9,6 +9,7 @@ import { sessionSummary } from '../lib/session';
 import { useStore } from '../store';
 import { usePlayerState } from '../playerStateContext';
 import { formatGp } from '../lib/shopping';
+import { percent, useUpdates } from '../lib/useUpdates';
 
 export function ProfilesSection() {
   const profiles = useProfiles();
@@ -143,6 +144,39 @@ function LedgerBlock() {
         <button type="button" className="btn btn-sm" onClick={() => setConfirm(true)}>Очистить журнал</button>
       )}
     </div>
+  );
+}
+
+export function UpdatesSection() {
+  const u = useUpdates();
+  if (!u) return null;
+  const { state: s } = u;
+  const text = s.state === 'checking' ? 'Проверяю…'
+    : s.state === 'current' ? 'Установлена последняя версия.'
+      : s.state === 'available' ? `Вышла версия ${s.latest}.`
+        : s.state === 'downloading' ? `Скачиваю версию ${s.latest}… ${percent(s.progress)}%`
+          : s.state === 'ready' ? `Версия ${s.latest} скачана — осталось перезапустить.`
+            : s.state === 'error' ? `Не вышло: ${s.error ?? 'нет связи'}. Попробуй позже.` : '';
+  return (
+    <section className="card section-card">
+      <h2 className="card-title">Обновления</h2>
+      <p className="muted">
+        Программа сверяется с выпусками на GitHub, скачивает новую переносную версию рядом со старой и перезапускается в неё.
+        Прогресс и настройки лежат рядом с программой — переносить ничего не нужно; прежний exe после перехода удаляется.
+        Ничего не ставится без твоей кнопки.
+      </p>
+      <p className="small">Сейчас: <strong>{s.current}</strong>{text ? ` · ${text}` : ''}</p>
+      <label className="switch">
+        <input type="checkbox" checked={s.auto !== false} onChange={(e) => u.setAuto(e.target.checked)} />
+        <span>Проверять при запуске и раз в несколько часов</span>
+      </label>
+      <div className="actions">
+        <button type="button" className="btn" onClick={u.check} disabled={s.state === 'checking' || s.state === 'downloading'}>Проверить сейчас</button>
+        {s.canInstall && s.state === 'available' && <button type="button" className="btn btn-primary" onClick={u.download}>Скачать</button>}
+        {s.state === 'ready' && <button type="button" className="btn btn-primary" onClick={u.install}>Перезапустить в новую версию</button>}
+      </div>
+      {!s.canInstall && <p className="muted small">Эта сборка запущена не из переносного exe — только сообщает о новой версии.</p>}
+    </section>
   );
 }
 

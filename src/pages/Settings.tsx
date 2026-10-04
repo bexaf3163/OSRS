@@ -12,7 +12,7 @@ import { BRIDGE_ORIGIN } from '../services/runeliteBridge';
 import { PluginUpdateNote } from '../components/PluginUpdateNote';
 import { plural } from '../lib/shopping';
 import { AccountSync } from '../components/AccountSync';
-import { BackupSection, DiagnosticsSection, ProfilesSection, SessionSection } from './SettingsExtra';
+import { BackupSection, DiagnosticsSection, UpdatesSection, ProfilesSection, SessionSection } from './SettingsExtra';
 
 const THEMES: [Theme, string][] = [['light', 'Светлая'], ['dark', 'Тёмная'], ['system', 'Системная']];
 
@@ -61,6 +61,7 @@ export function SettingsPage() {
       <PlayStyleSection />
       <Helpers />
       <BackupSection />
+      <UpdatesSection />
       <DiagnosticsSection />
 
       <section className="card section-card">
