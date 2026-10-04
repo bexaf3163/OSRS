@@ -14,13 +14,13 @@ import java.util.List;
 import net.runelite.client.ui.FontManager;
 import org.junit.Test;
 
-/** Плашка разработчика: строки состояния движка, зелёное — в порядке, красное — не так. */
+/** The developer badge: the engine status lines, green is fine, red is wrong. */
 public class DebugViewTest
 {
 	private static DebugView.State state(String step, List<String> conditions, List<String> trigger, String warning, boolean peeking, boolean manual)
 	{
-		return new DebugView.State(step, step == null ? null : "3/9", step == null ? null : 5, 1, 5, "Добудь руду", manual, peeking, warning, conditions, trigger, 1,
-			"seq 12, 3 с назад", 80, "POSITION: дошёл", "12/28", "3200,3200,0", 4242, true, true, true, "session-1.jsonl", 17, 0, Collections.emptyList(), null);
+		return new DebugView.State(step, step == null ? null : "3/9", step == null ? null : 5, 1, 5, "Get the ore", manual, peeking, warning, conditions, trigger, 1,
+			"seq 12, 3 s ago", 80, "POSITION: arrived", "12/28", "3200,3200,0", 4242, true, true, true, "session-1.jsonl", 17, 0, Collections.emptyList(), null);
 	}
 
 	private static List<DebugView.Row> rows(DebugView.State s)
@@ -29,7 +29,7 @@ public class DebugViewTest
 	}
 
 	@Test
-	public void первыйРядСодержитШагЭтапКурсорИРежим()
+	public void firstRowHasStepStageCursorAndMode()
 	{
 		String head = rows(state("S2-05", Collections.emptyList(), Collections.emptyList(), null, false, false)).get(0).getText();
 		assertTrue(head, head.startsWith("ActiveStep: S2-05 | Stage: 3/9 (var=5) | Cursor: 2/5 [auto]"));
@@ -38,7 +38,7 @@ public class DebugViewTest
 	}
 
 	@Test
-	public void шагаНетКрасным()
+	public void noStepIsRed()
 	{
 		DebugView.Row head = rows(state(null, Collections.emptyList(), Collections.emptyList(), null, false, false)).get(0);
 		assertEquals("ActiveStep: —", head.getText());
@@ -46,9 +46,9 @@ public class DebugViewTest
 	}
 
 	@Test
-	public void условиеFALSEКрасное_TRUEЗелёное()
+	public void conditionFALSEIsRed_TRUEIsGreen()
 	{
-		List<DebugView.Row> r = rows(state("S2-07", Arrays.asList("has Iron ore = FALSE", "need Bronze bar (сдан) = TRUE"), Collections.singletonList("Item(1535) = FALSE"), null, false, false));
+		List<DebugView.Row> r = rows(state("S2-07", Arrays.asList("has Iron ore = FALSE", "need Bronze bar (handed in) = TRUE"), Collections.singletonList("Item(1535) = FALSE"), null, false, false));
 		DebugView.Row has = r.stream().filter(x -> x.getText().contains("has Iron ore")).findFirst().get();
 		DebugView.Row need = r.stream().filter(x -> x.getText().contains("need Bronze bar")).findFirst().get();
 		assertEquals(DebugView.Level.BAD, has.getLevel());
@@ -59,7 +59,7 @@ public class DebugViewTest
 	}
 
 	@Test
-	public void триггерВыполненЗелёный_нетТриггераСерый()
+	public void triggerFulfilledIsGreen_noTriggerIsGrey()
 	{
 		DebugView.Row ok = rows(state("S1", Collections.emptyList(), Collections.singletonList("Quest(Cook's Assistant) = TRUE"), null, false, false)).stream()
 			.filter(x -> x.getText().startsWith("Trigger:")).findFirst().get();
@@ -71,36 +71,36 @@ public class DebugViewTest
 	}
 
 	@Test
-	public void предупреждениеКрасит_шапкуИДобавляетСтроку()
+	public void aWarningColoursTheHeaderAndAddsALine()
 	{
-		List<DebugView.Row> r = rows(state("S2-08", Collections.emptyList(), Collections.emptyList(), "Bronze bar ещё в сумке", false, false));
+		List<DebugView.Row> r = rows(state("S2-08", Collections.emptyList(), Collections.emptyList(), "Bronze bar is still in the bag", false, false));
 		assertEquals(DebugView.Level.BAD, r.get(0).getLevel());
-		assertTrue(r.stream().anyMatch(x -> x.getText().equals("Warning: Bronze bar ещё в сумке") && x.getLevel() == DebugView.Level.BAD));
+		assertTrue(r.stream().anyMatch(x -> x.getText().equals("Warning: Bronze bar is still in the bag") && x.getLevel() == DebugView.Level.BAD));
 	}
 
 	@Test
-	public void пустойЭкранПриШагеКрасный_иСтранностиВидны()
+	public void anEmptyScreenWithAStepIsRed_andOdditiesAreVisible()
 	{
 		DebugView.State s = new DebugView.State("S2-07", "1/3", 1, 0, 3, "x", false, false, null, Collections.emptyList(), Collections.emptyList(), -1, null, null, "", "0/28", "1,1,0", 1,
-			false, false, false, null, 0, 2, Arrays.asList("EMPTY: на экране пусто", "STUCK: стоит"), "shot-1.png");
+			false, false, false, null, 0, 2, Arrays.asList("EMPTY: nothing on screen", "STUCK: standing still"), "shot-1.png");
 		List<DebugView.Row> r = rows(s);
 		DebugView.Row screen = r.stream().filter(x -> x.getText().startsWith("Screen:")).findFirst().get();
-		assertEquals("Screen: HUD НЕТ, list НЕТ", screen.getText());
+		assertEquals("Screen: HUD NO, list NO", screen.getText());
 		assertEquals(DebugView.Level.BAD, screen.getLevel());
 		assertEquals(2, r.stream().filter(x -> x.getText().startsWith("⚠ ")).count());
-		assertTrue(r.stream().anyMatch(x -> x.getText().startsWith("Log: выключен")));
+		assertTrue(r.stream().anyMatch(x -> x.getText().startsWith("Log: off")));
 		assertTrue(r.stream().anyMatch(x -> x.getText().equals("Shot: shot-1.png")));
-		assertTrue(r.stream().anyMatch(x -> x.getText().equals("Snapshot: нет") && x.getLevel() == DebugView.Level.WARN));
+		assertTrue(r.stream().anyMatch(x -> x.getText().equals("Snapshot: none") && x.getLevel() == DebugView.Level.WARN));
 	}
 
 	@Test
-	public void безСнимкаСкриншотаНетСтроки()
+	public void withoutAScreenshotThereIsNoLine()
 	{
 		assertFalse(rows(state("S1", Collections.emptyList(), Collections.emptyList(), null, false, false)).stream().anyMatch(x -> x.getText().startsWith("Shot:")));
 	}
 
 	@Test
-	public void текстДляЖурналаИСкриншотаСобираетсяПостроково()
+	public void theTextForTheLogAndScreenshotIsAssembledLineByLine()
 	{
 		String plain = DebugView.plain(rows(state("S2-05", Collections.singletonList("has Iron ore = FALSE"), Collections.singletonList("Item(1535) = FALSE"), null, false, false)));
 		assertTrue(plain.startsWith("ActiveStep: S2-05"));
@@ -109,9 +109,9 @@ public class DebugViewTest
 	}
 
 	@Test
-	public void всеЗнакиПлашкиРисуютсяШрифтомRuneLite()
+	public void allBadgeSymbolsAreDrawnWithTheRuneLiteFont()
 	{
-		// «⚠» берётся из системного шрифта, как и в списке; остальное — латиница и кириллица.
+		// The "⚠" comes from the system font, as in the list; the rest is Latin.
 		Font f = FontManager.getRunescapeFont();
 		List<String> texts = new ArrayList<>();
 		for (DebugView.Row r : rows(state("S2-05", Arrays.asList("has A = TRUE"), Arrays.asList("Item(1) = FALSE"), "w", false, false)))
@@ -120,15 +120,15 @@ public class DebugViewTest
 		}
 		for (String t : texts)
 		{
-			assertEquals("«" + t + "» целиком рисуется", -1, f.canDisplayUpTo(t));
+			assertEquals("'" + t + "' is drawn in full", -1, f.canDisplayUpTo(t));
 		}
 	}
 
 	@Test
-	public void плашкаПереноситсяПоШиринеБезОбрезки()
+	public void theBadgeWrapsByWidthWithoutCutting()
 	{
 		FontMetrics fm = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics().getFontMetrics(OverlayText.font(FontManager.getRunescapeFont(), 0.9f));
-		String longest = "Why: " + "ITEM: шаги 2–4 сделаны по предметам, дальше «Принеси рыцарю меч»".repeat(3);
+		String longest = "Why: " + "ITEM: steps 2–4 done by items, then 'Bring the knight the sword'".repeat(3);
 		for (String line : OverlayText.wrap(longest, fm, OsrsPathDebugOverlay.WIDTH - 12))
 		{
 			assertTrue("«" + line + "» " + fm.stringWidth(line), fm.stringWidth(line) <= OsrsPathDebugOverlay.WIDTH - 12);

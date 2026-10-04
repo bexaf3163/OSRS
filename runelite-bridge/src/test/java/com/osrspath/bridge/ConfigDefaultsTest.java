@@ -7,21 +7,21 @@ import net.runelite.client.config.ConfigItem;
 import org.junit.Test;
 
 /**
- * RuneLite при первом запуске записывает значения по умолчанию в профиль игрока, и потом смена умолчания уже ничего
- * не меняет. Поэтому настройка, которую нельзя включать молча, живёт под новым ключом.
+ * On the first launch RuneLite writes the default values into the player's profile, and after that changing a default changes nothing.
+ * So a setting that must not be turned on silently lives under a new key.
  */
 public class ConfigDefaultsTest
 {
-	/** Все методы настроек — default, поэтому пустая реализация отдаёт значения по умолчанию. */
+	/** All the settings methods are default, so an empty implementation returns the default values. */
 	private static OsrsPathBridgeConfig defaults()
 	{
 		return new OsrsPathBridgeConfig() { };
 	}
 
 	@Test
-	public void умноеПроявление_выключеноПоУмолчанию_подНовымКлючом() throws Exception
+	public void smartViewIsOffByDefault_underANewKey() throws Exception
 	{
-		assertFalse("в игре список и HUD видны всегда, пока игрок сам не включит", defaults().smartOverlays());
+		assertFalse("in the game the list and the HUD are always visible until the player turns it on themselves", defaults().smartOverlays());
 		ConfigItem item = OsrsPathBridgeConfig.class.getMethod("smartOverlays").getAnnotation(ConfigItem.class);
 		assertEquals("smartView", item.keyName());
 	}

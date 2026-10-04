@@ -13,9 +13,9 @@ import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
 /**
- * Плашка разработчика: статус движка зелёным и красным поверх экрана игры. Скрыта, пока её не включишь
- * (по умолчанию Ctrl+Shift+D, настройка «Для разработчика»). Строки раскладывает {@link DebugView}; здесь только рисование:
- * тёмная подложка, цветной текст, перенос по ширине.
+ * The developer badge: the engine status in green and red over the game screen. Hidden until you turn it on
+ * (by default Ctrl+Shift+D, the "Developer" setting). {@link DebugView} lays out the lines; here is only the drawing:
+ * a dark backing, coloured text, wrapping to the width.
  */
 class OsrsPathDebugOverlay extends Overlay
 {
@@ -45,7 +45,7 @@ class OsrsPathDebugOverlay extends Overlay
 		return paint(g, s);
 	}
 
-	/** Рисование отдельно от плагина: так плашку можно проверить тестом и снять в картинку без RuneLite. */
+	/** Drawing apart from the plugin: so the badge can be tested and rendered into a picture without RuneLite. */
 	static Dimension paint(Graphics2D g, DebugView.State s)
 	{
 		Font font = OverlayText.font(g.getFont(), 0.9f);

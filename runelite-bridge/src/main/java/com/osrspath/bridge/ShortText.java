@@ -1,16 +1,16 @@
 package com.osrspath.bridge;
 
 /**
- * Одна короткая строка вместо абзаца для экрана игры: игре нужно «что сделать сейчас», подробности остаются в программе и
- * в подсказке при наведении. Программа присылает готовый короткий текст шага (поле s); эта запись — на случай, когда его
- * нет (программа старше плагина). Правила те же, что в программе (src/lib/shortText.ts):
- *  1) «Диалог: …» в конце отбрасывается — нужный вариант ответа подсвечивает сама игра;
- *  2) берётся первое предложение;
- *  3) длиннее предела — режется по « — » или запятой, иначе по слову, с многоточием.
+ * One short line instead of a paragraph for the game screen: the game needs "what to do now", the details stay in the app and
+ * in the hover hint. The app sends a ready short text for the step (field s); this fallback is for when there is none
+ * (the app is older than the plugin). The rules are the same as in the app (src/lib/shortText.ts):
+ *  1) "Dialogue: ..." at the end is dropped - the game itself highlights the right answer option;
+ *  2) the first sentence is taken;
+ *  3) if longer than the limit, cut at " - " or a comma, otherwise at a word, with an ellipsis.
  */
 final class ShortText
 {
-	/** Столько помещается в строку списка. */
+	/** This much fits in a list line. */
 	static final int MAX = 64;
 	private static final int MIN_CUT = 24;
 
@@ -30,7 +30,7 @@ final class ShortText
 			return "";
 		}
 		String t = text;
-		int dialog = t.indexOf("Диалог:");
+		int dialog = t.indexOf("Dialogue:");
 		if (dialog >= 0)
 		{
 			t = t.substring(0, dialog);

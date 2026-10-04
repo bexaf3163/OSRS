@@ -27,17 +27,17 @@ public class DangerRadarTest
 		z.setRadius(radius);
 		z.setWarningRadius(warn);
 		z.setSeverity(severity);
-		z.setMessage("опасно");
+		z.setMessage("danger");
 		z.setNpcNames(Collections.singletonList("Dark wizard"));
 		z.prepare();
 		return z;
 	}
 
 	@Test
-	public void зоныИзДанныхПриложенияЧитаютсяИзJar()
+	public void zonesFromTheAppDataAreReadFromTheJar()
 	{
 		DangerRadar radar = DangerRadar.load(new Gson());
-		assertTrue("в jar должен лежать dangerZones.json", radar.getZones().size() >= 3);
+		assertTrue("dangerZones.json must be in the jar", radar.getZones().size() >= 3);
 		for (DangerRadar.Zone z : radar.getZones())
 		{
 			assertTrue(z.getId(), z.warn() >= z.getRadius());
@@ -51,7 +51,7 @@ public class DangerRadarTest
 	}
 
 	@Test
-	public void битыеЗоныОтбрасываютсяАНеРоняютПлагин()
+	public void brokenZonesAreDroppedAndDoNotCrashThePlugin()
 	{
 		DangerRadar.ZoneFile f = new DangerRadar.ZoneFile();
 		DangerRadar.Zone noCenter = new DangerRadar.Zone();
@@ -66,17 +66,17 @@ public class DangerRadarTest
 	}
 
 	@Test
-	public void расстояниеКвадратом()
+	public void distanceAsASquare()
 	{
 		assertEquals(0, DangerRadar.distanceSq(3227, 3369, 3227, 3369));
 		assertEquals(25, DangerRadar.distanceSq(3227, 3369, 3230, 3373));
-		// Радиус 12: клетка в 12 по прямой — внутри, по диагонали 9/9 (≈12,7) — уже нет.
+		// Radius 12: a tile 12 away in a straight line is inside, a diagonal 9/9 (about 12.7) is not.
 		assertTrue(DangerRadar.distanceSq(0, 0, 12, 0) <= 12 * 12);
 		assertFalse(DangerRadar.distanceSq(0, 0, 9, 9) <= 12 * 12);
 	}
 
 	@Test
-	public void входВыходИЗвукОдинРазНаВход()
+	public void entryExitAndSoundOncePerEntry()
 	{
 		DangerRadar r = new DangerRadar(Collections.singletonList(zone("wiz", 3227, 3369, 12, 15, "CRITICAL")));
 		assertSame(DangerRadar.QUIET, r.update(3227, 3300, 0));
@@ -84,29 +84,29 @@ public class DangerRadarTest
 
 		DangerRadar.Reading in = r.update(3227, 3369 - 14, 0);
 		assertEquals(DangerRadar.Level.WARNING, in.getLevel());
-		assertTrue("вход — сигнал", in.isEntered());
-		assertFalse("стоим — без повторного сигнала", r.update(3227, 3369 - 14, 0).isEntered());
+		assertTrue("entry is a signal", in.isEntered());
+		assertFalse("standing still: no repeat signal", r.update(3227, 3369 - 14, 0).isEntered());
 		DangerRadar.Reading deeper = r.update(3227, 3369 - 5, 0);
 		assertEquals(DangerRadar.Level.INSIDE, deeper.getLevel());
-		assertFalse("глубже в той же зоне — без сигнала", deeper.isEntered());
+		assertFalse("deeper in the same zone: no signal", deeper.isEntered());
 
-		// Шаг наружу за радиус предупреждения, но в пределах запаса — всё ещё предупреждение, без мигания.
+		// A step out past the warning radius but within the margin is still a warning, without flicker.
 		DangerRadar.Reading edge = r.update(3227, 3369 - 17, 0);
 		assertEquals(DangerRadar.Level.WARNING, edge.getLevel());
 		assertFalse(edge.isEntered());
 		assertEquals(DangerRadar.Level.NEAR, r.update(3227, 3369 - 19, 0).getLevel());
-		assertTrue("вышел и вошёл снова — сигнал разрешён", r.update(3227, 3369 - 14, 0).isEntered());
+		assertTrue("left and entered again: the signal is allowed", r.update(3227, 3369 - 14, 0).isEntered());
 	}
 
 	@Test
-	public void другойЭтажНеОпасен()
+	public void anotherFloorIsNotDangerous()
 	{
 		DangerRadar r = new DangerRadar(Collections.singletonList(zone("wiz", 3227, 3369, 12, 15, "CRITICAL")));
 		assertSame(DangerRadar.QUIET, r.update(3227, 3369, 1));
 	}
 
 	@Test
-	public void изДвухЗонВыбираетсяТаКудаЗашёлГлубже()
+	public void ofTwoZonesTheDeeperOneIsChosen()
 	{
 		DangerRadar.Zone near = zone("near", 3100, 3100, 4, 8, "MEDIUM");
 		DangerRadar.Zone far = zone("far", 3112, 3100, 10, 14, "CRITICAL");
@@ -114,14 +114,14 @@ public class DangerRadarTest
 		DangerRadar.Reading a = r.update(3101, 3100, 0);
 		assertSame(near, a.getZone());
 		assertEquals(DangerRadar.Level.INSIDE, a.getLevel());
-		// Внутри обеих — ближе к центру дальней.
+		// Inside both: closer to the centre of the farther one.
 		DangerRadar.Reading b = r.update(3108, 3100, 0);
 		assertSame(far, b.getZone());
-		assertTrue("новая зона — новый сигнал", b.isEntered());
+		assertTrue("a new zone is a new signal", b.isEntered());
 	}
 
 	@Test
-	public void сбросПослеСменыПерсонажа()
+	public void resetAfterChangingCharacter()
 	{
 		DangerRadar r = new DangerRadar(Collections.singletonList(zone("wiz", 3227, 3369, 12, 15, "CRITICAL")));
 		assertTrue(r.update(3227, 3369, 0).isEntered());
@@ -130,17 +130,17 @@ public class DangerRadarTest
 	}
 
 	@Test
-	public void границаКругаБезДырИЛишнего()
+	public void theCircleBorderHasNoGapsAndNoExtras()
 	{
 		List<int[]> ring = DangerRadar.ring(0, 0, 12);
 		assertFalse(ring.isEmpty());
 		for (int[] t : ring)
 		{
 			int d = t[0] * t[0] + t[1] * t[1];
-			assertTrue("клетка границы внутри радиуса", d <= 144);
-			assertTrue("и у края, а не в середине", d > 100);
+			assertTrue("a border tile is inside the radius", d <= 144);
+			assertTrue("and near the edge, not in the middle", d > 100);
 		}
-		// Четыре крайние точки по осям — на границе.
+		// The four extreme points on the axes are on the border.
 		for (int[] want : new int[][]{{12, 0}, {-12, 0}, {0, 12}, {0, -12}})
 		{
 			assertTrue(ring.stream().anyMatch(t -> t[0] == want[0] && t[1] == want[1]));

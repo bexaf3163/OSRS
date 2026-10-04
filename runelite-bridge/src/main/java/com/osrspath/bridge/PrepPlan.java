@@ -7,10 +7,10 @@ import java.util.Map;
 import lombok.Data;
 
 /**
- * План подготовки, который программа уже посчитала (протокол 6, часть снимка /prep-plan): процент готовности, у каждого
- * предмета — важность, срок, хватает ли расходника и что сделать; «не бери сейчас»; режим восстановления после смерти;
- * совет про вес и сумку. Плагин ничего из этого не решает — только рисует рядом со своим живым списком предметов
- * (сумка и банк известны ему мгновенно, программе — с задержкой событий). Чего нет в плане — не рисуется.
+ * The preparation plan the app has already computed (protocol 6, part of the /prep-plan snapshot): the readiness percentage, for each
+ * item the importance, the deadline, whether the supply is enough and what to do; "don't take now"; the recovery mode after death;
+ * the weight and bag advice. The plugin decides none of this: it only draws it next to its own live item list
+ * (the bag and bank are known to it instantly, to the app with an event delay). What is not in the plan is not drawn.
  */
 @Data
 public class PrepPlan
@@ -34,7 +34,7 @@ public class PrepPlan
 	@Data
 	public static class Score
 	{
-		/** 0–100; null — проверять пока нечем (нет данных из игры). */
+		/** 0-100; null means there is nothing to check with yet (no data from the game). */
 		private Integer percent;
 		/** READY / NOT_READY / UNKNOWN. */
 		private String verdict;
@@ -47,7 +47,7 @@ public class PrepPlan
 	@Data
 	public static class Line
 	{
-		/** Английское название — как в сумке. */
+		/** The English name, as in the bag. */
 		private String name;
 		private int need;
 		/** EQUIPPED / INVENTORY / BANK / MISSING / UNKNOWN. */
@@ -56,9 +56,9 @@ public class PrepPlan
 		private String priority;
 		/** NOW / SOON / IN_STEP. */
 		private String timing;
-		/** LOW / CRITICAL — расходника мало; нет — хватает. */
+		/** LOW / CRITICAL means the supply is low; absent means enough. */
 		private String supply;
-		/** Что сделать, коротко: «Забери из банка», «Купи у Betty — 3 gp». */
+		/** What to do, briefly: "Take it from the bank", "Buy from Betty - 3 gp". */
 		private String action;
 
 		boolean lowSupply()
@@ -78,19 +78,19 @@ public class PrepPlan
 	{
 		if (stepId == null || stepId.isEmpty() || stepId.length() > 32)
 		{
-			return "нужен stepId плана";
+			return "stepId of the plan is required";
 		}
 		if (score != null && (score.percent != null && (score.percent < 0 || score.percent > 100)
 			|| score.critical < 0 || score.important < 0 || score.optimizations < 0 || score.unknown < 0
 			|| (score.verdict != null && ActiveTarget.tooLong(score.verdict))))
 		{
-			return "неверная оценка готовности";
+			return "invalid readiness estimate";
 		}
 		if (lines != null)
 		{
 			if (lines.size() > MAX_LINES)
 			{
-				return "слишком длинный план";
+				return "plan too long";
 			}
 			Map<String, Line> index = new HashMap<>();
 			for (Line l : lines)
@@ -98,39 +98,39 @@ public class PrepPlan
 				if (l == null || l.name == null || l.name.isEmpty() || ActiveTarget.tooLong(l.name) || l.need < 0 || l.need > ShoppingPlan.MAX_COUNT
 					|| ActiveTarget.tooLong(l.action))
 				{
-					return "неверная строка плана";
+					return "invalid plan row";
 				}
 				index.putIfAbsent(ActiveTarget.nameKey(l.name), l);
 			}
 			byName = index;
 		}
-		return textProblem(later, MAX_LATER, "не бери сейчас");
+		return textProblem(later, MAX_LATER, "don't take now");
 	}
 
 	private String textProblem(List<String> list, int max, String what)
 	{
 		if (list != null && (list.size() > max || list.stream().anyMatch(s -> s == null || s.isEmpty() || ActiveTarget.tooLong(s))))
 		{
-			return "неверный список: " + what;
+			return "invalid list: " + what;
 		}
 		if (recovery != null && (recovery.steps == null || recovery.steps.isEmpty() || recovery.steps.size() > MAX_RECOVERY
 			|| recovery.steps.stream().anyMatch(s -> s == null || s.isEmpty() || ActiveTarget.tooLong(s))
 			|| (recovery.title != null && ActiveTarget.tooLong(recovery.title))))
 		{
-			return "неверный режим восстановления";
+			return "invalid recovery mode";
 		}
 		if (ActiveTarget.tooLong(weight) || ActiveTarget.tooLong(slots))
 		{
-			return "слишком длинный совет";
+			return "advice too long";
 		}
 		if (blockers != null && (blockers.size() > MAX_BLOCKERS || blockers.stream().anyMatch(s -> s == null || s.isEmpty() || ActiveTarget.tooLong(s))))
 		{
-			return "неверный список блокеров";
+			return "invalid blockers list";
 		}
 		return null;
 	}
 
-	/** Строка плана по названию предмета (с любым регистром и числом в конце «×5» — как в списке игры); null — такой нет. */
+	/** A plan row by item name (with any case and a trailing count like "×5", as in the game list): null means there is none. */
 	Line line(String itemName)
 	{
 		return itemName == null ? null : byName.get(ActiveTarget.nameKey(rawName(itemName)));
@@ -142,7 +142,7 @@ public class PrepPlan
 		return shown.replaceAll("\\s*×\\s*\\d+\\s*$", "").trim();
 	}
 
-	/** Процент для заголовка списка: меньше ста и известен. */
+	/** The percentage for the list heading: below one hundred and known. */
 	Integer pendingPercent()
 	{
 		return score != null && score.percent != null && score.percent < 100 ? score.percent : null;

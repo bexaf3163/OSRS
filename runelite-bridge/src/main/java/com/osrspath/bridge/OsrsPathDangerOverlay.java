@@ -18,11 +18,11 @@ import net.runelite.client.ui.overlay.OverlayUtil;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 
 /**
- * Радар опасности в 3D-мире: красная граница зоны, пока игрок ближе 20 клеток к её центру,
- * и красный контур опасных NPC, пока он в зоне предупреждения. Внутри зоны граница плотнее.
+ * The danger radar in the 3D world: a red zone border while the player is closer than 20 tiles to its centre,
+ * and a red outline on dangerous NPCs while they are in the warning zone. Inside the zone the border is denser.
  *
- * Здесь только рисование: зону выбирает плагин раз за тик при смене клетки, опасных NPC собирает он же
- * и только в зоне предупреждения. Клетки границы посчитаны один раз при загрузке зон.
+ * Only drawing is here: the plugin chooses the zone once per tick when the tile changes, and collects the dangerous NPCs
+ * only in the warning zone. The border tiles are computed once when the zones load.
  */
 class OsrsPathDangerOverlay extends Overlay
 {
@@ -64,7 +64,7 @@ class OsrsPathDangerOverlay extends Overlay
 			return null;
 		}
 		boolean close = r.getLevel() == DangerRadar.Level.WARNING || r.getLevel() == DangerRadar.Level.INSIDE;
-		// Умное проявление: бледная граница вдали — шум; рисуем зону, только когда она близко или игрок уже в ней.
+		// Smart reveal: a pale border far away is noise; we draw the zone only when it is near or the player is already in it.
 		if (config.smartOverlays() && !close)
 		{
 			return null;

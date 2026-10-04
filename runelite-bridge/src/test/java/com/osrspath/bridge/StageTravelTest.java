@@ -9,10 +9,10 @@ import java.util.List;
 import org.junit.Test;
 
 /**
- * Переходы на настоящих данных программы: лодка, лестница, дверь. Игрок побывал у точки шага-перехода и оказался далеко от неё
- * (поплыл, телепортировался, спустился) — шаг сделан, стрелка ведёт к следующему. Поводом стал S2-09 из живой игры: после
- * «Seaman на пристани: плыви на Musa Point» курсор оставался на «плыви», стрелка вела обратно в Port Sarim, и игрок плавал туда-сюда.
- * Тесты на выдуманных строках («Войди…») это пропустили: в настоящих данных перед глаголом стоит название места.
+ * Transitions on the app's real data: a boat, a ladder, a door. The player was at the transition step's point and ended up far from it
+ * (sailed, teleported, went down): the step is done, the arrow leads to the next one. The occasion was S2-09 from the live game: after
+ * "Seaman at the dock: sail to Musa Point" the cursor stayed on "sail", the arrow led back to Port Sarim, and the player sailed back and forth.
+ * Tests on invented lines ("Enter...") missed this: in the real data a place name stands before the verb.
  */
 public class StageTravelTest
 {
@@ -25,7 +25,7 @@ public class StageTravelTest
 				return s.target.getGuide().getStage().getStages().get(idx).getSteps();
 			}
 		}
-		throw new AssertionError("нет этапа " + stepId + "#" + idx);
+		throw new AssertionError("no stage " + stepId + "#" + idx);
 	}
 
 	private static int at(StageTracker t, String id, int idx, List<ActiveTarget.StageLine> lines, int x, int y)
@@ -34,61 +34,61 @@ public class StageTravelTest
 	}
 
 	@Test
-	public void s209_приплылНаMusaPoint_курсорНаЗембо_аНеНазадНаПричал()
+	public void s209_sailedToMusaPoint_cursorOnZembo_notBackToTheQuay()
 	{
 		List<ActiveTarget.StageLine> lines = stage("S2-09", 1);
-		assertTrue("шаг «плыви» — переход: " + lines.get(0).shown(), StageTracker.isMove(lines.get(0)));
+		assertTrue("the 'sail' step is a transition: " + lines.get(0).shown(), StageTracker.isMove(lines.get(0)));
 		StageTracker t = new StageTracker();
-		assertEquals("далеко от причала — первый шаг", 0, at(t, "S2-09", 1, lines, 3040, 3235));
-		assertEquals("на причале, поговорил с моряком — первый шаг", 0, at(t, "S2-09", 1, lines, 3028, 3220));
-		// Лодка: за один тик — на Karamja, к Musa Point (там же точка шага «Вернись в Port Sarim» — до неё курсор не доходит).
-		assertEquals("приплыл — «купи ром у Zembo»", 1, at(t, "S2-09", 1, lines, 2956, 3146));
+		assertEquals("far from the quay: the first step", 0, at(t, "S2-09", 1, lines, 3040, 3235));
+		assertEquals("at the quay, talked to the sailor: the first step", 0, at(t, "S2-09", 1, lines, 3028, 3220));
+		// The boat: in one tick to Karamja, to Musa Point (the point of the step "Return to Port Sarim" is there too - the cursor does not reach it).
+		assertEquals("arrived: 'buy rum from Zembo'", 1, at(t, "S2-09", 1, lines, 2956, 3146));
 		assertTrue(t.reason(), t.reason().startsWith("LEFT"));
 		for (int i = 0; i < 100; i++)
 		{
-			assertEquals("на берегу курсор не возвращается к лодке", 1, at(t, "S2-09", 1, lines, 2954 + i % 3, 3150));
+			assertEquals("on the shore the cursor does not return to the boat", 1, at(t, "S2-09", 1, lines, 2954 + i % 3, 3150));
 		}
 	}
 
-	/** Живая игра: пробегая в семи клетках от Zembo и в восьми от Luthas, игрок «побывал» у обоих, и курсор прыгнул на «положи ром в ящик». */
+	/** The live game: running past within seven tiles of Zembo and eight of Luthas, the player "visited" both, and the cursor jumped to "put the rum in the crate". */
 	@Test
-	public void s209_пробежалМимоZemboИLuthas_шагиНеПерепрыгнуты()
+	public void s209_ranPastZemboAndLuthas_stepsAreNotSkipped()
 	{
 		List<ActiveTarget.StageLine> lines = stage("S2-09", 1);
 		StageTracker t = new StageTracker();
 		at(t, "S2-09", 1, lines, 3040, 3235);
 		at(t, "S2-09", 1, lines, 3028, 3220);
-		assertEquals("приплыл — «купи ром»", 1, at(t, "S2-09", 1, lines, 2956, 3146));
-		assertEquals("в 13 клетках от Zembo — ещё «купи ром»", 1, at(t, "S2-09", 1, lines, 2942, 3146));
-		assertEquals("в семи от Zembo, мимо — ром не куплен, курсор на нём", 1, at(t, "S2-09", 1, lines, 2936, 3146));
+		assertEquals("arrived: 'buy rum'", 1, at(t, "S2-09", 1, lines, 2956, 3146));
+		assertEquals("13 tiles from Zembo: still 'buy rum'", 1, at(t, "S2-09", 1, lines, 2942, 3146));
+		assertEquals("seven from Zembo, past: the rum is not bought, the cursor is on it", 1, at(t, "S2-09", 1, lines, 2936, 3146));
 		assertTrue(t.reason(), t.reason().startsWith("BLOCK"));
-		assertEquals("зашёл к Zembo — шаг на месте, ждёт покупки", 1, at(t, "S2-09", 1, lines, 2930, 3145));
-		assertEquals("ром не куплен, к Luthas — курсор остаётся на «купи ром»", 1, at(t, "S2-09", 1, lines, 2938, 3154));
+		assertEquals("went to Zembo: the step stays, waits for the purchase", 1, at(t, "S2-09", 1, lines, 2930, 3145));
+		assertEquals("rum not bought, to Luthas: the cursor stays on 'buy rum'", 1, at(t, "S2-09", 1, lines, 2938, 3154));
 		ItemCounts rum = new ItemCounts();
 		rum.add(431, ActiveTarget.nameKey("Karamjan rum"), 1);
-		assertEquals("ром куплен — «нарви бананы, поговори с Luthas»", 2, t.update("S2-09", 1, lines, 2938, 3154, 0, rum));
-		// Положил ром в ящик (ром ушёл из сумки у ящика) — шаг сдан сам, кнопка «сделано» не нужна.
-		assertEquals("у ящика с ромом в сумке — «положи ром в ящик»", 3, t.update("S2-09", 1, lines, 2939, 3149, 0, rum));
-		assertEquals("ром лежит в ящике — «заполни ящик»", 4, t.update("S2-09", 1, lines, 2939, 3149, 0, new ItemCounts()));
+		assertEquals("rum bought: 'pick bananas, talk to Luthas'", 2, t.update("S2-09", 1, lines, 2938, 3154, 0, rum));
+		// Put the rum in the crate (the rum left the bag at the crate): the step is handed in by itself, the "done" button is not needed.
+		assertEquals("at the crate with the rum in the bag: 'put the rum in the crate'", 3, t.update("S2-09", 1, lines, 2939, 3149, 0, rum));
+		assertEquals("the rum lies in the crate: 'fill the crate'", 4, t.update("S2-09", 1, lines, 2939, 3149, 0, new ItemCounts()));
 	}
 
 	@Test
-	public void s208_подготовилсяИВошёлВДом_стрелкаНаПодвалСразу()
+	public void s208_preparedAndEnteredTheHouse_arrowToTheBasementAtOnce()
 	{
 		List<ActiveTarget.StageLine> lines = stage("S2-08", 2);
 		ActiveTarget.StageLine door = lines.get(2);
-		assertTrue("«Подготовься к бою и войди…» — переход: " + door.shown(), StageTracker.isMove(door));
-		// Начинаем с этого шага: до него игрок уже сходил в бар и отдал пиво.
+		assertTrue("'Prepare for combat and enter...' is a transition: " + door.shown(), StageTracker.isMove(door));
+		// We start from this step: before it the player has already been to the bar and handed in the beer.
 		List<ActiveTarget.StageLine> from = lines.subList(2, lines.size());
 		StageTracker t = new StageTracker();
 		assertEquals(0, at(t, "S2-08", 2, from, 3110, 3329));
 		assertEquals(0, at(t, "S2-08", 2, from, door.getX(), door.getY() - 1));
-		assertEquals("в доме, до подвала далеко — шаг «войди» сделан", 1, at(t, "S2-08", 2, from, door.getX() - 6, door.getY() + 7));
+		assertEquals("in the house, far from the basement: the 'enter' step is done", 1, at(t, "S2-08", 2, from, door.getX() - 6, door.getY() + 7));
 	}
 
-	/** Для каждого шага-перехода настоящих данных: побывал у точки, оказался у следующей (но чуть в стороне) — курсор ушёл вперёд. */
+	/** For every transition step of the real data: visited the point, ended up at the next one (but a bit aside) - the cursor moved on. */
 	@Test
-	public void всякийПереходЗакрываетсяКогдаИгрокОказалсяУСледующегоШага()
+	public void everyTransitionIsClosedWhenThePlayerEndsUpAtTheNextStep()
 	{
 		int checked = 0;
 		List<String> bad = new ArrayList<>();
@@ -124,12 +124,12 @@ public class StageTravelTest
 					int c = t.update(id, idx, from, nx.getX() + 12, nx.getY(), nx.getPlane(), new ItemCounts());
 					if (c < 1)
 					{
-						bad.add(id + " этап " + (idx + 1) + " шаг " + (i + 1) + " «" + cur.shown() + "» → «" + nx.shown() + "»: курсор " + (c + 1));
+						bad.add(id + " stage " + (idx + 1) + " step " + (i + 1) + " '" + cur.shown() + "' -> '" + nx.shown() + "': cursor " + (c + 1));
 					}
 				}
 			}
 		}
-		assertTrue("мало переходов проверено: " + checked, checked >= 20);
-		assertFalse("переходы, которые не закрылись (" + bad.size() + "):\n" + String.join("\n", bad), !bad.isEmpty());
+		assertTrue("too few transitions checked: " + checked, checked >= 20);
+		assertFalse("transitions that did not close (" + bad.size() + "):\n" + String.join("\n", bad), !bad.isEmpty());
 	}
 }

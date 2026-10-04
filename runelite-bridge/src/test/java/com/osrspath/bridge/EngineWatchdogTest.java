@@ -7,7 +7,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-/** Сторож движка замечает состояния, которых быть не должно, и молчит, пока всё в порядке. */
+/** The engine watchdog notices states that must not exist and stays silent while all is well. */
 public class EngineWatchdogTest
 {
 	private EngineWatchdog w;
@@ -18,7 +18,7 @@ public class EngineWatchdogTest
 		w = new EngineWatchdog();
 	}
 
-	/** Игрок в игре на шаге с этапом: курсор cursor из size, сумка bag, клетка (x, y). */
+	/** The player is in the game on a step with a stage: cursor `cursor` of `size`, bag `bag`, tile (x, y). */
 	private static EngineWatchdog.Observation at(long now, int cursor, int size, boolean manual, int x, int y, int bag, boolean hud, boolean guide)
 	{
 		return new EngineWatchdog.Observation(now, "S2-07", "S2-07#3", cursor, size, manual, false, false, x, y, 0, bag, hud, guide, false, false, true);
@@ -35,7 +35,7 @@ public class EngineWatchdogTest
 	}
 
 	@Test
-	public void вПорядкеНичегоНеНаходит()
+	public void nothingFoundWhenAllIsWell()
 	{
 		for (int i = 0; i < 100; i++)
 		{
@@ -44,7 +44,7 @@ public class EngineWatchdogTest
 	}
 
 	@Test
-	public void курсорСтоитХодитьИМеняетСумкуНоНеДвигается()
+	public void cursorStandsAndPlayerWalksAndChangesTheBagButItDoesNotMove()
 	{
 		assertTrue(w.observe(ok(0, 1, 3000, 3000, 1)).isEmpty());
 		List<EngineWatchdog.Finding> last = null;
@@ -57,20 +57,20 @@ public class EngineWatchdogTest
 	}
 
 	@Test
-	public void стоитНаМестеНичегоНеДелает_этоНеЗастревание()
+	public void standingStillDoesNothing_thatIsNotBeingStuck()
 	{
 		w.observe(ok(0, 1, 3000, 3000, 7));
 		for (long t = 5_000; t <= 2 * EngineWatchdog.STUCK_MS; t += 5_000)
 		{
-			assertTrue("AFK не странность", w.observe(ok(t, 1, 3000, 3000, 7)).isEmpty());
+			assertTrue("AFK is not an oddity", w.observe(ok(t, 1, 3000, 3000, 7)).isEmpty());
 		}
 	}
 
 	@Test
-	public void походилПотомОтошёл_этоНеЗастревание()
+	public void walkedThenWentAway_isNotBeingStuck()
 	{
 		w.observe(ok(0, 1, 3000, 3000, 1));
-		// Первые две минуты — ходит и меняет сумку, затем замер и стоит; сторож не должен сыпать находками весь простой.
+		// For the first two minutes the player walks and changes the bag, then freezes and stands; the watchdog must not spam findings for the whole idle time.
 		for (long t = 5_000; t <= 120_000; t += 5_000)
 		{
 			w.observe(ok(t, 1, 3000 + (int) (t / 1000), 3000, (int) t));
@@ -80,18 +80,18 @@ public class EngineWatchdogTest
 			List<EngineWatchdog.Finding> f = w.observe(ok(t, 1, 3120, 3000, 120_000));
 			if (t - 120_000 >= EngineWatchdog.IDLE_MS)
 			{
-				assertTrue("игрок отошёл — не странность, t=" + t, f.isEmpty());
+				assertTrue("the player went away: not an oddity, t=" + t, f.isEmpty());
 			}
 		}
 	}
 
 	@Test
-	public void шагНаРучнойОтметкеИПросмотрНазадНеСчитаютсяЗастреванием()
+	public void aStepOnAManualMarkAndAViewBackAreNotBeingStuck()
 	{
 		w.observe(at(0, 1, 5, true, 3000, 3000, 0, true, true));
 		for (long t = 5_000; t <= 2 * EngineWatchdog.STUCK_MS; t += 5_000)
 		{
-			assertTrue("«ручной» шаг ждать можно долго", w.observe(at(t, 1, 5, true, 3000 + (int) (t / 1000), 3000, (int) t, true, true)).isEmpty());
+			assertTrue("a 'manual' step can be waited on for long", w.observe(at(t, 1, 5, true, 3000 + (int) (t / 1000), 3000, (int) t, true, true)).isEmpty());
 		}
 		EngineWatchdog w2 = new EngineWatchdog();
 		w2.observe(ok(0, 1, 3000, 3000, 0));
@@ -99,12 +99,12 @@ public class EngineWatchdogTest
 		{
 			EngineWatchdog.Observation o = new EngineWatchdog.Observation(t, "S2-07", "S2-07#3", 1, 5, false, true, false, 3000 + (int) (t / 1000), 3000, 0, (int) t,
 				true, true, false, false, true);
-			assertTrue("просмотр — не застревание", w2.observe(o).isEmpty());
+			assertTrue("viewing is not being stuck", w2.observe(o).isEmpty());
 		}
 	}
 
 	@Test
-	public void последняяСтрокаНеСчитаетсяЗастреванием()
+	public void theLastLineIsNotBeingStuck()
 	{
 		w.observe(ok(0, 4, 3000, 3000, 0));
 		for (long t = 5_000; t <= 2 * EngineWatchdog.STUCK_MS; t += 5_000)
@@ -114,21 +114,21 @@ public class EngineWatchdogTest
 	}
 
 	@Test
-	public void сдвигКурсораСбрасываетСчёт()
+	public void aCursorShiftResetsTheCount()
 	{
 		w.observe(ok(0, 1, 3000, 3000, 0));
 		for (long t = 5_000; t < EngineWatchdog.STUCK_MS; t += 5_000)
 		{
 			w.observe(ok(t, 1, 3000 + (int) (t / 1000), 3000, (int) t));
 		}
-		// Курсор сдвинулся незадолго до порога: отсчёт начинается заново.
+		// The cursor moved shortly before the threshold: the count starts again.
 		long now = EngineWatchdog.STUCK_MS;
 		assertTrue(w.observe(ok(now, 2, 3100, 3000, 1)).isEmpty());
 		assertTrue(w.observe(ok(now + 5_000, 2, 3105, 3000, 2)).isEmpty());
 	}
 
 	@Test
-	public void предупреждениеОПредметеДержитсяДолго()
+	public void anItemWarningHoldsForLong()
 	{
 		List<EngineWatchdog.Finding> f = null;
 		for (long t = 0; t <= EngineWatchdog.CLAMP_MS + 5_000; t += 5_000)
@@ -140,7 +140,7 @@ public class EngineWatchdogTest
 	}
 
 	@Test
-	public void предупреждениеСнялосьСчётСброшен()
+	public void theWarningWentAwayTheCountIsReset()
 	{
 		for (long t = 0; t < EngineWatchdog.CLAMP_MS; t += 5_000)
 		{
@@ -151,15 +151,15 @@ public class EngineWatchdogTest
 	}
 
 	@Test
-	public void шагЕстьаНаЭкранеПусто()
+	public void aStepExistsButTheScreenIsEmpty()
 	{
 		assertTrue(w.observe(at(0, 0, 5, false, 3000, 3000, 0, false, false)).isEmpty());
-		assertTrue("пока рано", w.observe(at(EngineWatchdog.EMPTY_MS - 1_000, 0, 5, false, 3000, 3000, 0, false, false)).isEmpty());
+		assertTrue("too early yet", w.observe(at(EngineWatchdog.EMPTY_MS - 1_000, 0, 5, false, 3000, 3000, 0, false, false)).isEmpty());
 		assertTrue(has(w.observe(at(EngineWatchdog.EMPTY_MS, 0, 5, false, 3000, 3000, 0, false, false)), "EMPTY"));
 	}
 
 	@Test
-	public void пустоНоХотяБыОднаПлашкаЕсть_нормально()
+	public void emptyButAtLeastOneCardIsThere_normal()
 	{
 		for (long t = 0; t <= 3 * EngineWatchdog.EMPTY_MS; t += 5_000)
 		{
@@ -169,7 +169,7 @@ public class EngineWatchdogTest
 	}
 
 	@Test
-	public void безШагаПустойЭкран_нормально()
+	public void noStepEmptyScreen_normal()
 	{
 		for (long t = 0; t <= 3 * EngineWatchdog.EMPTY_MS; t += 5_000)
 		{
@@ -179,7 +179,7 @@ public class EngineWatchdogTest
 	}
 
 	@Test
-	public void квестПройденАСписокЭтогоНеПоказывает()
+	public void questCompletedButTheListDoesNotShowIt()
 	{
 		List<EngineWatchdog.Finding> f = null;
 		for (long t = 0; t <= EngineWatchdog.QUEST_DONE_MS + 1_000; t += 1_000)
@@ -192,22 +192,22 @@ public class EngineWatchdogTest
 		for (long t = 0; t <= 3 * EngineWatchdog.QUEST_DONE_MS; t += 1_000)
 		{
 			EngineWatchdog.Observation o = new EngineWatchdog.Observation(t, "S2-07", "S2-07#3", 1, 5, false, false, false, 3000, 3000, 0, 0, true, true, true, true, true);
-			assertTrue("список показал «пройден» — всё хорошо", w2.observe(o).isEmpty());
+			assertTrue("the list showed 'completed': all is well", w2.observe(o).isEmpty());
 		}
 	}
 
 	@Test
-	public void вЛогинеИГдеЭкранаНет_молчит()
+	public void inLoginAndWhereThereIsNoScreen_silent()
 	{
 		for (long t = 0; t <= 3 * EngineWatchdog.STUCK_MS; t += 5_000)
 		{
 			EngineWatchdog.Observation o = new EngineWatchdog.Observation(t, "S2-07", "S2-07#3", 1, 5, false, false, true, 3000, 3000, 0, (int) t, false, false, true, false, false);
-			assertTrue("не в игре — не наблюдаем", w.observe(o).isEmpty());
+			assertTrue("not in the game: we do not observe", w.observe(o).isEmpty());
 		}
 	}
 
 	@Test
-	public void ключНаходкиСовпадаетСОкномЖурнала()
+	public void theFindingKeyMatchesTheJournalWindow()
 	{
 		w.observe(ok(0, 1, 3000, 3000, 0));
 		List<EngineWatchdog.Finding> f = null;

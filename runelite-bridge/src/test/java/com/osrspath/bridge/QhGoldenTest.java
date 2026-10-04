@@ -17,12 +17,12 @@ import java.util.Map;
 import org.junit.Test;
 
 /**
- * Эталон и плагин обязаны отвечать одинаково: тысячи наборов фактов игры (случайных и подобранных под условия) прогоняются через
- * все машины квестов. Ответы эталона (Python, как в Quest Helper) записаны в qh-golden.json; здесь тот же набор идёт через QhMachine.
+ * The reference and the plugin must answer the same: thousands of sets of game facts (random and picked for the conditions) are run through
+ * all the quest machines. The reference's answers (Python, as in Quest Helper) are recorded in qh-golden.json; here the same set goes through QhMachine.
  */
 public class QhGoldenTest
 {
-	/** Факты из JSON-вектора. */
+	/** Facts from a JSON vector. */
 	static final class JsonFacts implements QhMachine.Facts
 	{
 		private final JsonObject f;
@@ -158,16 +158,16 @@ public class QhGoldenTest
 	}
 
 	@Test
-	public void ресурсМашинЗагружается_ивНёмВсеКвестыМаршрута()
+	public void machinesResourceLoads_andHasAllQuestsOfTheRoute()
 	{
 		Map<String, QhMachine> all = QhMachine.all();
-		assertTrue("машин мало: " + all.size(), all.size() >= 30);
+		assertTrue("too few machines: " + all.size(), all.size() >= 30);
 		assertNotNull(all.get("S2-09"));
 		assertTrue(all.get("S2-09").hasStage(1));
 	}
 
 	@Test
-	public void плагинОтвечаетКакЭталон_наВсехВекторах()
+	public void pluginAnswersLikeTheReference_onAllVectors()
 	{
 		JsonObject root = new JsonParser().parse(new InputStreamReader(getClass().getResourceAsStream("/qh-golden.json"), StandardCharsets.UTF_8)).getAsJsonObject();
 		Map<String, QhMachine> all = QhMachine.all();
@@ -193,7 +193,7 @@ public class QhGoldenTest
 				boolean wantUndecided = expect.get("undecided").getAsBoolean();
 				if (wantUndecided != got.isUndecided())
 				{
-					bad.add(quest + "@" + var + " шаг " + stepNo + ": ждали undecided=" + wantUndecided + ", получили " + got.isUndecided());
+					bad.add(quest + "@" + var + " step " + stepNo + ": expected undecided=" + wantUndecided + ", got " + got.isUndecided());
 				}
 				else if (!wantUndecided)
 				{
@@ -205,8 +205,8 @@ public class QhGoldenTest
 					}
 					if (!wantLeaf.equals(got.getLeaf()) || expect.get("strong").getAsBoolean() != got.isStrong() || !wantPath.equals(got.getPath()))
 					{
-						bad.add(quest + "@" + var + " шаг " + stepNo + ": ждали " + wantLeaf + " strong=" + expect.get("strong").getAsBoolean() + " " + wantPath
-							+ ", получили " + got.getLeaf() + " strong=" + got.isStrong() + " " + got.getPath());
+						bad.add(quest + "@" + var + " step " + stepNo + ": expected " + wantLeaf + " strong=" + expect.get("strong").getAsBoolean() + " " + wantPath
+							+ ", got " + got.getLeaf() + " strong=" + got.isStrong() + " " + got.getPath());
 					}
 					if (got.isStrong())
 					{
@@ -220,10 +220,10 @@ public class QhGoldenTest
 				stepNo++;
 			}
 		}
-		assertTrue("векторов мало: " + checked, checked > 1500);
-		assertTrue("сильных ответов мало — тест ничего не проверяет: " + strong, strong > 500);
-		assertTrue("«не знаю» ни разу — вектора не задевают неизвестные условия: " + undecided, undecided > 20);
-		assertTrue("расхождений с эталоном: " + bad.size() + "\n" + String.join("\n", bad.subList(0, Math.min(15, bad.size()))), bad.isEmpty());
+		assertTrue("too few vectors: " + checked, checked > 1500);
+		assertTrue("too few strong answers - the test checks nothing: " + strong, strong > 500);
+		assertTrue("'don't know' never occurs - the vectors do not touch unknown conditions: " + undecided, undecided > 20);
+		assertTrue("disagreements with the reference: " + bad.size() + "\n" + String.join("\n", bad.subList(0, Math.min(15, bad.size()))), bad.isEmpty());
 		assertFalse(bad.size() > 0);
 	}
 }

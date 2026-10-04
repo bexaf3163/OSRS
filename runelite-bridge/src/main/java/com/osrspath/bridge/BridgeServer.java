@@ -29,61 +29,61 @@ import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Локальный HTTP-мост для приложения «OSRS Путь». Слушает только 127.0.0.1.
+ * Local HTTP bridge for the "OSRS Path" app. Listens on 127.0.0.1 only.
  *
  * <pre>
  * GET  /status        {"status":"ok","inGame":true,"activeStepId":"S1-03","stats":{"magic":25,…},"shortestPath":true,
  *                      "equipment":[{"id":1351,"name":"Bronze axe"}],"inventory":[{"id":995,"name":"Coins","count":250}],
  *                      "coins":250,"bankCoins":null,"carriedValue":1200,"bankValue":null,"protocol":2,"pluginVersion":"2.9.0"}
- *                      — снаряжение null, пока не в игре или подсказки апгрейда выключены; стоимость предметов — оценка
- *                      по ценам биржи без монет; protocol растёт, когда меняются адреса или поля моста
- * POST /active-step   цель шага (ActiveTarget) — стрелка, подсветка, HUD, проверка вылета, путь, темп, автоотметка
- * POST /clear         убрать всё
- * POST /shopping-plan оптовый список Grand Exchange (ShoppingPlan) — подсказка на бирже
- * POST /nav-target    временная цель поверх шага (NavTarget): место с карты или магазин; {"clear":true} — снять
- * POST /bank-tags     предметы этапа для мягкой подсветки в банке (BankTags)
- * POST /gear-hint     совет по снаряжению (GearHint): строка HUD, что спросить у банка и что подсветить; {"clear":true} — снять
- * GET  /telemetry     сводка журнала отладки: файл, счётчики, странности и последние события (с протокола 6; {"enabled":false}, если журнал выключен)
- * GET  /events        text/event-stream: STATUS (с player), STATS, XP, QUESTS (с протокола 5), OWNED, GEAR, PACING, NAV_SET, NAV_DONE, STEP_AUTO_COMPLETED
- *                      и пинг каждые 15 секунд
+ *                      - gear is null until in the game or while upgrade hints are off; item value is an estimate
+ *                      by Grand Exchange prices without coins; protocol grows when the bridge's addresses or fields change
+ * POST /active-step   the step's target (ActiveTarget): arrow, highlight, HUD, departure check, path, pace, auto-tick
+ * POST /clear         remove everything
+ * POST /shopping-plan the Grand Exchange bulk list (ShoppingPlan): the exchange hint
+ * POST /nav-target    a temporary target over the step (NavTarget): a place from the map or a shop; {"clear":true} clears it
+ * POST /bank-tags     the stage's items for soft highlighting in the bank (BankTags)
+ * POST /gear-hint     gear advice (GearHint): the HUD line, what to ask the bank for and what to highlight; {"clear":true} clears it
+ * GET  /telemetry     the debug log summary: file, counters, anomalies and latest events (since protocol 6; {"enabled":false} if the log is off)
+ * GET  /events        text/event-stream: STATUS (with player), STATS, XP, QUESTS (since protocol 5), OWNED, GEAR, PACING, NAV_SET, NAV_DONE, STEP_AUTO_COMPLETED
+ *                      and a ping every 15 seconds
  *
- * STATS, OWNED, GEAR и PACING уходят только при изменении (не чаще раза за игровой тик) и повторяются
- * новому подключению, чтобы приложению не ждать следующего изменения. Выключенная в настройках функция
- * отвечает 409 с объяснением — приложение показывает его, а не молчит.
+ * STATS, OWNED, GEAR and PACING go out only on change (at most once per game tick) and are repeated to
+ * a new connection, so the app does not wait for the next change. A feature turned off in the settings
+ * answers 409 with an explanation: the app shows it instead of staying silent.
  * </pre>
  *
- * Защита от сайтов в браузере: Host только локальный (против DNS rebinding), любой запрос с заголовком
- * Origin отклоняется, POST — только с заголовком X-OSRS-Path. Мост слушает одну программу для ПК: она ходит
- * сюда из главного процесса Electron, без Origin. Веб-версии больше нет, поэтому и CORS не нужен: браузер
- * без разрешения CORS не прочитает ответ и не отправит X-OSRS-Path.
+ * Protection from websites in a browser: Host only local (against DNS rebinding), any request with an
+ * Origin header is rejected, POST only with the X-OSRS-Path header. The bridge serves a single desktop app: it calls
+ * from the Electron main process, with no Origin. There is no web version any more, so CORS is not needed either: a browser
+ * without CORS permission cannot read the response or send X-OSRS-Path.
  *
- * Сервер не зависит от RuneLite — его можно проверить обычным тестом.
+ * The server does not depend on RuneLite, so it can be checked with an ordinary test.
  */
 @Slf4j
 public final class BridgeServer
 {
 	public static final int DEFAULT_PORT = 38282;
 	/**
-	 * Версия протокола моста. 1 — до 2.9 (поля не было: приложение считает такой плагин старым); 2 — с 2.9:
-	 * стоимость предметов в снаряжении и рукопожатие версий; 3 — с 2.10: guide в шаге для боковой панели;
-	 * 4 — с 2.11: guide рисуется и списком «Что нужно» на экране игры (кликабельным) — программа просит
-	 * перезапустить RuneLite, если в нём остался плагин 2.10. Растёт вместе с адресами, полями и тем, что плагин
-	 * делает с ними. 6 — с 2.22: один снимок состояния /prep-plan вместо пяти запросов (шаг, закупки, подсветка банка, совет
-	 * по снаряжению, план подготовки с процентом готовности); старые адреса остаются для программы с протоколом 5.
+	 * The bridge protocol version. 1 is before 2.9 (there was no field: the app counts such a plugin as old); 2 is since 2.9:
+	 * the value of items in gear and the version handshake; 3 is since 2.10: guide in the step for the side panel;
+	 * 4 is since 2.11: guide is also drawn as the "What you need" list on the game screen (clickable); the app asks to
+	 * restart RuneLite if it still has plugin 2.10. Grows with the addresses, fields and what the plugin
+	 * does with them. 6 is since 2.22: one /prep-plan state snapshot instead of five requests (step, shopping, bank highlight, gear
+	 * advice, the preparation plan with a readiness percentage); the old addresses remain for an app with protocol 5.
 	 */
 	static final int PROTOCOL = 6;
-	/** Версия плагина — та же, что у программы, с которой он едет в одном exe. */
+	/** The plugin version, the same as the app it ships with in one exe. */
 	static final String PLUGIN_VERSION = "2.27.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
-	/** Снимок целиком — шаг с этапами квеста, закупки и план в одном теле. */
+	/** The whole snapshot: the step with the quest stages, shopping and plan in one body. */
 	static final int MAX_SNAPSHOT = 384 * 1024;
 	static final int MAX_STREAMS = 8;
 	static final long PING_SECONDS = 15;
 
 	public interface Listener
 	{
-		/** Пришла новая цель. Вызывается в потоке сервера — дальше передавать в поток клиента. */
+		/** A new target arrived. Called on the server thread: pass it on to the client thread. */
 		void onActiveTarget(ActiveTarget target);
 
 		void onClear();
@@ -92,41 +92,41 @@ public final class BridgeServer
 		{
 		}
 
-		/** Временная цель. Возвращает причину отказа (функция выключена) или null. */
+		/** A temporary target. Returns the reason for refusal (the feature is off) or null. */
 		default String onNavTarget(NavTarget target)
 		{
-			return "не поддерживается";
+			return "not supported";
 		}
 
-		/** Предметы этапа для подсветки в банке. Возвращает причину отказа или null. */
+		/** The stage's items for highlighting in the bank. Returns the reason for refusal or null. */
 		default String onBankTags(BankTags tags)
 		{
-			return "не поддерживается";
+			return "not supported";
 		}
 
-		/** Совет по снаряжению. Возвращает причину отказа (функция выключена) или null. */
+		/** Gear advice. Returns the reason for refusal (the feature is off) or null. */
 		default String onGearHint(GearHint hint)
 		{
-			return "не поддерживается";
+			return "not supported";
 		}
 
 		/**
-		 * Снимок состояния (протокол 6). bad — части, не прошедшие проверку: их не применять, прежнее остаётся. Возвращает
-		 * итог: запоздавший снимок и отказы по частям (функция выключена в настройках).
+		 * The state snapshot (protocol 6). bad are the parts that failed validation: they are not applied, the previous ones stay. Returns
+		 * the outcome: a late snapshot and per-part refusals (the feature is turned off in the settings).
 		 */
 		default PrepResult onPrepPlan(PrepEnvelope envelope, Map<String, String> bad)
 		{
-			return new PrepResult(false, Map.of("all", "не поддерживается"));
+			return new PrepResult(false, Map.of("all", "not supported"));
 		}
 
-		/** Сводка журнала отладки для программы (GET /telemetry): {"enabled":false} или счётчики, странности и последние события. */
+		/** The debug log summary for the app (GET /telemetry): {"enabled":false} or counters, anomalies and latest events. */
 		default Map<String, Object> onTelemetry()
 		{
 			return Map.of("enabled", false);
 		}
 	}
 
-	/** Итог применения снимка: stale — пришёл более старый, чем уже применённый; rejected — части, которые не применены. */
+	/** The outcome of applying a snapshot: stale means an older one than already applied arrived; rejected are the parts that were not applied. */
 	public static final class PrepResult
 	{
 		final boolean stale;
@@ -149,24 +149,24 @@ public final class BridgeServer
 	private ScheduledExecutorService pinger;
 	private volatile boolean inGame;
 	private volatile String activeStepId;
-	/** Уровни навыков: {"magic": 25, …}; null — не в игре или передача выключена. */
+	/** Skill levels: {"magic": 25, ...}; null means not in the game or sending is off. */
 	private volatile Map<String, Integer> stats;
-	/** Опыт по навыкам: {"magic": 1234, …}; null — не в игре или передача выключена. С протокола 5. */
+	/** XP per skill: {"magic": 1234, ...}; null means not in the game or sending is off. Since protocol 5. */
 	private volatile Map<String, Integer> xp;
-	/** Названия завершённых квестов; null — не в игре или передача выключена. С протокола 5. */
+	/** Names of completed quests; null means not in the game or sending is off. Since protocol 5. */
 	private volatile List<String> questsDone;
-	/** Имя персонажа — программа переключает профиль по нему; null — не в игре. С протокола 5. */
+	/** The character name: the app switches profile by it; null means not in the game. Since protocol 5. */
 	private volatile String player;
-	/** Где стоит персонаж: {"x":…,"y":…,"plane":…}; только в /status (не рассылается — меняется с каждым шагом). С протокола 5. */
+	/** Where the character stands: {"x":...,"y":...,"plane":...}; only in /status (not broadcast, it changes with every step). Since protocol 5. */
 	private volatile Map<String, Integer> pos;
 	private volatile boolean shortestPath;
-	/** Текущая временная цель (как NAV_SET) или null — для /status. */
+	/** The current temporary target (like NAV_SET) or null, for /status. */
 	private volatile JsonObject navTarget;
-	/** Последнее событие OWNED — повторяется новым подключениям. */
+	/** The last OWNED event, repeated to new connections. */
 	private volatile Map<String, Object> lastOwned;
-	/** Снаряжение, сумка и монеты: {"equipment":[…],"inventory":[…],"coins":…,"bankCoins":…}; null — неизвестно. */
+	/** Gear, bag and coins: {"equipment":[...],"inventory":[...],"coins":...,"bankCoins":...}; null means unknown. */
 	private volatile Map<String, Object> gear;
-	/** Последнее событие PACING — повторяется новым подключениям. */
+	/** The last PACING event, repeated to new connections. */
 	private volatile Map<String, Object> lastPacing;
 
 	public BridgeServer(int port, Gson gson, Listener listener)
@@ -185,7 +185,7 @@ public final class BridgeServer
 		server.start();
 		pinger = Executors.newSingleThreadScheduledExecutor(daemon("osrs-path-bridge-ping"));
 		pinger.scheduleAtFixedRate(() -> sendAll(": ping\n\n"), PING_SECONDS, PING_SECONDS, TimeUnit.SECONDS);
-		log.info("OSRS Path Bridge слушает http://127.0.0.1:{}", getPort());
+		log.info("OSRS Path Bridge listening on http://127.0.0.1:{}", getPort());
 	}
 
 	public void stop()
@@ -212,7 +212,7 @@ public final class BridgeServer
 		}
 	}
 
-	/** Фактический порт — в тестах сервер берёт свободный (порт 0). */
+	/** The actual port: in tests the server takes a free one (port 0). */
 	public int getPort()
 	{
 		return server == null ? requestedPort : server.getAddress().getPort();
@@ -233,7 +233,7 @@ public final class BridgeServer
 		activeStepId = stepId;
 	}
 
-	/** Новые уровни навыков. Одинаковые не рассылаются. */
+	/** New skill levels. Identical ones are not broadcast. */
 	public void setStats(Map<String, Integer> value)
 	{
 		Map<String, Integer> copy = value == null ? null : new LinkedHashMap<>(value);
@@ -245,7 +245,7 @@ public final class BridgeServer
 		broadcast(statsEvent());
 	}
 
-	/** Опыт по навыкам (с протокола 5). Одинаковый не рассылается. */
+	/** XP per skill (since protocol 5). An identical one is not broadcast. */
 	public void setXp(Map<String, Integer> value)
 	{
 		Map<String, Integer> copy = value == null ? null : new LinkedHashMap<>(value);
@@ -257,7 +257,7 @@ public final class BridgeServer
 		broadcast(xpEvent());
 	}
 
-	/** Завершённые квесты (с протокола 5). Тот же список не рассылается. */
+	/** Completed quests (since protocol 5). The same list is not broadcast. */
 	public void setQuests(List<String> value)
 	{
 		List<String> copy = value == null ? null : new ArrayList<>(value);
@@ -269,7 +269,7 @@ public final class BridgeServer
 		broadcast(questsEvent());
 	}
 
-	/** Где стоит персонаж (с протокола 5): отвечает /status, событий нет. */
+	/** Where the character stands (since protocol 5): /status answers, no events. */
 	public void setPos(Integer x, Integer y, Integer plane)
 	{
 		if (x == null || y == null || plane == null)
@@ -284,7 +284,7 @@ public final class BridgeServer
 		pos = p;
 	}
 
-	/** Имя персонажа (с протокола 5); приходит в событии STATUS. */
+	/** The character name (since protocol 5); comes in the STATUS event. */
 	public void setPlayer(String value)
 	{
 		if (Objects.equals(player, value))
@@ -301,15 +301,15 @@ public final class BridgeServer
 	}
 
 	/**
-	 * Сколько есть нужных предметов: carried — в сумке и надето, noted — банкнотами в сумке,
-	 * bank — в банке (null, пока банк в этой сессии не открывали). Одинаковое не рассылается.
+	 * How many of the needed items there are: carried is in the bag and worn, noted is as notes in the bag,
+	 * bank is in the bank (null until the bank was opened in this session). The same is not broadcast.
 	 */
 	public void owned(boolean bankSeen, List<Map<String, Object>> items)
 	{
 		owned(bankSeen, null, items);
 	}
 
-	/** bankSavedAt — банк взят из сохранённого прошлого сеанса (время записи), а не прочитан из игры сейчас; null — прочитан сейчас. */
+	/** bankSavedAt: the bank was taken from the saved previous session (the write time), not read from the game now; null means read now. */
 	public void owned(boolean bankSeen, Long bankSavedAt, List<Map<String, Object>> items)
 	{
 		Map<String, Object> e = new LinkedHashMap<>();
@@ -328,7 +328,7 @@ public final class BridgeServer
 		broadcast(e);
 	}
 
-	/** Снаряжение и монеты для подсказки апгрейда. null — неизвестно (не в игре или функция выключена). */
+	/** Gear and coins for the upgrade hint. null means unknown (not in the game or the feature is off). */
 	public void setGear(Map<String, Object> value)
 	{
 		Map<String, Object> copy = value == null ? null : new LinkedHashMap<>(value);
@@ -340,7 +340,7 @@ public final class BridgeServer
 		broadcast(gearEvent());
 	}
 
-	/** Темп прокачки шага; value null — у шага темпа нет или он выключен. */
+	/** The step's pacing; value null means the step has none or it is off. */
 	public void pacing(String stepId, Map<String, Object> value)
 	{
 		Map<String, Object> e = new LinkedHashMap<>();
@@ -356,8 +356,8 @@ public final class BridgeServer
 	}
 
 	/**
-	 * Временная цель поставлена — программой (/nav-target) или игроком в игре (список «Что нужно», боковая панель).
-	 * Программа показывает ту же цель («● Стрелка ведёт сюда», метка на карте), даже если её выбрали в игре.
+	 * A temporary target was set, by the app (/nav-target) or by the player in the game (the "What you need" list, the side panel).
+	 * The app shows the same target ("● the arrow points here", the map marker), even if it was chosen in the game.
 	 */
 	public void navSet(NavTarget t)
 	{
@@ -370,8 +370,8 @@ public final class BridgeServer
 	}
 
 	/**
-	 * Цель в том же виде, в каком программа шлёт её на /nav-target (те же поля NavTarget), — программа сравнивает её со
-	 * своими кнопками. Служебный clear не нужен.
+	 * The target in the same form in which the app sends it to /nav-target (the same NavTarget fields): the app compares it with
+	 * its own buttons. The service clear is not needed.
 	 */
 	private JsonObject navJson(NavTarget t)
 	{
@@ -380,7 +380,7 @@ public final class BridgeServer
 		return o;
 	}
 
-	/** Временная цель снята: arrived — дошёл, obtained — предмет получен, cleared — снята настройкой или /clear. */
+	/** The temporary target was cleared: arrived means reached, obtained means the item was received, cleared means cleared by a setting or /clear. */
 	public void navDone(String reason, NavTarget t)
 	{
 		navTarget = null;
@@ -395,8 +395,8 @@ public final class BridgeServer
 	}
 
 	/**
-	 * Персонаж резко переместился (с плагина 2.20): kind — TELEPORT (скачок на 20+ клеток за тик: телепорт, возрождение)
-	 * или DEATH (персонаж умер; fromX/fromY — где). Программа по этим событиям включает режим восстановления.
+	 * The character moved abruptly (since plugin 2.20): kind is TELEPORT (a jump of 20+ tiles per tick: a teleport, a respawn)
+	 * or DEATH (the character died; fromX/fromY is where). The app turns on recovery mode from these events.
 	 */
 	public void moved(String kind, int[] from, int[] to)
 	{
@@ -501,7 +501,7 @@ public final class BridgeServer
 				json(ex, 403, error("host"));
 				return;
 			}
-			// Origin присылает только браузер. Программа для ПК ходит из главного процесса — без него.
+			// Origin is sent only by a browser. The desktop app calls from the main process, without it.
 			if (req.getFirst("Origin") != null)
 			{
 				json(ex, 403, error("origin"));
@@ -526,7 +526,7 @@ public final class BridgeServer
 					status.put("player", player);
 					status.put("pos", pos);
 					status.put("shortestPath", shortestPath);
-					// Куда сейчас ведёт временная цель — программа после перезапуска показывает ту же, что в игре.
+					// Where the temporary target leads now: after a restart the app shows the same one as in the game.
 					status.put("navTarget", navTarget);
 					Map<String, Object> g = gear;
 					status.put("equipment", g == null ? null : g.get("equipment"));
@@ -535,7 +535,7 @@ public final class BridgeServer
 					status.put("bankCoins", g == null ? null : g.get("bankCoins"));
 					status.put("carriedValue", g == null ? null : g.get("carriedValue"));
 					status.put("bankValue", g == null ? null : g.get("bankValue"));
-					// Рукопожатие версий: приложение сверяет протокол и просит обновить плагин, если он старше.
+					// Version handshake: the app checks the protocol and asks to update the plugin if it is older.
 					status.put("protocol", PROTOCOL);
 					status.put("pluginVersion", PLUGIN_VERSION);
 					json(ex, 200, status);
@@ -742,7 +742,7 @@ public final class BridgeServer
 		}
 		catch (IOException | RuntimeException e)
 		{
-			log.debug("Запрос к мосту не обработан", e);
+			log.debug("Bridge request not handled", e);
 		}
 		finally
 		{
@@ -754,7 +754,7 @@ public final class BridgeServer
 	}
 
 	/**
-	 * POST с JSON-телом нужного вида. null — ответ об ошибке уже отправлен (метод, заголовок, размер, разбор).
+	 * A POST with a JSON body of the needed kind. null means an error response has already been sent (method, header, size, parsing).
 	 */
 	private <T> T readJson(HttpExchange ex, String method, Class<T> type) throws IOException
 	{
@@ -807,7 +807,7 @@ public final class BridgeServer
 		h.set("Cache-Control", "no-cache");
 		ex.sendResponseHeaders(200, 0);
 		Stream s = new Stream(ex);
-		// Лишние соединения (забытые вкладки) закрываем, начиная со старых.
+		// Extra connections (forgotten tabs) are closed, starting from the old ones.
 		while (streams.size() >= MAX_STREAMS)
 		{
 			Stream old = streams.remove(0);
@@ -869,13 +869,13 @@ public final class BridgeServer
 		}
 	}
 
-	/** Тело запроса целиком, но не больше MAX_BODY; null — если больше. */
+	/** The whole request body, but no more than MAX_BODY; null if it is larger. */
 	static String readBody(InputStream in) throws IOException
 	{
 		return readBody(in, MAX_BODY);
 	}
 
-	/** Тело запроса целиком, но не больше limit; null — если больше. */
+	/** The whole request body, but no more than limit; null if it is larger. */
 	static String readBody(InputStream in, int limit) throws IOException
 	{
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -917,7 +917,7 @@ public final class BridgeServer
 		};
 	}
 
-	/** Открытый поток событий одного клиента. */
+	/** An open event stream of one client. */
 	private static final class Stream
 	{
 		private final HttpExchange exchange;
@@ -952,7 +952,7 @@ public final class BridgeServer
 			}
 			catch (IOException ignored)
 			{
-				// Клиент уже ушёл.
+				// The client has already left.
 			}
 			exchange.close();
 		}

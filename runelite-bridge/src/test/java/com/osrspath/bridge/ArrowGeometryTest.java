@@ -15,19 +15,19 @@ import net.runelite.client.ui.FontManager;
 import org.junit.Test;
 
 /**
- * Большая стрелка: направление как у миникарты при любом повороте камеры, плавность без дрожи,
- * состояния по расстоянию и рисунок внутри своей рамки настоящими шрифтами RuneLite.
+ * The big arrow: the direction as on the minimap at any camera rotation, smoothness without jitter,
+ * states by distance and the drawing inside its own frame with the real RuneLite fonts.
  */
 public class ArrowGeometryTest
 {
 	private static final double EPS = 1e-9;
 	private static final double UP = -Math.PI / 2;
 	private static final double DOWN = Math.PI / 2;
-	/** Четверть оборота камеры в единицах клиента (16384 на оборот). */
+	/** A quarter turn of the camera in client units (16384 per turn). */
 	private static final int QUARTER = 4096;
 
 	@Test
-	public void камераНаСеверЦельСевернееСтрелкаВверх()
+	public void cameraFacingNorth_targetToTheNorth_arrowUp()
 	{
 		assertEquals(UP, ArrowGeometry.screenAngle(0, 10, 0), EPS);
 		assertEquals(0, ArrowGeometry.screenAngle(10, 0, 0), EPS);
@@ -36,22 +36,22 @@ public class ArrowGeometryTest
 	}
 
 	@Test
-	public void стрелкаПоворачиваетсяВместеСКамерой()
+	public void arrowTurnsWithTheCamera()
 	{
-		// Поворот камеры на четверть оборота (как у миникарты): север уходит вправо, а цель на западе
-		// оказывается прямо по ходу — вверху.
+		// A quarter turn of the camera (as on the minimap): north goes to the right, and a target in the west
+		// ends up straight ahead - at the top.
 		assertEquals(0, ArrowGeometry.screenAngle(0, 10, QUARTER), EPS);
 		assertEquals(UP, ArrowGeometry.screenAngle(-10, 0, QUARTER), EPS);
-		// Пол-оборота: север сзади.
+		// Half a turn: north is behind.
 		assertEquals(DOWN, ArrowGeometry.screenAngle(0, 10, 2 * QUARTER), EPS);
-		// Старшие биты угла отбрасываются, как в Perspective.localToMinimap.
+		// The high bits of the angle are dropped, as in Perspective.localToMinimap.
 		assertEquals(ArrowGeometry.screenAngle(3, 7, 123), ArrowGeometry.screenAngle(3, 7, 123 + 16384), EPS);
 	}
 
 	@Test
-	public void совпадаетСМиникартойRuneLite()
+	public void matchesTheRuneLiteMinimap()
 	{
-		// Та же формула, что в Perspective.localToMinimap (1.12.39), с таблицами клиента.
+		// The same formula as in Perspective.localToMinimap (1.12.39), with the client's tables.
 		for (int yaw = 0; yaw < 16384; yaw += 777)
 		{
 			for (int[] d : new int[][]{{5, 0}, {0, 5}, {-7, 3}, {12, -9}})
@@ -68,32 +68,32 @@ public class ArrowGeometryTest
 	}
 
 	@Test
-	public void поворотПлавныйБезДрожи()
+	public void turnIsSmoothWithoutJitter()
 	{
 		assertEquals(1.0, ArrowGeometry.smooth(Double.NaN, 1.0), EPS);
-		// Мелочь в мёртвой зоне не двигает стрелку.
+		// A small change in the dead zone does not move the arrow.
 		assertEquals(1.0, ArrowGeometry.smooth(1.0, 1.0 + Math.toRadians(1)), EPS);
-		// Заметный поворот — плавно, часть пути за кадр.
+		// A noticeable turn is smooth, a part of the way per frame.
 		double next = ArrowGeometry.smooth(0, 0.5);
 		assertTrue(next > 0 && next < 0.5);
-		// По короткой дуге через ±π, а не через ноль.
+		// Along the short arc through ±π, not through zero.
 		double wrapAround = ArrowGeometry.smooth(Math.PI - 0.2, -Math.PI + 0.2);
 		assertTrue(Math.abs(wrapAround) > Math.PI - 0.2);
-		// Развернул камеру — сразу, без полусекундного разворота.
+		// The camera was turned sharply: at once, without a half-second swing.
 		assertEquals(DOWN, ArrowGeometry.smooth(UP + 0.1, DOWN), EPS);
 	}
 
 	@Test
-	public void подписьБезСторонСвета()
+	public void labelWithoutCompassDirections()
 	{
-		assertEquals("~62 клетки", OsrsPathArrowOverlay.label("~62 клетки ↑"));
-		assertEquals("~139 клеток, этажом выше", OsrsPathArrowOverlay.label("~139 клеток ↘, этажом выше"));
-		assertEquals("✓ Рядом", OsrsPathArrowOverlay.label("✓ Рядом"));
+		assertEquals("~62 tiles", OsrsPathArrowOverlay.label("~62 tiles ↑"));
+		assertEquals("~139 tiles, a floor up", OsrsPathArrowOverlay.label("~139 tiles ↘, a floor up"));
+		assertEquals("✓ Nearby", OsrsPathArrowOverlay.label("✓ Nearby"));
 		assertEquals(null, OsrsPathArrowOverlay.label(null));
 	}
 
 	@Test
-	public void состоянияПоРасстоянию()
+	public void statesByDistance()
 	{
 		assertEquals(ArrowGeometry.State.DEFAULT, ArrowGeometry.state(80, true, false));
 		assertEquals(ArrowGeometry.State.APPROACHING, ArrowGeometry.state(ArrowGeometry.APPROACH, true, false));
@@ -102,7 +102,7 @@ public class ArrowGeometryTest
 	}
 
 	@Test
-	public void стрелкаВнутриКругаПриЛюбомУгле()
+	public void arrowInsideTheCircleAtAnyAngle()
 	{
 		for (double a = -Math.PI; a <= Math.PI; a += 0.1)
 		{
@@ -112,7 +112,7 @@ public class ArrowGeometryTest
 				assertTrue(Math.hypot(p.xpoints[i] - 50, p.ypoints[i] - 50) <= 40 + 1);
 			}
 		}
-		// Нос — в сторону угла: при «вверх» самая верхняя точка — нос.
+		// The nose points in the direction of the angle: for "up" the topmost point is the nose.
 		Polygon up = ArrowGeometry.arrow(50, 50, 40, UP);
 		int top = Integer.MAX_VALUE;
 		for (int i = 0; i < up.npoints; i++)
@@ -123,11 +123,11 @@ public class ArrowGeometryTest
 	}
 
 	@Test
-	public void рисунокНеВылезаетЗаРамку() throws IOException
+	public void drawingDoesNotStickOutOfTheFrame() throws IOException
 	{
 		File out = new File("build/overlay-render");
 		out.mkdirs();
-		String[] texts = {null, "~62 клетки", "~139 клеток, этажом выше", "Цель под землёй — найди спуск"};
+		String[] texts = {null, "~62 tiles", "~139 tiles, a floor up", "Target is underground - find the way down"};
 		for (Font font : new Font[]{FontManager.getRunescapeFont(), FontManager.getRunescapeBoldFont(), FontManager.getRunescapeSmallFont()})
 		{
 			for (OsrsPathBridgeConfig.ArrowSize size : OsrsPathBridgeConfig.ArrowSize.values())
@@ -149,7 +149,7 @@ public class ArrowGeometryTest
 								{
 									if ((img.getRGB(x, y) >>> 24) != 0 && (x >= d.width || y >= d.height))
 									{
-										throw new AssertionError("за рамкой: " + state + " " + size + " «" + text + "» " + x + "," + y + " рамка " + d);
+										throw new AssertionError("outside the frame: " + state + " " + size + " '" + text + "' " + x + "," + y + " frame " + d);
 									}
 								}
 							}

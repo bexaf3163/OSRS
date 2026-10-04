@@ -10,21 +10,21 @@ import org.junit.Test;
 
 public class PacingTrackerTest
 {
-	/** Креветки до 20 рыбалки: 4 470 опыта, 10 за улов. */
+	/** Shrimp to Fishing 20: 4,470 XP, 10 per catch. */
 	private static ActiveTarget.Pacing shrimp(Double seconds)
 	{
 		ActiveTarget.Pacing p = new ActiveTarget.Pacing();
 		p.setSkill("fishing");
 		p.setTargetLevel(20);
 		p.setTargetExp(4470);
-		p.setActionName("креветка|креветки|креветок");
+		p.setActionName("shrimp|shrimps");
 		p.setExpPerAction(10);
 		p.setSecondsPerAction(seconds);
 		return p;
 	}
 
 	@Test
-	public void остатокОпытаИДействий()
+	public void remainingXpAndActions()
 	{
 		PacingTracker t = new PacingTracker(shrimp(null));
 		assertTrue(t.update(4130, 0));
@@ -32,27 +32,27 @@ public class PacingTrackerTest
 		assertEquals(340, s.getRemainingXp());
 		assertEquals(34, s.getActionsLeft());
 		assertFalse(s.isDone());
-		assertEquals("34 креветки до 20 Fishing (время рассчитывается…)", t.hudLine(s));
+		assertEquals("34 shrimps to 20 Fishing (calculating the time...)", t.hudLine(s));
 	}
 
 	@Test
-	public void безИсторииВремяНеВыдумывается()
+	public void withoutHistoryTheTimeIsNotInvented()
 	{
 		PacingTracker t = new PacingTracker(shrimp(null));
 		t.update(1000, 0);
 		t.update(1010, 5_000);
 		t.update(1020, 10_000);
-		// Две прибавки — ещё мало.
+		// Two gains are still too few.
 		assertNull(t.snapshot().getEtaSeconds());
 		assertNull(t.snapshot().getActionsPerMinute());
 	}
 
 	@Test
-	public void темпПоПоследнимПрибавкам()
+	public void paceFromTheLastGains()
 	{
 		PacingTracker t = new PacingTracker(shrimp(null));
 		t.update(4000, 0);
-		// Улов каждые 6 секунд: 10 уловов в минуту.
+		// A catch every 6 seconds: 10 catches a minute.
 		for (int i = 1; i <= 5; i++)
 		{
 			t.update(4000 + i * 10, i * 6_000L);
@@ -60,14 +60,14 @@ public class PacingTrackerTest
 		PacingTracker.Snapshot s = t.snapshot();
 		assertEquals(10.0, s.getActionsPerMinute(), 0.01);
 		assertEquals(42, s.getActionsLeft());
-		// 42 действия по 6 секунд.
+		// 42 actions of 6 seconds.
 		assertEquals(252L, (long) s.getEtaSeconds());
 		assertFalse(s.isEstimated());
-		assertEquals("42 креветки до 20 Fishing (~4 мин)", t.hudLine(s));
+		assertEquals("42 shrimps to 20 Fishing (~4 min)", t.hudLine(s));
 	}
 
 	@Test
-	public void перваяОценкаИзДанныхШагаПотомЗамер()
+	public void firstEstimateFromTheStepDataThenAMeasurement()
 	{
 		PacingTracker t = new PacingTracker(shrimp(4.0));
 		t.update(4000, 0);
@@ -84,7 +84,7 @@ public class PacingTrackerTest
 	}
 
 	@Test
-	public void паузаНачинаетЗамерЗаново()
+	public void aPauseStartsMeasuringAgain()
 	{
 		PacingTracker t = new PacingTracker(shrimp(null));
 		t.update(4000, 0);
@@ -92,17 +92,17 @@ public class PacingTrackerTest
 		t.update(4020, 12_000);
 		t.update(4030, 18_000);
 		assertEquals(10.0, t.snapshot().getActionsPerMinute(), 0.01);
-		// Сходил в банк на 5 минут — старый темп не смешивается с новым.
+		// Went to the bank for 5 minutes: the old pace is not mixed with the new one.
 		t.update(4040, 18_000 + 5 * 60_000);
 		assertNull(t.snapshot().getActionsPerMinute());
 	}
 
 	@Test
-	public void историяОграниченаПятьюПрибавками()
+	public void historyIsLimitedToFiveGains()
 	{
 		PacingTracker t = new PacingTracker(shrimp(null));
 		t.update(0, 0);
-		// Сначала медленно, потом быстро: темп — по последним пяти.
+		// First slowly, then fast: the pace comes from the last five.
 		for (int i = 1; i <= 5; i++)
 		{
 			t.update(i * 10, i * 30_000L);
@@ -115,10 +115,10 @@ public class PacingTrackerTest
 	}
 
 	@Test
-	public void нольПриВходеНеСтановитсяПрибавкой()
+	public void zeroOnLoginIsNotAGain()
 	{
 		PacingTracker t = new PacingTracker(shrimp(null));
-		// Сразу после входа опыт ещё 0, потом приходит настоящий — это точка отсчёта, а не прибавка в 4 000.
+		// Right after login the XP is still 0, then the real value arrives: that is a reference point, not a gain of 4,000.
 		t.update(0, 0);
 		assertFalse(t.hasXp());
 		t.update(4000, 600);
@@ -131,59 +131,59 @@ public class PacingTrackerTest
 	}
 
 	@Test
-	public void почтиГотовоИЦельДостигнута()
+	public void almostDoneAndTargetReached()
 	{
 		PacingTracker t = new PacingTracker(shrimp(null));
 		t.update(4440, 0);
 		PacingTracker.Snapshot almost = t.snapshot();
 		assertTrue(almost.isAlmost());
-		assertEquals("✓ Почти готово: 3 креветки до 20 Fishing", t.hudLine(almost));
+		assertEquals("✓ Almost done: 3 shrimps to 20 Fishing", t.hudLine(almost));
 		t.update(4475, 1_000);
 		PacingTracker.Snapshot done = t.snapshot();
 		assertTrue(done.isDone());
 		assertFalse(done.isAlmost());
 		assertEquals(0, done.getActionsLeft());
 		assertNull(done.getEtaSeconds());
-		assertEquals("✓ Целевой уровень достигнут: 20 Fishing", t.hudLine(done));
+		assertEquals("✓ Target level reached: 20 Fishing", t.hudLine(done));
 	}
 
 	@Test
-	public void опытНеУменьшаетсяИНеСчитаетсяДважды()
+	public void xpNeverDecreasesAndIsNotCountedTwice()
 	{
 		PacingTracker t = new PacingTracker(shrimp(null));
 		assertTrue(t.update(4000, 0));
-		assertFalse("то же значение — не изменение", t.update(4000, 1_000));
+		assertFalse("the same value is not a change", t.update(4000, 1_000));
 		assertFalse(t.update(-1, 2_000));
 	}
 
 	@Test
-	public void формыСловаДляЧисла()
+	public void wordFormForANumber()
 	{
-		String f = "бревно|бревна|брёвен";
-		assertEquals("бревно", PacingTracker.actionForm(f, 1));
-		assertEquals("бревна", PacingTracker.actionForm(f, 3));
-		assertEquals("брёвен", PacingTracker.actionForm(f, 5));
-		assertEquals("брёвен", PacingTracker.actionForm(f, 11));
-		assertEquals("брёвен", PacingTracker.actionForm(f, 12));
-		assertEquals("бревно", PacingTracker.actionForm(f, 21));
-		assertEquals("бревна", PacingTracker.actionForm(f, 34));
-		assertEquals("улов", PacingTracker.actionForm("улов", 7));
+		String f = "log|logs";
+		assertEquals("log", PacingTracker.actionForm(f, 1));
+		assertEquals("logs", PacingTracker.actionForm(f, 3));
+		assertEquals("logs", PacingTracker.actionForm(f, 5));
+		assertEquals("logs", PacingTracker.actionForm(f, 11));
+		assertEquals("logs", PacingTracker.actionForm(f, 12));
+		assertEquals("logs", PacingTracker.actionForm(f, 21));
+		assertEquals("logs", PacingTracker.actionForm(f, 34));
+		assertEquals("catch", PacingTracker.actionForm("catch", 7));
 	}
 
 	@Test
-	public void темпВЦелиШагаПроверяется()
+	public void paceInTheStepTargetIsValidated()
 	{
 		Gson gson = new Gson();
 		ActiveTarget ok = gson.fromJson("{\"stepId\":\"S1-11\",\"pacing\":{\"skill\":\"fishing\",\"targetLevel\":20,"
-			+ "\"targetExp\":4470,\"actionName\":\"креветка\",\"expPerAction\":10}}", ActiveTarget.class);
+			+ "\"targetExp\":4470,\"actionName\":\"shrimp\",\"expPerAction\":10}}", ActiveTarget.class);
 		assertNull(ok.prepare());
 		ActiveTarget badSkill = gson.fromJson("{\"stepId\":\"S1-11\",\"pacing\":{\"skill\":\"magic\",\"targetLevel\":20,"
 			+ "\"targetExp\":4470,\"actionName\":\"x\",\"expPerAction\":10}}", ActiveTarget.class);
-		assertEquals("неизвестный навык темпа", badSkill.prepare());
+		assertEquals("unknown pacing skill", badSkill.prepare());
 		ActiveTarget zero = gson.fromJson("{\"stepId\":\"S1-11\",\"pacing\":{\"skill\":\"fishing\",\"targetLevel\":20,"
 			+ "\"targetExp\":4470,\"actionName\":\"x\",\"expPerAction\":0}}", ActiveTarget.class);
-		assertEquals("неверное действие темпа", zero.prepare());
+		assertEquals("invalid pacing action", zero.prepare());
 		ActiveTarget old = gson.fromJson("{\"stepId\":\"S1-11\"}", ActiveTarget.class);
-		assertNull("старый клиент без темпа", old.prepare());
+		assertNull("old client without a pace", old.prepare());
 	}
 }

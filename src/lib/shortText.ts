@@ -13,7 +13,7 @@ export const SHORT_MAX = 64;
 const MIN_CUT = 24;
 
 export function shortLine(text: string, max = SHORT_MAX): string {
-  let t = text.replace(/\s*Диалог:[\s\S]*$/, '').trim();
+  let t = text.replace(/\s*Dialogue:[\s\S]*$/, '').trim();
   const first = t.split(/(?<=[.!?])\s+/)[0];
   if (first && first.length >= 12) t = first;
   t = t.replace(/[.\s]+$/, '');

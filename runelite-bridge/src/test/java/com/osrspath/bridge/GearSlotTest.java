@@ -5,11 +5,11 @@ import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
 
-/** Слоты надетого уходят в событие GEAR: по ним приложение понимает, чем персонаж дерётся. */
+/** The worn slots go into the GEAR event: the app uses them to tell what the character fights with. */
 public class GearSlotTest
 {
 	@Test
-	public void номераЯчеекСтановятсяИменамиСлотов()
+	public void cellNumbersBecomeSlotNames()
 	{
 		assertEquals("head", OsrsPathBridgePlugin.slotName(0));
 		assertEquals("amulet", OsrsPathBridgePlugin.slotName(2));
@@ -18,8 +18,8 @@ public class GearSlotTest
 		assertEquals("shield", OsrsPathBridgePlugin.slotName(5));
 		assertEquals("legs", OsrsPathBridgePlugin.slotName(7));
 		assertEquals("ring", OsrsPathBridgePlugin.slotName(12));
-		// Номер вне перечня — без имени, а не чужой слот. (6, 8, 11 в RuneLite — ARMS, HAIR, JAW: части модели,
-		// предметов в этих ячейках не бывает, до события GEAR они не доходят.)
+		// A number outside the list has no name, rather than someone else's slot. (6, 8, 11 in RuneLite are ARMS, HAIR, JAW: parts of the model,
+		// there are no items in those cells, they do not reach the GEAR event.)
 		assertNull(OsrsPathBridgePlugin.slotName(-1));
 		assertNull(OsrsPathBridgePlugin.slotName(99));
 	}

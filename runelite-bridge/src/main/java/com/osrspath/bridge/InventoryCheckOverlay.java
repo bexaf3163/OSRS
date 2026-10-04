@@ -19,9 +19,9 @@ import net.runelite.client.ui.overlay.components.LayoutableRenderableEntity;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
 /**
- * Проверка вылета при открытом банке: «✓ Rope 1/1», «✗ Cooked chicken 2/5 · +3 HP», «нет в банке».
- * Подсчёт — в плагине по событиям ItemContainerChanged; здесь только показ. Нужное подсвечивает в банке
- * OsrsPathItemOverlay. Предметы не перекладываются — это делает игрок.
+ * The departure check with the bank open: "✓ Rope 1/1", "✗ Cooked chicken 2/5 · +3 HP", "not in bank".
+ * The counting is in the plugin, from ItemContainerChanged events; here it is only shown. What is needed is highlighted in the bank by
+ * OsrsPathItemOverlay. Items are not moved: the player does that.
  */
 class InventoryCheckOverlay extends OverlayPanel
 {
@@ -42,7 +42,7 @@ class InventoryCheckOverlay extends OverlayPanel
 		this.client = client;
 		this.plugin = plugin;
 		this.config = config;
-		// Над окнами игры, иначе окно банка закроет панель. Внизу справа — над сумкой, кнопки банка свободны.
+		// Above the game windows, otherwise the bank window would cover the panel. Bottom right, above the bag: the bank buttons are free.
 		setPosition(OverlayPosition.BOTTOM_RIGHT);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 		setPriority(PRIORITY_HIGH);
@@ -81,7 +81,7 @@ class InventoryCheckOverlay extends OverlayPanel
 		return d;
 	}
 
-	/** Доля собранного: готовых строк из всех. */
+	/** The share collected: ready lines out of all. */
 	static double progress(Checklist.Result r)
 	{
 		int total = r.getRows().size();
@@ -93,7 +93,7 @@ class InventoryCheckOverlay extends OverlayPanel
 		return (double) ready / total;
 	}
 
-	/** Готов — зелёный; чего-то нет и в банке — янтарный; иначе красный: нужно взять из банка. */
+	/** Ready is green; something is missing even in the bank, amber; otherwise red: take it from the bank. */
 	static Color accent(Checklist.Result r)
 	{
 		if (r.isReady())
@@ -108,7 +108,7 @@ class InventoryCheckOverlay extends OverlayPanel
 		return Math.round((OsrsPathHudOverlay.WIDTH + 20) * (large ? OsrsPathHudOverlay.LARGE : 1f));
 	}
 
-	/** Содержимое панели. Статическое — тест отрисовывает его настоящими шрифтами без клиента. */
+	/** The panel contents. Static: a test draws it with the real fonts without a client. */
 	static void build(PanelComponent panel, Checklist.Result r, String stepId, FontMetrics fm, int width, int opacity)
 	{
 		int inner = OverlayText.inner(width);
@@ -116,14 +116,14 @@ class InventoryCheckOverlay extends OverlayPanel
 		c.clear();
 		panel.setPreferredSize(new Dimension(width, 0));
 		OverlayText.frame(panel, fm);
-		OverlayText.title(c, "Проверка вылета · " + stepId, OsrsPathHudOverlay.TITLE, fm, inner);
+		OverlayText.title(c, "Departure check · " + stepId, OsrsPathHudOverlay.TITLE, fm, inner);
 		c.add(new OverlayCard.Bar(progress(r), accent(r)));
 		int shown = 0;
 		for (Checklist.Row row : r.getRows())
 		{
 			if (shown++ == MAX_ROWS)
 			{
-				OverlayText.line(c, "…и ещё " + (r.getRows().size() - MAX_ROWS), MUTED, fm, inner);
+				OverlayText.line(c, "... " + (r.getRows().size() - MAX_ROWS) + " more", MUTED, fm, inner);
 				break;
 			}
 			line(c, row, fm, inner);
@@ -132,17 +132,17 @@ class InventoryCheckOverlay extends OverlayPanel
 		Color color;
 		if (r.isReady())
 		{
-			footer = "Готов к выходу (Ready to depart)";
+			footer = "Ready to depart";
 			color = OsrsPathHudOverlay.GOOD;
 		}
 		else if (r.getRows().stream().anyMatch(x -> x.getState() == Checklist.State.NOT_FOUND_IN_BANK))
 		{
-			footer = "Не хватает и в банке — см. «где взять» в приложении";
+			footer = "Missing in the bank too - see 'where to get it' in the app";
 			color = OsrsPathHudOverlay.WARN;
 		}
 		else
 		{
-			footer = "Возьми из банка подсвеченное";
+			footer = "Take the highlighted items from the bank";
 			color = OsrsPathHudOverlay.WARN;
 		}
 		OverlayText.line(c, footer, color, fm, inner);
@@ -162,14 +162,14 @@ class InventoryCheckOverlay extends OverlayPanel
 			case NOT_FOUND_IN_BANK:
 				mark = "✗ ";
 				color = OsrsPathHudOverlay.WARN;
-				right += row.getInBank() > 0 ? " · в банке " + row.getInBank() : " · нет в банке";
+				right += row.getInBank() > 0 ? " · in bank " + row.getInBank() : " · not in bank";
 				break;
 			default:
 				mark = "✗ ";
 				color = MISSING;
 				if (row.getInBank() > 0)
 				{
-					right += " · в банке " + row.getInBank();
+					right += " · in bank " + row.getInBank();
 				}
 		}
 		String name = row.getName() + (row.getHeals() != null ? " · +" + row.getHeals() + " HP" : "");

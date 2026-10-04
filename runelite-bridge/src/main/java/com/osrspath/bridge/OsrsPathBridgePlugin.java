@@ -101,18 +101,18 @@ import net.runelite.client.ui.overlay.worldmap.WorldMapPointManager;
 @Slf4j
 @PluginDescriptor(
 	name = "OSRS Path Bridge",
-	description = "Мост локального гида с 3D-подсказками, подсветкой и авто-завершением",
+	description = "Bridge from the local guide with 3D hints, highlights and auto-completion",
 	tags = {"bridge", "navigation", "helper"}
 )
 public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listener
 {
-	/** Плагин Shortest Path (Plugin Hub): его открытый API — PluginMessage с пространством имён «shortestpath». */
+	/** The Shortest Path plugin (Plugin Hub): its public API is a PluginMessage in the "shortestpath" namespace. */
 	static final String SHORTEST_PATH_CLASS = "shortestpath.ShortestPathPlugin";
 	static final String SHORTEST_PATH_NS = "shortestpath";
-	/** Ближе стольких клеток к месту временной цели — дошёл. */
+	/** Closer than this many tiles to the temporary target's place means arrived. */
 	static final int NAV_ARRIVED = 3;
 
-	/** Квесты RuneLite по названию из игры: «Cook's Assistant» → Quest.COOKS_ASSISTANT. */
+	/** RuneLite quests by the in-game name: "Cook's Assistant" -> Quest.COOKS_ASSISTANT. */
 	private static final Map<String, Quest> QUESTS = Arrays.stream(Quest.values())
 		.collect(Collectors.toMap(q -> ActiveTarget.nameKey(q.getName()), q -> q, (a, b) -> a));
 
@@ -185,23 +185,23 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	@Inject
 	private ScheduledExecutorService executor;
 
-	/** Боковая панель «OSRS Путь»: что нужно на шаг, где взять, «Путь сюда». */
+	/** The "OSRS Path" side panel: what the step needs, where to get it, "Go here". */
 	private OsrsPathPanel panel;
 	private NavigationButton panelButton;
-	/** Клики по списку «Что нужно» на экране игры. */
+	/** Clicks on the "What you need" list on the game screen. */
 	private GuideMouse guideMouse;
 	/**
-	 * Что нужно на шаг и куда идти — для списка в игре и боковой панели. Считается в потоке клиента при смене
-	 * шага, цели, сумки и банка; Swing-панель перестраивается, только когда вид изменился.
+	 * What the step needs and where to go, for the in-game list and the side panel. Computed on the client thread when the step,
+	 * target, bag or bank changes; the Swing panel is rebuilt only when the view changed.
 	 */
 	@Getter
 	private volatile StepGuide.View guideView;
-	/** В списке открыта вкладка «Совет». Сбрасывается, когда советов нет. */
+	/** The "Tip" tab is open in the list. Reset when there are no tips. */
 	private boolean adviceTab;
 	private StepGuide.View panelView;
-	/** Сообщение в списке и панели после нажатия, например «навигация выключена»; снимается сменой шага. */
+	/** A message in the list and panel after a click, for example "navigation is off"; cleared by changing the step. */
 	private String guideMessage;
-	/** Метка на карте мира: куда ведёт стрелка. */
+	/** The world map marker: where the arrow points. */
 	private WorldMapPoint mapPoint;
 
 	@Inject
@@ -213,31 +213,31 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	@Inject
 	private EventBus eventBus;
 
-	/** Текущая цель. Меняется только в потоке клиента, читается оверлеями там же. */
+	/** The current target. Changed only on the client thread, read by the overlays there too. */
 	@Getter
 	private ActiveTarget target;
 
-	/** Подходящие NPC и объекты рядом — собираются по событиям появления, а не перебором каждый кадр. */
+	/** Matching NPCs and objects nearby, collected from spawn events rather than by scanning every frame. */
 	@Getter
 	private final List<NPC> npcs = new ArrayList<>();
 
 	@Getter
 	private final Map<TileObject, String> objects = new HashMap<>();
 
-	/** Микро-HUD: пересчитывается раз за тик и при смене цели или сумки. */
+	/** The micro HUD: recomputed once per tick and when the target or bag changes. */
 	@Getter
 	private OsrsPathHudOverlay.State hud;
 
 	/**
-	 * Остановки маршрута текущего шага (калитка → мост → лестница → NPC); null — у шага их нет. На земле
-	 * они не рисуются: к текущей остановке ведут стрелка, HUD («Точка 2/5») и Shortest Path.
+	 * The route stops of the current step (gate -> bridge -> ladder -> NPC); null means the step has none. They
+	 * are not drawn on the ground: the arrow, the HUD ("Point 2/5") and Shortest Path lead to the current stop.
 	 */
 	private Navigation.Breadcrumbs breadcrumbs;
 
 	@Getter
 	private Checklist.Result checklist = Checklist.NONE;
 
-	/** Оптовый список на бирже: что есть, что в ордере, что купить. */
+	/** The bulk list at the exchange: what you have, what is in the order, what to buy. */
 	@Getter
 	private List<ShoppingPlan.Row> shopping = Collections.emptyList();
 
@@ -247,17 +247,17 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private boolean near;
 	private WorldPoint lastPosition;
 
-	/** Сумка и надетое (без банкнот), банкноты отдельно, банк — null, пока его не открывали. */
+	/** Bag and worn items (without notes), notes separately, bank null until it has been opened. */
 	private ItemCounts carried = ItemCounts.EMPTY;
 	private ItemCounts noted = ItemCounts.EMPTY;
 	private ItemCounts bank;
-	/** Банк подгружен из прошлого сеанса (из настроек профиля), а не прочитан из игры; пока банк не откроют, он «последний известный». */
+	/** The bank was loaded from a previous session (from the profile settings), not read from the game; until the bank is opened it is "last known". */
 	private boolean bankFromSave;
 	private long bankSavedAt;
-	/** Банк изменился и ещё не записан в настройки. */
+	/** The bank changed and has not been written to the settings yet. */
 	private boolean bankDirty;
 	private long bankWrittenAt;
-	/** Тиков с входа в игру, пока ищем снимок банка: профиль RuneLite появляется не в тот же миг, что вход. */
+	/** Ticks since login while looking for a bank snapshot: the RuneLite profile does not appear at the same moment as login. */
 	private int bankLoadTicks;
 	static final long BANK_SAVE_GAP_MS = 3_000;
 	static final int BANK_LOAD_TICKS = 30;
@@ -266,17 +266,17 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private Set<String> wantedNames = Collections.emptySet();
 
 	private ShoppingPlan plan;
-	/** Слоты биржи: ID предмета и ордер на покупку в каждом. */
+	/** Exchange slots: the item ID and the buy order in each. */
 	private final int[] offerItems = new int[8];
 	private final ShoppingPlan.Offer[] offerSlots = new ShoppingPlan.Offer[8];
 
 	private final Map<String, Integer> stats = new LinkedHashMap<>();
 	private boolean statsDirty;
-	/** Опыт по навыкам (уходит в программу не чаще раза в три секунды — он меняется с каждым действием). */
+	/** XP per skill (sent to the app at most once per three seconds, since it changes with every action). */
 	private final Map<String, Integer> xp = new LinkedHashMap<>();
 	private boolean xpDirty;
 	private int xpTicks;
-	/** Завершённые квесты, как они были отправлены; проверка — раз в двадцать тиков. */
+	/** Completed quests as they were sent; checked once every twenty ticks. */
 	private List<String> questsSent;
 	private int questTicks;
 	private String playerSent;
@@ -286,36 +286,36 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private boolean gearDirty;
 	private boolean pacingDirty;
 
-	/** Временная цель поверх шага: место с карты приложения или магазин для апгрейда. */
+	/** A temporary target over the step: a place from the app's map or a shop for an upgrade. */
 	@Getter
 	private NavTarget navTarget;
 
-	/** Совет приложения по снаряжению (POST /gear-hint): строка HUD, что спросить у банка, что подсветить. */
+	/** The app's gear advice (POST /gear-hint): the HUD line, what to ask the bank for, what to highlight. */
 	private volatile GearHint gearHint;
 
-	/** Продавец или NPC временной цели рядом — собирается по событиям, как NPC шага. */
+	/** The seller or NPC of the temporary target nearby, collected from events like the step's NPCs. */
 	@Getter
 	private final List<NPC> navNpcs = new ArrayList<>();
 
-	/** Предметы этапа для мягкой подсветки в банке (POST /bank-tags). Пишется из потока сервера. */
+	/** The stage's items for soft highlighting in the bank (POST /bank-tags). Written from the server thread. */
 	private volatile Set<Integer> bankTagIds = Collections.emptySet();
 
 	private DangerRadar radar;
 
-	/** Ближайшая опасная зона и насколько игрок к ней подошёл. Меняется при смене клетки. */
+	/** The nearest danger zone and how close the player got to it. Changes when the tile changes. */
 	@Getter
 	private DangerRadar.Reading danger = DangerRadar.QUIET;
 
-	/** Опасные NPC рядом — ищутся, только пока игрок в зоне предупреждения. */
+	/** Dangerous NPCs nearby: searched only while the player is in the warning zone. */
 	@Getter
 	private final List<NPC> dangerNpcs = new ArrayList<>();
 
-	/** Темп прокачки текущего шага; null — у шага его нет или он выключен. */
+	/** The pacing of the current step; null means the step has none or it is off. */
 	private PacingSet pacing;
 
 	private Plugin shortestPath;
 	private boolean shortestPathLooked;
-	/** Цель, отданная Shortest Path, — чтобы не слать одно и то же и знать, что потом очистить. */
+	/** The target handed to Shortest Path, so as not to send the same thing twice and to know what to clear later. */
 	private WorldPoint pathSent;
 
 	@Provides
@@ -376,7 +376,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				clientThread.invokeLater(() -> applyNav(null));
 			}
 		});
-		panelButton = NavigationButton.builder().tooltip("OSRS Путь: что нужно и куда идти").icon(OsrsPathPanel.icon()).priority(6).panel(panel).build();
+		panelButton = NavigationButton.builder().tooltip("OSRS Path: what you need and where to go").icon(OsrsPathPanel.icon()).priority(6).panel(panel).build();
 		clientToolbar.addNavigation(panelButton);
 		panelView = null;
 		guideView = null;
@@ -389,7 +389,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			}
 			if (loggedIn)
 			{
-				// Плагин включили посреди игры: уровни и сумку берём сразу, не дожидаясь событий.
+				// The plugin was enabled in the middle of a game: take levels and the bag at once, without waiting for events.
 				for (Skill skill : Skill.values())
 				{
 					if (!isOverall(skill))
@@ -459,7 +459,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		catch (IOException e)
 		{
-			log.warn("OSRS Path Bridge: порт {} занят или недоступен — мост не запущен", config.port(), e);
+			log.warn("OSRS Path Bridge: port {} is busy or unavailable - the bridge did not start", config.port(), e);
 			server = null;
 		}
 	}
@@ -478,7 +478,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	{
 		if ("runelite".equals(e.getGroup()) && e.getKey().endsWith("plugin"))
 		{
-			// Включили или выключили какой-то плагин — может быть, Shortest Path.
+			// Some plugin was enabled or disabled, maybe Shortest Path.
 			clientThread.invokeLater(this::updateNavigation);
 			return;
 		}
@@ -499,7 +499,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			stopServer();
 			startServer();
-			// Новый мост ничего не знает — сообщаем ему текущую временную цель, иначе программа её сбросит.
+			// The new bridge knows nothing, so tell it the current temporary target, otherwise the app will reset it.
 			clientThread.invokeLater(() ->
 			{
 				if (server != null && navTarget != null)
@@ -518,7 +518,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			case "upgradeRouter":
 				clientThread.invokeLater(() ->
 				{
-					// Выключили — временная цель снимается сразу, а не «когда-нибудь».
+					// Turned off: the temporary target is cleared at once, not "sometime".
 					if (navTarget != null && (!config.autoNavigation() || (navTarget.isPurchase() && !config.upgradeRouter())))
 					{
 						finishNav("cleared");
@@ -580,7 +580,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		clientThread.invokeLater(this::updateNavigation);
 	}
 
-	// ---------- Запросы приложения (поток сервера → поток клиента) ----------
+	// ---------- App requests (server thread -> client thread) ----------
 
 	@Override
 	public void onActiveTarget(ActiveTarget t)
@@ -608,11 +608,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			if (!config.autoNavigation())
 			{
-				return "навигация к местам выключена в настройках плагина OSRS Path Bridge";
+				return "navigation to places is turned off in the OSRS Path Bridge plugin settings";
 			}
 			if (t.isPurchase() && !config.upgradeRouter())
 			{
-				return "подсказки апгрейда выключены в настройках плагина OSRS Path Bridge";
+				return "upgrade hints are turned off in the OSRS Path Bridge plugin settings";
 			}
 		}
 		clientThread.invokeLater(() -> applyNav(t.isClear() ? null : t));
@@ -624,24 +624,24 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	{
 		if (!h.isClear() && !config.upgradeRouter())
 		{
-			return "подсказки апгрейда выключены в настройках плагина OSRS Path Bridge";
+			return "upgrade hints are turned off in the OSRS Path Bridge plugin settings";
 		}
 		clientThread.invokeLater(() ->
 		{
 			gearHint = h.isClear() ? null : h;
-			// Новые предметы для счёта в банке — событие OWNED уйдёт с ними.
+			// New items to count in the bank: the OWNED event goes out with them.
 			ownedDirty = true;
 			updateHud();
 		});
 		return null;
 	}
 
-	// ---------- Журнал отладки, плашка разработчика, скриншоты ----------
+	// ---------- Debug log, developer badge, screenshots ----------
 
-	/** Журнал событий движка; null — выключен в настройках. */
+	/** The engine event log; null means it is turned off in the settings. */
 	private volatile Telemetry telemetry;
 	private final EngineWatchdog watchdog = new EngineWatchdog();
-	/** Что показывает плашка разработчика; пересобирается раз в тик, пока плашка открыта. */
+	/** What the developer badge shows; rebuilt once per tick while the badge is open. */
 	@Getter
 	private volatile DebugView.State debugState;
 	@Getter
@@ -669,14 +669,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	static final int SHOTS_PER_SESSION = 12;
 	static final long SHOT_GAP_MS = 20_000;
-	/** Снимки «на каждом шаге» (смена этапа и строки) считаются отдельно от странностей: их много, и они нужны по порядку. */
+	/** "Every step" snapshots (stage and line changes) are counted separately from anomalies: there are many of them and they are needed in order. */
 	static final int STAGE_SHOTS_PER_SESSION = 40;
 	static final long STAGE_SHOT_GAP_MS = 6_000;
 	static final int SHOTS_KEPT = 80;
 	static final long HEARTBEAT_MS = 30_000;
 	static final int WATCH_TICKS = 5;
 
-	/** Сколько подробных событий каждого вида пишем в минуту: журнал ограничен по размеру, и важное в нём не должно утонуть в потоке. */
+	/** How many detailed events of each kind we write per minute: the log is limited in size, and the important things must not drown in the flow. */
 	private final Map<String, long[]> telBudgets = new HashMap<>();
 
 	private boolean telBudget(String kind, int perMinute)
@@ -691,7 +691,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return ++b[1] <= perMinute;
 	}
 
-	/** Событие в журнал — если он включён. */
+	/** An event into the log, if it is enabled. */
 	private void tel(String kind, Object... pairs)
 	{
 		Telemetry t = telemetry;
@@ -703,8 +703,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			}
 			catch (RuntimeException ex)
 			{
-				// Журнал нужен для разбора, а не для работы: его сбой не должен задеть подсказки в игре.
-				log.debug("Событие журнала не записано: {}", ex.toString());
+				// The log is for analysis, not for operation: its failure must not affect the in-game hints.
+				log.debug("Log event not written: {}", ex.toString());
 			}
 		}
 	}
@@ -739,8 +739,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	/** Плашки сообщают, что нарисовали: сторож движка ловит «шаг есть, а на экране пусто». */
-	/** Окно у банка, биржи или торговца сейчас на экране: старая проверка вылета у банка тогда не нужна — окно её заменяет. */
+	/** The badges report what they drew: the engine watchdog catches "there is a step, but the screen is empty". */
+	/** A bank, exchange or merchant window is on screen now: the old departure check at the bank is not needed then, the window replaces it. */
 	@Getter
 	private volatile boolean shopShown;
 
@@ -759,7 +759,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		guideOnScreen = shown;
 	}
 
-	/** Что игрок видит (текст плашки или списка): в журнал — только когда изменилось. */
+	/** What the player sees (badge or list text): into the log only when it changed. */
 	void uiShown(String view, String text)
 	{
 		Telemetry t = telemetry;
@@ -780,7 +780,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	/** Скриншот игры в папку журнала; пара «картинка — состояние движка» записывается в журнал. */
+	/** A game screenshot into the log folder; the pair "picture - engine state" is written to the log. */
 	private void takeShot(String why)
 	{
 		Telemetry t = telemetry;
@@ -799,7 +799,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			return;
 		}
-		// Снимок по горячей клавише не тратит лимит автоматических: игрок жмёт его сам и знает, зачем.
+		// A hotkey snapshot does not spend the automatic limit: the player presses it themselves and knows why.
 		if (auto)
 		{
 			lastShotAt = now;
@@ -812,7 +812,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		String state = DebugView.plain(DebugView.rows(buildDebugState()));
 		String stamp = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
-		// Снимки «на каждом шаге» — JPEG (их десятки, PNG игры весит ~2,5 МБ); странности и снимок по клавише — PNG без потерь.
+		// "Every step" snapshots are JPEG (there are dozens, a game PNG weighs ~2.5 MB); anomalies and the hotkey snapshot are lossless PNG.
 		String name = "shot-" + stamp + "-" + why.replaceAll("[^A-Za-z0-9_]+", "_") + (stage ? ".jpg" : ".png");
 		lastShotName = name;
 		File dir = new File(t.dir(), "shots");
@@ -832,11 +832,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		catch (IOException | RuntimeException ex)
 		{
-			log.warn("Скриншот для отладки не сохранён: {}", ex.toString());
+			log.warn("Debug screenshot not saved: {}", ex.toString());
 		}
 	}
 
-	/** В папке остаются только свежие скриншоты. */
+	/** Only fresh screenshots stay in the folder. */
 	private static void pruneShots(File dir)
 	{
 		File[] files = dir.listFiles((d, n) -> n.startsWith("shot-") && (n.endsWith(".png") || n.endsWith(".jpg")));
@@ -849,12 +849,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			if (!files[i].delete())
 			{
-				log.debug("Старый скриншот не удалён: {}", files[i]);
+				log.debug("Old screenshot not deleted: {}", files[i]);
 			}
 		}
 	}
 
-	/** Сводка журнала для приложения (GET /telemetry): путь, счётчики, последние странности и события. */
+	/** The log summary for the app (GET /telemetry): path, counters, the latest anomalies and events. */
 	@Override
 	public Map<String, Object> onTelemetry()
 	{
@@ -871,7 +871,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return m;
 	}
 
-	/** Раз в тик: пульс, сторож движка, состояние плашки разработчика. Поток клиента. */
+	/** Once per tick: pulse, engine watchdog, developer badge state. Client thread. */
 	private void debugTick(Player me)
 	{
 		try
@@ -880,8 +880,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		catch (RuntimeException ex)
 		{
-			// Отладочная часть не должна ломать игровой тик: сбой — в лог RuneLite, подсказки работают дальше.
-			log.warn("Сбой плашки разработчика или сторожа: {}", ex.toString());
+			// The debug part must not break the game tick: a failure goes to the RuneLite log, the hints keep working.
+			log.warn("Developer badge or watchdog failure: {}", ex.toString());
 		}
 	}
 
@@ -930,7 +930,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return value == null ? null : st.getStages().get(st.indexFor(value)).getSteps();
 	}
 
-	/** Состояние движка для плашки разработчика и для скриншота. Поток клиента. */
+	/** The engine state for the developer badge and for the screenshot. Client thread. */
 	private DebugView.State buildDebugState()
 	{
 		ActiveTarget.Stage st = stageOf(target);
@@ -946,11 +946,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		if (line != null && line.hasNeed())
 		{
-			conditions.add("need " + line.getNeed() + " (сдан) = " + (stageTracker.delivered() ? "TRUE" : "FALSE"));
+			conditions.add("need " + line.getNeed() + " (handed in) = " + (stageTracker.delivered() ? "TRUE" : "FALSE"));
 		}
 		if (st != null && value != null)
 		{
-			// Без слова FALSE: плашка красит такие строки красным, а «машина не решает» — не поломка.
+			// Without the word FALSE: the badge paints such lines red, and "the machine does not decide" is not a breakage.
 			conditions.add("QH: " + qhDescribe);
 		}
 		int queue = -1;
@@ -990,20 +990,20 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			st == null || value == null ? null : (st.indexFor(value) + 1) + "/" + st.getStages().size(), value, cur, lines == null ? 0 : lines.size(),
 			line == null ? null : line.shown(), lines != null && StageTracker.needsManualStep(lines, cur), stageTracker.peeking(), stageTracker.warning(),
 			conditions, completion == null ? new ArrayList<>() : completion.describe(), queue,
-			lastSnapshotAt == 0 ? null : "seq " + lastSnapshotSeq + ", " + Math.max(0, (now - lastSnapshotAt) / 1000) + " с назад", planPercent,
+			lastSnapshotAt == 0 ? null : "seq " + lastSnapshotSeq + ", " + Math.max(0, (now - lastSnapshotAt) / 1000) + " s ago", planPercent,
 			stageTracker.reason(), used + "/28", p == null ? "—" : p.getX() + "," + p.getY() + "," + p.getPlane(), tickCount, hudOnScreen, guideOnScreen,
 			t != null, t == null || t.file() == null ? null : t.file().getName(), t == null ? 0 : t.events(), t == null ? 0 : t.anomalyCount(), an,
 			lastShotName);
 	}
 
-	// ---------- Снимок состояния от программы (протокол 6) ----------
+	// ---------- State snapshot from the app (protocol 6) ----------
 
-	/** Номер последнего применённого снимка: запоздавший, более старый, отбрасывается. */
+	/** The number of the last applied snapshot: a late, older one is discarded. */
 	private final Object snapshotLock = new Object();
 	private long lastSnapshot = -1;
-	/** Шаг последнего снимка (JSON): тот же шаг не перезапускает цель и стрелку. null — шаг не из снимка или снят. */
+	/** The step of the last snapshot (JSON): the same step does not restart the target and arrow. null means the step is not from a snapshot or was cleared. */
 	private String snapshotStepKey;
-	/** План подготовки от программы; null — не присылала. Рисует его список «Что нужно». */
+	/** The preparation plan from the app; null means it did not send one. The "What you need" list draws it. */
 	private volatile PrepPlan prep;
 
 	@Override
@@ -1018,16 +1018,16 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			}
 			lastSnapshot = e.getSeq();
 		}
-		// Часть, которую игрок выключил в настройках плагина, не применяется — остальные применяются.
+		// A part the player turned off in the plugin settings is not applied; the others are.
 		Map<String, String> refused = new LinkedHashMap<>();
 		GearHint hint = e.getGearHint();
 		if (!bad.containsKey(PrepEnvelope.GEAR_HINT) && hint != null && !hint.isClear() && !config.upgradeRouter())
 		{
-			refused.put(PrepEnvelope.GEAR_HINT, "подсказки апгрейда выключены в настройках плагина OSRS Path Bridge");
+			refused.put(PrepEnvelope.GEAR_HINT, "upgrade hints are turned off in the OSRS Path Bridge plugin settings");
 		}
 		if (!bad.containsKey(PrepEnvelope.BANK_TAGS) && e.getBankTags() != null && !config.bankTagsHelper())
 		{
-			refused.put(PrepEnvelope.BANK_TAGS, "предметы этапа из приложения выключены в настройках плагина OSRS Path Bridge");
+			refused.put(PrepEnvelope.BANK_TAGS, "stage items from the app are turned off in the OSRS Path Bridge plugin settings");
 		}
 		lastSnapshotAt = System.currentTimeMillis();
 		lastSnapshotSeq = e.getSeq();
@@ -1041,7 +1041,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			for (Map.Entry<String, String> r : bad.entrySet())
 			{
-				t.anomaly("SNAPSHOT_REJECT", r.getKey(), "Часть снимка «" + r.getKey() + "» отклонена: " + r.getValue());
+				t.anomaly("SNAPSHOT_REJECT", r.getKey(), "Part of the snapshot '" + r.getKey() + "' was rejected: " + r.getValue());
 			}
 		}
 		clientThread.invokeLater(() -> applySnapshot(e, bad, refused));
@@ -1049,8 +1049,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	}
 
 	/**
-	 * Применить снимок целиком за один проход клиентского потока. Негодные и выключенные части не трогаем — остаётся
-	 * прежнее; остальные заменяются, а чего в снимке нет — снимается (снимок полный).
+	 * Apply the snapshot whole in one pass of the client thread. Invalid and disabled parts are not touched, the previous one
+	 * stays; the others are replaced, and whatever is absent from the snapshot is cleared (the snapshot is complete).
 	 */
 	private void applySnapshot(PrepEnvelope e, Map<String, String> bad, Map<String, String> refused)
 	{
@@ -1099,7 +1099,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		updateHud();
 	}
 
-	/** Предмет из совета по снаряжению — подсветить в сумке и банке. name — ключ ActiveTarget.nameKey. */
+	/** An item from the gear advice: highlight it in the bag and bank. name is the ActiveTarget.nameKey key. */
 	boolean isUpgradeItem(String name)
 	{
 		GearHint h = gearHint;
@@ -1117,13 +1117,13 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	{
 		if (!config.bankTagsHelper())
 		{
-			return "предметы этапа из приложения выключены в настройках плагина OSRS Path Bridge";
+			return "stage items from the app are turned off in the OSRS Path Bridge plugin settings";
 		}
 		bankTagIds = t.getIdSet();
 		return null;
 	}
 
-	/** Нужен ли предмет этапу — для мягкой рамки в банке. */
+	/** Whether the stage needs the item: for the soft frame in the bank. */
 	boolean isBankTagged(int itemId)
 	{
 		return bankTagIds.contains(itemId);
@@ -1140,7 +1140,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		});
 	}
 
-	/** Предметы текущего шага, которые уже были в сумке: отданные Hetty или использованные не просятся в сумку снова. */
+	/** Items of the current step that have already been in the bag: those handed to Hetty or used are not asked into the bag again. */
 	private final Set<String> gotItems = new HashSet<>();
 	private String gotStep;
 
@@ -1183,9 +1183,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		updateHud();
 	}
 
-	// ---------- Что нужно и куда: список в игре и боковая панель ----------
+	// ---------- What you need and where: the in-game list and the side panel ----------
 
-	/** Пересчитать вид (поток клиента): его рисует список в игре, а панели он уходит, только если изменился. */
+	/** Recompute the view (client thread): the in-game list draws it, and it goes to the panel only if it changed. */
 	private void refreshGuide()
 	{
 		ActiveTarget.Stage stage = stageOf(target);
@@ -1193,7 +1193,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		String stageNow = stage == null ? null : stageTracker.key() + "|" + questDone(target);
 		if (!Objects.equals(stageNow, checklistStage))
 		{
-			// Этап сменился (или квест сдан): проверка вылета и строка «Сумка» считаются по предметам нового этапа.
+			// The stage changed (or the quest was handed in): the departure check and the "Bag" line are counted by the items of the new stage.
 			checklistStage = stageNow;
 			recomputeChecklist();
 			updateHud();
@@ -1228,21 +1228,21 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		SwingUtilities.invokeLater(() -> p.show(shown));
 	}
 
-	// ---------- Шаги как в Quest Helper ----------
+	// ---------- Steps as in Quest Helper ----------
 
-	/** Защёлки условий Quest Helper: живут, пока игрок на этом квесте и не вышел из игры. */
+	/** Latches of Quest Helper conditions: they live while the player is on this quest and has not left the game. */
 	private final QhMachine.Session qhSession = new QhMachine.Session();
 	private QhLiveFacts qhFacts;
-	/** Только надетое: в «carried» оно вместе с сумкой, а часть условий Quest Helper требует именно надетое. */
+	/** Worn only: in "carried" it is together with the bag, and some Quest Helper conditions require exactly the worn item. */
 	private ItemCounts worn = ItemCounts.EMPTY;
-	/** Последний выбор машины одной строкой (для журнала и плашки разработчика) и его отпечаток (чтобы замечать смену). */
+	/** The machine's last pick in one line (for the log and the developer badge) and its fingerprint (to notice a change). */
 	private String qhLastKey = "";
 	private String qhDescribe = "—";
-	/** Quest Helper не может определить шаг без дневника квеста (S2-09): подсказка в списке, пока выбор — «синхронизируй». */
+	/** Quest Helper cannot determine the step without the quest journal (S2-09): a hint in the list while the pick is "sync". */
 	private String qhHint;
-	/** Машина дала сбой: до перезапуска плагина считаем по-старому (место и предметы) и не засоряем лог повторами. */
+	/** The machine failed: until the plugin restarts we count the old way (place and items) and do not clutter the log with repeats. */
 	private boolean qhBroken;
-	/** Тик, на котором читать дневник квеста: текст появляется чуть позже открытия окна. -1 — не ждём. */
+	/** The tick on which to read the quest journal: the text appears a bit after the window opens. -1 means not waiting. */
 	private int journalReadTick = -1;
 	private int loginTick = -1;
 	private int varBurst;
@@ -1271,26 +1271,26 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	}
 
 	/**
-	 * Выбор машины Quest Helper для строк этапа или null: машины нет, она не решает («не знаю» в условии) или выбрала шаг «по умолчанию»,
-	 * то есть доказательств нет, и строку определят место и предметы. Выбор пишется в журнал, когда меняется.
+	 * The Quest Helper machine's pick for the stage lines, or null: there is no machine, it does not decide ("unknown" in a condition) or it picked the step "by default",
+	 * that is, there is no evidence and the line will be decided by place and items. The pick is written to the log when it changes.
 	 */
 	private StageTracker.QhPick qhPick(String stepId, int value, List<ActiveTarget.StageLine> lines)
 	{
 		qhHint = null;
 		if (!config.qhMachine())
 		{
-			qhDescribe = "выключена в настройках";
+			qhDescribe = "turned off in the settings";
 			return null;
 		}
 		if (qhBroken)
 		{
-			qhDescribe = "отключена после сбоя (см. журнал RuneLite)";
+			qhDescribe = "disabled after a failure (see the RuneLite log)";
 			return null;
 		}
 		QhMachine m = QhMachine.all().get(stepId);
 		if (m == null || !m.hasStage(value))
 		{
-			qhDescribe = m == null ? "нет данных квеста" : "у Quest Helper нет шага для значения " + value;
+			qhDescribe = m == null ? "no quest data" : "Quest Helper has no step for value " + value;
 			return null;
 		}
 		QhMachine.Verdict v;
@@ -1300,19 +1300,19 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		catch (RuntimeException ex)
 		{
-			log.warn("Машина Quest Helper отключена до перезапуска плагина: {}", ex.toString(), ex);
+			log.warn("The Quest Helper machine is disabled until the plugin restarts: {}", ex.toString(), ex);
 			tel("qh", "error", ex.toString(), "step", stepId, "var", value);
 			qhBroken = true;
-			qhDescribe = "сбой: " + ex;
+			qhDescribe = "failure: " + ex;
 			return null;
 		}
 		int line = v.isUndecided() || !v.isStrong() ? -1 : m.lineFor(v, lines);
-		// Шаг «синхронизации» Quest Helper: ему не из чего понять, на каком шаге игрок, пока тот не открыл дневник квеста.
+		// The Quest Helper "sync" step: it has nothing to tell which step the player is on until they open the quest journal.
 		qhHint = !v.isUndecided() && !v.isStrong() && v.getLeaf() != null && v.getLeaf().endsWith("syncStep")
-			? "Открой дневник квеста: по нему Quest Helper и этот список узнают, на каком шаге ты." : null;
-		qhDescribe = v.isUndecided() ? "не решает (в условии есть «не знаю»)"
-			: v.getLeaf() + (v.isStrong() ? " [условие выполнено]" : " [по умолчанию]")
-			+ (line >= 0 ? " → строка " + (line + 1) : v.isStrong() ? " → такой строки в списке нет" : "");
+			? "Open the quest journal: Quest Helper and this list use it to learn which step you are on." : null;
+		qhDescribe = v.isUndecided() ? "does not decide (the condition has an 'unknown')"
+			: v.getLeaf() + (v.isStrong() ? " [condition met]" : " [by default]")
+			+ (line >= 0 ? " -> line " + (line + 1) : v.isStrong() ? " -> no such line in the list" : "");
 		String key = value + "|" + v.getLeaf() + "|" + v.isStrong() + "|" + v.isUndecided() + "|" + line;
 		if (!key.equals(qhLastKey))
 		{
@@ -1323,7 +1323,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return line < 0 ? null : new StageTracker.QhPick(line, v.getLeaf() + " (" + String.join(" > ", v.getPath()) + ")");
 	}
 
-	/** Раз в тик: пришло сообщение, диалог или предмет, и машина выбрала другой шаг — вид пересчитывается сразу, а не при следующем шаге игрока. */
+	/** Once per tick: a message, dialogue or item arrived and the machine picked another step; the view is recomputed at once, not at the player's next step. */
 	private void qhTick()
 	{
 		ActiveTarget.Stage st = stageOf(target);
@@ -1344,7 +1344,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	/** Дневник квеста: по его тексту Quest Helper сверяет шаг. В журнал — чистые строки без тегов цвета. */
+	/** The quest journal: Quest Helper checks the step against its text. Into the log as clean lines without colour tags. */
 	private void readJournal()
 	{
 		List<String> lines = qhFacts().widget(InterfaceID.QUESTJOURNAL, 6, true);
@@ -1369,7 +1369,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		updateHud();
 	}
 
-	/** Варианты ответа в диалоге: что предлагала игра, когда игрок выбирал. */
+	/** Dialogue options: what the game offered when the player chose. */
 	private void logDialogOptions()
 	{
 		List<String> opts = qhFacts().widget(InterfaceID.CHATMENU, 1, true);
@@ -1389,15 +1389,15 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		tel("opts", "list", clean);
 	}
 
-	// ---------- Этапы квеста ----------
+	// ---------- Quest stages ----------
 
 	/**
-	 * Текущий шаг этапа и всё, что его двигает: положение игрока, предметы шага (has, need), клики «сделано» и «назад».
-	 * Считается заново каждый тик (StageTracker.update) — не один раз, как раньше.
+	 * The current stage step and everything that moves it: the player's position, the step's items (has, need), the "done" and "back" clicks.
+	 * Recomputed every tick (StageTracker.update), not once as before.
 	 */
 	private final StageTracker stageTracker = new StageTracker();
 
-	/** Пересчитать текущий шаг этапа по положению игрока и предметам. Поток клиента. */
+	/** Recompute the current stage step from the player's position and items. Client thread. */
 	private void trackStageCursor(ActiveTarget.Stage st)
 	{
 		if (st == null)
@@ -1405,7 +1405,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			stageTracker.reset();
 			return;
 		}
-		// Квест пройден — шаги этапа больше не двигаем и не сверяем с сумкой: «Beer ещё в сумке» в миг сдачи квеста — ложная тревога.
+		// The quest is complete: stage steps are no longer moved or checked against the bag, "Beer is still in your bag" at the moment of handing in the quest is a false alarm.
 		if (questDone(target))
 		{
 			applyLineHighlight(null, null);
@@ -1431,7 +1431,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		applyLineHighlight(target.getStepId() + "#" + idx + "@" + at, lines.get(at).getHl());
 	}
 
-	/** Журнал: вход в этап, смена переменной квеста, куда и почему сдвинулся курсор, предупреждения. */
+	/** The log: entering a stage, a quest variable change, where and why the cursor moved, warnings. */
 	private void logStage(ActiveTarget.Stage st, int idx, int value, List<ActiveTarget.StageLine> lines, WorldPoint pos)
 	{
 		if (telemetry == null)
@@ -1444,7 +1444,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		catch (RuntimeException ex)
 		{
-			log.debug("Этап не записан в журнал: {}", ex.toString());
+			log.debug("Stage not written to the log: {}", ex.toString());
 		}
 	}
 
@@ -1491,9 +1491,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	/** Какой этап показан и ведёт ли к нему стрелка: ключ «шаг#этап»; смена ключа — стрелка к новому этапу. */
+	/** Which stage is shown and whether the arrow leads to it: the key "step#stage"; a key change means the arrow goes to the new stage. */
 	private String stageKey;
-	/** Стрелку поставил этап, а не игрок: дошёл — она остаётся у NPC (не прыгает назад к шагу), пока этап не сменится. */
+	/** The arrow was set by the stage, not the player: on arrival it stays at the NPC (does not jump back to the step) until the stage changes. */
 	private boolean navSticky;
 
 	private static ActiveTarget.Stage stageOf(ActiveTarget t)
@@ -1501,7 +1501,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return t == null || t.getGuide() == null ? null : t.getGuide().getStage();
 	}
 
-	/** Значение переменной квеста; null — не в игре. Поток клиента. */
+	/** The quest variable's value; null means not in the game. Client thread. */
 	private Integer stageValue(ActiveTarget.Stage st)
 	{
 		if (client.getGameState() != GameState.LOGGED_IN)
@@ -1511,7 +1511,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return st.isVarp() ? client.getVarpValue(st.getId()) : client.getVarbitValue(st.getId());
 	}
 
-	/** Квест шага пройден по данным игры (шаг с триггером «квест пройден»). */
+	/** The step's quest is complete by game data (a step with the "quest complete" trigger). */
 	private boolean questDone(ActiveTarget t)
 	{
 		ActiveTarget.Trigger trig = t == null ? null : t.getCompletionTrigger();
@@ -1523,8 +1523,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	}
 
 	/**
-	 * Этап квеста сменился (или шаг только что показали) — стрелка и маршрут к NPC нового этапа. Своя цель игрока
-	 * (клик по месту) не трогается, пока этап прежний. Квест пройден — стрелка этапа снимается.
+	 * The quest stage changed (or the step has just been shown): the arrow and route to the NPC of the new stage. The player's own target
+	 * (a click on a place) is not touched while the stage is the same. If the quest is complete, the stage arrow is cleared.
 	 */
 	private void followStage()
 	{
@@ -1543,7 +1543,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		boolean done = questDone(t);
 		int idx = st.indexFor(value);
 		List<ActiveTarget.StageLine> lines = st.getStages().get(idx).getSteps();
-		// Стрелка идёт за текущим шагом этапа, если у него есть клетка; нет — к точке этапа.
+		// The arrow follows the current stage step if it has a tile; if not, the stage's point.
 		int cursor = Math.max(0, Math.min(stageTracker.cursor(), lines.size() - 1));
 		ActiveTarget.StageLine now = done || lines.isEmpty() ? null : lines.get(cursor);
 		boolean byStep = now != null && now.hasPoint();
@@ -1569,7 +1569,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		if (sameStage && navTarget != null && !navSticky)
 		{
-			// Шаг сменился, а стрелку к своему месту поставил игрок — не трогаем.
+			// The step changed and the player set the arrow to their own place: do not touch.
 			return;
 		}
 		Integer go = st.getStages().get(idx).getGo();
@@ -1585,7 +1585,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	/** Клик по списку в игре (поток клиента). */
+	/** A click on the list in the game (client thread). */
 	private void guideAction(GuideList.Action a)
 	{
 		tel("click", "what", a.getKind().name(), "place", a.getKind() == GuideList.Kind.PLACE ? a.getPlace() : null,
@@ -1606,7 +1606,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				applyNav(null);
 				break;
 			case PREV:
-				// Вперёд по клику нельзя: курсор ведут факты в игре. Назад — посмотреть прежний шаг.
+				// No moving forward by click: the cursor is led by the facts in the game. Back views the previous step.
 				stageTracker.back();
 				refreshGuide();
 				break;
@@ -1616,7 +1616,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				break;
 			case NEXT:
 			{
-				// Только шаг, который игра сама не видит (подряд на одном месте); остальные пропустить нельзя.
+				// Only a step the game does not see by itself (several in a row at one place); the others cannot be skipped.
 				ActiveTarget.Stage st = stageOf(target);
 				Integer value = st == null ? null : stageValue(st);
 				if (value != null && stageTracker.forward(st.getStages().get(st.indexFor(value)).getSteps()))
@@ -1630,7 +1630,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	/** «Путь сюда»: временная цель к точке шага — стрелка, Shortest Path и подсветка NPC точки. */
+	/** "Go here": a temporary target at a step point: the arrow, Shortest Path and the NPC highlight at the point. */
 	private void goToPlace(int index)
 	{
 		ActiveTarget t = target;
@@ -1641,7 +1641,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		if (!config.autoNavigation())
 		{
-			guideMessage = "Навигация к местам выключена: RuneLite → OSRS Path Bridge → «Стрелка к местам».";
+			guideMessage = "Navigation to places is turned off: RuneLite -> OSRS Path Bridge -> 'Arrow to places'.";
 			refreshGuide();
 			return;
 		}
@@ -1649,7 +1649,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		applyNav(n);
 	}
 
-	// ---------- Временная цель: место с карты или магазин ----------
+	// ---------- Temporary target: a place from the map or a shop ----------
 
 	private void applyNav(NavTarget t)
 	{
@@ -1669,12 +1669,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		scanNavNpcs();
 		if (server != null)
 		{
-			// Программа узнаёт цель, даже если её выбрали в игре (список «Что нужно», панель), — и показывает ту же.
+			// The app learns the target even if it was chosen in the game (the "What you need" list, the panel), and shows the same one.
 			server.navSet(t);
 		}
 		if (t.isPurchase() && hasNavItem())
 		{
-			// Предмет уже есть — вести некуда.
+			// The item is already there: nowhere to lead.
 			finishNav("obtained");
 			return;
 		}
@@ -1682,7 +1682,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		updateHud();
 	}
 
-	/** Снять временную цель: стрелка и HUD возвращаются к шагу, приложение узнаёт почему. */
+	/** Clear the temporary target: the arrow and HUD return to the step, and the app learns why. */
 	private void finishNav(String reason)
 	{
 		NavTarget done = navTarget;
@@ -1706,7 +1706,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return t != null && t.isPurchase() && carried.count(t.getItemId(), t.getItemName()) > 0;
 	}
 
-	/** Дошёл до места (для цели без предмета): та же клетка этажа, не дальше трёх клеток. */
+	/** Arrived at the place (for a target without an item): the same tile of the plane, no farther than three tiles. */
 	private boolean arrived(WorldPoint pos)
 	{
 		NavTarget t = navTarget;
@@ -1742,14 +1742,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	// ---------- Радар опасности ----------
+	// ---------- Danger radar ----------
 
 	private static boolean warned(DangerRadar.Reading r)
 	{
 		return r.getLevel() == DangerRadar.Level.WARNING || r.getLevel() == DangerRadar.Level.INSIDE;
 	}
 
-	/** Новая клетка игрока: какая зона рядом, звук при входе, опасные NPC — только в зоне предупреждения. */
+	/** A new player tile: which zone is nearby, a sound on entering, dangerous NPCs only in the warning zone. */
 	private void updateDanger(WorldPoint pos)
 	{
 		if (!config.dangerRadar() || radar == null)
@@ -1802,9 +1802,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	// ---------- Темп прокачки ----------
+	// ---------- Pacing ----------
 
-	/** Темп шага заново: новый шаг, включили настройку или сменился персонаж. */
+	/** The step's pacing again: a new step, the setting was turned on or the character changed. */
 	private void setupPacing()
 	{
 		ActiveTarget.Pacing p = target == null ? null : target.getPacing();
@@ -1816,7 +1816,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		pacingDirty = true;
 	}
 
-	/** Опыт всех навыков темпа из клиента: при входе в игру и при новом шаге. */
+	/** XP of all pacing skills from the client: on login and on a new step. */
 	private void readPacingXp()
 	{
 		long now = System.currentTimeMillis();
@@ -1846,7 +1846,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		m.put("estimated", s.isEstimated());
 		m.put("almost", s.isAlmost());
 		m.put("done", s.isDone());
-		// Бой: какие навыки шага ещё не дошли до цели, кроме показанного.
+		// Combat: which of the step's skills have not reached the goal yet, besides the shown one.
 		if (pacing.skills().size() > 1)
 		{
 			m.put("left", pacing.left());
@@ -1854,9 +1854,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return m;
 	}
 
-	// ---------- Снаряжение и монеты для подсказки апгрейда ----------
+	// ---------- Equipment and coins for the upgrade hint ----------
 
-	/** Надетое, сумка и монеты. null — не в игре или подсказки апгрейда выключены; контейнер не пришёл — его поле null. */
+	/** Worn items, bag and coins. null means not in the game or upgrade hints are turned off; a container that did not arrive has a null field. */
 	private Map<String, Object> gearReport()
 	{
 		if (!config.upgradeRouter() || client.getGameState() != GameState.LOGGED_IN)
@@ -1887,7 +1887,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		List<Map<String, Object>> inventory = null;
 		int coins = 0;
-		// Занятых ячеек сумки: предметы в списке сложены по ID, а подготовке нужно знать, влезет ли ещё что-то.
+		// Occupied bag slots: the items in the list are stacked by ID, and preparation needs to know whether anything else will fit.
 		int slotsUsed = 0;
 		if (bag != null)
 		{
@@ -1912,11 +1912,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		g.put("inventory", inventory);
 		g.put("coins", bag == null ? null : coins);
 		g.put("inventorySlots", bag == null ? null : slotsUsed);
-		// Вес сумки и надетого — как в игре (client.getWeight): от него зависит, как быстро тает бег.
+		// Weight of the bag and worn items as in the game (client.getWeight): how fast running drains depends on it.
 		g.put("weight", bag == null ? null : client.getWeight());
 		g.put("bankCoins", bank == null ? null : bank.count(ItemID.COINS, "Coins"));
-		// Оценка предметов по ценам биржи (без монет): в сумке и на себе — и в банке, если его открывали.
-		// Это не деньги, а сколько выручишь, продав: приложение показывает её отдельно от монет, с «~».
+		// A value of items by Grand Exchange prices (without coins): in the bag and worn, and in the bank if it was opened.
+		// This is not money but what you would get by selling: the app shows it separately from coins, with "~".
 		IntUnaryOperator price = this::itemPrice;
 		g.put("carriedValue", carried.value(price, ItemID.COINS) + noted.value(price, ItemID.COINS));
 		g.put("bankValue", bank == null ? null : bank.value(price, ItemID.COINS));
@@ -1927,9 +1927,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private boolean priceBroken;
 
 	/**
-	 * Цена предмета на бирже. В RuneLite 1.13 getItemPrice(int) вернул long вместо int — вызов, собранный под 1.12,
-	 * падал с NoSuchMethodError и ронял плагин при входе в игру. Метод ищется по имени, результат — любое число;
-	 * любая ошибка — цена 0 (оценка предметов необязательна), клиент не страдает.
+	 * The item's Grand Exchange price. In RuneLite 1.13 getItemPrice(int) returned long instead of int: a call compiled for 1.12
+	 * failed with NoSuchMethodError and crashed the plugin on login. The method is looked up by name, the result is any number;
+	 * any error means price 0 (item valuation is optional), the client does not suffer.
 	 */
 	private int itemPrice(int id)
 	{
@@ -1950,12 +1950,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		catch (Throwable t)
 		{
 			priceBroken = true;
-			log.warn("OSRS Path Bridge: цены предметов недоступны в этой версии RuneLite — оценка предметов отключена", t);
+			log.warn("OSRS Path Bridge: item prices are unavailable in this RuneLite version - item valuation is turned off", t);
 			return 0;
 		}
 	}
 
-	/** Слот по номеру ячейки надетого: weapon, head, amulet… (EquipmentInventorySlot). null — неизвестная ячейка. */
+	/** A slot by the worn-slot number: weapon, head, amulet... (EquipmentInventorySlot). null means an unknown slot. */
 	static String slotName(int index)
 	{
 		for (EquipmentInventorySlot s : EquipmentInventorySlot.values())
@@ -1981,23 +1981,23 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return row;
 	}
 
-	// ---------- Куда идти: стрелка, Shortest Path, HUD ----------
+	// ---------- Where to go: arrow, Shortest Path, HUD ----------
 
-	/** Для большой стрелки: текущая точка пути, пока игрок в игре; null — стрелку не рисовать. */
+	/** For the big arrow: the current path point while the player is in the game; null means do not draw the arrow. */
 	WorldPoint arrowTarget()
 	{
 		return client.getGameState() == GameState.LOGGED_IN ? navTarget() : null;
 	}
 
-	/** «✓ Рядом» из HUD — с той же защитой от мигания на границе. */
+	/** "✓ Close" from the HUD, with the same protection against flicker at the boundary. */
 	boolean isNavNear()
 	{
 		return near;
 	}
 
 	/**
-	 * Текущая точка пути: временная цель, иначе следующая путевая точка или точка шага.
-	 * null — идти некуда или маршрут пройден.
+	 * The current path point: the temporary target, otherwise the next waypoint or the step's point.
+	 * null means nowhere to go or the route is done.
 	 */
 	private WorldPoint navTarget()
 	{
@@ -2009,7 +2009,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return p == null ? null : new WorldPoint(p.getX(), p.getY(), p.getPlane());
 	}
 
-	/** Точка шага без временной цели: текущая путевая точка или точка шага. null — шага нет или маршрут пройден. */
+	/** The step's point without a temporary target: the current waypoint or the step's point. null means no step or the route is done. */
 	private ActiveTarget.WorldPointDto stepPoint()
 	{
 		if (target == null)
@@ -2020,14 +2020,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	}
 
 	/**
-	 * Стрелка игры и Shortest Path — к текущей точке пути. Вызывается при смене цели, точки или настроек,
-	 * но не каждый кадр: путь Shortest Path считает сам, один раз на цель.
+	 * The game arrow and Shortest Path point to the current path point. Called when the target, point or settings change,
+	 * but not every frame: Shortest Path computes the path itself, once per target.
 	 */
 	private void updateNavigation()
 	{
 		WorldPoint nav = navTarget();
 		boolean loggedIn = client.getGameState() == GameState.LOGGED_IN;
-		// Стрелка: чужую (например, квестовую) не трогаем — только свою.
+		// The arrow: do not touch someone else's (for example a quest one), only our own.
 		if (nav == null || !config.hintArrow() || !loggedIn)
 		{
 			if (arrowSet)
@@ -2061,13 +2061,13 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		else if (pathSent != null)
 		{
-			// Очищаем только свой путь: если игрок сам задал цель в Shortest Path, мы её не прислали и не трогаем.
+			// Clear only our own path: if the player set the target in Shortest Path themselves, we did not send it and do not touch it.
 			eventBus.post(new PluginMessage(SHORTEST_PATH_NS, "clear"));
 			pathSent = null;
 		}
 	}
 
-	/** Подпись текущей цели для метки на карте: временная цель, точка маршрута, точка шага или название шага. */
+	/** The label of the current target for the map marker: the temporary target, a route point, the step's point or the step's name. */
 	private String navLabel()
 	{
 		if (navTarget != null)
@@ -2078,7 +2078,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			return null;
 		}
-		// Та же точка, что у стрелки (stepPoint), — подпись метки не разойдётся с её местом.
+		// The same point as the arrow (stepPoint), so the marker's label does not diverge from its place.
 		ActiveTarget.WorldPointDto p = stepPoint();
 		if (p != null && p.getLabel() != null && !p.getLabel().isEmpty())
 		{
@@ -2087,10 +2087,10 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return target.getGoal() != null && !target.getGoal().isEmpty() ? target.getGoal() : target.getTitle();
 	}
 
-	/** Метка на карте мира игры: одна, наша; другие метки (Shortest Path, квесты) не трогаем. */
+	/** The marker on the game's world map: just ours; other markers (Shortest Path, quests) are not touched. */
 	private void setMapPoint(WorldPoint at, String label)
 	{
-		String tooltip = at == null ? null : "OSRS Путь: " + (label == null ? "сюда ведёт стрелка" : label);
+		String tooltip = at == null ? null : "OSRS Path: " + (label == null ? "the arrow points here" : label);
 		if (mapPoint != null && at != null && at.equals(mapPoint.getWorldPoint()) && tooltip.equals(mapPoint.getTooltip()))
 		{
 			return;
@@ -2102,7 +2102,6 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		if (at != null)
 		{
-			// Название — для меню игры, а в шрифте игры нет кириллицы.
 			mapPoint = WorldMapPoint.builder().worldPoint(at).image(OsrsPathPanel.mapIcon()).tooltip(tooltip)
 				.snapToEdge(true).jumpOnClick(true).name("OSRS Path").build();
 			worldMapPointManager.add(mapPoint);
@@ -2122,8 +2121,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	}
 
 	/**
-	 * Что показывать в игре сейчас: путь, шаг, банк или биржа ({@link SmartView}). Окна банка и биржи читаются здесь,
-	 * в кадре, — так оверлеи не расходятся между собой.
+	 * What to show in the game now: the path, the step, the bank or the exchange ({@link SmartView}). The bank and exchange windows are read here,
+	 * in the frame, so the overlays do not disagree with each other.
 	 */
 	SmartView.Context overlayContext()
 	{
@@ -2139,7 +2138,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		refreshGuide();
 		boolean dangerShown = SmartView.dangerVisible(config.smartOverlays(), danger.getLevel());
 		GearHint h = gearHint;
-		// Совет по снаряжению — пока не идём за покупкой (тогда заголовок и так «Купи …»).
+		// The gear advice only while we are not going to buy (then the heading is "Buy ..." anyway).
 		String upgrade = navTarget == null && h != null && h.getText() != null && config.upgradeRouter() ? h.getText() : null;
 		if (target == null && navTarget == null && !dangerShown && upgrade == null)
 		{
@@ -2151,13 +2150,13 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		String goal;
 		if (navTarget != null)
 		{
-			// Временная цель поверх шага: сначала она, шаг — строкой ниже, чтобы не потерялся.
+			// A temporary target over the step: it goes first, the step is a line below so it does not get lost.
 			List<String> sellers = navTarget.getNpcNames();
 			title = navTarget.isPurchase()
-				? "Купи " + (navTarget.getItemName() != null ? navTarget.getItemName() : navTarget.getLabel())
-					+ (sellers != null && !sellers.isEmpty() ? " у " + sellers.get(0) : "")
-				: "К месту: " + navTarget.getLabel();
-			goal = stepTitle == null ? null : "Потом — шаг " + stepTitle;
+				? "Buy " + (navTarget.getItemName() != null ? navTarget.getItemName() : navTarget.getLabel())
+					+ (sellers != null && !sellers.isEmpty() ? " from " + sellers.get(0) : "")
+				: "Go to: " + navTarget.getLabel();
+			goal = stepTitle == null ? null : "Then: step " + stepTitle;
 		}
 		else if (target != null)
 		{
@@ -2167,13 +2166,13 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			{
 				ActiveTarget.WorldPointDto c = breadcrumbs.current();
 				goal = c == null
-					? "Маршрут пройден" + (goal != null ? " · " + goal : "")
-					: "Точка " + (breadcrumbs.index() + 1) + "/" + breadcrumbs.size() + (c.getLabel() != null ? ": " + c.getLabel() : "");
+					? "Route complete" + (goal != null ? " · " + goal : "")
+					: "Point " + (breadcrumbs.index() + 1) + "/" + breadcrumbs.size() + (c.getLabel() != null ? ": " + c.getLabel() : "");
 			}
 		}
 		else
 		{
-			title = "OSRS Путь";
+			title = "OSRS Path";
 			goal = null;
 		}
 		String distance = null;
@@ -2192,7 +2191,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (!checklist.getRows().isEmpty())
 		{
 			bag = checklist.isReady()
-				? "Сумка готова к выходу"
+				? "Bag ready to leave"
 				: Checklist.hudLine(checklist);
 		}
 		String pace = null;
@@ -2214,8 +2213,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	}
 
 	/**
-	 * Напоминание «Use X на Y» по первому действию шага, предмет которого уже в сумке. null — действий нет или
-	 * предмета ещё нет (тогда сначала его надо получить, это показывает список «Что нужно»).
+	 * A "Use X on Y" reminder for the step's first action whose item is already in the bag. null means there are no actions or
+	 * the item is not there yet (then it must be obtained first, which the "What you need" list shows).
 	 */
 	static String useLine(ActiveTarget t, ItemCounts bag)
 	{
@@ -2227,15 +2226,15 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			if (bag.count(null, u.getItem()) > 0)
 			{
-				return "Use " + u.getItem() + " на " + u.getTarget();
+				return "Use " + u.getItem() + " on " + u.getTarget();
 			}
 		}
 		return null;
 	}
 
 	/**
-	 * Строка о здоровье: показывается, когда HP ниже двух максимальных ударов противника шага (по вики), а у игрока
-	 * здоровье известно. null — всё в порядке, удар неизвестен или игрок не в игре.
+	 * A health line: shown when HP is below two max hits of the step's enemy (per the wiki) and the player's
+	 * health is known. null means all is well, the hit is unknown or the player is not in the game.
 	 */
 	static String healthLine(int hp, int hpMax, Integer maxHit)
 	{
@@ -2244,11 +2243,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			return null;
 		}
 		return hp <= maxHit
-			? "HP " + hp + "/" + hpMax + " — ЕШЬ СЕЙЧАС! Бьёт до " + maxHit
-			: "HP " + hp + "/" + hpMax + " — пора есть. Бьёт до " + maxHit;
+			? "HP " + hp + "/" + hpMax + " - EAT NOW! Hits up to " + maxHit
+			: "HP " + hp + "/" + hpMax + " - time to eat. Hits up to " + maxHit;
 	}
 
-	// ---------- Кого подсвечивать ----------
+	// ---------- Whom to highlight ----------
 
 	private void rescan()
 	{
@@ -2294,7 +2293,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	/** Что подсвечивать на текущем шаге этапа квеста (по Quest Helper): NPC, объекты, предметы в сумке. Меняется вместе с курсором. */
+	/** What to highlight on the current quest stage step (per Quest Helper): NPCs, objects, items in the bag. Changes with the cursor. */
 	private volatile ActiveTarget.LineHighlight lineHl = ActiveTarget.LineHighlight.NONE;
 	private String lineHlKey;
 
@@ -2308,7 +2307,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return lineHl.itemNames.contains(nameKey);
 	}
 
-	/** Курсор встал на другой шаг — подсветка этого шага; прежняя гаснет. Поток клиента. */
+	/** The cursor moved to another step: that step's highlight; the previous one goes out. Client thread. */
 	private void applyLineHighlight(String key, ActiveTarget.Highlight hl)
 	{
 		if (Objects.equals(key, lineHlKey))
@@ -2337,7 +2336,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return name != null && target.getNpcNameSet().contains(ActiveTarget.nameKey(name));
 	}
 
-	/** Имя объекта с учётом «двойников» (impostor): вид некоторых объектов зависит от прогресса квеста. */
+	/** An object's name accounting for impostors: the look of some objects depends on quest progress. */
 	private String objectName(TileObject o)
 	{
 		ObjectComposition c = client.getObjectDefinition(o.getId());
@@ -2381,7 +2380,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		objects.remove(o);
 	}
 
-	/** NPC появился или сменил облик: шага, временной цели или опасный — в свой список. */
+	/** An NPC appeared or changed its look: into its own list, whether the step's, the temporary target's or a dangerous one. */
 	private void trackNpc(NPC npc)
 	{
 		if (matches(npc))
@@ -2406,10 +2405,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	}
 
 	/**
-	 * Мышь над списком «Что нужно»: верхним пунктом меню игры становится строка списка. Иначе игра пишет в левом
-	 * верхнем углу действие того, что под плашкой («Chop down Yew tree»), и обводит его, будто клик уйдёт туда.
-	 * Остальные пункты остаются: правый клик по-прежнему открывает меню игры. Текст — латиницей: шрифт игры
-	 * не рисует кириллицу.
+	 * Mouse over the "What you need" list: the list line becomes the top game menu entry. Otherwise the game writes the action of whatever is
+	 * under the plate in the top-left corner ("Chop down Yew tree") and outlines it, as if the click would go there.
+	 * The other entries stay: a right click still opens the game menu.
 	 */
 	@Subscribe
 	public void onPostMenuSort(PostMenuSort e)
@@ -2505,7 +2503,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		GameState state = e.getGameState();
 		if (state == GameState.LOADING)
 		{
-			// Новая область: объекты придут заново событиями появления.
+			// A new area: objects will arrive again via spawn events.
 			objects.clear();
 		}
 		if (server != null && state != GameState.LOADING)
@@ -2528,7 +2526,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		if (state == GameState.LOGIN_SCREEN)
 		{
-			// Другой персонаж — другие уровни, сумка, банк, опыт и место.
+			// Another character means other levels, bag, bank, XP and place.
 			qhReset();
 			loginTick = -1;
 			stats.clear();
@@ -2543,7 +2541,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				server.setPlayer(null);
 				server.setPos(null, null, null);
 			}
-			// Банк этого персонажа — в настройки, пока профиль ещё его: следующий вход начнёт не с «банк неизвестен».
+			// This character's bank goes into the settings while the profile is still theirs: the next login will not start from "bank unknown".
 			saveBank(true);
 			carried = ItemCounts.EMPTY;
 			noted = ItemCounts.EMPTY;
@@ -2569,7 +2567,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	// ---------- Автоотметка ----------
+	// ---------- Auto-tick ----------
 
 	@Subscribe
 	public void onActorDeath(ActorDeath e)
@@ -2596,12 +2594,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			shareAccount(me);
 			WorldPoint pos = me.getWorldLocation();
-			// Всё про место игрока — только когда он сменил клетку, а не каждый тик.
+			// Everything about the player's place only when they changed tile, not every tick.
 			if (!pos.equals(lastPosition))
 			{
 				WorldPoint before = lastPosition;
 				lastPosition = pos;
-				// Скачок на 20+ клеток за тик — телепорт или возрождение: программа включает режим восстановления.
+				// A jump of 20+ tiles in a tick is a teleport or respawn: the app turns on recovery mode.
 				if (before != null && server != null && config.shareStats()
 					&& MoveDetector.isJump(before.getX(), before.getY(), pos.getX(), pos.getY()))
 				{
@@ -2637,7 +2635,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		flush();
 	}
 
-	/** Уровни и предметы уходят в приложение не чаще раза за тик и только если что-то изменилось. */
+	/** Levels and items go to the app at most once per tick and only if something changed. */
 	private void flush()
 	{
 		if (server == null)
@@ -2672,7 +2670,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	/** Имя персонажа и завершённые квесты — программе, если передача данных включена. Поток клиента (onGameTick). */
+	/** The character name and completed quests go to the app, if data transfer is on. Client thread (onGameTick). */
 	private void shareAccount(Player me)
 	{
 		if (server == null)
@@ -2707,7 +2705,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	/** Названия квестов в состоянии FINISHED (так их называет и сама игра). */
+	/** Names of quests in the FINISHED state (the game calls them the same way). */
 	List<String> completedQuests()
 	{
 		List<String> done = new ArrayList<>();
@@ -2721,9 +2719,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return done;
 	}
 
-	// ---------- Уровни ----------
+	// ---------- Levels ----------
 
-	/** Общий уровень — не навык; в RuneLite он помечен устаревшим, поэтому сравниваем по имени. */
+	/** The total level is not a skill; RuneLite marks it deprecated, so we compare by name. */
 	static boolean isOverall(Skill skill)
 	{
 		return "OVERALL".equals(skill.name());
@@ -2758,7 +2756,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		if (e.getSkill() == Skill.HITPOINTS && target != null && target.getMaxHit() != null)
 		{
-			// Здоровье меняется каждый удар: строка о нём пересчитывается сразу, а не раз в игровой тик.
+			// Health changes with every hit: its line is recomputed at once, not once per game tick.
 			updateHud();
 		}
 		if (pacing != null && pacing.tracks(key) && pacing.update(key, e.getXp(), System.currentTimeMillis()))
@@ -2768,7 +2766,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	// ---------- Сумка, банк и биржа ----------
+	// ---------- Bag, bank and exchange ----------
 
 	@Subscribe
 	public void onItemContainerChanged(ItemContainerChanged e)
@@ -2789,7 +2787,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	/** Раз в тик: подгрузить банк прошлого сеанса после входа; записать изменённый банк не чаще раза в несколько секунд. */
+	/** Once per tick: load the bank of the previous session after login; write a changed bank at most once per few seconds. */
 	private void persistBank()
 	{
 		try
@@ -2806,7 +2804,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		catch (RuntimeException ex)
 		{
-			log.warn("Сохранение банка: {}", ex.toString());
+			log.warn("Bank save: {}", ex.toString());
 		}
 	}
 
@@ -2826,8 +2824,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			}
 			catch (RuntimeException ex)
 			{
-				// Предмета с таким ID у игры нет (мусор в настройках) — пропускаем его, остальной банк годен.
-				log.debug("Предмет {} из сохранённого банка не опознан", e.getKey());
+				// No item with this ID exists in the game (junk in the settings): skip it, the rest of the bank is fine.
+				log.debug("Item {} from the saved bank was not recognised", e.getKey());
 			}
 		}
 		bank = b;
@@ -2838,7 +2836,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		containersChanged();
 	}
 
-	/** Банк — в настройки профиля. force — записать сейчас, не ждать паузы (выход, выключение плагина). */
+	/** The bank into the profile settings. force means write now, do not wait for the pause (logout, plugin shutdown). */
 	private void saveBank(boolean force)
 	{
 		ItemCounts b = bank;
@@ -2860,7 +2858,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		catch (RuntimeException ex)
 		{
-			log.warn("Банк не сохранён: {}", ex.toString());
+			log.warn("Bank not saved: {}", ex.toString());
 		}
 	}
 
@@ -2887,7 +2885,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		containersChanged();
 	}
 
-	/** Раскладывает контейнер по счётчикам. Банкноты — в notes (как предмет, который они обозначают). */
+	/** Lays a container out by counters. Notes go into notes (as the item they stand for). */
 	private void count(ItemContainer container, ItemCounts items, ItemCounts notes)
 	{
 		if (container == null)
@@ -2931,17 +2929,17 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		gearDirty = true;
 		if (hasNavItem())
 		{
-			// Купил или получил предмет апгрейда — временная цель снимается, шаг возвращается сам.
+			// Bought or received the upgrade item: the temporary target is cleared and the step returns by itself.
 			finishNav("obtained");
 			return;
 		}
 		updateHud();
 	}
 
-	/** Для какого этапа посчитана проверка вылета. */
+	/** For which stage the departure check was computed. */
 	private String checklistStage;
 
-	/** Предметы текущего этапа квеста; null — этапов нет или у этапа свой список не задан (тогда — предметы шага). */
+	/** The current quest stage's items; null means there are no stages or the stage has no list of its own (then the step's items). */
 	private List<ActiveTarget.GuideItem> stageItems()
 	{
 		ActiveTarget.Stage st = stageOf(target);
@@ -2951,12 +2949,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	private void recomputeChecklist()
 	{
-		// Квест сдан — предметы потрачены или отданы, «не хватает» уже ни о чём: проверка вылета пустеет.
+		// The quest was handed in: items were spent or given away, "missing" no longer says anything: the departure check empties.
 		List<ActiveTarget.ChecklistItem> items = target == null || questDone(target) ? null : target.getChecklist();
 		List<ActiveTarget.GuideItem> forStage = items == null ? null : stageItems();
 		if (forStage != null)
 		{
-			// Нужно сейчас только то, что названо у этапа: вчерашние предметы (пирог, кирка) уже не ждут.
+			// Needed now is only what the stage names: yesterday's items (the pie, the pickaxe) no longer wait.
 			List<ActiveTarget.ChecklistItem> kept = new ArrayList<>();
 			for (ActiveTarget.ChecklistItem c : items)
 			{
@@ -2991,7 +2989,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		wantedNames = names;
 	}
 
-	/** Надо ли взять этот предмет из банка по проверке вылета. */
+	/** Whether to take this item from the bank per the departure check. */
 	boolean isWantedFromBank(int itemId)
 	{
 		return wantedIds.contains(itemId);
@@ -3043,13 +3041,13 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		recomputeShopping();
 	}
 
-	/** Для автоотметки: сколько предмета у игрока — сумка, надетое, банкноты и банк, если его открывали. */
+	/** For auto-tick: how much of the item the player has: bag, worn, notes and the bank if it was opened. */
 	private int ownedCount(ActiveTarget.ItemNeed need)
 	{
 		return ItemCounts.sum(carried, noted, bank).count(need);
 	}
 
-	/** Сколько есть предметов, о которых спрашивает приложение: проверка вылета, условия вариантов и список закупок. */
+	/** How many of the items the app asks about: the departure check, the variant conditions and the shopping list. */
 	private List<Map<String, Object>> ownedReport()
 	{
 		Map<String, Map<String, Object>> out = new LinkedHashMap<>();
@@ -3119,7 +3117,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (msg != null && !msg.startsWith("OSRS Path:") && (t == ChatMessageType.GAMEMESSAGE || t == ChatMessageType.ENGINE
 			|| t == ChatMessageType.SPAM || t == ChatMessageType.MESBOX || t == ChatMessageType.DIALOG))
 		{
-			// Те же сообщения, по которым Quest Helper понимает, что шаг сделан («Luthas hands you 30 coins.»).
+			// The same messages by which Quest Helper understands that a step is done ("Luthas hands you 30 coins.").
 			qhFacts().add(t.name(), msg);
 			if (config.telemetryDetail() && telBudget("chat", 150))
 			{
@@ -3184,12 +3182,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		else if (telemetry != null && config.telemetryDetail() && client.getGameState() == GameState.LOGGED_IN && loginTick >= 0
 			&& tickCount - loginTick > 8 && varBurst++ < 10 && telBudget("varx", 90))
 		{
-			// Остальные переменные игры: из них Quest Helper собирает условия шагов, и по ним видно, что менялось от действия игрока.
+			// Other game variables: Quest Helper builds step conditions from them, and they show what changed from the player's action.
 			tel("varx", "varp", e.getVarpId(), "varbit", e.getVarbitId() < 0 ? null : e.getVarbitId(), "to", e.getValue());
 		}
 	}
 
-	/** Вызывается в потоке клиента (из onGameTick). */
+	/** Called on the client thread (from onGameTick). */
 	private Boolean isQuestFinished(String questName)
 	{
 		Quest quest = QUESTS.get(ActiveTarget.nameKey(questName));
@@ -3206,7 +3204,6 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			client.playSoundEffect(SoundEffectID.UI_BOOP);
 		}
-		// По-английски: в шрифте игры нет кириллицы.
 		client.addChatMessage(ChatMessageType.GAMEMESSAGE, "", "OSRS Path: step " + stepId + " complete", null);
 		recomputeChecklist();
 		updateHud();
@@ -3216,7 +3213,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	/** Для теста: какие названия квестов знает эта версия RuneLite. */
+	/** For a test: which quest names this RuneLite version knows. */
 	static Map<String, Quest> knownQuests()
 	{
 		return Collections.unmodifiableMap(QUESTS);

@@ -9,7 +9,7 @@ import static org.junit.Assert.assertTrue;
 import com.google.gson.Gson;
 import org.junit.Test;
 
-/** Подсветка шага этапа (как у Quest Helper): разбор, проверка и то, с чем плагин сравнивает NPC, объекты и предметы. */
+/** Stage step highlight (as in Quest Helper): parsing, validation and what the plugin compares NPCs, objects and items with. */
 public class LineHighlightTest
 {
 	private static final Gson GSON = new Gson();
@@ -20,29 +20,29 @@ public class LineHighlightTest
 	}
 
 	@Test
-	public void подсветкаРазбираетсяИСравниваетсяПоIDИИмени()
+	public void highlightIsParsedAndComparedByIdAndName()
 	{
-		ActiveTarget.StageLine l = line("{\"t\":\"Положи ром\",\"hl\":{\"npc\":[3647],\"obj\":[2072],\"on\":[\"Banana tree\"],\"item\":[\"Karamjan rum\"]}}");
+		ActiveTarget.StageLine l = line("{\"t\":\"Put the rum\",\"hl\":{\"npc\":[3647],\"obj\":[2072],\"on\":[\"Banana tree\"],\"item\":[\"Karamjan rum\"]}}");
 		assertNotNull(l.getHl());
 		assertNull(l.getHl().problem());
 		ActiveTarget.LineHighlight h = new ActiveTarget.LineHighlight(l.getHl());
 		assertTrue(h.npcIds.contains(3647));
 		assertTrue(h.objectIds.contains(2072));
-		assertTrue("имена сравниваются без регистра, как у остальных подсветок", h.objectNames.contains(ActiveTarget.nameKey("BANANA TREE")));
+		assertTrue("names are compared without case, like the other highlights", h.objectNames.contains(ActiveTarget.nameKey("BANANA TREE")));
 		assertTrue(h.itemNames.contains(ActiveTarget.nameKey("karamjan rum")));
 		assertFalse(h.isEmpty());
 	}
 
 	@Test
-	public void безПодсветки_пусто()
+	public void withoutHighlight_empty()
 	{
 		assertTrue(ActiveTarget.LineHighlight.NONE.isEmpty());
 		assertTrue(new ActiveTarget.LineHighlight(null).isEmpty());
-		assertNull(line("{\"t\":\"Поговори\"}").getHl());
+		assertNull(line("{\"t\":\"Talk\"}").getHl());
 	}
 
 	@Test
-	public void негоднаяПодсветкаОтвергаетсяЦеликом()
+	public void aBadHighlightIsRejectedWhole()
 	{
 		String[] bad = {"{\"npc\":[0]}", "{\"npc\":[300000]}", "{\"obj\":[-1]}", "{\"npc\":[1,2,3,4,5,6,7,8,9]}", "{\"on\":[\"\"]}", "{\"item\":[null]}",
 			"{\"on\":[\"" + "x".repeat(500) + "\"]}"};
@@ -54,22 +54,22 @@ public class LineHighlightTest
 	}
 
 	@Test
-	public void этапСНегоднойПодсветкойШагаНеПринимается()
+	public void aStageWithABadStepHighlightIsNotAccepted()
 	{
 		ActiveTarget t = GSON.fromJson("{\"stepId\":\"S2-09\",\"title\":\"x\",\"guide\":{\"items\":[],\"places\":[],\"stage\":{\"kind\":\"varp\",\"id\":71,\"stages\":["
-			+ "{\"at\":0,\"steps\":[{\"t\":\"Поговори\",\"hl\":{\"npc\":[0]}}]}]}}}", ActiveTarget.class);
+			+ "{\"at\":0,\"steps\":[{\"t\":\"Talk\",\"hl\":{\"npc\":[0]}}]}]}}}", ActiveTarget.class);
 		assertNotNull(t.prepare());
 		ActiveTarget ok = GSON.fromJson("{\"stepId\":\"S2-09\",\"title\":\"x\",\"guide\":{\"items\":[],\"places\":[],\"stage\":{\"kind\":\"varp\",\"id\":71,\"stages\":["
-			+ "{\"at\":0,\"steps\":[{\"t\":\"Поговори\",\"hl\":{\"npc\":[3647]}}]}]}}}", ActiveTarget.class);
+			+ "{\"at\":0,\"steps\":[{\"t\":\"Talk\",\"hl\":{\"npc\":[3647]}}]}]}}}", ActiveTarget.class);
 		assertNull(ok.prepare());
 	}
 
 	@Test
-	public void переходСДвижениемКурсораМеняетПодсветку_вДанных()
+	public void aTransitionWithCursorMovementChangesTheHighlight_inTheData()
 	{
-		// Строки Pirate's Treasure из данных программы: у каждой своя подсветка, а не одна на весь шаг.
-		ActiveTarget.StageLine rum = line("{\"t\":\"Положи ром\",\"hl\":{\"obj\":[2072],\"item\":[\"Karamjan rum\"]}}");
-		ActiveTarget.StageLine luthas = line("{\"t\":\"Скажи Luthas\",\"hl\":{\"npc\":[3647]}}");
+		// Pirate's Treasure lines from the app's data: each has its own highlight, not one for the whole step.
+		ActiveTarget.StageLine rum = line("{\"t\":\"Put the rum\",\"hl\":{\"obj\":[2072],\"item\":[\"Karamjan rum\"]}}");
+		ActiveTarget.StageLine luthas = line("{\"t\":\"Tell Luthas\",\"hl\":{\"npc\":[3647]}}");
 		assertTrue(new ActiveTarget.LineHighlight(rum.getHl()).npcIds.isEmpty());
 		assertEquals(1, new ActiveTarget.LineHighlight(luthas.getHl()).npcIds.size());
 		assertTrue(new ActiveTarget.LineHighlight(luthas.getHl()).objectIds.isEmpty());

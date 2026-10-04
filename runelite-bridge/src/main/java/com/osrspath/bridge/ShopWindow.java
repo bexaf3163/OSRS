@@ -9,12 +9,12 @@ import java.util.regex.Pattern;
 import lombok.Value;
 
 /**
- * Окно у банка, биржи и магазина: что нужно для шага именно здесь. В банке — что взять (и чего в банке нет), на бирже и у
- * торговца — что купить и где продаётся. Для любого квеста: берётся тот же список предметов шага или этапа, что и в списке
- * «Что нужно», плюс строки плана подготовки от программы (там действие вроде «Купи у Betty — 3 gp»). Предметы не
- * перекладываются и не покупаются — окно только говорит, что делать.
+ * The bank, exchange and shop window: what the step needs right here. At the bank, what to take (and what the bank lacks); at the exchange and at a
+ * merchant, what to buy and where it is sold. For any quest: the same item list of the step or stage as in the "What you need"
+ * list, plus the preparation plan rows from the app (an action like "Buy from Betty - 3 gp"). Items are not
+ * moved or bought: the window only says what to do.
  *
- * Здесь только раскладка строк (чистая логика для тестов); окно рисует {@link OsrsPathShopOverlay}.
+ * Only the row layout is here (pure logic for tests); {@link OsrsPathShopOverlay} draws the window.
  */
 final class ShopWindow
 {
@@ -25,13 +25,13 @@ final class ShopWindow
 
 	enum Mark
 	{
-		/** Сделать здесь: взять или купить. */
+		/** To do here: take or buy. */
 		TODO,
-		/** Не получится здесь: нет в банке. */
+		/** Cannot be done here: not in the bank. */
 		BAD,
-		/** Уже есть. */
+		/** Already have. */
 		GOOD,
-		/** Справка. */
+		/** A note. */
 		INFO
 	}
 
@@ -47,7 +47,7 @@ final class ShopWindow
 	{
 		String title;
 		List<Row> rows;
-		/** Сколько дел осталось здесь: взять или купить. */
+		/** How many things are left to do here: take or buy. */
 		int todo;
 	}
 
@@ -58,7 +58,7 @@ final class ShopWindow
 	{
 	}
 
-	/** Что показать у этого окна игры; null — показывать нечего (нет шага или предметов). */
+	/** What to show at this game window; null means nothing to show (no step or items). */
 	static Result build(Place place, StepGuide.View v)
 	{
 		if (v == null || v.getItems() == null)
@@ -76,7 +76,7 @@ final class ShopWindow
 			String raw = i.getName() == null ? i.getTitle() : i.getName();
 			seen.add(ActiveTarget.nameKey(PrepPlan.rawName(raw)));
 			PrepPlan.Line pl = plan == null ? null : plan.line(raw);
-			String label = i.getName() == null ? i.getTitle() : i.getName() + (i.getRu() == null ? "" : " (" + i.getRu() + ")");
+			String label = i.getName() == null ? i.getTitle() : i.getName();
 			switch (i.getHave())
 			{
 				case BAG:
@@ -91,7 +91,7 @@ final class ShopWindow
 					missing.add(label + hint(pl, i.getWhere()));
 					break;
 				default:
-					// Добудешь по ходу шага или уже отдано — у банка, биржи и торговца это не нужно.
+					// Obtained during the step or already handed in: not needed at the bank, exchange or merchant.
 					break;
 			}
 		}
@@ -130,12 +130,12 @@ final class ShopWindow
 		if (place == Place.BANK)
 		{
 			todo = take.size() + missing.size();
-			title = "Банк · что взять" + (id.isEmpty() ? "" : " · " + id);
-			add(rows, take, "Взять: ", Mark.TODO);
-			add(rows, missing, "Нет в банке: ", Mark.BAD);
+			title = "Bank · what to take" + (id.isEmpty() ? "" : " · " + id);
+			add(rows, take, "Take: ", Mark.TODO);
+			add(rows, missing, "Not in the bank: ", Mark.BAD);
 			if (take.isEmpty() && missing.isEmpty())
 			{
-				rows.add(new Row("Всё нужное уже в сумке ✓", Mark.GOOD));
+				rows.add(new Row("Everything needed is already in the bag ✓", Mark.GOOD));
 			}
 			else if (!inBag.isEmpty())
 			{
@@ -145,7 +145,7 @@ final class ShopWindow
 			{
 				if (plan.getWeight() != null && !plan.getWeight().isEmpty())
 				{
-					rows.add(new Row("Вес: " + plan.getWeight(), Mark.INFO));
+					rows.add(new Row("Weight: " + plan.getWeight(), Mark.INFO));
 				}
 				if (plan.getSlots() != null && !plan.getSlots().isEmpty())
 				{
@@ -153,22 +153,22 @@ final class ShopWindow
 				}
 				if (plan.getLater() != null && !plan.getLater().isEmpty())
 				{
-					rows.add(new Row("Не бери сейчас: " + String.join(", ", plan.getLater()), Mark.INFO));
+					rows.add(new Row("Don't take now: " + String.join(", ", plan.getLater()), Mark.INFO));
 				}
 			}
 		}
 		else
 		{
 			todo = missing.size();
-			title = (place == Place.EXCHANGE ? "Биржа · что купить" : "Магазин · что купить") + (id.isEmpty() ? "" : " · " + id);
-			add(rows, missing, "Купить: ", Mark.TODO);
+			title = (place == Place.EXCHANGE ? "Exchange · what to buy" : "Shop · what to buy") + (id.isEmpty() ? "" : " · " + id);
+			add(rows, missing, "Buy: ", Mark.TODO);
 			if (missing.isEmpty())
 			{
-				rows.add(new Row("Здесь покупать нечего ✓", Mark.GOOD));
+				rows.add(new Row("Nothing to buy here ✓", Mark.GOOD));
 			}
 			if (!inBank.isEmpty())
 			{
-				rows.add(new Row("Лежит в банке (не покупай): " + String.join(", ", inBank), Mark.INFO));
+				rows.add(new Row("In the bank (do not buy): " + String.join(", ", inBank), Mark.INFO));
 			}
 			if (!inBag.isEmpty())
 			{
@@ -178,14 +178,14 @@ final class ShopWindow
 		return new Result(title, rows, todo);
 	}
 
-	/** Сколько предметов, что уже с собой, называем в окне: длинный список всей сумки окно только раздувает. */
+	/** How many items already with you we name in the window: a long list of the whole bag only bloats the window. */
 	static final int BAG_SHOWN = 4;
 
-	/** «Уже в сумке: A, B, C, D и ещё 6» — не весь план на несколько шагов вперёд. */
+	/** "Already in the bag: A, B, C, D and 6 more": not the whole plan several steps ahead. */
 	static String bagLine(List<String> inBag)
 	{
 		int n = Math.min(inBag.size(), BAG_SHOWN);
-		return "Уже в сумке: " + String.join(", ", inBag.subList(0, n)) + (inBag.size() > n ? " и ещё " + (inBag.size() - n) : "");
+		return "Already in the bag: " + String.join(", ", inBag.subList(0, n)) + (inBag.size() > n ? " and " + (inBag.size() - n) + " more" : "");
 	}
 
 	private static void add(List<Row> rows, List<String> items, String prefix, Mark mark)
@@ -202,11 +202,11 @@ final class ShopWindow
 		}
 		if (shown < items.size())
 		{
-			rows.add(new Row("…и ещё " + (items.size() - shown), Mark.INFO));
+			rows.add(new Row("... and " + (items.size() - shown) + " more", Mark.INFO));
 		}
 	}
 
-	/** « — Купи у Betty — 3 gp»: действие плана, а нет его — где брать из шага. */
+	/** " - Buy from Betty - 3 gp": the plan's action, or if there is none, where to get it from the step. */
 	private static String hint(PrepPlan.Line l, String where)
 	{
 		String text = l != null && l.getAction() != null && !l.getAction().isEmpty() ? l.getAction() : where;
@@ -218,7 +218,7 @@ final class ShopWindow
 		return " — " + (t.endsWith(".") ? t.substring(0, t.length() - 1) : t);
 	}
 
-	/** Текст окна строками — для журнала отладки и тестов. */
+	/** The window text as lines, for the debug log and tests. */
 	static String plain(Result r)
 	{
 		StringBuilder sb = new StringBuilder(r.getTitle());

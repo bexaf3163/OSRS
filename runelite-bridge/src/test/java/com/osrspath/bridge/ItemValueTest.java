@@ -4,13 +4,13 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-/** Оценка предметов по ценам биржи: монеты не входят, неторгуемое — ноль, стопки умножаются. */
+/** Item valuation by exchange prices: coins are not included, untradeable is zero, stacks are multiplied. */
 public class ItemValueTest
 {
 	private static final int COINS = 995;
 
 	@Test
-	public void стоимостьБезМонет()
+	public void valueWithoutCoins()
 	{
 		ItemCounts c = new ItemCounts();
 		c.add(COINS, "coins", 5000);
@@ -22,7 +22,7 @@ public class ItemValueTest
 	}
 
 	@Test
-	public void безЦеныИОтрицательнаяЦенаНеСчитаются()
+	public void noPriceAndNegativePriceAreNotCounted()
 	{
 		ItemCounts c = new ItemCounts();
 		c.add(1, "x", 3);

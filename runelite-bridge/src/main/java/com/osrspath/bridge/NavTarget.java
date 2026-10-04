@@ -7,15 +7,15 @@ import java.util.Set;
 import lombok.Data;
 
 /**
- * Временная цель поверх шага: место с карты приложения («📍 Port Sarim») или магазин для апгрейда
- * («Купи Steel axe у Bob»). Стрелка, Shortest Path и HUD ведут к ней; шаг никуда не девается и
- * возвращается сам, когда игрок дошёл до места или получил предмет. {"clear": true} — снять раньше.
+ * A temporary target over the step: a place from the app's map ("📍 Port Sarim") or a shop for an upgrade
+ * ("Buy a Steel axe from Bob"). The arrow, Shortest Path and the HUD lead to it; the step does not go away and
+ * returns by itself when the player reached the place or got the item. {"clear": true} clears it earlier.
  */
 @Data
 public class NavTarget
 {
 	static final int MAX_NPCS = 8;
-	/** Мировые координаты RuneLite: наземный мир и подземелья (y до ~13 000) — всё меньше 16 384. */
+	/** RuneLite world coordinates: the surface world and dungeons (y up to ~13,000) are all below 16,384. */
 	static final int MAX_COORD = 16_384;
 	static final int MAX_ITEM_ID = 100_000;
 
@@ -24,12 +24,12 @@ public class NavTarget
 	private int x;
 	private int y;
 	private int plane;
-	/** Продавец или NPC у места — его подсветит оверлей мира. */
+	/** The seller or NPC at the place: the world overlay highlights it. */
 	private List<String> npcNames;
-	/** Предмет, за которым идём: с ним цель снимается, когда он появился в сумке или надет. */
+	/** The item being sought: with it the target is cleared when it appears in the bag or is worn. */
 	private String itemName;
 	private Integer itemId;
-	/** Шаг, к которому относится цель (для приложения; плагину не нужен). */
+	/** The step the target belongs to (for the app; the plugin does not need it). */
 	private String stepId;
 
 	private transient Set<String> npcNameSet = Collections.emptySet();
@@ -42,15 +42,15 @@ public class NavTarget
 		}
 		if (label == null || label.trim().isEmpty() || ActiveTarget.tooLong(label))
 		{
-			return "нужна подпись места";
+			return "place label required";
 		}
 		if (x <= 0 || y <= 0 || x >= MAX_COORD || y >= MAX_COORD || plane < 0 || plane > 3)
 		{
-			return "неверные координаты";
+			return "invalid coordinates";
 		}
 		if (npcNames != null && npcNames.size() > MAX_NPCS)
 		{
-			return "слишком много NPC";
+			return "too many NPCs";
 		}
 		Set<String> names = new HashSet<>();
 		if (npcNames != null)
@@ -59,28 +59,28 @@ public class NavTarget
 			{
 				if (n == null || n.isEmpty() || ActiveTarget.tooLong(n))
 				{
-					return "неверное имя NPC";
+					return "invalid NPC name";
 				}
 				names.add(ActiveTarget.nameKey(n));
 			}
 		}
 		if (itemName != null && (itemName.isEmpty() || ActiveTarget.tooLong(itemName)))
 		{
-			return "неверный предмет";
+			return "invalid item";
 		}
 		if (itemId != null && (itemId <= 0 || itemId >= MAX_ITEM_ID))
 		{
-			return "неверный ID предмета";
+			return "invalid item ID";
 		}
 		if (stepId != null && !stepId.matches("S\\d-\\d{2}"))
 		{
-			return "stepId должен быть вида S1-03";
+			return "stepId must look like S1-03";
 		}
 		npcNameSet = names;
 		return null;
 	}
 
-	/** Цель — покупка или получение предмета, а не просто место. */
+	/** The target is buying or getting an item, not just a place. */
 	boolean isPurchase()
 	{
 		return itemName != null || itemId != null;

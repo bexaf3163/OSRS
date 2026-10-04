@@ -1,31 +1,31 @@
 package com.osrspath.bridge;
 
 /**
- * «Умное проявление» оверлеев: что показывать в игре сейчас. Игра — оперативный уровень: куда кликнуть, сколько клеток
- * осталось, не бьют ли. Всё остальное (что купить оптом, где взять, формулы) остаётся в окне программы.
+ * The "smart reveal" of the overlays: what to show in the game now. The game is the operational level: where to click, how many tiles
+ * are left, whether they are hitting. Everything else (what to buy in bulk, where to get it, formulas) stays in the app window.
  *
- *  — в пути (цель дальше {@link #TRAVEL_TILES} клеток): стрелка и одна строка HUD — действие и расстояние;
- *  — у банка (открыто окно банка): список «Что нужно» и проверка вылета;
- *  — на бирже (открыты предложения GE): оптовый список; HUD — одной строкой;
- *  — рядом со шагом или без цели: обычный HUD и список «Что нужно».
- * Критичное — опасная зона, в которую игрок уже вошёл, и здоровье ниже одного удара — видно всегда.
+ *  - while travelling (the target is farther than {@link #TRAVEL_TILES} tiles): the arrow and one HUD line, the action and the distance;
+ *  - at the bank (the bank window is open): the "What you need" list and the departure check;
+ *  - at the exchange (GE offers are open): the bulk list; the HUD is one line;
+ *  - near the step or with no target: the usual HUD and the "What you need" list.
+ * The critical things, a danger zone the player is already in and health below one hit, are always visible.
  *
- * Здесь только решение — чистая логика для тестов; рисуют и читают окна игры оверлеи и плагин.
+ * Only the decision is here: pure logic for tests; the overlays and the plugin draw and read the game windows.
  */
 final class SmartView
 {
-	/** Дальше этого расстояния до цели игрок «в пути»: список шага ему сейчас не нужен. */
+	/** Farther than this distance to the target the player is "travelling": the step list is not needed now. */
 	static final int TRAVEL_TILES = 25;
 
 	enum Context
 	{
-		/** Бежит к цели: стрелка и одна строка. */
+		/** Running to the target: the arrow and one line. */
 		TRAVEL,
-		/** Рядом со шагом или цели нет: обычный вид. */
+		/** Near the step or there is no target: the usual view. */
 		STEP,
-		/** Открыт банк. */
+		/** The bank is open. */
 		BANK,
-		/** Открыты предложения Grand Exchange. */
+		/** The Grand Exchange offers are open. */
 		EXCHANGE
 	}
 
@@ -33,7 +33,7 @@ final class SmartView
 	{
 	}
 
-	/** tiles — расстояние до цели в клетках; -1 — не известно (цели нет, другой этаж, под землёй). */
+	/** tiles is the distance to the target in tiles; -1 means unknown (no target, another plane, underground). */
 	static Context of(boolean bankOpen, boolean exchangeOpen, int tiles)
 	{
 		if (bankOpen)
@@ -47,27 +47,27 @@ final class SmartView
 		return tiles > TRAVEL_TILES ? Context.TRAVEL : Context.STEP;
 	}
 
-	/** Список «Что нужно» — у банка и рядом со шагом; в пути и на бирже он закрывал бы обзор. */
+	/** The "What you need" list at the bank and near the step; while travelling and at the exchange it would block the view. */
 	static boolean showsGuide(Context c)
 	{
 		return c == Context.BANK || c == Context.STEP;
 	}
 
-	/** HUD одной строкой — в пути и на бирже. */
+	/** The HUD in one line while travelling and at the exchange. */
 	static boolean compactHud(Context c)
 	{
 		return c == Context.TRAVEL || c == Context.EXCHANGE;
 	}
 
-	/** Предупреждение радара в HUD: умный вид — только когда игрок уже в зоне; обычный — ещё и на подходе. */
+	/** The radar warning in the HUD: the smart view only when the player is already in the zone; the usual one also on the approach. */
 	static boolean dangerVisible(boolean smart, DangerRadar.Level level)
 	{
 		return smart ? level == DangerRadar.Level.INSIDE : level == DangerRadar.Level.WARNING || level == DangerRadar.Level.INSIDE;
 	}
 
 	/**
-	 * HUD в одну строку: «действие · расстояние». Остаются только критичные строки: опасная зона, в которой игрок уже
-	 * стоит, и здоровье ниже одного удара.
+	 * The HUD in one line: "action · distance". Only the critical lines remain: a danger zone the player is already
+	 * standing in, and health below one hit.
 	 */
 	static OsrsPathHudOverlay.State compact(OsrsPathHudOverlay.State s)
 	{
@@ -75,7 +75,7 @@ final class SmartView
 		String distance = s.getDistance();
 		String line = title == null || title.isEmpty() ? distance : distance == null ? title : title + " · " + distance;
 		boolean critical = s.isHealthCritical();
-		return new OsrsPathHudOverlay.State(line == null ? "OSRS Путь" : line, null, null, s.isNear(), null, false,
+		return new OsrsPathHudOverlay.State(line == null ? "OSRS Path" : line, null, null, s.isNear(), null, false,
 			s.isDangerInside() ? s.getDanger() : null, s.isDangerInside(), null, false, null,
 			critical ? s.getHealth() : null, critical, null, s.getTiles());
 	}

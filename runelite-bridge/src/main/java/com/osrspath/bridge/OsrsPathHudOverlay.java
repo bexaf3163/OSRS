@@ -20,29 +20,29 @@ import net.runelite.client.ui.overlay.components.LayoutableRenderableEntity;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
 /**
- * Микро-HUD: код и название шага, текущая цель и расстояние до неё. Слева сверху, под окнами игры,
- * перетаскивается мышью с зажатым Alt (как любая плашка RuneLite).
+ * The micro HUD: the step's code and name, the current target and the distance to it. Top left, under the game windows,
+ * draggable with the mouse while holding Alt (like any RuneLite plate).
  *
- * Строки плагин считает раз за игровой тик ({@link State}); здесь панель пересобирается, только
- * когда состояние или настройки изменились, — в обычном кадре ничего не создаётся. Длинные строки,
- * включая название шага, переносятся по ширине плашки ({@link OverlayText}).
+ * The plugin computes the lines once per game tick ({@link State}); here the panel is rebuilt only
+ * when the state or settings changed: a normal frame creates nothing. Long lines,
+ * including the step name, wrap to the plate width ({@link OverlayText}).
  */
 class OsrsPathHudOverlay extends OverlayPanel
 {
 	static final int WIDTH = 190;
-	/** Крупный HUD: шрифт и ширина больше на четверть. */
+	/** The large HUD: the font and width are a quarter bigger. */
 	static final float LARGE = 1.25f;
 	static final Color TITLE = new Color(255, 210, 90);
 	static final Color TEXT = new Color(230, 230, 230);
 	static final Color DISTANCE = new Color(120, 210, 255);
 	static final Color GOOD = new Color(90, 220, 120);
 	static final Color WARN = new Color(255, 170, 60);
-	/** «Почти готово» — золотисто-зелёный. */
+	/** "Almost done": golden green. */
 	static final Color ALMOST = new Color(200, 225, 90);
-	/** Совет по снаряжению: янтарный, как «⚡ Скоростной апгрейд» в приложении. */
+	/** Gear advice: amber, like "⚡ Speed upgrade" in the app. */
 	static final Color UPGRADE = new Color(255, 190, 70);
 
-	/** Всё, что показывает HUD. Неизменяемое: плагин заменяет его целиком. */
+	/** Everything the HUD shows. Immutable: the plugin replaces it whole. */
 	@Value
 	@AllArgsConstructor
 	static class State
@@ -51,29 +51,29 @@ class OsrsPathHudOverlay extends OverlayPanel
 		String goal;
 		String distance;
 		boolean near;
-		/** «Сумка: не хватает 2» / «Сумка готова» — если у шага есть проверка вылета. */
+		/** "Bag: missing 2" / "Bag ready", if the step has a departure check. */
 		String bag;
 		boolean bagReady;
-		/** Предупреждение радара опасности; null — рядом опасного нет. */
+		/** The danger radar warning; null means nothing dangerous nearby. */
 		String danger;
-		/** Игрок уже внутри опасной зоны, а не на подходе. */
+		/** The player is already inside the danger zone, not on the approach. */
 		boolean dangerInside;
-		/** «34 креветки до 20 Fishing (~7 мин)»; null — у шага нет темпа. */
+		/** "34 shrimps to 20 Fishing (~7 min)"; null means the step has no pace. */
 		String pacing;
-		/** Темп: почти готово или цель достигнута — строка зелёная. */
+		/** Pace: almost done or the goal reached: the line is green. */
 		boolean pacingGood;
-		/** «⚡ Надень Iron scimitar — он в банке»; null — совета нет или подсказки апгрейда выключены. */
+		/** "⚡ Wear Iron scimitar - it is in the bank"; null means no advice or upgrade hints are off. */
 		String upgrade;
-		/** «HP 12/40 — ешь! Бьёт до 8»; null — здоровье в порядке или у шага нет противника с известным ударом. */
+		/** "HP 12/40 - eat! Hits up to 8"; null means health is fine or the step has no enemy with a known hit. */
 		String health;
-		/** Здоровье не выше одного максимального удара: следующий удар может убить. */
+		/** Health no higher than one max hit: the next hit may kill. */
 		boolean healthCritical;
-		/** «Use Raw rat meat на Fireplace»: что сделать сейчас по шагу; null — нечего напоминать. */
+		/** "Use Raw rat meat on Fireplace": what to do now by the step; null means nothing to remind of. */
 		String action;
-		/** Расстояние до цели в клетках по прямой; -1 — не известно (цели нет, другой этаж, под землёй). */
+		/** The distance to the target in tiles in a straight line; -1 means unknown (no target, another plane, underground). */
 		int tiles;
 
-		/** Без предупреждения о здоровье и действия — как было до 2.15. */
+		/** Without the health and action warnings, as before 2.15. */
 		State(String title, String goal, String distance, boolean near, String bag, boolean bagReady, String danger,
 			boolean dangerInside, String pacing, boolean pacingGood, String upgrade)
 		{
@@ -86,7 +86,7 @@ class OsrsPathHudOverlay extends OverlayPanel
 			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, health, healthCritical, null, -1);
 		}
 
-		/** Без расстояния в клетках — как было до 2.19. */
+		/** Without the distance in tiles, as before 2.19. */
 		State(String title, String goal, String distance, boolean near, String bag, boolean bagReady, String danger,
 			boolean dangerInside, String pacing, boolean pacingGood, String upgrade, String health, boolean healthCritical, String action)
 		{
@@ -97,7 +97,7 @@ class OsrsPathHudOverlay extends OverlayPanel
 	private final OsrsPathBridgePlugin plugin;
 	private final OsrsPathBridgeConfig config;
 	private Object builtFor;
-	/** Размер плашки в прошлом кадре — по нему рисуется карточка. */
+	/** The plate size in the previous frame, which the card is drawn by. */
 	private Dimension last = new Dimension();
 
 	@Inject
@@ -122,14 +122,14 @@ class OsrsPathHudOverlay extends OverlayPanel
 			plugin.hudShown(false);
 			return null;
 		}
-		// Умное проявление: в пути и на бирже — одна строка (действие и расстояние), остальное в игре не нужно.
+		// Smart reveal: while travelling and at the exchange one line (the action and distance), the rest is not needed in the game.
 		if (config.smartOverlays() && SmartView.compactHud(plugin.overlayContext()))
 		{
 			s = SmartView.compact(s);
 		}
 		else if (config.hudLean())
 		{
-			// Компактный HUD: шаг, цель, расстояние и «сумка» — уже в списке «Что нужно»; плашка остаётся, только если ей есть что сказать.
+			// Compact HUD: the step, target, distance and "bag" are already in the "What you need" list; the plate stays only if it has something to say.
 			s = lean(s, GuideList.shown(config.showGuide(), config.guideCollapsed(), plugin.getGuideView(), config.smartOverlays(), plugin.overlayContext()));
 			if (s == null)
 			{
@@ -156,10 +156,10 @@ class OsrsPathHudOverlay extends OverlayPanel
 	}
 
 	/**
-	 * Компактный HUD. Рядом список «Что нужно» — шаг, цель, расстояние и «сумка» в HUD дублируют его (и стрелку с миникартой),
-	 * остаются только предупреждения: опасность, здоровье, действие, темп, совет по снаряжению. Списка нет — HUD единственный
-	 * источник: название и цель остаются, а «Сумка готова» — нет (хорошая новость не нужна, плохая — «Сумка: нет X» — остаётся).
-	 * null — показывать нечего: плашки нет совсем.
+	 * Compact HUD. Next to it is the "What you need" list: the step, target, distance and "bag" in the HUD duplicate it (and the arrow and minimap),
+	 * only warnings remain: danger, health, action, pace, gear advice. With no list the HUD is the only
+	 * source: the name and target stay, but "Bag ready" does not (good news is not needed, bad news, "Bag: missing X", stays).
+	 * null means nothing to show: no plate at all.
 	 */
 	static State lean(State s, boolean guideShown)
 	{
@@ -176,7 +176,7 @@ class OsrsPathHudOverlay extends OverlayPanel
 			s.isPacingGood(), s.getUpgrade(), s.getHealth(), s.isHealthCritical(), s.getAction(), s.getTiles());
 	}
 
-	/** Текст плашки строками — для журнала отладки: что игрок видит наверху. */
+	/** The plate text in lines, for the debug log: what the player sees at the top. */
 	static String plain(State s)
 	{
 		java.util.List<String> lines = new java.util.ArrayList<>();
@@ -195,7 +195,7 @@ class OsrsPathHudOverlay extends OverlayPanel
 		return s == null || s.isEmpty();
 	}
 
-	/** Цвет полоски: опасность — красный, цель рядом — зелёный, остальное — золото. */
+	/** The strip colour: danger is red, a target nearby is green, the rest gold. */
 	static Color accent(State s)
 	{
 		if (s.getDanger() != null || s.isHealthCritical())
@@ -205,14 +205,14 @@ class OsrsPathHudOverlay extends OverlayPanel
 		return s.isNear() ? OverlayCard.GREEN : OverlayCard.GOLD;
 	}
 
-	/** Ширина плашки: своя или та, что игрок задал, растянув её мышью с Alt. */
+	/** The plate width: its own or the one the player set by stretching it with Alt. */
 	static int panelWidth(Overlay overlay, int standard)
 	{
 		Dimension d = overlay.getPreferredSize();
 		return d != null && d.width > 0 ? d.width : standard;
 	}
 
-	/** Содержимое HUD. Статическое — чтобы тест мог отрисовать его настоящими шрифтами без клиента. */
+	/** The HUD contents. Static, so a test can draw it with the real fonts without a client. */
 	static void build(PanelComponent panel, State s, FontMetrics fm, int width, int opacity)
 	{
 		int inner = OverlayText.inner(width);
@@ -226,8 +226,8 @@ class OsrsPathHudOverlay extends OverlayPanel
 		}
 		if (s.getDanger() != null)
 		{
-			// Опасность — сразу под названием, выше цели: её нельзя пропустить.
-			OverlayText.line(c, s.isDangerInside() ? "⚠ ОПАСНО — ты в зоне!" : "⚠ ВНИМАНИЕ", OsrsPathDangerOverlay.DANGER, fm, inner);
+			// Danger comes right under the name, above the target: it cannot be missed.
+			OverlayText.line(c, s.isDangerInside() ? "⚠ DANGER - you are in the zone!" : "⚠ WARNING", OsrsPathDangerOverlay.DANGER, fm, inner);
 			OverlayText.line(c, s.getDanger(), OsrsPathDangerOverlay.DANGER, fm, inner);
 		}
 		if (s.getHealth() != null)
@@ -260,7 +260,7 @@ class OsrsPathHudOverlay extends OverlayPanel
 		}
 	}
 
-	/** Стандартный фон плашек RuneLite с прозрачностью из настроек. */
+	/** The standard RuneLite plate background with the transparency from the settings. */
 	static Color background(int opacityPercent)
 	{
 		Color c = ComponentConstants.STANDARD_BACKGROUND_COLOR;

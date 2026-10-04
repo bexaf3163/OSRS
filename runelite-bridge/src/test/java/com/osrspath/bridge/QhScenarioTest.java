@@ -9,10 +9,10 @@ import java.util.List;
 import org.junit.Test;
 
 /**
- * Машина Quest Helper на настоящих данных S2-09 (Pirate's Treasure): игрок проходит контрабанду рома, а сообщения, диалоги и предметы
- * приходят так, как их видит плагин. Поводом стал живой сеанс: игрок положил ром, наполнил ящик бананами и поговорил с Luthas
- * («Luthas hands you 30 coins.»), а список остался на «Скажи Luthas, что ящик заполнен»: по месту и предметам этого не увидеть,
- * Quest Helper же видит это по строке чата.
+ * The Quest Helper machine on the real S2-09 data (Pirate's Treasure): the player goes through the rum smuggling, and messages, dialogues and items
+ * arrive as the plugin sees them. The occasion was a live session: the player put the rum in, filled the crate with bananas and talked to Luthas
+ * ("Luthas hands you 30 coins."), and the list stayed on "Tell Luthas the crate is full": by place and items that cannot be seen,
+ * while Quest Helper sees it by the chat line.
  */
 public class QhScenarioTest
 {
@@ -28,17 +28,17 @@ public class QhScenarioTest
 				return s.target.getGuide().getStage().getStages().get(1).getSteps();
 			}
 		}
-		throw new AssertionError("нет этапа S2-09#1");
+		throw new AssertionError("no stage S2-09#1");
 	}
 
 	private static QhMachine machine()
 	{
 		QhMachine m = QhMachine.all().get("S2-09");
-		assertNotNull("нет машины S2-09", m);
+		assertNotNull("no machine S2-09", m);
 		return m;
 	}
 
-	/** Строка списка (с единицы), которую выбрала машина; 0 — машина не решает или решила «по умолчанию». */
+	/** The list line (from one) that the machine chose; 0 means the machine does not decide or decided 'by default'. */
 	private static int pick(QhMachine.Session session, QhFakeGame game)
 	{
 		QhMachine m = machine();
@@ -51,7 +51,7 @@ public class QhScenarioTest
 	}
 
 	@Test
-	public void всеСтрокиЭтапаИмеютКлючШагаQuestHelper()
+	public void allStageLinesHaveAQuestHelperStepKey()
 	{
 		List<ActiveTarget.StageLine> lines = lines();
 		assertEquals(10, lines.size());
@@ -60,85 +60,85 @@ public class QhScenarioTest
 			"smuggleRum.getRumFromCrate", "smuggleRum.bringRumToRedbeard"};
 		for (int i = 0; i < keys.length; i++)
 		{
-			assertEquals("ключ строки " + (i + 1) + " «" + lines.get(i).shown() + "»", keys[i], lines.get(i).getK());
+			assertEquals("key of line " + (i + 1) + " '" + lines.get(i).shown() + "'", keys[i], lines.get(i).getK());
 		}
 	}
 
 	@Test
-	public void контрабандаРома_отПричалаДоДоставки_каждаяСтрокаВоВремя()
+	public void rumSmuggling_fromTheQuayToTheDelivery_everyLineOnTime()
 	{
 		QhMachine.Session s = new QhMachine.Session();
 		QhFakeGame g = new QhFakeGame();
-		// Поговорил с Redbeard Frank: «Ok, I will bring you some rum.» Стоит на причале Port Sarim.
+		// Talked to Redbeard Frank: "Ok, I will bring you some rum." Stands on the Port Sarim quay.
 		g.say("Redbeard Frank", "Ok, I will bring you some rum.");
-		assertEquals("к лодке — первая строка", 1, pick(s, g));
-		// Приплыл на Karamja: с ромом ещё нет, к Zembo.
+		assertEquals("to the boat: the first line", 1, pick(s, g));
+		// Arrived on Karamja: no rum yet, to Zembo.
 		g.at(2955, 3146);
-		assertEquals("на Karamja без рома — «купи ром у Zembo»", 2, pick(s, g));
-		// Купил ром.
+		assertEquals("on Karamja without rum: 'buy rum from Zembo'", 2, pick(s, g));
+		// Bought the rum.
 		g.give(RUM, 1);
-		assertEquals("ром куплен — «нарви бананы, поговори с Luthas»", 3, pick(s, g));
-		// Luthas взял на работу и предложил наполнить ящик.
+		assertEquals("rum bought: 'pick bananas, talk to Luthas'", 3, pick(s, g));
+		// Luthas hired them and offered to fill the crate.
 		g.at(2938, 3154).say("Luthas", "If you could fill it up with bananas, I'll pay you 30 gold.");
-		assertEquals("взят на работу, ром с собой — «положи ром в ящик»", 4, pick(s, g));
-		// Положил ром в ящик: ром ушёл из сумки, игра написала в окне сообщения.
+		assertEquals("hired, rum on hand: 'put the rum in the crate'", 4, pick(s, g));
+		// Put the rum in the crate: the rum left the bag, the game wrote a message in the window.
 		g.take(RUM).mes("You stash the rum in the crate.");
-		assertEquals("ром в ящике — «заполни ящик бананами»", 5, pick(s, g));
-		// Наполнил ящик.
+		assertEquals("rum in the crate: 'fill the crate with bananas'", 5, pick(s, g));
+		// Filled the crate.
 		g.mes("You fill the crate with bananas.");
-		assertEquals("ящик полон — «скажи Luthas»", 6, pick(s, g));
-		// Сказал Luthas — вот случай из живой игры: список обязан сдвинуться сразу, а не когда игрок дойдёт до Customs officer.
+		assertEquals("the crate is full: 'tell Luthas'", 6, pick(s, g));
+		// Told Luthas - the live-game case: the list must move at once, not when the player reaches the Customs officer.
 		g.chat("Luthas hands you 30 coins.");
-		assertEquals("Luthas заплатил — «вернись в Port Sarim, заплати Customs officer»", 7, pick(s, g));
-		// Вернулся в Port Sarim.
+		assertEquals("Luthas paid: 'return to Port Sarim, pay the Customs officer'", 7, pick(s, g));
+		// Returned to Port Sarim.
 		g.at(3020, 3230);
-		assertEquals("в Port Sarim — «возьми White apron»", 8, pick(s, g));
+		assertEquals("in Port Sarim: 'take the White apron'", 8, pick(s, g));
 		g.give(WHITE_APRON, 1);
-		assertEquals("фартук взят — «ром в ящике подсобки Wydin»", 9, pick(s, g));
+		assertEquals("apron taken: 'rum in Wydin's back-room crate'", 9, pick(s, g));
 		g.give(RUM, 1);
-		assertEquals("ром достали из ящика — «отнеси Redbeard Frank»", 10, pick(s, g));
+		assertEquals("rum taken out of the crate: 'bring it to Redbeard Frank'", 10, pick(s, g));
 	}
 
 	@Test
-	public void сообщениеЗабытоПослеВыходаВИгру_шагВозвращаетсяПоДневнику()
+	public void messageForgottenAfterLoginToTheGame_stepReturnsByTheJournal()
 	{
 		QhMachine.Session s = new QhMachine.Session();
 		QhFakeGame g = new QhFakeGame().at(2938, 3154).give(RUM, 1);
-		// Плагин только что запустили: ни одного сообщения, защёлки пусты — машина не может ничего утверждать.
-		assertEquals("нет доказательств — решает прежняя логика", 0, pick(s, g));
-		// Игрок открыл дневник квеста: Quest Helper сверяет шаг именно по нему.
+		// The plugin has just been started: no messages, the latches are empty - the machine cannot state anything.
+		assertEquals("no evidence: the previous logic decides", 0, pick(s, g));
+		// The player opened the quest journal: Quest Helper checks the step by it.
 		g.journal("Pirate's Treasure", "I have taken employment on Luthas's banana plantation.");
-		assertEquals("дневник: «I have taken employment» + ром с собой — «положи ром в ящик»", 4, pick(s, g));
-		// Дневник закрыли: защёлка осталась, шаг держится.
+		assertEquals("journal: 'I have taken employment' + rum on hand: 'put the rum in the crate'", 4, pick(s, g));
+		// The journal was closed: the latch stayed, the step holds.
 		g.closeJournal();
-		assertEquals("дневник закрыт — шаг держится по защёлке", 4, pick(s, g));
+		assertEquals("journal closed: the step holds by the latch", 4, pick(s, g));
 	}
 
 	@Test
-	public void защёлкиЖивутДоСбросаСеанса()
+	public void latchesLiveUntilTheSessionResets()
 	{
 		QhMachine.Session s = new QhMachine.Session();
 		QhFakeGame g = new QhFakeGame().at(2955, 3146);
 		g.say("Redbeard Frank", "Ok, I will bring you some rum.");
 		assertEquals(2, pick(s, g));
 		g.events.clear();
-		assertEquals("сообщение забыто, защёлка помнит", 2, pick(s, g));
+		assertEquals("the message is forgotten, the latch remembers", 2, pick(s, g));
 		s.reset();
-		assertEquals("после сброса (другой квест, выход из игры) — доказательств нет", 0, pick(s, g));
+		assertEquals("after a reset (another quest, leaving the game): no evidence", 0, pick(s, g));
 	}
 
 	@Test
-	public void чужаяСтрокаВЧатеШагНеДвигает()
+	public void someoneElsesChatLineDoesNotMoveTheStep()
 	{
 		QhMachine.Session s = new QhMachine.Session();
 		QhFakeGame g = new QhFakeGame().at(2955, 3146);
 		g.say("Redbeard Frank", "Ok, I will bring you some rum.");
 		g.chat("You eat the banana.").chat("Luthas hands you 30 coins");
-		assertEquals("без точки в конце и без ящика — это не то сообщение", 2, pick(s, g));
+		assertEquals("without the full stop and without the crate: not that message", 2, pick(s, g));
 	}
 
 	@Test
-	public void цветныеТегиВСообщенииНеМешают()
+	public void colourTagsInAMessageDoNotInterfere()
 	{
 		QhMachine.Session s = new QhMachine.Session();
 		QhFakeGame g = new QhFakeGame().at(2938, 3154);
@@ -150,27 +150,27 @@ public class QhScenarioTest
 	}
 
 	@Test
-	public void этапБезУсловий_нетСильногоВыбора()
+	public void aStageWithoutConditions_noStrongChoice()
 	{
-		// var 0: единственный шаг «поговори с Redbeard» без условий — выбор по умолчанию, значит решает прежняя логика.
+		// var 0: the only step "talk to Redbeard" without conditions: the default choice, so the previous logic decides.
 		QhMachine m = machine();
 		QhMachine.Verdict v = m.resolve(0, new QhFakeGame(), new QhMachine.Session());
 		assertFalse(v.isUndecided());
-		assertFalse("шаг без условия — не доказательство", v.isStrong());
+		assertFalse("a step without a condition is not evidence", v.isStrong());
 		assertEquals("speakToRedbeard", v.getLeaf());
 	}
 
 	@Test
-	public void неизвестноеУсловие_машинаНеРешает()
+	public void unknownCondition_theMachineDoesNotDecide()
 	{
-		// var 3: первое условие — стрелка на NPC (Quest Helper читает её у клиента), у плагина этого нет: «не знаю» ≠ «нет».
+		// var 3: the first condition is the arrow on an NPC (Quest Helper reads it from the client), the plugin has none: "don't know" is not "no".
 		QhMachine.Verdict v = machine().resolve(3, new QhFakeGame(), new QhMachine.Session());
-		assertTrue("условие «NpcHintArrow» плагин проверить не может", v.isUndecided());
+		assertTrue("the 'NpcHintArrow' condition cannot be checked by the plugin", v.isUndecided());
 	}
 
-	/** Любой квест, любое значение переменной, пустая игра, игрок «нигде», забитая сообщениями память: машина не падает и отвечает. */
+	/** Any quest, any variable value, an empty game, a player "nowhere", memory stuffed with messages: the machine does not crash and answers. */
 	@Test
-	public void всеМашины_навсякийСлучай_неПадают()
+	public void allMachines_justInCase_doNotCrash()
 	{
 		int resolved = 0;
 		for (java.util.Map.Entry<String, QhMachine> e : QhMachine.all().entrySet())
@@ -183,7 +183,7 @@ public class QhScenarioTest
 				QhFakeGame noisy = new QhFakeGame();
 				for (int i = 0; i < 400; i++)
 				{
-					noisy.chat("мусор " + i).mes("<col=ff0000>" + i + "</col>").say("Кто-то", "реплика " + i);
+					noisy.chat("junk " + i).mes("<col=ff0000>" + i + "</col>").say("Somebody", "line " + i);
 				}
 				for (QhFakeGame g : new QhFakeGame[] {empty, nowhere, noisy})
 				{
@@ -197,11 +197,11 @@ public class QhScenarioTest
 				}
 			}
 		}
-		assertTrue("машины почти ничего не решают: " + resolved, resolved > 1000);
+		assertTrue("the machines decide almost nothing: " + resolved, resolved > 1000);
 	}
 
 	@Test
-	public void значенияБезШагаУQuestHelper_неРешаются()
+	public void valuesWithoutAStepInQuestHelper_areNotDecided()
 	{
 		assertFalse(machine().hasStage(7));
 		assertTrue(machine().resolve(7, new QhFakeGame(), new QhMachine.Session()).isUndecided());

@@ -23,24 +23,24 @@ import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
 /**
- * Список «Что нужно» на экране игры — под HUD, слева сверху (перетаскивается с Alt). Строки считает
- * {@link GuideList}; строка под мышью подсвечивается, внизу — подсказка к ней. После каждого кадра список
- * запоминает, где на холсте его строки, — по этим прямоугольникам {@link GuideMouse} понимает, куда нажали.
+ * The "What you need" list on the game screen: under the HUD, top left (draggable with Alt). {@link GuideList} computes the
+ * lines; the line under the mouse is highlighted, with a hint for it at the bottom. After each frame the list
+ * remembers where its lines are on the canvas, and {@link GuideMouse} uses those rectangles to tell where a click landed.
  */
 class OsrsPathGuideOverlay extends OverlayPanel
 {
-	/** Шире HUD: у предметов справа статус, под ними — «где взять». */
+	/** Wider than the HUD: items have a status on the right, and "where to get it" under them. */
 	static final int WIDTH = 240;
-	/** «Где взять» и подсказка — мельче основного текста. */
+	/** "Where to get it" and the hint are smaller than the main text. */
 	static final float SMALL = 0.85f;
 	static final Color HOVER = new Color(255, 255, 255, 40);
 	/**
-	 * Сколько после последнего кадра клик ещё считается по строкам. Список давно не рисовался (вышел из игры,
-	 * плашку скрыли) — клики уходят игре, а не в невидимые кнопки.
+	 * For how long after the last frame a click still counts against the lines. If the list has not been drawn for a long time (left the game,
+	 * the plate was hidden), clicks go to the game, not to invisible buttons.
 	 */
 	private static final long FRESH_NANOS = 500_000_000L;
 
-	/** Где на холсте список и его строки — снимок последнего кадра для потока мыши. */
+	/** Where the list and its lines are on the canvas: a snapshot of the last frame for the mouse thread. */
 	static final class Hits
 	{
 		static final Hits NONE = new Hits(new Rectangle(), Collections.emptyList(), Collections.emptyList(), 0);
@@ -58,7 +58,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			this.at = at;
 		}
 
-		/** Номер строки под точкой; -1 — не над строкой. */
+		/** The number of the line under a point; -1 means not over a line. */
 		int rowAt(int x, int y)
 		{
 			for (int i = 0; i < rows.size(); i++)
@@ -89,7 +89,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		this.config = config;
 		setPosition(OverlayPosition.TOP_LEFT);
 		setLayer(OverlayLayer.UNDER_WIDGETS);
-		// Ниже HUD в стопке слева сверху: у HUD приоритет выше.
+		// Below the HUD in the top-left stack: the HUD has higher priority.
 		setPriority(PRIORITY_LOW);
 		setClearChildren(false);
 		setMovable(true);
@@ -99,7 +99,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	public Dimension render(Graphics2D g)
 	{
 		StepGuide.View v = plugin.getGuideView();
-		// Умное проявление: в пути и на бирже список шага закрывал бы обзор — он нужен у банка и рядом со шагом.
+		// Smart reveal: while travelling and at the exchange the step list would block the view; it is needed at the bank and near the step.
 		if (!GuideList.shown(config.showGuide(), false, v, config.smartOverlays(), plugin.overlayContext()))
 		{
 			hits = Hits.NONE;
@@ -119,7 +119,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			components = build(panelComponent, v, config.guideCollapsed(), hovered, g.getFontMetrics(font), g.getFontMetrics(small),
 				font, small, width, config.hudOpacity(), terse);
 			builtFor = key;
-			// Что именно видит игрок — в журнал отладки (только когда плашка пересобрана, не каждый кадр).
+			// What exactly the player sees goes to the debug log (only when the plate was rebuilt, not every frame).
 			List<GuideList.Row> shown = new ArrayList<>();
 			for (RowComponent rc : components)
 			{
@@ -138,7 +138,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		return d;
 	}
 
-	/** Цвет полоски: квест пройден — зелёный, идёт по этапам — голубой, иначе золото. */
+	/** The strip colour: quest complete is green, going by stages is blue, otherwise gold. */
 	static Color accent(StepGuide.View v)
 	{
 		StepGuide.StageView s = v.getStage();
@@ -149,7 +149,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		return OverlayCard.GOLD;
 	}
 
-	/** Строка под мышью по прошлому кадру; -1 — мышь не над списком, открыто меню игры или над списком окно игры. */
+	/** The line under the mouse by the previous frame; -1 means the mouse is not over the list, the game menu is open or a game window is over the list. */
 	private int hovered()
 	{
 		if (client.isMenuOpen())
@@ -157,7 +157,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			return -1;
 		}
 		net.runelite.api.Point m = client.getMouseCanvasPosition();
-		// Над списком окно игры (банк, магазин, карта мира) — строка под ним не подсвечивается и не подсказывает.
+		// A game window is over the list (bank, shop, world map): the line under it is not highlighted and gives no hint.
 		if (m == null || GuideMouse.windowUnderMouse(client.getMenu().getMenuEntries())
 			|| GuideMouse.mapCovers(client.getWidget(net.runelite.api.gameval.InterfaceID.Worldmap.WINDOW), new java.awt.Point(m.getX(), m.getY())))
 		{
@@ -166,7 +166,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		return hits.rowAt(m.getX(), m.getY());
 	}
 
-	/** Прямоугольники строк на холсте: при отрисовке плашка уже стоит на своём месте (getBounds). */
+	/** The line rectangles on the canvas: at drawing time the plate already stands in its place (getBounds). */
 	private void remember(Dimension d)
 	{
 		if (d == null)
@@ -197,8 +197,8 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	}
 
 	/**
-	 * Что под точкой холста (поток мыши). null — не список, клик уходит игре; Action.NONE — список, но не кнопка:
-	 * клик по нему не должен уйти игре и повести персонажа туда, что под плашкой.
+	 * What is under a canvas point (mouse thread). null means not the list, the click goes to the game; Action.NONE means the list but not a button:
+	 * the click must not go to the game and walk the character to whatever is under the plate.
 	 */
 	GuideList.Action actionAt(Point p)
 	{
@@ -211,14 +211,14 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		return row < 0 ? GuideList.Action.NONE : h.actions.get(row);
 	}
 
-	/** Содержимое плашки. Статическое — тест рисует его настоящими шрифтами без клиента. */
+	/** The plate contents. Static: a test draws it with the real fonts without a client. */
 	static List<RowComponent> build(PanelComponent panel, StepGuide.View v, boolean collapsed, int hovered, FontMetrics fm,
 		FontMetrics smallFm, Font font, Font small, int width, int opacity)
 	{
 		return build(panel, v, collapsed, hovered, fm, smallFm, font, small, width, opacity, false);
 	}
 
-	/** terse — краткий вид для игры (умное проявление): подробности остаются в подсказке и в окне программы. */
+	/** terse is the brief view for the game (smart reveal): the details stay in the hint and in the app window. */
 	static List<RowComponent> build(PanelComponent panel, StepGuide.View v, boolean collapsed, int hovered, FontMetrics fm,
 		FontMetrics smallFm, Font font, Font small, int width, int opacity, boolean terse)
 	{
@@ -236,7 +236,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			c.add(rc);
 			if (i == 0 && !collapsed && v.getStage() != null && v.getStage().getTotal() > 0)
 			{
-				// Под заголовком этапа — полоска прохождения квеста.
+				// Under the stage heading is the quest progress strip.
 				StepGuide.StageView sv = v.getStage();
 				c.add(new OverlayCard.Bar(sv.isFinished() ? 1 : (double) (sv.getIndex() - 1) / sv.getTotal(),
 					sv.isFinished() ? OverlayCard.GREEN : OverlayCard.BLUE));
@@ -251,7 +251,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		return out;
 	}
 
-	/** Строка списка: её строки текста и подсветка, когда мышь над кнопкой. Размер и место — после отрисовки. */
+	/** A list line: its text lines and the highlight when the mouse is over a button. The size and place are set after drawing. */
 	static final class RowComponent implements LayoutableRenderableEntity
 	{
 		@Getter
@@ -299,7 +299,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 				{
 					h += g.getFontMetrics(f).getHeight();
 				}
-				// Подсветка — в пределах рамки панели (4 точки с каждой стороны): за плашку ничего не вылезает.
+				// The highlight stays within the panel frame (4 points on each side): nothing sticks out beyond the plate.
 				g.setColor(HOVER);
 				g.fillRoundRect(x - 4, y + 1, width + 8, h + 1, 8, 8);
 			}

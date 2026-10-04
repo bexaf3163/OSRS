@@ -16,8 +16,8 @@ import net.runelite.client.ui.FontManager;
 import org.junit.Test;
 
 /**
- * Плашка разработчика, нарисованная настоящим шрифтом RuneLite: помещается в свою рамку, зелёное и красное
- * различимы на тёмной подложке. Картинки для глаза — в build/overlay-render/debug-*.png.
+ * The developer badge drawn with the real RuneLite font: it fits its frame, and green and red
+ * are distinguishable on the dark backing. Pictures for the eye are in build/overlay-render/debug-*.png.
  */
 public class DebugOverlayRenderTest
 {
@@ -26,17 +26,17 @@ public class DebugOverlayRenderTest
 
 	private static DebugView.State healthy()
 	{
-		return new DebugView.State("S2-05", "3/9", 5, 1, 5, "Добудь руду", false, false, null, Arrays.asList("has Iron ore = TRUE"),
-			Collections.singletonList("Quest(The Knight's Sword) = FALSE"), 1, "seq 1712000000, 3 с назад", 80, "POSITION: дошёл до шага 2 «Добудь руду»", "12/28", "3200,3200,0", 4242, true,
+		return new DebugView.State("S2-05", "3/9", 5, 1, 5, "Mine the ore", false, false, null, Arrays.asList("has Iron ore = TRUE"),
+			Collections.singletonList("Quest(The Knight's Sword) = FALSE"), 1, "seq 1712000000, 3 s ago", 80, "POSITION: reached step 2 'Mine the ore'", "12/28", "3200,3200,0", 4242, true,
 			true, true, "session-20260101-120000.jsonl", 57, 0, Collections.emptyList(), null);
 	}
 
 	private static DebugView.State broken()
 	{
-		return new DebugView.State("S2-08", "2/6", 3, 2, 5, "Отдай Bronze bar Thurgo, чтобы он выковал меч", false, false, "Bronze bar ещё в сумке: сначала отдай его",
-			Arrays.asList("has Bronze bar = TRUE", "need Bronze bar (сдан) = FALSE"), Collections.singletonList("Item(2349) = FALSE"), 3, null, null,
-			"CLAMP: Bronze bar ещё в сумке: сначала отдай его", "26/28", "2998,3144,0", 99000, false, false, true, "session-20260101-120000.jsonl", 412, 2,
-			Arrays.asList("STUCK: Шаг 3/5 этапа S2-08#2 не меняется 184 с, хотя пройдено ~96 клеток и сумка менялась 7 раз", "EMPTY: шаг S2-08 выбран, а на экране пусто 22 с"),
+		return new DebugView.State("S2-08", "2/6", 3, 2, 5, "Give the Bronze bar to Thurgo so he forges the sword", false, false, "Bronze bar is still in the bag: hand it in first",
+			Arrays.asList("has Bronze bar = TRUE", "need Bronze bar (handed in) = FALSE"), Collections.singletonList("Item(2349) = FALSE"), 3, null, null,
+			"CLAMP: Bronze bar is still in the bag: hand it in first", "26/28", "2998,3144,0", 99000, false, false, true, "session-20260101-120000.jsonl", 412, 2,
+			Arrays.asList("STUCK: Step 3/5 of stage S2-08#2 has not changed for 184 s, though ~96 tiles were walked and the bag changed 7 times", "EMPTY: step S2-08 is chosen but the screen is empty for 22 s"),
 			"shot-20260101-120311-anomaly_STUCK.png");
 	}
 
@@ -91,14 +91,14 @@ public class DebugOverlayRenderTest
 	}
 
 	@Test
-	public void вПорядкеЗелёноеИСерое_красногоНет() throws IOException
+	public void greenAndGreyInOrder_noRed() throws IOException
 	{
 		Dimension[] size = new Dimension[1];
 		BufferedImage img = render(healthy(), size);
 		assertEquals(OsrsPathDebugOverlay.WIDTH, size[0].width);
-		assertEquals("за рамкой ничего не нарисовано", 0, count(img, OsrsPathDebugOverlay.WIDTH, img.getWidth(), p -> ((p >> 24) & 0xFF) != 0));
-		assertEquals("ниже рамки тоже", 0, countBelow(img, size[0].height));
-		assertTrue("зелёный текст есть", count(img, 0, OsrsPathDebugOverlay.WIDTH, DebugOverlayRenderTest::green) > 100);
+		assertEquals("nothing is drawn outside the frame", 0, count(img, OsrsPathDebugOverlay.WIDTH, img.getWidth(), p -> ((p >> 24) & 0xFF) != 0));
+		assertEquals("below the frame too", 0, countBelow(img, size[0].height));
+		assertTrue("there is green text", count(img, 0, OsrsPathDebugOverlay.WIDTH, DebugOverlayRenderTest::green) > 100);
 		save(img, size[0], "debug-healthy.png");
 	}
 
@@ -119,15 +119,15 @@ public class DebugOverlayRenderTest
 	}
 
 	@Test
-	public void сломанноеКрасноеИДлинныеСтрокиПереносятсяВРамку() throws IOException
+	public void brokenRedAndLongLinesWrapInsideTheFrame() throws IOException
 	{
 		Dimension[] size = new Dimension[1];
 		BufferedImage img = render(broken(), size);
 		assertEquals(0, count(img, OsrsPathDebugOverlay.WIDTH, img.getWidth(), p -> ((p >> 24) & 0xFF) != 0));
 		assertEquals(0, countBelow(img, size[0].height));
-		assertTrue("красный текст есть", count(img, 0, OsrsPathDebugOverlay.WIDTH, DebugOverlayRenderTest::red) > 200);
-		assertTrue("есть и зелёное: плашка различает", count(img, 0, OsrsPathDebugOverlay.WIDTH, DebugOverlayRenderTest::green) > 20);
-		assertTrue("высота плашки разумна: " + size[0].height, size[0].height < 360);
+		assertTrue("there is red text", count(img, 0, OsrsPathDebugOverlay.WIDTH, DebugOverlayRenderTest::red) > 200);
+		assertTrue("there is green too: the badge tells them apart", count(img, 0, OsrsPathDebugOverlay.WIDTH, DebugOverlayRenderTest::green) > 20);
+		assertTrue("the badge height is sensible: " + size[0].height, size[0].height < 360);
 		save(img, size[0], "debug-broken.png");
 	}
 }

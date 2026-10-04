@@ -118,7 +118,7 @@ export function qa(input: QaInput): QaIssue[] {
         }
         // Короткий текст для игры: одна строка, без диалога, с заглавной.
         const sc = l.s ? firstChar(l.s) : '';
-        if (!l.s || l.s.length > 72 || /Диалог/.test(l.s) || !sc || sc !== sc.toUpperCase() || /\s{2,}/.test(l.s) || /\s$/.test(l.s)) {
+        if (!l.s || l.s.length > 72 || /Dialogue/.test(l.s) || !sc || sc !== sc.toUpperCase() || /\s{2,}/.test(l.s) || /\s$/.test(l.s)) {
           add('stages-short', `${id}#${st.at}`, `короткий текст шага: «${(l.s ?? '').slice(0, 50)}» — нужен s до 72 знаков без диалога`);
         }
         if (!c || c !== c.toUpperCase() || /\s{2,}/.test(l.t) || /\s$/.test(l.t)) add('text', `${id}#${st.at}`, `текст шага: «${l.t.slice(0, 50)}»`);

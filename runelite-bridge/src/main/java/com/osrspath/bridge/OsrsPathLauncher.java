@@ -4,9 +4,9 @@ import net.runelite.client.RuneLite;
 import net.runelite.client.externalplugins.ExternalPluginManager;
 
 /**
- * Запуск RuneLite с плагином OSRS Path Bridge — его делает программа «OSRS Путь» (electron/runelite-launcher.cjs).
- * Классы клиента берутся из установленного RuneLite (~/.runelite/repository2), Java — из его же папки jre.
- * loadBuiltin работает и без режима разработчика: встроенные плагины RuneLite загружает всегда.
+ * Launching RuneLite with the OSRS Path Bridge plugin: done by the "OSRS Path" app (electron/runelite-launcher.cjs).
+ * The client classes are taken from the installed RuneLite (~/.runelite/repository2), Java from its own jre folder.
+ * loadBuiltin works even without developer mode: RuneLite always loads its built-in plugins.
  */
 public final class OsrsPathLauncher
 {

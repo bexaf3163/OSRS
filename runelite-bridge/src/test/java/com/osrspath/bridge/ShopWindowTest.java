@@ -23,13 +23,13 @@ import javax.imageio.ImageIO;
 import net.runelite.client.ui.FontManager;
 import org.junit.Test;
 
-/** Окно у банка, биржи и торговца: что взять, что купить, где продаётся — для любого квеста. */
+/** The window beside the bank, exchange and merchant: what to take, what to buy, where it is sold - for any quest. */
 public class ShopWindowTest
 {
-	private static StepGuide.ItemLine item(String name, String ru, int need, StepGuide.Have have, String where)
+	private static StepGuide.ItemLine item(String name, int need, StepGuide.Have have, String where)
 	{
 		String shown = name + (need > 1 ? " ×" + need : "");
-		return new StepGuide.ItemLine(shown + (ru == null ? "" : " (" + ru + ")"), "status", have, where, -1, shown, ru, "tag");
+		return new StepGuide.ItemLine(shown, "status", have, where, -1, shown, "tag");
 	}
 
 	private static StepGuide.View view(PrepPlan plan, StepGuide.ItemLine... items)
@@ -57,112 +57,112 @@ public class ShopWindowTest
 	private static StepGuide.View vampyre()
 	{
 		return view(null,
-			item("Beer", "Пиво", 3, StepGuide.Have.BANK, "паб Blue Moon Inn"),
-			item("Garlic", null, 1, StepGuide.Have.BAG, null),
-			item("Hammer", null, 1, StepGuide.Have.NONE, "Бакалея Лумбриджа."),
-			item("Stake", null, 1, StepGuide.Have.IN_STEP, null));
+			item("Beer", 3, StepGuide.Have.BANK, "Blue Moon Inn pub"),
+			item("Garlic", 1, StepGuide.Have.BAG, null),
+			item("Hammer", 1, StepGuide.Have.NONE, "Lumbridge General Store."),
+			item("Stake", 1, StepGuide.Have.IN_STEP, null));
 	}
 
 	@Test
-	public void вБанке_взять_нетВБанке_ужеВСумке()
+	public void inTheBank_take_notInTheBank_alreadyInTheBag()
 	{
 		ShopWindow.Result r = ShopWindow.build(ShopWindow.Place.BANK, vampyre());
-		assertEquals("Банк · что взять · S2-08", r.getTitle());
+		assertEquals("Bank · what to take · S2-08", r.getTitle());
 		List<String> t = texts(r);
-		assertEquals("Взять: Beer ×3 (Пиво)", t.get(0));
-		assertEquals("Нет в банке: Hammer — Бакалея Лумбриджа", t.get(1));
-		assertEquals("Уже в сумке: Garlic", t.get(2));
-		assertEquals("взять и купить — это дела здесь", 2, r.getTodo());
-		assertFalse("«добудешь по ходу» окно не касается", String.join("|", t).contains("Stake"));
+		assertEquals("Take: Beer ×3", t.get(0));
+		assertEquals("Not in the bank: Hammer — Lumbridge General Store", t.get(1));
+		assertEquals("Already in the bag: Garlic", t.get(2));
+		assertEquals("taking and buying are the jobs here", 2, r.getTodo());
+		assertFalse("the window ignores 'you will get it along the way'", String.join("|", t).contains("Stake"));
 	}
 
 	@Test
-	public void наБирже_купитьТоЧегоНетНигде_ЛежащееВБанкеНеПокупаем()
+	public void atTheExchange_buyWhatIsNowhere_whatLiesInTheBankIsNotBought()
 	{
 		ShopWindow.Result r = ShopWindow.build(ShopWindow.Place.EXCHANGE, vampyre());
-		assertEquals("Биржа · что купить · S2-08", r.getTitle());
+		assertEquals("Exchange · what to buy · S2-08", r.getTitle());
 		List<String> t = texts(r);
-		assertEquals("Купить: Hammer — Бакалея Лумбриджа", t.get(0));
-		assertTrue(t.contains("Лежит в банке (не покупай): Beer ×3 (Пиво)"));
-		assertTrue(t.contains("Уже в сумке: Garlic"));
+		assertEquals("Buy: Hammer — Lumbridge General Store", t.get(0));
+		assertTrue(t.contains("In the bank (do not buy): Beer ×3"));
+		assertTrue(t.contains("Already in the bag: Garlic"));
 		assertEquals(1, r.getTodo());
 	}
 
 	@Test
-	public void уТорговца_тоЖеЧтоНаБирже_ноСвоимЗаголовком()
+	public void atAMerchant_sameAsTheExchange_butWithItsOwnTitle()
 	{
 		ShopWindow.Result r = ShopWindow.build(ShopWindow.Place.SHOP, vampyre());
-		assertEquals("Магазин · что купить · S2-08", r.getTitle());
-		assertEquals("Купить: Hammer — Бакалея Лумбриджа", texts(r).get(0));
+		assertEquals("Shop · what to buy · S2-08", r.getTitle());
+		assertEquals("Buy: Hammer — Lumbridge General Store", texts(r).get(0));
 	}
 
 	@Test
-	public void действиеПрограммыЗаменяетОбщееГдеВзять()
+	public void theAppsActionReplacesTheGenericWhereToGet()
 	{
 		PrepPlan p = plan("{\"stepId\":\"S2-08\",\"lines\":[{\"name\":\"Hammer\",\"need\":1,\"where\":\"MISSING\",\"priority\":\"IMPORTANT\",\"timing\":\"NOW\","
-			+ "\"action\":\"Купи у Betty — 3 gp\"}]}");
-		ShopWindow.Result r = ShopWindow.build(ShopWindow.Place.SHOP, view(p, item("Hammer", null, 1, StepGuide.Have.NONE, "Бакалея.")));
-		assertEquals("Купить: Hammer — Купи у Betty — 3 gp", texts(r).get(0));
+			+ "\"action\":\"Buy from Betty - 3 gp\"}]}");
+		ShopWindow.Result r = ShopWindow.build(ShopWindow.Place.SHOP, view(p, item("Hammer", 1, StepGuide.Have.NONE, "General store.")));
+		assertEquals("Buy: Hammer — Buy from Betty - 3 gp", texts(r).get(0));
 	}
 
 	@Test
-	public void строкиПланаБезПредметаВСписке_добавляются_иВесИНеБериСейчасВБанке()
+	public void planLinesWithoutAnItemInTheList_areAdded_andWeightAndDoNotTakeNowAtTheBank()
 	{
-		PrepPlan p = plan("{\"stepId\":\"S2-08\",\"weight\":\"Сними в банк: Iron platebody\",\"slots\":\"Всё сразу не влезет\",\"later\":[\"Blue dye\",\"Orange dye\"],"
+		PrepPlan p = plan("{\"stepId\":\"S2-08\",\"weight\":\"Deposit in the bank: Iron platebody\",\"slots\":\"It will not all fit at once\",\"later\":[\"Blue dye\",\"Orange dye\"],"
 			+ "\"lines\":[{\"name\":\"Lobster\",\"need\":5,\"where\":\"BANK\",\"priority\":\"IMPORTANT\",\"timing\":\"SOON\"},"
 			+ "{\"name\":\"Rope\",\"need\":1,\"where\":\"MISSING\",\"priority\":\"IMPORTANT\",\"timing\":\"SOON\"},"
 			+ "{\"name\":\"Spade\",\"need\":1,\"where\":\"MISSING\",\"priority\":\"OPTIONAL\",\"timing\":\"SOON\"},"
 			+ "{\"name\":\"Pickaxe\",\"need\":1,\"where\":\"MISSING\",\"priority\":\"IMPORTANT\",\"timing\":\"IN_STEP\"}]}");
-		ShopWindow.Result r = ShopWindow.build(ShopWindow.Place.BANK, view(p, item("Garlic", null, 1, StepGuide.Have.BAG, null)));
+		ShopWindow.Result r = ShopWindow.build(ShopWindow.Place.BANK, view(p, item("Garlic", 1, StepGuide.Have.BAG, null)));
 		List<String> t = texts(r);
-		assertEquals("Взять: Lobster ×5", t.get(0));
-		assertEquals("Нет в банке: Rope", t.get(1));
-		assertFalse("необязательное и «по ходу» не тащим", String.join("|", t).contains("Spade") || String.join("|", t).contains("Pickaxe"));
-		assertTrue(t.contains("Вес: Сними в банк: Iron platebody"));
-		assertTrue(t.contains("⚠ Всё сразу не влезет"));
-		assertTrue(t.contains("Не бери сейчас: Blue dye, Orange dye"));
+		assertEquals("Take: Lobster ×5", t.get(0));
+		assertEquals("Not in the bank: Rope", t.get(1));
+		assertFalse("optional items and 'along the way' items are not hauled", String.join("|", t).contains("Spade") || String.join("|", t).contains("Pickaxe"));
+		assertTrue(t.contains("Weight: Deposit in the bank: Iron platebody"));
+		assertTrue(t.contains("⚠ It will not all fit at once"));
+		assertTrue(t.contains("Don't take now: Blue dye, Orange dye"));
 	}
 
 	@Test
-	public void длинныйСписокТогоЧтоУжеВСумке_обрезается()
+	public void aLongListOfWhatIsAlreadyInTheBag_isCut()
 	{
-		assertEquals("Уже в сумке: A, B", ShopWindow.bagLine(java.util.Arrays.asList("A", "B")));
-		assertEquals("Уже в сумке: A, B, C, D и ещё 9",
+		assertEquals("Already in the bag: A, B", ShopWindow.bagLine(java.util.Arrays.asList("A", "B")));
+		assertEquals("Already in the bag: A, B, C, D and 9 more",
 			ShopWindow.bagLine(java.util.Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M")));
 	}
 
 	@Test
-	public void всёЕстьИлиПокупатьНечего_окноГоворитОбЭтом()
+	public void everythingIsThereOrNothingToBuy_theWindowSaysSo()
 	{
-		StepGuide.View ok = view(null, item("Garlic", null, 1, StepGuide.Have.BAG, null));
-		assertEquals("Всё нужное уже в сумке ✓", texts(ShopWindow.build(ShopWindow.Place.BANK, ok)).get(0));
-		assertEquals("Здесь покупать нечего ✓", texts(ShopWindow.build(ShopWindow.Place.EXCHANGE, ok)).get(0));
+		StepGuide.View ok = view(null, item("Garlic", 1, StepGuide.Have.BAG, null));
+		assertEquals("Everything needed is already in the bag ✓", texts(ShopWindow.build(ShopWindow.Place.BANK, ok)).get(0));
+		assertEquals("Nothing to buy here ✓", texts(ShopWindow.build(ShopWindow.Place.EXCHANGE, ok)).get(0));
 		assertEquals(0, ShopWindow.build(ShopWindow.Place.BANK, ok).getTodo());
 	}
 
 	@Test
-	public void безШагаИлиБезПредметов_окнаНет()
+	public void withoutAStepOrWithoutItems_noWindow()
 	{
 		assertNull(ShopWindow.build(ShopWindow.Place.BANK, null));
 		assertNull(ShopWindow.build(ShopWindow.Place.BANK, view(null)));
-		assertNull("всё «по ходу шага» — у банка нечего делать", ShopWindow.build(ShopWindow.Place.BANK, view(null, item("Pickaxe", null, 1, StepGuide.Have.IN_STEP, null))));
+		assertNull("everything is 'along the way': nothing to do at the bank", ShopWindow.build(ShopWindow.Place.BANK, view(null, item("Pickaxe", 1, StepGuide.Have.IN_STEP, null))));
 	}
 
 	@Test
-	public void длинныйСписокОбрезаетсяСПометкой()
+	public void aLongListIsCutWithAMark()
 	{
 		StepGuide.ItemLine[] many = new StepGuide.ItemLine[20];
 		for (int i = 0; i < many.length; i++)
 		{
-			many[i] = item("Item" + i, null, 1, StepGuide.Have.NONE, null);
+			many[i] = item("Item" + i, 1, StepGuide.Have.NONE, null);
 		}
 		ShopWindow.Result r = ShopWindow.build(ShopWindow.Place.EXCHANGE, view(null, many));
 		assertTrue(r.getRows().size() <= ShopWindow.MAX_ROWS + 1);
-		assertEquals("…и ещё 8", texts(r).get(texts(r).size() - 1));
+		assertEquals("... and 8 more", texts(r).get(texts(r).size() - 1));
 	}
 
 	@Test
-	public void карточкаСтоитСбокуОтОкнаИгры()
+	public void theCardStandsBesideTheGameWindow()
 	{
 		ShopWindow.Result r = ShopWindow.build(ShopWindow.Place.BANK, vampyre());
 		Point left = OsrsPathShopOverlay.place(new Rectangle(700, 40, 500, 600), 1900, 1000, r, null);
@@ -176,18 +176,18 @@ public class ShopWindowTest
 	}
 
 	@Test
-	public void рисуетсяНастоящимШрифтомВРамке_иКартинкаДляГлаза() throws IOException
+	public void drawnWithTheRealFontInsideAFrame_andAPictureForTheEye() throws IOException
 	{
-		PrepPlan p = plan("{\"stepId\":\"S2-08\",\"weight\":\"Сними в банк: Iron platebody, Iron plateskirt, Iron kiteshield и ещё 2\",\"slots\":\"Всё сразу не влезет — на 1 ячейку больше\","
+		PrepPlan p = plan("{\"stepId\":\"S2-08\",\"weight\":\"Deposit in the bank: Iron platebody, Iron plateskirt, Iron kiteshield and 2 more\",\"slots\":\"It will not all fit at once - 1 slot too many\","
 			+ "\"later\":[\"Blue dye\",\"Orange dye\"],\"lines\":[{\"name\":\"Lobster\",\"need\":5,\"where\":\"BANK\",\"priority\":\"IMPORTANT\",\"timing\":\"NOW\"}]}");
 		File out = new File("build/overlay-render");
 		assertTrue(out.isDirectory() || out.mkdirs());
 		for (ShopWindow.Place place : ShopWindow.Place.values())
 		{
 			ShopWindow.Result r = ShopWindow.build(place, view(p,
-				item("Beer", "Пиво", 3, StepGuide.Have.BANK, "паб Blue Moon Inn, Varrock (бармен)"),
-				item("Hammer", null, 1, StepGuide.Have.NONE, "Бакалея Лумбриджа, Lumbridge General Store (Shop keeper)"),
-				item("Garlic", null, 1, StepGuide.Have.BAG, null)));
+				item("Beer", 3, StepGuide.Have.BANK, "Blue Moon Inn pub, Varrock (bartender)"),
+				item("Hammer", 1, StepGuide.Have.NONE, "Lumbridge General Store (Shop keeper)"),
+				item("Garlic", 1, StepGuide.Have.BAG, null)));
 			assertNotNull(r);
 			BufferedImage img = new BufferedImage(OsrsPathShopOverlay.WIDTH + 200, 520, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = img.createGraphics();
@@ -207,8 +207,8 @@ public class ShopWindowTest
 					}
 				}
 			}
-			assertEquals(place + ": за рамкой ничего не нарисовано", 0, stray);
-			assertTrue(place + ": высота разумна " + d.height, d.height < 420);
+			assertEquals(place + ": nothing is drawn outside the frame", 0, stray);
+			assertTrue(place + ": the height is sensible " + d.height, d.height < 420);
 			BufferedImage flat = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_RGB);
 			Graphics2D fg = flat.createGraphics();
 			fg.setColor(new java.awt.Color(60, 90, 50));

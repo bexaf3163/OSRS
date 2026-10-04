@@ -22,15 +22,15 @@ import java.util.function.LongSupplier;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Журнал для отладки: что делал движок плагина, пока ты играл. Одна строка JSON на событие в файл
- * {@code osrs-path-telemetry/session-ДАТА.jsonl} рядом с настройками RuneLite: смена шага и этапа, куда сдвинулся курсор
- * и почему (положение, предмет, сдача, возврат), клики, изменения сумки, смерть и телепорт, принятые снимки программы, то,
- * что игрок видел на экране (текст плашек), и «странности» — состояния, которых быть не должно (курсор не двигается, хотя
- * ты ходишь; на экране пусто; квест сдан, а список нет). Файл читает человек или скрипт {@code npm run telemetry}: по нему
- * можно найти ошибку, не повторяя игру.
+ * The debug log: what the plugin's engine did while you played. One JSON line per event into the file
+ * {@code osrs-path-telemetry/session-DATE.jsonl} next to the RuneLite settings: step and stage changes, where the cursor moved
+ * and why (position, item, hand-in, return), clicks, bag changes, death and teleport, the app snapshots accepted, what
+ * the player saw on screen (plate text), and "anomalies": states that should not exist (the cursor does not move although
+ * you walk; the screen is empty; the quest is done but the list is not). A person or the script {@code npm run telemetry} reads the file: it
+ * lets you find the bug without replaying the game.
  *
- * Только локально: никуда не отправляется. Размер ограничен ({@link #MAX_BYTES} на сеанс, {@link #KEEP_FILES} файлов).
- * В журнале нет имени персонажа и ничего вне игры плагина; скриншоты — отдельно (Screenshots).
+ * Local only: nothing is sent anywhere. The size is limited ({@link #MAX_BYTES} per session, {@link #KEEP_FILES} files).
+ * The log has no character name and nothing outside the plugin's game; screenshots are separate (Screenshots).
  */
 @Slf4j
 final class Telemetry
@@ -38,15 +38,15 @@ final class Telemetry
 	static final int KEEP_FILES = 8;
 	static final long MAX_BYTES = 6L * 1024 * 1024;
 	static final int RECENT = 200;
-	/** Длиннее строка в поле события не пишется: журнал нужен для разбора, а не для хранения текстов целиком. */
+	/** A longer string is not written into an event field: the log is for analysis, not for storing whole texts. */
 	static final int MAX_FIELD = 2_000;
 	static final int ANOMALIES = 40;
-	/** Сколько знаков последних событий отдавать в сводке для программы. */
+	/** How many characters of the latest events to give in the summary for the app. */
 	static final int SUMMARY_CHARS = 20_000;
-	/** Одна и та же странность в журнал и на экран — не чаще раза в это время, мс. */
+	/** The same anomaly goes to the log and the screen no more often than this time, ms. */
 	static final long DEDUPE_MS = 120_000;
 
-	/** Странность: состояние, которого быть не должно. */
+	/** An anomaly: a state that should not exist. */
 	static final class Anomaly
 	{
 		final long at;
@@ -83,7 +83,7 @@ final class Telemetry
 		this.clock = clock;
 	}
 
-	/** Файл сеанса; null — пока ничего не записано или папку создать не удалось. */
+	/** The session file; null until something is written or the folder could not be created. */
 	synchronized File file()
 	{
 		return file;
@@ -95,8 +95,8 @@ final class Telemetry
 	}
 
 	/**
-	 * Записать событие: kind — вид («stage», «click», «ui»…), дальше пары «поле, значение». Поток-безопасно; ошибки записи
-	 * журнал не роняют плагин — после первой журнал выключается.
+	 * Write an event: kind is the type ("stage", "click", "ui"...), then "field, value" pairs. Thread-safe; write errors
+	 * do not crash the plugin: after the first one the log turns itself off.
 	 */
 	synchronized void event(String kind, Object... pairs)
 	{
@@ -110,7 +110,7 @@ final class Telemetry
 		for (int i = 0; i + 1 < pairs.length; i += 2)
 		{
 			String key = String.valueOf(pairs[i]);
-			// Время и вид события задаёт сам журнал: поле с таким именем их не подменяет.
+			// The time and kind of the event are set by the log itself: a field with such a name does not replace them.
 			if (pairs[i + 1] != null && !key.equals("t") && !key.equals("kind"))
 			{
 				Object v = pairs[i + 1];
@@ -125,8 +125,8 @@ final class Telemetry
 	}
 
 	/**
-	 * Странность. Повтор той же (code + key) в ближайшие {@link #DEDUPE_MS} не пишется. true — новая: можно сделать
-	 * скриншот и показать на экране.
+	 * An anomaly. A repeat of the same one (code + key) within {@link #DEDUPE_MS} is not written. true means a new one: a screenshot
+	 * can be taken and it can be shown on screen.
 	 */
 	synchronized boolean anomaly(String code, String key, String message, Object... pairs)
 	{
@@ -181,7 +181,7 @@ final class Telemetry
 				out.flush();
 				return;
 			}
-			// Всегда LF, а не системный перевод строки: размер считается по байтам, и разбор журнала везде одинаков.
+			// Always LF, not the system line break: the size is counted in bytes, and parsing the log is the same everywhere.
 			out.write(line);
 			out.write('\n');
 			out.flush();
@@ -189,7 +189,7 @@ final class Telemetry
 		}
 		catch (IOException | RuntimeException e)
 		{
-			log.warn("Журнал отладки выключен: {}", e.toString());
+			log.warn("Debug log turned off: {}", e.toString());
 			closed = true;
 			closeQuietly();
 		}
@@ -204,7 +204,7 @@ final class Telemetry
 		out = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 	}
 
-	/** Оставить в папке не больше keep самых свежих журналов. */
+	/** Keep no more than keep of the freshest logs in the folder. */
 	static void prune(File dir, int keep)
 	{
 		File[] files = dir.listFiles((d, n) -> n.startsWith("session-") && n.endsWith(".jsonl"));
@@ -217,7 +217,7 @@ final class Telemetry
 		{
 			if (!files[i].delete())
 			{
-				log.debug("Старый журнал не удалён: {}", files[i]);
+				log.debug("Old log not deleted: {}", files[i]);
 			}
 		}
 	}
@@ -239,12 +239,12 @@ final class Telemetry
 		}
 		catch (IOException e)
 		{
-			log.debug("Журнал не закрылся", e);
+			log.debug("Log did not close", e);
 		}
 		out = null;
 	}
 
-	/** Сводка для плашки разработчика и ответа /telemetry. */
+	/** The summary for the developer badge and the /telemetry answer. */
 	synchronized Map<String, Object> summary(int lastEvents)
 	{
 		Map<String, Object> m = new LinkedHashMap<>();
@@ -266,7 +266,7 @@ final class Telemetry
 		m.put("recentAnomalies", an);
 		List<String> tail = new ArrayList<>(recent);
 		List<String> last = new ArrayList<>(tail.subList(Math.max(0, tail.size() - Math.max(0, lastEvents)), tail.size()));
-		// Ответ идёт через мост с потолком 64 КиБ, а строки в нём экранируются заново — оставляем с запасом, свежие важнее.
+		// The answer goes through the bridge with a 64 KiB ceiling, and the lines in it are escaped again: we leave a margin, the fresh ones matter more.
 		int chars = 0;
 		for (String l : last)
 		{
@@ -290,7 +290,7 @@ final class Telemetry
 		return anomalyCount;
 	}
 
-	/** Последняя странность — для плашки; null — не было. */
+	/** The last anomaly, for the badge; null means there was none. */
 	synchronized Anomaly lastAnomaly()
 	{
 		return anomalies.peekLast();

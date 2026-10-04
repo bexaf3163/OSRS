@@ -18,9 +18,9 @@ import java.util.Map;
 import org.junit.Test;
 
 /**
- * Снимки ровно такими, какими их шлёт программа на /prep-plan (prep-snapshots.json пишет тест программы
- * tests/prepEnvelope.test.ts): плагин принимает каждую часть, а список «Что нужно» рисует план без падений. Пересказать
- * формат здесь вручную значит рано или поздно разойтись с программой — поэтому берём её собственный вывод.
+ * The snapshots exactly as the app sends them on /prep-plan (prep-snapshots.json is written by the app test
+ * tests/prepEnvelope.test.ts): the plugin accepts each part, and the "What you need" list draws the plan without crashes. Retelling
+ * the format here by hand means sooner or later drifting from the app, so we take its own output.
  */
 public class PrepSnapshotFixtureTest
 {
@@ -40,23 +40,23 @@ public class PrepSnapshotFixtureTest
 	}
 
 	@Test
-	public void плагинПринимаетКаждыйСнимокПрограммы()
+	public void pluginAcceptsEverySnapshotOfTheApp()
 	{
 		List<JsonObject> rows = rows();
-		assertTrue("снимков мало: " + rows.size(), rows.size() >= 4);
+		assertTrue("too few snapshots: " + rows.size(), rows.size() >= 4);
 		for (JsonObject row : rows)
 		{
 			String name = row.get("name").getAsString();
 			PrepEnvelope e = GSON.fromJson(row.get("envelope"), PrepEnvelope.class);
 			assertNull(name, e.versionProblem());
 			Map<String, String> bad = e.prepare();
-			assertTrue(name + ": части отклонены — " + bad, bad.isEmpty());
+			assertTrue(name + ": parts rejected - " + bad, bad.isEmpty());
 			assertTrue(name, e.getSeq() > 0);
 		}
 	}
 
 	@Test
-	public void планПривязанКШагуСнимка_ИРисуетсяВСписке()
+	public void thePlanIsBoundToTheSnapshotsStep_andDrawnInTheList()
 	{
 		for (JsonObject row : rows())
 		{
@@ -64,7 +64,7 @@ public class PrepSnapshotFixtureTest
 			e.prepare();
 			if (e.getStep() == null)
 			{
-				assertNull(row.get("name").getAsString() + ": без шага плана нет", e.getPlan());
+				assertNull(row.get("name").getAsString() + ": no plan without the step", e.getPlan());
 				continue;
 			}
 			assertNotNull(e.getPlan());
@@ -78,7 +78,7 @@ public class PrepSnapshotFixtureTest
 	}
 
 	@Test
-	public void режимВосстановленияИзПрограммыРисуетсяСверху()
+	public void recoveryModeFromTheAppIsDrawnOnTop()
 	{
 		for (JsonObject row : rows())
 		{
@@ -102,11 +102,11 @@ public class PrepSnapshotFixtureTest
 			assertTrue(sb.toString(), sb.toString().contains("Ты умер"));
 			return;
 		}
-		throw new AssertionError("в копии снимков нет случая со смертью");
+		throw new AssertionError("the snapshot copy has no death case");
 	}
 
 	@Test
-	public void самыйБольшойШагСПланомВлезаетВОграничениеСнимка()
+	public void theBiggestStepWithAPlanFitsTheSnapshotLimit()
 	{
 		List<ActiveStepsTest.Sent> sent = ActiveStepsTest.all();
 		int biggest = 0;
@@ -120,7 +120,7 @@ public class PrepSnapshotFixtureTest
 				where = s.name;
 			}
 		}
-		// Шаг + закупки + план + совет: запас вдвое от самого большого шага.
-		assertTrue("шаг " + where + " весит " + biggest + " байт", biggest * 2 < BridgeServer.MAX_SNAPSHOT);
+		// Step + purchases + plan + advice: a margin of twice the biggest step.
+		assertTrue("step " + where + " weighs " + biggest + " bytes", biggest * 2 < BridgeServer.MAX_SNAPSHOT);
 	}
 }

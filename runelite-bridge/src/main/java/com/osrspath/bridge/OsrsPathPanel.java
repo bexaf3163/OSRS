@@ -23,19 +23,19 @@ import net.runelite.client.ui.FontManager;
 import net.runelite.client.ui.PluginPanel;
 
 /**
- * Боковая панель «OSRS Путь» в RuneLite: шаг, что нужно (есть в сумке, в банке, нет) и где это взять, точки шага.
- * «Путь сюда» ставит временную цель — стрелка и Shortest Path ведут туда, по приходу стрелка возвращается к шагу.
- * Это окно RuneLite, а не игра: нажатия здесь не попадают в игру. Строки считает {@link StepGuide} на потоке
- * клиента; сюда приходит готовый вид, панель перестраивается, только когда он изменился.
+ * The "OSRS Path" side panel in RuneLite: the step, what you need (in the bag, in the bank, missing) and where to get it, the step's points.
+ * "Go here" sets a temporary target: the arrow and Shortest Path lead there, and on arrival the arrow returns to the step.
+ * This is a RuneLite window, not the game: clicks here do not reach the game. {@link StepGuide} computes the rows on the client
+ * thread; a ready view arrives here, and the panel is rebuilt only when it changed.
  */
 class OsrsPathPanel extends PluginPanel
 {
 	interface Actions
 	{
-		/** Повести стрелку к точке шага с этим номером. */
+		/** Point the arrow at the step point with this number. */
 		void go(int place);
 
-		/** Снять временную цель: стрелка снова к шагу. */
+		/** Clear the temporary target: the arrow goes back to the step. */
 		void back();
 	}
 
@@ -59,7 +59,7 @@ class OsrsPathPanel extends PluginPanel
 		show(StepGuide.EMPTY);
 	}
 
-	/** Показать вид (на потоке Swing). Тот же вид — ничего не делает. */
+	/** Show the view (on the Swing thread). The same view does nothing. */
 	void show(StepGuide.View v)
 	{
 		if (v.equals(shown))
@@ -67,8 +67,8 @@ class OsrsPathPanel extends PluginPanel
 			return;
 		}
 		shown = v;
-		// Прокрутка остаётся на месте: панель перестраивается при каждом изменении сумки и цели, и без этого
-		// после «Путь сюда» список уезжал.
+		// The scroll position stays: the panel is rebuilt on every change of bag and target, and without this
+		// the list scrolled away after "Go here".
 		JScrollPane scroll = getScrollPane();
 		int at = scroll == null ? 0 : scroll.getVerticalScrollBar().getValue();
 		body.removeAll();
@@ -83,8 +83,8 @@ class OsrsPathPanel extends PluginPanel
 		if (v.getDetour() != null)
 		{
 			gap(6);
-			add(text("Стрелка ведёт: " + v.getDetour(), small(), BANK));
-			add(button("Вернуть стрелку к шагу", actions::back));
+			add(text("Arrow points to: " + v.getDetour(), small(), BANK));
+			add(button("Return the arrow to the step", actions::back));
 		}
 		if (v.getNote() != null)
 		{
@@ -102,7 +102,7 @@ class OsrsPathPanel extends PluginPanel
 			JPanel card = card();
 			if (stage.isFinished())
 			{
-				card.add(text("Квест пройден — шаг отметится сам.", regular(), GOOD));
+				card.add(text("Quest complete - the step will tick itself.", regular(), GOOD));
 			}
 			else
 			{
@@ -117,7 +117,7 @@ class OsrsPathPanel extends PluginPanel
 		}
 		if (!v.getItems().isEmpty())
 		{
-			header(stage != null ? "Нужно сейчас" : "Что нужно");
+			header(stage != null ? "Needed now" : "What you need");
 			for (StepGuide.ItemLine i : v.getItems())
 			{
 				JPanel card = card();
@@ -125,40 +125,40 @@ class OsrsPathPanel extends PluginPanel
 				card.add(text(i.getStatus(), small(), StepGuide.color(i.getHave())));
 				if (i.getWhere() != null && !GuideList.got(i))
 				{
-					card.add(text("Где взять: " + i.getWhere(), small(), MUTED));
+					card.add(text("Where to get it: " + i.getWhere(), small(), MUTED));
 				}
-				// Как в списке в игре: номер места мог не попасть в показанный список — тогда кнопки просто нет (раньше падало).
+				// As in the in-game list: the place number may not be in the shown list, then there is simply no button (it used to crash).
 				StepGuide.PlaceLine p = placeFor(v, i);
 				if (p != null && !GuideList.got(i))
 				{
-					card.add(p.isActive() ? text("● Стрелка ведёт сюда", small(), GOOD)
-						: button("Путь сюда", () -> actions.go(i.getPlace())));
+					card.add(p.isActive() ? text("● Arrow points here", small(), GOOD)
+						: button("Go here", () -> actions.go(i.getPlace())));
 				}
 				add(card);
 			}
 		}
 		if (v.getNext() != null)
 		{
-			header("Дальше");
+			header("Next");
 			JPanel card = card();
 			card.add(text(v.getNext(), regular(), GOOD));
 			add(card);
 		}
 		if (!v.getPlaces().isEmpty())
 		{
-			// Как в списке на экране игры: «Куда идти» — точка шага, откуда предметы и NPC квеста.
-			header("Куда идти");
+			// As in the on-screen game list: "Where to go" is the step's point, where the quest's items and NPCs are.
+			header("Where to go");
 			for (StepGuide.PlaceLine p : v.getPlaces())
 			{
 				JPanel card = card();
 				card.add(text(p.getLabel(), regular(), TEXT));
-				// Как в списке в игре: NPC подписываем у мест без предметов (места с предметами подписаны по предмету).
+				// As in the in-game list: we label NPCs at places without items (places with items are labelled by the item).
 				if (p.getNpc() != null && !p.isItems() && !p.getLabel().toLowerCase().contains(p.getNpc().toLowerCase()))
 				{
 					card.add(text("NPC: " + p.getNpc(), small(), MUTED));
 				}
-				card.add(p.isActive() ? text("● Стрелка ведёт сюда", small(), GOOD)
-					: button("Путь сюда", () -> actions.go(p.getIndex())));
+				card.add(p.isActive() ? text("● Arrow points here", small(), GOOD)
+					: button("Go here", () -> actions.go(p.getIndex())));
 				add(card);
 			}
 		}
@@ -171,8 +171,8 @@ class OsrsPathPanel extends PluginPanel
 	}
 
 	/**
-	 * Шрифты панели — как у плашек в игре (OverlayText.font): у шрифтов RuneScape нет кириллицы, и без замены
-	 * латиница шла мелким пиксельным шрифтом, а кириллица — крупным системным в одной строке.
+	 * The panel fonts are like the plates in the game (OverlayText.font): the RuneScape fonts lack some symbols, and without the replacement
+	 * letters went in a small pixel font and symbols in a large system one in one line.
 	 */
 	private static Font small()
 	{
@@ -228,13 +228,13 @@ class OsrsPathPanel extends PluginPanel
 		return p;
 	}
 
-	/** Ширина текста: панель RuneLite 225 точек минус поля панели и карточки. */
+	/** The text width: the RuneLite panel is 225 points minus the panel and card margins. */
 	static final int TEXT_WIDTH = PluginPanel.PANEL_WIDTH - 16 - 12;
 
 	/**
-	 * Текст с переносом по словам — как подпись, без рамки и курсора. JTextArea, а не JLabel с HTML: HTML берёт
-	 * шрифт по имени и теряет подстановку кириллицы, которую RuneLite делает для своих шрифтов. Ширина задаётся
-	 * заранее — иначе в вертикальном ряду перенос считается по одной длинной строке.
+	 * Text with word wrapping, as a label, with no frame or cursor. A JTextArea, not a JLabel with HTML: HTML takes the
+	 * font by name and loses the substitution RuneLite does for its own fonts. The width is set
+	 * in advance, otherwise in a vertical row the wrapping is computed by one long line.
 	 */
 	private static JTextArea text(String s, Font font, Color color)
 	{
@@ -278,7 +278,7 @@ class OsrsPathPanel extends PluginPanel
 
 	private static BufferedImage mapIcon;
 
-	/** Метка на карте мира: золотой круг со стрелкой — видна и на суше, и на воде. */
+	/** The world map marker: a gold circle with an arrow, visible on land and on water. */
 	static synchronized BufferedImage mapIcon()
 	{
 		if (mapIcon != null)
@@ -299,13 +299,13 @@ class OsrsPathPanel extends PluginPanel
 		return img;
 	}
 
-	/** Место, к которому ведёт предмет; null — номера нет в показанном списке мест (так упала панель в живой игре). */
+	/** The place the item leads to; null means the number is not in the shown list of places (that is how the panel crashed in a live game). */
 	static StepGuide.PlaceLine placeFor(StepGuide.View v, StepGuide.ItemLine i)
 	{
 		return i.getPlace() >= 0 && i.getPlace() < v.getPlaces().size() ? v.getPlaces().get(i.getPlace()) : null;
 	}
 
-	/** Значок кнопки на боковой полосе: стрелка, как большая стрелка в игре. */
+	/** The side-panel button icon: an arrow like the big arrow in the game. */
 	static BufferedImage icon()
 	{
 		BufferedImage img = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);

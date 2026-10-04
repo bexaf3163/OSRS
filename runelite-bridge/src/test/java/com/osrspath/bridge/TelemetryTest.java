@@ -20,7 +20,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-/** Журнал отладки: пишет строки JSON, не даёт подменить время и вид, ограничен размером, не роняет плагин. */
+/** The debug journal: writes JSON lines, does not let the time and kind be overridden, is limited by size, does not crash the plugin. */
 public class TelemetryTest
 {
 	private final Gson gson = new Gson();
@@ -57,12 +57,12 @@ public class TelemetryTest
 
 	private List<String> lines() throws IOException
 	{
-		assertNotNull("файл создан", t.file());
+		assertNotNull("the file is created", t.file());
 		return Files.readAllLines(t.file().toPath(), StandardCharsets.UTF_8);
 	}
 
 	@Test
-	public void событиеПишетсяОднойСтрокойJson() throws IOException
+	public void anEventIsWrittenAsOneJsonLine() throws IOException
 	{
 		t.event("step", "stepId", "S2-07", "title", "The Knight's Sword", "skipped", null);
 		List<String> l = lines();
@@ -71,11 +71,11 @@ public class TelemetryTest
 		assertEquals(1_000, o.get("t").getAsLong());
 		assertEquals("step", o.get("kind").getAsString());
 		assertEquals("S2-07", o.get("stepId").getAsString());
-		assertFalse("пустые поля не пишутся", o.has("skipped"));
+		assertFalse("empty fields are not written", o.has("skipped"));
 	}
 
 	@Test
-	public void времяИВидНеПодменяются() throws IOException
+	public void timeAndKindAreNotOverridden() throws IOException
 	{
 		t.event("click", "kind", "NEXT", "t", 5, "what", "NEXT");
 		JsonObject o = new JsonParser().parse(lines().get(0)).getAsJsonObject();
@@ -85,41 +85,41 @@ public class TelemetryTest
 	}
 
 	@Test
-	public void русскийТекстИПереводыСтрокСохраняютсяВОднойСтроке() throws IOException
+	public void textAndLineBreaksAreKeptInOneLine() throws IOException
 	{
-		t.event("ui", "text", "Возьми кирку\nи руду ↓");
+		t.event("ui", "text", "Take the pickaxe\nand the ore ↓");
 		List<String> l = lines();
-		assertEquals("перевод строки внутри текста экранирован", 1, l.size());
-		assertEquals("Возьми кирку\nи руду ↓", new JsonParser().parse(l.get(0)).getAsJsonObject().get("text").getAsString());
+		assertEquals("the line break inside the text is escaped", 1, l.size());
+		assertEquals("Take the pickaxe\nand the ore ↓", new JsonParser().parse(l.get(0)).getAsJsonObject().get("text").getAsString());
 	}
 
 	@Test
-	public void странностьНеПовторяетсяВТечениеОкнаИПишетсяСноваПослеНего()
+	public void anAnomalyIsNotRepeatedWithinTheWindowAndIsWrittenAgainAfterIt()
 	{
-		assertTrue(t.anomaly("STUCK", "S2-07@1", "стоит"));
+		assertTrue(t.anomaly("STUCK", "S2-07@1", "standing"));
 		now.addAndGet(60_000);
-		assertFalse("то же на том же шаге — не раньше окна", t.anomaly("STUCK", "S2-07@1", "стоит"));
-		assertTrue("другой ключ — другая странность", t.anomaly("STUCK", "S2-07@2", "стоит"));
-		assertTrue("другой код — тоже", t.anomaly("EMPTY", "S2-07@1", "пусто"));
+		assertFalse("the same on the same step: not before the window", t.anomaly("STUCK", "S2-07@1", "standing"));
+		assertTrue("another key is another anomaly", t.anomaly("STUCK", "S2-07@2", "standing"));
+		assertTrue("another code too", t.anomaly("EMPTY", "S2-07@1", "empty"));
 		now.addAndGet(Telemetry.DEDUPE_MS);
-		assertTrue("окно прошло — снова", t.anomaly("STUCK", "S2-07@1", "стоит"));
+		assertTrue("the window passed: again", t.anomaly("STUCK", "S2-07@1", "standing"));
 		assertEquals(4, t.anomalyCount());
 		assertEquals("STUCK", t.lastAnomaly().code);
 	}
 
 	@Test
-	public void странностьПопадаетВЖурналСКодомИСообщением() throws IOException
+	public void anAnomalyGoesIntoTheJournalWithACodeAndAMessage() throws IOException
 	{
-		t.anomaly("EMPTY", "k", "На экране пусто", "step", "S2-07");
+		t.anomaly("EMPTY", "k", "The screen is empty", "step", "S2-07");
 		JsonObject o = new JsonParser().parse(lines().get(0)).getAsJsonObject();
 		assertEquals("anomaly", o.get("kind").getAsString());
 		assertEquals("EMPTY", o.get("code").getAsString());
-		assertEquals("На экране пусто", o.get("message").getAsString());
+		assertEquals("The screen is empty", o.get("message").getAsString());
 		assertEquals("S2-07", o.get("step").getAsString());
 	}
 
 	@Test
-	public void размерОграниченИПоследняяСтрокаГоворитОбОбрезке() throws IOException
+	public void sizeIsLimitedAndTheLastLineTellsAboutTheTruncation() throws IOException
 	{
 		String chunk = "x".repeat(5_000);
 		for (int i = 0; i < 4_000; i++)
@@ -127,16 +127,16 @@ public class TelemetryTest
 			t.event("ui", "text", chunk);
 		}
 		long size = t.file().length();
-		assertTrue("файл не превышает предел: " + size, size <= Telemetry.MAX_BYTES + 200);
+		assertTrue("the file does not exceed the limit: " + size, size <= Telemetry.MAX_BYTES + 200);
 		List<String> l = lines();
 		assertTrue(l.get(l.size() - 1).contains("\"truncated\""));
-		// Сводка для программы продолжает работать и считает всё, что случилось.
+		// The summary for the app keeps working and counts everything that happened.
 		assertEquals(4_000, t.events());
 		assertTrue((Boolean) t.summary(5).get("truncated"));
 	}
 
 	@Test
-	public void сводкаОграниченаПоЧислуСобытийИПоРазмеру()
+	public void theSummaryIsLimitedByTheNumberOfEventsAndBySize()
 	{
 		for (int i = 0; i < 500; i++)
 		{
@@ -145,7 +145,7 @@ public class TelemetryTest
 		@SuppressWarnings("unchecked")
 		List<String> recent = (List<String>) t.summary(30).get("recent");
 		assertEquals(30, recent.size());
-		assertTrue("последние — свежие", recent.get(29).contains("\"n\":499"));
+		assertTrue("the last ones are fresh", recent.get(29).contains("\"n\":499"));
 		for (int i = 0; i < 100; i++)
 		{
 			t.event("ui", "text", "y".repeat(1_900));
@@ -153,40 +153,40 @@ public class TelemetryTest
 		@SuppressWarnings("unchecked")
 		List<String> big = (List<String>) t.summary(100).get("recent");
 		int chars = big.stream().mapToInt(String::length).sum();
-		assertTrue("сводка укладывается в ответ моста: " + chars, chars <= Telemetry.SUMMARY_CHARS);
+		assertTrue("the summary fits in the bridge's answer: " + chars, chars <= Telemetry.SUMMARY_CHARS);
 		assertFalse(big.isEmpty());
 	}
 
 	/**
-	 * Образец журнала в том виде, в каком его пишет плагин: его читает тест программы (tests/telemetryReport.test.ts),
-	 * так что формат строк сверяется с разбором по обе стороны. Новый образец: UPDATE_FIXTURES=1 gradlew test.
+	 * A sample journal as the plugin writes it: the app test (tests/telemetryReport.test.ts) reads it,
+	 * so the line format is checked by the parsing on both sides. A new sample: UPDATE_FIXTURES=1 gradlew test.
 	 */
 	@Test
-	public void образецЖурналаСовпадаетСФайломДляПрограммы() throws IOException
+	public void theSampleJournalMatchesTheFileForTheApp() throws IOException
 	{
 		AtomicLong clock = new AtomicLong(1_700_000_000_000L);
 		File d = new File(dir, "sample");
 		Telemetry s = new Telemetry(d, gson, clock::get);
 		s.event("session", "plugin", "2.23.0", "protocol", 6, "java", "17", "os", "Windows 11", "config", java.util.Collections.singletonMap("hudLean", true));
 		clock.addAndGet(100);
-		s.event("step", "stepId", "S2-07", "title", "The Knight's Sword", "goal", "Добудь руду", "stage", true);
+		s.event("step", "stepId", "S2-07", "title", "The Knight's Sword", "goal", "Mine the ore", "stage", true);
 		clock.addAndGet(100);
 		s.event("snapshot", "seq", 1L, "step", "S2-07", "plan", true, "percent", 80, "shopping", false);
-		s.event("stage", "event", "enter", "key", "S2-07#3", "stage", 3, "of", 9, "cursor", 1, "size", 5, "line", "Возьми кирку ↓", "reason", "POSITION: дошёл", "pos", new int[] {3000, 3000, 0});
+		s.event("stage", "event", "enter", "key", "S2-07#3", "stage", 3, "of", 9, "cursor", 1, "size", 5, "line", "Take the pickaxe ↓", "reason", "POSITION: arrived", "pos", new int[] {3000, 3000, 0});
 		clock.addAndGet(5_000);
-		s.event("stage", "event", "cursor", "key", "S2-07#3", "from", 1, "to", 2, "size", 5, "line", "Добудь руду", "reason", "ITEM: шаг 1 сделан", "pos", new int[] {3001, 3000, 0}, "manual", false);
+		s.event("stage", "event", "cursor", "key", "S2-07#3", "from", 1, "to", 2, "size", 5, "line", "Mine the ore", "reason", "ITEM: step 1 done", "pos", new int[] {3001, 3000, 0}, "manual", false);
 		clock.addAndGet(4_000);
 		s.event("click", "what", "NEXT", "cursor", 2, "step", "S2-07");
-		s.event("stage", "event", "cursor", "key", "S2-07#3", "from", 2, "to", 3, "size", 5, "line", "Отнеси", "reason", "MANUAL: «сделано» на шаге 2", "pos", new int[] {3001, 3000, 0}, "manual", true);
+		s.event("stage", "event", "cursor", "key", "S2-07#3", "from", 2, "to", 3, "size", 5, "line", "Hand it in", "reason", "MANUAL: 'done' on step 2", "pos", new int[] {3001, 3000, 0}, "manual", true);
 		s.event("bag", "delta", java.util.Collections.singletonMap("Iron ore", 1), "step", "S2-07");
-		s.event("ui", "view", "guide", "text", "S2-07 · Этап 3 из 9\n▶ Отнеси");
+		s.event("ui", "view", "guide", "text", "S2-07 · Stage 3 of 9\n▶ Hand it in");
 		clock.addAndGet(180_000);
-		s.anomaly("STUCK", "S2-07#3@2", "Шаг 3/5 этапа S2-07#3 не меняется 180 с", "step", "S2-07");
+		s.anomaly("STUCK", "S2-07#3@2", "Step 3/5 of stage S2-07#3 has not changed for 180 s", "step", "S2-07");
 		s.event("shot", "file", "shot-20240101-000000-anomaly_STUCK.png", "why", "anomaly_STUCK");
 		s.event("end");
 		s.close();
 		String actual = new String(Files.readAllBytes(s.file().toPath()), StandardCharsets.UTF_8);
-		assertTrue("перевод строки только LF", actual.indexOf(13) < 0);
+		assertTrue("line breaks are LF only", actual.indexOf(13) < 0);
 		File fixture = new File("src/test/resources/telemetry-session.jsonl");
 		if ("1".equals(System.getenv("UPDATE_FIXTURES")))
 		{
@@ -196,7 +196,7 @@ public class TelemetryTest
 	}
 
 	@Test
-	public void длинноеПолеОбрезается() throws IOException
+	public void aLongFieldIsTruncated() throws IOException
 	{
 		t.event("ui", "text", "z".repeat(10_000));
 		String text = new JsonParser().parse(lines().get(0)).getAsJsonObject().get("text").getAsString();
@@ -205,7 +205,7 @@ public class TelemetryTest
 	}
 
 	@Test
-	public void сводкаСодержитСчётчикиИСтранности()
+	public void theSummaryContainsCountersAndAnomalies()
 	{
 		t.event("step", "stepId", "S1");
 		t.event("step", "stepId", "S2");
@@ -220,7 +220,7 @@ public class TelemetryTest
 	}
 
 	@Test
-	public void вПапкеОстаётсяНеБольшеДопустимогоЧислаЖурналов() throws IOException
+	public void atMostTheAllowedNumberOfJournalsRemainInTheFolder() throws IOException
 	{
 		File d = new File(dir, "old");
 		assertTrue(d.mkdirs());
@@ -232,27 +232,27 @@ public class TelemetryTest
 		Telemetry.prune(d, Telemetry.KEEP_FILES - 1);
 		File[] left = d.listFiles((x, n) -> n.startsWith("session-"));
 		assertEquals(Telemetry.KEEP_FILES - 1, left.length);
-		assertTrue("остаются самые свежие", new File(d, "session-20240101-000011.jsonl").exists());
+		assertTrue("the freshest remain", new File(d, "session-20240101-000011.jsonl").exists());
 		assertFalse(new File(d, "session-20240101-000000.jsonl").exists());
-		assertTrue("чужие файлы не трогаем", new File(d, "keep.txt").exists());
+		assertTrue("we do not touch foreign files", new File(d, "keep.txt").exists());
 	}
 
 	@Test
-	public void ошибкаЗаписиЖурналВыключаетТихоИНеПадает() throws IOException
+	public void aWriteErrorTurnsTheJournalOffQuietlyAndDoesNotCrash() throws IOException
 	{
-		// Папка занята файлом: создать её нельзя.
+		// The folder is occupied by a file: it cannot be created.
 		File blocker = new File(dir, "blocked");
 		assertTrue(blocker.createNewFile());
 		Telemetry bad = new Telemetry(new File(blocker, "sub"), gson, now::get);
 		bad.event("step", "stepId", "S1");
 		bad.event("step", "stepId", "S2");
-		assertNull("файла нет", bad.file());
-		// Сводка в памяти работает, плагин не упал.
+		assertNull("there is no file", bad.file());
+		// The in-memory summary works, the plugin did not crash.
 		assertTrue(bad.events() >= 1);
 	}
 
 	@Test
-	public void послеЗакрытияНичегоНеПишется() throws IOException
+	public void nothingIsWrittenAfterClosing() throws IOException
 	{
 		t.event("step", "stepId", "S1");
 		t.close();

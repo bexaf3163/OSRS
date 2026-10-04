@@ -7,10 +7,10 @@ import java.util.List;
 import org.junit.Test;
 
 /**
- * Каждый этап каждого квеста — на настоящих данных программы (active-steps.json) — проходится «живым игроком»: приходит
- * к шагу, берёт предмет шага, сдаёт предмет шага. Курсор обязан дойти до последнего шага без единого пропуска и без
- * тупика: либо шаг определяется по игре (место, предмет), либо у него есть кнопка «сделано». Когда вперёд по клику
- * закрыли для всех, кроме шагов подряд на одном месте, именно этот тест следит, что ни один этап не застрянет.
+ * Every stage of every quest - on the app's real data (active-steps.json) - is walked by a "live player": arrives
+ * at the step, takes the step's item, hands in the step's item. The cursor must reach the last step without a single skip and
+ * without a dead end: either the step is determined by the game (place, item), or it has a "done" button. When going forward by click was
+ * closed for all but steps in a row at one place, this very test makes sure no stage gets stuck.
  */
 public class QuestStageWalkTest
 {
@@ -25,7 +25,7 @@ public class QuestStageWalkTest
 		return b;
 	}
 
-	/** Игрок идёт по шагам: у шага с has берёт предмет, у шага с need приносит его и отдаёт. Возвращает, где застрял, или null. */
+	/** The player walks the steps: at a step with has takes the item, at a step with need brings and hands it in. Returns where it got stuck, or null. */
 	static String walk(String name, int stage, List<ActiveTarget.StageLine> lines)
 	{
 		StageTracker t = new StageTracker();
@@ -54,30 +54,30 @@ public class QuestStageWalkTest
 			}
 			bag = bagOf(items);
 			t.update(name, stage, lines, x, y, plane, bag);
-			// Что игра сама не показывает — по кнопке «сделано», пока курсор не дойдёт до этого шага.
+			// What the game does not show by itself - by the "done" button, until the cursor reaches that step.
 			int guard = 0;
 			while (t.cursor() < i && guard++ < lines.size())
 			{
 				if (!t.forward(lines))
 				{
-					return "тупик перед шагом " + (i + 1) + "/" + lines.size() + " «" + l.shown() + "»: курсор на " + (t.cursor() + 1)
-						+ " «" + lines.get(t.cursor()).shown() + "», кнопки «сделано» нет";
+					return "dead end before step " + (i + 1) + "/" + lines.size() + " '" + l.shown() + "': the cursor is on " + (t.cursor() + 1)
+						+ " '" + lines.get(t.cursor()).shown() + "', there is no 'done' button";
 				}
 				t.update(name, stage, lines, x, y, plane, bag);
 			}
 			if (t.cursor() < i)
 			{
-				return "курсор не дошёл до шага " + (i + 1) + " «" + l.shown() + "»";
+				return "the cursor did not reach step " + (i + 1) + " '" + l.shown() + "'";
 			}
 			if (l.hasNeed())
 			{
-				// Сдал: предмет ушёл рядом с точкой шага.
+				// Handed in: the item left near the step's point.
 				items.remove(ActiveTarget.nameKey(l.getNeed()));
 				bag = bagOf(items);
 				t.update(name, stage, lines, x, y, plane, bag);
 				if (i < lines.size() - 1 && t.cursor() <= i && l.hasPoint())
 				{
-					return "после сдачи «" + l.getNeed() + "» курсор остался на шаге " + (i + 1) + " «" + l.shown() + "»";
+					return "after handing in '" + l.getNeed() + "' the cursor stayed on step " + (i + 1) + " '" + l.shown() + "'";
 				}
 			}
 		}
@@ -85,7 +85,7 @@ public class QuestStageWalkTest
 	}
 
 	@Test
-	public void вКаждомЭтапеКурсорДоходитДоКонцаБезТупиков()
+	public void inEveryStageTheCursorReachesTheEndWithoutDeadEnds()
 	{
 		List<String> bad = new ArrayList<>();
 		int stages = 0;
@@ -113,12 +113,12 @@ public class QuestStageWalkTest
 				String problem = walk(s.target.getStepId(), idx, l);
 				if (problem != null)
 				{
-					bad.add(s.target.getStepId() + " этап " + (idx + 1) + ": " + problem);
+					bad.add(s.target.getStepId() + " stage " + (idx + 1) + ": " + problem);
 				}
 			}
 		}
-		assertTrue("этапов мало: " + stages, stages > 100);
-		System.out.println("Этапов " + stages + ", шагов " + lines + ", из них только вручную (подряд на одном месте): " + manual);
-		assertTrue("этапы с тупиком (" + bad.size() + "):\n" + String.join("\n", bad.subList(0, Math.min(25, bad.size()))), bad.isEmpty());
+		assertTrue("too few stages: " + stages, stages > 100);
+		System.out.println("Stages " + stages + ", steps " + lines + ", of which manual only (in a row at one place): " + manual);
+		assertTrue("stages with a dead end (" + bad.size() + "):\n" + String.join("\n", bad.subList(0, Math.min(25, bad.size()))), bad.isEmpty());
 	}
 }

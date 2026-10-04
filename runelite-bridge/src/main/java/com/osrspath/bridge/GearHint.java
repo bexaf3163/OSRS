@@ -6,10 +6,10 @@ import java.util.Set;
 import lombok.Data;
 
 /**
- * Совет приложения по снаряжению (POST /gear-hint): строка для HUD («⚡ Надень Iron scimitar — он в банке»),
- * предметы, про которые сказать, сколько их в банке (уходят в событие OWNED), и предметы, которые подсветить
- * в сумке и банке. Строки может не быть — тогда приложение только спрашивает про банк. {"clear":true} — снять.
- * Плагин сам ничего не надевает и не покупает.
+ * The app's gear advice (POST /gear-hint): a line for the HUD ("⚡ Wear Iron scimitar - it is in the bank"),
+ * items to report the bank count of (they go into the OWNED event), and items to highlight
+ * in the bag and bank. There may be no line, then the app only asks about the bank. {"clear":true} clears it.
+ * The plugin wears and buys nothing itself.
  */
 @Data
 public class GearHint
@@ -31,19 +31,19 @@ public class GearHint
 		}
 		if (text != null && (text.isEmpty() || ActiveTarget.tooLong(text)))
 		{
-			return "неверный текст подсказки";
+			return "invalid hint text";
 		}
 		for (List<String> list : List.of(nonNull(watchItems), nonNull(highlightItems)))
 		{
 			if (list.size() > MAX_ITEMS)
 			{
-				return "слишком длинный список";
+				return "list too long";
 			}
 			for (String s : list)
 			{
 				if (s == null || s.isEmpty() || ActiveTarget.tooLong(s))
 				{
-					return "неверное имя предмета";
+					return "invalid item name";
 				}
 			}
 		}

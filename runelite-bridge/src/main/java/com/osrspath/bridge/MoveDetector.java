@@ -1,29 +1,29 @@
 package com.osrspath.bridge;
 
 /**
- * Резкий скачок персонажа: телепорт, возрождение после смерти. Шаг по земле — не больше двух клеток за тик, поэтому
- * скачок от {@link #JUMP} клеток — не ходьба. Спуск по лестнице тоже «прыгает» (под землёй координаты сдвинуты на
- * {@link #UNDERGROUND}), поэтому подземные координаты приводятся к наземным: спуск прямо под тем же местом — не скачок.
- * Чистая логика: плагин зовёт её на каждой смене клетки, программа получает событие MOVED.
+ * An abrupt jump of the character: a teleport, a respawn after death. A step on the ground is at most two tiles per tick, so
+ * a jump of {@link #JUMP} tiles or more is not walking. Going down a ladder also "jumps" (underground the coordinates are shifted by
+ * {@link #UNDERGROUND}), so underground coordinates are brought to surface ones: going down right under the same place is not a jump.
+ * Pure logic: the plugin calls it on every tile change, the app receives a MOVED event.
  */
 final class MoveDetector
 {
-	/** Сколько клеток за тик уже не ходьба. */
+	/** How many tiles per tick is no longer walking. */
 	static final int JUMP = 20;
-	/** Под землёй (подземелья, подвалы) координаты y сдвинуты на столько относительно места на карте над ними. */
+	/** Underground (dungeons, basements) the y coordinates are shifted by this much relative to the place on the map above them. */
 	static final int UNDERGROUND = 6400;
 
 	private MoveDetector()
 	{
 	}
 
-	/** Координата y как на карте мира над землёй. */
+	/** The y coordinate as on the world map above ground. */
 	static int surfaceY(int y)
 	{
 		return y >= UNDERGROUND + 1000 ? y - UNDERGROUND : y;
 	}
 
-	/** Расстояние между клетками (по большей из осей), подземелье — как место над ним; этаж не считается. */
+	/** The distance between tiles (by the larger of the axes), a dungeon as the place above it; the plane is not counted. */
 	static int distance(int x1, int y1, int x2, int y2)
 	{
 		return Math.max(Math.abs(x1 - x2), Math.abs(surfaceY(y1) - surfaceY(y2)));

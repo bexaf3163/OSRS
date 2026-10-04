@@ -8,19 +8,19 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * Последнее известное содержимое банка: запоминается, чтобы после перезапуска RuneLite банк не был «неизвестен», пока
- * его снова не откроешь. Хранится в настройках профиля RuneLite (на каждого персонажа свой), строкой
- * {@code {"v":1,"at":время,"items":{"ID":число,…}}} — только ID и числа, без имён: имена плагин берёт у игры при загрузке.
- * Читается с недоверием: настройки можно править руками, поэтому всё проверяется и мусор отбрасывается целиком.
+ * The last known bank contents: remembered so that after a RuneLite restart the bank is not "unknown" until
+ * you open it again. Stored in the RuneLite profile settings (a separate one for each character) as the string
+ * {@code {"v":1,"at":time,"items":{"ID":count,...}}}: only IDs and numbers, no names: the plugin takes the names from the game on loading.
+ * Read with distrust: the settings can be edited by hand, so everything is validated and junk is discarded whole.
  */
 final class BankSnapshot
 {
-	/** В банке не больше 1410 ячеек; с запасом на разные виды предметов. */
+	/** The bank has no more than 1410 cells; with a margin for different kinds of items. */
 	static final int MAX_ITEMS = 2000;
 	static final int MAX_ID = 100_000;
 	static final String KEY = "bankSnapshot";
 
-	/** Разобранный снимок: когда записан и что в банке (ID → число). */
+	/** A parsed snapshot: when it was written and what is in the bank (ID -> count). */
 	static final class Loaded
 	{
 		final long at;
@@ -39,7 +39,7 @@ final class BankSnapshot
 	{
 	}
 
-	/** Строка для настроек. Пустой банк тоже запоминается — он «известен». */
+	/** The string for the settings. An empty bank is remembered too: it is "known". */
 	static String write(ItemCounts bank, long at)
 	{
 		JsonObject o = new JsonObject();
@@ -60,7 +60,7 @@ final class BankSnapshot
 		return GSON.toJson(o);
 	}
 
-	/** Разобрать строку из настроек; null — нет снимка или он негоден. */
+	/** Parse a string from the settings; null means there is no snapshot or it is unusable. */
 	static Loaded read(String raw)
 	{
 		if (raw == null || raw.isEmpty() || raw.length() > 400_000)

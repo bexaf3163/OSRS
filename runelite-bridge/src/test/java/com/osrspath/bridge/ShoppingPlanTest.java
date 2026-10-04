@@ -24,7 +24,7 @@ public class ShoppingPlanTest
 	}
 
 	@Test
-	public void чтоЕстьЧтоВОрдереЧтоКупить()
+	public void whatIsOwnedWhatIsInAnOrderWhatToBuy()
 	{
 		ItemCounts owned = new ItemCounts();
 		owned.add(954, "rope", 2);
@@ -40,17 +40,17 @@ public class ShoppingPlanTest
 			item("Redberries", 1951, 1)), owned, offers);
 		assertEquals(ShoppingPlan.RowState.HAVE, rows.get(0).getState());
 		assertEquals(ShoppingPlan.RowState.BUYING, rows.get(1).getState());
-		assertEquals("ордер 0/1", rows.get(1).getOffer());
+		assertEquals("order 0/1", rows.get(1).getOffer());
 		assertEquals(ShoppingPlan.RowState.BOUGHT, rows.get(2).getState());
 		assertEquals(ShoppingPlan.RowState.NEEDED, rows.get(3).getState());
-		// Следующим искать — первое, что надо купить; только одно.
+		// Look for the first thing that has to be bought next; only one.
 		assertTrue(rows.get(3).isNext());
 		assertFalse(rows.get(4).isNext());
 		assertNull(rows.get(3).getOffer());
 	}
 
 	@Test
-	public void количествоПоСитуацииИПустойСписок()
+	public void amountDependingOnTheSituationAndAnEmptyList()
 	{
 		ItemCounts owned = new ItemCounts();
 		owned.add(314, "feather", 100);
@@ -60,13 +60,13 @@ public class ShoppingPlanTest
 	}
 
 	@Test
-	public void проверкаСписка()
+	public void listValidation()
 	{
 		ShoppingPlan plan = new ShoppingPlan();
-		assertEquals("items обязателен", plan.prepare());
+		assertEquals("items required", plan.prepare());
 		plan.setItems(Collections.singletonList(item("Rope", 954, 2)));
 		assertNull(plan.prepare());
 		plan.setItems(Collections.singletonList(item("Rope", 954, -1)));
-		assertEquals("неверное количество", plan.prepare());
+		assertEquals("invalid count", plan.prepare());
 	}
 }

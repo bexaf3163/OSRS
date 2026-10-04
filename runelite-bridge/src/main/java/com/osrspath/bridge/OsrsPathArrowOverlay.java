@@ -18,10 +18,10 @@ import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
 /**
- * Большая стрелка к текущей цели: вверху по центру экрана, над сценой, но под окнами игры — не закрывает
- * миникарту, чат и сумку и не мешает кликам. Поворачивается вместе с камерой, как миникарта; рядом с целью
- * превращается в «✓ Рядом», без цели — не рисуется. Подпись — то же расстояние, что в микро-HUD.
- * Перетаскивается мышью с зажатым Alt, размер — в настройках.
+ * The big arrow to the current target: top centre of the screen, over the scene but under the game windows, so it does not cover
+ * the minimap, chat and bag and does not get in the way of clicks. It turns with the camera, like the minimap; near the target
+ * it turns into "✓ Nearby", with no target it is not drawn. The label is the same distance as in the micro HUD.
+ * Draggable with the mouse while holding Alt, the size is in the settings.
  */
 class OsrsPathArrowOverlay extends Overlay
 {
@@ -36,7 +36,7 @@ class OsrsPathArrowOverlay extends Overlay
 	private final Client client;
 	private final OsrsPathBridgePlugin plugin;
 	private final OsrsPathBridgeConfig config;
-	/** Угол, нарисованный в прошлом кадре; NaN — стрелки не было. */
+	/** The angle drawn in the previous frame; NaN means there was no arrow. */
 	private double angle = Double.NaN;
 
 	@Inject
@@ -57,7 +57,7 @@ class OsrsPathArrowOverlay extends Overlay
 	{
 		WorldPoint target = config.bigArrow() ? plugin.arrowTarget() : null;
 		Player me = client.getLocalPlayer();
-		// Открыта карта мира: стрелка рисуется над окнами и легла бы на карту — там цель показывает метка.
+		// The world map is open: the arrow is drawn over the windows and would lie on the map, where the target is shown by the marker.
 		if (target == null || me == null || InventoryCheckOverlay.visible(client.getWidget(net.runelite.api.gameval.InterfaceID.Worldmap.WINDOW)))
 		{
 			angle = Double.NaN;
@@ -79,10 +79,10 @@ class OsrsPathArrowOverlay extends Overlay
 	}
 
 	/**
-	 * Рисует стрелку и подпись от (0, 0) и возвращает занятый размер. Статический — тест рисует его в картинку
-	 * настоящими шрифтами и проверяет, что всё внутри рамки. layer: 0 — тот же уровень; ±1 — этаж выше/ниже;
-	 * ±2 — на поверхности / под землёй (тогда вместо стрелки — шеврон вверх или вниз: направление по карте
-	 * между поверхностью и подземельем ничего не значит).
+	 * Draws the arrow and the label from (0, 0) and returns the size used. Static: a test draws it into an image
+	 * with the real fonts and checks that everything is inside the frame. layer: 0 is the same level; +-1 is a floor up/down;
+	 * +-2 is surface / underground (then instead of an arrow a chevron up or down: the direction on the map
+	 * between the surface and a dungeon means nothing).
 	 */
 	static Dimension draw(Graphics2D g, Font font, ArrowGeometry.State state, double angle, int layer, String text, int diameter)
 	{
@@ -90,12 +90,12 @@ class OsrsPathArrowOverlay extends Overlay
 		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		g.setFont(font);
 		FontMetrics fm = g.getFontMetrics(font);
-		String label = state == ArrowGeometry.State.VERY_CLOSE ? "Рядом" : text;
+		String label = state == ArrowGeometry.State.VERY_CLOSE ? "Nearby" : text;
 		int textW = label == null ? 0 : fm.stringWidth(label);
 		int width = Math.max(diameter, textW) + 2 * PAD;
 		int height = diameter + 2 * PAD + (label == null ? 0 : TEXT_GAP + fm.getHeight());
 
-		// Без плашки: стрелка с тёмным контуром и подпись с обводкой видны и на траве, и на снегу, и в темноте.
+		// No plate: an arrow with a dark outline and a label with a stroke are visible on grass, snow and in the dark alike.
 
 		double cx = width / 2.0;
 		double cy = PAD + diameter / 2.0;
@@ -115,7 +115,7 @@ class OsrsPathArrowOverlay extends Overlay
 		}
 		else
 		{
-			// Шеврон вверх/вниз между поверхностью и подземельем; иначе стрелка по направлению.
+			// A chevron up/down between the surface and a dungeon; otherwise an arrow by direction.
 			double a = Math.abs(layer) == 2 ? (layer > 0 ? -Math.PI / 2 : Math.PI / 2) : angle;
 			double scale = state == ArrowGeometry.State.APPROACHING ? 1.0 : 0.92;
 			Polygon p = ArrowGeometry.arrow(cx, cy, r * scale, a);
@@ -130,7 +130,7 @@ class OsrsPathArrowOverlay extends Overlay
 		{
 			int baseline = PAD + diameter + TEXT_GAP + fm.getAscent();
 			int x = (int) Math.round(cx - textW / 2.0);
-			// Обводка в четыре стороны и тень: без плашки подпись должна читаться на любом фоне.
+			// A stroke on four sides and a shadow: without a plate the label must be readable on any background.
 			g.setColor(new Color(0, 0, 0, 230));
 			for (int[] d : new int[][]{{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {1, 1}})
 			{
@@ -143,9 +143,9 @@ class OsrsPathArrowOverlay extends Overlay
 	}
 
 	/**
-	 * Подпись под стрелкой — расстояние из HUD без значка стороны света: «↑» в HUD значит «на север», а
-	 * стрелка рядом повёрнута по камере, и два разных «вверх» путали бы. «~62 клетки ↑, этажом выше» →
-	 * «~62 клетки, этажом выше».
+	 * The label under the arrow is the distance from the HUD without the compass-direction icon: "↑" in the HUD means "north", and
+	 * the arrow next to it is turned by the camera, and two different "ups" would confuse. "~62 tiles ↑, a floor up" ->
+	 * "~62 tiles, a floor up".
 	 */
 	static String label(String distance)
 	{

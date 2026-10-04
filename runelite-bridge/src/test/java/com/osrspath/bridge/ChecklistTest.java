@@ -34,7 +34,7 @@ public class ChecklistTest
 	private static final ActiveTarget.ChecklistItem ROPE = item("Rope", 954, 1, null);
 
 	@Test
-	public void предмет0из1НоВБанкеЕсть()
+	public void item0of1ButInTheBank()
 	{
 		Checklist.Result r = Checklist.evaluate(Collections.singletonList(ROPE), counts(), counts(954, "Rope", 3));
 		Checklist.Row row = r.getRows().get(0);
@@ -46,7 +46,7 @@ public class ChecklistTest
 	}
 
 	@Test
-	public void предмет1из1Готов()
+	public void item1of1Ready()
 	{
 		Checklist.Result r = Checklist.evaluate(Collections.singletonList(ROPE), counts(954, "Rope", 1), null);
 		assertEquals(Checklist.State.IN_BAG_READY, r.getRows().get(0).getState());
@@ -54,7 +54,7 @@ public class ChecklistTest
 	}
 
 	@Test
-	public void стопкаСчитаетсяПоКоличеству()
+	public void aStackIsCountedByQuantity()
 	{
 		ActiveTarget.ChecklistItem coins = item("Coins", 995, 90, null);
 		assertTrue(Checklist.evaluate(Collections.singletonList(coins), counts(995, "Coins", 120), null).isReady());
@@ -64,9 +64,9 @@ public class ChecklistTest
 	}
 
 	@Test
-	public void несколькоОдинаковыхПредметовСкладываются()
+	public void severalIdenticalItemsAreSummed()
 	{
-		// Пять курятин в разных ячейках сумки + еда подписана «+3 HP».
+		// Five chicken in different bag slots, the food is labelled "+3 HP".
 		ItemCounts bag = counts(2140, "Cooked chicken", 1, 2140, "Cooked chicken", 1);
 		ActiveTarget.ChecklistItem chicken = item("Cooked chicken", 2140, 5, 3);
 		Checklist.Row row = Checklist.evaluate(Collections.singletonList(chicken), bag, counts(2140, "Cooked chicken", 10)).getRows().get(0);
@@ -78,7 +78,7 @@ public class ChecklistTest
 	}
 
 	@Test
-	public void отсутствиеВБанке()
+	public void absentFromTheBank()
 	{
 		Checklist.Row row = Checklist.evaluate(Collections.singletonList(ROPE), counts(), counts(1351, "Bronze axe", 1)).getRows().get(0);
 		assertEquals(0, row.getInBank());
@@ -86,33 +86,33 @@ public class ChecklistTest
 	}
 
 	@Test
-	public void банкЕщёНеОткрывали()
+	public void theBankWasNotOpenedYet()
 	{
 		Checklist.Row row = Checklist.evaluate(Collections.singletonList(ROPE), counts(), null).getRows().get(0);
 		assertEquals(-1, row.getInBank());
-		// Без банка нельзя сказать «нет в банке» — просто не хватает в сумке.
+		// Without the bank you cannot say "not in the bank": it is simply missing from the bag.
 		assertEquals(Checklist.State.MISSING_FROM_BAG, row.getState());
 	}
 
 	@Test
-	public void полныйКомплектИПоискПоИмени()
+	public void aFullSetAndSearchByName()
 	{
 		List<ActiveTarget.ChecklistItem> items = Arrays.asList(ROPE, item("Hammer", null, 1, null), item("Tinderbox", 590, 1, null));
-		// Молоток без ID — найдётся по имени, регистр не важен.
+		// The hammer without an ID is found by name, the case does not matter.
 		Checklist.Result r = Checklist.evaluate(items, counts(954, "Rope", 1, 2347, "HAMMER", 1, 590, "Tinderbox", 1), counts());
 		assertTrue(r.isReady());
 		assertEquals(0, r.missing());
 	}
 
 	@Test
-	public void пустойСписок()
+	public void anEmptyList()
 	{
 		assertFalse(Checklist.evaluate(null, counts(), null).isReady());
 		assertTrue(Checklist.evaluate(Collections.emptyList(), counts(), null).getRows().isEmpty());
 	}
 
 	@Test
-	public void суммаСчётчиков()
+	public void sumOfCounters()
 	{
 		ItemCounts all = ItemCounts.sum(counts(954, "Rope", 1), null, counts(954, "Rope", 2));
 		assertEquals(3, all.count(954, "Rope"));

@@ -26,8 +26,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Протокол 6: один снимок /prep-plan вместо пяти запросов. Сервер проверяет каждую часть отдельно (негодная не мешает
- * остальным), отдаёт плагину снимок и сообщает программе, что отклонено; план подготовки рисует список «Что нужно».
+ * Protocol 6: one /prep-plan snapshot instead of five requests. The server checks every part separately (a bad one does not hinder
+ * the rest), hands the plugin the snapshot and tells the app what was rejected; the prep plan draws the "What you need" list.
  */
 public class PrepSnapshotTest
 {
@@ -89,10 +89,10 @@ public class PrepSnapshotTest
 	private static final String STEP = "{\"stepId\":\"S1-03\",\"title\":\"Cook's Assistant\","
 		+ "\"worldPoint\":{\"x\":3208,\"y\":3214,\"plane\":0,\"label\":\"Kitchen\"},\"npcNames\":[\"Cook\"]}";
 	private static final String PLAN = "{\"stepId\":\"S1-03\",\"score\":{\"percent\":62,\"verdict\":\"NOT_READY\",\"critical\":1,\"important\":0,\"optimizations\":0,\"unknown\":1},"
-		+ "\"lines\":[{\"name\":\"Egg\",\"need\":1,\"where\":\"MISSING\",\"priority\":\"CRITICAL\",\"timing\":\"NOW\",\"action\":\"Возьми на ферме севернее Lumbridge\"},"
+		+ "\"lines\":[{\"name\":\"Egg\",\"need\":1,\"where\":\"MISSING\",\"priority\":\"CRITICAL\",\"timing\":\"NOW\",\"action\":\"Pick one up at the farm north of Lumbridge\"},"
 		+ "{\"name\":\"Lobster\",\"need\":20,\"where\":\"INVENTORY\",\"priority\":\"IMPORTANT\",\"timing\":\"NOW\",\"supply\":\"LOW\"}],"
-		+ "\"later\":[\"Rune scimitar\",\"Lobster ×20\"],\"weight\":\"Сними железную броню в банк: 26 кг → 9 кг, бег дольше в ~1,3 раза\","
-		+ "\"slots\":\"Не влезет на 3 ячейки — оставь лишнее на потом\"}";
+		+ "\"later\":[\"Rune scimitar\",\"Lobster ×20\"],\"weight\":\"Deposit the iron armour in the bank: 26 kg → 9 kg, running lasts ~1.3x longer\","
+		+ "\"slots\":\"Won't fit by 3 slots - leave the extra for later\"}";
 
 	private static String snapshot(long seq, String step, String plan)
 	{
@@ -100,13 +100,13 @@ public class PrepSnapshotTest
 	}
 
 	@Test
-	public void статусОбъявляетПротокол6()
+	public void statusAnnouncesProtocol6()
 	{
-		assertTrue("снимок появился в протоколе 6", BridgeServer.PROTOCOL >= 6);
+		assertTrue("the snapshot appeared in protocol 6", BridgeServer.PROTOCOL >= 6);
 	}
 
 	@Test
-	public void снимокПринимаетсяЦеликом_частиНаМесте() throws Exception
+	public void aSnapshotIsAcceptedWhole_partsInPlace() throws Exception
 	{
 		HttpResponse<String> r = post(snapshot(100, STEP, PLAN));
 		assertEquals(r.body(), 200, r.statusCode());
@@ -114,20 +114,20 @@ public class PrepSnapshotTest
 		assertEquals(1, received.size());
 		PrepEnvelope e = received.get(0);
 		assertEquals("S1-03", e.getStep().getStepId());
-		assertEquals("тот же JSON шага — ключ, по которому плагин не перезапускает цель", GSON.toJson(GSON.fromJson(STEP, Object.class)).length() > 0, e.getStepKey().length() > 0);
+		assertEquals("the same step JSON is the key by which the plugin does not restart the target", GSON.toJson(GSON.fromJson(STEP, Object.class)).length() > 0, e.getStepKey().length() > 0);
 		assertEquals(62, (int) e.getPlan().getScore().getPercent());
-		assertNull("клиент снят (null) — снимок полный", e.getShopping());
+		assertNull("client cleared (null): the snapshot is complete", e.getShopping());
 		assertTrue(badParts.get(0).isEmpty());
 	}
 
 	@Test
-	public void негоднаяЧастьНеМешаетОстальным() throws Exception
+	public void aBadPartDoesNotHinderTheOthers() throws Exception
 	{
 		String badPlan = "{\"stepId\":\"\",\"lines\":[]}";
 		HttpResponse<String> r = post(snapshot(101, STEP, badPlan));
 		assertEquals(200, r.statusCode());
 		assertTrue(r.body(), r.body().contains("\"plan\":"));
-		assertEquals("шаг принят", "S1-03", received.get(0).getStep().getStepId());
+		assertEquals("the step is accepted", "S1-03", received.get(0).getStep().getStepId());
 		assertTrue(badParts.get(0).containsKey("plan"));
 		assertFalse(badParts.get(0).containsKey("step"));
 
@@ -135,22 +135,22 @@ public class PrepSnapshotTest
 		HttpResponse<String> r2 = post(snapshot(102, badStep, PLAN));
 		assertEquals(200, r2.statusCode());
 		assertTrue(badParts.get(1).containsKey("step"));
-		assertFalse("план при этом принят", badParts.get(1).containsKey("plan"));
+		assertFalse("the plan is accepted in the meantime", badParts.get(1).containsKey("plan"));
 	}
 
 	@Test
-	public void запоздавшийСнимокОтбрасывается() throws Exception
+	public void aLateSnapshotIsDropped() throws Exception
 	{
 		assertEquals(200, post(snapshot(200, STEP, PLAN)).statusCode());
 		HttpResponse<String> old = post(snapshot(150, STEP, "null"));
 		assertEquals(200, old.statusCode());
 		assertTrue(old.body(), old.body().contains("\"stale\":true"));
-		assertEquals("запоздавший не дошёл до плагина", 1, received.size());
+		assertEquals("the late one did not reach the plugin", 1, received.size());
 		assertTrue(post(snapshot(200, STEP, PLAN)).body().contains("\"stale\":true"));
 	}
 
 	@Test
-	public void неТотВидСнимка_иМусор_иБезЗаголовка() throws Exception
+	public void wrongKindOfSnapshot_junk_andNoHeader() throws Exception
 	{
 		assertEquals(400, post("{\"v\":5,\"seq\":1}").statusCode());
 		assertEquals(400, post("[1,2]").statusCode());
@@ -162,7 +162,7 @@ public class PrepSnapshotTest
 	}
 
 	@Test
-	public void большойСнимокВлезает_ОгромныйНет() throws Exception
+	public void aBigSnapshotFits_aHugeOneDoesNot() throws Exception
 	{
 		String lines = java.util.stream.IntStream.range(0, 40)
 			.mapToObj(i -> "{\"name\":\"Item " + i + "\",\"need\":1,\"where\":\"BANK\",\"priority\":\"IMPORTANT\",\"timing\":\"NOW\"}")
@@ -178,15 +178,15 @@ public class PrepSnapshotTest
 	}
 
 	@Test
-	public void планПроверяется()
+	public void thePlanIsValidated()
 	{
 		assertNotNull(prep("{\"stepId\":\"\"}"));
-		assertNotNull("процент вне 0–100", prep("{\"stepId\":\"S1\",\"score\":{\"percent\":120}}"));
-		assertNotNull("слишком много строк", prep("{\"stepId\":\"S1\",\"lines\":[" + java.util.stream.IntStream.range(0, PrepPlan.MAX_LINES + 1)
+		assertNotNull("percent outside 0-100", prep("{\"stepId\":\"S1\",\"score\":{\"percent\":120}}"));
+		assertNotNull("too many lines", prep("{\"stepId\":\"S1\",\"lines\":[" + java.util.stream.IntStream.range(0, PrepPlan.MAX_LINES + 1)
 			.mapToObj(i -> "{\"name\":\"I" + i + "\",\"need\":1}").collect(Collectors.joining(",")) + "]}"));
-		assertNotNull("строка без названия", prep("{\"stepId\":\"S1\",\"lines\":[{\"name\":\"\",\"need\":1}]}"));
-		assertNotNull("восстановление без пунктов", prep("{\"stepId\":\"S1\",\"recovery\":{\"title\":\"x\",\"steps\":[]}}"));
-		assertNotNull("слишком длинный совет", prep("{\"stepId\":\"S1\",\"weight\":\"" + "я".repeat(ActiveTarget.MAX_TEXT + 1) + "\"}"));
+		assertNotNull("a line without a name", prep("{\"stepId\":\"S1\",\"lines\":[{\"name\":\"\",\"need\":1}]}"));
+		assertNotNull("recovery without items", prep("{\"stepId\":\"S1\",\"recovery\":{\"title\":\"x\",\"steps\":[]}}"));
+		assertNotNull("advice too long", prep("{\"stepId\":\"S1\",\"weight\":\"" + "x".repeat(ActiveTarget.MAX_TEXT + 1) + "\"}"));
 		assertNull(prep(PLAN));
 	}
 
@@ -203,7 +203,7 @@ public class PrepSnapshotTest
 	}
 
 	@Test
-	public void строкаПлана_находитсяПоНазваниюБезЧислаИРегистра()
+	public void aPlanLineIsFoundByNameWithoutCountOrCase()
 	{
 		PrepPlan p = plan();
 		assertNotNull(p.line("Lobster ×20"));
@@ -211,7 +211,7 @@ public class PrepSnapshotTest
 		assertNull(p.line("Knife"));
 		assertEquals(Integer.valueOf(62), p.pendingPercent());
 		PrepPlan done = GSON.fromJson("{\"stepId\":\"S1\",\"score\":{\"percent\":100}}", PrepPlan.class);
-		assertNull("готов на сто — процент не пишем", done.pendingPercent());
+		assertNull("ready at one hundred: the percent is not written", done.pendingPercent());
 	}
 
 	private static List<GuideList.Row> rows(StepGuide.View v)
@@ -236,7 +236,7 @@ public class PrepSnapshotTest
 	private static StepGuide.View cook(PrepPlan p)
 	{
 		ActiveTarget t = GSON.fromJson("{\"stepId\":\"S1-03\",\"title\":\"Cook's Assistant\",\"guide\":{\"items\":["
-			+ "{\"name\":\"Egg\",\"id\":1944,\"where\":\"Курятник.\"},{\"name\":\"Lobster\",\"id\":379,\"count\":20}],\"places\":[]}}", ActiveTarget.class);
+			+ "{\"name\":\"Egg\",\"id\":1944,\"where\":\"Chicken coop.\"},{\"name\":\"Lobster\",\"id\":379,\"count\":20}],\"places\":[]}}", ActiveTarget.class);
 		assertNull(t.prepare());
 		ItemCounts bag = new ItemCounts();
 		bag.add(379, ActiveTarget.nameKey("Lobster"), 20);
@@ -245,75 +245,75 @@ public class PrepSnapshotTest
 	}
 
 	@Test
-	public void планРисуетсяВСписке_процентПриоритетМалоНеБериСейчас()
+	public void thePlanIsDrawnInTheList_percentPriorityLowDoNotTakeNow()
 	{
-		// Ширина с запасом: что где обрывается строкой, зависит от шрифта машины (на Linux-раннере кириллица шире, чем на Windows),
-		// а здесь проверяется только, что строки плана вообще нарисованы. Перенос по ширине проверяют остальные тесты.
+		// The width has a margin: where a line is cut depends on the machine's font, and here we only check that the plan lines are drawn at all.
+		// Wrapping by width is checked by the other tests.
 		String all = text(GuideList.rows(cook(plan()), false, FM, FM, 4000));
-		assertTrue("процент в заголовке: " + all, all.contains("S1-03 · Что нужно · 62%"));
-		assertTrue("совет программы вместо общего «где взять»: " + all, all.contains("Возьми на ферме севернее"));
-		assertFalse("общий текст заменён: " + all, all.contains("Курятник"));
-		assertTrue("расходника мало: " + all, all.contains("~мало"));
-		// Советы программы — на отдельной вкладке: на вкладке «Шаги» их нет, только полоска вкладок с числом советов.
-		assertTrue("вкладка с числом советов: " + all, all.contains("Шаги ~Совет · 3"));
-		assertFalse("не бери сейчас — не на вкладке шагов: " + all, all.contains("Не бери сейчас"));
-		assertFalse("вес — не на вкладке шагов: " + all, all.contains("Вес:"));
-		assertFalse("сумка — не на вкладке шагов: " + all, all.contains("Не влезет"));
+		assertTrue("the percent in the heading: " + all, all.contains("S1-03 · What you need · 62%"));
+		assertTrue("the app's advice instead of the generic 'where to get it': " + all, all.contains("Pick one up at the farm north"));
+		assertFalse("the generic text is replaced: " + all, all.contains("Chicken coop"));
+		assertTrue("a supply is low: " + all, all.contains("~low"));
+		// The app's tips are on a separate tab: the "Steps" tab has none of them, only the tab strip with the number of tips.
+		assertTrue("the tab with the number of tips: " + all, all.contains("Steps ~Tip · 3"));
+		assertFalse("do not take now is not on the steps tab: " + all, all.contains("Don't take now"));
+		assertFalse("weight is not on the steps tab: " + all, all.contains("Weight:"));
+		assertFalse("the bag is not on the steps tab: " + all, all.contains("Won't fit"));
 	}
 
 	@Test
-	public void советыПрограммы_навкладкеСовет_шагиНаВкладкеШагов()
+	public void theAppsTips_onTheTipTab_stepsOnTheStepsTab()
 	{
 		StepGuide.View v = cook(plan());
 		String adv = text(GuideList.rows(v.withAdviceTab(true), false, FM, FM, 4000));
-		assertTrue("не бери сейчас: " + adv, adv.contains("Не бери сейчас: Rune scimitar, Lobster ×20"));
-		assertTrue("вес: " + adv, adv.contains("Вес: Сними железную броню в банк"));
-		assertTrue("сумка: " + adv, adv.contains("⚠ Не влезет на 3 ячейки"));
-		assertTrue("вкладка «Совет» активна, «Шаги» рядом: " + adv, adv.contains("Шаги ~Совет · 3"));
-		assertFalse("предметов шага на вкладке совета нет: " + adv, adv.contains("Возьми на ферме севернее"));
+		assertTrue("don't take now: " + adv, adv.contains("Don't take now: Rune scimitar, Lobster ×20"));
+		assertTrue("weight: " + adv, adv.contains("Weight: Deposit the iron armour in the bank"));
+		assertTrue("bag: " + adv, adv.contains("⚠ Won't fit by 3 slots"));
+		assertTrue("the 'Tip' tab is active, 'Steps' beside it: " + adv, adv.contains("Steps ~Tip · 3"));
+		assertFalse("there are no step items on the tip tab: " + adv, adv.contains("Pick one up at the farm north"));
 		List<GuideList.Row> rows = GuideList.rows(v.withAdviceTab(true), false, FM, FM, 4000);
-		assertTrue("полоска вкладок — кнопка", rows.stream().anyMatch(r -> r.getAction().getKind() == GuideList.Kind.TAB));
+		assertTrue("the tab strip is a button", rows.stream().anyMatch(r -> r.getAction().getKind() == GuideList.Kind.TAB));
 	}
 
 	@Test
-	public void безСоветов_вкладкиНет_иОткрытаяСоветВернётВШаги()
+	public void withoutTips_noTabs_andAnOpenTipTabReturnsToSteps()
 	{
 		String all = text(GuideList.rows(cook(null).withAdviceTab(true), false, FM, FM, 4000));
-		assertFalse("нет советов — нет вкладок: " + all, all.contains("Совет ·"));
-		assertTrue("список шагов на месте: " + all, all.contains("Курятник"));
+		assertFalse("no tips, no tabs: " + all, all.contains("Tip ·"));
+		assertTrue("the step list is in place: " + all, all.contains("Chicken coop"));
 	}
 
 	@Test
-	public void безПлана_списокКакБыл()
+	public void withoutAPlan_theListIsAsItWas()
 	{
 		String all = text(rows(cook(null)));
-		assertFalse(all, all.contains("%") || all.contains("Не бери сейчас") || all.contains("Вес:"));
-		assertTrue(all, all.contains("Курятник"));
+		assertFalse(all, all.contains("%") || all.contains("Don't take now") || all.contains("Weight:"));
+		assertTrue(all, all.contains("Chicken coop"));
 		assertTrue(all, all.contains("~20/20"));
 	}
 
 	@Test
-	public void режимВосстановления_сверху_триПунктаМаксимум()
+	public void recoveryMode_onTop_threeItemsAtMost()
 	{
-		PrepPlan p = GSON.fromJson("{\"stepId\":\"S1-03\",\"recovery\":{\"title\":\"Ты умер — шаг S1-03 далеко (~90 кл.)\",\"steps\":["
-			+ "\"Забери вещи из могилы\",\"Возьми запасной ключ\",\"Вернись к шагу\",\"Четвёртый\"]}}", PrepPlan.class);
+		PrepPlan p = GSON.fromJson("{\"stepId\":\"S1-03\",\"recovery\":{\"title\":\"You died - step S1-03 is far away (~90 tiles)\",\"steps\":["
+			+ "\"Retrieve your items from the grave\",\"Take a spare key\",\"Return to the step\",\"Fourth\"]}}", PrepPlan.class);
 		assertNull(p.prepare());
 		List<GuideList.Row> rows = rows(cook(p));
-		assertTrue(text(rows.subList(0, 3)), text(rows.subList(1, 2)).contains("⚠ Ты умер — шаг S1-03 далеко"));
+		assertTrue(text(rows.subList(0, 3)), text(rows.subList(1, 2)).contains("⚠ You died - step S1-03 is far away"));
 		String all = text(rows);
-		assertTrue(all, all.contains("1) Забери вещи из могилы") && all.contains("3) Вернись к шагу"));
-		assertFalse("показываем три, остальное — в программе: " + all, all.contains("Четвёртый"));
+		assertTrue(all, all.contains("1) Retrieve your items from the grave") && all.contains("3) Return to the step"));
+		assertFalse("three are shown, the rest is in the app: " + all, all.contains("Fourth"));
 	}
 
 	@Test
-	public void планДругогоШагаНеЦепляется_тоЖеШагЦепляется()
+	public void aPlanForAnotherStepDoesNotAttach_theSameStepDoes()
 	{
 		PrepPlan p = plan();
 		ActiveTarget t = GSON.fromJson("{\"stepId\":\"S1-03\",\"title\":\"Cook's Assistant\",\"guide\":{\"items\":[],\"places\":[]}}", ActiveTarget.class);
 		StepGuide.View v = cook(null);
 		assertNotNull(StepGuide.withPlanFor(v, p, t).getPrep());
 		p.setStepId("S9-99");
-		assertNull("план прежнего шага не рисуется на новом", StepGuide.withPlanFor(v, p, t).getPrep());
+		assertNull("the plan of the previous step is not drawn on the new one", StepGuide.withPlanFor(v, p, t).getPrep());
 		assertNull(StepGuide.withPlanFor(v, null, t).getPrep());
 		assertNull(StepGuide.withPlanFor(v, p, null).getPrep());
 	}

@@ -11,24 +11,24 @@ import java.util.Collections;
 import org.junit.Test;
 
 /**
- * Боковая панель «OSRS Путь»: что нужно на шаг (есть, в банке, нет, по ходу шага), где взять, «Путь сюда» к точке,
- * и строка HUD, которая называет недостающее, а не «не хватает 1 из 1».
+ * The "OSRS Path" side panel: what the step needs (have, in bank, missing, in step), where to get it, "Go here" to a point,
+ * and the HUD line that names what is missing, not "missing 1 of 1".
  */
 public class StepGuideTest
 {
 	private static final Gson GSON = new Gson();
 
-	/** S2-03 Witch's Potion — как его присылает программа 2.10 (stepGuide в runeliteBridge.ts). */
+	/** S2-03 Witch's Potion, as the app 2.10 sends it (stepGuide in runeliteBridge.ts). */
 	static ActiveTarget witchsPotion()
 	{
-		ActiveTarget t = GSON.fromJson("{\"stepId\":\"S2-03\",\"title\":\"Witch's Potion\",\"goal\":\"Дом ведьмы Hetty\","
+		ActiveTarget t = GSON.fromJson("{\"stepId\":\"S2-03\",\"title\":\"Witch's Potion\",\"goal\":\"Witch Hetty's house\","
 			+ "\"guide\":{\"items\":["
-			+ "{\"name\":\"Onion\",\"nameRu\":\"Лук\",\"id\":1957,\"count\":1,\"where\":\"Сорви на грядке к северу от Rimmington.\",\"inStep\":true},"
-			+ "{\"name\":\"Eye of newt\",\"nameRu\":\"Глаз тритона\",\"id\":221,\"count\":1,\"where\":\"Купи у Betty в Port Sarim за 3 gp.\",\"inStep\":true},"
-			+ "{\"name\":\"Lobster\",\"id\":379,\"count\":5,\"where\":\"Купи на бирже.\"}],"
+			+ "{\"name\":\"Onion\",\"id\":1957,\"count\":1,\"where\":\"Pick from the onion patch north of Rimmington.\",\"inStep\":true},"
+			+ "{\"name\":\"Eye of newt\",\"id\":221,\"count\":1,\"where\":\"Buy from Betty in Port Sarim for 3 gp.\",\"inStep\":true},"
+			+ "{\"name\":\"Lobster\",\"id\":379,\"count\":5,\"where\":\"Buy on the Grand Exchange.\"}],"
 			+ "\"places\":["
-			+ "{\"x\":2968,\"y\":3204,\"plane\":0,\"label\":\"Hetty — дом в Rimmington\",\"npc\":\"Hetty\"},"
-			+ "{\"x\":2950,\"y\":3251,\"plane\":0,\"label\":\"Лук — грядка к северу от Rimmington\",\"items\":[\"Onion\"]},"
+			+ "{\"x\":2968,\"y\":3204,\"plane\":0,\"label\":\"Hetty — house in Rimmington\",\"npc\":\"Hetty\"},"
+			+ "{\"x\":2950,\"y\":3251,\"plane\":0,\"label\":\"Onion — patch north of Rimmington\",\"items\":[\"Onion\"]},"
 			+ "{\"x\":3014,\"y\":3259,\"plane\":0,\"label\":\"Eye of newt — Betty, Port Sarim\",\"npc\":\"Betty\",\"items\":[\"Eye of newt\"]}]}}",
 			ActiveTarget.class);
 		assertNull(t.prepare());
@@ -46,36 +46,36 @@ public class StepGuideTest
 	}
 
 	@Test
-	public void чтоНужноИГдеВзять()
+	public void whatIsNeededAndWhereToGet()
 	{
 		StepGuide.View v = StepGuide.view(witchsPotion(), counts(1957, "Onion", 1), counts(379, "Lobster", 2), null, 0, 0, 0);
 		assertEquals("[S2-03] Witch's Potion", v.getTitle());
 		StepGuide.ItemLine onion = v.getItems().get(0);
 		assertEquals(StepGuide.Have.BAG, onion.getHave());
-		assertEquals("Onion (Лук)", onion.getTitle());
+		assertEquals("Onion", onion.getTitle());
 		StepGuide.ItemLine newt = v.getItems().get(1);
 		assertEquals(StepGuide.Have.IN_STEP, newt.getHave());
-		assertEquals("Купи у Betty в Port Sarim за 3 gp.", newt.getWhere());
-		assertEquals("точка, где берут глаз тритона", 2, newt.getPlace());
+		assertEquals("Buy from Betty in Port Sarim for 3 gp.", newt.getWhere());
+		assertEquals("the point where the eye of newt is obtained", 2, newt.getPlace());
 		StepGuide.ItemLine lobster = v.getItems().get(2);
 		assertEquals(StepGuide.Have.NONE, lobster.getHave());
 		assertEquals("Lobster ×5", lobster.getTitle());
-		assertEquals("нет — есть 2 из 5", lobster.getStatus());
+		assertEquals("missing - have 2 of 5", lobster.getStatus());
 		assertEquals(-1, lobster.getPlace());
 	}
 
 	@Test
-	public void банкНеОткрывали_неизвестно_аВБанкеХватает_возьми()
+	public void bankNotOpened_unknown_andBankHasEnough_takeIt()
 	{
 		ActiveTarget t = witchsPotion();
 		assertEquals(StepGuide.Have.UNKNOWN, StepGuide.view(t, counts(), null, null, 0, 0, 0).getItems().get(2).getHave());
 		StepGuide.ItemLine inBank = StepGuide.view(t, counts(379, "Lobster", 1), counts(379, "Lobster", 9), null, 0, 0, 0).getItems().get(2);
 		assertEquals(StepGuide.Have.BANK, inBank.getHave());
-		assertEquals("в банке — возьми (1+9/5)", inBank.getStatus());
+		assertEquals("in bank - take it (1+9/5)", inBank.getStatus());
 	}
 
 	@Test
-	public void путьСюда_цельКТочкеСNpc_иАктивнаяТочкаОтмечена()
+	public void goHere_targetToPointWithNpc_andActivePointIsMarked()
 	{
 		ActiveTarget t = witchsPotion();
 		NavTarget n = StepGuide.navTo(t, 2);
@@ -83,9 +83,9 @@ public class StepGuideTest
 		assertEquals("Eye of newt — Betty, Port Sarim", n.getLabel());
 		assertEquals(3014, n.getX());
 		assertEquals(Collections.singletonList("Betty"), n.getNpcNames());
-		assertTrue("NPC точки подсветится", n.getNpcNameSet().contains("betty"));
+		assertTrue("the point's NPC will be highlighted", n.getNpcNameSet().contains("betty"));
 		assertEquals("S2-03", n.getStepId());
-		// Не покупка: цель снимется, когда игрок придёт, и стрелка вернётся к шагу.
+		// Not a purchase: the target is cleared when the player arrives, and the arrow returns to the step.
 		assertEquals(false, n.isPurchase());
 		assertNull(StepGuide.navTo(t, 9));
 		assertNull(StepGuide.navTo(null, 0));
@@ -97,25 +97,25 @@ public class StepGuideTest
 	}
 
 	@Test
-	public void безШагаИОтСтаройПрограммы_понятноеСообщение()
+	public void noStepAndFromOldApp_clearMessage()
 	{
 		assertEquals(StepGuide.EMPTY, StepGuide.view(null, counts(), null, null, 0, 0, 0));
 		ActiveTarget old = GSON.fromJson("{\"stepId\":\"S1-03\",\"title\":\"Cook's Assistant\"}", ActiveTarget.class);
 		assertNull(old.prepare());
-		assertTrue(StepGuide.view(old, counts(), null, null, 0, 0, 0).getNote().contains("Обнови программу"));
+		assertTrue(StepGuide.view(old, counts(), null, null, 0, 0, 0).getNote().contains("Update the OSRS Path app"));
 	}
 
 	@Test
-	public void неверныйСписокПанелиОтклоняется()
+	public void invalidPanelListIsRejected()
 	{
 		ActiveTarget bad = GSON.fromJson("{\"stepId\":\"S2-03\",\"guide\":{\"places\":[{\"x\":-5,\"y\":3204,\"plane\":0,\"label\":\"x\"}]}}", ActiveTarget.class);
-		assertEquals("неверная точка панели", bad.prepare());
+		assertEquals("invalid panel point", bad.prepare());
 		ActiveTarget noName = GSON.fromJson("{\"stepId\":\"S2-03\",\"guide\":{\"items\":[{\"name\":\"\"}]}}", ActiveTarget.class);
-		assertEquals("неверный предмет панели", noName.prepare());
+		assertEquals("invalid panel item", noName.prepare());
 	}
 
 	@Test
-	public void строкаHudНазываетНедостающее()
+	public void hudLineNamesWhatIsMissing()
 	{
 		ActiveTarget.ChecklistItem meat = new ActiveTarget.ChecklistItem();
 		meat.setName("Burnt meat");
@@ -127,32 +127,32 @@ public class StepGuideTest
 		rope.setName("Rope");
 		rope.setCount(1);
 
-		assertEquals("Сумка: нет Burnt meat",
+		assertEquals("Bag: missing Burnt meat",
 			Checklist.hudLine(Checklist.evaluate(Collections.singletonList(meat), counts(), counts())));
-		assertEquals("Сумка: Burnt meat — возьми из банка",
+		assertEquals("Bag: Burnt meat - take it from the bank",
 			Checklist.hudLine(Checklist.evaluate(Collections.singletonList(meat), counts(), counts(2146, "Burnt meat", 1))));
-		assertEquals("Сумка: нет Burnt meat, Lobster 13/20",
+		assertEquals("Bag: missing Burnt meat, Lobster 13/20",
 			Checklist.hudLine(Checklist.evaluate(Arrays.asList(meat, lobster), counts(379, "Lobster", 13), counts())));
-		assertEquals("Сумка: нет Burnt meat, Lobster 0/20 и ещё 1",
+		assertEquals("Bag: missing Burnt meat, Lobster 0/20 and 1 more",
 			Checklist.hudLine(Checklist.evaluate(Arrays.asList(meat, lobster, rope), counts(), counts())));
 	}
 
 	@Test
-	public void панельНеПадаетКогдаНомераМестаНетВСпискеМест()
+	public void panelDoesNotCrashWhenPlaceNumberIsNotInThePlacesList()
 	{
-		// В живой игре (S2-08, 2.23.0) у предмета был номер места 1, а в показанном списке место одно: панель падала с IndexOutOfBounds.
-		StepGuide.ItemLine item = new StepGuide.ItemLine("Beer", "нет", StepGuide.Have.NONE, null, 1, "Beer", null, "нет");
+		// In a live game (S2-08, 2.23.0) an item had place number 1 while the shown list had one place: the panel crashed with IndexOutOfBounds.
+		StepGuide.ItemLine item = new StepGuide.ItemLine("Beer", "missing", StepGuide.Have.NONE, null, 1, "Beer", "none");
 		StepGuide.PlaceLine place = new StepGuide.PlaceLine("Blue Moon Inn", 0, false, null, true);
 		StepGuide.View v = new StepGuide.View("t", "g", Collections.singletonList(item), Collections.singletonList(place), null, null, null, null);
 		assertNull(OsrsPathPanel.placeFor(v, item));
-		StepGuide.ItemLine ok = new StepGuide.ItemLine("Beer", "нет", StepGuide.Have.NONE, null, 0, "Beer", null, "нет");
+		StepGuide.ItemLine ok = new StepGuide.ItemLine("Beer", "missing", StepGuide.Have.NONE, null, 0, "Beer", "none");
 		assertEquals("Blue Moon Inn", OsrsPathPanel.placeFor(v, ok).getLabel());
-		StepGuide.ItemLine none = new StepGuide.ItemLine("Beer", "нет", StepGuide.Have.NONE, null, -1, "Beer", null, "нет");
+		StepGuide.ItemLine none = new StepGuide.ItemLine("Beer", "missing", StepGuide.Have.NONE, null, -1, "Beer", "none");
 		assertNull(OsrsPathPanel.placeFor(v, none));
 	}
 
 	@Test
-	public void значокПанелиРисуется()
+	public void panelIconIsDrawn()
 	{
 		assertEquals(16, OsrsPathPanel.icon().getWidth());
 	}

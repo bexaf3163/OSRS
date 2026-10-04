@@ -7,9 +7,9 @@ import java.util.Set;
 import lombok.Data;
 
 /**
- * Предметы этапа для мягкой подсветки в банке (POST /bank-tags): всё, что понадобится на этапе, видно
- * прямо в основном окне банка — без отдельной вкладки плагина Bank Tags и строки импорта.
- * Пустой список снимает подсветку.
+ * The stage's items for soft highlighting in the bank (POST /bank-tags): everything needed in the stage is visible
+ * right in the main bank window, without a separate Bank Tags plugin tab and an import string.
+ * An empty list clears the highlight.
  */
 @Data
 public class BankTags
@@ -25,22 +25,22 @@ public class BankTags
 	{
 		if (stageId == null || stageId.isEmpty() || stageId.length() > 64)
 		{
-			return "нужен stageId";
+			return "stageId required";
 		}
 		if (itemIds == null)
 		{
-			return "нужен список itemIds";
+			return "itemIds list required";
 		}
 		if (itemIds.size() > MAX_ITEMS)
 		{
-			return "слишком длинный список";
+			return "list too long";
 		}
 		Set<Integer> ids = new HashSet<>();
 		for (Integer id : itemIds)
 		{
 			if (id == null || id <= 0 || id >= NavTarget.MAX_ITEM_ID)
 			{
-				return "неверный ID предмета";
+				return "invalid item ID";
 			}
 			ids.add(id);
 		}

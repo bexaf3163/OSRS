@@ -9,43 +9,43 @@ import java.util.regex.PatternSyntaxException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Автоотметка текущего шага. Только условия, известные заранее и проверенные:
+ * Auto-tick of the current step. Only conditions that are known in advance and tested:
  * <ul>
- * <li>QUEST_COMPLETED — квест с этим названием в состоянии FINISHED (Quest.getState в RuneLite);</li>
- * <li>SKILL_LEVEL — настоящие уровни навыков (без зелий) не ниже заданных, все сразу;</li>
- * <li>ITEM_OWNED — предметы есть у игрока: в сумке, на нём, банкнотами и в банке вместе;</li>
- * <li>CHAT_MESSAGE — сообщение игры совпало с регулярным выражением шага;</li>
- * <li>VARBIT_CHANGED — varbit с этим номером принял ровно это значение.</li>
+ * <li>QUEST_COMPLETED: a quest with this name is in the FINISHED state (Quest.getState in RuneLite);</li>
+ * <li>SKILL_LEVEL: real skill levels (without potions) are at least the given ones, all at once;</li>
+ * <li>ITEM_OWNED: the player has the items: in the bag, worn, as notes and in the bank together;</li>
+ * <li>CHAT_MESSAGE: a game message matched the step's regular expression;</li>
+ * <li>VARBIT_CHANGED: the varbit with this number took exactly this value.</li>
  * </ul>
- * У QUEST_COMPLETED и SKILL_LEVEL могут быть ещё и предметы: «квест выполнен и куплен Dragon scimitar»,
- * «рыбалка 20 и 50 креветок». Такие условия — состояние игры: они проверяются сразу при взводе, после
- * изменений (уровни, сумка, банк, переменные) и заодно раз в {@link #QUEST_POLL_TICKS} тиков.
- * Срабатывает один раз на цель: повторные события и сообщения ничего не шлют.
- * Все методы вызываются в потоке клиента RuneLite, поэтому синхронизация не нужна.
+ * QUEST_COMPLETED and SKILL_LEVEL may also have items: "quest complete and a Dragon scimitar bought",
+ * "Fishing 20 and 50 shrimps". Such conditions are the game state: they are checked at once on arming, after
+ * changes (levels, bag, bank, variables) and also every {@link #QUEST_POLL_TICKS} ticks.
+ * Fires once per target: repeated events and messages send nothing.
+ * All methods are called on the RuneLite client thread, so no synchronisation is needed.
  */
 @Slf4j
 public class AutoCompletionManager
 {
-	/** Как часто перепроверять состояние, даже если игра не присылала изменений. */
+	/** How often to recheck the state even if the game sent no changes. */
 	static final int QUEST_POLL_TICKS = 10;
 
 	private static final Pattern TAGS = Pattern.compile("<[^>]*>");
 
 	public interface QuestChecker
 	{
-		/** true — квест выполнен, false — нет, null — квест с таким названием неизвестен. */
+		/** true means the quest is complete, false means not, null means a quest with this name is unknown. */
 		Boolean isFinished(String questName);
 	}
 
 	public interface LevelChecker
 	{
-		/** Настоящий уровень навыка по ключу приложения («attack»); null — ещё неизвестен (не в игре). */
+		/** The real skill level by the app's key ("attack"); null means not known yet (not in the game). */
 		Integer level(String skill);
 	}
 
 	public interface ItemChecker
 	{
-		/** Сколько этого предмета у игрока: сумка, надетое, банкноты и банк, если его открывали в этой сессии. */
+		/** How much of this item the player has: bag, worn, notes and the bank if it was opened in this session. */
 		int owned(ActiveTarget.ItemNeed need);
 	}
 
@@ -74,13 +74,13 @@ public class AutoCompletionManager
 		this.onCompleted = onCompleted;
 	}
 
-	/** Только квесты, сообщения и varbit: уровней и предметов этот менеджер не знает. */
+	/** Only quests, messages and varbit: this manager knows no levels or items. */
 	public AutoCompletionManager(QuestChecker quests, Consumer<String> onCompleted)
 	{
 		this(quests, skill -> null, need -> 0, onCompleted);
 	}
 
-	/** Новая цель (или null — снять). Условие взводится заново, даже если это тот же шаг. */
+	/** A new target (or null to clear). The condition is armed again, even if it is the same step. */
 	public void setTarget(ActiveTarget target)
 	{
 		stepId = null;
@@ -131,7 +131,7 @@ public class AutoCompletionManager
 				}
 				catch (PatternSyntaxException | NullPointerException e)
 				{
-					log.warn("Шаг {}: неверный chatPattern — автоотметка выключена", target.getStepId());
+					log.warn("Step {}: invalid chatPattern - auto-tick turned off", target.getStepId());
 					return;
 				}
 				break;
@@ -144,12 +144,12 @@ public class AutoCompletionManager
 				targetValue = t.getTargetValue();
 				break;
 			default:
-				log.warn("Шаг {}: неизвестный тип автоотметки {}", target.getStepId(), t.getType());
+				log.warn("Step {}: unknown auto-tick type {}", target.getStepId(), t.getType());
 				return;
 		}
 		type = t.getType();
 		stepId = target.getStepId();
-		// Сразу проверить: квест, уровни или предметы могли быть готовы ещё до того, как шаг показали в игре.
+		// Check at once: the quest, levels or items may have been ready before the step was shown in the game.
 		dirty = true;
 	}
 
@@ -159,8 +159,8 @@ public class AutoCompletionManager
 	}
 
 	/**
-	 * Условие автоотметки шага — для плашки разработчика и журнала: строки вида «Item(Lobster ×5) = 3/5 FALSE». Пусто —
-	 * у шага нет условия. Только читает: готовность проверяет onGameTick.
+	 * The step's auto-tick condition, for the developer badge and the log: lines like "Item(Lobster ×5) = 3/5 FALSE". Empty means
+	 * the step has no condition. Only reads: onGameTick checks readiness.
 	 */
 	public List<String> describe()
 	{
@@ -171,7 +171,7 @@ public class AutoCompletionManager
 		}
 		if (fired)
 		{
-			out.add(type + " сработало");
+			out.add(type + " fired");
 			return out;
 		}
 		if (questName != null)
@@ -191,22 +191,22 @@ public class AutoCompletionManager
 		}
 		if (chatPattern != null)
 		{
-			out.add("Chat(" + chatPattern.pattern() + ") = ждём сообщение");
+			out.add("Chat(" + chatPattern.pattern() + ") = waiting for a message");
 		}
 		if ("VARBIT_CHANGED".equals(type))
 		{
-			out.add("Varbit(" + varbitId + ") == " + targetValue + " = ждём");
+			out.add("Varbit(" + varbitId + ") == " + targetValue + " = waiting");
 		}
 		return out;
 	}
 
-	/** Условие — состояние игры (квест, уровни, предметы), а не событие. */
+	/** The condition is a game state (quest, levels, items), not an event. */
 	private boolean stateful()
 	{
 		return "QUEST_COMPLETED".equals(type) || "SKILL_LEVEL".equals(type) || "ITEM_OWNED".equals(type);
 	}
 
-	/** Сообщение игры (GAMEMESSAGE, SPAM). Теги цвета убираются перед сравнением. */
+	/** A game message (GAMEMESSAGE, SPAM). Colour tags are removed before comparing. */
 	public void onChatMessage(String message)
 	{
 		if (!isArmed() || !"CHAT_MESSAGE".equals(type) || message == null)
@@ -222,7 +222,7 @@ public class AutoCompletionManager
 
 	public void onVarbitChanged(int changedVarbitId, int value)
 	{
-		// Любая смена переменной может значить, что квест продвинулся.
+		// Any variable change may mean the quest moved on.
 		dirty = true;
 		if (isArmed() && "VARBIT_CHANGED".equals(type) && changedVarbitId == varbitId && value == targetValue)
 		{
@@ -230,13 +230,13 @@ public class AutoCompletionManager
 		}
 	}
 
-	/** Изменились уровни, сумка, надетое или банк — проверить условие на ближайшем тике. */
+	/** Levels, bag, worn items or the bank changed: check the condition on the next tick. */
 	public void onStateChanged()
 	{
 		dirty = true;
 	}
 
-	/** Раз в тик игры: условие проверяется после изменений и заодно раз в {@link #QUEST_POLL_TICKS} тиков. */
+	/** Once per game tick: the condition is checked after changes and also every {@link #QUEST_POLL_TICKS} ticks. */
 	public void onGameTick()
 	{
 		if (!isArmed() || !stateful())
@@ -254,7 +254,7 @@ public class AutoCompletionManager
 			Boolean finished = quests.isFinished(questName);
 			if (finished == null)
 			{
-				log.warn("Квест «{}» не найден в RuneLite — автоотметка шага {} выключена", questName, stepId);
+				log.warn("Quest '{}' not found in RuneLite - auto-tick of step {} turned off", questName, stepId);
 				type = null;
 				return;
 			}

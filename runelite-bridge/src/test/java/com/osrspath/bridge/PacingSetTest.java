@@ -11,10 +11,10 @@ import org.junit.Test;
 
 public class PacingSetTest
 {
-	/** 30 уровень — 13 363 опыта. */
+	/** Level 30 is 13,363 XP. */
 	private static final int XP_30 = 13_363;
 
-	/** S3-08: воины Al Kharid, 19 здоровья — 76 опыта навыка стиля за воина. */
+	/** S3-08: Al Kharid warriors, 19 health: 76 style XP per warrior. */
 	private static ActiveTarget.Pacing warriors()
 	{
 		ActiveTarget.Pacing p = new ActiveTarget.Pacing();
@@ -22,54 +22,54 @@ public class PacingSetTest
 		p.setAlso(List.of("strength", "defence"));
 		p.setTargetLevel(30);
 		p.setTargetExp(XP_30);
-		p.setActionName("воин|воина|воинов");
+		p.setActionName("warrior|warriors");
 		p.setExpPerAction(76);
 		return p;
 	}
 
 	@Test
-	public void безПрибавокПоказанПервыйНедокачанный()
+	public void withoutGainsTheFirstUnfinishedSkillIsShown()
 	{
 		PacingSet set = new PacingSet(warriors());
 		set.update("attack", XP_30 + 100, 0);
 		set.update("strength", 5_000, 0);
 		set.update("defence", 1_000, 0);
-		assertEquals("атака уже 30 — первой показана сила", "strength", set.getActive());
+		assertEquals("attack is already 30: strength is shown first", "strength", set.getActive());
 		PacingTracker.Snapshot s = set.snapshot();
 		assertEquals(XP_30 - 5_000, s.getRemainingXp());
-		// 8 363 опыта по 76 за воина — 110,04: до цели нужен 111-й.
+		// 8,363 XP at 76 per warrior is 110.04: the 111th is needed to reach the target.
 		assertEquals(111, s.getActionsLeft());
 		assertEquals(List.of("defence"), set.left());
-		assertEquals("111 воинов до 30 Strength (время рассчитывается…)", set.hudLine(s));
+		assertEquals("111 warriors to 30 Strength (calculating the time...)", set.hudLine(s));
 	}
 
 	@Test
-	public void показПереходитНаНавыкКоторыйРастёт()
+	public void theDisplayMovesToTheSkillThatIsGrowing()
 	{
 		PacingSet set = new PacingSet(warriors());
 		set.update("attack", 2_000, 0);
 		set.update("strength", 1_000, 0);
 		set.update("defence", 1_000, 0);
 		assertEquals("attack", set.getActive());
-		// Качает атаку.
+		// Training attack.
 		set.update("attack", 2_020, 1_000);
 		assertEquals("attack", set.getActive());
-		// Переключил стиль на силу: пока атака росла недавно, показ не прыгает.
+		// Switched the style to strength: while attack grew recently, the display does not jump.
 		set.update("strength", 1_020, 5_000);
 		assertEquals("attack", set.getActive());
-		// Атака не растёт дольше 10 секунд — показывается сила.
+		// Attack has not grown for over 10 seconds: strength is shown.
 		set.update("strength", 1_040, 1_000 + PacingSet.SWITCH_MS + 1);
 		assertEquals("strength", set.getActive());
 	}
 
 	@Test
-	public void стильControlledНеМигает()
+	public void controlledStyleDoesNotFlicker()
 	{
 		PacingSet set = new PacingSet(warriors());
 		set.update("attack", 1_000, 0);
 		set.update("strength", 1_000, 0);
 		set.update("defence", 1_000, 0);
-		// Controlled: каждый удар даёт опыт во все три навыка. Показ выбирается первым ударом и дальше не прыгает.
+		// Controlled: every hit gives XP to all three skills. The display is chosen by the first hit and does not jump after that.
 		String shown = null;
 		for (int i = 1; i <= 20; i++)
 		{
@@ -86,7 +86,7 @@ public class PacingSetTest
 	}
 
 	@Test
-	public void цельПоказанногоНавыкаЕстьДальшеСледующий()
+	public void theShownSkillsTargetIsDoneAndTheNextOneFollows()
 	{
 		PacingSet set = new PacingSet(warriors());
 		set.update("attack", XP_30 - 10, 0);
@@ -95,15 +95,15 @@ public class PacingSetTest
 		set.update("attack", XP_30 + 30, 2_400);
 		PacingTracker.Snapshot s = set.snapshot();
 		assertTrue(s.isDone());
-		assertEquals("✓ 30 Attack — дальше Strength: смени стиль атаки", set.hudLine(s));
-		// Сменил стиль: сила растёт — и сразу показана она, ждать 10 секунд не нужно (атака уже готова).
+		assertEquals("✓ 30 Attack - next Strength: change attack style", set.hudLine(s));
+		// Changed the style: strength grows and is shown at once, there is no need to wait 10 seconds (attack is already done).
 		set.update("strength", 1_040, 3_000);
 		assertEquals("strength", set.getActive());
 		assertEquals(List.of("defence"), set.left());
 	}
 
 	@Test
-	public void всеТриГотовы()
+	public void allThreeAreDone()
 	{
 		PacingSet set = new PacingSet(warriors());
 		set.update("attack", XP_30, 0);
@@ -112,56 +112,56 @@ public class PacingSetTest
 		PacingTracker.Snapshot s = set.snapshot();
 		assertTrue(s.isDone());
 		assertTrue(set.left().isEmpty());
-		assertEquals("✓ Целевой уровень достигнут: 30 Attack, Strength, Defence", set.hudLine(s));
+		assertEquals("✓ Target level reached: 30 Attack, Strength, Defence", set.hudLine(s));
 	}
 
 	@Test
-	public void боевойТемпЖдётВосьмиПрибавок()
+	public void combatPaceWaitsForEightGains()
 	{
 		PacingSet set = new PacingSet(warriors());
 		set.update("attack", 1_000, 0);
-		// Удар раз в 2,4 с, 12 опыта за удар (урон 3).
+		// A hit every 2.4 s, 12 XP per hit (damage 3).
 		for (int i = 1; i < PacingTracker.COMBAT_MIN_GAINS; i++)
 		{
 			set.update("attack", 1_000 + i * 12, i * 2_400L);
 		}
-		assertNull("семь ударов — один бой, это ещё не темп", set.snapshot().getActionsPerMinute());
+		assertNull("seven hits are one fight, that is not a pace yet", set.snapshot().getActionsPerMinute());
 		set.update("attack", 1_000 + PacingTracker.COMBAT_MIN_GAINS * 12, PacingTracker.COMBAT_MIN_GAINS * 2_400L);
 		Double perMinute = set.snapshot().getActionsPerMinute();
 		assertNotNull(perMinute);
-		// 12 опыта за 2,4 с = 300 опыта в минуту = 300 / 76 воинов в минуту.
+		// 12 XP per 2.4 s = 300 XP a minute = 300 / 76 warriors a minute.
 		assertEquals(300.0 / 76, perMinute, 0.01);
 	}
 
 	@Test
-	public void одинНавыкКакРаньше()
+	public void oneSkillAsBefore()
 	{
 		ActiveTarget.Pacing p = new ActiveTarget.Pacing();
 		p.setSkill("fishing");
 		p.setTargetLevel(20);
 		p.setTargetExp(4470);
-		p.setActionName("креветка|креветки|креветок");
+		p.setActionName("shrimp|shrimps");
 		p.setExpPerAction(10);
 		PacingSet set = new PacingSet(p);
 		assertFalse(set.tracks("attack"));
 		set.update("fishing", 4475, 0);
-		assertEquals("✓ Целевой уровень достигнут: 20 Fishing", set.hudLine(set.snapshot()));
+		assertEquals("✓ Target level reached: 20 Fishing", set.hudLine(set.snapshot()));
 		assertTrue(set.left().isEmpty());
 	}
 
 	@Test
-	public void несколькоНавыковТолькоВБою()
+	public void severalSkillsOnlyInCombat()
 	{
 		ActiveTarget.Pacing ok = warriors();
 		assertNull(ok.problem());
 		ActiveTarget.Pacing fishing = warriors();
 		fishing.setSkill("fishing");
-		assertEquals("неверный список навыков темпа", fishing.problem());
+		assertEquals("invalid pacing skill list", fishing.problem());
 		ActiveTarget.Pacing repeat = warriors();
 		repeat.setAlso(List.of("attack"));
-		assertEquals("неверный список навыков темпа", repeat.problem());
+		assertEquals("invalid pacing skill list", repeat.problem());
 		ActiveTarget.Pacing magic = warriors();
 		magic.setAlso(List.of("magic"));
-		assertEquals("неверный список навыков темпа", magic.problem());
+		assertEquals("invalid pacing skill list", magic.problem());
 	}
 }

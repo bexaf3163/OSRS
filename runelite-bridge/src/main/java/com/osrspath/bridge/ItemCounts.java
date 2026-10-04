@@ -6,9 +6,9 @@ import java.util.Map;
 import java.util.function.IntUnaryOperator;
 
 /**
- * Сколько каких предметов в контейнере (сумка, надетое, банк). Считается один раз на событие
- * ItemContainerChanged, а не каждый кадр. Предмет ищется по ID, а если ID не задан или отличается
- * (у вики и игры бывают разные варианты одного предмета) — по имени; берётся большее.
+ * How many of which items are in a container (bag, worn items, bank). Computed once per
+ * ItemContainerChanged event, not every frame. An item is looked up by ID, and if there is no ID or it differs
+ * (the wiki and the game sometimes have different variants of one item), by name; the larger is taken.
  */
 final class ItemCounts
 {
@@ -17,7 +17,7 @@ final class ItemCounts
 	private final Map<Integer, Integer> byId = new HashMap<>();
 	private final Map<String, Integer> byName = new HashMap<>();
 
-	/** name — уже ключ сравнения (ActiveTarget.nameKey). Стопки складываются. */
+	/** name is already a comparison key (ActiveTarget.nameKey). Stacks are added. */
 	void add(int id, String name, int quantity)
 	{
 		if (quantity <= 0)
@@ -31,19 +31,19 @@ final class ItemCounts
 		}
 	}
 
-	/** Сколько предметов с этим ID. */
+	/** How many items with this ID. */
 	int idCount(int id)
 	{
 		return byId.getOrDefault(id, 0);
 	}
 
-	/** Число по ID предметов — для сохранения банка между сеансами. Копия: счётчики не изменить снаружи. */
+	/** The count by item ID, for saving the bank between sessions. A copy: the counters cannot be changed from outside. */
 	Map<Integer, Integer> idCounts()
 	{
 		return new HashMap<>(byId);
 	}
 
-	/** Всё вместе: сумка + банкноты + банк — сколько предмета есть у игрока вообще. null пропускаются. */
+	/** Everything together: bag + notes + bank, how much of the item the player has at all. null ones are skipped. */
 	static ItemCounts sum(ItemCounts... parts)
 	{
 		ItemCounts out = new ItemCounts();
@@ -59,7 +59,7 @@ final class ItemCounts
 		return out;
 	}
 
-	/** Ступени инструментов по возрастанию: Iron pickaxe годится вместо Bronze pickaxe. */
+	/** Tool tiers in ascending order: an Iron pickaxe will do instead of a Bronze pickaxe. */
 	private static final String[] TIERS = {"bronze", "iron", "steel", "black", "mithril", "adamant", "rune", "dragon"};
 
 	int count(Integer id, String name)
@@ -71,8 +71,8 @@ final class ItemCounts
 	}
 
 	/**
-	 * Топор или кирка не хуже названной: нужен Bronze pickaxe — Iron, Steel и выше тоже подходят. Сумма по ступеням от
-	 * названной и выше; не инструмент — 0. Боевые «Black axe» и прочие названия вне шаблона не затрагиваются.
+	 * An axe or pickaxe no worse than the named one: if a Bronze pickaxe is needed, Iron, Steel and above also fit. The sum over tiers from
+	 * the named one and up; a non-tool is 0. Combat "Black axe" and other names outside the pattern are not affected.
 	 */
 	private int betterToolCount(String key)
 	{
@@ -99,8 +99,8 @@ final class ItemCounts
 	}
 
 	/**
-	 * Для автоотметки: с ID — только этот предмет (у кусков карты Dragon Slayer I одно название на троих),
-	 * без ID — все названия вместе.
+	 * For auto-tick: with an ID, only that item (the Dragon Slayer I map pieces share one name among three),
+	 * without an ID, all the names together.
 	 */
 	int count(ActiveTarget.ItemNeed need)
 	{
@@ -121,7 +121,7 @@ final class ItemCounts
 		return byId.isEmpty();
 	}
 
-	/** Что изменилось с прошлого раза: название → разница (положительная — прибавилось). Для журнала отладки. */
+	/** What changed since last time: name -> difference (positive means it increased). For the debug log. */
 	Map<String, Integer> deltaFrom(ItemCounts before)
 	{
 		Map<String, Integer> out = new java.util.TreeMap<>();
@@ -144,15 +144,15 @@ final class ItemCounts
 		return out;
 	}
 
-	/** Число, которое меняется вместе с содержимым: сторожу движка нужно знать только «менялась ли сумка». */
+	/** A number that changes with the contents: the engine watchdog only needs to know "did the bag change". */
 	int fingerprint()
 	{
 		return byName.hashCode();
 	}
 
 	/**
-	 * Оценка стоимости по ценам биржи: price(id) — цена одного, у неторгуемых 0. Монеты (skip) не входят —
-	 * они считаются отдельно, как точные деньги. Каждый предмет — один раз: ID, а не имя.
+	 * A value estimate by exchange prices: price(id) is the price of one, 0 for untradeable ones. Coins (skip) are not included:
+	 * they are counted separately, as exact money. Each item once: by ID, not by name.
 	 */
 	long value(IntUnaryOperator price, int skip)
 	{

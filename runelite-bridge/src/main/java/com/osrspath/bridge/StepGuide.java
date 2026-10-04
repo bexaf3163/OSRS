@@ -8,25 +8,25 @@ import java.util.Set;
 import lombok.Value;
 
 /**
- * Что показывают список «Что нужно» в игре и боковая панель «OSRS Путь»: предметы шага — есть ли (сумка, банк),
- * где взять и к какой точке повести стрелку, — и точки шага. Чистая логика: плагин считает её на потоке клиента,
- * список и панель только рисуют.
+ * What the "What you need" list in the game and the "OSRS Path" side panel show: the step's items (whether you have them: bag, bank),
+ * where to get them and which point to aim the arrow at, and the step's points. Pure logic: the plugin computes it on the client thread,
+ * the list and the panel only draw it.
  */
 final class StepGuide
 {
 	enum Have
 	{
-		/** В сумке или надето сколько нужно. */
+		/** In the bag or worn, as many as needed. */
 		BAG,
-		/** Не в сумке, но в банке хватает. */
+		/** Not in the bag, but the bank has enough. */
 		BANK,
-		/** Нет нигде (банк открывали). */
+		/** Nowhere (the bank has been opened). */
 		NONE,
-		/** Банк в этой сессии не открывали — неизвестно. */
+		/** The bank has not been opened in this session, so unknown. */
 		UNKNOWN,
-		/** Добывается по ходу шага, заранее брать не нужно. */
+		/** Obtained during the step, no need to take it beforehand. */
 		IN_STEP,
-		/** Уже было в сумке в этом шаге, а теперь нет — отдали, съели или использовали. Снова искать не надо. */
+		/** It was in the bag during this step and now is not: handed in, eaten or used. No need to look for it again. */
 		DONE,
 	}
 
@@ -39,19 +39,17 @@ final class StepGuide
 	@Value
 	static class ItemLine
 	{
-		/** Для панели: «Lobster ×5 (Омар)». */
+		/** For the panel: "Lobster ×5". */
 		String title;
-		/** Для панели: «в банке — возьми (1+9/5)». */
+		/** For the panel: "in bank - take it (1+9/5)". */
 		String status;
 		Have have;
 		String where;
-		/** Номер точки, где берут этот предмет; -1 — такой точки нет. */
+		/** The number of the point where this item is obtained; -1 means there is no such point. */
 		int place;
-		/** Для списка в игре: английское название, как в сумке, — «Lobster ×5». */
+		/** For the in-game list: the name as in the bag, "Lobster ×5". */
 		String name;
-		/** Русское название или null. */
-		String ru;
-		/** Для списка в игре: коротко справа — «есть», «в банке», «нет», «2/5», «по ходу», «в банке?». */
+		/** For the in-game list: short on the right, "have", "in bank", "none", "2/5", "in step", "bank?". */
 		String tag;
 	}
 
@@ -60,11 +58,11 @@ final class StepGuide
 	{
 		String label;
 		int index;
-		/** Стрелка сейчас ведёт сюда. */
+		/** The arrow now points here. */
 		boolean active;
-		/** NPC у точки (подсветится, когда стрелка ведёт сюда) или null. */
+		/** The NPC at the point (highlighted when the arrow points here) or null. */
 		String npc;
-		/** Здесь берут предметы шага — подпись о предмете («Лук — грядка»), а не о NPC. */
+		/** Items of the step are obtained here: the label is about the item ("Onion - patch"), not an NPC. */
 		boolean items;
 	}
 
@@ -75,19 +73,19 @@ final class StepGuide
 		String goal;
 		List<ItemLine> items;
 		List<PlaceLine> places;
-		/** Стрелка ведёт не к шагу, а к этой временной цели; null — к шагу. */
+		/** The arrow points not at the step but at this temporary target; null means at the step. */
 		String detour;
-		/** Сообщение вместо шага: «шаг не выбран», «навигация выключена»… */
+		/** A message instead of a step: "no step selected", "navigation is off"... */
 		String note;
-		/** Что делать дальше, когда всё нужное уже собрано (последний пункт быстрого пути шага); null — рано. */
+		/** What to do next when everything needed is collected (the last item of the step's quick path); null means too early. */
 		String next;
-		/** Последний пункт быстрого пути шага — всегда (с кем закончить); null — пунктов нет. */
+		/** The last item of the step's quick path, always (who to finish with); null means there are no items. */
 		String finale;
-		/** Этап квеста по переменной игры; null — у шага этапов нет или игра переменную не отдала. */
+		/** The quest stage by a game variable; null means the step has no stages or the game did not give the variable. */
 		StageView stage;
-		/** План подготовки от программы (протокол 6): процент, важность, «не бери сейчас», восстановление; null — программа плана не прислала. */
+		/** The preparation plan from the app (protocol 6): percent, importance, "don't take now", recovery; null means the app sent no plan. */
 		PrepPlan prep;
-		/** В списке в игре открыта вкладка «Совет» (красное и серое от программы: «Не бери сейчас», вес, сумка), а не «Шаги». */
+		/** The in-game list has the "Tip" tab open (the red and grey from the app: "Don't take now", weight, bag) rather than "Steps". */
 		boolean adviceTab;
 
 		View(String title, String goal, List<ItemLine> items, List<PlaceLine> places, String detour, String note, String next, String finale)
@@ -123,49 +121,49 @@ final class StepGuide
 			this.stage = stage;
 		}
 
-		/** То же с другим состоянием этапа (предупреждение и «вручную»). */
+		/** The same with another stage state (a warning and "manually"). */
 		View withStage(StageView s)
 		{
 			return new View(title, goal, items, places, detour, note, next, finale, s, prep, adviceTab);
 		}
 
-		/** То же с планом подготовки от программы. */
+		/** The same with the preparation plan from the app. */
 		View withPrep(PrepPlan p)
 		{
 			return new View(title, goal, items, places, detour, note, next, finale, stage, p, adviceTab);
 		}
 
-		/** То же с другим сообщением (guideMessage плагина). */
+		/** The same with another message (the plugin's guideMessage). */
 		View withNote(String message)
 		{
 			return new View(title, goal, items, places, detour, message, next, finale, stage, prep, adviceTab);
 		}
 
-		/** То же с открытой вкладкой «Совет» (или «Шаги»). */
+		/** The same with the "Tip" (or "Steps") tab open. */
 		View withAdviceTab(boolean on)
 		{
 			return new View(title, goal, items, places, detour, note, next, finale, stage, prep, on);
 		}
 	}
 
-	/** Где игрок в квесте: этап k из n, что делать сейчас и пройден ли квест. */
+	/** Where the player is in the quest: stage k of n, what to do now and whether the quest is complete. */
 	@Value
 	static class StageView
 	{
-		/** С единицы. */
+		/** One-based. */
 		int index;
 		int total;
-		/** Что делать на этапе — шаги по порядку. */
+		/** What to do in the stage: the steps in order. */
 		List<ActiveTarget.StageLine> steps;
-		/** Номер шага, на котором игрок сейчас (с нуля): до него — сделано. */
+		/** The number of the step the player is on now (zero-based): everything before it is done. */
 		int cursor;
-		/** Квест пройден (Quest.getState) — этапы больше не нужны. */
+		/** The quest is complete (Quest.getState): stages are not needed any more. */
 		boolean finished;
-		/** Что не так с шагом («Blurite ore ещё в сумке — сначала: …»); null — всё в порядке. */
+		/** What is wrong with the step ("Blurite ore is still in your bag - first: ..."); null means all is well. */
 		String warning;
-		/** Игрок смотрит прежний шаг (кнопка «назад») — автоматика не двигает курсор, пока просмотр не кончится. */
+		/** The player is viewing a previous step (the "back" button): the automation does not move the cursor until viewing ends. */
 		boolean peeking;
-		/** Текущий шаг игра сама не увидит (подряд на одном месте) — тогда есть кнопка «сделано»; на остальных шагах её нет. */
+		/** The game will not see the current step by itself (several in a row at one place): then there is a "done" button; the other steps have none. */
 		boolean manual;
 
 		StageView(int index, int total, List<ActiveTarget.StageLine> steps, int cursor, boolean finished)
@@ -197,14 +195,14 @@ final class StepGuide
 		}
 	}
 
-	/** План программы — только к своему шагу: план прежнего шага не должен рисоваться на новом, пока программа не прислала свежий. */
+	/** The app's plan belongs only to its own step: the plan of the previous step must not be drawn on the new one until the app sends a fresh one. */
 	static View withPlanFor(View v, PrepPlan plan, ActiveTarget target)
 	{
 		return plan != null && target != null && plan.getStepId() != null && plan.getStepId().equals(target.getStepId()) ? v.withPrep(plan) : v;
 	}
 
 	static final View EMPTY = new View(null, null, Collections.emptyList(), Collections.emptyList(), null,
-		"Шаг не выбран. В программе «OSRS Путь» нажми «Показать в игре» у шага — здесь появится, что нужно и куда идти.", null, null);
+		"No step selected. In the OSRS Path app press 'Show in game' on a step: what you need and where to go will appear here.", null, null);
 
 	private StepGuide()
 	{
@@ -229,8 +227,8 @@ final class StepGuide
 	}
 
 	/**
-	 * Строки панели и списка. carried — сумка и надетое (с банкнотами), bank — null, если банк не открывали.
-	 * navLabel — подпись временной цели или null; navX/navY — её клетка, чтобы отметить активную точку.
+	 * Rows for the panel and the list. carried is the bag and worn items (with notes), bank is null if the bank has not been opened.
+	 * navLabel is the label of the temporary target or null; navX/navY is its tile, to mark the active point.
 	 */
 	static View view(ActiveTarget t, ItemCounts carried, ItemCounts bank, String navLabel, int navX, int navY, int navPlane)
 	{
@@ -238,8 +236,8 @@ final class StepGuide
 	}
 
 	/**
-	 * got — предметы шага, которые уже побывали в сумке (ключи nameKey). Они пополняются здесь же: то, что взяли и потом
-	 * отдали (Hetty, котёл, лавка), в списке остаётся отмеченным, а не просится в сумку заново. null — без памяти.
+	 * got is the step's items that have already been in the bag (nameKey keys). They are topped up here: what was taken and then
+	 * handed in (Hetty, the cauldron, a shop) stays ticked in the list instead of being asked for again. null means no memory.
 	 */
 	static View view(ActiveTarget t, ItemCounts carried, ItemCounts bank, String navLabel, int navX, int navY, int navPlane, Set<String> got)
 	{
@@ -247,9 +245,9 @@ final class StepGuide
 	}
 
 	/**
-	 * stageValue — значение переменной квеста из игры (null — не знаем), questDone — Quest.getState == FINISHED.
-	 * У шага с этапами показывается только текущий: что делать, предметы этого этапа и одна точка. Квест пройден —
-	 * только «пройден». Нет значения или этапов — список шага целиком, как раньше.
+	 * stageValue is the quest variable's value from the game (null means unknown), questDone is Quest.getState == FINISHED.
+	 * For a step with stages only the current one is shown: what to do, the items of this stage and one point. A completed quest shows
+	 * only "complete". With no value or no stages, the step's whole list as before.
 	 */
 	static View view(ActiveTarget t, ItemCounts carried, ItemCounts bank, String navLabel, int navX, int navY, int navPlane, Set<String> got,
 		Integer stageValue, boolean questDone)
@@ -257,14 +255,14 @@ final class StepGuide
 		return view(t, carried, bank, navLabel, navX, navY, navPlane, got, stageValue, questDone, 0);
 	}
 
-	/** Радиус «дошёл до шага», клеток. */
+	/** The "reached the step" radius, in tiles. */
 	static final int STEP_RADIUS = 4;
-	/** Насколько вперёд от текущего шага ищем следующий: пройденный по дороге чужой шаг не перескакивает полэтапа. */
+	/** How far ahead of the current step the next one is searched: someone else's step passed on the way must not skip half a stage. */
 	static final int STEP_WINDOW = 4;
 
 	/**
-	 * Куда сдвинуть текущий шаг этапа по положению игрока. Стоит у своего шага — остаётся; дошёл до одного из ближайших
-	 * следующих — переходит на него. Шаги без клетки (подумать, подождать) перескакиваются, когда игрок дошёл дальше.
+	 * Where to move the current stage step by the player's position. Standing at their own step: stays; reached one of the nearest
+	 * next ones: moves to it. Steps without a tile (think, wait) are skipped when the player has gone further.
 	 */
 	static int advance(List<ActiveTarget.StageLine> lines, int cursor, int x, int y, int plane)
 	{
@@ -272,10 +270,10 @@ final class StepGuide
 	}
 
 	/**
-	 * Насколько вперёд искать шаг, когда этап только что показали. Этап сменился на глазах (игрок поговорил с NPC, и игра
-	 * перевела квест дальше) — ни один шаг нового этапа ещё не сделан, начинаем с первого: иначе стоящий у NPC игрок
-	 * «уже дошёл» до шага «верни ему предмет» дальше по списку, и стрелка ведёт туда, где он и так стоит. Этап открыт
-	 * впервые (вход в игру, новый шаг): игрок мог пройти часть шагов — ищем по всему списку.
+	 * How far ahead to look for a step when the stage has just been shown. The stage changed before our eyes (the player talked to an NPC and the game
+	 * moved the quest on): no step of the new stage is done yet, so start from the first; otherwise a player standing by the NPC
+	 * "has already reached" a step further down the list like "give it back to him", and the arrow leads to where they already stand. The stage is opened
+	 * for the first time (login, new step): the player may have done some steps, so search the whole list.
 	 */
 	static int freshWindow(boolean changedWhileWatching, int size)
 	{
@@ -283,8 +281,8 @@ final class StepGuide
 	}
 
 	/**
-	 * window — насколько вперёд искать. Этап открыт впервые (курсор в нуле, игрок мог уже пройти часть шагов — например,
-	 * у этапа весь маршрут целиком): ищем по всему списку, первый подходящий.
+	 * window is how far ahead to look. The stage is opened for the first time (the cursor is at zero, the player may have done some steps already, for example
+	 * a stage that is a whole route): search the whole list, the first match.
 	 */
 	static int advance(List<ActiveTarget.StageLine> lines, int cursor, int x, int y, int plane, int window)
 	{
@@ -292,8 +290,8 @@ final class StepGuide
 	}
 
 	/**
-	 * carried — что в сумке: шаг с условием need («верни руду») засчитывается по месту, только если предмет есть.
-	 * null — предметы неизвестны, условия не проверяются.
+	 * carried is what is in the bag: a step with a need condition ("give back the ore") counts by place only if the item is there.
+	 * null means items are unknown, conditions are not checked.
 	 */
 	static int advance(List<ActiveTarget.StageLine> lines, int cursor, int x, int y, int plane, int window, ItemCounts carried)
 	{
@@ -326,8 +324,8 @@ final class StepGuide
 	}
 
 	/**
-	 * Шаги, которые по предметам уже сделаны: у шага указан предмет (has), и он в сумке — идём дальше. Последний шаг
-	 * этапа не пропускается: этап кончится сам, когда игра сменит значение переменной.
+	 * Steps that are already done by items: the step names an item (has) and it is in the bag, so we move on. The last step
+	 * of the stage is not skipped: the stage ends by itself when the game changes the variable's value.
 	 */
 	static int skipDone(List<ActiveTarget.StageLine> lines, int cursor, ItemCounts carried)
 	{
@@ -349,7 +347,7 @@ final class StepGuide
 		return l.hasPoint() && l.getPlane() == plane && Math.abs(l.getX() - x) <= STEP_RADIUS && Math.abs(l.getY() - y) <= STEP_RADIUS;
 	}
 
-	/** cursor — текущий шаг этапа (advance); вне диапазона — ближайший допустимый. */
+	/** cursor is the current stage step (advance); out of range means the nearest valid one. */
 	static View view(ActiveTarget t, ItemCounts carried, ItemCounts bank, String navLabel, int navX, int navY, int navPlane, Set<String> got,
 		Integer stageValue, boolean questDone, int cursor)
 	{
@@ -387,7 +385,7 @@ final class StepGuide
 		{
 			if (stageView != null && (stageView.isFinished() || cur.getGo() == null || cur.getGo() != i))
 			{
-				// У этапа одна точка — куда идти сейчас; остальные места шага к нему не относятся.
+				// A stage has one point, where to go now; the step's other places do not belong to it.
 				continue;
 			}
 			ActiveTarget.GuidePlace p = places.get(i);
@@ -396,9 +394,9 @@ final class StepGuide
 			placeLines.add(new PlaceLine(p.getLabel(), i, active, npc, stageView == null && p.getItems() != null && !p.getItems().isEmpty()));
 		}
 		String title = "[" + t.getStepId() + "] " + (t.getTitle() == null ? "" : t.getTitle());
-		String note = g == null ? "Программа старше плагина: списка «что нужно» от неё не пришло. Обнови программу «OSRS Путь»." : null;
+		String note = g == null ? "The app is older than the plugin: it sent no 'what you need' list. Update the OSRS Path app." : null;
 		boolean staged = stageView != null;
-		// Стрелка этапа (к текущему шагу или к точке этапа) — не «объезд»: «Стрелку снова к шагу» нужно только после выбора своего места.
+		// The stage arrow (to the current step or to a stage point) is not a "detour": "Arrow back to the step" is needed only after choosing your own place.
 		String detour = navLabel;
 		if (staged && !stageView.isFinished() && navLabel != null)
 		{
@@ -415,8 +413,8 @@ final class StepGuide
 	}
 
 	/**
-	 * Взято ли уже: в сумке — запоминаем; было, а теперь нет — «готово». Добываемое по ходу шага (IN_STEP) тоже помнится,
-	 * но только когда оно действительно побывало в сумке.
+	 * Whether it is already taken: in the bag, we remember; it was and now is not, "done". What is obtained during the step (IN_STEP) is also remembered,
+	 * but only when it has really been in the bag.
 	 */
 	private static ItemLine remembered(ItemLine l, String rawName, Set<String> got)
 	{
@@ -432,7 +430,7 @@ final class StepGuide
 		}
 		if (got.contains(key))
 		{
-			return new ItemLine(l.getTitle(), "✓ уже было — отдано или использовано", Have.DONE, l.getWhere(), l.getPlace(), l.getName(), l.getRu(), "готово");
+			return new ItemLine(l.getTitle(), "✓ already handled - handed in or used", Have.DONE, l.getWhere(), l.getPlace(), l.getName(), "done");
 		}
 		return l;
 	}
@@ -442,7 +440,7 @@ final class StepGuide
 		return g == null || g.getSteps() == null || g.getSteps().isEmpty() ? null : g.getSteps().get(g.getSteps().size() - 1);
 	}
 
-	/** Последний пункт быстрого пути шага, когда всё нужное уже собрано; иначе null — списка предметов достаточно. */
+	/** The last item of the step's quick path when everything needed is already collected; otherwise null, the item list is enough. */
 	private static String next(ActiveTarget.Guide g, List<ItemLine> items)
 	{
 		if (g == null || g.getSteps() == null || g.getSteps().isEmpty() || items.isEmpty())
@@ -470,40 +468,38 @@ final class StepGuide
 		if (have >= need)
 		{
 			h = Have.BAG;
-			status = "✓ в сумке" + (need > 1 ? " " + have + "/" + need : "");
-			tag = need > 1 ? have + "/" + need : "есть";
+			status = "✓ in bag" + (need > 1 ? " " + have + "/" + need : "");
+			tag = need > 1 ? have + "/" + need : "have";
 		}
 		else if (inBank >= 0 && have + inBank >= need)
 		{
 			h = Have.BANK;
-			status = "в банке — возьми" + (need > 1 ? " (" + have + "+" + inBank + "/" + need + ")" : "");
-			tag = "в банке";
+			status = "in bank - take it" + (need > 1 ? " (" + have + "+" + inBank + "/" + need + ")" : "");
+			tag = "in bank";
 		}
 		else if (i.isInStep())
 		{
 			h = Have.IN_STEP;
-			status = "добудешь по ходу шага" + (have > 0 ? " (" + have + "/" + need + ")" : "");
-			tag = have > 0 ? have + "/" + need : "по ходу";
+			status = "you get it during the step" + (have > 0 ? " (" + have + "/" + need + ")" : "");
+			tag = have > 0 ? have + "/" + need : "in step";
 		}
 		else if (inBank < 0)
 		{
 			h = Have.UNKNOWN;
-			status = (have > 0 ? "в сумке " + have + "/" + need + ", " : "") + "банк не открывали";
-			tag = have > 0 ? have + "/" + need + " · в банке?" : "в банке?";
+			status = (have > 0 ? "in bag " + have + "/" + need + ", " : "") + "bank not opened";
+			tag = have > 0 ? have + "/" + need + " · bank?" : "bank?";
 		}
 		else
 		{
 			h = Have.NONE;
-			status = "нет" + (have + inBank > 0 ? " — есть " + (have + inBank) + " из " + need : "");
-			tag = have + inBank > 0 ? (have + inBank) + "/" + need : "нет";
+			status = "missing" + (have + inBank > 0 ? " - have " + (have + inBank) + " of " + need : "");
+			tag = have + inBank > 0 ? (have + inBank) + "/" + need : "none";
 		}
 		String name = i.getName() + (i.getCount() != null && need > 1 ? " ×" + need : "");
-		String ru = i.getNameRu() == null || i.getNameRu().isEmpty() ? null : i.getNameRu();
-		String title = name + (ru != null ? " (" + ru + ")" : "");
-		return new ItemLine(title, status, h, i.getWhere(), placeOf(i.getName(), places), name, ru, tag);
+		return new ItemLine(name, status, h, i.getWhere(), placeOf(i.getName(), places), name, tag);
 	}
 
-	/** Временная цель к точке шага номер index; null — точки нет. Предмет не задаётся: цель снимется по приходу. */
+	/** A temporary target at step point number index; null means there is no point. No item is set: the target is cleared on arrival. */
 	static NavTarget navTo(ActiveTarget t, int index)
 	{
 		ActiveTarget.Guide g = t == null ? null : t.getGuide();
@@ -525,7 +521,7 @@ final class StepGuide
 		return n.prepare() == null ? n : null;
 	}
 
-	/** Цель стрелки — клетка шага этапа; подпись — первое предложение его текста. null — у шага нет клетки. */
+	/** The arrow target is the stage step's tile; the label is the first sentence of its text. null means the step has no tile. */
 	static NavTarget navToLine(ActiveTarget t, ActiveTarget.StageLine line)
 	{
 		if (t == null || line == null || !line.hasPoint())
@@ -546,7 +542,7 @@ final class StepGuide
 		return n.prepare() == null ? n : null;
 	}
 
-	/** Точка, где берут предмет: у точки в items есть его название. */
+	/** A point where an item is obtained: the point's items hold its name. */
 	static int placeOf(String name, List<ActiveTarget.GuidePlace> places)
 	{
 		String key = ActiveTarget.nameKey(name);

@@ -10,16 +10,16 @@ import java.util.Collections;
 import org.junit.Test;
 
 /**
- * Компактный HUD: верхняя плашка не повторяет список «Что нужно» (название шага, цель, расстояние, «Сумка готова» — это всё
- * уже в списке, на стрелке и миникарте) и пропадает совсем, когда сказать ей нечего.
+ * The compact HUD: the top card does not repeat the "What you need" list (the step name, the target, the distance, "Bag ready": all of that is
+ * already in the list, on the arrow and on the minimap) and disappears altogether when it has nothing to say.
  */
 public class HudLeanTest
 {
-	/** Как на скриншоте: временная цель поверх шага, ~194 клетки, сумка готова. */
+	/** As in the screenshot: a temporary target over the step, ~194 tiles, the bag is ready. */
 	private static OsrsPathHudOverlay.State detour()
 	{
-		return new OsrsPathHudOverlay.State("К месту: Отнеси меч Squire", "Потом — шаг [S2-07] The Knight's Sword", "~194 клетки ↑", false,
-			"Сумка готова к выходу", true, null, false, null, false, null, null, false, null, 194);
+		return new OsrsPathHudOverlay.State("Go to: Take the sword to the Squire", "Then: step [S2-07] The Knight's Sword", "~194 tiles ↑", false,
+			"Bag ready to leave", true, null, false, null, false, null, null, false, null, 194);
 	}
 
 	private static StepGuide.View stageView()
@@ -29,60 +29,60 @@ public class HudLeanTest
 	}
 
 	@Test
-	public void списокНаЭкране_плашкаСДублямиПропадаетСовсем()
+	public void listOnScreen_aCardWithDuplicatesDisappearsAltogether()
 	{
-		assertNull("название, цель, расстояние и «сумка готова» — всё в списке", OsrsPathHudOverlay.lean(detour(), true));
+		assertNull("the name, the target, the distance and 'bag ready' are all in the list", OsrsPathHudOverlay.lean(detour(), true));
 	}
 
 	@Test
-	public void спискаНет_названиеЦельИРасстояниеОстаются_СумкаГотоваНет()
+	public void noList_nameTargetAndDistanceRemain_bagReadyDoesNot()
 	{
 		OsrsPathHudOverlay.State s = OsrsPathHudOverlay.lean(detour(), false);
 		assertNotNull(s);
-		assertEquals("К месту: Отнеси меч Squire", s.getTitle());
-		assertEquals("~194 клетки ↑", s.getDistance());
-		assertNull("хорошая новость не нужна", s.getBag());
+		assertEquals("Go to: Take the sword to the Squire", s.getTitle());
+		assertEquals("~194 tiles ↑", s.getDistance());
+		assertNull("good news is not needed", s.getBag());
 	}
 
 	@Test
-	public void спискаНет_ноВСумкеЧегоТоНеХватает_строкаСумкиОстаётся()
+	public void noList_butSomethingIsMissingInTheBag_theBagLineRemains()
 	{
-		OsrsPathHudOverlay.State s = new OsrsPathHudOverlay.State("Шаг", null, null, false, "Сумка: нет Knife", false, null, false, null, false, null);
-		assertEquals("Сумка: нет Knife", OsrsPathHudOverlay.lean(s, false).getBag());
-		assertNull("список рядом — недостающее видно в нём", OsrsPathHudOverlay.lean(s, true));
+		OsrsPathHudOverlay.State s = new OsrsPathHudOverlay.State("Step", null, null, false, "Bag: no Knife", false, null, false, null, false, null);
+		assertEquals("Bag: no Knife", OsrsPathHudOverlay.lean(s, false).getBag());
+		assertNull("the list is next to it: what is missing is visible in it", OsrsPathHudOverlay.lean(s, true));
 	}
 
 	@Test
-	public void предупреждения_остаютсяВсегда()
+	public void warningsAlwaysRemain()
 	{
-		OsrsPathHudOverlay.State danger = new OsrsPathHudOverlay.State("Шаг", "цель", "~5 клеток", false, null, false, "Скелет рядом", true, null, false, null);
+		OsrsPathHudOverlay.State danger = new OsrsPathHudOverlay.State("Step", "target", "~5 tiles", false, null, false, "Skeleton nearby", true, null, false, null);
 		OsrsPathHudOverlay.State lean = OsrsPathHudOverlay.lean(danger, true);
 		assertNotNull(lean);
-		assertEquals("Скелет рядом", lean.getDanger());
+		assertEquals("Skeleton nearby", lean.getDanger());
 		assertTrue(lean.isDangerInside());
-		assertNull("название и цель убраны", lean.getTitle());
+		assertNull("the name and the target are removed", lean.getTitle());
 		assertNull(lean.getGoal());
 
-		OsrsPathHudOverlay.State health = new OsrsPathHudOverlay.State("Шаг", null, null, false, null, false, null, false, null, false, null,
-			"HP 12/40 — ешь!", true);
-		assertEquals("HP 12/40 — ешь!", OsrsPathHudOverlay.lean(health, true).getHealth());
+		OsrsPathHudOverlay.State health = new OsrsPathHudOverlay.State("Step", null, null, false, null, false, null, false, null, false, null,
+			"HP 12/40 - eat!", true);
+		assertEquals("HP 12/40 - eat!", OsrsPathHudOverlay.lean(health, true).getHealth());
 		assertTrue(OsrsPathHudOverlay.lean(health, true).isHealthCritical());
 
-		OsrsPathHudOverlay.State action = new OsrsPathHudOverlay.State("Шаг", null, null, false, null, false, null, false, null, false, null,
-			null, false, "Use Knife на Bread");
-		assertEquals("Use Knife на Bread", OsrsPathHudOverlay.lean(action, true).getAction());
+		OsrsPathHudOverlay.State action = new OsrsPathHudOverlay.State("Step", null, null, false, null, false, null, false, null, false, null,
+			null, false, "Use Knife on Bread");
+		assertEquals("Use Knife on Bread", OsrsPathHudOverlay.lean(action, true).getAction());
 
-		OsrsPathHudOverlay.State pacing = new OsrsPathHudOverlay.State("Шаг", null, null, false, null, false, null, false, "34 креветки до 20 Fishing", true, null);
-		assertEquals("34 креветки до 20 Fishing", OsrsPathHudOverlay.lean(pacing, true).getPacing());
+		OsrsPathHudOverlay.State pacing = new OsrsPathHudOverlay.State("Step", null, null, false, null, false, null, false, "34 shrimps to 20 Fishing", true, null);
+		assertEquals("34 shrimps to 20 Fishing", OsrsPathHudOverlay.lean(pacing, true).getPacing());
 
-		OsrsPathHudOverlay.State upgrade = new OsrsPathHudOverlay.State("Шаг", null, null, false, null, false, null, false, null, false, "⚡ Надень Iron scimitar");
-		assertEquals("⚡ Надень Iron scimitar", OsrsPathHudOverlay.lean(upgrade, true).getUpgrade());
+		OsrsPathHudOverlay.State upgrade = new OsrsPathHudOverlay.State("Step", null, null, false, null, false, null, false, null, false, "⚡ Wear Iron scimitar");
+		assertEquals("⚡ Wear Iron scimitar", OsrsPathHudOverlay.lean(upgrade, true).getUpgrade());
 	}
 
 	@Test
-	public void сообщенияБезПредупреждений_ничегоНеТеряют_цветИРасстояниеВТикахСохраняются()
+	public void messagesWithoutWarnings_loseNothing_colourAndDistanceInTicksRemain()
 	{
-		OsrsPathHudOverlay.State s = new OsrsPathHudOverlay.State("Шаг", null, "рядом", true, null, false, null, false, "темп", false, null,
+		OsrsPathHudOverlay.State s = new OsrsPathHudOverlay.State("Step", null, "nearby", true, null, false, null, false, "pace", false, null,
 			null, false, null, 7);
 		OsrsPathHudOverlay.State lean = OsrsPathHudOverlay.lean(s, true);
 		assertTrue(lean.isNear());
@@ -90,15 +90,15 @@ public class HudLeanTest
 	}
 
 	@Test
-	public void списокВиден_толькоЕслиВключёнНеСвёрнутИЕстьЧтоПоказать()
+	public void listVisible_onlyIfEnabledNotCollapsedAndHasSomethingToShow()
 	{
 		StepGuide.View v = stageView();
 		assertTrue(GuideList.shown(true, false, v, false, SmartView.Context.STEP));
-		assertFalse("выключен в настройках", GuideList.shown(false, false, v, false, SmartView.Context.STEP));
-		assertFalse("свёрнут — подробностей в нём нет, HUD остаётся полным", GuideList.shown(true, true, v, false, SmartView.Context.STEP));
-		assertFalse("пусто", GuideList.shown(true, false, StepGuide.EMPTY, false, SmartView.Context.STEP));
-		assertFalse("в пути умный вид прячет список", GuideList.shown(true, false, v, true, SmartView.Context.TRAVEL));
-		assertTrue("у банка — показывает", GuideList.shown(true, false, v, true, SmartView.Context.BANK));
-		assertTrue("умный вид выключен — контекст не важен", GuideList.shown(true, false, v, false, SmartView.Context.TRAVEL));
+		assertFalse("turned off in the settings", GuideList.shown(false, false, v, false, SmartView.Context.STEP));
+		assertFalse("collapsed: no details in it, the HUD stays full", GuideList.shown(true, true, v, false, SmartView.Context.STEP));
+		assertFalse("empty", GuideList.shown(true, false, StepGuide.EMPTY, false, SmartView.Context.STEP));
+		assertFalse("while travelling smart view hides the list", GuideList.shown(true, false, v, true, SmartView.Context.TRAVEL));
+		assertTrue("at the bank it shows", GuideList.shown(true, false, v, true, SmartView.Context.BANK));
+		assertTrue("smart view is off: the context does not matter", GuideList.shown(true, false, v, false, SmartView.Context.TRAVEL));
 	}
 }

@@ -6,10 +6,10 @@ import java.util.List;
 import lombok.Value;
 
 /**
- * Плашка разработчика (Ctrl+Shift+D): статус движка зелёным и красным поверх экрана игры —
+ * The developer badge (Ctrl+Shift+D): the engine status in green and red over the game screen:
  * {@code ActiveStep: S2-05 | Stage: 3/9 | Cursor: 2/5 | Trigger: Item(Lobster ×5) = FALSE | QueueDepth: 1}.
- * Здесь только раскладка строк по состоянию (чистая логика для тестов); состояние собирает плагин, рисует
- * {@link OsrsPathDebugOverlay}. Каждая строка помечена уровнем: «в порядке» — зелёным, «не так» — красным.
+ * Only the row layout by state is here (pure logic for tests); the plugin collects the state, and
+ * {@link OsrsPathDebugOverlay} draws it. Each line is marked with a level: "fine" in green, "wrong" in red.
  */
 final class DebugView
 {
@@ -35,14 +35,14 @@ final class DebugView
 		Level level;
 	}
 
-	/** Всё, что показывает плашка. Неизменяемое: плагин заменяет его целиком раз в тик, пока плашка открыта. */
+	/** Everything the badge shows. Immutable: the plugin replaces it whole once per tick while the badge is open. */
 	@Value
 	static class State
 	{
 		String stepId;
-		/** «3/9»; null — у шага нет этапов. */
+		/** "3/9"; null means the step has no stages. */
 		String stage;
-		/** Значение переменной квеста; null — нет. */
+		/** The quest variable's value; null means none. */
 		Integer stageValue;
 		int cursor;
 		int size;
@@ -50,13 +50,13 @@ final class DebugView
 		boolean manualOnly;
 		boolean peeking;
 		String warning;
-		/** Условия текущего шага: «has Blurite ore = FALSE», «need Blurite ore = TRUE»; строка начинается с условия. */
+		/** The conditions of the current step: "has Blurite ore = FALSE", "need Blurite ore = TRUE"; a line starts with the condition. */
 		List<String> lineConditions;
-		/** Условие автоотметки шага — как в {@link AutoCompletionManager#describe}. */
+		/** The step's auto-tick condition, as in {@link AutoCompletionManager#describe}. */
 		List<String> trigger;
-		/** Сколько строк плана «нужно сейчас» ещё не выполнено; -1 — плана нет. */
+		/** How many "needed now" plan lines are still not done; -1 means no plan. */
 		int queueDepth;
-		/** «seq 1712… 3 с назад», null — снимков не было. */
+		/** "seq 1712... 3 s ago", null means there were no snapshots. */
 		String snapshot;
 		Integer planPercent;
 		String reason;
@@ -69,9 +69,9 @@ final class DebugView
 		String logFile;
 		int events;
 		int anomalies;
-		/** Последние странности (до трёх), свежие последними. */
+		/** The latest anomalies (up to three), the freshest last. */
 		List<String> recentAnomalies;
-		/** Имя последнего скриншота; null — не делали. */
+		/** The name of the last screenshot; null means none was taken. */
 		String lastShot;
 	}
 
@@ -128,7 +128,7 @@ final class DebugView
 		}
 		trig.append(" | QueueDepth: ").append(s.getQueueDepth() < 0 ? "—" : String.valueOf(s.getQueueDepth()));
 		out.add(new Row(trig.toString(), s.getTrigger().isEmpty() ? Level.INFO : bad ? Level.BAD : Level.GOOD));
-		StringBuilder snap = new StringBuilder("Snapshot: ").append(s.getSnapshot() == null ? "нет" : s.getSnapshot());
+		StringBuilder snap = new StringBuilder("Snapshot: ").append(s.getSnapshot() == null ? "none" : s.getSnapshot());
 		if (s.getPlanPercent() != null)
 		{
 			snap.append(" | Plan: ").append(s.getPlanPercent()).append('%');
@@ -142,8 +142,8 @@ final class DebugView
 			out.add(new Row("⚠ " + a, Level.BAD));
 		}
 		out.add(new Row(s.isLogging()
-			? "Log: " + s.getEvents() + " событий, " + s.getAnomalies() + " странностей → " + s.getLogFile()
-			: "Log: выключен (настройка «Журнал для отладки»)", s.getAnomalies() > 0 ? Level.WARN : Level.INFO));
+			? "Log: " + s.getEvents() + " events, " + s.getAnomalies() + " anomalies -> " + s.getLogFile()
+			: "Log: off (setting 'Debug log')", s.getAnomalies() > 0 ? Level.WARN : Level.INFO));
 		if (s.getLastShot() != null)
 		{
 			out.add(new Row("Shot: " + s.getLastShot(), Level.INFO));
@@ -153,10 +153,10 @@ final class DebugView
 
 	private static String yes(boolean b)
 	{
-		return b ? "да" : "НЕТ";
+		return b ? "yes" : "NO";
 	}
 
-	/** Текст строк подряд — для журнала и тестов. */
+	/** The lines of text in a row, for the log and tests. */
 	static String plain(List<Row> rows)
 	{
 		StringBuilder sb = new StringBuilder();

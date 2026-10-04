@@ -18,8 +18,8 @@ public interface OsrsPathBridgeConfig extends Config
 	String GROUP = "osrspathbridge";
 
 	@ConfigSection(
-		name = "Помощник в игре",
-		description = "Микро-HUD, проверка вылета, маршрут, подсказка на бирже и быстрые варианты",
+		name = "In-game helper",
+		description = "Micro HUD, departure check, route, exchange hint and quick variants",
 		position = 10
 	)
 	String companion = "companion";
@@ -27,8 +27,8 @@ public interface OsrsPathBridgeConfig extends Config
 	@Range(min = 1024, max = 65535)
 	@ConfigItem(
 		keyName = "port",
-		name = "Порт",
-		description = "Порт моста на 127.0.0.1. Приложение «OSRS Путь» ждёт 38282. Меняется после перезапуска плагина.",
+		name = "Port",
+		description = "Bridge port on 127.0.0.1. The OSRS Path app expects 38282. Applied after the plugin restarts.",
 		position = 1
 	)
 	default int port()
@@ -38,8 +38,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "hintArrow",
-		name = "Стрелка к месту шага",
-		description = "Жёлтая стрелка игры над точкой текущего шага",
+		name = "Arrow to the step's place",
+		description = "The game's yellow arrow above the current step's point",
 		position = 2
 	)
 	default boolean hintArrow()
@@ -49,8 +49,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "worldMapMarker",
-		name = "Метка на карте мира",
-		description = "Куда ведёт стрелка — меткой на карте мира игры. Далеко — метка у края карты; клик по ней — карта туда",
+		name = "World map marker",
+		description = "Shows where the arrow points as a marker on the game's world map. Far away: the marker sits at the map edge; click it to open the map there",
 		position = 3
 	)
 	default boolean worldMapMarker()
@@ -61,8 +61,8 @@ public interface OsrsPathBridgeConfig extends Config
 	@Alpha
 	@ConfigItem(
 		keyName = "highlightColor",
-		name = "Цвет подсветки",
-		description = "NPC, объекты, клетки, варианты диалога и предметы шага",
+		name = "Highlight colour",
+		description = "NPCs, objects, tiles, dialogue options and the step's items",
 		position = 4
 	)
 	default Color highlightColor()
@@ -72,8 +72,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "completionSound",
-		name = "Звук: шаг выполнен",
-		description = "Короткий звук интерфейса, когда шаг засчитан автоматически",
+		name = "Sound: step done",
+		description = "A short interface sound when a step is counted automatically",
 		position = 5
 	)
 	default boolean completionSound()
@@ -83,9 +83,9 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "smartView",
-		name = "Умное проявление",
-		description = "Выключено по умолчанию: список «Что нужно» и HUD видны всегда. Включишь — в пути останется только стрелка и "
-			+ "одна строка HUD, список появится у банка и рядом с местом шага, оптовый — на бирже, радар — когда ты уже в зоне",
+		name = "Smart reveal",
+		description = "Off by default: the 'What you need' list and HUD are always visible. If enabled, only the arrow and "
+			+ "one HUD line remain while travelling; the list appears at the bank and near the step's place, the bulk list at the exchange, the radar when you are already in a zone",
 		section = companion,
 		position = 10
 	)
@@ -96,8 +96,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "showHud",
-		name = "Показывать микро-HUD",
-		description = "Текущий шаг, цель и расстояние до неё. Плашку можно перетащить с зажатым Alt",
+		name = "Show micro HUD",
+		description = "The current step, the target and the distance to it. The plate can be dragged while holding Alt",
 		section = companion,
 		position = 11
 	)
@@ -108,9 +108,9 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "hudLean",
-		name = "Компактный HUD",
-		description = "Не повторять в HUD то, что уже есть в списке «Что нужно»: название шага, цель, расстояние и «Сумка готова». "
-			+ "Плашка остаётся, только когда есть предупреждение (опасность, здоровье, действие, темп) или списка нет",
+		name = "Compact HUD",
+		description = "Do not repeat in the HUD what the 'What you need' list already shows: the step name, target, distance and 'Bag ready'. "
+			+ "The plate stays only when there is a warning (danger, health, action, pace) or no list",
 		section = companion,
 		position = 11
 	)
@@ -121,9 +121,9 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "showGuide",
-		name = "Список «Что нужно»",
-		description = "Под HUD: предметы шага (есть, в банке, нет) с «где взять» и места шага с NPC. "
-			+ "Клик по строке — стрелка и путь туда, клик по заголовку — свернуть. Перетаскивается с Alt",
+		name = "'What you need' list",
+		description = "Under the HUD: the step's items (have, in bank, missing) with 'where to get it' and the step's places with NPCs. "
+			+ "A click on a line gives the arrow and path there, a click on the heading collapses it. Draggable with Alt",
 		section = companion,
 		position = 12
 	)
@@ -135,7 +135,7 @@ public interface OsrsPathBridgeConfig extends Config
 	@ConfigItem(
 		keyName = "guideCollapsed",
 		name = "",
-		description = "Список «Что нужно» свёрнут в одну строку — меняется кликом по его заголовку",
+		description = "The 'What you need' list is collapsed to one line; changed by clicking its heading",
 		hidden = true
 	)
 	default boolean guideCollapsed()
@@ -147,8 +147,8 @@ public interface OsrsPathBridgeConfig extends Config
 	@Units(Units.PERCENT)
 	@ConfigItem(
 		keyName = "hudOpacity",
-		name = "Фон HUD",
-		description = "Непрозрачность фона у плашек помощника, в процентах",
+		name = "HUD background",
+		description = "Opacity of the helper plates' background, in percent",
 		section = companion,
 		position = 13
 	)
@@ -159,8 +159,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "hudLarge",
-		name = "Крупный текст HUD",
-		description = "Увеличить текст и ширину плашек помощника на четверть",
+		name = "Large HUD text",
+		description = "Enlarge the text and width of the helper plates by a quarter",
 		section = companion,
 		position = 14
 	)
@@ -171,8 +171,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "showChecklist",
-		name = "Проверка вылета у банка",
-		description = "При открытом банке: что из предметов шага уже в сумке, а что взять. Нужное подсвечивается в банке",
+		name = "Departure check at the bank",
+		description = "With the bank open: which of the step's items are already in the bag and which to take. What is needed is highlighted in the bank",
 		section = companion,
 		position = 15
 	)
@@ -181,12 +181,12 @@ public interface OsrsPathBridgeConfig extends Config
 		return true;
 	}
 
-	/** Размер большой стрелки: диаметр круга в точках экрана. */
+	/** Big arrow size: the circle's diameter in screen pixels. */
 	enum ArrowSize
 	{
-		SMALL("Маленькая", 48),
-		MEDIUM("Средняя", 68),
-		LARGE("Крупная", 92);
+		SMALL("Small", 48),
+		MEDIUM("Medium", 68),
+		LARGE("Large", 92);
 
 		private final String label;
 		final int diameter;
@@ -206,8 +206,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "bigArrow",
-		name = "Большая стрелка",
-		description = "Крупная стрелка вверху экрана: поворачивается вместе с камерой и показывает, куда идти и сколько клеток. Перетаскивается с Alt",
+		name = "Big arrow",
+		description = "A large arrow at the top of the screen: it turns with the camera and shows where to go and how many tiles. Draggable with Alt",
 		section = companion,
 		position = 16
 	)
@@ -216,12 +216,12 @@ public interface OsrsPathBridgeConfig extends Config
 		return true;
 	}
 
-	// Название короткое: рядом с выпадающим списком места меньше, чем рядом с галочкой, — «Размер стрелки»
-	// в живом клиенте обрезался до «Размер ст…». Стоит сразу под «Большая стрелка», поэтому понятно, чего размер.
+	// The name is short: next to a dropdown there is less room than next to a checkbox, and "Arrow size"
+	// was cut to "Arrow si..." in the live client. It sits right under "Big arrow", so it is clear what the size is of.
 	@ConfigItem(
 		keyName = "arrowSize",
-		name = "Размер",
-		description = "Размер большой стрелки: маленькая, средняя или крупная — под размер окна и экрана",
+		name = "Size",
+		description = "Size of the big arrow: small, medium or large, to fit the window and screen",
 		section = companion,
 		position = 17
 	)
@@ -232,8 +232,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "useShortestPath",
-		name = "Через Shortest Path",
-		description = "Если установлен плагин Shortest Path (Plugin Hub), передавать ему цель шага — он проложит путь с учётом стен и дверей",
+		name = "Via Shortest Path",
+		description = "If the Shortest Path plugin (Plugin Hub) is installed, pass it the step's target; it lays out a path that accounts for walls and doors",
 		section = companion,
 		position = 18
 	)
@@ -244,9 +244,9 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "shopWindow",
-		name = "Окно у банка и торговца",
-		description = "Отдельная карточка рядом с банком, биржей и окном торговца: что взять из банка, что купить и где это продают — для любого квеста. "
-			+ "Ничего не перекладывает и не покупает",
+		name = "Bank and shop window",
+		description = "A separate card next to the bank, exchange and merchant windows: what to take from the bank, what to buy and where it is sold, for any quest. "
+			+ "Moves and buys nothing",
 		section = companion,
 		position = 19
 	)
@@ -257,8 +257,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "showGeHelper",
-		name = "Подсказка на бирже",
-		description = "При открытой Grand Exchange: оптовый список покупок из приложения. Сам ничего не покупает",
+		name = "Exchange hint",
+		description = "With the Grand Exchange open: the bulk shopping list from the app. Buys nothing by itself",
 		section = companion,
 		position = 20
 	)
@@ -269,8 +269,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "shareStats",
-		name = "Варианты по уровням",
-		description = "Передавать приложению уровни навыков, чтобы оно предлагало телепорты, каноэ и срезки",
+		name = "Level-based variants",
+		description = "Send skill levels to the app so it can offer teleports, canoes and shortcuts",
 		section = companion,
 		position = 20
 	)
@@ -280,17 +280,17 @@ public interface OsrsPathBridgeConfig extends Config
 	}
 
 	@ConfigSection(
-		name = "Места, радар, темп",
-		description = "Навигация к местам и магазинам из приложения, предметы этапа в банке, радар опасных мест и темп прокачки",
+		name = "Places, radar, pace",
+		description = "Navigation to places and shops from the app, stage items in the bank, the danger radar and the training pace",
 		position = 20
 	)
 	String helpers = "helpers";
 
 	@ConfigItem(
 		keyName = "autoNavigation",
-		name = "Стрелка к местам",
-		description = "Кнопка «Направить стрелку в игре» в приложении ставит стрелку (и маршрут Shortest Path) к месту с карты. "
-			+ "Дошёл — стрелка возвращается к шагу. Выключено — приложение получает отказ",
+		name = "Arrow to places",
+		description = "The 'Point arrow in game' button in the app sets the arrow (and the Shortest Path route) to a place from the map. "
+			+ "On arrival the arrow returns to the step. When off, the app gets a refusal",
 		section = helpers,
 		position = 21
 	)
@@ -301,10 +301,10 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "upgradeRouter",
-		name = "Подсказки апгрейдов",
-		description = "Передавать приложению снаряжение и монеты, чтобы оно предлагало инструмент, оружие, амулет и броню получше. "
-			+ "На шаге с боем совет — строкой ⚡ в HUD, лучшее из сумки и банка подсвечивается. "
-			+ "По кнопке «Направить» — продавец и нужный предмет в магазине подсвечиваются. Сам ничего не покупает и не надевает",
+		name = "Upgrade hints",
+		description = "Send gear and coins to the app so it can suggest a better tool, weapon, amulet and armour. "
+			+ "On a combat step the advice is a ⚡ line in the HUD, and the best item from the bag and bank is highlighted. "
+			+ "With the 'Navigate' button, the seller and the needed item in the shop are highlighted. Buys and equips nothing by itself",
 		section = helpers,
 		position = 22
 	)
@@ -315,8 +315,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "bankTagsHelper",
-		name = "Предметы этапа",
-		description = "Принимать от приложения список предметов этапа — для подсветки в банке",
+		name = "Stage items",
+		description = "Accept the stage's item list from the app, for highlighting in the bank",
 		section = helpers,
 		position = 23
 	)
@@ -327,8 +327,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "bankHighlight",
-		name = "Подсветка в банке",
-		description = "Мягкая золотистая рамка у предметов этапа в основном окне банка — вкладка Bank Tags не нужна",
+		name = "Bank highlight",
+		description = "A soft golden frame on the stage's items in the main bank window; the Bank Tags tab is not needed",
 		section = helpers,
 		position = 24
 	)
@@ -339,9 +339,9 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "dangerRadar",
-		name = "Радар опасности",
-		description = "Красная граница опасных мест (тёмные маги, ожившие деревья, агрессивные стражники), "
-			+ "контур опасных NPC и предупреждение в HUD. Выключено — ничего не считается",
+		name = "Danger radar",
+		description = "A red border on dangerous places (dark wizards, animated trees, aggressive guards), "
+			+ "an outline on dangerous NPCs and a HUD warning. When off, nothing is computed",
 		section = helpers,
 		position = 25
 	)
@@ -352,8 +352,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "dangerSound",
-		name = "Звук у опасной зоны",
-		description = "Один раз при входе в зону; снова — только если вышел и зашёл опять",
+		name = "Danger zone sound",
+		description = "Once on entering the zone; again only if you leave and re-enter",
 		section = helpers,
 		position = 26
 	)
@@ -364,8 +364,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "smartPacing",
-		name = "Темп прокачки",
-		description = "Считать по опыту, сколько действий осталось до цели шага и сколько это займёт, и передавать приложению",
+		name = "Training pace",
+		description = "Count by XP how many actions are left to the step's goal and how long that takes, and send it to the app",
 		section = helpers,
 		position = 27
 	)
@@ -376,8 +376,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "hudPacing",
-		name = "Темп в микро-HUD",
-		description = "Строка вида «34 креветки до 20 Fishing (~7 мин)» в плашке шага",
+		name = "Pace in micro HUD",
+		description = "A line like '34 shrimps to 20 Fishing (~7 min)' on the step plate",
 		section = helpers,
 		position = 28
 	)
@@ -388,8 +388,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "hudHealth",
-		name = "Здоровье в HUD",
-		description = "Красная строка в плашке шага, когда здоровье упало ниже двух максимальных ударов противника шага",
+		name = "Health in HUD",
+		description = "A red line on the step plate when health drops below two max hits of the step's enemy",
 		section = helpers,
 		position = 29
 	)
@@ -400,9 +400,9 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "stageFollow",
-		name = "Стрелка по этапам",
-		description = "У квестов с этапами список «Что нужно» показывает текущий этап, а стрелка сама ведёт к его NPC и сдвигается, "
-			+ "когда квест перешёл на следующий этап. Выключено — стрелка остаётся у шага, список всё равно показывает этап",
+		name = "Arrow by stages",
+		description = "For quests with stages the 'What you need' list shows the current stage, and the arrow itself leads to its NPC and moves "
+			+ "when the quest moves to the next stage. When off, the arrow stays at the step; the list still shows the stage",
 		section = helpers,
 		position = 30
 	)
@@ -413,9 +413,9 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "qhMachine",
-		name = "Шаги как в Quest Helper",
-		description = "Текущий шаг этапа выбирается по тем же условиям, что у плагина Quest Helper: предметы, место, переменные квеста, "
-			+ "сообщения чата и диалоги. Выключено — шаг определяют только место и предметы (как до версии 2.27)",
+		name = "Steps like Quest Helper",
+		description = "The current stage step is chosen by the same conditions as in the Quest Helper plugin: items, place, quest variables, "
+			+ "chat messages and dialogues. When off, only place and items decide the step (as before version 2.27)",
 		section = helpers,
 		position = 31
 	)
@@ -425,8 +425,8 @@ public interface OsrsPathBridgeConfig extends Config
 	}
 
 	@ConfigSection(
-		name = "Для разработчика",
-		description = "Плашка со статусом движка, журнал и скриншоты для разбора ошибок",
+		name = "Developer",
+		description = "A badge with the engine status, a log and screenshots for troubleshooting",
 		position = 90,
 		closedByDefault = true
 	)
@@ -434,9 +434,9 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "telemetry",
-		name = "Журнал для отладки",
-		description = "Пишет в папку osrs-path-telemetry рядом с настройками RuneLite, что делал плагин: смена шага и этапа, куда сдвинулся курсор и почему, "
-			+ "клики, сумка, смерть и телепорт, текст плашек и «странности». Только на этом компьютере, никуда не отправляется. До 8 файлов по 6 МБ",
+		name = "Debug log",
+		description = "Writes to the osrs-path-telemetry folder next to the RuneLite settings what the plugin did: step and stage changes, where the cursor moved and why, "
+			+ "clicks, bag, death and teleport, badge text and 'anomalies'. Stays on this computer, nothing is sent. Up to 8 files of 6 MB",
 		section = developer,
 		position = 91
 	)
@@ -447,9 +447,9 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "telemetryShots",
-		name = "Снимок при странности",
-		description = "Когда плагин заметил странность (шаг не меняется, пустой экран), сохраняет скриншот игры в папку osrs-path-telemetry/shots. "
-			+ "Не чаще раза в 20 секунд и не больше 12 за сеанс. На снимке видно всё, что на экране игры, включая чат",
+		name = "Screenshot on anomaly",
+		description = "When the plugin notices an anomaly (the step does not change, an empty screen), it saves a game screenshot to osrs-path-telemetry/shots. "
+			+ "No more than once per 20 seconds and no more than 12 per session. The screenshot shows everything on the game screen, including chat",
 		section = developer,
 		position = 92
 	)
@@ -460,9 +460,9 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "telemetryDetail",
-		name = "Журнал: чат и диалоги",
-		description = "В журнал попадают сообщения игры (чат, окна сообщений, реплики диалогов и варианты ответа), клики по меню игры, "
-			+ "смена переменных и текст дневника квеста, когда ты его открываешь. Нужно, чтобы понять, почему шаг не засчитался. Только на этом компьютере",
+		name = "Log: chat and dialogues",
+		description = "The log gets game messages (chat, message boxes, dialogue lines and answer options), game menu clicks, "
+			+ "variable changes and the quest journal text when you open it. Needed to understand why a step was not counted. Stays on this computer",
 		section = developer,
 		position = 95
 	)
@@ -473,9 +473,9 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "telemetryEventShots",
-		name = "Снимок на каждом шаге",
-		description = "Скриншот игры при каждом сдвиге курсора этапа, чтобы рядом с журналом было видно, что видел игрок. "
-			+ "Не чаще раза в 6 секунд и не больше 40 за сеанс; в папке остаются последние 80",
+		name = "Screenshot on every step",
+		description = "A game screenshot at every stage cursor move, so the log shows what the player saw. "
+			+ "No more than once per 6 seconds and no more than 40 per session; the last 80 stay in the folder",
 		section = developer,
 		position = 96
 	)
@@ -486,8 +486,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "debugKey",
-		name = "Плашка разработчика",
-		description = "Горячая клавиша: показать или скрыть поверх экрана статус движка — шаг, курсор, условия, снимок программы, странности",
+		name = "Developer badge",
+		description = "Hotkey: show or hide the engine status over the screen: step, cursor, conditions, the app's snapshot, anomalies",
 		section = developer,
 		position = 93
 	)
@@ -498,8 +498,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "shotKey",
-		name = "Скриншот для отладки",
-		description = "Горячая клавиша: сохранить скриншот игры в osrs-path-telemetry/shots и отметить его в журнале",
+		name = "Debug screenshot",
+		description = "Hotkey: save a game screenshot to osrs-path-telemetry/shots and mark it in the log",
 		section = developer,
 		position = 94
 	)

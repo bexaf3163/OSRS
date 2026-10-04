@@ -7,33 +7,33 @@ import java.util.List;
 import lombok.Value;
 
 /**
- * Список «Что нужно» прямо на экране игры, под HUD: предметы шага (есть, в банке, нет, по ходу шага) с «где взять»
- * и точки шага с NPC. Строка с местом — кнопка: клик ставит временную цель (стрелка, клетка, Shortest Path,
- * подсветка NPC), по приходу стрелка возвращается к шагу. Раньше это было только в программе — в игре HUD писал
- * «Сумка: не хватает 1 из 1».
+ * The "What you need" list right on the game screen, under the HUD: the step's items (have, in bank, missing, during the step) with "where to get it"
+ * and the step's points with NPCs. A line with a place is a button: a click sets a temporary target (arrow, tile, Shortest Path,
+ * NPC highlight), and on arrival the arrow returns to the step. This used to be only in the app; in the game the HUD wrote
+ * "Bag: missing 1 of 1".
  *
- * Здесь только раскладка строк — чистая логика для тестов. Рисует {@link OsrsPathGuideOverlay}, клики ловит
+ * Only the row layout is here: pure logic for tests. {@link OsrsPathGuideOverlay} draws it and catches the clicks,
  * {@link GuideMouse}.
  */
 final class GuideList
 {
 	enum Kind
 	{
-		/** Не кнопка: клик по списку просто не уходит в игру. */
+		/** Not a button: a click on the list simply does not go through to the game. */
 		NONE,
-		/** Заголовок: свернуть или развернуть список. */
+		/** The heading: collapse or expand the list. */
 		TOGGLE,
-		/** Строка с местом: стрелка и путь туда. */
+		/** A line with a place: the arrow and the path there. */
 		PLACE,
-		/** Стрелку — снова к шагу. */
+		/** The arrow back to the step. */
 		BACK,
-		/** Шаг, которого игра сама не увидит (подряд на одном месте), сделан — показать следующий. */
+		/** A step the game will not see by itself (several in a row at one place) is done: show the next one. */
 		NEXT,
-		/** Посмотреть предыдущий шаг этапа (ненадолго: дальше курсор снова ведут факты в игре). */
+		/** View the previous step of the stage (briefly: after that the cursor is led by the facts in the game again). */
 		PREV,
-		/** Закончить просмотр: курсор снова по фактам. */
+		/** End viewing: the cursor follows the facts again. */
 		RESUME,
-		/** Переключить вкладку списка: «Шаги» / «Совет». */
+		/** Switch the list tab: "Steps" / "Tip". */
 		TAB,
 	}
 
@@ -49,7 +49,7 @@ final class GuideList
 		static final Action TAB = new Action(Kind.TAB, -1);
 
 		Kind kind;
-		/** Номер точки шага для PLACE. */
+		/** The number of the step's point for PLACE. */
 		int place;
 
 		static Action place(int index)
@@ -63,7 +63,7 @@ final class GuideList
 		}
 	}
 
-	/** Одна строка текста: слева и (необязательно) справа. small — мелкий шрифт («где взять», подсказка). */
+	/** One line of text: left and (optionally) right. small is a small font ("where to get it", the hint). */
 	@Value
 	static class Line
 	{
@@ -79,21 +79,21 @@ final class GuideList
 	{
 		List<Line> lines;
 		Action action;
-		/** Подсказка внизу списка, пока мышь над строкой: полный текст и что сделает клик; null — без неё. */
+		/** The hint at the bottom of the list while the mouse is over a line: the full text and what a click does; null means none. */
 		String hint;
 	}
 
 	static final Color TITLE = OsrsPathHudOverlay.TITLE;
 	static final Color TEXT = OsrsPathHudOverlay.TEXT;
 	static final Color MUTED = new Color(175, 175, 175);
-	/** «Где взять» у строки-кнопки — цветом ссылки: по ней можно нажать. */
+	/** The "where to get it" of a button line in link colour: it can be clicked. */
 	static final Color LINK = new Color(140, 200, 255);
 	static final int MAX_ITEMS = 8;
 	static final int MAX_PLACES = 8;
-	/** Больше стольких предметов или мест — «где взять» и подписи в одну строку. */
+	/** More than this many items or places: "where to get it" and labels go on one line. */
 	static final int COMPACT_ITEMS = 4;
 	static final int COMPACT_PLACES = 3;
-	/** Строк «где взять» и подписи места; полностью — в подсказке при наведении. */
+	/** Lines of "where to get it" and place labels; the full text is in the hover hint. */
 	static final int WHERE_LINES = 2;
 	static final int PLACE_LINES = 2;
 	private static final String INDENT = "   ";
@@ -104,34 +104,34 @@ final class GuideList
 	}
 
 	/**
-	 * Виден ли список на экране сейчас: включён, не свёрнут (свёрнутый — одна строка, подробностей в нём нет), есть что
-	 * показать и, в умном виде, подходит момент (в пути и на бирже он закрывал бы обзор).
+	 * Whether the list is visible on screen now: enabled, not collapsed (a collapsed one is a single line, with no details), has something
+	 * to show and, in the smart view, the moment is right (while travelling and at the exchange it would block the view).
 	 */
 	static boolean shown(boolean enabled, boolean collapsed, StepGuide.View v, boolean smart, SmartView.Context context)
 	{
 		return enabled && !collapsed && worthShowing(v) && !(smart && !SmartView.showsGuide(context));
 	}
 
-	/** Показывать ли список: есть предметы, несколько мест, временная цель или сообщение. Иначе хватает HUD. */
+	/** Whether to show the list: there are items, several places, a temporary target or a message. Otherwise the HUD is enough. */
 	static boolean worthShowing(StepGuide.View v)
 	{
 		return v != null && v.getTitle() != null
 			&& (!v.getItems().isEmpty() || v.getPlaces().size() > 1 || v.getDetour() != null || v.getNote() != null || v.getStage() != null);
 	}
 
-	/** В кратком виде («умное проявление»): «где взять» и места — одной строкой, длинные списки короче. */
+	/** In the brief view (the "smart reveal"): "where to get it" and places on one line, long lists shorter. */
 	static final int TERSE_ITEMS = 5;
 	static final int TERSE_PLACES = 3;
 
-	/** Строки списка. fm — обычный шрифт, small — мелкий; width — ширина плашки. */
+	/** The list lines. fm is the normal font, small the small one; width is the plate's width. */
 	static List<Row> rows(StepGuide.View v, boolean collapsed, FontMetrics fm, FontMetrics small, int width)
 	{
 		return rows(v, collapsed, fm, small, width, false);
 	}
 
 	/**
-	 * Строки списка. terse — краткий вид для игры: описания «где достать» не растягиваются на несколько строк, а целиком
-	 * остаются в подсказке при наведении и в окне программы.
+	 * The list lines. terse is the brief view for the game: "where to get" descriptions are not stretched over several lines, and stay in full
+	 * in the hover hint and in the app window.
 	 */
 	static List<Row> rows(StepGuide.View v, boolean collapsed, FontMetrics fm, FontMetrics small, int width, boolean terse)
 	{
@@ -139,22 +139,22 @@ final class GuideList
 		final int maxPlaces = terse ? TERSE_PLACES : MAX_PLACES;
 		int inner = OverlayText.inner(width);
 		List<Row> out = new ArrayList<>();
-		// Предметов у шага нет — это список мест: заголовок «Куда идти», без второго такого же ниже.
+		// The step has no items: it is a list of places, so the heading is "Where to go", without a second one below.
 		StepGuide.StageView stage = v.getStage();
 		boolean placesOnly = v.getItems().isEmpty() && stage == null;
-		String heading = stage != null ? stageTitle(stage) : placesOnly ? "Куда идти" : "Что нужно";
-		// Код шага — впереди: HUD с названием шага убран, а в какой ты задаче, видно должно быть всегда.
+		String heading = stage != null ? stageTitle(stage) : placesOnly ? "Where to go" : "What you need";
+		// The step code goes first: the HUD with the step name is gone, and which task you are on must always be visible.
 		String code = code(v);
 		out.add(new Row(pair(code + (collapsed ? summary(v) : heading) + percent(v), stage != null && stage.isFinished() ? StepGuide.GOOD : TITLE,
 			collapsed ? "▼" : "▲", MUTED, fm, inner, false),
 			Action.TOGGLE, (v.getTitle() == null ? "" : v.getTitle() + ". ")
-				+ (collapsed ? "Клик — развернуть: что нужно и куда идти." : "Клик — свернуть список в одну строку.")));
+				+ (collapsed ? "Click to expand: what you need and where to go." : "Click to collapse the list to one line.")));
 		if (collapsed)
 		{
 			return out;
 		}
 		recoveryRows(out, v.getPrep(), fm, small, inner);
-		// Советы программы («Не бери сейчас», вес, сумка) — на отдельной вкладке: на экране игры им не место среди шагов.
+		// The app's tips ("Don't take now", weight, bag) are on a separate tab: on the game screen they do not belong among the steps.
 		int advice = adviceCount(v.getPrep());
 		boolean onAdvice = v.isAdviceTab() && advice > 0;
 		if (advice > 0)
@@ -172,28 +172,28 @@ final class GuideList
 		}
 		if (v.getDetour() != null)
 		{
-			out.add(new Row(text("← Стрелку — снова к шагу", StepGuide.BANK, fm, inner, false), Action.BACK,
-				"Сейчас стрелка ведёт: " + v.getDetour() + ". Клик — стрелка и путь снова к шагу."));
+			out.add(new Row(text("← Arrow back to the step", StepGuide.BANK, fm, inner, false), Action.BACK,
+				"The arrow now points to: " + v.getDetour() + ". Click to point the arrow and path back to the step."));
 		}
 		if (stage != null)
 		{
 			if (stage.isFinished())
 			{
-				out.add(new Row(text("Квест пройден — шаг отметится сам.", StepGuide.GOOD, fm, inner, false), Action.NONE, null));
+				out.add(new Row(text("Quest complete - the step will tick itself.", StepGuide.GOOD, fm, inner, false), Action.NONE, null));
 				return out;
 			}
 			stageRows(out, stage, fm, small, inner);
 		}
-		// Длинный список (Prince Ali Rescue — 12 предметов и 8 NPC) не должен закрывать полэкрана: «где взять» и места —
-		// в одну строку, целиком — в подсказке при наведении. Чего не хватает — сверху, что уже в сумке — вниз.
+		// A long list (Prince Ali Rescue: 12 items and 8 NPCs) must not cover half the screen: "where to get it" and places go
+		// on one line, in full in the hover hint. What is missing goes on top, what is already in the bag goes down.
 		List<StepGuide.ItemLine> all = ordered(v.getItems());
-		// На этапе — только то, что ещё нужно: взятое и сданное («✓ готово», «✓ есть») уже не просят внимания и место занимают зря.
-		// «По ходу» (получишь сам в этом квесте) среди «Нужно сейчас» не показываем: это не то, что надо взять сейчас, а в строках этапа
-		// и подсвеченных предметах оно и так видно.
+		// On a stage only what is still needed: what was taken and handed in ("✓ done", "✓ have") no longer asks for attention and takes space for nothing.
+		// "In step" (you get it yourself in this quest) is not shown among "Needed now": it is not something to take now, and it is already visible in the stage lines
+		// and the highlighted items.
 		List<StepGuide.ItemLine> items = stage != null ? pendingNow(all) : all;
 		if (stage != null && !items.isEmpty())
 		{
-			out.add(new Row(text("Нужно сейчас", MUTED, small, inner, true), Action.NONE, null));
+			out.add(new Row(text("Needed now", MUTED, small, inner, true), Action.NONE, null));
 		}
 		int whereLines = terse || items.size() > COMPACT_ITEMS ? 1 : WHERE_LINES;
 		for (int i = 0; i < Math.min(items.size(), maxItems); i++)
@@ -202,20 +202,20 @@ final class GuideList
 		}
 		if (items.size() > maxItems)
 		{
-			out.add(new Row(text("… ещё " + (items.size() - maxItems), MUTED, small, inner, true), Action.NONE, "Остальное — в панели «OSRS Путь» справа."));
+			out.add(new Row(text("… " + (items.size() - maxItems) + " more", MUTED, small, inner, true), Action.NONE, "The rest is in the OSRS Path panel on the right."));
 		}
-		// Всё собрано — что делать дальше: последний пункт быстрого пути шага («Отдай всё Hetty…»).
+		// Everything is collected, so what to do next: the last item of the step's quick path ("Give everything to Hetty...").
 		if (v.getNext() != null)
 		{
-			out.add(new Row(text("▶ Дальше: " + ShortText.of(v.getNext()), StepGuide.GOOD, fm, inner, true), Action.NONE, "Дальше: " + v.getNext()));
+			out.add(new Row(text("▶ Next: " + ShortText.of(v.getNext()), StepGuide.GOOD, fm, inner, true), Action.NONE, "Next: " + v.getNext()));
 		}
-		// Места, где берут предметы из списка выше, — уже кнопки в строках предметов: второй раз не показываем.
-		// Кроме первой — точки самого шага (NPC квеста): она в «Куда идти» всегда, даже если он выдаёт предмет.
+		// The places where the items of the list above are obtained are already buttons in the item lines: we do not show them a second time.
+		// Except the first: the step's own point (the quest NPC) is always in "Where to go", even if they hand out an item.
 		List<StepGuide.PlaceLine> places = new ArrayList<>();
 		for (StepGuide.PlaceLine p : v.getPlaces())
 		{
-			// Этап из нескольких шагов с клеткой: куда идти, говорит текущий шаг (стрелка уже ведёт к нему); точка этапа
-			// в целом («вход в подземелье») к концу этапа устаревает и только мешает.
+			// A stage of several steps with a tile: the current step says where to go (the arrow already leads to it); the stage's point
+			// as a whole ("dungeon entrance") goes stale towards the end of the stage and only gets in the way.
 			if (leadsByStep(stage))
 			{
 				break;
@@ -229,11 +229,11 @@ final class GuideList
 		{
 			if (stage != null)
 			{
-				out.add(new Row(text("Куда идти", MUTED, small, inner, true), Action.NONE, null));
+				out.add(new Row(text("Where to go", MUTED, small, inner, true), Action.NONE, null));
 			}
 			else if (!placesOnly)
 			{
-				out.add(new Row(text("Куда идти", TITLE, fm, inner, false), Action.NONE, null));
+				out.add(new Row(text("Where to go", TITLE, fm, inner, false), Action.NONE, null));
 			}
 			int placeLines = terse || places.size() > COMPACT_PLACES ? 1 : PLACE_LINES;
 			for (int i = 0; i < Math.min(places.size(), maxPlaces); i++)
@@ -242,13 +242,13 @@ final class GuideList
 			}
 			if (places.size() > maxPlaces)
 			{
-				out.add(new Row(text("… ещё " + (places.size() - maxPlaces), MUTED, small, inner, true), Action.NONE, "Остальное — в панели «OSRS Путь» справа."));
+				out.add(new Row(text("… " + (places.size() - maxPlaces) + " more", MUTED, small, inner, true), Action.NONE, "The rest is in the OSRS Path panel on the right."));
 			}
 		}
 		return out;
 	}
 
-	/** Сколько советов у программы для шага: блокеры, «не влезет», «не бери сейчас», вес. */
+	/** How many tips the app has for the step: blockers, "will not fit", "don't take now", weight. */
 	static int adviceCount(PrepPlan prep)
 	{
 		if (prep == null)
@@ -261,15 +261,15 @@ final class GuideList
 			+ (prep.getWeight() != null && !prep.getWeight().isEmpty() ? 1 : 0);
 	}
 
-	/** Полоска вкладок: «Шаги» слева, «Совет · N» справа; активная — золотом, вторая — серым. Клик по любой — переключить. */
+	/** The tab strip: "Steps" on the left, "Tip · N" on the right; the active one in gold, the other in grey. A click on either switches. */
 	static Row tabRow(boolean onAdvice, int advice, FontMetrics fm, int inner)
 	{
 		List<Line> lines = new ArrayList<>();
-		lines.add(new Line("Шаги", onAdvice ? MUTED : TITLE, "Совет · " + advice, onAdvice ? TITLE : StepGuide.BANK, true));
-		return new Row(lines, Action.TAB, onAdvice ? "Клик — вернуться к шагам." : "Клик — советы программы: что не брать сейчас, вес, сумка.");
+		lines.add(new Line("Steps", onAdvice ? MUTED : TITLE, "Tip · " + advice, onAdvice ? TITLE : StepGuide.BANK, true));
+		return new Row(lines, Action.TAB, onAdvice ? "Click to go back to the steps." : "Click for the app's tips: what not to take now, weight, bag.");
 	}
 
-	/** Текст строк списка подряд, как его видит игрок, — для журнала отладки и тестов: «левое ~правое», строки через перевод строки. */
+	/** The text of the list lines in a row, as the player sees it, for the debug log and tests: "left ~right", lines separated by newlines. */
 	static String plain(List<Row> rows)
 	{
 		StringBuilder sb = new StringBuilder();
@@ -291,7 +291,7 @@ final class GuideList
 		return sb.toString();
 	}
 
-	/** « · 82%» в заголовке: насколько шаг подготовлен по плану программы; готов на сто — не пишем. */
+	/** " · 82%" in the heading: how prepared the step is by the app's plan; at one hundred we do not write it. */
 	static String percent(StepGuide.View v)
 	{
 		Integer p = v.getPrep() == null ? null : v.getPrep().pendingPercent();
@@ -299,8 +299,8 @@ final class GuideList
 	}
 
 	/**
-	 * Режим восстановления (план программы): ты умер или телепортировался посреди шага — что сделать по порядку. Считает
-	 * программа (знает сумку, банк, шаг и где ты); плагин только рисует: заголовок янтарным и до трёх пунктов.
+	 * Recovery mode (the app's plan): you died or teleported in the middle of a step, so what to do in order. The app
+	 * computes it (it knows the bag, bank, step and where you are); the plugin only draws it: an amber heading and up to three items.
 	 */
 	static void recoveryRows(List<Row> out, PrepPlan prep, FontMetrics fm, FontMetrics small, int inner)
 	{
@@ -309,7 +309,7 @@ final class GuideList
 			return;
 		}
 		String title = prep.getRecovery().getTitle() == null || prep.getRecovery().getTitle().isEmpty()
-			? "Режим восстановления" : prep.getRecovery().getTitle();
+			? "Recovery mode" : prep.getRecovery().getTitle();
 		out.add(new Row(text("⚠ " + title, StepGuide.BANK, fm, inner, false), Action.NONE, String.join(" ", prep.getRecovery().getSteps())));
 		List<String> steps = prep.getRecovery().getSteps();
 		for (int i = 0; i < Math.min(steps.size(), RECOVERY_SHOWN); i++)
@@ -321,8 +321,8 @@ final class GuideList
 	static final int RECOVERY_SHOWN = 3;
 
 	/**
-	 * Советы программы под списком: «Не бери сейчас» (понадобится позже — место в сумке не занимать), вес и бег, сумка не
-	 * вмещает, нельзя по уровню или квесту. Каждая — одна-две мелкие строки; полный текст — в подсказке.
+	 * The app's tips under the list: "Don't take now" (needed later, do not use bag space), weight and running, the bag does not
+	 * fit, not allowed by level or quest. Each is one or two small lines; the full text is in the hint.
 	 */
 	static void adviceRows(List<Row> out, PrepPlan prep, FontMetrics small, int inner)
 	{
@@ -344,15 +344,15 @@ final class GuideList
 		if (prep.getLater() != null && !prep.getLater().isEmpty())
 		{
 			String all = String.join(", ", prep.getLater());
-			out.add(new Row(clip("", "Не бери сейчас: " + all, MUTED, small, inner, 2, true), Action.NONE, "Понадобится позже: " + all + "."));
+			out.add(new Row(clip("", "Don't take now: " + all, MUTED, small, inner, 2, true), Action.NONE, "You will need these later: " + all + "."));
 		}
 		if (prep.getWeight() != null && !prep.getWeight().isEmpty())
 		{
-			out.add(new Row(clip("", "Вес: " + prep.getWeight(), MUTED, small, inner, 2, true), Action.NONE, prep.getWeight()));
+			out.add(new Row(clip("", "Weight: " + prep.getWeight(), MUTED, small, inner, 2, true), Action.NONE, prep.getWeight()));
 		}
 	}
 
-	/** Сначала то, чего не хватает (в порядке маршрута), потом — что уже в сумке. */
+	/** First what is missing (in route order), then what is already in the bag. */
 	static List<StepGuide.ItemLine> ordered(List<StepGuide.ItemLine> items)
 	{
 		List<StepGuide.ItemLine> out = new ArrayList<>();
@@ -373,7 +373,7 @@ final class GuideList
 		return out;
 	}
 
-	/** Текущий шаг этапа сам говорит, куда идти: шагов несколько и у текущего есть клетка. */
+	/** The current stage step says where to go by itself: there are several steps and the current one has a tile. */
 	static boolean leadsByStep(StepGuide.StageView stage)
 	{
 		if (stage == null || stage.isFinished() || stage.getSteps().size() < 2)
@@ -383,7 +383,7 @@ final class GuideList
 		return stage.getSteps().get(Math.max(0, Math.min(stage.getCursor(), stage.getSteps().size() - 1))).hasPoint();
 	}
 
-	/** Предметы, которых ещё нет с собой: не взятые и не сданные. */
+	/** Items that are not with you yet: neither taken nor handed in. */
 	static List<StepGuide.ItemLine> pending(List<StepGuide.ItemLine> items)
 	{
 		List<StepGuide.ItemLine> out = new ArrayList<>();
@@ -397,7 +397,7 @@ final class GuideList
 		return out;
 	}
 
-	/** Предметы, которые надо взять именно сейчас: ещё не получены и не «по ходу» квеста. */
+	/** Items that must be taken right now: not yet obtained and not "during" the quest. */
 	static List<StepGuide.ItemLine> pendingNow(List<StepGuide.ItemLine> items)
 	{
 		List<StepGuide.ItemLine> out = new ArrayList<>();
@@ -411,16 +411,16 @@ final class GuideList
 		return out;
 	}
 
-	/** Предмет уже получен: сейчас в сумке или был в ней в этом шаге (отдан, использован). */
+	/** The item is already obtained: in the bag now or was in it during this step (handed in, used). */
 	static boolean got(StepGuide.ItemLine i)
 	{
 		return i.getHave() == StepGuide.Have.BAG || i.getHave() == StepGuide.Have.DONE;
 	}
 
 	/**
-	 * Место не нужно в «Куда идти», если там берут показанный предмет: пока его нет — туда ведёт строка предмета
-	 * (кнопка или «● ведёт туда»), когда он получен — идти туда незачем (Betty, крыса, грядка лука). Главная точка шага
-	 * (index 0, NPC квеста) остаётся всегда — там дело по квесту.
+	 * A place is not needed in "Where to go" if the shown item is obtained there: while it is missing, the item's line leads there
+	 * (a button or "● arrow points there"), and once it is obtained there is no reason to go (Betty, the rat, the onion patch). The step's main point
+	 * (index 0, the quest NPC) always stays: the quest business is there.
 	 */
 	private static boolean itemPlace(List<StepGuide.ItemLine> items, StepGuide.PlaceLine place, String finale, int shownItems)
 	{
@@ -439,27 +439,27 @@ final class GuideList
 		{
 			return linked;
 		}
-		// Всё отсюда взято, а у места есть NPC: он ещё нужен, только если им заканчивается шаг («Отдай всё Hetty…»).
-		// Пунктов быстрого пути нет — не гадаем, оставляем место: лишняя строка лучше пропавшей.
+		// Everything from here is taken and the place has an NPC: it is still needed only if the step ends with them ("Give everything to Hetty...").
+		// There are no quick-path items, so we do not guess and keep the place: an extra line is better than a lost one.
 		return finale != null && !finale.toLowerCase().contains(place.getNpc().toLowerCase());
 	}
 
-	/** Подсказка под списком для строки под мышью — мелким шрифтом, целиком. */
+	/** The hint under the list for the line under the mouse, in a small font, in full. */
 	static Row hint(String text, FontMetrics small, int width)
 	{
 		return new Row(text(text, TEXT, small, OverlayText.inner(width), true), Action.NONE, null);
 	}
 
-	/** Шагов впереди текущего, которые показываются: один — «Дальше», остальные — счётчиком; полный список — в панели справа. */
+	/** Steps ahead of the current one that are shown: one is "Next", the rest as a counter; the full list is in the panel on the right. */
 	static final int STAGE_AHEAD = 1;
 
 	/**
-	 * Шаги этапа: текущий — ярко, справа «3/4», под ним одной серой строкой «Дальше» (справа — сколько ещё после него) и,
-	 * если шаг не первый, «◀ Назад» — перечитать прежний шаг. Вперёд кликом пропустить нельзя: текущий шаг определяется по
-	 * тому, что происходит в игре (положение, предметы), — его нельзя «прощёлкать» и запутаться. Исключение — «✓ Сделано —
-	 * дальше» у шагов, которых игра сама не видит (подряд на одном месте): без неё список застрял бы. Пока смотришь прежний
-	 * шаг, появляется «▶ К текущему шагу». Тексты — короткие (StageLine.shown), полный текст — в подсказке при
-	 * наведении. Предупреждение («Blurite ore ещё в сумке») — янтарным сверху.
+	 * Stage steps: the current one bright, "3/4" on the right, under it in one grey line "Next" (with how many more after it on the right) and,
+	 * if the step is not the first, "◀ Back" to reread the previous step. Moving forward by click is not possible: the current step is determined by
+	 * what happens in the game (position, items), so you cannot click past it and get confused. The exception is "✓ Done -
+	 * next" on steps the game does not see by itself (several in a row at one place): without it the list would get stuck. While you view a previous
+	 * step, "▶ To current step" appears. The texts are short (StageLine.shown), the full text is in the hover
+	 * hint. A warning ("Blurite ore is still in your bag") goes on top in amber.
 	 */
 	static void stageRows(List<Row> out, StepGuide.StageView stage, FontMetrics fm, FontMetrics small, int inner)
 	{
@@ -475,34 +475,34 @@ final class GuideList
 		}
 		int cur = Math.max(0, Math.min(stage.getCursor(), lines.size() - 1));
 		ActiveTarget.StageLine now = lines.get(cur);
-		String count = (stage.isPeeking() ? "просмотр · " : "") + (cur + 1) + "/" + lines.size();
+		String count = (stage.isPeeking() ? "viewing · " : "") + (cur + 1) + "/" + lines.size();
 		out.add(new Row(pair("▶ " + now.shown(), stage.isPeeking() ? MUTED : TITLE, count, MUTED, fm, inner, false), Action.NONE, now.getT()));
 		for (int i = cur + 1; i < Math.min(lines.size(), cur + 1 + STAGE_AHEAD); i++)
 		{
 			int after = lines.size() - i - 1;
-			String next = "Дальше: " + lines.get(i).shown();
+			String next = "Next: " + lines.get(i).shown();
 			List<Line> row = after > 0 ? pair(next, MUTED, "+" + after, MUTED, small, inner, true) : clip("", next, MUTED, small, inner, 1, true);
-			out.add(new Row(row, Action.NONE, lines.get(i).getT() + (after > 0 ? " Ещё шагов после него: " + after + " — в панели «OSRS Путь» справа." : "")));
+			out.add(new Row(row, Action.NONE, lines.get(i).getT() + (after > 0 ? " Steps after this one: " + after + " - in the OSRS Path panel on the right." : "")));
 		}
 		if (stage.isManual() && cur < lines.size() - 1)
 		{
-			out.add(new Row(text("✓ Сделано — дальше", LINK, small, inner, true), Action.NEXT,
-				"Клик — этот шаг сделан, показать следующий. Кнопка только у шагов, которые игра сама не видит: подряд на одном месте."));
+			out.add(new Row(text("✓ Done - next", LINK, small, inner, true), Action.NEXT,
+				"Click: this step is done, show the next one. The button appears only on steps the game cannot see by itself: several in a row at one place."));
 		}
 		if (stage.isPeeking())
 		{
-			out.add(new Row(text("▶ К текущему шагу", LINK, small, inner, true), Action.RESUME,
-				"Клик — вернуться к шагу, на котором ты сейчас по игре. Сам вернётся через минуту."));
+			out.add(new Row(text("▶ To current step", LINK, small, inner, true), Action.RESUME,
+				"Click to return to the step you are on according to the game. It returns by itself after a minute."));
 		}
 		if (cur > 0)
 		{
 			ActiveTarget.StageLine prev = lines.get(cur - 1);
-			out.add(new Row(clip("", "◀ Назад: " + prev.shown(), MUTED, small, inner, 1, true), Action.PREV,
-				"Клик — посмотреть предыдущий шаг: " + prev.getT() + " Через минуту список сам вернётся к текущему."));
+			out.add(new Row(clip("", "◀ Back: " + prev.shown(), MUTED, small, inner, 1, true), Action.PREV,
+				"Click to view the previous step: " + prev.getT() + " After a minute the list returns to the current step by itself."));
 		}
 	}
 
-	/** «S2-07 · » из заголовка вида «[S2-07] Название»; пусто — кода нет. */
+	/** "S2-07 · " from a heading like "[S2-07] Title"; empty means there is no code. */
 	static String code(StepGuide.View v)
 	{
 		String t = v.getTitle();
@@ -516,10 +516,10 @@ final class GuideList
 
 	static String stageTitle(StepGuide.StageView s)
 	{
-		return s.isFinished() ? "Квест пройден ✓" : "Этап " + s.getIndex() + " из " + s.getTotal();
+		return s.isFinished() ? "Quest complete ✓" : "Stage " + s.getIndex() + " of " + s.getTotal();
 	}
 
-	/** Свёрнутый список — одной строкой: «Что нужно: нет 2 · в банке 1». */
+	/** The collapsed list in one line: "What you need: missing 2 · in bank 1". */
 	static String summary(StepGuide.View v)
 	{
 		if (v.getStage() != null)
@@ -530,15 +530,12 @@ final class GuideList
 				return base;
 			}
 			long missing = v.getItems().stream().filter(i -> !got(i) && i.getHave() != StepGuide.Have.IN_STEP).count();
-			return missing > 0 ? base + " · не хватает " + missing : base + " · всё с собой";
+			return missing > 0 ? base + " · " + missing + " missing" : base + " · all in your bag";
 		}
 		if (v.getItems().isEmpty())
 		{
 			int n = v.getPlaces().size();
-			int m10 = n % 10;
-			int m100 = n % 100;
-			String word = m100 >= 11 && m100 <= 14 ? "мест" : m10 == 1 ? "место" : m10 >= 2 && m10 <= 4 ? "места" : "мест";
-			return "Куда идти: " + n + " " + word;
+			return "Where to go: " + n + (n == 1 ? " place" : " places");
 		}
 		int none = 0;
 		int bank = 0;
@@ -567,21 +564,21 @@ final class GuideList
 		List<String> parts = new ArrayList<>();
 		if (none > 0)
 		{
-			parts.add("нет " + none);
+			parts.add("missing " + none);
 		}
 		if (bank > 0)
 		{
-			parts.add("в банке " + bank);
+			parts.add("in bank " + bank);
 		}
 		if (unknown > 0)
 		{
-			parts.add("в банке? " + unknown);
+			parts.add("bank? " + unknown);
 		}
 		if (inStep > 0)
 		{
-			parts.add("по ходу " + inStep);
+			parts.add("in step " + inStep);
 		}
-		return "Что нужно: " + (parts.isEmpty() ? "всё с собой" : String.join(" · ", parts));
+		return "What you need: " + (parts.isEmpty() ? "all in your bag" : String.join(" · ", parts));
 	}
 
 	static String mark(StepGuide.Have h)
@@ -601,8 +598,8 @@ final class GuideList
 	}
 
 	/**
-	 * Предмет: «✗ Eye of newt … нет», под ним «где взять» (до двух строк). Есть точка, где его берут, — строка
-	 * кнопка, «где взять» цветом ссылки. В сумке — одна зелёная строка, не кнопка.
+	 * An item: "✗ Eye of newt ... none", under it "where to get it" (up to two lines). If there is a point where it is obtained, the line is a
+	 * button, with "where to get it" in link colour. In the bag, one green line, not a button.
 	 */
 	static Row item(StepGuide.ItemLine i, List<StepGuide.PlaceLine> places, FontMetrics fm, FontMetrics small, int inner)
 	{
@@ -615,8 +612,8 @@ final class GuideList
 	}
 
 	/**
-	 * Предмет с пометками плана программы: вместо общего «где взять» — что сделать именно тебе («Забери из банка», «Купи у
-	 * Betty — 3 gp»), а у расходника, которого мало, — «мало» вместо «есть».
+	 * An item with marks from the app's plan: instead of the generic "where to get it", what to do exactly for you ("Take it from the bank", "Buy it from
+	 * Betty - 3 gp"), and for a supply that is running low, "low" instead of "have".
 	 */
 	static Row item(StepGuide.ItemLine i, List<StepGuide.PlaceLine> places, FontMetrics fm, FontMetrics small, int inner, int whereLines,
 		PrepPlan prep)
@@ -627,7 +624,7 @@ final class GuideList
 		boolean go = !bag && at != null && !at.isActive();
 		boolean low = bag && planned != null && planned.lowSupply();
 		String where = !bag && planned != null && planned.getAction() != null && !planned.getAction().isEmpty() ? planned.getAction() : i.getWhere();
-		List<Line> lines = pair(mark(i.getHave()) + " " + i.getName(), bag ? StepGuide.GOOD : TEXT, low ? "мало" : i.getTag(),
+		List<Line> lines = pair(mark(i.getHave()) + " " + i.getName(), bag ? StepGuide.GOOD : TEXT, low ? "low" : i.getTag(),
 			low ? StepGuide.BANK : StepGuide.color(i.getHave()), fm, inner, false);
 		if (!bag && where != null && !where.isEmpty())
 		{
@@ -635,32 +632,32 @@ final class GuideList
 		}
 		if (!bag && at != null && at.isActive())
 		{
-			lines.addAll(text(INDENT + "● стрелка ведёт туда", StepGuide.GOOD, small, inner, true));
+			lines.addAll(text(INDENT + "● arrow points there", StepGuide.GOOD, small, inner, true));
 		}
 		List<String> hint = new ArrayList<>();
-		hint.add(i.getName() + (i.getRu() != null ? " — " + i.getRu() : "") + ".");
+		hint.add(i.getName() + ".");
 		if (i.getWhere() != null && !i.getWhere().isEmpty())
 		{
-			hint.add("Где взять: " + i.getWhere());
+			hint.add("Where to get it: " + i.getWhere());
 		}
 		if (planned != null && planned.getAction() != null && !planned.getAction().isEmpty() && !planned.getAction().equals(i.getWhere()))
 		{
-			hint.add("Совет: " + planned.getAction() + ".");
+			hint.add("Tip: " + planned.getAction() + ".");
 		}
 		if (low)
 		{
-			hint.add("Расходника мало — пополни запас.");
+			hint.add("Running low on this supply - restock.");
 		}
 		if (go)
 		{
-			hint.add("Клик — стрелка и путь: " + at.getLabel() + (at.getNpc() != null ? ", " + at.getNpc() + " подсветится" : "") + ".");
+			hint.add("Click for the arrow and path: " + at.getLabel() + (at.getNpc() != null ? ", " + at.getNpc() + " will be highlighted" : "") + ".");
 		}
 		return new Row(lines, go ? Action.place(i.getPlace()) : Action.NONE, String.join(" ", hint));
 	}
 
 	/**
-	 * Место шага: «► Hetty — дом в Rimmington». Сюда ведёт стрелка — «●». NPC, которого нет в подписи, — впереди
-	 * («Cook — кухня замка»): список — это и «к кому идти». Места с предметами подписаны по предмету, им не нужно.
+	 * A step place: "► Hetty - house in Rimmington". The arrow leads here: "●". An NPC missing from the label goes first
+	 * ("Cook - castle kitchen"): the list is also "who to go to". Places with items are labelled by the item and do not need it.
 	 */
 	static Row place(StepGuide.PlaceLine p, FontMetrics fm, int inner)
 	{
@@ -677,13 +674,13 @@ final class GuideList
 		if (p.isActive())
 		{
 			return new Row(clip("", "● " + label, StepGuide.GOOD, fm, inner, lines, false), Action.NONE,
-				label + ". Стрелка ведёт сюда; дойдёшь — вернётся к шагу.");
+				label + ". The arrow points here; once you arrive it returns to the step.");
 		}
 		return new Row(clip("", "► " + label, TEXT, fm, inner, lines, false), Action.place(p.getIndex()),
-			label + ". Клик — стрелка и путь сюда" + (p.getNpc() != null ? ", " + p.getNpc() + " подсветится" : "") + ".");
+			label + ". Click for the arrow and path here" + (p.getNpc() != null ? ", " + p.getNpc() + " will be highlighted" : "") + ".");
 	}
 
-	/** Текст с переносом по ширине, без ограничения строк. */
+	/** Text wrapped to the width, with no line limit. */
 	static List<Line> text(String s, Color color, FontMetrics fm, int width, boolean small)
 	{
 		List<Line> out = new ArrayList<>();
@@ -695,8 +692,8 @@ final class GuideList
 	}
 
 	/**
-	 * Текст не длиннее max строк: последняя обрезается многоточием. prefix — отступ перед каждой строкой.
-	 * Полный текст — в подсказке при наведении.
+	 * Text no longer than max lines: the last one is cut with an ellipsis. prefix is the indent before each line.
+	 * The full text is in the hover hint.
 	 */
 	static List<Line> clip(String prefix, String s, Color color, FontMetrics fm, int width, int max, boolean small)
 	{
@@ -721,8 +718,8 @@ final class GuideList
 	}
 
 	/**
-	 * Строка с правой частью, как OverlayText.pair: помещается — одной строкой; нет — левое переносится,
-	 * правое встаёт в конец последней строки или отдельной строкой справа.
+	 * A line with a right part, like OverlayText.pair: if it fits, one line; if not, the left wraps,
+	 * the right goes at the end of the last line or on a separate line on the right.
 	 */
 	static List<Line> pair(String left, Color leftColor, String right, Color rightColor, FontMetrics fm, int width, boolean small)
 	{

@@ -13,23 +13,23 @@ import lombok.Setter;
 import net.runelite.client.ui.overlay.components.LayoutableRenderableEntity;
 
 /**
- * Вид плашек плагина: тёмная скруглённая карточка с цветной полоской слева (цвет — состояние: золото, зелёный,
- * красный) и тонкой рамкой. Вместо плоского коричневатого фона PanelComponent.
+ * The look of the plugin plates: a dark rounded card with a coloured strip on the left (the colour is the state: gold, green,
+ * red) and a thin border. Instead of PanelComponent's flat brownish background.
  *
- * Карточка рисуется до панели по её размеру из прошлого кадра — так же, как свой фон рисует PanelComponent.
- * Размер меняется только вместе с содержимым, то есть раз в игровой тик, и разница в один кадр не видна.
+ * The card is drawn before the panel, by its size from the previous frame, the same way PanelComponent draws its own background.
+ * The size changes only with the contents, that is once per game tick, and a one-frame difference is not visible.
  */
 final class OverlayCard
 {
 	static final int RADIUS = 12;
-	/** Ширина цветной полоски слева. */
+	/** The width of the coloured strip on the left. */
 	static final int BAR = 3;
 	private static final Color TOP = new Color(32, 36, 49);
 	private static final Color BOTTOM = new Color(15, 17, 24);
 	private static final Color BORDER = new Color(255, 255, 255, 36);
 	private static final Color TRACK = new Color(255, 255, 255, 38);
 
-	/** Акценты состояний: те же цвета, что у текста плашек. */
+	/** State accents: the same colours as the plate text. */
 	static final Color GOLD = OsrsPathHudOverlay.TITLE;
 	static final Color GREEN = OsrsPathHudOverlay.GOOD;
 	static final Color AMBER = OsrsPathHudOverlay.WARN;
@@ -50,7 +50,7 @@ final class OverlayCard
 		return new Color(c.getRed(), c.getGreen(), c.getBlue(), a);
 	}
 
-	/** Карточка размером w×h с левого верхнего угла (RuneLite уже сдвинул холст к плашке). */
+	/** A card of size w x h from the top-left corner (RuneLite has already moved the canvas to the plate). */
 	static void paint(Graphics2D g, int w, int h, Color accent, int opacityPercent)
 	{
 		if (w <= 2 || h <= 2)
@@ -82,7 +82,7 @@ final class OverlayCard
 		}
 	}
 
-	/** Тонкая полоска прогресса: «этап 3 из 9», «собрано 4 из 6». */
+	/** A thin progress bar: "stage 3 of 9", "collected 4 of 6". */
 	static final class Bar implements LayoutableRenderableEntity
 	{
 		static final int HEIGHT = 9;
@@ -117,7 +117,7 @@ final class OverlayCard
 		}
 	}
 
-	/** Полоска шириной width с левого верхнего угла (x, y) высотой {@link Bar#HEIGHT} вместе с отступами. */
+	/** A bar of the given width from the top-left corner (x, y) with the height {@link Bar#HEIGHT} including the padding. */
 	static void paint(Graphics2D g, int x, int y, int width, double fraction, Color color)
 	{
 		if (width <= 4)

@@ -19,13 +19,13 @@ import java.util.regex.Pattern;
 import org.junit.Test;
 
 /**
- * Сверка маршрута приложения (src/data/steps.json) с этой версией RuneLite:
- * каждое название квеста для автоотметки есть в Quest, шаблоны сообщений компилируются,
- * а цели шагов проходят ту же проверку, что и запрос к /active-step.
+ * A check of the app's route (src/data/steps.json) against this version of RuneLite:
+ * every quest name for auto-tick is in Quest, the message patterns compile,
+ * and the step targets pass the same check as the request to /active-step.
  */
 public class RouteTargetsTest
 {
-	/** Сообщение, которое распознаёт ScreenshotPlugin RuneLite 1.12.39: так выглядит повышение уровня в чате. */
+	/** The message recognised by RuneLite 1.12.39's ScreenshotPlugin: this is what a level-up looks like in chat. */
 	private static final Pattern RUNELITE_LEVEL_UP = Pattern.compile(
 		"Congratulations, you've just advanced your (?<skill>[a-zA-Z]+) level\\. You are now level (?<level>\\d+)");
 
@@ -33,7 +33,7 @@ public class RouteTargetsTest
 	{
 		String path = System.getProperty("osrsPath.steps", "../src/data/steps.json");
 		Path file = Paths.get(path);
-		assertTrue("нет " + file.toAbsolutePath(), Files.exists(file));
+		assertTrue("not found " + file.toAbsolutePath(), Files.exists(file));
 		JsonArray steps = new Gson().fromJson(new String(Files.readAllBytes(file), StandardCharsets.UTF_8), JsonArray.class);
 		List<JsonObject> out = new ArrayList<>();
 		for (JsonElement e : steps)
@@ -47,12 +47,12 @@ public class RouteTargetsTest
 				out.add(g);
 			}
 		}
-		assertTrue("в маршруте должны быть шаги с подсветкой", out.size() >= 5);
+		assertTrue("the route must have steps with a highlight", out.size() >= 5);
 		return out;
 	}
 
 	@Test
-	public void названияКвестовЕстьВRuneLite() throws Exception
+	public void questNamesAreInRuneLite() throws Exception
 	{
 		int quests = 0;
 		for (JsonObject g : targets())
@@ -64,15 +64,15 @@ public class RouteTargetsTest
 			}
 			quests++;
 			String name = t.get("questName").getAsString();
-			assertNotNull("квест «" + name + "» (" + g.get("stepId").getAsString() + ") не найден в net.runelite.api.Quest",
+			assertNotNull("quest '" + name + "' (" + g.get("stepId").getAsString() + ") is not found in net.runelite.api.Quest",
 				OsrsPathBridgePlugin.knownQuests().get(ActiveTarget.nameKey(name)));
 		}
-		// 34 квеста маршрута засчитываются сами (2.7); меньше — значит, автоотметка пропала из данных.
-		assertTrue("квестов с автоотметкой " + quests, quests >= 30);
+		// 34 route quests are counted by themselves (2.7); fewer means auto-tick went missing from the data.
+		assertTrue("quests with auto-tick " + quests, quests >= 30);
 	}
 
 	@Test
-	public void шаблоныСообщенийСовпадаютСНастоящимТекстомИгры() throws Exception
+	public void messagePatternsMatchTheRealGameText() throws Exception
 	{
 		for (JsonObject g : targets())
 		{
@@ -82,7 +82,7 @@ public class RouteTargetsTest
 				continue;
 			}
 			Pattern p = Pattern.compile(t.get("chatPattern").getAsString());
-			// Пример сообщения строим по шаблону RuneLite: навык и уровень берём из самого шаблона шага.
+			// We build an example message from the RuneLite pattern: the skill and the level are taken from the step's own template.
 			String skill = p.pattern().replaceAll(".*advanced your (\\w+) level.*", "$1");
 			boolean matched = false;
 			for (int level = 2; level <= 98; level++)
@@ -91,12 +91,12 @@ public class RouteTargetsTest
 				assertTrue(RUNELITE_LEVEL_UP.matcher(msg).find());
 				matched |= p.matcher(msg).find();
 			}
-			assertTrue("шаблон " + g.get("stepId").getAsString() + " ни разу не сработал", matched);
+			assertTrue("the pattern of " + g.get("stepId").getAsString() + " never matched", matched);
 		}
 	}
 
 	@Test
-	public void целиШаговПроходятПроверкуМоста() throws Exception
+	public void stepTargetsPassTheBridgeCheck() throws Exception
 	{
 		Gson gson = new Gson();
 		for (JsonObject g : targets())

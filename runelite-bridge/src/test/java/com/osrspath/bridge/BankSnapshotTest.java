@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.junit.Test;
 
-/** Банк между сеансами: записывается ID и числами, читается с недоверием — настройки можно править руками. */
+/** The bank between sessions: written as IDs and numbers, read with distrust - the settings can be edited by hand. */
 public class BankSnapshotTest
 {
 	private static ItemCounts bank()
@@ -22,7 +22,7 @@ public class BankSnapshotTest
 	}
 
 	@Test
-	public void записанныйБанкЧитаетсяОбратноБезПотерь()
+	public void aWrittenBankIsReadBackWithoutLoss()
 	{
 		String raw = BankSnapshot.write(bank(), 1_700_000_000_000L);
 		BankSnapshot.Loaded l = BankSnapshot.read(raw);
@@ -36,19 +36,19 @@ public class BankSnapshotTest
 	}
 
 	@Test
-	public void пустойБанкТожеИзвестен()
+	public void anEmptyBankIsKnownToo()
 	{
 		BankSnapshot.Loaded l = BankSnapshot.read(BankSnapshot.write(new ItemCounts(), 5));
-		assertNotNull("пустой банк — это «знаем, что пусто», а не «неизвестно»", l);
+		assertNotNull("an empty bank is 'we know it is empty', not 'unknown'", l);
 		assertTrue(l.items.isEmpty());
 	}
 
 	@Test
-	public void мусорОтбрасываетсяЦеликом()
+	public void junkIsDiscardedWhole()
 	{
-		String[] bad = {null, "", "не json", "[]", "{}", "{\"v\":2,\"items\":{}}", "{\"v\":1}", "{\"v\":1,\"items\":[]}",
+		String[] bad = {null, "", "not json", "[]", "{}", "{\"v\":2,\"items\":{}}", "{\"v\":1}", "{\"v\":1,\"items\":[]}",
 			"{\"v\":1,\"items\":{\"abc\":1}}", "{\"v\":1,\"items\":{\"0\":1}}", "{\"v\":1,\"items\":{\"379\":0}}", "{\"v\":1,\"items\":{\"379\":-4}}",
-			"{\"v\":1,\"items\":{\"999999\":1}}", "{\"v\":1,\"items\":{\"379\":\"много\"}}"};
+			"{\"v\":1,\"items\":{\"999999\":1}}", "{\"v\":1,\"items\":{\"379\":\"many\"}}"};
 		for (String raw : bad)
 		{
 			assertNull("«" + raw + "»", BankSnapshot.read(raw));
@@ -56,13 +56,13 @@ public class BankSnapshotTest
 	}
 
 	@Test
-	public void слишкомБольшаяСтрокаНеЧитается()
+	public void aTooBigStringIsNotRead()
 	{
 		assertNull(BankSnapshot.read("{\"v\":1,\"items\":{}," + "\"x\":\"" + "a".repeat(400_001) + "\"}"));
 	}
 
 	@Test
-	public void записьОграниченаПоЧислуПредметов()
+	public void theWriteIsLimitedByTheNumberOfItems()
 	{
 		ItemCounts big = new ItemCounts();
 		for (int i = 1; i <= BankSnapshot.MAX_ITEMS + 500; i++)
@@ -75,7 +75,7 @@ public class BankSnapshotTest
 	}
 
 	@Test
-	public void idCountsЭтоКопия()
+	public void idCountsIsACopy()
 	{
 		ItemCounts b = bank();
 		b.idCounts().clear();

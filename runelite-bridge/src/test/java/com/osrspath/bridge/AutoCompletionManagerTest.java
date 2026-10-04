@@ -16,9 +16,9 @@ public class AutoCompletionManagerTest
 	private Boolean questFinished = false;
 	private int questChecks;
 
-	/** Уровни из игры по ключу навыка; нет ключа — уровень неизвестен (не в игре). */
+	/** Levels from the game by skill key; no key means the level is unknown (not in the game). */
 	private final Map<String, Integer> levels = new HashMap<>();
-	/** Предметы у игрока: по названию и по ID. */
+	/** Items the player has: by name and by ID. */
 	private final Map<String, Integer> byName = new HashMap<>();
 	private final Map<Integer, Integer> byId = new HashMap<>();
 
@@ -63,9 +63,9 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
-	public void описаниеУсловияДляПлашкиРазработчика()
+	public void conditionDescriptionForTheDeveloperBadge()
 	{
-		assertTrue("без шага условия нет", manager.describe().isEmpty());
+		assertTrue("no step, no condition", manager.describe().isEmpty());
 		ActiveTarget t = target("S2-07", "ITEM_OWNED");
 		t.getCompletionTrigger().setItems(List.of(item(1535, 5, "Lobster")));
 		manager.setTarget(t);
@@ -81,23 +81,23 @@ public class AutoCompletionManagerTest
 		questFinished = true;
 		assertEquals(List.of("Quest(Cook's Assistant) = TRUE"), manager.describe());
 		questFinished = null;
-		assertEquals("квест неизвестен — вопрос, а не FALSE", List.of("Quest(Cook's Assistant) = ?"), manager.describe());
+		assertEquals("quest unknown - a question, not FALSE", List.of("Quest(Cook's Assistant) = ?"), manager.describe());
 	}
 
 	@Test
-	public void квестПроверяетсяСразуИПотомРедко()
+	public void questIsCheckedAtOnceAndThenRarely()
 	{
 		ActiveTarget t = target("S1-03", "QUEST_COMPLETED");
 		t.getCompletionTrigger().setQuestName("Cook's Assistant");
 		manager.setTarget(t);
 
 		manager.onGameTick();
-		assertEquals("при взводе квест проверяется сразу", 1, questChecks);
+		assertEquals("when armed the quest is checked at once", 1, questChecks);
 		for (int i = 0; i < AutoCompletionManager.QUEST_POLL_TICKS - 2; i++)
 		{
 			manager.onGameTick();
 		}
-		assertEquals("без изменений переменных — не каждый тик", 1, questChecks);
+		assertEquals("without variable changes it is not checked every tick", 1, questChecks);
 
 		questFinished = true;
 		manager.onVarbitChanged(123, 1);
@@ -107,11 +107,11 @@ public class AutoCompletionManagerTest
 
 		manager.onVarbitChanged(123, 2);
 		manager.onGameTick();
-		assertEquals("второй раз не шлём", 1, completed.size());
+		assertEquals("we do not send it twice", 1, completed.size());
 	}
 
 	@Test
-	public void квестВыполненДоПоказаВИгре()
+	public void questCompletedBeforeTheStepIsShownInTheGame()
 	{
 		questFinished = true;
 		ActiveTarget t = target("S1-03", "QUEST_COMPLETED");
@@ -122,7 +122,7 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
-	public void неизвестныйКвестВыключаетАвтоотметку()
+	public void unknownQuestTurnsAutoTickOff()
 	{
 		ActiveTarget t = target("S1-99", "QUEST_COMPLETED");
 		t.getCompletionTrigger().setQuestName("No Such Quest");
@@ -138,7 +138,7 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
-	public void сообщениеОНовомУровнеСТегамиЦвета()
+	public void newLevelMessageWithColourTags()
 	{
 		ActiveTarget t = target("S2-04", "CHAT_MESSAGE");
 		t.getCompletionTrigger().setChatPattern("^Congratulations, you've just advanced your Magic level\\. You are now level (2[5-9]|[3-9]\\d)\\.");
@@ -153,7 +153,7 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
-	public void varbitТолькоТочноеЗначение()
+	public void varbitOnlyTheExactValue()
 	{
 		ActiveTarget t = target("S9-99", "VARBIT_CHANGED");
 		t.getCompletionTrigger().setVarbitId(1234);
@@ -167,7 +167,7 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
-	public void новаяЦельВзводитЗаново()
+	public void aNewTargetArmsAgain()
 	{
 		ActiveTarget t = target("S2-04", "CHAT_MESSAGE");
 		t.getCompletionTrigger().setChatPattern("level 25");
@@ -185,19 +185,19 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
-	public void уровниВсеСразуИТолькоНастоящие()
+	public void levelsAllAtOnceAndOnlyRealOnes()
 	{
 		ActiveTarget t = target("S2-13", "SKILL_LEVEL");
 		t.getCompletionTrigger().setLevels(List.of(level("fishing", 30), level("cooking", 30)));
 		manager.setTarget(t);
 		manager.onGameTick();
-		assertTrue("уровни ещё неизвестны — не в игре", completed.isEmpty());
+		assertTrue("levels are not known yet - not in the game", completed.isEmpty());
 
 		levels.put("fishing", 31);
 		levels.put("cooking", 29);
 		manager.onStateChanged();
 		manager.onGameTick();
-		assertTrue("готовка 29 — рано", completed.isEmpty());
+		assertTrue("Cooking 29 is too early", completed.isEmpty());
 
 		levels.put("cooking", 30);
 		manager.onStateChanged();
@@ -205,11 +205,11 @@ public class AutoCompletionManagerTest
 		assertEquals(List.of("S2-13"), completed);
 		manager.onStateChanged();
 		manager.onGameTick();
-		assertEquals("второй раз не шлём", 1, completed.size());
+		assertEquals("we do not send it twice", 1, completed.size());
 	}
 
 	@Test
-	public void уровниУжеЕстьКПоказуШага()
+	public void levelsAreAlreadyThereWhenTheStepIsShown()
 	{
 		levels.put("magic", 40);
 		ActiveTarget t = target("S2-04", "SKILL_LEVEL");
@@ -220,13 +220,13 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
-	public void безИзмененийСостояниеПроверяетсяРедко()
+	public void withoutChangesTheStateIsCheckedRarely()
 	{
 		ActiveTarget t = target("S2-04", "SKILL_LEVEL");
 		t.getCompletionTrigger().setLevels(List.of(level("magic", 25)));
 		manager.setTarget(t);
 		manager.onGameTick();
-		// Уровень поменялся без события (так не бывает, но проверка всё равно дойдёт) — не позже чем через QUEST_POLL_TICKS.
+		// The level changed without an event (that does not happen, but the check will still get there) - no later than QUEST_POLL_TICKS.
 		levels.put("magic", 25);
 		for (int i = 0; i < AutoCompletionManager.QUEST_POLL_TICKS - 2; i++)
 		{
@@ -238,9 +238,9 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
-	public void уровниИПредметыВместе()
+	public void levelsAndItemsTogether()
 	{
-		// S1-11: рыбалка 20, готовка 15 и 50 креветок или анчоусов — вместе.
+		// S1-11: Fishing 20, Cooking 15 and 50 shrimps or anchovies - together.
 		ActiveTarget t = target("S1-11", "SKILL_LEVEL");
 		t.getCompletionTrigger().setLevels(List.of(level("fishing", 20), level("cooking", 15)));
 		t.getCompletionTrigger().setItems(List.of(item(null, 50, "Shrimps", "Anchovies")));
@@ -250,17 +250,17 @@ public class AutoCompletionManagerTest
 		byName.put("Shrimps", 30);
 		manager.onStateChanged();
 		manager.onGameTick();
-		assertTrue("30 креветок — мало", completed.isEmpty());
+		assertTrue("30 shrimps are too few", completed.isEmpty());
 		byName.put("Anchovies", 20);
 		manager.onStateChanged();
 		manager.onGameTick();
-		assertEquals("креветки и анчоусы считаются вместе", List.of("S1-11"), completed);
+		assertEquals("shrimps and anchovies are counted together", List.of("S1-11"), completed);
 	}
 
 	@Test
-	public void предметПоIdНеПутаетсяСТезками()
+	public void itemByIdIsNotConfusedWithNamesakes()
 	{
-		// Три куска карты Dragon Slayer I называются одинаково «Map part»: нужен именно кусок Melzar (1535).
+		// The three Dragon Slayer I map parts are all called "Map part": the Melzar piece (1535) is the one needed.
 		ActiveTarget t = target("S5-03", "ITEM_OWNED");
 		t.getCompletionTrigger().setItems(List.of(item(1535, 1, "Map part")));
 		manager.setTarget(t);
@@ -268,7 +268,7 @@ public class AutoCompletionManagerTest
 		byId.put(1537, 1);
 		manager.onStateChanged();
 		manager.onGameTick();
-		assertTrue("чужой кусок карты не засчитывается", completed.isEmpty());
+		assertTrue("someone else's map piece does not count", completed.isEmpty());
 		byId.put(1535, 1);
 		manager.onStateChanged();
 		manager.onGameTick();
@@ -276,7 +276,7 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
-	public void квестИПредметВдобавок()
+	public void questAndAnItemOnTop()
 	{
 		ActiveTarget t = target("S9-04", "QUEST_COMPLETED");
 		t.getCompletionTrigger().setQuestName("Monkey Madness I");
@@ -284,7 +284,7 @@ public class AutoCompletionManagerTest
 		manager.setTarget(t);
 		questFinished = true;
 		manager.onGameTick();
-		assertTrue("квест есть, ятагана ещё нет", completed.isEmpty());
+		assertTrue("the quest is done, the scimitar is not yet", completed.isEmpty());
 		byName.put("Dragon scimitar", 1);
 		manager.onStateChanged();
 		manager.onGameTick();
@@ -292,16 +292,16 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
-	public void пустыеУсловияНеВзводят()
+	public void emptyConditionsDoNotArm()
 	{
 		manager.setTarget(target("S2-13", "SKILL_LEVEL"));
-		assertFalse("SKILL_LEVEL без уровней", manager.isArmed());
+		assertFalse("SKILL_LEVEL without levels", manager.isArmed());
 		manager.setTarget(target("S5-02", "ITEM_OWNED"));
-		assertFalse("ITEM_OWNED без предметов", manager.isArmed());
+		assertFalse("ITEM_OWNED without items", manager.isArmed());
 	}
 
 	@Test
-	public void битыйШаблонНеВзводит()
+	public void aBrokenTemplateDoesNotArm()
 	{
 		ActiveTarget t = target("S2-04", "CHAT_MESSAGE");
 		t.getCompletionTrigger().setChatPattern("([");
@@ -309,6 +309,6 @@ public class AutoCompletionManagerTest
 		assertFalse(manager.isArmed());
 		ActiveTarget v = target("S2-04", "VARBIT_CHANGED");
 		manager.setTarget(v);
-		assertFalse("varbit без номера и значения не взводится", manager.isArmed());
+		assertFalse("varbit without a number and value does not arm", manager.isArmed());
 	}
 }

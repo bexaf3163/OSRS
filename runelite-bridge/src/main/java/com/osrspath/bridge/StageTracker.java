@@ -8,73 +8,73 @@ import java.util.Set;
 import java.util.function.LongSupplier;
 
 /**
- * Где игрок на этапе квеста: текущий шаг списка. Курсор считается только по тому, что видно в игре, — вперёд его двигают
- * не клики, а факты, иначе по списку легко «прощёлкать» мимо шага и не понять, где ты (так было в The Knight's Sword:
- * руду добыли, шаг не засчитался, «сделано» нажали мимо сдачи руды Thurgo — и список показывал «Отнеси меч Squire» с
- * рудой в сумке). Факты:
+ * Where the player is within a quest stage: the current step of the list. The cursor is counted only from what is visible in the game; it is moved
+ * by facts, not by clicks, otherwise it is easy to click past a step and lose track of where you are (that happened in The Knight's Sword:
+ * the ore was mined, the step was not counted, "done" was clicked past handing the ore to Thurgo, and the list showed "Bring the sword to the Squire" with
+ * the ore still in the bag). The facts:
  *
- *  — положение: игрок дошёл до одного из ближайших следующих шагов с клеткой (StepGuide.advance);
- *  — шаг с has («накопай X», «купи X», «получишь X») сделан, когда X в сумке; шаги без условий перед ним — тоже;
- *  — шаг с need («верни X NPC») сделан, когда X, что был в сумке, ушёл рядом с точкой шага (отдан). Пока X в сумке, дальше
- *    этого шага курсор не уйдёт, — вернётся и скажет почему;
- *  — этап сменила игра (переменная квеста) — отсчёт заново.
- * Вперёд по клику можно только там, где игра сама ничего не покажет ({@link #needsManualStep}: шаги подряд на одном
- * месте — «опусти рычаг A», «опусти рычаг B», — их по положению и предметам не различить). Остальные шаги пропустить нельзя:
- * курсор ведут факты. «Назад» — посмотреть предыдущий шаг: курсор держится {@link #PEEK_MS}, потом автоматика снова ведёт
- * по фактам; «к текущему» возвращает сразу.
+ *  - position: the player reached one of the nearest next steps that has a tile (StepGuide.advance);
+ *  - a step with has ("mine X", "buy X", "you receive X") is done when X is in the bag; steps without conditions before it are done too;
+ *  - a step with need ("give X to an NPC") is done when X, which was in the bag, disappeared near the step's point (handed in). While X is in the bag,
+ *    the cursor does not go past this step; it comes back and says why;
+ *  - the game changed the stage (quest variable): count again from the start.
+ * Moving forward by click is only possible where the game itself shows nothing ({@link #needsManualStep}: steps in a row at the same
+ * place, such as "pull lever A", "pull lever B", which position and items cannot tell apart). Other steps cannot be skipped:
+ * the facts lead the cursor. "Back" views the previous step: the cursor holds for {@link #PEEK_MS}, then the automation follows
+ * the facts again; "to current" returns at once.
  *
- * Чистая логика — только данные и состояние; плагин зовёт {@link #update} каждый тик, клики — {@link #back}, {@link #resume}
- * и {@link #forward}.
+ * Pure logic: only data and state; the plugin calls {@link #update} every tick, clicks call {@link #back}, {@link #resume}
+ * and {@link #forward}.
  */
 final class StageTracker
 {
-	/** Дальше этого от точки шага исчезновение предмета не считается сдачей: потерял, выбросил, положил в банк. */
+	/** Beyond this distance from the step's point a vanished item does not count as handed in: lost, dropped, put in the bank. */
 	static final int DELIVER_RADIUS = 12;
-	/** Сколько держится просмотр прежнего шага, мс: хватает перечитать и вернуться к делу, не успев запутаться. */
+	/** How long viewing a previous step lasts, ms: enough to reread and get back to work without getting confused. */
 	static final long PEEK_MS = 45_000;
-	/** Побывав у точки шага, отошёл дальше этого — шаг сделан (путь в доме петляет: прямо к следующей точке игрок не идёт). */
+	/** After visiting the step's point and moving farther than this, the step is done (the path inside a house winds: the player does not walk straight to the next point). */
 	static final int LEAVE_RADIUS = 6;
 	/**
-	 * Игрок «был у шага», если подходил к его точке ближе этого. Столько же, сколько «дошёл» (STEP_RADIUS): при восьми клетках игрок,
-	 * пробегая в семи от Zembo и в восьми от Luthas, «побывал» у обоих, и курсор перепрыгивал «купи ром» и «нарви бананы» (S2-09, живая игра).
+	 * The player "was at the step" if they came closer to its point than this. The same as "arrived" (STEP_RADIUS): with eight tiles the player,
+	 * running past Zembo at seven and Luthas at eight, "visited" both and the cursor jumped over "buy rum" and "pick bananas" (S2-09, live game).
 	 */
 	static final int VISIT_RADIUS = StepGuide.STEP_RADIUS;
 	/**
-	 * Шаг-переход: дойти — значит сделать; в отличие от «положи», «наполни», «убей», где пройти мимо — не значит сделать. Перед глаголом
-	 * бывает название места («Seaman на пристани: плыви на Musa Point») и короткая подготовка («Подготовься к бою и войди в…»,
-	 * «С Dramen staff в руке войди в…») — это тот же переход, иначе после лодки курсор остаётся на «плыви» и стрелка ведёт назад.
+	 * A transition step: arriving means doing it, unlike "put", "fill", "kill", where walking past does not mean doing it. Before the verb there may be
+	 * a place name ("Seaman on the docks: sail to Musa Point") and a short preparation ("Prepare for combat and enter...",
+	 * "With the Dramen staff in hand, enter...") - it is the same transition, otherwise after the boat the cursor stays on "sail" and the arrow points back.
 	 */
 	private static final java.util.regex.Pattern MOVE = java.util.regex.Pattern.compile(
-		"^(?:[^:]{1,60}:\\s*)?(?:(?:Подготовься к бою и|С [^,:]{1,40} в руке)\\s+)?"
-			+ "(?:Иди|Идти|Войди|Зайди|Спустись|Поднимись|Поднимайся|Спускайся|Плыви|Проплыви|Отплыви|Переплыви|Поплыви|Отправляйся|Направляйся|Вернись|Доберись|"
-			+ "Пройди|Выйди|Выберись|Телепортируйся|Беги|Залезь|Перелезь|Перейди|Поезжай|Лети|Улети|Сядь|Обойди|Следуй|Прыгни|Пройдись)(?![\\p{L}])",
+		"^(?:[^:]{1,60}:\\s*)?(?:(?:Prepare for combat and|With [^,:]{1,40} in hand,?)\\s+)?"
+			+ "(?:Go|Walk|Run|Head|Travel|Enter|Exit|Leave|Climb|Descend|Ascend|Sail|Swim|Row|Return|Teleport|Fly|Jump|Cross|Follow|Board|Get out|Get to)"
+			+ "(?![\\p{L}])",
 		java.util.regex.Pattern.CASE_INSENSITIVE | java.util.regex.Pattern.UNICODE_CASE);
 
 	private final LongSupplier clock;
 	private String key;
 	private int cursor;
-	/** Наибольшее число предмета need, замеченное в сумке с начала этапа, — по ключу nameKey. */
+	/** The largest count of a need item seen in the bag since the stage began, by nameKey. */
 	private final Map<String, Integer> peak = new HashMap<>();
-	/** Шаги с need, которые считаются сданными: предмет ушёл у точки шага. */
+	/** Steps with need that count as handed in: the item left near the step's point. */
 	private final Set<Integer> delivered = new HashSet<>();
-	/** До какого момента держится просмотр прежнего шага (мс по часам); 0 — не просматриваем. */
+	/** Until when viewing a previous step lasts (ms by the clock); 0 means not viewing. */
 	private long peekUntil;
 	private String warning;
-	/** Игрок побывал у точки текущего шага (visitedAt — у какого именно): уйдя к следующей точке, он считается сделавшим этот шаг. */
+	/** The player visited the current step's point (visitedAt is which one exactly): after leaving for the next point they count as having done this step. */
 	private boolean visited;
-	/** Шаги, к точке которых игрок подходил в этом этапе (в пределах {@link #VISIT_RADIUS}). */
+	/** Steps whose point the player approached in this stage (within {@link #VISIT_RADIUS}). */
 	private final Set<Integer> seen = new HashSet<>();
 	private int visitedAt = -1;
-	/** Почему курсор сдвинулся в последний раз: «POSITION», «ITEM», «DELIVERED», «CLAMP», «BACK», «MANUAL», «RESET» и подробности. */
+	/** Why the cursor moved last: "POSITION", "ITEM", "DELIVERED", "CLAMP", "BACK", "MANUAL", "RESET" and details. */
 	private String reason = "";
-	/** Строка, раньше которой машина Quest Helper курсор не возвращает: игрок сам нажал «сделано» и отвечает за это. -1 — не нажимал. */
+	/** The line before which the Quest Helper machine does not return the cursor: the player pressed "done" themselves and is responsible for it. -1 means not pressed. */
 	private int floor = -1;
-	/** Курсор сейчас поставила машина Quest Helper (у неё есть доказательство), а не место и предметы. */
+	/** The cursor is currently set by the Quest Helper machine (it has evidence), not by position and items. */
 	private boolean qhStrong;
 
 	/**
-	 * Выбор машины состояний Quest Helper для этого тика: строка этапа и почему. Строка есть, только когда машина решила по выполненному
-	 * условию (а не «по умолчанию») и её шаг есть среди строк этапа.
+	 * The Quest Helper state machine's pick for this tick: the stage line and why. There is a line only when the machine decided by a fulfilled
+	 * condition (not "by default") and its step is among the stage's lines.
 	 */
 	@lombok.Value
 	static class QhPick
@@ -93,7 +93,7 @@ final class StageTracker
 		this.clock = clock;
 	}
 
-	/** Ключ «шаг#этап»: смена — этап другой. null — этапов нет. */
+	/** Key "step#stage": a change means a different stage. null means no stages. */
 	String key()
 	{
 		return key;
@@ -104,26 +104,26 @@ final class StageTracker
 		return cursor;
 	}
 
-	/** Что не так с курсором: «Blurite ore ещё в сумке — сначала: Верни Thurgo…»; null — всё в порядке. */
+	/** What is wrong with the cursor: "Blurite ore is still in your bag - first: Give Thurgo..."; null means all is well. */
 	String warning()
 	{
 		return warning;
 	}
 
-	/** Причина последнего сдвига курсора — для журнала отладки: «POSITION: дошёл до шага 3», «DELIVERED: Blurite ore». */
-	/** Предмет текущей строки уже сдан — для плашки разработчика. */
+	/** Why the cursor moved last, for the debug log: "POSITION: reached step 3", "DELIVERED: Blurite ore". */
+	/** The current line's item has been handed in, for the developer badge. */
 	boolean delivered()
 	{
 		return delivered.contains(cursor);
 	}
 
-	/** Причина последнего сдвига курсора — для журнала отладки: «POSITION: дошёл до шага 3», «DELIVERED: Blurite ore». */
+	/** Why the cursor moved last, for the debug log: "POSITION: reached step 3", "DELIVERED: Blurite ore". */
 	String reason()
 	{
 		return reason;
 	}
 
-	/** Игрок смотрит прежний шаг (кнопка «назад»): автоматика пока не двигает курсор. */
+	/** The player is viewing a previous step (the "back" button): the automation does not move the cursor for now. */
 	boolean peeking()
 	{
 		return peekUntil > clock.getAsLong();
@@ -146,8 +146,8 @@ final class StageTracker
 	}
 
 	/**
-	 * Пересчитать курсор. stepId и stage — какой шаг и какой этап показан; lines — его шаги; x, y, plane — игрок;
-	 * bag — сумка, надетое и банкноты. Возвращает текущий шаг (с нуля).
+	 * Recalculate the cursor. stepId and stage are which step and which stage are shown; lines are its steps; x, y, plane are the player;
+	 * bag is the bag, worn items and notes. Returns the current step (zero-based).
 	 */
 	int update(String stepId, int stage, List<ActiveTarget.StageLine> lines, int x, int y, int plane, ItemCounts bag)
 	{
@@ -155,8 +155,8 @@ final class StageTracker
 	}
 
 	/**
-	 * То же, но с выбором машины Quest Helper. Если у неё есть доказательство (pick не null) — курсор ставит она, как в Quest Helper:
-	 * место и предметы продолжают считаться, но только когда доказательства нет. Просмотр «назад» и нажатое «сделано» сильнее.
+	 * The same, but with a Quest Helper machine pick. If it has evidence (pick is not null), it sets the cursor, as in Quest Helper:
+	 * position and items keep counting, but only when there is no evidence. Viewing "back" and a pressed "done" are stronger.
 	 */
 	int update(String stepId, int stage, List<ActiveTarget.StageLine> lines, int x, int y, int plane, ItemCounts bag, QhPick pick)
 	{
@@ -181,8 +181,8 @@ final class StageTracker
 	{
 		String next = stepId + "#" + stage;
 		boolean fresh = !next.equals(key);
-		// Этап сменился у нас на глазах (игрок поговорил с NPC, игра перевела квест дальше): ни один шаг нового этапа ещё не
-		// сделан. Этап открыт впервые (вход в игру, новый шаг): игрок мог пройти часть шагов — ищем по всему списку.
+		// The stage changed before our eyes (the player talked to an NPC and the game moved the quest on): no step of the new stage is
+		// done yet. The stage is opened for the first time (login, new step): the player may have done some steps, so search the whole list.
 		boolean changed = fresh && key != null && key.startsWith(stepId + "#");
 		if (fresh)
 		{
@@ -204,7 +204,7 @@ final class StageTracker
 		observe(lines, x, y, plane, bag);
 		if (peeking())
 		{
-			// Игрок смотрит прежний шаг — не трогаем, только следим за сдачей предметов.
+			// The player is viewing a previous step: do not touch, only watch for items being handed in.
 			return cursor;
 		}
 		int window = fresh ? StepGuide.freshWindow(changed, lines.size()) : StepGuide.STEP_WINDOW;
@@ -221,9 +221,9 @@ final class StageTracker
 		boolean gated = false;
 		if (!fresh && cursor > c1)
 		{
-			// По положению нельзя перепрыгнуть шаг, который сделать надо, а увидеть нечем: игрок, добежав до следующей точки, не
-			// отметил «положи ром в ящик» и «наполни ящик» — они пропускались молча (S2-09). Курсор встаёт на первом таком шаге:
-			// на «сделано» (игра его не покажет) или с возвратом к его месту (там ещё не были).
+			// By position one cannot jump over a step that must be done but cannot be seen: the player, having run to the next point, did not
+			// tick "put the rum in the crate" and "fill the crate", and they were skipped silently (S2-09). The cursor stops on the first such step:
+			// on "done" (the game will not show it) or going back to its place (not visited yet).
 			for (int g = c1; g < cursor; g++)
 			{
 				boolean gate = needsManualStep(lines, g);
@@ -234,23 +234,23 @@ final class StageTracker
 					ActiveTarget.StageLine stop = lines.get(g);
 					if (bag != null && stop.hasNeed() && !delivered.contains(g) && bag.count(null, stop.getNeed()) > 0)
 					{
-						warning = stop.getNeed() + " ещё в сумке — сначала: " + stop.shown();
+						warning = stop.getNeed() + " is still in your bag - first: " + stop.shown();
 					}
-					reason = (gate ? "GATE: шаг " + (g + 1) + " «" + lines.get(g).shown() + "» игра сама не увидит — отметь «сделано»"
-						: "BLOCK: шаг " + (g + 1) + " «" + lines.get(g).shown() + "» не сделан — вернись к его месту");
+					reason = (gate ? "GATE: step " + (g + 1) + " '" + lines.get(g).shown() + "' cannot be seen by the game - mark it 'done'"
+						: "BLOCK: step " + (g + 1) + " '" + lines.get(g).shown() + "' is not done - go back to its place");
 					break;
 				}
 			}
 		}
 		if (cursor != c1 && !gated)
 		{
-			reason = "POSITION: дошёл до шага " + (cursor + 1) + " «" + lines.get(cursor).shown() + "»";
+			reason = "POSITION: reached step " + (cursor + 1) + " '" + lines.get(cursor).shown() + "'";
 		}
 		int c2 = cursor;
 		cursor = skip(lines, cursor, bag);
 		if (cursor != c2)
 		{
-			reason = "ITEM: шаги " + (c2 + 1) + "–" + cursor + " сделаны по предметам, дальше «" + lines.get(cursor).shown() + "»";
+			reason = "ITEM: steps " + (c2 + 1) + "-" + cursor + " done by items, next is '" + lines.get(cursor).shown() + "'";
 		}
 		leave(lines, x, y, plane);
 		int c3 = cursor;
@@ -267,8 +267,8 @@ final class StageTracker
 	}
 
 	/**
-	 * Следим за предметами шагов «верни X»: сколько X побывало в сумке и не ушло ли оно у точки шага — тогда шаг сдан,
-	 * и всё, что до него, тоже (сдать, не сделав предыдущего, нельзя).
+	 * Watch the items of "give X" steps: how many X were in the bag and whether it left near the step's point; then the step is handed in,
+	 * and so is everything before it (you cannot hand in without having done the previous one).
 	 */
 	private void observe(List<ActiveTarget.StageLine> lines, int x, int y, int plane, ItemCounts bag)
 	{
@@ -301,7 +301,7 @@ final class StageTracker
 					cursor = Math.max(cursor, Math.min(i + 1, last));
 					if (cursor != before)
 					{
-						reason = "DELIVERED: " + l.getNeed() + " ушёл у шага " + (i + 1) + " «" + l.shown() + "»";
+						reason = "DELIVERED: " + l.getNeed() + " left at step " + (i + 1) + " '" + l.shown() + "'";
 					}
 				}
 			}
@@ -313,7 +313,7 @@ final class StageTracker
 		return l.getPlane() == plane && Math.abs(l.getX() - x) <= DELIVER_RADIUS && Math.abs(l.getY() - y) <= DELIVER_RADIUS;
 	}
 
-	/** Шаг сделан сам по себе: сдан (need) или нужный предмет сейчас в сумке (has). */
+	/** A step is done by itself: handed in (need) or the needed item is in the bag now (has). */
 	private boolean ownSatisfied(List<ActiveTarget.StageLine> lines, int i, ItemCounts bag)
 	{
 		ActiveTarget.StageLine l = lines.get(i);
@@ -321,8 +321,8 @@ final class StageTracker
 	}
 
 	/**
-	 * Шаг сделан: сам по себе или потому, что предмет, который он добывал (has), уже ушёл дальше — следующий шаг сдал его
-	 * (need того же предмета). Так «купи пиво» остаётся сделанным, когда пиво уже отдано Dr. Harlow и в сумке вместо него кол.
+	 * A step is done: by itself, or because the item it obtained (has) has already moved on - the next step handed it in
+	 * (need of the same item). So "buy beer" stays done when the beer has been given to Dr. Harlow and the stake is in the bag instead.
 	 */
 	private boolean satisfied(List<ActiveTarget.StageLine> lines, int i, ItemCounts bag)
 	{
@@ -348,10 +348,10 @@ final class StageTracker
 	}
 
 	/**
-	 * Шаги, которые по предметам уже сделаны, — вперёд от курсора. Кроме самого шага ещё и те, что перед ним без условий
-	 * (спуститься в пещеру, дойти): есть руда — значит, в пещере уже были. Через шаги с has/need не перепрыгиваем:
-	 * предметы можно собирать в любом порядке. Последний шаг этапа не пропускается — этап кончится, когда игра сменит
-	 * значение переменной.
+	 * Steps that are already done by items, forward from the cursor. Besides the step itself, also those before it without conditions
+	 * (go down into the cave, walk): there is ore, so the cave has been visited. We do not jump over steps with has/need:
+	 * items can be collected in any order. The last step of a stage is not skipped: the stage ends when the game changes the
+	 * variable's value.
 	 */
 	private int skip(List<ActiveTarget.StageLine> lines, int from, ItemCounts bag)
 	{
@@ -387,7 +387,7 @@ final class StageTracker
 		return at;
 	}
 
-	/** Первый несданный шаг «верни X», пока X в сумке: дальше него курсор не уходит. -1 — такого нет. */
+	/** The first not-yet-handed-in "give X" step while X is in the bag: the cursor does not go past it. -1 means there is none. */
 	private int blocker(List<ActiveTarget.StageLine> lines, int upTo, ItemCounts bag)
 	{
 		if (bag == null)
@@ -410,14 +410,14 @@ final class StageTracker
 		int b = blocker(lines, cursor - 1, bag);
 		if (b >= 0 && b < cursor)
 		{
-			warning = lines.get(b).getNeed() + " ещё в сумке — сначала: " + lines.get(b).shown();
+			warning = lines.get(b).getNeed() + " is still in your bag - first: " + lines.get(b).shown();
 			cursor = b;
 		}
 	}
 
 	/**
-	 * Клик «назад»: посмотреть шаг раньше. Автоматика не уносит курсор вперёд {@link #PEEK_MS}, потом вернёт его по фактам;
-	 * ещё клик — ещё шаг назад (и ещё столько же времени).
+	 * Click "back": view an earlier step. The automation does not carry the cursor forward for {@link #PEEK_MS}, then returns it by the facts;
+	 * another click goes one more step back (and for as long again).
 	 */
 	void back()
 	{
@@ -428,16 +428,16 @@ final class StageTracker
 		cursor--;
 		peekUntil = clock.getAsLong() + PEEK_MS;
 		warning = null;
-		reason = "BACK: просмотр шага " + (cursor + 1);
+		reason = "BACK: viewing step " + (cursor + 1);
 	}
 
-	/** Шаг-переход («Войди в…», «Спустись…», «Вернись в…»): дойти до места — значит сделать. */
+	/** A transition step ("Enter...", "Go down...", "Return to..."): arriving at the place means doing it. */
 	static boolean isMove(ActiveTarget.StageLine l)
 	{
 		return !l.hasHas() && !l.hasNeed() && MOVE.matcher(l.shown().trim()).find();
 	}
 
-	/** Можно ли пройти этот шаг по положению: это переход, он подтверждён предметом или игрок был у его точки. */
+	/** Whether this step can be passed by position: it is a transition, confirmed by an item, or the player was at its point. */
 	private boolean passable(List<ActiveTarget.StageLine> lines, int j, ItemCounts bag)
 	{
 		ActiveTarget.StageLine l = lines.get(j);
@@ -453,10 +453,10 @@ final class StageTracker
 	}
 
 	/**
-	 * Побывал у точки шага и ушёл от неё (дальше {@link #LEAVE_RADIUS} клеток или ближе к следующей) — шаг сделан. Без этого курсор стоял на «войди в дом», пока игрок не
-	 * подойдёт к следующей точке на четыре клетки: внутри дома стрелка оставалась у двери, куда он уже дошёл (S2-08, подвал
-	 * Draynor Manor). Только для шагов, где игре больше нечем подтвердить дело: есть клетка у этого и у следующего шага, на
-	 * них нет условий has/need, точки разные и на одном этаже. Постоять у NPC и не уйти — шаг остаётся.
+	 * Visited the step's point and moved away from it (farther than {@link #LEAVE_RADIUS} tiles or closer to the next one): the step is done. Without this the cursor stood on "enter the house" until the player
+	 * got within four tiles of the next point: inside the house the arrow stayed at the door they had already reached (S2-08, the basement of
+	 * Draynor Manor). Only for steps where the game has no other way to confirm the deed: this and the next step have a tile,
+	 * there are no has/need conditions on them, the points differ and are on the same plane. Standing by an NPC without leaving keeps the step.
 	 */
 	private void leave(List<ActiveTarget.StageLine> lines, int x, int y, int plane)
 	{
@@ -468,7 +468,7 @@ final class StageTracker
 		ActiveTarget.StageLine cur = lines.get(cursor);
 		if (!isMove(cur))
 		{
-			// Отойти от «наполни ящик» — не значит наполнить: только переходы закрываются уходом.
+			// Walking away from "fill the crate" does not mean filling it: only transitions are closed by leaving.
 			return;
 		}
 		if (cur.hasPoint() && cur.getPlane() == plane && Math.abs(cur.getX() - x) <= StepGuide.STEP_RADIUS && Math.abs(cur.getY() - y) <= StepGuide.STEP_RADIUS)
@@ -480,7 +480,7 @@ final class StageTracker
 			return;
 		}
 		ActiveTarget.StageLine nx = lines.get(cursor + 1);
-		// У следующего шага могут быть свои условия (предмет в сумке): это не мешает закончить переход — он закончен, когда ушёл.
+		// The next step may have its own conditions (an item in the bag): that does not prevent finishing the transition - it is finished when the player left.
 		if (!cur.hasPoint() || !nx.hasPoint() || cur.hasNeed() || cur.hasHas() || cur.getPlane() != plane || nx.getPlane() != plane || sameSpot(cur, nx))
 		{
 			return;
@@ -490,13 +490,13 @@ final class StageTracker
 		if (toNext < toCur || toCur > LEAVE_RADIUS)
 		{
 			cursor++;
-			reason = "LEFT: был у шага " + cursor + " «" + cur.shown() + "» и пошёл к следующему «" + nx.shown() + "»";
+			reason = "LEFT: was at step " + cursor + " '" + cur.shown() + "' and went on to the next '" + nx.shown() + "'";
 		}
 	}
 
 	/**
-	 * Выйдет ли игрок из шага сам: следующий шаг с клеткой не на том же месте (дошёл — курсор перешёл) или с предметом (добыл
-	 * или сдал); последний шаг этапа сменит игра. Иначе шаг только вручную: подряд на одном месте или без места — различить нечем.
+	 * Whether the player leaves the step by themselves: the next step has a tile not at the same place (arrived: the cursor moved on) or an item (obtained
+	 * or handed in); the last step of a stage is changed by the game. Otherwise the step is manual only: in a row at one place or without a place, nothing tells them apart.
 	 */
 	static boolean needsManualStep(List<ActiveTarget.StageLine> lines, int i)
 	{
@@ -504,14 +504,14 @@ final class StageTracker
 		{
 			return false;
 		}
-		// Решает именно следующий шаг: пока он не виден по игре, его текст не покажется (две рычага подряд — второй спрятан).
+		// It is the next step that decides: while it is not visible in the game, its text will not show (two levers in a row: the second is hidden).
 		ActiveTarget.StageLine cur = lines.get(i);
 		ActiveTarget.StageLine nx = lines.get(i + 1);
 		if (nx.hasHas() || nx.hasNeed())
 		{
 			return false;
 		}
-		// Шаг без клетки и без предмета ничем не подтвердить: «Нарви бананов», «Используй X на Y» — только отметкой.
+		// A step with no tile and no item cannot be confirmed by anything: "Pick bananas", "Use X on Y" - only by a tick.
 		if (!cur.hasPoint() && !cur.hasHas() && !cur.hasNeed())
 		{
 			return true;
@@ -525,21 +525,21 @@ final class StageTracker
 			&& Math.abs(a.getY() - b.getY()) <= StepGuide.STEP_RADIUS;
 	}
 
-	/** Можно ли нажать «сделано» на текущем шаге: он из тех, что игра сама не увидит. */
+	/** Whether "done" can be pressed on the current step: it is one the game will not see by itself. */
 	boolean canStepForward(List<ActiveTarget.StageLine> lines)
 	{
-		// Кнопка остаётся и тогда, когда шаг ведёт машина Quest Helper: если сообщение игры не дошло или переписано, игрок не застрянет.
-		// Нажатая «сделано» сильнее машины (floor): она не вернёт курсор назад.
+		// The button also stays when the step is led by the Quest Helper machine: if the game message did not arrive or was reworded, the player is not stuck.
+		// A pressed "done" is stronger than the machine (floor): it will not return the cursor back.
 		return !peeking() && needsManualStep(lines, cursor);
 	}
 
-	/** Курсор поставила машина Quest Helper (а не место и предметы). */
+	/** The cursor was set by the Quest Helper machine (not by position and items). */
 	boolean qhStrong()
 	{
 		return qhStrong;
 	}
 
-	/** Клик «сделано» — только на шаге, который по игре не определить; на остальных не делает ничего. true — курсор сдвинут. */
+	/** Click "done": only on a step that cannot be determined by the game; it does nothing on the others. true means the cursor moved. */
 	boolean forward(List<ActiveTarget.StageLine> lines)
 	{
 		if (!canStepForward(lines))
@@ -549,11 +549,11 @@ final class StageTracker
 		cursor++;
 		floor = cursor;
 		warning = null;
-		reason = "MANUAL: «сделано» на шаге " + cursor + " (игра его сама не видит)";
+		reason = "MANUAL: 'done' on step " + cursor + " (the game cannot see it by itself)";
 		return true;
 	}
 
-	/** Клик «к текущему»: просмотр закончен, курсор снова считается по фактам — сразу, без ожидания. */
+	/** Click "to current": viewing is over, the cursor is counted by the facts again, at once, without waiting. */
 	void resume()
 	{
 		peekUntil = 0;

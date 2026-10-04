@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Игра для сценарных тестов машины Quest Helper: изменяемые факты — сумка, надетое, банк, место, сообщения, виджеты, переменные.
- * Сообщения вида «Luthas hands you 30 coins.» и диалоги «Luthas|If you could fill it up…» записаны так же, как их видит плагин.
+ * A game for the scenario tests of the Quest Helper machine: mutable facts - bag, worn, bank, place, messages, widgets, variables.
+ * Messages like "Luthas hands you 30 coins." and dialogues like "Luthas|If you could fill it up…" are recorded the way the plugin sees them.
  */
 final class QhFakeGame implements QhMachine.Facts
 {
@@ -60,7 +60,7 @@ final class QhFakeGame implements QhMachine.Facts
 		return this;
 	}
 
-	/** Окно дневника квеста: заголовок (119:5) и строки текста (119:6, первой идёт сам виджет). */
+	/** The quest journal window: the heading (119:5) and the text lines (119:6, the widget itself comes first). */
 	QhFakeGame journal(String title, String... lines)
 	{
 		widgets.put("119:5", Arrays.asList(title));

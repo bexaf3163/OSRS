@@ -1,5 +1,5 @@
-// Плагин RuneLite «OSRS Path Bridge»: мост между приложением «OSRS Путь» и игрой.
-// Сборка повторяет официальный шаблон github.com/runelite/example-plugin.
+// The RuneLite plugin "OSRS Path Bridge": a bridge between the "OSRS Path" app and the game.
+// The build follows the official template github.com/runelite/example-plugin.
 
 plugins {
 	id 'java'
@@ -16,13 +16,13 @@ repositories {
 	mavenCentral()
 }
 
-// Версия клиента, против которой проверен плагин (совпадает с установленным RuneLite).
-// Шаблон RuneLite пишет 'latest.release'; здесь версия закреплена, чтобы сборка не менялась сама.
+// The client version the plugin was verified against (matches the installed RuneLite).
+// The RuneLite template writes 'latest.release'; here the version is pinned so that the build does not change by itself.
 def runeLiteVersion = '1.12.39'
 def pluginMainClass = 'com.osrspath.bridge.OsrsPathBridgeTest'
 
 dependencies {
-	// Gson, Guice, OkHttp и API игры приходят вместе с клиентом — в плагин их не упаковываем.
+	// Gson, Guice, OkHttp and the game API come with the client: we do not pack them into the plugin.
 	compileOnly group: 'net.runelite', name: 'client', version: runeLiteVersion
 
 	compileOnly 'org.projectlombok:lombok:1.18.30'
@@ -38,34 +38,34 @@ version = '1.0.0'
 
 tasks.withType(JavaCompile).configureEach {
 	options.encoding = 'UTF-8'
-	// Собирается JDK 17; байткод — Java 11, как требует шаблон RuneLite и Plugin Hub.
-	// Клиент RuneLite работает на Java 17 и такой плагин загружает.
+	// Built with JDK 17; the bytecode is Java 11, as the RuneLite template and the Plugin Hub require.
+	// The RuneLite client runs on Java 17 and loads such a plugin.
 	options.release.set(11)
-	// Устаревшие API RuneLite (WidgetInfo и т. п.) не используем — компилятор скажет, если что-то проскочит.
+	// We do not use RuneLite's deprecated APIs (WidgetInfo and the like): the compiler will say if one slips through.
 	options.compilerArgs << '-Xlint:deprecation'
 }
 
-// Зоны опасности — одни данные с приложением: src/data/dangerZones.json кладётся в jar рядом с классами.
+// The danger zones are the same data as the app: src/data/dangerZones.json goes into the jar next to the classes.
 processResources {
 	from('../src/data/dangerZones.json') {
 		into 'com/osrspath/bridge'
 	}
-	// Машины состояний квестов (условия Quest Helper, по которым выбирается шаг этапа) — тоже одни данные с приложением.
+	// The quest state machines (the Quest Helper conditions by which the stage step is chosen) are also the same data as the app.
 	from('../src/data/questMachines.json') {
 		into 'com/osrspath/bridge'
 	}
 }
 
-// Тесты читают маршрут приложения, чтобы проверить названия квестов и шаблоны сообщений.
+// The tests read the app's route to check quest names and message patterns.
 test {
 	systemProperty 'osrsPath.steps', file('../src/data/steps.json').absolutePath
-	// Шрифты RuneLite (FontManager) при загрузке создают папку ~/.runelite/fonts — в тестах она своя,
-	// настоящая папка RuneLite игрока не трогается. Картинки рисуются без окна.
+	// RuneLite fonts (FontManager) create the ~/.runelite/fonts folder on loading: in tests it is a separate one,
+	// the player's real RuneLite folder is not touched. Pictures are drawn without a window.
 	systemProperty 'user.home', layout.buildDirectory.dir('test-home').get().asFile.absolutePath
 	systemProperty 'java.awt.headless', 'true'
 }
 
-// Плагин одним файлом: его кладёт в exe программа «OSRS Путь» и запускает с установленным RuneLite.
+// The plugin as a single file: the "OSRS Path" app puts it into the exe and launches it with the installed RuneLite.
 jar {
 	archiveFileName = 'osrs-path-bridge.jar'
 	manifest {
@@ -73,8 +73,8 @@ jar {
 	}
 }
 
-// Клиент RuneLite в режиме разработчика с этим плагином: ./gradlew run
-// -PruneliteHome=<папка> — отдельная папка настроек вместо ~/.runelite (RuneLite берёт её из user.home).
+// The RuneLite client in developer mode with this plugin: ./gradlew run
+// -PruneliteHome=<folder> is a separate settings folder instead of ~/.runelite (RuneLite takes it from user.home).
 tasks.register('run', JavaExec) {
 	classpath = sourceSets.test.runtimeClasspath
 	mainClass = pluginMainClass

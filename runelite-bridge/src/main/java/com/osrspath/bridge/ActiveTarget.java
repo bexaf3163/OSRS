@@ -11,13 +11,13 @@ import lombok.Data;
 import net.runelite.api.Skill;
 
 /**
- * Текущий шаг, присланный приложением: то же, что InGameTarget в src/types/index.ts, плюс код и название шага.
- * Поля заполняет Gson; наборы для быстрого сравнения строит {@link #prepare()}.
+ * The current step sent by the app: the same as InGameTarget in src/types/index.ts, plus the step's code and title.
+ * Gson fills the fields; the sets for fast comparison are built by {@link #prepare()}.
  */
 @Data
 public class ActiveTarget
 {
-	/** Ограничения на размер: запрос приходит по сети, пусть и локальной. */
+	/** Size limits: the request arrives over a network, even if a local one. */
 	static final int MAX_LIST = 64;
 	static final int MAX_TEXT = 200;
 
@@ -36,21 +36,21 @@ public class ActiveTarget
 	private List<String> dialogChoices;
 	private List<String> highlightItems;
 	private Trigger completionTrigger;
-	/** Текущая цель одной строкой — для микро-HUD. */
+	/** The current target in one line, for the micro HUD. */
 	private String goal;
-	/** Что должно быть в сумке перед выходом из банка (проверка вылета). */
+	/** What must be in the bag before leaving the bank (departure check). */
 	private List<ChecklistItem> checklist;
-	/** Путевые точки по порядку: калитка → мост → лестница → NPC. */
+	/** Waypoints in order: gate -> bridge -> ladder -> NPC. */
 	private List<WorldPointDto> pathWaypoints;
-	/** Ещё предметы, про которые приложению нужно знать, сколько их есть (условия быстрых вариантов). */
+	/** More items the app needs to know the count of (conditions of the quick variants). */
 	private List<String> watchItems;
-	/** Темп прокачки навыка шага: сколько действий до цели и сколько это займёт. */
+	/** The step skill's pacing: how many actions to the goal and how long that takes. */
 	private Pacing pacing;
-	/** Для боковой панели: что нужно на шаг, где взять и куда можно повести стрелку (с протокола 3). */
+	/** For the side panel: what the step needs, where to get it and where the arrow can be pointed (since protocol 3). */
 	private Guide guide;
-	/** Самый сильный обычный удар противников шага (по вики): HUD предупредит, когда здоровье ниже двух таких ударов. */
+	/** The strongest regular hit of the step's enemies (per the wiki): the HUD warns when health drops below two such hits. */
 	private Integer maxHit;
-	/** «Use X на Y»: предмет из сумки и то, на что его применяют. HUD напомнит действие, а цель подсветится. */
+	/** "Use X on Y": an item from the bag and what it is used on. The HUD reminds of the action and the target is highlighted. */
 	private List<UseOn> useOn;
 
 	private transient Set<String> npcNameSet = Collections.emptySet();
@@ -65,7 +65,7 @@ public class ActiveTarget
 	{
 		private String item;
 		private String target;
-		/** object, npc или item; пусто — object. */
+		/** object, npc or item; empty means object. */
 		private String kind;
 
 		boolean isNpc()
@@ -98,18 +98,18 @@ public class ActiveTarget
 		private String color;
 	}
 
-	/** Боковая панель «OSRS Путь»: предметы шага с подсказкой «где взять» и точки шага. */
+	/** The "OSRS Path" side panel: the step's items with a "where to get it" hint and the step's points. */
 	@Data
 	public static class Guide
 	{
-		/** «Где взять» бывает длиннее обычной подписи — целое предложение из маршрута. */
+		/** "Where to get it" can be longer than a usual label: a whole sentence from the route. */
 		static final int MAX_WHERE = 500;
 
 		private List<GuideItem> items;
 		private List<GuidePlace> places;
-		/** Быстрый путь шага по порядку: последний пункт показывается, когда всё собрано. */
+		/** The step's quick path in order: the last item is shown when everything is collected. */
 		private List<String> steps;
-		/** Этапы квеста по переменной игры: что делать и куда идти именно сейчас. null — шаг без этапов. */
+		/** Quest stages by a game variable: what to do and where to go right now. null means the step has no stages. */
 		private Stage stage;
 
 		String problem()
@@ -126,22 +126,22 @@ public class ActiveTarget
 			{
 				if (list != null && list.size() > MAX_LIST)
 				{
-					return "слишком длинный список";
+					return "list too long";
 				}
 			}
 			for (String s : nonNull(steps))
 			{
 				if (s == null || s.length() > MAX_WHERE)
 				{
-					return "неверный пункт быстрого пути";
+					return "invalid quick-path item";
 				}
 			}
 			for (GuideItem i : nonNull(items))
 			{
-				if (i == null || i.name == null || i.name.isEmpty() || tooLong(i.name) || tooLong(i.nameRu)
+				if (i == null || i.name == null || i.name.isEmpty() || tooLong(i.name)
 					|| (i.where != null && i.where.length() > MAX_WHERE) || (i.count != null && (i.count < 1 || i.count > ShoppingPlan.MAX_COUNT)))
 				{
-					return "неверный предмет панели";
+					return "invalid panel item";
 				}
 			}
 			for (GuidePlace p : nonNull(places))
@@ -150,21 +150,21 @@ public class ActiveTarget
 					|| p.x <= 0 || p.y <= 0 || p.x >= NavTarget.MAX_COORD || p.y >= NavTarget.MAX_COORD || p.plane < 0 || p.plane > 3
 					|| (p.items != null && (p.items.size() > MAX_LIST || p.items.stream().anyMatch(n -> n == null || tooLong(n)))))
 				{
-					return "неверная точка панели";
+					return "invalid panel point";
 				}
 			}
 			return null;
 		}
 	}
 
-	/** Переменная квеста (varp или varbit) и этапы по её значениям — как StagePayload в программе. */
+	/** A quest variable (varp or varbit) and the stages by its values, like StagePayload in the app. */
 	@Data
 	public static class Stage
 	{
 		static final int MAX_STAGES = 40;
 		static final int MAX_STAGE_STEPS = 40;
 
-		/** «varp» или «varbit». */
+		/** "varp" or "varbit". */
 		private String kind;
 		private int id;
 		private List<StageStep> stages;
@@ -174,7 +174,7 @@ public class ActiveTarget
 			return "varp".equals(kind);
 		}
 
-		/** Номер этапа (с нуля) для значения переменной: последний, у которого at не больше значения; нет такого — первый. */
+		/** The stage number (zero-based) for a variable value: the last one whose at is not above the value; if there is none, the first. */
 		int indexFor(int value)
 		{
 			int found = 0;
@@ -192,11 +192,11 @@ public class ActiveTarget
 		{
 			if (!isVarp() && !"varbit".equals(kind))
 			{
-				return "неизвестный вид переменной квеста";
+				return "unknown quest variable kind";
 			}
 			if (id < 1 || id > 100_000 || stages == null || stages.isEmpty() || stages.size() > MAX_STAGES)
 			{
-				return "неверные этапы квеста";
+				return "invalid quest stages";
 			}
 			int last = -1;
 			for (StageStep s : stages)
@@ -204,7 +204,7 @@ public class ActiveTarget
 				if (s == null || s.steps == null || s.steps.isEmpty() || s.steps.size() > MAX_STAGE_STEPS || s.at < 0 || s.at > 100_000
 					|| s.at <= last || (s.go != null && (s.go < 0 || s.go >= placeCount)))
 				{
-					return "неверный этап квеста";
+					return "invalid quest stage";
 				}
 				for (StageLine line : s.steps)
 				{
@@ -213,20 +213,20 @@ public class ActiveTarget
 						|| line.y >= NavTarget.MAX_COORD || line.plane < 0 || line.plane > 3)) || tooLong(line.has)
 						|| (line.hl != null && line.hl.problem() != null) || (line.k != null && !line.k.matches("[A-Za-z0-9_.]{1,80}")))
 					{
-						return "неверный шаг этапа квеста";
+						return "invalid quest stage step";
 					}
 				}
 				last = s.at;
 				if (s.items != null && s.items.size() > MAX_LIST)
 				{
-					return "слишком длинный список";
+					return "list too long";
 				}
 				for (GuideItem i : nonNull(s.items))
 				{
-					if (i == null || i.name == null || i.name.isEmpty() || tooLong(i.name) || tooLong(i.nameRu)
+					if (i == null || i.name == null || i.name.isEmpty() || tooLong(i.name)
 						|| (i.where != null && i.where.length() > Guide.MAX_WHERE) || (i.count != null && (i.count < 1 || i.count > ShoppingPlan.MAX_COUNT)))
 					{
-						return "неверный предмет этапа";
+						return "invalid stage item";
 					}
 				}
 			}
@@ -234,7 +234,7 @@ public class ActiveTarget
 		}
 	}
 
-	/** Подсветка шага этапа: NPC и объекты по ID, объекты по имени (когда ID нет или облик меняется), предметы в сумке. */
+	/** A stage step highlight: NPCs and objects by ID, objects by name (when there is no ID or the look changes), items in the bag. */
 	@Data
 	public static class Highlight
 	{
@@ -252,21 +252,21 @@ public class ActiveTarget
 			{
 				if (ids.size() > MAX || ids.stream().anyMatch(i -> i == null || i < 1 || i > MAX_ID))
 				{
-					return "неверная подсветка шага";
+					return "invalid step highlight";
 				}
 			}
 			for (List<String> names : List.of(nonNull(on), nonNull(item)))
 			{
 				if (names.size() > MAX || names.stream().anyMatch(n -> n == null || n.isEmpty() || tooLong(n)))
 				{
-					return "неверная подсветка шага";
+					return "invalid step highlight";
 				}
 			}
 			return null;
 		}
 	}
 
-	/** То, что подсвечивается на текущем шаге этапа, готовое к сравнению: множества ID и имён. */
+	/** What is highlighted on the current stage step, ready for comparison: sets of IDs and names. */
 	static final class LineHighlight
 	{
 		static final LineHighlight NONE = new LineHighlight(null);
@@ -300,26 +300,26 @@ public class ActiveTarget
 		}
 	}
 
-	/** Шаг этапа: текст и, если известно, клетка — по ней плагин понимает, что игрок дошёл до шага. */
+	/** A stage step: the text and, if known, the tile; the plugin uses it to see that the player reached the step. */
 	@Data
 	public static class StageLine
 	{
 		private String t;
-		/** Короткий текст для строки списка в игре (до ~70 знаков); null — программа его не прислала, строка сократится сама. */
+		/** Short text for a list line in the game (up to ~70 characters); null means the app did not send it and the line shortens itself. */
 		private String s;
 		private Integer x;
 		private Integer y;
 		private Integer plane;
-		/** Предмет: он уже в сумке — шаг сделан (портрет найден — искать его уже не надо). null — по предметам не определяется. */
+		/** Item: it is already in the bag, so the step is done (the portrait is found, no need to look for it). null means not determined by items. */
 		private String has;
 		/**
-		 * Предмет, без которого шаг по положению не засчитывается: «верни Thurgo руду» не считается пройденным только
-		 * оттого, что игрок стоит рядом с Thurgo. null — условий нет.
+		 * An item without which the step is not counted by position: "give Thurgo the ore" is not considered done just
+		 * because the player stands next to Thurgo. null means no conditions.
 		 */
 		private String need;
-		/** Что подсвечивать в игре на этом шаге (по Quest Helper); null — только стрелка к клетке. */
+		/** What to highlight in the game on this step (per Quest Helper); null means only the arrow to the tile. */
 		private Highlight hl;
-		/** Имя шага в Quest Helper (talkToLuthasAgain): по нему машина состояний выбирает строку. null — шаг не из Quest Helper. */
+		/** The step's name in Quest Helper (talkToLuthasAgain): the state machine uses it to pick the line. null means not a Quest Helper step. */
 		private String k;
 
 		boolean hasPoint()
@@ -337,7 +337,7 @@ public class ActiveTarget
 			return has != null && !has.isEmpty();
 		}
 
-		/** Текст для строки в игре: короткий от программы, а нет его — первое предложение полного. */
+		/** The text for a line in the game: the short one from the app, or if there is none, the first sentence of the full one. */
 		String shown()
 		{
 			return s != null && !s.trim().isEmpty() ? s.trim() : ShortText.of(t);
@@ -347,13 +347,13 @@ public class ActiveTarget
 	@Data
 	public static class StageStep
 	{
-		/** С какого значения переменной действует этап. */
+		/** From which variable value the stage applies. */
 		private int at;
-		/** Что делать на этапе — шаги по порядку (как в Quest Helper), у каждого — клетка, если она известна. */
+		/** What to do in the stage: the steps in order (as in Quest Helper), each with a tile if known. */
 		private List<StageLine> steps;
-		/** Номер точки в places guide, куда идти; null — места нет. */
+		/** The number of the point in the guide's places to go to; null means no place. */
 		private Integer go;
-		/** Что нужно на этом этапе; null — предметы шага, пустой список — ничего. */
+		/** What is needed in this stage; null means the step's items, an empty list means nothing. */
 		private List<GuideItem> items;
 	}
 
@@ -361,12 +361,11 @@ public class ActiveTarget
 	public static class GuideItem
 	{
 		private String name;
-		private String nameRu;
 		private Integer id;
-		/** null — количество в маршруте не числом («сколько есть»): хватит одного. */
+		/** null means the amount in the route is not a number ("as many as you have"): one is enough. */
 		private Integer count;
 		private String where;
-		/** Добывается по ходу самого шага, брать заранее не нужно. */
+		/** Obtained during the step itself, no need to take it beforehand. */
 		private boolean inStep;
 	}
 
@@ -377,9 +376,9 @@ public class ActiveTarget
 		private int y;
 		private int plane;
 		private String label;
-		/** NPC в этой точке — подсветится, когда стрелка приведёт. */
+		/** The NPC at this point: highlighted once the arrow leads there. */
 		private String npc;
-		/** Какие предметы шага берут здесь (английские названия). */
+		/** Which of the step's items are taken here (English names). */
 		private List<String> items;
 	}
 
@@ -389,30 +388,30 @@ public class ActiveTarget
 		private String name;
 		private Integer id;
 		private int count;
-		/** Сколько здоровья лечит — у еды. */
+		/** How much health it heals, for food. */
 		private Integer heals;
 	}
 
-	/** То же, что StepPacing в src/types/index.ts. */
+	/** The same as StepPacing in src/types/index.ts. */
 	@Data
 	public static class Pacing
 	{
-		/** Навыки ближнего боя: у них действие — побеждённый противник, а опыт идёт за каждый удар. */
+		/** Melee skills: their action is a defeated enemy, and XP comes for each hit. */
 		static final Set<String> COMBAT = Set.of("attack", "strength", "defence");
 		static final Set<String> SKILLS = Set.of("fishing", "woodcutting", "cooking", "mining", "attack", "strength", "defence");
 
 		private String skill;
-		/** Ещё навыки с той же целью — только бой: сила и защита вслед за атакой. Показывается тот, что растёт. */
+		/** More skills with the same goal, combat only: Strength and Defence after Attack. The one that is growing is shown. */
 		private List<String> also;
 		private int targetLevel;
 		private int targetExp;
-		/** Название действия формами для 1, 2–4 и 5+: «креветка|креветки|креветок». Одна форма тоже годится. */
+		/** The action name in forms for 1 and 2+: "shrimp|shrimps". A single form works too. */
 		private String actionName;
 		private double expPerAction;
-		/** Сколько секунд на действие — первая оценка, пока нет своих замеров. */
+		/** Seconds per action: a first estimate until there are own measurements. */
 		private Double secondsPerAction;
 
-		/** Навык шага и следом навыки из also — в том порядке, в каком их советует качать шаг. */
+		/** The step's skill followed by the skills from also, in the order the step recommends training them. */
 		List<String> skills()
 		{
 			List<String> out = new ArrayList<>();
@@ -431,34 +430,34 @@ public class ActiveTarget
 		{
 			if (skill == null || !SKILLS.contains(skill))
 			{
-				return "неизвестный навык темпа";
+				return "unknown pacing skill";
 			}
 			if (also != null)
 			{
-				// Несколько навыков с одной целью бывает только в бою: их качают по очереди, меняя стиль атаки.
+				// Several skills with one goal happen only in combat: they are trained in turn, changing the attack style.
 				if (also.size() > 2 || !COMBAT.contains(skill))
 				{
-					return "неверный список навыков темпа";
+					return "invalid pacing skill list";
 				}
 				for (String s : also)
 				{
 					if (s == null || !COMBAT.contains(s) || s.equals(skill))
 					{
-						return "неверный список навыков темпа";
+						return "invalid pacing skill list";
 					}
 				}
 			}
 			if (targetLevel < 2 || targetLevel > 99 || targetExp < 1 || targetExp > 13_034_431)
 			{
-				return "неверная цель темпа";
+				return "invalid pacing target";
 			}
 			if (!(expPerAction > 0 && expPerAction <= 10_000) || actionName == null || actionName.isEmpty() || tooLong(actionName))
 			{
-				return "неверное действие темпа";
+				return "invalid pacing action";
 			}
 			if (secondsPerAction != null && !(secondsPerAction > 0 && secondsPerAction <= 600))
 			{
-				return "неверное время действия";
+				return "invalid action time";
 			}
 			return null;
 		}
@@ -469,9 +468,9 @@ public class ActiveTarget
 	{
 		private String type;
 		private String questName;
-		/** SKILL_LEVEL: эти настоящие уровни (без зелий) — все сразу. */
+		/** SKILL_LEVEL: these real levels (without potions), all at once. */
 		private List<LevelNeed> levels;
-		/** ITEM_OWNED — сами предметы; у QUEST_COMPLETED и SKILL_LEVEL — ещё одно условие вдобавок. */
+		/** ITEM_OWNED: the items themselves; QUEST_COMPLETED and SKILL_LEVEL have one more condition on top. */
 		private List<ItemNeed> items;
 		private String chatPattern;
 		private Integer varbitId;
@@ -483,13 +482,13 @@ public class ActiveTarget
 			{
 				if (levels.size() > MAX_LIST)
 				{
-					return "слишком длинный список";
+					return "list too long";
 				}
 				for (LevelNeed l : levels)
 				{
 					if (l == null || skillOf(l.skill) == null || l.level < 1 || l.level > 99)
 					{
-						return "неверный уровень автоотметки";
+						return "invalid auto-tick level";
 					}
 				}
 			}
@@ -497,13 +496,13 @@ public class ActiveTarget
 			{
 				if (items.size() > MAX_LIST)
 				{
-					return "слишком длинный список";
+					return "list too long";
 				}
 				for (ItemNeed i : items)
 				{
 					if (i == null || i.problem() != null)
 					{
-						return "неверный предмет автоотметки";
+						return "invalid auto-tick item";
 					}
 				}
 			}
@@ -511,7 +510,7 @@ public class ActiveTarget
 		}
 	}
 
-	/** Уровень навыка для автоотметки: ключ как в приложении («attack», «fishing») и уровень. */
+	/** A skill level for auto-tick: the key as in the app ("attack", "fishing") and the level. */
 	@Data
 	public static class LevelNeed
 	{
@@ -520,9 +519,9 @@ public class ActiveTarget
 	}
 
 	/**
-	 * Предмет для автоотметки: сколько его должно быть у игрока — в сумке, на нём, банкнотами и в банке вместе.
-	 * Несколько названий считаются вместе («Shrimps» и «Anchovies»). ID — когда у разных предметов одно
-	 * название (куски карты Dragon Slayer I): тогда считается только он.
+	 * An item for auto-tick: how many of it the player must have, in the bag, worn, as notes and in the bank together.
+	 * Several names are counted together ("Shrimps" and "Anchovies"). The ID is for when different items share one
+	 * name (the Dragon Slayer I map pieces): then only the ID is counted.
 	 */
 	@Data
 	public static class ItemNeed
@@ -535,28 +534,28 @@ public class ActiveTarget
 		{
 			if (names == null || names.isEmpty() || names.size() > MAX_LIST)
 			{
-				return "нужны названия";
+				return "names required";
 			}
 			for (String n : names)
 			{
 				if (n == null || n.trim().isEmpty() || tooLong(n))
 				{
-					return "неверное название";
+					return "invalid name";
 				}
 			}
 			if (id != null && (id <= 0 || id >= NavTarget.MAX_ITEM_ID))
 			{
-				return "неверный ID";
+				return "invalid ID";
 			}
 			if (count < 1 || count > ShoppingPlan.MAX_COUNT)
 			{
-				return "неверное количество";
+				return "invalid count";
 			}
 			return null;
 		}
 	}
 
-	/** Навык по ключу приложения («attack», «fishing») — так же, как OsrsPathBridgePlugin.skillKey. null — нет такого. */
+	/** A skill by the app's key ("attack", "fishing"), the same as OsrsPathBridgePlugin.skillKey. null means there is no such skill. */
 	static Skill skillOf(String key)
 	{
 		if (key == null)
@@ -574,24 +573,24 @@ public class ActiveTarget
 	}
 
 	/**
-	 * Проверка и подготовка после разбора JSON. Возвращает текст ошибки или null, если всё в порядке.
-	 * Имена сравниваются без учёта регистра и тегов цвета, как их показывает игра.
+	 * Validation and preparation after JSON parsing. Returns an error text, or null if all is well.
+	 * Names are compared without case and colour tags, as the game shows them.
 	 */
 	String prepare()
 	{
 		if (stepId == null || !stepId.matches("S\\d-\\d{2}"))
 		{
-			return "stepId должен быть вида S1-03";
+			return "stepId must look like S1-03";
 		}
 		if (tooLong(title) || tooLong(goal) || (worldPoint != null && tooLong(worldPoint.label)))
 		{
-			return "слишком длинный текст";
+			return "text too long";
 		}
 		for (List<?> list : new List<?>[]{groundTiles, npcNames, npcIds, objectNames, objectIds, dialogChoices, highlightItems, checklist, pathWaypoints, watchItems})
 		{
 			if (list != null && list.size() > MAX_LIST)
 			{
-				return "слишком длинный список";
+				return "list too long";
 			}
 		}
 		if (groundTiles != null)
@@ -600,7 +599,7 @@ public class ActiveTarget
 			{
 				if (t == null || tooLong(t.label))
 				{
-					return "неверная клетка";
+					return "invalid tile";
 				}
 			}
 		}
@@ -610,7 +609,7 @@ public class ActiveTarget
 			{
 				if (p == null || tooLong(p.label) || p.plane < 0 || p.plane > 3)
 				{
-					return "неверная путевая точка";
+					return "invalid waypoint";
 				}
 			}
 		}
@@ -620,7 +619,7 @@ public class ActiveTarget
 			{
 				if (i == null || i.name == null || i.name.isEmpty() || tooLong(i.name) || i.count < 1 || i.count > ShoppingPlan.MAX_COUNT)
 				{
-					return "неверный предмет проверки";
+					return "invalid check item";
 				}
 			}
 		}
@@ -628,20 +627,20 @@ public class ActiveTarget
 		{
 			if (useOn.size() > 8)
 			{
-				return "слишком длинный список";
+				return "list too long";
 			}
 			for (UseOn u : useOn)
 			{
 				if (u == null || u.item == null || u.item.isEmpty() || u.target == null || u.target.isEmpty() || tooLong(u.item) || tooLong(u.target)
 					|| (u.kind != null && !u.kind.matches("object|npc|item|")))
 				{
-					return "неверное действие «use»";
+					return "invalid 'use' action";
 				}
 			}
 		}
 		if (maxHit != null && (maxHit < 1 || maxHit > 200))
 		{
-			return "неверный максимальный удар";
+			return "invalid max hit";
 		}
 		if (pacing != null && pacing.problem() != null)
 		{
@@ -661,14 +660,14 @@ public class ActiveTarget
 			{
 				if (s == null || tooLong(s))
 				{
-					return "неверное имя";
+					return "invalid name";
 				}
 			}
 		}
 		npcNameSet = names(npcNames);
 		objectNameSet = names(objectNames);
 		itemNameSet = names(highlightItems);
-		// Цель и предмет действия «use» подсвечиваются так же, как остальное из шага.
+		// The target and item of the "use" action are highlighted like everything else from the step.
 		for (UseOn u : nonNull(useOn))
 		{
 			itemNameSet.add(nameKey(u.item));
@@ -695,7 +694,7 @@ public class ActiveTarget
 		return null;
 	}
 
-	/** Имя как ключ сравнения: без тегов, без неразрывных пробелов, в нижнем регистре. */
+	/** A name as a comparison key: without tags, without non-breaking spaces, in lower case. */
 	static String nameKey(String s)
 	{
 		if (s == null)
@@ -706,7 +705,7 @@ public class ActiveTarget
 		return SPACES.matcher(t).replaceAll(" ").trim().toLowerCase(Locale.ROOT);
 	}
 
-	/** Вариант диалога как ключ: ещё и без точки или восклицательного знака в конце — их вики пишет по-разному. */
+	/** A dialogue option as a key: also without a trailing full stop or exclamation mark, which the wiki writes inconsistently. */
 	static String dialogKey(String s)
 	{
 		String t = nameKey(s).replace('’', '\'');

@@ -17,18 +17,18 @@ import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Радар опасных мест: зоны из src/data/dangerZones.json (в jar кладёт Gradle) и вход/выход игрока.
+ * The danger radar: zones from src/data/dangerZones.json (Gradle puts it in the jar) and the player entering/leaving.
  *
- * Расстояния — квадратами (dx² + dy²), без корня. Раз за тик проверяется несколько зон — это дёшево;
- * всё дорогое (перебор NPC, рисование границы) плагин делает, только пока игрок рядом с зоной.
- * Выйти из предупреждения можно, отойдя на {@link #EXIT_MARGIN} клетки дальше, чем в него вошёл:
- * иначе на самой границе предупреждение и звук мигали бы каждый шаг.
+ * Distances are squared (dx^2 + dy^2), without a root. Several zones are checked once per tick, which is cheap;
+ * everything expensive (iterating NPCs, drawing the border) the plugin does only while the player is near a zone.
+ * To leave a warning, the player must move {@link #EXIT_MARGIN} tiles farther than where they entered:
+ * otherwise at the very border the warning and sound would flicker with every step.
  */
 @Slf4j
 final class DangerRadar
 {
 	static final String RESOURCE = "dangerZones.json";
-	/** Ближе стольких клеток к центру зоны рисуется её граница. */
+	/** The zone's border is drawn closer than this many tiles to its centre. */
 	static final int DRAW_RADIUS = 20;
 	static final int EXIT_MARGIN = 3;
 
@@ -55,7 +55,7 @@ final class DangerRadar
 		private Integer warningRadius;
 		private String severity;
 		private String message;
-		/** Коротко для HUD; без него — message. */
+		/** Short for the HUD; without it, message. */
 		private String hud;
 		private List<String> npcNames;
 
@@ -82,7 +82,7 @@ final class DangerRadar
 			return npcNameSet;
 		}
 
-		/** Клетки по краю круга radius — их рисует оверлей. */
+		/** The tiles along the edge of a circle of radius radius, which the overlay draws. */
 		List<int[]> getBoundary()
 		{
 			return boundary;
@@ -115,7 +115,7 @@ final class DangerRadar
 		List<Zone> zones;
 	}
 
-	/** Что радар думает о текущей клетке игрока. entered — только что вошёл в предупреждение (для звука). */
+	/** What the radar thinks about the player's current tile. entered means just entered the warning (for the sound). */
 	@Value
 	static class Reading
 	{
@@ -127,7 +127,7 @@ final class DangerRadar
 	static final Reading QUIET = new Reading(null, Level.NONE, false);
 
 	private final List<Zone> zones;
-	/** Зона, в предупреждении которой игрок сейчас, — чтобы не звать звук второй раз. */
+	/** The zone whose warning the player is in now, so as not to call the sound a second time. */
 	private Zone alerted;
 
 	DangerRadar(List<Zone> zones)
@@ -140,14 +140,14 @@ final class DangerRadar
 		return zones;
 	}
 
-	/** Зоны из ресурса плагина. Нет файла или он битый — пустой радар, а не падение плагина. */
+	/** The zones from the plugin resource. A missing or broken file gives an empty radar, not a plugin crash. */
 	static DangerRadar load(Gson gson)
 	{
 		try (InputStream in = DangerRadar.class.getResourceAsStream(RESOURCE))
 		{
 			if (in == null)
 			{
-				log.warn("OSRS Path Bridge: нет {} — радар опасности выключен", RESOURCE);
+				log.warn("OSRS Path Bridge: {} is missing - danger radar turned off", RESOURCE);
 				return new DangerRadar(Collections.emptyList());
 			}
 			try (Reader r = new InputStreamReader(in, StandardCharsets.UTF_8))
@@ -157,7 +157,7 @@ final class DangerRadar
 		}
 		catch (IOException | JsonParseException e)
 		{
-			log.warn("OSRS Path Bridge: {} не прочитан — радар опасности выключен", RESOURCE, e);
+			log.warn("OSRS Path Bridge: {} could not be read - danger radar turned off", RESOURCE, e);
 			return new DangerRadar(Collections.emptyList());
 		}
 	}
@@ -188,8 +188,8 @@ final class DangerRadar
 	}
 
 	/**
-	 * Новая клетка игрока. Из нескольких зон рядом выбирается та, в которую он глубже зашёл
-	 * (при равенстве — более опасная). Вызывать при смене клетки, а не каждый кадр.
+	 * A new player tile. Of several zones nearby the one the player is deeper in is chosen
+	 * (on a tie, the more dangerous one). Call when the tile changes, not every frame.
 	 */
 	Reading update(int x, int y, int plane)
 	{
@@ -204,7 +204,7 @@ final class DangerRadar
 			}
 			int d = distanceSq(x, y, z.center.x, z.center.y);
 			int warn = z.warn();
-			// Уже предупреждённому — выход с запасом, чтобы граница не мигала.
+			// For one already warned, leaving has a margin so the border does not flicker.
 			int stay = z == alerted ? warn + EXIT_MARGIN : warn;
 			Level level;
 			if (d <= z.radius * z.radius)
@@ -237,13 +237,13 @@ final class DangerRadar
 		return best == null ? QUIET : new Reading(best, bestLevel, entered);
 	}
 
-	/** Сбросить память о предупреждении — после входа в игру или смены персонажа. */
+	/** Reset the warning memory: after login or a character change. */
 	void reset()
 	{
 		alerted = null;
 	}
 
-	/** Клетки на краю круга: внутри радиуса, но с соседом снаружи. */
+	/** The tiles on the edge of a circle: inside the radius but with a neighbour outside. */
 	static List<int[]> ring(int cx, int cy, int r)
 	{
 		List<int[]> out = new ArrayList<>();

@@ -17,44 +17,44 @@ import java.util.Map;
 import lombok.Value;
 
 /**
- * Машина состояний квеста — условия, по которым Quest Helper выбирает текущий шаг этапа. Данные (src/data/questMachines.json)
- * собраны из его исходников; здесь они выполняются так же: условия проверяются подряд, первое выполненное выбирает шаг, иначе
- * шаг по умолчанию; «защёлки» Conditions(true, …) помнят, что условие хоть раз выполнялось.
+ * The quest state machine: the conditions by which Quest Helper chooses the current stage step. The data (src/data/questMachines.json)
+ * is built from its sources; here it is executed the same way: conditions are checked in turn, the first fulfilled one picks the step, otherwise
+ * the default step; the "latches" Conditions(true, ...) remember that a condition was fulfilled at least once.
  *
- * Условие даёт один из трёх ответов: да, нет, «не знаю» (null) — когда в нём то, чего плагин не видит (настройки Quest Helper,
- * предмет на земле). Если «не знаю» встретилось раньше выполненного условия, машина не решает: шаг определит прежняя логика.
+ * A condition gives one of three answers: yes, no, "unknown" (null), when it involves something the plugin cannot see (Quest Helper's settings,
+ * an item on the ground). If an "unknown" comes before a fulfilled condition, the machine does not decide: the old logic decides the step.
  *
- * Чистая логика: игру читают через {@link Facts}, поэтому всё проверяется тестами без клиента.
+ * Pure logic: the game is read through {@link Facts}, so everything is tested without a client.
  */
 final class QhMachine
 {
-	/** Что плагин знает об игре. null в ответе — «не знаю». */
+	/** What the plugin knows about the game. null in an answer means "unknown". */
 	interface Facts
 	{
-		/** Сколько предметов с этими ID: onlyWorn — только надетое; иначе сумка и надетое; bank — ещё и банк. */
+		/** How many items with these IDs: onlyWorn is worn only; otherwise bag and worn; bank adds the bank. */
 		int items(int[] ids, boolean onlyWorn, boolean bank);
 
-		/** Клетка игрока {x, y, plane} или null, если игрока нет. */
+		/** The player's tile {x, y, plane} or null if there is no player. */
 		int[] position();
 
 		int varbit(int id);
 
 		int varp(int id);
 
-		/** Сообщения с начала наблюдения: тип (GAMEMESSAGE, ENGINE, SPAM, MESBOX, DIALOG), текст. */
+		/** Messages since observation began: type (GAMEMESSAGE, ENGINE, SPAM, MESBOX, DIALOG), text. */
 		List<Event> events();
 
-		/** Тексты виджета (сам виджет первым, дети следом) или null, если его нет на экране. */
+		/** Widget texts (the widget itself first, then its children) or null if it is not on screen. */
 		List<String> widget(int group, int child, boolean children);
 
-		/** Есть ли в сцене NPC с этим ID (и в зоне, если задана {x1,y1,x2,y2,plane1,plane2}). null — не знаю. */
+		/** Whether an NPC with this ID is in the scene (and in the zone if {x1,y1,x2,y2,plane1,plane2} is given). null means unknown. */
 		Boolean npc(int id, int[] zone);
 
 		Boolean object(int[] ids, int[] zone);
 
 		int skill(String name);
 
-		/** Состояние квеста по названию из Quest Helper (PIRATES_TREASURE): "FINISHED", "IN_PROGRESS", "NOT_STARTED"; null — не знаю. */
+		/** The quest state by the Quest Helper name (PIRATES_TREASURE): "FINISHED", "IN_PROGRESS", "NOT_STARTED"; null means unknown. */
 		String quest(String name);
 	}
 
@@ -65,7 +65,7 @@ final class QhMachine
 		String text;
 	}
 
-	/** Что выбрала машина. leaf — шаг Quest Helper; path — имена вложенных условных шагов и сам лист (от внешнего к внутреннему). */
+	/** What the machine picked. leaf is a Quest Helper step; path is the names of nested conditional steps and the leaf itself (from outer to inner). */
 	@Value
 	static class Verdict
 	{
@@ -73,13 +73,13 @@ final class QhMachine
 
 		String leaf;
 		List<String> path;
-		/** Выбор сделало выполненное условие, а не шаг «по умолчанию». */
+		/** The pick was made by a fulfilled condition, not by the "by default" step. */
 		boolean strong;
-		/** Встретилось «не знаю» раньше выполненного условия: машина не решает. */
+		/** An "unknown" came before a fulfilled condition: the machine does not decide. */
 		boolean undecided;
 	}
 
-	/** Защёлки условий: состояние живёт, пока игрок не сменил квест или не вышел из игры. */
+	/** Condition latches: the state lives until the player changes the quest or leaves the game. */
 	static final class Session
 	{
 		private final IdentityHashMap<Object, Boolean> latched = new IdentityHashMap<>();
@@ -114,13 +114,13 @@ final class QhMachine
 		}
 	}
 
-	/** Есть ли у Quest Helper шаг для этого значения переменной квеста. */
+	/** Whether Quest Helper has a step for this value of the quest variable. */
 	boolean hasStage(int varValue)
 	{
 		return stages.has(String.valueOf(varValue));
 	}
 
-	/** Выбор машины для значения переменной квеста. */
+	/** The machine's pick for a quest variable value. */
 	Verdict resolve(int varValue, Facts facts, Session session)
 	{
 		JsonElement root = stages.get(String.valueOf(varValue));
@@ -131,14 +131,14 @@ final class QhMachine
 		return resolveNode(root, facts, session, new ArrayList<String>(), false, 0);
 	}
 
-	/** Шаги, в которые «входит» лист: он сам и родители из addSubSteps. */
+	/** The steps the leaf "enters": itself and the parents from addSubSteps. */
 	List<String> aliases(String leaf)
 	{
 		List<String> out = alias.get(leaf);
 		return out == null ? Collections.<String>emptyList() : out;
 	}
 
-	// ---------------------------------------------------------------- узлы
+	// ---------------------------------------------------------------- nodes
 
 	private JsonObject node(JsonElement ref)
 	{
@@ -205,7 +205,7 @@ final class QhMachine
 		return n.has("l") && Boolean.TRUE.equals(ev(n.get("l"), f, s));
 	}
 
-	// ---------------------------------------------------------------- условия
+	// ---------------------------------------------------------------- conditions
 
 	private static final String[] NO_TEXT = new String[0];
 
@@ -476,7 +476,7 @@ final class QhMachine
 		return Boolean.FALSE;
 	}
 
-	/** Как Text.sanitize у RuneLite: без тегов <…>, неразрывный пробел — пробел. */
+	/** Like RuneLite's Text.sanitize: without <...> tags, a non-breaking space becomes a space. */
 	static String sanitize(String s)
 	{
 		return s.replaceAll("<[^>]*>", "").replace(' ', ' ');
@@ -505,11 +505,11 @@ final class QhMachine
 		return out;
 	}
 
-	// ---------------------------------------------------------------- загрузка
+	// ---------------------------------------------------------------- loading
 
 	private static volatile Map<String, QhMachine> loaded;
 
-	/** Машины всех квестов маршрута, ключ — шаг маршрута (S2-09). Из ресурса плагина; нет ресурса — пусто. */
+	/** The machines of all the route's quests, keyed by route step (S2-09). From the plugin resource; with no resource the list is empty. */
 	static Map<String, QhMachine> all()
 	{
 		Map<String, QhMachine> m = loaded;
@@ -538,13 +538,13 @@ final class QhMachine
 		}
 		catch (IOException | RuntimeException ex)
 		{
-			// Без машин плагин работает по прежним правилам (место, предметы).
+			// Without machines the plugin works by the old rules (place and items).
 			return new HashMap<>();
 		}
 		return out;
 	}
 
-	/** Строка этапа, которую выбрал лист: по ключу строки (k) — лист, его родители из addSubSteps или вложенные условные шаги. -1 — нет такой. */
+	/** The stage line the leaf picked: by line key (k): the leaf, its parents from addSubSteps or nested conditional steps. -1 means no such line. */
 	int lineFor(Verdict v, List<ActiveTarget.StageLine> lines)
 	{
 		if (v == null || v.getLeaf() == null)

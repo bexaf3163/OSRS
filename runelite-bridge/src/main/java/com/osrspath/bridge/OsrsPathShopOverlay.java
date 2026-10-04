@@ -17,9 +17,9 @@ import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
 /**
- * Отдельное окно рядом с банком, биржей и окном торговца: что взять, что купить и где это продают. Список строит
- * {@link ShopWindow}; здесь — какое окно игры открыто, куда поставить карточку (сбоку от окна игры, не поверх него) и
- * рисование.
+ * A separate window next to the bank, exchange and merchant windows: what to take, what to buy and where it is sold. The list is built by
+ * {@link ShopWindow}; here: which game window is open, where to put the card (beside the game window, not over it) and
+ * the drawing.
  */
 class OsrsPathShopOverlay extends Overlay
 {
@@ -38,13 +38,13 @@ class OsrsPathShopOverlay extends Overlay
 		this.client = client;
 		this.plugin = plugin;
 		this.config = config;
-		// Положение считаем сами по окну игры: у банка и торговца оно разное.
+		// We compute the position ourselves from the game window: it differs for the bank and the merchant.
 		setPosition(OverlayPosition.DYNAMIC);
 		setLayer(OverlayLayer.ABOVE_WIDGETS);
 		setPriority(PRIORITY_HIGH);
 	}
 
-	/** Какое окно игры открыто и его рамка; null — ни банка, ни биржи, ни торговца. */
+	/** Which game window is open and its frame; null means no bank, exchange or merchant. */
 	private Open open()
 	{
 		Widget bank = client.getWidget(InterfaceID.Bankmain.ITEMS_CONTAINER);
@@ -77,7 +77,7 @@ class OsrsPathShopOverlay extends Overlay
 		}
 	}
 
-	/** Строки окна, которые игрок видит сейчас; null — окно не показано. Нужна и плагину: старую проверку вылета при этом прячем. */
+	/** The window lines the player sees now; null means the window is not shown. The plugin needs it too: we hide the old departure check then. */
 	ShopWindow.Result current()
 	{
 		if (!config.showShopWindow())
@@ -105,7 +105,7 @@ class OsrsPathShopOverlay extends Overlay
 		return size;
 	}
 
-	/** Левый верхний угол карточки: слева от окна игры, если там есть место, иначе справа, иначе в углу экрана. */
+	/** The card's top-left corner: to the left of the game window if there is room, otherwise to the right, otherwise in the screen corner. */
 	static java.awt.Point place(Rectangle frame, int canvasW, int canvasH, ShopWindow.Result r, Graphics2D g)
 	{
 		if (frame == null)
@@ -124,7 +124,7 @@ class OsrsPathShopOverlay extends Overlay
 		return new java.awt.Point(GAP, GAP);
 	}
 
-	/** Рисование отдельно от клиента: тест рисует настоящими шрифтами и снимает картинку. Возвращает размер карточки. */
+	/** Drawing apart from the client: a test draws with the real fonts and takes a picture. Returns the card size. */
 	static Dimension paint(Graphics2D g, ShopWindow.Result r, int width, float scale, int opacity, java.awt.Point at)
 	{
 		Font font = OverlayText.font(g.getFont(), scale);

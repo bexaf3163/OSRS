@@ -10,21 +10,21 @@ import net.runelite.api.widgets.Widget;
 import net.runelite.client.input.MouseAdapter;
 
 /**
- * Клики по списку «Что нужно» на экране игры. Левый клик по строке с местом — стрелка и путь туда (действие
- * уходит в поток клиента), по заголовку — свернуть или развернуть. Клик по списку в игру не попадает — как у карты
- * подземелий RuneLite (InstanceMapInputListener): персонаж не идёт туда, что под плашкой. Это кнопка окна
- * RuneLite, в игру ничего не отправляется.
+ * Clicks on the "What you need" list on the game screen. A left click on a line with a place gives the arrow and path there (the action
+ * goes to the client thread), a click on the heading collapses or expands. A click on the list does not reach the game, like the RuneLite
+ * dungeon map (InstanceMapInputListener): the character does not walk to whatever is under the plate. It is a RuneLite
+ * window button, nothing is sent into the game.
  *
- * Клик уходит игре, если: не левая кнопка; зажат Alt (RuneLite двигает плашки); открыто меню игры (выбирают его
- * пункт); выбрано заклинание или «Use»; над списком окно игры (банк, магазин) и у точки есть его действие —
- * список рисуется под окнами игры, и кнопки банка важнее невидимых строк под ним.
+ * The click goes to the game if: not the left button; Alt is held (RuneLite moves the plates); the game menu is open (its entry is being
+ * chosen); a spell or "Use" is selected; a game window is over the list (bank, shop) and the point has its action:
+ * the list is drawn under the game windows, and the bank buttons matter more than invisible lines under them.
  */
 class GuideMouse extends MouseAdapter
 {
 	private final Client client;
 	private final OsrsPathGuideOverlay overlay;
 	private final Consumer<GuideList.Action> act;
-	/** Нажатие забрал список — отпускание и щелчок тоже его. */
+	/** The press was taken by the list: the release and the click are its too. */
 	private boolean ours;
 
 	GuideMouse(Client client, OsrsPathGuideOverlay overlay, Consumer<GuideList.Action> act)
@@ -77,15 +77,15 @@ class GuideMouse extends MouseAdapter
 	}
 
 	/**
-	 * Над списком открыта карта мира: её метки и кнопки дают пункты меню без виджета (RuneLite «Focus on»),
-	 * поэтому windowUnderMouse её не видит. Клик — карте, а не невидимой строке под ней.
+	 * The world map is open over the list: its markers and buttons give menu entries without a widget (RuneLite "Focus on"),
+	 * so windowUnderMouse does not see it. The click goes to the map, not to an invisible line under it.
 	 */
 	static boolean mapCovers(Widget map, java.awt.Point p)
 	{
 		return InventoryCheckOverlay.visible(map) && map.getBounds() != null && map.getBounds().contains(p);
 	}
 
-	/** Пункт меню игры над списком (латиницей — шрифт игры без кириллицы). */
+	/** A game menu entry over the list. */
 	static String menuOption(GuideList.Action a)
 	{
 		switch (a.getKind())
@@ -104,8 +104,8 @@ class GuideMouse extends MouseAdapter
 	}
 
 	/**
-	 * Под мышью окно игры с действием: верхний пункт меню (его выполнит левый клик) — от виджета, например
-	 * «Withdraw-1» в банке. Над миром верхний пункт — «Walk here» или действие с NPC и объектом, без виджета.
+	 * A game window with an action under the mouse: the top menu entry (which a left click will run) is from a widget, for example
+	 * "Withdraw-1" in the bank. Over the world the top entry is "Walk here" or an action on an NPC and object, without a widget.
 	 */
 	static boolean windowUnderMouse(MenuEntry[] entries)
 	{

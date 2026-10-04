@@ -204,8 +204,8 @@ describe('образец журнала из плагина', () => {
     const { events, bad } = parseLog(text);
     expect(bad).toBe(0);
     expect(events).toHaveLength(12);
-    expect(events[1]).toMatchObject({ kind: 'step', title: "The Knight's Sword", goal: 'Добудь руду' });
-    expect(events[8].text).toBe('S2-07 · Этап 3 из 9\n▶ Отнеси');
+    expect(events[1]).toMatchObject({ kind: 'step', title: "The Knight's Sword", goal: 'Mine the ore' });
+    expect(events[8].text).toBe('S2-07 · Stage 3 of 9\n▶ Hand it in');
   });
 
   it('разбор находит то, что в образце заложено', () => {
@@ -213,7 +213,7 @@ describe('образец журнала из плагина', () => {
     const r = analyze(events, bad);
     expect(r.session).toMatchObject({ plugin: '2.23.0', protocol: 6, ended: true });
     expect(r.steps[0]).toMatchObject({ stepId: 'S2-07', stageEnters: 1, autoMoves: 1, clicks: { NEXT: 1 } });
-    expect(r.steps[0].manualLines).toEqual(['2/5 Добудь руду']);
+    expect(r.steps[0].manualLines).toEqual(['2/5 Mine the ore']);
     expect(r.findings.map((f) => f.code)).toEqual(['STUCK', 'MANUAL_LINES']);
     expect(r.shots).toHaveLength(1);
     expect(formatReport(r)).toContain('Найдено: ошибок 1, предупреждений 0.');

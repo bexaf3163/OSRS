@@ -5,15 +5,15 @@ import java.util.Deque;
 import lombok.Value;
 
 /**
- * Темп прокачки: сколько опыта и действий осталось до цели шага и сколько примерно на это уйдёт.
+ * Training pace: how much XP and how many actions are left to the step's goal and about how long that will take.
  *
- * Темп меряется по последним пяти прибавкам опыта: опыт между первой и последней из них, делённый на время.
- * Пока прибавок меньше трёх, время не выдумывается — только первая оценка из данных шага (secondsPerAction),
- * если она есть. Пауза дольше трёх минут начинает замер заново: перерыв на банк — не темп.
- * В бою опыт приходит за каждый удар, а действие — целый противник, поэтому там окно шире: последние
- * 30 прибавок, и замер начинается с восьми — иначе темп одного боя без ходьбы между противниками выходил бы
- * слишком быстрым.
- * Без RuneLite: чистый расчёт, проверяется обычным тестом.
+ * The pace is measured over the last five XP gains: the XP between the first and the last of them, divided by the time.
+ * While there are fewer than three gains, no time is made up: only the first estimate from the step's data (secondsPerAction),
+ * if there is one. A pause longer than three minutes starts the measurement again: a bank break is not pace.
+ * In combat XP comes for every hit and an action is a whole enemy, so the window is wider there: the last
+ * 30 gains, and the measurement starts from eight; otherwise the pace of a single fight, without walking between enemies, would come out
+ * too fast.
+ * Without RuneLite: a pure calculation, checked by an ordinary test.
  */
 final class PacingTracker
 {
@@ -22,10 +22,10 @@ final class PacingTracker
 	static final int COMBAT_HISTORY = 30;
 	static final int COMBAT_MIN_GAINS = 8;
 	static final long PAUSE_MS = 3 * 60_000L;
-	/** Меньше стольких действий — «почти готово». */
+	/** Fewer than this many actions means "almost done". */
 	static final int ALMOST = 5;
 
-	/** Что показать: опыт и действия до цели, темп и время. actionsPerMinute и etaSeconds — null, пока их не знаем. */
+	/** What to show: XP and actions to the goal, the pace and the time. actionsPerMinute and etaSeconds are null until we know them. */
 	@Value
 	static class Snapshot
 	{
@@ -34,14 +34,14 @@ final class PacingTracker
 		int actionsLeft;
 		Double actionsPerMinute;
 		Long etaSeconds;
-		/** Время — оценка из данных шага, а не замер. */
+		/** The time is an estimate from the step's data, not a measurement. */
 		boolean estimated;
 		boolean almost;
 		boolean done;
 	}
 
 	private final ActiveTarget.Pacing pacing;
-	/** Навык этого замера: у шага боя их несколько, у каждого свой. */
+	/** The skill of this measurement: a combat step has several, each with its own. */
 	private final String skill;
 	private final int history;
 	private final int minGains;
@@ -67,7 +67,7 @@ final class PacingTracker
 		return skill;
 	}
 
-	/** Опыт навыка; -1 — ещё не знаем. */
+	/** The skill's XP; -1 means not known yet. */
 	int getXp()
 	{
 		return xp;
@@ -79,9 +79,9 @@ final class PacingTracker
 	}
 
 	/**
-	 * Новое значение опыта навыка. true — что-то изменилось. Первое ненулевое значение — точка отсчёта, не прибавка:
-	 * сразу после входа RuneLite ещё отдаёт 0, и весь накопленный опыт иначе засчитался бы одной прибавкой —
-	 * темп взлетал до небес, и время показывалось «~0 мин», пока выброс не уходил из последних пяти.
+	 * A new XP value for a skill. true means something changed. The first non-zero value is the reference point, not a gain:
+	 * right after login RuneLite still returns 0, and all the accumulated XP would otherwise be counted as one gain,
+	 * the pace would shoot up and the time would show "~0 min" until the spike left the last five.
 	 */
 	boolean update(int currentXp, long nowMs)
 	{
@@ -125,7 +125,7 @@ final class PacingTracker
 			boolean first = true;
 			for (long[] g : gains)
 			{
-				// Опыт первой прибавки получен до начала отрезка — в темп не входит.
+				// The XP of the first gain was received before the interval began: it is not part of the pace.
 				if (!first)
 				{
 					gained += g[1];
@@ -146,24 +146,24 @@ final class PacingTracker
 		return new Snapshot(Math.max(xp, 0), remaining, actions, perMinute, eta, estimated, !done && actions < ALMOST, done);
 	}
 
-	/** Строка для HUD: «34 креветки до 20 Fishing (~7 мин)», «Почти готово», «Целевой уровень достигнут». */
+	/** The HUD line: "34 shrimps to 20 Fishing (~7 min)", "Almost done", "Target level reached". */
 	String hudLine(Snapshot s)
 	{
 		String name = skillName(skill);
 		if (s.isDone())
 		{
-			return "✓ Целевой уровень достигнут: " + pacing.getTargetLevel() + " " + name;
+			return "✓ Target level reached: " + pacing.getTargetLevel() + " " + name;
 		}
 		String line = s.getActionsLeft() + " " + actionForm(pacing.getActionName(), s.getActionsLeft())
-			+ " до " + pacing.getTargetLevel() + " " + name;
+			+ " to " + pacing.getTargetLevel() + " " + name;
 		if (s.isAlmost())
 		{
-			return "✓ Почти готово: " + line;
+			return "✓ Almost done: " + line;
 		}
 		return line + " (" + eta(s) + ")";
 	}
 
-	/** «fishing» → «Fishing»: как навык называется во вкладке навыков игры. */
+	/** "fishing" -> "Fishing": how the skill is called in the game's skills tab. */
 	static String skillName(String skill)
 	{
 		return Character.toUpperCase(skill.charAt(0)) + skill.substring(1);
@@ -173,32 +173,18 @@ final class PacingTracker
 	{
 		if (s.getEtaSeconds() == null)
 		{
-			return "время рассчитывается…";
+			return "calculating the time...";
 		}
 		long min = Math.round(s.getEtaSeconds() / 60.0);
-		String time = min < 1 ? "<1 мин" : "~" + min + " мин";
-		// Оценка из данных шага, а не замер, — так и написано: в бою она не учитывает ходьбу между противниками.
-		return s.isEstimated() ? "оценка " + time : time;
+		String time = min < 1 ? "<1 min" : "~" + min + " min";
+		// An estimate from the step's data, not a measurement, and it says so: in combat it does not account for walking between enemies.
+		return s.isEstimated() ? "estimate " + time : time;
 	}
 
-	/** Форма слова для числа: «креветка|креветки|креветок». */
+	/** The word form for a number: "shrimp|shrimps". */
 	static String actionForm(String forms, int n)
 	{
 		String[] f = forms.split("\\|");
-		if (f.length < 3)
-		{
-			return f[0];
-		}
-		int mod10 = n % 10;
-		int mod100 = n % 100;
-		if (mod10 == 1 && mod100 != 11)
-		{
-			return f[0];
-		}
-		if (mod10 >= 2 && mod10 <= 4 && (mod100 < 12 || mod100 > 14))
-		{
-			return f[1];
-		}
-		return f[2];
+		return n == 1 ? f[0] : f[f.length - 1];
 	}
 }

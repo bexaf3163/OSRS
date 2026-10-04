@@ -16,32 +16,32 @@ import net.runelite.client.ui.FontManager;
 import org.junit.Test;
 
 /**
- * Названия настроек плагина помещаются в панель RuneLite без многоточия.
+ * The plugin's setting names fit the RuneLite panel without an ellipsis.
  *
- * Панель шириной 225 точек: пункт подписан обычным шрифтом RuneScape (кириллица — из системного), справа —
- * галочка, поле числа или цвет; раздел — жирным. Мерки сняты с живого клиента 1.12.39: «Проверка вылета у
- * банка» рядом с галочкой видна целиком, «Непрозрачность HUD» рядом с полем процентов обрезалась до
- * «Непрозрачност…», заголовок «Места, банк, опасность, темп» — до «Места, банк, опасност…». Этим шрифтом
- * все видимые целиком названия не шире 184 точек, а все обрезанные — шире: мерка совпадает с клиентом.
+ * The panel is 225 points wide: an item is labelled with the regular RuneScape font, with a checkbox, a number field, a colour
+ * or a dropdown on the right; a section is in bold. The budgets are measured on the live client 1.12.39: a name next to a
+ * checkbox is shown whole up to 184 points, next to a number field up to 111, next to a colour up to 114, next to a dropdown up
+ * to 81, and a section heading (bold) up to 176. With this font every name that was shown whole is no wider than its budget and
+ * every one that was cut is wider: the measure matches the client.
  */
 public class ConfigNamesTest
 {
+	private static final int CHECKBOX = 184;
+	private static final int SPINNER = 111;
+	private static final int COLOR = 114;
+	private static final int DROPDOWN = 81;
+	private static final int SECTION = 176;
+
 	private static FontMetrics metrics(Font f)
 	{
 		return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics().getFontMetrics(f);
 	}
 
 	@Test
-	public void названияВлезаютВПанельНастроек()
+	public void namesFitTheSettingsPanel()
 	{
 		FontMetrics small = metrics(FontManager.getRunescapeFont());
 		FontMetrics bold = metrics(FontManager.getRunescapeBoldFont());
-		int checkbox = small.stringWidth("Проверка вылета у банка");
-		int spinner = small.stringWidth("Непрозрачност");
-		int color = small.stringWidth("Цвет подсветки");
-		int section = bold.stringWidth("Места, банк, опасност");
-		// Выпадающий список шире галочки: в живом клиенте «Размер стрелки» рядом с ним обрезался до «Размер ст…».
-		int dropdown = small.stringWidth("Размер ст…");
 		List<String> bad = new ArrayList<>();
 		int items = 0;
 		for (Method m : OsrsPathBridgeConfig.class.getDeclaredMethods())
@@ -53,18 +53,18 @@ public class ConfigNamesTest
 			}
 			items++;
 			Class<?> type = m.getReturnType();
-			int budget = type == int.class ? spinner : type == Color.class ? color : type.isEnum() ? dropdown : checkbox;
+			int budget = type == int.class ? SPINNER : type == Color.class ? COLOR : type.isEnum() ? DROPDOWN : CHECKBOX;
 			int w = small.stringWidth(item.name());
 			if (w > budget)
 			{
-				bad.add("«" + item.name() + "» " + w + " > " + budget);
+				bad.add("'" + item.name() + "' " + w + " > " + budget);
 			}
-			// Всплывающая подсказка — шрифтом RuneLite с подстановкой системного: чего он не умеет, выходит
-			// квадратиком (так было с 🧭 в 2.5.1). Запрета на значки нет — ⚡, ✓ и стрелки он рисует.
+			// The tooltip is drawn with the RuneLite font with a system fallback: what it cannot draw comes out as a
+			// box (it happened with the compass emoji in 2.5.1). Symbols are not banned - it draws the lightning bolt, the check mark and arrows.
 			int missing = FontManager.getRunescapeFont().canDisplayUpTo(item.description());
 			if (missing >= 0)
 			{
-				bad.add("«" + new String(Character.toChars(item.description().codePointAt(missing))) + "» не рисуется в подсказке «" + item.name() + "»");
+				bad.add("'" + new String(Character.toChars(item.description().codePointAt(missing))) + "' is not drawn in the tooltip of '" + item.name() + "'");
 			}
 		}
 		int sections = 0;
@@ -76,28 +76,27 @@ public class ConfigNamesTest
 				continue;
 			}
 			sections++;
-			if (bold.stringWidth(s.name()) > section)
+			if (bold.stringWidth(s.name()) > SECTION)
 			{
-				bad.add("раздел «" + s.name() + "» " + bold.stringWidth(s.name()) + " > " + section);
+				bad.add("section '" + s.name() + "' " + bold.stringWidth(s.name()) + " > " + SECTION);
 			}
 		}
-		// 2.7: 19 пунктов — убраны «Путевые точки на земле» и «Разрешённые сайты» (веб-версии больше нет).
-		assertTrue("пунктов: " + items, items >= 19);
-		assertTrue("разделов: " + sections, sections >= 2);
-		assertTrue("не влезает в панель RuneLite:\n" + String.join("\n", bad), bad.isEmpty());
+		// 2.7: 19 items - "Waypoints on the ground" and "Allowed sites" were removed (there is no web version any more).
+		assertTrue("items: " + items, items >= 19);
+		assertTrue("sections: " + sections, sections >= 2);
+		assertTrue("does not fit the RuneLite panel:\n" + String.join("\n", bad), bad.isEmpty());
 	}
 
 	@Test
-	public void меркаЛовитСтарыеНазвания()
+	public void theMeasureCatchesLongNames()
 	{
-		// Так было до исправления — в живом клиенте эти названия обрезались многоточием.
+		// Names like these were cut with an ellipsis in the live client.
 		FontMetrics small = metrics(FontManager.getRunescapeFont());
-		int checkbox = small.stringWidth("Проверка вылета у банка");
-		for (String old : new String[]{"Звук при выполнении шага", "Маршрут через Shortest Path", "Навигация к местам из приложения",
-			"Подсветка предметов этапа в банке", "Звук при входе в опасную зону"})
+		for (String old : new String[]{"Play a sound when the current step is completed", "Show the route through the Shortest Path plugin",
+			"Navigation to the places chosen in the app", "Highlight the items of the whole stage in the bank", "Play a sound when entering a danger zone"})
 		{
-			assertTrue(old, small.stringWidth(old) > checkbox);
+			assertTrue(old, small.stringWidth(old) > CHECKBOX);
 		}
-		assertTrue(small.stringWidth("Непрозрачность HUD") > small.stringWidth("Непрозрачност"));
+		assertTrue(small.stringWidth("HUD opacity in percent of the full colour") > SPINNER);
 	}
 }

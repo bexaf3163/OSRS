@@ -38,7 +38,7 @@ public class BridgeServerTest
 	private final List<NavTarget> navs = new CopyOnWriteArrayList<>();
 	private final List<BankTags> bankTags = new CopyOnWriteArrayList<>();
 	private final List<GearHint> gearHints = new CopyOnWriteArrayList<>();
-	/** Не null — слушатель отказывает с этой причиной (функция выключена в настройках). */
+	/** Not null: the listener refuses with this reason (the feature is turned off in the settings). */
 	private volatile String refuse;
 	private final HttpClient http = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(2)).build();
 	private BridgeServer server;
@@ -137,7 +137,7 @@ public class BridgeServerTest
 		+ "\"highlightItems\":[\"Egg\"],\"completionTrigger\":{\"type\":\"QUEST_COMPLETED\",\"questName\":\"Cook's Assistant\"}}";
 
 	@Test
-	public void statusОтвечаетOkИВИгре() throws Exception
+	public void statusAnswersOkAndInGame() throws Exception
 	{
 		HttpResponse<String> r = get("/status");
 		assertEquals(200, r.statusCode());
@@ -148,7 +148,7 @@ public class BridgeServerTest
 	}
 
 	@Test
-	public void statusСообщаетВерсииДляРукопожатия() throws Exception
+	public void statusReportsVersionsForTheHandshake() throws Exception
 	{
 		String body = get("/status").body();
 		assertTrue(body, body.contains("\"protocol\":" + BridgeServer.PROTOCOL));
@@ -156,7 +156,7 @@ public class BridgeServerTest
 	}
 
 	@Test
-	public void statusОтдаётОценкуПредметов() throws Exception
+	public void statusGivesItemValuation() throws Exception
 	{
 		java.util.Map<String, Object> gear = new java.util.LinkedHashMap<>();
 		gear.put("equipment", new java.util.ArrayList<>());
@@ -172,15 +172,15 @@ public class BridgeServerTest
 	}
 
 	@Test
-	public void слушаетТолькоLoopback()
+	public void listensOnLoopbackOnly()
 	{
 		assertTrue(InetAddress.getLoopbackAddress().isLoopbackAddress());
-		// Адрес сервера — тот самый loopback: снаружи компьютера до него не достучаться.
+		// The server address is the loopback itself: it cannot be reached from outside the computer.
 		assertEquals(base, "http://127.0.0.1:" + server.getPort());
 	}
 
 	@Test
-	public void activeStepПередаётЦельИСтатусЗапоминаетШаг() throws Exception
+	public void activeStepPassesTheTargetAndStatusRemembersTheStep() throws Exception
 	{
 		HttpResponse<String> r = post("/active-step", COOK, BridgeServer.HEADER, "1", "Content-Type", "application/json");
 		assertEquals(200, r.statusCode());
@@ -198,9 +198,9 @@ public class BridgeServerTest
 	}
 
 	@Test
-	public void postБезЗаголовкаОтклоняется() throws Exception
+	public void aPostWithoutTheHeaderIsRejected() throws Exception
 	{
-		// Обычная форма или fetch без CORS-разрешения с чужого сайта заголовок X-OSRS-Path не пришлёт.
+		// An ordinary form or a fetch without CORS permission from someone else's site will not send the X-OSRS-Path header.
 		assertEquals(403, post("/active-step", COOK, "Content-Type", "text/plain").statusCode());
 		assertEquals(403, post("/clear", "").statusCode());
 		assertTrue(targets.isEmpty());
@@ -208,9 +208,9 @@ public class BridgeServerTest
 	}
 
 	@Test
-	public void любойБраузерОтклоняетсяПрограммаДляПКПускается() throws Exception
+	public void anyBrowserIsRejected_theDesktopAppIsLetIn() throws Exception
 	{
-		// Веб-версии нет: запрос с Origin — это страница в браузере, даже с localhost.
+		// There is no web version: a request with Origin is a page in a browser, even from localhost.
 		for (String origin : new String[]{"https://evil.example", "http://localhost:5173", "http://127.0.0.1:38282", "null"})
 		{
 			assertEquals(origin, 403, get("/status", "Origin", origin).statusCode());
@@ -218,7 +218,7 @@ public class BridgeServerTest
 		}
 		assertTrue(targets.isEmpty());
 
-		// Предзапрос CORS тоже отклоняется — браузер не получит разрешения на X-OSRS-Path.
+		// The CORS preflight is rejected too: the browser will not get permission for X-OSRS-Path.
 		HttpRequest pre = HttpRequest.newBuilder(URI.create(base + "/active-step"))
 			.method("OPTIONS", HttpRequest.BodyPublishers.noBody())
 			.header("Origin", "http://localhost:5173")
@@ -229,16 +229,16 @@ public class BridgeServerTest
 		assertEquals(403, r.statusCode());
 		assertTrue(r.headers().firstValue("Access-Control-Allow-Origin").isEmpty());
 
-		// Программа для ПК (главный процесс Electron) Origin не присылает.
+		// The desktop app (the Electron main process) does not send Origin.
 		HttpResponse<String> app = get("/status");
 		assertEquals(200, app.statusCode());
 		assertTrue(app.headers().firstValue("Access-Control-Allow-Origin").isEmpty());
 	}
 
 	@Test
-	public void чужойHostОтклоняется() throws Exception
+	public void aForeignHostIsRejected() throws Exception
 	{
-		// Защита от DNS rebinding: сайт attacker.example, указывающий на 127.0.0.1, пришлёт свой Host.
+		// Protection against DNS rebinding: the site attacker.example, pointing to 127.0.0.1, will send its own Host.
 		try (Socket s = new Socket(InetAddress.getLoopbackAddress(), server.getPort()))
 		{
 			OutputStream out = s.getOutputStream();
@@ -254,7 +254,7 @@ public class BridgeServerTest
 	}
 
 	@Test
-	public void неверныеЗапросы() throws Exception
+	public void invalidRequests() throws Exception
 	{
 		assertEquals(400, post("/active-step", "{not json", BridgeServer.HEADER, "1").statusCode());
 		assertEquals(400, post("/active-step", "{\"stepId\":\"hack\"}", BridgeServer.HEADER, "1").statusCode());
@@ -271,12 +271,12 @@ public class BridgeServerTest
 	}
 
 	@Test
-	public void новыеПоляШагаПроверяютсяПоПроводу() throws Exception
+	public void newStepFieldsAreValidatedOnTheWire() throws Exception
 	{
 		String[] bad = {
 			"{\"stepId\":\"S5-08\",\"title\":\"x\",\"maxHit\":0}",
 			"{\"stepId\":\"S5-08\",\"title\":\"x\",\"maxHit\":201}",
-			"{\"stepId\":\"S5-08\",\"title\":\"x\",\"maxHit\":\"много\"}",
+			"{\"stepId\":\"S5-08\",\"title\":\"x\",\"maxHit\":\"lots\"}",
 			"{\"stepId\":\"S2-03\",\"title\":\"x\",\"useOn\":[null]}",
 			"{\"stepId\":\"S2-03\",\"title\":\"x\",\"useOn\":[{\"item\":\"Bones\"}]}",
 			"{\"stepId\":\"S2-03\",\"title\":\"x\",\"useOn\":[{\"item\":\"Bones\",\"target\":\"Cow\",\"kind\":\"hack\"}]}",
@@ -293,7 +293,7 @@ public class BridgeServerTest
 	}
 
 	@Test
-	public void eventsОтдаётСтатусИАвтоотметку() throws Exception
+	public void eventsGiveStatusAndAutoTick() throws Exception
 	{
 		BlockingQueue<String> lines = new LinkedBlockingQueue<>();
 		Socket s = new Socket(InetAddress.getLoopbackAddress(), server.getPort());
@@ -318,7 +318,7 @@ public class BridgeServerTest
 				}
 				catch (IOException ignored)
 				{
-					// Сокет закрыт в конце теста.
+					// The socket is closed at the end of the test.
 				}
 			});
 			reader.setDaemon(true);
@@ -330,7 +330,7 @@ public class BridgeServerTest
 			assertEquals("{\"type\":\"STATUS\",\"inGame\":true}", lines.poll(3, TimeUnit.SECONDS));
 			server.stepCompleted("S1-03");
 			assertEquals("{\"type\":\"STEP_AUTO_COMPLETED\",\"stepId\":\"S1-03\"}", lines.poll(3, TimeUnit.SECONDS));
-			// Тот же статус второй раз не рассылается.
+			// The same status is not sent a second time.
 			server.setInGame(true);
 			assertNull(lines.poll(300, TimeUnit.MILLISECONDS));
 		}
@@ -340,7 +340,7 @@ public class BridgeServerTest
 		}
 	}
 
-	/** Открыть /events и складывать строки data: в очередь. */
+	/** Open /events and put the data: lines into a queue. */
 	private Socket openEvents(BlockingQueue<String> lines) throws IOException
 	{
 		Socket s = new Socket(InetAddress.getLoopbackAddress(), server.getPort());
@@ -363,7 +363,7 @@ public class BridgeServerTest
 			}
 			catch (IOException ignored)
 			{
-				// Сокет закрыт в конце теста.
+				// The socket is closed at the end of the test.
 			}
 		});
 		reader.setDaemon(true);
@@ -372,7 +372,7 @@ public class BridgeServerTest
 	}
 
 	@Test
-	public void опытКвестыИИмяПерсонажа_протокол5()
+	public void xpQuestsAndCharacterName_protocol5()
 	{
 		try
 		{
@@ -390,7 +390,7 @@ public class BridgeServerTest
 				server.setQuests(java.util.Arrays.asList("Rune Mysteries", "Imp Catcher"));
 				server.setPlayer("Bexqq");
 				assertEquals("{\"type\":\"STATUS\",\"inGame\":false,\"player\":\"Bexqq\"}", lines.poll(3, TimeUnit.SECONDS));
-				assertNull("повторы не рассылаются", lines.poll(300, TimeUnit.MILLISECONDS));
+				assertNull("repeats are not sent", lines.poll(300, TimeUnit.MILLISECONDS));
 			}
 			String status = get("/status").body();
 			assertTrue(status, status.contains("\"xp\":{\"magic\":1234}"));
@@ -400,7 +400,7 @@ public class BridgeServerTest
 			assertTrue(get("/status").body(), get("/status").body().contains("\"pos\":{\"x\":3213,\"y\":3424,\"plane\":0}"));
 			server.setPos(null, null, null);
 			assertTrue(!get("/status").body().contains("\"pos\""));
-			// Новое подключение получает всё это сразу.
+			// A new connection gets all of this at once.
 			BlockingQueue<String> again = new LinkedBlockingQueue<>();
 			try (Socket s = openEvents(again))
 			{
@@ -411,7 +411,7 @@ public class BridgeServerTest
 				}
 				assertTrue(all.toString(), all.toString().contains("\"player\":\"Bexqq\"") && all.toString().contains("\"type\":\"XP\"") && all.toString().contains("\"type\":\"QUESTS\""));
 			}
-			// Выход из игры — всё снимается.
+			// Logging out removes everything.
 			server.setXp(null);
 			server.setQuests(null);
 			server.setPlayer(null);
@@ -424,7 +424,7 @@ public class BridgeServerTest
 	}
 
 	@Test
-	public void уровниИПредметыРассылаютсяПриИзмененииИПовторяютсяНовомуПодключению() throws Exception
+	public void levelsAndItemsAreSentOnChangeAndRepeatedToANewConnection() throws Exception
 	{
 		BlockingQueue<String> lines = new LinkedBlockingQueue<>();
 		try (Socket s = openEvents(lines))
@@ -435,7 +435,7 @@ public class BridgeServerTest
 			stats.put("woodcutting", 12);
 			server.setStats(stats);
 			assertEquals("{\"type\":\"STATS\",\"stats\":{\"magic\":25,\"woodcutting\":12}}", lines.poll(3, TimeUnit.SECONDS));
-			// Те же уровни второй раз не уходят.
+			// The same levels are not sent a second time.
 			server.setStats(new java.util.LinkedHashMap<>(stats));
 			java.util.Map<String, Object> rope = new java.util.LinkedHashMap<>();
 			rope.put("name", "Rope");
@@ -457,7 +457,7 @@ public class BridgeServerTest
 	}
 
 	@Test
-	public void shoppingPlanПроверяетсяИПередаётся() throws Exception
+	public void shoppingPlanIsValidatedAndPassed() throws Exception
 	{
 		String ok = "{\"items\":[{\"name\":\"Rope\",\"id\":954,\"count\":2},{\"name\":\"Hammer\",\"count\":1}]}";
 		assertEquals(403, post("/shopping-plan", ok).statusCode());
@@ -471,7 +471,7 @@ public class BridgeServerTest
 	}
 
 	@Test
-	public void navTargetПроверяетсяПередаётсяИОтказываетВыключенной() throws Exception
+	public void navTargetIsValidatedPassedAndRefusedWhenOff() throws Exception
 	{
 		String place = "{\"label\":\"Port Sarim\",\"x\":3029,\"y\":3221,\"plane\":0}";
 		String shop = "{\"label\":\"Bob's Brilliant Axes\",\"x\":3229,\"y\":3204,\"plane\":0,\"npcNames\":[\"Bob\"],"
@@ -486,7 +486,7 @@ public class BridgeServerTest
 		assertTrue(navs.get(1).getNpcNameSet().contains("bob"));
 		assertTrue(navs.get(2).isClear());
 
-		// Без подписи, вне мира, чужой этаж, мусор — отказ до слушателя.
+		// Without the signature, outside the world, another floor, junk: refused before the listener.
 		assertEquals(400, post("/nav-target", "{\"x\":3029,\"y\":3221,\"plane\":0}", BridgeServer.HEADER, "1").statusCode());
 		assertEquals(400, post("/nav-target", "{\"label\":\"X\",\"x\":-5,\"y\":3221,\"plane\":0}", BridgeServer.HEADER, "1").statusCode());
 		assertEquals(400, post("/nav-target", "{\"label\":\"X\",\"x\":3029,\"y\":3221,\"plane\":7}", BridgeServer.HEADER, "1").statusCode());
@@ -497,19 +497,19 @@ public class BridgeServerTest
 		assertEquals(405, get("/nav-target").statusCode());
 		assertEquals(3, navs.size());
 
-		refuse = "навигация выключена";
+		refuse = "navigation is turned off";
 		HttpResponse<String> off = post("/nav-target", place, BridgeServer.HEADER, "1");
 		assertEquals(409, off.statusCode());
-		assertTrue(off.body().contains("навигация выключена"));
+		assertTrue(off.body().contains("navigation is turned off"));
 		assertEquals(3, navs.size());
 	}
 
 	@Test
-	public void bankTagsПроверяютсяИПередаются() throws Exception
+	public void bankTagsAreValidatedAndPassed() throws Exception
 	{
 		assertEquals(200, post("/bank-tags", "{\"stageId\":\"stage-1\",\"itemIds\":[995,1351,1351,590]}", BridgeServer.HEADER, "1").statusCode());
 		assertEquals(3, bankTags.get(0).getIdSet().size());
-		// Пустой список — снять подсветку, это не ошибка.
+		// An empty list removes the highlight, it is not an error.
 		assertEquals(200, post("/bank-tags", "{\"stageId\":\"stage-1\",\"itemIds\":[]}", BridgeServer.HEADER, "1").statusCode());
 		assertTrue(bankTags.get(1).getIdSet().isEmpty());
 		assertEquals(400, post("/bank-tags", "{\"itemIds\":[995]}", BridgeServer.HEADER, "1").statusCode());
@@ -523,23 +523,23 @@ public class BridgeServerTest
 		}
 		assertEquals(400, post("/bank-tags", many.append("]}").toString(), BridgeServer.HEADER, "1").statusCode());
 		assertEquals(2, bankTags.size());
-		refuse = "выключено";
+		refuse = "turned off";
 		assertEquals(409, post("/bank-tags", "{\"stageId\":\"s\",\"itemIds\":[995]}", BridgeServer.HEADER, "1").statusCode());
 	}
 
 	@Test
-	public void gearHintПроверяетсяИПередаётся() throws Exception
+	public void gearHintIsValidatedAndPassed() throws Exception
 	{
-		String hint = "{\"text\":\"⚡ Сильнее: Steel scimitar у Zeke (Al Kharid), 400 gp\","
+		String hint = "{\"text\":\"⚡ Upgrade: Steel scimitar from Zeke (Al Kharid), 400 gp\","
 			+ "\"watchItems\":[\"Steel scimitar\",\"Iron scimitar\"],\"highlightItems\":[\"Iron scimitar\"]}";
-		// Без заголовка приложения — как любой чужой запрос.
+		// Without the app header: like any foreign request.
 		assertEquals(403, post("/gear-hint", hint).statusCode());
 		assertEquals(200, post("/gear-hint", hint, BridgeServer.HEADER, "1").statusCode());
 		GearHint got = gearHints.get(0);
 		assertEquals(2, got.watched().size());
 		assertTrue(got.getHighlightSet().contains(ActiveTarget.nameKey("Iron scimitar")));
 		assertFalse(got.getHighlightSet().contains(ActiveTarget.nameKey("Steel scimitar")));
-		// Только вопрос к банку, без строки в HUD, — тоже можно.
+		// Only a question to the bank, with no line in the HUD, is allowed too.
 		assertEquals(200, post("/gear-hint", "{\"watchItems\":[\"Mithril scimitar\"]}", BridgeServer.HEADER, "1").statusCode());
 		assertNull(gearHints.get(1).getText());
 		assertEquals(200, post("/gear-hint", "{\"clear\":true}", BridgeServer.HEADER, "1").statusCode());
@@ -564,19 +564,19 @@ public class BridgeServerTest
 		assertEquals(405, get("/gear-hint").statusCode());
 		assertEquals(3, gearHints.size());
 
-		// Подсказки выключены в настройках — 409 с причиной, а снять старую всё равно можно.
-		refuse = "подсказки апгрейда выключены";
+		// Hints are turned off in the settings: 409 with a reason, but the old one can still be cleared.
+		refuse = "upgrade hints are turned off";
 		HttpResponse<String> off = post("/gear-hint", hint, BridgeServer.HEADER, "1");
 		assertEquals(409, off.statusCode());
-		assertTrue(off.body().contains("подсказки апгрейда выключены"));
+		assertTrue(off.body().contains("upgrade hints are turned off"));
 		assertEquals(200, post("/gear-hint", "{\"clear\":true}", BridgeServer.HEADER, "1").statusCode());
 		assertEquals(4, gearHints.size());
 	}
 
 	@Test
-	public void statusСнаряжениеИСобытияТемпаИЦели() throws Exception
+	public void statusGearAndPaceAndTargetEvents() throws Exception
 	{
-		// Пока снаряжение неизвестно — поля есть, но null: старый клиент их просто не читает.
+		// While the gear is unknown the fields are there but null: an old client just does not read them.
 		String before = get("/status").body();
 		assertTrue(before.contains("\"status\":\"ok\""));
 		assertFalse(before.contains("\"coins\":"));
@@ -619,7 +619,7 @@ public class BridgeServerTest
 		assertTrue(after.contains("\"equipment\":[{\"id\":1351,\"name\":\"Bronze axe\"}]"));
 		assertTrue(after.contains("\"coins\":250"));
 
-		// Новое подключение сразу получает снаряжение и темп.
+		// A new connection gets the gear and the pace at once.
 		BlockingQueue<String> again = new LinkedBlockingQueue<>();
 		try (Socket s = openEvents(again))
 		{
@@ -630,11 +630,11 @@ public class BridgeServerTest
 	}
 
 	@Test
-	public void цельВыбраннаяВИгре_событиеNavSetИВStatus() throws Exception
+	public void targetChosenInTheGame_navSetEventAndInStatus() throws Exception
 	{
-		assertFalse("цели нет — поля нет", get("/status").body().contains("\"navTarget\""));
+		assertFalse("no target, no field", get("/status").body().contains("\"navTarget\""));
 		NavTarget t = new NavTarget();
-		t.setLabel("Ned — дом в Draynor Village");
+		t.setLabel("Ned: house in Draynor Village");
 		t.setX(3099);
 		t.setY(3259);
 		t.setNpcNames(Collections.singletonList("Ned"));
@@ -644,29 +644,29 @@ public class BridgeServerTest
 		{
 			assertTrue(lines.poll(3, TimeUnit.SECONDS).contains("STATUS"));
 			server.navSet(t);
-			assertEquals("{\"type\":\"NAV_SET\",\"target\":{\"label\":\"Ned — дом в Draynor Village\",\"x\":3099,\"y\":3259,\"plane\":0,"
+			assertEquals("{\"type\":\"NAV_SET\",\"target\":{\"label\":\"Ned: house in Draynor Village\",\"x\":3099,\"y\":3259,\"plane\":0,"
 				+ "\"npcNames\":[\"Ned\"],\"stepId\":\"S2-10\"}}", lines.poll(3, TimeUnit.SECONDS));
-			// Программа, запущенная позже, узнаёт цель из /status.
-			assertTrue(get("/status").body().contains("\"navTarget\":{\"label\":\"Ned — дом в Draynor Village\",\"x\":3099"));
+			// An app started later learns the target from /status.
+			assertTrue(get("/status").body().contains("\"navTarget\":{\"label\":\"Ned: house in Draynor Village\",\"x\":3099"));
 			server.navDone("arrived", t);
 			assertTrue(lines.poll(3, TimeUnit.SECONDS).startsWith("{\"type\":\"NAV_DONE\",\"reason\":\"arrived\""));
 		}
-		assertFalse("дошёл — цели снова нет", get("/status").body().contains("\"navTarget\""));
+		assertFalse("arrived: no target again", get("/status").body().contains("\"navTarget\""));
 	}
 
 	@Test
-	public void telemetryОтдаётСводкуЖурналаИЗащищёнКакОстальныеАдреса() throws Exception
+	public void telemetryGivesTheJournalSummaryAndIsProtectedLikeTheOtherAddresses() throws Exception
 	{
-		// Слушатель по умолчанию — журнал выключен.
+		// The default listener: the journal is off.
 		HttpResponse<String> r = get("/telemetry");
 		assertEquals(200, r.statusCode());
 		assertEquals("{\"enabled\":false}", r.body());
-		assertEquals("только GET", 405, post("/telemetry", "{}", "X-OSRS-Path", "1").statusCode());
-		assertEquals("запрос из браузера отклонён", 403, get("/telemetry", "Origin", "https://evil.example").statusCode());
+		assertEquals("GET only", 405, post("/telemetry", "{}", "X-OSRS-Path", "1").statusCode());
+		assertEquals("a request from a browser is rejected", 403, get("/telemetry", "Origin", "https://evil.example").statusCode());
 	}
 
 	@Test
-	public void остановкаЗакрываетПорт() throws Exception
+	public void stopClosesThePort()
 	{
 		int port = server.getPort();
 		server.stop();
@@ -680,6 +680,6 @@ public class BridgeServerTest
 			refused = true;
 		}
 		assertTrue(refused);
-		// @After вызовет stop ещё раз — это не должно падать.
+		// @After will call stop once more: it must not fail.
 	}
 }

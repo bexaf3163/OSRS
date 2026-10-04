@@ -15,16 +15,16 @@ import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPosition;
 
 /**
- * Нужный вариант в меню диалога: рамка вокруг строки и стрелка ▶ слева. И предмет апгрейда в магазине.
- * Меню вариантов — компонент InterfaceID.Chatmenu.OPTIONS (219:1) из gameval RuneLite 1.12.39;
- * варианты — его динамические дочерние виджеты с текстом.
+ * The right option in the dialogue menu: a frame around the line and an arrow ▶ on the left. And the upgrade item in a shop.
+ * The options menu is the component InterfaceID.Chatmenu.OPTIONS (219:1) from RuneLite 1.12.39's gameval;
+ * the options are its dynamic child widgets with text.
  */
 class OsrsPathWidgetOverlay extends Overlay
 {
 	private final Client client;
 	private final OsrsPathBridgePlugin plugin;
 	private final OsrsPathBridgeConfig config;
-	/** Ячейка предмета апгрейда в открытом магазине — запоминается, пока магазин тот же. */
+	/** The upgrade item's cell in an open shop: remembered while the shop is the same. */
 	private Widget shopSlot;
 
 	@Inject
@@ -76,7 +76,7 @@ class OsrsPathWidgetOverlay extends Overlay
 			g.setColor(color);
 			g.setStroke(new BasicStroke(2f));
 			g.drawRoundRect(b.x - 3, b.y - 1, b.width + 6, b.height + 2, 6, 6);
-			// Стрелка рисуется фигурой: в шрифтах игры знака ▶ нет.
+			// The arrow is drawn as a shape: the game fonts have no ▶ symbol.
 			int cy = b.y + b.height / 2;
 			Polygon arrow = new Polygon(new int[]{b.x - 16, b.x - 16, b.x - 7}, new int[]{cy - 6, cy + 6, cy}, 3);
 			g.fillPolygon(arrow);
@@ -85,10 +85,10 @@ class OsrsPathWidgetOverlay extends Overlay
 	}
 
 	/**
-	 * Предмет апгрейда в открытом магазине: рамка вокруг его ячейки. Ячейки магазина — динамические
-	 * дочерние виджеты InterfaceID.Shopmain.ITEMS (300:16) с ID предмета, так что ищется по ID
-	 * (или по имени, если приложение ID не знает), а не по месту на экране. Найденная ячейка
-	 * запоминается — перебор только когда магазин открылся или его содержимое сменилось.
+	 * The upgrade item in an open shop: a frame around its cell. The shop cells are dynamic
+	 * child widgets of InterfaceID.Shopmain.ITEMS (300:16) with the item ID, so it is looked up by ID
+	 * (or by name if the app does not know the ID), not by place on the screen. The found cell
+	 * is remembered: iterating only when the shop was opened or its contents changed.
 	 */
 	private void renderShopItem(Graphics2D g)
 	{
@@ -126,7 +126,7 @@ class OsrsPathWidgetOverlay extends Overlay
 		}
 		Rectangle b = shopSlot.getBounds();
 		Rectangle area = items.getBounds();
-		// Ячейка прокручена за край окна магазина — рамку не рисуем поверх чужого.
+		// The shop cell is scrolled beyond the shop window's edge: we do not draw the frame over someone else's.
 		if (b == null || area == null || b.width <= 0 || !area.contains(b.x + b.width / 2, b.y + b.height / 2))
 		{
 			return;
@@ -149,7 +149,7 @@ class OsrsPathWidgetOverlay extends Overlay
 		return nav.getItemName() != null && ActiveTarget.nameKey(w.getName()).equals(ActiveTarget.nameKey(nav.getItemName()));
 	}
 
-	/** Мягкая пульсация прозрачности — заметно, но не мигает. */
+	/** A soft pulsation of transparency: noticeable but not flickering. */
 	static Color pulse(Color base)
 	{
 		double phase = (System.currentTimeMillis() % 1200) / 1200.0;

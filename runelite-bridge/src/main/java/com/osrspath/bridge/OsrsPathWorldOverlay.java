@@ -21,8 +21,8 @@ import net.runelite.client.ui.overlay.OverlayUtil;
 import net.runelite.client.ui.overlay.outline.ModelOutlineRenderer;
 
 /**
- * Подсветка в 3D-мире: контур NPC и объектов шага с подписью, клетки из groundTiles и точка шага.
- * Кого подсвечивать, плагин собирает по событиям появления — здесь только рисование уже найденного.
+ * Highlighting in the 3D world: the outline of the step's NPCs and objects with a label, tiles from groundTiles and the step's point.
+ * The plugin collects whom to highlight from spawn events; here is only the drawing of what has been found.
  */
 class OsrsPathWorldOverlay extends Overlay
 {
@@ -52,7 +52,6 @@ class OsrsPathWorldOverlay extends Overlay
 	{
 		WorldView wv = client.getTopLevelWorldView();
 		NavTarget nav = plugin.getNavTarget();
-		// Подписи над NPC и клетками — одним шрифтом с кириллицей: иначе «[Купи: » крупно, а «Steel axe]» мелко.
 		g.setFont(OverlayText.font(g.getFont(), 1f));
 		if (nav != null && wv != null)
 		{
@@ -110,14 +109,14 @@ class OsrsPathWorldOverlay extends Overlay
 	}
 
 	/**
-	 * Временная цель: золотой контур продавца с подписью «[Купи: Steel axe]» (или его имя) и клетка места.
-	 * Продавца нет рядом — остаются клетка, стрелка и HUD.
+	 * A temporary target: a golden outline of the seller with the label "[Buy: Steel axe]" (or its name) and the place's tile.
+	 * If the seller is not nearby, the tile, the arrow and the HUD remain.
 	 */
 	private void renderNav(Graphics2D g, WorldView wv, NavTarget nav)
 	{
 		Color gold = OsrsPathHudOverlay.TITLE;
 		String buy = nav.isPurchase() && config.upgradeRouter()
-			? "[Купи: " + (nav.getItemName() != null ? nav.getItemName() : nav.getLabel()) + "]"
+			? "[Buy: " + (nav.getItemName() != null ? nav.getItemName() : nav.getLabel()) + "]"
 			: null;
 		for (NPC npc : plugin.getNavNpcs())
 		{
@@ -135,7 +134,7 @@ class OsrsPathWorldOverlay extends Overlay
 		drawTile(g, wv, nav.getX(), nav.getY(), nav.getPlane(), plugin.getNavNpcs().isEmpty() ? nav.getLabel() : null, gold);
 	}
 
-	/** Клетка мира: контур и подпись. Вне загруженной области или на другом этаже — ничего. */
+	/** A world tile: an outline and a label. Outside the loaded area or on another plane, nothing. */
 	private void drawTile(Graphics2D g, WorldView wv, int x, int y, int plane, String label, Color color)
 	{
 		if (plane != wv.getPlane())
@@ -164,7 +163,7 @@ class OsrsPathWorldOverlay extends Overlay
 		}
 	}
 
-	/** Цвет клетки из шага (#rrggbb); без него или при ошибке — общий цвет подсветки. */
+	/** The tile colour from the step (#rrggbb); without it or on error, the common highlight colour. */
 	static Color parseColor(String hex, Color fallback)
 	{
 		if (hex == null || !hex.matches("#[0-9a-fA-F]{6}"))

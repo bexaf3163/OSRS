@@ -6,18 +6,18 @@ import java.util.List;
 import lombok.Value;
 
 /**
- * Проверка вылета: всё ли для шага лежит в сумке (или надето), а чего не хватает — есть ли оно в банке.
- * Чистая логика без RuneLite: её же повторяет src/lib/checklist.ts в приложении.
+ * The departure check: is everything for the step in the bag (or worn), and for what is missing, is it in the bank.
+ * Pure logic without RuneLite: src/lib/checklist.ts in the app repeats it.
  */
 final class Checklist
 {
 	enum State
 	{
-		/** В сумке или надето сколько нужно. */
+		/** In the bag or worn as many as needed. */
 		IN_BAG_READY,
-		/** Не хватает, но в банке есть (или банк ещё не открывали). */
+		/** Missing, but the bank has it (or the bank has not been opened yet). */
 		MISSING_FROM_BAG,
-		/** Не хватает даже вместе с банком. */
+		/** Missing even with the bank. */
 		NOT_FOUND_IN_BANK,
 	}
 
@@ -27,7 +27,7 @@ final class Checklist
 		String name;
 		int have;
 		int need;
-		/** Сколько в банке; -1 — банк ещё не открывали. */
+		/** How many in the bank; -1 means the bank has not been opened yet. */
 		int inBank;
 		Integer heals;
 		State state;
@@ -37,7 +37,7 @@ final class Checklist
 	static class Result
 	{
 		List<Row> rows;
-		/** READY_TO_DEPART: всё на руках. */
+		/** READY_TO_DEPART: everything is on hand. */
 		boolean ready;
 
 		long missing()
@@ -49,8 +49,8 @@ final class Checklist
 	static final Result NONE = new Result(Collections.emptyList(), false);
 
 	/**
-	 * Строка HUD: чего не хватает — по названиям, а не «не хватает 1 из 1». Одна вещь в банке — «возьми из банка»;
-	 * больше двух — первые две и «и ещё N» (весь список — в панели «OSRS Путь»).
+	 * The HUD line: what is missing, by names, not "missing 1 of 1". One thing in the bank: "take it from the bank";
+	 * more than two: the first two and "and N more" (the whole list is in the "OSRS Path" panel).
 	 */
 	static String hudLine(Result r)
 	{
@@ -66,23 +66,23 @@ final class Checklist
 		}
 		if (names.isEmpty())
 		{
-			return "Сумка готова к выходу";
+			return "Bag ready to leave";
 		}
 		if (names.size() == 1)
 		{
 			return only.getState() == State.MISSING_FROM_BAG && only.getInBank() > 0
-				? "Сумка: " + names.get(0) + " — возьми из банка"
-				: "Сумка: нет " + names.get(0);
+				? "Bag: " + names.get(0) + " - take it from the bank"
+				: "Bag: missing " + names.get(0);
 		}
-		String head = "Сумка: нет " + names.get(0) + ", " + names.get(1);
-		return names.size() == 2 ? head : head + " и ещё " + (names.size() - 2);
+		String head = "Bag: missing " + names.get(0) + ", " + names.get(1);
+		return names.size() == 2 ? head : head + " and " + (names.size() - 2) + " more";
 	}
 
 	private Checklist()
 	{
 	}
 
-	/** bank == null — содержимое банка неизвестно (банк в этой сессии не открывали). */
+	/** bank == null means the bank's contents are unknown (the bank was not opened in this session). */
 	static Result evaluate(List<ActiveTarget.ChecklistItem> items, ItemCounts carried, ItemCounts bank)
 	{
 		if (items == null || items.isEmpty())

@@ -15,15 +15,15 @@ import java.util.List;
 import org.junit.Test;
 
 /**
- * Цели шагов ровно такими, какими их шлёт программа на /active-step (active-steps.json пишет тест программы
- * tests/activeSteps.fixture.test.ts): плагин принимает каждую, а у списка «Что нужно» в игре кнопки там, где у
- * предмета есть место. Раньше тесты плагина пересказывали маршрут сами и могли разойтись с программой.
+ * The step targets exactly as the app sends them on /active-step (active-steps.json is written by the app test
+ * tests/activeSteps.fixture.test.ts): the plugin accepts each one, and the "What you need" list in the game has buttons where an
+ * item has a place. Before, the plugin tests retold the route themselves and could drift from the app.
  */
 public class ActiveStepsTest
 {
 	private static final Gson GSON = new Gson();
 
-	/** Цель шага и подпись для сообщений: «S2-03» или «S2-05 / varrock-teleport». */
+	/** The step target and a label for messages: "S2-03" or "S2-05 / varrock-teleport". */
 	static final class Sent
 	{
 		final String name;
@@ -50,10 +50,10 @@ public class ActiveStepsTest
 	}
 
 	@Test
-	public void плагинПринимаетКаждыйШагПрограммы()
+	public void pluginAcceptsEveryStepOfTheApp()
 	{
 		List<Sent> sent = all();
-		assertTrue("целей мало: " + sent.size(), sent.size() > 60);
+		assertTrue("too few targets: " + sent.size(), sent.size() > 60);
 		List<String> bad = new ArrayList<>();
 		for (Sent s : sent)
 		{
@@ -64,14 +64,14 @@ public class ActiveStepsTest
 			}
 			if (s.target.getGuide() == null)
 			{
-				bad.add(s.name + ": без списка «что нужно» — плагин попросил бы обновить программу");
+				bad.add(s.name + ": no 'what you need' list - the plugin would ask to update the app");
 			}
 		}
 		assertTrue(String.join("\n", bad), bad.isEmpty());
 	}
 
 	@Test
-	public void уПредметаСМестомВСпискеЕстьКнопка()
+	public void anItemWithAPlaceInTheListHasAButton()
 	{
 		int buttons = 0;
 		int npcRows = 0;
@@ -80,7 +80,7 @@ public class ActiveStepsTest
 		for (Sent s : all())
 		{
 			assertTrue(s.name, s.target.prepare() == null);
-			// Ничего нет, банк открывали: всё, что не по ходу шага, — «нет», и где взять — кнопка, если место известно.
+			// Nothing in the bag, the bank was opened: everything not 'along the way' is 'none', and where to get it is a button if the place is known.
 			StepGuide.View v = StepGuide.view(s.target, new ItemCounts(), new ItemCounts(), null, 0, 0, 0);
 			for (StepGuide.ItemLine i : v.getItems())
 			{
@@ -97,12 +97,12 @@ public class ActiveStepsTest
 				{
 					npcRows++;
 					NavTarget n = StepGuide.navTo(s.target, r.getAction().getPlace());
-					assertNotNull(s.name + ": место без цели " + r.getLines().get(0).getLeft(), n);
+					assertNotNull(s.name + ": place without a target " + r.getLines().get(0).getLeft(), n);
 				}
 			}
 		}
-		// Откуда предметы (from) и NPC квестов — у десятков шагов, а не только у S2-03.
-		assertTrue("кнопок у предметов: " + buttons, buttons >= 40);
-		assertTrue("мест в «Куда идти»: " + npcRows, npcRows >= 60);
+		// Where items come from (from) and quest NPCs: dozens of steps, not only S2-03.
+		assertTrue("buttons at items: " + buttons, buttons >= 40);
+		assertTrue("places in 'Where to go': " + npcRows, npcRows >= 60);
 	}
 }

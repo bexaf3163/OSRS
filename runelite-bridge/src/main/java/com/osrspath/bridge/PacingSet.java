@@ -7,21 +7,21 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Темп шага по одному навыку или по нескольким с одной целью — в бою: атака, сила, защита до 30.
- * Их качают по очереди, переключая стиль атаки, поэтому показывается навык, который сейчас растёт.
- * Пока опыт не прибавлялся — первый по порядку шага, ещё не достигший цели. Стиль Controlled даёт опыт
- * во все три сразу: показ не прыгает, пока растёт и показанный навык.
- * Без RuneLite: чистый расчёт, проверяется обычным тестом.
+ * The pace of a step by one skill or by several with one goal, in combat: Attack, Strength, Defence to 30.
+ * They are trained in turn, switching the attack style, so the skill that is growing now is shown.
+ * While no XP has been gained, the first in the step's order that has not reached the goal. The Controlled style gives XP
+ * to all three at once: the display does not jump while the shown skill is growing too.
+ * Without RuneLite: a pure calculation, checked by an ordinary test.
  */
 final class PacingSet
 {
-	/** Столько без опыта в показанном навыке — и темп переходит на навык, который растёт. */
+	/** This long without XP in the shown skill, and the pace moves to the skill that is growing. */
 	static final long SWITCH_MS = 10_000L;
 
 	private final ActiveTarget.Pacing pacing;
 	private final Map<String, PacingTracker> trackers = new LinkedHashMap<>();
 	private String active;
-	/** Когда показанный навык последний раз получил опыт; null — прибавок ещё не было. */
+	/** When the shown skill last got XP; null means there have been no gains yet. */
 	private Long activeGainAt;
 
 	PacingSet(ActiveTarget.Pacing pacing)
@@ -49,13 +49,13 @@ final class PacingSet
 		return trackers.containsKey(skill);
 	}
 
-	/** Навык, который показывается сейчас. */
+	/** The skill shown now. */
 	String getActive()
 	{
 		return active;
 	}
 
-	/** Новый опыт навыка. true — что-то изменилось. */
+	/** A new XP value for a skill. true means something changed. */
 	boolean update(String skill, int xp, long nowMs)
 	{
 		PacingTracker t = trackers.get(skill);
@@ -97,7 +97,7 @@ final class PacingSet
 		return trackers.get(active).snapshot();
 	}
 
-	/** Навыки, которые ещё не дошли до цели, кроме показанного, — по порядку шага. */
+	/** The skills that have not reached the goal yet, besides the shown one, in the step's order. */
 	List<String> left()
 	{
 		List<String> out = new ArrayList<>();
@@ -112,8 +112,8 @@ final class PacingSet
 	}
 
 	/**
-	 * Строка для HUD. У одного навыка — как у PacingTracker. В бою, когда показанный навык дошёл до цели,
-	 * а другие нет: «✓ 30 Attack — дальше Strength: смени стиль атаки».
+	 * The HUD line. For one skill, like PacingTracker. In combat, when the shown skill reached the goal
+	 * and others did not: "✓ 30 Attack - next Strength: change attack style".
 	 */
 	String hudLine(PacingTracker.Snapshot s)
 	{
@@ -130,10 +130,10 @@ final class PacingSet
 			{
 				names.add(PacingTracker.skillName(skill));
 			}
-			return "✓ Целевой уровень достигнут: " + pacing.getTargetLevel() + " " + String.join(", ", names);
+			return "✓ Target level reached: " + pacing.getTargetLevel() + " " + String.join(", ", names);
 		}
 		return "✓ " + pacing.getTargetLevel() + " " + PacingTracker.skillName(active)
-			+ " — дальше " + PacingTracker.skillName(left.get(0)) + ": смени стиль атаки";
+			+ " - next " + PacingTracker.skillName(left.get(0)) + ": change attack style";
 	}
 
 	private String firstUnfinished()

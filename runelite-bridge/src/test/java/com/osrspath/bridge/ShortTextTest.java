@@ -6,44 +6,44 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-/** Запасное сокращение строки шага, когда программа не прислала короткий текст: те же правила, что в src/lib/shortText.ts. */
+/** A fallback shortening of a step line when the app did not send a short text: the same rules as in src/lib/shortText.ts. */
 public class ShortTextTest
 {
 	@Test
-	public void диалогВКонцеОтбрасывается()
+	public void dialogueAtTheEndIsDropped()
 	{
-		assertEquals("Поговори с Reldo в библиотеке дворца Varrock",
-			ShortText.of("Поговори с Reldo в библиотеке дворца Varrock. Диалог: «What do you know about the Imcando dwarves?»."));
+		assertEquals("Talk to Reldo in the Varrock Palace library",
+			ShortText.of("Talk to Reldo in the Varrock Palace library. Dialogue: 'What do you know about the Imcando dwarves?'."));
 	}
 
 	@Test
-	public void берётсяПервоеПредложение()
+	public void theFirstSentenceIsTaken()
 	{
-		assertEquals("Возьми Egg на ферме севернее Lumbridge", ShortText.of("Возьми Egg на ферме севернее Lumbridge. Яйцо лежит у курятника, их там много."));
+		assertEquals("Take an Egg at the farm north of Lumbridge", ShortText.of("Take an Egg at the farm north of Lumbridge. The egg lies by the chicken coop, there are plenty of them."));
 	}
 
 	@Test
-	public void короткоеНеМеняется_точкаВКонцеУбирается()
+	public void shortIsUnchanged_theFinalPeriodIsRemoved()
 	{
-		assertEquals("Дёрни Hopper controls", ShortText.of("Дёрни Hopper controls."));
-		assertEquals("Иди", ShortText.of("Иди"));
+		assertEquals("Pull the Hopper controls", ShortText.of("Pull the Hopper controls."));
+		assertEquals("Go", ShortText.of("Go"));
 	}
 
 	@Test
-	public void длинноеРежетсяПоТиреИлиЗапятойИлиСловуСМноготочием()
+	public void longIsCutByDashOrCommaOrWordWithAnEllipsis()
 	{
-		String byDash = ShortText.of("Поговори с Thurgo у его дома южнее Port Sarim — он ждёт тебя там уже давно и всё расскажет подробно");
-		assertEquals("Поговори с Thurgo у его дома южнее Port Sarim", byDash);
-		String byComma = ShortText.of("Поднимись на второй этаж замка Falador, потом иди на запад и ищи нужный шкаф в дальней комнате");
-		assertEquals("Поднимись на второй этаж замка Falador", byComma);
-		String byWord = ShortText.of("Поднимисьнавторойэтажзамкаfaladorпотомидинзападищинужныйшкафвдальнейкомнате и ещё что-то");
+		String byDash = ShortText.of("Talk to Thurgo at his house south of Port Sarim — he has been waiting for you there for a long time and will tell you everything in detail");
+		assertEquals("Talk to Thurgo at his house south of Port Sarim", byDash);
+		String byComma = ShortText.of("Go up to the second floor of Falador Castle, then go west and look for the right cupboard in the far room");
+		assertEquals("Go up to the second floor of Falador Castle", byComma);
+		String byWord = ShortText.of("Gouptothesecondfloorofthecastlefaladorthengowestandlookfortherightcupboardinthefarroom and something else");
 		assertTrue(byWord, byWord.endsWith("…") && byWord.length() <= ShortText.MAX);
 	}
 
 	@Test
-	public void неБольшеПредела_ипустоеБезПадения()
+	public void notMoreThanTheLimit_andEmptyWithoutCrash()
 	{
-		for (String s : new String[] {"А".repeat(300), "Слово ".repeat(80), "x"})
+		for (String s : new String[] {"A".repeat(300), "Word ".repeat(80), "x"})
 		{
 			assertTrue(s.length() > 0 && ShortText.of(s).length() <= ShortText.MAX);
 		}
@@ -52,14 +52,14 @@ public class ShortTextTest
 	}
 
 	@Test
-	public void готовыйКороткийТекстШагаГлавнее_апустойПадаетНаСокращение()
+	public void aReadyShortTextOfTheStepWins_anEmptyOneFallsBackToShortening()
 	{
 		ActiveTarget.StageLine l = new ActiveTarget.StageLine();
-		l.setT("Отнеси меч оруженосцу (Squire) — квест пройден. Диалог: «x».");
-		assertEquals("Отнеси меч оруженосцу (Squire) — квест пройден", l.shown());
-		l.setS("Отнеси меч Squire");
-		assertEquals("Отнеси меч Squire", l.shown());
+		l.setT("Take the sword to the Squire — quest complete. Dialogue: 'x'.");
+		assertEquals("Take the sword to the Squire — quest complete", l.shown());
+		l.setS("Take the sword to the Squire");
+		assertEquals("Take the sword to the Squire", l.shown());
 		l.setS("  ");
-		assertEquals("Отнеси меч оруженосцу (Squire) — квест пройден", l.shown());
+		assertEquals("Take the sword to the Squire — quest complete", l.shown());
 	}
 }

@@ -18,12 +18,12 @@ import net.runelite.client.ui.overlay.components.LayoutableRenderableEntity;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
 /**
- * Подсказка на Grand Exchange: оптовый список из приложения, что уже есть, что в ордере и что
- * искать следующим.
+ * The Grand Exchange hint: the bulk list from the app, what you already have, what is in an order and what to
+ * search for next.
  *
- * Текст в поиск биржи не подставляется: у RuneLite нет для этого публичного API, а запись в поле ввода
- * чата — это уже автоматизация ввода. Название копируется кнопкой «📋 Копировать название» в приложении.
- * Ордера не выставляются и не подтверждаются — только игроком.
+ * The text is not put into the exchange search: RuneLite has no public API for that, and writing into the chat
+ * input field is already input automation. The name is copied with the "📋 Copy name" button in the app.
+ * Orders are not placed or confirmed, only by the player.
  */
 class GrandExchangeHelperOverlay extends OverlayPanel
 {
@@ -75,7 +75,7 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 		return d;
 	}
 
-	/** Доля готового: строки «есть» из всех. */
+	/** The share ready: "have" lines out of all. */
 	static double progress(List<ShoppingPlan.Row> rows)
 	{
 		if (rows.isEmpty())
@@ -95,7 +95,7 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 		return Math.round((OsrsPathHudOverlay.WIDTH + 30) * (large ? OsrsPathHudOverlay.LARGE : 1f));
 	}
 
-	/** Содержимое панели. Статическое — тест отрисовывает его настоящими шрифтами без клиента. */
+	/** The panel contents. Static: a test draws it with the real fonts without a client. */
 	static void build(PanelComponent panel, List<ShoppingPlan.Row> rows, FontMetrics fm, int width, int opacity)
 	{
 		int inner = OverlayText.inner(width);
@@ -104,10 +104,10 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 		panel.setPreferredSize(new Dimension(width, 0));
 		OverlayText.frame(panel, fm);
 		long left = rows.stream().filter(r -> r.getState() != ShoppingPlan.RowState.HAVE).count();
-		OverlayText.title(c, left == 0 ? "Оптовый список: всё есть" : "Оптовый список · купить " + left,
+		OverlayText.title(c, left == 0 ? "Bulk list: have everything" : "Bulk list · buy " + left,
 			left == 0 ? OsrsPathHudOverlay.GOOD : OsrsPathHudOverlay.TITLE, fm, inner);
 		c.add(new OverlayCard.Bar(progress(rows), left == 0 ? OverlayCard.GREEN : OverlayCard.GOLD));
-		// Сначала то, что осталось купить: готовое уходит вниз.
+		// First what is left to buy: the finished ones go down.
 		List<ShoppingPlan.Row> ordered = rows.stream()
 			.sorted((a, b) -> Boolean.compare(a.getState() == ShoppingPlan.RowState.HAVE, b.getState() == ShoppingPlan.RowState.HAVE))
 			.collect(java.util.stream.Collectors.toList());
@@ -116,17 +116,17 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 		{
 			if (shown++ == MAX_ROWS)
 			{
-				OverlayText.line(c, "…и ещё " + (rows.size() - MAX_ROWS), MUTED, fm, inner);
+				OverlayText.line(c, "... " + (rows.size() - MAX_ROWS) + " more", MUTED, fm, inner);
 				break;
 			}
 			line(c, r, fm, inner);
 		}
-		OverlayText.line(c, "Название — кнопкой «Копировать» в OSRS Путь", MUTED, fm, inner);
+		OverlayText.line(c, "Name: use the 'Copy' button in OSRS Path", MUTED, fm, inner);
 	}
 
 	private static void line(List<LayoutableRenderableEntity> c, ShoppingPlan.Row r, FontMetrics fm, int inner)
 	{
-		String amount = r.getNeed() > 0 ? r.getHave() + "/" + r.getNeed() : (r.getHave() > 0 ? "есть " + r.getHave() : "по ситуации");
+		String amount = r.getNeed() > 0 ? r.getHave() + "/" + r.getNeed() : (r.getHave() > 0 ? "have " + r.getHave() : "as needed");
 		switch (r.getState())
 		{
 			case HAVE:

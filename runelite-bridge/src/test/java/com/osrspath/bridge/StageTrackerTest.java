@@ -13,15 +13,15 @@ import java.util.concurrent.atomic.AtomicLong;
 import org.junit.Test;
 
 /**
- * Курсор шага этапа считается по состоянию игры, а не по кликам. Случай, с которого всё началось (S2-07): руду добыли,
- * шаг не засчитался; игрок прокликал «сделано» мимо сдачи руды Thurgo и застрял на «Отнеси меч Squire» с рудой в сумке,
- * не зная, где он и как вернуться. Поэтому вперёд по клику пропустить шаг теперь нельзя вовсе; «назад» — только
- * просмотр на время, потом курсор снова ведут факты (S2-08: «вручную» застряло и не двигалось само).
+ * The stage step cursor is counted from the game state, not from clicks. The case it all started with (S2-07): the ore was mined,
+ * the step was not counted; the player clicked "done" past handing the ore to Thurgo and got stuck on "Bring the sword to the Squire" with the ore in the bag,
+ * not knowing where they were or how to get back. So moving a step forward by click is now not possible at all; "back" is only
+ * a temporary view, then the facts lead the cursor again (S2-08: "manual" got stuck and did not move by itself).
  */
 public class StageTrackerTest
 {
 	private static final String STEP = "S2-07";
-	/** Вход в подземелье, пещера с рудой, Thurgo, Squire. */
+	/** The dungeon entrance, the ore cave, Thurgo, the Squire. */
 	private static final int[] DUNGEON = {3008, 3150};
 	private static final int[] CAVE = {3049, 9566};
 	private static final int[] THURGO = {3000, 3145};
@@ -53,86 +53,86 @@ public class StageTrackerTest
 	}
 
 	@Test
-	public void рудаВСумке_шагДобычиЗасчитанСам_иСтрелкаКThurgo()
+	public void oreInBag_miningStepCountedByItself_andArrowToThurgo()
 	{
 		StageTracker t = new StageTracker();
-		assertEquals("входим в этап у входа в подземелье", 0, update(t, DUNGEON, bag(0, 2)));
-		assertEquals("в пещере копаем", 1, update(t, CAVE, bag(0, 2)));
-		assertEquals("руда в сумке — шаг добычи сделан, сдавать Thurgo", 2, update(t, CAVE, bag(1, 2)));
+		assertEquals("entering the stage at the dungeon entrance", 0, update(t, DUNGEON, bag(0, 2)));
+		assertEquals("in the cave we mine", 1, update(t, CAVE, bag(0, 2)));
+		assertEquals("ore in the bag: the mining step is done, hand in to Thurgo", 2, update(t, CAVE, bag(1, 2)));
 		assertNull(t.warning());
 	}
 
 	@Test
-	public void рудаВСумке_шагиБезУсловийПередНейПропускаются()
+	public void oreInBag_stepsWithoutConditionsBeforeItAreSkipped()
 	{
 		StageTracker t = new StageTracker();
 		assertEquals(0, update(t, FAR, bag(0, 0)));
-		assertEquals("руда есть, а у входа не были: спуск без условий — в пещере уже были", 2, update(t, FAR, bag(1, 2)));
+		assertEquals("there is ore but the player was not at the entrance: the descent has no conditions, the cave was visited", 2, update(t, FAR, bag(1, 2)));
 	}
 
 	@Test
-	public void шагиСПредметамиНеПерепрыгиваются_предметыВЛюбомПорядке()
+	public void stepsWithItemsAreNotJumped_itemsInAnyOrder()
 	{
 		List<ActiveTarget.StageLine> l = new Gson().fromJson("[{\"t\":\"A\",\"has\":\"Onion\"},{\"t\":\"B\",\"has\":\"Eye of newt\"},{\"t\":\"C\"}]",
 			new TypeToken<List<ActiveTarget.StageLine>>() { }.getType());
 		ItemCounts onlyNewt = new ItemCounts();
 		onlyNewt.add(221, ActiveTarget.nameKey("Eye of newt"), 1);
 		StageTracker t = new StageTracker();
-		assertEquals("глаз есть, лука нет — шаг лука остаётся", 0, t.update("S2-03", 0, l, 3000, 3000, 0, onlyNewt));
+		assertEquals("the eye is there, the onion is not: the onion step stays", 0, t.update("S2-03", 0, l, 3000, 3000, 0, onlyNewt));
 	}
 
 	@Test
-	public void рудаОтданаУThurgo_шагСдан_идёмКSquire()
+	public void oreGivenToThurgo_stepDone_goToSquire()
 	{
 		StageTracker t = new StageTracker();
 		update(t, CAVE, bag(1, 2));
 		assertEquals(2, update(t, THURGO, bag(1, 2)));
-		assertEquals("руда и прутья ушли у Thurgo — меч Squire", 3, update(t, THURGO, bag(0, 0)));
+		assertEquals("the ore and bars left at Thurgo: the sword to the Squire", 3, update(t, THURGO, bag(0, 0)));
 	}
 
 	@Test
-	public void рудаИсчезлаДалекоОтThurgo_этоНеСдача()
+	public void oreVanishedFarFromThurgo_isNotAHandIn()
 	{
 		StageTracker t = new StageTracker();
 		assertEquals(2, update(t, CAVE, bag(1, 2)));
-		assertEquals("выбросил или потерял в пещере — шаг «верни» остаётся", 2, update(t, CAVE, bag(0, 2)));
+		assertEquals("dropped or lost in the cave: the 'give back' step stays", 2, update(t, CAVE, bag(0, 2)));
 	}
 
 	@Test
-	public void двеРуды_одна_отдана_шагСдан()
+	public void twoOres_oneGiven_stepDone()
 	{
 		StageTracker t = new StageTracker();
 		update(t, THURGO, bag(2, 2));
 		assertEquals(2, update(t, THURGO, bag(2, 2)));
-		assertEquals("осталась лишняя руда, но число упало рядом с Thurgo — сдано", 3, update(t, THURGO, bag(1, 0)));
+		assertEquals("an extra ore remains, but the count fell next to Thurgo: handed in", 3, update(t, THURGO, bag(1, 0)));
 	}
 
 	@Test
-	public void игрокУSquireСРудой_курсорВозвращаетсяКThurgoИОбъясняет()
+	public void playerAtSquireWithOre_cursorReturnsToThurgoAndExplains()
 	{
 		StageTracker t = new StageTracker();
 		int cur = update(t, SQUIRE, bag(1, 2));
-		assertEquals("к Squire с рудой — вернуть к Thurgo, а не к мечу", 2, cur);
+		assertEquals("to the Squire with the ore: back to Thurgo, not to the sword", 2, cur);
 		assertNotNull(t.warning());
-		assertTrue(t.warning(), t.warning().contains("Blurite ore") && t.warning().contains("Верни Thurgo"));
-		assertEquals("предупреждение держится, пока руда в сумке", 2, update(t, SQUIRE, bag(1, 2)));
+		assertTrue(t.warning(), t.warning().contains("Blurite ore") && t.warning().contains("Give Thurgo"));
+		assertEquals("the warning holds while the ore is in the bag", 2, update(t, SQUIRE, bag(1, 2)));
 		assertNotNull(t.warning());
 	}
 
 	@Test
-	public void вперёдПоКлику_шагПропуститьНельзя_еслиИграСамаВидитРезультат()
+	public void forwardByClick_cannotSkipAStep_ifTheGameSeesTheResult()
 	{
 		StageTracker t = new StageTracker();
 		update(t, DUNGEON, bag(0, 0));
-		assertFalse("у S2-07 каждый шаг определяется по игре (место, предмет) — кнопки «сделано» нет", t.canStepForward(lines()));
+		assertFalse("every S2-07 step is determined by the game (place, item): there is no 'done' button", t.canStepForward(lines()));
 		assertFalse(t.forward(lines()));
-		assertEquals("клик не сдвинул курсор", 0, t.cursor());
+		assertEquals("the click did not move the cursor", 0, t.cursor());
 		update(t, THURGO, bag(1, 2));
 		assertFalse(t.forward(lines()));
 		assertEquals(2, t.cursor());
 	}
 
-	/** Рычаги подряд на одном месте: игра между ними ничего не показывает. */
+	/** Levers in a row at one place: the game shows nothing between them. */
 	private static List<ActiveTarget.StageLine> levers()
 	{
 		return new Gson().fromJson("[{\"t\":\"A\",\"x\":3100,\"y\":3300,\"plane\":0},{\"t\":\"B\",\"x\":3101,\"y\":3301,\"plane\":0},"
@@ -141,26 +141,26 @@ public class StageTrackerTest
 	}
 
 	@Test
-	public void вперёдПоКлику_толькоГдеИграНеВидит_подрядНаОдномМесте()
+	public void forwardByClick_onlyWhereTheGameCannotSee_inARowAtOnePlace()
 	{
 		List<ActiveTarget.StageLine> l = levers();
-		assertTrue("A→B на одном месте", StageTracker.needsManualStep(l, 0));
-		assertFalse("B→C: C в другом месте — дошёл, курсор перешёл", StageTracker.needsManualStep(l, 1));
-		assertTrue("C→D: у D нет места и предмета — вручную", StageTracker.needsManualStep(l, 2));
-		assertFalse("последний шаг — этап кончит игра", StageTracker.needsManualStep(l, 4));
+		assertTrue("A->B at one place", StageTracker.needsManualStep(l, 0));
+		assertFalse("B->C: C is at another place: arrived, the cursor moved on", StageTracker.needsManualStep(l, 1));
+		assertTrue("C->D: D has no place or item: manual", StageTracker.needsManualStep(l, 2));
+		assertFalse("the last step: the game will end the stage", StageTracker.needsManualStep(l, 4));
 		StageTracker t = new StageTracker();
 		t.update("S2-11", 0, l, 3100, 3300, 0, null);
 		assertEquals(0, t.cursor());
 		assertTrue(t.canStepForward(l));
 		assertTrue(t.forward(l));
 		assertEquals(1, t.cursor());
-		assertEquals("у B игра сама увидит C", 1, t.update("S2-11", 0, l, 3101, 3301, 0, null));
+		assertEquals("at B the game will itself see C", 1, t.update("S2-11", 0, l, 3101, 3301, 0, null));
 		assertFalse(t.forward(l));
-		assertEquals("дошёл до C — курсор сам", 2, t.update("S2-11", 0, l, 3200, 3300, 0, null));
+		assertEquals("reached C: the cursor by itself", 2, t.update("S2-11", 0, l, 3200, 3300, 0, null));
 	}
 
 	@Test
-	public void впросмотре_кнопкиСделаноНет()
+	public void whileViewing_thereIsNoDoneButton()
 	{
 		AtomicLong now = new AtomicLong(0);
 		StageTracker t = new StageTracker(now::get);
@@ -174,7 +174,7 @@ public class StageTrackerTest
 	}
 
 	@Test
-	public void назад_смотрим_прежнийШаг_автоматикаНеУносит_апотомВозвращаетПоФактам()
+	public void back_viewPreviousStep_automationDoesNotCarryAway_thenFactsReturn()
 	{
 		AtomicLong now = new AtomicLong(1_000_000);
 		StageTracker t = new StageTracker(now::get);
@@ -182,17 +182,17 @@ public class StageTrackerTest
 		t.back();
 		assertEquals(1, t.cursor());
 		assertTrue(t.peeking());
-		assertEquals("во время просмотра автоматика не уносит курсор", 1, update(t, THURGO, bag(1, 2)));
+		assertEquals("while viewing, the automation does not carry the cursor away", 1, update(t, THURGO, bag(1, 2)));
 		now.addAndGet(StageTracker.PEEK_MS - 1);
 		assertEquals(1, update(t, THURGO, bag(1, 2)));
 		assertTrue(t.peeking());
 		now.addAndGet(2);
-		assertEquals("просмотр кончился — снова по фактам: руда в сумке, Thurgo рядом", 2, update(t, THURGO, bag(1, 2)));
+		assertEquals("viewing is over: by the facts again: ore in the bag, Thurgo nearby", 2, update(t, THURGO, bag(1, 2)));
 		assertFalse(t.peeking());
 	}
 
 	@Test
-	public void кТекущему_возвращаетСразу()
+	public void toCurrent_returnsAtOnce()
 	{
 		AtomicLong now = new AtomicLong(5);
 		StageTracker t = new StageTracker(now::get);
@@ -205,7 +205,7 @@ public class StageTrackerTest
 	}
 
 	@Test
-	public void назадНесколькоРаз_каждыйСбрасываетВремя()
+	public void backSeveralTimes_eachResetsTheTime()
 	{
 		AtomicLong now = new AtomicLong(0);
 		StageTracker t = new StageTracker(now::get);
@@ -215,11 +215,11 @@ public class StageTrackerTest
 		t.back();
 		assertEquals(0, t.cursor());
 		now.addAndGet(StageTracker.PEEK_MS - 10);
-		assertTrue("второй клик продлил просмотр", t.peeking());
+		assertTrue("the second click extended viewing", t.peeking());
 	}
 
 	@Test
-	public void назад_наПервомШагеНичегоНеДелает()
+	public void back_onTheFirstStepDoesNothing()
 	{
 		StageTracker t = new StageTracker();
 		update(t, DUNGEON, bag(0, 0));
@@ -229,21 +229,21 @@ public class StageTrackerTest
 	}
 
 	@Test
-	public void сдачаВоВремяПросмотра_замечается_ипослеПросмотраКурсорУжеЗаНей()
+	public void handInDuringViewing_isNoticed_andAfterViewingTheCursorIsPastIt()
 	{
 		AtomicLong now = new AtomicLong(0);
 		StageTracker t = new StageTracker(now::get);
 		update(t, THURGO, bag(1, 2));
 		t.back();
 		assertEquals(1, t.cursor());
-		// Пока смотрели прежний шаг, игрок сдал руду.
+		// While viewing the previous step, the player handed in the ore.
 		assertEquals(1, update(t, THURGO, bag(0, 0)));
 		now.addAndGet(StageTracker.PEEK_MS + 1);
-		assertEquals("просмотр кончился: сдача была — к Squire", 3, update(t, THURGO, bag(0, 0)));
+		assertEquals("viewing is over: the hand-in happened: to the Squire", 3, update(t, THURGO, bag(0, 0)));
 	}
 
 	@Test
-	public void этапСменился_просмотрИПамятьСброшены()
+	public void stageChanged_viewingAndMemoryReset()
 	{
 		StageTracker t = new StageTracker();
 		update(t, THURGO, bag(1, 2));
@@ -255,14 +255,14 @@ public class StageTrackerTest
 	}
 
 	@Test
-	public void предметыНеизвестны_условияНеПроверяются()
+	public void itemsUnknown_conditionsNotChecked()
 	{
 		StageTracker t = new StageTracker();
-		assertEquals("без сумки — по положению, как раньше", 2, t.update(STEP, 0, lines(), THURGO[0], THURGO[1], 0, null));
+		assertEquals("without the bag: by position, as before", 2, t.update(STEP, 0, lines(), THURGO[0], THURGO[1], 0, null));
 	}
 
 	@Test
-	public void последнийШагНеПропускается_ЭтапКончаетИгра()
+	public void lastStepIsNotSkipped_theGameEndsTheStage()
 	{
 		StageTracker t = new StageTracker();
 		update(t, THURGO, bag(1, 2));
@@ -272,25 +272,25 @@ public class StageTrackerTest
 	}
 
 	@Test
-	public void положениеРаботаетПоПрежнему()
+	public void positionStillWorks()
 	{
 		StageTracker t = new StageTracker();
 		assertEquals(0, update(t, FAR, bag(0, 0)));
-		assertEquals("у входа в подземелье — первый шаг", 0, update(t, DUNGEON, bag(0, 0)));
-		assertEquals("в пещере — шаг добычи", 1, update(t, CAVE, bag(0, 0)));
+		assertEquals("at the dungeon entrance: the first step", 0, update(t, DUNGEON, bag(0, 0)));
+		assertEquals("in the cave: the mining step", 1, update(t, CAVE, bag(0, 0)));
 	}
 
 	@Test
-	public void добежалДоSquireБезРуды_шагДобычиНеПерепрыгивается()
+	public void ranToSquireWithoutOre_miningStepIsNotJumped()
 	{
 		StageTracker t = new StageTracker();
 		assertEquals(0, update(t, DUNGEON, bag(0, 0)));
-		// Раньше курсор уходил на Squire и стрелка вела к мечу, которого нет; теперь он ждёт на шаге, который не сделан.
-		assertEquals("добыча руды не сделана — курсор на ней, а не у Squire", 1, update(t, SQUIRE, bag(0, 0)));
+		// Before, the cursor went to the Squire and the arrow led to a sword that does not exist; now it waits on the step that is not done.
+		assertEquals("mining is not done: the cursor is on it, not at the Squire", 1, update(t, SQUIRE, bag(0, 0)));
 		assertTrue(t.reason(), t.reason().startsWith("BLOCK"));
 	}
 
-	// ---------- S2-08 Vampire Slayer: этап из пяти шагов, как в данных программы ----------
+	// ---------- S2-08 Vampire Slayer: a stage of five steps, as in the app's data ----------
 
 	private static final int[] HARLOW = {3222, 3399};
 	private static final int[] MANOR = {3108, 3353};
@@ -299,11 +299,11 @@ public class StageTrackerTest
 
 	private static List<ActiveTarget.StageLine> vampire()
 	{
-		return new Gson().fromJson("[{\"t\":\"Купи пиво.\",\"s\":\"Купи Beer у бармена Blue Moon Inn\",\"has\":\"Beer\"},"
-			+ "{\"t\":\"Отдай пиво Dr. Harlow.\",\"s\":\"Отдай Dr. Harlow Beer — получишь Stake\",\"x\":3222,\"y\":3399,\"plane\":0,\"need\":\"Beer\",\"has\":\"Stake\"},"
-			+ "{\"t\":\"Подготовься к бою и войди.\",\"s\":\"Подготовься к бою и войди в Draynor Manor\",\"x\":3108,\"y\":3353,\"plane\":0},"
-			+ "{\"t\":\"Спустись в подвал.\",\"s\":\"Спустись в подвал Draynor Manor\",\"x\":3116,\"y\":3358,\"plane\":0},"
-			+ "{\"t\":\"Открой Coffin.\",\"s\":\"Открой Coffin, убей Count Draynor\",\"x\":3078,\"y\":9776,\"plane\":0}]",
+		return new Gson().fromJson("[{\"t\":\"Buy a beer.\",\"s\":\"Buy a beer from the Blue Moon Inn bartender\",\"has\":\"Beer\"},"
+			+ "{\"t\":\"Give the beer to Dr. Harlow.\",\"s\":\"Give Dr. Harlow the beer for a stake\",\"x\":3222,\"y\":3399,\"plane\":0,\"need\":\"Beer\",\"has\":\"Stake\"},"
+			+ "{\"t\":\"Prepare for combat and enter.\",\"s\":\"Prepare for combat and enter Draynor Manor\",\"x\":3108,\"y\":3353,\"plane\":0},"
+			+ "{\"t\":\"Go down to the basement.\",\"s\":\"Go down to the Draynor Manor basement\",\"x\":3116,\"y\":3358,\"plane\":0},"
+			+ "{\"t\":\"Open the coffin.\",\"s\":\"Open the coffin, kill Count Draynor\",\"x\":3078,\"y\":9776,\"plane\":0}]",
 			new TypeToken<List<ActiveTarget.StageLine>>() { }.getType());
 	}
 
@@ -327,44 +327,44 @@ public class StageTrackerTest
 	}
 
 	@Test
-	public void vampireSlayer_весьЭтапИдётСамСКонцаВКонец_безЕдиногоКлика()
+	public void vampireSlayer_wholeStageRunsByItselfEndToEnd_withoutASingleClick()
 	{
 		StageTracker t = new StageTracker();
-		assertEquals("Купи Beer", 0, v(t, FAR, vbag(0, 0)));
-		assertEquals("пиво в сумке — к Dr. Harlow", 1, v(t, FAR, vbag(1, 0)));
-		assertEquals("у Harlow с пивом — отдаём", 1, v(t, HARLOW, vbag(1, 0)));
-		assertEquals("пиво ушло, кол пришёл — готовься к бою", 2, v(t, HARLOW, vbag(0, 1)));
-		assertEquals("у особняка — «подготовься и войди»", 2, v(t, MANOR, vbag(0, 1)));
-		assertEquals("у лестницы в подвал", 3, v(t, STAIRS, vbag(0, 1)));
-		assertEquals("в подвале у гроба — последний шаг", 4, v(t, COFFIN, vbag(0, 1)));
+		assertEquals("Buy beer", 0, v(t, FAR, vbag(0, 0)));
+		assertEquals("beer in the bag: to Dr. Harlow", 1, v(t, FAR, vbag(1, 0)));
+		assertEquals("at Harlow with the beer: we hand it in", 1, v(t, HARLOW, vbag(1, 0)));
+		assertEquals("the beer is gone, the stake came: prepare for combat", 2, v(t, HARLOW, vbag(0, 1)));
+		assertEquals("at the manor: 'prepare and enter'", 2, v(t, MANOR, vbag(0, 1)));
+		assertEquals("at the stairs to the basement", 3, v(t, STAIRS, vbag(0, 1)));
+		assertEquals("in the basement at the coffin: the last step", 4, v(t, COFFIN, vbag(0, 1)));
 	}
 
 	@Test
-	public void vampireSlayer_колУжеВСумке_приВходеВИгру_сразуКоВходуВОсобняк()
+	public void vampireSlayer_stakeAlreadyInBag_onLogin_straightToTheManorEntrance()
 	{
 		StageTracker t = new StageTracker();
-		assertEquals("кол уже есть (пиво отдано раньше): «Купи» и «Отдай» уже сделаны", 2, v(t, FAR, vbag(0, 1)));
+		assertEquals("the stake is already there (the beer was handed in earlier): 'Buy' and 'Give' are already done", 2, v(t, FAR, vbag(0, 1)));
 	}
 
 	@Test
-	public void vampireSlayer_смотрелНазад_иСамВернулсяКУ_особняка()
+	public void vampireSlayer_viewedBack_andReturnedToTheManorHimself()
 	{
 		AtomicLong now = new AtomicLong(0);
 		StageTracker t = new StageTracker(now::get);
 		v(t, MANOR, vbag(0, 1));
 		t.back();
 		assertEquals(1, t.cursor());
-		assertEquals("просмотр", 1, v(t, MANOR, vbag(0, 1)));
+		assertEquals("viewing", 1, v(t, MANOR, vbag(0, 1)));
 		now.addAndGet(StageTracker.PEEK_MS + 5);
-		assertEquals("прошла минута — снова «в особняк»: не «вручную» навсегда", 2, v(t, MANOR, vbag(0, 1)));
-		assertEquals("спустился — идём дальше сами", 3, v(t, STAIRS, vbag(0, 1)));
+		assertEquals("a minute passed: 'to the manor' again, not 'manual' forever", 2, v(t, MANOR, vbag(0, 1)));
+		assertEquals("went down: we go on by ourselves", 3, v(t, STAIRS, vbag(0, 1)));
 	}
 
-	/** S2-08 (по скриншоту игрока): «войди в Draynor Manor» у двери, «спустись в подвал» в восьми клетках, внутри дома. */
+	/** S2-08 (from a player's screenshot): "enter Draynor Manor" at the door, "go down to the basement" eight tiles away, inside the house. */
 	private static List<ActiveTarget.StageLine> manor()
 	{
-		return new Gson().fromJson("[{\"t\":\"Войди\",\"x\":3108,\"y\":3353,\"plane\":0},{\"t\":\"Спустись в подвал\",\"x\":3116,\"y\":3358,\"plane\":0},"
-			+ "{\"t\":\"Убей графа\",\"x\":3077,\"y\":9770,\"plane\":0}]", new TypeToken<List<ActiveTarget.StageLine>>() {}.getType());
+		return new Gson().fromJson("[{\"t\":\"Enter\",\"x\":3108,\"y\":3353,\"plane\":0},{\"t\":\"Go down to the basement\",\"x\":3116,\"y\":3358,\"plane\":0},"
+			+ "{\"t\":\"Kill the count\",\"x\":3077,\"y\":9770,\"plane\":0}]", new TypeToken<List<ActiveTarget.StageLine>>() {}.getType());
 	}
 
 	private static int manor(StageTracker t, int x, int y)
@@ -373,19 +373,19 @@ public class StageTrackerTest
 	}
 
 	@Test
-	public void былУДвериИОтошёл_шагСделан_стрелкаНаЛестницуСразу()
+	public void wasAtTheDoorAndMovedAway_stepDone_arrowToTheStairsAtOnce()
 	{
 		StageTracker t = new StageTracker();
-		assertEquals("далеко — первый шаг", 0, manor(t, 3110, 3329));
-		assertEquals("у двери — первый шаг, стрелка у двери", 0, manor(t, 3108, 3352));
-		// Путь в доме петляет: до лестницы ещё далеко (больше четырёх клеток), но от двери он уже отошёл.
-		assertEquals("шесть клеток от двери — ещё рядом", 0, manor(t, 3103, 3359));
-		assertEquals("семь клеток — шаг «войди» сделан", 1, manor(t, 3102, 3360));
+		assertEquals("far away: the first step", 0, manor(t, 3110, 3329));
+		assertEquals("at the door: the first step, the arrow at the door", 0, manor(t, 3108, 3352));
+		// The path inside the house winds: the stairs are still far (more than four tiles), but they have already moved away from the door.
+		assertEquals("six tiles from the door: still close", 0, manor(t, 3103, 3359));
+		assertEquals("seven tiles: the 'enter' step is done", 1, manor(t, 3102, 3360));
 		assertTrue(t.reason(), t.reason().startsWith("LEFT"));
 	}
 
 	@Test
-	public void постоялУДвери_шагОстаётся()
+	public void stoodAtTheDoor_stepStays()
 	{
 		StageTracker t = new StageTracker();
 		manor(t, 3108, 3352);
@@ -396,30 +396,30 @@ public class StageTrackerTest
 	}
 
 	@Test
-	public void неБылУТочкиШага_отойтиДалекоНеДостаточно()
+	public void wasNotAtTheStepPoint_movingFarIsNotEnough()
 	{
 		StageTracker t = new StageTracker();
-		// Появился уже в стороне (вход в игру, телепорт): у двери не был — шаг не закрывается.
+		// Appeared already to the side (login, teleport): they were not at the door, so the step is not closed.
 		assertEquals(0, manor(t, 3102, 3360));
 	}
 
 	@Test
-	public void шагСУсловиемНеЗакрываетсяУходом()
+	public void stepWithConditionIsNotClosedByLeaving()
 	{
-		List<ActiveTarget.StageLine> l = new Gson().fromJson("[{\"t\":\"Отдай\",\"x\":3108,\"y\":3353,\"plane\":0,\"need\":\"Beer\"},"
-			+ "{\"t\":\"Дальше\",\"x\":3116,\"y\":3358,\"plane\":0}]", new TypeToken<List<ActiveTarget.StageLine>>() {}.getType());
+		List<ActiveTarget.StageLine> l = new Gson().fromJson("[{\"t\":\"Give\",\"x\":3108,\"y\":3353,\"plane\":0,\"need\":\"Beer\"},"
+			+ "{\"t\":\"Next\",\"x\":3116,\"y\":3358,\"plane\":0}]", new TypeToken<List<ActiveTarget.StageLine>>() {}.getType());
 		ItemCounts beer = new ItemCounts();
 		beer.add(1, ActiveTarget.nameKey("Beer"), 1);
 		StageTracker t = new StageTracker();
 		t.update("S", 0, l, 3108, 3353, 0, beer);
-		assertEquals("пиво не отдано — уйти недостаточно", 0, t.update("S", 0, l, 3102, 3360, 0, beer));
+		assertEquals("the beer is not handed in: leaving is not enough", 0, t.update("S", 0, l, 3102, 3360, 0, beer));
 	}
 
-	/** S2-09 (по скриншоту игрока): «положи ром в ящик» и «наполни ящик» на одном месте, потом Luthas в пяти клетках. */
+	/** S2-09 (from a player's screenshot): "put the rum in the crate" and "fill the crate" at one place, then Luthas five tiles away. */
 	private static List<ActiveTarget.StageLine> crate()
 	{
-		return new Gson().fromJson("[{\"t\":\"Положи ром\",\"x\":2939,\"y\":3149,\"plane\":0},{\"t\":\"Наполни ящик\",\"x\":2939,\"y\":3149,\"plane\":0},"
-			+ "{\"t\":\"Скажи Luthas\",\"x\":2938,\"y\":3156,\"plane\":0},{\"t\":\"Вернись\",\"x\":3027,\"y\":3222,\"plane\":0}]", new TypeToken<List<ActiveTarget.StageLine>>() {}.getType());
+		return new Gson().fromJson("[{\"t\":\"Put the rum\",\"x\":2939,\"y\":3149,\"plane\":0},{\"t\":\"Fill the crate\",\"x\":2939,\"y\":3149,\"plane\":0},"
+			+ "{\"t\":\"Tell Luthas\",\"x\":2938,\"y\":3156,\"plane\":0},{\"t\":\"Return\",\"x\":3027,\"y\":3222,\"plane\":0}]", new TypeToken<List<ActiveTarget.StageLine>>() {}.getType());
 	}
 
 	private static int crate(StageTracker t, int x, int y)
@@ -428,22 +428,22 @@ public class StageTrackerTest
 	}
 
 	@Test
-	public void шагКоторыйИграНеУвидит_непрепрыгиваетсяПоПоложению()
+	public void stepTheGameWillNotSee_isNotJumpedByPosition()
 	{
 		StageTracker t = new StageTracker();
-		assertEquals("у ящика — «положи ром»", 0, crate(t, 2939, 3150));
-		// Ушёл к Luthas, не отметив «положи ром»: раньше курсор перепрыгивал сразу на «Скажи Luthas», пропустив «наполни ящик».
-		assertEquals("рядом с Luthas курсор всё равно ждёт на шаге без признаков", 0, crate(t, 2938, 3155));
+		assertEquals("at the crate: 'put the rum'", 0, crate(t, 2939, 3150));
+		// Went to Luthas without ticking "put the rum": before, the cursor jumped at once to "Tell Luthas", skipping "fill the crate".
+		assertEquals("next to Luthas the cursor still waits on the step with no signs", 0, crate(t, 2938, 3155));
 		assertTrue(t.reason(), t.reason().startsWith("GATE"));
-		assertTrue("кнопка «сделано» на нём есть — тупика нет", t.canStepForward(crate()));
+		assertTrue("the 'done' button is on it: no dead end", t.canStepForward(crate()));
 		assertTrue(t.forward(crate()));
-		assertEquals("«наполни ящик»: следующий шаг у Luthas, он различим по месту — идём дальше сами", 2, crate(t, 2938, 3155));
+		assertEquals("'fill the crate': the next step is at Luthas, distinguishable by place: we go on by ourselves", 2, crate(t, 2938, 3155));
 	}
 
 	@Test
-	public void входПосредиЭтапа_свободноСтановитсяНаБлижайшийШаг()
+	public void loginMidStage_freelyStandsOnTheNearestStep()
 	{
 		StageTracker t = new StageTracker();
-		assertEquals("зашёл в игру у Luthas — шаги у ящика уже позади", 2, crate(t, 2938, 3155));
+		assertEquals("logged in next to Luthas: the steps at the crate are already behind", 2, crate(t, 2938, 3155));
 	}
 }

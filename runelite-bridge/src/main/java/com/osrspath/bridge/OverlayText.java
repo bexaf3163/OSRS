@@ -15,32 +15,32 @@ import net.runelite.client.ui.overlay.components.PanelComponent;
 import net.runelite.client.ui.overlay.components.TitleComponent;
 
 /**
- * Текст плашек плагина: один шрифт на всю строку и перенос по ширине панели.
+ * Plugin plate text: one font for the whole line and wrapping to the panel width.
  *
- * У шрифтов RuneScape нет кириллицы, и RuneLite подставляет русские буквы из системного шрифта. В одной
- * строке латиница и цифры выходили мелкими, а кириллица крупной («от Lumbridge», «~62 клетки»). Поэтому,
- * если выбранный в RuneLite шрифт сам не умеет кириллицу, текст плагина целиком рисуется шрифтом Dialog того
- * же размера и начертания — из него RuneLite и так брал русские буквы.
+ * The RuneScape fonts lack some symbols the plugin uses (✓ ✗ ⚠ ▶ ◀ ●), and RuneLite substitutes them from a system font. In one
+ * line the letters and digits came out small and the symbols large ("from Lumbridge", "~62 tiles"). So,
+ * if the font chosen in RuneLite cannot display these symbols itself, the whole plugin text is drawn in the Dialog font of the same
+ * size and style, which is where RuneLite took those symbols from anyway.
  *
- * TitleComponent RuneLite строки не переносит: длинное название шага центрировалось и вылезало за рамку с
- * обеих сторон. LineComponent переносит только по словам. Здесь строки режутся заранее, чтобы каждая
- * помещалась целиком, — и компоненты RuneLite получают уже готовые строки.
+ * RuneLite's TitleComponent does not wrap lines: a long step name was centred and stuck out of the frame on
+ * both sides. LineComponent wraps only by words. Here the lines are cut in advance so that each
+ * fits completely, and RuneLite's components receive ready-made lines.
  */
 final class OverlayText
 {
-	/** Буквы, которых нет в шрифтах RuneScape. */
-	private static final String PROBE = "ЖжЁё";
-	/** Отступ между левой и правой частью строки («✗ Rope    0/1»). */
+	/** Symbols that the RuneScape fonts lack. */
+	private static final String PROBE = "✓✗⚠▶◀●";
+	/** The gap between the left and right part of a line ("✗ Rope    0/1"). */
 	private static final String GAP = "  ";
 
-	/** Шрифты по (шрифт RuneLite, масштаб): плашки и подписи на земле берут разные — кадр за кадром одни и те же. */
+	/** Fonts by (RuneLite font, scale): the plates and the ground labels take different ones, the same frame after frame. */
 	private static final Map<List<Object>, Font> FONTS = new HashMap<>();
 
 	private OverlayText()
 	{
 	}
 
-	/** Шрифт плашек плагина из шрифта, выбранного в RuneLite; scale — крупный HUD (1.25). */
+	/** The plugin plate font from the font chosen in RuneLite; scale is the large HUD (1.25). */
 	static synchronized Font font(Font base, float scale)
 	{
 		List<Object> key = Arrays.asList(base, scale);
@@ -57,51 +57,51 @@ final class OverlayText
 		}
 		else
 		{
-			// «Мелкий» шрифт RuneScape — мельче и в замене, чтобы выбор игрока не терялся.
+			// The "small" RuneScape font is smaller in the replacement too, so the player's choice is not lost.
 			float size = base.getFamily().toLowerCase().contains("small") ? base.getSize2D() * 0.85f : base.getSize2D();
 			f = new Font(Font.DIALOG, base.getStyle(), Math.round(size));
 		}
 		if (scale != 1f)
 		{
-			// Целый размер: у дробного (17,5 pt) округление высоты строк и хвостов букв расходилось на точку.
+			// A whole size: with a fractional one (17.5 pt) the rounding of line heights and letter descenders differed by a pixel.
 			f = f.deriveFont((float) Math.round(f.getSize2D() * scale));
 		}
 		if (FONTS.size() > 16)
 		{
-			// Игрок перебирает шрифты в настройках RuneLite — старые не нужны.
+			// The player cycles through fonts in the RuneLite settings, so the old ones are not needed.
 			FONTS.clear();
 		}
 		FONTS.put(key, f);
 		return f;
 	}
 
-	/** Поля карточки ({@link OverlayCard}): слева шире — там цветная полоска. */
+	/** The card margins ({@link OverlayCard}): wider on the left, where the colour strip is. */
 	static final int PAD_LEFT = OverlayCard.BAR + 7;
 	static final int PAD_RIGHT = 8;
 	static final int PAD_TOP = 6;
 
-	/** Ширина текста внутри панели шириной width. */
+	/** The text width inside a panel of the given width. */
 	static int inner(int width)
 	{
 		return width - PAD_LEFT - PAD_RIGHT;
 	}
 
 	/**
-	 * Рамка панели. LineComponent и TitleComponent ставят строку на нижний край своей высоты, и хвосты букв
-	 * («у», «р», «д») с тенью уходят ниже: у крупного шрифта последняя строка вылезала за рамку на точку.
-	 * Нижний отступ — не меньше хвоста и точки тени.
+	 * The panel frame. LineComponent and TitleComponent put a line at the bottom edge of its height, and the descenders of letters
+	 * ("y", "g", "p") with the shadow go lower: with a large font the last line stuck out of the frame by a pixel.
+	 * The bottom padding is at least the descender plus the shadow's dot.
 	 */
 	static void frame(PanelComponent panel, FontMetrics fm)
 	{
 		panel.setBorder(new Rectangle(PAD_LEFT, PAD_TOP, PAD_RIGHT, Math.max(PAD_TOP, fm.getDescent() + 3)));
-		// Фон — карточка OverlayCard, её рисует плашка до панели.
+		// The background is the OverlayCard card, which the plate draws before the panel.
 		panel.setBackgroundColor(null);
 	}
 
 	/**
-	 * Строки не шире width. Переносится по связкам слов ({@link #groups}): связка шире строки — по словам,
-	 * слово шире строки — по буквам. Так ничего не вылезает, а «14» не остаётся на строке одно. Связки не
-	 * стоят лишней строки: если с ними строк больше, чем при переносе по словам, берётся перенос по словам.
+	 * Lines no wider than width. Wrapping follows word groups ({@link #groups}): a group wider than the line is wrapped by words,
+	 * a word wider than the line by letters. So nothing sticks out, and "14" is not left alone on a line. Groups do not
+	 * cost an extra line: if there are more lines with them than with wrapping by words, wrapping by words is taken.
 	 */
 	static List<String> wrap(String text, FontMetrics fm, int width)
 	{
@@ -115,7 +115,7 @@ final class OverlayText
 		return glued.size() <= plain.size() ? glued : plain;
 	}
 
-	/** Жадная раскладка по единицам (связкам или словам). */
+	/** Greedy layout by units (groups or words). */
 	static List<String> layout(List<String> units, FontMetrics fm, int width)
 	{
 		List<String> lines = new ArrayList<>();
@@ -133,7 +133,7 @@ final class OverlayText
 				line.append(group);
 				continue;
 			}
-			// Связка не влезает и в целую строку — по словам, а слово длиннее строки — по буквам.
+			// A group does not fit even a whole line: by words, and a word longer than the line by letters.
 			for (String word : group.split(" "))
 			{
 				if (fits(line, word, fm, width))
@@ -156,9 +156,9 @@ final class OverlayText
 	}
 
 	/**
-	 * Слова, которые перенос не разрывает, — как неразрывный пробел в русской типографике: предлог со
-	 * следующим словом («из 14», «в зоне», «to depart»), число с короткой единицей («+20 HP», «10 000»),
-	 * тире и «·» не начинают строку, короткий хвост текста не остаётся один («14», «Путь», «↓»).
+	 * Words the wrapping does not break, like a non-breaking space in typography: a preposition with the
+	 * next word ("of 14", "in zone", "to depart"), a number with a short unit ("+20 HP", "10 000"),
+	 * a dash and "·" do not start a line, a short tail of text is not left alone ("14", "Path", "↓").
 	 */
 	static List<String> groups(String[] words)
 	{
@@ -225,7 +225,7 @@ final class OverlayText
 		}
 	}
 
-	/** Сколько первых символов слова помещается (хотя бы один; суррогатная пара не рвётся). */
+	/** How many leading characters of a word fit (at least one; a surrogate pair is not split). */
 	private static int fitting(String word, FontMetrics fm, int width)
 	{
 		int n = 1;
@@ -240,7 +240,7 @@ final class OverlayText
 		return n;
 	}
 
-	/** Заголовок по центру; длинный — несколькими строками. */
+	/** A heading centred; a long one in several lines. */
 	static void title(List<LayoutableRenderableEntity> out, String text, Color color, FontMetrics fm, int width)
 	{
 		for (String l : wrap(text, fm, width))
@@ -249,7 +249,7 @@ final class OverlayText
 		}
 	}
 
-	/** Строка слева; длинная — несколькими строками. */
+	/** A line on the left; a long one in several lines. */
 	static void line(List<LayoutableRenderableEntity> out, String text, Color color, FontMetrics fm, int width)
 	{
 		for (String l : wrap(text, fm, width))
@@ -259,8 +259,8 @@ final class OverlayText
 	}
 
 	/**
-	 * Строка с правой частью («✗ Cooked chicken · +3 HP» … «2/5 · в банке 3»). Помещается — одной строкой;
-	 * нет — левое переносится, а правое встаёт в конец последней строки или отдельной строкой справа.
+	 * A line with a right part ("✗ Cooked chicken · +3 HP" ... "2/5 · in bank 3"). If it fits, one line;
+	 * if not, the left wraps and the right goes at the end of the last line or on a separate line on the right.
 	 */
 	static void pair(List<LayoutableRenderableEntity> out, String left, Color leftColor, String right, Color rightColor,
 		FontMetrics fm, int width)

@@ -3,14 +3,14 @@ package com.osrspath.bridge;
 import lombok.Data;
 
 /**
- * Снимок состояния от программы — протокол 6, POST /prep-plan. Один запрос вместо пяти (/active-step, /shopping-plan,
- * /bank-tags, /gear-hint, план подготовки): плагин применяет всё за один проход клиентского потока, поэтому на экране
- * не бывает промежуточных состояний («стрелка к новому шагу, а список старого»), а после перезапуска RuneLite
- * достаточно один раз отправить снимок снова.
+ * The state snapshot from the app: protocol 6, POST /prep-plan. One request instead of five (/active-step, /shopping-plan,
+ * /bank-tags, /gear-hint, the preparation plan): the plugin applies everything in one pass of the client thread, so the screen
+ * never has intermediate states ("the arrow to the new step but the list of the old one"), and after a RuneLite restart
+ * it is enough to send the snapshot once again.
  *
- * Снимок полный: чего в нём нет (null), то снято. Номер seq растёт с каждым снимком — запоздавший, более старый
- * снимок плагин отбрасывает. Каждая часть проверяется отдельно: негодная не мешает остальным, ответ называет её.
- * Старые адреса остаются — для программы с протоколом 5 и ниже.
+ * The snapshot is complete: what is not in it (null) is cleared. The seq number grows with every snapshot: the plugin discards a late, older
+ * snapshot. Each part is validated separately: a bad one does not hinder the others, and the response names it.
+ * The old addresses remain, for an app with protocol 5 and below.
  */
 @Data
 public class PrepEnvelope
@@ -21,7 +21,7 @@ public class PrepEnvelope
 	static final String GEAR_HINT = "gearHint";
 	static final String PLAN = "plan";
 
-	/** Версия снимка; 6. */
+	/** The snapshot version; 6. */
 	private int v;
 	private long seq;
 	private ActiveTarget step;
@@ -30,10 +30,10 @@ public class PrepEnvelope
 	private GearHint gearHint;
 	private PrepPlan plan;
 
-	/** Шаг как пришёл (JSON): если он не изменился, плагин не перезапускает цель и стрелку. Ставит сервер. */
+	/** The step as it came (JSON): if it did not change, the plugin does not restart the target and arrow. Set by the server. */
 	private transient String stepKey;
 
-	/** Негодные части: имя → причина. Прошедшую проверку часть применять можно. */
+	/** Bad parts: name -> reason. A part that passed validation can be applied. */
 	java.util.Map<String, String> prepare()
 	{
 		java.util.Map<String, String> bad = new java.util.LinkedHashMap<>();
@@ -53,9 +53,9 @@ public class PrepEnvelope
 		}
 	}
 
-	/** Версия не 6 — снимок собран по другому протоколу, не применяем. */
+	/** A version other than 6: the snapshot was built for another protocol, we do not apply it. */
 	String versionProblem()
 	{
-		return v == 6 ? null : "ожидается снимок версии 6";
+		return v == 6 ? null : "snapshot version 6 expected";
 	}
 }

@@ -3,34 +3,34 @@ package com.osrspath.bridge;
 import java.awt.Polygon;
 
 /**
- * Большая стрелка к цели: куда повернуть её на экране и в каком она состоянии.
+ * The big arrow to the target: how to turn it on the screen and what state it is in.
  *
- * Направление считается так же, как RuneLite кладёт точки на миникарту (Perspective.localToMinimap в 1.12.39):
- * смещение до цели в клетках (x — на восток, y — на север) поворачивается на угол камеры
- * {@code getCameraYawTarget() & 16383} (16384 единицы на оборот). Поэтому стрелка показывает туда же, куда
- * миникарта: цель прямо по ходу камеры — вверх, справа — вправо, сзади — вниз. Чистая логика — проверяется
- * обычным тестом.
+ * The direction is computed the way RuneLite places points on the minimap (Perspective.localToMinimap in 1.12.39):
+ * the offset to the target in tiles (x is east, y is north) is rotated by the camera angle
+ * {@code getCameraYawTarget() & 16383} (16384 units per turn). So the arrow points the same way as
+ * the minimap: a target straight ahead of the camera is up, on the right is right, behind is down. Pure logic, checked by an
+ * ordinary test.
  */
 final class ArrowGeometry
 {
-	/** Ближе стольких клеток — стрелка крупнее и ярче: цель на подходе. */
+	/** Closer than this many tiles the arrow is bigger and brighter: the target is near. */
 	static final int APPROACH = 20;
-	/** Поворот меньше этого (в радианах, ~2°) не рисуется: стрелка не дрожит от мелких сдвигов. */
+	/** A turn smaller than this (in radians, ~2 degrees) is not drawn: the arrow does not tremble from small shifts. */
 	static final double DEAD_ZONE = Math.toRadians(2);
-	/** Доля пути до нового угла за кадр: плавный поворот вместо рывка. */
+	/** The share of the way to the new angle per frame: a smooth turn instead of a jerk. */
 	static final double EASE = 0.35;
 	private static final double TURN = 2 * Math.PI;
 	private static final int YAW_UNITS = 16384;
 
 	enum State
 	{
-		/** Цель далеко. */
+		/** The target is far. */
 		DEFAULT,
-		/** Цель на подходе (ближе {@link #APPROACH}). */
+		/** The target is on the approach (closer than {@link #APPROACH}). */
 		APPROACHING,
-		/** «✓ Рядом» — стрелка не нужна. */
+		/** "✓ Nearby": the arrow is not needed. */
 		VERY_CLOSE,
-		/** Цель на другом этаже или под землёй: стрелка есть, но главное — подпись. */
+		/** The target is on another plane or underground: there is an arrow, but the label matters most. */
 		OTHER_LEVEL,
 	}
 
@@ -39,8 +39,8 @@ final class ArrowGeometry
 	}
 
 	/**
-	 * Угол стрелки на экране в радианах: 0 — вправо, π/2 — вниз (ось y экрана смотрит вниз), −π/2 — вверх.
-	 * dx, dy — от игрока до цели в клетках мира; yaw — угол камеры из клиента.
+	 * The arrow angle on screen in radians: 0 is right, pi/2 is down (the screen's y axis points down), -pi/2 is up.
+	 * dx, dy are from the player to the target in world tiles; yaw is the camera angle from the client.
 	 */
 	static double screenAngle(int dx, int dy, int yaw)
 	{
@@ -50,7 +50,7 @@ final class ArrowGeometry
 		return Math.atan2(sy, sx);
 	}
 
-	/** Угол в (−π, π]. */
+	/** The angle in (-pi, pi]. */
 	static double wrap(double a)
 	{
 		double r = a % TURN;
@@ -66,8 +66,8 @@ final class ArrowGeometry
 	}
 
 	/**
-	 * Следующий угол стрелки: к новому — по короткой дуге и с плавностью; мелочь внутри мёртвой зоны не двигает.
-	 * NaN в prev — стрелки ещё не было: сразу новый угол.
+	 * The next arrow angle: to the new one along the short arc and smoothly; small things inside the dead zone do not move it.
+	 * NaN in prev means there was no arrow yet: the new angle at once.
 	 */
 	static double smooth(double prev, double next)
 	{
@@ -80,11 +80,11 @@ final class ArrowGeometry
 		{
 			return prev;
 		}
-		// Большой поворот (игрок развернул камеру) — сразу, иначе стрелка полсекунды смотрит не туда.
+		// A big turn (the player turned the camera) goes at once, otherwise the arrow points the wrong way for half a second.
 		return Math.abs(d) > Math.PI / 2 ? next : wrap(prev + d * EASE);
 	}
 
-	/** Состояние по расстоянию: near — «Рядом» из HUD (с защитой от мигания на границе). */
+	/** The state by distance: near is "Nearby" from the HUD (with protection against flicker at the boundary). */
 	static State state(int distance, boolean sameLevel, boolean near)
 	{
 		if (!sameLevel)
@@ -99,8 +99,8 @@ final class ArrowGeometry
 	}
 
 	/**
-	 * Стрелка-наконечник с хвостом, повёрнутая на angle, в круге радиуса r вокруг (cx, cy). Нос — на расстоянии
-	 * 0,9 r от центра, хвост — на 0,55 r с другой стороны: вся фигура внутри круга при любом угле.
+	 * An arrowhead with a tail, turned by angle, in a circle of radius r around (cx, cy). The nose is at a distance of
+	 * 0.9 r from the centre, the tail at 0.55 r on the other side: the whole figure is inside the circle at any angle.
 	 */
 	static Polygon arrow(double cx, double cy, double r, double angle)
 	{

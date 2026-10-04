@@ -6,8 +6,8 @@ import raw from '../src/data/questStages.json';
 const quests = (raw as unknown as { quests: Record<string, import('../src/types').QuestStages> }).quests;
 const withStages = allSteps.filter((s) => s.questStages);
 
-describe('этапы квестов (Quest Helper)', () => {
-  it('у каждого квеста с этапами есть шаг в маршруте, переменная и этапы по возрастанию', () => {
+describe('quest stages (Quest Helper)', () => {
+  it('every quest with stages has a route step, a variable and ascending stages', () => {
     expect(Object.keys(quests).length).toBeGreaterThanOrEqual(30);
     for (const [id, q] of Object.entries(quests)) {
       expect(allSteps.some((s) => s.id === id), id).toBe(true);
@@ -16,11 +16,11 @@ describe('этапы квестов (Quest Helper)', () => {
       const ats = q.stages.map((s) => s.at);
       expect(ats, id).toEqual([...ats].sort((a, b) => a - b));
       expect(new Set(ats).size, id).toBe(ats.length);
-      expect(ats[0], `${id}: первый этап должен быть с нуля`).toBe(0);
+      expect(ats[0], `${id}: the first stage must start at zero`).toBe(0);
     }
   });
 
-  it('пределы плагина: этапов ≤ 40, шагов в этапе ≤ 40, текст ≤ 500 знаков, координаты в пределах карты', () => {
+  it('plugin limits: stages <= 40, steps per stage <= 40, text <= 500 characters, coordinates within the map', () => {
     for (const [id, q] of Object.entries(quests)) {
       expect(q.stages.length, id).toBeLessThanOrEqual(40);
       for (const st of q.stages) {
@@ -40,41 +40,42 @@ describe('этапы квестов (Quest Helper)', () => {
     }
   });
 
-  it('нет английских остатков шаблонов Quest Helper: каждый шаг маршрута написан по-русски', () => {
+  it('every route section has a title, and no step text contains Cyrillic', () => {
     for (const [id, q] of Object.entries(quests)) {
       for (const p of q.route ?? []) {
         expect(p.title.trim().length, id).toBeGreaterThan(0);
-        for (const t of p.steps) expect(/[А-Яа-яЁё]/.test(t), `${id}: ${t.slice(0, 50)}`).toBe(true);
+        expect(/[А-Яа-яЁё]/.test(p.title), `${id}: ${p.title}`).toBe(false);
+        for (const t of p.steps) expect(/[А-Яа-яЁё]/.test(t), `${id}: ${t.slice(0, 50)}`).toBe(false);
       }
     }
   });
 
-  it('«Прохождение» шага — это маршрут Quest Helper целиком, а не старый короткий список', () => {
+  it('the step walkthrough is the whole Quest Helper route, not the old short list', () => {
     for (const s of withStages) {
       const flat = (s.questStages!.route ?? []).flatMap((p) => p.steps);
       if (flat.length) expect(s.quickSteps, s.id).toEqual(flat);
     }
   });
 
-  it('Knight’s Sword: между «Imcando» и «картиной» есть разговор со Squire и подъём по лестнице', () => {
+  it('Knight’s Sword: between Imcando and the portrait there is a talk with the Squire and a climb up the stairs', () => {
     const route = (quests['S2-07'].route ?? []).flatMap((p) => p.steps).join('\n');
     expect(route).toMatch(/Squire/);
-    expect(route).toMatch(/лестниц/);
+    expect(route).toMatch(/staircase/);
     expect(route.indexOf('Squire')).toBeLessThan(route.indexOf('Thurgo', route.indexOf('Squire')));
   });
 
-  it('Knight’s Sword: шаги до портрета пропускаются, когда Portrait уже в сумке; на этапе добычи нужна кирка', () => {
+  it('Knight’s Sword: the steps before the portrait are skipped when the Portrait is already in the bag; the mining stage needs a pickaxe', () => {
     const q = quests['S2-07'];
     const stage = q.stages.find((s) => s.do.some((l) => l.has === 'Portrait'))!;
     expect(stage.do.filter((l) => l.has === 'Portrait').length).toBe(3);
     expect(stage.do[stage.do.length - 1].has).toBeUndefined();
     const mining = q.stages.find((s) => s.items?.some((i) => i.name === 'Bronze pickaxe'));
-    expect(mining, 'кирка названа на этапе добычи Blurite').toBeDefined();
+    expect(mining, 'the pickaxe is named on the Blurite mining stage').toBeDefined();
     const sent = stepGuide(allSteps.find((s) => s.id === 'S2-07')!).stage!;
     expect(sent.stages.some((st) => st.steps.some((l) => l.has === 'Portrait'))).toBe(true);
   });
 
-  it('полезная нагрузка для плагина укладывается в лимит тела запроса и содержит этапы', () => {
+  it('the payload for the plugin fits the request body limit and contains the stages', () => {
     for (const s of withStages) {
       const g = stepGuide(s);
       expect(g.stage, s.id).toBeDefined();

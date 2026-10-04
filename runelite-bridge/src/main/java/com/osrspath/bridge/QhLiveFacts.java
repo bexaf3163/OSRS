@@ -17,12 +17,12 @@ import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.widgets.Widget;
 
 /**
- * Факты игры для машины состояний Quest Helper: то, что видно клиенту сейчас, и сообщения с начала наблюдения.
- * Читается только в потоке клиента.
+ * Game facts for the Quest Helper state machine: what the client sees now, and the messages since observation began.
+ * Read only on the client thread.
  */
 final class QhLiveFacts implements QhMachine.Facts
 {
-	/** Сообщений помним столько: хватает на весь квест, а старые сообщения Quest Helper всё равно не ищет. */
+	/** We remember this many messages: enough for a whole quest, and Quest Helper does not look for old messages anyway. */
 	static final int MAX_EVENTS = 300;
 
 	private final Client client;
@@ -39,7 +39,7 @@ final class QhLiveFacts implements QhMachine.Facts
 		this.bank = bank;
 	}
 
-	/** Сообщение игры: чат (GAMEMESSAGE, ENGINE, SPAM), окно сообщения (MESBOX), реплика диалога (DIALOG, «Имя|текст»). */
+	/** A game message: chat (GAMEMESSAGE, ENGINE, SPAM), message box (MESBOX), dialogue line (DIALOG, "Name|text"). */
 	void add(String type, String text)
 	{
 		if (text == null)
@@ -61,7 +61,7 @@ final class QhLiveFacts implements QhMachine.Facts
 	@Override
 	public int items(int[] ids, boolean onlyWorn, boolean withBank)
 	{
-		// Надетое входит в «сумку и надетое»; «только надетое» — подмножество.
+		// Worn items are part of "bag and worn"; "worn only" is a subset.
 		int total = onlyWorn ? sum(worn.get(), ids) : sum(carried.get(), ids);
 		if (withBank)
 		{

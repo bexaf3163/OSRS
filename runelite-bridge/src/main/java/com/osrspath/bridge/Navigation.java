@@ -5,18 +5,18 @@ import java.util.List;
 import lombok.Value;
 
 /**
- * Расстояние и направление до цели для микро-HUD и путевые точки шага.
- * Это расстояние по прямой между координатами, а не число шагов по дороге: реальный путь рисует
- * Shortest Path или путевые точки. Чистая логика — проверяется обычным тестом.
+ * The distance and direction to the target for the micro HUD, and the step's waypoints.
+ * This is the straight-line distance between coordinates, not the number of steps along the road: the real path is drawn by
+ * Shortest Path or the waypoints. Pure logic, checked by an ordinary test.
  */
 final class Navigation
 {
-	/** Ближе — «Рядом». Выход из «Рядом» чуть дальше, чтобы надпись не мигала на границе. */
+	/** Closer than this is "Nearby". Leaving "Nearby" is a little farther, so the label does not flicker at the boundary. */
 	static final int NEAR = 5;
 	static final int NEAR_EXIT = 7;
-	/** Путевая точка засчитана, если до неё не больше стольких клеток по любой оси. */
+	/** A waypoint counts if it is no more than this many tiles away on either axis. */
 	static final int WAYPOINT_REACH = 3;
-	/** Подземелья в игре лежат на 6400 клеток севернее поверхности (как src/lib/map.ts isUnderground). */
+	/** Dungeons in the game lie 6400 tiles north of the surface (like src/lib/map.ts isUnderground). */
 	static final int UNDERGROUND_Y = 6400;
 
 	private static final String[] ARROWS = {"→", "↗", "↑", "↖", "←", "↙", "↓", "↘"};
@@ -30,7 +30,7 @@ final class Navigation
 	{
 		String text;
 		boolean near;
-		/** Расстояние по прямой в клетках на этом этаже; -1 — не считается (другой этаж или под землёй). */
+		/** The straight-line distance in tiles on this plane; -1 means not counted (another plane or underground). */
 		int tiles;
 
 		Readout(String text, boolean near)
@@ -51,7 +51,7 @@ final class Navigation
 		return (int) Math.round(Math.hypot(x2 - x1, y2 - y1));
 	}
 
-	/** Стрелка по сторонам света: y в игре растёт на север. Пусто, если цель в той же клетке. */
+	/** An arrow by compass direction: y in the game grows to the north. Empty if the target is on the same tile. */
 	static String arrow(int dx, int dy)
 	{
 		if (dx == 0 && dy == 0)
@@ -68,54 +68,40 @@ final class Navigation
 		return y > UNDERGROUND_Y;
 	}
 
-	/** «клетка / клетки / клеток». */
+	/** "tile / tiles". */
 	static String tiles(int n)
 	{
-		int mod100 = n % 100;
-		int mod10 = n % 10;
-		if (mod100 >= 11 && mod100 <= 14)
-		{
-			return n + " клеток";
-		}
-		if (mod10 == 1)
-		{
-			return n + " клетка";
-		}
-		if (mod10 >= 2 && mod10 <= 4)
-		{
-			return n + " клетки";
-		}
-		return n + " клеток";
+		return n == 1 ? n + " tile" : n + " tiles";
 	}
 
-	/** Строка расстояния для HUD. wasNear — было ли «Рядом» на прошлом тике. */
+	/** The distance line for the HUD. wasNear is whether it was "Nearby" on the previous tick. */
 	static Readout readout(int px, int py, int pPlane, int tx, int ty, int tPlane, boolean wasNear)
 	{
 		boolean pUnder = underground(py);
 		boolean tUnder = underground(ty);
 		if (pUnder != tUnder)
 		{
-			return new Readout(tUnder ? "Цель под землёй — найди спуск" : "Цель на поверхности — выбирайся наверх", false);
+			return new Readout(tUnder ? "Target is underground - find the way down" : "Target is on the surface - get back up", false);
 		}
 		int d = distance(px, py, tx, ty);
 		if (pPlane != tPlane)
 		{
-			String floor = tPlane > pPlane ? "этажом выше" : "этажом ниже";
+			String floor = tPlane > pPlane ? "a floor up" : "a floor down";
 			return d < NEAR
-				? new Readout("Цель " + floor, false)
+				? new Readout("Target is " + floor, false)
 				: new Readout("~" + tiles(d) + " " + arrow(tx - px, ty - py) + ", " + floor, false);
 		}
 		if (d < NEAR || (wasNear && d < NEAR_EXIT))
 		{
-			return new Readout("✓ Рядом", true, d);
+			return new Readout("✓ Nearby", true, d);
 		}
 		return new Readout("~" + tiles(d) + " " + arrow(tx - px, ty - py), false, d);
 	}
 
 	/**
-	 * Путевые точки шага: калитка → мост → лестница → NPC. Текущая — первая незасчитанная.
-	 * Если игрок дошёл до более дальней точки, пропущенные засчитываются. Берётся ближайшая по порядку
-	 * подходящая точка, а не самая дальняя: маршрут может пройти одно место дважды (туда и обратно).
+	 * The step's waypoints: gate -> bridge -> ladder -> NPC. The current one is the first not counted.
+	 * If the player reached a farther waypoint, the skipped ones are counted. The nearest one in order that fits
+	 * is taken, not the farthest: a route may pass the same place twice (there and back).
 	 */
 	static final class Breadcrumbs
 	{
@@ -127,7 +113,7 @@ final class Navigation
 			this.points = points == null ? Collections.emptyList() : points;
 		}
 
-		/** Позиция игрока изменилась. true — текущая точка сменилась. */
+		/** The player's position changed. true means the current point changed. */
 		boolean update(int x, int y, int plane)
 		{
 			for (int i = index; i < points.size(); i++)
@@ -142,7 +128,7 @@ final class Navigation
 			return false;
 		}
 
-		/** Текущая точка или null, если маршрут пройден. */
+		/** The current point or null if the route is done. */
 		ActiveTarget.WorldPointDto current()
 		{
 			return finished() ? null : points.get(index);

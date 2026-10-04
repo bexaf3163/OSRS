@@ -8,8 +8,8 @@ import lombok.Data;
 import lombok.Value;
 
 /**
- * Оптовый список Grand Exchange из приложения: что купить на несколько шагов вперёд.
- * Плагин только показывает его на бирже и считает, что уже есть, — ничего не покупает сам.
+ * The Grand Exchange bulk list from the app: what to buy several steps ahead.
+ * The plugin only shows it at the exchange and counts what you already have; it buys nothing itself.
  */
 @Data
 public class ShoppingPlan
@@ -27,26 +27,26 @@ public class ShoppingPlan
 		private int count;
 	}
 
-	/** Текст ошибки или null. */
+	/** The error text or null. */
 	String prepare()
 	{
 		if (items == null)
 		{
-			return "items обязателен";
+			return "items required";
 		}
 		if (items.size() > MAX_ITEMS)
 		{
-			return "слишком длинный список";
+			return "list too long";
 		}
 		for (Item i : items)
 		{
 			if (i == null || i.name == null || i.name.isEmpty() || i.name.length() > ActiveTarget.MAX_TEXT)
 			{
-				return "неверное название";
+				return "invalid name";
 			}
 			if (i.count < 0 || i.count > MAX_COUNT)
 			{
-				return "неверное количество";
+				return "invalid count";
 			}
 		}
 		return null;
@@ -54,17 +54,17 @@ public class ShoppingPlan
 
 	enum RowState
 	{
-		/** Уже есть (в сумке, банкнотами или в банке). */
+		/** Already have (in the bag, as notes or in the bank). */
 		HAVE,
-		/** Ордер на бирже выполнен — осталось забрать. */
+		/** The exchange order is filled: it only remains to collect. */
 		BOUGHT,
-		/** Ордер выставлен и ждёт продавцов. */
+		/** The order is placed and waits for sellers. */
 		BUYING,
-		/** Надо купить. */
+		/** Needs to be bought. */
 		NEEDED,
 	}
 
-	/** Ордер на покупку из слотов биржи. */
+	/** A buy order from the exchange slots. */
 	@Value
 	static class Offer
 	{
@@ -77,18 +77,18 @@ public class ShoppingPlan
 	static class Row
 	{
 		String name;
-		/** 0 — количество по ситуации (в маршруте не число). */
+		/** 0 means the amount depends on the situation (not a number in the route). */
 		int need;
 		int have;
 		RowState state;
 		String offer;
-		/** Следующее, что искать на бирже. */
+		/** The next thing to search for at the exchange. */
 		boolean next;
 	}
 
 	/**
-	 * Что из списка уже есть и что осталось купить. owned — всё, что есть у игрока (сумка, надетое,
-	 * банкноты и банк, если его открывали); offers — ордера на покупку по ID предмета.
+	 * What of the list you already have and what remains to buy. owned is everything the player has (bag, worn items,
+	 * notes and the bank if it was opened); offers are the buy orders by item ID.
 	 */
 	static List<Row> progress(List<Item> items, ItemCounts owned, Map<Integer, Offer> offers)
 	{
@@ -112,12 +112,12 @@ public class ShoppingPlan
 			else if (offer != null && offer.isDone())
 			{
 				state = RowState.BOUGHT;
-				offerText = "куплено — забери";
+				offerText = "bought - collect it";
 			}
 			else if (offer != null)
 			{
 				state = RowState.BUYING;
-				offerText = "ордер " + offer.getBought() + "/" + offer.getTotal();
+				offerText = "order " + offer.getBought() + "/" + offer.getTotal();
 			}
 			else
 			{

@@ -27,8 +27,8 @@ import net.runelite.client.ui.FontManager;
 import org.junit.Test;
 
 /**
- * Список «Что нужно» на экране игры: какие строки, какие из них кнопки, что пишет подсказка, как сворачивается,
- * и что делает клик: попадает ли он в игру.
+ * The "What you need" list on the game screen: which lines, which of them are buttons, what the hint says, how it collapses,
+ * and what a click does: whether it reaches the game.
  */
 public class GuideListTest
 {
@@ -41,7 +41,7 @@ public class GuideListTest
 			.getFontMetrics(OverlayText.font(FontManager.getRunescapeFont(), scale));
 	}
 
-	/** Текст строки целиком, без переносов: «левое | правое» — как будто ширина бесконечная. */
+	/** The line's text in full, without wrapping: "left | right", as if the width were infinite. */
 	private static String text(GuideList.Row r)
 	{
 		String left = r.getLines().stream().map(GuideList.Line::getLeft).filter(s -> !s.isEmpty())
@@ -56,7 +56,7 @@ public class GuideListTest
 		return GuideList.rows(v, collapsed, FM, SMALL, OsrsPathGuideOverlay.WIDTH);
 	}
 
-	/** S2-03: лук в сумке, глаз тритона — по ходу шага у Betty, омаров нет (банк открывали, пусто). */
+	/** S2-03: the onion is in the bag, the eye of newt is in step at Betty's, no lobsters (the bank was opened, empty). */
 	private static StepGuide.View witchsPotion(String navLabel, int x, int y)
 	{
 		return StepGuide.view(StepGuideTest.witchsPotion(), StepGuideTest.counts(1957, "Onion", 1), StepGuideTest.counts(),
@@ -64,90 +64,90 @@ public class GuideListTest
 	}
 
 	@Test
-	public void предметыСоСтатусомИГдеВзять_местоКнопка()
+	public void itemsWithStatusAndWhereToGet_placeIsButton()
 	{
 		List<GuideList.Row> rows = rows(witchsPotion(null, 0, 0), false);
 		assertEquals(GuideList.Kind.TOGGLE, rows.get(0).getAction().getKind());
-		assertEquals("S2-03 · Что нужно | ▲", text(rows.get(0)));
+		assertEquals("S2-03 · What you need | ▲", text(rows.get(0)));
 
-		// Чего не хватает — сверху, лук уже в сумке — вниз.
+		// What is missing goes on top, the onion already in the bag goes down.
 		GuideList.Row onion = rows.get(3);
-		assertEquals("в сумке — одна строка, не кнопка", "✓ Onion | есть", text(onion));
+		assertEquals("in the bag: one line, not a button", "✓ Onion | have", text(onion));
 		assertFalse(onion.getAction().isClickable());
 
 		GuideList.Row newt = rows.get(1);
-		assertEquals("название и статус — одной строкой", "• Eye of newt | по ходу", newt.getLines().get(0).getLeft() + " | " + newt.getLines().get(0).getRight());
-		assertTrue("где взять — под названием", text(newt).contains("Купи у Betty в Port Sarim за 3 gp."));
-		assertEquals("где взять — цветом ссылки", GuideList.LINK, newt.getLines().get(1).getLeftColor());
-		assertTrue("где взять — мелким шрифтом", newt.getLines().get(1).isSmall());
+		assertEquals("name and status on one line", "• Eye of newt | in step", newt.getLines().get(0).getLeft() + " | " + newt.getLines().get(0).getRight());
+		assertTrue("where to get it is under the name", text(newt).contains("Buy from Betty in Port Sarim for 3 gp."));
+		assertEquals("where to get it in link colour", GuideList.LINK, newt.getLines().get(1).getLeftColor());
+		assertTrue("where to get it in a small font", newt.getLines().get(1).isSmall());
 		assertEquals(GuideList.Action.place(2), newt.getAction());
-		assertTrue(newt.getHint(), newt.getHint().contains("Глаз тритона") && newt.getHint().contains("Клик — стрелка и путь: Eye of newt — Betty, Port Sarim"));
+		assertTrue(newt.getHint(), newt.getHint().contains("Eye of newt") && newt.getHint().contains("Click for the arrow and path: Eye of newt — Betty, Port Sarim"));
 
 		GuideList.Row lobster = rows.get(2);
-		assertEquals("✗ Lobster ×5 | нет", lobster.getLines().get(0).getLeft() + " | " + lobster.getLines().get(0).getRight());
-		assertEquals("места нет — не кнопка", GuideList.Action.NONE, lobster.getAction());
+		assertEquals("✗ Lobster ×5 | none", lobster.getLines().get(0).getLeft() + " | " + lobster.getLines().get(0).getRight());
+		assertEquals("no place: not a button", GuideList.Action.NONE, lobster.getAction());
 		assertEquals(GuideList.MUTED, lobster.getLines().get(1).getLeftColor());
-		assertTrue("подсказка без обещания пути", !lobster.getHint().contains("Клик"));
+		assertTrue("the hint does not promise a path", !lobster.getHint().contains("Click"));
 
-		// Куда идти — только к кому не ведут строки предметов: грядка лука и Betty уже кнопки выше.
-		assertEquals("Куда идти", text(rows.get(4)));
-		assertEquals("► Hetty — дом в Rimmington", text(rows.get(5)));
+		// Where to go is only for those the item lines do not lead to: the onion patch and Betty are already buttons above.
+		assertEquals("Where to go", text(rows.get(4)));
+		assertEquals("► Hetty — house in Rimmington", text(rows.get(5)));
 		assertEquals(GuideList.Action.place(0), rows.get(5).getAction());
-		assertTrue(rows.get(5).getHint().contains("Hetty подсветится"));
+		assertTrue(rows.get(5).getHint().contains("Hetty will be highlighted"));
 		assertEquals(6, rows.size());
-		assertTrue(newt.getHint(), newt.getHint().contains("Betty подсветится"));
+		assertTrue(newt.getHint(), newt.getHint().contains("Betty will be highlighted"));
 	}
 
 	@Test
-	public void стрелкаВедётКТочке_онаОтмеченаИНеКнопка_естьВозвратКШагу()
+	public void arrowPointsAtPoint_itIsMarkedAndNotButton_thereIsReturnToStep()
 	{
 		List<GuideList.Row> rows = rows(witchsPotion("Eye of newt — Betty, Port Sarim", 3014, 3259), false);
 		GuideList.Row back = rows.get(1);
-		assertEquals("← Стрелку — снова к шагу", text(back));
+		assertEquals("← Arrow back to the step", text(back));
 		assertEquals(GuideList.Action.BACK, back.getAction());
 		GuideList.Row newt = rows.get(2);
-		assertTrue(text(newt), text(newt).contains("● стрелка ведёт туда"));
-		assertFalse("уже ведёт — не кнопка", newt.getAction().isClickable());
-		assertEquals("► Hetty — дом в Rimmington", text(rows.get(rows.size() - 1)));
+		assertTrue(text(newt), text(newt).contains("● arrow points there"));
+		assertFalse("already points there: not a button", newt.getAction().isClickable());
+		assertEquals("► Hetty — house in Rimmington", text(rows.get(rows.size() - 1)));
 
-		// Стрелка ведёт к месту, где предметов не берут, — оно в «Куда идти» с «●» и не кнопка.
-		List<GuideList.Row> toHetty = rows(witchsPotion("Hetty — дом в Rimmington", 2968, 3204), false);
+		// The arrow points to a place where no items are taken: it is in "Where to go" with "●" and not a button.
+		List<GuideList.Row> toHetty = rows(witchsPotion("Hetty — house in Rimmington", 2968, 3204), false);
 		GuideList.Row hetty = toHetty.get(toHetty.size() - 1);
-		assertEquals("● Hetty — дом в Rimmington", text(hetty));
+		assertEquals("● Hetty — house in Rimmington", text(hetty));
 		assertFalse(hetty.getAction().isClickable());
 	}
 
 	@Test
-	public void свёрнутый_однаСтрокаСИтогом()
+	public void collapsed_oneLineWithSummary()
 	{
 		List<GuideList.Row> rows = rows(witchsPotion(null, 0, 0), true);
 		assertEquals(1, rows.size());
-		assertEquals("S2-03 · Что нужно: нет 1 · по ходу 1 | ▼", text(rows.get(0)));
+		assertEquals("S2-03 · What you need: missing 1 · in step 1 | ▼", text(rows.get(0)));
 		assertEquals(GuideList.Action.TOGGLE, rows.get(0).getAction());
 		StepGuide.View allIn = StepGuide.view(StepGuideTest.witchsPotion(),
 			StepGuideTest.counts(1957, "Onion", 1, 221, "Eye of newt", 1, 379, "Lobster", 5), null, null, 0, 0, 0);
-		assertEquals("S2-03 · Что нужно: всё с собой | ▼", text(rows(allIn, true).get(0)));
+		assertEquals("S2-03 · What you need: all in your bag | ▼", text(rows(allIn, true).get(0)));
 	}
 
 	@Test
-	public void когдаПоказывать()
+	public void whenToShow()
 	{
 		assertFalse(GuideList.worthShowing(null));
-		assertFalse("шаг не выбран", GuideList.worthShowing(StepGuide.EMPTY));
+		assertFalse("no step selected", GuideList.worthShowing(StepGuide.EMPTY));
 		ActiveTarget onePlace = new com.google.gson.Gson().fromJson("{\"stepId\":\"S1-07\",\"title\":\"X\",\"guide\":{\"items\":[],"
 			+ "\"places\":[{\"x\":3236,\"y\":3155,\"plane\":0,\"label\":\"Abigale\"}]}}", ActiveTarget.class);
 		assertNull(onePlace.prepare());
-		assertFalse("одна точка без предметов — хватит HUD и стрелки",
+		assertFalse("one point without items: the HUD and arrow are enough",
 			GuideList.worthShowing(StepGuide.view(onePlace, StepGuideTest.counts(), null, null, 0, 0, 0)));
-		assertTrue("временная цель — нужен возврат к шагу",
+		assertTrue("a temporary target: the return to the step is needed",
 			GuideList.worthShowing(StepGuide.view(onePlace, StepGuideTest.counts(), null, "Bob", 3230, 3203, 0)));
 		assertTrue(GuideList.worthShowing(witchsPotion(null, 0, 0)));
 	}
 
 	@Test
-	public void длинноеГдеВзять_двеСтрокиИМноготочие()
+	public void longWhereToGet_twoLinesAndEllipsis()
 	{
-		String where = "Raw rat meat с гигантской крысы у часовни Port Sarim (или Raw beef) — используй на камине Hetty дважды, пока не сгорит.";
+		String where = "Raw rat meat from a giant rat by the Port Sarim chapel (or raw beef); cook it on Hetty's fireplace twice until it burns.";
 		int width = OverlayText.inner(OsrsPathGuideOverlay.WIDTH);
 		List<GuideList.Line> lines = GuideList.clip("   ", where, GuideList.MUTED, SMALL, width, 2, true);
 		assertEquals(2, lines.size());
@@ -156,33 +156,33 @@ public class GuideListTest
 		{
 			assertTrue(l.getLeft(), SMALL.stringWidth(l.getLeft()) <= width);
 		}
-		assertEquals("короткое — как есть", 1, GuideList.clip("   ", "Купи у Ned.", GuideList.MUTED, SMALL, width, 2, true).size());
+		assertEquals("short as is", 1, GuideList.clip("   ", "Buy from Ned.", GuideList.MUTED, SMALL, width, 2, true).size());
 	}
 
 	@Test
-	public void шагБезПредметов_заголовокКудаИдти()
+	public void stepWithoutItems_headingWhereToGo()
 	{
 		ActiveTarget t = new com.google.gson.Gson().fromJson("{\"stepId\":\"S2-05\",\"title\":\"Romeo & Juliet\",\"guide\":{\"items\":[],\"places\":["
-			+ "{\"x\":3211,\"y\":3422,\"plane\":0,\"label\":\"Romeo на площади Varrock\",\"npc\":\"Romeo\"},"
-			+ "{\"x\":3159,\"y\":3426,\"plane\":1,\"label\":\"Juliet — особняк\",\"npc\":\"Juliet\"}]}}", ActiveTarget.class);
+			+ "{\"x\":3211,\"y\":3422,\"plane\":0,\"label\":\"Romeo in Varrock Square\",\"npc\":\"Romeo\"},"
+			+ "{\"x\":3159,\"y\":3426,\"plane\":1,\"label\":\"Juliet — mansion\",\"npc\":\"Juliet\"}]}}", ActiveTarget.class);
 		assertNull(t.prepare());
 		List<GuideList.Row> rows = rows(StepGuide.view(t, StepGuideTest.counts(), null, null, 0, 0, 0), false);
-		assertEquals("S2-05 · Куда идти | ▲", text(rows.get(0)));
-		assertEquals("без второго заголовка", 3, rows.size());
-		assertEquals("► Juliet — особняк", text(rows.get(2)));
-		assertEquals("S2-05 · Куда идти: 2 места | ▼", text(rows(StepGuide.view(t, StepGuideTest.counts(), null, null, 0, 0, 0), true).get(0)));
+		assertEquals("S2-05 · Where to go | ▲", text(rows.get(0)));
+		assertEquals("without a second heading", 3, rows.size());
+		assertEquals("► Juliet — mansion", text(rows.get(2)));
+		assertEquals("S2-05 · Where to go: 2 places | ▼", text(rows(StepGuide.view(t, StepGuideTest.counts(), null, null, 0, 0, 0), true).get(0)));
 	}
 
 	@Test
-	public void местоСNpcГдеВсёВзято_сноваВКудаИдти()
+	public void placeWithNpcWhereEverythingIsTaken_backInWhereToGo()
 	{
-		// NPC выдаёт предмет, и к нему же идти дальше по квесту: пока предмета нет — к нему ведёт строка предмета,
-		// взял — NPC снова в «Куда идти». Грядка без NPC, где всё уже с собой, — не нужна.
+		// An NPC hands out an item and is also where to go next in the quest: while the item is missing, the item line leads to them,
+		// once it is taken the NPC is back in "Where to go". A patch without an NPC, where everything is already in the bag, is not needed.
 		ActiveTarget t = new com.google.gson.Gson().fromJson("{\"stepId\":\"S2-06\",\"title\":\"Rune Mysteries\",\"guide\":{"
 			+ "\"items\":[{\"name\":\"Research package\"},{\"name\":\"Onion\"}],\"places\":["
 			+ "{\"x\":3210,\"y\":3221,\"plane\":1,\"label\":\"Duke Horacio\",\"npc\":\"Duke Horacio\"},"
-			+ "{\"x\":3103,\"y\":9571,\"plane\":0,\"label\":\"Archmage Sedridor — подвал Wizards' Tower\",\"npc\":\"Archmage Sedridor\",\"items\":[\"Research package\"]},"
-			+ "{\"x\":2950,\"y\":3251,\"plane\":0,\"label\":\"Лук — грядка\",\"items\":[\"Onion\"]}]}}", ActiveTarget.class);
+			+ "{\"x\":3103,\"y\":9571,\"plane\":0,\"label\":\"Archmage Sedridor — Wizards' Tower basement\",\"npc\":\"Archmage Sedridor\",\"items\":[\"Research package\"]},"
+			+ "{\"x\":2950,\"y\":3251,\"plane\":0,\"label\":\"Onion — patch\",\"items\":[\"Onion\"]}]}}", ActiveTarget.class);
 		assertNull(t.prepare());
 		List<String> before = rows(StepGuide.view(t, StepGuideTest.counts(), StepGuideTest.counts(), null, 0, 0, 0), false).stream()
 			.map(GuideListTest::text).collect(Collectors.toList());
@@ -190,20 +190,20 @@ public class GuideListTest
 		List<String> after = rows(StepGuide.view(t, StepGuideTest.counts(-1, "Research package", 1, -1, "Onion", 1), null, null, 0, 0, 0), false)
 			.stream().map(GuideListTest::text).collect(Collectors.toList());
 		assertTrue(after.toString(), after.stream().anyMatch(r -> r.startsWith("► Archmage Sedridor")));
-		assertFalse(after.toString(), after.stream().anyMatch(r -> r.startsWith("► Лук")));
+		assertFalse(after.toString(), after.stream().anyMatch(r -> r.startsWith("► Onion")));
 	}
 
-	/** S2-03 как её присылает программа 2.12: четыре предмета «по ходу», места Betty и крысы, финал — «Отдай всё Hetty». */
+	/** S2-03 as the app 2.12 sends it: four items "in step", the places of Betty and the rat, the finale is "Give everything to Hetty". */
 	private static ActiveTarget hetty()
 	{
 		ActiveTarget t = new com.google.gson.Gson().fromJson("{\"stepId\":\"S2-03\",\"title\":\"Witch's Potion\",\"guide\":{"
 			+ "\"items\":[{\"name\":\"Onion\",\"inStep\":true},{\"name\":\"Eye of newt\",\"inStep\":true},{\"name\":\"Rat's tail\",\"inStep\":true}],"
 			+ "\"places\":["
-			+ "{\"x\":2968,\"y\":3204,\"plane\":0,\"label\":\"Hetty — дом в Rimmington\",\"npc\":\"Hetty\"},"
-			+ "{\"x\":2957,\"y\":3204,\"plane\":0,\"label\":\"Крыса — Brian's Archery Supplies\",\"npc\":\"Rat\",\"items\":[\"Rat's tail\"]},"
+			+ "{\"x\":2968,\"y\":3204,\"plane\":0,\"label\":\"Hetty — house in Rimmington\",\"npc\":\"Hetty\"},"
+			+ "{\"x\":2957,\"y\":3204,\"plane\":0,\"label\":\"Rat — Brian's Archery Supplies\",\"npc\":\"Rat\",\"items\":[\"Rat's tail\"]},"
 			+ "{\"x\":3014,\"y\":3259,\"plane\":0,\"label\":\"Eye of newt — Betty, Port Sarim\",\"npc\":\"Betty\",\"items\":[\"Eye of newt\"]},"
-			+ "{\"x\":2950,\"y\":3251,\"plane\":0,\"label\":\"Лук — грядка\",\"items\":[\"Onion\"]}],"
-			+ "\"steps\":[\"Поговори с Hetty.\",\"Сорви лук.\",\"Отдай всё Hetty и выпей из котла (Drink From).\"]}}", ActiveTarget.class);
+			+ "{\"x\":2950,\"y\":3251,\"plane\":0,\"label\":\"Onion — patch\",\"items\":[\"Onion\"]}],"
+			+ "\"steps\":[\"Talk to Hetty.\",\"Pick the onion.\",\"Give everything to Hetty and drink from the cauldron (Drink From).\"]}}", ActiveTarget.class);
 		assertNull(t.prepare());
 		return t;
 	}
@@ -214,7 +214,7 @@ public class GuideListTest
 	}
 
 	@Test
-	public void всёСобрано_местаСобранногоУходят_ПоказаноЧтоДелатьДальше()
+	public void everythingCollected_placesOfCollectedGo_whatToDoNextIsShown()
 	{
 		ActiveTarget t = hetty();
 		java.util.Set<String> got = new java.util.HashSet<>();
@@ -222,92 +222,92 @@ public class GuideListTest
 		List<String> before = shown(partial);
 		assertNull(partial.getNext());
 		assertTrue(before.toString(), before.stream().noneMatch(r -> r.startsWith("▶")));
-		assertTrue("Betty ещё нужна: Eye of newt нет — ведёт строка предмета", before.stream().anyMatch(r -> r.contains("Eye of newt")));
+		assertTrue("Betty is still needed: no Eye of newt, the item line leads there", before.stream().anyMatch(r -> r.contains("Eye of newt")));
 
 		StepGuide.View all = StepGuide.view(t, StepGuideTest.counts(1957, "Onion", 1, 221, "Eye of newt", 1, 300, "Rat's tail", 1),
 			StepGuideTest.counts(), null, 0, 0, 0, got);
 		List<String> after = shown(all);
-		assertTrue(after.toString(), after.stream().anyMatch(r -> r.startsWith("▶ Дальше: Отдай всё Hetty")));
-		assertTrue("Hetty — главная точка остаётся", after.stream().anyMatch(r -> r.startsWith("► Hetty")));
-		assertTrue("Betty и крыса уже не нужны: " + after, after.stream().noneMatch(r -> r.startsWith("► Eye of newt") || r.startsWith("► Крыса")));
+		assertTrue(after.toString(), after.stream().anyMatch(r -> r.startsWith("▶ Next: Give everything to Hetty")));
+		assertTrue("Hetty, the main point, stays", after.stream().anyMatch(r -> r.startsWith("► Hetty")));
+		assertTrue("Betty and the rat are no longer needed: " + after, after.stream().noneMatch(r -> r.startsWith("► Eye of newt") || r.startsWith("► Rat")));
 	}
 
 	@Test
-	public void отдалиПредметы_списокНеПроситИхСнова()
+	public void itemsHandedIn_listDoesNotAskForThemAgain()
 	{
 		ActiveTarget t = hetty();
 		java.util.Set<String> got = new java.util.HashSet<>();
 		StepGuide.view(t, StepGuideTest.counts(1957, "Onion", 1, 221, "Eye of newt", 1, 300, "Rat's tail", 1), StepGuideTest.counts(), null, 0, 0, 0, got);
-		// Отдали Hetty: сумка пуста, банк открывали — раньше список снова писал «нет».
+		// Handed to Hetty: the bag is empty, the bank was opened: before, the list wrote "none" again.
 		StepGuide.View handed = StepGuide.view(t, StepGuideTest.counts(), StepGuideTest.counts(), null, 0, 0, 0, got);
 		for (StepGuide.ItemLine i : handed.getItems())
 		{
 			assertEquals(i.getName(), StepGuide.Have.DONE, i.getHave());
-			assertEquals("готово", i.getTag());
+			assertEquals("done", i.getTag());
 		}
-		assertNotNull("и подсказка «что дальше» остаётся", handed.getNext());
-		// Без памяти (старое поведение) — как раньше.
+		assertNotNull("and the 'what next' hint stays", handed.getNext());
+		// Without memory (the old behaviour): as before.
 		assertEquals(StepGuide.Have.IN_STEP, StepGuide.view(t, StepGuideTest.counts(), StepGuideTest.counts(), null, 0, 0, 0).getItems().get(0).getHave());
 	}
 
 	@Test
-	public void NpcМестаУПоследнегоШага_остаётся()
+	public void npcOfPlaceAtLastStep_stays()
 	{
-		// «Отдай Brian…» — NPC места упомянут в финале: место не прячем, даже когда всё оттуда взято.
+		// "Give to Brian...": the place's NPC is mentioned in the finale, so we do not hide the place even when everything has been taken from there.
 		ActiveTarget t = new com.google.gson.Gson().fromJson("{\"stepId\":\"S2-06\",\"title\":\"T\",\"guide\":{\"items\":[{\"name\":\"Package\"}],\"places\":["
 			+ "{\"x\":3210,\"y\":3221,\"plane\":1,\"label\":\"Duke\",\"npc\":\"Duke\"},"
-			+ "{\"x\":3103,\"y\":9571,\"plane\":0,\"label\":\"Sedridor — подвал\",\"npc\":\"Sedridor\",\"items\":[\"Package\"]}],"
-			+ "\"steps\":[\"Отнеси Package к Sedridor.\"]}}", ActiveTarget.class);
+			+ "{\"x\":3103,\"y\":9571,\"plane\":0,\"label\":\"Sedridor — basement\",\"npc\":\"Sedridor\",\"items\":[\"Package\"]}],"
+			+ "\"steps\":[\"Bring the package to Sedridor.\"]}}", ActiveTarget.class);
 		assertNull(t.prepare());
 		List<String> r = shown(StepGuide.view(t, StepGuideTest.counts(-1, "Package", 1), null, null, 0, 0, 0, new java.util.HashSet<>()));
 		assertTrue(r.toString(), r.stream().anyMatch(x -> x.startsWith("► Sedridor")));
 	}
 
 	@Test
-	public void длинныйСписок_вОднуСтрокуИНедостающееСверху()
+	public void longList_onOneLineAndMissingOnTop()
 	{
 		StringBuilder items = new StringBuilder();
 		for (int i = 0; i < 12; i++)
 		{
-			items.append(i == 0 ? "" : ",").append("{\"name\":\"Item").append(i).append("\",\"where\":\"Очень длинный текст о том, где взять этот предмет, на три строки и больше, чтобы проверить сжатие.\"}");
+			items.append(i == 0 ? "" : ",").append("{\"name\":\"Item").append(i).append("\",\"where\":\"A very long text about where to get this item, three lines or more, to test the compression.\"}");
 		}
 		StringBuilder places = new StringBuilder();
 		for (int i = 0; i < 8; i++)
 		{
 			places.append(i == 0 ? "" : ",").append("{\"x\":").append(3200 + i).append(",\"y\":3200,\"plane\":0,\"label\":\"NPC").append(i)
-				.append(" — очень длинная подпись места, которая не влезает в одну строку\",\"npc\":\"Npc").append(i).append("\"}");
+				.append(" — a very long place label that does not fit on one line\",\"npc\":\"Npc").append(i).append("\"}");
 		}
 		ActiveTarget t = new com.google.gson.Gson().fromJson("{\"stepId\":\"S2-10\",\"title\":\"Prince Ali Rescue\",\"guide\":{\"items\":["
 			+ items + "],\"places\":[" + places + "]}}", ActiveTarget.class);
 		assertNull(t.prepare());
 		StepGuide.View v = StepGuide.view(t, StepGuideTest.counts(-1, "Item5", 1), StepGuideTest.counts(), null, 0, 0, 0);
 		List<GuideList.Row> rows = rows(v, false);
-		// Предметов не больше восьми, у каждого «где взять» одной строкой; Item5 уже в сумке — не в первых строках.
+		// No more than eight items, each with "where to get it" on one line; Item5 is already in the bag, so not in the first lines.
 		List<GuideList.Row> itemRows = rows.subList(1, 1 + GuideList.MAX_ITEMS);
 		for (GuideList.Row r : itemRows)
 		{
 			assertTrue(text(r), r.getLines().size() <= 2);
 			assertFalse(text(r), text(r).startsWith("✓"));
 		}
-		assertTrue(text(rows.get(1 + GuideList.MAX_ITEMS)), text(rows.get(1 + GuideList.MAX_ITEMS)).startsWith("… ещё 4"));
+		assertTrue(text(rows.get(1 + GuideList.MAX_ITEMS)), text(rows.get(1 + GuideList.MAX_ITEMS)).startsWith("… 4 more"));
 		GuideList.Row firstPlace = rows.get(3 + GuideList.MAX_ITEMS);
-		assertEquals("место — одной строкой с многоточием", 1, firstPlace.getLines().size());
+		assertEquals("the place is on one line with an ellipsis", 1, firstPlace.getLines().size());
 		assertTrue(firstPlace.getLines().get(0).getLeft().endsWith("…"));
-		assertTrue("целиком — в подсказке", firstPlace.getHint().contains("не влезает в одну строку"));
+		assertTrue("in full in the hint", firstPlace.getHint().contains("does not fit on one line"));
 	}
 
 	@Test
-	public void местоБезNpcВПодписи_npcВпереди()
+	public void placeWithoutNpcInLabel_npcFirst()
 	{
-		GuideList.Row r = GuideList.place(new StepGuide.PlaceLine("Кухня замка Lumbridge", 0, false, "Cook", false), FM,
+		GuideList.Row r = GuideList.place(new StepGuide.PlaceLine("Lumbridge Castle kitchen", 0, false, "Cook", false), FM,
 			OverlayText.inner(OsrsPathGuideOverlay.WIDTH));
-		assertTrue(text(r), text(r).startsWith("► Cook — Кухня замка"));
-		GuideList.Row same = GuideList.place(new StepGuide.PlaceLine("Hetty — дом в Rimmington", 0, false, "Hetty", false), FM,
+		assertTrue(text(r), text(r).startsWith("► Cook — Lumbridge Castle kitchen"));
+		GuideList.Row same = GuideList.place(new StepGuide.PlaceLine("Hetty — house in Rimmington", 0, false, "Hetty", false), FM,
 			OverlayText.inner(OsrsPathGuideOverlay.WIDTH));
-		assertEquals("► Hetty — дом в Rimmington", text(same));
+		assertEquals("► Hetty — house in Rimmington", text(same));
 	}
 
-	// ---------- Клики ----------
+	// ---------- Clicks ----------
 
 	private static Widget widget()
 	{
@@ -320,7 +320,7 @@ public class GuideListTest
 			(p, m, a) -> "getWidget".equals(m.getName()) ? w : null);
 	}
 
-	/** Клиент: открыто ли меню, выбрано ли заклинание, что в меню под мышью (последний пункт — левый клик). */
+	/** The client: whether a menu is open, whether a spell is selected, what is in the menu under the mouse (the last entry is the left click). */
 	private static Client client(boolean menuOpen, boolean widgetSelected, MenuEntry... entries)
 	{
 		Menu menu = (Menu) Proxy.newProxyInstance(Menu.class.getClassLoader(), new Class<?>[]{Menu.class},
@@ -346,7 +346,7 @@ public class GuideListTest
 		return new MouseEvent(new Canvas(), MouseEvent.MOUSE_PRESSED, 0, modifiers, x, y, 1, false, button);
 	}
 
-	/** Список на холсте в (10, 50): заголовок, строка-предмет без места, строка-место. */
+	/** The list on the canvas at (10, 50): a heading, an item line without a place, a place line. */
 	private static OsrsPathGuideOverlay overlay(Client c, long renderedAt)
 	{
 		OsrsPathGuideOverlay o = new OsrsPathGuideOverlay(c, null, null);
@@ -357,64 +357,64 @@ public class GuideListTest
 	}
 
 	@Test
-	public void кликПоМесту_действиеИКликНеУходитВИгру()
+	public void clickOnPlace_actionAndClickDoesNotGoToGame()
 	{
 		Client c = client(false, false, entry(null));
 		List<GuideList.Action> done = new ArrayList<>();
 		GuideMouse mouse = new GuideMouse(c, overlay(c, System.nanoTime()), done::add);
 		MouseEvent e = mouse.mousePressed(press(50, 105, MouseEvent.BUTTON1, InputEvent.BUTTON1_DOWN_MASK));
-		assertTrue("игра не получит клик — персонаж не пойдёт под плашку", e.isConsumed());
+		assertTrue("the game will not get the click: the character will not walk under the plate", e.isConsumed());
 		assertEquals(Collections.singletonList(GuideList.Action.place(3)), done);
 		MouseEvent up = new MouseEvent(new Canvas(), MouseEvent.MOUSE_RELEASED, 0, 0, 50, 105, 1, false, MouseEvent.BUTTON1);
 		assertTrue(mouse.mouseReleased(up).isConsumed());
 
-		// Строка без места — клик тоже не уходит в игру, но ничего не делает.
+		// A line without a place: the click does not go to the game either, but does nothing.
 		done.clear();
 		assertTrue(mouse.mousePressed(press(50, 80, MouseEvent.BUTTON1, InputEvent.BUTTON1_DOWN_MASK)).isConsumed());
 		assertTrue(done.isEmpty());
-		// Заголовок — свернуть.
+		// The heading: collapse.
 		mouse.mousePressed(press(50, 58, MouseEvent.BUTTON1, InputEvent.BUTTON1_DOWN_MASK));
 		assertEquals(Collections.singletonList(GuideList.Action.TOGGLE), done);
 	}
 
 	@Test
-	public void кликУходитИгре_внеСписка_правой_сAlt_меню_банкНадСписком_списокНеНарисован()
+	public void clickGoesToGame_outsideList_right_withAlt_menu_bankOverList_listNotDrawn()
 	{
 		List<GuideList.Action> done = new ArrayList<>();
 		Client world = client(false, false, entry(null));
 		GuideMouse mouse = new GuideMouse(world, overlay(world, System.nanoTime()), done::add);
-		assertFalse("мимо списка", mouse.mousePressed(press(400, 300, MouseEvent.BUTTON1, InputEvent.BUTTON1_DOWN_MASK)).isConsumed());
-		assertFalse("правая кнопка — меню игры", mouse.mousePressed(press(50, 105, MouseEvent.BUTTON3, InputEvent.BUTTON3_DOWN_MASK)).isConsumed());
-		assertFalse("Alt — RuneLite двигает плашку",
+		assertFalse("beside the list", mouse.mousePressed(press(400, 300, MouseEvent.BUTTON1, InputEvent.BUTTON1_DOWN_MASK)).isConsumed());
+		assertFalse("right button: the game menu", mouse.mousePressed(press(50, 105, MouseEvent.BUTTON3, InputEvent.BUTTON3_DOWN_MASK)).isConsumed());
+		assertFalse("Alt: RuneLite moves the plate",
 			mouse.mousePressed(press(50, 105, MouseEvent.BUTTON1, InputEvent.BUTTON1_DOWN_MASK | InputEvent.ALT_DOWN_MASK)).isConsumed());
 		MouseEvent up = new MouseEvent(new Canvas(), MouseEvent.MOUSE_RELEASED, 0, 0, 400, 300, 1, false, MouseEvent.BUTTON1);
-		assertFalse("отпускание чужого нажатия — игре", mouse.mouseReleased(up).isConsumed());
+		assertFalse("release of someone else's press goes to the game", mouse.mouseReleased(up).isConsumed());
 
 		Client menuOpen = client(true, false, entry(null));
-		assertFalse("открыто меню игры — выбирают его пункт",
+		assertFalse("the game menu is open: its entry is being chosen",
 			new GuideMouse(menuOpen, overlay(menuOpen, System.nanoTime()), done::add).mousePressed(press(50, 105, MouseEvent.BUTTON1, InputEvent.BUTTON1_DOWN_MASK)).isConsumed());
 		Client spell = client(false, true, entry(null));
-		assertFalse("выбрано заклинание или «Use»",
+		assertFalse("a spell or 'Use' is selected",
 			new GuideMouse(spell, overlay(spell, System.nanoTime()), done::add).mousePressed(press(50, 105, MouseEvent.BUTTON1, InputEvent.BUTTON1_DOWN_MASK)).isConsumed());
 		Client bank = client(false, false, entry(null), entry(widget()));
-		assertFalse("над списком банк: «Withdraw-1» важнее",
+		assertFalse("a bank over the list: 'Withdraw-1' matters more",
 			new GuideMouse(bank, overlay(bank, System.nanoTime()), done::add).mousePressed(press(50, 105, MouseEvent.BUTTON1, InputEvent.BUTTON1_DOWN_MASK)).isConsumed());
-		assertFalse("список давно не рисовался (вышел из игры, скрыт) — клики игре",
+		assertFalse("the list has not been drawn for a long time (left the game, hidden): clicks go to the game",
 			new GuideMouse(world, overlay(world, System.nanoTime() - 2_000_000_000L), done::add).mousePressed(press(50, 105, MouseEvent.BUTTON1, InputEvent.BUTTON1_DOWN_MASK)).isConsumed());
 		assertTrue(done.isEmpty());
 	}
 
 	@Test
-	public void окноИгрыПодМышью_поВерхнемуПунктуМеню()
+	public void gameWindowUnderMouse_byTopMenuEntry()
 	{
 		assertFalse(GuideMouse.windowUnderMouse(null));
 		assertFalse(GuideMouse.windowUnderMouse(new MenuEntry[0]));
-		assertFalse("Walk here — мир", GuideMouse.windowUnderMouse(new MenuEntry[]{entry(null), entry(null)}));
-		assertTrue("Withdraw-1 — окно банка", GuideMouse.windowUnderMouse(new MenuEntry[]{entry(null), entry(widget())}));
+		assertFalse("Walk here: the world", GuideMouse.windowUnderMouse(new MenuEntry[]{entry(null), entry(null)}));
+		assertTrue("Withdraw-1: the bank window", GuideMouse.windowUnderMouse(new MenuEntry[]{entry(null), entry(widget())}));
 		assertSame(GuideList.Action.NONE, GuideList.Action.NONE);
 	}
 
-	/** Пункт меню над списком — латиницей (шрифт игры без кириллицы) и по действию строки. */
+	/** A menu entry over the list, in Latin letters and by the line's action. */
 	@Test
 	public void menuOptionOverListIsLatin()
 	{
@@ -424,9 +424,9 @@ public class GuideListTest
 		assertEquals("List", GuideMouse.menuOption(GuideList.Action.NONE));
 	}
 
-	/** Открытая карта мира над списком: клик по её метке — карте, а не строке под ней. */
+	/** An open world map over the list: a click on its marker goes to the map, not to the line under it. */
 	@Test
-	public void картаМираНадСписком_кликУходитКарте()
+	public void worldMapOverList_clickGoesToMap()
 	{
 		Widget map = (Widget) Proxy.newProxyInstance(Widget.class.getClassLoader(), new Class<?>[]{Widget.class}, (p, m, a) ->
 			"isHidden".equals(m.getName()) ? Boolean.FALSE : "getBounds".equals(m.getName()) ? new Rectangle(0, 0, 500, 400) : null);
@@ -437,24 +437,24 @@ public class GuideListTest
 		assertFalse(new GuideMouse(withMap, overlay(withMap, System.nanoTime()), done::add)
 			.mousePressed(press(50, 105, MouseEvent.BUTTON1, InputEvent.BUTTON1_DOWN_MASK)).isConsumed());
 		assertTrue(done.isEmpty());
-		assertFalse("карта закрыта", GuideMouse.mapCovers(null, new java.awt.Point(50, 105)));
+		assertFalse("the map is closed", GuideMouse.mapCovers(null, new java.awt.Point(50, 105)));
 	}
 
 	@Test
-	public void краткийВид_теЖеКнопкиИТеЖеДействия_строкиНеДлиннее()
+	public void briefView_sameButtonsAndSameActions_linesNoLonger()
 	{
 		StepGuide.View v = witchsPotion(null, 0, 0);
 		List<GuideList.Row> normal = GuideList.rows(v, false, FM, SMALL, OsrsPathGuideOverlay.WIDTH);
 		List<GuideList.Row> terse = GuideList.rows(v, false, FM, SMALL, OsrsPathGuideOverlay.WIDTH, true);
-		assertEquals("кнопки те же — краткий вид не отнимает действий", normal.stream().map(GuideList.Row::getAction).collect(Collectors.toList()),
+		assertEquals("the buttons are the same: the brief view does not take actions away", normal.stream().map(GuideList.Row::getAction).collect(Collectors.toList()),
 			terse.stream().map(GuideList.Row::getAction).collect(Collectors.toList()));
 		int normalLines = normal.stream().mapToInt(r -> r.getLines().size()).sum();
 		int terseLines = terse.stream().mapToInt(r -> r.getLines().size()).sum();
-		assertTrue("строк не больше (" + terseLines + " против " + normalLines + ")", terseLines <= normalLines);
-		// Полное описание не пропадает — оно в подсказке при наведении.
+		assertTrue("no more lines (" + terseLines + " against " + normalLines + ")", terseLines <= normalLines);
+		// The full description does not vanish: it is in the hover hint.
 		for (int i = 0; i < normal.size(); i++)
 		{
-			assertEquals("подсказка строки " + i, normal.get(i).getHint(), terse.get(i).getHint());
+			assertEquals("hint of line " + i, normal.get(i).getHint(), terse.get(i).getHint());
 		}
 	}
 }
