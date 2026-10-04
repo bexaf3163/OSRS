@@ -139,7 +139,7 @@ final class ShopWindow
 			}
 			else if (!inBag.isEmpty())
 			{
-				rows.add(new Row("Уже в сумке: " + String.join(", ", inBag), Mark.GOOD));
+				rows.add(new Row(bagLine(inBag), Mark.GOOD));
 			}
 			if (plan != null)
 			{
@@ -172,10 +172,20 @@ final class ShopWindow
 			}
 			if (!inBag.isEmpty())
 			{
-				rows.add(new Row("Уже в сумке: " + String.join(", ", inBag), Mark.GOOD));
+				rows.add(new Row(bagLine(inBag), Mark.GOOD));
 			}
 		}
 		return new Result(title, rows, todo);
+	}
+
+	/** Сколько предметов, что уже с собой, называем в окне: длинный список всей сумки окно только раздувает. */
+	static final int BAG_SHOWN = 4;
+
+	/** «Уже в сумке: A, B, C, D и ещё 6» — не весь план на несколько шагов вперёд. */
+	static String bagLine(List<String> inBag)
+	{
+		int n = Math.min(inBag.size(), BAG_SHOWN);
+		return "Уже в сумке: " + String.join(", ", inBag.subList(0, n)) + (inBag.size() > n ? " и ещё " + (inBag.size() - n) : "");
 	}
 
 	private static void add(List<Row> rows, List<String> items, String prefix, Mark mark)

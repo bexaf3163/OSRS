@@ -124,6 +124,14 @@ public class ShopWindowTest
 	}
 
 	@Test
+	public void длинныйСписокТогоЧтоУжеВСумке_обрезается()
+	{
+		assertEquals("Уже в сумке: A, B", ShopWindow.bagLine(java.util.Arrays.asList("A", "B")));
+		assertEquals("Уже в сумке: A, B, C, D и ещё 9",
+			ShopWindow.bagLine(java.util.Arrays.asList("A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M")));
+	}
+
+	@Test
 	public void всёЕстьИлиПокупатьНечего_окноГоворитОбЭтом()
 	{
 		StepGuide.View ok = view(null, item("Garlic", null, 1, StepGuide.Have.BAG, null));
