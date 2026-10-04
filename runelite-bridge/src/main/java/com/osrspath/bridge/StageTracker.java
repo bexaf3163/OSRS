@@ -32,6 +32,8 @@ final class StageTracker
 	static final int DELIVER_RADIUS = 12;
 	/** Сколько держится просмотр прежнего шага, мс: хватает перечитать и вернуться к делу, не успев запутаться. */
 	static final long PEEK_MS = 45_000;
+	/** Побывав у точки шага, отошёл дальше этого — шаг сделан (путь в доме петляет: прямо к следующей точке игрок не идёт). */
+	static final int LEAVE_RADIUS = 6;
 
 	private final LongSupplier clock;
 	private String key;
@@ -43,6 +45,9 @@ final class StageTracker
 	/** До какого момента держится просмотр прежнего шага (мс по часам); 0 — не просматриваем. */
 	private long peekUntil;
 	private String warning;
+	/** Игрок побывал у точки текущего шага (visitedAt — у какого именно): уйдя к следующей точке, он считается сделавшим этот шаг. */
+	private boolean visited;
+	private int visitedAt = -1;
 	/** Почему курсор сдвинулся в последний раз: «POSITION», «ITEM», «DELIVERED», «CLAMP», «BACK», «MANUAL», «RESET» и подробности. */
 	private String reason = "";
 
@@ -80,6 +85,7 @@ final class StageTracker
 		return delivered.contains(cursor);
 	}
 
+	/** Причина последнего сдвига курсора — для журнала отладки: «POSITION: дошёл до шага 3», «DELIVERED: Blurite ore». */
 	String reason()
 	{
 		return reason;
@@ -100,6 +106,8 @@ final class StageTracker
 		peekUntil = 0;
 		warning = null;
 		reason = "";
+		visited = false;
+		visitedAt = -1;
 	}
 
 	/**
@@ -149,6 +157,7 @@ final class StageTracker
 		{
 			reason = "ITEM: шаги " + (c2 + 1) + "–" + cursor + " сделаны по предметам, дальше «" + lines.get(cursor).shown() + "»";
 		}
+		leave(lines, x, y, plane);
 		int c3 = cursor;
 		clamp(lines, bag);
 		if (cursor != c3)
@@ -325,6 +334,43 @@ final class StageTracker
 		peekUntil = clock.getAsLong() + PEEK_MS;
 		warning = null;
 		reason = "BACK: просмотр шага " + (cursor + 1);
+	}
+
+	/**
+	 * Побывал у точки шага и ушёл от неё (дальше {@link #LEAVE_RADIUS} клеток или ближе к следующей) — шаг сделан. Без этого курсор стоял на «войди в дом», пока игрок не
+	 * подойдёт к следующей точке на четыре клетки: внутри дома стрелка оставалась у двери, куда он уже дошёл (S2-08, подвал
+	 * Draynor Manor). Только для шагов, где игре больше нечем подтвердить дело: есть клетка у этого и у следующего шага, на
+	 * них нет условий has/need, точки разные и на одном этаже. Постоять у NPC и не уйти — шаг остаётся.
+	 */
+	private void leave(List<ActiveTarget.StageLine> lines, int x, int y, int plane)
+	{
+		if (visitedAt != cursor)
+		{
+			visitedAt = cursor;
+			visited = false;
+		}
+		ActiveTarget.StageLine cur = lines.get(cursor);
+		if (cur.hasPoint() && cur.getPlane() == plane && Math.abs(cur.getX() - x) <= StepGuide.STEP_RADIUS && Math.abs(cur.getY() - y) <= StepGuide.STEP_RADIUS)
+		{
+			visited = true;
+		}
+		if (!visited || cursor >= lines.size() - 1)
+		{
+			return;
+		}
+		ActiveTarget.StageLine nx = lines.get(cursor + 1);
+		if (!cur.hasPoint() || !nx.hasPoint() || cur.hasNeed() || cur.hasHas() || nx.hasNeed() || nx.hasHas()
+			|| cur.getPlane() != plane || nx.getPlane() != plane || sameSpot(cur, nx))
+		{
+			return;
+		}
+		int toCur = Math.max(Math.abs(cur.getX() - x), Math.abs(cur.getY() - y));
+		int toNext = Math.max(Math.abs(nx.getX() - x), Math.abs(nx.getY() - y));
+		if (toNext < toCur || toCur > LEAVE_RADIUS)
+		{
+			cursor++;
+			reason = "LEFT: был у шага " + cursor + " «" + cur.shown() + "» и пошёл к следующему «" + nx.shown() + "»";
+		}
 	}
 
 	/**

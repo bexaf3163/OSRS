@@ -348,4 +348,59 @@ public class StageTrackerTest
 		assertEquals("прошла минута — снова «в особняк»: не «вручную» навсегда", 2, v(t, MANOR, vbag(0, 1)));
 		assertEquals("спустился — идём дальше сами", 3, v(t, STAIRS, vbag(0, 1)));
 	}
+
+	/** S2-08 (по скриншоту игрока): «войди в Draynor Manor» у двери, «спустись в подвал» в восьми клетках, внутри дома. */
+	private static List<ActiveTarget.StageLine> manor()
+	{
+		return new Gson().fromJson("[{\"t\":\"Войди\",\"x\":3108,\"y\":3353,\"plane\":0},{\"t\":\"Спустись в подвал\",\"x\":3116,\"y\":3358,\"plane\":0},"
+			+ "{\"t\":\"Убей графа\",\"x\":3077,\"y\":9770,\"plane\":0}]", new TypeToken<List<ActiveTarget.StageLine>>() {}.getType());
+	}
+
+	private static int manor(StageTracker t, int x, int y)
+	{
+		return t.update("S2-08", 2, manor(), x, y, 0, new ItemCounts());
+	}
+
+	@Test
+	public void былУДвериИОтошёл_шагСделан_стрелкаНаЛестницуСразу()
+	{
+		StageTracker t = new StageTracker();
+		assertEquals("далеко — первый шаг", 0, manor(t, 3110, 3329));
+		assertEquals("у двери — первый шаг, стрелка у двери", 0, manor(t, 3108, 3352));
+		// Путь в доме петляет: до лестницы ещё далеко (больше четырёх клеток), но от двери он уже отошёл.
+		assertEquals("шесть клеток от двери — ещё рядом", 0, manor(t, 3103, 3359));
+		assertEquals("семь клеток — шаг «войди» сделан", 1, manor(t, 3102, 3360));
+		assertTrue(t.reason(), t.reason().startsWith("LEFT"));
+	}
+
+	@Test
+	public void постоялУДвери_шагОстаётся()
+	{
+		StageTracker t = new StageTracker();
+		manor(t, 3108, 3352);
+		for (int i = 0; i < 200; i++)
+		{
+			assertEquals(0, manor(t, 3109 + i % 2, 3352));
+		}
+	}
+
+	@Test
+	public void неБылУТочкиШага_отойтиДалекоНеДостаточно()
+	{
+		StageTracker t = new StageTracker();
+		// Появился уже в стороне (вход в игру, телепорт): у двери не был — шаг не закрывается.
+		assertEquals(0, manor(t, 3102, 3360));
+	}
+
+	@Test
+	public void шагСУсловиемНеЗакрываетсяУходом()
+	{
+		List<ActiveTarget.StageLine> l = new Gson().fromJson("[{\"t\":\"Отдай\",\"x\":3108,\"y\":3353,\"plane\":0,\"need\":\"Beer\"},"
+			+ "{\"t\":\"Дальше\",\"x\":3116,\"y\":3358,\"plane\":0}]", new TypeToken<List<ActiveTarget.StageLine>>() {}.getType());
+		ItemCounts beer = new ItemCounts();
+		beer.add(1, ActiveTarget.nameKey("Beer"), 1);
+		StageTracker t = new StageTracker();
+		t.update("S", 0, l, 3108, 3353, 0, beer);
+		assertEquals("пиво не отдано — уйти недостаточно", 0, t.update("S", 0, l, 3102, 3360, 0, beer));
+	}
 }

@@ -1170,6 +1170,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			stageTracker.reset();
 			return;
 		}
+		// Квест пройден — шаги этапа больше не двигаем и не сверяем с сумкой: «Beer ещё в сумке» в миг сдачи квеста — ложная тревога.
+		if (questDone(target))
+		{
+			return;
+		}
 		Integer value = stageValue(st);
 		if (value == null)
 		{
