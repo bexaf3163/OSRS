@@ -31,6 +31,12 @@ final class ItemCounts
 		}
 	}
 
+	/** Сколько предметов с этим ID. */
+	int idCount(int id)
+	{
+		return byId.getOrDefault(id, 0);
+	}
+
 	/** Число по ID предметов — для сохранения банка между сеансами. Копия: счётчики не изменить снаружи. */
 	Map<Integer, Integer> idCounts()
 	{

@@ -206,7 +206,7 @@ export interface StepGuidePayload {
 export interface StagePayload {
   kind: 'varp' | 'varbit';
   id: number;
-  stages: { at: number; steps: { t: string; s?: string; x?: number; y?: number; plane?: number; has?: string; need?: string; hl?: StageHighlight }[]; /** Номер точки в places. */ go?: number; items?: { name: string; nameRu?: string; id?: number; count?: number; where?: string; inStep?: boolean }[] }[];
+  stages: { at: number; steps: { t: string; s?: string; x?: number; y?: number; plane?: number; has?: string; need?: string; hl?: StageHighlight; k?: string }[]; /** Номер точки в places. */ go?: number; items?: { name: string; nameRu?: string; id?: number; count?: number; where?: string; inStep?: boolean }[] }[];
 }
 
 /** Панель RuneLite: предметы шага с «где взять» и точки — главная (NPC, старт) и места из карты шага. */
@@ -274,7 +274,7 @@ export function stagePayload(step: Step, places: StepGuidePayload['places']): St
       }
     }
     stages.push({
-      at: st.at, steps: st.do.slice(0, 40).map((l) => ({ t: l.t, ...shortOf(l), ...(l.at ? { x: l.at[0], y: l.at[1], plane: l.at[2] } : {}), ...(l.has ? { has: l.has } : {}), ...(l.need ? { need: l.need } : {}), ...(l.hl ? { hl: l.hl } : {}) })), ...(go !== undefined ? { go } : {}),
+      at: st.at, steps: st.do.slice(0, 40).map((l) => ({ t: l.t, ...shortOf(l), ...(l.at ? { x: l.at[0], y: l.at[1], plane: l.at[2] } : {}), ...(l.has ? { has: l.has } : {}), ...(l.need ? { need: l.need } : {}), ...(l.hl ? { hl: l.hl } : {}), ...(l.k ? { k: l.k } : {}) })), ...(go !== undefined ? { go } : {}),
       ...(st.items ? { items: st.items.slice(0, 12).map((i) => ({ ...i })) } : {}),
     });
   }

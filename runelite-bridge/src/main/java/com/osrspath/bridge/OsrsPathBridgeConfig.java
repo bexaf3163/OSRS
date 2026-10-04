@@ -411,6 +411,19 @@ public interface OsrsPathBridgeConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "qhMachine",
+		name = "Шаги как в Quest Helper",
+		description = "Текущий шаг этапа выбирается по тем же условиям, что у плагина Quest Helper: предметы, место, переменные квеста, "
+			+ "сообщения чата и диалоги. Выключено — шаг определяют только место и предметы (как до версии 2.27)",
+		section = helpers,
+		position = 31
+	)
+	default boolean qhMachine()
+	{
+		return true;
+	}
+
 	@ConfigSection(
 		name = "Для разработчика",
 		description = "Плашка со статусом движка, журнал и скриншоты для разбора ошибок",
@@ -441,6 +454,32 @@ public interface OsrsPathBridgeConfig extends Config
 		position = 92
 	)
 	default boolean telemetryShots()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "telemetryDetail",
+		name = "Журнал: чат и диалоги",
+		description = "В журнал попадают сообщения игры (чат, окна сообщений, реплики диалогов и варианты ответа), клики по меню игры, "
+			+ "смена переменных и текст дневника квеста, когда ты его открываешь. Нужно, чтобы понять, почему шаг не засчитался. Только на этом компьютере",
+		section = developer,
+		position = 95
+	)
+	default boolean telemetryDetail()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "telemetryEventShots",
+		name = "Снимок на каждом шаге",
+		description = "Скриншот игры при каждом сдвиге курсора этапа, чтобы рядом с журналом было видно, что видел игрок. "
+			+ "Не чаще раза в 6 секунд и не больше 40 за сеанс; в папке остаются последние 80",
+		section = developer,
+		position = 96
+	)
+	default boolean telemetryEventShots()
 	{
 		return true;
 	}

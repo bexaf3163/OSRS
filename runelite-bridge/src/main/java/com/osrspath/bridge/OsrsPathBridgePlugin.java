@@ -64,11 +64,13 @@ import net.runelite.api.events.GrandExchangeOfferChanged;
 import net.runelite.api.events.GroundObjectDespawned;
 import net.runelite.api.events.GroundObjectSpawned;
 import net.runelite.api.events.ItemContainerChanged;
+import net.runelite.api.events.MenuOptionClicked;
 import net.runelite.api.events.NpcChanged;
 import net.runelite.api.events.NpcDespawned;
 import net.runelite.api.events.NpcSpawned;
 import net.runelite.api.events.StatChanged;
 import net.runelite.api.events.VarbitChanged;
+import net.runelite.api.events.WidgetLoaded;
 import net.runelite.api.events.WallObjectDespawned;
 import net.runelite.api.events.WallObjectSpawned;
 import net.runelite.api.gameval.InventoryID;
@@ -83,6 +85,7 @@ import net.runelite.client.events.PluginChanged;
 import net.runelite.client.events.PluginMessage;
 import net.runelite.client.game.ItemManager;
 import net.runelite.client.util.HotkeyListener;
+import net.runelite.client.util.Text;
 import net.runelite.client.input.KeyManager;
 import net.runelite.client.input.MouseManager;
 import net.runelite.client.plugins.Plugin;
@@ -650,6 +653,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private final Map<String, String> lastUi = new HashMap<>();
 	private int shots;
 	private long lastShotAt;
+	private int stageShots;
+	private long lastStageShotAt;
 	private volatile String lastShotName;
 	private volatile long lastSnapshotAt;
 	private volatile long lastSnapshotSeq;
@@ -664,7 +669,10 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	static final int SHOTS_PER_SESSION = 12;
 	static final long SHOT_GAP_MS = 20_000;
-	static final int SHOTS_KEPT = 40;
+	/** Снимки «на каждом шаге» (смена этапа и строки) считаются отдельно от странностей: их много, и они нужны по порядку. */
+	static final int STAGE_SHOTS_PER_SESSION = 40;
+	static final long STAGE_SHOT_GAP_MS = 6_000;
+	static final int SHOTS_KEPT = 80;
 	static final long HEARTBEAT_MS = 30_000;
 	static final int WATCH_TICKS = 5;
 
@@ -767,7 +775,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		long now = System.currentTimeMillis();
 		boolean auto = why.startsWith("anomaly");
+		boolean stage = why.startsWith("stage");
 		if (auto && (shots >= SHOTS_PER_SESSION || now - lastShotAt < SHOT_GAP_MS))
+		{
+			return;
+		}
+		if (stage && (stageShots >= STAGE_SHOTS_PER_SESSION || now - lastStageShotAt < STAGE_SHOT_GAP_MS))
 		{
 			return;
 		}
@@ -777,9 +790,15 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			lastShotAt = now;
 			shots++;
 		}
+		if (stage)
+		{
+			lastStageShotAt = now;
+			stageShots++;
+		}
 		String state = DebugView.plain(DebugView.rows(buildDebugState()));
 		String stamp = java.time.LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd-HHmmss"));
-		String name = "shot-" + stamp + "-" + why.replaceAll("[^A-Za-z0-9_]+", "_") + ".png";
+		// Снимки «на каждом шаге» — JPEG (их десятки, PNG игры весит ~2,5 МБ); странности и снимок по клавише — PNG без потерь.
+		String name = "shot-" + stamp + "-" + why.replaceAll("[^A-Za-z0-9_]+", "_") + (stage ? ".jpg" : ".png");
 		lastShotName = name;
 		File dir = new File(t.dir(), "shots");
 		drawManager.requestNextFrameListener(image -> executor.execute(() -> writeShot(image, dir, name, why, state)));
@@ -792,7 +811,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			BufferedImage out = new BufferedImage(image.getWidth(null), image.getHeight(null), BufferedImage.TYPE_INT_RGB);
 			out.getGraphics().drawImage(image, 0, 0, null);
 			java.nio.file.Files.createDirectories(dir.toPath());
-			ImageIO.write(out, "png", new File(dir, name));
+			ImageIO.write(out, name.endsWith(".jpg") ? "jpg" : "png", new File(dir, name));
 			pruneShots(dir);
 			tel("shot", "file", name, "why", why, "state", state);
 		}
@@ -805,7 +824,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	/** В папке остаются только свежие скриншоты. */
 	private static void pruneShots(File dir)
 	{
-		File[] files = dir.listFiles((d, n) -> n.startsWith("shot-") && n.endsWith(".png"));
+		File[] files = dir.listFiles((d, n) -> n.startsWith("shot-") && (n.endsWith(".png") || n.endsWith(".jpg")));
 		if (files == null || files.length <= SHOTS_KEPT)
 		{
 			return;
@@ -913,6 +932,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (line != null && line.hasNeed())
 		{
 			conditions.add("need " + line.getNeed() + " (сдан) = " + (stageTracker.delivered() ? "TRUE" : "FALSE"));
+		}
+		if (st != null && value != null)
+		{
+			// Без слова FALSE: плашка красит такие строки красным, а «машина не решает» — не поломка.
+			conditions.add("QH: " + qhDescribe);
 		}
 		int queue = -1;
 		PrepPlan pp = prep;
@@ -1115,6 +1139,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			gotItems.clear();
 			gotStep = stepId;
 			stageKey = null;
+			qhReset();
 		}
 		target = t;
 		lineHlKey = null;
@@ -1173,6 +1198,10 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			v = v.withNote(guideMessage);
 		}
+		else if (qhHint != null)
+		{
+			v = v.withNote(qhHint);
+		}
 		guideView = v;
 		OsrsPathPanel p = panel;
 		if (p == null || v.equals(panelView))
@@ -1182,6 +1211,167 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		panelView = v;
 		StepGuide.View shown = v;
 		SwingUtilities.invokeLater(() -> p.show(shown));
+	}
+
+	// ---------- Шаги как в Quest Helper ----------
+
+	/** Защёлки условий Quest Helper: живут, пока игрок на этом квесте и не вышел из игры. */
+	private final QhMachine.Session qhSession = new QhMachine.Session();
+	private QhLiveFacts qhFacts;
+	/** Только надетое: в «carried» оно вместе с сумкой, а часть условий Quest Helper требует именно надетое. */
+	private ItemCounts worn = ItemCounts.EMPTY;
+	/** Последний выбор машины одной строкой (для журнала и плашки разработчика) и его отпечаток (чтобы замечать смену). */
+	private String qhLastKey = "";
+	private String qhDescribe = "—";
+	/** Quest Helper не может определить шаг без дневника квеста (S2-09): подсказка в списке, пока выбор — «синхронизируй». */
+	private String qhHint;
+	/** Машина дала сбой: до перезапуска плагина считаем по-старому (место и предметы) и не засоряем лог повторами. */
+	private boolean qhBroken;
+	/** Тик, на котором читать дневник квеста: текст появляется чуть позже открытия окна. -1 — не ждём. */
+	private int journalReadTick = -1;
+	private int loginTick = -1;
+	private int varBurst;
+	private int menuBurst;
+	private long menuBurstAt;
+
+	private QhLiveFacts qhFacts()
+	{
+		if (qhFacts == null)
+		{
+			qhFacts = new QhLiveFacts(client, () -> carried, () -> worn, () -> bank == null ? ItemCounts.EMPTY : bank);
+		}
+		return qhFacts;
+	}
+
+	private void qhReset()
+	{
+		qhSession.reset();
+		if (qhFacts != null)
+		{
+			qhFacts.clear();
+		}
+		qhLastKey = "";
+		qhDescribe = "—";
+		qhHint = null;
+	}
+
+	/**
+	 * Выбор машины Quest Helper для строк этапа или null: машины нет, она не решает («не знаю» в условии) или выбрала шаг «по умолчанию»,
+	 * то есть доказательств нет, и строку определят место и предметы. Выбор пишется в журнал, когда меняется.
+	 */
+	private StageTracker.QhPick qhPick(String stepId, int value, List<ActiveTarget.StageLine> lines)
+	{
+		qhHint = null;
+		if (!config.qhMachine())
+		{
+			qhDescribe = "выключена в настройках";
+			return null;
+		}
+		if (qhBroken)
+		{
+			qhDescribe = "отключена после сбоя (см. журнал RuneLite)";
+			return null;
+		}
+		QhMachine m = QhMachine.all().get(stepId);
+		if (m == null || !m.hasStage(value))
+		{
+			qhDescribe = m == null ? "нет данных квеста" : "у Quest Helper нет шага для значения " + value;
+			return null;
+		}
+		QhMachine.Verdict v;
+		try
+		{
+			v = m.resolve(value, qhFacts(), qhSession);
+		}
+		catch (RuntimeException ex)
+		{
+			log.warn("Машина Quest Helper отключена до перезапуска плагина: {}", ex.toString(), ex);
+			tel("qh", "error", ex.toString(), "step", stepId, "var", value);
+			qhBroken = true;
+			qhDescribe = "сбой: " + ex;
+			return null;
+		}
+		int line = v.isUndecided() || !v.isStrong() ? -1 : m.lineFor(v, lines);
+		// Шаг «синхронизации» Quest Helper: ему не из чего понять, на каком шаге игрок, пока тот не открыл дневник квеста.
+		qhHint = !v.isUndecided() && !v.isStrong() && v.getLeaf() != null && v.getLeaf().endsWith("syncStep")
+			? "Открой дневник квеста: по нему Quest Helper и этот список узнают, на каком шаге ты." : null;
+		qhDescribe = v.isUndecided() ? "не решает (в условии есть «не знаю»)"
+			: v.getLeaf() + (v.isStrong() ? " [условие выполнено]" : " [по умолчанию]")
+			+ (line >= 0 ? " → строка " + (line + 1) : v.isStrong() ? " → такой строки в списке нет" : "");
+		String key = value + "|" + v.getLeaf() + "|" + v.isStrong() + "|" + v.isUndecided() + "|" + line;
+		if (!key.equals(qhLastKey))
+		{
+			qhLastKey = key;
+			tel("qh", "var", value, "leaf", v.getLeaf(), "strong", v.isStrong(), "undecided", v.isUndecided(), "line", line < 0 ? null : line + 1,
+				"path", v.getPath());
+		}
+		return line < 0 ? null : new StageTracker.QhPick(line, v.getLeaf() + " (" + String.join(" > ", v.getPath()) + ")");
+	}
+
+	/** Раз в тик: пришло сообщение, диалог или предмет, и машина выбрала другой шаг — вид пересчитывается сразу, а не при следующем шаге игрока. */
+	private void qhTick()
+	{
+		ActiveTarget.Stage st = stageOf(target);
+		if (st == null || client.getGameState() != GameState.LOGGED_IN || questDone(target))
+		{
+			return;
+		}
+		Integer value = stageValue(st);
+		if (value == null)
+		{
+			return;
+		}
+		String before = qhLastKey;
+		qhPick(target.getStepId(), value, st.getStages().get(st.indexFor(value)).getSteps());
+		if (!Objects.equals(before, qhLastKey))
+		{
+			updateHud();
+		}
+	}
+
+	/** Дневник квеста: по его тексту Quest Helper сверяет шаг. В журнал — чистые строки без тегов цвета. */
+	private void readJournal()
+	{
+		List<String> lines = qhFacts().widget(InterfaceID.QUESTJOURNAL, 6, true);
+		if (lines == null)
+		{
+			return;
+		}
+		if (config.telemetryDetail())
+		{
+			List<String> title = qhFacts().widget(InterfaceID.QUESTJOURNAL, 5, false);
+			List<String> clean = new ArrayList<>();
+			for (String l : lines)
+			{
+				String t = l == null ? "" : Text.removeTags(l).trim();
+				if (!t.isEmpty())
+				{
+					clean.add(t);
+				}
+			}
+			tel("journal", "title", title == null || title.isEmpty() ? null : Text.removeTags(title.get(0)), "lines", clean);
+		}
+		updateHud();
+	}
+
+	/** Варианты ответа в диалоге: что предлагала игра, когда игрок выбирал. */
+	private void logDialogOptions()
+	{
+		List<String> opts = qhFacts().widget(InterfaceID.CHATMENU, 1, true);
+		if (opts == null)
+		{
+			return;
+		}
+		List<String> clean = new ArrayList<>();
+		for (String o : opts)
+		{
+			String t = o == null ? "" : Text.removeTags(o).trim();
+			if (!t.isEmpty())
+			{
+				clean.add(t);
+			}
+		}
+		tel("opts", "list", clean);
 	}
 
 	// ---------- Этапы квеста ----------
@@ -1219,7 +1409,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		WorldPoint pos = me.getWorldLocation();
 		List<ActiveTarget.StageLine> lines = st.getStages().get(idx).getSteps();
-		stageTracker.update(target.getStepId(), idx, lines, pos.getX(), pos.getY(), pos.getPlane(), ItemCounts.sum(carried, noted));
+		stageTracker.update(target.getStepId(), idx, lines, pos.getX(), pos.getY(), pos.getPlane(), ItemCounts.sum(carried, noted),
+			qhPick(target.getStepId(), value, lines));
 		logStage(st, idx, value, lines, pos);
 		int at = Math.max(0, Math.min(stageTracker.cursor(), lines.size() - 1));
 		applyLineHighlight(target.getStepId() + "#" + idx + "@" + at, lines.get(at).getHl());
@@ -1259,12 +1450,20 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			lastStageCursor = cur;
 			tel("stage", "event", "enter", "key", key, "stage", idx + 1, "of", st.getStages().size(), "cursor", cur + 1, "size", lines.size(),
 				"line", line == null ? null : line.shown(), "reason", stageTracker.reason(), "pos", at);
+			if (config.telemetryEventShots())
+			{
+				takeShot("stage_enter_" + (idx + 1));
+			}
 		}
 		else if (cur != lastStageCursor)
 		{
 			tel("stage", "event", "cursor", "key", key, "from", lastStageCursor + 1, "to", cur + 1, "size", lines.size(), "line", line == null ? null : line.shown(),
 				"reason", stageTracker.reason(), "pos", at, "manual", StageTracker.needsManualStep(lines, cur));
 			lastStageCursor = cur;
+			if (config.telemetryEventShots())
+			{
+				takeShot("stage_cursor_" + (cur + 1));
+			}
 		}
 		String warning = stageTracker.warning();
 		if (!Objects.equals(warning, lastWarning))
@@ -2300,6 +2499,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		if (state == GameState.LOGGED_IN)
 		{
+			loginTick = tickCount;
 			updateHud();
 		}
 		else if (state == GameState.LOGIN_SCREEN || state == GameState.HOPPING)
@@ -2314,6 +2514,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (state == GameState.LOGIN_SCREEN)
 		{
 			// Другой персонаж — другие уровни, сумка, банк, опыт и место.
+			qhReset();
+			loginTick = -1;
 			stats.clear();
 			statsDirty = true;
 			xp.clear();
@@ -2407,8 +2609,15 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				}
 				updateHud();
 			}
+			varBurst = 0;
 			debugTick(me);
 			persistBank();
+			if (journalReadTick >= 0 && tickCount >= journalReadTick)
+			{
+				journalReadTick = -1;
+				readJournal();
+			}
+			qhTick();
 		}
 		flush();
 	}
@@ -2646,6 +2855,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		ItemCounts n = new ItemCounts();
 		count(client.getItemContainer(InventoryID.INV), c, n);
 		count(client.getItemContainer(InventoryID.WORN), c, n);
+		ItemCounts w = new ItemCounts();
+		count(client.getItemContainer(InventoryID.WORN), w, null);
+		worn = w;
 		if (telemetry != null)
 		{
 			Map<String, Integer> delta = c.deltaFrom(lastBag);
@@ -2887,6 +3099,54 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			completion.onChatMessage(e.getMessage());
 		}
+		ChatMessageType t = e.getType();
+		String msg = e.getMessage();
+		if (msg != null && !msg.startsWith("OSRS Path:") && (t == ChatMessageType.GAMEMESSAGE || t == ChatMessageType.ENGINE
+			|| t == ChatMessageType.SPAM || t == ChatMessageType.MESBOX || t == ChatMessageType.DIALOG))
+		{
+			// Те же сообщения, по которым Quest Helper понимает, что шаг сделан («Luthas hands you 30 coins.»).
+			qhFacts().add(t.name(), msg);
+			if (config.telemetryDetail())
+			{
+				tel("chat", "type", t.name(), "name", e.getName(), "msg", Text.removeTags(msg));
+			}
+			updateHud();
+		}
+	}
+
+	@Subscribe
+	public void onWidgetLoaded(WidgetLoaded e)
+	{
+		if (e.getGroupId() == InterfaceID.QUESTJOURNAL)
+		{
+			journalReadTick = tickCount + 2;
+		}
+		else if (e.getGroupId() == InterfaceID.CHATMENU && config.telemetryDetail())
+		{
+			clientThread.invokeLater(this::logDialogOptions);
+		}
+	}
+
+	@Subscribe
+	public void onMenuOptionClicked(MenuOptionClicked e)
+	{
+		if (telemetry == null || !config.telemetryDetail())
+		{
+			return;
+		}
+		long now = System.currentTimeMillis();
+		if (now - menuBurstAt > 1000)
+		{
+			menuBurstAt = now;
+			menuBurst = 0;
+		}
+		if (++menuBurst > 6)
+		{
+			return;
+		}
+		net.runelite.api.MenuEntry me = e.getMenuEntry();
+		tel("menu", "opt", me.getOption(), "tgt", Text.removeTags(me.getTarget()), "act", me.getType().name(), "id", me.getIdentifier(),
+			"p0", me.getParam0(), "p1", me.getParam1());
 	}
 
 	@Subscribe
@@ -2897,9 +3157,16 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			completion.onVarbitChanged(e.getVarbitId(), e.getValue());
 		}
 		ActiveTarget.Stage st = stageOf(target);
-		if (st != null && (st.isVarp() ? e.getVarpId() == st.getId() : e.getVarbitId() == st.getId()))
+		boolean questVar = st != null && (st.isVarp() ? e.getVarpId() == st.getId() : e.getVarbitId() == st.getId());
+		if (questVar)
 		{
 			updateHud();
+		}
+		else if (telemetry != null && config.telemetryDetail() && client.getGameState() == GameState.LOGGED_IN && loginTick >= 0
+			&& tickCount - loginTick > 8 && varBurst++ < 10)
+		{
+			// Остальные переменные игры: из них Quest Helper собирает условия шагов, и по ним видно, что менялось от действия игрока.
+			tel("varx", "varp", e.getVarpId(), "varbit", e.getVarbitId() < 0 ? null : e.getVarbitId(), "to", e.getValue());
 		}
 	}
 

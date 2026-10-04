@@ -1,0 +1,4 @@
+work/
+qhm/machines_raw.json
+qhm/qh_steps.json
+__pycache__/

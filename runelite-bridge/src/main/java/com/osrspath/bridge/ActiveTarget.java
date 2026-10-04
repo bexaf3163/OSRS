@@ -211,7 +211,7 @@ public class ActiveTarget
 					if (line == null || line.t == null || line.t.trim().isEmpty() || line.t.length() > Guide.MAX_WHERE || (line.s != null && line.s.length() > Guide.MAX_WHERE)
 						|| (line.x != null && (line.y == null || line.plane == null || line.x <= 0 || line.y <= 0 || line.x >= NavTarget.MAX_COORD
 						|| line.y >= NavTarget.MAX_COORD || line.plane < 0 || line.plane > 3)) || tooLong(line.has)
-						|| (line.hl != null && line.hl.problem() != null))
+						|| (line.hl != null && line.hl.problem() != null) || (line.k != null && !line.k.matches("[A-Za-z0-9_.]{1,80}")))
 					{
 						return "неверный шаг этапа квеста";
 					}
@@ -319,6 +319,8 @@ public class ActiveTarget
 		private String need;
 		/** Что подсвечивать в игре на этом шаге (по Quest Helper); null — только стрелка к клетке. */
 		private Highlight hl;
+		/** Имя шага в Quest Helper (talkToLuthasAgain): по нему машина состояний выбирает строку. null — шаг не из Quest Helper. */
+		private String k;
 
 		boolean hasPoint()
 		{

@@ -336,6 +336,8 @@ export interface QuestStageLine {
   need?: string;
   /** Что подсвечивать в игре на этом шаге, как Quest Helper: NPC и объекты по ID, объекты по имени, предметы в сумке. */
   hl?: StageHighlight;
+  /** Имя шага в Quest Helper: по нему плагин сопоставляет выбор машины состояний со строкой. */
+  k?: string;
 }
 
 /** Подсветка шага этапа: по исходникам Quest Helper (scripts вне репозитория, данные — questStages.json). */

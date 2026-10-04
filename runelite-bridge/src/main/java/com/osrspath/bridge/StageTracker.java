@@ -67,6 +67,21 @@ final class StageTracker
 	private int visitedAt = -1;
 	/** Почему курсор сдвинулся в последний раз: «POSITION», «ITEM», «DELIVERED», «CLAMP», «BACK», «MANUAL», «RESET» и подробности. */
 	private String reason = "";
+	/** Строка, раньше которой машина Quest Helper курсор не возвращает: игрок сам нажал «сделано» и отвечает за это. -1 — не нажимал. */
+	private int floor = -1;
+	/** Курсор сейчас поставила машина Quest Helper (у неё есть доказательство), а не место и предметы. */
+	private boolean qhStrong;
+
+	/**
+	 * Выбор машины состояний Quest Helper для этого тика: строка этапа и почему. Строка есть, только когда машина решила по выполненному
+	 * условию (а не «по умолчанию») и её шаг есть среди строк этапа.
+	 */
+	@lombok.Value
+	static class QhPick
+	{
+		int line;
+		String why;
+	}
 
 	StageTracker()
 	{
@@ -126,6 +141,8 @@ final class StageTracker
 		visited = false;
 		visitedAt = -1;
 		seen.clear();
+		floor = -1;
+		qhStrong = false;
 	}
 
 	/**
@@ -133,6 +150,34 @@ final class StageTracker
 	 * bag — сумка, надетое и банкноты. Возвращает текущий шаг (с нуля).
 	 */
 	int update(String stepId, int stage, List<ActiveTarget.StageLine> lines, int x, int y, int plane, ItemCounts bag)
+	{
+		return update(stepId, stage, lines, x, y, plane, bag, null);
+	}
+
+	/**
+	 * То же, но с выбором машины Quest Helper. Если у неё есть доказательство (pick не null) — курсор ставит она, как в Quest Helper:
+	 * место и предметы продолжают считаться, но только когда доказательства нет. Просмотр «назад» и нажатое «сделано» сильнее.
+	 */
+	int update(String stepId, int stage, List<ActiveTarget.StageLine> lines, int x, int y, int plane, ItemCounts bag, QhPick pick)
+	{
+		qhStrong = false;
+		int before = cursor;
+		int result = updateByFacts(stepId, stage, lines, x, y, plane, bag);
+		if (pick != null && lines != null && !lines.isEmpty() && !peeking() && pick.getLine() >= 0 && pick.getLine() < lines.size() && pick.getLine() >= floor)
+		{
+			qhStrong = true;
+			if (pick.getLine() != result || pick.getLine() != before)
+			{
+				reason = "QH: " + pick.getWhy();
+			}
+			cursor = pick.getLine();
+			warning = null;
+			result = cursor;
+		}
+		return result;
+	}
+
+	private int updateByFacts(String stepId, int stage, List<ActiveTarget.StageLine> lines, int x, int y, int plane, ItemCounts bag)
 	{
 		String next = stepId + "#" + stage;
 		boolean fresh = !next.equals(key);
@@ -483,7 +528,15 @@ final class StageTracker
 	/** Можно ли нажать «сделано» на текущем шаге: он из тех, что игра сама не увидит. */
 	boolean canStepForward(List<ActiveTarget.StageLine> lines)
 	{
+		// Кнопка остаётся и тогда, когда шаг ведёт машина Quest Helper: если сообщение игры не дошло или переписано, игрок не застрянет.
+		// Нажатая «сделано» сильнее машины (floor): она не вернёт курсор назад.
 		return !peeking() && needsManualStep(lines, cursor);
+	}
+
+	/** Курсор поставила машина Quest Helper (а не место и предметы). */
+	boolean qhStrong()
+	{
+		return qhStrong;
 	}
 
 	/** Клик «сделано» — только на шаге, который по игре не определить; на остальных не делает ничего. true — курсор сдвинут. */
@@ -494,6 +547,7 @@ final class StageTracker
 			return false;
 		}
 		cursor++;
+		floor = cursor;
 		warning = null;
 		reason = "MANUAL: «сделано» на шаге " + cursor + " (игра его сама не видит)";
 		return true;

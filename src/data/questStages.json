@@ -55,7 +55,8 @@
         3212,
         3246,
         0
-       ]
+       ],
+       "k": "getBucket"
       },
       {
        "t": "Купи горшок (Pot) в Lumbridge General Store.",
@@ -64,7 +65,8 @@
         3212,
         3246,
         0
-       ]
+       ],
+       "k": "getPot"
       },
       {
        "t": "Возьми яйцо (Egg) на ферме к северу от Lumbridge.",
@@ -74,7 +76,8 @@
         3296,
         0
        ],
-       "has": "Egg"
+       "has": "Egg",
+       "k": "getEgg"
       },
       {
        "t": "Сорви пшеницу (Wheat) на поле к северу от Lumbridge.",
@@ -88,7 +91,8 @@
         "obj": [
          15507
         ]
-       }
+       },
+       "k": "getWheat"
       },
       {
        "t": "Поднимись по лестнице на мельнице (Mill) к северу от Lumbridge до верхнего этажа.",
@@ -102,7 +106,8 @@
         "obj": [
          12964
         ]
-       }
+       },
+       "k": "climbLadderOne"
       },
       {
        "t": "Засыпь зерно в бункер (Hopper).",
@@ -119,7 +124,8 @@
         "item": [
          "Grain"
         ]
-       }
+       },
+       "k": "fillHopper"
       },
       {
        "t": "Дёрни рычаг (Hopper controls).",
@@ -133,7 +139,8 @@
         "obj": [
          24964
         ]
-       }
+       },
+       "k": "operateControls"
       },
       {
        "t": "Спустись по лестнице мельницы на первый этаж.",
@@ -147,7 +154,8 @@
         "obj": [
          12966
         ]
-       }
+       },
+       "k": "climbLadderThree"
       },
       {
        "t": "Забери муку из ларя (Flour bin) в горшок.",
@@ -164,7 +172,8 @@
         "item": [
          "Pot"
         ]
-       }
+       },
+       "k": "collectFlour"
       },
       {
        "t": "Подои молочную корову (Dairy cow) к северу от Lumbridge — нужно ведро.",
@@ -178,7 +187,8 @@
         "obj": [
          8689
         ]
-       }
+       },
+       "k": "milkCow"
       },
       {
        "t": "Отдай повару на кухне замка Lumbridge все три предмета — квест пройден. Диалог: «What's wrong?» → «Can I help?» → «Yes».",
@@ -192,7 +202,8 @@
         "npc": [
          4626
         ]
-       }
+       },
+       "k": "finishQuest"
       }
      ],
      "go": {
@@ -213,7 +224,8 @@
         3212,
         3246,
         0
-       ]
+       ],
+       "k": "getBucket"
       },
       {
        "t": "Купи горшок (Pot) в Lumbridge General Store.",
@@ -222,7 +234,8 @@
         3212,
         3246,
         0
-       ]
+       ],
+       "k": "getPot"
       },
       {
        "t": "Возьми яйцо (Egg) на ферме к северу от Lumbridge.",
@@ -232,7 +245,8 @@
         3296,
         0
        ],
-       "has": "Egg"
+       "has": "Egg",
+       "k": "getEgg"
       },
       {
        "t": "Сорви пшеницу (Wheat) на поле к северу от Lumbridge.",
@@ -246,7 +260,8 @@
         "obj": [
          15507
         ]
-       }
+       },
+       "k": "getWheat"
       },
       {
        "t": "Поднимись по лестнице на мельнице (Mill) к северу от Lumbridge до верхнего этажа.",
@@ -260,7 +275,8 @@
         "obj": [
          12964
         ]
-       }
+       },
+       "k": "climbLadderOne"
       },
       {
        "t": "Засыпь зерно в бункер (Hopper).",
@@ -277,7 +293,8 @@
         "item": [
          "Grain"
         ]
-       }
+       },
+       "k": "fillHopper"
       },
       {
        "t": "Дёрни рычаг (Hopper controls).",
@@ -291,7 +308,8 @@
         "obj": [
          24964
         ]
-       }
+       },
+       "k": "operateControls"
       },
       {
        "t": "Спустись по лестнице мельницы на первый этаж.",
@@ -305,7 +323,8 @@
         "obj": [
          12966
         ]
-       }
+       },
+       "k": "climbLadderThree"
       },
       {
        "t": "Забери муку из ларя (Flour bin) в горшок.",
@@ -322,7 +341,8 @@
         "item": [
          "Pot"
         ]
-       }
+       },
+       "k": "collectFlour"
       },
       {
        "t": "Подои молочную корову (Dairy cow) к северу от Lumbridge — нужно ведро.",
@@ -336,7 +356,8 @@
         "obj": [
          8689
         ]
-       }
+       },
+       "k": "milkCow"
       },
       {
        "t": "Отдай повару на кухне замка Lumbridge все три предмета — квест пройден. Диалог: «What's wrong?» → «Can I help?» → «Yes».",
@@ -350,7 +371,8 @@
         "npc": [
          4626
         ]
-       }
+       },
+       "k": "finishQuest"
       }
      ],
      "go": {
@@ -421,7 +443,8 @@
         "npc": [
          732
         ]
-       }
+       },
+       "k": "startStep"
       },
       {
        "t": "Возьми ножницы (Shears) в доме Fred.",
@@ -431,7 +454,8 @@
         3273,
         0
        ],
-       "has": "Shears"
+       "has": "Shears",
+       "k": "getSheers"
       },
       {
        "t": "Состриги шерсть (Wool) с овец (Sheep) на ближнем поле — нужно 20 штук.",
@@ -445,7 +469,8 @@
         "npc": [
          2786
         ]
-       }
+       },
+       "k": "shearSheep"
       },
       {
        "t": "Поднимись по лестнице в замке Lumbridge: на 1-м этаже стоит прялка.",
@@ -454,7 +479,8 @@
         3204,
         3207,
         0
-       ]
+       ],
+       "k": "climbStairsUp"
       },
       {
        "t": "Спряди шерсть в клубки (Ball of wool) на прялке (Spinning wheel).",
@@ -468,7 +494,8 @@
         "obj": [
          14889
         ]
-       }
+       },
+       "k": "spinBalls"
       },
       {
        "t": "Спустись по лестнице. Диалог: «Climb down the stairs».",
@@ -482,7 +509,8 @@
         "obj": [
          16672
         ]
-       }
+       },
+       "k": "climbStairsDown"
       },
       {
        "t": "Отдай Fred клубки шерсти (не банкноты). Если клубков пока мало — часть можно сдать, остальное — позже. Диалог: «I need to talk to you about shearing these sheep!».",
@@ -496,7 +524,8 @@
         "npc": [
          732
         ]
-       }
+       },
+       "k": "turnInBalls"
       }
      ],
      "go": {
@@ -553,7 +582,8 @@
         "npc": [
          8484
         ]
-       }
+       },
+       "k": "startQuest"
       }
      ],
      "go": {
@@ -579,7 +609,8 @@
         "npc": [
          8484
         ]
-       }
+       },
+       "k": "startQuest"
       }
      ],
      "go": {
@@ -601,7 +632,8 @@
         3230,
         3209,
         0
-       ]
+       ],
+       "k": "digOutsideBob"
       }
      ],
      "go": {
@@ -629,7 +661,8 @@
         3203,
         3212,
         0
-       ]
+       ],
+       "k": "digCastle"
       }
      ],
      "go": {
@@ -657,7 +690,8 @@
         3109,
         3264,
         0
-       ]
+       ],
+       "k": "digDraynor"
       }
      ],
      "go": {
@@ -685,7 +719,8 @@
         3078,
         3259,
         0
-       ]
+       ],
+       "k": "digMartin"
       }
      ],
      "go": {
@@ -718,7 +753,8 @@
         "npc": [
          8484
         ]
-       }
+       },
+       "k": "speakVeosSarim"
       }
      ],
      "go": {
@@ -784,7 +820,8 @@
         "npc": [
          2812
         ]
-       }
+       },
+       "k": "talkToAereck"
       }
      ],
      "go": {
@@ -810,7 +847,8 @@
         "npc": [
          923
         ]
-       }
+       },
+       "k": "talkToUrhney"
       }
      ],
      "go": {
@@ -836,7 +874,8 @@
         "obj": [
          2145
         ]
-       }
+       },
+       "k": "openCoffin"
       },
       {
        "t": "Обыщи гроб (Search) на кладбище Lumbridge — появится призрак.",
@@ -850,7 +889,8 @@
         "obj": [
          15061
         ]
-       }
+       },
+       "k": "searchCoffin"
       },
       {
        "t": "Поговори с призраком (Ghost) в надетом Ghostspeak amulet. Диалог: «Yep, now tell me what the problem is» → «Yep, clever aren't I?» → «Yes, ok. Do you know WHY you're a ghost?» → «Yes, ok. Do you know why you're a ghost?».",
@@ -864,7 +904,8 @@
         "npc": [
          922
         ]
-       }
+       },
+       "k": "speakToGhost"
       }
      ],
      "go": {
@@ -889,7 +930,8 @@
         "obj": [
          2147
         ]
-       }
+       },
+       "k": "enterWizardsTowerBasement"
       },
       {
        "t": "Обыщи алтарь (Altar): появится скелет (13 ур.) и нападёт — можно просто убежать.",
@@ -903,7 +945,8 @@
         "obj": [
          2146
         ]
-       }
+       },
+       "k": "searchAltarAndRun"
       }
      ],
      "go": {
@@ -937,7 +980,8 @@
         "obj": [
          2147
         ]
-       }
+       },
+       "k": "enterWizardsTowerBasement"
       },
       {
        "t": "Обыщи алтарь (Altar): появится скелет (13 ур.) и нападёт — можно просто убежать.",
@@ -951,7 +995,8 @@
         "obj": [
          2146
         ]
-       }
+       },
+       "k": "searchAltarAndRun"
       },
       {
        "t": "Выйди из подвала наверх.",
@@ -965,7 +1010,8 @@
         "obj": [
          2148
         ]
-       }
+       },
+       "k": "exitWizardsTowerBasement"
       },
       {
        "t": "Открой гроб призрака на кладбище Lumbridge.",
@@ -979,7 +1025,8 @@
         "obj": [
          2145
         ]
-       }
+       },
+       "k": "openCoffinToPutSkullIn"
       },
       {
        "t": "Обыщи гроб, чтобы вернуть череп (Ghost's skull), — квест пройден.",
@@ -993,7 +1040,8 @@
         "obj": [
          15061
         ]
-       }
+       },
+       "k": "putSkullInCoffin"
       }
      ],
      "go": {
@@ -1111,7 +1159,8 @@
         "npc": [
          7623
         ]
-       }
+       },
+       "k": "talkToAbigale"
       }
      ],
      "go": {
@@ -1137,7 +1186,8 @@
         "npc": [
          7623
         ]
-       }
+       },
+       "k": "talkToAbigale"
       }
      ],
      "go": {
@@ -1164,7 +1214,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Возьми ведро (Bucket) у фонтана.",
@@ -1178,7 +1229,8 @@
         "obj": [
          30147
         ]
-       }
+       },
+       "k": "takeTheBucket"
       },
       {
        "t": "Обыщи бочку с дождевой водой (Barrel) к северу от фонтана — будет ролик.",
@@ -1192,7 +1244,8 @@
         "obj": [
          29649
         ]
-       }
+       },
+       "k": "searchTheBarrel"
       }
      ],
      "go": {
@@ -1217,7 +1270,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Возьми ведро (Bucket) у фонтана.",
@@ -1231,7 +1285,8 @@
         "obj": [
          30147
         ]
-       }
+       },
+       "k": "takeTheBucket"
       },
       {
        "t": "Используй ведро на бочку с дождевой водой.",
@@ -1245,7 +1300,8 @@
         "obj": [
          29649
         ]
-       }
+       },
+       "k": "useBucketOnBarrel"
       }
      ],
      "go": {
@@ -1270,7 +1326,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Обыщи бочку ещё раз — на дне ключ от особняка (Manor key).",
@@ -1284,7 +1341,8 @@
         "obj": [
          29649
         ]
-       }
+       },
+       "k": "searchTheBarrelForKey"
       },
       {
        "t": "Войди в особняк.",
@@ -1298,7 +1356,8 @@
         "obj": [
          30110
         ]
-       }
+       },
+       "k": "openManorDoor"
       }
      ],
      "go": {
@@ -1324,7 +1383,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Возьми нож (Knife) со стола.",
@@ -1338,7 +1398,8 @@
         "obj": [
          30145
         ]
-       }
+       },
+       "k": "takeKnife"
       },
       {
        "t": "Попробуй открыть дверь с розовой ручкой.",
@@ -1352,7 +1413,8 @@
         "obj": [
          30112
         ]
-       }
+       },
+       "k": "tryToOpenPinkKnobDoor"
       }
      ],
      "go": {
@@ -1377,7 +1439,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Подбери появившуюся записку.",
@@ -1391,7 +1454,8 @@
         "obj": [
          2266
         ]
-       }
+       },
+       "k": "takeNote1"
       },
       {
        "t": "Прочти записку.",
@@ -1400,7 +1464,8 @@
         "item": [
          "Notes"
         ]
-       }
+       },
+       "k": "readNotes1"
       }
      ],
      "go": {
@@ -1425,7 +1490,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Возьми нож (Knife) со стола.",
@@ -1439,7 +1505,8 @@
         "obj": [
          30145
         ]
-       }
+       },
+       "k": "takeKnife"
       },
       {
        "t": "Используй нож на отмеченную картину.",
@@ -1456,7 +1523,8 @@
         "item": [
          "Knife"
         ]
-       }
+       },
+       "k": "useKnifeOnPainting"
       }
      ],
      "go": {
@@ -1481,7 +1549,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Обыщи картину — внутри Ruby key.",
@@ -1495,7 +1564,8 @@
         "obj": [
          29650
         ]
-       }
+       },
+       "k": "searchPainting"
       },
       {
        "t": "Войди в дверь с рубиновой ручкой.",
@@ -1509,7 +1579,8 @@
         "obj": [
          30116
         ]
-       }
+       },
+       "k": "goThroughRubyDoor"
       }
      ],
      "go": {
@@ -1534,7 +1605,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Обыщи полки и возьми огниво (Tinderbox).",
@@ -1548,7 +1620,8 @@
         "obj": [
          30146
         ]
-       }
+       },
+       "k": "takeTinderbox"
       },
       {
        "t": "Зажги все незажжённые свечи в комнате.",
@@ -1565,7 +1638,8 @@
         "item": [
          "Tinderbox"
         ]
-       }
+       },
+       "k": "lightCandle1"
       }
      ],
      "go": {
@@ -1590,7 +1664,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Обыщи полки и возьми огниво (Tinderbox).",
@@ -1604,7 +1679,8 @@
         "obj": [
          30146
         ]
-       }
+       },
+       "k": "takeTinderbox"
       },
       {
        "t": "Подожги фитиль на бочке с порохом.",
@@ -1621,7 +1697,8 @@
         "item": [
          "Tinderbox"
         ]
-       }
+       },
+       "k": "lightBarrel"
       }
      ],
      "go": {
@@ -1646,7 +1723,8 @@
         "obj": [
          30116
         ]
-       }
+       },
+       "k": "leaveExplosionRoom"
       }
      ],
      "go": {
@@ -1672,7 +1750,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Перелезь через разрушенную стену.",
@@ -1686,7 +1765,8 @@
         "obj": [
          29657
         ]
-       }
+       },
+       "k": "climbWall"
       },
       {
        "t": "Понаблюдай (Observe) через деревья за Lacey.",
@@ -1700,7 +1780,8 @@
         "obj": [
          30150
         ]
-       }
+       },
+       "k": "observeThroughTree"
       }
      ],
      "go": {
@@ -1726,7 +1807,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Перелезь через разрушенную стену.",
@@ -1740,7 +1822,8 @@
         "obj": [
          29657
         ]
-       }
+       },
+       "k": "climbWall"
       },
       {
        "t": "Подбери записку у забора.",
@@ -1754,7 +1837,8 @@
         "obj": [
          2267
         ]
-       }
+       },
+       "k": "takeNote2"
       },
       {
        "t": "Прочти записку.",
@@ -1763,7 +1847,8 @@
         "item": [
          "Notes"
         ]
-       }
+       },
+       "k": "readNotes2"
       }
      ],
      "go": {
@@ -1788,7 +1873,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Перелезь через разрушенную стену.",
@@ -1802,7 +1888,8 @@
         "obj": [
          29657
         ]
-       }
+       },
+       "k": "climbWall"
       }
      ],
      "go": {
@@ -1828,7 +1915,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Перелезь через разрушенную стену.",
@@ -1842,7 +1930,8 @@
         "obj": [
          29657
         ]
-       }
+       },
+       "k": "climbWall"
       },
       {
        "t": "Осмотри пианино (правый клик → Search) — Emerald key. Мелодия D-E-A-D.",
@@ -1856,7 +1945,8 @@
         "obj": [
          29658
         ]
-       }
+       },
+       "k": "searchThePiano"
       },
       {
        "t": "Перелезь обратно через разрушенную стену в особняк.",
@@ -1870,7 +1960,8 @@
         "obj": [
          29657
         ]
-       }
+       },
+       "k": "returnOverBrokenWall"
       },
       {
        "t": "Войди в дверь с зелёной ручкой.",
@@ -1884,7 +1975,8 @@
         "obj": [
          30117
         ]
-       }
+       },
+       "k": "openEmeraldDoor"
       }
      ],
      "go": {
@@ -1909,7 +2001,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Попробуй войти в комнату с Bandos godsword — случится ещё одно убийство.",
@@ -1923,7 +2016,8 @@
         "obj": [
          30118
         ]
-       }
+       },
+       "k": "enterBandosGodswordRoomStep"
       }
      ],
      "go": {
@@ -1949,7 +2043,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Подбери записку у двери.",
@@ -1963,7 +2058,8 @@
         "obj": [
          29648
         ]
-       }
+       },
+       "k": "takeNote3"
       },
       {
        "t": "Прочти записку.",
@@ -1972,7 +2068,8 @@
         "item": [
          "Notes"
         ]
-       }
+       },
+       "k": "readNotes3"
       }
      ],
      "go": {
@@ -1997,7 +2094,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Возьми нож (Knife) со стола.",
@@ -2011,7 +2109,8 @@
         "obj": [
          30145
         ]
-       }
+       },
+       "k": "takeKnife"
       },
       {
        "t": "Используй нож на незажжённый камин в восточной комнате.",
@@ -2028,7 +2127,8 @@
         "item": [
          "Knife"
         ]
-       }
+       },
+       "k": "useKnifeOnFireplace"
       }
      ],
      "go": {
@@ -2048,7 +2148,8 @@
         1647,
         4836,
         0
-       ]
+       ],
+       "k": "pwSolveFireplacePuzzle"
       }
      ],
      "go": {
@@ -2074,7 +2175,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Осмотри камин ещё раз — Sapphire key.",
@@ -2088,7 +2190,8 @@
         "obj": [
          29659
         ]
-       }
+       },
+       "k": "searchFireplaceForSapphireKey"
       },
       {
        "t": "Войди в дверь с сапфировой ручкой.",
@@ -2102,7 +2205,8 @@
         "obj": [
          30119
         ]
-       }
+       },
+       "k": "goThroughSapphireDoor"
       }
      ],
      "go": {
@@ -2128,7 +2232,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Войди в дверь с сапфировой ручкой.",
@@ -2142,11 +2247,13 @@
         "obj": [
          30119
         ]
-       }
+       },
+       "k": "goThroughSapphireDoor"
       },
       {
        "t": "Поворачивай зеркало так, чтобы отразить ножи убийцы: шкаф, откуда он бросит, окутывает чёрный вихрь.",
-       "s": "Поворачивай зеркало: отражай ножи убийцы"
+       "s": "Поворачивай зеркало: отражай ножи убийцы",
+       "k": "reflectKnives"
       }
      ],
      "go": {
@@ -2172,11 +2279,13 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Досмотри ролик с раскрытием убийцы.",
-       "s": "Досмотри ролик с убийцей"
+       "s": "Досмотри ролик с убийцей",
+       "k": "watchTheKillersReveal"
       }
      ],
      "go": {
@@ -2202,11 +2311,13 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Подбери нож убийцы (Killer's knife).",
-       "s": "Подбери Killer's knife"
+       "s": "Подбери Killer's knife",
+       "k": "pickUpKillersKnife"
       },
       {
        "t": "Держи нож в руке и выбери Fight на Abigale (боя не будет).",
@@ -2220,7 +2331,8 @@
         "npc": [
          7635
         ]
-       }
+       },
+       "k": "fightAbigale"
       }
      ],
      "go": {
@@ -2245,7 +2357,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Попробуй выйти через сапфировую дверь.",
@@ -2259,7 +2372,8 @@
         "obj": [
          30119
         ]
-       }
+       },
+       "k": "leaveSapphireRoom"
       }
      ],
      "go": {
@@ -2285,7 +2399,8 @@
         "obj": [
          30108
         ]
-       }
+       },
+       "k": "takeTheBoat"
       },
       {
        "t": "Поговори с Mandy у выхода из особняка — квест пройден.",
@@ -2299,7 +2414,8 @@
         "npc": [
          7630
         ]
-       }
+       },
+       "k": "talkToMandy"
       }
      ],
      "go": {
@@ -2333,7 +2449,8 @@
      "do": [
       {
        "t": "Собери по одной бусине каждого цвета: красную, жёлтую, чёрную и белую. Их роняют бесы (Imp), либо купи на Grand Exchange.",
-       "s": "Собери бусины: красная, жёлтая, чёрная, белая"
+       "s": "Собери бусины: красная, жёлтая, чёрная, белая",
+       "k": "collectBeads"
       },
       {
        "t": "Иди в Wizards' Tower (к югу от Draynor Village) и поднимись по лестнице с бусинами.",
@@ -2347,7 +2464,8 @@
         "obj": [
          12536
         ]
-       }
+       },
+       "k": "moveToTower"
       },
       {
        "t": "Поговори с Wizard Mizgog на верхнем этаже, отдай бусины — квест пройден. Диалог: «Give me a quest please» → «Yes».",
@@ -2361,7 +2479,8 @@
         "npc": [
          7746
         ]
-       }
+       },
+       "k": "turnInQuest"
       }
      ],
      "go": {
@@ -2376,7 +2495,8 @@
      "do": [
       {
        "t": "Собери по одной бусине каждого цвета: красную, жёлтую, чёрную и белую. Их роняют бесы (Imp), либо купи на Grand Exchange.",
-       "s": "Собери бусины: красная, жёлтая, чёрная, белая"
+       "s": "Собери бусины: красная, жёлтая, чёрная, белая",
+       "k": "collectBeads"
       },
       {
        "t": "Иди в Wizards' Tower (к югу от Draynor Village) и поднимись по лестнице с бусинами.",
@@ -2390,7 +2510,8 @@
         "obj": [
          12536
         ]
-       }
+       },
+       "k": "moveToTower"
       },
       {
        "t": "Поговори с Wizard Mizgog на верхнем этаже, отдай бусины — квест пройден. Диалог: «Give me a quest please» → «Yes».",
@@ -2404,7 +2525,8 @@
         "npc": [
          7746
         ]
-       }
+       },
+       "k": "turnInQuest"
       }
      ],
      "go": {
@@ -2487,7 +2609,8 @@
         "npc": [
          4619
         ]
-       }
+       },
+       "k": "talkToWitch"
       }
      ],
      "go": {
@@ -2515,7 +2638,8 @@
         "npc": [
          2855
         ]
-       }
+       },
+       "k": "killRat"
       },
       {
        "t": "Купи Eye of newt у Betty в магазине рун в Port Sarim (3 gp).",
@@ -2525,12 +2649,14 @@
         3259,
         0
        ],
-       "has": "Eye of newt"
+       "has": "Eye of newt",
+       "k": "getEye"
       },
       {
        "t": "Добудь Burnt meat: убей гигантскую крысу у часовни Port Sarim, возьми Raw rat meat (подойдёт и Raw beef) и дважды пожарь на камине (Fireplace) в доме Hetty, пока не подгорит.",
        "s": "Raw rat meat: дважды пожарь на Fireplace у Hetty",
-       "has": "Burnt meat"
+       "has": "Burnt meat",
+       "k": "getMeat"
       },
       {
        "t": "Сорви лук (Onion) на грядке к северу от Rimmington.",
@@ -2540,7 +2666,8 @@
         3251,
         0
        ],
-       "has": "Onion"
+       "has": "Onion",
+       "k": "getOnion"
       },
       {
        "t": "Отнеси все четыре ингредиента Hetty.",
@@ -2554,7 +2681,8 @@
         "npc": [
          4619
         ]
-       }
+       },
+       "k": "returnToWitch"
       }
      ],
      "go": {
@@ -2604,7 +2732,13 @@
         2967,
         3205,
         0
-       ]
+       ],
+       "k": "drinkPotion",
+       "hl": {
+        "obj": [
+         2024
+        ]
+       }
       }
      ],
      "go": {
@@ -2663,7 +2797,8 @@
         "npc": [
          5037
         ]
-       }
+       },
+       "k": "talkToRomeo"
       }
      ],
      "go": {
@@ -2689,7 +2824,8 @@
         "npc": [
          5035
         ]
-       }
+       },
+       "k": "talkToJuliet"
       }
      ],
      "go": {
@@ -2712,10 +2848,14 @@
         0
        ],
        "hl": {
+        "npc": [
+         5037
+        ],
         "obj": [
          11799
         ]
-       }
+       },
+       "k": "giveLetterToRomeo"
       }
      ],
      "go": {
@@ -2741,11 +2881,13 @@
         "npc": [
          5038
         ]
-       }
+       },
+       "k": "talkToLawrence"
       },
       {
        "t": "Сорви Cadava berries с кустов к юго-востоку от Varrock.",
-       "s": "Сорви Cadava berries юго-восточнее Varrock"
+       "s": "Сорви Cadava berries юго-восточнее Varrock",
+       "k": "getBerries"
       }
      ],
      "go": {
@@ -2763,7 +2905,8 @@
       {
        "t": "Сорви Cadava berries с кустов к юго-востоку от Varrock.",
        "s": "Сорви Cadava berries юго-восточнее Varrock",
-       "has": "Cadava berries"
+       "has": "Cadava berries",
+       "k": "getBerries"
       },
       {
        "t": "Отнеси Cadava berries аптекарю (Apothecary) на юго-западе Varrock — он сварит Cadava potion. Диалог: «Talk about something else» → «Talk about Romeo & Juliet».",
@@ -2778,7 +2921,8 @@
         "npc": [
          5036
         ]
-       }
+       },
+       "k": "talkToApothecary"
       }
      ],
      "go": {
@@ -2813,7 +2957,8 @@
         "npc": [
          5036
         ]
-       }
+       },
+       "k": "talkToApothecary"
       },
       {
        "t": "Отнеси Cadava potion Juliet в доме к западу от Varrock.",
@@ -2828,7 +2973,8 @@
         "npc": [
          5035
         ]
-       }
+       },
+       "k": "givePotionToJuliet"
       }
      ],
      "go": {
@@ -2859,7 +3005,8 @@
         "npc": [
          5037
         ]
-       }
+       },
+       "k": "finishQuest"
       }
      ],
      "go": {
@@ -2911,7 +3058,8 @@
         "npc": [
          815
         ]
-       }
+       },
+       "k": "talkToHoracio"
       }
      ],
      "go": {
@@ -2938,7 +3086,8 @@
         "npc": [
          11432
         ]
-       }
+       },
+       "k": "bringTalismanToSedridor"
       }
      ],
      "go": {
@@ -2973,7 +3122,8 @@
         "npc": [
          11432
         ]
-       }
+       },
+       "k": "getResearchPackageFromSedridor"
       }
      ],
      "go": {
@@ -3000,7 +3150,8 @@
         "npc": [
          11432
         ]
-       }
+       },
+       "k": "getResearchPackageFromSedridor"
       },
       {
        "t": "Отнеси Research package Aubury в магазин рун на юго-востоке Varrock. Диалог: «I've been sent here with a package for you».",
@@ -3015,7 +3166,8 @@
         "npc": [
          11434
         ]
-       }
+       },
+       "k": "deliverPackageToAubury"
       }
      ],
      "go": {
@@ -3050,7 +3202,8 @@
         "npc": [
          11434
         ]
-       }
+       },
+       "k": "talkToAudburyAgain"
       }
      ],
      "go": {
@@ -3077,7 +3230,8 @@
         "npc": [
          11434
         ]
-       }
+       },
+       "k": "talkToAudburyAgain"
       },
       {
        "t": "Отнеси Research notes Sedridor в подвал Wizards' Tower — квест пройден.",
@@ -3092,7 +3246,8 @@
         "npc": [
          11432
         ]
-       }
+       },
+       "k": "deliverResearchNotesToSedridor"
       }
      ],
      "go": {
@@ -3171,7 +3326,8 @@
         "npc": [
          4737
         ]
-       }
+       },
+       "k": "talkToSquire"
       }
      ],
      "go": {
@@ -3197,7 +3353,8 @@
         "npc": [
          4243
         ]
-       }
+       },
+       "k": "talkToReldo"
       }
      ],
      "go": {
@@ -3223,7 +3380,8 @@
         "npc": [
          4733
         ]
-       }
+       },
+       "k": "talkToThurgo"
       }
      ],
      "go": {
@@ -3257,7 +3415,8 @@
         "npc": [
          4733
         ]
-       }
+       },
+       "k": "talkToThurgoAgain"
       }
      ],
      "go": {
@@ -3284,7 +3443,8 @@
         "npc": [
          4737
         ]
-       }
+       },
+       "k": "talkToSquire2"
       }
      ],
      "go": {
@@ -3311,7 +3471,8 @@
         "obj": [
          24070
         ]
-       }
+       },
+       "k": "goUpCastle1"
       },
       {
        "t": "На 1-м этаже поднимись по винтовой лестнице (Staircase) к западу от первой лестницы.",
@@ -3326,7 +3487,8 @@
         "obj": [
          24077
         ]
-       }
+       },
+       "k": "goUpCastle2"
       },
       {
        "t": "Обыщи шкаф (Cupboard) в комнате к югу от лестницы. Sir Vyvin должен быть в соседней комнате — иначе он заметит.",
@@ -3341,7 +3503,8 @@
         "obj": [
          2272
         ]
-       }
+       },
+       "k": "searchCupboard"
       },
       {
        "t": "Отнеси портрет Thurgo. Диалог: «About that sword».",
@@ -3356,7 +3519,8 @@
         "npc": [
          4733
         ]
-       }
+       },
+       "k": "givePortraitToThurgo"
       }
      ],
      "go": {
@@ -3382,7 +3546,8 @@
         "obj": [
          1738
         ]
-       }
+       },
+       "k": "enterDungeon"
       },
       {
        "t": "Накопай одну Blurite ore в восточной пещере.",
@@ -3397,7 +3562,8 @@
         "obj": [
          11378
         ]
-       }
+       },
+       "k": "mineBlurite"
       },
       {
        "t": "Верни Thurgo Blurite ore и два Iron bar. Диалог: «Can you make that replacement sword now?».",
@@ -3412,7 +3578,8 @@
         "npc": [
          4733
         ]
-       }
+       },
+       "k": "bringThurgoOre"
       },
       {
        "t": "Отнеси меч оруженосцу (Squire) — квест пройден.",
@@ -3426,7 +3593,8 @@
         "npc": [
          4737
         ]
-       }
+       },
+       "k": "finishQuest"
       }
      ],
      "go": {
@@ -3511,7 +3679,8 @@
         "npc": [
          3479
         ]
-       }
+       },
+       "k": "talkToMorgan"
       }
      ],
      "go": {
@@ -3535,7 +3704,8 @@
          2613,
          15645
         ]
-       }
+       },
+       "k": "cGetGarlic"
       },
       {
        "t": "Поговори с Dr. Harlow в пабе Blue Moon Inn в Varrock. Диалог: «Morgan needs your help!».",
@@ -3549,7 +3719,8 @@
         "npc": [
          3480
         ]
-       }
+       },
+       "k": "talkToHarlow"
       }
      ],
      "go": {
@@ -3587,7 +3758,8 @@
         "npc": [
          1312
         ]
-       }
+       },
+       "k": "buyBeer"
       },
       {
        "t": "Снова поговори с Dr. Harlow и отдай пиво — он даст кол (Stake). Диалог: «Yes. Here you go».",
@@ -3603,7 +3775,8 @@
         "npc": [
          3480
         ]
-       }
+       },
+       "k": "talkToHarlowAgain"
       },
       {
        "t": "Подготовься к бою с Count Draynor (34 ур.) и войди в Draynor Manor.",
@@ -3617,7 +3790,8 @@
         "obj": [
          134
         ]
-       }
+       },
+       "k": "enterDraynorManor"
       },
       {
        "t": "Спустись в подвал Draynor Manor.",
@@ -3631,7 +3805,8 @@
         "obj": [
          2616
         ]
-       }
+       },
+       "k": "goDownToBasement"
       },
       {
        "t": "Открой гроб (Coffin) и убей Count Draynor: кол (Stake) и молоток (Hammer) должны быть в сумке.",
@@ -3645,7 +3820,8 @@
         "on": [
          "Coffin"
         ]
-       }
+       },
+       "k": "openCoffin"
       }
      ],
      "go": {
@@ -3738,7 +3914,8 @@
         "npc": [
          3643
         ]
-       }
+       },
+       "k": "speakToRedbeard"
       }
      ],
      "go": {
@@ -3765,7 +3942,8 @@
         "npc": [
          3645
         ]
-       }
+       },
+       "k": "smuggleRum.goToKaramja"
       },
       {
        "t": "Поговори с Zembo в баре Karamja Wines, Spirits and Beers и купи одну бутылку Karamjan rum (30 gp). Диалог: «Yes please».",
@@ -3780,7 +3958,8 @@
          13655
         ]
        },
-       "has": "Karamjan rum"
+       "has": "Karamjan rum",
+       "k": "smuggleRum.talkToZambo"
       },
       {
        "t": "Нарви 10 бананов рядом и поговори с Luthas, чтобы наняться на плантацию. Диалог: «Could you offer me employment on your plantation?» → «Will you pay me for another crate full?».",
@@ -3797,7 +3976,8 @@
         "on": [
          "Banana tree"
         ]
-       }
+       },
+       "k": "smuggleRum.talkToLuthas"
       },
       {
        "t": "Положи Karamjan rum в ящик (Crate).",
@@ -3815,7 +3995,8 @@
          "Karamjan rum"
         ]
        },
-       "need": "Karamjan rum"
+       "need": "Karamjan rum",
+       "k": "smuggleRum.addRumToCrate"
       },
       {
        "t": "Заполни ящик бананами (правый клик по ящику — «Fill»), затем поговори с Luthas.",
@@ -3829,7 +4010,8 @@
         "obj": [
          2072
         ]
-       }
+       },
+       "k": "smuggleRum.addBananasToCrate"
       },
       {
        "t": "Скажи Luthas, что ящик заполнен.",
@@ -3843,7 +4025,8 @@
         "npc": [
          3647
         ]
-       }
+       },
+       "k": "smuggleRum.talkToLuthasAgain"
       },
       {
        "t": "Вернись в Port Sarim: заплати Customs officer за проезд (30 gp). Диалог: «Thank you, I'll be on my way» → «Can I journey on this ship?» → «Search away, I have nothing to hide» → «Ok» → «Search away. I have nothing to hide» → «Okay».",
@@ -3857,7 +4040,8 @@
         "npc": [
          3648
         ]
-       }
+       },
+       "k": "smuggleRum.talkToCustomsOfficer"
       },
       {
        "t": "Возьми белый фартук (White apron) в рыболовном магазине Gerrant (висит на задней стене).",
@@ -3867,7 +4051,8 @@
         3229,
         0
        ],
-       "has": "White apron"
+       "has": "White apron",
+       "k": "smuggleRum.getWhiteApron"
       },
       {
        "t": "Надень фартук и устройся к Wydin в продуктовый магазин Port Sarim; обыщи ящик в подсобке — там ром. Диалог: «Well, can I get a job here?».",
@@ -3881,7 +4066,8 @@
         "obj": [
          2071
         ]
-       }
+       },
+       "k": "smuggleRum.getRumFromCrate"
       },
       {
        "t": "Отнеси Karamjan rum Redbeard Frank в Port Sarim — он даст ключ.",
@@ -3896,7 +4082,8 @@
         "npc": [
          3643
         ]
-       }
+       },
+       "k": "smuggleRum.bringRumToRedbeard"
       }
      ],
      "go": {
@@ -3945,7 +4132,8 @@
         "obj": [
          11796
         ]
-       }
+       },
+       "k": "climbStairs"
       },
       {
        "t": "Открой сундук (Chest) ключом на 1-м этаже и забери Pirate message. Диалог: «Ok thanks, I'll go and get it».",
@@ -3962,7 +4150,8 @@
         "item": [
          "Chest key"
         ]
-       }
+       },
+       "k": "openChest"
       },
       {
        "t": "Прочитай Pirate message.",
@@ -3971,7 +4160,8 @@
         "item": [
          "Pirate message"
         ]
-       }
+       },
+       "k": "readPirateMessage"
       }
      ],
      "go": {
@@ -3997,7 +4187,8 @@
         "npc": [
          3651
         ]
-       }
+       },
+       "k": "digUpTreasure"
       }
      ],
      "go": {
@@ -4093,7 +4284,8 @@
         "npc": [
          4285
         ]
-       }
+       },
+       "k": "talkToHassan"
       }
      ],
      "go": {
@@ -4120,7 +4312,8 @@
         "npc": [
          4286
         ]
-       }
+       },
+       "k": "talkToOsman"
       }
      ],
      "go": {
@@ -4147,11 +4340,13 @@
         "npc": [
          4280
         ]
-       }
+       },
+       "k": "talkToNed"
       },
       {
        "t": "Покрась парик жёлтым красителем (Yellow dye). Если красителя нет — Aggie в Draynor Village сделает его из двух луковиц (Onion) и 5 gp.",
-       "s": "Покрась парик Yellow dye (нет — Aggie: 2 Onion и 5 gp)"
+       "s": "Покрась парик Yellow dye (нет — Aggie: 2 Onion и 5 gp)",
+       "k": "dyeWig"
       },
       {
        "t": "Поговори с Aggie в Draynor Village и возьми кожную пасту (Paste): ей нужны Ashes, Redberries, Pot of flour и Bucket of water. Диалог: «Can you make skin paste?» → «Yes please. Mix me some skin paste».",
@@ -4165,7 +4360,8 @@
         "npc": [
          120
         ]
-       }
+       },
+       "k": "talkToAggie"
       },
       {
        "t": "Поговори с Lady Keli в тюрьме к востоку от Draynor Village и сними отпечаток ключа: используй Soft clay на ключ. Если отпечаток уже есть — открой журнал квеста, чтобы синхронизироваться. Диалог: «Heard of you? You're famous in Gielinor!» → «What's your latest plan then?» → «How do you know someone won't try to free him?» → «Could I see the key please?» → «Could I touch the key for a moment please?».",
@@ -4179,7 +4375,8 @@
         "npc": [
          11578
         ]
-       }
+       },
+       "k": "talkToKeli"
       },
       {
        "t": "Отнеси Key print и Bronze bar на любую печь (Furnace) — ближайшая в Lumbridge; получится Bronze key.",
@@ -4197,7 +4394,8 @@
         "item": [
          "Key print"
         ]
-       }
+       },
+       "k": "makeKey"
       },
       {
        "t": "Поговори с Leela к востоку от Draynor Village.",
@@ -4211,7 +4409,8 @@
         "npc": [
          4274
         ]
-       }
+       },
+       "k": "talkToLeela"
       }
      ],
      "go": {
@@ -4237,7 +4436,8 @@
         "npc": [
          11577
         ]
-       }
+       },
+       "k": "talkToJoe"
       }
      ],
      "go": {
@@ -4278,7 +4478,8 @@
         "npc": [
          11578
         ]
-       }
+       },
+       "k": "useRopeOnKeli"
       }
      ],
      "go": {
@@ -4312,7 +4513,8 @@
         "obj": [
          2881
         ]
-       }
+       },
+       "k": "useKeyOnDoor"
       },
       {
        "t": "Поговори с принцем Али — освободи его (надень парик, юбку и пасту).",
@@ -4326,7 +4528,8 @@
         "npc": [
          11579
         ]
-       }
+       },
+       "k": "talkToAli"
       }
      ],
      "go": {
@@ -4352,7 +4555,8 @@
         "npc": [
          4285
         ]
-       }
+       },
+       "k": "returnToHassan"
       }
      ],
      "go": {
@@ -4436,7 +4640,8 @@
         "npc": [
          3561
         ]
-       }
+       },
+       "k": "talkToVeronica"
       }
      ],
      "go": {
@@ -4463,7 +4668,8 @@
         "obj": [
          134
         ]
-       }
+       },
+       "k": "enterManor"
       },
       {
        "t": "Поднимись на второй этаж по лестнице.",
@@ -4477,7 +4683,8 @@
         "obj": [
          11498
         ]
-       }
+       },
+       "k": "goToFirstFloor"
       },
       {
        "t": "Возьми рыбий корм (Fish food) в южной комнате.",
@@ -4486,7 +4693,8 @@
         3108,
         3356,
         1
-       ]
+       ],
+       "k": "pickupFishFood"
       },
       {
        "t": "Спустись обратно на первый этаж.",
@@ -4500,7 +4708,8 @@
         "obj": [
          11499
         ]
-       }
+       },
+       "k": "goDownToGroundFloor"
       },
       {
        "t": "Возьми яд (Poison) в северо-западной комнате.",
@@ -4509,11 +4718,13 @@
         3097,
         3366,
         0
-       ]
+       ],
+       "k": "pickupPoison"
       },
       {
        "t": "Используй яд на рыбий корм (Poisoned fish food).",
-       "s": "Используй Poison на Fish food"
+       "s": "Используй Poison на Fish food",
+       "k": "usePoisonOnFishFood"
       },
       {
        "t": "Возьми лопату (Spade) в восточной комнате и выйди из особняка через дверь в той же комнате.",
@@ -4522,7 +4733,8 @@
         3120,
         3359,
         0
-       ]
+       ],
+       "k": "pickupSpade"
       },
       {
        "t": "Обыщи компостную кучу (Compost heap) к западу от особняка — там ключ (Key).",
@@ -4536,7 +4748,8 @@
         "obj": [
          152
         ]
-       }
+       },
+       "k": "searchCompost"
       },
       {
        "t": "Используй отравленный корм на фонтане к юго-западу от особняка.",
@@ -4550,7 +4763,8 @@
         "obj": [
          153
         ]
-       }
+       },
+       "k": "useFishFoodOnFountain"
       },
       {
        "t": "Обыщи фонтан и забери манометр (Pressure gauge).",
@@ -4564,7 +4778,8 @@
         "obj": [
          153
         ]
-       }
+       },
+       "k": "searchFountain"
       },
       {
        "t": "Снова зайди в особняк на первый этаж.",
@@ -4578,7 +4793,8 @@
         "obj": [
          134
         ]
-       }
+       },
+       "k": "enterManorWithKey"
       },
       {
        "t": "Открой ключом маленькую комнату к северу от лестницы и возьми резиновую трубку (Rubber tube).",
@@ -4587,7 +4803,8 @@
         3111,
         3367,
         0
-       ]
+       ],
+       "k": "getTube"
       },
       {
        "t": "Обыщи книжный шкаф (Bookcase) в западной комнате — откроется потайная комната.",
@@ -4601,7 +4818,8 @@
         "obj": [
          155
         ]
-       }
+       },
+       "k": "searchBookcase"
       },
       {
        "t": "Спустись по лестнице в подвал.",
@@ -4615,7 +4833,8 @@
         "obj": [
          133
         ]
-       }
+       },
+       "k": "goDownLadder"
       },
       {
        "t": "Опусти рычаг A.",
@@ -4629,7 +4848,8 @@
         "obj": [
          146
         ]
-       }
+       },
+       "k": "pullDownLeverA"
       },
       {
        "t": "Опусти рычаг B.",
@@ -4643,7 +4863,8 @@
         "obj": [
          147
         ]
-       }
+       },
+       "k": "pullDownLeverB"
       },
       {
        "t": "Опусти рычаг D.",
@@ -4657,7 +4878,8 @@
         "obj": [
          149
         ]
-       }
+       },
+       "k": "pullDownLeverD"
       },
       {
        "t": "Подними рычаг B.",
@@ -4671,7 +4893,8 @@
         "obj": [
          147
         ]
-       }
+       },
+       "k": "pullUpLeverB"
       },
       {
        "t": "Подними рычаг A.",
@@ -4685,7 +4908,8 @@
         "obj": [
          146
         ]
-       }
+       },
+       "k": "pullUpLeverA"
       },
       {
        "t": "Опусти рычаг F.",
@@ -4699,7 +4923,8 @@
         "obj": [
          151
         ]
-       }
+       },
+       "k": "pullDownLeverF"
       },
       {
        "t": "Опусти рычаг E.",
@@ -4713,7 +4938,8 @@
         "obj": [
          150
         ]
-       }
+       },
+       "k": "pullDownLeverE"
       },
       {
        "t": "Опусти рычаг C.",
@@ -4727,7 +4953,8 @@
         "obj": [
          148
         ]
-       }
+       },
+       "k": "pullDownLeverC"
       },
       {
        "t": "Подними рычаг E.",
@@ -4741,7 +4968,8 @@
         "obj": [
          150
         ]
-       }
+       },
+       "k": "pullUpLeverE"
       },
       {
        "t": "Возьми масленку (Oil can) в западной комнате.",
@@ -4750,7 +4978,8 @@
         3092,
         9755,
         0
-       ]
+       ],
+       "k": "pickupOilCan"
       },
       {
        "t": "Поговори с Professor Oddenstein на верхнем этаже особняка. Диалог: «I'm looking for a guy called Ernest» → «Change him back this instant!».",
@@ -4764,7 +4993,8 @@
         "npc": [
          3562
         ]
-       }
+       },
+       "k": "talkToOddenstein"
       }
      ],
      "go": {
@@ -4790,7 +5020,8 @@
         "obj": [
          134
         ]
-       }
+       },
+       "k": "enterManor"
       },
       {
        "t": "Поднимись на второй этаж по лестнице.",
@@ -4804,7 +5035,8 @@
         "obj": [
          11498
         ]
-       }
+       },
+       "k": "goToFirstFloor"
       },
       {
        "t": "Возьми рыбий корм (Fish food) в южной комнате.",
@@ -4813,7 +5045,8 @@
         3108,
         3356,
         1
-       ]
+       ],
+       "k": "pickupFishFood"
       },
       {
        "t": "Спустись обратно на первый этаж.",
@@ -4827,7 +5060,8 @@
         "obj": [
          11499
         ]
-       }
+       },
+       "k": "goDownToGroundFloor"
       },
       {
        "t": "Возьми яд (Poison) в северо-западной комнате.",
@@ -4836,11 +5070,13 @@
         3097,
         3366,
         0
-       ]
+       ],
+       "k": "pickupPoison"
       },
       {
        "t": "Используй яд на рыбий корм (Poisoned fish food).",
-       "s": "Используй Poison на Fish food"
+       "s": "Используй Poison на Fish food",
+       "k": "usePoisonOnFishFood"
       },
       {
        "t": "Возьми лопату (Spade) в восточной комнате и выйди из особняка через дверь в той же комнате.",
@@ -4849,7 +5085,8 @@
         3120,
         3359,
         0
-       ]
+       ],
+       "k": "pickupSpade"
       },
       {
        "t": "Обыщи компостную кучу (Compost heap) к западу от особняка — там ключ (Key).",
@@ -4863,7 +5100,8 @@
         "obj": [
          152
         ]
-       }
+       },
+       "k": "searchCompost"
       },
       {
        "t": "Используй отравленный корм на фонтане к юго-западу от особняка.",
@@ -4877,7 +5115,8 @@
         "obj": [
          153
         ]
-       }
+       },
+       "k": "useFishFoodOnFountain"
       },
       {
        "t": "Обыщи фонтан и забери манометр (Pressure gauge).",
@@ -4891,7 +5130,8 @@
         "obj": [
          153
         ]
-       }
+       },
+       "k": "searchFountain"
       },
       {
        "t": "Снова зайди в особняк на первый этаж.",
@@ -4905,7 +5145,8 @@
         "obj": [
          134
         ]
-       }
+       },
+       "k": "enterManorWithKey"
       },
       {
        "t": "Открой ключом маленькую комнату к северу от лестницы и возьми резиновую трубку (Rubber tube).",
@@ -4914,7 +5155,8 @@
         3111,
         3367,
         0
-       ]
+       ],
+       "k": "getTube"
       },
       {
        "t": "Обыщи книжный шкаф (Bookcase) в западной комнате — откроется потайная комната.",
@@ -4928,7 +5170,8 @@
         "obj": [
          155
         ]
-       }
+       },
+       "k": "searchBookcase"
       },
       {
        "t": "Спустись по лестнице в подвал.",
@@ -4942,7 +5185,8 @@
         "obj": [
          133
         ]
-       }
+       },
+       "k": "goDownLadder"
       },
       {
        "t": "Опусти рычаг A.",
@@ -4956,7 +5200,8 @@
         "obj": [
          146
         ]
-       }
+       },
+       "k": "pullDownLeverA"
       },
       {
        "t": "Опусти рычаг B.",
@@ -4970,7 +5215,8 @@
         "obj": [
          147
         ]
-       }
+       },
+       "k": "pullDownLeverB"
       },
       {
        "t": "Опусти рычаг D.",
@@ -4984,7 +5230,8 @@
         "obj": [
          149
         ]
-       }
+       },
+       "k": "pullDownLeverD"
       },
       {
        "t": "Подними рычаг B.",
@@ -4998,7 +5245,8 @@
         "obj": [
          147
         ]
-       }
+       },
+       "k": "pullUpLeverB"
       },
       {
        "t": "Подними рычаг A.",
@@ -5012,7 +5260,8 @@
         "obj": [
          146
         ]
-       }
+       },
+       "k": "pullUpLeverA"
       },
       {
        "t": "Опусти рычаг F.",
@@ -5026,7 +5275,8 @@
         "obj": [
          151
         ]
-       }
+       },
+       "k": "pullDownLeverF"
       },
       {
        "t": "Опусти рычаг E.",
@@ -5040,7 +5290,8 @@
         "obj": [
          150
         ]
-       }
+       },
+       "k": "pullDownLeverE"
       },
       {
        "t": "Опусти рычаг C.",
@@ -5054,7 +5305,8 @@
         "obj": [
          148
         ]
-       }
+       },
+       "k": "pullDownLeverC"
       },
       {
        "t": "Подними рычаг E.",
@@ -5068,7 +5320,8 @@
         "obj": [
          150
         ]
-       }
+       },
+       "k": "pullUpLeverE"
       },
       {
        "t": "Возьми масленку (Oil can) в западной комнате.",
@@ -5077,7 +5330,8 @@
         3092,
         9755,
         0
-       ]
+       ],
+       "k": "pickupOilCan"
       },
       {
        "t": "Отдай Professor Oddenstein манометр, трубку и масленку — квест пройден.",
@@ -5091,7 +5345,8 @@
         "npc": [
          3562
         ]
-       }
+       },
+       "k": "talkToOddenteinAgain"
       }
      ],
      "go": {
@@ -5145,7 +5400,8 @@
         "obj": [
          16450
         ]
-       }
+       },
+       "k": "goUpLadder"
       },
       {
        "t": "Вторая Goblin mail — в ящике в западной хижине.",
@@ -5155,7 +5411,8 @@
          16556,
          16560
         ]
-       }
+       },
+       "k": "getCrate2"
       },
       {
        "t": "Третья Goblin mail — в ящике к северу от хижины генералов.",
@@ -5164,15 +5421,18 @@
         "obj": [
          16559
         ]
-       }
+       },
+       "k": "getCrate3"
       },
       {
        "t": "Используй Blue dye на одну из Goblin mail.",
-       "s": "Используй Blue dye на Goblin mail"
+       "s": "Используй Blue dye на Goblin mail",
+       "k": "dyeBlue"
       },
       {
        "t": "Используй Orange dye (смесь красного и жёлтого) на другую Goblin mail.",
-       "s": "Используй Orange dye на другую Goblin mail"
+       "s": "Используй Orange dye на другую Goblin mail",
+       "k": "dyeOrange"
       },
       {
        "t": "Поговори с одним из генералов (Goblin General) и покажи оранжевую кольчугу. Диалог: «Do you want me to pick an armour colour for you?» → «What about a different colour?» → «Yes» → «So how is life for the goblins?» → «Yes, Wartface looks fat» → «I have some orange armour here».",
@@ -5186,7 +5446,8 @@
         "npc": [
          669
         ]
-       }
+       },
+       "k": "talkToGeneral1"
       }
      ],
      "go": {
@@ -5211,7 +5472,8 @@
         "obj": [
          16450
         ]
-       }
+       },
+       "k": "goUpLadder"
       },
       {
        "t": "Вторая Goblin mail — в ящике в западной хижине.",
@@ -5221,7 +5483,8 @@
          16556,
          16560
         ]
-       }
+       },
+       "k": "getCrate2"
       },
       {
        "t": "Третья Goblin mail — в ящике к северу от хижины генералов.",
@@ -5230,15 +5493,18 @@
         "obj": [
          16559
         ]
-       }
+       },
+       "k": "getCrate3"
       },
       {
        "t": "Используй Blue dye на одну из Goblin mail.",
-       "s": "Используй Blue dye на Goblin mail"
+       "s": "Используй Blue dye на Goblin mail",
+       "k": "dyeBlue"
       },
       {
        "t": "Используй Orange dye (смесь красного и жёлтого) на другую Goblin mail.",
-       "s": "Используй Orange dye на другую Goblin mail"
+       "s": "Используй Orange dye на другую Goblin mail",
+       "k": "dyeOrange"
       },
       {
        "t": "Поговори с одним из генералов (Goblin General) и покажи оранжевую кольчугу. Диалог: «Do you want me to pick an armour colour for you?» → «What about a different colour?» → «Yes» → «So how is life for the goblins?» → «Yes, Wartface looks fat» → «I have some orange armour here».",
@@ -5252,7 +5518,8 @@
         "npc": [
          669
         ]
-       }
+       },
+       "k": "talkToGeneral1"
       }
      ],
      "go": {
@@ -5299,7 +5566,8 @@
         "obj": [
          16450
         ]
-       }
+       },
+       "k": "goUpLadder"
       },
       {
        "t": "Вторая Goblin mail — в ящике в западной хижине.",
@@ -5309,7 +5577,8 @@
          16556,
          16560
         ]
-       }
+       },
+       "k": "getCrate2"
       },
       {
        "t": "Третья Goblin mail — в ящике к северу от хижины генералов.",
@@ -5318,11 +5587,13 @@
         "obj": [
          16559
         ]
-       }
+       },
+       "k": "getCrate3"
       },
       {
        "t": "Используй Blue dye на одну из Goblin mail.",
-       "s": "Используй Blue dye на Goblin mail"
+       "s": "Используй Blue dye на Goblin mail",
+       "k": "dyeBlue"
       },
       {
        "t": "Снова поговори с генералом и покажи синюю кольчугу. Диалог: «So how is life for the goblins?» → «I have some blue armour here».",
@@ -5336,7 +5607,8 @@
         "npc": [
          669
         ]
-       }
+       },
+       "k": "talkToGeneral2"
       }
      ],
      "go": {
@@ -5377,7 +5649,8 @@
         "obj": [
          16450
         ]
-       }
+       },
+       "k": "goUpLadder"
       },
       {
        "t": "Вторая Goblin mail — в ящике в западной хижине.",
@@ -5387,7 +5660,8 @@
          16556,
          16560
         ]
-       }
+       },
+       "k": "getCrate2"
       },
       {
        "t": "Третья Goblin mail — в ящике к северу от хижины генералов.",
@@ -5396,7 +5670,8 @@
         "obj": [
          16559
         ]
-       }
+       },
+       "k": "getCrate3"
       },
       {
        "t": "Ещё раз поговори с генералом и покажи обычную (коричневую) кольчугу — квест пройден. Диалог: «So how is life for the goblins?» → «Yes, Wartface looks fat» → «I have some brown armour here».",
@@ -5410,7 +5685,8 @@
         "npc": [
          669
         ]
-       }
+       },
+       "k": "talkToGeneral3"
       }
      ],
      "go": {
@@ -5461,7 +5737,8 @@
         "npc": [
          3893
         ]
-       }
+       },
+       "k": "talkToDoric"
       }
      ],
      "go": {
@@ -5487,7 +5764,8 @@
         "npc": [
          3893
         ]
-       }
+       },
+       "k": "talkToDoric"
       }
      ],
      "go": {
@@ -5586,7 +5864,8 @@
         "npc": [
          4771
         ]
-       }
+       },
+       "k": "speakToAmik"
       }
      ],
      "go": {
@@ -5612,7 +5891,8 @@
         "obj": [
          2337
         ]
-       }
+       },
+       "k": "enterFortress"
       },
       {
        "t": "Толкни стену — откроется потайная комната.",
@@ -5626,7 +5906,8 @@
         "obj": [
          2341
         ]
-       }
+       },
+       "k": "pushWall"
       },
       {
        "t": "Поднимись по лестнице.",
@@ -5640,7 +5921,8 @@
         "obj": [
          17148
         ]
-       }
+       },
+       "k": "climbUpLadder1"
       },
       {
        "t": "Поднимись по следующей лестнице.",
@@ -5654,7 +5936,8 @@
         "obj": [
          17148
         ]
-       }
+       },
+       "k": "climbUpLadder2"
       },
       {
        "t": "Спустись по лестнице к югу.",
@@ -5668,7 +5951,8 @@
         "obj": [
          17149
         ]
-       }
+       },
+       "k": "climbDownLadder3"
       },
       {
        "t": "Поднимись по лестнице к востоку.",
@@ -5682,7 +5966,8 @@
         "obj": [
          17148
         ]
-       }
+       },
+       "k": "climbUpLadder4"
       },
       {
        "t": "Спустись по следующей лестнице к востоку.",
@@ -5696,7 +5981,8 @@
         "obj": [
          17149
         ]
-       }
+       },
+       "k": "climbDownLadder5"
       },
       {
        "t": "Спустись по лестнице к западу.",
@@ -5710,7 +5996,8 @@
         "obj": [
          17149
         ]
-       }
+       },
+       "k": "climbDownLadder6"
       },
       {
        "t": "Подслушай у решётки (Grill).",
@@ -5724,7 +6011,8 @@
         "obj": [
          2342
         ]
-       }
+       },
+       "k": "listenAtGrill"
       }
      ],
      "go": {
@@ -5770,7 +6058,8 @@
         "obj": [
          2337
         ]
-       }
+       },
+       "k": "enterFortress"
       },
       {
        "t": "Поднимись по лестнице из комнаты подслушивания.",
@@ -5784,7 +6073,8 @@
         "obj": [
          17148
         ]
-       }
+       },
+       "k": "climbUpLadder6"
       },
       {
        "t": "Поднимись по лестнице в комнате с часовней к востоку.",
@@ -5798,7 +6088,8 @@
         "obj": [
          17148
         ]
-       }
+       },
+       "k": "climbUpLadder5"
       },
       {
        "t": "Спустись по лестнице к западу.",
@@ -5812,7 +6103,8 @@
         "obj": [
          17149
         ]
-       }
+       },
+       "k": "climbDownLadder4"
       },
       {
        "t": "Поднимись по лестнице к западу.",
@@ -5826,7 +6118,8 @@
         "obj": [
          17148
         ]
-       }
+       },
+       "k": "climbUpLadder3"
       },
       {
        "t": "Спустись по лестнице к северу.",
@@ -5840,7 +6133,8 @@
         "obj": [
          17149
         ]
-       }
+       },
+       "k": "climbDownLadder2"
       },
       {
        "t": "Спустись по следующей лестнице.",
@@ -5854,7 +6148,8 @@
         "obj": [
          17149
         ]
-       }
+       },
+       "k": "climbDownLadder1"
       },
       {
        "t": "Зайди в восточную комнату и поднимись по лестнице. У двери будет диалог — выбери вариант 2. Диалог: «I don't care. I'm going in anyway».",
@@ -5868,7 +6163,8 @@
         "obj": [
          17159
         ]
-       }
+       },
+       "k": "goUpLadderToCabbageZone"
       },
       {
        "t": "Толкни стену к юго-востоку — откроется кладовая.",
@@ -5882,7 +6178,8 @@
         "obj": [
          2341
         ]
-       }
+       },
+       "k": "pushWall2"
       },
       {
        "t": "ИСПОЛЬЗУЙ капусту (Cabbage) на отверстие. Не съешь её по ошибке! Капуста должна быть с поля к югу от Falador.",
@@ -5899,7 +6196,8 @@
         "item": [
          "Cabbage (NOT from Draynor Manor)"
         ]
-       }
+       },
+       "k": "useCabbageOnHole"
       }
      ],
      "go": {
@@ -5945,7 +6243,8 @@
         "npc": [
          4771
         ]
-       }
+       },
+       "k": "returnToAmik"
       }
      ],
      "go": {
@@ -6016,7 +6315,8 @@
         "npc": [
          11868
         ]
-       }
+       },
+       "k": "talkToAris"
       }
      ],
      "go": {
@@ -6043,7 +6343,8 @@
         "npc": [
          5083
         ]
-       }
+       },
+       "k": "talkToPrysin"
       }
      ],
      "go": {
@@ -6070,7 +6371,8 @@
         "npc": [
          5085
         ]
-       }
+       },
+       "k": "talkToRovin"
       },
       {
        "t": "Вылей ведро воды (Bucket of water) в сток (Drain) у кухни дворца.",
@@ -6084,7 +6386,8 @@
         "obj": [
          17424
         ]
-       }
+       },
+       "k": "useFilledBucketOnDrain"
       },
       {
        "t": "Спустись в канализацию Varrock Sewers через люк (Manhole) к юго-востоку от замка.",
@@ -6098,7 +6401,8 @@
         "obj": [
          882
         ]
-       }
+       },
+       "k": "goDownManhole"
       },
       {
        "t": "Возьми Rusty key к северу от входа в канализацию.",
@@ -6112,7 +6416,8 @@
         "obj": [
          17431
         ]
-       }
+       },
+       "k": "pickupSecondKey"
       },
       {
        "t": "Принеси волшебнику Traiborn в Wizards' Tower 25 костей (Bones) — можно частями. Диалог: «Talk about Demon Slayer» → «I need to get a key given to you by Sir Prysin» → «Well, have you got any keys knocking around?» → «I'll get the bones for you».",
@@ -6126,7 +6431,8 @@
         "npc": [
          5081
         ]
-       }
+       },
+       "k": "talkToTraiborn"
       },
       {
        "t": "Вернись к Sir Prysin в юго-запад замка Varrock и отдай три ключа — получишь Silverlight.",
@@ -6140,7 +6446,8 @@
         "npc": [
          5083
         ]
-       }
+       },
+       "k": "returnToPrysin"
       },
       {
        "t": "Убей Delrith (27 ур.) мечом Silverlight у тёмных магов к югу от Varrock; добив, произнеси заклинание изгнания — слова назвала Aris (выбирай их в диалоге по порядку).",
@@ -6154,7 +6461,8 @@
         "npc": [
          5079
         ]
-       }
+       },
+       "k": "killDelrithStep"
       }
      ],
      "go": {
@@ -6232,7 +6540,8 @@
         "npc": [
          10655
         ]
-       }
+       },
+       "k": "talkToWillowToStart"
       }
      ],
      "go": {
@@ -6258,7 +6567,8 @@
         "npc": [
          10655
         ]
-       }
+       },
+       "k": "talkToWillowToStart"
       }
      ],
      "go": {
@@ -6285,7 +6595,8 @@
         "npc": [
          10657
         ]
-       }
+       },
+       "k": "recruitCheckal"
       },
       {
        "t": "Поговори с Atlas в Barbarian Village Inn — он научит эмоции Flex. Возьми Cooked meat, если нет. Диалог: «Yes».",
@@ -6299,7 +6610,8 @@
         "npc": [
          10658
         ]
-       }
+       },
+       "k": "talkToAtlas"
       },
       {
        "t": "Поговори с Checkal и повтори эмоцию Flex.",
@@ -6313,7 +6625,8 @@
         "npc": [
          10657
         ]
-       }
+       },
+       "k": "flexCheckal"
       }
      ],
      "go": {
@@ -6347,7 +6660,8 @@
         "npc": [
          10656
         ]
-       }
+       },
+       "k": "talkToMarley"
       },
       {
        "t": "Попроси повара (Cook) в Blue Moon Inn в Varrock приготовить Steak sandwich. Диалог: «I was wondering if you'd be able to make me a Steak sandwich?».",
@@ -6361,11 +6675,13 @@
         "npc": [
          2895
         ]
-       }
+       },
+       "k": "talkToCook"
       },
       {
        "t": "Собери мясо (Cooked meat), хлеб (Bread) и нож (Knife) для сэндвича.",
-       "s": "Собери Cooked meat, Bread и Knife"
+       "s": "Собери Cooked meat, Bread и Knife",
+       "k": "getIngredients"
       },
       {
        "t": "Используй нож на хлеб — получится Steak sandwich. Не съешь его!",
@@ -6375,7 +6691,8 @@
          "Knife",
          "Bread"
         ]
-       }
+       },
+       "k": "makeSandwich"
       },
       {
        "t": "Верни сэндвич Marley (не съешь его!).",
@@ -6389,7 +6706,8 @@
         "npc": [
          10656
         ]
-       }
+       },
+       "k": "feedMarley"
       },
       {
        "t": "Поговори с Burntof в таверне Falador (Rising Sun Inn).",
@@ -6403,7 +6721,8 @@
         "npc": [
          10659
         ]
-       }
+       },
+       "k": "talkToBurntof"
       },
       {
        "t": "Купи Asgarnian Ale для Burntof. Диалог: «What ales are you serving?» → «One Asgarnian Ale, please».",
@@ -6417,7 +6736,8 @@
         "npc": [
          1316
         ]
-       }
+       },
+       "k": "buyBeer"
       },
       {
        "t": "Отдай Asgarnian Ale Burntof.",
@@ -6431,7 +6751,8 @@
         "npc": [
          10659
         ]
-       }
+       },
+       "k": "giveBeer"
       },
       {
        "t": "Обыграй Burntof в «камень-ножницы-бумага» — любой ход подойдёт. Диалог: «Rock».",
@@ -6445,7 +6766,8 @@
         "npc": [
          10659
         ]
-       }
+       },
+       "k": "playRPS"
       }
      ],
      "go": {
@@ -6491,7 +6813,8 @@
         "npc": [
          10655
         ]
-       }
+       },
+       "k": "goToDungeon"
       }
      ],
      "go": {
@@ -6513,7 +6836,8 @@
         3000,
         3494,
         0
-       ]
+       ],
+       "k": "reenterDungeon"
       }
      ],
      "go": {
@@ -6534,7 +6858,8 @@
         "npc": [
          10654
         ]
-       }
+       },
+       "k": "defeatGuardian"
       }
      ],
      "items": []
@@ -6549,7 +6874,8 @@
         3000,
         3494,
         0
-       ]
+       ],
+       "k": "watchCutscene"
       }
      ],
      "go": {
@@ -6628,7 +6954,8 @@
         "npc": [
          7956
         ]
-       }
+       },
+       "k": "talkToTockFarm"
       }
      ],
      "go": {
@@ -6654,7 +6981,8 @@
         "npc": [
          7956
         ]
-       }
+       },
+       "k": "talkToTockFarm"
       }
      ],
      "go": {
@@ -6681,7 +7009,8 @@
         "npc": [
          7956
         ]
-       }
+       },
+       "k": "talkToTockRimmington"
       }
      ],
      "go": {
@@ -6708,7 +7037,8 @@
         "npc": [
          7961
         ]
-       }
+       },
+       "k": "talkToIthoi"
       },
       {
        "t": "Поговори с Gnocci в северо-западной хижине. Диалог: «I hear you've been cursed».",
@@ -6722,7 +7052,8 @@
         "npc": [
          7970
         ]
-       }
+       },
+       "k": "talkToGnocci"
       },
       {
        "t": "Поговори с Arsen в центральной хижине. Диалог: «I hear you've been cursed».",
@@ -6736,7 +7067,8 @@
         "npc": [
          7976
         ]
-       }
+       },
+       "k": "talkToArsen"
       },
       {
        "t": "Поговори с Cabin boy Colin в центральной хижине. Диалог: «I hear you've been cursed».",
@@ -6750,7 +7082,8 @@
         "npc": [
          7965
         ]
-       }
+       },
+       "k": "talkToColin"
       },
       {
        "t": "Возьми огниво (Tinderbox) рядом с Gnocci.",
@@ -6764,7 +7097,8 @@
         "obj": [
          31634
         ]
-       }
+       },
+       "k": "grabTinderbox"
       },
       {
        "t": "Возьми лопату (Spade) на юге Corsair Cove.",
@@ -6778,7 +7112,8 @@
         "obj": [
          31585
         ]
-       }
+       },
+       "k": "pickUpSpade"
       },
       {
        "t": "Поговори с Captain Tock на корабле. Диалог: «Arsen says he gave you a sacred ogre relic» → «About that sacred ogre relic».",
@@ -6792,7 +7127,8 @@
         "npc": [
          7958
         ]
-       }
+       },
+       "k": "talkToTockShip"
       },
       {
        "t": "Поговори с вождём Chief Tess (в пещере Corsair Cove Dungeon) и верни реликвию. Диалог: «I've come to return what Arsen stole».",
@@ -6806,7 +7142,8 @@
         "npc": [
          7988
         ]
-       }
+       },
+       "k": "talkToTess"
       },
       {
        "t": "Копай у дерева к юго-западу от бухты — найдёшь куклу. Диалог: «Search for the possessed doll and face the consequences».",
@@ -6820,7 +7157,8 @@
         "obj": [
          31790
         ]
-       }
+       },
+       "k": "digSand"
       },
       {
        "t": "Загляни в телескоп (Telescope) Ithoi.",
@@ -6834,7 +7172,8 @@
         "obj": [
          31632
         ]
-       }
+       },
+       "k": "lookThroughTelescope"
       },
       {
        "t": "Снова поговори с Gnocci.",
@@ -6848,7 +7187,8 @@
         "npc": [
          7970
         ]
-       }
+       },
+       "k": "talkToGnocci2"
       },
       {
        "t": "Снова поговори с Arsen.",
@@ -6862,7 +7202,8 @@
         "npc": [
          7976
         ]
-       }
+       },
+       "k": "talkToArsen2"
       },
       {
        "t": "Снова поговори с Colin.",
@@ -6876,7 +7217,8 @@
         "npc": [
          7965
         ]
-       }
+       },
+       "k": "talkToColin2"
       }
      ],
      "go": {
@@ -6902,7 +7244,8 @@
         "npc": [
          7958
         ]
-       }
+       },
+       "k": "talkToTockShip2"
       }
      ],
      "go": {
@@ -6929,7 +7272,8 @@
         "npc": [
          7970
         ]
-       }
+       },
+       "k": "talkToGnocci3"
       }
      ],
      "go": {
@@ -6955,7 +7299,8 @@
         "obj": [
          31634
         ]
-       }
+       },
+       "k": "grabTinderbox"
       },
       {
        "t": "Поговори с Arsen. Диалог: «I hear Ithoi cooked the meal you ate that night».",
@@ -6969,7 +7314,8 @@
         "npc": [
          7976
         ]
-       }
+       },
+       "k": "talkToArsen3"
       }
      ],
      "go": {
@@ -6994,7 +7340,8 @@
         "obj": [
          31634
         ]
-       }
+       },
+       "k": "grabTinderbox"
       },
       {
        "t": "Поговори с Ithoi — уличи его в том, что он не болен. Диалог: «I bet I can prove you're well enough to get up» → «I know you've faked the curse» → «I hear you cooked the meal they ate before getting sick» → «Maybe because the Captain's thinking of firing you».",
@@ -7008,7 +7355,8 @@
         "npc": [
          7961
         ]
-       }
+       },
+       "k": "talkToIthoi2"
       }
      ],
      "go": {
@@ -7033,7 +7381,8 @@
         "obj": [
          31724
         ]
-       }
+       },
+       "k": "useTinderboxOnWood"
       }
      ],
      "go": {
@@ -7058,7 +7407,8 @@
         "npc": [
          7958
         ]
-       }
+       },
+       "k": "talkToTockShip3"
       }
      ],
      "go": {
@@ -7085,7 +7435,8 @@
         "npc": [
          7964
         ]
-       }
+       },
+       "k": "killIthoi"
       }
      ],
      "go": {
@@ -7112,7 +7463,8 @@
         "npc": [
          7958
         ]
-       }
+       },
+       "k": "talkToTockShip4"
       }
      ],
      "go": {
@@ -7193,7 +7545,8 @@
         "npc": [
          15632
         ]
-       }
+       },
+       "k": "talkToCassius"
       }
      ],
      "go": {
@@ -7219,7 +7572,8 @@
         "npc": [
          15632
         ]
-       }
+       },
+       "k": "talkToCassius"
       }
      ],
      "go": {
@@ -7246,7 +7600,8 @@
         "npc": [
          4628
         ]
-       }
+       },
+       "k": "talkToGillie"
       },
       {
        "t": "Поговори с Seth Groats на его ферме к востоку от реки Lum.",
@@ -7260,7 +7615,8 @@
         "npc": [
          1351
         ]
-       }
+       },
+       "k": "talkToSeth"
       }
      ],
      "go": {
@@ -7282,7 +7638,8 @@
         3227,
         3287,
         0
-       ]
+       ],
+       "k": "searchShelves"
       },
       {
        "t": "Верни книгу Cassius.",
@@ -7296,7 +7653,8 @@
         "npc": [
          15632
         ]
-       }
+       },
+       "k": "returnToCassiusWithBook"
       }
      ],
      "go": {
@@ -7321,7 +7679,8 @@
         "npc": [
          15632
         ]
-       }
+       },
+       "k": "returnToCassiusWithBook"
       }
      ],
      "go": {
@@ -7341,7 +7700,8 @@
         "item": [
          "Milk sample"
         ]
-       }
+       },
+       "k": "drinkMilkSample1"
       }
      ]
     },
@@ -7360,7 +7720,8 @@
         "npc": [
          15632
         ]
-       }
+       },
+       "k": "talkToCassiusAfterDrink"
       }
      ],
      "go": {
@@ -7386,7 +7747,8 @@
         "npc": [
          815
         ]
-       }
+       },
+       "k": "talkToDuke"
       }
      ],
      "go": {
@@ -7412,7 +7774,8 @@
         "npc": [
          4628
         ]
-       }
+       },
+       "k": "talkToGillieAgain"
       }
      ],
      "go": {
@@ -7433,7 +7796,8 @@
         "item": [
          "Milk sample"
         ]
-       }
+       },
+       "k": "drinkMilkSample2"
       }
      ]
     },
@@ -7452,7 +7816,8 @@
         "npc": [
          4628
         ]
-       }
+       },
+       "k": "talkToGillieAfterDrink"
       }
      ],
      "go": {
@@ -7473,7 +7838,8 @@
         3262,
         3294,
         0
-       ]
+       ],
+       "k": "openBullPen"
       }
      ],
      "go": {
@@ -7498,7 +7864,8 @@
         "npc": [
          4628
         ]
-       }
+       },
+       "k": "talkToGillieAfterFight"
       }
      ],
      "go": {
@@ -7524,7 +7891,8 @@
         "npc": [
          15632
         ]
-       }
+       },
+       "k": "finishQuest"
       }
      ],
      "go": {
@@ -7612,7 +7980,8 @@
         "npc": [
          4181
         ]
-       }
+       },
+       "k": "talkToAlmera"
       }
      ],
      "go": {
@@ -7638,7 +8007,8 @@
         "obj": [
          1987
         ]
-       }
+       },
+       "k": "boardRaft"
       },
       {
        "t": "Поговори с Hudon на острове.",
@@ -7652,7 +8022,8 @@
         "npc": [
          4182
         ]
-       }
+       },
+       "k": "talkToHudon"
       }
      ],
      "go": {
@@ -7685,7 +8056,8 @@
         "obj": [
          1996
         ]
-       }
+       },
+       "k": "useRopeOnRock"
       },
       {
        "t": "Используй верёвку на мёртвое дерево.",
@@ -7699,7 +8071,8 @@
         "obj": [
          2020
         ]
-       }
+       },
+       "k": "useRopeOnTree"
       },
       {
        "t": "Залезь в бочку (Barrel).",
@@ -7713,7 +8086,8 @@
         "obj": [
          2022
         ]
-       }
+       },
+       "k": "getInBarrel"
       },
       {
        "t": "Поднимись по лестнице в доме к югу от дома Almera (дом Hadley).",
@@ -7727,7 +8101,8 @@
         "obj": [
          16671
         ]
-       }
+       },
+       "k": "goUpstairsHadley"
       },
       {
        "t": "Обыщи юго-восточный книжный шкаф.",
@@ -7741,11 +8116,13 @@
         "obj": [
          1989
         ]
-       }
+       },
+       "k": "searchBookcase"
       },
       {
        "t": "Прочти книгу (Book on Baxtorian).",
-       "s": "Прочти Book on Baxtorian"
+       "s": "Прочти Book on Baxtorian",
+       "k": "readBook"
       }
      ],
      "go": {
@@ -7778,7 +8155,8 @@
         "obj": [
          5250
         ]
-       }
+       },
+       "k": "enterGnomeDungeon"
       },
       {
        "t": "Обыщи необычный (другого цвета) ящик (Crate) в восточной комнате.",
@@ -7792,7 +8170,8 @@
         "obj": [
          1990
         ]
-       }
+       },
+       "k": "searchGnomeCrate"
       },
       {
        "t": "Пройди через ворота в западной комнате.",
@@ -7806,7 +8185,8 @@
         "obj": [
          1991
         ]
-       }
+       },
+       "k": "enterGnomeDoor"
       },
       {
        "t": "Поговори с Golrie — он отдаст Glarial's pebble.",
@@ -7820,7 +8200,8 @@
         "npc": [
          4183
         ]
-       }
+       },
+       "k": "talkToGolrie"
       },
       {
        "t": "Положи в банк всё, кроме Glarial's pebble и еды (без оружия и брони!). Используй pebble на надгробие Glarial (Glarial's tombstone) к востоку от Baxtorian Falls.",
@@ -7834,7 +8215,8 @@
         "obj": [
          1992
         ]
-       }
+       },
+       "k": "usePebble"
       },
       {
        "t": "Обыщи сундук (Chest) в западной комнате — Glarial's amulet.",
@@ -7848,7 +8230,8 @@
         "obj": [
          1994
         ]
-       }
+       },
+       "k": "searchGlarialChest"
       },
       {
        "t": "Обыщи гробницу Glarial (Glarial's tomb) в южной комнате — Glarial's urn.",
@@ -7862,11 +8245,13 @@
         "obj": [
          1993
         ]
-       }
+       },
+       "k": "searchGlarialCoffin"
       },
       {
        "t": "Выйди из гробницы и возьми: по 6 рун воздуха, воды и земли, верёвку (Rope), Glarial's amulet, Glarial's urn и еду.",
-       "s": "Возьми по 6 рун воздуха, воды, земли, Rope, Glarial's amulet, urn, еду"
+       "s": "Возьми по 6 рун воздуха, воды, земли, Rope, Glarial's amulet, urn, еду",
+       "k": "getFinalItems"
       },
       {
        "t": "Снова сядь на плот к западу от Almera.",
@@ -7880,7 +8265,8 @@
         "obj": [
          1987
         ]
-       }
+       },
+       "k": "boardRaftFinal"
       },
       {
        "t": "Используй верёвку на камень к югу.",
@@ -7894,7 +8280,8 @@
         "obj": [
          1996
         ]
-       }
+       },
+       "k": "useRopeOnRockFinal"
       },
       {
        "t": "Используй верёвку на мёртвое дерево.",
@@ -7908,7 +8295,8 @@
         "obj": [
          2020
         ]
-       }
+       },
+       "k": "useRopeOnTreeFinal"
       },
       {
        "t": "Надень Glarial's amulet.",
@@ -7917,7 +8305,8 @@
         "item": [
          "Glarial's amulet"
         ]
-       }
+       },
+       "k": "equipAmulet"
       },
       {
        "t": "Войди в водопад (Baxtorian Falls) с надетым амулетом.",
@@ -7931,7 +8320,8 @@
         "obj": [
          2010
         ]
-       }
+       },
+       "k": "enterFalls"
       },
       {
        "t": "Обыщи ящик (Crate) в восточной комнате — там ключ.",
@@ -7945,7 +8335,8 @@
         "obj": [
          1999
         ]
-       }
+       },
+       "k": "searchFallsCrate"
       },
       {
        "t": "Войди ключом в западную комнату.",
@@ -7959,11 +8350,13 @@
         "obj": [
          2002
         ]
-       }
+       },
+       "k": "useKeyOnFallsDoor"
       },
       {
        "t": "Используй по одной руне земли, воды и воздуха на каждую из 6 колонн, затем используй Glarial's amulet на статую Glarial.",
-       "s": "Руны земли, воды, воздуха — на 6 колонн; амулет — на статую"
+       "s": "Руны земли, воды, воздуха — на 6 колонн; амулет — на статую",
+       "k": "useRunes"
       },
       {
        "t": "НЕ нажимай на чашу (Chalice) левой кнопкой! Используй Glarial's urn на чашу — квест пройден.",
@@ -7980,7 +8373,8 @@
         "item": [
          "Glarial's urn"
         ]
-       }
+       },
+       "k": "useUrnOnChalice"
       }
      ],
      "go": {
@@ -8031,7 +8425,8 @@
      "do": [
       {
        "t": "Выйди из гробницы и возьми: по 6 рун воздуха, воды и земли, верёвку (Rope), Glarial's amulet, Glarial's urn и еду.",
-       "s": "Возьми по 6 рун воздуха, воды, земли, Rope, Glarial's amulet, urn, еду"
+       "s": "Возьми по 6 рун воздуха, воды, земли, Rope, Glarial's amulet, urn, еду",
+       "k": "getFinalItems"
       },
       {
        "t": "Снова сядь на плот к западу от Almera.",
@@ -8045,7 +8440,8 @@
         "obj": [
          1987
         ]
-       }
+       },
+       "k": "boardRaftFinal"
       },
       {
        "t": "Используй верёвку на камень к югу.",
@@ -8059,7 +8455,8 @@
         "obj": [
          1996
         ]
-       }
+       },
+       "k": "useRopeOnRockFinal"
       },
       {
        "t": "Используй верёвку на мёртвое дерево.",
@@ -8073,7 +8470,8 @@
         "obj": [
          2020
         ]
-       }
+       },
+       "k": "useRopeOnTreeFinal"
       },
       {
        "t": "Надень Glarial's amulet.",
@@ -8082,7 +8480,8 @@
         "item": [
          "Glarial's amulet"
         ]
-       }
+       },
+       "k": "equipAmulet"
       },
       {
        "t": "Войди в водопад (Baxtorian Falls) с надетым амулетом.",
@@ -8096,7 +8495,8 @@
         "obj": [
          2010
         ]
-       }
+       },
+       "k": "enterFalls"
       },
       {
        "t": "Обыщи ящик (Crate) в восточной комнате — там ключ.",
@@ -8110,7 +8510,8 @@
         "obj": [
          1999
         ]
-       }
+       },
+       "k": "searchFallsCrate"
       },
       {
        "t": "Войди ключом в западную комнату.",
@@ -8124,11 +8525,13 @@
         "obj": [
          2002
         ]
-       }
+       },
+       "k": "useKeyOnFallsDoor"
       },
       {
        "t": "Используй по одной руне земли, воды и воздуха на каждую из 6 колонн, затем используй Glarial's amulet на статую Glarial.",
-       "s": "Руны земли, воды, воздуха — на 6 колонн; амулет — на статую"
+       "s": "Руны земли, воды, воздуха — на 6 колонн; амулет — на статую",
+       "k": "useRunes"
       },
       {
        "t": "НЕ нажимай на чашу (Chalice) левой кнопкой! Используй Glarial's urn на чашу — квест пройден.",
@@ -8145,7 +8548,8 @@
         "item": [
          "Glarial's urn"
         ]
-       }
+       },
+       "k": "useUrnOnChalice"
       }
      ],
      "go": {
@@ -8238,7 +8642,8 @@
         "npc": [
          12029
         ]
-       }
+       },
+       "k": "startQuest"
       }
      ],
      "go": {
@@ -8264,7 +8669,8 @@
         "obj": [
          75
         ]
-       }
+       },
+       "k": "searchChest"
       }
      ],
      "go": {
@@ -8291,7 +8697,8 @@
         "obj": [
          75
         ]
-       }
+       },
+       "k": "searchChest"
       },
       {
        "t": "Надень броню Khazard и поговори с Khazard Guard на юго-востоке тюрьмы.",
@@ -8305,7 +8712,8 @@
         "npc": [
          1209
         ]
-       }
+       },
+       "k": "talkToGuard"
       }
      ],
      "go": {
@@ -8347,7 +8755,8 @@
         "obj": [
          75
         ]
-       }
+       },
+       "k": "searchChest"
       },
       {
        "t": "Купи Khali brew в баре к западу (5 gp). Диалог: «I'd like a Khali Brew please».",
@@ -8361,7 +8770,8 @@
         "npc": [
          1214
         ]
-       }
+       },
+       "k": "buyKhaliBrew"
       },
       {
        "t": "Отнеси пиво Khazard Guard.",
@@ -8375,7 +8785,8 @@
         "npc": [
          1209
         ]
-       }
+       },
+       "k": "giveKhaliBrew"
       }
      ],
      "go": {
@@ -8424,7 +8835,8 @@
         "obj": [
          75
         ]
-       }
+       },
+       "k": "searchChest"
       },
       {
        "t": "Возьми у Khazard Guard ещё один комплект ключей.",
@@ -8438,7 +8850,8 @@
         "npc": [
          1209
         ]
-       }
+       },
+       "k": "getCellKeys"
       },
       {
        "t": "Приготовься к бою: все противники берутся из укрытия, первый — Khazard Ogre (63 ур.). Открой ключами камеру Sammy.",
@@ -8452,7 +8865,8 @@
         "obj": [
          80
         ]
-       }
+       },
+       "k": "openCell"
       }
      ],
      "go": {
@@ -8493,7 +8907,8 @@
         "npc": [
          1225
         ]
-       }
+       },
+       "k": "killOgre"
       }
      ],
      "go": {
@@ -8513,7 +8928,13 @@
         2605,
         3153,
         0
-       ]
+       ],
+       "k": "talkToKhazard",
+       "hl": {
+        "npc": [
+         3510
+        ]
+       }
       }
      ],
      "go": {
@@ -8540,7 +8961,8 @@
         "npc": [
          1218
         ]
-       }
+       },
+       "k": "talkToHengrad"
       },
       {
        "t": "Убей скорпиона (Khazard scorpion) — тоже из укрытия за скелетом.",
@@ -8554,7 +8976,8 @@
         "npc": [
          1226
         ]
-       }
+       },
+       "k": "killScorpion"
       }
      ],
      "go": {
@@ -8580,7 +9003,8 @@
         "npc": [
          1224
         ]
-       }
+       },
+       "k": "killBouncer"
       }
      ],
      "go": {
@@ -8605,7 +9029,8 @@
         "obj": [
          82
         ]
-       }
+       },
+       "k": "leaveArena"
       },
       {
        "t": "Вернись к Lady Servil — квест пройден.",
@@ -8619,7 +9044,8 @@
         "npc": [
          12029
         ]
-       }
+       },
+       "k": "endQuest"
       }
      ],
      "go": {
@@ -8678,7 +9104,8 @@
         "npc": [
          4963
         ]
-       }
+       },
+       "k": "talkToBolrenAtCentreOfMaze"
       }
      ]
     },
@@ -8697,7 +9124,8 @@
         "npc": [
          4964
         ]
-       }
+       },
+       "k": "talkToCommanderMontai"
       }
      ],
      "go": {
@@ -8724,7 +9152,8 @@
         "npc": [
          4964
         ]
-       }
+       },
+       "k": "bringWoodToCommanderMontai"
       }
      ],
      "go": {
@@ -8758,7 +9187,8 @@
         "npc": [
          4964
         ]
-       }
+       },
+       "k": "talkToCommanderMontaiAgain"
       }
      ],
      "go": {
@@ -8784,7 +9214,8 @@
         "npc": [
          4975
         ]
-       }
+       },
+       "k": "firstTracker"
       },
       {
        "t": "Поговори со вторым следопытом внутри тюрьмы — получишь координату y.",
@@ -8798,7 +9229,8 @@
         "npc": [
          4976
         ]
-       }
+       },
+       "k": "secondTracker"
       },
       {
        "t": "Поговори с третьим следопытом к юго-западу от тюрьмы.",
@@ -8812,7 +9244,8 @@
         "npc": [
          4977
         ]
-       }
+       },
+       "k": "thirdTracker"
       },
       {
        "t": "Выстрели из баллисты (Ballista) по башне — введи полученные координаты.",
@@ -8821,7 +9254,8 @@
         "obj": [
          2181
         ]
-       }
+       },
+       "k": "fireBalistaConditional"
       }
      ],
      "go": {
@@ -8843,7 +9277,8 @@
          2183,
          16683
         ]
-       }
+       },
+       "k": "cRetrieveOrb"
       }
      ],
      "items": []
@@ -8859,7 +9294,8 @@
          4963,
          4968
         ]
-       }
+       },
+       "k": "returnFirstOrb"
       }
      ],
      "items": []
@@ -8879,7 +9315,8 @@
         "npc": [
          7621
         ]
-       }
+       },
+       "k": "talkToTheWarlord"
       },
       {
        "t": "Победи Khazard warlord (112 ур.) и забери сферы — его можно заманить за деревья и бить магией.",
@@ -8893,7 +9330,8 @@
         "npc": [
          7622
         ]
-       }
+       },
+       "k": "fightTheWarlord"
       }
      ],
      "go": {
@@ -8916,7 +9354,8 @@
          4963,
          4968
         ]
-       }
+       },
+       "k": "cReturnOrbs"
       }
      ],
      "items": []
@@ -9001,7 +9440,8 @@
         "npc": [
          8019
         ]
-       }
+       },
+       "k": "talkToKingNarnode"
       }
      ],
      "go": {
@@ -9027,7 +9467,8 @@
         "obj": [
          16683
         ]
-       }
+       },
+       "k": "climbUpToHazelmere"
       },
       {
        "t": "Поговори с Hazelmere — он заберёт bark sample и даст послание для короля.",
@@ -9041,7 +9482,8 @@
         "npc": [
          1422
         ]
-       }
+       },
+       "k": "talkToHazelmere"
       }
      ],
      "go": {
@@ -9066,7 +9508,8 @@
         "npc": [
          8019
         ]
-       }
+       },
+       "k": "bringScrollToKingNarnode"
       }
      ],
      "go": {
@@ -9093,7 +9536,8 @@
         "obj": [
          16683
         ]
-       }
+       },
+       "k": "climbUpToGlough"
       },
       {
        "t": "Поговори с Glough.",
@@ -9102,7 +9546,8 @@
         "npc": [
          2061
         ]
-       }
+       },
+       "k": "talkToGlough"
       }
      ],
      "go": {
@@ -9128,7 +9573,8 @@
         "npc": [
          8019
         ]
-       }
+       },
+       "k": "talkToKingNarnodeAfterGlough"
       }
      ],
      "go": {
@@ -9155,7 +9601,8 @@
         "npc": [
          1428
         ]
-       }
+       },
+       "k": "goTalkToCharlie"
       }
      ],
      "go": {
@@ -9178,7 +9625,8 @@
          2434,
          16683
         ]
-       }
+       },
+       "k": "goFindGloughJournal"
       }
      ],
      "items": []
@@ -9196,7 +9644,8 @@
         "obj": [
          16683
         ]
-       }
+       },
+       "k": "goConfrontGlough"
       },
       {
        "t": "Поговори с Charlie в камере.",
@@ -9210,7 +9659,8 @@
         "npc": [
          1428
         ]
-       }
+       },
+       "k": "talkToCharlieFromCell"
       },
       {
        "t": "Поговори с королём Narnode у камеры Charlie.",
@@ -9224,7 +9674,8 @@
         "npc": [
          8019
         ]
-       }
+       },
+       "k": "talkToKingNarnodeBeforeEscape"
       }
      ],
      "go": {
@@ -9251,7 +9702,8 @@
         "npc": [
          10467
         ]
-       }
+       },
+       "k": "escapeByGlider"
       },
       {
        "t": "Войди на верфь (Shipyard) на Karamja: скажи, что тебя послал Glough, и назови пароль Ka-Lu-Min. Диалог: «Glough sent me» → «Ka» → «Lu» → «Min».",
@@ -9265,7 +9717,8 @@
         "obj": [
          2438
         ]
-       }
+       },
+       "k": "enterTheShipyard"
       },
       {
        "t": "Возьми Lumber order у Foreman на южном причале: убей его или поговори (ответы на вопросы безопасности). Диалог: «Sadly his wife is no longer with us!» → «He loves worm holes» → «Anita».",
@@ -9279,7 +9732,8 @@
         "npc": [
          1429
         ]
-       }
+       },
+       "k": "talkToForeman"
       }
      ],
      "go": {
@@ -9300,7 +9754,8 @@
         2464,
         3495,
         3
-       ]
+       ],
+       "k": "goTalkToCharlie3"
       }
      ],
      "go": {
@@ -9329,7 +9784,8 @@
         "obj": [
          16675
         ]
-       }
+       },
+       "k": "goGetAnitaKey"
       },
       {
        "t": "Открой ключом сундук в доме Glough и забери invasion plans (дочитай диалог до конца).",
@@ -9338,7 +9794,8 @@
         "obj": [
          2436
         ]
-       }
+       },
+       "k": "findInvasionPlans"
       }
      ],
      "go": {
@@ -9364,7 +9821,8 @@
         "npc": [
          8019
         ]
-       }
+       },
+       "k": "takeInvasionPlansToKing"
       }
      ],
      "go": {
@@ -9390,7 +9848,8 @@
          2442,
          2443
         ]
-       }
+       },
+       "k": "placeTwigs"
       }
      ]
     },
@@ -9404,7 +9863,8 @@
         "obj": [
          26243
         ]
-       }
+       },
+       "k": "climbDownTrapDoor"
       },
       {
        "t": "Убей Black demon: сразу встань на клетку севернее лестницы — демон застрянет за камнями; бей магией, стрельбой или алебардой в течение 10 минут.",
@@ -9413,7 +9873,8 @@
         "npc": [
          1432
         ]
-       }
+       },
+       "k": "killBlackDemon"
       }
      ],
      "items": []
@@ -9433,7 +9894,8 @@
         "npc": [
          8019
         ]
-       }
+       },
+       "k": "talkToKingAfterFight"
       }
      ],
      "go": {
@@ -9455,7 +9917,8 @@
         "obj": [
          1985
         ]
-       }
+       },
+       "k": "findDaconiaStone"
       },
       {
        "t": "Отдай daconia rock королю Narnode под Grand Tree — квест пройден.",
@@ -9469,7 +9932,8 @@
         "npc": [
          8019
         ]
-       }
+       },
+       "k": "giveDaconiaStoneToKingNarnode"
       }
      ],
      "go": {
@@ -9547,7 +10011,8 @@
         "npc": [
          5215
         ]
-       }
+       },
+       "k": "talkToRoald"
       }
      ],
      "go": {
@@ -9573,7 +10038,8 @@
         "obj": [
          3490
         ]
-       }
+       },
+       "k": "goToTemple"
       }
      ],
      "go": {
@@ -9598,7 +10064,8 @@
         "npc": [
          7620
         ]
-       }
+       },
+       "k": "killTheDog"
       }
      ],
      "go": {
@@ -9624,7 +10091,8 @@
         "npc": [
          5215
         ]
-       }
+       },
+       "k": "returnToKingRoald"
       }
      ],
      "go": {
@@ -9651,7 +10119,8 @@
         "obj": [
          3490
         ]
-       }
+       },
+       "k": "returnToTemple"
       },
       {
        "t": "Убей Monk of Zamorak (30 ур.) ради Golden key. Можно спрятаться за скамьями.",
@@ -9665,7 +10134,8 @@
         "npc": [
          3486
         ]
-       }
+       },
+       "k": "killMonk"
       },
       {
        "t": "Поговори с Drezel на верхнем этаже храма (он заперт в камере). Диалог: «So, what now?» → «Yes, of course».",
@@ -9679,7 +10149,8 @@
         "npc": [
          9636
         ]
-       }
+       },
+       "k": "talkToDrezel"
       }
      ],
      "go": {
@@ -9712,7 +10183,8 @@
         "obj": [
          3490
         ]
-       }
+       },
+       "k": "returnToTemple"
       },
       {
        "t": "Убей Monk of Zamorak (30 ур.) ради Golden key. Можно спрятаться за скамьями.",
@@ -9726,7 +10198,8 @@
         "npc": [
          3486
         ]
-       }
+       },
+       "k": "killMonk"
       },
       {
        "t": "Спустись в подземелье храма через люк (Trapdoor).",
@@ -9740,7 +10213,8 @@
         "obj": [
          1579
         ]
-       }
+       },
+       "k": "enterUnderground"
       },
       {
        "t": "В центральной комнате найди среди монументов тот, на котором изображён ключ, и используй на него Golden key — получишь Iron key.",
@@ -9749,7 +10223,8 @@
         3421,
         9888,
         0
-       ]
+       ],
+       "k": "useKeyForKey"
       },
       {
        "t": "Набери воды в ведро (Bucket) из колодца в центральной комнате.",
@@ -9764,7 +10239,8 @@
         "obj": [
          3485
         ]
-       }
+       },
+       "k": "fillBucket"
       },
       {
        "t": "Поднимись обратно на верхний этаж храма (с водой).",
@@ -9778,7 +10254,8 @@
         "obj": [
          16683
         ]
-       }
+       },
+       "k": "goUpWithWaterToSecondFloor"
       },
       {
        "t": "Открой дверь камеры Drezel ключом (Iron key).",
@@ -9792,7 +10269,8 @@
         "obj": [
          3463
         ]
-       }
+       },
+       "k": "openDoor"
       }
      ],
      "go": {
@@ -9825,7 +10303,8 @@
         "obj": [
          1579
         ]
-       }
+       },
+       "k": "enterUnderground"
       },
       {
        "t": "Набери воды в ведро (Bucket) из колодца в центральной комнате.",
@@ -9840,7 +10319,8 @@
         "obj": [
          3485
         ]
-       }
+       },
+       "k": "fillBucket"
       },
       {
        "t": "Поднимись обратно на верхний этаж храма (с водой).",
@@ -9854,7 +10334,8 @@
         "obj": [
          16683
         ]
-       }
+       },
+       "k": "goUpWithWaterToSecondFloor"
       },
       {
        "t": "Поговори с Drezel — он благословит воду.",
@@ -9868,7 +10349,8 @@
         "npc": [
          9636
         ]
-       }
+       },
+       "k": "blessWater"
       },
       {
        "t": "Используй освящённую воду (Blessed water) на гроб (Coffin) в этой же комнате и выйди, когда появится Drezel.",
@@ -9882,7 +10364,8 @@
         "obj": [
          3480
         ]
-       }
+       },
+       "k": "useBlessedWater"
       }
      ],
      "go": {
@@ -9915,7 +10398,8 @@
         "obj": [
          16683
         ]
-       }
+       },
+       "k": "goUpWithWaterToSecondFloor"
       },
       {
        "t": "Снова поговори с Drezel.",
@@ -9929,7 +10413,8 @@
         "npc": [
          9636
         ]
-       }
+       },
+       "k": "talkToDrezelAfterFreeing"
       }
      ],
      "go": {
@@ -9955,7 +10440,8 @@
         "npc": [
          9636
         ]
-       }
+       },
+       "k": "talkToDrezelUnderground"
       }
      ],
      "go": {
@@ -9976,7 +10462,8 @@
         3439,
         9896,
         0
-       ]
+       ],
+       "k": "bringDrezelEssence"
       }
      ],
      "go": {
@@ -10051,7 +10538,8 @@
         "npc": [
          9636
         ]
-       }
+       },
+       "k": "talkToDrezel"
       }
      ],
      "go": {
@@ -10077,7 +10565,8 @@
         "obj": [
          3506
         ]
-       }
+       },
+       "k": "enterSwamp"
       }
      ],
      "go": {
@@ -10110,7 +10599,8 @@
         "obj": [
          3516
         ]
-       }
+       },
+       "k": "tryToEnterGrotto"
       },
       {
        "t": "Поговори с Filliman Tarlock. Диалог: «How long have you been a ghost?».",
@@ -10124,7 +10614,8 @@
         "npc": [
          943
         ]
-       }
+       },
+       "k": "talkToFilliman"
       }
      ],
      "go": {
@@ -10157,7 +10648,8 @@
         "obj": [
          3516
         ]
-       }
+       },
+       "k": "tryToEnterGrotto"
       },
       {
        "t": "Подними таз для умывания (Washing bowl) рядом с Grotto.",
@@ -10166,7 +10658,8 @@
         3437,
         3337,
         0
-       ]
+       ],
+       "k": "takeWashingBowl"
       },
       {
        "t": "Подними зеркало (Mirror) рядом с Grotto.",
@@ -10175,7 +10668,8 @@
         3437,
         3337,
         0
-       ]
+       ],
+       "k": "takeMirror"
       },
       {
        "t": "Используй зеркало на Filliman Tarlock. Диалог: «How long have you been a ghost?».",
@@ -10189,7 +10683,8 @@
         "npc": [
          943
         ]
-       }
+       },
+       "k": "useMirrorOnFilliman"
       }
      ],
      "go": {
@@ -10222,7 +10717,8 @@
         "obj": [
          3516
         ]
-       }
+       },
+       "k": "tryToEnterGrotto"
       },
       {
        "t": "Правой кнопкой обыщи дерево Grotto (Search) — получишь Journal.",
@@ -10236,7 +10732,8 @@
         "obj": [
          3517
         ]
-       }
+       },
+       "k": "searchGrotto"
       },
       {
        "t": "Используй дневник (Journal) на Filliman Tarlock. Диалог: «How can I help?».",
@@ -10250,7 +10747,8 @@
         "npc": [
          943
         ]
-       }
+       },
+       "k": "useJournalOnFilliman"
       }
      ],
      "go": {
@@ -10283,7 +10781,8 @@
         "obj": [
          3516
         ]
-       }
+       },
+       "k": "tryToEnterGrotto"
       },
       {
        "t": "Используй дневник (Journal) на Filliman Tarlock. Диалог: «How can I help?».",
@@ -10297,7 +10796,8 @@
         "npc": [
          943
         ]
-       }
+       },
+       "k": "useJournalOnFilliman"
       }
      ],
      "go": {
@@ -10330,7 +10830,8 @@
         "npc": [
          9636
         ]
-       }
+       },
+       "k": "talkToDrezelForBlessing"
       }
      ],
      "go": {
@@ -10352,7 +10853,8 @@
         "obj": [
          3509
         ]
-       }
+       },
+       "k": "castSpellAndGetMushroom"
       },
       {
        "t": "Используй гриб (Mushroom) на коричневый камень (Brown stone) перед Grotto. Если уже использовал — обыщи камень.",
@@ -10366,7 +10868,8 @@
         "obj": [
          3527
         ]
-       }
+       },
+       "k": "useMushroom"
       },
       {
        "t": "Используй карточку заклинания (Used spell) на серый камень (Gray stone) перед Grotto. Если уже использовал — обыщи камень.",
@@ -10380,7 +10883,8 @@
         "obj": [
          3529
         ]
-       }
+       },
+       "k": "useSpellCard"
       },
       {
        "t": "Встань на оранжевый камень (Orange stone) перед Grotto.",
@@ -10389,7 +10893,8 @@
         3440,
         3335,
         0
-       ]
+       ],
+       "k": "standOnOrange"
       },
       {
        "t": "Скажи Filliman Tarlock, что готов. Диалог: «I think I've solved the puzzle!».",
@@ -10403,7 +10908,8 @@
         "npc": [
          943
         ]
-       }
+       },
+       "k": "tellFillimanToCast"
       }
      ],
      "go": {
@@ -10436,7 +10942,8 @@
         "obj": [
          3516
         ]
-       }
+       },
+       "k": "enterGrotto"
       },
       {
        "t": "Внутри Grotto обыщи алтарь (Altar).",
@@ -10450,7 +10957,8 @@
         "obj": [
          3520
         ]
-       }
+       },
+       "k": "searchAltar"
       },
       {
        "t": "Поговори с Filliman в Grotto — он благословит серп (Silver sickle).",
@@ -10464,7 +10972,8 @@
         "npc": [
          943
         ]
-       }
+       },
+       "k": "talkToFillimanInGrotto"
       }
      ],
      "go": {
@@ -10504,7 +11013,8 @@
         "obj": [
          3516
         ]
-       }
+       },
+       "k": "enterGrotto"
       },
       {
        "t": "Внутри Grotto обыщи алтарь (Altar).",
@@ -10518,7 +11028,8 @@
         "obj": [
          3520
         ]
-       }
+       },
+       "k": "searchAltar"
       },
       {
        "t": "Поговори с Nature Spirit в Grotto — он благословит серп.",
@@ -10532,7 +11043,8 @@
         "npc": [
          944
         ]
-       }
+       },
+       "k": "blessSickle"
       }
      ],
      "go": {
@@ -10562,7 +11074,8 @@
      "do": [
       {
        "t": "Правой кнопкой «Bloom» благословлённым серпом рядом с гнилыми брёвнами в Mort Myre — вырастет Mort Myre fungi. Наполни ими druid pouch.",
-       "s": "Bloom серпом у гнилых брёвен — Mort Myre fungi в druid pouch"
+       "s": "Bloom серпом у гнилых брёвен — Mort Myre fungi в druid pouch",
+       "k": "fillPouches"
       },
       {
        "t": "Используй наполненный druid pouch на Ghast — после этого его можно атаковать; убей 3 штуки.",
@@ -10571,7 +11084,8 @@
         "npc": [
          945
         ]
-       }
+       },
+       "k": "killGhasts"
       }
      ],
      "items": [
@@ -10599,7 +11113,8 @@
         "obj": [
          3516
         ]
-       }
+       },
+       "k": "enterGrottoAgain"
       },
       {
        "t": "Поговори с Nature Spirit в Grotto — квест пройден.",
@@ -10613,7 +11128,8 @@
         "npc": [
          944
         ]
-       }
+       },
+       "k": "talkToNatureSpiritToFinish"
       }
      ],
      "go": {
@@ -10699,7 +11215,8 @@
         "npc": [
          4407
         ]
-       }
+       },
+       "k": "talkToAva"
       }
      ],
      "go": {
@@ -10725,7 +11242,8 @@
         "npc": [
          4411
         ]
-       }
+       },
+       "k": "talkToAlicesHusband"
       }
      ],
      "go": {
@@ -10759,7 +11277,8 @@
         "npc": [
          504
         ]
-       }
+       },
+       "k": "talkToAlice"
       }
      ],
      "go": {
@@ -10786,7 +11305,8 @@
         "npc": [
          4411
         ]
-       }
+       },
+       "k": "talkToAlicesHusband2"
       }
      ],
      "go": {
@@ -10819,7 +11339,8 @@
         "npc": [
          504
         ]
-       }
+       },
+       "k": "talkToAlice2"
       }
      ],
      "go": {
@@ -10845,7 +11366,8 @@
         "npc": [
          4411
         ]
-       }
+       },
+       "k": "talkToAlicesHusband2"
       }
      ],
      "go": {
@@ -10878,7 +11400,8 @@
         "npc": [
          504
         ]
-       }
+       },
+       "k": "talkToAlice2"
       }
      ],
      "go": {
@@ -10904,7 +11427,8 @@
         "npc": [
          2996
         ]
-       }
+       },
+       "k": "talkToOldCrone"
       }
      ],
      "go": {
@@ -10938,7 +11462,8 @@
         "npc": [
          4411
         ]
-       }
+       },
+       "k": "giveAmuletToHusband"
       }
      ],
      "go": {
@@ -10971,7 +11496,8 @@
         "npc": [
          4412
         ]
-       }
+       },
+       "k": "talkToAlicesHusband3"
       }
      ],
      "go": {
@@ -11005,7 +11531,8 @@
         "npc": [
          4412
         ]
-       }
+       },
+       "k": "buyUndeadChickens"
       },
       {
        "t": "Отдай двух нежить-кур Ava.",
@@ -11019,7 +11546,8 @@
         "npc": [
          4407
         ]
-       }
+       },
+       "k": "giveChickensToAva"
       }
      ],
      "go": {
@@ -11059,7 +11587,8 @@
         "npc": [
          4409
         ]
-       }
+       },
+       "k": "talkToWitch"
       }
      ],
      "go": {
@@ -11088,7 +11617,8 @@
         2978,
         3240,
         0
-       ]
+       ],
+       "k": "goToIronMine"
       },
       {
        "t": "Глядя на север, используй молот (Hammer) на выделенную железную руду.",
@@ -11098,7 +11628,8 @@
          "Hammer",
          "Selected Iron"
         ]
-       }
+       },
+       "k": "useHammerOnMagnet"
       },
       {
        "t": "Отдай Bar magnet Ava.",
@@ -11112,7 +11643,8 @@
         "npc": [
          4407
         ]
-       }
+       },
+       "k": "giveMagnetToAva"
       }
      ],
      "go": {
@@ -11140,7 +11672,8 @@
         "npc": [
          4417
         ]
-       }
+       },
+       "k": "attemptToCutTree"
       }
      ],
      "items": [
@@ -11167,7 +11700,8 @@
         "npc": [
          13433
         ]
-       }
+       },
+       "k": "talkToTurael"
       }
      ],
      "go": {
@@ -11202,7 +11736,8 @@
         "npc": [
          4417
         ]
-       }
+       },
+       "k": "cutTree"
       },
       {
        "t": "Отдай Undead twigs Ava.",
@@ -11216,7 +11751,8 @@
         "npc": [
          4407
         ]
-       }
+       },
+       "k": "giveTwigsToAva"
       }
      ],
      "go": {
@@ -11241,7 +11777,8 @@
         "npc": [
          4407
         ]
-       }
+       },
+       "k": "getNotesFromAva"
       }
      ],
      "go": {
@@ -11257,7 +11794,8 @@
      "do": [
       {
        "t": "Переведи записи: нажимай на все подсвеченные переключатели.",
-       "s": "Переведи записи: нажми все подсвеченные переключатели"
+       "s": "Переведи записи: нажми все подсвеченные переключатели",
+       "k": "translateNotes"
       }
      ]
     },
@@ -11276,7 +11814,8 @@
         "npc": [
          4407
         ]
-       }
+       },
+       "k": "giveNotesToAva"
       }
      ],
      "go": {
@@ -11291,7 +11830,8 @@
      "do": [
       {
        "t": "Соедини Hard leather и Polished buttons с выкройкой (Pattern).",
-       "s": "Соедини Hard leather и Polished buttons с Pattern"
+       "s": "Соедини Hard leather и Polished buttons с Pattern",
+       "k": "buildPattern"
       }
      ],
      "items": [
@@ -11325,7 +11865,8 @@
         "npc": [
          4407
         ]
-       }
+       },
+       "k": "giveContainerToAva"
       }
      ],
      "go": {
@@ -11392,7 +11933,8 @@
         "npc": [
          1158
         ]
-       }
+       },
+       "k": "talkToWarrior"
       }
      ],
      "go": {
@@ -11418,7 +11960,8 @@
         "obj": [
          2409
         ]
-       }
+       },
+       "k": "chopTree"
       },
       {
        "t": "Поговори с Shamus. Диалог: «I've been in that shed, I didn't see a city».",
@@ -11432,7 +11975,8 @@
         "npc": [
          1162
         ]
-       }
+       },
+       "k": "talkToShamus"
       }
      ],
      "go": {
@@ -11457,7 +12001,8 @@
         "npc": [
          1167
         ]
-       }
+       },
+       "k": "goToEntrana"
       },
       {
        "t": "Спустись по лестнице на северной стороне острова. Вернуться можно только телепортом. Диалог: «Well that is a risk I will have to take».",
@@ -11471,7 +12016,8 @@
         "obj": [
          2408
         ]
-       }
+       },
+       "k": "goDownHole"
       },
       {
        "t": "Убивай зомби, пока с одного не выпадет топор (Bronze axe).",
@@ -11480,7 +12026,8 @@
         2843,
         9760,
         0
-       ]
+       ],
+       "k": "getAxe"
       },
       {
        "t": "Попробуй срубить ветку с дерева Dramen: появится дух дерева (Tree Spirit, 101 ур.) — от него можно спрятаться за грибами рядом.",
@@ -11494,7 +12041,8 @@
         "obj": [
          1292
         ]
-       }
+       },
+       "k": "attemptToCutDramen"
       },
       {
        "t": "Убей Tree Spirit (безопасно — за грибами к востоку).",
@@ -11508,7 +12056,8 @@
         "npc": [
          1163
         ]
-       }
+       },
+       "k": "killDramenSpirit"
       }
      ],
      "go": {
@@ -11533,7 +12082,8 @@
         "obj": [
          2408
         ]
-       }
+       },
+       "k": "goDownHole"
       },
       {
        "t": "Убивай зомби, пока с одного не выпадет топор (Bronze axe).",
@@ -11542,7 +12092,8 @@
         2843,
         9760,
         0
-       ]
+       ],
+       "k": "getAxe"
       },
       {
        "t": "Срежь минимум одну ветку Dramen (лучше четыре — не придётся возвращаться в следующих квестах).",
@@ -11556,11 +12107,13 @@
         "obj": [
          1292
         ]
-       }
+       },
+       "k": "cutDramenBranch"
       },
       {
        "t": "Телепортируйся прочь с ветками — лучше в Lumbridge.",
-       "s": "Телепортируйся с ветками, лучше в Lumbridge"
+       "s": "Телепортируйся с ветками, лучше в Lumbridge",
+       "k": "teleportAway"
       },
       {
        "t": "Используй нож (Knife) на ветку Dramen — получится Dramen staff.",
@@ -11570,7 +12123,8 @@
          "Knife",
          "Dramen branch"
         ]
-       }
+       },
+       "k": "craftBranch"
       },
       {
        "t": "Войди в сарай к югу от Lumbridge с Dramen staff в руках — это вход в Zanaris.",
@@ -11587,7 +12141,8 @@
         "item": [
          "Dramen staff"
         ]
-       }
+       },
+       "k": "enterZanaris"
       }
      ],
      "go": {
@@ -11670,7 +12225,8 @@
         "npc": [
          5832
         ]
-       }
+       },
+       "k": "talkToMartin"
       }
      ],
      "go": {
@@ -11691,7 +12247,8 @@
         "npc": [
          2663
         ]
-       }
+       },
+       "k": "talkToFarmers"
       },
       {
        "t": "Вернись к Martin на рынок Draynor. Диалог: «Ask about the quest».",
@@ -11705,7 +12262,8 @@
         "npc": [
          5832
         ]
-       }
+       },
+       "k": "talkToMartinAgain"
       }
      ],
      "go": {
@@ -11732,7 +12290,8 @@
         "obj": [
          2406
         ]
-       }
+       },
+       "k": "enterZanaris"
       },
       {
        "t": "Поговори с Fairy Godfather в тронном зале. Диалог: «Where's the Fairy Queen?».",
@@ -11746,7 +12305,8 @@
         "npc": [
          1840
         ]
-       }
+       },
+       "k": "talkToGodfather"
       }
      ],
      "go": {
@@ -11771,7 +12331,8 @@
         "obj": [
          2406
         ]
-       }
+       },
+       "k": "enterZanaris"
       },
       {
        "t": "Поговори с Fairy Nuff на северо-западе Zanaris.",
@@ -11785,7 +12346,8 @@
         "npc": [
          1841
         ]
-       }
+       },
+       "k": "talkToNuff"
       }
      ],
      "go": {
@@ -11810,7 +12372,8 @@
         "npc": [
          5841
         ]
-       }
+       },
+       "k": "talkToZandar"
       }
      ],
      "go": {
@@ -11831,7 +12394,8 @@
         3106,
         3383,
         0
-       ]
+       ],
+       "k": "getSkull"
       },
       {
        "t": "Поговори с Malignius Mortifer к западу от Port Sarim. Диалог: «I need help with fighting a Tanglefoot» → «I was asking you about fighting a Tanglefoot».",
@@ -11845,7 +12409,8 @@
         "npc": [
          1783
         ]
-       }
+       },
+       "k": "talkToMortifer"
       }
      ],
      "go": {
@@ -11870,7 +12435,8 @@
         "obj": [
          3516
         ]
-       }
+       },
+       "k": "enterGrotto"
       },
       {
        "t": "Поговори с Nature Spirit — он зачарует секатор.",
@@ -11884,7 +12450,8 @@
         "npc": [
          944
         ]
-       }
+       },
+       "k": "talkToSpirit"
       }
      ],
      "go": {
@@ -11923,7 +12490,8 @@
         "obj": [
          2406
         ]
-       }
+       },
+       "k": "enterZanarisForFight"
       },
       {
        "t": "Войди в логово Tanglefoot на юге Zanaris, у космического алтаря.",
@@ -11937,7 +12505,8 @@
         "obj": [
          11999
         ]
-       }
+       },
+       "k": "enterTanglefootRoom"
       },
       {
        "t": "Убей большого Tanglefoot волшебным секатором (Magic secateurs) — урон по нему только им; можно «зацепить» на углу.",
@@ -11951,7 +12520,8 @@
         "npc": [
          5848
         ]
-       }
+       },
+       "k": "killTanglefoot"
       }
      ],
      "go": {
@@ -11976,7 +12546,8 @@
         "npc": [
          1840
         ]
-       }
+       },
+       "k": "talkToGodfatherToFinish"
       }
      ],
      "go": {
@@ -12052,7 +12623,8 @@
         "npc": [
          5832
         ]
-       }
+       },
+       "k": "talkToMartin"
       }
      ],
      "go": {
@@ -12068,7 +12640,8 @@
      "do": [
       {
        "t": "Подожди 5 минут.",
-       "s": "Подожди 5 минут"
+       "s": "Подожди 5 минут",
+       "k": "waitForMartin"
       }
      ],
      "items": []
@@ -12088,7 +12661,8 @@
         "npc": [
          5832
         ]
-       }
+       },
+       "k": "talkToMartinAgain"
       }
      ],
      "go": {
@@ -12115,7 +12689,8 @@
         "obj": [
          2406
         ]
-       }
+       },
+       "k": "enterZanaris"
       },
       {
        "t": "Обыщи сертификат (Healing certificate) в комнате Fairy Nuff.",
@@ -12129,7 +12704,8 @@
         "obj": [
          16315
         ]
-       }
+       },
+       "k": "takeCertificate"
       },
       {
        "t": "Правой кнопкой изучи сертификат (Study).",
@@ -12138,7 +12714,8 @@
         "item": [
          "Nuff's certificate"
         ]
-       }
+       },
+       "k": "studyCertificate"
       },
       {
        "t": "Прочти табличку у Cosmic Temple на юге Zanaris.",
@@ -12152,7 +12729,8 @@
         "obj": [
          16307
         ]
-       }
+       },
+       "k": "readSign"
       },
       {
        "t": "Поговори с Fairy Godfather в тронном зале. Диалог: «Where is the Fairy Queen?» → «Where could she have been taken to?» → «Yes, okay».",
@@ -12166,7 +12744,8 @@
         "npc": [
          1840
         ]
-       }
+       },
+       "k": "talkToGodfather"
       },
       {
        "t": "С сертификатом Nuff в сумке пройди по фейским кольцам: A.I.R., D.L.R., D.J.Q., затем A.J.S.",
@@ -12180,7 +12759,8 @@
         "obj": [
          29560
         ]
-       }
+       },
+       "k": "goToHideout"
       },
       {
        "t": "Поговори с Fairy Nuff.",
@@ -12194,7 +12774,8 @@
         "npc": [
          1841
         ]
-       }
+       },
+       "k": "talkToNuff"
       }
      ],
      "go": {
@@ -12219,7 +12800,8 @@
         "npc": [
          1840
         ]
-       }
+       },
+       "k": "pickpocketGodfather"
       },
       {
        "t": "Отдай Fairy Nuff секатор королевы (Queen's secateurs).",
@@ -12233,7 +12815,8 @@
         "npc": [
          1841
         ]
-       }
+       },
+       "k": "giveSecateursToNuff"
       }
      ],
      "go": {
@@ -12254,7 +12837,8 @@
         2355,
         4455,
         0
-       ]
+       ],
+       "k": "goTalkNuffAfterSec"
       }
      ],
      "go": {
@@ -12275,11 +12859,13 @@
         "obj": [
          29560
         ]
-       }
+       },
+       "k": "goToCkp"
       },
       {
        "t": "Дождись появления star flower.",
-       "s": "Дождись star flower"
+       "s": "Дождись star flower",
+       "k": "waitForStarFlower"
       },
       {
        "t": "Сорви star flower.",
@@ -12293,7 +12879,8 @@
         "npc": [
          1857
         ]
-       }
+       },
+       "k": "pickStarFlower"
       },
       {
        "t": "Пройди по кольцу D.I.R., готовым к бою с Gorak (они пробивают защитные молитвы).",
@@ -12302,7 +12889,8 @@
         "obj": [
          29560
         ]
-       }
+       },
+       "k": "goToDir"
       },
       {
        "t": "Убивай Gorak ради когтей.",
@@ -12311,11 +12899,13 @@
         "npc": [
          1834
         ]
-       }
+       },
+       "k": "killGorak"
       },
       {
        "t": "Подбери когти Gorak (Gorak claw).",
-       "s": "Подбери Gorak claw"
+       "s": "Подбери Gorak claw",
+       "k": "pickupGorakClaw"
       },
       {
        "t": "Добавь star flower во флакон воды (Vial of water).",
@@ -12325,7 +12915,8 @@
          "Star flower",
          "Vial of water"
         ]
-       }
+       },
+       "k": "useStarFlowerOnVial"
       },
       {
        "t": "Используй ступку (Pestle and mortar) на когти Gorak.",
@@ -12335,7 +12926,8 @@
          "Pestle and mortar",
          "Gorak claws"
         ]
-       }
+       },
+       "k": "usePestleOnClaw"
       },
       {
        "t": "Добавь порошок когтей на недоделанное зелье.",
@@ -12345,7 +12937,8 @@
          "Gorak claw powder",
          "Magic essence (unf)"
         ]
-       }
+       },
+       "k": "usePowderOnPotion"
       },
       {
        "t": "С сертификатом Nuff в сумке пройди по фейским кольцам: A.I.R., D.L.R., D.J.Q., затем A.J.S.",
@@ -12354,7 +12947,8 @@
         "obj": [
          29495
         ]
-       }
+       },
+       "k": "goToHideout2"
       },
       {
        "t": "Используй готовое зелье (Magic essence) на королеву фей.",
@@ -12371,7 +12965,8 @@
         "item": [
          "Magic essence"
         ]
-       }
+       },
+       "k": "usePotionOnQueen"
       }
      ],
      "go": {
@@ -12396,7 +12991,8 @@
         "npc": [
          1842
         ]
-       }
+       },
+       "k": "talkToQueen"
       }
      ],
      "go": {
@@ -12552,7 +13148,8 @@
         "npc": [
          8019
         ]
-       }
+       },
+       "k": "talkToNarnode"
       }
      ],
      "go": {
@@ -12578,7 +13175,8 @@
         "npc": [
          6091
         ]
-       }
+       },
+       "k": "flyGandius"
       },
       {
        "t": "Поговори с G.L.O. Caranock на верфи.",
@@ -12592,7 +13190,8 @@
         "npc": [
          1460
         ]
-       }
+       },
+       "k": "talkToCaranock"
       },
       {
        "t": "Вернись к королю Narnode Shareen в Tree Gnome Stronghold.",
@@ -12606,7 +13205,8 @@
         "npc": [
          8019
         ]
-       }
+       },
+       "k": "talkToNarnodeAfterShipyard"
       },
       {
        "t": "Поговори с Daero на 1-м этаже Tree Gnome Stronghold — пройди все варианты диалога, пока не появится «Leave...». Диалог: «Leave» → «Who is it?» → «Yes» → «Talk about the 10th squad».",
@@ -12620,7 +13220,8 @@
         "npc": [
          1444
         ]
-       }
+       },
+       "k": "talkToDaero"
       },
       {
        "t": "Поговори с Daero в ангаре.",
@@ -12634,7 +13235,8 @@
         "npc": [
          1444
         ]
-       }
+       },
+       "k": "talkToDaeroInHangar"
       },
       {
        "t": "Используй панель перезагрузки (Reinitialisation panel) и реши головоломку.",
@@ -12648,7 +13250,8 @@
         "obj": [
          4871
         ]
-       }
+       },
+       "k": "clickPuzzle"
       },
       {
        "t": "Снова поговори с Daero в ангаре.",
@@ -12662,7 +13265,8 @@
         "npc": [
          1444
         ]
-       }
+       },
+       "k": "talkToDaeroAfterPuzzle"
       },
       {
        "t": "Поговори с Waydar. Диалог: «Yes».",
@@ -12676,7 +13280,8 @@
         "npc": [
          6675
         ]
-       }
+       },
+       "k": "talkToWaydarAfterPuzzle"
       },
       {
        "t": "Поговори с Lumdo.",
@@ -12690,7 +13295,8 @@
         "npc": [
          1453
         ]
-       }
+       },
+       "k": "talkToLumdo"
       },
       {
        "t": "Поговори с Waydar на Crash Island. Диалог: «I cannot convince Lumdo to take us to the island».",
@@ -12704,7 +13310,8 @@
         "npc": [
          6675
         ]
-       }
+       },
+       "k": "talkToWaydarOnCrash"
       }
      ],
      "go": {
@@ -12745,7 +13352,8 @@
         "npc": [
          6675
         ]
-       }
+       },
+       "k": "talkToWaydarAfterPuzzle"
       },
       {
        "t": "Иди на запад и войди в долину на север ВКЛЮЧИВ Protect from Ranged. Остерегайся яда и урона.",
@@ -12760,7 +13368,8 @@
          1453,
          1444
         ]
-       }
+       },
+       "k": "enterValley"
       },
       {
        "t": "Дождись, когда стражник-горилла отойдёт от камеры, выберись и иди к северной стороне тюрьмы.",
@@ -12769,7 +13378,8 @@
         2779,
         2802,
         0
-       ]
+       ],
+       "k": "leavePrison"
       },
       {
        "t": "Держись восточного края города и дойди до Garkor на юго-востоке.",
@@ -12783,7 +13393,8 @@
         "npc": [
          7158
         ]
-       }
+       },
+       "k": "talkToGarkor"
       },
       {
        "t": "Иди на запад и войди в большое открытое здание через южную дверь. НЕ СТАНОВИСЬ НА СВЕТЛЫЙ ПОЛ.",
@@ -12797,7 +13408,8 @@
         "obj": [
          4710
         ]
-       }
+       },
+       "k": "enterDentureBuilding"
       },
       {
        "t": "НЕ ХОДИ ПО СВЕТЛОМУ ПОЛУ. Обыщи сложенные ящики — Monkey dentures. Диалог: «Yes».",
@@ -12811,7 +13423,8 @@
         "obj": [
          4715
         ]
-       }
+       },
+       "k": "searchForDentures"
       },
       {
        "t": "Обыщи ящик в юго-восточном углу и спустись в пещеру. Диалог: «Yes, I'm sure».",
@@ -12825,7 +13438,8 @@
         "obj": [
          4714
         ]
-       }
+       },
+       "k": "goDownFromDentures"
       },
       {
        "t": "Обыщи ящик на северо-западе комнаты — M'amulet mould. Диалог: «Yes».",
@@ -12839,11 +13453,13 @@
         "obj": [
          4724
         ]
-       }
+       },
+       "k": "searchForMould"
       },
       {
        "t": "Телепортируйся наружу и подготовься к опасному участку: энергия/стамина, еда, зелья молитвы.",
-       "s": "Телепорт наружу: энергия, еда, Prayer potion"
+       "s": "Телепорт наружу: энергия, еда, Prayer potion",
+       "k": "leaveToPrepareForBar"
       },
       {
        "t": "Возьми еду, противоядие, зелья энергии/стамины/молитвы и вернись на Ape Atoll.",
@@ -12859,7 +13475,8 @@
          6675,
          1453
         ]
-       }
+       },
+       "k": "goUpToDaeroForAmuletRun"
       },
       {
        "t": "Войди в подземелье на юге Ape Atoll.",
@@ -12873,7 +13490,8 @@
         "obj": [
          4780
         ]
-       }
+       },
+       "k": "enterDungeonForAmuletRun"
       },
       {
        "t": "Поговори с Zooknock на северо-востоке подземелья. Диалог: «What do we need for the monkey amulet?» → «I'll be back later».",
@@ -12887,7 +13505,8 @@
         "npc": [
          7170
         ]
-       }
+       },
+       "k": "talkToZooknock"
       },
       {
        "t": "Используй Monkey dentures на Zooknock. Если уже делал — открой журнал квестов для синхронизации.",
@@ -12901,7 +13520,8 @@
         "npc": [
          7170
         ]
-       }
+       },
+       "k": "useDentures"
       },
       {
        "t": "Используй M'amulet mould на Zooknock. Если уже делал — открой журнал квестов для синхронизации.",
@@ -12915,7 +13535,8 @@
         "npc": [
          7170
         ]
-       }
+       },
+       "k": "useMould"
       },
       {
        "t": "Используй Gold bar на Zooknock. Если уже делал — открой журнал квестов для синхронизации.",
@@ -12929,11 +13550,13 @@
         "npc": [
          7170
         ]
-       }
+       },
+       "k": "useBar"
       },
       {
        "t": "Телепортируйся наружу и подготовься: еда, зелья молитвы, противоядие, форма (mould) и Enchanted bar.",
-       "s": "Телепорт наружу: еда, Prayer potion, противоядие, mould, Enchanted bar"
+       "s": "Телепорт наружу: еда, Prayer potion, противоядие, mould, Enchanted bar",
+       "k": "leaveToPrepareForAmulet"
       },
       {
        "t": "Возьми еду, противоядие, зелья молитвы и вернись на Ape Atoll.",
@@ -12949,7 +13572,8 @@
          6675,
          1453
         ]
-       }
+       },
+       "k": "goUpToDaeroForAmuletMake"
       },
       {
        "t": "Иди на запад и войди в долину на север ВКЛЮЧИВ Protect from Ranged. Остерегайся яда и урона.",
@@ -12964,7 +13588,8 @@
          1453,
          1444
         ]
-       }
+       },
+       "k": "enterValleyForAmuletMake"
       },
       {
        "t": "Дождись, когда стражник-горилла отойдёт от камеры, выберись и иди к северной стороне тюрьмы, затем спускайся в подвал храма.",
@@ -12978,7 +13603,8 @@
         "obj": [
          4879
         ]
-       }
+       },
+       "k": "enterTemple"
       },
       {
        "t": "Используй Enchanted bar на стену пламени (Wall of flame).",
@@ -12992,7 +13618,8 @@
         "obj": [
          4766
         ]
-       }
+       },
+       "k": "useBarOnFlame"
       },
       {
        "t": "Вылезай по верёвке. Если планируешь Recipe for Disaster — убей Zombie monkey (кости) здесь и гориллу наверху.",
@@ -13006,7 +13633,8 @@
         "obj": [
          4881
         ]
-       }
+       },
+       "k": "leaveTempleDungeon"
       },
       {
        "t": "Иди на северо-запад острова и несколько раз поговори с детёнышем обезьяны (Monkey child). В итоге отдашь ему 5 бананов и получишь Monkey talisman. Диалог: «Well I'll be a monkey's uncle!» → «How many bananas did Aunty want?» → «Ok, I promise!» → «I've lost that toy you gave me» → «Wow - can I borrow it?».",
@@ -13020,7 +13648,8 @@
         "npc": [
          5268
         ]
-       }
+       },
+       "k": "talkToMonkeyChild"
       },
       {
        "t": "Снова поговори с детёнышем обезьяны.",
@@ -13034,7 +13663,8 @@
         "npc": [
          5268
         ]
-       }
+       },
+       "k": "talkToMonkeyChild2"
       },
       {
        "t": "Снова поговори с детёнышем обезьяны.",
@@ -13048,7 +13678,8 @@
         "npc": [
          5268
         ]
-       }
+       },
+       "k": "talkToMonkeyChild3"
       },
       {
        "t": "Отдай детёнышу 5 бананов.",
@@ -13062,7 +13693,8 @@
         "npc": [
          5268
         ]
-       }
+       },
+       "k": "giveChildBananas"
       },
       {
        "t": "Дождись, когда тётя сделает обход, затем поговори с детёнышем — он отдаст талисман.",
@@ -13076,7 +13708,8 @@
         "npc": [
          5268
         ]
-       }
+       },
+       "k": "talkToChildForTalisman"
       },
       {
        "t": "Этот раздел готовит к Recipe for Disaster. Не нужен — отметь галочкой раздел и пропусти. Диалог: «I've lost that toy you gave me» → «Wow - can I borrow it?» → «Ok, I promise!».",
@@ -13090,7 +13723,8 @@
         "npc": [
          5268
         ]
-       }
+       },
+       "k": "talkToChildFor4Talismans"
       },
       {
        "t": "Убей обезьяну-лучника (Monkey archer) ради костей.",
@@ -13104,7 +13738,8 @@
         "npc": [
          5274
         ]
-       }
+       },
+       "k": "killNinja"
       },
       {
        "t": "Убей гориллу в храме ради костей; если она достаёт — лечится при ударе, лучше безопасное место или флинч.",
@@ -13118,7 +13753,8 @@
         "npc": [
          5275
         ]
-       }
+       },
+       "k": "killGorilla"
       },
       {
        "t": "Спустись в подвал храма, чтобы убить Zombie monkey.",
@@ -13132,7 +13768,8 @@
         "obj": [
          4879
         ]
-       }
+       },
+       "k": "goDownToZombie"
       },
       {
        "t": "Убей Zombie monkey ради костей.",
@@ -13146,11 +13783,13 @@
         "npc": [
          1467
         ]
-       }
+       },
+       "k": "killZombie"
       },
       {
        "t": "Телепортируйся наружу и подготовься: еда, зелья молитвы, противоядие.",
-       "s": "Телепорт наружу: еда, Prayer potion, противоядие"
+       "s": "Телепорт наружу: еда, Prayer potion, противоядие",
+       "k": "leaveToPrepareForTalismanRun"
       },
       {
        "t": "Возьми еду, противоядие, зелья молитвы и вернись на Ape Atoll.",
@@ -13166,7 +13805,8 @@
          6675,
          1453
         ]
-       }
+       },
+       "k": "goUpToDaeroForTalismanRun"
       },
       {
        "t": "Войди в подземелье на юге Ape Atoll.",
@@ -13180,7 +13820,8 @@
         "obj": [
          4780
         ]
-       }
+       },
+       "k": "enterDungeonForTalismanRun"
       },
       {
        "t": "Используй Monkey talisman на Zooknock. Если уже делал — открой журнал квестов для синхронизации.",
@@ -13194,7 +13835,8 @@
         "npc": [
          7170
         ]
-       }
+       },
+       "k": "useTalisman"
       },
       {
        "t": "Используй Monkey bones на Zooknock. Если уже делал — открой журнал квестов для синхронизации.",
@@ -13208,7 +13850,8 @@
         "npc": [
          7170
         ]
-       }
+       },
+       "k": "useBones"
       }
      ],
      "go": {
@@ -13245,7 +13888,8 @@
          "Gorilla bones",
          "Zombie monkey bones"
         ]
-       }
+       },
+       "k": "leaveDungeonWithGreeGree"
       },
       {
        "t": "Поговори с Monkey Minder в зоопарке Ardougne с надетым greegree Karamjan monkey.",
@@ -13259,7 +13903,8 @@
         "npc": [
          5235
         ]
-       }
+       },
+       "k": "talkToMinder"
       },
       {
        "t": "Поговори с обезьяной в вольере.",
@@ -13273,7 +13918,8 @@
         "npc": [
          5279
         ]
-       }
+       },
+       "k": "talkToMonkeyAtZoo"
       },
       {
        "t": "СНИМИ greegree, снова поговори с Monkey Minder — выйдешь.",
@@ -13287,7 +13933,8 @@
         "npc": [
          5235
         ]
-       }
+       },
+       "k": "talkToMinderAgain"
       },
       {
        "t": "ИДИ ПЕШКОМ к Daero и возвращайся на Ape Atoll. Телепортом — начнёшь заново.",
@@ -13303,7 +13950,8 @@
          6675,
          1453
         ]
-       }
+       },
+       "k": "goUpToDaeroForTalkingToAwow"
       },
       {
        "t": "Поговори с Garkor.",
@@ -13317,7 +13965,8 @@
         "npc": [
          7158
         ]
-       }
+       },
+       "k": "talkToGarkorWithMonkey"
       },
       {
        "t": "Поговори со стражей у здания на юго-востоке Marim. Если уже говорил — открой журнал квестов.",
@@ -13331,7 +13980,8 @@
         "npc": [
          5278
         ]
-       }
+       },
+       "k": "talkToGuard"
       },
       {
        "t": "Поговори с Kruk на северо-западе острова.",
@@ -13345,7 +13995,8 @@
         "npc": [
          5257
         ]
-       }
+       },
+       "k": "talkToKruk"
       },
       {
        "t": "Поговори с Awowogei — два раза.",
@@ -13359,7 +14010,8 @@
         "obj": [
          4771
         ]
-       }
+       },
+       "k": "talkToAwow"
       },
       {
        "t": "Поговори с Garkor.",
@@ -13373,7 +14025,8 @@
         "npc": [
          7158
         ]
-       }
+       },
+       "k": "talkToGarkorForSigil"
       }
      ],
      "go": {
@@ -13399,15 +14052,18 @@
         "npc": [
          7158
         ]
-       }
+       },
+       "k": "talkToGarkorForSigil"
       },
       {
        "t": "Подготовься к бою с Jungle Demon. Когда будешь готов, надень 10th squad sigil.",
-       "s": "К бою с Jungle Demon; надень 10th squad sigil"
+       "s": "К бою с Jungle Demon; надень 10th squad sigil",
+       "k": "prepareForBattle"
       },
       {
        "t": "Убей Jungle Demon: Protect from Magic и держи дистанцию.",
-       "s": "Убей Jungle Demon: Protect from Magic, держи дистанцию"
+       "s": "Убей Jungle Demon: Protect from Magic, держи дистанцию",
+       "k": "killDemon"
       }
      ],
      "go": {
@@ -13441,7 +14097,8 @@
         "npc": [
          8019
         ]
-       }
+       },
+       "k": "talkToNarnodeToFinish"
       }
      ],
      "go": {

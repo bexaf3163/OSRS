@@ -50,6 +50,10 @@ processResources {
 	from('../src/data/dangerZones.json') {
 		into 'com/osrspath/bridge'
 	}
+	// Машины состояний квестов (условия Quest Helper, по которым выбирается шаг этапа) — тоже одни данные с приложением.
+	from('../src/data/questMachines.json') {
+		into 'com/osrspath/bridge'
+	}
 }
 
 // Тесты читают маршрут приложения, чтобы проверить названия квестов и шаблоны сообщений.
