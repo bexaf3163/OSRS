@@ -135,6 +135,7 @@ export function analyze(events: TelemetryEvent[], badLines = 0): Report {
   // Строка, на которой сейчас курсор: с неё считается «сколько стоим» и что закрыл игрок кнопкой.
   let line: { stepId: string; cursor: number; size: number; text: string; since: number; start: [number, number, number] | null; farthest: number } | null = null;
   let lastClickAt = -Infinity;
+  let emptyBeats = 0;
 
   const closeLine = (until: number) => {
     if (!line) return;
@@ -215,7 +216,11 @@ export function analyze(events: TelemetryEvent[], badLines = 0): Report {
       case 'beat': {
         const p = pos(e.pos);
         if (line && line.start && p) line.farthest = Math.max(line.farthest, dist(line.start, p));
-        if (e.hud === false && e.guide === false && str(e.step)) {
+        // Первый пульс после входа в шаг приходит раньше, чем плашки успели нарисоваться (так было в живом сеансе):
+        // пусто считается только на втором пульсе подряд.
+        if (e.hud === false && e.guide === false && str(e.step)) emptyBeats++;
+        else emptyBeats = 0;
+        if (emptyBeats === 2) {
           add({ severity: 'bad', code: 'BEAT_EMPTY', at: e.t, step: str(e.step) ?? undefined, text: `Шаг ${str(e.step)} выбран, а ни плашка, ни список не показаны (пульс сеанса)` });
         }
         break;

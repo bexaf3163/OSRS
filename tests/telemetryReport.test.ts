@@ -118,6 +118,7 @@ describe('analyze: правила', () => {
     const r = analyze([
       ...header,
       ev(30_000, 'beat', { step: 'S2-07', hud: false, guide: false, pos: [3000, 3000, 0] }),
+      ev(60_000, 'beat', { step: 'S2-07', hud: false, guide: false, pos: [3000, 3000, 0] }),
       ev(31_000, 'ui', { view: 'guide', text: 'Нормально\n' + 'x'.repeat(120) }),
       ev(32_000, 'ui', { view: 'hud', text: 'Копать ??? руду' }),
       ev(33_000, 'end'),
@@ -125,6 +126,12 @@ describe('analyze: правила', () => {
     const codes = r.findings.map((f) => f.code);
     expect(codes).toEqual(expect.arrayContaining(['BEAT_EMPTY', 'UI_LONG', 'UI_GLYPH']));
     expect(r.findings[0].severity).toBe('bad');
+  });
+
+  it('один пустой пульс сразу после входа в шаг — не ошибка (плашки ещё не нарисованы)', () => {
+    const r = analyze([...header, ev(30_000, 'beat', { step: 'S2-07', hud: false, guide: false, pos: [3000, 3000, 0] }),
+      ev(60_000, 'beat', { step: 'S2-07', hud: false, guide: true, pos: [3000, 3000, 0] }), ev(61_000, 'end')]);
+    expect(r.findings.map((f) => f.code)).not.toContain('BEAT_EMPTY');
   });
 
   it('скриншоты перечисляются; обрезанный и неоконченный журнал отмечены', () => {
