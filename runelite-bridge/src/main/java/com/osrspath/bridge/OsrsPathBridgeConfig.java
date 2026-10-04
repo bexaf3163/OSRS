@@ -243,11 +243,24 @@ public interface OsrsPathBridgeConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "shopWindow",
+		name = "Окно у банка и торговца",
+		description = "Отдельная карточка рядом с банком, биржей и окном торговца: что взять из банка, что купить и где это продают — для любого квеста. "
+			+ "Ничего не перекладывает и не покупает",
+		section = companion,
+		position = 19
+	)
+	default boolean showShopWindow()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "showGeHelper",
 		name = "Подсказка на бирже",
 		description = "При открытой Grand Exchange: оптовый список покупок из приложения. Сам ничего не покупает",
 		section = companion,
-		position = 19
+		position = 20
 	)
 	default boolean showGeHelper()
 	{

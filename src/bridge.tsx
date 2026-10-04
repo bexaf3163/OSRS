@@ -32,6 +32,7 @@ const BRANCH_KEY = 'osrs-put:branch-choice';
 /** Последний оптовый список — уходит в игру снова, когда RuneLite перезапустили. */
 const PLAN_KEY = 'osrs-put:shopping-plan';
 const MOVES_KEY = 'osrs-put:moves';
+const GEAR_KEY = 'osrs-put:last-gear';
 /** Шаг, показанный в игре: после перезапуска программы или RuneLite он возвращается в игру сам. */
 const ACTIVE_KEY = 'osrs-put:active-step';
 /** Автозапуск — один раз за запуск программы (в разработке StrictMode вызывает эффекты дважды). */
@@ -77,6 +78,8 @@ interface BridgeValue {
   syncPlan: (plan: ShoppingPlanPayload) => Promise<boolean>;
   /** Снаряжение, сумка и монеты из игры; null — неизвестно. */
   gear: GearState | null;
+  /** Последнее известное снаряжение, сумка и монеты — записано, пока игра шла; показывается, когда RuneLite закрыт. Не «сейчас». */
+  lastGear: LastGear | null;
   /** Темп прокачки шага, показанного в игре. */
   pacing: PacingState | null;
   /** Временная цель в игре (место или магазин); null — стрелка ведёт к шагу. */
@@ -136,6 +139,26 @@ function loadJson<T extends object>(key: string, fallback: T | null): T | null {
     // Нет хранилища или мусор — по умолчанию.
   }
   return fallback;
+}
+
+/** Снимок снаряжения для показа без связи: чей, когда записан и что тогда было. */
+export interface LastGear {
+  at: number;
+  player: string;
+  gear: GearState;
+}
+
+/** Читается с недоверием: хранилище правят руками и другие версии. Мусор — как будто ничего не записывали. */
+export function parseLastGear(raw: unknown): LastGear | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const o = raw as Record<string, unknown>;
+  const gear = parseGear(o.gear);
+  if (!gear || typeof o.at !== 'number' || !Number.isFinite(o.at) || o.at <= 0 || typeof o.player !== 'string' || !o.player || o.player.length > 40) return null;
+  return { at: o.at, player: o.player, gear };
+}
+
+function loadLastGear(): LastGear | null {
+  return parseLastGear(loadJson<Record<string, unknown>>(GEAR_KEY, null));
 }
 
 /** Выбор ветки по шагам: берём только пары «шаг → строка». */
@@ -210,12 +233,23 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const [shortestPath, setShortestPath] = useState(false);
   const [branchChoice, setBranchChoice] = useState<Record<string, string>>(loadBranchChoice);
   const [gear, setGear] = useState<GearState | null>(null);
+  const [lastGear, setLastGear] = useState<LastGear | null>(loadLastGear);
   const [pacing, setPacing] = useState<PacingState | null>(null);
   const [xp, setXp] = useState<PlayerStats | null>(null);
   const [questsDone, setQuestsDone] = useState<string[] | null>(null);
   // Скачки персонажа (смерть, телепорт): хранятся короткое время — после перезапуска программы режим восстановления не теряется.
   const [moves, setMoves] = useState<MoveEvent[]>(() => (loadJson<{ list: MoveEvent[] }>(MOVES_KEY, null)?.list ?? []).filter((m) => m && typeof m.at === 'number' && Date.now() - m.at < 3_600_000).slice(-8));
   const [player, setPlayer] = useState<string | null>(null);
+  // Сумка, надетое и монеты запоминаются, пока игра идёт: закрыли RuneLite или программу — последнее известное остаётся.
+  useEffect(() => {
+    if (!gear || !player) return undefined;
+    const t = setTimeout(() => {
+      const saved: LastGear = { at: Date.now(), player, gear };
+      saveJson(GEAR_KEY, saved);
+      setLastGear(saved);
+    }, 2000);
+    return () => clearTimeout(t);
+  }, [gear, player]);
   const [session, setSession] = useState<SessionBase>(() => ({
     startedAt: Date.now(), levels0: null, xp0: null,
     closed0: Object.entries(progress.steps).filter(([, v]) => v === 'done' || v === 'skipped').map(([k]) => k),
@@ -650,11 +684,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     () => ({
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, userClearedAt, plugin,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, navigate, clearNav, userClearedAt, plugin,
       xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, pacing, navTarget, navigate, clearNav, userClearedAt, plugin,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, navigate, clearNav, userClearedAt, plugin,
       xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;

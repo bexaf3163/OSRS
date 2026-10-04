@@ -83,6 +83,12 @@ describe('проверка вылета', () => {
     expect(r.missing).toBe(0);
   });
 
+  it('банк из сохранённого прошлого сеанса помечен временем записи; мусор вместо времени игнорируется', () => {
+    expect(parseOwned({ bankSeen: true, bankSavedAt: 1_700_000_000_000, items: [] })?.bankSavedAt).toBe(1_700_000_000_000);
+    expect(parseOwned({ bankSeen: true, items: [] })?.bankSavedAt).toBeUndefined();
+    for (const bad of ['вчера', -5, 0, NaN, null]) expect(parseOwned({ bankSeen: true, bankSavedAt: bad, items: [] })?.bankSavedAt, String(bad)).toBeUndefined();
+  });
+
   it('мусор в событии OWNED отбрасывается', () => {
     const o = parseOwned({ bankSeen: true, items: [{ name: 'Rope', carried: -3, bank: 'x' }, null, { carried: 1 }] })!;
     expect(o.items.get(nameKey('rope'))).toMatchObject({ carried: 0, noted: 0 });

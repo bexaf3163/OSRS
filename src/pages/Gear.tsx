@@ -2,7 +2,7 @@
 // и банка, купить у торговца или на бирже, накопить. Считается по формулам урона OSRS Wiki против противника
 // ближайшего шага с боем. Данные о снаряжении — из RuneLite; без него — по уровням из профиля.
 
-import { useBridge } from '../bridge';
+import { useBridge, type LastGear } from '../bridge';
 import { useStore } from '../store';
 import { formatGp } from '../lib/shopping';
 import { wealthOf } from '../lib/wealth';
@@ -124,7 +124,7 @@ function lockGroups(locked: LockedItem[]): LockedItem[][] {
 }
 
 export function GearPage() {
-  const { state, stats, gear } = useBridge();
+  const { state, stats, gear, lastGear } = useBridge();
   const { mode, steps } = useStore();
   const { advice, fightStep, pricesReady, pricesFailed } = useGearAdvice();
   const places = usePlaceMap();
@@ -189,6 +189,8 @@ export function GearPage() {
           {pricesFailed ? ' Цены биржи недоступны (нет интернета?) — покупки на бирже без цены.' : !pricesReady ? ' Загружаю цены биржи…' : ''}
         </p>
       </section>
+
+      {!advice.live && lastGear && <LastKnown last={lastGear} />}
 
       <section className="card section-card" aria-labelledby="gear-now">
         <h2 id="gear-now" className="card-title">Сделать сейчас — бить быстрее</h2>
@@ -285,5 +287,25 @@ export function GearPage() {
       </p>
       <PlaceMapView view={places.view} onClose={places.close} />
     </div>
+  );
+}
+
+/** Что было у персонажа, когда игру закрыли: не «сейчас», а запись — поэтому с датой и именем. */
+function LastKnown({ last }: { last: LastGear }) {
+  const g = last.gear;
+  const worn = (g.equipment ?? []).map((i) => i.name);
+  const bag = (g.inventory ?? []).map((i) => (i.count && i.count > 1 ? `${i.name} ×${i.count}` : i.name));
+  return (
+    <section className="card section-card" aria-labelledby="gear-last">
+      <h2 id="gear-last" className="card-title">Последнее известное — {last.player}, {new Date(last.at).toLocaleString('ru-RU')}</h2>
+      <p className="muted small">Запись, пока игра шла. Что изменилось после — программа узнает, когда RuneLite подключится.</p>
+      {worn.length > 0 && <p className="small"><strong>Надето:</strong> {worn.join(', ')}</p>}
+      {bag.length > 0 && <p className="small"><strong>В сумке:</strong> {bag.join(', ')}</p>}
+      {g.coins !== null && (
+        <p className="small">
+          <strong>Монеты:</strong> {formatGp(g.coins)} gp{g.bankCoins != null ? `, в банке ${formatGp(g.bankCoins)}` : ''}
+        </p>
+      )}
+    </section>
   );
 }

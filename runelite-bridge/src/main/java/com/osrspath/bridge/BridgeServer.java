@@ -73,7 +73,7 @@ public final class BridgeServer
 	 */
 	static final int PROTOCOL = 6;
 	/** Версия плагина — та же, что у программы, с которой он едет в одном exe. */
-	static final String PLUGIN_VERSION = "2.23.0";
+	static final String PLUGIN_VERSION = "2.24.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	/** Снимок целиком — шаг с этапами квеста, закупки и план в одном теле. */
@@ -306,9 +306,19 @@ public final class BridgeServer
 	 */
 	public void owned(boolean bankSeen, List<Map<String, Object>> items)
 	{
+		owned(bankSeen, null, items);
+	}
+
+	/** bankSavedAt — банк взят из сохранённого прошлого сеанса (время записи), а не прочитан из игры сейчас; null — прочитан сейчас. */
+	public void owned(boolean bankSeen, Long bankSavedAt, List<Map<String, Object>> items)
+	{
 		Map<String, Object> e = new LinkedHashMap<>();
 		e.put("type", "OWNED");
 		e.put("bankSeen", bankSeen);
+		if (bankSavedAt != null)
+		{
+			e.put("bankSavedAt", bankSavedAt);
+		}
 		e.put("items", items);
 		if (e.equals(lastOwned))
 		{

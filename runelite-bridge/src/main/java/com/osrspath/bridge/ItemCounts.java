@@ -31,6 +31,12 @@ final class ItemCounts
 		}
 	}
 
+	/** Число по ID предметов — для сохранения банка между сеансами. Копия: счётчики не изменить снаружи. */
+	Map<Integer, Integer> idCounts()
+	{
+		return new HashMap<>(byId);
+	}
+
 	/** Всё вместе: сумка + банкноты + банк — сколько предмета есть у игрока вообще. null пропускаются. */
 	static ItemCounts sum(ItemCounts... parts)
 	{

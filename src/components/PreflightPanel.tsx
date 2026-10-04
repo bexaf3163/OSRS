@@ -47,7 +47,7 @@ export function PreflightPanel({ step }: { step: Step }) {
         </ul>
         <p className={`preflight-verdict ${r.ready ? 'is-ready' : ''}`} role="status">
           {r.ready ? '🟢 Всё готово — можно идти'
-            : owned.bankSeen ? `Не готов к походу: не хватает ${r.missing}`
+            : owned.bankSeen ? `Не готов к походу: не хватает ${r.missing}${owned.bankSavedAt ? '. Банк — по записи прошлого сеанса: открой его, чтобы обновить.' : ''}`
               : `Не готов к походу: не хватает ${r.missing}. Открой банк — покажу, что там есть, и подсвечу нужное.`}
         </p>
       </>

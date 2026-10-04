@@ -171,6 +171,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private OsrsPathDebugOverlay debugOverlay;
 
 	@Inject
+	private OsrsPathShopOverlay shopOverlay;
+
+	@Inject
 	private KeyManager keyManager;
 
 	@Inject
@@ -243,6 +246,16 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private ItemCounts carried = ItemCounts.EMPTY;
 	private ItemCounts noted = ItemCounts.EMPTY;
 	private ItemCounts bank;
+	/** Банк подгружен из прошлого сеанса (из настроек профиля), а не прочитан из игры; пока банк не откроют, он «последний известный». */
+	private boolean bankFromSave;
+	private long bankSavedAt;
+	/** Банк изменился и ещё не записан в настройки. */
+	private boolean bankDirty;
+	private long bankWrittenAt;
+	/** Тиков с входа в игру, пока ищем снимок банка: профиль RuneLite появляется не в тот же миг, что вход. */
+	private int bankLoadTicks;
+	static final long BANK_SAVE_GAP_MS = 3_000;
+	static final int BANK_LOAD_TICKS = 30;
 	private final Map<Integer, String> itemNames = new HashMap<>();
 	private Set<Integer> wantedIds = Collections.emptySet();
 	private Set<String> wantedNames = Collections.emptySet();
@@ -314,6 +327,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		startTelemetry();
 		startServer();
 		overlayManager.add(debugOverlay);
+		overlayManager.add(shopOverlay);
 		debugHotkey = new HotkeyListener(() -> config.debugKey())
 		{
 			@Override
@@ -389,9 +403,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	@Override
 	protected void shutDown()
 	{
+		saveBank(true);
 		keyManager.unregisterKeyListener(debugHotkey);
 		keyManager.unregisterKeyListener(shotHotkey);
 		overlayManager.remove(debugOverlay);
+		overlayManager.remove(shopOverlay);
 		debugVisible = false;
 		stopTelemetry();
 		stopServer();
@@ -699,6 +715,15 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	}
 
 	/** Плашки сообщают, что нарисовали: сторож движка ловит «шаг есть, а на экране пусто». */
+	/** Окно у банка, биржи или торговца сейчас на экране: старая проверка вылета у банка тогда не нужна — окно её заменяет. */
+	@Getter
+	private volatile boolean shopShown;
+
+	void shopWindowShown(boolean shown)
+	{
+		shopShown = shown;
+	}
+
 	void hudShown(boolean shown)
 	{
 		hudOnScreen = shown;
@@ -2260,9 +2285,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				server.setPlayer(null);
 				server.setPos(null, null, null);
 			}
+			// Банк этого персонажа — в настройки, пока профиль ещё его: следующий вход начнёт не с «банк неизвестен».
+			saveBank(true);
 			carried = ItemCounts.EMPTY;
 			noted = ItemCounts.EMPTY;
 			bank = null;
+			bankFromSave = false;
+			bankDirty = false;
+			bankLoadTicks = 0;
 			radar.reset();
 			danger = DangerRadar.QUIET;
 			lastPosition = null;
@@ -2337,6 +2367,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				updateHud();
 			}
 			debugTick(me);
+			persistBank();
 		}
 		flush();
 	}
@@ -2362,7 +2393,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (ownedDirty)
 		{
 			ownedDirty = false;
-			server.owned(bank != null, ownedReport());
+			server.owned(bank != null, bank != null && bankFromSave ? bankSavedAt : null, ownedReport());
 		}
 		if (gearDirty)
 		{
@@ -2487,7 +2518,84 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			ItemCounts b = new ItemCounts();
 			count(e.getItemContainer(), b, null);
 			bank = b;
+			bankFromSave = false;
+			bankDirty = true;
 			containersChanged();
+		}
+	}
+
+	/** Раз в тик: подгрузить банк прошлого сеанса после входа; записать изменённый банк не чаще раза в несколько секунд. */
+	private void persistBank()
+	{
+		try
+		{
+			if (bank == null && bankLoadTicks < BANK_LOAD_TICKS)
+			{
+				bankLoadTicks++;
+				loadBank();
+			}
+			if (bankDirty && System.currentTimeMillis() - bankWrittenAt >= BANK_SAVE_GAP_MS)
+			{
+				saveBank(false);
+			}
+		}
+		catch (RuntimeException ex)
+		{
+			log.warn("Сохранение банка: {}", ex.toString());
+		}
+	}
+
+	private void loadBank()
+	{
+		BankSnapshot.Loaded l = BankSnapshot.read(configManager.getRSProfileConfiguration(OsrsPathBridgeConfig.GROUP, BankSnapshot.KEY));
+		if (l == null)
+		{
+			return;
+		}
+		ItemCounts b = new ItemCounts();
+		for (Map.Entry<Integer, Integer> e : l.items.entrySet())
+		{
+			try
+			{
+				b.add(e.getKey(), itemName(e.getKey()), e.getValue());
+			}
+			catch (RuntimeException ex)
+			{
+				// Предмета с таким ID у игры нет (мусор в настройках) — пропускаем его, остальной банк годен.
+				log.debug("Предмет {} из сохранённого банка не опознан", e.getKey());
+			}
+		}
+		bank = b;
+		bankFromSave = true;
+		bankSavedAt = l.at;
+		bankLoadTicks = BANK_LOAD_TICKS;
+		tel("bank", "event", "loaded", "items", l.items.size(), "savedAt", l.at);
+		containersChanged();
+	}
+
+	/** Банк — в настройки профиля. force — записать сейчас, не ждать паузы (выход, выключение плагина). */
+	private void saveBank(boolean force)
+	{
+		ItemCounts b = bank;
+		if (b == null || bankFromSave || !bankDirty)
+		{
+			return;
+		}
+		long now = System.currentTimeMillis();
+		if (!force && now - bankWrittenAt < BANK_SAVE_GAP_MS)
+		{
+			return;
+		}
+		try
+		{
+			configManager.setRSProfileConfiguration(OsrsPathBridgeConfig.GROUP, BankSnapshot.KEY, BankSnapshot.write(b, now));
+			bankWrittenAt = now;
+			bankDirty = false;
+			tel("bank", "event", "saved", "items", b.idCounts().size());
+		}
+		catch (RuntimeException ex)
+		{
+			log.warn("Банк не сохранён: {}", ex.toString());
 		}
 	}
 

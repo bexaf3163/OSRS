@@ -60,7 +60,7 @@ class InventoryCheckOverlay extends OverlayPanel
 	{
 		Checklist.Result r = plugin.getChecklist();
 		ActiveTarget target = plugin.getTarget();
-		if (!config.showChecklist() || target == null || r.getRows().isEmpty()
+		if (plugin.isShopShown() || !config.showChecklist() || target == null || r.getRows().isEmpty()
 			|| !visible(client.getWidget(InterfaceID.Bankmain.ITEMS_CONTAINER)))
 		{
 			return null;

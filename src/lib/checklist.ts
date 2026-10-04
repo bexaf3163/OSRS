@@ -16,6 +16,8 @@ export interface OwnedItem {
 
 export interface OwnedState {
   bankSeen: boolean;
+  /** Банк взят из сохранённого прошлого сеанса (время записи, мс), а не прочитан из игры сейчас; нет — прочитан сейчас. */
+  bankSavedAt?: number;
   /** По ключу nameKey(name). */
   items: Map<string, OwnedItem>;
 }
@@ -92,7 +94,7 @@ export function evaluatePreflight(items: PreflightItem[], owned: OwnedState): Pr
 /** Разбор события OWNED из плагина; мусор отбрасывается. */
 export function parseOwned(e: unknown): OwnedState | null {
   if (!e || typeof e !== 'object') return null;
-  const { bankSeen, items } = e as { bankSeen?: unknown; items?: unknown };
+  const { bankSeen, items, bankSavedAt } = e as { bankSeen?: unknown; items?: unknown; bankSavedAt?: unknown };
   if (!Array.isArray(items)) return null;
   const map = new Map<string, OwnedItem>();
   for (const raw of items) {
@@ -108,7 +110,8 @@ export function parseOwned(e: unknown): OwnedState | null {
       bank: typeof r.bank === 'number' ? num(r.bank) : undefined,
     });
   }
-  return { bankSeen: bankSeen === true, items: map };
+  const saved = typeof bankSavedAt === 'number' && Number.isFinite(bankSavedAt) && bankSavedAt > 0 ? bankSavedAt : undefined;
+  return { bankSeen: bankSeen === true, ...(saved !== undefined ? { bankSavedAt: saved } : {}), items: map };
 }
 
 /** Всего у игрока: сумка, банкноты и банк (если его открывали). */
