@@ -676,6 +676,21 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	static final long HEARTBEAT_MS = 30_000;
 	static final int WATCH_TICKS = 5;
 
+	/** Сколько подробных событий каждого вида пишем в минуту: журнал ограничен по размеру, и важное в нём не должно утонуть в потоке. */
+	private final Map<String, long[]> telBudgets = new HashMap<>();
+
+	private boolean telBudget(String kind, int perMinute)
+	{
+		long now = System.currentTimeMillis();
+		long[] b = telBudgets.computeIfAbsent(kind, k -> new long[2]);
+		if (now - b[0] > 60_000)
+		{
+			b[0] = now;
+			b[1] = 0;
+		}
+		return ++b[1] <= perMinute;
+	}
+
 	/** Событие в журнал — если он включён. */
 	private void tel(String kind, Object... pairs)
 	{
@@ -3106,11 +3121,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			// Те же сообщения, по которым Quest Helper понимает, что шаг сделан («Luthas hands you 30 coins.»).
 			qhFacts().add(t.name(), msg);
-			if (config.telemetryDetail())
+			if (config.telemetryDetail() && telBudget("chat", 150))
 			{
 				tel("chat", "type", t.name(), "name", e.getName(), "msg", Text.removeTags(msg));
 			}
-			updateHud();
+			if (stageOf(target) != null)
+			{
+				updateHud();
+			}
 		}
 	}
 
@@ -3140,13 +3158,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			menuBurstAt = now;
 			menuBurst = 0;
 		}
-		if (++menuBurst > 6)
+		if (++menuBurst > 6 || !telBudget("menu", 120))
 		{
 			return;
 		}
 		net.runelite.api.MenuEntry me = e.getMenuEntry();
-		tel("menu", "opt", me.getOption(), "tgt", Text.removeTags(me.getTarget()), "act", me.getType().name(), "id", me.getIdentifier(),
-			"p0", me.getParam0(), "p1", me.getParam1());
+		String target = me.getTarget();
+		tel("menu", "opt", me.getOption(), "tgt", target == null ? "" : Text.removeTags(target), "act", me.getType() == null ? null : me.getType().name(),
+			"id", me.getIdentifier(), "p0", me.getParam0(), "p1", me.getParam1());
 	}
 
 	@Subscribe
@@ -3163,7 +3182,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			updateHud();
 		}
 		else if (telemetry != null && config.telemetryDetail() && client.getGameState() == GameState.LOGGED_IN && loginTick >= 0
-			&& tickCount - loginTick > 8 && varBurst++ < 10)
+			&& tickCount - loginTick > 8 && varBurst++ < 10 && telBudget("varx", 90))
 		{
 			// Остальные переменные игры: из них Quest Helper собирает условия шагов, и по ним видно, что менялось от действия игрока.
 			tel("varx", "varp", e.getVarpId(), "varbit", e.getVarbitId() < 0 ? null : e.getVarbitId(), "to", e.getValue());

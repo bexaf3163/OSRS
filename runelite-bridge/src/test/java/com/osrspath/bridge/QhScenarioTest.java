@@ -168,6 +168,38 @@ public class QhScenarioTest
 		assertTrue("условие «NpcHintArrow» плагин проверить не может", v.isUndecided());
 	}
 
+	/** Любой квест, любое значение переменной, пустая игра, игрок «нигде», забитая сообщениями память: машина не падает и отвечает. */
+	@Test
+	public void всеМашины_навсякийСлучай_неПадают()
+	{
+		int resolved = 0;
+		for (java.util.Map.Entry<String, QhMachine> e : QhMachine.all().entrySet())
+		{
+			for (int value = 0; value <= 520; value++)
+			{
+				QhFakeGame empty = new QhFakeGame();
+				QhFakeGame nowhere = new QhFakeGame();
+				nowhere.pos = null;
+				QhFakeGame noisy = new QhFakeGame();
+				for (int i = 0; i < 400; i++)
+				{
+					noisy.chat("мусор " + i).mes("<col=ff0000>" + i + "</col>").say("Кто-то", "реплика " + i);
+				}
+				for (QhFakeGame g : new QhFakeGame[] {empty, nowhere, noisy})
+				{
+					QhMachine.Verdict v = e.getValue().resolve(value, g, new QhMachine.Session());
+					assertNotNull(e.getKey() + "@" + value, v);
+					if (!v.isUndecided())
+					{
+						resolved++;
+						assertNotNull(e.getKey() + "@" + value, v.getLeaf());
+					}
+				}
+			}
+		}
+		assertTrue("машины почти ничего не решают: " + resolved, resolved > 1000);
+	}
+
 	@Test
 	public void значенияБезШагаУQuestHelper_неРешаются()
 	{
