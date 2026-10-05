@@ -324,7 +324,7 @@ final class StageTracker
 	private boolean ownSatisfied(List<ActiveTarget.StageLine> lines, int i, ItemCounts bag)
 	{
 		ActiveTarget.StageLine l = lines.get(i);
-		return delivered.contains(i) || (bag != null && l.hasHas() && bag.count(null, l.getHas()) > 0);
+		return delivered.contains(i) || l.holds(bag);
 	}
 
 	/**
@@ -342,7 +342,7 @@ final class StageTracker
 		{
 			return false;
 		}
-		String item = ActiveTarget.nameKey(l.getHas());
+		String item = ActiveTarget.nameKey(l.primaryHas());
 		for (int j = i + 1; j < lines.size(); j++)
 		{
 			ActiveTarget.StageLine later = lines.get(j);

@@ -140,4 +140,17 @@ public class SkinPasteStageTest
 			assertFalse(i.getName() + " is still needed at the first line", i.getHave() == StepGuide.Have.DONE);
 		}
 	}
+
+	@Test
+	public void gameRestartedWithTheKeyAlreadyMade_theListDoesNotRollBackToKeli()
+	{
+		List<ActiveTarget.StageLine> lines = lines();
+		int leela = indexOf(lines, "talkToLeela");
+		// The key print was used up making the key, so only the key is left in the bag (live report: the list went back to "Lady Keli").
+		ItemCounts bag = bag(true, true);
+		bag.add(2418, ActiveTarget.nameKey("Bronze key"), 1);
+		StageTracker t = new StageTracker();
+		assertEquals("a fresh start in the furnace hut", leela, t.update(ID, 20, lines, 3227, 3255, 0, bag));
+		assertEquals("and anywhere else", leela, new StageTracker().update(ID, 20, lines, 3127, 3244, 0, bag));
+	}
 }

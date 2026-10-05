@@ -334,8 +334,7 @@ final class StepGuide
 			return cursor;
 		}
 		int at = Math.max(0, Math.min(cursor, lines.size() - 1));
-		while (at < lines.size() - 1 && lines.get(at).getHas() != null && !lines.get(at).getHas().isEmpty()
-			&& carried.count(null, lines.get(at).getHas()) > 0)
+		while (at < lines.size() - 1 && lines.get(at).holds(carried))
 		{
 			at++;
 		}

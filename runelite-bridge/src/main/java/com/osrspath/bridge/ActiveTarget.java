@@ -337,6 +337,32 @@ public class ActiveTarget
 			return has != null && !has.isEmpty();
 		}
 
+		/** The item the step obtains: for "Key print|Bronze key" the first one (the others are what it turns into later). */
+		String primaryHas()
+		{
+			return has == null ? null : has.split("[|]", 2)[0].trim();
+		}
+
+		/**
+		 * Whether the bag holds the step's item. "has" may list alternatives with "|": "Key print|Bronze key" is done by the print and also by the key
+		 * made from it, so a step stays done after the item was used up by the next one (the game restarted with the key already in the bag).
+		 */
+		boolean holds(ItemCounts bag)
+		{
+			if (bag == null || !hasHas())
+			{
+				return false;
+			}
+			for (String name : has.split("[|]"))
+			{
+				if (!name.trim().isEmpty() && bag.count(null, name.trim()) > 0)
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
 		/** The text for a line in the game: the short one from the app, or if there is none, the first sentence of the full one. */
 		String shown()
 		{

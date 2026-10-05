@@ -968,7 +968,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		List<String> conditions = new ArrayList<>();
 		if (line != null && line.hasHas())
 		{
-			conditions.add("has " + line.getHas() + " = " + (bag.count(null, line.getHas()) > 0 ? "TRUE" : "FALSE"));
+			conditions.add("has " + line.getHas() + " = " + (line.holds(bag) ? "TRUE" : "FALSE"));
 		}
 		if (line != null && line.hasNeed())
 		{
