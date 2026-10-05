@@ -1303,6 +1303,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private StageTracker.QhPick qhPick(String stepId, int value, List<ActiveTarget.StageLine> lines)
 	{
 		qhHint = null;
+		stageTracker.qhUndecided(false);
 		if (!config.qhMachine())
 		{
 			qhDescribe = "turned off in the settings";
@@ -1332,6 +1333,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			qhDescribe = "failure: " + ex;
 			return null;
 		}
+		stageTracker.qhUndecided(v.isUndecided());
 		int line = v.isUndecided() || !v.isStrong() ? -1 : m.lineFor(v, lines);
 		// The Quest Helper "sync" step: it has nothing to tell which step the player is on until they open the quest journal.
 		qhHint = !v.isUndecided() && !v.isStrong() && v.getLeaf() != null && v.getLeaf().endsWith("syncStep")

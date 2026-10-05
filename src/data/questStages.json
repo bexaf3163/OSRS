@@ -4340,6 +4340,7 @@
         3244,
         0
        ],
+       "has": "Key print",
        "hl": {
         "npc": [
          11578
@@ -4356,6 +4357,7 @@
         0
        ],
        "need": "Bronze bar",
+       "has": "Bronze key",
        "hl": {
         "obj": [
          24009
@@ -10592,6 +10594,7 @@
         3337,
         0
        ],
+       "has": "Mirror",
        "k": "takeMirror"
       },
       {
@@ -12006,6 +12009,7 @@
          1292
         ]
        },
+       "has": "Dramen branch",
        "k": "cutDramenBranch"
       },
       {
@@ -12022,6 +12026,7 @@
          "Dramen branch"
         ]
        },
+       "has": "Dramen staff",
        "k": "craftBranch"
       },
       {
@@ -12775,6 +12780,7 @@
          1857
         ]
        },
+       "has": "Star flower",
        "k": "pickStarFlower"
       },
       {
@@ -12800,6 +12806,7 @@
       {
        "t": "Pickup the gorak's claws.",
        "s": "Pick up the Gorak claws",
+       "has": "Gorak claws",
        "k": "pickupGorakClaw"
       },
       {
@@ -12822,6 +12829,7 @@
          "Gorak claws"
         ]
        },
+       "has": "Gorak claw powder",
        "k": "usePestleOnClaw"
       },
       {

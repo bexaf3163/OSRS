@@ -71,6 +71,13 @@ final class StageTracker
 	private int floor = -1;
 	/** The cursor is currently set by the Quest Helper machine (it has evidence), not by position and items. */
 	private boolean qhStrong;
+	/** The Quest Helper machine does not decide this step (a condition it cannot read): nothing may hold the player on it, so "done" is always offered. */
+	private boolean qhUndecided;
+
+	void qhUndecided(boolean undecided)
+	{
+		qhUndecided = undecided;
+	}
 
 	/**
 	 * The Quest Helper state machine's pick for this tick: the stage line and why. There is a line only when the machine decided by a fulfilled
@@ -530,7 +537,9 @@ final class StageTracker
 	{
 		// The button also stays when the step is led by the Quest Helper machine: if the game message did not arrive or was reworded, the player is not stuck.
 		// A pressed "done" is stronger than the machine (floor): it will not return the cursor back.
-		return !peeking() && needsManualStep(lines, cursor);
+		// And when the machine cannot decide (a flag of its own that the plugin cannot read), place and items may not see the step either (S2-10: the key print
+		// obtained at Keli, the next step is far away): then the player can always move on by hand.
+		return !peeking() && (needsManualStep(lines, cursor) || (qhUndecided && lines != null && cursor < lines.size() - 1));
 	}
 
 	/** The cursor was set by the Quest Helper machine (not by position and items). */

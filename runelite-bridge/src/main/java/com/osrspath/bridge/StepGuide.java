@@ -378,7 +378,13 @@ final class StepGuide
 		List<ItemLine> items = new ArrayList<>();
 		for (ActiveTarget.GuideItem i : source)
 		{
-			items.add(remembered(item(i, places, carried, bank), i.getName(), got));
+			ItemLine line = remembered(item(i, places, carried, bank), i.getName(), got);
+			// The stage has no list of its own, so the quest's whole list stands in: what the finished lines used up (wool for the wig) is not "needed now".
+			if (stageView != null && !questDone && cur.getItems() == null && spentByEarlierLines(line, i.getName(), stageView.getSteps(), stageView.getCursor()))
+			{
+				line = new ItemLine(line.getTitle(), "✓ already handled - handed in or used", Have.DONE, line.getWhere(), line.getPlace(), line.getName(), "done");
+			}
+			items.add(line);
 		}
 		List<PlaceLine> placeLines = new ArrayList<>();
 		for (int i = 0; i < places.size(); i++)
@@ -410,6 +416,47 @@ final class StepGuide
 			}
 		}
 		return new View(title, t.getGoal(), items, placeLines, detour, note, staged ? null : next(g, items), staged ? null : finale(g), stageView);
+	}
+
+	/**
+	 * An item that is not in the bag or the bank, that a finished stage line talks about and no line from the current one on does: it was used up by those lines
+	 * (the wool for the wig, the ashes for the paste). An item nobody names, or one in the bag or bank, stays as it is.
+	 */
+	static boolean spentByEarlierLines(ItemLine l, String rawName, List<ActiveTarget.StageLine> lines, int cursor)
+	{
+		if (cursor <= 0 || l.getHave() == Have.BAG || l.getHave() == Have.BANK || l.getHave() == Have.DONE)
+		{
+			return false;
+		}
+		boolean before = false;
+		for (int i = 0; i < lines.size(); i++)
+		{
+			ActiveTarget.StageLine s = lines.get(i);
+			if (!names(s, rawName))
+			{
+				continue;
+			}
+			if (i >= cursor)
+			{
+				return false;
+			}
+			before = true;
+		}
+		return before;
+	}
+
+	/** Whether a stage line names the item, in its full or its short text; "Pot of flour" is also named by "flour" (a container is not what the line is about). */
+	private static boolean names(ActiveTarget.StageLine s, String rawName)
+	{
+		String bare = GuideList.baseName(rawName).replaceFirst("(?i)^(pot|bucket|jug|vial|bowl|glass|bottle) of ", "");
+		for (String text : new String[] {s.getT(), s.getS()})
+		{
+			if (text != null && (GuideList.mentions(text, rawName) || GuideList.mentions(text, bare)))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

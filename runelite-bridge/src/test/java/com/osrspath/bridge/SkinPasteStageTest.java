@@ -1,6 +1,8 @@
 package com.osrspath.bridge;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import org.junit.Test;
@@ -73,5 +75,69 @@ public class SkinPasteStageTest
 		assertEquals("the dyed wig is in the bag, no paste yet: Aggie", aggie, t.update(ID, 20, lines, AGGIE_X, AGGIE_Y, 0, bag(true, false)));
 		assertEquals("Aggie hands over the paste: the next step", keli, t.update(ID, 20, lines, AGGIE_X, AGGIE_Y, 0, bag(true, true)));
 		assertEquals("and it stays there while the player walks to the jail", keli, t.update(ID, 20, lines, 3110, 3250, 0, bag(true, true)));
+	}
+
+	private static ActiveTarget target()
+	{
+		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
+		{
+			if (ID.equals(s.target.getStepId()) && s.target.getGuide() != null && s.target.getGuide().getStage() != null)
+			{
+				return s.target;
+			}
+		}
+		throw new AssertionError("no S2-10");
+	}
+
+	@Test
+	public void keyPrintInTheBag_theKeliStepIsDone_nextIsTheFurnace()
+	{
+		List<ActiveTarget.StageLine> lines = lines();
+		int keli = indexOf(lines, "talkToKeli");
+		int key = indexOf(lines, "makeKey");
+		StageTracker t = new StageTracker();
+		ItemCounts noPrint = bag(true, true);
+		assertEquals("at Keli with soft clay", keli, t.update(ID, 20, lines, 3127, 3244, 0, noPrint));
+		ItemCounts print = bag(true, true);
+		print.add(2423, ActiveTarget.nameKey("Key print"), 1);
+		assertEquals("the print was taken: the key at the furnace", key, t.update(ID, 20, lines, 3127, 3244, 0, print));
+	}
+
+	@Test
+	public void machineThatCannotDecide_alwaysOffersDone()
+	{
+		List<ActiveTarget.StageLine> lines = lines();
+		StageTracker t = new StageTracker();
+		t.update(ID, 20, lines, 3127, 3244, 0, bag(true, true));
+		assertFalse("no flag from the machine: only the steps the game cannot see", t.canStepForward(lines) && !StageTracker.needsManualStep(lines, t.cursor()));
+		t.qhUndecided(true);
+		assertTrue(t.canStepForward(lines));
+		int before = t.cursor();
+		assertTrue(t.forward(lines));
+		assertEquals(before + 1, t.cursor());
+		t.qhUndecided(false);
+		assertEquals("decided again: back to the old rule", StageTracker.needsManualStep(lines, t.cursor()), t.canStepForward(lines));
+	}
+
+	@Test
+	public void itemsTheFinishedLinesUsedUp_areNotNeededNow()
+	{
+		ActiveTarget t = target();
+		List<ActiveTarget.StageLine> lines = lines();
+		int keli = indexOf(lines, "talkToKeli");
+		StepGuide.View v = StepGuide.view(t, new ItemCounts(), ItemCounts.EMPTY, null, 0, 0, 0, new java.util.HashSet<String>(), 20, false, keli);
+		for (StepGuide.ItemLine i : v.getItems())
+		{
+			String n = i.getName();
+			if (n.startsWith("Ball of wool") || n.equals("Ashes") || n.equals("Redberries") || n.equals("Pot of flour") || n.equals("Bucket of water"))
+			{
+				assertEquals(n + " was used up by the wig and the paste", StepGuide.Have.DONE, i.getHave());
+			}
+		}
+		StepGuide.View start = StepGuide.view(t, new ItemCounts(), ItemCounts.EMPTY, null, 0, 0, 0, new java.util.HashSet<String>(), 20, false, 0);
+		for (StepGuide.ItemLine i : start.getItems())
+		{
+			assertFalse(i.getName() + " is still needed at the first line", i.getHave() == StepGuide.Have.DONE);
+		}
 	}
 }
