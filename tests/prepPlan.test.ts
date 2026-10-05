@@ -262,3 +262,29 @@ describe('the preparation plan: the engine', () => {
     expect(engine.computed.plan).toBe(2);
   });
 });
+
+describe('made items: the ingredients are planned too (Goblin Diplomacy, Orange dye)', () => {
+  const dye = [mk('G1', [item('Blue dye', 1), item('Orange dye', 1)])];
+  const held = (o: Record<string, Partial<OwnedItem>>) => state(owned({ 'Blue dye': { carried: 1 }, 'Orange dye': { carried: 0, bank: 0 }, 'Red dye': { carried: 0, bank: 0 }, 'Yellow dye': { carried: 0, bank: 0 }, ...o }, true));
+
+  it('a missing Orange dye brings its Red dye, with an arrow to Aggie; the Yellow dye in the bag is not repeated', () => {
+    const p = plan(held({ 'Yellow dye': { carried: 1 } }), { list: dye, id: 'G1' });
+    expect(line(p, 'Orange dye')).toMatchObject({ where: 'MISSING' });
+    expect(line(p, 'Red dye')).toMatchObject({ where: 'MISSING', timing: 'NOW', priority: 'IMPORTANT', action: { kind: 'GATHER' } });
+    expect(line(p, 'Red dye').action?.nav?.label).toMatch(/Aggie/);
+    expect(p.lines.find((l) => l.name === 'Yellow dye')).toBeUndefined();
+    expect(p.now.map((l) => l.name)).toContain('Red dye');
+  });
+
+  it('with both ingredients missing both are listed; with the Orange dye in the bag, neither', () => {
+    const none = plan(held({}), { list: dye, id: 'G1' });
+    expect(none.lines.filter((l) => l.key.startsWith('recipe:')).map((l) => l.name).sort()).toEqual(['Red dye', 'Yellow dye']);
+    const have = plan(held({ 'Orange dye': { carried: 1 } }), { list: dye, id: 'G1' });
+    expect(have.lines.some((l) => l.key.startsWith('recipe:'))).toBe(false);
+  });
+
+  it('a bank that was not opened leaves the ingredients "not checked", never missing', () => {
+    const p = plan(state(owned({ 'Blue dye': { carried: 1 } }, false)), { list: dye, id: 'G1' });
+    expect(line(p, 'Red dye').where).toBe('UNKNOWN');
+  });
+});

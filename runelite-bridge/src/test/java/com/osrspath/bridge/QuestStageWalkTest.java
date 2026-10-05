@@ -46,7 +46,7 @@ public class QuestStageWalkTest
 			}
 			if (l.hasHas())
 			{
-				items.put(ActiveTarget.nameKey(l.primaryHas()), 1);
+				items.put(ActiveTarget.nameKey(l.primaryHas()), Math.max(1, l.hasCount()));
 			}
 			if (l.hasNeed())
 			{

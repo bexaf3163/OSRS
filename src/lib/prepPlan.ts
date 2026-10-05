@@ -12,6 +12,8 @@
 
 import type { Progress, Step, WikiItemDetail } from '../types';
 import { itemById } from '../data';
+import recipesJson from '../data/recipes.json';
+import { npcSpot } from './stepPlaces';
 import type { NavTargetPayload } from '../services/runeliteBridge';
 import { upgradeNav, type UpgradeRecommendation } from '../services/gearUpgradeRouter';
 import { aggregateShopping, plural, type ShoppingLine } from './shopping';
@@ -200,6 +202,35 @@ function sourceAction(src: SourceOption | null, name: string, toGet: number, coi
   };
 }
 
+interface Recipe { makeAt: string; from: { nameEn: string; count: number; how: string; npc?: string }[] }
+const RECIPES = (recipesJson as { recipes: Record<string, Recipe> }).recipes;
+
+/**
+ * An item that is missing but can be made from others (Orange dye from Red and Yellow dye): the ingredients are planned as well, so the player is warned
+ * before leaving the place that makes them. An ingredient already in the bag is not repeated; one that may lie in the bank stays "not checked".
+ */
+function recipeLines(parent: PrepLine, step: Step, state: PlayerState): PrepLine[] {
+  const recipe = RECIPES[parent.name];
+  if (!recipe || (parent.where !== 'MISSING' && parent.where !== 'UNKNOWN')) return [];
+  const out: PrepLine[] = [];
+  for (const ing of recipe.from) {
+    const held = heldOf(state, ing.nameEn);
+    const count = ing.count * Math.max(1, parent.count - ((parent.have.bag ?? 0) + parent.have.noted));
+    if ((held.bag ?? 0) + held.noted >= count) continue;
+    const where: PrepWhere = held.presence === 'UNKNOWN' ? 'UNKNOWN' : (held.bank ?? 0) > 0 ? 'BANK' : held.presence === 'MISSING' ? 'MISSING' : 'INVENTORY';
+    const spot = ing.npc ? npcSpot(ing.npc, step.id) : undefined;
+    out.push({
+      key: `recipe:${parent.key}:${ing.nameEn}`, name: ing.nameEn, count, exact: true, where,
+      have: { bag: held.bag, noted: held.noted, bank: held.bank, equipped: held.equipped },
+      toGet: where === 'MISSING' ? count : null, priority: 'IMPORTANT', timing: parent.timing,
+      action: where === 'BANK' ? bankAction(step, ing.nameEn, count)
+        : { kind: 'GATHER', label: ing.how, ...(spot ? { nav: { label: `${recipe.makeAt}: ${ing.nameEn}`, x: spot.x, y: spot.y, plane: spot.plane, itemName: ing.nameEn, stepId: step.id } } : {}) },
+      why: `${parent.name} is made from ${recipe.from.map((f) => f.nameEn).join(' + ')} — or buy it`, usedIn: parent.usedIn,
+    });
+  }
+  return out;
+}
+
 const ORDER: Record<PrepPriority, number> = { CRITICAL: 0, IMPORTANT: 1, OPTIMIZATION: 2, OPTIONAL: 3 };
 const TIMING: Record<PrepTiming, number> = { NOW: 0, SOON: 1, IN_STEP: 2, LATER: 3 };
 
@@ -272,6 +303,9 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       });
     }
   }
+
+  // Made items: if one is missing, its ingredients are planned too.
+  for (const l of [...lines]) lines.push(...recipeLines(l, step, state));
 
   // Recommended: not needed for the step but it saves time; we do not force it: that is an "improvement".
   const window = tripWindow(i.steps, i.progress, step.id, Math.max(0, ids.length - 1));

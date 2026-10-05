@@ -5366,9 +5366,11 @@
        ],
        "hl": {
         "obj": [
-         16450
+         16450,
+         16561
         ]
        },
+       "has": "Goblin mail|Blue goblin mail|Orange goblin mail",
        "k": "goUpLadder"
       },
       {
@@ -5380,6 +5382,12 @@
          16560
         ]
        },
+       "at": [
+         2951,
+         3508,
+         0
+       ],
+       "has": "Goblin mail|Blue goblin mail|Orange goblin mail x2",
        "k": "getCrate2"
       },
       {
@@ -5390,16 +5398,24 @@
          16559
         ]
        },
+       "at": [
+         2959,
+         3514,
+         0
+       ],
+       "has": "Goblin mail|Blue goblin mail|Orange goblin mail x3",
        "k": "getCrate3"
       },
       {
        "t": "Use the blue dye on one of the goblin mail.",
        "s": "Use the blue dye on a goblin mail",
+       "has": "Blue goblin mail",
        "k": "dyeBlue"
       },
       {
        "t": "Use the orange dye on one of the goblin mail.",
        "s": "Use the orange dye on another goblin mail",
+       "has": "Orange goblin mail",
        "k": "dyeOrange"
       },
       {
@@ -5438,9 +5454,11 @@
        ],
        "hl": {
         "obj": [
-         16450
+         16450,
+         16561
         ]
        },
+       "has": "Goblin mail|Blue goblin mail|Orange goblin mail",
        "k": "goUpLadder"
       },
       {
@@ -5452,6 +5470,12 @@
          16560
         ]
        },
+       "at": [
+         2951,
+         3508,
+         0
+       ],
+       "has": "Goblin mail|Blue goblin mail|Orange goblin mail x2",
        "k": "getCrate2"
       },
       {
@@ -5462,16 +5486,24 @@
          16559
         ]
        },
+       "at": [
+         2959,
+         3514,
+         0
+       ],
+       "has": "Goblin mail|Blue goblin mail|Orange goblin mail x3",
        "k": "getCrate3"
       },
       {
        "t": "Use the blue dye on one of the goblin mail.",
        "s": "Use the blue dye on a goblin mail",
+       "has": "Blue goblin mail",
        "k": "dyeBlue"
       },
       {
        "t": "Use the orange dye on one of the goblin mail.",
        "s": "Use the orange dye on another goblin mail",
+       "has": "Orange goblin mail",
        "k": "dyeOrange"
       },
       {
@@ -5512,7 +5544,7 @@
       {
        "name": "Orange dye",
        "id": 1769,
-       "where": "Mix the red and yellow dyes from step S2-01."
+       "where": "Buy it, or have Aggie in Draynor Village make it from a Red dye (3 redberries + 5 gp) and a Yellow dye (2 onions + 5 gp). Get this before you leave Draynor."
       }
      ]
     },
@@ -5529,9 +5561,11 @@
        ],
        "hl": {
         "obj": [
-         16450
+         16450,
+         16561
         ]
        },
+       "has": "Goblin mail|Blue goblin mail|Orange goblin mail",
        "k": "goUpLadder"
       },
       {
@@ -5543,6 +5577,12 @@
          16560
         ]
        },
+       "at": [
+         2951,
+         3508,
+         0
+       ],
+       "has": "Goblin mail|Blue goblin mail|Orange goblin mail x2",
        "k": "getCrate2"
       },
       {
@@ -5553,11 +5593,18 @@
          16559
         ]
        },
+       "at": [
+         2959,
+         3514,
+         0
+       ],
+       "has": "Goblin mail|Blue goblin mail|Orange goblin mail x3",
        "k": "getCrate3"
       },
       {
        "t": "Use the blue dye on one of the goblin mail.",
        "s": "Use the blue dye on a goblin mail",
+       "has": "Blue goblin mail",
        "k": "dyeBlue"
       },
       {
@@ -5610,9 +5657,11 @@
        ],
        "hl": {
         "obj": [
-         16450
+         16450,
+         16561
         ]
        },
+       "has": "Goblin mail|Blue goblin mail|Orange goblin mail",
        "k": "goUpLadder"
       },
       {
@@ -5624,6 +5673,12 @@
          16560
         ]
        },
+       "at": [
+         2951,
+         3508,
+         0
+       ],
+       "has": "Goblin mail|Blue goblin mail|Orange goblin mail x2",
        "k": "getCrate2"
       },
       {
@@ -5634,6 +5689,12 @@
          16559
         ]
        },
+       "at": [
+         2959,
+         3514,
+         0
+       ],
+       "has": "Goblin mail|Blue goblin mail|Orange goblin mail x3",
        "k": "getCrate3"
       },
       {
@@ -6644,6 +6705,7 @@
          "Bread"
         ]
        },
+       "has": "Steak sandwich",
        "k": "makeSandwich"
       },
       {

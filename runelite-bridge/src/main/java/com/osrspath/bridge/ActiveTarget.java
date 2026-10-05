@@ -304,6 +304,8 @@ public class ActiveTarget
 	@Data
 	public static class StageLine
 	{
+		/** "... x2" at the end of a has text: how many are needed. */
+		private static final java.util.regex.Pattern HAS_COUNT = java.util.regex.Pattern.compile("[ ]*[x×][ ]*([0-9]+)[ ]*$");
 		private String t;
 		/** Short text for a list line in the game (up to ~70 characters); null means the app did not send it and the line shortens itself. */
 		private String s;
@@ -337,15 +339,40 @@ public class ActiveTarget
 			return has != null && !has.isEmpty();
 		}
 
-		/** The item the step obtains: for "Key print|Bronze key" the first one (the others are what it turns into later). */
+		/**
+		 * The "has" text without its count: "Goblin mail x2" gives "Goblin mail". For "Key print|Bronze key" the first item is the one the step obtains
+		 * (the others are what it turns into later).
+		 */
 		String primaryHas()
 		{
-			return has == null ? null : has.split("[|]", 2)[0].trim();
+			return has == null ? null : hasNames().get(0);
+		}
+
+		/** The least number of items that makes the step done: "Goblin mail x2" is 2, no count is 1. */
+		int hasCount()
+		{
+			java.util.regex.Matcher m = HAS_COUNT.matcher(has == null ? "" : has);
+			return m.find() ? Integer.parseInt(m.group(1)) : 1;
+		}
+
+		private java.util.List<String> hasNames()
+		{
+			java.util.List<String> out = new java.util.ArrayList<>();
+			String text = has == null ? "" : HAS_COUNT.matcher(has).replaceFirst("");
+			for (String name : text.split("[|]"))
+			{
+				if (!name.trim().isEmpty())
+				{
+					out.add(name.trim());
+				}
+			}
+			return out.isEmpty() ? java.util.Collections.singletonList("") : out;
 		}
 
 		/**
-		 * Whether the bag holds the step's item. "has" may list alternatives with "|": "Key print|Bronze key" is done by the print and also by the key
-		 * made from it, so a step stays done after the item was used up by the next one (the game restarted with the key already in the bag).
+		 * Whether the bag holds the step's item. "has" may list alternatives with "|" and a count at the end: "Goblin mail|Blue goblin mail|Orange goblin mail x3"
+		 * is done when the three kinds together number three, so a step stays done after the item was used up or turned into another (the dye, the key made
+		 * from the print). The counts of the listed items are added; no count means one.
 		 */
 		boolean holds(ItemCounts bag)
 		{
@@ -353,14 +380,12 @@ public class ActiveTarget
 			{
 				return false;
 			}
-			for (String name : has.split("[|]"))
+			int total = 0;
+			for (String name : hasNames())
 			{
-				if (!name.trim().isEmpty() && bag.count(null, name.trim()) > 0)
-				{
-					return true;
-				}
+				total += name.isEmpty() ? 0 : bag.count(null, name);
 			}
-			return false;
+			return total >= hasCount();
 		}
 
 		/** The text for a line in the game: the short one from the app, or if there is none, the first sentence of the full one. */

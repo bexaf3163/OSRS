@@ -1,0 +1,13 @@
+{
+  "source": "OSRS Wiki: Orange dye, Red dye, Yellow dye (Aggie in Draynor Village).",
+  "note": "Items that are made from other items. If the made item is missing, the ingredients are planned too, so the player is warned before leaving the place where they are made.",
+  "recipes": {
+    "Orange dye": {
+      "makeAt": "Aggie",
+      "from": [
+        { "nameEn": "Red dye", "count": 1, "how": "Aggie in Draynor Village makes it: 3 redberries + 5 gp.", "npc": "Aggie" },
+        { "nameEn": "Yellow dye", "count": 1, "how": "Aggie in Draynor Village makes it: 2 onions + 5 gp.", "npc": "Aggie" }
+      ]
+    }
+  }
+}
