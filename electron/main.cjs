@@ -16,11 +16,13 @@ const isWeb = (url) => /^https?:\/\//i.test(url);
 
 // --- The portable version: everything is next to the exe, so the app can be carried on a flash drive. ---
 const portableDir = process.env.PORTABLE_EXECUTABLE_DIR;
+let freshData = false;
 if (portableDir) {
   const installedData = app.getPath('userData');
   const dataDir = path.join(portableDir, 'OSRS-Put-data');
   // The first launch of the portable version after the regular one — we take the progress along.
   if (!fs.existsSync(dataDir)) {
+    freshData = true;
     try {
       fs.mkdirSync(dataDir, { recursive: true });
       for (const name of ['Local Storage', 'progress.json', 'window.json', 'ui.json']) {
@@ -68,7 +70,7 @@ const saveUi = () => writeAtomic('ui.json', JSON.stringify(ui));
 // Copies outside the app folder: deleting the exe and its data folder does not delete them. The data folder of a
 // fresh install is filled back from the freshest copy (the files that already exist are never touched).
 const autoCopyDir = path.join(app.getPath('appData'), 'OSRS Path', 'progress-copies');
-if (ui.backupOff !== true) restoreFromCopies(app.getPath('userData'), autoCopyDir);
+if (ui.backupOff !== true) restoreFromCopies(app.getPath('userData'), autoCopyDir, freshData);
 
 function stepZoom(current, dir) {
   if (dir > 0) return ZOOM_STEPS.find((s) => s > current + 0.001) ?? ZOOM_STEPS[ZOOM_STEPS.length - 1];
@@ -129,6 +131,10 @@ if (!app.requestSingleInstanceLock()) {
       writeAtomic(name, json);
     }
     pending.clear();
+    // The freshest copy follows every change, so a deleted folder loses seconds, not an hour.
+    if (ui.backupOff !== true) {
+      try { latestCopy(app.getPath('userData'), autoCopyDir); } catch { /* the copies folder is unavailable */ }
+    }
   }
 
   ipcMain.handle('zoom:get', () => zoomState());

@@ -1,7 +1,8 @@
 // "Sync with the account": the game knows which quests are complete and which levels are reached, so the route steps
 // with such an auto-tick can be closed at once, without waiting for the player to go through them with the plugin on.
 // Steps where the auto-tick also needs items (a quest plus a bought Dragon scimitar) are left alone: a quest
-// cannot tell that the item has been bought.
+// cannot tell that the item has been bought. A level goal is different: the levels prove the training was done,
+// and the items listed with it (food, ore) are consumed or sold on the way, so they do not hold the step back.
 
 import type { PlayerStats, Progress, Step } from '../types';
 import { isClosed } from './next-step';
@@ -21,7 +22,7 @@ export function syncCandidates(steps: readonly Step[], p: Progress, questsDone: 
   for (const step of steps) {
     if (isClosed(p, step.id)) continue;
     const t = step.inGame?.completionTrigger;
-    if (!t || t.items?.length) continue;
+    if (!t || (t.items?.length && t.type !== 'SKILL_LEVEL')) continue;
     if (t.type === 'QUEST_COMPLETED' && t.questName && done.has(questKey(t.questName))) {
       out.push({ step, why: `quest ${t.questName} complete` });
     } else if (t.type === 'SKILL_LEVEL' && levels && t.levels?.length && t.levels.every((l) => (levels[l.skill] ?? 0) >= l.level)) {

@@ -94,7 +94,7 @@ describe('copies outside the app and the restore of a fresh data folder', () => 
   const api = createRequire(import.meta.url)('../electron/progress-files.cjs') as {
     dailyBackup: (dir: string, target: string, now?: Date) => number;
     latestCopy: (dir: string, target: string) => void;
-    restoreFromCopies: (dir: string, source: string) => string[];
+    restoreFromCopies: (dir: string, source: string, replaceOlder?: boolean) => string[];
   };
   const at = (s: string) => JSON.stringify({ updatedAt: s, steps: { a: 'done' } });
 
@@ -133,5 +133,33 @@ describe('copies outside the app and the restore of a fresh data folder', () => 
     // The second launch changes nothing, and a missing copies folder is not an error.
     expect(api.restoreFromCopies(d, src)).toEqual([]);
     expect(api.restoreFromCopies(d, join(src, 'nope'))).toEqual([]);
+  });
+
+  it('a stale or fresh data folder never replaces the latest copy', () => {
+    const d = tmp();
+    const out = join(tmp(), 'copies');
+    writeFileSync(join(d, 'progress.json'), at('2026-10-05T10:00:00Z'));
+    api.latestCopy(d, out);
+    // Another data folder (a new install, a test run) with an OLDER state is skipped…
+    writeFileSync(join(d, 'progress.json'), at('2026-10-05T08:00:00Z'));
+    api.latestCopy(d, out);
+    expect(JSON.parse(readFileSync(join(out, 'osrs-put-progress-latest.json'), 'utf8')).updatedAt).toBe('2026-10-05T10:00:00Z');
+    // …and a newer one (also a deliberate reset) goes through.
+    writeFileSync(join(d, 'progress.json'), at('2026-10-05T11:00:00Z'));
+    api.latestCopy(d, out);
+    expect(JSON.parse(readFileSync(join(out, 'osrs-put-progress-latest.json'), 'utf8')).updatedAt).toBe('2026-10-05T11:00:00Z');
+  });
+
+  it('a just-created data folder holding an older state is refreshed from a newer copy, but not the other way round', () => {
+    const src = tmp();
+    writeFileSync(join(src, 'osrs-put-progress-latest.json'), at('2026-10-05T10:00:00Z'));
+    const stale = tmp();
+    writeFileSync(join(stale, 'progress.json'), at('2026-10-05T08:00:00Z'));
+    expect(api.restoreFromCopies(stale, src)).toEqual([]);
+    expect(api.restoreFromCopies(stale, src, true)).toEqual(['progress.json']);
+    expect(JSON.parse(readFileSync(join(stale, 'progress.json'), 'utf8')).updatedAt).toBe('2026-10-05T10:00:00Z');
+    const newerHere = tmp();
+    writeFileSync(join(newerHere, 'progress.json'), at('2026-10-05T12:00:00Z'));
+    expect(api.restoreFromCopies(newerHere, src, true)).toEqual([]);
   });
 });

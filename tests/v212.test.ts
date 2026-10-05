@@ -62,6 +62,11 @@ describe('accountSync', () => {
     const c = syncCandidates([quest, withItems, lvl], emptyProgress(), ['Cooks Assistant', 'Imp Catcher'], { attack: 5 });
     expect(c.map((x) => x.step.id)).toEqual(['Q1', 'L1']);
   });
+  it('a level goal closes the step even when items are listed with it: the levels prove the training', () => {
+    const train = { id: 'T1', inGame: { completionTrigger: { type: 'SKILL_LEVEL', levels: [{ skill: 'mining', level: 15 }], items: [{ names: ['Copper ore'], count: 5 }] } } } as unknown as Step;
+    expect(syncCandidates([train], emptyProgress(), [], { mining: 15 }).map((x) => x.step.id)).toEqual(['T1']);
+    expect(syncCandidates([train], emptyProgress(), [], { mining: 14 })).toEqual([]);
+  });
   it('what is already closed and the unknown are not offered', () => {
     const p = { ...emptyProgress(), steps: { Q1: 'done' as const } };
     expect(syncCandidates([quest, lvl], p, [], { attack: 4 })).toEqual([]);

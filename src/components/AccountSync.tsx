@@ -49,7 +49,7 @@ export function AccountSync({ compact = false }: { compact?: boolean }) {
       <h2 className="card-title">Account sync</h2>
       <p className="muted small">
         The plugin reports which quests are completed and which levels are reached. Steps with such an auto-mark can be closed at once without doing
-        them again, together with the steps they require (those were done on the way). Use it to restore a lost progress. Steps that also need items
+        them again, together with the steps they require (those were done on the way). Use it to restore a lost progress. Quest steps that also need items
         are not touched, and notes cannot be read back from the game. It only marks, it removes nothing.
       </p>
       {state !== 'online' && <p className="muted small">No link with RuneLite — start the game with the plugin.</p>}
