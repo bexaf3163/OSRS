@@ -514,6 +514,7 @@ async function run(browser: Browser) {
       expect(/ready \d+%/.test(trip) && trip.includes('critical'), 'what you need: the readiness in percent and the number of critical ones');
       expect(trip.includes('missing') && /Buy|Take|Obtain|Earn/.test(trip), 'what you need: for each thing — what to do with it');
       if (process.env.UI_SHOTS) await page.locator('.one-trip').screenshot({ path: `${process.env.UI_SHOTS}/prep-plan-${width}.png` }).catch(() => {});
+      if (process.env.UI_SHOTS) await page.screenshot({ path: `${process.env.UI_SHOTS}/step-prep-${width}.png` }).catch(() => {});
       expect(await noOverflow(page), 'one trip: no horizontal scrolling');
       expect(!errors.length, `one trip: no console errors ${errors.join('; ')}`);
       await page.context().close();

@@ -1,6 +1,6 @@
 # OSRS Path — the project map: what exists, where it lies, how it is connected
 
-> This file is written so that it can be dropped whole into another chat with a request to suggest what to add or fix. Project version: **2.30.0** (bridge protocol 6). Repository: https://github.com/bexaf3163/OSRS. The language of the interface and the texts is English.
+> This file is written so that it can be dropped whole into another chat with a request to suggest what to add or fix. Project version: **2.31.0** (bridge protocol 6). Repository: https://github.com/bexaf3163/OSRS. The language of the interface and the texts is English.
 > The inventory is compiled from the sources; a note **[not in the game]** means it was not checked in a live game, only by tests, a browser and a plugin imitation.
 
 ---

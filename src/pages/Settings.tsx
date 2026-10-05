@@ -4,6 +4,7 @@ import { known } from '../data';
 import { useStore } from '../store';
 import { exportFileName, exportProgress, importProgress, type ImportResult } from '../lib/progress';
 import { applyTheme, loadTheme, type Theme } from '../lib/theme';
+import { applyLook, applySolid, loadLook, loadSolid, type Look } from '../lib/look';
 import { desktop, type RuneliteCheck, type ZoomState } from '../lib/desktop';
 import { applyTextScale, loadTextScale, percent, stepScale, TEXT_EVENT, TEXT_STEPS, ZOOM_STEPS } from '../lib/ui-scale';
 import { useBridge } from '../bridge';
@@ -189,9 +190,11 @@ function Stepper({ id, label, value, steps, onChange }: { id: string; label: str
 function Appearance() {
   const bridge = desktop();
   const [theme, setTheme] = useState<Theme>(loadTheme);
+  const [look, setLook] = useState<Look>(loadLook);
+  const [solid, setSolid] = useState(loadSolid);
   const [text, setText] = useState(loadTextScale);
   const [zoom, setZoom] = useState<ZoomState | null>(null);
-  const ids = { theme: useId(), text: useId(), zoom: useId() };
+  const ids = { theme: useId(), look: useId(), text: useId(), zoom: useId() };
 
   useEffect(() => {
     if (!bridge) return;
@@ -211,6 +214,10 @@ function Appearance() {
   const pickTheme = (t: Theme) => {
     setTheme(t);
     applyTheme(t);
+  };
+  const pickLook = (l: Look) => {
+    setLook(l);
+    applyLook(l);
   };
   const pickText = (v: number) => {
     setText(v);
@@ -236,6 +243,23 @@ function Appearance() {
             </button>
           ))}
         </div>
+      </div>
+
+      <div className="setting">
+        <span className="setting-label" id={ids.look}>Look</span>
+        <div className="segmented" role="group" aria-labelledby={ids.look}>
+          {([['glass', 'Glass'], ['classic', 'Classic']] as const).map(([l, label]) => (
+            <button key={l} type="button" aria-pressed={look === l} className={`seg ${look === l ? 'is-active' : ''}`} onClick={() => pickLook(l)}>
+              {label}
+            </button>
+          ))}
+        </div>
+        {look === 'glass' && (
+          <label className="switch">
+            <input type="checkbox" checked={solid} onChange={(e) => { setSolid(e.target.checked); applySolid(e.target.checked); }} />
+            <span>Solid panels (no blur) — for weak graphics</span>
+          </label>
+        )}
       </div>
 
       {bridge && zoom && (

@@ -1511,3 +1511,111 @@ select option { background: var(--surface); color: var(--text); }
 .prep-recovery ol { padding-left: 20px; }
 .prep-recovery-actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .prep-action { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+
+/* ---------- Glass look (default; "Classic" in Settings turns it off, "Solid panels" turns the blur off) ---------- */
+/* Only tokens and surfaces: no layout and no content change. Every rule starts with :root:not([data-look="classic"]). */
+
+/* The ring and the chip strip exist only in the glass look. */
+.ready-ring, .prep-strip { display: none; }
+
+:root:not([data-look="classic"]) {
+  --radius: 14px;
+  --radius-sm: 10px;
+  --glass: rgba(255, 255, 255, 0.72);
+  --glass-border: rgba(22, 24, 29, 0.1);
+  --glass-glow: rgba(36, 88, 211, 0.08);
+  --bg-art: radial-gradient(900px 480px at 12% -8%, rgba(70, 110, 220, 0.14), transparent 70%),
+    radial-gradient(760px 420px at 100% 40%, rgba(40, 170, 130, 0.10), transparent 70%);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-look="classic"]):not([data-theme="light"]) {
+    --bg: #0d0f14; --surface: #171b25; --surface-2: #1e2330; --surface-3: #131720;
+    --border: rgba(255, 255, 255, 0.09); --border-strong: rgba(255, 255, 255, 0.16);
+    --gold: #f5c451; --gold-ink: #f5c451; --gold-soft: rgba(245, 196, 81, 0.12);
+    --done: #34d399; --done-soft: rgba(52, 211, 153, 0.12);
+    --danger: #fb7185; --danger-soft: rgba(244, 63, 94, 0.14);
+    --accent-ink: #7cc4ff;
+    --glass: rgba(24, 28, 38, 0.72); --glass-border: rgba(255, 255, 255, 0.09); --glass-glow: rgba(124, 196, 255, 0.07);
+    --bg-art: radial-gradient(900px 480px at 12% -8%, rgba(59, 91, 219, 0.30), transparent 70%),
+      radial-gradient(760px 420px at 100% 40%, rgba(18, 128, 106, 0.22), transparent 70%),
+      radial-gradient(700px 380px at 40% 110%, rgba(138, 90, 18, 0.18), transparent 70%);
+  }
+}
+:root:not([data-look="classic"])[data-theme="dark"] {
+  --bg: #0d0f14; --surface: #171b25; --surface-2: #1e2330; --surface-3: #131720;
+  --border: rgba(255, 255, 255, 0.09); --border-strong: rgba(255, 255, 255, 0.16);
+  --gold: #f5c451; --gold-ink: #f5c451; --gold-soft: rgba(245, 196, 81, 0.12);
+  --done: #34d399; --done-soft: rgba(52, 211, 153, 0.12);
+  --danger: #fb7185; --danger-soft: rgba(244, 63, 94, 0.14);
+  --accent-ink: #7cc4ff;
+  --glass: rgba(24, 28, 38, 0.72); --glass-border: rgba(255, 255, 255, 0.09); --glass-glow: rgba(124, 196, 255, 0.07);
+  --bg-art: radial-gradient(900px 480px at 12% -8%, rgba(59, 91, 219, 0.30), transparent 70%),
+    radial-gradient(760px 420px at 100% 40%, rgba(18, 128, 106, 0.22), transparent 70%),
+    radial-gradient(700px 380px at 40% 110%, rgba(138, 90, 18, 0.18), transparent 70%);
+}
+
+:root:not([data-look="classic"]) body { background: var(--bg-art), var(--bg); background-attachment: fixed; }
+
+/* The panels: frosted glass. */
+:root:not([data-look="classic"]) .card,
+:root:not([data-look="classic"]) .step-status,
+:root:not([data-look="classic"]) .one-trip,
+:root:not([data-look="classic"]) .training,
+:root:not([data-look="classic"]) .dock > * {
+  background: var(--glass);
+  border-color: var(--glass-border);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  backdrop-filter: blur(14px) saturate(120%);
+}
+/* A soft glow by the state instead of the hard strip on the left. */
+:root:not([data-look="classic"]) .step-status,
+:root:not([data-look="classic"]) .one-trip,
+:root:not([data-look="classic"]) .training { box-shadow: 0 0 24px var(--glass-glow); }
+:root:not([data-look="classic"]) .step-status.is-ready { box-shadow: 0 0 0 1px color-mix(in srgb, var(--done) 35%, transparent), 0 0 24px color-mix(in srgb, var(--done) 16%, transparent); }
+:root:not([data-look="classic"]) .step-status.is-prep { box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 38%, transparent), 0 0 24px color-mix(in srgb, var(--gold) 16%, transparent); }
+:root:not([data-look="classic"]) .step-status.is-blocked { box-shadow: 0 0 0 1px color-mix(in srgb, var(--danger) 40%, transparent), 0 0 24px color-mix(in srgb, var(--danger) 16%, transparent); }
+:root:not([data-look="classic"]) .step-status { padding: 12px 16px; }
+
+/* The stage list: the current step glows gold, as "in progress". */
+:root:not([data-look="classic"]) .rail-step.is-selected { background: var(--gold-soft); color: var(--text); box-shadow: 0 0 0 1px color-mix(in srgb, var(--gold) 45%, transparent), 0 0 18px color-mix(in srgb, var(--gold) 14%, transparent); }
+:root:not([data-look="classic"]) .rail-stage.is-current > .rail-stage-btn { background: var(--gold-soft); }
+:root:not([data-look="classic"]) .rail-stage.is-current .rail-num { background: var(--gold); border-color: var(--gold); color: #1a1405; }
+
+/* The verdict ring: the readiness percent in a ring, in the state colour. */
+:root:not([data-look="classic"]) .status-text { display: inline-flex; align-items: center; gap: 8px; }
+:root:not([data-look="classic"]) .ready-ring {
+  --ring: var(--muted);
+  display: inline-flex; align-items: center; justify-content: center; flex: none;
+  width: 44px; height: 44px; border-radius: 50%;
+  background: conic-gradient(var(--ring) calc(var(--p, 0) * 1%), color-mix(in srgb, var(--text) 10%, transparent) 0);
+}
+:root:not([data-look="classic"]) .ready-ring i {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 34px; height: 34px; border-radius: 50%; background: var(--surface);
+  font-style: normal; font-size: 0.72rem; font-weight: 650; font-variant-numeric: tabular-nums;
+}
+:root:not([data-look="classic"]) .step-status.is-ready .ready-ring { --ring: var(--done); }
+:root:not([data-look="classic"]) .step-status.is-prep .ready-ring { --ring: var(--gold); }
+:root:not([data-look="classic"]) .step-status.is-blocked .ready-ring { --ring: var(--danger); }
+
+/* The chip strip in "What you need": the state is in the words and the colour. */
+:root:not([data-look="classic"]) .prep-strip { display: flex; flex-direction: column; gap: 8px; }
+.prep-strip-group { display: flex; flex-direction: column; gap: 4px; }
+.prep-strip-label { font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.one-trip .prep-strip-chips { display: flex; flex-direction: row; flex-wrap: wrap; gap: 6px; padding-left: 0; list-style: none; margin: 0; }
+.prep-pill { border: 1px solid var(--border); border-radius: 12px; padding: 4px 11px; font-size: 0.82rem; background: color-mix(in srgb, var(--text) 4%, transparent); }
+.prep-pill.is-ok { border-color: color-mix(in srgb, var(--done) 45%, transparent); color: var(--done); }
+.prep-pill.is-bank { border-color: color-mix(in srgb, var(--gold) 50%, transparent); color: var(--gold-ink); }
+.prep-pill.is-missing { border-color: color-mix(in srgb, var(--danger) 55%, transparent); color: var(--danger); }
+.prep-pill.is-unknown { border-style: dashed; color: var(--muted); }
+
+/* Solid panels: no blur, opaque surfaces (weak graphics, or taste). */
+:root[data-solid="1"]:not([data-look="classic"]) .card,
+:root[data-solid="1"]:not([data-look="classic"]) .step-status,
+:root[data-solid="1"]:not([data-look="classic"]) .one-trip,
+:root[data-solid="1"]:not([data-look="classic"]) .training,
+:root[data-solid="1"]:not([data-look="classic"]) .dock > * {
+  background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none;
+}
+:root[data-solid="1"]:not([data-look="classic"]) body { background: var(--bg); }
+@media (prefers-reduced-motion: reduce) { :root:not([data-look="classic"]) * { transition-duration: 0.01ms !important; } }

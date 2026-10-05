@@ -19,7 +19,9 @@ function csp(): Plugin {
     transformIndexHtml: {
       order: 'post',
       handler(html) {
-        const hashes = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => `'sha256-${createHash('sha256').update(m[1]).digest('base64')}'`);
+        // The browser reads CR and CRLF in the page as LF before it hashes the script, so we hash the same text:
+        // a checkout with Windows line endings must not change the hash and block the script.
+        const hashes = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map((m) => `'sha256-${createHash('sha256').update(m[1].replace(/\r\n?/g, '\n')).digest('base64')}'`);
         const policy = [
           "default-src 'none'",
           `script-src 'self' ${hashes.join(' ')}`.trim(),

@@ -5,7 +5,7 @@
 // they hold all the earlier functionality, nothing is removed. When the player is ready, the accordion collapses by itself.
 // Tabs without content are not shown: the components decide themselves whether they have anything to say (null — no).
 
-import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import type { Step } from '../types';
 import { useStore } from '../store';
 import { useBridge } from '../bridge';
@@ -124,7 +124,10 @@ export function StepStatus({ step }: { step: Step }) {
   return (
     <section className={`step-status ${tone}`} aria-label="Step status">
       <div className="status-line">
-        <span className="status-text" role="status"><span aria-hidden="true">{icon}</span> <strong>{shown}</strong></span>
+        <span className="status-text" role="status">
+          {percent !== null && <span className="ready-ring" aria-hidden="true" style={{ '--p': percent } as CSSProperties}><i>{percent}%</i></span>}
+          <span aria-hidden="true">{icon}</span> <strong>{shown}</strong>
+        </span>
         <span className="status-actions">
           {prep && !recovering && canFix && (
             <button type="button" className="btn btn-primary btn-sm" onClick={() => void fix()} disabled={underway}>

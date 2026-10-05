@@ -10,6 +10,7 @@ import { useFeatures } from '../lib/features';
 import { styleOf } from '../lib/playStyle';
 import { formatGp } from '../lib/shopping';
 import { kgText } from '../lib/weight';
+import { prepChipGroups } from '../lib/prepChips';
 import { BAG_SLOTS, type PrepPlan, type PrepAction, type PrepLine, type PrepWhere, type Supply } from '../lib/prepPlan';
 import { NavigateButton } from './NavigateButton';
 import { useUpgradeRecommendation } from './UpgradePrompt';
@@ -86,6 +87,24 @@ export function RecoveryBanner({ step, rec }: { step: Step; rec: NonNullable<Pre
   );
 }
 
+/** The glass look: the same lines as chips by timing, at a glance; the full list with the actions stays below. Hidden in the classic look. */
+function ChipStrip({ plan, showLater }: { plan: PrepPlan; showLater: boolean }) {
+  const groups = prepChipGroups(plan, showLater);
+  if (!groups.length) return null;
+  return (
+    <div className="prep-strip" aria-label="Summary by timing">
+      {groups.map((g) => (
+        <div key={g.key} className="prep-strip-group">
+          <span className="prep-strip-label">{g.label}</span>
+          <ul className="prep-strip-chips">
+            {g.chips.map((c) => <li key={c.key} className={`prep-pill is-${c.state}`}>{c.text}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function Section({ title, hint, lines }: { title: string; hint?: string; lines: PrepLine[] }) {
   if (!lines.length) return null;
   const known = lines.filter((l) => l.where !== 'UNKNOWN');
@@ -130,6 +149,7 @@ export function OneTripCard({ step, inStatus = false }: { step: Step; inStatus?:
           {score.unknown > 0 && <span className="prep-chip is-unknown">? not checked: {score.unknown}</span>}
         </p>
       )}
+      <ChipStrip plan={plan} showLater={profile.showLater} />
       {plan.recovery && !inStatus && <RecoveryBanner step={step} rec={plan.recovery} />}
       {quiet && <p className="small">🟢 <strong>All ready</strong> — you can go.</p>}
       {plan.blockers.length > 0 && (
