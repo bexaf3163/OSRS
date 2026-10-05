@@ -103,7 +103,12 @@ export function ReadinessPanel({ step }: { step: Step }) {
           <ul className="ready-list">{r.unknown.map((x) => <Row key={`${x.kind}-${x.label}`} r={x} />)}</ul>
         </details>
       )}
-      {ok.length > 0 && (
+      {ok.length > 4 ? (
+        <details className="small ready-ok">
+          <summary>✓ {ok.length} requirements met</summary>
+          {ok.map((x) => x.label).join(' · ')}
+        </details>
+      ) : ok.length > 0 && (
         <p className="small ready-ok">✓ {ok.map((x) => x.label).join(' · ')}</p>
       )}
     </section>

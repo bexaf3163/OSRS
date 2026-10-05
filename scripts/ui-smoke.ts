@@ -330,6 +330,7 @@ async function run(browser: Browser) {
     // An old plugin without the protocol field — a request to restart RuneLite.
     {
       const { page } = await open(browser, width, {}, '#/settings');
+      await page.getByRole('tab', { name: 'RuneLite' }).click();
       const t = await text(page, '.plaque-warning');
       expect(t.includes('old plugin') && t.includes('restart RuneLite'), 'settings: a plugin without a handshake — "old plugin, restart RuneLite"');
       await page.context().close();
@@ -391,6 +392,7 @@ async function run(browser: Browser) {
         localStorage: { 'osrs-put:profiles': profiles, [key('alpha one')]: JSON.stringify(rows), [key('beta two')]: JSON.stringify(rows.slice(0, 1)) },
         status: { protocol: 5, pluginVersion: '2.20.0', player: 'Alpha One' },
       }, '#/settings');
+      await page.getByRole('tab', { name: 'Progress and copies' }).click();
       await page.waitForSelector('.ledger-block', { timeout: 5000 });
       const t = await text(page, '.ledger-block');
       expect(t.includes('entries 2') && t.includes('Coins +'), 'journal: the records of the earlier launch are in place');

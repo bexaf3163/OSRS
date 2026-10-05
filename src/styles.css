@@ -735,6 +735,8 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .mode-btn.is-active { background: var(--surface); color: var(--text); box-shadow: 0 0 0 1px var(--border); }
 .mode-btn.is-members.is-active { color: var(--members); box-shadow: 0 0 0 1px color-mix(in srgb, var(--members) 45%, transparent); }
 .mode-label { display: none; }
+.settings-tabs { align-self: flex-start; margin: 0 0 16px; max-width: 100%; height: auto; flex-wrap: wrap; border-radius: 22px; }
+.settings-tabs .mode-btn { padding: 8px 16px; }
 .density-btn { width: 40px; height: 40px; }
 @media (min-width: 520px) and (max-width: 899px), (min-width: 1180px) { .mode-label { display: inline; } }
 @media (min-width: 900px) and (max-width: 1179px) {
@@ -1019,6 +1021,14 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 .rail-step-title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; }
 .rail-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--warn); }
 
+.center.is-switching > * { opacity: 0.55; transition: opacity 120ms; }
+.center.is-switching::before {
+  content: ''; position: sticky; top: 0; z-index: 2; display: block; height: 3px; flex: none; border-radius: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent); background-size: 40% 100%; background-repeat: no-repeat;
+  animation: step-loading 900ms linear infinite;
+}
+@keyframes step-loading { from { background-position: -40% 0; } to { background-position: 140% 0; } }
+@media (prefers-reduced-motion: reduce) { .center.is-switching::before { animation: none; background-size: 100% 100%; } }
 .center { display: flex; flex-direction: column; gap: 12px; padding: 0 4px 24px; min-width: 0; }
 .step-view {
   display: flex; flex-direction: column; gap: 4px;
@@ -1203,6 +1213,8 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 .bridge-dot { font-size: 0.7rem; }
 /* The label by the link icon — only on a very wide window: otherwise the header overflowed the screen (at 1400 px — by 193 px). */
 @media (max-width: 1719px) { .bridge-label { display: none; } }
+.bridge-label-short { display: none; font-size: 0.8rem; font-weight: 600; }
+@media (min-width: 1280px) and (max-width: 1719px) { .bridge-label-short { display: inline; } }
 
 /* A step done in the game — a short green flash on the row. */
 .is-just-done { animation: just-done 1.6s ease-out; }
@@ -1234,6 +1246,7 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 .ingame-route { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 2px; font-size: 0.86rem; }
 
 .preflight { border-top: 1px dashed var(--border); padding-top: 8px; margin-top: 2px; }
+.preflight-details > summary { cursor: pointer; color: var(--muted); margin-bottom: 4px; }
 .preflight-list { list-style: none; margin: 0 0 6px; padding: 0; display: flex; flex-direction: column; gap: 4px; }
 .preflight-row { display: grid; grid-template-columns: 18px 1fr auto; align-items: baseline; gap: 6px; font-size: 0.88rem; }
 .preflight-mark { font-weight: 700; text-align: center; }

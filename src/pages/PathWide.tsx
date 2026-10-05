@@ -1,7 +1,7 @@
 // "Path" on a wide screen (redesign D): on the left a ribbon of stages with steps, in the centre the chosen step,
 // on the right the pinned wiki dossier. The whole route, the step and the dossier are visible at once, without page scrolling.
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
 import type { Step } from '../types';
 import { stepById } from '../data';
 import { useStore } from '../store';
@@ -21,6 +21,9 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   const { advance } = useBridge();
   const suggested = nextStep(steps, progress, qp) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
   const [selectedId, setSelectedId] = useState(() => focusStep ?? suggested.id);
+  // The rail highlights the clicked step at once; the heavy step card follows as a transition with a loading state.
+  const [railId, setRailId] = useState(selectedId);
+  const [switching, startSwitch] = useTransition();
   const selected = steps.find((s) => s.id === selectedId) ?? suggested;
   const current = currentStage(steps, progress);
   const [openStages, setOpenStages] = useState<Set<number>>(() => new Set([selected.stage]));
@@ -30,7 +33,8 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   const select = useCallback((id: string, focus = true) => {
     const step = stepById.get(id);
     if (!step) return;
-    setSelectedId(id);
+    setRailId(id);
+    startSwitch(() => setSelectedId(id));
     setOpenStages((o) => (o.has(step.stage) ? o : new Set(o).add(step.stage)));
     // A new step — from the start: the central column scrolls by itself, the page stays still.
     center.current?.scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
@@ -112,8 +116,8 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
                       return (
                         <li key={s.id}>
                           <button type="button" id={`rail-${s.id}`}
-                            className={`rail-step ${s.id === selected.id ? 'is-selected' : ''} ${closed ? 'is-closed' : ''} ${s.id === suggested.id ? 'is-next' : ''}`}
-                            aria-current={s.id === selected.id ? 'step' : undefined} onClick={() => select(s.id, false)}>
+                            className={`rail-step ${s.id === railId ? 'is-selected' : ''} ${closed ? 'is-closed' : ''} ${s.id === suggested.id ? 'is-next' : ''}`}
+                            aria-current={s.id === railId ? 'step' : undefined} onClick={() => select(s.id, false)}>
                             <span className="rail-step-mark" aria-hidden="true">
                               {progress.steps[s.id] === 'done' ? <IconCheck /> : locked ? <IconLock /> : null}
                             </span>
@@ -135,7 +139,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
         </ol>
       </nav>
 
-      <section className="center" ref={center} aria-labelledby="step-view-title">
+      <section className={`center ${switching ? 'is-switching' : ''}`} ref={center} aria-labelledby="step-view-title" aria-busy={switching}>
         {pending.length > 0 && (
           <div className="review-banner card">
             <h2 className="review-title">🔔 The guide updated to V2!</h2>

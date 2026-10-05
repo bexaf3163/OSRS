@@ -19,6 +19,8 @@ export function BridgeIndicator() {
     <a className={`bridge-indicator ${online ? 'is-online' : ''} ${stale ? 'is-stale' : ''}`} href="#/settings" title={hint} aria-label={`${label}. ${hint}`}>
       <span className="bridge-dot" aria-hidden="true">{stale ? '🟡' : online ? '🟢' : '⚪'}</span>
       <span className="bridge-label">{label}</span>
+      {/* Between 1280 and 1719 px the full label does not fit: a one-word status keeps the dot from being a riddle. */}
+      <span className="bridge-label-short">{stale ? 'Update' : online ? 'Linked' : state === 'connecting' ? '…' : 'Offline'}</span>
     </a>
   );
 }

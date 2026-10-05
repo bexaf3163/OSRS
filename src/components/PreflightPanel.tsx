@@ -28,6 +28,9 @@ export function PreflightPanel({ step }: { step: Step }) {
     const r = evaluatePreflight(items, owned);
     body = (
       <>
+        {/* All ready: the list folds to one line, so it does not repeat what the status above already says. */}
+        <details className="preflight-details" open={!r.ready}>
+          <summary className="small">{r.rows.filter((x) => x.state === 'IN_BAG_READY').length} of {r.rows.length} items in the bag</summary>
         <ul className="preflight-list">
           {r.rows.map(({ item, have, inBank, state: s }) => (
             <li key={item.nameEn} className={`preflight-row is-${s === 'IN_BAG_READY' ? 'ok' : s === 'MISSING_FROM_BAG' ? 'missing' : 'absent'}`}>
@@ -45,6 +48,7 @@ export function PreflightPanel({ step }: { step: Step }) {
             </li>
           ))}
         </ul>
+        </details>
         <p className={`preflight-verdict ${r.ready ? 'is-ready' : ''}`} role="status">
           {r.ready ? '🟢 All ready — you can go'
             : owned.bankSeen ? `Not ready to set off: ${r.missing} missing${owned.bankSavedAt ? '. The bank is from a record of an earlier session: open it to refresh.' : ''}`

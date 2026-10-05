@@ -15,6 +15,18 @@ import { plural } from '../lib/shopping';
 import { AccountSync } from '../components/AccountSync';
 import { BackupSection, DiagnosticsSection, UpdatesSection, ProfilesSection, SessionSection } from './SettingsExtra';
 
+type SettingsTab = 'look' | 'game' | 'progress' | 'app';
+const SETTINGS_TABS: [SettingsTab, string][] = [['look', 'Look'], ['game', 'RuneLite'], ['progress', 'Progress and copies'], ['app', 'App']];
+const TAB_KEY = 'osrs-put-settings-tab';
+function loadTab(): SettingsTab {
+  try {
+    const v = localStorage.getItem(TAB_KEY);
+    return SETTINGS_TABS.some(([k]) => k === v) ? (v as SettingsTab) : 'look';
+  } catch {
+    return 'look';
+  }
+}
+
 const THEMES: [Theme, string][] = [['light', 'Light'], ['dark', 'Dark'], ['system', 'System']];
 
 function download(name: string, text: string) {
@@ -35,6 +47,11 @@ export function SettingsPage() {
   const [confirmReset, setConfirmReset] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
   const bridge = desktop();
+  const [tab, setTab] = useState<SettingsTab>(loadTab);
+  const chooseTab = (k: SettingsTab) => {
+    setTab(k);
+    try { localStorage.setItem(TAB_KEY, k); } catch { /* it is remembered until restart */ }
+  };
 
   const done = Object.values(progress.steps).filter((s) => s === 'done').length;
 
@@ -54,72 +71,93 @@ export function SettingsPage() {
         <h1>Settings</h1>
       </header>
 
-      <Appearance />
-      <RuneLiteBridge />
-      <ProfilesSection />
-      <AccountSync />
-      <SessionSection />
-      <PlayStyleSection />
-      <Helpers />
-      <BackupSection />
-      <UpdatesSection />
-      <DiagnosticsSection />
+      <div className="mode-toggle settings-tabs" role="tablist" aria-label="Settings sections">
+        {SETTINGS_TABS.map(([k, label]) => (
+          <button key={k} type="button" role="tab" aria-selected={tab === k} className={`mode-btn ${tab === k ? 'is-active' : ''}`} onClick={() => chooseTab(k)}>{label}</button>
+        ))}
+      </div>
 
-      <section className="card section-card">
-        <h2 className="card-title">Transferring progress</h2>
-        <p className="muted">
-          The progress is stored in this app and as a copy — the file <code className="code">progress.json</code> in the data folder.
-          To move it to another computer, save the file here and load it there.
-        </p>
-        {bridge && (
-          <p className="muted small">
-            {bridge.isPortable() ? 'The portable version: the data is next to the app, in the folder ' : 'The progress copy is in the folder '}
-            <code className="code code-path">{bridge.dataDir()}</code>
+      {tab === 'look' && (
+        <>
+          <Appearance />
+          <PlayStyleSection />
+        </>
+      )}
+      {tab === 'game' && (
+        <>
+          <RuneLiteBridge />
+          <Helpers />
+        </>
+      )}
+      {tab === 'progress' && (
+        <>
+          <ProfilesSection />
+          <AccountSync />
+          <SessionSection />
+          <BackupSection />
+        <section className="card section-card">
+          <h2 className="card-title">Transferring progress</h2>
+          <p className="muted">
+            The progress is stored in this app and as a copy — the file <code className="code">progress.json</code> in the data folder.
+            To move it to another computer, save the file here and load it there.
           </p>
-        )}
-        <p className="small">Now: {done} {plural(done, 'step done', 'steps done')}, changed {new Date(progress.updatedAt).toLocaleString('en-US')}.</p>
-        <div className="actions">
-          <button type="button" className="btn btn-primary" onClick={() => download(exportFileName(), exportProgress(progress))}>
-            Export progress
-          </button>
-          <button type="button" className="btn" onClick={() => fileRef.current?.click()}>Import progress</button>
-          <input ref={fileRef} type="file" accept="application/json,.json" hidden onChange={(e) => onFile(e.target.files?.[0])} />
-        </div>
-
-        {importError && <p className="notice is-error" role="alert">{importError}</p>}
-        {pending && (
-          <div className="notice" role="alert">
-            <p>
-              In the file: {pending.stats.done} done, {pending.stats.skipped} skipped, {pending.stats.levels} levels,
-              {pending.stats.notes} notes; saved {new Date(pending.progress.updatedAt).toLocaleString('en-US')}.
-              {pending.stats.migrated && ' A file from the first version of the route — the marks were carried over to V2, the old ones are kept inside.'}
-              {pending.stats.dropped > 0 && ` Unknown entries dropped: ${pending.stats.dropped}.`}
+          {bridge && (
+            <p className="muted small">
+              {bridge.isPortable() ? 'The portable version: the data is next to the app, in the folder ' : 'The progress copy is in the folder '}
+              <code className="code code-path">{bridge.dataDir()}</code>
             </p>
-            <p>The current progress on this device will be replaced.</p>
-            <div className="actions">
-              <button type="button" className="btn btn-primary" onClick={() => { replace(pending.progress, 'Progress loaded'); setPending(null); }}>
-                Replace
-              </button>
-              <button type="button" className="btn" onClick={() => setPending(null)}>Cancel</button>
-            </div>
+          )}
+          <p className="small">Now: {done} {plural(done, 'step done', 'steps done')}, changed {new Date(progress.updatedAt).toLocaleString('en-US')}.</p>
+          <div className="actions">
+            <button type="button" className="btn btn-primary" onClick={() => download(exportFileName(), exportProgress(progress))}>
+              Export progress
+            </button>
+            <button type="button" className="btn" onClick={() => fileRef.current?.click()}>Import progress</button>
+            <input ref={fileRef} type="file" accept="application/json,.json" hidden onChange={(e) => onFile(e.target.files?.[0])} />
           </div>
-        )}
-      </section>
 
-      <section className="card section-card">
-        <h2 className="card-title">Reset</h2>
-        <p className="muted">It removes the marks, levels and notes on this device. Right after the reset it can be undone.</p>
-        {confirmReset ? (
-          <div className="actions">
-            <button type="button" className="btn btn-danger" onClick={() => { reset(); setConfirmReset(false); }}>Yes, reset everything</button>
-            <button type="button" className="btn" onClick={() => setConfirmReset(false)}>Cancel</button>
-          </div>
-        ) : (
-          <div className="actions">
-            <button type="button" className="btn" onClick={() => setConfirmReset(true)}>Reset progress</button>
-          </div>
-        )}
-      </section>
+          {importError && <p className="notice is-error" role="alert">{importError}</p>}
+          {pending && (
+            <div className="notice" role="alert">
+              <p>
+                In the file: {pending.stats.done} done, {pending.stats.skipped} skipped, {pending.stats.levels} levels,
+                {pending.stats.notes} notes; saved {new Date(pending.progress.updatedAt).toLocaleString('en-US')}.
+                {pending.stats.migrated && ' A file from the first version of the route — the marks were carried over to V2, the old ones are kept inside.'}
+                {pending.stats.dropped > 0 && ` Unknown entries dropped: ${pending.stats.dropped}.`}
+              </p>
+              <p>The current progress on this device will be replaced.</p>
+              <div className="actions">
+                <button type="button" className="btn btn-primary" onClick={() => { replace(pending.progress, 'Progress loaded'); setPending(null); }}>
+                  Replace
+                </button>
+                <button type="button" className="btn" onClick={() => setPending(null)}>Cancel</button>
+              </div>
+            </div>
+          )}
+        </section>
+
+        <section className="card section-card">
+          <h2 className="card-title">Reset</h2>
+          <p className="muted">It removes the marks, levels and notes on this device. Right after the reset it can be undone.</p>
+          {confirmReset ? (
+            <div className="actions">
+              <button type="button" className="btn btn-danger" onClick={() => { reset(); setConfirmReset(false); }}>Yes, reset everything</button>
+              <button type="button" className="btn" onClick={() => setConfirmReset(false)}>Cancel</button>
+            </div>
+          ) : (
+            <div className="actions">
+              <button type="button" className="btn" onClick={() => setConfirmReset(true)}>Reset progress</button>
+            </div>
+          )}
+        </section>
+        </>
+      )}
+      {tab === 'app' && (
+        <>
+          <UpdatesSection />
+          <DiagnosticsSection />
+        </>
+      )}
 
       <p className="muted small">
         OSRS Path {__APP_VERSION__}

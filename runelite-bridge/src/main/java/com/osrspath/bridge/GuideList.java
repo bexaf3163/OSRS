@@ -261,11 +261,11 @@ final class GuideList
 			+ (prep.getWeight() != null && !prep.getWeight().isEmpty() ? 1 : 0);
 	}
 
-	/** The tab strip: "Steps" on the left, "Tip · N" on the right; the active one in gold, the other in grey. A click on either switches. */
+	/** The tab strip: "Steps" on the left, "Tip · N" on the right; the active one in gold, the other in link blue (it can be clicked). A click on either switches. */
 	static Row tabRow(boolean onAdvice, int advice, FontMetrics fm, int inner)
 	{
 		List<Line> lines = new ArrayList<>();
-		lines.add(new Line("Steps", onAdvice ? MUTED : TITLE, "Tip · " + advice, onAdvice ? TITLE : StepGuide.BANK, true));
+		lines.add(new Line("Steps", onAdvice ? LINK : TITLE, "Tip · " + advice, onAdvice ? TITLE : LINK, true));
 		return new Row(lines, Action.TAB, onAdvice ? "Click to go back to the steps." : "Click for the app's tips: what not to take now, weight, bag.");
 	}
 
