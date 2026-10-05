@@ -11,6 +11,7 @@ interface Updater {
   download(): Promise<unknown>;
   install(): boolean;
   cleanup(): void;
+  sweepOld(): void;
 }
 const m = createRequire(import.meta.url)('../electron/updater.cjs') as {
   createUpdater(o: Record<string, unknown>): Updater;
@@ -100,7 +101,7 @@ describe('the app update', () => {
   });
   afterEach(() => rmSync(dir, { recursive: true, force: true }));
 
-  const make = (over: Record<string, unknown> = {}, env: Record<string, string> = {}) => {
+  const make = (over: Record<string, unknown> = {}, env: Record<string, string | undefined> = {}) => {
     const states: string[] = [];
     const u = m.createUpdater({
       version: '2.24.0',
@@ -235,6 +236,34 @@ describe('the app update', () => {
       writeFileSync(join(data, 'update-cleanup.json'), 'not json');
       make().u.cleanup();
       expect(existsSync(join(dir, 'OSRS-Put-2.24.0-portable.exe'))).toBe(true);
+    });
+  });
+
+  describe('sweeping older versions next to the running exe', () => {
+    const put = (name: string) => { const p = join(dir, name); writeFileSync(p, 'x'); return p; };
+    const running = () => ({ PORTABLE_EXECUTABLE_FILE: join(dir, 'OSRS-Put-2.25.0-portable.exe') });
+
+    it('deletes every older version, keeps the running one, a newer one and foreign files', () => {
+      const old1 = put('OSRS-Put-2.23.0-portable.exe');
+      const old2 = put('OSRS-Put-2.9.1-portable.exe');
+      const self = put('OSRS-Put-2.25.0-portable.exe');
+      const newer = put('OSRS-Put-2.26.0-portable.exe');
+      const other = put('notes.txt');
+      const part = put('OSRS-Put-2.20.0-portable.exe.part');
+      make({ version: '2.25.0' }, running()).u.sweepOld();
+      expect(existsSync(old1)).toBe(false);
+      expect(existsSync(old2)).toBe(false);
+      for (const kept of [self, newer, other, part]) expect(existsSync(kept), kept).toBe(true);
+    });
+
+    it('touches nothing when this exe was renamed or is not portable', () => {
+      const old = put('OSRS-Put-2.23.0-portable.exe');
+      make({ version: '2.25.0' }, { PORTABLE_EXECUTABLE_FILE: join(dir, 'my-copy.exe') }).u.sweepOld();
+      expect(existsSync(old)).toBe(true);
+      make({ version: '2.25.0' }, { PORTABLE_EXECUTABLE_FILE: join(dir, 'OSRS-Put-2.24.0-portable.exe') }).u.sweepOld();
+      expect(existsSync(old), 'the name carries another version than the running one').toBe(true);
+      make({ version: '2.25.0' }, { PORTABLE_EXECUTABLE_FILE: undefined, PORTABLE_EXECUTABLE_DIR: undefined }).u.sweepOld();
+      expect(existsSync(old)).toBe(true);
     });
   });
 });

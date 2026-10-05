@@ -235,6 +235,7 @@ if (!app.requestSingleInstanceLock()) {
     saveUi();
   });
   updater.cleanup();
+  updater.sweepOld();
   updater.schedule(() => ui.autoUpdate !== false);
 
   function createWindow() {
@@ -246,7 +247,7 @@ if (!app.requestSingleInstanceLock()) {
       y: saved.y,
       minWidth: 380,
       minHeight: 560,
-      title: 'OSRS Path',
+      title: `OSRS Path ${app.getVersion()}`,
       icon: path.join(DIST, 'icon-512.png'),
       backgroundColor: nativeTheme.shouldUseDarkColors ? '#111214' : '#f4f5f7',
       autoHideMenuBar: true,
@@ -261,6 +262,8 @@ if (!app.requestSingleInstanceLock()) {
       },
     });
     if (saved.maximized) win.maximize();
+    // The page has its own <title>; the window keeps the running version in its name.
+    win.on('page-title-updated', (e) => e.preventDefault());
     win.once('ready-to-show', () => win.show());
     win.on('close', () => {
       saveWindowState();

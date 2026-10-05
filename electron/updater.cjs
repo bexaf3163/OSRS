@@ -261,6 +261,30 @@ function createUpdater({ version, env, userData, onState, quit, fetchRelease: fe
     }
   }
 
+  /**
+   * The start of an app run from OSRS-Put-<its own version>-portable.exe: every OLDER OSRS-Put-x.y.z-portable.exe lying next to it is deleted —
+   * the ones left by a manual update, a skipped version or a cleanup that could not finish. Only files with exactly that name pattern, in the
+   * same folder, older than the running version and not the running file; if this exe was renamed, nothing is touched. A busy file is retried.
+   */
+  function sweepOld(tries = 0) {
+    if (!exe || !dir) return;
+    const self = ASSET_RE.exec(path.basename(exe));
+    if (!self || self[1] !== version) return;
+    let names;
+    try { names = fsApi.readdirSync(dir); } catch { return; }
+    let busy = false;
+    for (const name of names) {
+      const m = ASSET_RE.exec(name);
+      if (!m || name === path.basename(exe) || !isNewer(version, m[1])) continue;
+      try {
+        fsApi.rmSync(path.join(dir, name), { force: true });
+      } catch {
+        busy = true;
+      }
+    }
+    if (busy && tries < 15) setTimeout(() => sweepOld(tries + 1), 2000).unref();
+  }
+
   /** The check at launch and every few hours, if turned on. enabled() — asks the setting every time. */
   function schedule(enabled) {
     clearTimeout(timer);
@@ -273,7 +297,7 @@ function createUpdater({ version, env, userData, onState, quit, fetchRelease: fe
     timer.unref();
   }
 
-  return { check, download: fetchUpdate, install, cleanup, schedule, get state() { return state; } };
+  return { check, download: fetchUpdate, install, cleanup, sweepOld, schedule, get state() { return state; } };
 }
 
 module.exports = { createUpdater, download, fetchRelease, pickRelease, parseVersion, isNewer, safeForCmd, ASSET_RE, DOWNLOAD_RE, REPO };
