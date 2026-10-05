@@ -92,6 +92,8 @@ export function SearchBox({ open, onClose }: { open: boolean; onClose: () => voi
     if (e.key === 'ArrowDown') { e.preventDefault(); setActive((a) => Math.min(rows - 1, a + 1)); }
     else if (e.key === 'ArrowUp') { e.preventDefault(); setActive((a) => Math.max(0, a - 1)); }
     else if (e.key === 'Enter' && rows) { e.preventDefault(); pick(rowAt(active)); }
+    // The search field itself clears on the first Escape and only the second closes the dialog: one is enough.
+    else if (e.key === 'Escape') { e.preventDefault(); onClose(); }
   };
 
   useEffect(() => {

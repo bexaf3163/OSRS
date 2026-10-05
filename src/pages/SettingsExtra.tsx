@@ -201,7 +201,7 @@ export function DiagnosticsSection() {
     <section className="card section-card">
       <h2 className="card-title">Diagnostics</h2>
       <p className="muted small">
-        If something works wrong: press — the app will collect the versions, the RuneLite link state, the last bridge events and a summary of the plugin journal (how much is written, what oddities the watchdog found).
+        If something is not working, press "Copy the report": the app collects the versions, the RuneLite link state, the last bridge events and a summary of the plugin journal (how much is written, what oddities the watchdog found).
         There are no bag, bank or notes in the report.
       </p>
       <div className="actions"><button type="button" className="btn" onClick={() => void collect()}>Copy the report</button></div>

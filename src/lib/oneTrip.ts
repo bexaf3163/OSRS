@@ -123,7 +123,9 @@ export function planOneTrip(steps: Step[], progress: Progress, currentId: string
     lines.push({ line, held, allocation, toGet, status, urgency });
   }
   const pending = lines.filter((l) => l.status === 'GET' || l.status === 'BANK');
-  const coinsHave = state.coins.bag.known && state.coins.bank.known ? state.coins.bag.value + state.coins.bank.value : null;
+  // The bank not opened leaves the total unknown, but coins in the bag that already cover the need settle the question.
+  const { bag, bank } = state.coins;
+  const coinsHave = !bag.known ? null : bank.known ? bag.value + bank.value : bag.value >= list.coins ? bag.value : null;
   const coinsMissing = coinsHave === null ? null : Math.max(0, list.coins - coinsHave);
   return {
     stepIds: ids,

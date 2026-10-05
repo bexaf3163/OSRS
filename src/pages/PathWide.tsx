@@ -83,10 +83,13 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
       <h1 className="visually-hidden">Path</h1>
 
       <nav className="rail" aria-label="Stages and steps">
-        {selected.id !== suggested.id && (
+        {selected.id !== suggested.id ? (
           <button type="button" className="rail-now" onClick={() => select(suggested.id)}>
             To the current step · <code className="code">{suggested.id}</code>
           </button>
+        ) : (
+          // The same height as the button: the list below does not jump when you leave the current step.
+          <div className="rail-now is-here">You are on the current step · <code className="code">{suggested.id}</code></div>
         )}
         <ol className="rail-stages">
           {stages.map((st) => {

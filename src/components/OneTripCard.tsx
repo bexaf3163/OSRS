@@ -56,8 +56,8 @@ function Unknown({ lines }: { lines: PrepLine[] }) {
   return (
     <li className="prep-line is-unknown">
       <span className="prep-where" aria-hidden="true">?</span>
-      <strong>Not checked:</strong> {lines.map((l) => `${l.name}${countOf(l)}`).join(', ')}
-      {a && <> · <Action a={a} /></>}
+      {/* One text block: as separate flex items the hint dropped to its own line, away from the names. */}
+      <span><strong>Not checked:</strong> {lines.map((l) => `${l.name}${countOf(l)}`).join(', ')}{a && <> · <Action a={a} /></>}</span>
     </li>
   );
 }

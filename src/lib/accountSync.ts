@@ -54,3 +54,32 @@ export function withRequired(steps: readonly Step[], confirmed: readonly SyncCan
   const order = new Map(steps.map((s, i) => [s.id, i]));
   return [...confirmed, ...[...implied.values()].sort((a, b) => (order.get(a.step.id) ?? 0) - (order.get(b.step.id) ?? 0))];
 }
+
+/**
+ * Steps BEFORE the furthest step that is closed or confirmed by the game and that the game can neither confirm nor deny:
+ * no in-game signal (setting up the client, banking, buying) or only items (they were used or sold on the way). They are
+ * offered separately and honestly labelled as unverified. A step whose quest or levels the game says are NOT done is never
+ * offered: the game contradicts it.
+ */
+export function earlierUnverified(
+  steps: readonly Step[],
+  p: Progress,
+  confirmed: readonly SyncCandidate[],
+  questsDone: readonly string[] | null,
+  levels: PlayerStats | null,
+): SyncCandidate[] {
+  if (questsDone === null) return [];
+  const taken = new Set(confirmed.map((c) => c.step.id));
+  let frontier = -1;
+  steps.forEach((s, i) => { if (taken.has(s.id) || isClosed(p, s.id)) frontier = i; });
+  const done = new Set(questsDone.map(questKey));
+  const out: SyncCandidate[] = [];
+  steps.forEach((step, i) => {
+    if (i >= frontier || taken.has(step.id) || isClosed(p, step.id)) return;
+    const t = step.inGame?.completionTrigger;
+    if (t?.type === 'QUEST_COMPLETED' && t.questName && !done.has(questKey(t.questName))) return;
+    if (t?.type === 'SKILL_LEVEL' && t.levels?.length && levels && !t.levels.every((l) => (levels[l.skill] ?? 0) >= l.level)) return;
+    out.push({ step, why: 'the game has no signal for it, and you are already past it' });
+  });
+  return out;
+}

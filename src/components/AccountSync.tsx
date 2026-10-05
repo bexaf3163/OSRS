@@ -4,7 +4,7 @@
 import { useMemo, useState } from 'react';
 import { stepById } from '../data';
 import { useBridge } from '../bridge';
-import { syncCandidates, withRequired } from '../lib/accountSync';
+import { earlierUnverified, syncCandidates, withRequired } from '../lib/accountSync';
 import { gateAllows } from '../lib/profiles';
 import { withReviewed, withStep } from '../lib/progress';
 import { useStore } from '../store';
@@ -16,6 +16,18 @@ export function AccountSync({ compact = false }: { compact?: boolean }) {
   const [hidden, setHidden] = useState(false);
   const allowed = gateAllows(gate);
   const list = useMemo(() => (allowed ? withRequired(steps, syncCandidates(steps, progress, questsDone, stats), progress) : []), [allowed, steps, progress, questsDone, stats]);
+
+  // Steps before the game's furthest confirmed one that nothing in the game can confirm: offered separately, not in the compact plaque.
+  const unverified = useMemo(() => (allowed ? earlierUnverified(steps, progress, list, questsDone, stats) : []), [allowed, steps, progress, list, questsDone, stats]);
+
+  const markUnverified = () => {
+    let p = progress;
+    for (const c of unverified) {
+      p = withStep(p, c.step.id, 'done');
+      if (stepById.get(c.step.id)?.updatedInV2) p = withReviewed(p, [c.step.id]);
+    }
+    replace(p, `Earlier steps marked: ${unverified.length}`);
+  };
 
   const apply = () => {
     let p = progress;
@@ -57,14 +69,26 @@ export function AccountSync({ compact = false }: { compact?: boolean }) {
       {state === 'online' && !old && !gateAllows(gate) && <p className="notice small">The game has a different character than this profile — choose the profile above.</p>}
       {state === 'online' && !old && gateAllows(gate) && (questsDone === null
         ? <p className="muted small">The quests have not come from the game yet — log in to the game (data sending must be turned on in the plugin).</p>
-        : list.length === 0
-          ? <p className="muted small">✓ Everything the game knows is already marked ({questsDone.length} quests completed).</p>
-          : (
-            <>
-              <ul className="small">{list.map((c) => <li key={c.step.id}><code className="code">{c.step.id}</code> {c.step.title} — {c.why}</li>)}</ul>
-              <div className="actions"><button type="button" className="btn btn-primary" onClick={apply}>Mark {list.length} steps</button></div>
-            </>
-          ))}
+        : (
+          <>
+            {list.length === 0
+              ? <p className="muted small">✓ Everything the game knows is already marked ({questsDone.length} quests completed).</p>
+              : (
+                <>
+                  <ul className="small">{list.map((c) => <li key={c.step.id}><code className="code">{c.step.id}</code> {c.step.title} — {c.why}</li>)}</ul>
+                  <div className="actions"><button type="button" className="btn btn-primary" onClick={apply}>Mark {list.length} steps</button></div>
+                </>
+              )}
+            {unverified.length > 0 && (
+              <details className="small">
+                <summary>{unverified.length} earlier {unverified.length === 1 ? 'step' : 'steps'} the game cannot confirm</summary>
+                <p className="muted">You are already past these, but nothing in the game proves they were done (setting up the client, banking, buying). Mark them only if you did them.</p>
+                <ul>{unverified.map((c) => <li key={c.step.id}><code className="code">{c.step.id}</code> {c.step.title}</li>)}</ul>
+                <div className="actions"><button type="button" className="btn" onClick={markUnverified}>I did these — mark {unverified.length}</button></div>
+              </details>
+            )}
+          </>
+        ))}
     </section>
   );
 }

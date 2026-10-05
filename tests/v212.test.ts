@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { etaMinutes, etaText, XpTracker } from '../src/lib/xpRate';
 import { sessionSummary } from '../src/lib/session';
-import { questKey, syncCandidates, withRequired } from '../src/lib/accountSync';
+import { earlierUnverified, questKey, syncCandidates, withRequired } from '../src/lib/accountSync';
 import { addProfile, defaultProfiles, gateAllows, linkPlayer, MAIN_ID, parseProfiles, profileFileName, profileGate, profileStorageKey, removeProfile, renameProfile } from '../src/lib/profiles';
 import { parsePlayer, parsePos, parseQuests, parseXp } from '../src/services/runeliteBridge';
 import { emptyProgress } from '../src/lib/progress';
@@ -66,6 +66,24 @@ describe('accountSync', () => {
     const train = { id: 'T1', inGame: { completionTrigger: { type: 'SKILL_LEVEL', levels: [{ skill: 'mining', level: 15 }], items: [{ names: ['Copper ore'], count: 5 }] } } } as unknown as Step;
     expect(syncCandidates([train], emptyProgress(), [], { mining: 15 }).map((x) => x.step.id)).toEqual(['T1']);
     expect(syncCandidates([train], emptyProgress(), [], { mining: 14 })).toEqual([]);
+  });
+  it('earlier steps the game cannot confirm are offered, the ones it contradicts are not', () => {
+    const none = { id: 'E1' } as unknown as Step;
+    const items = { id: 'E2', inGame: { completionTrigger: { type: 'ITEM_OWNED', items: [{ names: ['Coins'], count: 20000 }] } } } as unknown as Step;
+    const wrongQuest = { id: 'E3', inGame: { completionTrigger: { type: 'QUEST_COMPLETED', questName: 'Imp Catcher' } } } as unknown as Step;
+    const lowLevel = { id: 'E4', inGame: { completionTrigger: { type: 'SKILL_LEVEL', levels: [{ skill: 'attack', level: 40 }] } } } as unknown as Step;
+    const later = { id: 'E5' } as unknown as Step;
+    const steps = [none, items, wrongQuest, lowLevel, quest, later];
+    const confirmed = syncCandidates(steps, emptyProgress(), ['Cooks Assistant'], { attack: 5 });
+    expect(confirmed.map((c) => c.step.id)).toEqual(['Q1']);
+    // E5 comes after the furthest confirmed step, E3 and E4 are contradicted by the game.
+    expect(earlierUnverified(steps, emptyProgress(), confirmed, ['Cooks Assistant'], { attack: 5 }).map((c) => c.step.id)).toEqual(['E1', 'E2']);
+    // Nothing is offered without game data or without a confirmed step.
+    expect(earlierUnverified(steps, emptyProgress(), confirmed, null, null)).toEqual([]);
+    expect(earlierUnverified(steps, emptyProgress(), [], [], null)).toEqual([]);
+    // A step the player closed by hand also counts as the frontier (E3, E4 and Q1 stay out: the game says they are not done).
+    const p = { ...emptyProgress(), steps: { E5: 'done' as const } };
+    expect(earlierUnverified(steps, p, [], [], { attack: 5 }).map((c) => c.step.id)).toEqual(['E1', 'E2']);
   });
   it('what is already closed and the unknown are not offered', () => {
     const p = { ...emptyProgress(), steps: { Q1: 'done' as const } };
