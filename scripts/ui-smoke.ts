@@ -508,6 +508,8 @@ async function run(browser: Browser) {
         status: { protocol: 5, pluginVersion: '2.13.0', pos: { x: 3222, y: 3218, plane: 0 }, stats: {}, coins: 100, bankCoins: 0, equipment: [], inventory: [] },
         events: [{ type: 'OWNED', bankSeen: true, items: [...new Set(names)].map((n) => ({ name: n, carried: 0, noted: 0, bank: 0 })) }],
       }, '#/step/S2-10');
+      // The future preparation is a folded section of the step view: open it, as the player would.
+      await page.locator('summary', { hasText: 'Future Preparation' }).click();
       await page.waitForSelector('.one-trip', { timeout: 5000 });
       const trip = await text(page, '.one-trip');
       expect(trip.includes('What you need') && trip.includes('Needed now') && trip.includes('Open the shopping list'), 'what you need: the "Needed now" list and a link to shopping');
@@ -517,6 +519,25 @@ async function run(browser: Browser) {
       if (process.env.UI_SHOTS) await page.screenshot({ path: `${process.env.UI_SHOTS}/step-prep-${width}.png` }).catch(() => {});
       expect(await noOverflow(page), 'one trip: no horizontal scrolling');
       expect(!errors.length, `one trip: no console errors ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
+    // The cockpit: the current sub-step is the hero, its items are a strip, the walkthrough is folded, and the dossier column is never an empty hint.
+    {
+      const { page, errors } = await open(browser, width, {
+        progress: progressBefore('S2-10'),
+        status: { protocol: 5, pluginVersion: '2.37.3', stats: {}, coins: 0, bankCoins: 0, equipment: [], inventory: [],
+          navTarget: { label: 'Lady Keli: use soft clay on the key for a print', x: 3127, y: 3244, plane: 0, stepId: 'S2-10' } },
+      }, '#/step/S2-10');
+      await page.waitForSelector('.sub-hero', { timeout: 5000 });
+      const hero = await text(page, '.sub-hero');
+      expect(hero.includes('Step 4 of 6') && hero.includes('Lady Keli') && hero.includes('Lead to Target in Game'), 'cockpit: the hero names the sub-step and has the lead button');
+      expect(hero.includes('Could I touch the key for a moment please?'), 'cockpit: the dialogue options are listed');
+      expect((await text(page, '.sub-items')).includes('Soft clay'), 'cockpit: the strip holds the items of this sub-step');
+      expect(await page.locator('details.step-fold:not([open])', { hasText: 'Full Walkthrough Reference' }).count() === 1, 'cockpit: the full walkthrough is folded');
+      expect(await page.locator('details.step-fold:not([open])', { hasText: 'Future Preparation' }).count() === 1, 'cockpit: the future preparation is folded');
+      expect(await noOverflow(page), 'cockpit: no horizontal scrolling');
+      expect(!errors.length, `cockpit: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
@@ -617,6 +638,29 @@ async function run(browser: Browser) {
     }
     expect(!bad.length, `${routes.length} pages at ${width} px — no errors and scrolling ${bad.slice(0, 5).join(' | ')}`);
     await page.context().close();
+  }
+
+  // The dossier column of the wide Path page: never an empty hint. With a current target it shows that NPC; with none, it folds away.
+  console.log('dossier');
+  {
+    const { page, errors } = await open(browser, 1280, {
+      progress: progressBefore('S2-10'),
+      status: { protocol: 5, pluginVersion: '2.37.3', stats: {}, coins: 0, bankCoins: 0, equipment: [], inventory: [],
+        navTarget: { label: 'Lady Keli: use soft clay on the key for a print', x: 3127, y: 3244, plane: 0, stepId: 'S2-10' } },
+    }, '#/step/S2-10');
+    await page.waitForSelector('.dock .dock-panel', { timeout: 5000 });
+    const dock = await text(page, '.dock');
+    expect(/your current target/i.test(dock) && dock.includes('Keli') && !dock.includes('Click an item or NPC'), 'dossier: it shows the target NPC instead of an empty hint');
+    if (process.env.UI_SHOTS) await page.screenshot({ path: `${process.env.UI_SHOTS}/cockpit-1280.png` }).catch(() => {});
+    expect(errors.length === 0, `dossier: no console errors ${errors.join('; ')}`);
+    await page.context().close();
+    const route = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; npc?: unknown; questStages?: unknown }[];
+    const plain = route.find((x) => !x.npc && !x.questStages)!;
+    const second = await open(browser, 1280, { progress: progressBefore(plain.id), status: { protocol: 5, stats: {}, equipment: [], inventory: [] } }, `#/step/${plain.id}`);
+    await second.page.waitForSelector('.path-wide', { timeout: 5000 });
+    expect(await second.page.locator('.path-wide.no-dock').count() === 1 && !(await second.page.locator('.dock').isVisible()), 'dossier: with no target the column folds away');
+    expect(second.errors.length === 0, `dossier: no console errors on a plain step ${second.errors.join('; ')}`);
+    await second.page.context().close();
   }
 
   // The Content-Security-Policy of the built page: the meta tag is there, a foreign inline script does not run, and the page

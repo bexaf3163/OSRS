@@ -1,7 +1,7 @@
 // The step card: the header in the list and the details by section.
 // The order: status → title → context (NPC, place) → items → actions → tips → completion.
 
-import { useId, useState } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import type { Field, Step, StepItemRequirement } from '../types';
 import { levelById } from '../data';
 import { useStore } from '../store';
@@ -33,6 +33,7 @@ import { MoneyPlan } from './MoneyPlan';
 import { ItemIcon, useWiki } from './WikiDrawer';
 import { plural } from '../lib/shopping';
 import { LiveXp } from './LiveXp';
+import { SubStepHero, SubStepItems, useSubStep } from './SubStepHero';
 
 const WARN_LABELS = new Set(['Dangerous', 'Attention', 'Combat']);
 
@@ -116,6 +117,17 @@ function ItemChip({ item }: { item: StepItemRequirement }) {
   );
 }
 
+/** A collapsed section ("[+] Future Preparation"): its content mounts on the first opening, so a closed one costs nothing. */
+function Fold({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
+  const [opened, setOpened] = useState(false);
+  return (
+    <details className="step-fold" onToggle={(e) => { if ((e.currentTarget as HTMLDetailsElement).open) setOpened(true); }}>
+      <summary><span className="step-fold-title">{title}</span>{hint && <span className="muted small"> · {hint}</span>}</summary>
+      {opened && <div className="step-fold-body">{children}</div>}
+    </details>
+  );
+}
+
 function FieldRow({ field }: { field: Field }) {
   return (
     <div className={`field ${WARN_LABELS.has(field.label) ? 'is-warn' : ''}`}>
@@ -131,6 +143,7 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
   const { openNpc } = useWiki();
   const zen = !useFeatures().inspector;
   const recovering = useReadinessEngine().ctx.recovery?.stepId === step.id;
+  const sub = useSubStep(step);
   const status = progress.steps[step.id];
   const blockers = isClosed(progress, step.id) ? null : blockersOf(step, progress, qp);
   const reviewing = needsReview(step, progress);
@@ -194,7 +207,6 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
   const helpers = (
     <>
       <ReadinessPanel step={step} />
-      <OneTripCard step={step} />
       <MoneyGoal step={step} />
       <StepTraining step={step} />
       <MagicPlan step={step} />
@@ -236,10 +248,24 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
   const image = step.imageUrl && <StepImage src={step.imageUrl} caption={step.imageCaption} />;
 
   const quick = step.quickSteps && step.quickSteps.length > 0 && (
-    <section className="step-section">
-      <h4 className="subhead">Walkthrough</h4>
-      <ol className="quick-steps">{step.quickSteps.map((q, i) => <li key={i}><Inline text={q} /></li>)}</ol>
-    </section>
+    <ol className="quick-steps">{step.quickSteps.map((q, i) => <li key={i}><Inline text={q} /></li>)}</ol>
+  );
+
+  // The cockpit: what to do now (the current sub-step and its items), with everything else folded away.
+  const hero = sub && (
+    <>
+      <SubStepHero step={step} sub={sub} />
+      <SubStepItems step={step} sub={sub} />
+    </>
+  );
+  const future = <Fold title="Future Preparation" hint="what to bring on the next steps"><OneTripCard step={step} /></Fold>;
+  const nQuick = step.quickSteps?.length ?? 0;
+  const reference = (quick || (sub && how)) && (
+    <Fold title="Full Walkthrough Reference" hint={nQuick ? `${nQuick} ${nQuick === 1 ? 'step' : 'steps'}, for reference` : 'for reference'}>
+      {sub && where}
+      {sub && how}
+      {quick}
+    </Fold>
   );
 
   // The critical field warnings ("Dangerous", "Attention", "Combat") are always visible, the other fields — in the details.
@@ -314,20 +340,24 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
   );
 
   if (zen) {
-    // "Zen": the current step, the status in one line, what to do, the "Done" button and critical warnings. The rest — in "More".
+    // "Zen": the current sub-step as a hero card, its items, the status in one line, the "Done" button and critical warnings.
+    // Everything else is folded: the future preparation, the full walkthrough, and "More".
     return (
       <div className="step-details is-zen">
         {reviewPlaque}
-        {where}
+        {!sub && where}
         {warning}
         {fieldList(fieldsWarn)}
+        {hero}
         <StepStatus step={step} />
-        {recovering ? (
+        {!sub && (recovering ? (
           // After a derailment "what to do on the step" comes later: first return. The text stays at hand but does not shout.
-          <details className="zen-more"><summary className="small">What to do on the step — after returning</summary>{how}{quick}</details>
-        ) : <>{how}{quick}</>}
+          <details className="zen-more"><summary className="small">What to do on the step — after returning</summary>{how}</details>
+        ) : how)}
         {doneWhen}
         {actions}
+        {future}
+        {reference}
         <details className="zen-more">
           <summary className="small">More about the step</summary>
           {metaRow}
@@ -348,20 +378,27 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
     <div className="step-details">
       {metaRow}
       {reviewPlaque}
-      {where}
+      {!sub && where}
       {warning}
+      {fieldList(fieldsWarn)}
+      {hero}
       {helpers}
-      {how}
+      {!sub && how}
       {bring}
-      {items}
-      {image}
-      {quick}
-      {fieldList(fieldsAll)}
       {notes}
       {requires}
       {targets}
       {doneWhen}
       {actions}
+      {future}
+      {reference}
+      {(step.itemsRequired?.length || step.itemsRecommended?.length || image || fieldsRest.length > 0) && (
+        <Fold title="Items, details and fields" hint="the raw step data">
+          {items}
+          {image}
+          {fieldList(fieldsRest)}
+        </Fold>
+      )}
     </div>
   );
 }

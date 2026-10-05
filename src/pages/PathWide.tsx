@@ -1,7 +1,7 @@
 // "Path" on a wide screen (redesign D): on the left a ribbon of stages with steps, in the centre the chosen step,
 // on the right the pinned wiki dossier. The whole route, the step and the dossier are visible at once, without page scrolling.
 
-import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import type { Step } from '../types';
 import { stepById } from '../data';
 import { useStore } from '../store';
@@ -11,14 +11,16 @@ import { flashDone } from '../lib/flash';
 import { needsReview, pendingReview } from '../lib/review';
 import { IconCheck, IconChevron, IconLock, TypeIcon, TYPE_LABEL } from '../components/Icons';
 import { StepBody } from '../components/StepCard';
-import { WikiDock } from '../components/WikiDrawer';
+import { WikiDock, useWiki } from '../components/WikiDrawer';
+import { findSubStep, subStepNpcInfo } from '../lib/subStep';
 import { GearBanner } from '../components/GearPrompt';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey: number }) {
   const { progress, qp, steps, stages, setStep, review, reactivate } = useStore();
-  const { advance } = useBridge();
+  const { advance, navTarget } = useBridge();
+  const { setSuggested, chosen } = useWiki();
   const suggested = nextStep(steps, progress, qp) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
   const [selectedId, setSelectedId] = useState(() => focusStep ?? suggested.id);
   // The rail highlights the clicked step at once; the heavy step card follows as a transition with a loading state.
@@ -78,12 +80,26 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
     select(pending[0].id);
   };
 
+  // The dossier column is never an empty hint: with nothing chosen by hand it shows the NPC of the current sub-step (or the step's own NPC);
+  // with neither, the column folds away and the step takes its width.
+  const dossierNpc = useMemo(() => {
+    const sub = isClosed(progress, selected.id) ? null : findSubStep(selected, navTarget);
+    return (sub ? subStepNpcInfo(selected, sub) : null) ?? selected.npc ?? null;
+  }, [selected, progress, navTarget]);
+  const dossierKey = dossierNpc?.nameEn ?? null;
+  useEffect(() => {
+    setSuggested(dossierNpc);
+    return () => setSuggested(null);
+    // Only the NPC's name matters: a new status poll gives a new object for the same NPC.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dossierKey, setSuggested]);
+
   const upcoming = nextAfter(selected.id);
   const blockers = isClosed(progress, selected.id) ? null : blockersOf(selected, progress, qp);
   const status = progress.steps[selected.id];
 
   return (
-    <div className="path-wide">
+    <div className={`path-wide ${!chosen && !dossierNpc ? 'no-dock' : ''}`}>
       <h1 className="visually-hidden">Path</h1>
 
       <nav className="rail" aria-label="Stages and steps">

@@ -21,6 +21,10 @@ type Target =
 interface WikiContextValue {
   openItem: (query: string | number, label?: string) => void;
   openNpc: (npc: StepNpcInfo) => void;
+  /** The pinned column shows this NPC while nothing was chosen by hand (the target of the step's current sub-step); null clears it. */
+  setSuggested: (npc: StepNpcInfo | null) => void;
+  /** Something was chosen by hand: the column is not left to the suggestion. */
+  chosen: boolean;
   /** A place for the pinned column: a page registers the element while it is on screen. */
   setDock: (el: HTMLElement | null) => void;
 }
@@ -36,17 +40,19 @@ export function useWiki(): WikiContextValue {
 export function WikiProvider({ children }: { children: ReactNode }) {
   const [target, setTarget] = useState<Target | null>(null);
   const [dock, setDock] = useState<HTMLElement | null>(null);
+  const [suggested, setSuggested] = useState<StepNpcInfo | null>(null);
   const wide = useMediaQuery(DOCK);
   const openItem = useCallback((query: string | number, label?: string) => setTarget({ kind: 'item', query, label }), []);
   const openNpc = useCallback((npc: StepNpcInfo) => setTarget({ kind: 'npc', npc }), []);
-  const value = useMemo(() => ({ openItem, openNpc, setDock }), [openItem, openNpc]);
+  const chosen = target !== null;
+  const value = useMemo(() => ({ openItem, openNpc, setSuggested, chosen, setDock }), [openItem, openNpc, chosen]);
   const docked = wide && dock !== null;
   const close = useCallback(() => setTarget(null), []);
   return (
     <WikiContext.Provider value={value}>
       {children}
       {docked
-        ? createPortal(<DockedInspector target={target} onClose={close} />, dock)
+        ? createPortal(<DockedInspector target={target} suggested={suggested} onClose={close} />, dock)
         : <WikiDrawer target={target} onClose={close} />}
     </WikiContext.Provider>
   );
@@ -58,7 +64,16 @@ export function WikiDock({ className }: { className?: string }) {
   return <aside className={className} ref={setDock} aria-label="OSRS Wiki inspector" />;
 }
 
-function DockedInspector({ target, onClose }: { target: Target | null; onClose: () => void }) {
+function DockedInspector({ target, suggested, onClose }: { target: Target | null; suggested: StepNpcInfo | null; onClose: () => void }) {
+  if (!target && suggested) {
+    // Nothing chosen by hand: the target of the current sub-step, so the column is never an empty hint. There is nothing to close.
+    return (
+      <div className="dock-panel is-suggested" key={suggested.nameEn}>
+        <p className="dock-suggested small muted">Your current target</p>
+        <NpcView npc={suggested} />
+      </div>
+    );
+  }
   if (!target) {
     return (
       <div className="dock-empty">

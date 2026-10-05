@@ -1,6 +1,6 @@
 # OSRS Path — the project map: what exists, where it lies, how it is connected
 
-> This file is written so that it can be dropped whole into another chat with a request to suggest what to add or fix. Project version: **2.37.3** (bridge protocol 6). Repository: https://github.com/bexaf3163/OSRS. The language of the interface and the texts is English.
+> This file is written so that it can be dropped whole into another chat with a request to suggest what to add or fix. Project version: **2.38.0** (bridge protocol 6). Repository: https://github.com/bexaf3163/OSRS. The language of the interface and the texts is English.
 > The inventory is compiled from the sources; a note **[not in the game]** means it was not checked in a live game, only by tests, a browser and a plugin imitation.
 
 ---
@@ -224,6 +224,7 @@ The header: search (`/`), the progress ring and the quest points, the F2P/Member
 | `bagCleanup.ts` | Bag cleanup (2.37): what in the bag no step of the preparation window asks for, so it can stay in the bank; money, food, runes, staffs, teleports and jewellery are never listed; no advice if the bag is unknown. |
 | `splits.ts` | Time splits (2.37): the time of each step from the previous completion (`Progress.doneAt`), breaks over 30 minutes left out, bulk-marked steps counted apart as untimed. |
 | `tips.ts`, `travelInput.ts` | The one-line "fastest way" tip on the step status (2.37), and the planner input built once for both the tip and the "How to get there" card. |
+| `subStep.ts` | The cockpit step view (2.38): the sub-step the game's arrow is on (matched by label or tile to the quest stage lines), its dialogue options, its own items and their bag/bank/missing/not-checked status, and the NPC for the dossier. No link or a detour means no sub-step and the old layout. |
 | `weight.ts` | Weight and running. The weight of the bag and equipment decides how fast the run energy bar drains. The formula is from the OSRS Wiki "Run energy": loss per tick = floor(60 + 67 · clamp(weight, 0..64) / 64) × (1 − Agility / 300).… |
 | `xp.ts` | The standard OSRS XP formula. check-data compares it with the "How much XP is needed per level" table in src/data/xp.json. |
 | `xpRate.ts` | The XP rate from the plugin's measurements: skill XP arrives every ~3 seconds while training goes on. The speed is the gain over the measurement window (up to 10 minutes), only when the player is really training: after two… |
