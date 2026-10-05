@@ -1,4 +1,5 @@
-// "🧭 How to get there": where you are now (the plugin) and how best to reach the step's place — on foot, by teleport or by canoe.
+// "🧭 How to get there": where you are now (the plugin) and how best to reach the step's place — on foot, by teleport, canoe, fairy ring or charter ship,
+// and, when it is clearly worth it, by way of the bank or the exchange to fetch a teleport tablet first (the app only suggests; it never buys).
 // What is available is counted from the levels and items from the game; what we do not know (the bank was not opened) is marked "?". The distances are in a
 // straight line: this is a comparison of options, not an exact time.
 
@@ -6,13 +7,16 @@ import { useMemo, useState } from 'react';
 import type { Step } from '../types';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
+import { usePlayerState } from '../playerStateContext';
+import { nameKey } from '../lib/checklist';
 import { stepPlaces } from '../lib/stepPlaces';
 import { dist, travelOptions, TRANSPORT, walkText, type Availability, type Point, type TravelOption } from '../lib/travel';
 
 const BADGE: Record<Availability, string> = { ready: '✓ available now', maybe: '? check', locked: '🔒 not yet' };
 
 export function TravelPlan({ step }: { step: Step }) {
-  const { progress } = useStore();
+  const { progress, mode } = useStore();
+  const { prices } = usePlayerState();
   const { enabled, state, inGame, stats, gear, owned, locate, navigate } = useBridge();
   const places = useMemo(() => stepPlaces(step), [step]);
   const [pos, setPos] = useState<Point | null>(null);
@@ -32,7 +36,10 @@ export function TravelPlan({ step }: { step: Step }) {
   const levels = { ...progress.levels, ...(stats ?? {}) };
   const carried = gear && (gear.equipment || gear.inventory) ? [...(gear.equipment ?? []), ...(gear.inventory ?? [])] : null;
   const options: TravelOption[] = pos && pos.plane === 0 && target.plane === 0
-    ? travelOptions({ from: pos, to: target, levels, carried, bankSeen: Boolean(owned?.bankSeen) })
+    ? travelOptions({
+      from: pos, to: target, levels, carried, bankSeen: Boolean(owned?.bankSeen),
+      bank: owned?.bankSeen ? bankCounts(owned.items.values()) : null, priceOf: prices.priceOf, members: mode === 'members',
+    })
     : [];
 
   return (
@@ -78,6 +85,9 @@ export function TravelPlan({ step }: { step: Step }) {
                 {o.id === 'canoe' && o.availability !== 'locked' && (
                   <button type="button" className="btn btn-sm" onClick={() => void navigateToStation(o, navigate)}>🧭 Lead to the station</button>
                 )}
+                {o.go && o.availability !== 'locked' && (
+                  <button type="button" className="btn btn-sm" onClick={() => void navigate({ label: o.go!.label, x: o.go!.x, y: o.go!.y, plane: o.go!.plane })}>🧭 Lead to {o.go.label}</button>
+                )}
               </li>
             ))}
           </ul>
@@ -92,6 +102,13 @@ export function TravelPlan({ step }: { step: Step }) {
 }
 
 /** The arrow in the game — to the canoe station this variant starts from. */
+/** What the bank holds, by name key: the planner looks for tablets there before it suggests buying them. */
+function bankCounts(items: Iterable<{ name: string; bank?: number }>): Map<string, number> {
+  const out = new Map<string, number>();
+  for (const i of items) if ((i.bank ?? 0) > 0) out.set(nameKey(i.name), i.bank!);
+  return out;
+}
+
 async function navigateToStation(o: TravelOption, navigate: ReturnType<typeof useBridge>['navigate']): Promise<void> {
   const name = o.title.replace(/^Canoe\s+/, '').split(' → ')[0];
   const station = TRANSPORT.canoe.stations.find((s) => s.name === name);

@@ -1,6 +1,6 @@
 # OSRS Path — the project map: what exists, where it lies, how it is connected
 
-> This file is written so that it can be dropped whole into another chat with a request to suggest what to add or fix. Project version: **2.34.1** (bridge protocol 6). Repository: https://github.com/bexaf3163/OSRS. The language of the interface and the texts is English.
+> This file is written so that it can be dropped whole into another chat with a request to suggest what to add or fix. Project version: **2.35.0** (bridge protocol 6). Repository: https://github.com/bexaf3163/OSRS. The language of the interface and the texts is English.
 > The inventory is compiled from the sources; a note **[not in the game]** means it was not checked in a live game, only by tests, a browser and a plugin imitation.
 
 ---
@@ -408,6 +408,7 @@ The header: search (`/`), the progress ring and the quest points, the F2P/Member
 | `toolProgression.json` | The axe and pickaxe tiers | by hand |
 | `dangerZones.json` | The radar zones | by hand (from the wiki, not measured) |
 | `transport.json` | Teleports, canoes, boats | by hand |
+| `transportNet.json` | Fairy rings, charter ports and fares, teleport tablets | generated from the wiki: `npm run build-transport-net` |
 | `spells.json` | The spells for the magic plan | by hand |
 | `skills.json`, `members-skills.json`, `levels.json`, `goals.json`, `xp.json`, `plugins.json`, `reference.json` | Skills, levels, goals, the XP table, plugins, the reference | by hand; `check-data` verifies them |
 | `index.ts` | Typed access to the data | — |

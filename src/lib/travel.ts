@@ -3,6 +3,9 @@
 // is decided by the levels and things from the game; what we do not know (the bank was not opened) is marked, not invented.
 
 import transportJson from '../data/transport.json';
+import netJson from '../data/transportNet.json';
+import locationsJson from '../data/majorLocations.json';
+import { nameKey } from './checklist';
 import type { GearItem } from '../services/runeliteBridge';
 
 export interface Point { x: number; y: number; plane: number }
@@ -29,18 +32,45 @@ export const TRANSPORT = transportJson as unknown as {
   canoe: { stations: CanoeStation[]; types: CanoeType[]; axes: string[] };
 };
 
+export interface FairyRing { code: string; x: number; y: number; place: string; note: string; underground: boolean }
+export interface CharterPort { id: string; name: string; x: number; y: number; note: string }
+export interface Tablet { id: string; item: string; spell: string }
+
+/** Fairy rings, charter ports with the fare table and the teleport tablets: generated from the wiki by scripts/build-transport-net.ts. */
+export const NET = netJson as unknown as {
+  checked: string;
+  fairyRings: FairyRing[];
+  charter: { ports: CharterPort[]; fares: (number | null)[][] };
+  tablets: Tablet[];
+};
+
+const LOCATIONS = (locationsJson as unknown as { locations: Record<string, { x: number; y: number; plane: number; label: string; kind: string }> }).locations;
+/** Where tablets and runes are bought. */
+export const EXCHANGE: Point & { label: string } = { x: LOCATIONS['Grand Exchange'].x, y: LOCATIONS['Grand Exchange'].y, plane: 0, label: 'Grand Exchange' };
+const BANKS: (Point & { label: string })[] = Object.values(LOCATIONS).filter((l) => l.kind === 'bank' && l.plane === 0).map((l) => ({ x: l.x, y: l.y, plane: l.plane, label: l.label }));
+
 /** Running is 2 tiles per tick (0.6 s): that is the lower bound of the walking time. */
 export const TILES_PER_SECOND = 2 / 0.6;
 
 /** A gain smaller than this number of tiles is not worth runes or charges: the option is not shown. */
 export const MIN_SAVING_TILES = 20;
 
+/**
+ * Opportunistic routing: a teleport the player does not carry is offered only if going to get it first is clearly worth it: it saves at least this many
+ * tiles after the detour, the detour itself is short, and the price is small (an unknown price is shown as unknown, never as zero).
+ */
+export const OPPORTUNISTIC_MIN_SAVING_TILES = 60;
+export const OPPORTUNISTIC_MAX_DETOUR_TILES = 120;
+export const OPPORTUNISTIC_MAX_COST = 3000;
+
 export const dist = (a: Point, b: Point): number => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
 
 export type Availability = 'ready' | 'maybe' | 'locked';
 export interface Need { text: string; ok: boolean | null }
 
-export interface Leg { kind: 'walk' | 'teleport' | 'canoe' | 'boat'; label: string; tiles: number }
+export interface Leg { kind: 'walk' | 'teleport' | 'canoe' | 'boat' | 'fairy' | 'charter'; label: string; tiles: number }
+/** Fetching a teleport item first: from the bank (free) or from the exchange (a price). The app only suggests it; it never buys. */
+export interface Acquire { what: string; where: string; point: Point; tiles: number; cost: number | null; source: 'bank' | 'exchange' }
 export interface TravelOption {
   id: string;
   title: string;
@@ -51,6 +81,10 @@ export interface TravelOption {
   /** What is missing or what to check: a level, runes, a book. */
   needs: Need[];
   note?: string;
+  /** The option starts with fetching an item (opportunistic routing). */
+  acquire?: Acquire;
+  /** The first place to go to: the fairy ring, the port, the bank or the exchange. The "lead here" button uses it. */
+  go?: Point & { label: string };
 }
 
 export interface TravelInput {
@@ -62,6 +96,12 @@ export interface TravelInput {
   carried: readonly GearItem[] | null;
   /** The bank was opened (an item missing from the bag may be in the bank). */
   bankSeen: boolean;
+  /** What the bank holds, by nameKey; null or absent means unknown. */
+  bank?: ReadonlyMap<string, number> | null;
+  /** The exchange price per piece by name; absent means no prices (an unknown price is never taken as zero). */
+  priceOf?: (name: string) => number | undefined;
+  /** A members account or world: false locks the members-only ways, null or absent means unknown. */
+  members?: boolean | null;
 }
 
 const count = (items: readonly GearItem[], names: readonly string[]): number =>
@@ -108,6 +148,138 @@ function teleportNeeds(t: Teleport, inp: TravelInput): { needs: Need[]; availabi
     if (ok === null) unsure = true;
   }
   return { needs, availability: locked ? 'locked' : unsure ? 'maybe' : 'ready' };
+}
+
+const needFrom = (have: boolean | null, bankSeen: boolean): boolean | null => (have === null ? null : have ? true : bankSeen ? false : null);
+
+const membersNeed = (members: boolean | null | undefined): Need => ({ text: 'a members account', ok: members === undefined ? null : members });
+
+/** A fairy ring pair: the nearest ring to the player and the ring nearest to the target (surface rings only: a straight line says nothing underground). */
+function fairyOption(inp: TravelInput): TravelOption | null {
+  const rings = NET.fairyRings.filter((r) => !r.underground);
+  let best: { a: FairyRing; b: FairyRing; tiles: number } | null = null;
+  for (const a of rings) {
+    for (const b of rings) {
+      if (a.code === b.code) continue;
+      const tiles = dist(inp.from, { ...a, plane: 0 }) + dist({ ...b, plane: 0 }, inp.to);
+      if (!best || tiles < best.tiles) best = { a, b, tiles };
+    }
+  }
+  if (!best) return null;
+  const { a, b } = best;
+  const staff = inp.carried ? count(inp.carried, ['Dramen staff', 'Lunar staff']) > 0 : null;
+  const needs: Need[] = [
+    membersNeed(inp.members),
+    { text: 'Fairytale II - Cure a Queen started (the Fairy Godfather)', ok: null },
+    { text: 'a dramen or lunar staff worn or in the bag (not needed after the elite Lumbridge diary)', ok: needFrom(staff, inp.bankSeen) },
+  ];
+  for (const r of [a, b]) if (r.note) needs.push({ text: `ring ${r.code}: ${r.note}`, ok: null });
+  const locked = needs.some((n) => n.ok === false);
+  const unsure = needs.some((n) => n.ok === null);
+  return {
+    id: 'fairy', title: `Fairy ring ${a.code} → ${b.code}`,
+    legs: [
+      { kind: 'walk', label: `to the fairy ring ${a.code} (${a.place})`, tiles: dist(inp.from, { ...a, plane: 0 }) },
+      { kind: 'fairy', label: `code ${a.code} → ${b.code}: ${b.place}`, tiles: 0 },
+      { kind: 'walk', label: 'then on foot', tiles: dist({ ...b, plane: 0 }, inp.to) },
+    ],
+    walkTiles: best.tiles, availability: locked ? 'locked' : unsure ? 'maybe' : 'ready', needs,
+    go: { x: a.x, y: a.y, plane: 0, label: `Fairy ring ${a.code} — ${a.place}` },
+  };
+}
+
+/** The cheapest charter pair by tiles on foot (a tie goes to the lower fare); a pair with no route (fare null) is skipped. */
+function charterOption(inp: TravelInput): TravelOption | null {
+  const { ports, fares } = NET.charter;
+  let best: { i: number; j: number; tiles: number; fare: number } | null = null;
+  for (let i = 0; i < ports.length; i++) {
+    for (let j = 0; j < ports.length; j++) {
+      const fare = fares[i]?.[j];
+      if (i === j || fare === null || fare === undefined) continue;
+      const tiles = dist(inp.from, { ...ports[i], plane: 0 }) + dist({ ...ports[j], plane: 0 }, inp.to);
+      if (!best || tiles < best.tiles || (tiles === best.tiles && fare < best.fare)) best = { i, j, tiles, fare };
+    }
+  }
+  if (!best) return null;
+  const a = ports[best.i];
+  const b = ports[best.j];
+  const coins = inp.carried ? count(inp.carried, ['Coins']) : null;
+  const needs: Need[] = [
+    membersNeed(inp.members),
+    { text: `${best.fare} gp in coins${coins !== null ? ` (in the bag: ${coins})` : ''}`, ok: needFrom(coins === null ? null : coins >= best.fare, inp.bankSeen) },
+  ];
+  for (const p of [a, b]) if (p.note) needs.push({ text: `${p.name}: ${p.note}`, ok: null });
+  const locked = needs.some((n) => n.ok === false);
+  const unsure = needs.some((n) => n.ok === null);
+  return {
+    id: 'charter', title: `Charter ship ${a.name} → ${b.name}`,
+    legs: [
+      { kind: 'walk', label: `to the dock ${a.name}`, tiles: dist(inp.from, { ...a, plane: 0 }) },
+      { kind: 'charter', label: `charter ship for ${best.fare} gp`, tiles: 0 },
+      { kind: 'walk', label: `from ${b.name} to the target`, tiles: dist({ ...b, plane: 0 }, inp.to) },
+    ],
+    walkTiles: best.tiles, availability: locked ? 'locked' : unsure ? 'maybe' : 'ready', needs,
+    note: 'The fare is halved with Cabin Fever done or a Ring of Charos worn.',
+    go: { x: a.x, y: a.y, plane: 0, label: `Charter dock — ${a.name}` },
+  };
+}
+
+/** Where to fetch an item from: the nearest bank if the bank is known to hold it, otherwise the exchange. */
+function acquireFor(item: string, inp: TravelInput): Acquire {
+  if (inp.bank?.get(nameKey(item))) {
+    const bank = BANKS.reduce<(Point & { label: string }) | null>((m, c) => (!m || dist(inp.from, c) < dist(inp.from, m) ? c : m), null);
+    if (bank) return { what: item, where: bank.label, point: bank, tiles: dist(inp.from, bank), cost: 0, source: 'bank' };
+  }
+  return { what: item, where: EXCHANGE.label, point: EXCHANGE, tiles: dist(inp.from, EXCHANGE), cost: inp.priceOf?.(item) ?? null, source: 'exchange' };
+}
+
+/**
+ * Teleport tablets and the Chronicle: a tablet in the bag is simply a ready option; one the player does not carry is offered by way of the bank or the
+ * exchange only when it is worth it (OPPORTUNISTIC_* limits). The runes of a spell are not fetched this way. The app only suggests: it never buys.
+ */
+function itemTeleportOptions(inp: TravelInput, direct: number): TravelOption[] {
+  const out: TravelOption[] = [];
+  const entries: { id: string; item: string; title: string; dest: Teleport['dest']; note?: string; plain: boolean }[] = [];
+  for (const tb of NET.tablets) {
+    const spell = TRANSPORT.teleports.find((t) => t.id === tb.spell);
+    if (spell) entries.push({ id: tb.id, item: tb.item, title: `${tb.item} tablet`, dest: spell.dest, plain: true });
+  }
+  for (const t of TRANSPORT.teleports) {
+    if (t.kind === 'item' && t.items?.length) entries.push({ id: t.id, item: t.items[0], title: t.name, dest: t.dest, plain: false, ...(t.note ? { note: t.note } : {}) });
+  }
+  for (const e of entries) {
+    const tail = dist(e.dest, inp.to);
+    const carried = inp.carried ? count(inp.carried, [e.item]) > 0 : null;
+    if (carried === true) {
+      // The Chronicle in the bag is already in the plain teleport list.
+      if (e.plain) {
+        out.push({ id: e.id, title: e.title, legs: [{ kind: 'teleport', label: `${e.item} → ${e.dest.label}`, tiles: 0 }, { kind: 'walk', label: 'then on foot', tiles: tail }],
+          walkTiles: tail, availability: 'ready', needs: [{ text: `${e.item} in the bag`, ok: true }] });
+      }
+      continue;
+    }
+    const acq = acquireFor(e.item, inp);
+    const total = acq.tiles + tail;
+    const worth = direct - total >= OPPORTUNISTIC_MIN_SAVING_TILES && acq.tiles <= OPPORTUNISTIC_MAX_DETOUR_TILES && (acq.cost === null || acq.cost <= OPPORTUNISTIC_MAX_COST);
+    if (!worth) continue;
+    const coins = inp.carried ? count(inp.carried, ['Coins']) : null;
+    const afford = acq.source === 'bank' || acq.cost === null || coins === null ? null : needFrom(coins >= acq.cost, inp.bankSeen);
+    const verb = acq.source === 'bank' ? 'withdraw' : 'buy';
+    const price = acq.source === 'bank' ? 'free' : acq.cost === null ? 'price unknown' : `~${acq.cost} gp`;
+    out.push({
+      id: `${e.id}-acquire`, title: `${e.item}: ${verb} first, then teleport`,
+      legs: [
+        { kind: 'walk', label: `to the ${acq.where}: ${verb} ${e.item} (${price})`, tiles: acq.tiles },
+        { kind: 'teleport', label: `${e.item} → ${e.dest.label}`, tiles: 0 },
+        { kind: 'walk', label: 'then on foot', tiles: tail },
+      ],
+      walkTiles: total, availability: afford === false ? 'locked' : 'maybe',
+      needs: [{ text: acq.source === 'bank' ? `${e.item} in the bank (${acq.where})` : `${e.item} from the ${acq.where} (${price})`, ok: afford }],
+      acquire: acq, go: { ...acq.point, label: acq.where },
+      ...(e.note ? { note: e.note } : {}),
+    });
+  }
+  return out;
 }
 
 /** The possible ways to get there: the available ones first, within them by tiles on foot. The useless ones (not shorter on foot) are not shown. */
@@ -180,6 +352,14 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
       ...(b.note ? { note: b.note } : {}),
     });
   }
+
+  // Fairy rings and charter ships (members), and the tablets that may have to be fetched first.
+  // On a known free-to-play account the members-only ways are left out: they are noise there, not "not yet".
+  const fairy = inp.members === false ? null : fairyOption(inp);
+  if (fairy) out.push(fairy);
+  const charter = inp.members === false ? null : charterOption(inp);
+  if (charter) out.push(charter);
+  out.push(...itemTeleportOptions(inp, direct));
 
   const rank = (o: TravelOption) => (o.availability === 'ready' ? 0 : o.availability === 'maybe' ? 1 : 2);
   return out.filter((o) => o.id === 'walk' || o.walkTiles + MIN_SAVING_TILES <= direct).sort((x, y) => rank(x) - rank(y) || x.walkTiles - y.walkTiles);
