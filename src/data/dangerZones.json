@@ -48,6 +48,85 @@
       "hud": "Draynor Jail guards (level 26)",
       "npcNames": ["Jail guard"],
       "source": "Jail guard: LocLine \"Draynor Village jail\", 3109-3127 x 3237-3249; aggressive2-4 = Yes"
+    },
+    {
+      "id": "elvarg-lair",
+      "name": "Elvarg's lair",
+      "center": {"x": 2855, "y": 9637, "plane": 0},
+      "radius": 16,
+      "warningRadius": 28,
+      "severity": "CRITICAL",
+      "message": "DANGER: Elvarg (level 83) breathes fire that hits up to 70 without an Anti-dragon shield. Wear the shield before you go in and keep it on.",
+      "hud": "Equip the Anti-dragon shield! Elvarg's fire hits up to 70.",
+      "npcNames": ["Elvarg"],
+      "onlySteps": ["S5-08"],
+      "unlessWorn": ["Anti-dragon shield", "Dragonfire shield", "Dragonfire ward", "Ancient wyvern shield"],
+      "source": "Quest Helper Dragon Slayer I: enterElvargArea 2846,9635 and killElvarg 2855,9637; shield from the OSRS Wiki article Elvarg"
+    },
+    {
+      "id": "crandor-boarding",
+      "name": "Lady Lumbridge at Port Sarim",
+      "center": {"x": 3047, "y": 3205, "plane": 0},
+      "radius": 6,
+      "warningRadius": 14,
+      "severity": "HIGH",
+      "message": "Do not sail to Crandor without the Anti-dragon shield: Elvarg waits at the end of the trip. Take it from Duke Horacio in Lumbridge Castle first.",
+      "hud": "Take the Anti-dragon shield before boarding!",
+      "onlySteps": ["S5-08"],
+      "unlessHeld": ["Anti-dragon shield", "Dragonfire shield", "Dragonfire ward", "Ancient wyvern shield"],
+      "source": "Quest Helper Dragon Slayer I: boardShipToGo 3047,3205 with the anti-dragon shield as a requirement"
+    },
+    {
+      "id": "melzar-lesser-demon",
+      "name": "Melzar's lesser demon",
+      "center": {"x": 2936, "y": 9652, "plane": 0},
+      "radius": 7,
+      "warningRadius": 12,
+      "severity": "HIGH",
+      "message": "The lesser demon (level 82) behind the magenta door hits hard. Safespot it with ranged or magic from the spot east of the magenta door.",
+      "hud": "Lesser demon (level 82): safespot it from the east of the magenta door.",
+      "npcNames": ["Lesser demon"],
+      "onlySteps": ["S5-03"],
+      "source": "Quest Helper Dragon Slayer I: killLesserDemon 2936,9652 (safespottable)"
+    },
+    {
+      "id": "draynor-manor-stake",
+      "name": "Draynor Manor: no Stake",
+      "center": {"x": 3108, "y": 3353, "plane": 0},
+      "radius": 8,
+      "warningRadius": 18,
+      "severity": "HIGH",
+      "message": "Count Draynor cannot be killed without a Stake. Dr. Harlow in the Blue Moon Inn gives one for a beer.",
+      "hud": "Take a Stake for Count Draynor!",
+      "onlySteps": ["S2-08"],
+      "unlessHeld": ["Stake"],
+      "source": "Quest Helper Vampyre Slayer: enterDraynorManor 3108,3353; the stake and the hammer are required for Count Draynor, garlic weakens him"
+    },
+    {
+      "id": "draynor-manor-hammer",
+      "name": "Draynor Manor: no Hammer",
+      "center": {"x": 3108, "y": 3353, "plane": 0},
+      "radius": 8,
+      "warningRadius": 18,
+      "severity": "HIGH",
+      "message": "You need a Hammer to drive the Stake into Count Draynor. The Lumbridge General Store sells one for 1 gp.",
+      "hud": "Take a Hammer for Count Draynor!",
+      "onlySteps": ["S2-08"],
+      "unlessHeld": ["Hammer"],
+      "source": "Quest Helper Vampyre Slayer: enterDraynorManor 3108,3353; the stake and the hammer are required for Count Draynor, garlic weakens him"
+    },
+    {
+      "id": "draynor-manor-garlic",
+      "name": "Draynor Manor: no Garlic",
+      "center": {"x": 3108, "y": 3353, "plane": 0},
+      "radius": 8,
+      "warningRadius": 18,
+      "severity": "MEDIUM",
+      "message": "Garlic in the bag weakens Count Draynor (level 34). It is in the cupboard upstairs in Morgan's house.",
+      "hud": "Garlic in the bag weakens Count Draynor.",
+      "onlySteps": ["S2-08"],
+      "unlessHeld": ["Garlic"],
+      "source": "Quest Helper Vampyre Slayer: enterDraynorManor 3108,3353; the stake and the hammer are required for Count Draynor, garlic weakens him"
     }
   ]
 }

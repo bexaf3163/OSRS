@@ -58,6 +58,12 @@ final class DangerRadar
 		/** Short for the HUD; without it, message. */
 		private String hud;
 		private List<String> npcNames;
+		/** The zone counts only while the guide is on one of these steps (S5-08): after the quest the docks are not a danger. Empty means always. */
+		private List<String> onlySteps;
+		/** The warning is dropped while one of these is worn (Anti-dragon shield: the fire is no danger with it on). */
+		private List<String> unlessWorn;
+		/** The warning is dropped while one of these is worn or in the bag (the shield for the boat, not yet for the fight). */
+		private List<String> unlessHeld;
 
 		private transient Set<String> npcNameSet = Collections.emptySet();
 		private transient List<int[]> boundary = Collections.emptyList();
@@ -193,12 +199,18 @@ final class DangerRadar
 	 */
 	Reading update(int x, int y, int plane)
 	{
+		return update(x, y, plane, z -> false);
+	}
+
+	/** The same, with zones the player is already covered for (the item that makes the danger harmless is on) left out. */
+	Reading update(int x, int y, int plane, java.util.function.Predicate<Zone> covered)
+	{
 		Zone best = null;
 		Level bestLevel = Level.NONE;
 		int bestSq = Integer.MAX_VALUE;
 		for (Zone z : zones)
 		{
-			if (z.center.plane != plane)
+			if (z.center.plane != plane || covered.test(z))
 			{
 				continue;
 			}

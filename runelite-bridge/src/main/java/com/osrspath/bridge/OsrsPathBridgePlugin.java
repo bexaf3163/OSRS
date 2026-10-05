@@ -1246,6 +1246,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			v = v.withNote(qhHint);
 		}
+		else
+		{
+			String say = incantationHint(v);
+			if (say != null)
+			{
+				v = v.withNote(say);
+			}
+		}
 		guideView = v;
 		OsrsPathPanel p = panel;
 		if (p == null || v.equals(panelView))
@@ -1255,6 +1263,24 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		panelView = v;
 		StepGuide.View shown = v;
 		SwingUtilities.invokeLater(() -> p.show(shown));
+	}
+
+	/** Demon Slayer, the fight with Delrith: the words to say in order, read from the account's own varbits (they are random per account). */
+	private String incantationHint(StepGuide.View v)
+	{
+		StepGuide.StageView sv = v.getStage();
+		if (target == null || !"S3-03".equals(target.getStepId()) || sv == null || sv.getSteps() == null || sv.getCursor() < 0 || sv.getCursor() >= sv.getSteps().size()
+			|| !"killDelrithStep".equals(sv.getSteps().get(sv.getCursor()).getK()) || client.getGameState() != GameState.LOGGED_IN)
+		{
+			return null;
+		}
+		int[] values = new int[Incantation.VARBITS.length];
+		for (int i = 0; i < values.length; i++)
+		{
+			values[i] = client.getVarbitValue(Incantation.VARBITS[i]);
+		}
+		String order = Incantation.order(values);
+		return order == null ? null : "Say in the dialogue, in this order: " + order;
 	}
 
 	// ---------- Steps as in Quest Helper ----------
@@ -1829,7 +1855,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			return;
 		}
 		DangerRadar.Reading before = danger;
-		danger = radar.update(pos.getX(), pos.getY(), pos.getPlane());
+		danger = radar.update(pos.getX(), pos.getY(), pos.getPlane(), this::dangerCovered);
 		if (!warned(danger))
 		{
 			dangerNpcs.clear();
@@ -1841,6 +1867,50 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (danger.isEntered() && config.dangerSound())
 		{
 			client.playSoundEffect(SoundEffectID.PRAYER_DEPLETE_TWINKLE);
+		}
+	}
+
+	/** Whether the item that makes the zone harmless is on: the Anti-dragon shield worn (or, for the boat, anywhere in the bag). */
+	private boolean dangerCovered(DangerRadar.Zone zone)
+	{
+		if (zone.getOnlySteps() != null && !zone.getOnlySteps().isEmpty())
+		{
+			ActiveTarget t = target;
+			if (t == null || t.getStepId() == null || !zone.getOnlySteps().contains(t.getStepId()))
+			{
+				return true;
+			}
+		}
+		if (zone.getUnlessWorn() != null)
+		{
+			for (String name : zone.getUnlessWorn())
+			{
+				if (worn.count(null, name) > 0)
+				{
+					return true;
+				}
+			}
+		}
+		if (zone.getUnlessHeld() != null)
+		{
+			for (String name : zone.getUnlessHeld())
+			{
+				if (carried.count(null, name) > 0)
+				{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/** After the worn items or the bag changed: the warning for a missing shield appears or goes away without a step. */
+	private void refreshDanger()
+	{
+		Player p = client.getLocalPlayer();
+		if (p != null && client.getGameState() == GameState.LOGGED_IN && p.getWorldLocation() != null)
+		{
+			updateDanger(p.getWorldLocation());
 		}
 	}
 
@@ -2958,6 +3028,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		carried = c;
 		noted = n;
 		containersChanged();
+		refreshDanger();
 	}
 
 	/** Lays a container out by counters. Notes go into notes (as the item they stand for). */

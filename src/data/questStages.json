@@ -14071,6 +14071,1286 @@
      "items": []
     }
    ]
+  },
+  "S5-01": {
+   "var": [
+    "varp",
+    176
+   ],
+   "route": [
+    {
+     "title": "Getting started",
+     "steps": [
+      "Talk to the Guildmaster in the Champions' Guild, south of Varrock. Needs 32 quest points. Dialogue: “Can I have a quest?”.",
+      "Talk to Oziach in his hut in north-western Edgeville. Dialogue: “Can you sell me a rune platebody?” → “The Guildmaster of the Champions' Guild told me.” → “I thought you were going to give me a quest.” → “A dragon, that sounds like fun.”."
+     ]
+    },
+    {
+     "title": "The Guildmaster's questions",
+     "steps": [
+      "Return to the Guildmaster and ask every question in turn: the ship, the shield, Melzar's, Thalzar's and Lozar's map pieces. Asking about Melzar's piece gives you the Maze key."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to the Guildmaster in the Champions' Guild, south of Varrock. Dialogue: “Can I have a quest?”. You need 32 quest points.",
+       "s": "Guildmaster (Champions' Guild): ask for a quest (32 QP)",
+       "at": [
+        3190,
+        3360,
+        0
+       ],
+       "hl": {
+        "npc": [
+         814
+        ]
+       },
+       "k": "startQuest"
+      }
+     ],
+     "go": {
+      "x": 3190,
+      "y": 3360,
+      "plane": 0,
+      "label": "Guildmaster — Champions' Guild",
+      "npc": "Guildmaster"
+     },
+     "items": []
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Talk to Oziach in his hut in north-western Edgeville. Dialogue: “Can you sell me a rune platebody?” → “The Guildmaster of the Champions' Guild told me.” → “I thought you were going to give me a quest.” → “A dragon, that sounds like fun.”.",
+       "s": "Oziach (Edgeville): ask about the dragon quest",
+       "at": [
+        3068,
+        3517,
+        0
+       ],
+       "hl": {
+        "npc": [
+         822
+        ]
+       },
+       "k": "talkToOziach"
+      }
+     ],
+     "go": {
+      "x": 3068,
+      "y": 3517,
+      "plane": 0,
+      "label": "Oziach — Edgeville",
+      "npc": "Oziach"
+     },
+     "items": []
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Return to the Guildmaster and ask every question in turn. Dialogue: “About my quest to kill the dragon...” → “I talked to Oziach...” → “Where can I find the right ship?”.",
+       "s": "Guildmaster: ask where to find the right ship",
+       "at": [
+        3190,
+        3360,
+        0
+       ],
+       "hl": {
+        "npc": [
+         814
+        ]
+       },
+       "k": "returnToGuildmaster"
+      },
+      {
+       "t": "Ask the Guildmaster again. Dialogue: “About my quest to kill the dragon...” → “I talked to Oziach...” → “How can I protect myself from the dragon's breath?”.",
+       "s": "Guildmaster: ask how to survive the dragon's breath",
+       "at": [
+        3190,
+        3360,
+        0
+       ],
+       "hl": {
+        "npc": [
+         814
+        ]
+       },
+       "k": "askAboutShield"
+      },
+      {
+       "t": "Ask the Guildmaster again. Dialogue: “About my quest to kill the dragon...” → “I talked to Oziach...” → “How can I find the route to Crandor?” → “Where is Melzar's map piece?”. He gives you the Maze key.",
+       "s": "Guildmaster: ask about Melzar's map piece (gives the Maze key)",
+       "at": [
+        3190,
+        3360,
+        0
+       ],
+       "hl": {
+        "npc": [
+         814
+        ]
+       },
+       "has": "Maze key",
+       "k": "askAboutMelzar"
+      },
+      {
+       "t": "Ask the Guildmaster again. Dialogue: “About my quest to kill the dragon...” → “I talked to Oziach...” → “How can I find the route to Crandor?” → “Where is Thalzar's map piece?”.",
+       "s": "Guildmaster: ask about Thalzar's map piece",
+       "at": [
+        3190,
+        3360,
+        0
+       ],
+       "hl": {
+        "npc": [
+         814
+        ]
+       },
+       "k": "askAboutThalzar"
+      },
+      {
+       "t": "Ask the Guildmaster once more. Dialogue: “About my quest to kill the dragon...” → “I talked to Oziach...” → “How can I find the route to Crandor?” → “Where is Lozar's map piece?”.",
+       "s": "Guildmaster: ask about Lozar's map piece",
+       "at": [
+        3190,
+        3360,
+        0
+       ],
+       "hl": {
+        "npc": [
+         814
+        ]
+       },
+       "k": "askAboutLozar"
+      }
+     ],
+     "go": {
+      "x": 3190,
+      "y": 3360,
+      "plane": 0,
+      "label": "Guildmaster — Champions' Guild",
+      "npc": "Guildmaster"
+     },
+     "items": []
+    }
+   ]
+  },
+  "S5-02": {
+   "var": [
+    "varp",
+    176
+   ],
+   "route": [
+    {
+     "title": "The shield",
+     "steps": [
+      "Go up the stairs in Lumbridge Castle to the first floor.",
+      "Talk to Duke Horacio for the Anti-dragon shield. Dialogue: “I seek a shield that will protect me from dragonbreath.” → “Elvarg, the dragon of Crandor island!” → “Yes” → “So, are you going to give me the shield or not?”."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Go up the stairs in Lumbridge Castle to the first floor, where Duke Horacio is.",
+       "s": "Lumbridge Castle: climb the stairs to the first floor",
+       "at": [
+        3205,
+        3208,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16671
+        ]
+       },
+       "k": "goUpToDukeHoracio"
+      },
+      {
+       "t": "Talk to Duke Horacio on the first floor of Lumbridge Castle. Dialogue: “I seek a shield that will protect me from dragonbreath.” → “Elvarg, the dragon of Crandor island!” → “Yes” → “So, are you going to give me the shield or not?”. Take a spare one if you like: it is free.",
+       "s": "Duke Horacio: get the Anti-dragon shield",
+       "at": [
+        3210,
+        3220,
+        1
+       ],
+       "hl": {
+        "npc": [
+         815
+        ],
+        "item": [
+         "Anti-dragon shield"
+        ]
+       },
+       "has": "Anti-dragon shield",
+       "k": "getShield"
+      }
+     ],
+     "go": {
+      "x": 3210,
+      "y": 3220,
+      "plane": 1,
+      "label": "Duke Horacio — Lumbridge Castle, first floor",
+      "npc": "Duke Horacio"
+     },
+     "items": []
+    }
+   ]
+  },
+  "S5-03": {
+   "var": [
+    "varp",
+    176
+   ],
+   "route": [
+    {
+     "title": "Ground floor: the red key",
+     "steps": [
+      "Enter Melzar's Maze north of Rimmington with the Maze key.",
+      "Kill the marked zombie rat for the red key and go through the red door, then up the ladder."
+     ]
+    },
+    {
+     "title": "First floor: the orange key",
+     "steps": [
+      "Kill the marked ghost for the orange key, go through the orange door and up the ladder."
+     ]
+    },
+    {
+     "title": "Second floor: the yellow key",
+     "steps": [
+      "Kill the marked skeleton for the yellow key, go through the yellow door, then down the ladders to the ground floor and into the basement."
+     ]
+    },
+    {
+     "title": "Basement: blue, magenta and green keys",
+     "steps": [
+      "Kill the marked zombie (blue key), Melzar the Mad (magenta key) and the lesser demon (green key), open the doors and the chest for the map piece."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Enter Melzar's Maze north of Rimmington. Be ready to fight up to a level 82 lesser demon. The Maze key opens the front door.",
+       "s": "Melzar's Maze: open the door (Maze key)",
+       "at": [
+        2941,
+        3248,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2595
+        ]
+       },
+       "k": "enterMelzarsMaze"
+      },
+      {
+       "t": "Kill the marked zombie rat for the red key.",
+       "s": "Ground floor: kill the marked zombie rat (red key)",
+       "at": [
+        2933,
+        3250,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3969
+        ]
+       },
+       "has": "Key",
+       "k": "killRat"
+      },
+      {
+       "t": "Go through the north-west red door with the red key.",
+       "s": "Ground floor: red door",
+       "at": [
+        2926,
+        3253,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2596
+        ]
+       },
+       "k": "openRedDoor"
+      },
+      {
+       "t": "Climb up the ladder to the first floor.",
+       "s": "Ground floor: ladder up",
+       "at": [
+        2928,
+        3256,
+        0
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       },
+       "k": "goUpRatLadder"
+      },
+      {
+       "t": "Kill the marked ghost for the orange key.",
+       "s": "First floor: kill the marked ghost (orange key)",
+       "at": [
+        2927,
+        3253,
+        1
+       ],
+       "hl": {
+        "npc": [
+         3975
+        ]
+       },
+       "has": "Key x2",
+       "k": "killGhost"
+      },
+      {
+       "t": "Go through the orange door (the second one from the north).",
+       "s": "First floor: orange door",
+       "at": [
+        2931,
+        3253,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2597
+        ]
+       },
+       "k": "openOrangeDoor"
+      },
+      {
+       "t": "Climb up the ladder to the second floor.",
+       "s": "First floor: ladder up",
+       "at": [
+        2934,
+        3254,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16683
+        ]
+       },
+       "k": "goUpGhostLadder"
+      },
+      {
+       "t": "Kill the marked skeleton for the yellow key.",
+       "s": "Second floor: kill the marked skeleton (yellow key)",
+       "at": [
+        2927,
+        3253,
+        2
+       ],
+       "hl": {
+        "npc": [
+         3972
+        ]
+       },
+       "has": "Key x3",
+       "k": "killSkeleton"
+      },
+      {
+       "t": "Go through the south-west yellow door.",
+       "s": "Second floor: yellow door",
+       "at": [
+        2924,
+        3249,
+        2
+       ],
+       "hl": {
+        "obj": [
+         2598
+        ]
+       },
+       "k": "openYellowDoor"
+      },
+      {
+       "t": "Climb down the ladder.",
+       "s": "Second floor: ladder down",
+       "at": [
+        2940,
+        3240,
+        2
+       ],
+       "hl": {
+        "obj": [
+         16679
+        ]
+       },
+       "k": "goDownSkeletonLadder"
+      },
+      {
+       "t": "Climb down again.",
+       "s": "First floor: ladder down",
+       "at": [
+        2937,
+        3240,
+        1
+       ],
+       "hl": {
+        "obj": [
+         16679
+        ]
+       },
+       "k": "goDownLadderRoomLadder"
+      },
+      {
+       "t": "Climb down the ladder into the basement of Melzar's Maze.",
+       "s": "Ground floor: ladder down to the basement",
+       "at": [
+        2932,
+        3240,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2605
+        ]
+       },
+       "k": "goDownBasementEntryLadder"
+      },
+      {
+       "t": "Kill the marked zombie for the blue key.",
+       "s": "Basement: kill the marked zombie (blue key)",
+       "at": [
+        2932,
+        9643,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3980
+        ]
+       },
+       "has": "Key x4",
+       "k": "killZombie"
+      },
+      {
+       "t": "Go through the blue door in the north-west corner.",
+       "s": "Basement: blue door",
+       "at": [
+        2931,
+        9644,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2599
+        ]
+       },
+       "k": "openBlueDoor"
+      },
+      {
+       "t": "Kill Melzar the Mad (level 43) for the magenta key.",
+       "s": "Basement: kill Melzar the Mad (magenta key)",
+       "at": [
+        2929,
+        9649,
+        0
+       ],
+       "hl": {
+        "npc": [
+         823
+        ]
+       },
+       "has": "Key x5",
+       "k": "killMelzar"
+      },
+      {
+       "t": "Go through the magenta door.",
+       "s": "Basement: magenta door",
+       "at": [
+        2929,
+        9652,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2600
+        ]
+       },
+       "k": "openMagntaDoor"
+      },
+      {
+       "t": "Kill the lesser demon (level 82) for the green key. Safespot it with ranged or magic from the spot east of the magenta door.",
+       "s": "Basement: kill the lesser demon (green key)",
+       "at": [
+        2936,
+        9652,
+        0
+       ],
+       "hl": {
+        "npc": [
+         3982
+        ]
+       },
+       "has": "Key x6",
+       "k": "killLesserDemon"
+      },
+      {
+       "t": "Go through the green door.",
+       "s": "Basement: green door",
+       "at": [
+        2936,
+        9655,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2601
+        ]
+       },
+       "k": "openGreenDoor"
+      },
+      {
+       "t": "Open the chest and take Melzar's map piece.",
+       "s": "Basement: open the chest (map piece)",
+       "at": [
+        2935,
+        9657,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2603
+        ]
+       },
+       "k": "openMelzarChest"
+      }
+     ],
+     "go": {
+      "x": 2941,
+      "y": 3248,
+      "plane": 0,
+      "label": "Melzar's Maze — north of Rimmington"
+     },
+     "items": [
+      {
+       "name": "Maze key",
+       "id": 1542,
+       "where": "From the Guildmaster in the Champions' Guild (S5-01). He gives another if you lose it."
+      },
+      {
+       "name": "Lobster",
+       "id": 379,
+       "where": "Food for the fights: up to a level 82 lesser demon.",
+       "count": 10
+      }
+     ]
+    }
+   ]
+  },
+  "S5-04": {
+   "var": [
+    "varp",
+    176
+   ],
+   "route": [
+    {
+     "title": "The Oracle and the secret room",
+     "steps": [
+      "Talk to the Oracle on top of Ice Mountain.",
+      "Go down the ladder in the dwarven camp, then use the four items on the magic door in the north-east of the Dwarven Mine.",
+      "Search the chest for Thalzar's map piece."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to the Oracle on top of Ice Mountain. Dialogue: “I seek a piece of the map to the island of Crandor.”.",
+       "s": "Oracle (Ice Mountain): ask for the map piece",
+       "at": [
+        3014,
+        3501,
+        0
+       ],
+       "hl": {
+        "npc": [
+         821
+        ]
+       },
+       "k": "talkToOracle"
+      },
+      {
+       "t": "Go down the ladder in the dwarven camp south of Ice Mountain into the Dwarven Mine.",
+       "s": "Dwarven camp: ladder down to the Dwarven Mine",
+       "at": [
+        3019,
+        3450,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11867
+        ]
+       },
+       "k": "goIntoDwarvenMine"
+      },
+      {
+       "t": "Go to the north-east of the Dwarven Mine and use the silk on the magic door.",
+       "s": "Dwarven Mine: use Silk on the magic door",
+       "at": [
+        3050,
+        9840,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25115
+        ],
+        "item": [
+         "Silk"
+        ]
+       },
+       "need": "Silk",
+       "k": "useSilkOnDoor"
+      },
+      {
+       "t": "Use the lobster pot on the magic door.",
+       "s": "Magic door: use the Lobster pot",
+       "at": [
+        3050,
+        9840,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25115
+        ],
+        "item": [
+         "Lobster pot"
+        ]
+       },
+       "need": "Lobster pot",
+       "k": "usePotOnDoor"
+      },
+      {
+       "t": "Use the unfired bowl on the magic door.",
+       "s": "Magic door: use the Unfired bowl",
+       "at": [
+        3050,
+        9840,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25115
+        ],
+        "item": [
+         "Unfired bowl"
+        ]
+       },
+       "need": "Unfired bowl",
+       "k": "useUnfiredBowlOnDoor"
+      },
+      {
+       "t": "Use the wizard's mind bomb on the magic door. Be careful not to drink it.",
+       "s": "Magic door: use the Wizard's mind bomb (do not drink it)",
+       "at": [
+        3050,
+        9840,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25115
+        ],
+        "item": [
+         "Wizard's mind bomb"
+        ]
+       },
+       "need": "Wizard's mind bomb",
+       "k": "useMindBombOnDoor"
+      },
+      {
+       "t": "Search the chest for Thalzar's map piece.",
+       "s": "Secret room: search the chest (map piece)",
+       "at": [
+        3057,
+        9841,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2587
+        ]
+       },
+       "k": "searchThalzarChest"
+      }
+     ],
+     "go": {
+      "x": 3014,
+      "y": 3501,
+      "plane": 0,
+      "label": "Oracle — top of Ice Mountain",
+      "npc": "Oracle"
+     },
+     "items": [
+      {
+       "name": "Silk",
+       "id": 950,
+       "where": "Silk trader in Al Kharid, 3 gp."
+      },
+      {
+       "name": "Lobster pot",
+       "id": 301,
+       "where": "Gerrant's Fishy Business in Port Sarim, 20 gp."
+      },
+      {
+       "name": "Unfired bowl",
+       "id": 1791,
+       "where": "Soft clay on a pottery wheel (Crafting 8), or buy it on the Grand Exchange."
+      },
+      {
+       "name": "Wizard's mind bomb",
+       "id": 1907,
+       "where": "Rising Sun Inn in Falador, 3 gp."
+      }
+     ]
+    }
+   ]
+  },
+  "S5-05": {
+   "var": [
+    "varp",
+    176
+   ],
+   "route": [
+    {
+     "title": "Wormbrain in Port Sarim Jail",
+     "steps": [
+      "Option 1: pay Wormbrain 10,000 coins for Lozar's map piece in the dialogue.",
+      "Option 2: kill him with ranged or magic, then cast Telekinetic Grab (Magic 33, law rune + air rune) on the map piece.",
+      "Use the three Map parts on each other to make the Crandor map."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Go to Port Sarim Jail. Either pay Wormbrain 10,000 coins (Dialogue: “I believe you've got a piece of a map that I need.” → “I suppose I could pay you for the map piece...” → “Alright then, 10,000 it is.”), or kill him with ranged or magic and cast Telekinetic Grab (Magic 33, 1 law rune + 1 air rune) on the map piece.",
+       "s": "Wormbrain (Port Sarim Jail): pay 10,000 gp or Telekinetic Grab",
+       "at": [
+        3015,
+        3195,
+        0
+       ],
+       "hl": {
+        "npc": [
+         820
+        ]
+       },
+       "has": "Map part x3",
+       "k": "optionsForLozarPiece"
+      },
+      {
+       "t": "Use the three Map parts on each other to make the Crandor map.",
+       "s": "Bag: use the three Map parts together (Crandor map)",
+       "hl": {
+        "item": [
+         "Map part"
+        ]
+       },
+       "has": "Crandor map",
+       "k": "repairMap"
+      }
+     ],
+     "go": {
+      "x": 3015,
+      "y": 3195,
+      "plane": 0,
+      "label": "Wormbrain — Port Sarim Jail",
+      "npc": "Wormbrain"
+     },
+     "items": [
+      {
+       "name": "Law rune",
+       "id": 563,
+       "where": "For Telekinetic Grab (Magic 33), together with an air rune or a staff of air."
+      },
+      {
+       "name": "Coins",
+       "id": 995,
+       "where": "If you pay instead: 10,000 coins."
+      },
+      {
+       "name": "Map part",
+       "id": 1535,
+       "where": "The other two map pieces (Melzar's and Thalzar's): the three merge into the Crandor map.",
+       "count": 3
+      }
+     ]
+    }
+   ]
+  },
+  "S5-06": {
+   "var": [
+    "varp",
+    176
+   ],
+   "route": [
+    {
+     "title": "The ship",
+     "steps": [
+      "Buy Lady Lumbridge from Klarense on the south Port Sarim docks for 2,000 coins.",
+      "Board the ship, go down into the hull and repair the hole three times (a plank and 30 steel nails each)."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Klarense on the south Port Sarim docks and buy his boat. Dialogue: “I'd like to buy her.” → “Yep, sounds good.”. It costs 2,000 coins.",
+       "s": "Klarense (Port Sarim docks): buy Lady Lumbridge (2,000 gp)",
+       "at": [
+        3044,
+        3203,
+        0
+       ],
+       "hl": {
+        "npc": [
+         819
+        ]
+       },
+       "k": "talkToKlarense"
+      },
+      {
+       "t": "Board your new ship by the gangplank.",
+       "s": "Port Sarim docks: board Lady Lumbridge",
+       "at": [
+        3047,
+        3205,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2593
+        ]
+       },
+       "k": "boardShip1"
+      },
+      {
+       "t": "Go down the ladder into the ship's hull.",
+       "s": "Ship deck: ladder down to the hull",
+       "at": [
+        3049,
+        3208,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2590
+        ]
+       },
+       "k": "goDownShipLadder"
+      },
+      {
+       "t": "Use a plank on the hole in the hull (it takes 30 steel nails and a hammer). Repeat 3 times.",
+       "s": "Hull: repair the hole, plank 1 of 3",
+       "at": [
+        3047,
+        9639,
+        1
+       ],
+       "hl": {
+        "obj": [
+         25036
+        ],
+        "item": [
+         "Plank",
+         "Steel nails",
+         "Hammer"
+        ]
+       },
+       "need": "Plank",
+       "k": "repairShip"
+      },
+      {
+       "t": "Repair the hole again: second plank.",
+       "s": "Hull: repair the hole, plank 2 of 3",
+       "at": [
+        3047,
+        9639,
+        1
+       ],
+       "hl": {
+        "obj": [
+         25036
+        ],
+        "item": [
+         "Plank",
+         "Steel nails",
+         "Hammer"
+        ]
+       },
+       "need": "Plank",
+       "k": "repairShip2"
+      },
+      {
+       "t": "Repair the hole a third time: last plank.",
+       "s": "Hull: repair the hole, plank 3 of 3",
+       "at": [
+        3047,
+        9639,
+        1
+       ],
+       "hl": {
+        "obj": [
+         25036
+        ],
+        "item": [
+         "Plank",
+         "Steel nails",
+         "Hammer"
+        ]
+       },
+       "need": "Plank",
+       "k": "repairShip3"
+      }
+     ],
+     "go": {
+      "x": 3044,
+      "y": 3203,
+      "plane": 0,
+      "label": "Klarense — south Port Sarim docks",
+      "npc": "Klarense"
+     },
+     "items": [
+      {
+       "name": "Plank",
+       "id": 960,
+       "where": "Ordinary planks, bought on the Grand Exchange.",
+       "count": 3
+      },
+      {
+       "name": "Steel nails",
+       "id": 1539,
+       "where": "30 for each plank: buy 90 on the Grand Exchange.",
+       "count": 90
+      },
+      {
+       "name": "Hammer",
+       "id": 2347,
+       "where": "Lumbridge General Store, 1 gp."
+      },
+      {
+       "name": "Coins",
+       "id": 995,
+       "where": "For the ship: 2,000 coins.",
+       "count": 2000
+      }
+     ]
+    }
+   ]
+  },
+  "S5-07": {
+   "var": [
+    "varp",
+    176
+   ],
+   "route": [
+    {
+     "title": "The map and the captain",
+     "steps": [
+      "Use the three map pieces on each other to make the Crandor map.",
+      "Bring the map to Captain Ned in Draynor Village and ask him to be your captain."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Use the three Map parts on each other to make the Crandor map.",
+       "s": "Bag: use the three Map parts together (Crandor map)",
+       "hl": {
+        "item": [
+         "Map part"
+        ]
+       },
+       "has": "Crandor map",
+       "k": "repairMap"
+      },
+      {
+       "t": "Bring Ned the Crandor map and ask him to be your captain. Dialogue: “You're a sailor? Could you take me to Crandor?”.",
+       "s": "Captain Ned (Draynor): ask him to be your captain",
+       "at": [
+        3098,
+        3257,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4280
+        ],
+        "item": [
+         "Crandor map"
+        ]
+       },
+       "k": "talkToNed"
+      }
+     ],
+     "go": {
+      "x": 3098,
+      "y": 3257,
+      "plane": 0,
+      "label": "Captain Ned — Draynor Village",
+      "npc": "Ned"
+     },
+     "items": [
+      {
+       "name": "Map part",
+       "id": 1535,
+       "where": "The three map pieces: Melzar's, Thalzar's and Lozar's (S5-03 to S5-05).",
+       "count": 3
+      }
+     ]
+    }
+   ]
+  },
+  "S5-08": {
+   "var": [
+    "varp",
+    176
+   ],
+   "route": [
+    {
+     "title": "Sail to Crandor",
+     "steps": [
+      "Do not board without the Anti-dragon shield, food and a strong weapon.",
+      "Board Lady Lumbridge in Port Sarim and talk to Ned on the deck."
+     ]
+    },
+    {
+     "title": "Crandor and the volcano",
+     "steps": [
+      "Go to the centre of the island and down the hole.",
+      "Go all the way south and through the wall: it unlocks the shortcut from the Karamja volcano.",
+      "Enter Elvarg's area and kill her. Her head ends up in your bag."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Prepare to fight Elvarg (level 83). Do not board without the Anti-dragon shield, plenty of food (lobsters or swordfish), a strong weapon (adamant or rune) and a strength potion. Then board Lady Lumbridge in Port Sarim.",
+       "s": "Port Sarim: board the ship (Anti-dragon shield in the bag first!)",
+       "at": [
+        3047,
+        3205,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2593
+        ],
+        "item": [
+         "Anti-dragon shield"
+        ]
+       },
+       "k": "boardShipToGo"
+      },
+      {
+       "t": "Talk to Ned on the deck. Dialogue: “Yes, let's go!”.",
+       "s": "Ship deck: talk to Ned to sail to Crandor",
+       "at": [
+        3048,
+        3208,
+        1
+       ],
+       "hl": {
+        "npc": [
+         5864
+        ]
+       },
+       "k": "talkToNedOnShip"
+      }
+     ],
+     "go": {
+      "x": 3047,
+      "y": 3205,
+      "plane": 0,
+      "label": "Lady Lumbridge — Port Sarim docks"
+     },
+     "items": [
+      {
+       "name": "Anti-dragon shield",
+       "id": 1540,
+       "where": "Worn before the fight: without it Elvarg's fire hits up to 70. Duke Horacio in Lumbridge Castle gives it free (S5-02)."
+      },
+      {
+       "name": "Lobster",
+       "id": 379,
+       "where": "Food: bring 20 or more (swordfish are as good).",
+       "count": 20
+      },
+      {
+       "name": "Strength potion(4)",
+       "id": 113,
+       "where": "Optional boost: a strength potion before the fight."
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Go to the centre of the island and go down the hole.",
+       "s": "Crandor: climb down the hole in the centre of the island",
+       "at": [
+        2834,
+        3256,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25154
+        ]
+       },
+       "k": "enterCrandorHole"
+      },
+      {
+       "t": "Go all the way south and through the wall to unlock the shortcut back to the Karamja volcano. Lesser demons (level 82) can attack down here: keep moving and eat when low. If you die later, come back through the volcano at Karamja (south of Brimhaven) and through this wall.",
+       "s": "Crandor dungeon: go south and through the wall (shortcut)",
+       "at": [
+        2836,
+        9600,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2606
+        ]
+       },
+       "k": "unlockShortcut"
+      },
+      {
+       "t": "Equip the Anti-dragon shield, then climb into Elvarg's area. Pick the Stab style on the sword, eat below 20 health, and never take the shield off.",
+       "s": "Crandor dungeon: enter Elvarg's lair (shield worn!)",
+       "at": [
+        2846,
+        9635,
+        0
+       ],
+       "hl": {
+        "obj": [
+         25161
+        ],
+        "item": [
+         "Anti-dragon shield"
+        ]
+       },
+       "k": "enterElvargArea"
+      },
+      {
+       "t": "Kill Elvarg (level 83). When she dies her head lands in your inventory.",
+       "s": "Elvarg's lair: kill Elvarg (her head drops into the bag)",
+       "at": [
+        2855,
+        9637,
+        0
+       ],
+       "hl": {
+        "npc": [
+         8033
+        ]
+       },
+       "has": "Elvarg's head",
+       "k": "killElvarg"
+      }
+     ],
+     "go": {
+      "x": 2834,
+      "y": 3256,
+      "plane": 0,
+      "label": "Crandor — the hole in the centre of the island"
+     },
+     "items": [
+      {
+       "name": "Anti-dragon shield",
+       "id": 1540,
+       "where": "Worn: without it Elvarg's fire hits up to 70."
+      },
+      {
+       "name": "Lobster",
+       "id": 379,
+       "where": "Food: 20 or more.",
+       "count": 20
+      }
+     ]
+    }
+   ]
+  },
+  "S5-09": {
+   "var": [
+    "varp",
+    176
+   ],
+   "route": [
+    {
+     "title": "Finish",
+     "steps": [
+      "Talk to Oziach in north-western Edgeville to finish the quest."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Oziach in his hut in north-western Edgeville to finish the quest. Then you can buy and wear the Rune platebody (Defence 40).",
+       "s": "Oziach (Edgeville): finish the quest",
+       "at": [
+        3068,
+        3517,
+        0
+       ],
+       "hl": {
+        "npc": [
+         822
+        ],
+        "item": [
+         "Elvarg's head"
+        ]
+       },
+       "k": "finishQuest"
+      }
+     ],
+     "go": {
+      "x": 3068,
+      "y": 3517,
+      "plane": 0,
+      "label": "Oziach — Edgeville",
+      "npc": "Oziach"
+     },
+     "items": []
+    }
+   ]
   }
  }
 }

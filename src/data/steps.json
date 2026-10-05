@@ -4663,6 +4663,13 @@
         "howToGet": "From S2-01 or on the Grand Exchange for about 170 gp. Restores run energy on the climb to the volcano.",
         "wikiItemId": 3008,
         "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png"
+      },
+      {
+        "nameEn": "Strength potion(4)",
+        "amount": 1,
+        "howToGet": "Recommended: one dose before you enter Elvarg's lair. Buy on the Grand Exchange for about 100 gp.",
+        "wikiItemId": 113,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
       }
     ],
     "fields": [
@@ -4696,7 +4703,8 @@
         "Anti-dragon shield",
         "Rune sword",
         "Lobster",
-        "Energy potion(4)"
+        "Energy potion(4)",
+        "Strength potion(4)"
       ],
       "completionTrigger": {
         "type": "ITEM_OWNED",

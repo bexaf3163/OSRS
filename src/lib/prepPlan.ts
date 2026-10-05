@@ -202,6 +202,31 @@ function sourceAction(src: SourceOption | null, name: string, toGet: number, coi
   };
 }
 
+/** An item the step must not start without: not a level or a quest, but a death or a lost trip when missing. */
+interface SafetyRule { names: string[]; label: string; detail: string }
+export const SAFETY: Record<string, SafetyRule[]> = {
+  // Boarding the ship for Crandor: Elvarg's fire hits up to 70 without the shield.
+  'S5-08': [{
+    names: ['Anti-dragon shield', 'Dragonfire shield', 'Dragonfire ward', 'Ancient wyvern shield'],
+    label: 'No Anti-dragon shield with you',
+    detail: "Do not board the ship without it: Elvarg's fire hits up to 70. Duke Horacio in Lumbridge Castle gives it free.",
+  }],
+};
+
+/**
+ * The safety blockers of a step: a rule is broken only when the plan SAW the item missing or in the bank (not in the bag or worn). An item that was not
+ * checked (no game connection, bank not opened) is unknown, never a block: the plan does not claim what it does not know.
+ */
+export function safetyBlockers(stepId: string, lines: readonly PrepLine[]): { label: string; detail?: string }[] {
+  const out: { label: string; detail?: string }[] = [];
+  for (const rule of SAFETY[stepId] ?? []) {
+    const mine = lines.filter((l) => rule.names.includes(l.name));
+    if (!mine.length || mine.some((l) => l.where === 'INVENTORY' || l.where === 'EQUIPPED' || l.where === 'UNKNOWN')) continue;
+    out.push({ label: mine.some((l) => l.where === 'BANK') ? `${rule.names[0]} is in the bank, not with you` : rule.label, detail: rule.detail });
+  }
+  return out;
+}
+
 interface Recipe { makeAt: string; from: { nameEn: string; count: number; how: string; npc?: string }[] }
 const RECIPES = (recipesJson as { recipes: Record<string, Recipe> }).recipes;
 
@@ -348,10 +373,13 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
     ...(coinsMissing !== null && coinsMissing > 0 ? { action: { kind: 'EARN' as const, label: `Short of ${gp(coinsMissing)} gp: earn it`, href: '#/shopping' } } : {}),
   };
 
-  // What items cannot fix: levels, quests, a closed step.
-  const blockers = i.readiness.problems
-    .filter((p) => p.hard && (p.kind === 'skill' || p.kind === 'quest' || p.kind === 'step' || p.kind === 'qp' || p.kind === 'mode'))
-    .map((p) => ({ label: p.label, ...(p.detail ? { detail: p.detail } : {}) }));
+  // What items cannot fix: levels, quests, a closed step. Then the hard safety checks: an item without which the step ends in a death.
+  const blockers = [
+    ...i.readiness.problems
+      .filter((p) => p.hard && (p.kind === 'skill' || p.kind === 'quest' || p.kind === 'step' || p.kind === 'qp' || p.kind === 'mode'))
+      .map((p) => ({ label: p.label, ...(p.detail ? { detail: p.detail } : {}) })),
+    ...safetyBlockers(step.id, lines),
+  ];
 
   const stepOrder = (l: PrepLine) => (l.usedIn[0] ? ids.indexOf(l.usedIn[0]) : 99);
   lines.sort((a, b) => ORDER[a.priority] - ORDER[b.priority] || TIMING[a.timing] - TIMING[b.timing] || stepOrder(a) - stepOrder(b) || (a.key < b.key ? -1 : 1));
