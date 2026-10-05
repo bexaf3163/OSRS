@@ -63,6 +63,44 @@ public class GuideListTest
 			navLabel, x, y, 0);
 	}
 
+	private static StepGuide.ItemLine itemLine(String name, StepGuide.Have have)
+	{
+		return new StepGuide.ItemLine(name, "", have, "", -1, name, "");
+	}
+
+	private static ActiveTarget.StageLine stageLine(String text)
+	{
+		ActiveTarget.StageLine l = new ActiveTarget.StageLine();
+		l.setT(text);
+		l.setS(text);
+		return l;
+	}
+
+	@Test
+	public void onAStage_theBagRowSaysWhatTheGameSeesInTheBag_notWhatIsBankedHandedInOrMissing()
+	{
+		StepGuide.StageView sv = new StepGuide.StageView(3, 7, java.util.Arrays.asList(stageLine("Have Ned make a wig; buy rope too"), stageLine("Dye the wig yellow")), 0, false);
+		List<StepGuide.ItemLine> items = java.util.Arrays.asList(itemLine("Ball of wool ×3", StepGuide.Have.BAG), itemLine("Rope", StepGuide.Have.BAG),
+			itemLine("Bronze bar", StepGuide.Have.BANK), itemLine("Beer", StepGuide.Have.DONE), itemLine("Onion", StepGuide.Have.NONE), itemLine("Ashes", StepGuide.Have.UNKNOWN));
+		StepGuide.View v = new StepGuide.View("[S2-10] Prince Ali Rescue", null, items, java.util.Collections.emptyList(), null, null, null, null, sv);
+		String all = GuideList.plain(rows(v, false));
+		assertTrue("2 in the bag of the 5 that count (the handed-in beer is not counted): " + all, all.contains("In your bag: 2 of 5 items"));
+		assertFalse("the held items are not listed by name on a stage: " + all, all.contains("Ball of wool") || all.contains("Rope"));
+		GuideList.Row bag = GuideList.bagRow(items, SMALL, 200);
+		assertNotNull(bag);
+		assertTrue(bag.getHint(), bag.getHint().contains("Ball of wool ×3, Rope") && !bag.getHint().contains("Bronze bar,") && !bag.getHint().contains("Onion"));
+		assertFalse("not a button", bag.getAction().isClickable());
+		assertNull("nothing in the bag: no row", GuideList.bagRow(java.util.Arrays.asList(itemLine("Onion", StepGuide.Have.NONE)), SMALL, 200));
+		assertNull(GuideList.bagRow(java.util.Collections.emptyList(), SMALL, 200));
+	}
+
+	@Test
+	public void aStepWithoutAStage_hasNoBagRow_itsItemsAreListedWithTheirStatus()
+	{
+		String all = GuideList.plain(rows(witchsPotion(null, 0, 0), false));
+		assertFalse(all, all.contains("In your bag"));
+	}
+
 	@Test
 	public void itemsWithStatusAndWhereToGet_placeIsButton()
 	{

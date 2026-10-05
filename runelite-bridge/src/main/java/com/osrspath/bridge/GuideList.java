@@ -183,6 +183,11 @@ final class GuideList
 				return out;
 			}
 			stageRows(out, stage, fm, small, inner);
+			Row bag = bagRow(v.getItems(), small, inner);
+			if (bag != null)
+			{
+				out.add(bag);
+			}
 		}
 		// A long list (Prince Ali Rescue: 12 items and 8 NPCs) must not cover half the screen: "where to get it" and places go
 		// on one line, in full in the hover hint. What is missing goes on top, what is already in the bag goes down.
@@ -500,6 +505,35 @@ final class GuideList
 			out.add(new Row(clip("", "◀ Back: " + prev.shown(), MUTED, small, inner, 1, true), Action.PREV,
 				"Click to view the previous step: " + prev.getT() + " After a minute the list returns to the current step by itself."));
 		}
+	}
+
+	/**
+	 * On a stage the items already in the bag are left out of "Needed now" (a deliberate choice: they take space for nothing), so the list never
+	 * said that the bag was read, and the stage lines ("buy rope too") are fixed walkthrough text. This one short row says how many of the step's
+	 * items the game reports in the bag, and the hover hint names them. Only the bag counts as "in your bag"; handed-in items ("done") and ones
+	 * obtained during the step are not part of the total. null means none of them is in the bag.
+	 */
+	static Row bagRow(List<StepGuide.ItemLine> items, FontMetrics small, int inner)
+	{
+		List<String> names = new ArrayList<>();
+		int total = 0;
+		for (StepGuide.ItemLine i : items)
+		{
+			if (i.getHave() == StepGuide.Have.BAG)
+			{
+				names.add(i.getName());
+			}
+			if (i.getHave() != StepGuide.Have.IN_STEP && i.getHave() != StepGuide.Have.DONE)
+			{
+				total++;
+			}
+		}
+		if (names.isEmpty())
+		{
+			return null;
+		}
+		return new Row(clip("", "In your bag: " + names.size() + " of " + total + " items", StepGuide.GOOD, small, inner, 1, true), Action.NONE,
+			"In your bag now, as the game reports it: " + String.join(", ", names) + ". The step lines above are the quest's fixed order; a line about something you already hold can be skipped.");
 	}
 
 	/** "S2-07 · " from a heading like "[S2-07] Title"; empty means there is no code. */
