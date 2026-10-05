@@ -1630,6 +1630,24 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				adviceTab = !adviceTab;
 				refreshGuide();
 				break;
+			case DETOUR:
+			{
+				PrepPlan p = prep;
+				NavTarget n = p != null && p.hasDetour() ? p.getDetour().navTarget(target == null ? null : target.getStepId()) : null;
+				if (n == null)
+				{
+					break;
+				}
+				if (!config.autoNavigation())
+				{
+					guideMessage = "Navigation to places is turned off: RuneLite -> OSRS Path Bridge -> 'Arrow to places'.";
+					refreshGuide();
+					break;
+				}
+				guideMessage = null;
+				applyNav(n);
+				break;
+			}
 			case BACK:
 				applyNav(null);
 				break;

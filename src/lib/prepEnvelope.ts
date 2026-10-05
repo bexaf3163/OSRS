@@ -10,6 +10,7 @@
 import type { ActiveStepPayload, GearHintPayload, ShoppingPlanPayload } from '../services/runeliteBridge';
 import { kgText } from './weight';
 import type { PrepLine, PrepPlan, PrepPriority, PrepTiming, PrepWhere, Supply } from './prepPlan';
+import type { Detour } from './detours';
 
 export const SNAPSHOT_VERSION = 6;
 
@@ -30,6 +31,8 @@ export interface PrepPlanPayload {
   weight?: string;
   slots?: string;
   blockers?: string[];
+  /** A stop worth making on the way ("Detour: Buy Orange dye at ..."): the text and where the arrow leads when it is clicked in the game. */
+  detour?: { text: string; x: number; y: number; plane: number; label: string };
 }
 
 export interface BankTagsPayload {
@@ -89,7 +92,7 @@ export function recoveryPayload(plan: PrepPlan): PrepPlanPayload['recovery'] | u
 }
 
 /** The preparation plan in the form the plugin draws: without the excess and within its checks. */
-export function planPayload(plan: PrepPlan): PrepPlanPayload {
+export function planPayload(plan: PrepPlan, detour?: Detour | null): PrepPlanPayload {
   const lines = plan.lines
     .filter((l) => l.timing !== 'LATER')
     .slice(0, MAX_PLAN_LINES)
@@ -114,6 +117,7 @@ export function planPayload(plan: PrepPlan): PrepPlanPayload {
     ...(recovery ? { recovery } : {}),
     ...(weight ? { weight } : {}),
     ...(slots ? { slots } : {}),
+    ...(detour ? { detour: { text: clipText(detour.text), x: detour.stop.x, y: detour.stop.y, plane: detour.stop.plane, label: clipText(detour.stop.label, 60) } } : {}),
     ...(plan.blockers.length ? { blockers: plan.blockers.slice(0, MAX_BLOCKERS).map((b) => clipText(b.detail ? `${b.label} — ${b.detail}` : b.label)) } : {}),
   };
 }

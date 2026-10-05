@@ -98,6 +98,8 @@ class GuideMouse extends MouseAdapter
 				return "Collapse / expand";
 			case TAB:
 				return "Steps / advice";
+			case DETOUR:
+				return "Arrow to the stop";
 			default:
 				return "List";
 		}

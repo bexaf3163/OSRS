@@ -28,6 +28,7 @@ public class PrepPlan
 	private String weight;
 	private String slots;
 	private List<String> blockers;
+	private Detour detour;
 
 	private transient Map<String, Line> byName = Collections.emptyMap();
 
@@ -67,6 +68,35 @@ public class PrepPlan
 		}
 	}
 
+	/** A stop worth making on the way ("Detour: Buy Orange dye at Aggie (+10 tiles, saves ~3 min)"): the text and where a click leads the arrow. */
+	@Data
+	public static class Detour
+	{
+		private String text;
+		private String label;
+		private int x;
+		private int y;
+		private int plane;
+
+		boolean valid()
+		{
+			return text != null && !text.trim().isEmpty() && !ActiveTarget.tooLong(text) && label != null && !label.trim().isEmpty() && !ActiveTarget.tooLong(label)
+				&& x > 0 && y > 0 && x < NavTarget.MAX_COORD && y < NavTarget.MAX_COORD && plane >= 0 && plane <= 3;
+		}
+
+		/** The arrow target of the stop. */
+		NavTarget navTarget(String stepId)
+		{
+			NavTarget n = new NavTarget();
+			n.setLabel(label.length() > 60 ? label.substring(0, 59) + "…" : label);
+			n.setX(x);
+			n.setY(y);
+			n.setPlane(plane);
+			n.setStepId(stepId);
+			return n.prepare() == null ? n : null;
+		}
+	}
+
 	@Data
 	public static class Recovery
 	{
@@ -103,6 +133,10 @@ public class PrepPlan
 				index.putIfAbsent(ActiveTarget.nameKey(l.name), l);
 			}
 			byName = index;
+		}
+		if (detour != null && !detour.valid())
+		{
+			return "invalid detour";
 		}
 		return textProblem(later, MAX_LATER, "don't take now");
 	}
@@ -146,6 +180,11 @@ public class PrepPlan
 	Integer pendingPercent()
 	{
 		return score != null && score.percent != null && score.percent < 100 ? score.percent : null;
+	}
+
+	boolean hasDetour()
+	{
+		return detour != null && detour.valid();
 	}
 
 	boolean hasRecovery()

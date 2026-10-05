@@ -35,6 +35,8 @@ final class GuideList
 		RESUME,
 		/** Switch the list tab: "Steps" / "Tip". */
 		TAB,
+		/** The purchase detour: the arrow and the path to the stop the app suggests. */
+		DETOUR,
 	}
 
 	@Value
@@ -47,6 +49,7 @@ final class GuideList
 		static final Action PREV = new Action(Kind.PREV, -1);
 		static final Action RESUME = new Action(Kind.RESUME, -1);
 		static final Action TAB = new Action(Kind.TAB, -1);
+		static final Action DETOUR = new Action(Kind.DETOUR, -1);
 
 		Kind kind;
 		/** The number of the step's point for PLACE. */
@@ -184,6 +187,10 @@ final class GuideList
 			{
 				out.add(bag);
 			}
+		}
+		if (v.getPrep() != null && v.getPrep().hasDetour())
+		{
+			out.add(detourRow(v.getPrep(), fm, inner));
 		}
 		// A long list (Prince Ali Rescue: 12 items and 8 NPCs) must not cover half the screen: "where to get it" and places go
 		// on one line, in full in the hover hint. What is missing goes on top, what is already in the bag goes down.
@@ -532,6 +539,10 @@ final class GuideList
 			out.add(new Row(clip("", "⚠ " + s.getWarning(), StepGuide.BANK, fm, inner, 2, true), Action.NONE, s.getWarning()));
 		}
 		PrepPlan prep = v.getPrep();
+		if (prep != null && prep.hasDetour())
+		{
+			out.add(detourRow(prep, fm, inner));
+		}
 		if (prep != null && prep.hasRecovery())
 		{
 			String title = prep.getRecovery().getTitle() == null || prep.getRecovery().getTitle().isEmpty() ? "Recovery mode" : prep.getRecovery().getTitle();
@@ -587,14 +598,22 @@ final class GuideList
 		return out;
 	}
 
-	/** How many tips the app has for the step: blockers, "will not fit", "don't take now", weight. */
+	/** The suggested stop on the way, as one clickable row: a click points the arrow there. The app only suggests it. */
+	static Row detourRow(PrepPlan prep, FontMetrics fm, int inner)
+	{
+		String text = prep.getDetour().getText();
+		return new Row(clip("", "⚡ " + text, StepGuide.GOOD, fm, inner, 2, true), Action.DETOUR,
+			text + ". Click to point the arrow at " + prep.getDetour().getLabel() + ". The app only suggests it: it buys nothing.");
+	}
+
+	/** How many tips the app has for the step: a detour, blockers, "will not fit", "don't take now", weight. */
 	static int adviceCount(PrepPlan prep)
 	{
 		if (prep == null)
 		{
 			return 0;
 		}
-		return (prep.getBlockers() == null ? 0 : prep.getBlockers().size())
+		return (prep.hasDetour() ? 1 : 0) + (prep.getBlockers() == null ? 0 : prep.getBlockers().size())
 			+ (prep.getSlots() != null && !prep.getSlots().isEmpty() ? 1 : 0)
 			+ (prep.getLater() != null && !prep.getLater().isEmpty() ? 1 : 0)
 			+ (prep.getWeight() != null && !prep.getWeight().isEmpty() ? 1 : 0);
@@ -668,6 +687,10 @@ final class GuideList
 		if (prep == null)
 		{
 			return;
+		}
+		if (prep.hasDetour())
+		{
+			out.add(detourRow(prep, small, inner));
 		}
 		if (prep.getBlockers() != null)
 		{

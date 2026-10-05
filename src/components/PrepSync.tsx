@@ -2,7 +2,7 @@
 // goes to the plugin in the shared snapshot, and it draws the readiness percent, "do not take now", the recovery mode, advice about weight
 // and the bag next to its live item list. It draws nothing; with a protocol below 6 it does nothing.
 
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
 import { useFeatures } from '../lib/features';
@@ -13,6 +13,11 @@ import { planPayload } from '../lib/prepEnvelope';
 import { supportsSnapshot } from '../services/runeliteBridge';
 import { useUpgradeRecommendation } from './UpgradePrompt';
 import type { Step } from '../types';
+import { procurementDetour, type Detour } from '../lib/detours';
+import { stepPlaces } from '../lib/stepPlaces';
+
+/** How often the position is read for the purchase detour: the text is rounded, so the snapshot does not change on every step. */
+const DETOUR_POLL_MS = 15_000;
 
 export function PrepSync() {
   const { state, activeStepId, plugin, setPrepPart } = useBridge();
@@ -30,11 +35,31 @@ export function PrepSync() {
 }
 
 function StepPlan({ step }: { step: Step }) {
-  const { setPrepPart } = useBridge();
+  const { setPrepPart, locate } = useBridge();
   const profile = styleOf(useFeatures());
   const upgrade = useUpgradeRecommendation(step);
-  const plan = useReadinessEngine().plan(step, { ahead: profile.lookAhead, upgrade });
-  const payload = planPayload(plan);
+  const engine = useReadinessEngine();
+  const plan = engine.plan(step, { ahead: profile.lookAhead, upgrade });
+  // A purchase or pick-up worth a stop on the way: judged by where the player is now, read every few seconds, not on every tick.
+  const [detour, setDetour] = useState<Detour | null>(null);
+  const planRef = useRef(plan);
+  planRef.current = plan;
+  const to = stepPlaces(step)[0];
+  const coins = engine.ctx.state.coins.bag.known ? engine.ctx.state.coins.bag.value : null;
+  useEffect(() => {
+    let dead = false;
+    const run = async () => {
+      const pos = await locate();
+      if (dead) return;
+      setDetour(pos && to && pos.plane === 0 && to.plane === 0 ? procurementDetour({ plan: planRef.current, stepId: step.id, from: pos, to, coins }) : null);
+    };
+    void run();
+    const t = window.setInterval(() => void run(), DETOUR_POLL_MS);
+    return () => { dead = true; window.clearInterval(t); };
+    // The plan is read from a ref when the timer fires: a new plan object on every render must not restart the timer.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [step.id, locate, to?.x, to?.y, plan.now.length, plan.soon.length, coins]);
+  const payload = planPayload(plan, detour);
   const key = JSON.stringify(payload);
   useEffect(() => {
     setPrepPart('plan', payload);

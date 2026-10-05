@@ -59,9 +59,39 @@ export const MIN_SAVING_TILES = 20;
  * Opportunistic routing: a teleport the player does not carry is offered only if going to get it first is clearly worth it: it saves at least this many
  * tiles after the detour, the detour itself is short, and the price is small (an unknown price is shown as unknown, never as zero).
  */
-export const OPPORTUNISTIC_MIN_SAVING_TILES = 60;
-export const OPPORTUNISTIC_MAX_DETOUR_TILES = 120;
+// Relaxed in 2.39: 60 and 120 tiles starved the live routes. The detour is already counted in the saving (direct - (fetch + tail)), so a separate tight cap
+// on the fetch only hid worthwhile shortcuts: it is now a sanity limit, and 40 tiles (about 12 s of running) is enough saving to say so.
+export const OPPORTUNISTIC_MIN_SAVING_TILES = 40;
+export const OPPORTUNISTIC_MAX_DETOUR_TILES = 300;
 export const OPPORTUNISTIC_MAX_COST = 3000;
+
+/** Why a fetch-first suggestion was dropped (or kept with a caveat). The same reasons are used for the purchase detours in detours.ts. */
+export type DetourRejection = 'exceeds_detour_limit' | 'insufficient_savings' | 'price_unknown' | 'missing_coins' | 'not_whitelisted' | 'price_too_high';
+
+export interface DetourDecision {
+  /** What was judged: an item name, or the stop for a group of items. */
+  subject: string;
+  outcome: 'offered' | 'rejected';
+  reason?: DetourRejection;
+  /** An offered suggestion with a caveat: the price is unknown, or the coins in the bag do not cover it. */
+  caveat?: 'price_unknown' | 'missing_coins';
+  /** The numbers behind the verdict, in tiles unless said otherwise. */
+  detail: Record<string, number | string | null>;
+}
+
+const decisionSink: { log: ((d: DetourDecision) => void) | null } = { log: null };
+/** The debug sink: set it to see every verdict (tests, the developer console). */
+export function setDetourLog(fn: ((d: DetourDecision) => void) | null): void {
+  decisionSink.log = fn;
+}
+/** Record a verdict: to the caller's callback, to the debug sink, and to the console when localStorage "osrs-put:debug-fetch" is "1". */
+export function emitDecision(d: DetourDecision, extra?: (d: DetourDecision) => void): void {
+  extra?.(d);
+  decisionSink.log?.(d);
+  try {
+    if (typeof localStorage !== 'undefined' && localStorage.getItem('osrs-put:debug-fetch') === '1') console.debug('[fetch-first]', JSON.stringify(d));
+  } catch { /* no storage */ }
+}
 
 export const dist = (a: Point, b: Point): number => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
 
@@ -104,6 +134,8 @@ export interface TravelInput {
   members?: boolean | null;
   /** Seconds until the Home Teleport can be cast again (from the game); null or absent means it is ready or unknown. */
   homeCooldownSec?: number | null;
+  /** Called with the verdict on every fetch-first candidate: offered, or rejected with the reason. */
+  onDecision?: (d: DetourDecision) => void;
 }
 
 const count = (items: readonly GearItem[], names: readonly string[]): number =>
@@ -272,10 +304,17 @@ function itemTeleportOptions(inp: TravelInput, direct: number): TravelOption[] {
     }
     const acq = acquireFor(e.item, inp);
     const total = acq.tiles + tail;
-    const worth = direct - total >= OPPORTUNISTIC_MIN_SAVING_TILES && acq.tiles <= OPPORTUNISTIC_MAX_DETOUR_TILES && (acq.cost === null || acq.cost <= OPPORTUNISTIC_MAX_COST);
-    if (!worth) continue;
+    const detail = { fetch: acq.tiles, tail, direct, saving: direct - total, cost: acq.cost, source: acq.source };
+    const reject = (reason: DetourRejection) => { emitDecision({ subject: e.item, outcome: 'rejected', reason, detail }, inp.onDecision); };
+    if (acq.tiles > OPPORTUNISTIC_MAX_DETOUR_TILES) { reject('exceeds_detour_limit'); continue; }
+    if (direct - total < OPPORTUNISTIC_MIN_SAVING_TILES) { reject('insufficient_savings'); continue; }
+    if (acq.cost !== null && acq.cost > OPPORTUNISTIC_MAX_COST) { reject('price_too_high'); continue; }
     const coins = inp.carried ? count(inp.carried, ['Coins']) : null;
     const afford = acq.source === 'bank' || acq.cost === null || coins === null ? null : needFrom(coins >= acq.cost, inp.bankSeen);
+    emitDecision({
+      subject: e.item, outcome: 'offered', detail,
+      ...(acq.source === 'exchange' && acq.cost === null ? { caveat: 'price_unknown' as const } : afford === false ? { caveat: 'missing_coins' as const } : {}),
+    }, inp.onDecision);
     const verb = acq.source === 'bank' ? 'withdraw' : 'buy';
     const price = acq.source === 'bank' ? 'free' : acq.cost === null ? 'price unknown' : `~${acq.cost} gp`;
     out.push({

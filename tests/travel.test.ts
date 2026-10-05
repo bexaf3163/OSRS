@@ -78,3 +78,144 @@ describe('how to get there', () => {
     expect(ranks).toEqual([...ranks].sort((a, b) => a - b));
   });
 });
+
+// ---------- Fetch it first: why it did not show live, and the purchase detour ----------
+import { allSteps as routeSteps, stepById } from '../src/data';
+import { buildPlayerState } from '../src/lib/playerState';
+import { createReadinessEngine } from '../src/lib/readinessEngine';
+import { emptyProgress } from '../src/lib/progress';
+import { nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
+import { stepPlaces } from '../src/lib/stepPlaces';
+import { planPayload } from '../src/lib/prepEnvelope';
+import { DETOUR_MAX_EXTRA_TILES, procurementDetour } from '../src/lib/detours';
+import { OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MIN_SAVING_TILES, setDetourLog, type DetourDecision } from '../src/lib/travel';
+import type { PrepPlan } from '../src/lib/prepPlan';
+
+describe('fetch it first: every verdict has a reason, and the thresholds do not starve the routes', () => {
+  const falador = at(2970, 3380);
+  const price = (name: string) => (name === 'Falador teleport' ? 600 : undefined);
+  const decisions = (over: Partial<TravelInput>): DetourDecision[] => {
+    const seen: DetourDecision[] = [];
+    travelOptions(input({ to: falador, carried: bag(['Coins', 5000]), bankSeen: true, priceOf: price, ...over, onDecision: (d) => seen.push(d) }));
+    return seen.filter((d) => d.subject === 'Falador teleport');
+  };
+
+  it('the limits are the relaxed ones: 40 tiles of saving, a 300-tile sanity cap on the fetch', () => {
+    expect(OPPORTUNISTIC_MIN_SAVING_TILES).toBe(40);
+    expect(OPPORTUNISTIC_MAX_DETOUR_TILES).toBe(300);
+  });
+
+  it('a candidate that saves too little is logged with the reason and the numbers', () => {
+    // From Lumbridge the exchange is farther than the target itself: nothing to save.
+    const d = decisions({ from: at(3222, 3218) });
+    expect(d).toHaveLength(1);
+    expect(d[0]).toMatchObject({ outcome: 'rejected', reason: 'insufficient_savings' });
+    expect(d[0].detail.saving as number).toBeLessThan(OPPORTUNISTIC_MIN_SAVING_TILES);
+  });
+
+  it('a fetch beyond the sanity cap is logged as exceeding the detour limit', () => {
+    const d = decisions({ from: at(3222, 2800) });
+    expect(d[0]).toMatchObject({ outcome: 'rejected', reason: 'exceeds_detour_limit' });
+  });
+
+  it('an offered suggestion carries its caveat: price unknown, or coins that do not cover it', () => {
+    const near = at(3165, 3440);
+    expect(decisions({ from: near, priceOf: undefined })[0]).toMatchObject({ outcome: 'offered', caveat: 'price_unknown' });
+    expect(decisions({ from: near, carried: bag(['Coins', 50]) })[0]).toMatchObject({ outcome: 'offered', caveat: 'missing_coins' });
+    expect(decisions({ from: near })[0]).toMatchObject({ outcome: 'offered' });
+  });
+
+  it('the debug sink sees every verdict', () => {
+    const all: DetourDecision[] = [];
+    setDetourLog((d) => all.push(d));
+    travelOptions(input({ from: at(3165, 3440), to: falador, carried: bag(['Coins', 5000]), bankSeen: true, priceOf: price }));
+    setDetourLog(null);
+    expect(all.length).toBeGreaterThan(0);
+    expect(all.every((d) => d.outcome === 'offered' || d.reason)).toBe(true);
+  });
+
+  it('a tablet in the Draynor bank is fetched in one tile: Draynor to Goblin Village produces the option', () => {
+    const draynor = at(3093, 3244);
+    const goblinVillage = at(2957, 3512);
+    const bank = new Map([[nameKey('Falador teleport'), 2]]);
+    const o = travelOptions(input({ from: draynor, to: goblinVillage, carried: bag(['Coins', 100]), bankSeen: true, bank })).find((x) => x.id === 'falador-tab-acquire');
+    expect(o?.acquire).toMatchObject({ source: 'bank' });
+    expect(o!.walkTiles).toBeLessThan(dist(draynor, goblinVillage) - OPPORTUNISTIC_MIN_SAVING_TILES);
+  });
+});
+
+describe('purchase detours: a thing the next steps need, near where the player is', () => {
+  const none = { bag: 0, noted: 0, bank: 0, equipped: 0 };
+  const owned = (rows: Record<string, Partial<OwnedItem>>): OwnedState => {
+    const items = new Map<string, OwnedItem>();
+    for (const [name, o] of Object.entries(rows)) items.set(nameKey(name), { name, carried: 0, noted: 0, ...o });
+    return { bankSeen: true, items };
+  };
+  const planFor = (id: string, rows: Record<string, Partial<OwnedItem>>): PrepPlan => {
+    const step = stepById.get(id)!;
+    const state = buildPlayerState({
+      mode: 'f2p', stats: null, progress: { levels: {} }, owned: owned(rows), gear: { equipment: [], inventory: [], coins: 600, bankCoins: 0 }, questsDone: null, connected: true,
+    });
+    return createReadinessEngine({ steps: routeSteps, progress: emptyProgress(), qp: 0, mode: 'f2p', state }).plan(step);
+  };
+  const dyes = { 'Blue dye': { carried: 1 }, 'Orange dye': { carried: 0, bank: 0 }, 'Red dye': { carried: 0, bank: 0 }, 'Yellow dye': { carried: 1, bank: 0 } };
+
+  it('Draynor to Goblin Village (S2-12): Aggie is 13 tiles away and makes the missing Red dye, so the stop is suggested', () => {
+    const plan = planFor('S2-12', dyes);
+    const to = stepPlaces(stepById.get('S2-12')!)[0];
+    const seen: DetourDecision[] = [];
+    const d = procurementDetour({ plan, stepId: 'S2-12', from: at(3093, 3244), to, coins: 600, onDecision: (x) => seen.push(x) });
+    expect(d, JSON.stringify(seen)).not.toBeNull();
+    expect(d!.items).toContain('Red dye');
+    expect(d!.text).toMatch(/^Detour: Get Red dye at Aggie \(\+\d+ tiles, saves ~/);
+    expect(seen.some((x) => x.outcome === 'offered')).toBe(true);
+  });
+
+  it('the stop travels in the plan payload to the game: text and where the arrow leads', () => {
+    const plan = planFor('S2-12', dyes);
+    const to = stepPlaces(stepById.get('S2-12')!)[0];
+    const d = procurementDetour({ plan, stepId: 'S2-12', from: at(3093, 3244), to, coins: 600 })!;
+    const payload = planPayload(plan, d);
+    expect(payload.detour).toMatchObject({ text: d.text, x: d.stop.x, y: d.stop.y, plane: 0 });
+    expect(planPayload(plan, null).detour).toBeUndefined();
+    expect(planPayload(plan).detour).toBeUndefined();
+  });
+
+  it('far from the place, the stop is dropped with the reason', () => {
+    const plan = planFor('S2-12', dyes);
+    const seen: DetourDecision[] = [];
+    const d = procurementDetour({ plan, stepId: 'S2-12', from: at(3213, 3424), to: at(3300, 3800), coins: 600, onDecision: (x) => seen.push(x) });
+    expect(d).toBeNull();
+    expect(seen.some((x) => x.reason === 'exceeds_detour_limit' || x.reason === 'insufficient_savings')).toBe(true);
+    expect(DETOUR_MAX_EXTRA_TILES).toBeGreaterThan(0);
+  });
+
+  it('the Varrock shopping steps put the exchange first when it is close, with all the items at that stop', () => {
+    const ge = { x: 3165, y: 3487, plane: 0 };
+    const buy = (name: string, price: number) => ({
+      key: name, name, count: 1, exact: true, where: 'MISSING' as const, have: none, toGet: 1, priority: 'CRITICAL' as const, timing: 'NOW' as const,
+      action: { kind: 'BUY' as const, label: `Buy ${name}`, price, nav: { label: `Grand Exchange: ${name}`, ...ge, itemName: name } }, why: '', usedIn: ['S2-01'],
+    });
+    const aggie = {
+      key: 'Red dye', name: 'Red dye', count: 1, exact: true, where: 'MISSING' as const, have: none, toGet: 1, priority: 'IMPORTANT' as const, timing: 'NOW' as const,
+      action: { kind: 'GATHER' as const, label: 'Aggie', nav: { label: 'Aggie: Red dye', x: 3180, y: 3470, plane: 0, itemName: 'Red dye' } }, why: '', usedIn: ['S2-01'],
+    };
+    const plan = { now: [buy('Pot', 1), buy('Bucket', 2), buy('Rope', 18), aggie], soon: [] };
+    const d = procurementDetour({ plan, stepId: 'S2-01', from: at(3190, 3470), to: at(3213, 3424), coins: 500 });
+    expect(d?.stop.x).toBe(ge.x);
+    expect(d?.items).toEqual(['Pot', 'Bucket', 'Rope']);
+  });
+
+  it('an unpriced purchase, one we cannot afford, and a thing with no place are each dropped with their own reason', () => {
+    const base = { key: 'x', name: 'X', count: 1, exact: true, where: 'MISSING' as const, have: none, toGet: 1, priority: 'IMPORTANT' as const, timing: 'NOW' as const, why: '', usedIn: ['S2-12'] };
+    const nav = { label: 'Shop: X', x: 3094, y: 3245, plane: 0 };
+    const reasons = (line: object, coins: number | null) => {
+      const seen: DetourDecision[] = [];
+      procurementDetour({ plan: { now: [line as never], soon: [] }, stepId: 'S2-12', from: at(3093, 3244), to: at(2957, 3512), coins, onDecision: (d) => seen.push(d) });
+      return seen.map((d) => d.reason);
+    };
+    expect(reasons({ ...base, action: { kind: 'BUY', label: 'Buy', nav } }, 500)).toEqual(['price_unknown']);
+    expect(reasons({ ...base, action: { kind: 'BUY', label: 'Buy', price: 900, nav } }, 100)).toEqual(['missing_coins']);
+    expect(reasons({ ...base, action: { kind: 'EARN', label: 'Earn it first' } }, 500)).toEqual(['not_whitelisted']);
+  });
+});
