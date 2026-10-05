@@ -1,28 +1,50 @@
-# OSRS Path
+<h1 align="center">OSRS Path</h1>
 
-A personal progress tracker for Old School RuneScape. Route V2: 54 free-to-play steps (stages 1–6) and 15 members steps
-(stages 7–9), 20 skills with training plans (12 free and 8 members), goals by stage, quests, a reference and RuneLite plugins.
-A built-in OSRS Wiki inspector: the Grand Exchange price, shops, free spawn places and drops for 203 items.
+<p align="center">
+  <b>A guided Old School RuneScape account route for your desktop, with a RuneLite plugin that shows you what to do, where to go and what to bring — right in the game.</b>
+</p>
 
-The route facts — requirements, rewards, floors, prices — were checked against the OSRS Wiki and the Grand Exchange on 26.09.2026.
-The route has earning steps: where the money for each purchase comes from, with a budget at current prices.
+<p align="center">
+  <a href="https://github.com/bexaf3163/OSRS/releases/latest">Download for Windows</a> ·
+  <a href="PROJECT_MAP.md">Project map</a> ·
+  <a href="#runelite-bridge">RuneLite bridge</a> ·
+  <a href="#version-history-summary">Version history</a>
+</p>
 
-Steps have a map: a preview of the place right in the card and the OSRS Wiki world map full screen, with a point switch
-for fishing, ore and treasure steps. The food in every fight is named and counted: what exactly, how much, how much it heals and where to get it.
+---
 
-The **OSRS Path Bridge** RuneLite plugin (the `runelite-bridge/` folder) shows the current step right in the game: an arrow to the place,
-highlights of NPCs, objects, tiles, the right dialogue option and items — and marks the step as done by itself when it is done in the game: the quest is
-counted, the level is reached, the needed things are in hand or in the bank (62 steps of 69). It is also an in-game helper: a micro HUD with the goal and
-the distance, a bag check at the bank, a route through the Shortest Path plugin, a hint at the Grand Exchange — and the app offers quick options for your levels and
-builds a bulk shopping list.
-The app analyses your gear: what is worn, how hard it hits the step's opponent and what to wear or buy to hit faster — on the "⚔️ Gear" page, in a combat step card
-and in a line of the in-game HUD.
-Every step has a **readiness** check: whether the levels, quests, items and coins are enough, and what to do if not
-("⚡ Catch up Crafting", "🧭 To the bank — take the Knife", "🛒 Add to shopping"); the bulk list has "I already have it";
-the game has a **big arrow** that turns with the camera; the big map shows where it leads.
+## What it is
 
-No server and no accounts. One program for Windows — a portable exe. There is no web version and no phone version:
-the desktop program does everything the same and also talks to RuneLite, and maintaining three builds for one player is extra work and extra places for something to break.
+OSRS Path walks a fresh account from the first minute to a solid mid-game character as **69 checked steps in 9 stages** — 54 free-to-play steps
+and 15 members steps — with the money for every purchase planned along the way. Everything was cross-checked against the OSRS Wiki, the Grand Exchange
+and the Quest Helper sources. It is one portable Windows program plus the **OSRS Path Bridge** plugin for RuneLite; the two talk to each other on your own PC,
+so there is no server, no account and nothing to sign up for.
+
+## What it does
+
+| | |
+|---|---|
+| **A route you can trust** | 69 steps with requirements, rewards, floors, prices and short walkthroughs. 20 skills with training plans (12 free, 8 members), goals by stage, quests, a reference and a built-in OSRS Wiki inspector for 203 items. |
+| **Readiness before every step** | A traffic light for levels, quests, items and coins, with one-click fixes: train a skill, go to the bank, add to the shopping list, make up the money. What the program does not know is shown as "not checked", never as "no". |
+| **The game shows you the way** | The plugin puts the step in the game: a big arrow that turns with the camera, highlights for NPCs, objects, tiles, dialogue options and items, and a clickable "What you need" list that follows the quest stage like Quest Helper does. |
+| **It tracks you** | 62 of the 69 steps close by themselves when the quest is counted, the level is reached or the items are in hand. "Sync with the account" restores a lost progress from what the game knows. |
+| **Gear, food and pace** | What to wear and buy to hit faster, food for every fight, health in the HUD, XP per hour and the time to the goal, run energy and weight advice. |
+| **Shopping and money** | A bulk Grand Exchange list without double counting, a budget at live prices, "I already have it", earning methods from the wiki and a resource journal that survives between sessions. |
+| **Maps and travel** | The OSRS Wiki world map in every step with a place, and "Where am I? How to get there": on foot, teleports, canoes and boats compared for your levels and runes. |
+| **Safe by design** | Your progress is stored twice and copied every hour outside the program folder; a fresh install restores itself. Profiles per character. Auto-update from GitHub with a checksum. |
+
+## Principles
+
+- **A companion, not a bot.** It shows, counts and guides. It never clicks for you, never buys or sells, and never moves items — offers, the bank and dialogues stay yours.
+- **Honest about what it does not know.** An unavailable value is "unknown", not zero; the program says what was not checked in the live game.
+- **Local and private.** No server and no accounts. The plugin answers only the program, on `127.0.0.1`.
+- **One build.** A portable Windows exe, no installer, no web or phone version — fewer places for something to break.
+
+## Quick start
+
+1. Download **`OSRS-Put-<version>-portable.exe`** from [Releases](https://github.com/bexaf3163/OSRS/releases/latest) and run it. (The exe is not signed: SmartScreen may ask — "More info" → "Run anyway".)
+2. Open RuneLite from the program (Settings → RuneLite) so it starts with the plugin, then log in. The header indicator turns green.
+3. Pick your mode (F2P / Members), open the "Path" screen and follow the current step. If you already have progress in the game, press "Sync with the account".
 
 ## Desktop app
 
