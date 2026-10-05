@@ -202,6 +202,18 @@ public interface OsrsPathBridgeConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "dockBar",
+		name = "Docked bar",
+		description = "Replace the HUD plate with a single bar (step, what to do, distance, items in the bag / bank / missing, readiness). The 'What you need' list opens under it only while the mouse is over the bar or the list, at the open bank, or for a moment after. Off by default",
+		section = companion,
+		position = 14
+	)
+	default boolean dockBar()
+	{
+		return false;
+	}
+
+	@ConfigItem(
 		keyName = "showChecklist",
 		name = "Departure check at the bank",
 		description = "With the bank open: which of the step's items are already in the bag and which to take. What is needed is highlighted in the bank",

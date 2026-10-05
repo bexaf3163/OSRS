@@ -159,6 +159,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private OsrsPathGuideOverlay guideOverlay;
 
 	@Inject
+	private OsrsPathDockOverlay dockOverlay;
+
+	@Inject
 	private MouseManager mouseManager;
 
 	@Inject
@@ -360,6 +363,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		overlayManager.add(dangerOverlay);
 		overlayManager.add(arrowOverlay);
 		overlayManager.add(guideOverlay);
+		overlayManager.add(dockOverlay);
 		guideMouse = new GuideMouse(client, guideOverlay, a -> clientThread.invokeLater(() -> guideAction(a)));
 		mouseManager.registerMouseListener(guideMouse);
 		panel = new OsrsPathPanel(new OsrsPathPanel.Actions()
@@ -425,6 +429,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		overlayManager.remove(dangerOverlay);
 		overlayManager.remove(arrowOverlay);
 		overlayManager.remove(guideOverlay);
+		overlayManager.remove(dockOverlay);
 		mouseManager.unregisterMouseListener(guideMouse);
 		clientToolbar.removeNavigation(panelButton);
 		clientThread.invoke(() ->
@@ -757,6 +762,27 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	void guideShown(boolean shown)
 	{
 		guideOnScreen = shown;
+	}
+
+	boolean guideOnScreen()
+	{
+		return guideOnScreen;
+	}
+
+	private volatile boolean dockOnScreen;
+	private volatile boolean dockExpanded;
+
+	/** The docked bar tells whether it is on screen and whether the list under it should be open. */
+	void dockShown(boolean onScreen, boolean expanded)
+	{
+		dockOnScreen = onScreen;
+		dockExpanded = expanded;
+	}
+
+	/** The list is hidden by the docked bar: the bar is on screen and nothing opened the list. */
+	boolean dockHidesList()
+	{
+		return dockOnScreen && !dockExpanded;
 	}
 
 	/** What the player sees (badge or list text): into the log only when it changed. */

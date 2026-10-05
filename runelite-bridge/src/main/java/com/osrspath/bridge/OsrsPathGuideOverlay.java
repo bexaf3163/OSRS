@@ -106,6 +106,13 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			plugin.guideShown(false);
 			return null;
 		}
+		// The docked bar keeps the list closed until the mouse is over the bar or the list, or the bank is open.
+		if (config.dockBar() && plugin.dockHidesList())
+		{
+			hits = Hits.NONE;
+			plugin.guideShown(false);
+			return null;
+		}
 		float scale = config.hudLarge() ? OsrsPathHudOverlay.LARGE : 1f;
 		Font font = OverlayText.font(g.getFont(), scale);
 		Font small = OverlayText.font(g.getFont(), scale * SMALL);

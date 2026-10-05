@@ -122,6 +122,12 @@ class OsrsPathHudOverlay extends OverlayPanel
 			plugin.hudShown(false);
 			return null;
 		}
+		// The docked bar replaces this plate (it carries the same state in one row).
+		if (config.dockBar())
+		{
+			plugin.hudShown(false);
+			return null;
+		}
 		// Smart reveal: while travelling and at the exchange one line (the action and distance), the rest is not needed in the game.
 		if (config.smartOverlays() && SmartView.compactHud(plugin.overlayContext()))
 		{
