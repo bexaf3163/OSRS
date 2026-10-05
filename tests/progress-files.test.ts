@@ -13,8 +13,8 @@ const dirs: string[] = [];
 const tmp = () => { const d = mkdtempSync(join(tmpdir(), 'osrs-progress-')); dirs.push(d); return d; };
 afterEach(() => { for (const d of dirs.splice(0)) rmSync(d, { recursive: true, force: true }); });
 
-describe('файл прогресса', () => {
-  it('целый файл читается как есть, отсутствующий — null', () => {
+describe('the progress file', () => {
+  it('a whole file is read as is, a missing one — null', () => {
     const d = tmp();
     expect(readProgress(d)).toBeNull();
     writeFileSync(join(d, 'progress.json'), '{"version":3}');
@@ -22,7 +22,7 @@ describe('файл прогресса', () => {
     expect(readdirSync(d)).toEqual(['progress.json']);
   });
 
-  it('битый файл откладывается целиком, а не пропадает; хранятся три последних', () => {
+  it('a broken file is set aside whole, not lost; the last three are kept', () => {
     const d = tmp();
     for (let i = 1; i <= 5; i++) {
       writeFileSync(join(d, 'progress.json'), `{"steps":{"S1-01":"do${i}`);
@@ -33,7 +33,7 @@ describe('файл прогресса', () => {
     expect(readFileSync(join(d, broken[2]), 'utf8')).toBe('{"steps":{"S1-01":"do5');
   });
 
-  it('копия делается только с целого файла и не затирает хорошую битой', () => {
+  it('a copy is made only from a whole file and does not overwrite a good one with a broken one', () => {
     const d = tmp();
     backupProgress(d);
     expect(existsSync(join(d, 'progress.bak.json'))).toBe(false);
@@ -46,14 +46,14 @@ describe('файл прогресса', () => {
   });
 });
 
-describe('профили и копия по расписанию', () => {
+describe('profiles and the scheduled copy', () => {
   const api = createRequire(import.meta.url)('../electron/progress-files.cjs') as {
     readProgress: (dir: string, now?: Date, name?: string) => string | null;
     backupProgress: (dir: string, name?: string) => void;
     dailyBackup: (dir: string, target: string, now?: Date) => number;
   };
 
-  it('у каждого профиля свой файл, битый откладывается под своим именем', () => {
+  it('each profile has its own file, a broken one is set aside under its own name', () => {
     const d = tmp();
     writeFileSync(join(d, 'progress-ab12.json'), '{"x":1}');
     expect(api.readProgress(d, new Date(), 'progress-ab12.json')).toBe('{"x":1}');
@@ -66,9 +66,9 @@ describe('профили и копия по расписанию', () => {
     expect(readFileSync(join(d, 'progress-ab12.bak.json'), 'utf8')).toBe('{"x":2}');
   });
 
-  it('копия по расписанию: раз в сутки, по файлу на профиль, сегодняшняя не затирается, хранятся 14', () => {
+  it('scheduled copy: once a day, one file per profile, today\'s is not overwritten, 14 are kept', () => {
     const d = tmp();
-    const out = join(tmp(), 'копии');
+    const out = join(tmp(), 'copies');
     writeFileSync(join(d, 'progress.json'), '{"a":1}');
     writeFileSync(join(d, 'progress-xy.json'), '{"b":2}');
     writeFileSync(join(d, 'progress.bak.json'), '{"old":1}');
@@ -82,9 +82,9 @@ describe('профили и копия по расписанию', () => {
     const main = readdirSync(out).filter((n) => /^osrs-put-progress-\d{8}\.json$/.test(n));
     expect(main).toHaveLength(14);
     expect(main[0]).toBe('osrs-put-progress-20261007.json');
-    // Профиль «xy» не съеден основным при удалении старых.
+    // Profile "xy" is not eaten by the main one when old ones are deleted.
     expect(readdirSync(out).filter((n) => n.startsWith('osrs-put-progress-xy-'))).toHaveLength(14);
-    // Битый файл не копируется.
+    // A broken file is not copied.
     writeFileSync(join(d, 'progress.json'), '{"a":');
     expect(api.dailyBackup(d, out, new Date(2026, 9, 21))).toBe(1);
   });

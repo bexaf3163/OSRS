@@ -18,8 +18,8 @@ const gear = (over: Record<string, unknown> = {}) => ({
 const stateWith = (g: ReturnType<typeof gear> | null) =>
   buildPlayerState({ mode: 'f2p', stats: null, progress: { levels: {} }, owned: null, gear: g as never, questsDone: null, connected: true });
 
-describe('вес и бег (формула OSRS Wiki «Run energy»)', () => {
-  it('единицы энергии за тик: 60 при нуле, 127 при 64 кг; ниже нуля и выше 64 — как на границе', () => {
+describe('weight and running (the OSRS Wiki "Run energy" formula)', () => {
+  it('energy units per tick: 60 at zero, 127 at 64 kg; below zero and above 64 — as at the boundary', () => {
     expect(energyUnits(0)).toBe(60);
     expect(energyUnits(-12)).toBe(60);
     expect(energyUnits(64)).toBe(127);
@@ -27,29 +27,29 @@ describe('вес и бег (формула OSRS Wiki «Run energy»)', () => {
     expect(energyUnits(25)).toBe(86);
   });
 
-  it('самый тяжёлый выдыхается вдвое быстрее лёгкого, а не «в разы»; 18 кг — около трети', () => {
+  it('the heaviest drains twice as fast as the lightest, not "several times"; 18 kg — about a third', () => {
     expect(runLengthRatio(64, 0)).toBeCloseTo(127 / 60, 5);
     expect(runLengthRatio(64, 0)).toBeLessThan(2.2);
     expect(runLengthRatio(18, 0)).toBeCloseTo(78 / 60, 5);
     expect(runLengthRatio(10, 10)).toBe(1);
   });
 
-  it('вес предметов — из вики; нет в базе — неизвестен, а не ноль', () => {
+  it('item weight comes from the wiki; not in the database — unknown, not zero', () => {
     expect(weightOf('Rune platebody')).toBeCloseTo(9.979, 3);
     expect(weightOf('rune platebody')).toBeCloseTo(9.979, 3);
-    expect(weightOf('Нет такого предмета')).toBeUndefined();
+    expect(weightOf('No such item')).toBeUndefined();
   });
 
-  it('вес из игры разбирается; мусор отбрасывается', () => {
+  it('weight from the game is parsed; garbage is dropped', () => {
     expect(parseGear({ equipment: [], inventory: [], coins: 1, weight: 12 })?.weight).toBe(12);
-    expect(parseGear({ equipment: [], inventory: [], coins: 1, weight: 'много' })?.weight).toBeUndefined();
+    expect(parseGear({ equipment: [], inventory: [], coins: 1, weight: 'a lot' })?.weight).toBeUndefined();
     expect(parseGear({ equipment: [], inventory: [], coins: 1, weight: 5000 })?.weight).toBeUndefined();
     expect(parseGear({ equipment: [], inventory: [], coins: 1 })?.weight).toBeUndefined();
   });
 });
 
-describe('совет по весу', () => {
-  it('шаг без боя: тяжёлая броня — в банк; вес и «во сколько раз дольше» посчитаны; нужное и деньги не трогаем', () => {
+describe('weight advice', () => {
+  it('a no-combat step: heavy armour — to the bank; the weight and "how many times longer" are computed; what is needed and the money are left alone', () => {
     const a = weightAdvice(calm, stateWith(gear()), new Set(['Lobster']));
     expect(a.level).toBe('HEAVY');
     expect(a.items.map((i) => i.name)).toEqual(['Iron bar', 'Rune platebody', 'Rune platelegs', 'Rune full helm']);
@@ -62,13 +62,13 @@ describe('совет по весу', () => {
     expect(a.ratio).toBeCloseTo(runLengthRatio(26, 26 - a.saving), 5);
   });
 
-  it('шаг, которому броня нужна (она в списке нужного), — не трогаем', () => {
+  it('a step that needs the armour (it is in the needed list) — left alone', () => {
     const a = weightAdvice(calm, stateWith(gear()), new Set(['Rune platebody', 'Rune full helm', 'Rune platelegs', 'Iron bar']));
     expect(a.items).toEqual([]);
     expect(a.level).toBe('NONE');
   });
 
-  it('бой, угрозы, боевая прокачка и шаг со снаряжением — не «без боя»: ничего не советуем', () => {
+  it('combat, threats, combat training and a step with gear — not "no combat": no advice', () => {
     expect(isCalm({ type: 'skill', foes: ['Cow'] } as never)).toBe(false);
     expect(isCalm({ type: 'quest', threats: ['Elvarg'] } as never)).toBe(false);
     expect(isCalm({ type: 'skill', targets: [{ skill: 'strength', level: 20 }] } as never)).toBe(false);
@@ -78,7 +78,7 @@ describe('совет по весу', () => {
     expect(a).toMatchObject({ level: 'NONE', items: [], saving: 0, current: 26 });
   });
 
-  it('вес из игры неизвестен: советуем по предметам, но число «было → стало» не выдумываем', () => {
+  it('weight from the game is unknown: advise by items, but do not invent the "was → became" number', () => {
     const a = weightAdvice(calm, stateWith(gear({ weight: undefined })), new Set());
     expect(a.level).toBe('HEAVY');
     expect(a.current).toBeNull();
@@ -86,13 +86,13 @@ describe('совет по весу', () => {
     expect(a.ratio).toBeNull();
   });
 
-  it('сумка неизвестна (плагин не прислал): лишнее в сумке не угадываем, надетое — видно', () => {
+  it('the bag is unknown (the plugin did not send it): the surplus in the bag is not guessed, what is worn is visible', () => {
     const a = weightAdvice(calm, stateWith(gear({ inventory: null })), new Set());
     expect(a.items.every((i) => i.from === 'EQUIPPED')).toBe(true);
     expect(a.items.length).toBeGreaterThan(0);
   });
 
-  it('мелочь (меньше 3 кг) — не повод для разговора; 3–10 кг — «можно облегчить»', () => {
+  it('small stuff (under 3 kg) is no reason to talk; 3–10 kg — "could be lighter"', () => {
     const light = weightAdvice(calm, stateWith(gear({ equipment: [{ id: 1, name: 'Rune full helm', slot: 'head' }], inventory: [] })), new Set());
     expect(light.level).toBe('NONE');
     expect(light.items).toEqual([]);
@@ -100,8 +100,8 @@ describe('совет по весу', () => {
     expect(mid.level).toBe('LIGHT');
   });
 
-  it('килограммы по-русски', () => {
-    expect(kgText(9.979)).toBe('10 кг');
-    expect(kgText(12.34)).toBe('12,3 кг');
+  it('kilograms', () => {
+    expect(kgText(9.979)).toBe('10 kg');
+    expect(kgText(12.34)).toBe('12.3 kg');
   });
 });

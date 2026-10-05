@@ -1,4 +1,4 @@
-"""Собирает машины Quest Helper всех квестов маршрута: {шаг маршрута: {'stages': {N: узел}, 'nodes': {...}, 'reqs': {...}, 'alias': {...}}}."""
+"""Builds the Quest Helper machines of all the route quests: {route step: {'stages': {N: node}, 'nodes': {...}, 'reqs': {...}, 'alias': {...}}}."""
 import json
 import os
 import sys
@@ -9,7 +9,7 @@ from paths import WORK as SP, STEPS as STEPS_PATH  # noqa: E402
 import interp as I  # noqa: E402
 from interp import Req, Step, Interp, collect_classes  # noqa: E402
 
-import quests as C  # noqa: E402  (таблица QUESTS: шаг маршрута -> (класс, вид переменной, номер))
+import quests as C  # noqa: E402  (the QUESTS table: route step -> (class, variable kind, number))
 
 
 STEPS = json.load(open(STEPS_PATH, encoding='utf-8'))
@@ -48,7 +48,7 @@ def all_steps(root, seen=None):
 
 
 def rename_helpers(stages):
-    """Шаги вспомогательного класса: имя = «хозяин.имя» (так их называют строки этапов)."""
+    """The steps of a helper class: name = "owner.name" (this is how the stage lines call them)."""
     seen = set()
     for st in stages.values():
         for s in all_steps(st, seen):
@@ -70,7 +70,7 @@ class Emitter:
         self.refcount = {}
         self.unknown = {}
 
-    # ---- подсчёт использований условий
+    # ---- counting the uses of conditions
     def count(self, r, seen_nodes=None):
         if isinstance(r, str) or r is None:
             return
@@ -92,7 +92,7 @@ class Emitter:
         if st.default is not None:
             self.count_step(st.default, seen)
 
-    # ---- вывод
+    # ---- output
     def req_ref(self, r):
         if r is None:
             return None
@@ -100,7 +100,7 @@ class Emitter:
             if id(r) not in self.req_key:
                 key = 'r%d' % (len(self.req_key) + 1)
                 self.req_key[id(r)] = key
-                self.reqs[key] = None  # бронь: рекурсия безопасна, циклов нет
+                self.reqs[key] = None  # a reservation: the recursion is safe, there are no cycles
                 self.reqs[key] = self.req_plain(r)
             return self.req_key[id(r)]
         return self.req_plain(r)
@@ -156,7 +156,7 @@ def alias_table(stages):
                     alias.setdefault(sub.name, [])
                     if s.name not in alias[sub.name]:
                         alias[sub.name].append(s.name)
-            # вложенный условный шаг: имя контейнера для поиска строки
+            # a nested conditional step: the container name for the line lookup
     return alias
 
 
@@ -193,9 +193,9 @@ def main():
     for sid, q in out.items():
         n_nodes = len(q['nodes'])
         n_reqs = len(q['reqs'])
-        print(sid, q['cls'], 'этапов', len(q['stages']), 'узлов', n_nodes, 'условий', n_reqs, 'неизвестное', q['unknown'])
+        print(sid, q['cls'], 'stages', len(q['stages']), 'nodes', n_nodes, 'conditions', n_reqs, 'unknown', q['unknown'])
     if report:
-        print('ОШИБКИ', report)
+        print('ERRORS', report)
 
 
 if __name__ == '__main__':

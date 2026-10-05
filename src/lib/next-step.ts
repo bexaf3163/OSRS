@@ -1,4 +1,4 @@
-// Доступность шагов и выбор «Что делать сейчас».
+// Step availability and the choice of "What to do now".
 
 import type { Progress, Step } from '../types';
 
@@ -11,7 +11,7 @@ export interface Blockers {
   qp?: { need: number; have: number };
 }
 
-/** Что мешает начать шаг. null — ничего, шаг доступен. */
+/** What prevents starting the step. null means nothing, the step is available. */
 export function blockersOf(step: Step, p: Progress, qp: number): Blockers | null {
   const steps = step.requires.filter((id) => !isClosed(p, id));
   const needQp = step.minQp !== undefined && qp < step.minQp;
@@ -19,28 +19,28 @@ export function blockersOf(step: Step, p: Progress, qp: number): Blockers | null
   return { steps, ...(needQp ? { qp: { need: step.minQp!, have: qp } } : {}) };
 }
 
-/** Первый по порядку незакрытый шаг, у которого выполнены зависимости и хватает очков квестов. */
+/** The first unclosed step in order whose dependencies are met and for which there are enough quest points. */
 export function nextStep(steps: Step[], p: Progress, qp: number): Step | null {
   return steps.find((s) => !isClosed(p, s.id) && !blockersOf(s, p, qp)) ?? null;
 }
 
-/** Первый незакрытый шаг вообще — даже если заблокирован. */
+/** The first unclosed step at all, even if it is blocked. */
 export function firstOpen(steps: Step[], p: Progress): Step | null {
   return steps.find((s) => !isClosed(p, s.id)) ?? null;
 }
 
-/** Текущий этап — этап первого незакрытого шага; когда всё закрыто — последний. */
+/** The current stage is the stage of the first unclosed step; when everything is closed, the last one. */
 export function currentStage(steps: Step[], p: Progress): number {
   return firstOpen(steps, p)?.stage ?? steps[steps.length - 1]?.stage ?? 1;
 }
 
 export function blockerParts(b: Blockers): string[] {
   const parts = [...b.steps];
-  if (b.qp) parts.push(`очки квестов ${b.qp.need} (сейчас ${b.qp.have})`);
+  if (b.qp) parts.push(`quest points ${b.qp.need} (now ${b.qp.have})`);
   return parts;
 }
 
-/** Следующий незакрытый шаг после id (по кругу с начала списка) — его открывает «Отметить выполненным». */
+/** The next unclosed step after id (cyclically from the start of the list): "Mark as done" opens it. */
 export function openAfter(steps: Step[], p: Progress, id: string): Step | undefined {
   const at = steps.findIndex((s) => s.id === id);
   const open = (s: Step) => s.id !== id && !isClosed(p, s.id);

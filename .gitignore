@@ -2,7 +2,7 @@ node_modules/
 dist/
 release/
 *.log
-# Служебный файл TypeScript (tsc) — появляется при проверке типов, в репозиторий не нужен.
+# A TypeScript service file (tsc) — appears during type checks, not needed in the repository.
 *.tsbuildinfo
 .DS_Store
 

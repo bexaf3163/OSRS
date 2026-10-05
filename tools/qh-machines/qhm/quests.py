@@ -1,4 +1,4 @@
-"""Квесты маршрута: шаг маршрута -> (класс Quest Helper, вид переменной, номер переменной)."""
+"""The route quests: route step -> (the Quest Helper class, the variable kind, the variable number)."""
 
 QUESTS = {
     'S1-03': ('CooksAssistant', 'varp', 29), 'S1-04': ('SheepShearer', 'varp', 179), 'S1-05': ('XMarksTheSpot', 'varbit', 8063),

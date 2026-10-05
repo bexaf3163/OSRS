@@ -1,7 +1,7 @@
-// Состояние связи с RuneLite: включена ли она, есть ли плагин, какой шаг показан в игре.
-// Автоотметка из игры идёт сюда: шаг отмечается, в игру уходит следующий, страницы открывают его у себя.
-// Отсюда же уровни навыков (быстрые варианты), счёт предметов (проверка вылета) и оптовый список для биржи,
-// временная цель «🧭 к месту / в магазин», предметы этапа для банка, снаряжение и темп прокачки из игры.
+// The RuneLite link state: whether it is on, whether the plugin is there, which step is shown in the game.
+// The auto-mark from the game comes here: the step is marked, the next one goes to the game, the pages open it on their own.
+// Also from here: the skill levels (quick variants), the item count (departure check) and the bulk list for the exchange,
+// the temporary target "🧭 to a place / to a shop", the stage items for the bank, the gear and the training pace from the game.
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { PlayerStats, Step, StepBranch } from './types';
@@ -27,18 +27,18 @@ import { buildEnvelope, EMPTY_PARTS, envelopeKey, nextSeq, type SnapshotParts } 
 
 const ENABLED_KEY = 'osrs-put:runelite-bridge';
 const AUTOLAUNCH_KEY = 'osrs-put:runelite-autolaunch';
-/** Выбранные быстрые варианты: { 'S2-05': 'varrock-teleport' }. */
+/** The chosen quick variants: { 'S2-05': 'varrock-teleport' }. */
 const BRANCH_KEY = 'osrs-put:branch-choice';
-/** Последний оптовый список — уходит в игру снова, когда RuneLite перезапустили. */
+/** The last bulk list — goes to the game again when RuneLite was restarted. */
 const PLAN_KEY = 'osrs-put:shopping-plan';
 const MOVES_KEY = 'osrs-put:moves';
 const GEAR_KEY = 'osrs-put:last-gear';
-/** Шаг, показанный в игре: после перезапуска программы или RuneLite он возвращается в игру сам. */
+/** The step shown in the game: after a restart of the app or RuneLite it returns to the game by itself. */
 const ACTIVE_KEY = 'osrs-put:active-step';
-/** Автозапуск — один раз за запуск программы (в разработке StrictMode вызывает эффекты дважды). */
+/** Auto-launch — once per app launch (in development StrictMode runs the effects twice). */
 let autoLaunchDone = false;
 
-/** off — связь выключена в настройках; connecting — первая попытка; offline — плагина нет; online — есть. */
+/** off — the link is turned off in settings; connecting — the first attempt; offline — no plugin; online — there. */
 export type BridgeState = 'off' | 'connecting' | 'offline' | 'online';
 export type PointResult = 'ok' | 'offline' | 'empty';
 
@@ -53,102 +53,102 @@ interface BridgeValue {
   setEnabled: (on: boolean) => void;
   state: BridgeState;
   inGame: boolean;
-  /** Шаг, который сейчас показан в игре. */
+  /** The step currently shown in the game. */
   activeStepId: string | null;
   pointInGame: (step: Step) => Promise<PointResult>;
   clear: () => Promise<void>;
-  /** Последняя автоотметка из игры — страницы «Пути» открывают следующий шаг. */
+  /** The last auto-mark from the game — the "Path" pages open the next step. */
   advance: AutoAdvance | null;
-  /** Программа для ПК умеет сама запускать RuneLite с плагином. */
+  /** The desktop app can start RuneLite with the plugin by itself. */
   canLaunch: boolean;
   launchRuneLite: () => Promise<RuneliteLaunch | null>;
-  /** Запускать RuneLite вместе с программой. */
+  /** Start RuneLite together with the app. */
   autoLaunch: boolean;
   setAutoLaunch: (on: boolean) => void;
-  /** Уровни из игры; null — нет связи или передача выключена в плагине. */
+  /** Levels from the game; null — no link or the sending is turned off in the plugin. */
   stats: PlayerStats | null;
-  /** Сколько есть предметов шага и списка закупок (сумка, банкноты, банк). */
+  /** How many of the step's and the shopping list's items there are (bag, banknotes, bank). */
   owned: OwnedState | null;
-  /** В игре установлен Shortest Path — путь по земле рисует он. */
+  /** Shortest Path is installed in the game — it draws the path over land. */
   shortestPath: boolean;
-  /** Выбранный быстрый вариант шага (id) — с ним шаг уходит в игру. */
+  /** The chosen quick variant of the step (id) — the step goes to the game with it. */
   branchChoice: Record<string, string>;
   chooseBranch: (step: Step, branchId: string | null) => void;
-  /** Оптовый список — в подсказку на бирже (и запомнить до следующего запуска RuneLite). */
+  /** The bulk list — into the exchange hint (and remember until the next RuneLite launch). */
   syncPlan: (plan: ShoppingPlanPayload) => Promise<boolean>;
-  /** Снаряжение, сумка и монеты из игры; null — неизвестно. */
+  /** Gear, bag and coins from the game; null — unknown. */
   gear: GearState | null;
-  /** Последнее известное снаряжение, сумка и монеты — записано, пока игра шла; показывается, когда RuneLite закрыт. Не «сейчас». */
+  /** The last known gear, bag and coins — recorded while the game was running; shown when RuneLite is closed. Not "now". */
   lastGear: LastGear | null;
-  /** Темп прокачки шага, показанного в игре. */
+  /** The training pace of the step shown in the game. */
   pacing: PacingState | null;
-  /** Временная цель в игре (место или магазин); null — стрелка ведёт к шагу. */
+  /** The temporary target in the game (a place or a shop); null — the arrow leads to the step. */
   navTarget: NavTargetPayload | null;
-  /** Поставить временную цель. Без связи или при отказе плагина — ответ с причиной. */
+  /** Set a temporary target. Without a link or on a refusal by the plugin — an answer with the reason. */
   navigate: (target: NavTargetPayload) => Promise<NavResult | { ok: false; reason: 'off' }>;
   clearNav: () => Promise<void>;
-  /** Когда игрок сам снял цель стрелки (мс); 0 — не снимал. Автоподготовка после этого не перехватывает стрелку. */
+  /** When the player cleared the arrow target themselves (ms); 0 — never. Auto preparation does not take over the arrow after that. */
   userClearedAt: number;
-  /** Версия плагина и совместимость с программой; null — нет связи. */
+  /** The plugin version and compatibility with the app; null — no link. */
   plugin: { protocol: number | null; version: string | null; compat: PluginCompat } | null;
-  /** Опыт по навыкам из игры (протокол 5); null — нет связи, старый плагин или передача выключена. */
+  /** XP by skill from the game (protocol 5); null — no link, an old plugin or the sending is turned off. */
   xp: PlayerStats | null;
-  /** Названия завершённых квестов (протокол 5); null — неизвестно. */
+  /** Names of completed quests (protocol 5); null — unknown. */
   questsDone: string[] | null;
-  /** Имя персонажа из игры (протокол 5). */
+  /** The character name from the game (protocol 5). */
   player: string | null;
   /**
-   * Часть снимка для игры (протокол 6): совет по снаряжению, предметы для банка, план подготовки. Уходит в плагин вместе
-   * со всем остальным одним запросом; у плагина старше протокола 6 вызов ничего не делает — там свои отдельные запросы.
+   * A part of the snapshot for the game (protocol 6): gear advice, items for the bank, the preparation plan. It goes to the plugin together
+   * with everything else in one request; for a plugin older than protocol 6 the call does nothing — it has its own separate requests.
    */
   setPrepPart: <K extends 'gearHint' | 'bankTags' | 'plan'>(key: K, value: SnapshotParts[K]) => void;
-  /** Какой профиль и персонаж сейчас: можно ли писать в профиль уровни и отметки из игры. */
+  /** Which profile and character are current: whether levels and marks from the game may be written into the profile. */
   gate: ProfileGate;
-  /** Опыта в час по навыку по замерам этого сеанса; null — замеров мало. */
+  /** XP per hour by skill from this session's measurements; null — too few measurements. */
   xpRate: (skill: string) => number | null;
-  /** Сеанс: когда начался и с чего (первые уровни и опыт, закрытые шаги) — для сводки. */
+  /** The session: when it began and with what (the first levels and XP, closed steps) — for the summary. */
   session: SessionBase;
-  /** Текст для отчёта об ошибке: версии, связь, последние события моста. */
+  /** The text for an error report: versions, the link, the last bridge events. */
   diagnostics: () => Promise<string>;
-  /** Недавние скачки персонажа (смерть, телепорт) — по ним включается режим восстановления. */
+  /** Recent character jumps (death, teleport) — they turn on the recovery mode. */
   moves: MoveEvent[];
-  /** Где персонаж сейчас: свежий запрос к плагину (протокол 5); null — нет связи, не в игре или плагин не сообщает. */
+  /** Where the character is now: a fresh request to the plugin (protocol 5); null — no link, not in the game or the plugin does not report. */
   locate: () => Promise<{ x: number; y: number; plane: number } | null>;
 }
 
 const BridgeContext = createContext<BridgeValue | null>(null);
 
-/** По умолчанию связь включена; без программы для ПК (страница при разработке) — выключена, моста там нет. */
+/** By default the link is on; without the desktop app (a page in development) it is off, there is no bridge. */
 function loadEnabled(): boolean {
   try {
     const v = localStorage.getItem(ENABLED_KEY);
     if (v === '1' || v === '0') return v === '1';
   } catch {
-    // Хранилище недоступно — значение по умолчанию.
+    // Storage is unavailable — the default value.
   }
   return Boolean(desktop()?.bridge);
 }
 
-/** Только объект: `null`, массив, строка в хранилище — как будто ничего не сохраняли. */
+/** An object only: `null`, an array, a string in the storage — as if nothing had been saved. */
 function loadJson<T extends object>(key: string, fallback: T | null): T | null {
   try {
     const raw = localStorage.getItem(key);
     const data = raw ? (JSON.parse(raw) as unknown) : null;
     if (data && typeof data === 'object' && !Array.isArray(data)) return data as T;
   } catch {
-    // Нет хранилища или мусор — по умолчанию.
+    // No storage or garbage — the default.
   }
   return fallback;
 }
 
-/** Снимок снаряжения для показа без связи: чей, когда записан и что тогда было. */
+/** A gear snapshot for showing without a link: whose, when recorded and what there was then. */
 export interface LastGear {
   at: number;
   player: string;
   gear: GearState;
 }
 
-/** Читается с недоверием: хранилище правят руками и другие версии. Мусор — как будто ничего не записывали. */
+/** Read with distrust: the storage is edited by hand and by other versions. Garbage — as if nothing had been written. */
 export function parseLastGear(raw: unknown): LastGear | null {
   if (!raw || typeof raw !== 'object') return null;
   const o = raw as Record<string, unknown>;
@@ -161,32 +161,32 @@ function loadLastGear(): LastGear | null {
   return parseLastGear(loadJson<Record<string, unknown>>(GEAR_KEY, null));
 }
 
-/** Выбор ветки по шагам: берём только пары «шаг → строка». */
+/** The choice of branch by steps: we take only "step → string" pairs. */
 function loadBranchChoice(): Record<string, string> {
   const data = loadJson<Record<string, unknown>>(BRANCH_KEY, {}) ?? {};
   return Object.fromEntries(Object.entries(data).filter((e): e is [string, string] => typeof e[1] === 'string'));
 }
 
 function saveJson(key: string, value: unknown): void {
-  try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* запомнится до перезапуска */ }
+  try { localStorage.setItem(key, JSON.stringify(value)); } catch { /* it is remembered until a restart */ }
 }
 
-/** Одна строка о событии моста для отчёта: без содержимого сумки и банка. */
+/** One line about a bridge event for the report: without the contents of the bag and bank. */
 function logEvent(log: { t: number; text: string }[], e: BridgeEvent): void {
   const d = e as Record<string, unknown>;
   const n = (v: unknown) => (Array.isArray(v) ? v.length : v && typeof v === 'object' ? Object.keys(v).length : v === null ? 0 : '?');
   let text: string = e.type;
   if (e.type === 'STEP_AUTO_COMPLETED') text += ` ${String(d.stepId)}`;
-  else if (e.type === 'STATUS') text += ` inGame=${String(d.inGame)}${d.player ? ' player=да' : ''}`;
-  else if (e.type === 'STATS' || e.type === 'XP') text += ` навыков=${n(d.stats ?? d.xp)}`;
-  else if (e.type === 'QUESTS') text += ` квестов=${n(d.done)}`;
-  else if (e.type === 'OWNED') text += ` предметов=${n(d.items)} банк=${String(d.bankSeen)}`;
+  else if (e.type === 'STATUS') text += ` inGame=${String(d.inGame)}${d.player ? ' player=yes' : ''}`;
+  else if (e.type === 'STATS' || e.type === 'XP') text += ` skills=${n(d.stats ?? d.xp)}`;
+  else if (e.type === 'QUESTS') text += ` quests=${n(d.done)}`;
+  else if (e.type === 'OWNED') text += ` items=${n(d.items)} bank=${String(d.bankSeen)}`;
   else if (e.type === 'PACING') text += ` ${String(d.stepId ?? '')}`;
   log.push({ t: Date.now(), text });
   if (log.length > 200) log.splice(0, log.length - 200);
 }
 
-/** Выбранный быстрый вариант шага, если он у шага ещё есть. */
+/** The chosen quick variant of the step, if the step still has it. */
 function chosenBranch(step: Step, choice: Record<string, string>): StepBranch | undefined {
   const id = choice[step.id];
   return id ? step.branches?.find((b) => b.id === id) : undefined;
@@ -210,9 +210,9 @@ function loadAutoLaunch(): boolean {
 }
 
 const LAUNCH_TEXT: Partial<Record<RuneliteLaunch['state'], string>> = {
-  started: '🎮 Запускаю RuneLite с мостом OSRS Path Bridge…',
-  starting: 'RuneLite уже запускается…',
-  running: 'RuneLite с мостом уже запущен',
+  started: '🎮 Starting RuneLite with the OSRS Path Bridge…',
+  starting: 'RuneLite is already starting…',
+  running: 'RuneLite with the bridge is already running',
 };
 
 export function BridgeProvider({ children }: { children: ReactNode }) {
@@ -222,7 +222,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const runelite = desktop()?.runelite;
   const [state, setState] = useState<BridgeState>(enabled ? 'connecting' : 'off');
   const [inGame, setInGame] = useState(false);
-  // Показанный в игре шаг переживает перезапуск программы, если он ещё не выполнен.
+  // A step shown in the game survives an app restart if it is not done yet.
   const [activeStepId, setActiveStepId] = useState<string | null>(() => {
     const id = loadActiveStep();
     return id && steps.some((s) => s.id === id) && !isClosed(progress, id) ? id : null;
@@ -237,10 +237,10 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const [pacing, setPacing] = useState<PacingState | null>(null);
   const [xp, setXp] = useState<PlayerStats | null>(null);
   const [questsDone, setQuestsDone] = useState<string[] | null>(null);
-  // Скачки персонажа (смерть, телепорт): хранятся короткое время — после перезапуска программы режим восстановления не теряется.
+  // Character jumps (death, teleport): kept for a short time — after an app restart the recovery mode is not lost.
   const [moves, setMoves] = useState<MoveEvent[]>(() => (loadJson<{ list: MoveEvent[] }>(MOVES_KEY, null)?.list ?? []).filter((m) => m && typeof m.at === 'number' && Date.now() - m.at < 3_600_000).slice(-8));
   const [player, setPlayer] = useState<string | null>(null);
-  // Сумка, надетое и монеты запоминаются, пока игра идёт: закрыли RuneLite или программу — последнее известное остаётся.
+  // The bag, the worn items and the coins are remembered while the game is running: if RuneLite or the app is closed, the last known stays.
   useEffect(() => {
     if (!gear || !player) return undefined;
     const t = setTimeout(() => {
@@ -255,26 +255,26 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     closed0: Object.entries(progress.steps).filter(([, v]) => v === 'done' || v === 'skipped').map(([k]) => k),
   }));
   const tracker = useRef(new XpTracker());
-  /** Последние события моста — для кнопки «Диагностика». */
+  /** The latest bridge events — for the "Diagnostics" button. */
   const eventLog = useRef<{ t: number; text: string }[]>([]);
   const profiles = useProfiles();
   const gate = useMemo(() => profileGate(profiles, player), [profiles, player]);
   const [navTarget, setNavTargetState] = useState<NavTargetPayload | null>(null);
   const [plugin, setPlugin] = useState<BridgeValue['plugin']>(null);
   const features = useFeatures();
-  /** Какие предметы этапа уже в плагине — чтобы не слать одно и то же при каждой отрисовке. */
+  /** Which stage items are already in the plugin — so as not to send the same on every render. */
   const bankSent = useRef('');
   /**
-   * Цель стрелки знает плагин (с 2.11 он сообщает её: NAV_SET, NAV_DONE, /status). Номер растёт с каждым событием о
-   * цели — ответ /status, отправленный до события, её уже не перетрёт.
+   * The arrow target is known to the plugin (since 2.11 it reports it: NAV_SET, NAV_DONE, /status). The number grows with every event about the
+   * target — a /status reply sent before the event cannot overwrite it any more.
    */
   const navSeq = useRef(0);
-  /** Протокол плагина на связи — с 4 программа не ставит цель сама, а ждёт NAV_SET. */
+  /** The protocol of the plugin on the link — since 4 the app does not set the target itself, but waits for NAV_SET. */
   const pluginProtocol = useRef<number | null>(null);
   /**
-   * Снимок состояния для игры (протокол 6): всё, что программа хочет видеть в игре, — одним сообщением. parts — что
-   * должно быть там сейчас; sentKey — что плагин уже получил (то же не шлём); synced — снимок можно слать: шаг в parts
-   * соответствует тому, что показывает программа (иначе пустой шаг снял бы в плагине шаг, о котором программа ещё не знает).
+   * The state snapshot for the game (protocol 6): everything the app wants to see in the game — in one message. parts — what
+   * should be there now; sentKey — what the plugin has already received (the same is not sent); synced — the snapshot may be sent: the step in parts
+   * matches what the app shows (otherwise an empty step would clear in the plugin a step the app does not know about yet).
    */
   const snapshot = useRef({ parts: { ...EMPTY_PARTS } as SnapshotParts, seq: 0, sentKey: null as string | null, synced: false, timer: null as ReturnType<typeof setTimeout> | null });
   const setNavFromPlugin = useCallback((t: NavTargetPayload | null) => {
@@ -282,14 +282,14 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     setNavTargetState(t);
   }, []);
 
-  // Обработчик событий живёт дольше отрисовки — свежие данные берёт из ссылок.
+  // The event handler outlives a render — it takes fresh data from refs.
   const latest = useRef({ progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear, gate });
   latest.current = { progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear, gate };
-  /** Уже обработанные автоотметки: одно событие не отмечает шаг дважды и не двигает маршрут дважды. */
+  /** Already handled auto-marks: one event does not mark a step twice and does not move the route twice. */
   const handled = useRef(new Set<string>());
   const nonce = useRef(0);
 
-  /** Отправить снимок сейчас. true — плагин получил его (или то же уже было у него). */
+  /** Send the snapshot now. true — the plugin received it (or already had the same). */
   const flushSnapshot = useCallback(async (): Promise<boolean> => {
     const sn = snapshot.current;
     if (sn.timer) { clearTimeout(sn.timer); sn.timer = null; }
@@ -299,7 +299,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     sn.seq = seq;
     const r = await postPrepPlan(buildEnvelope(sn.parts, seq));
     if (!r.ok) { if (sn.seq === seq) sn.sentKey = null; return false; }
-    // Ответ запоздавшего снимка не должен затереть то, что отправлено после него.
+    // The answer of a late snapshot must not overwrite what was sent after it.
     if (sn.seq === seq) sn.sentKey = key;
     return true;
   }, []);
@@ -308,15 +308,15 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     const sn = snapshot.current;
     sn.parts = { ...sn.parts, [key]: value };
     if (!supportsSnapshot(pluginProtocol.current) || !sn.synced) return;
-    // Сумка и уровни меняются очередью событий — отправляем, когда всё улеглось.
+    // The bag and levels change through an event queue — we send when everything has settled.
     if (sn.timer) clearTimeout(sn.timer);
     sn.timer = setTimeout(() => { sn.timer = null; void flushSnapshot(); }, 350);
   }, [flushSnapshot]);
 
-  /** Шаг в игру. У шага боя — с первой оценкой времени на противника по нынешнему оружию и уровням. */
+  /** A step into the game. For a combat step — with a first time estimate per opponent by the current weapon and levels. */
   const sendStep = useCallback(async (step: Step, branch?: StepBranch): Promise<boolean> => {
     const { progress: p, stats: live, gear: g, steps: list } = latest.current;
-    // Предметы текущего и ближайших шагов — плагин считает их заранее: «одна ходка» знает, что уже есть.
+    // The items of the current and the nearest steps — the plugin counts them in advance: "one trip" knows what is already there.
     const ahead = tripWindow(list, p, step.id).slice(1).flatMap((s) => preflightItems(s).map((i) => i.nameEn));
     const target = withKillEstimate(step, { ...p.levels, ...(live ?? {}) }, g);
     if (!supportsSnapshot(pluginProtocol.current)) return syncActiveStep(target, undefined, branch, ahead);
@@ -328,7 +328,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     return flushSnapshot();
   }, [flushSnapshot]);
 
-  /** Снять шаг в игре: при снимке — частью снимка, иначе — отдельным запросом. */
+  /** Remove the step in the game: with a snapshot — as part of it, otherwise — by a separate request. */
   const clearStep = useCallback(async (): Promise<void> => {
     if (!supportsSnapshot(pluginProtocol.current)) { await clearActiveStep(); return; }
     const sn = snapshot.current;
@@ -339,18 +339,18 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
 
   const setEnabled = useCallback((on: boolean) => {
     setEnabledState(on);
-    try { localStorage.setItem(ENABLED_KEY, on ? '1' : '0'); } catch { /* запомнится до перезапуска */ }
+    try { localStorage.setItem(ENABLED_KEY, on ? '1' : '0'); } catch { /* it is remembered until a restart */ }
   }, []);
 
   const onCompleted = useCallback((id: string) => {
     const { progress: p, steps: list, setStep: mark, activeStepId: active } = latest.current;
-    // В игре другой персонаж, чем в этом профиле, — его квесты и уровни сюда не пишем.
+    // The game has a different character than this profile — its quests and levels are not written here.
     if (!gateAllows(latest.current.gate)) return;
     const plan = planAutoComplete(list, p, id, active, handled.current);
     handled.current.add(id);
     if (!plan.mark) return;
     const next = plan.next;
-    mark(id, 'done', `🎮 RuneLite: ${id} выполнен в игре${next ? ` — дальше ${next.id}` : ''}`);
+    mark(id, 'done', `🎮 RuneLite: ${id} done in the game${next ? ` — next ${next.id}` : ''}`);
     setAdvance({ from: id, to: next?.id, nonce: ++nonce.current });
     if (plan.inGame === 'sync-next' && next) {
       handled.current.delete(next.id);
@@ -361,14 +361,14 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     }
   }, [sendStep, clearStep]);
 
-  /** Временная цель снята в игре: дошёл до места, получил предмет или её сняли. Шаг снова ведёт стрелку. */
+  /** The temporary target was cleared in the game: the player reached the place, got the item or it was cleared. The step leads the arrow again. */
   const onNavDone = useCallback((e: BridgeEvent) => {
     const { reason, label, itemName } = e as { reason?: unknown; label?: unknown; itemName?: unknown };
     setNavFromPlugin(null);
     const say = latest.current.notify;
-    if (reason === 'obtained') say(`✓ ${typeof itemName === 'string' ? itemName : 'Предмет'} получен — стрелка снова ведёт к шагу`);
-    else if (reason === 'arrived') say(`📍 На месте${typeof label === 'string' ? `: ${label}` : ''} — стрелка снова ведёт к шагу`);
-    // Шаг заново — HUD и цель в игре точно те же, что до отклонения.
+    if (reason === 'obtained') say(`✓ ${typeof itemName === 'string' ? itemName : 'The item'} obtained — the arrow leads to the step again`);
+    else if (reason === 'arrived') say(`📍 You are there${typeof label === 'string' ? `: ${label}` : ''} — the arrow leads to the step again`);
+    // The step anew — the HUD and the target in the game are exactly the same as before the detour.
     const { activeStepId: active, steps: list, branchChoice: choice } = latest.current;
     const step = active ? list.find((s) => s.id === active) : undefined;
     if (step && reason !== 'cleared') void sendStep(step, chosenBranch(step, choice));
@@ -379,7 +379,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       if (activeStepId) localStorage.setItem(ACTIVE_KEY, activeStepId);
       else localStorage.removeItem(ACTIVE_KEY);
     } catch {
-      // Хранилище недоступно — шаг просто не вернётся после перезапуска.
+      // Storage is unavailable — the step simply will not return after a restart.
     }
   }, [activeStepId]);
 
@@ -396,11 +396,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       setPlayer(null);
       tracker.current.reset();
       setPlugin(null);
-      // RuneLite закрыли — временной цели там больше нет.
+      // RuneLite was closed — there is no temporary target there any more.
       setNavFromPlugin(null);
       pluginProtocol.current = null;
       bankSent.current = '';
-      // RuneLite закрыли — в новом плагине ничего нет: снимок уйдёт заново, когда программа снова свяжется.
+      // RuneLite was closed — there is nothing in the new plugin: the snapshot goes again when the app connects again.
       snapshot.current.sentKey = null;
       snapshot.current.synced = false;
       if (snapshot.current.timer) { clearTimeout(snapshot.current.timer); snapshot.current.timer = null; }
@@ -423,21 +423,21 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       setShortestPath(s.shortestPath);
       setPlugin(s.online ? { protocol: s.protocol, version: s.pluginVersion, compat: pluginCompat(s.protocol) } : null);
       pluginProtocol.current = s.online ? s.protocol : null;
-      // Цель стрелки — какая в игре сейчас (её могли выбрать в игре или до перезапуска программы). Старый плагин
-      // (до 2.11) цель не сообщает — тогда оставляем ту, что знает программа. Пришло событие о цели, пока ждали
-      // ответа, — оно новее ответа.
+      // The arrow target — whichever is in the game now (it could have been chosen in the game or before the app restart). An old plugin
+      // (before 2.11) does not report the target — then we keep the one the app knows. If an event about the target came while waiting
+      // for the reply — it is newer than the reply.
       if (s.online && s.protocol !== null && s.protocol >= 4 && seq === navSeq.current) setNavTargetState(s.navTarget);
       if (s.stats) setStats(s.stats);
       if (s.xp) { setXp(s.xp); tracker.current.push(s.xp, Date.now()); }
       if (s.questsDone) setQuestsDone(s.questsDone);
       setPlayer(s.player);
       setGear(s.gear);
-      // RuneLite перезапустили (или программу) — плагин шага не знает: отправляем снова. Тот же шаг не
-      // шлём повторно, чтобы не сбросить в плагине путевые точки и замер темпа.
+      // RuneLite was restarted (or the app) — the plugin does not know the step: we send it again. We do not
+      // send the same step twice, so as not to reset the waypoints and the pace measurement in the plugin.
       const want = latest.current.activeStepId;
       if (s.online && supportsSnapshot(s.protocol)) {
-        // Протокол 6: снимок полный и плагин не пересбрасывает тот же шаг — после перезапуска любой из сторон просто
-        // отправляем всё заново: шаг, закупки, подсветку банка, совет и план.
+        // Protocol 6: the snapshot is full and the plugin does not re-reset the same step — after a restart of either side we simply
+        // send everything anew: the step, shopping, the bank highlight, the advice and the plan.
         const sn = snapshot.current;
         if (!sn.synced || resync) {
           const step = want ? latest.current.steps.find((x) => x.id === want) : undefined;
@@ -452,7 +452,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
           const step = latest.current.steps.find((x) => x.id === want);
           if (step) void sendStep(step, chosenBranch(step, latest.current.branchChoice));
         }
-        // RuneLite могли перезапустить — оптовый список для биржи отправляем снова (протокол 6 шлёт его в снимке).
+        // RuneLite could have been restarted — we send the exchange bulk list again (protocol 6 sends it in the snapshot).
         const plan = loadJson<ShoppingPlanPayload>(PLAN_KEY, null);
         if (Array.isArray(plan?.items) && plan.items.length) void syncShoppingPlan(plan);
       }
@@ -468,7 +468,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       else if (e.type === 'STATUS') {
         setPlayer(parsePlayer((e as { player?: unknown }).player));
         setInGame(Boolean((e as { inGame?: unknown }).inGame));
-        // Вход в игру и выход — повод заново спросить про Shortest Path.
+        // Entering and leaving the game is a reason to ask about Shortest Path again.
         refresh();
       } else if (e.type === 'STATS') setStats(parseStats((e as { stats?: unknown }).stats));
       else if (e.type === 'OWNED') setOwned(parseOwned(e));
@@ -495,8 +495,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
         forget();
         return;
       }
-      // Поток открыт — сверяемся с /status: индикатор должен показывать то, что отвечает плагин,
-      // а шаг, показанный в игре, должен быть и в плагине.
+      // The stream is open — we check against /status: the indicator must show what the plugin answers,
+      // and the step shown in the game must be in the plugin too.
       refresh(true);
     });
     return () => {
@@ -505,8 +505,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     };
   }, [enabled, onCompleted, onNavDone, sendStep, setNavFromPlugin, flushSnapshot]);
 
-  // Предметы этапа показанного в игре шага — плагину, для мягкой подсветки в банке.
-  // Уходят при смене шага (и этапа), после переподключения и когда функцию включили; выключили — подсветка снимается.
+  // The items of the stage of the step shown in the game — to the plugin, for a soft highlight in the bank.
+  // They go on a step (and stage) change, after a reconnect and when the feature is turned on; turned off — the highlight is removed.
   useEffect(() => {
     if (state !== 'online') return;
     const step = activeStepId ? steps.find((s) => s.id === activeStepId) : undefined;
@@ -521,29 +521,29 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
 
   const setAutoLaunch = useCallback((on: boolean) => {
     setAutoLaunchState(on);
-    try { localStorage.setItem(AUTOLAUNCH_KEY, on ? '1' : '0'); } catch { /* запомнится до перезапуска */ }
+    try { localStorage.setItem(AUTOLAUNCH_KEY, on ? '1' : '0'); } catch { /* it is remembered until a restart */ }
   }, []);
 
   const launchRuneLite = useCallback(async (quiet = false): Promise<RuneliteLaunch | null> => {
     if (!runelite) return null;
     const r = await runelite.launch().catch(() => null);
     if (!r) return null;
-    const text = r.ok ? LAUNCH_TEXT[r.state] : `RuneLite не запустился: ${r.problems?.[0] ?? 'подробности в настройках'}`;
-    // Автозапуск молчит, если RuneLite уже работает; ошибку показываем всегда — иначе непонятно, почему нет связи.
+    const text = r.ok ? LAUNCH_TEXT[r.state] : `RuneLite did not start: ${r.problems?.[0] ?? 'details in settings'}`;
+    // The auto-launch is silent if RuneLite is already running; we always show an error — otherwise it is unclear why there is no link.
     if (text && !(quiet && r.state === 'running')) notify(text);
     return r;
   }, [runelite, notify]);
 
-  // С запуском программы — RuneLite с плагином, если связь и автозапуск включены.
+  // With the app launch — RuneLite with the plugin, if the link and auto-launch are on.
   useEffect(() => {
     if (autoLaunchDone || !runelite || !enabled || !autoLaunch) return;
     autoLaunchDone = true;
     void launchRuneLite(true);
   }, [runelite, enabled, autoLaunch, launchRuneLite]);
 
-  // Шаг, который ведёт в игре, отметили в программе (кнопкой или галочкой) — в игру сразу уходит следующий
-  // открытый шаг. Автоотметку из игры это не повторяет: её шаг уже в handled, и onCompleted двигает сам.
-  // Только переход «был открыт → закрыт»: уже пройденный шаг, показанный в игре вручную, остаётся на месте.
+  // A step that leads in the game was marked in the app (by a button or a tick) — the next open step goes to the game at once.
+  // The auto-mark from the game does not repeat this: its step is already in handled, and onCompleted moves by itself.
+  // Only the "was open → closed" transition: an already completed step shown in the game by hand stays where it is.
   const activeWasOpen = useRef<string | null>(null);
   useEffect(() => {
     if (!activeStepId) return;
@@ -566,7 +566,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     if (!toInGameTarget(step, branch)) return 'empty';
     const ok = await sendStep(step, branch);
     if (!ok) return 'offline';
-    // Шаг снова в игре — его новая автоотметка должна сработать, даже если раньше уже была.
+    // The step is in the game again — its new auto-mark must work even if there already was one earlier.
     handled.current.delete(step.id);
     setActiveStepId(step.id);
     return 'ok';
@@ -586,7 +586,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       latest.current.branchChoice = next;
       return next;
     });
-    // Шаг уже показан в игре — обновляем цель сразу, без повторного нажатия.
+    // The step is already shown in the game — we update the target at once, without a repeated press.
     if (latest.current.activeStepId === step.id) {
       const branch = branchId ? step.branches?.find((b) => b.id === branchId) : undefined;
       void sendStep(step, branch);
@@ -598,15 +598,15 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     if (!supportsSnapshot(pluginProtocol.current)) return syncShoppingPlan(plan);
     const sn = snapshot.current;
     sn.parts = { ...sn.parts, shopping: plan };
-    // Шаг в снимке ещё не известен (программа только запустилась) — снимок уйдёт, когда он будет; список сохранён.
+    // The step in the snapshot is not known yet (the app has just started) — the snapshot goes when it is; the list is saved.
     return sn.synced ? flushSnapshot() : true;
   }, [flushSnapshot]);
 
   const navigate = useCallback(async (target: NavTargetPayload) => {
     if (!enabled) return { ok: false as const, reason: 'off' as const };
     const r = await setNavTarget(target);
-    // Плагин 2.11+ сам сообщит цель (NAV_SET) — и снимет её, если предмет уже в сумке (NAV_DONE): ставить её здесь
-    // значит рисковать вернуть уже снятую. Старый плагин не сообщает — тогда запоминаем сами.
+    // Plugin 2.11+ reports the target itself (NAV_SET) — and clears it if the item is already in the bag (NAV_DONE): setting it here
+    // means risking bringing back an already cleared one. An old plugin does not report — then we remember ourselves.
     if (r.ok && (pluginProtocol.current ?? 0) < 4) setNavTargetState(target);
     return r;
   }, [enabled]);
@@ -618,7 +618,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     setNavFromPlugin(null);
   }, [setNavFromPlugin]);
 
-  // Уровни из игры сами попадают в поля уровней — только когда персонаж тот же, что в профиле.
+  // Levels from the game go into the level fields by themselves — only when the character is the same as in the profile.
   useEffect(() => {
     if (!features.levelsFromGame || !stats || !gateAllows(gate)) return;
     const known: Record<string, number> = {};
@@ -626,14 +626,14 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     setLevels(known);
   }, [stats, features.levelsFromGame, gate, setLevels]);
 
-  // Первый увиденный персонаж привязывается к профилю без имени.
+  // The first character seen is bound to the profile without a name.
   useEffect(() => {
     if (gate.kind !== 'link') return;
     const s = readProfiles();
     writeProfiles(linkPlayer(s, s.active, gate.player));
   }, [gate]);
 
-  // Сводка сеанса считается от первых полученных значений; другой персонаж — новый сеанс.
+  // The session summary is counted from the first received values; another character — a new session.
   const sessionPlayer = useRef<string | null>(null);
   useEffect(() => {
     if (player && sessionPlayer.current && sessionPlayer.current !== player) {
@@ -659,23 +659,23 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
 
   const diagnostics = useCallback(async () => {
     const st = await checkStatus();
-    // Журнал плагина (с 2.23.0): сколько записано и какие странности нашёл сторож; подробности — npm run telemetry.
+    // The plugin journal (since 2.23.0): how much is written and what oddities the watchdog found; details — npm run telemetry.
     const log = st.online ? await getTelemetry() : null;
     const done = Object.values(latest.current.progress.steps).filter((v) => v === 'done').length;
     const report = {
-      программа: __APP_VERSION__,
-      окно: typeof navigator === 'undefined' ? '' : navigator.userAgent,
-      связь: { включена: enabled, состояние: state, вИгре: inGame, плагин: plugin, шагВИгре: activeStepId },
-      ответПлагина: {
-        онлайн: st.online, протокол: st.protocol, версия: st.pluginVersion, шагУПлагина: st.activeStepId,
-        уровней: st.stats ? Object.keys(st.stats).length : 0, опыт: Boolean(st.xp), квестов: st.questsDone?.length ?? null, персонаж: Boolean(st.player),
+      app: __APP_VERSION__,
+      window: typeof navigator === 'undefined' ? '' : navigator.userAgent,
+      link: { enabled, state, inGame, plugin, activeStep: activeStepId },
+      pluginReply: {
+        online: st.online, protocol: st.protocol, version: st.pluginVersion, pluginStep: st.activeStepId,
+        levels: st.stats ? Object.keys(st.stats).length : 0, xp: Boolean(st.xp), quests: st.questsDone?.length ?? null, character: Boolean(st.player),
       },
-      журналПлагина: log === null ? null : log.enabled
-        ? { файл: log.file, событий: log.events, странностей: log.anomalies, обрезан: log.truncated, последнийСнимок: log.lastShot, последниеСтранности: log.recentAnomalies.map((x) => `${x.code}: ${x.message}`) }
-        : { включён: false },
-      настройки: { автозапуск: autoLaunch, возможности: features, режим: latest.current.progress.gameMode ?? null, профиль: gate.kind },
-      прогресс: { выполнено: done, всего: latest.current.steps.length },
-      события: eventLog.current.slice(-100).map((x) => `${new Date(x.t).toLocaleTimeString('ru-RU')} ${x.text}`),
+      pluginJournal: log === null ? null : log.enabled
+        ? { file: log.file, events: log.events, anomalies: log.anomalies, truncated: log.truncated, lastShot: log.lastShot, recentAnomalies: log.recentAnomalies.map((x) => `${x.code}: ${x.message}`) }
+        : { enabled: false },
+      settings: { autoLaunch, features, mode: latest.current.progress.gameMode ?? null, profile: gate.kind },
+      progress: { done, total: latest.current.steps.length },
+      events: eventLog.current.slice(-100).map((x) => `${new Date(x.t).toLocaleTimeString('en-US')} ${x.text}`),
     };
     return JSON.stringify(report, null, 2);
   }, [enabled, state, inGame, plugin, activeStepId, autoLaunch, features, gate.kind]);
@@ -696,6 +696,6 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
 
 export function useBridge(): BridgeValue {
   const v = useContext(BridgeContext);
-  if (!v) throw new Error('useBridge вне BridgeProvider');
+  if (!v) throw new Error('useBridge outside BridgeProvider');
   return v;
 }

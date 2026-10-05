@@ -1,6 +1,6 @@
-"""Символьное выполнение исходников квестов Quest Helper: из loadSteps() получается машина состояний каждого этапа —
-дерево шагов с условиями (предметы, зоны, переменные, сообщения чата, диалоги, текст виджетов), в порядке проверки Quest Helper.
-Результат — JSON: {'stages': {N: узел}, 'nodes': {...}, 'reqs': {...}, 'alias': {...}, 'unknown': [...]}."""
+"""Symbolic execution of the Quest Helper quest sources: from loadSteps() comes the state machine of each stage —
+a tree of steps with conditions (items, zones, variables, chat messages, dialogues, widget text), in the order Quest Helper checks them.
+The result is JSON: {'stages': {N: node}, 'nodes': {...}, 'reqs': {...}, 'alias': {...}, 'unknown': [...]}."""
 import os
 import re
 import sys
@@ -11,7 +11,7 @@ from jparse import parse_class  # noqa: E402
 from paths import WORK as SP  # noqa: E402
 
 
-# ---------------------------------------------------------------- константы
+# ---------------------------------------------------------------- constants
 def load_consts():
     out = {}
     d = os.path.join(SP, 'consts')
@@ -38,7 +38,7 @@ def load_collections():
     start = src.index('public enum ItemCollections')
     body = src[start:]
     out = {}
-    # записи: ИМЯ( ... ),  — до следующей записи верхнего уровня
+    # entries: NAME( ... ),  — up to the next top-level entry
     for m in re.finditer(r'^\t([A-Z][A-Z0-9_]*)\(', body, re.M):
         name = m.group(1)
         j = m.end()
@@ -61,7 +61,7 @@ CONSTS = load_consts()
 
 
 def load_qh_enum(fname, cons_tables):
-    """Перечисления Quest Helper (QuestVarbits, QuestVarPlayer): ИМЯ(VarbitID.X) или ИМЯ(123)."""
+    """The Quest Helper enumerations (QuestVarbits, QuestVarPlayer): NAME(VarbitID.X) or NAME(123)."""
     path = os.path.join(SP, fname)
     out = {}
     if not os.path.exists(path):
@@ -93,7 +93,7 @@ for _l in open(os.path.join(SP, 'consts', 'gv_InterfaceID_nested.txt'), encoding
 OPS = {'GREATER': '>', 'LESS': '<', 'LESS_EQUAL': '<=', 'EQUAL': '==', 'GREATER_EQUAL': '>=', 'NOT_EQUAL': '!='}
 
 
-# ---------------------------------------------------------------- значения
+# ---------------------------------------------------------------- values
 class Enum:
     def __init__(self, cls, name, value=None):
         self.cls, self.name, self.value = cls, name, value
@@ -133,14 +133,14 @@ class Step:
         self.entries = []         # [(req, Step)]
         self.lock = None
         self.subs = []
-        self.owner = None         # имя переменной-хозяина для шагов из вспомогательного класса
+        self.owner = None         # the name of the owner variable for steps from a helper class
 
     def __repr__(self):
         return '<Step %s %s>' % (self.kind, self.name)
 
 
 class Req(dict):
-    """Узел условия (JSON-словарь). Тождество объекта важно: Conditions с защёлкой — одно состояние на все места использования."""
+    """A condition node (a JSON dictionary). The object identity matters: Conditions with a latch are one state for all the places of use."""
 
     def __hash__(self):
         return id(self)
@@ -167,7 +167,7 @@ def flat(xs):
 
 class Interp:
     def __init__(self, cls_name, classes):
-        self.classes = classes            # имя класса -> разобранный класс
+        self.classes = classes            # the class name -> the parsed class
         self.main = classes[cls_name]
         self.env = {}
         self.stages = {}
@@ -178,7 +178,7 @@ class Interp:
         self.static_imports = dict(self.main['static_imports'])
         self.quest_name = ''
 
-    # ------------------------------------------------------------ константы
+    # ------------------------------------------------------------ constants
     def const(self, cls, name):
         full = self.imports.get(cls, '')
         pkg = 'gv' if 'gameval' in full else 'api'
@@ -187,14 +187,14 @@ class Interp:
             tab = CONSTS.get('gv_' + cls) or CONSTS.get('api_' + cls)
         if tab is not None and name in tab:
             return tab[name]
-        # запасной вариант: другое пространство
+        # a fallback: another namespace
         for alt in ('gv_', 'api_'):
             t = CONSTS.get(alt + cls)
             if t and name in t:
                 return t[name]
         return None
 
-    # ------------------------------------------------------------ выполнение
+    # ------------------------------------------------------------ execution
     def run(self):
         for f in self.main['fields']:
             self.stmt(f)
@@ -240,7 +240,7 @@ class Interp:
         if isinstance(val, Step) and val.name is None:
             val.name = name
 
-    # ------------------------------------------------------------ выражения
+    # ------------------------------------------------------------ expressions
     def ev(self, e):
         if e is None:
             return None
@@ -386,7 +386,7 @@ class Interp:
             return self.make_step(typ, args, e)
         return Unk('new ' + typ)
 
-    # ------------------------------------------------------------ требования
+    # ------------------------------------------------------------ requirements
     def make_zone(self, args):
         a = [x for x in args if not isinstance(x, str)]
         if not a:
@@ -530,7 +530,7 @@ class Interp:
         who = None
         text = strs
         if bools:
-            # есть логический аргумент: первая строка — имя говорящего
+            # there is a boolean argument: the first line is the speaker's name
             if flat_args and isinstance(flat_args[0], str):
                 who = flat_args[0]
                 text = [x for x in flat(flat_args[1:]) if isinstance(x, str)]
@@ -604,11 +604,11 @@ class Interp:
                 state = a.name
         return req('quest', q=qn, st=state)
 
-    # ------------------------------------------------------------ шаги
+    # ------------------------------------------------------------ steps
     def make_step(self, typ, args, e):
         if typ == 'ConditionalStep':
             st = Step('cond')
-            # new ConditionalStep(questHelper, step, [text], reqs...) — второй аргумент: шаг по умолчанию
+            # new ConditionalStep(questHelper, step, [text], reqs...) — the second argument: the default step
             for a in args[1:]:
                 if isinstance(a, Step):
                     st.default = a
@@ -626,14 +626,14 @@ class Interp:
         return st
 
     def make_helper_step(self, typ, args):
-        """Вспомогательный класс шага (RumSmugglingStep и т. п.): выполняем его конструктор в своём окружении."""
+        """A helper step class (RumSmugglingStep and so on): we run its constructor in its own environment."""
         cls = self.classes[typ]
         st = Step('cond') if cls.get('extends') == 'ConditionalStep' else Step('leaf')
         if st.kind == 'cond':
             st.helper = typ
         saved_env, saved_imports = self.env, self.imports
         env = dict(self.env)
-        # поля вспомогательного класса: свои
+        # the fields of the helper class: its own
         self.env = {}
         self.imports = dict(cls['imports'])
         self.this_stack.append(st)
@@ -648,12 +648,12 @@ class Interp:
             inner = self.env
             self.env = saved_env
             self.imports = saved_imports
-        # имена внутренних шагов получают префикс владельца (узнаём его при присваивании)
+        # the names of the inner steps get the owner's prefix (we learn it on assignment)
         st.inner_env = inner
         return st
 
     def ctor_stmt(self, cls, s, st):
-        # super(...) — первое: new ConditionalStep(..., defaultStep)
+        # super(...) — the first: new ConditionalStep(..., defaultStep)
         if s[0] == 'expr' and s[1][0] == 'call' and s[1][1] is None and s[1][2] == 'super':
             args = [self.ev(a) for a in s[1][3]]
             for a in args[1:]:
@@ -665,7 +665,7 @@ class Interp:
 
     def ev_call(self, e):
         obj, name, rawargs = e[1], e[2], e[3]
-        # статические помощники логики
+        # static logic helpers
         if obj is None:
             if name in ('and', 'or', 'nor', 'nand', 'not'):
                 args = flat([self.ev(a) for a in rawargs])
@@ -690,10 +690,10 @@ class Interp:
             if name in ('List', 'asList'):
                 return flat([self.ev(a) for a in rawargs])
             return Unk('call ' + name)
-        # this.steps.get(null) — шаг по умолчанию вспомогательного условного шага
+        # this.steps.get(null) — the default step of the helper conditional step
         if obj == ('field', ('name', 'this'), 'steps') and name == 'get' and self.this_stack:
             return self.this_stack[-1].default
-        # getQuestHelper().getQuest().getName() — название квеста
+        # getQuestHelper().getQuest().getName() — the quest name
         if name == 'getName' and obj[0] == 'call' and obj[2] == 'getQuest':
             return self.quest_name
         # List.of / Arrays.asList / ImmutableList.of
@@ -701,7 +701,7 @@ class Interp:
             return flat([self.ev(a) for a in rawargs])
         if obj[0] == 'name' and obj[1] == 'LogicHelper':
             return self.ev_call(('call', None, name, rawargs))
-        # статическая фабрика шага: DigStep.withCustomSpadeRequirement(...) и т. п.
+        # a static step factory: DigStep.withCustomSpadeRequirement(...) and so on
         if obj[0] == 'name' and obj[1].endswith('Step') and obj[1] not in self.env:
             for a in rawargs:
                 self.ev(a)
@@ -716,7 +716,7 @@ class Interp:
         return self.dispatch(target, name, args)
 
     def current_class(self):
-        # внутри вспомогательного класса — он; иначе главный
+        # inside a helper class — it; otherwise the main one
         if self.this_stack and hasattr(self.this_stack[-1], 'helper'):
             return self.classes[self.this_stack[-1].helper]
         return self.main
@@ -812,7 +812,7 @@ class Interp:
             c = Step(st.kind)
             c.default, c.entries, c.lock, c.subs = st.default, list(st.entries), st.lock, list(st.subs)
             return c
-        # остальные методы шага — «текучий» интерфейс (возвращают тот же шаг) или пустышки
+        # the other step methods are a "fluent" interface (they return the same step) or stubs
         return st
 
     def add_step(self, st, args):
@@ -833,9 +833,9 @@ class Interp:
         return None
 
 
-# ---------------------------------------------------------------- сборка
+# ---------------------------------------------------------------- assembly
 def collect_classes(cls_name, qdir):
-    """Главный класс и вспомогательные из той же папки пакета."""
+    """The main class and the helper ones from the same package folder."""
     classes = {}
     main = os.path.join(SP, 'qh', cls_name + '.java')
     classes[cls_name] = parse_class(open(main, encoding='utf-8').read())

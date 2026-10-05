@@ -1,5 +1,5 @@
 {
-  "source": "Требования к уровню — игры; ID, магазины и цены — база предметов проекта (f2p-items.json с OSRS Wiki), координаты магазинов — словарь мест (majorLocations.json)",
+  "source": "Level requirements come from the game; IDs, shops and prices from the project's item database (f2p-items.json from the OSRS Wiki), shop coordinates from the place dictionary (majorLocations.json)",
   "woodcutting": [
     { "tier": "Bronze axe", "itemId": 1351, "levelReq": 1, "shop": { "npc": "Bob", "store": "Bob's Brilliant Axes", "city": "Lumbridge" } },
     { "tier": "Iron axe", "itemId": 1349, "levelReq": 1, "minor": true, "shop": { "npc": "Bob", "store": "Bob's Brilliant Axes", "city": "Lumbridge" } },

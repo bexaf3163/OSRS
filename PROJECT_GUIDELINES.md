@@ -1,8 +1,8 @@
-# OSRS «Путь» — MASTER PROJECT GUIDELINES & AGENT INSTRUCTIONS
+# OSRS Path — MASTER PROJECT GUIDELINES & AGENT INSTRUCTIONS
 
 ## 0. PURPOSE
 
-This is the single consolidated operating contract for Claude Code working on OSRS «Путь».
+This is the single consolidated operating contract for Claude Code working on OSRS Path.
 
 Use it together with the task-specific prompt being executed.
 
@@ -47,10 +47,10 @@ Prefer focused surgical diffs. Do not rewrite whole files when only a small sect
 All player-facing UI, RuneLite HUD, overlays, dialogs, warnings, and recommendations must be in native English:
 
 - Match official OSRS Wiki and Quest Helper terminology exactly.
-- Eliminate Cyrillic fonts and dual-naming conventions ("Русское название (English Name)"). Use canonical in-game English names only.
+- Eliminate non-English text and dual-naming conventions ("Local name (English Name)"). Use canonical in-game English names only.
 - Code comments, commit messages, and internal documentation remain strictly in English.
 
-(Amended 2026-10-04 by the user; replaces the earlier "natural Russian UI" rule. Existing Russian UI text is converted only when a task explicitly asks for it; all new or changed player-facing text is English.)
+(Amended 2026-10-04 by the user; it replaced the earlier rule that set the interface in natural Russian. The whole interface, data and documentation were converted to English on 2026-10-05; all new or changed text is English.)
 
 ## 4. CORE ARCHITECTURAL INVARIANTS
 
@@ -141,7 +141,7 @@ The agent may automate:
 - starting/stopping local services;
 - normal OS UI actions.
 
-### Allowed in OSRS «Путь»
+### Allowed in OSRS Path
 
 The system may automate:
 
@@ -289,7 +289,7 @@ The guide should proactively tell the player what is missing.
 
 Example:
 
-`⚠️ Подготовка: Купи Steel axe у Боба в Лумбридже.`
+`⚠️ Preparation: Buy a Steel axe from Bob in Lumbridge.`
 
 Then provide navigation if available.
 
@@ -346,13 +346,13 @@ But:
 - never spend automatically;
 - do not interrupt the player for trivial upgrades.
 
-## 12. «ЧТО НУЖНО ДЛЯ ИГРЫ»
+## 12. "WHAT YOU NEED FOR THE GAME"
 
 The preparation interface should clearly distinguish:
 
 ### Ready
 
-`✓ Еда 20/20`
+`✓ Food 20/20`
 `✓ Steel axe`
 `✓ 500 gp`
 `✓ Woodcutting 15`
@@ -481,7 +481,7 @@ All external/live systems must fail gracefully.
 
 Bridge unavailable:
 
-`RuneLite не подключён`
+`RuneLite is not connected`
 
 and state becomes UNKNOWN.
 
@@ -634,7 +634,7 @@ Audit:
 
 ### UI
 
-- Russian spelling;
+- English spelling;
 - punctuation;
 - grammar;
 - broken labels;
@@ -688,21 +688,21 @@ Fix clear, in-scope problems. Do not perform unrelated aesthetic refactors.
 
 The product should make OSRS feel like:
 
-`пришел → посмотрел → купил → надел → пошел → кайфуешь`
+`arrive → look → buy → equip → go → enjoy`
 
 The guide should proactively answer:
 
-- Что мне нужно?
-- Где это взять?
-- Могу ли я это надеть/использовать?
-- Чего не хватает?
-- Что уже есть?
-- Что выгоднее купить?
-- Сколько GP есть?
-- Сколько еще нужно заработать?
-- Есть ли быстрый shortcut?
-- Есть ли teleport?
-- Готов ли я идти?
+- What do I need?
+- Where do I get it?
+- Can I wear/use it?
+- What is missing?
+- What do I already have?
+- What is the better buy?
+- How much GP do I have?
+- How much more do I need to earn?
+- Is there a quick shortcut?
+- Is there a teleport?
+- Am I ready to go?
 
 The player should not need to repeatedly research Wiki pages or remember obscure requirements.
 

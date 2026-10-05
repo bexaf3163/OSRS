@@ -1,4 +1,4 @@
-// В игре другой персонаж, чем в активном профиле: уровни и отметки из игры не пишем, пока игрок не выберет.
+// The game has a different character than the active profile: levels and marks from the game are not written until the player chooses.
 
 import { useBridge } from '../bridge';
 import { addProfile, readProfiles, switchProfile, writeProfiles } from '../lib/profiles';
@@ -17,16 +17,16 @@ export function ProfileBanner() {
       {gate.kind === 'switch'
         ? (
           <>
-            <p><strong>В игре персонаж {gate.player} — это профиль «{gate.profile.name}»</strong></p>
-            <p className="small">Пока открыт другой профиль, уровни и отметки из игры в него не записываются.</p>
-            <div className="actions"><button type="button" className="btn btn-primary" onClick={() => switchProfile(gate.profile.id)}>Переключить на «{gate.profile.name}»</button></div>
+            <p><strong>The character {gate.player} is in the game — that is the profile "{gate.profile.name}"</strong></p>
+            <p className="small">While another profile is open, levels and marks from the game are not written into it.</p>
+            <div className="actions"><button type="button" className="btn btn-primary" onClick={() => switchProfile(gate.profile.id)}>Switch to "{gate.profile.name}"</button></div>
           </>
         )
         : (
           <>
-            <p><strong>В игре новый персонаж: {gate.player}</strong></p>
-            <p className="small">Активный профиль привязан к другому персонажу, поэтому уровни и отметки из игры сюда не записываются. Создай отдельный профиль — у него будет свой прогресс.</p>
-            <div className="actions"><button type="button" className="btn btn-primary" onClick={create}>Создать профиль «{gate.player}»</button></div>
+            <p><strong>A new character is in the game: {gate.player}</strong></p>
+            <p className="small">The active profile is tied to another character, so levels and marks from the game are not written here. Create a separate profile — it will have its own progress.</p>
+            <div className="actions"><button type="button" className="btn btn-primary" onClick={create}>Create the profile "{gate.player}"</button></div>
           </>
         )}
     </div>

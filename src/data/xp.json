@@ -1,5 +1,5 @@
 {
-  "title": "Сколько опыта нужно до уровня",
+  "title": "How much XP you need to a level",
   "points": [
     {
       "level": 5,
@@ -77,7 +77,7 @@
   "note": [
     {
       "t": "p",
-      "text": "Пример расчёта: от 30 до 40 рубки нужно 37 224 − 13 363 = 23 861 опыта. Ива даёт 67,5 опыта за бревно — это около 354 брёвен. Плагин Skill Calculator считает такое сам."
+      "text": "An example calculation: from Woodcutting 30 to 40 you need 37,224 - 13,363 = 23,861 XP. A willow gives 67.5 XP per log, which is about 354 logs. The Skill Calculator plugin does such sums itself."
     }
   ]
 }

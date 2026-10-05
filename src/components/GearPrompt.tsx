@@ -1,7 +1,7 @@
-// «⚔️ Сильнее в бою»: на шаге с боем — что надеть или купить, чтобы бить быстрее противника этого шага.
-// Разбор — gearAdvisor (формулы урона OSRS Wiki, защита противника с вики). Кнопка ведёт стрелку в игре к продавцу;
-// когда предмет окажется в сумке, цель снимется сама. Ничего не покупает и не надевает — только советует.
-// «✕ Пропустить» прячет совет на этом шаге (и строку в HUD игры).
+// "⚔️ Stronger in combat": on a combat step — what to wear or buy to hit the step's opponent faster.
+// The analysis is gearAdvisor (OSRS Wiki damage formulas, the opponent's defence from the wiki). The button leads the in-game arrow to the seller;
+// when the item is in the bag, the target is cleared by itself. It buys and wears nothing — only advises.
+// "✕ Skip" hides the advice on this step (and the HUD line in the game).
 
 import type { Step } from '../types';
 import { useStore } from '../store';
@@ -15,19 +15,19 @@ import type { Foe } from '../types';
 import { NavigateButton } from './NavigateButton';
 import { PlaceButton, PlaceMapView, usePlaceMap } from './PlaceMap';
 
-/** «против Cow (2 ур.)», «против Al Kharid warrior (9 ур.) и Flesh Crawler (28 ур.)». */
-export const foesText = (foes: Foe[]) => `против ${foes.map((f) => `${f.name} (${f.combat} ур.)`).join(' и ')}`;
+/** "against Cow (level 2)", "against Al Kharid warrior (level 9) and Flesh Crawler (level 28)". */
+export const foesText = (foes: Foe[]) => `against ${foes.map((f) => `${f.name} (level ${f.combat})`).join(' and ')}`;
 
-/** Что сделать: «Надень Iron scimitar — он в банке», «Купи Steel scimitar вместо Bronze sword». */
+/** What to do: "Wear Iron scimitar — it is in the bank", "Buy Steel scimitar instead of Bronze sword". */
 export function ActionTitle({ a }: { a: GearAction }) {
   const cur = a.current?.name ?? a.currentName;
   if (a.how === 'wear') {
-    return <>Надень <strong>{a.item.name}</strong> — {a.source.kind === 'bank' ? 'он в банке' : 'он в сумке'}</>;
+    return <>Wear <strong>{a.item.name}</strong> — {a.source.kind === 'bank' ? 'it is in the bank' : 'it is in the bag'}</>;
   }
-  return <>Купи <strong>{a.item.name}</strong>{cur ? <> вместо {cur}</> : null}</>;
+  return <>Buy <strong>{a.item.name}</strong>{cur ? <> instead of {cur}</> : null}</>;
 }
 
-/** Где взять: магазин — с кнопкой карты, биржа — с ценой; второй вариант — «или …». */
+/** Where to get it: a shop — with a map button, the exchange — with a price; the second option — "or …". */
 export function ActionSource({ a, onShow }: { a: GearAction; onShow: ReturnType<typeof usePlaceMap>['show'] }) {
   if (a.how === 'wear') return null;
   const s = a.source;
@@ -37,33 +37,33 @@ export function ActionSource({ a, onShow }: { a: GearAction; onShow: ReturnType<
       {s.kind === 'shop' ? (
         <>
           <PlaceButton query={{ kind: 'shop', location: s.location, shop: s.shop, npc: s.npc }} onShow={onShow}>{s.shop} • {s.location}</PlaceButton>
-          {s.npc && <span className="muted"> · продавец {s.npc}</span>}
+          {s.npc && <span className="muted"> · seller {s.npc}</span>}
           <> · {formatGp(s.price)} gp</>
-          {s.toll ? <span className="muted"> (+{s.toll} gp за проход в Al Kharid)</span> : null}
+          {s.toll ? <span className="muted"> (+{s.toll} gp toll into Al Kharid)</span> : null}
         </>
       ) : (
-        <>Grand Exchange{s.kind === 'ge' && s.price !== undefined ? <> · ~{formatGp(s.price)} gp</> : <span className="muted"> · цена не загрузилась</span>}</>
+        <>Grand Exchange{s.kind === 'ge' && s.price !== undefined ? <> · ~{formatGp(s.price)} gp</> : <span className="muted"> · the price did not load</span>}</>
       )}
-      {alt && <span className="muted"> · или {altText(alt)}</span>}
+      {alt && <span className="muted"> · or {altText(alt)}</span>}
     </>
   );
 }
 
-const altText = (s: Source) => (s.kind === 'ge' ? (s.price !== undefined ? `на бирже ~${formatGp(s.price)} gp` : 'на бирже') : sourceText(s));
+const altText = (s: Source) => (s.kind === 'ge' ? (s.price !== undefined ? `on the exchange ~${formatGp(s.price)} gp` : 'on the exchange') : sourceText(s));
 
-/** Пометки: предмет всё равно покупается по маршруту, двуручное оружие. */
+/** Marks: the item is bought on the route anyway, a two-handed weapon. */
 export function ActionNotes({ a }: { a: GearAction }) {
   return (
     <>
       {a.routeStep && (
-        <> По маршруту он покупается на шаге <a href={`#/step/${a.routeStep}`}>{a.routeStep}</a> — взять раньше значит раньше бить быстрее.</>
+        <> The route buys it at step <a href={`#/step/${a.routeStep}`}>{a.routeStep}</a> — taking it earlier means hitting faster sooner.</>
       )}
-      {a.twoHanded && <> Двуручное: щит придётся снять.</>}
+      {a.twoHanded && <> Two-handed: the shield will have to come off.</>}
     </>
   );
 }
 
-/** «⚠️ Coif есть в банке, но надеть его пока нельзя: 20 Ranged (сейчас 17)» — чтобы не принять его за готовый. */
+/** "⚠️ Coif is in the bank but cannot be worn yet: 20 Ranged (now 17)" — so that it is not taken for ready. */
 export function LockedOwnedNote({ advice }: { advice: GearAdvice }) {
   const owned = advice.locked.filter((l) => l.owned);
   if (!owned.length) return null;
@@ -71,7 +71,7 @@ export function LockedOwnedNote({ advice }: { advice: GearAdvice }) {
     <>
       {owned.map((l) => (
         <p key={l.item.id} className="small lock-note">
-          ⚠️ <strong>{l.item.name}</strong> {l.owned === 'bank' ? 'есть в банке' : 'есть в сумке'}, но надеть его пока нельзя: нужно {missingText(l.missing)}.
+          ⚠️ <strong>{l.item.name}</strong> {l.owned === 'bank' ? 'is in the bank' : 'is in the bag'}, but cannot be worn yet: needs {missingText(l.missing)}.
         </p>
       ))}
     </>
@@ -81,7 +81,7 @@ export function LockedOwnedNote({ advice }: { advice: GearAdvice }) {
 export function GearPrompt({ step }: { step: Step }) {
   const { upgradeRouter } = useFeatures();
   const { progress } = useStore();
-  // Дешёвые проверки — до разбора: он нужен только раскрытому невыполненному шагу с боем.
+  // Cheap checks — before the analysis: it is needed only for an expanded unfinished combat step.
   if (!upgradeRouter || !step.foes?.length || isClosed(progress, step.id) || progress.upgradeDismissedForSteps?.includes(step.id)) return null;
   return <GearPromptBody step={step} />;
 }
@@ -96,25 +96,25 @@ function GearPromptBody({ step }: { step: Step }) {
   const goal = advice.goals.find((g) => g.slot === 'weapon') ?? advice.goals.find((g) => g.slot === 'neck');
   const vs = foesText(advice.foes);
   const skip = (
-    <button type="button" className="btn btn-ghost btn-sm" onClick={() => dismissUpgrade(step.id)}>✕ Пропустить</button>
+    <button type="button" className="btn btn-ghost btn-sm" onClick={() => dismissUpgrade(step.id)}>✕ Skip</button>
   );
 
-  // Без RuneLite не видно, что надето и сколько монет: советуем по уровням из профиля.
+  // Without RuneLite we cannot see what is worn and how many coins there are: we advise by the levels from the profile.
   if (!advice.live) {
     const best = advice.goals.find((g) => g.slot === 'weapon');
     if (!best) return null;
     return (
-      <section className="upgrade" aria-label="Сильнее в бою">
-        <p className="upgrade-kicker">⚔️ Сильнее в бою</p>
+      <section className="upgrade" aria-label="Stronger in combat">
+        <p className="upgrade-kicker">⚔️ Stronger in combat</p>
         <p className="small">
-          Лучшее оружие по твоему уровню Attack ({advice.levels.attack}) — <strong>{best.item.name}</strong>
+          The best weapon for your Attack level ({advice.levels.attack}) — <strong>{best.item.name}</strong>
           {best.source.kind !== 'bag' && best.source.kind !== 'bank' ? <> ({sourceText(best.source)})</> : null}.
           {' '}{state === 'online'
-            ? 'Войди в игру в RuneLite — программа увидит, что надето и сколько монет, и скажет, стоит ли менять.'
-            : 'Включи связь с RuneLite — программа увидит, что надето и сколько монет, и скажет, стоит ли менять.'}
+            ? 'Log in to the game in RuneLite — the app will see what is worn and how many coins you have, and say whether a change is worth it.'
+            : 'Turn on the RuneLite link — the app will see what is worn and how many coins you have, and say whether a change is worth it.'}
         </p>
         <div className="upgrade-actions">
-          <a className="btn btn-sm" href="#/gear">Весь разбор снаряжения</a>
+          <a className="btn btn-sm" href="#/gear">The full gear analysis</a>
           {skip}
         </div>
       </section>
@@ -125,9 +125,9 @@ function GearPromptBody({ step }: { step: Step }) {
     return (
       <>
         <p className="small gear-ok">
-          ✓ Оружие — лучшее, что можно при твоих уровнях {vs}
-          {goal ? <>; дальше — {goal.item.name}{goal.short !== undefined ? <>, не хватает {formatGp(goal.short)} gp</> : null}</> : null}.
-          {' '}<a href="#/gear">Разбор снаряжения</a>
+          ✓ The weapon is the best possible at your levels {vs}
+          {goal ? <>; next — {goal.item.name}{goal.short !== undefined ? <>, {formatGp(goal.short)} gp missing</> : null}</> : null}.
+          {' '}<a href="#/gear">Gear analysis</a>
         </p>
         <LockedOwnedNote advice={advice} />
       </>
@@ -137,11 +137,11 @@ function GearPromptBody({ step }: { step: Step }) {
   const nav = actionNav(top, step.id);
   const seller = top.source.kind === 'shop' ? top.source.npc ?? top.source.shop : 'Grand Exchange';
   return (
-    <section className="upgrade" aria-label="Сильнее в бою">
-      <p className="upgrade-kicker">⚔️ Сильнее в бою</p>
+    <section className="upgrade" aria-label="Stronger in combat">
+      <p className="upgrade-kicker">⚔️ Stronger in combat</p>
       <p className="upgrade-title"><ActionTitle a={top} /></p>
       <p className="small">{capital(gainText(top))} {vs}.<ActionNotes a={top} /></p>
-      {top.how === 'buy' && <p className="small upgrade-where"><span className="muted">Где взять: </span><ActionSource a={top} onShow={places.show} /></p>}
+      {top.how === 'buy' && <p className="small upgrade-where"><span className="muted">Where to get it: </span><ActionSource a={top} onShow={places.show} /></p>}
       {more.length > 0 && (
         <ul className="small gear-more">
           {more.map((a) => (
@@ -153,14 +153,14 @@ function GearPromptBody({ step }: { step: Step }) {
       )}
       {goal && (
         <p className="small muted">
-          💰 Цель: {goal.item.name} — {gainText(goal)}
-          {goal.short !== undefined ? <>, не хватает {formatGp(goal.short)} gp</> : <>, цена неизвестна</>}.
+          💰 Goal: {goal.item.name} — {gainText(goal)}
+          {goal.short !== undefined ? <>, {formatGp(goal.short)} gp missing</> : <>, the price is unknown</>}.
         </p>
       )}
       <LockedOwnedNote advice={advice} />
       <div className="upgrade-actions">
-        {nav && <NavigateButton target={nav} label={`🧭 Направить ${seller === 'Grand Exchange' ? 'на Grand Exchange' : `к ${seller}`}`} />}
-        <a className="btn btn-ghost btn-sm" href="#/gear">Весь разбор</a>
+        {nav && <NavigateButton target={nav} label={`🧭 Point ${seller === 'Grand Exchange' ? 'to the Grand Exchange' : `to ${seller}`}`} />}
+        <a className="btn btn-ghost btn-sm" href="#/gear">The full analysis</a>
         {skip}
       </div>
       <PlaceMapView view={places.view} onClose={places.close} />
@@ -171,8 +171,8 @@ function GearPromptBody({ step }: { step: Step }) {
 const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 
 /**
- * Баннер на «Пути»: снаряжение видно из игры и есть что сделать — главный совет и ссылка на разбор.
- * Прячется вместе с советом ближайшего шага с боем («✕ Пропустить»).
+ * A banner on "Path": the gear is visible from the game and there is something to do — the main advice and a link to the analysis.
+ * It hides together with the advice of the nearest combat step ("✕ Skip").
  */
 export function GearBanner() {
   const { upgradeRouter } = useFeatures();
@@ -187,12 +187,12 @@ function GearBannerBody() {
   const top = advice.actions[0];
   if (!advice.live || !top || (fightStep && progress.upgradeDismissedForSteps?.includes(fightStep.id))) return null;
   return (
-    <section className="upgrade gear-banner" aria-label="Сильнее в бою">
-      <p className="upgrade-kicker">⚔️ Можно бить быстрее</p>
+    <section className="upgrade gear-banner" aria-label="Stronger in combat">
+      <p className="upgrade-kicker">⚔️ You can hit faster</p>
       <p className="small"><ActionTitle a={top} /> — {gainText(top)} {foesText(advice.foes)}.</p>
       <div className="upgrade-actions">
-        <a className="btn btn-sm" href="#/gear">Разбор снаряжения</a>
-        {fightStep && <button type="button" className="btn btn-ghost btn-sm" onClick={() => dismissUpgrade(fightStep.id)}>✕ Скрыть</button>}
+        <a className="btn btn-sm" href="#/gear">Gear analysis</a>
+        {fightStep && <button type="button" className="btn btn-ghost btn-sm" onClick={() => dismissUpgrade(fightStep.id)}>✕ Hide</button>}
       </div>
     </section>
   );

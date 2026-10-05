@@ -1,5 +1,5 @@
-// «🧭 Показать в игре»: шаг уходит в плагин RuneLite — стрелка, подсветка NPC, объектов, клеток,
-// нужных вариантов диалога и предметов. Ниже — что именно подсветится.
+// "🧭 Show in the game": the step goes to the RuneLite plugin — the arrow, the highlight of NPCs, objects, tiles,
+// the needed dialogue options and items. Below — what exactly will be highlighted.
 
 import { useState } from 'react';
 import type { InGameTarget, Step } from '../types';
@@ -13,9 +13,9 @@ import { plural } from '../lib/shopping';
 
 const GROUPS: [keyof InGameTarget, string][] = [
   ['npcNames', 'NPC'],
-  ['objectNames', 'Объект'],
-  ['dialogChoices', 'Диалог'],
-  ['highlightItems', 'Предмет'],
+  ['objectNames', 'Object'],
+  ['dialogChoices', 'Dialogue'],
+  ['highlightItems', 'Item'],
 ];
 
 export function InGamePanel({ step }: { step: Step }) {
@@ -23,7 +23,7 @@ export function InGamePanel({ step }: { step: Step }) {
   const [notice, setNotice] = useState<'' | 'sending' | 'offline'>('');
   if (!enabled || !toInGameTarget(step)) return null;
   const active = activeStepId === step.id;
-  // Без связи шаг не «активен в RuneLite», а ждёт подключения — вернётся туда сам.
+  // Without a link the step is not "active in RuneLite" but waits for the connection — it will return there by itself.
   const live = active && state === 'online';
   const g = step.inGame;
   const trigger = g?.completionTrigger;
@@ -37,55 +37,55 @@ export function InGamePanel({ step }: { step: Step }) {
   };
 
   return (
-    <section className="step-section ingame" aria-label="Подсказки в игре">
+    <section className="step-section ingame" aria-label="In-game hints">
       <div className="ingame-row">
         <button type="button" className={`btn ${active ? 'btn-ingame-active' : ''}`} onClick={point} disabled={notice === 'sending'}
-          title={active ? 'Шаг уже ведёт тебя в игре. Нажми, чтобы отправить его ещё раз' : undefined}
+          title={active ? 'The step already guides you in the game. Click to send it again' : undefined}
           aria-describedby={notice === 'offline' ? `ingame-${step.id}` : undefined}>
-          {active ? '✓ Показан в игре' : '🧭 Показать в игре'}
+          {active ? '✓ Shown in the game' : '🧭 Show in the game'}
         </button>
-        {live && <span className="badge badge-ingame">● Активно в RuneLite</span>}
-        {active && !live && <span className="badge">○ Вернётся в игру, когда RuneLite подключится</span>}
-        {active && <button type="button" className="btn btn-ghost btn-sm" onClick={() => void clear()}>Убрать из игры</button>}
+        {live && <span className="badge badge-ingame">● Active in RuneLite</span>}
+        {active && !live && <span className="badge">○ It will return to the game when RuneLite connects</span>}
+        {active && <button type="button" className="btn btn-ghost btn-sm" onClick={() => void clear()}>Remove from the game</button>}
       </div>
       {notice === 'offline' && (
         <p className="muted small" id={`ingame-${step.id}`} role="status">
-          RuneLite мост оффлайн{state === 'online' ? ' или отказал' : ''}
+          RuneLite bridge offline{state === 'online' ? ' or refused' : ''}
           {canLaunch
-            ? <>. <button type="button" className="btn btn-sm" onClick={() => void launchRuneLite()}>🎮 Запустить RuneLite</button> — через ~10 секунд нажми «Показать в игре» ещё раз.</>
-            : <>: запусти RuneLite с плагином OSRS Path Bridge (как — в README, раздел «RuneLite bridge»).</>}
+            ? <>. <button type="button" className="btn btn-sm" onClick={() => void launchRuneLite()}>🎮 Launch RuneLite</button> — in ~10 seconds press "Show in the game" again.</>
+            : <>: start RuneLite with the OSRS Path Bridge plugin (how — in the README, the "RuneLite bridge" section).</>}
         </p>
       )}
       {active && <PluginUpdateNote />}
       {live && plugin?.compat === 'ok' && (
         <p className="muted small">
-          🖱 В игре слева сверху, под плашкой шага, — список «Что нужно»: что с собой, чего нет и где взять. Клик по строке с
-          местом — стрелка и путь туда, NPC подсветится; клик по заголовку — свернуть.
+          🖱 In the game at the top left, under the step plate, is the "What you need" list: what to bring, what is missing and where to get it. A click on a row with
+          a place — the arrow and the path there, the NPC is highlighted; a click on the heading — collapse.
         </p>
       )}
       <PacingLine step={step} />
-      {trigger && <p className="muted small">Шаг отметится сам, когда {triggerText(trigger)}.</p>}
+      {trigger && <p className="muted small">The step will be marked by itself when {triggerText(trigger)}.</p>}
       {active && (
         <p className="muted small">
           {shortestPath
-            ? '🗺 Путь по земле прокладывает Shortest Path — с учётом стен и дверей.'
-            : waypoints.length ? `🗺 Маршрут по ${waypoints.length} ${plural(waypoints.length, 'точке', 'точкам', 'точкам')}: стрелка и HUD ведут от точки к точке. Путь с учётом стен рисует плагин Shortest Path из Plugin Hub.`
-              : '🗺 Стрелка показывает направление по прямой. Путь с учётом стен рисует плагин Shortest Path из Plugin Hub.'}
+            ? '🗺 The path over land is laid by Shortest Path — taking walls and doors into account.'
+            : waypoints.length ? `🗺 A route through ${waypoints.length} ${plural(waypoints.length, 'point', 'points')}: the arrow and the HUD lead from point to point. The path with walls is drawn by the Shortest Path plugin from the Plugin Hub.`
+              : '🗺 The arrow shows the straight-line direction. The path with walls is drawn by the Shortest Path plugin from the Plugin Hub.'}
         </p>
       )}
       <PreflightPanel step={step} />
       {waypoints.length > 0 && (
         <details className="ingame-details">
-          <summary className="subhead">Маршрут · {waypoints.length} {waypoints.length < 5 ? 'точки' : 'точек'}</summary>
+          <summary className="subhead">Route · {waypoints.length} {plural(waypoints.length, 'point', 'points')}</summary>
           <ol className="ingame-route">{waypoints.map((w, i) => <li key={i}>{w.label ?? `${w.x}, ${w.y}`}</li>)}</ol>
         </details>
       )}
       {chips.length > 0 && (
         <details className="ingame-details">
-          <summary className="subhead">Подсвечено в игре · {chips.length}</summary>
+          <summary className="subhead">Highlighted in the game · {chips.length}</summary>
           <ul className="ingame-chips">
             {chips.map((c) => (
-              <li key={`${c.kind}:${c.name}`} className={`ingame-chip is-${c.kind === 'Диалог' ? 'dialog' : 'plain'}`}>
+              <li key={`${c.kind}:${c.name}`} className={`ingame-chip is-${c.kind === 'Dialogue' ? 'dialog' : 'plain'}`}>
                 <span className="ingame-kind">{c.kind}</span> {c.name}
               </li>
             ))}

@@ -1,5 +1,5 @@
-// «Путь» на широком экране (редизайн D): слева лента этапов с шагами, в центре выбранный шаг,
-// справа закреплённое досье вики. Весь маршрут, шаг и досье видны сразу, без прокрутки страницы.
+// "Path" on a wide screen (redesign D): on the left a ribbon of stages with steps, in the centre the chosen step,
+// on the right the pinned wiki dossier. The whole route, the step and the dossier are visible at once, without page scrolling.
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Step } from '../types';
@@ -32,14 +32,14 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
     if (!step) return;
     setSelectedId(id);
     setOpenStages((o) => (o.has(step.stage) ? o : new Set(o).add(step.stage)));
-    // Новый шаг — с начала: центральная колонка прокручивается сама, страница стоит на месте.
+    // A new step — from the start: the central column scrolls by itself, the page stays still.
     center.current?.scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
     if (focus) window.setTimeout(() => center.current?.querySelector<HTMLElement>('.step-view-title')?.focus({ preventScroll: true }), 0);
-    // Выбранный шаг в ленте — в видимой области.
+    // The chosen step in the ribbon — within the visible area.
     window.setTimeout(() => document.getElementById(`rail-${id}`)?.scrollIntoView({ block: 'nearest' }), 0);
   }, []);
 
-  // Переход по ссылке #/step/S3-05.
+  // Navigation by the link #/step/S3-05.
   useEffect(() => {
     if (focusStep && steps.some((s) => s.id === focusStep)) select(focusStep);
   }, [focusStep, focusKey, steps, select]);
@@ -53,7 +53,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
 
   const nextAfter = (id: string): Step | undefined => openAfter(steps, progress, id);
 
-  // Шаг выполнен в игре (RuneLite): как после кнопки «Отметить выполненным» — в центре следующий.
+  // The step is done in the game (RuneLite): as after the "Mark as done" button — the next one is in the centre.
   const seenAdvance = useRef(advance?.nonce);
   useEffect(() => {
     if (!advance || advance.nonce === seenAdvance.current) return;
@@ -62,7 +62,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
     if (advance.to && steps.some((s) => s.id === advance.to)) select(advance.to);
   }, [advance, steps, select]);
 
-  /** «Отметить выполненным»: шаг закрывается, в центре сразу следующий незакрытый. */
+  /** "Mark as done": the step closes, the next unclosed one is at once in the centre. */
   const complete = (id: string) => {
     const next = nextAfter(id);
     setStep(id, 'done');
@@ -80,12 +80,12 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
 
   return (
     <div className="path-wide">
-      <h1 className="visually-hidden">Путь</h1>
+      <h1 className="visually-hidden">Path</h1>
 
-      <nav className="rail" aria-label="Этапы и шаги">
+      <nav className="rail" aria-label="Stages and steps">
         {selected.id !== suggested.id && (
           <button type="button" className="rail-now" onClick={() => select(suggested.id)}>
-            К текущему шагу · <code className="code">{suggested.id}</code>
+            To the current step · <code className="code">{suggested.id}</code>
           </button>
         )}
         <ol className="rail-stages">
@@ -116,9 +116,9 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
                             </span>
                             <code className="rail-step-code">{s.id}</code>
                             <span className="rail-step-title">{s.title}</span>
-                            {needsReview(s, progress) && <span className="rail-dot" title="Обновлено в V2 — проверь" />}
+                            {needsReview(s, progress) && <span className="rail-dot" title="Updated in V2 — check" />}
                             <span className="visually-hidden">
-                              {progress.steps[s.id] === 'done' ? ', сделано' : progress.steps[s.id] === 'skipped' ? ', пропущено' : locked ? ', заблокировано' : ''}
+                              {progress.steps[s.id] === 'done' ? ', done' : progress.steps[s.id] === 'skipped' ? ', skipped' : locked ? ', locked' : ''}
                             </span>
                           </button>
                         </li>
@@ -135,38 +135,37 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
       <section className="center" ref={center} aria-labelledby="step-view-title">
         {pending.length > 0 && (
           <div className="review-banner card">
-            <h2 className="review-title">🔔 Обновление гайда до V2!</h2>
+            <h2 className="review-title">🔔 The guide updated to V2!</h2>
             <p>
-              В {pending.length === 1 ? 'шаге' : 'шагах'} {pending.map((s) => s.id).join(', ')}, которые ты уже отметил, появились важные требования.
-              Очки квестов при сбросе не отнимаются.
+              In the {pending.length === 1 ? 'step' : 'steps'} {pending.map((s) => s.id).join(', ')}, which you already marked, important requirements appeared.
+              Quest points are not taken away on a reset.
             </p>
             <div className="actions">
-              <button type="button" className="btn btn-primary" onClick={showChanges}>Показать что изменилось</button>
-              <button type="button" className="btn" onClick={() => reactivate(pending.map((s) => s.id))}>Сбросить обновлённые шаги в активные</button>
-              <button type="button" className="btn btn-ghost" onClick={() => review(pending.map((s) => s.id))}>Я всё проверил, скрыть</button>
+              <button type="button" className="btn btn-primary" onClick={showChanges}>Show what changed</button>
+              <button type="button" className="btn" onClick={() => reactivate(pending.map((s) => s.id))}>Reset the updated steps to active</button>
+              <button type="button" className="btn btn-ghost" onClick={() => review(pending.map((s) => s.id))}>I checked everything, hide</button>
             </div>
           </div>
         )}
 
-        {/* У шага с боем свой совет в карточке — баннер его не повторяет. */}
+        {/* A combat step has its own advice in the card — the banner does not repeat it. */}
         {!selected.foes?.length && <GearBanner />}
         <article className={`step-view ${selected.membersOnly ? 'is-members' : ''}`} key={selected.id}>
           <header className="step-view-head">
             <p className="step-view-kicker">
               <code className="code">{selected.id}</code>
               <TypeIcon type={selected.type} />
-              <span>{TYPE_LABEL[selected.type]} · этап {selected.stage}</span>
+              <span>{TYPE_LABEL[selected.type]} · stage {selected.stage}</span>
               {selected.qp ? <span className="badge badge-qp">+{selected.qp} QP</span> : null}
               {selected.membersOnly && <span className="badge badge-members">Members</span>}
-              {selected.optional && <span className="tag">необязательный</span>}
-              {status === 'done' && <span className="badge badge-f2p"><IconCheck /> сделано</span>}
-              {status === 'skipped' && <span className="tag">пропущено</span>}
-              {selected.id === suggested.id && status !== 'done' && <span className="badge badge-now">сейчас по плану</span>}
+              {selected.optional && <span className="tag">optional</span>}
+              {status === 'done' && <span className="badge badge-f2p"><IconCheck /> done</span>}
+              {status === 'skipped' && <span className="tag">skipped</span>}
+              {selected.id === suggested.id && status !== 'done' && <span className="badge badge-now">now by the plan</span>}
             </p>
             <h2 className="step-view-title" id="step-view-title" tabIndex={-1}>{selected.title}</h2>
-            {selected.titleRu && <p className="step-view-ru">{selected.titleRu}</p>}
             {blockers && (
-              <p className="step-blocked"><IconLock />Сначала: {blockerParts(blockers).join(', ')}</p>
+              <p className="step-blocked"><IconLock />First: {blockerParts(blockers).join(', ')}</p>
             )}
           </header>
           <StepBody step={selected} onDone={complete} nextId={upcoming?.id} />

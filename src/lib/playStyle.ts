@@ -1,7 +1,7 @@
-// Стиль игры: «спокойно» или «эффективно». Одна настройка, которую читают все помощники, вместо отдельных переключателей:
-//  — спокойно: меньше на экране, ничего не навязывается; способы прокачки — без риска и без лишних кликов;
-//  — эффективно: больше подсказок и сравнений; способы — самые быстрые из доступных, с оценкой времени.
-// Стиль меняет только подачу и порядок выбора. Требования к шагу, безопасность и «неизвестно — не нет» одинаковы всегда.
+// Play style: "calm" or "efficient". One setting that all the helpers read, instead of separate switches:
+//  - calm: less on the screen, nothing is pushed; training methods without risk and without extra clicks;
+//  - efficient: more hints and comparisons; the methods are the fastest available, with a time estimate.
+// The style changes only the presentation and the order of choice. The step's requirements, safety and "unknown is not none" are always the same.
 
 import type { Features } from './features';
 
@@ -10,21 +10,21 @@ export type PlayStyle = 'chill' | 'efficient';
 export interface StyleProfile {
   style: PlayStyle;
   label: string;
-  /** Шагов вперёд после текущего в «одной ходке». */
+  /** Steps ahead after the current one in "one trip". */
   lookAhead: number;
-  /** Показывать «Позже» в одной ходке. */
+  /** Show "Later" in one trip. */
   showLater: boolean;
-  /** Показывать оценку времени и сравнение способов. */
+  /** Show the time estimate and the comparison of methods. */
   showTime: boolean;
-  /** Сколько других способов показывать сразу (остальное — в «Подробнее»). */
+  /** How many other methods to show at once (the rest are under "More"). */
   alternatives: number;
-  /** quiet — сообщения только о главном (готово, пора вернуться); full — ещё и «что дальше в очереди». */
+  /** quiet means messages only about the main thing (done, time to go back); full means also "what is next in the queue". */
   announce: 'quiet' | 'full';
 }
 
 export const STYLES: Record<PlayStyle, StyleProfile> = {
-  chill: { style: 'chill', label: '🌿 Спокойно', lookAhead: 2, showLater: false, showTime: false, alternatives: 0, announce: 'quiet' },
-  efficient: { style: 'efficient', label: '⚡ Эффективно', lookAhead: 4, showLater: true, showTime: true, alternatives: 3, announce: 'full' },
+  chill: { style: 'chill', label: '🌿 Calm', lookAhead: 2, showLater: false, showTime: false, alternatives: 0, announce: 'quiet' },
+  efficient: { style: 'efficient', label: '⚡ Efficient', lookAhead: 4, showLater: true, showTime: true, alternatives: 3, announce: 'full' },
 };
 
 export const styleOf = (f: Pick<Features, 'efficient'>): StyleProfile => (f.efficient ? STYLES.efficient : STYLES.chill);

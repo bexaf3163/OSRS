@@ -1,37 +1,37 @@
-// Как объяснить автоотметку шага: «Шаг отметится сам, когда …». Одна фраза на любое условие —
-// квест, уровни, предметы или их сочетание.
+// How to explain an automatic step mark: "The step will be marked by itself when …". One phrase for any condition —
+// a quest, levels, items or a combination of them.
 
 import type { CompletionTrigger, OwnedItem } from '../types';
 
-/** «Fishing 30» — навыки названы так же, как во вкладке навыков игры и в «Готово, когда». */
+/** "Fishing 30": skills are named as in the game's skills tab and in "Done when". */
 function skillName(skill: string): string {
   return skill.charAt(0).toUpperCase() + skill.slice(1);
 }
 
 function list(parts: string[]): string {
-  return parts.length > 1 ? `${parts.slice(0, -1).join(', ')} и ${parts[parts.length - 1]}` : parts[0] ?? '';
+  return parts.length > 1 ? `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}` : parts[0] ?? '';
 }
 
-/** «Maze key», «50 × Shrimps или Anchovies», «20 000 × Coins». */
+/** "Maze key", "50 × Shrimps or Anchovies", "20,000 × Coins". */
 export function ownedText(i: OwnedItem): string {
-  const names = i.names.join(' или ');
-  return i.count > 1 ? `${i.count.toLocaleString('ru-RU')} × ${names}` : names;
+  const names = i.names.join(' or ');
+  return i.count > 1 ? `${i.count.toLocaleString('en-US')} × ${names}` : names;
 }
 
-/** Хвост фразы после «Шаг отметится сам, когда …». */
+/** The tail of the phrase after "The step will be marked by itself when …". */
 export function triggerText(t: CompletionTrigger): string {
-  const items = t.items?.length ? `у тебя будет ${list(t.items.map(ownedText))} (сумка, надетое и банк вместе)` : '';
-  const and = (head: string) => (items ? `${head}, и ${items}` : head);
+  const items = t.items?.length ? `you will have ${list(t.items.map(ownedText))} (bag, equipped and bank together)` : '';
+  const and = (head: string) => (items ? `${head}, and ${items}` : head);
   switch (t.type) {
     case 'QUEST_COMPLETED':
-      return and('квест засчитается в игре');
+      return and('the quest is counted in the game');
     case 'SKILL_LEVEL':
-      return and(`в игре будет ${list((t.levels ?? []).map((l) => `${skillName(l.skill)} ${l.level}`))}`);
+      return and(`you reach ${list((t.levels ?? []).map((l) => `${skillName(l.skill)} ${l.level}`))} in the game`);
     case 'ITEM_OWNED':
-      return items || 'предмет появится у тебя';
+      return items || 'the item appears in your possession';
     case 'CHAT_MESSAGE':
-      return 'в чате игры появится нужное сообщение';
+      return 'the needed message appears in the game chat';
     case 'VARBIT_CHANGED':
-      return 'игра засчитает этот этап';
+      return 'the game counts this stage';
   }
 }

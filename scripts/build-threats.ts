@@ -1,6 +1,6 @@
-// Собирает src/data/threats.json с OSRS Wiki: максимальные удары и скорость противников шагов (Bucket infobox_monster) и
-// сколько здоровья восстанавливает еда бесплатной версии (первая фраза «restores N Hitpoints» в статье). Нужна сеть.
-// Запуск: npm run build-threats (около минуты). Чисел от себя нет: только то, что написано в вики.
+// Builds src/data/threats.json from the OSRS Wiki: the max hits and speed of the step opponents (Bucket infobox_monster) and
+// how much health the free-version food restores (the first phrase "restores N Hitpoints" in the article). It needs a network.
+// Run: npm run build-threats (about a minute). No numbers of our own: only what is written in the wiki.
 
 import { writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -23,7 +23,7 @@ async function get(params: Record<string, string>): Promise<Record<string, unkno
   }
 }
 
-/** Противники: ключ в шагах (foes/threats), статья вики и версия (если у статьи их несколько). */
+/** The opponents: the key in the steps (foes/threats), the wiki article and the version (if the article has several). */
 const THREATS: { key: string; page: string; version?: string; note?: string }[] = [
   { key: 'Count Draynor', page: 'Count Draynor' },
   { key: 'Al Kharid warrior', page: 'Al Kharid warrior' },
@@ -39,7 +39,7 @@ const THREATS: { key: string; page: string; version?: string; note?: string }[] 
   { key: 'Ogress shaman', page: 'Ogress shaman' },
 ];
 
-/** Еда бесплатной версии, которую съедают за один укус. */
+/** The free-version food that is eaten in one bite. */
 const FOODS = ['Shrimps', 'Anchovies', 'Sardine', 'Herring', 'Mackerel', 'Trout', 'Cod', 'Pike', 'Salmon', 'Tuna', 'Lobster', 'Bass', 'Swordfish', 'Cooked chicken', 'Cooked meat', 'Bread'];
 
 const quote = (s: string) => `'${s.replace(/'/g, "\\'")}'`;
@@ -48,10 +48,10 @@ for (const t of THREATS) {
   const res = await get({ action: 'bucket', query: `bucket('infobox_monster').select('page_name','version_anchor','max_hit','attack_speed','hitpoints','combat_level','is_members_only').where('page_name',${quote(t.page)}).limit(40).run()` });
   const rows = (res.bucket as Record<string, unknown>[]) ?? [];
   const row = rows.find((r) => !t.version || r.version_anchor === t.version) ?? rows[0];
-  if (!row) { console.log(`  ✗ ${t.key}: нет карточки`); continue; }
+  if (!row) { console.log(`  ✗ ${t.key}: no card`); continue; }
   const raw = (Array.isArray(row.max_hit) ? row.max_hit : [row.max_hit]).map(String);
   const hits = raw.map((s) => ({ n: parseInt(s, 10), label: s.replace(/^\s*\d+\s*/, '').replace(/^\((.*)\)$/, '$1').trim() })).filter((h) => Number.isFinite(h.n));
-  if (!hits.length) { console.log(`  ✗ ${t.key}: нет максимального удара (${raw.join(', ')})`); continue; }
+  if (!hits.length) { console.log(`  ✗ ${t.key}: no max hit (${raw.join(', ')})`); continue; }
   threats[t.key] = { page: t.page, ...(t.version ? { version: t.version } : {}), hits, speedTicks: Number(row.attack_speed) || 4, hitpoints: Number(row.hitpoints) || 0, combat: Number(row.combat_level) || 0 };
 }
 
@@ -61,13 +61,13 @@ for (const name of FOODS) {
   const text = (res.parse as { wikitext?: string } | undefined)?.wikitext ?? '';
   const m = /restores?\s+(\d+)\s*\[\[Hitpoints/i.exec(text);
   if (m) foods.push({ name, heals: parseInt(m[1], 10) });
-  else console.log(`  ✗ еда ${name}: фраза «restores N Hitpoints» не найдена`);
+  else console.log(`  ✗ food ${name}: the phrase "restores N Hitpoints" was not found`);
 }
 
 writeFileSync(OUT, `${JSON.stringify({
-  source: 'OSRS Wiki: карточки монстров (Bucket infobox_monster) и статьи еды',
+  source: 'OSRS Wiki: monster infoboxes (Bucket infobox_monster) and the food articles',
   generatedAt: new Date().toISOString().slice(0, 10),
   threats,
   foods,
 }, null, 1)}\n`);
-console.log(`Записано: противников ${Object.keys(threats).length}/${THREATS.length}, еды ${foods.length}/${FOODS.length}`);
+console.log(`Written: opponents ${Object.keys(threats).length}/${THREATS.length}, food ${foods.length}/${FOODS.length}`);

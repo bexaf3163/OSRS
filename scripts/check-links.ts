@@ -1,5 +1,5 @@
-// Проверяет, что все ссылки на вики из steps.json, f2p-items.json и reference.json ведут на существующие статьи и файлы.
-// Нужна сеть. Запуск: npm run check-links
+// Checks that all the wiki links from steps.json, f2p-items.json and reference.json lead to existing articles and files.
+// It needs a network. Run: npm run check-links
 
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -15,7 +15,7 @@ const npcs = (JSON.parse(readFileSync(`${root}src/data/npcLocations.json`, 'utf8
 const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 const API = 'https://oldschool.runescape.wiki/api.php';
 
-/** Ссылка → заголовок страницы вики («File:…» для картинок). */
+/** A link → the wiki page title ("File:…" for images). */
 function titleOf(url: string): string | null {
   const page = url.match(/\/w\/([^#?]+)/);
   if (page) return decodeURIComponent(page[1]).replace(/_/g, ' ');
@@ -38,15 +38,15 @@ for (const s of steps) {
   add(s.id, s.quickGuideUrl);
   add(s.id, s.imageUrl);
   add(`${s.id} NPC`, s.npc?.wikiUrl);
-  if (s.mapUrl && !/World_map#\/m=\d+,\d+,\d$/.test(s.mapUrl)) console.log(`  ✗ ${s.id}: странная ссылка на карту ${s.mapUrl}`);
+  if (s.mapUrl && !/World_map#\/m=\d+,\d+,\d$/.test(s.mapUrl)) console.log(`  ✗ ${s.id}: a strange map link ${s.mapUrl}`);
 }
 for (const i of items) {
-  add(`предмет ${i.nameEn}`, i.wikiUrl);
-  add(`иконка ${i.nameEn}`, i.iconUrl);
+  add(`item ${i.nameEn}`, i.wikiUrl);
+  add(`icon ${i.nameEn}`, i.iconUrl);
 }
-// Где стоят NPC шагов: статья вики, с карты которой взята точка.
+// Where the steps' NPCs stand: the wiki article whose map the point was taken from.
 for (const [name, rows] of Object.entries(npcs)) for (const r of rows) add(`NPC ${name}`, `https://oldschool.runescape.wiki/w/${encodeURIComponent(r.page.replace(/ /g, '_'))}`);
-// Гайд: ссылки в тексте — на навыки (и подписки), квесты, гайды прокачки, по которым сверялся план.
+// The guide: the links in the text — to skills (and members), quests, the training guides the plan was checked against.
 for (const [, url] of reference.matchAll(/\]\((https:\/\/oldschool\.runescape\.wiki\/[^)\s]+)\)/g)) add('reference', url);
 
 const titles = [...refs.keys()];
@@ -60,29 +60,29 @@ for (let i = 0; i < titles.length; i += 50) {
   await new Promise((r) => setTimeout(r, 400));
 }
 
-// Тайлы карты: превью и карта мира берут их с maps.runescape.wiki по версии рендера из src/lib/map.ts.
+// The map tiles: the preview and the world map take them from maps.runescape.wiki by the render version from src/lib/map.ts.
 const mapProblems: string[] = [];
 const planes = new Set([...steps.flatMap((s) => [s.mapLocation, ...(s.resourceSpots ?? [])]).filter(Boolean).map((p) => p!.plane),
   ...Object.values(npcs).flat().map((r) => r.plane)]);
 for (const plane of planes) {
-  // Тайл Lumbridge на масштабе 2 — есть на любом этаже.
+  // The Lumbridge tile at scale 2 — it exists on every floor.
   const res = await fetch(tileUrl(2, plane, 50, 50), { headers: { 'User-Agent': UA } });
-  if (!res.ok || !res.headers.get('content-type')?.startsWith('image/')) mapProblems.push(`тайл этажа ${plane}: HTTP ${res.status}`);
+  if (!res.ok || !res.headers.get('content-type')?.startsWith('image/')) mapProblems.push(`the tile of floor ${plane}: HTTP ${res.status}`);
 }
-// Вики сама рисует превью карт из тайлов своей текущей версии — сверяемся с ней.
+// The wiki itself draws the map previews from the tiles of its current version — we check against it.
 const page = await (await fetch('https://oldschool.runescape.wiki/w/Lumbridge', { headers: { 'User-Agent': UA } })).text();
 const current = page.match(/maps\.runescape\.wiki\/osrs\/versions\/([\w-]+)\/tiles/)?.[1];
-console.log(`Тайлы карты: версия ${MAP_VERSION}, на вики сейчас ${current ?? 'не найдена'}, этажей в маршруте ${planes.size}`);
+console.log(`Map tiles: version ${MAP_VERSION}, on the wiki now ${current ?? 'not found'}, floors on the route ${planes.size}`);
 if (mapProblems.length) for (const m of mapProblems) console.log(`  ✗ ${m}`);
-else console.log('  ✓ тайлы отдаются');
-if (current && current !== MAP_VERSION) console.log(`  ! вики перешла на ${current} — обнови MAP_VERSION в src/lib/map.ts (старые тайлы пока работают)`);
+else console.log('  ✓ the tiles are served');
+if (current && current !== MAP_VERSION) console.log(`  ! the wiki moved to ${current} — update MAP_VERSION in src/lib/map.ts (the old tiles still work)`);
 
-console.log(`Проверено ссылок на вики: ${titles.length}`);
+console.log(`Wiki links checked: ${titles.length}`);
 if (missing.length || mapProblems.length) {
   for (const t of missing) {
     const from = [...(refs.get(t) ?? refs.get(t.replace(/^File:/, 'File:')) ?? [])].join(', ');
-    console.log(`  ✗ нет на вики: ${t}${from ? ` — ${from}` : ''}`);
+    console.log(`  ✗ not on the wiki: ${t}${from ? ` — ${from}` : ''}`);
   }
   process.exit(1);
 }
-console.log('  ✓ все статьи и файлы существуют');
+console.log('  ✓ all the articles and files exist');

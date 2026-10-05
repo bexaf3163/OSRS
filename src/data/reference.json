@@ -1,53 +1,53 @@
 {
-  "title": "OSRS: гайд для новичка и плагины RuneLite",
-  "description": "Полный путь в Old School RuneScape для бесплатной версии: от первого шага после обучающего острова до рунической брони после Dragon Slayer I. Иди по «Пошаговому плану», а разделы навыков открывай, когда шаг отправляет туда за подробностями.",
+  "title": "OSRS: a beginner's guide and RuneLite plugins",
+  "description": "The full path through Old School RuneScape for the free version: from the first step after Tutorial Island to rune armour after Dragon Slayer I. Follow the \"Step-by-step plan\", and open the skill sections when a step sends you there for details.",
   "sections": [
     {
       "id": "setup",
-      "title": "Вход и настройка",
+      "title": "Signing in and setup",
       "blocks": [
         {
           "t": "p",
-          "text": "В игру с Jagex-аккаунтом входят только через Jagex Launcher: логин и пароль прямо в окне клиента не работают."
+          "text": "You sign in to the game with a Jagex account only through the Jagex Launcher: a login and password typed straight into the client window do not work."
         },
         {
           "t": "ol",
           "items": [
             {
-              "text": "Скачай Jagex Launcher с сайта jagex.com и войди в него почтой и паролем Jagex-аккаунта."
+              "text": "Download the Jagex Launcher from jagex.com and sign in with your Jagex account's email and password."
             },
             {
-              "text": "Выбери Old School RuneScape, при необходимости создай персонажа."
+              "text": "Choose Old School RuneScape and create a character if needed."
             },
             {
-              "text": "В списке клиентов выбери RuneLite и нажми Play. Дальше лаунчер помнит вход."
+              "text": "In the list of clients choose RuneLite and press Play. After that the launcher remembers your sign-in."
             }
           ]
         },
         {
           "t": "p",
-          "text": "Графика на Dell Latitude 5420 (Intel Iris Xe):"
+          "text": "Graphics on a Dell Latitude 5420 (Intel Iris Xe):"
         },
         {
           "t": "ul",
           "items": [
             {
-              "text": "**GPU** — стабильные 60+ fps, оригинальная картинка. Можно поднять дальность прорисовки и включить сглаживание."
+              "text": "**GPU**: a stable 60+ fps and the original picture. You can raise the draw distance and turn on anti-aliasing."
             },
             {
-              "text": "**117 HD** — красивый свет, тени и вода. На средних настройках примерно 40–60 fps, для стабильных 60 урежь дальность прорисовки (30–40 тайлов), тени и сглаживание."
+              "text": "**117 HD**: nice lighting, shadows and water. On medium settings roughly 40-60 fps; for a stable 60 cut the draw distance (30-40 tiles), shadows and anti-aliasing."
             },
             {
-              "text": "**GPU и 117 HD одновременно не включаются**: 117 HD заменяет GPU. Включён должен быть только один из них."
+              "text": "**GPU and 117 HD cannot be on at the same time**: 117 HD replaces GPU. Only one of them should be enabled."
             },
             {
-              "text": "Для игры фоном ставь в **FPS Control** лимит 10–20 кадров для неактивного окна."
+              "text": "To play in the background set a limit of 10-20 frames for the inactive window in **FPS Control**."
             },
             {
-              "text": "Проверь, что в ноутбуке две планки памяти (двухканальный режим), играй от сети в режиме максимальной производительности."
+              "text": "Check that the laptop has two memory sticks (dual-channel mode) and play on mains power in the maximum performance mode."
             },
             {
-              "text": "AFK-таймер выхода в настройках клиента можно увеличить до 30 минут."
+              "text": "The AFK logout timer in the client settings can be raised to 30 minutes."
             }
           ]
         }
@@ -55,39 +55,39 @@
     },
     {
       "id": "membership",
-      "title": "Бесплатная версия или подписка",
+      "title": "Free or membership",
       "blocks": [
         {
           "t": "p",
-          "text": "Сразу покупать подписку не нужно: бесплатной версии хватит на десятки часов, и весь гайд выше проходится бесплатно."
+          "text": "You do not need to buy membership right away: the free version is enough for dozens of hours, and the whole guide above is played for free."
         },
         {
           "t": "table",
           "head": [
             "",
-            "Бесплатно",
-            "С подпиской"
+            "Free",
+            "With membership"
           ],
           "rows": [
             [
-              "Карта",
-              "Примерно четверть мира: Лумбридж, Варрок, Фаладор, Draynor, Эдгвилль",
-              "Весь мир"
+              "Map",
+              "About a quarter of the world: Lumbridge, Varrock, Falador, Draynor, Edgeville",
+              "The whole world"
             ],
             [
-              "Навыки",
-              "15: бой, рубка, рыбалка, готовка, добыча, кузнечное дело, костры, ремесло, руны",
-              "Плюс Agility, Thieving, Herblore, Farming, Slayer, Construction и другие"
+              "Skills",
+              "15: combat, woodcutting, fishing, cooking, mining, smithing, firemaking, crafting, runecraft",
+              "Plus Agility, Thieving, Herblore, Farming, Slayer, Construction and others"
             ],
             [
-              "Квесты",
-              "Около двух десятков",
-              "Больше ста пятидесяти"
+              "Quests",
+              "About two dozen",
+              "More than a hundred and fifty"
             ],
             [
-              "Броня",
-              "До рунной",
-              "Драконья и выше"
+              "Armour",
+              "Up to rune",
+              "Dragon and above"
             ]
           ]
         },
@@ -95,13 +95,13 @@
           "t": "ul",
           "items": [
             {
-              "text": "Когда подписка заканчивается, прогресс сохраняется, закрываются только members-навыки и зоны."
+              "text": "When membership ends your progress is kept; only the members skills and areas are closed."
             },
             {
-              "text": "Подписку можно купить игровым золотом через **Old School Bond** на Grand Exchange."
+              "text": "You can buy membership with in-game gold through an **Old School Bond** on the Grand Exchange."
             },
             {
-              "text": "Актуальную цену смотри на сайте Jagex."
+              "text": "Check Jagex's website for the current price."
             }
           ]
         }
@@ -109,105 +109,105 @@
     },
     {
       "id": "skill-graph",
-      "title": "Как навыки кормят друг друга",
+      "title": "How skills feed each other",
       "blocks": []
     },
     {
       "id": "stuck",
-      "title": "Если не знаешь, что делать",
+      "title": "If you do not know what to do",
       "blocks": [
         {
           "t": "ol",
           "items": [
             {
-              "text": "**Есть квест из текущего этапа?** Делай его: квесты дают опыт, деньги и очки квестов (Quest Points), без которых не открыть Dragon Slayer I."
+              "text": "**Is there a quest in the current stage?** Do it: quests give XP, money and Quest Points, without which Dragon Slayer I will not open."
             },
             {
-              "text": "**Меньше 20 штук еды в банке?** Порыбачь и приготовь."
+              "text": "**Fewer than 20 pieces of food in the bank?** Go fishing and cook."
             },
             {
-              "text": "**Можно надеть металл получше?** Выкуй или купи."
+              "text": "**Can you wear better metal?** Smith or buy it."
             },
             {
-              "text": "**Бой отстаёт от мирных навыков?** Иди в бой."
+              "text": "**Is combat behind the peaceful skills?** Go and fight."
             },
             {
-              "text": "**Иначе** — любой мирный навык, который сейчас нравится."
+              "text": "**Otherwise**: any peaceful skill you feel like right now."
             }
           ]
         },
         {
           "t": "p",
-          "text": "Хороший ритм: 30–40 минут боя, потом 30–40 минут мирного навыка. Не надоедает, и ресурсы копятся сами."
+          "text": "A good rhythm: 30-40 minutes of combat, then 30-40 minutes of a peaceful skill. It does not get boring, and the resources pile up on their own."
         },
         {
           "t": "p",
-          "text": "Перед стартом включи плагин **Quest Helper** (см. «Плагины RuneLite»): он проведёт по каждому квесту из плана."
+          "text": "Before you start enable the **Quest Helper** plugin (see \"RuneLite plugins\"): it will walk you through every quest in the plan."
         }
       ]
     },
     {
       "id": "transport",
-      "title": "Телепорты, каноэ и лодки",
+      "title": "Teleports, canoes and boats",
       "blocks": [
         {
           "t": "p",
-          "text": "Пешком по карте долго. В бесплатной версии путь сокращают телепорты, каноэ на реке Lum и лодка на Karamja. Где это выгодно, у шага есть **⚡ Быстрый вариант**: программа сама проверяет уровень и предметы, а кнопка «Вести в игре этим путём» переводит на него стрелку в игре."
+          "text": "Walking the map takes long. In the free version the way is shortened by teleports, canoes on the River Lum and the boat to Karamja. Where that pays, the step has a **⚡ Fast option**: the app checks your level and items itself, and the \"Guide me this way in game\" button points the in-game arrow along it."
         },
         {
           "t": "table",
           "head": [
-            "Куда нужно",
-            "Чем",
-            "Цена"
+            "Where you need to go",
+            "By what",
+            "Cost"
           ],
           "rows": [
             [
-              "В Лумбридж: банк в замке, плита, болото",
+              "To Lumbridge: the castle bank, the range, the swamp",
               "Home Teleport",
-              "Бесплатно, раз в 30 минут"
+              "Free, once every 30 minutes"
             ],
             [
-              "Первый раз к Stronghold of Security",
+              "The first time to the Stronghold of Security",
               "Count Check",
-              "Бесплатно, один раз"
+              "Free, once"
             ],
             [
-              "В Varrock и к Grand Exchange",
-              "До 25 магии — книга Chronicle, с 25 — Varrock Teleport",
-              "Заряд книги — карта от 150 gp; руны на телепорт ≈ 130 gp"
+              "To Varrock and the Grand Exchange",
+              "Up to Magic 25 the Chronicle book, from 25 Varrock Teleport",
+              "A book charge is a card from 150 gp; the runes for a teleport are about 130 gp"
             ],
             [
-              "Вдоль реки Lum: Lumbridge, Champions' Guild, Barbarian Village, Edgeville",
-              "Каноэ",
-              "Бесплатно, нужны топор и рубка от 12"
+              "Along the River Lum: Lumbridge, Champions' Guild, Barbarian Village, Edgeville",
+              "Canoe",
+              "Free, you need an axe and Woodcutting from 12"
             ],
             [
-              "На Karamja",
-              "Лодка из Port Sarim",
-              "30 gp в одну сторону"
+              "To Karamja",
+              "The boat from Port Sarim",
+              "30 gp one way"
             ]
           ]
         },
         {
           "t": "p",
-          "text": "**Home Teleport — бесплатно домой в Лумбридж**"
+          "text": "**Home Teleport: free, home to Lumbridge**"
         },
         {
           "t": "p",
-          "text": "Это заклинание **Lumbridge Home Teleport** («телепорт домой»). Оно есть у каждого персонажа с первого дня: стоит в обычной книге заклинаний (Standard spellbook), руны и уровень магии не нужны. Другую книгу заклинаний можно взять только с подпиской, и в ней свой телепорт домой — не в Лумбридж."
+          "text": "This is the **Lumbridge Home Teleport** spell. Every character has it from day one: it is in the ordinary spellbook (Standard spellbook), and needs no runes or Magic level. Another spellbook can be taken only with membership, and it has its own home teleport, not to Lumbridge."
         },
         {
           "t": "ol",
           "items": [
             {
-              "text": "Открой вкладку магии (Magic) на боковой панели. Lumbridge Home Teleport — первый значок, в левом верхнем углу."
+              "text": "Open the Magic tab on the side panel. Lumbridge Home Teleport is the first icon, in the top-left corner."
             },
             {
-              "text": "Кликни по нему и ничего не делай около 14 секунд, пока идёт анимация: клик по земле, другое действие или удар монстра её прервут."
+              "text": "Click it and do nothing for about 14 seconds while the animation plays: a click on the ground, another action or a monster's hit will interrupt it."
             },
             {
-              "text": "Появишься перед замком Лумбриджа."
+              "text": "You appear in front of Lumbridge Castle."
             }
           ]
         },
@@ -215,51 +215,51 @@
           "t": "ul",
           "items": [
             {
-              "text": "Руны и уровень магии не нужны, опыта не даёт."
+              "text": "It needs no runes or Magic level and gives no XP."
             },
             {
-              "text": "Работает раз в 30 минут. Пока он перезаряжается, значок серый, а если нажать, чат напишет, сколько минут осталось."
+              "text": "It works once every 30 minutes. While it recharges the icon is grey, and if you press it the chat tells you how many minutes are left."
             },
             {
-              "text": "В бою не работает: отойди от монстра и подожди 10 секунд."
+              "text": "It does not work in combat: step away from the monster and wait 10 seconds."
             },
             {
-              "text": "Глубже 20-го уровня Wilderness не работает."
+              "text": "It does not work deeper than Wilderness level 20."
             },
             {
-              "text": "**Когда:** закончил дела вдали от Лумбриджа — возвращайся телепортом, а не пешком. Перезаряжается он сам, так что трать его каждый раз, когда тебе в Лумбридж."
+              "text": "**When:** you have finished business far from Lumbridge: return by teleport rather than on foot. It recharges by itself, so spend it every time you need to be in Lumbridge."
             },
             {
-              "text": "**Если значок серый** (телепорт перезаряжается): иди пешком, по реке Lum — на каноэ, а с 31 магии — Lumbridge Teleport за руны. Путь Shortest Path, который начинается с «Lumbridge Home Teleport», в это время не годится — иди пешком или выключи в его настройках «Use Home Teleport spells»."
+              "text": "**If the icon is grey** (the teleport is recharging): walk, take a canoe along the River Lum, or from Magic 31 use Lumbridge Teleport for runes. A Shortest Path route that starts with \"Lumbridge Home Teleport\" is no good at that moment: walk, or turn off \"Use Home Teleport spells\" in its settings."
             }
           ]
         },
         {
           "t": "p",
-          "text": "**Count Check — один бесплатный телепорт к Stronghold of Security**"
+          "text": "**Count Check: one free teleport to the Stronghold of Security**"
         },
         {
           "t": "p",
-          "text": "Стоит на кладбище Лумбриджа, к югу от церкви. Talk-to → «Where can I learn more about security?» → «Yes». Сработает один раз и только если ты ещё ни разу не был в Stronghold of Security. Прибереги его для шага S1-09."
+          "text": "He stands in the Lumbridge graveyard, south of the church. Talk-to, \"Where can I learn more about security?\", \"Yes\". It works once and only if you have never been to the Stronghold of Security. Save it for step S1-09."
         },
         {
           "t": "p",
-          "text": "**Книга Chronicle — к Champions' Guild у Varrock**"
+          "text": "**The Chronicle book: to Champions' Guild by Varrock**"
         },
         {
           "t": "ol",
           "items": [
             {
-              "text": "Купи у Diango на рынке Draynor Village: правый клик по нему → Trade. Книга — 300 gp, карта Teleport card — от 150 gp, каждая следующая чуть дороже."
+              "text": "Buy it from Diango in the Draynor Village market: right-click him, Trade. The book is 300 gp, a Teleport card is from 150 gp, and each next one is a little dearer."
             },
             {
-              "text": "Заряди: выбери карту (Use) и кликни по книге. Одна карта — один заряд, всего до 1 000. Уходят сразу все карты из сумки, а карты-заметки (noted) книгу не заряжают."
+              "text": "Charge it: pick a card (Use) and click the book. One card is one charge, up to 1,000 in all. All the cards in your bag go at once, and noted cards do not charge the book."
             },
             {
-              "text": "Телепорт — **правый клик по книге → Teleport**. Обычный клик надевает её в слот щита (Wield). Надетую книгу тоже можно использовать: правый клик по ней во вкладке снаряжения → Teleport."
+              "text": "To teleport, **right-click the book, Teleport**. A plain click wields it in the shield slot (Wield). A wielded book can also be used: right-click it in the equipment tab, Teleport."
             },
             {
-              "text": "Окажешься у Champions' Guild к югу от Varrock. Рядом станция каноэ и шахта South-west Varrock mine, к Grand Exchange — на север через город."
+              "text": "You arrive at Champions' Guild south of Varrock. Next to it are a canoe station and the South-west Varrock mine; the Grand Exchange is north through the city."
             }
           ]
         },
@@ -267,37 +267,37 @@
           "t": "ul",
           "items": [
             {
-              "text": "Остаток зарядов — правый клик → Check charges."
+              "text": "The charges that are left: right-click, Check charges."
             },
             {
-              "text": "К северо-востоку от места прибытия — каменный круг с тёмными магами (Dark wizard). Они нападают сами и больно бьют слабых персонажей: к кругу не подходи."
+              "text": "To the north-east of the arrival point is a stone circle with dark wizards (Dark wizard). They attack on their own and hit weak characters hard: do not go near the circle."
             },
             {
-              "text": "В Wilderness книга не работает."
+              "text": "The book does not work in the Wilderness."
             },
             {
-              "text": "Погиб, а книга не попала в сохраняемые предметы — она пропадёт. Новую продаст Diango, заряды сохранятся."
+              "text": "If you die and the book was not among the protected items, it is lost. Diango sells a new one, and the charges are kept."
             },
             {
-              "text": "**Когда:** нужно в Varrock или к бирже, а магии ещё нет 25 — или кончились руны на Varrock Teleport."
+              "text": "**When:** you need Varrock or the exchange and do not have Magic 25 yet, or you have run out of runes for Varrock Teleport."
             }
           ]
         },
         {
           "t": "p",
-          "text": "**Varrock Teleport — с 25 магии**"
+          "text": "**Varrock Teleport: from Magic 25**"
         },
         {
           "t": "ol",
           "items": [
             {
-              "text": "На каждый телепорт нужны руны: 1 Law rune, 3 Air rune и 1 Fire rune. Надетый посох воздуха (Staff of air) заменяет руны воздуха, посох огня (Staff of fire) — руны огня."
+              "text": "Every teleport needs runes: 1 Law rune, 3 Air rune and 1 Fire rune. A wielded Staff of air replaces the air runes, and a Staff of fire the fire runes."
             },
             {
-              "text": "Вкладка магии → Varrock Teleport. Значок светится, когда хватает уровня и рун; наведи на него мышь — подсказка покажет, каких рун сколько нужно."
+              "text": "Magic tab, Varrock Teleport. The icon glows when you have the level and runes; hover over it and the tooltip shows how many of which runes you need."
             },
             {
-              "text": "Через пару секунд ты на площади у фонтана в центре Varrock, недалеко от банка Varrock West."
+              "text": "A couple of seconds later you are on the square by the fountain in the centre of Varrock, not far from the Varrock West bank."
             }
           ]
         },
@@ -305,31 +305,31 @@
           "t": "ul",
           "items": [
             {
-              "text": "Каждый телепорт — 35 опыта магии, поэтому до 31 уровня магию качают им же (шаг S3-09)."
+              "text": "Every teleport is 35 Magic XP, which is why Magic is trained with it up to level 31 (step S3-09)."
             },
             {
-              "text": "С 31 магии открывается Lumbridge Teleport (3 Air, 1 Earth, 1 Law) — к замку Лумбриджа без долгой анимации Home Teleport, с 37 — Falador Teleport (3 Air, 1 Water, 1 Law) — к западному банку Falador."
+              "text": "At Magic 31 Lumbridge Teleport opens (3 Air, 1 Earth, 1 Law): to Lumbridge Castle without the long Home Teleport animation; at 37, Falador Teleport (3 Air, 1 Water, 1 Law): to the west Falador bank."
             },
             {
-              "text": "**Когда:** всегда, когда нужно в Varrock или к бирже. Он высаживает ближе к банку и бирже, чем книга."
+              "text": "**When:** always, when you need Varrock or the exchange. It drops you closer to the bank and the exchange than the book does."
             }
           ]
         },
         {
           "t": "p",
-          "text": "**Каноэ по реке Lum**"
+          "text": "**Canoes on the River Lum**"
         },
         {
           "t": "p",
-          "text": "Станции по порядку: Lumbridge (мастер Barfy Bill, восточный берег к северу от моста у замка) → Champions' Guild (Tarquin) → Barbarian Village (Sigurd) → Edgeville (Hari) → Ferox Enclave (Marten, только на Waka). Чем выше рубка, тем дальше плывёт каноэ за один раз:"
+          "text": "The stations in order: Lumbridge (the master Barfy Bill, the east bank north of the bridge by the castle), Champions' Guild (Tarquin), Barbarian Village (Sigurd), Edgeville (Hari), Ferox Enclave (Marten, only on a Waka). The higher your Woodcutting, the farther a canoe goes in one trip:"
         },
         {
           "t": "table",
           "head": [
-            "Каноэ",
-            "Рубка",
-            "Опыт",
-            "Остановок"
+            "Canoe",
+            "Woodcutting",
+            "XP",
+            "Stops"
           ],
           "rows": [
             [
@@ -354,7 +354,7 @@
               "Waka",
               "57",
               "150",
-              "Любая станция, в том числе в Wilderness"
+              "Any station, including the one in the Wilderness"
             ]
           ]
         },
@@ -362,22 +362,22 @@
           "t": "ol",
           "items": [
             {
-              "text": "Возьми топор, которым можешь рубить, — в сумку или в руки. Можно сдать топор мастеру станции (правый клик → Store-axe): он хранится сразу для всех станций, и носить его не нужно."
+              "text": "Take an axe you can chop with, in the bag or in your hands. You can hand the axe to the station master (right-click, Store-axe): it is stored for all the stations at once, and you do not need to carry it."
             },
             {
-              "text": "Кликни по станции (Canoe Station) → «Chop-down»: персонаж срубит дерево, иногда с нескольких попыток."
+              "text": "Click the station (Canoe Station), \"Chop-down\": the character fells a tree, sometimes in several attempts."
             },
             {
-              "text": "«Shape-Canoe» → в окне выбери каноэ по своему уровню рубки."
+              "text": "\"Shape-Canoe\", then in the window choose the canoe for your Woodcutting level."
             },
             {
-              "text": "«Float Log» (для остальных каноэ — «Float Canoe») — спусти каноэ на воду."
+              "text": "\"Float Log\" (for the other canoes, \"Float Canoe\"): launch the canoe on the water."
             },
             {
-              "text": "«Paddle Log» («Paddle Canoe») → в окне выбери остановку."
+              "text": "\"Paddle Log\" (\"Paddle Canoe\"), then in the window choose the stop."
             },
             {
-              "text": "На месте каноэ тонет. Назад — новое каноэ на этой станции."
+              "text": "At the destination the canoe sinks. To go back you need a new canoe at that station."
             }
           ]
         },
@@ -385,34 +385,34 @@
           "t": "ul",
           "items": [
             {
-              "text": "Сделал каноэ и не поплыл — оно ждёт на этой станции, пока не выйдешь из игры."
+              "text": "If you made a canoe and did not sail, it waits at that station until you log out."
             },
             {
-              "text": "**Не плыви в Wilderness Pond.** Это глубокая Wilderness: станции там нет, обратно только пешком, телепорты не работают. Игра переспросит — отвечай «Eeep! The Wilderness... No thank you»"
+              "text": "**Do not sail to the Wilderness Pond.** It is the deep Wilderness: there is no station there, you can only walk back, and teleports do not work. The game asks again, so answer \"Eeep! The Wilderness... No thank you\""
             },
             {
-              "text": "**Когда:** цель рядом со станцией — Stronghold of Security и нахлыст у Barbarian Village, Champions' Guild и шахта у Varrock, Edgeville. Особенно когда Home Teleport перезаряжается. С рубкой 42 из Лумбриджа за одну поездку доплывёшь до Edgeville — рядом Grand Exchange, и тратиться на книгу не нужно."
+              "text": "**When:** the target is near a station: the Stronghold of Security and fly fishing at Barbarian Village, Champions' Guild and the mine by Varrock, Edgeville. Especially when Home Teleport is recharging. With Woodcutting 42 you can paddle from Lumbridge to Edgeville in one trip: the Grand Exchange is next to it, and you do not need to spend on the book."
             }
           ]
         },
         {
           "t": "p",
-          "text": "**Лодка на Karamja**"
+          "text": "**The boat to Karamja**"
         },
         {
           "t": "ol",
           "items": [
             {
-              "text": "Возьми в сумку минимум 60 gp: 30 туда и 30 обратно."
+              "text": "Take at least 60 gp in your bag: 30 there and 30 back."
             },
             {
-              "text": "На причале Port Sarim поговори с любым из моряков — Captain Tobias, Seaman Lorris или Seaman Thresnor: Talk-to → «Yes please». Если в меню правого клика есть пункт Travel или Musa Point, он отвезёт сразу."
+              "text": "On the Port Sarim dock talk to any of the sailors: Captain Tobias, Seaman Lorris or Seaman Thresnor: Talk-to, \"Yes please\". If the right-click menu has a Travel or Musa Point option, he takes you at once."
             },
             {
-              "text": "Высадишься на причале Musa Point на Karamja."
+              "text": "You land at the Musa Point dock on Karamja."
             },
             {
-              "text": "Обратно — Customs officer на том же причале: Talk-to → «Can I journey on this ship?» → «Search away, I have nothing to hide» → «Ok». Пункт Travel или Port Sarim в меню правого клика, если он есть, быстрее."
+              "text": "To come back, the Customs officer on the same dock: Talk-to, \"Can I journey on this ship?\", \"Search away, I have nothing to hide\", \"Ok\". The Travel or Port Sarim option in the right-click menu, if there is one, is faster."
             }
           ]
         },
@@ -420,61 +420,61 @@
           "t": "ul",
           "items": [
             {
-              "text": "Karamjan rum таможня отбирает — в Pirate's Treasure (шаг S2-09) его провозят в ящике с бананами."
+              "text": "Customs takes away Karamjan rum: in Pirate's Treasure (step S2-09) it is smuggled in the crate with the bananas."
             },
             {
-              "text": "Не осталось денег на обратный путь — поговори с Luthas на банановой плантации и сложи 10 бананов в ящик: он заплатит 30 gp."
+              "text": "If you have no money left for the way back, talk to Luthas at the banana plantation and put 10 bananas in the crate: he pays 30 gp."
             },
             {
-              "text": "**Когда:** Pirate's Treasure, омары и рыба-меч у Musa Point (шаги S4-04 и S6-02)."
+              "text": "**When:** Pirate's Treasure, and lobsters and swordfish at Musa Point (steps S4-04 and S6-02)."
             }
           ]
         },
         {
           "t": "p",
-          "text": "**Подсказки Shortest Path**"
+          "text": "**Shortest Path hints**"
         },
         {
           "t": "p",
-          "text": "Плагин сам вставляет в маршрут телепорты, каноэ и корабли, когда они выгоднее ходьбы и у тебя есть всё нужное. У места, где ими пора воспользоваться, он подписывает, что сделать: название телепорта (например, «Lumbridge Home Teleport»), остановку каноэ или пункт диалога. Лишний способ выключается в настройках плагина — например, «Use Home Teleport spells» или «Use canoes»."
+          "text": "The plugin inserts teleports, canoes and ships into the route itself when they beat walking and you have everything needed. At the place where it is time to use one, it labels what to do: the teleport's name (for example \"Lumbridge Home Teleport\"), the canoe stop or the dialogue option. An unwanted method can be turned off in the plugin's settings, for example \"Use Home Teleport spells\" or \"Use canoes\"."
         }
       ]
     },
     {
       "id": "plugins",
-      "title": "Плагины RuneLite",
+      "title": "RuneLite plugins",
       "blocks": []
     },
     {
       "id": "tips",
-      "title": "Советы и безопасность",
+      "title": "Tips and safety",
       "blocks": [
         {
           "t": "ul",
           "items": [
             {
-              "text": "**Home Teleport** во вкладке магии бесплатно возвращает в Лумбридж, раз в полчаса. Как им пользоваться и когда выгоднее книга, каноэ или лодка — в разделе [Телепорты, каноэ и лодки](#/reference/transport)."
+              "text": "**Home Teleport** in the Magic tab takes you home to Lumbridge for free, once every half hour. How to use it, and when the book, a canoe or a boat is better, is in the section [Teleports, canoes and boats](#/reference/transport)."
             },
             {
-              "text": "**Бег** быстро тратит энергию, включай его по делу."
+              "text": "**Running** drains energy fast: turn it on when it matters."
             },
             {
-              "text": "**Wilderness** к северу от Эдгвилля — зона, где игроки могут убить тебя и забрать вещи. Новичку туда не стоит."
+              "text": "**The Wilderness** north of Edgeville is a zone where players can kill you and take your things. A beginner should not go there."
             },
             {
-              "text": "После смерти вещи лежат в могиле какое-то время, успей за ними вернуться."
+              "text": "After you die your things lie in the grave for a while: get back for them in time."
             },
             {
-              "text": "«Удвоение денег», «бесплатные вещи» и незнакомые ссылки — всегда мошенничество."
+              "text": "\"Double your money\", \"free items\" and unfamiliar links are always a scam."
             },
             {
-              "text": "Автокликеры, ботов и «джигглеры» мыши Jagex банит."
+              "text": "Jagex bans autoclickers, bots and mouse \"jigglers\"."
             },
             {
-              "text": "На телефоне удобно AFK-качаться, квесты и бой лучше на ПК. Аккаунт общий."
+              "text": "On a phone it is convenient to train AFK, but quests and combat are better on a PC. The account is shared."
             },
             {
-              "text": "Русского языка в игре нет: помогают Quest Helper и вики с переводчиком в браузере."
+              "text": "The game is in English only: Quest Helper and the wiki help with unfamiliar terms."
             }
           ]
         }
@@ -482,50 +482,50 @@
     },
     {
       "id": "wiki",
-      "title": "Ссылки на вики",
+      "title": "Wiki links",
       "blocks": [
         {
           "t": "p",
-          "text": "В документ нельзя вставить картинки напрямую, но на вики у каждого навыка есть карты мест, фото монстров и предметов:"
+          "text": "You cannot paste pictures straight into the document, but on the wiki every skill has maps of places and pictures of monsters and items:"
         },
         {
           "t": "ul",
           "items": [
             {
-              "text": "[Рубка](https://oldschool.runescape.wiki/w/Woodcutting), [Костры](https://oldschool.runescape.wiki/w/Firemaking), [Рыбалка](https://oldschool.runescape.wiki/w/Fishing), [Готовка](https://oldschool.runescape.wiki/w/Cooking)"
+              "text": "[Woodcutting](https://oldschool.runescape.wiki/w/Woodcutting), [Firemaking](https://oldschool.runescape.wiki/w/Firemaking), [Fishing](https://oldschool.runescape.wiki/w/Fishing), [Cooking](https://oldschool.runescape.wiki/w/Cooking)"
             },
             {
-              "text": "[Добыча руды](https://oldschool.runescape.wiki/w/Mining), [Кузнечное дело](https://oldschool.runescape.wiki/w/Smithing), [Ремесло](https://oldschool.runescape.wiki/w/Crafting)"
+              "text": "[Mining](https://oldschool.runescape.wiki/w/Mining), [Smithing](https://oldschool.runescape.wiki/w/Smithing), [Crafting](https://oldschool.runescape.wiki/w/Crafting)"
             },
             {
-              "text": "[Атака](https://oldschool.runescape.wiki/w/Attack), [Дальний бой](https://oldschool.runescape.wiki/w/Ranged), [Магия](https://oldschool.runescape.wiki/w/Magic), [Молитва](https://oldschool.runescape.wiki/w/Prayer), [Создание рун](https://oldschool.runescape.wiki/w/Runecraft)"
+              "text": "[Attack](https://oldschool.runescape.wiki/w/Attack), [Ranged](https://oldschool.runescape.wiki/w/Ranged), [Magic](https://oldschool.runescape.wiki/w/Magic), [Prayer](https://oldschool.runescape.wiki/w/Prayer), [Runecraft](https://oldschool.runescape.wiki/w/Runecraft)"
             },
             {
-              "text": "С подпиской: [Ловкость](https://oldschool.runescape.wiki/w/Agility), [Воровство](https://oldschool.runescape.wiki/w/Thieving), [Истребление](https://oldschool.runescape.wiki/w/Slayer), [Фермерство](https://oldschool.runescape.wiki/w/Farming), [Травничество](https://oldschool.runescape.wiki/w/Herblore), [Охота](https://oldschool.runescape.wiki/w/Hunter), [Строительство](https://oldschool.runescape.wiki/w/Construction), [Изготовление луков](https://oldschool.runescape.wiki/w/Fletching)"
+              "text": "With membership: [Agility](https://oldschool.runescape.wiki/w/Agility), [Thieving](https://oldschool.runescape.wiki/w/Thieving), [Slayer](https://oldschool.runescape.wiki/w/Slayer), [Farming](https://oldschool.runescape.wiki/w/Farming), [Herblore](https://oldschool.runescape.wiki/w/Herblore), [Hunter](https://oldschool.runescape.wiki/w/Hunter), [Construction](https://oldschool.runescape.wiki/w/Construction), [Fletching](https://oldschool.runescape.wiki/w/Fletching)"
             },
             {
-              "text": "[Интерактивная карта мира](https://oldschool.runescape.wiki/w/World_map)"
+              "text": "[The interactive world map](https://oldschool.runescape.wiki/w/World_map)"
             }
           ]
         },
         {
           "t": "p",
-          "text": "Страницы, по которым сверялся план:"
+          "text": "The pages the plan was checked against:"
         },
         {
           "t": "ul",
           "items": [
             {
-              "text": "[Бесплатные квесты](https://oldschool.runescape.wiki/w/Quests/Free-to-play) и [оптимальный порядок квестов](https://oldschool.runescape.wiki/w/Optimal_quest_guide/Free-to-play)"
+              "text": "[Free-to-play quests](https://oldschool.runescape.wiki/w/Quests/Free-to-play) and the [optimal quest order](https://oldschool.runescape.wiki/w/Optimal_quest_guide/Free-to-play)"
             },
             {
               "text": "[Dragon Slayer I](https://oldschool.runescape.wiki/w/Dragon_Slayer_I)"
             },
             {
-              "text": "[Прокачка рубки](https://oldschool.runescape.wiki/w/Free-to-play_Woodcutting_training) и [кузнечного дела](https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training) в бесплатной версии"
+              "text": "Training [Woodcutting](https://oldschool.runescape.wiki/w/Free-to-play_Woodcutting_training) and [Smithing](https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training) in the free version"
             },
             {
-              "text": "Навыки подписки: гайды прокачки [ловкости](https://oldschool.runescape.wiki/w/Agility_training), [воровства](https://oldschool.runescape.wiki/w/Thieving_training), [истребления](https://oldschool.runescape.wiki/w/Slayer_training), [фермерства](https://oldschool.runescape.wiki/w/Farming_training), [травничества](https://oldschool.runescape.wiki/w/Herblore_training), [охоты](https://oldschool.runescape.wiki/w/Hunter_training), [строительства](https://oldschool.runescape.wiki/w/Construction_training) и [изготовления луков](https://oldschool.runescape.wiki/w/Fletching_training), а ещё [крыши для ловкости](https://oldschool.runescape.wiki/w/Rooftop_Agility_Courses), [мастера истребления](https://oldschool.runescape.wiki/w/Slayer_Master) и [опыт за квесты](https://oldschool.runescape.wiki/w/Quest_experience_rewards)"
+              "text": "Members skills: training guides for [Agility](https://oldschool.runescape.wiki/w/Agility_training), [Thieving](https://oldschool.runescape.wiki/w/Thieving_training), [Slayer](https://oldschool.runescape.wiki/w/Slayer_training), [Farming](https://oldschool.runescape.wiki/w/Farming_training), [Herblore](https://oldschool.runescape.wiki/w/Herblore_training), [Hunter](https://oldschool.runescape.wiki/w/Hunter_training), [Construction](https://oldschool.runescape.wiki/w/Construction_training) and [Fletching](https://oldschool.runescape.wiki/w/Fletching_training), and also the [Agility rooftop courses](https://oldschool.runescape.wiki/w/Rooftop_Agility_Courses), the [Slayer masters](https://oldschool.runescape.wiki/w/Slayer_Master) and [quest experience rewards](https://oldschool.runescape.wiki/w/Quest_experience_rewards)"
             }
           ]
         }
@@ -534,29 +534,29 @@
   ],
   "training": {
     "id": "training",
-    "title": "Прокачка навыков: как это устроено",
+    "title": "Skill training: how it works",
     "blocks": [
       {
         "t": "p",
-        "text": "Разделы ниже — справочник к пошаговому плану. Бесплатные навыки написаны для бесплатной версии, то, что открывается только с подпиской, помечено отдельно. Восемь навыков подписки собраны в конце, в разделе «Навыки подписки (Members)»."
+        "text": "The sections below are a reference for the step-by-step plan. The free skills are written for the free version, and what opens only with membership is marked separately. The eight members skills are gathered at the end, in the \"Members skills\" section."
       },
       {
         "t": "ul",
         "items": [
           {
-            "text": "**Коды диапазонов.** Каждая строка в таблицах прокачки имеет код: `WC-2` — рубка, второй диапазон уровней. Программа-трекер может по уровню навыка сама показать нужную строку."
+            "text": "**Range codes.** Every row in the training tables has a code: `WC-2` is Woodcutting, the second level range. The tracker app can show the right row for you from your skill level."
           },
           {
-            "text": "**Инструменты.** Топоры и кирки: бронза и железо с 1 уровня, сталь с 6, чёрный с 11, мифрил с 21, адамант с 31, руна с 41. Скорость заметно растёт с каждым металлом — покупай лучший доступный."
+            "text": "**Tools.** Axes and pickaxes: bronze and iron from level 1, steel from 6, black from 11, mithril from 21, adamant from 31, rune from 41. The speed rises noticeably with every metal: buy the best available."
           },
           {
-            "text": "**Цепочки навыков:** рубка → костры; рыбалка → готовка → еда; добыча → кузнечное дело → броня и оружие; бой → кости и шкуры → молитва и ремесло."
+            "text": "**Skill chains:** Woodcutting to Firemaking; Fishing to Cooking to food; Mining to Smithing to armour and weapons; combat to bones and hides to Prayer and Crafting."
           },
           {
-            "text": "**Банки:** Лумбридж (верхний этаж замка), Draynor, Варрок (два), Фаладор (два), Эдгвилль, Al Kharid."
+            "text": "**Banks:** Lumbridge (the top floor of the castle), Draynor, Varrock (two), Falador (two), Edgeville, Al Kharid."
           },
           {
-            "text": "**Выбрасывать или банковать?** Для быстрого опыта добычу выбрасывают (включи в настройках «Shift click to drop»). Для денег и своих материалов — несут в банк."
+            "text": "**Drop or bank?** For fast XP drop what you gather (turn on \"Shift click to drop\" in the settings). For money and your own materials carry it to the bank."
           }
         ]
       }
@@ -565,52 +565,52 @@
   "graph": {
     "edges": [
       {
-        "from": "Добыча руды",
-        "to": "Кузнечное дело"
+        "from": "Mining",
+        "to": "Smithing"
       },
       {
-        "from": "Кузнечное дело",
-        "to": "Оружие и броня"
+        "from": "Smithing",
+        "to": "Weapons and armour"
       },
       {
-        "from": "Рыбалка",
-        "to": "Готовка"
+        "from": "Fishing",
+        "to": "Cooking"
       },
       {
-        "from": "Готовка",
-        "to": "Еда"
+        "from": "Cooking",
+        "to": "Food"
       },
       {
-        "from": "Оружие и броня",
-        "to": "Бой и квесты"
+        "from": "Weapons and armour",
+        "to": "Combat and quests"
       },
       {
-        "from": "Еда",
-        "to": "Бой и квесты"
+        "from": "Food",
+        "to": "Combat and quests"
       },
       {
-        "from": "Бой и квесты",
-        "to": "Кости"
+        "from": "Combat and quests",
+        "to": "Bones"
       },
       {
-        "from": "Бой и квесты",
-        "to": "Шкуры"
+        "from": "Combat and quests",
+        "to": "Hides"
       },
       {
-        "from": "Кости",
-        "to": "Молитва"
+        "from": "Bones",
+        "to": "Prayer"
       },
       {
-        "from": "Шкуры",
-        "to": "Ремесло"
+        "from": "Hides",
+        "to": "Crafting"
       },
       {
-        "from": "Ремесло",
-        "to": "Оружие и броня"
+        "from": "Crafting",
+        "to": "Weapons and armour"
       },
       {
-        "from": "Молитва",
-        "to": "Бой и квесты"
+        "from": "Prayer",
+        "to": "Combat and quests"
       }
     ]
   }

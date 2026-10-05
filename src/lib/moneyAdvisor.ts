@@ -1,6 +1,6 @@
-// «Как добрать деньги»: способы заработка из вики (moneyMaking.json), которые доступны по уровням игрока.
-// Уровни — из игры или введённые вручную; чего не знаем — не придумываем, а помечаем «?». Выручка в час — оценка вики
-// по ценам биржи на дату снимка при хорошей игре: у новичка она ниже, и интерфейс так и говорит.
+// "How to make up the money": earning methods from the wiki (moneyMaking.json) that are available at the player's levels.
+// Levels come from the game or are entered manually; what we do not know we do not invent but mark with "?". Income per hour is the wiki's estimate
+// at Grand Exchange prices on the snapshot date with good play: for a beginner it is lower, and the interface says so.
 
 import moneyJson from '../data/moneyMaking.json';
 import type { MoneyData, MoneyMethod, MoneyReq, Step } from '../types';
@@ -10,7 +10,7 @@ export const MONEY = moneyJson as MoneyData;
 
 export type Levels = Readonly<Record<string, number | undefined>>;
 
-/** Боевой уровень по формуле игры; null — не знаем атаку, силу или защиту. */
+/** The combat level by the game's formula; null means Attack, Strength or Defence is unknown. */
 export function combatLevel(l: Levels): number | null {
   const { attack, strength, defence } = l;
   if (attack === undefined || strength === undefined || defence === undefined) return null;
@@ -24,24 +24,24 @@ export function combatLevel(l: Levels): number | null {
 
 export interface ReqState {
   req: MoneyReq;
-  /** Сколько у игрока; undefined — не знаем. */
+  /** How much the player has; undefined means unknown. */
   have?: number;
   ok: boolean;
 }
 
 export interface MethodView {
   method: MoneyMethod;
-  /** Обязательные требования, которых не хватает (известный уровень ниже нужного). */
+  /** The mandatory requirements that are lacking (a known level is below the needed one). */
   missing: ReqState[];
-  /** Обязательные требования, по которым уровень неизвестен. */
+  /** The mandatory requirements whose level is unknown. */
   unknown: ReqState[];
-  /** Советуемые уровни, которых не хватает (только подсказка). */
+  /** The advised levels that are lacking (only a hint). */
   advice: ReqState[];
-  /** Квесты из условий способа, не пройденные игроком и нужные обязательно. */
+  /** The quests from the method's conditions that the player has not completed and that are mandatory. */
   questsMissing: string[];
-  /** Сколько уровней не хватает до самого далёкого обязательного требования. */
+  /** How many levels are lacking to the furthest mandatory requirement. */
   gap: number;
-  /** free — ничего покупать не надо; invest — вики называет стартовый капитал или материалы, которые покупают. */
+  /** free means nothing needs buying; invest means the wiki names a starting capital or materials to buy. */
   cost: 'free' | 'invest';
 }
 
@@ -50,11 +50,11 @@ function stateOf(req: MoneyReq, levels: Levels, combat: number | null): ReqState
   return { req, ...(have !== undefined ? { have } : {}), ok: have !== undefined && have >= req.level };
 }
 
-/** Названия квестов маршрута, упомянутые в условиях способа, которые игрок ещё не прошёл (если условие жёсткое). */
+/** The route quest names mentioned in the method's conditions that the player has not completed yet (if the condition is hard). */
 function questGaps(m: MoneyMethod, steps: readonly Step[], done: ReadonlySet<string>): string[] {
   if (!m.quests) return [];
   const text = m.quests.toLowerCase();
-  // «recommended» — совет, а не требование: подсказкой он остаётся в самом тексте условий.
+  // "recommended" is advice, not a requirement: it remains a hint in the conditions text itself.
   if (/recommend|optional/.test(text)) return [];
   const found: string[] = [];
   for (const s of steps) {
@@ -76,19 +76,19 @@ export function viewMethod(m: MoneyMethod, levels: Levels, steps: readonly Step[
 }
 
 export interface MoneyAdvice {
-  /** Без вложений, доступны по известным уровням (неизвестные помечены), выручка по убыванию. */
+  /** Without investment, available at the known levels (unknown ones are marked), income in descending order. */
   free: MethodView[];
-  /** Нужны вложения, которые тебе по карману (или неизвестно, сколько у тебя монет). */
+  /** Need investment that you can afford (or it is unknown how many coins you have). */
   invest: MethodView[];
-  /** Откроются скоро: не хватает не больше SOON_GAP уровней. */
+  /** Will open soon: no more than SOON_GAP levels are lacking. */
   soon: MethodView[];
 }
 
 export const SOON_GAP = 10;
 
 /**
- * cash — монеты (сумка + банк), null — неизвестно: тогда способы с капиталом не отсекаются, но и не выдаются за доступные
- * без оговорки (в строке способа остаётся «от N gp»).
+ * cash is coins (bag + bank), null means unknown: then methods with capital are not cut off, but they are not passed off as available
+ * without a caveat either (the method's line keeps "from N gp").
  */
 export function adviseMoney(
   levels: Levels, steps: readonly Step[], questsDone: ReadonlySet<string>, methods: readonly MoneyMethod[] = MONEY.methods, cash: number | null = null,
@@ -97,7 +97,7 @@ export function adviseMoney(
   const open = views.filter((v) => !v.missing.length && !v.questsMissing.length);
   const soon = views.filter((v) => v.missing.length > 0 && v.gap <= SOON_GAP && !v.questsMissing.length);
   const byProfit = (a: MethodView, b: MethodView) => b.method.profit - a.method.profit;
-  // Сначала то, что точно доступно, потом то, где уровень неизвестен.
+  // First what is surely available, then what has an unknown level.
   const order = (list: MethodView[]) => [...list.filter((v) => !v.unknown.length).sort(byProfit), ...list.filter((v) => v.unknown.length).sort(byProfit)];
   const affordable = (v: MethodView) => cash === null || !v.method.capital || v.method.capital <= cash;
   return {
@@ -107,12 +107,12 @@ export function adviseMoney(
   };
 }
 
-/** Часов до цели при выручке profit в час; null — нечего считать. */
+/** Hours to the goal at an income of profit per hour; null means nothing to count. */
 export function hoursToCover(missingGp: number, profit: number): number | null {
   return missingGp > 0 && profit > 0 ? missingGp / profit : null;
 }
 
 export function reqText(r: MoneyReq): string {
-  const name = r.skill === 'combat' ? 'боевой' : r.skill.charAt(0).toUpperCase() + r.skill.slice(1);
+  const name = r.skill === 'combat' ? 'combat' : r.skill.charAt(0).toUpperCase() + r.skill.slice(1);
   return `${name} ${r.level}${r.plus ? '+' : ''}`;
 }

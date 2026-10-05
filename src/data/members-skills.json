@@ -1,24 +1,24 @@
 {
-  "title": "Навыки подписки (Members)",
+  "title": "Members skills",
   "intro": [
     {
       "t": "p",
-      "text": "Эти восемь навыков качаются только с подпиской. На бесплатных мирах их не прокачать, но набранные уровни сохраняются. Маршрут этапов 7–9 просит из них немного: ловкость 25 для The Grand Tree (S7-04), ловкость 40 и части Graceful (S8-03), истребление 18 для Animal Magnetism (S8-04). Планы ниже идут дальше, до 99 уровня, и сверены с гайдами прокачки OSRS Wiki."
+      "text": "These eight skills can be trained only with membership. They cannot be trained on free worlds, but the levels you have gained are kept. The route of stages 7–9 asks for little of them: Agility 25 for The Grand Tree (S7-04), Agility 40 and the Graceful pieces (S8-03), Slayer 18 for Animal Magnetism (S8-04). The plans below go further, up to level 99, and were checked against the OSRS Wiki training guides."
     },
     {
       "t": "ul",
       "items": [
         {
-          "text": "**Коды строк** такие же, как у бесплатных навыков: `AG-3` — ловкость, третья строка. Программа подсвечивает строку по твоему уровню."
+          "text": "**Row codes** are the same as for the free skills: `AG-3` is Agility, the third row. The app highlights the row for your level."
         },
         {
-          "text": "**Опыт в час** взят из вики и рассчитан на уверенную игру. Поначалу, пока учишься, выйдет медленнее."
+          "text": "**XP per hour** is taken from the wiki and assumes confident play. At first, while you are learning, it will be slower."
         },
         {
-          "text": "**Квесты** часто дают сразу несколько уровней, поэтому у каждого навыка есть их список. Квесты с маршрута помечены кодом шага."
+          "text": "**Quests** often give several levels at once, so every skill has a list of them. Quests on the route are marked with a step code."
         },
         {
-          "text": "**Твой уровень** вводится на странице навыка — по нему подсвечивается строка плана. Шаги маршрута S7-04, S8-03 и S8-04 плагин OSRS Path Bridge отмечает сам, когда нужный уровень взят в игре."
+          "text": "**Your level** is entered on the skill page; the plan row is highlighted by it. The route steps S7-04, S8-03 and S8-04 are ticked by the OSRS Path Bridge plugin itself once the required level is reached in the game."
         }
       ]
     }
@@ -26,217 +26,217 @@
   "skills": [
     {
       "id": "AG",
-      "title": "Ловкость (Agility)",
-      "name": "Ловкость",
+      "title": "Agility",
+      "name": "Agility",
       "levelSkills": [
         "agility"
       ],
       "intro": [
         {
           "t": "p",
-          "text": "Ловкость качают на трассах: проходишь круг препятствий и получаешь опыт. С каждым уровнем быстрее восстанавливается энергия бега, открываются короткие пути (Agility shortcuts) по всему миру. На крышах (Rooftop Agility Courses) падают знаки грации (Mark of Grace), за них покупают лёгкий сет Graceful."
+          "text": "Agility is trained on courses: you go round a circuit of obstacles and get XP. With every level run energy recovers faster, and shortcuts (Agility shortcuts) open all over the world. Marks of Grace drop on the rooftops (Rooftop Agility Courses), and the light Graceful set is bought with them."
         }
       ],
       "sections": [
         {
-          "title": "Зачем качать",
+          "title": "Why train it",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Маршрут:** 25 для The Grand Tree (S7-04), 40 и первые части Graceful (S8-03)."
+                  "text": "**The route:** 25 for The Grand Tree (S7-04), 40 and the first Graceful pieces (S8-03)."
                 },
                 {
-                  "text": "**Бег:** чем выше ловкость, тем быстрее восстанавливается энергия. Это ускоряет всё остальное — квесты, забеги по грядкам, походы в банк."
+                  "text": "**Running:** the higher your Agility, the faster energy recovers. That speeds up everything else: quests, farming runs, trips to the bank."
                 },
                 {
-                  "text": "**Короткие пути** по миру требуют разных уровней ловкости. Плагин World Map в RuneLite подписывает их уровни прямо на карте мира."
+                  "text": "**Shortcuts** around the world need various Agility levels. The World Map plugin in RuneLite labels their levels right on the world map."
                 },
                 {
-                  "text": "**Квесты подписки:** многим нужна ловкость, например Cold War (30), Land of the Goblins (38) и Royal Trouble (40)."
+                  "text": "**Members quests:** many need Agility, for example Cold War (30), Land of the Goblins (38) and Royal Trouble (40)."
                 }
               ]
             }
           ]
         },
         {
-          "title": "План прокачки",
+          "title": "Training plan",
           "blocks": [
             {
               "t": "table",
               "head": [
-                "Код",
-                "Уровни",
-                "Где качать",
-                "Где это",
-                "Опыт в час",
-                "Заметки"
+                "Code",
+                "Levels",
+                "Where to train",
+                "Where it is",
+                "XP per hour",
+                "Notes"
               ],
               "rows": [
                 [
                   "AG-1",
                   "1–20",
-                  "Gnome Stronghold Agility Course или Draynor Village Rooftop Course",
+                  "Gnome Stronghold Agility Course or Draynor Village Rooftop Course",
                   "Tree Gnome Stronghold; Draynor Village",
-                  "~10 тыс.",
-                  "На трассе гномов падений нет, еда не нужна: 110,5 опыта за круг. Крыши Draynor открыты с 1 уровня: 120 за круг и знаки грации"
+                  "~10k",
+                  "There are no falls on the gnome course and no food is needed: 110.5 XP per lap. The Draynor rooftops are open from level 1: 120 per lap and Marks of Grace"
                 ],
                 [
                   "AG-2",
                   "20–30",
                   "Al Kharid Rooftop Course",
                   "Al Kharid",
-                  "~12 тыс.",
-                  "216 за круг. Быстрее — ловушка с шипами (Floor spikes) в Brimhaven Agility Arena: до 30 тыс. в час, вход 200 монет"
+                  "~12k",
+                  "216 per lap. Faster: the Floor spikes trap in the Brimhaven Agility Arena: up to 30k an hour, the entrance costs 200 coins"
                 ],
                 [
                   "AG-3",
                   "30–40",
                   "Varrock Rooftop Course",
-                  "Варрок",
-                  "~14 тыс.",
-                  "270 за круг. Прибыльная альтернатива — Agility Pyramid между Nardah и Sophanem: ~25 тыс. в час и 10 000 монет за каждую вершину пирамиды"
+                  "Varrock",
+                  "~14k",
+                  "270 per lap. A profitable alternative is the Agility Pyramid between Nardah and Sophanem: ~25k an hour and 10,000 coins for each pyramid top"
                 ],
                 [
                   "AG-4",
                   "40–50",
                   "Canifis Rooftop Course",
-                  "Canifis, Morytania (после Priest in Peril, S8-01)",
-                  "~19,7 тыс.",
-                  "240 за круг и больше всего знаков грации: 16–18 в час. Лучшая трасса для сета Graceful"
+                  "Canifis, Morytania (after Priest in Peril, S8-01)",
+                  "~19.7k",
+                  "240 per lap and the most Marks of Grace: 16–18 an hour. The best course for the Graceful set"
                 ],
                 [
                   "AG-5",
                   "50–60",
                   "Falador Rooftop Course",
-                  "Фаладор",
-                  "~35 тыс.",
-                  "586 за круг. Быстрее — Wilderness Agility Course с 52 (50–60 тыс. в час), но это глубокая Дикая местность, где нападают игроки"
+                  "Falador",
+                  "~35k",
+                  "586 per lap. Faster: the Wilderness Agility Course from 52 (50–60k an hour), but that is the deep Wilderness, where players attack"
                 ],
                 [
                   "AG-6",
                   "60–70",
                   "Seers' Village Rooftop Course",
                   "Seers' Village",
-                  "~46,8 тыс.",
-                  "570 за круг, со сложным дневником Kandarin — до 58 тыс. Быстрее — Hallowed Sepulchre с 62 (нужен квест Sins of the Father)"
+                  "~46.8k",
+                  "570 per lap, with the Kandarin hard diary up to 58k. Faster: the Hallowed Sepulchre from 62 (needs the quest Sins of the Father)"
                 ],
                 [
                   "AG-7",
                   "70–80",
                   "Pollnivneach Rooftop Course",
-                  "Pollnivneach (ковёр от Shantay Pass)",
-                  "~52 тыс.",
-                  "890 за круг"
+                  "Pollnivneach (the carpet from Shantay Pass)",
+                  "~52k",
+                  "890 per lap"
                 ],
                 [
                   "AG-8",
                   "80–90",
                   "Rellekka Rooftop Course",
                   "Rellekka",
-                  "~55 тыс.",
-                  "780 за круг, со сложным дневником Fremennik — до 65 тыс."
+                  "~55k",
+                  "780 per lap, with the Fremennik hard diary up to 65k"
                 ],
                 [
                   "AG-9",
                   "90+",
                   "Ardougne Rooftop Course",
-                  "Восточный Ardougne",
-                  "~70 тыс.",
-                  "889 за круг. Знаки грации копятся в одной клетке и не пропадают, пока бегаешь"
+                  "East Ardougne",
+                  "~70k",
+                  "889 per lap. Marks of Grace pile up on one tile and do not vanish while you run"
                 ]
               ]
             },
             {
               "t": "p",
-              "text": "Если твой уровень на 20 выше требования трассы, знаков грации выпадает в пять раз меньше. Исключение — Canifis: там правило не действует, поэтому Graceful собирают на ней."
+              "text": "If your level is 20 above the course's requirement, five times fewer Marks of Grace drop. The exception is Canifis: the rule does not apply there, which is why Graceful is collected on it."
             }
           ]
         },
         {
-          "title": "Квесты с опытом ловкости",
+          "title": "Quests with Agility XP",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**The Grand Tree** (S7-05) — 7 900 опыта. С 25 уровня это сразу около 31."
+                  "text": "**The Grand Tree** (S7-05): 7,900 XP. From level 25 that is about 31 at once."
                 },
                 {
-                  "text": "**The Tourist Trap** — две награды опытом на выбор. Если обе отдать ловкости, выйдет с 1 до 26 уровня: быстрее, чем бегать первые трассы."
+                  "text": "**The Tourist Trap**: two XP rewards of your choice. If you give both to Agility, you go from level 1 to 26: faster than running the first courses."
                 },
                 {
-                  "text": "**Recruitment Drive** — 1 000, **The Depths of Despair** (нужна ловкость 18) — 1 500."
+                  "text": "**Recruitment Drive**: 1,000, **The Depths of Despair** (needs Agility 18): 1,500."
                 },
                 {
-                  "text": "Вместе эти четыре квеста дают 19 700 опыта — 33 уровень."
+                  "text": "Together these four quests give 19,700 XP, level 33."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Graceful и знаки грации",
+          "title": "Graceful and Marks of Grace",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "Сет продаёт Grace в Rogues' Den — подвале паба The Toad and Chicken в Burthorpe."
+                  "text": "The set is sold by Grace in the Rogues' Den, the basement of The Toad and Chicken pub in Burthorpe."
                 },
                 {
-                  "text": "Цена в знаках: капюшон 35, куртка 55, штаны 60, перчатки 30, сапоги 40, плащ 40. Весь сет — 260 знаков."
+                  "text": "The price in marks: hood 35, top 55, legs 60, gloves 30, boots 40, cape 40. The whole set is 260 marks."
                 },
                 {
-                  "text": "Каждая часть снижает вес и ускоряет восстановление энергии бега. Полный сет даёт +30% к восстановлению."
+                  "text": "Every piece lowers weight and speeds up run energy recovery. The full set gives +30% recovery."
                 },
                 {
-                  "text": "На Canifis с 40 уровня весь сет собирается примерно за 13–16 часов (500–900 кругов). К этому времени ловкость дорастёт до 54–59."
+                  "text": "At Canifis from level 40 the whole set is collected in about 13–16 hours (500–900 laps). By then Agility will have grown to 54–59."
                 },
                 {
-                  "text": "Знак лежит на земле 10 минут — подбирай сразу. На бесплатных мирах Graceful вес не снижает."
+                  "text": "A mark lies on the ground for 10 minutes: pick it up at once. On free worlds Graceful does not lower weight."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Полезно знать",
+          "title": "Good to know",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Летний пирог (Summer pie)** поднимает ловкость на 5 — можно выйти на следующую трассу раньше."
+                  "text": "**A Summer pie** raises Agility by 5: you can move on to the next course earlier."
                 },
                 {
-                  "text": "**Еда:** на крышах иногда срываешься и теряешь здоровье. Пока уровень близок к требованию трассы, держи немного еды."
+                  "text": "**Food:** on the rooftops you sometimes fall and lose health. While your level is close to the course's requirement, keep a little food."
                 },
                 {
-                  "text": "**Бег без остановок:** каждое препятствие на крышах восстанавливает 1–2% энергии бега, поэтому по трассе можно бегать непрерывно."
+                  "text": "**Running without stops:** every rooftop obstacle restores 1–2% run energy, so you can run the course continuously."
                 },
                 {
-                  "text": "**Официальный мир ловкости** — 346 (Members): там больше игроков на трассах."
+                  "text": "**The official Agility world** is 346 (Members): there are more players on the courses."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Частые вопросы",
+          "title": "Frequently asked questions",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Опыта меньше, чем в плане?** Скорость в таблице — для игры без ошибок и простоев. Падения и паузы её снижают."
+                  "text": "**Less XP than in the plan?** The speed in the table is for play without mistakes and downtime. Falls and pauses lower it."
                 },
                 {
-                  "text": "**Какая трасса лучше для Graceful?** Canifis — с 40 до 60 уровня и дальше: знаков там больше всего до самой трассы Ardougne."
+                  "text": "**Which course is best for Graceful?** Canifis, from level 40 to 60 and beyond: it has the most marks right up to the Ardougne course."
                 },
                 {
-                  "text": "**Качать ловкость отдельно или по пути?** Для маршрута хватит 25 и 40. Дальше качай, когда захочешь: бег быстрее, путей больше."
+                  "text": "**Train Agility separately or along the way?** For the route 25 and 40 are enough. After that train when you want: running is faster and there are more shortcuts."
                 }
               ]
             }
@@ -245,12 +245,12 @@
       ],
       "plan": {
         "head": [
-          "Код",
-          "Уровни",
-          "Где качать",
-          "Где это",
-          "Опыт в час",
-          "Заметки"
+          "Code",
+          "Levels",
+          "Where to train",
+          "Where it is",
+          "XP per hour",
+          "Notes"
         ],
         "ranges": [
           {
@@ -258,15 +258,15 @@
             "from": 1,
             "to": 20,
             "levels": "1–20",
-            "what": "Gnome Stronghold Agility Course или Draynor Village Rooftop Course",
-            "notes": "На трассе гномов падений нет, еда не нужна: 110,5 опыта за круг. Крыши Draynor открыты с 1 уровня: 120 за круг и знаки грации",
+            "what": "Gnome Stronghold Agility Course or Draynor Village Rooftop Course",
+            "notes": "There are no falls on the gnome course and no food is needed: 110.5 XP per lap. The Draynor rooftops are open from level 1: 120 per lap and Marks of Grace",
             "cells": [
               "AG-1",
               "1–20",
-              "Gnome Stronghold Agility Course или Draynor Village Rooftop Course",
+              "Gnome Stronghold Agility Course or Draynor Village Rooftop Course",
               "Tree Gnome Stronghold; Draynor Village",
-              "~10 тыс.",
-              "На трассе гномов падений нет, еда не нужна: 110,5 опыта за круг. Крыши Draynor открыты с 1 уровня: 120 за круг и знаки грации"
+              "~10k",
+              "There are no falls on the gnome course and no food is needed: 110.5 XP per lap. The Draynor rooftops are open from level 1: 120 per lap and Marks of Grace"
             ]
           },
           {
@@ -275,14 +275,14 @@
             "to": 30,
             "levels": "20–30",
             "what": "Al Kharid Rooftop Course",
-            "notes": "216 за круг. Быстрее — ловушка с шипами (Floor spikes) в Brimhaven Agility Arena: до 30 тыс. в час, вход 200 монет",
+            "notes": "216 per lap. Faster: the Floor spikes trap in the Brimhaven Agility Arena: up to 30k an hour, the entrance costs 200 coins",
             "cells": [
               "AG-2",
               "20–30",
               "Al Kharid Rooftop Course",
               "Al Kharid",
-              "~12 тыс.",
-              "216 за круг. Быстрее — ловушка с шипами (Floor spikes) в Brimhaven Agility Arena: до 30 тыс. в час, вход 200 монет"
+              "~12k",
+              "216 per lap. Faster: the Floor spikes trap in the Brimhaven Agility Arena: up to 30k an hour, the entrance costs 200 coins"
             ]
           },
           {
@@ -291,14 +291,14 @@
             "to": 40,
             "levels": "30–40",
             "what": "Varrock Rooftop Course",
-            "notes": "270 за круг. Прибыльная альтернатива — Agility Pyramid между Nardah и Sophanem: ~25 тыс. в час и 10 000 монет за каждую вершину пирамиды",
+            "notes": "270 per lap. A profitable alternative is the Agility Pyramid between Nardah and Sophanem: ~25k an hour and 10,000 coins for each pyramid top",
             "cells": [
               "AG-3",
               "30–40",
               "Varrock Rooftop Course",
-              "Варрок",
-              "~14 тыс.",
-              "270 за круг. Прибыльная альтернатива — Agility Pyramid между Nardah и Sophanem: ~25 тыс. в час и 10 000 монет за каждую вершину пирамиды"
+              "Varrock",
+              "~14k",
+              "270 per lap. A profitable alternative is the Agility Pyramid between Nardah and Sophanem: ~25k an hour and 10,000 coins for each pyramid top"
             ]
           },
           {
@@ -307,14 +307,14 @@
             "to": 50,
             "levels": "40–50",
             "what": "Canifis Rooftop Course",
-            "notes": "240 за круг и больше всего знаков грации: 16–18 в час. Лучшая трасса для сета Graceful",
+            "notes": "240 per lap and the most Marks of Grace: 16–18 an hour. The best course for the Graceful set",
             "cells": [
               "AG-4",
               "40–50",
               "Canifis Rooftop Course",
-              "Canifis, Morytania (после Priest in Peril, S8-01)",
-              "~19,7 тыс.",
-              "240 за круг и больше всего знаков грации: 16–18 в час. Лучшая трасса для сета Graceful"
+              "Canifis, Morytania (after Priest in Peril, S8-01)",
+              "~19.7k",
+              "240 per lap and the most Marks of Grace: 16–18 an hour. The best course for the Graceful set"
             ]
           },
           {
@@ -323,14 +323,14 @@
             "to": 60,
             "levels": "50–60",
             "what": "Falador Rooftop Course",
-            "notes": "586 за круг. Быстрее — Wilderness Agility Course с 52 (50–60 тыс. в час), но это глубокая Дикая местность, где нападают игроки",
+            "notes": "586 per lap. Faster: the Wilderness Agility Course from 52 (50–60k an hour), but that is the deep Wilderness, where players attack",
             "cells": [
               "AG-5",
               "50–60",
               "Falador Rooftop Course",
-              "Фаладор",
-              "~35 тыс.",
-              "586 за круг. Быстрее — Wilderness Agility Course с 52 (50–60 тыс. в час), но это глубокая Дикая местность, где нападают игроки"
+              "Falador",
+              "~35k",
+              "586 per lap. Faster: the Wilderness Agility Course from 52 (50–60k an hour), but that is the deep Wilderness, where players attack"
             ]
           },
           {
@@ -339,14 +339,14 @@
             "to": 70,
             "levels": "60–70",
             "what": "Seers' Village Rooftop Course",
-            "notes": "570 за круг, со сложным дневником Kandarin — до 58 тыс. Быстрее — Hallowed Sepulchre с 62 (нужен квест Sins of the Father)",
+            "notes": "570 per lap, with the Kandarin hard diary up to 58k. Faster: the Hallowed Sepulchre from 62 (needs the quest Sins of the Father)",
             "cells": [
               "AG-6",
               "60–70",
               "Seers' Village Rooftop Course",
               "Seers' Village",
-              "~46,8 тыс.",
-              "570 за круг, со сложным дневником Kandarin — до 58 тыс. Быстрее — Hallowed Sepulchre с 62 (нужен квест Sins of the Father)"
+              "~46.8k",
+              "570 per lap, with the Kandarin hard diary up to 58k. Faster: the Hallowed Sepulchre from 62 (needs the quest Sins of the Father)"
             ]
           },
           {
@@ -355,14 +355,14 @@
             "to": 80,
             "levels": "70–80",
             "what": "Pollnivneach Rooftop Course",
-            "notes": "890 за круг",
+            "notes": "890 per lap",
             "cells": [
               "AG-7",
               "70–80",
               "Pollnivneach Rooftop Course",
-              "Pollnivneach (ковёр от Shantay Pass)",
-              "~52 тыс.",
-              "890 за круг"
+              "Pollnivneach (the carpet from Shantay Pass)",
+              "~52k",
+              "890 per lap"
             ]
           },
           {
@@ -371,14 +371,14 @@
             "to": 90,
             "levels": "80–90",
             "what": "Rellekka Rooftop Course",
-            "notes": "780 за круг, со сложным дневником Fremennik — до 65 тыс.",
+            "notes": "780 per lap, with the Fremennik hard diary up to 65k",
             "cells": [
               "AG-8",
               "80–90",
               "Rellekka Rooftop Course",
               "Rellekka",
-              "~55 тыс.",
-              "780 за круг, со сложным дневником Fremennik — до 65 тыс."
+              "~55k",
+              "780 per lap, with the Fremennik hard diary up to 65k"
             ]
           },
           {
@@ -387,14 +387,14 @@
             "to": null,
             "levels": "90+",
             "what": "Ardougne Rooftop Course",
-            "notes": "889 за круг. Знаки грации копятся в одной клетке и не пропадают, пока бегаешь",
+            "notes": "889 per lap. Marks of Grace pile up on one tile and do not vanish while you run",
             "cells": [
               "AG-9",
               "90+",
               "Ardougne Rooftop Course",
-              "Восточный Ardougne",
-              "~70 тыс.",
-              "889 за круг. Знаки грации копятся в одной клетке и не пропадают, пока бегаешь"
+              "East Ardougne",
+              "~70k",
+              "889 per lap. Marks of Grace pile up on one tile and do not vanish while you run"
             ]
           }
         ],
@@ -406,104 +406,104 @@
     },
     {
       "id": "TH",
-      "title": "Воровство (Thieving)",
-      "name": "Воровство",
+      "title": "Thieving",
+      "name": "Thieving",
       "levelSkills": [
         "thieving"
       ],
       "intro": [
         {
           "t": "p",
-          "text": "Воровство — кражи с прилавков (Steal-from), карманные кражи у NPC (Pickpocket), взлом замков и сундуков. Навык даёт монеты и полезные вещи. Неудачная карманная кража оглушает на несколько секунд и бьёт по здоровью, поэтому держи еду. С прилавка красть безопасно, если продавец и стражники не видят."
+          "text": "Thieving is stealing from stalls (Steal-from), pickpocketing NPCs (Pickpocket), and picking locks and chests. The skill gives coins and useful items. A failed pickpocket stuns you for a few seconds and hurts your health, so keep food. Stealing from a stall is safe if the vendor and the guards do not see."
         }
       ],
       "sections": [
         {
-          "title": "Зачем качать",
+          "title": "Why train it",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Маршрут:** Fight Arena (S7-02) даёт 2 175 опыта воровства — сразу 16 уровень. Отдельно качать воровство маршрут не просит."
+                  "text": "**The route:** the Fight Arena (S7-02) gives 2,175 Thieving XP, level 16 at once. The route does not ask you to train Thieving separately."
                 },
                 {
-                  "text": "**Fairytale II** целиком требует воровство 40 (на маршруте только вступление, S9-03)."
+                  "text": "**Fairytale II** in full requires Thieving 40 (the route has only the start, S9-03)."
                 },
                 {
-                  "text": "**Деньги:** рыцари Ardougne и кражи ценностей в Varlamore приносят монеты вместе с опытом."
+                  "text": "**Money:** the Knights of Ardougne and stealing valuables in Varlamore bring coins along with XP."
                 },
                 {
-                  "text": "**Квесты подписки:** многие требуют воровство, например The Feud (30) и Death to the Dorgeshuun (23)."
+                  "text": "**Members quests:** many require Thieving, for example The Feud (30) and Death to the Dorgeshuun (23)."
                 }
               ]
             }
           ]
         },
         {
-          "title": "План прокачки",
+          "title": "Training plan",
           "blocks": [
             {
               "t": "table",
               "head": [
-                "Код",
-                "Уровни",
-                "Что делать",
-                "Где",
-                "Опыт в час",
-                "Заметки"
+                "Code",
+                "Levels",
+                "What to do",
+                "Where",
+                "XP per hour",
+                "Notes"
               ],
               "rows": [
                 [
                   "TH-1",
                   "1–5",
-                  "Карманные кражи у мужчин и женщин (Man, Woman)",
-                  "Лумбридж, Draynor, Варрок",
+                  "Pickpocketing men and women (Man, Woman)",
+                  "Lumbridge, Draynor, Varrock",
                   "—",
-                  "8 опыта за удачную кражу, до 5 уровня — 49 краж. Совсем без риска: взламывать дверь в East Ardougne — 3,8 опыта, провал ничем не грозит"
+                  "8 XP per successful theft, 49 thefts up to level 5. Completely risk-free: picking the door lock in East Ardougne is 3.8 XP, and a failure threatens nothing"
                 ],
                 [
                   "TH-2",
                   "5–25",
-                  "Прилавок пекаря (Bakery stall)",
-                  "Рынок East Ardougne, восточный прилавок",
-                  "до 19 тыс.",
-                  "16 опыта за кражу. Стой так, чтобы пекарь и стражники не видели: заметят — нападут. Пироги выбрасывай или ешь"
+                  "The baker's stall (Bakery stall)",
+                  "The East Ardougne market, the east stall",
+                  "up to 19k",
+                  "16 XP per theft. Stand so that the baker and the guards do not see: if they notice, they attack. Drop or eat the pies"
                 ],
                 [
                   "TH-3",
                   "25–50",
-                  "Фруктовые прилавки (Fruit Stall)",
-                  "Hosidius, Great Kourend (корабль Veos из Port Sarim)",
-                  "34–43 тыс.",
-                  "28,5 опыта. Лучше всего крайний восточный дом у пляжа: там два прилавка рядом и нет сторожевых собак. Фрукты выбрасывай на бегу"
+                  "Fruit stalls (Fruit Stall)",
+                  "Hosidius, Great Kourend (the Veos ship from Port Sarim)",
+                  "34–43k",
+                  "28.5 XP. The easternmost house by the beach is best: there are two stalls side by side and no guard dogs. Drop the fruit as you run"
                 ],
                 [
                   "TH-4",
                   "50–55",
-                  "Кража ценностей (Stealing valuables)",
-                  "Civitas illa Fortis, Varlamore (квест Children of the Sun)",
-                  "~72 тыс.",
-                  "Спокойный метод. Сначала карманными кражами собираешь ключи от домов у богатых горожан, потом обчищаешь дома, пока хозяев нет"
+                  "Stealing valuables (Stealing valuables)",
+                  "Civitas illa Fortis, Varlamore (the quest Children of the Sun)",
+                  "~72k",
+                  "A calm method. First you collect house keys from rich townspeople by pickpocketing, then you clean out the houses while the owners are away"
                 ],
                 [
                   "TH-5",
                   "55+",
-                  "Карманные кражи у рыцарей (Knight of Ardougne)",
-                  "Рынок East Ardougne",
-                  "86 тыс. на 55, 240 тыс. на 95",
-                  "84,3 опыта. Скорость — со средним дневником Ardougne (+10% к успеху) и ожерельем Dodgy necklace. Монеты копятся в кошельках (Coin pouch) — открывай их"
+                  "Pickpocketing knights (Knight of Ardougne)",
+                  "The East Ardougne market",
+                  "86k at 55, 240k at 95",
+                  "84.3 XP. The speed is with the Ardougne medium diary (+10% success) and a Dodgy necklace. Coins pile up in pouches (Coin pouch): open them"
                 ]
               ]
             },
             {
               "t": "p",
-              "text": "Быстрее, но сложнее: оглушать бандитов дубинкой (Blackjacking) в Pollnivneach с 45 (часть квеста The Feud), красть артефакты в Port Piscarilius с 49, сундуки Rogues' Castle в Дикой местности с 84 и Pyramid Plunder с 91."
+              "text": "Faster but harder: blackjacking bandits (Blackjacking) in Pollnivneach from 45 (part of the quest The Feud), stealing artefacts in Port Piscarilius from 49, the Rogues' Castle chests in the Wilderness from 84 and Pyramid Plunder from 91."
             }
           ]
         },
         {
-          "title": "Квесты с опытом воровства",
+          "title": "Quests with Thieving XP",
           "blocks": [
             {
               "t": "ul",
@@ -512,51 +512,51 @@
                   "text": "**Fight Arena** (S7-02) — 2 175."
                 },
                 {
-                  "text": "Без больших требований: **Biohazard** (1 250), **Hazeel Cult** (1 500), **Tower of Life** (500), **Tribal Totem** (1 775, нужно воровство 21). Вместе с Fight Arena — 7 200 опыта, 24 уровень."
+                  "text": "Without big requirements: **Biohazard** (1,250), **Hazeel Cult** (1,500), **Tower of Life** (500), **Tribal Totem** (1,775, needs Thieving 21). Together with the Fight Arena that is 7,200 XP, level 24."
                 },
                 {
-                  "text": "Дальше: **The Queen of Thieves** (20) — 2 000, **The Giant Dwarf** (14) — 1 500, **Death to the Dorgeshuun** (23) — 2 000, **The Feud** (30) — 15 000."
+                  "text": "Further on: **The Queen of Thieves** (20): 2,000, **The Giant Dwarf** (14): 1,500, **Death to the Dorgeshuun** (23): 2,000, **The Feud** (30): 15,000."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Что усиливает воровство",
+          "title": "What boosts Thieving",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Дневник Ardougne:** средний уровень даёт +10% к успеху карманных краж в Ardougne, сложный — везде. Кулон или плащ носить не нужно, бонус постоянный."
+                  "text": "**The Ardougne diary:** the medium tier gives +10% success to pickpocketing in Ardougne, the hard tier everywhere. You do not need to wear a pendant or cape, the bonus is permanent."
                 },
                 {
-                  "text": "**Ожерелье Dodgy necklace:** 25% шанс не получить оглушение и урон при провале. Хватает на 10 срабатываний."
+                  "text": "**The Dodgy necklace:** a 25% chance not to be stunned or take damage on a failure. It lasts 10 triggers."
                 },
                 {
-                  "text": "**Перчатки Gloves of silence** (охота 54): +5% к успеху. Бонус дневника Ardougne их перекрывает."
+                  "text": "**Gloves of silence** (Hunter 54): +5% success. The Ardougne diary bonus overrides them."
                 },
                 {
-                  "text": "**Набор вора (Rogue equipment)** из мини-игры Rogues' Den (с 50 воровства): полный набор всегда даёт двойную добычу. Опыта больше не становится."
+                  "text": "**The Rogue equipment** from the Rogues' Den minigame (from Thieving 50): the full set always gives double loot. XP does not increase."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Частые вопросы",
+          "title": "Frequently asked questions",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Стражник напал после кражи с прилавка?** Тебя увидел продавец или стражник. Отойди, дождись, пока отстанут, и воруй так, чтобы тебя не было видно."
+                  "text": "**A guard attacked you after stealing from a stall?** The vendor or a guard saw you. Step away, wait until they lose interest, and steal so that you are out of sight."
                 },
                 {
-                  "text": "**Кошельков слишком много?** Без дневника Ardougne в инвентаре помещается 28 кошельков, со средним — 56. Открой их, иначе кражи остановятся."
+                  "text": "**Too many pouches?** Without the Ardougne diary the inventory holds 28 pouches, with the medium one 56. Open them, or the thefts stop."
                 },
                 {
-                  "text": "**Здоровье тает?** Бери еду или ожерелья Dodgy necklace. Чем выше уровень, тем реже провалы."
+                  "text": "**Health melting away?** Take food or Dodgy necklaces. The higher the level, the rarer the failures."
                 }
               ]
             }
@@ -565,12 +565,12 @@
       ],
       "plan": {
         "head": [
-          "Код",
-          "Уровни",
-          "Что делать",
-          "Где",
-          "Опыт в час",
-          "Заметки"
+          "Code",
+          "Levels",
+          "What to do",
+          "Where",
+          "XP per hour",
+          "Notes"
         ],
         "ranges": [
           {
@@ -578,16 +578,16 @@
             "from": 1,
             "to": 5,
             "levels": "1–5",
-            "what": "Карманные кражи у мужчин и женщин (Man, Woman)",
-            "where": "Лумбридж, Draynor, Варрок",
-            "notes": "8 опыта за удачную кражу, до 5 уровня — 49 краж. Совсем без риска: взламывать дверь в East Ardougne — 3,8 опыта, провал ничем не грозит",
+            "what": "Pickpocketing men and women (Man, Woman)",
+            "where": "Lumbridge, Draynor, Varrock",
+            "notes": "8 XP per successful theft, 49 thefts up to level 5. Completely risk-free: picking the door lock in East Ardougne is 3.8 XP, and a failure threatens nothing",
             "cells": [
               "TH-1",
               "1–5",
-              "Карманные кражи у мужчин и женщин (Man, Woman)",
-              "Лумбридж, Draynor, Варрок",
+              "Pickpocketing men and women (Man, Woman)",
+              "Lumbridge, Draynor, Varrock",
               "—",
-              "8 опыта за удачную кражу, до 5 уровня — 49 краж. Совсем без риска: взламывать дверь в East Ardougne — 3,8 опыта, провал ничем не грозит"
+              "8 XP per successful theft, 49 thefts up to level 5. Completely risk-free: picking the door lock in East Ardougne is 3.8 XP, and a failure threatens nothing"
             ]
           },
           {
@@ -595,16 +595,16 @@
             "from": 5,
             "to": 25,
             "levels": "5–25",
-            "what": "Прилавок пекаря (Bakery stall)",
-            "where": "Рынок East Ardougne, восточный прилавок",
-            "notes": "16 опыта за кражу. Стой так, чтобы пекарь и стражники не видели: заметят — нападут. Пироги выбрасывай или ешь",
+            "what": "The baker's stall (Bakery stall)",
+            "where": "The East Ardougne market, the east stall",
+            "notes": "16 XP per theft. Stand so that the baker and the guards do not see: if they notice, they attack. Drop or eat the pies",
             "cells": [
               "TH-2",
               "5–25",
-              "Прилавок пекаря (Bakery stall)",
-              "Рынок East Ardougne, восточный прилавок",
-              "до 19 тыс.",
-              "16 опыта за кражу. Стой так, чтобы пекарь и стражники не видели: заметят — нападут. Пироги выбрасывай или ешь"
+              "The baker's stall (Bakery stall)",
+              "The East Ardougne market, the east stall",
+              "up to 19k",
+              "16 XP per theft. Stand so that the baker and the guards do not see: if they notice, they attack. Drop or eat the pies"
             ]
           },
           {
@@ -612,16 +612,16 @@
             "from": 25,
             "to": 50,
             "levels": "25–50",
-            "what": "Фруктовые прилавки (Fruit Stall)",
-            "where": "Hosidius, Great Kourend (корабль Veos из Port Sarim)",
-            "notes": "28,5 опыта. Лучше всего крайний восточный дом у пляжа: там два прилавка рядом и нет сторожевых собак. Фрукты выбрасывай на бегу",
+            "what": "Fruit stalls (Fruit Stall)",
+            "where": "Hosidius, Great Kourend (the Veos ship from Port Sarim)",
+            "notes": "28.5 XP. The easternmost house by the beach is best: there are two stalls side by side and no guard dogs. Drop the fruit as you run",
             "cells": [
               "TH-3",
               "25–50",
-              "Фруктовые прилавки (Fruit Stall)",
-              "Hosidius, Great Kourend (корабль Veos из Port Sarim)",
-              "34–43 тыс.",
-              "28,5 опыта. Лучше всего крайний восточный дом у пляжа: там два прилавка рядом и нет сторожевых собак. Фрукты выбрасывай на бегу"
+              "Fruit stalls (Fruit Stall)",
+              "Hosidius, Great Kourend (the Veos ship from Port Sarim)",
+              "34–43k",
+              "28.5 XP. The easternmost house by the beach is best: there are two stalls side by side and no guard dogs. Drop the fruit as you run"
             ]
           },
           {
@@ -629,16 +629,16 @@
             "from": 50,
             "to": 55,
             "levels": "50–55",
-            "what": "Кража ценностей (Stealing valuables)",
-            "where": "Civitas illa Fortis, Varlamore (квест Children of the Sun)",
-            "notes": "Спокойный метод. Сначала карманными кражами собираешь ключи от домов у богатых горожан, потом обчищаешь дома, пока хозяев нет",
+            "what": "Stealing valuables (Stealing valuables)",
+            "where": "Civitas illa Fortis, Varlamore (the quest Children of the Sun)",
+            "notes": "A calm method. First you collect house keys from rich townspeople by pickpocketing, then you clean out the houses while the owners are away",
             "cells": [
               "TH-4",
               "50–55",
-              "Кража ценностей (Stealing valuables)",
-              "Civitas illa Fortis, Varlamore (квест Children of the Sun)",
-              "~72 тыс.",
-              "Спокойный метод. Сначала карманными кражами собираешь ключи от домов у богатых горожан, потом обчищаешь дома, пока хозяев нет"
+              "Stealing valuables (Stealing valuables)",
+              "Civitas illa Fortis, Varlamore (the quest Children of the Sun)",
+              "~72k",
+              "A calm method. First you collect house keys from rich townspeople by pickpocketing, then you clean out the houses while the owners are away"
             ]
           },
           {
@@ -646,16 +646,16 @@
             "from": 55,
             "to": null,
             "levels": "55+",
-            "what": "Карманные кражи у рыцарей (Knight of Ardougne)",
-            "where": "Рынок East Ardougne",
-            "notes": "84,3 опыта. Скорость — со средним дневником Ardougne (+10% к успеху) и ожерельем Dodgy necklace. Монеты копятся в кошельках (Coin pouch) — открывай их",
+            "what": "Pickpocketing knights (Knight of Ardougne)",
+            "where": "The East Ardougne market",
+            "notes": "84.3 XP. The speed is with the Ardougne medium diary (+10% success) and a Dodgy necklace. Coins pile up in pouches (Coin pouch): open them",
             "cells": [
               "TH-5",
               "55+",
-              "Карманные кражи у рыцарей (Knight of Ardougne)",
-              "Рынок East Ardougne",
-              "86 тыс. на 55, 240 тыс. на 95",
-              "84,3 опыта. Скорость — со средним дневником Ardougne (+10% к успеху) и ожерельем Dodgy necklace. Монеты копятся в кошельках (Coin pouch) — открывай их"
+              "Pickpocketing knights (Knight of Ardougne)",
+              "The East Ardougne market",
+              "86k at 55, 240k at 95",
+              "84.3 XP. The speed is with the Ardougne medium diary (+10% success) and a Dodgy necklace. Coins pile up in pouches (Coin pouch): open them"
             ]
           }
         ],
@@ -667,222 +667,222 @@
     },
     {
       "id": "SL",
-      "title": "Истребление (Slayer)",
-      "name": "Истребление",
+      "title": "Slayer",
+      "name": "Slayer",
       "levelSkills": [
         "slayer"
       ],
       "intro": [
         {
           "t": "p",
-          "text": "Истребление — бой по заданиям. Мастер истребления (Slayer Master) даёт задание: убить определённое число монстров одного вида. Опыт истребления начисляется только за монстров из задания — примерно столько, сколько у монстра здоровья. Некоторых монстров можно бить только с нужным уровнем истребления, а против некоторых нужен особый предмет."
+          "text": "Slayer is combat by tasks. A Slayer Master gives you a task: kill a certain number of monsters of one kind. Slayer XP is awarded only for task monsters, roughly as much as the monster's health. Some monsters can be hit only with the required Slayer level, and against some you need a special item."
         }
       ],
       "sections": [
         {
-          "title": "Зачем качать",
+          "title": "Why train it",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Маршрут:** 18 для Animal Magnetism (S8-04 → S8-05). Сам квест даст ещё 1 000 опыта."
+                  "text": "**The route:** 18 for Animal Magnetism (S8-04 to S8-05). The quest itself gives another 1,000 XP."
                 },
                 {
-                  "text": "**Бой попутно:** за убийство идёт и обычный опыт атаки, силы или дальнего боя."
+                  "text": "**Combat along the way:** a kill also gives ordinary Attack, Strength or Ranged XP."
                 },
                 {
-                  "text": "**Очки истребления (Slayer reward points):** за них открывают шлем истребителя (Slayer helmet), кольцо истребления (Slayer ring) и отмену неудобных заданий."
+                  "text": "**Slayer reward points:** they unlock the Slayer helmet, the Slayer ring and cancelling inconvenient tasks."
                 },
                 {
-                  "text": "**Добыча:** с монстров истребления падают ценные вещи, например Abyssal whip с Abyssal demon (85 истребления)."
+                  "text": "**Loot:** Slayer monsters drop valuable items, for example the Abyssal whip from the Abyssal demon (Slayer 85)."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Мастера истребления",
+          "title": "Slayer masters",
           "blocks": [
             {
               "t": "table",
               "head": [
-                "Мастер",
-                "Где",
-                "Когда доступен",
-                "Очков за задание"
+                "Master",
+                "Where",
+                "When available",
+                "Points per task"
               ],
               "rows": [
                 [
                   "Turael",
-                  "Burthorpe, дом к югу от общего магазина",
-                  "С любым уровнем",
+                  "Burthorpe, the house south of the general store",
+                  "At any level",
                   "0"
                 ],
                 [
                   "Spria",
                   "Draynor Village",
-                  "После квеста A Porcine of Interest",
+                  "After the quest A Porcine of Interest",
                   "0"
                 ],
                 [
                   "Mazchna",
-                  "Canifis, северо-восток",
-                  "После Priest in Peril (S8-01) и с 20 уровня боя",
+                  "Canifis, north-east",
+                  "After Priest in Peril (S8-01) and from Combat level 20",
                   "6"
                 ],
                 [
                   "Vannaka",
                   "Edgeville Dungeon",
-                  "С 40 уровня боя",
+                  "From Combat level 40",
                   "8"
                 ],
                 [
                   "Chaeldar",
                   "Zanaris",
-                  "После Lost City (S9-01) и с 70 уровня боя",
+                  "After Lost City (S9-01) and from Combat level 70",
                   "10"
                 ],
                 [
                   "Konar quo Maten",
                   "Mount Karuulm",
-                  "С 75 уровня боя",
+                  "From Combat level 75",
                   "18"
                 ],
                 [
                   "Nieve (Steve)",
                   "Tree Gnome Stronghold",
-                  "С 85 уровня боя",
+                  "From Combat level 85",
                   "12"
                 ],
                 [
                   "Duradel",
                   "Shilo Village",
-                  "Квест Shilo Village, 100 боя и 50 истребления",
+                  "The quest Shilo Village, Combat 100 and Slayer 50",
                   "15"
                 ]
               ]
             },
             {
               "t": "p",
-              "text": "Очки начисляются с 5-го задания подряд, а квест A Porcine of Interest сразу даёт 30 очков. За каждое 10-е, 50-е, 100-е, 250-е и 1000-е задание дают больше."
+              "text": "Points are awarded from the 5th task in a row, and the quest A Porcine of Interest gives 30 points at once. Every 10th, 50th, 100th, 250th and 1000th task gives more."
             }
           ]
         },
         {
-          "title": "План прокачки",
+          "title": "Training plan",
           "blocks": [
             {
               "t": "table",
               "head": [
-                "Код",
-                "Уровни",
-                "Что делать",
-                "Где",
-                "Заметки"
+                "Code",
+                "Levels",
+                "What to do",
+                "Where",
+                "Notes"
               ],
               "rows": [
                 [
                   "SL-1",
                   "1–18",
-                  "Викторина в музее, квест A Porcine of Interest, потом задания Mazchna",
-                  "Varrock Museum (подвал); Draynor Village; Canifis",
-                  "Викторина Natural history quiz у Orlando Smith — 1 000 опыта. Короткий квест A Porcine of Interest (старт — доска объявлений в Draynor Village; нужны верёвка и нож, бой с Sourhog 37 уровня) — ещё 1 000. Это 13 уровень, до 18 хватит одного-двух заданий Mazchna"
+                  "The museum quiz, the quest A Porcine of Interest, then Mazchna's tasks",
+                  "Varrock Museum (basement); Draynor Village; Canifis",
+                  "The Natural history quiz with Orlando Smith: 1,000 XP. The short quest A Porcine of Interest (start: the notice board in Draynor Village; you need a rope and a knife, a fight with the level 37 Sourhog) another 1,000. That is level 13, and one or two of Mazchna's tasks are enough to reach 18"
                 ],
                 [
                   "SL-2",
                   "18–40",
-                  "Задания Mazchna, с 40 уровня боя — Vannaka",
+                  "Mazchna's tasks, from Combat level 40 Vannaka",
                   "Canifis; Edgeville Dungeon",
-                  "Задания крупнее (у Mazchna 30–50 монстров) и приносят очки. Предметы для заданий продают сами мастера"
+                  "Bigger tasks (Mazchna gives 30–50 monsters) and they bring points. The items for tasks are sold by the masters themselves"
                 ],
                 [
                   "SL-3",
                   "40–70",
-                  "Задания Vannaka, с 70 уровня боя — Chaeldar",
-                  "Edgeville Dungeon; Zanaris (после Lost City)",
-                  "Копи 400 очков на Slayer helmet: шлем даёт бонус против монстров из задания, собрать его нужно 55 ремесла"
+                  "Vannaka's tasks, from Combat level 70 Chaeldar",
+                  "Edgeville Dungeon; Zanaris (after Lost City)",
+                  "Save 400 points for the Slayer helmet: it gives a bonus against task monsters, and making it needs Crafting 55"
                 ],
                 [
                   "SL-4",
                   "70+",
-                  "Задания Konar, Nieve или Duradel",
+                  "Konar's, Nieve's or Duradel's tasks",
                   "Mount Karuulm; Tree Gnome Stronghold; Shilo Village",
-                  "Пушка (Dwarf multicannon, квест Dwarf Cannon) и заклинания по площади из Desert Treasure I ускоряют задания в разы. Неудобные задания отменяй за очки"
+                  "A cannon (Dwarf multicannon, the quest Dwarf Cannon) and area spells from Desert Treasure I speed tasks up many times over. Cancel inconvenient tasks for points"
                 ]
               ]
             },
             {
               "t": "p",
-              "text": "Бери задания у самого сильного мастера, которого позволяет уровень боя: его монстры дают больше опыта за задание."
+              "text": "Take tasks from the strongest master your Combat level allows: their monsters give more XP per task."
             }
           ]
         },
         {
-          "title": "Предметы для заданий",
+          "title": "Task items",
           "blocks": [
             {
               "t": "p",
-              "text": "Их продают мастера истребления (магазин Slayer Equipment):"
+              "text": "They are sold by the Slayer masters (the Slayer Equipment shop):"
             },
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Самоцвет (Enchanted gem)** — показывает, сколько монстров осталось. Первый выдают бесплатно с первым заданием, но только если до этого у тебя не было опыта истребления. Если сначала пройти викторину в музее, самоцвет придётся купить за 1 монету."
+                  "text": "**The Enchanted gem** shows how many monsters are left. The first one is given free with the first task, but only if you had no Slayer XP before. If you do the museum quiz first, you will have to buy the gem for 1 coin."
                 },
                 {
-                  "text": "**Наушники (Earmuffs)** — против Banshee (15 истребления, Slayer Tower в Morytania)."
+                  "text": "**Earmuffs** against Banshees (Slayer 15, the Slayer Tower in Morytania)."
                 },
                 {
-                  "text": "**Мешок соли (Bag of salt)** — добить Rockslug (20). **Ледяной охладитель (Ice cooler)** — добить ящериц Desert Lizard (22)."
+                  "text": "**A Bag of salt**: to finish off a Rockslug (20). **An Ice cooler**: to finish off Desert Lizards (22)."
                 },
                 {
-                  "text": "**Зеркальный щит (Mirror shield)** — против Cockatrice (25)."
+                  "text": "**A Mirror shield** against the Cockatrice (25)."
                 },
                 {
-                  "text": "**Источник света** — в Lumbridge Swamp Caves, где живут Cave bug (7) и Cave slime (17). Без света в пещере темно, и нападают насекомые."
+                  "text": "**A light source**: in the Lumbridge Swamp Caves, where Cave bugs (7) and Cave slimes (17) live. Without light it is dark in the cave, and insects attack."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Полезно знать",
+          "title": "Good to know",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Проверить задание:** правый клик по мастеру → Assignment или самоцвет в инвентаре."
+                  "text": "**Check your task:** right-click the master, Assignment, or use the gem in your inventory."
                 },
                 {
-                  "text": "**Уровень боя учитывается:** по умолчанию мастера не дают монстров намного сильнее тебя."
+                  "text": "**Combat level counts:** by default the masters do not give monsters much stronger than you."
                 },
                 {
-                  "text": "**Замена задания:** Turael может заменить задание другого мастера на своё, более лёгкое, но серия заданий обнулится, а с ней и очки за серию."
+                  "text": "**Swapping a task:** Turael can swap another master's task for one of his own, an easier one, but the task streak resets, and the streak points with it."
                 },
                 {
-                  "text": "**Монстр не получает урона?** Значит, для него нужен особый предмет или уровень истребления."
+                  "text": "**The monster takes no damage?** Then it needs a special item or a Slayer level."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Частые вопросы",
+          "title": "Frequently asked questions",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Зачем истребление, если можно просто бить монстров?** Часть монстров без задания или без уровня вообще не бьётся. Кроме того, задания дают двойной опыт — боевой и истребления."
+                  "text": "**Why Slayer, if you can just hit monsters?** Some monsters cannot be hit at all without a task or the level. Besides, tasks give double XP: combat and Slayer."
                 },
                 {
-                  "text": "**У кого брать задания для S8-04?** У Mazchna в Canifis: монстров в задании больше, и опыта тоже. У Turael задания короткие, но опыта за них мало — до 18 понадобится много заданий."
+                  "text": "**Who to take tasks from for S8-04?** From Mazchna in Canifis: there are more monsters in the task, and more XP too. Turael's tasks are short but give little XP: to get to 18 you will need many tasks."
                 },
                 {
-                  "text": "**Дорого?** Нет: предметы для первых заданий стоят недорого, основные расходы — еда."
+                  "text": "**Expensive?** No: the items for the first tasks are cheap, and the main expense is food."
                 }
               ]
             }
@@ -891,11 +891,11 @@
       ],
       "plan": {
         "head": [
-          "Код",
-          "Уровни",
-          "Что делать",
-          "Где",
-          "Заметки"
+          "Code",
+          "Levels",
+          "What to do",
+          "Where",
+          "Notes"
         ],
         "ranges": [
           {
@@ -903,15 +903,15 @@
             "from": 1,
             "to": 18,
             "levels": "1–18",
-            "what": "Викторина в музее, квест A Porcine of Interest, потом задания Mazchna",
-            "where": "Varrock Museum (подвал); Draynor Village; Canifis",
-            "notes": "Викторина Natural history quiz у Orlando Smith — 1 000 опыта. Короткий квест A Porcine of Interest (старт — доска объявлений в Draynor Village; нужны верёвка и нож, бой с Sourhog 37 уровня) — ещё 1 000. Это 13 уровень, до 18 хватит одного-двух заданий Mazchna",
+            "what": "The museum quiz, the quest A Porcine of Interest, then Mazchna's tasks",
+            "where": "Varrock Museum (basement); Draynor Village; Canifis",
+            "notes": "The Natural history quiz with Orlando Smith: 1,000 XP. The short quest A Porcine of Interest (start: the notice board in Draynor Village; you need a rope and a knife, a fight with the level 37 Sourhog) another 1,000. That is level 13, and one or two of Mazchna's tasks are enough to reach 18",
             "cells": [
               "SL-1",
               "1–18",
-              "Викторина в музее, квест A Porcine of Interest, потом задания Mazchna",
-              "Varrock Museum (подвал); Draynor Village; Canifis",
-              "Викторина Natural history quiz у Orlando Smith — 1 000 опыта. Короткий квест A Porcine of Interest (старт — доска объявлений в Draynor Village; нужны верёвка и нож, бой с Sourhog 37 уровня) — ещё 1 000. Это 13 уровень, до 18 хватит одного-двух заданий Mazchna"
+              "The museum quiz, the quest A Porcine of Interest, then Mazchna's tasks",
+              "Varrock Museum (basement); Draynor Village; Canifis",
+              "The Natural history quiz with Orlando Smith: 1,000 XP. The short quest A Porcine of Interest (start: the notice board in Draynor Village; you need a rope and a knife, a fight with the level 37 Sourhog) another 1,000. That is level 13, and one or two of Mazchna's tasks are enough to reach 18"
             ]
           },
           {
@@ -919,15 +919,15 @@
             "from": 18,
             "to": 40,
             "levels": "18–40",
-            "what": "Задания Mazchna, с 40 уровня боя — Vannaka",
+            "what": "Mazchna's tasks, from Combat level 40 Vannaka",
             "where": "Canifis; Edgeville Dungeon",
-            "notes": "Задания крупнее (у Mazchna 30–50 монстров) и приносят очки. Предметы для заданий продают сами мастера",
+            "notes": "Bigger tasks (Mazchna gives 30–50 monsters) and they bring points. The items for tasks are sold by the masters themselves",
             "cells": [
               "SL-2",
               "18–40",
-              "Задания Mazchna, с 40 уровня боя — Vannaka",
+              "Mazchna's tasks, from Combat level 40 Vannaka",
               "Canifis; Edgeville Dungeon",
-              "Задания крупнее (у Mazchna 30–50 монстров) и приносят очки. Предметы для заданий продают сами мастера"
+              "Bigger tasks (Mazchna gives 30–50 monsters) and they bring points. The items for tasks are sold by the masters themselves"
             ]
           },
           {
@@ -935,15 +935,15 @@
             "from": 40,
             "to": 70,
             "levels": "40–70",
-            "what": "Задания Vannaka, с 70 уровня боя — Chaeldar",
-            "where": "Edgeville Dungeon; Zanaris (после Lost City)",
-            "notes": "Копи 400 очков на Slayer helmet: шлем даёт бонус против монстров из задания, собрать его нужно 55 ремесла",
+            "what": "Vannaka's tasks, from Combat level 70 Chaeldar",
+            "where": "Edgeville Dungeon; Zanaris (after Lost City)",
+            "notes": "Save 400 points for the Slayer helmet: it gives a bonus against task monsters, and making it needs Crafting 55",
             "cells": [
               "SL-3",
               "40–70",
-              "Задания Vannaka, с 70 уровня боя — Chaeldar",
-              "Edgeville Dungeon; Zanaris (после Lost City)",
-              "Копи 400 очков на Slayer helmet: шлем даёт бонус против монстров из задания, собрать его нужно 55 ремесла"
+              "Vannaka's tasks, from Combat level 70 Chaeldar",
+              "Edgeville Dungeon; Zanaris (after Lost City)",
+              "Save 400 points for the Slayer helmet: it gives a bonus against task monsters, and making it needs Crafting 55"
             ]
           },
           {
@@ -951,15 +951,15 @@
             "from": 70,
             "to": null,
             "levels": "70+",
-            "what": "Задания Konar, Nieve или Duradel",
+            "what": "Konar's, Nieve's or Duradel's tasks",
             "where": "Mount Karuulm; Tree Gnome Stronghold; Shilo Village",
-            "notes": "Пушка (Dwarf multicannon, квест Dwarf Cannon) и заклинания по площади из Desert Treasure I ускоряют задания в разы. Неудобные задания отменяй за очки",
+            "notes": "A cannon (Dwarf multicannon, the quest Dwarf Cannon) and area spells from Desert Treasure I speed tasks up many times over. Cancel inconvenient tasks for points",
             "cells": [
               "SL-4",
               "70+",
-              "Задания Konar, Nieve или Duradel",
+              "Konar's, Nieve's or Duradel's tasks",
               "Mount Karuulm; Tree Gnome Stronghold; Shilo Village",
-              "Пушка (Dwarf multicannon, квест Dwarf Cannon) и заклинания по площади из Desert Treasure I ускоряют задания в разы. Неудобные задания отменяй за очки"
+              "A cannon (Dwarf multicannon, the quest Dwarf Cannon) and area spells from Desert Treasure I speed tasks up many times over. Cancel inconvenient tasks for points"
             ]
           }
         ],
@@ -971,134 +971,134 @@
     },
     {
       "id": "FA",
-      "title": "Фермерство (Farming)",
-      "name": "Фермерство",
+      "title": "Farming",
+      "name": "Farming",
       "levelSkills": [
         "farming"
       ],
       "intro": [
         {
           "t": "p",
-          "text": "Фермерство — посадки на грядках по всему миру. Растения растут в реальном времени, даже когда ты не в игре. Опыт дают посадка, проверка здоровья выросшего дерева и сбор урожая. Главный метод — забеги по деревьям (tree runs): обход всех грядок занимает 5–10 минут раз-два в день, а в остальное время качаешь другое."
+          "text": "Farming is planting in patches all around the world. Plants grow in real time, even when you are not in the game. XP comes from planting, checking the health of a grown tree and harvesting. The main method is tree runs: going round all the patches takes 5–10 minutes once or twice a day, and the rest of the time you train something else."
         }
       ],
       "sections": [
         {
-          "title": "Зачем качать",
+          "title": "Why train it",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Маршрут:** Fairytale I (S9-02) даст 3 500 опыта — сразу 17 уровень."
+                  "text": "**The route:** Fairytale I (S9-02) gives 3,500 XP, level 17 at once."
                 },
                 {
-                  "text": "**Fairytale II** целиком требует фермерство 49 (на маршруте только вступление, S9-03)."
+                  "text": "**Fairytale II** in full requires Farming 49 (the route has only the start, S9-03)."
                 },
                 {
-                  "text": "**Травы:** сам выращиваешь травы для травничества или на продажу."
+                  "text": "**Herbs:** you grow herbs yourself for Herblore or to sell."
                 },
                 {
-                  "text": "**Пассивный опыт:** деревья растут сами — лучший навык «между делом»."
+                  "text": "**Passive XP:** the trees grow by themselves: the best skill \"in between\"."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Инструменты и защита",
+          "title": "Tools and protection",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Инструменты:** грабли (Rake), сажалка (Seed dibber), лопата (Spade), лейка (Watering can), садовый совок (Gardening trowel) для саженцев. Их можно оставить на хранение у Tool Leprechaun — он стоит у каждой группы грядок."
+                  "text": "**Tools:** a rake (Rake), a seed dibber (Seed dibber), a spade (Spade), a watering can (Watering can), a gardening trowel (Gardening trowel) for saplings. You can leave them with the Tool Leprechaun: he stands by every group of patches."
                 },
                 {
-                  "text": "**Саженец** получается так: семя в горшок с землёй (совок в инвентаре), полить из лейки и подождать. Саженцы растут и в банке."
+                  "text": "**A sapling** is made like this: a seed in a pot of soil (with a trowel in your inventory), water it from a can and wait. Saplings grow in the bank too."
                 },
                 {
-                  "text": "**Компост** (Compost, Supercompost, Ultracompost) снижает риск болезни и повышает урожай."
+                  "text": "**Compost** (Compost, Supercompost, Ultracompost) lowers the risk of disease and raises the yield."
                 },
                 {
-                  "text": "**Садовник у грядки** за плату — корзину фруктов, мешок овощей и т. п. — присмотрит за посадкой, и она не погибнет. За плату он же срубит выросшее дерево."
+                  "text": "**A gardener at a patch** for a fee (a basket of fruit, a sack of vegetables and so on) looks after the planting so it does not die. For a fee he will also chop down a grown tree."
                 }
               ]
             }
           ]
         },
         {
-          "title": "План прокачки",
+          "title": "Training plan",
           "blocks": [
             {
               "t": "table",
               "head": [
-                "Код",
-                "Уровни",
-                "Что сажать",
-                "Где",
-                "Опыт",
-                "Заметки"
+                "Code",
+                "Levels",
+                "What to plant",
+                "Where",
+                "XP",
+                "Notes"
               ],
               "rows": [
                 [
                   "FA-1",
                   "1–15",
-                  "Овощи: картофель (1), лук (5), капуста (7), помидоры (12); травы: гуам (9), марентилл (14)",
-                  "Грядки к югу от Фаладора, у Catherby, к северу от East Ardougne, у Port Phasmatys (после Priest in Peril)",
-                  "9–14 за каждый собранный овощ",
-                  "Овощи растут 40 минут. После Fairytale I (S9-02) эти уровни уже будут"
+                  "Vegetables: potato (1), onion (5), cabbage (7), tomato (12); herbs: guam (9), marrentill (14)",
+                  "The patches south of Falador, by Catherby, north of East Ardougne, by Port Phasmatys (after Priest in Peril)",
+                  "9–14 for each vegetable harvested",
+                  "Vegetables grow in 40 minutes. After Fairytale I (S9-02) you will already have these levels"
                 ],
                 [
                   "FA-2",
                   "15–27",
-                  "Дубы (Acorn)",
-                  "Грядки для деревьев: Лумбридж (к западу от замка), Варрок (у замка), Falador Park, Taverley, Tree Gnome Stronghold",
-                  "481 за дерево",
-                  "Растёт 2 часа 40 минут. Плата садовнику — корзина помидоров"
+                  "Oaks (Acorn)",
+                  "Tree patches: Lumbridge (west of the castle), Varrock (by the castle), Falador Park, Taverley, the Tree Gnome Stronghold",
+                  "481 per tree",
+                  "It grows in 2 hours 40 minutes. The gardener's fee is a basket of tomatoes"
                 ],
                 [
                   "FA-3",
                   "27–45",
-                  "Фруктовые деревья: яблоня (27), банан (33), апельсин (39), карри (42); с 30 — ивы",
-                  "Грядки для фруктовых деревьев: Tree Gnome Stronghold, Catherby, Tree Gnome Village, Brimhaven; ивы — в грядках для деревьев",
-                  "1 272–3 037 за фруктовое дерево, 1 481 за иву",
-                  "Фруктовое дерево растёт 16 часов — сажай раз в день"
+                  "Fruit trees: apple (27), banana (33), orange (39), curry (42); willows from 30",
+                  "Fruit tree patches: the Tree Gnome Stronghold, Catherby, Tree Gnome Village, Brimhaven; willows in the tree patches",
+                  "1,272–3,037 per fruit tree, 1,481 per willow",
+                  "A fruit tree grows in 16 hours: plant once a day"
                 ],
                 [
                   "FA-4",
                   "45–60",
-                  "Клёны (45); ананас (51), папайя (57); твёрдые породы: тик (35), красное дерево (55)",
-                  "Те же грядки; твёрдые породы — на Fossil Island (квест Bone Voyage)",
-                  "3 448 за клён, 4 792–6 380 за фруктовое дерево",
-                  "С 45 открывается Farming Guild в Kebos Lowlands"
+                  "Maples (45); pineapple (51), papaya (57); hardwoods: teak (35), mahogany (55)",
+                  "The same patches; hardwoods on Fossil Island (the quest Bone Voyage)",
+                  "3,448 per maple, 4,792–6,380 per fruit tree",
+                  "From 45 the Farming Guild opens in the Kebos Lowlands"
                 ],
                 [
                   "FA-5",
                   "60–75",
-                  "Тисы (60), пальмы (68), калькват (72)",
-                  "Все грядки; калькват — в Tai Bwo Wannai на Karamja",
-                  "7 151 за тис, 10 510 за пальму",
-                  "В зависимости от цен пальмы и дальше бывают выгоднее драконьего фрукта"
+                  "Yews (60), palms (68), calquat (72)",
+                  "All the patches; calquat in Tai Bwo Wannai on Karamja",
+                  "7,151 per yew, 10,510 per palm",
+                  "Depending on prices, palms and beyond are sometimes better than the dragonfruit"
                 ],
                 [
                   "FA-6",
                   "75+",
-                  "Волшебные деревья (75), драконий фрукт (81); особые: кристальное дерево (74), celastrus (85), redwood (90)",
-                  "Все грядки",
-                  "13 914 за волшебное дерево, 17 895 за драконий фрукт",
-                  "Забег по 6 волшебным, 6 драконьим, кальквату и celastrus — около 216 тыс. опыта за 5 минут"
+                  "Magic trees (75), dragonfruit (81); special: the crystal tree (74), celastrus (85), redwood (90)",
+                  "All the patches",
+                  "13,914 per magic tree, 17,895 per dragonfruit",
+                  "A run of 6 magic trees, 6 dragonfruit, the calquat and the celastrus is about 216k XP in 5 minutes"
                 ]
               ]
             },
             {
               "t": "p",
-              "text": "Забеги по деревьям — самый быстрый путь: если в день их делать один-два, 99 выходит примерно за 3–4 месяца. Саженцы и плата садовникам стоят денег, поэтому нужен источник дохода."
+              "text": "Tree runs are the fastest way: if you do one or two a day, 99 comes in about 3–4 months. Saplings and the gardeners' fees cost money, so you need a source of income."
             }
           ]
         },
         {
-          "title": "Квесты с опытом фермерства",
+          "title": "Quests with Farming XP",
           "blocks": [
             {
               "t": "ul",
@@ -1107,51 +1107,51 @@
                   "text": "**Fairytale I - Growing Pains** (S9-02) — 3 500."
                 },
                 {
-                  "text": "**Forgettable Tale...** (17) — 5 000, **The Garden of Death** (20) — 10 000, **Garden of Tranquillity** (25) — 5 000, **My Arm's Big Adventure** (29) — 5 000, **Enlightened Journey** (30) — 3 000, подквест Recipe for Disaster с гоблинами — 1 000."
+                  "text": "**Forgettable Tale...** (17): 5,000, **The Garden of Death** (20): 10,000, **Garden of Tranquillity** (25): 5,000, **My Arm's Big Adventure** (29): 5,000, **Enlightened Journey** (30): 3,000, the Recipe for Disaster subquest with the goblins: 1,000."
                 },
                 {
-                  "text": "Вместе — 32 500 опыта, это 38 уровень."
+                  "text": "Together that is 32,500 XP, level 38."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Травы (herb runs)",
+          "title": "Herbs (herb runs)",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "Травы растут 80 минут. Сразу доступны три грядки для трав: у Фаладора, Catherby и Ardougne. Ещё одна в Morytania — после Priest in Peril."
+                  "text": "Herbs grow in 80 minutes. Three herb patches are available at once: by Falador, Catherby and Ardougne. One more in Morytania after Priest in Peril."
                 },
                 {
-                  "text": "Всегда клади ультракомпост: риск болезни меньше, урожай больше."
+                  "text": "Always put in ultracompost: the disease risk is lower and the yield is bigger."
                 },
                 {
-                  "text": "Уровни трав: гуам 9, марентилл 14, тарромин 19, харралендер 26, ранарр 32, тоадфлакс 38, ирит 44, авантое 50, квуарм 56, снэпдрагон 62, кадантин 67, лантадайм 73, дварф вид 79, торстол 85."
+                  "text": "The herb levels: guam 9, marrentill 14, tarromin 19, harralander 26, ranarr 32, toadflax 38, irit 44, avantoe 50, kwuarm 56, snapdragon 62, cadantine 67, lantadyme 73, dwarf weed 79, torstol 85."
                 },
                 {
-                  "text": "Забег по травам — в первую очередь заработок. Опыта больше дают деревья."
+                  "text": "A herb run is first of all earnings. The trees give more XP."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Частые вопросы",
+          "title": "Frequently asked questions",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Растение погибло?** Оно заболело, а ты не успел вылечить. Плати садовнику — тогда посадка не погибнет."
+                  "text": "**The plant died?** It fell ill and you did not manage to cure it. Pay the gardener: then the planting will not die."
                 },
                 {
-                  "text": "**Нужно ли стоять и ждать?** Нет. Посадил — ушёл, вернулся, когда выросло. Время роста идёт и без тебя."
+                  "text": "**Do you need to stand and wait?** No. You plant, leave, and come back when it has grown. The growth time runs without you."
                 },
                 {
-                  "text": "**Tithe Farm** в Hosidius (с 34 фермерства) — мини-игра, за которую дают набор фермера (Farmer's outfit): он добавляет опыт фермерства."
+                  "text": "**The Tithe Farm** in Hosidius (from Farming 34) is a minigame that gives the Farmer's outfit: it adds Farming XP."
                 }
               ]
             }
@@ -1160,12 +1160,12 @@
       ],
       "plan": {
         "head": [
-          "Код",
-          "Уровни",
-          "Что сажать",
-          "Где",
-          "Опыт",
-          "Заметки"
+          "Code",
+          "Levels",
+          "What to plant",
+          "Where",
+          "XP",
+          "Notes"
         ],
         "ranges": [
           {
@@ -1173,16 +1173,16 @@
             "from": 1,
             "to": 15,
             "levels": "1–15",
-            "what": "Овощи: картофель (1), лук (5), капуста (7), помидоры (12); травы: гуам (9), марентилл (14)",
-            "where": "Грядки к югу от Фаладора, у Catherby, к северу от East Ardougne, у Port Phasmatys (после Priest in Peril)",
-            "notes": "Овощи растут 40 минут. После Fairytale I (S9-02) эти уровни уже будут",
+            "what": "Vegetables: potato (1), onion (5), cabbage (7), tomato (12); herbs: guam (9), marrentill (14)",
+            "where": "The patches south of Falador, by Catherby, north of East Ardougne, by Port Phasmatys (after Priest in Peril)",
+            "notes": "Vegetables grow in 40 minutes. After Fairytale I (S9-02) you will already have these levels",
             "cells": [
               "FA-1",
               "1–15",
-              "Овощи: картофель (1), лук (5), капуста (7), помидоры (12); травы: гуам (9), марентилл (14)",
-              "Грядки к югу от Фаладора, у Catherby, к северу от East Ardougne, у Port Phasmatys (после Priest in Peril)",
-              "9–14 за каждый собранный овощ",
-              "Овощи растут 40 минут. После Fairytale I (S9-02) эти уровни уже будут"
+              "Vegetables: potato (1), onion (5), cabbage (7), tomato (12); herbs: guam (9), marrentill (14)",
+              "The patches south of Falador, by Catherby, north of East Ardougne, by Port Phasmatys (after Priest in Peril)",
+              "9–14 for each vegetable harvested",
+              "Vegetables grow in 40 minutes. After Fairytale I (S9-02) you will already have these levels"
             ]
           },
           {
@@ -1190,16 +1190,16 @@
             "from": 15,
             "to": 27,
             "levels": "15–27",
-            "what": "Дубы (Acorn)",
-            "where": "Грядки для деревьев: Лумбридж (к западу от замка), Варрок (у замка), Falador Park, Taverley, Tree Gnome Stronghold",
-            "notes": "Растёт 2 часа 40 минут. Плата садовнику — корзина помидоров",
+            "what": "Oaks (Acorn)",
+            "where": "Tree patches: Lumbridge (west of the castle), Varrock (by the castle), Falador Park, Taverley, the Tree Gnome Stronghold",
+            "notes": "It grows in 2 hours 40 minutes. The gardener's fee is a basket of tomatoes",
             "cells": [
               "FA-2",
               "15–27",
-              "Дубы (Acorn)",
-              "Грядки для деревьев: Лумбридж (к западу от замка), Варрок (у замка), Falador Park, Taverley, Tree Gnome Stronghold",
-              "481 за дерево",
-              "Растёт 2 часа 40 минут. Плата садовнику — корзина помидоров"
+              "Oaks (Acorn)",
+              "Tree patches: Lumbridge (west of the castle), Varrock (by the castle), Falador Park, Taverley, the Tree Gnome Stronghold",
+              "481 per tree",
+              "It grows in 2 hours 40 minutes. The gardener's fee is a basket of tomatoes"
             ]
           },
           {
@@ -1207,16 +1207,16 @@
             "from": 27,
             "to": 45,
             "levels": "27–45",
-            "what": "Фруктовые деревья: яблоня (27), банан (33), апельсин (39), карри (42); с 30 — ивы",
-            "where": "Грядки для фруктовых деревьев: Tree Gnome Stronghold, Catherby, Tree Gnome Village, Brimhaven; ивы — в грядках для деревьев",
-            "notes": "Фруктовое дерево растёт 16 часов — сажай раз в день",
+            "what": "Fruit trees: apple (27), banana (33), orange (39), curry (42); willows from 30",
+            "where": "Fruit tree patches: the Tree Gnome Stronghold, Catherby, Tree Gnome Village, Brimhaven; willows in the tree patches",
+            "notes": "A fruit tree grows in 16 hours: plant once a day",
             "cells": [
               "FA-3",
               "27–45",
-              "Фруктовые деревья: яблоня (27), банан (33), апельсин (39), карри (42); с 30 — ивы",
-              "Грядки для фруктовых деревьев: Tree Gnome Stronghold, Catherby, Tree Gnome Village, Brimhaven; ивы — в грядках для деревьев",
-              "1 272–3 037 за фруктовое дерево, 1 481 за иву",
-              "Фруктовое дерево растёт 16 часов — сажай раз в день"
+              "Fruit trees: apple (27), banana (33), orange (39), curry (42); willows from 30",
+              "Fruit tree patches: the Tree Gnome Stronghold, Catherby, Tree Gnome Village, Brimhaven; willows in the tree patches",
+              "1,272–3,037 per fruit tree, 1,481 per willow",
+              "A fruit tree grows in 16 hours: plant once a day"
             ]
           },
           {
@@ -1224,16 +1224,16 @@
             "from": 45,
             "to": 60,
             "levels": "45–60",
-            "what": "Клёны (45); ананас (51), папайя (57); твёрдые породы: тик (35), красное дерево (55)",
-            "where": "Те же грядки; твёрдые породы — на Fossil Island (квест Bone Voyage)",
-            "notes": "С 45 открывается Farming Guild в Kebos Lowlands",
+            "what": "Maples (45); pineapple (51), papaya (57); hardwoods: teak (35), mahogany (55)",
+            "where": "The same patches; hardwoods on Fossil Island (the quest Bone Voyage)",
+            "notes": "From 45 the Farming Guild opens in the Kebos Lowlands",
             "cells": [
               "FA-4",
               "45–60",
-              "Клёны (45); ананас (51), папайя (57); твёрдые породы: тик (35), красное дерево (55)",
-              "Те же грядки; твёрдые породы — на Fossil Island (квест Bone Voyage)",
-              "3 448 за клён, 4 792–6 380 за фруктовое дерево",
-              "С 45 открывается Farming Guild в Kebos Lowlands"
+              "Maples (45); pineapple (51), papaya (57); hardwoods: teak (35), mahogany (55)",
+              "The same patches; hardwoods on Fossil Island (the quest Bone Voyage)",
+              "3,448 per maple, 4,792–6,380 per fruit tree",
+              "From 45 the Farming Guild opens in the Kebos Lowlands"
             ]
           },
           {
@@ -1241,16 +1241,16 @@
             "from": 60,
             "to": 75,
             "levels": "60–75",
-            "what": "Тисы (60), пальмы (68), калькват (72)",
-            "where": "Все грядки; калькват — в Tai Bwo Wannai на Karamja",
-            "notes": "В зависимости от цен пальмы и дальше бывают выгоднее драконьего фрукта",
+            "what": "Yews (60), palms (68), calquat (72)",
+            "where": "All the patches; calquat in Tai Bwo Wannai on Karamja",
+            "notes": "Depending on prices, palms and beyond are sometimes better than the dragonfruit",
             "cells": [
               "FA-5",
               "60–75",
-              "Тисы (60), пальмы (68), калькват (72)",
-              "Все грядки; калькват — в Tai Bwo Wannai на Karamja",
-              "7 151 за тис, 10 510 за пальму",
-              "В зависимости от цен пальмы и дальше бывают выгоднее драконьего фрукта"
+              "Yews (60), palms (68), calquat (72)",
+              "All the patches; calquat in Tai Bwo Wannai on Karamja",
+              "7,151 per yew, 10,510 per palm",
+              "Depending on prices, palms and beyond are sometimes better than the dragonfruit"
             ]
           },
           {
@@ -1258,16 +1258,16 @@
             "from": 75,
             "to": null,
             "levels": "75+",
-            "what": "Волшебные деревья (75), драконий фрукт (81); особые: кристальное дерево (74), celastrus (85), redwood (90)",
-            "where": "Все грядки",
-            "notes": "Забег по 6 волшебным, 6 драконьим, кальквату и celastrus — около 216 тыс. опыта за 5 минут",
+            "what": "Magic trees (75), dragonfruit (81); special: the crystal tree (74), celastrus (85), redwood (90)",
+            "where": "All the patches",
+            "notes": "A run of 6 magic trees, 6 dragonfruit, the calquat and the celastrus is about 216k XP in 5 minutes",
             "cells": [
               "FA-6",
               "75+",
-              "Волшебные деревья (75), драконий фрукт (81); особые: кристальное дерево (74), celastrus (85), redwood (90)",
-              "Все грядки",
-              "13 914 за волшебное дерево, 17 895 за драконий фрукт",
-              "Забег по 6 волшебным, 6 драконьим, кальквату и celastrus — около 216 тыс. опыта за 5 минут"
+              "Magic trees (75), dragonfruit (81); special: the crystal tree (74), celastrus (85), redwood (90)",
+              "All the patches",
+              "13,914 per magic tree, 17,895 per dragonfruit",
+              "A run of 6 magic trees, 6 dragonfruit, the calquat and the celastrus is about 216k XP in 5 minutes"
             ]
           }
         ],
@@ -1279,84 +1279,84 @@
     },
     {
       "id": "HE",
-      "title": "Травничество (Herblore)",
-      "name": "Травничество",
+      "title": "Herblore",
+      "name": "Herblore",
       "levelSkills": [
         "herblore"
       ],
       "intro": [
         {
           "t": "p",
-          "text": "Травничество — варка зелий. Трава (Herb) и флакон воды (Vial of water) дают незаконченное зелье (Unfinished potion), к нему добавляется второй ингредиент. Зелья усиливают бой, восстанавливают молитву и энергию бега. Навык почти целиком покупается: опыт идёт за ингредиенты с Grand Exchange."
+          "text": "Herblore is brewing potions. A herb (Herb) and a vial of water (Vial of water) give an unfinished potion (Unfinished potion), to which a second ingredient is added. Potions boost combat and restore Prayer and run energy. The skill is almost entirely bought: XP comes from ingredients from the Grand Exchange."
         }
       ],
       "sections": [
         {
-          "title": "Зачем качать",
+          "title": "Why train it",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Зелья для боя:** молитвенные (Prayer potion, 38), суперзелья атаки, силы и защиты, восстановление (Super restore, 63)."
+                  "text": "**Combat potions:** Prayer potion (38), super attack, strength and defence, restoration (Super restore, 63)."
                 },
                 {
-                  "text": "**Энергия бега:** Energy potion (26), Super energy (52), Stamina potion (77)."
+                  "text": "**Run energy:** Energy potion (26), Super energy (52), Stamina potion (77)."
                 },
                 {
-                  "text": "**Fairytale II** целиком требует травничество 57."
+                  "text": "**Fairytale II** in full requires Herblore 57."
                 },
                 {
-                  "text": "**Маршрут** травничество не требует."
+                  "text": "The route does not require **Herblore**."
                 }
               ]
             }
           ]
         },
         {
-          "title": "С чего начать: Druidic Ritual",
+          "title": "Where to start: Druidic Ritual",
           "blocks": [
             {
               "t": "p",
-              "text": "Без этого квеста травничество не качается вообще."
+              "text": "Without this quest Herblore cannot be trained at all."
             },
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "Квест начинает Kaqemeex в каменном круге к северу от Taverley."
+                  "text": "The quest is started by Kaqemeex at the stone circle north of Taverley."
                 },
                 {
-                  "text": "Нужно сырое мясо: медвежатина (Raw bear meat), крысятина (Raw rat meat), говядина (Raw beef) и курица (Raw chicken). Мясо окунаешь в котёл Cauldron of Thunder в Taverley Dungeon."
+                  "text": "You need raw meat: bear meat (Raw bear meat), rat meat (Raw rat meat), beef (Raw beef) and chicken (Raw chicken). You dip the meat into the Cauldron of Thunder in Taverley Dungeon."
                 },
                 {
-                  "text": "Награда — 250 опыта, сразу 3 уровень, и 4 очка квестов."
+                  "text": "The reward is 250 XP, level 3 at once, and 4 quest points."
                 }
               ]
             }
           ]
         },
         {
-          "title": "План прокачки",
+          "title": "Training plan",
           "blocks": [
             {
               "t": "table",
               "head": [
-                "Код",
-                "Уровни",
-                "Какое зелье",
-                "Из чего",
-                "Опыт за зелье",
-                "Заметки"
+                "Code",
+                "Levels",
+                "Which potion",
+                "From what",
+                "XP per potion",
+                "Notes"
               ],
               "rows": [
                 [
                   "HE-1",
                   "1–3",
-                  "Квест Druidic Ritual",
-                  "Сырое мясо четырёх видов",
-                  "250 за квест",
-                  "Без квеста навык закрыт"
+                  "The quest Druidic Ritual",
+                  "Four kinds of raw meat",
+                  "250 for the quest",
+                  "Without the quest the skill is closed"
                 ],
                 [
                   "HE-2",
@@ -1364,7 +1364,7 @@
                   "Attack potion",
                   "Guam leaf + Eye of newt",
                   "25",
-                  "Квесты Jungle Potion, Recruitment Drive и The Dig Site поднимут с 3 сразу до 19"
+                  "The quests Jungle Potion, Recruitment Drive and The Dig Site take you from 3 straight to 19"
                 ],
                 [
                   "HE-3",
@@ -1385,10 +1385,10 @@
                 [
                   "HE-5",
                   "26–38",
-                  "Energy potion, с 36 — Combat potion",
-                  "Harralander + Chocolate dust или Goat horn dust",
+                  "Energy potion, from 36 Combat potion",
+                  "Harralander + Chocolate dust or Goat horn dust",
                   "67,5 / 84",
-                  "Шоколадную пыль делают из шоколада пестиком (Pestle and mortar)"
+                  "Chocolate dust is made from chocolate with a pestle and mortar (Pestle and mortar)"
                 ],
                 [
                   "HE-6",
@@ -1396,13 +1396,13 @@
                   "Prayer potion",
                   "Ranarr weed + Snape grass",
                   "87,5",
-                  "Самое нужное зелье для боя: хорошо продаётся"
+                  "The most needed combat potion: it sells well"
                 ],
                 [
                   "HE-7",
                   "45–55",
-                  "Super attack, с 52 — Super energy",
-                  "Irit leaf + Eye of newt или Avantoe + Mort myre fungus",
+                  "Super attack, from 52 Super energy",
+                  "Irit leaf + Eye of newt or Avantoe + Mort myre fungus",
                   "100 / 117,5",
                   ""
                 ],
@@ -1417,37 +1417,37 @@
                 [
                   "HE-9",
                   "63–72",
-                  "Super restore, с 66 — Super defence",
-                  "Snapdragon + Red spiders' eggs или Cadantine + White berries",
+                  "Super restore, from 66 Super defence",
+                  "Snapdragon + Red spiders' eggs or Cadantine + White berries",
                   "142,5 / 150",
                   ""
                 ],
                 [
                   "HE-10",
                   "72–81",
-                  "Ranging potion, с 78 — Zamorak brew",
-                  "Dwarf weed + Wine of zamorak или Torstol + Jangerberries",
+                  "Ranging potion, from 78 Zamorak brew",
+                  "Dwarf weed + Wine of zamorak or Torstol + Jangerberries",
                   "162,5 / 175",
                   ""
                 ],
                 [
                   "HE-11",
                   "81+",
-                  "Saradomin brew, с 90 — Super combat potion",
-                  "Toadflax + Crushed nest или Torstol + три суперзелья",
+                  "Saradomin brew, from 90 Super combat potion",
+                  "Toadflax + Crushed nest or Torstol + three super potions",
                   "180 / 150",
-                  "С 60 и квестом Children of the Sun есть мини-игра Mastering Mixology: больше опыта за каждую траву"
+                  "From 60 and with the quest Children of the Sun there is the Mastering Mixology minigame: more XP for every herb"
                 ]
               ]
             },
             {
               "t": "p",
-              "text": "Скорость — около 2 500 зелий в час, если добавлять второй ингредиент к готовым незаконченным зельям: например, Prayer potion дают около 219 тыс. опыта в час. Незаконченное зелье опыта не даёт, поэтому из чистых трав выйдет медленнее."
+              "text": "The speed is about 2,500 potions an hour if you add the second ingredient to ready unfinished potions: for example, a Prayer potion gives about 219k XP an hour. An unfinished potion gives no XP, so it comes out slower from clean herbs."
             }
           ]
         },
         {
-          "title": "Квесты с опытом травничества",
+          "title": "Quests with Herblore XP",
           "blocks": [
             {
               "t": "ul",
@@ -1456,48 +1456,48 @@
                   "text": "**Druidic Ritual** — 250."
                 },
                 {
-                  "text": "**Jungle Potion** (3) — 775, **Recruitment Drive** — 1 000, **The Dig Site** (10) — 2 000. С Druidic Ritual — 19 уровень."
+                  "text": "**Jungle Potion** (3): 775, **Recruitment Drive**: 1,000, **The Dig Site** (10): 2,000. With Druidic Ritual that is level 19."
                 },
                 {
-                  "text": "Дальше: **Zogre Flesh Eaters** (8) — 2 000, **Shades of Mort'ton** (15) — 2 000, **Heroes' Quest** (25) — 1 325, **Eadgar's Ruse** (31) — 11 000."
+                  "text": "Further on: **Zogre Flesh Eaters** (8): 2,000, **Shades of Mort'ton** (15): 2,000, **Heroes' Quest** (25): 1,325, **Eadgar's Ruse** (31): 11,000."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Полезно знать",
+          "title": "Good to know",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Грязные травы (Grimy)** сначала чистят (Clean) — это тоже опыт, медленный, но прибыльный."
+                  "text": "**Grimy herbs (Grimy)** are cleaned first (Clean): that is XP too, slow but profitable."
                 },
                 {
-                  "text": "**Флаконы с водой, глаз тритона и пестик** продаёт Jatix в Taverley."
+                  "text": "**Vials of water, eye of newt and a pestle** are sold by Jatix in Taverley."
                 },
                 {
-                  "text": "**Ожерелье Amulet of chemistry** даёт шанс сварить зелье на 4 дозы вместо 3."
+                  "text": "**The Amulet of chemistry** gives a chance to brew a 4-dose potion instead of a 3-dose one."
                 },
                 {
-                  "text": "**Переливать зелья** в 4 дозы бесплатно помогает Bob Barter у Grand Exchange."
+                  "text": "**Pouring potions** into 4 doses for free is done by Bob Barter by the Grand Exchange."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Частые вопросы",
+          "title": "Frequently asked questions",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Дорого?** Да: травничество — один из самых дорогих навыков. Дешевле варить то, что сам будешь пить, например молитвенные зелья для боя."
+                  "text": "**Expensive?** Yes: Herblore is one of the most expensive skills. It is cheaper to brew what you will drink yourself, for example Prayer potions for combat."
                 },
                 {
-                  "text": "**Где брать травы?** На Grand Exchange или со своих грядок (см. «Фермерство»)."
+                  "text": "**Where do I get herbs?** On the Grand Exchange or from your own patches (see \"Farming\")."
                 }
               ]
             }
@@ -1506,12 +1506,12 @@
       ],
       "plan": {
         "head": [
-          "Код",
-          "Уровни",
-          "Какое зелье",
-          "Из чего",
-          "Опыт за зелье",
-          "Заметки"
+          "Code",
+          "Levels",
+          "Which potion",
+          "From what",
+          "XP per potion",
+          "Notes"
         ],
         "ranges": [
           {
@@ -1519,15 +1519,15 @@
             "from": 1,
             "to": 3,
             "levels": "1–3",
-            "what": "Квест Druidic Ritual",
-            "notes": "Без квеста навык закрыт",
+            "what": "The quest Druidic Ritual",
+            "notes": "Without the quest the skill is closed",
             "cells": [
               "HE-1",
               "1–3",
-              "Квест Druidic Ritual",
-              "Сырое мясо четырёх видов",
-              "250 за квест",
-              "Без квеста навык закрыт"
+              "The quest Druidic Ritual",
+              "Four kinds of raw meat",
+              "250 for the quest",
+              "Without the quest the skill is closed"
             ]
           },
           {
@@ -1536,14 +1536,14 @@
             "to": 12,
             "levels": "3–12",
             "what": "Attack potion",
-            "notes": "Квесты Jungle Potion, Recruitment Drive и The Dig Site поднимут с 3 сразу до 19",
+            "notes": "The quests Jungle Potion, Recruitment Drive and The Dig Site take you from 3 straight to 19",
             "cells": [
               "HE-2",
               "3–12",
               "Attack potion",
               "Guam leaf + Eye of newt",
               "25",
-              "Квесты Jungle Potion, Recruitment Drive и The Dig Site поднимут с 3 сразу до 19"
+              "The quests Jungle Potion, Recruitment Drive and The Dig Site take you from 3 straight to 19"
             ]
           },
           {
@@ -1581,15 +1581,15 @@
             "from": 26,
             "to": 38,
             "levels": "26–38",
-            "what": "Energy potion, с 36 — Combat potion",
-            "notes": "Шоколадную пыль делают из шоколада пестиком (Pestle and mortar)",
+            "what": "Energy potion, from 36 Combat potion",
+            "notes": "Chocolate dust is made from chocolate with a pestle and mortar (Pestle and mortar)",
             "cells": [
               "HE-5",
               "26–38",
-              "Energy potion, с 36 — Combat potion",
-              "Harralander + Chocolate dust или Goat horn dust",
+              "Energy potion, from 36 Combat potion",
+              "Harralander + Chocolate dust or Goat horn dust",
               "67,5 / 84",
-              "Шоколадную пыль делают из шоколада пестиком (Pestle and mortar)"
+              "Chocolate dust is made from chocolate with a pestle and mortar (Pestle and mortar)"
             ]
           },
           {
@@ -1598,14 +1598,14 @@
             "to": 45,
             "levels": "38–45",
             "what": "Prayer potion",
-            "notes": "Самое нужное зелье для боя: хорошо продаётся",
+            "notes": "The most needed combat potion: it sells well",
             "cells": [
               "HE-6",
               "38–45",
               "Prayer potion",
               "Ranarr weed + Snape grass",
               "87,5",
-              "Самое нужное зелье для боя: хорошо продаётся"
+              "The most needed combat potion: it sells well"
             ]
           },
           {
@@ -1613,12 +1613,12 @@
             "from": 45,
             "to": 55,
             "levels": "45–55",
-            "what": "Super attack, с 52 — Super energy",
+            "what": "Super attack, from 52 Super energy",
             "cells": [
               "HE-7",
               "45–55",
-              "Super attack, с 52 — Super energy",
-              "Irit leaf + Eye of newt или Avantoe + Mort myre fungus",
+              "Super attack, from 52 Super energy",
+              "Irit leaf + Eye of newt or Avantoe + Mort myre fungus",
               "100 / 117,5",
               ""
             ]
@@ -1643,12 +1643,12 @@
             "from": 63,
             "to": 72,
             "levels": "63–72",
-            "what": "Super restore, с 66 — Super defence",
+            "what": "Super restore, from 66 Super defence",
             "cells": [
               "HE-9",
               "63–72",
-              "Super restore, с 66 — Super defence",
-              "Snapdragon + Red spiders' eggs или Cadantine + White berries",
+              "Super restore, from 66 Super defence",
+              "Snapdragon + Red spiders' eggs or Cadantine + White berries",
               "142,5 / 150",
               ""
             ]
@@ -1658,12 +1658,12 @@
             "from": 72,
             "to": 81,
             "levels": "72–81",
-            "what": "Ranging potion, с 78 — Zamorak brew",
+            "what": "Ranging potion, from 78 Zamorak brew",
             "cells": [
               "HE-10",
               "72–81",
-              "Ranging potion, с 78 — Zamorak brew",
-              "Dwarf weed + Wine of zamorak или Torstol + Jangerberries",
+              "Ranging potion, from 78 Zamorak brew",
+              "Dwarf weed + Wine of zamorak or Torstol + Jangerberries",
               "162,5 / 175",
               ""
             ]
@@ -1673,15 +1673,15 @@
             "from": 81,
             "to": null,
             "levels": "81+",
-            "what": "Saradomin brew, с 90 — Super combat potion",
-            "notes": "С 60 и квестом Children of the Sun есть мини-игра Mastering Mixology: больше опыта за каждую траву",
+            "what": "Saradomin brew, from 90 Super combat potion",
+            "notes": "From 60 and with the quest Children of the Sun there is the Mastering Mixology minigame: more XP for every herb",
             "cells": [
               "HE-11",
               "81+",
-              "Saradomin brew, с 90 — Super combat potion",
-              "Toadflax + Crushed nest или Torstol + три суперзелья",
+              "Saradomin brew, from 90 Super combat potion",
+              "Toadflax + Crushed nest or Torstol + three super potions",
               "180 / 150",
-              "С 60 и квестом Children of the Sun есть мини-игра Mastering Mixology: больше опыта за каждую траву"
+              "From 60 and with the quest Children of the Sun there is the Mastering Mixology minigame: more XP for every herb"
             ]
           }
         ],
@@ -1693,126 +1693,126 @@
     },
     {
       "id": "HU",
-      "title": "Охота (Hunter)",
-      "name": "Охота",
+      "title": "Hunter",
+      "name": "Hunter",
       "levelSkills": [
         "hunter"
       ],
       "intro": [
         {
           "t": "p",
-          "text": "Охота — ловля зверей и птиц. Птиц ловят силками (Bird snare), бабочек — сачком (Butterfly net), кебитов (Kebbit) — петлёй (Noose wand), шиншилл — ловушками-коробками (Box trap). С уровнем растёт число ловушек, которые можно поставить одновременно. В Дикой местности разрешена одна лишняя ловушка."
+          "text": "Hunter is catching animals and birds. Birds are caught with snares (Bird snare), butterflies with a net (Butterfly net), kebbits (Kebbit) with a noose (Noose wand), chinchompas with box traps (Box trap). The number of traps you can set at once grows with your level. In the Wilderness one extra trap is allowed."
         }
       ],
       "sections": [
         {
-          "title": "Зачем качать",
+          "title": "Why train it",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Шиншиллы (Chinchompa)** — метательное оружие дальнего боя, бьёт по нескольким монстрам сразу."
+                  "text": "**Chinchompas (Chinchompa)** are a ranged thrown weapon that hits several monsters at once."
                 },
                 {
-                  "text": "**Перчатки Gloves of silence** (54 охоты) помогают воровству."
+                  "text": "**Gloves of silence** (Hunter 54) help Thieving."
                 },
                 {
-                  "text": "**Квесты подписки:** Eagles' Peak (27), At First Light (46) и другие."
+                  "text": "**Members quests:** Eagles' Peak (27), At First Light (46) and others."
                 },
                 {
-                  "text": "**Маршрут** охоту не требует."
+                  "text": "The route does not require **Hunter**."
                 }
               ]
             }
           ]
         },
         {
-          "title": "План прокачки",
+          "title": "Training plan",
           "blocks": [
             {
               "t": "table",
               "head": [
-                "Код",
-                "Уровни",
-                "Кого ловить",
-                "Где",
-                "Опыт в час",
-                "Заметки"
+                "Code",
+                "Levels",
+                "What to catch",
+                "Where",
+                "XP per hour",
+                "Notes"
               ],
               "rows": [
                 [
                   "HU-1",
                   "1–9",
-                  "Викторина Natural history quiz",
-                  "Varrock Museum, подвал (Orlando Smith)",
+                  "The Natural history quiz",
+                  "Varrock Museum, the basement (Orlando Smith)",
                   "—",
-                  "1 000 опыта охоты сразу, заодно 1 000 опыта истребления"
+                  "1,000 Hunter XP at once, and 1,000 Slayer XP along with it"
                 ],
                 [
                   "HU-2",
                   "9–15",
-                  "Выслеживание Feldip weasel",
-                  "Feldip Hunter area (кольцо фей AKS или свиток Feldip Hills teleport)",
-                  "~13 тыс.",
-                  "Нужна петля (Noose wand). Кольцо Ring of pursuit показывает весь след сразу"
+                  "Tracking the Feldip weasel",
+                  "The Feldip Hunter area (the AKS fairy ring or a Feldip Hills teleport scroll)",
+                  "~13k",
+                  "You need a noose (Noose wand). The Ring of pursuit shows the whole trail at once"
                 ],
                 [
                   "HU-3",
                   "15–25",
-                  "Бабочки Ruby harvest и птицы Copper longtail",
-                  "Piscatoris Hunter area (кольцо фей AKQ)",
-                  "до 20 тыс.",
-                  "Сачок, банки для бабочек (Butterfly jar) и две птичьи ловушки: пока ловишь бабочек, птицы попадаются сами"
+                  "Ruby harvest butterflies and Copper longtail birds",
+                  "The Piscatoris Hunter area (the AKQ fairy ring)",
+                  "up to 20k",
+                  "A net, butterfly jars (Butterfly jar) and two bird snares: while you catch butterflies the birds get caught by themselves"
                 ],
                 [
                   "HU-4",
                   "25–43",
-                  "Бабочки Sapphire glacialis, с 35 — Snowy knight",
+                  "Sapphire glacialis butterflies, from 35 Snowy knight",
                   "Rellekka Hunter area",
-                  "~28,5 тыс. на 25",
-                  "Можно заодно ставить силки на птиц Cerulean twitch"
+                  "~28.5k at 25",
+                  "You can set snares for Cerulean twitch birds along the way"
                 ],
                 [
                   "HU-5",
                   "43–49",
-                  "Соколиная охота (Falconry) на Spotted kebbit",
-                  "Piscatoris, соколиная зона",
-                  "60–70 тыс.",
-                  "Сокол напрокат — 500 монет. Оружие, щит и перчатки нужно снять"
+                  "Falconry (Falconry) on the Spotted kebbit",
+                  "Piscatoris, the falconry area",
+                  "60–70k",
+                  "The falcon rental is 500 coins. You must take off your weapon, shield and gloves"
                 ],
                 [
                   "HU-6",
                   "49–73",
-                  "Выслеживание Razor-backed kebbit",
-                  "Piscatoris, к востоку от кольца AKQ",
-                  "до 100 тыс.",
-                  "Петля и кольца Ring of pursuit. Со Stamina potion — до 130 тыс."
+                  "Tracking the Razor-backed kebbit",
+                  "Piscatoris, east of the AKQ ring",
+                  "up to 100k",
+                  "A noose and Rings of pursuit. With a Stamina potion up to 130k"
                 ],
                 [
                   "HU-7",
                   "73+",
-                  "Чёрные шиншиллы (Black chinchompa) или задания Hunters' Rumours",
-                  "Wilderness Hunter area; Hunter Guild в Varlamore (квест Children of the Sun)",
+                  "Black chinchompas (Black chinchompa) or the Hunters' Rumours tasks",
+                  "The Wilderness Hunter area; the Hunter Guild in Varlamore (the quest Children of the Sun)",
                   "—",
-                  "Шиншиллы — самый быстрый метод и прибыль, но это Дикая местность с игроками-убийцами. Спокойнее — задания в Hunter Guild с 72"
+                  "Chinchompas are the fastest method and profit, but it is the Wilderness with player killers. Calmer: the tasks in the Hunter Guild from 72"
                 ]
               ]
             },
             {
               "t": "p",
-              "text": "Ловушки-коробки (для шиншилл и некоторых зверей) можно ставить после начала квеста Eagles' Peak."
+              "text": "Box traps (for chinchompas and some animals) can be set after starting the quest Eagles' Peak."
             }
           ]
         },
         {
-          "title": "Квесты с опытом охоты",
+          "title": "Quests with Hunter XP",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Natural history quiz** (мини-квест в Varrock Museum) — 1 000."
+                  "text": "**The Natural history quiz** (a miniquest in the Varrock Museum): 1,000."
                 },
                 {
                   "text": "**Eagles' Peak** (27) — 2 500, **The Ascent of Arceuus** (12) — 1 500, **Perilous Moons** (20) — 5 000."
@@ -1822,35 +1822,35 @@
           ]
         },
         {
-          "title": "Полезно знать",
+          "title": "Good to know",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Птичьи домики (Bird houses)** на Fossil Island (квест Bone Voyage) — пассивный опыт, как грядки: поставил, через 50 минут собрал."
+                  "text": "**Bird houses** on Fossil Island (the quest Bone Voyage): passive XP, like patches: you set one up and collect it 50 minutes later."
                 },
                 {
-                  "text": "**Hunter potion** поднимает уровень охоты: можно раньше ловить новых зверей и ставить лишнюю ловушку."
+                  "text": "**A Hunter potion** raises your Hunter level: you can catch new animals earlier and set an extra trap."
                 },
                 {
-                  "text": "**Кольцо Ring of pursuit** при выслеживании показывает весь след — меньше беготни."
+                  "text": "**The Ring of pursuit** shows the whole trail when tracking: less running around."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Частые вопросы",
+          "title": "Frequently asked questions",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Ловушка упала пустой?** Зверь сбежал. С уровнем промахов меньше."
+                  "text": "**The trap fell empty?** The animal escaped. With level there are fewer misses."
                 },
                 {
-                  "text": "**Как добраться до Piscatoris и Feldip Hills?** Проще всего кольцами фей (Fairy rings): они открываются вступлением Fairytale II (S9-03)."
+                  "text": "**How do I get to Piscatoris and the Feldip Hills?** Easiest by fairy rings (Fairy rings): they open with the start of Fairytale II (S9-03)."
                 }
               ]
             }
@@ -1859,12 +1859,12 @@
       ],
       "plan": {
         "head": [
-          "Код",
-          "Уровни",
-          "Кого ловить",
-          "Где",
-          "Опыт в час",
-          "Заметки"
+          "Code",
+          "Levels",
+          "What to catch",
+          "Where",
+          "XP per hour",
+          "Notes"
         ],
         "ranges": [
           {
@@ -1872,16 +1872,16 @@
             "from": 1,
             "to": 9,
             "levels": "1–9",
-            "what": "Викторина Natural history quiz",
-            "where": "Varrock Museum, подвал (Orlando Smith)",
-            "notes": "1 000 опыта охоты сразу, заодно 1 000 опыта истребления",
+            "what": "The Natural history quiz",
+            "where": "Varrock Museum, the basement (Orlando Smith)",
+            "notes": "1,000 Hunter XP at once, and 1,000 Slayer XP along with it",
             "cells": [
               "HU-1",
               "1–9",
-              "Викторина Natural history quiz",
-              "Varrock Museum, подвал (Orlando Smith)",
+              "The Natural history quiz",
+              "Varrock Museum, the basement (Orlando Smith)",
               "—",
-              "1 000 опыта охоты сразу, заодно 1 000 опыта истребления"
+              "1,000 Hunter XP at once, and 1,000 Slayer XP along with it"
             ]
           },
           {
@@ -1889,16 +1889,16 @@
             "from": 9,
             "to": 15,
             "levels": "9–15",
-            "what": "Выслеживание Feldip weasel",
-            "where": "Feldip Hunter area (кольцо фей AKS или свиток Feldip Hills teleport)",
-            "notes": "Нужна петля (Noose wand). Кольцо Ring of pursuit показывает весь след сразу",
+            "what": "Tracking the Feldip weasel",
+            "where": "The Feldip Hunter area (the AKS fairy ring or a Feldip Hills teleport scroll)",
+            "notes": "You need a noose (Noose wand). The Ring of pursuit shows the whole trail at once",
             "cells": [
               "HU-2",
               "9–15",
-              "Выслеживание Feldip weasel",
-              "Feldip Hunter area (кольцо фей AKS или свиток Feldip Hills teleport)",
-              "~13 тыс.",
-              "Нужна петля (Noose wand). Кольцо Ring of pursuit показывает весь след сразу"
+              "Tracking the Feldip weasel",
+              "The Feldip Hunter area (the AKS fairy ring or a Feldip Hills teleport scroll)",
+              "~13k",
+              "You need a noose (Noose wand). The Ring of pursuit shows the whole trail at once"
             ]
           },
           {
@@ -1906,16 +1906,16 @@
             "from": 15,
             "to": 25,
             "levels": "15–25",
-            "what": "Бабочки Ruby harvest и птицы Copper longtail",
-            "where": "Piscatoris Hunter area (кольцо фей AKQ)",
-            "notes": "Сачок, банки для бабочек (Butterfly jar) и две птичьи ловушки: пока ловишь бабочек, птицы попадаются сами",
+            "what": "Ruby harvest butterflies and Copper longtail birds",
+            "where": "The Piscatoris Hunter area (the AKQ fairy ring)",
+            "notes": "A net, butterfly jars (Butterfly jar) and two bird snares: while you catch butterflies the birds get caught by themselves",
             "cells": [
               "HU-3",
               "15–25",
-              "Бабочки Ruby harvest и птицы Copper longtail",
-              "Piscatoris Hunter area (кольцо фей AKQ)",
-              "до 20 тыс.",
-              "Сачок, банки для бабочек (Butterfly jar) и две птичьи ловушки: пока ловишь бабочек, птицы попадаются сами"
+              "Ruby harvest butterflies and Copper longtail birds",
+              "The Piscatoris Hunter area (the AKQ fairy ring)",
+              "up to 20k",
+              "A net, butterfly jars (Butterfly jar) and two bird snares: while you catch butterflies the birds get caught by themselves"
             ]
           },
           {
@@ -1923,16 +1923,16 @@
             "from": 25,
             "to": 43,
             "levels": "25–43",
-            "what": "Бабочки Sapphire glacialis, с 35 — Snowy knight",
+            "what": "Sapphire glacialis butterflies, from 35 Snowy knight",
             "where": "Rellekka Hunter area",
-            "notes": "Можно заодно ставить силки на птиц Cerulean twitch",
+            "notes": "You can set snares for Cerulean twitch birds along the way",
             "cells": [
               "HU-4",
               "25–43",
-              "Бабочки Sapphire glacialis, с 35 — Snowy knight",
+              "Sapphire glacialis butterflies, from 35 Snowy knight",
               "Rellekka Hunter area",
-              "~28,5 тыс. на 25",
-              "Можно заодно ставить силки на птиц Cerulean twitch"
+              "~28.5k at 25",
+              "You can set snares for Cerulean twitch birds along the way"
             ]
           },
           {
@@ -1940,16 +1940,16 @@
             "from": 43,
             "to": 49,
             "levels": "43–49",
-            "what": "Соколиная охота (Falconry) на Spotted kebbit",
-            "where": "Piscatoris, соколиная зона",
-            "notes": "Сокол напрокат — 500 монет. Оружие, щит и перчатки нужно снять",
+            "what": "Falconry (Falconry) on the Spotted kebbit",
+            "where": "Piscatoris, the falconry area",
+            "notes": "The falcon rental is 500 coins. You must take off your weapon, shield and gloves",
             "cells": [
               "HU-5",
               "43–49",
-              "Соколиная охота (Falconry) на Spotted kebbit",
-              "Piscatoris, соколиная зона",
-              "60–70 тыс.",
-              "Сокол напрокат — 500 монет. Оружие, щит и перчатки нужно снять"
+              "Falconry (Falconry) on the Spotted kebbit",
+              "Piscatoris, the falconry area",
+              "60–70k",
+              "The falcon rental is 500 coins. You must take off your weapon, shield and gloves"
             ]
           },
           {
@@ -1957,16 +1957,16 @@
             "from": 49,
             "to": 73,
             "levels": "49–73",
-            "what": "Выслеживание Razor-backed kebbit",
-            "where": "Piscatoris, к востоку от кольца AKQ",
-            "notes": "Петля и кольца Ring of pursuit. Со Stamina potion — до 130 тыс.",
+            "what": "Tracking the Razor-backed kebbit",
+            "where": "Piscatoris, east of the AKQ ring",
+            "notes": "A noose and Rings of pursuit. With a Stamina potion up to 130k",
             "cells": [
               "HU-6",
               "49–73",
-              "Выслеживание Razor-backed kebbit",
-              "Piscatoris, к востоку от кольца AKQ",
-              "до 100 тыс.",
-              "Петля и кольца Ring of pursuit. Со Stamina potion — до 130 тыс."
+              "Tracking the Razor-backed kebbit",
+              "Piscatoris, east of the AKQ ring",
+              "up to 100k",
+              "A noose and Rings of pursuit. With a Stamina potion up to 130k"
             ]
           },
           {
@@ -1974,16 +1974,16 @@
             "from": 73,
             "to": null,
             "levels": "73+",
-            "what": "Чёрные шиншиллы (Black chinchompa) или задания Hunters' Rumours",
-            "where": "Wilderness Hunter area; Hunter Guild в Varlamore (квест Children of the Sun)",
-            "notes": "Шиншиллы — самый быстрый метод и прибыль, но это Дикая местность с игроками-убийцами. Спокойнее — задания в Hunter Guild с 72",
+            "what": "Black chinchompas (Black chinchompa) or the Hunters' Rumours tasks",
+            "where": "The Wilderness Hunter area; the Hunter Guild in Varlamore (the quest Children of the Sun)",
+            "notes": "Chinchompas are the fastest method and profit, but it is the Wilderness with player killers. Calmer: the tasks in the Hunter Guild from 72",
             "cells": [
               "HU-7",
               "73+",
-              "Чёрные шиншиллы (Black chinchompa) или задания Hunters' Rumours",
-              "Wilderness Hunter area; Hunter Guild в Varlamore (квест Children of the Sun)",
+              "Black chinchompas (Black chinchompa) or the Hunters' Rumours tasks",
+              "The Wilderness Hunter area; the Hunter Guild in Varlamore (the quest Children of the Sun)",
               "—",
-              "Шиншиллы — самый быстрый метод и прибыль, но это Дикая местность с игроками-убийцами. Спокойнее — задания в Hunter Guild с 72"
+              "Chinchompas are the fastest method and profit, but it is the Wilderness with player killers. Calmer: the tasks in the Hunter Guild from 72"
             ]
           }
         ],
@@ -1995,162 +1995,162 @@
     },
     {
       "id": "CN",
-      "title": "Строительство (Construction)",
-      "name": "Строительство",
+      "title": "Construction",
+      "name": "Construction",
       "levelSkills": [
         "construction"
       ],
       "intro": [
         {
           "t": "p",
-          "text": "Строительство — обустройство своего дома (Player-owned house): комнаты, мебель, порталы, алтарь. Опыт дают постройки из досок (Plank). Навык дорогой: доски покупают, а мебель после постройки убирают и строят снова. Нужны пила (Saw) и молоток (Hammer)."
+          "text": "Construction is furnishing your own house (Player-owned house): rooms, furniture, portals, an altar. XP comes from builds made of planks (Plank). The skill is expensive: planks are bought, and furniture is removed after building and built again. You need a saw (Saw) and a hammer (Hammer)."
         }
       ],
       "sections": [
         {
-          "title": "Зачем качать",
+          "title": "Why train it",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Дом как узел телепортов:** порталы, шкатулка с украшениями, бассейн восстановления — на высоких уровнях дом заменяет кучу телепортов."
+                  "text": "**The house as a teleport hub:** portals, a jewellery box, a restoration pool: at high levels the house replaces a heap of teleports."
                 },
                 {
-                  "text": "**Квесты подписки:** некоторые требуют строительство, например Cold War (34)."
+                  "text": "**Members quests:** some require Construction, for example Cold War (34)."
                 },
                 {
-                  "text": "**Маршрут** строительство не требует."
+                  "text": "The route does not require **Construction**."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Как получить дом",
+          "title": "How to get a house",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Мини-квест Daddy's Home:** начни у Marlo в доме агента по недвижимости на северо-востоке Варрока. Награда: около 940 опыта (8 уровень), дом в Rimmington и ящик Marlo's crate — 25 досок, 50 мифриловых гвоздей, 10 дубовых досок, 5 стальных слитков, 8 рулонов ткани и телепорты."
+                  "text": "**The miniquest Daddy's Home:** start with Marlo in the estate agent's house in north-east Varrock. The reward: about 940 XP (level 8), a house in Rimmington and the crate Marlo's crate: 25 planks, 50 mithril nails, 10 oak planks, 5 steel bars, 8 bolts of cloth and teleports."
                 },
                 {
-                  "text": "**Или купи дом** у агента по недвижимости (Estate agent) за 1 000 монет."
+                  "text": "**Or buy a house** from the estate agent (Estate agent) for 1,000 coins."
                 },
                 {
-                  "text": "**Портал дома** стоит в Rimmington. Правый клик по порталу → Build mode — вход в режиме строительства. С 40 магии в дом можно телепортироваться заклинанием Teleport to House."
+                  "text": "**The house portal** stands in Rimmington. Right-click the portal, Build mode: you enter in building mode. From Magic 40 you can teleport to the house with the spell Teleport to House."
                 }
               ]
             }
           ]
         },
         {
-          "title": "План прокачки",
+          "title": "Training plan",
           "blocks": [
             {
               "t": "table",
               "head": [
-                "Код",
-                "Уровни",
-                "Что строить",
-                "Комната",
-                "Из чего",
-                "Опыт за штуку",
-                "Заметки"
+                "Code",
+                "Levels",
+                "What to build",
+                "Room",
+                "From what",
+                "XP each",
+                "Notes"
               ],
               "rows": [
                 [
                   "CN-1",
                   "1–8",
-                  "Мини-квест Daddy's Home",
+                  "The miniquest Daddy's Home",
                   "—",
-                  "Всё дают в квесте",
-                  "~940 за квест",
-                  "Ящик Marlo даст материалы на первые уровни"
+                  "The quest gives everything",
+                  "~940 for the quest",
+                  "Marlo's crate gives materials for the first levels"
                 ],
                 [
                   "CN-2",
                   "8–15",
-                  "Книжный шкаф (Wooden bookcase), с 9 — кладовая (Wooden larder)",
-                  "Гостиная (Parlour), кухня (Kitchen)",
-                  "4 или 8 досок и не меньше стольких же гвоздей",
+                  "A bookcase (Wooden bookcase), from 9 the larder (Wooden larder)",
+                  "The parlour (Parlour), the kitchen (Kitchen)",
+                  "4 or 8 planks and at least as many nails",
                   "115 / 228",
-                  "Гвозди бери стальные (Steel nails) или лучше: слабые чаще гнутся"
+                  "Take steel nails (Steel nails) or better: weak ones bend more often"
                 ],
                 [
                   "CN-3",
                   "15–22",
-                  "Верстак (Repair bench), с 16 — Crafting table 1",
-                  "Мастерская (Workshop)",
-                  "2 или 4 дубовые доски (Oak plank)",
+                  "A workbench (Repair bench), from 16 Crafting table 1",
+                  "The workshop (Workshop)",
+                  "2 or 4 oak planks (Oak plank)",
                   "120 / 240",
-                  "С дубовыми досками гвозди не нужны"
+                  "With oak planks you need no nails"
                 ],
                 [
                   "CN-4",
                   "22–33",
-                  "Дубовый стол (Oak dining table), с 31 — Carved oak table",
-                  "Столовая (Dining room)",
-                  "4 или 6 дубовых досок",
+                  "An oak table (Oak dining table), from 31 Carved oak table",
+                  "The dining room (Dining room)",
+                  "4 or 6 oak planks",
                   "240 / 360",
                   ""
                 ],
                 [
                   "CN-5",
                   "33–52",
-                  "Дубовая кладовая (Oak larder)",
-                  "Кухня",
-                  "8 дубовых досок",
+                  "An oak larder (Oak larder)",
+                  "The kitchen",
+                  "8 oak planks",
                   "480",
-                  "220 кладовых — 1 760 досок. С 40 найми слугу (Butler) в Servants' Guild в East Ardougne — нужны две спальни с кроватями. Слуга носит доски из банка"
+                  "220 larders is 1,760 planks. From 40 hire a butler (Butler) at the Servants' Guild in East Ardougne: you need two bedrooms with beds. The butler carries planks from the bank"
                 ],
                 [
                   "CN-6",
                   "52–77",
-                  "Стол из красного дерева (Mahogany table)",
-                  "Столовая",
-                  "6 досок красного дерева (Mahogany plank)",
+                  "A mahogany table (Mahogany table)",
+                  "The dining room",
+                  "6 mahogany planks (Mahogany plank)",
                   "840",
-                  "Очень дорого. Дешевле — дубовые двери (Oak dungeon door) с 74: 10 дубовых досок, 600 опыта"
+                  "Very expensive. Cheaper: oak dungeon doors (Oak dungeon door) from 74: 10 oak planks, 600 XP"
                 ],
                 [
                   "CN-7",
                   "77+",
-                  "Скамья Gnome bench",
+                  "A Gnome bench",
                   "Superior garden",
-                  "6 досок красного дерева",
+                  "6 mahogany planks",
                   "840",
-                  "До 1,1 млн опыта в час — самый быстрый метод"
+                  "Up to 1.1 million XP an hour: the fastest method"
                 ]
               ]
             },
             {
               "t": "p",
-              "text": "До 40 уровня доски удобно разменивать из банкнот у Phials рядом с порталом в Rimmington — 5 монет за доску."
+              "text": "Up to level 40 it is convenient to exchange planks from banknotes at Phials by the portal in Rimmington: 5 coins per plank."
             }
           ]
         },
         {
-          "title": "Дешёвая альтернатива: Mahogany Homes",
+          "title": "A cheap alternative: Mahogany Homes",
           "blocks": [
             {
               "t": "p",
-              "text": "Заказы на ремонт мебели в домах NPC в Фаладоре, Варроке, East Ardougne и Hosidius. Начни у Amy в Фаладоре, когда будет свой дом. Нужны доски, стальные слитки, пила и молоток, гвозди не нужны. Медленнее, зато дешевле и спокойнее. За заказы дают очки: на них покупается набор плотника (Carpenter's outfit) — он добавляет опыт."
+              "text": "Orders to repair furniture in NPCs' houses in Falador, Varrock, East Ardougne and Hosidius. Start with Amy in Falador once you have your own house. You need planks, steel bars, a saw and a hammer, and no nails. Slower, but cheaper and calmer. The orders give points: they buy the Carpenter's outfit, which adds XP."
             }
           ]
         },
         {
-          "title": "Частые вопросы",
+          "title": "Frequently asked questions",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Где взять доски?** На Grand Exchange. Можно распилить брёвна на лесопилке (Sawmill), но опыта это не даёт."
+                  "text": "**Where do I get planks?** On the Grand Exchange. You can saw logs at a sawmill (Sawmill), but that gives no XP."
                 },
                 {
-                  "text": "**Не хватает уровня на комнату?** У каждой комнаты свой уровень: кухня с 5, столовая с 10, мастерская с 15."
+                  "text": "**Not enough level for a room?** Every room has its own level: the kitchen from 5, the dining room from 10, the workshop from 15."
                 }
               ]
             }
@@ -2159,13 +2159,13 @@
       ],
       "plan": {
         "head": [
-          "Код",
-          "Уровни",
-          "Что строить",
-          "Комната",
-          "Из чего",
-          "Опыт за штуку",
-          "Заметки"
+          "Code",
+          "Levels",
+          "What to build",
+          "Room",
+          "From what",
+          "XP each",
+          "Notes"
         ],
         "ranges": [
           {
@@ -2173,16 +2173,16 @@
             "from": 1,
             "to": 8,
             "levels": "1–8",
-            "what": "Мини-квест Daddy's Home",
-            "notes": "Ящик Marlo даст материалы на первые уровни",
+            "what": "The miniquest Daddy's Home",
+            "notes": "Marlo's crate gives materials for the first levels",
             "cells": [
               "CN-1",
               "1–8",
-              "Мини-квест Daddy's Home",
+              "The miniquest Daddy's Home",
               "—",
-              "Всё дают в квесте",
-              "~940 за квест",
-              "Ящик Marlo даст материалы на первые уровни"
+              "The quest gives everything",
+              "~940 for the quest",
+              "Marlo's crate gives materials for the first levels"
             ]
           },
           {
@@ -2190,16 +2190,16 @@
             "from": 8,
             "to": 15,
             "levels": "8–15",
-            "what": "Книжный шкаф (Wooden bookcase), с 9 — кладовая (Wooden larder)",
-            "notes": "Гвозди бери стальные (Steel nails) или лучше: слабые чаще гнутся",
+            "what": "A bookcase (Wooden bookcase), from 9 the larder (Wooden larder)",
+            "notes": "Take steel nails (Steel nails) or better: weak ones bend more often",
             "cells": [
               "CN-2",
               "8–15",
-              "Книжный шкаф (Wooden bookcase), с 9 — кладовая (Wooden larder)",
-              "Гостиная (Parlour), кухня (Kitchen)",
-              "4 или 8 досок и не меньше стольких же гвоздей",
+              "A bookcase (Wooden bookcase), from 9 the larder (Wooden larder)",
+              "The parlour (Parlour), the kitchen (Kitchen)",
+              "4 or 8 planks and at least as many nails",
               "115 / 228",
-              "Гвозди бери стальные (Steel nails) или лучше: слабые чаще гнутся"
+              "Take steel nails (Steel nails) or better: weak ones bend more often"
             ]
           },
           {
@@ -2207,16 +2207,16 @@
             "from": 15,
             "to": 22,
             "levels": "15–22",
-            "what": "Верстак (Repair bench), с 16 — Crafting table 1",
-            "notes": "С дубовыми досками гвозди не нужны",
+            "what": "A workbench (Repair bench), from 16 Crafting table 1",
+            "notes": "With oak planks you need no nails",
             "cells": [
               "CN-3",
               "15–22",
-              "Верстак (Repair bench), с 16 — Crafting table 1",
-              "Мастерская (Workshop)",
-              "2 или 4 дубовые доски (Oak plank)",
+              "A workbench (Repair bench), from 16 Crafting table 1",
+              "The workshop (Workshop)",
+              "2 or 4 oak planks (Oak plank)",
               "120 / 240",
-              "С дубовыми досками гвозди не нужны"
+              "With oak planks you need no nails"
             ]
           },
           {
@@ -2224,13 +2224,13 @@
             "from": 22,
             "to": 33,
             "levels": "22–33",
-            "what": "Дубовый стол (Oak dining table), с 31 — Carved oak table",
+            "what": "An oak table (Oak dining table), from 31 Carved oak table",
             "cells": [
               "CN-4",
               "22–33",
-              "Дубовый стол (Oak dining table), с 31 — Carved oak table",
-              "Столовая (Dining room)",
-              "4 или 6 дубовых досок",
+              "An oak table (Oak dining table), from 31 Carved oak table",
+              "The dining room (Dining room)",
+              "4 or 6 oak planks",
               "240 / 360",
               ""
             ]
@@ -2240,16 +2240,16 @@
             "from": 33,
             "to": 52,
             "levels": "33–52",
-            "what": "Дубовая кладовая (Oak larder)",
-            "notes": "220 кладовых — 1 760 досок. С 40 найми слугу (Butler) в Servants' Guild в East Ardougne — нужны две спальни с кроватями. Слуга носит доски из банка",
+            "what": "An oak larder (Oak larder)",
+            "notes": "220 larders is 1,760 planks. From 40 hire a butler (Butler) at the Servants' Guild in East Ardougne: you need two bedrooms with beds. The butler carries planks from the bank",
             "cells": [
               "CN-5",
               "33–52",
-              "Дубовая кладовая (Oak larder)",
-              "Кухня",
-              "8 дубовых досок",
+              "An oak larder (Oak larder)",
+              "The kitchen",
+              "8 oak planks",
               "480",
-              "220 кладовых — 1 760 досок. С 40 найми слугу (Butler) в Servants' Guild в East Ardougne — нужны две спальни с кроватями. Слуга носит доски из банка"
+              "220 larders is 1,760 planks. From 40 hire a butler (Butler) at the Servants' Guild in East Ardougne: you need two bedrooms with beds. The butler carries planks from the bank"
             ]
           },
           {
@@ -2257,16 +2257,16 @@
             "from": 52,
             "to": 77,
             "levels": "52–77",
-            "what": "Стол из красного дерева (Mahogany table)",
-            "notes": "Очень дорого. Дешевле — дубовые двери (Oak dungeon door) с 74: 10 дубовых досок, 600 опыта",
+            "what": "A mahogany table (Mahogany table)",
+            "notes": "Very expensive. Cheaper: oak dungeon doors (Oak dungeon door) from 74: 10 oak planks, 600 XP",
             "cells": [
               "CN-6",
               "52–77",
-              "Стол из красного дерева (Mahogany table)",
-              "Столовая",
-              "6 досок красного дерева (Mahogany plank)",
+              "A mahogany table (Mahogany table)",
+              "The dining room",
+              "6 mahogany planks (Mahogany plank)",
               "840",
-              "Очень дорого. Дешевле — дубовые двери (Oak dungeon door) с 74: 10 дубовых досок, 600 опыта"
+              "Very expensive. Cheaper: oak dungeon doors (Oak dungeon door) from 74: 10 oak planks, 600 XP"
             ]
           },
           {
@@ -2274,16 +2274,16 @@
             "from": 77,
             "to": null,
             "levels": "77+",
-            "what": "Скамья Gnome bench",
-            "notes": "До 1,1 млн опыта в час — самый быстрый метод",
+            "what": "A Gnome bench",
+            "notes": "Up to 1.1 million XP an hour: the fastest method",
             "cells": [
               "CN-7",
               "77+",
-              "Скамья Gnome bench",
+              "A Gnome bench",
               "Superior garden",
-              "6 досок красного дерева",
+              "6 mahogany planks",
               "840",
-              "До 1,1 млн опыта в час — самый быстрый метод"
+              "Up to 1.1 million XP an hour: the fastest method"
             ]
           }
         ],
@@ -2295,125 +2295,125 @@
     },
     {
       "id": "FL",
-      "title": "Изготовление луков (Fletching)",
-      "name": "Изготовление луков",
+      "title": "Fletching",
+      "name": "Fletching",
       "levelSkills": [
         "fletching"
       ],
       "intro": [
         {
           "t": "p",
-          "text": "Изготовление луков — луки, стрелы, болты и дротики из брёвен, перьев и наконечников. В бесплатной версии луки только покупают, а с подпиской их можно делать самому — для своего дальнего боя и на продажу. Нужен нож (Knife), он продаётся в любом общем магазине (General store)."
+          "text": "Fletching is making bows, arrows, bolts and darts from logs, feathers and tips. In the free version bows are only bought, and with membership you can make them yourself: for your own Ranged and to sell. You need a knife (Knife), sold in any General store."
         }
       ],
       "sections": [
         {
-          "title": "Зачем качать",
+          "title": "Why train it",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Свои луки и стрелы** для дальнего боя."
+                  "text": "**Your own bows and arrows** for Ranged."
                 },
                 {
-                  "text": "**«На ходу»:** дротики (Dart) и болты делаются в два клика, пока бежишь по трассе ловкости, делаешь квест или забег по грядкам — опыт почти без затрат времени."
+                  "text": "**\"On the go\":** darts (Dart) and bolts are made in two clicks while you run an Agility course, do a quest or a farming run: XP at almost no cost in time."
                 },
                 {
-                  "text": "**Маршрут:** Animal Magnetism (S8-05) даст 1 000 опыта — сразу 9 уровень."
+                  "text": "**The route:** Animal Magnetism (S8-05) gives 1,000 XP, level 9 at once."
                 }
               ]
             }
           ]
         },
         {
-          "title": "План прокачки",
+          "title": "Training plan",
           "blocks": [
             {
               "t": "table",
               "head": [
-                "Код",
-                "Уровни",
-                "Что делать",
-                "Из чего",
-                "Опыт за штуку",
-                "Заметки"
+                "Code",
+                "Levels",
+                "What to do",
+                "From what",
+                "XP each",
+                "Notes"
               ],
               "rows": [
                 [
                   "FL-1",
                   "1–5",
-                  "Древки стрел (Arrow shaft)",
-                  "Обычные брёвна (Logs) и нож",
-                  "5 за бревно — это 15 древков",
-                  "Можно сразу доделывать безголовые стрелы (Headless arrow): 15 древков и 15 перьев — 15 опыта"
+                  "Arrow shafts (Arrow shaft)",
+                  "Regular logs (Logs) and a knife",
+                  "5 per log, which is 15 shafts",
+                  "You can finish headless arrows (Headless arrow) right away: 15 shafts and 15 feathers give 15 XP"
                 ],
                 [
                   "FL-2",
                   "5–10",
-                  "Короткий лук (Shortbow (u))",
-                  "Обычные брёвна",
+                  "Shortbow (Shortbow (u))",
+                  "Regular logs",
                   "5",
-                  "Натянуть тетиву (Bow string) — ещё столько же опыта"
+                  "Stringing (Bow string) gives as much XP again"
                 ],
                 [
                   "FL-3",
                   "10–20",
-                  "Длинный лук (Longbow (u))",
-                  "Обычные брёвна",
+                  "Longbow (Longbow (u))",
+                  "Regular logs",
                   "10",
                   ""
                 ],
                 [
                   "FL-4",
                   "20–35",
-                  "Oak shortbow, с 25 — Oak longbow",
-                  "Дубовые брёвна",
+                  "Oak shortbow, from 25 Oak longbow",
+                  "Oak logs",
                   "16,5 / 25",
                   ""
                 ],
                 [
                   "FL-5",
                   "35–50",
-                  "Willow shortbow, с 40 — Willow longbow",
-                  "Ивовые брёвна",
+                  "Willow shortbow, from 40 Willow longbow",
+                  "Willow logs",
                   "33,3 / 41,5",
                   ""
                 ],
                 [
                   "FL-6",
                   "50–65",
-                  "Maple shortbow, с 55 — Maple longbow",
-                  "Кленовые брёвна",
+                  "Maple shortbow, from 55 Maple longbow",
+                  "Maple logs",
                   "50 / 58,3",
                   ""
                 ],
                 [
                   "FL-7",
                   "65–80",
-                  "Yew shortbow, с 70 — Yew longbow",
-                  "Тисовые брёвна",
+                  "Yew shortbow, from 70 Yew longbow",
+                  "Yew logs",
                   "67,5 / 75",
                   ""
                 ],
                 [
                   "FL-8",
                   "80+",
-                  "Magic shortbow, с 85 — Magic longbow",
-                  "Волшебные брёвна",
+                  "Magic shortbow, from 85 Magic longbow",
+                  "Magic logs",
                   "83,3 / 91,5",
-                  "С 40 выгодны и боевые посохи (Battlestaff) из коры celastrus: 80 опыта за штуку"
+                  "From 40 battlestaves (Battlestaff) from celastrus bark are worthwhile too: 80 XP each"
                 ]
               ]
             },
             {
               "t": "p",
-              "text": "Ножом получается около 1 800 луков в час, ножом Fletching knife — около 2 700. Натягивание тетивы идёт быстрее вырезания и даёт столько же опыта. Тетиву прядут из льна (Flax) на прялке — это ремесло с 10 уровня."
+              "text": "With a knife you get about 1,800 bows an hour, with a Fletching knife about 2,700. Stringing is faster than carving and gives as much XP. Bow strings are spun from flax (Flax) on a spinning wheel, which is Crafting from level 10."
             }
           ]
         },
         {
-          "title": "Квесты с опытом изготовления луков",
+          "title": "Quests with Fletching XP",
           "blocks": [
             {
               "t": "ul",
@@ -2422,45 +2422,45 @@
                   "text": "**Animal Magnetism** (S8-05) — 1 000."
                 },
                 {
-                  "text": "**Big Chompy Bird Hunting** (5) — 262, **Zogre Flesh Eaters** — 2 000. Вместе с Animal Magnetism — 18 уровень."
+                  "text": "**Big Chompy Bird Hunting** (5): 262, **Zogre Flesh Eaters**: 2,000. Together with Animal Magnetism that is level 18."
                 },
                 {
-                  "text": "**Temple of Ikov** — 8 000 и **The Fremennik Trials** — 2 812. С ними — 30 уровень."
+                  "text": "**Temple of Ikov**: 8,000 and **The Fremennik Trials**: 2,812. With them it is level 30."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Полезно знать",
+          "title": "Good to know",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Перья** продаёт Gerrant's Fishy Business в Port Sarim, а ещё они падают с куриц."
+                  "text": "**Feathers** are sold by Gerrant's Fishy Business in Port Sarim, and they also drop from chickens."
                 },
                 {
-                  "text": "**Дротики** — лучший способ качать «на ходу», но наконечники (Dart tip) стоят денег."
+                  "text": "**Darts** are the best way to train \"on the go\", but the tips (Dart tip) cost money."
                 },
                 {
-                  "text": "**Лук к бою:** короткие луки стреляют быстрее, длинные — дальше. Для прокачки дальнего боя обычно берут короткие."
+                  "text": "**A bow for combat:** shortbows shoot faster, longbows farther. For training Ranged shortbows are usually taken."
                 }
               ]
             }
           ]
         },
         {
-          "title": "Частые вопросы",
+          "title": "Frequently asked questions",
           "blocks": [
             {
               "t": "ul",
               "items": [
                 {
-                  "text": "**Где брать брёвна?** Рубить самому (см. «Рубка») или покупать на Grand Exchange."
+                  "text": "**Where do I get logs?** Chop them yourself (see \"Woodcutting\") or buy them on the Grand Exchange."
                 },
                 {
-                  "text": "**Выгодно ли?** Натягивание тетивы на тисовые и волшебные луки обычно окупается. Вырезать древки из дешёвых брёвен — почти бесплатно."
+                  "text": "**Is it worth it?** Stringing yew and magic bows usually pays for itself. Carving shafts from cheap logs is almost free."
                 }
               ]
             }
@@ -2469,12 +2469,12 @@
       ],
       "plan": {
         "head": [
-          "Код",
-          "Уровни",
-          "Что делать",
-          "Из чего",
-          "Опыт за штуку",
-          "Заметки"
+          "Code",
+          "Levels",
+          "What to do",
+          "From what",
+          "XP each",
+          "Notes"
         ],
         "ranges": [
           {
@@ -2482,15 +2482,15 @@
             "from": 1,
             "to": 5,
             "levels": "1–5",
-            "what": "Древки стрел (Arrow shaft)",
-            "notes": "Можно сразу доделывать безголовые стрелы (Headless arrow): 15 древков и 15 перьев — 15 опыта",
+            "what": "Arrow shafts (Arrow shaft)",
+            "notes": "You can finish headless arrows (Headless arrow) right away: 15 shafts and 15 feathers give 15 XP",
             "cells": [
               "FL-1",
               "1–5",
-              "Древки стрел (Arrow shaft)",
-              "Обычные брёвна (Logs) и нож",
-              "5 за бревно — это 15 древков",
-              "Можно сразу доделывать безголовые стрелы (Headless arrow): 15 древков и 15 перьев — 15 опыта"
+              "Arrow shafts (Arrow shaft)",
+              "Regular logs (Logs) and a knife",
+              "5 per log, which is 15 shafts",
+              "You can finish headless arrows (Headless arrow) right away: 15 shafts and 15 feathers give 15 XP"
             ]
           },
           {
@@ -2498,15 +2498,15 @@
             "from": 5,
             "to": 10,
             "levels": "5–10",
-            "what": "Короткий лук (Shortbow (u))",
-            "notes": "Натянуть тетиву (Bow string) — ещё столько же опыта",
+            "what": "Shortbow (Shortbow (u))",
+            "notes": "Stringing (Bow string) gives as much XP again",
             "cells": [
               "FL-2",
               "5–10",
-              "Короткий лук (Shortbow (u))",
-              "Обычные брёвна",
+              "Shortbow (Shortbow (u))",
+              "Regular logs",
               "5",
-              "Натянуть тетиву (Bow string) — ещё столько же опыта"
+              "Stringing (Bow string) gives as much XP again"
             ]
           },
           {
@@ -2514,12 +2514,12 @@
             "from": 10,
             "to": 20,
             "levels": "10–20",
-            "what": "Длинный лук (Longbow (u))",
+            "what": "Longbow (Longbow (u))",
             "cells": [
               "FL-3",
               "10–20",
-              "Длинный лук (Longbow (u))",
-              "Обычные брёвна",
+              "Longbow (Longbow (u))",
+              "Regular logs",
               "10",
               ""
             ]
@@ -2529,12 +2529,12 @@
             "from": 20,
             "to": 35,
             "levels": "20–35",
-            "what": "Oak shortbow, с 25 — Oak longbow",
+            "what": "Oak shortbow, from 25 Oak longbow",
             "cells": [
               "FL-4",
               "20–35",
-              "Oak shortbow, с 25 — Oak longbow",
-              "Дубовые брёвна",
+              "Oak shortbow, from 25 Oak longbow",
+              "Oak logs",
               "16,5 / 25",
               ""
             ]
@@ -2544,12 +2544,12 @@
             "from": 35,
             "to": 50,
             "levels": "35–50",
-            "what": "Willow shortbow, с 40 — Willow longbow",
+            "what": "Willow shortbow, from 40 Willow longbow",
             "cells": [
               "FL-5",
               "35–50",
-              "Willow shortbow, с 40 — Willow longbow",
-              "Ивовые брёвна",
+              "Willow shortbow, from 40 Willow longbow",
+              "Willow logs",
               "33,3 / 41,5",
               ""
             ]
@@ -2559,12 +2559,12 @@
             "from": 50,
             "to": 65,
             "levels": "50–65",
-            "what": "Maple shortbow, с 55 — Maple longbow",
+            "what": "Maple shortbow, from 55 Maple longbow",
             "cells": [
               "FL-6",
               "50–65",
-              "Maple shortbow, с 55 — Maple longbow",
-              "Кленовые брёвна",
+              "Maple shortbow, from 55 Maple longbow",
+              "Maple logs",
               "50 / 58,3",
               ""
             ]
@@ -2574,12 +2574,12 @@
             "from": 65,
             "to": 80,
             "levels": "65–80",
-            "what": "Yew shortbow, с 70 — Yew longbow",
+            "what": "Yew shortbow, from 70 Yew longbow",
             "cells": [
               "FL-7",
               "65–80",
-              "Yew shortbow, с 70 — Yew longbow",
-              "Тисовые брёвна",
+              "Yew shortbow, from 70 Yew longbow",
+              "Yew logs",
               "67,5 / 75",
               ""
             ]
@@ -2589,15 +2589,15 @@
             "from": 80,
             "to": null,
             "levels": "80+",
-            "what": "Magic shortbow, с 85 — Magic longbow",
-            "notes": "С 40 выгодны и боевые посохи (Battlestaff) из коры celastrus: 80 опыта за штуку",
+            "what": "Magic shortbow, from 85 Magic longbow",
+            "notes": "From 40 battlestaves (Battlestaff) from celastrus bark are worthwhile too: 80 XP each",
             "cells": [
               "FL-8",
               "80+",
-              "Magic shortbow, с 85 — Magic longbow",
-              "Волшебные брёвна",
+              "Magic shortbow, from 85 Magic longbow",
+              "Magic logs",
               "83,3 / 91,5",
-              "С 40 выгодны и боевые посохи (Battlestaff) из коры celastrus: 80 опыта за штуку"
+              "From 40 battlestaves (Battlestaff) from celastrus bark are worthwhile too: 80 XP each"
             ]
           }
         ],

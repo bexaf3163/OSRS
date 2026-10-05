@@ -1,5 +1,5 @@
 {
-  "source": "OSRS Wiki: {{LocLine}} и карты статей Dark wizard, Undead tree, Vine (Draynor Manor), Jail guard (проверено 2026-09-27)",
+  "source": "OSRS Wiki: {{LocLine}} and the map of the articles Dark wizard, Undead tree, Vine (Draynor Manor), Jail guard (checked 2026-09-27)",
   "zones": [
     {
       "id": "dark-wizards-varrock",
@@ -8,10 +8,10 @@
       "radius": 12,
       "warningRadius": 15,
       "severity": "CRITICAL",
-      "message": "ОПАСНО: тёмные маги 7 и 20 уровня у каменного круга к югу от Варрока нападают сами и бьют магией. Обходи круг стороной.",
-      "hud": "Зона тёмных магов! Обходи круг стороной.",
+      "message": "DANGER: the level 7 and 20 dark wizards at the stone circle south of Varrock attack on their own and hit with magic. Stay away from the circle.",
+      "hud": "Dark wizard zone! Stay away from the circle.",
       "npcNames": ["Dark wizard"],
-      "source": "Dark wizard — LocLine «Varrock stone circle», 11 точек 3223–3232 × 3363–3374; aggressive = Yes"
+      "source": "Dark wizard: LocLine \"Varrock stone circle\", 11 points 3223-3232 x 3363-3374; aggressive = Yes"
     },
     {
       "id": "dark-wizards-draynor",
@@ -20,10 +20,10 @@
       "radius": 4,
       "warningRadius": 7,
       "severity": "MEDIUM",
-      "message": "Осторожно: за банком Draynor стоят тёмные маги 7 уровня — нападают сами. Место ловли креветок рядом, лови южнее.",
-      "hud": "Тёмные маги за банком Draynor.",
+      "message": "Careful: level 7 dark wizards stand behind the Draynor bank and attack on their own. The shrimp fishing spot is nearby, fish further south.",
+      "hud": "Dark wizards behind the Draynor bank.",
       "npcNames": ["Dark wizard"],
-      "source": "Dark wizard — LocLine «Behind Draynor Village bank», 3084,3236 и 3085,3238"
+      "source": "Dark wizard: LocLine \"Behind Draynor Village bank\", 3084,3236 and 3085,3238"
     },
     {
       "id": "draynor-manor-trees",
@@ -32,10 +32,10 @@
       "radius": 10,
       "warningRadius": 13,
       "severity": "HIGH",
-      "message": "ОПАСНО: во дворе Draynor Manor ожившие деревья бьют проходящих мимо, а невидимые лозы у юго-восточного угла жалят каждые 3 секунды. Не беги через двор напрямик.",
-      "hud": "Ожившие деревья Draynor Manor!",
+      "message": "DANGER: in the Draynor Manor yard the animated trees hit anyone passing by, and invisible vines at the south-east corner sting every 3 seconds. Do not run straight across the yard.",
+      "hud": "Draynor Manor animated trees!",
       "npcNames": ["Undead tree"],
-      "source": "Undead tree — карта статьи, 10 точек двора 3103–3122 × 3335–3348; Vine (Draynor Manor) — 3118,3342, r=7"
+      "source": "Undead tree: the article map, 10 points of the yard 3103-3122 x 3335-3348; Vine (Draynor Manor): 3118,3342, r=7"
     },
     {
       "id": "draynor-jail-guards",
@@ -44,10 +44,10 @@
       "radius": 9,
       "warningRadius": 13,
       "severity": "MEDIUM",
-      "message": "Осторожно: тюремные стражники 26 уровня у тюрьмы Draynor агрессивны и догоняют на дороге. Обходи тюрьму стороной.",
-      "hud": "Стражники тюрьмы Draynor (26 ур.)",
+      "message": "Careful: the level 26 jail guards by Draynor Jail are aggressive and chase you along the road. Stay away from the jail.",
+      "hud": "Draynor Jail guards (level 26)",
       "npcNames": ["Jail guard"],
-      "source": "Jail guard — LocLine «Draynor Village jail», 3109–3127 × 3237–3249; aggressive2–4 = Yes"
+      "source": "Jail guard: LocLine \"Draynor Village jail\", 3109-3127 x 3237-3249; aggressive2-4 = Yes"
     }
   ]
 }

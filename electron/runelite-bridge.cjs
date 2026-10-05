@@ -1,16 +1,16 @@
-// Связь окна с плагином RuneLite «OSRS Path Bridge» (http://127.0.0.1:38282) через главный процесс.
-// Окно не ходит на localhost само: так нет CORS, а выключенный RuneLite не сыплет ошибками в консоль.
-// Только loopback и только адреса из списка — окно не может попросить главный процесс сходить куда-то ещё.
-// Список сверяется с BRIDGE_PATHS приложения (tests/bridge.test.ts): новый адрес без него молча не работал бы в exe.
+// The link of the window with the RuneLite plugin "OSRS Path Bridge" (http://127.0.0.1:38282) through the main process.
+// The window does not go to localhost itself: this way there is no CORS, and a turned-off RuneLite does not spray errors into the console.
+// Only loopback and only the addresses from the list — the window cannot ask the main process to go anywhere else.
+// The list is checked against the app's BRIDGE_PATHS (tests/bridge.test.ts): a new address without it would silently not work in the exe.
 
 const http = require('node:http');
 
 const HOST = '127.0.0.1';
-// Порт можно подменить только для проверок (scripts/e2e-electron.ts): заглушка на свободном порту, а не живой плагин игрока.
+// The port can be replaced only for checks (scripts/e2e-electron.ts): a stub on a free port, not the player's live plugin.
 const PORT = Number(process.env.OSRS_PUT_BRIDGE_PORT) || 38282;
 const PATHS = new Set(['/status', '/active-step', '/clear', '/shopping-plan', '/nav-target', '/bank-tags', '/gear-hint', '/prep-plan', '/telemetry']);
 const REQUEST_TIMEOUT_MS = 1500;
-/** Плагин шлёт пинг каждые 15 секунд; тишина дольше — соединение мёртвое. */
+/** The plugin sends a ping every 15 seconds; silence longer than that — the connection is dead. */
 const IDLE_TIMEOUT_MS = 45_000;
 const MAX_BODY = 64 * 1024;
 
@@ -53,7 +53,7 @@ function request({ method, path, body }) {
   });
 }
 
-/** Разбор text/event-stream: события разделены пустой строкой, данные — в строках «data:». */
+/** Parsing text/event-stream: the events are separated by an empty line, the data is in the "data:" lines. */
 function sseParser(onData) {
   let buf = '';
   return (chunk) => {
@@ -69,7 +69,7 @@ function sseParser(onData) {
   };
 }
 
-/** Регистрирует обработчики ipc. Поток событий — один на окно; повторное открытие закрывает прежний. */
+/** Registers the ipc handlers. The event stream is one per window; reopening closes the previous one. */
 function registerBridge(ipcMain) {
   const streams = new Map();
   const watched = new Set();
@@ -113,7 +113,7 @@ function registerBridge(ipcMain) {
     state.req.on('error', fail);
     state.req.on('close', fail);
     streams.set(id, state);
-    // Окно закрыли — поток за ним не держим. Подписка одна на окно, а не на каждое переподключение.
+    // The window was closed — we do not keep a stream for it. The subscription is one per window, not per reconnection.
     if (!watched.has(id)) {
       watched.add(id);
       wc.once('destroyed', () => { watched.delete(id); closeStream(id); });

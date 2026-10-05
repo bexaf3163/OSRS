@@ -1,7 +1,7 @@
-// Плагин в RuneLite старше программы: связь есть, но новых функций нет. Программа запускает RuneLite с плагином
-// из своей папки, а уже запущенный RuneLite держит тот плагин, с которым стартовал, — после обновления программы
-// его нужно перезапустить. Раньше об этом писали только шапка («Обнови плагин RuneLite») и настройки — и игрок
-// не видел в игре нового списка «Что нужно», не понимая почему.
+// The plugin in RuneLite is older than the app: there is a link but no new features. The app starts RuneLite with the plugin
+// from its folder, and an already running RuneLite keeps the plugin it started with — after the app update
+// it must be restarted. Before, only the header ("Update the RuneLite plugin") and settings said so — and the player
+// did not see the new "What you need" list in the game and did not understand why.
 
 import { useBridge } from '../bridge';
 import { APP_PROTOCOL, missingWithPlugin } from '../services/runeliteBridge';
@@ -12,24 +12,24 @@ export function PluginUpdateNote() {
   if (plugin.compat === 'newer') {
     return (
       <div className="plaque plaque-warning" role="note">
-        <p><strong>⚠️ Плагин в RuneLite новее программы</strong></p>
-        <p className="small">Программа: {__APP_VERSION__} (протокол моста {APP_PROTOCOL}) · Плагин: {plugin.version} (протокол {plugin.protocol}). Обнови программу «OSRS Путь».</p>
+        <p><strong>⚠️ The plugin in RuneLite is newer than the app</strong></p>
+        <p className="small">App: {__APP_VERSION__} (bridge protocol {APP_PROTOCOL}) · Plugin: {plugin.version} (protocol {plugin.protocol}). Update the "OSRS Path" app.</p>
       </div>
     );
   }
   const missing = missingWithPlugin(plugin.protocol);
   return (
     <div className="plaque plaque-warning" role="note">
-      <p><strong>⚠️ В RuneLite работает старый плагин {plugin.version ?? 'до 2.9'} — перезапусти RuneLite</strong></p>
+      <p><strong>⚠️ An old plugin {plugin.version ?? 'before 2.9'} is running in RuneLite — restart RuneLite</strong></p>
       <p className="small">
-        Программа {__APP_VERSION__} привезла новый плагин, но RuneLite, запущенный раньше, держит старый.
-        {missing.length > 0 && <> Со старым нет: {missing.join('; ')}.</>}
+        The app {__APP_VERSION__} brought a new plugin, but a RuneLite started earlier keeps the old one.
+        {missing.length > 0 && <> Missing with the old one: {missing.join('; ')}.</>}
       </p>
       <p className="small">
         {canLaunch
-          ? 'Выйди из игры, закрой RuneLite и нажми «🎮 Запустить RuneLite с мостом» в настройках — RuneLite откроется уже с новым плагином.'
-          : 'Выйди из игры, закрой RuneLite и запусти его снова с новым плагином (jar из папки программы).'}
-        {' '}Шаги, стрелка и подсказки пока работают.
+          ? 'Leave the game, close RuneLite and press "🎮 Launch RuneLite with the bridge" in settings — RuneLite will open with the new plugin.'
+          : 'Leave the game, close RuneLite and start it again with the new plugin (the jar from the app folder).'}
+        {' '}The steps, the arrow and the hints work for now.
       </p>
     </div>
   );

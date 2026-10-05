@@ -1,4 +1,4 @@
-// «🍖 Еда на бой»: чем и когда бьёт противник шага (вики) и что из еды у тебя уже есть. Здоровье — из игры или со страницы навыков.
+// "🍖 Food for combat": how and when the step's opponent hits (wiki) and what food you already have. Health — from the game or from the skills page.
 
 import type { Step } from '../types';
 import { useBridge } from '../bridge';
@@ -18,26 +18,26 @@ export function FoodAdvice({ step }: { step: Step }) {
   const best = bag[0];
 
   return (
-    <section className="step-section food-advice" aria-label="Еда на бой">
-      <h4 className="subhead">🍖 Еда на бой</h4>
+    <section className="step-section food-advice" aria-label="Food for combat">
+      <h4 className="subhead">🍖 Food for combat</h4>
       <ul className="small">
         {views.map((v) => (
           <li key={v.key}>
-            <strong>{v.key}</strong>: бьёт до {v.typical}{v.excluded ? ` (без защиты — до ${v.worst}: ${v.excluded.label})` : ''} раз в {v.everySeconds} с.
-            {v.threat.hits.length > 1 && !v.excluded && <> Удары: {v.threat.hits.map((h) => `${h.n}${h.label ? ` ${h.label}` : ''}`).join(', ')}.</>}
-            {' '}Ешь, когда HP ниже {v.eatBelow}.
-            {v.survives !== null && <> Твоё HP {hp} — это {v.survives} {v.survives === 1 ? 'максимальный удар' : 'максимальных ударов'} подряд.</>}
+            <strong>{v.key}</strong>: hits up to {v.typical}{v.excluded ? ` (without protection — up to ${v.worst}: ${v.excluded.label})` : ''} once every {v.everySeconds} s.
+            {v.threat.hits.length > 1 && !v.excluded && <> Hits: {v.threat.hits.map((h) => `${h.n}${h.label ? ` ${h.label}` : ''}`).join(', ')}.</>}
+            {' '}Eat when HP is below {v.eatBelow}.
+            {v.survives !== null && <> Your HP {hp} — that is {v.survives} {v.survives === 1 ? 'max hit' : 'max hits'} in a row.</>}
           </li>
         ))}
       </ul>
       {gear?.inventory ? (
         best
-          ? <p className="small">В сумке: {bag.map((b) => `${b.food.name} ×${b.count} (+${b.food.heals})`).join(', ')}.{best.food.heals >= worst ? ' Одного укуса хватает, чтобы перекрыть максимальный удар.' : ` Одна порция лечит меньше максимального удара (${worst}) — ешь заранее.`}</p>
-          : <p className="small">Еды в сумке нет. Одним укусом перекрывают максимальный удар ({worst}): {covering.slice(0, 4).map((f) => `${f.name} (+${f.heals})`).join(', ') || 'нужна еда посильнее'}.</p>
+          ? <p className="small">In the bag: {bag.map((b) => `${b.food.name} ×${b.count} (+${b.food.heals})`).join(', ')}.{best.food.heals >= worst ? ' One bite is enough to cover the max hit.' : ` One portion heals less than the max hit (${worst}) — eat ahead of time.`}</p>
+          : <p className="small">No food in the bag. These cover the max hit ({worst}) with one bite: {covering.slice(0, 4).map((f) => `${f.name} (+${f.heals})`).join(', ') || 'you need stronger food'}.</p>
       ) : (
-        <p className="muted small">Еда, которая перекрывает максимальный удар ({worst}): {covering.slice(0, 4).map((f) => `${f.name} (+${f.heals})`).join(', ') || '—'}.</p>
+        <p className="muted small">Food that covers the max hit ({worst}): {covering.slice(0, 4).map((f) => `${f.name} (+${f.heals})`).join(', ') || '—'}.</p>
       )}
-      <p className="muted small">Удары и лечение — вики на {THREATS_DATE}. Порог «в два удара» — запас на случай двух ударов подряд.</p>
+      <p className="muted small">Hits and healing — the wiki as of {THREATS_DATE}. The "two hits" threshold is a margin for two hits in a row.</p>
     </section>
   );
 }

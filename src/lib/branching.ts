@@ -1,16 +1,16 @@
-// Быстрые варианты шага для статов игрока: «⚡ У тебя Magic 25 — Varrock Teleport».
-// Уровни берутся из RuneLite, а без него — введённые вручную на странице навыков.
-// Основной путь не прячется: вариант только дополняет его.
+// A step's quick options for the player's stats: "⚡ You have Magic 25: Varrock Teleport".
+// Levels come from RuneLite, and without it, from those entered manually on the skills page.
+// The main route is not hidden: an option only adds to it.
 
 import type { BranchCondition, BranchNeed, PlayerStats, Progress, Step, StepBranch } from '../types';
 import { nameKey, ownedTotal, type OwnedState } from './checklist';
 import { heldOf, levelsOf } from './playerState';
 
-/** available — условие выполнено; locked — точно не выполнено; unknown — данных нет (RuneLite выключен, уровень не введён). */
+/** available means the condition is met; locked means surely not met; unknown means no data (RuneLite is off, the level is not entered). */
 export type BranchStatus = 'available' | 'locked' | 'unknown';
 
 export interface BranchContext {
-  /** Уровни из RuneLite; null — связи нет. */
+  /** Levels from RuneLite; null means no connection. */
   stats: PlayerStats | null;
   progress: Progress;
   steps: Step[];
@@ -19,14 +19,14 @@ export interface BranchContext {
 
 export interface ConditionResult {
   status: BranchStatus;
-  /** Текущее значение: уровень или сколько предметов есть. */
+  /** The current value: a level or how many items there are. */
   have?: number;
   need?: number;
-  /** Откуда значение: из игры или из ручного ввода. */
+  /** Where the value comes from: the game or manual entry. */
   source?: 'runelite' | 'manual' | 'progress';
 }
 
-/** Чего не хватает для варианта: has — сколько есть, certain — точно ли (банк открывали или предмет в сумке известен). */
+/** What the option lacks: has is how many there are, certain is whether it is sure (the bank was opened or the item in the bag is known). */
 export interface MissingNeed {
   label: string;
   have: number;
@@ -36,7 +36,7 @@ export interface MissingNeed {
 
 export interface BranchResult extends ConditionResult {
   branch: StepBranch;
-  /** Уровень есть, а предметов не хватает (certain) или не видно (не certain: банк не открывали). */
+  /** The level is there but the items are lacking (certain) or not visible (not certain: the bank was not opened). */
   missing?: MissingNeed[];
 }
 
@@ -53,7 +53,7 @@ export function evaluateCondition(c: BranchCondition, ctx: BranchContext): Condi
     case 'SKILL_LEVEL': {
       if (!c.skill || !c.minLevel) return { status: 'unknown' };
       const need = c.minLevel;
-      // Тот же расчёт уровня, что у готовности шага: игра главнее введённого вручную; нет ни того ни другого — неизвестно.
+      // The same level calculation as the step's readiness: the game wins over a manual entry; if there is neither, it is unknown.
       const lv = levelsOf(ctx.stats, ctx.progress.levels ?? {})[c.skill];
       if (!lv?.known) return { status: 'unknown', need };
       return { status: lv.value >= need ? 'available' : 'locked', have: lv.value, need, source: lv.source === 'game' ? 'runelite' : 'manual' };
@@ -66,7 +66,7 @@ export function evaluateCondition(c: BranchCondition, ctx: BranchContext): Condi
     }
     case 'ITEM_OWNED': {
       if (!c.itemName) return { status: 'unknown' };
-      // Тот же расчёт наличия, что у готовности и закупок: «нет ни в сумке, ни в банке» — только когда банк открывали.
+      // The same ownership calculation as readiness and shopping: "in neither the bag nor the bank" only when the bank was opened.
       const h = heldOf({ owned: ctx.owned, equipment: {}, manual: {}, bankSeen: ctx.owned?.bankSeen === true }, c.itemName);
       if (h.bag === null) return { status: 'unknown' };
       const have = (h.bag ?? 0) + h.noted + (h.bank ?? 0);
@@ -79,8 +79,8 @@ export function evaluateCondition(c: BranchCondition, ctx: BranchContext): Condi
 }
 
 /**
- * Хватает ли предметов: null — сказать нельзя (мост выключен, предмет не отслеживается). Есть всё — пустой список.
- * Не хватает — недостающее: certain, если банк открывали или хоть что-то из предмета лежит в сумке; иначе «возможно в банке».
+ * Whether the items suffice: null means it cannot be said (the bridge is off, the item is not tracked). Having everything gives an empty list.
+ * If something is lacking, the missing part: certain if the bank was opened or at least some of the item is in the bag; otherwise "maybe in the bank".
  */
 export function missingNeeds(needs: readonly BranchNeed[] | undefined, owned: OwnedState | null): MissingNeed[] | null {
   if (!needs?.length) return [];
@@ -90,7 +90,7 @@ export function missingNeeds(needs: readonly BranchNeed[] | undefined, owned: Ow
   for (const n of needs) {
     if ((n.unless ?? []).some((u) => (ownedTotal(owned, u) ?? 0) > 0)) { anyKnown = true; continue; }
     const totals = n.items.map((name) => ownedTotal(owned, name));
-    if (totals.every((t) => t === null)) continue; // плагин про этот предмет ничего не сообщал
+    if (totals.every((t) => t === null)) continue; // the plugin reported nothing about this item
     anyKnown = true;
     const have = totals.reduce<number>((s, t) => s + (t ?? 0), 0);
     if (have >= n.count) continue;
@@ -108,37 +108,37 @@ export function evaluateBranches(step: Step, ctx: BranchContext): BranchResult[]
   });
 }
 
-/** Подпись условия: «Magic 25», «после Lost City», «есть Chronicle». */
+/** The condition label: "Magic 25", "after Lost City", "has Chronicle". */
 export function conditionLabel(c: BranchCondition): string {
   switch (c.type) {
     case 'SKILL_LEVEL':
       return `${SKILL_NAMES[c.skill ?? ''] ?? c.skill} ${c.minLevel}`;
     case 'QUEST_COMPLETED':
-      return `после ${c.questName}`;
+      return `after ${c.questName}`;
     case 'ITEM_OWNED':
-      return `есть ${c.itemName}`;
+      return `has ${c.itemName}`;
     default:
       return '';
   }
 }
 
-/** Почему вариант доступен: «у тебя Magic 25 (из игры)», «Lost City выполнен», «Chronicle есть». */
+/** Why the option is available: "you have Magic 25 (from the game)", "Lost City complete", "Chronicle in hand". */
 export function reasonLabel(r: ConditionResult & { branch: StepBranch }): string {
   const c = r.branch.condition;
-  const from = r.source === 'runelite' ? ' (из игры)' : r.source === 'manual' ? ' (введено вручную)' : '';
+  const from = r.source === 'runelite' ? ' (from the game)' : r.source === 'manual' ? ' (entered manually)' : '';
   switch (c.type) {
     case 'SKILL_LEVEL':
-      return `у тебя ${SKILL_NAMES[c.skill ?? ''] ?? c.skill} ${r.have ?? ''}${from}`;
+      return `you have ${SKILL_NAMES[c.skill ?? ''] ?? c.skill} ${r.have ?? ''}${from}`;
     case 'QUEST_COMPLETED':
-      return `${c.questName} выполнен`;
+      return `${c.questName} complete`;
     case 'ITEM_OWNED':
-      return `${c.itemName} есть${from}`;
+      return `${c.itemName} in hand${from}`;
     default:
       return '';
   }
 }
 
-/** Предметы из условий шага — о них плагин должен сообщать, сколько их есть. */
+/** The items from a step's conditions: the plugin must report how many of them there are. */
 export function watchedItems(step: Step): string[] {
   const names = (step.branches ?? []).flatMap((b) => [
     ...(b.condition.type === 'ITEM_OWNED' && b.condition.itemName ? [b.condition.itemName] : []),
@@ -147,7 +147,7 @@ export function watchedItems(step: Step): string[] {
   return [...new Set(names)].slice(0, 40);
 }
 
-/** «~2 мин» из секунд. */
+/** "~2 min" from seconds. */
 export function formatSaving(seconds: number): string {
-  return seconds < 90 ? `~${Math.round(seconds)} с` : `~${Math.round(seconds / 60)} мин`;
+  return seconds < 90 ? `~${Math.round(seconds)} s` : `~${Math.round(seconds / 60)} min`;
 }

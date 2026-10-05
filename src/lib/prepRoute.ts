@@ -1,55 +1,55 @@
-// Маршрут подготовки к шагу: что именно сделать до выхода, в каком порядке, и возврат к шагу, когда всё готово.
-// Строится из готовности (readiness.ts) — одно состояние, никаких своих проверок. Подготовка не ломает основной
-// маршрут: каждый заход за подготовкой — «объезд» (DetourFrame) с условием возврата; глубина объездов не больше трёх,
-// повтор того же объезда запрещён, а выполненное не отправляет игрока туда снова. Ничего не покупает.
+// The preparation route for a step: what exactly to do before leaving, in what order, and the return to the step when all is ready.
+// Built from readiness (readiness.ts): one state, no checks of its own. Preparation does not break the main
+// route: every trip for preparation is a "detour" (DetourFrame) with a return condition; the depth of detours is at most three,
+// repeating the same detour is forbidden, and what was done does not send the player there again. It buys nothing.
 
 import type { Step } from '../types';
 import type { ReadinessAction, RequirementStatus, StepReadiness } from './readiness';
 
-/** Насколько срочно: сейчас, скоро (следующие шаги), потом. */
+/** How urgent: now, soon (the next steps), later. */
 export type Urgency = 'NOW' | 'SOON' | 'LATER';
-/** Обязательно, рекомендуется, по желанию — по желанию игрока заставлять нельзя. */
+/** Mandatory, recommended, optional: the player cannot be forced to do the optional. */
 export type Need = 'REQUIRED' | 'RECOMMENDED' | 'OPTIONAL';
 
 export type TaskKind = 'block' | 'quest' | 'stat' | 'buy' | 'money' | 'bank';
 
 export interface PrepTask {
-  /** Стабильный ключ: одна и та же задача — один и тот же id при любом пересчёте. */
+  /** A stable key: the same task has the same id at any recount. */
   id: string;
   kind: TaskKind;
   label: string;
   detail?: string;
-  /** Чем меньше, тем раньше: 1 закрыт, 2 выживание, 3 обязательное снаряжение и предметы, 4 уровни, 5 экономия времени, 6 удобство, 7 по желанию. */
+  /** The lower the earlier: 1 closed, 2 survival, 3 mandatory gear and items, 4 levels, 5 time saving, 6 convenience, 7 optional. */
   priority: number;
   need: Need;
   urgency: Urgency;
   action?: ReadinessAction;
-  /** Для задачи «добери уровень»: навык и цель — по ним подбирается способ прокачки. */
+  /** For a "reach the level" task: the skill and the goal, by which a training method is chosen. */
   stat?: { skill: string; min: number };
-  /** Для задач «забрать» и «купить»: английские названия предметов по порядку. */
+  /** For the "collect" and "buy" tasks: the English item names in order. */
   items?: string[];
-  /** Из каких строк готовности собрана задача. */
+  /** Which readiness lines the task is made of. */
   from: RequirementStatus[];
 }
 
 export interface PrepRoute {
   stepId: string;
-  /** Все задачи по порядку выполнения. */
+  /** All the tasks in order of doing. */
   tasks: PrepTask[];
-  /** Главное сейчас: одно. */
+  /** The main thing now: one. */
   primary: PrepTask | null;
-  /** Не больше двух следующих — остальное свёрнуто. */
+  /** No more than two next ones: the rest is collapsed. */
   next: PrepTask[];
   hidden: number;
-  /** Куда возвращаемся, когда всё сделано. */
+  /** Where we return when all is done. */
   returnTo: string;
-  /** Подготовки нет: шаг готов (проблем среди обязательного нет). */
+  /** No preparation: the step is ready (no problems among the mandatory). */
   ready: boolean;
 }
 
 const BLOCK = new Set(['mode', 'step', 'qp']);
 
-/** Обязательное ли требование: «нужно по ходу квеста» (hard=false) начать шаг не мешает. */
+/** Whether the requirement is mandatory: "needed during the quest" (hard=false) does not prevent starting the step. */
 const needOf = (r: RequirementStatus): Need => (r.hard ? 'REQUIRED' : 'OPTIONAL');
 
 function priorityOf(r: RequirementStatus): number {
@@ -70,7 +70,7 @@ export function buildPrepRoute(r: StepReadiness, step: Pick<Step, 'id'>): PrepRo
     } else if (p.kind === 'item' && p.hard) {
       buy.push(p);
     } else if (p.kind === 'coins') {
-      tasks.push({ id: 'money', kind: 'money', label: `Монеты: ${p.label}`, detail: p.detail, priority: 3, need: 'REQUIRED', urgency: 'NOW', ...(p.action ? { action: p.action } : {}), from: [p] });
+      tasks.push({ id: 'money', kind: 'money', label: `Coins: ${p.label}`, detail: p.detail, priority: 3, need: 'REQUIRED', urgency: 'NOW', ...(p.action ? { action: p.action } : {}), from: [p] });
     } else if (p.kind === 'skill') {
       tasks.push({ id: `stat:${p.label.toLowerCase()}`, kind: 'stat', label: p.label, detail: p.detail, priority: priorityOf(p), need: needOf(p), urgency: p.hard ? 'NOW' : 'LATER', ...(p.action ? { action: p.action } : {}), ...(p.stat ? { stat: p.stat } : {}), from: [p] });
     } else if (p.kind === 'quest' || p.kind === 'step' || p.kind === 'qp' || p.kind === 'mode') {
@@ -79,19 +79,19 @@ export function buildPrepRoute(r: StepReadiness, step: Pick<Step, 'id'>): PrepRo
       tasks.push({ id: `${p.kind}:${p.label.toLowerCase()}`, kind: 'buy', label: p.label, detail: p.detail, priority: priorityOf(p), need: needOf(p), urgency: p.hard ? 'NOW' : 'LATER', ...(p.action ? { action: p.action } : {}), from: [p] });
     }
   }
-  // Всё, что лежит в банке, — один заход: «забери из банка: A, B, монеты».
+  // Everything that is in the bank is one trip: "take from the bank: A, B, coins".
   if (bank.length) {
     const nav = bank.find((b) => b.action?.kind === 'nav')?.action;
     tasks.push({
-      id: 'bank', kind: 'bank', label: `Забери из банка: ${bank.map((b) => b.label).join(', ')}`, priority: 3, need: 'REQUIRED', urgency: 'NOW',
+      id: 'bank', kind: 'bank', label: `Take from the bank: ${bank.map((b) => b.label).join(', ')}`, priority: 3, need: 'REQUIRED', urgency: 'NOW',
       ...(nav ? { action: nav } : {}), items: bank.flatMap((b) => (b.item ? [b.item] : [])), from: bank,
     });
   }
-  // Всё, что надо купить, — одна закупка.
+  // Everything that must be bought is one purchase.
   if (buy.length) {
     tasks.push({
-      id: 'buy', kind: 'buy', label: `Купи: ${buy.map((b) => b.label).join(', ')}`, priority: 3, need: 'REQUIRED', urgency: 'NOW',
-      action: { kind: 'link', label: '🛒 В закупки', href: '#/shopping' }, items: buy.flatMap((b) => (b.item ? [b.item] : [])), from: buy,
+      id: 'buy', kind: 'buy', label: `Buy: ${buy.map((b) => b.label).join(', ')}`, priority: 3, need: 'REQUIRED', urgency: 'NOW',
+      action: { kind: 'link', label: '🛒 To shopping', href: '#/shopping' }, items: buy.flatMap((b) => (b.item ? [b.item] : [])), from: buy,
     });
   }
   tasks.sort((a, b) => a.priority - b.priority || (a.id < b.id ? -1 : 1));
@@ -109,9 +109,9 @@ export function buildPrepRoute(r: StepReadiness, step: Pick<Step, 'id'>): PrepRo
 }
 
 /**
- * Какие задачи подготовки ещё не выполнены: и те, что точно не сделаны, и те, что проверить нечем. Объезд снимается,
- * только когда задача выполнена по данным, а не когда данные пропали (связь оборвалась, страница перезагрузилась):
- * «неизвестно» — не «готово».
+ * Which preparation tasks are not yet done: both those surely not done and those that cannot be checked. A detour is cleared
+ * only when the task is done by data, not when the data disappeared (the connection dropped, the page reloaded):
+ * "unknown" is not "done".
  */
 export function openTaskIds(r: StepReadiness, step: Pick<Step, 'id'>): Set<string> {
   const ids = new Set(buildPrepRoute(r, step).tasks.map((t) => t.id));
@@ -125,25 +125,25 @@ export function openTaskIds(r: StepReadiness, step: Pick<Step, 'id'>): Set<strin
 }
 
 // ---------------------------------------------------------------------------
-// Объезды: стек с условием возврата. Хранится между запусками (одна запись на профиль).
+// Detours: a stack with a return condition. Kept between launches (one record per profile).
 
 export const MAX_DETOUR_DEPTH = 3;
 
 export interface DetourFrame {
   sourceStepId: string;
-  /** id задачи подготовки (PrepTask.id), ради которой начат объезд. */
+  /** The id of the preparation task (PrepTask.id) for which the detour was started. */
   detourId: string;
   reason: string;
   startedAt: number;
-  /** Человеческое условие возврата: «Fishing 20 достигнут». */
+  /** A human-readable return condition: "Fishing 20 reached". */
   returnCondition: string;
-  /** Игрок сам снял стрелку: автоподготовка её больше не ставит, пока он не нажмёт «Продолжить». */
+  /** The player removed the arrow themselves: auto-prepare no longer sets it until they press "Continue". */
   paused?: boolean;
 }
 
 export interface PrepState {
   stack: DetourFrame[];
-  /** Выполненные объезды «шаг:задача»: второй раз сами не предлагаем. */
+  /** The completed detours "step:task": we do not offer them a second time ourselves. */
   done: string[];
 }
 
@@ -153,7 +153,7 @@ const doneKey = (stepId: string, detourId: string) => `${stepId}:${detourId}`;
 
 export type StartResult =
   | { ok: true; state: PrepState }
-  /** Объезд не начат: глубина или цикл — задачи остаются списком на экране. */
+  /** The detour did not start: depth or a loop: the tasks stay as a list on the screen. */
   | { ok: false; state: PrepState; reason: 'DEPTH' | 'CYCLE' | 'DONE_BEFORE' };
 
 export function startDetour(state: PrepState, frame: DetourFrame): StartResult {
@@ -164,9 +164,9 @@ export function startDetour(state: PrepState, frame: DetourFrame): StartResult {
 }
 
 /**
- * Сверка с готовностью: объезд, чья задача больше не открыта, выполнен — снимается со стека, а выполненное
- * запоминается. Возвращает шаг, к которому пора вернуться (источник верхнего объезда, если он остался, иначе
- * источник последнего снятого).
+ * Checking against readiness: a detour whose task is no longer open is done: it is removed from the stack, and what was done
+ * is remembered. It returns the step to go back to (the source of the top detour if one is left, otherwise
+ * the source of the last one removed).
  */
 export function reconcile(state: PrepState, openTasks: (stepId: string) => Set<string> | null): { state: PrepState; returnTo: string | null } {
   const stack = [...state.stack];
@@ -175,7 +175,7 @@ export function reconcile(state: PrepState, openTasks: (stepId: string) => Set<s
   while (stack.length) {
     const top = stack[stack.length - 1];
     const open = openTasks(top.sourceStepId);
-    // Готовность шага неизвестна (шаг пропал, нет данных) — объезд оставляем: ничего не теряем молча.
+    // The step's readiness is unknown (the step is gone, no data): we keep the detour: nothing is lost silently.
     if (open === null) break;
     if (open.has(top.detourId)) break;
     done.add(doneKey(top.sourceStepId, top.detourId));
@@ -187,7 +187,7 @@ export function reconcile(state: PrepState, openTasks: (stepId: string) => Set<s
 
 export const PREP_KEY = 'osrs-put:prep';
 
-/** Битые данные в хранилище — пустое состояние: ничего не падает. */
+/** Broken data in storage means an empty state: nothing crashes. */
 export function parsePrep(raw: string | null): PrepState {
   try {
     const d = raw ? (JSON.parse(raw) as Record<string, unknown>) : {};

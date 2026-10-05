@@ -1,3 +1,4 @@
+// The "Quests" screen: the route quests, the quest points and what they unlock.
 import { useState } from 'react';
 import type { Progress, Quest } from '../types';
 import { allQuests, BASE_QP, BASE_QUEST, stepById } from '../data';
@@ -9,10 +10,10 @@ type Status = 'done' | 'skipped' | 'available' | 'blocked';
 type Filter = 'all' | 'done' | 'available' | 'blocked';
 
 const FILTERS: [Filter, string][] = [
-  ['all', 'Все'],
-  ['done', 'Сделанные'],
-  ['available', 'Доступные'],
-  ['blocked', 'Заблокированные'],
+  ['all', 'All'],
+  ['done', 'Done'],
+  ['available', 'Available'],
+  ['blocked', 'Blocked'],
 ];
 
 interface Row {
@@ -51,11 +52,11 @@ export function QuestsPage() {
   return (
     <div className="page">
       <header className="page-head">
-        <h1>Квесты</h1>
-        <p className="muted">{count('done')} из {rows.length + 1} · очки квестов {qp}</p>
+        <h1>Quests</h1>
+        <p className="muted">{count('done')} of {rows.length + 1} · quest points {qp}</p>
       </header>
 
-      <div className="segmented" role="group" aria-label="Фильтр квестов">
+      <div className="segmented" role="group" aria-label="Quest filter">
         {FILTERS.map(([f, label]) => (
           <button key={f} type="button" aria-pressed={filter === f}
             className={`seg ${filter === f ? 'is-active' : ''}`} onClick={() => setFilter(f)}>
@@ -71,7 +72,7 @@ export function QuestsPage() {
               <span className="quest-status"><IconCheck /></span>
               <span className="quest-body">
                 <span className="quest-title">{BASE_QUEST}</span>
-                <span className="quest-meta">Обучающий остров · +{BASE_QP} QP · уже пройден</span>
+                <span className="quest-meta">Tutorial Island · +{BASE_QP} QP · already completed</span>
               </span>
             </div>
           </li>
@@ -84,21 +85,20 @@ export function QuestsPage() {
               </span>
               <span className="quest-body">
                 <span className="quest-title">{r.quest.title}</span>
-                {r.quest.titleRu && <span className="quest-ru">{r.quest.titleRu}</span>}
                 <span className="quest-meta">
-                  Этап {r.quest.stage}{r.quest.membersOnly && ' · Members'}{r.quest.qp > 0 && ` · +${r.quest.qp} QP`}
-                  {r.quest.parts.length > 0 && ` · шагов ${r.partsDone} / ${r.quest.parts.length}`}
+                  Stage {r.quest.stage}{r.quest.membersOnly && ' · Members'}{r.quest.qp > 0 && ` · +${r.quest.qp} QP`}
+                  {r.quest.parts.length > 0 && ` · steps ${r.partsDone} / ${r.quest.parts.length}`}
                   {' · '}
-                  <span className="quest-state">{{ done: 'сделан', skipped: 'пропущен', available: 'доступен', blocked: 'заблокирован' }[r.status]}</span>
+                  <span className="quest-state">{{ done: 'done', skipped: 'skipped', available: 'available', blocked: 'blocked' }[r.status]}</span>
                 </span>
-                {r.blocked && <span className="quest-blocked">Сначала: {r.blocked}</span>}
+                {r.blocked && <span className="quest-blocked">First: {r.blocked}</span>}
               </span>
               <IconChevron className="chevron" />
             </a>
           </li>
         ))}
       </ul>
-      {!visible.length && !matches(filter, base) && <p className="muted empty">Здесь пусто.</p>}
+      {!visible.length && !matches(filter, base) && <p className="muted empty">Nothing here.</p>}
     </div>
   );
 }

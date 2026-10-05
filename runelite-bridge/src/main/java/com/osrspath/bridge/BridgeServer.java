@@ -73,7 +73,7 @@ public final class BridgeServer
 	 */
 	static final int PROTOCOL = 6;
 	/** The plugin version, the same as the app it ships with in one exe. */
-	static final String PLUGIN_VERSION = "2.27.0";
+	static final String PLUGIN_VERSION = "2.28.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	/** The whole snapshot: the step with the quest stages, shopping and plan in one body. */
@@ -226,11 +226,6 @@ public final class BridgeServer
 		}
 		inGame = value;
 		broadcast(statusEvent());
-	}
-
-	public void setActiveStepId(String stepId)
-	{
-		activeStepId = stepId;
 	}
 
 	/** New skill levels. Identical ones are not broadcast. */

@@ -10,7 +10,7 @@ interface Props {
   compact?: boolean;
 }
 
-/** Уровень навыка: число с кнопками − и +. Сохраняется сразу. */
+/** A skill level: a number with − and + buttons. Saved at once. */
 export function LevelInput({ id, label, hideLabel, compact }: Props) {
   const { progress, setLevel } = useStore();
   const value = levelOf(progress, id);
@@ -31,12 +31,12 @@ export function LevelInput({ id, label, hideLabel, compact }: Props) {
       <label htmlFor={inputId} className={hideLabel ? 'visually-hidden' : 'level-label'}>{label}</label>
       <div className="stepper">
         <button type="button" className="stepper-btn" onClick={() => setLevel(id, value - 1)} disabled={value <= MIN_LEVEL}
-          aria-label={`${label}: уменьшить`}>−</button>
+          aria-label={`${label}: decrease`}>−</button>
         <input id={inputId} className="stepper-input" type="text" inputMode="numeric" pattern="[0-9]*"
           autoComplete="off" value={draft} onChange={(e) => onChange(e.target.value)}
           onFocus={(e) => e.target.select()} onBlur={() => setDraft(String(value))} />
         <button type="button" className="stepper-btn" onClick={() => setLevel(id, value + 1)} disabled={value >= MAX_LEVEL}
-          aria-label={`${label}: увеличить`}>+</button>
+          aria-label={`${label}: increase`}>+</button>
       </div>
     </div>
   );

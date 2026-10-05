@@ -1,6 +1,6 @@
-// «Как добраться»: от положения игрока (плагин, /status → pos) до цели шага — пешком, телепортом или каноэ.
-// Расстояния — по прямой (преграды неизвестны), поэтому это сравнение вариантов, а не точное время. Что доступно сейчас,
-// определяется по уровням и вещам из игры; чего не знаем (банк не открывали) — помечаем, а не придумываем.
+// "How to get there": from the player's position (the plugin, /status → pos) to the step target — on foot, by teleport or by canoe.
+// The distances are straight lines (the obstacles are unknown), so this is a comparison of options, not an exact time. What is available now
+// is decided by the levels and things from the game; what we do not know (the bank was not opened) is marked, not invented.
 
 import transportJson from '../data/transport.json';
 import type { GearItem } from '../services/runeliteBridge';
@@ -10,7 +10,6 @@ export interface Teleport {
   id: string;
   kind: 'home' | 'spell' | 'item';
   name: string;
-  nameRu: string;
   magic?: number;
   runes?: Record<string, number>;
   items?: string[];
@@ -30,10 +29,10 @@ export const TRANSPORT = transportJson as unknown as {
   canoe: { stations: CanoeStation[]; types: CanoeType[]; axes: string[] };
 };
 
-/** Бег — 2 клетки за тик (0,6 с): так считается нижняя оценка времени пешком. */
+/** Running is 2 tiles per tick (0.6 s): that is the lower bound of the walking time. */
 export const TILES_PER_SECOND = 2 / 0.6;
 
-/** Выигрыш меньше этого числа клеток не стоит ни рун, ни зарядов: вариант не показываем. */
+/** A gain smaller than this number of tiles is not worth runes or charges: the option is not shown. */
 export const MIN_SAVING_TILES = 20;
 
 export const dist = (a: Point, b: Point): number => Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
@@ -46,10 +45,10 @@ export interface TravelOption {
   id: string;
   title: string;
   legs: Leg[];
-  /** Клеток пешком по всем отрезкам (прямая). */
+  /** Tiles on foot over all legs (a straight line). */
   walkTiles: number;
   availability: Availability;
-  /** Чего не хватает или что проверить: уровень, руны, книга. */
+  /** What is missing or what to check: a level, runes, a book. */
   needs: Need[];
   note?: string;
 }
@@ -57,11 +56,11 @@ export interface TravelOption {
 export interface TravelInput {
   from: Point;
   to: Point;
-  /** Уровни из игры или введённые вручную. */
+  /** Levels from the game or entered by hand. */
   levels: Readonly<Record<string, number | undefined>>;
-  /** Надетое и сумка из игры; null — игры нет. */
+  /** Equipped items and the bag from the game; null — no game. */
   carried: readonly GearItem[] | null;
-  /** Банк открывали (предмета нет в сумке — значит, возможно, он в банке). */
+  /** The bank was opened (an item missing from the bag may be in the bank). */
   bankSeen: boolean;
 }
 
@@ -80,10 +79,10 @@ function teleportNeeds(t: Teleport, inp: TravelInput): { needs: Need[]; availabi
   if (t.kind === 'home') return { needs: [], availability: 'ready' };
   if (t.kind === 'item') {
     const have = inp.carried ? count(inp.carried, t.items ?? []) > 0 : null;
-    // Нет при себе, а банк открывали — значит, нет нигде рядом; банк не открывали — может лежать там.
+    // Not on hand and the bank was opened: it is not anywhere nearby; the bank was not opened: it may be lying there.
     const ok = have === null ? null : have ? true : inp.bankSeen ? false : null;
     return {
-      needs: [{ text: `${t.items![0]} при себе (заряды — Check charges)`, ok }],
+      needs: [{ text: `${t.items![0]} on you (charges: Check charges)`, ok }],
       availability: ok === false ? 'locked' : 'maybe',
     };
   }
@@ -93,41 +92,41 @@ function teleportNeeds(t: Teleport, inp: TravelInput): { needs: Need[]; availabi
   let unsure = false;
   if (t.magic) {
     const ok = lvl === undefined ? null : lvl >= t.magic;
-    needs.push({ text: `Magic ${t.magic}${lvl !== undefined ? ` (у тебя ${lvl})` : ''}`, ok });
+    needs.push({ text: `Magic ${t.magic}${lvl !== undefined ? ` (you have ${lvl})` : ''}`, ok });
     if (ok === false) locked = true;
     if (ok === null) unsure = true;
   }
   for (const [rune, qty] of Object.entries(t.runes ?? {})) {
     if (inp.carried && STAFF_OF[rune] && count(inp.carried, STAFF_OF[rune]) > 0) {
-      needs.push({ text: `${runeName(rune)} ×${qty} — заменяет посох`, ok: true });
+      needs.push({ text: `${runeName(rune)} ×${qty} — replaces the staff`, ok: true });
       continue;
     }
     const have = inp.carried ? count(inp.carried, [runeName(rune)]) : null;
     const ok = have === null ? null : have >= qty ? true : inp.bankSeen ? false : null;
-    needs.push({ text: `${runeName(rune)} ×${qty}${have !== null ? ` (в сумке ${have})` : ''}`, ok });
+    needs.push({ text: `${runeName(rune)} ×${qty}${have !== null ? ` (in the bag: ${have})` : ''}`, ok });
     if (ok === false) locked = true;
     if (ok === null) unsure = true;
   }
   return { needs, availability: locked ? 'locked' : unsure ? 'maybe' : 'ready' };
 }
 
-/** Возможные способы добраться: доступные сначала, внутри — по числу клеток пешком. Бесполезные (не короче пешком) не показываются. */
+/** The possible ways to get there: the available ones first, within them by tiles on foot. The useless ones (not shorter on foot) are not shown. */
 export function travelOptions(inp: TravelInput): TravelOption[] {
   const out: TravelOption[] = [];
   const direct = dist(inp.from, inp.to);
-  out.push({ id: 'walk', title: 'Пешком', legs: [{ kind: 'walk', label: 'бегом по прямой', tiles: direct }], walkTiles: direct, availability: 'ready', needs: [] });
+  out.push({ id: 'walk', title: 'On foot', legs: [{ kind: 'walk', label: 'running in a straight line', tiles: direct }], walkTiles: direct, availability: 'ready', needs: [] });
 
   for (const t of TRANSPORT.teleports) {
     const tail = dist(t.dest, inp.to);
     const { needs, availability } = teleportNeeds(t, inp);
     out.push({
-      id: t.id, title: t.nameRu,
-      legs: [{ kind: 'teleport', label: `${t.nameRu} → ${t.dest.label}`, tiles: 0 }, { kind: 'walk', label: 'дальше пешком', tiles: tail }],
+      id: t.id, title: t.name,
+      legs: [{ kind: 'teleport', label: `${t.name} → ${t.dest.label}`, tiles: 0 }, { kind: 'walk', label: 'then on foot', tiles: tail }],
       walkTiles: tail, availability, needs, ...(t.note ? { note: t.note } : {}),
     });
   }
 
-  // Каноэ: лучшая пара станций — от игрока до станции A, по реке до B (не дальше, чем позволяет тип каноэ), от B до цели.
+  // A canoe: the best pair of stations — from the player to station A, down the river to B (no farther than the canoe type allows), from B to the target.
   const stations = TRANSPORT.canoe.stations;
   const types = TRANSPORT.canoe.types;
   let best: { a: number; b: number; tiles: number; type: CanoeType } | null = null;
@@ -148,22 +147,22 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
     const a = stations[best.a];
     const b = stations[best.b];
     out.push({
-      id: 'canoe', title: `Каноэ ${a.name} → ${b.name}`,
+      id: 'canoe', title: `Canoe ${a.name} → ${b.name}`,
       legs: [
-        { kind: 'walk', label: `до станции ${a.name}`, tiles: dist(inp.from, a) },
-        { kind: 'canoe', label: `${best.type.name}: ${Math.abs(best.a - best.b)} ост.`, tiles: 0 },
-        { kind: 'walk', label: `от станции ${b.name} до цели`, tiles: dist(b, inp.to) },
+        { kind: 'walk', label: `to station ${a.name}`, tiles: dist(inp.from, a) },
+        { kind: 'canoe', label: `${best.type.name}: ${Math.abs(best.a - best.b)} stops`, tiles: 0 },
+        { kind: 'walk', label: `from station ${b.name} to the target`, tiles: dist(b, inp.to) },
       ],
       walkTiles: best.tiles,
       availability: levelOk === false ? 'locked' : levelOk === null || hasAxe === null ? 'maybe' : 'ready',
       needs: [
-        { text: `Woodcutting ${best.type.level} для ${best.type.name}${wc !== undefined ? ` (у тебя ${wc})` : ''}`, ok: levelOk },
-        { text: 'любой топор (можно оставить на станции)', ok: hasAxe },
+        { text: `Woodcutting ${best.type.level} for ${best.type.name}${wc !== undefined ? ` (you have ${wc})` : ''}`, ok: levelOk },
+        { text: 'any axe (can be left at the station)', ok: hasAxe },
       ],
     });
   }
 
-  // Лодки: пристань до пристани за 30 монет.
+  // Boats: pier to pier for 30 coins.
   for (const b of TRANSPORT.boats) {
     const tiles = dist(inp.from, b.from) + dist(b.to, inp.to);
     const coins = inp.carried ? count(inp.carried, ['Coins']) : null;
@@ -171,13 +170,13 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
     out.push({
       id: b.id, title: b.name,
       legs: [
-        { kind: 'walk', label: `до ${b.from.label}`, tiles: dist(inp.from, b.from) },
-        { kind: 'boat', label: `лодка за ${b.cost} gp`, tiles: 0 },
-        { kind: 'walk', label: `от ${b.to.label} до цели`, tiles: dist(b.to, inp.to) },
+        { kind: 'walk', label: `to ${b.from.label}`, tiles: dist(inp.from, b.from) },
+        { kind: 'boat', label: `boat for ${b.cost} gp`, tiles: 0 },
+        { kind: 'walk', label: `from ${b.to.label} to the target`, tiles: dist(b.to, inp.to) },
       ],
       walkTiles: tiles,
       availability: ok === false ? 'locked' : ok ? 'ready' : 'maybe',
-      needs: [{ text: `${b.cost} gp монетами${coins !== null ? ` (в сумке ${coins})` : ''}`, ok }],
+      needs: [{ text: `${b.cost} gp in coins${coins !== null ? ` (in the bag: ${coins})` : ''}`, ok }],
       ...(b.note ? { note: b.note } : {}),
     });
   }
@@ -186,9 +185,9 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
   return out.filter((o) => o.id === 'walk' || o.walkTiles + MIN_SAVING_TILES <= direct).sort((x, y) => rank(x) - rank(y) || x.walkTiles - y.walkTiles);
 }
 
-/** «40 кл. · бегом не меньше 12 с»: нижняя оценка — преграды, бой и энергия делают дольше. */
+/** "40 tiles · running at least 12 s": the lower bound — obstacles, combat and energy make it longer. */
 export function walkText(tiles: number): string {
-  if (tiles <= 0) return 'на месте';
+  if (tiles <= 0) return 'on the spot';
   const sec = Math.ceil(tiles / TILES_PER_SECOND);
-  return `${tiles} кл. · бегом не меньше ${sec < 90 ? `${sec} с` : `${Math.round(sec / 60)} мин`}`;
+  return `${tiles} tiles · running at least ${sec < 90 ? `${sec} s` : `${Math.round(sec / 60)} min`}`;
 }

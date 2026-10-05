@@ -1,6 +1,6 @@
-// Места из досье вики — на карту и в игру: «📍 Port Sarim» открывает карту мира с меткой и подписью источника,
-// «🧭» ведёт туда стрелку в RuneLite. Координаты — только из поиска мест (словарь → OSRS Wiki → поиск вики):
-// без найденной точки в игру ничего не уходит.
+// Places from the wiki dossier — onto the map and into the game: "📍 Port Sarim" opens the world map with a marker and the source caption,
+// "🧭" leads the RuneLite arrow there. Coordinates — only from place search (dictionary → OSRS Wiki → wiki search):
+// without a found point nothing goes to the game.
 
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
@@ -23,7 +23,7 @@ interface View {
   nav?: NavTargetPayload;
 }
 
-/** Карта одного места: открыть сразу с «Ищу место…», потом метка или поиск вики. Закрыли раньше — ответ отбрасывается. */
+/** The map of one place: open at once with "Searching for the place…", then the marker or a wiki search. Closed earlier — the answer is discarded. */
 export function usePlaceMap() {
   const [view, setView] = useState<View | null>(null);
   const request = useRef(0);
@@ -50,7 +50,7 @@ export function usePlaceMap() {
 
 export function PlaceMapView({ view, onClose }: { view: View | null; onClose: () => void }) {
   if (!view) return null;
-  // Поверх досье, а не внутри него: у выдвижной панели своё окно.
+  // On top of the dossier, not inside it: the slide-out panel has its own window.
   return createPortal(
     <Suspense fallback={null}>
       <WorldMapModal title={view.title} target={view.target} status={view.status} searchUrl={view.searchUrl}
@@ -60,16 +60,16 @@ export function PlaceMapView({ view, onClose }: { view: View | null; onClose: ()
   );
 }
 
-/** «📍 место» — открыть на карте. */
+/** "📍 place" — open on the map. */
 export function PlaceButton({ query, children, onShow }: { query: PlaceQuery; children: ReactNode; onShow: (q: PlaceQuery) => void }) {
   return (
-    <button type="button" className="place-link" onClick={() => onShow(query)} title="Показать на карте мира">
+    <button type="button" className="place-link" onClick={() => onShow(query)} title="Show on the world map">
       <span aria-hidden="true">📍</span> {children}
     </button>
   );
 }
 
-/** «🧭» в строке — найти место и сразу направить туда стрелку в RuneLite, не открывая карту. */
+/** "🧭" in a row — find the place and point the RuneLite arrow there at once, without opening the map. */
 export function PlaceNavButton({ query }: { query: PlaceQuery }) {
   const { enabled, navigate } = useBridge();
   const { notify } = useStore();
@@ -80,16 +80,16 @@ export function PlaceNavButton({ query }: { query: PlaceQuery }) {
     const r = await resolvePlace(query).catch(() => null);
     if (!r || !isPoint(r)) {
       setBusy(false);
-      notify('Точку места не нашёл — открой 📍 карту: там поиск на OSRS Wiki');
+      notify('Could not find the place point — open the 📍 map: it has an OSRS Wiki search');
       return;
     }
     const res = await navigate(navPayload(query, r));
     setBusy(false);
-    notify(res.ok ? `🧭 Стрелка в игре ведёт к: ${r.label}` : res.reason === 'refused' ? `RuneLite отказал: ${res.message}` : 'RuneLite offline — стрелку поставить некуда');
+    notify(res.ok ? `🧭 The in-game arrow leads to: ${r.label}` : res.reason === 'refused' ? `RuneLite refused: ${res.message}` : 'RuneLite offline — nowhere to point the arrow');
   };
   return (
     <button type="button" className="icon-btn nav-btn" onClick={() => void go()} disabled={busy}
-      title="Указать в RuneLite" aria-label={`Указать в RuneLite: ${query.shop ?? query.npc ?? query.location}`}>
+      title="Point in RuneLite" aria-label={`Point in RuneLite: ${query.shop ?? query.npc ?? query.location}`}>
       🧭
     </button>
   );

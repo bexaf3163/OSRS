@@ -1,4 +1,4 @@
-// Состояние прогресса: один источник на всё приложение, сохранение (localStorage + файл в программе для ПК), отмена.
+// The progress state: one source for the whole app, saving (localStorage + a file in the desktop app), undo.
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import type { GameMode, Progress, Stage, Step, StepStatus } from './types';
@@ -20,28 +20,28 @@ export interface Toast {
 interface StoreValue {
   progress: Progress;
   mode: GameMode;
-  /** Шаги и этапы, видимые в текущем режиме. */
+  /** The steps and stages visible in the current mode. */
   steps: Step[];
   stages: Stage[];
   qp: number;
   maxQp: number;
-  /** message — своя подпись в сообщении внизу (например, «выполнено в игре»). */
+  /** message — a custom caption in the message at the bottom (for example, "done in the game"). */
   setStep: (id: string, status: StepStatus | null, message?: string) => void;
   setLevel: (id: string, level: number) => void;
-  /** Несколько уровней сразу — уровни из игры. */
+  /** Several levels at once — the levels from the game. */
   setLevels: (levels: Record<string, number>) => void;
   setNote: (id: string, note: string) => void;
   setMode: (mode: GameMode) => void;
   review: (ids: string[]) => void;
   reactivate: (ids: string[]) => void;
-  /** «✕ Пропустить» подсказку апгрейда на шаге (dismissed=false — вернуть). */
+  /** "✕ Skip" the upgrade hint on a step (dismissed=false — bring it back). */
   dismissUpgrade: (stepId: string, dismissed?: boolean) => void;
-  /** «У меня уже есть» в оптовой закупке: количество или null — убрать отметку. */
+  /** "I already have it" in the bulk shopping: a quantity or null — remove the mark. */
   setOwnedManual: (key: string, count: number | null) => void;
   replace: (p: Progress, message: string) => void;
   reset: () => void;
   toast: Toast | null;
-  /** Сообщение внизу без отмены. */
+  /** A message at the bottom without undo. */
   notify: (message: string) => void;
   undo: () => void;
   dismissToast: () => void;
@@ -57,23 +57,23 @@ function storage(): Storage | undefined {
   }
 }
 
-/** localStorage или файл программы для ПК — что свежее. Файл спасает, если хранилище браузера пропало. */
+/** localStorage or the desktop app's file — whichever is fresher. The file saves things if the browser storage is gone. */
 function initialProgress(): Progress {
   const ls = storage();
   let hasLocal = false;
-  try { hasLocal = Boolean(ls?.getItem(progressKey())); } catch { /* нет хранилища */ }
+  try { hasLocal = Boolean(ls?.getItem(progressKey())); } catch { /* no storage */ }
   const local = loadProgress(ls, known, progressKey());
   try {
     const text = desktop()?.loadProgressFile(readProfiles().active);
     const fromFile = text ? normalizeProgress(JSON.parse(text), known)?.progress : undefined;
     if (fromFile && (!hasLocal || Date.parse(fromFile.updatedAt) > Date.parse(local.updatedAt))) return fromFile;
   } catch {
-    // Битый файл — остаёмся на localStorage.
+    // A broken file — we stay on localStorage.
   }
   return local;
 }
 
-/** Ключ прогресса активного профиля: у основного прежний. */
+/** The progress key of the active profile: the main one keeps the old key. */
 function progressKey(): string {
   return profileStorageKey(STORAGE_KEY, readProfiles().active);
 }
@@ -83,7 +83,7 @@ function persist(p: Progress) {
   try {
     desktop()?.saveProgressFile(JSON.stringify(p), readProfiles().active);
   } catch {
-    // Файл не записался — localStorage всё равно сохранён.
+    // The file was not written — localStorage is saved anyway.
   }
 }
 
@@ -98,7 +98,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const toastRef = useRef(toast);
   toastRef.current = toast;
 
-  // Пришедшее из другой вкладки не пишем обратно, иначе вкладки начнут перекидываться записью.
+  // What came from another tab is not written back, otherwise the tabs start bouncing the write between them.
   const fromOtherTab = useRef(false);
   useEffect(() => {
     if (fromOtherTab.current) fromOtherTab.current = false;
@@ -122,10 +122,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const setStep = useCallback((id: string, status: StepStatus | null, message?: string) => {
     const before = current.current;
     let next = withStep(before, id, status);
-    // Шаг, отмеченный уже по тексту V2, проверять повторно не нужно.
+    // A step already marked by the V2 text does not need to be checked again.
     if (status === 'done' && stepById.get(id)?.updatedInV2) next = withReviewed(next, [id]);
     setProgress(next);
-    show(message ?? (status === 'done' ? `Отмечено ${id}` : status === 'skipped' ? `Пропущено ${id}` : `Снята отметка ${id}`), before);
+    show(message ?? (status === 'done' ? `Marked ${id}` : status === 'skipped' ? `Skipped ${id}` : `Unmarked ${id}`), before);
   }, [show]);
 
   const setLevel = useCallback((id: string, level: number) => {
@@ -147,13 +147,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const review = useCallback((ids: string[]) => {
     const before = current.current;
     setProgress(withReviewed(before, ids));
-    show(ids.length > 1 ? 'Обновления V2 отмечены проверенными' : `${ids[0]} проверен`, before);
+    show(ids.length > 1 ? 'V2 updates marked as checked' : `${ids[0]} checked`, before);
   }, [show]);
 
   const reactivate = useCallback((ids: string[]) => {
     const before = current.current;
     setProgress(withReactivated(before, ids, qpOf));
-    show(ids.length > 1 ? `Возвращено в активные: ${ids.join(', ')}` : `${ids[0]} снова в плане`, before);
+    show(ids.length > 1 ? `Returned to active: ${ids.join(', ')}` : `${ids[0]} is back in the plan`, before);
   }, [show]);
 
   const dismissUpgrade = useCallback((stepId: string, dismissed = true) => {
@@ -172,9 +172,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const reset = useCallback(() => {
     const before = current.current;
-    // Режим игры — настройка, а не прогресс: сброс его не трогает.
+    // The game mode is a setting, not progress: a reset does not touch it.
     setProgress({ ...emptyProgress(), ...(before.gameMode ? { gameMode: before.gameMode } : {}) });
-    show('Прогресс сброшен', before);
+    show('Progress reset', before);
   }, [show]);
 
   const undo = useCallback(() => {
@@ -205,6 +205,6 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
 export function useStore(): StoreValue {
   const v = useContext(StoreContext);
-  if (!v) throw new Error('useStore вне StoreProvider');
+  if (!v) throw new Error('useStore outside StoreProvider');
   return v;
 }

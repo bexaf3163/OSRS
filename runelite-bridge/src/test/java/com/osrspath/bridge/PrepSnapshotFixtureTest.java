@@ -82,7 +82,7 @@ public class PrepSnapshotFixtureTest
 	{
 		for (JsonObject row : rows())
 		{
-			if (!row.get("name").getAsString().contains("смерти"))
+			if (!row.get("name").getAsString().contains("death"))
 			{
 				continue;
 			}
@@ -99,7 +99,7 @@ public class PrepSnapshotFixtureTest
 					sb.append(l.getLeft()).append(' ');
 				}
 			}
-			assertTrue(sb.toString(), sb.toString().contains("Ты умер"));
+			assertTrue(sb.toString(), sb.toString().contains("You died"));
 			return;
 		}
 		throw new AssertionError("the snapshot copy has no death case");

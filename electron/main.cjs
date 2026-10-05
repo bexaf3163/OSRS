@@ -1,6 +1,6 @@
-// Десктоп-оболочка OSRS Путь: то же приложение из dist/ в отдельном окне.
-// Данные — в папке программы (%APPDATA%\OSRS Путь), а у переносной версии — рядом с exe (OSRS-Put-data).
-// Прогресс хранится дважды: в localStorage окна и файлом progress.json — файл переживает сброс хранилища.
+// The desktop shell of OSRS Path: the same app from dist/ in a separate window.
+// The data is in the app folder (%APPDATA%\OSRS Path), and for the portable version — next to the exe (OSRS-Put-data).
+// The progress is stored twice: in the window's localStorage and as the file progress.json — the file survives a storage reset.
 
 const { app, BrowserWindow, Menu, dialog, ipcMain, nativeTheme, session, shell } = require('electron');
 const fs = require('node:fs');
@@ -13,12 +13,12 @@ const { backupProgress, dailyBackup, readProgress } = require('./progress-files.
 const DIST = path.join(__dirname, '..', 'dist');
 const isWeb = (url) => /^https?:\/\//i.test(url);
 
-// --- Переносная версия: всё рядом с exe, чтобы программу можно было носить на флешке. ---
+// --- The portable version: everything is next to the exe, so the app can be carried on a flash drive. ---
 const portableDir = process.env.PORTABLE_EXECUTABLE_DIR;
 if (portableDir) {
   const installedData = app.getPath('userData');
   const dataDir = path.join(portableDir, 'OSRS-Put-data');
-  // Первый запуск переносной версии после обычной — забираем прогресс с собой.
+  // The first launch of the portable version after the regular one — we take the progress along.
   if (!fs.existsSync(dataDir)) {
     try {
       fs.mkdirSync(dataDir, { recursive: true });
@@ -27,7 +27,7 @@ if (portableDir) {
         if (fs.existsSync(from)) fs.cpSync(from, path.join(dataDir, name), { recursive: true });
       }
     } catch {
-      // Не скопировалось — начнём с чистого листа, прогресс можно перенести файлом.
+      // It did not copy — we start from a clean sheet, the progress can be moved with a file.
     }
   }
   app.setPath('userData', dataDir);
@@ -43,7 +43,7 @@ function readJson(name, fallback) {
   }
 }
 
-/** Запись через временный файл: при сбое посреди записи старый файл остаётся целым. */
+/** A write through a temporary file: if it fails in the middle of a write, the old file stays whole. */
 function writeAtomic(name, text) {
   const target = file(name);
   const tmp = `${target}.tmp`;
@@ -51,11 +51,11 @@ function writeAtomic(name, text) {
     fs.writeFileSync(tmp, text);
     fs.renameSync(tmp, target);
   } catch {
-    // Диск недоступен — localStorage окна всё равно сохранён.
+    // The disk is unavailable — the window's localStorage is saved anyway.
   }
 }
 
-// --- Масштаб ---
+// --- Scale ---
 const ZOOM_STEPS = [0.8, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2];
 const BASE_WIDTH = 1280;
 const clamp = (n, lo, hi) => Math.min(hi, Math.max(lo, n));
@@ -75,9 +75,9 @@ if (!app.requestSingleInstanceLock()) {
   let win = null;
 
   /**
-   * Итоговый масштаб: ручной × подстройка под ширину окна. Окно шире 1280 — крупнее (до 1,5×),
-   * уже — мельче (до 0,9×). Масштаб окна (zoomFactor) честно меняет ширину для медиазапросов,
-   * поэтому узкое окно по-прежнему получает мобильную раскладку.
+   * The final scale: manual × the adaptation to the window width. A window wider than 1280 — larger (up to 1.5×),
+   * narrower — smaller (down to 0.9×). The window scale (zoomFactor) honestly changes the width for media queries,
+   * so a narrow window still gets the mobile layout.
    */
   function effectiveZoom() {
     if (!win || !ui.autoZoom) return ui.zoom;
@@ -106,17 +106,17 @@ if (!app.requestSingleInstanceLock()) {
     writeAtomic('window.json', JSON.stringify({ ...win.getNormalBounds(), maximized: win.isMaximized() }));
   }
 
-  // Прогресс пишется при каждом изменении (заметка — на каждую букву), поэтому с задержкой.
+  // The progress is written on every change (a note — on every letter), so with a delay.
   const pending = new Map();
   const backedUp = new Set();
   let progressTimer = null;
-  /** Файл прогресса профиля: у основного прежний progress.json. Идентификатор — только из букв и цифр. */
+  /** A profile's progress file: the main one keeps the old progress.json. The identifier is letters and digits only. */
   const progressFile = (id) => (/^[a-z0-9]{1,12}$/.test(String(id)) && id !== 'main' ? `progress-${id}.json` : 'progress.json');
   function flushProgress() {
     clearTimeout(progressTimer);
     for (const [name, json] of pending) {
       if (!backedUp.has(name)) {
-        // Первая запись сеанса: прежний целый файл остаётся копией (progress.bak.json).
+        // The first write of the session: the earlier whole file stays as a copy (progress.bak.json).
         backedUp.add(name);
         backupProgress(app.getPath('userData'), name);
       }
@@ -146,7 +146,7 @@ if (!app.requestSingleInstanceLock()) {
     progressTimer = setTimeout(flushProgress, 400);
   });
 
-  // Копия прогресса раз в сутки в папку, выбранную игроком (настройки программы).
+  // A progress copy once a day into the folder chosen by the player (the app settings).
   const backupState = (error = null) => ({ dir: ui.backupDir || null, last: ui.backupLast || null, error });
   function runBackup() {
     if (!ui.backupDir) return backupState();
@@ -157,12 +157,12 @@ if (!app.requestSingleInstanceLock()) {
       saveUi();
       return backupState();
     } catch (err) {
-      return backupState(String(err && err.code ? err.code : 'ошибка записи'));
+      return backupState(String(err && err.code ? err.code : 'write error'));
     }
   }
   ipcMain.handle('backup:get', () => backupState());
   ipcMain.handle('backup:choose', async () => {
-    const r = await dialog.showOpenDialog(win ?? undefined, { title: 'Папка для копий прогресса', properties: ['openDirectory', 'createDirectory'] });
+    const r = await dialog.showOpenDialog(win ?? undefined, { title: 'Folder for progress copies', properties: ['openDirectory', 'createDirectory'] });
     if (r.canceled || !r.filePaths[0]) return backupState();
     ui.backupDir = r.filePaths[0];
     saveUi();
@@ -180,12 +180,12 @@ if (!app.requestSingleInstanceLock()) {
   ipcMain.on('app:data-dir', (e) => { e.returnValue = app.getPath('userData'); });
   ipcMain.on('app:is-portable', (e) => { e.returnValue = Boolean(portableDir); });
   registerBridge(ipcMain);
-  // RuneLite с плагином: окно решает, запускать ли его вместе с программой (настройка там же).
+  // RuneLite with the plugin: the window decides whether to start it together with the app (the setting is there too).
   const runelite = createLauncher({ logFile: file('runelite-launch.log') });
   ipcMain.handle('runelite:check', () => runelite.check());
   ipcMain.handle('runelite:launch', () => runelite.launch());
 
-  // Обновление переносной версии: проверка в фоне (можно выключить), скачивание и установка — по кнопке в настройках.
+  // Updating the portable version: the check is in the background (it can be turned off), the download and install — by a button in settings.
   const updater = createUpdater({
     version: app.getVersion(),
     env: process.env,
@@ -213,7 +213,7 @@ if (!app.requestSingleInstanceLock()) {
       y: saved.y,
       minWidth: 380,
       minHeight: 560,
-      title: 'OSRS Путь',
+      title: 'OSRS Path',
       icon: path.join(DIST, 'icon-512.png'),
       backgroundColor: nativeTheme.shouldUseDarkColors ? '#111214' : '#f4f5f7',
       autoHideMenuBar: true,
@@ -243,10 +243,10 @@ if (!app.requestSingleInstanceLock()) {
     });
     win.webContents.on('did-finish-load', applyZoom);
 
-    // Ctrl + колесо мыши.
+    // Ctrl + the mouse wheel.
     win.webContents.on('zoom-changed', (_e, direction) => setZoom(stepZoom(ui.zoom, direction === 'in' ? 1 : -1)));
 
-    // Ctrl + «+» / «−» / «0», включая цифровой блок: у пункта меню только одно сочетание, поэтому ловим сами.
+    // Ctrl + "+" / "−" / "0", including the numeric keypad: a menu item has only one shortcut, so we catch them ourselves.
     win.webContents.on('before-input-event', (event, input) => {
       if (input.type !== 'keyDown' || !(input.control || input.meta) || input.alt) return;
       const k = input.key;
@@ -257,7 +257,7 @@ if (!app.requestSingleInstanceLock()) {
       event.preventDefault();
     });
 
-    // Ссылки на вики и прочие сайты — в обычный браузер, а не внутрь программы.
+    // Links to the wiki and other sites — to an ordinary browser, not inside the app.
     win.webContents.setWindowOpenHandler(({ url }) => {
       if (isWeb(url)) shell.openExternal(url);
       return { action: 'deny' };
@@ -271,32 +271,32 @@ if (!app.requestSingleInstanceLock()) {
     win.loadFile(path.join(DIST, 'index.html'));
   }
 
-  // Меню спрятано (показывается по Alt), но даёт привычные сочетания клавиш.
-  // Масштаб здесь только подписан: клавиши обрабатывает before-input-event.
+  // The menu is hidden (shown with Alt) but gives the familiar shortcuts.
+  // The scale is only labelled here: the keys are handled by before-input-event.
   Menu.setApplicationMenu(Menu.buildFromTemplate([
     {
-      label: 'Вид',
+      label: 'View',
       submenu: [
-        { role: 'reload', label: 'Обновить' },
+        { role: 'reload', label: 'Reload' },
         { type: 'separator' },
-        { label: 'Крупнее', accelerator: 'CommandOrControl+=', registerAccelerator: false, click: () => setZoom(stepZoom(ui.zoom, 1)) },
-        { label: 'Мельче', accelerator: 'CommandOrControl+-', registerAccelerator: false, click: () => setZoom(stepZoom(ui.zoom, -1)) },
-        { label: 'Обычный размер', accelerator: 'CommandOrControl+0', registerAccelerator: false, click: () => setZoom(1) },
+        { label: 'Zoom in', accelerator: 'CommandOrControl+=', registerAccelerator: false, click: () => setZoom(stepZoom(ui.zoom, 1)) },
+        { label: 'Zoom out', accelerator: 'CommandOrControl+-', registerAccelerator: false, click: () => setZoom(stepZoom(ui.zoom, -1)) },
+        { label: 'Actual size', accelerator: 'CommandOrControl+0', registerAccelerator: false, click: () => setZoom(1) },
         { type: 'separator' },
-        { role: 'togglefullscreen', label: 'Во весь экран' },
-        { role: 'toggleDevTools', label: 'Инструменты разработчика' },
+        { role: 'togglefullscreen', label: 'Full screen' },
+        { role: 'toggleDevTools', label: 'Developer tools' },
       ],
     },
     {
-      label: 'Правка',
+      label: 'Edit',
       submenu: [
-        { role: 'undo', label: 'Отменить' },
-        { role: 'redo', label: 'Повторить' },
+        { role: 'undo', label: 'Undo' },
+        { role: 'redo', label: 'Redo' },
         { type: 'separator' },
-        { role: 'cut', label: 'Вырезать' },
-        { role: 'copy', label: 'Копировать' },
-        { role: 'paste', label: 'Вставить' },
-        { role: 'selectAll', label: 'Выделить всё' },
+        { role: 'cut', label: 'Cut' },
+        { role: 'copy', label: 'Copy' },
+        { role: 'paste', label: 'Paste' },
+        { role: 'selectAll', label: 'Select all' },
       ],
     },
   ]));
@@ -308,7 +308,7 @@ if (!app.requestSingleInstanceLock()) {
   });
 
   app.whenReady().then(() => {
-    // OSRS Wiki просит представляться в запросах к API; из окна браузера заголовок не задать.
+    // The OSRS Wiki asks to introduce oneself in API requests; the header cannot be set from a browser window.
     session.defaultSession.webRequest.onBeforeSendHeaders(
       { urls: ['https://oldschool.runescape.wiki/*', 'https://prices.runescape.wiki/*', 'https://maps.runescape.wiki/*'] },
       (details, callback) => {

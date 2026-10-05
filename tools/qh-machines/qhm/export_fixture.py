@@ -1,5 +1,5 @@
-"""Сжимает qh_steps.json (steps_info.py) в tests/fixtures/qh-steps.json: клетка (wp) каждого шага Quest Helper и id NPC/объекта первого аргумента.
-Тест tests/questMachines.test.ts сверяет с ним клетки и подсветку строк этапов."""
+"""Compresses qh_steps.json (steps_info.py) into tests/fixtures/qh-steps.json: the tile (wp) of each Quest Helper step and the id of the NPC/object of the first argument.
+The test tests/questMachines.test.ts checks the tiles and the highlight of the stage lines against it."""
 import json
 import os
 import sys
@@ -18,8 +18,8 @@ def main():
         rev = open(os.path.join(WORK, 'QH_REVISION.txt'), encoding='utf-8').read().split()
     except OSError:
         pass
-    note = 'Zoinkwiz/quest-helper' + (', коммит %s от %s' % (rev[0][:7], rev[1][:10]) if len(rev) >= 2 else '') + \
-        ': клетка (wp) и id первого аргумента шага, извлечённые из исходников квестов'
+    note = 'Zoinkwiz/quest-helper' + (', commit %s of %s' % (rev[0][:7], rev[1][:10]) if len(rev) >= 2 else '') + \
+        ': the tile (wp) and the id of the first argument of a step, extracted from the quest sources'
     out = {'source': note, 'steps': {}}
     n = 0
     for sid, steps in qh.items():
@@ -35,7 +35,7 @@ def main():
             out['steps'][sid] = d
     text = json.dumps(out, ensure_ascii=False, separators=(',', ':')) + '\n'
     open(FIXTURE, 'w', encoding='utf-8', newline='\n').write(text)
-    print('шагов с клеткой:', n, '→', FIXTURE, len(text), 'байт')
+    print('steps with a tile:', n, '→', FIXTURE, len(text), 'bytes')
 
 
 if __name__ == '__main__':

@@ -1,6 +1,6 @@
-// Режим восстановления для экранов: следит за событиями MOVED из игры (смерть, телепорт), решает, срыв ли это
-// (lib/recovery.ts), пока срыв — раз в полминуты спрашивает у плагина, где игрок: рядом с шагом — режим кончился.
-// «Это не срыв» запоминается: то, что было до этой кнопки, больше не считается.
+// The recovery mode for screens: watches the MOVED events from the game (death, teleport), decides whether it is a derailment
+// (lib/recovery.ts); while it is a derailment, asks the plugin every half minute where the player is: near the step — the mode ends.
+// "This is not a derailment" is remembered: whatever happened before that button no longer counts.
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useBridge } from '../bridge';
@@ -32,7 +32,7 @@ export function useRecoveryTracker(): { active: ActiveRecovery | null; dismiss: 
     [moves, step, now, dismissedAt, here],
   );
 
-  // Пока срыв — смотрим, не дошёл ли игрок до шага; раз в полминуты, не чаще.
+  // While derailed, we check whether the player has reached the step; every half minute, no more often.
   const active = Boolean(candidate);
   useEffect(() => {
     if (!active || state !== 'online') return undefined;
@@ -46,13 +46,13 @@ export function useRecoveryTracker(): { active: ActiveRecovery | null; dismiss: 
     return () => { alive = false; clearInterval(t); };
   }, [active, state, locate]);
 
-  // Новый скачок — прежнее «где я» устарело.
+  // A new jump: the previous "where am I" is out of date.
   useEffect(() => { setHere(null); }, [moves.length]);
 
   const dismiss = useCallback(() => {
     const t = Date.now();
     setDismissedAt(t);
-    try { localStorage.setItem(DISMISS_KEY, String(t)); } catch { /* запомнится до перезапуска */ }
+    try { localStorage.setItem(DISMISS_KEY, String(t)); } catch { /* it is remembered until a restart */ }
   }, []);
 
   const value = useMemo<ActiveRecovery | null>(() => (step && candidate ? { stepId: step.id, recovery: candidate } : null), [step, candidate]);

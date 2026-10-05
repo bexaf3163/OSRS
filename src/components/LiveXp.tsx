@@ -1,5 +1,5 @@
-// Опыт из игры до цели: сколько осталось и через сколько минут по темпу этого сеанса. Темп — только по замерам
-// (нужно хотя бы полминуты прироста): без них время не придумывается.
+// The XP from the game to the goal: how much is left and in how many minutes at this session's pace. The pace is from measurements only
+// (at least half a minute of gain is needed): without them the time is not invented.
 
 import { levelById } from '../data';
 import { useBridge } from '../bridge';
@@ -27,19 +27,19 @@ export function LiveXp({ targets }: { targets: readonly XpTarget[] }) {
     });
   if (!rows.length) return null;
   return (
-    <div className="live-xp" aria-label="Опыт из игры">
+    <div className="live-xp" aria-label="XP from the game">
       {rows.map(({ t, have, goal, left, rate, eta }) => (
         <div key={t.skill} className="live-xp-row">
           <span className="live-xp-name">{levelById.get(t.skill)?.name ?? t.skill}</span>
           {left === 0
-            ? <span className="live-xp-text">✓ уровень {t.level} взят</span>
+            ? <span className="live-xp-text">✓ level {t.level} reached</span>
             : (
               <span className="live-xp-text">
-                до {t.level}: ещё {left.toLocaleString('ru-RU')} опыта
-                {rate ? ` · ${rate.toLocaleString('ru-RU')}/ч${eta ? ` · ${etaText(eta)}` : ''}` : ' · темп появится, когда пойдёт опыт'}
+                to {t.level}: {left.toLocaleString('en-US')} XP left
+                {rate ? ` · ${rate.toLocaleString('en-US')}/h${eta ? ` · ${etaText(eta)}` : ''}` : ' · the pace will appear once XP starts coming'}
               </span>
             )}
-          <ProgressBar value={goal > 0 ? have / goal : 0} label={`Опыт до ${t.level} уровня`} />
+          <ProgressBar value={goal > 0 ? have / goal : 0} label={`XP to level ${t.level}`} />
         </div>
       ))}
     </div>

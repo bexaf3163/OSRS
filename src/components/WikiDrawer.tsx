@@ -1,7 +1,7 @@
-// Встроенный инспектор вики: досье предмета или NPC.
-// На широком экране «Пути» — закреплённая третья колонка, иначе — выдвижная панель справа.
-// Открывается кликом по предмету/NPC в карточке шага или из поиска; закрывается ✕, кликом по фону или Escape.
-// Места в досье (где лежит бесплатно, магазины, продавцы, города, место NPC) — «📍» на карту мира и «🧭» в игру.
+// The built-in wiki inspector: an item or NPC dossier.
+// On a wide "Path" screen it is a pinned third column, otherwise a slide-out panel on the right.
+// Opened by a click on an item/NPC in the step card or from the search; closed by ✕, a click on the backdrop or Escape.
+// Places in the dossier (where it lies for free, shops, sellers, towns, the NPC's place) — "📍" onto the world map and "🧭" into the game.
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
@@ -21,7 +21,7 @@ type Target =
 interface WikiContextValue {
   openItem: (query: string | number, label?: string) => void;
   openNpc: (npc: StepNpcInfo) => void;
-  /** Место для закреплённой колонки: страница регистрирует элемент, пока она на экране. */
+  /** A place for the pinned column: a page registers the element while it is on screen. */
   setDock: (el: HTMLElement | null) => void;
 }
 
@@ -29,7 +29,7 @@ const WikiContext = createContext<WikiContextValue | null>(null);
 
 export function useWiki(): WikiContextValue {
   const v = useContext(WikiContext);
-  if (!v) throw new Error('useWiki вне WikiProvider');
+  if (!v) throw new Error('useWiki outside WikiProvider');
   return v;
 }
 
@@ -52,24 +52,24 @@ export function WikiProvider({ children }: { children: ReactNode }) {
   );
 }
 
-/** Место под закреплённое досье. Пока оно на экране, инспектор рисуется здесь. */
+/** A place for the pinned dossier. While it is on screen, the inspector is drawn here. */
 export function WikiDock({ className }: { className?: string }) {
   const { setDock } = useWiki();
-  return <aside className={className} ref={setDock} aria-label="Инспектор OSRS Wiki" />;
+  return <aside className={className} ref={setDock} aria-label="OSRS Wiki inspector" />;
 }
 
 function DockedInspector({ target, onClose }: { target: Target | null; onClose: () => void }) {
   if (!target) {
     return (
       <div className="dock-empty">
-        <p className="dock-empty-title">Досье OSRS Wiki</p>
-        <p className="muted small">Нажми на предмет или NPC в шаге — здесь появятся цена на бирже, магазины, дроп и где взять бесплатно.</p>
+        <p className="dock-empty-title">OSRS Wiki dossier</p>
+        <p className="muted small">Click an item or NPC in a step — the exchange price, shops, drops and where to get it for free will appear here.</p>
       </div>
     );
   }
   return (
     <div className="dock-panel" key={target.kind === 'item' ? String(target.query) : target.npc.nameEn}>
-      <button type="button" className="icon-btn drawer-close" onClick={onClose} aria-label="Закрыть досье">
+      <button type="button" className="icon-btn drawer-close" onClick={onClose} aria-label="Close the dossier">
         <IconClose />
       </button>
       {target.kind === 'item' ? <ItemView query={target.query} label={target.label} /> : <NpcView npc={target.npc} />}
@@ -103,13 +103,13 @@ function WikiDrawer({ target, onClose }: { target: Target | null; onClose: () =>
   }, [onClose]);
 
   return (
-    <dialog ref={dialog} className={`drawer ${closing ? 'is-closing' : ''}`} aria-label="Инспектор OSRS Wiki"
-      // Карта мира из досье — отдельное окно в портале, но события React всплывают по дереву компонентов:
-      // Escape в карте закрывает только карту, а не досье под ней.
+    <dialog ref={dialog} className={`drawer ${closing ? 'is-closing' : ''}`} aria-label="OSRS Wiki inspector"
+      // The world map from the dossier is a separate window in a portal, but React events bubble up the component tree:
+      // Escape in the map closes only the map, not the dossier under it.
       onCancel={(e) => { if (e.target !== dialog.current) return; e.preventDefault(); close(); }}
       onClick={(e) => { if (e.target === dialog.current) close(); }}>
       <div className="drawer-panel">
-        <button type="button" className="icon-btn drawer-close" onClick={close} aria-label="Закрыть">
+        <button type="button" className="icon-btn drawer-close" onClick={close} aria-label="Close">
           <IconClose />
         </button>
         {target?.kind === 'item' && <ItemView key={String(target.query)} query={target.query} label={target.label} />}
@@ -121,10 +121,10 @@ function WikiDrawer({ target, onClose }: { target: Target | null; onClose: () =>
 
 function timeAgo(iso: string): string {
   const min = Math.round((Date.now() - Date.parse(iso)) / 60000);
-  if (min < 1) return 'только что';
-  if (min < 60) return `${min} мин назад`;
+  if (min < 1) return 'just now';
+  if (min < 60) return `${min} min ago`;
   const h = Math.round(min / 60);
-  return h < 24 ? `${h} ч назад` : new Date(iso).toLocaleDateString('ru-RU');
+  return h < 24 ? `${h} h ago` : new Date(iso).toLocaleDateString('en-US');
 }
 
 const gp = (n: number) => `${formatXp(n)} gp`;
@@ -152,8 +152,8 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
       <div className="drawer-body">
         <header className="drawer-hero"><div className="drawer-title"><h2>{label ?? String(query)}</h2></div></header>
         {status === 'loading'
-          ? <p className="muted drawer-state" aria-live="polite">Ищу на OSRS Wiki…</p>
-          : <p className="notice is-error">Не удалось найти предмет на OSRS Wiki. Проверь подключение к интернету.</p>}
+          ? <p className="muted drawer-state" aria-live="polite">Searching the OSRS Wiki…</p>
+          : <p className="notice is-error">Could not find the item on the OSRS Wiki. Check your internet connection.</p>}
       </div>
     );
   }
@@ -164,11 +164,10 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
         <span className="drawer-icon"><ItemIcon src={item.iconUrl} alt="" size={36} /></span>
         <div className="drawer-title">
           <h2>{item.nameEn}</h2>
-          {item.nameRu && <p className="drawer-ru">{item.nameRu}</p>}
           <span className={`badge ${item.members ? 'badge-members' : 'badge-f2p'}`}>{item.members ? 'Members' : 'Free-to-play'}</span>
         </div>
       </header>
-      {item.examine && <p className="drawer-examine">«{item.examine}»</p>}
+      {item.examine && <p className="drawer-examine">“{item.examine}”</p>}
 
       <div className="tiles">
         <div className="tile tile-ge">
@@ -176,11 +175,11 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
           {item.gePrice ? (
             <>
               <span className="tile-value">{gp(item.gePrice.buyPrice)}</span>
-              <span className="tile-sub">покупка · продажа {gp(item.gePrice.sellPrice)}</span>
-              <span className="tile-sub">обновлено {timeAgo(item.gePrice.updatedAt)}</span>
+              <span className="tile-sub">buy · sell {gp(item.gePrice.sellPrice)}</span>
+              <span className="tile-sub">updated {timeAgo(item.gePrice.updatedAt)}</span>
             </>
           ) : (
-            <span className="tile-sub">{status === 'loading' ? 'Загружаю цену…' : status === 'offline' || item.priceUnavailable ? 'Нет связи — цена недоступна' : 'Не продаётся на бирже'}</span>
+            <span className="tile-sub">{status === 'loading' ? 'Loading the price…' : status === 'offline' || item.priceUnavailable ? 'No connection — the price is unavailable' : 'Not sold on the exchange'}</span>
           )}
         </div>
         <div className="tile">
@@ -191,13 +190,13 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
         <div className="tile">
           <span className="tile-label">🏪 Store value</span>
           <span className="tile-value">{gp(item.value)}</span>
-          <span className="tile-sub">базовая цена у торговцев</span>
+          <span className="tile-sub">the base price at traders</span>
         </div>
       </div>
 
       {item.freeSpawns && item.freeSpawns.length > 0 && (
         <section className="drawer-section">
-          <h3>Где взять бесплатно</h3>
+          <h3>Where to get it for free</h3>
           <ul className={`drawer-list ${autoLocation ? 'is-places' : ''}`}>
             {item.freeSpawns.map((s) => {
               if (!autoLocation) return <li key={s}>{s}</li>;
@@ -215,10 +214,10 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
 
       {item.buyLocations && item.buyLocations.length > 0 && (
         <section className="drawer-section">
-          <h3>Магазины и торговцы</h3>
-          <div className="table-wrap" tabIndex={0} role="region" aria-label="Магазины">
+          <h3>Shops and traders</h3>
+          <div className="table-wrap" tabIndex={0} role="region" aria-label="Shops">
             <table className="table table-compact">
-              <thead><tr><th scope="col">Магазин</th><th scope="col">NPC</th><th scope="col">Город</th><th scope="col">Цена</th><th scope="col">Запас</th></tr></thead>
+              <thead><tr><th scope="col">Shop</th><th scope="col">NPC</th><th scope="col">Town</th><th scope="col">Price</th><th scope="col">Stock</th></tr></thead>
               <tbody>
                 {item.buyLocations.map((b) => {
                   const shop: PlaceQuery = { kind: 'shop', location: b.location, shop: b.shopName, npc: b.owner };
@@ -252,12 +251,12 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
 
       {item.dropSources && item.dropSources.length > 0 && (
         <section className="drawer-section">
-          <h3>Дроп с монстров</h3>
+          <h3>Monster drops</h3>
           <ul className="drop-list">
             {item.dropSources.map((d) => (
               <li key={d.monster}>
                 <span>{d.monster}</span>
-                <span className="muted">{d.combatLevel !== null ? `ур. ${d.combatLevel}` : ''}</span>
+                <span className="muted">{d.combatLevel !== null ? `lvl ${d.combatLevel}` : ''}</span>
                 <span className="drop-rate">{d.rate}</span>
               </li>
             ))}
@@ -265,11 +264,11 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
         </section>
       )}
 
-      {status === 'offline' && <p className="muted small">Нет связи с OSRS Wiki — показаны сохранённые данные.</p>}
+      {status === 'offline' && <p className="muted small">No connection to the OSRS Wiki — the saved data is shown.</p>}
 
       <footer className="drawer-footer">
         <a className="btn btn-ghost" href={item.wikiUrl} target="_blank" rel="noopener noreferrer">
-          Открыть полную статью на OSRS Wiki <IconExternal />
+          Open the full article on the OSRS Wiki <IconExternal />
         </a>
       </footer>
       <PlaceMapView view={places.view} onClose={places.close} />
@@ -294,28 +293,27 @@ function NpcView({ npc }: { npc: StepNpcInfo }) {
         {info?.imageUrl && <span className="drawer-icon drawer-icon-npc"><ItemIcon src={info.imageUrl} alt="" size={48} /></span>}
         <div className="drawer-title">
           <h2>{npc.nameEn}</h2>
-          <p className="drawer-ru">{npc.nameRu}</p>
           <span className="badge badge-npc">NPC</span>
         </div>
       </header>
-      {info?.examine && <p className="drawer-examine">«{info.examine}»</p>}
+      {info?.examine && <p className="drawer-examine">“{info.examine}”</p>}
       <dl className="fields">
-        <div className="field"><dt>Где</dt><dd>{npc.location}</dd></div>
-        <div className="field"><dt>Этаж</dt><dd>{npc.floor}</dd></div>
-        {npc.dialogue && <div className="field"><dt>Диалог</dt><dd>{npc.dialogue}</dd></div>}
-        {info?.location && <div className="field"><dt>По вики</dt><dd>{info.location}</dd></div>}
+        <div className="field"><dt>Where</dt><dd>{npc.location}</dd></div>
+        <div className="field"><dt>Floor</dt><dd>{npc.floor}</dd></div>
+        {npc.dialogue && <div className="field"><dt>Dialogue</dt><dd>{npc.dialogue}</dd></div>}
+        {info?.location && <div className="field"><dt>Per the wiki</dt><dd>{info.location}</dd></div>}
       </dl>
       {autoLocation && (
         <p className="place-row">
-          <PlaceButton query={here} onShow={places.show}>{npc.nameEn} на карте мира</PlaceButton>
+          <PlaceButton query={here} onShow={places.show}>{npc.nameEn} on the world map</PlaceButton>
           <PlaceNavButton query={here} />
         </p>
       )}
-      {info === undefined && <p className="muted drawer-state" aria-live="polite">Загружаю с OSRS Wiki…</p>}
-      <p className="muted small">Этажи в игре считаются по-британски: Ground floor — 1-й этаж (земля), 1st floor — 2-й, 2nd floor — 3-й.</p>
+      {info === undefined && <p className="muted drawer-state" aria-live="polite">Loading from the OSRS Wiki…</p>}
+      <p className="muted small">Floors are numbered the British way: the Ground floor is ground level, the 1st floor is the one above it (the 2nd floor in US numbering).</p>
       <footer className="drawer-footer">
         <a className="btn btn-ghost" href={npc.wikiUrl ?? info?.wikiUrl} target="_blank" rel="noopener noreferrer">
-          Открыть статью на OSRS Wiki <IconExternal />
+          Open the article on the OSRS Wiki <IconExternal />
         </a>
       </footer>
       <PlaceMapView view={places.view} onClose={places.close} />
@@ -323,7 +321,7 @@ function NpcView({ npc }: { npc: StepNpcInfo }) {
   );
 }
 
-/** Иконка с вики фиксированного размера без растяжения; при ошибке — пустая плашка. */
+/** A fixed-size wiki icon without stretching; on error — an empty plate. */
 export function ItemIcon({ src, alt, size = 20 }: { src?: string; alt: string; size?: number }) {
   const [failed, setFailed] = useState(false);
   if (!src || failed) return <span className="item-icon item-icon-empty" style={{ width: size, height: size }} aria-hidden="true" />;

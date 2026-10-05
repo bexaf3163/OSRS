@@ -1,11 +1,11 @@
-// Снимок состояния для игры — протокол 6 (POST /prep-plan). Раньше программа слала плагину пять отдельных запросов
-// (шаг, закупки, подсветка банка, совет по снаряжению, и план в программе считался только для себя): между ними экран
-// игры показывал то стрелку к новому шагу при старом списке, то совет к прошлому шагу. Теперь программа собирает всё,
-// что должно быть в игре, в одно сообщение; плагин применяет его за один проход и только рисует. Решает программа:
-// у неё сумка, банк, цены, шаги вперёд и план подготовки (prepPlan.ts); у плагина — живая сумка для мгновенных галочек.
+// The state snapshot for the game: protocol 6 (POST /prep-plan). Before, the app sent the plugin five separate requests
+// (the step, shopping, bank highlighting, gear advice, and the plan was counted in the app only for itself): between them the game
+// screen showed now an arrow to a new step with the old list, now advice for the previous step. Now the app gathers everything
+// that should be in the game into one message; the plugin applies it in one pass and only draws. The app decides:
+// it has the bag, the bank, the prices, the steps ahead and the preparation plan (prepPlan.ts); the plugin has the live bag for instant ticks.
 //
-// Снимок полный: чего в нём нет (null) — то снято. Номер seq растёт; запоздавший плагин отбрасывает. Чистые функции —
-// отправку и повторы ведёт bridge.tsx.
+// The snapshot is complete: what is not in it (null) is cleared. The seq number grows; the plugin drops a late one. Pure functions:
+// sending and retries are handled by bridge.tsx.
 
 import type { ActiveStepPayload, GearHintPayload, ShoppingPlanPayload } from '../services/runeliteBridge';
 import { kgText } from './weight';
@@ -13,7 +13,7 @@ import type { PrepLine, PrepPlan, PrepPriority, PrepTiming, PrepWhere, Supply } 
 
 export const SNAPSHOT_VERSION = 6;
 
-/** Предел строк плана и текстов — как в плагине (PrepPlan.java): лишнее плагин отверг бы целиком. */
+/** The limit of plan lines and texts is the same as in the plugin (PrepPlan.java): the plugin would reject the excess whole. */
 export const MAX_PLAN_LINES = 48;
 const MAX_LATER = 12;
 const MAX_RECOVERY = 5;
@@ -24,7 +24,7 @@ export interface PrepPlanPayload {
   stepId: string;
   score: { percent: number | null; verdict: 'READY' | 'NOT_READY' | 'UNKNOWN'; critical: number; important: number; optimizations: number; unknown: number };
   lines: { name: string; need: number; where: PrepWhere; priority: PrepPriority; timing: PrepTiming; supply?: Exclude<Supply, 'ENOUGH'>; action?: string }[];
-  /** «Не бери сейчас»: что понадобится позже. */
+  /** "Do not take now": what will be needed later. */
   later: string[];
   recovery?: { title: string; steps: string[] };
   weight?: string;
@@ -47,7 +47,7 @@ export interface PrepEnvelope {
   plan: PrepPlanPayload | null;
 }
 
-/** Строка не длиннее предела плагина: режем по слову, с многоточием. */
+/** A string no longer than the plugin's limit: cut at a word, with an ellipsis. */
 export function clipText(s: string, max = MAX_TEXT): string {
   const t = s.replace(/\s+/g, ' ').trim();
   if (t.length <= max) return t;
@@ -57,38 +57,38 @@ export function clipText(s: string, max = MAX_TEXT): string {
 
 const countOf = (l: Pick<PrepLine, 'name' | 'count'>) => (l.count > 1 ? `${l.name} ×${l.count}` : l.name);
 
-/** Текст про вес для игры: что оставить в банке и что это даст. Пусто — советовать нечего. */
+/** The weight text for the game: what to leave in the bank and what that gives. Empty means nothing to advise. */
 export function weightText(plan: PrepPlan): string | undefined {
   const w = plan.weight;
   if (w.level === 'NONE' || !w.items.length) return undefined;
   const names = w.items.slice(0, 3).map((i) => `${i.name}${i.count > 1 ? ` ×${i.count}` : ''}`).join(', ');
-  const more = w.items.length > 3 ? ` и ещё ${w.items.length - 3}` : '';
-  const head = w.level === 'HEAVY' ? 'Сними в банк' : 'Можно оставить в банке';
+  const more = w.items.length > 3 ? ` and ${w.items.length - 3} more` : '';
+  const head = w.level === 'HEAVY' ? 'Deposit in the bank' : 'You can leave in the bank';
   const effect = w.current !== null && w.after !== null
-    ? ` (${kgText(w.current)} → ${kgText(Math.max(0, w.after))}${w.ratio !== null && w.ratio >= 1.05 ? `, бег дольше в ~${(Math.round(w.ratio * 10) / 10).toLocaleString('ru-RU')} раза` : ''})`
+    ? ` (${kgText(w.current)} → ${kgText(Math.max(0, w.after))}${w.ratio !== null && w.ratio >= 1.05 ? `, running lasts ~${(Math.round(w.ratio * 10) / 10).toLocaleString('en-US')}x longer` : ''})`
     : ` (−${kgText(w.saving)})`;
   return clipText(`${head}: ${names}${more}${effect}`);
 }
 
-/** Сумка не вместит всё сразу — что делать. Пусто — влезает или неизвестно. */
+/** The bag will not hold everything at once: what to do. Empty means it fits or is unknown. */
 export function slotsText(plan: PrepPlan): string | undefined {
   const over = plan.slots.over;
   if (over <= 0) return undefined;
-  return clipText(`Всё сразу не влезет — на ${over} ${over === 1 ? 'ячейку' : 'ячеек'} больше. Возьми нужное шагу, остальное потом`);
+  return clipText(`It will not all fit at once: ${over} ${over === 1 ? 'slot' : 'slots'} too many. Take what the step needs, the rest later`);
 }
 
-/** Режим восстановления для игры: заголовок и пункты по порядку. */
+/** The recovery mode for the game: the heading and the points in order. */
 export function recoveryPayload(plan: PrepPlan): PrepPlanPayload['recovery'] | undefined {
   const rec = plan.recovery;
   if (!rec) return undefined;
   const r = rec.recovery;
-  const far = r.distance !== null ? ` (~${r.distance} кл.)` : '';
-  const title = r.reason === 'DEATH' ? `Ты умер — шаг ${plan.stepId} далеко${far}` : `Ты в Lumbridge, шаг ${plan.stepId} далеко${far}`;
+  const far = r.distance !== null ? ` (~${r.distance} tiles)` : '';
+  const title = r.reason === 'DEATH' ? `You died: step ${plan.stepId} is far away${far}` : `You are in Lumbridge: step ${plan.stepId} is far away${far}`;
   const steps = rec.steps.slice(0, MAX_RECOVERY).map((s) => clipText(s.detail ? `${s.label} — ${s.detail}` : s.label));
   return steps.length ? { title: clipText(title), steps } : undefined;
 }
 
-/** План подготовки в виде, который плагин рисует: без лишнего и в пределах его проверок. */
+/** The preparation plan in the form the plugin draws: without the excess and within its checks. */
 export function planPayload(plan: PrepPlan): PrepPlanPayload {
   const lines = plan.lines
     .filter((l) => l.timing !== 'LATER')
@@ -128,7 +128,7 @@ export interface SnapshotParts {
 
 export const EMPTY_PARTS: SnapshotParts = { step: null, shopping: null, bankTags: null, gearHint: null, plan: null };
 
-/** Номер следующего снимка: растёт и между запусками программы (по часам), чтобы плагин не принял новый за запоздавший. */
+/** The number of the next snapshot: it grows between app launches too (by the clock), so that the plugin does not take a new one for a late one. */
 export function nextSeq(prev: number, now = Date.now()): number {
   return Math.max(prev + 1, now);
 }
@@ -139,15 +139,15 @@ export function buildEnvelope(parts: SnapshotParts, seq: number): PrepEnvelope {
     seq,
     step: parts.step,
     shopping: parts.shopping && parts.shopping.items.length ? parts.shopping : null,
-    // Пустой список ничего не подсвечивает — как «снято».
+    // An empty list highlights nothing, as "cleared".
     bankTags: parts.bankTags && parts.bankTags.itemIds.length ? parts.bankTags : null,
     gearHint: parts.gearHint,
-    // План от другого шага плагин не приложит; не шлём и лишнего.
+    // The plugin will not apply a plan from another step; we do not send the excess either.
     plan: parts.plan && (!parts.step || parts.plan.stepId === parts.step.stepId) ? parts.plan : null,
   };
 }
 
-/** Что снимок содержит по существу — без номера: одинаковое не шлём второй раз. */
+/** What the snapshot contains in substance, without the number: the same is not sent a second time. */
 export function envelopeKey(parts: SnapshotParts): string {
   const e = buildEnvelope(parts, 0);
   return JSON.stringify({ ...e, seq: 0 });

@@ -131,7 +131,7 @@ public class DebugViewTest
 		String longest = "Why: " + "ITEM: steps 2–4 done by items, then 'Bring the knight the sword'".repeat(3);
 		for (String line : OverlayText.wrap(longest, fm, OsrsPathDebugOverlay.WIDTH - 12))
 		{
-			assertTrue("«" + line + "» " + fm.stringWidth(line), fm.stringWidth(line) <= OsrsPathDebugOverlay.WIDTH - 12);
+			assertTrue("'" + line + "' " + fm.stringWidth(line), fm.stringWidth(line) <= OsrsPathDebugOverlay.WIDTH - 12);
 		}
 	}
 }

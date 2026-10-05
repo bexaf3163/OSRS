@@ -1,6 +1,6 @@
-// «Золотой» снимок готовности: статус и состояния требований каждого шага маршрута в шести сценариях.
-// Единый движок заменил три отдельных расчёта и был сверён со старым кодом на этих же данных; снимок держит это
-// поведение: если ответ изменился, тест покажет какой шаг и сценарий. Обновить осознанно: UPDATE_FIXTURES=1 npm test.
+// The "golden" readiness snapshot: the status and the requirement states of every route step in six scenarios.
+// The unified engine replaced three separate calculations and was checked against the old code on this same data; the snapshot keeps this
+// behaviour: if an answer changed, the test shows which step and scenario. To update deliberately: UPDATE_FIXTURES=1 npm test.
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -21,12 +21,12 @@ function ownedFor(s: Step, mk: (need: number) => Partial<OwnedItem>, bankSeen: b
 }
 const all99 = Object.fromEntries(['attack', 'strength', 'defence', 'ranged', 'magic', 'prayer', 'mining', 'smithing', 'fishing', 'cooking', 'firemaking', 'woodcutting', 'agility', 'crafting', 'runecraft', 'herblore', 'thieving', 'fletching', 'slayer', 'farming', 'construction', 'hunter'].map((k) => [k, 99]));
 const scenarios: { name: string; stats: Record<string, number> | null; owned: (s: Step) => OwnedState | null; gear: GearState | null }[] = [
-  { name: 'всё есть', stats: all99, owned: (s) => ownedFor(s, (n) => ({ carried: n + 5 }), true), gear: gearOf(10_000_000, 10_000_000) },
-  { name: 'в банке', stats: { attack: 1, ranged: 17 }, owned: (s) => ownedFor(s, (n) => ({ carried: 0, bank: n }), true), gear: gearOf(0, 10_000_000) },
-  { name: 'часть', stats: { attack: 1 }, owned: (s) => ownedFor(s, (n) => ({ carried: Math.floor(n / 2), bank: 0 }), true), gear: gearOf(10, 0) },
-  { name: 'ничего', stats: { attack: 1 }, owned: (s) => ownedFor(s, () => ({ carried: 0, bank: 0 }), true), gear: gearOf(0, 0) },
-  { name: 'банк не открыт', stats: { attack: 1 }, owned: (s) => ownedFor(s, (n) => ({ carried: Math.floor(n / 2) }), false), gear: gearOf(5, null) },
-  { name: 'нет связи', stats: null, owned: () => null, gear: null },
+  { name: 'everything present', stats: all99, owned: (s) => ownedFor(s, (n) => ({ carried: n + 5 }), true), gear: gearOf(10_000_000, 10_000_000) },
+  { name: 'in the bank', stats: { attack: 1, ranged: 17 }, owned: (s) => ownedFor(s, (n) => ({ carried: 0, bank: n }), true), gear: gearOf(0, 10_000_000) },
+  { name: 'part', stats: { attack: 1 }, owned: (s) => ownedFor(s, (n) => ({ carried: Math.floor(n / 2), bank: 0 }), true), gear: gearOf(10, 0) },
+  { name: 'nothing', stats: { attack: 1 }, owned: (s) => ownedFor(s, () => ({ carried: 0, bank: 0 }), true), gear: gearOf(0, 0) },
+  { name: 'bank not open', stats: { attack: 1 }, owned: (s) => ownedFor(s, (n) => ({ carried: Math.floor(n / 2) }), false), gear: gearOf(5, null) },
+  { name: 'no connection', stats: null, owned: () => null, gear: null },
 ];
 
 function fresh(): string {
@@ -42,11 +42,11 @@ function fresh(): string {
   return `[\n${rows.join(',\n')}\n]\n`;
 }
 
-describe('готовность шагов: золотой снимок', () => {
-  it('ответы единого движка не изменились', () => {
+describe('step readiness: the golden snapshot', () => {
+  it('the unified engine answers have not changed', () => {
     const now = fresh();
     if (process.env.UPDATE_FIXTURES === '1') writeFileSync(FILE, now);
     const saved = existsSync(FILE) ? readFileSync(FILE, 'utf8') : '';
-    expect(saved === now, 'tests/fixtures/readiness.golden.json устарел — UPDATE_FIXTURES=1 npx vitest run tests/readiness.golden.test.ts').toBe(true);
+    expect(saved === now, 'tests/fixtures/readiness.golden.json is out of date — UPDATE_FIXTURES=1 npx vitest run tests/readiness.golden.test.ts').toBe(true);
   });
 });

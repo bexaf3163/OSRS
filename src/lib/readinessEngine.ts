@@ -1,8 +1,8 @@
-// Единый движок готовности: один раз на снимок состояния считает готовность, маршрут подготовки, цепочку «починить всё»
-// и «одну ходку» — и помнит ответы. Экран шага, наблюдатель подготовки, очередь и «что делать сейчас» берут их
-// отсюда, а не считают каждый своё: пока ни уровни, ни предметы, ни отметки не изменились, повторных расчётов нет.
+// The single readiness engine: once per state snapshot it counts readiness, the preparation route, the "fix everything" chain
+// and "one trip", and remembers the answers. The step screen, the preparation observer, the queue and "what to do now" take them
+// from here instead of each counting its own: while no levels, items or marks have changed, there are no repeated calculations.
 //
-// Память живёт ровно до смены снимка: движок создаётся заново, когда меняется состояние игрока, отметки или режим.
+// The memory lives exactly until the snapshot changes: the engine is created anew when the player's state, the marks or the mode change.
 
 import type { Step } from '../types';
 import { fixChainOf, readinessOf, type ChainLink, type ReadinessContext, type StepReadiness } from './readiness';
@@ -15,24 +15,24 @@ import type { UpgradeRecommendation } from '../services/gearUpgradeRouter';
 
 export interface ReadinessEngine {
   readonly ctx: ReadinessContext;
-  /** Готовность шага (с памятью). */
+  /** A step's readiness (with memory). */
   readiness(step: Step): StepReadiness;
-  /** Маршрут подготовки к шагу: главное, следом не больше двух. */
+  /** The preparation route for a step: the main task, then no more than two. */
   prep(step: Step): PrepRoute;
-  /** «Починить всё»: цепочка шагов до готовности. */
+  /** "Fix everything": a chain of steps to readiness. */
   chain(step: Step): ChainLink[];
-  /** Открытые задачи подготовки шага; null — такого шага нет. */
+  /** A step's open preparation tasks; null means there is no such step. */
   openTasks(stepId: string): Set<string> | null;
-  /** Очередь подготовки: маршрут с «куда вести» для каждой задачи. */
+  /** The preparation queue: the route with "where to lead" for each task. */
   queue(step: Step, style: PlayStyle): PrepQueue;
-  /** «Одна ходка» на этот шаг и ближайшие. */
+  /** "One trip" for this step and the nearest ones. */
   trip(stepId: string, ahead?: number): OneTripPlan;
   /**
-   * План подготовки: одно решение «что нужно», из которого рисуются «Что нужно» в программе, список в игре и проверка
-   * у банка (prepPlan.ts). upgrade — совет по инструменту, если он есть.
+   * The preparation plan: one decision "what is needed", from which the in-app "What you need", the in-game list and the bank
+   * check are drawn (prepPlan.ts). upgrade is a tool tip, if there is one.
    */
   plan(step: Step, opts?: { ahead?: number; upgrade?: UpgradeRecommendation | null }): PrepPlan;
-  /** Сколько раз по-настоящему считали (не из памяти) — для проверок. */
+  /** How many times it was really counted (not from memory), for tests. */
   readonly computed: { readiness: number; trip: number; plan: number };
 }
 

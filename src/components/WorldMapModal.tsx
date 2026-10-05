@@ -1,9 +1,9 @@
-// Карта мира на весь экран: тайлы OSRS Wiki в Leaflet, метки точек шага, переключение точек и этажей.
-// Грузится отдельным куском только по кнопке «Карта мира» — Leaflet не утяжеляет запуск.
-// Встроить страницу карты вики нельзя (X-Frame-Options: DENY), поэтому рендер свой — из тех же тайлов.
+// The full-screen world map: OSRS Wiki tiles in Leaflet, the step point markers, switching of points and floors.
+// Loaded as a separate chunk only by the "World map" button — Leaflet does not weigh down the start.
+// The wiki's map page cannot be embedded (X-Frame-Options: DENY), so the rendering is our own — from the same tiles.
 //
-// Та же карта показывает и одно место из досье вики (target): где лежит предмет, магазин, NPC.
-// Пока место ищется — «Ищу место…», не нашлось — ссылка на поиск вики, а кнопка «🧭» ведёт туда стрелку в игре.
+// The same map shows one place from the wiki dossier (target): where an item lies, a shop, an NPC.
+// While the place is being searched — "Searching for the place…", not found — a link to the wiki search, and the "🧭" button leads the in-game arrow there.
 
 import { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
@@ -22,40 +22,40 @@ export type MapStatus = 'loading' | 'error' | 'fallback';
 
 interface Props {
   title: string;
-  /** Точки шага; для одного места из досье — target. */
+  /** The step points; for a single place from the dossier — target. */
   points?: MapLocation[];
   active?: number;
   onActive?: (i: number) => void;
   target?: MapTarget | null;
-  /** Место ещё ищется, поиск не удался или точной точки нет — вместо метки сообщение. */
+  /** The place is still being searched, the search failed or there is no exact point — a message instead of a marker. */
   status?: MapStatus;
-  /** Поиск по вики, когда точки нет. */
+  /** A wiki search when there is no point. */
   searchUrl?: string;
-  /** Временная цель для RuneLite; без неё кнопки «🧭» нет. */
+  /** A temporary target for RuneLite; without it there is no "🧭" button. */
   navigate?: NavTargetPayload;
-  /** Куда ведёт стрелка в игре для этого шага — своя метка 🧭, даже если это не точка шага. */
+  /** Where the in-game arrow leads for this step — its own 🧭 marker, even if it is not a step point. */
   arrow?: NavigationTarget | null;
-  /** Шаг показан в игре: карта открывается на цели стрелки. */
+  /** The step is shown in the game: the map opens on the arrow target. */
   arrowLive?: boolean;
   wikiUrl?: string;
   onClose: () => void;
 }
 
-/** Тайлы вики в системе координат игры: широта — y клетки, долгота — x. Тайл Leaflet (x, y) — это тайл вики (x, −y − 1). */
+/** The wiki tiles in the game coordinate system: latitude is the tile y, longitude is x. The Leaflet tile (x, y) is the wiki tile (x, −y − 1). */
 const WikiTiles = L.TileLayer.extend({
   getTileUrl(this: L.TileLayer & { options: { plane: number } }, c: L.Coords) {
     return tileUrl(c.z, this.options.plane, c.x, -c.y - 1);
   },
 });
 
-/** Центр клетки — чтобы метка стояла посередине, а не на углу. */
+/** The centre of a tile — so the marker stands in the middle, not on a corner. */
 const center = (p: MapLocation) => L.latLng(p.y + 0.5, p.x + 0.5);
 
 function pinIcon(active: boolean): L.DivIcon {
   return L.divIcon({ className: `map-pin ${active ? 'is-active' : ''}`, html: '<span></span>', iconSize: [22, 22], iconAnchor: [11, 11] });
 }
 
-/** Метка цели стрелки: крупная, со значком компаса — видна на любом масштабе. */
+/** The arrow target marker: large, with a compass icon — visible at any zoom. */
 const arrowIcon = L.divIcon({ className: 'map-arrow-pin', html: '<span>🧭</span>', iconSize: [34, 34], iconAnchor: [17, 17] });
 const samePoint = (a: { x: number; y: number; plane: number }, b: { x: number; y: number; plane: number }) =>
   Math.abs(a.x - b.x) <= 1 && Math.abs(a.y - b.y) <= 1 && a.plane === b.plane;
@@ -72,14 +72,14 @@ export default function WorldMapModal({
   const markers = useRef<L.Marker[]>([]);
   const points: MapLocation[] = target ? [{ x: target.x, y: target.y, plane: target.plane, label: target.label }] : stepPoints;
   const point: MapLocation | undefined = status ? undefined : points[Math.min(active, points.length - 1)];
-  // Точки приходят новыми объектами при каждой отрисовке — эффекты завязаны на координаты, иначе карта
-  // возвращалась бы к метке, пока её двигают.
+  // The points arrive as new objects on every render — the effects are tied to the coordinates, otherwise the map
+  // would return to the marker while it is being moved.
   const pointKey = point ? `${point.x},${point.y},${point.plane},${point.zoom ?? ''}` : '';
   const pointsKey = points.map((p) => `${p.x},${p.y},${p.plane},${p.label}`).join(';');
   const [plane, setPlane] = useState(point?.plane ?? 0);
   const [offline, setOffline] = useState(false);
   const arrowMarker = useRef<L.Marker | null>(null);
-  /** Цель стрелки не совпадает ни с одной точкой шага — у неё своя кнопка «показать». */
+  /** The arrow target matches none of the step points — it has its own "show" button. */
   const arrowApart = Boolean(arrow && !target && !points.some((p) => samePoint(p, arrow)));
   const arrowKey = arrow ? `${arrow.x},${arrow.y},${arrow.plane},${arrow.label}` : '';
 
@@ -88,7 +88,7 @@ export default function WorldMapModal({
     if (d && !d.open) d.showModal();
   }, []);
 
-  // Карта создаётся один раз — когда появилась первая точка (у места из досье её сначала ищут).
+  // The map is created once — when the first point appeared (for a dossier place it is searched first).
   const hasPoint = Boolean(point);
   useEffect(() => {
     if (!holder.current || !point) return;
@@ -110,21 +110,21 @@ export default function WorldMapModal({
       minNativeZoom: MIN_ZOOM,
       maxNativeZoom: MAX_ZOOM,
       noWrap: true,
-      // Мир OSRS: всё, что дальше, — пустые тайлы (404), их не запрашиваем.
+      // The OSRS world: everything beyond is empty tiles (404), we do not request them.
       bounds: L.latLngBounds([1150, 1000], [13000, 4300]),
       attribution: MAP_ATTRIBUTION,
     });
     layer.on('tileload', () => { loaded++; setOffline(false); });
-    // Нет связи — пустое окно не оставляем: сообщение поверх и ссылка на вики.
+    // No connection — we do not leave an empty window: a message on top and a wiki link.
     layer.on('tileerror', () => { failed++; if (!loaded && failed >= 4) setOffline(true); });
     layer.addTo(m);
-    // Шаг показан в игре, а стрелка ведёт не к точке шага — карта открывается там, куда ведёт стрелка.
+    // The step is shown in the game, and the arrow leads not to the step point — the map opens where the arrow leads.
     const start = arrowLive && arrow && arrowApart ? { ...arrow, zoom: undefined as number | undefined } : point;
     m.setView(center(start), start.zoom ?? DEFAULT_ZOOM);
     setPlane(start.plane);
     map.current = m;
     tiles.current = layer;
-    // Размер окна известен только после showModal.
+    // The window size is known only after showModal.
     const t = window.setTimeout(() => m.invalidateSize(), 0);
     return () => {
       window.clearTimeout(t);
@@ -133,9 +133,9 @@ export default function WorldMapModal({
       tiles.current = null;
       markers.current = [];
     };
-  }, [hasPoint]); // Карта создаётся один раз на появление точки.
+  }, [hasPoint]); // The map is created once per point appearance.
 
-  // Метки всех точек: активная — крупнее и пульсирует, подпись видна всегда.
+  // Markers of all points: the active one is larger and pulses, the caption is always visible.
   useEffect(() => {
     const m = map.current;
     if (!m) return;
@@ -149,13 +149,13 @@ export default function WorldMapModal({
     });
   }, [pointsKey, active, plane, onActive, hasPoint]);
 
-  // Метка цели стрелки — поверх точек шага, с подписью «куда ведёт стрелка».
+  // The arrow target marker — over the step points, with the caption "where the arrow leads".
   useEffect(() => {
     const m = map.current;
     arrowMarker.current?.remove();
     arrowMarker.current = null;
     if (!m || !arrow || target) return;
-    const tip = `🧭 ${arrowLive ? 'Стрелка в игре ведёт сюда' : 'Сюда поведёт стрелка'}: ${arrow.label}`;
+    const tip = `🧭 ${arrowLive ? 'The in-game arrow leads here' : 'The arrow will lead here'}: ${arrow.label}`;
     const mk = L.marker(center(arrow), { icon: arrowIcon, keyboard: false, zIndexOffset: 2000, title: tip })
       .bindTooltip(tip, { direction: 'bottom', offset: [0, 14], permanent: arrowApart, className: 'map-tip map-tip-arrow' });
     if (arrow.plane === plane) mk.addTo(m);
@@ -170,7 +170,7 @@ export default function WorldMapModal({
     m.setView(center(arrow), Math.max(m.getZoom(), DEFAULT_ZOOM));
   };
 
-  // Переключение точки: центр, масштаб и этаж точки.
+  // Switching a point: the centre, zoom and floor of the point.
   useEffect(() => {
     const m = map.current;
     if (!m || !point) return;
@@ -190,34 +190,34 @@ export default function WorldMapModal({
   const badge = target ? sourceBadge(target) : null;
 
   return (
-    <dialog ref={dialog} className="map-modal" aria-label={`Карта мира: ${title}`}
+    <dialog ref={dialog} className="map-modal" aria-label={`World map: ${title}`}
       onClose={onClose} onClick={(e) => { if (e.target === dialog.current) close(); }}>
       <div className="map-modal-panel">
         <header className="map-modal-head">
           <div className="map-modal-title">
             <strong>🗺️ {title}</strong>
             {point
-              ? <span className="muted small">{point.label} · {isUnderground(point) ? 'подземелье' : floorLabel(point.plane)} · клетка {point.x}, {point.y}</span>
-              : <span className="muted small">{status === 'loading' ? 'Ищу место…' : 'Место без точной точки'}</span>}
+              ? <span className="muted small">{point.label} · {isUnderground(point) ? 'underground' : floorLabel(point.plane)} · tile {point.x}, {point.y}</span>
+              : <span className="muted small">{status === 'loading' ? 'Searching for the place…' : 'A place without an exact point'}</span>}
           </div>
-          <button type="button" className="icon-btn" onClick={close} aria-label="Закрыть карту">
+          <button type="button" className="icon-btn" onClick={close} aria-label="Close the map">
             <IconClose />
           </button>
         </header>
         {(badge || target?.origin) && point && (
           <p className="map-source small">
             {badge && <span className="map-source-badge">{badge}</span>}
-            {target?.origin && <span className="muted"> · координаты: {target.origin}</span>}
+            {target?.origin && <span className="muted"> · coordinates: {target.origin}</span>}
           </p>
         )}
         {arrow && !target && (
           <p className="map-source small">
-            🧭 {arrowLive ? 'Стрелка в игре ведёт' : 'Стрелка поведёт'} к «{arrow.label}» <span className="muted">({SOURCE_TEXT[arrow.source]}, клетка {arrow.x}, {arrow.y})</span>
-            {arrowApart && <> {' '}<button type="button" className="link-btn" onClick={showArrow}>Показать на карте</button></>}
+            🧭 {arrowLive ? 'The in-game arrow leads' : 'The arrow will lead'} to "{arrow.label}" <span className="muted">({SOURCE_TEXT[arrow.source]}, tile {arrow.x}, {arrow.y})</span>
+            {arrowApart && <> {' '}<button type="button" className="link-btn" onClick={showArrow}>Show on the map</button></>}
           </p>
         )}
         {points.length > 1 && !target && (
-          <div className="spot-switch" role="radiogroup" aria-label="Точки на карте">
+          <div className="spot-switch" role="radiogroup" aria-label="Points on the map">
             {points.map((p, i) => (
               <button key={`${p.x},${p.y},${p.plane}`} type="button" role="radio" aria-checked={i === active}
                 className={`spot-chip ${i === active ? 'is-active' : ''}`} onClick={() => onActive(i)}>
@@ -229,7 +229,7 @@ export default function WorldMapModal({
         <div className="map-modal-body">
           <div ref={holder} className="map-canvas" />
           {point && (
-            <div className="map-floors" role="radiogroup" aria-label="Этаж">
+            <div className="map-floors" role="radiogroup" aria-label="Floor">
               {[0, 1, 2, 3].map((f) => (
                 <button key={f} type="button" role="radio" aria-checked={plane === f} className={`map-floor ${plane === f ? 'is-active' : ''}`}
                   onClick={() => setPlane(f)} title={floorLabel(f)}>
@@ -240,33 +240,33 @@ export default function WorldMapModal({
           )}
           {status === 'loading' && (
             <div className="map-modal-offline map-modal-status" role="status" aria-live="polite">
-              <p><strong>Ищу место на карте…</strong></p>
-              <p className="small muted">Сначала словарь мест, потом страница на OSRS Wiki.</p>
+              <p><strong>Searching for the place on the map…</strong></p>
+              <p className="small muted">First the place dictionary, then a page on the OSRS Wiki.</p>
             </div>
           )}
           {(status === 'fallback' || status === 'error') && (
             <div className="map-modal-offline map-modal-status" role="status">
-              <p><strong>Точную координату автоматически определить не удалось.</strong></p>
+              <p><strong>The exact coordinate could not be determined automatically.</strong></p>
               <p className="small">
-                {status === 'error' ? 'OSRS Wiki не ответила, а в словаре мест такого нет. ' : ''}
-                Место можно найти поиском на OSRS Wiki — там статья и её карта.
+                {status === 'error' ? 'The OSRS Wiki did not answer, and the place dictionary does not have it. ' : ''}
+                The place can be found by searching the OSRS Wiki — there is an article and its map.
               </p>
               {searchUrl && (
-                <p><a className="btn btn-sm" href={searchUrl} target="_blank" rel="noopener noreferrer">Открыть поиск на OSRS Wiki <IconExternal /></a></p>
+                <p><a className="btn btn-sm" href={searchUrl} target="_blank" rel="noopener noreferrer">Open the search on the OSRS Wiki <IconExternal /></a></p>
               )}
             </div>
           )}
           {offline && point && (
             <div className="map-modal-offline" role="status">
-              <p><strong>Карта не загрузилась.</strong> Тайлы карты берутся с maps.runescape.wiki — нужен интернет.</p>
-              <p className="small">Место: {point.label}, клетка {point.x}, {point.y}, {floorLabel(point.plane)}.</p>
+              <p><strong>The map did not load.</strong> The map tiles come from maps.runescape.wiki — the internet is needed.</p>
+              <p className="small">Place: {point.label}, tile {point.x}, {point.y}, {floorLabel(point.plane)}.</p>
             </div>
           )}
         </div>
         {((navigate && point) || wikiUrl) && (
           <div className="map-modal-foot small">
             {navigate && point && <NavigateButton target={navigate} />}
-            {wikiUrl && <a href={wikiUrl} target="_blank" rel="noopener noreferrer">Открыть место на карте вики <IconExternal /></a>}
+            {wikiUrl && <a href={wikiUrl} target="_blank" rel="noopener noreferrer">Open the place on the wiki map <IconExternal /></a>}
           </div>
         )}
       </div>

@@ -1,61 +1,60 @@
-// Проверка вылета: всё ли из предметов шага лежит в сумке перед выходом из банка.
-// Счёт приходит из RuneLite (событие OWNED); правила — те же, что в плагине (Checklist.java).
+// The departure check: whether everything from the step's items is in the bag before leaving the bank.
+// The count comes from RuneLite (the OWNED event); the rules are the same as in the plugin (Checklist.java).
 
 import type { Step, StepItemRequirement } from '../types';
 
-/** Сколько предмета есть у игрока, по данным плагина. bank — undefined, пока банк в этой сессии не открывали. */
+/** How many of an item the player has, by the plugin's data. bank is undefined until the bank was opened in this session. */
 export interface OwnedItem {
   name: string;
   id?: number;
-  /** В сумке и надето (без банкнот). */
+  /** In the bag and worn (without banknotes). */
   carried: number;
-  /** Банкнотами в сумке. */
+  /** As banknotes in the bag. */
   noted: number;
   bank?: number;
 }
 
 export interface OwnedState {
   bankSeen: boolean;
-  /** Банк взят из сохранённого прошлого сеанса (время записи, мс), а не прочитан из игры сейчас; нет — прочитан сейчас. */
+  /** The bank was taken from a saved earlier session (the time of the write, ms), not read from the game just now; absent means read just now. */
   bankSavedAt?: number;
-  /** По ключу nameKey(name). */
+  /** By the key nameKey(name). */
   items: Map<string, OwnedItem>;
 }
 
-/** Имя как ключ сравнения — так же, как ActiveTarget.nameKey в плагине. */
+/** The name as a comparison key, the same way as ActiveTarget.nameKey in the plugin. */
 export function nameKey(s: string): string {
-  return s.replace(/<[^>]*>/g, '').replace(/ /g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+  return s.replace(/<[^>]*>/g, '').replace(/00a0/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
 }
 
 /**
- * Количество из маршрута: 1, «23 (20 сдать, 3 в банк)» → 23, «20+» → 20, «1 000» → 1000.
- * null — количество не числом («Сколько есть», «По одной на алхимию»).
+ * The quantity from the route: 1, "23 (20 to hand in, 3 for the bank)" gives 23, "20+" gives 20, "1,000" gives 1000.
+ * null means the quantity is not a number ("As many as you have", "One per alchemy").
  */
 export function parseAmount(amount: string | number): number | null {
   if (typeof amount === 'number') return Number.isFinite(amount) && amount > 0 ? Math.floor(amount) : null;
-  const m = amount.match(/^\s*(\d{1,3}(?:[  ]\d{3})+|\d+)/);
+  const m = amount.match(/^\s*(\d{1,3}(?:[,  ]\d{3})+|\d+)/);
   if (!m) return null;
-  const n = Number(m[1].replace(/[  ]/g, ''));
+  const n = Number(m[1].replace(/[,  ]/g, ''));
   return n > 0 ? n : null;
 }
 
 export interface PreflightItem {
   nameEn: string;
-  nameRu: string;
   id?: number;
   count: number;
-  /** false — в маршруте количество не числом: проверяется «есть хотя бы один». */
+  /** false means the route's quantity is not a number: "at least one is there" is checked. */
   exact: boolean;
   heals?: number;
 }
 
-/** Что проверять у банка: требуемые предметы, кроме тех, что добываются по ходу самого шага. */
+/** What to check at the bank: the required items except those obtained during the step itself. */
 export function preflightItems(step: Step): PreflightItem[] {
   return (step.itemsRequired ?? [])
     .filter((i: StepItemRequirement) => !i.inStep)
     .map((i) => {
       const n = parseAmount(i.amount);
-      return { nameEn: i.nameEn, nameRu: i.nameRu, id: i.wikiItemId, count: n ?? 1, exact: n !== null, heals: i.heals };
+      return { nameEn: i.nameEn, id: i.wikiItemId, count: n ?? 1, exact: n !== null, heals: i.heals };
     });
 }
 
@@ -64,14 +63,14 @@ export type PreflightState = 'IN_BAG_READY' | 'MISSING_FROM_BAG' | 'NOT_FOUND_IN
 export interface PreflightRow {
   item: PreflightItem;
   have: number;
-  /** null — банк ещё не открывали. */
+  /** null means the bank was not opened yet. */
   inBank: number | null;
   state: PreflightState;
 }
 
 export interface PreflightResult {
   rows: PreflightRow[];
-  /** READY_TO_DEPART: всё на руках. */
+  /** READY_TO_DEPART: everything is on hand. */
   ready: boolean;
   missing: number;
 }
@@ -91,7 +90,7 @@ export function evaluatePreflight(items: PreflightItem[], owned: OwnedState): Pr
   return { rows, ready: rows.length > 0 && missing === 0, missing };
 }
 
-/** Разбор события OWNED из плагина; мусор отбрасывается. */
+/** Parsing of the OWNED event from the plugin; junk is dropped. */
 export function parseOwned(e: unknown): OwnedState | null {
   if (!e || typeof e !== 'object') return null;
   const { bankSeen, items, bankSavedAt } = e as { bankSeen?: unknown; items?: unknown; bankSavedAt?: unknown };
@@ -114,7 +113,7 @@ export function parseOwned(e: unknown): OwnedState | null {
   return { bankSeen: bankSeen === true, ...(saved !== undefined ? { bankSavedAt: saved } : {}), items: map };
 }
 
-/** Всего у игрока: сумка, банкноты и банк (если его открывали). */
+/** The player's total: bag, banknotes and the bank (if it was opened). */
 export function ownedTotal(owned: OwnedState | null, name: string): number | null {
   if (!owned) return null;
   const o = owned.items.get(nameKey(name));

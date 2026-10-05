@@ -1,10 +1,10 @@
-// Автообновление переносной версии: сверяет версию с последним выпуском на GitHub, скачивает новый exe рядом со старым,
-// проверяет размер и контрольную сумму и по кнопке перезапускает программу уже из нового exe. Данные лежат в
-// OSRS-Put-data рядом с exe — новая версия подхватывает их сама, перекачивать и переносить ничего не нужно.
+// Auto-update of the portable version: compares the version with the latest GitHub release, downloads the new exe next to the old one,
+// checks the size and checksum and, on a button, restarts the app from the new exe. The data is in
+// OSRS-Put-data next to the exe — the new version picks it up by itself, nothing needs to be re-downloaded or moved.
 //
-// Ходит только на api.github.com и в хранилище вложений GitHub (https), ничего не отправляет, кроме обычного запроса.
-// Обновление ставит игрок кнопкой; в фоне только проверка (её можно выключить). Старый exe после перехода удаляется:
-// имя файла проверяется по шаблону, версия должна быть старше запущенной.
+// It goes only to api.github.com and the GitHub attachment storage (https), sends nothing except an ordinary request.
+// The player installs the update with a button; in the background there is only the check (it can be turned off). The old exe is deleted after the switch:
+// the file name is checked against a pattern, the version must be older than the running one.
 
 const fs = require('node:fs');
 const https = require('node:https');
@@ -22,13 +22,13 @@ const MAX_SIZE = 400 * 1024 * 1024;
 const MAX_REDIRECTS = 5;
 const CHECK_EVERY_MS = 6 * 60 * 60_000;
 
-/** «v2.24.0» / «2.24.0» → [2, 24, 0]; иначе null. */
+/** "v2.24.0" / "2.24.0" → [2, 24, 0]; otherwise null. */
 function parseVersion(v) {
   const m = /^v?(\d{1,4})\.(\d{1,4})\.(\d{1,4})$/.exec(String(v ?? '').trim());
   return m ? [Number(m[1]), Number(m[2]), Number(m[3])] : null;
 }
 
-/** true, если a новее b. Непонятная версия — не новее. */
+/** true if a is newer than b. An unclear version is not newer. */
 function isNewer(a, b) {
   const x = parseVersion(a);
   const y = parseVersion(b);
@@ -40,8 +40,8 @@ function isNewer(a, b) {
 }
 
 /**
- * Что скачивать из ответа GitHub «последний выпуск»: версия, имя файла, адрес, размер и sha256 (если GitHub её дал).
- * Черновики, предварительные выпуски, чужие адреса и странные размеры отбрасываются — null.
+ * What to download from the GitHub "latest release" reply: the version, the file name, the address, the size and sha256 (if GitHub gave it).
+ * Drafts, pre-releases, foreign addresses and strange sizes are dropped — null.
  */
 function pickRelease(rel) {
   if (!rel || typeof rel !== 'object' || rel.draft === true || rel.prerelease === true) return null;
@@ -63,29 +63,29 @@ function pickRelease(rel) {
   return null;
 }
 
-/** Обычный GET по https с редиректами; только свои хосты. onResponse(res) получает финальный ответ. */
+/** An ordinary GET over https with redirects; only own hosts. onResponse(res) receives the final response. */
 function get(url, headers, onResponse, onError, redirects = 0) {
   let u;
   try {
     u = new URL(url);
   } catch {
-    onError(new Error('адрес'));
+    onError(new Error('address'));
     return null;
   }
   if (u.protocol !== 'https:' || !HOST_OK(u.hostname)) {
-    onError(new Error('чужой адрес'));
+    onError(new Error('foreign address'));
     return null;
   }
   const req = https.get(u, { headers: { 'User-Agent': 'OSRS-Put-updater', ...headers }, timeout: 20_000 }, (res) => {
     if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
       res.resume();
-      if (redirects >= MAX_REDIRECTS) onError(new Error('много переадресаций'));
+      if (redirects >= MAX_REDIRECTS) onError(new Error('too many redirects'));
       else get(new URL(res.headers.location, u).toString(), headers, onResponse, onError, redirects + 1);
       return;
     }
     onResponse(res);
   });
-  req.on('timeout', () => req.destroy(new Error('таймаут')));
+  req.on('timeout', () => req.destroy(new Error('timeout')));
   req.on('error', onError);
   return req;
 }
@@ -95,35 +95,35 @@ function fetchRelease() {
     get(RELEASE_URL, { Accept: 'application/vnd.github+json' }, (res) => {
       if (res.statusCode !== 200) {
         res.resume();
-        reject(new Error(`GitHub ответил ${res.statusCode}`));
+        reject(new Error(`GitHub answered ${res.statusCode}`));
         return;
       }
       let text = '';
       res.setEncoding('utf8');
       res.on('data', (c) => {
         text += c;
-        if (text.length > 2_000_000) res.destroy(new Error('слишком большой ответ'));
+        if (text.length > 2_000_000) res.destroy(new Error('the response is too big'));
       });
       res.on('end', () => {
-        try { resolve(JSON.parse(text)); } catch { reject(new Error('ответ не разобрать')); }
+        try { resolve(JSON.parse(text)); } catch { reject(new Error('the response cannot be parsed')); }
       });
       res.on('error', reject);
     }, reject);
   });
 }
 
-/** Скачать в dest через .part, проверить размер и sha256; на выходе — целый файл или ошибка (частичный удаляется). */
+/** Download into dest through .part, check the size and sha256; the result is a whole file or an error (a partial one is deleted). */
 function download(rel, dest, onProgress) {
   const part = `${dest}.part`;
   return new Promise((resolve, reject) => {
     const fail = (err) => {
-      try { fs.rmSync(part, { force: true }); } catch { /* не страшно */ }
+      try { fs.rmSync(part, { force: true }); } catch { /* not a problem */ }
       reject(err);
     };
     get(rel.url, {}, (res) => {
       if (res.statusCode !== 200) {
         res.resume();
-        fail(new Error(`сервер ответил ${res.statusCode}`));
+        fail(new Error(`the server answered ${res.statusCode}`));
         return;
       }
       const hash = crypto.createHash('sha256');
@@ -133,7 +133,7 @@ function download(rel, dest, onProgress) {
       res.on('data', (chunk) => {
         got += chunk.length;
         hash.update(chunk);
-        if (got > rel.size) res.destroy(new Error('файл больше заявленного'));
+        if (got > rel.size) res.destroy(new Error('the file is larger than declared'));
         const now = Date.now();
         if (now - last > 250) { last = now; onProgress(got / rel.size); }
       });
@@ -141,8 +141,8 @@ function download(rel, dest, onProgress) {
       out.on('error', fail);
       res.pipe(out);
       out.on('finish', () => {
-        if (got !== rel.size) { fail(new Error('размер файла не сошёлся')); return; }
-        if (rel.sha256 && hash.digest('hex') !== rel.sha256) { fail(new Error('контрольная сумма не сошлась')); return; }
+        if (got !== rel.size) { fail(new Error('the file size did not match')); return; }
+        if (rel.sha256 && hash.digest('hex') !== rel.sha256) { fail(new Error('the checksum did not match')); return; }
         try {
           fs.renameSync(part, dest);
           onProgress(1);
@@ -155,14 +155,14 @@ function download(rel, dest, onProgress) {
   });
 }
 
-/** Безопасно ли подставить путь в командную строку cmd: без кавычек, &, %, ^ и переводов строки. */
+/** Whether it is safe to put a path into a cmd command line: without quotes, &, %, ^ and line breaks. */
 function safeForCmd(p) {
   return typeof p === 'string' && p.length > 0 && p.length < 260 && !/["&%^<>|\r\n]/.test(p);
 }
 
 /**
- * Обновление приложения. env — окружение (process.env), userData — папка данных, onState — куда сообщать о состоянии,
- * quit — закрыть программу. Для проверок всё подменяется.
+ * The app update. env — the environment (process.env), userData — the data folder, onState — where to report the state,
+ * quit — close the app. Everything is replaced for checks.
  */
 function createUpdater({ version, env, userData, onState, quit, fetchRelease: fetcher = fetchRelease, downloader = download, spawner = spawn, fsApi = fs }) {
   const exe = env.PORTABLE_EXECUTABLE_FILE || null;
@@ -178,7 +178,7 @@ function createUpdater({ version, env, userData, onState, quit, fetchRelease: fe
     onState(state);
   };
 
-  /** Уже скачано раньше (программу закрыли до перезапуска) — готово к установке без новой загрузки. */
+  /** Already downloaded earlier (the app was closed before the restart) — ready to install without a new download. */
   const target = () => (rel && dir ? path.join(dir, rel.name) : null);
 
   async function check() {
@@ -222,12 +222,12 @@ function createUpdater({ version, env, userData, onState, quit, fetchRelease: fe
     return state;
   }
 
-  /** Запустить новую версию после выхода из этой и закрыть программу. false — не получилось, ничего не закрыто. */
+  /** Start the new version after exiting this one and close the app. false — it did not work, nothing is closed. */
   function install() {
     const file = target();
     if (state.state !== 'ready' || !canInstall || !file || !fsApi.existsSync(file) || !safeForCmd(file)) return false;
     try {
-      // Старый exe новая версия удалит сама, когда он освободится.
+      // The new version will delete the old exe itself when it is freed.
       fsApi.writeFileSync(path.join(userData, 'update-cleanup.json'), JSON.stringify({ delete: exe }));
       const cmd = env.ComSpec || 'cmd.exe';
       const child = spawner(cmd, ['/d', '/s', '/c', `"ping -n 3 127.0.0.1 >nul & start "" "${file}""`], {
@@ -242,26 +242,26 @@ function createUpdater({ version, env, userData, onState, quit, fetchRelease: fe
     }
   }
 
-  /** Старт после обновления: прежний exe (из update-cleanup.json) удаляется, когда освободится. */
+  /** The start after an update: the earlier exe (from update-cleanup.json) is deleted when it is freed. */
   function cleanup(tries = 0) {
     const f = path.join(userData, 'update-cleanup.json');
     let old = null;
     try { old = JSON.parse(fsApi.readFileSync(f, 'utf8')).delete; } catch { return; }
     const m = typeof old === 'string' ? ASSET_RE.exec(path.basename(old)) : null;
     if (!m || !isNewer(version, m[1]) || (dir && path.dirname(old) !== dir)) {
-      try { fsApi.rmSync(f, { force: true }); } catch { /* не страшно */ }
+      try { fsApi.rmSync(f, { force: true }); } catch { /* not a problem */ }
       return;
     }
     try {
       fsApi.rmSync(old, { force: true });
       fsApi.rmSync(f, { force: true });
     } catch {
-      // Ещё занят прежним процессом — подождём и повторим.
+      // Still busy with the earlier process — we wait and retry.
       if (tries < 15) setTimeout(() => cleanup(tries + 1), 2000).unref();
     }
   }
 
-  /** Проверка при запуске и раз в несколько часов, если включена. enabled() — спрашивает настройку каждый раз. */
+  /** The check at launch and every few hours, if turned on. enabled() — asks the setting every time. */
   function schedule(enabled) {
     clearTimeout(timer);
     const run = () => {

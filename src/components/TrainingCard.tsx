@@ -1,5 +1,5 @@
-// «🎯 Чем качать»: способ прокачки навыка до цели — по уровню, режиму, предметам и стилю игры (спокойно / эффективно).
-// Расчёт — lib/trainingRouter.ts; здесь только показ. Ничего не запускает и не покупает: стрелка — по кнопке игрока.
+// "🎯 What to train with": a skill training method up to the goal — by level, mode, items and play style (calm / efficient).
+// The calculation is lib/trainingRouter.ts; here only the display. It starts and buys nothing: the arrow is by the player's button.
 
 import { useMemo } from 'react';
 import type { Step } from '../types';
@@ -17,7 +17,7 @@ import { trainingNav } from '../lib/trainingNav';
 import type { NavTargetPayload } from '../services/runeliteBridge';
 import { NavigateButton } from './NavigateButton';
 
-/** Совет по навыку из общего состояния игрока; пересчёт — когда меняются уровни, предметы, режим или стиль. */
+/** Skill advice from the shared player state; recomputed when levels, items, mode or style change. */
 export function useTrainingAdvice(skill: string | null, target: number): TrainingAdvice | null {
   const { mode } = useStore();
   const { state } = usePlayerState();
@@ -32,7 +32,7 @@ export function useTrainingAdvice(skill: string | null, target: number): Trainin
   );
 }
 
-/** Точка на карте для способа: только из словаря мест по ключу — без догадок по тексту. */
+/** A map point for a method: only from the place dictionary by key — without guessing from the text. */
 export function methodNav(v: MethodView): NavTargetPayload | null {
   return trainingNav(v.method);
 }
@@ -44,14 +44,14 @@ function Alternative({ v }: { v: MethodView }) {
   return (
     <li>
       <strong>{m.name}</strong>
-      <span className="muted"> — {m.where}{m.xph ? `; ≈ ${m.xph[0] === m.xph[1] ? m.xph[0].toLocaleString('ru-RU') : `${m.xph[0].toLocaleString('ru-RU')}–${m.xph[1].toLocaleString('ru-RU')}`} опыта в час (по вики)` : ''}</span>
-      {v.status === 'PREP' && <span className="muted"> · сначала: {v.missing.map((x) => x.label).join(', ')}</span>}
-      {v.status === 'LOCKED' && <span className="muted"> · закрыто: {v.missing.map((x) => x.label).join(', ')}</span>}
+      <span className="muted"> — {m.where}{m.xph ? `; ≈ ${m.xph[0] === m.xph[1] ? m.xph[0].toLocaleString('en-US') : `${m.xph[0].toLocaleString('en-US')}–${m.xph[1].toLocaleString('en-US')}`} XP per hour (wiki)` : ''}</span>
+      {v.status === 'PREP' && <span className="muted"> · first: {v.missing.map((x) => x.label).join(', ')}</span>}
+      {v.status === 'LOCKED' && <span className="muted"> · locked: {v.missing.map((x) => x.label).join(', ')}</span>}
     </li>
   );
 }
 
-/** Способов в списке нет (Hunter, Construction, Slayer…) — строка плана прокачки из гайда для этого уровня. */
+/** No methods in the list (Hunter, Construction, Slayer…) — the training plan row for this level. */
 function GuideRow({ skill, level, fallback }: { skill: string; level: number; fallback: string }) {
   const guide = skillById.get(levelById.get(skill)?.skill ?? '');
   const hit = guide ? rangeForLevel(guide.plan.ranges, level) : null;
@@ -60,7 +60,7 @@ function GuideRow({ skill, level, fallback }: { skill: string; level: number; fa
   return (
     <>
       <p className="training-now"><strong>{r.what}</strong>{r.where && <span className="muted"> — {r.where}</span>}</p>
-      <p className="small muted">По плану прокачки гайда ({r.code}, уровни {r.levels}){r.notes ? `: ${r.notes}` : ''}. <a href={`#/skills/${guide.id}`}>Весь план</a></p>
+      <p className="small muted">From the skill's training plan ({r.code}, levels {r.levels}){r.notes ? `: ${r.notes}` : ''}. <a href={`#/skills/${guide.id}`}>The whole plan</a></p>
     </>
   );
 }
@@ -76,62 +76,62 @@ export function TrainingCard({ skill, target }: { skill: string; target: number 
   const count = advice.actionsLeft;
   const showOthers = advice.others.length > 0;
   return (
-    <section className="training" aria-label="Чем качать">
+    <section className="training" aria-label="What to train with">
       <p className="readiness-head">
-        🎯 <strong>Чем качать: {skillTitle(skill)}</strong> <span className="muted">— сейчас {advice.level}, цель {target}</span>
+        🎯 <strong>What to train with: {skillTitle(skill)}</strong> <span className="muted">— now {advice.level}, goal {target}</span>
       </p>
       {best ? (
         <>
           <p className="training-now"><strong>{best.method.name}</strong><span className="muted"> — {best.method.where}</span></p>
           <p className="small muted">{advice.reason}</p>
           {count !== null && best.method.act && (
-            <p className="small">Ещё ≈ {count.toLocaleString('ru-RU')} {actionForm(best.method.act, count)}{legEnd < target ? ` до ${legEnd} уровня` : ` до ${target} уровня`}.</p>
+            <p className="small">≈ {count.toLocaleString('en-US')} more {actionForm(best.method.act, count)}{legEnd < target ? ` to level ${legEnd}` : ` to level ${target}`}.</p>
           )}
           {profile.showTime && advice.time && (
-            <p className="small">⏱ {formatHours(advice.time)} до {target}{advice.time.source === 'wiki' ? ' (по скорости из вики — ориентир)' : ' (по твоему темпу)'}.</p>
+            <p className="small">⏱ {formatHours(advice.time)} to {target}{advice.time.source === 'wiki' ? ' (by the wiki speed — a guide)' : ' (at your pace)'}.</p>
           )}
           {best.status === 'PREP' && (
-            <p className="small">Сначала: <strong>{best.missing.map((x) => x.label).join(', ')}</strong> <a href="#/shopping">В закупки</a></p>
+            <p className="small">First: <strong>{best.missing.map((x) => x.label).join(', ')}</strong> <a href="#/shopping">To the shopping list</a></p>
           )}
-          {best.unchecked.length > 0 && <p className="small muted">Не проверено: {best.unchecked.map((x) => x.label).join(', ')} — открой банк в игре.</p>}
+          {best.unchecked.length > 0 && <p className="small muted">Not checked: {best.unchecked.map((x) => x.label).join(', ')} — open the bank in the game.</p>}
           {best.method.note && <p className="small muted">{best.method.note}</p>}
           <div className="actions">
-            {nav && <NavigateButton target={nav} label={`🧭 К месту: ${nav.label}`} />}
-            <a className="btn btn-ghost btn-sm" href={best.method.url} target="_blank" rel="noopener noreferrer">Вики ↗</a>
+            {nav && <NavigateButton target={nav} label={`🧭 To the place: ${nav.label}`} />}
+            <a className="btn btn-ghost btn-sm" href={best.method.url} target="_blank" rel="noopener noreferrer">Wiki ↗</a>
           </div>
         </>
       ) : (
         <GuideRow skill={skill} level={advice.level} fallback={advice.reason} />
       )}
       {advice.path.length > 1 && (
-        <p className="small muted">Путь: {advice.path.map((l) => `${l.fromLevel}–${l.toLevel} ${l.method.name}`).join(' → ')}</p>
+        <p className="small muted">Path: {advice.path.map((l) => `${l.fromLevel}–${l.toLevel} ${l.method.name}`).join(' → ')}</p>
       )}
       {advice.quests.length > 0 && (
-        <p className="small muted">📜 Часть уровней закрывают квесты: {advice.quests.map((q) => q.name).join('; ')}.</p>
+        <p className="small muted">📜 Some levels are covered by quests: {advice.quests.map((q) => q.name).join('; ')}.</p>
       )}
       {showOthers && (
         <details className="small" open={profile.alternatives > 0}>
-          <summary className="muted">Другие способы: {advice.others.length}</summary>
+          <summary className="muted">Other methods: {advice.others.length}</summary>
           <ul>{advice.others.slice(0, profile.alternatives || 3).map((v) => <Alternative key={v.method.id} v={v} />)}</ul>
         </details>
       )}
       <p className="small muted">
-        Стиль: {profile.label} ·{' '}
+        Style: {profile.label} ·{' '}
         <button type="button" className="link-btn" onClick={() => setFeatures({ efficient: !features.efficient })}>
-          {features.efficient ? 'сделать спокойнее' : 'показать самые быстрые'}
+          {features.efficient ? 'make it calmer' : 'show the fastest'}
         </button>
       </p>
     </section>
   );
 }
 
-/** Для шага-прокачки: берёт отстающий навык цели шага и показывает «чем качать». Остальные шаги — ничего. */
+/** For a training step: takes the lagging skill of the step's goal and shows "what to train with". Other steps — nothing. */
 export function StepTraining({ step }: { step: Step }) {
   const { state } = usePlayerState();
   const trig = step.inGame?.completionTrigger;
   const pick = useMemo(() => {
     if (trig?.type !== 'SKILL_LEVEL' || !trig.levels?.length || trig.items?.length) return null;
-    // Сколько не хватает до цели — у отстающего навыка; уровень неизвестен — берём первый.
+    // How much is left to the goal — for the lagging skill; the level is unknown — we take the first.
     const rows = trig.levels.map((l) => ({ skill: l.skill, target: l.level, lv: levelOf(state, l.skill) }));
     const open = rows.filter((r) => r.lv === undefined || r.lv < r.target);
     if (!open.length) return null;

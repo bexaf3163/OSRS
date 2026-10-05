@@ -1,4 +1,4 @@
-// V2 Review: выполненные шаги, в которых в V2 появились важные требования, ещё не проверенные пользователем.
+// V2 Review: completed steps in which important requirements appeared in V2 that the user has not checked yet.
 
 import type { Progress, Step } from '../types';
 

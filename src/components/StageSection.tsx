@@ -1,3 +1,4 @@
+// A stage section with its list of steps.
 import { useId } from 'react';
 import type { Stage, Step } from '../types';
 import { BASE_QP } from '../data';
@@ -34,15 +35,15 @@ export function StageSection({ stage, steps, open, current, onToggle, expanded, 
           <span className="stage-num">{complete ? <IconCheck /> : stage.id}</span>
           <span className="stage-name">
             <span className="stage-kicker">
-              Этап {stage.id}{stage.membersOnly && ' · 👑 Members'}{current && ' · сейчас'}
+              Stage {stage.id}{stage.membersOnly && ' · 👑 Members'}{current && ' · current'}
             </span>
             <span className="stage-title">{stage.title}</span>
           </span>
-          <span className="stage-count">{closed} / {steps.length}<span className="visually-hidden"> шагов</span></span>
+          <span className="stage-count">{closed} / {steps.length}<span className="visually-hidden"> steps</span></span>
           <IconChevron className="chevron" />
         </button>
       </h2>
-      <ProgressBar value={steps.length ? closed / steps.length : 0} label={`Этап ${stage.id}: выполнено шагов`} />
+      <ProgressBar value={steps.length ? closed / steps.length : 0} label={`Stage ${stage.id}: steps done`} />
       <div className={`collapse ${open ? 'is-open' : ''}`} id={bodyId} inert={!open}>
         <div className="collapse-inner">
           <ol className="steps">
@@ -50,7 +51,7 @@ export function StageSection({ stage, steps, open, current, onToggle, expanded, 
               <StepCard key={s.id} step={s} open={expanded.has(s.id)} onToggle={() => onToggleStep(s.id)} onDone={onDone} />
             ))}
           </ol>
-          <p className="stage-summary muted small">Очки квестов к концу этапа: {qpAtEnd}</p>
+          <p className="stage-summary muted small">Quest points by the end of the stage: {qpAtEnd}</p>
         </div>
       </div>
     </section>

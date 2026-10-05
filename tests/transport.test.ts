@@ -9,7 +9,7 @@ import { Inline } from '../src/components/Inline';
 const transport = reference.sections.find((s) => s.id === 'transport');
 const transportText = blocksText(transport?.blocks ?? []);
 
-/** Все строки, которые видит пользователь: шаги, справка, навыки. */
+/** All the strings the user sees: steps, the reference, skills. */
 function strings(v: unknown, out: string[] = []): string[] {
   if (typeof v === 'string') out.push(v);
   else if (Array.isArray(v)) v.forEach((x) => strings(x, out));
@@ -18,66 +18,66 @@ function strings(v: unknown, out: string[] = []): string[] {
 }
 const allTexts = strings([allSteps, reference, skills]);
 
-describe('справка «Телепорты, каноэ и лодки»', () => {
-  it('раздел есть и стоит после «Если не знаешь, что делать»', () => {
+describe('the "Teleports, canoes and boats" reference', () => {
+  it('the section exists and comes after "If you do not know what to do"', () => {
     const ids = reference.sections.map((s) => s.id);
     expect(ids.indexOf('transport')).toBe(ids.indexOf('stuck') + 1);
-    expect(transport!.title).toBe('Телепорты, каноэ и лодки');
+    expect(transport!.title).toBe('Teleports, canoes and boats');
   });
 
-  it('объясняет, как пользоваться каждым способом', () => {
+  it('explains how to use each method', () => {
     for (const fact of [
-      'Lumbridge Home Teleport', '30 минут', 'Count Check', 'Where can I learn more about security?',
-      'правый клик по книге → Teleport', 'Check charges', '1 Law rune, 3 Air rune и 1 Fire rune',
+      'Lumbridge Home Teleport', '30 minutes', 'Count Check', 'Where can I learn more about security?',
+      'right-click the book, Teleport', 'Check charges', '1 Law rune, 3 Air rune and 1 Fire rune',
       'Chop-down', 'Shape-Canoe', 'Float Log', 'Paddle Log', 'Store-axe', 'Wilderness Pond',
       'Captain Tobias', 'Customs officer', 'Can I journey on this ship?', 'Luthas',
     ]) expect(transportText, fact).toContain(fact);
   });
 
-  it('Home Teleport: что это, где, при каком условии и что делать, если он недоступен (§70)', () => {
+  it('Home Teleport: what it is, where, under what condition and what to do if it is unavailable (§70)', () => {
     for (const fact of [
-      'Standard spellbook', 'руны и уровень магии не нужны', 'первый значок', '14 секунд', 'раз в 30 минут',
-      'В бою не работает', 'Глубже 20-го уровня Wilderness', 'Если значок серый', 'Lumbridge Teleport за руны',
+      'Standard spellbook', 'needs no runes or Magic level', 'the first icon', '14 seconds', 'once every 30 minutes',
+      'It does not work in combat', 'deeper than Wilderness level 20', 'If the icon is grey', 'Lumbridge Teleport for runes',
       'Use Home Teleport spells',
     ]) expect(transportText, fact).toContain(fact);
-    // У шага, где маршрут на него рассчитывает, есть запасной выход.
+    // The step where the route counts on it has a fallback.
     const s109 = stepsFor('f2p').find((s) => s.id === 'S1-09')!;
     const exit = s109.quickSteps!.find((q) => q.includes('Lumbridge Home Teleport'))!;
-    expect(exit).toContain('значок серый');
+    expect(exit).toContain('icon is grey');
     expect(exit).toContain('Climb-up');
   });
 
-  it('находится поиском', () => {
+  it('is found by search', () => {
     const index = buildIndex({ steps: stepsFor('f2p'), skills, reference, plugins, items, typeLabel: {} });
-    for (const q of ['Home Teleport', 'каноэ', 'Customs officer']) {
+    for (const q of ['Home Teleport', 'canoe', 'Customs officer']) {
       expect(search(index, q).slice(0, 5).map((h) => h.item.href), q).toContain('#/reference/transport');
     }
   });
 
-  it('таблица каноэ: уровень рубки и число остановок по вики', () => {
-    const table = transport!.blocks.find((b) => b.t === 'table' && b.head[0] === 'Каноэ');
+  it('the canoe table: the woodcutting level and the number of stops from the wiki', () => {
+    const table = transport!.blocks.find((b) => b.t === 'table' && b.head[0] === 'Canoe');
     expect(table && table.t === 'table' && table.rows.map((r) => [r[0], r[1], r[3]])).toEqual([
-      ['Log', '12', '1'], ['Dugout', '27', '2'], ['Stable Dugout', '42', '3'], ['Waka', '57', 'Любая станция, в том числе в Wilderness'],
+      ['Log', '12', '1'], ['Dugout', '27', '2'], ['Stable Dugout', '42', '3'], ['Waka', '57', 'Any station, including the one in the Wilderness'],
     ]);
   });
 });
 
-describe('названия действий совпадают с игрой', () => {
-  // Кэш клиента: станция каноэ — Chop-down, Shape-Canoe, Float Log/Canoe, Paddle Log/Canoe;
-  // книга Chronicle — Wield, Teleport, Check charges, Destroy. Бармен на Karamja — Zembo.
-  it('у станции каноэ только настоящие пункты меню', () => {
-    const quoted = allTexts.flatMap((t) => [...t.matchAll(/«((?:Chop|Shape|Float|Paddle)[^»]*)»/g)].map((m) => m[1]));
+describe('action names match the game', () => {
+  // The client cache: the canoe station — Chop-down, Shape-Canoe, Float Log/Canoe, Paddle Log/Canoe;
+  // the Chronicle book — Wield, Teleport, Check charges, Destroy. The bartender on Karamja — Zembo.
+  it('the canoe station has only real menu items', () => {
+    const quoted = allTexts.flatMap((t) => [...t.matchAll(/"((?:Chop|Shape|Float|Paddle)[^"]*)"/g)].map((m) => m[1]));
     expect(quoted.length).toBeGreaterThan(10);
     for (const q of quoted) expect(['Chop-down', 'Shape-Canoe', 'Float Log', 'Float Canoe', 'Paddle Log', 'Paddle Canoe']).toContain(q);
   });
 
-  it('нет действия Rub у книги и бармена Zambo', () => {
+  it('there is no Rub action on the book and no bartender Zambo', () => {
     expect(allTexts.filter((t) => /\bRub\b|\bZambo\b/.test(t))).toEqual([]);
   });
 });
 
-describe('ссылки внутри программы', () => {
-  it('каждая ссылка #/… из данных ведёт на существующую страницу', () => {
+describe('links inside the app', () => {
+  it('every #/… link from the data leads to an existing page', () => {
     const links = allTexts.flatMap((t) => [...t.matchAll(/\]\((#\/[^)]+)\)/g)].map((m) => m[1]));
     expect(links.length).toBeGreaterThan(0);
     for (const href of links) {
@@ -87,11 +87,11 @@ describe('ссылки внутри программы', () => {
     }
   });
 
-  it('Inline делает из #/… ссылку в этой же вкладке, а внешние — в новой', () => {
+  it('Inline turns #/… into a link in the same tab, and external ones into a new one', () => {
     const html = (text: string) => renderToStaticMarkup(createElement(Inline, { text }));
-    expect(html('См. [справку](#/reference/transport).')).toBe('См. <a href="#/reference/transport">справку</a>.');
-    expect(html('[вики](https://oldschool.runescape.wiki/w/Canoe)')).toBe(
-      '<a href="https://oldschool.runescape.wiki/w/Canoe" target="_blank" rel="noopener noreferrer">вики</a>');
-    expect(html('[файл](docs/readme.md)')).toBe('<span>файл</span>');
+    expect(html('See [the reference](#/reference/transport).')).toBe('See <a href="#/reference/transport">the reference</a>.');
+    expect(html('[wiki](https://oldschool.runescape.wiki/w/Canoe)')).toBe(
+      '<a href="https://oldschool.runescape.wiki/w/Canoe" target="_blank" rel="noopener noreferrer">wiki</a>');
+    expect(html('[file](docs/readme.md)')).toBe('<span>file</span>');
   });
 });

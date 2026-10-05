@@ -1,10 +1,10 @@
-"""Выгружает константы RuneLite API (id предметов, NPC, объектов, переменных, виджетов) в work/consts/*.txt: «ИМЯ значение» построчно.
-Генераторы читают их вместо кода — исходники Quest Helper ссылаются на ItemID.GARLIC, NpcID.MORGAN, InterfaceID.Questjournal.TITLE.
+"""Dumps the RuneLite API constants (ids of items, NPCs, objects, variables, widgets) into work/consts/*.txt: "NAME value" per line.
+The generators read them instead of code — the Quest Helper sources refer to ItemID.GARLIC, NpcID.MORGAN, InterfaceID.Questjournal.TITLE.
 
-  python qhm/dump_consts.py [путь к runelite-api-X.jar]
+  python qhm/dump_consts.py [path to runelite-api-X.jar]
 
-Без аргумента берётся самый свежий runelite-api из кэша Gradle (~/.gradle/caches/modules-2/files-2.1/net.runelite/runelite-api).
-Нужен javap из JDK (JAVA_HOME или PATH)."""
+Without an argument the newest runelite-api from the Gradle cache is taken (~/.gradle/caches/modules-2/files-2.1/net.runelite/runelite-api).
+javap from the JDK is needed (JAVA_HOME or PATH)."""
 import glob
 import os
 import re
@@ -28,7 +28,7 @@ def find_jar():
     found = glob.glob(os.path.expanduser('~/.gradle/caches/modules-2/files-2.1/net.runelite/runelite-api/*/*/runelite-api-*.jar'))
     found = [f for f in found if not f.endswith(('-sources.jar', '-javadoc.jar'))]
     if not found:
-        sys.exit('нет runelite-api в кэше Gradle: передай путь к jar первым аргументом')
+        sys.exit('no runelite-api in the Gradle cache: pass the jar path as the first argument')
     return sorted(found)[-1]
 
 
@@ -38,9 +38,9 @@ def javap_exe():
 
 
 def constants(jar, classes):
-    """{полное имя класса: [(имя, значение)]}; классы, которых нет в jar, пропускаются."""
+    """{the full class name: [(name, value)]}; the classes that are not in the jar are skipped."""
     out = {}
-    for i in range(0, len(classes), 60):  # командная строка Windows короткая
+    for i in range(0, len(classes), 60):  # the Windows command line is short
         batch = classes[i:i + 60]
         run = subprocess.run([javap_exe(), '-cp', jar, '-constants'] + batch, capture_output=True, text=True, encoding='utf-8')
         current = None
@@ -74,7 +74,7 @@ def main():
         table = constants(jar, have)
         for n in wanted:
             write('%s_%s.txt' % (prefix, n), table.get(pkg + n, []))
-    # вложенные классы InterfaceID: «Questjournal.TITLE значение»
+    # nested InterfaceID classes: "Questjournal.TITLE value"
     nested = sorted(c for c in classes if c.startswith('net.runelite.api.gameval.InterfaceID$') and c.count('$') == 1)
     table = constants(jar, nested)
     rows = []

@@ -7,45 +7,45 @@ import { emptyProgress } from '../src/lib/progress';
 
 const progress = (levels: Record<string, number>) => ({ ...emptyProgress(), levels });
 
-describe('навыки подписки: планы из гайда', () => {
-  it('восемь навыков с кодами гайда и id уровней RuneLite', () => {
+describe('members skills: plans from the guide', () => {
+  it('eight skills with guide codes and RuneLite level ids', () => {
     expect(membersSkills.map((s) => `${s.id}:${s.levelSkills.join()}`)).toEqual([
       'AG:agility', 'TH:thieving', 'SL:slayer', 'FA:farming', 'HE:herblore', 'HU:hunter', 'CN:construction', 'FL:fletching',
     ]);
     for (const s of membersSkills) {
       expect(s.membersOnly).toBe(true);
-      expect(s.sections[s.plan.sectionIndex].title).toBe('План прокачки');
+      expect(s.sections[s.plan.sectionIndex].title).toBe('Training plan');
       expect(s.intro.length).toBeGreaterThan(0);
     }
   });
 
-  it('строка плана находится для любого уровня 1–99', () => {
+  it('a plan row is found for any level 1–99', () => {
     for (const s of membersSkills) {
       for (let level = 1; level <= 99; level++) {
         const hit = rangeForLevel(s.plan.ranges, level)!;
-        expect(hit.beyond, `${s.id} ур. ${level}`).toBe(false);
-        expect(level >= hit.range.from && (hit.range.to === null || level < hit.range.to), `${s.id} ур. ${level}`).toBe(true);
+        expect(hit.beyond, `${s.id} lvl ${level}`).toBe(false);
+        expect(level >= hit.range.from && (hit.range.to === null || level < hit.range.to), `${s.id} lvl ${level}`).toBe(true);
       }
     }
   });
 
-  it('раздел ищется и по коду, и по id уровня: старые ссылки #/skills/agility не ломаются', () => {
-    expect(findSkill('AG')?.name).toBe('Ловкость');
+  it('a section is found by code and by level id: old #/skills/agility links do not break', () => {
+    expect(findSkill('AG')?.name).toBe('Agility');
     expect(findSkill('agility')?.id).toBe('AG');
     expect(findSkill('slayer')?.id).toBe('SL');
     expect(findSkill('attack')?.id).toBe('ME');
     expect(findSkill('WC')?.id).toBe('WC');
     expect(findSkill('sailing')).toBeUndefined();
-    expect(levelById.get('fletching')).toMatchObject({ skill: 'FL', name: 'Изготовление луков', membersOnly: true });
+    expect(levelById.get('fletching')).toMatchObject({ skill: 'FL', name: 'Fletching', membersOnly: true });
   });
 
-  it('бесплатные навыки не смешались с навыками подписки', () => {
+  it('free skills did not get mixed with members skills', () => {
     expect(skills).toHaveLength(12);
     expect(skills.some((s) => s.membersOnly)).toBe(false);
     expect(skillById.size).toBe(20);
   });
 
-  it('шаги маршрута с ловкостью и истреблением показывают строку плана', () => {
+  it('route steps with agility and slayer show a plan row', () => {
     expect(stepSkills(stepById.get('S7-04')!).map((s) => s.id)).toEqual(['AG']);
     expect(stepSkills(stepById.get('S8-04')!).map((s) => s.id).sort()).toEqual(['CR', 'RA', 'SL']);
     const ag = skillById.get('AG')!;
@@ -55,14 +55,14 @@ describe('навыки подписки: планы из гайда', () => {
     expect(skillRange(skillById.get('SL')!, progress({ slayer: 9 }))?.range.code).toBe('SL-1');
   });
 
-  it('коды шагов в тексте планов существуют', () => {
+  it('step codes in the plan texts exist', () => {
     const codes = [...new Set(JSON.stringify(membersGuide).match(/S\d-\d\d/g) ?? [])];
     expect(codes.length).toBeGreaterThan(5);
     for (const code of codes) expect(stepById.has(code), code).toBe(true);
   });
 
-  it('поиск находит строки плана подписки в режиме Members', () => {
-    const typeLabel = { quest: 'Квест', skill: 'Навык', gear: 'Снаряжение', prep: 'Подготовка' };
+  it('search finds members plan rows in Members mode', () => {
+    const typeLabel = { quest: 'Quest', skill: 'Skill', gear: 'Gear', prep: 'Preparation' };
     const members = buildIndex({ steps: stepsFor('members'), skills: [...skills, ...membersSkills], reference, plugins, items, typeLabel });
     expect(search(members, 'AG-4')[0].item.href).toBe('#/skills/AG');
     expect(search(members, 'Canifis Rooftop').some((h) => h.item.code === 'AG-4')).toBe(true);

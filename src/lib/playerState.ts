@@ -1,8 +1,8 @@
-// Единое состояние игрока: уровни, предметы, монеты, квесты, положение, режим — один снимок на всю программу.
-// Готовность, закупки, подготовка, цель навигации и сводка изменений читают его, а не каждый свои куски bridge/store.
+// The single player state: levels, items, coins, quests, position, mode: one snapshot for the whole app.
+// Readiness, shopping, preparation, the navigation target and the change summary read it, instead of each taking its own pieces of bridge/store.
 //
-// Главное правило: «неизвестно» — не «нет». У каждого значения есть три исхода: известно (откуда), неизвестно.
-// Предмет — PRESENT (есть), MISSING (точно нет: известны и сумка, и банк), UNKNOWN (банк не открывали, а в сумке нет).
+// The main rule: "unknown" is not "none". Every value has three outcomes: known (from where), unknown.
+// An item is PRESENT (have it), MISSING (surely not: both the bag and the bank are known), UNKNOWN (the bank was not opened and it is not in the bag).
 
 import type { GameMode, PlayerStats, Progress } from '../types';
 import type { GearState } from '../services/runeliteBridge';
@@ -19,28 +19,28 @@ export interface WorldPoint { x: number; y: number; plane: number }
 
 export interface PlayerState {
   mode: GameMode;
-  /** Есть живая связь с игрой: без неё всё из игры — «неизвестно», а не «ноль». */
+  /** There is a live connection to the game: without it everything from the game is "unknown", not "zero". */
   connected: boolean;
   player: string | null;
   levels: Record<string, Known<number>>;
   coins: { bag: Known<number>; bank: Known<number> };
-  /** Занятых ячеек сумки (из 28): неизвестно, пока плагин не прислал. */
+  /** Occupied bag slots (of 28): unknown until the plugin sends them. */
   bagSlots: Known<number>;
-  /** Вес сумки и надетого, кг (из игры); неизвестен, пока плагин не прислал. */
+  /** The weight of the bag and worn items, kg (from the game); unknown until the plugin sends it. */
   weight: Known<number>;
-  /** Что лежит в сумке (все предметы, не только отслеживаемые) — для веса и лишнего; неизвестно, пока плагин не прислал. */
+  /** What is in the bag (all items, not only tracked ones) for weight and extras; unknown until the plugin sends it. */
   bagItems: Known<{ name: string; count: number }[]>;
-  /** Названия квестов, засчитанных в игре. */
+  /** The quest names counted in the game. */
   quests: Known<string[]>;
   position: Known<WorldPoint>;
-  /** Банк в этой сессии открывали: только тогда «нет в сумке» значит «нет совсем». */
+  /** The bank was opened in this session: only then "not in the bag" means "not at all". */
   bankSeen: boolean;
-  /** Что надето: слот → название. */
+  /** What is worn: slot to name. */
   equipment: Record<string, string>;
-  /** Ручные отметки «уже есть» из закупок (ключ строки списка → количество). */
+  /** The manual "I already have it" marks from shopping (the list row key to the quantity). */
   manual: Record<string, number>;
   owned: OwnedState | null;
-  /** Короткий отпечаток для мемоизации: меняется, только когда изменилось то, что влияет на расчёты. */
+  /** A short fingerprint for memoisation: it changes only when what affects the calculations changed. */
   fingerprint: string;
 }
 
@@ -56,7 +56,7 @@ export interface PlayerStateInput {
   player?: string | null;
 }
 
-/** Уровни из игры главнее введённых вручную; нет ни тех ни других — неизвестно. */
+/** Levels from the game win over manual ones; if there are neither, unknown. */
 export function levelsOf(stats: PlayerStats | null, profile: Record<string, number>): Record<string, Known<number>> {
   const out: Record<string, Known<number>> = {};
   for (const [k, v] of Object.entries(profile)) if (typeof v === 'number' && Number.isFinite(v)) out[k] = known(v, 'profile');
@@ -105,7 +105,7 @@ function fingerprintOf(s: PlayerState): string {
   return [s.mode, s.connected ? 1 : 0, s.bankSeen ? 1 : 0, lv, c(s.coins.bag), c(s.coins.bank), c(s.bagSlots), c(s.weight), s.bagItems.known ? s.bagItems.value.map((b) => `${b.name}:${b.count}`).sort().join(',') : '?', q, eq, man, items].join('|');
 }
 
-/** Уровень навыка; undefined — неизвестен. */
+/** The skill's level; undefined means unknown. */
 export function levelOf(s: PlayerState, skill: string): number | undefined {
   const l = s.levels[skill];
   return l?.known ? l.value : undefined;
@@ -115,48 +115,48 @@ export type Presence = 'PRESENT' | 'MISSING' | 'UNKNOWN';
 
 export interface Held {
   presence: Presence;
-  /** В сумке и на себе (банкноты отдельно). */
+  /** In the bag and on the character (banknotes separately). */
   bag: number | null;
   noted: number;
-  /** null — банк в этой сессии не открывали. */
+  /** null means the bank was not opened in this session. */
   bank: number | null;
-  /** Из них надето (только для показа: в bag оно уже входит). */
+  /** Of which worn (for display only: it is already included in bag). */
   equipped: number;
-  /** Сумма всего известного; null — известно не всё и в сумке нет ничего. */
+  /** The sum of everything known; null means not everything is known and there is nothing in the bag. */
   total: number | null;
   source: StateSource | 'none';
 }
 
 /**
- * Сколько предмета у игрока. Игра знает и сумку, и банк — это главное. Банк неизвестен: слова игрока («у меня уже есть N»)
- * считаются, сумка их не опровергает; иначе в сумке есть — известно «есть», а нет — UNKNOWN, не MISSING.
+ * How much of an item the player has. The game knows both the bag and the bank, which is the main thing. If the bank is unknown, the player's words ("I already have N")
+ * are counted and the bag does not refute them; otherwise if it is in the bag it is known "have", and if not it is UNKNOWN, not MISSING.
  */
 export function heldOf(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'>, nameEn: string, manualKey?: string): Held {
   const o = s.owned?.items.get(nameKey(nameEn));
   const equipped = Object.values(s.equipment).filter((n) => nameKey(n) === nameKey(nameEn)).length;
   const manual = manualKey ? s.manual[manualKey] : undefined;
-  // Игра знает всё — и сумку, и банк: отметки игрока не нужны.
+  // The game knows everything, both the bag and the bank: the player's marks are not needed.
   if (o && s.bankSeen) {
     const bag = o.carried;
     const bank = o.bank ?? 0;
     const total = bag + o.noted + bank;
     return { presence: total > 0 ? 'PRESENT' : 'MISSING', bag, noted: o.noted, bank, equipped, total, source: 'game' };
   }
-  // Отметка игрока: сумка из игры её не опровергает (остальное может лежать в банке), но и не уменьшает.
-  // «У меня 0» — тоже слово игрока: нет, а не «не знаю».
+  // The player's mark: the bag from the game does not refute it (the rest may be in the bank), but does not reduce it either.
+  // "I have 0" is also the player's word: none, not "unknown".
   if (manual !== undefined) {
     const total = Math.max(manual, (o?.carried ?? 0) + (o?.noted ?? 0));
     return { presence: total > 0 ? 'PRESENT' : 'MISSING', bag: o ? o.carried : null, noted: o?.noted ?? 0, bank: null, equipped, total, source: 'manual' };
   }
-  // Банк неизвестен: что лежит в сумке — известно, а нет в сумке — «не проверено», не «нет».
+  // The bank is unknown: what is in the bag is known, and not in the bag is "not checked", not "none".
   if (o && o.carried + o.noted > 0) return { presence: 'PRESENT', bag: o.carried, noted: o.noted, bank: null, equipped, total: o.carried + o.noted, source: 'game' };
-  // Плагин присылает только предметы, за которыми следит (шаг, закупки): нет записи — не «нет предмета», а «не следили».
+  // The plugin sends only the items it tracks (the step, shopping): no record is not "no item" but "not tracked".
   return { presence: 'UNKNOWN', bag: o ? o.carried : null, noted: o?.noted ?? 0, bank: null, equipped, total: null, source: 'none' };
 }
 
 export type QuestPresence = 'DONE' | 'NOT_DONE' | 'UNKNOWN';
 
-/** Квест засчитан в игре; список неизвестен — UNKNOWN. */
+/** A quest is counted in the game; the list is unknown means UNKNOWN. */
 export function questOf(s: PlayerState, quest: string): QuestPresence {
   if (!s.quests.known) return 'UNKNOWN';
   return s.quests.value.some((q) => nameKey(q) === nameKey(quest)) ? 'DONE' : 'NOT_DONE';
@@ -169,7 +169,7 @@ export function coinsOf(s: PlayerState): { bag: number | null; bank: number | nu
 }
 
 // ---------------------------------------------------------------------------
-// Что изменилось между двумя снимками — для пересчёта подготовки и сводки «27 → 30 Defence».
+// What changed between two snapshots: for recounting the preparation and the "27 to 30 Defence" summary.
 
 export type StateChange =
   | { kind: 'LEVEL'; skill: string; from: number; to: number }
@@ -186,7 +186,7 @@ export function diffPlayerState(prev: PlayerState | null, next: PlayerState): St
   const out: StateChange[] = [];
   if (prev.mode !== next.mode) out.push({ kind: 'MODE', from: prev.mode, to: next.mode });
   if (prev.connected !== next.connected) out.push({ kind: 'CONNECTION', connected: next.connected });
-  // Только когда известно и раньше, и теперь: «неизвестно → известно» не прибавка, а появление данных.
+  // Only when known both before and now: "unknown to known" is not a gain but the appearance of data.
   for (const [skill, now] of Object.entries(next.levels)) {
     const before = prev.levels[skill];
     if (before?.known && now.known && before.value !== now.value) out.push({ kind: 'LEVEL', skill, from: before.value, to: now.value });
@@ -202,7 +202,7 @@ export function diffPlayerState(prev: PlayerState | null, next: PlayerState): St
   }
   if (prev.owned && next.owned) {
     const total = (o: { carried: number; noted: number; bank?: number }, seen: boolean) => o.carried + o.noted + (seen ? o.bank ?? 0 : 0);
-    // Банк открыли или закрыли — суммы несравнимы, считаем только сумку.
+    // The bank was opened or closed: the totals are not comparable, count only the bag.
     const withBank = prev.bankSeen && next.bankSeen;
     const names = new Set([...prev.owned.items.keys(), ...next.owned.items.keys()]);
     let n = 0;

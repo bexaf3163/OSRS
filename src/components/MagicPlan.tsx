@@ -1,5 +1,5 @@
-// «Магия до цели: сколько заклинаний и сколько это стоит» — у шагов с `magicPlan` (S2-04). Цены — с биржи, опыт —
-// из игры (или по уровню); без цен и связи с игрой расчёт всё равно показывается, но помечен приблизительным.
+// "Magic to the goal: how many spells and what it costs" — for steps with `magicPlan` (S2-04). Prices — from the exchange, XP —
+// from the game (or by level); without prices and the game link the calculation is still shown, but marked approximate.
 
 import { useEffect, useState } from 'react';
 import type { Step } from '../types';
@@ -13,7 +13,7 @@ import {
   hidesToCover, OPTIONS, planFor, PLAN_PRICE_IDS, SPELLS, SPELLS_CHECKED, STAFFS, staffPayback, type PlanResult, type PriceMap,
 } from '../lib/magicPlan';
 
-/** Нужный пользователю уровень Magic из цели шага. */
+/** The Magic level the user needs, from the step's goal. */
 function targetLevel(step: Step): number {
   return step.magicPlan?.target ?? step.inGame?.completionTrigger?.levels?.find((l) => l.skill === 'magic')?.level ?? 25;
 }
@@ -38,9 +38,9 @@ export function MagicPlan({ step }: { step: Step }) {
   const target = targetLevel(step);
   const level = stats?.magic ?? progress.levels.magic;
   const gameXp = xp?.magic;
-  // Опыт: точный из игры; иначе начало введённого уровня; иначе — после Imp Catcher и Witch's Potion (875 + 325) уровень 10.
+  // XP: exact from the game; otherwise the start of the entered level; otherwise — after Imp Catcher and Witch's Potion (875 + 325) level 10.
   const fromXp = gameXp ?? (level !== undefined ? xpForLevel(level) : xpForLevel(plan.from));
-  const basis = gameXp !== undefined ? 'опыт из игры' : level !== undefined ? `Magic ${level}, опыт с начала уровня` : `Magic ${plan.from} — как по маршруту, твой уровень неизвестен`;
+  const basis = gameXp !== undefined ? 'XP from the game' : level !== undefined ? `Magic ${level}, XP from the start of the level` : `Magic ${plan.from} — as by the route, your level is unknown`;
   const w = wealthOf(gear);
   const cash = w ? (w.cash.total ?? w.cash.bag ?? 0) : null;
   const has = (name: string) => [...(gear?.equipment ?? []), ...(gear?.inventory ?? [])].some((i) => i.name === name)
@@ -48,9 +48,9 @@ export function MagicPlan({ step }: { step: Step }) {
 
   if (!prices) {
     return (
-      <section className="step-section magic-plan" aria-label="Расчёт магии">
-        <h4 className="subhead">🔮 Сколько стоит дойти до Magic {target}</h4>
-        <p className="muted small">{failed ? 'Цены биржи недоступны — расчёт по ним невозможен. Таблица заклинаний ниже верная.' : 'Загружаю цены биржи…'}</p>
+      <section className="step-section magic-plan" aria-label="Magic calculation">
+        <h4 className="subhead">🔮 What it costs to reach Magic {target}</h4>
+        <p className="muted small">{failed ? 'The exchange prices are unavailable — the calculation by them is impossible. The spell table below is right.' : 'Loading the exchange prices…'}</p>
         <SpellTable />
       </section>
     );
@@ -65,19 +65,19 @@ export function MagicPlan({ step }: { step: Step }) {
   const pay = staffPayback('fire', fireSpell, prices);
 
   return (
-    <section className="step-section magic-plan" aria-label="Расчёт магии">
-      <h4 className="subhead">🔮 Сколько стоит дойти до Magic {target}</h4>
+    <section className="step-section magic-plan" aria-label="Magic calculation">
+      <h4 className="subhead">🔮 What it costs to reach Magic {target}</h4>
       <p className="muted small">
-        Отсюда: {basis}. Нужно ещё {Math.max(0, xpForLevel(target) - fromXp).toLocaleString('ru-RU')} опыта.
-        Цены — биржа сейчас; заклинания — карточки вики (проверено {SPELLS_CHECKED}).
+        From here: {basis}. {Math.max(0, xpForLevel(target) - fromXp).toLocaleString('en-US')} XP more is needed.
+        Prices — the exchange now; spells — the wiki cards (checked {SPELLS_CHECKED}).
       </p>
       <div className="table-wrap">
         <table className="table table-compact">
-          <thead><tr><th>Вариант</th><th>Заклинаний</th><th>Руны</th><th>Посох</th><th>Итого</th></tr></thead>
+          <thead><tr><th>Option</th><th>Casts</th><th>Runes</th><th>Staff</th><th>Total</th></tr></thead>
           <tbody>
             {results.map((r) => (
               <tr key={r.option.id} className={r === cheapest ? 'is-current' : ""}>
-                <td>{r.option.label}{r === cheapest && ' · дешевле всего'}{r === fastest && r !== cheapest && ' · быстрее всего'}</td>
+                <td>{r.option.label}{r === cheapest && ' · cheapest'}{r === fastest && r !== cheapest && ' · fastest'}</td>
                 <td>{r.casts.toLocaleString('ru-RU')}</td>
                 <td>{formatGp(r.runesCost)}</td>
                 <td>{r.staffCost ? formatGp(r.staffCost) : '—'}</td>
@@ -89,18 +89,18 @@ export function MagicPlan({ step }: { step: Step }) {
       </div>
       {cash !== null && (
         <p className="small">
-          У тебя {formatGp(cash)} gp{w?.bankUnknown ? ' в сумке (банк не открывали)' : ''}.{' '}
+          You have {formatGp(cash)} gp{w?.bankUnknown ? ' in the bag (the bank was not opened)' : ''}.{' '}
           {cash >= cheapest.total
-            ? <strong className="ok-text">На самый дешёвый вариант хватает.</strong>
-            : <>На самый дешёвый вариант не хватает {formatGp(cheapest.total - cash)} gp — но заклинания можно кастовать порциями: деньги вернутся шкурами.</>}
+            ? <strong className="ok-text">That covers the cheapest option.</strong>
+            : <>The cheapest option is {formatGp(cheapest.total - cash)} gp short — but spells can be cast in batches: the money comes back as hides.</>}
         </p>
       )}
       <ul className="small">
-        <li><strong>Бей коров в Lumbridge.</strong> Уровень 2, 8 здоровья, шкура падает с каждой.{hides !== null ? ` Чтобы окупить ${formatGp(cheapest.total)} gp на рунах, нужно продать ≈ ${hides} шкур.` : ''} Шкуры — на биржу или к Ellis в Al Kharid (кожа дороже).</li>
+        <li><strong>Kill cows in Lumbridge.</strong> Level 2, 8 hitpoints, a hide drops from each.{hides !== null ? ` To pay back ${formatGp(cheapest.total)} gp on runes you need to sell ≈ ${hides} hides.` : ''} Hides go to the exchange or to Ellis in Al Kharid (tanned leather is worth more).</li>
         {pay && (
-          <li>Посох огня окупается за ≈ {pay.casts} заклинаний Fire Strike: он экономит {formatGp(pay.perCast)} gp на каждом (руны огня не тратятся). {has(STAFFS.fire.name) ? 'Он у тебя уже есть.' : 'Купи его на первых шкурах.'}</li>
+          <li>The staff of fire pays for itself in ≈ {pay.casts} Fire Strike casts: it saves {formatGp(pay.perCast)} gp on each (the fire runes are not spent). {has(STAFFS.fire.name) ? 'You already have it.' : 'Buy it with the first hides.'}</li>
         )}
-        <li>Заклинания одного яруса бьют одинаково — Wind Strike с посохом воздуха дешевле, а Fire Strike вдвое быстрее по опыту. Выбирай по тому, чего не хватает: монет или времени.</li>
+        <li>Spells of the same tier hit the same — Wind Strike with a staff of air is cheaper, and Fire Strike is twice as fast in XP. Choose by what you lack: coins or time.</li>
       </ul>
       <SpellTable />
     </section>
@@ -110,10 +110,10 @@ export function MagicPlan({ step }: { step: Step }) {
 function SpellTable() {
   return (
     <details className="small">
-      <summary>Заклинания: уровень, опыт, руны</summary>
+      <summary>Spells: level, XP, runes</summary>
       <ul>
         {SPELLS.map((s) => (
-          <li key={s.id}><strong>{s.name}</strong> — Magic {s.level}, {s.xp} опыта; {Object.entries(s.runes).map(([r, n]) => `${n} ${r}`).join(' + ')}</li>
+          <li key={s.id}><strong>{s.name}</strong> — Magic {s.level}, {s.xp} XP; {Object.entries(s.runes).map(([r, n]) => `${n} ${r}`).join(' + ')}</li>
         ))}
       </ul>
     </details>

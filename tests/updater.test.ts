@@ -29,11 +29,11 @@ const asset = (v: string, over: Record<string, unknown> = {}) => ({
   ...over,
 });
 const release = (v: string, over: Record<string, unknown> = {}, assetOver: Record<string, unknown> = {}) => ({
-  tag_name: `v${v}`, draft: false, prerelease: false, body: '**Окно у банка** и ещё\nвторая строка', assets: [asset(v, assetOver)], ...over,
+  tag_name: `v${v}`, draft: false, prerelease: false, body: '**Window by the bank** and more\nsecond line', assets: [asset(v, assetOver)], ...over,
 });
 
-describe('версии', () => {
-  it('разбор и сравнение', () => {
+describe('versions', () => {
+  it('parsing and comparison', () => {
     expect(m.parseVersion('v2.24.0')).toEqual([2, 24, 0]);
     expect(m.parseVersion('2.24.0')).toEqual([2, 24, 0]);
     for (const bad of ['2.24', 'v2.24.0-beta', '', null, undefined, 'latest', '1.2.3.4']) expect(m.parseVersion(bad), String(bad)).toBeNull();
@@ -42,22 +42,22 @@ describe('версии', () => {
     expect(m.isNewer('3.0.0', '2.99.99')).toBe(true);
     expect(m.isNewer('2.24.0', '2.24.0')).toBe(false);
     expect(m.isNewer('2.23.0', '2.24.0')).toBe(false);
-    expect(m.isNewer('мусор', '2.24.0')).toBe(false);
+    expect(m.isNewer('garbage', '2.24.0')).toBe(false);
   });
 });
 
-describe('что скачивать из выпуска GitHub', () => {
-  it('нормальный выпуск: версия, файл, адрес, размер, сумма, первая строка описания', () => {
+describe('what to download from a GitHub release', () => {
+  it('a normal release: version, file, address, size, checksum, the first line of the description', () => {
     const r = m.pickRelease(release('2.25.0'));
-    expect(r).toMatchObject({ version: '2.25.0', name: 'OSRS-Put-2.25.0-portable.exe', size: SIZE, sha256: 'ab'.repeat(32), notes: 'Окно у банка и ещё' });
+    expect(r).toMatchObject({ version: '2.25.0', name: 'OSRS-Put-2.25.0-portable.exe', size: SIZE, sha256: 'ab'.repeat(32), notes: 'Window by the bank and more' });
   });
 
-  it('суммы может не быть — тогда проверяется только размер', () => {
+  it('the checksum may be absent — then only the size is checked', () => {
     expect(m.pickRelease(release('2.25.0', {}, { digest: undefined }))?.sha256).toBeNull();
     expect(m.pickRelease(release('2.25.0', {}, { digest: 'md5:abc' }))?.sha256).toBeNull();
   });
 
-  it('черновик, предварительный, чужой адрес, не тот файл, странный размер — отбрасываются', () => {
+  it('a draft, a pre-release, a foreign address, the wrong file, a strange size — are dropped', () => {
     const bad = [
       release('2.25.0', { draft: true }),
       release('2.25.0', { prerelease: true }),
@@ -68,24 +68,24 @@ describe('что скачивать из выпуска GitHub', () => {
       release('2.25.0', {}, { name: 'setup.exe', browser_download_url: 'https://github.com/bexaf3163/OSRS/releases/download/v2.25.0/setup.exe' }),
       release('2.25.0', {}, { size: 1000 }),
       release('2.25.0', {}, { size: 5 * 1024 ** 3 }),
-      release('2.25.0', {}, { size: 'много' }),
+      release('2.25.0', {}, { size: 'a lot' }),
       release('latest'),
-      { tag_name: 'v2.25.0', assets: 'нет' },
+      { tag_name: 'v2.25.0', assets: 'none' },
       null, 'x', [],
     ];
     for (const r of bad) expect(m.pickRelease(r), JSON.stringify(r).slice(0, 80)).toBeNull();
   });
 });
 
-describe('путь в командной строке', () => {
-  it('кавычки, &, %, ^ и переводы строки не допускаются', () => {
+describe('a path in the command line', () => {
+  it('quotes, &, %, ^ and line breaks are not allowed', () => {
     expect(m.safeForCmd('C:\\Users\\Mark\\Downloads\\OSRS-Put-2.25.0-portable.exe')).toBe(true);
-    expect(m.safeForCmd('C:\\Мои файлы\\OSRS-Put-2.25.0-portable.exe')).toBe(true);
+    expect(m.safeForCmd('C:\\My files\\OSRS-Put-2.25.0-portable.exe')).toBe(true);
     for (const bad of ['a"b', 'a&b', 'a%PATH%b', 'a^b', 'a\nb', 'a|b', '', null]) expect(m.safeForCmd(bad), String(bad)).toBe(false);
   });
 });
 
-describe('обновление приложения', () => {
+describe('the app update', () => {
   let dir: string;
   let data: string;
   const quit = { n: 0 };
@@ -94,7 +94,7 @@ describe('обновление приложения', () => {
     dir = mkdtempSync(join(tmpdir(), 'osrs-upd-'));
     data = join(dir, 'OSRS-Put-data');
     mkdirSync(data, { recursive: true });
-    writeFileSync(join(dir, 'OSRS-Put-2.24.0-portable.exe'), 'старая');
+    writeFileSync(join(dir, 'OSRS-Put-2.24.0-portable.exe'), 'old');
     quit.n = 0;
     spawned.length = 0;
   });
@@ -110,17 +110,17 @@ describe('обновление приложения', () => {
       quit: () => { quit.n++; },
       fetchRelease: async () => release('2.25.0'),
       downloader: async (rel: Rel, dest: string, onProgress: (p: number) => void) => { onProgress(0.5); writeFileSync(dest, ''); truncateSync(dest, rel.size); onProgress(1); },
-      spawner: (cmd: string, args: string[], opts: Record<string, unknown>) => { spawned.push({ cmd, args, opts }); return { unref() { /* ничего */ } }; },
+      spawner: (cmd: string, args: string[], opts: Record<string, unknown>) => { spawned.push({ cmd, args, opts }); return { unref() { /* nothing */ } }; },
       ...over,
     });
     return { u, states };
   };
 
-  it('новая версия: проверка → скачать → готово → перезапуск; старый exe помечен на удаление', async () => {
+  it('a new version: check → download → ready → restart; the old exe is marked for deletion', async () => {
     const { u, states } = make();
     await u.check();
     expect(u.state).toMatchObject({ state: 'available', latest: '2.25.0', canInstall: true });
-    expect(u.install(), 'пока не скачано — нельзя').toBe(false);
+    expect(u.install(), 'not downloaded yet — cannot install').toBe(false);
     await u.download();
     expect(u.state.state).toBe('ready');
     expect(existsSync(join(dir, 'OSRS-Put-2.25.0-portable.exe'))).toBe(true);
@@ -133,7 +133,7 @@ describe('обновление приложения', () => {
     expect(JSON.parse(readFileSync(join(data, 'update-cleanup.json'), 'utf8')).delete).toBe(join(dir, 'OSRS-Put-2.24.0-portable.exe'));
   });
 
-  it('та же или более старая версия — «последняя»', async () => {
+  it('the same or an older version — "latest"', async () => {
     const { u } = make({ fetchRelease: async () => release('2.24.0') });
     await u.check();
     expect(u.state.state).toBe('current');
@@ -142,7 +142,7 @@ describe('обновление приложения', () => {
     expect(u2.state.state).toBe('current');
   });
 
-  it('уже скачанное прошлый раз не качается снова', async () => {
+  it('what was downloaded last time is not downloaded again', async () => {
     const f = join(dir, 'OSRS-Put-2.25.0-portable.exe');
     writeFileSync(f, '');
     truncateSync(f, SIZE);
@@ -154,26 +154,26 @@ describe('обновление приложения', () => {
     expect(downloads).toBe(0);
   });
 
-  it('недокачанный файл другого размера не считается готовым', async () => {
-    writeFileSync(join(dir, 'OSRS-Put-2.25.0-portable.exe'), 'обрывок');
+  it('a partly downloaded file of another size is not considered ready', async () => {
+    writeFileSync(join(dir, 'OSRS-Put-2.25.0-portable.exe'), 'stub');
     const { u } = make();
     await u.check();
     expect(u.state.state).toBe('available');
   });
 
-  it('сбой сети и сбой загрузки — ошибка с текстом, программа цела', async () => {
-    const { u } = make({ fetchRelease: async () => { throw new Error('нет сети'); } });
+  it('a network failure and a download failure — an error with text, the program is intact', async () => {
+    const { u } = make({ fetchRelease: async () => { throw new Error('no network'); } });
     await u.check();
-    expect(u.state).toMatchObject({ state: 'error', error: 'нет сети' });
-    const { u: u2 } = make({ downloader: async () => { throw new Error('контрольная сумма не сошлась'); } });
+    expect(u.state).toMatchObject({ state: 'error', error: 'no network' });
+    const { u: u2 } = make({ downloader: async () => { throw new Error('the checksum did not match'); } });
     await u2.check();
     await u2.download();
-    expect(u2.state).toMatchObject({ state: 'error', error: 'контрольная сумма не сошлась' });
+    expect(u2.state).toMatchObject({ state: 'error', error: 'the checksum did not match' });
     expect(u2.install()).toBe(false);
     expect(quit.n).toBe(0);
   });
 
-  it('не переносная сборка: сообщает о новой версии, но не качает и не ставит', async () => {
+  it('not a portable build: reports a new version, but does not download or install', async () => {
     const { u } = make({}, { PORTABLE_EXECUTABLE_FILE: '', PORTABLE_EXECUTABLE_DIR: '' });
     await u.check();
     expect(u.state).toMatchObject({ state: 'available', canInstall: false });
@@ -182,7 +182,7 @@ describe('обновление приложения', () => {
     expect(u.install()).toBe(false);
   });
 
-  it('небезопасный путь не уходит в командную строку', async () => {
+  it('an unsafe path does not go into the command line', async () => {
     const odd = join(dir, 'a&b');
     mkdirSync(odd);
     writeFileSync(join(odd, 'OSRS-Put-2.24.0-portable.exe'), 'x');
@@ -195,10 +195,10 @@ describe('обновление приложения', () => {
     expect(quit.n).toBe(0);
   });
 
-  describe('уборка прежнего exe при запуске новой версии', () => {
+  describe('cleaning up the previous exe when the new version starts', () => {
     const note = (old: string) => writeFileSync(join(data, 'update-cleanup.json'), JSON.stringify({ delete: old }));
 
-    it('удаляет прежний, если он старше и лежит рядом', () => {
+    it('deletes the previous one if it is older and lies next to it', () => {
       const old = join(dir, 'OSRS-Put-2.24.0-portable.exe');
       note(old);
       const { u } = make({ version: '2.25.0' }, { PORTABLE_EXECUTABLE_FILE: join(dir, 'OSRS-Put-2.25.0-portable.exe') });
@@ -207,7 +207,7 @@ describe('обновление приложения', () => {
       expect(existsSync(join(data, 'update-cleanup.json'))).toBe(false);
     });
 
-    it('не трогает файл новее запущенной версии, чужое имя и чужую папку', () => {
+    it('does not touch a file newer than the running version, a foreign name and a foreign folder', () => {
       const newer = join(dir, 'OSRS-Put-2.26.0-portable.exe');
       writeFileSync(newer, 'x');
       note(newer);
@@ -215,7 +215,7 @@ describe('обновление приложения', () => {
       expect(existsSync(newer)).toBe(true);
       expect(existsSync(join(data, 'update-cleanup.json'))).toBe(false);
 
-      const other = join(dir, 'документы.docx');
+      const other = join(dir, 'documents.docx');
       writeFileSync(other, 'x');
       note(other);
       make({ version: '2.25.0' }).u.cleanup();
@@ -230,9 +230,9 @@ describe('обновление приложения', () => {
       rmSync(elsewhere, { recursive: true, force: true });
     });
 
-    it('без записи или с мусором в ней — ничего не происходит', () => {
+    it('without a record or with garbage in it — nothing happens', () => {
       make().u.cleanup();
-      writeFileSync(join(data, 'update-cleanup.json'), 'не json');
+      writeFileSync(join(data, 'update-cleanup.json'), 'not json');
       make().u.cleanup();
       expect(existsSync(join(dir, 'OSRS-Put-2.24.0-portable.exe'))).toBe(true);
     });

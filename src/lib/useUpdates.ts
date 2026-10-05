@@ -1,4 +1,4 @@
-// Состояние автообновления для окна: подписка на главный процесс (electron/updater.cjs). Без программы для ПК — null.
+// The auto-update state for the window: a subscription to the main process (electron/updater.cjs). Without the desktop app — null.
 
 import { useCallback, useEffect, useState } from 'react';
 import { desktop, type UpdateState } from './desktop';
@@ -11,7 +11,7 @@ export interface UpdatesApi {
   setAuto: (on: boolean) => void;
 }
 
-/** Состояние обновления и действия; null — в браузере и в старой сборке обновлений нет. */
+/** The update state and actions; null — there are no updates in the browser or in an old build. */
 export function useUpdates(): UpdatesApi | null {
   const api = desktop()?.updates;
   const [state, setState] = useState<UpdateState | null>(null);
@@ -32,7 +32,7 @@ export function useUpdates(): UpdatesApi | null {
   return api && state ? { state, check, download, install, setAuto } : null;
 }
 
-/** Сколько процентов скачано — целым числом. */
+/** How many percent are downloaded — as a whole number. */
 export function percent(p: number): number {
   return Math.max(0, Math.min(100, Math.round((Number.isFinite(p) ? p : 0) * 100)));
 }

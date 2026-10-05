@@ -1,18 +1,18 @@
-// «Синхронизировать с аккаунтом»: игра знает, какие квесты завершены и какие уровни взяты, — шаги маршрута
-// с такой автоотметкой можно закрыть сразу, не дожидаясь, пока игрок пройдёт их при включённом плагине.
-// Шаги, где автоотметка требует ещё и предметы (квест и купленный Dragon scimitar), не трогаем: по квесту
-// нельзя понять, что вещь уже куплена.
+// "Sync with the account": the game knows which quests are complete and which levels are reached, so the route steps
+// with such an auto-tick can be closed at once, without waiting for the player to go through them with the plugin on.
+// Steps where the auto-tick also needs items (a quest plus a bought Dragon scimitar) are left alone: a quest
+// cannot tell that the item has been bought.
 
 import type { PlayerStats, Progress, Step } from '../types';
 import { isClosed } from './next-step';
 
 export interface SyncCandidate {
   step: Step;
-  /** Почему можно отметить: «квест выполнен», «все уровни взяты». */
+  /** Why it can be ticked: "quest complete", "all levels reached". */
   why: string;
 }
 
-/** Название квеста как ключ сравнения: регистр, апострофы и знаки не важны. */
+/** The quest name as a comparison key: case, apostrophes and punctuation do not matter. */
 export const questKey = (name: string): string => name.toLowerCase().replace(/[^a-z0-9]+/g, '');
 
 export function syncCandidates(steps: readonly Step[], p: Progress, questsDone: readonly string[] | null, levels: PlayerStats | null): SyncCandidate[] {
@@ -23,9 +23,9 @@ export function syncCandidates(steps: readonly Step[], p: Progress, questsDone: 
     const t = step.inGame?.completionTrigger;
     if (!t || t.items?.length) continue;
     if (t.type === 'QUEST_COMPLETED' && t.questName && done.has(questKey(t.questName))) {
-      out.push({ step, why: `квест ${t.questName} выполнен` });
+      out.push({ step, why: `quest ${t.questName} complete` });
     } else if (t.type === 'SKILL_LEVEL' && levels && t.levels?.length && t.levels.every((l) => (levels[l.skill] ?? 0) >= l.level)) {
-      out.push({ step, why: 'нужные уровни уже взяты' });
+      out.push({ step, why: 'the required levels are already reached' });
     }
   }
   return out;

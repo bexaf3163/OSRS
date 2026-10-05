@@ -1,5 +1,5 @@
 {
-  "source": "OSRS Wiki: карточки монстров (Bucket infobox_monster) — противники из шагов маршрута (поле foes в steps.json)",
+  "source": "OSRS Wiki: monster infoboxes (Bucket infobox_monster): the opponents from the route steps (the foes field in steps.json)",
   "updated": "2026-09-27",
   "foes": [
     {

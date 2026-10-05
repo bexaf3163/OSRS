@@ -1,18 +1,18 @@
-// Места шага: точка шага, места с карты шага, откуда предметы (NPC или магазин из словаря мест) и NPC квеста.
-// Одна раскладка для программы и игры: те же места — точками на карте шага в программе и строками «Куда идти»
-// в списке «Что нужно» на экране игры (клик — стрелка и путь туда).
+// The places of a step: the step point, the places from the step map, where items come from (an NPC or a shop from the place dictionary) and the quest NPCs.
+// One layout for the app and the game: the same places — as points on the step map in the app and as "Where to go" rows
+// in the "What is needed" list on the game screen (a click — an arrow and the path there).
 
 import type { GamePoint, MapLocation, Step, StepBranch } from '../types';
 import npcJson from '../data/npcLocations.json';
 import locationsJson from '../data/majorLocations.json';
 import { initialPoint, stepPoints } from './map';
 
-/** Где стоит NPC (карта его статьи на OSRS Wiki). steps — только для этих шагов: одно имя бывает у разных NPC. */
+/** Where an NPC stands (the map of its OSRS Wiki article). steps — only for these steps: one name can belong to different NPCs. */
 export interface NpcSpot {
   x: number;
   y: number;
   plane: number;
-  /** Коротко, где это: «рынок Draynor Village». */
+  /** Briefly where it is: "Draynor Village market". */
   area: string;
   page: string;
   steps?: string[];
@@ -21,7 +21,7 @@ export interface NpcSpot {
 export const npcSpots = (npcJson as { npcs: Record<string, NpcSpot[]> }).npcs;
 const DICT = (locationsJson as { locations: Record<string, { x: number; y: number; plane: number; label: string; kind: string }> }).locations;
 
-/** Где NPC на этом шаге: запись именно для шага, иначе общая. */
+/** Where the NPC is on this step: the entry made for the step, otherwise the general one. */
 export function npcSpot(name: string, stepId: string): NpcSpot | undefined {
   const rows = npcSpots[name];
   if (!rows) return undefined;
@@ -29,8 +29,8 @@ export function npcSpot(name: string, stepId: string): NpcSpot | undefined {
 }
 
 /**
- * Откуда предмет по полю from: NPC (подсветится, когда стрелка приведёт) или место из словаря — магазин,
- * подземелье. У общих магазинов продавца зовут Shop keeper.
+ * Where an item comes from by the "from" field: an NPC (highlighted when the arrow brings you there) or a place from the dictionary — a shop,
+ * a dungeon. For general shops the seller is called Shop keeper.
  */
 export function itemSource(from: string, stepId: string): MapLocation | undefined {
   const n = npcSpot(from, stepId);
@@ -43,13 +43,13 @@ export function itemSource(from: string, stepId: string): MapLocation | undefine
 const near = (a: GamePoint, b: GamePoint) => Math.abs(a.x - b.x) <= 1 && Math.abs(a.y - b.y) <= 1 && a.plane === b.plane;
 
 /**
- * Откуда предметы и NPC квеста — к уже собранным точкам шага. Одна клетка — одно место: предметы и NPC
- * сливаются в него. main — номер главной точки (NPC шага стоит там), −1 — главной нет.
+ * Where the items and the quest NPCs are — added to the step points already collected. One tile — one place: the items and NPCs
+ * merge into it. main — the number of the main point (the step's NPC stands there), −1 — there is no main one.
  */
 function withSources(step: Step, places: MapLocation[], main: number, branch: StepBranch | undefined): MapLocation[] {
   for (const i of step.itemsRequired ?? []) {
     if (!i.from) continue;
-    // Предмет выдаёт NPC самого шага — это его точка, а не ещё одна рядом.
+    // An item is given by the step's own NPC — that is its point, not one more next to it.
     const own = !branch && main >= 0 && i.from === step.npc?.nameEn ? main : -1;
     const src = own >= 0 ? places[own] : itemSource(i.from, step.id);
     if (!src) continue;
@@ -62,7 +62,7 @@ function withSources(step: Step, places: MapLocation[], main: number, branch: St
     }
   }
   for (const name of step.inGame?.npcNames ?? []) {
-    // NPC шага — в главной точке; с быстрым вариантом главная точка другая, и NPC шага — отдельной строкой.
+    // The step's NPC is at the main point; with the quick variant the main point is different, and the step's NPC is a separate row.
     if ((!branch && main >= 0 && name === step.npc?.nameEn) || places.some((q) => q.npc === name)) continue;
     const n = npcSpot(name, step.id);
     if (!n) continue;
@@ -77,8 +77,8 @@ function withSources(step: Step, places: MapLocation[], main: number, branch: St
 }
 
 /**
- * Места для игры: первой — куда ведёт стрелка шага (быстрый вариант, точка в игре или на карте), потом места
- * с карты шага, откуда предметы, NPC квеста.
+ * Places for the game: first where the step arrow leads (the quick variant, a point in the game or on the map), then the places
+ * from the step map, where items come from, the quest NPCs.
  */
 export function stepPlaces(step: Step, branch?: StepBranch): MapLocation[] {
   const main: GamePoint | undefined = branch?.replacementTarget ?? step.inGame?.worldPoint ?? step.mapLocation;
@@ -91,7 +91,7 @@ export function stepPlaces(step: Step, branch?: StepBranch): MapLocation[] {
   }
   for (const p of step.resourceSpots ?? []) {
     const same = places.findIndex((q) => near(q, p));
-    // Точка шага и первое место карты часто одно и то же — оставляем одну, с подписью и заметкой места.
+    // The step point and the first map place are often the same — we keep one, with a label and the place note.
     if (same >= 0) places[same] = { ...places[same], ...p, npc: p.npc ?? places[same].npc };
     else places.push({ ...p });
   }
@@ -99,8 +99,8 @@ export function stepPlaces(step: Step, branch?: StepBranch): MapLocation[] {
 }
 
 /**
- * Места для карты шага в программе: точки карты шага в прежнем порядке («До 40» перед «С 40»), за ними — откуда
- * предметы и NPC квеста.
+ * Places for the step map in the app: the step map points in the former order ("Up to 40" before "From 40"), followed by where the
+ * items come from and the quest NPCs.
  */
 export function mapPlaces(step: Step): MapLocation[] {
   const points = stepPoints(step).map((p) => ({ ...p }));

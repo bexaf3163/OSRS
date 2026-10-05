@@ -1,9 +1,9 @@
-# OSRS «Путь» — project rules
+# OSRS Path — project rules
 
 Binding operating contract for every task in this repo: @PROJECT_GUIDELINES.md (verbatim copy of `OSRS_Path_Master_Project_Guidelines.md`). Follow it strictly; it overrides default habits.
 
 Key points to keep in mind every time:
-- Reply in concise English. Player-facing UI text (desktop, HUD, overlays, dialogs, warnings) is native English with canonical OSRS Wiki / Quest Helper names — no Cyrillic, no dual naming (section 3, amended). Code comments, commit messages and docs are English. Existing Russian UI is converted only on explicit request.
+- Reply in concise English. Player-facing UI text (desktop, HUD, overlays, dialogs, warnings) is native English with canonical OSRS Wiki / Quest Helper names — no Cyrillic, no dual naming (section 3, amended). Code comments, commit messages and docs are English. The whole project is English now; do not reintroduce Cyrillic text (`tests/questStages.test.ts` guards the quest data).
 - Inspect existing code first, reuse existing systems, make small surgical diffs, no parallel implementations.
 - State is `PRESENT | MISSING | UNKNOWN`; never turn unavailable data into `0` or `MISSING`.
 - Never invent requirements, coordinates or availability; mark them for verification.

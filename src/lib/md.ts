@@ -1,4 +1,4 @@
-// Inline-разметка гайда: **жирный**, `код`, [ссылка](url).
+// Inline guide markup: **bold**, `code`, [link](url).
 
 export function stripMd(text: string): string {
   return text
@@ -7,7 +7,7 @@ export function stripMd(text: string): string {
     .replace(/`([^`]+)`/g, '$1');
 }
 
-/** Нормализация для поиска: регистр и «ё». */
+/** Normalisation for search: case. */
 export function fold(text: string): string {
-  return text.toLowerCase().replace(/ё/g, 'е');
+  return text.toLowerCase();
 }

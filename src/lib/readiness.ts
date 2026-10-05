@@ -1,8 +1,8 @@
-// Готовность к шагу: хватает ли уровней, квестов, предметов и монет — и что сделать, если нет.
-// Один расчёт поверх того, что уже знает программа: уровни из игры (или из профиля), отметки квестов на пути,
-// сумка и банк из RuneLite, ручные «уже есть» из оптовой закупки. Ничего не придумывает: чего программа не
-// знает, то «⚪ не проверено», а не «нет» (UNKNOWN ≠ MISSING). Каждая проблема — с действием: ссылка на план
-// навыка или шаг квеста, «🧭 к банку» за предметом, оптовый список для покупки.
+// Readiness for a step: whether there are enough levels, quests, items and coins, and what to do if not.
+// One calculation on top of what the app already knows: levels from the game (or the profile), quest marks on the route,
+// the bag and bank from RuneLite, the manual "already have" from the bulk purchase. It invents nothing: what the app does not
+// know is "⚪ not checked", not "none" (UNKNOWN is not MISSING). Every problem comes with an action: a link to the skill plan
+// or the quest step, "🧭 to the bank" for an item, the bulk list for buying.
 
 import type { GameMode, PlayerStats, Progress, Step } from '../types';
 import { levelById } from '../data';
@@ -16,18 +16,18 @@ import { evaluate } from './requirements';
 
 export type ReadinessStatus =
   | 'READY'
-  /** Всё есть, но что-то надо забрать из банка или подтянуть по ходу квеста. */
+  /** Everything is there, but something has to be taken from the bank or picked up during the quest. */
   | 'MINOR_PREP'
   | 'MISSING_ITEM'
   | 'MISSING_STATS'
   | 'MISSING_QUEST'
   | 'MISSING_MONEY'
-  /** Шаг закрыт: не пройдены шаги до него или он только для подписки. */
+  /** The step is closed: the steps before it are not done, or it is members-only. */
   | 'BLOCKED'
-  /** Проблем не найдено, но часть требований проверить не по чему (нет связи с игрой, не введены уровни). */
+  /** No problems found, but part of the requirements cannot be checked (no connection to the game, levels not entered). */
   | 'UNKNOWN';
 
-/** OK — выполнено; BANK — есть, но в банке; PARTIAL — есть часть; MISSING — нет; UNKNOWN — неизвестно. */
+/** OK means met; BANK means have it but in the bank; PARTIAL means have part; MISSING means none; UNKNOWN means unknown. */
 export type RequirementState = 'OK' | 'BANK' | 'PARTIAL' | 'MISSING' | 'UNKNOWN';
 
 export type ReadinessAction =
@@ -38,15 +38,15 @@ export interface RequirementStatus {
   kind: 'step' | 'qp' | 'mode' | 'skill' | 'quest' | 'item' | 'coins';
   label: string;
   state: RequirementState;
-  /** false — не мешает начать: нужно по ходу квеста (Agility 25 в The Grand Tree). */
+  /** false means it does not hinder starting: needed during the quest (Agility 25 in The Grand Tree). */
   hard: boolean;
   detail?: string;
-  /** Откуда известно: игра, профиль (введено вручную), отметка «уже есть», отметки шагов. */
+  /** Where it is known from: the game, the profile (entered manually), the "already have" mark, the step marks. */
   source?: 'game' | 'profile' | 'manual' | 'route';
   action?: ReadinessAction;
-  /** У строки уровня: навык и нужный уровень (для «чем качать»). */
+  /** For a level row: the skill and the needed level (for "what to train with"). */
   stat?: { skill: string; min: number };
-  /** У строки предмета: английское название — по нему ищут в банке, на бирже и в магазине. */
+  /** For an item row: the English name, by which it is searched in the bank, at the exchange and in a shop. */
   item?: string;
 }
 
@@ -54,20 +54,20 @@ export interface StepReadiness {
   stepId: string;
   status: ReadinessStatus;
   requirements: RequirementStatus[];
-  /** Что не так — по порядку важности; пусто, если всё в порядке. */
+  /** What is wrong, in order of importance; empty if all is well. */
   problems: RequirementStatus[];
-  /** Что проверить не удалось. */
+  /** What could not be checked. */
   unknown: RequirementStatus[];
   /**
-   * Шаг-прокачка, чья цель уже достигнута (уровни не ниже цели шага): качать заново не нужно.
-   * Только когда все уровни известны и у цели нет условий по предметам.
+   * A training step whose goal is already reached (levels not below the step's goal): there is no need to train again.
+   * Only when all the levels are known and the goal has no item conditions.
    */
   goalMet?: { skill: string; level: number; have: number; source: 'game' | 'profile' }[];
 }
 
 export interface ReadinessInput {
   step: Step;
-  /** Все шаги маршрута (для квестов: шаг, где квест засчитывается). */
+  /** All the route's steps (for quests: the step where the quest is counted). */
   steps: Step[];
   progress: Progress;
   qp: number;
@@ -83,7 +83,7 @@ interface Place { x: number; y: number; plane: number; label: string; kind: stri
 const places = Object.values((locationsJson as { locations: Record<string, Place> }).locations);
 const banks = places.filter((p) => p.kind === 'bank');
 
-/** Банк ближе всего к месту шага: за вещами туда, а не через полкарты. */
+/** The bank nearest to the step's place: go there for things, not across half the map. */
 export function nearestBank(step: Step): Place | null {
   const at = step.mapLocation;
   if (!at || !banks.length) return null;
@@ -91,34 +91,34 @@ export function nearestBank(step: Step): Place | null {
 }
 const dist = (a: { x: number; y: number }, b: { x: number; y: number }) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2;
 
-/** Шаг, где квест засчитывается (автоотметка QUEST_COMPLETED по названию квеста). */
+/** The step where a quest is counted (the auto-tick QUEST_COMPLETED by the quest name). */
 export function questStepOf(steps: Step[], quest: string): Step | undefined {
   return steps.find((s) => s.inGame?.completionTrigger?.type === 'QUEST_COMPLETED' && s.inGame.completionTrigger.questName === quest);
 }
 
-/** Уровень навыка из единого состояния: из игры, иначе введённый в профиле, иначе неизвестен. */
+/** A skill's level from the single state: from the game, otherwise the one entered in the profile, otherwise unknown. */
 function levelFrom(state: PlayerState, skill: string): { level: number; source: 'game' | 'profile' } | null {
   const l = state.levels[skill];
   return l?.known ? { level: l.value, source: l.source === 'game' ? 'game' : 'profile' } : null;
 }
 
-/** Как во вкладке навыков игры: Mining, Agility. */
+/** As in the game's skills tab: Mining, Agility. */
 const skillName = (id: string) => id.charAt(0).toUpperCase() + id.slice(1);
 const skillPage = (id: string) => levelById.get(id)?.skill;
-const gp = (n: number) => Math.round(n).toLocaleString('ru-RU').replace(/ /g, ' ');
+const gp = (n: number) => Math.round(n).toLocaleString('en-US');
 
-/** Всё, что нужно расчёту готовности: маршрут, отметки и единое состояние игрока (playerState.ts). */
+/** Everything the readiness calculation needs: the route, the marks and the single player state (playerState.ts). */
 export interface ReadinessContext {
   steps: Step[];
   progress: Progress;
   qp: number;
   mode: GameMode;
   state: PlayerState;
-  /** Срыв на показанном в игре шаге (смерть, телепорт): план подготовки переходит в режим восстановления. */
+  /** A setback on a step shown in the game (a death, a teleport): the preparation plan goes into recovery mode. */
   recovery?: { stepId: string; recovery: import('./recovery').Recovery } | null;
 }
 
-/** Контекст из «сырых» данных (тесты и места, где единого состояния ещё нет). */
+/** Context from "raw" data (tests and places where there is no single state yet). */
 export function contextOf(i: ReadinessInput): ReadinessContext {
   return {
     steps: i.steps, progress: i.progress, qp: i.qp, mode: i.mode,
@@ -131,51 +131,51 @@ export function stepReadiness(input: ReadinessInput): StepReadiness {
 }
 
 /**
- * Готовность шага. Исходы («есть / в банке / часть / нет / неизвестно») даёт единая проверка требований
- * (requirements.ts) по единому состоянию игрока; здесь — только порядок, подписи и действия.
+ * A step's readiness. The outcomes ("have / in the bank / part / none / unknown") are given by the single requirements check
+ * (requirements.ts) over the single player state; here there is only the order, the labels and the actions.
  */
 export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
   const { steps, progress: p, qp, mode, state } = ctx;
   const reqs: RequirementStatus[] = [];
 
-  // Режим игры и шаги до этого.
+  // The game mode and the steps before it.
   if (step.membersOnly && mode === 'f2p') {
-    reqs.push({ kind: 'mode', label: 'Только с подпиской', state: 'MISSING', hard: true, detail: 'Шаг для Members — в режиме F2P он не нужен.', source: 'route' });
+    reqs.push({ kind: 'mode', label: 'Members only', state: 'MISSING', hard: true, detail: 'A Members step: it is not needed in F2P mode.', source: 'route' });
   }
   const b = blockersOf(step, p, qp);
   for (const id of b?.steps ?? []) {
     const s = steps.find((x) => x.id === id);
     reqs.push({
-      kind: 'step', label: `Сначала ${id}${s ? ` «${s.title}»` : ''}`, state: 'MISSING', hard: true, source: 'route',
-      action: { kind: 'link', label: `К шагу ${id}`, href: `#/step/${id}` },
+      kind: 'step', label: `First ${id}${s ? ` "${s.title}"` : ''}`, state: 'MISSING', hard: true, source: 'route',
+      action: { kind: 'link', label: `To step ${id}`, href: `#/step/${id}` },
     });
   }
   if (b?.qp) {
     reqs.push({
-      kind: 'qp', label: `${b.qp.need} ${plural(b.qp.need, 'очко', 'очка', 'очков')} квестов`, state: 'MISSING', hard: true, detail: `сейчас ${b.qp.have}, не хватает ${b.qp.need - b.qp.have}`, source: 'route',
-      action: { kind: 'link', label: 'Квесты', href: '#/quests' },
+      kind: 'qp', label: `${b.qp.need} quest ${plural(b.qp.need, 'point', 'points')}`, state: 'MISSING', hard: true, detail: `now ${b.qp.have}, ${b.qp.need - b.qp.have} short`, source: 'route',
+      action: { kind: 'link', label: 'Quests', href: '#/quests' },
     });
   }
 
-  // Уровни и квесты из статьи квеста.
+  // Levels and quests from the quest article.
   for (const r of step.requirements ?? []) {
     if (r.type === 'skill') {
       const res = evaluate({ type: 'skill', skill: r.skill, min: r.min }, state);
       const have = levelFrom(state, r.skill);
       const label = `${skillName(r.skill)} ${r.min}`;
       const page = skillPage(r.skill);
-      const action: ReadinessAction | undefined = page ? { kind: 'link', label: `⚡ Добрать ${skillName(r.skill)}`, href: `#/skills/${page}` } : undefined;
+      const action: ReadinessAction | undefined = page ? { kind: 'link', label: `⚡ Catch up ${skillName(r.skill)}`, href: `#/skills/${page}` } : undefined;
       const hard = r.when !== 'during';
-      const note = r.when === 'during' ? ' Нужен по ходу квеста — начать можно и без него.' : '';
-      const boost = r.boostable ? ' Можно поднять временно (boost).' : '';
+      const note = r.when === 'during' ? ' Needed during the quest: you can start without it.' : '';
+      const boost = r.boostable ? ' It can be raised temporarily (boost).' : '';
       if (res.state === 'UNKNOWN') {
-        reqs.push({ kind: 'skill', label, state: 'UNKNOWN', hard, stat: { skill: r.skill, min: r.min }, detail: `уровень неизвестен — войди в игру с RuneLite или введи его на странице навыка.${note}` });
+        reqs.push({ kind: 'skill', label, state: 'UNKNOWN', hard, stat: { skill: r.skill, min: r.min }, detail: `level unknown: log in to the game with RuneLite or enter it on the skill page.${note}` });
       } else if (res.state === 'OK') {
         reqs.push({ kind: 'skill', label, state: 'OK', hard, stat: { skill: r.skill, min: r.min }, detail: `${res.have} ≥ ${r.min}`, ...(have ? { source: have.source } : {}) });
       } else {
         reqs.push({
           kind: 'skill', label, state: 'MISSING', hard, stat: { skill: r.skill, min: r.min }, ...(have ? { source: have.source } : {}),
-          detail: `сейчас ${res.have}, не хватает ${res.missing}.${note}${boost}`,
+          detail: `now ${res.have}, ${res.missing} short.${note}${boost}`,
           ...(action ? { action } : {}),
         });
       }
@@ -183,24 +183,24 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
       const qs = questStepOf(steps, r.quest);
       const game = questOf(state, r.quest);
       if (qs && isClosed(p, qs.id)) {
-        reqs.push({ kind: 'quest', label: r.quest, state: 'OK', hard: true, detail: `шаг ${qs.id} отмечен`, source: 'route' });
+        reqs.push({ kind: 'quest', label: r.quest, state: 'OK', hard: true, detail: `step ${qs.id} is marked`, source: 'route' });
       } else if (game === 'DONE') {
-        // Игра знает лучше отметок: квест засчитан, даже если шаг на пути ещё не закрыт.
-        reqs.push({ kind: 'quest', label: r.quest, state: 'OK', hard: true, detail: 'засчитан в игре', source: 'game' });
+        // The game knows better than the marks: the quest is counted even if the step on the route is not closed yet.
+        reqs.push({ kind: 'quest', label: r.quest, state: 'OK', hard: true, detail: 'counted in the game', source: 'game' });
       } else if (qs) {
         reqs.push({
-          kind: 'quest', label: r.quest, state: 'MISSING', hard: true, detail: `шаг ${qs.id} ещё не отмечен`, source: 'route',
-          action: { kind: 'link', label: `🧭 К квесту — ${qs.id}`, href: `#/step/${qs.id}` },
+          kind: 'quest', label: r.quest, state: 'MISSING', hard: true, detail: `step ${qs.id} is not marked yet`, source: 'route',
+          action: { kind: 'link', label: `🧭 To the quest: ${qs.id}`, href: `#/step/${qs.id}` },
         });
       } else if (game === 'NOT_DONE') {
-        reqs.push({ kind: 'quest', label: r.quest, state: 'MISSING', hard: true, detail: 'квеста нет на маршруте, и в игре он не засчитан', source: 'game' });
+        reqs.push({ kind: 'quest', label: r.quest, state: 'MISSING', hard: true, detail: 'the quest is not on the route and is not counted in the game', source: 'game' });
       } else {
-        reqs.push({ kind: 'quest', label: r.quest, state: 'UNKNOWN', hard: true, detail: 'квеста нет на маршруте — отметить его выполнение программа не может' });
+        reqs.push({ kind: 'quest', label: r.quest, state: 'UNKNOWN', hard: true, detail: 'the quest is not on the route: the app cannot mark it done' });
       }
     }
   }
 
-  // Предметы, которые берут с собой (не добываются по ходу шага), и монеты.
+  // Items taken along (not obtained during the step) and coins.
   const bank = nearestBank(step);
   for (const it of preflightItems(step)) {
     const isCoins = it.id === COINS_ID || nameKey(it.nameEn) === 'coins';
@@ -209,20 +209,20 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
       const c = coinsOf(state);
       const label = `${gp(it.count)} gp`;
       if (res.state === 'UNKNOWN' && c.bag === null) {
-        reqs.push({ kind: 'coins', label, state: 'UNKNOWN', hard: true, detail: 'сколько монет — видно только из игры с RuneLite' });
+        reqs.push({ kind: 'coins', label, state: 'UNKNOWN', hard: true, detail: 'how many coins you have is visible only from the game with RuneLite' });
       } else if (res.state === 'OK') {
-        reqs.push({ kind: 'coins', label, state: 'OK', hard: true, detail: `в сумке ${gp(c.bag!)}`, source: 'game' });
+        reqs.push({ kind: 'coins', label, state: 'OK', hard: true, detail: `${gp(c.bag!)} in the bag`, source: 'game' });
       } else if (res.state === 'BANK') {
-        reqs.push({ kind: 'coins', label, state: 'BANK', hard: true, detail: `в сумке ${gp(c.bag!)}, остальное в банке — возьми`, source: 'game', ...(bank ? { action: bankNav(bank, step, 'Coins') } : {}) });
+        reqs.push({ kind: 'coins', label, state: 'BANK', hard: true, detail: `${gp(c.bag!)} in the bag, the rest is in the bank: take it`, source: 'game', ...(bank ? { action: bankNav(bank, step, 'Coins') } : {}) });
       } else if (res.state === 'UNKNOWN') {
-        reqs.push({ kind: 'coins', label, state: 'UNKNOWN', hard: true, detail: `в сумке ${gp(c.bag!)}; банк в этой сессии не открывали` });
+        reqs.push({ kind: 'coins', label, state: 'UNKNOWN', hard: true, detail: `${gp(c.bag!)} in the bag; the bank was not opened in this session` });
       } else {
-        // Где заработать: ближайший шаг-заработок маршрута (коровьи шкуры, железная руда) — не дальше этого шага.
+        // Where to earn: the nearest earning step on the route (cowhides, iron ore), no further than this step.
         const at = steps.findIndex((x) => x.id === step.id);
         const earn = steps.slice(0, at >= 0 ? at + 1 : steps.length).filter((x) => x.moneyGoal).pop() ?? steps.find((x) => x.moneyGoal);
         reqs.push({
-          kind: 'coins', label, state: 'MISSING', hard: true, detail: `всего ${gp(c.total ?? c.bag ?? 0)}, не хватает ${gp(res.missing ?? it.count)}`, source: 'game',
-          ...(earn ? { action: { kind: 'link' as const, label: `💰 Заработать — ${earn.id}`, href: `#/step/${earn.id}` } } : {}),
+          kind: 'coins', label, state: 'MISSING', hard: true, detail: `${gp(c.total ?? c.bag ?? 0)} in all, ${gp(res.missing ?? it.count)} short`, source: 'game',
+          ...(earn ? { action: { kind: 'link' as const, label: `💰 Earn: ${earn.id}`, href: `#/step/${earn.id}` } } : {}),
         });
       }
       continue;
@@ -231,30 +231,30 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     const res = evaluate({ type: 'item', name: it.nameEn, count: it.count, manualKey: key, ...(it.id !== undefined ? { id: it.id } : {}) }, state);
     const h = heldOf(state, it.nameEn, key);
     const label = `${it.nameEn}${it.count > 1 ? ` ×${it.count}${it.exact ? '' : '+'}` : ''}`;
-    const shop: ReadinessAction = { kind: 'link', label: '🛒 В закупки', href: '#/shopping' };
+    const shop: ReadinessAction = { kind: 'link', label: '🛒 To shopping', href: '#/shopping' };
     const manual = h.source === 'manual';
     const source: RequirementStatus['source'] = manual ? 'manual' : 'game';
     if (res.state === 'OK') {
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: 'OK', hard: true, source,
-        detail: manual ? `отмечено «уже есть: ${state.manual[key]}»` : 'в сумке',
+        detail: manual ? `marked "already have: ${state.manual[key]}"` : 'in the bag',
       });
     } else if (res.state === 'BANK') {
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: 'BANK', hard: true, source: 'game',
-        detail: `в сумке ${(h.bag ?? 0) + h.noted}, в банке ${h.bank ?? 0} — возьми из банка`,
+        detail: `${(h.bag ?? 0) + h.noted} in the bag, ${h.bank ?? 0} in the bank: take it from the bank`,
         ...(bank ? { action: bankNav(bank, step, it.nameEn) } : {}),
       });
     } else if (res.state === 'UNKNOWN') {
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: 'UNKNOWN', hard: true,
-        detail: h.bag !== null ? `в сумке ${h.bag + h.noted}; банк в этой сессии не открывали` : 'не проверено — нужна связь с RuneLite или отметка «уже есть» в закупках',
+        detail: h.bag !== null ? `${h.bag + h.noted} in the bag; the bank was not opened in this session` : 'not checked: it needs a RuneLite connection or an "already have" mark in shopping',
       });
     } else {
       const have = res.have ?? 0;
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: res.state, hard: true, source,
-        detail: manual ? `отмечено ${state.manual[key]}, не хватает ${res.missing}` : have ? `есть ${have}, не хватает ${res.missing}` : 'нет ни в сумке, ни в банке',
+        detail: manual ? `marked ${state.manual[key]}, ${res.missing} short` : have ? `have ${have}, ${res.missing} short` : 'in neither the bag nor the bank',
         action: shop,
       });
     }
@@ -278,18 +278,18 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
 
 export interface ChainLink {
   step: Step;
-  /** Что мешает именно этому звену, кроме шагов до него: уровни, предметы, монеты. */
+  /** What hinders this very link, besides the steps before it: levels, items, coins. */
   why: RequirementStatus[];
 }
 
-/** Номер шага из ссылки действия «#/step/S2-03»; null — ссылка не на шаг. */
+/** The step number from a link action "#/step/S2-03"; null means the link is not to a step. */
 const stepOfHref = (a?: ReadinessAction): string | null => (a?.kind === 'link' ? /^#\/step\/(S\d-\d{2})$/.exec(a.href)?.[1] ?? null : null);
 
 /**
- * «Починить всё»: цепочка шагов до готовности. Идём по тому, что мешает (не пройденные шаги и квесты), вглубь не больше
- * maxDepth звеньев, и собираем в порядке выполнения: самое глубокое звено первым, сам шаг — последним. Цикл не вечен:
- * каждый шаг берётся один раз. Пусто — шагу ничего не предшествует. `readiness` — общий расчёт с памятью (движок),
- * чтобы звенья цепочки не пересчитывались заново.
+ * "Fix everything": a chain of steps to readiness. We go along what hinders (steps and quests not done), no deeper than
+ * maxDepth links, and collect in order of doing: the deepest link first, the step itself last. The loop is not endless:
+ * every step is taken once. Empty means nothing precedes the step. `readiness` is the common calculation with memory (the engine),
+ * so that the chain's links are not recounted.
  */
 export function fixChainOf(
   step: Step,
@@ -323,11 +323,11 @@ export function fixChain(input: ReadinessInput, maxDepth = 3): ChainLink[] {
 }
 
 function bankNav(bank: Place, step: Step, itemName: string): ReadinessAction {
-  // Цель снимется сама, когда предмет окажется в сумке, — стрелка вернётся к шагу.
-  return { kind: 'nav', label: `🧭 К банку — ${bank.label}`, target: { label: `${bank.label}: взять ${itemName}`, x: bank.x, y: bank.y, plane: bank.plane, itemName, stepId: step.id } };
+  // The target clears itself when the item is in the bag: the arrow returns to the step.
+  return { kind: 'nav', label: `🧭 To the bank: ${bank.label}`, target: { label: `${bank.label}: take ${itemName}`, x: bank.x, y: bank.y, plane: bank.plane, itemName, stepId: step.id } };
 }
 
-/** Главная причина — по старшинству: закрыт → квест → уровни → предметы → монеты → мелочи → неизвестное. */
+/** The main reason by seniority: closed, quest, levels, items, coins, small things, unknown. */
 function statusOf(reqs: RequirementStatus[]): ReadinessStatus {
   const missing = (r: RequirementStatus) => r.state === 'MISSING' || r.state === 'PARTIAL';
   const hardMissing = reqs.filter((r) => r.hard && missing(r));
@@ -342,12 +342,12 @@ function statusOf(reqs: RequirementStatus[]): ReadinessStatus {
 }
 
 export const STATUS_TEXT: Record<ReadinessStatus, { icon: string; text: string }> = {
-  READY: { icon: '🟢', text: 'Готов к шагу' },
-  MINOR_PREP: { icon: '🟡', text: 'Почти готов — мелочь перед выходом' },
-  MISSING_ITEM: { icon: '🟠', text: 'Не хватает предметов' },
-  MISSING_MONEY: { icon: '🟠', text: 'Не хватает монет' },
-  MISSING_STATS: { icon: '🟠', text: 'Нужна короткая подготовка: уровни' },
-  MISSING_QUEST: { icon: '🔴', text: 'Сначала квест' },
-  BLOCKED: { icon: '🔴', text: 'Шаг пока закрыт' },
-  UNKNOWN: { icon: '⚪', text: 'Проблем не видно, но проверено не всё' },
+  READY: { icon: '🟢', text: 'Ready for the step' },
+  MINOR_PREP: { icon: '🟡', text: 'Almost ready: a small thing before leaving' },
+  MISSING_ITEM: { icon: '🟠', text: 'Items are missing' },
+  MISSING_MONEY: { icon: '🟠', text: 'Coins are missing' },
+  MISSING_STATS: { icon: '🟠', text: 'A short preparation is needed: levels' },
+  MISSING_QUEST: { icon: '🔴', text: 'The quest first' },
+  BLOCKED: { icon: '🔴', text: 'The step is closed for now' },
+  UNKNOWN: { icon: '⚪', text: 'No problems seen, but not everything was checked' },
 };

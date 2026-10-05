@@ -1,4 +1,4 @@
-// Настройки 2.12: профили персонажей, копия прогресса по расписанию, сводка сеанса и «Диагностика».
+// The 2.12 settings: character profiles, a scheduled progress copy, the session summary and "Diagnostics".
 
 import { useEffect, useState } from 'react';
 import { levelById } from '../data';
@@ -28,10 +28,10 @@ export function ProfilesSection() {
 
   return (
     <section className="card section-card">
-      <h2 className="card-title">Профили персонажей</h2>
+      <h2 className="card-title">Character profiles</h2>
       <p className="muted small">
-        У каждого персонажа свой прогресс. Программа узнаёт персонажа по имени из игры и предложит переключиться; уровни и отметки
-        из игры пишутся только в профиль этого персонажа. Первый увиденный персонаж привязывается к профилю сам.
+        Each character has its own progress. The app recognises the character by the name from the game and offers to switch; the levels and marks
+        from the game are written only into that character's profile. The first character seen is bound to a profile by itself.
       </p>
       <ul className="profile-list">
         {profiles.list.map((p) => {
@@ -41,27 +41,27 @@ export function ProfilesSection() {
               {renaming?.id === p.id
                 ? (
                   <form onSubmit={(e) => { e.preventDefault(); writeProfiles(renameProfile(readProfiles(), p.id, renaming.name)); setRenaming(null); }}>
-                    <input aria-label="Название профиля" value={renaming.name} maxLength={30} autoFocus onChange={(e) => setRenaming({ id: p.id, name: e.target.value })} />
-                    <button type="submit" className="btn btn-sm">Сохранить</button>
+                    <input aria-label="Profile name" value={renaming.name} maxLength={30} autoFocus onChange={(e) => setRenaming({ id: p.id, name: e.target.value })} />
+                    <button type="submit" className="btn btn-sm">Save</button>
                   </form>
                 )
-                : <span><strong>{p.name}</strong>{active && ' · открыт'}<span className="muted small"> · {p.player ? `персонаж ${p.player}` : 'персонаж ещё не привязан'}</span></span>}
+                : <span><strong>{p.name}</strong>{active && ' · open'}<span className="muted small"> · {p.player ? `character ${p.player}` : 'no character bound yet'}</span></span>}
               <span className="profile-actions">
-                {!active && <button type="button" className="btn btn-sm" onClick={() => switchProfile(p.id)}>Открыть</button>}
-                <button type="button" className="btn btn-sm btn-ghost" onClick={() => setRenaming({ id: p.id, name: p.name })}>Переименовать</button>
+                {!active && <button type="button" className="btn btn-sm" onClick={() => switchProfile(p.id)}>Open</button>}
+                <button type="button" className="btn btn-sm btn-ghost" onClick={() => setRenaming({ id: p.id, name: p.name })}>Rename</button>
                 {p.id !== MAIN_ID && (confirm === p.id
-                  ? <button type="button" className="btn btn-sm btn-danger" onClick={() => { writeProfiles(removeProfile(readProfiles(), p.id)); setConfirm(null); if (active) switchProfile(MAIN_ID); }}>Точно удалить (прогресс останется в файле)</button>
-                  : <button type="button" className="btn btn-sm btn-ghost" onClick={() => setConfirm(p.id)}>Удалить</button>)}
+                  ? <button type="button" className="btn btn-sm btn-danger" onClick={() => { writeProfiles(removeProfile(readProfiles(), p.id)); setConfirm(null); if (active) switchProfile(MAIN_ID); }}>Delete for sure (the progress stays in the file)</button>
+                  : <button type="button" className="btn btn-sm btn-ghost" onClick={() => setConfirm(p.id)}>Delete</button>)}
               </span>
             </li>
           );
         })}
       </ul>
       <form className="actions" onSubmit={(e) => { e.preventDefault(); add(); }}>
-        <input aria-label="Название нового профиля" placeholder="Новый профиль, например «Второй»" value={name} maxLength={30} onChange={(e) => setName(e.target.value)} />
-        <button type="submit" className="btn" disabled={profiles.list.length >= 8}>Создать</button>
+        <input aria-label="New profile name" placeholder="New profile name" value={name} maxLength={30} onChange={(e) => setName(e.target.value)} />
+        <button type="submit" className="btn" disabled={profiles.list.length >= 8}>Create</button>
       </form>
-      {player && <p className="muted small">Сейчас в игре: {player}{gate.kind === 'ok' ? ' ✓ профиль совпадает' : ''}.</p>}
+      {player && <p className="muted small">In the game now: {player}{gate.kind === 'ok' ? ' ✓ the profile matches' : ''}.</p>}
     </section>
   );
 }
@@ -78,20 +78,20 @@ export function BackupSection() {
   const run = (f: () => Promise<BackupState>) => void f().then(setState);
   return (
     <section className="card section-card">
-      <h2 className="card-title">Копия прогресса по расписанию</h2>
+      <h2 className="card-title">Scheduled progress copy</h2>
       <p className="muted small">
-        Раз в сутки (и при запуске) прогресс копируется в выбранную папку, например в OneDrive: файл на каждый профиль и день,
-        хранятся последние 14. Восстановить — «Перенос прогресса» → «Загрузить из файла».
+        Once a day (and at launch) the progress is copied into the chosen folder, for example into OneDrive: one file per profile and day,
+        the last 14 are kept. To restore — "Transferring progress" → "Import progress".
       </p>
       <p className="small">
-        {state?.dir ? <>Папка: <code className="code">{state.dir}</code></> : 'Копии выключены.'}
-        {state?.last && <> Последняя копия: {new Date(state.last).toLocaleString('ru-RU')}.</>}
+        {state?.dir ? <>Folder: <code className="code">{state.dir}</code></> : 'Copies are off.'}
+        {state?.last && <> Last copy: {new Date(state.last).toLocaleString('en-US')}.</>}
       </p>
-      {state?.error && <p className="notice is-error small" role="alert">Не вышло записать в папку ({state.error}). Выбери другую.</p>}
+      {state?.error && <p className="notice is-error small" role="alert">Could not write to the folder ({state.error}). Choose another.</p>}
       <div className="actions">
-        <button type="button" className="btn" onClick={() => run(api.choose)}>{state?.dir ? 'Сменить папку' : 'Выбрать папку'}</button>
-        {state?.dir && <button type="button" className="btn" onClick={() => run(api.now)}>Сделать копию сейчас</button>}
-        {state?.dir && <button type="button" className="btn btn-ghost" onClick={() => run(api.clear)}>Выключить</button>}
+        <button type="button" className="btn" onClick={() => run(api.choose)}>{state?.dir ? 'Change folder' : 'Choose a folder'}</button>
+        {state?.dir && <button type="button" className="btn" onClick={() => run(api.now)}>Make a copy now</button>}
+        {state?.dir && <button type="button" className="btn btn-ghost" onClick={() => run(api.clear)}>Turn off</button>}
       </div>
     </section>
   );
@@ -104,15 +104,15 @@ export function SessionSection() {
   const s = sessionSummary(session, Date.now(), xp, stats, closed);
   return (
     <section className="card section-card">
-      <h2 className="card-title">Этот сеанс</h2>
+      <h2 className="card-title">This session</h2>
       <p className="small">
-        Идёт {s.minutes} мин · закрыто шагов: <strong>{s.stepsDone}</strong>
+        Running {s.minutes} min · steps closed: <strong>{s.stepsDone}</strong>
       </p>
-      {state === 'online' && !session.xp0 && <p className="muted small">Опыт и уровни начнут считаться, когда плагин (2.12+) пришлёт их из игры.</p>}
+      {state === 'online' && !session.xp0 && <p className="muted small">XP and levels will start being counted when the plugin (2.12+) sends them from the game.</p>}
       {s.xpGained.length > 0 && (
         <ul className="small">
           {s.xpGained.slice(0, 8).map((g) => (
-            <li key={g.skill}>{levelById.get(g.skill)?.name ?? g.skill}: +{g.xp.toLocaleString('ru-RU')} опыта{g.levels > 0 ? ` · +${g.levels} ур.` : ''}</li>
+            <li key={g.skill}>{levelById.get(g.skill)?.name ?? g.skill}: +{g.xp.toLocaleString('en-US')} XP{g.levels > 0 ? ` · +${g.levels} lvl` : ''}</li>
           ))}
         </ul>
       )}
@@ -121,27 +121,27 @@ export function SessionSection() {
   );
 }
 
-/** Журнал ресурсов: хранится между сеансами (30 дней) отдельно для каждого персонажа; здесь его можно очистить. */
+/** The resource journal: kept between sessions (30 days) separately for each character; here it can be cleared. */
 function LedgerBlock() {
   const { summary, session, since, clearLedger } = usePlayerState();
   const [confirm, setConfirm] = useState(false);
   if (!summary.entries) {
-    return <p className="muted small">Журнал ресурсов пуст: он наполняется, пока RuneLite подключён, и хранится между сеансами.</p>;
+    return <p className="muted small">The resource journal is empty: it fills while RuneLite is connected and is kept between sessions.</p>;
   }
   return (
     <div className="ledger-block">
       <p className="small">
-        <strong>Журнал ресурсов</strong> — записей {summary.entries}{since !== null ? `, с ${new Date(since).toLocaleDateString('ru-RU')}` : ''}. Монеты +{formatGp(summary.coinsEarned)}, потрачено {formatGp(summary.coinsSpent)}
-        {summary.estimatedLootValue > 0 ? `, добыча ≈${formatGp(summary.estimatedLootValue)} gp (оценка, не деньги)` : ''}.
-        {session.entries > 0 && summary.entries > session.entries ? ` За этот сеанс — ${session.entries}.` : ''}
+        <strong>Resource journal</strong> — entries {summary.entries}{since !== null ? `, since ${new Date(since).toLocaleDateString('en-US')}` : ''}. Coins +{formatGp(summary.coinsEarned)}, spent {formatGp(summary.coinsSpent)}
+        {summary.estimatedLootValue > 0 ? `, loot ≈${formatGp(summary.estimatedLootValue)} gp (an estimate, not money)` : ''}.
+        {session.entries > 0 && summary.entries > session.entries ? ` This session — ${session.entries}.` : ''}
       </p>
       {confirm ? (
         <div className="actions">
-          <button type="button" className="btn btn-danger" onClick={() => { clearLedger(); setConfirm(false); }}>Да, очистить журнал</button>
-          <button type="button" className="btn" onClick={() => setConfirm(false)}>Отмена</button>
+          <button type="button" className="btn btn-danger" onClick={() => { clearLedger(); setConfirm(false); }}>Yes, clear the journal</button>
+          <button type="button" className="btn" onClick={() => setConfirm(false)}>Cancel</button>
         </div>
       ) : (
-        <button type="button" className="btn btn-sm" onClick={() => setConfirm(true)}>Очистить журнал</button>
+        <button type="button" className="btn btn-sm" onClick={() => setConfirm(true)}>Clear the journal</button>
       )}
     </div>
   );
@@ -151,31 +151,31 @@ export function UpdatesSection() {
   const u = useUpdates();
   if (!u) return null;
   const { state: s } = u;
-  const text = s.state === 'checking' ? 'Проверяю…'
-    : s.state === 'current' ? 'Установлена последняя версия.'
-      : s.state === 'available' ? `Вышла версия ${s.latest}.`
-        : s.state === 'downloading' ? `Скачиваю версию ${s.latest}… ${percent(s.progress)}%`
-          : s.state === 'ready' ? `Версия ${s.latest} скачана — осталось перезапустить.`
-            : s.state === 'error' ? `Не вышло: ${s.error ?? 'нет связи'}. Попробуй позже.` : '';
+  const text = s.state === 'checking' ? 'Checking…'
+    : s.state === 'current' ? 'The latest version is installed.'
+      : s.state === 'available' ? `Version ${s.latest} is out.`
+        : s.state === 'downloading' ? `Downloading version ${s.latest}… ${percent(s.progress)}%`
+          : s.state === 'ready' ? `Version ${s.latest} is downloaded — only a restart is left.`
+            : s.state === 'error' ? `Failed: ${s.error ?? 'no connection'}. Try later.` : '';
   return (
     <section className="card section-card">
-      <h2 className="card-title">Обновления</h2>
+      <h2 className="card-title">Updates</h2>
       <p className="muted">
-        Программа сверяется с выпусками на GitHub, скачивает новую переносную версию рядом со старой и перезапускается в неё.
-        Прогресс и настройки лежат рядом с программой — переносить ничего не нужно; прежний exe после перехода удаляется.
-        Ничего не ставится без твоей кнопки.
+        The app checks the GitHub releases, downloads the new portable version next to the old one and restarts into it.
+        The progress and settings are next to the app — nothing needs to be moved; the previous exe is deleted after the switch.
+        Nothing is installed without your button.
       </p>
-      <p className="small">Сейчас: <strong>{s.current}</strong>{text ? ` · ${text}` : ''}</p>
+      <p className="small">Now: <strong>{s.current}</strong>{text ? ` · ${text}` : ''}</p>
       <label className="switch">
         <input type="checkbox" checked={s.auto !== false} onChange={(e) => u.setAuto(e.target.checked)} />
-        <span>Проверять при запуске и раз в несколько часов</span>
+        <span>Check at launch and every few hours</span>
       </label>
       <div className="actions">
-        <button type="button" className="btn" onClick={u.check} disabled={s.state === 'checking' || s.state === 'downloading'}>Проверить сейчас</button>
-        {s.canInstall && s.state === 'available' && <button type="button" className="btn btn-primary" onClick={u.download}>Скачать</button>}
-        {s.state === 'ready' && <button type="button" className="btn btn-primary" onClick={u.install}>Перезапустить в новую версию</button>}
+        <button type="button" className="btn" onClick={u.check} disabled={s.state === 'checking' || s.state === 'downloading'}>Check now</button>
+        {s.canInstall && s.state === 'available' && <button type="button" className="btn btn-primary" onClick={u.download}>Download</button>}
+        {s.state === 'ready' && <button type="button" className="btn btn-primary" onClick={u.install}>Restart into the new version</button>}
       </div>
-      {!s.canInstall && <p className="muted small">Эта сборка запущена не из переносного exe — только сообщает о новой версии.</p>}
+      {!s.canInstall && <p className="muted small">This build was not started from the portable exe — it only reports a new version.</p>}
     </section>
   );
 }
@@ -189,21 +189,21 @@ export function DiagnosticsSection() {
     setText(report);
     try {
       await navigator.clipboard.writeText(report);
-      setNote(`Скопировано в буфер (${report.split('\n').length} строк) — вставь в чат.`);
+      setNote(`Copied to the clipboard (${report.split('\n').length} lines) — paste it into the chat.`);
     } catch {
-      setNote('Буфер недоступен — выдели текст ниже и скопируй сам.');
+      setNote('The clipboard is unavailable — select the text below and copy it yourself.');
     }
   };
   return (
     <section className="card section-card">
-      <h2 className="card-title">Диагностика</h2>
+      <h2 className="card-title">Diagnostics</h2>
       <p className="muted small">
-        Если что-то работает не так: нажми — программа соберёт версии, состояние связи с RuneLite, последние события моста и сводку журнала плагина (сколько записано, какие странности нашёл сторож).
-        Сумки, банка и заметок в отчёте нет.
+        If something works wrong: press — the app will collect the versions, the RuneLite link state, the last bridge events and a summary of the plugin journal (how much is written, what oddities the watchdog found).
+        There are no bag, bank or notes in the report.
       </p>
-      <div className="actions"><button type="button" className="btn" onClick={() => void collect()}>Скопировать отчёт</button></div>
+      <div className="actions"><button type="button" className="btn" onClick={() => void collect()}>Copy the report</button></div>
       {note && <p className="small" role="status">{note}</p>}
-      {text && <textarea className="diag" readOnly rows={8} value={text} aria-label="Отчёт" />}
+      {text && <textarea className="diag" readOnly rows={8} value={text} aria-label="Report" />}
     </section>
   );
 }

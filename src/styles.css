@@ -1,8 +1,8 @@
-/* OSRS Путь — минимализм: тёплый нейтральный фон, один акцент (приглушённое золото), границы 1px.
-   Тёмная тема — нейтральный графит без жёлто-коричневого оттенка; золото только в акцентах. */
+/* OSRS Path — minimalism: a warm neutral background, one accent (muted gold), 1px borders.
+   The dark theme is a neutral graphite without a yellow-brown tint; gold only in accents. */
 
-/* OSRS Путь — редизайн D «Панель с картой прогресса»: нейтральный графит, синий — навигация и главные действия,
-   золото — очки квестов и советы, зелёный — сделано, фиолетовый — подписка. Границы 1px, скругление 8–10px. */
+/* OSRS Path — redesign D "A panel with a progress map": neutral graphite, blue for navigation and main actions,
+   gold for quest points and advice, green for done, purple for membership. 1px borders, 8–10px rounding. */
 
 :root {
   --bg: #f4f5f7;
@@ -14,7 +14,7 @@
   --border: #e1e4ea;
   --border-strong: #cdd2da;
   --accent: #2458d3;
-  --accent-ink: #1f4fc0;      /* синий текст и ссылки: контраст с фоном выше 4.5:1 */
+  --accent-ink: #1f4fc0;      /* blue text and links: contrast with the background above 4.5:1 */
   --accent-soft: #e6eefc;
   --on-accent: #ffffff;
   --gold: #b8892e;
@@ -25,7 +25,7 @@
   --warn: #9a4a1f;
   --warn-soft: #f7e7dc;
   --focus: #2458d3;
-  --toast-accent: #8fb3ff;   /* тост тёмный на светлой теме */
+  --toast-accent: #8fb3ff;   /* the toast is dark on the light theme */
   --danger: #b3261e;
   --danger-soft: #fbe9e7;
   --members: #6d4fb0;
@@ -105,7 +105,7 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-/* Размер шрифта из настроек: все шрифты в rem, отступы в px — растёт только текст. */
+/* The font size from the settings: all fonts are in rem, spacing in px — only the text grows. */
 html {
   font-size: calc(var(--text-scale, 1) * 100%);
   -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--topbar-h) + 12px);
@@ -161,7 +161,7 @@ p { margin: 0; }
   color: var(--accent-ink);
 }
 
-/* ---------- Каркас ---------- */
+/* ---------- Frame ---------- */
 
 .topbar {
   position: sticky; top: 0; z-index: 20;
@@ -250,9 +250,9 @@ main {
   main { padding-top: 24px; padding-bottom: 48px; }
   .toast-region { bottom: 24px !important; }
 }
-/* 900–1180 px с RuneLite на связи: в шапке ещё значок связи — вкладки ужимаются, иначе шапка вылезала на 11 px. */
-/* 900–1320 px: вкладки и значки шапки не помещались (на 900 px — на 145 px): вкладки — одними значками
-   с подсказкой, поиск — значком. Название вкладки остаётся для экранного диктора. */
+/* 900–1180 px with RuneLite connected: the header also has a link icon — the tabs shrink, otherwise the header overflowed by 11 px. */
+/* 900–1320 px: the header tabs and icons did not fit (at 900 px — by 145 px): the tabs become icons only
+   with a hint, the search becomes an icon. The tab name stays for the screen reader. */
 @media (min-width: 900px) and (max-width: 1319px) {
   .topbar-inner { gap: 8px; }
   .tabs-top { margin-left: 4px; }
@@ -264,7 +264,7 @@ main {
   .search-trigger-text, .search-trigger kbd { display: none; }
 }
 
-/* ---------- Карточки, кнопки ---------- */
+/* ---------- Cards, buttons ---------- */
 
 .card {
   background: var(--surface);
@@ -336,7 +336,7 @@ main {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 4px; padding: 4px;
   background: var(--surface-2); border-radius: var(--radius);
 }
-/* Длинная подпись («Заблокированные 7») на узком окне переносится внутри кнопки, а не вылезает за экран. */
+/* A long caption ("Blocked 7") in a narrow window wraps inside the button instead of overflowing the screen. */
 .seg {
   min-height: 40px; min-width: 0; padding: 4px 12px; line-height: 1.2;
   border: 1px solid transparent; border-radius: var(--radius-sm);
@@ -345,7 +345,7 @@ main {
 .seg.is-active { background: var(--surface); color: var(--text); border-color: var(--border); }
 .seg-count { font-weight: 500; color: var(--muted); margin-left: 2px; white-space: nowrap; }
 
-/* ---------- Текст гайда ---------- */
+/* ---------- Guide text ---------- */
 
 .prose { display: flex; flex-direction: column; gap: 12px; }
 .prose h2 { margin-top: 8px; }
@@ -358,7 +358,7 @@ main {
 .section + .section { margin-top: 8px; }
 
 .table-wrap {
-  position: relative; /* держит внутри скрытые подписи для чтения с экрана */
+  position: relative; /* keeps the hidden captions for screen reading inside */
   overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius);
   background: var(--surface); -webkit-overflow-scrolling: touch;
 }
@@ -374,7 +374,7 @@ main {
   font: 600 0.7rem/1.6 var(--font); color: var(--on-accent); background: var(--accent);
 }
 
-/* ---------- Путь ---------- */
+/* ---------- Path ---------- */
 
 .summary { display: flex; flex-direction: column; gap: 14px; }
 .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
@@ -408,11 +408,9 @@ main {
 .field.is-done-when dd { font-weight: 550; }
 .field.is-warn { padding: 8px 10px; border-radius: var(--radius-sm); background: var(--warn-soft); }
 .field.is-warn dt { color: var(--warn); }
-.field-plain dd::before { content: "·"; color: var(--muted); margin-right: 6px; }
 
 @media (min-width: 600px) {
   .field { grid-template-columns: 124px 1fr; gap: 12px; }
-  .field-plain { grid-template-columns: 1fr; padding-left: 136px; }
 }
 
 .hints { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
@@ -535,7 +533,7 @@ main {
 }
 .note textarea:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 0 1px var(--accent); }
 
-/* ---------- Уровни ---------- */
+/* ---------- Levels ---------- */
 
 .level-input { display: flex; flex-direction: column; gap: 4px; }
 .level-label { font-size: 0.78rem; font-weight: 600; color: var(--muted); }
@@ -556,7 +554,7 @@ main {
 .stepper-input:focus { outline: none; }
 .level-input.is-compact .stepper-btn { width: 36px; }
 
-/* ---------- Навыки ---------- */
+/* ---------- Skills ---------- */
 
 .skill-grid { display: grid; grid-template-columns: 1fr; gap: 10px; }
 @media (min-width: 560px) { .skill-grid { grid-template-columns: repeat(2, 1fr); } }
@@ -613,7 +611,7 @@ main {
 .link-list .is-done span { color: var(--muted); }
 .done-mark { color: var(--done); margin-left: auto; width: 18px; height: 18px; }
 
-/* ---------- Цели ---------- */
+/* ---------- Goals ---------- */
 
 .legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 0.8rem; color: var(--muted); }
 .legend-item { display: inline-flex; align-items: center; gap: 6px; }
@@ -639,7 +637,7 @@ main {
 thead .is-current-col { color: var(--accent-ink) !important; }
 .qp-row > * { border-top: 1px solid var(--border-strong); }
 
-/* ---------- Квесты ---------- */
+/* ---------- Quests ---------- */
 
 .quest-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
 .quest-link {
@@ -664,7 +662,7 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .quest.is-available .quest-state { color: var(--accent-ink); font-weight: 600; }
 .quest-blocked { font-size: 0.8rem; color: var(--muted); }
 
-/* ---------- Справка ---------- */
+/* ---------- Reference ---------- */
 
 .nav-list { list-style: none; margin: 0; padding: 0; overflow: hidden; }
 .nav-list li + li { border-top: 1px solid var(--border); }
@@ -690,7 +688,7 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .plugin-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 2px; }
 .plugin-name { font-weight: 650; font-size: 0.95rem; }
 
-/* ---------- Поиск ---------- */
+/* ---------- Search ---------- */
 
 .search-dialog {
   width: min(640px, calc(100vw - 24px)); max-height: min(640px, calc(100dvh - 48px));
@@ -721,7 +719,7 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .search-hit-snippet { font-size: 0.85rem; color: var(--muted); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .search-dialog > .empty { padding: 20px 16px; }
 
-/* ---------- Режим игры ---------- */
+/* ---------- Game mode ---------- */
 
 .mode-toggle {
   display: inline-flex; padding: 3px; gap: 2px; height: 40px;
@@ -744,9 +742,8 @@ a.quest-link:hover { border-color: var(--border-strong); }
   .search-trigger-text, .search-trigger kbd { display: none !important; }
 }
 
-/* ---------- Карточка шага V2 ---------- */
+/* ---------- Step card V2 ---------- */
 
-.step-title-ru { font-size: 0.85rem; color: var(--muted); }
 .step-badges { display: inline-flex; flex-wrap: wrap; gap: 4px; }
 .step-badges:empty { display: none; }
 
@@ -784,7 +781,7 @@ a.quest-link:hover { border-color: var(--border-strong); }
   background: var(--surface); border: 1px solid var(--border);
 }
 .plaque-npc { background: var(--surface-2); }
-/* Подпись и текст — одной строкой: «Совет: …», «Готово, когда: …». */
+/* The caption and text on one line: "Tip: …", "Done when: …". */
 .plaque-tip, .plaque-safespot, .plaque-members, .plaque-done { display: block; }
 .npc-name {
   align-self: flex-start; padding: 0; border: 0; background: none; cursor: pointer; text-align: left;
@@ -862,11 +859,9 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .stage.is-members.is-current .stage-num { background: var(--members); border-color: var(--members); color: var(--surface); }
 .stage.is-members .stage-kicker { color: var(--members); }
 .next.is-members { box-shadow: inset 4px 0 0 var(--members); }
-.next-title-ru { color: var(--muted); margin-top: -8px; }
 .skill-card.is-members { border-color: color-mix(in srgb, var(--members) 30%, var(--border)); }
-.quest-ru { font-size: 0.85rem; color: var(--muted); }
 
-/* ---------- Инспектор вики ---------- */
+/* ---------- Wiki inspector ---------- */
 
 .drawer {
   position: fixed; inset: 0 0 0 auto; margin: 0; padding: 0;
@@ -890,7 +885,6 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .drawer-icon-npc { width: 64px; height: 64px; }
 .drawer-title { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0; }
 .drawer-title h2 { font-size: 1.3rem; }
-.drawer-ru { color: var(--muted); }
 .drawer-examine { font-style: italic; color: var(--muted); }
 .drawer-state { padding: 8px 0; }
 .tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -913,7 +907,7 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .table-compact th, .table-compact td { padding: 6px 8px; font-size: 0.85rem; }
 .drawer-footer { padding-top: 4px; }
 
-/* ---------- Поиск по группам ---------- */
+/* ---------- Search by groups ---------- */
 
 .search-group {
   padding: 10px 12px 4px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em;
@@ -923,7 +917,7 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .search-hit-price { margin-left: auto; font-size: 0.8rem; font-weight: 600; color: var(--gold-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .search-hit.is-item .search-hit-sub { padding-left: 28px; }
 
-/* ---------- Настройки: внешний вид ---------- */
+/* ---------- Settings: appearance ---------- */
 
 .setting { display: flex; flex-direction: column; gap: 8px; padding-top: 12px; border-top: 1px solid var(--border); }
 .setting:first-of-type { padding-top: 0; border-top: 0; }
@@ -938,7 +932,7 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .switch input { width: 20px; height: 20px; accent-color: var(--accent); margin: 0; }
 .code-path { word-break: break-all; }
 
-/* ---------- Редизайн D: шапка с прогрессом ---------- */
+/* ---------- Redesign D: the header with progress ---------- */
 
 .header-progress { display: none; align-items: center; gap: 10px; text-decoration: none; color: var(--text); padding: 4px 8px 4px 4px; border-radius: 999px; }
 .header-progress:hover { background: var(--surface-2); }
@@ -964,7 +958,7 @@ a.quest-link:hover { border-color: var(--border-strong); }
 .btn-next { font-weight: 600; opacity: 0.85; }
 .flip { transform: rotate(180deg); }
 
-/* ---------- Редизайн D: три колонки «Пути» ---------- */
+/* ---------- Redesign D: the three columns of "Path" ---------- */
 
 main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 .path-wide {
@@ -1021,7 +1015,7 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 .rail-step-mark .icon { width: 13px; height: 13px; }
 .rail-step:not(.is-closed) .rail-step-mark { color: var(--muted); }
 .rail-step-code { font-family: var(--mono); font-size: 0.7rem; }
-.rail-step-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rail-step-title { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; overflow-wrap: anywhere; }
 .rail-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--warn); }
 
 .center { display: flex; flex-direction: column; gap: 12px; padding: 0 4px 24px; min-width: 0; }
@@ -1035,7 +1029,6 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 .step-view-head { display: flex; flex-direction: column; gap: 4px; padding: 18px 20px 0; }
 .step-view-kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--muted); }
 .step-view-title { font-size: 1.6rem; line-height: 1.2; outline: none; }
-.step-view-ru { color: var(--muted); }
 .step-view .step-details { padding: 12px 20px 8px; animation: none; }
 .step-view .step-meta-row { justify-content: flex-end; }
 .step-view .step-meta-row > .muted { display: none; }
@@ -1052,7 +1045,7 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
   .step-view, .dock-panel { animation: none; }
 }
 
-/* ---------- Тост ---------- */
+/* ---------- Toast ---------- */
 
 .toast-region {
   position: fixed; left: 0; right: 0; z-index: 30; pointer-events: none;
@@ -1083,7 +1076,7 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
   *, *::before, *::after { animation-duration: 1ms !important; transition-duration: 1ms !important; }
 }
 
-/* ---------- V2.2: карта шага, карта мира, RuneLite ---------- */
+/* ---------- V2.2: the step map, the world map, RuneLite ---------- */
 
 .btn-sm { min-height: 34px; padding: 0 12px; font-size: 0.85rem; }
 
@@ -1114,7 +1107,7 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 .map-tiles { position: absolute; top: 0; left: 50%; transform: translateX(-50%); pointer-events: none; }
 .map-tiles img { position: absolute; width: 256px; height: 256px; max-width: none; image-rendering: auto; user-select: none; }
 .map-preview-image { width: 100%; height: 100%; object-fit: cover; display: block; }
-/* Метка в центре превью: кольцо и пульс, чтобы место было видно и на пёстрой карте. */
+/* The marker in the centre of the preview: a ring and a pulse, so the place is visible on a busy map too. */
 .map-marker {
   position: absolute; left: 50%; top: 55px; width: 14px; height: 14px; margin: -7px 0 0 -7px; border-radius: 50%;
   background: #ff4d3d; border: 2px solid #fff; box-shadow: 0 0 0 2px rgb(0 0 0 / 0.45);
@@ -1166,7 +1159,7 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 .map-modal-offline p { margin: 0; }
 .map-modal-foot { margin: 0; display: flex; flex-wrap: wrap; justify-content: flex-end; align-items: center; gap: 8px 16px; }
 .map-modal-foot .icon { width: 13px; height: 13px; }
-/* Метки Leaflet: div-иконки без картинок, активная крупнее и пульсирует. */
+/* Leaflet markers: div icons without images, the active one is larger and pulses. */
 .map-pin span {
   display: block; width: 14px; height: 14px; margin: 4px; border-radius: 50%;
   background: #ffb020; border: 2px solid #fff; box-shadow: 0 0 0 2px rgb(0 0 0 / 0.5);
@@ -1207,10 +1200,10 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 .bridge-indicator.is-online { color: var(--done); }
 .bridge-indicator.is-stale { color: var(--warn); }
 .bridge-dot { font-size: 0.7rem; }
-/* Надпись у значка связи — только на очень широком окне: иначе шапка вылезала за экран (на 1400 px — на 193 px). */
+/* The label by the link icon — only on a very wide window: otherwise the header overflowed the screen (at 1400 px — by 193 px). */
 @media (max-width: 1719px) { .bridge-label { display: none; } }
 
-/* Шаг выполнен в игре — короткая зелёная вспышка на строке. */
+/* A step done in the game — a short green flash on the row. */
 .is-just-done { animation: just-done 1.6s ease-out; }
 @keyframes just-done {
   0% { box-shadow: 0 0 0 2px var(--done); background-color: var(--done-soft); }
@@ -1228,11 +1221,11 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 .runelite-help > summary { cursor: pointer; font-weight: 600; font-size: 0.9rem; }
 .runelite-help ol { margin: 6px 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
 
-/* ---------- V2.4: помощник в игре — проверка вылета, быстрые варианты, оптовый список ---------- */
+/* ---------- V2.4: the in-game helper — the departure check, quick variants, the bulk list ---------- */
 .icon-btn-emoji { font-size: 1.05rem; line-height: 1; }
-/* В узком окне в шапке нет места — список открывается из карточки «Что делать сейчас» и из шагов-закупок. */
+/* In a narrow window there is no room in the header — the list opens from the "What to do now" card and from shopping steps. */
 @media (max-width: 480px) { .icon-btn-emoji { display: none; } }
-/* 320 px: шапка не помещалась на 16 px и срезала настройки — название прячется, значок остаётся ссылкой домой. */
+/* 320 px: the header did not fit by 16 px and cut off the settings — the name hides, the icon stays a link home. */
 @media (max-width: 359px) {
   .brand > span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
@@ -1298,7 +1291,7 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 .shop-count { display: flex; flex-direction: column; align-items: flex-end; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 
-/* Места из досье вики: «📍 место» открывает карту, «🧭» ведёт стрелку в игре. */
+/* Places from the wiki dossier: "📍 place" opens the map, "🧭" leads the arrow in the game. */
 .drawer-list.is-places { list-style: none; padding-left: 0; gap: 2px; }
 .place-row { display: flex; align-items: center; gap: 2px; margin: 0; }
 .place-link {
@@ -1320,15 +1313,15 @@ th .place-link { font-weight: inherit; }
 }
 .map-modal-status { inset: 50% 12px auto; transform: translateY(-50%); max-width: 460px; margin: 0 auto; text-align: center; display: flex; flex-direction: column; gap: 6px; align-items: center; }
 
-/* Bank Tags этапа: кнопка над шагами этапа (и в левой колонке широкого экрана). */
+/* The stage's Bank Tags: a button above the stage steps (and in the left column of a wide screen). */
 
-/* Темп прокачки из игры. */
+/* The training pace from the game. */
 .pacing { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 0; font-size: 0.92rem; }
 .pacing-main { font-weight: 600; font-variant-numeric: tabular-nums; }
 .pacing-eta { color: var(--accent-ink); font-variant-numeric: tabular-nums; }
 .pacing.is-good .pacing-main { color: var(--done); }
 
-/* ⚡ Скоростной апгрейд: игровая плашка с янтарным акцентом, без мигания. */
+/* ⚡ Speed upgrade: an in-game plate with an amber accent, without blinking. */
 .upgrade {
   display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border-radius: var(--radius-sm);
   border: 1px solid color-mix(in srgb, var(--gold) 55%, transparent); background: var(--gold-soft);
@@ -1347,7 +1340,7 @@ th .place-link { font-weight: inherit; }
 .gear-ok { margin: 0; color: var(--done); }
 .gear-ok a { color: inherit; }
 
-/* ⚔️ Снаряжение */
+/* ⚔️ Gear */
 .gear-page { gap: 12px; }
 .gear-summary { display: flex; flex-direction: column; gap: 6px; }
 .gear-summary p { margin: 0; }
@@ -1365,7 +1358,7 @@ th .place-link { font-weight: inherit; }
 .lock-note { margin: 0; color: var(--warn); }
 
 
-/* Готовность к шагу: светофор и действия. */
+/* Step readiness: a traffic light and actions. */
 .readiness { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; background: var(--surface-3); }
 .readiness p { margin: 0; }
 .readiness.is-ready { box-shadow: inset 3px 0 0 var(--done); }
@@ -1388,13 +1381,13 @@ th .place-link { font-weight: inherit; }
 }
 .readiness-detour { color: var(--gold-ink); }
 
-/* 💰 Цель шага-заработка. */
+/* 💰 The goal of an earning step. */
 .money-goal { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; background: var(--surface-3); box-shadow: inset 3px 0 0 var(--gold); }
 .money-goal p { margin: 0; }
 .money-bar { height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
 .money-bar > span { display: block; height: 100%; background: var(--gold); border-radius: inherit; }
 
-/* 2.12: опыт из игры, профили, диагностика */
+/* 2.12: XP from the game, profiles, diagnostics */
 .live-xp { display: grid; gap: 6px; margin-top: 10px; }
 .live-xp-row { display: grid; grid-template-columns: 7em 1fr; gap: 2px 10px; align-items: center; font-size: 0.88rem; }
 .live-xp-name { font-weight: 600; }
@@ -1406,14 +1399,14 @@ th .place-link { font-weight: inherit; }
 .profile-actions { display: flex; flex-wrap: wrap; gap: 6px; }
 .diag { width: 100%; margin-top: 8px; font: 0.8rem/1.4 ui-monospace, Consolas, monospace; resize: vertical; }
 
-/* 2.13: расчёт магии и «как добрать деньги» */
+/* 2.13: the magic calculation and "how to make up the money" */
 .magic-plan, .money-plan { margin-top: 12px; }
 .money-plan > summary { cursor: pointer; }
 .money-list { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; }
 .money-method { padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); }
 .money-method p { margin: 0; }
 
-/* 2.14: как добраться */
+/* 2.14: how to get there */
 .travel-plan { margin-top: 12px; }
 .travel-list { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; }
 .travel-option { padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); }
@@ -1421,7 +1414,7 @@ th .place-link { font-weight: inherit; }
 .travel-option.is-locked { opacity: 0.75; }
 .travel-option.is-ready { border-color: var(--accent); }
 
-/* Выпадающие списки: общий вид вместо системного окошка — в тон полям и кнопкам программы. */
+/* Drop-down lists: a shared look instead of the system window — in tune with the app's fields and buttons. */
 select {
   appearance: none; -webkit-appearance: none;
   min-height: 34px; padding: 0 32px 0 12px; max-width: 100%;
@@ -1439,7 +1432,7 @@ select option { background: var(--surface); color: var(--text); }
 .select-field { display: inline-flex; align-items: center; gap: 8px; max-width: 100%; min-width: 0; }
 .select-field select { min-width: 0; text-overflow: ellipsis; }
 
-/* Способы добраться: название слева, отметка справа, строка пешком — отдельно, без наезда текста. */
+/* Ways to get there: the name on the left, the mark on the right, the on-foot line separately, with no text overlap. */
 .travel-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px; }
 .travel-title { font-size: 1rem; min-width: 0; overflow-wrap: anywhere; }
 .travel-walk { margin-top: 2px; }
@@ -1448,14 +1441,14 @@ select option { background: var(--surface); color: var(--text); }
 .travel-badge.is-locked { background: var(--surface-2); color: var(--muted); }
 .travel-option p + p { margin-top: 2px; }
 
-/* Маршрут подготовки и «одна ходка» (2.17). */
+/* The preparation route and "one trip" (2.17). */
 .prep-route { display: flex; flex-direction: column; gap: 6px; padding: 8px 10px; border: 1px dashed var(--border-strong); border-radius: var(--radius-sm); }
 .prep-route p { margin: 0; }
 .prep-primary { display: flex; flex-direction: column; gap: 6px; }
 .prep-primary .actions { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .prep-next { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 2px; }
 .style-toggle .style-label { display: inline; }
-/* Единый статус шага («Дзен»): одна строка, подробности — по кнопке. */
+/* The unified step status ("Zen"): one line, details on a button. */
 .step-status { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; display: flex; flex-direction: column; gap: 8px; background: var(--surface-3); box-shadow: inset 3px 0 0 var(--border-strong); }
 .step-status.is-ready { box-shadow: inset 3px 0 0 var(--done); }
 .step-status.is-prep { box-shadow: inset 3px 0 0 var(--gold); }

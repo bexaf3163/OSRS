@@ -24,19 +24,19 @@ const step = (over: Partial<Step> & { id: string }): Step => ({
   stage: 1, type: 'quest', title: over.id, doneWhen: '—', requires: [], ...over,
 });
 
-describe('«Что делать сейчас»', () => {
-  it('в начале — первый шаг', () => {
+describe('"What to do now"', () => {
+  it('at the start — the first step', () => {
     const p = emptyProgress();
     expect(nextStep(f2p, p, questPoints(f2p, p, BASE_QP))?.id).toBe('S1-01');
   });
 
-  it('пропускает закрытые шаги', () => {
+  it('skips closed steps', () => {
     const p = progressWith({ 'S1-01': 'done', 'S1-02': 'done' });
     expect(nextStep(f2p, p, questPoints(f2p, p, BASE_QP))?.id).toBe('S1-03');
   });
 
-  it('не выбирает шаг с невыполненной зависимостью', () => {
-    // Всё до S2-02 сделано, кроме S2-01 — а Imp Catcher ждёт закупок на бирже.
+  it('does not pick a step with an unmet dependency', () => {
+    // Everything before S2-02 is done except S2-01 — and Imp Catcher waits for the Grand Exchange shopping.
     const done = allBefore('S2-02');
     delete done['S2-01'];
     const p = progressWith(done);
@@ -45,12 +45,12 @@ describe('«Что делать сейчас»', () => {
     expect(blockersOf(f2p.find((s) => s.id === 'S2-02')!, p, qp)).toEqual({ steps: ['S2-01'] });
   });
 
-  it('обходит заблокированный шаг и берёт следующий доступный', () => {
+  it('bypasses a blocked step and takes the next available one', () => {
     const list = [step({ id: 'A', requires: ['C'] }), step({ id: 'B' }), step({ id: 'C' })];
     expect(nextStep(list, emptyProgress(), 0)?.id).toBe('B');
   });
 
-  it('учитывает порог очков квестов', () => {
+  it('takes the quest points threshold into account', () => {
     const list = [step({ id: 'A', minQp: 5 }), step({ id: 'B', qp: 4 })];
     const p = emptyProgress();
     expect(nextStep(list, p, 1)?.id).toBe('B');
@@ -59,21 +59,21 @@ describe('«Что делать сейчас»', () => {
     expect(nextStep(list, after, questPoints(list, after, 1))?.id).toBe('A');
   });
 
-  it('Below Ice Mountain (S3-04) ждёт 16 очков квестов', () => {
+  it('Below Ice Mountain (S3-04) waits for 16 quest points', () => {
     const s = f2p.find((x) => x.id === 'S3-04')!;
     const p = emptyProgress();
     expect(blockersOf(s, p, 15)?.qp).toEqual({ need: 16, have: 15 });
     expect(blockersOf(s, p, 16)).toBeNull();
   });
 
-  it('пропущенный шаг закрыт для зависимостей', () => {
+  it('a skipped step counts as closed for dependencies', () => {
     const list = [step({ id: 'A', optional: true }), step({ id: 'B', requires: ['A'] })];
     const p = progressWith({ A: 'skipped' });
     expect(blockersOf(list[1], p, 0)).toBeNull();
     expect(nextStep(list, p, 0)?.id).toBe('B');
   });
 
-  it('когда всё закрыто — null; последний этап F2P — 6, Members — 9', () => {
+  it('when everything is closed — null; the last F2P stage is 6, Members — 9', () => {
     for (const [mode, last] of [['f2p', 6], ['members', 9]] as [GameMode, number][]) {
       const steps = stepsFor(mode);
       const p = progressWith(Object.fromEntries(steps.map((s) => [s.id, 'done' as const])));
@@ -82,11 +82,11 @@ describe('«Что делать сейчас»', () => {
     }
   });
 
-  it('текущий этап — этап первого незакрытого шага', () => {
+  it('the current stage — the stage of the first unclosed step', () => {
     expect(currentStage(f2p, progressWith(allBefore('S3-01')))).toBe(3);
   });
 
-  it.each(['f2p', 'members'] as GameMode[])('проход по плану (%s) всегда даёт следующий шаг — план без тупиков', (mode) => {
+  it.each(['f2p', 'members'] as GameMode[])('walking the plan (%s) always gives the next step — a plan without dead ends', (mode) => {
     const steps = stepsFor(mode);
     let p = emptyProgress();
     const order: string[] = [];

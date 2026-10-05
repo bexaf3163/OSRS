@@ -1,4 +1,4 @@
-"""Дыры в данных: листья машины Quest Helper (шаги, которые QH показывает на этом значении переменной), для которых в нашем этапе нет строки."""
+"""Holes in the data: the leaves of a Quest Helper machine (the steps QH shows at this variable value) for which our stage has no line."""
 import json
 import os
 import sys
@@ -51,7 +51,7 @@ for sid, m in machines.items():
                 info = qh.get(sid, {}).get(leaf) or {}
                 gaps.setdefault((sid, leaf), []).append(v)
                 gaps[(sid, leaf)] = sorted(set(gaps[(sid, leaf)]))
-print('листьев без строки:', len(gaps))
+print('leaves without a line:', len(gaps))
 for (sid, leaf), vs in sorted(gaps.items()):
     info = qh.get(sid, {}).get(leaf) or {}
     print('%-6s %-45s var=%-18s %-18s %s' % (sid, leaf, ','.join(map(str, vs))[:18], info.get('typ'), (info.get('text') or '')[:90]))

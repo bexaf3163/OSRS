@@ -1,13 +1,13 @@
-// Оптовый список Grand Exchange: одна закупка на несколько шагов вперёд вместо походов на биржу перед каждым.
-// Предметы собираются из itemsRequired выбранных шагов, одинаковые складываются по ID (без ID — по имени).
+// The Grand Exchange bulk list: one purchase for several steps ahead instead of trips to the exchange before each.
+// The items are collected from the itemsRequired of the selected steps, identical ones are summed by ID (without an ID, by name).
 
 import type { Step, StepItemRequirement } from '../types';
 import { nameKey, parseAmount, type OwnedState } from './checklist';
 import { heldOf } from './playerState';
 
 /**
- * Инструменты и снаряжение: не тратятся, поэтому одного хватает на все шаги — берётся наибольшее
- * количество за шаг, а не сумма. Всё остальное (руда, еда, квестовые предметы) складывается.
+ * Tools and gear: they are not used up, so one is enough for all the steps: the largest
+ * quantity per step is taken, not the sum. Everything else (ore, food, quest items) is summed.
  */
 export const REUSABLE = new Set([
   'bronze axe', 'bronze pickaxe', 'mithril axe', 'small fishing net', 'fly fishing rod', 'harpoon', 'lobster pot',
@@ -16,8 +16,8 @@ export const REUSABLE = new Set([
 ]);
 
 const COINS_ID = 995;
-/** «Из шага S2-01», «Из S4-05: …», «Сохранённые из S1-04!», «Запасной из шага S1-03». */
-const CARRY_OVER = /(?:^|[\s(])из\s+(?:шага\s+)?(S\d-\d{2})/i;
+/** "From step S2-01", "From S4-05: ...", "The ones saved from S1-04!", "The spare one from step S1-03". */
+const CARRY_OVER = /(?:^|[\s(])from\s+(?:step\s+)?(S\d-\d{2})/i;
 
 export function carryOverFrom(item: StepItemRequirement): string | null {
   return item.howToGet.match(CARRY_OVER)?.[1] ?? null;
@@ -26,31 +26,30 @@ export function carryOverFrom(item: StepItemRequirement): string | null {
 export interface ShoppingSource {
   stepId: string;
   amount: string | number;
-  /** Тот же предмет, что куплен/добыт в более раннем выбранном шаге, — второй раз не считается. */
+  /** The same item as bought/obtained in an earlier selected step: not counted a second time. */
   carryOver: boolean;
 }
 
 export interface ShoppingLine {
   key: string;
   nameEn: string;
-  nameRu: string;
   id?: number;
   iconUrl?: string;
   count: number;
-  /** false — хотя бы в одном шаге количество не числом («сколько есть»): count — нижняя оценка. */
+  /** false means in at least one step the quantity is not a number ("as many as you have"): count is a lower estimate. */
   exact: boolean;
   reusable: boolean;
-  /** Во всех шагах добывается по ходу самого шага (не закупкой) — покупать не обязательно. */
+  /** In every step it is obtained during the step itself (not by a purchase): buying is not mandatory. */
   inStepOnly: boolean;
   sources: ShoppingSource[];
-  /** Где взять — из первого шага, где предмет нужен. */
+  /** Where to get it: from the first step where the item is needed. */
   howToGet: string;
 }
 
 export interface ShoppingList {
   required: ShoppingLine[];
   recommended: ShoppingLine[];
-  /** Сколько монет нужно на сами шаги (проезд, плата NPC). */
+  /** How many coins the steps themselves need (fare, an NPC's fee). */
   coins: number;
 }
 
@@ -79,7 +78,7 @@ function collect(steps: Step[], pick: (s: Step) => StepItemRequirement[] | undef
         acc = {
           line: {
             key: item.wikiItemId !== undefined ? `id:${item.wikiItemId}` : `name:${name}`,
-            nameEn: item.nameEn, nameRu: item.nameRu, id: item.wikiItemId, iconUrl: item.iconUrl,
+            nameEn: item.nameEn, id: item.wikiItemId, iconUrl: item.iconUrl,
             count: 0, exact: true, reusable: REUSABLE.has(name), inStepOnly: true, sources: [], howToGet: item.howToGet,
           },
           perStep: new Map(),
@@ -96,9 +95,9 @@ function collect(steps: Step[], pick: (s: Step) => StepItemRequirement[] | undef
       acc.line.sources.push({ stepId: step.id, amount: item.amount, carryOver });
       if (carryOver) continue;
       if (n === null) acc.line.exact = false;
-      // В шаге-закупке (gear) «по ходу шага» и значит «купить на бирже».
+      // In a purchase step (gear) "during the step" means "buy at the exchange".
       if (!item.inStep || step.type === 'gear') acc.allInStep = false;
-      // Две строки одного предмета в одном шаге — разные нужды (ловушка для рыбы и для Оракула): складываются.
+      // Two rows of one item in one step are different needs (a trap for fish and for the Oracle): they are summed.
       acc.perStep.set(step.id, (acc.perStep.get(step.id) ?? 0) + (n ?? 1));
     }
   }
@@ -111,76 +110,68 @@ function collect(steps: Step[], pick: (s: Step) => StepItemRequirement[] | undef
     });
 }
 
-/** Сводный список по выбранным шагам (в порядке маршрута). */
+/** The summary list for the selected steps (in route order). */
 export function aggregateShopping(steps: Step[]): ShoppingList {
   const selected = new Set(steps.map((s) => s.id));
   const coins = { n: 0 };
   const required = collect(steps, (s) => s.itemsRequired, selected, coins);
   const requiredKeys = new Set(required.flatMap((l) => [l.key, `name:${nameKey(l.nameEn)}`]));
-  // Рекомендуемое, которое и так в обязательном списке (по ID или по имени), второй раз не показываем.
+  // A recommended item that is already in the required list (by ID or by name) is not shown a second time.
   const recommended = collect(steps, (s) => s.itemsRecommended, selected)
     .filter((l) => !requiredKeys.has(l.key) && !requiredKeys.has(`name:${nameKey(l.nameEn)}`));
   return { required, recommended, coins: coins.n };
 }
 
-/** Русское число: plural(21, 'позиция', 'позиции', 'позиций') → «позиция». */
-export function plural(n: number, one: string, few: string, many: string): string {
-  const m10 = n % 10;
-  const m100 = n % 100;
-  if (m100 >= 11 && m100 <= 14) return many;
-  if (m10 === 1) return one;
-  if (m10 >= 2 && m10 <= 4) return few;
-  return many;
+/** English plural: plural(21, 'item', 'items') gives "items"; plural(1, ...) gives "item". */
+export function plural(n: number, one: string, many: string): string {
+  return n === 1 ? one : many;
 }
 
 export function formatGp(n: number): string {
-  return Math.round(n).toLocaleString('ru-RU').replace(/ /g, ' ');
+  return Math.round(n).toLocaleString('en-US');
 }
 
 export interface CopyLine {
   nameEn: string;
-  /** Сколько купить. */
+  /** How much to buy. */
   buy: number;
   exact: boolean;
 }
 
-/** Текст для буфера обмена: английские названия — как их искать на бирже. */
+/** Text for the clipboard: English names, as they are searched at the exchange. */
 export function shoppingText(title: string, lines: CopyLine[], coins: number): string {
   const rows = lines.filter((l) => l.buy > 0).map((l) => `${l.nameEn} x${l.buy}${l.exact ? '' : '+'}`);
   const out = [title, ...rows];
-  if (coins > 0) out.push(`Coins ~${formatGp(coins)} gp (на сами шаги)`);
+  if (coins > 0) out.push(`Coins ~${formatGp(coins)} gp (for the steps themselves)`);
   return out.join('\n');
 }
 
 // ---------------------------------------------------------------------------
-// «У меня уже есть»: сколько предмета уже есть и сколько осталось купить.
+// "I already have it": how much of an item there already is and how much is left to buy.
 //
-// Источники по старшинству: данные из игры, если они полные (банк открывали в этой сессии RuneLite), →
-// отметка игрока «у меня есть N» → неизвестно. «Неизвестно» — не ноль: без банка сумка говорит только о
-// сумке, и программа не делает вывод, что остального нет.
+// Sources by seniority: the game's data if it is complete (the bank was opened in this RuneLite session), then
+// the player's mark "I have N", then unknown. "Unknown" is not zero: without the bank the bag speaks only of the
+// bag, and the app does not conclude that there is no more.
 
-/** MISSING — нет совсем, PARTIAL — часть, SUFFICIENT — хватает, UNKNOWN — неизвестно, UNAVAILABLE — не продаётся на бирже. */
+/** MISSING means none at all, PARTIAL part, SUFFICIENT enough, UNKNOWN unknown, UNAVAILABLE not sold at the exchange. */
 export type ShoppingItemStatus = 'MISSING' | 'PARTIAL' | 'SUFFICIENT' | 'UNKNOWN' | 'UNAVAILABLE';
 
 export interface Holding {
   required: number;
-  /** Сколько есть — по лучшему источнику; null — неизвестно. */
+  /** How much there is, by the best source; null means unknown. */
   owned: number | null;
-  /** Сколько купить. При неизвестном — всё, что не подтверждено (верхняя оценка). */
+  /** How much to buy. With the unknown: everything not confirmed (an upper estimate). */
   buy: number;
   status: ShoppingItemStatus;
   source: 'live' | 'manual' | 'bag' | 'none';
-  /** Из игры: в сумке (с банкнотами) и в банке; bank null — банк в этой сессии не открывали. */
+  /** From the game: in the bag (with banknotes) and in the bank; bank null means the bank was not opened in this session. */
   carried?: number;
   bank?: number | null;
-  /** Отметка игрока, если есть. */
+  /** The player's mark, if there is one. */
   manual?: number;
-  /** Игрок отметил больше, чем подтверждает игра с открытым банком: отметка устарела. */
+  /** The player marked more than the game confirms with an open bank: the mark is out of date. */
   stale?: boolean;
 }
-
-/** Ключ строки списка для ручной отметки: по ID предмета, у предметов без ID — по имени (§97.18). */
-export const lineKey = (line: Pick<ShoppingLine, 'key'>) => line.key;
 
 export function holdingFor(
   line: Pick<ShoppingLine, 'nameEn' | 'count' | 'exact'>,
@@ -189,7 +180,7 @@ export function holdingFor(
   onGe = true,
 ): Holding {
   const required = line.count;
-  // Один и тот же расчёт «сколько есть», что и у готовности шага и единых требований (playerState.heldOf).
+  // The same "how much there is" calculation as readiness and the single requirements (playerState.heldOf).
   const h = heldOf({ owned: owned as OwnedState | null, equipment: {}, manual: manual !== undefined ? { m: manual } : {}, bankSeen: owned?.bankSeen === true }, line.nameEn, manual !== undefined ? 'm' : undefined);
   const inGame = h.bag !== null;
   const carried = inGame ? (h.bag ?? 0) + h.noted : undefined;
@@ -205,7 +196,7 @@ export function holdingFor(
     if (have >= required) return 'SUFFICIENT';
     return have > 0 ? 'PARTIAL' : 'MISSING';
   };
-  // Игра знает всё: и сумку, и банк.
+  // The game knows everything: both the bag and the bank.
   if (h.source === 'game' && h.bank !== null) {
     const total = h.total ?? 0;
     return {
@@ -213,12 +204,12 @@ export function holdingFor(
       ...(manual !== undefined && manual > total ? { stale: true } : {}),
     };
   }
-  // Отметка игрока: сумка из игры её не опровергает (остальное может лежать в банке).
+  // The player's mark: the bag from the game does not refute it (the rest may be in the bank).
   if (h.source === 'manual') {
     const have = h.total ?? 0;
     return { ...base, owned: have, buy: Math.max(0, required - have), status: status(have), source: 'manual' };
   }
-  // Банк неизвестен: хватает того, что в сумке, — известно; не хватает — неизвестно, а не «нет».
+  // The bank is unknown: what is in the bag suffices, it is known; what is lacking is unknown, not "none".
   if (carried !== undefined) {
     if (carried >= required) return { ...base, owned: carried, buy: 0, status: status(carried), source: 'bag' };
     return { ...base, owned: null, buy: required - carried, status: status(null), source: 'bag' };
@@ -227,8 +218,8 @@ export function holdingFor(
 }
 
 /**
- * Сколько просить у плагина для подсказки на бирже. Плагин сам вычитает то, что видит в игре; ручная отметка
- * ему неизвестна — её вычитаем здесь, не считая дважды то, что он и так видит в сумке.
+ * How much to ask the plugin for a hint at the exchange. The plugin itself subtracts what it sees in the game; the manual mark
+ * is unknown to it: we subtract it here, not counting twice what it already sees in the bag.
  */
 export function pluginCount(h: Holding): number {
   if (h.source !== 'manual') return h.required;

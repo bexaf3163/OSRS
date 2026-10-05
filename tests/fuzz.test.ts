@@ -8,7 +8,7 @@ import { adviseStyle } from '../src/lib/styleGear';
 import { adviseMoney } from '../src/lib/moneyAdvisor';
 import { travelOptions } from '../src/lib/travel';
 
-// Детерминированный генератор: тест воспроизводим, а не «иногда падает».
+// A deterministic generator: the test is reproducible, not "fails sometimes".
 function rng(seed: number) {
   let s = seed >>> 0;
   return () => { s = (Math.imul(s, 1664525) + 1013904223) >>> 0; return s / 2 ** 32; };
@@ -42,8 +42,8 @@ const parsers: [string, (x: unknown) => unknown][] = [
   ['parseGear', parseGear], ['parsePacing', parsePacing], ['parseNavTarget', parseNavTarget], ['parseOwned', parseOwned], ['ownedManualOf', ownedManualOf],
 ];
 
-describe('мусор на входе не роняет программу', () => {
-  it('разборщики событий моста и сохранений: 3000 случайных значений на каждый', () => {
+describe('garbage input does not crash the program', () => {
+  it('bridge event and save parsers: 3000 random values each', () => {
     const r = rng(20261003);
     for (const [name, fn] of parsers) {
       for (let i = 0; i < 3000; i++) {
@@ -53,7 +53,7 @@ describe('мусор на входе не роняет программу', () =
     }
   }, 30_000);
 
-  it('normalizeProgress: любое значение — прогресс или null, но не исключение', () => {
+  it('normalizeProgress: any value — progress or null, but not an exception', () => {
     const r = rng(7);
     const known = knownData;
     for (let i = 0; i < 4000; i++) {
@@ -67,7 +67,7 @@ describe('мусор на входе не роняет программу', () =
     }
   });
 
-  it('советники по данным игры: подсовываем снаряжение, уровни и монеты неправильной формы', () => {
+  it('game-data advisors: feeding gear, levels and coins of the wrong shape', () => {
     const r = rng(99);
     for (let i = 0; i < 1500; i++) {
       const gear = parseGear(junk(r));

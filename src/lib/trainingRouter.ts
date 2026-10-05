@@ -1,12 +1,12 @@
-// «Чем качать»: по уровню, цели, режиму игры, предметам и стилю игры (спокойно / эффективно) выбирает способ прокачки
-// навыка и показывает путь до цели. Способы — src/data/trainingMethods.json (OSRS Wiki и план прокачки гайда).
+// "What to train with": by level, goal, game mode, items and play style (calm / efficient) it picks a training method
+// for the skill and shows the path to the goal. The methods are in src/data/trainingMethods.json (OSRS Wiki and the skills' training plans).
 //
-// Правила, на которых всё держится:
-//  — выбирается только то, что открыто: уровень подходит, режим (F2P/Members) подходит, квест пройден. Чего не хватает
-//    из предметов, называется («нужна кирка», «нужны перья»), но способ остаётся — это подготовка, а не запрет;
-//  — «неизвестно» не равно «нет»: предмет, который проверить нечем, не снимает способ с выбора;
-//  — скорость из вики — ориентир, а не обещание: время до цели считается по замерам игрока, а когда замеров нет —
-//    только как диапазон «по вики» и помечено. Опыт за действие — точное число игры, по нему считается «сколько ещё действий».
+// The rules everything rests on:
+//  — only what is open is chosen: the level fits, the mode (F2P/Members) fits, the quest is done. What is missing
+//    in items is named ("a pickaxe is needed", "feathers are needed"), but the method stays — it is preparation, not a ban;
+//  — "unknown" is not "no": an item that cannot be checked does not remove a method from the choice;
+//  — the wiki speed is a guide, not a promise: the time to the goal is counted from the player's measurements, and when there are none —
+//    only as a "per the wiki" range and marked so. The XP per action is the game's exact number; "how many more actions" is counted from it.
 
 import type { GameMode } from '../types';
 import methodsJson from '../data/trainingMethods.json';
@@ -23,36 +23,36 @@ export type { PlayStyle };
 
 export type MethodNeed =
   | { type: 'item'; name: string; count?: number }
-  /** Любой топор / кирка не ниже подходящей ступени — берётся из toolProgression.json. */
+  /** Any axe / pickaxe of at least the suitable tier — taken from toolProgression.json. */
   | { type: 'tool'; skill: 'woodcutting' | 'mining' }
   | { type: 'quest'; quest: string }
   | { type: 'skill'; skill: string; min: number };
 
 export interface TrainingMethod {
   id: string;
-  /** Навыки, которые способ качает (бой — все три). */
+  /** The skills the method trains (combat — all three). */
   skills: string[];
   from: number;
-  /** До какого уровня (не включая) способ лучший; null — до конца. */
+  /** Up to which level (exclusive) the method is the best; null — to the end. */
   to: number | null;
   name: string;
   members: boolean;
   needs: MethodNeed[];
-  /** Опыт в час по вики: [от, до] — ориентир. */
+  /** XP per hour per the wiki: [from, to] — a guide. */
   xph: [number, number] | null;
-  /** Опыт за одно действие — точное значение игры. */
+  /** XP per single action — the game's exact value. */
   xpa: number | null;
-  /** Форма слова «бревно|бревна|брёвен» для «сколько ещё». */
+  /** The word forms "log|logs" for "how many more". */
   act: string | null;
   effort: Effort;
   cost: MethodCost;
   risk: Risk;
   where: string;
-  /** Ключ места в словаре мест (majorLocations.json) — для стрелки в игре; нет — только словами. */
+  /** The key of the place in the place dictionary (majorLocations.json) — for the in-game arrow; none — words only. */
   place?: string;
   note?: string;
   url: string;
-  /** Квест с одноразовой наградой опытом: в «лучший способ» не попадает, показывается отдельно. */
+  /** A quest with a one-time XP reward: it does not become the "best method", it is shown separately. */
   kind: 'method' | 'quest';
   xpTotal: number | null;
 }
@@ -76,7 +76,7 @@ interface Tier { tier: string; levelReq: number }
 const tools = toolProgressionJson as unknown as Record<'woodcutting' | 'mining', Tier[]>;
 
 // ---------------------------------------------------------------------------
-// Требования способа
+// The method's requirements
 
 export interface NeedStatus {
   kind: MethodNeed['type'];
@@ -95,12 +95,12 @@ function needStatus(n: MethodNeed, state: PlayerState): NeedStatus {
     return { kind: 'quest', label: n.quest, state: r.state, detail: r.detail };
   }
   if (n.type === 'tool') {
-    // Годится любой инструмент ступени, которую позволяет уровень (лучший открытый не нужен — достаточно любого).
+    // Any tool of the tier the level allows fits (the best open one is not needed — any one is enough).
     const lv = levelOf(state, n.skill);
     const usable = tools[n.skill].filter((t) => lv === undefined || t.levelReq <= lv);
     const req: Requirement = { type: 'alternative', requiredCount: 1, alternatives: usable.map((t) => ({ name: t.tier })) };
     const r = evaluate(req, state);
-    return { kind: 'tool', label: n.skill === 'woodcutting' ? 'Топор' : 'Кирка', state: r.state, detail: r.detail };
+    return { kind: 'tool', label: n.skill === 'woodcutting' ? 'Axe' : 'Pickaxe', state: r.state, detail: r.detail };
   }
   const count = n.count ?? 1;
   const r = evaluate({ type: 'item', name: n.name, count }, state);
@@ -112,9 +112,9 @@ export type MethodStatus = 'READY' | 'PREP' | 'LOCKED';
 export interface MethodView {
   method: TrainingMethod;
   status: MethodStatus;
-  /** Чего не хватает (предметы, инструмент) или что закрывает способ (квест, уровень навыка). */
+  /** What is missing (items, a tool) or what closes the method (a quest, a skill level). */
   missing: NeedStatus[];
-  /** Что проверить нечем: не «нет», а «не знаю». */
+  /** What cannot be checked: not "no" but "I don't know". */
   unchecked: NeedStatus[];
 }
 
@@ -127,19 +127,19 @@ export function viewMethod(m: TrainingMethod, state: PlayerState): MethodView {
 }
 
 // ---------------------------------------------------------------------------
-// Выбор
+// The choice
 
 const EFFORT_RANK: Record<Effort, number> = { afk: 0, low: 1, medium: 2, high: 3 };
 const RISK_RANK: Record<Risk, number> = { none: 0, low: 1, high: 2 };
 const COST_RANK: Record<MethodCost, number> = { profit: 0, free: 0, cost: 1 };
 const STATUS_RANK: Record<MethodStatus, number> = { READY: 0, PREP: 1, LOCKED: 2 };
 
-/** Для порядка берём нижнюю границу скорости: верхняя у вики часто требует особых приёмов (тики, инвентарь). */
+/** For ordering we take the lower speed bound: the wiki's upper one often needs special tricks (ticks, inventory). */
 const rateLow = (m: TrainingMethod): number | null => (m.xph ? m.xph[0] : null);
 
 /**
- * Порядок способов. Спокойный стиль: сначала готовое, без риска, с меньшим числом кликов, не в убыток — скорость лишь
- * при равенстве. Эффективный: сначала готовое, потом по скорости (у способов без скорости — по уровню входа).
+ * The order of methods. Calm style: first the ready ones, without risk, with fewer clicks, not at a loss — speed only
+ * on a tie. Efficient: first the ready ones, then by speed (for methods without a speed — by entry level).
  */
 function compare(style: PlayStyle) {
   return (a: MethodView, b: MethodView): number => {
@@ -172,7 +172,7 @@ export interface PathLeg {
 }
 
 export interface TimeEstimate {
-  /** measured — по замерам игрока, wiki — по скорости из вики (диапазон, ориентир). */
+  /** measured — from the player's measurements, wiki — from the wiki speed (a range, a guide). */
   source: 'measured' | 'wiki';
   minHours: number;
   maxHours: number;
@@ -180,21 +180,21 @@ export interface TimeEstimate {
 
 export interface TrainingAdvice {
   skill: string;
-  /** null — уровень неизвестен: советовать нечего. */
+  /** null — the level is unknown: there is nothing to advise. */
   level: number | null;
   target: number;
   best: MethodView | null;
-  /** До трёх других способов этого уровня. */
+  /** Up to three other methods of this level. */
   others: MethodView[];
-  /** Квесты с наградой опытом в этом диапазоне — отдельно от способов. */
+  /** Quests with an XP reward in this range — separately from the methods. */
   quests: TrainingMethod[];
-  /** Путь от уровня до цели: какой способ на каком отрезке. */
+  /** The path from the level to the goal: which method on which leg. */
   path: PathLeg[];
   xpLeft: number | null;
-  /** Сколько ещё действий лучшим способом до конца его отрезка; null — опыт за действие неизвестен. */
+  /** How many more actions with the best method to the end of its leg; null — the XP per action is unknown. */
   actionsLeft: number | null;
   time: TimeEstimate | null;
-  /** Одна фраза «почему этот способ». */
+  /** One phrase "why this method". */
   reason: string;
   style: PlayStyle;
 }
@@ -205,40 +205,40 @@ export interface AdviceInput {
   state: PlayerState;
   mode: GameMode;
   style: PlayStyle;
-  /** Текущий опыт навыка (если известен): иначе считается от начала уровня. */
+  /** The skill's current XP (if known): otherwise counted from the start of the level. */
   xp?: number | null;
-  /** Опыт в час по замерам игрока. */
+  /** XP per hour from the player's measurements. */
   measuredXph?: number | null;
   methods?: readonly TrainingMethod[];
 }
 
-const fmtK = (n: number) => (n >= 1000 ? `${Math.round(n / 1000)} тыс.` : String(n));
+const fmtK = (n: number) => (n >= 1000 ? `${Math.round(n / 1000)}k` : String(n));
 
 function reasonFor(v: MethodView, style: PlayStyle, level: number): string {
   const m = v.method;
   const parts: string[] = [];
   if (style === 'chill') {
-    const quiet = m.effort === 'afk' ? 'почти без кликов' : m.effort === 'low' ? 'мало кликов' : m.effort === 'medium' ? 'спокойный темп' : 'нужно внимание';
-    parts.push(m.risk === 'none' ? `без риска, ${quiet}` : `${quiet}, риск небольшой`);
+    const quiet = m.effort === 'afk' ? 'almost no clicks' : m.effort === 'low' ? 'few clicks' : m.effort === 'medium' ? 'relaxed pace' : 'needs attention';
+    parts.push(m.risk === 'none' ? `no risk, ${quiet}` : `${quiet}, small risk`);
   } else if (m.xph) {
-    parts.push(m.xph[0] === m.xph[1] ? `≈ ${fmtK(m.xph[0])} опыта в час` : `≈ ${fmtK(m.xph[0])}–${fmtK(m.xph[1])} опыта в час`);
+    parts.push(m.xph[0] === m.xph[1] ? `≈ ${fmtK(m.xph[0])} XP per hour` : `≈ ${fmtK(m.xph[0])}–${fmtK(m.xph[1])} XP per hour`);
   } else {
-    parts.push('лучший способ для этого уровня');
+    parts.push('the best method for this level');
   }
-  if (m.cost === 'cost') parts.push('расходы на материалы');
-  else if (m.cost === 'profit') parts.push('можно остаться в плюсе');
-  if (v.status === 'PREP') parts.push(`сначала: ${v.missing.map((x) => x.label).join(', ')}`);
-  if (v.status === 'LOCKED') parts.push(`закрыто: ${v.missing.map((x) => x.label).join(', ')}`);
-  if (level < m.from) parts.push(`с ${m.from} уровня`);
+  if (m.cost === 'cost') parts.push('material costs');
+  else if (m.cost === 'profit') parts.push('can end in profit');
+  if (v.status === 'PREP') parts.push(`first: ${v.missing.map((x) => x.label).join(', ')}`);
+  if (v.status === 'LOCKED') parts.push(`locked: ${v.missing.map((x) => x.label).join(', ')}`);
+  if (level < m.from) parts.push(`from level ${m.from}`);
   return parts.join('; ');
 }
 
-/** Лучший способ на каждом отрезке пути до цели: подряд идущие одинаковые склеиваются. */
+/** The best method on each leg of the path to the goal: identical consecutive ones merge. */
 function buildPath(skill: string, level: number, target: number, input: AdviceInput, cmp: ReturnType<typeof compare>): PathLeg[] {
   const methods = input.methods ?? trainingMethods;
   const legs: PathLeg[] = [];
   for (let lv = level; lv < target; lv++) {
-    // Для будущих уровней требования к предметам не учитываем: «что понадобится», а не «что есть сейчас».
+    // For future levels the item requirements are not counted: "what will be needed", not "what there is now".
     const cands = methodsFor(skill, methods).filter((m) => availableAt(m, lv, input.mode)).map((m) => viewMethod(m, input.state)).filter((v) => v.status !== 'LOCKED' || v.missing.every((x) => x.kind === 'skill'));
     cands.sort(cmp);
     const pick = cands[0]?.method;
@@ -255,8 +255,8 @@ export function adviseTraining(input: AdviceInput): TrainingAdvice {
   const methods = input.methods ?? trainingMethods;
   const level = levelOf(state, skill) ?? null;
   const empty: TrainingAdvice = { skill, level, target, best: null, others: [], quests: [], path: [], xpLeft: null, actionsLeft: null, time: null, reason: '', style };
-  if (level === null) return { ...empty, reason: 'Уровень неизвестен — войди в игру с RuneLite или введи его на странице навыка.' };
-  if (level >= target) return { ...empty, reason: 'Цель уже достигнута.' };
+  if (level === null) return { ...empty, reason: 'Level unknown: log in to the game with RuneLite or enter it on the skill page.' };
+  if (level >= target) return { ...empty, reason: 'The goal is already reached.' };
 
   const cmp = compare(style);
   const views = methodsFor(skill, methods).filter((m) => availableAt(m, level, mode)).map((m) => viewMethod(m, state)).sort(cmp);
@@ -281,13 +281,13 @@ export function adviseTraining(input: AdviceInput): TrainingAdvice {
   }
   return {
     ...empty, best, others, quests, path, xpLeft, actionsLeft, time,
-    reason: best ? reasonFor(best, style, level) : 'Для этого уровня и режима способа в списке нет — смотри план прокачки навыка.',
+    reason: best ? reasonFor(best, style, level) : 'There is no method in the list for this level and mode: see the skill training plan.',
   };
 }
 
-/** «примерно 3–4 ч» / «≈ 2 ч»; меньше часа — в минутах. */
+/** "about 3–4 h" / "≈ 2 h"; under an hour — in minutes. */
 export function formatHours(t: TimeEstimate): string {
-  const f = (h: number) => (h < 1 ? `${Math.max(1, Math.round(h * 60))} мин` : `${String(h < 10 ? Math.round(h * 10) / 10 : Math.round(h)).replace('.', ',')} ч`);
-  if (t.minHours === t.maxHours || f(t.minHours) === f(t.maxHours)) return `${t.source === 'wiki' ? 'примерно' : '≈'} ${f(t.maxHours)}`;
-  return `примерно ${f(t.minHours)}–${f(t.maxHours)}`;
+  const f = (h: number) => (h < 1 ? `${Math.max(1, Math.round(h * 60))} min` : `${h < 10 ? Math.round(h * 10) / 10 : Math.round(h)} h`);
+  if (t.minHours === t.maxHours || f(t.minHours) === f(t.maxHours)) return `${t.source === 'wiki' ? 'about' : '≈'} ${f(t.maxHours)}`;
+  return `about ${f(t.minHours)}–${f(t.maxHours)}`;
 }

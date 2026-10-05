@@ -1,5 +1,5 @@
-// «Готовность к шагу»: светофор и что сделать до выхода — у каждой проблемы своё действие.
-// Расчёт — lib/readiness.ts; здесь только показ. Шаг без требований и предметов панели не получает.
+// "Readiness for a step": a traffic light and what to do before setting off — each problem has its own action.
+// The calculation is lib/readiness.ts; here only the display. A step without requirements and items gets no panel.
 
 import type { Step } from '../types';
 import { useStore } from '../store';
@@ -25,7 +25,7 @@ function Row({ r }: { r: RequirementStatus }) {
       <span className="ready-mark" aria-hidden="true">{MARK[r.state]}</span>
       <span className="ready-text">
         <strong>{r.label}</strong>
-        {!r.hard && <span className="muted"> · по ходу квеста</span>}
+        {!r.hard && <span className="muted"> · during the quest</span>}
         {r.detail && <span className="muted"> — {r.detail}</span>}
       </span>
       {r.action && <span className="ready-action"><Action a={r.action} /></span>}
@@ -33,41 +33,41 @@ function Row({ r }: { r: RequirementStatus }) {
   );
 }
 
-/** «✓ Цель шага уже выполнена»: уровни не ниже цели — качать заново не нужно, шаг можно закрыть. */
+/** "✓ The step goal is already met": the levels are not below the goal — no need to train again, the step can be closed. */
 function GoalMet({ step, r }: { step: Step; r: StepReadiness }) {
   const { setStep } = useStore();
   if (!r.goalMet) return null;
   const fromGame = r.goalMet.every((g) => g.source === 'game');
   return (
-    <section className="readiness is-ready" aria-label="Цель шага">
+    <section className="readiness is-ready" aria-label="Step goal">
       <p className="readiness-head" role="status">
-        🟢 <strong>Цель шага уже выполнена</strong>: {r.goalMet.map((g) => `${g.skill} ${g.have} (нужно ${g.level})`).join(', ')}
-        <span className="muted"> — {fromGame ? 'по данным игры' : 'по уровням из профиля'}. Качать заново не нужно.</span>
+        🟢 <strong>The step goal is already met</strong>: {r.goalMet.map((g) => `${g.skill} ${g.have} (need ${g.level})`).join(', ')}
+        <span className="muted"> — {fromGame ? 'by the game data' : 'by the levels from the profile'}. No need to train again.</span>
       </p>
       <div className="actions">
-        <button type="button" className="btn btn-primary btn-sm" onClick={() => setStep(step.id, 'done', `${step.id} закрыт: цель уже выполнена`)}>
-          ✓ Отметить выполненным
+        <button type="button" className="btn btn-primary btn-sm" onClick={() => setStep(step.id, 'done', `${step.id} closed: the goal is already met`)}>
+          ✓ Mark as done
         </button>
       </div>
     </section>
   );
 }
 
-/** «🧩 Цепочка до готовности»: что пройти по порядку, чтобы шаг открылся (до трёх звеньев вглубь). */
+/** "🧩 The chain to readiness": what to complete in order for the step to open (up to three links deep). */
 function Chain({ step }: { step: Step }) {
   const chain = useReadinessEngine().chain(step);
   if (!chain.length) return null;
   return (
     <details className="ready-chain" open>
-      <summary className="small">🧩 Цепочка до готовности: {chain.length + 1} {chain.length === 1 ? 'шаг' : 'шага'}</summary>
+      <summary className="small">🧩 The chain to readiness: {chain.length + 1} {chain.length === 1 ? 'step' : 'steps'}</summary>
       <ol className="small">
         {chain.map((l) => (
           <li key={l.step.id}>
             <a href={`#/step/${l.step.id}`}><strong>{l.step.id}</strong> {l.step.title}</a>
-            {l.why.length > 0 && <span className="muted"> — ещё нужно: {l.why.map((w) => w.label).join(', ')}</span>}
+            {l.why.length > 0 && <span className="muted"> — still needed: {l.why.map((w) => w.label).join(', ')}</span>}
           </li>
         ))}
-        <li><strong>{step.id}</strong> {step.title} — этот шаг</li>
+        <li><strong>{step.id}</strong> {step.title} — this step</li>
       </ol>
     </details>
   );
@@ -84,14 +84,14 @@ export function ReadinessPanel({ step }: { step: Step }) {
   const detour = navTarget?.stepId === step.id ? navTarget : null;
   const ok = r.requirements.filter((x) => x.state === 'OK');
   return (
-    <section className={`readiness is-${r.status.toLowerCase()}`} aria-label="Готовность к шагу">
+    <section className={`readiness is-${r.status.toLowerCase()}`} aria-label="Step readiness">
       <p className="readiness-head" role="status"><span aria-hidden="true">{s.icon}</span> <strong>{s.text}</strong></p>
       {detour && (
-        // Обход: стрелка в игре ведёт за подготовкой; когда предмет окажется в сумке (или ты дойдёшь до места),
-        // плагин сам снимет цель, и стрелка вернётся к этому шагу.
+        // A detour: the in-game arrow leads for the preparation; when the item is in the bag (or you reach the place),
+        // the plugin clears the target by itself, and the arrow returns to this step.
         <p className="small readiness-detour">
-          ⚡ Подготовка: {detour.label}. Вернёмся к {step.id}, когда {detour.itemName ? `${detour.itemName} будет в сумке` : 'дойдёшь до места'}.{' '}
-          <button type="button" className="link-btn" onClick={() => void clearNav()}>Вернуться к шагу сейчас</button>
+          ⚡ Preparation: {detour.label}. We return to {step.id} when {detour.itemName ? `${detour.itemName} is in the bag` : 'you reach the place'}.{' '}
+          <button type="button" className="link-btn" onClick={() => void clearNav()}>Return to the step now</button>
         </p>
       )}
       <PrepRouteBlock step={step} />
@@ -99,7 +99,7 @@ export function ReadinessPanel({ step }: { step: Step }) {
       <Chain step={step} />
       {r.unknown.length > 0 && (
         <details className="ready-unknown">
-          <summary className="small">⚪ Не проверено: {r.unknown.length}</summary>
+          <summary className="small">⚪ Not checked: {r.unknown.length}</summary>
           <ul className="ready-list">{r.unknown.map((x) => <Row key={`${x.kind}-${x.label}`} r={x} />)}</ul>
         </details>
       )}
@@ -110,14 +110,14 @@ export function ReadinessPanel({ step }: { step: Step }) {
   );
 }
 
-/** Одна строка для «Что делать сейчас»: светофор и главное, что мешает. */
+/** One line for "What to do now": the traffic light and the main thing that gets in the way. */
 export function ReadinessLine({ step }: { step: Step }) {
   const r = useReadiness(step);
   if (r?.goalMet && !r.problems.length) {
     return (
       <p className="readiness-line is-ready">
-        🟢 Цель шага уже выполнена: {r.goalMet.map((g) => `${g.skill} ${g.have}`).join(', ')} — качать заново не нужно.{' '}
-        <a href={`#/step/${step.id}`}>Подробнее</a>
+        🟢 The step goal is already met: {r.goalMet.map((g) => `${g.skill} ${g.have}`).join(', ')} — no need to train again.{' '}
+        <a href={`#/step/${step.id}`}>More</a>
       </p>
     );
   }
@@ -128,8 +128,8 @@ export function ReadinessLine({ step }: { step: Step }) {
     <p className={`readiness-line is-${r.status.toLowerCase()}`}>
       <span aria-hidden="true">{s.icon}</span> {s.text}
       {first && <>: <strong>{first.label}</strong>{first.detail ? <span className="muted"> — {first.detail}</span> : null}</>}
-      {r.problems.length > 1 && <span className="muted"> (и ещё {r.problems.length - 1})</span>}
-      {' '}<a href={`#/step/${step.id}`}>Подробнее</a>
+      {r.problems.length > 1 && <span className="muted"> (and {r.problems.length - 1} more)</span>}
+      {' '}<a href={`#/step/${step.id}`}>More</a>
     </p>
   );
 }

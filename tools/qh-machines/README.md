@@ -1,54 +1,54 @@
-# Машины состояний Quest Helper — генераторы
+# Quest Helper state machines — generators
 
-Плагин ведёт шаг квеста так же, как [Quest Helper](https://github.com/Zoinkwiz/quest-helper): по тому, что игрок сделал (сообщения чата и диалогов,
-дневник квеста, предметы, место, переменные), а не только по месту и сумке. Порядок и условия Quest Helper (`ConditionalStep`) вынуты из его
-исходников и лежат в `src/data/questMachines.json` — это ресурс плагина (`QhMachine.java` читает его и считает).
-Здесь — скрипты, которыми файл собирается. Ничего из этого не нужно для сборки приложения и плагина: нужно, когда вышла новая версия Quest Helper
-или в маршрут добавили квест.
+The plugin follows a quest step the same way as [Quest Helper](https://github.com/Zoinkwiz/quest-helper): by what the player has done (chat and dialogue messages,
+the quest journal, items, place, variables), not only by place and bag. The order and conditions of Quest Helper (`ConditionalStep`) were extracted from its
+sources and live in `src/data/questMachines.json` — this is a plugin resource (`QhMachine.java` reads and evaluates it).
+Here are the scripts that build the file. None of this is needed to build the app or the plugin: it is needed when a new Quest Helper version comes out
+or a quest is added to the route.
 
-Лицензия Quest Helper (BSD 2-Clause) — в `THIRD_PARTY_NOTICES.md` в корне репозитория.
+The Quest Helper license (BSD 2-Clause) is in `THIRD_PARTY_NOTICES.md` in the repository root.
 
-## Что где
+## What is where
 
-| Файл | Зачем |
+| File | Purpose |
 |---|---|
-| `qhm/quests.py` | Квесты маршрута: шаг маршрута → класс Quest Helper, вид и номер переменной |
-| `qhm/fetch_qh.py` | Клонирует Quest Helper (`--depth 1`, только `src/main/java`) и раскладывает исходники квестов в `work/` |
-| `qhm/dump_consts.py` | Выгружает константы RuneLite API (`ItemID.GARLIC`, `NpcID.MORGAN`, `InterfaceID.Questjournal.TITLE`…) в `work/consts/` |
-| `qhm/jparse.py`, `qhm/interp.py` | Разбор Java-подмножества и «символьное» выполнение `loadSteps()` каждого квеста: получается дерево шагов с условиями |
-| `qhm/build.py`, `qhm/build_machines.py` | Из дерева — таблицы узлов и условий; `build_machines.py` пишет `src/data/questMachines.json` |
-| `qhm/qeval.py` | Эталонный вычислитель (Python): три значения «да / нет / не знаю», защёлки, сообщения чата |
-| `qhm/golden.py` | Случайные и подобранные наборы фактов → ответы эталона → `runelite-bridge/src/test/resources/qh-golden.json` |
-| `qhm/steps_info.py`, `qhm/export_fixture.py` | Клетка, тип и id каждого шага Quest Helper → `tests/fixtures/qh-steps.json` |
-| `qhm/reach.py`, `qhm/gaps.py`, `qhm/compare_pos.py`, `qhm/compare_hl.py` | Сверка наших данных с Quest Helper: недостижимые строки, шаги без строки, клетки, подсветка |
-| `qhm/pretty.py` | Машина квеста читаемым деревом: `python qhm/pretty.py S2-09 1` |
+| `qhm/quests.py` | The route quests: a route step → the Quest Helper class, the kind and number of the variable |
+| `qhm/fetch_qh.py` | Clones Quest Helper (`--depth 1`, only `src/main/java`) and lays the quest sources out in `work/` |
+| `qhm/dump_consts.py` | Dumps the RuneLite API constants (`ItemID.GARLIC`, `NpcID.MORGAN`, `InterfaceID.Questjournal.TITLE`…) into `work/consts/` |
+| `qhm/jparse.py`, `qhm/interp.py` | A parser of the Java subset and the "symbolic" execution of each quest's `loadSteps()`: the result is a tree of steps with conditions |
+| `qhm/build.py`, `qhm/build_machines.py` | From the tree — the tables of nodes and conditions; `build_machines.py` writes `src/data/questMachines.json` |
+| `qhm/qeval.py` | The reference evaluator (Python): three values "yes / no / unknown", latches, chat messages |
+| `qhm/golden.py` | Random and hand-picked sets of facts → the reference answers → `runelite-bridge/src/test/resources/qh-golden.json` |
+| `qhm/steps_info.py`, `qhm/export_fixture.py` | The tile, type and id of each Quest Helper step → `tests/fixtures/qh-steps.json` |
+| `qhm/reach.py`, `qhm/gaps.py`, `qhm/compare_pos.py`, `qhm/compare_hl.py` | Checking our data against Quest Helper: unreachable lines, steps without a line, tiles, highlights |
+| `qhm/pretty.py` | A quest machine as a readable tree: `python qhm/pretty.py S2-09 1` |
 
-## Как обновить после новой версии Quest Helper
+## How to update after a new Quest Helper version
 
-Нужны git, Python 3, JDK (`JAVA_HOME`, из него берётся `javap`) и собранный плагин (`runelite-bridge`, чтобы в кэше Gradle был `runelite-api`).
-Рабочая папка `work/` (в git не попадает) — или любая другая через `QH_WORK`. Пути длинные: `fetch_qh.py` включает `core.longpaths`.
+You need git, Python 3, a JDK (`JAVA_HOME`, `javap` is taken from it) and a built plugin (`runelite-bridge`, so that `runelite-api` is in the Gradle cache).
+The working folder `work/` (it does not go into git) — or any other through `QH_WORK`. The paths are long: `fetch_qh.py` turns on `core.longpaths`.
 
 ```bash
 cd tools/qh-machines
-python qhm/fetch_qh.py            # исходники Quest Helper → work/ (в work/QH_REVISION.txt — какой коммит разобран)
-python qhm/dump_consts.py         # константы RuneLite → work/consts/
-python qhm/build_machines.py      # src/data/questMachines.json (с --check только сверяет, ничего не пишет)
-python qhm/golden.py              # эталонные вектора для QhGoldenTest
+python qhm/fetch_qh.py            # the Quest Helper sources → work/ (work/QH_REVISION.txt says which commit was parsed)
+python qhm/dump_consts.py         # the RuneLite constants → work/consts/
+python qhm/build_machines.py      # src/data/questMachines.json (with --check it only compares and writes nothing)
+python qhm/golden.py              # the reference vectors for QhGoldenTest
 python qhm/steps_info.py && python qhm/export_fixture.py   # tests/fixtures/qh-steps.json
 ```
 
-Потом проверки: `npm test` (`tests/questMachines.test.ts` скажет, у каких строк `k` больше нет среди шагов Quest Helper, а у каких клетка или
-подсветка разошлись) и `cd runelite-bridge && ./gradlew test` (`QhGoldenTest`: Java и эталон отвечают одинаково на всех векторах).
+Then the checks: `npm test` (`tests/questMachines.test.ts` tells which lines' `k` is no longer among the Quest Helper steps, and which lines' tile or
+highlight diverged) and `cd runelite-bridge && ./gradlew test` (`QhGoldenTest`: Java and the reference answer the same on all vectors).
 
-Если Quest Helper переименовал или добавил шаг:
+If Quest Helper renamed or added a step:
 
-- у строк в `src/data/questStages.json` поле `k` — имя шага Quest Helper; его ставит человек (строки переведены и выверены вручную). Переименованный шаг
-  — поправить `k` у строки. Новый шаг без строки показывает `qhm/gaps.py`: решить, нужна ли ему строка в списке.
-- число недостижимых строк (`qhm/reach.py`) и шагов без строки (`qhm/gaps.py`) в `tests/questMachines.test.ts` ограничено сверху: расти оно не должно.
+- the `k` field of the lines in `src/data/questStages.json` is the name of a Quest Helper step; a person sets it (the lines were written and checked by hand). A renamed step
+  — fix `k` on the line. A new step without a line is shown by `qhm/gaps.py`: decide whether it needs a line in the list.
+- the number of unreachable lines (`qhm/reach.py`) and of steps without a line (`qhm/gaps.py`) is capped in `tests/questMachines.test.ts`: it must not grow.
 
-Что генератор не умеет (плагин в этих местах скажет «не знаю», а не «нет»): условия, которые читают клиент напрямую (стрелка на NPC, `NpcInteractingRequirement`,
-`InInstanceRequirement`, `RuneliteRequirement`, предметы на земле). `DialogRequirement` с `mustBeActive` и `allowMesbox` считается как обычный: в данных
-сейчас таких условий нет, при появлении — доработать `interp.py` (`make_dialog`) и `qeval.py`/`QhMachine.java`.
+What the generator cannot do (in these places the plugin says "unknown", not "no"): conditions that read the client directly (the arrow on an NPC, `NpcInteractingRequirement`,
+`InInstanceRequirement`, `RuneliteRequirement`, items on the ground). `DialogRequirement` with `mustBeActive` and `allowMesbox` is counted as an ordinary one: there are no such
+conditions in the data now; when they appear, extend `interp.py` (`make_dialog`) and `qeval.py`/`QhMachine.java`.
 
-`build_machines.py --check` на свежем клоне Quest Helper (коммит `75b623a`, 16.09.2026) и свежей выгрузке констант (runelite-api 1.12.39) даёт файл,
-побайтно совпадающий с лежащим в репозитории: так проверено, что генератор воспроизводим.
+`build_machines.py --check` on a fresh Quest Helper clone (commit `75b623a`, 16.09.2026) and a fresh constants dump (runelite-api 1.12.39) gives a file
+byte-for-byte equal to the one in the repository: this is how the generator was checked to be reproducible.

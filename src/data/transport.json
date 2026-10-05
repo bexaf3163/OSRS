@@ -1,27 +1,25 @@
 {
   "source": "https://oldschool.runescape.wiki/w/Teleportation",
   "checked": "2026-10-03",
-  "note": "Точки и условия — со статей вики: карточки заклинаний (Infobox Spell, Map), Chronicle, Canoe и Canoe Station. Время и клетки считаются по прямой, преграды программа не знает.",
+  "note": "Points and conditions come from the wiki articles: spell cards (Infobox Spell, Map), Chronicle, Canoe and Canoe Station. Time and tiles are counted in a straight line; the app does not know about obstacles.",
   "teleports": [
     {
       "id": "lumbridge-home",
       "kind": "home",
       "name": "Lumbridge Home Teleport",
-      "nameRu": "Домашний телепорт в Lumbridge",
       "dest": {
         "x": 3221,
         "y": 3218,
         "plane": 0,
-        "label": "замок Lumbridge"
+        "label": "Lumbridge Castle"
       },
       "cooldownMin": 30,
-      "note": "Бесплатно, без рун и уровня; читается ≈ 14 секунд, раз в 30 минут, в бою не работает."
+      "note": "Free, with no runes or level; takes about 14 seconds to cast, once every 30 minutes, does not work in combat."
     },
     {
       "id": "lumbridge-teleport",
       "kind": "spell",
       "name": "Lumbridge Teleport",
-      "nameRu": "Телепорт в Lumbridge",
       "magic": 31,
       "runes": {
         "law": 1,
@@ -32,15 +30,14 @@
         "x": 3221,
         "y": 3218,
         "plane": 0,
-        "label": "замок Lumbridge"
+        "label": "Lumbridge Castle"
       },
-      "note": "Быстро, не прерывается боем."
+      "note": "Fast, not interrupted by combat."
     },
     {
       "id": "varrock-teleport",
       "kind": "spell",
       "name": "Varrock Teleport",
-      "nameRu": "Телепорт в Varrock",
       "magic": 25,
       "runes": {
         "law": 1,
@@ -51,14 +48,13 @@
         "x": 3213,
         "y": 3424,
         "plane": 0,
-        "label": "площадь Varrock у фонтана"
+        "label": "Varrock Square by the fountain"
       }
     },
     {
       "id": "falador-teleport",
       "kind": "spell",
       "name": "Falador Teleport",
-      "nameRu": "Телепорт в Falador",
       "magic": 37,
       "runes": {
         "law": 1,
@@ -76,7 +72,6 @@
       "id": "chronicle",
       "kind": "item",
       "name": "Chronicle",
-      "nameRu": "Книга Chronicle",
       "items": [
         "Chronicle"
       ],
@@ -84,9 +79,9 @@
         "x": 3201,
         "y": 3355,
         "plane": 0,
-        "label": "у Champions' Guild"
+        "label": "by Champions' Guild"
       },
-      "note": "Правый клик по книге → Teleport; заряды — Check charges."
+      "note": "Right-click the book, Teleport; charges: Check charges."
     }
   ],
   "canoe": {
@@ -164,12 +159,12 @@
   "boats": [
     {
       "id": "karamja-boat",
-      "name": "Лодка Port Sarim → Karamja",
+      "name": "Boat: Port Sarim to Karamja",
       "from": {
         "x": 3028,
         "y": 3218,
         "plane": 0,
-        "label": "пристань Port Sarim (Captain Tobias, Seaman Lorris)"
+        "label": "the Port Sarim dock (Captain Tobias, Seaman Lorris)"
       },
       "to": {
         "x": 2950,
@@ -178,11 +173,11 @@
         "label": "Musa Point, Karamja"
       },
       "cost": 30,
-      "note": "30 gp (15 в перчатках Karamja, бесплатно с Ring of Charos(a))."
+      "note": "30 gp (15 with Karamja gloves, free with a Ring of Charos(a))."
     },
     {
       "id": "port-sarim-boat",
-      "name": "Лодка Karamja → Port Sarim",
+      "name": "Boat: Karamja to Port Sarim",
       "from": {
         "x": 2950,
         "y": 3151,
@@ -193,10 +188,10 @@
         "x": 3028,
         "y": 3218,
         "plane": 0,
-        "label": "пристань Port Sarim"
+        "label": "the Port Sarim dock"
       },
       "cost": 30,
-      "note": "30 gp; Customs officer конфискует Karamjan rum."
+      "note": "30 gp; the Customs officer confiscates Karamjan rum."
     }
   ]
 }

@@ -1,6 +1,6 @@
-// План подготовки — в игру (протокол 6). Программа считает его для карточки «Что нужно» (prepPlan.ts); этот же план
-// уходит плагину в общем снимке, и тот рисует процент готовности, «не бери сейчас», режим восстановления, совет про вес
-// и сумку рядом со своим живым списком предметов. Ничего не рисует; при протоколе ниже 6 ничего не делает.
+// The preparation plan — into the game (protocol 6). The app computes it for the "What you need" card (prepPlan.ts); the same plan
+// goes to the plugin in the shared snapshot, and it draws the readiness percent, "do not take now", the recovery mode, advice about weight
+// and the bag next to its live item list. It draws nothing; with a protocol below 6 it does nothing.
 
 import { useEffect } from 'react';
 import { useBridge } from '../bridge';
@@ -21,7 +21,7 @@ export function PrepSync() {
   const live = state === 'online' && supportsSnapshot(plugin?.protocol ?? null);
   const open = Boolean(step) && !isClosed(progress, step!.id);
 
-  // Шага в игре нет, шаг закрыт или плагин старый — плана в снимке нет.
+  // There is no step in the game, the step is closed or the plugin is old — there is no plan in the snapshot.
   useEffect(() => {
     if (live && !open) setPrepPart('plan', null);
   }, [live, open, setPrepPart]);
@@ -38,7 +38,7 @@ function StepPlan({ step }: { step: Step }) {
   const key = JSON.stringify(payload);
   useEffect(() => {
     setPrepPart('plan', payload);
-    // payload пересчитывается каждую отрисовку — следим за содержимым через key.
+    // payload is recomputed on every render — we watch the content through key.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, setPrepPart]);
   return null;

@@ -1,5 +1,5 @@
-// Прогресс: хранение, экспорт и импорт JSON, миграция старых сохранений, чистые обновления.
-// Без относительных импортов значений: модуль используют и тесты, и приложение.
+// Progress: storage, JSON export and import, migration of old saves, pure updates.
+// No relative value imports: the module is used by both the tests and the app.
 
 import type { GameMode, ManualOwned, Progress, StepStatus } from '../types/index.ts';
 
@@ -14,8 +14,8 @@ export interface Known {
 }
 
 /**
- * Старый маршрут (V1, по osrs-guide.md) → текущий. Шаг считается сделанным, если сделаны все перечисленные шаги V1.
- * Переносится только то, где условие «Готово, когда» по сути совпадает. Остальное лежит в progress.legacy.
+ * The old route (V1, from the old guide) to the current one. A step counts as done if all the listed V1 steps are done.
+ * Only what is the same in substance by the "Done when" condition is carried over. The rest lies in progress.legacy.
  */
 export const V2_FROM_V1: Record<string, string[]> = {
   'S1-01': ['S1-01'], 'S1-02': ['S1-02'], 'S1-03': ['S1-03'], 'S1-04': ['S1-04'], 'S1-05': ['S1-05'],
@@ -32,8 +32,8 @@ export const V2_FROM_V1: Record<string, string[]> = {
 };
 
 /**
- * Маршрут V2 (2.0.0) → V2.1: шаги с тем же содержанием получили новые номера — деньги до покупок,
- * требования квестов подписки по порядку. Сохранения версии 2 переименовываются этой таблицей.
+ * The V2 route (2.0.0) to V2.1: steps with the same content got new numbers: money before purchases,
+ * the members quest requirements in order. Version 2 saves are renamed by this table.
  */
 export const V3_FROM_V2: Record<string, string> = {
   'S1-06': 'S1-10', 'S1-07': 'S1-06', 'S1-08': 'S1-07', 'S1-09': 'S1-08', 'S1-10': 'S1-09',
@@ -69,7 +69,7 @@ function statusMap(v: unknown): Record<string, StepStatus> {
   return out;
 }
 
-/** V1 → V2: переносит отметки и заметки по таблице, а полную копию старого прогресса кладёт в legacy. */
+/** V1 to V2: carries over the marks and notes by the table, and puts a full copy of the old progress into legacy. */
 export function migrateV1(steps: Record<string, StepStatus>, notes: Record<string, string>) {
   const out: { steps: Record<string, StepStatus>; notes: Record<string, string> } = { steps: {}, notes: {} };
   for (const [v2, from] of Object.entries(V2_FROM_V1)) {
@@ -83,13 +83,13 @@ export function migrateV1(steps: Record<string, StepStatus>, notes: Record<strin
 
 export interface Normalized {
   progress: Progress;
-  /** Сколько записей отброшено: неизвестные шаги, навыки или неверные значения. */
+  /** How many records were dropped: unknown steps, skills or invalid values. */
   dropped: number;
-  /** Сохранение первой версии маршрута (V1) — отметки перенесены по таблице. */
+  /** A save of the route's first version (V1): the marks were carried over by the table. */
   migrated: boolean;
 }
 
-/** Приводит похожее на прогресс к текущей форме. null — если это не прогресс вовсе. */
+/** Brings something that looks like progress to the current shape. null if it is not progress at all. */
 export function normalizeProgress(raw: unknown, known: Known): Normalized | null {
   if (!isObject(raw)) return null;
   if (!isObject(raw.steps) && !isObject(raw.levels) && !isObject(raw.notes)) return null;
@@ -124,7 +124,7 @@ export function normalizeProgress(raw: unknown, known: Known): Normalized | null
     if (known.stepIds.has(id)) p.notes[id] = note;
     else if (!migrated) dropped++;
   }
-  // Заметки не строкой (или пустые) отброшены ещё при чтении — их тоже считаем.
+  // Notes that are not a string (or are empty) were dropped on reading: we count them too.
   if (!migrated && isObject(raw.notes)) dropped += Object.keys(raw.notes).length - Object.keys(notes).length;
   if (typeof raw.updatedAt === 'string' && !Number.isNaN(Date.parse(raw.updatedAt))) p.updatedAt = raw.updatedAt;
 
@@ -151,7 +151,7 @@ export function loadProgress(storage: Pick<Storage, 'getItem'> | undefined, know
     const text = storage?.getItem(key);
     if (text) return normalizeProgress(JSON.parse(text), known)?.progress ?? emptyProgress();
   } catch {
-    // Повреждённая запись или недоступное хранилище — начинаем с чистого листа.
+    // A damaged record or unavailable storage: we start from a clean slate.
   }
   return emptyProgress();
 }
@@ -191,16 +191,16 @@ export function importProgress(text: string, known: Known): ImportResult {
   try {
     raw = JSON.parse(text);
   } catch {
-    return { ok: false, error: 'Это не JSON. Выбери файл, сохранённый кнопкой «Экспорт прогресса».' };
+    return { ok: false, error: 'This is not JSON. Choose a file saved with the "Export progress" button.' };
   }
   if (isObject(raw) && 'app' in raw && raw.app !== EXPORT_APP) {
-    return { ok: false, error: 'Файл сохранён другим приложением.' };
+    return { ok: false, error: 'The file was saved by another app.' };
   }
   if (isObject(raw) && typeof raw.version === 'number' && raw.version > PROGRESS_VERSION) {
-    return { ok: false, error: 'Файл сохранён более новой версией приложения. Обнови приложение и попробуй снова.' };
+    return { ok: false, error: 'The file was saved by a newer version of the app. Update the app and try again.' };
   }
   const n = normalizeProgress(raw, known);
-  if (!n) return { ok: false, error: 'В файле нет прогресса: не найдены шаги, уровни или заметки.' };
+  if (!n) return { ok: false, error: 'There is no progress in the file: no steps, levels or notes were found.' };
   const statuses = Object.values(n.progress.steps);
   return {
     ok: true,
@@ -219,7 +219,7 @@ export function importProgress(text: string, known: Known): ImportResult {
 const touch = (p: Progress): Progress => ({ ...p, updatedAt: new Date().toISOString() });
 const without = (list: string[] | undefined, id: string) => (list ?? []).filter((x) => x !== id);
 
-/** Отметка шага. Выполненный заново шаг снимает «очки сохранены» — они снова считаются по отметке. */
+/** Marking a step. A step done again clears "points kept": they are counted from the mark again. */
 export function withStep(p: Progress, id: string, status: StepStatus | null): Progress {
   const steps = { ...p.steps };
   if (status) steps[id] = status;
@@ -233,7 +233,7 @@ export function withLevel(p: Progress, id: string, level: number): Progress {
   return touch({ ...p, levels: { ...p.levels, [id]: clampLevel(level) } });
 }
 
-/** Несколько уровней сразу (уровни из игры). Без изменений возвращает тот же объект — запись в файл не нужна. */
+/** Several levels at once (levels from the game). With no changes it returns the same object: no file write is needed. */
 export function withLevels(p: Progress, levels: Readonly<Record<string, number>>): Progress {
   const next = { ...p.levels };
   let changed = false;
@@ -255,7 +255,7 @@ export function withGameMode(p: Progress, mode: GameMode): Progress {
   return touch({ ...p, gameMode: mode });
 }
 
-/** «✕ Пропустить» у подсказки апгрейда: на этом шаге она больше не показывается. Прогресс шага не трогается. */
+/** "✕ Skip" on a gear upgrade hint: on this step it is no longer shown. The step's progress is not touched. */
 export function withUpgradeDismissed(p: Progress, stepId: string, dismissed = true): Progress {
   const set = new Set(p.upgradeDismissedForSteps ?? []);
   if (dismissed) set.add(stepId);
@@ -266,11 +266,11 @@ export function withUpgradeDismissed(p: Progress, stepId: string, dismissed = tr
   return touch(next);
 }
 
-/** Сколько предмета игрок может указать вручную: больше в игре не бывает (стопка — до 2 147 483 647). */
+/** How much of an item the player can enter manually: there is no more in the game (a stack is up to 2,147,483,647). */
 export const MAX_OWNED = 2_147_483_647;
 const OWNED_KEY = /^(id:\d{1,9}|name:.{1,200})$/;
 
-/** Ручные «уже есть» из сохранения: только правильные ключи и целые количества от 0; остальное отбрасывается. */
+/** The manual "already have" values from a save: only valid keys and whole quantities from 0; the rest is dropped. */
 export function ownedManualOf(v: unknown): Record<string, ManualOwned> {
   const out: Record<string, ManualOwned> = {};
   if (!isObject(v)) return out;
@@ -285,8 +285,8 @@ export function ownedManualOf(v: unknown): Record<string, ManualOwned> {
 }
 
 /**
- * «У меня уже есть»: сколько предмета у игрока, по его словам. null — убрать отметку (снова считать по игре).
- * Мусор (NaN, дробь, минус, бесконечность) не сохраняется — прогресс не меняется.
+ * "I already have it": how much of an item the player has, by their word. null removes the mark (count by the game again).
+ * Junk (NaN, a fraction, a minus, infinity) is not saved: the progress does not change.
  */
 export function withOwnedManual(p: Progress, key: string, count: number | null): Progress {
   const next: Record<string, ManualOwned> = { ...(p.ownedManual ?? {}) };
@@ -305,15 +305,15 @@ export function withOwnedManual(p: Progress, key: string, count: number | null):
   return touch(out);
 }
 
-/** V2 Review: шаг проверен, предупреждение скрывается, отметка остаётся. */
+/** V2 Review: the step is checked, the warning is hidden, the mark stays. */
 export function withReviewed(p: Progress, ids: string[]): Progress {
   const reviewed = [...new Set([...(p.reviewedV2Steps ?? []), ...ids])];
   return touch({ ...p, reviewedV2Steps: reviewed });
 }
 
 /**
- * V2 Review: вернуть шаги в активные. Отметка снимается, но полученные в игре очки квестов не откатываются —
- * шаг попадает в qpKept, пока его не отметят снова.
+ * V2 Review: return steps to active. The mark is removed, but quest points received in the game are not rolled back:
+ * the step goes to qpKept until it is marked again.
  */
 export function withReactivated(p: Progress, ids: string[], qpOf: (id: string) => number): Progress {
   const steps = { ...p.steps };

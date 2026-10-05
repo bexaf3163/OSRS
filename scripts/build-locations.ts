@@ -1,11 +1,11 @@
-// Собирает src/data/majorLocations.json — словарь ключевых мест для «📍» в инспекторе предметов и карте.
-// Нужна сеть. Запуск: npm run build-locations (около минуты).
+// Builds src/data/majorLocations.json — a dictionary of key places for the "📍" in the item inspector and the map.
+// It needs a network. Run: npm run build-locations (about a minute).
 //
-// Координаты не пишутся руками: для каждого места берётся статья OSRS Wiki и её карта ({{Map}} в карточке).
-// Руками здесь только список мест, их вид и синонимы — как их называют в строках магазинов и спавнов.
-// Stronghold of Security и Varrock Sewers не вошли: у их статей карта — картинка, а не {{Map}}.
-// Места ловли и руды берутся не из статьи (там карта всей области), а из строк {{ObjectLocLine}}
-// на странице самого места ловли или руды — это точки, где они стоят в игре.
+// The coordinates are not written by hand: for each place an OSRS Wiki article and its map ({{Map}} in the card) are taken.
+// By hand here are only the list of places, their kind and synonyms — how they are called in the shop and spawn lines.
+// Stronghold of Security and Varrock Sewers are left out: their articles have a picture as the map, not {{Map}}.
+// The fishing and ore places are taken not from the article (there the map shows the whole area) but from the {{ObjectLocLine}} lines
+// on the page of the fishing or ore place itself — these are the points where they stand in the game.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -17,9 +17,9 @@ const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 
 type Kind = 'city' | 'bank' | 'shop' | 'npc' | 'guild' | 'landmark' | 'dungeon' | 'transport' | 'fishing' | 'mine';
 
-/** [название, вид, синонимы, статья вики (если отличается от названия)]. */
+/** [name, kind, synonyms, the wiki article (if different from the name)]. */
 const PLACES: [string, Kind, string[], string?][] = [
-  // Города и области
+  // Towns and areas
   ['Lumbridge', 'city', []],
   ['Lumbridge Castle', 'landmark', ['Lumbridge castle']],
   ['Lumbridge Swamp', 'landmark', ['Lumbridge swamp']],
@@ -64,7 +64,7 @@ const PLACES: [string, Kind, string[], string?][] = [
   ['Draynor jail', 'landmark', ['Draynor Village jail', 'Draynor Jail']],
   ['Port Sarim jail', 'landmark', ['Port Sarim Jail']],
   ['Lighthouse', 'landmark', []],
-  // Гильдии
+  // Guilds
   ["Champions' Guild", 'guild', ['Champions Guild']],
   ["Cooks' Guild", 'guild', ['Cooking Guild', "Cook's Guild"]],
   ['Crafting Guild', 'guild', []],
@@ -75,11 +75,11 @@ const PLACES: [string, Kind, string[], string?][] = [
   ["Wizards' Guild", 'guild', ['Wizards Guild']],
   ['Woodcutting Guild', 'guild', []],
   ['Farming Guild', 'guild', []],
-  // Подземелья
+  // Dungeons
   ['Dwarven Mine', 'dungeon', ['Dwarven Mines']],
   ['Edgeville Dungeon', 'dungeon', []],
   ['Asgarnian Ice Dungeon', 'dungeon', []],
-  // Банки
+  // Banks
   ['Varrock West Bank', 'bank', []],
   ['Varrock East Bank', 'bank', []],
   ['Falador East Bank', 'bank', []],
@@ -87,7 +87,7 @@ const PLACES: [string, Kind, string[], string?][] = [
   ['Draynor Bank', 'bank', ['Draynor Village bank'], 'Draynor bank'],
   ['Al Kharid Bank', 'bank', [], 'Al Kharid bank'],
   ['Edgeville Bank', 'bank', [], 'Edgeville bank'],
-  // Магазины
+  // Shops
   ["Bob's Brilliant Axes", 'shop', ["Bob's Brilliant Axes."]],
   ['Lumbridge General Store', 'shop', []],
   ["Gerrant's Fishy Business", 'shop', ["Gerrant's Fishy Business."]],
@@ -116,7 +116,7 @@ const PLACES: [string, Kind, string[], string?][] = [
   ['Blue Moon Inn', 'shop', []],
   ['Rising Sun Inn', 'shop', []],
   ['Jolly Boar Inn', 'shop', []],
-  // NPC маршрута и продавцы
+  // Route NPCs and sellers
   ['Fishing tutor', 'npc', ['Fishing Tutor']],
   ['Father Aereck', 'npc', []],
   ['Father Urhney', 'npc', []],
@@ -135,11 +135,11 @@ const PLACES: [string, Kind, string[], string?][] = [
   ['Diango', 'npc', []],
   ['Horvik', 'npc', []],
   ['Thessalia', 'npc', []],
-  // Транспорт
+  // Transport
   ['Barfy Bill', 'transport', ['Lumbridge canoe station']],
   ['Tarquin', 'transport', ["Champions' Guild canoe station"]],
   ['Sigurd', 'transport', ['Barbarian Village canoe station']],
-  // Шахты со своей статьёй и картой
+  // Mines with their own article and map
   ['South-east Varrock mine', 'mine', ['Varrock east mine', 'Varrock East Mine']],
   ['South-west Varrock mine', 'mine', ['Varrock west mine', 'Varrock West Mine']],
   ['Al Kharid mine', 'mine', ['Al Kharid Mine']],
@@ -147,7 +147,7 @@ const PLACES: [string, Kind, string[], string?][] = [
   ['Barbarian Village mine', 'mine', []],
 ];
 
-/** [название, вид, синонимы, страница места ловли или руды, место в её {{ObjectLocLine}}]. */
+/** [name, kind, synonyms, the fishing or ore place page, the place in its {{ObjectLocLine}}]. */
 const SPOTS: [string, Kind, string[], string, string][] = [
   ['Lumbridge Swamp fishing spots', 'fishing', ['Lumbridge Swamp by Fishing tutor', 'Lumbridge Swamp fishing'], 'Fishing spot (small net, bait)', 'Lumbridge Swamp'],
   ['Draynor Village fishing spots', 'fishing', ['Draynor fishing', 'Draynor Village fishing'], 'Fishing spot (small net, bait)', 'Draynor Village'],
@@ -175,7 +175,7 @@ for (const [name, kind, aliases, page] of PLACES) {
   const article = await fetchWikitext(fetchFn, page ?? name).catch(() => null);
   const point = article ? articleMapPoint(article.text) : null;
   if (!article || !point) {
-    failed.push(`${name}${article ? ' (нет {{Map}})' : ' (нет статьи)'}`);
+    failed.push(`${name}${article ? ' (no {{Map}})' : ' (no article)'}`);
   } else {
     out[name] = { x: point.x, y: point.y, plane: point.plane, label: name, kind, ...(aliases.length ? { aliases } : {}), page: article.title };
   }
@@ -190,20 +190,20 @@ for (const [name, kind, aliases, page, location] of SPOTS) {
   }
   const article = pages.get(page);
   const point = article ? locLinePoint(article.text, location) : null;
-  if (!article || !point) failed.push(`${name}${article ? ` (нет «${location}» в ObjectLocLine)` : ' (нет статьи)'}`);
+  if (!article || !point) failed.push(`${name}${article ? ` (no "${location}" in ObjectLocLine)` : ' (no article)'}`);
   else out[name] = { x: point.x, y: point.y, plane: point.plane, label: name, kind, ...(aliases.length ? { aliases } : {}), page: article.title };
 }
 
-// Прежние записи не пропадают из-за сбоя сети — остаются, пока их статья снова не ответит.
+// The earlier entries do not vanish because of a network failure — they stay until their article answers again.
 let previous: Record<string, Entry> = {};
 try {
   previous = (JSON.parse(readFileSync(OUT, 'utf8')) as { locations: Record<string, Entry> }).locations;
 } catch {
-  // Первый запуск.
+  // The first run.
 }
 for (const name of failed.map((f) => f.replace(/ \(.*\)$/, ''))) if (previous[name]) out[name] = previous[name];
 
 const date = new Date().toISOString().slice(0, 10);
-writeFileSync(OUT, JSON.stringify({ source: 'OSRS Wiki, шаблон {{Map}} в статье', updated: date, locations: out }, null, 2) + '\n');
-console.log(`Мест: ${Object.keys(out).length} из ${PLACES.length + SPOTS.length}`);
-if (failed.length) console.log(`Без координат: ${failed.join('; ')}`);
+writeFileSync(OUT, JSON.stringify({ source: 'OSRS Wiki, the {{Map}} template in the article', updated: date, locations: out }, null, 2) + '\n');
+console.log(`Places: ${Object.keys(out).length} of ${PLACES.length + SPOTS.length}`);
+if (failed.length) console.log(`Without coordinates: ${failed.join('; ')}`);

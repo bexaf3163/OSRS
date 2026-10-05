@@ -1,31 +1,31 @@
-// Цели по уровням из названия шага: «Рыбалка до 20 и готовка до 15» → fishing 20, cooking 15.
-// Без относительных импортов: файл используют и приложение, и скрипты проверки в Node.
+// Level targets from a step title: "Fishing to 20 and Cooking to 15" → fishing 20, cooking 15.
+// No relative imports: the file is used by both the app and the check scripts in Node.
 
 import type { Target } from '../types/index.ts';
 
-/** Корни слов в названиях шагов → id уровней навыков. */
+/** Word stems in step titles → skill level ids. */
 const TITLE_SKILL_WORDS: [RegExp, string[]][] = [
-  [/^бой$/, ['attack', 'strength', 'defence']],
-  [/^рыбалк/, ['fishing']],
-  [/^готовк/, ['cooking']],
-  [/^рубк/, ['woodcutting']],
-  [/^костр/, ['firemaking']],
-  [/^добыч/, ['mining']],
-  [/^кузнечн/, ['smithing']],
-  [/^маги/, ['magic']],
-  [/^молитв/, ['prayer']],
-  [/^ремесл/, ['crafting']],
-  [/^создани/, ['runecraft']],
-  [/^ловкост/, ['agility']],
-  [/^стрельб/, ['ranged']],
-  [/^истреблен/, ['slayer']],
+  [/^combat$/, ['attack', 'strength', 'defence']],
+  [/^fishing$/, ['fishing']],
+  [/^cooking$/, ['cooking']],
+  [/^woodcutting$/, ['woodcutting']],
+  [/^firemaking$/, ['firemaking']],
+  [/^mining$/, ['mining']],
+  [/^smithing$/, ['smithing']],
+  [/^magic$/, ['magic']],
+  [/^prayer$/, ['prayer']],
+  [/^crafting$/, ['crafting']],
+  [/^runecraft(?:ing)?$/, ['runecraft']],
+  [/^agility$/, ['agility']],
+  [/^ranged$/, ['ranged']],
+  [/^slayer$/, ['slayer']],
 ];
 
-/** Слова идут по порядку; число после «до» достаётся всем навыкам, названным перед ним. */
+/** The words go in order; the number after "to" goes to all the skills named before it. */
 export function titleTargets(title: string): Target[] {
   const out: Target[] = [];
   let pending: string[] = [];
-  for (const m of title.matchAll(/до (\d+)|(\p{L}+)/gu)) {
+  for (const m of title.matchAll(/\bto (\d+)|(\p{L}+)/gu)) {
     if (m[1]) {
       for (const skill of pending) if (!out.some((t) => t.skill === skill)) out.push({ skill, level: Number(m[1]) });
       pending = [];

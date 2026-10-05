@@ -1,4 +1,4 @@
-// Маршруты на hash: работают на GitHub Pages и из любой папки без настройки сервера.
+// Hash routes: they work on GitHub Pages and from any folder without server setup.
 
 import { useEffect, useState } from 'react';
 
@@ -6,10 +6,10 @@ export type Page = 'path' | 'skills' | 'goals' | 'quests' | 'reference' | 'setti
 
 export interface Route {
   page: Page;
-  /** Код навыка, раздела справки или шага (#/step/S3-05 открывает Путь с раскрытым шагом). */
+  /** The code of a skill, a reference section or a step (#/step/S3-05 opens Path with the step expanded). */
   param?: string;
   step?: string;
-  /** Растёт с каждым переходом — чтобы повторный клик по той же ссылке снова прокрутил к шагу. */
+  /** Grows with every navigation, so that a repeated click on the same link scrolls to the step again. */
   key: number;
 }
 

@@ -1,4 +1,4 @@
-// Цели по этапам для уровней навыков.
+// Goals by stage for skill levels.
 
 import type { GoalsData, GoalValue } from '../types';
 
@@ -11,5 +11,5 @@ export function isReached(level: number, goal: GoalValue): boolean {
 }
 
 export function formatXp(n: number): string {
-  return n.toLocaleString('ru-RU');
+  return n.toLocaleString('en-US');
 }

@@ -1,16 +1,16 @@
-// Цены для оценки добычи: свежие с биржи (OSRS Wiki Prices), а пока их нет — из базы предметов проекта.
-// Оценка добычи пересчитывается по текущим ценам при каждом показе, а не фиксируется в момент находки:
-// цена, которая была час назад, — не цена сейчас.
+// Prices for estimating loot: fresh ones from the exchange (OSRS Wiki Prices), and until they arrive from the project's item database.
+// The loot estimate is recounted at the current prices on every display and not fixed at the moment of the find:
+// a price that was an hour ago is not the price now.
 
 import { nameKey } from './checklist';
 import type { LedgerEntry } from './ledger';
 
 export interface PriceBook {
-  /** Цена продажи за штуку по названию; нет цены — undefined. */
+  /** The sale price per piece by name; no price means undefined. */
   priceOf: (name: string) => number | undefined;
-  /** live — цены биржи, baked — из базы проекта (биржа недоступна). */
+  /** live means the exchange prices, baked means from the project's database (the exchange is unavailable). */
   source: 'live' | 'baked';
-  /** Когда получены свежие цены (мс); для baked — null. */
+  /** When the fresh prices were received (ms); null for baked. */
   at: number | null;
 }
 
@@ -20,8 +20,8 @@ export interface LivePrices {
 }
 
 /**
- * Свежие цены по названию: идентификатор → название берётся из справочника биржи. Предмета нет в свежих ценах
- * (не торгуется или редкий) — берём цену из базы проекта, если она там есть. Сети нет вовсе — только база.
+ * Fresh prices by name: the id to name mapping is taken from the exchange's catalogue. If an item is not among the fresh prices
+ * (untradeable or rare), take the price from the project's database if it has one. With no network at all, only the database.
  */
 export function buildPriceBook(live: LivePrices | null, mapping: Map<number, { name: string }> | null, baked: Map<string, number>): PriceBook {
   if (!live || !mapping || live.prices.size === 0) {
@@ -30,7 +30,7 @@ export function buildPriceBook(live: LivePrices | null, mapping: Map<number, { n
   const byName = new Map<string, number>();
   for (const [id, p] of live.prices) {
     const m = mapping.get(id);
-    // Одно название у нескольких предметов (версии, банкноты) — берём меньшую цену: оценка не должна завышаться.
+    // One name for several items (versions, banknotes): take the lower price: the estimate must not be inflated.
     if (m && p.sellPrice > 0) {
       const k = nameKey(m.name);
       const prev = byName.get(k);
@@ -40,7 +40,7 @@ export function buildPriceBook(live: LivePrices | null, mapping: Map<number, { n
   return { priceOf: (name) => byName.get(nameKey(name)) ?? baked.get(nameKey(name)), source: 'live', at: live.at };
 }
 
-/** Записи журнала с оценкой по текущим ценам; монеты и записи без цены остаются как были. */
+/** Journal records with an estimate at current prices; coins and records without a price stay as they were. */
 export function reprice(entries: LedgerEntry[], book: PriceBook): LedgerEntry[] {
   return entries.map((e) => {
     if (e.name === 'Coins') return e;
@@ -54,13 +54,13 @@ export function reprice(entries: LedgerEntry[], book: PriceBook): LedgerEntry[] 
   });
 }
 
-/** «по ценам биржи на 20:15» / «по ценам из базы — биржа недоступна». */
+/** "at exchange prices from 20:15" / "at database prices: the exchange is unavailable". */
 export function priceNote(book: PriceBook): string {
   if (book.source === 'live' && book.at !== null) {
     const d = new Date(book.at);
     const hh = String(d.getHours()).padStart(2, '0');
     const mm = String(d.getMinutes()).padStart(2, '0');
-    return `по ценам биржи на ${hh}:${mm}`;
+    return `at exchange prices from ${hh}:${mm}`;
   }
-  return 'по ценам из базы — биржа недоступна';
+  return 'at database prices: the exchange is unavailable';
 }

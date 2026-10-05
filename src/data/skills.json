@@ -1,52 +1,52 @@
 [
   {
     "id": "WC",
-    "title": "Рубка (Woodcutting)",
-    "name": "Рубка",
+    "title": "Woodcutting",
+    "name": "Woodcutting",
     "levelSkills": [
       "woodcutting"
     ],
     "intro": [
       {
         "t": "p",
-        "text": "Самый спокойный навык: кликнул по дереву, и персонаж рубит, пока не заполнится инвентарь. Хорош для фона."
+        "text": "The calmest skill: click a tree and the character chops until the inventory is full. Good for the background."
       }
     ],
     "sections": [
       {
-        "title": "Деревья",
+        "title": "Trees",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Уровень",
-              "Дерево",
-              "Опыт за бревно"
+              "Level",
+              "Tree",
+              "XP per log"
             ],
             "rows": [
               [
                 "1",
-                "Обычное (Tree)",
+                "Regular (Tree)",
                 "25"
               ],
               [
                 "15",
-                "Дуб (Oak)",
+                "Oak",
                 "37,5"
               ],
               [
                 "30",
-                "Ива (Willow)",
+                "Willow",
                 "67,5"
               ],
               [
                 "45",
-                "Клён (Maple)",
+                "Maple",
                 "100"
               ],
               [
                 "60",
-                "Тис (Yew)",
+                "Yew",
                 "175"
               ]
             ]
@@ -54,97 +54,97 @@
         ]
       },
       {
-        "title": "План прокачки",
+        "title": "Training plan",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Код",
-              "Уровни",
-              "Что рубить",
-              "Где",
-              "Сколько брёвен"
+              "Code",
+              "Levels",
+              "What to chop",
+              "Where",
+              "How many logs"
             ],
             "rows": [
               [
                 "WC-1",
                 "1–15",
-                "Обычные деревья",
-                "К западу от замка Лумбридж, к югу от Grand Exchange",
+                "Regular trees",
+                "West of Lumbridge Castle, south of the Grand Exchange",
                 "~100"
               ],
               [
                 "WC-2",
                 "15–30",
-                "Дубы",
-                "У банка Draynor, к юго-западу от западного банка Варрока, за общим магазином Лумбриджа",
+                "Oaks",
+                "By the Draynor bank, south-west of the west Varrock bank, behind the Lumbridge General Store",
                 "~290"
               ],
               [
                 "WC-3",
                 "30–45",
-                "Ивы",
-                "К юго-западу от банка Draynor; спокойнее — к востоку от паба Rusty Anchor в Port Sarim (ящик для сдачи на причале)",
+                "Willows",
+                "South-west of the Draynor bank; calmer: east of the Rusty Anchor pub in Port Sarim (a deposit box on the dock)",
                 "~710"
               ],
               [
                 "WC-4",
                 "45–60",
-                "Ивы или клёны",
-                "Ивы — там же; клёны — только в Corsair Cove Resource Area после Dragon Slayer I",
-                "~3 100 ив или ~2 100 клёнов"
+                "Willows or maples",
+                "Willows in the same place; maples only in the Corsair Cove Resource Area after Dragon Slayer I",
+                "~3,100 willows or ~2,100 maples"
               ],
               [
                 "WC-5",
                 "60+",
-                "Тисы (ради денег)",
-                "К югу от банка Эдгвилля, к северу от дворца Варрока, к югу от восточного банка Фаладора",
+                "Yews (for money)",
+                "South of the Edgeville bank, north of Varrock Palace, south of the east Falador bank",
                 "—"
               ]
             ]
           },
           {
             "t": "p",
-            "text": "Скорость на ивах: примерно 20–28 тыс. опыта в час на 30 уровне и до 35 тыс. на 40 с рунным топором."
+            "text": "Speed on willows: roughly 20–28 thousand XP an hour at level 30 and up to 35 thousand at 40 with a rune axe."
           }
         ]
       },
       {
-        "title": "Полезно знать",
+        "title": "Good to know",
         "blocks": [
           {
             "t": "ul",
             "items": [
               {
-                "text": "**Рубка в компании.** С обновлением Forestry за каждого игрока, рубящего то же дерево, даётся скрытый бонус +1 к уровню (до +10), а деревья исчезают по таймеру, не быстрее. Поэтому на популярных ивах в Draynor рубить выгоднее."
+                "text": "**Chopping in company.** Since the Forestry update every player chopping the same tree gives a hidden +1 level bonus (up to +10), and trees disappear on a timer, no faster. So on the busy Draynor willows chopping pays better."
               },
               {
-                "text": "**Лесные события.** С набором лесника (Forestry kit) на бесплатных мирах случаются события Struggling sapling, Rising roots и Friendly ent. Они дают больше опыта и кору для ценной рукояти топора."
+                "text": "**Forestry events.** With a Forestry kit on free worlds the events Struggling sapling, Rising roots and Friendly ent happen. They give more XP and bark for a valuable axe handle."
               },
               {
-                "text": "**Опасность у ив Draynor:** рядом бродят тёмные маги (уровень 7), которые могут напасть на совсем слабого персонажа."
+                "text": "**Danger at the Draynor willows:** dark wizards (level 7) wander nearby and can attack a very weak character."
               }
             ]
           }
         ]
       },
       {
-        "title": "Частые вопросы",
+        "title": "Frequently asked questions",
         "blocks": [
           {
             "t": "ul",
             "items": [
               {
-                "text": "**Инвентарь полный?** Для опыта — выбрасывай брёвна (shift + клик), для денег — банкуй. У ив Draynor банк рядом, так что разницы почти нет."
+                "text": "**Inventory full?** For XP drop the logs (shift + click), for money bank them. The Draynor willows have a bank next to them, so there is almost no difference."
               },
               {
-                "text": "**Персонаж перестал рубить.** Дерево временно исчезло, переходи к соседнему."
+                "text": "**The character stopped chopping.** The tree has disappeared for a while; move to a neighbouring one."
               },
               {
-                "text": "**Где взять топор лучше?** Grand Exchange или магазин топоров Bob's Brilliant Axes в Лумбридже (до стального)."
+                "text": "**Where do I get a better axe?** The Grand Exchange or the axe shop Bob's Brilliant Axes in Lumbridge (up to steel)."
               },
               {
-                "text": "**С подпиской:** тиковые методы, секвойи, волшебные деревья и гильдия лесорубов."
+                "text": "**With membership:** tick methods, redwoods, magic trees and the Woodcutting Guild."
               }
             ]
           }
@@ -153,11 +153,11 @@
     ],
     "plan": {
       "head": [
-        "Код",
-        "Уровни",
-        "Что рубить",
-        "Где",
-        "Сколько брёвен"
+        "Code",
+        "Levels",
+        "What to chop",
+        "Where",
+        "How many logs"
       ],
       "ranges": [
         {
@@ -165,14 +165,14 @@
           "from": 1,
           "to": 15,
           "levels": "1–15",
-          "what": "Обычные деревья",
-          "where": "К западу от замка Лумбридж, к югу от Grand Exchange",
+          "what": "Regular trees",
+          "where": "West of Lumbridge Castle, south of the Grand Exchange",
           "amount": "~100",
           "cells": [
             "WC-1",
             "1–15",
-            "Обычные деревья",
-            "К западу от замка Лумбридж, к югу от Grand Exchange",
+            "Regular trees",
+            "West of Lumbridge Castle, south of the Grand Exchange",
             "~100"
           ]
         },
@@ -181,14 +181,14 @@
           "from": 15,
           "to": 30,
           "levels": "15–30",
-          "what": "Дубы",
-          "where": "У банка Draynor, к юго-западу от западного банка Варрока, за общим магазином Лумбриджа",
+          "what": "Oaks",
+          "where": "By the Draynor bank, south-west of the west Varrock bank, behind the Lumbridge General Store",
           "amount": "~290",
           "cells": [
             "WC-2",
             "15–30",
-            "Дубы",
-            "У банка Draynor, к юго-западу от западного банка Варрока, за общим магазином Лумбриджа",
+            "Oaks",
+            "By the Draynor bank, south-west of the west Varrock bank, behind the Lumbridge General Store",
             "~290"
           ]
         },
@@ -197,14 +197,14 @@
           "from": 30,
           "to": 45,
           "levels": "30–45",
-          "what": "Ивы",
-          "where": "К юго-западу от банка Draynor; спокойнее — к востоку от паба Rusty Anchor в Port Sarim (ящик для сдачи на причале)",
+          "what": "Willows",
+          "where": "South-west of the Draynor bank; calmer: east of the Rusty Anchor pub in Port Sarim (a deposit box on the dock)",
           "amount": "~710",
           "cells": [
             "WC-3",
             "30–45",
-            "Ивы",
-            "К юго-западу от банка Draynor; спокойнее — к востоку от паба Rusty Anchor в Port Sarim (ящик для сдачи на причале)",
+            "Willows",
+            "South-west of the Draynor bank; calmer: east of the Rusty Anchor pub in Port Sarim (a deposit box on the dock)",
             "~710"
           ]
         },
@@ -213,15 +213,15 @@
           "from": 45,
           "to": 60,
           "levels": "45–60",
-          "what": "Ивы или клёны",
-          "where": "Ивы — там же; клёны — только в Corsair Cove Resource Area после Dragon Slayer I",
-          "amount": "~3 100 ив или ~2 100 клёнов",
+          "what": "Willows or maples",
+          "where": "Willows in the same place; maples only in the Corsair Cove Resource Area after Dragon Slayer I",
+          "amount": "~3,100 willows or ~2,100 maples",
           "cells": [
             "WC-4",
             "45–60",
-            "Ивы или клёны",
-            "Ивы — там же; клёны — только в Corsair Cove Resource Area после Dragon Slayer I",
-            "~3 100 ив или ~2 100 клёнов"
+            "Willows or maples",
+            "Willows in the same place; maples only in the Corsair Cove Resource Area after Dragon Slayer I",
+            "~3,100 willows or ~2,100 maples"
           ]
         },
         {
@@ -229,13 +229,13 @@
           "from": 60,
           "to": null,
           "levels": "60+",
-          "what": "Тисы (ради денег)",
-          "where": "К югу от банка Эдгвилля, к северу от дворца Варрока, к югу от восточного банка Фаладора",
+          "what": "Yews (for money)",
+          "where": "South of the Edgeville bank, north of Varrock Palace, south of the east Falador bank",
           "cells": [
             "WC-5",
             "60+",
-            "Тисы (ради денег)",
-            "К югу от банка Эдгвилля, к северу от дворца Варрока, к югу от восточного банка Фаладора",
+            "Yews (for money)",
+            "South of the Edgeville bank, north of Varrock Palace, south of the east Falador bank",
             "—"
           ]
         }
@@ -247,63 +247,63 @@
   },
   {
     "id": "FM",
-    "title": "Розжиг костров (Firemaking)",
-    "name": "Розжиг костров",
+    "title": "Firemaking",
+    "name": "Firemaking",
     "levelSkills": [
       "firemaking"
     ],
     "intro": [
       {
         "t": "p",
-        "text": "Костры качаются быстро и без риска: нужны огниво (Tinderbox) и брёвна, свои или купленные."
+        "text": "Fires are trained quickly and without risk: you need a tinderbox (Tinderbox) and logs, your own or bought."
       }
     ],
     "sections": [
       {
-        "title": "План прокачки",
+        "title": "Training plan",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Код",
-              "Уровни",
-              "Брёвна",
-              "Опыт за штуку",
-              "Сколько штук"
+              "Code",
+              "Levels",
+              "Logs",
+              "XP per log",
+              "How many"
             ],
             "rows": [
               [
                 "FM-1",
                 "1–15",
-                "Обычные (Logs)",
+                "Regular (Logs)",
                 "40",
                 "~60"
               ],
               [
                 "FM-2",
                 "15–30",
-                "Дубовые (Oak logs)",
+                "Oak (Oak logs)",
                 "60",
                 "~185"
               ],
               [
                 "FM-3",
                 "30–45",
-                "Ивовые (Willow logs)",
+                "Willow (Willow logs)",
                 "90",
                 "~535"
               ],
               [
                 "FM-4",
                 "45–60",
-                "Кленовые (Maple logs) — покупать на GE",
+                "Maple (Maple logs): buy on the GE",
                 "135",
                 "~1 570"
               ],
               [
                 "FM-5",
                 "60+",
-                "Тисовые (Yew logs)",
+                "Yew (Yew logs)",
                 "202,5",
                 "—"
               ]
@@ -311,50 +311,50 @@
           },
           {
             "t": "p",
-            "text": "До 45 проще всего жечь свои брёвна прямо во время рубки. С 45 выгоднее рубить ради опыта рубки, а кленовые брёвна для костров докупать."
+            "text": "Up to 45 it is easiest to burn your own logs right while chopping. From 45 it pays more to chop for Woodcutting XP and buy maple logs for fires."
           }
         ]
       },
       {
-        "title": "Как жечь быстро",
+        "title": "How to burn fast",
         "blocks": [
           {
             "t": "ol",
             "items": [
               {
-                "text": "Возьми из банка огниво и 27 брёвен."
+                "text": "Take a tinderbox and 27 logs from the bank."
               },
               {
-                "text": "Встань в начало пустой прямой линии — удобнее всего в рядах у Grand Exchange в Варроке, банк рядом."
+                "text": "Stand at the start of an empty straight line: the rows by the Grand Exchange in Varrock are the most convenient, with a bank next to them."
               },
               {
-                "text": "Используй огниво на бревне. После костра персонаж сам делает шаг на запад, и следующий костёр встаёт в линию."
+                "text": "Use the tinderbox on a log. After the fire the character steps west by itself, and the next fire lines up."
               },
               {
-                "text": "Брёвна кончились — возвращайся в банк и начинай новую линию."
+                "text": "When the logs run out go back to the bank and start a new line."
               }
             ]
           },
           {
             "t": "p",
-            "text": "Спокойный вариант: во время рубки разводи костёр лесника (Forester's campfire) рядом с деревом и подкладывай брёвна. Опыта меньше, но почти без кликов."
+            "text": "A calm option: while chopping, light a Forester's campfire by the tree and feed it logs. Less XP, but almost no clicks."
           }
         ]
       },
       {
-        "title": "Частые вопросы",
+        "title": "Frequently asked questions",
         "blocks": [
           {
             "t": "ul",
             "items": [
               {
-                "text": "**«You can't light a fire here».** На этой клетке уже горит костёр или разжигать нельзя. Отойди на соседнюю пустую."
+                "text": "**\"You can't light a fire here\".** There is already a fire on this tile or lighting one is not allowed. Step to a neighbouring empty tile."
               },
               {
-                "text": "**Где огниво?** Общий магазин Лумбриджа."
+                "text": "**Where is the tinderbox?** The Lumbridge General Store."
               },
               {
-                "text": "**Зачем костры?** На них можно готовить где угодно. С подпиской с 50 уровня открывается мини-игра Wintertodt."
+                "text": "**Why fires?** You can cook on them anywhere. With membership the Wintertodt minigame opens at level 50."
               }
             ]
           }
@@ -363,11 +363,11 @@
     ],
     "plan": {
       "head": [
-        "Код",
-        "Уровни",
-        "Брёвна",
-        "Опыт за штуку",
-        "Сколько штук"
+        "Code",
+        "Levels",
+        "Logs",
+        "XP per log",
+        "How many"
       ],
       "ranges": [
         {
@@ -375,12 +375,12 @@
           "from": 1,
           "to": 15,
           "levels": "1–15",
-          "what": "Обычные (Logs)",
+          "what": "Regular (Logs)",
           "amount": "~60",
           "cells": [
             "FM-1",
             "1–15",
-            "Обычные (Logs)",
+            "Regular (Logs)",
             "40",
             "~60"
           ]
@@ -390,12 +390,12 @@
           "from": 15,
           "to": 30,
           "levels": "15–30",
-          "what": "Дубовые (Oak logs)",
+          "what": "Oak (Oak logs)",
           "amount": "~185",
           "cells": [
             "FM-2",
             "15–30",
-            "Дубовые (Oak logs)",
+            "Oak (Oak logs)",
             "60",
             "~185"
           ]
@@ -405,12 +405,12 @@
           "from": 30,
           "to": 45,
           "levels": "30–45",
-          "what": "Ивовые (Willow logs)",
+          "what": "Willow (Willow logs)",
           "amount": "~535",
           "cells": [
             "FM-3",
             "30–45",
-            "Ивовые (Willow logs)",
+            "Willow (Willow logs)",
             "90",
             "~535"
           ]
@@ -420,12 +420,12 @@
           "from": 45,
           "to": 60,
           "levels": "45–60",
-          "what": "Кленовые (Maple logs) — покупать на GE",
+          "what": "Maple (Maple logs): buy on the GE",
           "amount": "~1 570",
           "cells": [
             "FM-4",
             "45–60",
-            "Кленовые (Maple logs) — покупать на GE",
+            "Maple (Maple logs): buy on the GE",
             "135",
             "~1 570"
           ]
@@ -435,11 +435,11 @@
           "from": 60,
           "to": null,
           "levels": "60+",
-          "what": "Тисовые (Yew logs)",
+          "what": "Yew (Yew logs)",
           "cells": [
             "FM-5",
             "60+",
-            "Тисовые (Yew logs)",
+            "Yew (Yew logs)",
             "202,5",
             "—"
           ]
@@ -452,132 +452,132 @@
   },
   {
     "id": "FI",
-    "title": "Рыбалка (Fishing)",
-    "name": "Рыбалка",
+    "title": "Fishing",
+    "name": "Fishing",
     "levelSkills": [
       "fishing"
     ],
     "intro": [
       {
         "t": "p",
-        "text": "Рыбалка кормит весь бой: пойманную рыбу готовишь и носишь как еду. Места ловли отмечены голубым значком рыбы, плагин Fishing их подсвечивает."
+        "text": "Fishing feeds all your combat: you cook the fish you catch and carry it as food. Fishing spots are marked with a light-blue fish icon, and the Fishing plugin highlights them."
       }
     ],
     "sections": [
       {
-        "title": "Рыба",
+        "title": "Fish",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Уровень",
-              "Рыба",
-              "Опыт",
-              "Снасть"
+              "Level",
+              "Fish",
+              "XP",
+              "Tackle"
             ],
             "rows": [
               [
                 "1",
-                "Креветки (Shrimps)",
+                "Shrimps",
                 "10",
-                "Маленькая сеть (Small fishing net)"
+                "Small fishing net"
               ],
               [
                 "5",
-                "Сардины (Sardine)",
+                "Sardine",
                 "20",
-                "Удочка (Fishing rod) + наживка (Fishing bait)"
+                "Fishing rod + Fishing bait"
               ],
               [
                 "10",
-                "Сельдь (Herring)",
+                "Herring",
                 "30",
-                "Удочка + наживка"
+                "Rod + bait"
               ],
               [
                 "15",
-                "Анчоусы (Anchovies)",
+                "Anchovies",
                 "40",
-                "Маленькая сеть"
+                "Small net"
               ],
               [
                 "20",
-                "Форель (Trout)",
+                "Trout",
                 "50",
-                "Удочка нахлыстом (Fly fishing rod) + перья (Feather)"
+                "Fly fishing rod + Feather"
               ],
               [
                 "25",
-                "Щука (Pike)",
+                "Pike",
                 "60",
-                "Удочка + наживка"
+                "Rod + bait"
               ],
               [
                 "30",
-                "Лосось (Salmon)",
+                "Salmon",
                 "70",
-                "Удочка нахлыстом + перья"
+                "Fly fishing rod + feathers"
               ],
               [
                 "35",
-                "Тунец (Tuna)",
+                "Tuna",
                 "80",
-                "Гарпун (Harpoon)"
+                "Harpoon"
               ],
               [
                 "40",
-                "Омар (Lobster)",
+                "Lobster",
                 "90",
-                "Ловушка (Lobster pot)"
+                "Lobster pot"
               ],
               [
                 "50",
-                "Рыба-меч (Swordfish)",
+                "Swordfish",
                 "100",
-                "Гарпун"
+                "Harpoon"
               ]
             ]
           }
         ]
       },
       {
-        "title": "План прокачки",
+        "title": "Training plan",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Код",
-              "Уровни",
-              "Что ловить",
-              "Где",
-              "Сколько рыбы"
+              "Code",
+              "Levels",
+              "What to catch",
+              "Where",
+              "How much fish"
             ],
             "rows": [
               [
                 "FI-1",
                 "1–20",
-                "Креветки, с 15 анчоусы",
-                "Болото к югу от Лумбриджа, берег у Draynor",
+                "Shrimps, anchovies from 15",
+                "The swamp south of Lumbridge, the shore by Draynor",
                 "~350"
               ],
               [
                 "FI-2",
                 "20–40",
-                "Форель, с 30 лосось",
-                "Река в Barbarian Village или у Лумбриджа",
+                "Trout, salmon from 30",
+                "The river at Barbarian Village or by Lumbridge",
                 "~550"
               ],
               [
                 "FI-3",
                 "40–50",
-                "Омары (деньги) или дальше форель и лосось (опыт)",
+                "Lobsters (money) or trout and salmon further on (XP)",
                 "Karamja, Musa Point",
-                "~710 омаров"
+                "~710 lobsters"
               ],
               [
                 "FI-4",
                 "50+",
-                "Рыба-меч и тунец",
+                "Swordfish and tuna",
                 "Karamja, Musa Point",
                 "—"
               ]
@@ -585,36 +585,36 @@
           },
           {
             "t": "p",
-            "text": "Лосось нахлыстом — самый быстрый опыт в бесплатной версии, при этом почти AFK. Омары и рыба-меч медленнее, зато это лучшая еда и хорошие деньги."
+            "text": "Fly fishing salmon is the fastest XP in the free version, and almost AFK. Lobsters and swordfish are slower, but they are the best food and good money."
           }
         ]
       },
       {
-        "title": "Как попасть на Karamja",
+        "title": "How to get to Karamja",
         "blocks": [
           {
             "t": "p",
-            "text": "В Port Sarim на причале поговори с моряками и заплати 30 монет. Обратно — у таможенника (Customs officer) на Karamja, тоже 30 монет. Банка на острове нет: улов сдают в ящик для сдачи (Deposit box) на причале Port Sarim. Что отвечать морякам и таможеннику — в разделе [Телепорты, каноэ и лодки](#/reference/transport)."
+            "text": "On the Port Sarim dock talk to the sailors and pay 30 coins. To come back, use the Customs officer on Karamja, also 30 coins. There is no bank on the island: the catch is put in the deposit box on the Port Sarim dock. What to answer the sailors and the customs officer is in the section [Teleports, canoes and boats](#/reference/transport)."
           }
         ]
       },
       {
-        "title": "Частые вопросы",
+        "title": "Frequently asked questions",
         "blocks": [
           {
             "t": "ul",
             "items": [
               {
-                "text": "**Где снасти?** Рыболовный магазин Gerrant's Fishy Business в Port Sarim: сети, удочки, перья, наживка, ловушки, гарпуны."
+                "text": "**Where do I get tackle?** The fishing shop Gerrant's Fishy Business in Port Sarim: nets, rods, feathers, bait, pots, harpoons."
               },
               {
-                "text": "**Точка ловли пропала.** Точки иногда перемещаются, ищи значок рыбы рядом."
+                "text": "**The fishing spot is gone.** Spots sometimes move; look for the fish icon nearby."
               },
               {
-                "text": "**Выбрасывать или готовить?** Для опыта рыбалки — выбрасывай. Для еды — готовь сам, это заодно качает готовку."
+                "text": "**Drop or cook?** For Fishing XP drop it. For food cook it yourself, which trains Cooking as well."
               },
               {
-                "text": "**С подпиской:** варварская рыбалка, акулы, гильдия рыбаков."
+                "text": "**With membership:** barbarian fishing, sharks, the Fishing Guild."
               }
             ]
           }
@@ -623,11 +623,11 @@
     ],
     "plan": {
       "head": [
-        "Код",
-        "Уровни",
-        "Что ловить",
-        "Где",
-        "Сколько рыбы"
+        "Code",
+        "Levels",
+        "What to catch",
+        "Where",
+        "How much fish"
       ],
       "ranges": [
         {
@@ -635,14 +635,14 @@
           "from": 1,
           "to": 20,
           "levels": "1–20",
-          "what": "Креветки, с 15 анчоусы",
-          "where": "Болото к югу от Лумбриджа, берег у Draynor",
+          "what": "Shrimps, anchovies from 15",
+          "where": "The swamp south of Lumbridge, the shore by Draynor",
           "amount": "~350",
           "cells": [
             "FI-1",
             "1–20",
-            "Креветки, с 15 анчоусы",
-            "Болото к югу от Лумбриджа, берег у Draynor",
+            "Shrimps, anchovies from 15",
+            "The swamp south of Lumbridge, the shore by Draynor",
             "~350"
           ]
         },
@@ -651,14 +651,14 @@
           "from": 20,
           "to": 40,
           "levels": "20–40",
-          "what": "Форель, с 30 лосось",
-          "where": "Река в Barbarian Village или у Лумбриджа",
+          "what": "Trout, salmon from 30",
+          "where": "The river at Barbarian Village or by Lumbridge",
           "amount": "~550",
           "cells": [
             "FI-2",
             "20–40",
-            "Форель, с 30 лосось",
-            "Река в Barbarian Village или у Лумбриджа",
+            "Trout, salmon from 30",
+            "The river at Barbarian Village or by Lumbridge",
             "~550"
           ]
         },
@@ -667,15 +667,15 @@
           "from": 40,
           "to": 50,
           "levels": "40–50",
-          "what": "Омары (деньги) или дальше форель и лосось (опыт)",
+          "what": "Lobsters (money) or trout and salmon further on (XP)",
           "where": "Karamja, Musa Point",
-          "amount": "~710 омаров",
+          "amount": "~710 lobsters",
           "cells": [
             "FI-3",
             "40–50",
-            "Омары (деньги) или дальше форель и лосось (опыт)",
+            "Lobsters (money) or trout and salmon further on (XP)",
             "Karamja, Musa Point",
-            "~710 омаров"
+            "~710 lobsters"
           ]
         },
         {
@@ -683,12 +683,12 @@
           "from": 50,
           "to": null,
           "levels": "50+",
-          "what": "Рыба-меч и тунец",
+          "what": "Swordfish and tuna",
           "where": "Karamja, Musa Point",
           "cells": [
             "FI-4",
             "50+",
-            "Рыба-меч и тунец",
+            "Swordfish and tuna",
             "Karamja, Musa Point",
             "—"
           ]
@@ -701,69 +701,69 @@
   },
   {
     "id": "CO",
-    "title": "Готовка (Cooking)",
-    "name": "Готовка",
+    "title": "Cooking",
+    "name": "Cooking",
     "levelSkills": [
       "cooking"
     ],
     "intro": [
       {
         "t": "p",
-        "text": "Готовь то, что поймал: готовка почти всегда поспевает за рыбалкой, и в итоге у тебя своя еда для боя."
+        "text": "Cook what you catch: Cooking almost always keeps up with Fishing, and in the end you have your own food for combat."
       }
     ],
     "sections": [
       {
-        "title": "Что готовить",
+        "title": "What to cook",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Уровень",
-              "Еда",
-              "Опыт",
-              "Лечит"
+              "Level",
+              "Food",
+              "XP",
+              "Heals"
             ],
             "rows": [
               [
                 "1",
-                "Креветки, курица, говядина",
+                "Shrimps, chicken, beef",
                 "30",
                 "3"
               ],
               [
                 "15",
-                "Форель (Trout)",
+                "Trout",
                 "70",
                 "7"
               ],
               [
                 "20",
-                "Щука (Pike)",
+                "Pike",
                 "80",
                 "8"
               ],
               [
                 "25",
-                "Лосось (Salmon)",
+                "Salmon",
                 "90",
                 "9"
               ],
               [
                 "30",
-                "Тунец (Tuna)",
+                "Tuna",
                 "100",
                 "10"
               ],
               [
                 "40",
-                "Омар (Lobster)",
+                "Lobster",
                 "120",
                 "12"
               ],
               [
                 "45",
-                "Рыба-меч (Swordfish)",
+                "Swordfish",
                 "140",
                 "14"
               ]
@@ -772,50 +772,50 @@
         ]
       },
       {
-        "title": "План прокачки",
+        "title": "Training plan",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Код",
-              "Уровни",
-              "Что готовить",
-              "Где",
-              "Сколько штук"
+              "Code",
+              "Levels",
+              "What to cook",
+              "Where",
+              "How many"
             ],
             "rows": [
               [
                 "CO-1",
                 "1–15",
-                "Креветки, мясо с ферм",
-                "Плита на кухне замка Лумбридж",
+                "Shrimps, meat from the farms",
+                "The range in the Lumbridge Castle kitchen",
                 "~80"
               ],
               [
                 "CO-2",
                 "15–25",
-                "Форель",
-                "Плита в Al Kharid у банка",
+                "Trout",
+                "The range in Al Kharid by the bank",
                 "~80"
               ],
               [
                 "CO-3",
                 "25–40",
-                "Лосось, с 30 тунец",
+                "Salmon, tuna from 30",
                 "Al Kharid",
                 "~330"
               ],
               [
                 "CO-4",
                 "40–45",
-                "Омары",
+                "Lobsters",
                 "Al Kharid",
                 "~200"
               ],
               [
                 "CO-5",
                 "45–50",
-                "Рыба-меч",
+                "Swordfish",
                 "Al Kharid",
                 "~285"
               ]
@@ -824,41 +824,41 @@
         ]
       },
       {
-        "title": "Как готовить много сразу",
+        "title": "How to cook a lot at once",
         "blocks": [
           {
             "t": "ol",
             "items": [
               {
-                "text": "Возьми из банка 28 сырой рыбы."
+                "text": "Take 28 raw fish from the bank."
               },
               {
-                "text": "Используй рыбу на плите (Range) и выбери «All» — персонаж приготовит весь инвентарь сам."
+                "text": "Use the fish on a range (Range) and choose \"All\": the character cooks the whole inventory by itself."
               },
               {
-                "text": "Относи в банк и повторяй."
+                "text": "Take it to the bank and repeat."
               }
             ]
           }
         ]
       },
       {
-        "title": "Частые вопросы",
+        "title": "Frequently asked questions",
         "blocks": [
           {
             "t": "ul",
             "items": [
               {
-                "text": "**Почему еда подгорает?** Шанс сжечь падает с уровнем, на плите ниже, чем на костре. Горит меньше всего на плите в кухне замка Лумбридж, но только для простой еды и только после квеста Cook's Assistant."
+                "text": "**Why does food burn?** The chance to burn drops with level and is lower on a range than on a fire. It burns least on the range in the Lumbridge Castle kitchen, but only for simple food and only after the quest Cook's Assistant."
               },
               {
-                "text": "**Al Kharid.** После квеста Prince Ali Rescue ворота бесплатны. Банк и плита — в паре шагов друг от друга."
+                "text": "**Al Kharid.** After the quest Prince Ali Rescue the gate is free. The bank and the range are a couple of steps from each other."
               },
               {
-                "text": "**Сколько еды брать в бой?** Сколько поместится после снаряжения: обычно 15–20 штук лучшей рыбы, какую умеешь готовить."
+                "text": "**How much food to take into combat?** As much as fits after the gear: usually 15–20 pieces of the best fish you can cook."
               },
               {
-                "text": "**С подпиской:** гораздо больше рецептов, пироги, пицца, вино и плиты рядом с банком."
+                "text": "**With membership:** far more recipes, pies, pizza, wine and ranges next to the bank."
               }
             ]
           }
@@ -867,11 +867,11 @@
     ],
     "plan": {
       "head": [
-        "Код",
-        "Уровни",
-        "Что готовить",
-        "Где",
-        "Сколько штук"
+        "Code",
+        "Levels",
+        "What to cook",
+        "Where",
+        "How many"
       ],
       "ranges": [
         {
@@ -879,14 +879,14 @@
           "from": 1,
           "to": 15,
           "levels": "1–15",
-          "what": "Креветки, мясо с ферм",
-          "where": "Плита на кухне замка Лумбридж",
+          "what": "Shrimps, meat from the farms",
+          "where": "The range in the Lumbridge Castle kitchen",
           "amount": "~80",
           "cells": [
             "CO-1",
             "1–15",
-            "Креветки, мясо с ферм",
-            "Плита на кухне замка Лумбридж",
+            "Shrimps, meat from the farms",
+            "The range in the Lumbridge Castle kitchen",
             "~80"
           ]
         },
@@ -895,14 +895,14 @@
           "from": 15,
           "to": 25,
           "levels": "15–25",
-          "what": "Форель",
-          "where": "Плита в Al Kharid у банка",
+          "what": "Trout",
+          "where": "The range in Al Kharid by the bank",
           "amount": "~80",
           "cells": [
             "CO-2",
             "15–25",
-            "Форель",
-            "Плита в Al Kharid у банка",
+            "Trout",
+            "The range in Al Kharid by the bank",
             "~80"
           ]
         },
@@ -911,13 +911,13 @@
           "from": 25,
           "to": 40,
           "levels": "25–40",
-          "what": "Лосось, с 30 тунец",
+          "what": "Salmon, tuna from 30",
           "where": "Al Kharid",
           "amount": "~330",
           "cells": [
             "CO-3",
             "25–40",
-            "Лосось, с 30 тунец",
+            "Salmon, tuna from 30",
             "Al Kharid",
             "~330"
           ]
@@ -927,13 +927,13 @@
           "from": 40,
           "to": 45,
           "levels": "40–45",
-          "what": "Омары",
+          "what": "Lobsters",
           "where": "Al Kharid",
           "amount": "~200",
           "cells": [
             "CO-4",
             "40–45",
-            "Омары",
+            "Lobsters",
             "Al Kharid",
             "~200"
           ]
@@ -943,13 +943,13 @@
           "from": 45,
           "to": 50,
           "levels": "45–50",
-          "what": "Рыба-меч",
+          "what": "Swordfish",
           "where": "Al Kharid",
           "amount": "~285",
           "cells": [
             "CO-5",
             "45–50",
-            "Рыба-меч",
+            "Swordfish",
             "Al Kharid",
             "~285"
           ]
@@ -962,128 +962,128 @@
   },
   {
     "id": "MI",
-    "title": "Добыча руды (Mining)",
-    "name": "Добыча руды",
+    "title": "Mining",
+    "name": "Mining",
     "levelSkills": [
       "mining"
     ],
     "intro": [
       {
         "t": "p",
-        "text": "Добыча — основа кузнечного дела: из своей руды плавишь слитки и куёшь оружие и броню."
+        "text": "Mining is the basis of Smithing: you smelt bars from your own ore and forge weapons and armour."
       }
     ],
     "sections": [
       {
-        "title": "Руда",
+        "title": "Ore",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Уровень",
-              "Руда",
-              "Опыт",
-              "Зачем"
+              "Level",
+              "Ore",
+              "XP",
+              "What for"
             ],
             "rows": [
               [
                 "1",
-                "Глина (Clay)",
+                "Clay",
                 "5",
-                "Квесты, гончарное дело"
+                "Quests, pottery"
               ],
               [
                 "1",
-                "Медь (Copper), олово (Tin)",
+                "Copper, Tin",
                 "17,5",
-                "Бронза"
+                "Bronze"
               ],
               [
                 "15",
-                "Железо (Iron)",
+                "Iron",
                 "35",
-                "Железо и сталь, лучший опыт"
+                "Iron and steel, the best XP"
               ],
               [
                 "20",
-                "Серебро (Silver)",
+                "Silver",
                 "40",
-                "Украшения"
+                "Jewellery"
               ],
               [
                 "30",
-                "Уголь (Coal)",
+                "Coal",
                 "50",
-                "Сталь и выше"
+                "Steel and above"
               ],
               [
                 "40",
-                "Золото (Gold)",
+                "Gold",
                 "65",
-                "Украшения"
+                "Jewellery"
               ],
               [
                 "55",
-                "Мифрил (Mithril)",
+                "Mithril",
                 "80",
-                "Мифрил"
+                "Mithril"
               ],
               [
                 "70",
-                "Адамант (Adamantite)",
+                "Adamantite",
                 "95",
-                "Адамант"
+                "Adamant"
               ]
             ]
           }
         ]
       },
       {
-        "title": "План прокачки",
+        "title": "Training plan",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Код",
-              "Уровни",
-              "Что копать",
-              "Где",
-              "Сколько руды"
+              "Code",
+              "Levels",
+              "What to mine",
+              "Where",
+              "How much ore"
             ],
             "rows": [
               [
                 "MI-1",
                 "1–15",
-                "Медь и олово",
-                "Шахта на болоте к юго-востоку от Лумбриджа, шахта к юго-востоку от Варрока",
+                "Copper and tin",
+                "The mine in the swamp south-east of Lumbridge, the mine south-east of Varrock",
                 "~140"
               ],
               [
                 "MI-2",
                 "15–30",
-                "Железо, выбрасывая руду",
-                "Al Kharid, к юго-востоку от Варрока, Rimmington",
+                "Iron, dropping the ore",
+                "Al Kharid, south-east of Varrock, Rimmington",
                 "~310"
               ],
               [
                 "MI-3",
                 "30–45",
-                "Железо (опыт) или уголь (сталь и деньги)",
-                "Железо — там же; уголь — Barbarian Village",
-                "~1 380 железа"
+                "Iron (XP) or coal (steel and money)",
+                "Iron in the same place; coal in Barbarian Village",
+                "~1,380 iron"
               ],
               [
                 "MI-4",
                 "45–60",
-                "Железо или спокойная добыча в Camdozaal",
-                "Camdozaal открывается квестом Below Ice Mountain",
-                "~6 100 железа"
+                "Iron or calm mining in Camdozaal",
+                "Camdozaal opens with the quest Below Ice Mountain",
+                "~6,100 iron"
               ],
               [
                 "MI-5",
                 "60+",
-                "Уголь и мифрил",
-                "Mining Guild под Фаладором (с 60 добычи)",
+                "Coal and mithril",
+                "The Mining Guild under Falador (from Mining 60)",
                 "—"
               ]
             ]
@@ -1091,31 +1091,31 @@
         ]
       },
       {
-        "title": "Как копать железо быстрее всего",
+        "title": "How to mine iron fastest",
         "blocks": [
           {
             "t": "p",
-            "text": "Встань так, чтобы рядом было 2–3 железных камня. Копай их по кругу: пока один восстанавливается, копаешь другой. Когда инвентарь полный — выбрасывай руду (shift + клик). Это самый быстрый опыт добычи в бесплатной версии."
+            "text": "Stand so that 2–3 iron rocks are next to you. Mine them in a circle: while one recovers you mine another. When the inventory is full drop the ore (shift + click). This is the fastest Mining XP in the free version."
           }
         ]
       },
       {
-        "title": "Частые вопросы",
+        "title": "Frequently asked questions",
         "blocks": [
           {
             "t": "ul",
             "items": [
               {
-                "text": "**Что за камень?** Наведи курсор — в названии написано, какая руда. Пустой камень серый, он скоро восстановится."
+                "text": "**What kind of rock is it?** Hover the cursor: the name says which ore it is. An empty rock is grey and will recover soon."
               },
               {
-                "text": "**Camdozaal** — подземные шахты после Below Ice Mountain. С 14 добычи там копают барронит (Barronite): медленно, но очень спокойно, и заодно капает немного опыта кузнечного дела."
+                "text": "**Camdozaal** is the underground mines after Below Ice Mountain. From Mining 14 you mine Barronite there: slowly, but very calmly, and a little Smithing XP drips in along the way."
               },
               {
-                "text": "**Руническая руда (Runite, 85)** в бесплатной версии только в Wilderness, это опасно."
+                "text": "**Runite ore (Runite, 85)** in the free version is only in the Wilderness, which is dangerous."
               },
               {
-                "text": "**С подпиской:** Motherlode Mine — AFK-добыча с хорошим опытом, самоцветы и гильдия с большим выбором руды."
+                "text": "**With membership:** the Motherlode Mine, AFK mining with good XP, gems, and a guild with a wide choice of ore."
               }
             ]
           }
@@ -1124,11 +1124,11 @@
     ],
     "plan": {
       "head": [
-        "Код",
-        "Уровни",
-        "Что копать",
-        "Где",
-        "Сколько руды"
+        "Code",
+        "Levels",
+        "What to mine",
+        "Where",
+        "How much ore"
       ],
       "ranges": [
         {
@@ -1136,14 +1136,14 @@
           "from": 1,
           "to": 15,
           "levels": "1–15",
-          "what": "Медь и олово",
-          "where": "Шахта на болоте к юго-востоку от Лумбриджа, шахта к юго-востоку от Варрока",
+          "what": "Copper and tin",
+          "where": "The mine in the swamp south-east of Lumbridge, the mine south-east of Varrock",
           "amount": "~140",
           "cells": [
             "MI-1",
             "1–15",
-            "Медь и олово",
-            "Шахта на болоте к юго-востоку от Лумбриджа, шахта к юго-востоку от Варрока",
+            "Copper and tin",
+            "The mine in the swamp south-east of Lumbridge, the mine south-east of Varrock",
             "~140"
           ]
         },
@@ -1152,14 +1152,14 @@
           "from": 15,
           "to": 30,
           "levels": "15–30",
-          "what": "Железо, выбрасывая руду",
-          "where": "Al Kharid, к юго-востоку от Варрока, Rimmington",
+          "what": "Iron, dropping the ore",
+          "where": "Al Kharid, south-east of Varrock, Rimmington",
           "amount": "~310",
           "cells": [
             "MI-2",
             "15–30",
-            "Железо, выбрасывая руду",
-            "Al Kharid, к юго-востоку от Варрока, Rimmington",
+            "Iron, dropping the ore",
+            "Al Kharid, south-east of Varrock, Rimmington",
             "~310"
           ]
         },
@@ -1168,15 +1168,15 @@
           "from": 30,
           "to": 45,
           "levels": "30–45",
-          "what": "Железо (опыт) или уголь (сталь и деньги)",
-          "where": "Железо — там же; уголь — Barbarian Village",
-          "amount": "~1 380 железа",
+          "what": "Iron (XP) or coal (steel and money)",
+          "where": "Iron in the same place; coal in Barbarian Village",
+          "amount": "~1,380 iron",
           "cells": [
             "MI-3",
             "30–45",
-            "Железо (опыт) или уголь (сталь и деньги)",
-            "Железо — там же; уголь — Barbarian Village",
-            "~1 380 железа"
+            "Iron (XP) or coal (steel and money)",
+            "Iron in the same place; coal in Barbarian Village",
+            "~1,380 iron"
           ]
         },
         {
@@ -1184,15 +1184,15 @@
           "from": 45,
           "to": 60,
           "levels": "45–60",
-          "what": "Железо или спокойная добыча в Camdozaal",
-          "where": "Camdozaal открывается квестом Below Ice Mountain",
-          "amount": "~6 100 железа",
+          "what": "Iron or calm mining in Camdozaal",
+          "where": "Camdozaal opens with the quest Below Ice Mountain",
+          "amount": "~6,100 iron",
           "cells": [
             "MI-4",
             "45–60",
-            "Железо или спокойная добыча в Camdozaal",
-            "Camdozaal открывается квестом Below Ice Mountain",
-            "~6 100 железа"
+            "Iron or calm mining in Camdozaal",
+            "Camdozaal opens with the quest Below Ice Mountain",
+            "~6,100 iron"
           ]
         },
         {
@@ -1200,13 +1200,13 @@
           "from": 60,
           "to": null,
           "levels": "60+",
-          "what": "Уголь и мифрил",
-          "where": "Mining Guild под Фаладором (с 60 добычи)",
+          "what": "Coal and mithril",
+          "where": "The Mining Guild under Falador (from Mining 60)",
           "cells": [
             "MI-5",
             "60+",
-            "Уголь и мифрил",
-            "Mining Guild под Фаладором (с 60 добычи)",
+            "Coal and mithril",
+            "The Mining Guild under Falador (from Mining 60)",
             "—"
           ]
         }
@@ -1218,92 +1218,92 @@
   },
   {
     "id": "SM",
-    "title": "Кузнечное дело (Smithing)",
-    "name": "Кузнечное дело",
+    "title": "Smithing",
+    "name": "Smithing",
     "levelSkills": [
       "smithing"
     ],
     "intro": [
       {
         "t": "p",
-        "text": "Своё оружие и броня: выплавляешь слитки в печи (Furnace), потом куёшь на наковальне (Anvil) молотом (Hammer). Опыт за предмет зависит от числа слитков, поэтому быстрее всего качают нагрудниками — они из 5 слитков."
+        "text": "Your own weapons and armour: smelt bars in a furnace (Furnace), then forge on an anvil (Anvil) with a hammer (Hammer). The XP per item depends on the number of bars, so platebodies are the fastest to train: they take 5 bars."
       }
     ],
     "sections": [
       {
-        "title": "Где работать",
+        "title": "Where to work",
         "blocks": [
           {
             "t": "ul",
             "items": [
               {
-                "text": "**Печь:** Эдгвилль — ближайшая к банку в бесплатной версии. Ещё есть в Al Kharid, Фаладоре и Лумбридже."
+                "text": "**Furnace:** Edgeville is the nearest to a bank in the free version. There are also ones in Al Kharid, Falador and Lumbridge."
               },
               {
-                "text": "**Наковальня:** к югу от западного банка Варрока — ближайшая к банку."
+                "text": "**Anvil:** south of the west Varrock bank, the nearest to a bank."
               }
             ]
           }
         ]
       },
       {
-        "title": "Слитки",
+        "title": "Bars",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Слиток",
-              "Уровень",
-              "Руда",
-              "Опыт за плавку"
+              "Bar",
+              "Level",
+              "Ore",
+              "XP per smelt"
             ],
             "rows": [
               [
-                "Бронза",
+                "Bronze",
                 "1",
-                "1 медь + 1 олово",
+                "1 copper + 1 tin",
                 "6,2"
               ],
               [
-                "Железо",
+                "Iron",
                 "15",
-                "1 железо, выходит примерно в половине случаев",
+                "1 iron, comes out in about half the cases",
                 "12,5"
               ],
               [
-                "Серебро",
+                "Silver",
                 "20",
-                "1 серебро",
+                "1 silver",
                 "13,7"
               ],
               [
-                "Сталь",
+                "Steel",
                 "30",
-                "1 железо + 2 угля",
+                "1 iron + 2 coal",
                 "17,5"
               ],
               [
-                "Золото",
+                "Gold",
                 "40",
-                "1 золото",
+                "1 gold",
                 "22,5"
               ],
               [
-                "Мифрил",
+                "Mithril",
                 "50",
-                "1 мифрил + 4 угля",
+                "1 mithril + 4 coal",
                 "30"
               ],
               [
-                "Адамант",
+                "Adamant",
                 "70",
-                "1 адамант + 6 угля",
+                "1 adamant + 6 coal",
                 "37,5"
               ],
               [
-                "Руна",
+                "Rune",
                 "85",
-                "1 руна + 8 угля",
+                "1 rune + 8 coal",
                 "50"
               ]
             ]
@@ -1311,68 +1311,68 @@
         ]
       },
       {
-        "title": "Что можно выковать",
+        "title": "What you can forge",
         "blocks": [
           {
             "t": "p",
-            "text": "У каждого металла базовый уровень: бронза 1, железо 15, сталь 30, мифрил 50, адамант 70, руна 85. Уровень предмета = базовый + надбавка из таблицы."
+            "text": "Each metal has a base level: bronze 1, iron 15, steel 30, mithril 50, adamant 70, rune 85. An item's level = the base + the bonus from the table."
           },
           {
             "t": "table",
             "head": [
-              "Предмет",
-              "Надбавка",
-              "Слитков"
+              "Item",
+              "Bonus",
+              "Bars"
             ],
             "rows": [
               [
-                "Кинжал (Dagger)",
+                "Dagger",
                 "+0",
                 "1"
               ],
               [
-                "Ятаган (Scimitar)",
+                "Scimitar",
                 "+5",
                 "2"
               ],
               [
-                "Длинный меч (Longsword)",
+                "Longsword",
                 "+6",
                 "2"
               ],
               [
-                "Полный шлем (Full helm)",
+                "Full helm",
                 "+7",
                 "2"
               ],
               [
-                "Кольчуга (Chainbody)",
+                "Chainbody",
                 "+11",
                 "3"
               ],
               [
-                "Кайтовый щит (Kiteshield)",
+                "Kiteshield",
                 "+12",
                 "3"
               ],
               [
-                "Двуручный меч (2h sword)",
+                "2h sword",
                 "+14",
                 "3"
               ],
               [
-                "Поножи (Platelegs)",
+                "Platelegs",
                 "+16",
                 "3"
               ],
               [
-                "Нагрудник (Platebody)",
+                "Platebody",
                 "+18",
                 "5"
               ],
               [
-                "Стальные гвозди (Steel nails, 15 штук)",
-                "34 (только сталь)",
+                "Steel nails (15 pieces)",
+                "34 (steel only)",
                 "1"
               ]
             ]
@@ -1380,21 +1380,21 @@
         ]
       },
       {
-        "title": "Свои комплекты",
+        "title": "Your own sets",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Комплект",
-              "Шлем",
-              "Щит",
-              "Поножи",
-              "Нагрудник",
-              "Носить с защиты"
+              "Set",
+              "Helm",
+              "Shield",
+              "Platelegs",
+              "Platebody",
+              "Wear from Defence"
             ],
             "rows": [
               [
-                "Железный",
+                "Iron",
                 "22",
                 "27",
                 "31",
@@ -1402,7 +1402,7 @@
                 "1"
               ],
               [
-                "Стальной",
+                "Steel",
                 "37",
                 "42",
                 "46",
@@ -1410,7 +1410,7 @@
                 "5"
               ],
               [
-                "Мифриловый",
+                "Mithril",
                 "57",
                 "62",
                 "66",
@@ -1418,7 +1418,7 @@
                 "20"
               ],
               [
-                "Адамантовый",
+                "Adamant",
                 "77",
                 "82",
                 "86",
@@ -1430,82 +1430,82 @@
         ]
       },
       {
-        "title": "План прокачки",
+        "title": "Training plan",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Код",
-              "Уровни",
-              "Что делать",
-              "Опыт за штуку",
-              "Сколько"
+              "Code",
+              "Levels",
+              "What to do",
+              "XP per log",
+              "How much"
             ],
             "rows": [
               [
                 "SM-1",
                 "1–29",
-                "Квест The Knight's Sword",
-                "12 725 за квест",
-                "1 квест"
+                "The quest The Knight's Sword",
+                "12,725 for the quest",
+                "1 quest"
               ],
               [
                 "SM-2",
                 "29–33",
-                "Бронзовые нагрудники",
+                "Bronze platebodies",
                 "62,5",
-                "~90 нагрудников (~445 слитков)"
+                "~90 platebodies (~445 bars)"
               ],
               [
                 "SM-3",
                 "33–48",
-                "Железные нагрудники (и свой железный комплект)",
+                "Iron platebodies (and your own iron set)",
                 "125",
-                "~520 нагрудников"
+                "~520 platebodies"
               ],
               [
                 "SM-4",
                 "48–68",
-                "Стальные нагрудники (и свой стальной комплект)",
+                "Steel platebodies (and your own steel set)",
                 "187,5",
-                "~2 780 нагрудников"
+                "~2,780 platebodies"
               ],
               [
                 "SM-5",
                 "68–88",
-                "Мифриловые нагрудники",
+                "Mithril platebodies",
                 "250",
-                "~15 100 нагрудников"
+                "~15,100 platebodies"
               ]
             ]
           },
           {
             "t": "p",
-            "text": "Без квеста: 1–5 бронзовые топоры, 5–9 бронзовые ятаганы, 9–18 бронзовые боевые молоты (Warhammer), 18–33 бронзовые нагрудники."
+            "text": "Without the quest: 1–5 bronze axes, 5–9 bronze scimitars, 9–18 bronze warhammers (Warhammer), 18–33 bronze platebodies."
           },
           {
             "t": "p",
-            "text": "Скорость: бронзовые нагрудники — около 50 тыс. опыта в час, железные — 100 тыс., стальные — 150 тыс. Но это дорого: быстрый путь с 33 до 48 обходится в сотни тысяч монет на слитках."
+            "text": "Speed: bronze platebodies are about 50 thousand XP an hour, iron 100 thousand, steel 150 thousand. But it is expensive: the fast route from 33 to 48 costs hundreds of thousands of coins in bars."
           }
         ]
       },
       {
-        "title": "Частые вопросы",
+        "title": "Frequently asked questions",
         "blocks": [
           {
             "t": "ul",
             "items": [
               {
-                "text": "**Железо не выплавилось.** В бесплатной версии железный слиток выходит примерно в половине случаев, руда при неудаче теряется. Заклинание Superheat Item (магия 43) плавит железо всегда."
+                "text": "**The iron did not smelt.** In the free version an iron bar comes out in about half the cases, and the ore is lost on a failure. The spell Superheat Item (Magic 43) always smelts iron."
               },
               {
-                "text": "**Своё выгоднее покупного?** Обычно нет: готовая броня на GE часто дешевле слитков. Своё делают ради опыта и удовольствия."
+                "text": "**Is your own cheaper than bought?** Usually not: ready-made armour on the GE is often cheaper than the bars. You make your own for XP and fun."
               },
               {
-                "text": "**Спокойный вариант.** Плавить слитки в Эдгвилле — почти AFK и иногда даже с прибылью. Проверь цены на GE перед началом."
+                "text": "**A calm option.** Smelting bars in Edgeville is almost AFK and sometimes even at a profit. Check the GE prices before you start."
               },
               {
-                "text": "**С подпиской:** Blast Furnace и ядра для пушки (AFK-кузнечка)."
+                "text": "**With membership:** the Blast Furnace and cannonballs (AFK smithing)."
               }
             ]
           }
@@ -1514,11 +1514,11 @@
     ],
     "plan": {
       "head": [
-        "Код",
-        "Уровни",
-        "Что делать",
-        "Опыт за штуку",
-        "Сколько"
+        "Code",
+        "Levels",
+        "What to do",
+        "XP per log",
+        "How much"
       ],
       "ranges": [
         {
@@ -1526,14 +1526,14 @@
           "from": 1,
           "to": 29,
           "levels": "1–29",
-          "what": "Квест The Knight's Sword",
-          "amount": "1 квест",
+          "what": "The quest The Knight's Sword",
+          "amount": "1 quest",
           "cells": [
             "SM-1",
             "1–29",
-            "Квест The Knight's Sword",
-            "12 725 за квест",
-            "1 квест"
+            "The quest The Knight's Sword",
+            "12,725 for the quest",
+            "1 quest"
           ]
         },
         {
@@ -1541,14 +1541,14 @@
           "from": 29,
           "to": 33,
           "levels": "29–33",
-          "what": "Бронзовые нагрудники",
-          "amount": "~90 нагрудников (~445 слитков)",
+          "what": "Bronze platebodies",
+          "amount": "~90 platebodies (~445 bars)",
           "cells": [
             "SM-2",
             "29–33",
-            "Бронзовые нагрудники",
+            "Bronze platebodies",
             "62,5",
-            "~90 нагрудников (~445 слитков)"
+            "~90 platebodies (~445 bars)"
           ]
         },
         {
@@ -1556,14 +1556,14 @@
           "from": 33,
           "to": 48,
           "levels": "33–48",
-          "what": "Железные нагрудники (и свой железный комплект)",
-          "amount": "~520 нагрудников",
+          "what": "Iron platebodies (and your own iron set)",
+          "amount": "~520 platebodies",
           "cells": [
             "SM-3",
             "33–48",
-            "Железные нагрудники (и свой железный комплект)",
+            "Iron platebodies (and your own iron set)",
             "125",
-            "~520 нагрудников"
+            "~520 platebodies"
           ]
         },
         {
@@ -1571,14 +1571,14 @@
           "from": 48,
           "to": 68,
           "levels": "48–68",
-          "what": "Стальные нагрудники (и свой стальной комплект)",
-          "amount": "~2 780 нагрудников",
+          "what": "Steel platebodies (and your own steel set)",
+          "amount": "~2,780 platebodies",
           "cells": [
             "SM-4",
             "48–68",
-            "Стальные нагрудники (и свой стальной комплект)",
+            "Steel platebodies (and your own steel set)",
             "187,5",
-            "~2 780 нагрудников"
+            "~2,780 platebodies"
           ]
         },
         {
@@ -1586,14 +1586,14 @@
           "from": 68,
           "to": 88,
           "levels": "68–88",
-          "what": "Мифриловые нагрудники",
-          "amount": "~15 100 нагрудников",
+          "what": "Mithril platebodies",
+          "amount": "~15,100 platebodies",
           "cells": [
             "SM-5",
             "68–88",
-            "Мифриловые нагрудники",
+            "Mithril platebodies",
             "250",
-            "~15 100 нагрудников"
+            "~15,100 platebodies"
           ]
         }
       ],
@@ -1604,66 +1604,66 @@
   },
   {
     "id": "CR",
-    "title": "Ремесло (Crafting)",
-    "name": "Ремесло",
+    "title": "Crafting",
+    "name": "Crafting",
     "levelSkills": [
       "crafting"
     ],
     "intro": [
       {
         "t": "p",
-        "text": "Кожаная броня для лучника, гончарное дело, огранка камней и украшения. Инструменты — игла (Needle), нитки (Thread), долото (Chisel) и формы (Mould) — продаются в магазине ремесла Rommik's Crafty Supplies в Rimmington."
+        "text": "Leather armour for an archer, pottery, gem cutting and jewellery. The tools, a needle (Needle), thread (Thread), a chisel (Chisel) and moulds (Mould), are sold in the crafting shop Rommik's Crafty Supplies in Rimmington."
       }
     ],
     "sections": [
       {
-        "title": "Кожа",
+        "title": "Leather",
         "blocks": [
           {
             "t": "p",
-            "text": "Шкуры (Cowhide) выпадают с коров у Лумбриджа. Выделай их у кожевника Ellis в Al Kharid (1 монета за мягкую кожу, 3 — за жёсткую) и используй иглу на коже. Нитки тратятся понемногу, бери катушку с запасом."
+            "text": "Cowhides (Cowhide) drop from the cows by Lumbridge. Have them tanned by the tanner Ellis in Al Kharid (1 coin for soft leather, 3 for hard) and use a needle on the leather. Thread is used up little by little, so take a spool with a margin."
           },
           {
             "t": "table",
             "head": [
-              "Уровень",
-              "Предмет",
-              "Опыт"
+              "Level",
+              "Item",
+              "XP"
             ],
             "rows": [
               [
                 "1",
-                "Перчатки (Leather gloves)",
+                "Leather gloves",
                 "13,8"
               ],
               [
                 "7",
-                "Сапоги (Leather boots)",
+                "Leather boots",
                 "16,25"
               ],
               [
                 "9",
-                "Капюшон (Coif)",
+                "Coif",
                 "18,5"
               ],
               [
                 "11",
-                "Наручи (Leather vambraces)",
+                "Leather vambraces",
                 "22"
               ],
               [
                 "14",
-                "Куртка (Leather body)",
+                "Leather body",
                 "25"
               ],
               [
                 "18",
-                "Штаны (Leather chaps)",
+                "Leather chaps",
                 "27"
               ],
               [
                 "28",
-                "Жёсткая куртка (Hard leather body)",
+                "Hard leather body",
                 "35"
               ]
             ]
@@ -1671,109 +1671,109 @@
         ]
       },
       {
-        "title": "Огранка камней и украшения",
+        "title": "Gem cutting and jewellery",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Уровень",
-              "Что",
-              "Опыт"
+              "Level",
+              "What",
+              "XP"
             ],
             "rows": [
               [
                 "5 / 6 / 8",
-                "Золотые кольцо / ожерелье / амулет",
+                "Gold ring / necklace / amulet",
                 "15 / 20 / 30"
               ],
               [
                 "20",
-                "Огранка сапфира (Sapphire)",
+                "Cutting a sapphire (Sapphire)",
                 "50"
               ],
               [
                 "27",
-                "Огранка изумруда (Emerald)",
+                "Cutting an emerald (Emerald)",
                 "67,5"
               ],
               [
                 "34",
-                "Огранка рубина (Ruby)",
+                "Cutting a ruby (Ruby)",
                 "85"
               ],
               [
                 "43",
-                "Огранка алмаза (Diamond)",
+                "Cutting a diamond (Diamond)",
                 "107,5"
               ]
             ]
           },
           {
             "t": "p",
-            "text": "Кольцо, ожерелье или амулет с камнем делают на печи: золотой слиток + огранённый камень + форма. Сапфировое кольцо — с 20, изумрудное — с 27, рубиновое — с 34, алмазное — с 43."
+            "text": "A ring, necklace or amulet with a gem is made at a furnace: a gold bar + a cut gem + a mould. The sapphire ring is from level 20, the emerald from 27, the ruby from 34, the diamond from 43."
           }
         ]
       },
       {
-        "title": "План прокачки",
+        "title": "Training plan",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Код",
-              "Уровни",
-              "Что делать",
-              "Где",
-              "Сколько"
+              "Code",
+              "Levels",
+              "What to do",
+              "Where",
+              "How much"
             ],
             "rows": [
               [
                 "CR-1",
                 "1–7",
-                "Квесты Sheep Shearer и Misthalin Mystery",
+                "The quests Sheep Shearer and Misthalin Mystery",
                 "—",
-                "2 квеста"
+                "2 quests"
               ],
               [
                 "CR-2",
                 "7–14",
-                "Сапоги, капюшоны, наручи",
-                "Где угодно, кожа из Al Kharid",
-                "~100 шкур"
+                "Boots, coifs, vambraces",
+                "Anywhere, leather from Al Kharid",
+                "~100 hides"
               ],
               [
                 "CR-3",
                 "14–20",
-                "Кожаные куртки",
-                "Где угодно",
-                "~95 шкур"
+                "Leather bodies",
+                "Anywhere",
+                "~95 hides"
               ],
               [
                 "CR-4",
                 "20–27",
-                "Огранка сапфиров",
-                "Где угодно, камни с GE",
+                "Cutting sapphires",
+                "Anywhere, gems from the GE",
                 "~105"
               ],
               [
                 "CR-5",
                 "27–34",
-                "Огранка изумрудов",
-                "Где угодно",
+                "Cutting emeralds",
+                "Anywhere",
                 "~155"
               ],
               [
                 "CR-6",
                 "34–43",
-                "Огранка рубинов",
-                "Где угодно",
+                "Cutting rubies",
+                "Anywhere",
                 "~355"
               ],
               [
                 "CR-7",
                 "43+",
-                "Огранка алмазов или алмазные украшения",
-                "Crafting Guild (с 40)",
+                "Cutting diamonds or diamond jewellery",
+                "The Crafting Guild (from 40)",
                 "—"
               ]
             ]
@@ -1781,31 +1781,31 @@
         ]
       },
       {
-        "title": "Гончарное дело",
+        "title": "Pottery",
         "blocks": [
           {
             "t": "p",
-            "text": "В Barbarian Village стоят гончарный круг и печь. Глину (Clay) смочи водой — получится мягкая глина (Soft clay). На круге: горшок (1), форма для пирога (7), миска (8). Сырая миска (Unfired bowl) нужна для Dragon Slayer I."
+            "text": "In Barbarian Village there are a pottery wheel and an oven. Wet clay (Clay) with water to get soft clay (Soft clay). On the wheel: a pot (1), a pie dish (7), a bowl (8). An Unfired bowl is needed for Dragon Slayer I."
           }
         ]
       },
       {
-        "title": "Частые вопросы",
+        "title": "Frequently asked questions",
         "blocks": [
           {
             "t": "ul",
             "items": [
               {
-                "text": "**Шкуры кончились?** Коровы к востоку от Лумбриджа — бесконечный источник, заодно качаешь бой."
+                "text": "**Out of hides?** The cows east of Lumbridge are an endless source, and you train combat along the way."
               },
               {
-                "text": "**Crafting Guild** к западу от Фаладора открывается с 40 ремесла, нужен коричневый фартук (Brown apron). Внутри золото, глина и банк."
+                "text": "**The Crafting Guild** west of Falador opens at Crafting 40 and needs a Brown apron. Inside are gold, clay and a bank."
               },
               {
-                "text": "**Самое дорогое в ремесле** — камни с GE. Дешевле всего качаться на коже, если шкуры собирать самому."
+                "text": "**The most expensive part of Crafting** is the gems from the GE. The cheapest way to train is on leather, if you collect the hides yourself."
               },
               {
-                "text": "**С подпиской:** драконья кожа, стеклодувное дело, батстаффы."
+                "text": "**With membership:** dragonhide, glassblowing, battlestaves."
               }
             ]
           }
@@ -1814,11 +1814,11 @@
     ],
     "plan": {
       "head": [
-        "Код",
-        "Уровни",
-        "Что делать",
-        "Где",
-        "Сколько"
+        "Code",
+        "Levels",
+        "What to do",
+        "Where",
+        "How much"
       ],
       "ranges": [
         {
@@ -1826,14 +1826,14 @@
           "from": 1,
           "to": 7,
           "levels": "1–7",
-          "what": "Квесты Sheep Shearer и Misthalin Mystery",
-          "amount": "2 квеста",
+          "what": "The quests Sheep Shearer and Misthalin Mystery",
+          "amount": "2 quests",
           "cells": [
             "CR-1",
             "1–7",
-            "Квесты Sheep Shearer и Misthalin Mystery",
+            "The quests Sheep Shearer and Misthalin Mystery",
             "—",
-            "2 квеста"
+            "2 quests"
           ]
         },
         {
@@ -1841,15 +1841,15 @@
           "from": 7,
           "to": 14,
           "levels": "7–14",
-          "what": "Сапоги, капюшоны, наручи",
-          "where": "Где угодно, кожа из Al Kharid",
-          "amount": "~100 шкур",
+          "what": "Boots, coifs, vambraces",
+          "where": "Anywhere, leather from Al Kharid",
+          "amount": "~100 hides",
           "cells": [
             "CR-2",
             "7–14",
-            "Сапоги, капюшоны, наручи",
-            "Где угодно, кожа из Al Kharid",
-            "~100 шкур"
+            "Boots, coifs, vambraces",
+            "Anywhere, leather from Al Kharid",
+            "~100 hides"
           ]
         },
         {
@@ -1857,15 +1857,15 @@
           "from": 14,
           "to": 20,
           "levels": "14–20",
-          "what": "Кожаные куртки",
-          "where": "Где угодно",
-          "amount": "~95 шкур",
+          "what": "Leather bodies",
+          "where": "Anywhere",
+          "amount": "~95 hides",
           "cells": [
             "CR-3",
             "14–20",
-            "Кожаные куртки",
-            "Где угодно",
-            "~95 шкур"
+            "Leather bodies",
+            "Anywhere",
+            "~95 hides"
           ]
         },
         {
@@ -1873,14 +1873,14 @@
           "from": 20,
           "to": 27,
           "levels": "20–27",
-          "what": "Огранка сапфиров",
-          "where": "Где угодно, камни с GE",
+          "what": "Cutting sapphires",
+          "where": "Anywhere, gems from the GE",
           "amount": "~105",
           "cells": [
             "CR-4",
             "20–27",
-            "Огранка сапфиров",
-            "Где угодно, камни с GE",
+            "Cutting sapphires",
+            "Anywhere, gems from the GE",
             "~105"
           ]
         },
@@ -1889,14 +1889,14 @@
           "from": 27,
           "to": 34,
           "levels": "27–34",
-          "what": "Огранка изумрудов",
-          "where": "Где угодно",
+          "what": "Cutting emeralds",
+          "where": "Anywhere",
           "amount": "~155",
           "cells": [
             "CR-5",
             "27–34",
-            "Огранка изумрудов",
-            "Где угодно",
+            "Cutting emeralds",
+            "Anywhere",
             "~155"
           ]
         },
@@ -1905,14 +1905,14 @@
           "from": 34,
           "to": 43,
           "levels": "34–43",
-          "what": "Огранка рубинов",
-          "where": "Где угодно",
+          "what": "Cutting rubies",
+          "where": "Anywhere",
           "amount": "~355",
           "cells": [
             "CR-6",
             "34–43",
-            "Огранка рубинов",
-            "Где угодно",
+            "Cutting rubies",
+            "Anywhere",
             "~355"
           ]
         },
@@ -1921,13 +1921,13 @@
           "from": 43,
           "to": null,
           "levels": "43+",
-          "what": "Огранка алмазов или алмазные украшения",
-          "where": "Crafting Guild (с 40)",
+          "what": "Cutting diamonds or diamond jewellery",
+          "where": "The Crafting Guild (from 40)",
           "cells": [
             "CR-7",
             "43+",
-            "Огранка алмазов или алмазные украшения",
-            "Crafting Guild (с 40)",
+            "Cutting diamonds or diamond jewellery",
+            "The Crafting Guild (from 40)",
             "—"
           ]
         }
@@ -1939,8 +1939,8 @@
   },
   {
     "id": "ME",
-    "title": "Ближний бой: атака, сила, защита, здоровье",
-    "name": "Ближний бой",
+    "title": "Melee combat: Attack, Strength, Defence, Hitpoints",
+    "name": "Melee combat",
     "levelSkills": [
       "attack",
       "strength",
@@ -1949,79 +1949,79 @@
     "intro": [
       {
         "t": "p",
-        "text": "За каждое очко урона получаешь 4 опыта в навык выбранного стиля и примерно 1,3 опыта здоровья. Стиль выбирается во вкладке с мечом (Combat Options)."
+        "text": "For every point of damage you get 4 XP in the skill of the chosen style and about 1.3 Hitpoints XP. The style is chosen in the tab with the sword (Combat Options)."
       },
       {
         "t": "table",
         "head": [
-          "Стиль",
-          "Что качает"
+          "Style",
+          "What it trains"
         ],
         "rows": [
           [
             "Accurate",
-            "Атаку: точность и доступ к оружию получше"
+            "Attack: accuracy and access to better weapons"
           ],
           [
             "Aggressive",
-            "Силу: сила удара"
+            "Strength: hit strength"
           ],
           [
             "Defensive",
-            "Защиту: доступ к броне получше, реже попадают по тебе"
+            "Defence: access to better armour, you are hit less often"
           ],
           [
             "Controlled",
-            "Все три понемногу (не на всём оружии)"
+            "All three a little (not on every weapon)"
           ]
         ]
       },
       {
         "t": "p",
-        "text": "**Порядок для новичка:** подними атаку до следующего металла, возьми новое оружие, потом догони силу и защиту. Например: атака 20 → сила 20 → защита 20 → атака 30."
+        "text": "**The order for a beginner:** raise Attack to the next metal, get the new weapon, then catch up Strength and Defence. For example: Attack 20, Strength 20, Defence 20, Attack 30."
       }
     ],
     "sections": [
       {
-        "title": "Оружие и броня по уровню",
+        "title": "Weapons and armour by level",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Металл",
-              "Атака (оружие)",
-              "Защита (броня)"
+              "Metal",
+              "Attack (weapon)",
+              "Defence (armour)"
             ],
             "rows": [
               [
-                "Бронза, железо",
+                "Bronze, iron",
                 "1",
                 "1"
               ],
               [
-                "Сталь",
+                "Steel",
                 "5",
                 "5"
               ],
               [
-                "Чёрный (Black)",
+                "Black",
                 "10",
                 "10"
               ],
               [
-                "Мифрил",
+                "Mithril",
                 "20",
                 "20"
               ],
               [
-                "Адамант",
+                "Adamant",
                 "30",
                 "30"
               ],
               [
-                "Руна",
+                "Rune",
                 "40",
-                "40 (нагрудник — после Dragon Slayer I)"
+                "40 (the platebody only after Dragon Slayer I)"
               ]
             ]
           },
@@ -2029,97 +2029,97 @@
             "t": "ul",
             "items": [
               {
-                "text": "**Для прокачки** — ятаган (Scimitar): быстрый и точный. Рунический ятаган с 40 атаки прослужит всю бесплатную игру."
+                "text": "**For training** use a scimitar (Scimitar): fast and accurate. A rune scimitar from Attack 40 will serve the whole free game."
               },
               {
-                "text": "**Против драконов** — рунический меч (Rune sword): колющий удар, у Elvarg слабость к нему."
+                "text": "**Against dragons** use a rune sword (Rune sword): a stab attack, and Elvarg is weak to it."
               },
               {
-                "text": "**Против демонов** — Silverlight из квеста Demon Slayer."
+                "text": "**Against demons** use Silverlight from the quest Demon Slayer."
               }
             ]
           }
         ]
       },
       {
-        "title": "План прокачки",
+        "title": "Training plan",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Код",
-              "Уровни",
-              "Кого бить",
-              "Где",
-              "Заметки"
+              "Code",
+              "Levels",
+              "Who to fight",
+              "Where",
+              "Notes"
             ],
             "rows": [
               [
                 "ME-1",
                 "1–10",
-                "Курицы, коровы",
-                "Фермы вокруг Лумбриджа",
-                "Безопасно, кости и шкуры"
+                "Chickens, cows",
+                "The farms around Lumbridge",
+                "Safe, bones and hides"
               ],
               [
                 "ME-2",
                 "10–20",
-                "Гоблины, потом варвары",
-                "К востоку от Лумбриджа, Barbarian Village",
-                "Бьют слабо"
+                "Goblins, then barbarians",
+                "East of Lumbridge, Barbarian Village",
+                "They hit weakly"
               ],
               [
                 "ME-3",
                 "20–30",
-                "Воины Al Kharid (Al Kharid warrior)",
-                "Дворец Al Kharid",
-                "Банк рядом, много монстров"
+                "Al Kharid warriors (Al Kharid warrior)",
+                "The Al Kharid palace",
+                "A bank nearby, lots of monsters"
               ],
               [
                 "ME-4",
                 "30–40",
                 "Flesh Crawler",
-                "Stronghold of Security, второй этаж",
-                "Бьют часто, но слабо"
+                "The Stronghold of Security, the second floor",
+                "They hit often, but weakly"
               ],
               [
                 "ME-5",
                 "40–50",
-                "Моховые великаны (Moss giant), гигантские лягушки (Giant frog)",
-                "Канализация Варрока, болото Лумбриджа",
-                "Большие кости для молитвы"
+                "Moss giants (Moss giant), giant frogs (Giant frog)",
+                "The Varrock sewers, the Lumbridge swamp",
+                "Big bones for Prayer"
               ],
               [
                 "ME-6",
                 "50–60",
-                "Холмовые великаны (Hill giant), моховые великаны",
-                "Edgeville Dungeon, канализация Варрока",
-                "Вход к холмовым великанам — по вики"
+                "Hill giants (Hill giant), moss giants",
+                "Edgeville Dungeon, the Varrock sewers",
+                "The entrance to the hill giants is on the wiki"
               ]
             ]
           }
         ]
       },
       {
-        "title": "Частые вопросы",
+        "title": "Frequently asked questions",
         "blocks": [
           {
             "t": "ul",
             "items": [
               {
-                "text": "**Сколько еды брать?** 10–15 штук лучшей рыбы, что умеешь готовить. Ешь, когда здоровье ниже половины."
+                "text": "**How much food to take?** 10–15 pieces of the best fish you can cook. Eat when your health is below half."
               },
               {
-                "text": "**Монстр слишком сильный?** Цвет уровня над ним: зелёный и жёлтый — можно, красный — рано."
+                "text": "**Is the monster too strong?** The colour of the level above it: green and yellow are fine, red is too early."
               },
               {
-                "text": "**Монстры перестали нападать сами.** Агрессивные монстры через 10 минут на одном месте успокаиваются. Отойди подальше и вернись."
+                "text": "**The monsters stopped attacking on their own.** Aggressive monsters calm down after 10 minutes in one place. Step far away and come back."
               },
               {
-                "text": "**Автоответ.** Включи Auto Retaliate во вкладке боя, чтобы персонаж сам отвечал на атаки."
+                "text": "**Auto retaliate.** Turn on Auto Retaliate in the combat tab so the character answers attacks by itself."
               },
               {
-                "text": "**Здоровье (Hitpoints)** отдельно качать не нужно: растёт само при любом бое."
+                "text": "**Hitpoints** do not need training separately: it grows by itself in any combat."
               }
             ]
           }
@@ -2128,11 +2128,11 @@
     ],
     "plan": {
       "head": [
-        "Код",
-        "Уровни",
-        "Кого бить",
-        "Где",
-        "Заметки"
+        "Code",
+        "Levels",
+        "Who to fight",
+        "Where",
+        "Notes"
       ],
       "ranges": [
         {
@@ -2140,15 +2140,15 @@
           "from": 1,
           "to": 10,
           "levels": "1–10",
-          "what": "Курицы, коровы",
-          "where": "Фермы вокруг Лумбриджа",
-          "notes": "Безопасно, кости и шкуры",
+          "what": "Chickens, cows",
+          "where": "The farms around Lumbridge",
+          "notes": "Safe, bones and hides",
           "cells": [
             "ME-1",
             "1–10",
-            "Курицы, коровы",
-            "Фермы вокруг Лумбриджа",
-            "Безопасно, кости и шкуры"
+            "Chickens, cows",
+            "The farms around Lumbridge",
+            "Safe, bones and hides"
           ]
         },
         {
@@ -2156,15 +2156,15 @@
           "from": 10,
           "to": 20,
           "levels": "10–20",
-          "what": "Гоблины, потом варвары",
-          "where": "К востоку от Лумбриджа, Barbarian Village",
-          "notes": "Бьют слабо",
+          "what": "Goblins, then barbarians",
+          "where": "East of Lumbridge, Barbarian Village",
+          "notes": "They hit weakly",
           "cells": [
             "ME-2",
             "10–20",
-            "Гоблины, потом варвары",
-            "К востоку от Лумбриджа, Barbarian Village",
-            "Бьют слабо"
+            "Goblins, then barbarians",
+            "East of Lumbridge, Barbarian Village",
+            "They hit weakly"
           ]
         },
         {
@@ -2172,15 +2172,15 @@
           "from": 20,
           "to": 30,
           "levels": "20–30",
-          "what": "Воины Al Kharid (Al Kharid warrior)",
-          "where": "Дворец Al Kharid",
-          "notes": "Банк рядом, много монстров",
+          "what": "Al Kharid warriors (Al Kharid warrior)",
+          "where": "The Al Kharid palace",
+          "notes": "A bank nearby, lots of monsters",
           "cells": [
             "ME-3",
             "20–30",
-            "Воины Al Kharid (Al Kharid warrior)",
-            "Дворец Al Kharid",
-            "Банк рядом, много монстров"
+            "Al Kharid warriors (Al Kharid warrior)",
+            "The Al Kharid palace",
+            "A bank nearby, lots of monsters"
           ]
         },
         {
@@ -2189,14 +2189,14 @@
           "to": 40,
           "levels": "30–40",
           "what": "Flesh Crawler",
-          "where": "Stronghold of Security, второй этаж",
-          "notes": "Бьют часто, но слабо",
+          "where": "The Stronghold of Security, the second floor",
+          "notes": "They hit often, but weakly",
           "cells": [
             "ME-4",
             "30–40",
             "Flesh Crawler",
-            "Stronghold of Security, второй этаж",
-            "Бьют часто, но слабо"
+            "The Stronghold of Security, the second floor",
+            "They hit often, but weakly"
           ]
         },
         {
@@ -2204,15 +2204,15 @@
           "from": 40,
           "to": 50,
           "levels": "40–50",
-          "what": "Моховые великаны (Moss giant), гигантские лягушки (Giant frog)",
-          "where": "Канализация Варрока, болото Лумбриджа",
-          "notes": "Большие кости для молитвы",
+          "what": "Moss giants (Moss giant), giant frogs (Giant frog)",
+          "where": "The Varrock sewers, the Lumbridge swamp",
+          "notes": "Big bones for Prayer",
           "cells": [
             "ME-5",
             "40–50",
-            "Моховые великаны (Moss giant), гигантские лягушки (Giant frog)",
-            "Канализация Варрока, болото Лумбриджа",
-            "Большие кости для молитвы"
+            "Moss giants (Moss giant), giant frogs (Giant frog)",
+            "The Varrock sewers, the Lumbridge swamp",
+            "Big bones for Prayer"
           ]
         },
         {
@@ -2220,155 +2220,155 @@
           "from": 50,
           "to": 60,
           "levels": "50–60",
-          "what": "Холмовые великаны (Hill giant), моховые великаны",
-          "where": "Edgeville Dungeon, канализация Варрока",
-          "notes": "Вход к холмовым великанам — по вики",
+          "what": "Hill giants (Hill giant), moss giants",
+          "where": "Edgeville Dungeon, the Varrock sewers",
+          "notes": "The entrance to the hill giants is on the wiki",
           "cells": [
             "ME-6",
             "50–60",
-            "Холмовые великаны (Hill giant), моховые великаны",
-            "Edgeville Dungeon, канализация Варрока",
-            "Вход к холмовым великанам — по вики"
+            "Hill giants (Hill giant), moss giants",
+            "Edgeville Dungeon, the Varrock sewers",
+            "The entrance to the hill giants is on the wiki"
           ]
         }
       ],
       "sectionIndex": 1
     },
-    "subtitle": "атака, сила, защита, здоровье",
+    "subtitle": "Attack, Strength, Defence, Hitpoints",
     "wiki": "https://oldschool.runescape.wiki/w/Attack"
   },
   {
     "id": "RA",
-    "title": "Дальний бой (Ranged)",
-    "name": "Дальний бой",
+    "title": "Ranged",
+    "name": "Ranged",
     "levelSkills": [
       "ranged"
     ],
     "intro": [
       {
         "t": "p",
-        "text": "Лучник бьёт издалека и может стрелять из безопасной точки (safespot), куда монстр не дойдёт. Луки делает навык Fletching, но он только для подписчиков, поэтому в бесплатной версии луки и стрелы покупают на Grand Exchange."
+        "text": "An archer hits from far away and can shoot from a safespot (safespot) the monster cannot reach. Bows are made with the Fletching skill, but it is members-only, so in the free version bows and arrows are bought on the Grand Exchange."
       }
     ],
     "sections": [
       {
-        "title": "Снаряжение по уровню",
+        "title": "Equipment by level",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Уровень",
-              "Лук",
-              "Стрелы"
+              "Level",
+              "Bow",
+              "Arrows"
             ],
             "rows": [
               [
                 "1",
                 "Shortbow",
-                "Бронзовые, железные"
+                "Bronze, iron"
               ],
               [
                 "5",
                 "Oak shortbow",
-                "Стальные (Steel arrow)"
+                "Steel (Steel arrow)"
               ],
               [
                 "20",
                 "Willow shortbow",
-                "Мифриловые (Mithril arrow)"
+                "Mithril (Mithril arrow)"
               ],
               [
                 "30",
                 "Maple shortbow",
-                "Адамантовые (Adamant arrow)"
+                "Adamant (Adamant arrow)"
               ],
               [
                 "40",
                 "Yew shortbow",
-                "Рунические (Rune arrow)"
+                "Rune (Rune arrow)"
               ]
             ]
           },
           {
             "t": "p",
-            "text": "Броня: кожаная с 1 (можно сшить самому, см. «Ремесло»), жёсткая кожаная куртка с 10 защиты, зелёная драконья кожа (Green d'hide) с 40 дальнего боя — куртка только после Dragon Slayer I."
+            "text": "Armour: leather from 1 (you can sew it yourself, see \"Crafting\"), a hard leather body from Defence 10, green dragonhide (Green d'hide) from Ranged 40; the body only after Dragon Slayer I."
           }
         ]
       },
       {
-        "title": "Стили",
+        "title": "Styles",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Стиль",
-              "Что даёт"
+              "Style",
+              "What it gives"
             ],
             "rows": [
               [
                 "Accurate",
-                "Точнее, весь опыт в дальний бой"
+                "More accurate, all the XP to Ranged"
               ],
               [
                 "Rapid",
-                "Быстрее всех, весь опыт в дальний бой — лучший для прокачки"
+                "The fastest, all the XP to Ranged: the best for training"
               ],
               [
                 "Longrange",
-                "Дальше стреляет, опыт делится между дальним боем и защитой"
+                "Shoots farther, the XP is split between Ranged and Defence"
               ]
             ]
           }
         ]
       },
       {
-        "title": "План прокачки",
+        "title": "Training plan",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Код",
-              "Уровни",
-              "Кого бить",
-              "Где"
+              "Code",
+              "Levels",
+              "Who to fight",
+              "Where"
             ],
             "rows": [
               [
                 "RA-1",
                 "1–20",
-                "Курицы, коровы, гоблины",
-                "Фермы у Лумбриджа"
+                "Chickens, cows, goblins",
+                "The farms by Lumbridge"
               ],
               [
                 "RA-2",
                 "20–40",
-                "Flesh Crawler, воины Al Kharid",
-                "Stronghold of Security, дворец Al Kharid"
+                "Flesh Crawler, Al Kharid warriors",
+                "The Stronghold of Security, the Al Kharid palace"
               ],
               [
                 "RA-3",
                 "40+",
-                "Моховые великаны из-за препятствия",
-                "Канализация Варрока"
+                "Moss giants from behind an obstacle",
+                "The Varrock sewers"
               ]
             ]
           }
         ]
       },
       {
-        "title": "Частые вопросы",
+        "title": "Frequently asked questions",
         "blocks": [
           {
             "t": "ul",
             "items": [
               {
-                "text": "**Стрелы кончаются?** Часть стрел падает на землю рядом с монстром — подбирай, плагин Ground Items их подсветит."
+                "text": "**Running out of arrows?** Some arrows fall on the ground next to the monster: pick them up, the Ground Items plugin highlights them."
               },
               {
-                "text": "**Совмещать с ближним боем?** Да, навыки независимые. Удобно качать по очереди, когда надоедает одно."
+                "text": "**Combine with melee?** Yes, the skills are independent. It is convenient to train them in turn when you get tired of one."
               },
               {
-                "text": "**Для Dragon Slayer I** лук не подходит: нужен щит от драконьего огня, а лук двуручный. Для драконов лучше ближний бой."
+                "text": "**For Dragon Slayer I** a bow does not work: you need a shield against dragonfire, and a bow is two-handed. Melee is better against dragons."
               }
             ]
           }
@@ -2377,10 +2377,10 @@
     ],
     "plan": {
       "head": [
-        "Код",
-        "Уровни",
-        "Кого бить",
-        "Где"
+        "Code",
+        "Levels",
+        "Who to fight",
+        "Where"
       ],
       "ranges": [
         {
@@ -2388,13 +2388,13 @@
           "from": 1,
           "to": 20,
           "levels": "1–20",
-          "what": "Курицы, коровы, гоблины",
-          "where": "Фермы у Лумбриджа",
+          "what": "Chickens, cows, goblins",
+          "where": "The farms by Lumbridge",
           "cells": [
             "RA-1",
             "1–20",
-            "Курицы, коровы, гоблины",
-            "Фермы у Лумбриджа"
+            "Chickens, cows, goblins",
+            "The farms by Lumbridge"
           ]
         },
         {
@@ -2402,13 +2402,13 @@
           "from": 20,
           "to": 40,
           "levels": "20–40",
-          "what": "Flesh Crawler, воины Al Kharid",
-          "where": "Stronghold of Security, дворец Al Kharid",
+          "what": "Flesh Crawler, Al Kharid warriors",
+          "where": "The Stronghold of Security, the Al Kharid palace",
           "cells": [
             "RA-2",
             "20–40",
-            "Flesh Crawler, воины Al Kharid",
-            "Stronghold of Security, дворец Al Kharid"
+            "Flesh Crawler, Al Kharid warriors",
+            "The Stronghold of Security, the Al Kharid palace"
           ]
         },
         {
@@ -2416,13 +2416,13 @@
           "from": 40,
           "to": null,
           "levels": "40+",
-          "what": "Моховые великаны из-за препятствия",
-          "where": "Канализация Варрока",
+          "what": "Moss giants from behind an obstacle",
+          "where": "The Varrock sewers",
           "cells": [
             "RA-3",
             "40+",
-            "Моховые великаны из-за препятствия",
-            "Канализация Варрока"
+            "Moss giants from behind an obstacle",
+            "The Varrock sewers"
           ]
         }
       ],
@@ -2433,173 +2433,173 @@
   },
   {
     "id": "MA",
-    "title": "Магия (Magic)",
-    "name": "Магия",
+    "title": "Magic",
+    "name": "Magic",
     "levelSkills": [
       "magic"
     ],
     "intro": [
       {
         "t": "p",
-        "text": "Боевые заклинания, телепорты и полезные чары. Каждое заклинание тратит руны: базовые продают маг Aubury в Варроке и Betty в Port Sarim, остальные — на GE. Посох стихии (Staff of air, fire и т. д.) заменяет руны своей стихии — магазин посохов Zaff в Варроке."
+        "text": "Combat spells, teleports and useful enchantments. Every spell uses runes: the basic ones are sold by the mage Aubury in Varrock and Betty in Port Sarim, the rest on the GE. An elemental staff (Staff of air, fire and so on) replaces the runes of its element: the staff shop of Zaff in Varrock."
       }
     ],
     "sections": [
       {
-        "title": "Заклинания",
+        "title": "Spells",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Уровень",
-              "Заклинание",
-              "Опыт",
-              "Зачем"
+              "Level",
+              "Spell",
+              "XP",
+              "What for"
             ],
             "rows": [
               [
                 "1",
                 "Wind Strike",
                 "5,5",
-                "Первая боевая магия"
+                "The first combat magic"
               ],
               [
                 "5 / 9 / 13",
                 "Water / Earth / Fire Strike",
                 "7,5 / 9,5 / 11,5",
-                "Удары сильнее"
+                "Stronger strikes"
               ],
               [
                 "17–35",
                 "Wind, Water, Earth, Fire Bolt",
                 "13,5–22,5",
-                "Следующий уровень урона"
+                "The next level of damage"
               ],
               [
                 "21",
                 "Low Level Alchemy",
                 "31",
-                "Предмет в золото"
+                "An item into gold"
               ],
               [
                 "25",
                 "Varrock Teleport",
                 "35",
-                "Телепорт в Варрок"
+                "Teleport to Varrock"
               ],
               [
                 "31",
                 "Lumbridge Teleport",
                 "41",
-                "Телепорт в Лумбридж"
+                "Teleport to Lumbridge"
               ],
               [
                 "33",
                 "Telekinetic Grab",
                 "43",
-                "Подобрать предмет издалека (нужно для Dragon Slayer I)"
+                "Pick up an item from afar (needed for Dragon Slayer I)"
               ],
               [
                 "37",
                 "Falador Teleport",
                 "48",
-                "Телепорт в Фаладор"
+                "Teleport to Falador"
               ],
               [
                 "41–59",
                 "Wind, Water, Earth, Fire Blast",
                 "25,5–34,5",
-                "Сильная боевая магия"
+                "Strong combat magic"
               ],
               [
                 "43",
                 "Superheat Item",
                 "53",
-                "Слиток из руды без печи, железо всегда успешно"
+                "A bar from ore without a furnace, iron always succeeds"
               ],
               [
                 "55",
                 "High Level Alchemy",
                 "65",
-                "Предмет в золото выгоднее"
+                "An item into gold pays better"
               ]
             ]
           }
         ]
       },
       {
-        "title": "План прокачки",
+        "title": "Training plan",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Код",
-              "Уровни",
-              "Что делать",
-              "Где",
-              "Заметки"
+              "Code",
+              "Levels",
+              "What to do",
+              "Where",
+              "Notes"
             ],
             "rows": [
               [
                 "MA-1",
                 "1–13",
-                "Страйки по курам и коровам, каждое новое заклинание сразу меняй",
-                "Фермы у Лумбриджа",
-                "Imp Catcher и Witch's Potion дают около 10 уровня"
+                "Strikes on chickens and cows, change to every new spell at once",
+                "The farms by Lumbridge",
+                "Imp Catcher and Witch's Potion give about level 10"
               ],
               [
                 "MA-2",
                 "13–25",
-                "Fire Strike по монстрам",
-                "Где удобно",
-                "С посохом огня руны огня не нужны"
+                "Fire Strike on monsters",
+                "Where convenient",
+                "With a Staff of fire you do not need fire runes"
               ],
               [
                 "MA-3",
                 "25–33",
-                "Телепорты в Варрок",
-                "Где угодно",
-                "~300 телепортов, заодно удобно перемещаться"
+                "Teleports to Varrock",
+                "Anywhere",
+                "~300 teleports, convenient for getting around along the way"
               ],
               [
                 "MA-4",
                 "33–43",
-                "Телепорты в Лумбридж и Фаладор",
-                "Где угодно",
-                "Руны закона — основной расход"
+                "Teleports to Lumbridge and Falador",
+                "Anywhere",
+                "Law runes are the main expense"
               ],
               [
                 "MA-5",
                 "43–55",
-                "Superheat Item на железной руде",
-                "Где угодно",
-                "Заодно качает кузнечное дело"
+                "Superheat Item on iron ore",
+                "Anywhere",
+                "Trains Smithing along the way"
               ],
               [
                 "MA-6",
                 "55+",
                 "High Level Alchemy",
-                "Где угодно",
-                "Проверяй прибыль плагином Item Prices"
+                "Anywhere",
+                "Check the profit with the Item Prices plugin"
               ]
             ]
           }
         ]
       },
       {
-        "title": "Частые вопросы",
+        "title": "Frequently asked questions",
         "blocks": [
           {
             "t": "ul",
             "items": [
               {
-                "text": "**Броня мешает магии?** Да, металл снижает точность заклинаний. Магу лучше мантии (Wizard robe)."
+                "text": "**Does armour hinder magic?** Yes, metal lowers spell accuracy. A mage is better in robes (Wizard robe)."
               },
               {
-                "text": "**Эффективный приём:** на 55 и выше выкованные нагрудники можно превращать в золото High Level Alchemy по дороге между наковальней и банком."
+                "text": "**An efficient trick:** from 55 and up you can turn forged platebodies into gold with High Level Alchemy on the way between the anvil and the bank."
               },
               {
-                "text": "**С подпиской:** древние заклинания, лунная книга, заклинания подготовки."
+                "text": "**With membership:** ancient spells, the lunar book, arceuus spells."
               }
             ]
           }
@@ -2608,11 +2608,11 @@
     ],
     "plan": {
       "head": [
-        "Код",
-        "Уровни",
-        "Что делать",
-        "Где",
-        "Заметки"
+        "Code",
+        "Levels",
+        "What to do",
+        "Where",
+        "Notes"
       ],
       "ranges": [
         {
@@ -2620,15 +2620,15 @@
           "from": 1,
           "to": 13,
           "levels": "1–13",
-          "what": "Страйки по курам и коровам, каждое новое заклинание сразу меняй",
-          "where": "Фермы у Лумбриджа",
-          "notes": "Imp Catcher и Witch's Potion дают около 10 уровня",
+          "what": "Strikes on chickens and cows, change to every new spell at once",
+          "where": "The farms by Lumbridge",
+          "notes": "Imp Catcher and Witch's Potion give about level 10",
           "cells": [
             "MA-1",
             "1–13",
-            "Страйки по курам и коровам, каждое новое заклинание сразу меняй",
-            "Фермы у Лумбриджа",
-            "Imp Catcher и Witch's Potion дают около 10 уровня"
+            "Strikes on chickens and cows, change to every new spell at once",
+            "The farms by Lumbridge",
+            "Imp Catcher and Witch's Potion give about level 10"
           ]
         },
         {
@@ -2636,15 +2636,15 @@
           "from": 13,
           "to": 25,
           "levels": "13–25",
-          "what": "Fire Strike по монстрам",
-          "where": "Где удобно",
-          "notes": "С посохом огня руны огня не нужны",
+          "what": "Fire Strike on monsters",
+          "where": "Where convenient",
+          "notes": "With a Staff of fire you do not need fire runes",
           "cells": [
             "MA-2",
             "13–25",
-            "Fire Strike по монстрам",
-            "Где удобно",
-            "С посохом огня руны огня не нужны"
+            "Fire Strike on monsters",
+            "Where convenient",
+            "With a Staff of fire you do not need fire runes"
           ]
         },
         {
@@ -2652,15 +2652,15 @@
           "from": 25,
           "to": 33,
           "levels": "25–33",
-          "what": "Телепорты в Варрок",
-          "where": "Где угодно",
-          "notes": "~300 телепортов, заодно удобно перемещаться",
+          "what": "Teleports to Varrock",
+          "where": "Anywhere",
+          "notes": "~300 teleports, convenient for getting around along the way",
           "cells": [
             "MA-3",
             "25–33",
-            "Телепорты в Варрок",
-            "Где угодно",
-            "~300 телепортов, заодно удобно перемещаться"
+            "Teleports to Varrock",
+            "Anywhere",
+            "~300 teleports, convenient for getting around along the way"
           ]
         },
         {
@@ -2668,15 +2668,15 @@
           "from": 33,
           "to": 43,
           "levels": "33–43",
-          "what": "Телепорты в Лумбридж и Фаладор",
-          "where": "Где угодно",
-          "notes": "Руны закона — основной расход",
+          "what": "Teleports to Lumbridge and Falador",
+          "where": "Anywhere",
+          "notes": "Law runes are the main expense",
           "cells": [
             "MA-4",
             "33–43",
-            "Телепорты в Лумбридж и Фаладор",
-            "Где угодно",
-            "Руны закона — основной расход"
+            "Teleports to Lumbridge and Falador",
+            "Anywhere",
+            "Law runes are the main expense"
           ]
         },
         {
@@ -2684,15 +2684,15 @@
           "from": 43,
           "to": 55,
           "levels": "43–55",
-          "what": "Superheat Item на железной руде",
-          "where": "Где угодно",
-          "notes": "Заодно качает кузнечное дело",
+          "what": "Superheat Item on iron ore",
+          "where": "Anywhere",
+          "notes": "Trains Smithing along the way",
           "cells": [
             "MA-5",
             "43–55",
-            "Superheat Item на железной руде",
-            "Где угодно",
-            "Заодно качает кузнечное дело"
+            "Superheat Item on iron ore",
+            "Anywhere",
+            "Trains Smithing along the way"
           ]
         },
         {
@@ -2701,14 +2701,14 @@
           "to": null,
           "levels": "55+",
           "what": "High Level Alchemy",
-          "where": "Где угодно",
-          "notes": "Проверяй прибыль плагином Item Prices",
+          "where": "Anywhere",
+          "notes": "Check the profit with the Item Prices plugin",
           "cells": [
             "MA-6",
             "55+",
             "High Level Alchemy",
-            "Где угодно",
-            "Проверяй прибыль плагином Item Prices"
+            "Anywhere",
+            "Check the profit with the Item Prices plugin"
           ]
         }
       ],
@@ -2719,147 +2719,147 @@
   },
   {
     "id": "PR",
-    "title": "Молитва (Prayer)",
-    "name": "Молитва",
+    "title": "Prayer",
+    "name": "Prayer",
     "levelSkills": [
       "prayer"
     ],
     "intro": [
       {
         "t": "p",
-        "text": "Молитва даёт временные усиления в бою. Качается закапыванием костей (клик по кости → Bury) и лампами опыта из квестов. Очки молитвы восстанавливаются у алтаря (Altar), например в церкви Лумбриджа."
+        "text": "Prayer gives temporary boosts in combat. You train it by burying bones (click a bone, Bury) and with XP lamps from quests. Prayer points are restored at an altar (Altar), for example in Lumbridge church."
       }
     ],
     "sections": [
       {
-        "title": "Кости",
+        "title": "Bones",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Кость",
-              "Опыт",
-              "Откуда"
+              "Bone",
+              "XP",
+              "Where from"
             ],
             "rows": [
               [
-                "Обычная (Bones)",
+                "Regular (Bones)",
                 "4,5",
-                "Почти любые монстры: курицы, коровы, гоблины"
+                "Almost any monsters: chickens, cows, goblins"
               ],
               [
-                "Большая (Big bones)",
+                "Big (Big bones)",
                 "15",
-                "Великаны: моховые и холмовые"
+                "Giants: moss and hill"
               ]
             ]
           }
         ]
       },
       {
-        "title": "План прокачки",
+        "title": "Training plan",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Код",
-              "Уровни",
-              "Что делать",
-              "Сколько"
+              "Code",
+              "Levels",
+              "What to do",
+              "How much"
             ],
             "rows": [
               [
                 "PR-1",
                 "1–11",
-                "Квест The Restless Ghost + лампа из X Marks the Spot",
-                "2 квеста"
+                "The quest The Restless Ghost + the lamp from X Marks the Spot",
+                "2 quests"
               ],
               [
                 "PR-2",
                 "11–25",
-                "Закапывай все кости из боя; лампа из The Ides of Milk тоже в молитву",
-                "~1 400 обычных костей"
+                "Bury all the bones from combat; the lamp from The Ides of Milk goes into Prayer too",
+                "~1,400 regular bones"
               ],
               [
                 "PR-3",
                 "25–37",
-                "Большие кости с великанов или с GE",
-                "~1 250 больших костей"
+                "Big bones from giants or from the GE",
+                "~1,250 big bones"
               ],
               [
                 "PR-4",
                 "37–43",
-                "Большие кости",
-                "~1 525 больших костей"
+                "Big bones",
+                "~1,525 big bones"
               ]
             ]
           }
         ]
       },
       {
-        "title": "Полезные молитвы",
+        "title": "Useful prayers",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Уровень",
-              "Молитва",
-              "Что даёт"
+              "Level",
+              "Prayer",
+              "What it gives"
             ],
             "rows": [
               [
                 "1 / 10 / 28",
                 "Thick Skin, Rock Skin, Steel Skin",
-                "Защита +5 / 10 / 15%"
+                "Defence +5 / 10 / 15%"
               ],
               [
                 "4 / 13 / 31",
                 "Burst of Strength, Superhuman Strength, Ultimate Strength",
-                "Сила +5 / 10 / 15%"
+                "Strength +5 / 10 / 15%"
               ],
               [
                 "7 / 16 / 34",
                 "Clarity of Thought, Improved Reflexes, Incredible Reflexes",
-                "Атака +5 / 10 / 15%"
+                "Attack +5 / 10 / 15%"
               ],
               [
                 "8 / 26 / 44",
                 "Sharp Eye, Hawk Eye, Eagle Eye",
-                "Дальний бой +5 / 10 / 15%"
+                "Ranged +5 / 10 / 15%"
               ],
               [
                 "9 / 27 / 45",
                 "Mystic Will, Mystic Lore, Mystic Might",
-                "Магия +5 / 10 / 15%"
+                "Magic +5 / 10 / 15%"
               ],
               [
                 "25",
                 "Protect Item",
-                "После смерти сохраняется на 1 предмет больше"
+                "After death 1 more item is kept"
               ],
               [
                 "37 / 40 / 43",
                 "Protect from Magic, Missiles, Melee",
-                "Защита от магии, стрел, ближнего боя"
+                "Protection from magic, missiles and melee"
               ]
             ]
           }
         ]
       },
       {
-        "title": "Частые вопросы",
+        "title": "Frequently asked questions",
         "blocks": [
           {
             "t": "ul",
             "items": [
               {
-                "text": "**Молитва быстро кончается.** Включай её только на сложных монстрах и выключай сразу после боя."
+                "text": "**Prayer runs out fast.** Turn it on only against hard monsters and turn it off right after the fight."
               },
               {
-                "text": "**Закапывать или продавать большие кости?** До 43 молитвы лучше закапывать: Protect from Melee сильно облегчает бой."
+                "text": "**Bury or sell big bones?** Up to Prayer 43 it is better to bury them: Protect from Melee makes combat much easier."
               },
               {
-                "text": "**С подпиской:** алтарь в своём доме и храмы дают в 3,5 раза больше опыта за кость."
+                "text": "**With membership:** an altar in your own house and temples give 3.5 times more XP per bone."
               }
             ]
           }
@@ -2868,10 +2868,10 @@
     ],
     "plan": {
       "head": [
-        "Код",
-        "Уровни",
-        "Что делать",
-        "Сколько"
+        "Code",
+        "Levels",
+        "What to do",
+        "How much"
       ],
       "ranges": [
         {
@@ -2879,13 +2879,13 @@
           "from": 1,
           "to": 11,
           "levels": "1–11",
-          "what": "Квест The Restless Ghost + лампа из X Marks the Spot",
-          "amount": "2 квеста",
+          "what": "The quest The Restless Ghost + the lamp from X Marks the Spot",
+          "amount": "2 quests",
           "cells": [
             "PR-1",
             "1–11",
-            "Квест The Restless Ghost + лампа из X Marks the Spot",
-            "2 квеста"
+            "The quest The Restless Ghost + the lamp from X Marks the Spot",
+            "2 quests"
           ]
         },
         {
@@ -2893,13 +2893,13 @@
           "from": 11,
           "to": 25,
           "levels": "11–25",
-          "what": "Закапывай все кости из боя; лампа из The Ides of Milk тоже в молитву",
-          "amount": "~1 400 обычных костей",
+          "what": "Bury all the bones from combat; the lamp from The Ides of Milk goes into Prayer too",
+          "amount": "~1,400 regular bones",
           "cells": [
             "PR-2",
             "11–25",
-            "Закапывай все кости из боя; лампа из The Ides of Milk тоже в молитву",
-            "~1 400 обычных костей"
+            "Bury all the bones from combat; the lamp from The Ides of Milk goes into Prayer too",
+            "~1,400 regular bones"
           ]
         },
         {
@@ -2907,13 +2907,13 @@
           "from": 25,
           "to": 37,
           "levels": "25–37",
-          "what": "Большие кости с великанов или с GE",
-          "amount": "~1 250 больших костей",
+          "what": "Big bones from giants or from the GE",
+          "amount": "~1,250 big bones",
           "cells": [
             "PR-3",
             "25–37",
-            "Большие кости с великанов или с GE",
-            "~1 250 больших костей"
+            "Big bones from giants or from the GE",
+            "~1,250 big bones"
           ]
         },
         {
@@ -2921,13 +2921,13 @@
           "from": 37,
           "to": 43,
           "levels": "37–43",
-          "what": "Большие кости",
-          "amount": "~1 525 больших костей",
+          "what": "Big bones",
+          "amount": "~1,525 big bones",
           "cells": [
             "PR-4",
             "37–43",
-            "Большие кости",
-            "~1 525 больших костей"
+            "Big bones",
+            "~1,525 big bones"
           ]
         }
       ],
@@ -2938,108 +2938,108 @@
   },
   {
     "id": "RC",
-    "title": "Создание рун (Runecraft)",
-    "name": "Создание рун",
+    "title": "Runecraft",
+    "name": "Runecraft",
     "levelSkills": [
       "runecraft"
     ],
     "intro": [
       {
         "t": "p",
-        "text": "Свои руны для магии. Открывается квестом **Rune Mysteries** (шаг S2-06). После него маг Aubury в Варроке телепортирует в шахту рунической сущности (Rune essence)."
+        "text": "Your own runes for magic. It opens with the quest **Rune Mysteries** (step S2-06). After it the mage Aubury in Varrock teleports you to the rune essence mine (Rune essence)."
       },
       {
         "t": "p",
-        "text": "**Как это работает:** добываешь сущность в шахте Aubury → несёшь к алтарю нужной стихии с талисманом (Talisman) или тиарой (Tiara) → входишь в алтарь → используешь сущность на алтаре внутри. С ростом уровня за одну сущность выходит больше рун: например, руны воздуха — по 2 с 11 уровня."
+        "text": "**How it works:** you mine essence in Aubury's mine, carry it to the altar of the element you want with a talisman (Talisman) or a tiara (Tiara), enter the altar and use the essence on the altar inside. As your level grows one essence gives more runes: for example, air runes come 2 at a time from level 11."
       }
     ],
     "sections": [
       {
-        "title": "Алтари",
+        "title": "Altars",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Уровень",
-              "Руна",
-              "Опыт за сущность",
-              "Где алтарь"
+              "Level",
+              "Rune",
+              "XP per essence",
+              "Where the altar is"
             ],
             "rows": [
               [
                 "1",
-                "Воздух (Air)",
+                "Air",
                 "5",
-                "К югу от Фаладора"
+                "South of Falador"
               ],
               [
                 "2",
-                "Разум (Mind)",
+                "Mind",
                 "5,5",
-                "К северу от Фаладора"
+                "North of Falador"
               ],
               [
                 "5",
-                "Вода (Water)",
+                "Water",
                 "6",
-                "Болото к югу от Лумбриджа"
+                "The swamp south of Lumbridge"
               ],
               [
                 "9",
-                "Земля (Earth)",
+                "Earth",
                 "6,5",
-                "К северо-востоку от Варрока"
+                "North-east of Varrock"
               ],
               [
                 "14",
-                "Огонь (Fire)",
+                "Fire",
                 "7",
-                "К северу от Al Kharid"
+                "North of Al Kharid"
               ],
               [
                 "20",
-                "Тело (Body)",
+                "Body",
                 "7,5",
-                "К югу от монастыря Эдгвилля"
+                "South of Edgeville Monastery"
               ]
             ]
           }
         ]
       },
       {
-        "title": "План прокачки",
+        "title": "Training plan",
         "blocks": [
           {
             "t": "table",
             "head": [
-              "Код",
-              "Уровни",
-              "Что делать",
-              "Сколько сущности"
+              "Code",
+              "Levels",
+              "What to do",
+              "How much essence"
             ],
             "rows": [
               [
                 "RC-1",
                 "1–9",
-                "Руны воздуха",
+                "Air runes",
                 "~195"
               ],
               [
                 "RC-2",
                 "9–14",
-                "Руны земли — алтарь близко к шахте Aubury и банку Варрока",
+                "Earth runes: the altar is close to Aubury's mine and the Varrock bank",
                 "~175"
               ],
               [
                 "RC-3",
                 "14–20",
-                "Руны огня — банк Al Kharid рядом",
+                "Fire runes: the Al Kharid bank is nearby",
                 "~340"
               ],
               [
                 "RC-4",
                 "20–30",
-                "Руны огня или тела",
+                "Fire or body runes",
                 "~1 270"
               ]
             ]
@@ -3047,22 +3047,22 @@
         ]
       },
       {
-        "title": "Частые вопросы",
+        "title": "Frequently asked questions",
         "blocks": [
           {
             "t": "ul",
             "items": [
               {
-                "text": "**Медленно?** Да, в бесплатной версии это один из самых медленных навыков. Качай, когда нужны свои руны или хочется спокойно побегать."
+                "text": "**Slow?** Yes, in the free version it is one of the slowest skills. Train it when you need your own runes or fancy a calm run around."
               },
               {
-                "text": "**Где талисман?** Талисман воздуха даёт Rune Mysteries, остальные падают с монстров или продаются на GE."
+                "text": "**Where do I get a talisman?** Rune Mysteries gives the air talisman, and the others drop from monsters or are sold on the GE."
               },
               {
-                "text": "**Тиара** не занимает место в инвентаре: делается из серебряного слитка с формой (ремесло 23) и связывается с талисманом у алтаря."
+                "text": "**A tiara** takes no inventory space: it is made from a silver bar with a mould (Crafting 23) and bound to a talisman at the altar."
               },
               {
-                "text": "**С подпиской:** мини-игра Guardians of the Rift — самый популярный способ качать руны."
+                "text": "**With membership:** the Guardians of the Rift minigame is the most popular way to train runes."
               }
             ]
           }
@@ -3071,10 +3071,10 @@
     ],
     "plan": {
       "head": [
-        "Код",
-        "Уровни",
-        "Что делать",
-        "Сколько сущности"
+        "Code",
+        "Levels",
+        "What to do",
+        "How much essence"
       ],
       "ranges": [
         {
@@ -3082,12 +3082,12 @@
           "from": 1,
           "to": 9,
           "levels": "1–9",
-          "what": "Руны воздуха",
+          "what": "Air runes",
           "amount": "~195",
           "cells": [
             "RC-1",
             "1–9",
-            "Руны воздуха",
+            "Air runes",
             "~195"
           ]
         },
@@ -3096,12 +3096,12 @@
           "from": 9,
           "to": 14,
           "levels": "9–14",
-          "what": "Руны земли — алтарь близко к шахте Aubury и банку Варрока",
+          "what": "Earth runes: the altar is close to Aubury's mine and the Varrock bank",
           "amount": "~175",
           "cells": [
             "RC-2",
             "9–14",
-            "Руны земли — алтарь близко к шахте Aubury и банку Варрока",
+            "Earth runes: the altar is close to Aubury's mine and the Varrock bank",
             "~175"
           ]
         },
@@ -3110,12 +3110,12 @@
           "from": 14,
           "to": 20,
           "levels": "14–20",
-          "what": "Руны огня — банк Al Kharid рядом",
+          "what": "Fire runes: the Al Kharid bank is nearby",
           "amount": "~340",
           "cells": [
             "RC-3",
             "14–20",
-            "Руны огня — банк Al Kharid рядом",
+            "Fire runes: the Al Kharid bank is nearby",
             "~340"
           ]
         },
@@ -3124,12 +3124,12 @@
           "from": 20,
           "to": 30,
           "levels": "20–30",
-          "what": "Руны огня или тела",
+          "what": "Fire or body runes",
           "amount": "~1 270",
           "cells": [
             "RC-4",
             "20–30",
-            "Руны огня или тела",
+            "Fire or body runes",
             "~1 270"
           ]
         }

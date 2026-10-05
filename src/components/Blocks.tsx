@@ -1,4 +1,4 @@
-// Блоки гайда: абзацы, списки, таблицы.
+// Guide blocks: paragraphs, lists, tables.
 
 import type { Block } from '../types';
 import { Inline } from './Inline';

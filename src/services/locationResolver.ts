@@ -1,31 +1,29 @@
-// Координаты места по его названию — для «📍» в инспекторе предметов, карты мира и стрелки в RuneLite.
+// The coordinates of a place by its name — for the "📍" in the item inspector, the world map and the RuneLite arrow.
 //
-// Порядок:
-// 0. Строка «где лежит бесплатно»: точка спавна из {{ItemSpawnLine}} на странице предмета — это клетка,
-//    а не центр города. Без сети — дальше по списку.
-// 1. Словарь src/data/majorLocations.json (собран с карт статей OSRS Wiki): точное название, синоним,
-//    название без регистра и служебных слов.
-// 2. OSRS Wiki: карта {{Map}} в статье магазина, NPC или места. Cargo API у вики нет
-//    (action=cargoquery отвечает «Unrecognized value») — поэтому разбирается разметка статьи,
-//    та же, из которой собран словарь.
-// 3. Словарь «примерно»: место, упомянутое в строке («Varrock - east of the Grand Exchange» → Grand Exchange),
-//    или похожее написание. Идёт после вики: точка спавна с вики точнее центра города.
-// 4. Ничего не нашлось — поиск на OSRS Wiki (статья места с её картой).
+// The order:
+// 0. The "where it lies for free" line: the spawn point from {{ItemSpawnLine}} on the item page — this is a tile,
+//    not the centre of a town. Without a network — on down the list.
+// 1. The dictionary src/data/majorLocations.json (collected from OSRS Wiki article maps): the exact name, a synonym,
+//    the name without case and service words.
+// 2. OSRS Wiki: the {{Map}} map in the article of a shop, NPC or place. The wiki has no Cargo API
+//    (action=cargoquery answers "Unrecognized value") — so the article markup is parsed,
+//    the same one the dictionary was built from.
+// 3. The "approximate" dictionary: a place mentioned in the line ("Varrock - east of the Grand Exchange" → Grand Exchange),
+//    or a similar spelling. It goes after the wiki: a wiki spawn point is more exact than a town centre.
+// 4. Nothing found — a search on the OSRS Wiki (the place article with its map).
 //
-// Ответы вики кешируются (в памяти и в localStorage на неделю): одно место не запрашивается дважды,
-// а найденное раньше работает и без интернета.
+// Wiki answers are cached (in memory and in localStorage for a week): one place is not requested twice,
+// and what was found before works without the internet too.
 
 import majorLocations from '../data/majorLocations.json';
 import { articleMapPoint, cleanWikiText, fetchWikitext, spawnPoint, WIKI_ORIGIN, type FetchFn, type WikiPoint } from './wikiApi';
 
-export type LocationSource = 'dictionary' | 'wiki' | 'search-fallback';
-
 export interface ResolvedPoint extends WikiPoint {
   label: string;
   source: 'dictionary' | 'wiki';
-  /** Как нашлось: точное имя, синоним, без регистра, по упоминанию, похожее написание, спавн, статья. */
+  /** How it was found: the exact name, a synonym, without case, by mention, a similar spelling, a spawn, an article. */
   match: 'exact' | 'alias' | 'normalized' | 'substring' | 'fuzzy' | 'spawn' | 'article';
-  /** Статья вики, с карты которой взята точка. */
+  /** The wiki article whose map gave the point. */
   page?: string;
 }
 
@@ -37,7 +35,7 @@ export interface SearchFallback {
 
 export type ResolvedLocation = ResolvedPoint | SearchFallback;
 
-/** Что ещё известно о месте: магазин и продавец из таблицы магазинов, страница предмета для спавна. */
+/** What else is known about the place: the shop and seller from the shop table, the item page for a spawn. */
 export interface ResolveContext {
   shopName?: string;
   itemPage?: string;
@@ -53,14 +51,14 @@ interface DictEntry extends WikiPoint {
 
 const DICT = (majorLocations as { locations: Record<string, DictEntry> }).locations;
 
-/** Служебные слова строк мест: «shop», «by», «south of»… Значимые слова названий не трогаются. */
+/** Service words of place lines: "shop", "by", "south of"… Meaningful words of names are not touched. */
 const STOP = /\b(?:shop|store|by|near|the|of|in|at|north|south|east|west|north-east|north-west|south-east|south-west|outside|inside|upstairs|downstairs|behind)\b/g;
 
-/** Название без регистра, пометок этажа и подписки, пунктуации и служебных слов. */
+/** A name without case, floor and members marks, punctuation and service words. */
 export function normalizeName(s: string): string {
   return cleanWikiText(s)
     .toLowerCase()
-    .replace(/\((?:только для подписки|[^)]*этаж[^)]*)\)/g, ' ')
+    .replace(/\((?:members only|[^)]*floor[^)]*)\)/g, ' ')
     .replace(/\b(?:ground|\d+(?:st|nd|rd|th)) floor\b/g, ' ')
     .replace(/[’`]/g, "'")
     .replace(/[.,:;!?()"-]/g, ' ')
@@ -87,7 +85,7 @@ function point(entry: DictEntry, match: ResolvedPoint['match']): ResolvedPoint {
   return { x: entry.x, y: entry.y, plane: entry.plane, label: entry.label, source: 'dictionary', match, page: entry.page };
 }
 
-/** Точное совпадение: имя, синоним, затем без регистра и служебных слов. */
+/** An exact match: the name, a synonym, then without case and service words. */
 export function matchStrict(text: string): ResolvedPoint | null {
   const raw = text.trim();
   if (!raw) return null;
@@ -101,7 +99,7 @@ export function matchStrict(text: string): ResolvedPoint | null {
   return n ? point(n.entry, 'normalized') : null;
 }
 
-/** Расстояние Левенштейна — для опечаток и разного написания («Draynor Vilage»). */
+/** The Levenshtein distance — for typos and different spellings ("Draynor Vilage"). */
 export function levenshtein(a: string, b: string): number {
   if (a === b) return 0;
   const row = Array.from({ length: b.length + 1 }, (_, i) => i);
@@ -118,8 +116,8 @@ export function levenshtein(a: string, b: string): number {
 }
 
 /**
- * Примерное совпадение: самое длинное известное место, упомянутое в строке целыми словами,
- * иначе похожее написание (не больше одной ошибки на пять букв).
+ * An approximate match: the longest known place mentioned in the line as whole words,
+ * otherwise a similar spelling (no more than one mistake per five letters).
  */
 export function matchLoose(text: string): ResolvedPoint | null {
   const norm = normalizeName(text);
@@ -140,7 +138,7 @@ export function searchUrl(query: string): string {
   return `${WIKI_ORIGIN}/w/Special:Search?search=${encodeURIComponent(query)}`;
 }
 
-// ---------- Вики с кешем ----------
+// ---------- The wiki with a cache ----------
 
 const TTL_MS = 7 * 24 * 60 * 60 * 1000;
 const FAIL_TTL_MS = 60 * 1000;
@@ -155,14 +153,14 @@ export interface Cached {
 }
 
 export interface WikiLocator {
-  /** Точка статьи ({{Map}}); null — статьи или карты нет. */
+  /** An article point ({{Map}}); null — there is no article or map. */
   article(page: string): Promise<WikiPoint | null>;
-  /** Точка спавна предмета на его странице. */
+  /** An item spawn point on its page. */
   spawn(itemPage: string, itemName: string, location: string): Promise<WikiPoint | null>;
   clear(): void;
 }
 
-/** Больше стольких мест кеш не держит: старые вытесняются, localStorage не растёт без конца. */
+/** The cache holds no more places than this: old ones are evicted, localStorage does not grow forever. */
 const MAX_ENTRIES = 300;
 
 function loadStore(now: number): Record<string, Cached> {
@@ -170,7 +168,7 @@ function loadStore(now: number): Record<string, Cached> {
     const raw = localStorage.getItem(STORAGE_KEY);
     const data = raw ? (JSON.parse(raw) as Record<string, Cached>) : {};
     if (!data || typeof data !== 'object') return {};
-    // Устаревшие и ошибки прошлых запусков не нужны: ошибки не пишутся, а устаревшее всё равно спросим заново.
+    // Outdated ones and errors of earlier runs are not needed: errors are not written, and the outdated we will ask again anyway.
     for (const [k, v] of Object.entries(data)) if (!v || v.failed || typeof v.at !== 'number' || now - v.at >= TTL_MS) delete data[k];
     return data;
   } catch {
@@ -188,7 +186,7 @@ function saveStore(data: Record<string, Cached>): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(pruneStore(data)));
   } catch {
-    // Хранилище недоступно — кеш только в памяти.
+    // Storage is unavailable — the cache is in memory only.
   }
 }
 
@@ -198,12 +196,12 @@ const validPoint = (p: unknown): p is WikiPoint => {
 };
 
 /**
- * Запросы к вики за координатами: один запрос на статью, ответы — в памяти и localStorage.
- * Ошибка сети запоминается на минуту — повторный клик не долбит вики, но и не блокирует надолго.
+ * Wiki requests for coordinates: one request per article, answers — in memory and localStorage.
+ * A network error is remembered for a minute — a repeated click does not hammer the wiki, but does not block for long either.
  */
 export function createWikiLocator(fetchFn: FetchFn, now: () => number = Date.now, persistent = true): WikiLocator {
   const store: Record<string, Cached> = persistent ? loadStore(now()) : {};
-  // Разметка статьи держится несколько минут: у предмета спавны в разных местах — страница одна.
+  // An article's markup is kept for a few minutes: an item has spawns in different places — the page is one.
   const texts = new Map<string, { at: number; p: Promise<{ title: string; text: string } | null> }>();
   const inflight = new Map<string, Promise<WikiPoint | null>>();
 
@@ -219,7 +217,7 @@ export function createWikiLocator(fetchFn: FetchFn, now: () => number = Date.now
   async function cached(key: string, load: () => Promise<WikiPoint | null>): Promise<WikiPoint | null> {
     const hit = store[key];
     if (hit && now() - hit.at < (hit.failed ? FAIL_TTL_MS : TTL_MS)) {
-      if (hit.failed) throw new Error('OSRS Wiki недавно не ответила');
+      if (hit.failed) throw new Error('OSRS Wiki did not respond recently');
       return validPoint(hit.value) ? hit.value : null;
     }
     let p = inflight.get(key);
@@ -257,16 +255,16 @@ export function createWikiLocator(fetchFn: FetchFn, now: () => number = Date.now
   };
 }
 
-/** Строка спавна в досье помечена «(только для подписки)» — на вики этой пометки нет. */
-const withoutMembersMark = (s: string) => cleanWikiText(s).replace(/\s*\(только для подписки\)$/, '');
+/** A spawn line in the dossier is marked "(members only)" — the wiki has no such mark. */
+const withoutMembersMark = (s: string) => cleanWikiText(s).replace(/\s*\(members only\)$/, '');
 
 const defaultFetch: FetchFn =(url) => fetch(url, { signal: AbortSignal.timeout(TIMEOUT_MS) });
 let defaultLocator: WikiLocator | null = null;
 const locator = () => (defaultLocator ??= createWikiLocator(defaultFetch));
 
 /**
- * Координаты места. locationName — строка из данных («Lumbridge - outside Fred the Farmer's house», «Port Sarim»),
- * npcName — продавец или NPC. Никогда не бросает: без точки — поиск на вики.
+ * The coordinates of a place. locationName — a line from the data ("Lumbridge - outside Fred the Farmer's house", "Port Sarim"),
+ * npcName — the seller or NPC. It never throws: without a point — a wiki search.
  */
 export async function resolveLocationCoordinates(
   locationName: string,
@@ -275,23 +273,23 @@ export async function resolveLocationCoordinates(
   wiki: WikiLocator = locator(),
 ): Promise<ResolvedLocation> {
   const label = cleanWikiText(ctx.shopName || npcName || locationName) || locationName;
-  // 0. Спавн предмета: клетка, где он лежит, точнее любой точки словаря («Port Sarim» — это весь город).
-  //    Нет сети — сразу словарь; ответ кешируется, второй клик не ждёт вики.
+  // 0. An item spawn: the tile where it lies is more exact than any dictionary point ("Port Sarim" is a whole town).
+  //    No network — straight to the dictionary; the answer is cached, the second click does not wait for the wiki.
   if (ctx.itemPage && ctx.itemName) {
     const spot = withoutMembersMark(locationName);
     try {
       const p = await wiki.spawn(ctx.itemPage, ctx.itemName, spot);
       if (p) return { ...p, label: spot, source: 'wiki', match: 'spawn', page: ctx.itemPage };
     } catch {
-      // Вики не ответила — словарь.
+      // The wiki did not answer — the dictionary.
     }
   }
-  // 1. Словарь, точно: магазин и продавец точнее города.
+  // 1. The dictionary, exact: a shop and seller are more exact than a town.
   for (const name of [ctx.shopName, npcName, locationName]) {
     const hit = name ? matchStrict(name) : null;
     if (hit) return hit;
   }
-  // 2. Вики: статьи магазина, NPC, места.
+  // 2. The wiki: the articles of the shop, NPC, place.
   const tries: (() => Promise<ResolvedPoint | null>)[] = [];
   for (const page of [ctx.shopName, npcName, locationName]) {
     const clean = page ? withoutMembersMark(page) : '';
@@ -306,15 +304,15 @@ export async function resolveLocationCoordinates(
       const hit = await t();
       if (hit) return hit;
     } catch {
-      // Вики не ответила — дальше словарь «примерно» и поиск.
+      // The wiki did not answer — on to the approximate dictionary and search.
     }
   }
-  // 3. Словарь примерно.
+  // 3. The approximate dictionary.
   for (const name of [ctx.shopName, npcName, locationName]) {
     const hit = name ? matchLoose(name) : null;
     if (hit) return hit;
   }
-  // 4. Поиск на вики.
+  // 4. A wiki search.
   return { source: 'search-fallback', label, searchUrl: searchUrl(cleanWikiText(npcName || ctx.shopName || locationName) || locationName) };
 }
 

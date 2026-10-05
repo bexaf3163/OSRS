@@ -3,11 +3,11 @@ import { Inline } from './Inline';
 interface TableProps {
   head: string[];
   rows: string[][];
-  /** Индекс подсвеченной строки. */
+  /** The index of the highlighted row. */
   highlight?: number;
   highlightLabel?: string;
   caption?: string;
-  /** Первая колонка — моноширинный код (WC-1, S1-01). */
+  /** The first column is a monospaced code (WC-1, S1-01). */
   codeColumn?: boolean;
 }
 
@@ -17,7 +17,7 @@ export function Table({ head, rows, highlight, highlightLabel, caption, codeColu
       <table className="table">
         {caption && <caption className="visually-hidden">{caption}</caption>}
         <thead>
-          <tr>{head.map((h, i) => <th key={i} scope="col">{h ? <Inline text={h} /> : <span className="visually-hidden">Название</span>}</th>)}</tr>
+          <tr>{head.map((h, i) => <th key={i} scope="col">{h ? <Inline text={h} /> : <span className="visually-hidden">Name</span>}</th>)}</tr>
         </thead>
         <tbody>
           {rows.map((row, r) => (

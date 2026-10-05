@@ -1,12 +1,12 @@
-// Автоочередь подготовки: сама выстраивает, что сделать до шага, и сама ведёт стрелку к первому, потом ко второму —
-// пока не останется ничего, и тогда возвращает к шагу. Игроку не нужно нажимать «Начать подготовку».
+// The auto-queue for preparation: it lines up what to do before the step and leads the arrow first to the first thing, then to the second,
+// until nothing is left, and then returns to the step. The player does not need to press "Start preparing".
 //
-// Правила безопасности:
-//  — стрелку ставим только когда у задачи есть место (банк, магазин, место прокачки) и у игрока нет другой цели;
-//  — если игрок сам снял стрелку — очередь на паузе, пока он не нажмёт «Продолжить»;
-//  — «неизвестно» не запускает ничего и не закрывает ничего (данных нет — молчим);
-//  — повторы и циклы запрещены теми же правилами объездов (prepRoute.startDetour); выполненное заново не предлагается;
-//  — ничего не покупается и не делается в игре за игрока: стрелка и подсказка, решает он.
+// Safety rules:
+//  - the arrow is set only when the task has a place (a bank, a shop, a training place) and the player has no other target;
+//  - if the player removed the arrow themselves, the queue is paused until they press "Continue";
+//  - "unknown" starts nothing and closes nothing (no data: we stay silent);
+//  - repeats and loops are forbidden by the same detour rules (prepRoute.startDetour); what was done is not offered again;
+//  - nothing is bought and nothing is done in the game for the player: an arrow and a hint, they decide.
 
 import type { GameMode } from '../types';
 import type { ReadinessAction } from './readiness';
@@ -17,9 +17,9 @@ import { exchangeNav, trainingNav } from './trainingNav';
 import type { PlayStyle } from './playStyle';
 
 export interface QueueTask extends PrepTask {
-  /** Куда вести стрелку; null — места нет (квест, шаг, монеты): только подсказка. */
+  /** Where to lead the arrow; null means there is no place (a quest, a step, coins): only a hint. */
   guide: ReadinessAction | null;
-  /** Название способа прокачки — для задач «добери уровень». */
+  /** The training method's name, for the "reach the level" tasks. */
   method?: string;
 }
 
@@ -35,7 +35,7 @@ export interface QueueContext {
   style: PlayStyle;
 }
 
-/** К маршруту подготовки добавляет «куда вести»: банк — как есть, уровень — место способа, покупка — Grand Exchange. */
+/** Adds "where to lead" to the preparation route: a bank as is, a level is the method's place, a purchase is the Grand Exchange. */
 export function buildQueue(route: PrepRoute, ctx: QueueContext): PrepQueue {
   const tasks = route.tasks.map((t): QueueTask => {
     if (t.action?.kind === 'nav') return { ...t, guide: t.action };
@@ -44,13 +44,13 @@ export function buildQueue(route: PrepRoute, ctx: QueueContext): PrepQueue {
       const best = advice.best;
       if (best) {
         const nav = trainingNav(best.method);
-        return { ...t, method: best.method.name, guide: nav ? { kind: 'nav', label: `🧭 К месту: ${nav.label}`, target: nav } : null };
+        return { ...t, method: best.method.name, guide: nav ? { kind: 'nav', label: `🧭 Go to: ${nav.label}`, target: nav } : null };
       }
       return { ...t, guide: null };
     }
     if (t.kind === 'buy' && t.items?.length) {
       const nav = exchangeNav(t.items[0]);
-      return { ...t, guide: nav ? { kind: 'nav', label: `🧭 К бирже — ${t.items[0]}`, target: nav } : null };
+      return { ...t, guide: nav ? { kind: 'nav', label: `🧭 To the exchange: ${t.items[0]}`, target: nav } : null };
     }
     return { ...t, guide: null };
   });
@@ -58,32 +58,32 @@ export function buildQueue(route: PrepRoute, ctx: QueueContext): PrepQueue {
 }
 
 // ---------------------------------------------------------------------------
-// Решение: что делать очереди сейчас
+// Decision: what the queue does now
 
 export interface AutoInput {
   queue: PrepQueue | null;
   stepId: string;
   prep: PrepState;
-  /** Автоподготовка включена в настройках. */
+  /** Auto-prepare is on in the settings. */
   enabled: boolean;
-  /** Есть живая связь с игрой: без неё «не хватает» может оказаться «не знаю». */
+  /** There is a live connection to the game: without it "lacking" may turn out to be "unknown". */
   online: boolean;
-  /** Сейчас в игре уже стоит какая-то цель стрелки. */
+  /** Some arrow target is already set in the game. */
   navActive: boolean;
   announce: 'quiet' | 'full';
   now: number;
-  /** Когда последний раз перенацеливали эту задачу: ключ → время. Не чаще раза в минуту. */
+  /** When this task was last retargeted: key to time. Not more than once a minute. */
   recent: ReadonlyMap<string, number>;
-  /** Отказы игрока в этом сеансе: «шаг:задача». */
+  /** The player's refusals in this session: "step:task". */
   declined: ReadonlySet<string>;
 }
 
 export type AutoDecision =
-  /** Начать объезд и поставить стрелку. */
+  /** Start a detour and set the arrow. */
   | { kind: 'start'; task: QueueTask; frame: DetourFrame; state: PrepState }
-  /** Объезд идёт, а стрелку плагин снял (предмет взят, место достигнуто), задача ещё не готова — поставить к следующему. */
+  /** A detour is going on and the plugin cleared the arrow (the item was taken, the place reached), the task is not done yet: set it to the next. */
   | { kind: 'renav'; task: QueueTask; key: string }
-  /** Следующая задача без места — просто сказать, что дальше. */
+  /** The next task without a place: just say what is next. */
   | { kind: 'announce'; task: QueueTask; key: string };
 
 export const RENAV_GAP_MS = 60_000;
@@ -97,7 +97,7 @@ export function decideAuto(i: AutoInput): AutoDecision | null {
   if (mine.some((f) => f.paused)) return null;
 
   if (mine.length) {
-    // Объезд идёт: перенацеливаем, только если стрелки нет, а задача ещё открыта и у неё есть место.
+    // A detour is going on: we retarget only if there is no arrow while the task is still open and has a place.
     const top = mine[mine.length - 1];
     const task = queue.tasks.find((t) => t.id === top.detourId);
     if (!task || i.navActive || task.guide?.kind !== 'nav') return null;
@@ -113,7 +113,7 @@ export function decideAuto(i: AutoInput): AutoDecision | null {
   if (task.guide?.kind === 'nav') {
     const frame: DetourFrame = {
       sourceStepId: stepId, detourId: task.id, reason: task.label, startedAt: i.now,
-      returnCondition: `${task.label} — готово`,
+      returnCondition: `${task.label} - done`,
     };
     const res = startDetour(i.prep, frame);
     return res.ok ? { kind: 'start', task, frame, state: res.state } : null;

@@ -1,7 +1,7 @@
-// Собирает src/data/weights.json с OSRS Wiki: вес предметов в килограммах (Bucket infobox_item, поле weight) — для
-// плана подготовки: сколько весит сумка и надетое, что лучше оставить в банке на шаге без боя. Берутся предметы
-// программы: база предметов (f2p-items.json) и снаряжение (gear.json). Нужна сеть. Запуск: npm run build-weights
-// (около трёх минут). Чисел от себя нет: нет веса в вики — предмета нет в файле, и вес его неизвестен.
+// Builds src/data/weights.json from the OSRS Wiki: the item weight in kilograms (Bucket infobox_item, the weight field) — for
+// the preparation plan: how much the bag and the worn items weigh, what is better left in the bank on a step without combat. The items taken are the app's:
+// the item database (f2p-items.json) and the gear (gear.json). It needs a network. Run: npm run build-weights
+// (about three minutes). No numbers of our own: no weight in the wiki — the item is not in the file, and its weight is unknown.
 
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
@@ -28,7 +28,7 @@ const read = <T>(rel: string): T => JSON.parse(readFileSync(`${root}${rel}`, 'ut
 const names = new Set<string>();
 for (const g of read<{ items: { name: string }[] }>('src/data/gear.json').items) names.add(g.name);
 for (const i of read<{ nameEn: string }[]>('src/data/f2p-items.json')) names.add(i.nameEn);
-// Что обычно лежит в сумке на шагах маршрута, но не всегда есть в базе предметов.
+// What usually lies in the bag on the route steps but is not always in the item database.
 for (const n of ['Coins', 'Lobster', 'Swordfish', 'Trout', 'Salmon', 'Tuna', 'Shrimps', 'Bread', 'Cooked chicken', 'Cooked meat', 'Stamina potion (4)', 'Energy potion (4)', 'Super energy (4)', 'Law rune', 'Air rune', 'Fire rune', 'Water rune', 'Earth rune', 'Mind rune', 'Body rune', 'Chaos rune', 'Bronze arrow', 'Iron arrow', 'Steel arrow', 'Shortbow', 'Oak shortbow', 'Staff', 'Staff of fire', 'Rope', 'Spade', 'Hammer', 'Tinderbox', 'Knife', 'Bucket', 'Pot', 'Shears']) names.add(n);
 
 const quote = (s: string) => `'${s.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
@@ -41,5 +41,5 @@ for (const name of [...names].sort()) {
   if (kg === undefined) { missing++; continue; }
   items[name] = Math.round(kg * 1000) / 1000;
 }
-writeFileSync(OUT, `${JSON.stringify({ source: 'OSRS Wiki: карточки предметов (Bucket infobox_item, поле weight), килограммы', updated: new Date().toISOString().slice(0, 10), items }, null, 1)}\n`);
-console.log(`Весов: ${Object.keys(items).length}, без веса в вики: ${missing}`);
+writeFileSync(OUT, `${JSON.stringify({ source: 'OSRS Wiki: item infoboxes (Bucket infobox_item, the weight field), kilograms', updated: new Date().toISOString().slice(0, 10), items }, null, 1)}\n`);
+console.log(`Weights: ${Object.keys(items).length}, without a weight in the wiki: ${missing}`);

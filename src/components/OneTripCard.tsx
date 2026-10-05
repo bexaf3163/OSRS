@@ -1,6 +1,6 @@
-// «🧳 Что нужно»: план подготовки к шагу и ближайшим трём (lib/prepPlan.ts) — одно решение, а это блок, который его показывает. У каждой вещи видно, где она (надета / в сумке / в банке / нет / не проверено), что с ней сделать
-// (забрать, купить и у кого, заработать, добыть), почему нужна, и хватает ли расходника. Критичное отделено от «заодно»
-// и «позже»: не всё сразу, не всё в сумку. Что неизвестно, не выдаётся за «нет». Ничего не покупает: решает игрок.
+// "🧳 What you need": the preparation plan for the step and the nearest three (lib/prepPlan.ts) — one decision, and this is the block that shows it. For each thing you see where it is (worn / in the bag / in the bank / missing / not checked), what to do with it
+// (take, buy and from whom, earn, obtain), why it is needed, and whether the consumable is enough. The critical is separated from "meanwhile"
+// and "later": not everything at once, not everything into the bag. What is unknown is not passed off as "missing". It buys nothing: the player decides.
 
 import type { Step } from '../types';
 import { useStore } from '../store';
@@ -15,13 +15,13 @@ import { NavigateButton } from './NavigateButton';
 import { useUpgradeRecommendation } from './UpgradePrompt';
 
 const WHERE: Record<PrepWhere, { icon: string; text: string }> = {
-  EQUIPPED: { icon: '🛡', text: 'надето' },
-  INVENTORY: { icon: '✓', text: 'в сумке' },
-  BANK: { icon: '🏦', text: 'в банке' },
-  MISSING: { icon: '✗', text: 'нет' },
-  UNKNOWN: { icon: '?', text: 'не проверено' },
+  EQUIPPED: { icon: '🛡', text: 'worn' },
+  INVENTORY: { icon: '✓', text: 'in the bag' },
+  BANK: { icon: '🏦', text: 'in the bank' },
+  MISSING: { icon: '✗', text: 'missing' },
+  UNKNOWN: { icon: '?', text: 'not checked' },
 };
-const SUPPLY: Record<Supply, string> = { ENOUGH: 'хватает', LOW: 'мало', CRITICAL: 'очень мало' };
+const SUPPLY: Record<Supply, string> = { ENOUGH: 'enough', LOW: 'low', CRITICAL: 'very low' };
 
 const countOf = (l: PrepLine) => (l.count > 1 ? ` ×${l.count}${l.exact ? '' : '+'}` : '');
 
@@ -49,38 +49,38 @@ function Row({ l, showWhy = true }: { l: PrepLine; showWhy?: boolean }) {
   );
 }
 
-/** Строки «не проверено» одной строкой: действие у них общее — открыть банк или подключить RuneLite. */
+/** The "not checked" lines in one line: they share the action — open the bank or connect RuneLite. */
 function Unknown({ lines }: { lines: PrepLine[] }) {
   if (!lines.length) return null;
   const a = lines.find((l) => l.action)?.action;
   return (
     <li className="prep-line is-unknown">
       <span className="prep-where" aria-hidden="true">?</span>
-      <strong>Не проверено:</strong> {lines.map((l) => `${l.name}${countOf(l)}`).join(', ')}
+      <strong>Not checked:</strong> {lines.map((l) => `${l.name}${countOf(l)}`).join(', ')}
       {a && <> · <Action a={a} /></>}
     </li>
   );
 }
 
-/** Режим восстановления: что сделать по порядку после смерти или телепорта посреди шага. */
+/** The recovery mode: what to do in order after death or a teleport in the middle of a step. */
 export function RecoveryBanner({ step, rec }: { step: Step; rec: NonNullable<PrepPlan['recovery']> }) {
   const { dismiss } = useRecovery();
   const r = rec.recovery;
-  const far = r.distance !== null ? ` (до него ~${r.distance} кл.)` : '';
+  const far = r.distance !== null ? ` (~${r.distance} tiles away)` : '';
   const head = r.reason === 'DEATH'
-    ? `💀 Ты умер${r.landedAt ? ' и возродился в Lumbridge' : ''} — шаг ${step.id} остался далеко${far}`
-    : `🔁 Ты в Lumbridge, а шаг ${step.id} далеко${far}: похоже, телепорт посреди шага`;
-  const back = r.target ? { label: `Шаг ${step.id}`, x: r.target.x, y: r.target.y, plane: r.target.plane, stepId: step.id } : null;
+    ? `💀 You died${r.landedAt ? ' and respawned in Lumbridge' : ''} — step ${step.id} is left far behind${far}`
+    : `🔁 You are in Lumbridge, and step ${step.id} is far${far}: it looks like a teleport in the middle of the step`;
+  const back = r.target ? { label: `Step ${step.id}`, x: r.target.x, y: r.target.y, plane: r.target.plane, stepId: step.id } : null;
   return (
     <div className="prep-recovery" role="alert">
-      <p className="readiness-head"><strong>Режим восстановления</strong></p>
+      <p className="readiness-head"><strong>Recovery mode</strong></p>
       <p className="small">{head}.</p>
       <ol className="small">
         {rec.steps.map((st) => <li key={st.label}><strong>{st.label}</strong>{st.detail && <span className="muted"> — {st.detail}</span>}</li>)}
       </ol>
       <p className="small prep-recovery-actions">
-        {back && <NavigateButton target={back} label="🧭 Вернуться к шагу" />}
-        <button type="button" className="btn btn-ghost btn-sm" onClick={dismiss}>Это не срыв — продолжить</button>
+        {back && <NavigateButton target={back} label="🧭 Return to the step" />}
+        <button type="button" className="btn btn-ghost btn-sm" onClick={dismiss}>This is not a derailment — continue</button>
       </p>
     </div>
   );
@@ -101,7 +101,7 @@ function Section({ title, hint, lines }: { title: string; hint?: string; lines: 
   );
 }
 
-/** inStatus — режим восстановления уже показан выше, в статусе шага (Дзен): здесь не повторяем. */
+/** inStatus — the recovery mode is already shown above, in the step status (Zen): we do not repeat it here. */
 export function OneTripCard({ step, inStatus = false }: { step: Step; inStatus?: boolean }) {
   const { progress } = useStore();
   const profile = styleOf(useFeatures());
@@ -116,80 +116,80 @@ export function OneTripCard({ step, inStatus = false }: { step: Step; inStatus?:
   const quiet = score.verdict === 'READY' && !pending && !coinsShort && slots.over === 0 && plan.weight.level !== 'HEAVY' && !plan.recovery;
   const unknownCoins = plan.coins.need > 0 && plan.coins.have === null;
   return (
-    <section className="one-trip" aria-label="Что нужно">
+    <section className="one-trip" aria-label="What you need">
       <p className="readiness-head">
-        🧳 <strong>Что нужно</strong>
-        <span className="muted"> — на {plan.stepIds.length} {plan.stepIds.length === 1 ? 'шаг' : 'шага'} вперёд</span>
-        {score.percent !== null && <span className={`prep-score is-${score.verdict.toLowerCase()}`}> · готово {score.percent}%</span>}
+        🧳 <strong>What you need</strong>
+        <span className="muted"> — for {plan.stepIds.length} {plan.stepIds.length === 1 ? 'step' : 'steps'} ahead</span>
+        {score.percent !== null && <span className={`prep-score is-${score.verdict.toLowerCase()}`}> · ready {score.percent}%</span>}
       </p>
       {(score.critical > 0 || score.important > 0 || score.optimizations > 0 || score.unknown > 0) && (
         <p className="small prep-chips">
-          {score.critical > 0 && <span className="prep-chip is-critical">🔴 критично: {score.critical}</span>}
-          {score.important > 0 && <span className="prep-chip is-important">🟡 важно: {score.important}</span>}
-          {score.optimizations > 0 && <span className="prep-chip is-opt">⚡ улучшений: {score.optimizations}</span>}
-          {score.unknown > 0 && <span className="prep-chip is-unknown">? не проверено: {score.unknown}</span>}
+          {score.critical > 0 && <span className="prep-chip is-critical">🔴 critical: {score.critical}</span>}
+          {score.important > 0 && <span className="prep-chip is-important">🟡 important: {score.important}</span>}
+          {score.optimizations > 0 && <span className="prep-chip is-opt">⚡ improvements: {score.optimizations}</span>}
+          {score.unknown > 0 && <span className="prep-chip is-unknown">? not checked: {score.unknown}</span>}
         </p>
       )}
       {plan.recovery && !inStatus && <RecoveryBanner step={step} rec={plan.recovery} />}
-      {quiet && <p className="small">🟢 <strong>Всё готово</strong> — можно идти.</p>}
+      {quiet && <p className="small">🟢 <strong>All ready</strong> — you can go.</p>}
       {plan.blockers.length > 0 && (
         <ul className="small">
           {plan.blockers.map((b) => <li key={b.label} className="prep-line is-missing p-critical"><span className="prep-where" aria-hidden="true">🔒</span><strong>{b.label}</strong>{b.detail && <span className="muted"> — {b.detail}</span>}</li>)}
         </ul>
       )}
-      <Section title="🔴 Нужно сейчас" lines={plan.now} />
-      <Section title="🟡 Заодно" hint="понадобится в ближайших шагах" lines={plan.soon} />
+      <Section title="🔴 Needed now" lines={plan.now} />
+      <Section title="🟡 Meanwhile" hint="will be needed in the next steps" lines={plan.soon} />
       {plan.byTheWay.length > 0 && (
-        <p className="small prep-title"><strong>⚪ По ходу шага:</strong> <span className="muted">{plan.byTheWay.map((l) => `${l.name}${countOf(l)}`).join(', ')} — заранее брать не нужно</span></p>
+        <p className="small prep-title"><strong>⚪ Along the way:</strong> <span className="muted">{plan.byTheWay.map((l) => `${l.name}${countOf(l)}`).join(', ')} — no need to take them in advance</span></p>
       )}
       {(coinsShort || unknownCoins) && (
         <p className="small">
-          💰 <strong>Монеты на шаги:</strong>{' '}
+          💰 <strong>Coins for the steps:</strong>{' '}
           {coinsShort
-            ? <>не хватает {formatGp(plan.coins.missing!)} gp из {formatGp(plan.coins.need)}{plan.coins.action?.href && <> · <a href={plan.coins.action.href}>как добрать →</a></>}</>
-            : <span className="muted">нужно {formatGp(plan.coins.need)} gp — сколько у тебя, пока не знаю</span>}
+            ? <>{formatGp(plan.coins.missing!)} gp of {formatGp(plan.coins.need)} missing{plan.coins.action?.href && <> · <a href={plan.coins.action.href}>how to make up →</a></>}</>
+            : <span className="muted">{formatGp(plan.coins.need)} gp needed — I do not know yet how much you have</span>}
         </p>
       )}
       {slots.over > 0 && (
         <p className="notice small" role="note">
-          ⚠️ <strong>Всё сразу не влезет:</strong> в сумке занято {slots.used} из {BAG_SLOTS}, взять надо ещё ≈{slots.adding} — на {slots.over}{' '}
-          {slots.over === 1 ? 'ячейку' : 'ячеек'} больше. Возьми сейчас нужное этому шагу, остальное — позже.
+          ⚠️ <strong>It will not all fit at once:</strong> {slots.used} of {BAG_SLOTS} bag slots used, {slots.adding} more to take — {slots.over}{' '}
+          {slots.over === 1 ? 'slot' : 'slots'} too many. Take what this step needs now, the rest later.
         </p>
       )}
       {plan.weight.items.length > 0 && (
         <div className={`prep-weight is-${plan.weight.level.toLowerCase()}`} role="note">
           <p className="small">
-            ⚖️ <strong>{plan.weight.level === 'HEAVY' ? 'Сними лишнее в банк' : 'Можно облегчить сумку'}:</strong>{' '}
+            ⚖️ <strong>{plan.weight.level === 'HEAVY' ? 'Leave the extra in the bank' : 'You can lighten the bag'}:</strong>{' '}
             {plan.weight.items.map((i) => `${i.name}${i.count > 1 ? ` ×${i.count}` : ''} (${kgText(i.kg)})`).join(', ')}.
           </p>
           <p className="small muted">
-            Шаг без боя — тяжёлое тут не нужно.{' '}
+            A step without combat — the heavy stuff is not needed here.{' '}
             {plan.weight.current !== null && plan.weight.after !== null && plan.weight.ratio !== null
-              ? <>Вес {kgText(plan.weight.current)} → {kgText(Math.max(0, plan.weight.after))}{plan.weight.ratio >= 1.05 ? <>: бег продержится в ~{(Math.round(plan.weight.ratio * 10) / 10).toLocaleString('ru-RU')} раза дольше.</> : '.'}</>
-              : <>Снимется {kgText(plan.weight.saving)}; общий вес из игры пока не пришёл.</>}
+              ? <>Weight {kgText(plan.weight.current)} → {kgText(Math.max(0, plan.weight.after))}{plan.weight.ratio >= 1.05 ? <>: running will last ~{(Math.round(plan.weight.ratio * 10) / 10).toLocaleString('en-US')}x longer.</> : '.'}</>
+              : <>It would shed {kgText(plan.weight.saving)}; the total weight from the game has not arrived yet.</>}
             {plan.weight.action && <> <span className="prep-action">{plan.weight.action.label}{plan.weight.action.nav && <> <NavigateButton target={plan.weight.action.nav} label="🧭" compact /></>}</span></>}
           </p>
         </div>
       )}
       {plan.have.length > 0 && (
         <details className="small">
-          <summary className="muted">🟢 Уже есть: {plan.have.length}</summary>
+          <summary className="muted">🟢 Already have: {plan.have.length}</summary>
           <ul>{plan.have.map((l) => <Row key={l.key} l={l} />)}</ul>
         </details>
       )}
       {profile.showLater && plan.later.length > 0 && (
         <details className="small">
-          <summary className="muted">⏳ Не бери сейчас — понадобится позже: {plan.later.length}</summary>
+          <summary className="muted">⏳ Do not take now — needed later: {plan.later.length}</summary>
           <ul>{plan.later.map((l) => <Row key={l.key} l={l} />)}</ul>
         </details>
       )}
       {plan.optimizations.length > 0 && (
         <details className="small" open={plan.optimizations.some((l) => l.key.startsWith('upgrade:'))}>
-          <summary className="muted">⚡ Улучшения: {plan.optimizations.length}</summary>
+          <summary className="muted">⚡ Improvements: {plan.optimizations.length}</summary>
           <ul>{plan.optimizations.map((l) => <Row key={l.key} l={l} />)}</ul>
         </details>
       )}
-      <p className="small"><a className="btn btn-ghost btn-sm" href="#/shopping">🛒 Открыть закупки</a></p>
+      <p className="small"><a className="btn btn-ghost btn-sm" href="#/shopping">🛒 Open the shopping list</a></p>
     </section>
   );
 }

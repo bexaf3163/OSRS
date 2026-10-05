@@ -19,7 +19,7 @@ import dangerZones from '../src/data/dangerZones.json';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;
 
-/** Транспорт-заглушка с настраиваемым ответом. */
+/** A transport stub with a configurable answer. */
 function transport(reply: { ok: boolean; status: number; data?: unknown }) {
   const calls: { method: string; path: string; body?: unknown }[] = [];
   const t: BridgeTransport = {
@@ -32,12 +32,12 @@ function transport(reply: { ok: boolean; status: number; data?: unknown }) {
   return { t, calls };
 }
 
-describe('Предметы этапа для подсветки в банке', () => {
-  it('повторы и мусор убираются, порядок сохраняется', () => {
+describe('Stage items for the bank highlight', () => {
+  it('repeats and garbage are removed, the order is kept', () => {
     expect(uniqueIds([1351, 590, 1351, 0, -4, 2.5, 590, 995])).toEqual([1351, 590, 995]);
   });
 
-  it('этап 1 в F2P: предметы из банка, без выдаваемых по ходу шага', () => {
+  it('stage 1 in F2P: items from the bank, without those handed out during the step', () => {
     const ids = stageBankItemIds(1, 'f2p');
     expect(ids).toContain(1351); // Bronze axe
     expect(ids).toContain(1265); // Bronze pickaxe
@@ -48,17 +48,17 @@ describe('Предметы этапа для подсветки в банке', 
     for (const id of inStep) if (!alsoFromBank.has(id)) expect(ids).not.toContain(id);
   });
 
-  it('F2P без предметов Members, Members — со всеми', () => {
+  it('F2P without Members items, Members — with all of them', () => {
     for (const stage of [1, 2, 3, 4, 5, 6]) {
       for (const id of stageBankItemIds(stage, 'f2p')) expect(itemById.get(id)?.members).not.toBe(true);
     }
-    // Этапы Members в F2P пусты: их шагов в режиме F2P нет.
+    // Members stages in F2P are empty: their steps do not exist in F2P mode.
     expect(stageBankItemIds(8, 'f2p')).toEqual([]);
     expect(stageBankItemIds(1, 'members').length).toBeGreaterThanOrEqual(stageBankItemIds(1, 'f2p').length);
   });
 });
 
-// ---------- Роутер апгрейда ----------
+// ---------- The upgrade router ----------
 
 const bronzeAxe = { id: 1351, name: 'Bronze axe' };
 const gear = (over: Partial<GearState> = {}): GearState => ({ equipment: [bronzeAxe], inventory: [], coins: 1000, bankCoins: null, ...over });
@@ -66,49 +66,49 @@ const wc = step('S1-08');
 const input = (over: Partial<RouterInput> = {}): RouterInput => ({ step: wc, mode: 'f2p', levels: { woodcutting: 6 }, gear: gear(), ...over });
 
 describe('Smart Tool & Gear Upgrade Router', () => {
-  it('категории шага: рубка и добыча; квест и бой — без этой подсказки', () => {
+  it('step categories: woodcutting and mining; quest and combat — without this hint', () => {
     expect(stepUpgradeCategories(step('S1-08'))).toEqual(['woodcutting']);
     expect(stepUpgradeCategories(step('S1-12'))).toEqual(['mining']);
-    // Оружие на шагах с боем сравнивает разбор снаряжения (tests/gear.test.ts), а не ступени инструментов.
+    // The weapon on combat steps is compared by the gear advisor (tests/gear.test.ts), not by the tool tiers.
     expect(stepUpgradeCategories(step('S3-08'))).toEqual([]);
     expect(stepUpgradeCategories(step('S1-03'))).toEqual([]);
   });
 
-  it('1. Bronze axe и Woodcutting 6 → Steel axe у Bob в Lumbridge', () => {
+  it('1. Bronze axe and Woodcutting 6 → Steel axe from Bob in Lumbridge', () => {
     const r = recommendUpgrade(input())!;
     expect(r.status).toBe('UPGRADE_AVAILABLE');
     expect(r).toMatchObject({ currentItem: 'Bronze axe', recommendedItem: 'Steel axe', recommendedItemId: 1353, npc: 'Bob', shopPrice: 200, approxCost: 200 });
-    // Точка магазина — из словаря мест, не отдельная.
+    // The shop point is from the place dictionary, not a separate one.
     expect(r.coords).toEqual({ x: matchStrict("Bob's Brilliant Axes")!.x, y: matchStrict("Bob's Brilliant Axes")!.y, plane: 0 });
     expect(showsPrompt(r)).toBe(true);
   });
 
-  it('2. Woodcutting 5 → Steel axe не предлагается', () => {
+  it('2. Woodcutting 5 → a Steel axe is not offered', () => {
     const r = recommendUpgrade(input({ levels: { woodcutting: 5 } }))!;
     expect(r.recommendedItem).not.toBe('Steel axe');
     expect(showsPrompt(r)).toBe(false);
   });
 
-  it('3. Steel axe уже в руке или в сумке — подсказки нет', () => {
+  it('3. A Steel axe is already in the hand or the bag — no hint', () => {
     expect(recommendUpgrade(input({ gear: gear({ equipment: [{ id: 1353, name: 'Steel axe' }] }) }))!.status).toBe('NO_UPGRADE');
     const inBag = recommendUpgrade(input({ gear: gear({ equipment: [], inventory: [{ id: 1353, name: 'Steel axe' }] }) }))!;
     expect(inBag.status).toBe('NO_UPGRADE');
     expect(showsPrompt(inBag)).toBe(false);
   });
 
-  it('топор в сумке считается: он рубит и оттуда', () => {
+  it('an axe in the bag counts: it chops from there too', () => {
     const r = recommendFor('woodcutting', input({ levels: { woodcutting: 21 }, gear: gear({ equipment: [], inventory: [{ id: 1355, name: 'Mithril axe' }] }) }));
     expect(r).toMatchObject({ status: 'NO_UPGRADE', currentItem: 'Mithril axe' });
   });
 
-  it('4. Монет мало → UPGRADE_NOT_AFFORDABLE, банк считается', () => {
+  it('4. Few coins → UPGRADE_NOT_AFFORDABLE, the bank counts', () => {
     const poor = recommendUpgrade(input({ gear: gear({ coins: 50 }) }))!;
     expect(poor.status).toBe('UPGRADE_NOT_AFFORDABLE');
     expect(poor.coins).toBe(50);
     expect(recommendUpgrade(input({ gear: gear({ coins: 50, bankCoins: 500 }) }))!.status).toBe('UPGRADE_AVAILABLE');
   });
 
-  it('биржа дешевле магазина — цена по бирже', () => {
+  it('the exchange is cheaper than the shop — the exchange price', () => {
     const r = recommendUpgrade(input({ gePrices: new Map([[1353, 150]]), gear: gear({ coins: 160 }) }))!;
     expect(r).toMatchObject({ status: 'UPGRADE_AVAILABLE', approxCost: 150, shopPrice: 200, gePrice: 150 });
   });
@@ -118,42 +118,42 @@ describe('Smart Tool & Gear Upgrade Router', () => {
     woodcutting: [...toolProgression.woodcutting, { tier: 'Dragon axe', levelReq: 61, membersOnly: true, geOnly: true }],
   };
 
-  it('5. F2P не получает Members-апгрейд', () => {
+  it('5. F2P does not get a Members upgrade', () => {
     const r = recommendFor('woodcutting', input({ levels: { woodcutting: 70 }, data: withMembers, gear: gear({ equipment: [{ id: 1359, name: 'Rune axe' }] }) }));
     expect(r.status).toBe('NO_UPGRADE');
   });
 
-  it('6. Members получает и F2P-, и Members-апгрейды', () => {
+  it('6. Members gets both F2P and Members upgrades', () => {
     const f2pTier = recommendFor('woodcutting', input({ mode: 'members', levels: { woodcutting: 6 }, data: withMembers }));
     expect(f2pTier.recommendedItem).toBe('Steel axe');
     const dragon = recommendFor('woodcutting', input({ mode: 'members', levels: { woodcutting: 70 }, data: withMembers, gear: gear({ equipment: [{ id: 1359, name: 'Rune axe' }] }) }));
     expect(dragon).toMatchObject({ status: 'UPGRADE_AVAILABLE', recommendedItem: 'Dragon axe', geOnly: true });
   });
 
-  it('7–8. «Пропустить» скрывает подсказку только на этом шаге', () => {
+  it('7–8. "Skip" hides the hint only on this step', () => {
     expect(recommendUpgrade(input({ dismissed: ['S1-08'] }))!.status).toBe('SKIPPED');
     const mining = recommendUpgrade({ step: step('S1-12'), mode: 'f2p', levels: { mining: 6 }, gear: gear({ equipment: [{ id: 1265, name: 'Bronze pickaxe' }], coins: 10000 }), dismissed: ['S1-08'] })!;
     expect(mining).toMatchObject({ status: 'UPGRADE_AVAILABLE', recommendedItem: 'Steel pickaxe', npc: 'Nurmof' });
   });
 
-  it('сравнение по ступеням, а не по словам в названии', () => {
-    // «Bronze» в чужом предмете не делает его топором.
+  it('comparison by tiers, not by words in the name', () => {
+    // "Bronze" in a foreign item does not make it an axe.
     const r = recommendUpgrade(input({ gear: gear({ equipment: [{ id: 1117, name: 'Bronze chainbody' }] }) }))!;
     expect(r.currentItem).toBeUndefined();
     expect(r.recommendedItem).toBe('Steel axe');
   });
 
-  it('без RuneLite — UNKNOWN и без подсказки', () => {
+  it('without RuneLite — UNKNOWN and no hint', () => {
     const r = recommendUpgrade(input({ gear: null }))!;
     expect(r.status).toBe('UNKNOWN');
     expect(showsPrompt(r)).toBe(false);
   });
 
-  it('слабые ступени (Iron axe) — не повод идти в магазин', () => {
+  it('weak tiers (Iron axe) are no reason to go to the shop', () => {
     expect(showsPrompt(recommendUpgrade(input({ levels: { woodcutting: 3 } })))).toBe(false);
   });
 
-  it('только с биржи → стрелка к Grand Exchange, с предметом для автоснятия', () => {
+  it('exchange only → the arrow to the Grand Exchange, with an item for the auto-removal', () => {
     const r = recommendUpgrade(input({ levels: { woodcutting: 45 }, gear: gear({ coins: 100000 }) }))!;
     expect(r).toMatchObject({ recommendedItem: 'Rune axe', geOnly: true });
     expect(r.shop).toBeUndefined();
@@ -161,12 +161,12 @@ describe('Smart Tool & Gear Upgrade Router', () => {
     expect(nav).toMatchObject({ label: 'Grand Exchange', itemName: 'Rune axe', itemId: 1359, stepId: 'S1-08' });
   });
 
-  it('9. цель магазина снимается по предмету: в ней есть ID и имя', () => {
+  it('9. the shop target is cleared by the item: it has an ID and a name', () => {
     const nav = upgradeNav(recommendUpgrade(input())!, 'S1-08')!;
     expect(nav).toMatchObject({ label: "Bob's Brilliant Axes", npcNames: ['Bob'], itemName: 'Steel axe', itemId: 1353, stepId: 'S1-08' });
   });
 
-  it('данные ступеней: ID из базы предметов, магазины — в её списке продавцов и в словаре мест', () => {
+  it('tier data: IDs from the item database, shops — in its seller list and in the place dictionary', () => {
     for (const [cat, tiers] of Object.entries(toolProgression).filter(([k]) => k !== 'source') as [string, ToolProgression['woodcutting']][]) {
       let prevLevel = 0;
       for (const t of tiers) {
@@ -176,18 +176,18 @@ describe('Smart Tool & Gear Upgrade Router', () => {
         expect(item?.nameEn, `${t.tier}: ID ${t.itemId}`).toBe(t.tier);
         if (t.shop && !t.geOnly) {
           const shops = (item!.buyLocations ?? []).map((b) => b.shopName.replace(/\.$/, ''));
-          expect(shops, `${t.tier} продаётся в ${t.shop.store}`).toContain(t.shop.store);
-          expect(matchStrict(t.shop.store), `${t.shop.store} в словаре мест`).not.toBeNull();
+          expect(shops, `${t.tier} is sold at ${t.shop.store}`).toContain(t.shop.store);
+          expect(matchStrict(t.shop.store), `${t.shop.store} in the place dictionary`).not.toBeNull();
         }
       }
     }
   });
 });
 
-// ---------- Совместимость ----------
+// ---------- Compatibility ----------
 
-describe('Совместимость сохранений', () => {
-  it('10. старый прогресс без новых полей загружается как раньше', () => {
+describe('Save compatibility', () => {
+  it('10. old progress without the new fields loads as before', () => {
     const old = { version: 3, steps: { 'S1-01': 'done' }, levels: { woodcutting: 10 }, notes: {}, updatedAt: '2026-01-01T00:00:00.000Z' };
     const n = normalizeProgress(old, known)!;
     expect(n.dropped).toBe(0);
@@ -195,7 +195,7 @@ describe('Совместимость сохранений', () => {
     expect(n.progress.upgradeDismissedForSteps).toBeUndefined();
   });
 
-  it('«Пропустить» сохраняется, неизвестные шаги отбрасываются', () => {
+  it('"Skip" is saved, unknown steps are dropped', () => {
     const n = normalizeProgress({ ...emptyProgress(), upgradeDismissedForSteps: ['S1-08', 'S9-99', 5] }, known)!;
     expect(n.progress.upgradeDismissedForSteps).toEqual(['S1-08']);
     let p = withUpgradeDismissed(emptyProgress(), 'S1-08');
@@ -204,38 +204,38 @@ describe('Совместимость сохранений', () => {
     expect(p.upgradeDismissedForSteps).toBeUndefined();
   });
 
-  it('настройки функций: битые и незнакомые — по умолчанию', () => {
+  it('feature settings: broken and unfamiliar — the defaults', () => {
     expect(parseFeatures(null)).toEqual(DEFAULT_FEATURES);
-    expect(parseFeatures('мусор')).toEqual(DEFAULT_FEATURES);
+    expect(parseFeatures('garbage')).toEqual(DEFAULT_FEATURES);
     expect(parseFeatures('{"pacing":false,"x":1,"bankTags":"no"}')).toEqual({ ...DEFAULT_FEATURES, pacing: false });
   });
 });
 
-// ---------- Мост: временная цель, банк, снаряжение, темп ----------
+// ---------- The bridge: a temporary target, the bank, gear, pace ----------
 
-describe('Мост: новые запросы и события', () => {
-  it('/status говорит, какой шаг сейчас в плагине: после перезапуска RuneLite — никакого', async () => {
+describe('The bridge: new requests and events', () => {
+  it('/status says which step is now in the plugin: after a RuneLite restart — none', async () => {
     const live = await checkStatus(transport({ ok: true, status: 200, data: { status: 'ok', inGame: true, activeStepId: 'S1-13' } }).t);
     expect(live.activeStepId).toBe('S1-13');
-    // Gson плагина не пишет пустые поля: шага нет — поля нет.
+    // The plugin Gson does not write empty fields: no step — no field.
     expect((await checkStatus(transport({ ok: true, status: 200, data: { status: 'ok', inGame: false } }).t)).activeStepId).toBeNull();
     expect((await checkStatus(transport({ ok: true, status: 200, data: { status: 'ok', activeStepId: 42 } }).t)).activeStepId).toBeNull();
     expect((await checkStatus(transport({ ok: false, status: 0 }).t)).activeStepId).toBeNull();
   });
 
-  it('шаг с темпом уходит в игру вместе с темпом', () => {
+  it('a step with a pace goes to the game together with the pace', () => {
     const p = toInGameTarget(step('S1-12'))!;
     expect(p.pacing).toMatchObject({ skill: 'mining', targetLevel: 15, targetExp: 2411, expPerAction: 17.5 });
   });
 
-  it('временная цель: ok, оффлайн и отказ выключенной функции', async () => {
+  it('a temporary target: ok, offline and a refusal of a turned-off feature', async () => {
     const target = { label: 'Port Sarim', x: 3029, y: 3221, plane: 0 };
     const ok = transport({ ok: true, status: 200, data: { status: 'ok' } });
     expect(await setNavTarget(target, ok.t)).toEqual({ ok: true });
     expect(ok.calls[0]).toEqual({ method: 'POST', path: '/nav-target', body: target });
     expect(await setNavTarget(target, transport({ ok: false, status: 0 }).t)).toEqual({ ok: false, reason: 'offline' });
-    expect(await setNavTarget(target, transport({ ok: false, status: 409, data: { status: 'error', error: 'навигация выключена' } }).t))
-      .toEqual({ ok: false, reason: 'refused', message: 'навигация выключена' });
+    expect(await setNavTarget(target, transport({ ok: false, status: 409, data: { status: 'error', error: 'navigation is turned off' } }).t))
+      .toEqual({ ok: false, reason: 'refused', message: 'navigation is turned off' });
     const old = await setNavTarget(target, transport({ ok: false, status: 404, data: { status: 'error', error: 'not found' } }).t);
     expect(old.ok).toBe(false);
     const clr = transport({ ok: true, status: 200 });
@@ -243,14 +243,14 @@ describe('Мост: новые запросы и события', () => {
     expect(clr.calls[0].body).toEqual({ clear: true });
   });
 
-  it('предметы этапа — в /bank-tags', async () => {
+  it('the step items — to /bank-tags', async () => {
     const b = transport({ ok: true, status: 200 });
     expect(await syncBankTags('stage-1', [995, 1351], b.t)).toBe(true);
     expect(b.calls[0]).toEqual({ method: 'POST', path: '/bank-tags', body: { stageId: 'stage-1', itemIds: [995, 1351] } });
   });
 
-  it('совет по снаряжению — в /gear-hint; снять — clear; старый плагин и выключенная функция — не ошибка', async () => {
-    const hint = { text: '⚡ Сильнее: Steel scimitar у Zeke (Al Kharid), 400 gp', watchItems: ['Steel scimitar'], highlightItems: [] };
+  it('a gear hint — to /gear-hint; removing — clear; an old plugin and a turned-off feature — not an error', async () => {
+    const hint = { text: '⚡ Stronger: Steel scimitar from Zeke (Al Kharid), 400 gp', watchItems: ['Steel scimitar'], highlightItems: [] };
     const ok = transport({ ok: true, status: 200 });
     expect(await setGearHint(hint, ok.t)).toBe('ok');
     expect(ok.calls[0]).toEqual({ method: 'POST', path: '/gear-hint', body: hint });
@@ -259,80 +259,80 @@ describe('Мост: новые запросы и события', () => {
     expect(clr.calls[0].body).toEqual({ clear: true });
     expect(await setGearHint(hint, transport({ ok: false, status: 0 }).t)).toBe('offline');
     expect(await setGearHint(hint, transport({ ok: false, status: 404 }).t)).toBe('old');
-    expect(await setGearHint(hint, transport({ ok: false, status: 409, data: { status: 'error', error: 'выключено' } }).t)).toBe('off');
+    expect(await setGearHint(hint, transport({ ok: false, status: 409, data: { status: 'error', error: 'turned off' } }).t)).toBe('off');
   });
 
-  it('снаряжение: слот надетого из игры, неизвестный слот — без него', () => {
+  it('gear: the slot of what is worn from the game, an unknown slot — without it', () => {
     expect(parseGear({ equipment: [{ id: 1291, name: 'Bronze sword', slot: 'weapon' }, { id: 1540, name: 'Anti-dragon shield', slot: 'Shield!' }] })!.equipment)
       .toEqual([{ id: 1291, name: 'Bronze sword', slot: 'weapon' }, { id: 1540, name: 'Anti-dragon shield' }]);
   });
 
-  it('снаряжение: пропущенные поля — неизвестно, мусор отбрасывается', () => {
+  it('gear: missing fields — unknown, garbage is dropped', () => {
     expect(parseGear(undefined)).toBeNull();
     expect(parseGear({})).toBeNull();
     expect(parseGear({ equipment: [{ id: 1351, name: 'Bronze axe' }, { id: 'x' }], coins: 250 }))
       .toEqual({ equipment: [{ id: 1351, name: 'Bronze axe' }], inventory: null, coins: 250, bankCoins: null });
   });
 
-  it('темп: из события, без выдуманного времени', () => {
+  it('pace: from the event, without an invented time', () => {
     const e = { type: 'PACING', stepId: 'S1-11', pacing: { skill: 'fishing', targetLevel: 20, xp: 4130, remainingXp: 340, actionsLeft: 34, estimated: false, almost: false, done: false } };
     const p = parsePacing(e)!;
     expect(p).toMatchObject({ actionsLeft: 34, actionsPerMinute: null, etaSeconds: null });
-    expect(etaText(p)).toBe('время рассчитывается…');
-    expect(pacingText(p, 'креветка|креветки|креветок')).toBe('34 креветки до 20 Fishing');
+    expect(etaText(p)).toBe('calculating the time...');
+    expect(pacingText(p, 'shrimp|shrimps')).toBe('34 shrimps to 20 Fishing');
     expect(parsePacing({ type: 'PACING', stepId: 'S1-11', pacing: null })).toBeNull();
     expect(parsePacing({ type: 'PACING', stepId: 'S1-11', pacing: { skill: 'magic' } })).toBeNull();
     const fast = parsePacing({ ...e, pacing: { ...e.pacing, actionsPerMinute: 10, etaSeconds: 204 } })!;
-    expect(etaText(fast)).toBe('≈ 3 мин');
-    expect(pacingText({ ...p, almost: true, actionsLeft: 3 }, 'креветка|креветки|креветок')).toBe('✓ Почти готово: 3 креветки до 20 Fishing');
-    expect(pacingText({ ...p, done: true }, 'креветка')).toBe('✓ Целевой уровень достигнут: 20 Fishing');
-    expect(actionForm('бревно|бревна|брёвен', 11)).toBe('брёвен');
-    expect(actionForm('бревно|бревна|брёвен', 21)).toBe('бревно');
+    expect(etaText(fast)).toBe('≈ 3 min');
+    expect(pacingText({ ...p, almost: true, actionsLeft: 3 }, 'shrimp|shrimps')).toBe('✓ Almost done: 3 shrimps to 20 Fishing');
+    expect(pacingText({ ...p, done: true }, 'shrimp')).toBe('✓ Target level reached: 20 Fishing');
+    expect(actionForm('log|logs', 1)).toBe('log');
+    expect(actionForm('log|logs', 11)).toBe('logs');
   });
 
-  it('темп боя: показан растущий навык, остальные — «потом», готовый навык подсказывает сменить стиль', () => {
+  it('combat pace: the growing skill is shown, the others — "then", a finished skill suggests changing the style', () => {
     const e = { type: 'PACING', stepId: 'S3-08', pacing: {
       skill: 'strength', targetLevel: 30, xp: 5000, remainingXp: 8363, actionsLeft: 111, estimated: true, almost: false, done: false,
       actionsPerMinute: 3.2, etaSeconds: 2081, left: ['defence', 'magic', 'attack'],
     } };
     const p = parsePacing(e)!;
-    // Незнакомые навыки в left отбрасываются.
+    // Unknown skills in left are dropped.
     expect(p.left).toEqual(['defence', 'attack']);
     const all = ['attack', 'strength', 'defence'] as const;
-    expect(pacingText(p, 'воин|воина|воинов', all)).toBe('111 воинов до 30 Strength');
-    expect(etaText(p)).toBe('примерно 35 мин');
-    expect(pacingNext(p)).toBe('потом Defence и Attack');
-    expect(pacingNext({ ...p, left: ['defence'] })).toBe('потом Defence');
+    expect(pacingText(p, 'warrior|warriors', all)).toBe('111 warriors to 30 Strength');
+    expect(etaText(p)).toBe('approx. 35 min');
+    expect(pacingNext(p)).toBe('then Defence and Attack');
+    expect(pacingNext({ ...p, left: ['defence'] })).toBe('then Defence');
     const doneOne = { ...p, done: true, actionsLeft: 0, left: ['defence' as const] };
-    expect(pacingText(doneOne, 'воин|воина|воинов', all)).toBe('✓ 30 Strength — дальше Defence: смени стиль атаки');
+    expect(pacingText(doneOne, 'warrior|warriors', all)).toBe('✓ 30 Strength - next Defence: change attack style');
     expect(pacingNext(doneOne)).toBe('');
-    expect(pacingText({ ...doneOne, left: [] }, 'воин|воина|воинов', all)).toBe('✓ Целевой уровень достигнут: 30 Attack, Strength, Defence');
-    // Старый плагин не шлёт left — это просто пустой список.
+    expect(pacingText({ ...doneOne, left: [] }, 'warrior|warriors', all)).toBe('✓ Target level reached: 30 Attack, Strength, Defence');
+    // An old plugin does not send left — that is just an empty list.
     expect(parsePacing({ ...e, pacing: { ...e.pacing, left: undefined } })!.left).toEqual([]);
   });
 });
 
-// ---------- Досье → карта → игра ----------
+// ---------- The dossier → the map → the game ----------
 
-describe('Места из досье на карту и в игру', () => {
+describe('Places from the dossier to the map and the game', () => {
   const shears = { nameEn: 'Shears', wikiUrl: 'https://oldschool.runescape.wiki/w/Shears' };
 
-  it('страница предмета из ссылки вики', () => {
+  it('the item page from a wiki link', () => {
     expect(pageFromUrl('https://oldschool.runescape.wiki/w/Raw_shrimps')).toBe('Raw shrimps');
     expect(pageFromUrl('https://oldschool.runescape.wiki/w/Cook%27s_Assistant')).toBe("Cook's Assistant");
     expect(pageFromUrl('https://example.com/')).toBeUndefined();
   });
 
-  it('подпись источника: предмет, магазин, город', () => {
+  it('the source caption: an item, a shop, a town', () => {
     const p = { x: 3189, y: 3273, plane: 0, label: 'Fred the Farmer', source: 'dictionary' as const, match: 'substring' as const, page: 'Fred the Farmer' };
     const spawn = mapTarget({ kind: 'spawn', location: "Lumbridge - outside Fred the Farmer's house", item: shears }, p);
-    expect(sourceBadge(spawn)).toBe("Источник предмета: Shears • Lumbridge - outside Fred the Farmer's house");
-    expect(spawn.origin).toMatch(/примерно/);
+    expect(sourceBadge(spawn)).toBe("Item source: Shears • Lumbridge - outside Fred the Farmer's house");
+    expect(spawn.origin).toMatch(/approximate/);
     const shop = mapTarget({ kind: 'shop', location: 'Port Sarim', shop: "Gerrant's Fishy Business.", npc: 'Gerrant' }, { ...p, match: 'exact' });
-    expect(sourceBadge(shop)).toBe("Источник: Gerrant's Fishy Business. • Gerrant • Port Sarim");
+    expect(sourceBadge(shop)).toBe("Source: Gerrant's Fishy Business. • Gerrant • Port Sarim");
   });
 
-  it('в игру уходит только найденная точка; продавец — для подсветки', () => {
+  it('only the found point goes to the game; the seller — for the highlight', () => {
     const p = { x: 3015, y: 3225, plane: 0, label: "Gerrant's Fishy Business", source: 'dictionary' as const, match: 'exact' as const, page: 'x' };
     expect(navPayload({ kind: 'shop', location: 'Port Sarim', shop: "Gerrant's Fishy Business.", npc: 'Gerrant' }, p))
       .toEqual({ label: "Gerrant's Fishy Business", x: 3015, y: 3225, plane: 0, npcNames: ['Gerrant'] });
@@ -340,10 +340,10 @@ describe('Места из досье на карту и в игру', () => {
   });
 });
 
-describe('Радар опасности: данные', () => {
+describe('Danger radar: data', () => {
   const zones = (dangerZones as { zones: { id: string; center: { x: number; y: number; plane: number }; radius: number; warningRadius?: number; severity: string; message: string; npcNames?: string[] }[] }).zones;
 
-  it('проверенные зоны с разумными радиусами и сообщением', () => {
+  it('verified zones with sensible radii and a message', () => {
     expect(zones.map((z) => z.id)).toEqual(expect.arrayContaining(['dark-wizards-varrock', 'draynor-manor-trees', 'draynor-jail-guards']));
     for (const z of zones) {
       expect(z.radius).toBeGreaterThan(0);
@@ -355,19 +355,19 @@ describe('Радар опасности: данные', () => {
     }
   });
 
-  it('тюрьма Port Sarim не опасна (стражники не агрессивны) — зоны нет', () => {
+  it('the Port Sarim jail is not dangerous (the guards are not aggressive) — no zone', () => {
     expect(zones.some((z) => z.id === 'port-sarim-jail')).toBe(false);
   });
 });
 
-describe('Шаги с темпом', () => {
-  it('темп только у шагов прокачки', () => {
+describe('Steps with a pace', () => {
+  it('pace only on training steps', () => {
     const paced: Step[] = allSteps.filter((s) => s.pacing);
     expect(paced.map((s) => s.id)).toEqual(['S1-08', 'S1-11', 'S1-12', 'S2-13', 'S3-08', 'S4-03']);
     for (const s of paced) expect(s.type).toBe('skill');
   });
 
-  it('темп боя: три навыка до одной цели, опыт за противника — 4 × его здоровье', () => {
+  it('combat pace: three skills to one goal, experience per opponent — 4 × its health', () => {
     const hp = new Map(foeData.foes.map((f) => [f.name, f.hitpoints]));
     for (const id of ['S3-08', 'S4-03']) {
       const s = allSteps.find((x) => x.id === id)!;

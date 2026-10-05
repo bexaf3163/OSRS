@@ -1,5 +1,5 @@
-// «⚡ Быстрый вариант для твоих статов»: телепорт, каноэ, срезка — если уровень позволяет.
-// Уровни — из RuneLite, а без него — введённые вручную в «Навыках». Обычный путь шага остаётся как есть.
+// "⚡ A quick variant for your stats": a teleport, a canoe, a shortcut — if the level allows.
+// Levels — from RuneLite, and without it — entered by hand in "Skills". The step's ordinary path stays as it is.
 
 import type { Step } from '../types';
 import { useBridge } from '../bridge';
@@ -27,24 +27,24 @@ export function BranchSuggestions({ step }: { step: Step }) {
           <span className="muted small">
             {kind === 'available'
               ? ` · ${reasonLabel(r)}`
-              : ` · нужно ${conditionLabel(branch.condition)}`}
+              : ` · needs ${conditionLabel(branch.condition)}`}
           </span>
-          {branch.timeSavingSeconds ? <span className="badge badge-qp">экономия {formatSaving(branch.timeSavingSeconds)}</span> : null}
+          {branch.timeSavingSeconds ? <span className="badge badge-qp">saves {formatSaving(branch.timeSavingSeconds)}</span> : null}
         </p>
         {branch.replacementText && <p className="branch-text"><Inline text={branch.replacementText} /></p>}
         {r.missing?.length ? (
           <p className="branch-missing small" role="note">
             {r.missing.every((m) => m.certain)
-              ? <>⚠ Не хватает: {r.missing.map((m) => `${m.label} (есть ${m.have} из ${m.need})`).join(', ')}. Возьми или купи, пока вариант не сработает.</>
-              : <>⚠ В сумке не вижу: {r.missing.map((m) => `${m.label} (${m.have} из ${m.need})`).join(', ')}. Может лежать в банке — открой банк, и я проверю.</>}
+              ? <>⚠ Missing: {r.missing.map((m) => `${m.label} (have ${m.have} of ${m.need})`).join(', ')}. Take or buy it before the variant works.</>
+              : <>⚠ I do not see in the bag: {r.missing.map((m) => `${m.label} (${m.have} of ${m.need})`).join(', ')}. It may be in the bank — open the bank and I will check.</>}
           </p>
         ) : branch.needs?.length ? (
-          <p className="muted small">Нужно с собой: {branch.needs.map((n) => `${n.label}${n.count > 1 ? ` ×${n.count}` : ''}`).join(', ')}.</p>
+          <p className="muted small">Bring with you: {branch.needs.map((n) => `${n.label}${n.count > 1 ? ` ×${n.count}` : ''}`).join(', ')}.</p>
         ) : null}
         {kind === 'available' && enabled && branch.replacementTarget && !r.missing?.some((m) => m.certain) && (
           <button type="button" className={`btn btn-sm ${isChosen ? 'btn-ingame-active' : ''}`}
             onClick={() => chooseBranch(step, isChosen ? null : branch.id)} aria-pressed={isChosen}>
-            {isChosen ? '✓ В игре ведёт этот вариант — вернуть обычный' : '🧭 Вести в игре этим путём'}
+            {isChosen ? '✓ This variant leads in the game — return the ordinary one' : '🧭 Lead in the game by this route'}
           </button>
         )}
       </li>
@@ -52,8 +52,8 @@ export function BranchSuggestions({ step }: { step: Step }) {
   };
 
   return (
-    <section className="step-section branches" aria-label="Быстрые варианты">
-      <h4 className="subhead">⚡ {available.length ? 'Быстрый вариант для твоих статов' : 'Быстрые варианты'}</h4>
+    <section className="step-section branches" aria-label="Quick variants">
+      <h4 className="subhead">⚡ {available.length ? 'A quick variant for your stats' : 'Quick variants'}</h4>
       {(available.length > 0 || unknown.length > 0) && (
         <ul className="branch-list">
           {available.map((r) => card(r, 'available'))}
@@ -61,19 +61,19 @@ export function BranchSuggestions({ step }: { step: Step }) {
         </ul>
       )}
       {unknown.length > 0 && (
-        <p className="muted small">Уровень неизвестен: включи RuneLite с мостом или введи уровень на странице «Навыки».</p>
+        <p className="muted small">The level is unknown: start RuneLite with the bridge or enter the level on the "Skills" page.</p>
       )}
       {locked.length > 0 && (
         <ul className="branch-locked">
           {locked.map((r) => (
             <li key={r.branch.id} className="muted small">
-              🔒 {r.branch.label} — нужно {conditionLabel(r.branch.condition)}
-              {typeof r.have === 'number' && r.branch.condition.type === 'SKILL_LEVEL' ? `, у тебя ${r.have}` : ''}
+              🔒 {r.branch.label} — needs {conditionLabel(r.branch.condition)}
+              {typeof r.have === 'number' && r.branch.condition.type === 'SKILL_LEVEL' ? `, you have ${r.have}` : ''}
             </li>
           ))}
         </ul>
       )}
-      <p className="muted small">Обычный путь ниже тоже работает — быстрый вариант его только сокращает.</p>
+      <p className="muted small">The ordinary path below works too — the quick variant only shortens it.</p>
     </section>
   );
 }

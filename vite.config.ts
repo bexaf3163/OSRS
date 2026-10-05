@@ -6,10 +6,10 @@ import { readFileSync } from 'node:fs';
 const pkg = JSON.parse(readFileSync('package.json', 'utf8')) as { version: string };
 
 /**
- * Content-Security-Policy в собранной странице: скрипты только свои (плюс хэш маленького скрипта темы в
- * index.html), сеть — только вики, цены и карта. Вставляется при сборке: в разработке Vite сам добавляет
- * встроенные скрипты и веб-сокет, и мета-тег их бы заблокировал. Окно Electron открывает страницу с диска
- * (file://), заголовки там не приходят — поэтому мета-тег, а не заголовок.
+ * Content-Security-Policy in the built page: only own scripts (plus the hash of the small theme script in
+ * index.html), the network — only the wiki, prices and the map. Inserted at build time: in development Vite itself adds
+ * inline scripts and a web socket, and the meta tag would block them. The Electron window opens the page from disk
+ * (file://), headers do not arrive there — hence a meta tag, not a header.
  */
 function csp(): Plugin {
   const WIKI = 'https://oldschool.runescape.wiki';
@@ -40,14 +40,14 @@ function csp(): Plugin {
 }
 
 export default defineConfig({
-  // Программа для ПК открывает сборку с диска (file://) — пути только относительные.
+  // The desktop app opens the build from disk (file://) — only relative paths.
   base: './',
   define: { __APP_VERSION__: JSON.stringify(pkg.version) },
   plugins: [react(), csp()],
-  // Большая часть сборки — база предметов (~190 досье с магазинами и дропом) и снаряжения. Программа
-  // читает её с диска, поэтому дробить на куски смысла мало; порог — чтобы заметить неожиданный рост.
+  // Most of the build is the item database (~190 dossiers with shops and drops) and gear. The app
+  // reads it from disk, so splitting into chunks makes little sense; the limit is there to notice unexpected growth.
   build: { chunkSizeWarningLimit: 900 },
-  // Собранные exe пишут данные рядом с собой (release/OSRS-Put-data): их файлы заняты, и наблюдатель
-  // за изменениями падал с EBUSY, пока открыта переносная программа. Туда и в сборку плагина смотреть незачем.
+  // The built exe files write data next to themselves (release/OSRS-Put-data): their files are busy, and the watcher
+  // fell with EBUSY while the portable app was open. There is no reason to watch there and in the plugin build.
   server: { watch: { ignored: ['**/release/**', '**/runelite-bridge/**'] } },
 });

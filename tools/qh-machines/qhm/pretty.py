@@ -1,4 +1,4 @@
-"""Читаемый вывод машины: условия строкой, дерево шагов с отступами."""
+"""Readable output of a machine: the conditions as a string, the step tree with indents."""
 import json
 import sys
 

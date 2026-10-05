@@ -1,4 +1,4 @@
-"""Клетка, тип и текст каждого шага Quest Helper (по именам листьев машин): для сверки с координатами стрелок в данных программы."""
+"""The tile, type and text of each Quest Helper step (by the machine leaf names): for checking against the arrow coordinates in the app data."""
 import json
 import os
 import sys
@@ -32,7 +32,7 @@ def main():
     json.dump(out, open(os.path.join(HERE, 'qh_steps.json'), 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
     n = sum(len(v) for v in out.values())
     w = sum(1 for v in out.values() for x in v.values() if x['wp'])
-    print('квестов', len(out), 'шагов', n, 'с клеткой', w)
+    print('quests', len(out), 'steps', n, 'with a tile', w)
 
 
 if __name__ == '__main__':

@@ -1,72 +1,72 @@
 [
   {
     "id": "attack",
-    "name": "Атака",
+    "name": "Attack",
     "skill": "ME"
   },
   {
     "id": "strength",
-    "name": "Сила",
+    "name": "Strength",
     "skill": "ME"
   },
   {
     "id": "defence",
-    "name": "Защита",
+    "name": "Defence",
     "skill": "ME"
   },
   {
     "id": "ranged",
-    "name": "Дальний бой",
+    "name": "Ranged",
     "skill": "RA"
   },
   {
     "id": "magic",
-    "name": "Магия",
+    "name": "Magic",
     "skill": "MA"
   },
   {
     "id": "prayer",
-    "name": "Молитва",
+    "name": "Prayer",
     "skill": "PR"
   },
   {
     "id": "woodcutting",
-    "name": "Рубка",
+    "name": "Woodcutting",
     "skill": "WC"
   },
   {
     "id": "firemaking",
-    "name": "Костры",
+    "name": "Firemaking",
     "skill": "FM"
   },
   {
     "id": "fishing",
-    "name": "Рыбалка",
+    "name": "Fishing",
     "skill": "FI"
   },
   {
     "id": "cooking",
-    "name": "Готовка",
+    "name": "Cooking",
     "skill": "CO"
   },
   {
     "id": "mining",
-    "name": "Добыча руды",
+    "name": "Mining",
     "skill": "MI"
   },
   {
     "id": "smithing",
-    "name": "Кузнечное дело",
+    "name": "Smithing",
     "skill": "SM"
   },
   {
     "id": "crafting",
-    "name": "Ремесло",
+    "name": "Crafting",
     "skill": "CR"
   },
   {
     "id": "runecraft",
-    "name": "Создание рун",
+    "name": "Runecraft",
     "skill": "RC"
   }
 ]

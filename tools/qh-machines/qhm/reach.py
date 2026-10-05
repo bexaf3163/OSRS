@@ -1,5 +1,5 @@
-"""Достижимость строк: для каждого значения переменной квеста — какие строки этапа машина вообще может выбрать (лист, имя вложенного
-условного шага или родитель из addSubSteps совпадает с ключом строки k)."""
+"""Reachability of lines: for each quest variable value — which stage lines the machine can choose at all (the leaf, the name of the nested
+conditional step or the parent from addSubSteps matches the line key k)."""
 import json
 import os
 import sys
@@ -37,7 +37,7 @@ for sid, m in machines.items():
     q = stages[sid]
     var_values = sorted(int(k) for k in m['stages'])
     sts = q['stages']
-    # какой этап показывает плагин для значения: последний этап с at <= value
+    # which stage the plugin shows for a value: the last stage with at <= value
     def stage_for(v):
         idx = 0
         for i, s in enumerate(sts):
@@ -61,7 +61,7 @@ for sid, m in machines.items():
     for i, s in enumerate(sts):
         if not any(int(k) >= s['at'] for k in m['stages']):
             missing_stage.append((sid, i, s['at']))
-print('строк всего (по значениям)', total, 'недостижимых', len(unreach))
+print('lines in total (by values)', total, 'unreachable', len(unreach))
 for u in unreach[:120]:
     print(u)
-print('этапы без шага у QH:', missing_stage)
+print('stages without a QH step:', missing_stage)

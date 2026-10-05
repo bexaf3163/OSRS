@@ -1,5 +1,5 @@
-// Глобальный поиск: окно поверх страницы, открывается кнопкой в шапке или клавишей «/».
-// Результаты по группам: шаги прохождения, база предметов (с ценой биржи), навыки и справка, OSRS Wiki.
+// The global search: a window over the page, opened by the header button or the "/" key.
+// The results are in groups: the walkthrough steps, the item database (with the exchange price), skills and the reference, the OSRS Wiki.
 
 import { Fragment, useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { items, membersSkills, plugins, reference, skills } from '../data';
@@ -12,12 +12,12 @@ import { IconClose, IconSearch, TYPE_LABEL } from './Icons';
 import { ItemIcon, useWiki } from './WikiDrawer';
 
 const KIND_LABEL: Record<SearchKind, string> = {
-  step: 'Шаг',
-  item: 'Предмет',
-  range: 'Прокачка',
-  skill: 'Навык',
-  ref: 'Справка',
-  plugin: 'Плагин',
+  step: 'Step',
+  item: 'Item',
+  range: 'Training',
+  skill: 'Skill',
+  ref: 'Reference',
+  plugin: 'Plugin',
 };
 
 interface Group {
@@ -26,7 +26,7 @@ interface Group {
   hits: SearchHit[];
 }
 
-/** Строка «найти на вики»: живой поиск, когда в локальной базе нужного нет. */
+/** The "find on the wiki" row: a live search when the local database lacks what is needed. */
 const WIKI_ROW = 'wiki';
 
 export function SearchBox({ open, onClose }: { open: boolean; onClose: () => void }) {
@@ -38,7 +38,7 @@ export function SearchBox({ open, onClose }: { open: boolean; onClose: () => voi
   const [active, setActive] = useState(0);
   const [prices, setPrices] = useState<Record<number, number | null>>({});
   const listId = useId();
-  // Навыки подписки ищутся только в режиме Members — как и шаги этапов 7–9.
+  // Members skills are searched only in Members mode — like the steps of stages 7–9.
   const index = useMemo(() => buildIndex({
     steps, skills: mode === 'members' ? [...skills, ...membersSkills] : skills, reference, plugins, items, typeLabel: TYPE_LABEL,
   }), [steps, mode]);
@@ -47,9 +47,9 @@ export function SearchBox({ open, onClose }: { open: boolean; onClose: () => voi
     const hits = search(index, query, 400);
     const of = (kinds: SearchKind[], limit: number) => hits.filter((h) => kinds.includes(h.item.kind)).slice(0, limit);
     return [
-      { id: 'steps', title: 'Шаги прохождения', hits: of(['step'], 12) },
-      { id: 'items', title: 'База предметов OSRS', hits: of(['item'], 8) },
-      { id: 'other', title: 'Навыки и справка', hits: of(['skill', 'range', 'ref', 'plugin'], 10) },
+      { id: 'steps', title: 'Walkthrough steps', hits: of(['step'], 12) },
+      { id: 'items', title: 'OSRS item database', hits: of(['item'], 8) },
+      { id: 'other', title: 'Skills and reference', hits: of(['skill', 'range', 'ref', 'plugin'], 10) },
     ].filter((g) => g.hits.length);
   }, [index, query]);
 
@@ -68,7 +68,7 @@ export function SearchBox({ open, onClose }: { open: boolean; onClose: () => voi
 
   useEffect(() => setActive(0), [query]);
 
-  // Цены биржи для найденных предметов: один общий запрос, дальше кэш на 5 минут.
+  // The exchange prices for found items: one shared request, then a 5-minute cache.
   useEffect(() => {
     let alive = true;
     const ids = flat.map((h) => h.item.itemId).filter((id): id is number => id !== undefined && !(id in prices));
@@ -76,7 +76,7 @@ export function SearchBox({ open, onClose }: { open: boolean; onClose: () => voi
     Promise.all(ids.map((id) => getGePrice(id).then((p) => [id, p?.buyPrice ?? null] as const).catch(() => [id, null] as const)))
       .then((pairs) => alive && setPrices((old) => ({ ...old, ...Object.fromEntries(pairs) })));
     return () => { alive = false; };
-    // prices не в зависимостях: иначе каждое обновление запускало бы повторный круг.
+    // prices is not in the dependencies: otherwise every update would start another round.
   }, [groups]);
 
   const pick = (hit: SearchHit | typeof WIKI_ROW) => {
@@ -100,17 +100,17 @@ export function SearchBox({ open, onClose }: { open: boolean; onClose: () => voi
 
   let n = -1;
   return (
-    <dialog ref={dialog} className="search-dialog" aria-label="Поиск" onClose={onClose}
+    <dialog ref={dialog} className="search-dialog" aria-label="Search" onClose={onClose}
       onClick={(e) => { if (e.target === dialog.current) onClose(); }}>
       <div className="search-box">
         <IconSearch />
-        <input ref={input} type="search" className="search-input" placeholder="Шаг, квест, NPC, предмет, навык…"
+        <input ref={input} type="search" className="search-input" placeholder="Step, quest, NPC, item, skill…"
           value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={onKey}
           role="combobox" aria-expanded={rows > 0} aria-controls={listId} aria-autocomplete="list"
-          aria-activedescendant={rows ? `${listId}-${active}` : undefined} aria-label="Поиск" enterKeyHint="go" />
-        <button type="button" className="icon-btn" onClick={onClose} aria-label="Закрыть поиск"><IconClose /></button>
+          aria-activedescendant={rows ? `${listId}-${active}` : undefined} aria-label="Search" enterKeyHint="go" />
+        <button type="button" className="icon-btn" onClick={onClose} aria-label="Close the search"><IconClose /></button>
       </div>
-      <ul className="search-results" id={listId} role="listbox" aria-label="Результаты">
+      <ul className="search-results" id={listId} role="listbox" aria-label="Results">
         {groups.map((g) => (
           <Fragment key={g.id}>
             <li role="presentation" className="search-group">{g.title}</li>
@@ -142,13 +142,13 @@ export function SearchBox({ open, onClose }: { open: boolean; onClose: () => voi
             <li id={`${listId}-${flat.length}`} role="option" aria-selected={active === flat.length}
               className={`search-hit ${active === flat.length ? 'is-active' : ''}`}
               onClick={() => pick(WIKI_ROW)} onMouseMove={() => setActive(flat.length)}>
-              <span className="search-hit-head"><IconSearch /><span className="search-hit-title">Найти «{query.trim()}» на OSRS Wiki</span></span>
-              <span className="search-hit-sub">Откроется в инспекторе: цена, магазины, дроп</span>
+              <span className="search-hit-head"><IconSearch /><span className="search-hit-title">Find "{query.trim()}" on the OSRS Wiki</span></span>
+              <span className="search-hit-sub">It opens in the inspector: price, shops, drops</span>
             </li>
           </>
         )}
       </ul>
-      {!query.trim() && <p className="muted empty small">Например: S3-05, Mizgog, лосось, Anti-dragon shield, WC-3, Quest Helper.</p>}
+      {!query.trim() && <p className="muted empty small">For example: S3-05, Mizgog, salmon, Anti-dragon shield, WC-3, Quest Helper.</p>}
     </dialog>
   );
 }

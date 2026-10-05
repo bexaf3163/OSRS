@@ -1,6 +1,6 @@
-// Темп опыта из замеров плагина: опыт по навыкам приходит каждые ~3 секунды, пока идёт прокачка.
-// Скорость — прирост за окно замеров (до 10 минут), только когда игрок действительно качается:
-// после двух минут без прироста замеры сбрасываются, иначе перерыв на банк занижал бы темп.
+// The XP rate from the plugin's measurements: skill XP arrives every ~3 seconds while training goes on.
+// The speed is the gain over the measurement window (up to 10 minutes), only when the player is really training:
+// after two minutes without a gain the measurements are reset, otherwise a bank break would understate the rate.
 
 const WINDOW_MS = 10 * 60_000;
 const IDLE_MS = 2 * 60_000;
@@ -12,17 +12,17 @@ export class XpTracker {
   private samples = new Map<string, Sample[]>();
   private lastGain = new Map<string, number>();
 
-  /** Новый снимок опыта {навык: опыт}. now — миллисекунды (Date.now()). */
+  /** A new XP snapshot {skill: xp}. now — milliseconds (Date.now()). */
   push(xp: Readonly<Record<string, number>>, now: number): void {
     for (const [skill, value] of Object.entries(xp)) {
       if (!Number.isFinite(value)) continue;
       const list = this.samples.get(skill) ?? [];
       const last = list[list.length - 1];
-      if (last && value < last.xp) { list.length = 0; } // другой персонаж или сброс — начинаем заново
+      if (last && value < last.xp) { list.length = 0; } // another character or a reset — start over
       if (last && value > last.xp) this.lastGain.set(skill, now);
       else if (last && now - (this.lastGain.get(skill) ?? last.t) > IDLE_MS) list.length = 0;
       if (!list.length) this.lastGain.set(skill, now);
-      // Одинаковые подряд замеры не копим — хватает первого и последнего.
+      // Identical consecutive measurements are not accumulated — the first and the last are enough.
       if (list.length >= 2 && list[list.length - 1].xp === value && list[list.length - 2].xp === value) list[list.length - 1] = { t: now, xp: value };
       else list.push({ t: now, xp: value });
       while (list.length > 1 && now - list[0].t > WINDOW_MS) list.shift();
@@ -30,7 +30,7 @@ export class XpTracker {
     }
   }
 
-  /** Опыта в час по навыку или null — замеров мало или прироста нет. */
+  /** XP per hour for a skill or null — too few measurements or no gain. */
   rate(skill: string): number | null {
     const list = this.samples.get(skill);
     if (!list || list.length < 2) return null;
@@ -48,16 +48,16 @@ export class XpTracker {
   }
 }
 
-/** Минут до цели при такой скорости; null — скорости нет или цель достигнута. */
+/** Minutes to the goal at this speed; null — there is no speed or the goal is reached. */
 export function etaMinutes(remainingXp: number, perHour: number | null): number | null {
   if (!perHour || perHour <= 0 || remainingXp <= 0) return null;
   return Math.ceil((remainingXp / perHour) * 60);
 }
 
-/** «≈ 25 мин», «≈ 1 ч 20 мин». */
+/** "≈ 25 min", "≈ 1 h 20 min". */
 export function etaText(minutes: number): string {
-  if (minutes < 60) return `≈ ${Math.max(1, minutes)} мин`;
+  if (minutes < 60) return `≈ ${Math.max(1, minutes)} min`;
   const h = Math.floor(minutes / 60);
   const m = minutes % 60;
-  return m ? `≈ ${h} ч ${m} мин` : `≈ ${h} ч`;
+  return m ? `≈ ${h} h ${m} min` : `≈ ${h} h`;
 }

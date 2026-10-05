@@ -1,11 +1,10 @@
 {
-  "source": "OSRS Wiki: карточки предметов и бонусов (Bucket infobox_item, infobox_bonuses), магазины (storeline, infobox_shop), требования — из статей",
+  "source": "OSRS Wiki: item and bonus infoboxes (Bucket infobox_item, infobox_bonuses), shops (storeline, infobox_shop), requirements from the articles",
   "updated": "2026-09-27",
   "items": [
     {
       "id": 1205,
       "name": "Bronze dagger",
-      "nameRu": "Бронзовый кинжал",
       "slot": "weapon",
       "kind": "dagger",
       "metal": "bronze",
@@ -41,7 +40,6 @@
     {
       "id": 1277,
       "name": "Bronze sword",
-      "nameRu": "Бронзовый меч",
       "slot": "weapon",
       "kind": "sword",
       "metal": "bronze",
@@ -77,7 +75,6 @@
     {
       "id": 1321,
       "name": "Bronze scimitar",
-      "nameRu": "Бронзовый ятаган",
       "slot": "weapon",
       "kind": "scimitar",
       "metal": "bronze",
@@ -113,7 +110,6 @@
     {
       "id": 1291,
       "name": "Bronze longsword",
-      "nameRu": "Бронзовый длинный меч",
       "slot": "weapon",
       "kind": "longsword",
       "metal": "bronze",
@@ -149,7 +145,6 @@
     {
       "id": 1422,
       "name": "Bronze mace",
-      "nameRu": "Бронзовая булава",
       "slot": "weapon",
       "kind": "mace",
       "metal": "bronze",
@@ -186,7 +181,6 @@
     {
       "id": 1337,
       "name": "Bronze warhammer",
-      "nameRu": "Бронзовый боевой молот",
       "slot": "weapon",
       "kind": "warhammer",
       "metal": "bronze",
@@ -214,7 +208,6 @@
     {
       "id": 1375,
       "name": "Bronze battleaxe",
-      "nameRu": "Бронзовая секира",
       "slot": "weapon",
       "kind": "battleaxe",
       "metal": "bronze",
@@ -250,7 +243,6 @@
     {
       "id": 1307,
       "name": "Bronze 2h sword",
-      "nameRu": "Бронзовый двуручный меч",
       "slot": "weapon",
       "kind": "2h sword",
       "metal": "bronze",
@@ -279,7 +271,6 @@
     {
       "id": 1351,
       "name": "Bronze axe",
-      "nameRu": "Бронзовый топор",
       "slot": "weapon",
       "kind": "axe",
       "metal": "bronze",
@@ -321,7 +312,6 @@
     {
       "id": 1265,
       "name": "Bronze pickaxe",
-      "nameRu": "Бронзовая кирка",
       "slot": "weapon",
       "kind": "pickaxe",
       "metal": "bronze",
@@ -381,7 +371,6 @@
     {
       "id": 1155,
       "name": "Bronze full helm",
-      "nameRu": "Бронзовый полный шлем",
       "slot": "head",
       "kind": "full helm",
       "metal": "bronze",
@@ -416,7 +405,6 @@
     {
       "id": 1139,
       "name": "Bronze med helm",
-      "nameRu": "Бронзовый средний шлем",
       "slot": "head",
       "kind": "med helm",
       "metal": "bronze",
@@ -451,7 +439,6 @@
     {
       "id": 1117,
       "name": "Bronze platebody",
-      "nameRu": "Бронзовый нагрудник",
       "slot": "body",
       "kind": "platebody",
       "metal": "bronze",
@@ -486,7 +473,6 @@
     {
       "id": 1103,
       "name": "Bronze chainbody",
-      "nameRu": "Бронзовая кольчуга",
       "slot": "body",
       "kind": "chainbody",
       "metal": "bronze",
@@ -527,7 +513,6 @@
     {
       "id": 1075,
       "name": "Bronze platelegs",
-      "nameRu": "Бронзовые поножи",
       "slot": "legs",
       "kind": "platelegs",
       "metal": "bronze",
@@ -562,7 +547,6 @@
     {
       "id": 1087,
       "name": "Bronze plateskirt",
-      "nameRu": "Бронзовая латная юбка",
       "slot": "legs",
       "kind": "plateskirt",
       "metal": "bronze",
@@ -597,7 +581,6 @@
     {
       "id": 1189,
       "name": "Bronze kiteshield",
-      "nameRu": "Бронзовый кайтовый щит",
       "slot": "shield",
       "kind": "kiteshield",
       "metal": "bronze",
@@ -632,7 +615,6 @@
     {
       "id": 1173,
       "name": "Bronze sq shield",
-      "nameRu": "Бронзовый квадратный щит",
       "slot": "shield",
       "kind": "sq shield",
       "metal": "bronze",
@@ -667,7 +649,6 @@
     {
       "id": 1203,
       "name": "Iron dagger",
-      "nameRu": "Железный кинжал",
       "slot": "weapon",
       "kind": "dagger",
       "metal": "iron",
@@ -703,7 +684,6 @@
     {
       "id": 1279,
       "name": "Iron sword",
-      "nameRu": "Железный меч",
       "slot": "weapon",
       "kind": "sword",
       "metal": "iron",
@@ -739,7 +719,6 @@
     {
       "id": 1323,
       "name": "Iron scimitar",
-      "nameRu": "Железный ятаган",
       "slot": "weapon",
       "kind": "scimitar",
       "metal": "iron",
@@ -775,7 +754,6 @@
     {
       "id": 1293,
       "name": "Iron longsword",
-      "nameRu": "Железный длинный меч",
       "slot": "weapon",
       "kind": "longsword",
       "metal": "iron",
@@ -811,7 +789,6 @@
     {
       "id": 1420,
       "name": "Iron mace",
-      "nameRu": "Железная булава",
       "slot": "weapon",
       "kind": "mace",
       "metal": "iron",
@@ -848,7 +825,6 @@
     {
       "id": 1335,
       "name": "Iron warhammer",
-      "nameRu": "Железный боевой молот",
       "slot": "weapon",
       "kind": "warhammer",
       "metal": "iron",
@@ -876,7 +852,6 @@
     {
       "id": 1363,
       "name": "Iron battleaxe",
-      "nameRu": "Железная секира",
       "slot": "weapon",
       "kind": "battleaxe",
       "metal": "iron",
@@ -918,7 +893,6 @@
     {
       "id": 1309,
       "name": "Iron 2h sword",
-      "nameRu": "Железный двуручный меч",
       "slot": "weapon",
       "kind": "2h sword",
       "metal": "iron",
@@ -947,7 +921,6 @@
     {
       "id": 1349,
       "name": "Iron axe",
-      "nameRu": "Железный топор",
       "slot": "weapon",
       "kind": "axe",
       "metal": "iron",
@@ -983,7 +956,6 @@
     {
       "id": 1267,
       "name": "Iron pickaxe",
-      "nameRu": "Железная кирка",
       "slot": "weapon",
       "kind": "pickaxe",
       "metal": "iron",
@@ -1025,7 +997,6 @@
     {
       "id": 1153,
       "name": "Iron full helm",
-      "nameRu": "Железный полный шлем",
       "slot": "head",
       "kind": "full helm",
       "metal": "iron",
@@ -1060,7 +1031,6 @@
     {
       "id": 1137,
       "name": "Iron med helm",
-      "nameRu": "Железный средний шлем",
       "slot": "head",
       "kind": "med helm",
       "metal": "iron",
@@ -1095,7 +1065,6 @@
     {
       "id": 1115,
       "name": "Iron platebody",
-      "nameRu": "Железный нагрудник",
       "slot": "body",
       "kind": "platebody",
       "metal": "iron",
@@ -1130,7 +1099,6 @@
     {
       "id": 1101,
       "name": "Iron chainbody",
-      "nameRu": "Железная кольчуга",
       "slot": "body",
       "kind": "chainbody",
       "metal": "iron",
@@ -1171,7 +1139,6 @@
     {
       "id": 1067,
       "name": "Iron platelegs",
-      "nameRu": "Железные поножи",
       "slot": "legs",
       "kind": "platelegs",
       "metal": "iron",
@@ -1212,7 +1179,6 @@
     {
       "id": 1081,
       "name": "Iron plateskirt",
-      "nameRu": "Железная латная юбка",
       "slot": "legs",
       "kind": "plateskirt",
       "metal": "iron",
@@ -1247,7 +1213,6 @@
     {
       "id": 1191,
       "name": "Iron kiteshield",
-      "nameRu": "Железный кайтовый щит",
       "slot": "shield",
       "kind": "kiteshield",
       "metal": "iron",
@@ -1282,7 +1247,6 @@
     {
       "id": 1175,
       "name": "Iron sq shield",
-      "nameRu": "Железный квадратный щит",
       "slot": "shield",
       "kind": "sq shield",
       "metal": "iron",
@@ -1317,7 +1281,6 @@
     {
       "id": 1207,
       "name": "Steel dagger",
-      "nameRu": "Стальной кинжал",
       "slot": "weapon",
       "kind": "dagger",
       "metal": "steel",
@@ -1356,7 +1319,6 @@
     {
       "id": 1281,
       "name": "Steel sword",
-      "nameRu": "Стальной меч",
       "slot": "weapon",
       "kind": "sword",
       "metal": "steel",
@@ -1395,7 +1357,6 @@
     {
       "id": 1325,
       "name": "Steel scimitar",
-      "nameRu": "Стальной ятаган",
       "slot": "weapon",
       "kind": "scimitar",
       "metal": "steel",
@@ -1434,7 +1395,6 @@
     {
       "id": 1295,
       "name": "Steel longsword",
-      "nameRu": "Стальной длинный меч",
       "slot": "weapon",
       "kind": "longsword",
       "metal": "steel",
@@ -1473,7 +1433,6 @@
     {
       "id": 1424,
       "name": "Steel mace",
-      "nameRu": "Стальная булава",
       "slot": "weapon",
       "kind": "mace",
       "metal": "steel",
@@ -1513,7 +1472,6 @@
     {
       "id": 1339,
       "name": "Steel warhammer",
-      "nameRu": "Стальной боевой молот",
       "slot": "weapon",
       "kind": "warhammer",
       "metal": "steel",
@@ -1544,7 +1502,6 @@
     {
       "id": 1365,
       "name": "Steel battleaxe",
-      "nameRu": "Стальная секира",
       "slot": "weapon",
       "kind": "battleaxe",
       "metal": "steel",
@@ -1589,7 +1546,6 @@
     {
       "id": 1311,
       "name": "Steel 2h sword",
-      "nameRu": "Стальной двуручный меч",
       "slot": "weapon",
       "kind": "2h sword",
       "metal": "steel",
@@ -1621,7 +1577,6 @@
     {
       "id": 1353,
       "name": "Steel axe",
-      "nameRu": "Стальной топор",
       "slot": "weapon",
       "kind": "axe",
       "metal": "steel",
@@ -1660,7 +1615,6 @@
     {
       "id": 1269,
       "name": "Steel pickaxe",
-      "nameRu": "Стальная кирка",
       "slot": "weapon",
       "kind": "pickaxe",
       "metal": "steel",
@@ -1705,7 +1659,6 @@
     {
       "id": 1157,
       "name": "Steel full helm",
-      "nameRu": "Стальной полный шлем",
       "slot": "head",
       "kind": "full helm",
       "metal": "steel",
@@ -1743,7 +1696,6 @@
     {
       "id": 1141,
       "name": "Steel med helm",
-      "nameRu": "Стальной средний шлем",
       "slot": "head",
       "kind": "med helm",
       "metal": "steel",
@@ -1781,7 +1733,6 @@
     {
       "id": 1119,
       "name": "Steel platebody",
-      "nameRu": "Стальной нагрудник",
       "slot": "body",
       "kind": "platebody",
       "metal": "steel",
@@ -1819,7 +1770,6 @@
     {
       "id": 1105,
       "name": "Steel chainbody",
-      "nameRu": "Стальная кольчуга",
       "slot": "body",
       "kind": "chainbody",
       "metal": "steel",
@@ -1863,7 +1813,6 @@
     {
       "id": 1069,
       "name": "Steel platelegs",
-      "nameRu": "Стальные поножи",
       "slot": "legs",
       "kind": "platelegs",
       "metal": "steel",
@@ -1901,7 +1850,6 @@
     {
       "id": 1083,
       "name": "Steel plateskirt",
-      "nameRu": "Стальная латная юбка",
       "slot": "legs",
       "kind": "plateskirt",
       "metal": "steel",
@@ -1939,7 +1887,6 @@
     {
       "id": 1193,
       "name": "Steel kiteshield",
-      "nameRu": "Стальной кайтовый щит",
       "slot": "shield",
       "kind": "kiteshield",
       "metal": "steel",
@@ -1977,7 +1924,6 @@
     {
       "id": 1177,
       "name": "Steel sq shield",
-      "nameRu": "Стальной квадратный щит",
       "slot": "shield",
       "kind": "sq shield",
       "metal": "steel",
@@ -2015,7 +1961,6 @@
     {
       "id": 1217,
       "name": "Black dagger",
-      "nameRu": "Чёрный кинжал",
       "slot": "weapon",
       "kind": "dagger",
       "metal": "black",
@@ -2054,7 +1999,6 @@
     {
       "id": 1283,
       "name": "Black sword",
-      "nameRu": "Чёрный меч",
       "slot": "weapon",
       "kind": "sword",
       "metal": "black",
@@ -2093,7 +2037,6 @@
     {
       "id": 1327,
       "name": "Black scimitar",
-      "nameRu": "Чёрный ятаган",
       "slot": "weapon",
       "kind": "scimitar",
       "metal": "black",
@@ -2124,7 +2067,6 @@
     {
       "id": 1297,
       "name": "Black longsword",
-      "nameRu": "Чёрный длинный меч",
       "slot": "weapon",
       "kind": "longsword",
       "metal": "black",
@@ -2163,7 +2105,6 @@
     {
       "id": 1426,
       "name": "Black mace",
-      "nameRu": "Чёрная булава",
       "slot": "weapon",
       "kind": "mace",
       "metal": "black",
@@ -2195,7 +2136,6 @@
     {
       "id": 1341,
       "name": "Black warhammer",
-      "nameRu": "Чёрный боевой молот",
       "slot": "weapon",
       "kind": "warhammer",
       "metal": "black",
@@ -2226,7 +2166,6 @@
     {
       "id": 1367,
       "name": "Black battleaxe",
-      "nameRu": "Чёрная секира",
       "slot": "weapon",
       "kind": "battleaxe",
       "metal": "black",
@@ -2265,7 +2204,6 @@
     {
       "id": 1313,
       "name": "Black 2h sword",
-      "nameRu": "Чёрный двуручный меч",
       "slot": "weapon",
       "kind": "2h sword",
       "metal": "black",
@@ -2297,7 +2235,6 @@
     {
       "id": 1361,
       "name": "Black axe",
-      "nameRu": "Чёрный топор",
       "slot": "weapon",
       "kind": "axe",
       "metal": "black",
@@ -2328,7 +2265,6 @@
     {
       "id": 12297,
       "name": "Black pickaxe",
-      "nameRu": "Чёрная кирка",
       "slot": "weapon",
       "kind": "pickaxe",
       "metal": "black",
@@ -2359,7 +2295,6 @@
     {
       "id": 1165,
       "name": "Black full helm",
-      "nameRu": "Чёрный полный шлем",
       "slot": "head",
       "kind": "full helm",
       "metal": "black",
@@ -2397,7 +2332,6 @@
     {
       "id": 1151,
       "name": "Black med helm",
-      "nameRu": "Чёрный средний шлем",
       "slot": "head",
       "kind": "med helm",
       "metal": "black",
@@ -2427,7 +2361,6 @@
     {
       "id": 1125,
       "name": "Black platebody",
-      "nameRu": "Чёрный нагрудник",
       "slot": "body",
       "kind": "platebody",
       "metal": "black",
@@ -2465,7 +2398,6 @@
     {
       "id": 1107,
       "name": "Black chainbody",
-      "nameRu": "Чёрная кольчуга",
       "slot": "body",
       "kind": "chainbody",
       "metal": "black",
@@ -2503,7 +2435,6 @@
     {
       "id": 1077,
       "name": "Black platelegs",
-      "nameRu": "Чёрные поножи",
       "slot": "legs",
       "kind": "platelegs",
       "metal": "black",
@@ -2547,7 +2478,6 @@
     {
       "id": 1089,
       "name": "Black plateskirt",
-      "nameRu": "Чёрная латная юбка",
       "slot": "legs",
       "kind": "plateskirt",
       "metal": "black",
@@ -2585,7 +2515,6 @@
     {
       "id": 1195,
       "name": "Black kiteshield",
-      "nameRu": "Чёрный кайтовый щит",
       "slot": "shield",
       "kind": "kiteshield",
       "metal": "black",
@@ -2615,7 +2544,6 @@
     {
       "id": 1179,
       "name": "Black sq shield",
-      "nameRu": "Чёрный квадратный щит",
       "slot": "shield",
       "kind": "sq shield",
       "metal": "black",
@@ -2645,7 +2573,6 @@
     {
       "id": 1209,
       "name": "Mithril dagger",
-      "nameRu": "Мифриловый кинжал",
       "slot": "weapon",
       "kind": "dagger",
       "metal": "mithril",
@@ -2684,7 +2611,6 @@
     {
       "id": 1285,
       "name": "Mithril sword",
-      "nameRu": "Мифриловый меч",
       "slot": "weapon",
       "kind": "sword",
       "metal": "mithril",
@@ -2723,7 +2649,6 @@
     {
       "id": 1329,
       "name": "Mithril scimitar",
-      "nameRu": "Мифриловый ятаган",
       "slot": "weapon",
       "kind": "scimitar",
       "metal": "mithril",
@@ -2762,7 +2687,6 @@
     {
       "id": 1299,
       "name": "Mithril longsword",
-      "nameRu": "Мифриловый длинный меч",
       "slot": "weapon",
       "kind": "longsword",
       "metal": "mithril",
@@ -2801,7 +2725,6 @@
     {
       "id": 1428,
       "name": "Mithril mace",
-      "nameRu": "Мифриловая булава",
       "slot": "weapon",
       "kind": "mace",
       "metal": "mithril",
@@ -2841,7 +2764,6 @@
     {
       "id": 1343,
       "name": "Mithril warhammer",
-      "nameRu": "Мифриловый боевой молот",
       "slot": "weapon",
       "kind": "warhammer",
       "metal": "mithril",
@@ -2872,7 +2794,6 @@
     {
       "id": 1369,
       "name": "Mithril battleaxe",
-      "nameRu": "Мифриловая секира",
       "slot": "weapon",
       "kind": "battleaxe",
       "metal": "mithril",
@@ -2917,7 +2838,6 @@
     {
       "id": 1315,
       "name": "Mithril 2h sword",
-      "nameRu": "Мифриловый двуручный меч",
       "slot": "weapon",
       "kind": "2h sword",
       "metal": "mithril",
@@ -2949,7 +2869,6 @@
     {
       "id": 1355,
       "name": "Mithril axe",
-      "nameRu": "Мифриловый топор",
       "slot": "weapon",
       "kind": "axe",
       "metal": "mithril",
@@ -2980,7 +2899,6 @@
     {
       "id": 1273,
       "name": "Mithril pickaxe",
-      "nameRu": "Мифриловая кирка",
       "slot": "weapon",
       "kind": "pickaxe",
       "metal": "mithril",
@@ -3025,7 +2943,6 @@
     {
       "id": 1159,
       "name": "Mithril full helm",
-      "nameRu": "Мифриловый полный шлем",
       "slot": "head",
       "kind": "full helm",
       "metal": "mithril",
@@ -3063,7 +2980,6 @@
     {
       "id": 1143,
       "name": "Mithril med helm",
-      "nameRu": "Мифриловый средний шлем",
       "slot": "head",
       "kind": "med helm",
       "metal": "mithril",
@@ -3101,7 +3017,6 @@
     {
       "id": 1121,
       "name": "Mithril platebody",
-      "nameRu": "Мифриловый нагрудник",
       "slot": "body",
       "kind": "platebody",
       "metal": "mithril",
@@ -3139,7 +3054,6 @@
     {
       "id": 1109,
       "name": "Mithril chainbody",
-      "nameRu": "Мифриловая кольчуга",
       "slot": "body",
       "kind": "chainbody",
       "metal": "mithril",
@@ -3183,7 +3097,6 @@
     {
       "id": 1071,
       "name": "Mithril platelegs",
-      "nameRu": "Мифриловые поножи",
       "slot": "legs",
       "kind": "platelegs",
       "metal": "mithril",
@@ -3221,7 +3134,6 @@
     {
       "id": 1085,
       "name": "Mithril plateskirt",
-      "nameRu": "Мифриловая латная юбка",
       "slot": "legs",
       "kind": "plateskirt",
       "metal": "mithril",
@@ -3259,7 +3171,6 @@
     {
       "id": 1197,
       "name": "Mithril kiteshield",
-      "nameRu": "Мифриловый кайтовый щит",
       "slot": "shield",
       "kind": "kiteshield",
       "metal": "mithril",
@@ -3289,7 +3200,6 @@
     {
       "id": 1181,
       "name": "Mithril sq shield",
-      "nameRu": "Мифриловый квадратный щит",
       "slot": "shield",
       "kind": "sq shield",
       "metal": "mithril",
@@ -3327,7 +3237,6 @@
     {
       "id": 1211,
       "name": "Adamant dagger",
-      "nameRu": "Адамантовый кинжал",
       "slot": "weapon",
       "kind": "dagger",
       "metal": "adamant",
@@ -3366,7 +3275,6 @@
     {
       "id": 1287,
       "name": "Adamant sword",
-      "nameRu": "Адамантовый меч",
       "slot": "weapon",
       "kind": "sword",
       "metal": "adamant",
@@ -3405,7 +3313,6 @@
     {
       "id": 1331,
       "name": "Adamant scimitar",
-      "nameRu": "Адамантовый ятаган",
       "slot": "weapon",
       "kind": "scimitar",
       "metal": "adamant",
@@ -3436,7 +3343,6 @@
     {
       "id": 1301,
       "name": "Adamant longsword",
-      "nameRu": "Адамантовый длинный меч",
       "slot": "weapon",
       "kind": "longsword",
       "metal": "adamant",
@@ -3475,7 +3381,6 @@
     {
       "id": 1430,
       "name": "Adamant mace",
-      "nameRu": "Адамантовая булава",
       "slot": "weapon",
       "kind": "mace",
       "metal": "adamant",
@@ -3515,7 +3420,6 @@
     {
       "id": 1345,
       "name": "Adamant warhammer",
-      "nameRu": "Адамантовый боевой молот",
       "slot": "weapon",
       "kind": "warhammer",
       "metal": "adamant",
@@ -3546,7 +3450,6 @@
     {
       "id": 1371,
       "name": "Adamant battleaxe",
-      "nameRu": "Адамантовая секира",
       "slot": "weapon",
       "kind": "battleaxe",
       "metal": "adamant",
@@ -3585,7 +3488,6 @@
     {
       "id": 1317,
       "name": "Adamant 2h sword",
-      "nameRu": "Адамантовый двуручный меч",
       "slot": "weapon",
       "kind": "2h sword",
       "metal": "adamant",
@@ -3617,7 +3519,6 @@
     {
       "id": 1357,
       "name": "Adamant axe",
-      "nameRu": "Адамантовый топор",
       "slot": "weapon",
       "kind": "axe",
       "metal": "adamant",
@@ -3648,7 +3549,6 @@
     {
       "id": 1271,
       "name": "Adamant pickaxe",
-      "nameRu": "Адамантовая кирка",
       "slot": "weapon",
       "kind": "pickaxe",
       "metal": "adamant",
@@ -3693,7 +3593,6 @@
     {
       "id": 1161,
       "name": "Adamant full helm",
-      "nameRu": "Адамантовый полный шлем",
       "slot": "head",
       "kind": "full helm",
       "metal": "adamant",
@@ -3731,7 +3630,6 @@
     {
       "id": 1145,
       "name": "Adamant med helm",
-      "nameRu": "Адамантовый средний шлем",
       "slot": "head",
       "kind": "med helm",
       "metal": "adamant",
@@ -3769,7 +3667,6 @@
     {
       "id": 1123,
       "name": "Adamant platebody",
-      "nameRu": "Адамантовый нагрудник",
       "slot": "body",
       "kind": "platebody",
       "metal": "adamant",
@@ -3807,7 +3704,6 @@
     {
       "id": 1111,
       "name": "Adamant chainbody",
-      "nameRu": "Адамантовая кольчуга",
       "slot": "body",
       "kind": "chainbody",
       "metal": "adamant",
@@ -3845,7 +3741,6 @@
     {
       "id": 1073,
       "name": "Adamant platelegs",
-      "nameRu": "Адамантовые поножи",
       "slot": "legs",
       "kind": "platelegs",
       "metal": "adamant",
@@ -3883,7 +3778,6 @@
     {
       "id": 1091,
       "name": "Adamant plateskirt",
-      "nameRu": "Адамантовая латная юбка",
       "slot": "legs",
       "kind": "plateskirt",
       "metal": "adamant",
@@ -3921,7 +3815,6 @@
     {
       "id": 1199,
       "name": "Adamant kiteshield",
-      "nameRu": "Адамантовый кайтовый щит",
       "slot": "shield",
       "kind": "kiteshield",
       "metal": "adamant",
@@ -3951,7 +3844,6 @@
     {
       "id": 1183,
       "name": "Adamant sq shield",
-      "nameRu": "Адамантовый квадратный щит",
       "slot": "shield",
       "kind": "sq shield",
       "metal": "adamant",
@@ -3981,7 +3873,6 @@
     {
       "id": 1213,
       "name": "Rune dagger",
-      "nameRu": "Рунический кинжал",
       "slot": "weapon",
       "kind": "dagger",
       "metal": "rune",
@@ -4012,7 +3903,6 @@
     {
       "id": 1289,
       "name": "Rune sword",
-      "nameRu": "Рунический меч",
       "slot": "weapon",
       "kind": "sword",
       "metal": "rune",
@@ -4051,7 +3941,6 @@
     {
       "id": 1333,
       "name": "Rune scimitar",
-      "nameRu": "Рунический ятаган",
       "slot": "weapon",
       "kind": "scimitar",
       "metal": "rune",
@@ -4082,7 +3971,6 @@
     {
       "id": 1303,
       "name": "Rune longsword",
-      "nameRu": "Рунический длинный меч",
       "slot": "weapon",
       "kind": "longsword",
       "metal": "rune",
@@ -4121,7 +4009,6 @@
     {
       "id": 1432,
       "name": "Rune mace",
-      "nameRu": "Руническая булава",
       "slot": "weapon",
       "kind": "mace",
       "metal": "rune",
@@ -4161,7 +4048,6 @@
     {
       "id": 1347,
       "name": "Rune warhammer",
-      "nameRu": "Рунический боевой молот",
       "slot": "weapon",
       "kind": "warhammer",
       "metal": "rune",
@@ -4192,7 +4078,6 @@
     {
       "id": 1373,
       "name": "Rune battleaxe",
-      "nameRu": "Руническая секира",
       "slot": "weapon",
       "kind": "battleaxe",
       "metal": "rune",
@@ -4223,7 +4108,6 @@
     {
       "id": 1319,
       "name": "Rune 2h sword",
-      "nameRu": "Рунический двуручный меч",
       "slot": "weapon",
       "kind": "2h sword",
       "metal": "rune",
@@ -4255,7 +4139,6 @@
     {
       "id": 1359,
       "name": "Rune axe",
-      "nameRu": "Рунический топор",
       "slot": "weapon",
       "kind": "axe",
       "metal": "rune",
@@ -4286,7 +4169,6 @@
     {
       "id": 1275,
       "name": "Rune pickaxe",
-      "nameRu": "Руническая кирка",
       "slot": "weapon",
       "kind": "pickaxe",
       "metal": "rune",
@@ -4331,7 +4213,6 @@
     {
       "id": 1163,
       "name": "Rune full helm",
-      "nameRu": "Рунический полный шлем",
       "slot": "head",
       "kind": "full helm",
       "metal": "rune",
@@ -4361,7 +4242,6 @@
     {
       "id": 1147,
       "name": "Rune med helm",
-      "nameRu": "Рунический средний шлем",
       "slot": "head",
       "kind": "med helm",
       "metal": "rune",
@@ -4391,7 +4271,6 @@
     {
       "id": 1127,
       "name": "Rune platebody",
-      "nameRu": "Рунический нагрудник",
       "slot": "body",
       "kind": "platebody",
       "metal": "rune",
@@ -4432,7 +4311,6 @@
     {
       "id": 1113,
       "name": "Rune chainbody",
-      "nameRu": "Руническая кольчуга",
       "slot": "body",
       "kind": "chainbody",
       "metal": "rune",
@@ -4470,7 +4348,6 @@
     {
       "id": 1079,
       "name": "Rune platelegs",
-      "nameRu": "Рунические поножи",
       "slot": "legs",
       "kind": "platelegs",
       "metal": "rune",
@@ -4508,7 +4385,6 @@
     {
       "id": 1093,
       "name": "Rune plateskirt",
-      "nameRu": "Руническая латная юбка",
       "slot": "legs",
       "kind": "plateskirt",
       "metal": "rune",
@@ -4546,7 +4422,6 @@
     {
       "id": 1201,
       "name": "Rune kiteshield",
-      "nameRu": "Рунический кайтовый щит",
       "slot": "shield",
       "kind": "kiteshield",
       "metal": "rune",
@@ -4576,7 +4451,6 @@
     {
       "id": 1185,
       "name": "Rune sq shield",
-      "nameRu": "Рунический квадратный щит",
       "slot": "shield",
       "kind": "sq shield",
       "metal": "rune",
@@ -4606,7 +4480,6 @@
     {
       "id": 1478,
       "name": "Amulet of accuracy",
-      "nameRu": "Амулет точности",
       "slot": "neck",
       "kind": "amulet",
       "reqFrom": "Free-to-play PvP equipment",
@@ -4632,7 +4505,6 @@
     {
       "id": 1729,
       "name": "Amulet of defence",
-      "nameRu": "Амулет защиты",
       "slot": "neck",
       "kind": "amulet",
       "reqFrom": "Free-to-play PvP equipment",
@@ -4658,7 +4530,6 @@
     {
       "id": 1725,
       "name": "Amulet of strength",
-      "nameRu": "Амулет силы",
       "slot": "neck",
       "kind": "amulet",
       "reqFrom": "Free-to-play PvP equipment",
@@ -4684,7 +4555,6 @@
     {
       "id": 1731,
       "name": "Amulet of power",
-      "nameRu": "Амулет мощи",
       "slot": "neck",
       "kind": "amulet",
       "reqFrom": "Amulet of power",
@@ -4711,7 +4581,6 @@
     {
       "id": 1171,
       "name": "Wooden shield",
-      "nameRu": "Деревянный щит",
       "slot": "shield",
       "kind": "shield",
       "reqFrom": "Free-to-play PvP equipment",
@@ -4745,7 +4614,6 @@
     {
       "id": 1129,
       "name": "Leather body",
-      "nameRu": "Кожаная куртка",
       "slot": "body",
       "kind": "leather",
       "reqFrom": "Leather body",
@@ -4779,7 +4647,6 @@
     {
       "id": 1095,
       "name": "Leather chaps",
-      "nameRu": "Кожаные штаны",
       "slot": "legs",
       "kind": "leather",
       "reqFrom": "Leather armour",
@@ -4805,7 +4672,6 @@
     {
       "id": 1169,
       "name": "Coif",
-      "nameRu": "Капюшон",
       "slot": "head",
       "kind": "leather",
       "req": {
@@ -4842,7 +4708,6 @@
     {
       "id": 1131,
       "name": "Hardleather body",
-      "nameRu": "Куртка из жёсткой кожи",
       "slot": "body",
       "kind": "leather",
       "req": {

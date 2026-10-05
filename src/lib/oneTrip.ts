@@ -1,7 +1,7 @@
-// «Одна ходка»: подготовка к текущему шагу и нескольким ближайшим вместе — один заход в банк и на биржу вместо
-// трёх. Предметы собираются из требований шагов окна, то, что уже есть у игрока, закрепляется за ближайшими шагами
-// (резерв: одни и те же 13 штук еды не засчитываются дважды), инструменты берутся один раз на все шаги.
-// «Нужно позже» не значит «купи сейчас»: каждой строке — срочность NOW / SOON / LATER.
+// "One trip": preparation for the current step and several nearest ones together: one visit to the bank and the exchange instead of
+// three. The items are collected from the requirements of the window's steps, what the player already has is assigned to the nearest steps
+// (a reserve: the same 13 pieces of food are not counted twice), tools are taken once for all the steps.
+// "Needed later" does not mean "buy now": each line has an urgency NOW / SOON / LATER.
 
 import type { Step } from '../types';
 import { aggregateShopping, type ShoppingLine } from './shopping';
@@ -11,7 +11,7 @@ import { isClosed } from './next-step';
 import type { Progress } from '../types';
 import type { Urgency } from './prepRoute';
 
-/** Шагов вперёд после текущего, которые берём в одну ходку. */
+/** How many steps ahead after the current one are taken into one trip. */
 export const LOOK_AHEAD = 3;
 
 export type TripStatus = 'HAVE' | 'BANK' | 'GET' | 'UNKNOWN';
@@ -19,7 +19,7 @@ export type TripStatus = 'HAVE' | 'BANK' | 'GET' | 'UNKNOWN';
 export interface TripAllocation {
   stepId: string;
   need: number;
-  /** Сколько из нужного покрыто тем, что уже есть (закреплено за этим шагом). */
+  /** How much of what is needed is covered by what you already have (assigned to this step). */
   covered: number;
 }
 
@@ -27,10 +27,10 @@ export interface TripLine {
   line: ShoppingLine;
   held: Held;
   allocation: TripAllocation[];
-  /** Сколько ещё взять (купить или забрать); null — неизвестно (банк не открывали). */
+  /** How much more to take (to buy or collect); null means unknown (the bank was not opened). */
   toGet: number | null;
   status: TripStatus;
-  /** Когда понадобится: по ближайшему шагу, где не хватает. */
+  /** When it will be needed: by the nearest step where it is lacking. */
   urgency: Urgency;
 }
 
@@ -41,21 +41,21 @@ export interface TripCoins {
 }
 
 export interface OneTripPlan {
-  /** Шаги окна по порядку: текущий и ближайшие. */
+  /** The window's steps in order: the current one and the nearest ones. */
   stepIds: string[];
   lines: TripLine[];
-  /** Взять сейчас: нужно текущему шагу, а у игрока нет (или лежит в банке). */
+  /** Take now: the current step needs it and the player does not have it (or it is in the bank). */
   now: TripLine[];
-  /** Заодно, если по пути: понадобится в ближайших шагах. */
+  /** While you are at it, if on the way: it will be needed in the nearest steps. */
   soon: TripLine[];
-  /** Позже: не сейчас, только чтобы знать. */
+  /** Later: not now, only to know. */
   later: TripLine[];
-  /** Проверить нечем (банк не открывали, плагин не следил): не «нет», а «не знаю» — в списки «взять» не попадает. */
+  /** Nothing to check with (the bank was not opened, the plugin did not watch): not "none" but "unknown", it does not get into the "take" lists. */
   unknown: TripLine[];
   coins: TripCoins;
 }
 
-/** Текущий шаг и следующие незакрытые (по порядку маршрута) — окно подготовки. */
+/** The current step and the following unclosed ones (in route order): the preparation window. */
 export function tripWindow(steps: Step[], progress: Progress, currentId: string, ahead = LOOK_AHEAD): Step[] {
   const at = steps.findIndex((s) => s.id === currentId);
   if (at < 0) return [];
@@ -74,7 +74,7 @@ function perStepNeed(line: ShoppingLine, stepIds: string[]): { stepId: string; n
     if (!src.length) continue;
     const n = src.reduce((sum, s) => sum + (parseAmount(s.amount) ?? 1), 0);
     if (line.reusable) {
-      // Инструмент нужен один на все шаги: берём наибольшее, а не сумму.
+      // One tool serves all the steps: take the largest, not the sum.
       if (reusableTaken) continue;
       reusableTaken = true;
       out.push({ stepId, need: line.count });
@@ -93,7 +93,7 @@ export function planOneTrip(steps: Step[], progress: Progress, currentId: string
   for (const line of list.required) {
     const held = heldOf(state, line.nameEn, line.key);
     const needs = perStepNeed(line, ids);
-    // Закрепляем уже имеющееся за ближайшими шагами: есть 13 из 20 — первым хватает, последнему не хватит.
+    // Assign what is already owned to the nearest steps: 13 of 20 is on hand, the first steps are covered, the last is not.
     let pool = held.total ?? 0;
     const allocation: TripAllocation[] = needs.map((n) => {
       const covered = Math.min(pool, n.need);

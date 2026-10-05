@@ -1,2 +1,2 @@
-/** Версия из package.json, подставляется при сборке (vite.config.ts). */
+/** The version from package.json, substituted at build time (vite.config.ts). */
 declare const __APP_VERSION__: string;

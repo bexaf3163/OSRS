@@ -1,9 +1,9 @@
-// Собирает src/data/moneyMaking.json с OSRS Wiki: способы заработка бесплатной версии (список «Money making guide/
-// Free-to-play» и карточка Mmgtable каждой статьи). Нужна сеть. Запуск: npm run build-money (около минуты).
+// Builds src/data/moneyMaking.json from the OSRS Wiki: the free-version money-making methods (the "Money making guide/
+// Free-to-play" list and the Mmgtable card of each article). It needs a network. Run: npm run build-money (about a minute).
 //
-// Берётся только то, что написано в вики: название, выручка в час по текущим ценам биржи (снимок на дату сборки),
-// напряжённость, требуемые и рекомендуемые уровни, квесты и предметы. Выручка — не обещание: она зависит от цен в
-// момент снимка, программа показывает дату снимка. От себя здесь лишь разбор разметки.
+// Only what the wiki says is taken: the name, the revenue per hour at the current exchange prices (a snapshot at the build date),
+// the intensity, the required and recommended levels, the quests and items. The revenue is not a promise: it depends on the prices at the
+// moment of the snapshot, and the app shows the snapshot date. Only the markup parsing is from us.
 
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
@@ -31,7 +31,7 @@ async function get(params: Record<string, string>): Promise<Record<string, unkno
 
 const slug = (t: string) => t.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 
-// 1. Список: название, выручка в час, напряжённость, ссылка на статью.
+// 1. The list: the name, the revenue per hour, the intensity, the article link.
 const list = await get({ action: 'parse', page: 'Money_making_guide/Free-to-play', prop: 'text' });
 const html = (list.parse as { text: string }).text;
 const rows = [...html.matchAll(/<tr[^>]*>(.*?)<\/tr>/gs)].map((m) => m[1]);
@@ -47,9 +47,9 @@ for (const r of rows) {
     intensity: plain(cells[4]), members: plain(cells[5]).length > 0, skillsHtml: cells[2],
   });
 }
-console.log(`В списке: ${entries.length}`);
+console.log(`In the list: ${entries.length}`);
 
-// 2. Карточка каждой статьи.
+// 2. The card of each article.
 const methods: MoneyMethod[] = [];
 const problems: string[] = [];
 for (const e of entries) {
@@ -58,7 +58,7 @@ for (const e of entries) {
     const data = await get({ action: 'parse', page: e.page, prop: 'wikitext', redirects: '1' });
     const text = (data.parse as { wikitext: string }).wikitext;
     const f = mmgFields(text);
-    if (!f.activity) { problems.push(`${e.page}: нет Mmgtable`); continue; }
+    if (!f.activity) { problems.push(`${e.page}: no Mmgtable`); continue; }
     const quest = wikiPlain(f.quest ?? '');
     const item = wikiPlain(f.item ?? '');
     const other = wikiPlain(f.other ?? '');
@@ -92,5 +92,5 @@ const out: MoneyData = {
 };
 mkdirSync(dirname(OUT), { recursive: true });
 writeFileSync(OUT, `${JSON.stringify(out, null, 1)}\n`);
-console.log(`Записано ${methods.length} способов в ${OUT}`);
-if (problems.length) console.log(`Проблемы (${problems.length}):\n${problems.join('\n')}`);
+console.log(`Written ${methods.length} methods to ${OUT}`);
+if (problems.length) console.log(`Problems (${problems.length}):\n${problems.join('\n')}`);

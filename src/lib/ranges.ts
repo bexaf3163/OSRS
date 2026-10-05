@@ -1,4 +1,4 @@
-// Строка «Плана прокачки» по уровню навыка.
+// The "Training plan" row by skill level.
 
 import type { Progress, Skill, SkillRange } from '../types';
 import { levelOf } from './progress';
@@ -6,11 +6,11 @@ import { levelOf } from './progress';
 export interface RangeHit {
   range: SkillRange;
   index: number;
-  /** Уровень выше последнего закрытого диапазона («68–88» при уровне 95). */
+  /** A level above the last closed range ("68–88" at level 95). */
   beyond: boolean;
 }
 
-/** Диапазон «15–30» включает 15 и не включает 30: на 30 уже следующая строка. */
+/** The range "15–30" includes 15 and does not include 30: at 30 the next row applies. */
 export function rangeForLevel(ranges: SkillRange[], level: number): RangeHit | null {
   if (!ranges.length) return null;
   const index = ranges.findIndex((r) => level >= r.from && (r.to === null || level < r.to));
@@ -20,7 +20,7 @@ export function rangeForLevel(ranges: SkillRange[], level: number): RangeHit | n
   return { range: ranges[0], index: 0, beyond: false };
 }
 
-/** Уровень раздела навыка. Ближний бой — по отстающему из атаки, силы и защиты. */
+/** The skill section's level. Melee is the lagging one of Attack, Strength and Defence. */
 export function skillLevel(skill: Skill, p: Progress): number {
   return Math.min(...skill.levelSkills.map((id) => levelOf(p, id)));
 }

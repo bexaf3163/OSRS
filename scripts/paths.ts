@@ -6,7 +6,7 @@ const root = fileURLToPath(new URL('..', import.meta.url)).replace(/\\/g, '/');
 
 export const DATA_DIR = `${root}src/data`;
 
-/** Маршрут V2 — ведётся прямо в JSON. */
+/** The V2 route — kept right in the JSON. */
 export function readRoute(): Route {
   const read = (name: string) => JSON.parse(readFileSync(`${DATA_DIR}/${name}`, 'utf8'));
   return {

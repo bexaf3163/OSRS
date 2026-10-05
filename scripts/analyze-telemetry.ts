@@ -1,6 +1,6 @@
-// Разбор журнала отладки плагина: `npm run telemetry` читает самый свежий сеанс из ~/.runelite/osrs-path-telemetry
-// (или файл/папку, переданные аргументом) и печатает находки: странности движка, где курсор стоял долго, что игрок
-// закрывал вручную, какие скриншоты сделаны. `--json` — тот же отчёт для скрипта. Ничего не пишет и никуда не ходит.
+// Analysis of the plugin debug journal: `npm run telemetry` reads the latest session from ~/.runelite/osrs-path-telemetry
+// (or the file/folder passed as an argument) and prints the findings: engine oddities, where the cursor stood long, what the player
+// closed by hand, which screenshots were taken. `--json` — the same report for a script. It writes nothing and goes nowhere.
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { join, resolve } from 'node:path';
@@ -26,7 +26,7 @@ else {
 }
 
 if (files.length === 0) {
-  console.error(`Журналов нет в ${dir}. Включи настройку «Журнал для отладки» у плагина OSRS Путь и поиграй — файл появится сам.`);
+  console.error(`No journals in ${dir}. Turn on the "Debug log" setting of the OSRS Path plugin and play — the file will appear by itself.`);
   process.exit(2);
 }
 

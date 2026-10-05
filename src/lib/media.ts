@@ -1,11 +1,11 @@
-// Медиазапрос как состояние React. Масштаб программы для ПК меняет ширину для медиазапросов честно,
-// поэтому раскладка переключается и от размера окна, и от масштаба интерфейса.
+// A media query as React state. The desktop app's scale changes the width for media queries honestly,
+// so the layout switches on both the window size and the interface scale.
 
 import { useEffect, useState } from 'react';
 
-/** Три колонки «Пути»: лента этапов + шаг. */
+/** The three columns of "Path": the stage strip + the step. */
 export const WIDE = '(min-width: 1080px)';
-/** Досье вики закреплено третьей колонкой, а не выезжает поверх. */
+/** The wiki dossier is pinned as the third column rather than sliding over the top. */
 export const DOCK = '(min-width: 1260px)';
 
 export function useMediaQuery(query: string): boolean {

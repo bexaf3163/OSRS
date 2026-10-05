@@ -1,6 +1,6 @@
-// Темп прокачки из игры: «🐟 34 креветки до 20 Fishing · ≈ 7 мин». Считает плагин RuneLite по опыту;
-// пока замеров мало, время не выдумывается — «время рассчитывается…». В бою (атака, сила, защита до одной
-// цели) показан навык, который сейчас растёт, и что качать после него.
+// The training pace from the game: "🐟 34 shrimps to 20 Fishing · ≈ 7 min". The RuneLite plugin counts it from XP;
+// while there are few measurements, the time is not invented — "calculating the time…". In combat (attack, strength, defence to one
+// goal) the skill that is growing now is shown, and what to train after it.
 
 import type { Step } from '../types';
 import { useBridge } from '../bridge';
@@ -13,11 +13,11 @@ export function PacingLine({ step }: { step: Step }) {
   if (!on || !step.pacing) return null;
   if (!pacing || pacing.stepId !== step.id || activeStepId !== step.id) {
     return activeStepId === step.id
-      ? <p className="pacing muted small">{ICON[step.pacing.skill]} Темп появится после первого опыта в игре.</p>
+      ? <p className="pacing muted small">{ICON[step.pacing.skill]} The pace will appear after the first XP in the game.</p>
       : null;
   }
   const all = [step.pacing.skill, ...(step.pacing.also ?? [])];
-  // Навык дошёл до цели, а другие ещё нет — это не «готово», а подсказка сменить стиль.
+  // A skill reached the goal and the others have not — this is not "done" but a hint to change the style.
   const good = pacing.almost || (pacing.done && !pacing.left.length);
   const next = pacingNext(pacing);
   return (
@@ -26,7 +26,7 @@ export function PacingLine({ step }: { step: Step }) {
       <span className="pacing-main">{pacingText(pacing, step.pacing.actionName, all)}</span>
       {!pacing.done && !pacing.almost && <span className="pacing-eta">{etaText(pacing)}</span>}
       {pacing.actionsPerMinute !== null && !pacing.done && (
-        <span className="pacing-rate muted small">{pacing.estimated ? 'оценка' : 'темп'} {pacing.actionsPerMinute.toLocaleString('ru-RU')} в минуту</span>
+        <span className="pacing-rate muted small">{pacing.estimated ? 'estimate' : 'pace'} {pacing.actionsPerMinute.toLocaleString('en-US')} per minute</span>
       )}
       {next && <span className="pacing-rate muted small">{next}</span>}
     </p>

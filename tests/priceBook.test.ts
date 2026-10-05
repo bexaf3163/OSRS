@@ -8,33 +8,33 @@ const baked = new Map<string, number>([[nameKey('Lobster'), 100], [nameKey('Rare
 const mapping = new Map([[379, { name: 'Lobster' }], [380, { name: 'Lobster' }], [1511, { name: 'Logs' }]]);
 const live = (at = Date.parse('2026-10-03T17:15:00Z')) => ({ at, prices: new Map([[379, { sellPrice: 150 }], [380, { sellPrice: 120 }], [1511, { sellPrice: 90 }]]) });
 
-describe('цены для оценки добычи', () => {
-  it('без свежих цен — из базы проекта, с пометкой', () => {
+describe('prices for the loot estimate', () => {
+  it('without fresh prices — from the project database, with a note', () => {
     const b = buildPriceBook(null, null, baked);
     expect(b.source).toBe('baked');
     expect(b.priceOf('lobster')).toBe(100);
-    expect(b.priceOf('Нет такого')).toBeUndefined();
-    expect(priceNote(b)).toContain('биржа недоступна');
+    expect(b.priceOf('No such item')).toBeUndefined();
+    expect(priceNote(b)).toContain('the exchange is unavailable');
   });
 
-  it('свежие цены главнее базы; одно название у двух предметов — меньшая цена', () => {
+  it('fresh prices win over the database; one name on two items — the lower price', () => {
     const b = buildPriceBook(live(), mapping, baked);
     expect(b.source).toBe('live');
     expect(b.priceOf('Lobster')).toBe(120);
     expect(b.priceOf('Logs')).toBe(90);
-    expect(priceNote(b)).toMatch(/по ценам биржи на \d\d:\d\d/);
+    expect(priceNote(b)).toMatch(/at exchange prices from \d\d:\d\d/);
   });
 
-  it('предмета нет в свежих ценах — берётся цена из базы', () => {
+  it('the item is not in the fresh prices — the database price is taken', () => {
     expect(buildPriceBook(live(), mapping, baked).priceOf('Rare thing')).toBe(7);
   });
 
-  it('пустой ответ или справочник не вышел — остаётся база, а не пустота', () => {
+  it('an empty answer or the catalogue did not load — the database stays, not emptiness', () => {
     expect(buildPriceBook({ at: 1, prices: new Map() }, mapping, baked).source).toBe('baked');
     expect(buildPriceBook(live(), null, baked).source).toBe('baked');
   });
 
-  it('оценка пересчитывается по текущим ценам; монеты и безымянные не трогаются', () => {
+  it('the estimate is recomputed at current prices; coins and nameless ones are left alone', () => {
     const entries: LedgerEntry[] = [
       { name: 'Lobster', quantityDelta: 10, reason: 'LOOT', timestamp: 1, estimatedGpValue: 1000 },
       { name: 'Coins', quantityDelta: 500, reason: 'LOOT', timestamp: 2, estimatedGpValue: 500 },
@@ -43,15 +43,15 @@ describe('цены для оценки добычи', () => {
     const out = reprice(entries, buildPriceBook(live(), mapping, baked));
     expect(out[0].estimatedGpValue).toBe(1200);
     expect(out[1].estimatedGpValue).toBe(500);
-    // Цены больше нет — старую оценку не оставляем: она показывала бы то, чего мы не знаем.
+    // The price is gone — we do not keep the old estimate: it would show something we do not know.
     expect(out[2].estimatedGpValue).toBeUndefined();
     expect(entries[0].estimatedGpValue).toBe(1000);
   });
 });
 
-describe('служба цен: все цены разом', () => {
+describe('price service: all prices at once', () => {
   const rows = { data: { '379': { high: 160, highTime: 1000, low: 150, lowTime: 900 }, '1511': { high: null, highTime: null, low: null, lowTime: null } } };
-  it('отдаёт цены и время получения одним запросом', async () => {
+  it('returns the prices and the time they were fetched in one request', async () => {
     let calls = 0;
     const svc = createPriceService(async () => { calls++; return { ok: true, status: 200, json: async () => rows }; }, () => 5000);
     const all = await svc.getAllPrices();

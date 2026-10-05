@@ -16,30 +16,30 @@ function state(over: Partial<PlayerStateInput> = {}) {
   return buildPlayerState({ mode: 'f2p', stats: null, progress: { levels: {} }, owned: null, gear: null, questsDone: null, ...over });
 }
 
-describe('единое состояние игрока', () => {
-  it('уровень из игры главнее введённого вручную; нет данных — неизвестен, а не 1', () => {
+describe('the single player state', () => {
+  it('the level from the game wins over the one entered by hand; no data — unknown, not 1', () => {
     const s = state({ stats: { ranged: 17 }, progress: { levels: { ranged: 30, magic: 25 } } });
     expect(levelOf(s, 'ranged')).toBe(17);
     expect(levelOf(s, 'magic')).toBe(25);
     expect(levelOf(s, 'fishing')).toBeUndefined();
   });
 
-  it('предмет: банк не открывали и в сумке нет — UNKNOWN, не MISSING; банк открыт и пусто — MISSING', () => {
+  it('an item: the bank was not opened and not in the bag — UNKNOWN, not MISSING; the bank is open and empty — MISSING', () => {
     expect(heldOf(state({ owned: owned({}, false) }), 'Lobster').presence).toBe('UNKNOWN');
     expect(heldOf(state({ owned: owned({ Lobster: { carried: 0 } }, false) }), 'Lobster').presence).toBe('UNKNOWN');
     expect(heldOf(state({ owned: owned({ Lobster: { carried: 0, bank: 0 } }, true) }), 'Lobster').presence).toBe('MISSING');
-    // Плагин следит не за всем: нет записи — не «нет предмета», а «не следили».
+    // The plugin does not watch everything: no record — not "no item" but "not watched".
     expect(heldOf(state({ owned: owned({}, true) }), 'Lobster').presence).toBe('UNKNOWN');
     expect(heldOf(state({ owned: owned({ Lobster: { carried: 5, bank: 8 } }, true) }), 'Lobster')).toMatchObject({ presence: 'PRESENT', bag: 5, bank: 8, total: 13 });
     expect(heldOf(state({ owned: null }), 'Lobster').presence).toBe('UNKNOWN');
   });
 
-  it('ручная отметка «уже есть» засчитывается, когда игра о предмете не знает ничего', () => {
+  it('the manual "already have" mark counts when the game knows nothing about the item', () => {
     const s = state({ progress: { levels: {}, ownedManual: { 'name:rope': { count: 2 } } }, owned: owned({}, false) });
     expect(heldOf(s, 'Rope', 'name:rope')).toMatchObject({ presence: 'PRESENT', total: 2, source: 'manual' });
   });
 
-  it('квесты и монеты: неизвестно остаётся неизвестным', () => {
+  it('quests and coins: the unknown stays unknown', () => {
     expect(questOf(state(), "Cook's Assistant")).toBe('UNKNOWN');
     expect(questOf(state({ questsDone: ["Cook's Assistant"] }), "cook's assistant")).toBe('DONE');
     expect(questOf(state({ questsDone: [] }), "Cook's Assistant")).toBe('NOT_DONE');
@@ -48,7 +48,7 @@ describe('единое состояние игрока', () => {
     expect(coinsOf(state()).bag).toBeNull();
   });
 
-  it('снимки: изменения уровней, предметов, монет и квестов; «неизвестно → известно» не прибавка', () => {
+  it('snapshots: changes of levels, items, coins and quests; "unknown → known" is not a gain', () => {
     const a = state({ stats: { defence: 27 }, owned: owned({ Lobster: { carried: 5 } }, false), gear: gear({ coins: 850 }), questsDone: [] });
     const b = state({
       stats: { defence: 30 }, owned: owned({ Lobster: { carried: 8 }, 'Rune full helm': { carried: 1 } }, false),
@@ -62,11 +62,11 @@ describe('единое состояние игрока', () => {
     expect(d).toContainEqual({ kind: 'QUEST', name: 'Dragon Slayer I' });
     expect(diffPlayerState(a, a)).toEqual([]);
     expect(diffPlayerState(null, a)).toEqual([]);
-    // Данные из игры появились впервые — это не «уровень вырос».
+    // The data from the game appeared for the first time — that is not "the level went up".
     expect(diffPlayerState(state(), state({ stats: { defence: 30 } })).some((c) => c.kind === 'LEVEL')).toBe(false);
   });
 
-  it('отпечаток не меняется от порядка и меняется от содержимого', () => {
+  it('the fingerprint does not change with the order and changes with the content', () => {
     const a = state({ stats: { a: 1, b: 2 } });
     const b = state({ stats: { b: 2, a: 1 } });
     expect(a.fingerprint).toBe(b.fingerprint);
@@ -74,17 +74,17 @@ describe('единое состояние игрока', () => {
   });
 });
 
-describe('единые требования', () => {
+describe('the unified requirements', () => {
   const ev = (r: Requirement, s = state()) => evaluate(r, s).state;
 
-  it('Coif требует 20 Ranged: 17 — нет (не хватает 3), 20 — можно', () => {
+  it('Coif requires 20 Ranged: 17 — no (3 short), 20 — fine', () => {
     const coif: Requirement = { type: 'skill', skill: 'ranged', min: 20 };
     expect(evaluate(coif, state({ stats: { ranged: 17 } }))).toMatchObject({ state: 'MISSING', missing: 3 });
     expect(ev(coif, state({ stats: { ranged: 20 } }))).toBe('OK');
     expect(ev(coif)).toBe('UNKNOWN');
   });
 
-  it('предмет: в сумке OK, в банке BANK, часть PARTIAL, нет MISSING, банк не открыт UNKNOWN', () => {
+  it('an item: in the bag OK, in the bank BANK, part PARTIAL, none MISSING, bank not open UNKNOWN', () => {
     const food: Requirement = { type: 'item', name: 'Lobster', count: 20 };
     expect(ev(food, state({ owned: owned({ Lobster: { carried: 25 } }, false) }))).toBe('OK');
     expect(ev(food, state({ owned: owned({ Lobster: { carried: 5, bank: 15 } }, true) }))).toBe('BANK');
@@ -93,15 +93,15 @@ describe('единые требования', () => {
     expect(ev(food, state({ owned: owned({ Lobster: { carried: 5 } }, false) }))).toBe('UNKNOWN');
   });
 
-  it('надето: надето OK; в сумке или банке — BANK («надень»); нет — MISSING; без связи — UNKNOWN', () => {
+  it('worn: worn OK; in the bag or bank — BANK ("wear it"); none — MISSING; without a connection — UNKNOWN', () => {
     const helm: Requirement = { type: 'equipment', name: 'Coif', slot: 'head' };
     expect(ev(helm, state({ gear: gear({ equipment: [{ id: 1169, name: 'Coif', slot: 'head' }] }), owned: owned({}, true) }))).toBe('OK');
-    expect(evaluate(helm, state({ gear: gear(), owned: owned({ Coif: { carried: 1 } }, true) })).detail).toContain('надень');
+    expect(evaluate(helm, state({ gear: gear(), owned: owned({ Coif: { carried: 1 } }, true) })).detail).toContain('wear it');
     expect(ev(helm, state({ gear: gear(), owned: owned({ Coif: { carried: 0, bank: 0 } }, true) }))).toBe('MISSING');
     expect(ev(helm)).toBe('UNKNOWN');
   });
 
-  it('деньги: хватает в сумке, остальное в банке, не хватает, банк неизвестен', () => {
+  it('money: enough in the bag, the rest in the bank, not enough, bank unknown', () => {
     const m: Requirement = { type: 'money', amount: 2000 };
     expect(ev(m, state({ gear: gear({ coins: 2500 }) }))).toBe('OK');
     expect(ev(m, state({ gear: gear({ coins: 300, bankCoins: 1800 }) }))).toBe('BANK');
@@ -110,7 +110,7 @@ describe('единые требования', () => {
     expect(ev(m)).toBe('UNKNOWN');
   });
 
-  it('группа вариантов: форель 5 + лосось 10 при нужных 20 — есть 15, не хватает 5', () => {
+  it('a group of alternatives: trout 5 + salmon 10 with 20 needed — 15 held, 5 short', () => {
     const food: Requirement = { type: 'alternative', requiredCount: 20, alternatives: [{ name: 'Trout' }, { name: 'Salmon' }] };
     const s = state({ owned: owned({ Trout: { carried: 5 }, Salmon: { carried: 10 } }, true) });
     expect(evaluate(food, s)).toMatchObject({ state: 'PARTIAL', have: 15, missing: 5 });
@@ -118,7 +118,7 @@ describe('единые требования', () => {
     expect(ev(food, state({ owned: owned({ Trout: { carried: 5 } }, false) }))).toBe('UNKNOWN');
   });
 
-  it('составное: все — худший исход, любой — лучший; квест и режим', () => {
+  it('composite: all — the worst outcome, any — the best; a quest and a mode', () => {
     const all: Requirement = { type: 'composite', all: [{ type: 'skill', skill: 'ranged', min: 20 }, { type: 'skill', skill: 'magic', min: 25 }] };
     expect(ev(all, state({ stats: { ranged: 25, magic: 10 } }))).toBe('MISSING');
     expect(ev(all, state({ stats: { ranged: 25, magic: 30 } }))).toBe('OK');
@@ -127,6 +127,6 @@ describe('единые требования', () => {
     expect(ev({ type: 'quest', quest: 'Dragon Slayer I' }, state({ questsDone: ['Dragon Slayer I'] }))).toBe('OK');
     expect(ev({ type: 'gameMode', mode: 'members' }, state({ mode: 'f2p' }))).toBe('MISSING');
     expect(ev({ type: 'gameMode', mode: 'f2p' }, state({ mode: 'members' }))).toBe('OK');
-    expect(describeReq(all)).toBe('Ranged 20 и Magic 25');
+    expect(describeReq(all)).toBe('Ranged 20 and Magic 25');
   });
 });

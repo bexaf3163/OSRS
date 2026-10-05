@@ -1,6 +1,6 @@
-// npm run bridge:jar — собрать jar плагина RuneLite (runelite-bridge/build/libs/osrs-path-bridge.jar),
-// который программа для ПК кладёт в exe и запускает вместе с установленным RuneLite.
-// Нужен JDK 17: JAVA_HOME или ~/.jdks/<jdk-17…>. С --optional без JDK просто предупреждает (для npm run desktop).
+// npm run bridge:jar — build the RuneLite plugin jar (runelite-bridge/build/libs/osrs-path-bridge.jar),
+// which the desktop app puts into the exe and starts together with the installed RuneLite.
+// JDK 17 is needed: JAVA_HOME or ~/.jdks/<jdk-17…>. With --optional without a JDK it just warns (for npm run desktop).
 
 import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync } from 'node:fs';
@@ -24,9 +24,9 @@ function findJdk(): string | undefined {
 
 const jdk = findJdk();
 if (!jdk) {
-  const msg = 'Не найден JDK 17 (JAVA_HOME или ~/.jdks) — jar плагина RuneLite не собран.';
+  const msg = 'JDK 17 not found (JAVA_HOME or ~/.jdks) — the RuneLite plugin jar was not built.';
   if (optional) {
-    console.warn(`! ${msg}${existsSync(jar) ? ' Используется собранный ранее.' : ''}`);
+    console.warn(`! ${msg}${existsSync(jar) ? ' The earlier built one is used.' : ''}`);
     process.exit(0);
   }
   console.error(`✗ ${msg}`);
@@ -34,12 +34,12 @@ if (!jdk) {
 }
 
 const gradlew = join(dir, win ? 'gradlew.bat' : 'gradlew');
-// .bat на Windows запускается только через оболочку — команда одной строкой, аргументы в ней свои.
+// A .bat on Windows runs only through the shell — the command is one line, the arguments are in it.
 const r = win
   ? spawnSync(`"${gradlew}" --no-daemon -q jar`, { cwd: dir, stdio: 'inherit', shell: true, env: { ...process.env, JAVA_HOME: jdk } })
   : spawnSync(gradlew, ['--no-daemon', '-q', 'jar'], { cwd: dir, stdio: 'inherit', env: { ...process.env, JAVA_HOME: jdk } });
 if (r.status !== 0 || !existsSync(jar)) {
-  console.error('✗ Gradle не собрал jar плагина');
+  console.error('✗ Gradle did not build the plugin jar');
   process.exit(1);
 }
 console.log(`✓ ${jar}`);

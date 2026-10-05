@@ -1,3 +1,4 @@
+// The "Settings" screen: appearance, the RuneLite link, helpers, progress export and import.
 import { useEffect, useId, useRef, useState } from 'react';
 import { known } from '../data';
 import { useStore } from '../store';
@@ -14,7 +15,7 @@ import { plural } from '../lib/shopping';
 import { AccountSync } from '../components/AccountSync';
 import { BackupSection, DiagnosticsSection, UpdatesSection, ProfilesSection, SessionSection } from './SettingsExtra';
 
-const THEMES: [Theme, string][] = [['light', 'Светлая'], ['dark', 'Тёмная'], ['system', 'Системная']];
+const THEMES: [Theme, string][] = [['light', 'Light'], ['dark', 'Dark'], ['system', 'System']];
 
 function download(name: string, text: string) {
   const url = URL.createObjectURL(new Blob([text], { type: 'application/json' }));
@@ -50,7 +51,7 @@ export function SettingsPage() {
   return (
     <div className="page">
       <header className="page-head">
-        <h1>Настройки</h1>
+        <h1>Settings</h1>
       </header>
 
       <Appearance />
@@ -65,23 +66,23 @@ export function SettingsPage() {
       <DiagnosticsSection />
 
       <section className="card section-card">
-        <h2 className="card-title">Перенос прогресса</h2>
+        <h2 className="card-title">Transferring progress</h2>
         <p className="muted">
-          Прогресс хранится в этой программе и копией — файлом <code className="code">progress.json</code> в папке данных.
-          Чтобы перенести его на другой компьютер, сохрани файл здесь и загрузи его там.
+          The progress is stored in this app and as a copy — the file <code className="code">progress.json</code> in the data folder.
+          To move it to another computer, save the file here and load it there.
         </p>
         {bridge && (
           <p className="muted small">
-            {bridge.isPortable() ? 'Переносная версия: данные лежат рядом с программой, в папке ' : 'Копия прогресса лежит в папке '}
+            {bridge.isPortable() ? 'The portable version: the data is next to the app, in the folder ' : 'The progress copy is in the folder '}
             <code className="code code-path">{bridge.dataDir()}</code>
           </p>
         )}
-        <p className="small">Сейчас: {done} {plural(done, 'шаг сделан', 'шага сделано', 'шагов сделано')}, изменено {new Date(progress.updatedAt).toLocaleString('ru-RU')}.</p>
+        <p className="small">Now: {done} {plural(done, 'step done', 'steps done')}, changed {new Date(progress.updatedAt).toLocaleString('en-US')}.</p>
         <div className="actions">
           <button type="button" className="btn btn-primary" onClick={() => download(exportFileName(), exportProgress(progress))}>
-            Экспорт прогресса
+            Export progress
           </button>
-          <button type="button" className="btn" onClick={() => fileRef.current?.click()}>Импорт прогресса</button>
+          <button type="button" className="btn" onClick={() => fileRef.current?.click()}>Import progress</button>
           <input ref={fileRef} type="file" accept="application/json,.json" hidden onChange={(e) => onFile(e.target.files?.[0])} />
         </div>
 
@@ -89,41 +90,41 @@ export function SettingsPage() {
         {pending && (
           <div className="notice" role="alert">
             <p>
-              В файле: сделано {pending.stats.done}, пропущено {pending.stats.skipped}, уровней {pending.stats.levels},
-              заметок {pending.stats.notes}; сохранён {new Date(pending.progress.updatedAt).toLocaleString('ru-RU')}.
-              {pending.stats.migrated && ' Файл от первой версии маршрута — отметки перенесены на V2, старые сохранены внутри.'}
-              {pending.stats.dropped > 0 && ` Неизвестных записей отброшено: ${pending.stats.dropped}.`}
+              In the file: {pending.stats.done} done, {pending.stats.skipped} skipped, {pending.stats.levels} levels,
+              {pending.stats.notes} notes; saved {new Date(pending.progress.updatedAt).toLocaleString('en-US')}.
+              {pending.stats.migrated && ' A file from the first version of the route — the marks were carried over to V2, the old ones are kept inside.'}
+              {pending.stats.dropped > 0 && ` Unknown entries dropped: ${pending.stats.dropped}.`}
             </p>
-            <p>Текущий прогресс на этом устройстве будет заменён.</p>
+            <p>The current progress on this device will be replaced.</p>
             <div className="actions">
-              <button type="button" className="btn btn-primary" onClick={() => { replace(pending.progress, 'Прогресс загружен'); setPending(null); }}>
-                Заменить
+              <button type="button" className="btn btn-primary" onClick={() => { replace(pending.progress, 'Progress loaded'); setPending(null); }}>
+                Replace
               </button>
-              <button type="button" className="btn" onClick={() => setPending(null)}>Отмена</button>
+              <button type="button" className="btn" onClick={() => setPending(null)}>Cancel</button>
             </div>
           </div>
         )}
       </section>
 
       <section className="card section-card">
-        <h2 className="card-title">Сброс</h2>
-        <p className="muted">Удалит отметки, уровни и заметки на этом устройстве. Сразу после сброса его можно отменить.</p>
+        <h2 className="card-title">Reset</h2>
+        <p className="muted">It removes the marks, levels and notes on this device. Right after the reset it can be undone.</p>
         {confirmReset ? (
           <div className="actions">
-            <button type="button" className="btn btn-danger" onClick={() => { reset(); setConfirmReset(false); }}>Да, сбросить всё</button>
-            <button type="button" className="btn" onClick={() => setConfirmReset(false)}>Отмена</button>
+            <button type="button" className="btn btn-danger" onClick={() => { reset(); setConfirmReset(false); }}>Yes, reset everything</button>
+            <button type="button" className="btn" onClick={() => setConfirmReset(false)}>Cancel</button>
           </div>
         ) : (
           <div className="actions">
-            <button type="button" className="btn" onClick={() => setConfirmReset(true)}>Сбросить прогресс</button>
+            <button type="button" className="btn" onClick={() => setConfirmReset(true)}>Reset progress</button>
           </div>
         )}
       </section>
 
       <p className="muted small">
-        OSRS Путь {__APP_VERSION__}
-        {bridge?.isPortable() ? ' · переносная версия' : ''}
-        {' · '}<a href="https://github.com/bexaf3163/OSRS/releases/latest" target="_blank" rel="noopener noreferrer">Новые версии</a>
+        OSRS Path {__APP_VERSION__}
+        {bridge?.isPortable() ? ' · portable version' : ''}
+        {' · '}<a href="https://github.com/bexaf3163/OSRS/releases/latest" target="_blank" rel="noopener noreferrer">New versions</a>
       </p>
     </div>
   );
@@ -136,12 +137,12 @@ function Stepper({ id, label, value, steps, onChange }: { id: string; label: str
       <span className="scale-row">
         <span className="stepper">
           <button type="button" className="stepper-btn" onClick={() => onChange(stepScale(steps, value, -1))}
-            disabled={value <= steps[0]} aria-label={`${label}: меньше`}>−</button>
+            disabled={value <= steps[0]} aria-label={`${label}: less`}>−</button>
           <output className="stepper-value" aria-live="polite">{percent(value)}</output>
           <button type="button" className="stepper-btn" onClick={() => onChange(stepScale(steps, value, 1))}
-            disabled={value >= steps[steps.length - 1]} aria-label={`${label}: больше`}>+</button>
+            disabled={value >= steps[steps.length - 1]} aria-label={`${label}: more`}>+</button>
         </span>
-        {value !== 1 && <button type="button" className="btn btn-ghost" onClick={() => onChange(1)}>Сбросить до 100%</button>}
+        {value !== 1 && <button type="button" className="btn btn-ghost" onClick={() => onChange(1)}>Reset to 100%</button>}
       </span>
     </div>
   );
@@ -162,7 +163,7 @@ function Appearance() {
     return () => { alive = false; off(); };
   }, [bridge]);
 
-  // Размер шрифта мог поменяться клавишами — держим переключатель в согласии.
+  // The font size could have been changed with the keys — we keep the switch in agreement.
   useEffect(() => {
     const on = () => setText(loadTextScale());
     window.addEventListener(TEXT_EVENT, on);
@@ -186,10 +187,10 @@ function Appearance() {
 
   return (
     <section className="card section-card">
-      <h2 className="card-title">Внешний вид</h2>
+      <h2 className="card-title">Appearance</h2>
 
       <div className="setting">
-        <span className="setting-label" id={ids.theme}>Тема</span>
+        <span className="setting-label" id={ids.theme}>Theme</span>
         <div className="segmented" role="group" aria-labelledby={ids.theme}>
           {THEMES.map(([t, label]) => (
             <button key={t} type="button" aria-pressed={theme === t} className={`seg ${theme === t ? 'is-active' : ''}`} onClick={() => pickTheme(t)}>
@@ -201,21 +202,21 @@ function Appearance() {
 
       {bridge && zoom && (
         <div className="setting">
-          <Stepper id={ids.zoom} label="Масштаб интерфейса" value={zoom.zoom} steps={ZOOM_STEPS} onChange={(v) => pickZoom({ zoom: v })} />
+          <Stepper id={ids.zoom} label="Interface scale" value={zoom.zoom} steps={ZOOM_STEPS} onChange={(v) => pickZoom({ zoom: v })} />
           <label className="switch">
             <input type="checkbox" checked={zoom.autoZoom} onChange={(e) => pickZoom({ autoZoom: e.target.checked })} />
-            <span>Подстраивать под размер окна</span>
+            <span>Adapt to the window size</span>
           </label>
           <p className="muted small">
-            Сейчас {percent(zoom.effective)}{zoom.autoZoom && Math.abs(zoom.effective - zoom.zoom) > 0.005 ? ' с учётом ширины окна' : ''}.
-            Клавиши: <kbd>Ctrl</kbd> + <kbd>+</kbd> / <kbd>−</kbd>, <kbd>Ctrl</kbd> + <kbd>0</kbd> — сброс, или <kbd>Ctrl</kbd> + колесо мыши.
+            Now {percent(zoom.effective)}{zoom.autoZoom && Math.abs(zoom.effective - zoom.zoom) > 0.005 ? ' taking the window width into account' : ''}.
+            Keys: <kbd>Ctrl</kbd> + <kbd>+</kbd> / <kbd>−</kbd>, <kbd>Ctrl</kbd> + <kbd>0</kbd> — reset, or <kbd>Ctrl</kbd> + the mouse wheel.
           </p>
         </div>
       )}
 
       <div className="setting">
-        <Stepper id={ids.text} label="Размер шрифта" value={text} steps={TEXT_STEPS} onChange={pickText} />
-        <p className="muted small">Меняет только текст — отступы и раскладка остаются прежними.</p>
+        <Stepper id={ids.text} label="Font size" value={text} steps={TEXT_STEPS} onChange={pickText} />
+        <p className="muted small">It changes only the text — the spacing and layout stay the same.</p>
       </div>
 
       {bridge && zoom && (
@@ -223,7 +224,7 @@ function Appearance() {
           <label className="switch">
             <input type="checkbox" checked={zoom.alwaysOnTop}
               onChange={(e) => { setZoom({ ...zoom, alwaysOnTop: e.target.checked }); bridge.setAlwaysOnTop(e.target.checked); }} />
-            <span>Поверх всех окон — удобно держать рядом с игрой</span>
+            <span>On top of all windows — handy to keep next to the game</span>
           </label>
         </div>
       )}
@@ -232,29 +233,29 @@ function Appearance() {
 }
 
 const HELPERS: { key: keyof Features; title: string; text: string }[] = [
-  { key: 'autoLocation', title: '📍 Места на карте', text: 'Места в досье вики (где лежит бесплатно, магазины, продавцы, города) открываются на карте мира, а 🧭 ведёт туда стрелку в игре.' },
-  { key: 'bankTags', title: '🏦 Предметы этапа в банке', text: 'Пока шаг этапа показан в игре, плагин OSRS Path Bridge мягко подсвечивает в основном окне банка всё, что понадобится на этом этапе. Отдельную вкладку и строку импорта делать не нужно.' },
-  { key: 'pacing', title: '⏱ Темп прокачки', text: 'Сколько действий и минут осталось до цели шага — по опыту из игры. Без замеров время не придумывается.' },
-  { key: 'levelsFromGame', title: '📈 Уровни из игры', text: 'Уровни навыков из игры сами попадают в поля уровней на страницах навыков и шагов (ручной ввод остаётся, когда игры рядом нет). Пишутся только в профиль того персонажа, который в игре.' },
-  { key: 'upgradeRouter', title: '⚡ Апгрейды и снаряжение', text: 'Перед долгой прокачкой — топор или кирка получше, если уровень уже позволяет. На шагах с боем — оружие, амулет и броня получше по формулам урона OSRS Wiki, против противника шага; совет — и строкой в HUD игры. Сама ничего не покупает и не надевает.' },
+  { key: 'autoLocation', title: '📍 Places on the map', text: 'The places in the wiki dossier (where it lies for free, shops, sellers, towns) open on the world map, and 🧭 leads the in-game arrow there.' },
+  { key: 'bankTags', title: '🏦 Stage items in the bank', text: 'While a step of the stage is shown in the game, the OSRS Path Bridge plugin softly highlights in the main bank window everything that will be needed at this stage. A separate tab and an import string are not needed.' },
+  { key: 'pacing', title: '⏱ Training pace', text: 'How many actions and minutes are left to the step goal — from the XP in the game. Without measurements the time is not invented.' },
+  { key: 'levelsFromGame', title: '📈 Levels from the game', text: 'The skill levels from the game go into the level fields on the skill and step pages by themselves (manual entry stays when the game is not nearby). They are written only into the profile of the character who is in the game.' },
+  { key: 'upgradeRouter', title: '⚡ Upgrades and gear', text: 'Before a long training — a better axe or pickaxe, if the level already allows. On combat steps — a better weapon, amulet and armor by the OSRS Wiki damage formulas, against the step\'s opponent; the advice is also a line in the game HUD. It buys and wears nothing by itself.' },
 ];
 
 function PlayStyleSection() {
   const features = useFeatures();
   return (
-    <section className="card section-card" aria-label="Стиль игры">
-      <h2 className="card-title">Стиль игры и подготовка</h2>
+    <section className="card section-card" aria-label="Play style">
+      <h2 className="card-title">Play style and preparation</h2>
       <div className="setting">
         <DensityPills />
         <p className="muted small">
-          <strong>Дзен</strong> — на экране шаг, одна строка статуса, кнопка «Сделано» и критичные предупреждения; остальное — по «Подробнее».
-          {' '}<strong>Инспектор</strong> — все блоки шага развёрнуты: формулы, калькуляторы опыта, ветки, досье предметов, экономика.
-          В игре список и HUD видны всегда; настройка плагина «Умное проявление» (по умолчанию выключена) прячет лишнее в пути.
+          <strong>Zen</strong> — the screen has the step, one status line, the "Done" button and critical warnings; the rest — under "More".
+          {' '}<strong>Inspector</strong> — all the step blocks are expanded: formulas, XP calculators, branches, item dossiers, economy.
+          In the game the list and the HUD are always visible; the plugin setting "Smart reveal" (off by default) hides the extra on the way.
         </p>
       </div>
       <div className="setting">
-        <div className="mode-toggle style-toggle" role="group" aria-label="Стиль игры">
-          {([['chill', '🌿', 'Спокойно'], ['efficient', '⚡', 'Эффективно']] as const).map(([k, icon, label]) => {
+        <div className="mode-toggle style-toggle" role="group" aria-label="Play style">
+          {([['chill', '🌿', 'Calm'], ['efficient', '⚡', 'Efficient']] as const).map(([k, icon, label]) => {
             const on = (k === 'efficient') === features.efficient;
             return (
               <button key={k} type="button" className={`mode-btn ${on ? 'is-active' : ''}`} aria-pressed={on} onClick={() => setFeatures({ efficient: k === 'efficient' })}>
@@ -264,19 +265,19 @@ function PlayStyleSection() {
           })}
         </div>
         <p className="muted small">
-          <strong>Спокойно</strong> — меньше на экране, ничего не навязывается; способы прокачки — без риска и без лишних кликов; сообщения только о главном.
-          {' '}<strong>Эффективно</strong> — больше подсказок и сравнений; способы — самые быстрые из доступных, с оценкой времени; в «одной ходке» видно дальше. Требования шагов и безопасность от стиля не зависят.
+          <strong>Calm</strong> — less on the screen, nothing is pushed; training methods — without risk and without extra clicks; messages only about the main thing.
+          {' '}<strong>Efficient</strong> — more hints and comparisons; methods — the fastest of the available, with a time estimate; "one trip" sees further. The step requirements and safety do not depend on the style.
         </p>
       </div>
       <div className="setting">
         <label className="switch">
           <input type="checkbox" checked={features.autoPrep} onChange={(e) => setFeatures({ autoPrep: e.target.checked })} />
-          <span>🧭 Автоподготовка к шагу</span>
+          <span>🧭 Auto preparation for a step</span>
         </label>
         <p className="muted small">
-          Приложение само выстраивает, что взять или сделать до шага, и ведёт стрелку в игре: к банку за предметом, к бирже за покупкой, к месту прокачки.
-          Когда задача выполнена, ведёт к следующей, а в конце возвращает к шагу. Стрелку не перехватывает, если в игре уже стоит цель, и замолкает, если снять её самому.
-          Ничего не покупает и не делает за тебя.
+          The app itself lines up what to take or do before a step and leads the arrow in the game: to the bank for an item, to the exchange for a purchase, to a training place.
+          When a task is done, it leads to the next one, and at the end returns to the step. It does not take over the arrow if a target is already set in the game, and goes quiet if you clear it yourself.
+          It buys and does nothing for you.
         </p>
       </div>
     </section>
@@ -287,10 +288,10 @@ function Helpers() {
   const features = useFeatures();
   return (
     <section className="card section-card">
-      <h2 className="card-title">Помощник: места, банк, темп, апгрейды</h2>
+      <h2 className="card-title">The helper: places, bank, pace, upgrades</h2>
       <p className="muted small">
-        Выключенная функция не только прячется, но и ничего не делает. То, что рисуется в самой игре (радар опасности,
-        подсветка, звук), настраивается ещё и в плагине OSRS Path Bridge: RuneLite → настройки плагина → «Места, радар, темп».
+        A turned-off feature is not only hidden but does nothing. What is drawn in the game itself (the danger radar,
+        the highlight, the sound) is also configured in the OSRS Path Bridge plugin: RuneLite → plugin settings → "Places, radar, pace".
       </p>
       {HELPERS.map((h) => (
         <div className="setting" key={h.key}>
@@ -313,9 +314,9 @@ function RuneLiteBridge() {
     if (canLaunch) void desktop()?.runelite?.check().then(setCheck).catch(() => setCheck(null));
   }, [canLaunch, state]);
 
-  const status = state === 'off' ? 'выключена'
-    : state === 'online' ? `🟢 плагин на связи${inGame ? ', персонаж в игре' : ', персонаж не в игре'}`
-      : state === 'connecting' ? 'подключение…' : '⚪ плагин не отвечает';
+  const status = state === 'off' ? 'off'
+    : state === 'online' ? `🟢 the plugin is connected${inGame ? ', the character is in the game' : ', the character is not in the game'}`
+      : state === 'connecting' ? 'connecting…' : '⚪ the plugin does not respond';
   const launch = async () => {
     setLaunching(true);
     await launchRuneLite();
@@ -325,21 +326,21 @@ function RuneLiteBridge() {
     <section className="card section-card">
       <h2 className="card-title">RuneLite</h2>
       <p className="muted">
-        Плагин OSRS Path Bridge для RuneLite показывает текущий шаг прямо в игре: стрелка к месту, подсветка NPC, объектов,
-        клеток, нужного варианта в диалоге и предметов в инвентаре — и сам отмечает шаг, когда квест засчитан.
-        Связь только внутри компьютера: <code className="code">{BRIDGE_ORIGIN}</code>.
+        The OSRS Path Bridge plugin for RuneLite shows the current step right in the game: an arrow to the place, a highlight of NPCs, objects,
+        tiles, the needed dialogue option and inventory items — and it marks the step itself when the quest is counted.
+        The link stays inside the computer: <code className="code">{BRIDGE_ORIGIN}</code>.
       </p>
       <div className="setting">
         <label className="switch">
           <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />
-          <span>Связь с RuneLite</span>
+          <span>RuneLite link</span>
         </label>
-        <p className="muted small">Сейчас: {status}.{activeStepId && (state === 'online'
-          ? <> В игре показан шаг <code className="code">{activeStepId}</code>.</>
-          : <> Шаг <code className="code">{activeStepId}</code> вернётся в игру, когда RuneLite подключится.</>)}</p>
-        {activeStepId && <div className="actions"><button type="button" className="btn" onClick={() => void clear()}>Убрать подсказки из игры</button></div>}
+        <p className="muted small">Now: {status}.{activeStepId && (state === 'online'
+          ? <> The game shows the step <code className="code">{activeStepId}</code>.</>
+          : <> The step <code className="code">{activeStepId}</code> will return to the game when RuneLite connects.</>)}</p>
+        {activeStepId && <div className="actions"><button type="button" className="btn" onClick={() => void clear()}>Remove the hints from the game</button></div>}
         {plugin && (plugin.compat === 'ok'
-          ? <p className="muted small">✓ Плагин {plugin.version ?? ''} совместим с программой {__APP_VERSION__} (протокол {plugin.protocol}).</p>
+          ? <p className="muted small">✓ The plugin {plugin.version ?? ''} is compatible with the app {__APP_VERSION__} (protocol {plugin.protocol}).</p>
           : <PluginUpdateNote />)}
       </div>
 
@@ -347,48 +348,48 @@ function RuneLiteBridge() {
         <div className="setting">
           <label className="switch">
             <input type="checkbox" checked={autoLaunch} disabled={!enabled} onChange={(e) => setAutoLaunch(e.target.checked)} />
-            <span>Запускать RuneLite вместе с OSRS Путь</span>
+            <span>Start RuneLite together with OSRS Path</span>
           </label>
           <div className="actions">
             <button type="button" className="btn btn-primary" onClick={launch} disabled={launching || !check?.ok || state === 'online'}>
-              🎮 {state === 'online' ? 'RuneLite с мостом запущен' : 'Запустить RuneLite с мостом'}
+              🎮 {state === 'online' ? 'RuneLite with the bridge is running' : 'Launch RuneLite with the bridge'}
             </button>
           </div>
           {check && (
             <ul className="runelite-checks small">
               {check.ok
-                ? <li className="is-ok">✓ RuneLite {check.clientVersion} найден — плагин запустится вместе с ним</li>
+                ? <li className="is-ok">✓ RuneLite {check.clientVersion} found — the plugin will start with it</li>
                 : check.problems.map((p) => <li key={p} className="is-bad">✗ {p}</li>)}
               {check.credentials
-                ? <li className="is-ok">✓ Вход с Jagex Account сохранён</li>
-                : <li className="is-warn">! Вход с Jagex Account не сохранён — см. ниже</li>}
+                ? <li className="is-ok">✓ The Jagex Account sign-in is saved</li>
+                : <li className="is-warn">! The Jagex Account sign-in is not saved — see below</li>}
             </ul>
           )}
           {check && !check.credentials && (
             <details className="runelite-help">
-              <summary>Как входить с Jagex Account (один раз)</summary>
+              <summary>How to sign in with a Jagex Account (once)</summary>
               <p className="small">
-                RuneLite, запущенный не из Jagex Launcher, не знает твою сессию. Её можно сохранить один раз — так RuneLite
-                советует разработчикам:
+                RuneLite started not from the Jagex Launcher does not know your session. It can be saved once — this is what RuneLite
+                recommends to developers:
               </p>
               <ol className="small">
-                <li>В меню «Пуск» открой <strong>RuneLite (configure)</strong>.</li>
-                <li>В поле <strong>Client arguments</strong> впиши <code className="code">--insecure-write-credentials</code> и нажми Save.</li>
-                <li>Запусти RuneLite через <strong>Jagex Launcher</strong> как обычно и закрой его, когда откроется.</li>
-                <li>Верни поле Client arguments пустым — дальше RuneLite с мостом будет входить сам.</li>
+                <li>In the Start menu open <strong>RuneLite (configure)</strong>.</li>
+                <li>In the <strong>Client arguments</strong> field enter <code className="code">--insecure-write-credentials</code> and press Save.</li>
+                <li>Start RuneLite through the <strong>Jagex Launcher</strong> as usual and close it when it opens.</li>
+                <li>Leave the Client arguments field empty again — from then on RuneLite with the bridge signs in by itself.</li>
               </ol>
               <p className="small muted">
-                Сессия хранится в файле <code className="code">%USERPROFILE%\.runelite\credentials.properties</code> — он даёт вход
-                в аккаунт, никому его не отправляй. Отозвать: «End sessions» в настройках Jagex Account или удалить файл.
-                Старые аккаунты без Jagex Account входят логином и паролем прямо в окне RuneLite.
+                The session is stored in the file <code className="code">%USERPROFILE%\.runelite\credentials.properties</code> — it gives access
+                to the account, do not send it to anyone. To revoke: "End sessions" in the Jagex Account settings, or delete the file.
+                Old accounts without a Jagex Account sign in with a login and password right in the RuneLite window.
               </p>
             </details>
           )}
         </div>
       ) : (
         <p className="muted small">
-          RuneLite с плагином запускается одной кнопкой (или сам, вместе с программой) — эта сборка запущена не как
-          программа для ПК, поэтому кнопки здесь нет.
+          RuneLite with the plugin starts with one button (or by itself, together with the app) — this build was not started as the
+          desktop app, so there is no button here.
         </p>
       )}
     </section>

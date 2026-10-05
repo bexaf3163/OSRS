@@ -1,3 +1,4 @@
+// The list of skills: the free and the members ones with their training plans.
 import { goals, levelById, membersGuide, membersSkills, reference, skills, xpData } from '../data';
 import { useStore } from '../store';
 import { currentStage } from '../lib/next-step';
@@ -17,8 +18,8 @@ export function SkillsPage() {
   return (
     <div className="page">
       <header className="page-head">
-        <h1>Навыки</h1>
-        <p className="muted">Введи текущие уровни — трекер подсветит строку плана и сравнит с целью этапа {stage}.</p>
+        <h1>Skills</h1>
+        <p className="muted">Enter your current levels — the tracker will highlight the plan row and compare with the goal of stage {stage}.</p>
       </header>
 
       <details className="disclosure card">
@@ -37,9 +38,9 @@ export function SkillsPage() {
 
       {mode === 'members' && (
         <section className="section" aria-labelledby="members-skills">
-          <h2 id="members-skills">Навыки подписки <span className="badge badge-members">Members</span></h2>
+          <h2 id="members-skills">Members skills <span className="badge badge-members">Members</span></h2>
           <details className="disclosure card">
-            <summary>Как устроены планы навыков подписки</summary>
+            <summary>How the members skill plans work</summary>
             <div className="prose"><Blocks blocks={membersGuide.intro} /></div>
           </details>
           <div className="skill-grid">
@@ -57,7 +58,7 @@ export function XpTable() {
     const q = xpData.points[i + half];
     return [String(p.level), formatXp(p.xp), q ? String(q.level) : '', q ? formatXp(q.xp) : ''];
   });
-  return <Table head={['Уровень', 'Опыт', 'Уровень', 'Опыт']} rows={rows} caption="Опыт до уровня" />;
+  return <Table head={['Level', 'XP', 'Level', 'XP']} rows={rows} caption="XP to level" />;
 }
 
 function SkillCard({ skill, stage }: { skill: Skill; stage: number }) {
@@ -80,11 +81,11 @@ function SkillCard({ skill, stage }: { skill: Skill; stage: number }) {
           const name = levelById.get(id)!.name;
           return (
             <div key={id} className="skill-level">
-              <LevelInput id={id} label={many ? name : `Уровень: ${name}`} hideLabel={!many} compact />
+              <LevelInput id={id} label={many ? name : `Level: ${name}`} hideLabel={!many} compact />
               {goal && (
                 <span className={`goal-chip ${reached ? 'is-reached' : ''}`}>
-                  цель {goal.raw}{reached && <IconCheck />}
-                  <span className="visually-hidden"> на этапе {stage}{reached ? ', достигнута' : ''}</span>
+                  goal {goal.raw}{reached && <IconCheck />}
+                  <span className="visually-hidden"> at stage {stage}{reached ? ', reached' : ''}</span>
                 </span>
               )}
             </div>

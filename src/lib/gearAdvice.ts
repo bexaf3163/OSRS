@@ -1,6 +1,6 @@
-// Разбор снаряжения для экрана: уровни (из игры главнее введённых вручную), надетое, сумка и банк из RuneLite,
-// цены биржи, бесплатен ли шлагбаум Al Kharid, что маршрут ещё купит и с кем дерётся шаг. Сам разбор —
-// чистая функция adviseGear; здесь только сбор входных данных.
+// The gear analysis for the screen: levels (from the game, which win over manual ones), what is worn, the bag and bank from RuneLite,
+// Grand Exchange prices, whether the Al Kharid gate is free, what the route will still buy and who the step fights. The analysis itself is a
+// pure function adviseGear; here is only the gathering of inputs.
 
 import { useEffect, useMemo, useState } from 'react';
 import type { Progress, Step } from '../types';
@@ -10,19 +10,19 @@ import { isClosed } from './next-step';
 import { getGePrice } from '../services/pricesApi';
 import { adviseGear, gearData, routeNeeds, stepFoes, type AdvisorInput, type GearAdvice } from '../services/gearAdvisor';
 
-/** Цены биржи всех предметов снаряжения. Сервис цен скачивает их одним файлом и держит 5 минут. */
+/** The Grand Exchange prices of all gear items. The price service downloads them as one file and keeps them for 5 minutes. */
 async function loadGearPrices(): Promise<Map<number, number>> {
   const rows = await Promise.all(gearData.items.filter((i) => i.tradeable).map(async (i) => [i.id, (await getGePrice(i.id))?.buyPrice] as const));
   return new Map(rows.filter((r): r is readonly [number, number] => typeof r[1] === 'number' && r[1] > 0));
 }
 
-/** С кем сравнивать оружие: шаг с противниками — его; иначе ближайший невыполненный шаг с боем; иначе никто (корова). */
+/** Who to compare weapons against: a step with opponents uses its own; otherwise the nearest unfinished combat step; otherwise nobody (a cow). */
 export function fightStepFor(steps: Step[], p: Progress, step?: Step | null): Step | null {
   if (step?.foes?.length) return step;
   return steps.find((s) => s.foes?.length && !isClosed(p, s.id)) ?? null;
 }
 
-/** Квесты, отмеченные выполненными на пути (автоотметка шага по квесту): открывают, например, Rune platebody. */
+/** Quests marked done on the way (a step's quest auto-tick): they unlock, for example, the Rune platebody. */
 function questsDone(steps: Step[], p: Progress): Set<string> {
   return new Set(steps.flatMap((s) => {
     const t = s.inGame?.completionTrigger;
@@ -30,7 +30,7 @@ function questsDone(steps: Step[], p: Progress): Set<string> {
   }));
 }
 
-/** Проход в Al Kharid бесплатный после Prince Ali Rescue — по названию, а не по коду шага. */
+/** Passage into Al Kharid is free after Prince Ali Rescue: by name, not by step code. */
 function freeToll(steps: Step[], p: Progress): boolean {
   const quest = steps.find((s) => s.title === 'Prince Ali Rescue');
   return Boolean(quest && isClosed(p, quest.id));
@@ -39,9 +39,9 @@ function freeToll(steps: Step[], p: Progress): boolean {
 export interface GearAdviceView {
   advice: GearAdvice;
   input: AdvisorInput;
-  /** Шаг, чьи противники в сравнении (или null — корова). */
+  /** The step whose opponents are in the comparison (or null for a cow). */
   fightStep: Step | null;
-  /** Цены биржи загружены; нет — у покупок на бирже цены нет, и они не попадают в «по карману». */
+  /** The Grand Exchange prices are loaded; if not, purchases at the exchange have no price and do not count as "affordable". */
   pricesReady: boolean;
   pricesFailed: boolean;
 }
@@ -62,7 +62,7 @@ export function useGearAdvice(step?: Step | null): GearAdviceView {
 
   const fightStep = fightStepFor(steps, progress, step);
   const input = useMemo<AdvisorInput>(() => ({
-    // Уровни из игры главнее введённых вручную: они точные и свежие.
+    // Levels from the game win over manual ones: they are exact and fresh.
     levels: { ...progress.levels, ...(stats ?? {}) },
     gear,
     owned,

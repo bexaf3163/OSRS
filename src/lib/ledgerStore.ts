@@ -1,7 +1,7 @@
-// Хранение журнала ресурсов между сеансами. Журнал — отдельно для каждого профиля и персонажа: прибавки одного
-// аккаунта не попадают в итоги другого. Лежит в хранилище окна (localStorage): журнал — справка, не прогресс, поэтому
-// отдельного файла рядом с программой у него нет, а любое повреждение просто начинает его заново.
-// Старше 30 дней и сверх лимита записи отбрасываются; битые записи не загружаются.
+// Storing the resource journal between sessions. The journal is separate for each profile and character: the gains of one
+// account do not enter the totals of another. It lives in the window's storage (localStorage): the journal is a reference, not progress, so
+// it has no separate file next to the app, and any damage simply starts it again.
+// Records older than 30 days and over the limit are dropped; broken records are not loaded.
 
 import type { LedgerEntry, LedgerReason } from './ledger';
 
@@ -11,7 +11,7 @@ export const LEDGER_MAX_AGE_MS = 30 * 24 * 3600_000;
 
 const REASONS: ReadonlySet<string> = new Set<LedgerReason>(['LOOT', 'PICKUP', 'PURCHASE', 'SALE', 'QUEST_REWARD', 'BANK_TRANSFER', 'CONSUMED', 'UNKNOWN']);
 
-/** Ключ журнала: профиль и имя персонажа (нет имени — общий «неизвестный»). */
+/** The journal key: the profile and the character's name (without a name, the shared "unknown"). */
 export function ledgerKey(profileId: string, player: string | null | undefined): string {
   const who = (player ?? '').trim().toLowerCase().replace(/\s+/g, ' ');
   return `${LEDGER_KEY}:${profileId}:${who || '-'}`;
@@ -29,7 +29,7 @@ function valid(e: unknown): e is LedgerEntry {
     && (o.estimatedGpValue === undefined || (typeof o.estimatedGpValue === 'number' && Number.isFinite(o.estimatedGpValue)));
 }
 
-/** Свежие записи по времени и лимиту; порядок сохраняется. */
+/** Fresh records by time and limit; the order is kept. */
 export function trim(entries: LedgerEntry[], now: number): LedgerEntry[] {
   return entries.filter((e) => now - e.timestamp <= LEDGER_MAX_AGE_MS && e.timestamp <= now + 60_000).slice(-LEDGER_LIMIT);
 }
@@ -51,11 +51,11 @@ export function saveLedger(store: Store | undefined, key: string, entries: Ledge
     if (!entries.length) store?.removeItem(key);
     else store?.setItem(key, JSON.stringify(entries));
   } catch {
-    // Хранилище полно или закрыто: журнал останется в памяти до конца сеанса.
+    // The storage is full or closed: the journal stays in memory until the end of the session.
   }
 }
 
-/** Записи, сделанные начиная с момента since (текущий сеанс). */
+/** Records made from the moment since (the current session). */
 export function since(entries: LedgerEntry[], from: number): LedgerEntry[] {
   return entries.filter((e) => e.timestamp >= from);
 }

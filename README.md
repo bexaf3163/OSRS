@@ -1,720 +1,581 @@
-# OSRS Путь
+# OSRS Path
 
-Личный трекер прогресса в Old School RuneScape. Маршрут V2.2: 54 шага бесплатной версии (этапы 1–6)
-и 15 шагов подписки (этапы 7–9), 20 навыков с планом прокачки (12 бесплатных и 8 навыков подписки),
-цели по этапам, квесты, справка и плагины RuneLite. Встроенный инспектор OSRS Wiki: цена на бирже, магазины,
-бесплатные места появления и дроп для 202 предметов.
+A personal progress tracker for Old School RuneScape. Route V2: 54 free-to-play steps (stages 1–6) and 15 members steps
+(stages 7–9), 20 skills with training plans (12 free and 8 members), goals by stage, quests, a reference and RuneLite plugins.
+A built-in OSRS Wiki inspector: the Grand Exchange price, shops, free spawn places and drops for 203 items.
 
-Факты маршрута — требования, награды, этажи, цены — сверены с OSRS Wiki и биржей на 26.09.2026.
-В маршруте есть шаги заработка: откуда взять деньги на каждую закупку, с бюджетом по текущим ценам.
+The route facts — requirements, rewards, floors, prices — were checked against the OSRS Wiki and the Grand Exchange on 26.09.2026.
+The route has earning steps: where the money for each purchase comes from, with a budget at current prices.
 
-У шагов — карта: превью места прямо в карточке и карта мира OSRS Wiki на весь экран, у рыбалки,
-руды и кладов — переключатель точек. Еда в каждом бою названа и посчитана: что именно, сколько, сколько
-лечит и где взять.
+Steps have a map: a preview of the place right in the card and the OSRS Wiki world map full screen, with a point switch
+for fishing, ore and treasure steps. The food in every fight is named and counted: what exactly, how much, how much it heals and where to get it.
 
-Плагин для RuneLite «OSRS Path Bridge» (папка `runelite-bridge/`) показывает текущий шаг прямо в игре:
-стрелка к месту, подсветка NPC, объектов, клеток, нужного варианта диалога и предметов — и сам отмечает
-шаг, когда он сделан в игре: квест засчитан, уровень взят, нужные вещи на руках или в банке (62 шага из 69).
-С версии 2.4 он ещё и помощник в игре: микро-HUD с целью и расстоянием, проверка сумки у банка, путь через
-плагин Shortest Path, подсказка на бирже — а приложение предлагает быстрые варианты по твоим уровням
-и собирает оптовый список закупок.
-С версии 2.6 программа разбирает снаряжение: что надето, насколько сильно оно бьёт противника шага и что
-надеть или купить, чтобы бить быстрее, — на странице «⚔️ Снаряжение», в карточке шага с боем и строкой в HUD игры.
-С версии 2.9 у каждого шага есть **готовность**: хватает ли уровней, квестов, предметов и монет, и что сделать, если
-нет («⚡ Добрать Crafting», «🧭 К банку — взять Knife», «🛒 В закупки»); в оптовом списке — «У меня уже есть»;
-в игре — **большая стрелка**, которая поворачивается вместе с камерой; на большой карте видно, куда она ведёт.
+The **OSRS Path Bridge** RuneLite plugin (the `runelite-bridge/` folder) shows the current step right in the game: an arrow to the place,
+highlights of NPCs, objects, tiles, the right dialogue option and items — and marks the step as done by itself when it is done in the game: the quest is
+counted, the level is reached, the needed things are in hand or in the bank (62 steps of 69). It is also an in-game helper: a micro HUD with the goal and
+the distance, a bag check at the bank, a route through the Shortest Path plugin, a hint at the Grand Exchange — and the app offers quick options for your levels and
+builds a bulk shopping list.
+The app analyses your gear: what is worn, how hard it hits the step's opponent and what to wear or buy to hit faster — on the "⚔️ Gear" page, in a combat step card
+and in a line of the in-game HUD.
+Every step has a **readiness** check: whether the levels, quests, items and coins are enough, and what to do if not
+("⚡ Catch up Crafting", "🧭 To the bank — take the Knife", "🛒 Add to shopping"); the bulk list has "I already have it";
+the game has a **big arrow** that turns with the camera; the big map shows where it leads.
 
-Без сервера и аккаунтов. Одна программа для Windows — переносной exe. Веб-версии и версии для телефона
-с 2.7 нет: программа для ПК умеет всё то же и ещё связь с RuneLite, а поддерживать три сборки ради
-одного игрока — лишняя работа и лишние места, где что-то сломается.
+No server and no accounts. One program for Windows — a portable exe. There is no web version and no phone version:
+the desktop program does everything the same and also talks to RuneLite, and maintaining three builds for one player is extra work and extra places for something to break.
 
-## Программа для ПК
+## Desktop app
 
-Готовый файл — на странице [Releases](https://github.com/bexaf3163/OSRS/releases/latest):
-**`OSRS-Put-<версия>-portable.exe`**, без установки. Данные лежат **рядом с exe**, в папке `OSRS-Put-data`:
-программу можно носить на флешке вместе с прогрессом. Новая версия — просто новый exe рядом со старым:
-прогресс в той же папке. Установщика с 2.7 нет; если раньше стояла установленная версия (данные
-в `%APPDATA%\OSRS Путь`), переносная при первом запуске заберёт её прогресс сама.
+The ready file is on the [Releases](https://github.com/bexaf3163/OSRS/releases/latest) page:
+**`OSRS-Put-<version>-portable.exe`**, no installation. The data lies **next to the exe**, in the `OSRS-Put-data` folder:
+the program can be carried on a flash drive together with the progress. A new version is just a new exe next to the old one:
+the progress is in the same folder. If an installed version was used earlier (its data is in
+`%APPDATA%\OSRS Path`), the portable one takes its progress on the first launch by itself.
 
-Прогресс хранится дважды: внутри программы и файлом `progress.json` в папке данных —
-файл спасает, если внутреннее хранилище пропадёт. Где лежит папка, видно в «Настройках».
+The progress is stored twice: inside the program and as the `progress.json` file in the data folder —
+the file saves you if the internal storage disappears. Where the folder is, you can see in "Settings".
 
-Exe не подписан сертификатом, поэтому при первом запуске Windows SmartScreen может показать
-«Windows защитила ваш компьютер» → «Подробнее» → «Выполнить в любом случае».
+The exe is not signed with a certificate, so on the first launch Windows SmartScreen may show
+"Windows protected your PC" → "More info" → "Run anyway".
 
-**Внешний вид** (шестерёнка → «Внешний вид»):
+**Appearance** (the gear → "Appearance"):
 
-- **Масштаб интерфейса** — 80–200 %. Клавиши: Ctrl + «+» / «−», Ctrl + 0 — сброс, Ctrl + колесо мыши.
-- **Подстраивать под размер окна** — растягиваешь окно шире 1280 точек, и всё становится крупнее
-  (до 1,5×), сужаешь — мельче (до 0,9×). Узкое окно получает компактную раскладку в одну колонку.
-- **Размер шрифта** — отдельно от масштаба: только текст.
-- **Поверх всех окон** — удобно держать рядом с игрой.
+- **Interface scale** — 80–200 %. Keys: Ctrl + "+" / "−", Ctrl + 0 resets, Ctrl + the mouse wheel.
+- **Adapt to the window size** — stretch the window wider than 1280 points and everything becomes larger
+  (up to 1.5×), narrow it and it becomes smaller (down to 0.9×). A narrow window gets a compact one-column layout.
+- **Font size** — separate from the scale: the text only.
+- **Always on top** — handy to keep next to the game.
 
-Всё запоминается между запусками. Ссылки на вики открываются в обычном браузере. Меню скрыто —
-показывается по Alt; обновить — Ctrl+R.
+Everything is remembered between launches. Wiki links open in an ordinary browser. The menu is hidden —
+it is shown with Alt; reload — Ctrl+R.
 
-## Экран «Путь»
+## The "Path" screen
 
-На широком окне (от 1080 точек) — три колонки: слева лента этапов с шагами, в центре выбранный шаг,
-справа закреплённое досье OSRS Wiki (от 1260 точек; уже — выезжает поверх). «Отметить выполненным»
-сразу открывает следующий незакрытый шаг. В шапке — кольцо прогресса и очки квестов.
-На узком окне этапы идут списком, шаги раскрываются на месте.
+On a wide window (from 1080 points) there are three columns: on the left the ribbon of stages with steps, in the centre the chosen step,
+on the right the pinned OSRS Wiki dossier (from 1260 points; narrower — it slides over). "Mark as done"
+opens the next unclosed step at once. The header has the progress ring and the quest points.
+On a narrow window the stages go as a list, the steps expand in place.
 
-В карточке шага:
+In a step card:
 
-- **превью карты** — место старта или сбора с меткой, этажом и подписью; клик — карта мира;
-- **точки** `📍 Точка 1 … 📍 Точка 2` — у рыбалки, руды, кладов X Marks the Spot; превью, подпись
-  и карта мира переключаются вместе;
-- **«🗺️ Карта мира»** — карта на весь экран: метки всех точек шага, переключатель этажей, масштаб
-  колесом, закрывается ✕, кликом по фону или Escape;
-- **«Требуемые предметы и еда»** — у еды отмечено, сколько она лечит (`+3 HP`), у каждого предмета —
-  где взять;
-- **«🧭 Показать в игре»** — если включена связь с RuneLite (ниже), и под ней **«🧳 Проверка вылета»**;
-- **«⚡ Быстрый вариант для твоих статов»** — телепорт, каноэ, книга Chronicle, если уровень или предмет позволяет.
+- **a map preview** — the start or gathering place with a marker, a floor and a caption; a click opens the world map;
+- **points** `📍 Point 1 … 📍 Point 2` — for fishing, ore and X Marks the Spot treasures; the preview, the caption
+  and the world map switch together;
+- **"🗺️ World map"** — a full-screen map: the markers of all the step's points, a floor switch, zoom
+  with the wheel, closed with ✕, a click on the background or Escape;
+- **"Required items and food"** — food shows how much it heals (`+3 HP`), every item shows
+  where to get it;
+- **"🧭 Show in the game"** — if the link with RuneLite is on (below), and under it **"🧳 Departure check"**;
+- **"⚡ Quick option for your stats"** — a teleport, a canoe, the Chronicle book, if the level or the item allows.
 
-Кнопка **🛒** в шапке (на узком окне — ссылка в карточке «Что делать сейчас») — оптовый список Grand Exchange.
+The **🛒** button in the header (on a narrow window — a link in the "What to do now" card) opens the Grand Exchange bulk list.
 
-## Карта
+In **Zen** mode the card shows the step, its single status ("🟢 Ready to set off" or "🟡 Preparation required (3 items) · Fix · More"), "Done" and only the critical warnings;
+in **Inspector** mode every block is expanded (the toggle is in the header and in Settings).
 
-Карта — это тайлы OSRS Wiki (`maps.runescape.wiki`, © Weird Gloop, игра © Jagex) в Leaflet.
-Встроить саму страницу карты вики нельзя: `oldschool.runescape.wiki` запрещает показ в чужих окнах
-(`X-Frame-Options: DENY`, `frame-ancestors 'none'`), поэтому карта рисуется у нас из тех же тайлов.
-Версия рендера — `MAP_VERSION` в `src/lib/map.ts`; `npm run check-links` скажет, когда вики перейдёт на новую.
+## The map
 
-Без интернета превью показывает координаты клетки вместо картинки, а карта мира — сообщение
-и место текстом: пустого окна нет. Сам Leaflet лежит в сборке и грузится только при открытии карты мира.
+The map is the OSRS Wiki tiles (`maps.runescape.wiki`, © Weird Gloop, the game © Jagex) in Leaflet.
+The wiki map page itself cannot be embedded: `oldschool.runescape.wiki` forbids display in foreign windows
+(`X-Frame-Options: DENY`, `frame-ancestors 'none'`), so the map is drawn here from the same tiles.
+The render version is `MAP_VERSION` in `src/lib/map.ts`; `npm run check-links` says when the wiki moves to a new one.
 
-## Режимы F2P и Members
+Without the internet the preview shows the tile coordinates instead of a picture, and the world map shows a message
+and the place as text: there is no empty window. Leaflet itself is in the build and is loaded only when the world map is opened.
 
-Переключатель `🛡️ F2P | 👑 Members` в шапке. В режиме Members появляются этапы 7–9,
-навыки подписки с планами прокачки на вкладке «Навыки», квесты подписки и подсказки для подписчиков в шагах F2P.
-Квесты подписки идут в порядке требований: Agility 25 до The Grand Tree, Nature Spirit и Lost City до
-Fairytale I, навыки для Animal Magnetism и Lost City — отдельным шагом.
-Отметки не теряются при переключении.
+## F2P and Members modes
+
+The `🛡️ F2P | 👑 Members` switch in the header. In Members mode stages 7–9 appear,
+the members skills with training plans on the "Skills" tab, the members quests and hints for members in the F2P steps.
+The members quests go in the order of their requirements: Agility 25 before The Grand Tree, Nature Spirit and Lost City before
+Fairytale I, the skills for Animal Magnetism and Lost City — as a separate step.
+Marks are not lost when switching.
 
 ## RuneLite bridge
 
-Плагин **OSRS Path Bridge** для RuneLite — в папке `runelite-bridge/` (Java 17, Gradle, RuneLite 1.12.39).
-Он слушает только `127.0.0.1:38282` — адрес внутри компьютера, снаружи недоступен; удалённого сервера нет.
+The **OSRS Path Bridge** plugin for RuneLite is in the `runelite-bridge/` folder (Java 17, Gradle, RuneLite 1.12.39).
+It listens only on `127.0.0.1:38282` — an address inside the computer, unreachable from outside; there is no remote server.
 
-Что делает, когда в приложении нажать «🧭 Показать в игре»:
+What it does when you press "🧭 Show in the game" in the app:
 
-- **стрелка** игры к месту шага (`Client.setHintArrow`) и **большая стрелка** вверху экрана (с 2.9): поворачивается
-  вместе с камерой, как миникарта, крупно пишет расстояние, рядом с целью становится «✓ Рядом»; размер —
-  в настройках плагина, место — перетаскиванием с Alt; с 2.10 — без тёмной плашки;
-- **список «Что нужно»** на экране игры (с 2.11): предметы шага со статусом и «где взять», NPC квеста и места — клик
-  по строке ведёт туда стрелку и маршрут; **панель «OSRS Путь»** на боковой полосе RuneLite (с 2.10) — то же подробнее;
-- **метка на карте мира** игры (с 2.11): куда ведёт стрелка, далеко — у края карты;
-- **контур и подпись** над NPC и объектами шага (кухонная плита, гроб, алтарь…) — `ModelOutlineRenderer`;
-- **клетки** — «Копай здесь», места ловли и т. п.;
-- **диалог** — рамка и стрелка у нужного варианта (меню `InterfaceID.Chatmenu.OPTIONS`);
-- **предметы** шага в инвентаре и банке — пульсирующая рамка по краю ячейки (`WidgetItemOverlay`);
-- **автоотметка**: шаг сделан в игре — плагин шлёт событие, приложение отмечает шаг, открывает следующий
-  и сразу показывает в игре его. Короткий звук интерфейса и строка в чате игры.
+- the game's **arrow** to the step's place (`Client.setHintArrow`) and the **big arrow** at the top of the screen: it turns
+  with the camera like the minimap, writes the distance large, and near the target becomes "✓ Nearby"; the size is
+  in the plugin settings, the place is by dragging with Alt;
+- the **"What you need" list** on the game screen: the step's items with a status and "where to get it", the quest NPCs and places — a click
+  on a row leads the arrow and the route there; the **"OSRS Path" panel** on the RuneLite side bar — the same in more detail;
+- a **marker on the game's world map**: where the arrow leads, far away — at the edge of the map;
+- an **outline and a caption** over the step's NPCs and objects (a cooking range, a coffin, an altar…) — `ModelOutlineRenderer`;
+- **tiles** — "Dig here", fishing spots and so on;
+- a **dialogue** — a frame and an arrow at the needed option (the `InterfaceID.Chatmenu.OPTIONS` menu);
+- the step's **items** in the inventory and the bank — a pulsing frame along the cell edge (`WidgetItemOverlay`);
+- the **auto-mark**: the step is done in the game — the plugin sends an event, the app marks the step, opens the next one
+  and shows it in the game at once. A short interface sound and a line in the game chat.
 
-Автоотметка (поле `inGame.completionTrigger`) есть у 62 шагов из 69 — с 2.7 у всех, где условие проверяется
-по состоянию игры, а не по догадке:
+The auto-mark (the `inGame.completionTrigger` field) exists for 62 steps of 69 — everywhere the condition is checked
+by the game state and not by a guess:
 
-| Условие | Шагов | Как проверяет плагин |
+| Condition | Steps | How the plugin checks |
 |---|---|---|
-| `QUEST_COMPLETED` — квест засчитан | 34 | `Quest.getState` = FINISHED; название — точное из `net.runelite.api.Quest` |
-| `SKILL_LEVEL` — все уровни из названия шага | 16 | настоящий уровень из `StatChanged` (без временных бустов) |
-| `ITEM_OWNED` — вещи на руках | 12 | сумка, банкноты, надетое и банк вместе (`ItemCounts`); банк известен, когда его хоть раз открыли |
+| `QUEST_COMPLETED` — the quest is counted | 34 | `Quest.getState` = FINISHED; the name is exactly the one from `net.runelite.api.Quest` |
+| `SKILL_LEVEL` — all the levels from the step title | 16 | the real level from `StatChanged` (without temporary boosts) |
+| `ITEM_OWNED` — things in hand | 12 | the bag, banknotes, worn and the bank together (`ItemCounts`); the bank is known once it has been opened |
 
-К квесту и уровню можно добавить вещи (`items`): «Agility 40 и две части Graceful» — так у 18 шагов.
-Предмет считается по ID, если он указан, иначе по названиям. Проверка — когда что-то изменилось и раз
-в 10 тиков, без опроса каждый кадр. Условий по сообщению в чате и varbit в маршруте нет: номера varbit без
-проверки в игре не заводятся. Без автоотметки остались 6 шагов, у которых нет надёжного признака в игре
-(настройки, заработок, осмотр места, вступление Fairytale II), — их отмечаешь сам.
+Items (`items`) can be added to a quest and a level: "Agility 40 and two Graceful pieces" — so for 18 steps.
+An item is counted by ID if it is given, otherwise by names. The check runs when something changed and once
+every 10 ticks, without polling every frame. There are no chat-message and varbit conditions in the route: varbit numbers are not added
+without being checked in the game. 6 steps are left without an auto-mark because they have no reliable sign in the game
+(settings, earning, looking around a place, the Fairytale II intro) — you mark them yourself.
 
-## Помощник в игре (2.4)
+### Quest stages and the Quest Helper machines
 
-Пять частей, которые дополняют мост, а не заменяют его. Каждая выключается в настройках плагина
-(RuneLite → OSRS Path Bridge → «Помощник в игре»), и ни одна не мешает, если RuneLite не запущен.
+For the 32 route quests the in-game list knows the quest stage (by the quest variable, as in Quest Helper): it shows only the current stage, its lines in order
+(a move by place and a "step done" button), the stage's items, and leads the arrow to the current line. A quest is handed in — "Quest complete" and the departure check list is cleared.
+The quest routes are taken from Quest Helper (full assistance), so there are no skipped steps.
 
-| | Где | Нужен RuneLite? |
+Since 2.27 the line is chosen by the same logic as Quest Helper's: chat and dialogue messages, the quest journal, game variables, items and place
+(`src/data/questMachines.json`, a plugin resource generated by `tools/qh-machines`). The machine's choice is evidence: when it exists it sets the cursor;
+with no evidence the earlier logic (place and items) decides; a condition the plugin cannot check counts as "unknown", not "no". The "Steps like Quest Helper" setting
+turns the machine off. The license of Quest Helper is in `THIRD_PARTY_NOTICES.md`.
+
+## The in-game helper
+
+Five parts that complement the bridge and do not replace it. Each one is turned off in the plugin settings
+(RuneLite → OSRS Path Bridge → "In-game helper"), and none gets in the way if RuneLite is not running.
+
+| | Where | Is RuneLite needed? |
 |---|---|---|
-| **Микро-HUD** — `[S1-06] The Restless Ghost`, текущая цель, `~142 клетки ↗` или `✓ Рядом` | в игре, слева сверху | да |
-| **Проверка вылета** — `✓ Rope 1/1`, `✗ Cooked chicken 2/5 · +3 HP`, `Готов к выходу (Ready to depart)` | в игре у банка и в карточке шага | да |
-| **Быстрые варианты** — `⚡ Varrock Teleport · у тебя Magic 25 (из игры)` | в карточке шага | нет: без RuneLite — по уровням, введённым в «Навыках» |
-| **Оптовый список GE** — сумма по этапам, бюджет, копирование | страница 🛒 | нет; с RuneLite — ещё «сколько уже есть» и подсказка на бирже |
-| **Путь по земле** — Shortest Path; без него — стрелка и HUD по остановкам | в игре | да |
+| **Micro HUD** — `[S1-06] The Restless Ghost`, the current goal, `~142 tiles ↗` or `✓ Nearby` | in the game, top left | yes |
+| **Departure check** — `✓ Rope 1/1`, `✗ Cooked chicken 2/5 · +3 HP`, `Ready to depart` | in the game at the bank and in the step card | yes |
+| **Quick options** — `⚡ Varrock Teleport · you have Magic 25 (from the game)` | in the step card | no: without RuneLite — by the levels entered in "Skills" |
+| **GE bulk list** — the total by stages, the budget, copying | the 🛒 page | no; with RuneLite — also "how many you already have" and a hint at the exchange |
+| **Route on the ground** — Shortest Path; without it — the arrow and the HUD by stops | in the game | yes |
 
-**Микро-HUD** (`OsrsPathHudOverlay`, `OverlayPanel`, слой `UNDER_WIDGETS`, слева сверху). Перетаскивается
-с зажатым Alt, прозрачность и крупный текст — в настройках. Расстояние — по прямой между координатами,
-а не число шагов по дороге; стрелка — сторона света от тебя к цели. «✓ Рядом» — ближе 5 клеток (и держится
-до 7, чтобы не мигать). Другой этаж и подземелье пишутся словами. Строки считаются раз за игровой тик,
-только если ты сдвинулся.
+**Micro HUD** (`OsrsPathHudOverlay`, `OverlayPanel`, the `UNDER_WIDGETS` layer, top left). It is dragged
+with Alt held, the transparency and the large text are in the settings. The distance is a straight line between coordinates,
+not the number of steps along the road; the arrow is the compass direction from you to the target. "✓ Nearby" is closer than 5 tiles (and holds
+up to 7, so as not to blink). Another floor and a dungeon are written in words. The lines are recomputed once per game tick,
+only if you moved.
 
-**Проверка вылета.** Приложение отправляет в плагин обязательные предметы шага, кроме тех, что добываются
-по ходу самого шага (`inStep` в маршруте: амулет от NPC, пиво у бармена). Плагин считает сумку и надетое
-по событиям `ItemContainerChanged` (банкноты не в счёт — их не съесть), а банк — когда его открываешь.
-Состояния: `IN_BAG_READY`, `MISSING_FROM_BAG` (есть в банке — ячейка подсвечена зелёным), `NOT_FOUND_IN_BANK`;
-всё на руках — «Готов к выходу». Предметы плагин не перекладывает. То же самое — «🧳 Проверка вылета»
-в карточке шага, обновляется само.
+**Departure check.** The app sends the plugin the step's mandatory items, except those obtained
+during the step itself (`inStep` in the route: an amulet from an NPC, beer at the bartender). The plugin counts the bag and the worn items
+by `ItemContainerChanged` events (banknotes do not count — they cannot be eaten), and the bank — when you open it.
+States: `IN_BAG_READY`, `MISSING_FROM_BAG` (it is in the bank — the cell is highlighted green), `NOT_FOUND_IN_BANK`;
+everything in hand — "Ready to depart". The plugin does not move items. The same thing is the "🧳 Departure check"
+in the step card, updated by itself.
 
-**Быстрые варианты** — поле `branches` у шага: условие (`SKILL_LEVEL`, `QUEST_COMPLETED`, `ITEM_OWNED`),
-текст и точка, куда вести. Уровни плагин присылает при изменении (`StatChanged`, событие `STATS`), приложение
-показывает вариант сразу. «🧭 Вести в игре этим путём» — точка варианта уходит в игру вместо обычной.
-Основной путь не прячется. Сейчас в маршруте: Varrock Teleport (Magic 25) у пяти шагов, каноэ Log (Woodcutting 12)
-и Dugout (27) к Stronghold of Security, книга Chronicle к бирже. Срезок по ловкости пока нет: в маршруте
-F2P ловкость не качается, а пороги для подписки ещё не сверены.
+**Quick options** — the `branches` field of a step: a condition (`SKILL_LEVEL`, `QUEST_COMPLETED`, `ITEM_OWNED`),
+a text and a point to lead to. The plugin sends the levels on change (`StatChanged`, the `STATS` event), the app
+shows the option at once. "🧭 Lead this way in the game" — the option's point goes to the game instead of the usual one.
+The main way is not hidden. The route now has: Varrock Teleport (Magic 25) on five steps, the Log canoe (Woodcutting 12)
+and the Dugout (27) to the Stronghold of Security, the Chronicle book to the exchange. There are no agility shortcuts yet: the F2P route
+does not train Agility, and the members thresholds are not verified yet.
 
-**Оптовый список Grand Exchange** (страница 🛒). Берёт обязательные предметы выбранных этапов, одинаковые
-складывает по ID предмета (без ID — по имени). Не считает дважды: «Из шага S2-01» — это тот же предмет;
-инструменты и снаряжение (молоток, лопата, топор) — одного хватает на все шаги. Группы: «Купить на бирже»,
-«Добудешь по ходу шагов», «Рекомендуется», «На бирже не продаются» (квестовые — по справочнику цен OSRS Wiki).
-Бюджет — по тому же сервису цен, что и инспектор предметов. «📋 Скопировать список для биржи» — английские
-названия с количеством; «📋 Копировать название» — у каждого предмета.
+**Grand Exchange bulk list** (the 🛒 page). It takes the mandatory items of the chosen stages and adds up the same ones
+by item ID (without an ID — by name). It does not count twice: "From step S2-01" is the same item;
+tools and gear (a hammer, a spade, an axe) — one is enough for all steps. Groups: "Buy at the exchange",
+"You will get it during the steps", "Recommended", "Not sold at the exchange" (quest ones — by the OSRS Wiki price reference).
+The budget is by the same price service as the item inspector. "📋 Copy the list for the exchange" — English
+names with the quantity; "📋 Copy the name" — on every item.
 
-**Подсказка на бирже** (`GrandExchangeHelperOverlay`). При открытой Grand Exchange — тот же список: что уже есть
-(сумка, банкноты, банк), что в ордере, что куплено и ждёт, `▶` у следующего. Название в поиск биржи
-**не подставляется**: у RuneLite нет для этого публичного API, а писать в поле ввода игры — уже автоматизация
-ввода. Ордера плагин не выставляет и не подтверждает.
+**The exchange hint** (`GrandExchangeHelperOverlay`). With the Grand Exchange open — the same list: what you already have
+(bag, banknotes, bank), what is in an offer, what is bought and waiting, `▶` at the next one. The name is **not put**
+into the exchange search: RuneLite has no public API for that, and writing into the game's input field is already input
+automation. The plugin does not place or confirm offers.
 
-**Маршрут по земле.** Если установлен плагин **Shortest Path** (Plugin Hub) — мост передаёт ему цель через его
-открытый API (`PluginMessage("shortestpath", "path", {target})`, очистка — `"clear"`), и путь с учётом стен
-и дверей рисует он; свой путь он считает сам, один раз на цель. Чужую цель, заданную вручную, мост не стирает.
-Поле `pathWaypoints` — остановки по порядку: стрелка игры и HUD («Точка 2/5: …») ведут к текущей, она
-засчитывается в 3 клетках, в конце маршрут очищается. Сейчас остановки есть у The Restless Ghost (церковь →
-Father Urhney → гроб → башня магов → гроб). Метки остановок на земле убраны в 2.7: при Shortest Path они
-дублировали его путь, а без него стрелки и HUD хватает.
+**Route on the ground.** If the **Shortest Path** plugin (Plugin Hub) is installed, the bridge gives it the target through its
+open API (`PluginMessage("shortestpath", "path", {target})`, clearing — `"clear"`), and it draws the path with walls
+and doors in mind; it computes its own path once per target. A foreign target set by hand is not erased by the bridge.
+The `pathWaypoints` field is the stops in order: the game arrow and the HUD ("Point 2/5: …") lead to the current one, it is
+counted at 3 tiles, and at the end the route is cleared. The stops exist now for The Restless Ghost (the church →
+Father Urhney → the coffin → the wizards' tower → the coffin).
 
-## Места, банк, опасность, темп и апгрейды (2.5)
+## Places, bank, danger, pace and upgrades
 
-Всё, что ниже, работает как одно целое: досье вики → точка на карте → стрелка в игре → HUD; активный шаг →
-предметы этапа в банке → темп прокачки → предупреждение об опасности. В приложении каждую часть можно выключить
-(«Настройки → Помощник: места, банк, темп, апгрейды»), в игре — в настройках плагина, раздел
-«Места, радар, темп». Выключенная функция не просто прячется: не ищет, не шлёт и не рисует.
+Everything below works as one whole: the wiki dossier → a point on the map → the arrow in the game → the HUD; the active step →
+the stage items in the bank → the training pace → a danger warning. In the app each part can be turned off
+("Settings → Helper: places, bank, pace, upgrades"), in the game — in the plugin settings, the section
+"Places, radar, pace". A turned-off feature is not merely hidden: it does not search, send or draw.
 
-**📍 Места из досье вики.** В инспекторе предмета строки «Где взять бесплатно», магазин, продавец и город
-в таблице магазинов, а у NPC — «на карте мира» открывают карту мира с меткой и подписью источника
-(«Источник предмета: Small fishing net • Lumbridge Swamp - by the Fishing tutor»). Координаты не прописаны
-в предметах — их находит общий поиск мест (`src/services/locationResolver.ts`):
+**📍 Places from the wiki dossier.** In the item inspector the "Where to get it for free" rows, the shop, the seller and the town
+in the shop table, and for an NPC "on the world map" open the world map with a marker and the source caption
+("Item source: Small fishing net • Lumbridge Swamp - by the Fishing tutor"). The coordinates are not written
+into the items — they are found by the common place search (`src/services/locationResolver.ts`):
 
-1. строка «где лежит бесплатно» — точка спавна со страницы предмета на OSRS Wiki (`{{ItemSpawnLine}}`);
-2. словарь `src/data/majorLocations.json` — 126 мест: города, банки, магазины, NPC маршрута, гильдии, шахты,
-   места ловли, транспорт. Точное имя, синоним, без регистра и служебных слов («shop», «by», «south of»…);
-3. карта `{{Map}}` в статье магазина, NPC или места на вики;
-4. словарь «примерно» — место, названное внутри строки, или похожее написание (на карте помечено «примерно»);
-5. ничего не нашлось — «Точную координату автоматически определить не удалось» и поиск на OSRS Wiki.
+1. the "lies free" line — the spawn point from the item page on the OSRS Wiki (`{{ItemSpawnLine}}`);
+2. the `src/data/majorLocations.json` dictionary — 126 places: towns, banks, shops, route NPCs, guilds, mines,
+   fishing spots, transport. An exact name, a synonym, case-insensitive and without service words ("shop", "by", "south of"…);
+3. the `{{Map}}` map in the article of a shop, an NPC or a place on the wiki;
+4. the "approximate" dictionary — a place named inside a line, or a similar spelling (marked "approximate" on the map);
+5. nothing found — "The exact coordinate could not be determined automatically" and a search on the OSRS Wiki.
 
-Cargo API у OSRS Wiki больше нет (`action=cargoquery` отвечает «Unrecognized value»), поэтому разбирается
-разметка статей — та же, из которой собран словарь (`npm run build-locations`, нужна сеть). Ответы вики
-кешируются в памяти и в localStorage на неделю (ошибка — на минуту), одно место не запрашивается дважды.
+The OSRS Wiki no longer has a Cargo API (`action=cargoquery` answers "Unrecognized value"), so the markup of articles is parsed —
+the same one the dictionary was built from (`npm run build-locations`, needs the network). Wiki answers are cached in memory
+and in localStorage for a week (an error — for a minute), and one place is not requested twice.
 
-**🧭 Стрелка к месту в игре.** Кнопка «🧭 Направить стрелку в игре» на карте (и 🧭 в строке досье) ставит
-временную цель поверх шага (`POST /nav-target`): стрелка игры, маршрут Shortest Path и HUD («К месту: Port Sarim»)
-ведут туда, продавец подсвечен. Дошёл (3 клетки) — цель снимается сама и стрелка возвращается к шагу.
-Без RuneLite карта работает как обычно, рядом с кнопкой — «RuneLite offline».
+**🧭 The arrow to a place in the game.** The "🧭 Point the arrow in the game" button on the map (and 🧭 in a dossier row) sets
+a temporary target over the step (`POST /nav-target`): the game arrow, the Shortest Path route and the HUD ("To the place: Port Sarim")
+lead there, the seller is highlighted. Arrived (3 tiles) — the target clears by itself and the arrow returns to the step.
+Without RuneLite the map works as usual, with "RuneLite offline" next to the button.
 
-**🏦 Предметы этапа в банке.** Пока шаг этапа показан в игре, мост мягко обводит золотистой рамкой в основном
-окне банка все предметы этапа, которые берут из банка (`POST /bank-tags`; в F2P — без предметов Members).
-Подсветка меняется вместе с этапом сама. Строки импорта для плагина Bank Tags с 2.7 нет: её пришлось бы
-копировать и вставлять заново на каждом этапе, а подсветка приходит без действий.
+**🏦 Stage items in the bank.** While a stage step is shown in the game, the bridge softly outlines in gold, in the main
+bank window, all the stage items that are taken from the bank (`POST /bank-tags`; in F2P — without the Members items).
+The highlight changes with the stage by itself.
 
-**⚠ Радар опасности.** Зоны — `src/data/dangerZones.json` (данные сверены с вики, плагин берёт тот же файл):
-тёмные маги у каменного круга к югу от Варрока и за банком Draynor, ожившие деревья во дворе Draynor Manor,
-агрессивные стражники у тюрьмы Draynor. Ближе 20 клеток — красная граница зоны на земле; в зоне
-предупреждения — «⚠ ВНИМАНИЕ» в HUD, красный контур опасных NPC и звук один раз на вход (вышел и зашёл —
-снова). Расстояния — квадратами, NPC ищутся только рядом с зоной.
+**⚠ Danger radar.** The zones are `src/data/dangerZones.json` (the data is checked against the wiki, the plugin takes the same file):
+dark wizards at the stone circle south of Varrock and behind the Draynor bank, the animated trees in the Draynor Manor yard,
+the aggressive guards at the Draynor jail. Closer than 20 tiles — a red zone border on the ground; in the warning
+zone — "⚠ WARNING" in the HUD, a red outline of the dangerous NPCs and a sound once per entry (leave and enter —
+again). The distances are squared, NPCs are searched only near a zone.
 
-**⏱ Темп прокачки.** У шагов прокачки с одним понятным действием (рубка до 15, креветки до 20, руда до 15,
-форель до 30) поле `pacing`: навык, цель, опыт за действие. Плагин считает по опыту из игры (`StatChanged`):
-«34 креветки до 20 Fishing (~7 мин)» в HUD и то же в карточке шага. Темп — по последним пяти прибавкам
-опыта; пока их меньше трёх, время не придумывается: «время рассчитывается…». Меньше 5 действий —
-«✓ Почти готово», цель достигнута — «✓ Целевой уровень достигнут».
+**⏱ Training pace.** Training steps with one clear action (chopping to 15, shrimp to 20, ore to 15,
+trout to 30) have a `pacing` field: the skill, the goal, the XP per action. The plugin counts by the XP from the game (`StatChanged`):
+"34 shrimps to 20 Fishing (~7 min)" in the HUD and the same in the step card. The pace is by the last five XP
+gains; until there are three, the time is not invented: "calculating the time…". Fewer than 5 actions —
+"✓ Almost done", the goal reached — "✓ Target level reached".
 
-С 2.7 темп есть и у боя (S3-08 — воины Al Kharid до 30, S4-03 — моховые великаны до 40): три навыка сразу
-(`skill` и `also`), опыт за противника — 4 × его здоровье (у воина 19 → 76, у великана 60 → 240; сверяет
-`check-data`). HUD показывает навык, в который сейчас идёт опыт, «потом Strength и Defence», а когда этот
-навык готов — «✓ 30 Attack — дальше Strength: смени стиль атаки». Пока своих замеров нет, первая оценка
-времени берётся из разбора снаряжения (секунд на противника по надетому оружию и уровням) с пометкой
-«оценка»; снаряжение неизвестно — оценки нет, время не выдумывается. Замер боя — по последним 30 прибавкам.
+Combat has a pace too (S3-08 — Al Kharid warriors to 30, S4-03 — moss giants to 40): three skills at once
+(`skill` and `also`), the XP per opponent is 4 × its health (the warrior 19 → 76, the giant 60 → 240; `check-data`
+verifies it). The HUD shows the skill the XP is currently going into, "then Strength and Defence", and when that
+skill is ready — "✓ 30 Attack - next Strength: change attack style". Until there are measurements of its own, the first time estimate
+comes from the gear analysis (seconds per opponent by the worn weapon and the levels) marked
+"approx."; the gear is unknown — no estimate, the time is not invented. The combat measurement is by the last 30 gains.
 
-**⚡ Скоростной апгрейд.** Перед рубкой и добычей приложение сравнивает твой топор или кирку
-(снаряжение, сумка и монеты — из плагина) со ступенями `src/data/toolProgression.json` и, если уровень уже
-позволяет получше, предлагает: «Замени Bronze axe → Steel axe · Bob's Brilliant Axes • Lumbridge · ~200 gp».
-«🧭 Направить к Bob» — стрелка к магазину, Bob обведён с подписью «[Купи: Steel axe]», топор обведён в окне
-магазина. Как только топор в сумке или в руке, цель снимается сама и шаг возвращается. Денег не хватает —
-идти не зовёт, а показывает, как добрать (ориентиры, а не обещанный доход). «✕ Пропустить» прячет подсказку
-на этом шаге. Цены и продавцы — из базы предметов (OSRS Wiki), магазины — из словаря мест. Ничего не покупает.
-Оружие, амулет и броню с 2.6 советует разбор снаряжения — ниже.
+**⚡ Speed upgrade.** Before chopping and mining the app compares your axe or pickaxe
+(gear, bag and coins — from the plugin) with the tiers of `src/data/toolProgression.json` and, if the level already
+allows a better one, offers: "Replace Bronze axe → Steel axe · Bob's Brilliant Axes • Lumbridge · ~200 gp".
+"🧭 Point to Bob" — the arrow to the shop, Bob is outlined with the caption "[Buy: Steel axe]", the axe is outlined in the shop
+window. As soon as the axe is in the bag or in the hand, the target clears by itself and the step returns. Not enough money —
+it does not call you there, it shows how to make it up (guides, not a promised income). "✕ Skip" hides the hint
+on this step. Prices and sellers — from the item database (OSRS Wiki), the shops — from the place dictionary. It buys nothing.
+Weapons, amulets and armour are advised by the gear analysis — below.
 
-**⚔️ Снаряжение (2.6).** Страница `#/gear` (значок ⚔️ в шапке; на узком окне — из «Что делать сейчас» и из
-шагов с боем) показывает уровни, что надето, как сильно это бьёт («удар до 2, раз в 2,4 с, попаданий 71% —
-≈ 20 с на одну корову») и что сделать, чтобы бить быстрее:
+**⚔️ Gear.** The `#/gear` page (the ⚔️ icon in the header; on a narrow window — from "What to do now" and from
+combat steps) shows the levels, what is worn, how hard it hits ("max hit 2, once every 2.4 s, 71% hits —
+≈ 20 s per cow") and what to do to hit faster:
 
-1. **надеть** лучшее, что уже есть в сумке или банке, — бесплатно и первым делом;
-2. **купить** оружие и амулет по карману — у торговца (стрелка ведёт к нему, 🧭) или на бирже;
-3. **накопить** — лучшее вообще, если на него не хватает: «не хватает 600 gp»;
-4. броня по карману — отдельно и «по желанию»: бой она не ускоряет, а деньги нужны на закупки маршрута;
-5. что откроется дальше (следующий ятаган и нагрудник по уровню) и открытые молитвы на силу и атаку.
+1. **wear** the best you already have in the bag or the bank — free and first;
+2. **buy** the weapon and the amulet you can afford — from a trader (the arrow leads to them, 🧭) or at the exchange;
+3. **save up** — the best overall, if you cannot afford it: "600 gp short";
+4. the armour you can afford — separately and "optional": it does not speed up the fight, and the money is needed for the route's shopping;
+5. what unlocks next (the next scimitar and body by level) and the unlocked strength and attack prayers.
 
-Урон считается по формулам OSRS Wiki («Damage per second/Melee»): максимальный удар, шанс попадания, средний
-урон в секунду — для стилей Accurate и Aggressive категории оружия, против **противника шага**
-(`foes` в `steps.json`: коровы на S1-13, воины Al Kharid и Flesh Crawler на S3-08, Count Draynor, Moss giant…;
-их защита — из карточек монстров на вики, `src/data/monsters.json`). Меч покупают на всю прокачку, а
-максимальный удар растёт ступеньками, поэтому выгода — в среднем на ближайших 10 уровнях силы. Советуется всё,
-что даёт хотя бы +3% урона или +3 защиты; из почти равных — то, что маршрут всё равно купит (ятаганы и амулет
-силы на S2-01), а заметно более дешёвое — только при настоящей экономии. Магазин немногим дороже биржи (до 100 gp)
-идёт первым: цена точная и он обычно рядом. Требования к уровню — из текста статей вики (у молотов — сила,
-а не атака); предмет с непроверенным требованием не советуется. Без RuneLite — советы по уровням из профиля,
-без выдуманного «+%» к неизвестному оружию.
+Damage is counted by the OSRS Wiki formulas ("Damage per second/Melee"): the max hit, the hit chance, the average
+damage per second — for the Accurate and Aggressive styles of the weapon category, against the **step's opponent**
+(`foes` in `steps.json`: cows on S1-13, Al Kharid warriors and the Flesh Crawler on S3-08, Count Draynor, the Moss giant…;
+their defence is from the monster cards on the wiki, `src/data/monsters.json`). A sword is bought for the whole training, and the
+max hit grows in steps, so the gain is the average over the nearest 10 strength levels. Everything that gives at least +3% damage
+or +3 defence is advised; of the nearly equal — what the route buys anyway (the scimitars and the strength amulet on S2-01), and a noticeably cheaper one — only for a real saving. A shop slightly pricier than the exchange (up to 100 gp)
+goes first: the price is exact and it is usually nearby. The level requirements are from the wiki article text (for warhammers — strength,
+not attack); an item with an unverified requirement is not advised. Without RuneLite — advice by the levels from the profile,
+without an invented "+%" for an unknown weapon.
 
-На шаге с боем в карточке — плашка «⚔️ Сильнее в бою» с главным советом и «🧭 Направить к Zeke», на «Пути» —
-короткий баннер, а в игре (`POST /gear-hint`) — строка HUD «⚡ Сильнее: Iron scimitar у Zeke (Al Kharid), 112 gp»
-или «⚡ Надень Iron scimitar — он в банке», и этот предмет пульсирует янтарной рамкой в сумке и банке.
-Плагин заодно сообщает, сколько таких предметов лежит в банке (событие `OWNED`), — по этому программа узнаёт,
-что можно надеть бесплатно. Ничего не покупает и не надевает. Выключается тем же переключателем
-«⚡ Апгрейды и снаряжение» и настройкой плагина «Подсказки апгрейдов».
+On a combat step the card has a "⚔️ Stronger in combat" plate with the main advice and "🧭 Point to Zeke", on "Path" — a
+short banner, and in the game (`POST /gear-hint`) — a HUD line "⚡ Stronger: Iron scimitar from Zeke (Al Kharid), 112 gp"
+or "⚡ Wear Iron scimitar — it is in the bank", and that item pulses with an amber frame in the bag and the bank.
+The plugin also reports how many of these items are in the bank (the `OWNED` event) — this is how the program learns
+that something can be worn for free. It buys and wears nothing. It is turned off by the same "⚡ Upgrades and gear" switch
+and the plugin setting "Upgrade hints".
 
-### Сборка и проверка
+### Building and checking the plugin
 
-Нужен JDK 17 (например, [Temurin 17](https://adoptium.net/temurin/releases/?version=17)), `JAVA_HOME` указывает на него.
+You need JDK 17 (for example [Temurin 17](https://adoptium.net/temurin/releases/?version=17)), `JAVA_HOME` points to it.
 
 ```bash
 cd runelite-bridge
 ./gradlew testClasses
 ```
 
-`./gradlew test` — тесты моста: HTTP и поток событий, отказ любому браузеру, автоотметка (квест, уровни,
-вещи по ID и названиям, их сочетания), проверка вылета (0/1, 1/1, стопки, нет в банке), расстояние и стрелка,
-путевые точки, прогресс закупок, временная цель, предметы этапа, снаряжение в `/status`, радар опасности
-(вход, выход, звук один раз, граница круга), темп прокачки (остаток, темп, пауза, «почти готово», бой по трём
-навыкам), а ещё сверка
-маршрута с этой версией RuneLite — каждое название квеста для автоотметки есть в `net.runelite.api.Quest`.
-На Windows вместо `./gradlew` — `gradlew.bat`.
+`./gradlew test` — the bridge tests: HTTP and the event stream, refusal of any browser, the auto-mark (a quest, levels,
+things by ID and by names, their combinations), the departure check (0/1, 1/1, stacks, not in the bank), the distance and the arrow,
+waypoints, the shopping progress, a temporary target, the stage items, the gear in `/status`, the danger radar
+(entry, exit, the sound once, the circle border), the training pace (remainder, pace, pause, "almost done", combat by three
+skills), the Quest Helper machines (a reference answer on thousands of vectors), the in-game text layout: `OverlayLayoutTest` draws
+the HUD, the departure check and the exchange with the real RuneLite fonts for all steps, branches, purchases, places, zones and pace lines,
+in all the fonts and in the large mode, and looks for points outside the frame; `ConfigNamesTest` measures the setting names by the panel.
+Also a check of the route against this RuneLite version — every quest name for the auto-mark is in `net.runelite.api.Quest`.
+On Windows use `gradlew.bat` instead of `./gradlew`.
 
-### Запуск — в программе для ПК ничего делать не нужно
+### Starting — in the desktop program nothing needs to be done
 
-Открываешь «OSRS Путь» — и RuneLite с плагином запускается сам (секунд 10–20, индикатор в шапке станет
-зелёным). Выключается в «Настройки → RuneLite → Запускать RuneLite вместе с OSRS Путь»; там же кнопка
-«🎮 Запустить RuneLite с мостом». Закрытие «OSRS Путь» игру не закрывает.
+You open "OSRS Path" — and RuneLite with the plugin starts by itself (10–20 seconds, the indicator in the header turns
+green). It is turned off in "Settings → RuneLite → Start RuneLite together with OSRS Path"; there is also the button
+"🎮 Start RuneLite with the bridge". Closing "OSRS Path" does not close the game.
 
-Как это устроено: Java берётся из установленного RuneLite (`%LOCALAPPDATA%\RuneLite\jre`), классы клиента —
-из его кэша `~/.runelite/repository2` (их скачивает лаунчер RuneLite), плагин — `osrs-path-bridge.jar` внутри программы
-(около 90 КБ, только наш код). Ничего не скачивается. Нужно одно: RuneLite установлен и хотя бы раз запускался
-через Jagex Launcher. Журнал запуска — `runelite-launch.log` в папке данных программы.
+How it works: Java is taken from the installed RuneLite (`%LOCALAPPDATA%\RuneLite\jre`), the client classes —
+from its cache `~/.runelite/repository2` (the RuneLite launcher downloads them), the plugin is `osrs-path-bridge.jar` inside the program
+(about 90 KB, only our code). Nothing is downloaded. One thing is needed: RuneLite is installed and was started at least once
+through the Jagex Launcher. The start log is `runelite-launch.log` in the program's data folder.
 
-Обычный RuneLite из лаунчера сторонние плагины не загружает (в 1.12.39 папка `~/.runelite/sideloaded-plugins`
-читается только в режиме разработчика, а он включается, лишь когда клиент запущен **без** лаунчера), поэтому
-программа запускает клиент напрямую, как официальный шаблон плагинов RuneLite.
+An ordinary RuneLite from the launcher does not load third-party plugins (in 1.12.39 the `~/.runelite/sideloaded-plugins` folder
+is read only in developer mode, and it is turned on only when the client is started **without** the launcher), so the
+program starts the client directly, like the official RuneLite plugin template.
 
-**Вход с Jagex Account.** RuneLite, запущенный не из Jagex Launcher, не знает твою сессию. Один раз:
-«Пуск → RuneLite (configure)» → в поле *Client arguments* вписать `--insecure-write-credentials` → Save →
-запустить RuneLite через Jagex Launcher и закрыть → вернуть поле пустым. Сессия сохранится в
-`%USERPROFILE%\.runelite\credentials.properties` — файл даёт вход в аккаунт, никому его не отправляй
-(отозвать — «End sessions» в настройках Jagex Account). Старые аккаунты без Jagex Account входят логином
-и паролем в окне RuneLite. Программа показывает в настройках, сохранён ли вход.
+**Signing in with a Jagex Account.** A RuneLite started not from the Jagex Launcher does not know your session. Once:
+"Start → RuneLite (configure)" → in the *Client arguments* field enter `--insecure-write-credentials` → Save →
+start RuneLite through the Jagex Launcher and close it → make the field empty again. The session is saved in
+`%USERPROFILE%\.runelite\credentials.properties` — the file gives access to the account, send it to nobody
+(to revoke — "End sessions" in the Jagex Account settings). Old accounts without a Jagex Account sign in with a login
+and password in the RuneLite window. The program shows in the settings whether the sign-in is saved.
 
-### Запуск из репозитория (для разработки)
+### Starting from the repository (for development)
 
 ```bash
 cd runelite-bridge
 ./gradlew run
 ```
 
-`./gradlew run -PruneliteHome=C:\rl-dev` — отдельная папка настроек, настоящий `~/.runelite` не трогается.
-Для входа с Jagex Account клиенту для разработки нужны сохранённые данные входа — как их получить через
-лаунчер, описано в вики RuneLite, статья «Using Jagex Accounts» (параметр `--insecure-write-credentials`).
+`./gradlew run -PruneliteHome=C:\rl-dev` — a separate settings folder, the real `~/.runelite` is not touched.
+For a Jagex Account sign-in the development client needs saved sign-in data — how to get it through the
+launcher is described in the RuneLite wiki, the article "Using Jagex Accounts" (the `--insecure-write-credentials` parameter).
 
-Порядок:
+The order:
 
-1. Запустить RuneLite с плагином: программа для ПК делает это сама, из репозитория — `./gradlew run`.
-2. Плагин OSRS Path Bridge включён сам (в списке плагинов RuneLite — его настройки: порт, цвет, стрелка, звук
-   и раздел «Помощник в игре»).
-3. Запустить приложение «OSRS Путь» (программа для ПК или `npm run dev`).
-4. В шапке — `🟢 RuneLite мост активен`. Связь включена сразу; выключается в «Настройки → RuneLite».
-5. Открыть шаг, например S1-03 Cook's Assistant.
-6. Нажать «🧭 Показать в игре» — кнопка станет «✓ Показан в игре», рядом появится «● Активно в RuneLite».
-7. В игре: стрелка над кухней, контур повара, рамка у «What's wrong?».
-8. Выполнить квест.
-9. Шаг отметится сам, откроется S1-04 и тут же уйдёт в игру.
+1. Start RuneLite with the plugin: the desktop program does it itself, from the repository — `./gradlew run`.
+2. The OSRS Path Bridge plugin is on by itself (in the RuneLite plugin list — its settings: the port, colour, arrow, sound
+   and the "In-game helper" section).
+3. Start the "OSRS Path" app (the desktop program or `npm run dev`).
+4. In the header — `🟢 RuneLite bridge active`. The link is on at once; it is turned off in "Settings → RuneLite".
+5. Open a step, for example S1-03 Cook's Assistant.
+6. Press "🧭 Show in the game" — the button becomes "✓ Shown in the game", and "● Active in RuneLite" appears next to it.
+7. In the game: an arrow over the kitchen, an outline of the cook, a frame at "What's wrong?".
+8. Complete the quest.
+9. The step is marked by itself, S1-04 opens and goes to the game at once.
 
-### Список «Что нужно» в игре и панель «OSRS Путь» (2.10–2.11)
+### The "What you need" list in the game and the "OSRS Path" panel
 
-**На экране игры** (2.11), слева сверху под плашкой шага — список «Что нужно»: предметы шага со статусом («есть»,
-«в банке», «нет», «по ходу» — добудешь в самом шаге, «в банке?» — банк ещё не открывали), под каждым — где взять;
-чего не хватает — сверху. Ниже — «Куда идти»: NPC квеста и места шага. Строка с местом — кнопка: клик ставит
-временную цель — стрелка, клетка на земле и Shortest Path ведут туда, NPC подсвечивается, по приходу стрелка сама
-возвращается к шагу («← Стрелку — снова к шагу» — сразу). Мышь над строкой — внизу полный текст и что сделает клик;
-клик по заголовку — свернуть. Клики по списку в игру не уходят (как у карты подземелий RuneLite); если сверху окно
-игры (банк, магазин) — клик его. Выключается настройкой «Список «Что нужно»», двигается с Alt.
+**On the game screen**, top left under the step plate, is the "What you need" list: the step's items with a status ("have",
+"in the bank", "none", "during the step" — you will get it in the step itself, "in the bank?" — the bank was not opened yet), under each — where to get it;
+what is missing — at the top. Below — "Where to go": the quest NPCs and the step's places. A row with a place is a button: a click sets
+a temporary target — the arrow, the tile on the ground and Shortest Path lead there, the NPC is highlighted, on arrival the arrow itself
+returns to the step ("← Arrow back to the step" — at once). The mouse over a row shows the full text and what the click will do at the bottom;
+a click on the title collapses it. Clicks on the list do not go to the game (as with the RuneLite dungeon map); if a game window is on top
+(a bank, a shop), a click goes to it. It is turned off by the "What you need list" setting and is moved with Alt.
 
-**Боковая панель** (2.10) — значок-стрелка на полосе RuneLite: то же подробнее, с «Путь сюда» у каждого места.
+**The side panel** — an arrow icon on the RuneLite bar: the same in more detail, with "Go here" on every place.
 
-**Откуда места.** Точка шага, места с карты шага (`resourceSpots`), откуда предметы (поле `from` у предмета: NPC из
-`src/data/npcLocations.json` или место из `majorLocations.json`) и NPC квеста из `inGame.npcNames`, если известно,
-где они стоят (`npcLocations.json` — по картам статей OSRS Wiki; одно имя у разных NPC — запись со `steps`, как
-Cook в Blue Moon Inn для S3-04). Одна раскладка — `src/lib/stepPlaces.ts`: те же места — точками на карте шага в
-программе («🧭 Вести сюда в игре») и строками в игре. `check-data` проверяет, что у каждого `from` место есть,
-`check-links` — что статьи NPC существуют.
+**Where the places come from.** The step point, the places from the step map (`resourceSpots`), where items come from (the `from` field of an item: an NPC from
+`src/data/npcLocations.json` or a place from `majorLocations.json`) and the quest NPCs from `inGame.npcNames` if it is known
+where they stand (`npcLocations.json` — from the maps of the OSRS Wiki articles; one name for different NPCs — a record with `steps`, like
+the Cook in the Blue Moon Inn for S3-04). One layout — `src/lib/stepPlaces.ts`: the same places are points on the step map in the
+program ("🧭 Lead here in the game") and rows in the game. `check-data` verifies that every `from` has a place,
+`check-links` — that the NPC articles exist.
 
-**Одна цель в программе и в игре.** Цель, выбранную в игре, плагин сообщает событием `NAV_SET` и полем `navTarget`
-в `/status` — программа отмечает её «● Стрелка ведёт сюда» и после своего перезапуска. Строка «Сумка» в HUD
-называет недостающее: «Сумка: нет Burnt meat», «Сумка: Burnt meat — возьми из банка».
+**One target in the program and in the game.** A target chosen in the game is reported by the plugin with the `NAV_SET` event and the `navTarget` field
+in `/status` — the program marks it "● The arrow leads here" even after its own restart. The "Bag" line in the HUD
+names what is missing: "Bag: no Burnt meat", "Bag: Burnt meat — take it from the bank".
 
-**Старый плагин.** Программа запускает RuneLite с плагином из своей папки, но уже запущенный RuneLite держит тот,
-с которым стартовал. Плагин старше программы (протокол меньше) — на карточке шага и в настройках «В RuneLite
-работает старый плагин — перезапусти RuneLite» и чего без этого нет.
+**An old plugin.** The program starts RuneLite with the plugin from its folder, but an already running RuneLite keeps the one
+it started with. A plugin older than the program (a lower protocol) — on the step card and in the settings "An old plugin is running in
+RuneLite — restart RuneLite" and what is missing without it.
 
-Если RuneLite не запущен, индикатор — `⚪ RuneLite мост оффлайн`, кнопка пишет, что делать; приложение
-переподключается само с паузами до 30 секунд. Запросы идут через главный процесс программы (без CORS
-и без ошибок в консоли). Страница из `npm run dev` в браузере работает без связи с RuneLite.
+If RuneLite is not running, the indicator is `⚪ RuneLite bridge offline`, the button says what to do; the app
+reconnects by itself with pauses of up to 30 seconds. The requests go through the program's main process (no CORS
+and no console errors). A page from `npm run dev` in a browser works without a link to RuneLite.
 
-### Адреса моста
+### Bridge addresses
 
-| Запрос | Что делает |
+| Request | What it does |
 |---|---|
-| `GET /status` | `{"status":"ok","inGame":true,"activeStepId":"S1-03","stats":{"magic":25,…},"shortestPath":true,"equipment":[…],"inventory":[…],"coins":250,"carriedValue":1200,"navTarget":{"label":"Ned — дом в Draynor Village","x":3099,"y":3259,"plane":0,"npcNames":["Ned"]},"protocol":4,"pluginVersion":"2.11.0"}` — с 2.9 оценка предметов по ценам биржи без монет (`carriedValue`, `bankValue`) и рукопожатие версий; протокол 3 (2.10) — список `guide` для боковой панели; 4 (2.11) — список «Что нужно» на экране игры и `navTarget` — куда сейчас ведёт временная цель |
-| `POST /active-step` | Цель шага (`InGameTarget` + `stepId`, `title`, `goal`, `checklist`, `pathWaypoints`, `watchItems`, `pacing`, с 2.10 `guide`: `{"items":[{"name":"Eye of newt","nameRu":"Глаз тритона","id":221,"count":1,"where":"Купи у Betty…","inStep":true}],"places":[{"x":3014,"y":3259,"plane":0,"label":"Eye of newt — Betty, Port Sarim","npc":"Betty","items":["Eye of newt"]}]}` — для панели «OSRS Путь») |
-| `POST /clear` | Убрать стрелку, подсветку, HUD, путь и временную цель |
-| `POST /shopping-plan` | Оптовый список для подсказки на бирже: `{"items":[{"name":"Rope","id":954,"count":2}]}` |
-| `POST /nav-target` | Временная цель: `{"label":"Port Sarim","x":3029,"y":3221,"plane":0,"npcNames":["Gerrant"]}`, для покупки ещё `itemName`, `itemId`, `stepId`; `{"clear":true}` — снять |
-| `POST /bank-tags` | Предметы этапа для подсветки в банке: `{"stageId":"stage-1","itemIds":[1351,590]}`; пустой список — снять |
-| `POST /gear-hint` | Совет по снаряжению: `{"text":"⚡ Сильнее: …","watchItems":["Steel scimitar"],"highlightItems":["Iron scimitar"]}` — строка HUD, про какие предметы сказать счёт в банке (`OWNED`), что подсветить; `{"clear":true}` — снять |
-| `GET /events` | Поток событий: `STATUS`, `STATS` (уровни), `OWNED` (сколько есть нужных предметов), `GEAR` (снаряжение и монеты), `PACING` (темп), `NAV_SET` (временная цель поставлена — программой или игроком в игре, с 2.11), `NAV_DONE` (временная цель снята: `arrived`, `obtained`, `cleared`), `STEP_AUTO_COMPLETED`, пинг каждые 15 секунд |
+| `GET /status` | `{"status":"ok","inGame":true,"activeStepId":"S1-03","stats":{"magic":25,…},"shortestPath":true,"equipment":[…],"inventory":[…],"coins":250,"carriedValue":1200,"navTarget":{"label":"Ned — a house in Draynor Village","x":3099,"y":3259,"plane":0,"npcNames":["Ned"]},"protocol":6,"pluginVersion":"2.28.0"}` — the estimate of items by exchange prices without coins (`carriedValue`, `bankValue`) and the version handshake; protocol 3 — the `guide` list for the side panel; 4 — the "What you need" list on the game screen and `navTarget`, where the temporary target currently leads; 5 — XP, quests, the character name; 6 — the single state snapshot `/prep-plan` |
+| `POST /active-step` | The step target (`InGameTarget` + `stepId`, `title`, `goal`, `checklist`, `pathWaypoints`, `watchItems`, `pacing`, `guide`: `{"items":[{"name":"Eye of newt","id":221,"count":1,"where":"Buy from Betty…","inStep":true}],"places":[{"x":3014,"y":3259,"plane":0,"label":"Eye of newt — Betty, Port Sarim","npc":"Betty","items":["Eye of newt"]}]}` — for the "OSRS Path" panel) |
+| `POST /prep-plan` | The single state snapshot (protocol 6): the step target, the shopping list, the bank tags, the gear hint and the preparation plan in one request with a sequence number; the plugin answers which parts it rejected |
+| `POST /clear` | Remove the arrow, the highlight, the HUD, the path and the temporary target |
+| `POST /shopping-plan` | The bulk list for the exchange hint: `{"items":[{"name":"Rope","id":954,"count":2}]}` |
+| `POST /nav-target` | A temporary target: `{"label":"Port Sarim","x":3029,"y":3221,"plane":0,"npcNames":["Gerrant"]}`, for a purchase also `itemName`, `itemId`, `stepId`; `{"clear":true}` — remove |
+| `POST /bank-tags` | The stage items for the bank highlight: `{"stageId":"stage-1","itemIds":[1351,590]}`; an empty list — remove |
+| `POST /gear-hint` | A gear hint: `{"text":"⚡ Stronger: …","watchItems":["Steel scimitar"],"highlightItems":["Iron scimitar"]}` — the HUD line, which items to report the bank count for (`OWNED`), what to highlight; `{"clear":true}` — remove |
+| `GET /telemetry` | The summary of the debug journal (the file path, the size, the state) |
+| `GET /events` | The event stream: `STATUS`, `STATS` (levels), `OWNED` (how many of the needed items there are), `GEAR` (gear and coins), `PACING` (pace), `NAV_SET` (a temporary target was set — by the program or by the player in the game), `NAV_DONE` (a temporary target was removed: `arrived`, `obtained`, `cleared`), `STEP_AUTO_COMPLETED`, a ping every 15 seconds |
 
-`STATS`, `OWNED`, `GEAR` и `PACING` уходят только при изменении и не чаще раза за игровой тик; новому
-подключению они повторяются сразу. Уровни можно не передавать — «Варианты по уровням» в настройках
-плагина; снаряжение и монеты — «Подсказки апгрейдов». Выключенная функция отвечает `409`
-с объяснением, и приложение показывает его. Поля, которых нет, плагин не пишет (а не пишет `null`).
-У надетого с 2.6 есть слот (`"slot":"weapon"`, `"amulet"`, `"shield"`… — имена `EquipmentInventorySlot`).
+`STATS`, `OWNED`, `GEAR` and `PACING` go only on change and no more than once per game tick; a new
+connection gets them again at once. The levels can be left unsent — "Options by levels" in the plugin
+settings; the gear and coins — "Upgrade hints". A turned-off feature answers `409`
+with an explanation, and the app shows it. Fields that do not exist are not written by the plugin (rather than writing `null`).
+Worn items have a slot (`"slot":"weapon"`, `"amulet"`, `"shield"`… — the `EquipmentInventorySlot` names).
 
-Защита от сайтов в браузере: заголовок `Host` — только `127.0.0.1`/`localhost` (против DNS rebinding),
-любой запрос с заголовком `Origin` отклоняется (`403`) — его присылает только браузер, а программа для ПК ходит
-из главного процесса без него; POST — только с заголовком `X-OSRS-Path: 1`, тело — до 64 КБ. CORS мост
-не разрешает, поэтому страница в браузере не прочитает ответ и не пошлёт заголовок. Настройки «Разрешённые
-сайты» с 2.7 нет: веб-версии, для которой она была, больше нет.
+Protection against websites in a browser: the `Host` header — only `127.0.0.1`/`localhost` (against DNS rebinding),
+any request with an `Origin` header is rejected (`403`) — only a browser sends it, while the desktop program goes
+from the main process without it; POST — only with the `X-OSRS-Path: 1` header, the body — up to 64 KB. The bridge does not allow CORS,
+so a page in a browser cannot read the answer or send the header.
 
-### Что проверено, а что нет
+### What is verified and what is not
 
-Проверено на RuneLite 1.12.39: плагин загружается в клиент («Plugin OsrsPathBridgePlugin is now running»),
-мост отвечает на все четыре адреса, приложение в браузере и программа для ПК видят его, «Показать в игре»
-передаёт шаг, автоотметка (событие из моста) отмечает шаг один раз и открывает следующий.
-**Не проверено в игре**: стрелка, подсветка и срабатывание условий на живом персонаже — для этого нужен вход
-в игру. Код использует только API, найденный в jar RuneLite 1.12.39, и тесты сверяют маршрут с ним.
+Verified on RuneLite 1.12.39: the plugin loads into the client ("Plugin OsrsPathBridgePlugin is now running"),
+the bridge answers all the addresses, the app in a browser and the desktop program see it, "Show in the game"
+passes a step, the auto-mark (an event from the bridge) marks the step once and opens the next one; the panel, the temporary targets "To the place" and "Buy",
+the return to the step and the settings panel were checked in a live game on 2.5.1. The HUD text is drawn with a single RuneLite font and wrapped by the
+plate width (and by the one the player set with the mouse), and a number does not detach from its word.
+**Not verified in the game**: what was made after 2.16.0 on a live character unless a release note says otherwise (the developer plate, the hotkeys, the screenshots),
+the radar borders and outlines, the sound, the seller and shop cell highlight, the gear line and the amber frame.
+The code uses only the API found in the RuneLite 1.12.39 jar, and the tests check the route against it.
 
-Помощник 2.4: плагин запускается в RuneLite 1.12.39 со всеми новыми оверлеями, Shortest Path у пользователя
-загружается в том же клиенте. Приложение проверено с подменным мостом: уровень меняется — вариант
-появляется сам, сумка и банк меняются — проверка вылета обновляется, список закупок уходит в мост.
-**Не проверено в игре**: вид HUD, проверки у банка и подсказки на бирже на живом персонаже и то, как
-Shortest Path принимает цель от моста.
+Checks: `npm test`, `npm run test:ui`, `npm run test:e2e` (a real Electron, locally), `./gradlew test`.
+The plugin's compatibility with an installed RuneLite (after its update): `npm run check-runelite`.
 
-Этап 2.5: плагин с радаром, темпом, временной целью и подсветкой магазина и банка запускается в RuneLite 1.12.39
-из собранной программы; `/status` отвечает (снаряжение и монеты появляются в нём только после входа в игру),
-`/nav-target` и `/bank-tags` принимаются через Electron, неверные координаты отклоняются с 400.
-Приложение проверено в браузере с подменным мостом: досье → карта → «🧭» уходит в мост; отказ выключенной
-настройки виден; апгрейд → «Направить к Bob» → предмет куплен → цель снята, шаг вернулся; темп без замеров
-не придумывает время; Bank Tag копируется. Кириллица, стрелки и ✓/⚠ в HUD рисуются: шрифт RuneLite —
-составной (Swing, с подстановкой системного шрифта), это проверено отрисовкой. **Не проверено в игре**:
-граница и контуры радара, звук, подсветка продавца и ячейки магазина и строка темпа на живом персонаже.
+## Version history (summary)
 
-2.5.1 — проверка в живой игре (RuneLite 1.12.39, шаг S1-13). Название шага в HUD не переносилось и вылезало
-за рамку с обеих сторон; в одной строке латиница шла мелким шрифтом RuneScape, а кириллица — крупным системным
-(«от Lumbridge», «~62 клетки»); в настройках плагина десять названий обрезались многоточием. Теперь текст плашек
-и подписей на земле рисуется одним шрифтом с кириллицей и переносится по ширине плашки (и по той, что игрок
-задал мышью), число не отрывается от слова. Закреплено тестами: `OverlayLayoutTest` рисует HUD, проверку
-вылета и биржу настоящими шрифтами RuneLite для всех шагов, веток, покупок, мест, зон и строк темпа, во всех
-шрифтах и в крупном режиме, и ищет точки за рамкой; `ConfigNamesTest` меряет названия настроек по панели.
-Ещё одно: после перезапуска RuneLite шаг не возвращался в игру, хотя программа писала «Активно в RuneLite».
-Теперь показанный шаг запоминается и сам возвращается в плагин при подключении (если плагин его не знает).
-В живой игре на 2.5.1 проверены HUD шага, временные цели «К месту» и «Купи», возврат к шагу и панель
-настроек. Красную стрелку на миникарте игра рисует, только пока цель в пределах миникарты; к дальней цели
-ведут направление в HUD и путь Shortest Path.
+- **2.27** — the quest stages are chosen by the Quest Helper machines (chat and dialogue messages, the journal, variables, items, place); a more detailed debug journal.
+- **2.19** — less text: Zen / Inspector, a single status, a smart reveal in the game (a plugin setting, off by default).
+- **2.18** — one readiness engine, auto-preparation (the queue leads the arrow to the bank, the exchange, the training place), "🎯 What to train with" (training methods by level, mode, items and play style), the "calm / efficient" play style, live exchange prices in the resource journal.
+- **2.17** — the single player state and the unified requirements; the preparation route; "one trip"; the resource journal; one navigation target with a reason; the data consistency check (`scripts/qa.ts`).
+- **2.16** — the in-game "What you need" knows the quest stage; the routes of 32 quests are taken from Quest Helper; a new look of the plates; bridge protocol 5.
+- **2.15** — "Food for combat", "Fix everything" (the chain of steps to readiness), "What to wear for magic and ranged", step-by-step guides for S7-05, S9-03, S9-04; `tests/fuzz.test.ts`.
+- **2.14** — "Where am I? How to get there": the character position from the plugin, on foot / teleport / canoe / boat options with a check of the level, runes, axe and coins.
+- **2.13** — S2-04 in detail, "How to make up the money" (earning methods from the wiki).
+- **2.12** — XP, quests, the name and the position from the game; "Sync with the account"; character profiles; a scheduled progress copy; "This session" and "Diagnostics".
+- **2.11** — the "What you need" list on the game screen; a marker on the game's world map; places for 43 items and 101 quest NPCs; bridge protocol 4.
+- **2.10** — the "OSRS Path" side panel in RuneLite; bridge protocol 3.
+- **2.9** — readiness, "I already have it", the big arrow, money, the item estimate.
+- **2.7** — members skills with training plans, an auto-mark on 62 steps, the combat pace; one build (the web and phone versions, the installer and the Bank Tags import string were removed).
+- **2.6** — the gear analysis. **2.5** — places, the bank, the danger radar, the pace, upgrades. **2.4** — the in-game helper.
 
-2.5.2 — транспорт. В справке новый раздел «Телепорты, каноэ и лодки»: как пользоваться Home Teleport, Count
-Check, книгой Chronicle, Varrock Teleport, каноэ на реке Lum и лодкой на Karamja и когда что выгоднее. Факты —
-с OSRS Wiki, названия пунктов меню — из кэша игры. У книги Chronicle появилось «Прохождение», в шагах —
-точные действия («правый клик по книге → Teleport», «Chop-down» → «Shape-Canoe» → «Float Log» → «Paddle Log»,
-что отвечать морякам и таможне). Заодно исправлены «Rub» у книги (такого действия нет), имя бармена Zembo,
-белый фартук (он на крючке, его не покупают) и направление к омарам на Musa Point. Ссылки вида
-`[текст](#/reference/transport)` в текстах гайда теперь открывают страницу программы.
+## Moving from older route versions
 
-2.6.0 — снаряжение. Проверено в браузере с подменным мостом (на 1100 и 390 точках, светлая и тёмная тема):
-S1-13 с Bronze sword, 3 атаки и 8 520 gp — «Купи Iron scimitar у Zeke, 112 gp (+10 за шлагбаум) · или на бирже
-~59 gp», амулет силы, броня отдельно; в плагин уходит строка HUD; Iron scimitar появляется в банке — совет
-сам меняется на «Надень — он в банке» и включается подсветка; без RuneLite — советы по уровню без «+%».
-Горизонтальной прокрутки нет, ошибок в консоли нет. В плагине `/gear-hint` покрыт тестами (приём, отказы 400
-и 409, снятие), строки HUD со всеми 135 предметами проверены отрисовкой настоящими шрифтами.
-**Не проверено в игре**: строка HUD и янтарная рамка на живом персонаже.
+Saved progress is carried over by itself — at program start and when importing a file:
 
-2.7.0 — навыки подписки, автоотметка, темп боя, одна сборка. У восьми навыков подписки — планы прокачки до 99
-из гайда (раздел «Навыки подписки (Members)»): коды `AG-1…`, строка «сейчас», подсказки в шагах S7-04, S8-03,
-S8-04, поиск. Факты сверены с OSRS Wiki: трассы и знаки грации, мастера истребления, семена и опыт деревьев,
-зелья, опыт за квесты. Заодно поправлены шаги: крыши Draynor открыты с 1 уровня (а не с 10), The Grand Tree
-с 25 ловкости даёт около 31 уровня (не 32), для истребления 18 быстрее викторина в музее, A Porcine
-of Interest и задания Mazchna. Подсветка в игре — у 68 шагов вместо 13, автоотметка — у 62 вместо 10,
-темп — у двух шагов боя. Убраны веб-версия и версия для телефона, настройка «Разрешённые сайты», метки
-путевых точек на земле, установщик и строка импорта Bank Tags. Проверено: 270 тестов приложения, 87 тестов
-плагина, `check-data`; в браузере с заглушкой моста программы для ПК — страницы навыков подписки, старые
-ссылки `#/skills/agility`, поиск, настройки, темп боя (оценка по снаряжению уходит в плагин) и автоотметка:
-событие плагина отмечает шаг, открывает следующий и отправляет его в игру. **Не проверено в игре**: новые
-условия автоотметки и строка темпа боя на живом персонаже.
+- **V1** (the first version): marks and notes move to the corresponding steps by the
+  `V2_FROM_V1` table in `src/lib/progress.ts`, a full copy of the old progress stays inside (`legacy`);
+- **V2 (2.0.0)**: in 2.1 some steps got new numbers (money before purchases, members quests by
+  requirements) — marks, notes and saved points are renamed by the `V3_FROM_V2` table.
 
-2.9.0 — готовность, «уже есть», стрелка, деньги. Готовность к шагу (`src/lib/readiness.ts`): уровни и квесты
-из статей квестов вики (у 8 шагов, `check-data` сверяет их с полем «Требования»), предметы — по сумке и банку
-из игры или отметке «уже есть», монеты — по игре; неизвестное — «⚪ не проверено», а не «нет». В оптовом списке
-у каждой строки «нужно / есть / купить» и откуда это известно; в подсказку на бирже уходит только то, что
-осталось купить. Снаряжение: замок «🔒 нужно 20 Ranged» и «есть в банке, но надеть нельзя»; S3-07 больше не
-покупает второй амулет. Плагин: большая стрелка (направление — формула миникарты RuneLite, сверено с её таблицами),
-оценка предметов и рукопожатие версий. Координаты NPC всех 42 шагов с NPC сверены с картами их статей на вики,
-S2-03 и S1-07 исправлены. Проверено: 320 тестов приложения, 99 тестов плагина, `check-data`, `check-links`
-(565 ссылок), `npm run test:ui` (50 проверок в браузере на 390 и 1100 точках и шапка на 10 ширинах).
-**Не проверено в игре**: большая стрелка, оценка предметов в банке и рукопожатие с плагином на живом персонаже.
+Three steps (S1-03, S1-04, S2-01) got important requirements in V2. If they are already marked,
+the "Guide update to V2!" banner appears on "Path": you can look at the changes, return the steps
+to active (quest points are not taken away) or hide the warning.
 
-2.10.0 — панель «OSRS Путь» в RuneLite. Боковая панель плагина: что нужно на шаг (есть в сумке, в банке, нет,
-добудешь по ходу шага), где взять и «Путь сюда» к точкам шага — временная цель со стрелкой, Shortest Path и
-подсветкой NPC, по приходу стрелка возвращается к шагу. В программе — «🧭 Вести сюда в игре» под картой шага.
-У точек карты S2-03 — предметы и NPC (`MapLocation.items`, `npc`; `check-data` сверяет их с шагом). Большая
-стрелка без тёмной плашки (подпись с обводкой), строка «Сумка» в HUD называет недостающее. Протокол моста 3.
-Проверено: 323 теста приложения, 106 тестов плагина, `check-data`, `npm run test:ui` (58 проверок); панель — в
-настоящем RuneLite 1.12.39 без входа в игру (список, «Путь сюда», возврат к шагу, прокрутка не сбивается).
-**Не проверено в игре**: стрелка без плашки и строка HUD на живом персонаже.
+## Running
 
-Проверки: `npm test`, `npm run test:ui`, `npm run test:e2e` (настоящий Electron, локально), `./gradlew test`.
-Совместимость плагина с установленным RuneLite (после его обновления): `npm run check-runelite`.
-
-2.19.0 — меньше текста: «Дзен / Инспектор», единый статус, умное проявление в игре:
-- **Единый статус шага** вместо стопки плашек: «🟢 Готов к выходу · Начать шаг» или «🟡 Требуется подготовка (3 пункта) · Исправить · Подробнее»; по «Подробнее» — вкладки (подготовка, снаряжение, еда, путь и игра, прокачка и варианты), готов — сворачивается сам;
-- **«🧘 Дзен / 🔍 Инспектор»** (значок в шапке и Настройки): Дзен — шаг, статус, «Сделано» и критичные предупреждения; Инспектор — все блоки развёрнуты;
-- **Умное проявление в игре** (настройка плагина, по умолчанию выключена — в игре список и HUD видны всегда): в пути — стрелка и одна строка HUD; список «Что нужно» — у банка и рядом со шагом; оптовый список — на бирже; радар — только когда уже в зоне; критичное видно всегда.
-
-2.18.0 — один движок, автоподготовка, «чем качать», стиль игры:
-- **Один движок готовности** (`readinessEngine.ts`): готовность шага, закупки, быстрые варианты, подготовка и «одна ходка» считают наличие предметов, уровни и квесты одним кодом и берут ответы из общей памяти — без повторных расчётов;
-- **Автоподготовка** (`prepQueue.ts`): сама выстраивает очередь и ведёт стрелку — к банку за предметом, к Grand Exchange за покупкой, к месту прокачки; выполненное снимает, в конце возвращает к шагу; не перехватывает стрелку, при ручном снятии — пауза; выключается в Настройках;
-- **«🎯 Чем качать»** (`trainingRouter.ts`, `data/trainingMethods.json`): способ прокачки по уровню, режиму, предметам и стилю игры, путь до цели, «ещё ≈ N действий», время по твоему темпу (без замеров — диапазон «по вики» в стиле «Эффективно»);
-- **Стиль игры «спокойно / эффективно»** (Настройки);
-- **Живые цены** биржи в журнале ресурсов (раз в 5 минут).
-
-2.17.0 — единое состояние игрока и подготовка к шагу:
-- **Единое состояние игрока** (`src/lib/playerState.ts`): уровни, предметы, монеты, квесты, режим — один снимок на всю программу, три исхода («есть», «нет», «неизвестно»), сравнение снимков («Defence 27 → 30»);
-- **Единые требования** (`requirements.ts`): уровень, предмет, надето, квест, деньги, режим, группа вариантов («20 еды: форель или лосось»);
-- **Маршрут подготовки** к шагу: одно главное, следом не больше двух, возврат к шагу; заходы запоминаются (глубина до трёх, без повторов и циклов), снимаются сами, когда задача выполнена по данным;
-- **Одна ходка**: что взять сейчас на этот шаг и три следующих — имеющееся закреплено за ближайшими шагами, «потом» не значит «купи сейчас»;
-- **Журнал ресурсов и цель по ресурсу**: известные монеты и оценка добычи — отдельно, перекладывание в банк заработком не считается, время — только по достаточным замерам; лучший источник предмета (банк → сумка → бесплатно рядом → магазин → биржа);
-- **Единая цель навигации** с причиной (шаг, быстрый вариант, магазин, NPC, место добычи, подготовка), **проверка согласованности данных** (`scripts/qa.ts`): Coif, амулеты, Home Teleport, этапы квестов.
-
-2.16.1 — исправления после проверки в игре:
-- «Сумка» в HUD и проверка вылета считают предметы текущего этапа квеста (Redberry pie уже не ждут после отдачи);
-- топор и кирка не хуже названных засчитываются (Iron pickaxe вместо Bronze pickaxe);
-- шаг этапа сам считается сделанным, если нужный предмет уже в сумке (Knight's Sword: портрет есть — идти к Thurgo);
-- стрелка этапа больше не помечается «объездом» и не просит «снова к шагу».
-
-2.16.0 — переработка игрового аддона:
-- в игре «Что нужно» знает этап квеста (по переменной квеста из Quest Helper): показывает только текущий этап, его шаги по порядку (с переходом по месту и кнопкой «шаг сделан»), предметы этого этапа и ведёт стрелку к текущему шагу. Квест сдан — «Квест пройден», список проверки вылета очищается;
-- маршруты 32 квестов взяты из Quest Helper (full assistance) — в них нет пропущенных шагов (Knight's Sword: поговорить со Squire, подняться по лестнице, обыскать шкаф);
-- новый вид плашек (тёмная скруглённая карточка, цветная полоска состояния, полоски прогресса) и единые выпадающие списки в приложении; «Как добраться» без наложения текста; после сдачи квеста «Проверка вылета» больше не жалуется на пустую сумку;
-- протокол моста 5, плагин 2.16.0.
-
-2.15.1 — сверка и проверка на мусор:
-- цены в шагах сверены с биржей (бусины, Holy symbol, удочка/гарпун/ловушка — теперь цена магазина), посох огня в «Что носить»;
-- `tests/fuzz.test.ts`: случайный мусор в разборщиках моста, сохранений и советниках не роняет программу.
-
-2.15.0 — бой, снаряжение, подготовка:
-- «Еда на бой» (удары противников и еда из вики), строка «Здоровье в HUD», подсветка «использовать X на Y»;
-- «Починить всё» в панели готовности: цепочка шагов до готовности;
-- «Что носить для магии и стрельбы» (S2-04, S3-09, S8-04): рекомендации вики под уровни, квесты, монеты и цены биржи;
-- пошаговые гайды S7-05, S9-03, S9-04.
-
-2.14.1 — неточности маршрута:
-- S3-09: расчёт «сколько стоит дойти до Magic 33» (удары и телепорты);
-- S5-09: цена Rune platebody у Oziach (84 500 gp, Defence 40) названа в шаге.
-
-2.14.0 — «Где я? Как добраться»:
-- положение персонажа от плагина (`pos`), варианты пешком / телепорт / каноэ / лодка с проверкой уровня, рун, топора и монет;
-- данные — `src/data/transport.json` (вики), расчёт — `src/lib/travel.ts`, блок — `TravelPlan`.
-
-2.13.0 — S2-04 подробно, «как добрать деньги»:
-- S2-04: руны и посох, автозаклинание, расчёт «сколько стоит дойти до Magic 25» по твоему опыту и ценам биржи;
-- «Как добрать деньги»: способы заработка из вики под твои уровни и монеты (`npm run build-money`);
-- пошаговые маршруты для Misthalin Mystery, Shield of Arrav, The Ides of Milk и начала Dragon Slayer I;
-- исправлены этажи в базе предметов (неразрывный пробел в ответе вики).
-
-2.12.1 — список «Что нужно» не просит то, что уже есть:
-- собранный предмет убирает своё место из «Куда идти», а сданный (Hetty) — «✓ готово», не «нет»;
-- строка «▶ Дальше» — последний пункт быстрого пути, когда всё собрано;
-- быстрый Varrock Teleport и каноэ проверяют руны и топор (`needs` у ветки), посох заменяет руны.
-
-2.12.0 — программа и игра лучше знают друг друга (протокол моста 5):
-- уровни из игры в поля уровней, опыт и «≈ время до цели» по темпу сеанса;
-- «Синхронизировать с аккаунтом»: завершённые квесты и взятые уровни закрывают шаги;
-- профили персонажей (по имени из игры), копия прогресса по расписанию в выбранную папку;
-- «Этот сеанс» и «Диагностика» в настройках. Плагин шлёт опыт, квесты, имя и положение.
-
-2.11.3 — плагин не падает на RuneLite 1.13 (`getItemPrice` стал `long`: цена читается через рефлексию, ошибка даёт цену 0).
-
-2.11.2 — исправления по проверке всего функционала:
-- копия файла прогресса (`progress.bak.json`, битый файл не затирается);
-- Content-Security-Policy в странице;
-- крупнее мелкий текст;
-- места для Goblin mail, костей, Glarial's pebble и ещё четырёх NPC квестов.
-
-2.11.1 — исправления после проверки в живой игре:
-- над списком «Что нужно» игра больше не показывает и не обводит то, что под плашкой;
-- клик по метке на карте мира не уходит в список;
-- большая стрелка не рисуется поверх открытой карты.
-
-2.11.0 — список «Что нужно» на экране игры. Кликабельный список под HUD: предметы со статусом и «где взять», NPC
-квеста и места; клик — стрелка и путь туда (`GuideList`, `OsrsPathGuideOverlay`, `GuideMouse`). Места для 43 предметов
-(`from`) и 101 NPC квестов (`npcLocations.json`) — и на карте шага в программе. Цель, выбранная в игре, видна в
-программе (`NAV_SET`, `navTarget` в `/status`); метка на карте мира игры; предупреждение о старом плагине на карточке
-шага. Протокол моста 4. Полный прогон: ревью кода (5 ошибок синхронизации цели и списка), окончания после чисел,
-фильтр квестов на узком окне, тексты Cook's Assistant по карте вики; тест-контракт `active-steps.json` — тесты плагина
-проверяют ровно то, что шлёт программа. Проверено: 330 тестов приложения, 122 теста плагина, `check-data`,
-`check-links` (633), `npm run test:ui` (74 проверки, все 97 страниц на 390 и 1280 точках), программа с настоящим
-RuneLite 1.12.39 в облаке. **Не проверено в игре**: сам список на экране игры и метка на карте мира на живом персонаже.
-
-## Переход со старых версий маршрута
-
-Сохранённый прогресс переносится сам — при запуске программы и при импорте файла:
-
-- **V1** (первая версия): отметки и заметки переезжают на соответствующие шаги по таблице
-  `V2_FROM_V1` в `src/lib/progress.ts`, полная копия старого прогресса остаётся внутри (`legacy`);
-- **V2 (2.0.0)**: в 2.1 часть шагов получила новые номера (деньги до покупок, квесты подписки по
-  требованиям) — отметки, заметки и сохранённые очки переименовываются таблицей `V3_FROM_V2`.
-
-У трёх шагов (S1-03, S1-04, S2-01) в V2 появились важные требования. Если они уже отмечены,
-на «Пути» появится баннер «Обновление гайда до V2!»: можно посмотреть изменения, вернуть шаги
-в активные (очки квестов при этом не отнимаются) или скрыть предупреждение.
-
-## Запуск
-
-Нужен Node 22.18 или новее (скрипты данных написаны на TypeScript и запускаются самим Node).
+Node 22.18 or newer is needed (the data scripts are written in TypeScript and run by Node itself).
 
 ```bash
 npm install
 npm run dev
 ```
 
-Откроется `http://localhost:5173` — та же программа в браузере, но без связи с RuneLite и без файла
-прогресса: так удобно править интерфейс. Настоящая проверка — `npm run desktop`.
+`http://localhost:5173` opens — the same program in a browser, but without a link to RuneLite and without the progress
+file: handy for editing the interface. The real check is `npm run desktop`.
 
-| Команда | Что делает |
+| Command | What it does |
 |---|---|
-| `npm run dev` | Локальная разработка |
-| `npm run build` | Проверка типов и сборка в `dist/` |
-| `npm run preview` | Открыть собранную версию (`http://localhost:4173`) |
-| `npm test` | Юнит-тесты (Vitest) |
-| `npm run test:ui` | Интерфейс в настоящем браузере с подменным мостом: готовность, закупка, снаряжение, карта, шапка (после `npm run build`; Chromium — `npx playwright install chromium`) |
-| `npm run check-data` | Проверка маршрута, базы предметов и текста; сверка навыков и справки с гайдом |
-| `npm run parse-guide` | Перенос навыков, целей, справки из `osrs-guide.md` → `src/data/*.json` |
-| `npm run build-items` | Собрать базу предметов с OSRS Wiki (нужен интернет) |
-| `npm run check-links` | Проверить все ссылки и картинки вики в маршруте, базе предметов и гайде и тайлы карты (нужен интернет) |
-| `npm run icons` | Перерисовать иконки в `public/` |
-| `npm run desktop` | Собрать и открыть программу для ПК (Electron) |
-| `npm run dist:win` | Собрать переносной exe в `release/` (вместе с jar плагина RuneLite) |
-| `npm run bridge:jar` | Собрать только jar плагина (нужен JDK 17: `JAVA_HOME` или `~/.jdks`) |
-| `cd runelite-bridge && ./gradlew testClasses` | Собрать плагин RuneLite и его тесты (нужен JDK 17) |
-| `cd runelite-bridge && ./gradlew test` | Тесты плагина |
-| `cd runelite-bridge && ./gradlew run` | RuneLite с плагином OSRS Path Bridge |
+| `npm run dev` | Local development |
+| `npm run build` | Type check and build into `dist/` |
+| `npm run preview` | Open the built version (`http://localhost:4173`) |
+| `npm test` | Unit tests (Vitest) |
+| `npm run test:ui` | The interface in a real browser with a stub bridge: readiness, shopping, gear, the map, the header (after `npm run build`; Chromium — `npx playwright install chromium`) |
+| `npm run check-data` | A check of the route, the item database, the texts, the skills and the reference |
+| `npm run build-items` | Build the item database from the OSRS Wiki (needs the internet) |
+| `npm run build-gear` | Build the gear and monster data from the OSRS Wiki (needs the internet) |
+| `npm run check-links` | Check all wiki links and pictures in the route, the item database and the guide, and the map tiles (needs the internet) |
+| `npm run icons` | Redraw the icons in `public/` |
+| `npm run desktop` | Build and open the desktop program (Electron) |
+| `npm run dist:win` | Build the portable exe into `release/` (together with the RuneLite plugin jar) |
+| `npm run bridge:jar` | Build only the plugin jar (JDK 17 is needed: `JAVA_HOME` or `~/.jdks`) |
+| `cd runelite-bridge && ./gradlew testClasses` | Build the RuneLite plugin and its tests (JDK 17 is needed) |
+| `cd runelite-bridge && ./gradlew test` | The plugin tests |
+| `cd runelite-bridge && ./gradlew run` | RuneLite with the OSRS Path Bridge plugin |
 
-## Выпуск новой версии
+## Releasing a new version
 
-1. Поднять `version` в `package.json` (её видно внизу «Настроек»).
-2. `npm run check-data`, `npm test`, `npm run build`, `npm run test:ui`, `npm run check-links`, `cd runelite-bridge && ./gradlew test`, `npm run dist:win`.
-   Версия плагина (`PLUGIN_VERSION` в `BridgeServer.java`) — та же, что у программы: тест это проверяет.
-3. Закоммитить, запушить и выложить exe:
+1. Raise `version` in `package.json` (and `package-lock.json`, two places; it is seen at the bottom of "Settings"), and `PLUGIN_VERSION` in `BridgeServer.java` — the same as the program's: a test checks it.
+2. Write `release-notes/vX.Y.Z.md` — it becomes the release description.
+3. `npm run check-data`, `npm test`, `npm run build`, `npm run test:ui`, `cd runelite-bridge && ./gradlew test`.
+4. Commit and push to `main`. The `Release` workflow (`.github/workflows/release.yml`) sees the changed version in `package.json`, builds the portable exe on Windows together with the plugin jar, sets the tag
+   `vX.Y.Z` and publishes the release. A version that already has a release is not built again.
 
-```bash
-gh release create v2.7.0 release/OSRS-Put-2.7.0-portable.exe --title "OSRS Путь 2.7.0" --notes "Что изменилось"
-```
+On every push GitHub Actions runs `check-data`, the tests, the build and the browser checks, and separately the RuneLite plugin tests
+(the `Checks` workflow, `.github/workflows/checks.yml`).
+The networked `build-items` and `check-links` are not run in CI.
 
-При каждом пуше GitHub Actions прогоняет `check-data`, тесты и сборку, а отдельно — тесты плагина RuneLite
-(`.github/workflows/checks.yml`).
-Сетевые `build-items` и `check-links` в CI не запускаются.
+## Moving the progress to another computer
 
-## Перенос прогресса на другой компьютер
+The easiest way is to move the `OSRS-Put-data` folder together with the exe. Or with a file:
 
-Проще всего — перенести папку `OSRS-Put-data` вместе с exe. Или файлом:
+1. On the old computer: the gear → **Export progress**.
+2. On the new one: the gear → **Import progress** → choose the file → **Replace**.
 
-1. На старом компьютере: шестерёнка → **Экспорт прогресса**.
-2. На новом: шестерёнка → **Импорт прогресса** → выбрать файл → **Заменить**.
+The import replaces the progress entirely; right after the replacement it can be undone in the message that appears.
+First-version files are accepted too — they are carried over to V2 the same way as saved progress.
 
-Импорт заменяет прогресс целиком; сразу после замены его можно отменить в появившемся сообщении.
-Файлы первой версии тоже принимаются — они переносятся на V2 так же, как сохранённый прогресс.
+## Data
 
-## Данные
+- **The V2 route** — `src/data/steps.json` and `stages.json`, the source of truth for the steps. They are edited by hand,
+  after an edit — `npm run check-data`.
+- **Skills, level goals, XP, plugins, the reference** — `src/data/skills.json`, `goals.json`, `xp.json`, `plugins.json`, `reference.json`. The members skills are
+  `src/data/members-skills.json`: a skill has a code (`AG`) and a level id as in RuneLite (`agility`); old
+  `#/skills/agility` links open the same section. `check-data` verifies that the plans run from level 1 without gaps and the codes are in order.
+- **The item database** — `src/data/f2p-items.json`, built by `npm run build-items` from the OSRS Wiki
+  (the Bucket API: the description, trader prices, drops; spawn places — from the articles). The script politely
+  waits between requests and caches the answers in `node_modules/.cache`; `--fresh` — rebuild. It also sets IDs and icons
+  on the items in the steps.
+- **Exchange prices** — live, from prices.runescape.wiki; kept in memory for 5 minutes.
+- **The place dictionary** — `src/data/majorLocations.json`, built by `npm run build-locations` from the OSRS Wiki: for each
+  place — the `{{Map}}` map of its article, for fishing and ore places — the `{{ObjectLocLine}}` rows on the fishing or
+  ore page. Only the list of places and the synonyms are by hand in the script. A network failure does not erase the earlier records.
+- **Danger zones** — `src/data/dangerZones.json`, each zone has where the data is from (`source`). The plugin takes the same
+  file: Gradle puts it into the jar.
+- **Tool tiers** — `src/data/toolProgression.json`: axes and pickaxes, IDs, requirements, the seller. Prices are from the item
+  database, the shop points are from the place dictionary; the tests verify that the ID, the shop and the point are in place.
+- **Gear** — `src/data/gear.json`: 135 free-version melee items (weapons of seven metals, helmets,
+  bodies, legs, shields, amulets, leather armour) — attack, defence and strength bonuses, the attack speed, the slot, the level requirement
+  from the article text, shops and prices. **Step opponents** — `src/data/monsters.json`: the defence, level and
+  health by the `foes` field of the steps. Both files are built by `npm run build-gear` from the OSRS Wiki (Bucket `infobox_bonuses`,
+  `infobox_monster`, `storeline`, articles; needs the network, the answers are cached, `--fresh` — anew).
+- **Quest stages and machines** — `src/data/questStages.json` (the stage lines of the 32 route quests) and `src/data/questMachines.json`
+  (generated, see `tools/qh-machines/README.md`).
 
-- **Маршрут V2** — `src/data/steps.json` и `stages.json`, источник правды для шагов. Правятся руками,
-  после правки — `npm run check-data`.
-- **Навыки, цели по уровням, опыт, плагины, справка** — из `osrs-guide.md` через `npm run parse-guide`
-  (если есть ошибки, файлы не перезаписываются). Навыки подписки — `src/data/members-skills.json` из раздела
-  «Навыки подписки (Members)»: у навыка код (`AG`) и id уровня, как у RuneLite (`agility`); старые ссылки
-  `#/skills/agility` открывают тот же раздел. `check-data` ловит ситуацию, когда гайд поменяли,
-  а `parse-guide` не запустили.
-- **База предметов** — `src/data/f2p-items.json`, собирается `npm run build-items` с OSRS Wiki
-  (Bucket API: описание, цены у торговцев, дроп; места появления — из статей). Скрипт вежливо
-  ждёт между запросами и кэширует ответы в `node_modules/.cache`; `--fresh` — собрать заново.
-  Он же проставляет ID и иконки предметам в шагах.
-- **Цены биржи** — живые, с prices.runescape.wiki; держатся в памяти 5 минут.
-- **Словарь мест** — `src/data/majorLocations.json`, собирается `npm run build-locations` с OSRS Wiki: для каждого
-  места — карта `{{Map}}` его статьи, для мест ловли и руды — строки `{{ObjectLocLine}}` на странице места ловли
-  или руды. Руками в скрипте только список мест и синонимы. Сбой сети не стирает прежние записи.
-- **Опасные зоны** — `src/data/dangerZones.json`, у каждой зоны — откуда данные (`source`). Плагин берёт тот же
-  файл: Gradle кладёт его в jar.
-- **Ступени инструментов** — `src/data/toolProgression.json`: топоры и кирки, ID, требования, продавец. Цены — из базы
-  предметов, точки магазинов — из словаря мест; тесты сверяют, что ID, магазин и точка на месте.
-- **Снаряжение** — `src/data/gear.json`: 135 предметов ближнего боя бесплатной версии (оружие семи металлов, шлемы,
-  нагрудники, поножи, щиты, амулеты, кожаная броня) — бонусы атаки, защиты и силы, скорость удара, слот, требование
-  к уровню из текста статьи, магазины и цены. **Противники шагов** — `src/data/monsters.json`: защита, уровень и
-  здоровье по полю `foes` шагов. Оба файла собирает `npm run build-gear` с OSRS Wiki (Bucket `infobox_bonuses`,
-  `infobox_monster`, `storeline`, статьи; нужна сеть, ответы кэшируются, `--fresh` — заново).
+Step fields for the map and the game (all optional): `mapLocation` — the start point `{x, y, plane, label, zoom?, note?}`
+in game coordinates, `resourceSpots` — gathering places for the switch, `mapPreviewImage` — your own picture instead of tiles,
+`warning` — the main warning, `inGame` — the RuneLite highlight and the auto-mark condition, `pacing` — the training
+pace (`skill`, `targetLevel`, `targetExp`, `actionName` as the forms "shrimp|shrimps", `expPerAction`,
+optionally `secondsPerAction`). A food item has `heals`, how much it heals.
 
-Поля шага для карты и игры (все необязательные): `mapLocation` — точка старта `{x, y, plane, label, zoom?, note?}`
-в координатах игры, `resourceSpots` — места сбора для переключателя, `mapPreviewImage` — своя картинка вместо тайлов,
-`warning` — главное предупреждение, `inGame` — подсветка в RuneLite и условие автоотметки, `pacing` — темп
-прокачки (`skill`, `targetLevel`, `targetExp`, `actionName` формами «креветка|креветки|креветок», `expPerAction`,
-необязательно `secondsPerAction`). У предмета еды — `heals`, сколько он лечит.
+What `check-data` verifies: step numbers and stages, dependencies, quest points (F2P — 46,
+with membership — 69) and a match with the "Reward", the reachability of the point thresholds, floors in the UK format
+(`Ground floor`, `1st floor`), for step items — a database record with the same icon,
+120+ items in the database, the text — a capital letter at the start, known typos, paired brackets
+and quotes; map points (coordinates, floor, caption, a match with the "Wiki map" link), the highlight fields
+and the auto-mark conditions, for every item — where to get it, for food — how much it heals, no "take food" anywhere without a name
+and a quantity; the pace — the skill and level are the same as in the step title, the XP is by the game formula; there are no HTML entities
+or `[UK]/[US]` marks in the shop and spawn places; the auto-mark — the quest name as in the game, the levels the same
+as in the step title, for items the ID and the quantity are within bounds; the combat pace — XP 4 × the opponent's health; the members
+skill plans run from level 1 without gaps; the consistency rules (`scripts/qa.ts`): Coif, amulets, Home Teleport, quest stages,
+training methods.
 
-Что проверяет `check-data`: номера и этапы шагов, зависимости, очки квестов (F2P — 46,
-с подпиской — 69) и совпадение с «Наградой», достижимость порогов по очкам, этажи в формате
-`Ground floor (1-й этаж / земля)`, у предметов шагов — запись в базе с той же иконкой и русское
-название, 120+ предметов в базе, текст — заглавная буква в начале, известные опечатки, парные скобки
-и кавычки; точки на карте (координаты, этаж, подпись, совпадение со ссылкой «Карта вики»), поля подсветки
-и условий автоотметки, у каждого предмета — где взять, у еды — сколько лечит, нигде нет «возьми еду» без названия
-и количества; темп — навык и уровень те же, что в названии шага, опыт — по формуле игры; в местах магазинов
-и спавнов нет HTML-сущностей и пометок `[UK]/[US]`; автоотметка — название квеста как в игре, уровни те же,
-что в названии шага, у предметов ID и количество в пределах; темп боя — опыт 4 × здоровье противника; планы
-навыков подписки идут с 1 уровня без пропусков.
+## How it is counted
 
-## Как считается
+- **"What to do now"** — the first unclosed step in order whose dependencies are all closed
+  and whose quest points are enough.
+- **"Mark as done"** in a card collapses it and expands the next unclosed step;
+  the page scrolls only if it is not visible.
+- **A closed step** — done or skipped. Only the optional S3-05 (Shield of Arrav) can be skipped;
+  it then gives no points, and the F2P maximum becomes 45 of 46.
+- **Quest points in "Goals"** are counted from the V2 route by stages.
+- **The training plan row** — by the entered level: the range "15–30" includes 15 but not 30.
+  Melee — by the lowest of attack, strength and defence.
+- **Floors** — British, as in the game: Ground floor, 1st floor, 2nd floor.
+- **Experience** — the standard OSRS formula.
 
-- **«Что делать сейчас»** — первый по порядку незакрытый шаг, у которого закрыты все зависимости
-  и хватает очков квестов.
-- **«Отметить выполненным»** в карточке сворачивает её и раскрывает следующий незакрытый шаг;
-  страница прокручивается, только если он не виден.
-- **Закрытый шаг** — сделанный или пропущенный. Пропустить можно только необязательный S3-05
-  (Shield of Arrav); очков он тогда не даёт, и максимум F2P становится 45 из 46.
-- **Очки квестов в «Целях»** считаются из маршрута V2 по этапам.
-- **Строка плана прокачки** — по введённому уровню: диапазон «15–30» включает 15, но не 30.
-  Ближний бой — по отстающему из атаки, силы и защиты.
-- **Этажи** — по-британски, как в игре: Ground floor — 1-й этаж (земля), 1st floor — 2-й, 2nd floor — 3-й.
-- **Опыт** — стандартная формула OSRS.
-
-## Устройство
+## Structure
 
 ```
-osrs-guide.md          источник навыков, целей и справки
-scripts/               parse-guide, check-data, build-items, check-links, проверки, иконки
-src/data/              маршрут V2, база предметов и JSON из гайда
-src/services/          OSRS Wiki (Bucket API, статьи), цены биржи, мост RuneLite, поиск мест, апгрейд инструментов,
-                       разбор снаряжения (формулы урона)
-src/lib/               прогресс и перенос V1, «что сейчас», очки, квесты, опыт, поиск, масштаб, карта,
-                       проверка вылета, быстрые варианты, оптовый список, предметы этапа для банка, места, темп,
-                       условия автоотметки, функции
-src/bridge.tsx         состояние связи с RuneLite, автоотметка, уровни и предметы из игры
-src/components/        карточка шага, карта шага и карта мира, «Показать в игре», этап, «сейчас», инспектор вики,
-                       поиск, переключатель режима, прогресс и индикатор RuneLite в шапке
-src/pages/             Путь (узкий и широкий в три колонки), Навыки, Навык, Цели, Квесты, Справка, Настройки,
-                       оптовый список GE, Снаряжение
-tests/                 юнит-тесты
-electron/              окно программы для ПК, мост к нему (preload), связь с плагином RuneLite и его запуск
-runelite-bridge/       плагин RuneLite «OSRS Path Bridge»: HTTP/SSE-мост, подсветка, автоотметка, HUD,
-                       проверка вылета, путь, подсказка на бирже, временная цель, радар опасности, темп
-vite.config.ts         сборка
+scripts/               check-data, build-items, build-gear, build-locations, check-links, qa and other checks, the icons
+src/data/              the V2 route, the item database and the JSON of skills, goals and the reference
+src/services/          the OSRS Wiki (Bucket API, articles), exchange prices, the RuneLite bridge, place search, tool upgrades,
+                       the gear analysis (damage formulas)
+src/lib/               progress and the V1 transfer, "what now", points, quests, XP, search, scale, the map,
+                       the departure check, quick options, the bulk list, the stage items for the bank, places, pace,
+                       the auto-mark conditions, readiness, preparation, training, travel, the feature switches
+src/bridge.tsx         the state of the link with RuneLite, the auto-mark, levels and items from the game
+src/components/        the step card, the step map and the world map, "Show in the game", the stage, "now", the wiki inspector,
+                       search, the mode switch, the progress and the RuneLite indicator in the header
+src/pages/             Path (narrow and wide in three columns), Skills, Skill, Goals, Quests, Reference, Settings,
+                       the GE bulk list, Gear
+tests/                 unit tests
+electron/              the desktop program window, the bridge to it (preload), the link with the RuneLite plugin and its launch
+runelite-bridge/       the "OSRS Path Bridge" RuneLite plugin: the HTTP/SSE bridge, the highlight, the auto-mark, the HUD,
+                       the departure check, the path, the exchange hint, a temporary target, the danger radar, the pace
+tools/qh-machines/     generators of the Quest Helper machines (not needed to build)
+vite.config.ts         the build
 ```
 
-Зависимости: React, Vite, TypeScript, Vitest, Leaflet (карта мира), для exe — Electron и electron-builder;
-плагин — RuneLite client 1.12.39 (только при сборке), Lombok, JUnit.
+Dependencies: React, Vite, TypeScript, Vitest, Leaflet (the world map), for the exe — Electron and electron-builder;
+the plugin — the RuneLite client 1.12.39 (only at build time), Lombok, JUnit. The architecture notes by directory are in `PROJECT_MAP.md`.

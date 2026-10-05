@@ -15,17 +15,17 @@ function memoryStorage() {
   };
 }
 
-describe('прогресс: экспорт и импорт', () => {
+describe('progress: export and import', () => {
   const sample = () => {
     let p = emptyProgress();
     p = withStep(p, 'S1-01', 'done');
     p = withStep(p, 'S3-05', 'skipped');
     p = withLevel(p, 'fishing', 23);
-    p = withNote(p, 'S2-05', 'ключ в банке');
+    p = withNote(p, 'S2-05', 'key in the bank');
     return p;
   };
 
-  it('экспорт → импорт возвращает тот же прогресс', () => {
+  it('export → import returns the same progress', () => {
     const p = sample();
     const result = importProgress(exportProgress(p), known);
     expect(result.ok).toBe(true);
@@ -34,65 +34,65 @@ describe('прогресс: экспорт и импорт', () => {
     expect(result.stats).toEqual({ done: 1, skipped: 1, levels: 1, notes: 1, dropped: 0, migrated: false });
   });
 
-  it('экспорт помечен приложением', () => {
+  it('the export is marked by the app', () => {
     expect(JSON.parse(exportProgress(emptyProgress())).app).toBe('osrs-put');
     expect(exportFileName(new Date('2026-09-26T10:00:00Z'))).toBe('osrs-put-progress-2026-09-26.json');
   });
 
-  it('не JSON — понятная ошибка', () => {
-    const r = importProgress('это не json', known);
-    expect(r).toEqual({ ok: false, error: expect.stringContaining('не JSON') });
+  it('not JSON — a clear error', () => {
+    const r = importProgress('this is not json', known);
+    expect(r).toEqual({ ok: false, error: expect.stringContaining('not JSON') });
   });
 
-  it('чужой файл и файл без прогресса отклоняются', () => {
-    expect(importProgress(JSON.stringify({ app: 'другое', steps: {} }), known).ok).toBe(false);
+  it('a foreign file and a file without progress are rejected', () => {
+    expect(importProgress(JSON.stringify({ app: 'other', steps: {} }), known).ok).toBe(false);
     expect(importProgress(JSON.stringify({ hello: 1 }), known).ok).toBe(false);
     expect(importProgress(JSON.stringify([1, 2]), known).ok).toBe(false);
     expect(importProgress('null', known).ok).toBe(false);
   });
 
-  it('файл новой версии отклоняется', () => {
+  it('a file of a newer version is rejected', () => {
     const r = importProgress(JSON.stringify({ app: 'osrs-put', version: 4, steps: {} }), known);
-    expect(r).toEqual({ ok: false, error: expect.stringContaining('новой версией') });
+    expect(r).toEqual({ ok: false, error: expect.stringContaining('newer version') });
   });
 
-  it('неизвестные шаги, навыки и неверные значения отбрасываются', () => {
+  it('unknown steps, skills and wrong values are dropped', () => {
     const r = importProgress(JSON.stringify({
       version: 3,
       steps: { 'S1-01': 'done', 'S9-99': 'done', 'S1-02': 'maybe' },
-      levels: { fishing: 120, cooking: '15', sailing: 50, mining: 'много' },
-      notes: { 'S1-01': 'ок', 'S9-99': 'нет', 'S1-02': 5 },
+      levels: { fishing: 120, cooking: '15', sailing: 50, mining: 'a lot' },
+      notes: { 'S1-01': 'ok', 'S9-99': 'no', 'S1-02': 5 },
     }), known);
     expect(r.ok).toBe(true);
     if (!r.ok) return;
     expect(r.progress.steps).toEqual({ 'S1-01': 'done' });
     expect(r.progress.levels).toEqual({ fishing: 99, cooking: 15 });
-    expect(r.progress.notes).toEqual({ 'S1-01': 'ок' });
+    expect(r.progress.notes).toEqual({ 'S1-01': 'ok' });
     expect(r.stats.dropped).toBe(6);
   });
 });
 
-describe('прогресс: хранение', () => {
-  it('сохраняется и читается', () => {
+describe('progress: storage', () => {
+  it('is saved and read', () => {
     const s = memoryStorage();
     const p = withStep(emptyProgress(), 'S1-03', 'done');
     expect(saveProgress(s, p)).toBe(true);
     expect(loadProgress(s, known)).toEqual(p);
   });
 
-  it('повреждённая запись — чистый прогресс', () => {
+  it('a damaged record — clean progress', () => {
     const s = memoryStorage();
-    s.setItem(STORAGE_KEY, '{битый');
+    s.setItem(STORAGE_KEY, '{broken');
     expect(loadProgress(s, known).steps).toEqual({});
   });
 
-  it('недоступное хранилище не роняет приложение', () => {
+  it('an unavailable storage does not crash the app', () => {
     const broken = { getItem: () => { throw new Error('SecurityError'); }, setItem: () => { throw new Error('QuotaExceeded'); } };
     expect(loadProgress(broken, known).steps).toEqual({});
     expect(saveProgress(broken, emptyProgress())).toBe(false);
   });
 
-  it('обновления не меняют исходный объект', () => {
+  it('updates do not change the source object', () => {
     const p = emptyProgress();
     const q = withStep(p, 'S1-01', 'done');
     expect(p.steps).toEqual({});
@@ -101,43 +101,43 @@ describe('прогресс: хранение', () => {
   });
 });
 
-describe('прогресс: переход с V1 на V2', () => {
+describe('progress: moving from V1 to V2', () => {
   const v1 = {
     app: 'osrs-put', version: 1, updatedAt: '2026-05-01T10:00:00.000Z',
     steps: { 'S1-03': 'done', 'S1-06': 'done', 'S2-03': 'done', 'S4-07': 'done', 'S4-08': 'done', 'S3-07': 'skipped', 'S6-01': 'done' },
     levels: { fishing: 30 },
-    notes: { 'S1-06': 'дух у кладбища', 'S6-01': 'старая заметка' },
+    notes: { 'S1-06': 'ghost at the graveyard', 'S6-01': 'old note' },
   };
 
-  it('отметки переезжают по таблице, старый прогресс целиком остаётся в legacy', () => {
+  it('marks move by the table, the whole old progress stays in legacy', () => {
     const n = normalizeProgress(v1, known)!;
     expect(n.migrated).toBe(true);
     expect(n.progress.version).toBe(3);
-    // V1 S1-06 (The Restless Ghost) — это S1-06 и сейчас; V1 S2-03 (закупки на бирже) — S2-01;
-    // V2 S4-05 (закупки к дракону) собран из двух шагов V1 и засчитан, только когда сделаны оба.
+    // V1 S1-06 (The Restless Ghost) is S1-06 now too; V1 S2-03 (exchange shopping) is S2-01;
+    // V2 S4-05 (shopping for the dragon) is assembled from two V1 steps and counted only when both are done.
     expect(n.progress.steps).toEqual({ 'S1-03': 'done', 'S1-06': 'done', 'S2-01': 'done', 'S4-05': 'done', 'S3-05': 'skipped' });
-    expect(n.progress.notes).toEqual({ 'S1-06': 'дух у кладбища' });
-    // Шаг, которого в V2 нет, не теряется: он в резервной копии.
+    expect(n.progress.notes).toEqual({ 'S1-06': 'ghost at the graveyard' });
+    // A step that does not exist in V2 is not lost: it is in the backup copy.
     expect(n.progress.legacy).toEqual({ steps: v1.steps, notes: v1.notes });
     expect(n.progress.levels).toEqual({ fishing: 30 });
     expect(n.progress.updatedAt).toBe(v1.updatedAt);
   });
 
-  it('таблица переноса ведёт только в существующие шаги V2', () => {
+  it('the transfer table leads only to existing V2 steps', () => {
     for (const id of Object.keys(V2_FROM_V1)) expect(stepById.has(id), id).toBe(true);
   });
 
-  it('часть составного шага не засчитывает его целиком', () => {
+  it('a part of a composite step does not count it as a whole', () => {
     const n = normalizeProgress({ steps: { 'S4-07': 'done' } }, known)!;
     expect(n.progress.steps['S4-05']).toBeUndefined();
   });
 
-  it('импорт файла V1 сообщает о переносе', () => {
+  it('importing a V1 file reports the transfer', () => {
     const r = importProgress(JSON.stringify(v1), known);
     expect(r.ok && r.stats.migrated).toBe(true);
   });
 
-  it('V2 читается без повторного переноса и сохраняет режим, проверенные шаги и очки', () => {
+  it('V2 is read without a repeated transfer and keeps the mode, the reviewed steps and the points', () => {
     let p = withGameMode(withStep(emptyProgress(), 'S7-01', 'done'), 'members');
     p = withReviewed(p, ['S1-03']);
     p = { ...p, qpKept: ['S1-04'] };
@@ -148,23 +148,23 @@ describe('прогресс: переход с V1 на V2', () => {
   });
 });
 
-describe('прогресс: переход с V2 (2.0.0) на V2.1', () => {
+describe('progress: moving from V2 (2.0.0) to V2.1', () => {
   const v2 = {
     app: 'osrs-put', version: 2, updatedAt: '2026-09-26T12:00:00.000Z',
-    // V2: S1-06 — книга Chronicle, S1-10 — Stronghold, S8-03 — Fairytale I, S7-04 — The Grand Tree.
+    // V2: S1-06 is the Chronicle book, S1-10 is Stronghold, S8-03 is Fairytale I, S7-04 is The Grand Tree.
     steps: { 'S1-06': 'done', 'S1-10': 'done', 'S8-03': 'done', 'S7-04': 'done', 'S2-01': 'done' },
-    notes: { 'S1-06': 'книга в инвентаре' },
+    notes: { 'S1-06': 'book in the inventory' },
     reviewedV2Steps: ['S2-01'],
     qpKept: ['S8-03'],
     gameMode: 'members',
   };
 
-  it('шаги переезжают на новые номера вместе с заметками, проверками и сохранёнными очками', () => {
+  it('steps move to the new numbers together with notes, reviews and kept points', () => {
     const n = normalizeProgress(v2, known)!;
     expect(n.migrated).toBe(false);
     expect(n.dropped).toBe(0);
     expect(n.progress.steps).toEqual({ 'S1-10': 'done', 'S1-09': 'done', 'S9-02': 'done', 'S7-05': 'done', 'S2-01': 'done' });
-    expect(n.progress.notes).toEqual({ 'S1-10': 'книга в инвентаре' });
+    expect(n.progress.notes).toEqual({ 'S1-10': 'book in the inventory' });
     expect(n.progress.qpKept).toEqual(['S9-02']);
     expect(n.progress.reviewedV2Steps).toEqual(['S2-01']);
     expect(n.progress.gameMode).toBe('members');
@@ -172,7 +172,7 @@ describe('прогресс: переход с V2 (2.0.0) на V2.1', () => {
     expect(stepById.get('S9-02')!.title).toContain('Fairytale I');
   });
 
-  it('таблица переименований — перестановка: каждый новый номер занят одним старым шагом', () => {
+  it('the rename table is a permutation: every new number is taken by one old step', () => {
     const targets = Object.values(V3_FROM_V2);
     expect(new Set(targets).size).toBe(targets.length);
     for (const id of targets) expect(stepById.has(id), id).toBe(true);
@@ -180,7 +180,7 @@ describe('прогресс: переход с V2 (2.0.0) на V2.1', () => {
 });
 
 describe('V2 Review', () => {
-  it('предупреждение — только у выполненных шагов, обновлённых в V2, и до проверки', () => {
+  it('the warning — only for done steps updated in V2, and before the review', () => {
     const s = stepById.get('S1-03')!;
     expect(s.updatedInV2).toBe(true);
     expect(needsReview(s, emptyProgress())).toBe(false);
@@ -190,13 +190,13 @@ describe('V2 Review', () => {
     expect(needsReview(stepById.get('S1-05')!, withStep(emptyProgress(), 'S1-05', 'done'))).toBe(false);
   });
 
-  it('у каждого обновлённого шага есть описание изменений', () => {
+  it('every updated step has a description of the changes', () => {
     const updated = allSteps.filter((s) => s.updatedInV2);
     expect(updated.map((s) => s.id)).toEqual(['S1-03', 'S1-04', 'S2-01']);
     for (const s of updated) expect(s.v2ChangesSummary?.length).toBeGreaterThan(20);
   });
 
-  it('список на проверку после переноса V1', () => {
+  it('the review list after the V1 transfer', () => {
     const p = normalizeProgress({ steps: { 'S1-03': 'done', 'S1-04': 'done', 'S2-03': 'done' } }, known)!.progress;
     expect(p.steps['S2-01']).toBe('done');
     expect(pendingReview(allSteps, p).map((s) => s.id)).toEqual(['S1-03', 'S1-04', 'S2-01']);

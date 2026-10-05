@@ -1,8 +1,8 @@
-// Запуск RuneLite с плагином OSRS Path Bridge прямо из программы «OSRS Путь».
-// Ничего не скачивается: Java — из установленного RuneLite (%LOCALAPPDATA%\RuneLite\jre),
-// классы клиента — из его же кэша (~/.runelite/repository2), плагин — маленький jar внутри программы.
-// Обычный RuneLite из лаунчера сторонние плагины не грузит, поэтому клиент запускается напрямую,
-// как в официальном шаблоне плагинов RuneLite (ExternalPluginManager.loadBuiltin).
+// Starting RuneLite with the OSRS Path Bridge plugin right from the "OSRS Path" app.
+// Nothing is downloaded: Java is from the installed RuneLite (%LOCALAPPDATA%\RuneLite\jre),
+// the client classes are from its own cache (~/.runelite/repository2), the plugin is a small jar inside the app.
+// The ordinary RuneLite from the launcher does not load third-party plugins, so the client is started directly,
+// as in the official RuneLite plugin template (ExternalPluginManager.loadBuiltin).
 
 const { spawn } = require('node:child_process');
 const fs = require('node:fs');
@@ -12,7 +12,7 @@ const http = require('node:http');
 
 const MAIN_CLASS = 'com.osrspath.bridge.OsrsPathLauncher';
 const PLUGIN_JAR = 'osrs-path-bridge.jar';
-// Как у лаунчера RuneLite (его config.json); -ea нужен loadBuiltin.
+// As in the RuneLite launcher (its config.json); -ea is needed by loadBuiltin.
 const JVM_ARGS = ['-ea', '-Xmx768m', '-Xss2m', '-XX:CompileThreshold=1500', '-XX:+DisableAttachMechanism'];
 
 const exists = (p) => { try { return fs.statSync(p).isFile(); } catch { return false; } };
@@ -21,7 +21,7 @@ function runeliteDir() {
   return path.join(os.homedir(), '.runelite');
 }
 
-/** Java установленного RuneLite, иначе JAVA_HOME. javaw — без чёрного окна консоли. */
+/** The Java of the installed RuneLite, otherwise JAVA_HOME. javaw — without a black console window. */
 function findJava() {
   const exe = process.platform === 'win32' ? 'javaw.exe' : 'java';
   const candidates = [];
@@ -30,7 +30,7 @@ function findJava() {
   return candidates.find(exists) ?? null;
 }
 
-/** Версия из имени файла: client-1.12.39.jar → [1, 12, 39]. */
+/** The version from the file name: client-1.12.39.jar → [1, 12, 39]. */
 function versionOf(name) {
   const m = name.match(/-(\d+(?:\.\d+)*)(?=[-.])/);
   return m ? m[1].split('.').map(Number) : [];
@@ -46,8 +46,8 @@ function newer(a, b) {
 }
 
 /**
- * Библиотеки клиента из кэша лаунчера RuneLite. Если после обновления лежат две версии одной
- * библиотеки, берётся новая. Клиент и injected-client должны быть одной версии.
+ * The client libraries from the RuneLite launcher cache. If after an update there are two versions of one
+ * library, the new one is taken. The client and injected-client must be of one version.
  */
 function findClient(dir = path.join(runeliteDir(), 'repository2')) {
   let names;
@@ -71,7 +71,7 @@ function findClient(dir = path.join(runeliteDir(), 'repository2')) {
   return { version, jars: [...byKey.values()].map((e) => path.join(dir, e.name)) };
 }
 
-/** jar плагина: в собранной программе — в resources, при запуске из репозитория — результат Gradle. */
+/** The plugin jar: in the built app — in resources, when run from the repository — the Gradle result. */
 function findPluginJar() {
   const candidates = [
     process.resourcesPath && path.join(process.resourcesPath, 'runelite-bridge', PLUGIN_JAR),
@@ -80,7 +80,7 @@ function findPluginJar() {
   return candidates.find(exists) ?? null;
 }
 
-/** Отвечает ли уже мост (RuneLite с плагином запущен). */
+/** Whether the bridge already answers (RuneLite with the plugin is running). */
 function bridgeAlive() {
   return new Promise((resolve) => {
     const req = http.get({ host: '127.0.0.1', port: 38282, path: '/status', timeout: 800, headers: { 'X-OSRS-Path': '1' } }, (res) => {
@@ -92,20 +92,20 @@ function bridgeAlive() {
   });
 }
 
-/** Что есть для запуска и чего не хватает — для настроек и кнопки. */
+/** What there is for launching and what is missing — for the settings and the button. */
 function check() {
   const java = findJava();
   const client = findClient();
   const plugin = findPluginJar();
   const problems = [];
-  if (!java) problems.push('Не найден RuneLite: установи его с runelite.net и запусти один раз через Jagex Launcher.');
-  if (!client) problems.push('Не найдены файлы клиента RuneLite: запусти RuneLite один раз через Jagex Launcher — он их скачает.');
-  if (!plugin) problems.push('В программе нет плагина OSRS Path Bridge — пересобери её (npm run dist:win).');
+  if (!java) problems.push('RuneLite not found: install it from runelite.net and start it once through the Jagex Launcher.');
+  if (!client) problems.push('The RuneLite client files were not found: start RuneLite once through the Jagex Launcher — it will download them.');
+  if (!plugin) problems.push('The app has no OSRS Path Bridge plugin — rebuild it (npm run dist:win).');
   return {
     ok: problems.length === 0,
     problems,
     clientVersion: client?.version ?? null,
-    // Сессия Jagex Account для RuneLite вне лаунчера (--insecure-write-credentials).
+    // The Jagex Account session for RuneLite outside the launcher (--insecure-write-credentials).
     credentials: exists(path.join(runeliteDir(), 'credentials.properties')),
   };
 }
@@ -116,7 +116,7 @@ function createLauncher({ logFile }) {
 
   async function launch() {
     if (await bridgeAlive()) return { ok: true, state: 'running' };
-    // Только что запущенный клиент ещё грузится (мост поднимается ~10 секунд) — второй не нужен.
+    // A just-started client is still loading (the bridge comes up in ~10 seconds) — a second one is not needed.
     if (child && child.exitCode === null && Date.now() - startedAt < 90_000) return { ok: true, state: 'starting' };
     const java = findJava();
     const client = findClient();
@@ -127,10 +127,10 @@ function createLauncher({ logFile }) {
     try {
       out = fs.openSync(logFile, 'w');
     } catch {
-      // Без журнала — не страшно.
+      // Without a log — not a problem.
     }
     try {
-      // Для проверок: отдельная папка настроек RuneLite вместо ~/.runelite (RuneLite берёт её из user.home).
+      // For checks: a separate RuneLite settings folder instead of ~/.runelite (RuneLite takes it from user.home).
       const home = process.env.OSRS_PUT_RUNELITE_USER_HOME;
       const args = [...JVM_ARGS, ...(home ? [`-Duser.home=${home}`] : []), '-cp', classpath, MAIN_CLASS];
       child = spawn(java, args, {
@@ -139,7 +139,7 @@ function createLauncher({ logFile }) {
         windowsHide: false,
       });
       startedAt = Date.now();
-      // RuneLite живёт своей жизнью: закрытие «OSRS Путь» игру не закрывает.
+      // RuneLite lives its own life: closing "OSRS Path" does not close the game.
       child.unref();
       child.on('error', () => { child = null; });
       return { ok: true, state: 'started', clientVersion: client.version };

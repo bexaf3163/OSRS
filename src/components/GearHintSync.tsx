@@ -1,8 +1,8 @@
-// Совет по снаряжению — в игру (POST /gear-hint). Строка в HUD («⚡ Сильнее: Steel scimitar у Zeke…») и подсветка
-// в сумке и банке — только пока в игре показан невыполненный шаг с боем и совет на нём не пропущен. Какие предметы
-// спросить у банка — всегда, пока есть связь: по ним страница «Снаряжение» узнаёт, что лежит в банке.
-// Шлётся при изменении и после переподключения; выключили функцию — снимается. Ничего не рисует.
-// Протокол 6: совет — часть общего снимка (bridge.setPrepPart), отдельного запроса нет.
+// Gear advice — into the game (POST /gear-hint). The HUD line ("⚡ Stronger: Steel scimitar from Zeke…") and the highlight
+// in the bag and bank — only while an unfinished combat step is shown in the game and its advice is not skipped. Which items to
+// ask the bank about — always while there is a link: the "Gear" page learns from them what lies in the bank.
+// Sent on change and after reconnecting; if the feature is turned off — it is cleared. It draws nothing.
+// Protocol 6: the advice is part of the shared snapshot (bridge.setPrepPart), there is no separate request.
 
 import { useEffect, useRef } from 'react';
 import { useBridge } from '../bridge';
@@ -20,9 +20,9 @@ export function GearHintSync() {
   const { upgradeRouter } = useFeatures();
   const step = activeStepId ? steps.find((s) => s.id === activeStepId) ?? null : null;
   const { advice, input } = useGearAdvice(step);
-  /** Что уже в плагине при этом подключении; null — ничего. */
+  /** What is already in the plugin on this connection; null — nothing. */
   const sent = useRef<string | null>(null);
-  /** Плагин старой версии не знает /gear-hint — до переподключения не спрашиваем. */
+  /** An old plugin does not know /gear-hint — we do not ask until it reconnects. */
   const old = useRef(false);
 
   const fighting = Boolean(step?.foes?.length) && !isClosed(progress, step!.id) && !(progress.upgradeDismissedForSteps ?? []).includes(step!.id);
@@ -38,13 +38,13 @@ export function GearHintSync() {
 
   useEffect(() => {
     if (state !== 'online') {
-      // RuneLite закрыли или перезапустили — совет там пропал, после подключения отправим заново.
+      // RuneLite was closed or restarted — the advice is gone there, we will send it again after connecting.
       sent.current = null;
       old.current = false;
       return;
     }
     if (snapshot) {
-      // Единый снимок: пустое значение тоже часть снимка — «совета нет». Дедуп и задержку держит сам мост.
+      // A single snapshot: an empty value is part of the snapshot too — "no advice". Dedup and delay are kept by the bridge itself.
       if (key !== sent.current) {
         sent.current = key;
         setPrepPart('gearHint', payload);
@@ -52,7 +52,7 @@ export function GearHintSync() {
       return;
     }
     if (old.current || key === sent.current || (payload === null && sent.current === null)) return;
-    // Уровни и сумка меняются очередью событий — отправляем, когда всё улеглось.
+    // Levels and the bag change through an event queue — we send when everything has settled.
     const timer = setTimeout(() => {
       sent.current = key;
       void setGearHint(payload).then((r) => {
@@ -61,7 +61,7 @@ export function GearHintSync() {
       });
     }, 300);
     return () => clearTimeout(timer);
-    // payload пересчитывается каждую отрисовку — следим за его содержимым через key.
+    // payload is recomputed on every render — we watch its content through key.
   }, [state, key, snapshot, setPrepPart]);
 
   return null;

@@ -1,7 +1,7 @@
-// Что программа шлёт плагину на /active-step — для каждого шага и каждого быстрого варианта. Копия лежит в
-// runelite-bridge/src/test/resources/active-steps.json: тесты плагина проверяют, что он принимает всё это
-// (prepare) и что список «Что нужно» на экране игры рисуется без вылезаний, — на настоящих данных, а не на
-// пересказе маршрута. Этот тест следит, чтобы копия не отстала от программы. Обновить: UPDATE_FIXTURES=1 npm test.
+// What the app sends the plugin on /active-step — for every step and every quick variant. The copy lies in
+// runelite-bridge/src/test/resources/active-steps.json: the plugin tests check that it accepts all of it
+// (prepare) and that the "What you need" list on the game screen is drawn without overflows — on the real data, not on
+// a retelling of the route. This test makes sure the copy does not fall behind the app. To update: UPDATE_FIXTURES=1 npm test.
 
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
@@ -21,15 +21,15 @@ function fresh(): string {
       if (bt) rows.push(JSON.stringify({ step: s.id, branch: b.id, target: bt }));
     }
   }
-  // Строка на цель — чтобы в истории было видно, какой шаг изменился.
+  // A row per target — so the history shows which step changed.
   return `[\n${rows.join(',\n')}\n]\n`;
 }
 
-describe('цели шагов для тестов плагина', () => {
-  it('копия в runelite-bridge совпадает с тем, что шлёт программа', () => {
+describe('step targets for the plugin tests', () => {
+  it('the copy in runelite-bridge matches what the app sends', () => {
     const now = fresh();
     if (process.env.UPDATE_FIXTURES === '1') writeFileSync(FILE, now);
     const saved = existsSync(FILE) ? readFileSync(FILE, 'utf8') : '';
-    expect(saved === now, 'runelite-bridge/src/test/resources/active-steps.json устарел — UPDATE_FIXTURES=1 npm test').toBe(true);
+    expect(saved === now, 'runelite-bridge/src/test/resources/active-steps.json is out of date — UPDATE_FIXTURES=1 npm test').toBe(true);
   });
 });

@@ -1,3 +1,4 @@
+// A progress bar.
 export function ProgressBar({ value, label }: { value: number; label: string }) {
   const pct = Math.round(Math.max(0, Math.min(1, value)) * 100);
   return (

@@ -5,10 +5,10 @@ import java.nio.file.*;
 import java.util.*;
 
 /**
- * Проверка бинарной совместимости плагина с установленным RuneLite: каждая ссылка скомпилированного плагина
- * на net.runelite.* (метод, поле, конструктор) должна существовать в jar клиента. Так ловится поломка вроде
- * ItemManager.getItemPrice (int → long в 1.13), которую компилятор не видит, пока плагин собран под старую версию.
- * Запускается через scripts/check-runelite-compat.ts.
+ * A binary compatibility check of the plugin with the installed RuneLite: every reference of the compiled plugin
+ * to net.runelite.* (a method, field, constructor) must exist in the client jar. This catches a breakage like
+ * ItemManager.getItemPrice (int → long in 1.13) that the compiler does not see while the plugin is built against the old version.
+ * It is run through scripts/check-runelite-compat.ts.
  */
 public class RuneLiteCompat
 {
@@ -46,16 +46,16 @@ public class RuneLiteCompat
 				if (!ok)
 				{
 					bad++;
-					System.out.println("НЕТ: " + line);
+					System.out.println("MISSING: " + line);
 				}
 			}
 			catch (Throwable t)
 			{
 				bad++;
-				System.out.println("НЕТ КЛАССА/ОШИБКА: " + line + " -> " + t);
+				System.out.println("NO CLASS/ERROR: " + line + " -> " + t);
 			}
 		}
-		System.out.println("Проверено ссылок: " + n + ", расхождений: " + bad);
+		System.out.println("References checked: " + n + ", mismatches: " + bad);
 	}
 
 	static boolean hasField(Class<?> c, String name)
@@ -115,7 +115,7 @@ public class RuneLiteCompat
 				return true;
 			}
 		}
-		// Object, а для интерфейса — методы Object.
+		// Object, and for an interface — the methods of Object.
 		return c.isInterface() && hasMethod(Object.class, name, desc);
 	}
 

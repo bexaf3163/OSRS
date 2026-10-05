@@ -1,11 +1,11 @@
-// Места из досье вики → точка на карте и временная цель для RuneLite. Чистые функции без React и Leaflet:
-// что искать (строка спавна, магазин, продавец, город), откуда взялись координаты и что уходит в игру.
+// Places from the wiki dossier to a point on the map and a temporary target for RuneLite. Pure functions without React and Leaflet:
+// what to look for (a spawn line, a shop, a seller, a town), where the coordinates came from and what goes to the game.
 
 import type { WikiItemDetail } from '../types';
 import { resolveLocationCoordinates, type ResolvedPoint, type ResolveContext } from '../services/locationResolver';
 import type { NavTargetPayload } from '../services/runeliteBridge';
 
-/** Что за место: строка «где лежит бесплатно», магазин (и его продавец, город) или NPC. */
+/** What kind of place: a "where it lies for free" line, a shop (and its seller, town) or an NPC. */
 export interface PlaceQuery {
   kind: 'spawn' | 'shop' | 'npc' | 'city';
   location: string;
@@ -14,7 +14,7 @@ export interface PlaceQuery {
   item?: Pick<WikiItemDetail, 'nameEn' | 'wikiUrl'>;
 }
 
-/** Одно место на карте и откуда оно: предмет, продавец, магазин, город. */
+/** One place on the map and where it comes from: an item, a seller, a shop, a town. */
 export interface MapTarget {
   x: number;
   y: number;
@@ -24,11 +24,11 @@ export interface MapTarget {
   sourceNpc?: string;
   sourceShop?: string;
   sourceLocation?: string;
-  /** Откуда координаты: «словарь мест», «карта статьи вики»… */
+  /** Where the coordinates come from: "the place dictionary", "the wiki article map"... */
   origin?: string;
 }
 
-/** Название статьи из ссылки вики: …/w/Bronze_axe → «Bronze axe». */
+/** The article name from a wiki link: .../w/Bronze_axe gives "Bronze axe". */
 export function pageFromUrl(url: string): string | undefined {
   const m = /\/w\/([^?#]+)/.exec(url);
   if (!m) return undefined;
@@ -45,19 +45,19 @@ export function resolvePlace(q: PlaceQuery): ReturnType<typeof resolveLocationCo
     ctx.itemPage = pageFromUrl(q.item.wikiUrl);
     ctx.itemName = q.item.nameEn;
   }
-  // Клик по городу — это город; по магазину и продавцу — сам магазин, он точнее.
+  // A click on a town is a town; on a shop or seller it is the shop itself, which is more exact.
   if (q.kind !== 'city' && q.shop) ctx.shopName = q.shop;
   return resolveLocationCoordinates(q.location, q.kind === 'city' ? undefined : q.npc, ctx);
 }
 
 const MATCH_TEXT: Record<ResolvedPoint['match'], string> = {
-  exact: '', alias: '', normalized: '', substring: ' (примерно: по названию места в строке)', fuzzy: ' (примерно: похожее название)',
+  exact: '', alias: '', normalized: '', substring: ' (approximate: by the place name in the line)', fuzzy: ' (approximate: a similar name)',
   spawn: '', article: '',
 };
 
 function origin(p: ResolvedPoint): string {
-  if (p.source === 'wiki') return p.match === 'spawn' ? `место на странице «${p.page}» OSRS Wiki` : `карта статьи «${p.page}» OSRS Wiki`;
-  return `словарь мест (статья «${p.page}»)${MATCH_TEXT[p.match]}`;
+  if (p.source === 'wiki') return p.match === 'spawn' ? `a place on the OSRS Wiki page "${p.page}"` : `the map of the article "${p.page}" on the OSRS Wiki`;
+  return `the place dictionary (article "${p.page}")${MATCH_TEXT[p.match]}`;
 }
 
 export function mapTarget(q: PlaceQuery, p: ResolvedPoint): MapTarget {
@@ -71,7 +71,7 @@ export function mapTarget(q: PlaceQuery, p: ResolvedPoint): MapTarget {
   };
 }
 
-/** Временная цель в игру — только из найденной точки. Продавец — чтобы плагин подсветил его. */
+/** A temporary target into the game: only from a found point. The seller is so that the plugin highlights them. */
 export function navPayload(q: PlaceQuery, p: ResolvedPoint): NavTargetPayload {
   return {
     label: p.label.slice(0, 200), x: p.x, y: p.y, plane: p.plane,
@@ -79,9 +79,9 @@ export function navPayload(q: PlaceQuery, p: ResolvedPoint): NavTargetPayload {
   };
 }
 
-/** «Источник предмета: Shears • Fred the Farmer», «Источник: Gerrant's Fishy Business • Port Sarim». */
+/** "Item source: Shears • Fred the Farmer", "Source: Gerrant's Fishy Business • Port Sarim". */
 export function sourceBadge(t: MapTarget): string | null {
   const where = [t.sourceShop, t.sourceNpc, t.sourceLocation].filter((s, i, all) => s && all.indexOf(s) === i);
-  if (t.sourceItem) return `Источник предмета: ${[t.sourceItem, ...where].join(' • ')}`;
-  return where.length ? `Источник: ${where.join(' • ')}` : null;
+  if (t.sourceItem) return `Item source: ${[t.sourceItem, ...where].join(' • ')}`;
+  return where.length ? `Source: ${where.join(' • ')}` : null;
 }

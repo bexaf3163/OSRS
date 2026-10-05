@@ -1,6 +1,6 @@
-// Файл прогресса: чтение с откладыванием битого файла и копия последнего целого состояния.
-// Запись и так идёт через временный файл (main.cjs), так что порча маловероятна; но если файл всё же не
-// разбирается, его нельзя затирать следующей записью — прогресс могли править руками или переносить с другого ПК.
+// The progress file: reading with a broken file set aside and a copy of the last whole state.
+// The write already goes through a temporary file (main.cjs), so corruption is unlikely; but if the file still does not
+// parse, it must not be overwritten by the next write — the progress could have been edited by hand or moved from another PC.
 
 const fs = require('node:fs');
 const path = require('node:path');
@@ -17,8 +17,8 @@ function parses(text) {
 }
 
 /**
- * Текст файла прогресса или null, если файла нет или он битый. Битый файл не удаляется: его копия
- * остаётся рядом как progress.broken-<время>.json (хранятся три последних).
+ * The progress file text or null if there is no file or it is broken. A broken file is not deleted: its copy
+ * stays nearby as progress.broken-<time>.json (the last three are kept).
  */
 function readProgress(dir, now = new Date(), name = 'progress.json') {
   const target = path.join(dir, name);
@@ -36,18 +36,18 @@ function readProgress(dir, now = new Date(), name = 'progress.json') {
     const old = fs.readdirSync(dir).filter((n) => n.startsWith(`${base}.broken-`) && n.endsWith('.json')).sort();
     for (const n of old.slice(0, Math.max(0, old.length - BROKEN_KEEP))) fs.rmSync(path.join(dir, n), { force: true });
   } catch {
-    // Копию не удалось — файл при этом остаётся на месте до следующей записи.
+    // The copy failed — the file stays in place until the next write.
   }
   return null;
 }
 
-/** Копия целого файла прогресса перед первой записью сеанса: progress.bak.json. Битый файл копией не становится. */
+/** A copy of the whole progress file before the first write of the session: progress.bak.json. A broken file does not become the copy. */
 function backupProgress(dir, name = 'progress.json') {
   const target = path.join(dir, name);
   try {
     if (parses(fs.readFileSync(target, 'utf8'))) fs.copyFileSync(target, path.join(dir, name.replace(/\.json$/, '.bak.json')));
   } catch {
-    // Файла ещё нет — копировать нечего.
+    // There is no file yet — there is nothing to copy.
   }
 }
 
@@ -55,9 +55,9 @@ const DAY_KEEP = 14;
 const stampOf = (d) => `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
 
 /**
- * Копия по расписанию: раз в сутки каждый файл прогресса (progress.json и progress-<профиль>.json) копируется в
- * выбранную папку как osrs-put-<имя>-ГГГГММДД.json. Сегодняшняя копия не перезаписывается; хранятся последние
- * четырнадцать на каждый файл. Битый файл не копируется. Возвращает число новых копий или бросает ошибку папки.
+ * A scheduled copy: once a day every progress file (progress.json and progress-<profile>.json) is copied into
+ * the chosen folder as osrs-put-<name>-YYYYMMDD.json. Today's copy is not overwritten; the last
+ * fourteen per file are kept. A broken file is not copied. It returns the number of new copies or throws a folder error.
  */
 function dailyBackup(dir, target, now = new Date()) {
   fs.mkdirSync(target, { recursive: true });

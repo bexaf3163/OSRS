@@ -465,7 +465,7 @@ public class OverlayLayoutTest
 				assertEquals(t.replace(" ", ""), String.join("", lines).replace(" ", ""));
 				for (String l : lines)
 				{
-					assertTrue(t + " @" + w + ": «" + l + "»", fm.stringWidth(l) <= w || l.codePointCount(0, l.length()) == 1);
+					assertTrue(t + " @" + w + ": '" + l + "'", fm.stringWidth(l) <= w || l.codePointCount(0, l.length()) == 1);
 				}
 				String[] words = t.split(" ");
 				boolean gluedCostsLine = OverlayText.layout(OverlayText.groups(words), fm, w).size()

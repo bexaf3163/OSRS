@@ -1,8 +1,8 @@
-// Сквозная проверка настоящего Electron: окно открывается, мост отвечает, прогресс пишется файлом на диск.
-// Запуск: npm run build && npm run test:e2e (нужен дисплей — на CI не запускается; локально Windows/Mac/Linux).
+// An end-to-end check of the real Electron: the window opens, the bridge answers, the progress is written to disk as a file.
+// Run: npm run build && npm run test:e2e (a display is needed — it does not run on CI; locally on Windows/Mac/Linux).
 //
-// Безопасность: данные и «AppData» — во временной папке, RuneLite не запускается (LOCALAPPDATA пуст), а мост
-// программы смотрит на заглушку на свободном порту (OSRS_PUT_BRIDGE_PORT) — к настоящему плагину игрока не ходит.
+// Safety: the data and "AppData" are in a temporary folder, RuneLite is not started (LOCALAPPDATA is empty), and the app's bridge
+// looks at a stub on a free port (OSRS_PUT_BRIDGE_PORT) — it does not go to the player's real plugin.
 
 import { spawn, spawnSync, type ChildProcess } from 'node:child_process';
 import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
@@ -22,7 +22,7 @@ const expect = (cond: boolean, what: string) => {
   else { console.log(`  ✗ ${what}`); failures.push(what); }
 };
 
-// --- Заглушка плагина ---
+// --- The plugin stub ---
 const status = {
   status: 'ok', inGame: true, protocol: 5, pluginVersion: '2.14.1', shortestPath: false, player: 'E2E Tester',
   stats: { magic: 10, woodcutting: 15, attack: 5, strength: 5, defence: 5 }, xp: { magic: 1200 }, questsDone: ['Rune Mysteries'],
@@ -44,7 +44,7 @@ const bridge = http.createServer((req, res) => {
 await new Promise<void>((r) => bridge.listen(0, '127.0.0.1', r));
 const bridgePort = (bridge.address() as { port: number }).port;
 
-// --- Запуск ---
+// --- Launch ---
 const home = mkdtempSync(join(tmpdir(), 'osrs-put-e2e-'));
 const cdpPort = 9400 + Math.floor(Math.random() * 400);
 const app: ChildProcess = spawn(electronPath, ['.', `--remote-debugging-port=${cdpPort}`], {
@@ -56,9 +56,9 @@ function stop() {
   try {
     if (process.platform === 'win32' && app.pid) spawnSync('taskkill', ['/T', '/F', '/PID', String(app.pid)]);
     else app.kill('SIGKILL');
-  } catch { /* уже закрыт */ }
+  } catch { /* already closed */ }
   bridge.close();
-  try { rmSync(home, { recursive: true, force: true }); } catch { /* занят — не страшно */ }
+  try { rmSync(home, { recursive: true, force: true }); } catch { /* busy — not a problem */ }
 }
 
 try {
@@ -66,7 +66,7 @@ try {
   for (let i = 0; i < 60 && !up; i++) {
     try { up = (await fetch(`http://127.0.0.1:${cdpPort}/json/version`)).ok; } catch { await new Promise((r) => setTimeout(r, 500)); }
   }
-  if (!up) throw new Error('Electron не поднялся');
+  if (!up) throw new Error('Electron did not come up');
   const browser = await chromium.connectOverCDP(`http://127.0.0.1:${cdpPort}`);
   const page = browser.contexts()[0].pages()[0];
   const errors: string[] = [];
@@ -75,36 +75,37 @@ try {
   await page.waitForLoadState('load');
   await page.waitForTimeout(2500);
 
-  expect((await page.title()).includes('OSRS Путь'), 'окно: заголовок «OSRS Путь»');
+  expect((await page.title()).includes('OSRS Path'), 'window: the title "OSRS Path"');
   const api = await page.evaluate(() => Object.keys((window as unknown as { osrsDesktop?: object }).osrsDesktop ?? {}).sort());
-  expect(['backup', 'bridge', 'loadProgressFile', 'saveProgressFile'].every((k) => api.includes(k)), `окно: API оболочки на месте (${api.length} методов)`);
+  expect(['backup', 'bridge', 'loadProgressFile', 'saveProgressFile'].every((k) => api.includes(k)), `window: the shell API is in place (${api.length} methods)`);
 
-  // Мост: заглушка видна как плагин 2.14.1, персонаж привязан.
+  // The bridge: the stub is seen as plugin 2.14.1, the character is bound.
   await page.evaluate(() => { location.hash = '#/settings'; });
   await page.waitForTimeout(1500);
   const settings = await page.locator('main').innerText();
-  expect(settings.includes('E2E Tester'), 'мост: имя персонажа из плагина видно в настройках');
-  expect(settings.includes('Профили персонажей') && settings.includes('Диагностика'), 'настройки: профили и диагностика на месте');
+  expect(settings.includes('E2E Tester'), 'bridge: the character name from the plugin is visible in the settings');
+  expect(settings.includes('Character profiles') && settings.includes('Diagnostics'), 'settings: profiles and diagnostics are in place');
 
-  // Прогресс: отметка шага уходит в progress.json атомарной записью.
+  // The progress: a step mark goes into progress.json with an atomic write.
   await page.evaluate(() => { location.hash = '#/'; });
   await page.waitForTimeout(1000);
-  await page.locator('.step input[type="checkbox"]').first().check();
+  // The wide layout has a "Done" button on the open step; the narrow list has a checkbox on every step.
+  await page.getByRole('button', { name: /^(Done|Mark as done)/ }).first().click();
   await page.waitForTimeout(2500);
   const file = join(home, 'OSRS-Put-data', 'progress.json');
-  expect(existsSync(file), 'прогресс: progress.json создан в папке данных');
+  expect(existsSync(file), 'progress: progress.json was created in the data folder');
   const saved = existsSync(file) ? (JSON.parse(readFileSync(file, 'utf8')) as { steps?: Record<string, string> }) : {};
-  expect(Object.values(saved.steps ?? {}).includes('done'), 'прогресс: отмеченный шаг лежит в файле');
-  expect(!existsSync(`${file}.tmp`), 'прогресс: временного файла записи не осталось');
+  expect(Object.values(saved.steps ?? {}).includes('done'), 'progress: the marked step is in the file');
+  expect(!existsSync(`${file}.tmp`), 'progress: no temporary write file is left');
 
-  expect(!errors.length, `консоль: ошибок нет ${errors.join('; ')}`);
+  expect(!errors.length, `console: no errors ${errors.join('; ')}`);
   await browser.close();
 } catch (e) {
-  failures.push(`сбой прогона: ${(e as Error).message}`);
-  console.log(`  ✗ сбой прогона: ${(e as Error).message}`);
+  failures.push(`run failure: ${(e as Error).message}`);
+  console.log(`  ✗ run failure: ${(e as Error).message}`);
 } finally {
   stop();
 }
 
-console.log(failures.length ? `\nНе прошло: ${failures.length}` : '\nИтог: всё прошло');
+console.log(failures.length ? `\nFailed: ${failures.length}` : '\nTotal: everything passed');
 process.exit(failures.length ? 1 : 0);

@@ -1,17 +1,17 @@
 {
-  "intro": "Уровни, к которым стоит прийти к концу каждого этапа. Это ориентир, а не жёсткое правило: если какой-то навык отстаёт на пару уровней, это нормально.",
+  "intro": "The levels to have reached by the end of each stage. This is a guideline, not a hard rule: if a skill is a couple of levels behind, that is fine.",
   "stages": [
-    "Этап 1",
-    "Этап 2",
-    "Этап 3",
-    "Этап 4",
-    "Этап 5",
-    "Этап 6"
+    "Stage 1",
+    "Stage 2",
+    "Stage 3",
+    "Stage 4",
+    "Stage 5",
+    "Stage 6"
   ],
   "rows": [
     {
       "id": "attack",
-      "label": "Атака",
+      "label": "Attack",
       "values": [
         {
           "raw": "10",
@@ -42,7 +42,7 @@
     },
     {
       "id": "strength",
-      "label": "Сила",
+      "label": "Strength",
       "values": [
         {
           "raw": "10",
@@ -73,7 +73,7 @@
     },
     {
       "id": "defence",
-      "label": "Защита",
+      "label": "Defence",
       "values": [
         {
           "raw": "10",
@@ -104,7 +104,7 @@
     },
     {
       "id": "ranged",
-      "label": "Дальний бой",
+      "label": "Ranged",
       "values": [
         {
           "raw": "1",
@@ -135,7 +135,7 @@
     },
     {
       "id": "magic",
-      "label": "Магия",
+      "label": "Magic",
       "values": [
         {
           "raw": "1",
@@ -165,7 +165,7 @@
     },
     {
       "id": "prayer",
-      "label": "Молитва",
+      "label": "Prayer",
       "values": [
         {
           "raw": "11",
@@ -196,7 +196,7 @@
     },
     {
       "id": "woodcutting",
-      "label": "Рубка",
+      "label": "Woodcutting",
       "values": [
         {
           "raw": "15",
@@ -226,7 +226,7 @@
     },
     {
       "id": "firemaking",
-      "label": "Костры",
+      "label": "Firemaking",
       "values": [
         {
           "raw": "15",
@@ -257,7 +257,7 @@
     },
     {
       "id": "fishing",
-      "label": "Рыбалка",
+      "label": "Fishing",
       "values": [
         {
           "raw": "20",
@@ -287,7 +287,7 @@
     },
     {
       "id": "cooking",
-      "label": "Готовка",
+      "label": "Cooking",
       "values": [
         {
           "raw": "15",
@@ -317,7 +317,7 @@
     },
     {
       "id": "mining",
-      "label": "Добыча руды",
+      "label": "Mining",
       "values": [
         {
           "raw": "15",
@@ -347,7 +347,7 @@
     },
     {
       "id": "smithing",
-      "label": "Кузнечное дело",
+      "label": "Smithing",
       "values": [
         {
           "raw": "1",
@@ -377,7 +377,7 @@
     },
     {
       "id": "crafting",
-      "label": "Ремесло",
+      "label": "Crafting",
       "values": [
         {
           "raw": "8",
@@ -408,7 +408,7 @@
     },
     {
       "id": "runecraft",
-      "label": "Создание рун",
+      "label": "Runecraft",
       "values": [
         {
           "raw": "1",
@@ -439,7 +439,7 @@
     },
     {
       "id": "qp",
-      "label": "Очки квестов",
+      "label": "Quest points",
       "values": [
         {
           "raw": "6",
@@ -468,5 +468,5 @@
       ]
     }
   ],
-  "note": "На этапе 5 сила и защита вырастут сами: Dragon Slayer I даёт по 18 650 опыта в каждую. Кузнечное дело 29 даёт квест The Knight's Sword (12 725 опыта), магию 25 и 33 — тренировка в шагах S2-04 и S3-09. Значения сверены с маршрутом V2.1 на 26.09.2026."
+  "note": "In stage 5 Strength and Defence rise on their own: Dragon Slayer I gives 18,650 XP in each. Smithing 29 comes from the quest The Knight's Sword (12,725 XP), and Magic 25 and 33 from training in steps S2-04 and S3-09. The values were checked against the V2.1 route on 26 Sep 2026."
 }

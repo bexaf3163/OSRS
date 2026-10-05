@@ -1,20 +1,20 @@
-// Деньги и запас: точные монеты отдельно от оценки предметов. Монеты в сумке и банке — факт из игры;
-// предметы — «~» по ценам биржи (оценка плагина через цены RuneLite), это не деньги, пока их не продали.
+// Money and stock: exact coins separately from the item estimate. Coins in the bag and bank are a fact from the game;
+// items are "~" at exchange prices (the plugin's estimate through RuneLite prices), this is not money until they are sold.
 //
-// Двойного счёта нет по построению: считается то, что лежит сейчас (сумка + банк), а не события «подобрал →
-// положил в сумку → отнёс в банк». Предмет, переложенный в банк, не прибавляется второй раз: он просто
-// переехал из одной суммы в другую. Прибавка за шаг — разница между снимками.
+// There is no double counting by construction: what lies there now (bag + bank) is counted, not the events "picked up →
+// put in the bag → took to the bank". An item moved to the bank is not added a second time: it simply
+// moved from one sum to the other. The gain per step is the difference between snapshots.
 
 import type { GearState } from '../services/runeliteBridge';
 
 export interface Wealth {
-  /** Монеты: сумка, банк; total — только если известны оба (банк открывали). */
+  /** Coins: bag, bank; total — only if both are known (the bank was opened). */
   cash: { bag: number | null; bank: number | null; total: number | null };
-  /** Оценка предметов без монет: в сумке и на себе, в банке. */
+  /** The estimate of items without coins: in the bag and worn, in the bank. */
   items: { carried: number | null; bank: number | null; total: number | null };
-  /** Монеты + оценка предметов; null — чего-то не хватает для полной суммы. */
+  /** Coins + the item estimate; null — something is missing for the full sum. */
   estimatedTotal: number | null;
-  /** Банк в этой сессии не открывали — известна только сумка. */
+  /** The bank was not opened in this session: only the bag is known. */
   bankUnknown: boolean;
 }
 
@@ -35,20 +35,20 @@ export function wealthOf(gear: GearState | null): Wealth | null {
 
 export interface MoneyGoalProgress {
   goal: number;
-  /** Точные монеты (сумка + банк). */
+  /** Exact coins (bag + bank). */
   cash: number;
-  /** Сколько не хватает монетами. */
+  /** How many coins are missing. */
   missingCash: number;
-  /** Оценка предметов: если продать, сколько добавится (≈). */
+  /** The item estimate: if sold, how much is added (≈). */
   itemsValue: number | null;
-  /** Монеты + предметы (≈) против цели. */
+  /** Coins + items (≈) against the goal. */
   withItems: number | null;
   done: boolean;
-  /** Цели хватит, если продать предметы (≈), но монетами ещё нет. */
+  /** The goal is reached if the items (≈) are sold, but not by coins yet. */
   doneIfSold: boolean;
 }
 
-/** Прогресс шага-заработка. null — монеты в банке неизвестны: без них прогресс не посчитать честно. */
+/** The progress of an earning step. null — the bank coins are unknown: without them the progress cannot be honestly counted. */
 export function moneyGoalProgress(goal: number, w: Wealth | null): MoneyGoalProgress | null {
   if (!w || w.cash.total === null) return null;
   const cash = w.cash.total;

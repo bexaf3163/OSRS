@@ -1,41 +1,41 @@
 [
   {
     "id": 1,
-    "title": "Lumbridge, быстрый транспорт и первые квесты"
+    "title": "Lumbridge, fast transport and the first quests"
   },
   {
     "id": 2,
-    "title": "Varrock, магия телепортации и ключевые квесты"
+    "title": "Varrock, teleport magic and key quests"
   },
   {
     "id": 3,
-    "title": "Доступ в шахты и подготовка экипировки"
+    "title": "Access to the mines and gear preparation"
   },
   {
     "id": 4,
-    "title": "Подготовка к Dragon Slayer I"
+    "title": "Preparing for Dragon Slayer I"
   },
   {
     "id": 5,
-    "title": "Dragon Slayer I — кульминация F2P"
+    "title": "Dragon Slayer I: the F2P climax"
   },
   {
     "id": 6,
-    "title": "F2P-эндшпиль и выход на подписку (Bond)"
+    "title": "The F2P endgame and the move to membership (Bond)"
   },
   {
     "id": 7,
-    "title": "Экспресс-старт подписки: боевой скачок без гринда",
+    "title": "Express start of membership: a combat jump without grinding",
     "membersOnly": true
   },
   {
     "id": 8,
-    "title": "Глобальный транспорт и выносливость",
+    "title": "Global transport and stamina",
     "membersOnly": true
   },
   {
     "id": 9,
-    "title": "Драконье оружие и путь к Barrows Gloves",
+    "title": "Dragon weapons and the road to Barrows Gloves",
     "membersOnly": true
   }
 ]

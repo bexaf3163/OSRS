@@ -1,5 +1,5 @@
-// «Еда на бой»: сколько бьёт противник шага и когда есть. Числа — с вики (threats.json, build-threats): максимальный удар,
-// скорость, лечение еды. От себя только правило порога: есть, пока HP не упало ниже двух максимальных ударов.
+// "Food for combat": how hard the step's opponent hits and when to eat. The numbers come from the wiki (threats.json, build-threats): max hit,
+// speed, food healing. The only thing of our own is the threshold rule: eat while HP has not dropped below two max hits.
 
 import threatsJson from '../data/threats.json';
 import type { Step } from '../types';
@@ -12,14 +12,14 @@ export const THREATS = threatsJson.threats as unknown as Record<string, Threat>;
 export const FOODS = threatsJson.foods as Food[];
 export const THREATS_DATE = threatsJson.generatedAt;
 
-/** Название противников шага: foes и threats; те, о ком вики-данных нет (корова), пропускаются. */
+/** The names of the step's opponents: foes and threats; those with no wiki data (a cow) are skipped. */
 export function threatKeys(step: Pick<Step, 'foes' | 'threats'>): string[] {
   return [...new Set([...(step.foes ?? []), ...(step.threats ?? [])])].filter((k) => THREATS[k]);
 }
 
 /**
- * Обычный максимальный удар: удары «без защиты» (драконье пламя без щита) в расчёт порога не входят — их отдельно
- * предупреждаем текстом. Возвращает также самый сильный удар и признак, что он исключён.
+ * The usual max hit: "unprotected" hits (dragonfire without a shield) are not counted in the threshold, they are
+ * warned about separately in text. It also returns the strongest hit and a flag that it was excluded.
  */
 export function typicalHit(t: Threat): { typical: number; worst: number; excluded: Hit | null } {
   const isUnprotected = (h: Hit) => /dragonfire/i.test(h.label) && !/with/i.test(h.label);
@@ -29,7 +29,7 @@ export function typicalHit(t: Threat): { typical: number; worst: number; exclude
   return { typical, worst, excluded: t.hits.find(isUnprotected) ?? null };
 }
 
-/** Самый сильный обычный удар противников шага для HUD; 0 — у шага нет противников с вики-данными. */
+/** The strongest usual hit of the step's opponents for the HUD; 0 means the step has no opponents with wiki data. */
 export function stepMaxHit(step: Pick<Step, 'foes' | 'threats'>): number {
   return Math.max(0, ...threatKeys(step).map((k) => typicalHit(THREATS[k]).typical));
 }
@@ -40,11 +40,11 @@ export interface FoodView {
   typical: number;
   worst: number;
   excluded: Hit | null;
-  /** Секунд между ударами. */
+  /** Seconds between hits. */
   everySeconds: number;
-  /** Есть, когда здоровье ниже этого. */
+  /** Eat when health is below this. */
   eatBelow: number;
-  /** Сколько максимальных ударов подряд выдержит текущее здоровье; null — здоровье неизвестно. */
+  /** How many max hits in a row the current health will take; null means health is unknown. */
   survives: number | null;
 }
 
@@ -59,7 +59,7 @@ export function viewThreat(key: string, hp: number | undefined): FoodView {
   };
 }
 
-/** Еда из сумки по названию (с учётом количества), лучшая по лечению сверху. */
+/** Food from the bag by name (counting the quantity), the best healing on top. */
 export function foodInBag(items: readonly { name: string; count?: number }[] | null): { food: Food; count: number }[] {
   if (!items) return [];
   return FOODS.flatMap((f) => {
@@ -68,7 +68,7 @@ export function foodInBag(items: readonly { name: string; count?: number }[] | n
   }).sort((a, b) => b.food.heals - a.food.heals);
 }
 
-/** Какая еда одним укусом перекрывает максимальный удар, самая слабая сверху (экономнее). */
+/** Which food covers the max hit in one bite, the weakest on top (more economical). */
 export function foodsCovering(hit: number): Food[] {
   return FOODS.filter((f) => f.heals >= hit).sort((a, b) => a.heals - b.heals);
 }

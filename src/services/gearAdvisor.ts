@@ -1,13 +1,13 @@
-// Разбор снаряжения: что надето, насколько сильно оно бьёт при твоих уровнях и что сделать, чтобы стать сильнее —
-// надеть лучшее из сумки или банка, купить у торговца или на бирже. Порядок: сначала бесплатное, потом оружие
-// (от него зависит скорость боя), амулет, броня. Ничего не покупает и не надевает — только советует и ведёт.
+// Gear analysis: what is worn, how hard it hits at your levels and what to do to get stronger —
+// wear the best from the bag or bank, buy from a trader or at the exchange. The order: the free first, then the weapon
+// (combat speed depends on it), the amulet, the armor. It buys and wears nothing — only advises and leads.
 //
-// Предметы, бонусы, скорость, требования и магазины — из OSRS Wiki (gear.json, npm run build-gear).
-// Урон — по формулам вики («Damage per second/Melee»): максимальный удар, шанс попадания, средний урон
-// в секунду. Цель — противник шага (monsters.json, его защита с вики), а без шага — корова: так
-// сравниваются предметы между собой, а не обещается точная скорость убийства. Предмет покупают на всю
-// прокачку, поэтому выгода считается в среднем на ближайших 10 уровнях силы: максимальный удар растёт
-// ступеньками, и на самом текущем уровне лучший меч может бить так же, как старый.
+// Items, bonuses, speed, requirements and shops are from the OSRS Wiki (gear.json, npm run build-gear).
+// Damage follows the wiki formulas ("Damage per second/Melee"): max hit, hit chance, average damage
+// per second. The target is the step's opponent (monsters.json, its defence from the wiki), and without a step — a cow: this
+// compares items with each other and does not promise an exact kill speed. An item is bought for the whole
+// training, so the benefit is averaged over the nearest 10 Strength levels: the max hit grows
+// in steps, and at the very current level the best sword may hit the same as the old one.
 
 import gearJson from '../data/gear.json';
 import monstersJson from '../data/monsters.json';
@@ -22,21 +22,21 @@ const gearByName = new Map(gearData.items.map((i) => [nameKey(i.name), i]));
 
 export const SLOTS: GearSlot[] = ['weapon', 'neck', 'head', 'body', 'legs', 'shield'];
 export const SLOT_LABEL: Record<GearSlot, string> = {
-  weapon: 'Оружие', neck: 'Амулет', head: 'Шлем', body: 'Торс', legs: 'Ноги', shield: 'Щит',
+  weapon: 'Weapon', neck: 'Amulet', head: 'Helm', body: 'Body', legs: 'Legs', shield: 'Shield',
 };
 
-/** Слоты игры (EquipmentInventorySlot в RuneLite) → слоты советника. Остальные (плащ, перчатки…) не разбираем. */
+/** The game slots (EquipmentInventorySlot in RuneLite) → the advisor slots. The others (cape, gloves…) are not analysed. */
 const GAME_SLOT: Record<string, GearSlot> = { weapon: 'weapon', amulet: 'neck', head: 'head', body: 'body', legs: 'legs', shield: 'shield' };
 
-/** Оружие, которое советуем покупать. Топоры и кирки — инструменты: как оружие их узнаём, но не советуем. */
+/** The weapons we advise buying. Axes and pickaxes are tools: we recognise them as weapons but do not advise them. */
 const WEAPON_KINDS = new Set(['dagger', 'sword', 'scimitar', 'longsword', 'mace', 'warhammer', 'battleaxe', '2h sword']);
 
 export const foeData = monstersJson as FoeData;
 const foeByName = new Map(foeData.foes.map((f) => [f.name, f]));
-/** Без шага сравниваем с коровой — первым противником маршрута (S1-13). */
+/** Without a step we compare with a cow — the first opponent of the route (S1-13). */
 export const DEFAULT_FOE: Foe = foeByName.get('Cow')!;
 
-/** Противники шага из monsters.json; шаг без них — не про ближний бой. */
+/** The step's opponents from monsters.json; a step without them is not about melee. */
 export function stepFoes(step: Pick<Step, 'foes'>): Foe[] {
   return (step.foes ?? []).map((n) => foeByName.get(n)).filter((f): f is Foe => Boolean(f));
 }
@@ -44,22 +44,22 @@ export function stepFoes(step: Pick<Step, 'foes'>): Foe[] {
 export interface Levels { attack: number; strength: number; defence: number; prayer?: number; ranged?: number; magic?: number }
 
 // ---------------------------------------------------------------------------
-// Урон (OSRS Wiki, Damage per second/Melee)
+// Damage (OSRS Wiki, Damage per second/Melee)
 
-/** Нейтральная цель для проверки формул: Defence 1, защитные бонусы 0. */
+/** A neutral target for checking the formulas: Defence 1, defence bonuses 0. */
 export const TARGET = { defenceLevel: 1, defenceBonus: 0 };
 const TICK = 0.6;
-/** Без оружия — кулаки: бонусов нет, удар раз в 4 тика (OSRS Wiki, Unarmed). */
+/** Without a weapon — fists: no bonuses, a hit every 4 ticks (OSRS Wiki, Unarmed). */
 const UNARMED_SPEED = 4;
-/** На скольких уровнях силы усредняется выгода предмета (текущий и следующие). */
+/** Over how many Strength levels an item's benefit is averaged (the current and the following). */
 export const WINDOW = 10;
 
 export type Style = 'accurate' | 'aggressive';
 export type AttackType = 'stab' | 'slash' | 'crush';
 
 /**
- * Стили Accurate и Aggressive категорий оружия (OSRS Wiki, Weapon types / {{CombatStyles}}) и тип удара
- * у каждого. Controlled и Defensive для урона не лучше — их не считаем.
+ * The Accurate and Aggressive styles of the weapon categories (OSRS Wiki, Weapon types / {{CombatStyles}}) and the hit type
+ * of each. Controlled and Defensive are no better for damage — we do not count them.
  */
 const STYLES: Record<string, { type: AttackType; style: Style }[]> = {
   'stab sword': [{ type: 'stab', style: 'accurate' }, { type: 'stab', style: 'aggressive' }, { type: 'slash', style: 'aggressive' }],
@@ -71,7 +71,7 @@ const STYLES: Record<string, { type: AttackType; style: Style }[]> = {
   pickaxe: [{ type: 'stab', style: 'accurate' }, { type: 'stab', style: 'aggressive' }, { type: 'crush', style: 'aggressive' }],
   unarmed: [{ type: 'crush', style: 'accurate' }, { type: 'crush', style: 'aggressive' }],
 };
-/** Категория оружия по виду предмета (там же, на вики). */
+/** The weapon category by the item kind (the same place on the wiki). */
 const CATEGORY: Record<string, string> = {
   dagger: 'stab sword', sword: 'stab sword', scimitar: 'slash sword', longsword: 'slash sword',
   mace: 'spiked', warhammer: 'blunt', battleaxe: 'axe', axe: 'axe', '2h sword': '2h sword', pickaxe: 'pickaxe',
@@ -80,19 +80,19 @@ const CATEGORY: Record<string, string> = {
 export interface MeleeResult {
   maxHit: number;
   hitChance: number;
-  /** Средний урон в секунду. */
+  /** Average damage per second. */
   dps: number;
-  /** Стиль, при котором урон выше: Accurate (+3 к атаке) или Aggressive (+3 к силе). */
+  /** The style with higher damage: Accurate (+3 attack) or Aggressive (+3 strength). */
   style: Style;
-  /** Тип удара этого стиля: колющий, режущий или дробящий. */
+  /** The hit type of this style: stab, slash or crush. */
   type?: AttackType;
-  /** Секунд между ударами. */
+  /** Seconds between hits. */
   speed: number;
 }
 
 export interface Prayers { attack?: number; strength?: number }
 
-/** Урон при одном стиле. Все округления — как на вики: вниз, на каждом шаге. target — защита цели. */
+/** Damage with one style. All roundings as on the wiki: down, at each step. target — the target's defence. */
 export function meleeHit(
   lv: Levels, attackBonus: number, strengthBonus: number, speedTicks: number, style: Style, prayers: Prayers = {},
   target: { defenceLevel: number; defenceBonus: number } = TARGET,
@@ -108,8 +108,8 @@ export function meleeHit(
 }
 
 /**
- * Лучший стиль оружия (null — без оружия) с амулетом против противника: перебираются стили Accurate и
- * Aggressive категории оружия, у каждого свой тип удара — и своя защита противника от него.
+ * The best weapon style (null — no weapon) with an amulet against an opponent: the Accurate and
+ * Aggressive styles of the weapon category are tried, each has its own hit type — and the opponent's own defence against it.
  */
 export function meleeWith(lv: Levels, weapon: GearPiece | null, neck: GearPiece | null, prayers: Prayers = {}, foe: Foe = DEFAULT_FOE): MeleeResult {
   const styles = STYLES[weapon ? CATEGORY[weapon.kind] ?? 'unarmed' : 'unarmed'];
@@ -125,8 +125,8 @@ export function meleeWith(lv: Levels, weapon: GearPiece | null, neck: GearPiece 
 }
 
 /**
- * Ценность оружия и амулета на прокачку: урон в секунду в среднем на текущем и следующих уровнях силы
- * (до 99) и по всем противникам шага. Так ступеньки максимального удара не прячут выгоду предмета.
+ * The value of a weapon and amulet for training: damage per second averaged over the current and following Strength levels
+ * (up to 99) and over all the step's opponents. So the max hit steps do not hide an item's benefit.
  */
 export function meleeValue(lv: Levels, weapon: GearPiece | null, neck: GearPiece | null, foes: readonly Foe[] = [DEFAULT_FOE]): number {
   let sum = 0;
@@ -143,10 +143,10 @@ export function meleeValue(lv: Levels, weapon: GearPiece | null, neck: GearPiece
 const defenceSum = (p: GearPiece | null) => (p ? p.defence.stab + p.defence.slash + p.defence.crush : 0);
 
 /**
- * Первая оценка темпа шага боя: секунд на одного противника — его здоровье, делённое на урон в секунду
- * нынешнего оружия и амулета при нынешних уровнях (против первого противника шага). Ходьба между боями
- * не входит, поэтому оценка скорее быстрая — в игре её сменит замер. null — у шага нет противника,
- * снаряжение из игры не пришло или оружие в руке программе неизвестно: время тогда не выдумываем.
+ * The first estimate of a combat step's pace: seconds per opponent — its health divided by the damage per second
+ * of the current weapon and amulet at the current levels (against the step's first opponent). Walking between fights
+ * is not included, so the estimate is rather fast — in the game a measurement will replace it. null — the step has no opponent,
+ * the gear from the game did not come or the weapon in hand is unknown to the app: we do not invent the time then.
  */
 export function killSeconds(step: Pick<Step, 'foes'>, levels: Partial<Record<string, number>>, gear: GearState | null, data: GearData = gearData): number | null {
   const foe = stepFoes(step)[0];
@@ -160,20 +160,20 @@ export function killSeconds(step: Pick<Step, 'foes'>, levels: Partial<Record<str
 const COMBAT = new Set(['attack', 'strength', 'defence']);
 
 /**
- * Шаг для игры с первой оценкой темпа боя: секунд на противника по нынешнему оружию и уровням (killSeconds).
- * Плагин показывает её с пометкой «оценка», пока не накопит своих замеров. Оценки нет — шаг как есть.
+ * A step for the game with the first estimate of the combat pace: seconds per opponent by the current weapon and levels (killSeconds).
+ * The plugin shows it marked "estimate" until it collects its own measurements. No estimate — the step as is.
  */
 export function withKillEstimate(step: Step, levels: Partial<Record<string, number>>, gear: GearState | null): Step {
   const p = step.pacing;
   if (!p || !COMBAT.has(p.skill) || p.secondsPerAction !== undefined) return step;
   const sec = killSeconds(step, levels, gear);
-  // Плагин принимает до 10 минут на действие; дольше — это не темп, а неподходящее оружие.
+  // The plugin accepts up to 10 minutes per action; longer is not a pace but an unsuitable weapon.
   if (sec === null || !(sec > 0) || sec > 600) return step;
   return { ...step, pacing: { ...p, secondsPerAction: Math.round(sec * 10) / 10 } };
 }
 
 // ---------------------------------------------------------------------------
-// Разбор
+// Analysis
 
 export type Source =
   | { kind: 'bag' }
@@ -188,29 +188,29 @@ export type Gain =
 export interface GearAction {
   slot: GearSlot;
   item: GearPiece;
-  /** Что сейчас в этом слоте: известный предмет, неизвестный (только имя) или пусто. */
+  /** What is in this slot now: a known item, an unknown one (a name only) or empty. */
   current: GearPiece | null;
   currentName?: string;
   how: 'wear' | 'buy';
   source: Source;
-  /** Другие места, где взять (для «или на бирже»). */
+  /** Other places to get it (for "or at the exchange"). */
   alternatives: Source[];
-  /** Цена выбранного источника; 0 — уже есть; null — цена неизвестна. */
+  /** The price of the chosen source; 0 — already have; null — the price is unknown. */
   cost: number | null;
   gain: Gain;
-  /** По маршруту этот предмет всё равно покупается на шаге (код шага). */
+  /** By the route this item is bought at a step anyway (the step code). */
   routeStep?: string;
-  /** Займёт обе руки — щит придётся снять. */
+  /** Takes both hands — the shield will have to be taken off. */
   twoHanded?: boolean;
-  /** Сколько не хватает монет (для целей «накопить»). */
+  /** How many coins are missing (for "save up" goals). */
   short?: number;
 }
 
 export interface Unlock { item: GearPiece; skill: 'attack' | 'defence' | 'strength'; level: number; have: number }
 
 /**
- * Предмет лучше надетого, который пока нельзя надеть: не хватает уровней или квеста. Показывается замком
- * «🔒 нужно 20 Ranged (сейчас 17)» — вместо молчания или совета, который не наденется.
+ * An item better than the worn one that cannot be worn yet: levels or a quest are missing. Shown with a lock
+ * "🔒 needs 20 Ranged (now 17)" — instead of silence or advice that cannot be worn.
  */
 export interface LockedItem {
   slot: GearSlot;
@@ -219,37 +219,37 @@ export interface LockedItem {
   currentName?: string;
   gain: Gain;
   missing: MissingRequirement[];
-  /** Уже лежит в сумке или банке, но надеть его пока нельзя. */
+  /** Already in the bag or bank but cannot be worn yet. */
   owned?: 'bag' | 'bank';
 }
 
-/** Замок показываем, если до предмета не больше стольких уровней (или он уже есть) — это ближняя цель, а не мечта. */
+/** The lock is shown if the item is at most this many levels away (or already owned) — it is a near goal, not a dream. */
 export const LOCK_NEAR = 10;
 
 export interface Equipped { piece: GearPiece | null; id: number; name: string }
 
 export interface GearAdvice {
-  /** Есть ли данные из игры (надетое, сумка). */
+  /** Whether there is data from the game (worn, bag). */
   live: boolean;
   levels: Levels;
   equipped: Partial<Record<GearSlot, Equipped>>;
   coins: { bag: number | null; bank: number | null; total: number | null };
-  /** С кем сравнивалось оружие: противники шага или корова. */
+  /** What the weapon was compared with: the step's opponents or a cow. */
   foes: Foe[];
-  /** Урон сейчас — против первого из них, при текущих уровнях. */
+  /** Damage now — against the first of them, at the current levels. */
   weaponNow: MeleeResult;
-  /** Оружие в руке неизвестно программе — урон «сейчас» посчитан без него. */
+  /** The weapon in hand is unknown to the app — the damage "now" is computed without it. */
   weaponUnknown?: string;
-  /** Сделать сейчас ради скорости: надеть лучшее, что уже есть, купить оружие и амулет. */
+  /** Do now for speed: wear the best of what you already have, buy a weapon and an amulet. */
   actions: GearAction[];
-  /** Броня по карману — из того, что осталось после оружия и амулета. Бой она не ускоряет, но бережёт еду. */
+  /** Armor within means — from what is left after the weapon and amulet. It does not speed up combat, but saves food. */
   armour: GearAction[];
-  /** Лучше, чем можно сейчас: не хватает монет. */
+  /** Better than what is possible now: not enough coins. */
   goals: GearAction[];
   unlocks: Unlock[];
-  /** Лучше надетого, но пока нельзя надеть: по одному на слот, сначала то, что уже есть в сумке или банке. */
+  /** Better than worn but cannot be worn yet: one per slot, first what is already in the bag or bank. */
   locked: LockedItem[];
-  /** Молитвы на силу и атаку, которые уже открыты. */
+  /** The prayers for strength and attack that are already unlocked. */
   prayers: { name: string; level: number; effect: string; maxHit?: number }[];
 }
 
@@ -258,23 +258,23 @@ export interface AdvisorInput {
   gear: GearState | null;
   owned?: OwnedState | null;
   mode: GameMode;
-  /** Цены биржи по ID. */
+  /** Exchange prices by ID. */
   gePrices?: ReadonlyMap<number, number>;
-  /** Шлагбаум Al Kharid бесплатный (Prince Ali Rescue пройден). */
+  /** The Al Kharid toll gate is free (Prince Ali Rescue is done). */
   freeToll?: boolean;
-  /** Какие предметы маршрут ещё покупает: nameKey → код шага. */
+  /** Which items the route still buys: nameKey → step code. */
   routeNeeds?: ReadonlyMap<string, string>;
-  /** Противники шага (stepFoes): с ними сравнивается оружие. Пусто — корова. */
+  /** The step's opponents (stepFoes): the weapon is compared with them. Empty — a cow. */
   foes?: readonly Foe[];
-  /** Выполненные квесты. Предмет с квестом в требованиях (Rune platebody — Dragon Slayer I) без него не советуем. */
+  /** Completed quests. An item with a quest in its requirements (Rune platebody — Dragon Slayer I) is not advised without it. */
   questsDone?: ReadonlySet<string>;
   data?: GearData;
 }
 
-/** Шлагбаум между Lumbridge и Al Kharid: 10 монет, после Prince Ali Rescue — бесплатно (OSRS Wiki, Al Kharid). */
+/** The gate between Lumbridge and Al Kharid: 10 coins, free after Prince Ali Rescue (OSRS Wiki, Al Kharid). */
 export const TOLL = 10;
 
-/** Уровни с запасом: без данных — 1 (так советы не обещают то, что ещё нельзя надеть). */
+/** Levels with a default: without data — 1 (so the advice does not promise what cannot be worn yet). */
 function levelsOf(raw: Partial<Record<string, number>>): Levels {
   const n = (k: string) => (typeof raw[k] === 'number' && raw[k]! >= 1 ? raw[k]! : 1);
   const opt = (k: 'prayer' | 'ranged' | 'magic') => (typeof raw[k] === 'number' && raw[k]! >= 1 ? { [k]: raw[k] } : {});
@@ -291,8 +291,8 @@ export type MissingRequirement =
   | { kind: 'quest'; quest: string };
 
 /**
- * Чего не хватает, чтобы надеть: уровни всех боевых навыков и квесты. Неизвестный уровень считается первым,
- * неизвестный квест — невыполненным: совет не должен обещать то, что может не надеться.
+ * What is missing to wear: the levels of all combat skills and the quests. An unknown level counts as the first,
+ * an unknown quest as not done: the advice must not promise what may not be wearable.
  */
 export function missingRequirements(p: GearPiece, lv: Levels, quests: ReadonlySet<string> = new Set()): MissingRequirement[] {
   const r = p.req ?? {};
@@ -310,16 +310,16 @@ export function canWear(p: GearPiece, lv: Levels, quests?: ReadonlySet<string>):
   return missingRequirements(p, lv, quests).length === 0;
 }
 
-/** «20 Ranged (сейчас 17), квест Dragon Slayer I» — чего не хватает до предмета. */
+/** "20 Ranged (now 17), quest Dragon Slayer I" — what is missing for the item. */
 export function missingText(missing: MissingRequirement[]): string {
-  return missing.map((m) => (m.kind === 'skill' ? `${m.need} ${SKILL_EN[m.skill]} (сейчас ${m.have})` : `квест ${m.quest}`)).join(', ');
+  return missing.map((m) => (m.kind === 'skill' ? `${m.need} ${SKILL_EN[m.skill]} (now ${m.have})` : `quest ${m.quest}`)).join(', ');
 }
 
 function pieceOf(id: number, name: string, data: GearData): GearPiece | null {
   return (data === gearData ? gearById.get(id) ?? gearByName.get(nameKey(name)) : data.items.find((i) => i.id === id || nameKey(i.name) === nameKey(name))) ?? null;
 }
 
-/** Надетое по слотам: слот из игры, а у старого плагина (без слота) — по базе предметов. */
+/** Worn items by slot: the slot from the game, and for an old plugin (no slot) — from the item database. */
 function equippedBySlot(gear: GearState | null, data: GearData): Partial<Record<GearSlot, Equipped>> {
   const out: Partial<Record<GearSlot, Equipped>> = {};
   for (const it of gear?.equipment ?? []) {
@@ -330,7 +330,7 @@ function equippedBySlot(gear: GearState | null, data: GearData): Partial<Record<
   return out;
 }
 
-/** Магазины, куда можно довести стрелкой: есть в словаре мест. Остальные (гильдии, Wilderness) — не советуем. */
+/** Shops reachable with the arrow: they are in the place dictionary. The others (guilds, Wilderness) we do not advise. */
 function shopsOf(p: GearPiece, freeToll: boolean): Extract<Source, { kind: 'shop' }>[] {
   const out: Extract<Source, { kind: 'shop' }>[] = [];
   for (const s of p.shops ?? []) {
@@ -346,20 +346,20 @@ function shopsOf(p: GearPiece, freeToll: boolean): Extract<Source, { kind: 'shop
   return out.sort((a, b) => a.price - b.price);
 }
 
-/** Где уже лежит предмет: в сумке или в банке (по счёту из плагина). Неизвестно или нет — undefined. */
+/** Where the item already is: in the bag or in the bank (by the plugin's count). Unknown or no — undefined. */
 function ownedWhere(p: GearPiece, input: AdvisorInput): 'bag' | 'bank' | undefined {
   if (input.gear?.inventory?.some((i) => i.id === p.id || nameKey(i.name) === nameKey(p.name))) return 'bag';
   const bank = input.owned?.items.get(nameKey(p.name))?.bank;
   return bank && bank > 0 ? 'bank' : undefined;
 }
 
-/** Сравнение рангов по порядку чисел: a раньше b. */
+/** Comparing ranks by the order of numbers: a before b. */
 function lexLess(a: number[], b: number[]): boolean {
   for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) return a[i] < b[i];
   return false;
 }
 
-/** Откуда взять предмет: сумка, банк, магазины, биржа — сначала бесплатное, потом дешёвое. */
+/** Where to get the item: bag, bank, shops, exchange — the free first, then the cheap. */
 function sourcesOf(p: GearPiece, input: AdvisorInput): Source[] {
   const out: Source[] = [];
   if (input.gear?.inventory?.some((i) => i.id === p.id || nameKey(i.name) === nameKey(p.name))) out.push({ kind: 'bag' });
@@ -368,8 +368,8 @@ function sourcesOf(p: GearPiece, input: AdvisorInput): Source[] {
   const shops = shopsOf(p, Boolean(input.freeToll));
   const ge: Source[] = p.tradeable ? [{ kind: 'ge', ...(input.gePrices?.has(p.id) ? { price: input.gePrices.get(p.id) } : {}) }] : [];
   const priced = [...shops, ...ge].sort((a, b) => priceOf(a, Infinity) - priceOf(b, Infinity));
-  // Магазин немногим дороже биржи — сначала магазин: цена точная, сделку ждать не надо, и в начале пути
-  // он обычно рядом (Zeke — у коровника за воротами Al Kharid, биржа — в Varrock). Биржа остаётся «или …».
+  // A shop slightly dearer than the exchange — the shop first: the price is exact, there is no waiting for a deal, and at the start of the route
+  // it is usually near (Zeke — by the cow pen beyond the Al Kharid gate, the exchange — in Varrock). The exchange stays as "or …".
   const cheapest = priced[0];
   if (cheapest?.kind === 'ge' && cheapest.price !== undefined) {
     const shop = priced.find((s) => s.kind === 'shop' && priceOf(s, Infinity) - cheapest.price! < SAVE_GP);
@@ -378,7 +378,7 @@ function sourcesOf(p: GearPiece, input: AdvisorInput): Source[] {
   return [...out, ...priced];
 }
 
-/** Цена источника: у магазина — с платой за проход; бесплатно — 0; неизвестно — fallback. */
+/** The source price: for a shop — with the toll; free — 0; unknown — fallback. */
 function priceOf(s: Source, fallback: number): number {
   if (s.kind === 'bag' || s.kind === 'bank') return 0;
   if (s.kind === 'shop') return s.price + (s.toll ?? 0);
@@ -389,22 +389,22 @@ function allowed(p: GearPiece, lv: Levels, mode: GameMode, quests?: ReadonlySet<
   return (!p.members || mode === 'members') && !p.reqUnverified && canWear(p, lv, quests);
 }
 
-/** Молитвы на атаку и силу по уровню молитвы (OSRS Wiki: уровень и множитель каждой). */
+/** Attack and strength prayers by prayer level (OSRS Wiki: the level and multiplier of each). */
 const PRAYERS: { name: string; level: number; kind: 'attack' | 'strength'; mult: number; effect: string }[] = [
-  { name: 'Burst of Strength', level: 4, kind: 'strength', mult: 1.05, effect: '+5% к силе' },
-  { name: 'Clarity of Thought', level: 7, kind: 'attack', mult: 1.05, effect: '+5% к атаке' },
-  { name: 'Superhuman Strength', level: 13, kind: 'strength', mult: 1.1, effect: '+10% к силе' },
-  { name: 'Improved Reflexes', level: 16, kind: 'attack', mult: 1.1, effect: '+10% к атаке' },
-  { name: 'Ultimate Strength', level: 31, kind: 'strength', mult: 1.15, effect: '+15% к силе' },
-  { name: 'Incredible Reflexes', level: 34, kind: 'attack', mult: 1.15, effect: '+15% к атаке' },
+  { name: 'Burst of Strength', level: 4, kind: 'strength', mult: 1.05, effect: '+5% Strength' },
+  { name: 'Clarity of Thought', level: 7, kind: 'attack', mult: 1.05, effect: '+5% Attack' },
+  { name: 'Superhuman Strength', level: 13, kind: 'strength', mult: 1.1, effect: '+10% Strength' },
+  { name: 'Improved Reflexes', level: 16, kind: 'attack', mult: 1.1, effect: '+10% Attack' },
+  { name: 'Ultimate Strength', level: 31, kind: 'strength', mult: 1.15, effect: '+15% Strength' },
+  { name: 'Incredible Reflexes', level: 34, kind: 'attack', mult: 1.15, effect: '+15% Attack' },
 ];
 
 /**
- * С какой выгоды советуем: урон в секунду хотя бы +3% (в среднем на прокачку), защита — хотя бы +3.
- * Порог низкий намеренно: любое ускорение стоит показать, а процент в совете говорит, насколько оно велико.
+ * From what benefit we advise: damage per second at least +3% (averaged over the training), defence — at least +3.
+ * The threshold is low on purpose: any speed-up is worth showing, and the percent in the advice says how big it is.
  */
 const WORTH = { dps: 1.03, defence: 3 };
-/** Из почти равных дешёвое берём, если оно хотя бы вдвое дешевле и экономит не меньше этого. */
+/** Among nearly equal ones we take the cheap one if it is at least twice as cheap and saves at least this much. */
 export const SAVE_GP = 100;
 
 export function adviseGear(input: AdvisorInput): GearAdvice {
@@ -426,12 +426,12 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
 
   const route = (p: GearPiece) => input.routeNeeds?.get(nameKey(p.name));
 
-  // Оружие: лучший урон в секунду при твоих уровнях. Неизвестное программе оружие в руке сравнить нельзя —
-  // тогда урон «сейчас» считается без него, а текст совета говорит только о новом оружии (gainText).
+  // Weapon: the best damage per second at your levels. A weapon in hand unknown to the app cannot be compared —
+  // then the damage "now" is counted without it, and the advice text speaks only about the new weapon (gainText).
   /**
-   * Чем предмет лучше надетого в слоте — или null, если не лучше по порогам совета. Оружие — урон в секунду;
-   * амулет — урон с оружием в руке, а ради защиты — только если урон не падает; броня — сумма защиты от
-   * колющих, режущих и дробящих ударов.
+   * How an item is better than the worn one in the slot — or null if not better by the advice thresholds. A weapon — damage per second;
+   * an amulet — damage with the weapon in hand, and for defence — only if the damage does not drop; armor — the sum of defence against
+   * stab, slash and crush hits.
    */
   function gainOf(slot: GearSlot, p: GearPiece, cur: Equipped | undefined): Gain | null {
     if (slot === 'weapon') {
@@ -460,11 +460,11 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
     }
   }
 
-  // В каждом слоте — одно лучшее «надеть» (бесплатно) и одна лучшая покупка по деньгам.
-  // Урон главнее защиты: защита амулета решает только при равном уроне. Иначе +6 защиты Amulet of power
-  // перевешивали 3% урона Amulet of strength, и совет по амулету зависел от случайных цифр.
+  // In each slot — one best "wear" (free) and one best purchase by money.
+  // Damage matters more than defence: an amulet's defence decides only at equal damage. Otherwise the +6 defence of the Amulet of power
+  // outweighed the 3% damage of the Amulet of strength, and the amulet advice depended on random numbers.
   const score = (a: GearAction) => (a.gain.kind === 'dps' ? Math.round(a.gain.ratio * 1000) * 1000 + (a.gain.defenceAfter ?? 0) : a.gain.after);
-  /** b заметно лучше a — по тем же порогам, что и совет вообще. Иначе за разницу платить незачем. */
+  /** b is noticeably better than a — by the same thresholds as the advice in general. Otherwise it is not worth paying for the difference. */
   const better = (b: GearAction, a: GearAction) => (b.gain.kind === 'dps' && a.gain.kind === 'dps'
     ? b.gain.ratio >= a.gain.ratio * WORTH.dps
       || (b.gain.ratio >= a.gain.ratio * 0.999 && (b.gain.defenceAfter ?? 0) - (a.gain.defenceAfter ?? 0) >= WORTH.defence)
@@ -474,7 +474,7 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   const goals: GearAction[] = [];
   let left = total ?? 0;
   const order: GearSlot[] = ['weapon', 'neck', 'body', 'legs', 'head', 'shield'];
-  // Сначала то, что уже есть: надеть бесплатно.
+  // First what is already owned: wear it for free.
   const wearBest = new Map<GearSlot, GearAction>();
   for (const a of candidates.filter((c) => c.how === 'wear')) {
     const cur = wearBest.get(a.slot);
@@ -483,8 +483,8 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   for (const slot of order) if (wearBest.has(slot)) actions.push(wearBest.get(slot)!);
   const best = (list: GearAction[]) => list.reduce((a, b) => (score(b) > score(a) || (score(b) === score(a) && (b.cost ?? Infinity) < (a.cost ?? Infinity)) ? b : a));
   /**
-   * Что выбрать из списка: самое сильное, но из почти равных — то, что маршрут всё равно купит (эти деньги
-   * не лишние), а заметно более дешёвое — только если экономия настоящая, а не 30 монет за худший предмет.
+   * What to choose from the list: the strongest, but among nearly equal ones — what the route buys anyway (this money
+   * is not extra), and a noticeably cheaper one — only if the saving is real, not 30 coins for a worse item.
    */
   const choose = (list: GearAction[]): GearAction => {
     const strongest = best(list);
@@ -496,14 +496,14 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
     const cheap = pool.filter((a) => a.cost !== null && lead.cost! - a.cost >= SAVE_GP && a.cost * 2 <= lead.cost!);
     return cheap.length ? cheap.reduce((a, b) => (b.cost! < a.cost! || (b.cost === a.cost && score(b) > score(a)) ? b : a)) : lead;
   };
-  // Потом покупки: лучшее, на что хватает денег, — сейчас; лучшее вообще, если на него не хватает, — цель.
-  // Покупка должна быть заметно лучше того, что можно надеть бесплатно.
+  // Then purchases: the best that the money covers — now; the best overall, if the money is not enough — the goal.
+  // A purchase must be noticeably better than what can be worn for free.
   for (const slot of order) {
     const worn = wearBest.get(slot);
     const buys = candidates.filter((c) => c.slot === slot && c.how === 'buy' && (!worn || better(c, worn)));
     if (!buys.length) continue;
     const top = choose(buys);
-    // «Не хватает» — от денег до покупки в этом слоте: дешёвый меч сейчас не делает цель дороже.
+    // "Missing" — from the money to the purchase in this slot: a cheap sword now does not make the goal more expensive.
     const budget = left;
     const affordable = total === null ? [] : buys.filter((b) => b.cost !== null && b.cost <= budget);
     const pick = affordable.length ? choose(affordable) : null;
@@ -517,7 +517,7 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
     }
   }
 
-  // Что откроется дальше: ятаган и броня следующего металла.
+  // What opens next: the scimitar and the armor of the next metal.
   const unlocks: Unlock[] = [];
   const nextOf = (kind: string, skill: 'attack' | 'defence') => data.items
     .filter((p) => p.kind === kind && !p.reqUnverified && (!p.members || input.mode === 'members') && (p.req?.[skill] ?? 1) > lv[skill])
@@ -527,8 +527,8 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   const plate = nextOf('platebody', 'defence');
   if (plate) unlocks.push({ item: plate, skill: 'defence', level: plate.req!.defence!, have: lv.defence });
 
-  // Замки: лучше надетого по тем же порогам, что и совет, но требования не выполнены. Предмет, которого нет
-  // в базе требований (reqUnverified) или нет в режиме игры, замком не показываем — про него ничего не известно.
+  // Locks: better than worn by the same thresholds as the advice, but the requirements are not met. An item that is not
+  // in the requirements database (reqUnverified) or not in the game mode is not shown as a lock — nothing is known about it.
   const locked: LockedItem[] = [];
   const lockBeats = (lock: Gain, g: Gain) => (lock.kind === 'dps' && g.kind === 'dps'
     ? lock.ratio >= g.ratio * WORTH.dps
@@ -547,12 +547,12 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
       const gain = gainOf(slot, p, cur);
       if (!gain) continue;
       const owned = ownedWhere(p, input);
-      // Не из сумки или банка — только если он заметно лучше того, что можно надеть или купить уже сейчас:
-      // замок на предмет, равный доступному, — лишний шум.
+      // Not from the bag or bank — only if it is noticeably better than what can be worn or bought right now:
+      // a lock on an item equal to an available one is extra noise.
       if (!owned && open.some((a) => !lockBeats(gain, a.gain))) continue;
       const gap = missing.reduce((s, m) => s + (m.kind === 'skill' ? m.need - m.have : 0), 0);
       if (!owned && gap > LOCK_NEAR) continue;
-      // Сначала то, что уже есть, потом ближайшее по уровням, из равных — сильнейшее.
+      // First what is already owned, then the nearest by levels, among equals — the strongest.
       const rank = [owned ? 0 : 1, gap, -(gain.kind === 'dps' ? gain.ratio * 1000 : gain.after)];
       if (pick && !lexLess(rank, pickRank)) continue;
       pick = {
@@ -564,7 +564,7 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
     if (pick) locked.push(pick);
   }
 
-  // Молитвы: лучшая открытая на силу и на атаку; сколько даёт к удару с оружием в руке.
+  // Prayers: the best unlocked for strength and for attack; how much it adds to a hit with the weapon in hand.
   const prayers: GearAdvice['prayers'] = [];
   for (const kind of ['strength', 'attack'] as const) {
     const open = PRAYERS.filter((p) => p.kind === kind && (lv.prayer ?? 1) >= p.level).pop();
@@ -608,58 +608,58 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
 }
 
 // ---------------------------------------------------------------------------
-// Тексты и цели
+// Texts and goals
 
-const gp = (n: number) => n.toLocaleString('ru-RU').replace(/ /g, ' ');
+const gp = (n: number) => n.toLocaleString('en-US');
 const pct = (r: number) => `${Math.round((r - 1) * 100)}%`;
 
-/** «удар до 3 вместо 2, урона в секунду +45%» — чем действие лучше. */
+/** "max hit 3 instead of 2, damage per second +45%" — how the action is better. */
 export function gainText(a: Pick<GearAction, 'gain' | 'slot' | 'currentName'>): string {
   const g = a.gain;
-  if (g.kind === 'defence') return `защита +${g.after - g.before} (${g.before} → ${g.after})`;
-  // Что в руке сейчас — программе неизвестно: сравнивать не с чем, говорим только про новое оружие.
+  if (g.kind === 'defence') return `defence +${g.after - g.before} (${g.before} → ${g.after})`;
+  // What is in hand now is unknown to the app: there is nothing to compare with, we speak only about the new weapon.
   if (a.currentName && a.slot === 'weapon') {
-    return `удар до ${g.after.maxHit}, раз в ${g.after.speed.toFixed(1).replace('.', ',')} с — сравни с ${a.currentName} во вкладке Equipment Stats`;
+    return `max hit ${g.after.maxHit}, once every ${g.after.speed.toFixed(1)} s — compare with ${a.currentName} in the Equipment Stats tab`;
   }
   const parts: string[] = [];
-  if (g.after.maxHit !== g.before.maxHit) parts.push(`удар до ${g.after.maxHit} вместо ${g.before.maxHit}`);
-  if (Math.abs(g.after.speed - g.before.speed) > 0.01) parts.push(`удар раз в ${g.after.speed.toFixed(1).replace('.', ',')} с вместо ${g.before.speed.toFixed(1).replace('.', ',')}`);
-  if (g.ratio >= 1.01) parts.push(`урона в секунду +${pct(g.ratio)}`);
-  if (g.defenceAfter !== undefined && g.defenceBefore !== undefined && g.defenceAfter > g.defenceBefore) parts.push(`защита +${g.defenceAfter - g.defenceBefore}`);
-  return parts.join(', ') || 'чуть сильнее';
+  if (g.after.maxHit !== g.before.maxHit) parts.push(`max hit ${g.after.maxHit} instead of ${g.before.maxHit}`);
+  if (Math.abs(g.after.speed - g.before.speed) > 0.01) parts.push(`one hit every ${g.after.speed.toFixed(1)} s instead of ${g.before.speed.toFixed(1)} s`);
+  if (g.ratio >= 1.01) parts.push(`damage per second +${pct(g.ratio)}`);
+  if (g.defenceAfter !== undefined && g.defenceBefore !== undefined && g.defenceAfter > g.defenceBefore) parts.push(`defence +${g.defenceAfter - g.defenceBefore}`);
+  return parts.join(', ') || 'slightly stronger';
 }
 
-/** Сам предмет, без сравнения: когда неизвестно, что надето сейчас (нет связи с игрой). */
+/** The item itself, without a comparison: when it is unknown what is worn now (no link with the game). */
 export function statsText(a: Pick<GearAction, 'gain' | 'slot' | 'item'>): string {
   const g = a.gain;
-  if (g.kind === 'defence') return `защита ${g.after}`;
+  if (g.kind === 'defence') return `defence ${g.after}`;
   if (a.slot === 'neck') {
-    // У амулета — его бонусы: удар без известного оружия ничего не говорит.
+    // For an amulet — its bonuses: a hit with an unknown weapon says nothing.
     const p = a.item;
     const accuracy = Math.max(p.attack.stab, p.attack.slash, p.attack.crush);
-    const parts = [p.strength && `сила +${p.strength}`, accuracy && `точность +${accuracy}`, defenceSum(p) && `защита +${defenceSum(p)}`];
+    const parts = [p.strength && `strength +${p.strength}`, accuracy && `accuracy +${accuracy}`, defenceSum(p) && `defence +${defenceSum(p)}`];
     return parts.filter(Boolean).join(', ');
   }
-  return `удар до ${g.after.maxHit}, раз в ${g.after.speed.toFixed(1).replace('.', ',')} с`;
+  return `max hit ${g.after.maxHit}, once every ${g.after.speed.toFixed(1)} s`;
 }
 
-/** Где взять: «у Zeke в Al Kharid — 400 gp (+10 gp за проход)», «лежит в банке», «на бирже ~350 gp». */
+/** Where to get it: "from Zeke in Al Kharid — 400 gp (+10 gp toll)", "in the bank", "on the exchange ~350 gp". */
 export function sourceText(s: Source): string {
-  if (s.kind === 'bag') return 'уже в сумке';
-  if (s.kind === 'bank') return 'лежит в банке';
-  if (s.kind === 'ge') return s.price !== undefined ? `на бирже ~${gp(s.price)} gp` : 'на бирже (цена не загрузилась)';
-  return `${s.npc ? `у ${s.npc} ` : ''}в ${s.shop} (${s.location}) — ${gp(s.price)} gp${s.toll ? ` + ${s.toll} gp за проход в Al Kharid` : ''}`;
+  if (s.kind === 'bag') return 'already in the bag';
+  if (s.kind === 'bank') return 'in the bank';
+  if (s.kind === 'ge') return s.price !== undefined ? `on the exchange ~${gp(s.price)} gp` : 'on the exchange (the price did not load)';
+  return `${s.npc ? `from ${s.npc} at ` : 'at '}${s.shop} (${s.location}) — ${gp(s.price)} gp${s.toll ? ` + ${s.toll} gp toll into Al Kharid` : ''}`;
 }
 
-/** Короткая строка для HUD в игре: одно главное действие. */
+/** A short line for the HUD in the game: one main action. */
 export function hudHint(a: GearAction): string {
-  if (a.how === 'wear') return `⚡ Надень ${a.item.name} — ${a.source.kind === 'bank' ? 'он в банке' : 'он в сумке'}`;
+  if (a.how === 'wear') return `⚡ Wear ${a.item.name} — ${a.source.kind === 'bank' ? 'it is in the bank' : 'it is in the bag'}`;
   const s = a.source;
-  if (s.kind === 'shop') return `⚡ Сильнее: ${a.item.name} у ${s.npc ?? s.shop} (${s.location}), ${gp(s.price)} gp`;
-  return `⚡ Сильнее: ${a.item.name} на бирже${s.kind === 'ge' && s.price !== undefined ? `, ~${gp(s.price)} gp` : ''}`;
+  if (s.kind === 'shop') return `⚡ Stronger: ${a.item.name} from ${s.npc ?? s.shop} (${s.location}), ${gp(s.price)} gp`;
+  return `⚡ Stronger: ${a.item.name} on the exchange${s.kind === 'ge' && s.price !== undefined ? `, ~${gp(s.price)} gp` : ''}`;
 }
 
-/** Куда вести стрелку за покупкой: магазин (продавец подсвечен) или биржа. Для «надеть» — никуда. */
+/** Where to lead the arrow for a purchase: a shop (the seller is highlighted) or the exchange. For "wear" — nowhere. */
 export function actionNav(a: GearAction, stepId?: string): NavTargetPayload | null {
   if (a.how !== 'buy') return null;
   const item = { itemName: a.item.name, itemId: a.item.id, ...(stepId ? { stepId } : {}) };
@@ -670,8 +670,8 @@ export function actionNav(a: GearAction, stepId?: string): NavTargetPayload | nu
 }
 
 /**
- * Какие предметы спросить у плагина (счёт в банке приходит только по названиям): всё, что можно надеть
- * при текущих уровнях и что лучше надетого, — по 3 на слот, чтобы список был коротким.
+ * Which items to ask the plugin about (the bank count comes only by names): everything that can be worn
+ * at the current levels and is better than the worn one — 3 per slot, to keep the list short.
  */
 export function watchNames(input: AdvisorInput, limit = 3): string[] {
   const data = input.data ?? gearData;
@@ -700,7 +700,7 @@ export function watchNames(input: AdvisorInput, limit = 3): string[] {
   return out;
 }
 
-/** Предметы, которые маршрут ещё покупает (не пройденные шаги-закупки): nameKey → код шага. */
+/** The items the route still buys (shopping steps not yet done): nameKey → step code. */
 export function routeNeeds(steps: { id: string; type: string; itemsRequired?: { nameEn: string }[] }[], closed: (id: string) => boolean): Map<string, string> {
   const out = new Map<string, string>();
   for (const s of steps) {

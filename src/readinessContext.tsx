@@ -1,5 +1,5 @@
-// Единый движок готовности для экранов: один на всё приложение, пересоздаётся только когда меняется то, что влияет
-// на расчёты (состояние игрока, отметки шагов, очки квестов, режим, маршрут). Расчёты и ответы — lib/readinessEngine.ts.
+// The single readiness engine for the screens: one for the whole app, recreated only when what affects
+// the calculations changes (player state, step marks, quest points, mode, route). The calculations and answers are in lib/readinessEngine.ts.
 
 import { createContext, useContext, useMemo, type ReactNode } from 'react';
 import type { Step } from './types';
@@ -29,17 +29,17 @@ export function ReadinessProvider({ children }: { children: ReactNode }) {
 
 export function useReadinessEngine(): ReadinessEngine {
   const v = useContext(Ctx);
-  if (!v) throw new Error('useReadinessEngine вне ReadinessProvider');
+  if (!v) throw new Error('useReadinessEngine outside ReadinessProvider');
   return v;
 }
 
-/** Готовность шага из общего движка: пересчёт — только когда меняются уровни, предметы, монеты, отметки или шаг. */
+/** A step's readiness from the shared engine: recomputed only when levels, items, coins, marks or the step change. */
 export function useReadiness(step: Step | null): StepReadiness | null {
   const engine = useReadinessEngine();
   return step ? engine.readiness(step) : null;
 }
 
-/** Режим восстановления: срыв (смерть, телепорт) на шаге, который показан в игре; dismiss — «это не срыв». */
+/** The recovery mode: a derailment (death, teleport) on the step that is shown in the game; dismiss — "this is not a derailment". */
 export function useRecovery(): { active: ActiveRecovery | null; dismiss: () => void } {
   return useContext(RecoveryCtx);
 }

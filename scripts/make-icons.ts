@@ -1,12 +1,12 @@
-// Рисует иконки программы без библиотек: PNG 512 — значок окна и exe, SVG — логотип в шапке.
-// Запуск: npm run icons. Результат лежит в public/ и хранится в репозитории.
+// Draws the app icons without libraries: a 512 PNG — the window and exe icon, an SVG — the logo in the header.
+// Run: npm run icons. The result is in public/ and is kept in the repository.
 
 import { writeFileSync } from 'node:fs';
 import { deflateSync } from 'node:zlib';
 
 const BG = [0x1c, 0x1a, 0x16];
 const GOLD = [0xc9, 0x9a, 0x3e];
-/** Тропа из трёх отрезков: путь вверх к цели. Координаты в долях стороны. */
+/** A trail of three segments: the way up to the goal. The coordinates are in fractions of the side. */
 const PATH: [number, number][] = [[0.25, 0.7], [0.42, 0.5], [0.56, 0.61], [0.75, 0.35]];
 const STROKE = 0.075;
 const START_DOT = 0.07;
@@ -47,7 +47,7 @@ function chunk(type: string, data: Buffer): Buffer {
 }
 
 function png(size: number): Buffer {
-  const SS = 4; // сглаживание: 4×4 пробы на пиксель
+  const SS = 4; // anti-aliasing: 4×4 samples per pixel
   const raw = Buffer.alloc((size * 3 + 1) * size);
   for (let y = 0; y < size; y++) {
     raw[y * (size * 3 + 1)] = 0;
@@ -66,7 +66,7 @@ function png(size: number): Buffer {
   const ihdr = Buffer.alloc(13);
   ihdr.writeUInt32BE(size, 0);
   ihdr.writeUInt32BE(size, 4);
-  ihdr[8] = 8; // бит на канал
+  ihdr[8] = 8; // bits per channel
   ihdr[9] = 2; // RGB
   return Buffer.concat([
     Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
@@ -91,4 +91,4 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
 const out = new URL('../public/', import.meta.url);
 writeFileSync(new URL('icon-512.png', out), png(512));
 writeFileSync(new URL('icon.svg', out), svg);
-console.log('Иконки записаны в public/');
+console.log('Icons written to public/');

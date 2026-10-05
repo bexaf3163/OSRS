@@ -1,4 +1,4 @@
-// Глобальный поиск по шагам, базе предметов, навыкам, строкам прокачки и справке.
+// Global search over steps, the item database, skills, training rows and the reference.
 
 import type { Block, PluginsData, ReferenceData, Skill, Step, WikiItemDetail } from '../types';
 import { fold, stripMd } from './md';
@@ -11,11 +11,11 @@ export interface SearchItem {
   title: string;
   subtitle: string;
   href: string;
-  /** Весь текст записи без разметки — из него берётся отрывок. */
+  /** The whole text of an entry without markup: the excerpt is taken from it. */
   text: string;
   folded: string;
   foldedTitle: string;
-  /** Предмет базы: открывается в инспекторе вики, а не по ссылке. */
+  /** A database item: it opens in the wiki inspector, not by a link. */
   itemId?: number;
   icon?: string;
 }
@@ -51,19 +51,19 @@ export interface SearchSources {
   typeLabel: Record<string, string>;
 }
 
-/** Весь текст шага: названия, NPC, предметы, действия и советы — чтобы находить шаг по любому из них. */
+/** The whole text of a step: titles, NPCs, items, actions and tips, so that a step is found by any of them. */
 export function stepText(s: Step): string {
-  const itemsText = [...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])].map((i) => `${i.nameEn} ${i.nameRu}`);
+  const itemsText = [...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])].map((i) => i.nameEn);
   const parts = [
-    s.titleRu,
-    s.npc && `${s.npc.nameEn} ${s.npc.nameRu} ${s.npc.location}`,
+    s.title,
+    s.npc && `${s.npc.nameEn} ${s.npc.location}`,
     s.where, s.bring, s.how,
     ...itemsText,
     ...(s.quickSteps ?? []),
     s.proTip, s.safespot, s.reward,
     ...(s.fields ?? []).map((f) => (f.label ? `${f.label}: ${f.text}` : f.text)),
     ...(s.tips ?? []),
-    `Готово, когда: ${s.doneWhen}`,
+    `Done when: ${s.doneWhen}`,
   ];
   return stripMd(parts.filter(Boolean).join('\n'));
 }
@@ -71,31 +71,31 @@ export function stepText(s: Step): string {
 export function buildIndex({ steps, skills, reference, plugins, items = [], typeLabel }: SearchSources): SearchItem[] {
   const out: SearchItem[] = [];
   for (const s of steps) {
-    out.push(item('step', s.title, `${typeLabel[s.type]} · этап ${s.stage}${s.membersOnly ? ' · Members' : ''}`, `#/step/${s.id}`, stepText(s), s.id));
+    out.push(item('step', s.title, `${typeLabel[s.type]} · stage ${s.stage}${s.membersOnly ? ' · Members' : ''}`, `#/step/${s.id}`, stepText(s), s.id));
   }
   for (const it of items) {
-    const row = item('item', it.nameEn, it.nameRu ?? 'Предмет', `item:${it.id}`, it.nameRu ?? '');
+    const row = item('item', it.nameEn, 'Item', `item:${it.id}`, '');
     out.push({ ...row, itemId: it.id, icon: it.iconUrl });
   }
   for (const sk of skills) {
     for (const r of sk.plan.ranges) {
-      out.push(item('range', r.what, `${sk.name} · уровни ${r.levels}`, `#/skills/${sk.id}`, stripMd(r.cells.slice(2).join(' · ')), r.code));
+      out.push(item('range', r.what, `${sk.name} · levels ${r.levels}`, `#/skills/${sk.id}`, stripMd(r.cells.slice(2).join(' · ')), r.code));
     }
     const text = [blocksText(sk.intro), ...sk.sections.map((sec) => `${sec.title}\n${blocksText(sec.blocks)}`)].join('\n');
-    out.push(item('skill', sk.name, sk.nameEn ?? sk.subtitle ?? 'Навык', `#/skills/${sk.id}`, text));
+    out.push(item('skill', sk.name, sk.nameEn ?? sk.subtitle ?? 'Skill', `#/skills/${sk.id}`, text));
   }
   for (const sec of reference.sections) {
     if (sec.id === 'plugins') continue;
-    out.push(item('ref', sec.title, 'Справка', `#/reference/${sec.id}`, blocksText(sec.blocks)));
+    out.push(item('ref', sec.title, 'Reference', `#/reference/${sec.id}`, blocksText(sec.blocks)));
   }
-  out.push(item('ref', reference.training.title, 'Навыки', '#/skills', blocksText(reference.training.blocks)));
-  // Разбор снаряжения — страница программы, а не раздел гайда: находится по словам, которыми его ищут.
-  out.push(item('ref', 'Снаряжение: оружие, амулет, броня', 'Что надеть и купить, чтобы бить быстрее', '#/gear',
-    'Разбор снаряжения: оружие, амулет, броня, экипировка, апгрейд, усиление. Ятаган (scimitar), меч, амулет силы — '
-    + 'что лучше при твоих уровнях, где купить, сколько накопить. Equipment, gear, weapon, armour, upgrade.'));
+  out.push(item('ref', reference.training.title, 'Skills', '#/skills', blocksText(reference.training.blocks)));
+  // Gear analysis is an app page, not a guide section: it is found by the words people search it with.
+  out.push(item('ref', 'Gear: weapon, amulet, armour', 'What to wear and buy to hit faster', '#/gear',
+    'Gear analysis: weapon, amulet, armour, equipment, upgrade, boost. Scimitar, sword, amulet of strength: '
+    + 'what is better at your levels, where to buy, how much to save. Equipment, gear, weapon, armour, upgrade.'));
   for (const g of plugins.groups) {
     for (const pl of g.plugins) {
-      out.push(item('plugin', pl.name, `Плагин · ${pl.sourceLabel} · ${g.title}`, `#/reference/plugins`, pl.why));
+      out.push(item('plugin', pl.name, `Plugin · ${pl.sourceLabel} · ${g.title}`, `#/reference/plugins`, pl.why));
     }
   }
   return out;

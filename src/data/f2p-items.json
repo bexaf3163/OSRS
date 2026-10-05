@@ -2,7 +2,6 @@
   {
     "id": 890,
     "nameEn": "Adamant arrow",
-    "nameRu": "Адамантовая стрела",
     "examine": "Arrows with adamant heads.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_arrow_1.png",
@@ -130,7 +129,6 @@
   {
     "id": 1357,
     "nameEn": "Adamant axe",
-    "nameRu": "Адамантовый топор",
     "examine": "A powerful axe.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_axe.png",
@@ -202,7 +200,6 @@
   {
     "id": 1161,
     "nameEn": "Adamant full helm",
-    "nameRu": "Адамантовый полный шлем",
     "examine": "A full face helmet.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_full_helm.png",
@@ -290,7 +287,6 @@
   {
     "id": 1199,
     "nameEn": "Adamant kiteshield",
-    "nameRu": "Адамантовый кайтовый щит",
     "examine": "A large metal shield.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_kiteshield.png",
@@ -370,7 +366,6 @@
   {
     "id": 1271,
     "nameEn": "Adamant pickaxe",
-    "nameRu": "Адамантовая кирка",
     "examine": "Used for mining.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_pickaxe.png",
@@ -444,7 +439,6 @@
   {
     "id": 1123,
     "nameEn": "Adamant platebody",
-    "nameRu": "Адамантовый нагрудник",
     "examine": "Provides excellent protection.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_platebody.png",
@@ -454,7 +448,7 @@
     "buyLocations": [
       {
         "shopName": "Valaine's Shop of Champions.",
-        "location": "1st floor (2-й этаж) of Champions' Guild",
+        "location": "1st floor of Champions' Guild",
         "owner": "Valaine",
         "price": 21632,
         "stock": 1,
@@ -540,7 +534,6 @@
   {
     "id": 1073,
     "nameEn": "Adamant platelegs",
-    "nameRu": "Адамантовые поножи",
     "examine": "These look pretty heavy.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_platelegs.png",
@@ -628,7 +621,6 @@
   {
     "id": 1331,
     "nameEn": "Adamant scimitar",
-    "nameRu": "Адамантовый ятаган",
     "examine": "A vicious, curved sword.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_scimitar.png",
@@ -700,7 +692,6 @@
   {
     "id": 2361,
     "nameEn": "Adamantite bar",
-    "nameRu": "Адамантовый слиток",
     "examine": "It's a bar of adamantite.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Adamantite_bar.png",
@@ -754,7 +745,6 @@
   {
     "id": 449,
     "nameEn": "Adamantite ore",
-    "nameRu": "Адамантовая руда",
     "examine": "This needs refining.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Adamantite_ore.png",
@@ -850,7 +840,6 @@
   {
     "id": 556,
     "nameEn": "Air rune",
-    "nameRu": "Руна воздуха",
     "examine": "One of the 4 basic elemental Runes.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png",
@@ -943,7 +932,7 @@
       "East of Draynor jail",
       "Musa Point - behind Luthas' house",
       "Wilderness - Dark Warriors' Fortress",
-      "West of Ralos' Rise (только для подписки)"
+      "West of Ralos' Rise (members only)"
     ],
     "dropSources": [
       {
@@ -992,7 +981,6 @@
   {
     "id": 1438,
     "nameEn": "Air talisman",
-    "nameRu": "Талисман воздуха",
     "examine": "A mysterious power emanates from the talisman...",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Air_talisman.png",
@@ -1046,7 +1034,6 @@
   {
     "id": 1478,
     "nameEn": "Amulet of accuracy",
-    "nameRu": "Амулет точности",
     "examine": "It increases my aim.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_accuracy.png",
@@ -1058,7 +1045,6 @@
   {
     "id": 1731,
     "nameEn": "Amulet of power",
-    "nameRu": "Амулет мощи",
     "examine": "An enchanted diamond amulet of power.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_power.png",
@@ -1092,7 +1078,6 @@
   {
     "id": 1725,
     "nameEn": "Amulet of strength",
-    "nameRu": "Амулет силы",
     "examine": "An enchanted ruby amulet.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_strength.png",
@@ -1126,7 +1111,6 @@
   {
     "id": 319,
     "nameEn": "Anchovies",
-    "nameRu": "Анчоусы",
     "examine": "Some nicely cooked anchovies.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Anchovies.png",
@@ -1138,7 +1122,6 @@
   {
     "id": 1540,
     "nameEn": "Anti-dragon shield",
-    "nameRu": "Щит от драконьего огня",
     "examine": "This provides partial protection from dragonbreath attacks.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Anti-dragon_shield.png",
@@ -1160,7 +1143,6 @@
   {
     "id": 2446,
     "nameEn": "Antipoison(4)",
-    "nameRu": "Противоядие",
     "examine": "4 doses of antipoison potion.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Antipoison(4).png",
@@ -1172,7 +1154,6 @@
   {
     "id": 592,
     "nameEn": "Ashes",
-    "nameRu": "Пепел",
     "examine": "A heap of ashes.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Ashes.png",
@@ -1180,8 +1161,8 @@
     "highAlch": 1,
     "lowAlch": 1,
     "freeSpawns": [
-      "Bandits' camp north-east of Ralos' Rise (только для подписки)",
-      "Sisterhood Sanctuary (только для подписки)"
+      "Bandits' camp north-east of Ralos' Rise (members only)",
+      "Sisterhood Sanctuary (members only)"
     ],
     "dropSources": [
       {
@@ -1230,7 +1211,6 @@
   {
     "id": 2428,
     "nameEn": "Attack potion(4)",
-    "nameRu": "Зелье атаки",
     "examine": "4 doses of Attack potion.",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Attack_potion(4).png",
@@ -1249,7 +1229,6 @@
   {
     "id": 1759,
     "nameEn": "Ball of wool",
-    "nameRu": "Клубок шерсти",
     "examine": "Spun from wool.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Ball_of_wool.png",
@@ -1339,7 +1318,7 @@
       }
     ],
     "freeSpawns": [
-      "Civitas illa Fortis 1st floor (2-й этаж) (только для подписки)"
+      "Civitas illa Fortis 1st floor (members only)"
     ],
     "dropSources": [
       {
@@ -1378,7 +1357,6 @@
   {
     "id": 1917,
     "nameEn": "Beer",
-    "nameRu": "Пиво",
     "examine": "A glass of frothy ale.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Beer.png",
@@ -1469,11 +1447,11 @@
       "Barbarian Village",
       "Ferox Enclave - The Old Nite pub (Telegrab only)",
       "Old School Museum - Lower floor (Telegrab only)",
-      "Combat Training Camp (только для подписки)",
-      "Brimhaven - Dead Man's Chest pub (только для подписки)",
-      "Desert Mining Camp (только для подписки)",
-      "Shayzien (только для подписки)",
-      "Shayziens' Wall - northern outpost (только для подписки)"
+      "Combat Training Camp (members only)",
+      "Brimhaven - Dead Man's Chest pub (members only)",
+      "Desert Mining Camp (members only)",
+      "Shayzien (members only)",
+      "Shayziens' Wall - northern outpost (members only)"
     ],
     "dropSources": [
       {
@@ -1522,7 +1500,6 @@
   {
     "id": 532,
     "nameEn": "Big bones",
-    "nameRu": "Большие кости",
     "examine": "Ew it's a pile of bones.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Big_bones.png",
@@ -1531,12 +1508,12 @@
     "lowAlch": 1,
     "freeSpawns": [
       "Wilderness - Bone Yard",
-      "Shayzien - Giant Pit (только для подписки)",
-      "Wolf Den - after killing the Dire Wolf Alpha (только для подписки)",
-      "Trollweiss Mountain summit (только для подписки)",
-      "Colossal Wyrm Remains (one requires telegrab) (только для подписки)",
-      "Here be minotaurs (только для подписки)",
-      "Isle of Bones (только для подписки)"
+      "Shayzien - Giant Pit (members only)",
+      "Wolf Den - after killing the Dire Wolf Alpha (members only)",
+      "Trollweiss Mountain summit (members only)",
+      "Colossal Wyrm Remains (one requires telegrab) (members only)",
+      "Here be minotaurs (members only)",
+      "Isle of Bones (members only)"
     ],
     "dropSources": [
       {
@@ -1585,7 +1562,6 @@
   {
     "id": 1474,
     "nameEn": "Black bead",
-    "nameRu": "Чёрная бусина",
     "examine": "A small round black bead.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Black_bead.png",
@@ -1604,7 +1580,6 @@
   {
     "id": 1767,
     "nameEn": "Blue dye",
-    "nameRu": "Синий краситель",
     "examine": "A little bottle of blue dye.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Blue_dye.png",
@@ -1642,7 +1617,6 @@
   {
     "id": 577,
     "nameEn": "Blue wizard robe",
-    "nameRu": "Синяя мантия волшебника",
     "examine": "I can do magic better in this.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Blue_wizard_robe.png",
@@ -1661,7 +1635,6 @@
   {
     "id": 668,
     "nameEn": "Blurite ore",
-    "nameRu": "Синяя руда",
     "examine": "Definitely blue.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Blurite_ore.png",
@@ -1672,7 +1645,6 @@
   {
     "id": 559,
     "nameEn": "Body rune",
-    "nameRu": "Руна тела",
     "examine": "Used for curse spells.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Body_rune.png",
@@ -1767,7 +1739,7 @@
       "Wilderness - Dark Warriors' Fortress",
       "Wilderness - Lava Maze",
       "Varrock Sewers",
-      "Zeke's Superior Scimitars. - 1st floor (2-й этаж)"
+      "Zeke's Superior Scimitars. - 1st floor"
     ],
     "dropSources": [
       {
@@ -1816,7 +1788,6 @@
   {
     "id": 526,
     "nameEn": "Bones",
-    "nameRu": "Кости",
     "examine": "Bones are for burying!",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Bones.png",
@@ -1880,7 +1851,6 @@
   {
     "id": 2309,
     "nameEn": "Bread",
-    "nameRu": "Хлеб",
     "examine": "Nice crispy bread.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Bread.png",
@@ -1971,13 +1941,13 @@
     ],
     "freeSpawns": [
       "Corsair Cove Dungeon",
-      "East Ardougne - basement of the Carnillean Mansion (только для подписки)",
-      "Gwenith - inside Preswylwyr Dall's home (только для подписки)",
-      "South of Mount Quidamortem (только для подписки)",
-      "Sunset Coast 2nd floor (3-й этаж) (только для подписки)",
-      "Sunrise Palace 1st floor (2-й этаж) (только для подписки)",
-      "Outer Fortis 1st floor (2-й этаж) (только для подписки)",
-      "Cam Torum - basement of the south-western homes (только для подписки)"
+      "East Ardougne - basement of the Carnillean Mansion (members only)",
+      "Gwenith - inside Preswylwyr Dall's home (members only)",
+      "South of Mount Quidamortem (members only)",
+      "Sunset Coast 2nd floor (members only)",
+      "Sunrise Palace 1st floor (members only)",
+      "Outer Fortis 1st floor (members only)",
+      "Cam Torum - basement of the south-western homes (members only)"
     ],
     "dropSources": [
       {
@@ -2006,7 +1976,6 @@
   {
     "id": 882,
     "nameEn": "Bronze arrow",
-    "nameRu": "Бронзовая стрела",
     "examine": "Arrows with bronze heads.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_arrow_1.png",
@@ -2040,7 +2009,7 @@
       },
       {
         "shopName": "Bolkoy's Village Shop",
-        "location": "Tree Gnome Village, 1st floor (2-й этаж)",
+        "location": "Tree Gnome Village, 1st floor",
         "owner": "Bolkoy",
         "price": 1,
         "stock": 30,
@@ -2056,7 +2025,7 @@
       },
       {
         "shopName": "Gulluck and Sons",
-        "location": "Grand Tree, 2nd floor (3-й этаж)",
+        "location": "Grand Tree, 2nd floor",
         "owner": "Gulluck",
         "price": 1,
         "stock": 200,
@@ -2101,9 +2070,9 @@
       "Lumbridge Castle",
       "Rimmington - Brian's Archery Supplies",
       "Wilderness - south-west of Ferox Enclave",
-      "Great Kourend - eastern end of Lizardman Canyon (только для подписки)",
-      "Kharidian Desert - Uzer Hunter area (только для подписки)",
-      "Ranging Guild - shooting range (только для подписки)"
+      "Great Kourend - eastern end of Lizardman Canyon (members only)",
+      "Kharidian Desert - Uzer Hunter area (members only)",
+      "Ranging Guild - shooting range (members only)"
     ],
     "dropSources": [
       {
@@ -2152,7 +2121,6 @@
   {
     "id": 1351,
     "nameEn": "Bronze axe",
-    "nameRu": "Бронзовый топор",
     "examine": "A woodcutter's axe.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png",
@@ -2247,9 +2215,9 @@
       "Draynor Village - near Friendly Forester",
       "Lumbridge - outside Fred the Farmer's house",
       "Lumbridge - outside Seth Groats's house",
-      "Brimhaven - Dead Man's Chest pub (только для подписки)",
-      "Rellekka - near the rock crabs (только для подписки)",
-      "Tai Bwo Wannai - Hardwood Grove (только для подписки)"
+      "Brimhaven - Dead Man's Chest pub (members only)",
+      "Rellekka - near the rock crabs (members only)",
+      "Tai Bwo Wannai - Hardwood Grove (members only)"
     ],
     "dropSources": [
       {
@@ -2298,7 +2266,6 @@
   {
     "id": 2349,
     "nameEn": "Bronze bar",
-    "nameRu": "Бронзовый слиток",
     "examine": "It's a bar of bronze.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_bar.png",
@@ -2340,9 +2307,9 @@
       }
     ],
     "freeSpawns": [
-      "Brimhaven Dungeon (task-only area) (только для подписки)",
-      "Salius' Armour Shop (только для подписки)",
-      "Cam Torum (только для подписки)"
+      "Brimhaven Dungeon (task-only area) (members only)",
+      "Salius' Armour Shop (members only)",
+      "Cam Torum (members only)"
     ],
     "dropSources": [
       {
@@ -2391,7 +2358,6 @@
   {
     "id": 1139,
     "nameEn": "Bronze med helm",
-    "nameRu": "Бронзовый средний шлем",
     "examine": "A medium sized helmet.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_med_helm.png",
@@ -2417,7 +2383,7 @@
       },
       {
         "shopName": "Warrior Guild Armoury",
-        "location": "1st floor (2-й этаж) of Warriors' Guild",
+        "location": "1st floor of Warriors' Guild",
         "owner": "Anton",
         "price": 28,
         "stock": 5,
@@ -2433,7 +2399,7 @@
       }
     ],
     "freeSpawns": [
-      "Draynor Manor (Ground floor (1-й этаж))",
+      "Draynor Manor (Ground floor)",
       "Draynor Manor (Count Draynor's basement)"
     ],
     "dropSources": [
@@ -2483,7 +2449,6 @@
   {
     "id": 1265,
     "nameEn": "Bronze pickaxe",
-    "nameRu": "Бронзовая кирка",
     "examine": "Used for mining.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png",
@@ -2549,7 +2514,7 @@
       },
       {
         "shopName": "Bolkoy's Village Shop",
-        "location": "Tree Gnome Village, 1st floor (2-й этаж)",
+        "location": "Tree Gnome Village, 1st floor",
         "owner": "Bolkoy",
         "price": 1,
         "stock": 5,
@@ -2575,12 +2540,12 @@
     "freeSpawns": [
       "Barbarian Village - house with spinning wheel",
       "Giants' Plateau",
-      "Lumbridge Castle gatehouse (2nd floor (3-й этаж))",
+      "Lumbridge Castle gatehouse (2nd floor)",
       "Mining Guild building",
       "Rimmington - Anja and Hengel's house",
-      "Abandoned Mine - level 2 (только для подписки)",
-      "Abandoned Mine - level 4 (только для подписки)",
-      "Ape Atoll - Temple of Marimbo (только для подписки)"
+      "Abandoned Mine - level 2 (members only)",
+      "Abandoned Mine - level 4 (members only)",
+      "Ape Atoll - Temple of Marimbo (members only)"
     ],
     "dropSources": [
       {
@@ -2629,7 +2594,6 @@
   {
     "id": 1321,
     "nameEn": "Bronze scimitar",
-    "nameRu": "Бронзовый ятаган",
     "examine": "A vicious, curved sword.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_scimitar.png",
@@ -2687,9 +2651,9 @@
       }
     ],
     "freeSpawns": [
-      "Corsair Cove - Arsen the Thief's house (1st floor (2-й этаж))",
+      "Corsair Cove - Arsen the Thief's house (1st floor)",
       "Giants' Plateau",
-      "Rimmington - Anja and Hengel's house (1st floor (2-й этаж))"
+      "Rimmington - Anja and Hengel's house (1st floor)"
     ],
     "dropSources": [
       {
@@ -2738,7 +2702,6 @@
   {
     "id": 1925,
     "nameEn": "Bucket",
-    "nameRu": "Ведро",
     "examine": "It's a wooden bucket.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Bucket.png",
@@ -2835,7 +2798,7 @@
       "Goblin Village - general's house",
       "Lumbridge - farm house south of the hops patch",
       "Lumbridge Castle cellar",
-      "Varrock Palace (1st floor (2-й этаж))"
+      "Varrock Palace (1st floor)"
     ],
     "dropSources": [
       {
@@ -2884,7 +2847,6 @@
   {
     "id": 1927,
     "nameEn": "Bucket of milk",
-    "nameRu": "Ведро молока",
     "examine": "It's a bucket of milk.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_milk.png",
@@ -2942,15 +2904,14 @@
       }
     ],
     "freeSpawns": [
-      "Rellekka (только для подписки)",
-      "Wyrmscraig (только для подписки)"
+      "Rellekka (members only)",
+      "Wyrmscraig (members only)"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Bucket_of_milk"
   },
   {
     "id": 1929,
     "nameEn": "Bucket of water",
-    "nameRu": "Ведро воды",
     "examine": "It's a bucket of water.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Bucket_of_water.png",
@@ -3009,13 +2970,13 @@
     ],
     "freeSpawns": [
       "Ferox Enclave - The Old Nite pub",
-      "Cam Torum - 1st floor (2-й этаж) of The Lost Pickaxe (только для подписки)",
-      "Catherby - Caleb's house (только для подписки)",
-      "Catherby - house north of Hickton's Archery Emporium (только для подписки)",
-      "Gwenith - inside Preswylwyr Dall's home (только для подписки)",
-      "Meiyerditch - all around the city (только для подписки)",
-      "Meiyerditch - upper floor of buildings (только для подписки)",
-      "Brimhaven - south-west of the spirit tree patch (только для подписки)"
+      "Cam Torum - 1st floor of The Lost Pickaxe (members only)",
+      "Catherby - Caleb's house (members only)",
+      "Catherby - house north of Hickton's Archery Emporium (members only)",
+      "Gwenith - inside Preswylwyr Dall's home (members only)",
+      "Meiyerditch - all around the city (members only)",
+      "Meiyerditch - upper floor of buildings (members only)",
+      "Brimhaven - south-west of the spirit tree patch (members only)"
     ],
     "dropSources": [
       {
@@ -3054,13 +3015,12 @@
   {
     "id": 2146,
     "nameEn": "Burnt meat",
-    "nameRu": "Горелое мясо",
     "examine": "Oh dear, it's totally burnt!",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Burnt_meat.png",
     "value": 1,
     "freeSpawns": [
-      "Weiss (только для подписки)"
+      "Weiss (members only)"
     ],
     "dropSources": [
       {
@@ -3074,7 +3034,6 @@
   {
     "id": 1965,
     "nameEn": "Cabbage",
-    "nameRu": "Капуста",
     "examine": "Yuck I don't like cabbage.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Cabbage.png",
@@ -3165,7 +3124,7 @@
       "Al Kharid Palace - western room",
       "Lumbridge Castle cellar",
       "Realm of Memories",
-      "Kebos Lowlands - Battlefront (только для подписки)"
+      "Kebos Lowlands - Battlefront (members only)"
     ],
     "dropSources": [
       {
@@ -3214,7 +3173,6 @@
   {
     "id": 753,
     "nameEn": "Cadava berries",
-    "nameRu": "Ягоды кадавы",
     "examine": "Poisonous berries.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Cadava_berries.png",
@@ -3233,7 +3191,6 @@
   {
     "id": 562,
     "nameEn": "Chaos rune",
-    "nameRu": "Руна хаоса",
     "examine": "Used for low level missile spells.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_rune.png",
@@ -3325,7 +3282,7 @@
     "freeSpawns": [
       "Wilderness - Wilderness Pond",
       "Wilderness - Dark Warriors' Fortress",
-      "Trollweiss Mountain - first slide down (только для подписки)"
+      "Trollweiss Mountain - first slide down (members only)"
     ],
     "dropSources": [
       {
@@ -3374,7 +3331,6 @@
   {
     "id": 1755,
     "nameEn": "Chisel",
-    "nameRu": "Долото",
     "examine": "Good for detailed crafting.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Chisel.png",
@@ -3465,13 +3421,13 @@
     ],
     "freeSpawns": [
       "Crafting Guild",
-      "Abandoned Mine - level 4 (только для подписки)",
-      "Cam Torum - on a crate in blacksmith basement (только для подписки)",
-      "Civitas illa Fortis - on a crate in the Fortis Blacksmith store (только для подписки)",
-      "Dense essence mine (только для подписки)",
-      "East Ardougne - Wizard Cromperty's house (только для подписки)",
-      "Isle of Souls - bench near anvil (только для подписки)",
-      "Necropolis mine - south-east of Sophanem (только для подписки)"
+      "Abandoned Mine - level 4 (members only)",
+      "Cam Torum - on a crate in blacksmith basement (members only)",
+      "Civitas illa Fortis - on a crate in the Fortis Blacksmith store (members only)",
+      "Dense essence mine (members only)",
+      "East Ardougne - Wizard Cromperty's house (members only)",
+      "Isle of Souls - bench near anvil (members only)",
+      "Necropolis mine - south-east of Sophanem (members only)"
     ],
     "dropSources": [
       {
@@ -3495,7 +3451,6 @@
   {
     "id": 13660,
     "nameEn": "Chronicle",
-    "nameRu": "Хроника",
     "examine": "The legends of RuneScape.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Chronicle.png",
@@ -3523,7 +3478,6 @@
   {
     "id": 434,
     "nameEn": "Clay",
-    "nameRu": "Глина",
     "examine": "Some hard dry clay.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Clay.png",
@@ -3531,7 +3485,7 @@
     "highAlch": 1,
     "lowAlch": 1,
     "freeSpawns": [
-      "Darkmeyer - lower tier (только для подписки)"
+      "Darkmeyer - lower tier (members only)"
     ],
     "dropSources": [
       {
@@ -3575,7 +3529,6 @@
   {
     "id": 453,
     "nameEn": "Coal",
-    "nameRu": "Уголь",
     "examine": "Hmm a non-renewable energy source!",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Coal.png",
@@ -3687,7 +3640,6 @@
   {
     "id": 1169,
     "nameEn": "Coif",
-    "nameRu": "Капюшон",
     "examine": "Light weight head protection.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Coif.png",
@@ -3717,7 +3669,6 @@
   {
     "id": 995,
     "nameEn": "Coins",
-    "nameRu": "Монеты",
     "examine": "Lovely money!",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png",
@@ -3779,7 +3730,6 @@
   {
     "id": 2140,
     "nameEn": "Cooked chicken",
-    "nameRu": "Жареная курица",
     "examine": "Mmm this looks tasty.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Cooked_chicken.png",
@@ -3787,14 +3737,13 @@
     "highAlch": 2,
     "lowAlch": 1,
     "freeSpawns": [
-      "Falador - Cassie's Shield Shop. (1st floor (2-й этаж))"
+      "Falador - Cassie's Shield Shop. (1st floor)"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Cooked_chicken"
   },
   {
     "id": 2142,
     "nameEn": "Cooked meat",
-    "nameRu": "Приготовленное мясо",
     "examine": "Mmm this looks tasty.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Cooked_meat.png",
@@ -3820,7 +3769,7 @@
       },
       {
         "shopName": "Bolkoy's Village Shop",
-        "location": "Tree Gnome Village, 1st floor (2-й этаж)",
+        "location": "Tree Gnome Village, 1st floor",
         "owner": "Bolkoy",
         "price": 5,
         "stock": 2,
@@ -3861,9 +3810,9 @@
     ],
     "freeSpawns": [
       "Barbarian Village - Long Hall",
-      "Corsair Cove - Arsen the Thief's house (1st floor (2-й этаж))",
-      "Shayziens' Wall - northern outpost (только для подписки)",
-      "Kebos Lowlands - General Vir's tent in the Battlefront (только для подписки)"
+      "Corsair Cove - Arsen the Thief's house (1st floor)",
+      "Shayziens' Wall - northern outpost (members only)",
+      "Kebos Lowlands - General Vir's tent in the Battlefront (members only)"
     ],
     "dropSources": [
       {
@@ -3907,7 +3856,6 @@
   {
     "id": 436,
     "nameEn": "Copper ore",
-    "nameRu": "Медная руда",
     "examine": "This needs refining.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Copper_ore.png",
@@ -4019,7 +3967,6 @@
   {
     "id": 564,
     "nameEn": "Cosmic rune",
-    "nameRu": "Космическая руна",
     "examine": "Used for enchant spells.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Cosmic_rune.png",
@@ -4118,7 +4065,6 @@
   {
     "id": 1739,
     "nameEn": "Cowhide",
-    "nameRu": "Коровья шкура",
     "examine": "I should take this to the tannery.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Cowhide.png",
@@ -4157,7 +4103,6 @@
   {
     "id": 560,
     "nameEn": "Death rune",
-    "nameRu": "Руна смерти",
     "examine": "Used for medium level missile spells.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Death_rune.png",
@@ -4247,7 +4192,7 @@
       }
     ],
     "freeSpawns": [
-      "Feldip Hills - west of the gnome glider (только для подписки)"
+      "Feldip Hills - west of the gnome glider (members only)"
     ],
     "dropSources": [
       {
@@ -4296,7 +4241,6 @@
   {
     "id": 772,
     "nameEn": "Dramen staff",
-    "nameRu": "Посох Драмен",
     "examine": "Crafted from a Dramen tree branch.",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Dramen_staff.png",
@@ -4307,7 +4251,6 @@
   {
     "id": 557,
     "nameEn": "Earth rune",
-    "nameRu": "Руна земли",
     "examine": "One of the 4 basic elemental Runes.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Earth_rune.png",
@@ -4400,7 +4343,7 @@
       "Varrock - north-east of the Grand Exchange",
       "Wilderness - Dark Warriors' Fortress",
       "Varrock Sewers - western end",
-      "West of Ralos' Rise (только для подписки)"
+      "West of Ralos' Rise (members only)"
     ],
     "dropSources": [
       {
@@ -4449,7 +4392,6 @@
   {
     "id": 4278,
     "nameEn": "Ecto-token",
-    "nameRu": "Экто-жетон",
     "examine": "A token with ectoplasm on it.",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Ecto-token_1.png",
@@ -4459,7 +4401,6 @@
   {
     "id": 1944,
     "nameEn": "Egg",
-    "nameRu": "Яйцо",
     "examine": "A nice fresh egg.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Egg.png",
@@ -4488,11 +4429,11 @@
       "Falador farm",
       "Lumbridge - north-west of Fred the Farmer's house",
       "Lumbridge - farm house south of the hops patch",
-      "Entrana - house north of the bridge (только для подписки)",
-      "Zanaris - Chicken shrine (только для подписки)",
-      "Kebos Lowlands - Mary and Gordon's farm (только для подписки)",
-      "Tal Teklan (только для подписки)",
-      "Ortus Farm (только для подписки)"
+      "Entrana - house north of the bridge (members only)",
+      "Zanaris - Chicken shrine (members only)",
+      "Kebos Lowlands - Mary and Gordon's farm (members only)",
+      "Tal Teklan (members only)",
+      "Ortus Farm (members only)"
     ],
     "dropSources": [
       {
@@ -4506,7 +4447,6 @@
   {
     "id": 3008,
     "nameEn": "Energy potion(4)",
-    "nameRu": "Зелье энергии",
     "examine": "4 doses of energy potion.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png",
@@ -4560,7 +4500,6 @@
   {
     "id": 221,
     "nameEn": "Eye of newt",
-    "nameRu": "Глаз тритона",
     "examine": "It seems to be looking at me.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Eye_of_newt.png",
@@ -4602,7 +4541,7 @@
       },
       {
         "shopName": "Myths' Guild Herbalist",
-        "location": "Myths' Guild, 1st floor (2-й этаж)",
+        "location": "Myths' Guild, 1st floor",
         "owner": "Primula",
         "price": 3,
         "stock": 50,
@@ -4688,7 +4627,6 @@
   {
     "id": 314,
     "nameEn": "Feather",
-    "nameRu": "Перо",
     "examine": "Used for fly fishing.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Feather.png",
@@ -4778,10 +4716,10 @@
       }
     ],
     "freeSpawns": [
-      "Kebos Lowlands - Mary and Gordon's farm (только для подписки)",
-      "Hosidius - Jonathan's house (1st floor (2-й этаж)) (Telegrab) (только для подписки)",
-      "Sunset Coast (только для подписки)",
-      "The Summer Shore (только для подписки)"
+      "Kebos Lowlands - Mary and Gordon's farm (members only)",
+      "Hosidius - Jonathan's house (1st floor) (Telegrab) (members only)",
+      "Sunset Coast (members only)",
+      "The Summer Shore (members only)"
     ],
     "dropSources": [
       {
@@ -4830,7 +4768,6 @@
   {
     "id": 554,
     "nameEn": "Fire rune",
-    "nameRu": "Руна огня",
     "examine": "One of the 4 basic elemental Runes.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Fire_rune.png",
@@ -4923,8 +4860,8 @@
       "Wilderness - Dark Warriors' Fortress",
       "Al Kharid mine - northern end",
       "Crandor and Karamja Dungeon - lesser demon area",
-      "Camelot - 1st floor (2-й этаж) of castle (только для подписки)",
-      "Chasm of Fire - lowest level (только для подписки)"
+      "Camelot - 1st floor of castle (members only)",
+      "Chasm of Fire - lowest level (members only)"
     ],
     "dropSources": [
       {
@@ -4973,7 +4910,6 @@
   {
     "id": 313,
     "nameEn": "Fishing bait",
-    "nameRu": "Наживка",
     "examine": "For use with a fishing rod.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Fishing_bait.png",
@@ -5063,7 +4999,7 @@
       }
     ],
     "freeSpawns": [
-      "Kastori (только для подписки)"
+      "Kastori (members only)"
     ],
     "dropSources": [
       {
@@ -5112,7 +5048,6 @@
   {
     "id": 307,
     "nameEn": "Fishing rod",
-    "nameRu": "Удочка",
     "examine": "Useful for catching sardine or herring.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Fishing_rod.png",
@@ -5201,12 +5136,12 @@
       }
     ],
     "freeSpawns": [
-      "Entrana - building next to fishing platform (только для подписки)",
-      "Isle of Souls (только для подписки)",
-      "Meiyerditch Laboratories (только для подписки)",
-      "Ruins of Unkah (только для подписки)",
-      "Sunset Coast (только для подписки)",
-      "Auburn Valley (только для подписки)"
+      "Entrana - building next to fishing platform (members only)",
+      "Isle of Souls (members only)",
+      "Meiyerditch Laboratories (members only)",
+      "Ruins of Unkah (members only)",
+      "Sunset Coast (members only)",
+      "Auburn Valley (members only)"
     ],
     "dropSources": [
       {
@@ -5225,7 +5160,6 @@
   {
     "id": 309,
     "nameEn": "Fly fishing rod",
-    "nameRu": "Удочка нахлыстом",
     "examine": "Useful for catching salmon or trout.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Fly_fishing_rod.png",
@@ -5315,15 +5249,14 @@
       }
     ],
     "freeSpawns": [
-      "Isle of Souls (только для подписки)",
-      "Sunset Coast (только для подписки)"
+      "Isle of Souls (members only)",
+      "Sunset Coast (members only)"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Fly_fishing_rod"
   },
   {
     "id": 2084,
     "nameEn": "Fruit blast",
-    "nameRu": "Фруктовый коктейль",
     "examine": "A cool refreshing fruit mix.",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Fruit_blast.png",
@@ -5335,7 +5268,6 @@
   {
     "id": 1550,
     "nameEn": "Garlic",
-    "nameRu": "Чеснок",
     "examine": "A clove of garlic.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Garlic.png",
@@ -5393,8 +5325,8 @@
       }
     ],
     "freeSpawns": [
-      "East Ardougne (только для подписки)",
-      "Seers' Village (только для подписки)"
+      "East Ardougne (members only)",
+      "Seers' Village (members only)"
     ],
     "dropSources": [
       {
@@ -5408,7 +5340,6 @@
   {
     "id": 552,
     "nameEn": "Ghostspeak amulet",
-    "nameRu": "Амулет разговора с духами",
     "examine": "It lets me talk to ghosts.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Ghostspeak_amulet.png",
@@ -5419,7 +5350,6 @@
   {
     "id": 294,
     "nameEn": "Glarial's pebble",
-    "nameRu": "Камешек Глариал",
     "examine": "A small pebble with elven inscription.",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Glarial's_pebble.png",
@@ -5429,7 +5359,6 @@
   {
     "id": 288,
     "nameEn": "Goblin mail",
-    "nameRu": "Гоблинская кольчуга",
     "examine": "Some brown armour designed to fit goblins.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Goblin_mail.png",
@@ -5478,7 +5407,6 @@
   {
     "id": 2357,
     "nameEn": "Gold bar",
-    "nameRu": "Золотой слиток",
     "examine": "It's a bar of gold.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Gold_bar.png",
@@ -5507,7 +5435,7 @@
       "Varrock - west bank basement",
       "Corsair Cove Dungeon - eastern end",
       "Corsair Cove Dungeon - northern end",
-      "Civitas illa Fortis - Thieves hideout (1st floor (2-й этаж)) (только для подписки)"
+      "Civitas illa Fortis - Thieves hideout (1st floor) (members only)"
     ],
     "dropSources": [
       {
@@ -5556,7 +5484,6 @@
   {
     "id": 444,
     "nameEn": "Gold ore",
-    "nameRu": "Золотая руда",
     "examine": "This needs refining.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Gold_ore.png",
@@ -5608,9 +5535,9 @@
     "freeSpawns": [
       "Varrock - west bank basement",
       "Ruins (east), level 27 Wilderness",
-      "North Brimhaven mine (только для подписки)",
-      "Rogues' Castle (3rd floor (4-й этаж)), level 53 Wilderness (только для подписки)",
-      "Rogues' Castle (Ground floor (1-й этаж)), level 53 Wilderness (только для подписки)"
+      "North Brimhaven mine (members only)",
+      "Rogues' Castle (3rd floor), level 53 Wilderness (members only)",
+      "Rogues' Castle (Ground floor), level 53 Wilderness (members only)"
     ],
     "dropSources": [
       {
@@ -5659,7 +5586,6 @@
   {
     "id": 1135,
     "nameEn": "Green d'hide body",
-    "nameRu": "Куртка из зелёной драконьей кожи",
     "examine": "Made from 100% real dragonhide.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Green_d'hide_body.png",
@@ -5723,7 +5649,6 @@
   {
     "id": 1065,
     "nameEn": "Green d'hide vambraces",
-    "nameRu": "Наручи из зелёной драконьей кожи",
     "examine": "Vambraces made from 100% real dragonhide.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Green_d'hide_vambraces.png",
@@ -5753,7 +5678,6 @@
   {
     "id": 1909,
     "nameEn": "Greenman's ale",
-    "nameRu": "Эль Гринмена",
     "examine": "A glass of frothy ale.",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Greenman's_ale.png",
@@ -5807,7 +5731,6 @@
   {
     "id": 2347,
     "nameEn": "Hammer",
-    "nameRu": "Молот",
     "examine": "Good for hitting things!",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Hammer.png",
@@ -5901,10 +5824,10 @@
       "Giants' Plateau",
       "Falador - upstairs of the furnace building",
       "Ruins of Camdozaal",
-      "Aldarin (только для подписки)",
-      "Auburnvale (только для подписки)",
-      "Buccaneers' Haven (1st floor (2-й этаж)) (только для подписки)",
-      "Burgh de Rott - upstairs (только для подписки)"
+      "Aldarin (members only)",
+      "Auburnvale (members only)",
+      "Buccaneers' Haven (1st floor) (members only)",
+      "Burgh de Rott - upstairs (members only)"
     ],
     "dropSources": [
       {
@@ -5953,7 +5876,6 @@
   {
     "id": 1743,
     "nameEn": "Hard leather",
-    "nameRu": "Жёсткая кожа",
     "examine": "It's a piece of hard leather.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Hard_leather.png",
@@ -5982,7 +5904,6 @@
   {
     "id": 311,
     "nameEn": "Harpoon",
-    "nameRu": "Гарпун",
     "examine": "Useful for catching really big fish.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Harpoon.png",
@@ -6072,9 +5993,9 @@
       }
     ],
     "freeSpawns": [
-      "Buccaneers' Haven (только для подписки)",
-      "Fishing Guild (только для подписки)",
-      "Ruins of Unkah (только для подписки)"
+      "Buccaneers' Haven (members only)",
+      "Fishing Guild (members only)",
+      "Ruins of Unkah (members only)"
     ],
     "dropSources": [
       {
@@ -6093,7 +6014,6 @@
   {
     "id": 1718,
     "nameEn": "Holy symbol",
-    "nameRu": "Святой символ",
     "examine": "A blessed holy symbol of Saradomin.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Holy_symbol.png",
@@ -6115,7 +6035,6 @@
   {
     "id": 884,
     "nameEn": "Iron arrow",
-    "nameRu": "Железная стрела",
     "examine": "Arrows with iron heads.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Iron_arrow_1.png",
@@ -6227,7 +6146,6 @@
   {
     "id": 1349,
     "nameEn": "Iron axe",
-    "nameRu": "Железный топор",
     "examine": "A woodcutter's axe.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Iron_axe.png",
@@ -6245,7 +6163,7 @@
       },
       {
         "shopName": "Gulluck and Sons",
-        "location": "Grand Tree, 2nd floor (3-й этаж)",
+        "location": "Grand Tree, 2nd floor",
         "owner": "Gulluck",
         "price": 56,
         "stock": 5,
@@ -6302,10 +6220,10 @@
     ],
     "freeSpawns": [
       "Varrock Sewers",
-      "Tai Bwo Wannai - Hardwood Grove (только для подписки)",
-      "Civitas illa Fortis 1st floor (2-й этаж) (только для подписки)",
-      "Auburnvale (только для подписки)",
-      "Tear of the Soul (только для подписки)"
+      "Tai Bwo Wannai - Hardwood Grove (members only)",
+      "Civitas illa Fortis 1st floor (members only)",
+      "Auburnvale (members only)",
+      "Tear of the Soul (members only)"
     ],
     "dropSources": [
       {
@@ -6354,7 +6272,6 @@
   {
     "id": 2351,
     "nameEn": "Iron bar",
-    "nameRu": "Железный слиток",
     "examine": "It's a bar of iron.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Iron_bar.png",
@@ -6373,11 +6290,11 @@
     ],
     "freeSpawns": [
       "Wilderness - north-west of Ferox Enclave",
-      "Brimhaven Dungeon (task-only area) (только для подписки)",
-      "Ghorrock Dungeon (только для подписки)",
-      "Mynydd (только для подписки)",
-      "Sunset Coast (только для подписки)",
-      "Shields of Mistrock (1st floor (2-й этаж)) (только для подписки)"
+      "Brimhaven Dungeon (task-only area) (members only)",
+      "Ghorrock Dungeon (members only)",
+      "Mynydd (members only)",
+      "Sunset Coast (members only)",
+      "Shields of Mistrock (1st floor) (members only)"
     ],
     "dropSources": [
       {
@@ -6426,7 +6343,6 @@
   {
     "id": 1101,
     "nameEn": "Iron chainbody",
-    "nameRu": "Железная кольчуга",
     "examine": "A series of connected metal rings.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Iron_chainbody.png",
@@ -6460,7 +6376,7 @@
       },
       {
         "shopName": "Warrior Guild Armoury",
-        "location": "1st floor (2-й этаж) of Warriors' Guild",
+        "location": "1st floor of Warriors' Guild",
         "owner": "Anton",
         "price": 252,
         "stock": 3,
@@ -6504,7 +6420,6 @@
   {
     "id": 440,
     "nameEn": "Iron ore",
-    "nameRu": "Железная руда",
     "examine": "This needs refining.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Iron_ore.png",
@@ -6616,7 +6531,6 @@
   {
     "id": 1267,
     "nameEn": "Iron pickaxe",
-    "nameRu": "Железная кирка",
     "examine": "Used for mining.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Iron_pickaxe.png",
@@ -6674,13 +6588,13 @@
       }
     ],
     "freeSpawns": [
-      "Digsite Dungeon - next to Doug Deeping (только для подписки)",
-      "Rellekka - near the rock crabs (только для подписки)",
-      "Varlamore - between the Harpie bug swarms (только для подписки)",
-      "Weiss - Salt Mines (только для подписки)",
-      "Blast mine (только для подписки)",
-      "Deepfin Point (только для подписки)",
-      "Wyrmscraig Cavern (только для подписки)"
+      "Digsite Dungeon - next to Doug Deeping (members only)",
+      "Rellekka - near the rock crabs (members only)",
+      "Varlamore - between the Harpie bug swarms (members only)",
+      "Weiss - Salt Mines (members only)",
+      "Blast mine (members only)",
+      "Deepfin Point (members only)",
+      "Wyrmscraig Cavern (members only)"
     ],
     "dropSources": [
       {
@@ -6729,7 +6643,6 @@
   {
     "id": 1115,
     "nameEn": "Iron platebody",
-    "nameRu": "Железный нагрудник",
     "examine": "Provides excellent protection.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Iron_platebody.png",
@@ -6771,7 +6684,7 @@
       }
     ],
     "freeSpawns": [
-      "Prifddinas - on a table in Aneirin's Armour (только для подписки)"
+      "Prifddinas - on a table in Aneirin's Armour (members only)"
     ],
     "dropSources": [
       {
@@ -6805,7 +6718,6 @@
   {
     "id": 1323,
     "nameEn": "Iron scimitar",
-    "nameRu": "Железный ятаган",
     "examine": "A vicious, curved sword.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Iron_scimitar.png",
@@ -6864,11 +6776,11 @@
     ],
     "freeSpawns": [
       "Wilderness - Bone Yard",
-      "Ruins of Morra (must be telegrabbed) (только для подписки)",
-      "South-west corner of the south-western temple in the Stranglewood (must be telegrabbed) (только для подписки)",
-      "West of Ortus Farm (только для подписки)",
-      "Northern most villa in Aldarin - 2nd floor (3-й этаж) (только для подписки)",
-      "Buccaneers' Haven (только для подписки)"
+      "Ruins of Morra (must be telegrabbed) (members only)",
+      "South-west corner of the south-western temple in the Stranglewood (must be telegrabbed) (members only)",
+      "West of Ortus Farm (members only)",
+      "Northern most villa in Aldarin - 2nd floor (members only)",
+      "Buccaneers' Haven (members only)"
     ],
     "dropSources": [
       {
@@ -6917,7 +6829,6 @@
   {
     "id": 1935,
     "nameEn": "Jug",
-    "nameRu": "Кувшин",
     "examine": "This jug is empty.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Jug.png",
@@ -7013,8 +6924,8 @@
       "Varrock - Ye olde Tea Shoppe",
       "Cooks' Guild",
       "Lumbridge Castle cellar",
-      "Slepe - Crombwick Manor (только для подписки)",
-      "Uzer Oasis - Cassim's house (только для подписки)"
+      "Slepe - Crombwick Manor (members only)",
+      "Uzer Oasis - Cassim's house (members only)"
     ],
     "dropSources": [
       {
@@ -7033,7 +6944,6 @@
   {
     "id": 431,
     "nameEn": "Karamjan rum",
-    "nameRu": "Карамджийский ром",
     "examine": "A very strong spirit brewed on Karamja.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Karamjan_rum.png",
@@ -7062,7 +6972,6 @@
   {
     "id": 75,
     "nameEn": "Khazard armour",
-    "nameRu": "Броня Хазарда",
     "examine": "Armour, as worn by the minions of General Khazard.",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Khazard_armour.png",
@@ -7073,7 +6982,6 @@
   {
     "id": 74,
     "nameEn": "Khazard helmet",
-    "nameRu": "Шлем Хазарда",
     "examine": "A helmet, as worn by the minions of General Khazard.",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Khazard_helmet.png",
@@ -7084,7 +6992,6 @@
   {
     "id": 946,
     "nameEn": "Knife",
-    "nameRu": "Нож",
     "examine": "A dangerous looking knife.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Knife.png",
@@ -7179,7 +7086,7 @@
       "Lumbridge Castle kitchen",
       "Musa Point - Karamja General Store",
       "Ruins of Camdozaal - near the Offering Altar",
-      "Varrock General Store (1st floor (2-й этаж))",
+      "Varrock General Store (1st floor)",
       "Varrock Sewers",
       "Wilderness - Lava Maze"
     ],
@@ -7230,7 +7137,6 @@
   {
     "id": 563,
     "nameEn": "Law rune",
-    "nameRu": "Руна закона",
     "examine": "Used for teleport spells.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Law_rune.png",
@@ -7342,7 +7248,6 @@
   {
     "id": 1741,
     "nameEn": "Leather",
-    "nameRu": "Кожа",
     "examine": "It's a piece of leather.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Leather.png",
@@ -7350,14 +7255,13 @@
     "highAlch": 1,
     "lowAlch": 1,
     "freeSpawns": [
-      "Shayzien Encampment (only obtainable with Telekinetic Grab) (только для подписки)"
+      "Shayzien Encampment (only obtainable with Telekinetic Grab) (members only)"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Leather"
   },
   {
     "id": 1129,
     "nameEn": "Leather body",
-    "nameRu": "Кожаная куртка",
     "examine": "Better than no armour!",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Leather_body.png",
@@ -7426,7 +7330,6 @@
   {
     "id": 1095,
     "nameEn": "Leather chaps",
-    "nameRu": "Кожаные штаны",
     "examine": "Better than no armour!",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Leather_chaps.png",
@@ -7448,7 +7351,6 @@
   {
     "id": 379,
     "nameEn": "Lobster",
-    "nameRu": "Омар",
     "examine": "This looks tricky to eat.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
@@ -7536,7 +7438,6 @@
   {
     "id": 301,
     "nameEn": "Lobster pot",
-    "nameRu": "Ловушка для омаров",
     "examine": "Useful for catching lobsters.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png",
@@ -7626,10 +7527,10 @@
       }
     ],
     "freeSpawns": [
-      "Isle of Souls (только для подписки)",
-      "Fishing Guild (только для подписки)",
-      "Ruins of Unkah (только для подписки)",
-      "Sunset Coast (только для подписки)"
+      "Isle of Souls (members only)",
+      "Fishing Guild (members only)",
+      "Ruins of Unkah (members only)",
+      "Sunset Coast (members only)"
     ],
     "dropSources": [
       {
@@ -7648,7 +7549,6 @@
   {
     "id": 1511,
     "nameEn": "Logs",
-    "nameRu": "Брёвна",
     "examine": "A number of wooden logs.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Logs.png",
@@ -7658,12 +7558,12 @@
     "freeSpawns": [
       "Citharede Abbey",
       "Draynor Village - Spria's house",
-      "Lumbridge Castle (2nd floor (3-й этаж))",
+      "Lumbridge Castle (2nd floor)",
       "Rimmington - Brian's Archery Supplies",
       "Tutorial Island - north of the Survival Expert",
       "Varrock - Old Man Yarlo's house",
-      "Wizards' Tower - staircase on (Ground floor (1-й этаж))",
-      "Civitas illa Fortis (только для подписки)"
+      "Wizards' Tower - staircase on (Ground floor)",
+      "Civitas illa Fortis (members only)"
     ],
     "dropSources": [
       {
@@ -7692,7 +7592,6 @@
   {
     "id": 1517,
     "nameEn": "Maple logs",
-    "nameRu": "Кленовые брёвна",
     "examine": "Logs cut from a maple tree.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Maple_logs.png",
@@ -7716,7 +7615,6 @@
   {
     "id": 853,
     "nameEn": "Maple shortbow",
-    "nameRu": "Кленовый короткий лук",
     "examine": "A shortbow made out of Maple, still effective.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Maple_shortbow.png",
@@ -7795,7 +7693,6 @@
   {
     "id": 11849,
     "nameEn": "Mark of Grace",
-    "nameRu": "Знак грации",
     "examine": "You can exchange these for rewards at the Rogues' Den.",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Mark_of_Grace.png",
@@ -7805,7 +7702,6 @@
   {
     "id": 1542,
     "nameEn": "Maze key",
-    "nameRu": "Ключ от лабиринта",
     "examine": "A key to Melzar's Maze (Used in the Dragon Slayer I quest).",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Maze_key.png",
@@ -7813,7 +7709,7 @@
     "buyLocations": [
       {
         "shopName": "Legends Guild Shop of Useful Items.",
-        "location": "2nd floor (3-й этаж) of Legends' Guild (west side)",
+        "location": "2nd floor of Legends' Guild (west side)",
         "owner": "Siegfried Erkle",
         "price": 1,
         "stock": 3,
@@ -7825,7 +7721,6 @@
   {
     "id": 558,
     "nameEn": "Mind rune",
-    "nameRu": "Руна разума",
     "examine": "Used for basic level missile spells.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Mind_rune.png",
@@ -7915,11 +7810,11 @@
       }
     ],
     "freeSpawns": [
-      "Lumbridge Castle (Ground floor (1-й этаж))",
+      "Lumbridge Castle (Ground floor)",
       "Wilderness - Dark Warriors' Fortress",
       "Varrock Sewers",
       "Wilderness - Bone Yard",
-      "Moss giants west of Ralos' Rise (только для подписки)"
+      "Moss giants west of Ralos' Rise (members only)"
     ],
     "dropSources": [
       {
@@ -7968,7 +7863,6 @@
   {
     "id": 888,
     "nameEn": "Mithril arrow",
-    "nameRu": "Мифриловая стрела",
     "examine": "Arrows with mithril heads.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_arrow_1.png",
@@ -8050,7 +7944,7 @@
       }
     ],
     "freeSpawns": [
-      "Ranging Guild - shooting range (только для подписки)"
+      "Ranging Guild - shooting range (members only)"
     ],
     "dropSources": [
       {
@@ -8099,7 +7993,6 @@
   {
     "id": 1355,
     "nameEn": "Mithril axe",
-    "nameRu": "Мифриловый топор",
     "examine": "A powerful axe.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_axe.png",
@@ -8171,7 +8064,6 @@
   {
     "id": 2359,
     "nameEn": "Mithril bar",
-    "nameRu": "Мифриловый слиток",
     "examine": "It's a bar of mithril.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_bar.png",
@@ -8225,7 +8117,6 @@
   {
     "id": 447,
     "nameEn": "Mithril ore",
-    "nameRu": "Мифриловая руда",
     "examine": "This needs refining.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_ore.png",
@@ -8329,7 +8220,6 @@
   {
     "id": 1273,
     "nameEn": "Mithril pickaxe",
-    "nameRu": "Мифриловая кирка",
     "examine": "Used for mining.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_pickaxe.png",
@@ -8408,7 +8298,6 @@
   {
     "id": 1121,
     "nameEn": "Mithril platebody",
-    "nameRu": "Мифриловый нагрудник",
     "examine": "Provides excellent protection.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_platebody.png",
@@ -8520,7 +8409,6 @@
   {
     "id": 1329,
     "nameEn": "Mithril scimitar",
-    "nameRu": "Мифриловый ятаган",
     "examine": "A vicious, curved sword.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_scimitar.png",
@@ -8601,7 +8489,6 @@
   {
     "id": 561,
     "nameEn": "Nature rune",
-    "nameRu": "Руна природы",
     "examine": "Used for alchemy spells.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Nature_rune.png",
@@ -8668,7 +8555,7 @@
     ],
     "freeSpawns": [
       "Wilderness - on a small island south-east of the Demonic Ruins",
-      "Rellekka - on a small island near the rock crabs (только для подписки)"
+      "Rellekka - on a small island near the rock crabs (members only)"
     ],
     "dropSources": [
       {
@@ -8717,7 +8604,6 @@
   {
     "id": 1733,
     "nameEn": "Needle",
-    "nameRu": "Игла",
     "examine": "Used with a thread to make clothes.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Needle.png",
@@ -8807,14 +8693,14 @@
       }
     ],
     "freeSpawns": [
-      "Darkmeyer Seamstress (только для подписки)",
-      "Kebos Lowlands - Mary and Gordon's house (1st floor (2-й этаж)) (только для подписки)",
-      "Prifddinas - west inside Lliann's Wares (только для подписки)",
-      "Shayzien Encampment (только для подписки)",
-      "Hunter Guild (только для подписки)",
-      "Ralos' Rise 1st floor (2-й этаж) (только для подписки)",
-      "Civitas illa Fortis 1st floor (2-й этаж) (только для подписки)",
-      "Auburnvale (только для подписки)"
+      "Darkmeyer Seamstress (members only)",
+      "Kebos Lowlands - Mary and Gordon's house (1st floor) (members only)",
+      "Prifddinas - west inside Lliann's Wares (members only)",
+      "Shayzien Encampment (members only)",
+      "Hunter Guild (members only)",
+      "Ralos' Rise 1st floor (members only)",
+      "Civitas illa Fortis 1st floor (members only)",
+      "Auburnvale (members only)"
     ],
     "dropSources": [
       {
@@ -8828,7 +8714,6 @@
   {
     "id": 1521,
     "nameEn": "Oak logs",
-    "nameRu": "Дубовые брёвна",
     "examine": "Logs cut from an oak tree.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Oak_logs.png",
@@ -8857,7 +8742,6 @@
   {
     "id": 843,
     "nameEn": "Oak shortbow",
-    "nameRu": "Дубовый короткий лук",
     "examine": "A shortbow made out of oak, still effective.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Oak_shortbow.png",
@@ -8923,7 +8807,7 @@
       }
     ],
     "freeSpawns": [
-      "Civitas illa Fortis 2nd floor (3-й этаж) (только для подписки)"
+      "Civitas illa Fortis 2nd floor (members only)"
     ],
     "dropSources": [
       {
@@ -8937,7 +8821,6 @@
   {
     "id": 13190,
     "nameEn": "Old school bond",
-    "nameRu": "Облигация Old School Bond",
     "examine": "This bond can be redeemed for membership.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Old_school_bond.png",
@@ -8947,7 +8830,6 @@
   {
     "id": 1957,
     "nameEn": "Onion",
-    "nameRu": "Лук",
     "examine": "A strong smelling onion.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Onion.png",
@@ -9037,8 +8919,8 @@
       }
     ],
     "freeSpawns": [
-      "Lumbridge General Store - 1st floor (2-й этаж)",
-      "Mistrock (только для подписки)"
+      "Lumbridge General Store - 1st floor",
+      "Mistrock (members only)"
     ],
     "dropSources": [
       {
@@ -9057,7 +8939,6 @@
   {
     "id": 1769,
     "nameEn": "Orange dye",
-    "nameRu": "Оранжевый краситель",
     "examine": "A little bottle of orange dye.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Orange_dye.png",
@@ -9099,14 +8980,13 @@
       }
     ],
     "freeSpawns": [
-      "Shayzien Styles (только для подписки)"
+      "Shayzien Styles (members only)"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Orange_dye"
   },
   {
     "id": 1013,
     "nameEn": "Pink skirt",
-    "nameRu": "Розовая юбка",
     "examine": "A ladies skirt.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Pink_skirt.png",
@@ -9151,7 +9031,6 @@
   {
     "id": 960,
     "nameEn": "Plank",
-    "nameRu": "Доска",
     "examine": "A plank of wood!",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png",
@@ -9172,11 +9051,11 @@
       "Wilderness - Graveyard of Shadows",
       "Crandor - crashed ship at the south-eastern coast. 3 require Telekinetic Grab.",
       "Wilderness - by Larran's small chest",
-      "Port Khazard (только для подписки)",
-      "Barbarian Outpost - north of the agility course (только для подписки)",
-      "Kebos Lowlands mine (только для подписки)",
-      "Ape Atoll - hut in south-western coast (только для подписки)",
-      "Fossil Island - Museum Camp (только для подписки)"
+      "Port Khazard (members only)",
+      "Barbarian Outpost - north of the agility course (members only)",
+      "Kebos Lowlands mine (members only)",
+      "Ape Atoll - hut in south-western coast (members only)",
+      "Fossil Island - Museum Camp (members only)"
     ],
     "dropSources": [
       {
@@ -9200,7 +9079,6 @@
   {
     "id": 10496,
     "nameEn": "Polished buttons",
-    "nameRu": "Полированные пуговицы",
     "examine": "Shiny!",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Polished_buttons.png",
@@ -9212,7 +9090,6 @@
   {
     "id": 1931,
     "nameEn": "Pot",
-    "nameRu": "Горшок",
     "examine": "This pot is empty.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Pot.png",
@@ -9286,7 +9163,7 @@
       },
       {
         "shopName": "Bolkoy's Village Shop",
-        "location": "Tree Gnome Village, 1st floor (2-й этаж)",
+        "location": "Tree Gnome Village, 1st floor",
         "owner": "Bolkoy",
         "price": 1,
         "stock": 3,
@@ -9306,10 +9183,10 @@
       "Varrock - the Blue Moon Inn",
       "Lumbridge Castle kitchen",
       "Lumbridge Swamp - north-western end",
-      "Cooks' Guild (2nd floor (3-й этаж))",
-      "Burgh de Rott - upstairs (только для подписки)",
-      "Darkmeyer (только для подписки)",
-      "Hosidius - Little Shop of Horace (только для подписки)"
+      "Cooks' Guild (2nd floor)",
+      "Burgh de Rott - upstairs (members only)",
+      "Darkmeyer (members only)",
+      "Hosidius - Little Shop of Horace (members only)"
     ],
     "dropSources": [
       {
@@ -9328,7 +9205,6 @@
   {
     "id": 1933,
     "nameEn": "Pot of flour",
-    "nameRu": "Горшок муки",
     "examine": "There is flour in this pot.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Pot_of_flour.png",
@@ -9418,7 +9294,7 @@
       }
     ],
     "freeSpawns": [
-      "Aldarin (только для подписки)"
+      "Aldarin (members only)"
     ],
     "dropSources": [
       {
@@ -9467,7 +9343,6 @@
   {
     "id": 2434,
     "nameEn": "Prayer potion(4)",
-    "nameRu": "Зелье молитвы",
     "examine": "4 doses of Prayer restore potion.",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Prayer_potion(4).png",
@@ -9521,7 +9396,6 @@
   {
     "id": 300,
     "nameEn": "Rat's tail",
-    "nameRu": "Крысиный хвост",
     "examine": "A bit of rat.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rat's_tail.png",
@@ -9554,7 +9428,6 @@
   {
     "id": 321,
     "nameEn": "Raw anchovies",
-    "nameRu": "Сырые анчоусы",
     "examine": "I should try cooking this.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Raw_anchovies.png",
@@ -9660,7 +9533,6 @@
   {
     "id": 377,
     "nameEn": "Raw lobster",
-    "nameRu": "Сырой омар",
     "examine": "I should try cooking this.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Raw_lobster.png",
@@ -9796,7 +9668,6 @@
   {
     "id": 331,
     "nameEn": "Raw salmon",
-    "nameRu": "Сырой лосось",
     "examine": "I should try cooking this.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Raw_salmon.png",
@@ -9912,7 +9783,6 @@
   {
     "id": 317,
     "nameEn": "Raw shrimps",
-    "nameRu": "Сырые креветки",
     "examine": "I should try cooking this.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Raw_shrimps.png",
@@ -10003,8 +9873,8 @@
     ],
     "freeSpawns": [
       "Corsair Cove Dungeon",
-      "Slepe - house next to Sisterhood Sanctuary entrance (только для подписки)",
-      "Kebos Lowlands - Battlefront (только для подписки)"
+      "Slepe - house next to Sisterhood Sanctuary entrance (members only)",
+      "Kebos Lowlands - Battlefront (members only)"
     ],
     "dropSources": [
       {
@@ -10018,7 +9888,6 @@
   {
     "id": 371,
     "nameEn": "Raw swordfish",
-    "nameRu": "Сырая рыба-меч",
     "examine": "I should try cooking this.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Raw_swordfish.png",
@@ -10154,7 +10023,6 @@
   {
     "id": 335,
     "nameEn": "Raw trout",
-    "nameRu": "Сырая форель",
     "examine": "I should try cooking this.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Raw_trout.png",
@@ -10248,7 +10116,6 @@
   {
     "id": 359,
     "nameEn": "Raw tuna",
-    "nameRu": "Сырой тунец",
     "examine": "I should try cooking this.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Raw_tuna.png",
@@ -10387,7 +10254,6 @@
   {
     "id": 1470,
     "nameEn": "Red bead",
-    "nameRu": "Красная бусина",
     "examine": "A small round red bead.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Red_bead.png",
@@ -10406,7 +10272,6 @@
   {
     "id": 1763,
     "nameEn": "Red dye",
-    "nameRu": "Красный краситель",
     "examine": "A little bottle of red dye.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Red_dye.png",
@@ -10440,14 +10305,13 @@
       }
     ],
     "freeSpawns": [
-      "Sisterhood Sanctuary (только для подписки)"
+      "Sisterhood Sanctuary (members only)"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Red_dye"
   },
   {
     "id": 1951,
     "nameEn": "Redberries",
-    "nameRu": "Красные ягоды",
     "examine": "Very bright red berries.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Redberries.png",
@@ -10501,7 +10365,6 @@
   {
     "id": 2325,
     "nameEn": "Redberry pie",
-    "nameRu": "Пирог с красными ягодами",
     "examine": "Looks tasty.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Redberry_pie.png",
@@ -10531,7 +10394,6 @@
   {
     "id": 290,
     "nameEn": "Research package",
-    "nameRu": "Посылка с исследованиями",
     "examine": "This contains some vital research.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Research_package.png",
@@ -10541,7 +10403,6 @@
   {
     "id": 1592,
     "nameEn": "Ring mould",
-    "nameRu": "Форма для колец",
     "examine": "Used to make rings.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Ring_mould.png",
@@ -10607,7 +10468,7 @@
       }
     ],
     "freeSpawns": [
-      "Crafting Guild - 1st floor (2-й этаж)"
+      "Crafting Guild - 1st floor"
     ],
     "dropSources": [
       {
@@ -10646,7 +10507,6 @@
   {
     "id": 954,
     "nameEn": "Rope",
-    "nameRu": "Верёвка",
     "examine": "A coil of rope.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png",
@@ -10738,12 +10598,12 @@
     "freeSpawns": [
       "Corsair Cove Dungeon",
       "Musa Point - Karamja General Store",
-      "Brine Rat Cavern - special spawn (только для подписки)",
-      "Darkmeyer - lower tier (только для подписки)",
-      "Fishing Platform (только для подписки)",
-      "Gu'Tanoth - Toban's island (только для подписки)",
-      "Kebos Lowlands - east of the Farming Guild (только для подписки)",
-      "Rellekka Hunter area - polar eagle lair (только для подписки)"
+      "Brine Rat Cavern - special spawn (members only)",
+      "Darkmeyer - lower tier (members only)",
+      "Fishing Platform (members only)",
+      "Gu'Tanoth - Toban's island (members only)",
+      "Kebos Lowlands - east of the Farming Guild (members only)",
+      "Rellekka Hunter area - polar eagle lair (members only)"
     ],
     "dropSources": [
       {
@@ -10772,7 +10632,6 @@
   {
     "id": 2518,
     "nameEn": "Rotten tomato",
-    "nameRu": "Гнилой помидор",
     "examine": "Pretty smelly.",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rotten_tomato.png",
@@ -10796,14 +10655,13 @@
       }
     ],
     "freeSpawns": [
-      "Colossal Wyrm Agility Course (только для подписки)"
+      "Colossal Wyrm Agility Course (members only)"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Rotten_tomato"
   },
   {
     "id": 1319,
     "nameEn": "Rune 2h sword",
-    "nameRu": "Рунический двуручный меч",
     "examine": "A two handed sword.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rune_2h_sword.png",
@@ -10857,7 +10715,6 @@
   {
     "id": 892,
     "nameEn": "Rune arrow",
-    "nameRu": "Руническая стрела",
     "examine": "Arrows with rune heads.",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rune_arrow_1.png",
@@ -10961,7 +10818,6 @@
   {
     "id": 1359,
     "nameEn": "Rune axe",
-    "nameRu": "Рунический топор",
     "examine": "A powerful axe.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rune_axe.png",
@@ -11025,7 +10881,6 @@
   {
     "id": 1373,
     "nameEn": "Rune battleaxe",
-    "nameRu": "Руническая секира",
     "examine": "A vicious looking axe.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rune_battleaxe.png",
@@ -11079,7 +10934,6 @@
   {
     "id": 1436,
     "nameEn": "Rune essence",
-    "nameRu": "Руническая сущность",
     "examine": "An unimbued rune.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rune_essence.png",
@@ -11128,7 +10982,6 @@
   {
     "id": 1163,
     "nameEn": "Rune full helm",
-    "nameRu": "Рунический полный шлем",
     "examine": "A full face helmet.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rune_full_helm.png",
@@ -11200,7 +11053,6 @@
   {
     "id": 1201,
     "nameEn": "Rune kiteshield",
-    "nameRu": "Рунический кайтовый щит",
     "examine": "A large metal shield.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rune_kiteshield.png",
@@ -11264,7 +11116,6 @@
   {
     "id": 1147,
     "nameEn": "Rune med helm",
-    "nameRu": "Рунический средний шлем",
     "examine": "A medium sized helmet.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rune_med_helm.png",
@@ -11328,7 +11179,6 @@
   {
     "id": 1275,
     "nameEn": "Rune pickaxe",
-    "nameRu": "Руническая кирка",
     "examine": "Used for mining.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rune_pickaxe.png",
@@ -11432,7 +11282,6 @@
   {
     "id": 1127,
     "nameEn": "Rune platebody",
-    "nameRu": "Рунический нагрудник",
     "examine": "Provides excellent protection.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rune_platebody.png",
@@ -11504,7 +11353,6 @@
   {
     "id": 1079,
     "nameEn": "Rune platelegs",
-    "nameRu": "Рунические поножи",
     "examine": "These look pretty heavy.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rune_platelegs.png",
@@ -11592,7 +11440,6 @@
   {
     "id": 1333,
     "nameEn": "Rune scimitar",
-    "nameRu": "Рунический ятаган",
     "examine": "A vicious, curved sword.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rune_scimitar.png",
@@ -11656,7 +11503,6 @@
   {
     "id": 1289,
     "nameEn": "Rune sword",
-    "nameRu": "Рунический меч",
     "examine": "A razor sharp sword.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Rune_sword.png",
@@ -11720,7 +11566,6 @@
   {
     "id": 2363,
     "nameEn": "Runite bar",
-    "nameRu": "Рунитовый слиток",
     "examine": "It's a bar of runite.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Runite_bar.png",
@@ -11774,7 +11619,6 @@
   {
     "id": 451,
     "nameEn": "Runite ore",
-    "nameRu": "Рунитовая руда",
     "examine": "This needs refining.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Runite_ore.png",
@@ -11862,7 +11706,6 @@
   {
     "id": 329,
     "nameEn": "Salmon",
-    "nameRu": "Лосось",
     "examine": "Some nicely cooked salmon.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
@@ -11904,7 +11747,6 @@
   {
     "id": 5329,
     "nameEn": "Secateurs",
-    "nameRu": "Секатор",
     "examine": "Good for pruning away diseased leaves.",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Secateurs.png",
@@ -12005,7 +11847,6 @@
   {
     "id": 1735,
     "nameEn": "Shears",
-    "nameRu": "Ножницы",
     "examine": "For shearing sheep.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Shears.png",
@@ -12079,7 +11920,7 @@
       },
       {
         "shopName": "Bolkoy's Village Shop",
-        "location": "Tree Gnome Village, 1st floor (2-й этаж)",
+        "location": "Tree Gnome Village, 1st floor",
         "owner": "Bolkoy",
         "price": 1,
         "stock": 2,
@@ -12097,9 +11938,9 @@
     "freeSpawns": [
       "Lumbridge - farm north-west",
       "Draynor Manor",
-      "Crafting Guild (1st floor (2-й этаж))",
-      "Hosidius - Watson's house (только для подписки)",
-      "Hosidius - east of flax field (только для подписки)"
+      "Crafting Guild (1st floor)",
+      "Hosidius - Watson's house (members only)",
+      "Hosidius - east of flax field (members only)"
     ],
     "dropSources": [
       {
@@ -12113,7 +11954,6 @@
   {
     "id": 841,
     "nameEn": "Shortbow",
-    "nameRu": "Короткий лук",
     "examine": "Short but effective.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Shortbow.png",
@@ -12139,7 +11979,7 @@
       },
       {
         "shopName": "Gulluck and Sons",
-        "location": "Grand Tree, 2nd floor (3-й этаж)",
+        "location": "Grand Tree, 2nd floor",
         "owner": "Gulluck",
         "price": 50,
         "stock": 4,
@@ -12179,8 +12019,8 @@
       }
     ],
     "freeSpawns": [
-      "Kharidian Desert - north-west of the Uzer Hunter area (только для подписки)",
-      "Taverley - building directly west of the tree patch (1st floor (2-й этаж)) (только для подписки)"
+      "Kharidian Desert - north-west of the Uzer Hunter area (members only)",
+      "Taverley - building directly west of the tree patch (1st floor) (members only)"
     ],
     "dropSources": [
       {
@@ -12204,7 +12044,6 @@
   {
     "id": 315,
     "nameEn": "Shrimps",
-    "nameRu": "Креветки",
     "examine": "Some nicely cooked shrimp.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Shrimps.png",
@@ -12216,7 +12055,6 @@
   {
     "id": 950,
     "nameEn": "Silk",
-    "nameRu": "Шёлк",
     "examine": "It's a sheet of silk.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Silk.png",
@@ -12303,9 +12141,9 @@
       }
     ],
     "freeSpawns": [
-      "Civitas illa Fortis 1st floor (2-й этаж) (только для подписки)",
-      "Darkmeyer Seamstress (только для подписки)",
-      "Prifddinas - west inside Lliann's Wares (только для подписки)"
+      "Civitas illa Fortis 1st floor (members only)",
+      "Darkmeyer Seamstress (members only)",
+      "Prifddinas - west inside Lliann's Wares (members only)"
     ],
     "dropSources": [
       {
@@ -12319,7 +12157,6 @@
   {
     "id": 2355,
     "nameEn": "Silver bar",
-    "nameRu": "Серебряный слиток",
     "examine": "It's a bar of silver.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Silver_bar.png",
@@ -12407,7 +12244,6 @@
   {
     "id": 442,
     "nameEn": "Silver ore",
-    "nameRu": "Серебряная руда",
     "examine": "This needs refining.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Silver_ore.png",
@@ -12535,7 +12371,6 @@
   {
     "id": 2961,
     "nameEn": "Silver sickle",
-    "nameRu": "Серебряный серп",
     "examine": "It's a silver sickle.",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Silver_sickle.png",
@@ -12573,7 +12408,6 @@
   {
     "id": 303,
     "nameEn": "Small fishing net",
-    "nameRu": "Маленькая сеть",
     "examine": "Useful for catching small fish.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png",
@@ -12667,10 +12501,10 @@
       "Corsair Cove Dungeon",
       "Ruins of Camdozaal - near fishing spot",
       "Wilderness - western Ruins",
-      "Sunset Coast (только для подписки)",
-      "Shipwreck Cove (только для подписки)",
-      "Fishing Guild (только для подписки)",
-      "Burgh de Rott - southernmost house (только для подписки)"
+      "Sunset Coast (members only)",
+      "Shipwreck Cove (members only)",
+      "Fishing Guild (members only)",
+      "Burgh de Rott - southernmost house (members only)"
     ],
     "dropSources": [
       {
@@ -12689,7 +12523,6 @@
   {
     "id": 1761,
     "nameEn": "Soft clay",
-    "nameRu": "Мягкая глина",
     "examine": "Clay soft enough to mould.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Soft_clay.png",
@@ -12697,7 +12530,7 @@
     "highAlch": 1,
     "lowAlch": 1,
     "freeSpawns": [
-      "Civitas illa Fortis 1st floor (2-й этаж) (только для подписки)"
+      "Civitas illa Fortis 1st floor (members only)"
     ],
     "dropSources": [
       {
@@ -12731,7 +12564,6 @@
   {
     "id": 952,
     "nameEn": "Spade",
-    "nameRu": "Лопата",
     "examine": "A slightly muddy spade.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Spade.png",
@@ -12824,11 +12656,11 @@
       "Corsair Cove Dungeon",
       "Draynor Manor",
       "Falador - estate agent",
-      "Varrock General Store (1st floor (2-й этаж))",
-      "Barrows - entrance (только для подписки)",
-      "East Ardougne - Edmond and Alrena's house (только для подписки)",
-      "Farming Guild (только для подписки)",
-      "Hosidius - outside Watson's house (только для подписки)"
+      "Varrock General Store (1st floor)",
+      "Barrows - entrance (members only)",
+      "East Ardougne - Edmond and Alrena's house (members only)",
+      "Farming Guild (members only)",
+      "Hosidius - outside Watson's house (members only)"
     ],
     "dropSources": [
       {
@@ -12842,7 +12674,6 @@
   {
     "id": 1379,
     "nameEn": "Staff",
-    "nameRu": "Посох",
     "examine": "It's a slightly magical stick.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Staff.png",
@@ -12885,7 +12716,7 @@
     ],
     "freeSpawns": [
       "Giants' Plateau",
-      "West of Ralos' Rise (только для подписки)"
+      "West of Ralos' Rise (members only)"
     ],
     "dropSources": [
       {
@@ -12934,7 +12765,6 @@
   {
     "id": 1381,
     "nameEn": "Staff of air",
-    "nameRu": "Посох воздуха",
     "examine": "A Magical staff.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_air.png",
@@ -13013,7 +12843,6 @@
   {
     "id": 1387,
     "nameEn": "Staff of fire",
-    "nameRu": "Посох огня",
     "examine": "A Magical staff.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png",
@@ -13117,7 +12946,6 @@
   {
     "id": 1549,
     "nameEn": "Stake",
-    "nameRu": "Кол",
     "examine": "A very pointy stick.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Stake.png",
@@ -13128,7 +12956,6 @@
   {
     "id": 886,
     "nameEn": "Steel arrow",
-    "nameRu": "Стальная стрела",
     "examine": "Arrows with steel heads.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Steel_arrow_1.png",
@@ -13202,7 +13029,7 @@
       },
       {
         "shopName": "Legends Guild General Store.",
-        "location": "1st floor (2-й этаж) of Legends' Guild",
+        "location": "1st floor of Legends' Guild",
         "owner": "Fionella",
         "price": 18,
         "stock": 500,
@@ -13210,7 +13037,7 @@
       }
     ],
     "freeSpawns": [
-      "Colossal Wyrm Agility Course advanced route (только для подписки)"
+      "Colossal Wyrm Agility Course advanced route (members only)"
     ],
     "dropSources": [
       {
@@ -13259,7 +13086,6 @@
   {
     "id": 1353,
     "nameEn": "Steel axe",
-    "nameRu": "Стальной топор",
     "examine": "A woodcutter's axe.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Steel_axe.png",
@@ -13277,7 +13103,7 @@
       },
       {
         "shopName": "Gulluck and Sons",
-        "location": "Grand Tree, 2nd floor (3-й этаж)",
+        "location": "Grand Tree, 2nd floor",
         "owner": "Gulluck",
         "price": 200,
         "stock": 3,
@@ -13355,7 +13181,6 @@
   {
     "id": 2353,
     "nameEn": "Steel bar",
-    "nameRu": "Стальной слиток",
     "examine": "It's a bar of steel.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Steel_bar.png",
@@ -13363,7 +13188,7 @@
     "highAlch": 60,
     "lowAlch": 40,
     "freeSpawns": [
-      "Brimhaven Dungeon (task-only area) (только для подписки)"
+      "Brimhaven Dungeon (task-only area) (members only)"
     ],
     "dropSources": [
       {
@@ -13412,7 +13237,6 @@
   {
     "id": 1539,
     "nameEn": "Steel nails",
-    "nameRu": "Стальные гвозди",
     "examine": "Keeps things in place fairly permanently.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png",
@@ -13456,7 +13280,6 @@
   {
     "id": 1269,
     "nameEn": "Steel pickaxe",
-    "nameRu": "Стальная кирка",
     "examine": "Used for mining.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Steel_pickaxe.png",
@@ -13530,10 +13353,10 @@
       }
     ],
     "freeSpawns": [
-      "Abandoned Mine - level 2 (только для подписки)",
-      "Daeyalt essence mine (только для подписки)",
-      "Sisterhood Sanctuary mine (только для подписки)",
-      "Slayer Tower basement (inaccessible) (только для подписки)"
+      "Abandoned Mine - level 2 (members only)",
+      "Daeyalt essence mine (members only)",
+      "Sisterhood Sanctuary mine (members only)",
+      "Slayer Tower basement (inaccessible) (members only)"
     ],
     "dropSources": [
       {
@@ -13577,7 +13400,6 @@
   {
     "id": 1119,
     "nameEn": "Steel platebody",
-    "nameRu": "Стальной нагрудник",
     "examine": "Provides excellent protection.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Steel_platebody.png",
@@ -13668,7 +13490,6 @@
   {
     "id": 1325,
     "nameEn": "Steel scimitar",
-    "nameRu": "Стальной ятаган",
     "examine": "A vicious, curved sword.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Steel_scimitar.png",
@@ -13734,7 +13555,7 @@
       }
     ],
     "freeSpawns": [
-      "Prifddinas - on a table in Iorwerth's Arms (только для подписки)"
+      "Prifddinas - on a table in Iorwerth's Arms (members only)"
     ],
     "dropSources": [
       {
@@ -13783,7 +13604,6 @@
   {
     "id": 113,
     "nameEn": "Strength potion(4)",
-    "nameRu": "Зелье силы",
     "examine": "4 doses of Strength potion.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png",
@@ -13795,7 +13615,6 @@
   {
     "id": 373,
     "nameEn": "Swordfish",
-    "nameRu": "Рыба-меч",
     "examine": "I'd better be careful eating this!",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Swordfish.png",
@@ -13829,7 +13648,7 @@
       },
       {
         "shopName": "Legends Guild General Store.",
-        "location": "1st floor (2-й этаж) of Legends' Guild",
+        "location": "1st floor of Legends' Guild",
         "owner": "Fionella",
         "price": 124,
         "stock": 20,
@@ -13883,7 +13702,6 @@
   {
     "id": 13658,
     "nameEn": "Teleport card",
-    "nameRu": "Карта телепортации",
     "examine": "A card which has magical properties.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Teleport_card.png",
@@ -13903,7 +13721,6 @@
   {
     "id": 1734,
     "nameEn": "Thread",
-    "nameRu": "Нитки",
     "examine": "Used with a needle to make clothes.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Thread.png",
@@ -13994,13 +13811,13 @@
     ],
     "freeSpawns": [
       "Varrock - Jolly Boar Inn",
-      "Darkmeyer Seamstress (только для подписки)",
-      "Kebos Lowlands - Mary and Gordon's house (1st floor (2-й этаж)) (только для подписки)",
-      "Prifddinas - west inside Lliann's Wares (только для подписки)",
-      "Shayzien Styles (только для подписки)",
-      "Civitas illa Fortis (только для подписки)",
-      "Quetzacalli Gorge (только для подписки)",
-      "Wyrmscraig - Auchrie (только для подписки)"
+      "Darkmeyer Seamstress (members only)",
+      "Kebos Lowlands - Mary and Gordon's house (1st floor) (members only)",
+      "Prifddinas - west inside Lliann's Wares (members only)",
+      "Shayzien Styles (members only)",
+      "Civitas illa Fortis (members only)",
+      "Quetzacalli Gorge (members only)",
+      "Wyrmscraig - Auchrie (members only)"
     ],
     "dropSources": [
       {
@@ -14049,7 +13866,6 @@
   {
     "id": 438,
     "nameEn": "Tin ore",
-    "nameRu": "Оловянная руда",
     "examine": "This needs refining.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Tin_ore.png",
@@ -14161,7 +13977,6 @@
   {
     "id": 590,
     "nameEn": "Tinderbox",
-    "nameRu": "Огниво",
     "examine": "Useful for lighting a fire.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Tinderbox.png",
@@ -14252,13 +14067,13 @@
     ],
     "freeSpawns": [
       "Castle Wars - Saradominist's base",
-      "Castle Wars - Saradominist's base (1st floor (2-й этаж))",
+      "Castle Wars - Saradominist's base (1st floor)",
       "Castle Wars - Zamorakian's base",
-      "Castle Wars - Zamorakian's base (1st floor (2-й этаж))",
+      "Castle Wars - Zamorakian's base (1st floor)",
       "Giants' Plateau",
-      "Draynor Manor (2nd floor (3-й этаж))",
+      "Draynor Manor (2nd floor)",
       "Corsair Cove",
-      "Darkmeyer - lower tier (только для подписки)"
+      "Darkmeyer - lower tier (members only)"
     ],
     "dropSources": [
       {
@@ -14307,7 +14122,6 @@
   {
     "id": 333,
     "nameEn": "Trout",
-    "nameRu": "Форель",
     "examine": "Some nicely cooked trout.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
@@ -14325,7 +14139,7 @@
       },
       {
         "shopName": "Warrior Guild Food Shop",
-        "location": "Ground floor (1-й этаж) of Warriors' Guild",
+        "location": "Ground floor of Warriors' Guild",
         "owner": "Lidio",
         "price": 12,
         "stock": 10,
@@ -14354,7 +14168,6 @@
   {
     "id": 361,
     "nameEn": "Tuna",
-    "nameRu": "Тунец",
     "examine": "Wow, this is a big fish.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Tuna.png",
@@ -14434,7 +14247,6 @@
   {
     "id": 1617,
     "nameEn": "Uncut diamond",
-    "nameRu": "Неогранённый алмаз",
     "examine": "This would be worth more cut.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Uncut_diamond.png",
@@ -14514,7 +14326,6 @@
   {
     "id": 1621,
     "nameEn": "Uncut emerald",
-    "nameRu": "Неогранённый изумруд",
     "examine": "This would be worth more cut.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Uncut_emerald.png",
@@ -14594,7 +14405,6 @@
   {
     "id": 1619,
     "nameEn": "Uncut ruby",
-    "nameRu": "Неогранённый рубин",
     "examine": "This would be worth more cut.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Uncut_ruby.png",
@@ -14628,7 +14438,7 @@
       }
     ],
     "freeSpawns": [
-      "The Great Conch (только для подписки)"
+      "The Great Conch (members only)"
     ],
     "dropSources": [
       {
@@ -14677,7 +14487,6 @@
   {
     "id": 1623,
     "nameEn": "Uncut sapphire",
-    "nameRu": "Неогранённый сапфир",
     "examine": "This would be worth more cut.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Uncut_sapphire.png",
@@ -14711,8 +14520,8 @@
       }
     ],
     "freeSpawns": [
-      "King Black Dragon Lair (только для подписки)",
-      "Trollweiss Mountain summit (только для подписки)"
+      "King Black Dragon Lair (members only)",
+      "Trollweiss Mountain summit (members only)"
     ],
     "dropSources": [
       {
@@ -14761,7 +14570,6 @@
   {
     "id": 1791,
     "nameEn": "Unfired bowl",
-    "nameRu": "Необожжённая миска",
     "examine": "I need to put this in a pottery oven.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Unfired_bowl.png",
@@ -14773,7 +14581,6 @@
   {
     "id": 555,
     "nameEn": "Water rune",
-    "nameRu": "Руна воды",
     "examine": "One of the 4 basic elemental Runes.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Water_rune.png",
@@ -14914,7 +14721,6 @@
   {
     "id": 1005,
     "nameEn": "White apron",
-    "nameRu": "Белый фартук",
     "examine": "A mostly clean apron.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/White_apron.png",
@@ -14956,7 +14762,6 @@
   {
     "id": 1476,
     "nameEn": "White bead",
-    "nameRu": "Белая бусина",
     "examine": "A small round white bead.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/White_bead.png",
@@ -14975,7 +14780,6 @@
   {
     "id": 1519,
     "nameEn": "Willow logs",
-    "nameRu": "Ивовые брёвна",
     "examine": "Logs cut from a willow tree.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Willow_logs.png",
@@ -14999,7 +14803,6 @@
   {
     "id": 849,
     "nameEn": "Willow shortbow",
-    "nameRu": "Ивовый короткий лук",
     "examine": "A shortbow made out of willow, still effective.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Willow_shortbow.png",
@@ -15073,7 +14876,6 @@
   {
     "id": 1017,
     "nameEn": "Wizard hat",
-    "nameRu": "Шляпа волшебника",
     "examine": "A silly pointed hat.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Wizard_hat.png",
@@ -15099,7 +14901,7 @@
       }
     ],
     "freeSpawns": [
-      "Shayzien Styles (только для подписки)"
+      "Shayzien Styles (members only)"
     ],
     "dropSources": [
       {
@@ -15123,7 +14925,6 @@
   {
     "id": 1907,
     "nameEn": "Wizard's mind bomb",
-    "nameRu": "Бомба разума",
     "examine": "It's got strange bubbles in it.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Wizard's_mind_bomb.png",
@@ -15189,7 +14990,6 @@
   {
     "id": 1472,
     "nameEn": "Yellow bead",
-    "nameRu": "Жёлтая бусина",
     "examine": "A small round yellow bead.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_bead.png",
@@ -15208,7 +15008,6 @@
   {
     "id": 1765,
     "nameEn": "Yellow dye",
-    "nameRu": "Жёлтый краситель",
     "examine": "A little bottle of yellow dye.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_dye.png",
@@ -15246,7 +15045,6 @@
   {
     "id": 1515,
     "nameEn": "Yew logs",
-    "nameRu": "Тисовые брёвна",
     "examine": "Logs cut from a yew tree.",
     "members": false,
     "iconUrl": "https://oldschool.runescape.wiki/images/Yew_logs.png",
@@ -15300,7 +15098,6 @@
   {
     "id": 857,
     "nameEn": "Yew shortbow",
-    "nameRu": "Тисовый короткий лук",
     "examine": "A shortbow made out of yew, still effective.",
     "members": true,
     "iconUrl": "https://oldschool.runescape.wiki/images/Yew_shortbow.png",

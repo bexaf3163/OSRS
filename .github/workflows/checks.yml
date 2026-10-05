@@ -1,4 +1,4 @@
-name: Проверки
+name: Checks
 
 on:
   push:
@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      # Для проверок Electron не нужен — не качаем его бинарник.
+      # Electron is not needed for the checks — we do not download its binary.
       ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
     steps:
       - uses: actions/checkout@v4
@@ -22,7 +22,7 @@ jobs:
       - run: npm run check-data
       - run: npm test
       - run: npm run build
-      # Интерфейс в настоящем браузере: готовность, закупка, снаряжение, карта, шапка (scripts/ui-smoke.ts).
+      # The interface in a real browser: readiness, shopping, gear, the map, the header (scripts/ui-smoke.ts).
       - run: npx playwright install --with-deps chromium
       - run: npm run test:ui
 
@@ -39,5 +39,5 @@ jobs:
           distribution: temurin
           java-version: 17
           cache: gradle
-      # Плагин компилируется против RuneLite 1.12.39; тесты сверяют названия квестов маршрута с API клиента.
+      # The plugin is compiled against RuneLite 1.12.39; the tests compare the route quest names with the client API.
       - run: chmod +x gradlew && ./gradlew --no-daemon test

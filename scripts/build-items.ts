@@ -1,8 +1,8 @@
-// Собирает src/data/f2p-items.json с OSRS Wiki и проставляет wikiItemId и iconUrl предметам в steps.json.
-// Нужна сеть. Запуск: npm run build-items (примерно 2–4 минуты, вики просит не спешить).
+// Builds src/data/f2p-items.json from the OSRS Wiki and fills in wikiItemId and iconUrl for the items in steps.json.
+// It needs a network. Run: npm run build-items (about 2–4 minutes, the wiki asks not to hurry).
 //
-// Данные — только с вики: описание, цены у торговцев, алхимия, магазины, дроп, спавны.
-// От себя здесь лишь выбор предметов и русские названия (перевод).
+// The data is from the wiki only: the description, trader prices, alchemy, shops, drops, spawns.
+// Only the choice of items is from us.
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
@@ -15,51 +15,51 @@ const STEPS = `${root}src/data/steps.json`;
 const OUT = `${root}src/data/f2p-items.json`;
 const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 
-/** Ключевые предметы F2P вне маршрута: руды, слитки, инструменты, рыба, руны, снаряжение. */
-const KEY_ITEMS: Record<string, string> = {
-  'Copper ore': 'Медная руда', 'Tin ore': 'Оловянная руда', 'Iron ore': 'Железная руда', 'Silver ore': 'Серебряная руда',
-  'Coal': 'Уголь', 'Gold ore': 'Золотая руда', 'Mithril ore': 'Мифриловая руда', 'Adamantite ore': 'Адамантовая руда',
-  'Runite ore': 'Рунитовая руда', 'Rune essence': 'Руническая сущность', 'Clay': 'Глина',
-  'Bronze bar': 'Бронзовый слиток', 'Iron bar': 'Железный слиток', 'Silver bar': 'Серебряный слиток', 'Steel bar': 'Стальной слиток',
-  'Gold bar': 'Золотой слиток', 'Mithril bar': 'Мифриловый слиток', 'Adamantite bar': 'Адамантовый слиток', 'Runite bar': 'Рунитовый слиток',
-  'Logs': 'Брёвна', 'Oak logs': 'Дубовые брёвна', 'Willow logs': 'Ивовые брёвна', 'Maple logs': 'Кленовые брёвна', 'Yew logs': 'Тисовые брёвна',
-  'Bronze axe': 'Бронзовый топор', 'Iron axe': 'Железный топор', 'Steel axe': 'Стальной топор', 'Mithril axe': 'Мифриловый топор',
-  'Adamant axe': 'Адамантовый топор', 'Rune axe': 'Рунический топор',
-  'Bronze pickaxe': 'Бронзовая кирка', 'Iron pickaxe': 'Железная кирка', 'Steel pickaxe': 'Стальная кирка',
-  'Mithril pickaxe': 'Мифриловая кирка', 'Adamant pickaxe': 'Адамантовая кирка', 'Rune pickaxe': 'Руническая кирка',
-  'Small fishing net': 'Маленькая сеть', 'Fishing rod': 'Удочка', 'Fly fishing rod': 'Удочка нахлыстом', 'Harpoon': 'Гарпун',
-  'Lobster pot': 'Ловушка для омаров', 'Fishing bait': 'Наживка', 'Feather': 'Перо',
-  'Tinderbox': 'Огниво', 'Hammer': 'Молот', 'Chisel': 'Долото', 'Needle': 'Игла', 'Thread': 'Нитки', 'Knife': 'Нож',
-  'Shears': 'Ножницы', 'Spade': 'Лопата', 'Bucket': 'Ведро', 'Pot': 'Горшок', 'Jug': 'Кувшин', 'Ring mould': 'Форма для колец',
-  'Raw shrimps': 'Сырые креветки', 'Shrimps': 'Креветки', 'Raw anchovies': 'Сырые анчоусы', 'Anchovies': 'Анчоусы',
-  'Raw trout': 'Сырая форель', 'Trout': 'Форель', 'Raw salmon': 'Сырой лосось', 'Salmon': 'Лосось',
-  'Raw tuna': 'Сырой тунец', 'Tuna': 'Тунец', 'Raw lobster': 'Сырой омар', 'Lobster': 'Омар',
-  'Raw swordfish': 'Сырая рыба-меч', 'Swordfish': 'Рыба-меч',
-  'Air rune': 'Руна воздуха', 'Water rune': 'Руна воды', 'Earth rune': 'Руна земли', 'Fire rune': 'Руна огня',
-  'Mind rune': 'Руна разума', 'Body rune': 'Руна тела', 'Chaos rune': 'Руна хаоса', 'Death rune': 'Руна смерти',
-  'Law rune': 'Руна закона', 'Nature rune': 'Руна природы', 'Cosmic rune': 'Космическая руна',
-  'Bones': 'Кости', 'Big bones': 'Большие кости', 'Cowhide': 'Коровья шкура', 'Leather': 'Кожа', 'Hard leather': 'Жёсткая кожа',
-  'Uncut sapphire': 'Неогранённый сапфир', 'Uncut emerald': 'Неогранённый изумруд', 'Uncut ruby': 'Неогранённый рубин', 'Uncut diamond': 'Неогранённый алмаз',
-  'Amulet of accuracy': 'Амулет точности', 'Amulet of strength': 'Амулет силы', 'Amulet of power': 'Амулет мощи',
-  'Strength potion(4)': 'Зелье силы', 'Attack potion(4)': 'Зелье атаки', 'Energy potion(4)': 'Зелье энергии',
-  'Bronze scimitar': 'Бронзовый ятаган', 'Iron scimitar': 'Железный ятаган', 'Steel scimitar': 'Стальной ятаган',
-  'Mithril scimitar': 'Мифриловый ятаган', 'Adamant scimitar': 'Адамантовый ятаган', 'Rune scimitar': 'Рунический ятаган',
-  'Rune sword': 'Рунический меч', 'Rune battleaxe': 'Руническая секира', 'Rune 2h sword': 'Рунический двуручный меч',
-  'Iron platebody': 'Железный нагрудник', 'Steel platebody': 'Стальной нагрудник', 'Mithril platebody': 'Мифриловый нагрудник',
-  'Adamant platebody': 'Адамантовый нагрудник', 'Rune platebody': 'Рунический нагрудник',
-  'Rune full helm': 'Рунический полный шлем', 'Rune med helm': 'Рунический средний шлем', 'Rune platelegs': 'Рунические поножи',
-  'Rune kiteshield': 'Рунический кайтовый щит', 'Anti-dragon shield': 'Щит от драконьего огня',
-  'Green d\'hide body': 'Куртка из зелёной драконьей кожи', 'Green d\'hide vambraces': 'Наручи из зелёной драконьей кожи',
-  'Leather body': 'Кожаная куртка', 'Leather chaps': 'Кожаные штаны', 'Coif': 'Капюшон',
-  'Shortbow': 'Короткий лук', 'Oak shortbow': 'Дубовый короткий лук', 'Willow shortbow': 'Ивовый короткий лук',
-  'Maple shortbow': 'Кленовый короткий лук', 'Yew shortbow': 'Тисовый короткий лук',
-  'Bronze arrow': 'Бронзовая стрела', 'Iron arrow': 'Железная стрела', 'Steel arrow': 'Стальная стрела', 'Mithril arrow': 'Мифриловая стрела',
-  'Adamant arrow': 'Адамантовая стрела', 'Rune arrow': 'Руническая стрела',
-  'Staff of air': 'Посох воздуха', 'Staff of fire': 'Посох огня', 'Wizard hat': 'Шляпа волшебника', 'Blue wizard robe': 'Синяя мантия волшебника',
-  'Steel nails': 'Стальные гвозди', 'Plank': 'Доска', 'Coins': 'Монеты', 'Old school bond': 'Облигация Old School Bond',
-};
+/** The key F2P items outside the route: ores, bars, tools, fish, runes, equipment. */
+const KEY_ITEMS: string[] = [
+  'Copper ore', 'Tin ore', 'Iron ore', 'Silver ore',
+  'Coal', 'Gold ore', 'Mithril ore', 'Adamantite ore',
+  'Runite ore', 'Rune essence', 'Clay',
+  'Bronze bar', 'Iron bar', 'Silver bar', 'Steel bar',
+  'Gold bar', 'Mithril bar', 'Adamantite bar', 'Runite bar',
+  'Logs', 'Oak logs', 'Willow logs', 'Maple logs', 'Yew logs',
+  'Bronze axe', 'Iron axe', 'Steel axe', 'Mithril axe',
+  'Adamant axe', 'Rune axe',
+  'Bronze pickaxe', 'Iron pickaxe', 'Steel pickaxe',
+  'Mithril pickaxe', 'Adamant pickaxe', 'Rune pickaxe',
+  'Small fishing net', 'Fishing rod', 'Fly fishing rod', 'Harpoon',
+  'Lobster pot', 'Fishing bait', 'Feather',
+  'Tinderbox', 'Hammer', 'Chisel', 'Needle', 'Thread', 'Knife',
+  'Shears', 'Spade', 'Bucket', 'Pot', 'Jug', 'Ring mould',
+  'Raw shrimps', 'Shrimps', 'Raw anchovies', 'Anchovies',
+  'Raw trout', 'Trout', 'Raw salmon', 'Salmon',
+  'Raw tuna', 'Tuna', 'Raw lobster', 'Lobster',
+  'Raw swordfish', 'Swordfish',
+  'Air rune', 'Water rune', 'Earth rune', 'Fire rune',
+  'Mind rune', 'Body rune', 'Chaos rune', 'Death rune',
+  'Law rune', 'Nature rune', 'Cosmic rune',
+  'Bones', 'Big bones', 'Cowhide', 'Leather', 'Hard leather',
+  'Uncut sapphire', 'Uncut emerald', 'Uncut ruby', 'Uncut diamond',
+  'Amulet of accuracy', 'Amulet of strength', 'Amulet of power',
+  'Strength potion(4)', 'Attack potion(4)', 'Energy potion(4)',
+  'Bronze scimitar', 'Iron scimitar', 'Steel scimitar',
+  'Mithril scimitar', 'Adamant scimitar', 'Rune scimitar',
+  'Rune sword', 'Rune battleaxe', 'Rune 2h sword',
+  'Iron platebody', 'Steel platebody', 'Mithril platebody',
+  'Adamant platebody', 'Rune platebody',
+  'Rune full helm', 'Rune med helm', 'Rune platelegs',
+  'Rune kiteshield', 'Anti-dragon shield',
+  'Green d\'hide body', 'Green d\'hide vambraces',
+  'Leather body', 'Leather chaps', 'Coif',
+  'Shortbow', 'Oak shortbow', 'Willow shortbow',
+  'Maple shortbow', 'Yew shortbow',
+  'Bronze arrow', 'Iron arrow', 'Steel arrow', 'Mithril arrow',
+  'Adamant arrow', 'Rune arrow',
+  'Staff of air', 'Staff of fire', 'Wizard hat', 'Blue wizard robe',
+  'Steel nails', 'Plank', 'Coins', 'Old school bond',
+];
 
-// Вики ограничивает частоту запросов: не чаще одного в 350 мс, при 429 — ждём и повторяем.
+// The wiki limits the request rate: no more than one per 350 ms, on a 429 — wait and repeat.
 let lastRequest = 0;
 const fetchFn = async (url: string) => {
   for (let attempt = 1; ; attempt++) {
@@ -73,7 +73,7 @@ const fetchFn = async (url: string) => {
   }
 };
 
-// Кэш уже собранных предметов: повторный запуск докачивает только недостающее. --fresh — собрать заново.
+// A cache of the items already built: a repeated run fetches only what is missing. --fresh — build anew.
 const CACHE = `${root}node_modules/.cache/osrs-put-items.json`;
 const cache: Record<string, WikiItemDetail> = (() => {
   if (process.argv.includes('--fresh') || !existsSync(CACHE)) return {};
@@ -87,27 +87,27 @@ const saveCache = () => {
 const steps = JSON.parse(readFileSync(STEPS, 'utf8')) as Step[];
 const stepItems = steps.flatMap((s) => [...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])]);
 
-const wanted = new Map<string, string>(Object.entries(KEY_ITEMS));
-for (const it of stepItems) if (!wanted.has(it.nameEn)) wanted.set(it.nameEn, it.nameRu);
+const wanted = new Set<string>(KEY_ITEMS);
+for (const it of stepItems) wanted.add(it.nameEn);
 
 const mappingRes = await fetchFn('https://prices.runescape.wiki/api/v1/osrs/mapping');
-if (!mappingRes.ok) throw new Error(`API цен ответил ${mappingRes.status}`);
+if (!mappingRes.ok) throw new Error(`The price API answered ${mappingRes.status}`);
 const mappingById = new Map((await mappingRes.json() as MappingEntry[]).map((m) => [m.id, m]));
 const mapping = (id: number) => mappingById.get(id);
 
-console.log(`Предметов к сборке: ${wanted.size}`);
+console.log(`Items to build: ${wanted.size}`);
 const results = new Map<string, WikiItemDetail>();
 const missing: string[] = [];
-const names = [...wanted.keys()];
+const names = [...wanted];
 let done = 0;
 
 for (const name of names) {
   const cached = cache[name];
   if (cached) {
-    results.set(name, { ...cached, nameRu: wanted.get(name)! });
+    results.set(name, cached);
   } else {
     try {
-      const d = await fetchItemDetail(fetchFn, name, wanted.get(name), mapping);
+      const d = await fetchItemDetail(fetchFn, name, mapping);
       if (d) {
         results.set(name, d);
         cache[name] = d;
@@ -122,15 +122,15 @@ for (const name of names) {
 }
 
 if (missing.length) {
-  console.error(`\nНе найдены на вики: ${missing.join(', ')}`);
+  console.error(`\nNot found on the wiki: ${missing.join(', ')}`);
   process.exit(1);
 }
 
 const items = [...results.values()].sort((a, b) => a.nameEn.localeCompare(b.nameEn));
 writeFileSync(OUT, JSON.stringify(items, null, 2) + '\n');
 
-// ID и иконки — в предметы шагов.
-// По имени из запроса: у вики регистр иногда другой («Old school bond»).
+// The IDs and icons — into the step items.
+// By the name from the request: the wiki's letter case is sometimes different ("Old school bond").
 const fill = (it: StepItemRequirement) => {
   const d = results.get(it.nameEn)!;
   if (d.nameEn !== it.nameEn) it.nameEn = d.nameEn;
@@ -143,5 +143,5 @@ for (const s of steps) {
 }
 writeFileSync(STEPS, JSON.stringify(steps, null, 2) + '\n');
 
-console.log(`\nЗаписано: ${items.length} предметов в f2p-items.json; ID и иконки проставлены в ${stepItems.length} предметах шагов.`);
-console.log(`Членских (members) среди них: ${items.filter((i) => i.members).length}.`);
+console.log(`\nWritten: ${items.length} items to f2p-items.json; IDs and icons set on ${stepItems.length} step items.`);
+console.log(`Members items among them: ${items.filter((i) => i.members).length}.`);

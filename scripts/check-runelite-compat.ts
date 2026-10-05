@@ -1,7 +1,7 @@
-// Проверяет, что собранный плагин совместим с УСТАНОВЛЕННЫМ у игрока RuneLite: все его ссылки на net.runelite.*
-// существуют в jar клиента. Нужны: JDK 17 (javap, javac), собранный плагин (./gradlew build) и RuneLite с папкой
-// ~/.runelite/repository2 (появляется после первого запуска клиента). На CI не запускается.
-// Запуск: npm run check-runelite [версия, например 1.13.1] — без версии берётся самая новая из установленных.
+// Checks that the built plugin is compatible with the RuneLite INSTALLED on the player's machine: all its references to net.runelite.*
+// exist in the client jar. Needed: JDK 17 (javap, javac), a built plugin (./gradlew build) and RuneLite with the folder
+// ~/.runelite/repository2 (it appears after the first client launch). It does not run on CI.
+// Run: npm run check-runelite [version, for example 1.13.1] — without a version the newest of the installed ones is taken.
 
 import { spawnSync } from 'node:child_process';
 import { existsSync, mkdirSync, readdirSync, writeFileSync } from 'node:fs';
@@ -25,15 +25,15 @@ function jdk(): string | null {
 }
 
 const java = jdk();
-if (!java) { console.error('Нужен JDK 17: задай JAVA_HOME или положи его в ~/.jdks.'); process.exit(2); }
-if (!existsSync(classes)) { console.error('Плагин не собран: запусти ./gradlew build в runelite-bridge.'); process.exit(2); }
-if (!existsSync(repo)) { console.error(`Нет ${repo}: запусти RuneLite один раз, чтобы он скачал клиент.`); process.exit(2); }
+if (!java) { console.error('JDK 17 is needed: set JAVA_HOME or put it in ~/.jdks.'); process.exit(2); }
+if (!existsSync(classes)) { console.error('The plugin is not built: run ./gradlew build in runelite-bridge.'); process.exit(2); }
+if (!existsSync(repo)) { console.error(`No ${repo}: start RuneLite once so that it downloads the client.`); process.exit(2); }
 
 const jars = readdirSync(repo);
 const versions = jars.map((j) => /^client-(\d+(?:\.\d+)+)\.jar$/.exec(j)?.[1]).filter((v): v is string => Boolean(v))
   .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
 const version = process.argv[2] ?? versions[versions.length - 1];
-if (!version || !versions.includes(version)) { console.error(`Клиент ${version ?? '?'} не найден в ${repo} (есть: ${versions.join(', ')}).`); process.exit(2); }
+if (!version || !versions.includes(version)) { console.error(`Client ${version ?? '?'} not found in ${repo} (available: ${versions.join(', ')}).`); process.exit(2); }
 
 const exe = (name: string) => join(java, 'bin', process.platform === 'win32' ? `${name}.exe` : name);
 const classNames = readdirSync(join(classes, 'com', 'osrspath', 'bridge')).filter((f) => f.endsWith('.class'))
@@ -52,7 +52,7 @@ writeFileSync(refsFile, `${refs.join('\n')}\n`);
 const javac = spawnSync(exe('javac'), ['-encoding', 'UTF-8', '-d', work, join(root, 'scripts', 'RuneLiteCompat.java')], { encoding: 'utf8' });
 if (javac.status !== 0) { console.error(javac.stderr); process.exit(2); }
 
-// Клиент, его API и общие библиотеки из репозитория RuneLite (версии библиотек — какие лежат).
+// The client, its API and the shared libraries from the RuneLite repository (the library versions — whichever are there).
 const pick = (re: RegExp) => jars.filter((j) => re.test(j)).map((j) => join(repo, j));
 const cp = [
   ...pick(new RegExp(`^client-${version.replace(/\./g, '\\.')}\\.jar$`)),
@@ -62,5 +62,5 @@ const cp = [
 const run = spawnSync(exe('java'), ['-Dfile.encoding=UTF-8', '-cp', work, 'RuneLiteCompat', refsFile, cp], { encoding: 'utf8' });
 process.stdout.write(run.stdout);
 if (run.stderr) process.stderr.write(run.stderr);
-console.log(`RuneLite ${version}: ${run.status === 0 && /расхождений: 0/.test(run.stdout) ? 'плагин совместим' : 'ЕСТЬ РАСХОЖДЕНИЯ'}`);
-process.exit(run.status === 0 && /расхождений: 0/.test(run.stdout) ? 0 : 1);
+console.log(`RuneLite ${version}: ${run.status === 0 && /mismatches: 0/.test(run.stdout) ? 'the plugin is compatible' : 'THERE ARE MISMATCHES'}`);
+process.exit(run.status === 0 && /mismatches: 0/.test(run.stdout) ? 0 : 1);

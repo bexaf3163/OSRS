@@ -1,32 +1,32 @@
-// Помощники этапа 3 в приложении: их можно выключить в настройках, и тогда они не только прячутся,
-// но и ничего не делают — не ищут координаты, не шлют предметы этапа в RuneLite, не предлагают апгрейды.
-// То, что происходит в самой игре, выключается ещё и в настройках плагина OSRS Path Bridge.
+// The stage 3 helpers in the app: they can be turned off in the settings, and then they not only hide
+// but also do nothing: they look up no coordinates, send no stage items to RuneLite, offer no upgrades.
+// What happens in the game itself is also turned off in the OSRS Path Bridge plugin's settings.
 
 import { useSyncExternalStore } from 'react';
 
 export interface Features {
-  /** 📍 у мест в досье вики: карта и стрелка в игре. */
+  /** 📍 at places in the wiki dossier: the map and an arrow in the game. */
   autoLocation: boolean;
-  /** Подсветка предметов этапа в банке (плагин OSRS Path Bridge). Ключ прежний — сохранённый выбор не теряется. */
+  /** Highlighting the stage's items in the bank (the OSRS Path Bridge plugin). The key is unchanged, so a saved choice is not lost. */
   bankTags: boolean;
-  /** Темп прокачки из игры в карточке шага. */
+  /** The training pace from the game in the step card. */
   pacing: boolean;
-  /** Подсказка быстрого апгрейда инструмента или оружия. */
+  /** A hint for a quick upgrade of a tool or weapon. */
   upgradeRouter: boolean;
-  /** Уровни навыков из игры сами попадают в поля уровней (протокол плагина 2+; 2.12). */
+  /** Skill levels from the game go into the level fields by themselves (plugin protocol 2+; 2.12). */
   levelsFromGame: boolean;
-  /** Автоподготовка: приложение само ведёт стрелку за недостающим (банк, магазин) и возвращает к шагу. */
+  /** Auto-prepare: the app itself leads the arrow to what is missing (a bank, a shop) and returns to the step. */
   autoPrep: boolean;
-  /** Стиль «эффективно» (по умолчанию — «спокойно»): lib/playStyle.ts. */
+  /** The "efficient" style (the default is "calm"): lib/playStyle.ts. */
   efficient: boolean;
-  /** Режим «Инспектор»: все блоки карточки шага развёрнуты (по умолчанию — «Дзен»: одна строка статуса и кнопка «Сделано»). */
+  /** The "Inspector" mode: all the step card's blocks are expanded (the default is "Zen": one status line and a "Done" button). */
   inspector: boolean;
 }
 
 export const FEATURES_KEY = 'osrs-put:features';
 export const DEFAULT_FEATURES: Features = { autoLocation: true, bankTags: true, pacing: true, upgradeRouter: true, levelsFromGame: true, autoPrep: true, efficient: false, inspector: false };
 
-/** Сохранённое, а незнакомое и битое — по умолчанию (новая функция включена). */
+/** What is saved; the unfamiliar and the broken fall back to the default (a new feature is on). */
 export function parseFeatures(raw: string | null): Features {
   const out = { ...DEFAULT_FEATURES };
   try {
@@ -35,7 +35,7 @@ export function parseFeatures(raw: string | null): Features {
       if (typeof data?.[key] === 'boolean') out[key] = data[key];
     }
   } catch {
-    // Мусор в хранилище — по умолчанию.
+    // Junk in storage means the default.
   }
   return out;
 }
@@ -46,7 +46,7 @@ const listeners = new Set<() => void>();
 function read(): Features {
   if (!current) {
     let raw: string | null = null;
-    try { raw = localStorage.getItem(FEATURES_KEY); } catch { /* нет хранилища */ }
+    try { raw = localStorage.getItem(FEATURES_KEY); } catch { /* no storage */ }
     current = parseFeatures(raw);
   }
   return current;
@@ -54,7 +54,7 @@ function read(): Features {
 
 export function setFeatures(patch: Partial<Features>): void {
   current = { ...read(), ...patch };
-  try { localStorage.setItem(FEATURES_KEY, JSON.stringify(current)); } catch { /* запомнится до перезапуска */ }
+  try { localStorage.setItem(FEATURES_KEY, JSON.stringify(current)); } catch { /* it is remembered until restart */ }
   for (const l of listeners) l();
 }
 

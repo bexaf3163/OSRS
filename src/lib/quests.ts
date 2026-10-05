@@ -1,17 +1,17 @@
-// Список квестов из шагов маршрута. Квест из нескольких шагов (Dragon Slayer I) — одна запись.
+// The list of quests from the route steps. A quest of several steps (Dragon Slayer I) is one entry.
 
 import type { Quest, Step } from '../types';
 
-/** Название квеста по ссылке на вики: …/w/Dragon_Slayer_I → «Dragon Slayer I». */
+/** The quest name from a wiki link: .../w/Dragon_Slayer_I gives "Dragon Slayer I". */
 function questName(step: Step): string {
   const m = step.wikiUrl?.match(/\/w\/([^/#?]+)$/);
   return m ? decodeURIComponent(m[1]).replace(/_/g, ' ') : step.title;
 }
 
 /**
- * Шаг-квест без очков — часть следующего квеста с очками в том же этапе, если у него нет
- * своего квеста (Quick guide) или это тот же квест: S5-01…S5-08 → Dragon Slayer I.
- * Иначе это отдельный квест без очков: вступление Fairytale II, начало Recipe for Disaster.
+ * A quest step without points is part of the next quest with points in the same stage if it has no
+ * quest of its own (Quick guide) or it is the same quest: S5-01...S5-08 is Dragon Slayer I.
+ * Otherwise it is a separate quest without points: the Fairytale II start, the beginning of Recipe for Disaster.
  */
 export function deriveQuests(steps: Step[]): Quest[] {
   const quests = steps.filter((s) => s.type === 'quest');
@@ -29,7 +29,6 @@ export function deriveQuests(steps: Step[]): Quest[] {
       return {
         stepId: s.id,
         title: parts.length ? questName(s) : s.title.replace(/\s*\(.*\)$/, ''),
-        ...(s.titleRu ? { titleRu: s.titleRu } : {}),
         stage: s.stage,
         qp: s.qp ?? 0,
         parts: parts.length ? [...parts, s.id] : [],

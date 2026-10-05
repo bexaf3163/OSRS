@@ -1,9 +1,9 @@
-// Режим восстановления: игрок умер, нажал телепорт посреди шага или иначе оказался вдали от того места, где шаг.
-// Маршрут предполагает, что игрок стоит где нужно, — после срыва «бей зомби» или «иди к лестнице» были бы насмешкой.
-// Плагин присылает событие MOVED: DEATH (персонаж умер) и TELEPORT (скачок на 20+ клеток за тик). Здесь решается,
-// срыв это или нормальный путь: телепорт к шагу срывом не считается, а возрождение в Lumbridge вдали от шага — считается.
-// Чистая логика: время и клетки приходят снаружи. Что делать дальше, строит план подготовки (prepPlan.ts) —
-// вещи могли пропасть, и он это сам увидит по сумке и банку; здесь только «срыв ли это» и «что сказать».
+// Recovery mode: the player died, pressed a teleport in the middle of a step, or otherwise ended up far from where the step is.
+// The route assumes the player stands where needed; after a setback "hit the zombie" or "go to the ladder" would be a mockery.
+// The plugin sends a MOVED event: DEATH (the character died) and TELEPORT (a jump of 20+ tiles in a tick). Here it is decided
+// whether it is a setback or a normal path: a teleport to the step is not a setback, and a respawn in Lumbridge far from the step is.
+// Pure logic: the time and the tiles come from outside. What to do next is built by the preparation plan (prepPlan.ts):
+// things could have been lost, and it sees that itself from the bag and bank; here there is only "is it a setback" and "what to say".
 
 import type { Step } from '../types';
 
@@ -11,25 +11,25 @@ export interface Point { x: number; y: number; plane: number }
 
 export interface MoveEvent {
   kind: 'DEATH' | 'TELEPORT';
-  /** Откуда: у смерти — где умер. */
+  /** From where: for a death, where they died. */
   from: Point | null;
-  /** Куда попал; у смерти нет — следом придёт TELEPORT возрождения. */
+  /** Where they ended up; a death has none: the respawn's TELEPORT follows. */
   to: Point | null;
-  /** Когда программа получила событие, мс. */
+  /** When the app received the event, ms. */
   at: number;
 }
 
-/** Куда возрождает после смерти и куда ведёт Home Teleport у большинства игроков. */
+/** Where a death respawns and where Home Teleport leads for most players. */
 export const RESPAWN: Point = { x: 3222, y: 3218, plane: 0 };
-/** Не дальше стольких клеток от точки возрождения — «в Лумбридже». */
+/** No farther than this many tiles from the respawn point means "in Lumbridge". */
 export const HUB_RADIUS = 15;
-/** Дальше стольких клеток от шага — «шаг далеко». */
+/** Farther than this many tiles from the step means "the step is far". */
 export const FAR = 100;
-/** Ближе стольких — уже у шага, восстановление кончилось. */
+/** Closer than this: already at the step, the recovery is over. */
 export const NEAR = 40;
-/** Смерть и возрождение идут подряд: возрождение позже смерти не больше чем на столько мс — это та же смерть. */
+/** A death and a respawn come in a row: the respawn is later than the death by no more than this many ms: it is the same death. */
 export const DEATH_WINDOW_MS = 3 * 60_000;
-/** Через сколько режим гаснет сам. */
+/** How long until the mode fades by itself. */
 export const RECOVERY_TTL_MS = 30 * 60_000;
 const UNDERGROUND = 6400;
 
@@ -37,15 +37,15 @@ export type RecoveryReason = 'DEATH' | 'TELEPORT';
 
 export interface Recovery {
   reason: RecoveryReason;
-  /** Когда случилось, мс. */
+  /** When it happened, ms. */
   since: number;
-  /** Где игрок оказался (Lumbridge); null — ещё не возродился. */
+  /** Where the player ended up (Lumbridge); null means not respawned yet. */
   landedAt: Point | null;
-  /** Где умер (только при смерти). */
+  /** Where they died (only for a death). */
   diedAt: Point | null;
-  /** Клеток до шага по прямой; null — не посчитать (под землёй, нет точки шага). */
+  /** Tiles to the step in a straight line; null means it cannot be counted (underground, no step point). */
   distance: number | null;
-  /** Куда идти обратно: точка шага. */
+  /** Where to go back: the step's point. */
   target: Point | null;
 }
 
@@ -53,7 +53,7 @@ const surfaceY = (y: number) => (y >= UNDERGROUND + 1000 ? y - UNDERGROUND : y);
 const dist = (a: Point, b: Point) => Math.max(Math.abs(a.x - b.x), Math.abs(surfaceY(a.y) - surfaceY(b.y)));
 const underground = (p: Point) => p.y >= UNDERGROUND + 1000;
 
-/** Точка шага: явная точка для игры, иначе стартовая точка на карте. */
+/** The step's point: an explicit point for the game, otherwise the start point on the map. */
 export function stepPoint(step: Pick<Step, 'inGame' | 'mapLocation'>): Point | null {
   const w = step.inGame?.worldPoint ?? step.mapLocation;
   return w ? { x: w.x, y: w.y, plane: w.plane } : null;
@@ -62,20 +62,20 @@ export function stepPoint(step: Pick<Step, 'inGame' | 'mapLocation'>): Point | n
 export const inHub = (p: Point | null | undefined): boolean => !!p && !underground(p) && dist(p, RESPAWN) <= HUB_RADIUS;
 
 export interface RecoveryInput {
-  /** События MOVED по порядку (новые в конце). */
+  /** The MOVED events in order (new ones at the end). */
   moves: readonly MoveEvent[];
   step: Pick<Step, 'inGame' | 'mapLocation'>;
   now: number;
-  /** Игрок нажал «Это не срыв»: всё, что случилось раньше этого момента, не считается. */
+  /** The player pressed "This is not a setback": whatever happened before that moment does not count. */
   dismissedAt?: number;
-  /** Где игрок сейчас, если известно: рядом с шагом — восстановление окончено. */
+  /** Where the player is now, if known: near the step means the recovery is over. */
   here?: Point | null;
 }
 
 /**
- * Срыв или нет. Смерть — всегда срыв (вещи могли остаться в могиле), если игрок не оказался сразу у шага. Телепорт —
- * только когда он привёл в Lumbridge, а шаг далеко от него: «Home Teleport посреди квеста». Телепорт ближе к шагу
- * (Varrock Teleport к квесту в Varrock) — нормальный путь, а не срыв.
+ * A setback or not. A death is always a setback (things could have stayed in the grave), unless the player ended up right at the step. A teleport is
+ * only when it brought them to Lumbridge while the step is far from it: "Home Teleport in the middle of a quest". A teleport closer to the step
+ * (Varrock Teleport to a quest in Varrock) is a normal path, not a setback.
  */
 export function detectRecovery(i: RecoveryInput): Recovery | null {
   const last = i.moves[i.moves.length - 1];
@@ -85,17 +85,17 @@ export function detectRecovery(i: RecoveryInput): Recovery | null {
   const target = stepPoint(i.step);
   const death = [...i.moves].reverse().find((m) => m.kind === 'DEATH' && last.at - m.at <= DEATH_WINDOW_MS && m.at <= last.at);
   const landedAt = last.kind === 'TELEPORT' ? last.to : null;
-  // Где игрок: по данным игры; ещё не возродился — возродится в Lumbridge (место смерти для этого не годится).
+  // Where the player is: by the game's data; not yet respawned means they will respawn in Lumbridge (the place of death does not fit here).
   const place = i.here ?? landedAt ?? (death ? RESPAWN : null);
   const distance = place && target && !underground(target) && !underground(place) ? dist(place, target) : null;
   if (distance !== null && distance <= NEAR) return null;
   if (death) {
-    // Умер вблизи шага и возродился где угодно — всё равно срыв; но если шаг как раз у возрождения, делать нечего.
+    // Died near the step and respawned anywhere is still a setback; but if the step is right at the respawn, there is nothing to do.
     if (target && landedAt && dist(landedAt, target) <= NEAR) return null;
     return { reason: 'DEATH', since: death.at, landedAt, diedAt: death.from, distance, target };
   }
   if (last.kind !== 'TELEPORT') return null;
-  // Одинокий телепорт: срыв, только если он привёл в Lumbridge, а шаг далеко от него.
+  // A lone teleport: a setback only if it brought them to Lumbridge while the step is far from it.
   if (!inHub(last.to) || !target || underground(target) || dist(RESPAWN, target) <= FAR) return null;
   return { reason: 'TELEPORT', since: last.at, landedAt, diedAt: null, distance, target };
 }
@@ -103,22 +103,22 @@ export function detectRecovery(i: RecoveryInput): Recovery | null {
 export interface RecoveryStep { label: string; detail?: string }
 
 /**
- * Что сказать игроку. Порядок: вещи, недостающее, возвращение. «Недостающее» программа берёт из плана подготовки,
- * поэтому пустой список здесь значит «ничего не пропало — просто возвращайся».
+ * What to say to the player. The order: things, the missing, the return. The "missing" is taken by the app from the preparation plan,
+ * so an empty list here means "nothing was lost: just go back".
  */
 export function recoverySteps(r: Recovery, missing: number, stepId: string): RecoveryStep[] {
   const out: RecoveryStep[] = [];
   if (r.reason === 'DEATH') {
     out.push({
-      label: 'Забери вещи, которые остались после смерти',
-      detail: 'Они лежат на могиле там, где ты умер; если могилу не успел забрать — вещи у Смерти в Death’s Office. Сначала могила, потом банк.',
+      label: 'Collect the things left after the death',
+      detail: 'They lie on the grave where you died; if you did not collect the grave in time, the things are with Death in Death’s Office. The grave first, then the bank.',
     });
   } else {
-    out.push({ label: 'Проверь сумку и снаряжение', detail: 'Телепорт переместил тебя в Lumbridge: всё, что было с тобой, осталось при тебе.' });
+    out.push({ label: 'Check your bag and equipment', detail: 'The teleport moved you to Lumbridge: everything you had with you stays with you.' });
   }
   out.push(missing > 0
-    ? { label: `Возьми недостающее: ${missing} ${missing === 1 ? 'пункт' : missing < 5 ? 'пункта' : 'пунктов'}`, detail: 'Список ниже уже пересчитан по тому, что у тебя осталось.' }
-    : { label: 'Недостающего нет — всё, что нужно шагу, при тебе' });
-  out.push({ label: `Вернись к шагу ${stepId}`, detail: 'Стрелка в игре ведёт к месту шага; «Как добраться» подскажет телепорт или каноэ.' });
+    ? { label: `Take what is missing: ${missing} ${missing === 1 ? 'item' : 'items'}`, detail: 'The list below is already recounted by what you have left.' }
+    : { label: 'Nothing is missing: everything the step needs is with you' });
+  out.push({ label: `Go back to step ${stepId}`, detail: 'The arrow in the game leads to the step\'s place; "How to get there" suggests a teleport or a canoe.' });
   return out;
 }

@@ -1,5 +1,5 @@
-"""Эталонный вычислитель машин Quest Helper (Python). Те же правила, что в плагине (QhEval.java): три значения (да / нет / не знаю),
-защёлки Conditions(true, …), события чата/диалога по истории сообщений. Нужен генератору для проверок и для «золотых» векторов тестов плагина."""
+"""The reference evaluator of the Quest Helper machines (Python). The same rules as in the plugin (QhEval.java): three values (yes / no / unknown),
+the latches Conditions(true, …), the chat/dialogue events by the message history. The generator needs it for checks and for the "golden" vectors of the plugin tests."""
 import re
 
 T, F, U = True, False, None
@@ -21,8 +21,8 @@ class Facts:
         self.pos = pos
         self.vb = vb or {}
         self.vp = vp or {}
-        self.events = events or []      # (тип, имя, текст)
-        self.widgets = widgets or {}    # (группа, ребёнок) -> [тексты]: первый — сам виджет, остальные — дети
+        self.events = events or []      # (type, name, text)
+        self.widgets = widgets or {}    # (group, child) -> [texts]: the first is the widget itself, the rest are children
         self.npcs = npcs or []          # (id, x, y, plane)
         self.objs = objs or []
         self.quests = quests or {}
@@ -30,7 +30,7 @@ class Facts:
 
 
 class Machine:
-    """Одна машина квеста: таблицы reqs/nodes и состояние защёлок."""
+    """One quest machine: the reqs/nodes tables and the latch state."""
 
     def __init__(self, data):
         self.reqs = data.get('reqs', {})
@@ -156,7 +156,7 @@ class Machine:
             return st == n['st']
         return U
 
-    # ------------------------------------------------------------ машина
+    # ------------------------------------------------------------ the machine
     def node(self, ref):
         return self.nodes[ref] if isinstance(ref, str) else ref
 
@@ -167,7 +167,7 @@ class Machine:
         return self.ev(lk, facts) is T
 
     def resolve(self, ref, facts, path=None, strong=False):
-        """(лист, путь имён, сильный ли вывод) или None, если не решить (встретилось «не знаю»)."""
+        """(the leaf, the name path, whether the inference is strong) or None if it cannot be decided (an "unknown" was met)."""
         nd = self.node(ref)
         path = (path or []) + ([nd['n']] if nd.get('n') else [])
         if 's' in nd:

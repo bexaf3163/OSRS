@@ -1,5 +1,5 @@
-// Копирование в буфер обмена: Clipboard API, а если он закрыт (нет фокуса, старый браузер,
-// ограничения программы для ПК) — старый способ через выделение текста.
+// Copying to the clipboard: the Clipboard API, and if it is blocked (no focus, an old browser,
+// desktop app restrictions) the old way through selecting text.
 
 export async function copyText(text: string): Promise<boolean> {
   try {

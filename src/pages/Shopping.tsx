@@ -1,6 +1,6 @@
-// «🛒 Оптовый список Grand Exchange»: одна закупка на несколько этапов вперёд.
-// Цены — из того же сервиса цен OSRS Wiki, что и инспектор предметов; что уже есть — из RuneLite.
-// Покупать приходится самому: программа только собирает список, копирует названия и подсказывает на бирже.
+// "🛒 Grand Exchange shopping list": one purchase for several stages ahead.
+// The prices come from the same OSRS Wiki price service as the item inspector; what you already have — from RuneLite.
+// You have to buy yourself: the app only assembles the list, copies the names and hints at the exchange.
 
 import { useEffect, useMemo, useState } from 'react';
 import { useStore } from '../store';
@@ -18,13 +18,13 @@ import { copyText as copy } from '../lib/clipboard';
 const RANGE_KEY = 'osrs-put:shopping-range';
 const FILTER_KEY = 'osrs-put:shopping-filter';
 
-/** Что показывать: по умолчанию — то, что ещё надо купить (и что неизвестно), чтобы список не рос от купленного. */
+/** What to show: by default what is still to buy (and what is unknown), so the list does not grow from what was bought. */
 type Filter = 'need' | 'partial' | 'have' | 'all';
 const FILTERS: { id: Filter; label: string }[] = [
-  { id: 'need', label: 'Нужно купить' },
-  { id: 'partial', label: 'Частично есть' },
-  { id: 'have', label: 'Уже есть' },
-  { id: 'all', label: 'Все' },
+  { id: 'need', label: 'Need to buy' },
+  { id: 'partial', label: 'Partly owned' },
+  { id: 'have', label: 'Already owned' },
+  { id: 'all', label: 'All' },
 ];
 const shows = (f: Filter, st: ShoppingItemStatus) => (f === 'all' ? true
   : f === 'have' ? st === 'SUFFICIENT'
@@ -46,7 +46,7 @@ interface Range {
   openOnly: boolean;
 }
 
-/** Сохранённый диапазон; `null`, массив и прочий мусор в хранилище — как будто ничего не сохраняли. */
+/** The saved range; `null`, an array and other garbage in the storage — as if nothing had been saved. */
 function loadRange(): Partial<Range> {
   try {
     const data = JSON.parse(localStorage.getItem(RANGE_KEY) ?? '{}') as unknown;
@@ -64,23 +64,23 @@ function loadRange(): Partial<Range> {
 
 interface Row {
   line: ShoppingLine;
-  /** Сколько есть, откуда это известно и сколько купить. */
+  /** How many there are, how it is known and how many to buy. */
   h: Holding;
   price?: GePrice | null;
 }
 
-/** Где что лежит: «в сумке 5 · в банке 8», «отмечено вручную», «? банк не открыт». */
+/** Where things are: "in the bag 5 · in the bank 8", "marked by hand", "? bank not opened". */
 function sourceNote(h: Holding): string {
   const parts: string[] = [];
-  if (h.source === 'live') parts.push(`в сумке ${h.carried ?? 0} · в банке ${h.bank ?? 0}`);
+  if (h.source === 'live') parts.push(`in the bag ${h.carried ?? 0} · in the bank ${h.bank ?? 0}`);
   else if (h.source === 'manual') {
-    parts.push(`отмечено вручную: ${h.manual}`);
-    if (h.carried) parts.push(`в сумке ${h.carried}`);
-  } else if (h.source === 'bag') parts.push(`в сумке ${h.carried ?? 0} · ? банк не открыт`);
+    parts.push(`marked by hand: ${h.manual}`);
+    if (h.carried) parts.push(`in the bag ${h.carried}`);
+  } else if (h.source === 'bag') parts.push(`in the bag ${h.carried ?? 0} · ? bank not opened`);
   return parts.join(' · ');
 }
 
-/** Поле «уже есть»: −, число, +. Мусор (буквы, минус, дробь) не сохраняется — поле возвращается к прежнему. */
+/** The "already have" field: −, a number, +. Garbage (letters, a minus, a fraction) is not saved — the field returns to the previous value. */
 function OwnedInput({ value, max, name, onSet }: { value: number; max: number; name: string; onSet: (n: number) => void }) {
   const [draft, setDraft] = useState(String(value));
   useEffect(() => setDraft(String(value)), [value]);
@@ -92,13 +92,13 @@ function OwnedInput({ value, max, name, onSet }: { value: number; max: number; n
   return (
     <span className="owned-input">
       <button type="button" className="btn btn-ghost btn-sm" onClick={() => onSet(Math.max(0, value - 1))} disabled={value <= 0}
-        aria-label={`${name}: на один меньше`}>−</button>
-      <input type="text" inputMode="numeric" value={draft} aria-label={`${name}: сколько уже есть`}
+        aria-label={`${name}: one less`}>−</button>
+      <input type="text" inputMode="numeric" value={draft} aria-label={`${name}: how many you already have`}
         onChange={(e) => setDraft(e.target.value.replace(/[^\d]/g, ''))} onBlur={commit}
         onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }} />
       <button type="button" className="btn btn-ghost btn-sm" onClick={() => onSet(Math.min(MAX_OWNED, value + 1))}
-        aria-label={`${name}: на один больше`}>+</button>
-      <span className="muted small">из {max}</span>
+        aria-label={`${name}: one more`}>+</button>
+      <span className="muted small">of {max}</span>
     </span>
   );
 }
@@ -108,7 +108,7 @@ export function ShoppingPage() {
   const [filter, setFilterState] = useState<Filter>(loadFilter);
   const setFilter = (f: Filter) => {
     setFilterState(f);
-    try { localStorage.setItem(FILTER_KEY, f); } catch { /* до перезапуска */ }
+    try { localStorage.setItem(FILTER_KEY, f); } catch { /* until a restart */ }
   };
   const { state, owned, syncPlan } = useBridge();
   const stageIds = useMemo(() => stages.map((s) => s.id).filter((id) => steps.some((st) => st.stage === id)), [stages, steps]);
@@ -124,7 +124,7 @@ export function ShoppingPage() {
     setRange((r) => {
       const next = { ...r, ...patch };
       if (next.to < next.from) next.to = next.from;
-      try { localStorage.setItem(RANGE_KEY, JSON.stringify(next)); } catch { /* до перезапуска */ }
+      try { localStorage.setItem(RANGE_KEY, JSON.stringify(next)); } catch { /* until a restart */ }
       return next;
     });
   };
@@ -135,7 +135,7 @@ export function ShoppingPage() {
   );
   const list = useMemo(() => aggregateShopping(selected), [selected]);
 
-  // Что продаётся на бирже: справочник предметов из API цен. null — ещё грузится или недоступен.
+  // What is sold on the exchange: the item reference from the price API. null — still loading or unavailable.
   const [tradeable, setTradeable] = useState<Set<number> | null>(null);
   const [pricesError, setPricesError] = useState(false);
   useEffect(() => {
@@ -178,8 +178,8 @@ export function ShoppingPage() {
   const left = buyRows.filter((r) => r.h.buy > 0).length;
   const stale = [...buyRows, ...gatherRows, ...recRows].filter((r) => r.h.stale);
 
-  // Список — в подсказку на бирже в RuneLite. Плагин сам вычитает то, что видит в игре; ручные отметки — вычтены здесь.
-  // Количество 0 у плагина значит «сколько по ситуации» — отмеченное вручную как имеющееся в список не идёт.
+  // The list — into the exchange hint in RuneLite. The plugin subtracts what it sees in the game itself; the manual marks are subtracted here.
+  // A quantity of 0 for the plugin means "as the situation requires" — what is marked by hand as owned does not go into the list.
   const planItems = buyRows.map((r) => ({ name: r.line.nameEn, id: r.line.id, count: pluginCount(r.h) })).filter((i) => i.count > 0);
   const planKey = planItems.map((i) => `${i.name}:${i.count}`).join('|');
   useEffect(() => {
@@ -188,37 +188,37 @@ export function ShoppingPage() {
       void syncPlan({ items: planItems });
     }, 400);
     return () => clearTimeout(timer);
-    // planItems пересчитывается каждую отрисовку — следим за его содержимым через planKey.
+    // planItems is recomputed on every render — we watch its content through planKey.
   }, [planKey, state, syncPlan]);
 
   const syncFromGame = () => {
     if (state !== 'online') {
-      notify('RuneLite не подключён — укажи, что уже есть, вручную в строках списка');
+      notify('RuneLite is not connected — mark what you already have by hand in the list rows');
       return;
     }
     if (!owned?.bankSeen) {
-      notify('Открой банк в игре — программа посчитает, что там лежит, и обновит список');
+      notify('Open the bank in the game — the app will count what is there and update the list');
       return;
     }
     const live = [...buyRows, ...gatherRows, ...recRows].filter((r) => r.h.source === 'live' && r.h.manual !== undefined);
     for (const r of live) setOwnedManual(r.line.key, null);
-    notify(live.length ? `Взято из игры: ${live.length} ${plural(live.length, 'позиция', 'позиции', 'позиций')} — ручные отметки заменены` : 'Список уже по данным игры: сумка и банк учтены');
+    notify(live.length ? `Taken from the game: ${live.length} ${plural(live.length, 'item', 'items')} — the manual marks were replaced` : 'The list is already by the game data: the bag and bank are counted');
   };
 
-  const title = `Grand Exchange — этап${range.from === range.to ? ` ${range.from}` : `ы ${range.from}–${range.to}`}`;
+  const title = `Grand Exchange — stage${range.from === range.to ? ` ${range.from}` : `s ${range.from}–${range.to}`}`;
   const copyAll = async () => {
     const text = shoppingText(title, buyRows.map((r) => ({ nameEn: r.line.nameEn, buy: r.h.buy, exact: r.line.exact })), list.coins);
-    notify(await copy(text) ? '📋 Список скопирован — вставь его в заметку рядом с игрой' : 'Не удалось скопировать — браузер запретил доступ к буферу обмена');
+    notify(await copy(text) ? '📋 The list is copied — paste it into a note next to the game' : 'Could not copy — the browser denied access to the clipboard');
   };
   const copyName = async (name: string) => {
-    notify(await copy(name) ? `📋 «${name}» скопировано — вставь в поиск GE` : 'Не удалось скопировать');
+    notify(await copy(name) ? `📋 "${name}" is copied — paste it into the GE search` : 'Could not copy');
   };
 
   const bridgeNote = state === 'online'
     ? owned
-      ? owned.bankSeen ? 'Учтено, что уже лежит в сумке и в банке (RuneLite).' : 'Учтена сумка. Открой банк в игре — учту и его.'
-      : 'Войди в игру в RuneLite — учту то, что уже есть.'
-    : state === 'off' ? 'Что уже есть — отмечай в строках вручную.' : 'RuneLite не подключён — что уже есть, отмечай в строках вручную.';
+      ? owned.bankSeen ? 'What already lies in the bag and bank is counted (RuneLite).' : 'The bag is counted. Open the bank in the game — I will count it too.'
+      : 'Log in to the game in RuneLite — I will count what you already have.'
+    : state === 'off' ? 'Mark what you already have by hand in the rows.' : 'RuneLite is not connected — mark what you already have by hand in the rows.';
 
   const rowView = (r: Row) => {
     const { line, h } = r;
@@ -229,24 +229,24 @@ export function ShoppingPage() {
       <li key={line.key} className={`shop-row is-${h.status.toLowerCase()}`}>
         <ItemIcon src={line.iconUrl} alt="" />
         <div className="shop-main">
-          <p className="shop-name"><strong>{line.nameEn}</strong> <span className="muted">({line.nameRu})</span></p>
+          <p className="shop-name"><strong>{line.nameEn}</strong></p>
           <p className="shop-src muted small">
             {line.sources.map((s, i) => {
               const n = parseAmount(s.amount);
               return (
                 <span key={`${s.stepId}-${i}`}>
                   {i > 0 && ', '}
-                  <a href={`#/step/${s.stepId}`}>{s.stepId}</a>{n !== null && n > 1 && !s.carryOver ? ` ×${n}` : ''}{s.carryOver ? ' (тот же)' : ''}
+                  <a href={`#/step/${s.stepId}`}>{s.stepId}</a>{n !== null && n > 1 && !s.carryOver ? ` ×${n}` : ''}{s.carryOver ? ' (same)' : ''}
                 </span>
               );
             })}
-            {line.reusable && line.sources.length > 1 ? ' · инструмент: одного хватит' : ''}
+            {line.reusable && line.sources.length > 1 ? ' · a tool: one is enough' : ''}
           </p>
           {note && <p className="muted small">{note}</p>}
           {h.stale && (
             <p className="small warn-text">
-              ⚠️ Игра больше не подтверждает отметку «есть {h.manual}» — считаю по игре.{' '}
-              <button type="button" className="link-btn" onClick={() => setManual(null)}>Убрать отметку</button>
+              ⚠️ The game no longer confirms the mark "have {h.manual}" — counting by the game.{' '}
+              <button type="button" className="link-btn" onClick={() => setManual(null)}>Remove the mark</button>
             </p>
           )}
         </div>
@@ -254,28 +254,28 @@ export function ShoppingPage() {
           {h.status === 'SUFFICIENT'
             ? <strong className="ok-text">✓ {h.owned ?? 0} / {line.count}{line.exact ? '' : '+'}</strong>
             : <strong>×{line.count}{line.exact ? '' : '+'}</strong>}
-          {h.status === 'PARTIAL' && <span className="small">есть {h.owned} · купить {h.buy}</span>}
-          {h.status === 'UNKNOWN' && h.source === 'bag' && <span className="muted small">купить до {h.buy}</span>}
+          {h.status === 'PARTIAL' && <span className="small">have {h.owned} · buy {h.buy}</span>}
+          {h.status === 'UNKNOWN' && h.source === 'bag' && <span className="muted small">buy up to {h.buy}</span>}
           {r.price && h.buy > 0 && <span className="muted small">≈ {formatGp(r.price.buyPrice * h.buy)} gp</span>}
-          {r.price === null && h.buy > 0 && !pricesError && <span className="muted small">цена неизвестна</span>}
+          {r.price === null && h.buy > 0 && !pricesError && <span className="muted small">price unknown</span>}
         </div>
         <div className="shop-actions">
           {h.source === 'live' ? (
-            // Сумка и банк известны из игры — ручная отметка ничего бы не изменила.
-            <span className="muted small">✓ по данным игры</span>
+            // The bag and bank are known from the game — a manual mark would change nothing.
+            <span className="muted small">✓ by the game data</span>
           ) : single ? (
             h.manual !== undefined && h.manual > 0
-              ? <button type="button" className="btn btn-ghost btn-sm" onClick={() => setManual(null)}>↺ Снять «уже есть»</button>
-              : h.status !== 'SUFFICIENT' && <button type="button" className="btn btn-sm" onClick={() => setManual(line.count)}>✓ Уже есть</button>
+              ? <button type="button" className="btn btn-ghost btn-sm" onClick={() => setManual(null)}>↺ Clear "already have"</button>
+              : h.status !== 'SUFFICIENT' && <button type="button" className="btn btn-sm" onClick={() => setManual(line.count)}>✓ Already have</button>
           ) : (
             <>
               <OwnedInput value={h.manual ?? h.owned ?? 0} max={line.count} name={line.nameEn} onSet={setManual} />
-              {h.status !== 'SUFFICIENT' && <button type="button" className="btn btn-sm" onClick={() => setManual(line.count)}>✓ Есть все</button>}
-              {h.manual !== undefined && <button type="button" className="btn btn-ghost btn-sm" onClick={() => setManual(null)}>↺ Снять отметку</button>}
+              {h.status !== 'SUFFICIENT' && <button type="button" className="btn btn-sm" onClick={() => setManual(line.count)}>✓ Have all</button>}
+              {h.manual !== undefined && <button type="button" className="btn btn-ghost btn-sm" onClick={() => setManual(null)}>↺ Remove the mark</button>}
             </>
           )}
           <button type="button" className="btn btn-ghost btn-sm" onClick={() => void copyName(line.nameEn)}
-            aria-label={`Копировать название ${line.nameEn}`}>📋 Название</button>
+            aria-label={`Copy the name ${line.nameEn}`}>📋 Name</button>
         </div>
       </li>
     );
@@ -285,60 +285,60 @@ export function ShoppingPage() {
   return (
     <div className="page shop-page">
       <header className="page-head">
-        <h1>🛒 Оптовый список Grand Exchange</h1>
-        <p className="muted">Всё, что нужно на несколько этапов вперёд, — одной закупкой. Одинаковые предметы сложены, инструменты не повторяются.</p>
+        <h1>🛒 Grand Exchange shopping list</h1>
+        <p className="muted">Everything needed for several stages ahead — in one purchase. Identical items are merged, tools are not repeated.</p>
       </header>
 
       <div className="card shop-controls">
-        <label>С этапа{' '}
+        <label>From stage{' '}
           <select value={range.from} onChange={(e) => update({ from: Number(e.target.value) })}>
             {stageIds.map((id) => <option key={id} value={id}>{id}</option>)}
           </select>
         </label>
-        <label>по{' '}
+        <label>to{' '}
           <select value={range.to} onChange={(e) => update({ to: Number(e.target.value) })}>
             {stageIds.filter((id) => id >= range.from).map((id) => <option key={id} value={id}>{id}</option>)}
           </select>
         </label>
         <label className="shop-check">
-          <input type="checkbox" checked={range.openOnly} onChange={(e) => update({ openOnly: e.target.checked })} /> только невыполненные шаги
+          <input type="checkbox" checked={range.openOnly} onChange={(e) => update({ openOnly: e.target.checked })} /> only unfinished steps
         </label>
       </div>
 
       <div className="card shop-summary">
         {buyRows.length > 0 && left === 0 ? (
-          <p><strong>🟢 Всё уже подготовлено</strong> — покупки не требуются.</p>
+          <p><strong>🟢 Everything is already prepared</strong> — no purchases are needed.</p>
         ) : (
           <p>
-            <strong>{left ? `Купить: ${left} ${plural(left, 'позицию', 'позиции', 'позиций')}` : 'Покупать нечего'}</strong>
-            {budget > 0 && <> · бюджет оставшихся покупок ≈ <strong>{formatGp(budget)} gp</strong></>}
-            {list.coins > 0 && <> · ещё {formatGp(list.coins)} gp монетами на сами шаги</>}
+            <strong>{left ? `Buy: ${left} ${plural(left, 'item', 'items')}` : 'Nothing to buy'}</strong>
+            {budget > 0 && <> · the budget of the remaining purchases ≈ <strong>{formatGp(budget)} gp</strong></>}
+            {list.coins > 0 && <> · another {formatGp(list.coins)} gp in coins for the steps themselves</>}
           </p>
         )}
         {buyRows.length > 0 && (
           <p className="small shop-tally">
-            {buyRows.length} {plural(buyRows.length, 'позиция', 'позиции', 'позиций')}:
-            {' '}✓ уже есть {have}
-            {partial > 0 && <> · 🟡 частично {partial}</>}
-            {missing > 0 && <> · ✗ нет {missing}</>}
-            {unknown > 0 && <> · ? неизвестно {unknown}</>}
-            {notGeRows.length > 0 && <> · не продаётся на бирже {notGeRows.length}</>}
+            {buyRows.length} {plural(buyRows.length, 'item', 'items')}:
+            {' '}✓ already have {have}
+            {partial > 0 && <> · 🟡 partly {partial}</>}
+            {missing > 0 && <> · ✗ missing {missing}</>}
+            {unknown > 0 && <> · ? unknown {unknown}</>}
+            {notGeRows.length > 0 && <> · not sold on the exchange {notGeRows.length}</>}
           </p>
         )}
         <p className="muted small">
-          {pricesError ? 'Цены сейчас недоступны (нет интернета?) — список работает и без них.'
-            : `Цены — справочно, с prices.runescape.wiki${unpriced ? `; без цены: ${unpriced}` : ''}.`}
+          {pricesError ? 'The prices are unavailable now (no internet?) — the list works without them too.'
+            : `Prices are for reference, from prices.runescape.wiki${unpriced ? `; without a price: ${unpriced}` : ''}.`}
           {bridgeNote && <> {bridgeNote}</>}
-          {state === 'online' && ' Список показан и в игре — открой биржу.'}
+          {state === 'online' && ' The list is shown in the game too — open the exchange.'}
         </p>
-        {stale.length > 0 && <p className="small warn-text">⚠️ Игра не подтверждает {stale.length} {plural(stale.length, 'ручную отметку', 'ручные отметки', 'ручных отметок')} — они помечены в списке.</p>}
+        {stale.length > 0 && <p className="small warn-text">⚠️ The game does not confirm {stale.length} {plural(stale.length, 'manual mark', 'manual marks')} — they are marked in the list.</p>}
         <div className="shop-buttons">
           <button type="button" className="btn btn-primary" onClick={() => void copyAll()} disabled={!left}>
-            📋 Скопировать список для биржи
+            📋 Copy the list for the exchange
           </button>
-          <button type="button" className="btn" onClick={syncFromGame}>✓ Синхронизировать с моим банком</button>
+          <button type="button" className="btn" onClick={syncFromGame}>✓ Sync with my bank</button>
         </div>
-        <div className="segmented shop-filter" role="group" aria-label="Что показывать">
+        <div className="segmented shop-filter" role="group" aria-label="What to show">
           {FILTERS.map((f) => (
             <button key={f.id} type="button" className={`seg ${filter === f.id ? 'is-active' : ''}`} aria-pressed={filter === f.id} onClick={() => setFilter(f.id)}>
               {f.label} <span className="seg-count">{buyRows.filter((r) => shows(f.id, r.h.status)).length}</span>
@@ -349,33 +349,33 @@ export function ShoppingPage() {
 
       {buyRows.length > 0 && (
         <section className="shop-group">
-          <h2 className="subhead">Купить на бирже · {visible(buyRows).length} из {buyRows.length}</h2>
+          <h2 className="subhead">Buy at the exchange · {visible(buyRows).length} of {buyRows.length}</h2>
           {visible(buyRows).length
             ? <ul className="shop-list">{visible(buyRows).map(rowView)}</ul>
-            : <p className="muted small">В этом фильтре пусто — выбери «Все».</p>}
+            : <p className="muted small">This filter is empty — choose "All".</p>}
         </section>
       )}
       {gatherRows.length > 0 && (
         <details className="shop-group">
-          <summary className="subhead">Добудешь по ходу шагов — можно купить, чтобы не собирать · {gatherRows.length}</summary>
+          <summary className="subhead">You will get these along the way — you can buy them to avoid gathering · {gatherRows.length}</summary>
           <ul className="shop-list">{visible(gatherRows).map(rowView)}</ul>
         </details>
       )}
       {recRows.length > 0 && (
         <details className="shop-group">
-          <summary className="subhead">Рекомендуется, не обязательно · {recRows.length}</summary>
+          <summary className="subhead">Recommended, not required · {recRows.length}</summary>
           <ul className="shop-list">{visible(recRows).map(rowView)}</ul>
         </details>
       )}
       {notGeRows.length > 0 && (
         <details className="shop-group">
-          <summary className="subhead">На бирже не продаются — получишь по ходу · {notGeRows.length}</summary>
+          <summary className="subhead">Not sold at the exchange — you get them along the way · {notGeRows.length}</summary>
           <ul className="shop-list">
             {notGeRows.map((r) => (
               <li key={r.line.key} className="shop-row is-quest">
                 <ItemIcon src={r.line.iconUrl} alt="" />
                 <div className="shop-main">
-                  <p className="shop-name"><strong>{r.line.nameEn}</strong> <span className="muted">({r.line.nameRu})</span></p>
+                  <p className="shop-name"><strong>{r.line.nameEn}</strong></p>
                   <p className="muted small">{r.line.howToGet}</p>
                 </div>
               </li>
@@ -383,8 +383,8 @@ export function ShoppingPage() {
           </ul>
         </details>
       )}
-      {!list.required.length && !list.recommended.length && <p className="muted empty">На выбранных этапах покупать нечего.</p>}
-      <p className="muted small">Программа ничего не покупает сама: ордера на бирже выставляешь ты.</p>
+      {!list.required.length && !list.recommended.length && <p className="muted empty">There is nothing to buy in the chosen stages.</p>}
+      <p className="muted small">The app buys nothing by itself: you place the exchange orders.</p>
     </div>
   );
 }

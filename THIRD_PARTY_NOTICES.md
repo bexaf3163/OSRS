@@ -1,11 +1,11 @@
-# Сторонние материалы
+# Third-party materials
 
 ## Quest Helper
 
-Этапы квестов (`src/data/questStages.json`), машины состояний шагов (`src/data/questMachines.json`), сверочные файлы
-(`tests/fixtures/qh-steps.json`, `runelite-bridge/src/test/resources/qh-golden.json`) и генераторы (`tools/qh-machines`) получены из исходников
-плагина [Quest Helper](https://github.com/Zoinkwiz/quest-helper) для RuneLite: порядок шагов, условия, клетки и подсветка. Тексты шагов переведены и
-выверены вручную.
+The quest stages (`src/data/questStages.json`), the step state machines (`src/data/questMachines.json`), the reference files
+(`tests/fixtures/qh-steps.json`, `runelite-bridge/src/test/resources/qh-golden.json`) and the generators (`tools/qh-machines`) were derived from the sources of the
+[Quest Helper](https://github.com/Zoinkwiz/quest-helper) RuneLite plugin: the order of steps, the conditions, the tiles and the highlights. The step texts were written and
+checked by hand.
 
 ```
 BSD 2-Clause License

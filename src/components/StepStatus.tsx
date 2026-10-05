@@ -1,9 +1,9 @@
-// «Единый статус» шага вместо стопки плашек: одна строка —
-//   🟢 Готов к выходу · [Начать шаг]
-//   🟡 Требуется подготовка (3 пункта) · [Исправить] [Подробнее]
-// По «Подробнее» раскрывается аккордеон с вкладками (подготовка, снаряжение, еда, путь и игра, прокачка и варианты) —
-// в них лежит весь прежний функционал, ничего не убрано. Когда игрок готов, аккордеон сворачивается сам.
-// Вкладки без содержимого не показываются: компоненты сами решают, есть ли им что сказать (null — нет).
+// The "unified status" of a step instead of a stack of plaques: one line —
+//   🟢 Ready to set off · [Start the step]
+//   🟡 Preparation required (3 items) · [Fix] [More]
+// "More" expands an accordion with tabs (preparation, gear, food, route and game, training and variants) —
+// they hold all the earlier functionality, nothing is removed. When the player is ready, the accordion collapses by itself.
+// Tabs without content are not shown: the components decide themselves whether they have anything to say (null — no).
 
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import type { Step } from '../types';
@@ -35,14 +35,14 @@ import { BranchSuggestions } from './BranchSuggestions';
 type TabKey = 'prep' | 'gear' | 'food' | 'route' | 'plan';
 
 const TABS: { key: TabKey; label: string; icon: string }[] = [
-  { key: 'prep', label: 'Подготовка', icon: '🧭' },
-  { key: 'gear', label: 'Снаряжение', icon: '⚔️' },
-  { key: 'food', label: 'Еда', icon: '🍖' },
-  { key: 'route', label: 'Путь и игра', icon: '🗺️' },
-  { key: 'plan', label: 'Прокачка и варианты', icon: '🎯' },
+  { key: 'prep', label: 'Preparation', icon: '🧭' },
+  { key: 'gear', label: 'Gear', icon: '⚔️' },
+  { key: 'food', label: 'Food', icon: '🍖' },
+  { key: 'route', label: 'Route and game', icon: '🗺️' },
+  { key: 'plan', label: 'Training and variants', icon: '🎯' },
 ];
 
-/** Какие вкладки не пусты: считаем по DOM — компонент без содержимого ничего не рисует. */
+/** Which tabs are not empty: counted from the DOM — a component without content draws nothing. */
 function useFilled(keys: TabKey[]) {
   const refs = useRef<Partial<Record<TabKey, HTMLDivElement | null>>>({});
   const [filled, setFilled] = useState<Partial<Record<TabKey, boolean>>>({});
@@ -62,7 +62,7 @@ function useFilled(keys: TabKey[]) {
     const mo = new MutationObserver(update);
     for (const k of keys) if (refs.current[k]) mo.observe(refs.current[k]!, { childList: true });
     return () => mo.disconnect();
-    // keys постоянны для карточки.
+    // the keys are constant for a card.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return { refs, filled };
@@ -83,7 +83,7 @@ export function StepStatus({ step }: { step: Step }) {
   const openDetails = () => { setTab('prep'); setOpen(true); };
   const { available: canFix, underway, fix } = usePrepFix(step, openDetails);
 
-  // Игрок стал готов — аккордеон сворачивается: остаётся одна чистая строка.
+  // The player became ready — the accordion collapses: one clean line remains.
   const prevStatus = useRef(r?.status);
   useEffect(() => {
     if (prevStatus.current && prevStatus.current !== 'READY' && r?.status === 'READY') setOpen(false);
@@ -97,10 +97,10 @@ export function StepStatus({ step }: { step: Step }) {
   const n = r.problems.length;
   const ready = r.status === 'READY' || (!!r.goalMet && n === 0);
   const prep = !ready && n > 0 && r.status !== 'BLOCKED' && r.status !== 'MISSING_QUEST';
-  const text = ready ? 'Готов к выходу'
-    : prep ? `Требуется подготовка (${n} ${plural(n, 'пункт', 'пункта', 'пунктов')})`
-      : r.status === 'UNKNOWN' ? 'Проверено не всё' : s.text;
-  const shown = recovering ? (recovering.recovery.reason === 'DEATH' ? 'Ты умер — режим восстановления' : 'Срыв маршрута — режим восстановления') : !ready && percent !== null && prep ? `${text} · готово ${percent}%` : text;
+  const text = ready ? 'Ready to set off'
+    : prep ? `Preparation required (${n} ${plural(n, 'item', 'items')})`
+      : r.status === 'UNKNOWN' ? 'Not everything is checked' : s.text;
+  const shown = recovering ? (recovering.recovery.reason === 'DEATH' ? 'You died — recovery mode' : 'Route derailment — recovery mode') : !ready && percent !== null && prep ? `${text} · ready ${percent}%` : text;
   const icon = recovering ? '🔁' : ready ? '🟢' : prep ? '🟡' : s.icon;
   const tone = recovering ? 'is-prep' : ready ? 'is-ready' : prep ? 'is-prep' : r.status === 'UNKNOWN' ? 'is-unknown' : 'is-blocked';
   const hasTarget = enabled && !!toInGameTarget(step);
@@ -122,34 +122,34 @@ export function StepStatus({ step }: { step: Step }) {
   );
 
   return (
-    <section className={`step-status ${tone}`} aria-label="Статус шага">
+    <section className={`step-status ${tone}`} aria-label="Step status">
       <div className="status-line">
         <span className="status-text" role="status"><span aria-hidden="true">{icon}</span> <strong>{shown}</strong></span>
         <span className="status-actions">
           {prep && !recovering && canFix && (
             <button type="button" className="btn btn-primary btn-sm" onClick={() => void fix()} disabled={underway}>
-              {underway ? '⚡ Подготовка идёт' : '▶ Исправить'}
+              {underway ? '⚡ Preparation underway' : '▶ Fix'}
             </button>
           )}
           {!prep && !recovering && hasTarget && (ready || r.status === 'UNKNOWN') && (
             <button type="button" className={`btn btn-sm ${active ? 'btn-ingame-active' : 'btn-primary'}`} onClick={() => void start()} disabled={sent === 'sending'}>
-              {active ? '✓ Показан в игре' : '▶ Начать шаг'}
+              {active ? '✓ Shown in the game' : '▶ Start the step'}
             </button>
           )}
           <button type="button" className="btn btn-ghost btn-sm" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
-            Подробнее {open ? '▴' : '▾'}
+            More {open ? '▴' : '▾'}
           </button>
         </span>
       </div>
       {recovering && <RecoveryBanner step={step} rec={recovering} />}
-      {sent === 'offline' && <p className="small muted" role="status">RuneLite мост оффлайн{link === 'online' ? ' или отказал' : ''}. Запусти RuneLite с плагином OSRS Path Bridge.</p>}
+      {sent === 'offline' && <p className="small muted" role="status">RuneLite bridge offline{link === 'online' ? ' or refused' : ''}. Start RuneLite with the OSRS Path Bridge plugin.</p>}
       {detour ? (
-        <p className="small status-arrow">🧭 Стрелка ведёт: {detour.label}</p>
+        <p className="small status-arrow">🧭 The arrow leads to: {detour.label}</p>
       ) : active ? (
-        <p className="small status-arrow muted">🧭 Шаг показан в игре — стрелка ведёт к нему.</p>
+        <p className="small status-arrow muted">🧭 The step is shown in the game — the arrow leads to it.</p>
       ) : null}
       {open && visibleTabs.length > 1 && (
-        <div className="status-tabs" role="tablist" aria-label="Подробности шага">
+        <div className="status-tabs" role="tablist" aria-label="Step details">
           {visibleTabs.map((t) => (
             <button key={t.key} type="button" role="tab" className={`status-tab ${current === t.key ? 'is-active' : ''}`} aria-selected={current === t.key}
               onClick={() => setTab(t.key)}>

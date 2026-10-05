@@ -1,9 +1,9 @@
-// Типы данных приложения. Маршрут V2 — src/data/steps.json и stages.json;
-// навыки, цели и справка — из osrs-guide.md (scripts/parse-guide.ts).
+// The app's data types. The V2 route is src/data/steps.json and stages.json;
+// the skills, goals and reference live in the other JSON files of src/data.
 
 export type StepType = 'quest' | 'skill' | 'gear' | 'prep';
 
-/** Кусок разметки гайда. Текст внутри — строка с простой inline-разметкой (**жирный**, `код`, [ссылка](url)). */
+/** A piece of guide markup. The text is a string with simple inline markup (**bold**, `code`, [link](url)). */
 export type Block =
   | { t: 'p'; text: string }
   | { t: 'ul' | 'ol'; items: ListItem[]; start?: number }
@@ -18,14 +18,14 @@ export interface ListItem {
 
 export type FieldKey = 'where' | 'bring' | 'how' | 'reward' | 'doneWhen';
 
-/** Подписанная строка шага: «Зачем: …», «Опасно: …», «Бой: …». */
+/** A labelled line of a step: "Why: ...", "Danger: ...", "Combat: ...". */
 export interface Field {
   label: string;
   text: string;
   key?: FieldKey;
 }
 
-/** Цель навыка из названия шага: «Рыбалка до 20» → { skill: 'fishing', level: 20 }. */
+/** A skill goal from a step title: "Fishing to 20" becomes { skill: 'fishing', level: 20 }. */
 export interface Target {
   skill: string;
   level: number;
@@ -33,46 +33,45 @@ export interface Target {
 
 export type GameMode = 'f2p' | 'members';
 
-/** Предмет, который нужно взять или стоит взять на шаг. */
+/** An item to take, or worth taking, for a step. */
 export interface StepItemRequirement {
   nameEn: string;
-  nameRu: string;
-  /** 1 или «23 (20 сдать, 3 в банк)». */
+  /** 1 or "23 (20 to hand in, 3 for the bank)". */
   amount: string | number;
-  /** Где именно взять предмет; пусто, если маршрут не уточняет. */
+  /** Exactly where to get the item; empty if the route does not say. */
   howToGet: string;
   /**
-   * Откуда предмет: NPC из npcLocations.json («Betty») или место из majorLocations.json («Lumbridge General Store»).
-   * Место становится точкой на карте шага и кнопкой у предмета в списке «Что нужно» в игре.
+   * Where the item comes from: an NPC from npcLocations.json ("Betty") or a place from majorLocations.json ("Lumbridge General Store").
+   * The place becomes a point on the step's map and a button next to the item in the in-game "What you need" list.
    */
   from?: string;
   iconUrl?: string;
-  /** ID предмета на OSRS Wiki и в API цен. */
+  /** The item's ID on the OSRS Wiki and in the price API. */
   wikiItemId?: number;
-  /** Сколько очков здоровья восстанавливает — у еды. */
+  /** How many health points it restores (for food). */
   heals?: number;
-  /** Добывается по ходу самого шага (выдаст NPC, подберёшь, купишь на месте): у банка не проверяется. */
+  /** Obtained during the step itself (an NPC hands it out, you pick it up, buy it on the spot): not checked at the bank. */
   inStep?: boolean;
 }
 
-/** Точка на карте мира в игровых координатах (как в RuneLite и на карте OSRS Wiki). */
+/** A point on the world map in game coordinates (as in RuneLite and on the OSRS Wiki map). */
 export interface MapLocation {
   x: number;
   y: number;
-  /** 0 — Ground floor (земля), 1 — 1st floor, 2 — 2nd floor, 3 — 3rd floor. */
+  /** 0 is the ground floor, 1 is the 1st floor, 2 the 2nd floor, 3 the 3rd floor. */
   plane: number;
   label: string;
-  /** Масштаб карты вики: от −3 (весь мир) до 3 (клетки крупно). По умолчанию 2. */
+  /** The wiki map scale: from -3 (the whole world) to 3 (tiles up close). 2 by default. */
   zoom?: number;
-  /** Как найти место на месте: ориентиры, чего избегать. Показывается под переключателем точек. */
+  /** How to find the place on the spot: landmarks and what to avoid. Shown under the point switcher. */
   note?: string;
-  /** Предметы шага (nameEn), которые берут здесь: в панели RuneLite у предмета появится «Путь сюда». */
+  /** The step's items (nameEn) taken here: in the RuneLite panel the item gets "Way here". */
   items?: string[];
-  /** NPC в этой точке: стрелка подсветит его, когда игрок придёт. */
+  /** An NPC at this point: the arrow highlights it when the player arrives. */
   npc?: string;
 }
 
-/** Точка в игре без подписи на карте: цель, путевая точка. */
+/** A point in the game without a map label: a target or a waypoint. */
 export interface GamePoint {
   x: number;
   y: number;
@@ -80,7 +79,7 @@ export interface GamePoint {
   label?: string;
 }
 
-/** Что показать в игре через плагин RuneLite «OSRS Path Bridge». */
+/** What to show in the game through the "OSRS Path Bridge" RuneLite plugin. */
 export interface InGameTarget {
   worldPoint?: GamePoint;
   groundTiles?: { x: number; y: number; plane: number; label: string; color?: string }[];
@@ -88,31 +87,31 @@ export interface InGameTarget {
   npcIds?: number[];
   objectNames?: string[];
   objectIds?: number[];
-  /** Точный текст вариантов в диалоге, которые нужно выбрать. */
+  /** The exact text of the dialogue options to choose. */
   dialogChoices?: string[];
-  /** Названия предметов (как в игре, по-английски) — подсветка в инвентаре и банке. */
+  /** Item names (as in the game, in English): highlighting in the inventory and bank. */
   highlightItems?: string[];
-  /** Текущая цель одной строкой для микро-HUD; без неё — подпись точки шага. */
+  /** The current target in one line for the micro HUD; without it the step point's label is used. */
   goal?: string;
   /**
-   * Остановки по порядку: калитка → мост → лестница → NPC. В игре стрелка и HUD («Точка 2/5») ведут к текущей
-   * остановке, а если установлен Shortest Path — он ведёт к ней настоящим путём.
+   * Stops in order: gate, bridge, ladder, NPC. In the game the arrow and the HUD ("Point 2/5") lead to the current
+   * stop, and if Shortest Path is installed it leads there by a real path.
    */
   pathWaypoints?: GamePoint[];
   /**
-   * Только проверенные условия: квест из игры, настоящие уровни навыков, предметы у игрока, точный текст
-   * сообщения или varbit со значением.
+   * Only verified conditions: a quest from the game, real skill levels, items the player has, an exact message
+   * text or a varbit with a value.
    */
   completionTrigger?: CompletionTrigger;
 }
 
 export interface CompletionTrigger {
   type: 'QUEST_COMPLETED' | 'SKILL_LEVEL' | 'ITEM_OWNED' | 'CHAT_MESSAGE' | 'VARBIT_CHANGED';
-  /** QUEST_COMPLETED: название квеста, как его знает RuneLite (net.runelite.api.Quest). */
+  /** QUEST_COMPLETED: the quest name as RuneLite knows it (net.runelite.api.Quest). */
   questName?: string;
-  /** SKILL_LEVEL: настоящие уровни (без зелий), все сразу. Совпадают с целями из названия шага. */
+  /** SKILL_LEVEL: real levels (without potions), all at once. They match the goals from the step title. */
   levels?: Target[];
-  /** ITEM_OWNED — сами предметы; у QUEST_COMPLETED и SKILL_LEVEL — ещё одно условие вдобавок. */
+  /** ITEM_OWNED: the items themselves; QUEST_COMPLETED and SKILL_LEVEL have one more condition on top. */
   items?: OwnedItem[];
   chatPattern?: string;
   varbitId?: number;
@@ -120,113 +119,96 @@ export interface CompletionTrigger {
 }
 
 /**
- * Предмет для автоотметки: сколько его должно быть у игрока — в сумке, на нём, банкнотами и в банке вместе
- * (банк — если его открывали в этой сессии игры).
+ * An item for auto-tick: how many of it the player must have, in the bag, worn, as banknotes and in the bank together
+ * (the bank if it was opened in this game session).
  */
 export interface OwnedItem {
-  /** Названия как в игре. Несколько — считаются вместе: «Shrimps» и «Anchovies», любые части Graceful. */
+  /** Names as in the game. Several are counted together: "Shrimps" and "Anchovies", any Graceful pieces. */
   names: string[];
-  /** Только этот ID — когда у разных предметов одно название (куски карты Dragon Slayer I). */
+  /** This ID only: when different items share a name (the Dragon Slayer I map pieces). */
   id?: number;
   count: number;
 }
 
-/** Навыки, у которых шаг считает темп: столько действий до цели и столько минут. */
+/** The skills for which a step counts a pace: this many actions to the goal and this many minutes. */
 export type PacingSkill = 'fishing' | 'woodcutting' | 'cooking' | 'mining' | 'attack' | 'strength' | 'defence';
 
 /**
- * Темп прокачки шага. Плагин RuneLite считает по опыту из игры, сколько действий осталось
- * до targetExp и сколько это займёт; без замеров время не выдумывается.
+ * A step's training pace. The RuneLite plugin counts from the game's XP how many actions are left
+ * to targetExp and how long it will take; without measurements the time is not invented.
  */
 export interface StepPacing {
   skill: PacingSkill;
   /**
-   * Ещё навыки с той же целью — только бой: сила и защита вслед за атакой. Их качают по очереди, меняя стиль
-   * атаки; темп показывает тот, что сейчас растёт.
+   * More skills with the same goal: combat only, Strength and Defence after Attack. They are trained in turn by changing the attack
+   * style; the pace shows the one that is growing now.
    */
   also?: PacingSkill[];
   targetLevel: number;
-  /** Опыт на targetLevel по таблице опыта игры. */
+  /** The XP at targetLevel by the game's XP table. */
   targetExp: number;
-  /** Действие формами для 1, 2–4 и 5+: «креветка|креветки|креветок». Одна форма тоже годится. */
+  /** The action in forms for 1 and for more: "shrimp|shrimps". A single form works too. */
   actionName: string;
-  /** Опыт за одно действие (улов, бревно, руда, приготовленная рыба; в бою — 4 × здоровье противника). */
+  /** XP per action (a catch, a log, an ore, a cooked fish; in combat 4 x the opponent's health). */
   expPerAction: number;
-  /** Секунд на действие — первая оценка до своих замеров. */
+  /** Seconds per action: the first estimate before your own measurements. */
   secondsPerAction?: number;
 }
 
-/** Опасное место для радара в RuneLite (src/data/dangerZones.json). */
-export interface DangerZone {
-  id: string;
-  name: string;
-  center: { x: number; y: number; plane: number };
-  radius: number;
-  warningRadius?: number;
-  severity: 'LOW' | 'MEDIUM' | 'HIGH' | 'CRITICAL';
-  message: string;
-  /** Коротко для микро-HUD. */
-  hud?: string;
-  npcNames?: string[];
-  /** Откуда данные: статья вики и её точки. */
-  source?: string;
-}
-
-/** NPC или точка старта шага. */
+/** The NPC or the start point of the step. */
 export interface StepNpcInfo {
   nameEn: string;
-  nameRu: string;
   location: string;
-  /** Этаж по британскому счёту с пояснением: «1st floor (2-й этаж)». */
+  /** The floor in the British numbering: "1st floor". */
   floor: string;
   dialogue?: string;
   wikiUrl?: string;
 }
 
-/** Уровни навыков по ключам RuneLite: { magic: 25, woodcutting: 12 }. */
+/** Skill levels by RuneLite keys: { magic: 25, woodcutting: 12 }. */
 export type PlayerStats = Record<string, number>;
 
 export type BranchConditionType = 'SKILL_LEVEL' | 'QUEST_COMPLETED' | 'ITEM_OWNED';
 
-/** Условие быстрого варианта. Проверяется по уровням из RuneLite (или введённым вручную), прогрессу и предметам. */
+/** A condition of a quick option. Checked against levels from RuneLite (or entered manually), progress and items. */
 export interface BranchCondition {
   type: BranchConditionType;
-  /** Ключ навыка RuneLite: magic, woodcutting, agility… */
+  /** The RuneLite skill key: magic, woodcutting, agility... */
   skill?: string;
   minLevel?: number;
-  /** Название квеста как в игре — засчитан, если его шаг отмечен выполненным. */
+  /** The quest name as in the game: counted if its step is marked done. */
   questName?: string;
-  /** Предмет (как в игре, по-английски) — есть в сумке, надет или в банке. */
+  /** An item (as in the game, in English): in the bag, worn or in the bank. */
   itemName?: string;
 }
 
 /**
- * Что нужно иметь, чтобы быстрый вариант сработал, кроме уровня: руны для телепорта, топор для каноэ.
- * Хватает, когда суммарно предметов из items не меньше count или есть что-то из unless (посох воздуха вместо рун воздуха).
+ * What you must have for the quick option to work besides the level: runes for a teleport, an axe for a canoe.
+ * It is enough when the total of the items in items is at least count or you have something from unless (a Staff of air instead of air runes).
  */
 export interface BranchNeed {
-  /** Как назвать в подсказке: «Air rune ×3». */
+  /** How to name it in a hint: "Air rune x3". */
   label: string;
   count: number;
-  /** Названия предметов как в игре — считаются вместе (любой топор). */
+  /** Item names as in the game: counted together (any axe). */
   items: string[];
-  /** Что заменяет предмет целиком: посох стихии вместо рун. */
+  /** What replaces the item entirely: an elemental staff instead of runes. */
   unless?: string[];
 }
 
-/** Быстрый вариант шага для текущих статов: основной путь не заменяет, а дополняет. */
+/** A step's quick option for the player's current stats: it does not replace the main route but adds to it. */
 export interface StepBranch {
   id: string;
-  /** Короткий заголовок: «Varrock Teleport». */
+  /** A short heading: "Varrock Teleport". */
   label: string;
   condition: BranchCondition;
-  /** Что нужно иметь при себе, кроме уровня. Без этого вариант не называют доступным молча: руны проверяются. */
+  /** What you must carry besides the level. Without it the option is not silently called available: the runes are checked. */
   needs?: BranchNeed[];
-  /** Как сделать по-быстрому. */
+  /** How to do it fast. */
   replacementText?: string;
-  /** Куда ведёт быстрый вариант — эта точка уходит в игру, если выбрать его. */
+  /** Where the quick option leads: this point goes into the game if you choose it. */
   replacementTarget?: MapLocation;
-  /** Экономия времени, только если она проверена. */
+  /** The time saved, only if it is verified. */
   timeSavingSeconds?: number;
 }
 
@@ -235,13 +217,12 @@ export interface Step {
   stage: number;
   type: StepType;
   title: string;
-  titleRu?: string;
   qp?: number;
   minQp?: number;
   requires: string[];
   /**
-   * Требования, которые проверяются по состоянию игрока (уровни, квесты), — из статьи квеста на OSRS Wiki.
-   * Готовность шага (lib/readiness.ts) сверяет их с уровнями из игры или профиля и с отметками квестов.
+   * Requirements checked against the player's state (levels, quests), from the quest article on the OSRS Wiki.
+   * A step's readiness (lib/readiness.ts) checks them against the levels from the game or the profile and the quest marks.
    */
   requirements?: StepRequirement[];
   optional?: boolean;
@@ -251,7 +232,7 @@ export interface Step {
   mapUrl?: string;
 
   npc?: StepNpcInfo;
-  /** Этаж места, если у шага нет NPC (например, банк на верхушке замка). */
+  /** The floor of the place if the step has no NPC (for example a bank at the top of a castle). */
   floor?: string;
   itemsRequired?: StepItemRequirement[];
   itemsRecommended?: StepItemRequirement[];
@@ -261,23 +242,23 @@ export interface Step {
   imageCaption?: string;
   proTip?: string;
 
-  /** Где начинается шаг: превью карты в карточке и карта мира. */
+  /** Where the step starts: the map preview in the card and the world map. */
   mapLocation?: MapLocation;
-  /** Несколько равноценных мест (рыбалка, руда): переключаются на карте. */
+  /** Several equal places (fishing, ore): switched on the map. */
   resourceSpots?: MapLocation[];
-  /** Готовая картинка вместо превью из тайлов карты. */
+  /** A ready picture instead of the preview made of map tiles. */
   mapPreviewImage?: string;
-  /** Главное предупреждение шага — жёлтая плашка над прохождением. */
+  /** The step's main warning: a yellow plate above the walkthrough. */
   warning?: string;
-  /** Подсветка в игре и автоотметка через RuneLite. */
+  /** Highlighting in the game and auto-tick through RuneLite. */
   inGame?: InGameTarget;
-  /** Быстрые варианты для статов игрока: телепорт, каноэ, срезка. */
+  /** Quick options for the player's stats: a teleport, a canoe, a shortcut. */
   branches?: StepBranch[];
-  /** Темп прокачки навыка шага (рыбалка, рубка, готовка, добыча). */
+  /** The step's skill training pace (fishing, woodcutting, cooking, mining). */
   pacing?: StepPacing;
   /**
-   * С кем шаг дерётся в ближнем бою — названия статей вики (monsters.json). По ним разбор снаряжения
-   * сравнивает оружие и показывает совет на шаге. Нет у шагов, где бьют особым оружием или магией.
+   * Who the step fights in melee: wiki article names (monsters.json). The gear advisor uses them to
+   * compare weapons and show a hint on the step. Absent from steps where you fight with a special weapon or magic.
    */
   foes?: string[];
 
@@ -287,19 +268,19 @@ export interface Step {
   tips?: string[];
   reward?: string;
   doneWhen: string;
-  /** Шаг-заработок: сколько монет должно быть к концу шага (в сумке и банке). Прогресс — lib/wealth.ts. */
+  /** An earning step: how many coins you should have by the end of the step (in the bag and bank). Progress is in lib/wealth.ts. */
   moneyGoal?: number;
-  /** Противники без боевой карточки в foes (босс, квестовый монстр): ключи threats.json — для совета по еде. */
+  /** Opponents without a combat card in foes (a boss, a quest monster): threats.json keys, for the food advice. */
   threats?: string[];
-  /** Показать, что носить для магии или стрельбы (рекомендации вики) под уровни и монеты игрока. */
+  /** Show what to wear for magic or ranged (wiki recommendations) for the player's levels and coins. */
   styleGear?: 'magic' | 'ranged';
-  /** «Use X на Y»: в игре HUD напомнит действие, а предмет и цель подсветятся. kind — object (по умолчанию), npc или item. */
+  /** "Use X on Y": in the game the HUD reminds you of the action and the item and the target are highlighted. kind is object (the default), npc or item. */
   useOn?: { item: string; target: string; kind?: 'object' | 'npc' | 'item' }[];
-  /** Показать расчёт «сколько стоит дойти до цели Magic боевыми заклинаниями» (S2-04). */
-  magicPlan?: { target: number; /** С какого уровня начинаешь по маршруту — если игра и страница навыков молчат. */ from: number };
-  /** Этапы квеста по переменной игры: что делать и куда идти именно сейчас (src/data/questStages.json). */
+  /** Show the calculation "what it costs to reach a Magic goal with combat spells" (S2-04). */
+  magicPlan?: { target: number; /** The level you start from on the route, if the game and the skill page say nothing. */ from: number };
+  /** Quest stages by a game variable: what to do and where to go right now (src/data/questStages.json). */
   questStages?: QuestStages;
-  /** Прочие подписанные строки: «Зачем», «Важно», «Опасно», «Бой», «Требования». */
+  /** Other labelled lines: "Why", "Important", "Danger", "Combat", "Requirements". */
   fields?: Field[];
   targets?: Target[];
 
@@ -309,68 +290,67 @@ export interface Step {
   membersAlternative?: string;
 }
 
-/** Предмет, нужный на этапе квеста. */
+/** An item needed in a quest stage. */
 export interface QuestStageItem {
   name: string;
-  nameRu?: string;
   id?: number;
   count?: number;
   where?: string;
-  /** Добывается по ходу этапа — заранее не нужен. */
+  /** Obtained during the stage: not needed in advance. */
   inStep?: boolean;
 }
 
-/** Точка этапа: NPC из словаря мест или явные клетки. */
+/** A stage point: an NPC from the place dictionary or explicit tiles. */
 export type QuestStageGo = string | { x: number; y: number; plane: number; label: string; npc?: string };
 
-/** Шаг этапа: что сделать и (если есть) где — по месту игрок проходит шаги, плагин сам отмечает пройденные. */
+/** A stage step: what to do and (if known) where: the player goes through the steps by place, and the plugin ticks off the passed ones itself. */
 export interface QuestStageLine {
   t: string;
-  /** Короткий текст для строки списка в игре (до ~70 знаков, без диалога); полный t — в подсказке и панели. */
+  /** Short text for a line of the in-game list (up to ~70 characters, without the dialogue); the full t is in the hint and the panel. */
   s?: string;
-  /** x, y, plane — клетка шага (Quest Helper). */
+  /** x, y, plane: the step's tile (Quest Helper). */
   at?: [number, number, number];
-  /** Предмет: он уже в сумке — шаг сделан (плагин сам идёт к следующему шагу). */
+  /** An item: if it is already in the bag the step is done (the plugin moves on to the next step itself). */
   has?: string;
-  /** Предмет, без которого шаг по положению не засчитывается («верни Thurgo руду» — не оттого, что стоишь рядом с ним). */
+  /** An item without which the step is not counted by position ("return the ore to Thurgo" is not done just by standing next to him). */
   need?: string;
-  /** Что подсвечивать в игре на этом шаге, как Quest Helper: NPC и объекты по ID, объекты по имени, предметы в сумке. */
+  /** What to highlight in the game on this step, as Quest Helper does: NPCs and objects by ID, objects by name, items in the bag. */
   hl?: StageHighlight;
-  /** Имя шага в Quest Helper: по нему плагин сопоставляет выбор машины состояний со строкой. */
+  /** The step's name in Quest Helper: the plugin matches the state machine's choice to a line by it. */
   k?: string;
 }
 
-/** Подсветка шага этапа: по исходникам Quest Helper (scripts вне репозитория, данные — questStages.json). */
+/** A stage step's highlight: from the Quest Helper sources (scripts outside the repository, data in questStages.json). */
 export interface StageHighlight {
   npc?: number[];
   obj?: number[];
-  /** Имена объектов — когда ID у Quest Helper нет или объект меняет облик («Banana tree»). */
+  /** Object names: when Quest Helper has no ID or the object changes its look ("Banana tree"). */
   on?: string[];
   item?: string[];
 }
 
-/** Один этап квеста: действует, пока переменная квеста не меньше at и не дошла до следующего этапа. */
+/** One quest stage: in effect while the quest variable is at least at and has not reached the next stage. */
 export interface QuestStage {
   at: number;
-  /** Что делать на этом этапе — шаги по порядку, как в Quest Helper (идти, подняться, поговорить, диалог). */
+  /** What to do in this stage: steps in order, as in Quest Helper (go, climb, talk, dialogue). */
   do: QuestStageLine[];
   go?: QuestStageGo;
-  /** Что нужно именно на этом этапе. Нет поля — список предметов шага; [] — ничего. */
+  /** What is needed in this very stage. No field means the step's item list; [] means nothing. */
   items?: QuestStageItem[];
 }
 
 /**
- * Переменная квеста в игре (varp или varbit, номера из Quest Helper) и этапы по её значениям. Плагин читает значение
- * и показывает в списке «Что нужно» только текущий этап. Квест пройден — по Quest.getState, не по значению.
+ * A quest variable in the game (a varp or varbit, numbers from Quest Helper) and stages by its values. The plugin reads the value
+ * and shows only the current stage in the "What you need" list. A quest is complete by Quest.getState, not by the value.
  */
 export interface QuestStages {
   var: ['varp' | 'varbit', number];
   stages: QuestStage[];
-  /** Весь квест по разделам (как панель Quest Helper): из него строится «Прохождение» шага. */
+  /** The whole quest by sections (like the Quest Helper panel): the step's "Walkthrough" is built from it. */
   route?: { title: string; steps: string[] }[];
 }
 
-/** Требование шага. when: 'during' — нужно по ходу квеста, начать можно и без него. */
+/** A step requirement. when: 'during' means needed during the quest, you can start without it. */
 export type StepRequirement =
   | { type: 'skill'; skill: string; min: number; when?: 'start' | 'during'; boostable?: boolean }
   | { type: 'quest'; quest: string };
@@ -381,11 +361,10 @@ export interface Stage {
   membersOnly?: boolean;
 }
 
-/** Досье предмета для встроенного инспектора вики. */
+/** An item dossier for the built-in wiki inspector. */
 export interface WikiItemDetail {
   id: number;
   nameEn: string;
-  nameRu?: string;
   examine: string;
   members: boolean;
   iconUrl: string;
@@ -393,7 +372,7 @@ export interface WikiItemDetail {
   highAlch?: number;
   lowAlch?: number;
   gePrice?: { buyPrice: number; sellPrice: number; updatedAt: string };
-  /** Цену узнать не удалось (нет связи, таймаут). Только во время работы, в данных не бывает. */
+  /** The price could not be found (no connection, timeout). Only at run time, never in the data. */
   priceUnavailable?: boolean;
   buyLocations?: { shopName: string; location: string; owner?: string; price: number; stock: number | string; members?: boolean }[];
   freeSpawns?: string[];
@@ -401,13 +380,13 @@ export interface WikiItemDetail {
   wikiUrl: string;
 }
 
-/** Слоты снаряжения, которые разбирает советник: оружие, шлем, торс, ноги, щит, амулет. */
+/** The equipment slots the advisor handles: weapon, helm, body, legs, shield, amulet. */
 export type GearSlot = 'weapon' | 'head' | 'body' | 'legs' | 'shield' | 'neck';
 
 export interface GearStats { stab: number; slash: number; crush: number; magic: number; ranged: number }
 
-/** Предмет снаряжения с OSRS Wiki (gear.json): бонусы, требование, магазины. */
-/** Требования к надеванию. Уровень 1 не пишется — это не требование. */
+/** An equipment item from the OSRS Wiki (gear.json): bonuses, requirement, shops. */
+/** Requirements to wear it. Level 1 is not written: that is not a requirement. */
 export interface GearRequirements {
   attack?: number;
   strength?: number;
@@ -415,24 +394,23 @@ export interface GearRequirements {
   ranged?: number;
   magic?: number;
   prayer?: number;
-  /** Квесты, без которых предмет не надеть: Rune platebody — Dragon Slayer I. */
+  /** Quests without which the item cannot be worn: the Rune platebody needs Dragon Slayer I. */
   quests?: string[];
 }
 
 export interface GearPiece {
   id: number;
   name: string;
-  nameRu: string;
   slot: GearSlot;
-  /** Вид: scimitar, sword, platebody, amulet… */
+  /** Kind: scimitar, sword, platebody, amulet... */
   kind: string;
   metal?: 'bronze' | 'iron' | 'steel' | 'black' | 'mithril' | 'adamant' | 'rune';
   twoHanded?: boolean;
-  /** Что нужно, чтобы надеть: { attack: 5 }, у молотов { strength: 5 }, у Coif { ranged: 20 }, квесты. Нет — требований нет (если есть reqFrom). */
+  /** What you need to wear it: { attack: 5 }, for hammers { strength: 5 }, for the Coif { ranged: 20 }, quests. Absent means no requirements (if reqFrom is set). */
   req?: GearRequirements;
-  /** Статья вики, где сказано о требованиях (или об их отсутствии). */
+  /** The wiki article that states the requirements (or their absence). */
   reqFrom?: string;
-  /** Вики о требованиях молчит: такой предмет не советуем, только узнаём на персонаже. */
+  /** The wiki says nothing about requirements: we do not recommend such an item, we only learn about it from the character. */
   reqUnverified?: boolean;
   members: boolean;
   tradeable: boolean;
@@ -440,9 +418,9 @@ export interface GearPiece {
   defence: GearStats;
   strength: number;
   prayer?: number;
-  /** Тиков между ударами (у оружия; тик — 0,6 с). */
+  /** Ticks between hits (for a weapon; a tick is 0.6 s). */
   speed?: number;
-  /** Магазины бесплатной версии: цена при полном запасе. */
+  /** Free-version shops: the price at full stock. */
   shops?: { shop: string; location: string; price: number; owner?: string }[];
   iconUrl: string;
 }
@@ -453,7 +431,7 @@ export interface GearData {
   items: GearPiece[];
 }
 
-/** Противник из карточки монстра на вики: с ним сравнивается оружие. Версия — самая низкоуровневая у статьи. */
+/** An opponent from the wiki monster card: weapons are compared against it. The version is the lowest-level one in the article. */
 export interface Foe {
   name: string;
   version?: string;
@@ -474,13 +452,13 @@ export interface SkillRange {
   code: string;
   from: number;
   to: number | null;
-  /** Колонка «Уровни» как в гайде: «15–30», «60+». */
+  /** The "Levels" column as in the guide: "15–30", "60+". */
   levels: string;
   what: string;
   where?: string;
   amount?: string;
   notes?: string;
-  /** Вся строка таблицы как в гайде. */
+  /** The whole table row as in the guide. */
   cells: string[];
 }
 
@@ -491,29 +469,29 @@ export interface SkillSection {
 
 export interface Skill {
   id: string;
-  /** Заголовок раздела целиком. */
+  /** The whole section heading. */
   title: string;
   name: string;
   nameEn?: string;
   subtitle?: string;
-  /** Игровые навыки с уровнями, которые описывает раздел (у ближнего боя их три). */
+  /** The game skills with levels that the section describes (melee has three). */
   levelSkills: string[];
   intro: Block[];
   sections: SkillSection[];
   plan: { head: string[]; ranges: SkillRange[]; sectionIndex: number };
   wiki?: string;
-  /** Навык подписки (раздел «Навыки подписки» гайда). */
+  /** A members skill (the "Members skills" section of the guide). */
   membersOnly?: true;
 }
 
-/** Раздел гайда «Навыки подписки (Members)» — src/data/members-skills.json. */
+/** The "Members skills" section of the guide: src/data/members-skills.json. */
 export interface MembersSkillsData {
   title: string;
   intro: Block[];
   skills: Skill[];
 }
 
-/** Навык с отдельным уровнем — строка таблицы «Цели по этапам». */
+/** A skill with its own level: a row of the "Goals by stage" table. */
 export interface LevelSkill {
   id: string;
   name: string;
@@ -527,7 +505,7 @@ export interface GoalValue {
 }
 
 export interface GoalRow {
-  /** id уровня навыка или 'qp' для строки «Очки квестов». */
+  /** The skill's level id, or 'qp' for the "Quest points" row. */
   id: string;
   label: string;
   values: GoalValue[];
@@ -580,13 +558,12 @@ export interface ReferenceData {
 }
 
 export interface Quest {
-  /** Код шага, который закрывает квест. */
+  /** The code of the step that closes the quest. */
   stepId: string;
   title: string;
-  titleRu?: string;
   stage: number;
   qp: number;
-  /** Шаги-части квеста (у Dragon Slayer I — весь этап 5). */
+  /** The quest's part steps (for Dragon Slayer I, the whole of stage 5). */
   parts: string[];
   membersOnly?: boolean;
 }
@@ -600,28 +577,28 @@ export interface Progress {
   notes: Record<string, string>;
   updatedAt: string;
   gameMode?: GameMode;
-  /** Шаги с пометкой updatedInV2, которые пользователь уже проверил. */
+  /** Steps marked updatedInV2 that the user has already checked. */
   reviewedV2Steps?: string[];
-  /** Шаги, возвращённые в активные после V2: их очки квестов уже получены в игре и не откатываются. */
+  /** Steps returned to active after V2: their quest points are already earned in the game and are not rolled back. */
   qpKept?: string[];
-  /** Полная копия прогресса старого маршрута (V1) до переноса в V2 — чтобы ничего не потерять. */
+  /** A full copy of the old route's (V1) progress before the move to V2, so that nothing is lost. */
   legacy?: { steps: Record<string, StepStatus>; notes: Record<string, string> };
-  /** Шаги, где игрок нажал «✕ Пропустить» у подсказки апгрейда снаряжения. */
+  /** Steps where the player pressed "✕ Skip" on a gear upgrade hint. */
   upgradeDismissedForSteps?: string[];
   /**
-   * «У меня уже есть» в оптовой закупке: сколько предмета есть по словам игрока. Ключ — строка списка
-   * (`id:1725` по ID предмета, `name:…` у предметов без ID). Данные из игры главнее, если они полные.
+   * "I already have it" in the bulk purchase: how much of an item there is by the player's own words. The key is the list row
+   * (`id:1725` by item ID, `name:...` for items without an ID). Data from the game wins if it is complete.
    */
   ownedManual?: Record<string, ManualOwned>;
 }
 
 export interface ManualOwned {
   count: number;
-  /** Когда игрок указал количество (ISO). */
+  /** When the player gave the quantity (ISO). */
   updatedAt: string;
 }
 
-/** Уровень, нужный (required) или советуемый для способа заработка; combat — боевой уровень, plus — «и выше». */
+/** The level needed (required) or advised for an earning method; combat is the combat level, plus means "and above". */
 export interface MoneyReq {
   skill: string;
   level: number;
@@ -629,12 +606,12 @@ export interface MoneyReq {
   plus?: boolean;
 }
 
-/** Способ заработка из «Money making guide/Free-to-play» на вики (scripts/build-money.ts). */
+/** An earning method from the wiki's "Money making guide/Free-to-play" (scripts/build-money.ts). */
 export interface MoneyMethod {
   id: string;
   title: string;
   url: string;
-  /** Выручка в час по ценам биржи на дату снимка. */
+  /** Income per hour at the Grand Exchange prices on the snapshot date. */
   profit: number;
   intensity: string;
   category: string;
@@ -642,11 +619,11 @@ export interface MoneyMethod {
   quests?: string;
   items?: string;
   other?: string;
-  /** Слова вики о боевой подготовке («Decent and recommended…»), которые числами не выразить. */
+  /** The wiki's words about combat preparation ("Decent and recommended..."), which numbers cannot express. */
   skillsNote?: string;
-  /** Стартовый капитал, который вики называет явно (gp). */
+  /** The starting capital the wiki names explicitly (gp). */
   capital?: number;
-  /** Что покупают или несут с собой, кроме монет. */
+  /** What you buy or carry besides coins. */
   inputs?: string[];
 }
 

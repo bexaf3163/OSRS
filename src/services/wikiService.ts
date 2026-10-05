@@ -1,5 +1,5 @@
-// Досье предмета и NPC для встроенного инспектора вики.
-// Сначала локальная база (f2p-items.json), потом живой поиск по вики. Цены биржи — всегда живые.
+// An item and NPC dossier for the built-in wiki inspector.
+// First the local database (f2p-items.json), then a live wiki search. Exchange prices are always live.
 
 import type { WikiItemDetail } from '../types';
 import { itemById, items } from '../data';
@@ -7,34 +7,17 @@ import { fold } from '../lib/md';
 import { getGePrice, getMapping } from './pricesApi';
 import { fetchItemDetail, fetchNpc, openSearch, type FetchFn, type NpcInfo } from './wikiApi';
 
-/** Зависший запрос к вики не должен оставлять досье «загружается» навсегда. */
+/** A hung wiki request must not leave a dossier "loading" forever. */
 const WIKI_TIMEOUT_MS = 12_000;
 const fetchFn: FetchFn = (url) => fetch(url, { signal: AbortSignal.timeout(WIKI_TIMEOUT_MS) });
 
 export function findLocalItem(query: string | number): WikiItemDetail | undefined {
   if (typeof query === 'number') return itemById.get(query);
   const q = fold(query.trim());
-  return items.find((i) => fold(i.nameEn) === q || (i.nameRu && fold(i.nameRu) === q));
+  return items.find((i) => fold(i.nameEn) === q);
 }
 
-/** Поиск по локальной базе: имя на английском или русском содержит все слова запроса. */
-export function searchLocalItems(query: string, limit = 8): WikiItemDetail[] {
-  const tokens = fold(query.trim()).split(/\s+/).filter(Boolean);
-  if (!tokens.length) return [];
-  const scored = items
-    .map((i) => {
-      const hay = fold(`${i.nameEn} ${i.nameRu ?? ''}`);
-      if (!tokens.every((t) => hay.includes(t))) return null;
-      const q = tokens.join(' ');
-      const score = (fold(i.nameEn) === q || fold(i.nameRu ?? '') === q ? 100 : 0) + (fold(i.nameEn).startsWith(q) || fold(i.nameRu ?? '').startsWith(q) ? 20 : 0) - i.nameEn.length / 100;
-      return { i, score };
-    })
-    .filter((x): x is { i: WikiItemDetail; score: number } => x !== null)
-    .sort((a, b) => b.score - a.score);
-  return scored.slice(0, limit).map((x) => x.i);
-}
-
-/** Досье с ценой биржи. Цены нет, потому что не торгуется, и цены нет, потому что нет связи, — разные вещи. */
+/** A dossier with the exchange price. No price because it is not traded and no price because there is no connection are different things. */
 async function withPrice(d: WikiItemDetail): Promise<WikiItemDetail> {
   try {
     const p = await getGePrice(d.id);
@@ -46,7 +29,7 @@ async function withPrice(d: WikiItemDetail): Promise<WikiItemDetail> {
 
 const remote = new Map<string, Promise<WikiItemDetail | null>>();
 
-/** Досье предмета: локальная база + свежая цена, иначе — живой поиск по вики. */
+/** An item dossier: the local database + a fresh price, otherwise a live wiki search. */
 export async function getItemDetail(query: string | number): Promise<WikiItemDetail | null> {
   const local = findLocalItem(query);
   if (local) return withPrice(local);
@@ -57,7 +40,7 @@ export async function getItemDetail(query: string | number): Promise<WikiItemDet
       const [hit] = await openSearch(fetchFn, query, 1);
       if (!hit) return null;
       const mapping = await getMapping().catch(() => new Map());
-      return fetchItemDetail(fetchFn, hit.title, undefined, (id) => mapping.get(id));
+      return fetchItemDetail(fetchFn, hit.title, (id) => mapping.get(id));
     })();
     p.catch(() => remote.delete(key));
     remote.set(key, p);
@@ -75,9 +58,4 @@ export function getNpcDetail(name: string): Promise<NpcInfo | null> {
     npcs.set(name, p);
   }
   return npcs.get(name)!;
-}
-
-/** Статьи вики по запросу — для поиска, когда в локальной базе ничего нет. */
-export function searchWiki(query: string, limit = 5) {
-  return openSearch(fetchFn, query, limit);
 }

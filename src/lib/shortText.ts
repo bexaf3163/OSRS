@@ -1,13 +1,13 @@
-// Короткий текст для экрана игры: одна строка вместо абзаца. Игре нужно «что сделать сейчас», а подробности (диалоги,
-// пояснения, предупреждения) остаются в программе и в подсказке при наведении.
-// Шаги квестов (data/questStages.json) несут готовый короткий текст в поле s — его пишет человек, и он точнее любого правила.
-// Это сокращение — запасное, для строк без s (новые шаги, быстрые пути шагов):
-//  1) «Диалог: …» — в конце строки — отбрасывается: нужный вариант ответа подсвечивает сама игра;
-//  2) берётся первое предложение;
-//  3) длиннее предела — режется по « — » или запятой, иначе по слову, с многоточием.
-// Те же правила в плагине (ShortText.java): программа и плагин сокращают одинаково.
+// Short text for the game screen: one line instead of a paragraph. The game needs "what to do now", while the details (dialogues,
+// explanations, warnings) stay in the app and in the hover hint.
+// Quest steps (data/questStages.json) carry a ready short text in the field s: a human writes it, and it is more exact than any rule.
+// This shortening is a fallback, for lines without s (new steps, a step's quick paths):
+//  1) "Dialogue: ..." at the end of a line is dropped: the game itself highlights the right answer option;
+//  2) the first sentence is taken;
+//  3) longer than the limit it is cut at " — " or a comma, otherwise by a word, with an ellipsis.
+// The same rules are in the plugin (ShortText.java): the app and the plugin shorten the same way.
 
-/** Длиннее этого — режем: ровно столько помещается в строку списка в игре. */
+/** Longer than this we cut: exactly this much fits in a line of the in-game list. */
 export const SHORT_MAX = 64;
 
 const MIN_CUT = 24;

@@ -1,5 +1,5 @@
-"""«Золотые» векторы для теста плагина: случайные и целевые наборы фактов игры → ответ эталонного вычислителя (qeval.py).
-Тест плагина (QhGoldenTest) прогоняет те же факты через QhMachine.java и сверяет ответ: Python и Java обязаны совпасть на каждом."""
+"""The "golden" vectors for the plugin test: random and targeted sets of game facts → the answer of the reference evaluator (qeval.py).
+The plugin test (QhGoldenTest) runs the same facts through QhMachine.java and compares the answer: Python and Java must match on each one."""
 import json
 import os
 import random
@@ -51,7 +51,7 @@ def stage_atoms(m, ref):
 
 
 def apply_atom(f, a, truth, rng):
-    """Подправить факты так, чтобы атом стал truth (или случайным, если не знаем как)."""
+    """Adjust the facts so that the atom becomes truth (or random if we do not know how)."""
     o = a['o']
     if o == 'item' and a.get('ids'):
         ids = a['ids']
@@ -196,17 +196,17 @@ def main():
         for var, root in q['stages'].items():
             key = json.dumps(root, sort_keys=True) if not isinstance(root, str) else root
             if isinstance(root, dict) and 's' in root and not root.get('l'):
-                continue   # лист без условий: проверять нечего
+                continue   # a leaf without conditions: nothing to check
             if key in done_roots:
                 continue
             done_roots.add(key)
             al = stage_atoms(m, root)
             nd = m.node(root)
             made = []
-            # случайные наборы
+            # random sets
             for _ in range(10):
                 made.append(random_facts(al, rng))
-            # целевые: условия верхнего условного шага по очереди
+            # targeted: the conditions of the top conditional step in turn
             if 'c' in nd:
                 for cref, _ in nd['c'][:14]:
                     f = random_facts([], rng)
@@ -219,17 +219,17 @@ def main():
                     m.latched = {}
                     if k == 0:
                         pass
-                    # последовательность: защёлки живут между шагами; факты меняются
+                    # a sequence: the latches live between steps; the facts change
                     steps.append({'facts': facts_json(f), 'expect': expect(m, int(var), f)})
                     f = copy_facts(f)
-                    # случайно «забыть» часть фактов, но защёлки остаются
+                    # randomly "forget" some of the facts, but the latches stay
                     if rng.random() < 0.7:
                         f.events = []
                     if rng.random() < 0.5:
                         f.items = {}
                     if rng.random() < 0.5:
                         f.pos = (rng.randint(2500, 3500), rng.randint(2900, 3600), 0)
-                # состояние защёлок надо считать последовательно: пересчитать ответы одним проходом с общим состоянием
+                # the latch state must be counted sequentially: recompute the answers in one pass with a shared state
                 m.latched = {}
                 f = base
                 steps = []
@@ -241,11 +241,11 @@ def main():
                     if rng.random() < 0.5:
                         f.items = {}
                 vectors.append({'quest': sid, 'var': int(var), 'steps': steps})
-    # размер: ограничим
+    # size: limit it
     rng.shuffle(vectors)
     vectors = vectors[:900]
     json.dump({'v': 1, 'vectors': vectors}, open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
-    print('векторов', len(vectors), 'байт', os.path.getsize(OUT))
+    print('vectors', len(vectors), 'bytes', os.path.getsize(OUT))
 
 
 if __name__ == '__main__':

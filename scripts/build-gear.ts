@@ -1,11 +1,11 @@
-// Собирает src/data/gear.json с OSRS Wiki: оружие и броня ближнего боя бесплатной версии, амулеты и то,
-// что выдают на обучающем острове. И src/data/monsters.json — защиту противников из шагов маршрута (foes),
-// с которыми сравнивается оружие. Нужна сеть. Запуск: npm run build-gear (около минуты).
+// Builds src/data/gear.json from the OSRS Wiki: the free-version melee weapons and armor, amulets and what
+// is handed out on Tutorial Island. And src/data/monsters.json — the defence of the opponents from the route steps (foes),
+// which the weapons are compared against. It needs a network. Run: npm run build-gear (about a minute).
 //
-// Данные — только с вики: ID, бонусы и скорость (Bucket infobox_bonuses), магазины и цены (storeline),
-// требования — из текста статьи предмета, а если она молчит — из статьи набора («Adamant equipment») или обзора
-// «Free-to-play PvP equipment» (scripts/gear-requirements.ts), монстры — Bucket infobox_monster. От себя здесь лишь
-// список предметов и русские названия.
+// The data is from the wiki only: ID, bonuses and speed (Bucket infobox_bonuses), shops and prices (storeline),
+// the requirements from the item article text, and if it is silent — from the set article ("Adamant equipment") or the overview
+// "Free-to-play PvP equipment" (scripts/gear-requirements.ts), the monsters — Bucket infobox_monster. Only the
+// list of items is from us.
 
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname } from 'node:path';
@@ -21,54 +21,47 @@ const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 
 const METALS = ['bronze', 'iron', 'steel', 'black', 'mithril', 'adamant', 'rune'] as const;
 type Metal = typeof METALS[number];
-/** Требование металла по вики («Players require 5 Attack to wield steel weapons»): сверка того, что в статье. */
+/** The metal requirement per the wiki ("Players require 5 Attack to wield steel weapons"): a cross-check of what the article says. */
 const METAL_LEVEL: Record<Metal, number> = { bronze: 1, iron: 1, steel: 5, black: 10, mithril: 20, adamant: 30, rune: 40 };
-const METAL_RU: Record<Metal, [string, string, string]> = {
-  // мужской, женский, множественный
-  bronze: ['Бронзовый', 'Бронзовая', 'Бронзовые'], iron: ['Железный', 'Железная', 'Железные'],
-  steel: ['Стальной', 'Стальная', 'Стальные'], black: ['Чёрный', 'Чёрная', 'Чёрные'],
-  mithril: ['Мифриловый', 'Мифриловая', 'Мифриловые'], adamant: ['Адамантовый', 'Адамантовая', 'Адамантовые'],
-  rune: ['Рунический', 'Руническая', 'Рунические'],
-};
 
-/** Вид предмета: суффикс в названии, слот, род русского названия и само название. */
-const KINDS: { kind: string; en: string; slot: GearSlot; g: 0 | 1 | 2; ru: string }[] = [
-  { kind: 'dagger', en: 'dagger', slot: 'weapon', g: 0, ru: 'кинжал' },
-  { kind: 'sword', en: 'sword', slot: 'weapon', g: 0, ru: 'меч' },
-  { kind: 'scimitar', en: 'scimitar', slot: 'weapon', g: 0, ru: 'ятаган' },
-  { kind: 'longsword', en: 'longsword', slot: 'weapon', g: 0, ru: 'длинный меч' },
-  { kind: 'mace', en: 'mace', slot: 'weapon', g: 1, ru: 'булава' },
-  { kind: 'warhammer', en: 'warhammer', slot: 'weapon', g: 0, ru: 'боевой молот' },
-  { kind: 'battleaxe', en: 'battleaxe', slot: 'weapon', g: 1, ru: 'секира' },
-  { kind: '2h sword', en: '2h sword', slot: 'weapon', g: 0, ru: 'двуручный меч' },
-  { kind: 'axe', en: 'axe', slot: 'weapon', g: 0, ru: 'топор' },
-  { kind: 'pickaxe', en: 'pickaxe', slot: 'weapon', g: 1, ru: 'кирка' },
-  { kind: 'full helm', en: 'full helm', slot: 'head', g: 0, ru: 'полный шлем' },
-  { kind: 'med helm', en: 'med helm', slot: 'head', g: 0, ru: 'средний шлем' },
-  { kind: 'platebody', en: 'platebody', slot: 'body', g: 0, ru: 'нагрудник' },
-  { kind: 'chainbody', en: 'chainbody', slot: 'body', g: 1, ru: 'кольчуга' },
-  { kind: 'platelegs', en: 'platelegs', slot: 'legs', g: 2, ru: 'поножи' },
-  { kind: 'plateskirt', en: 'plateskirt', slot: 'legs', g: 1, ru: 'латная юбка' },
-  { kind: 'kiteshield', en: 'kiteshield', slot: 'shield', g: 0, ru: 'кайтовый щит' },
-  { kind: 'sq shield', en: 'sq shield', slot: 'shield', g: 0, ru: 'квадратный щит' },
+/** The item kind: the suffix in the name, the slot and the name itself. */
+const KINDS: { kind: string; en: string; slot: GearSlot }[] = [
+  { kind: 'dagger', en: 'dagger', slot: 'weapon' },
+  { kind: 'sword', en: 'sword', slot: 'weapon' },
+  { kind: 'scimitar', en: 'scimitar', slot: 'weapon' },
+  { kind: 'longsword', en: 'longsword', slot: 'weapon' },
+  { kind: 'mace', en: 'mace', slot: 'weapon' },
+  { kind: 'warhammer', en: 'warhammer', slot: 'weapon' },
+  { kind: 'battleaxe', en: 'battleaxe', slot: 'weapon' },
+  { kind: '2h sword', en: '2h sword', slot: 'weapon' },
+  { kind: 'axe', en: 'axe', slot: 'weapon' },
+  { kind: 'pickaxe', en: 'pickaxe', slot: 'weapon' },
+  { kind: 'full helm', en: 'full helm', slot: 'head' },
+  { kind: 'med helm', en: 'med helm', slot: 'head' },
+  { kind: 'platebody', en: 'platebody', slot: 'body' },
+  { kind: 'chainbody', en: 'chainbody', slot: 'body' },
+  { kind: 'platelegs', en: 'platelegs', slot: 'legs' },
+  { kind: 'plateskirt', en: 'plateskirt', slot: 'legs' },
+  { kind: 'kiteshield', en: 'kiteshield', slot: 'shield' },
+  { kind: 'sq shield', en: 'sq shield', slot: 'shield' },
 ];
 
-/** Без металла: амулеты и вещи с обучающего острова и из начала пути. */
-const EXTRA: { name: string; ru: string; kind: string; set?: string }[] = [
-  { name: 'Amulet of accuracy', ru: 'Амулет точности', kind: 'amulet' },
-  { name: 'Amulet of defence', ru: 'Амулет защиты', kind: 'amulet' },
-  { name: 'Amulet of strength', ru: 'Амулет силы', kind: 'amulet' },
-  { name: 'Amulet of power', ru: 'Амулет мощи', kind: 'amulet' },
-  { name: 'Wooden shield', ru: 'Деревянный щит', kind: 'shield' },
-  { name: 'Leather body', ru: 'Кожаная куртка', kind: 'leather', set: 'Leather armour' },
-  { name: 'Leather chaps', ru: 'Кожаные штаны', kind: 'leather', set: 'Leather armour' },
-  { name: 'Coif', ru: 'Капюшон', kind: 'leather' },
-  { name: 'Hardleather body', ru: 'Куртка из жёсткой кожи', kind: 'leather' },
+/** Without a metal: amulets and things from Tutorial Island and the start of the path. */
+const EXTRA: { name: string; kind: string; set?: string }[] = [
+  { name: 'Amulet of accuracy', kind: 'amulet' },
+  { name: 'Amulet of defence', kind: 'amulet' },
+  { name: 'Amulet of strength', kind: 'amulet' },
+  { name: 'Amulet of power', kind: 'amulet' },
+  { name: 'Wooden shield', kind: 'shield' },
+  { name: 'Leather body', kind: 'leather', set: 'Leather armour' },
+  { name: 'Leather chaps', kind: 'leather', set: 'Leather armour' },
+  { name: 'Coif', kind: 'leather' },
+  { name: 'Hardleather body', kind: 'leather' },
 ];
 
 const SLOT: Record<string, GearSlot> = { weapon: 'weapon', '2h': 'weapon', head: 'head', body: 'body', legs: 'legs', shield: 'shield', neck: 'neck' };
 
-// Вики просит не спешить: не чаще одного запроса в 350 мс, при 429 — ждём и повторяем.
+// The wiki asks not to hurry: no more than one request per 350 ms, on a 429 — wait and repeat.
 let lastRequest = 0;
 const fetchFn = async (url: string) => {
   for (let attempt = 1; ; attempt++) {
@@ -82,7 +75,7 @@ const fetchFn = async (url: string) => {
   }
 };
 
-// v2: требования всех боевых навыков и квесты (reqFrom) — старый кэш их не знает.
+// v2: the requirements of all combat skills and the quests (reqFrom) — the old cache does not know them.
 const CACHE = `${root}node_modules/.cache/osrs-put-gear-v2.json`;
 const cache: Record<string, GearPiece> = (() => {
   if (process.argv.includes('--fresh') || !existsSync(CACHE)) return {};
@@ -92,16 +85,15 @@ const saveCache = () => { mkdirSync(dirname(CACHE), { recursive: true }); writeF
 
 const OVERVIEW = 'Free-to-play PvP equipment';
 const pages = new Map<string, string | null>();
-/** Статья набора или обзора — одна загрузка на все предметы. */
+/** The article of a set or an overview — one load for all the items. */
 async function pageText(name: string): Promise<string | null> {
   if (!pages.has(name)) pages.set(name, (await fetchWikitext(fetchFn, name))?.text ?? null);
   return pages.get(name)!;
 }
 
-const wanted: { name: string; ru: string; kind: string; metal?: Metal; slot?: GearSlot; set?: string }[] = [
+const wanted: { name: string; kind: string; metal?: Metal; slot?: GearSlot; set?: string }[] = [
   ...METALS.flatMap((metal) => KINDS.map((k) => ({
     name: `${metal[0].toUpperCase()}${metal.slice(1)} ${k.en}`,
-    ru: `${METAL_RU[metal][k.g]} ${k.ru}`,
     kind: k.kind, metal, slot: k.slot, set: `${metal[0].toUpperCase()}${metal.slice(1)} equipment`,
   }))),
   ...EXTRA,
@@ -110,9 +102,9 @@ const wanted: { name: string; ru: string; kind: string; metal?: Metal; slot?: Ge
 const problems: string[] = [];
 const items: GearPiece[] = [];
 const fresh = wanted.filter((w) => !cache[w.name]);
-console.log(`Предметов: ${wanted.length}, из кэша ${wanted.length - fresh.length}`);
+console.log(`Items: ${wanted.length}, from the cache ${wanted.length - fresh.length}`);
 
-// Бонусы — пачкой по статьям; карточка предмета, магазины и текст — по одному.
+// The bonuses — in a batch by articles; the item card, shops and text — one by one.
 const boxes = new Map<string, Awaited<ReturnType<typeof fetchItemInfobox>>>();
 for (const w of fresh) boxes.set(w.name, await fetchItemInfobox(fetchFn, w.name));
 const bonuses: Map<string, ItemBonuses> = fresh.length
@@ -122,12 +114,12 @@ const bonuses: Map<string, ItemBonuses> = fresh.length
 for (const w of wanted) {
   if (cache[w.name]) { items.push(cache[w.name]); continue; }
   const box = boxes.get(w.name);
-  if (!box) { problems.push(`${w.name}: нет карточки предмета`); continue; }
+  if (!box) { problems.push(`${w.name}: no item card`); continue; }
   const b = bonuses.get(box.pageName);
-  if (!b) { problems.push(`${w.name}: нет бонусов`); continue; }
+  if (!b) { problems.push(`${w.name}: no bonuses`); continue; }
   const slot = SLOT[b.slot];
-  if (!slot || (w.slot && w.slot !== slot)) { problems.push(`${w.name}: слот «${b.slot}»`); continue; }
-  // Требования: статья предмета → статья набора → обзор бесплатного снаряжения. Нигде нет — «не проверено».
+  if (!slot || (w.slot && w.slot !== slot)) { problems.push(`${w.name}: slot "${b.slot}"`); continue; }
+  // The requirements: the item article → the set article → the free equipment overview. None anywhere — "not verified".
   const page = await fetchWikitext(fetchFn, box.pageName);
   const own = page ? requirementsFromText(page.text) : null;
   let req: GearRequirements | null = own === 'none' ? {} : own;
@@ -141,15 +133,14 @@ for (const w of wanted) {
     const overview = await pageText(OVERVIEW);
     if (overview && listedWithoutRequirements(overview, box.name)) { req = {}; reqFrom = OVERVIEW; }
   }
-  if (!req) problems.push(`${w.name}: требования не найдены ни в статье, ни в статье набора — в советы не пойдёт`);
-  // Сверка с правилом металла («Players require 5 Attack to wield steel weapons»): расхождение — на проверку.
+  if (!req) problems.push(`${w.name}: the requirements are found neither in the article nor in the set article — it will not go into the advice`);
+  // A cross-check with the metal rule ("Players require 5 Attack to wield steel weapons"): a discrepancy goes for review.
   const top = Math.max(1, ...Object.entries(req ?? {}).filter(([k]) => k !== 'quests').map(([, v]) => v as number));
-  if (req && w.metal && top !== METAL_LEVEL[w.metal]) problems.push(`${w.name}: в статье ${JSON.stringify(req)}, по металлу ${METAL_LEVEL[w.metal]}`);
+  if (req && w.metal && top !== METAL_LEVEL[w.metal]) problems.push(`${w.name}: the article says ${JSON.stringify(req)}, by the metal ${METAL_LEVEL[w.metal]}`);
   const stores = (await fetchStores(fetchFn, box.name).catch(() => [])).filter((s) => !s.members);
   const item: GearPiece = {
     id: box.id,
     name: box.name,
-    nameRu: w.ru,
     slot,
     kind: w.kind,
     ...(w.metal ? { metal: w.metal } : {}),
@@ -171,15 +162,15 @@ for (const w of wanted) {
   saveCache();
 }
 
-// Противники шагов: у статьи бывает несколько версий — берём версию бесплатного мира и самую
-// низкоуровневую (Ghast из Nature Spirit — 30, Flesh Crawler — 28): с ней игрок встречается первым.
+// The step opponents: an article may have several versions — we take the free-world version and the
+// lowest-level one (Ghast from Nature Spirit — 30, Flesh Crawler — 28): the player meets it first.
 const steps = JSON.parse(readFileSync(`${root}src/data/steps.json`, 'utf8')) as Step[];
 const foeNames = [...new Set(steps.flatMap((s) => s.foes ?? []))];
 const monsters = await fetchMonsters(fetchFn, foeNames);
 const foes: Foe[] = [];
 for (const name of foeNames) {
   const versions = monsters.get(name);
-  if (!versions?.length) { problems.push(`${name}: нет карточки монстра`); continue; }
+  if (!versions?.length) { problems.push(`${name}: no monster card`); continue; }
   const v = [...versions].sort((a, b) => Number(a.members) - Number(b.members) || a.combat - b.combat)[0];
   foes.push({
     name, ...(v.version ? { version: v.version } : {}),
@@ -187,24 +178,24 @@ for (const name of foeNames) {
   });
 }
 
-if (problems.length) console.log(`\nНа проверку:\n  ${problems.join('\n  ')}`);
-const hard = problems.filter((p) => /нет карточки|нет бонусов|слот/.test(p));
+if (problems.length) console.log(`\nFor review:\n  ${problems.join('\n  ')}`);
+const hard = problems.filter((p) => /no item card|no bonuses|slot/.test(p));
 if (hard.length) {
-  console.error('\ngear.json не записан: нет данных по предметам выше.');
+  console.error('\ngear.json was not written: there is no data for the items above.');
   process.exit(1);
 }
 
 const data: GearData = {
-  source: 'OSRS Wiki: карточки предметов и бонусов (Bucket infobox_item, infobox_bonuses), магазины (storeline, infobox_shop), требования — из статей',
+  source: 'OSRS Wiki: item and bonus infoboxes (Bucket infobox_item, infobox_bonuses), shops (storeline, infobox_shop), requirements from the articles',
   updated: new Date().toISOString().slice(0, 10),
   items,
 };
 writeFileSync(OUT, JSON.stringify(data, null, 2) + '\n');
-console.log(`\nЗаписано ${items.length} предметов в ${OUT}; members: ${items.filter((i) => i.members).map((i) => i.name).join(', ') || 'нет'}`);
+console.log(`\nWritten ${items.length} items to ${OUT}; members: ${items.filter((i) => i.members).map((i) => i.name).join(', ') || 'none'}`);
 const foeData: FoeData = {
-  source: 'OSRS Wiki: карточки монстров (Bucket infobox_monster) — противники из шагов маршрута (поле foes в steps.json)',
+  source: 'OSRS Wiki: monster infoboxes (Bucket infobox_monster): the opponents from the route steps (the foes field in steps.json)',
   updated: data.updated,
   foes,
 };
 writeFileSync(OUT_FOES, JSON.stringify(foeData, null, 2) + '\n');
-console.log(`Записано ${foes.length} противников в ${OUT_FOES}: ${foes.map((f) => `${f.name} (${f.combat})`).join(', ')}`);
+console.log(`Written ${foes.length} opponents to ${OUT_FOES}: ${foes.map((f) => `${f.name} (${f.combat})`).join(', ')}`);

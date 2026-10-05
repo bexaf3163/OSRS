@@ -1,6 +1,6 @@
-"""Небольшой разборщик подмножества Java, которого хватает исходникам квестов Quest Helper:
-токены, выражения (вызовы, new, поля, литералы, бинарные/унарные), операторы (объявления, присваивания, вызовы), методы класса.
-Всё, чего разборщик не понимает, превращается в узел ('unk', текст) — а не в ошибку: условие с неизвестным кусочком потом даёт «не знаю»."""
+"""A small parser of the Java subset that the Quest Helper quest sources need:
+tokens, expressions (calls, new, fields, literals, binary/unary), statements (declarations, assignments, calls), class methods.
+Everything the parser does not understand turns into a node ('unk', text) — not into an error: a condition with an unknown piece later gives "unknown"."""
 import re
 
 TOKEN_RE = re.compile(r'''
@@ -71,9 +71,9 @@ class Parser:
 
     def expect(self, text):
         if not self.eat(text):
-            raise SyntaxError('ожидалось %r, найдено %r (токен %d)' % (text, self.peek(), self.i))
+            raise SyntaxError('expected %r, found %r (token %d)' % (text, self.peek(), self.i))
 
-    # ---------- выражения ----------
+    # ---------- expressions ----------
     BINOPS = [['||'], ['&&'], ['|'], ['^'], ['&'], ['==', '!='], ['<', '>', '<=', '>='], ['+', '-'], ['*', '/', '%']]
 
     def expr(self):
@@ -95,7 +95,7 @@ class Parser:
         left = self.binary(level + 1)
         while self.peek()[0] == 'op' and self.peek()[1] in self.BINOPS[level]:
             op = self.next()[1]
-            # «<» после имени типа в дженериках встречается только в new/объявлениях; в выражениях это сравнение
+            # "<" after a type name occurs in generics only in new/declarations; in expressions it is a comparison
             right = self.binary(level + 1)
             left = ('bin', op, left, right)
         return left
@@ -120,7 +120,7 @@ class Parser:
         return out
 
     def skip_generics(self):
-        """Пропустить <...> (дженерики), если они стоят здесь."""
+        """Skip <...> (generics) if they stand here."""
         if not self.at('<'):
             return
         depth = 0
@@ -165,7 +165,7 @@ class Parser:
             except ValueError:
                 return ('lit', float(s))
         if k == 'op' and v == '(':
-            # приведение типа (Type) expr / лямбда (a, b) -> ... / скобки
+            # a type cast (Type) expr / a lambda (a, b) -> ... / parentheses
             j = self.i + 1
             depth = 1
             while depth and self.t[j][0] != 'eof':
@@ -179,7 +179,7 @@ class Parser:
                 params = [t[1] for t in self.t[self.i + 1:j - 1] if t[0] == 'id']
                 self.i = j + 1
                 return self.lambda_body(params)
-            # приведение: (int) x, (Type) name
+            # a cast: (int) x, (Type) name
             inner = self.t[self.i + 1:j - 1]
             if inner and all(t[0] == 'id' or t[1] in ('.', '<', '>', '[', ']', ',') for t in inner) and after[0] in ('id', 'str', 'num') or (inner and len(inner) == 1 and inner[0][0] == 'id' and after[1] in ('(', '!')):
                 if inner[0][1][:1].isupper() or inner[0][1] in ('int', 'long', 'double', 'float', 'boolean', 'String'):
@@ -201,7 +201,7 @@ class Parser:
             if v == 'this':
                 self.next()
                 return ('name', 'this')
-            # лямбда x -> ...
+            # a lambda x -> ...
             if self.peek(1)[1] == '->':
                 params = [v]
                 self.i += 2
@@ -211,7 +211,7 @@ class Parser:
                 return ('call', None, v, self.args())
             return ('name', v)
         if k == 'op' and v == '{':
-            # инициализатор массива {a, b}
+            # an array initializer {a, b}
             self.next()
             out = []
             while not self.at('}') and self.peek()[0] != 'eof':
@@ -278,9 +278,9 @@ class Parser:
             else:
                 return e
 
-    # ---------- операторы ----------
+    # ---------- statements ----------
     def statement(self):
-        """Один оператор: ('decl', имя, expr) | ('assign', lhs, expr) | ('expr', expr) | ('skip', текст)."""
+        """One statement: ('decl', name, expr) | ('assign', lhs, expr) | ('expr', expr) | ('skip', text)."""
         tok = self.peek()
         if tok == ('op', ';'):
             self.next()
@@ -320,7 +320,7 @@ class Parser:
                     return
 
     def skip_statement(self):
-        # до конца оператора: либо блок {...}, либо до ';'; для if/else — оба.
+        # up to the end of the statement: either a block {...}, or up to ';'; for if/else — both.
         while True:
             tok = self.peek()
             if tok[0] == 'eof':
@@ -374,7 +374,7 @@ class Parser:
     def declaration(self):
         if self.peek()[1] == 'final':
             self.next()
-        # тип
+        # the type
         self.next()
         while self.at('.'):
             self.next()
@@ -400,7 +400,7 @@ class Parser:
         return items[0] if len(items) == 1 else ('multi', items)
 
     def block(self):
-        """Операторы до закрывающей }."""
+        """The statements up to the closing }."""
         out = []
         while not self.at('}') and self.peek()[0] != 'eof':
             before = self.i
@@ -418,9 +418,9 @@ class Parser:
 
 
 def parse_class(src):
-    """Методы и поля верхнего класса файла: {'methods': {имя: [операторы]}, 'ctor': [операторы], 'fields': [операторы], 'extends': имя,
-    'name': имя, 'imports': {Простое: Полное}}."""
-    # импорты
+    """The methods and fields of the file's top class: {'methods': {name: [statements]}, 'ctor': [statements], 'fields': [statements], 'extends': name,
+    'name': name, 'imports': {Simple: Full}}."""
+    # imports
     imports = {}
     static_imports = {}
     for m in re.finditer(r'^\s*import\s+(static\s+)?([\w.]+?)(?:\.\*)?\s*;', src, re.M):
@@ -429,7 +429,7 @@ def parse_class(src):
         (static_imports if m.group(1) else imports)[simple] = full
     toks = tokenize(src)
     p = Parser(toks)
-    # найти объявление класса
+    # find the class declaration
     name = extends = None
     i = 0
     while i < len(toks):
@@ -447,7 +447,7 @@ def parse_class(src):
     order = []
     while not p.at('}') and p.peek()[0] != 'eof':
         start = p.i
-        # заголовок до '{' или ';' на нулевой глубине скобок
+        # the header up to '{' or ';' at zero bracket depth
         j = p.i
         depth = 0
         kind = None
@@ -476,7 +476,7 @@ def parse_class(src):
             break
         header = toks[start:j]
         if kind == 'block':
-            # метод/конструктор/вложенный класс/инициализатор
+            # a method/constructor/nested class/initializer
             names = [t[1] for t in header]
             paren = next((k for k, t in enumerate(header) if t == ('op', '(')), None)
             if paren is not None and paren > 0 and header[paren - 1][0] == 'id' and 'class' not in names:
@@ -490,16 +490,16 @@ def parse_class(src):
                     methods[mname] = body
                     order.append(mname)
                 continue
-            # вложенное: пропускаем
+            # a nested one: we skip it
             p.i = j
             p.skip_balanced('{', '}')
             continue
         if kind == 'semi':
-            # поле без инициализатора (или аннотация)
+            # a field without an initializer (or an annotation)
             p.i = j + 1
             continue
         if kind == 'init':
-            # поле с инициализатором: ... name = expr ;
+            # a field with an initializer: ... name = expr ;
             names = [t for t in header if t[0] == 'id']
             fname = names[-1][1] if names else None
             p.i = j + 1

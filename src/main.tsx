@@ -1,3 +1,4 @@
+// The React entry point: the providers (progress, the RuneLite link, the player state, the readiness engine).
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';

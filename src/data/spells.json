@@ -1,7 +1,7 @@
 {
   "source": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
   "checked": "2026-10-03",
-  "note": "Уровень, опыт и руны — из карточек заклинаний вики (Infobox Spell). Заклинания одного яруса бьют одинаково, выбор не влияет на меткость. Телепорты Varrock и Lumbridge — из карточек вики (Infobox Spell): 35 и 41 опыта за каст.",
+  "note": "Level, XP and runes come from the wiki spell cards (Infobox Spell). Spells of the same tier hit equally hard, and the choice does not affect accuracy. The Varrock and Lumbridge teleports also come from the wiki's spell cards (Infobox Spell): 35 and 41 XP per cast.",
   "spells": [
     {
       "id": "wind-strike",
@@ -86,22 +86,18 @@
   "staffs": {
     "air": {
       "name": "Staff of air",
-      "nameRu": "Посох воздуха",
       "id": 1381
     },
     "water": {
       "name": "Staff of water",
-      "nameRu": "Посох воды",
       "id": 1383
     },
     "earth": {
       "name": "Staff of earth",
-      "nameRu": "Посох земли",
       "id": 1385
     },
     "fire": {
       "name": "Staff of fire",
-      "nameRu": "Посох огня",
       "id": 1387
     }
   },

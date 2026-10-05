@@ -1,7 +1,7 @@
-// npm run test:ui — прогон интерфейса в настоящем браузере (Chromium через Playwright), как у игрока в exe:
-// собранная страница, подменная программа для ПК (window.osrsDesktop) и подменный мост RuneLite. Сеть к вики
-// закрыта — проверяется, что всё работает и без неё. Нужна сборка (npm run build) и Chromium
-// (npx playwright install chromium). Раньше эти сценарии жили вне репозитория.
+// npm run test:ui — a run of the interface in a real browser (Chromium through Playwright), as the player has it in the exe:
+// the built page, a stub desktop app (window.osrsDesktop) and a stub RuneLite bridge. The network to the wiki
+// is closed — it checks that everything works without it too. It needs a build (npm run build) and Chromium
+// (npx playwright install chromium). These scenarios used to live outside the repository.
 
 import { spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -16,13 +16,13 @@ interface Mock {
   status?: Record<string, unknown>;
   events?: unknown[];
   localStorage?: Record<string, string>;
-  /** Режим «Дзен» (по умолчанию в тестах включён «Инспектор»: все блоки шага развёрнуты, как проверялось раньше). */
+  /** The "Zen" mode (by default the tests turn "Inspector" on: all the step blocks are expanded, as it was checked before). */
   zen?: boolean;
-  /** Цены биржи по ID предмета: подменяют ответ prices.runescape.wiki (без них сеть к вики закрыта). */
+  /** The exchange prices by item ID: they stand in for the prices.runescape.wiki reply (without them the network to the wiki is closed). */
   prices?: Record<number, number>;
 }
 
-/** Прогресс: всё до шага закрыто. */
+/** The progress: everything before the step is closed. */
 function progressBefore(id: string, extra: Record<string, unknown> = {}) {
   const ids = steps.map((s) => s.id);
   const done = Object.fromEntries(ids.slice(0, ids.indexOf(id)).map((s) => [s, 'done']));
@@ -37,7 +37,7 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
       const f = JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as Record<string, unknown>;
       if (f.inspector === undefined) f.inspector = !m.zen;
       localStorage.setItem('osrs-put:features', JSON.stringify(f));
-    } catch { /* нет хранилища */ }
+    } catch { /* no storage */ }
     const w = window as unknown as Record<string, unknown>;
     const posts: unknown[] = [];
     w.__posts = posts;
@@ -88,10 +88,10 @@ const text = (page: Page, sel: string) => page.locator(sel).allInnerTexts().then
 
 async function run(browser: Browser) {
   for (const width of [390, 1100]) {
-    console.log(`Ширина ${width}`);
+    console.log(`Width ${width}`);
 
-    // Готовность к шагу: не хватает уровня — действие «добрать»; предмет в банке — «к банку». Автоподготовка выключена —
-    // заход начинается кнопкой (автоочередь проверяется ниже).
+    // Step readiness: a level is missing — the action "catch up"; an item is in the bank — "to the bank". The auto preparation is off —
+    // the trip starts with a button (the auto queue is checked below).
     {
       const { page, errors } = await open(browser, width, {
         progress: progressBefore('S9-01'),
@@ -100,25 +100,25 @@ async function run(browser: Browser) {
         localStorage: { 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
       }, '#/step/S9-01');
       const t = await text(page, '.readiness');
-      expect(t.includes('Нужна короткая подготовка') && t.includes('Добрать Crafting'), 'готовность: не хватает Crafting 31 — «⚡ Добрать Crafting»');
-      expect(t.includes('К банку'), 'готовность: Knife в банке — «🧭 К банку»');
-      // Маршрут подготовки: одно главное, кнопка начала, возврат к шагу; заход переживает перезагрузку страницы.
+      expect(t.includes('A short preparation is needed') && t.includes('Catch up Crafting'), 'readiness: Crafting 31 is missing — "⚡ Catch up Crafting"');
+      expect(t.includes('To the bank'), 'readiness: Knife is in the bank — "🧭 To the bank"');
+      // The preparation route: one main thing, the start button, the return to the step; the trip survives a page reload.
       const prep = await text(page, '.prep-route');
-      expect(prep.includes('Подготовка к S9-01') && prep.includes('Начать подготовку') && prep.includes('вернёмся к S9-01'), 'подготовка: главное, кнопка и возврат к шагу');
-      await page.getByRole('button', { name: /Начать подготовку/ }).click();
+      expect(prep.includes('Preparing for S9-01') && prep.includes('Start the preparation') && prep.includes('then we return to S9-01'), 'preparation: the main thing, the button and the return to the step');
+      await page.getByRole('button', { name: /Start the preparation/ }).click();
       await page.waitForTimeout(300);
       const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:prep') ?? '{}') as { stack?: { sourceStepId: string }[] });
-      expect(saved.stack?.length === 1 && saved.stack[0].sourceStepId === 'S9-01', 'подготовка: заход запомнился в хранилище');
+      expect(saved.stack?.length === 1 && saved.stack[0].sourceStepId === 'S9-01', 'preparation: the trip was remembered in the storage');
       await page.reload();
       await page.waitForTimeout(1200);
-      expect((await text(page, '.prep-route')).includes('Подготовка идёт'), 'подготовка: после перезагрузки заход всё ещё идёт');
-      expect(await noOverflow(page), 'шаг: без горизонтальной прокрутки');
-      expect(!errors.length, `шаг: ошибок в консоли нет ${errors.join('; ')}`);
+      expect((await text(page, '.prep-route')).includes('Preparation underway'), 'preparation: after a reload the trip is still going');
+      expect(await noOverflow(page), 'step: no horizontal scrolling');
+      expect(!errors.length, `step: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // Автоочередь подготовки: сама ставит стрелку к банку за Knife, запоминает заход, переживает перезагрузку;
-    // игрок снял стрелку — очередь на паузе, «Продолжить» возвращает.
+    // The auto queue of the preparation: it sets the arrow to the bank for a Knife by itself, remembers the trip, survives a reload;
+    // the player cleared the arrow — the queue is paused, "Continue" brings it back.
     {
       const { page, errors } = await open(browser, width, {
         progress: progressBefore('S9-01'),
@@ -127,46 +127,46 @@ async function run(browser: Browser) {
       }, '#/step/S9-01');
       type Post = { path: string; body: Record<string, unknown> };
       const posts = () => page.evaluate(() => (window as unknown as { __posts: Post[] }).__posts);
-      // Связь с игрой и банк приходят не мгновенно — ждём, пока очередь начнёт заход.
+      // The link with the game and the bank do not arrive at once — we wait until the queue starts a trip.
       await page.waitForFunction(() => (window as unknown as { __posts: Post[] }).__posts.some((p) => p.path === '/nav-target'), null, { timeout: 10000 }).catch(() => undefined);
       await page.waitForTimeout(300);
       const nav = (await posts()).filter((p) => p.path === '/nav-target').pop()?.body;
-      expect(nav?.itemName === 'Knife' && nav?.stepId === 'S9-01', 'автоочередь: стрелка сама ведёт к банку за Knife');
+      expect(nav?.itemName === 'Knife' && nav?.stepId === 'S9-01', 'auto queue: the arrow leads to the bank for a Knife by itself');
       const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:prep') ?? '{}') as { stack?: { sourceStepId: string; detourId: string }[] });
-      expect(saved.stack?.length === 1 && saved.stack[0].detourId === 'bank', 'автоочередь: заход начат сам и запомнился');
-      expect((await text(page, '.prep-route')).includes('Подготовка идёт'), 'автоочередь: в блоке подготовки — «Подготовка идёт»');
+      expect(saved.stack?.length === 1 && saved.stack[0].detourId === 'bank', 'auto queue: the trip started by itself and was remembered');
+      expect((await text(page, '.prep-route')).includes('Preparation underway'), 'auto queue: the preparation block says "Preparation underway"');
       const navCount = (await posts()).filter((p) => p.path === '/nav-target').length;
       await page.waitForTimeout(800);
-      expect((await posts()).filter((p) => p.path === '/nav-target').length === navCount, 'автоочередь: стрелку не дёргает по кругу');
+      expect((await posts()).filter((p) => p.path === '/nav-target').length === navCount, 'auto queue: the arrow is not jerked in circles');
       await page.reload();
       await page.waitForTimeout(1200);
-      expect((await text(page, '.prep-route')).includes('Подготовка идёт'), 'автоочередь: после перезагрузки заход всё ещё идёт');
-      expect(!errors.length, `автоочередь: ошибок в консоли нет ${errors.join('; ')}`);
+      expect((await text(page, '.prep-route')).includes('Preparation underway'), 'auto queue: after a reload the trip is still going');
+      expect(!errors.length, `auto queue: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // Игрок сам снял стрелку — очередь на паузе и больше её не ставит.
+    // The player cleared the arrow themselves — the queue is paused and does not set it any more.
     {
-      const target = { label: 'Банк: взять Knife', x: 3185, y: 3436, plane: 0, itemName: 'Knife', stepId: 'S9-01' };
+      const target = { label: 'Bank: take Knife', x: 3185, y: 3436, plane: 0, itemName: 'Knife', stepId: 'S9-01' };
       const { page, errors } = await open(browser, width, {
         progress: progressBefore('S9-01'),
         status: { protocol: 5, stats: { crafting: 40, woodcutting: 40 }, navTarget: target },
         events: [{ type: 'STATS', stats: { crafting: 40, woodcutting: 40 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Knife', carried: 0, noted: 0, bank: 1 }] }],
-        localStorage: { 'osrs-put:prep': JSON.stringify({ stack: [{ sourceStepId: 'S9-01', detourId: 'bank', reason: 'Забери из банка', startedAt: 1, returnCondition: 'готово' }], done: [] }) },
+        localStorage: { 'osrs-put:prep': JSON.stringify({ stack: [{ sourceStepId: 'S9-01', detourId: 'bank', reason: 'Take it from the bank', startedAt: 1, returnCondition: 'done' }], done: [] }) },
       }, '#/step/S9-01');
-      await page.getByRole('button', { name: /Вернуться к шагу сейчас/ }).click();
+      await page.getByRole('button', { name: /Return to the step now/ }).click();
       await page.waitForTimeout(700);
-      expect((await text(page, '.prep-route')).includes('Продолжить подготовку'), 'пауза: после снятия стрелки — «Продолжить подготовку»');
+      expect((await text(page, '.prep-route')).includes('Continue the preparation'), 'pause: after the arrow is cleared — "Continue the preparation"');
       type Post = { path: string };
       const navs = (await page.evaluate(() => (window as unknown as { __posts: Post[] }).__posts)).filter((p) => p.path === '/nav-target').length;
       await page.waitForTimeout(800);
       const after = (await page.evaluate(() => (window as unknown as { __posts: Post[] }).__posts)).filter((p) => p.path === '/nav-target').length;
-      expect(navs === after, 'пауза: стрелку больше не ставит');
-      expect(!errors.length, `пауза: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(navs === after, 'pause: it does not set the arrow any more');
+      expect(!errors.length, `pause: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // Стиль игры и «чем качать»: спокойный по умолчанию; переключение в настройках; карточка способа на странице навыка.
+    // The play style and "what to train with": calm by default; switching in settings; the method card on the skill page.
     {
       const { page, errors } = await open(browser, width, {
         progress: progressBefore('S1-08', { levels: { woodcutting: 32 } }),
@@ -175,23 +175,23 @@ async function run(browser: Browser) {
       }, '#/skills/WC');
       await page.waitForSelector('.training', { timeout: 5000 });
       const calm = await text(page, '.training');
-      expect(calm.includes('Чем качать') && calm.includes('Ивы') && !calm.includes('по вики — ориентир') && calm.includes('Стиль: 🌿 Спокойно'), 'чем качать: на 32 уровне — ивы, спокойный стиль без оценки времени');
-      expect(await noOverflow(page), 'чем качать: без горизонтальной прокрутки');
+      expect(calm.includes('What to train with') && calm.includes('Willow') && !calm.includes('by the wiki speed') && calm.includes('Style: 🌿 Calm'), 'what to train with: at level 32 — willows, the calm style without a time estimate');
+      expect(await noOverflow(page), 'what to train with: no horizontal scrolling');
       await page.goto(`${BASE}#/settings`);
       await page.waitForTimeout(400);
-      await page.getByRole('button', { name: /Эффективно/ }).click();
+      await page.getByRole('button', { name: /Efficient/ }).click();
       await page.waitForTimeout(200);
       const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { efficient?: boolean });
-      expect(feat.efficient === true, 'стиль: «Эффективно» запомнилось в настройках');
+      expect(feat.efficient === true, 'style: "Efficient" was remembered in the settings');
       await page.goto(`${BASE}#/skills/WC`);
       await page.waitForSelector('.training', { timeout: 5000 });
       const fast = await text(page, '.training');
-      expect(fast.includes('Стиль: ⚡ Эффективно') && /из вики/.test(fast), 'чем качать: эффективный стиль показывает время и скорость «по вики»');
-      expect(!errors.length, `чем качать: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(fast.includes('Style: ⚡ Efficient') && /wiki speed/.test(fast), 'what to train with: the efficient style shows the time and the speed "per the wiki"');
+      expect(!errors.length, `what to train with: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // «Дзен»: вместо стопки плашек — одна строка статуса; подробности — по кнопке, вкладками; готов — «Начать шаг».
+    // "Zen": instead of a stack of plaques — one status line; the details on a button, as tabs; ready — "Start the step".
     {
       const { page, errors } = await open(browser, width, {
         zen: true,
@@ -202,17 +202,17 @@ async function run(browser: Browser) {
       }, '#/step/S9-01');
       await page.waitForSelector('.step-status', { timeout: 8000 });
       const line = await text(page, '.status-line');
-      expect(/Требуется подготовка \(\d/.test(line) && line.includes('Исправить') && line.includes('Подробнее'), `дзен: одна строка статуса с подготовкой и кнопками (${line.replace(/\s+/g, ' ').slice(0, 90)})`);
-      expect(!(await page.locator('.readiness').first().isVisible()), 'дзен: панель готовности свёрнута, на экране её нет');
-      expect((await text(page, '.step-details')).includes('Сделано'), 'дзен: кнопка «Сделано» на месте');
-      expect(await page.locator('.zen-more').count() === 1, 'дзен: прочее — в «Подробнее о шаге»');
-      await page.getByRole('button', { name: /Подробнее ▾/ }).click();
+      expect(/Preparation required \(\d/.test(line) && line.includes('Fix') && line.includes('More'), `Zen: one status line with the preparation and the buttons (${line.replace(/\s+/g, ' ').slice(0, 90)})`);
+      expect(!(await page.locator('.readiness').first().isVisible()), 'Zen: the readiness panel is folded, it is not on the screen');
+      expect((await text(page, '.step-details')).includes('Done'), 'Zen: the "Done" button is in place');
+      expect(await page.locator('.zen-more').count() === 1, 'Zen: the rest is in "More about the step"');
+      await page.getByRole('button', { name: /More ▾/ }).click();
       await page.waitForTimeout(300);
       const open1 = await text(page, '.readiness');
-      expect(open1.includes('Добрать Crafting') && open1.includes('К банку'), 'дзен: по «Подробнее» раскрывается вся прежняя панель подготовки');
-      expect(await page.locator('.status-tab').count() >= 2, 'дзен: вкладки подробностей (подготовка, путь и игра…)');
-      expect(await noOverflow(page), 'дзен: без горизонтальной прокрутки');
-      expect(!errors.length, `дзен: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(open1.includes('Catch up Crafting') && open1.includes('To the bank'), 'Zen: "More" expands the whole earlier preparation panel');
+      expect(await page.locator('.status-tab').count() >= 2, 'Zen: the detail tabs (preparation, route and game…)');
+      expect(await noOverflow(page), 'Zen: no horizontal scrolling');
+      expect(!errors.length, `Zen: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
@@ -224,45 +224,45 @@ async function run(browser: Browser) {
       }, '#/step/S1-04');
       await page.waitForSelector('.step-status', { timeout: 8000 });
       const line = await text(page, '.status-line');
-      expect(line.includes('Готов к выходу') && line.includes('Начать шаг') && !line.includes('Исправить'), `дзен: готов — «Готов к выходу · Начать шаг» (${line.replace(/\s+/g, ' ').slice(0, 80)})`);
-      expect(await noOverflow(page), 'дзен (готов): без горизонтальной прокрутки');
-      // Переключатель в шапке: «Инспектор» возвращает все блоки.
-      // На узком окне значок в шапке скрыт (как ⚔️ и 🛒) — переключатель всегда есть в Настройках.
-      if (width > 480) await page.getByRole('button', { name: /переключить на «Инспектор»/ }).click();
+      expect(line.includes('Ready to set off') && line.includes('Start the step') && !line.includes('Fix'), `Zen: ready — "Ready to set off · Start the step" (${line.replace(/\s+/g, ' ').slice(0, 80)})`);
+      expect(await noOverflow(page), 'Zen (ready): no horizontal scrolling');
+      // The switch in the header: "Inspector" brings back all the blocks.
+      // In a narrow window the header icon is hidden (like ⚔️ and 🛒) — the switch is always in Settings.
+      if (width > 480) await page.getByRole('button', { name: /switch to "Inspector"/ }).click();
       else {
         await page.goto(`${BASE}#/settings`);
-        await page.getByRole('button', { name: /^Инспектор$/ }).click();
+        await page.getByRole('button', { name: /^Inspector$/ }).click();
       }
       await page.waitForTimeout(300);
       const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { inspector?: boolean });
-      expect(feat.inspector === true && await page.locator('.step-status').count() === 0, 'инспектор: переключатель в шапке разворачивает блоки и прячет строку статуса');
-      expect(!errors.length, `дзен (готов): ошибок в консоли нет ${errors.join('; ')}`);
+      expect(feat.inspector === true && await page.locator('.step-status').count() === 0, 'Inspector: the header switch expands the blocks and hides the status line');
+      expect(!errors.length, `Zen (ready): no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // Оптовая закупка: «уже есть» меняет «купить», сохраняется и уходит в подсказку на бирже.
+    // Bulk shopping: "already have" changes "buy", is saved and goes into the exchange hint.
     {
       const { page, errors } = await open(browser, width, {
         events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Feather', carried: 120, noted: 0, bank: 200 }] }],
       }, '#/shopping');
-      const input = page.getByLabel('Energy potion(4): сколько уже есть').first();
+      const input = page.getByLabel('Energy potion(4): how many you already have').first();
       await input.fill('3');
       await input.press('Enter');
       await page.waitForTimeout(900);
       const tally = await text(page, '.shop-tally');
-      expect(/частично \d/.test(tally), 'закупка: отмеченные 3 из 5 — «частично»');
+      expect(/partly \d/.test(tally), 'shopping: 3 of 5 marked — "partly"');
       const saved = await page.evaluate(() => JSON.parse(String((window as unknown as Record<string, unknown>).__saved ?? '{}')));
-      expect(saved.ownedManual?.['id:3008']?.count === 3, 'закупка: отметка «уже есть 3» сохранена в прогрессе');
+      expect(saved.ownedManual?.['id:3008']?.count === 3, 'shopping: the mark "already have 3" is saved in the progress');
       const plan = await page.evaluate(() => ((window as unknown as { __posts: { path: string; body: { items: { name: string; count: number }[] } }[] }).__posts)
         .filter((p) => p.path === '/shopping-plan').pop()?.body.items ?? []);
-      expect(plan.find((i) => i.name === 'Energy potion(4)')?.count === 2, 'закупка: в игру уходит «купить 2», а не 5');
-      expect(plan.find((i) => i.name === 'Feather')?.count === 500, 'закупка: перья — по данным игры, плагин сам вычтет 320');
-      expect(await noOverflow(page), 'закупка: без горизонтальной прокрутки');
-      expect(!errors.length, `закупка: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(plan.find((i) => i.name === 'Energy potion(4)')?.count === 2, 'shopping: "buy 2" goes to the game, not 5');
+      expect(plan.find((i) => i.name === 'Feather')?.count === 500, 'shopping: feathers — by the game data, the plugin subtracts 320 itself');
+      expect(await noOverflow(page), 'shopping: no horizontal scrolling');
+      expect(!errors.length, `shopping: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // Снаряжение: Coif в банке при 17 Ranged — «есть, но надеть нельзя», а не совет надеть.
+    // Gear: a Coif in the bank at 17 Ranged — "you have it but cannot wear it", not advice to wear it.
     {
       const gear = { equipment: [{ id: 1325, name: 'Steel scimitar', slot: 'weapon' }], inventory: [], coins: 500, bankCoins: 3000 };
       const stats = { attack: 20, strength: 20, defence: 1, ranged: 17 };
@@ -271,100 +271,100 @@ async function run(browser: Browser) {
         events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Coif', carried: 0, noted: 0, bank: 1 }] }],
       }, '#/gear');
       const t = await text(page, '.gear-locked');
-      expect(t.includes('нужно 20 Ranged') && t.includes('Coif') && t.includes('надеть его пока нельзя'), 'снаряжение: 🔒 Coif — нужно 20 Ranged, лежит в банке');
-      expect(!(await text(page, '.gear-list')).includes('Надень Coif'), 'снаряжение: Coif не советуется надеть');
-      expect(await noOverflow(page), 'снаряжение: без горизонтальной прокрутки');
-      expect(!errors.length, `снаряжение: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(t.includes('needs 20 Ranged') && t.includes('Coif') && t.includes('cannot be worn yet'), 'gear: 🔒 Coif — needs 20 Ranged, lies in the bank');
+      expect(!(await text(page, '.gear-list')).includes('Wear Coif'), 'gear: it is not advised to wear the Coif');
+      expect(await noOverflow(page), 'gear: no horizontal scrolling');
+      expect(!errors.length, `gear: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // Большая карта: цель стрелки (быстрый вариант) видна отдельной меткой.
+    // The big map: the arrow target (a quick variant) is visible as a separate marker.
     {
       const { page, errors } = await open(browser, width, {
         localStorage: { 'osrs-put:branch-choice': '{"S2-05":"varrock-teleport"}', 'osrs-put:active-step': 'S2-05' },
         progress: progressBefore('S2-05'),
         status: { activeStepId: 'S2-05' },
       }, '#/step/S2-05');
-      await page.getByRole('button', { name: '🗺️ Карта мира' }).first().click();
+      await page.getByRole('button', { name: '🗺️ World map' }).first().click();
       await page.waitForTimeout(800);
       const t = await text(page, '.map-source');
-      expect(t.includes('Стрелка в игре ведёт') && t.includes('Varrock Teleport'), 'карта: метка «Стрелка в игре ведёт к Varrock Teleport»');
-      expect(await page.locator('.map-arrow-pin').count() === 1, 'карта: метка 🧭 на карте');
-      expect(!errors.length, `карта: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(t.includes('The in-game arrow leads') && t.includes('Varrock Teleport'), 'map: the marker "The in-game arrow leads to Varrock Teleport"');
+      expect(await page.locator('.map-arrow-pin').count() === 1, 'map: the 🧭 marker on the map');
+      expect(!errors.length, `map: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // Точка шага → игра: «Вести сюда в игре» ставит цель с NPC точки; «Показать в игре» отдаёт панели RuneLite
-    // «что нужно / где взять / точки шага».
+    // A step point → the game: "Lead here in the game" sets a target with the point's NPC; "Show in the game" gives the RuneLite panel
+    // "what you need / where to get it / the step points".
     {
       const { page, errors } = await open(browser, width, { progress: progressBefore('S2-03') }, '#/step/S2-03');
       await page.getByRole('radio', { name: /Eye of newt — Betty/ }).click();
-      await page.getByRole('button', { name: '🧭 Вести сюда в игре' }).click();
+      await page.getByRole('button', { name: '🧭 Lead here in the game' }).click();
       await page.waitForTimeout(500);
       type Post = { path: string; body: Record<string, unknown> };
       const posts = () => page.evaluate(() => (window as unknown as { __posts: Post[] }).__posts);
       const nav = (await posts()).filter((p) => p.path === '/nav-target').pop()?.body;
       expect(nav?.x === 3014 && JSON.stringify(nav?.npcNames) === '["Betty"]' && nav?.stepId === 'S2-03',
-        'карта шага: «Вести сюда в игре» — цель у Betty с подсветкой NPC');
-      await page.getByRole('button', { name: '🧭 Показать в игре' }).first().click();
+        'step map: "Lead here in the game" — a target at Betty with the NPC highlighted');
+      await page.getByRole('button', { name: '🧭 Show in the game' }).first().click();
       await page.waitForTimeout(500);
       const guide = (await posts()).filter((p) => p.path === '/active-step').pop()?.body.guide as
         { items: { name: string; where?: string }[]; places: { label: string; items?: string[] }[] } | undefined;
       expect(guide?.items.length === 4 && guide.items.every((i) => i.where) && guide.places.length === 5,
-        'показать в игре: панели RuneLite уходят 4 предмета с «где взять» и 5 точек');
-      expect(await noOverflow(page), 'карта шага: без горизонтальной прокрутки');
-      expect(!errors.length, `карта шага: ошибок в консоли нет ${errors.join('; ')}`);
+        'show in the game: 4 items with "where to get it" and 5 points go to the RuneLite panel');
+      expect(await noOverflow(page), 'step map: no horizontal scrolling');
+      expect(!errors.length, `step map: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // Шаг-заработок: монеты против цели.
+    // An earning step: coins against the goal.
     {
       const gear = { equipment: [], inventory: [], coins: 300, bankCoins: 12000, carriedValue: 4200, bankValue: 5000 };
       const { page } = await open(browser, width, { progress: progressBefore('S1-13'), status: gear, events: [{ type: 'GEAR', gear }] }, '#/step/S1-13');
       const t = await text(page, '.money-goal');
-      expect(t.includes('12 300 / 20 000') && t.includes('не хватает 7 700'), 'заработок: «Монеты: 12 300 / 20 000 gp — не хватает 7 700»');
-      expect(t.includes('~9 200'), 'заработок: предметы — отдельно, с «~»');
+      expect(t.includes('12,300 / 20,000') && t.includes('7,700 missing'), 'earning: "Coins: 12,300 / 20,000 gp — 7,700 missing"');
+      expect(t.includes('~9,200'), 'earning: the items — separately, with "~"');
       await page.context().close();
     }
 
-    // Старый плагин без поля protocol — просьба перезапустить RuneLite.
+    // An old plugin without the protocol field — a request to restart RuneLite.
     {
       const { page } = await open(browser, width, {}, '#/settings');
       const t = await text(page, '.plaque-warning');
-      expect(t.includes('старый плагин') && t.includes('перезапусти RuneLite'), 'настройки: плагин без рукопожатия — «старый плагин, перезапусти RuneLite»');
+      expect(t.includes('old plugin') && t.includes('restart RuneLite'), 'settings: a plugin without a handshake — "old plugin, restart RuneLite"');
       await page.context().close();
     }
 
-    // Плагин 2.10 (протокол 3) при программе 2.11: на карточке шага — что его нет и что сделать; с новым — подсказка о списке.
+    // Plugin 2.10 (protocol 3) with app 2.11: the step card says it is missing and what to do; with a new one — a hint about the list.
     {
       const { page } = await open(browser, width, {
         localStorage: { 'osrs-put:active-step': 'S2-03' }, progress: progressBefore('S2-03'),
         status: { activeStepId: 'S2-03', protocol: 3, pluginVersion: '2.10.0' },
       }, '#/step/S2-03');
       const t = await text(page, '.ingame');
-      expect(t.includes('старый плагин 2.10.0') && t.includes('список «Что нужно» на экране игры'), 'шаг: плагин 2.10 — «перезапусти RuneLite», без списка в игре');
+      expect(t.includes('old plugin 2.10.0') && t.includes('"What you need" list on the game screen'), 'step: plugin 2.10 — "restart RuneLite", without the list in the game');
       await page.context().close();
       const fresh = await open(browser, width, {
         localStorage: { 'osrs-put:active-step': 'S2-03' }, progress: progressBefore('S2-03'),
         status: { activeStepId: 'S2-03', protocol: 6, pluginVersion: '2.22.0' },
       }, '#/step/S2-03');
       const f = await text(fresh.page, '.ingame');
-      expect(f.includes('список «Что нужно»') && !f.includes('старый плагин'), 'шаг: плагин 2.22 — подсказка, где в игре список «Что нужно»');
-      expect(!fresh.errors.length, `шаг: ошибок в консоли нет ${fresh.errors.join('; ')}`);
+      expect(f.includes('"What you need" list') && !f.includes('old plugin'), 'step: plugin 2.22 — a hint where the "What you need" list is in the game');
+      expect(!fresh.errors.length, `step: no console errors ${fresh.errors.join('; ')}`);
       await fresh.page.context().close();
     }
 
-    // 2.12: чужой персонаж не пишет в активный профиль и получает предложение; опыт из игры виден на странице навыка.
+    // 2.12: another character does not write into the active profile and gets an offer; XP from the game is visible on the skill page.
     {
-      const profiles = JSON.stringify({ active: 'main', list: [{ id: 'main', name: 'Основной', player: 'Alpha One' }] });
+      const profiles = JSON.stringify({ active: 'main', list: [{ id: 'main', name: 'Main', player: 'Alpha One' }] });
       const { page, errors } = await open(browser, width, {
         localStorage: { 'osrs-put:profiles': profiles },
         status: { protocol: 5, pluginVersion: '2.12.0', player: 'Beta Two', xp: { woodcutting: 10, strength: 0 } },
       }, '#/skills/WC');
       await page.waitForSelector('.plaque-warning', { timeout: 5000 });
       const t = await text(page, '.plaque-warning');
-      expect(t.includes('новый персонаж') && t.includes('Beta Two'), 'профиль: чужой персонаж — предложение создать профиль');
-      expect(!errors.length, `профиль: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(t.includes('new character') && t.includes('Beta Two'), 'profile: another character — an offer to create a profile');
+      expect(!errors.length, `profile: no console errors ${errors.join('; ')}`);
       await page.context().close();
 
       const ok = await open(browser, width, {
@@ -373,14 +373,14 @@ async function run(browser: Browser) {
       }, '#/skills/WC');
       await ok.page.waitForSelector('.live-xp', { timeout: 5000 });
       const x = await text(ok.page, '.live-xp');
-      expect(x.includes('до ') && x.includes('опыта'), 'навык: опыт из игры — «до уровня ещё N опыта»');
-      expect((await ok.page.locator('.plaque-warning').count()) === 0, 'профиль: свой персонаж — без предупреждения');
+      expect(x.includes('to ') && x.includes('XP left'), 'skill: XP from the game — "N XP left to the level"');
+      expect((await ok.page.locator('.plaque-warning').count()) === 0, 'profile: the own character — no warning');
       await ok.page.context().close();
     }
 
-    // 2.19.2: журнал ресурсов живёт между сеансами — записи прежнего запуска на месте, чужого персонажа не видно, очистка работает.
+    // 2.19.2: the resource journal lives between sessions — the records of the earlier launch are in place, another character's is not visible, clearing works.
     {
-      const profiles = JSON.stringify({ active: 'main', list: [{ id: 'main', name: 'Основной', player: 'Alpha One' }] });
+      const profiles = JSON.stringify({ active: 'main', list: [{ id: 'main', name: 'Main', player: 'Alpha One' }] });
       const now = Date.now();
       const rows = [
         { name: 'Coins', quantityDelta: 5000, reason: 'LOOT', timestamp: now - 3 * 24 * 3600_000, estimatedGpValue: 5000 },
@@ -393,17 +393,17 @@ async function run(browser: Browser) {
       }, '#/settings');
       await page.waitForSelector('.ledger-block', { timeout: 5000 });
       const t = await text(page, '.ledger-block');
-      expect(t.includes('записей 2') && t.includes('Монеты +'), 'журнал: записи прежнего запуска на месте');
-      await page.getByRole('button', { name: 'Очистить журнал' }).click();
-      await page.getByRole('button', { name: 'Да, очистить журнал' }).click();
-      await page.waitForFunction(() => document.body.innerText.includes('Журнал ресурсов пуст'), null, { timeout: 5000 });
+      expect(t.includes('entries 2') && t.includes('Coins +'), 'journal: the records of the earlier launch are in place');
+      await page.getByRole('button', { name: 'Clear the journal' }).click();
+      await page.getByRole('button', { name: 'Yes, clear the journal' }).click();
+      await page.waitForFunction(() => document.body.innerText.includes('The resource journal is empty'), null, { timeout: 5000 });
       const left = await page.evaluate((k) => ({ a: localStorage.getItem(k.a), b: localStorage.getItem(k.b) }), { a: key('alpha one'), b: key('beta two') });
-      expect(left.a === null && left.b !== null, 'журнал: очистка стирает журнал этого персонажа и не трогает чужой');
-      expect(!errors.length, `журнал: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(left.a === null && left.b !== null, 'journal: clearing erases this character\'s journal and does not touch another\'s');
+      expect(!errors.length, `journal: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // 2.12.1: Magic 25 есть, а рун нет — быстрый Varrock Teleport не выдаётся за готовый, а говорит, чего не хватает.
+    // 2.12.1: Magic 25 is there but the runes are not — the quick Varrock Teleport is not passed off as ready, it says what is missing.
     {
       const { page, errors } = await open(browser, width, {
         progress: progressBefore('S2-05'),
@@ -411,13 +411,13 @@ async function run(browser: Browser) {
       }, '#/step/S2-05');
       await page.waitForSelector('.branch-missing', { timeout: 5000 });
       const t = await text(page, '.branch-missing');
-      expect(t.includes('Не хватает') && t.includes('Law rune'), 'быстрый вариант: нет рун — «не хватает Law rune»');
-      expect((await page.locator('.branch button:has-text("Вести в игре")').count()) === 0, 'быстрый вариант: без рун не ведёт в игре телепортом');
-      expect(!errors.length, `быстрый вариант: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(t.includes('Missing') && t.includes('Law rune'), 'quick variant: no runes — "missing Law rune"');
+      expect((await page.locator('.branch button:has-text("Lead in the game")').count()) === 0, 'quick variant: without runes it does not lead by teleport in the game');
+      expect(!errors.length, `quick variant: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // 2.13: S2-04 — расчёт магии по ценам биржи и «как добрать деньги» под уровни игрока.
+    // 2.13: S2-04 — the magic calculation by exchange prices and "how to make up the money" for the player's levels.
     {
       const prices = { 556: 6, 558: 3, 555: 6, 557: 6, 554: 6, 563: 120, 1381: 1542, 1383: 1500, 1385: 1500, 1387: 940, 1739: 125 };
       const { page, errors } = await open(browser, width, {
@@ -426,35 +426,35 @@ async function run(browser: Browser) {
       }, '#/step/S2-04');
       await page.waitForSelector('.magic-plan table', { timeout: 6000 });
       const t = await text(page, '.magic-plan');
-      expect(t.includes('Только Wind Strike') && t.includes('посох огня') && t.includes('Magic 25'), 'S2-04: расчёт магии — варианты и посох огня');
-      expect(t.includes('шкур'), 'S2-04: сколько шкур окупает руны');
+      expect(t.includes('Wind Strike only') && t.includes('staff of fire') && t.includes('Magic 25'), 'S2-04: the magic calculation — the options and the staff of fire');
+      expect(t.includes('hides'), 'S2-04: how many hides pay back the runes');
       await page.locator('.money-plan summary').click();
       const m = await text(page, '.money-plan');
-      expect(m.includes('Как добрать деньги') && m.includes('gp/ч'), 'S2-04: «Как добрать деньги» — способы с выручкой в час');
-      expect((await page.locator('.money-method').count()) > 0, 'S2-04: у блока денег есть способы');
+      expect(m.includes('How to make up the money') && m.includes('gp/h'), 'S2-04: "How to make up the money" — methods with revenue per hour');
+      expect((await page.locator('.money-method').count()) > 0, 'S2-04: the money block has methods');
       await page.locator('.style-gear summary').click();
       await page.waitForSelector('.style-row', { timeout: 6000 });
       const sg = await text(page, '.style-gear');
-      expect(sg.includes('Что носить для магии') && sg.includes('Оружие:') && sg.includes('Рекомендации OSRS Wiki'), 'S2-04: «Что носить для магии» — слоты и источник');
-      expect(await noOverflow(page), 'S2-04: экипировка без горизонтальной прокрутки');
-      expect(!errors.length, `S2-04: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(sg.includes('What to wear for magic') && sg.includes('Weapon:') && sg.includes('OSRS Wiki recommendations'), 'S2-04: "What to wear for magic" — the slots and the source');
+      expect(await noOverflow(page), 'S2-04: the gear without horizontal scrolling');
+      expect(!errors.length, `S2-04: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // 2.15: бой с драконом (S5-08) — «Еда на бой»: удары Elvarg по вики и совет по еде.
+    // 2.15: the dragon fight (S5-08) — "Food for combat": Elvarg's hits per the wiki and the food advice.
     {
       const { page, errors } = await open(browser, width, {
         progress: progressBefore('S5-08'),
         events: [{ type: 'STATS', stats: { hitpoints: 40 } }],
       }, '#/step/S5-08');
       const f = await text(page, '.food-advice');
-      expect(f.includes('Еда на бой') && f.includes('Elvarg') && f.includes('Ешь, когда HP ниже'), 'S5-08: «Еда на бой» — удары Elvarg и порог еды');
-      expect(await noOverflow(page), 'S5-08: без горизонтальной прокрутки');
-      expect(!errors.length, `S5-08: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(f.includes('Food for combat') && f.includes('Elvarg') && f.includes('Eat when HP is below'), 'S5-08: "Food for combat" — Elvarg\'s hits and the food threshold');
+      expect(await noOverflow(page), 'S5-08: no horizontal scrolling');
+      expect(!errors.length, `S5-08: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // 2.14: «Где я? Как добраться» — положение из игры, варианты до Varrock (S2-05) и их доступность.
+    // 2.14: "Where am I? How to get there" — the position from the game, the options to Varrock (S2-05) and their availability.
     {
       const { page, errors } = await open(browser, width, {
         progress: progressBefore('S2-05'),
@@ -463,12 +463,12 @@ async function run(browser: Browser) {
           coins: 500, equipment: [], inventory: [{ id: 563, name: 'Law rune', count: 1 }, { id: 556, name: 'Air rune', count: 3 }, { id: 554, name: 'Fire rune', count: 1 }],
         },
       }, '#/step/S2-05');
-      await page.getByRole('button', { name: /Где я/ }).click();
+      await page.getByRole('button', { name: /Where am I/ }).click();
       await page.waitForSelector('.travel-option', { timeout: 5000 });
       const t = await text(page, '.travel-plan');
-      expect(t.includes('Телепорт в Varrock') && t.includes('можно сейчас'), 'как добраться: Varrock Teleport с рунами — «можно сейчас»');
-      expect(t.includes('3222, 3218'), 'как добраться: показано положение из игры');
-      // Текст не налезает на плашку статуса: у каждого варианта название и плашка не пересекаются.
+      expect(t.includes('Varrock Teleport') && t.includes('available now'), 'how to get there: Varrock Teleport with runes — "available now"');
+      expect(t.includes('3222, 3218'), 'how to get there: the position from the game is shown');
+      // The text does not overlap the status plate: in every option the name and the plate do not intersect.
       const overlaps = await page.evaluate(() => {
         const bad: string[] = [];
         document.querySelectorAll('.travel-option').forEach((o) => {
@@ -478,8 +478,8 @@ async function run(browser: Browser) {
         });
         return bad;
       });
-      expect(overlaps.length === 0, `как добраться: название не налезает на плашку (${overlaps.join(' | ')})`);
-      // Выпадающий список в стиле приложения, а не системный белый.
+      expect(overlaps.length === 0, `how to get there: the name does not overlap the plate (${overlaps.join(' | ')})`);
+      // A drop-down list in the app's style, not the system white one.
       const sel = await page.evaluate(() => {
         const el = document.querySelector('.travel-plan select') as HTMLSelectElement | null;
         if (!el) return null;
@@ -491,12 +491,12 @@ async function run(browser: Browser) {
         probe.remove();
         return { appearance: cs.appearance, bg: cs.backgroundColor, surface };
       });
-      expect(sel !== null && sel.appearance === 'none' && sel.bg === sel.surface, `как добраться: select в стиле приложения (${JSON.stringify(sel)})`);
-      expect(!errors.length, `как добраться: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(sel !== null && sel.appearance === 'none' && sel.bg === sel.surface, `how to get there: the select is in the app's style (${JSON.stringify(sel)})`);
+      expect(!errors.length, `how to get there: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // «Одна ходка»: банк открыт, предметов шага и ближайших нет — что взять сейчас, заодно и потом; неизвестное — отдельно.
+    // "One trip": the bank is open, the items of the step and the nearest ones are missing — what to take now, meanwhile and later; the unknown — separately.
     {
       const route = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; amount: string | number; inStep?: boolean }[] }[];
       const at = route.findIndex((x) => x.id === 'S2-10');
@@ -508,16 +508,16 @@ async function run(browser: Browser) {
       }, '#/step/S2-10');
       await page.waitForSelector('.one-trip', { timeout: 5000 });
       const trip = await text(page, '.one-trip');
-      expect(trip.includes('Что нужно') && trip.includes('Нужно сейчас') && trip.includes('Открыть закупки'), 'что нужно: список «Нужно сейчас» и ссылка на закупки');
-      expect(/готово \d+%/.test(trip) && trip.includes('критично'), 'что нужно: готовность в процентах и число критичных');
-      expect(trip.includes('нет') && /Купи|Забери|Добудешь|заработай/.test(trip), 'что нужно: у каждой вещи — что с ней сделать');
+      expect(trip.includes('What you need') && trip.includes('Needed now') && trip.includes('Open the shopping list'), 'what you need: the "Needed now" list and a link to shopping');
+      expect(/ready \d+%/.test(trip) && trip.includes('critical'), 'what you need: the readiness in percent and the number of critical ones');
+      expect(trip.includes('missing') && /Buy|Take|Obtain|Earn/.test(trip), 'what you need: for each thing — what to do with it');
       if (process.env.UI_SHOTS) await page.locator('.one-trip').screenshot({ path: `${process.env.UI_SHOTS}/prep-plan-${width}.png` }).catch(() => {});
-      expect(await noOverflow(page), 'одна ходка: без горизонтальной прокрутки');
-      expect(!errors.length, `одна ходка: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(await noOverflow(page), 'one trip: no horizontal scrolling');
+      expect(!errors.length, `one trip: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // Режим восстановления: умер в подземелье и возродился в Lumbridge — вместо «бей зомби» план «забери вещи, вернись».
+    // The recovery mode: died in a dungeon and respawned in Lumbridge — instead of "kill zombies" a plan "collect the things, go back".
     {
       const { page, errors } = await open(browser, width, {
         zen: true, localStorage: { 'osrs-put:active-step': 'S2-07' }, progress: progressBefore('S2-07'),
@@ -529,16 +529,16 @@ async function run(browser: Browser) {
       }, '#/step/S2-07');
       await page.waitForSelector('.prep-recovery', { timeout: 5000 });
       const t = await text(page, '.prep-recovery');
-      expect(t.includes('Режим восстановления') && t.includes('умер') && t.includes('Забери вещи') && t.includes('Вернись к шагу S2-07'), 'восстановление: умер — вещи, недостающее, возвращение');
-      expect((await text(page, '.step-status')).includes('режим восстановления'), 'восстановление: статус шага говорит о режиме');
-      expect(await noOverflow(page), 'восстановление: без горизонтальной прокрутки');
-      await page.getByRole('button', { name: 'Это не срыв — продолжить' }).click();
+      expect(t.includes('Recovery mode') && t.includes('died') && t.includes('Collect the things') && t.includes('Go back to step S2-07'), 'recovery: died — the things, the missing, the return');
+      expect((await text(page, '.step-status')).includes('recovery mode'), 'recovery: the step status speaks of the mode');
+      expect(await noOverflow(page), 'recovery: no horizontal scrolling');
+      await page.getByRole('button', { name: 'This is not a derailment — continue' }).click();
       await page.waitForFunction(() => !document.querySelector('.prep-recovery'), null, { timeout: 5000 });
-      expect(!errors.length, `восстановление: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(!errors.length, `recovery: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // Протокол 6: шаг, закупки, подсветка банка, совет и план уходят в игру одним снимком /prep-plan — отдельных запросов нет.
+    // Protocol 6: the step, shopping, the bank highlight, the advice and the plan go to the game in one /prep-plan snapshot — there are no separate requests.
     {
       const { page, errors } = await open(browser, width, {
         zen: true, localStorage: { 'osrs-put:active-step': 'S2-07', 'osrs-put:shopping-plan': '{"items":[{"name":"Iron bar","count":2}]}' }, progress: progressBefore('S2-07'),
@@ -547,18 +547,18 @@ async function run(browser: Browser) {
       await page.waitForTimeout(1500);
       const sent = await page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts);
       const snaps = sent.filter((p) => p.path === '/prep-plan');
-      expect(snaps.length > 0, 'протокол 6: снимок /prep-plan отправлен');
+      expect(snaps.length > 0, 'protocol 6: the /prep-plan snapshot was sent');
       const last = snaps[snaps.length - 1]?.body;
-      expect(last?.v === 6 && last?.step?.stepId === 'S2-07', 'протокол 6: в снимке шаг S2-07');
-      expect(last?.plan?.stepId === 'S2-07' && Array.isArray(last?.plan?.lines) && last.plan.lines.length > 0, 'протокол 6: в снимке план подготовки с предметами');
-      expect(last?.shopping?.items?.[0]?.name === 'Iron bar', 'протокол 6: закупки — в том же снимке');
-      expect(!sent.some((p) => ['/active-step', '/gear-hint', '/bank-tags', '/shopping-plan'].includes(p.path)), 'протокол 6: пяти отдельных запросов нет');
-      expect(snaps.every((p, i) => i === 0 || p.body.seq > snaps[i - 1].body.seq), 'протокол 6: номера снимков растут');
-      expect(!errors.length, `протокол 6: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(last?.v === 6 && last?.step?.stepId === 'S2-07', 'protocol 6: the snapshot has step S2-07');
+      expect(last?.plan?.stepId === 'S2-07' && Array.isArray(last?.plan?.lines) && last.plan.lines.length > 0, 'protocol 6: the snapshot has the preparation plan with items');
+      expect(last?.shopping?.items?.[0]?.name === 'Iron bar', 'protocol 6: shopping — in the same snapshot');
+      expect(!sent.some((p) => ['/active-step', '/gear-hint', '/bank-tags', '/shopping-plan'].includes(p.path)), 'protocol 6: there are no five separate requests');
+      expect(snaps.every((p, i) => i === 0 || p.body.seq > snaps[i - 1].body.seq), 'protocol 6: the snapshot numbers grow');
+      expect(!errors.length, `protocol 6: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // Квест сдан — «Проверка вылета» не требует предметов, которых уже нет.
+    // The quest is handed in — the "Departure check" does not demand items that are no longer there.
     {
       const { page, errors } = await open(browser, width, {
         progress: progressBefore('S2-10'),
@@ -566,31 +566,31 @@ async function run(browser: Browser) {
       }, '#/step/S2-10');
       await page.waitForTimeout(500);
       const t = await text(page, '.preflight-verdict');
-      expect(t.includes('Шаг выполнен') && !/Не готов|не хватает/i.test(t), `сданный квест: проверка вылета не ругается на пустую сумку (${t.slice(0, 80)})`);
-      expect(!errors.length, `сданный квест: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(t.includes('The step is done') && !/Not ready|missing/i.test(t), `a handed-in quest: the departure check does not complain about an empty bag (${t.slice(0, 80)})`);
+      expect(!errors.length, `a handed-in quest: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
 
-    // Квест с NPC: на карте шага — точки NPC и откуда предметы, как в списке в игре.
+    // A quest with an NPC: on the step map — the points of the NPC and where items come from, as in the list in the game.
     {
       const { page, errors } = await open(browser, width, { progress: progressBefore('S2-10') }, '#/step/S2-10');
       const chips = await page.locator('.spot-chip').allInnerTexts();
       expect(chips.some((c) => c.includes('Ned')) && chips.some((c) => c.includes('Lady Keli')) && chips.some((c) => c.includes('Prince Ali')),
-        `карта шага: NPC квеста точками (${chips.length})`);
-      await page.getByRole('radio', { name: /Ned — дом в Draynor Village/ }).click();
-      await page.getByRole('button', { name: '🧭 Вести сюда в игре' }).click();
+        `step map: the quest NPC as points (${chips.length})`);
+      await page.getByRole('radio', { name: /Ned — a house in Draynor Village/ }).click();
+      await page.getByRole('button', { name: '🧭 Lead here in the game' }).click();
       await page.waitForTimeout(500);
       const nav = await page.evaluate(() => (window as unknown as { __posts: { path: string; body: Record<string, unknown> }[] }).__posts
         .filter((p) => p.path === '/nav-target').pop()?.body);
-      expect(JSON.stringify(nav?.npcNames) === '["Ned"]' && nav?.x === 3099, 'карта шага: «Вести сюда в игре» к Ned с подсветкой');
-      expect(await noOverflow(page), 'карта шага с NPC: без горизонтальной прокрутки');
-      expect(!errors.length, `карта шага с NPC: ошибок в консоли нет ${errors.join('; ')}`);
+      expect(JSON.stringify(nav?.npcNames) === '["Ned"]' && nav?.x === 3099, 'step map: "Lead here in the game" to Ned with a highlight');
+      expect(await noOverflow(page), 'step map with an NPC: no horizontal scrolling');
+      expect(!errors.length, `step map with an NPC: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
   }
 
-  // Все страницы: шаги, навыки, справка — открываются без ошибок в консоли, без падения и горизонтальной прокрутки.
-  console.log('Все страницы');
+  // All the pages: steps, skills, the reference — open without console errors, without a crash and horizontal scrolling.
+  console.log('All the pages');
   const skillIds = [
     ...(JSON.parse(readFileSync(new URL('../src/data/skills.json', import.meta.url), 'utf8')) as { id: string }[]).map((x) => x.id),
     ...(JSON.parse(readFileSync(new URL('../src/data/members-skills.json', import.meta.url), 'utf8')) as { skills: { id: string }[] }).skills.map((x) => x.id),
@@ -608,43 +608,43 @@ async function run(browser: Browser) {
         overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
         crashed: !!document.querySelector('.page-error'),
       }));
-      if (info.overflow > 0) bad.push(`${r}: прокрутка ${info.overflow}px`);
-      if (info.crashed) bad.push(`${r}: страница упала`);
+      if (info.overflow > 0) bad.push(`${r}: scroll ${info.overflow}px`);
+      if (info.crashed) bad.push(`${r}: the page crashed`);
       if (errors.length > before) bad.push(`${r}: ${errors.slice(before).join('; ').slice(0, 200)}`);
     }
-    expect(!bad.length, `${routes.length} страниц на ${width} точках — без ошибок и прокрутки ${bad.slice(0, 5).join(' | ')}`);
+    expect(!bad.length, `${routes.length} pages at ${width} px — no errors and scrolling ${bad.slice(0, 5).join(' | ')}`);
     await page.context().close();
   }
 
-  // Content-Security-Policy собранной страницы: мета-тег есть, чужой встроенный скрипт не выполняется, а страница
-  // с нашим скриптом темы и сетью только к вики работает (ошибок в консоли нет).
+  // The Content-Security-Policy of the built page: the meta tag is there, a foreign inline script does not run, and the page
+  // with our theme script and the network only to the wiki works (there are no console errors).
   console.log('CSP');
   {
     const { page, errors } = await open(browser, 1280, {}, '#/');
-    expect(await page.evaluate(() => document.querySelector('meta[http-equiv="Content-Security-Policy"]')?.getAttribute('content')?.includes("default-src 'none'") ?? false), 'CSP: политика в странице');
+    expect(await page.evaluate(() => document.querySelector('meta[http-equiv="Content-Security-Policy"]')?.getAttribute('content')?.includes("default-src 'none'") ?? false), 'CSP: the policy is in the page');
     const blocked = await page.evaluate(() => new Promise<boolean>((res) => {
       const s = document.createElement('script');
       s.textContent = 'window.__injected = 1';
       document.head.appendChild(s);
       setTimeout(() => res(!(window as unknown as Record<string, unknown>).__injected), 100);
     }));
-    expect(blocked, 'CSP: чужой встроенный скрипт заблокирован');
-    // Одно нарушение — наше же испытание выше; остальных быть не должно.
+    expect(blocked, 'CSP: a foreign inline script is blocked');
+    // One violation is our own trial above; there must be no others.
     const own = errors.filter((e) => /Content Security Policy|Refused/.test(e));
-    expect(own.length === 1 && own[0].includes('inline script'), `CSP: наша страница не нарушает свою политику ${own.join('; ')}`);
+    expect(own.length === 1 && own[0].includes('inline script'), `CSP: our page does not violate its own policy ${own.join('; ')}`);
     await page.context().close();
   }
 
-  // Шапка помещается на любой ширине, когда RuneLite на связи (раньше вылезала на 11–193 точки).
-  console.log('Шапка');
+  // The header fits at any width when RuneLite is connected (it used to overflow by 11–193 px).
+  console.log('Header');
   for (const width of [320, 390, 900, 1000, 1100, 1280, 1400, 1600, 1720, 1920]) {
     const { page } = await open(browser, width, {}, '#/');
-    expect(await noOverflow(page), `шапка на ${width} точках без горизонтальной прокрутки`);
+    expect(await noOverflow(page), `the header at ${width} px without horizontal scrolling`);
     await page.context().close();
   }
 }
 
-// Адрес задан явно: без --host сервер на части машин (CI GitHub) слушает только IPv6 ::1, и 127.0.0.1 не отвечает.
+// The address is set explicitly: without --host the server on some machines (GitHub CI) listens on IPv6 ::1 only, and 127.0.0.1 does not answer.
 const server = spawn(process.execPath, ['node_modules/vite/bin/vite.js', 'preview', '--host', '127.0.0.1', '--port', String(PORT), '--strictPort'], { stdio: 'ignore' });
 try {
   let up = false;
@@ -652,7 +652,7 @@ try {
     up = await fetch(BASE).then((r) => r.ok).catch(() => false);
     if (!up) await new Promise((r) => setTimeout(r, 200));
   }
-  if (!up) throw new Error(`Сервер предпросмотра не поднялся на ${BASE} — сначала npm run build`);
+  if (!up) throw new Error(`The preview server did not come up on ${BASE} — run npm run build first`);
   const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
   try {
     await run(browser);
@@ -662,5 +662,5 @@ try {
 } finally {
   server.kill();
 }
-console.log(failures.length ? `\nИтог: не прошло ${failures.length}` : '\nИтог: всё прошло');
+console.log(failures.length ? `\nTotal: ${failures.length} failed` : '\nTotal: everything passed');
 process.exit(failures.length ? 1 : 0);

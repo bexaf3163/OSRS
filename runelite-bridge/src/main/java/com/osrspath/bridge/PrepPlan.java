@@ -136,7 +136,7 @@ public class PrepPlan
 		return itemName == null ? null : byName.get(ActiveTarget.nameKey(rawName(itemName)));
 	}
 
-	/** «Lobster ×5» → «Lobster». */
+	/** "Lobster ×5" → "Lobster". */
 	static String rawName(String shown)
 	{
 		return shown.replaceAll("\\s*×\\s*\\d+\\s*$", "").trim();

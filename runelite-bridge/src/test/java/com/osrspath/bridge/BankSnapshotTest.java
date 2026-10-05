@@ -51,7 +51,7 @@ public class BankSnapshotTest
 			"{\"v\":1,\"items\":{\"999999\":1}}", "{\"v\":1,\"items\":{\"379\":\"many\"}}"};
 		for (String raw : bad)
 		{
-			assertNull("«" + raw + "»", BankSnapshot.read(raw));
+			assertNull("'" + raw + "'", BankSnapshot.read(raw));
 		}
 	}
 

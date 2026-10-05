@@ -1,11 +1,11 @@
-// Карта мира OSRS Wiki: тайлы, этажи и точки шага.
-// Встроить саму карту вики нельзя — oldschool.runescape.wiki отвечает X-Frame-Options: DENY и
-// frame-ancestors 'none', поэтому карта рисуется у нас из тех же тайлов (maps.runescape.wiki,
-// Access-Control-Allow-Origin: *). Тайл масштаба z — 256×256 точек, в клетке игры 2^z точек.
+// The OSRS Wiki world map: tiles, floors and the step's points.
+// The wiki's own map cannot be embedded: oldschool.runescape.wiki answers with X-Frame-Options: DENY and
+// frame-ancestors 'none', so we draw the map ourselves from the same tiles (maps.runescape.wiki,
+// Access-Control-Allow-Origin: *). A tile of scale z is 256x256 points, a game tile is 2^z points.
 
 import type { MapLocation, Step } from '../types';
 
-/** Версия рендера карты, которую сейчас показывает вики (проверено 26.09.2026). */
+/** The map render version the wiki currently shows (checked 26 Sep 2026). */
 export const MAP_VERSION = '2026-08-12_a';
 const TILE_ROOT = `https://maps.runescape.wiki/osrs/versions/${MAP_VERSION}/tiles/rendered`;
 
@@ -14,14 +14,14 @@ export const MAX_ZOOM = 3;
 export const DEFAULT_ZOOM = 2;
 export const TILE = 256;
 
-export const MAP_ATTRIBUTION = 'Карта © OSRS Wiki (Weird Gloop), игра © Jagex';
+export const MAP_ATTRIBUTION = 'Map © OSRS Wiki (Weird Gloop), game © Jagex';
 
-/** Тайл карты мира (mapId 0 — поверхность и подземелья основного мира). */
+/** A world map tile (mapId 0 is the surface and the dungeons of the main world). */
 export function tileUrl(zoom: number, plane: number, tx: number, ty: number): string {
   return `${TILE_ROOT}/0/${zoom}/${plane}_${tx}_${ty}.png`;
 }
 
-/** Сколько экранных точек в одной клетке игры на этом масштабе. */
+/** How many screen points are in one game tile at this scale. */
 export const pxPerSquare = (zoom: number) => 2 ** zoom;
 
 export interface PlacedTile {
@@ -31,9 +31,9 @@ export interface PlacedTile {
 }
 
 /**
- * Тайлы, которые закрывают окно width×height; клетка p — по центру по горизонтали и на высоте anchorY
- * (доля от верха: у превью метка чуть выше центра, чтобы подпись внизу её не закрывала).
- * Координаты — от левого верхнего угла окна. Центр клетки (x + 0.5) — метка посередине клетки, а не на углу.
+ * The tiles that cover a width x height window; tile p is centred horizontally and at height anchorY
+ * (a fraction of the top: in the preview the marker is a little above the centre so the caption below does not cover it).
+ * Coordinates are from the window's top-left corner. The tile's centre (x + 0.5) puts the marker in the middle of the tile, not on its corner.
  */
 export function tilesAround(p: { x: number; y: number; plane: number }, zoom: number, width: number, height: number, anchorY = 0.5): PlacedTile[] {
   const ppt = pxPerSquare(zoom);
@@ -51,7 +51,7 @@ export function tilesAround(p: { x: number; y: number; plane: number }, zoom: nu
       out.push({
         url: tileUrl(zoom, p.plane, tx, ty),
         left: Math.round(width / 2 + (tx * span - cx) * ppt),
-        // Север сверху: у тайла ty верхний край — клетка (ty + 1) * span.
+        // North is at the top: for tile ty the top edge is tile (ty + 1) * span.
         top: Math.round(ay - ((ty + 1) * span - cy) * ppt),
       });
     }
@@ -59,21 +59,21 @@ export function tilesAround(p: { x: number; y: number; plane: number }, zoom: nu
   return out;
 }
 
-const FLOORS = ['Ground floor (1-й этаж / земля)', '1st floor (2-й этаж)', '2nd floor (3-й этаж)', '3rd floor (4-й этаж)'];
+const FLOORS = ['Ground floor', '1st floor', '2nd floor', '3rd floor'];
 
-/** Этаж по британскому счёту, как в игре и в карточках шагов. */
+/** The floor in the British numbering, as in the game and in the step cards. */
 export function floorLabel(plane: number): string {
-  return FLOORS[plane] ?? `Этаж ${plane}`;
+  return FLOORS[plane] ?? `Floor ${plane}`;
 }
 
-/** Подземелья лежат на карте мира далеко к северу (y > 6400) — это не этаж, а отдельная область. */
+/** Dungeons lie far to the north on the world map (y > 6400): that is not a floor but a separate area. */
 export const isUnderground = (p: { y: number }) => p.y > 6400;
 
 const same = (a: MapLocation, b: MapLocation) => a.x === b.x && a.y === b.y && a.plane === b.plane;
 
 /**
- * Все точки шага для переключателя: старт и места сбора. Если старт совпадает с одним из мест
- * (у шагов прокачки старт — это первое место), он не дублируется.
+ * All the step's points for the switcher: the start and the gathering places. If the start coincides with one of the places
+ * (for training steps the start is the first place), it is not duplicated.
  */
 export function stepPoints(step: Pick<Step, 'mapLocation' | 'resourceSpots'>): MapLocation[] {
   const spots = step.resourceSpots ?? [];
@@ -82,7 +82,7 @@ export function stepPoints(step: Pick<Step, 'mapLocation' | 'resourceSpots'>): M
   return spots.some((s) => same(s, start)) ? spots : [start, ...spots];
 }
 
-/** С какой точки открыть карту: со старта шага (он есть в списке точек). */
+/** Which point to open the map at: the step's start (it is in the list of points). */
 export function initialPoint(step: Pick<Step, 'mapLocation' | 'resourceSpots'>): number {
   const points = stepPoints(step);
   const start = step.mapLocation;

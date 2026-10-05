@@ -1,11 +1,11 @@
-// Предметы этапа для банка: плагин OSRS Path Bridge мягко подсвечивает их в основном окне банка RuneLite
-// (POST /bank-tags), пока шаг этапа показан в игре. Отдельной вкладки и строки импорта нет: подсветка
-// приходит сама и меняется вместе с этапом, а строку пришлось бы копировать и вставлять заново на каждом этапе.
+// The stage's items for the bank: the OSRS Path Bridge plugin softly highlights them in the main RuneLite bank window
+// (POST /bank-tags) while the stage's step is shown in the game. There is no separate tab and no import string: the highlight
+// arrives by itself and changes with the stage, whereas a string would have to be copied and pasted again at every stage.
 
 import type { GameMode, Step } from '../types';
 import { itemById, stepsFor } from '../data';
 
-/** ID без повторов и мусора, в исходном порядке. */
+/** IDs without repeats and junk, in the original order. */
 export function uniqueIds(ids: Iterable<number>): number[] {
   const out: number[] = [];
   const seen = new Set<number>();
@@ -18,15 +18,15 @@ export function uniqueIds(ids: Iterable<number>): number[] {
   return out;
 }
 
-/** Предметы шага, которые берут из банка (не те, что выдадут или подберёшь по ходу шага). */
+/** The step's items taken from the bank (not the ones handed out or picked up during the step). */
 export function stepBankItemIds(step: Step): number[] {
   const items = [...(step.itemsRequired ?? []), ...(step.itemsRecommended ?? [])];
   return items.filter((i) => !i.inStep && i.wikiItemId).map((i) => i.wikiItemId!);
 }
 
 /**
- * Предметы этапа для банка: из всех шагов этапа в выбранном режиме, без повторов.
- * В F2P не попадают предметы Members — по базе предметов вики.
+ * The stage's items for the bank: from all the stage's steps in the chosen mode, without repeats.
+ * Members items are left out of F2P, by the wiki item database.
  */
 export function stageBankItemIds(stage: number, mode: GameMode = 'f2p', steps: Step[] = stepsFor(mode)): number[] {
   const ids = uniqueIds(steps.filter((s) => s.stage === stage).flatMap(stepBankItemIds));

@@ -1,5 +1,5 @@
-// Мост между окном и программой: масштаб, «поверх всех окон», файл прогресса и связь с плагином RuneLite.
-// Окно работает в песочнице — наружу выдаются только эти функции, без доступа к Node.
+// The bridge between the window and the app: scale, "always on top", the progress file and the link with the RuneLite plugin.
+// The window works in a sandbox — only these functions are exposed, without access to Node.
 
 const { contextBridge, ipcRenderer } = require('electron');
 
@@ -12,10 +12,10 @@ contextBridge.exposeInMainWorld('osrsDesktop', {
     ipcRenderer.on('zoom:changed', listener);
     return () => ipcRenderer.removeListener('zoom:changed', listener);
   },
-  // Синхронно: прогресс нужен до первой отрисовки, иначе мелькнёт пустой.
+  // Synchronous: the progress is needed before the first render, otherwise an empty one would flash.
   loadProgressFile: (profileId) => ipcRenderer.sendSync('progress:load', String(profileId ?? 'main')),
   saveProgressFile: (json, profileId) => ipcRenderer.send('progress:save', String(json), String(profileId ?? 'main')),
-  // Копия прогресса раз в сутки в выбранную папку.
+  // A progress copy once a day into the chosen folder.
   backup: {
     get: () => ipcRenderer.invoke('backup:get'),
     choose: () => ipcRenderer.invoke('backup:choose'),
@@ -24,7 +24,7 @@ contextBridge.exposeInMainWorld('osrsDesktop', {
   },
   dataDir: () => ipcRenderer.sendSync('app:data-dir'),
   isPortable: () => ipcRenderer.sendSync('app:is-portable'),
-  // Обновление переносной версии (electron/updater.cjs): проверка, скачивание, перезапуск в новую версию.
+  // Updating the portable version (electron/updater.cjs): the check, the download, the restart into the new version.
   updates: {
     get: () => ipcRenderer.invoke('update:get'),
     check: () => ipcRenderer.invoke('update:check'),
@@ -37,12 +37,12 @@ contextBridge.exposeInMainWorld('osrsDesktop', {
       return () => ipcRenderer.removeListener('update:state', listener);
     },
   },
-  // Запуск RuneLite с плагином OSRS Path Bridge (electron/runelite-launcher.cjs).
+  // Starting RuneLite with the OSRS Path Bridge plugin (electron/runelite-launcher.cjs).
   runelite: {
     check: () => ipcRenderer.invoke('runelite:check'),
     launch: () => ipcRenderer.invoke('runelite:launch'),
   },
-  // Плагин RuneLite на 127.0.0.1:38282: запросы и поток событий идут через главный процесс.
+  // The RuneLite plugin at 127.0.0.1:38282: the requests and the event stream go through the main process.
   bridge: {
     request: (method, path, body) => ipcRenderer.invoke('bridge:request', { method: String(method), path: String(path), body }),
     openEvents: (onEvent, onState) => {

@@ -1,5 +1,5 @@
-// Проверки данных: маршрут V2 (steps.json, stages.json, f2p-items.json) и то, что перенесено из osrs-guide.md.
-// Общие для parse-guide.ts и check-data.ts. Без сети.
+// Data checks: the V2 route (steps.json, stages.json, f2p-items.json) and the skills, goals, XP, plugins and reference data.
+// Used by check-data.ts and the tests. No network.
 
 import type {
   FoeData, GoalsData, LevelSkill, MembersSkillsData, PluginsData, ReferenceData, Skill, Stage, Step, WikiItemDetail, XpData,
@@ -9,7 +9,7 @@ import { titleTargets } from '../src/lib/targets.ts';
 
 export interface GuideData {
   skills: Skill[];
-  /** Навыки подписки — src/data/members-skills.json. */
+  /** The members skills — src/data/members-skills.json. */
   members: MembersSkillsData;
   levels: LevelSkill[];
   goals: GoalsData;
@@ -24,11 +24,11 @@ export interface Route {
   steps: Step[];
   stages: Stage[];
   items: WikiItemDetail[];
-  /** Противники шагов (monsters.json): для темпа боя — здоровье, от него опыт за противника. */
+  /** The opponents of the steps (monsters.json): for the combat pace — health, from which the XP per opponent comes. */
   monsters?: FoeData;
-  /** Где стоят NPC шагов (npcLocations.json) — для «Куда идти» и точек на карте шага. */
+  /** Where the steps' NPCs stand (npcLocations.json) — for "Where to go" and the step map points. */
   npcs?: Record<string, { x: number; y: number; plane: number; area: string; page: string; steps?: string[] }[]>;
-  /** Словарь мест (majorLocations.json): магазины и места, откуда предметы. */
+  /** The place dictionary (majorLocations.json): shops and places where items come from. */
   places?: Record<string, { x: number; y: number; plane: number; label: string }>;
 }
 
@@ -38,21 +38,18 @@ export interface Report {
   warnings: number;
 }
 
-/** Известные опечатки и небрежности, которые уже встречались в текстах маршрута. */
+/** Known typos and slips that have already appeared in the route texts. */
 const TYPOS: [RegExp, string][] = [
-  [/Перемещёни/i, 'Перемещени'], [/пещёр/i, 'пещер'], [/убьет/i, 'убьёт'], [/\bШелк/i, 'Шёлк'], [/бревнах/i, 'брёвнах'],
-  [/Пей омар/i, 'Ешь омара'], [/\s->\s/, '→ вместо ->'], [/ {2,}/, 'двойной пробел'], [/\s[,.;:!?](?!\d)/, 'пробел перед знаком препинания'],
+  [/\s->\s/, '→ instead of ->'], [/ {2,}/, 'double space'], [/\s[,.;:!?](?!\d)/, 'space before punctuation'],
   [/Karamja rum/, 'Karamjan rum'],
-  // Названия из игры (кэш клиента и OSRS Wiki): бармен на Karamja — Zembo; у книги Chronicle
-  // действия Wield, Teleport, Check charges — «Rub» нет; у станции каноэ «Float Log / Float Canoe»
-  // и «Paddle Log / Paddle Canoe», голых «Float» и «Paddle» в меню нет.
-  [/\bZambo\b/, 'Zembo'], [/\bRub\b/, 'у Chronicle нет действия Rub — правый клик → Teleport'],
-  [/«(Float|Paddle)»/, '«Float Log» или «Float Canoe», «Paddle Log» или «Paddle Canoe»'],
-  // Один город — одно написание: в текстах «Фаладор» (Falador), «Фалладор» встречался один раз.
-  [/Фалладор/, 'Фаладор'],
+  // Names from the game (the client cache and the OSRS Wiki): the bartender on Karamja is Zembo; the Chronicle book
+  // has the actions Wield, Teleport, Check charges — there is no "Rub"; the canoe station has "Float Log / Float Canoe"
+  // and "Paddle Log / Paddle Canoe", there is no bare "Float" or "Paddle" in the menu.
+  [/\bZambo\b/, 'Zembo'], [/\bRub\b/, 'Chronicle has no Rub action — right-click → Teleport'],
+  [/"(Float|Paddle)"/, '"Float Log" or "Float Canoe", "Paddle Log" or "Paddle Canoe"'],
 ];
 
-/** Все строки объекта — для проверки текстов из гайда (справка, навыки, цели). */
+/** All the strings of an object — for checking the reference, skills and goals texts. */
 function strings(o: unknown, out: string[] = []): string[] {
   if (typeof o === 'string') out.push(o);
   else if (Array.isArray(o)) o.forEach((x) => strings(x, out));
@@ -60,42 +57,42 @@ function strings(o: unknown, out: string[] = []): string[] {
   return out;
 }
 
-/** Еда маршрута и сколько очков здоровья она восстанавливает (OSRS Wiki). */
+/** The route's food and how many health points it restores (OSRS Wiki). */
 const FOOD = new Map([
   ['Cooked chicken', 3], ['Shrimps', 3], ['Trout', 7], ['Salmon', 9], ['Lobster', 12], ['Swordfish', 14],
 ]);
 
-/** Еда без названия и количества — новичок не знает, что брать. */
-const VAGUE = /(\d+(–\d+)?\s+(штук\s+)?еды|возьми еду|^еда\.?$|еда для боя)/i;
+/** Food without a name and quantity — a beginner does not know what to take. */
+const VAGUE = /(\d+(–\d+)?\s+(pieces\s+of\s+)?food|bring food|^food\.?$|food for (the )?fight)/i;
 
-/** Имя NPC как в игре (латиница): по нему плагин находит и подсвечивает NPC. */
+/** An NPC name as in the game (Latin): the plugin finds and highlights the NPC by it. */
 const NPC_NAME = /^[A-Z][A-Za-z' .-]{1,40}$/;
 
-/** Клетка карты мира: поверхность и подземелья OSRS укладываются в эти границы. */
+/** A world map tile: the OSRS surface and dungeons fit into these bounds. */
 function badPoint(p: { x: number; y: number; plane: number }): boolean {
   const int = (n: unknown) => Number.isInteger(n);
   return !int(p.x) || !int(p.y) || !int(p.plane) || p.x < 1000 || p.x > 4200 || p.y < 2400 || p.y > 13000 || p.plane < 0 || p.plane > 3;
 }
 
-/** Тексты шага, которые видит пользователь, с подписью, где они. */
+/** The step texts the user sees, with a caption saying where they are. */
 function userTexts(s: Step): [string, string][] {
   const out: [string, string][] = [];
   const add = (where: string, t?: string) => { if (t) out.push([where, t]); };
-  add('Где', s.where); add('Как', s.how); add('Взять', s.bring); add('Награда', s.reward); add('Готово, когда', s.doneWhen);
-  add('Pro-tip', s.proTip); add('Safespot', s.safespot); add('Подпись к схеме', s.imageCaption);
-  add('Что изменилось в V2', s.v2ChangesSummary); add('С подпиской', s.membersAlternative);
-  add('NPC: место', s.npc?.location); add('NPC: диалог', s.npc?.dialogue); add('Предупреждение', s.warning);
-  add('Точка на карте', s.mapLocation?.label);
-  s.resourceSpots?.forEach((p, i) => { add(`Точка ${i + 1}`, p.label); add(`Точка ${i + 1}: пояснение`, p.note); });
-  s.quickSteps?.forEach((q, i) => add(`Шаг ${i + 1}`, q));
+  add('Where', s.where); add('How', s.how); add('Bring', s.bring); add('Reward', s.reward); add('Done when', s.doneWhen);
+  add('Pro-tip', s.proTip); add('Safespot', s.safespot); add('Image caption', s.imageCaption);
+  add('What changed in V2', s.v2ChangesSummary); add('With membership', s.membersAlternative);
+  add('NPC: place', s.npc?.location); add('NPC: dialogue', s.npc?.dialogue); add('Warning', s.warning);
+  add('Map point', s.mapLocation?.label);
+  s.resourceSpots?.forEach((p, i) => { add(`Point ${i + 1}`, p.label); add(`Point ${i + 1}: note`, p.note); });
+  s.quickSteps?.forEach((q, i) => add(`Step ${i + 1}`, q));
   s.fields?.forEach((f) => add(f.label, f.text));
-  s.tips?.forEach((t) => add('Совет', t));
-  for (const it of [...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])]) add(`Где взять ${it.nameEn}`, it.howToGet);
-  s.branches?.forEach((b) => add(`Быстрый вариант «${b.label}»`, b.replacementText));
+  s.tips?.forEach((t) => add('Tip', t));
+  for (const it of [...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])]) add(`Where to get ${it.nameEn}`, it.howToGet);
+  s.branches?.forEach((b) => add(`Quick variant "${b.label}"`, b.replacementText));
   return out;
 }
 
-/** Первая буква текста: эмодзи и кавычки пропускаются; если текст начинается с числа («3 клубка»), буквы нет. */
+/** The first letter of a text: emoji and quotes are skipped; if the text starts with a number ("3 balls of wool"), there is no letter. */
 function firstLetter(t: string): string | undefined {
   const m = t.match(/[\p{L}\p{N}]/u)?.[0];
   return m && /\p{L}/u.test(m) ? m : undefined;
@@ -108,7 +105,7 @@ function balanced(t: string): boolean {
     if (ch === ')') depth--;
     if (depth < 0) return false;
   }
-  return depth === 0 && (t.match(/«/g)?.length ?? 0) === (t.match(/»/g)?.length ?? 0) && (t.match(/"/g)?.length ?? 0) % 2 === 0;
+  return depth === 0 && (t.match(/“/g)?.length ?? 0) === (t.match(/”/g)?.length ?? 0) && (t.match(/"/g)?.length ?? 0) % 2 === 0;
 }
 
 export function validate(d: GuideData | null, route: Route): Report {
@@ -126,55 +123,55 @@ export function validate(d: GuideData | null, route: Route): Report {
   const f2p = steps.filter((s) => !s.membersOnly);
   const members = steps.filter((s) => s.membersOnly);
 
-  // --- Шаги ---
-  lines.push('Маршрут V2');
-  ok(`Шагов ${steps.length}: F2P ${f2p.length} (${f2p[0]?.id}…${f2p[f2p.length - 1]?.id}), Members ${members.length}`);
-  check(idSet.size === ids.length, 'Коды шагов не повторяются', 'Есть повторяющиеся коды шагов');
+  // --- Steps ---
+  lines.push('The V2 route');
+  ok(`Steps ${steps.length}: F2P ${f2p.length} (${f2p[0]?.id}…${f2p[f2p.length - 1]?.id}), Members ${members.length}`);
+  check(idSet.size === ids.length, 'Step codes are not repeated', 'There are repeated step codes');
   const badIds = steps.filter((s) => !/^S\d-\d{2}$/.test(s.id) || Number(s.id[1]) !== s.stage).map((s) => s.id);
-  check(!badIds.length, 'Код каждого шага совпадает с его этапом (S<этап>-<номер>)', `Код не совпадает с этапом: ${badIds.join(', ')}`);
+  check(!badIds.length, 'Every step code matches its stage (S<stage>-<number>)', `The code does not match the stage: ${badIds.join(', ')}`);
   const gaps = steps.filter((s, i) => {
     const prev = steps[i - 1];
     return Number(s.id.slice(3)) !== (prev && prev.stage === s.stage ? Number(prev.id.slice(3)) + 1 : 1);
   }).map((s) => s.id);
-  check(!gaps.length, 'Внутри каждого этапа номера идут подряд с 01', `Номера идут не подряд: ${gaps.join(', ')}`);
+  check(!gaps.length, 'Within every stage the numbers run in order from 01', `The numbers do not run in order: ${gaps.join(', ')}`);
 
   const stageIds = new Set(stages.map((s) => s.id));
   const noStage = steps.filter((s) => !stageIds.has(s.stage)).map((s) => s.id);
-  check(!noStage.length, `Этапов ${stages.length}, у каждого шага есть этап`, `Шаги без этапа в stages.json: ${noStage.join(', ')}`);
+  check(!noStage.length, `Stages ${stages.length}, every step has a stage`, `Steps without a stage in stages.json: ${noStage.join(', ')}`);
   const membersStages = new Set(stages.filter((s) => s.membersOnly).map((s) => s.id));
   const mixed = steps.filter((s) => Boolean(s.membersOnly) !== membersStages.has(s.stage)).map((s) => s.id);
-  check(!mixed.length, 'Шаги Members лежат только в этапах Members, и наоборот', `Режим шага не совпадает с этапом: ${mixed.join(', ')}`);
+  check(!mixed.length, 'Members steps are only in Members stages, and vice versa', `The step mode does not match the stage: ${mixed.join(', ')}`);
 
   const noCore = steps.filter((s) => !['quest', 'skill', 'gear', 'prep'].includes(s.type) || !s.title || !s.doneWhen).map((s) => s.id);
-  check(!noCore.length, 'У каждого шага есть тип, название и «Готово, когда»', `Без типа, названия или «Готово, когда»: ${noCore.join(', ')}`);
+  check(!noCore.length, 'Every step has a type, a title and "Done when"', `Without a type, title or "Done when": ${noCore.join(', ')}`);
   const questsNoWiki = steps.filter((s) => s.type === 'quest' && !s.wikiUrl).map((s) => s.id);
-  check(!questsNoWiki.length, 'У каждого квеста есть ссылка на вики', `Квесты без ссылки на вики: ${questsNoWiki.join(', ')}`);
+  check(!questsNoWiki.length, 'Every quest has a wiki link', `Quests without a wiki link: ${questsNoWiki.join(', ')}`);
   const noFloor = steps.filter((s) => (s.npc || s.floor !== undefined) && !(s.npc?.floor || s.floor)).map((s) => s.id);
-  check(!noFloor.length, 'У всех NPC и мест с этажом этаж указан', `Не указан этаж: ${noFloor.join(', ')}`);
-  const badFloor = steps.flatMap((s) => [s.npc?.floor, s.floor].filter(Boolean).filter((f) => !/^(Ground|\d(st|nd|rd|th)) floor \(\d-й этаж/.test(f!)).map(() => s.id));
-  check(!badFloor.length, 'Этажи записаны по британскому счёту с пояснением («1st floor (2-й этаж)»)', `Этаж без пояснения: ${badFloor.join(', ')}`);
+  check(!noFloor.length, 'Every NPC and place with a floor has the floor stated', `The floor is not stated: ${noFloor.join(', ')}`);
+  const badFloor = steps.flatMap((s) => [s.npc?.floor, s.floor].filter(Boolean).filter((f) => !/^(Ground|\d(st|nd|rd|th)) floor$/.test(f!)).map(() => s.id));
+  check(!badFloor.length, 'The floors are written in the UK numbering ("1st floor")', `An unrecognised floor: ${badFloor.join(', ')}`);
 
-  // --- Зависимости и очки ---
-  lines.push('Зависимости и очки квестов');
+  // --- Dependencies and points ---
+  lines.push('Dependencies and quest points');
   const refs = steps.flatMap((s) => s.requires.map((r) => ({ from: s.id, to: r })));
   const broken = refs.filter((r) => !idSet.has(r.to));
-  check(!broken.length, `Ссылок на шаги: ${refs.length}, все ведут на существующие коды`, `Ссылки на несуществующие шаги: ${broken.map((r) => `${r.from}→${r.to}`).join(', ')}`);
+  check(!broken.length, `Step references: ${refs.length}, all lead to existing codes`, `References to non-existent steps: ${broken.map((r) => `${r.from}→${r.to}`).join(', ')}`);
   const forward = refs.filter((r) => ids.indexOf(r.to) > ids.indexOf(r.from));
-  check(!forward.length, 'Зависимости указывают только на шаги выше по списку — циклов нет', `Зависимости вперёд: ${forward.map((r) => `${r.from}→${r.to}`).join(', ')}`);
+  check(!forward.length, 'The dependencies point only to steps higher in the list — there are no cycles', `Forward dependencies: ${forward.map((r) => `${r.from}→${r.to}`).join(', ')}`);
   const f2pToMembers = refs.filter((r) => !steps.find((s) => s.id === r.from)?.membersOnly && steps.find((s) => s.id === r.to)?.membersOnly);
-  check(!f2pToMembers.length, 'F2P-шаги не зависят от шагов Members', `F2P зависит от Members: ${f2pToMembers.map((r) => `${r.from}→${r.to}`).join(', ')}`);
+  check(!f2pToMembers.length, 'F2P steps do not depend on Members steps', `F2P depends on Members: ${f2pToMembers.map((r) => `${r.from}→${r.to}`).join(', ')}`);
 
   const f2pQp = EXPECTED.baseQp + f2p.reduce((sum, s) => sum + (s.qp ?? 0), 0);
-  check(f2pQp === EXPECTED.f2pQp, `F2P: ${f2pQp} очков квестов (${EXPECTED.baseQp} за Learning the Ropes + шаги)`, `F2P: ${f2pQp} очков квестов, ожидалось ${EXPECTED.f2pQp}`);
-  ok(`Members добавляет ${members.reduce((sum, s) => sum + (s.qp ?? 0), 0)} очков квестов`);
+  check(f2pQp === EXPECTED.f2pQp, `F2P: ${f2pQp} quest points (${EXPECTED.baseQp} for Learning the Ropes + the steps)`, `F2P: ${f2pQp} quest points, expected ${EXPECTED.f2pQp}`);
+  ok(`Members adds ${members.reduce((sum, s) => sum + (s.qp ?? 0), 0)} quest points`);
   const qpNotQuest = steps.filter((s) => s.qp && s.type !== 'quest').map((s) => s.id);
-  if (qpNotQuest.length) fail(`Очки у шагов не-квестов: ${qpNotQuest.join(', ')}`);
+  if (qpNotQuest.length) fail(`Points on non-quest steps: ${qpNotQuest.join(', ')}`);
   const qpMismatch = steps.filter((s) => {
     const m = s.reward?.match(/(\d+) QP/);
     return (m ? Number(m[1]) : 0) !== (s.qp ?? 0) && !(s.qp === undefined && !m);
-  }).map((s) => `${s.id} (qp ${s.qp ?? 0}, в «Награде» ${s.reward?.match(/(\d+) QP/)?.[1] ?? 0})`);
-  check(!qpMismatch.length, 'Очки каждого квеста совпадают с текстом «Награды»', `Не совпадают с «Наградой»: ${qpMismatch.join('; ')}`);
-  // --- Требования шага (готовность): уровни и квесты из статьи квеста ---
+  }).map((s) => `${s.id} (qp ${s.qp ?? 0}, in "Reward" ${s.reward?.match(/(\d+) QP/)?.[1] ?? 0})`);
+  check(!qpMismatch.length, 'The points of each quest match the "Reward" text', `They do not match the "Reward": ${qpMismatch.join('; ')}`);
+  // --- Step requirements (readiness): levels and quests from the quest article ---
   const REQ_SKILLS = new Set(['attack', 'strength', 'defence', 'ranged', 'prayer', 'magic', 'runecraft', 'hitpoints', 'crafting', 'mining',
     'smithing', 'fishing', 'cooking', 'firemaking', 'woodcutting', 'agility', 'herblore', 'thieving', 'fletching', 'slayer', 'farming',
     'construction', 'hunter', 'sailing']);
@@ -182,91 +179,89 @@ export function validate(d: GuideData | null, route: Route): Report {
   const badReq: string[] = [];
   const cap = (x: string) => x.charAt(0).toUpperCase() + x.slice(1);
   steps.forEach((s, i) => {
-    const text = (s.fields ?? []).filter((f) => f.label.startsWith('Требован')).map((f) => f.text).join(' ');
+    const text = (s.fields ?? []).filter((f) => f.label.startsWith('Requirement')).map((f) => f.text).join(' ');
     for (const r of s.requirements ?? []) {
       if (r.type === 'skill') {
         if (!REQ_SKILLS.has(r.skill) || !Number.isInteger(r.min) || r.min < 1 || r.min > 99) badReq.push(`${s.id}: ${r.skill} ${r.min}`);
-        else if (!text.includes(`${cap(r.skill)} ${r.min}`)) badReq.push(`${s.id}: «${cap(r.skill)} ${r.min}» нет в поле «Требования»`);
+        else if (!text.includes(`${cap(r.skill)} ${r.min}`)) badReq.push(`${s.id}: "${cap(r.skill)} ${r.min}" is not in the "Requirements" field`);
       } else {
         const at = questAt.get(r.quest);
-        if (at === undefined) badReq.push(`${s.id}: квест «${r.quest}» не из маршрута`);
-        else if (at >= i) badReq.push(`${s.id}: квест «${r.quest}» на маршруте позже шага`);
-        else if (steps[at].membersOnly && !s.membersOnly) badReq.push(`${s.id}: F2P-шаг требует квест Members «${r.quest}»`);
-        if (!text.includes(r.quest)) badReq.push(`${s.id}: «${r.quest}» нет в поле «Требования»`);
+        if (at === undefined) badReq.push(`${s.id}: the quest "${r.quest}" is not from the route`);
+        else if (at >= i) badReq.push(`${s.id}: the quest "${r.quest}" is later on the route than the step`);
+        else if (steps[at].membersOnly && !s.membersOnly) badReq.push(`${s.id}: an F2P step requires the Members quest "${r.quest}"`);
+        if (!text.includes(r.quest)) badReq.push(`${s.id}: "${r.quest}" is not in the "Requirements" field`);
       }
     }
-    // Обратно: всё, что поле «Требования» называет уровнем или квестом маршрута, записано и в requirements.
+    // Conversely: everything the "Requirements" field names as a level or a route quest is recorded in requirements too.
     for (const m of text.matchAll(/\b([A-Z][a-z]+) (\d{1,2})\b/g)) {
       if (REQ_SKILLS.has(m[1].toLowerCase()) && !(s.requirements ?? []).some((r) => r.type === 'skill' && r.skill === m[1].toLowerCase() && r.min === Number(m[2]))) {
-        badReq.push(`${s.id}: «${m[0]}» из поля «Требования» нет в requirements`);
+        badReq.push(`${s.id}: "${m[0]}" from the "Requirements" field is not in requirements`);
       }
     }
     for (const q of questAt.keys()) {
-      if (q && text.includes(q) && !(s.requirements ?? []).some((r) => r.type === 'quest' && r.quest === q) && !text.includes(`(а значит, ${q}`) && !text.match(new RegExp(`а значит[^)]*${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`))) {
-        badReq.push(`${s.id}: квест «${q}» из поля «Требования» нет в requirements`);
+      if (q && text.includes(q) && !(s.requirements ?? []).some((r) => r.type === 'quest' && r.quest === q) && !text.includes(`(and so ${q}`) && !text.match(new RegExp(`and so[^)]*${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`))) {
+        badReq.push(`${s.id}: the quest "${q}" from the "Requirements" field is not in requirements`);
       }
     }
   });
-  // Цель шага-заработка совпадает с «Готово, когда»: «В банке 20 000+ монет» ↔ moneyGoal 20000.
+  // The goal of an earning step matches "Done when": "20,000+ coins in the bank" ↔ moneyGoal 20000.
   for (const s of steps.filter((x) => x.moneyGoal !== undefined)) {
-    const n = Number((s.doneWhen.match(/(\d{1,3}(?:[  ]\d{3})+|\d+)\+? монет/)?.[1] ?? '').replace(/[  ]/g, ''));
-    if (!Number.isInteger(s.moneyGoal) || s.moneyGoal! <= 0 || n !== s.moneyGoal) badReq.push(`${s.id}: moneyGoal ${s.moneyGoal} не совпадает с «Готово, когда»`);
+    const n = Number((s.doneWhen.match(/(\d{1,3}(?:,\d{3})+|\d+)\+? coins/)?.[1] ?? '').replace(/,/g, ''));
+    if (!Number.isInteger(s.moneyGoal) || s.moneyGoal! <= 0 || n !== s.moneyGoal) badReq.push(`${s.id}: moneyGoal ${s.moneyGoal} does not match "Done when"`);
   }
   const withReq = steps.filter((s) => s.requirements?.length).length;
-  check(!badReq.length, `Требования шагов (${withReq}): навыки и уровни верные, квесты — с маршрута и раньше шага, совпадают с полем «Требования»`, `Требования шагов: ${badReq.join('; ')}`);
+  check(!badReq.length, `Step requirements (${withReq}): the skills and levels are right, the quests are from the route and earlier than the step, they match the "Requirements" field`, `Step requirements: ${badReq.join('; ')}`);
 
   let running = EXPECTED.baseQp;
   const unreachable: string[] = [];
   for (const s of f2p) {
-    if (s.minQp !== undefined && running < s.minQp) unreachable.push(`${s.id} ждёт ${s.minQp}, а до него можно набрать ${running}`);
+    if (s.minQp !== undefined && running < s.minQp) unreachable.push(`${s.id} waits for ${s.minQp}, and before it ${running} can be earned`);
     running += s.qp ?? 0;
   }
-  check(!unreachable.length, 'Пороги очков квестов достижимы шагами выше по списку', `Недостижимые пороги: ${unreachable.join('; ')}`);
+  check(!unreachable.length, 'The quest point thresholds are reachable by the steps above in the list', `Unreachable thresholds: ${unreachable.join('; ')}`);
 
   const noTargets = steps.filter((s) => s.type === 'skill' && !titleTargets(s.title).length).map((s) => s.id);
-  check(!noTargets.length, 'У всех шагов-навыков распознаны цели по уровням в названии', `Не распознаны цели в названии: ${noTargets.join(', ')}`);
+  check(!noTargets.length, 'Every skill step has level goals recognised in the title', `Goals not recognised in the title: ${noTargets.join(', ')}`);
   const review = steps.filter((s) => s.updatedInV2 && !s.v2ChangesSummary).map((s) => s.id);
-  check(!review.length, `Шагов с пометкой «обновлено в V2»: ${steps.filter((s) => s.updatedInV2).length}, у всех есть пояснение`, `Нет пояснения к обновлению: ${review.join(', ')}`);
+  check(!review.length, `Steps marked "updated in V2": ${steps.filter((s) => s.updatedInV2).length}, all have an explanation`, `No explanation for the update: ${review.join(', ')}`);
 
-  // --- Предметы ---
-  lines.push('Предметы');
+  // --- Items ---
+  lines.push('Items');
   const itemIds = new Map(items.map((i) => [i.id, i]));
   const stepItems = steps.flatMap((s) => [...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])].map((it) => ({ s: s.id, it })));
   const noItem = stepItems.filter(({ it }) => !it.wikiItemId || !itemIds.has(it.wikiItemId) || itemIds.get(it.wikiItemId)!.iconUrl !== it.iconUrl);
-  check(!noItem.length, `Предметов в шагах: ${stepItems.length}, у всех есть ID и иконка из базы`, `Нет в базе или иконка не совпадает: ${noItem.map(({ s, it }) => `${s}:${it.nameEn}`).join(', ')}`);
-  const noRu = stepItems.filter(({ it }) => !it.nameRu).map(({ s, it }) => `${s}:${it.nameEn}`);
-  check(!noRu.length, 'У всех предметов шагов есть русское название', `Без русского названия: ${noRu.join(', ')}`);
-  check(items.length >= 120, `В базе предметов ${items.length} позиций (нужно 120+)`, `В базе только ${items.length} предметов, нужно 120+`);
+  check(!noItem.length, `Items in steps: ${stepItems.length}, all have an ID and an icon from the database`, `Not in the database or the icon does not match: ${noItem.map(({ s, it }) => `${s}:${it.nameEn}`).join(', ')}`);
+  check(items.length >= 120, `The item database has ${items.length} entries (120+ needed)`, `The database has only ${items.length} items, 120+ needed`);
   const itemGaps = items.filter((i) => !i.examine || !i.iconUrl || !i.wikiUrl).map((i) => i.nameEn);
-  check(!itemGaps.length, 'У каждого предмета базы есть описание, иконка и ссылка на вики', `Неполные предметы: ${itemGaps.join(', ')}`);
+  check(!itemGaps.length, 'Every database item has a description, an icon and a wiki link', `Incomplete items: ${itemGaps.join(', ')}`);
   const noHow = stepItems.filter(({ it }) => !it.howToGet.trim()).map(({ s, it }) => `${s}:${it.nameEn}`);
-  check(!noHow.length, 'У каждого предмета шага сказано, где его взять', `Не сказано, где взять: ${noHow.join(', ')}`);
+  check(!noHow.length, 'Every step item says where to get it', `Where to get it is not stated: ${noHow.join(', ')}`);
   const food = stepItems.filter(({ it }) => FOOD.has(it.nameEn));
-  const noHeal = food.filter(({ it }) => it.heals !== FOOD.get(it.nameEn)).map(({ s, it }) => `${s}:${it.nameEn} (${it.heals ?? 'нет'} вместо ${FOOD.get(it.nameEn)})`);
-  check(!noHeal.length, `У еды в шагах (${food.length}) указано, сколько она лечит`, `Неверное или пустое «лечит»: ${noHeal.join(', ')}`);
-  // Подпись картинки — это и alt для экранного чтения; без неё схема безымянна.
+  const noHeal = food.filter(({ it }) => it.heals !== FOOD.get(it.nameEn)).map(({ s, it }) => `${s}:${it.nameEn} (${it.heals ?? 'none'} instead of ${FOOD.get(it.nameEn)})`);
+  check(!noHeal.length, `The food in the steps (${food.length}) states how much it heals`, `A wrong or empty "heals": ${noHeal.join(', ')}`);
+  // An image caption is also the alt text for screen reading; without it the diagram is nameless.
   const noCaption = steps.filter((s) => s.imageUrl && !s.imageCaption).map((s) => s.id);
-  if (noCaption.length) warn(`Картинка без подписи: ${noCaption.join(', ')}`);
-  else ok('У всех картинок шагов есть подпись');
+  if (noCaption.length) warn(`An image without a caption: ${noCaption.join(', ')}`);
+  else ok('Every step image has a caption');
 
-  // --- Карта и подсветка в игре ---
-  lines.push('Карта и RuneLite');
+  // --- The map and the in-game highlight ---
+  lines.push('The map and RuneLite');
   const located = steps.filter((s) => s.mapLocation);
   const points = steps.flatMap((s) => [
     ...(s.mapLocation ? [{ s: s.id, p: s.mapLocation }] : []),
     ...(s.resourceSpots ?? []).map((p) => ({ s: s.id, p })),
   ]);
   const badPoints = points.filter(({ p }) => badPoint(p) || !p.label?.trim() || (p.zoom !== undefined && (!Number.isInteger(p.zoom) || p.zoom < -3 || p.zoom > 3)));
-  check(!badPoints.length, `Точек на карте ${points.length} (шагов с картой ${located.length}): координаты, этаж и подпись в порядке`,
-    `Неверная точка: ${badPoints.map(({ s, p }) => `${s} ${p.x},${p.y},${p.plane}`).join('; ')}`);
-  // Точки карты с предметами: предмет — из списка шага (иначе в панели RuneLite «Путь сюда» повиснет в воздухе).
+  check(!badPoints.length, `Map points ${points.length} (steps with a map ${located.length}): the coordinates, floor and caption are fine`,
+    `A wrong point: ${badPoints.map(({ s, p }) => `${s} ${p.x},${p.y},${p.plane}`).join('; ')}`);
+  // Map points with items: an item is from the step's list (otherwise "Go here" in the RuneLite panel would hang in the air).
   const badSpotItems = steps.flatMap((s) => (s.resourceSpots ?? []).flatMap((p) => (p.items ?? [])
     .filter((n) => ![...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])].some((i) => i.nameEn === n))
-    .map((n) => `${s.id} «${p.label}»: ${n}`)));
-  const badSpotNpc = steps.flatMap((s) => (s.resourceSpots ?? []).filter((p) => p.npc !== undefined && !NPC_NAME.test(p.npc)).map((p) => `${s.id} «${p.label}»`));
-  check(!badSpotItems.length && !badSpotNpc.length, 'Предметы и NPC у точек карты — из шага и с английскими именами',
-    `Точки карты: ${[...badSpotItems, ...badSpotNpc].join('; ')}`);
-  // Откуда предметы (from) и где NPC шагов: у предмета место находится, у NPC — точка на карте, имена как в игре.
+    .map((n) => `${s.id} "${p.label}": ${n}`)));
+  const badSpotNpc = steps.flatMap((s) => (s.resourceSpots ?? []).filter((p) => p.npc !== undefined && !NPC_NAME.test(p.npc)).map((p) => `${s.id} "${p.label}"`));
+  check(!badSpotItems.length && !badSpotNpc.length, 'The items and NPCs at map points are from the step and have English names',
+    `Map points: ${[...badSpotItems, ...badSpotNpc].join('; ')}`);
+  // Where items come from (from) and where the steps' NPCs are: an item has a place, an NPC has a map point, the names are as in the game.
   if (route.npcs && route.places) {
     const npcs = route.npcs;
     const places = route.places;
@@ -277,39 +272,39 @@ export function validate(d: GuideData | null, route: Route): Report {
     const badNpc = Object.entries(npcs).flatMap(([name, rows]) => {
       const general = rows.filter((r) => !r.steps).length;
       return [
-      ...(!NPC_NAME.test(name) ? [`имя «${name}»`] : []),
-      ...(general !== 1 ? [`${name}: общих записей ${general} (нужна одна)`] : []),
+      ...(!NPC_NAME.test(name) ? [`the name "${name}"`] : []),
+      ...(general !== 1 ? [`${name}: general entries ${general} (one is needed)`] : []),
       ...rows.flatMap((r) => [
-        ...(badPoint(r) ? [`${name}: клетка ${r.x},${r.y},${r.plane}`] : []),
-        ...(!r.area?.trim() || !r.page?.trim() ? [`${name}: нет места или статьи`] : []),
-        ...(r.steps ?? []).filter((id) => !ids.has(id)).map((id) => `${name}: шага ${id} нет`),
+        ...(badPoint(r) ? [`${name}: the tile ${r.x},${r.y},${r.plane}`] : []),
+        ...(!r.area?.trim() || !r.page?.trim() ? [`${name}: no place or article`] : []),
+        ...(r.steps ?? []).filter((id) => !ids.has(id)).map((id) => `${name}: there is no step ${id}`),
       ]),
       ];
     });
-    check(!badFrom.length && !badNpc.length, 'Откуда предметы и где NPC шагов — места есть на карте',
-      `Места: ${[...badFrom, ...badNpc].join('; ')}`);
+    check(!badFrom.length && !badNpc.length, 'Where items come from and where the steps\' NPCs are — the places exist on the map',
+      `Places: ${[...badFrom, ...badNpc].join('; ')}`);
     const used = new Set(steps.flatMap((s) => [...(s.inGame?.npcNames ?? []), ...(s.itemsRequired ?? []).map((i) => i.from ?? '')]));
     const unused = Object.keys(npcs).filter((n) => !used.has(n));
-    if (unused.length) warn(`NPC из npcLocations.json не нужны ни одному шагу: ${unused.join(', ')}`);
+    if (unused.length) warn(`NPCs from npcLocations.json are not needed by any step: ${unused.join(', ')}`);
   }
-  // Ссылка «Карта» на вики и точка превью — одно и то же место: расхождение значит, что поправили только одно.
+  // The wiki "Map" link and the preview point are the same place: a discrepancy means only one of them was fixed.
   const drift = steps.filter((s) => {
     const m = s.mapUrl?.match(/#\/m=(\d+),(\d+),(\d+)/);
     return m && s.mapLocation && (Number(m[1]) !== s.mapLocation.x || Number(m[2]) !== s.mapLocation.y || Number(m[3]) !== s.mapLocation.plane);
   }).map((s) => s.id);
-  check(!drift.length, 'Точка превью совпадает со ссылкой на карту вики', `Точка и ссылка на карту расходятся: ${drift.join(', ')}`);
-  // Переключатель — точка шага и места с карты вместе: одно место и одна точка шага в другой клетке — уже две.
+  check(!drift.length, 'The preview point matches the wiki map link', `The point and the map link differ: ${drift.join(', ')}`);
+  // The switch is the step point and the map places together: one place and one step point on another tile — that is already two.
   const lonelySpots = steps.filter((s) => {
     if (!s.resourceSpots) return false;
     const start = s.mapLocation;
     const apart = start && !s.resourceSpots.some((p) => p.x === start.x && p.y === start.y && p.plane === start.plane);
     return s.resourceSpots.length + (apart ? 1 : 0) < 2;
   }).map((s) => s.id);
-  check(!lonelySpots.length, 'Переключатель точек — только там, где их две и больше', `Одна точка на карте шага: ${lonelySpots.join(', ')}`);
+  check(!lonelySpots.length, 'The point switch is only where there are two or more', `One point on the step map: ${lonelySpots.join(', ')}`);
 
   const TRIGGERS = new Set(['QUEST_COMPLETED', 'SKILL_LEVEL', 'ITEM_OWNED', 'CHAT_MESSAGE', 'VARBIT_CHANGED']);
-  // Название квеста у RuneLite: как у шага (тире в названии — дефис) или как у статьи вики шага
-  // («Триумф у Oziach» — последний этап Dragon Slayer I). Есть ли он в RuneLite — проверяет RouteTargetsTest.
+  // The quest name in RuneLite: like the step (a dash in the name is a hyphen) or like the step's wiki article
+  // ("Triumph at Oziach" — the last stage of Dragon Slayer I). Whether it exists in RuneLite is checked by RouteTargetsTest.
   const questNamesOf = (s: Step) => [s.title.replace(/ — /g, ' - '),
     ...(s.wikiUrl ? [decodeURIComponent(s.wikiUrl.replace(/^.*\/w\//, '')).replace(/_/g, ' ')] : [])];
   const triggerQuests = new Map<string, string>();
@@ -318,53 +313,53 @@ export function validate(d: GuideData | null, route: Route): Report {
     const g = s.inGame;
     if (!g) continue;
     if (g.worldPoint && badPoint(g.worldPoint)) badGame.push(`${s.id}: worldPoint`);
-    for (const t of g.groundTiles ?? []) if (badPoint(t) || !t.label.trim()) badGame.push(`${s.id}: клетка ${t.x},${t.y}`);
+    for (const t of g.groundTiles ?? []) if (badPoint(t) || !t.label.trim()) badGame.push(`${s.id}: the tile ${t.x},${t.y}`);
     for (const key of ['npcNames', 'objectNames', 'dialogChoices', 'highlightItems'] as const) {
-      if (g[key]?.some((n) => !n.trim())) badGame.push(`${s.id}: пустое имя в ${key}`);
+      if (g[key]?.some((n) => !n.trim())) badGame.push(`${s.id}: an empty name in ${key}`);
     }
     const t = g.completionTrigger;
     if (!t) continue;
-    if (!TRIGGERS.has(t.type)) badGame.push(`${s.id}: неизвестный триггер ${t.type}`);
-    // Квест засчитывается по названию из игры; название шага-квеста и есть это название.
+    if (!TRIGGERS.has(t.type)) badGame.push(`${s.id}: an unknown trigger ${t.type}`);
+    // A quest is counted by the name from the game; the name of a quest step is exactly this name.
     if (t.type === 'QUEST_COMPLETED') {
-      if (s.type !== 'quest' || !questNamesOf(s).includes(t.questName ?? '')) badGame.push(`${s.id}: questName «${t.questName}» не совпадает с квестом шага`);
+      if (s.type !== 'quest' || !questNamesOf(s).includes(t.questName ?? '')) badGame.push(`${s.id}: questName "${t.questName}" does not match the step's quest`);
       const twin = triggerQuests.get(t.questName ?? '');
-      if (twin) badGame.push(`${s.id}: квест «${t.questName}» уже отмечает ${twin} — оба шага закрылись бы разом`);
+      if (twin) badGame.push(`${s.id}: the quest "${t.questName}" is already marked by ${twin} — both steps would close at once`);
       triggerQuests.set(t.questName ?? '', s.id);
     }
-    // Уровни — ровно цели из названия шага: иначе шаг закрылся бы раньше или позже, чем написано.
+    // The levels are exactly the goals from the step title: otherwise the step would close earlier or later than written.
     if (t.type === 'SKILL_LEVEL') {
       const want = titleTargets(s.title).map((x) => `${x.skill} ${x.level}`).sort().join(', ');
       const got = (t.levels ?? []).map((x) => `${x.skill} ${x.level}`).sort().join(', ');
-      if (!t.levels?.length || want !== got) badGame.push(`${s.id}: уровни автоотметки «${got}» ≠ цели из названия «${want}»`);
-    } else if (t.levels) badGame.push(`${s.id}: уровни бывают только у SKILL_LEVEL`);
-    if (t.type === 'ITEM_OWNED' && !t.items?.length) badGame.push(`${s.id}: ITEM_OWNED без предметов`);
-    if (t.items && !['QUEST_COMPLETED', 'SKILL_LEVEL', 'ITEM_OWNED'].includes(t.type)) badGame.push(`${s.id}: предметы бывают только у условий-состояний`);
+      if (!t.levels?.length || want !== got) badGame.push(`${s.id}: the auto-mark levels "${got}" ≠ the goals from the title "${want}"`);
+    } else if (t.levels) badGame.push(`${s.id}: levels exist only for SKILL_LEVEL`);
+    if (t.type === 'ITEM_OWNED' && !t.items?.length) badGame.push(`${s.id}: ITEM_OWNED without items`);
+    if (t.items && !['QUEST_COMPLETED', 'SKILL_LEVEL', 'ITEM_OWNED'].includes(t.type)) badGame.push(`${s.id}: items exist only for state conditions`);
     for (const i of t.items ?? []) {
-      if (!i.names?.length || i.names.some((n) => !n.trim())) badGame.push(`${s.id}: предмет автоотметки без названия`);
-      if (!Number.isInteger(i.count) || i.count < 1) badGame.push(`${s.id}: количество ${i.names?.join('/')} — ${i.count}`);
+      if (!i.names?.length || i.names.some((n) => !n.trim())) badGame.push(`${s.id}: an auto-mark item without a name`);
+      if (!Number.isInteger(i.count) || i.count < 1) badGame.push(`${s.id}: the quantity ${i.names?.join('/')} — ${i.count}`);
       if (i.id !== undefined && (!Number.isInteger(i.id) || i.id <= 0)) badGame.push(`${s.id}: ID ${i.id}`);
     }
     if (t.type === 'CHAT_MESSAGE') {
-      try { new RegExp(t.chatPattern ?? ''); } catch { badGame.push(`${s.id}: chatPattern не регулярное выражение`); }
-      if (!t.chatPattern) badGame.push(`${s.id}: нет chatPattern`);
+      try { new RegExp(t.chatPattern ?? ''); } catch { badGame.push(`${s.id}: chatPattern is not a regular expression`); }
+      if (!t.chatPattern) badGame.push(`${s.id}: no chatPattern`);
     }
-    if (t.type === 'VARBIT_CHANGED' && (!Number.isInteger(t.varbitId) || !Number.isInteger(t.targetValue))) badGame.push(`${s.id}: varbitId и targetValue обязательны`);
+    if (t.type === 'VARBIT_CHANGED' && (!Number.isInteger(t.varbitId) || !Number.isInteger(t.targetValue))) badGame.push(`${s.id}: varbitId and targetValue are required`);
   }
   const withGame = steps.filter((s) => s.inGame);
   const auto = withGame.filter((s) => s.inGame!.completionTrigger);
-  check(!badGame.length, `Подсветка в игре у ${withGame.length} шагов, автоотметка у ${auto.length}: поля в порядке`, `Ошибки подсветки: ${badGame.join('; ')}`);
+  check(!badGame.length, `The in-game highlight at ${withGame.length} steps, the auto-mark at ${auto.length}: the fields are fine`, `Highlight errors: ${badGame.join('; ')}`);
 
-  // Путевые точки: по порядку, с подписью (её показывает HUD: «Точка 2/5: мост»).
+  // The waypoints: in order, with a caption (the HUD shows it: "Point 2/5: the bridge").
   const badRoute = steps.flatMap((s) => (s.inGame?.pathWaypoints ?? [])
     .filter((p) => badPoint(p) || !p.label?.trim())
     .map((p) => `${s.id} ${p.x},${p.y}`));
   const routed = steps.filter((s) => s.inGame?.pathWaypoints?.length);
   const shortRoute = routed.filter((s) => s.inGame!.pathWaypoints!.length < 2).map((s) => s.id);
-  check(!badRoute.length && !shortRoute.length, `Путевые точки у ${routed.length} шагов: координаты и подписи в порядке`,
-    `Путевые точки: ${[...badRoute, ...shortRoute.map((id) => `${id}: одна точка — это просто worldPoint`)].join('; ')}`);
+  check(!badRoute.length && !shortRoute.length, `Waypoints at ${routed.length} steps: the coordinates and captions are fine`,
+    `Waypoints: ${[...badRoute, ...shortRoute.map((id) => `${id}: one point is just a worldPoint`)].join('; ')}`);
 
-  // Быстрые варианты: известный навык и уровень 1–99, квест из маршрута, предмет с названием, точка на карте.
+  // Quick variants: a known skill and a level 1–99, a quest from the route, an item with a name, a map point.
   const SKILLS = new Set(['attack', 'strength', 'defence', 'ranged', 'prayer', 'magic', 'runecraft', 'hitpoints', 'crafting', 'mining',
     'smithing', 'fishing', 'cooking', 'firemaking', 'woodcutting', 'agility', 'herblore', 'thieving', 'fletching', 'slayer', 'farming',
     'construction', 'hunter', 'sailing']);
@@ -374,27 +369,27 @@ export function validate(d: GuideData | null, route: Route): Report {
     const ids = new Set<string>();
     for (const b of s.branches ?? []) {
       const c = b.condition;
-      if (!b.id || ids.has(b.id)) badBranch.push(`${s.id}: повтор или пустой id варианта`);
+      if (!b.id || ids.has(b.id)) badBranch.push(`${s.id}: a repeated or empty variant id`);
       ids.add(b.id);
-      if (!b.label?.trim()) badBranch.push(`${s.id}/${b.id}: нет label`);
-      if (c.type === 'SKILL_LEVEL' && (!SKILLS.has(c.skill ?? '') || !Number.isInteger(c.minLevel) || c.minLevel! < 1 || c.minLevel! > 99)) badBranch.push(`${s.id}/${b.id}: навык или уровень`);
-      if (c.type === 'QUEST_COMPLETED' && !questTitles.has(c.questName ?? '')) badBranch.push(`${s.id}/${b.id}: квест «${c.questName}» не из маршрута`);
-      if (c.type === 'ITEM_OWNED' && !c.itemName?.trim()) badBranch.push(`${s.id}/${b.id}: нет itemName`);
-      if (!['SKILL_LEVEL', 'QUEST_COMPLETED', 'ITEM_OWNED'].includes(c.type)) badBranch.push(`${s.id}/${b.id}: неизвестное условие ${c.type}`);
-      if (b.replacementTarget && (badPoint(b.replacementTarget) || !b.replacementTarget.label?.trim())) badBranch.push(`${s.id}/${b.id}: точка`);
+      if (!b.label?.trim()) badBranch.push(`${s.id}/${b.id}: no label`);
+      if (c.type === 'SKILL_LEVEL' && (!SKILLS.has(c.skill ?? '') || !Number.isInteger(c.minLevel) || c.minLevel! < 1 || c.minLevel! > 99)) badBranch.push(`${s.id}/${b.id}: the skill or level`);
+      if (c.type === 'QUEST_COMPLETED' && !questTitles.has(c.questName ?? '')) badBranch.push(`${s.id}/${b.id}: the quest "${c.questName}" is not from the route`);
+      if (c.type === 'ITEM_OWNED' && !c.itemName?.trim()) badBranch.push(`${s.id}/${b.id}: no itemName`);
+      if (!['SKILL_LEVEL', 'QUEST_COMPLETED', 'ITEM_OWNED'].includes(c.type)) badBranch.push(`${s.id}/${b.id}: an unknown condition ${c.type}`);
+      if (b.replacementTarget && (badPoint(b.replacementTarget) || !b.replacementTarget.label?.trim())) badBranch.push(`${s.id}/${b.id}: the point`);
       if (b.timeSavingSeconds !== undefined && !(b.timeSavingSeconds > 0)) badBranch.push(`${s.id}/${b.id}: timeSavingSeconds`);
     }
   }
   const branched = steps.filter((s) => s.branches?.length);
-  check(!badBranch.length, `Быстрые варианты у ${branched.length} шагов: условия и точки в порядке`, `Быстрые варианты: ${badBranch.join('; ')}`);
+  check(!badBranch.length, `Quick variants at ${branched.length} steps: the conditions and points are fine`, `Quick variants: ${badBranch.join('; ')}`);
 
-  // Проверка вылета: у шага, где всё добывается по ходу, проверять у банка нечего — это нормально, но
-  // inStep только у обязательных предметов (рекомендуемые у банка и так не проверяются).
+  // The departure check: for a step where everything is obtained along the way there is nothing to check at the bank — that is fine, but
+  // inStep is only on required items (the recommended ones are not checked at the bank anyway).
   const recInStep = steps.flatMap((s) => (s.itemsRecommended ?? []).filter((i) => i.inStep).map((i) => `${s.id} ${i.nameEn}`));
-  check(!recInStep.length, `Предметы «по ходу шага» помечены у ${steps.filter((s) => s.itemsRequired?.some((i) => i.inStep)).length} шагов`,
-    `inStep у рекомендуемых предметов: ${recInStep.join(', ')}`);
+  check(!recInStep.length, `Items "along the step" are marked at ${steps.filter((s) => s.itemsRequired?.some((i) => i.inStep)).length} steps`,
+    `inStep on recommended items: ${recInStep.join(', ')}`);
 
-  // Темп прокачки: навык и уровень — те же, что в названии шага; опыт до уровня — по формуле игры.
+  // The training pace: the skill and level are those in the step title; the XP to a level is by the game formula.
   const COMBAT = new Set(['attack', 'strength', 'defence']);
   const PACING_SKILLS = new Set(['fishing', 'woodcutting', 'cooking', 'mining', ...COMBAT]);
   const foeHp = new Map((route.monsters?.foes ?? []).map((f) => [f.name, f.hitpoints]));
@@ -402,96 +397,96 @@ export function validate(d: GuideData | null, route: Route): Report {
     const p = s.pacing;
     if (!p) return [];
     const out: string[] = [];
-    if (!PACING_SKILLS.has(p.skill)) out.push(`${s.id}: навык ${p.skill}`);
-    if (p.targetExp !== xpForLevel(p.targetLevel)) out.push(`${s.id}: опыт ${p.targetExp} ≠ ${xpForLevel(p.targetLevel)} для ${p.targetLevel}`);
-    if (!(p.expPerAction > 0)) out.push(`${s.id}: опыт за действие ${p.expPerAction}`);
+    if (!PACING_SKILLS.has(p.skill)) out.push(`${s.id}: the skill ${p.skill}`);
+    if (p.targetExp !== xpForLevel(p.targetLevel)) out.push(`${s.id}: XP ${p.targetExp} ≠ ${xpForLevel(p.targetLevel)} for ${p.targetLevel}`);
+    if (!(p.expPerAction > 0)) out.push(`${s.id}: XP per action ${p.expPerAction}`);
     const forms = p.actionName.split('|');
-    if (!(forms.length === 1 || forms.length === 3) || forms.some((f) => !f.trim())) out.push(`${s.id}: формы действия «${p.actionName}»`);
+    if (!(forms.length === 1 || forms.length === 2) || forms.some((f) => !f.trim())) out.push(`${s.id}: the action forms "${p.actionName}"`);
     for (const skill of [p.skill, ...(p.also ?? [])]) {
-      if (!titleTargets(s.title).some((t) => t.skill === skill && t.level === p.targetLevel)) out.push(`${s.id}: цели ${skill} ${p.targetLevel} нет в названии`);
+      if (!titleTargets(s.title).some((t) => t.skill === skill && t.level === p.targetLevel)) out.push(`${s.id}: the goal ${skill} ${p.targetLevel} is not in the title`);
     }
-    // Несколько навыков — только бой: их качают по очереди, меняя стиль атаки.
+    // Several skills — only combat: they are trained in turn, changing the attack style.
     if (p.also && (!COMBAT.has(p.skill) || p.also.some((a) => !COMBAT.has(a) || a === p.skill) || new Set(p.also).size !== p.also.length)) {
       out.push(`${s.id}: also ${p.also.join(', ')}`);
     }
-    // Бой: действие — противник, опыт навыка стиля — 4 за единицу урона, то есть 4 × его здоровье.
+    // Combat: the action is an opponent, the XP of the style skill is 4 per point of damage, that is 4 × its health.
     if (COMBAT.has(p.skill)) {
       const hp = foeHp.get(s.foes?.[0] ?? '');
-      if (hp === undefined) out.push(`${s.id}: темп боя без противника из monsters.json`);
-      else if (p.expPerAction !== 4 * hp) out.push(`${s.id}: опыт за противника ${p.expPerAction} ≠ 4 × ${hp}`);
+      if (hp === undefined) out.push(`${s.id}: a combat pace without an opponent from monsters.json`);
+      else if (p.expPerAction !== 4 * hp) out.push(`${s.id}: the XP per opponent ${p.expPerAction} ≠ 4 × ${hp}`);
     }
-    if (p.secondsPerAction !== undefined && !(p.secondsPerAction > 0)) out.push(`${s.id}: секунд на действие ${p.secondsPerAction}`);
+    if (p.secondsPerAction !== undefined && !(p.secondsPerAction > 0)) out.push(`${s.id}: seconds per action ${p.secondsPerAction}`);
     return out;
   });
   const paced = steps.filter((s) => s.pacing).length;
-  check(!badPacing.length, `Темп прокачки у ${paced} шагов: навык, уровень и опыт сходятся с названием и формулой`, `Темп прокачки: ${badPacing.join('; ')}`);
+  check(!badPacing.length, `The training pace at ${paced} steps: the skill, level and XP agree with the title and the formula`, `The training pace: ${badPacing.join('; ')}`);
 
-  // Разметка вики в базе предметов: HTML-сущности и «[UK]/[US]» — признак старой очистки текста.
+  // Wiki markup in the item database: HTML entities and "[UK]/[US]" are a sign of the old text cleaning.
   const entities = items.flatMap((i) => [...(i.buyLocations ?? []).map((b) => b.location), ...(i.freeSpawns ?? [])]
     .filter((t) => /&(#\d+|[a-z]+);|\[(UK|US)\]/i.test(t)).map((t) => `${i.nameEn}: ${t}`));
-  check(!entities.length, 'В местах магазинов и спавнов нет HTML-сущностей и пометок [UK]/[US]', `Неочищенный текст вики: ${entities.slice(0, 5).join('; ')}`);
+  check(!entities.length, 'There are no HTML entities or [UK]/[US] marks in the shop and spawn places', `Uncleaned wiki text: ${entities.slice(0, 5).join('; ')}`);
 
-  // --- Текст ---
-  lines.push('Текст');
-  const vague = steps.flatMap((s) => userTexts(s).filter(([, t]) => VAGUE.test(t)).map(([where]) => `${s.id} «${where}»`));
-  check(!vague.length, 'Еда везде названа и посчитана', `Еда без названия или количества: ${vague.join(', ')}`);
+  // --- Text ---
+  lines.push('Text');
+  const vague = steps.flatMap((s) => userTexts(s).filter(([, t]) => VAGUE.test(t)).map(([where]) => `${s.id} "${where}"`));
+  check(!vague.length, 'The food is named and counted everywhere', `Food without a name or quantity: ${vague.join(', ')}`);
   const lower: string[] = [];
   const typos: string[] = [];
   const unbalanced: string[] = [];
   for (const s of steps) {
-    for (const [where, t] of [['Название', s.title] as [string, string], ...userTexts(s)]) {
+    for (const [where, t] of [['Title', s.title] as [string, string], ...userTexts(s)]) {
       const ch = firstLetter(t);
-      if (ch && ch !== ch.toUpperCase() && !/^[a-z]/.test(t)) lower.push(`${s.id} «${where}»`);
-      for (const [re, hint] of TYPOS) if (re.test(t)) typos.push(`${s.id} «${where}»: ${hint}`);
-      if (!balanced(t)) unbalanced.push(`${s.id} «${where}»`);
+      if (ch && ch !== ch.toUpperCase() && !/^[a-z]/.test(t)) lower.push(`${s.id} "${where}"`);
+      for (const [re, hint] of TYPOS) if (re.test(t)) typos.push(`${s.id} "${where}": ${hint}`);
+      if (!balanced(t)) unbalanced.push(`${s.id} "${where}"`);
     }
   }
   for (const st of stages) {
     const ch = firstLetter(st.title);
-    if (ch && ch !== ch.toUpperCase()) lower.push(`этап ${st.id}`);
+    if (ch && ch !== ch.toUpperCase()) lower.push(`stage ${st.id}`);
   }
-  check(!lower.length, 'Все тексты шагов и этапов начинаются с заглавной буквы', `Начинается со строчной: ${lower.join(', ')}`);
-  check(!typos.length, 'Известных опечаток и ASCII-стрелок нет', `Опечатки: ${typos.join('; ')}`);
-  check(!unbalanced.length, 'Скобки и кавычки закрыты', `Незакрытые скобки или кавычки: ${unbalanced.join(', ')}`);
+  check(!lower.length, 'All step and stage texts start with a capital letter', `Starts with a lowercase letter: ${lower.join(', ')}`);
+  check(!typos.length, 'There are no known typos or ASCII arrows', `Typos: ${typos.join('; ')}`);
+  check(!unbalanced.length, 'Brackets and quotes are closed', `Unclosed brackets or quotes: ${unbalanced.join(', ')}`);
 
   if (d) {
-    // Опечатки и те же правила написания — и в текстах из гайда: справка, навыки, цели, плагины.
-    const guideTypos = strings(d).flatMap((t) => TYPOS.filter(([re, hint]) => re.test(t) && !/двойной пробел|пробел перед/.test(hint)).map(([, hint]) => `«${t.slice(0, 40)}…»: ${hint}`));
-    check(!guideTypos.length, 'В текстах из гайда известных опечаток нет', `Опечатки в гайде: ${guideTypos.join('; ')}`);
+    // The typos and the same spelling rules — in the skills, goals and reference texts too: reference, skills, goals, plugins.
+    const guideTypos = strings(d).flatMap((t) => TYPOS.filter(([re, hint]) => re.test(t) && !/double space|space before/.test(hint)).map(([, hint]) => `"${t.slice(0, 40)}…": ${hint}`));
+    check(!guideTypos.length, 'There are no known typos in the skills, goals and reference texts', `Typos in the skills, goals and reference texts: ${guideTypos.join('; ')}`);
 
-    // --- Из гайда ---
-    lines.push('Навыки, цели и опыт (osrs-guide.md)');
-    check(d.skills.length === EXPECTED.skills, `Навыков ${d.skills.length}: ${d.skills.map((s) => `${s.id}(${s.plan.ranges.length})`).join(' ')}`, `Ожидалось ${EXPECTED.skills} навыков, найдено ${d.skills.length}`);
+    // --- Skills, goals and XP ---
+    lines.push('Skills, goals and XP');
+    check(d.skills.length === EXPECTED.skills, `Skills ${d.skills.length}: ${d.skills.map((s) => `${s.id}(${s.plan.ranges.length})`).join(' ')}`, `Expected ${EXPECTED.skills} skills, found ${d.skills.length}`);
     let planErrors = 0;
     for (const s of d.skills) {
       const bad = s.plan.ranges.filter((r, i) => r.code !== `${s.id}-${i + 1}` || (r.to !== null && r.to <= r.from));
-      if (bad.length) { planErrors++; fail(`${s.id}: неправильные строки плана ${bad.map((r) => r.code).join(', ')}`); }
+      if (bad.length) { planErrors++; fail(`${s.id}: wrong plan rows ${bad.map((r) => r.code).join(', ')}`); }
     }
-    if (!planErrors) ok('У каждого навыка план прокачки с кодами по порядку');
+    if (!planErrors) ok('Every skill has a training plan with codes in order');
 
-    // Навыки подписки: строка плана должна найтись для любого уровня 1–99, иначе «Сейчас по плану» пропадёт.
+    // Members skills: a plan row must be found for any level 1–99, otherwise "Now by the plan" disappears.
     const ms = d.members.skills;
-    check(ms.length === EXPECTED.members, `Навыков подписки ${ms.length}: ${ms.map((s) => `${s.id}(${s.plan.ranges.length})`).join(' ')}`,
-      `Ожидалось ${EXPECTED.members} навыков подписки, найдено ${ms.length}`);
+    check(ms.length === EXPECTED.members, `Members skills ${ms.length}: ${ms.map((s) => `${s.id}(${s.plan.ranges.length})`).join(' ')}`,
+      `Expected ${EXPECTED.members} members skills, found ${ms.length}`);
     const holes = ms.filter((s) => {
       const r = s.plan.ranges;
       return r[0].from !== 1 || r[r.length - 1].to !== null
         || r.some((x, i) => x.code !== `${s.id}-${i + 1}` || (i > 0 && r[i - 1].to !== x.from) || (x.to !== null && x.to <= x.from));
     }).map((s) => s.id);
-    check(!holes.length, 'Планы навыков подписки идут с 1 уровня без пропусков, коды по порядку',
-      `План навыка подписки не с 1 уровня, с пропуском или не по порядку: ${holes.join(', ')}`);
+    check(!holes.length, 'The members skill plans run from level 1 without gaps, the codes in order',
+      `A members skill plan not from level 1, with a gap or not in order: ${holes.join(', ')}`);
     const f2pLevels = new Set(d.levels.map((l) => l.id));
     const badMembers = ms.filter((s) => s.membersOnly !== true || s.levelSkills.length !== 1 || f2pLevels.has(s.levelSkills[0])
       || d.skills.some((f) => f.id === s.id) || s.wiki !== `https://oldschool.runescape.wiki/w/${s.nameEn}`).map((s) => s.id);
-    check(!badMembers.length, 'У навыков подписки свой уровень, свой код и ссылка на вики',
-      `Навык подписки без своего уровня, с чужим кодом или без ссылки на вики: ${badMembers.join(', ')}`);
+    check(!badMembers.length, 'Members skills have their own level, their own code and a wiki link',
+      `A members skill without its own level, with a foreign code or without a wiki link: ${badMembers.join(', ')}`);
     const goalRows = d.goals.rows.filter((r) => r.id !== 'qp');
-    check(goalRows.length === d.levels.length, `«Цели по этапам»: ${goalRows.length} навыков × ${d.goals.stages.length} этапов`, '«Цели по этапам» неполные');
+    check(goalRows.length === d.levels.length, `"Goals by stage": ${goalRows.length} skills × ${d.goals.stages.length} stages`, '"Goals by stage" is incomplete');
     const xpBad = d.xp.points.filter((p) => xpForLevel(p.level) !== p.xp).map((p) => `${p.level}: ${p.xp} ≠ ${xpForLevel(p.level)}`);
-    check(!xpBad.length, `Формула опыта совпадает со всеми ${d.xp.points.length} строками таблицы гайда`, `Формула расходится с гайдом: ${xpBad.join('; ')}`);
+    check(!xpBad.length, `The XP formula matches all ${d.xp.points.length} rows of the XP table`, `The formula differs from the XP table: ${xpBad.join('; ')}`);
   }
 
   lines.push('');
-  lines.push(`Итог: ошибок ${errors}, предупреждений ${warnings}`);
+  lines.push(`Total: errors ${errors}, warnings ${warnings}`);
   return { lines, errors, warnings };
 }

@@ -1,7 +1,7 @@
 import { Component, type ReactNode } from 'react';
 
 interface Props {
-  /** Смена страницы сбрасывает ошибку: сломанный раздел не должен запирать остальные. */
+  /** A page change clears the error: a broken section must not lock the others. */
   resetKey: string;
   children: ReactNode;
 }
@@ -11,8 +11,8 @@ interface State {
 }
 
 /**
- * Ошибка одной страницы не гасит всё окно: шапка и вкладки остаются, прогресс не трогаем.
- * Без этого React снимает всё дерево, и программа становится белым листом.
+ * An error on one page does not take down the whole window: the header and tabs stay, the progress is untouched.
+ * Without this React removes the whole tree, and the app becomes a white sheet.
  */
 export class PageBoundary extends Component<Props, State> {
   state: State = { error: null };
@@ -30,12 +30,12 @@ export class PageBoundary extends Component<Props, State> {
     if (!error) return this.props.children;
     return (
       <div className="card page-error" role="alert">
-        <h2 className="card-title">Эта страница не открылась</h2>
-        <p>Прогресс сохранён отдельно и не пострадал. Попробуй открыть страницу заново или перейди в другой раздел.</p>
+        <h2 className="card-title">This page did not open</h2>
+        <p>The progress is saved separately and is not harmed. Try opening the page again or go to another section.</p>
         <p className="muted small">{error.message}</p>
         <div className="page-error-actions">
-          <button type="button" className="btn btn-primary" onClick={() => this.setState({ error: null })}>Открыть заново</button>
-          <a className="btn" href="#/">К пути</a>
+          <button type="button" className="btn btn-primary" onClick={() => this.setState({ error: null })}>Reopen</button>
+          <a className="btn" href="#/">To the path</a>
         </div>
       </div>
     );

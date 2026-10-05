@@ -1,4 +1,4 @@
-// Одноцветные значки: stroke = currentColor, размер задаёт CSS.
+// One-colour icons: stroke = currentColor, the size is set by CSS.
 
 import type { ReactNode } from 'react';
 import type { StepType } from '../types';
@@ -15,21 +15,21 @@ function Svg({ children, className }: IconProps & { children: ReactNode }) {
 }
 
 export const TYPE_LABEL: Record<StepType, string> = {
-  quest: 'Квест',
-  skill: 'Навык',
-  gear: 'Снаряжение',
-  prep: 'Подготовка',
+  quest: 'Quest',
+  skill: 'Skill',
+  gear: 'Gear',
+  prep: 'Preparation',
 };
 
 export function TypeIcon({ type, className }: { type: StepType; className?: string }) {
   const paths: Record<StepType, ReactNode> = {
-    // Свиток квеста
+    // A quest scroll
     quest: <><path d="M7 4h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H9" /><path d="M7 4a2 2 0 0 0-2 2v1h4V6a2 2 0 0 0-2-2Z" /><path d="M9 7v11a2 2 0 1 1-4 0v-1h4" /><path d="M12 9h4M12 13h4" /></>,
-    // Растущий навык
+    // A growing skill
     skill: <><path d="M4 17l5-5 4 3 7-7" /><path d="M15 8h5v5" /></>,
-    // Щит снаряжения
+    // A gear shield
     gear: <><path d="M12 3l7 3v5.5c0 4.4-3 7.7-7 9.5-4-1.8-7-5.1-7-9.5V6l7-3Z" /></>,
-    // Список подготовки
+    // A preparation list
     prep: <><rect x="5" y="4" width="14" height="17" rx="2" /><path d="M9 4v2h6V4" /><path d="M9 11l1.5 1.5L13 10M9 16h6" /></>,
   };
   return (

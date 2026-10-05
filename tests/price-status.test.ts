@@ -1,15 +1,15 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-// Сеть не нужна: цены подменяются, досье берётся из локальной базы.
+// No network needed: prices are replaced, the dossier comes from the local database.
 const getGePrice = vi.fn();
 vi.mock('../src/services/pricesApi', () => ({ getGePrice: (id: number) => getGePrice(id), getMapping: async () => new Map() }));
 
 const { getItemDetail } = await import('../src/services/wikiService');
 
-describe('цена в досье', () => {
+describe('price in the dossier', () => {
   beforeEach(() => { getGePrice.mockReset(); });
 
-  it('нет связи — помечено, а не «не продаётся»', async () => {
+  it('no connection — marked, not "not sold"', async () => {
     getGePrice.mockImplementation(async () => { throw new DOMException('The operation timed out.', 'TimeoutError'); });
     const d = await getItemDetail('Small fishing net');
     expect(d?.nameEn).toBe('Small fishing net');
@@ -17,14 +17,14 @@ describe('цена в досье', () => {
     expect(d?.priceUnavailable).toBe(true);
   });
 
-  it('не торгуется — без пометки о связи', async () => {
+  it('not traded — without a connection note', async () => {
     getGePrice.mockResolvedValue(null);
     const d = await getItemDetail('Small fishing net');
     expect(d?.gePrice).toBeUndefined();
     expect(d?.priceUnavailable).toBeUndefined();
   });
 
-  it('цена есть — приклеена к досье', async () => {
+  it('the price is there — attached to the dossier', async () => {
     getGePrice.mockResolvedValue({ buyPrice: 12, sellPrice: 10, updatedAt: '2026-09-27T00:00:00Z' });
     const d = await getItemDetail('Small fishing net');
     expect(d?.gePrice?.buyPrice).toBe(12);

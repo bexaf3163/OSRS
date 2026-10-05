@@ -1,6 +1,6 @@
-// Запросы к OSRS Wiki: карточка предмета, магазины, дроп, спавны, NPC.
-// Общий код для приложения (живые запросы) и scripts/build-items.ts (сборка локальной базы).
-// Без относительных импортов: файл запускается и в Vite, и прямо в Node.
+// Requests to the OSRS Wiki: the item card, shops, drops, spawns, NPCs.
+// Shared code for the app (live requests) and scripts/build-items.ts (building the local database).
+// No relative imports: the file runs both in Vite and directly in Node.
 
 import type { WikiItemDetail } from '../types/index.ts';
 
@@ -9,12 +9,12 @@ const API = `${WIKI_ORIGIN}/api.php`;
 
 export type FetchFn = (url: string) => Promise<{ ok: boolean; status: number; json(): Promise<unknown> }>;
 
-/** Ссылка на статью вики. */
+/** A link to a wiki article. */
 export function wikiPageUrl(page: string): string {
   return `${WIKI_ORIGIN}/w/${encodeURIComponent(page.replace(/ /g, '_')).replace(/%2F/g, '/')}`;
 }
 
-/** Ссылка на файл вики: «File:Shears.png» → https://oldschool.runescape.wiki/images/Shears.png */
+/** A link to a wiki file: "File:Shears.png" → https://oldschool.runescape.wiki/images/Shears.png */
 export function wikiFileUrl(file: string): string {
   const name = file.replace(/^File:/, '').replace(/ /g, '_');
   return `${WIKI_ORIGIN}/images/${encodeURIComponent(name)}`;
@@ -25,7 +25,7 @@ const quote = (s: string) => `'${s.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'
 async function getJson(fetchFn: FetchFn, params: Record<string, string>): Promise<Record<string, unknown>> {
   const url = `${API}?${new URLSearchParams({ format: 'json', origin: '*', ...params })}`;
   const res = await fetchFn(url);
-  if (!res.ok) throw new Error(`OSRS Wiki ответила ${res.status}`);
+  if (!res.ok) throw new Error(`OSRS Wiki responded ${res.status}`);
   return (await res.json()) as Record<string, unknown>;
 }
 
@@ -35,7 +35,7 @@ async function bucket(fetchFn: FetchFn, query: string): Promise<Record<string, u
   return (data.bucket as Record<string, unknown>[]) ?? [];
 }
 
-/** В Bucket логическое «да» приходит пустой строкой, «нет» — отсутствием поля. */
+/** In Bucket a logical "yes" comes as an empty string, "no" as an absent field. */
 const flag = (row: Record<string, unknown>, key: string) => key in row && row[key] !== false && row[key] !== '0';
 const first = (v: unknown): string => (Array.isArray(v) ? String(v[0] ?? '') : v == null ? '' : String(v));
 const num = (v: unknown): number | undefined => {
@@ -43,25 +43,22 @@ const num = (v: unknown): number | undefined => {
   return Number.isFinite(n) && first(v) !== '' ? n : undefined;
 };
 
-const UK_FLOOR: Record<string, string> = {
-  '0': 'Ground floor (1-й этаж)', '1': '1st floor (2-й этаж)', '2': '2nd floor (3-й этаж)', '3': '3rd floor (4-й этаж)',
-};
+const UK_FLOOR: Record<string, string> = { '0': 'Ground floor', '1': '1st floor', '2': '2nd floor', '3': '3rd floor' };
 
 const ENTITIES: Record<string, string> = { nbsp: ' ', amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", '#91': '[', '#93': ']', '#39': "'" };
-const US_FLOOR: Record<string, string> = { Ground: '1', '1st': '2', '2nd': '3', '3rd': '4', '4th': '5' };
 
 /**
- * Вики-разметка в простой текст: [[A|B]] → B, {{FloorNumber|uk=1}} → «1st floor (2-й этаж)».
- * Bucket отдаёт уже развёрнутые шаблоны с HTML-сущностями: «1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93;»
- * — это тоже приводится к «1st floor (2-й этаж)».
+ * Wiki markup to plain text: [[A|B]] → B, {{FloorNumber|uk=1}} → "1st floor".
+ * Bucket gives already expanded templates with HTML entities: "1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93;"
+ * — this too is turned into "1st floor" (the game's own UK numbering; the US name is dropped).
  */
 export function cleanWikiText(s: string): string {
   return s
     .replace(/&(#\d+|[a-z]+);/gi, (m, e: string) => ENTITIES[e.toLowerCase()] ?? m)
-    // Вики иногда отдаёт неразрывный пробел (U+00A0 или &#160;): без замены «floor[UK]» не узнавался.
+    // The wiki sometimes gives a non-breaking space (U+00A0 or &#160;): without replacing it "floor[UK]" was not recognized.
     .replace(/&#160;|\u00a0/g, ' ')
     .replace(/\b(Ground|\d+(?:st|nd|rd|th)) floor\[UK\](?:Ground|\d+(?:st|nd|rd|th)) floor\[US\]/g,
-      (_m, uk: string) => `${uk} floor (${US_FLOOR[uk] ?? '?'}-й этаж)`)
+      (_m, uk: string) => `${uk} floor`)
     .replace(/\{\{FloorNumber\|(?:[^}]*?\|)?uk=(\d)[^}]*\}\}/gi, (_m, n: string) => UK_FLOOR[n] ?? `${n} floor`)
     .replace(/\{\{[^{}]*\}\}/g, '')
     .replace(/\[\[(?:[^\]|]*\|)?([^\]]*)\]\]/g, '$1')
@@ -83,7 +80,7 @@ export interface ItemInfobox {
   iconUrl: string;
 }
 
-/** Карточка предмета по точному имени (item_name), например «Energy potion(4)». */
+/** An item card by the exact name (item_name), e.g. "Energy potion(4)". */
 export async function fetchItemInfobox(fetchFn: FetchFn, name: string): Promise<ItemInfobox | null> {
   const rows = await bucket(fetchFn,
     `bucket('infobox_item').select('page_name','item_name','item_id','examine','value','high_alchemy_value','is_members_only','tradeable','image').where('item_name',${quote(name)}).run()`);
@@ -102,19 +99,19 @@ export async function fetchItemInfobox(fetchFn: FetchFn, name: string): Promise<
   };
 }
 
-/** Бонусы снаряжения из карточки {{Infobox Bonuses}}: атака и защита по типам, сила, скорость, слот. */
+/** Equipment bonuses from the {{Infobox Bonuses}} card: attack and defence by type, strength, speed, slot. */
 export interface ItemBonuses {
   attack: { stab: number; slash: number; crush: number; magic: number; ranged: number };
   defence: { stab: number; slash: number; crush: number; magic: number; ranged: number };
   strength: number;
   prayer: number;
-  /** Слот вики: weapon, 2h, head, body, legs, shield, neck… */
+  /** The wiki slot: weapon, 2h, head, body, legs, shield, neck… */
   slot: string;
-  /** Тиков между ударами (у оружия). */
+  /** Ticks between attacks (for a weapon). */
   speed?: number;
 }
 
-/** Бонусы пачкой по названиям статей: статья → бонусы (первая версия, если их несколько). */
+/** Bonuses in a batch by article titles: article → bonuses (the first version if there are several). */
 export async function fetchBonuses(fetchFn: FetchFn, pages: string[]): Promise<Map<string, ItemBonuses>> {
   const out = new Map<string, ItemBonuses>();
   const n = (r: Record<string, unknown>, k: string) => num(r[k]) ?? 0;
@@ -138,7 +135,7 @@ export async function fetchBonuses(fetchFn: FetchFn, pages: string[]): Promise<M
   return out;
 }
 
-/** Защита монстра из карточки {{Infobox Monster}}: у статьи бывает несколько версий (уровней). */
+/** A monster's defence from the {{Infobox Monster}} card: an article may have several versions (levels). */
 export interface MonsterStats {
   page: string;
   version?: string;
@@ -149,7 +146,7 @@ export interface MonsterStats {
   members: boolean;
 }
 
-/** Все версии монстров пачкой по названиям статей: статья → версии. */
+/** All monster versions in a batch by article titles: article → versions. */
 export async function fetchMonsters(fetchFn: FetchFn, pages: string[]): Promise<Map<string, MonsterStats[]>> {
   const out = new Map<string, MonsterStats[]>();
   const n = (r: Record<string, unknown>, k: string) => num(r[k]) ?? 0;
@@ -178,14 +175,14 @@ export async function fetchMonsters(fetchFn: FetchFn, pages: string[]): Promise<
 
 type Store = NonNullable<WikiItemDetail['buyLocations']>[number];
 
-/** Магазины, где продаётся предмет: цена, запас, город и владелец. */
+/** Shops that sell an item: price, stock, town and owner. */
 export async function fetchStores(fetchFn: FetchFn, name: string, limit = 10): Promise<Store[]> {
   const lines = await bucket(fetchFn,
     `bucket('storeline').select('sold_by','store_sell_price','store_stock','store_currency').where('sold_item',${quote(name)}).limit(40).run()`);
   const coins = lines.filter((l) => !first(l.store_currency) || /coins/i.test(first(l.store_currency)));
   const shops = [...new Set(coins.map((l) => first(l.sold_by)).filter(Boolean))];
   const info = new Map<string, Record<string, unknown>>();
-  // Сведения о магазинах пачками: город, владелец, только для подписки или нет.
+  // Shop details in batches: town, owner, members only or not.
   for (let i = 0; i < shops.length; i += 15) {
     const chunk = shops.slice(i, i + 15);
     const where = chunk.map((s) => `{'page_name',${quote(s)}}`).join(',');
@@ -206,7 +203,7 @@ export async function fetchStores(fetchFn: FetchFn, name: string, limit = 10): P
       members: flag(i, 'is_members_only'),
     };
   });
-  // Сначала бесплатные магазины, потом дешёвые.
+  // Free shops first, then the cheap ones.
   out.sort((a, b) => Number(a.members) - Number(b.members) || a.price - b.price);
   const seen = new Set<string>();
   return out.filter((s) => (seen.has(s.shopName) ? false : (seen.add(s.shopName), true))).slice(0, limit);
@@ -214,7 +211,7 @@ export async function fetchStores(fetchFn: FetchFn, name: string, limit = 10): P
 
 type Drop = NonNullable<WikiItemDetail['dropSources']>[number] & { members?: boolean };
 
-/** Монстры, с которых падает предмет (только бой), с боевым уровнем и шансом. */
+/** Monsters that drop an item (combat only), with combat level and chance. */
 export async function fetchDrops(fetchFn: FetchFn, name: string, limit = 8): Promise<Drop[]> {
   const rows = await bucket(fetchFn,
     `bucket('dropsline').select('page_name','drop_json').where('item_name',${quote(name)}).limit(60).run()`);
@@ -227,7 +224,7 @@ export async function fetchDrops(fetchFn: FetchFn, name: string, limit = 8): Pro
       const rate = String(d.Rarity ?? '');
       if (monster && !drops.some((x) => x.monster === monster)) drops.push({ monster, rate });
     } catch {
-      // Битая строка дропа — пропускаем.
+      // A broken drop line — skip it.
     }
   }
   const names = drops.map((d) => d.monster);
@@ -247,13 +244,13 @@ export async function fetchDrops(fetchFn: FetchFn, name: string, limit = 8): Pro
     rate: d.rate,
     members: levels.get(d.monster)?.members ?? false,
   }));
-  // Бесплатные монстры и частый дроп — выше.
+  // Free monsters and common drops — higher.
   const chance = (r: string) => (/always/i.test(r) ? 1 : (([a, b]) => (b ? Number(a) / Number(b) : 0))(r.split('/')));
   out.sort((a, b) => Number(a.members) - Number(b.members) || chance(b.rate) - chance(a.rate));
   return out.slice(0, limit);
 }
 
-/** Точки спавна со страницы предмета ({{ItemSpawnLine}}). F2P — первыми. */
+/** Spawn points from the item page ({{ItemSpawnLine}}). F2P first. */
 export async function fetchSpawns(fetchFn: FetchFn, pageName: string, itemName: string, limit = 8): Promise<string[]> {
   const data = await getJson(fetchFn, { action: 'parse', page: pageName, prop: 'wikitext', formatversion: '2' });
   const text = String((data.parse as { wikitext?: string } | undefined)?.wikitext ?? '');
@@ -272,7 +269,7 @@ export async function fetchSpawns(fetchFn: FetchFn, pageName: string, itemName: 
     if (!out.some((o) => o.text === location)) out.push({ text: location, members });
   }
   out.sort((a, b) => Number(a.members) - Number(b.members));
-  return out.slice(0, limit).map((o) => (o.members ? `${o.text} (только для подписки)` : o.text));
+  return out.slice(0, limit).map((o) => (o.members ? `${o.text} (members only)` : o.text));
 }
 
 export interface NpcInfo {
@@ -299,16 +296,16 @@ export async function fetchNpc(fetchFn: FetchFn, name: string): Promise<NpcInfo 
   };
 }
 
-/** Поиск статьи по названию (MediaWiki opensearch). */
+/** An article search by title (MediaWiki opensearch). */
 export async function openSearch(fetchFn: FetchFn, query: string, limit = 5): Promise<{ title: string; url: string }[]> {
   const url = `${API}?action=opensearch&search=${encodeURIComponent(query)}&limit=${limit}&format=json&origin=*`;
   const res = await fetchFn(url);
-  if (!res.ok) throw new Error(`OSRS Wiki ответила ${res.status}`);
+  if (!res.ok) throw new Error(`OSRS Wiki responded ${res.status}`);
   const [, titles, , urls] = (await res.json()) as [string, string[], string[], string[]];
   return titles.map((title, i) => ({ title, url: urls[i] }));
 }
 
-/** Строка из https://prices.runescape.wiki/api/v1/osrs/mapping — точные цены у торговцев и алхимии. */
+/** A row from https://prices.runescape.wiki/api/v1/osrs/mapping — exact prices at traders and alchemy. */
 export interface MappingEntry {
   id: number;
   name: string;
@@ -320,9 +317,9 @@ export interface MappingEntry {
   icon?: string;
 }
 
-/** Полное досье предмета с вики (без цен биржи — их добавляет pricesApi). */
+/** The full item dossier from the wiki (without exchange prices — pricesApi adds them). */
 export async function fetchItemDetail(
-  fetchFn: FetchFn, name: string, nameRu?: string, mapping?: (id: number) => MappingEntry | undefined,
+  fetchFn: FetchFn, name: string, mapping?: (id: number) => MappingEntry | undefined,
 ): Promise<WikiItemDetail | null> {
   const box = await fetchItemInfobox(fetchFn, name);
   if (!box) return null;
@@ -331,13 +328,12 @@ export async function fetchItemDetail(
     fetchDrops(fetchFn, box.name).catch(() => []),
     fetchSpawns(fetchFn, box.pageName, box.name).catch(() => []),
   ]);
-  // У предметов биржи цены торговцев и алхимии берём из mapping: карточка вики иногда их не заполняет.
+  // For exchange items we take trader and alchemy prices from mapping: the wiki card sometimes does not fill them.
   const m = mapping?.(box.id);
   const highAlch = m?.highalch ?? (box.highAlch || undefined);
   return {
     id: box.id,
     nameEn: box.name,
-    ...(nameRu ? { nameRu } : {}),
     examine: box.examine || m?.examine || '',
     members: m?.members ?? box.members,
     iconUrl: box.iconUrl,
@@ -351,16 +347,16 @@ export async function fetchItemDetail(
   };
 }
 
-// ---------- Координаты из статей: шаблоны {{Map}} и {{ItemSpawnLine}} ----------
+// ---------- Coordinates from articles: the {{Map}} and {{ItemSpawnLine}} templates ----------
 
-/** Клетка мира в координатах игры (как в RuneLite): x, y, этаж. */
+/** A world tile in game coordinates (as in RuneLite): x, y, floor. */
 export interface WikiPoint {
   x: number;
   y: number;
   plane: number;
 }
 
-/** Шаблоны с именем name и всё внутри них — с учётом вложенных {{…}}. */
+/** Templates named name and everything inside them — with nested {{…}} taken into account. */
 export function templates(text: string, name: string): string[] {
   const out: string[] = [];
   const open = new RegExp(`\\{\\{\\s*${name}\\s*\\|`, 'gi');
@@ -378,7 +374,7 @@ export function templates(text: string, name: string): string[] {
   return out;
 }
 
-/** Параметры шаблона верхнего уровня: разделитель | вне вложенных шаблонов и ссылок. */
+/** Parameters of a top-level template: the | separator outside nested templates and links. */
 function templateParams(body: string): string[] {
   const out: string[] = [];
   let depth = 0;
@@ -398,9 +394,9 @@ const PAIR = /^(\d{3,5})\s*,\s*(\d{3,5})(?:\s*,\s*(\d))?$/;
 const COLON = /x:\s*(\d{3,5})\s*,\s*y:\s*(\d{3,5})(?:\s*,\s*plane:\s*(\d))?/gi;
 
 /**
- * Точки одного шаблона карты: «3144,3178», «x:3190,y:3273,plane:1» или x=/y=/plane=.
- * Если заданы x= и y= — это и есть точка (остальное — контур). mapID у подземелий свой (Dwarven Mine — 6),
- * но координаты и там мировые — те же, что у RuneLite, поэтому они подходят.
+ * The points of one map template: "3144,3178", "x:3190,y:3273,plane:1" or x=/y=/plane=.
+ * If x= and y= are given, that is the point (the rest is an outline). The mapID of dungeons is its own (Dwarven Mine — 6),
+ * but the coordinates there are world ones too — the same as RuneLite's, so they fit.
  */
 export function mapTemplatePoints(body: string): WikiPoint[] {
   const params = templateParams(body);
@@ -417,8 +413,8 @@ export function mapTemplatePoints(body: string): WikiPoint[] {
 }
 
 /**
- * Точки из параметров шаблона в обеих записях вики: «3244,3159» и «x:3190,y:3273,plane:1».
- * Строки спавнов пишут и так, и так (у Small fishing net — «3244,3159|3245,3156»).
+ * Points from template parameters in both wiki notations: "3244,3159" and "x:3190,y:3273,plane:1".
+ * Spawn lines are written both ways (Small fishing net has "3244,3159|3245,3156").
  */
 function paramPoints(params: string[], plane: number): WikiPoint[] {
   const pts: WikiPoint[] = [];
@@ -431,8 +427,8 @@ function paramPoints(params: string[], plane: number): WikiPoint[] {
 }
 
 /**
- * Одна точка из нескольких: середина, если все рядом (контур дома, место спавна), иначе первая —
- * у NPC с точками по всему миру середина оказалась бы в чистом поле.
+ * One point out of several: the middle if all are close (a house outline, a spawn place), otherwise the first —
+ * for an NPC with points all over the world the middle would land in an empty field.
  */
 export function representativePoint(points: WikiPoint[], spread = 40): WikiPoint | null {
   if (!points.length) return null;
@@ -442,7 +438,7 @@ export function representativePoint(points: WikiPoint[], spread = 40): WikiPoint
   return compact ? { x: cx, y: cy, plane: points[0].plane } : points[0];
 }
 
-/** Точка статьи: первый шаблон {{Map}} с точками — карта в карточке NPC, магазина или места. */
+/** An article point: the first {{Map}} template with points — the map in an NPC, shop or place card. */
 export function articleMapPoint(wikitext: string): WikiPoint | null {
   for (const body of templates(wikitext, 'Map')) {
     const p = representativePoint(mapTemplatePoints(body));
@@ -451,7 +447,7 @@ export function articleMapPoint(wikitext: string): WikiPoint | null {
   return null;
 }
 
-/** Точка спавна предмета из {{ItemSpawnLine}} с тем же местом (сравнение — по очищенному тексту). */
+/** An item spawn point from {{ItemSpawnLine}} with the same place (compared by the cleaned text). */
 export function spawnPoint(wikitext: string, itemName: string, location: string): WikiPoint | null {
   const want = cleanWikiText(location).toLowerCase();
   for (const body of templates(wikitext, 'ItemSpawnLine')) {
@@ -467,8 +463,8 @@ export function spawnPoint(wikitext: string, itemName: string, location: string)
 }
 
 /**
- * Точка места из {{ObjectLocLine}}/{{LocLine}} с тем же местом: так на вики отмечены места ловли и руды
- * («Fishing spot (small net, bait)» → «Lumbridge Swamp»). Сравнение — по очищенному тексту без регистра.
+ * A place point from {{ObjectLocLine}}/{{LocLine}} with the same place: this is how the wiki marks fishing and ore places
+ * ("Fishing spot (small net, bait)" → "Lumbridge Swamp"). Compared by the cleaned text without case.
  */
 export function locLinePoint(wikitext: string, location: string): WikiPoint | null {
   const want = cleanWikiText(location).toLowerCase();
@@ -485,7 +481,7 @@ export function locLinePoint(wikitext: string, location: string): WikiPoint | nu
   return null;
 }
 
-/** Вики-разметка статьи (с переходом по перенаправлению). null — статьи нет. */
+/** An article's wiki markup (following a redirect). null — there is no article. */
 export async function fetchWikitext(fetchFn: FetchFn, page: string): Promise<{ title: string; text: string } | null> {
   const data = await getJson(fetchFn, { action: 'parse', page, prop: 'wikitext', redirects: '1', formatversion: '2' });
   if (data.error) return null;

@@ -1,13 +1,13 @@
-"""Скачивает исходники Quest Helper (Zoinkwiz/quest-helper, ветка master) и раскладывает в work/ так, как их читают генераторы:
+"""Downloads the Quest Helper sources (Zoinkwiz/quest-helper, the master branch) and lays them out in work/ the way the generators read them:
 
-  work/quest-helper/          клон репозитория (мелкий, --depth 1)
-  work/QH_REVISION.txt        коммит и дата — какую версию Quest Helper разобрали
-  work/qh/<Квест>.java        главный класс каждого квеста маршрута
-  work/qhpkg/<пакет>/*.java   весь пакет квеста (вспомогательные шаги вроде RumSmugglingStep)
+  work/quest-helper/          a clone of the repository (shallow, --depth 1)
+  work/QH_REVISION.txt        the commit and date — which Quest Helper version was parsed
+  work/qh/<Quest>.java        the main class of each route quest
+  work/qhpkg/<package>/*.java   the whole quest package (helper steps like RumSmugglingStep)
   work/qhcore/ItemCollections.java
   work/QuestVarbits.java, work/QuestVarPlayer.java
 
-Константы RuneLite (id предметов, NPC, объектов, переменных) выгружает dump_consts.py. Нужен git."""
+The RuneLite constants (ids of items, NPCs, objects, variables) are dumped by dump_consts.py. git is needed."""
 import os
 import shutil
 import subprocess
@@ -36,8 +36,8 @@ def main():
     if os.path.isdir(os.path.join(repo, '.git')):
         run('git', '-C', repo, 'pull', '--ff-only')
     else:
-        shutil.rmtree(repo, ignore_errors=True)  # недокачанный клон прошлой попытки
-        # core.longpaths: в Quest Helper есть файлы с очень длинными путями, без этого Windows не даёт их создать
+        shutil.rmtree(repo, ignore_errors=True)  # an incompletely downloaded clone from the previous attempt
+        # core.longpaths: Quest Helper has files with very long paths, without this Windows does not let them be created
         run('git', '-c', 'core.longpaths=true', 'clone', '--depth', '1', '--filter=blob:none', '--sparse', URL, repo)
         run('git', '-C', repo, 'config', 'core.longpaths', 'true')
         run('git', '-C', repo, 'sparse-checkout', 'set', 'src/main/java')
@@ -58,7 +58,7 @@ def main():
     for sid, (cls, _kind, _vid) in C.QUESTS.items():
         hits = [h for h in index.get(cls + '.java', []) if '/helpers/quests/' in h.replace('\\', '/')]
         if len(hits) != 1:
-            sys.exit('%s: класс %s найден %d раз(а): %s' % (sid, cls, len(hits), hits))
+            sys.exit('%s: class %s found %d time(s): %s' % (sid, cls, len(hits), hits))
         pkg = os.path.dirname(hits[0])
         shutil.copy(hits[0], os.path.join(WORK, 'qh', cls + '.java'))
         dst = os.path.join(WORK, 'qhpkg', os.path.basename(pkg))
@@ -69,9 +69,9 @@ def main():
     for name, dest in (('ItemCollections.java', 'qhcore'), ('QuestVarbits.java', ''), ('QuestVarPlayer.java', '')):
         hits = index.get(name, [])
         if len(hits) != 1:
-            sys.exit('%s найден %d раз(а): %s' % (name, len(hits), hits))
+            sys.exit('%s found %d time(s): %s' % (name, len(hits), hits))
         shutil.copy(hits[0], os.path.join(WORK, dest, name))
-    print('разложено квестов:', len(C.QUESTS), '→', WORK)
+    print('quests laid out:', len(C.QUESTS), '→', WORK)
 
 
 if __name__ == '__main__':

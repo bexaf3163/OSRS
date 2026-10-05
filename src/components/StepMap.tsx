@@ -1,5 +1,5 @@
-// Карта в карточке шага: превью из тайлов OSRS Wiki, переключатель точек и карта мира на весь экран.
-// Выбранная точка — одно состояние на превью, переключатель и карту мира: они всегда показывают одно место.
+// The map in the step card: a preview from OSRS Wiki tiles, a point switch and the full-screen world map.
+// The chosen point is one state for the preview, the switch and the world map: they always show the same place.
 
 import { lazy, Suspense, useState } from 'react';
 import type { MapLocation, Step } from '../types';
@@ -14,14 +14,14 @@ import { ImageModal } from './StepImage';
 
 const WorldMapModal = lazy(() => import('./WorldMapModal'));
 
-/** Превью рисуется на эту ширину и обрезается по карточке — узкая колонка просто видит середину. */
+/** The preview is drawn at this width and cropped by the card — a narrow column just sees the middle. */
 const PREVIEW_W = 720;
 const PREVIEW_H = 132;
-/** Метка на 42 % высоты — как .map-marker в стилях. */
+/** The marker at 42% of the height — like .map-marker in the styles. */
 const ANCHOR_Y = 0.42;
 
 export function StepMap({ step }: { step: Step }) {
-  // Точки карты шага, откуда предметы и NPC квеста — те же места, что в списке «Что нужно» в игре.
+  // The step map points, where items and quest NPCs are — the same places as in the "What you need" list in the game.
   const points = mapPlaces(step);
   const [active, setActive] = useState(() => initialPoint(step));
   const [open, setOpen] = useState(false);
@@ -34,9 +34,9 @@ export function StepMap({ step }: { step: Step }) {
   const point = points[Math.min(active, points.length - 1)];
 
   return (
-    <section className="step-map" aria-label="Карта">
+    <section className="step-map" aria-label="Map">
       {points.length > 1 && (
-        <div className="spot-switch" role="radiogroup" aria-label="Точки на карте">
+        <div className="spot-switch" role="radiogroup" aria-label="Points on the map">
           {points.map((p, i) => (
             <button key={`${p.x},${p.y},${p.plane}`} type="button" role="radio" aria-checked={i === active}
               className={`spot-chip ${i === active ? 'is-active' : ''}`} onClick={() => setActive(i)}>
@@ -47,7 +47,7 @@ export function StepMap({ step }: { step: Step }) {
       )}
 
       {step.mapPreviewImage ? (
-        <button type="button" className="map-preview" onClick={() => setZoomed(true)} aria-label={`Схема: ${point.label} — открыть крупно`}>
+        <button type="button" className="map-preview" onClick={() => setZoomed(true)} aria-label={`Diagram: ${point.label} — open larger`}>
           <img className="map-preview-image" src={step.mapPreviewImage} alt="" referrerPolicy="no-referrer" />
           <MapCaption point={point} />
         </button>
@@ -57,15 +57,15 @@ export function StepMap({ step }: { step: Step }) {
       {point.note && <p className="spot-note small"><Inline text={point.note} /></p>}
 
       <div className="map-actions">
-        <button type="button" className="btn btn-ghost btn-sm" onClick={() => setOpen(true)}>🗺️ Карта мира</button>
-        {/* Выбранная точка — в игру: стрелка и Shortest Path ведут туда, NPC точки подсвечивается, по приходу
-            стрелка возвращается к шагу. То же делает «Путь сюда» в панели «OSRS Путь» в RuneLite. */}
-        <NavigateButton label="🧭 Вести сюда в игре"
+        <button type="button" className="btn btn-ghost btn-sm" onClick={() => setOpen(true)}>🗺️ World map</button>
+        {/* The chosen point goes to the game: the arrow and Shortest Path lead there, the point's NPC is highlighted, on arrival
+            the arrow returns to the step. "Go here" in the "OSRS Path" panel in RuneLite does the same. */}
+        <NavigateButton label="🧭 Lead here in the game"
           target={{ label: point.label, x: point.x, y: point.y, plane: point.plane, ...(point.npc ? { npcNames: [point.npc] } : {}), stepId: step.id }} />
       </div>
 
       {zoomed && step.mapPreviewImage && (
-        <ImageModal src={step.mapPreviewImage} alt={`Схема: ${point.label}`} caption={point.label} onClose={() => setZoomed(false)} />
+        <ImageModal src={step.mapPreviewImage} alt={`Diagram: ${point.label}`} caption={point.label} onClose={() => setZoomed(false)} />
       )}
       {open && (
         <Suspense fallback={null}>
@@ -81,26 +81,26 @@ function MapCaption({ point }: { point: MapLocation }) {
   return (
     <span className="map-caption">
       <span className="map-caption-label">📍 {point.label}</span>
-      <span className="map-caption-floor">{isUnderground(point) ? 'Подземелье' : floorLabel(point.plane)}</span>
+      <span className="map-caption-floor">{isUnderground(point) ? 'Underground' : floorLabel(point.plane)}</span>
     </span>
   );
 }
 
-/** Статичное превью: несколько тайлов вокруг точки и заметная метка в центре. */
+/** A static preview: several tiles around the point and a visible marker in the centre. */
 function MapPreview({ point, onOpen }: { point: MapLocation; onOpen: () => void }) {
   const zoom = point.zoom ?? DEFAULT_ZOOM;
   const tiles = tilesAround(point, zoom, PREVIEW_W, PREVIEW_H, ANCHOR_Y);
   const key = `${point.x},${point.y},${point.plane},${zoom}`;
-  // Считаем провалы по конкретной точке: при переключении счёт начинается заново.
+  // We count failures per point: on switching the count starts over.
   const [failed, setFailed] = useState<{ key: string; n: number }>({ key, n: 0 });
   const errors = failed.key === key ? failed.n : 0;
   const offline = errors >= tiles.length;
 
   return (
     <button type="button" className={`map-preview ${offline ? 'is-offline' : ''}`} onClick={onOpen}
-      aria-label={`${point.label}: открыть на карте мира`}>
+      aria-label={`${point.label}: open on the world map`}>
       {offline ? (
-        <span className="map-offline small">Карта не загрузилась — нет связи с OSRS Wiki. Клетка {point.x}, {point.y}</span>
+        <span className="map-offline small">The map did not load — no connection to the OSRS Wiki. Tile {point.x}, {point.y}</span>
       ) : (
         <span className="map-tiles" style={{ width: PREVIEW_W, height: PREVIEW_H }} key={key} aria-hidden="true">
           {tiles.map((t) => (

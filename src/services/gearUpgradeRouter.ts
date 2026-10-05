@@ -1,11 +1,11 @@
-// Умный апгрейд инструмента перед долгой прокачкой: у игрока уже 6+ Woodcutting, а в руках
-// бронзовый топор — предложить Steel axe у Bob в Lumbridge за ~200 gp и вернуть к шагу, когда топор куплен.
-// Оружие и броня — не здесь: их сравнивает по урону и защите разбор снаряжения (gearAdvisor.ts).
+// A smart tool upgrade before a long training: the player already has 6+ Woodcutting, and in hand is
+// a bronze axe — suggest a Steel axe from Bob in Lumbridge for ~200 gp and return to the step when the axe is bought.
+// Weapons and armor are not here: they are compared by damage and defence by the gear analysis (gearAdvisor.ts).
 //
-// Только советует и ведёт: ничего не покупает, не тратит и не продаёт. Решение — чистая функция от шага,
-// уровней, снаряжения и монет; сравнение — по порядку ступеней из toolProgression.json, а не по словам
-// в названии («Bronze» в имени — не доказательство). Цены и продавцы — из базы предметов проекта (OSRS Wiki),
-// точка магазина — из словаря мест, как у карты и досье.
+// It only advises and leads: it buys, spends and sells nothing. The decision is a pure function of the step,
+// levels, gear and coins; the comparison is by the order of tiers in toolProgression.json, not by words
+// in the name ("Bronze" in the name is not proof). Prices and sellers are from the project's item database (OSRS Wiki),
+// the shop point is from the place dictionary, like the map and the dossier.
 
 import toolProgressionJson from '../data/toolProgression.json';
 import type { GameMode, Step, WikiItemDetail } from '../types';
@@ -27,7 +27,7 @@ export interface ToolUpgradeEntry {
   geAlternative?: boolean;
   geOnly?: boolean;
   membersOnly?: boolean;
-  /** Почти не быстрее предыдущей ступени: ради неё не зовём в магазин (но как текущий инструмент — учитываем). */
+  /** Barely faster than the previous tier: we do not send to a shop for it (but as the current tool we count it). */
   minor?: boolean;
 }
 
@@ -42,7 +42,7 @@ export interface UpgradeRecommendation {
   recommendedItem?: string;
   recommendedItemId?: number;
   levelReq?: number;
-  /** Дешевле из известного: цена в магазине или на бирже. */
+  /** The cheaper of the known: the price in a shop or at the exchange. */
   approxCost?: number;
   shopPrice?: number;
   gePrice?: number;
@@ -59,7 +59,7 @@ export interface UpgradeRecommendation {
 export interface RouterInput {
   step: Step;
   mode: GameMode;
-  /** Уровни навыков: из игры, а без неё — введённые в приложении. */
+  /** Skill levels: from the game, and without it — entered in the app. */
   levels: Record<string, number | undefined>;
   gear: GearState | null;
   dismissed?: readonly string[];
@@ -69,11 +69,11 @@ export interface RouterInput {
 }
 
 const BOOST: Record<UpgradeCategory, string> = {
-  woodcutting: 'Топор металлом выше срубает чаще — больше брёвен в минуту на том же уровне.',
-  mining: 'Кирка металлом выше добывает чаще — больше руды в минуту на том же уровне.',
+  woodcutting: 'A higher-metal axe cuts more often — more logs per minute at the same level.',
+  mining: 'A higher-metal pickaxe mines more often — more ore per minute at the same level.',
 };
 
-/** Какие категории апгрейда у шага: по навыкам прокачки шага. Квесты, закупки и бой — без этой подсказки. */
+/** Which upgrade categories a step has: by the step's training skills. Quests, shopping and combat — without this hint. */
 export function stepUpgradeCategories(step: Step): UpgradeCategory[] {
   if (step.type !== 'skill') return [];
   const skills = new Set([...(step.targets ?? []).map((t) => t.skill), ...(step.pacing ? [step.pacing.skill] : [])]);
@@ -85,7 +85,7 @@ export function stepUpgradeCategories(step: Step): UpgradeCategory[] {
 
 const key = (s: string) => s.trim().toLowerCase();
 
-/** Номер ступени предмета; −1 — не из этой линейки. По ID, а без ID — по точному имени. */
+/** The tier number of an item; −1 — not from this line. By ID, and without an ID — by the exact name. */
 function tierIndex(tiers: ToolUpgradeEntry[], id: number, name: string): number {
   return tiers.findIndex((t) => (t.itemId !== undefined ? t.itemId === id : key(t.tier) === key(name)));
 }
@@ -96,7 +96,7 @@ function bestOwned(tiers: ToolUpgradeEntry[], items: { id: number; name: string 
   return best;
 }
 
-/** Цена в магазине из базы предметов: магазин на вики пишется и с точкой в конце («Bob's Brilliant Axes.»). */
+/** The price in a shop from the item database: the wiki writes a shop with a trailing dot too ("Bob's Brilliant Axes."). */
 function shopPrice(entry: ToolUpgradeEntry, item: (id: number) => WikiItemDetail | undefined): number | undefined {
   if (!entry.shop || entry.itemId === undefined) return entry.approxCost;
   const store = key(entry.shop.store).replace(/\.$/, '');
@@ -109,11 +109,11 @@ export function recommendFor(category: UpgradeCategory, input: RouterInput): Upg
   const item = input.item ?? ((id: number) => itemById.get(id));
   const tiers = data[category];
   const base: UpgradeRecommendation = { status: 'UNKNOWN', skill: category };
-  if (!input.gear || (!input.gear.equipment && !input.gear.inventory)) return { ...base, reason: 'Нет данных о снаряжении — RuneLite не подключён' };
+  if (!input.gear || (!input.gear.equipment && !input.gear.inventory)) return { ...base, reason: 'No gear data — RuneLite is not connected' };
   const level = input.levels[category];
-  if (!level) return { ...base, reason: 'Неизвестен уровень навыка' };
+  if (!level) return { ...base, reason: 'Skill level unknown' };
 
-  // Топор и кирка работают и из сумки — считается лучший, что при себе.
+  // An axe and a pickaxe work from the bag too — the best one on hand counts.
   const owned = Math.max(bestOwned(tiers, input.gear.equipment), bestOwned(tiers, input.gear.inventory));
   const currentItem = owned >= 0 ? tiers[owned].tier : undefined;
 
@@ -135,7 +135,7 @@ export function recommendFor(category: UpgradeCategory, input: RouterInput): Upg
     efficiencyBoost: target.efficiencyBoost ?? BOOST[category],
     geOnly: Boolean(target.geOnly),
   };
-  if (best <= owned) return { ...rec, status: 'UPGRADE_OWNED', reason: `${target.tier} уже есть — возьми его в руку` };
+  if (best <= owned) return { ...rec, status: 'UPGRADE_OWNED', reason: `${target.tier} is already owned — wield it` };
   if (input.dismissed?.includes(input.step.id)) return { ...rec, status: 'SKIPPED' };
 
   if (target.shop && !target.geOnly) {
@@ -156,12 +156,12 @@ export function recommendFor(category: UpgradeCategory, input: RouterInput): Upg
   const coins = (input.gear.coins ?? 0) + (input.gear.bankCoins ?? 0);
   rec.coins = coins;
   if (rec.approxCost !== undefined && coins < rec.approxCost) {
-    return { ...rec, status: 'UPGRADE_NOT_AFFORDABLE', reason: `Нужно ~${rec.approxCost} gp, есть ${coins}` };
+    return { ...rec, status: 'UPGRADE_NOT_AFFORDABLE', reason: `Need ~${rec.approxCost} gp, you have ${coins}` };
   }
-  return { ...rec, status: 'UPGRADE_AVAILABLE', reason: `Уровень ${level} позволяет ${target.tier} (с ${target.levelReq})` };
+  return { ...rec, status: 'UPGRADE_AVAILABLE', reason: `Level ${level} allows ${target.tier} (requires ${target.levelReq})` };
 }
 
-/** Первая полезная подсказка шага: апгрейд или «не хватает монет». Иначе — итог первой категории (или null). */
+/** The first useful hint of a step: an upgrade or "not enough coins". Otherwise — the result of the first category (or null). */
 export function recommendUpgrade(input: RouterInput): UpgradeRecommendation | null {
   const cats = stepUpgradeCategories(input.step);
   if (!cats.length) return null;
@@ -169,13 +169,13 @@ export function recommendUpgrade(input: RouterInput): UpgradeRecommendation | nu
   return all.find((r) => r.status === 'UPGRADE_AVAILABLE' || r.status === 'UPGRADE_NOT_AFFORDABLE') ?? all[0];
 }
 
-/** Подсказку показываем только там, где есть что предложить. */
+/** The hint is shown only where there is something to offer. */
 export const showsPrompt = (r: UpgradeRecommendation | null): r is UpgradeRecommendation =>
   !!r && (r.status === 'UPGRADE_AVAILABLE' || r.status === 'UPGRADE_NOT_AFFORDABLE');
 
 /**
- * Куда вести стрелку за апгрейдом: магазин из словаря мест или, для предметов только с биржи, Grand Exchange.
- * С предметом (имя и ID) — плагин снимет цель сам, когда он окажется в сумке или надет.
+ * Where to lead the arrow for an upgrade: a shop from the place dictionary or, for exchange-only items, the Grand Exchange.
+ * With an item (name and ID) the plugin clears the target itself when it is in the bag or worn.
  */
 export function upgradeNav(r: UpgradeRecommendation, stepId: string): NavTargetPayload | null {
   const item = { itemName: r.recommendedItem, ...(r.recommendedItemId ? { itemId: r.recommendedItemId } : {}), stepId };

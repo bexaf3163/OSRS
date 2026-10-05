@@ -1,4 +1,4 @@
-// «Что делать сейчас» — главный элемент экрана «Путь».
+// "What to do now" — the main element of the "Path" screen.
 
 import { useStore } from '../store';
 import { blockerParts, blockersOf, firstOpen, nextStep } from '../lib/next-step';
@@ -16,25 +16,25 @@ export function NextStepCard({ onDone }: { onDone: (id: string) => void }) {
     const open = firstOpen(steps, progress);
     if (!open) {
       return (
-        <section className="next card is-finished" aria-label="Что делать сейчас">
-          <p className="eyebrow">Путь пройден</p>
-          <h2 className="next-title">Все {steps.length} {plural(steps.length, 'шаг закрыт', 'шага закрыты', 'шагов закрыты')}</h2>
+        <section className="next card is-finished" aria-label="What to do now">
+          <p className="eyebrow">The path is complete</p>
+          <h2 className="next-title">All {steps.length} {plural(steps.length, 'step is closed', 'steps are closed')}</h2>
           <p className="muted">
             {mode === 'f2p'
-              ? 'F2P-маршрут закончен. Если купил Bond — переключись на Members в шапке: откроются этапы 7–9.'
-              : 'Дальше — свободная игра. Цели и навыки остаются под рукой.'}
+              ? 'The F2P route is finished. If you bought a Bond — switch to Members in the header: stages 7–9 will open.'
+              : 'Next is free play. The goals and skills stay at hand.'}
           </p>
         </section>
       );
     }
     const b = blockersOf(open, progress, qp);
     return (
-      <section className="next card" aria-label="Что делать сейчас">
-        <p className="eyebrow">Что делать сейчас</p>
-        <h2 className="next-title">Доступных шагов нет</h2>
+      <section className="next card" aria-label="What to do now">
+        <p className="eyebrow">What to do now</p>
+        <h2 className="next-title">No steps available</h2>
         <p className="muted">
-          Следующий по плану — <a href={`#/step/${open.id}`}>{open.id} {open.title}</a>
-          {b && <>, но сначала: {blockerParts(b).join(', ')}</>}.
+          Next by the plan — <a href={`#/step/${open.id}`}>{open.id} {open.title}</a>
+          {b && <>, but first: {blockerParts(b).join(', ')}</>}.
         </p>
       </section>
     );
@@ -44,34 +44,33 @@ export function NextStepCard({ onDone }: { onDone: (id: string) => void }) {
 
   return (
     <section className={`next card ${step.membersOnly ? 'is-members' : ''}`} aria-labelledby="next-title">
-      <p className="eyebrow">Что делать сейчас</p>
+      <p className="eyebrow">What to do now</p>
       <div className="next-meta">
         <code className="code">{step.id}</code>
         <TypeIcon type={step.type} />
-        <span className="muted">{TYPE_LABEL[step.type]} · этап {step.stage}{step.qp ? ` · +${step.qp} QP` : ''}</span>
+        <span className="muted">{TYPE_LABEL[step.type]} · stage {step.stage}{step.qp ? ` · +${step.qp} QP` : ''}</span>
       </div>
       <h2 className="next-title" id="next-title">{step.title}</h2>
-      {step.titleRu && <p className="next-title-ru">{step.titleRu}</p>}
       <dl className="fields">
-        {where && <div className="field"><dt>Где</dt><dd><Inline text={where} /></dd></div>}
-        {step.npc && <div className="field"><dt>Этаж</dt><dd>{step.npc.floor}</dd></div>}
+        {where && <div className="field"><dt>Where</dt><dd><Inline text={where} /></dd></div>}
+        {step.npc && <div className="field"><dt>Floor</dt><dd>{step.npc.floor}</dd></div>}
         {step.itemsRequired && step.itemsRequired.length > 0 && (
-          <div className="field"><dt>Взять</dt><dd>{step.itemsRequired.map((i) => i.nameEn).join(', ')}</dd></div>
+          <div className="field"><dt>Bring</dt><dd>{step.itemsRequired.map((i) => i.nameEn).join(', ')}</dd></div>
         )}
-        <div className="field is-done-when"><dt>Готово, когда</dt><dd><Inline text={step.doneWhen} /></dd></div>
+        <div className="field is-done-when"><dt>Done when</dt><dd><Inline text={step.doneWhen} /></dd></div>
       </dl>
       <RangeHints step={step} />
       <ReadinessLine step={step} />
       <div className="actions">
-        <button type="button" className="btn btn-primary btn-lg" onClick={() => onDone(step.id)}>Отметить выполненным</button>
+        <button type="button" className="btn btn-primary btn-lg" onClick={() => onDone(step.id)}>Mark as done</button>
         {step.optional && (
-          <button type="button" className="btn btn-lg" onClick={() => setStep(step.id, 'skipped')}>Пропустить</button>
+          <button type="button" className="btn btn-lg" onClick={() => setStep(step.id, 'skipped')}>Skip</button>
         )}
-        <a className="btn btn-ghost btn-lg" href={`#/step/${step.id}`}>Подробнее</a>
+        <a className="btn btn-ghost btn-lg" href={`#/step/${step.id}`}>More</a>
       </div>
-      <p className="next-shop muted small"><a href="#/shopping">🛒 Оптовый список Grand Exchange</a> — закупка сразу на несколько этапов.</p>
+      <p className="next-shop muted small"><a href="#/shopping">🛒 Grand Exchange shopping list</a> — buying for several stages at once.</p>
       {step.foes?.length ? (
-        <p className="next-shop muted small"><a href="#/gear">⚔️ Снаряжение</a> — что надеть и купить, чтобы бить быстрее на этом шаге.</p>
+        <p className="next-shop muted small"><a href="#/gear">⚔️ Gear</a> — what to wear and buy to hit faster on this step.</p>
       ) : null}
     </section>
   );

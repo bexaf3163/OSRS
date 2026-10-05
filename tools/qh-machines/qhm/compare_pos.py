@@ -1,4 +1,4 @@
-"""Сверка наших строк этапов с шагами Quest Helper: клетка стрелки (at) и подсветка (hl) против wp и id шага с тем же ключом k."""
+"""A check of our stage lines against the Quest Helper steps: the arrow tile (at) and the highlight (hl) against wp and the step id with the same key k."""
 import json
 import os
 import sys
@@ -23,30 +23,30 @@ for sid, q in steps.items():
                 continue
             qs = info.get(k)
             if qs is None:
-                nok.append((sid, si + 1, li + 1, k, 'нет такого шага в QH'))
+                nok.append((sid, si + 1, li + 1, k, 'no such step in QH'))
                 continue
             wp = qs.get('wp')
             at = line.get('at')
             if wp and at:
                 d = max(abs(wp[0] - at[0]), abs(wp[1] - at[1]))
                 if wp[2] != at[2]:
-                    plane.append((sid, si + 1, li + 1, k, 'у нас этаж %d, у QH %d' % (at[2], wp[2]), line.get('s')))
+                    plane.append((sid, si + 1, li + 1, k, 'ours is floor %d, QH is %d' % (at[2], wp[2]), line.get('s')))
                 elif d > 12:
                     far.append((d, sid, si + 1, li + 1, k, tuple(at), tuple(wp), qs['typ'], line.get('s')))
                 else:
                     same += 1
             elif wp and not at:
-                nopt.append((sid, si + 1, li + 1, k, 'у нас нет клетки, у QH', wp, line.get('s')))
-print('строк', total, 'совпали по клетке (≤12)', same)
-print('\nДАЛЕКО (> 12 клеток):', len(far))
+                nopt.append((sid, si + 1, li + 1, k, 'we have no tile, QH has', wp, line.get('s')))
+print('lines', total, 'matched by tile (≤12)', same)
+print('\nFAR (> 12 tiles):', len(far))
 for r in sorted(far, reverse=True):
     print(' ', r)
-print('\nДРУГОЙ ЭТАЖ:', len(plane))
+print('\nANOTHER FLOOR:', len(plane))
 for r in plane:
     print(' ', r)
-print('\nУ НАС НЕТ КЛЕТКИ, У QH ЕСТЬ:', len(nopt))
+print('\nWE HAVE NO TILE, QH HAS ONE:', len(nopt))
 for r in nopt:
     print(' ', r)
-print('\nБЕЗ КЛЮЧА / НЕТ В QH:', len(nok))
+print('\nNO KEY / NOT IN QH:', len(nok))
 for r in nok:
     print(' ', r)

@@ -1,4 +1,4 @@
-// Тема: светлая, тёмная или как в системе. Ранний выбор до отрисовки — в index.html.
+// The theme: light, dark or as in the system. The early choice before rendering is in index.html.
 
 export type Theme = 'light' | 'dark' | 'system';
 const KEY = 'osrs-put:theme';
@@ -8,7 +8,7 @@ export function loadTheme(): Theme {
     const t = localStorage.getItem(KEY);
     if (t === 'light' || t === 'dark') return t;
   } catch {
-    // Хранилище недоступно — берём системную.
+    // Storage is unavailable: take the system one.
   }
   return 'system';
 }
@@ -21,6 +21,6 @@ export function applyTheme(theme: Theme): void {
     if (theme === 'system') localStorage.removeItem(KEY);
     else localStorage.setItem(KEY, theme);
   } catch {
-    // Не сохранится между запусками, но тема уже применена.
+    // It will not be saved between launches, but the theme is already applied.
   }
 }

@@ -1,8 +1,8 @@
-// Сводка сеанса: что изменилось с тех пор, как программа получила от игры первые уровни и опыт.
+// The session summary: what changed since the app received the first levels and XP from the game.
 
 import type { PlayerStats } from '../types';
 
-/** С чего начался сеанс: первые полученные из игры уровни и опыт и шаги, закрытые к запуску программы. */
+/** What the session started with: the first levels and XP received from the game, and the steps closed by the time the app launched. */
 export interface SessionBase {
   startedAt: number;
   levels0: PlayerStats | null;
@@ -11,11 +11,11 @@ export interface SessionBase {
 }
 
 export interface SessionSummary {
-  /** Сколько идёт сеанс, минут. */
+  /** How long the session has lasted, minutes. */
   minutes: number;
-  /** Опыт по навыкам с начала сеанса, больше всего — первым; levels — на сколько выросли уровни. */
+  /** XP by skill since the start of the session, the most first; levels is how much the levels grew. */
   xpGained: { skill: string; xp: number; levels: number }[];
-  /** Шагов закрыто за сеанс. */
+  /** Steps closed in the session. */
   stepsDone: number;
 }
 

@@ -1,19 +1,19 @@
-// Журнал ресурсов: что прибавилось и убавилось за сеанс и почему — добыча, покупка, продажа, награда, перекладывание
-// в банк, расход. Строится из изменений между снимками состояния (playerState.diffPlayerState), а не из
-// «подобрал → положил → отнёс»: перекладывание в банк не считается заработком, а оценка добычи не выдаётся за деньги.
-// «Известные монеты» и «оценка предметов» всегда отдельно.
+// The resource journal: what increased and decreased during the session and why: gathering, buying, selling, a reward, moving
+// to the bank, spending. It is built from the changes between state snapshots (playerState.diffPlayerState), not from
+// "picked up, put down, carried": moving to the bank does not count as earnings, and an estimate of loot is not passed off as money.
+// "Known coins" and "item estimate" are always separate.
 
 import type { StateChange, PlayerState } from './playerState';
 
 export type LedgerReason = 'LOOT' | 'PICKUP' | 'PURCHASE' | 'SALE' | 'QUEST_REWARD' | 'BANK_TRANSFER' | 'CONSUMED' | 'UNKNOWN';
 
 export interface LedgerEntry {
-  /** Предмет; для монет — «Coins». */
+  /** An item; for coins it is "Coins". */
   name: string;
   quantityDelta: number;
   reason: LedgerReason;
   timestamp: number;
-  /** Оценка стоимости прибавки по ценам биржи; нет цены — нет оценки. */
+  /** An estimate of the value of a gain at Grand Exchange prices; no price means no estimate. */
   estimatedGpValue?: number;
 }
 
@@ -22,12 +22,12 @@ export type PriceOf = (name: string) => number | undefined;
 const COINS = 'Coins';
 
 /**
- * Записи за одно изменение состояния. Причина — по тому, что случилось рядом в этот же миг:
- *  — предмет прибавился, монеты в сумке убавились → покупка; предмет убавился, монеты прибавились → продажа;
- *  — квест засчитан в этот же миг → награда за квест;
- *  — банк открыли или закрыли (суммы несравнимы) → записей нет: это не прибавка, а появление данных;
- *  — иначе прибавка — добыча, убыль — расход.
- * Когда банк известен и до, и после, перекладывание не меняет суммы — записей не будет, заработком оно не считается.
+ * Records for one state change. The reason is by what happened next to it at the same moment:
+ *  - an item increased and bag coins decreased: a purchase; an item decreased and coins increased: a sale;
+ *  - a quest was counted at the same moment: a quest reward;
+ *  - the bank was opened or closed (totals are not comparable): no records, that is not a gain but the appearance of data;
+ *  - otherwise a gain is gathering and a loss is spending.
+ * When the bank is known both before and after, moving does not change the totals: there will be no records, and it does not count as earnings.
  */
 export function entriesFor(prev: PlayerState | null, next: PlayerState, changes: StateChange[], now: number, priceOf?: PriceOf): LedgerEntry[] {
   if (!prev || !changes.length) return [];
@@ -39,7 +39,7 @@ export function entriesFor(prev: PlayerState | null, next: PlayerState, changes:
   const out: LedgerEntry[] = [];
   const gained = items.some((i) => i.to > i.from);
   const lost = items.some((i) => i.to < i.from);
-  // Монеты сумки и банка вместе: положил деньги в банк — сумка убавилась, банк прибавился, итог нулевой.
+  // The coins of the bag and the bank together: put money in the bank and the bag decreased and the bank increased, the total is zero.
   const coinDelta = (coin ? coin.to - coin.from : 0) + (bankCoin ? bankCoin.to - bankCoin.from : 0);
   const bagDelta = coin ? coin.to - coin.from : 0;
   if (coinDelta !== 0) {
@@ -60,13 +60,13 @@ export function entriesFor(prev: PlayerState | null, next: PlayerState, changes:
 }
 
 export interface LedgerSummary {
-  /** Монеты, полученные добычей, наградами и продажей (без перекладывания в банк). */
+  /** Coins received from gathering, rewards and selling (not counting moving to the bank). */
   coinsEarned: number;
-  /** Потрачено на покупки. */
+  /** Spent on purchases. */
   coinsSpent: number;
-  /** Оценка добытых предметов по ценам биржи — это не деньги, пока их не продали. */
+  /** An estimate of the gathered items at Grand Exchange prices: this is not money until they are sold. */
   estimatedLootValue: number;
-  /** Сколько записей добычи без цены: оценка занижена на них. */
+  /** How many gathering records have no price: the estimate is understated by them. */
   unpricedLoot: number;
   entries: number;
 }
@@ -89,25 +89,25 @@ export function summarize(entries: LedgerEntry[]): LedgerSummary {
 }
 
 /**
- * Цель по ресурсу: сейчас, нужно, не хватает, откуда (игра/вручную/неизвестно) и время — только если хватает замеров.
- * «Известно» и «оценка» не смешиваются: current — то, что точно есть; estimated — оценка добычи (если задана).
+ * A goal for a resource: now, needed, missing, where from (game/manual/unknown) and the time, only if there are enough measurements.
+ * "Known" and "estimate" are not mixed: current is what is surely there; estimated is the loot estimate (if given).
  */
 export interface ResourceGoal {
   label: string;
-  /** null — неизвестно. */
+  /** null means unknown. */
   current: number | null;
   target: number;
   missing: number | null;
-  /** Оценка добычи по ценам биржи (для денег): сколько прибавится, если продать. */
+  /** The loot estimate at Grand Exchange prices (for money): how much will be added if sold. */
   estimated?: number;
-  /** Оценка прогресса «известное + добыча»: показывается отдельной строкой с «~». */
+  /** An estimate of progress "known + loot": shown as a separate line with "~". */
   estimatedProgress?: number;
   done: boolean;
-  /** Минут до цели по темпу сеанса; undefined — замеров мало, время не выдумываем. */
+  /** Minutes to the goal at the session's pace; undefined means too few measurements, so the time is not invented. */
   etaMinutes?: number;
 }
 
-/** Минимум замеров, чтобы называть время. */
+/** The minimum number of measurements to name a time. */
 export const MIN_ETA_SECONDS = 120;
 
 export function resourceGoal(
@@ -125,7 +125,7 @@ export function resourceGoal(
   return goal;
 }
 
-/** Темп в минуту по записям добычи за последние windowMs; null — замеров мало (меньше MIN_ETA_SECONDS) или нет прироста. */
+/** The per-minute pace from the gathering records over the last windowMs; null means too few measurements (under MIN_ETA_SECONDS) or no gain. */
 export function ratePerMinute(entries: LedgerEntry[], now: number, pick: (e: LedgerEntry) => number, windowMs = 10 * 60_000): number | null {
   const recent = entries.filter((e) => now - e.timestamp <= windowMs && e.reason !== 'BANK_TRANSFER');
   if (recent.length < 2) return null;

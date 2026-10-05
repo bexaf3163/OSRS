@@ -1,4 +1,4 @@
-"""Сверка подсветки: id NPC/объекта шага Quest Helper против hl.npc / hl.obj нашей строки."""
+"""A highlight check: the NPC/object id of a Quest Helper step against hl.npc / hl.obj of our line."""
 import json
 import os
 import sys
@@ -27,18 +27,18 @@ for sid, q in steps.items():
                 if ids[0] in have:
                     ok += 1
                 else:
-                    miss_npc.append((sid, si + 1, li + 1, k, 'QH npc', ids[0], 'у нас', sorted(have), line.get('s')))
+                    miss_npc.append((sid, si + 1, li + 1, k, 'QH npc', ids[0], 'ours', sorted(have), line.get('s')))
             elif typ in ('ObjectStep',) and ids:
                 have = set(hl.get('obj') or [])
                 if ids[0] in have:
                     ok += 1
                 else:
-                    miss_obj.append((sid, si + 1, li + 1, k, 'QH obj', ids[0], 'у нас', sorted(have), line.get('s')))
-print('типы шагов в сверке:', kinds)
-print('совпало', ok)
-print('NPC не подсвечен:', len(miss_npc))
+                    miss_obj.append((sid, si + 1, li + 1, k, 'QH obj', ids[0], 'ours', sorted(have), line.get('s')))
+print('step kinds in the check:', kinds)
+print('matched', ok)
+print('NPC not highlighted:', len(miss_npc))
 for r in miss_npc:
     print(' ', r)
-print('объект не подсвечен:', len(miss_obj))
+print('object not highlighted:', len(miss_obj))
 for r in miss_obj:
     print(' ', r)

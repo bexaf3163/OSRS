@@ -1,20 +1,20 @@
 {
-  "source": "Карты {{Map}} статей NPC на OSRS Wiki (Delrith — центр каменного круга по LocLine тёмных магов). Сверено по шагам маршрута 27.09.2026.",
-  "note": "Где стоят NPC шагов — для «Куда идти» в списке «Что нужно» в игре и точек на карте шага. Запись со steps — только для этих шагов (одно имя — разные NPC: Cook в Lumbridge и в Blue Moon Inn).",
+  "source": "The {{Map}} maps of the NPC articles on the OSRS Wiki (Delrith: the centre of the stone circle by the dark wizards' LocLine). Checked against the route steps on 27 Sep 2026.",
+  "note": "Where the step NPCs stand: for \"Where to go\" in the in-game \"What you need\" list and the points on the step's map. An entry with steps applies only to those steps (one name, different NPCs: the Cook in Lumbridge and in the Blue Moon Inn).",
   "npcs": {
     "Cook": [
       {
         "x": 3209,
         "y": 3214,
         "plane": 0,
-        "area": "кухня замка Lumbridge",
+        "area": "the Lumbridge Castle kitchen",
         "page": "Cook (Lumbridge)"
       },
       {
         "x": 3230,
         "y": 3400,
         "plane": 0,
-        "area": "восточная комната паба Blue Moon Inn, Varrock",
+        "area": "the east room of the Blue Moon Inn pub, Varrock",
         "page": "Cook (Blue Moon Inn)",
         "steps": [
           "S3-04"
@@ -26,7 +26,7 @@
         "x": 3189,
         "y": 3273,
         "plane": 0,
-        "area": "дом фермера к северу от Lumbridge",
+        "area": "the farmhouse north of Lumbridge",
         "page": "Fred the Farmer"
       }
     ],
@@ -35,7 +35,7 @@
         "x": 3243,
         "y": 3210,
         "plane": 0,
-        "area": "церковь Lumbridge",
+        "area": "Lumbridge church",
         "page": "Father Aereck"
       }
     ],
@@ -44,7 +44,7 @@
         "x": 3148,
         "y": 3176,
         "plane": 0,
-        "area": "хижина на болоте Lumbridge Swamp",
+        "area": "a shack in Lumbridge Swamp",
         "page": "Father Urhney"
       }
     ],
@@ -53,7 +53,7 @@
         "x": 3250,
         "y": 3193,
         "plane": 0,
-        "area": "гроб на кладбище у церкви Lumbridge",
+        "area": "the coffin in the graveyard by Lumbridge church",
         "page": "Restless ghost"
       }
     ],
@@ -62,7 +62,7 @@
         "x": 3236,
         "y": 3155,
         "plane": 0,
-        "area": "лодка на юго-востоке Lumbridge Swamp",
+        "area": "a boat in the south-east of Lumbridge Swamp",
         "page": "Abigale"
       }
     ],
@@ -71,7 +71,7 @@
         "x": 3240,
         "y": 3199,
         "plane": 0,
-        "area": "Lumbridge, к югу от церкви — телепортирует к Stronghold of Security",
+        "area": "Lumbridge, south of the church: teleports to the Stronghold of Security",
         "page": "Count Check"
       }
     ],
@@ -80,7 +80,7 @@
         "x": 3244,
         "y": 3157,
         "plane": 0,
-        "area": "болото Lumbridge Swamp",
+        "area": "Lumbridge Swamp",
         "page": "Fishing tutor"
       }
     ],
@@ -89,7 +89,7 @@
         "x": 3211,
         "y": 3223,
         "plane": 1,
-        "area": "Lumbridge Castle, 1st floor (2-й этаж)",
+        "area": "Lumbridge Castle, 1st floor",
         "page": "Duke Horacio"
       }
     ],
@@ -98,7 +98,7 @@
         "x": 3138,
         "y": 3211,
         "plane": 0,
-        "area": "дерево на болоте Lumbridge Swamp",
+        "area": "a tree in Lumbridge Swamp",
         "page": "Shamus"
       }
     ],
@@ -107,7 +107,7 @@
         "x": 3170,
         "y": 3279,
         "plane": 0,
-        "area": "к югу от мельницы Mill Lane Mill",
+        "area": "south of Mill Lane Mill",
         "page": "Cassius"
       }
     ],
@@ -116,7 +116,7 @@
         "x": 3253,
         "y": 3275,
         "plane": 0,
-        "area": "коровник к востоку от Lumbridge",
+        "area": "the cow barn east of Lumbridge",
         "page": "Gillie Groats"
       }
     ],
@@ -125,7 +125,7 @@
         "x": 3229,
         "y": 3204,
         "plane": 0,
-        "area": "магазин топоров на юге Lumbridge",
+        "area": "the axe shop in south Lumbridge",
         "page": "Bob"
       }
     ],
@@ -134,7 +134,7 @@
         "x": 3081,
         "y": 3247,
         "plane": 0,
-        "area": "рынок Draynor Village",
+        "area": "the Draynor Village market",
         "page": "Diango"
       }
     ],
@@ -143,7 +143,7 @@
         "x": 3099,
         "y": 3269,
         "plane": 0,
-        "area": "дом в Draynor Village",
+        "area": "a house in Draynor Village",
         "page": "Morgan"
       }
     ],
@@ -152,7 +152,7 @@
         "x": 3099,
         "y": 3259,
         "plane": 0,
-        "area": "дом в Draynor Village",
+        "area": "a house in Draynor Village",
         "page": "Ned"
       }
     ],
@@ -161,7 +161,7 @@
         "x": 3086,
         "y": 3259,
         "plane": 0,
-        "area": "дом ведьмы в Draynor Village",
+        "area": "the witch's house in Draynor Village",
         "page": "Aggie"
       }
     ],
@@ -170,7 +170,7 @@
         "x": 3113,
         "y": 3262,
         "plane": 0,
-        "area": "Draynor Village, к северу от тюрьмы",
+        "area": "Draynor Village, north of the jail",
         "page": "Leela"
       }
     ],
@@ -179,7 +179,7 @@
         "x": 3128,
         "y": 3244,
         "plane": 0,
-        "area": "тюрьма Draynor",
+        "area": "Draynor Jail",
         "page": "Lady Keli"
       }
     ],
@@ -188,7 +188,7 @@
         "x": 3124,
         "y": 3244,
         "plane": 0,
-        "area": "стражник у тюрьмы Draynor",
+        "area": "the guard by Draynor Jail",
         "page": "Joe (jail)"
       }
     ],
@@ -197,7 +197,7 @@
         "x": 3126,
         "y": 3243,
         "plane": 0,
-        "area": "камера тюрьмы Draynor",
+        "area": "a cell in Draynor Jail",
         "page": "Prince Ali"
       }
     ],
@@ -206,7 +206,7 @@
         "x": 3110,
         "y": 3330,
         "plane": 0,
-        "area": "у ворот Draynor Manor",
+        "area": "by the gate of Draynor Manor",
         "page": "Veronica"
       }
     ],
@@ -215,7 +215,7 @@
         "x": 3111,
         "y": 3367,
         "plane": 2,
-        "area": "Draynor Manor, 2nd floor (3-й этаж)",
+        "area": "Draynor Manor, 2nd floor",
         "page": "Professor Oddenstein"
       }
     ],
@@ -233,7 +233,7 @@
         "x": 3078,
         "y": 3258,
         "plane": 0,
-        "area": "рынок Draynor Village",
+        "area": "the Draynor Village market",
         "page": "Martin the Master Gardener"
       }
     ],
@@ -242,7 +242,7 @@
         "x": 3104,
         "y": 3164,
         "plane": 2,
-        "area": "Wizards' Tower, 2nd floor (3-й этаж)",
+        "area": "Wizards' Tower, 2nd floor",
         "page": "Wizard Mizgog"
       }
     ],
@@ -251,7 +251,7 @@
         "x": 3112,
         "y": 3157,
         "plane": 1,
-        "area": "Wizards' Tower, 1st floor (2-й этаж)",
+        "area": "Wizards' Tower, 1st floor",
         "page": "Wizard Traiborn"
       }
     ],
@@ -260,7 +260,7 @@
         "x": 3103,
         "y": 9571,
         "plane": 0,
-        "area": "подвал Wizards' Tower",
+        "area": "the basement of Wizards' Tower",
         "page": "Archmage Sedridor"
       }
     ],
@@ -269,7 +269,7 @@
         "x": 2968,
         "y": 3206,
         "plane": 0,
-        "area": "дом ведьмы в Rimmington",
+        "area": "the witch's house in Rimmington",
         "page": "Hetty"
       }
     ],
@@ -278,7 +278,7 @@
         "x": 3013,
         "y": 3259,
         "plane": 0,
-        "area": "магазин магии в Port Sarim",
+        "area": "the magic shop in Port Sarim",
         "page": "Betty"
       }
     ],
@@ -287,7 +287,7 @@
         "x": 3052,
         "y": 3250,
         "plane": 0,
-        "area": "причал Port Sarim",
+        "area": "the Port Sarim dock",
         "page": "Redbeard Frank"
       }
     ],
@@ -296,7 +296,7 @@
         "x": 3013,
         "y": 3207,
         "plane": 0,
-        "area": "продуктовый магазин в Port Sarim",
+        "area": "the food shop in Port Sarim",
         "page": "Wydin"
       }
     ],
@@ -305,7 +305,7 @@
         "x": 3013,
         "y": 3226,
         "plane": 0,
-        "area": "рыболовный магазин в Port Sarim",
+        "area": "the fishing shop in Port Sarim",
         "page": "Gerrant"
       }
     ],
@@ -314,7 +314,7 @@
         "x": 3047,
         "y": 3204,
         "plane": 0,
-        "area": "южный причал Port Sarim",
+        "area": "the south dock of Port Sarim",
         "page": "Klarense"
       }
     ],
@@ -323,7 +323,7 @@
         "x": 3030,
         "y": 3273,
         "plane": 0,
-        "area": "к северу от Port Sarim",
+        "area": "north of Port Sarim",
         "page": "Captain Tock"
       }
     ],
@@ -332,7 +332,7 @@
         "x": 3057,
         "y": 3259,
         "plane": 0,
-        "area": "огород к северу от Port Sarim",
+        "area": "the vegetable patch north of Port Sarim",
         "page": "Frizzy Skernip"
       }
     ],
@@ -341,7 +341,7 @@
         "x": 3001,
         "y": 3144,
         "plane": 0,
-        "area": "Mudskipper Point, к югу от Port Sarim",
+        "area": "Mudskipper Point, south of Port Sarim",
         "page": "Thurgo"
       }
     ],
@@ -359,7 +359,7 @@
         "x": 2939,
         "y": 3154,
         "plane": 0,
-        "area": "банановая плантация, Musa Point",
+        "area": "the banana plantation, Musa Point",
         "page": "Luthas"
       }
     ],
@@ -368,7 +368,7 @@
         "x": 2950,
         "y": 3151,
         "plane": 0,
-        "area": "причал Musa Point, Karamja",
+        "area": "the Musa Point dock, Karamja",
         "page": "Customs officer"
       }
     ],
@@ -377,7 +377,7 @@
         "x": 3211,
         "y": 3425,
         "plane": 0,
-        "area": "площадь Varrock",
+        "area": "Varrock Square",
         "page": "Romeo"
       }
     ],
@@ -386,7 +386,7 @@
         "x": 3159,
         "y": 3426,
         "plane": 1,
-        "area": "особняк к западу от Varrock, 1st floor (2-й этаж)",
+        "area": "a manor west of Varrock, 1st floor",
         "page": "Juliet"
       }
     ],
@@ -395,7 +395,7 @@
         "x": 3254,
         "y": 3485,
         "plane": 0,
-        "area": "церковь Varrock",
+        "area": "Varrock church",
         "page": "Father Lawrence"
       }
     ],
@@ -404,7 +404,7 @@
         "x": 3195,
         "y": 3404,
         "plane": 0,
-        "area": "аптека на юго-западе Varrock",
+        "area": "the apothecary in south-west Varrock",
         "page": "Apothecary"
       }
     ],
@@ -413,7 +413,7 @@
         "x": 3253,
         "y": 3402,
         "plane": 0,
-        "area": "магазин рун в Varrock",
+        "area": "the rune shop in Varrock",
         "page": "Aubury"
       }
     ],
@@ -422,7 +422,7 @@
         "x": 3210,
         "y": 3495,
         "plane": 0,
-        "area": "библиотека дворца Varrock",
+        "area": "the Varrock Palace library",
         "page": "Reldo"
       }
     ],
@@ -431,7 +431,7 @@
         "x": 3222,
         "y": 3397,
         "plane": 0,
-        "area": "паб Blue Moon Inn, Varrock",
+        "area": "the Blue Moon Inn pub, Varrock",
         "page": "Dr Harlow"
       }
     ],
@@ -440,7 +440,7 @@
         "x": 3204,
         "y": 3425,
         "plane": 0,
-        "area": "шатёр на площади Varrock",
+        "area": "the tent on Varrock Square",
         "page": "Aris"
       }
     ],
@@ -449,7 +449,7 @@
         "x": 3203,
         "y": 3472,
         "plane": 0,
-        "area": "дворец Varrock, западное крыло",
+        "area": "Varrock Palace, west wing",
         "page": "Sir Prysin"
       }
     ],
@@ -458,7 +458,7 @@
         "x": 3204,
         "y": 3497,
         "plane": 2,
-        "area": "дворец Varrock, 2nd floor (3-й этаж)",
+        "area": "Varrock Palace, 2nd floor",
         "page": "Captain Rovin"
       }
     ],
@@ -467,7 +467,7 @@
         "x": 3227,
         "y": 3369,
         "plane": 0,
-        "area": "каменный круг к югу от Varrock — там тёмные маги",
+        "area": "the stone circle south of Varrock, where the dark wizards are",
         "page": "Delrith"
       }
     ],
@@ -476,7 +476,7 @@
         "x": 3222,
         "y": 3472,
         "plane": 0,
-        "area": "тронный зал дворца Varrock",
+        "area": "the Varrock Palace throne room",
         "page": "King Roald"
       }
     ],
@@ -485,7 +485,7 @@
         "x": 3206,
         "y": 3416,
         "plane": 0,
-        "area": "магазин одежды в Varrock",
+        "area": "the clothes shop in Varrock",
         "page": "Thessalia"
       }
     ],
@@ -503,7 +503,7 @@
         "x": 2977,
         "y": 3342,
         "plane": 0,
-        "area": "двор White Knights' Castle",
+        "area": "the courtyard of White Knights' Castle",
         "page": "Squire"
       }
     ],
@@ -512,7 +512,7 @@
         "x": 2984,
         "y": 3339,
         "plane": 2,
-        "area": "White Knights' Castle, 2nd floor (3-й этаж)",
+        "area": "White Knights' Castle, 2nd floor",
         "page": "Sir Vyvin"
       }
     ],
@@ -521,7 +521,7 @@
         "x": 2960,
         "y": 3337,
         "plane": 2,
-        "area": "White Knights' Castle, 2nd floor (3-й этаж)",
+        "area": "White Knights' Castle, 2nd floor",
         "page": "Sir Amik Varze"
       }
     ],
@@ -530,7 +530,7 @@
         "x": 2952,
         "y": 3452,
         "plane": 0,
-        "area": "дом к северу от Falador",
+        "area": "a house north of Falador",
         "page": "Doric"
       }
     ],
@@ -539,7 +539,7 @@
         "x": 2957,
         "y": 3367,
         "plane": 0,
-        "area": "паб Rising Sun Inn, Falador",
+        "area": "the Rising Sun Inn pub, Falador",
         "page": "Burntof"
       }
     ],
@@ -548,7 +548,7 @@
         "x": 3004,
         "y": 3374,
         "plane": 0,
-        "area": "парк Falador",
+        "area": "Falador Park",
         "page": "Heskel"
       }
     ],
@@ -557,7 +557,7 @@
         "x": 2990,
         "y": 3268,
         "plane": 0,
-        "area": "к югу от Falador",
+        "area": "south of Falador",
         "page": "Malignius Mortifer"
       }
     ],
@@ -566,7 +566,7 @@
         "x": 3053,
         "y": 3305,
         "plane": 0,
-        "area": "огород к югу от Falador",
+        "area": "the vegetable patch south of Falador",
         "page": "Elstan"
       }
     ],
@@ -575,7 +575,7 @@
         "x": 3036,
         "y": 3294,
         "plane": 0,
-        "area": "магазин фермера к югу от Falador",
+        "area": "the farmer's shop south of Falador",
         "page": "Sarah"
       }
     ],
@@ -584,7 +584,7 @@
         "x": 2972,
         "y": 3312,
         "plane": 0,
-        "area": "магазин кольчуг на юге Falador",
+        "area": "the chainmail shop in south Falador",
         "page": "Wayne"
       }
     ],
@@ -593,7 +593,7 @@
         "x": 3075,
         "y": 3430,
         "plane": 0,
-        "area": "магазин шлемов в Barbarian Village",
+        "area": "the helmet shop in Barbarian Village",
         "page": "Peksa"
       }
     ],
@@ -611,7 +611,7 @@
         "x": 3011,
         "y": 3501,
         "plane": 0,
-        "area": "вершина Ice Mountain",
+        "area": "the top of Ice Mountain",
         "page": "Oracle"
       }
     ],
@@ -620,7 +620,7 @@
         "x": 3070,
         "y": 3517,
         "plane": 0,
-        "area": "хижина к северо-западу от Edgeville",
+        "area": "a hut north-west of Edgeville",
         "page": "Oziach"
       }
     ],
@@ -629,7 +629,7 @@
         "x": 3087,
         "y": 3415,
         "plane": 0,
-        "area": "Barbarian Village, у гончарной печи",
+        "area": "Barbarian Village, by the pottery oven",
         "page": "Checkal"
       }
     ],
@@ -638,7 +638,7 @@
         "x": 3075,
         "y": 3439,
         "plane": 0,
-        "area": "таверна The Long Hall, Barbarian Village",
+        "area": "the tavern The Long Hall, Barbarian Village",
         "page": "Atlas"
       }
     ],
@@ -647,7 +647,7 @@
         "x": 3088,
         "y": 3472,
         "plane": 0,
-        "area": "руины к югу от банка Edgeville",
+        "area": "the ruins south of the Edgeville bank",
         "page": "Marley"
       }
     ],
@@ -656,7 +656,7 @@
         "x": 3302,
         "y": 3163,
         "plane": 0,
-        "area": "дворец Al Kharid",
+        "area": "the Al Kharid palace",
         "page": "Chancellor Hassan"
       }
     ],
@@ -665,7 +665,7 @@
         "x": 3286,
         "y": 3180,
         "plane": 0,
-        "area": "Al Kharid, к северу от дворца",
+        "area": "Al Kharid, north of the palace",
         "page": "Osman"
       }
     ],
@@ -674,7 +674,7 @@
         "x": 3298,
         "y": 3202,
         "plane": 0,
-        "area": "рынок Al Kharid",
+        "area": "the Al Kharid market",
         "page": "Silk trader"
       }
     ],
@@ -683,7 +683,7 @@
         "x": 2529,
         "y": 2839,
         "plane": 1,
-        "area": "Corsair Cove, 1st floor (2-й этаж)",
+        "area": "Corsair Cove, 1st floor",
         "page": "Ithoi the Navigator"
       }
     ],
@@ -710,7 +710,7 @@
         "x": 2013,
         "y": 9006,
         "plane": 0,
-        "area": "подземелье Corsair Cove",
+        "area": "the Corsair Cove dungeon",
         "page": "Chief Tess"
       }
     ],
@@ -719,7 +719,7 @@
         "x": 2522,
         "y": 3498,
         "plane": 0,
-        "area": "дом у Baxtorian Falls",
+        "area": "a house by Baxtorian Falls",
         "page": "Almera"
       }
     ],
@@ -728,7 +728,7 @@
         "x": 2510,
         "y": 3484,
         "plane": 0,
-        "area": "река у Baxtorian Falls",
+        "area": "the river by Baxtorian Falls",
         "page": "Hudon"
       }
     ],
@@ -737,7 +737,7 @@
         "x": 2566,
         "y": 3199,
         "plane": 0,
-        "area": "у Fight Arena",
+        "area": "by the Fight Arena",
         "page": "Lady Servil"
       }
     ],
@@ -746,7 +746,7 @@
         "x": 2568,
         "y": 3144,
         "plane": 0,
-        "area": "бар в юго-западном углу Fight Arena",
+        "area": "the bar in the south-west corner of the Fight Arena",
         "page": "Khazard Barman"
       }
     ],
@@ -764,7 +764,7 @@
         "x": 2520,
         "y": 3213,
         "plane": 0,
-        "area": "поле боя у Tree Gnome Village",
+        "area": "the battlefield by Tree Gnome Village",
         "page": "Commander Montai"
       }
     ],
@@ -782,7 +782,7 @@
         "x": 2478,
         "y": 3463,
         "plane": 1,
-        "area": "дом в Tree Gnome Stronghold, 1st floor (2-й этаж)",
+        "area": "a house in the Tree Gnome Stronghold, 1st floor",
         "page": "Glough"
       }
     ],
@@ -791,7 +791,7 @@
         "x": 2390,
         "y": 3514,
         "plane": 1,
-        "area": "дом в Tree Gnome Stronghold, 1st floor (2-й этаж)",
+        "area": "a house in the Tree Gnome Stronghold, 1st floor",
         "page": "Anita"
       }
     ],
@@ -818,7 +818,7 @@
         "x": 2484,
         "y": 3487,
         "plane": 1,
-        "area": "Grand Tree, 1st floor (2-й этаж)",
+        "area": "the Grand Tree, 1st floor",
         "page": "Daero"
       }
     ],
@@ -836,7 +836,7 @@
         "x": 3416,
         "y": 3487,
         "plane": 2,
-        "area": "камера на верхнем этаже храма Paterdomus (2nd floor, 3-й этаж)",
+        "area": "a cell on the top floor of the Paterdomus temple (2nd floor)",
         "page": "Drezel",
         "steps": [
           "S8-01"
@@ -846,7 +846,7 @@
         "x": 3440,
         "y": 9895,
         "plane": 0,
-        "area": "под храмом Paterdomus",
+        "area": "under the Paterdomus temple",
         "page": "Drezel"
       }
     ],
@@ -873,7 +873,7 @@
         "x": 3628,
         "y": 3526,
         "plane": 0,
-        "area": "ферма к западу от Port Phasmatys",
+        "area": "a farm west of Port Phasmatys",
         "page": "Alice"
       }
     ],
@@ -882,7 +882,7 @@
         "x": 3463,
         "y": 3558,
         "plane": 0,
-        "area": "к востоку от Slayer Tower",
+        "area": "east of the Slayer Tower",
         "page": "Old crone"
       }
     ],
@@ -909,7 +909,7 @@
         "x": 2447,
         "y": 4428,
         "plane": 0,
-        "area": "тронный зал Zanaris",
+        "area": "the Zanaris throne room",
         "page": "Fairy Godfather"
       }
     ],
@@ -936,7 +936,7 @@
         "x": 2959,
         "y": 3513,
         "plane": 0,
-        "area": "северный дом Goblin Village",
+        "area": "the north house of Goblin Village",
         "page": "General Wartface"
       }
     ],
@@ -945,7 +945,7 @@
         "x": 2557,
         "y": 2857,
         "plane": 0,
-        "area": "причал Corsair Cove",
+        "area": "the Corsair Cove dock",
         "page": "Cabin Boy Colin"
       }
     ],
@@ -954,7 +954,7 @@
         "x": 3629,
         "y": 3528,
         "plane": 0,
-        "area": "ферма Alice у Port Phasmatys",
+        "area": "Alice's farm by Port Phasmatys",
         "page": "Malcolm"
       }
     ],
@@ -963,7 +963,7 @@
         "x": 2515,
         "y": 9581,
         "plane": 0,
-        "area": "подземелье Tree Gnome Village (камера Golrie)",
+        "area": "the Tree Gnome Village dungeon (Golrie's cell)",
         "page": "Golrie"
       }
     ]

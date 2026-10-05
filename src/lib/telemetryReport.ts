@@ -1,7 +1,7 @@
-// Разбор журнала отладки плагина (osrs-path-telemetry/session-*.jsonl): по нему находят ошибки, не повторяя игру.
-// Плагин пишет по строке JSON на событие (Telemetry.java); здесь — чтение, поиск странностей и сводка по шагам.
-// Чистые функции без файлов и сети: читает файл scripts/analyze-telemetry.ts, а приложение берёт сводку моста
-// (summarizeBridge) для отчёта диагностики.
+// Parsing the plugin's debug journal (osrs-path-telemetry/session-*.jsonl): it is used to find errors without replaying the game.
+// The plugin writes one JSON line per event (Telemetry.java); here: reading, finding oddities and a per-step summary.
+// Pure functions without files or network: the file scripts/analyze-telemetry.ts reads them, and the app takes the bridge summary
+// (summarizeBridge) for the diagnostics report.
 
 export interface TelemetryEvent {
   t: number;
@@ -15,7 +15,7 @@ export interface Finding {
   severity: Severity;
   code: string;
   text: string;
-  /** Метка времени события, к которому относится находка; null — ко всему сеансу. */
+  /** The timestamp of the event the finding refers to; null — to the whole session. */
   at: number | null;
   step?: string;
 }
@@ -25,13 +25,13 @@ export interface StepSummary {
   title: string;
   startedAt: number;
   durationMs: number;
-  /** Вошли в этапов квеста. */
+  /** Quest stages entered. */
   stageEnters: number;
-  /** Сколько раз курсор сдвинулся сам (не по клику). */
+  /** How many times the cursor moved by itself (not by a click). */
   autoMoves: number;
-  /** Клики по виду: NEXT, BACK, PREV, RESUME, PLACE, TOGGLE. */
+  /** Clicks on the view: NEXT, BACK, PREV, RESUME, PLACE, TOGGLE. */
   clicks: Record<string, number>;
-  /** Строки, которые игрок закрывал кнопкой «Сделано — дальше»: кандидаты на автоматическое определение. */
+  /** Lines the player closed with the "Done - next" button: candidates for automatic detection. */
   manualLines: string[];
   anomalies: number;
 }
@@ -70,23 +70,23 @@ export interface Report {
   slowLines: SlowLine[];
   shots: Shot[];
   findings: Finding[];
-  /** Строки журнала, которые не удалось разобрать. */
+  /** Journal lines that could not be parsed. */
   badLines: number;
 }
 
-/** Порог «слишком долго на одной строке, хотя игрок ходил», мс. */
+/** The threshold of "too long on one line although the player walked", ms. */
 export const SLOW_LINE_MS = 5 * 60_000;
-/** Сколько клеток считается «ходил». */
+/** How many tiles count as "walked". */
 export const WALKED_TILES = 10;
-/** «Назад» столько раз на одном шаге — игрок, возможно, потерялся. */
+/** "Back" this many times on one step: the player may be lost. */
 export const BACK_CLICKS = 3;
-/** Длиннее этого строка на экране уже не «коротко». */
+/** A line longer than this is no longer "short" on screen. */
 export const MAX_UI_LINE = 90;
 
 const str = (v: unknown): string | null => (typeof v === 'string' ? v : null);
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 
-/** JSONL → события. Битые строки (обрыв на записи) пропускаются и считаются, остальные читаются. */
+/** JSONL → events. Broken lines (a cut-off write) are skipped and counted, the rest are read. */
 export function parseLog(text: string): { events: TelemetryEvent[]; bad: number } {
   const events: TelemetryEvent[] = [];
   let bad = 0;
@@ -114,12 +114,12 @@ function dist(a: [number, number, number], b: [number, number, number]): number 
 
 export function formatDuration(ms: number): string {
   const s = Math.max(0, Math.round(ms / 1000));
-  if (s < 60) return `${s} с`;
+  if (s < 60) return `${s} s`;
   const m = Math.floor(s / 60);
-  return m < 60 ? `${m} мин ${s % 60} с` : `${Math.floor(m / 60)} ч ${m % 60} мин`;
+  return m < 60 ? `${m} min ${s % 60} s` : `${Math.floor(m / 60)} h ${m % 60} min`;
 }
 
-/** Все правила поиска ошибок и странностей по журналу сеанса. */
+/** All the rules for finding errors and oddities in a session journal. */
 export function analyze(events: TelemetryEvent[], badLines = 0): Report {
   const counts: Record<string, number> = {};
   const findings: Finding[] = [];
@@ -132,7 +132,7 @@ export function analyze(events: TelemetryEvent[], badLines = 0): Report {
   let cur: StepSummary | null = null;
   let snapshots = 0;
   let stale = 0;
-  // Строка, на которой сейчас курсор: с неё считается «сколько стоим» и что закрыл игрок кнопкой.
+  // The line the cursor is on now: "how long we stand" and what the player closed with the button are counted from it.
   let line: { stepId: string; cursor: number; size: number; text: string; since: number; start: [number, number, number] | null; farthest: number } | null = null;
   let lastClickAt = -Infinity;
   let emptyBeats = 0;
@@ -144,7 +144,7 @@ export function analyze(events: TelemetryEvent[], badLines = 0): Report {
     if (d >= SLOW_LINE_MS && line.farthest >= WALKED_TILES) {
       add({
         severity: 'warn', code: 'SLOW_LINE', at: line.since, step: line.stepId,
-        text: `Строка ${line.cursor}/${line.size} шага ${line.stepId} («${line.text}») держалась ${formatDuration(d)}, хотя игрок прошёл ~${line.farthest} клеток — курсор мог не заметить действие`,
+        text: `Line ${line.cursor}/${line.size} of step ${line.stepId} ("${line.text}") stayed for ${formatDuration(d)} although the player walked ~${line.farthest} tiles — the cursor may have missed the action`,
       });
     }
     line = null;
@@ -167,7 +167,7 @@ export function analyze(events: TelemetryEvent[], badLines = 0): Report {
         break;
       case 'truncated':
         session.truncated = true;
-        add({ severity: 'warn', code: 'TRUNCATED', at: e.t, text: 'Журнал дошёл до предела размера и дальше не писался — конец сеанса не виден' });
+        add({ severity: 'warn', code: 'TRUNCATED', at: e.t, text: 'The journal reached its size limit and was not written further — the end of the session is not visible' });
         break;
       case 'step': {
         closeLine(e.t);
@@ -181,7 +181,7 @@ export function analyze(events: TelemetryEvent[], badLines = 0): Report {
         if (e.stale === true) stale++;
         if (e.rejected && typeof e.rejected === 'object') {
           for (const [part, why] of Object.entries(e.rejected as Record<string, unknown>)) {
-            add({ severity: 'warn', code: 'SNAPSHOT_PART', at: e.t, text: `Часть снимка «${part}» не применена: ${String(why)}` });
+            add({ severity: 'warn', code: 'SNAPSHOT_PART', at: e.t, text: `Snapshot part "${part}" was not applied: ${String(why)}` });
           }
         }
         break;
@@ -197,12 +197,12 @@ export function analyze(events: TelemetryEvent[], badLines = 0): Report {
           const reason = str(e.reason) ?? '';
           const byClick = e.t - lastClickAt <= 2500;
           if (cur && !byClick) cur.autoMoves++;
-          // Назад без клика «Назад» — возврат из-за предмета, который ещё не сдан; такое надо видеть, но это не ошибка.
+          // Back without a "Back" click is a return because of an item not yet handed in; it should be seen, but it is not an error.
           if (from !== null && to !== null && to < from && !byClick && !/^(CLAMP|BACK|RESET|RESUME)/.test(reason)) {
-            add({ severity: 'warn', code: 'CURSOR_BACK', at: e.t, step: stepId, text: `Курсор вернулся с ${from} на ${to} без клика и без понятной причины («${reason || 'нет'}») на шаге ${stepId ?? '—'}` });
+            add({ severity: 'warn', code: 'CURSOR_BACK', at: e.t, step: stepId, text: `The cursor went back from ${from} to ${to} without a click and without a clear reason ("${reason || 'none'}") on step ${stepId ?? '—'}` });
           }
           if (reason.startsWith('MANUAL') && from !== null && to !== null && to !== from + 1) {
-            add({ severity: 'warn', code: 'NEXT_JUMP', at: e.t, step: stepId, text: `«Сделано — дальше» перепрыгнуло с ${from} на ${to}: пропущено ${to - from - 1} строк` });
+            add({ severity: 'warn', code: 'NEXT_JUMP', at: e.t, step: stepId, text: `"Done - next" jumped from ${from} to ${to}: ${to - from - 1} lines skipped` });
           }
         } else {
           break;
@@ -216,12 +216,12 @@ export function analyze(events: TelemetryEvent[], badLines = 0): Report {
       case 'beat': {
         const p = pos(e.pos);
         if (line && line.start && p) line.farthest = Math.max(line.farthest, dist(line.start, p));
-        // Первый пульс после входа в шаг приходит раньше, чем плашки успели нарисоваться (так было в живом сеансе):
-        // пусто считается только на втором пульсе подряд.
+        // The first beat after entering a step comes before the plates have been drawn (this happened in a live session):
+        // empty counts only on the second beat in a row.
         if (e.hud === false && e.guide === false && str(e.step)) emptyBeats++;
         else emptyBeats = 0;
         if (emptyBeats === 2) {
-          add({ severity: 'bad', code: 'BEAT_EMPTY', at: e.t, step: str(e.step) ?? undefined, text: `Шаг ${str(e.step)} выбран, а ни плашка, ни список не показаны (пульс сеанса)` });
+          add({ severity: 'bad', code: 'BEAT_EMPTY', at: e.t, step: str(e.step) ?? undefined, text: `Step ${str(e.step)} is selected, but neither the plate nor the list is shown (session beat)` });
         }
         break;
       }
@@ -238,16 +238,16 @@ export function analyze(events: TelemetryEvent[], badLines = 0): Report {
         const text = str(e.text) ?? '';
         for (const l of text.split('\n')) {
           if (l.length > MAX_UI_LINE) {
-            add({ severity: 'warn', code: 'UI_LONG', at: e.t, step: stepId, text: `Длинная строка на экране (${l.length} знаков) — «${l.slice(0, 60)}…»` });
+            add({ severity: 'warn', code: 'UI_LONG', at: e.t, step: stepId, text: `A long line on screen (${l.length} characters) — "${l.slice(0, 60)}…"` });
             break;
           }
         }
-        if (/�|\?\?\?/.test(text)) add({ severity: 'bad', code: 'UI_GLYPH', at: e.t, step: stepId, text: `На экране битые знаки: «${text.slice(0, 80)}»` });
+        if (/�|\?\?\?/.test(text)) add({ severity: 'bad', code: 'UI_GLYPH', at: e.t, step: stepId, text: `Broken glyphs on screen: "${text.slice(0, 80)}"` });
         break;
       }
       case 'anomaly':
         if (cur) cur.anomalies++;
-        add({ severity: 'bad', code: str(e.code) ?? 'ANOMALY', at: e.t, step: str(e.step) ?? stepId, text: str(e.message) ?? 'странность без описания' });
+        add({ severity: 'bad', code: str(e.code) ?? 'ANOMALY', at: e.t, step: str(e.step) ?? stepId, text: str(e.message) ?? 'an oddity without a description' });
         break;
       case 'shot':
         shots.push({ at: e.t, file: str(e.file) ?? '?', why: str(e.why) ?? '' });
@@ -261,20 +261,20 @@ export function analyze(events: TelemetryEvent[], badLines = 0): Report {
   session.durationMs = session.startedAt === null || session.endedAt === null ? 0 : session.endedAt - session.startedAt;
 
   if (steps.length > 0 && snapshots === 0 && (session.protocol ?? 0) >= 6) {
-    add({ severity: 'warn', code: 'NO_SNAPSHOT', at: null, text: 'Шаги были, а снимка от программы не пришло ни разу — план в игре не показывался (программа закрыта или старая)' });
+    add({ severity: 'warn', code: 'NO_SNAPSHOT', at: null, text: 'There were steps, but no snapshot ever came from the app — the plan was not shown in the game (the app is closed or old)' });
   }
-  if (stale >= 5) add({ severity: 'info', code: 'STALE_SNAPSHOTS', at: null, text: `Запоздавших снимков: ${stale} — программа шлёт их не по порядку` });
+  if (stale >= 5) add({ severity: 'info', code: 'STALE_SNAPSHOTS', at: null, text: `Late snapshots: ${stale} — the app sends them out of order` });
   for (const s of steps) {
     const back = (s.clicks.BACK ?? 0) + (s.clicks.PREV ?? 0);
-    if (back >= BACK_CLICKS) add({ severity: 'warn', code: 'BACK_OFTEN', at: s.startedAt, step: s.stepId, text: `На шаге ${s.stepId} «Назад» нажато ${back} раз — игрок, возможно, терялся` });
+    if (back >= BACK_CLICKS) add({ severity: 'warn', code: 'BACK_OFTEN', at: s.startedAt, step: s.stepId, text: `On step ${s.stepId} "Back" was pressed ${back} times — the player may have been lost` });
     if (s.manualLines.length > 0) {
-      add({ severity: 'info', code: 'MANUAL_LINES', at: s.startedAt, step: s.stepId, text: `Шаг ${s.stepId}: игрок закрыл вручную — ${s.manualLines.join('; ')}. Кандидаты на автоопределение (has/need)` });
+      add({ severity: 'info', code: 'MANUAL_LINES', at: s.startedAt, step: s.stepId, text: `Step ${s.stepId}: the player closed by hand — ${s.manualLines.join('; ')}. Candidates for auto-detection (has/need)` });
     }
   }
   if (!session.ended && events.length > 0) {
-    add({ severity: 'info', code: 'NOT_ENDED', at: null, text: 'Конец сеанса не записан: игра шла в момент чтения или RuneLite закрылся аварийно' });
+    add({ severity: 'info', code: 'NOT_ENDED', at: null, text: 'The end of the session is not recorded: the game was running at the time of reading or RuneLite closed abnormally' });
   }
-  if (badLines > 0) add({ severity: 'info', code: 'BAD_LINES', at: null, text: `Не разобрано строк журнала: ${badLines} (обрыв записи)` });
+  if (badLines > 0) add({ severity: 'info', code: 'BAD_LINES', at: null, text: `Unparsed journal lines: ${badLines} (a cut-off write)` });
 
   slowLines.sort((a, b) => b.durationMs - a.durationMs);
   slowLines.length = Math.min(slowLines.length, 8);
@@ -285,45 +285,45 @@ export function analyze(events: TelemetryEvent[], badLines = 0): Report {
 
 const MARK: Record<Severity, string> = { bad: '✗', warn: '⚠', info: '·' };
 
-/** Отчёт для чтения человеком: что за сеанс, что странного, где курсор стоял долго, какие скриншоты есть. */
+/** A report for a human to read: what session it was, what is odd, where the cursor stood long, which screenshots exist. */
 export function formatReport(r: Report): string {
   const out: string[] = [];
   const s = r.session;
-  out.push(`Сеанс: плагин ${s.plugin ?? '?'} (протокол ${s.protocol ?? '?'}), Java ${s.java ?? '?'}, ${s.os ?? '?'}`);
-  out.push(`Длился ${formatDuration(s.durationMs)}, событий ${s.events}${s.ended ? '' : ' (конец не записан)'}${s.truncated ? ', журнал обрезан' : ''}`);
+  out.push(`Session: plugin ${s.plugin ?? '?'} (protocol ${s.protocol ?? '?'}), Java ${s.java ?? '?'}, ${s.os ?? '?'}`);
+  out.push(`Lasted ${formatDuration(s.durationMs)}, ${s.events} events${s.ended ? '' : ' (end not recorded)'}${s.truncated ? ', journal truncated' : ''}`);
   const kinds = Object.entries(r.counts).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k}:${n}`).join(' ');
-  out.push(`События: ${kinds || '—'}`);
+  out.push(`Events: ${kinds || '—'}`);
   const bad = r.findings.filter((f) => f.severity === 'bad').length;
   const warn = r.findings.filter((f) => f.severity === 'warn').length;
   out.push('');
-  out.push(bad + warn === 0 ? 'Ошибок и странностей не найдено.' : `Найдено: ошибок ${bad}, предупреждений ${warn}.`);
+  out.push(bad + warn === 0 ? 'No errors or oddities found.' : `Found: ${bad} ${bad === 1 ? 'error' : 'errors'}, ${warn} ${warn === 1 ? 'warning' : 'warnings'}.`);
   for (const f of r.findings) out.push(`  ${MARK[f.severity]} [${f.code}] ${f.text}`);
   if (r.steps.length > 0) {
     out.push('');
-    out.push('Шаги:');
+    out.push('Steps:');
     for (const st of r.steps) {
       const clicks = Object.entries(st.clicks).map(([k, n]) => `${k}×${n}`).join(' ');
-      out.push(`  ${st.stepId} ${st.title ? `«${st.title}» ` : ''}— ${formatDuration(st.durationMs)}, этапов ${st.stageEnters}, сам сдвинулся ${st.autoMoves}${clicks ? `, клики ${clicks}` : ''}${st.anomalies ? `, странностей ${st.anomalies}` : ''}`);
+      out.push(`  ${st.stepId} ${st.title ? `"${st.title}" ` : ''}— ${formatDuration(st.durationMs)}, ${st.stageEnters} stages, moved by itself ${st.autoMoves}${clicks ? `, clicks ${clicks}` : ''}${st.anomalies ? `, oddities ${st.anomalies}` : ''}`);
     }
   }
   if (r.slowLines.length > 0) {
     out.push('');
-    out.push('Дольше всего на строке:');
-    for (const l of r.slowLines) out.push(`  ${formatDuration(l.durationMs)} — ${l.stepId} ${l.cursor}/${l.size} «${l.line}»`);
+    out.push('Longest on a line:');
+    for (const l of r.slowLines) out.push(`  ${formatDuration(l.durationMs)} — ${l.stepId} ${l.cursor}/${l.size} "${l.line}"`);
   }
   if (r.shots.length > 0) {
     out.push('');
-    out.push('Скриншоты (папка shots рядом с журналом):');
+    out.push('Screenshots (the shots folder next to the journal):');
     for (const sh of r.shots) out.push(`  ${sh.file} — ${sh.why}`);
   }
   return out.join('\n');
 }
 
-// ---------- Сводка из моста (GET /telemetry) ----------
+// ---------- Summary from the bridge (GET /telemetry) ----------
 
 export interface BridgeTelemetry {
   enabled: boolean;
-  /** Только имя файла: путь содержит имя пользователя Windows, в отчёт диагностики его не несём. */
+  /** The file name only: the path contains the Windows user name, we do not carry it into the diagnostics report. */
   file: string | null;
   events: number;
   anomalies: number;
@@ -332,7 +332,7 @@ export interface BridgeTelemetry {
   recentAnomalies: { code: string; message: string }[];
 }
 
-/** Ответ моста → проверенная сводка. Мусор и выключенный журнал → null / enabled:false. */
+/** The bridge reply → a checked summary. Garbage and a disabled journal → null / enabled:false. */
 export function summarizeBridge(raw: unknown): BridgeTelemetry | null {
   if (!raw || typeof raw !== 'object') return null;
   const o = raw as Record<string, unknown>;

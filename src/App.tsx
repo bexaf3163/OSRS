@@ -1,3 +1,4 @@
+// The frame: the header, the page switch (hash routing), the global observers of preparation and of the RuneLite link.
 import { useEffect, useState, type ComponentType } from 'react';
 import { findSkill, reference } from './data';
 import { useStore } from './store';
@@ -26,19 +27,19 @@ import { ProfileBanner } from './components/ProfileBanner';
 import { UpdateBanner } from './components/UpdateBanner';
 
 const TABS: { page: Page; href: string; label: string; Icon: ComponentType<{ className?: string }> }[] = [
-  { page: 'path', href: '#/', label: 'Путь', Icon: IconPath },
-  { page: 'skills', href: '#/skills', label: 'Навыки', Icon: IconSkills },
-  { page: 'goals', href: '#/goals', label: 'Цели', Icon: IconGoals },
-  { page: 'quests', href: '#/quests', label: 'Квесты', Icon: IconQuests },
-  { page: 'reference', href: '#/reference', label: 'Справка', Icon: IconBook },
+  { page: 'path', href: '#/', label: 'Path', Icon: IconPath },
+  { page: 'skills', href: '#/skills', label: 'Skills', Icon: IconSkills },
+  { page: 'goals', href: '#/goals', label: 'Goals', Icon: IconGoals },
+  { page: 'quests', href: '#/quests', label: 'Quests', Icon: IconQuests },
+  { page: 'reference', href: '#/reference', label: 'Reference', Icon: IconBook },
 ];
 
 function pageTitle(page: Page, param?: string): string {
-  if (page === 'skills' && param) return findSkill(param)?.name ?? 'Навыки';
-  if (page === 'reference' && param) return reference.sections.find((s) => s.id === param)?.title ?? 'Справка';
-  if (page === 'settings') return 'Настройки';
-  if (page === 'shopping') return 'Оптовый список GE';
-  if (page === 'gear') return 'Снаряжение';
+  if (page === 'skills' && param) return findSkill(param)?.name ?? 'Skills';
+  if (page === 'reference' && param) return reference.sections.find((s) => s.id === param)?.title ?? 'Reference';
+  if (page === 'settings') return 'Settings';
+  if (page === 'shopping') return 'GE shopping list';
+  if (page === 'gear') return 'Gear';
   return TABS.find((t) => t.page === page)!.label;
 }
 
@@ -47,7 +48,7 @@ export function App() {
   const { mode } = useStore();
   const [searchOpen, setSearchOpen] = useState(false);
 
-  // «/» открывает поиск, если фокус не в поле ввода.
+  // "/" opens the search if the focus is not in an input field.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const t = e.target as HTMLElement;
@@ -65,7 +66,7 @@ export function App() {
   }, [mode]);
 
   useEffect(() => {
-    document.title = `${pageTitle(route.page, route.param)} — OSRS Путь`;
+    document.title = `${pageTitle(route.page, route.param)} — OSRS Path`;
     if (!route.step) window.scrollTo(0, 0);
   }, [route]);
 
@@ -84,15 +85,15 @@ export function App() {
   return (
     <>
       <a className="skip-link" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>
-        К содержимому
+        Skip to content
       </a>
       <header className="topbar">
         <div className="topbar-inner">
           <a className="brand" href="#/">
             <img src="./icon.svg" alt="" width="28" height="28" />
-            <span>OSRS Путь</span>
+            <span>OSRS Path</span>
           </a>
-          <nav className="tabs tabs-top" aria-label="Разделы">
+          <nav className="tabs tabs-top" aria-label="Sections">
             {TABS.map(({ page, href, label, Icon }) => (
               <a key={page} href={href} className={`tab ${route.page === page ? 'is-active' : ''}`} title={label}
                 aria-current={route.page === page ? 'page' : undefined}>
@@ -105,22 +106,22 @@ export function App() {
             <BridgeIndicator />
             <DensityToggle />
             <ModeToggle />
-            <button type="button" className="search-trigger" onClick={() => setSearchOpen(true)} aria-label="Поиск" aria-keyshortcuts="/">
+            <button type="button" className="search-trigger" onClick={() => setSearchOpen(true)} aria-label="Search" aria-keyshortcuts="/">
               <IconSearch />
-              <span className="search-trigger-text">Поиск</span>
+              <span className="search-trigger-text">Search</span>
               <kbd>/</kbd>
             </button>
             <a href="#/gear" className={`icon-btn icon-btn-emoji ${route.page === 'gear' ? 'is-active' : ''}`}
-              aria-label="Снаряжение: что надеть и купить, чтобы бить быстрее" title="Снаряжение: что надеть и купить, чтобы бить быстрее"
+              aria-label="Gear: what to wear and buy to hit faster" title="Gear: what to wear and buy to hit faster"
               aria-current={route.page === 'gear' ? 'page' : undefined}>
               <span aria-hidden="true">⚔️</span>
             </a>
             <a href="#/shopping" className={`icon-btn icon-btn-emoji ${route.page === 'shopping' ? 'is-active' : ''}`}
-              aria-label="Оптовый список Grand Exchange" title="Оптовый список Grand Exchange"
+              aria-label="Grand Exchange shopping list" title="Grand Exchange shopping list"
               aria-current={route.page === 'shopping' ? 'page' : undefined}>
               <span aria-hidden="true">🛒</span>
             </a>
-            <a href="#/settings" className={`icon-btn ${route.page === 'settings' ? 'is-active' : ''}`} aria-label="Настройки"
+            <a href="#/settings" className={`icon-btn ${route.page === 'settings' ? 'is-active' : ''}`} aria-label="Settings"
               aria-current={route.page === 'settings' ? 'page' : undefined}>
               <IconSettings />
             </a>
@@ -134,7 +135,7 @@ export function App() {
         <PageBoundary resetKey={`${route.page}/${route.param ?? ''}`}>{content}</PageBoundary>
       </main>
 
-      <nav className="tabs tabs-bottom" aria-label="Разделы">
+      <nav className="tabs tabs-bottom" aria-label="Sections">
         {TABS.map(({ page, href, label, Icon }) => (
           <a key={page} href={href} className={`tab ${route.page === page ? 'is-active' : ''}`}
             aria-current={route.page === page ? 'page' : undefined}>

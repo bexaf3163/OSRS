@@ -1,4 +1,4 @@
-// Inline-разметка гайда в React без innerHTML: **жирный**, `код`, [ссылка](url или #/страница) и коды шагов → ссылки.
+// The inline markup of the texts in React without innerHTML: **bold**, `code`, [link](url or #/page) and step codes → links.
 
 import type { ReactNode } from 'react';
 import { stepById } from '../data';
@@ -24,7 +24,7 @@ function render(text: string, linkSteps: boolean): ReactNode[] {
     } else if (tok.startsWith('[')) {
       const lm = tok.match(/^\[([^\]]+)\]\(([^)]+)\)$/)!;
       const external = /^https?:\/\//.test(lm[2]);
-      // «#/reference/transport» — страница самой программы: открывается здесь же, без новой вкладки.
+      // "#/reference/transport" is a page of the app itself: it opens here, without a new tab.
       const internal = lm[2].startsWith('#/');
       out.push(external
         ? <a key={key++} href={lm[2]} target="_blank" rel="noopener noreferrer">{lm[1]}</a>

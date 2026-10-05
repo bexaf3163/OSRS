@@ -1,5 +1,5 @@
-// Единое состояние игрока для экранов: один снимок на всех (готовность, закупки, подготовка, одна ходка, цели) и
-// журнал ресурсов сеанса. Пересчитывается только когда меняется отпечаток — не на каждый рендер.
+// The single player state for the screens: one snapshot for everyone (readiness, shopping, preparation, one trip, goals) and
+// the session resource journal. Recomputed only when the fingerprint changes — not on every render.
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { items } from './data';
@@ -15,34 +15,34 @@ import { getAllPrices, getMapping, PRICE_TTL_MS } from './services/pricesApi';
 
 interface PlayerStateValue {
   state: PlayerState;
-  /** Что изменилось в последний раз (уровни, предметы, монеты, квесты). */
+  /** What changed last (levels, items, coins, quests). */
   changes: StateChange[];
   ledger: LedgerEntry[];
-  /** Итоги всего журнала (между сеансами, до 30 дней) по текущим ценам: оценка добычи пересчитывается при обновлении цен. */
+  /** Totals of the whole journal (between sessions, up to 30 days) at current prices: the loot estimate is recomputed when prices update. */
   summary: LedgerSummary;
-  /** Итоги только за этот сеанс — с момента запуска программы. */
+  /** Totals of this session only — since the app was launched. */
   session: LedgerSummary;
-  /** Начало журнала (первая запись) и очистка: журнал хранится между сеансами, и игрок может начать заново. */
+  /** The journal start (the first record) and clearing: the journal is kept between sessions, and the player can start over. */
   since: number | null;
   clearLedger: () => void;
-  /** Откуда цены: свежие с биржи или из базы проекта. */
+  /** Where the prices come from: fresh from the exchange or from the project database. */
   prices: PriceBook;
 }
 
 const Ctx = createContext<PlayerStateValue | null>(null);
 
-/** Цена продажи по названию: из базы предметов проекта (оценка, не свежая цена биржи). */
+/** The sell price by name: from the project item database (an estimate, not a fresh exchange price). */
 const SELL_PRICE = new Map<string, number>(items.flatMap((i) => (i.gePrice ? [[nameKey(i.nameEn), i.gePrice.sellPrice] as [string, number]] : [])));
 const BAKED = buildPriceBook(null, null, SELL_PRICE);
 
 /**
- * Свежие цены биржи: загружаются, когда в журнале появилась добыча, и обновляются раз в 5 минут, пока окно открыто. Нет сети — остаются
- * цены из базы проекта (с пометкой), а прежние свежие цены не пропадают от одной неудачной попытки.
+ * Fresh exchange prices: loaded when loot appears in the journal and refreshed every 5 minutes while the window is open. No network — the
+ * project database prices stay (with a mark), and earlier fresh prices do not vanish after one failed attempt.
  */
 function useLivePrices(needed: boolean): PriceBook {
   const [book, setBook] = useState<PriceBook>(BAKED);
   useEffect(() => {
-    // Пока добычи нет, свежие цены никому не нужны: не грузим ~1,5 МБ зря.
+    // While there is no loot, fresh prices are not needed by anyone: we do not load ~1.5 MB for nothing.
     if (!needed) return;
     let dead = false;
     const load = async () => {
@@ -50,7 +50,7 @@ function useLivePrices(needed: boolean): PriceBook {
       try {
         const [live, mapping] = await Promise.all([getAllPrices(), getMapping()]);
         if (!dead) setBook(buildPriceBook(live, mapping, SELL_PRICE));
-      } catch { /* биржа недоступна: остаются прежние цены */ }
+      } catch { /* the exchange is unavailable: the earlier prices stay */ }
     };
     void load();
     const t = setInterval(() => void load(), PRICE_TTL_MS);
@@ -73,13 +73,13 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
     () => buildPlayerState({ mode, stats, progress, owned, gear, questsDone, player, connected: link === 'online' }),
     [mode, stats, progress, owned, gear, questsDone, player, link],
   );
-  // Тот же отпечаток — тот же объект: потребители не пересчитываются зря.
+  // The same fingerprint — the same object: consumers do not recompute for nothing.
   const stable = useRef(next);
   if (stable.current.fingerprint !== next.fingerprint) stable.current = next;
   const state = stable.current;
 
   const [changes, setChanges] = useState<StateChange[]>([]);
-  // Журнал привязан к ключу «профиль + персонаж»: смена ключа загружает чужой журнал, а не дописывает в прежний.
+  // The journal is bound to the "profile + character" key: a key change loads another journal, and does not append to the earlier one.
   const key = ledgerKey(profiles.active, player);
   const [book, setBook] = useState<{ key: string; entries: LedgerEntry[] }>(() => ({ key, entries: loadLedger(ls(), key, Date.now()) }));
   if (book.key !== key) setBook({ key, entries: loadLedger(ls(), key, Date.now()) });
@@ -90,7 +90,7 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
   const prev = useRef<PlayerState | null>(null);
   const prevPlayer = useRef<string | null>(null);
   useEffect(() => {
-    // Другой персонаж — отсчёт заново: снимок «до» принадлежал не ему.
+    // Another character — counting starts over: the "before" snapshot did not belong to them.
     if (prevPlayer.current !== (player ?? null)) {
       prevPlayer.current = player ?? null;
       prev.current = state;
@@ -102,7 +102,7 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
     const diff = diffPlayerState(before, state);
     if (!diff.length) return;
     setChanges(diff);
-    // В журнал — только пока связь живая: без неё «изменений» нет, есть пропавшие данные.
+    // Into the journal only while the link is alive: without it there are no "changes", there is missing data.
     if (!before || !before.connected || !state.connected) return;
     const entries = entriesFor(before, state, diff, Date.now(), priceRef.current.priceOf);
     if (!entries.length) return;
@@ -132,6 +132,6 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
 
 export function usePlayerState(): PlayerStateValue {
   const v = useContext(Ctx);
-  if (!v) throw new Error('usePlayerState вне PlayerStateProvider');
+  if (!v) throw new Error('usePlayerState outside PlayerStateProvider');
   return v;
 }

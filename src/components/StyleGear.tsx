@@ -1,4 +1,4 @@
-// «🛡 Что носить для магии / стрельбы»: советы вики по слотам под твои уровни и монеты. Цены — биржа; что надето — из игры.
+// "🛡 What to wear for magic / ranged": the wiki's advice by slot for your levels and coins. Prices — the exchange; what is worn — from the game.
 
 import { useEffect, useMemo, useState } from 'react';
 import type { Step } from '../types';
@@ -6,10 +6,10 @@ import { useBridge } from '../bridge';
 import { useStore } from '../store';
 import { formatGp } from '../lib/shopping';
 import { wealthOf } from '../lib/wealth';
-import { adviseStyle, QUEST_STEP, shoppingTotal, SLOT_RU, STYLE_GEAR, type PickStatus } from '../lib/styleGear';
+import { adviseStyle, QUEST_STEP, shoppingTotal, SLOT_LABEL, STYLE_GEAR, type PickStatus } from '../lib/styleGear';
 import { getGePrice, getMapping } from '../services/pricesApi';
 
-const STATUS: Record<PickStatus, string> = { worn: '✓ надето', bag: '✓ в сумке', buy: 'купить', save: 'копить', find: 'добыть', locked: 'пока нельзя' };
+const STATUS: Record<PickStatus, string> = { worn: '✓ worn', bag: '✓ in the bag', buy: 'buy', save: 'save up', find: 'obtain', locked: 'locked for now' };
 
 export function StyleGear({ step }: { step: Step }) {
   const { progress, steps } = useStore();
@@ -48,21 +48,21 @@ export function StyleGear({ step }: { step: Step }) {
   const total = picks ? shoppingTotal(picks) : 0;
   return (
     <details className="step-section style-gear">
-      <summary><strong>🛡 Что носить {style === 'magic' ? 'для магии' : 'для стрельбы'}</strong>{total > 0 && <span className="muted small"> — докупить ≈ {formatGp(total)} gp</span>}</summary>
+      <summary><strong>🛡 What to wear {style === 'magic' ? 'for magic' : 'for ranged'}</strong>{total > 0 && <span className="muted small"> — still to buy ≈ {formatGp(total)} gp</span>}</summary>
       {!picks
-        ? <p className="muted small">Загружаю цены биржи…</p>
+        ? <p className="muted small">Loading the exchange prices…</p>
         : (
           <ul className="style-list small">
             {picks.map((p) => (
               <li key={p.slot} className={`style-row is-${p.status}`}>
-                <strong>{SLOT_RU[p.slot]}:</strong> {p.name ?? 'пока нечего'} <span className="muted">· {STATUS[p.status]}{p.price ? ` ≈ ${formatGp(p.price)} gp` : ''}</span>
+                <strong>{SLOT_LABEL[p.slot]}:</strong> {p.name ?? 'nothing yet'} <span className="muted">· {STATUS[p.status]}{p.price ? ` ≈ ${formatGp(p.price)} gp` : ''}</span>
                 {p.note && <span className="muted"> — {p.note}</span>}
-                {p.better && <span className="muted"> · лучше: {p.better.name} ({p.better.why})</span>}
+                {p.better && <span className="muted"> · better: {p.better.name} ({p.better.why})</span>}
               </li>
             ))}
           </ul>
         )}
-      <p className="muted small">Рекомендации OSRS Wiki ({STYLE_GEAR.generatedAt}), цены — биржа сейчас. Это список бесплатной версии: для Members броня и оружие другие.</p>
+      <p className="muted small">OSRS Wiki recommendations ({STYLE_GEAR.generatedAt}), prices — the exchange now. This is a list for the free version: for Members the armor and weapons are different.</p>
     </details>
   );
 }

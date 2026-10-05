@@ -19,9 +19,9 @@ export function SkillDetailPage({ id }: { id: string }) {
   if (!skill) {
     return (
       <div className="page">
-        <a className="back" href="#/skills"><IconBack />Навыки</a>
-        <h1>Навык не найден</h1>
-        <p className="muted">Кода «{id}» нет в гайде.</p>
+        <a className="back" href="#/skills"><IconBack />Skills</a>
+        <h1>Skill not found</h1>
+        <p className="muted">There is no skill with the code "{id}".</p>
       </div>
     );
   }
@@ -33,37 +33,37 @@ function SkillView({ skill }: { skill: Skill }) {
   const level = skillLevel(skill, progress);
   const hit = rangeForLevel(skill.plan.ranges, level);
   const related = steps.filter((s) => s.targets?.some((t) => levelById.get(t.skill)?.skill === skill.id));
-  // «Чем качать»: у ближнего боя — отстающий из трёх навыков; цель — как в калькуляторе ниже.
+  // "What to train with": for melee — the lagging one of the three skills; the goal is as in the calculator below.
   const stage = currentStage(steps, progress);
   const lagging = [...skill.levelSkills].sort((a, b) => levelOf(progress, a) - levelOf(progress, b))[0];
   const trainTarget = defaultTarget(skill, lagging, levelOf(progress, lagging), stage);
 
   return (
     <div className="page">
-      <a className="back" href="#/skills"><IconBack />Навыки</a>
+      <a className="back" href="#/skills"><IconBack />Skills</a>
       <header className="page-head">
         <h1>{skill.name}{skill.membersOnly && <> <span className="badge badge-members">Members</span></>}</h1>
         <p className="muted">
           {skill.nameEn ?? skill.subtitle}
-          {skill.wiki && <> · <a href={skill.wiki} target="_blank" rel="noopener noreferrer">Вики <IconExternal /></a></>}
+          {skill.wiki && <> · <a href={skill.wiki} target="_blank" rel="noopener noreferrer">Wiki <IconExternal /></a></>}
         </p>
       </header>
       {skill.membersOnly && mode === 'f2p' && (
-        <p className="notice">Навык качается только с подпиской. Переключи режим на Members в шапке, чтобы увидеть этапы 7–9.</p>
+        <p className="notice">This skill can be trained only with membership. Switch the mode to Members in the header to see stages 7–9.</p>
       )}
 
-      <section className="card levels-card" aria-label="Уровни">
+      <section className="card levels-card" aria-label="Levels">
         <div className="levels-row">
           {skill.levelSkills.map((lid) => <LevelInput key={lid} id={lid} label={levelById.get(lid)!.name} />)}
         </div>
         <LiveXp targets={skill.levelSkills.map((lid) => ({ skill: lid, level: Math.min(99, levelOf(progress, lid) + 1) }))} />
         {hit && (
           <p className="current-range">
-            Сейчас по плану:{' '}
+            Now by the plan:{' '}
             <button type="button" className="link-btn" onClick={() => document.getElementById('plan')?.scrollIntoView({ behavior: 'smooth' })}>
               <code className="code">{hit.range.code}</code>
             </button> · {hit.range.levels}
-            {skill.levelSkills.length > 1 && <span className="muted"> (по отстающему, ур. {level})</span>}
+            {skill.levelSkills.length > 1 && <span className="muted"> (by the lagging one, level {level})</span>}
           </p>
         )}
       </section>
@@ -74,7 +74,7 @@ function SkillView({ skill }: { skill: Skill }) {
 
       {related.length > 0 && (
         <section className="section">
-          <h2>Шаги пути с этим навыком</h2>
+          <h2>Path steps with this skill</h2>
           <ul className="link-list">
             {related.map((s) => (
               <li key={s.id} className={isClosed(progress, s.id) ? 'is-done' : ''}>
@@ -108,7 +108,7 @@ function PlanBlocks({ skill, highlight, blocks }: { skill: Skill; highlight?: nu
     <>
       <Blocks blocks={blocks.slice(0, tableAt)} />
       <Table head={skill.plan.head} rows={skill.plan.ranges.map((r) => r.cells)} highlight={highlight}
-        highlightLabel="сейчас" codeColumn caption={`План прокачки: ${skill.name}`} />
+        highlightLabel="now" codeColumn caption={`Training plan: ${skill.name}`} />
       <Blocks blocks={blocks.slice(tableAt + 1)} />
     </>
   );
@@ -124,7 +124,7 @@ function defaultTarget(skill: Skill, levelId: string, level: number, stage: numb
 
 interface CalcProps {
   levelIds: string[];
-  /** Цель по умолчанию: цель этапа или конец текущей строки плана. */
+  /** The default goal: the stage goal or the end of the current plan row. */
   suggest: (levelId: string, level: number, stage: number) => number;
 }
 
@@ -137,11 +137,11 @@ function Calculator({ levelIds, suggest }: CalcProps) {
   const [xpNow, setXpNow] = useState('');
   const ids = { which: useId(), target: useId(), xp: useId() };
 
-  // Новый навык или уровень — новая цель по умолчанию.
+  // A new skill or level — a new default goal.
   useEffect(() => {
     setTarget(String(suggest(which, level, stage)));
     setXpNow('');
-    // suggest и массив пересоздаются на каждом рендере — цель пересчитывается только при смене навыка или уровня.
+    // suggest and the array are recreated on every render — the goal is recomputed only when the skill or level changes.
   }, [levelIds.join(), which, level, stage]);
 
   const targetLevel = clampLevel(Number(target) || 1);
@@ -153,27 +153,27 @@ function Calculator({ levelIds, suggest }: CalcProps) {
 
   return (
     <section className="card calc" aria-labelledby={`${ids.which}-h`}>
-      <h2 className="card-title" id={`${ids.which}-h`}>Сколько опыта осталось</h2>
+      <h2 className="card-title" id={`${ids.which}-h`}>How much XP is left</h2>
       <div className="calc-grid">
         {levelIds.length > 1 && (
           <div className="calc-field">
-            <label htmlFor={ids.which}>Навык</label>
+            <label htmlFor={ids.which}>Skill</label>
             <select id={ids.which} value={which} onChange={(e) => setWhich(e.target.value)}>
               {levelIds.map((lid) => <option key={lid} value={lid}>{levelById.get(lid)!.name}</option>)}
             </select>
           </div>
         )}
         <div className="calc-field">
-          <span className="calc-label">Уровень сейчас</span>
+          <span className="calc-label">Level now</span>
           <span className="calc-static">{level}</span>
         </div>
         <div className="calc-field">
-          <label htmlFor={ids.target}>Цель</label>
+          <label htmlFor={ids.target}>Goal</label>
           <input id={ids.target} type="text" inputMode="numeric" pattern="[0-9]*" value={target}
             onChange={(e) => setTarget(e.target.value.replace(/\D/g, '').slice(0, 2))} onFocus={(e) => e.target.select()} />
         </div>
         <div className="calc-field">
-          <label htmlFor={ids.xp}>Точный опыт</label>
+          <label htmlFor={ids.xp}>Exact XP</label>
           <input id={ids.xp} type="text" inputMode="numeric" value={xpNow} placeholder={formatXp(xpForLevel(level))}
             aria-describedby={`${ids.xp}-hint`}
             onChange={(e) => setXpNow(e.target.value)} />
@@ -181,13 +181,13 @@ function Calculator({ levelIds, suggest }: CalcProps) {
       </div>
       <p className="calc-result" aria-live="polite">
         {targetLevel <= level
-          ? <>Уровень {targetLevel} уже взят.</>
-          : <><strong>{formatXp(left)}</strong> опыта до {targetLevel} уровня <span className="muted">({name.toLowerCase()})</span></>}
+          ? <>Level {targetLevel} is already reached.</>
+          : <><strong>{formatXp(left)}</strong> XP to level {targetLevel} <span className="muted">({name.toLowerCase()})</span></>}
       </p>
       <p className="muted small" id={`${ids.xp}-hint`}>
-        {hasExact ? `Сейчас ${formatXp(exact)}` : `Уровень ${level} начинается с ${formatXp(xpForLevel(level))}`} · уровень {targetLevel} — {formatXp(xpForLevel(targetLevel))} опыта.
-        {xpNow.trim() && !hasExact && ' Точный опыт не подходит к уровню — считаю от начала уровня.'}
-        {!xpNow.trim() && ' Точный опыт из игры можно не вводить — тогда счёт от начала уровня.'}
+        {hasExact ? `Now ${formatXp(exact)}` : `Level ${level} starts at ${formatXp(xpForLevel(level))}`} · level {targetLevel} — {formatXp(xpForLevel(targetLevel))} XP.
+        {xpNow.trim() && !hasExact && ' The exact XP does not match the level — counting from the start of the level.'}
+        {!xpNow.trim() && ' The exact XP from the game can be left empty — then the count is from the start of the level.'}
       </p>
     </section>
   );

@@ -5,7 +5,7 @@ import {
 import { articleMapPoint, cleanWikiText, locLinePoint, mapTemplatePoints, spawnPoint } from '../src/services/wikiApi';
 import majorLocations from '../src/data/majorLocations.json';
 
-/** Вики-заглушка: отвечает разметкой статей из таблицы, считает запросы. */
+/** A wiki stub: answers with the markup of the articles from the table, counts the requests. */
 function fakeWiki(pages: Record<string, string>, fail = false) {
   const calls: string[] = [];
   const fetchFn = async (url: string) => {
@@ -25,13 +25,13 @@ function fakeWiki(pages: Record<string, string>, fail = false) {
 }
 
 const noWiki: WikiLocator = {
-  article: async () => { throw new Error('не должно звать вики'); },
-  spawn: async () => { throw new Error('не должно звать вики'); },
+  article: async () => { throw new Error('must not call the wiki'); },
+  spawn: async () => { throw new Error('must not call the wiki'); },
   clear() {},
 };
 
-describe('словарь мест', () => {
-  it('собран с вики и без выдуманных точек', () => {
+describe('the place dictionary', () => {
+  it('is collected from the wiki and has no invented points', () => {
     const { locations, source } = majorLocations as { source: string; locations: Record<string, { x: number; y: number; plane: number; page: string }> };
     expect(source).toMatch(/OSRS Wiki/);
     const entries = Object.values(locations);
@@ -44,13 +44,13 @@ describe('словарь мест', () => {
     }
   });
 
-  it('название приводится к общему виду', () => {
+  it('the name is reduced to a common form', () => {
     expect(normalizeName("Fred the Farmer's house")).toBe('fred farmer house');
-    expect(normalizeName('Lumbridge Castle 2nd floor (3-й этаж)')).toBe('lumbridge castle');
-    expect(normalizeName('Port Sarim (только для подписки)')).toBe('port sarim');
+    expect(normalizeName('Lumbridge Castle 2nd floor')).toBe('lumbridge castle');
+    expect(normalizeName('Port Sarim (Members only)')).toBe('port sarim');
   });
 
-  it('точное имя, синоним и без регистра', () => {
+  it('an exact name, a synonym and case-insensitive', () => {
     expect(matchStrict('Port Sarim')).toMatchObject({ x: 3029, y: 3221, match: 'exact', source: 'dictionary' });
     expect(matchStrict('GE')).toMatchObject({ label: 'Grand Exchange', match: 'alias' });
     expect(matchStrict('port sarim')).toMatchObject({ label: 'Port Sarim' });
@@ -58,7 +58,7 @@ describe('словарь мест', () => {
     expect(matchStrict('Varrock - east of the Grand Exchange')).toBeNull();
   });
 
-  it('упоминание в строке и опечатка', () => {
+  it('a mention in a line and a typo', () => {
     expect(matchLoose('Varrock - east of the Grand Exchange')).toMatchObject({ label: 'Grand Exchange', match: 'substring' });
     expect(matchLoose("Lumbridge - outside Fred the Farmer's house")).toMatchObject({ label: 'Fred the Farmer' });
     expect(matchLoose('Draynor Vilage')).toMatchObject({ label: 'Draynor Village', match: 'substring' });
@@ -68,10 +68,10 @@ describe('словарь мест', () => {
 });
 
 describe('resolveLocationCoordinates', () => {
-  it('A: «Lumbridge Swamp by Fishing tutor» — из словаря, без вики', async () => {
+  it('A: "Lumbridge Swamp by Fishing tutor" — from the dictionary, without the wiki', async () => {
     const r = await resolveLocationCoordinates('Lumbridge Swamp by Fishing tutor', undefined, {}, noWiki);
-    // Середина пяти мест ловли «Lumbridge Swamp» со страницы Fishing spot (small net, bait): 3243,3150.
-    // В примере задания — 3241,3152, в двух клетках; сам Fishing tutor стоит в 3244,3157.
+    // The middle of the five "Lumbridge Swamp" fishing spots from the Fishing spot page (small net, bait): 3243,3150.
+    // In the task example it is 3241,3152, within two tiles; the Fishing tutor himself stands at 3244,3157.
     expect(r).toMatchObject({ x: 3243, y: 3150, plane: 0, source: 'dictionary', label: 'Lumbridge Swamp fishing spots' });
   });
 
@@ -79,12 +79,12 @@ describe('resolveLocationCoordinates', () => {
     expect(await resolveLocationCoordinates('Port Sarim', undefined, {}, noWiki)).toMatchObject({ x: 3029, y: 3221, source: 'dictionary' });
   });
 
-  it('C: магазин точнее города', async () => {
+  it('C: a shop is more precise than a town', async () => {
     const r = await resolveLocationCoordinates('Port Sarim', 'Gerrant', { shopName: "Gerrant's Fishy Business." }, noWiki);
     expect(r).toMatchObject({ x: 3015, y: 3225, label: "Gerrant's Fishy Business" });
   });
 
-  it('D: неизвестное место — поиск на вики, без исключения', async () => {
+  it('D: an unknown place — a wiki search, without an exception', async () => {
     const { fetchFn } = fakeWiki({});
     const r = await resolveLocationCoordinates('Xyzzy plugh', undefined, {}, createWikiLocator(fetchFn, Date.now, false));
     expect(r.source).toBe('search-fallback');
@@ -92,7 +92,7 @@ describe('resolveLocationCoordinates', () => {
     if (!isPoint(r)) expect(r.searchUrl).toBe('https://oldschool.runescape.wiki/w/Special:Search?search=Xyzzy%20plugh');
   });
 
-  it('вики не отвечает — словарь «примерно», затем поиск', async () => {
+  it('the wiki does not answer — the dictionary "approximately", then a search', async () => {
     const { fetchFn } = fakeWiki({}, true);
     const wiki = createWikiLocator(fetchFn, Date.now, false);
     expect(await resolveLocationCoordinates('Varrock - east of the Grand Exchange', undefined, {}, wiki))
@@ -100,7 +100,7 @@ describe('resolveLocationCoordinates', () => {
     expect((await resolveLocationCoordinates('Nowhere at all', undefined, {}, wiki)).source).toBe('search-fallback');
   });
 
-  it('спавн берётся со страницы предмета и точнее города', async () => {
+  it('the spawn is taken from the item page and is more precise than the town', async () => {
     const { fetchFn } = fakeWiki({
       'Bucket': "{{ItemSpawnLine|name=Bucket|location=[[Lumbridge Castle]] kitchen|members=No|x:3208,y:3214|x:3210,y:3214}}",
     });
@@ -109,25 +109,25 @@ describe('resolveLocationCoordinates', () => {
     expect(r).toMatchObject({ x: 3209, y: 3214, plane: 0, source: 'wiki', match: 'spawn' });
   });
 
-  it('спавн в городе из словаря — клетка спавна, без сети — центр города', async () => {
+  it('a spawn in a town from the dictionary — the spawn tile, without a network — the town centre', async () => {
     const pages = { Egg: '{{ItemSpawnLine|name=Egg|location=[[Port Sarim]]|x:3017,y:3205}}' };
     const online = fakeWiki(pages);
     expect(await resolveLocationCoordinates('Port Sarim', undefined, { itemPage: 'Egg', itemName: 'Egg' }, createWikiLocator(online.fetchFn, Date.now, false)))
       .toMatchObject({ x: 3017, y: 3205, match: 'spawn' });
     const offline = fakeWiki(pages, true);
-    expect(await resolveLocationCoordinates('Port Sarim (только для подписки)', undefined, { itemPage: 'Egg', itemName: 'Egg' }, createWikiLocator(offline.fetchFn, Date.now, false)))
+    expect(await resolveLocationCoordinates('Port Sarim (Members only)', undefined, { itemPage: 'Egg', itemName: 'Egg' }, createWikiLocator(offline.fetchFn, Date.now, false)))
       .toMatchObject({ x: 3029, y: 3221, source: 'dictionary' });
   });
 
-  it('статья NPC на вики, когда в словаре его нет', async () => {
+  it('the NPC article on the wiki, when it is not in the dictionary', async () => {
     const { fetchFn } = fakeWiki({ 'Some trader': '{{Infobox NPC|name=Some trader}}\n{{Map|x=3100|y=3500|plane=1|mapID=0}}' });
     const r = await resolveLocationCoordinates('Somewhere odd', 'Some trader', {}, createWikiLocator(fetchFn, Date.now, false));
     expect(r).toMatchObject({ x: 3100, y: 3500, plane: 1, source: 'wiki', match: 'article', label: 'Some trader' });
   });
 });
 
-describe('кеш вики', () => {
-  it('одна статья — один запрос, в том числе при одновременных кликах', async () => {
+describe('the wiki cache', () => {
+  it('one article — one request, including simultaneous clicks', async () => {
     const { fetchFn, calls } = fakeWiki({ Place: '{{Map|3200,3200}}' });
     const wiki = createWikiLocator(fetchFn, Date.now, false);
     const [a, b] = await Promise.all([wiki.article('Place'), wiki.article('Place')]);
@@ -137,7 +137,7 @@ describe('кеш вики', () => {
     expect(calls).toEqual(['Place']);
   });
 
-  it('устаревает через неделю, ошибка — через минуту', async () => {
+  it('expires after a week, an error — after a minute', async () => {
     let t = 0;
     const ok = fakeWiki({ Place: '{{Map|3200,3200}}' });
     const wiki = createWikiLocator(ok.fetchFn, () => t, false);
@@ -160,20 +160,20 @@ describe('кеш вики', () => {
   });
 });
 
-describe('разбор карт вики', () => {
-  it('три записи {{Map}}', () => {
+describe('parsing wiki maps', () => {
+  it('three {{Map}} records', () => {
     expect(mapTemplatePoints('x=3222|y=3218|plane=0|mapID=0')).toEqual([{ x: 3222, y: 3218, plane: 0 }]);
     expect(mapTemplatePoints('3144,3178|3150,3180|mtype=polygon')).toHaveLength(2);
     expect(mapTemplatePoints('x:3190,y:3273,plane:1')).toEqual([{ x: 3190, y: 3273, plane: 1 }]);
   });
 
-  it('разбросанные точки NPC — первая, а не середина мира', () => {
+  it('scattered NPC points — the first, not the middle of the world', () => {
     expect(articleMapPoint('{{Map|3000,3000|3400,3400}}')).toEqual({ x: 3000, y: 3000, plane: 0 });
     expect(articleMapPoint('{{Map|3000,3000|3010,3010}}')).toEqual({ x: 3005, y: 3005, plane: 0 });
-    expect(articleMapPoint('нет карты')).toBeNull();
+    expect(articleMapPoint('no map')).toBeNull();
   });
 
-  it('места ловли и руды — из строк ObjectLocLine', () => {
+  it('fishing and ore places — from the ObjectLocLine rows', () => {
     const text = '{{ObjectLocLine|name=Fishing spot|location=[[Draynor Village]]|plane=0|x:3086,y:3227|x:3085,y:3230}}'
       + '{{ObjectLocLine|name=Fishing spot|location=[[Lumbridge Swamp]]|x:3246,y:3155|x:3240,y:3147}}';
     expect(locLinePoint(text, 'Lumbridge Swamp')).toEqual({ x: 3243, y: 3151, plane: 0 });
@@ -181,29 +181,29 @@ describe('разбор карт вики', () => {
     expect(locLinePoint(text, 'Catherby')).toBeNull();
   });
 
-  it('спавн с точками без «x:» — как у Small fishing net на вики', () => {
+  it('a spawn with points without "x:" — as with the Small fishing net on the wiki', () => {
     const text = '{{ItemSpawnLine|name=Small fishing net|location=[[Lumbridge Swamp]] - by the [[Fishing tutor]]|members=No|3244,3159|3245,3156|leagueRegion = Misthalin}}';
     expect(spawnPoint(text, 'Small fishing net', 'Lumbridge Swamp - by the Fishing tutor')).toEqual({ x: 3245, y: 3158, plane: 0 });
   });
 
-  it('строка досье «Lumbridge Swamp - by the Fishing tutor» без сети — из словаря', async () => {
+  it('the dossier row "Lumbridge Swamp - by the Fishing tutor" without a network — from the dictionary', async () => {
     const r = await resolveLocationCoordinates('Lumbridge Swamp - by the Fishing tutor', undefined, {}, noWiki);
     expect(r).toMatchObject({ label: 'Lumbridge Swamp fishing spots', match: 'normalized' });
   });
 
-  it('спавн чужого предмета не подходит', () => {
+  it('a foreign item\'s spawn does not fit', () => {
     const text = '{{ItemSpawnLine|name=Egg|location=Farm|x:3000,y:3000}}';
     expect(spawnPoint(text, 'Bucket', 'Farm')).toBeNull();
     expect(spawnPoint(text, 'Egg', 'Farm')).toEqual({ x: 3000, y: 3000, plane: 0 });
   });
 
-  it('HTML-сущности и этажи из Bucket', () => {
-    expect(cleanWikiText('Wizards&#39; Tower 1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93;')).toBe("Wizards' Tower 1st floor (2-й этаж)");
+  it('HTML entities and floors from Bucket', () => {
+    expect(cleanWikiText('Wizards&#39; Tower 1st&nbsp;floor&#91;UK&#93;2nd&nbsp;floor&#91;US&#93;')).toBe("Wizards' Tower 1st floor");
   });
 });
 
-describe('кеш мест в localStorage', () => {
-  it('ошибки не сохраняются, а старые места вытесняются свежими', () => {
+describe('the place cache in localStorage', () => {
+  it('errors are not saved, and old places are displaced by fresh ones', () => {
     const data = {
       a: { at: 1, value: { x: 3000, y: 3000, plane: 0 } },
       b: { at: 3, value: null },
@@ -215,9 +215,9 @@ describe('кеш мест в localStorage', () => {
   });
 });
 
-describe('cleanWikiText: неразрывный пробел вики', () => {
-  it('«1st floor[UK]2nd floor[US]» с U+00A0 приводится к «1st floor (2-й этаж)»', () => {
-    expect(cleanWikiText('1st floor[UK]2nd floor[US] of Champions\' Guild')).toBe("1st floor (2-й этаж) of Champions' Guild");
-    expect(cleanWikiText('Grand Tree, 2nd&#160;floor&#91;UK&#93;3rd&#160;floor&#91;US&#93;')).toBe('Grand Tree, 2nd floor (3-й этаж)');
+describe('cleanWikiText: the wiki non-breaking space', () => {
+  it('"1st floor[UK]2nd floor[US]" with U+00A0 is reduced to "1st floor"', () => {
+    expect(cleanWikiText('1st floor[UK]2nd floor[US] of Champions\' Guild')).toBe("1st floor of Champions' Guild");
+    expect(cleanWikiText('Grand Tree, 2nd&#160;floor&#91;UK&#93;3rd&#160;floor&#91;US&#93;')).toBe('Grand Tree, 2nd floor');
   });
 });

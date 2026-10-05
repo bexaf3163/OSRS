@@ -1,4 +1,4 @@
-// Состояние объездов подготовки: хранится в окне (отдельно у каждого профиля) и переживает обновление и перезапуск.
+// The state of the preparation detours: kept in the window (separately for each profile) and survives a refresh and a restart.
 
 import { useCallback, useSyncExternalStore } from 'react';
 import { activeOf, profileStorageKey, useProfiles } from './profiles';
@@ -6,7 +6,7 @@ import { emptyPrep, parsePrep, PREP_KEY, type PrepState } from './prepRoute';
 
 const EMPTY = emptyPrep();
 
-/** Отказы игрока в этом сеансе («шаг:задача»): автоочередь не предлагает то же снова, пока окно не закрыто. */
+/** The player's refusals in this session ("step:task"): the auto queue does not offer the same again until the window is closed. */
 export const declined = new Set<string>();
 const listeners = new Set<() => void>();
 const cache = new Map<string, PrepState>();
@@ -15,7 +15,7 @@ function read(key: string): PrepState {
   const hit = cache.get(key);
   if (hit) return hit;
   let raw: string | null = null;
-  try { raw = localStorage.getItem(key); } catch { /* нет хранилища */ }
+  try { raw = localStorage.getItem(key); } catch { /* no storage */ }
   const s = parsePrep(raw);
   cache.set(key, s);
   return s;
@@ -23,7 +23,7 @@ function read(key: string): PrepState {
 
 function write(key: string, s: PrepState): void {
   cache.set(key, s);
-  try { localStorage.setItem(key, JSON.stringify(s)); } catch { /* запомнится до перезапуска */ }
+  try { localStorage.setItem(key, JSON.stringify(s)); } catch { /* it is remembered until a restart */ }
   for (const l of listeners) l();
 }
 

@@ -36,18 +36,18 @@ function planOf(stepId: string, have: Record<string, Partial<OwnedItem>>, extra:
 
 const DEATH: Recovery = { reason: 'DEATH', since: 1, landedAt: { x: 3222, y: 3218, plane: 0 }, diedAt: null, distance: 120, target: { x: 3000, y: 3145, plane: 0 } };
 
-describe('снимок состояния для игры (протокол 6)', () => {
-  it('программа объявляет протокол 6 и адрес /prep-plan; плагин старше — просим обновить', () => {
+describe('the state snapshot for the game (protocol 6)', () => {
+  it('the app declares protocol 6 and the /prep-plan address; an older plugin — we ask to update', () => {
     expect(APP_PROTOCOL).toBe(6);
     expect(BRIDGE_PATHS).toContain('/prep-plan');
     expect(supportsSnapshot(6)).toBe(true);
     expect(supportsSnapshot(5)).toBe(false);
     expect(supportsSnapshot(null)).toBe(false);
-    expect(missingWithPlugin(5).join(' ')).toMatch(/снимок/);
+    expect(missingWithPlugin(5).join(' ')).toMatch(/snapshot/);
     expect(missingWithPlugin(6)).toEqual([]);
   });
 
-  it('план в игре: процент, строки с важностью, «не бери сейчас», в пределах проверок плагина', () => {
+  it('the plan in the game: percent, lines with importance, "do not take now", within the plugin checks', () => {
     const p = planPayload(planOf('S2-07', { 'Bronze pickaxe': { carried: 1 }, 'Iron bar': { carried: 0, bank: 2 } }));
     expect(p.stepId).toBe('S2-07');
     expect(typeof p.score.percent).toBe('number');
@@ -65,24 +65,24 @@ describe('снимок состояния для игры (протокол 6)',
     expect(p.later.length).toBeLessThanOrEqual(12);
   });
 
-  it('режим восстановления: заголовок и пункты по порядку, не больше пяти', () => {
+  it('recovery mode: the heading and the points in order, no more than five', () => {
     const p = planPayload(planOf('S2-07', {}, { recovery: DEATH }));
-    expect(p.recovery?.title).toMatch(/Ты умер/);
+    expect(p.recovery?.title).toMatch(/You died/);
     expect(p.recovery?.title).toContain('S2-07');
     expect(p.recovery!.steps.length).toBeGreaterThan(0);
     expect(p.recovery!.steps.length).toBeLessThanOrEqual(5);
-    expect(p.recovery!.steps[0]).toMatch(/вещи|могил/i);
+    expect(p.recovery!.steps[0]).toMatch(/things|grave/i);
     expect(planPayload(planOf('S2-07', {})).recovery).toBeUndefined();
   });
 
-  it('текст не длиннее предела плагина, режется по слову', () => {
-    const c = clipText('слово '.repeat(100));
+  it('the text is not longer than the plugin limit, cut at a word', () => {
+    const c = clipText('word '.repeat(100));
     expect(c.length).toBeLessThanOrEqual(200);
     expect(c.endsWith('…')).toBe(true);
-    expect(clipText('коротко  и   ясно')).toBe('коротко и ясно');
+    expect(clipText('short  and   clear')).toBe('short and clear');
   });
 
-  it('снимок полный: чего нет — null; пустое — как снято; план другого шага не уходит', () => {
+  it('the snapshot is complete: what is absent — null; empty — as taken; another step\'s plan is not sent', () => {
     const step = toInGameTarget(allSteps.find((s) => s.id === 'S1-03')!)!;
     const plan = planPayload(planOf('S1-03', {}));
     const parts: SnapshotParts = { step, shopping: { items: [] }, bankTags: { stageId: 'stage-1', itemIds: [] }, gearHint: null, plan };
@@ -94,13 +94,13 @@ describe('снимок состояния для игры (протокол 6)',
     expect(buildEnvelope({ ...parts, step: null }, 9).step).toBeNull();
   });
 
-  it('одинаковое не шлётся второй раз: ключ не зависит от номера снимка', () => {
+  it('the same is not sent twice: the key does not depend on the snapshot number', () => {
     const parts: SnapshotParts = { ...EMPTY_PARTS, bankTags: { stageId: 'stage-1', itemIds: [1, 2] } };
     expect(envelopeKey(parts)).toBe(envelopeKey({ ...parts }));
     expect(envelopeKey(parts)).not.toBe(envelopeKey({ ...parts, bankTags: { stageId: 'stage-1', itemIds: [1, 3] } }));
   });
 
-  it('номер снимка растёт и между запусками программы (по часам), запоздавший не пройдёт', () => {
+  it('the snapshot number grows between app launches too (by the clock), a late one will not pass', () => {
     expect(nextSeq(0, 1000)).toBe(1000);
     expect(nextSeq(1000, 1000)).toBe(1001);
     expect(nextSeq(5000, 1000)).toBe(5001);
@@ -108,24 +108,24 @@ describe('снимок состояния для игры (протокол 6)',
     expect(nextSeq(a, 1_700_000_000_000 + 5)).toBeGreaterThan(a);
   });
 
-  it('копия снимков в runelite-bridge совпадает с тем, что шлёт программа (плагин разбирает её в своих тестах)', () => {
+  it('the copy of the snapshots in runelite-bridge matches what the app sends (the plugin parses it in its own tests)', () => {
     const mkParts = (id: string, plan: PrepPlan, extra: Partial<SnapshotParts> = {}): SnapshotParts => ({
       step: toInGameTarget(allSteps.find((s: Step) => s.id === id)!), shopping: null, bankTags: null, gearHint: null, plan: planPayload(plan), ...extra,
     });
     const cases: [string, SnapshotParts][] = [
-      ['S1-03: что-то в сумке, что-то в банке', mkParts('S1-03', planOf('S1-03', { Bucket: { carried: 1 }, Pot: { carried: 0, bank: 1 } }), {
+      ['S1-03: some in the bag, some in the bank', mkParts('S1-03', planOf('S1-03', { Bucket: { carried: 1 }, Pot: { carried: 0, bank: 1 } }), {
         shopping: { items: [{ name: 'Bucket', id: 1925, count: 2 }] }, bankTags: { stageId: 'stage-1', itemIds: [1925, 1931] },
       })],
-      ['S2-07: после смерти', mkParts('S2-07', planOf('S2-07', {}, { recovery: DEATH }))],
-      ['S2-03: сумка почти полная', mkParts('S2-03', planOf('S2-03', { Onion: { carried: 1 } }, { slots: 27 }), {
-        gearHint: { text: '⚡ Надень Iron scimitar — он в банке', watchItems: ['Iron scimitar'], highlightItems: ['Iron scimitar'] },
+      ['S2-07: after death', mkParts('S2-07', planOf('S2-07', {}, { recovery: DEATH }))],
+      ['S2-03: the bag is almost full', mkParts('S2-03', planOf('S2-03', { Onion: { carried: 1 } }, { slots: 27 }), {
+        gearHint: { text: '⚡ Wear Iron scimitar — it is in the bank', watchItems: ['Iron scimitar'], highlightItems: ['Iron scimitar'] },
       })],
-      ['без шага: всё снято', { ...EMPTY_PARTS }],
+      ['no step: everything cleared', { ...EMPTY_PARTS }],
     ];
     const rows = cases.map(([name, parts], i) => JSON.stringify({ name, envelope: buildEnvelope(parts, 1000 + i) }));
     const now = `[\n${rows.join(',\n')}\n]\n`;
     if (process.env.UPDATE_FIXTURES === '1') writeFileSync(FILE, now);
     const saved = existsSync(FILE) ? readFileSync(FILE, 'utf8') : '';
-    expect(saved === now, 'runelite-bridge/src/test/resources/prep-snapshots.json устарел — UPDATE_FIXTURES=1 npm test').toBe(true);
+    expect(saved === now, 'runelite-bridge/src/test/resources/prep-snapshots.json is out of date — UPDATE_FIXTURES=1 npm test').toBe(true);
   });
 });

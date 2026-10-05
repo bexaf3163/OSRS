@@ -1,13 +1,13 @@
-// Мост к программе для ПК (electron/preload.cjs). Без него (страница при разработке) всё работает, только без RuneLite и файла прогресса.
+// The bridge to the desktop app (electron/preload.cjs). Without it (the page during development) everything works, only without RuneLite and the progress file.
 
 export interface ZoomState {
-  /** Масштаб, выбранный вручную. */
+  /** The scale chosen manually. */
   zoom: number;
-  /** Подстраивать масштаб под ширину окна. */
+  /** Fit the scale to the window width. */
   autoZoom: boolean;
-  /** Итоговый масштаб сейчас: ручной × подстройка под окно. */
+  /** The resulting scale now: manual x fit to the window. */
   effective: number;
-  /** Окно поверх всех окон. */
+  /** The window is on top of all other windows. */
   alwaysOnTop: boolean;
 }
 
@@ -15,40 +15,40 @@ export interface RuneliteCheck {
   ok: boolean;
   problems: string[];
   clientVersion: string | null;
-  /** Сохранена ли сессия Jagex Account (~/.runelite/credentials.properties). */
+  /** Whether a Jagex Account session is saved (~/.runelite/credentials.properties). */
   credentials: boolean;
 }
 
 export interface RuneliteLaunch {
   ok: boolean;
-  /** started — запущен сейчас, starting — уже запускается, running — мост уже отвечает, missing/failed — не вышло. */
+  /** started means launched now, starting means already launching, running means the bridge already answers, missing/failed mean it did not work. */
   state: 'started' | 'starting' | 'running' | 'missing' | 'failed';
   problems?: string[];
   clientVersion?: string;
 }
 
 export interface BackupState {
-  /** Папка для копий или null — копии выключены. */
+  /** The folder for copies, or null if copies are off. */
   dir: string | null;
-  /** Когда сделана последняя копия (ISO) или null. */
+  /** When the last copy was made (ISO), or null. */
   last: string | null;
-  /** Чем кончилась последняя попытка: ok, ошибка или null. */
+  /** How the last attempt ended: ok, an error, or null. */
   error: string | null;
 }
 
 export interface UpdateState {
-  /** idle — не проверяли, checking, current — свежая, available — есть новая, downloading, ready — скачана, error. */
+  /** idle means not checked, checking, current means fresh, available means there is a new one, downloading, ready means downloaded, error. */
   state: 'idle' | 'checking' | 'current' | 'available' | 'downloading' | 'ready' | 'error';
   current: string;
   latest: string | null;
-  /** Первая строка описания выпуска. */
+  /** The first line of the release description. */
   notes: string;
-  /** Доля скачанного, 0–1. */
+  /** The share downloaded, 0-1. */
   progress: number;
   error: string | null;
-  /** Можно ли поставить обновление: только переносная версия (exe). Иначе программа лишь сообщает о новой. */
+  /** Whether the update can be installed: only the portable version (exe). Otherwise the app only reports a new one. */
   canInstall: boolean;
-  /** Проверять в фоне при запуске и раз в несколько часов. */
+  /** Check in the background at launch and every few hours. */
   auto?: boolean;
 }
 
@@ -57,20 +57,20 @@ export interface DesktopBridge {
   setZoom(settings: { zoom: number; autoZoom: boolean }): void;
   setAlwaysOnTop(on: boolean): void;
   onZoom(callback: (state: ZoomState) => void): () => void;
-  /** Прогресс файлом рядом с данными программы (в переносной версии — рядом с exe). */
+  /** Progress as a file next to the app's data (in the portable version, next to the exe). */
   loadProgressFile(profileId?: string): string | null;
   saveProgressFile(json: string, profileId?: string): void;
-  /** Копия прогресса по расписанию (раз в сутки в выбранную папку). В старых сборках её нет. */
+  /** A scheduled copy of progress (once a day into the chosen folder). Older builds do not have it. */
   backup?: {
     get(): Promise<BackupState>;
     choose(): Promise<BackupState>;
     now(): Promise<BackupState>;
     clear(): Promise<BackupState>;
   };
-  /** Где лежат данные программы — для подсказки в настройках. */
+  /** Where the app's data lives: for a hint in the settings. */
   dataDir(): string;
   isPortable(): boolean;
-  /** Автообновление переносной версии. В старых сборках его нет. */
+  /** Auto-update of the portable version. Older builds do not have it. */
   updates?: {
     get(): Promise<UpdateState>;
     check(): Promise<UpdateState>;
@@ -79,12 +79,12 @@ export interface DesktopBridge {
     setAuto(on: boolean): void;
     onState(callback: (state: UpdateState) => void): () => void;
   };
-  /** Запуск RuneLite с плагином OSRS Path Bridge из установленного RuneLite. */
+  /** Launching RuneLite with the OSRS Path Bridge plugin from the installed RuneLite. */
   runelite?: {
     check(): Promise<RuneliteCheck>;
     launch(): Promise<RuneliteLaunch>;
   };
-  /** Мост к плагину RuneLite через главный процесс (src/services/runeliteBridge.ts). В старых сборках его нет. */
+  /** The bridge to the RuneLite plugin through the main process (src/services/runeliteBridge.ts). Older builds do not have it. */
   bridge?: {
     request(method: string, path: string, body?: unknown): Promise<{ ok: boolean; status: number; data?: unknown }>;
     openEvents(onEvent: (data: string) => void, onState: (state: 'open' | 'closed') => void): () => void;

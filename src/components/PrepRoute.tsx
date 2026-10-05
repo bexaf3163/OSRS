@@ -1,8 +1,8 @@
-// «Маршрут подготовки»: что сделать до выхода по порядку — одно главное, следом не больше двух, и возврат к шагу.
-// Очередь строится и запускается сама (PrepAuto): стрелка ведёт за недостающим — в банк, к бирже, к месту прокачки, —
-// а когда задача выполнена по данным игры, объезд снимается и очередь идёт дальше; в конце приложение говорит вернуться.
-// Игрок может приостановить («Приостановить»), отказаться («Отменить заход») или выключить автоподготовку в настройках.
-// Расчёт — lib/prepRoute.ts и lib/prepQueue.ts, готовность — lib/readiness.ts.
+// "The preparation route": what to do before setting off, in order — one main thing, then no more than two, and the return to the step.
+// The queue is built and started by itself (PrepAuto): the arrow leads for what is missing — to the bank, the exchange, a training place —
+// and when a task is done by the game data, the detour is removed and the queue goes on; at the end the app says to return.
+// The player can pause ("Pause"), refuse ("Cancel the trip") or turn off the auto preparation in settings.
+// The calculation is lib/prepRoute.ts and lib/prepQueue.ts, readiness is lib/readiness.ts.
 
 import { useEffect, useRef } from 'react';
 import type { Step } from '../types';
@@ -26,8 +26,8 @@ function TaskAction({ a }: { a: ReadinessAction }) {
 }
 
 /**
- * «Исправить» одной кнопкой: начать подготовку к шагу (стрелка к банку, бирже или месту прокачки). Если у главной задачи
- * места нет (квест, уровень без точки на карте) — ничего не уходит из окна: onDetails раскрывает подробности подготовки.
+ * "Fix" with one button: start the preparation for the step (the arrow to the bank, the exchange or a training place). If the main task
+ * has no place (a quest, a level with no map point) — nothing leaves the window: onDetails expands the preparation details.
  */
 export function usePrepFix(step: Step, onDetails: () => void): { available: boolean; underway: boolean; fix: () => Promise<void> } {
   const profile = styleOf(useFeatures());
@@ -41,10 +41,10 @@ export function usePrepFix(step: Step, onDetails: () => void): { available: bool
     if (!primary) return;
     const res = startDetour(prep, {
       sourceStepId: step.id, detourId: primary.id, reason: primary.label, startedAt: Date.now(),
-      returnCondition: `${primary.label} — готово`,
+      returnCondition: `${primary.label} — done`,
     });
     if (!res.ok) {
-      if (res.reason === 'DEPTH') notify('Подготовка уже в три захода — сделай по списку, потом новые.');
+      if (res.reason === 'DEPTH') notify('The preparation is already three trips deep — do the list first, then new ones.');
       onDetails();
       return;
     }
@@ -76,16 +76,16 @@ export function PrepRouteBlock({ step }: { step: Step }) {
   const begin = async () => {
     const res = startDetour(prep, {
       sourceStepId: step.id, detourId: primary.id, reason: primary.label, startedAt: Date.now(),
-      returnCondition: `${primary.label} — готово`,
+      returnCondition: `${primary.label} — done`,
     });
     if (!res.ok) {
-      notify(res.reason === 'DEPTH' ? 'Подготовка уже в три захода — сделай по списку, потом новые.'
-        : res.reason === 'DONE_BEFORE' ? 'Это уже делалось раньше — проверь, что на месте.' : 'Этот заход уже идёт.');
+      notify(res.reason === 'DEPTH' ? 'The preparation is already three trips deep — do the list first, then new ones.'
+        : res.reason === 'DONE_BEFORE' ? 'This was done before — check that it is in place.' : 'This trip is already underway.');
       return;
     }
     declined.delete(`${step.id}:${primary.id}`);
     set(res.state);
-    // Стрелка ведёт за подготовкой; шаг вернётся сам, когда задача выполнена (или кнопкой «Вернуть к шагу»).
+    // The arrow leads for the preparation; the step returns by itself when the task is done (or with the "Return to the step" button).
     const go = primary.guide ?? primary.action;
     if (go?.kind === 'nav') await navigate(go.target);
     else if (go?.kind === 'link') window.location.hash = go.href;
@@ -104,29 +104,29 @@ export function PrepRouteBlock({ step }: { step: Step }) {
 
   const go = primary.guide ?? primary.action;
   return (
-    <div className="prep-route" role="group" aria-label="Маршрут подготовки">
-      <p className="small prep-head">🧭 <strong>Подготовка к {step.id}</strong> <span className="muted">— сначала главное</span></p>
+    <div className="prep-route" role="group" aria-label="Preparation route">
+      <p className="small prep-head">🧭 <strong>Preparing for {step.id}</strong> <span className="muted">— the main thing first</span></p>
       <div className="prep-primary">
         <p className="prep-now">
           <span aria-hidden="true">{KIND_ICON[primary.kind]}</span> <strong>{primary.label}</strong>
           {primary.detail && <span className="muted"> — {primary.detail}</span>}
         </p>
-        {primary.method && <p className="small muted">Чем: {primary.method}</p>}
+        {primary.method && <p className="small muted">How: {primary.method}</p>}
         <div className="actions">
           {go && <TaskAction a={go} />}
           {paused ? (
-            <button type="button" className="btn btn-primary btn-sm" onClick={() => void resume()}>▶ Продолжить подготовку</button>
+            <button type="button" className="btn btn-primary btn-sm" onClick={() => void resume()}>▶ Continue the preparation</button>
           ) : (
             <button type="button" className="btn btn-primary btn-sm" onClick={() => void begin()} disabled={underway}>
-              {underway ? '⚡ Подготовка идёт' : '▶ Начать подготовку'}
+              {underway ? '⚡ Preparation underway' : '▶ Start the preparation'}
             </button>
           )}
         </div>
       </div>
       {next.length > 0 && (
-        // Спокойно: одно главное, остальное свёрнуто; эффективно: следующие две задачи видны сразу.
+        // Calm: one main thing, the rest folded; efficient: the next two tasks are visible at once.
         <details className="prep-more" open={profile.style === 'efficient'}>
-          <summary className="small muted">Что дальше: {next.length}{hidden > 0 ? ` и ещё ${hidden}` : ''}</summary>
+          <summary className="small muted">What next: {next.length}{hidden > 0 ? ` and ${hidden} more` : ''}</summary>
           <ol className="small prep-next" start={2}>
             {next.map((t) => (
               <li key={t.id}>
@@ -137,14 +137,14 @@ export function PrepRouteBlock({ step }: { step: Step }) {
           </ol>
         </details>
       )}
-      {next.length === 0 && hidden > 0 && <p className="small muted">…и ещё {hidden} — остальное после этого.</p>}
-      <p className="small muted">→ потом вернёмся к {step.id}{active.length > 1 ? ` (заходов подготовки: ${active.length})` : ''}.</p>
+      {next.length === 0 && hidden > 0 && <p className="small muted">…and {hidden} more — the rest after this.</p>}
+      <p className="small muted">→ then we return to {step.id}{active.length > 1 ? ` (preparation trips: ${active.length})` : ''}.</p>
       <p className="small muted">
         {features.autoPrep
-          ? <>Автоподготовка включена: очередь идёт сама. {underway && !paused && <><button type="button" className="link-btn" onClick={cancel}>Отменить заход</button> · </>}</>
-          : <>Автоподготовка выключена. </>}
+          ? <>Auto preparation is on: the queue runs by itself. {underway && !paused && <><button type="button" className="link-btn" onClick={cancel}>Cancel the trip</button> · </>}</>
+          : <>Auto preparation is off. </>}
         <button type="button" className="link-btn" onClick={() => setFeatures({ autoPrep: !features.autoPrep })}>
-          {features.autoPrep ? 'Выключить' : 'Включить'}
+          {features.autoPrep ? 'Turn off' : 'Turn on'}
         </button>
       </p>
     </div>
@@ -152,8 +152,8 @@ export function PrepRouteBlock({ step }: { step: Step }) {
 }
 
 /**
- * Следит за объездами: когда задача подготовки выполнена, снимает объезд и говорит, что пора вернуться к шагу.
- * Один на всё приложение: готовность считает общий движок, а не каждый экран заново.
+ * Watches the detours: when a preparation task is done, removes the detour and says it is time to return to the step.
+ * One for the whole app: the shared engine counts the readiness, not every screen anew.
  */
 export function PrepWatcher() {
   const { notify } = useStore();
@@ -166,15 +166,15 @@ export function PrepWatcher() {
     set(res.state);
     if (res.returnTo) {
       const left = res.state.stack.length;
-      notify(left ? `🟢 Один заход подготовки готов — дальше вернёмся к ${res.returnTo}.` : `🟢 Подготовка готова — возвращайся к ${res.returnTo}.`);
+      notify(left ? `🟢 One preparation trip is ready — next we return to ${res.returnTo}.` : `🟢 The preparation is ready — return to ${res.returnTo}.`);
     }
   }, [prep, set, engine, notify]);
   return null;
 }
 
 /**
- * Автоочередь: сама выстраивает подготовку к текущему шагу и сама ведёт стрелку — к банку, бирже, месту прокачки.
- * Стрелку не перехватывает, если в игре уже стоит цель, и замолкает, когда игрок снял стрелку сам.
+ * The auto queue: builds the preparation for the current step by itself and leads the arrow — to the bank, the exchange, a training place.
+ * It does not take over the arrow if a target is already set in the game, and goes quiet when the player cleared the arrow by hand.
  */
 export function PrepAuto() {
   const features = useFeatures();
@@ -192,7 +192,7 @@ export function PrepAuto() {
 
   useEffect(() => {
     if (!focus) return;
-    // Игрок сам снял стрелку: очередь этого шага на паузе, пока он не нажмёт «Продолжить».
+    // The player cleared the arrow by hand: this step's queue is paused until they press "Continue".
     if (userClearedAt !== seenClear.current) {
       seenClear.current = userClearedAt;
       if (prep.stack.some((f) => f.sourceStepId === focus.id && !f.paused)) {
@@ -213,16 +213,16 @@ export function PrepAuto() {
         recent.current.set(`${focus.id}:${d.task.id}:${d.task.guide.target.x},${d.task.guide.target.y},${d.task.guide.target.itemName ?? ''}`, now);
         void navigate(d.task.guide.target);
       }
-      notify(`🧭 Подготовка к ${focus.id}: ${d.task.label}. Стрелка ведёт туда; вернуться — «Вернуть к шагу».`);
+      notify(`🧭 Preparing for ${focus.id}: ${d.task.label}. The arrow leads there; to return — "Return to the step".`);
     } else if (d.kind === 'renav') {
-      // Не больше трёх раз на одну цель: если плагин снимает её сразу (игрок уже на месте), не крутим по кругу.
+      // No more than three times per target: if the plugin clears it at once (the player is already there), we do not loop.
       const n = (renavs.current.get(d.key) ?? 0) + 1;
       renavs.current.set(d.key, n);
       recent.current.set(d.key, now);
       if (n <= 3 && d.task.guide?.kind === 'nav') void navigate(d.task.guide.target);
     } else if (!announced.current.has(d.key)) {
       announced.current.add(d.key);
-      notify(`➡️ Дальше в подготовке к ${focus.id}: ${d.task.label}.`);
+      notify(`➡️ Next in the preparation for ${focus.id}: ${d.task.label}.`);
     }
   }, [focus, engine, prep, set, navTarget, navigate, features.autoPrep, profile, link, userClearedAt, notify]);
   return null;

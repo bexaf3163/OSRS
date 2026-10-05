@@ -1,4 +1,4 @@
-"""Пути генераторов: корень репозитория и рабочая папка с исходниками Quest Helper (её наполняет fetch_qh.py, в git она не попадает)."""
+"""The generator paths: the repository root and the work folder with the Quest Helper sources (filled by fetch_qh.py, it does not go into git)."""
 import os
 
 HERE = os.path.dirname(os.path.abspath(__file__))
