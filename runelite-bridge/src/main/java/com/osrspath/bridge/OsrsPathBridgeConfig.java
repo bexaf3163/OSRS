@@ -214,6 +214,18 @@ public interface OsrsPathBridgeConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "guideCompact",
+		name = "Compact list",
+		description = "The 'What you need' list is two rows (the step code and stage with the progress, and the step you are on) and opens in full while the mouse is over it: the recipe, the next steps, the buttons, the bag, the items and the places. Off shows the whole list all the time",
+		section = companion,
+		position = 14
+	)
+	default boolean guideCompact()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "showChecklist",
 		name = "Departure check at the bank",
 		description = "With the bank open: which of the step's items are already in the bag and which to take. What is needed is highlighted in the bank",

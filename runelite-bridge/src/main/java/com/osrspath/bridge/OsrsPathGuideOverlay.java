@@ -79,6 +79,10 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	private List<RowComponent> components = Collections.emptyList();
 	private volatile Hits hits = Hits.NONE;
 	private Dimension last = new Dimension();
+	/** The strict two-line view: when the mouse was last over the card (nanoTime, or Long.MIN_VALUE), and when the card started to open. */
+	private long lastOver = Long.MIN_VALUE;
+	private long openedAt;
+	private boolean open;
 
 	@Inject
 	OsrsPathGuideOverlay(Client client, OsrsPathBridgePlugin plugin, OsrsPathBridgeConfig config)
@@ -120,11 +124,14 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		int width = OsrsPathHudOverlay.panelWidth(this, Math.round(WIDTH * scale));
 		int hovered = hovered();
 		boolean terse = config.smartOverlays();
-		Object key = Arrays.asList(v, config.guideCollapsed(), hovered, config.hudOpacity(), font, small, width, terse);
+		// By default the card is two rows and opens while the mouse is over it. The docked bar opens the list itself, so there the list is always whole.
+		boolean compact = config.guideCompact() && !config.dockBar() && !config.guideCollapsed();
+		int reveal = compact ? reveal() : GuideList.EXPAND_STEPS;
+		Object key = Arrays.asList(v, config.guideCollapsed(), hovered, config.hudOpacity(), font, small, width, terse, compact, reveal);
 		if (!key.equals(builtFor))
 		{
 			components = build(panelComponent, v, config.guideCollapsed(), hovered, g.getFontMetrics(font), g.getFontMetrics(small),
-				font, small, width, config.hudOpacity(), terse);
+				font, small, width, config.hudOpacity(), terse, compact, reveal);
 			builtFor = key;
 			// What exactly the player sees goes to the debug log (only when the plate was rebuilt, not every frame).
 			List<GuideList.Row> shown = new ArrayList<>();
@@ -159,18 +166,51 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	/** The line under the mouse by the previous frame; -1 means the mouse is not over the list, the game menu is open or a game window is over the list. */
 	private int hovered()
 	{
+		net.runelite.api.Point m = freeMouse();
+		return m == null ? -1 : hits.rowAt(m.getX(), m.getY());
+	}
+
+	/** The mouse point, or null if there is none, the game menu is open, or a game window (bank, shop, world map) is over the list. */
+	private net.runelite.api.Point freeMouse()
+	{
 		if (client.isMenuOpen())
 		{
-			return -1;
+			return null;
 		}
 		net.runelite.api.Point m = client.getMouseCanvasPosition();
-		// A game window is over the list (bank, shop, world map): the line under it is not highlighted and gives no hint.
 		if (m == null || GuideMouse.windowUnderMouse(client.getMenu().getMenuEntries())
 			|| GuideMouse.mapCovers(client.getWidget(net.runelite.api.gameval.InterfaceID.Worldmap.WINDOW), new java.awt.Point(m.getX(), m.getY())))
 		{
-			return -1;
+			return null;
 		}
-		return hits.rowAt(m.getX(), m.getY());
+		return m;
+	}
+
+	/**
+	 * How much of the card is open now, 0 to {@link GuideList#EXPAND_STEPS}: it opens while the mouse is over the card (by the rectangle of the previous
+	 * frame) and for {@link GuideList#COLLAPSE_GRACE_NANOS} after, so it does not blink at the edge. While the game menu is open the state is kept.
+	 */
+	private int reveal()
+	{
+		long now = System.nanoTime();
+		net.runelite.api.Point m = freeMouse();
+		Rectangle b = getBounds();
+		boolean over = m != null && b != null && b.width > 0 && b.contains(m.getX(), m.getY());
+		if (client.isMenuOpen())
+		{
+			over = open;
+		}
+		if (over)
+		{
+			lastOver = now;
+		}
+		boolean want = GuideList.expandWanted(over, lastOver == Long.MIN_VALUE ? -1 : now - lastOver);
+		if (want && !open)
+		{
+			openedAt = now;
+		}
+		open = want;
+		return open ? GuideList.revealSteps(now - openedAt) : 0;
 	}
 
 	/** The line rectangles on the canvas: at drawing time the plate already stands in its place (getBounds). */
@@ -229,11 +269,19 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	static List<RowComponent> build(PanelComponent panel, StepGuide.View v, boolean collapsed, int hovered, FontMetrics fm,
 		FontMetrics smallFm, Font font, Font small, int width, int opacity, boolean terse)
 	{
+		return build(panel, v, collapsed, hovered, fm, smallFm, font, small, width, opacity, terse, false, GuideList.EXPAND_STEPS);
+	}
+
+	/** compact is the strict two-line view; reveal is how much of the rest is open (0 is closed), see {@link GuideList#expandedRows}. */
+	static List<RowComponent> build(PanelComponent panel, StepGuide.View v, boolean collapsed, int hovered, FontMetrics fm,
+		FontMetrics smallFm, Font font, Font small, int width, int opacity, boolean terse, boolean compact, int reveal)
+	{
 		List<LayoutableRenderableEntity> c = panel.getChildren();
 		c.clear();
 		panel.setPreferredSize(new Dimension(width, 0));
 		OverlayText.frame(panel, fm);
-		List<GuideList.Row> rows = GuideList.rows(v, collapsed, fm, smallFm, width, terse);
+		List<GuideList.Row> rows = compact && !collapsed ? GuideList.expandedRows(v, reveal, fm, smallFm, width, terse)
+			: GuideList.rows(v, collapsed, fm, smallFm, width, terse);
 		List<RowComponent> out = new ArrayList<>();
 		for (int i = 0; i < rows.size(); i++)
 		{

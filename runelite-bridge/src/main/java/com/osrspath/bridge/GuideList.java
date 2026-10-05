@@ -144,11 +144,7 @@ final class GuideList
 		boolean placesOnly = v.getItems().isEmpty() && stage == null;
 		String heading = stage != null ? stageTitle(stage) : placesOnly ? "Where to go" : "What you need";
 		// The step code goes first: the HUD with the step name is gone, and which task you are on must always be visible.
-		String code = code(v);
-		out.add(new Row(pair(code + (collapsed ? summary(v) : heading) + percent(v), stage != null && stage.isFinished() ? StepGuide.GOOD : TITLE,
-			collapsed ? "▼" : "▲", MUTED, fm, inner, false),
-			Action.TOGGLE, (v.getTitle() == null ? "" : v.getTitle() + ". ")
-				+ (collapsed ? "Click to expand: what you need and where to go." : "Click to collapse the list to one line.")));
+		out.add(headerRow(v, collapsed, heading, fm, inner));
 		if (collapsed)
 		{
 			return out;
@@ -250,6 +246,191 @@ final class GuideList
 				out.add(new Row(text("… " + (places.size() - maxPlaces) + " more", MUTED, small, inner, true), Action.NONE, "The rest is in the OSRS Path panel on the right."));
 			}
 		}
+		return out;
+	}
+
+	/** The heading row: the step code, the stage or "What you need", the readiness percent, and the fold arrow. */
+	static Row headerRow(StepGuide.View v, boolean collapsed, String heading, FontMetrics fm, int inner)
+	{
+		StepGuide.StageView stage = v.getStage();
+		return new Row(pair(code(v) + (collapsed ? summary(v) : heading) + percent(v), stage != null && stage.isFinished() ? StepGuide.GOOD : TITLE,
+			collapsed ? "▼" : "▲", MUTED, fm, inner, false),
+			Action.TOGGLE, (v.getTitle() == null ? "" : v.getTitle() + ". ")
+				+ (collapsed ? "Click to expand: what you need and where to go." : "Click to collapse the list to one line."));
+	}
+
+	// ------------------------------------------------------------------------------------------------------------
+	// The strict two-line view. By default the list is the heading and the step you are on; everything else opens while the mouse is over the card.
+
+	/** The card opens in this many steps (rows are revealed one portion at a time), over about this long. */
+	static final int EXPAND_STEPS = 8;
+	static final long EXPAND_NANOS = 160_000_000L;
+	/** The card stays open this long after the mouse left it, so a pixel of edge or a tick of lag never makes it blink. */
+	static final long COLLAPSE_GRACE_NANOS = 350_000_000L;
+
+	/** Whether the card should be open: the mouse is over it, or just left (sinceOverNanos is negative if it never was over). */
+	static boolean expandWanted(boolean over, long sinceOverNanos)
+	{
+		return over || (sinceOverNanos >= 0 && sinceOverNanos < COLLAPSE_GRACE_NANOS);
+	}
+
+	/** How many of the {@link #EXPAND_STEPS} portions are shown this long after the card started to open: at least one at once, all after EXPAND_NANOS. */
+	static int revealSteps(long sinceExpandNanos)
+	{
+		long s = Math.max(0, sinceExpandNanos);
+		return (int) Math.min(EXPAND_STEPS, 1 + s * EXPAND_STEPS / EXPAND_NANOS);
+	}
+
+	/**
+	 * The step line without its recipe: a tail after ";" goes ("; buy rope too"), a bracket keeps only what stands before a colon, that is who
+	 * ("(Aggie: 2 onions + 5 gp)" becomes "(Aggie)"), and a bracket with no colon is the recipe and goes ("(3 balls of wool)").
+	 */
+	static String concise(String s)
+	{
+		if (s == null)
+		{
+			return "";
+		}
+		String t = s;
+		int semi = t.indexOf(';');
+		if (semi > 0)
+		{
+			t = t.substring(0, semi);
+		}
+		StringBuilder out = new StringBuilder();
+		for (int i = 0; i < t.length(); i++)
+		{
+			char c = t.charAt(i);
+			if (c != '(')
+			{
+				out.append(c);
+				continue;
+			}
+			int depth = 0;
+			int end = -1;
+			for (int j = i; j < t.length(); j++)
+			{
+				if (t.charAt(j) == '(')
+				{
+					depth++;
+				}
+				else if (t.charAt(j) == ')' && --depth == 0)
+				{
+					end = j;
+					break;
+				}
+			}
+			if (end < 0)
+			{
+				out.append(c);
+				continue;
+			}
+			String inner = t.substring(i + 1, end);
+			int colon = inner.indexOf(':');
+			if (colon > 0)
+			{
+				out.append('(').append(inner.substring(0, colon).trim()).append(')');
+			}
+			i = end;
+		}
+		return out.toString().replaceAll("\\s+", " ").replaceAll("\\s+([,.;:!?])", "$1").trim();
+	}
+
+	/** The step on the cursor of the stage, or null if the list has no stage or it is done. */
+	private static ActiveTarget.StageLine nowLine(StepGuide.View v)
+	{
+		StepGuide.StageView s = v.getStage();
+		if (s == null || s.isFinished() || s.getSteps() == null || s.getSteps().isEmpty())
+		{
+			return null;
+		}
+		return s.getSteps().get(Math.max(0, Math.min(s.getCursor(), s.getSteps().size() - 1)));
+	}
+
+	/** The two rows that are always there: the heading and the step you are on ("▶ [2/6] Dye the wig yellow (Aggie)"). */
+	static List<Row> coreRows(StepGuide.View v, FontMetrics fm, int width)
+	{
+		int inner = OverlayText.inner(width);
+		StepGuide.StageView stage = v.getStage();
+		String heading = stage != null ? stageTitle(stage) : v.getItems().isEmpty() ? "Where to go" : "What you need";
+		List<Row> out = new ArrayList<>();
+		out.add(headerRow(v, false, heading, fm, inner));
+		ActiveTarget.StageLine now = nowLine(v);
+		if (now != null)
+		{
+			int n = stage.getSteps().size();
+			int cur = Math.max(0, Math.min(stage.getCursor(), n - 1));
+			String text = "▶ [" + (cur + 1) + "/" + n + "] " + concise(now.shown());
+			out.add(new Row(clip("", (stage.isPeeking() ? "viewing · " : "") + text, stage.isPeeking() ? MUTED : TITLE, fm, inner, 2, false), Action.NONE, now.getT()));
+		}
+		else if (stage != null && stage.isFinished())
+		{
+			out.add(new Row(text("Quest complete - the step will tick itself.", StepGuide.GOOD, fm, inner, false), Action.NONE, null));
+		}
+		else if (v.getNote() != null && v.getItems().isEmpty())
+		{
+			out.add(new Row(clip("", ShortText.of(v.getNote()), MUTED, fm, inner, 1, false), Action.NONE, v.getNote()));
+		}
+		else
+		{
+			out.add(new Row(clip("", summary(v), TEXT, fm, inner, 1, false), Action.NONE, null));
+		}
+		return out;
+	}
+
+	/** What must not be hidden even in the strict view: a warning about the step and the recovery mode after a death. */
+	static List<Row> alertRows(StepGuide.View v, FontMetrics fm, int width)
+	{
+		int inner = OverlayText.inner(width);
+		List<Row> out = new ArrayList<>();
+		StepGuide.StageView s = v.getStage();
+		if (s != null && s.getWarning() != null)
+		{
+			out.add(new Row(clip("", "⚠ " + s.getWarning(), StepGuide.BANK, fm, inner, 2, true), Action.NONE, s.getWarning()));
+		}
+		PrepPlan prep = v.getPrep();
+		if (prep != null && prep.hasRecovery())
+		{
+			String title = prep.getRecovery().getTitle() == null || prep.getRecovery().getTitle().isEmpty() ? "Recovery mode" : prep.getRecovery().getTitle();
+			out.add(new Row(clip("", "⚠ " + title, StepGuide.BANK, fm, inner, 2, true), Action.NONE, String.join(" ", prep.getRecovery().getSteps())));
+		}
+		return out;
+	}
+
+	/**
+	 * The list for the strict view: reveal is how many of {@link #EXPAND_STEPS} portions of the rest are shown (0 is the closed card: two rows, plus a warning
+	 * or the recovery mode if there is one). The open card is the same two rows with the whole list under them: the recipe of the step, the tab strip,
+	 * the next steps, the buttons, the bag, the items, the places. Nothing the full list shows is lost, it only waits for the mouse.
+	 */
+	static List<Row> expandedRows(StepGuide.View v, int reveal, FontMetrics fm, FontMetrics small, int width, boolean terse)
+	{
+		List<Row> core = coreRows(v, fm, width);
+		if (reveal <= 0)
+		{
+			List<Row> closed = new ArrayList<>(core);
+			closed.addAll(alertRows(v, fm, width));
+			return closed;
+		}
+		List<Row> full = rows(v, false, fm, small, width, terse);
+		ActiveTarget.StageLine now = nowLine(v);
+		List<Row> extra = new ArrayList<>();
+		if (now != null && !concise(now.shown()).equals(now.shown()))
+		{
+			extra.add(new Row(clip("", "Details: " + now.shown(), MUTED, small, OverlayText.inner(width), 2, true), Action.NONE, now.getT()));
+		}
+		for (int i = 1; i < full.size(); i++)
+		{
+			Row r = full.get(i);
+			// The step line of the stage is already the second core row.
+			if (now != null && r.getAction() == Action.NONE && now.getT() != null && now.getT().equals(r.getHint()))
+			{
+				continue;
+			}
+			extra.add(r);
+		}
+		int shown = (int) Math.ceil(extra.size() * (double) Math.min(reveal, EXPAND_STEPS) / EXPAND_STEPS);
+		List<Row> out = new ArrayList<>(core);
+		out.addAll(extra.subList(0, Math.min(shown, extra.size())));
 		return out;
 	}
 

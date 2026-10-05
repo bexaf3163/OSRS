@@ -626,19 +626,22 @@ public class OverlayLayoutTest
 						{
 							hover = rows.get(i).getAction().isClickable() ? i : -1;
 						}
-						for (int mode = 0; mode < 3; mode++)
+						for (int mode = 0; mode < 5; mode++)
 						{
 							boolean collapsed = mode == 2;
+							// Modes 3 and 4 are the strict two-line card: closed, and opened by the mouse.
+							boolean compact = mode >= 3;
+							int reveal = mode == 4 ? GuideList.EXPAND_STEPS : 0;
 							int h = mode == 1 ? hover : -1;
 							String save = null;
 							String id = v.getTitle().substring(1, 6);
-							String name = "guide-" + id + (v.getStage() != null ? "-stage" + v.getStage().getIndex() + "c" + v.getStage().getCursor() : "") + "-" + (collapsed ? "collapsed" : h >= 0 ? "hover" : "list") + "-" + fontName(base) + (large ? "-large" : "");
+							String name = "guide-" + id + (v.getStage() != null ? "-stage" + v.getStage().getIndex() + "c" + v.getStage().getCursor() : "") + "-" + (compact ? (reveal > 0 ? "compact-open" : "compact-closed") : collapsed ? "collapsed" : h >= 0 ? "hover" : "list") + "-" + fontName(base) + (large ? "-large" : "");
 							// For the eye: the first view (the bank was not opened): S2-03 as for the player in the screenshot, a quest with many NPCs and Cook's Assistant.
 							if (width == standard && (id.equals("S2-03") || id.equals("S2-10") || id.equals("S1-03") || (id.equals("S2-07") && v.getStage() != null && v.getStage().getCursor() > 0)) && v.getDetour() == null && saved.add(name))
 							{
 								save = name;
 							}
-							int out = overflow((panel, fm, w) -> OsrsPathGuideOverlay.build(panel, v, collapsed, h, fm, smallFm, font, small, w, 70),
+							int out = overflow((panel, fm, w) -> OsrsPathGuideOverlay.build(panel, v, collapsed, h, fm, smallFm, font, small, w, 70, false, compact, compact ? reveal : GuideList.EXPAND_STEPS),
 								font, width, save);
 							if (out > 0)
 							{

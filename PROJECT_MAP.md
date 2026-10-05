@@ -1,6 +1,6 @@
 # OSRS Path — the project map: what exists, where it lies, how it is connected
 
-> This file is written so that it can be dropped whole into another chat with a request to suggest what to add or fix. Project version: **2.35.0** (bridge protocol 6). Repository: https://github.com/bexaf3163/OSRS. The language of the interface and the texts is English.
+> This file is written so that it can be dropped whole into another chat with a request to suggest what to add or fix. Project version: **2.36.0** (bridge protocol 6). Repository: https://github.com/bexaf3163/OSRS. The language of the interface and the texts is English.
 > The inventory is compiled from the sources; a note **[not in the game]** means it was not checked in a live game, only by tests, a browser and a plugin imitation.
 
 ---
@@ -124,7 +124,7 @@ The header: search (`/`), the progress ring and the quest points, the F2P/Member
 - **Auto-update (2.25):** `electron/updater.cjs` — a release from GitHub (`releases/latest`), the attachment `OSRS-Put-X.Y.Z-portable.exe` strictly from `bexaf3163/OSRS` (20–400 MB, sha256 from `digest`), a download next to the exe, a restart on a button; the "Check at start" setting; the UI — `UpdateBanner`, `SettingsExtra.UpdatesSection`, `lib/useUpdates.ts`, `lib/desktop.ts`. The data lies in `OSRS-Put-data` next to the exe and the new version picks it up by itself.
 - The launch: `OsrsPathLauncher` (+ `electron/runelite-launcher.cjs`).
 
-**The plugin settings** (`OsrsPathBridgeConfig`, the "In-game helper" section and others): `qhMachine`, `telemetryDetail`, `telemetryEventShots` (2.27), `port`, `hintArrow`, `worldMapMarker`, `highlightColor`, `completionSound`, `smartOverlays`, `showHud`, `showGuide`, `guideCollapsed`, `hudOpacity`, `hudLarge`, `overlayTheme` (2.32), `dockBar` (2.34), `showChecklist`, `bigArrow`, `arrowSize`, `useShortestPath`, `showGeHelper`, `shareStats`, `autoNavigation`, `upgradeRouter`, `bankTagsHelper`, `bankHighlight`, `dangerRadar`, `dangerSound`, `smartPacing`, `hudPacing`, `hudHealth`, `stageFollow`. The config keys are stable: they are stored in the player's RuneLite profile.
+**The plugin settings** (`OsrsPathBridgeConfig`, the "In-game helper" section and others): `qhMachine`, `telemetryDetail`, `telemetryEventShots` (2.27), `port`, `hintArrow`, `worldMapMarker`, `highlightColor`, `completionSound`, `smartOverlays`, `showHud`, `showGuide`, `guideCollapsed`, `hudOpacity`, `hudLarge`, `overlayTheme` (2.32), `dockBar` (2.34), `guideCompact` (2.36), `showChecklist`, `bigArrow`, `arrowSize`, `useShortestPath`, `showGeHelper`, `shareStats`, `autoNavigation`, `upgradeRouter`, `bankTagsHelper`, `bankHighlight`, `dangerRadar`, `dangerSound`, `smartPacing`, `hudPacing`, `hudHealth`, `stageFollow`. The config keys are stable: they are stored in the player's RuneLite profile.
 
 **The bridge:** `BridgeServer.java` — HTTP `/status`, `/active-step`, `/shopping-plan`, `/nav-target`, `/bank-tags`, `/gear-hint`, `/prep-plan`, `/telemetry`, `/clear`, `/events` (SSE); it answers only on `127.0.0.1`, any `Origin` gets 403. The plugin version `PLUGIN_VERSION` must match `package.json`.
 

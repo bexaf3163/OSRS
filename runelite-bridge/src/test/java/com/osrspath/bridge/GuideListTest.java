@@ -101,6 +101,162 @@ public class GuideListTest
 		assertFalse(all, all.contains("In your bag"));
 	}
 
+	/** The rows as one string: a long row wraps to two lines at the real card width, and the text must still be found. */
+	private static String flat(List<GuideList.Row> rows)
+	{
+		return GuideList.plain(rows).replace("\n", " ");
+	}
+
+	/** S2-10, stage 3 of 7, the step on the cursor, with the real lines from the game screenshot. */
+	private static StepGuide.View princeAli(int cursor, String warning, boolean peeking)
+	{
+		StepGuide.StageView sv = new StepGuide.StageView(3, 7, java.util.Arrays.asList(
+			stageLine("Have Ned make a wig (3 balls of wool); buy rope too"),
+			stageLine("Dye the wig yellow (Aggie: 2 onions + 5 gp)"),
+			stageLine("Aggie: get skin paste (ashes, redberries, flour, water)"),
+			stageLine("Lady Keli: use soft clay on the key for a print"),
+			stageLine("Use the key print and bronze bar on a furnace"),
+			stageLine("Talk to Leela (east of Draynor Village)")), cursor, false, warning, peeking, true);
+		List<StepGuide.ItemLine> items = java.util.Arrays.asList(itemLine("Ball of wool ×3", StepGuide.Have.BAG), itemLine("Rope", StepGuide.Have.BAG),
+			itemLine("Bronze bar", StepGuide.Have.BANK), itemLine("Onion ×2", StepGuide.Have.NONE));
+		return new StepGuide.View("[S2-10] Prince Ali Rescue", null, items, java.util.Collections.emptyList(), null, null, null, null, sv);
+	}
+
+	@Test
+	public void concise_dropsTheRecipeAndKeepsWho()
+	{
+		assertEquals("Dye the wig yellow (Aggie)", GuideList.concise("Dye the wig yellow (Aggie: 2 onions + 5 gp)"));
+		assertEquals("Have Ned make a wig", GuideList.concise("Have Ned make a wig (3 balls of wool); buy rope too"));
+		assertEquals("Aggie: get skin paste", GuideList.concise("Aggie: get skin paste (ashes, redberries, flour, water)"));
+		assertEquals("Talk to Leela", GuideList.concise("Talk to Leela (east of Draynor Village)"));
+		assertEquals("Use Bronze bar on Thurgo", GuideList.concise("Use Bronze bar (x1) on Thurgo"));
+		assertEquals("Nothing to cut", GuideList.concise("Nothing to cut"));
+		assertEquals("Unbalanced (bracket", GuideList.concise("Unbalanced (bracket"));
+		assertEquals("", GuideList.concise(null));
+		assertEquals("", GuideList.concise(""));
+	}
+
+	@Test
+	public void strictView_isTwoRows_withNoRecipeNextBackBagOrPlaces()
+	{
+		List<GuideList.Row> rows = GuideList.expandedRows(princeAli(1, null, false), 0, FM, SMALL, OsrsPathGuideOverlay.WIDTH, false);
+		assertEquals(2, rows.size());
+		assertEquals("S2-10 · Stage 3 of 7 ~▲", GuideList.plain(rows.subList(0, 1)));
+		String all = flat(rows);
+		assertTrue(all, all.contains("▶ [2/6] Dye the wig yellow (Aggie)"));
+		for (String gone : new String[] {"Next:", "Done", "Back", "In your bag", "Where to go", "onions", "Needed now", "Tip"})
+		{
+			assertFalse(gone + " must wait for the mouse: " + all, all.contains(gone));
+		}
+	}
+
+	@Test
+	public void openCard_hasTheSameTwoRowsOnTop_andTheWholeListUnder()
+	{
+		StepGuide.View v = princeAli(1, null, false);
+		List<GuideList.Row> closed = GuideList.expandedRows(v, 0, FM, SMALL, OsrsPathGuideOverlay.WIDTH, false);
+		List<GuideList.Row> open = GuideList.expandedRows(v, GuideList.EXPAND_STEPS, FM, SMALL, OsrsPathGuideOverlay.WIDTH, false);
+		assertEquals("the heading does not move", closed.get(0), open.get(0));
+		assertEquals("the step line does not move or change", closed.get(1), open.get(1));
+		String all = flat(open);
+		for (String shown : new String[] {"Details: Dye the wig yellow (Aggie: 2 onions + 5 gp)", "Next: Aggie: get skin paste", "✓ Done - next", "◀ Back: Have Ned make a wig",
+			"In your bag: 2 of 4 items", "Needed now", "Onion"})
+		{
+			assertTrue(shown + " is in the open card: " + all, all.contains(shown));
+		}
+	}
+
+	@Test
+	public void openingRevealsRowsOneByOne_neverShrinks_andEndsWithTheFullList()
+	{
+		StepGuide.View v = princeAli(1, null, false);
+		int previous = 0;
+		for (int step = 0; step <= GuideList.EXPAND_STEPS; step++)
+		{
+			int n = GuideList.expandedRows(v, step, FM, SMALL, OsrsPathGuideOverlay.WIDTH, false).size();
+			assertTrue("step " + step + ": " + n + " rows after " + previous, n >= previous);
+			previous = n;
+		}
+		assertEquals(2, GuideList.expandedRows(v, 0, FM, SMALL, OsrsPathGuideOverlay.WIDTH, false).size());
+		assertTrue(previous > 6);
+		assertEquals("more than the end is the same as the end", previous, GuideList.expandedRows(v, 99, FM, SMALL, OsrsPathGuideOverlay.WIDTH, false).size());
+	}
+
+	@Test
+	public void nothingTheFullListShowsIsLost_itWaitsForTheMouse()
+	{
+		StepGuide.View v = princeAli(1, null, false);
+		List<GuideList.Row> full = rows(v, false);
+		List<GuideList.Row> open = GuideList.expandedRows(v, GuideList.EXPAND_STEPS, FM, SMALL, OsrsPathGuideOverlay.WIDTH, false);
+		String openText = flat(open);
+		for (int i = 1; i < full.size(); i++)
+		{
+			GuideList.Row r = full.get(i);
+			if (r.getHint() != null && r.getHint().contains("Dye the wig yellow") && r.getAction() == GuideList.Action.NONE)
+			{
+				continue; // the step line itself, which is the second row in the strict view
+			}
+			for (GuideList.Line l : r.getLines())
+			{
+				assertTrue("'" + l.getLeft() + "' is still in the open card: " + openText, openText.contains(l.getLeft()));
+			}
+		}
+		assertEquals("the buttons are still buttons", full.stream().filter(r -> r.getAction().isClickable()).count(), open.stream().filter(r -> r.getAction().isClickable()).count());
+	}
+
+	@Test
+	public void aWarningIsNeverHiddenInTheStrictView()
+	{
+		String warning = "Bronze bar is still in your bag - first: furnace";
+		List<GuideList.Row> rows = GuideList.expandedRows(princeAli(1, warning, false), 0, FM, SMALL, OsrsPathGuideOverlay.WIDTH, false);
+		assertEquals(3, rows.size());
+		assertTrue(flat(rows), flat(rows).contains("⚠ Bronze bar is still in your bag"));
+		List<GuideList.Row> open = GuideList.expandedRows(princeAli(1, warning, false), GuideList.EXPAND_STEPS, FM, SMALL, OsrsPathGuideOverlay.WIDTH, false);
+		assertEquals("the warning is not shown twice when open", 1, open.stream().filter(r -> GuideList.plain(java.util.Collections.singletonList(r)).contains("⚠ Bronze bar")).count());
+	}
+
+	@Test
+	public void viewingAnEarlierStepIsSaidInTheStrictView()
+	{
+		String all = flat(GuideList.expandedRows(princeAli(0, null, true), 0, FM, SMALL, OsrsPathGuideOverlay.WIDTH, false));
+		assertTrue(all, all.contains("viewing · ▶ [1/6] Have Ned make a wig"));
+		assertFalse(all, all.contains("balls of wool"));
+	}
+
+	@Test
+	public void aStepWithoutAStage_isTwoRowsToo()
+	{
+		List<GuideList.Row> rows = GuideList.expandedRows(witchsPotion(null, 0, 0), 0, FM, SMALL, OsrsPathGuideOverlay.WIDTH, false);
+		assertEquals(2, rows.size());
+		assertEquals("S2-03 · What you need ~▲", GuideList.plain(rows.subList(0, 1)));
+	}
+
+	@Test
+	public void theCardOpensWhileTheMouseIsOverIt_andClosesOnlyAfterTheGrace()
+	{
+		assertFalse("not over, never was", GuideList.expandWanted(false, -1));
+		assertTrue(GuideList.expandWanted(true, -1));
+		assertTrue("just left", GuideList.expandWanted(false, GuideList.COLLAPSE_GRACE_NANOS - 1));
+		assertFalse("left a while ago", GuideList.expandWanted(false, GuideList.COLLAPSE_GRACE_NANOS));
+		assertEquals("at least one portion at once", 1, GuideList.revealSteps(0));
+		assertEquals(GuideList.EXPAND_STEPS, GuideList.revealSteps(GuideList.EXPAND_NANOS));
+		assertEquals(GuideList.EXPAND_STEPS, GuideList.revealSteps(Long.MAX_VALUE / 100));
+		int prev = 0;
+		for (long t = 0; t <= GuideList.EXPAND_NANOS; t += GuideList.EXPAND_NANOS / 20)
+		{
+			int r = GuideList.revealSteps(t);
+			assertTrue(r >= prev);
+			prev = r;
+		}
+	}
+
+	@Test
+	public void theCompactListIsOnByDefault_underANewStableKey() throws Exception
+	{
+		assertTrue(new OsrsPathBridgeConfig() { }.guideCompact());
+		assertEquals("guideCompact", OsrsPathBridgeConfig.class.getMethod("guideCompact").getAnnotation(net.runelite.client.config.ConfigItem.class).keyName());
+	}
+
 	@Test
 	public void itemsWithStatusAndWhereToGet_placeIsButton()
 	{
