@@ -1,0 +1,179 @@
+{
+  "skill": "runecraft",
+  "start": 1,
+  "f2pCap": 44,
+  "steps": [
+    {
+      "id": "runecraft-01",
+      "skill": "runecraft",
+      "levelRange": [
+        1,
+        9
+      ],
+      "methodType": "GATHER",
+      "title": "Air runes",
+      "description": "Mine rune essence with Aubury in Varrock, then craft it on the air altar.",
+      "targetLevel": 9,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Air altar",
+        "tile": [
+          2843,
+          4833,
+          0
+        ],
+        "objectName": "Altar",
+        "npcName": "Aubury"
+      }
+    },
+    {
+      "id": "runecraft-02",
+      "skill": "runecraft",
+      "levelRange": [
+        9,
+        14
+      ],
+      "methodType": "GATHER",
+      "title": "Earth runes",
+      "description": "Craft earth runes on the earth altar.",
+      "targetLevel": 14,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Earth altar",
+        "tile": [
+          2657,
+          4840,
+          0
+        ],
+        "objectName": "Altar"
+      }
+    },
+    {
+      "id": "runecraft-03",
+      "skill": "runecraft",
+      "levelRange": [
+        14,
+        20
+      ],
+      "methodType": "GATHER",
+      "title": "Fire runes",
+      "description": "Craft fire runes on the fire altar.",
+      "targetLevel": 20,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Fire altar",
+        "tile": [
+          2584,
+          4837,
+          0
+        ],
+        "objectName": "Altar"
+      }
+    },
+    {
+      "id": "runecraft-04",
+      "skill": "runecraft",
+      "levelRange": [
+        20,
+        44
+      ],
+      "methodType": "GATHER",
+      "title": "Body runes",
+      "description": "Body runes give the best XP per essence in the early game. Craft them on the body altar.",
+      "targetLevel": 44,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Body altar",
+        "tile": [
+          2522,
+          4839,
+          0
+        ],
+        "objectName": "Altar"
+      }
+    },
+    {
+      "id": "runecraft-05",
+      "skill": "runecraft",
+      "levelRange": [
+        44,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Nature runes",
+      "description": "Craft nature runes: steady XP and money, mostly clicking the altar.",
+      "targetLevel": 99,
+      "lane": "afk",
+      "members": true,
+      "location": {
+        "name": "Nature altar",
+        "tile": [
+          2399,
+          4840,
+          0
+        ],
+        "objectName": "Altar"
+      }
+    },
+    {
+      "id": "runecraft-06",
+      "skill": "runecraft",
+      "levelRange": [
+        27,
+        99
+      ],
+      "methodType": "MINIGAME",
+      "title": "Guardians of the Rift",
+      "description": "The strongest members Runecraft method: help the Great Guardian, mine fragments, craft guardian essence and spend points on runes. Needs Temple of the Eye and Runecraft 27.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Guardians of the Rift",
+        "tile": [
+          3616,
+          9492,
+          0
+        ],
+        "npcName": "Apprentice Cordelia"
+      },
+      "prerequisites": {
+        "questIds": [
+          "Temple of the Eye"
+        ]
+      }
+    },
+    {
+      "id": "runecraft-07",
+      "skill": "runecraft",
+      "levelRange": [
+        44,
+        99
+      ],
+      "methodType": "MINIGAME",
+      "title": "Guardians of the Rift",
+      "description": "The same minigame is also the calm option: it needs Temple of the Eye and Runecraft 27.",
+      "targetLevel": 99,
+      "lane": "afk",
+      "members": true,
+      "location": {
+        "name": "Guardians of the Rift",
+        "tile": [
+          3616,
+          9492,
+          0
+        ],
+        "npcName": "Apprentice Cordelia"
+      },
+      "prerequisites": {
+        "questIds": [
+          "Temple of the Eye"
+        ]
+      }
+    }
+  ]
+}

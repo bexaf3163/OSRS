@@ -14,6 +14,7 @@ import { StepBody } from '../components/StepCard';
 import { WikiDock, useWiki } from '../components/WikiDrawer';
 import { findSubStep, subStepNpcInfo } from '../lib/subStep';
 import { GearBanner } from '../components/GearPrompt';
+import { TrackedSkillCard } from '../components/TrackedSkillCard';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -170,6 +171,8 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
             </div>
           </div>
         )}
+
+        <TrackedSkillCard />
 
         {/* A combat step has its own advice in the card — the banner does not repeat it. */}
         {!selected.foes?.length && <GearBanner />}

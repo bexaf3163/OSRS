@@ -1,0 +1,73 @@
+{
+  "skill": "construction",
+  "start": 1,
+  "f2pCap": 0,
+  "steps": [
+    {
+      "id": "construction-01",
+      "skill": "construction",
+      "levelRange": [
+        1,
+        99
+      ],
+      "methodType": "MINIGAME",
+      "title": "Mahogany Homes",
+      "description": "Repair houses for the carpenters: a low-effort way that works from level 1 and pays you in XP and points.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Mahogany Homes",
+        "tile": [
+          2989,
+          3363,
+          0
+        ]
+      }
+    },
+    {
+      "id": "construction-02",
+      "skill": "construction",
+      "levelRange": [
+        33,
+        52
+      ],
+      "methodType": "CRAFT",
+      "title": "Oak larders",
+      "description": "Build and remove oak larders in your house with planks bought on the Grand Exchange.",
+      "targetLevel": 52,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Rimmington",
+        "tile": [
+          2956,
+          3232,
+          0
+        ]
+      }
+    },
+    {
+      "id": "construction-03",
+      "skill": "construction",
+      "levelRange": [
+        52,
+        99
+      ],
+      "methodType": "CRAFT",
+      "title": "Mahogany furniture",
+      "description": "Build and remove mahogany tables in your house: fast, and the cost is mostly planks.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Rimmington",
+        "tile": [
+          2956,
+          3232,
+          0
+        ]
+      }
+    }
+  ]
+}

@@ -1029,6 +1029,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private long lastSnapshot = -1;
 	/** The step of the last snapshot (JSON): the same step does not restart the target and arrow. null means the step is not from a snapshot or was cleared. */
 	private String snapshotStepKey;
+	/** The tracked skill's path from the app and the step of it that is applied now ("2:mining-04"); null while no skill is led. Client thread. */
+	private SkillPath skillPath;
+	private String skillStepKey;
 	/** The preparation plan from the app; null means it did not send one. The "What you need" list draws it. */
 	private volatile PrepPlan prep;
 	/** Until when the transport item is framed in the bag after a click on its row. */
@@ -1060,7 +1063,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		lastSnapshotAt = System.currentTimeMillis();
 		lastSnapshotSeq = e.getSeq();
-		planPercent = e.getPlan() == null || e.getPlan().getScore() == null ? null : e.getPlan().getScore().getPercent();
+		// The readiness percent belongs to the quest step: while a skill is led there is none.
+		planPercent = e.getSkillPath() != null || e.getPlan() == null || e.getPlan().getScore() == null ? null : e.getPlan().getScore().getPercent();
 		Map<String, String> allRejected = new LinkedHashMap<>(bad);
 		allRejected.putAll(refused);
 		tel("snapshot", "seq", e.getSeq(), "step", e.getStep() == null ? null : e.getStep().getStepId(), "plan", e.getPlan() != null, "percent", planPercent,
@@ -1083,7 +1087,26 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	 */
 	private void applySnapshot(PrepEnvelope e, Map<String, String> bad, Map<String, String> refused)
 	{
-		if (!bad.containsKey(PrepEnvelope.STEP))
+		boolean skillLed = skillPath != null;
+		if (!bad.containsKey(PrepEnvelope.SKILL_PATH))
+		{
+			SkillPath sp = e.getSkillPath();
+			if (sp != null)
+			{
+				skillLed = true;
+				applySkillPath(sp);
+			}
+			else if (skillPath != null)
+			{
+				// Tracking stopped: the quest step comes back from this very snapshot.
+				skillPath = null;
+				skillStepKey = null;
+				snapshotStepKey = null;
+				skillLed = false;
+				tel("skill", "event", "released");
+			}
+		}
+		if (!skillLed && !bad.containsKey(PrepEnvelope.STEP))
 		{
 			ActiveTarget t = e.getStep();
 			if (t == null)
@@ -1126,6 +1149,50 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			prep = e.getPlan();
 		}
 		updateHud();
+	}
+
+	/**
+	 * The path of the tracked skill arrived (or arrived again, with the same content on most snapshots): the step for the real level becomes the target. The cursor
+	 * is a fact (the first step above the real level), never a stored number, so a restart or a late snapshot cannot put it wrong. Client thread.
+	 */
+	private void applySkillPath(SkillPath sp)
+	{
+		skillPath = sp;
+		syncSkillTarget(false);
+	}
+
+	/** Make the target match the real level; a chime when a level moved the cursor on. */
+	private void syncSkillTarget(boolean chime)
+	{
+		SkillPath sp = skillPath;
+		Skill skill = sp == null ? null : sp.skillEnum();
+		if (sp == null || skill == null || client.getGameState() != GameState.LOGGED_IN)
+		{
+			return;
+		}
+		int idx = sp.indexFor(client.getRealSkillLevel(skill));
+		String key = idx + ":" + (idx < sp.getSteps().size() ? sp.getSteps().get(idx).getId() : "done");
+		if (key.equals(skillStepKey))
+		{
+			return;
+		}
+		boolean moved = skillStepKey != null;
+		skillStepKey = key;
+		ActiveTarget t = sp.targetFor(idx);
+		if (t != null && t.prepare() != null)
+		{
+			t = null;
+		}
+		if (navTarget != null)
+		{
+			finishNav("cleared");
+		}
+		applyTarget(t);
+		tel("skill", "skill", sp.getSkill(), "index", idx, "of", sp.getSteps().size(), "step", t == null ? null : t.getTitle());
+		if (chime && moved && config.completionSound())
+		{
+			client.playSoundEffect(SoundEffectID.UI_BOOP);
+		}
 	}
 
 	/** An item from the gear advice: highlight it in the bag and bank. name is the ActiveTarget.nameKey key. */
@@ -2883,6 +2950,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (isOverall(e.getSkill()))
 		{
 			return;
+		}
+		// The tracked skill reached the target level of its step: the next step leads (chime, arrow to its place, its object or NPC highlighted).
+		if (skillPath != null && e.getSkill() == skillPath.skillEnum())
+		{
+			syncSkillTarget(true);
 		}
 		String key = skillKey(e.getSkill());
 		Integer oldXp = xp.put(key, e.getXp());

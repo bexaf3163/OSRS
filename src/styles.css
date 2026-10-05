@@ -1695,3 +1695,28 @@ select option { background: var(--surface); color: var(--text); }
 .req-bar { display: grid; grid-template-columns: minmax(96px, auto) minmax(80px, 1fr) auto; align-items: center; gap: 10px; margin-top: 4px; font-size: 0.85rem; }
 .req-bar-track { height: 8px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); overflow: hidden; }
 .req-bar-fill { display: block; height: 100%; background: var(--accent); }
+
+/* ---- Skill leveling roadmap (Skills → "Leveling roadmap") and the tracked skill card ---- */
+.skill-roadmap-open { display: flex; align-items: center; gap: 8px; margin: 4px 0 0; }
+.skill-drawer .drawer-panel { max-width: min(720px, 100vw); }
+.skill-roadmap-head { display: flex; flex-direction: column; gap: 6px; padding-right: 44px; }
+.skill-roadmap-head h2 { font-size: 1.3rem; }
+.skill-seg { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.skill-seg-btn {
+  min-height: 34px; padding: 4px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--text); font: inherit; font-size: 0.85rem; cursor: pointer;
+}
+.skill-seg-btn.is-on { background: var(--accent-soft); color: var(--accent-ink); border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); font-weight: 600; }
+.skill-seg-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.skill-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.skill-timeline { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.skill-bracket { border-left: 3px solid var(--border); padding-left: 12px; }
+.skill-bracket h3 { font-size: 0.9rem; margin: 0 0 6px; color: var(--muted); }
+.skill-bracket > ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.skill-step { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; background: var(--surface); }
+.skill-step.is-now { border-color: color-mix(in srgb, var(--accent) 60%, var(--border)); background: var(--accent-soft); }
+.skill-step.is-done { opacity: 0.6; }
+.skill-step-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 4px; }
+.skill-step-range { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 0.85rem; }
+.skill-step-text { margin: 0 0 4px; font-size: 0.9rem; }
+.tracked-skill { display: flex; flex-direction: column; gap: 6px; border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); }

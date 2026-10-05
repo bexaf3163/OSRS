@@ -1,0 +1,188 @@
+{
+  "skill": "fletching",
+  "start": 1,
+  "f2pCap": 0,
+  "steps": [
+    {
+      "id": "fletching-01",
+      "skill": "fletching",
+      "levelRange": [
+        1,
+        26
+      ],
+      "methodType": "QUEST",
+      "title": "The Tourist Trap (XP skip)",
+      "description": "A members quest with a big Fletching reward. Put the reward on Fletching when the quest lets you choose.",
+      "targetLevel": 26,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Irena",
+        "tile": [
+          3303,
+          3112,
+          0
+        ],
+        "npcName": "Irena"
+      },
+      "reward": {
+        "quest": "The Tourist Trap",
+        "xp": 9300
+      }
+    },
+    {
+      "id": "fletching-02",
+      "skill": "fletching",
+      "levelRange": [
+        1,
+        5
+      ],
+      "methodType": "CRAFT",
+      "title": "Arrow shafts",
+      "description": "Cut logs into arrow shafts with a knife for the first levels.",
+      "targetLevel": 5,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "fletching-03",
+      "skill": "fletching",
+      "levelRange": [
+        5,
+        20
+      ],
+      "methodType": "CRAFT",
+      "title": "Shortbows",
+      "description": "Cut logs into unstrung shortbows and string them.",
+      "targetLevel": 20,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "fletching-04",
+      "skill": "fletching",
+      "levelRange": [
+        20,
+        40
+      ],
+      "methodType": "CRAFT",
+      "title": "Oak bows",
+      "description": "Cut oak logs into unstrung bows and string them.",
+      "targetLevel": 40,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "fletching-05",
+      "skill": "fletching",
+      "levelRange": [
+        40,
+        55
+      ],
+      "methodType": "CRAFT",
+      "title": "Willow bows",
+      "description": "Cut willow logs into unstrung longbows and string them.",
+      "targetLevel": 55,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "fletching-06",
+      "skill": "fletching",
+      "levelRange": [
+        55,
+        70
+      ],
+      "methodType": "CRAFT",
+      "title": "Maple bows",
+      "description": "Cut maple logs into unstrung longbows and string them.",
+      "targetLevel": 70,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "fletching-07",
+      "skill": "fletching",
+      "levelRange": [
+        70,
+        85
+      ],
+      "methodType": "CRAFT",
+      "title": "Yew bows",
+      "description": "Cut yew logs into unstrung longbows and string them.",
+      "targetLevel": 85,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "fletching-08",
+      "skill": "fletching",
+      "levelRange": [
+        85,
+        99
+      ],
+      "methodType": "CRAFT",
+      "title": "Magic bows",
+      "description": "Cut magic logs into unstrung longbows and string them.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    }
+  ]
+}

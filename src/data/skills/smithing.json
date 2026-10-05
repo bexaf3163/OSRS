@@ -1,0 +1,155 @@
+{
+  "skill": "smithing",
+  "start": 1,
+  "f2pCap": 99,
+  "steps": [
+    {
+      "id": "smithing-01",
+      "skill": "smithing",
+      "levelRange": [
+        1,
+        29
+      ],
+      "methodType": "QUEST",
+      "title": "The Knight's Sword (XP skip)",
+      "description": "A free quest that gives a huge block of Smithing XP in one go: it skips most of the early smithing. You need to mine blurite ore (Mining 10).",
+      "targetLevel": 29,
+      "lane": "fast",
+      "members": false,
+      "location": {
+        "name": "Squire",
+        "tile": [
+          2977,
+          3342,
+          0
+        ],
+        "npcName": "Squire"
+      },
+      "reward": {
+        "quest": "The Knight's Sword",
+        "xp": 12725,
+        "routeStepId": "S2-07"
+      }
+    },
+    {
+      "id": "smithing-02",
+      "skill": "smithing",
+      "levelRange": [
+        29,
+        40
+      ],
+      "methodType": "GATHER",
+      "title": "Smith at the Varrock anvil",
+      "description": "Smith the best item you can make at the anvil just south of the Varrock west bank. It loses a little money but takes under an hour.",
+      "targetLevel": 40,
+      "lane": "fast",
+      "members": false,
+      "location": {
+        "name": "Varrock West Bank",
+        "tile": [
+          3185,
+          3440,
+          0
+        ],
+        "objectName": "Anvil"
+      }
+    },
+    {
+      "id": "smithing-03",
+      "skill": "smithing",
+      "levelRange": [
+        1,
+        40
+      ],
+      "methodType": "GATHER",
+      "title": "Anvil smithing",
+      "description": "Smelt bars in a furnace and smith the best item at the anvil south of the Varrock west bank. Pick items that use several bars per action.",
+      "targetLevel": 40,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Varrock West Bank",
+        "tile": [
+          3185,
+          3440,
+          0
+        ],
+        "objectName": "Anvil"
+      }
+    },
+    {
+      "id": "smithing-04",
+      "skill": "smithing",
+      "levelRange": [
+        40,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Smith the best armour",
+      "description": "Smith armour at the Varrock anvil with mithril or adamantite bars (free to play): slower, but works everywhere.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Varrock West Bank",
+        "tile": [
+          3185,
+          3440,
+          0
+        ],
+        "objectName": "Anvil"
+      }
+    },
+    {
+      "id": "smithing-05",
+      "skill": "smithing",
+      "levelRange": [
+        15,
+        99
+      ],
+      "methodType": "MINIGAME",
+      "title": "Giants' Foundry",
+      "description": "Forge swords at Giants' Foundry: low effort, and it pays you. Needs Sleeping Giants.",
+      "targetLevel": 99,
+      "lane": "afk",
+      "members": true,
+      "location": {
+        "name": "Giants' Foundry",
+        "tile": [
+          3360,
+          3151,
+          0
+        ],
+        "npcName": "Kovac"
+      },
+      "prerequisites": {
+        "questIds": [
+          "Sleeping Giants"
+        ]
+      }
+    },
+    {
+      "id": "smithing-06",
+      "skill": "smithing",
+      "levelRange": [
+        40,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Blast Furnace gold bars",
+      "description": "Smelt gold bars at the Blast Furnace: the fastest viable members method from level 40 (it costs money).",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Blast Furnace",
+        "tile": [
+          2930,
+          10197,
+          0
+        ],
+        "objectName": "Bar dispenser"
+      }
+    }
+  ]
+}

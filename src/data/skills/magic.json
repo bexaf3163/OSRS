@@ -1,0 +1,152 @@
+{
+  "skill": "magic",
+  "start": 1,
+  "f2pCap": 99,
+  "steps": [
+    {
+      "id": "magic-01",
+      "skill": "magic",
+      "levelRange": [
+        1,
+        4
+      ],
+      "methodType": "QUEST",
+      "title": "Witch's Potion (XP skip)",
+      "description": "A very short free quest with a Magic reward. Both Magic quests together take you to level 10.",
+      "targetLevel": 4,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Hetty",
+        "tile": [
+          2968,
+          3206,
+          0
+        ],
+        "npcName": "Hetty"
+      },
+      "reward": {
+        "quest": "Witch's Potion",
+        "xp": 325,
+        "routeStepId": "S2-03"
+      }
+    },
+    {
+      "id": "magic-02",
+      "skill": "magic",
+      "levelRange": [
+        4,
+        9
+      ],
+      "methodType": "QUEST",
+      "title": "Imp Catcher (XP skip)",
+      "description": "Another short free quest with a Magic reward.",
+      "targetLevel": 9,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Wizard Mizgog",
+        "tile": [
+          3104,
+          3164,
+          2
+        ],
+        "npcName": "Wizard Mizgog"
+      },
+      "reward": {
+        "quest": "Imp Catcher",
+        "xp": 875,
+        "routeStepId": "S2-02"
+      }
+    },
+    {
+      "id": "magic-03",
+      "skill": "magic",
+      "levelRange": [
+        7,
+        21
+      ],
+      "methodType": "GATHER",
+      "title": "Lvl-1 Enchant",
+      "description": "Enchant sapphire or opal jewellery with the Lvl-1 Enchant spell: around 250 casts take you from level 7 to 21.",
+      "targetLevel": 21,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "magic-04",
+      "skill": "magic",
+      "levelRange": [
+        1,
+        21
+      ],
+      "methodType": "COMBAT",
+      "title": "Strike spells on cows",
+      "description": "Cast the best Strike spell on cows near Lumbridge. Buy mind, air and fire runes (or use a staff).",
+      "targetLevel": 21,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Lumbridge",
+        "tile": [
+          3188,
+          3220,
+          0
+        ],
+        "npcName": "Cow"
+      }
+    },
+    {
+      "id": "magic-05",
+      "skill": "magic",
+      "levelRange": [
+        21,
+        55
+      ],
+      "methodType": "GATHER",
+      "title": "Low Level Alchemy",
+      "description": "Convert cheap items into coins with Low Level Alchemy: the spell can be cast while you do other things.",
+      "targetLevel": 55,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "magic-06",
+      "skill": "magic",
+      "levelRange": [
+        55,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "High Level Alchemy",
+      "description": "Alchemise items you buy on the Grand Exchange: very low effort, a small cost. Put the spell where you can click it fast.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    }
+  ]
+}

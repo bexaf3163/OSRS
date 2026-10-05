@@ -1,0 +1,172 @@
+{
+  "skill": "defence",
+  "start": 1,
+  "f2pCap": 99,
+  "steps": [
+    {
+      "id": "defence-01",
+      "skill": "defence",
+      "levelRange": [
+        1,
+        30
+      ],
+      "methodType": "COMBAT",
+      "title": "Cows near Lumbridge (Defence style)",
+      "description": "Kill cows on the Defence style. Slow, but the free way at the start.",
+      "targetLevel": 30,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Lumbridge",
+        "tile": [
+          3188,
+          3220,
+          0
+        ],
+        "npcName": "Cow"
+      }
+    },
+    {
+      "id": "defence-02",
+      "skill": "defence",
+      "levelRange": [
+        1,
+        33
+      ],
+      "methodType": "QUEST",
+      "title": "Dragon Slayer I (XP skip)",
+      "description": "The free-to-play finale quest: a large Defence and Strength reward. Follow the Dragon Slayer I steps of the route.",
+      "targetLevel": 33,
+      "lane": "fast",
+      "members": false,
+      "location": {
+        "name": "Champions' Guild",
+        "tile": [
+          3191,
+          3357,
+          0
+        ],
+        "npcName": "Guildmaster"
+      },
+      "reward": {
+        "quest": "Dragon Slayer I",
+        "xp": 18650
+      }
+    },
+    {
+      "id": "defence-03",
+      "skill": "defence",
+      "levelRange": [
+        30,
+        60
+      ],
+      "methodType": "COMBAT",
+      "title": "Hill giants",
+      "description": "Hill giants in the Edgeville Dungeon on the Defence style.",
+      "targetLevel": 60,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Edgeville Dungeon",
+        "tile": [
+          3116,
+          9908,
+          0
+        ],
+        "npcName": "Hill Giant"
+      }
+    },
+    {
+      "id": "defence-04",
+      "skill": "defence",
+      "levelRange": [
+        60,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Moss giants",
+      "description": "Moss giants in the Varrock Sewers on the Defence style (free to play).",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Varrock",
+        "tile": [
+          3210,
+          3448,
+          0
+        ],
+        "npcName": "Moss giant"
+      }
+    },
+    {
+      "id": "defence-05",
+      "skill": "defence",
+      "levelRange": [
+        50,
+        60
+      ],
+      "methodType": "COMBAT",
+      "title": "Gemstone Crab",
+      "description": "Fight the Gemstone Crab in the Tlati Rainforest on the Defence style.",
+      "targetLevel": 60,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Gemstone Crab",
+        "tile": [
+          1275,
+          3160,
+          0
+        ],
+        "npcName": "Gemstone Crab"
+      }
+    },
+    {
+      "id": "defence-06",
+      "skill": "defence",
+      "levelRange": [
+        30,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Gemstone Crab (AFK)",
+      "description": "Stand by the Gemstone Crab and keep attacking: the low-effort option all the way up.",
+      "targetLevel": 99,
+      "lane": "afk",
+      "members": true,
+      "location": {
+        "name": "Gemstone Crab",
+        "tile": [
+          1275,
+          3160,
+          0
+        ],
+        "npcName": "Gemstone Crab"
+      }
+    },
+    {
+      "id": "defence-07",
+      "skill": "defence",
+      "levelRange": [
+        60,
+        99
+      ],
+      "methodType": "MINIGAME",
+      "title": "Nightmare Zone",
+      "description": "Fight bosses inside your own dream in the Nightmare Zone.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Nightmare Zone",
+        "tile": [
+          2605,
+          3115,
+          0
+        ],
+        "npcName": "Dominic Onion"
+      }
+    }
+  ]
+}

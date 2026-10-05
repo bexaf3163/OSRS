@@ -1,0 +1,57 @@
+{
+  "skill": "hitpoints",
+  "start": 10,
+  "f2pCap": 99,
+  "steps": [
+    {
+      "id": "hitpoints-01",
+      "skill": "hitpoints",
+      "levelRange": [
+        10,
+        24
+      ],
+      "methodType": "QUEST",
+      "title": "Witch's House (XP skip)",
+      "description": "A free quest with a large Hitpoints reward. Bring food: the experiment fights back.",
+      "targetLevel": 24,
+      "lane": "fast",
+      "members": false,
+      "location": {
+        "name": "Witch's House",
+        "tile": [
+          2928,
+          3456,
+          0
+        ],
+        "npcName": "Boy"
+      },
+      "reward": {
+        "quest": "Witch's House",
+        "xp": 6325
+      }
+    },
+    {
+      "id": "hitpoints-02",
+      "skill": "hitpoints",
+      "levelRange": [
+        10,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Hitpoints grow with combat",
+      "description": "Hitpoints rise with every combat style you train. Follow the Attack, Strength, Defence and Ranged guides: there is no separate method.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Lumbridge",
+        "tile": [
+          3188,
+          3220,
+          0
+        ],
+        "npcName": "Cow"
+      }
+    }
+  ]
+}

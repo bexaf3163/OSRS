@@ -1,0 +1,141 @@
+{
+  "skill": "firemaking",
+  "start": 1,
+  "f2pCap": 99,
+  "steps": [
+    {
+      "id": "firemaking-01",
+      "skill": "firemaking",
+      "levelRange": [
+        1,
+        15
+      ],
+      "methodType": "GATHER",
+      "title": "Burn regular logs",
+      "description": "Light fires on a line of free tiles with a tinderbox. Buy the logs on the Grand Exchange or chop them yourself.",
+      "targetLevel": 15,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "firemaking-02",
+      "skill": "firemaking",
+      "levelRange": [
+        15,
+        30
+      ],
+      "methodType": "GATHER",
+      "title": "Burn oak logs",
+      "description": "Light a line of fires with oak logs.",
+      "targetLevel": 30,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "firemaking-03",
+      "skill": "firemaking",
+      "levelRange": [
+        30,
+        45
+      ],
+      "methodType": "GATHER",
+      "title": "Burn willow logs",
+      "description": "Light a line of fires with willow logs.",
+      "targetLevel": 45,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "firemaking-04",
+      "skill": "firemaking",
+      "levelRange": [
+        45,
+        60
+      ],
+      "methodType": "GATHER",
+      "title": "Burn maple logs",
+      "description": "Light a line of fires with maple logs.",
+      "targetLevel": 60,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "firemaking-05",
+      "skill": "firemaking",
+      "levelRange": [
+        60,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Burn yew logs",
+      "description": "Light a line of fires with yew logs.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "firemaking-06",
+      "skill": "firemaking",
+      "levelRange": [
+        50,
+        99
+      ],
+      "methodType": "MINIGAME",
+      "title": "Wintertodt",
+      "description": "Wintertodt is the best members Firemaking method: fletch kindling, feed the brazier and fight the cold. Bring food and a knife.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Wintertodt",
+        "tile": [
+          1630,
+          3981,
+          0
+        ],
+        "npcName": "Wintertodt"
+      },
+      "recommendedXpRate": "~100k xp/hr"
+    }
+  ]
+}

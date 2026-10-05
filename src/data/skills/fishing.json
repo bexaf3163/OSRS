@@ -1,0 +1,199 @@
+{
+  "skill": "fishing",
+  "start": 1,
+  "f2pCap": 99,
+  "steps": [
+    {
+      "id": "fishing-01",
+      "skill": "fishing",
+      "levelRange": [
+        1,
+        24
+      ],
+      "methodType": "QUEST",
+      "title": "Sea Slug (XP skip)",
+      "description": "A short quest with a big Fishing reward: it takes you to level 24 without catching a fish.",
+      "targetLevel": 24,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Caroline",
+        "tile": [
+          2716,
+          3302,
+          0
+        ],
+        "npcName": "Caroline"
+      },
+      "reward": {
+        "quest": "Sea Slug",
+        "xp": 7175
+      }
+    },
+    {
+      "id": "fishing-02",
+      "skill": "fishing",
+      "levelRange": [
+        24,
+        26
+      ],
+      "methodType": "QUEST",
+      "title": "Fishing Contest (XP skip)",
+      "description": "A short quest with a Fishing reward. You catch one fish in the contest.",
+      "targetLevel": 26,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Bonzo",
+        "tile": [
+          2640,
+          3437,
+          0
+        ],
+        "npcName": "Bonzo"
+      },
+      "reward": {
+        "quest": "Fishing Contest",
+        "xp": 2437
+      }
+    },
+    {
+      "id": "fishing-03",
+      "skill": "fishing",
+      "levelRange": [
+        1,
+        20
+      ],
+      "methodType": "GATHER",
+      "title": "Shrimps and anchovies",
+      "description": "Net-fish shrimps and anchovies at the Draynor Village fishing spots.",
+      "targetLevel": 20,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Draynor Village fishing spots",
+        "tile": [
+          3086,
+          3229,
+          0
+        ],
+        "npcName": "Fishing spot"
+      }
+    },
+    {
+      "id": "fishing-04",
+      "skill": "fishing",
+      "levelRange": [
+        20,
+        40
+      ],
+      "methodType": "GATHER",
+      "title": "Trout and salmon",
+      "description": "Fly-fish trout and salmon at the Barbarian Village spots. You need a fly fishing rod and feathers.",
+      "targetLevel": 40,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Barbarian Village fishing spots",
+        "tile": [
+          3107,
+          3429,
+          0
+        ],
+        "npcName": "Fishing spot"
+      }
+    },
+    {
+      "id": "fishing-05",
+      "skill": "fishing",
+      "levelRange": [
+        40,
+        50
+      ],
+      "methodType": "GATHER",
+      "title": "Lobsters",
+      "description": "Catch lobsters with a lobster pot at Musa Point on Karamja.",
+      "targetLevel": 50,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Musa Point fishing spots",
+        "tile": [
+          2925,
+          3180,
+          0
+        ],
+        "npcName": "Fishing spot"
+      }
+    },
+    {
+      "id": "fishing-06",
+      "skill": "fishing",
+      "levelRange": [
+        50,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Tuna and swordfish",
+      "description": "Harpoon tuna and swordfish at Musa Point on Karamja: free to play.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Musa Point fishing spots",
+        "tile": [
+          2925,
+          3180,
+          0
+        ],
+        "npcName": "Fishing spot"
+      }
+    },
+    {
+      "id": "fishing-07",
+      "skill": "fishing",
+      "levelRange": [
+        35,
+        99
+      ],
+      "methodType": "MINIGAME",
+      "title": "Tempoross",
+      "description": "Fight the Tempoross on a busy world: fast, low effort and it rewards extra XP at the end.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Tempoross",
+        "tile": [
+          3035,
+          2850,
+          0
+        ],
+        "npcName": "Tempoross"
+      }
+    },
+    {
+      "id": "fishing-08",
+      "skill": "fishing",
+      "levelRange": [
+        58,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Barbarian fishing",
+      "description": "Catch leaping fish at the Barbarian Outpost: it also trains Strength and Agility.",
+      "targetLevel": 99,
+      "lane": "afk",
+      "members": true,
+      "location": {
+        "name": "Otto Godblessed",
+        "tile": [
+          2502,
+          3489,
+          0
+        ],
+        "npcName": "Fishing spot"
+      }
+    }
+  ]
+}

@@ -1,0 +1,201 @@
+{
+  "skill": "woodcutting",
+  "start": 1,
+  "f2pCap": 99,
+  "steps": [
+    {
+      "id": "woodcutting-01",
+      "skill": "woodcutting",
+      "levelRange": [
+        1,
+        13
+      ],
+      "methodType": "QUEST",
+      "title": "Monk's Friend (XP skip)",
+      "description": "A short quest with a Woodcutting reward: no chopping needed.",
+      "targetLevel": 13,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Brother Omad",
+        "tile": [
+          2604,
+          3209,
+          0
+        ],
+        "npcName": "Brother Omad"
+      },
+      "reward": {
+        "quest": "Monk's Friend",
+        "xp": 2000
+      }
+    },
+    {
+      "id": "woodcutting-02",
+      "skill": "woodcutting",
+      "levelRange": [
+        13,
+        17
+      ],
+      "methodType": "QUEST",
+      "title": "Enlightened Journey (XP skip)",
+      "description": "A balloon quest with a Woodcutting reward.",
+      "targetLevel": 17,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Auguste",
+        "tile": [
+          2810,
+          3356,
+          0
+        ],
+        "npcName": "Auguste"
+      },
+      "reward": {
+        "quest": "Enlightened Journey",
+        "xp": 1500
+      }
+    },
+    {
+      "id": "woodcutting-03",
+      "skill": "woodcutting",
+      "levelRange": [
+        1,
+        15
+      ],
+      "methodType": "GATHER",
+      "title": "Regular trees",
+      "description": "Chop ordinary trees by Lumbridge Castle. Use the best axe you can wield.",
+      "targetLevel": 15,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Lumbridge",
+        "tile": [
+          3188,
+          3220,
+          0
+        ],
+        "objectName": "Tree"
+      },
+      "recommendedXpRate": "~12k xp/hr"
+    },
+    {
+      "id": "woodcutting-04",
+      "skill": "woodcutting",
+      "levelRange": [
+        15,
+        30
+      ],
+      "methodType": "GATHER",
+      "title": "Oak trees",
+      "description": "Chop oak trees: by the Draynor bank, west of Varrock, or at Port Sarim.",
+      "targetLevel": 30,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Draynor Bank",
+        "tile": [
+          3093,
+          3243,
+          0
+        ],
+        "objectName": "Oak tree"
+      }
+    },
+    {
+      "id": "woodcutting-05",
+      "skill": "woodcutting",
+      "levelRange": [
+        30,
+        60
+      ],
+      "methodType": "GATHER",
+      "title": "Willow trees",
+      "description": "Chop willows by Draynor Village and bank or drop the logs. Dark wizards wander nearby: stay alert.",
+      "targetLevel": 60,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Draynor Village",
+        "tile": [
+          3103,
+          3265,
+          0
+        ],
+        "objectName": "Willow tree"
+      },
+      "recommendedXpRate": "~20-35k xp/hr"
+    },
+    {
+      "id": "woodcutting-06",
+      "skill": "woodcutting",
+      "levelRange": [
+        60,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Yew trees",
+      "description": "Chop yews south of the Edgeville bank: free to play and good money.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Edgeville Bank",
+        "tile": [
+          3093,
+          3495,
+          0
+        ],
+        "objectName": "Yew tree"
+      }
+    },
+    {
+      "id": "woodcutting-07",
+      "skill": "woodcutting",
+      "levelRange": [
+        35,
+        60
+      ],
+      "methodType": "GATHER",
+      "title": "Teak trees",
+      "description": "Teak trees give the best Woodcutting XP of the accessible trees: chop them and bank or drop the logs.",
+      "targetLevel": 60,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Teak tree",
+        "tile": [
+          2335,
+          3048,
+          0
+        ],
+        "objectName": "Teak tree"
+      }
+    },
+    {
+      "id": "woodcutting-08",
+      "skill": "woodcutting",
+      "levelRange": [
+        60,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Woodcutting Guild",
+      "description": "Chop yews and magic trees in the Woodcutting Guild (Woodcutting 60): a bank is next to the trees.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Woodcutting Guild",
+        "tile": [
+          1565,
+          3499,
+          0
+        ],
+        "objectName": "Yew tree"
+      }
+    }
+  ]
+}

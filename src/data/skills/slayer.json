@@ -1,0 +1,76 @@
+{
+  "skill": "slayer",
+  "start": 1,
+  "f2pCap": 0,
+  "steps": [
+    {
+      "id": "slayer-01",
+      "skill": "slayer",
+      "levelRange": [
+        1,
+        20
+      ],
+      "methodType": "COMBAT",
+      "title": "Turael tasks",
+      "description": "Take easy tasks from Turael in Burthorpe: the safe start. Bring food and what the task needs.",
+      "targetLevel": 20,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Burthorpe",
+        "tile": [
+          2870,
+          3544,
+          0
+        ],
+        "npcName": "Turael"
+      }
+    },
+    {
+      "id": "slayer-02",
+      "skill": "slayer",
+      "levelRange": [
+        20,
+        50
+      ],
+      "methodType": "COMBAT",
+      "title": "Vannaka tasks",
+      "description": "Take tasks from Vannaka in the Edgeville Dungeon (Combat 40). Skip what you dislike with the task block and skip points.",
+      "targetLevel": 50,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Edgeville Dungeon",
+        "tile": [
+          3116,
+          9908,
+          0
+        ],
+        "npcName": "Vannaka"
+      }
+    },
+    {
+      "id": "slayer-03",
+      "skill": "slayer",
+      "levelRange": [
+        50,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Nieve tasks",
+      "description": "Take tasks from Nieve in the Tree Gnome Stronghold (Combat 85) for better XP. Bring a Slayer helmet when you can.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Tree Gnome Stronghold",
+        "tile": [
+          2440,
+          3460,
+          0
+        ],
+        "npcName": "Nieve"
+      }
+    }
+  ]
+}

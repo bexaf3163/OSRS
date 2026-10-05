@@ -1,0 +1,252 @@
+{
+  "skill": "attack",
+  "start": 1,
+  "f2pCap": 99,
+  "steps": [
+    {
+      "id": "attack-01",
+      "skill": "attack",
+      "levelRange": [
+        1,
+        30
+      ],
+      "methodType": "QUEST",
+      "title": "Waterfall Quest (XP skip)",
+      "description": "Do the quest: its reward is a large block of Attack XP (and the same for Strength). No combat levels are needed, but food helps.",
+      "targetLevel": 30,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Almera",
+        "tile": [
+          2522,
+          3498,
+          0
+        ],
+        "npcName": "Almera"
+      },
+      "reward": {
+        "quest": "Waterfall Quest",
+        "xp": 13750,
+        "routeStepId": "S7-01"
+      }
+    },
+    {
+      "id": "attack-02",
+      "skill": "attack",
+      "levelRange": [
+        30,
+        36
+      ],
+      "methodType": "QUEST",
+      "title": "Fight Arena (XP skip)",
+      "description": "A short quest with a large Attack reward. You fight a few guards and a scorpion: bring food.",
+      "targetLevel": 36,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Lady Servil",
+        "tile": [
+          2566,
+          3199,
+          0
+        ],
+        "npcName": "Lady Servil"
+      },
+      "reward": {
+        "quest": "Fight Arena",
+        "xp": 12175,
+        "routeStepId": "S7-02"
+      }
+    },
+    {
+      "id": "attack-03",
+      "skill": "attack",
+      "levelRange": [
+        36,
+        39
+      ],
+      "methodType": "QUEST",
+      "title": "Tree Gnome Village (XP skip)",
+      "description": "Another Attack reward: the gnome quest ends with a fight against the warlord.",
+      "targetLevel": 39,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Commander Montai",
+        "tile": [
+          2520,
+          3213,
+          0
+        ],
+        "npcName": "Commander Montai"
+      },
+      "reward": {
+        "quest": "Tree Gnome Village",
+        "xp": 11450,
+        "routeStepId": "S7-03"
+      }
+    },
+    {
+      "id": "attack-04",
+      "skill": "attack",
+      "levelRange": [
+        1,
+        20
+      ],
+      "methodType": "COMBAT",
+      "title": "Cows near Lumbridge",
+      "description": "Kill cows with your best weapon on the Attack style. Bones can be buried for Prayer.",
+      "targetLevel": 20,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Lumbridge",
+        "tile": [
+          3188,
+          3220,
+          0
+        ],
+        "npcName": "Cow"
+      }
+    },
+    {
+      "id": "attack-05",
+      "skill": "attack",
+      "levelRange": [
+        20,
+        40
+      ],
+      "methodType": "COMBAT",
+      "title": "Al Kharid warriors",
+      "description": "The warriors in the Al Kharid palace hit weakly and give steady XP. Bring food.",
+      "targetLevel": 40,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Al Kharid",
+        "tile": [
+          3290,
+          3185,
+          0
+        ],
+        "npcName": "Al Kharid warrior"
+      }
+    },
+    {
+      "id": "attack-06",
+      "skill": "attack",
+      "levelRange": [
+        40,
+        60
+      ],
+      "methodType": "COMBAT",
+      "title": "Hill giants",
+      "description": "Hill giants in the Edgeville Dungeon: good XP, and big bones for Prayer. Bring food and bank often.",
+      "targetLevel": 60,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Edgeville Dungeon",
+        "tile": [
+          3116,
+          9908,
+          0
+        ],
+        "npcName": "Hill Giant"
+      }
+    },
+    {
+      "id": "attack-07",
+      "skill": "attack",
+      "levelRange": [
+        60,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Moss giants",
+      "description": "Moss giants in the Varrock Sewers (free to play). Bring food.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Varrock",
+        "tile": [
+          3210,
+          3448,
+          0
+        ],
+        "npcName": "Moss giant"
+      }
+    },
+    {
+      "id": "attack-08",
+      "skill": "attack",
+      "levelRange": [
+        45,
+        60
+      ],
+      "methodType": "COMBAT",
+      "title": "Gemstone Crab",
+      "description": "Fight the Gemstone Crab in the Tlati Rainforest: very low effort, good XP from combat level 30 and up. It resets, so you can leave it running.",
+      "targetLevel": 60,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Gemstone Crab",
+        "tile": [
+          1275,
+          3160,
+          0
+        ],
+        "npcName": "Gemstone Crab"
+      }
+    },
+    {
+      "id": "attack-09",
+      "skill": "attack",
+      "levelRange": [
+        30,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Gemstone Crab (AFK)",
+      "description": "Stand by the Gemstone Crab and keep attacking: it is the low-effort option all the way up.",
+      "targetLevel": 99,
+      "lane": "afk",
+      "members": true,
+      "location": {
+        "name": "Gemstone Crab",
+        "tile": [
+          1275,
+          3160,
+          0
+        ],
+        "npcName": "Gemstone Crab"
+      }
+    },
+    {
+      "id": "attack-10",
+      "skill": "attack",
+      "levelRange": [
+        60,
+        99
+      ],
+      "methodType": "MINIGAME",
+      "title": "Nightmare Zone",
+      "description": "Fight bosses inside your own dream in the Nightmare Zone: a steady high-level members method.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Nightmare Zone",
+        "tile": [
+          2605,
+          3115,
+          0
+        ],
+        "npcName": "Dominic Onion"
+      }
+    }
+  ]
+}

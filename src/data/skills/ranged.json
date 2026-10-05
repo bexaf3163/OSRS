@@ -1,0 +1,145 @@
+{
+  "skill": "ranged",
+  "start": 1,
+  "f2pCap": 99,
+  "steps": [
+    {
+      "id": "ranged-01",
+      "skill": "ranged",
+      "levelRange": [
+        1,
+        20
+      ],
+      "methodType": "COMBAT",
+      "title": "Cows with a shortbow",
+      "description": "Shoot cows near Lumbridge with a shortbow and bronze arrows. Pick up the arrows after the fight.",
+      "targetLevel": 20,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Lumbridge",
+        "tile": [
+          3188,
+          3220,
+          0
+        ],
+        "npcName": "Cow"
+      }
+    },
+    {
+      "id": "ranged-02",
+      "skill": "ranged",
+      "levelRange": [
+        20,
+        40
+      ],
+      "methodType": "COMBAT",
+      "title": "Giant frogs",
+      "description": "Giant frogs in the Lumbridge Swamp: easy targets. Pick up your arrows.",
+      "targetLevel": 40,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Lumbridge Swamp",
+        "tile": [
+          3197,
+          3166,
+          0
+        ],
+        "npcName": "Giant frog"
+      }
+    },
+    {
+      "id": "ranged-03",
+      "skill": "ranged",
+      "levelRange": [
+        40,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Flesh crawlers",
+      "description": "Flesh crawlers in the Stronghold of Security (free to play). Bring arrows and food.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Flesh Crawler",
+        "tile": [
+          1917,
+          5141,
+          0
+        ],
+        "npcName": "Flesh Crawler"
+      }
+    },
+    {
+      "id": "ranged-04",
+      "skill": "ranged",
+      "levelRange": [
+        1,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Gemstone Crab",
+      "description": "Shoot the Gemstone Crab in the Tlati Rainforest: a low-effort method that works from level 1 to 99.",
+      "targetLevel": 99,
+      "lane": "afk",
+      "members": true,
+      "location": {
+        "name": "Gemstone Crab",
+        "tile": [
+          1275,
+          3160,
+          0
+        ],
+        "npcName": "Gemstone Crab"
+      }
+    },
+    {
+      "id": "ranged-05",
+      "skill": "ranged",
+      "levelRange": [
+        1,
+        70
+      ],
+      "methodType": "COMBAT",
+      "title": "Gemstone Crab",
+      "description": "Shoot the Gemstone Crab in the Tlati Rainforest: very low effort, and fast enough at these levels.",
+      "targetLevel": 70,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Gemstone Crab",
+        "tile": [
+          1275,
+          3160,
+          0
+        ],
+        "npcName": "Gemstone Crab"
+      }
+    },
+    {
+      "id": "ranged-06",
+      "skill": "ranged",
+      "levelRange": [
+        70,
+        99
+      ],
+      "methodType": "MINIGAME",
+      "title": "Nightmare Zone",
+      "description": "Shoot bosses inside your own dream in the Nightmare Zone.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Nightmare Zone",
+        "tile": [
+          2605,
+          3115,
+          0
+        ],
+        "npcName": "Dominic Onion"
+      }
+    }
+  ]
+}

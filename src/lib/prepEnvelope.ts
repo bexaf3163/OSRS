@@ -12,6 +12,7 @@ import { kgText } from './weight';
 import type { PrepLine, PrepPlan, PrepPriority, PrepTiming, PrepWhere, Supply } from './prepPlan';
 import type { Detour } from './detours';
 import type { RecommendedTransport } from './transport';
+import type { SkillPathPayload } from './skillGuide';
 import { items as itemData } from '../data';
 import { nameKey } from './checklist';
 
@@ -56,6 +57,7 @@ export interface PrepEnvelope {
   bankTags: BankTagsPayload | null;
   gearHint: GearHintPayload | null;
   plan: PrepPlanPayload | null;
+  skillPath?: SkillPathPayload;
 }
 
 /** A string no longer than the plugin's limit: cut at a word, with an ellipsis. */
@@ -170,6 +172,8 @@ export interface SnapshotParts {
   bankTags: BankTagsPayload | null;
   gearHint: GearHintPayload | null;
   plan: PrepPlanPayload | null;
+  /** The tracked skill's whole path (Skills → "Track Skill Path"): while it is there the plugin leads the skill step and ignores the quest step. */
+  skillPath?: SkillPathPayload | null;
 }
 
 export const EMPTY_PARTS: SnapshotParts = { step: null, shopping: null, bankTags: null, gearHint: null, plan: null };
@@ -190,6 +194,8 @@ export function buildEnvelope(parts: SnapshotParts, seq: number): PrepEnvelope {
     gearHint: parts.gearHint,
     // The plugin will not apply a plan from another step; we do not send the excess either.
     plan: parts.plan && (!parts.step || parts.plan.stepId === parts.step.stepId) ? parts.plan : null,
+    // Only when there is one: an app that tracks no skill sends the same snapshot as before.
+    ...(parts.skillPath && parts.skillPath.steps.length ? { skillPath: parts.skillPath } : {}),
   };
 }
 

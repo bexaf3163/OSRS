@@ -1,0 +1,223 @@
+{
+  "skill": "strength",
+  "start": 1,
+  "f2pCap": 99,
+  "steps": [
+    {
+      "id": "strength-01",
+      "skill": "strength",
+      "levelRange": [
+        1,
+        30
+      ],
+      "methodType": "QUEST",
+      "title": "Waterfall Quest (XP skip)",
+      "description": "Do the quest: its reward is a large block of Strength XP (and the same for Attack).",
+      "targetLevel": 30,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Almera",
+        "tile": [
+          2522,
+          3498,
+          0
+        ],
+        "npcName": "Almera"
+      },
+      "reward": {
+        "quest": "Waterfall Quest",
+        "xp": 13750,
+        "routeStepId": "S7-01"
+      }
+    },
+    {
+      "id": "strength-02",
+      "skill": "strength",
+      "levelRange": [
+        30,
+        38
+      ],
+      "methodType": "QUEST",
+      "title": "Dragon Slayer I (XP skip)",
+      "description": "The free-to-play finale quest: a large Strength and Defence reward. Follow the Dragon Slayer I steps of the route.",
+      "targetLevel": 38,
+      "lane": "fast",
+      "members": false,
+      "location": {
+        "name": "Champions' Guild",
+        "tile": [
+          3191,
+          3357,
+          0
+        ],
+        "npcName": "Guildmaster"
+      },
+      "reward": {
+        "quest": "Dragon Slayer I",
+        "xp": 18650
+      }
+    },
+    {
+      "id": "strength-03",
+      "skill": "strength",
+      "levelRange": [
+        1,
+        20
+      ],
+      "methodType": "COMBAT",
+      "title": "Cows near Lumbridge",
+      "description": "Kill cows on the Strength style.",
+      "targetLevel": 20,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Lumbridge",
+        "tile": [
+          3188,
+          3220,
+          0
+        ],
+        "npcName": "Cow"
+      }
+    },
+    {
+      "id": "strength-04",
+      "skill": "strength",
+      "levelRange": [
+        20,
+        40
+      ],
+      "methodType": "COMBAT",
+      "title": "Al Kharid warriors",
+      "description": "The warriors in the Al Kharid palace on the Aggressive style. Bring food.",
+      "targetLevel": 40,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Al Kharid",
+        "tile": [
+          3290,
+          3185,
+          0
+        ],
+        "npcName": "Al Kharid warrior"
+      }
+    },
+    {
+      "id": "strength-05",
+      "skill": "strength",
+      "levelRange": [
+        40,
+        60
+      ],
+      "methodType": "COMBAT",
+      "title": "Hill giants",
+      "description": "Hill giants in the Edgeville Dungeon on the Aggressive style.",
+      "targetLevel": 60,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Edgeville Dungeon",
+        "tile": [
+          3116,
+          9908,
+          0
+        ],
+        "npcName": "Hill Giant"
+      }
+    },
+    {
+      "id": "strength-06",
+      "skill": "strength",
+      "levelRange": [
+        60,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Moss giants",
+      "description": "Moss giants in the Varrock Sewers (free to play).",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Varrock",
+        "tile": [
+          3210,
+          3448,
+          0
+        ],
+        "npcName": "Moss giant"
+      }
+    },
+    {
+      "id": "strength-07",
+      "skill": "strength",
+      "levelRange": [
+        50,
+        60
+      ],
+      "methodType": "COMBAT",
+      "title": "Gemstone Crab",
+      "description": "Fight the Gemstone Crab in the Tlati Rainforest on the Strength style.",
+      "targetLevel": 60,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Gemstone Crab",
+        "tile": [
+          1275,
+          3160,
+          0
+        ],
+        "npcName": "Gemstone Crab"
+      }
+    },
+    {
+      "id": "strength-08",
+      "skill": "strength",
+      "levelRange": [
+        30,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Gemstone Crab (AFK)",
+      "description": "Stand by the Gemstone Crab and keep attacking: the low-effort option all the way up.",
+      "targetLevel": 99,
+      "lane": "afk",
+      "members": true,
+      "location": {
+        "name": "Gemstone Crab",
+        "tile": [
+          1275,
+          3160,
+          0
+        ],
+        "npcName": "Gemstone Crab"
+      }
+    },
+    {
+      "id": "strength-09",
+      "skill": "strength",
+      "levelRange": [
+        60,
+        99
+      ],
+      "methodType": "MINIGAME",
+      "title": "Nightmare Zone",
+      "description": "Fight bosses inside your own dream in the Nightmare Zone.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Nightmare Zone",
+        "tile": [
+          2605,
+          3115,
+          0
+        ],
+        "npcName": "Dominic Onion"
+      }
+    }
+  ]
+}

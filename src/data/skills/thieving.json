@@ -1,0 +1,127 @@
+{
+  "skill": "thieving",
+  "start": 1,
+  "f2pCap": 0,
+  "steps": [
+    {
+      "id": "thieving-01",
+      "skill": "thieving",
+      "levelRange": [
+        1,
+        5
+      ],
+      "methodType": "GATHER",
+      "title": "Pickpocket men and women",
+      "description": "Pickpocket men and women in Lumbridge or Varrock for your first levels.",
+      "targetLevel": 5,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Lumbridge",
+        "tile": [
+          3188,
+          3220,
+          0
+        ],
+        "npcName": "Man"
+      }
+    },
+    {
+      "id": "thieving-02",
+      "skill": "thieving",
+      "levelRange": [
+        5,
+        25
+      ],
+      "methodType": "GATHER",
+      "title": "Bakery stalls",
+      "description": "Steal from the bakery stall in East Ardougne: bring food, the guard is nearby.",
+      "targetLevel": 25,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "East Ardougne",
+        "tile": [
+          2624,
+          3300,
+          0
+        ],
+        "objectName": "Baker's stall"
+      }
+    },
+    {
+      "id": "thieving-03",
+      "skill": "thieving",
+      "levelRange": [
+        25,
+        45
+      ],
+      "methodType": "GATHER",
+      "title": "Fruit stalls",
+      "description": "Steal from the fruit stalls in Hosidius.",
+      "targetLevel": 45,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Hosidius",
+        "tile": [
+          1762,
+          3598,
+          0
+        ],
+        "objectName": "Fruit stall"
+      }
+    },
+    {
+      "id": "thieving-04",
+      "skill": "thieving",
+      "levelRange": [
+        45,
+        55
+      ],
+      "methodType": "GATHER",
+      "title": "Blackjack bandits",
+      "description": "Blackjack bandits in Pollnivneach: needs The Feud.",
+      "targetLevel": 55,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Pollnivneach",
+        "tile": [
+          3358,
+          2974,
+          0
+        ],
+        "npcName": "Bandit"
+      },
+      "prerequisites": {
+        "questIds": [
+          "The Feud"
+        ]
+      }
+    },
+    {
+      "id": "thieving-05",
+      "skill": "thieving",
+      "levelRange": [
+        55,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Knights of Ardougne",
+      "description": "Pickpocket the Knights of Ardougne in East Ardougne: the classic mid-to-high level method. Bring food.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "East Ardougne",
+        "tile": [
+          2624,
+          3300,
+          0
+        ],
+        "npcName": "Knight of Ardougne"
+      }
+    }
+  ]
+}

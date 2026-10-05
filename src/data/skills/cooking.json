@@ -1,0 +1,122 @@
+{
+  "skill": "cooking",
+  "start": 1,
+  "f2pCap": 99,
+  "steps": [
+    {
+      "id": "cooking-01",
+      "skill": "cooking",
+      "levelRange": [
+        1,
+        20
+      ],
+      "methodType": "GATHER",
+      "title": "Raw beef and chicken",
+      "description": "Cook raw beef and chicken on the range in the Lumbridge Castle kitchen (after Cook's Assistant) or on a fire.",
+      "targetLevel": 20,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Lumbridge Castle",
+        "tile": [
+          3217,
+          3219,
+          0
+        ],
+        "objectName": "Range"
+      }
+    },
+    {
+      "id": "cooking-02",
+      "skill": "cooking",
+      "levelRange": [
+        20,
+        30
+      ],
+      "methodType": "GATHER",
+      "title": "Trout",
+      "description": "Cook trout on a fire or range by the fishing spots at Barbarian Village.",
+      "targetLevel": 30,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Barbarian Village",
+        "tile": [
+          3080,
+          3427,
+          0
+        ],
+        "objectName": "Fire"
+      }
+    },
+    {
+      "id": "cooking-03",
+      "skill": "cooking",
+      "levelRange": [
+        30,
+        35
+      ],
+      "methodType": "GATHER",
+      "title": "Tuna",
+      "description": "Cook tuna on a range at Musa Point or after a trip to the bank.",
+      "targetLevel": 35,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Musa Point",
+        "tile": [
+          2904,
+          3162,
+          0
+        ],
+        "objectName": "Range"
+      }
+    },
+    {
+      "id": "cooking-04",
+      "skill": "cooking",
+      "levelRange": [
+        35,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Jugs of wine",
+      "description": "Make wine in the Cooks' Guild: use grapes on a jug of water, then the range. It trains Cooking fast and costs little (free to play).",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Cooks' Guild",
+        "tile": [
+          3144,
+          3450,
+          0
+        ],
+        "objectName": "Range"
+      }
+    },
+    {
+      "id": "cooking-05",
+      "skill": "cooking",
+      "levelRange": [
+        30,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Cooked karambwan",
+      "description": "Buy raw karambwan on the Grand Exchange and cook them on the Hosidius range: the fastest low-effort Cooking method.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Hosidius",
+        "tile": [
+          1762,
+          3598,
+          0
+        ],
+        "objectName": "Range"
+      }
+    }
+  ]
+}

@@ -24,6 +24,7 @@ import { useFeatures } from './lib/features';
 import { isClosed, openAfter } from './lib/next-step';
 import { withKillEstimate } from './services/gearAdvisor';
 import { buildEnvelope, EMPTY_PARTS, envelopeKey, nextSeq, type SnapshotParts } from './lib/prepEnvelope';
+import type { SkillPathPayload } from './lib/skillGuide';
 
 const ENABLED_KEY = 'osrs-put:runelite-bridge';
 const AUTOLAUNCH_KEY = 'osrs-put:runelite-autolaunch';
@@ -102,6 +103,8 @@ interface BridgeValue {
    * with everything else in one request; for a plugin older than protocol 6 the call does nothing — it has its own separate requests.
    */
   setPrepPart: <K extends 'gearHint' | 'bankTags' | 'plan'>(key: K, value: SnapshotParts[K]) => void;
+  /** The tracked skill's path for the game (null: stop tracking). While there is one the plugin leads that skill instead of the quest step. */
+  setSkillPath: (value: SkillPathPayload | null) => void;
   /** Which profile and character are current: whether levels and marks from the game may be written into the profile. */
   gate: ProfileGate;
   /** XP per hour by skill from this session's measurements; null — too few measurements. */
@@ -309,6 +312,17 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     sn.parts = { ...sn.parts, [key]: value };
     if (!supportsSnapshot(pluginProtocol.current) || !sn.synced) return;
     // The bag and levels change through an event queue — we send when everything has settled.
+    if (sn.timer) clearTimeout(sn.timer);
+    sn.timer = setTimeout(() => { sn.timer = null; void flushSnapshot(); }, 350);
+  }, [flushSnapshot]);
+
+  const setSkillPath = useCallback((value: SkillPathPayload | null) => {
+    const sn = snapshot.current;
+    sn.parts = { ...sn.parts, skillPath: value };
+    if (!supportsSnapshot(pluginProtocol.current)) return;
+    // With a path in the snapshot the plugin ignores the quest step, so the snapshot may go before the app knows its step; clearing waits for a synced one.
+    if (value) sn.synced = true;
+    else if (!sn.synced) return;
     if (sn.timer) clearTimeout(sn.timer);
     sn.timer = setTimeout(() => { sn.timer = null; void flushSnapshot(); }, 350);
   }, [flushSnapshot]);
@@ -685,11 +699,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
       stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, navigate, clearNav, userClearedAt, plugin,
-      xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart,
+      xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
       stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, navigate, clearNav, userClearedAt, plugin,
-      xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart],
+      xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;
 }

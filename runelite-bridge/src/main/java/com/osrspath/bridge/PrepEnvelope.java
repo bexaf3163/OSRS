@@ -20,6 +20,7 @@ public class PrepEnvelope
 	static final String BANK_TAGS = "bankTags";
 	static final String GEAR_HINT = "gearHint";
 	static final String PLAN = "plan";
+	static final String SKILL_PATH = "skillPath";
 
 	/** The snapshot version; 6. */
 	private int v;
@@ -29,6 +30,8 @@ public class PrepEnvelope
 	private BankTags bankTags;
 	private GearHint gearHint;
 	private PrepPlan plan;
+	/** The tracked skill's path: while it is there the plugin leads that skill instead of the quest step. Absent means no skill is tracked. */
+	private SkillPath skillPath;
 
 	/** The step as it came (JSON): if it did not change, the plugin does not restart the target and arrow. Set by the server. */
 	private transient String stepKey;
@@ -42,6 +45,7 @@ public class PrepEnvelope
 		check(bad, BANK_TAGS, bankTags == null ? null : bankTags.prepare());
 		check(bad, GEAR_HINT, gearHint == null ? null : gearHint.prepare());
 		check(bad, PLAN, plan == null ? null : plan.prepare());
+		check(bad, SKILL_PATH, skillPath == null ? null : skillPath.prepare());
 		return bad;
 	}
 

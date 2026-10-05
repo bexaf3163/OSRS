@@ -1,0 +1,105 @@
+{
+  "skill": "herblore",
+  "start": 1,
+  "f2pCap": 0,
+  "steps": [
+    {
+      "id": "herblore-01",
+      "skill": "herblore",
+      "levelRange": [
+        1,
+        3
+      ],
+      "methodType": "QUEST",
+      "title": "Druidic Ritual (XP skip)",
+      "description": "A members quest that gives your first Herblore levels and unlocks the skill.",
+      "targetLevel": 3,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Kaqemeex",
+        "tile": [
+          2926,
+          3484,
+          0
+        ],
+        "npcName": "Kaqemeex"
+      },
+      "reward": {
+        "quest": "Druidic Ritual",
+        "xp": 250
+      }
+    },
+    {
+      "id": "herblore-02",
+      "skill": "herblore",
+      "levelRange": [
+        3,
+        8
+      ],
+      "methodType": "QUEST",
+      "title": "Jungle Potion (XP skip)",
+      "description": "A members quest with a Herblore reward (it needs level 3 first).",
+      "targetLevel": 8,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Trufitus",
+        "tile": [
+          2809,
+          3086,
+          0
+        ],
+        "npcName": "Trufitus"
+      },
+      "reward": {
+        "quest": "Jungle Potion",
+        "xp": 775
+      }
+    },
+    {
+      "id": "herblore-03",
+      "skill": "herblore",
+      "levelRange": [
+        3,
+        99
+      ],
+      "methodType": "CRAFT",
+      "title": "Make potions",
+      "description": "Buy herbs and secondaries on the Grand Exchange and make the best potion you can: the standard Herblore method.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "herblore-04",
+      "skill": "herblore",
+      "levelRange": [
+        60,
+        99
+      ],
+      "methodType": "MINIGAME",
+      "title": "Mastering Mixology",
+      "description": "Brew potions in the Mastering Mixology minigame in Varlamore: a fast low-effort method from level 60.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Mastering Mixology",
+        "tile": [
+          1389,
+          2918,
+          0
+        ]
+      }
+    }
+  ]
+}

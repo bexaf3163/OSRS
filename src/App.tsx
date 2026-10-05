@@ -14,6 +14,7 @@ import { PrepAuto, PrepWatcher } from './components/PrepRoute';
 import { PageBoundary } from './components/PageBoundary';
 import { GearHintSync } from './components/GearHintSync';
 import { PrepSync } from './components/PrepSync';
+import { SkillSync } from './components/TrackedSkillCard';
 import { PathPage } from './pages/Path';
 import { SkillsPage } from './pages/Skills';
 import { SkillDetailPage } from './pages/SkillDetail';
@@ -150,6 +151,7 @@ export function App() {
       <ToastView />
       <GearHintSync />
       <PrepSync />
+      <SkillSync />
       <SearchBox open={searchOpen} onClose={() => setSearchOpen(false)} />
     </>
   );

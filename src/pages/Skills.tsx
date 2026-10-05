@@ -1,4 +1,5 @@
-// The list of skills: the free and the members ones with their training plans.
+// The list of skills: the free and the members ones with their training plans, and the leveling roadmap of each.
+import { useState } from 'react';
 import { goals, levelById, membersGuide, membersSkills, reference, skills, xpData } from '../data';
 import { useStore } from '../store';
 import { currentStage } from '../lib/next-step';
@@ -11,6 +12,9 @@ import { IconCheck, IconChevron } from '../components/Icons';
 import { Inline } from '../components/Inline';
 import { LevelInput } from '../components/LevelInput';
 import { Table } from '../components/Table';
+import { SkillRoadmapDrawer } from '../components/SkillRoadmap';
+import { SKILL_NAMES, type SkillName } from '../lib/skillGuide';
+import { useTracked } from '../lib/skillTrack';
 
 export function SkillsPage() {
   const { progress, steps, mode } = useStore();
@@ -61,10 +65,20 @@ export function XpTable() {
   return <Table head={['Level', 'XP', 'Level', 'XP']} rows={rows} caption="XP to level" />;
 }
 
+/** The skills of the card that have a leveling roadmap: the melee card also opens Hitpoints. */
+function roadmapSkills(skill: Skill): SkillName[] {
+  const ids = skill.id === 'ME' ? [...skill.levelSkills, 'hitpoints'] : skill.levelSkills;
+  return ids.filter((id): id is SkillName => (SKILL_NAMES as readonly string[]).includes(id));
+}
+
 function SkillCard({ skill, stage }: { skill: Skill; stage: number }) {
   const { progress } = useStore();
   const hit = skillRange(skill, progress);
   const many = skill.levelSkills.length > 1;
+  const [roadmap, setRoadmap] = useState(false);
+  const tracked = useTracked();
+  const guides = roadmapSkills(skill);
+  const isTracked = tracked !== null && guides.includes(tracked.skill);
   return (
     <article className={`skill-card card ${skill.membersOnly ? 'is-members' : ''}`}>
       <a className="skill-card-link" href={`#/skills/${skill.id}`}>
@@ -97,6 +111,13 @@ function SkillCard({ skill, stage }: { skill: Skill; stage: number }) {
           <code className="code">{hit.range.code}</code> <Inline text={hit.range.what} />
         </p>
       )}
+      {guides.length > 0 && (
+        <p className="skill-roadmap-open">
+          <button type="button" className="btn btn-sm" onClick={() => setRoadmap(true)}>🗺 Leveling roadmap</button>
+          {isTracked && <span className="badge badge-now">tracking</span>}
+        </p>
+      )}
+      {roadmap && <SkillRoadmapDrawer skills={guides} label={skill.name} onClose={() => setRoadmap(false)} />}
     </article>
   );
 }

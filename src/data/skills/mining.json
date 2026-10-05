@@ -1,0 +1,155 @@
+{
+  "skill": "mining",
+  "start": 1,
+  "f2pCap": 99,
+  "steps": [
+    {
+      "id": "mining-01",
+      "skill": "mining",
+      "levelRange": [
+        1,
+        10
+      ],
+      "methodType": "QUEST",
+      "title": "Doric's Quest (XP skip)",
+      "description": "A free quest with a small Mining reward; it also gives you the right to use the north anvil.",
+      "targetLevel": 10,
+      "lane": "fast",
+      "members": false,
+      "location": {
+        "name": "Doric",
+        "tile": [
+          2952,
+          3452,
+          0
+        ],
+        "npcName": "Doric"
+      },
+      "reward": {
+        "quest": "Doric's Quest",
+        "xp": 1300,
+        "routeStepId": "S3-01"
+      }
+    },
+    {
+      "id": "mining-02",
+      "skill": "mining",
+      "levelRange": [
+        10,
+        31
+      ],
+      "methodType": "QUEST",
+      "title": "The Dig Site (XP skip)",
+      "description": "A members quest with a very large Mining reward: a single quest that skips most of the early levels.",
+      "targetLevel": 31,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Examiner",
+        "tile": [
+          3364,
+          3342,
+          0
+        ],
+        "npcName": "Examiner"
+      },
+      "reward": {
+        "quest": "The Dig Site",
+        "xp": 15300
+      }
+    },
+    {
+      "id": "mining-03",
+      "skill": "mining",
+      "levelRange": [
+        1,
+        15
+      ],
+      "methodType": "GATHER",
+      "title": "Copper and tin",
+      "description": "Mine copper and tin at the Lumbridge Swamp mine: quiet, with no aggressive monsters.",
+      "targetLevel": 15,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "East Lumbridge Swamp mine",
+        "tile": [
+          3229,
+          3146,
+          0
+        ],
+        "objectName": "Copper rocks"
+      }
+    },
+    {
+      "id": "mining-04",
+      "skill": "mining",
+      "levelRange": [
+        15,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Iron ore (powermining)",
+      "description": "Mine iron at the Al Kharid mine and drop the ore: the standard free-to-play method.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Al Kharid mine",
+        "tile": [
+          3298,
+          3293,
+          0
+        ],
+        "objectName": "Iron rocks"
+      },
+      "recommendedXpRate": "~25-45k xp/hr"
+    },
+    {
+      "id": "mining-05",
+      "skill": "mining",
+      "levelRange": [
+        30,
+        99
+      ],
+      "methodType": "MINIGAME",
+      "title": "Motherlode Mine",
+      "description": "Mine pay-dirt, clean it in the hopper and empty the sack: a profitable low-effort members method.",
+      "targetLevel": 99,
+      "lane": "afk",
+      "members": true,
+      "location": {
+        "name": "Motherlode Mine",
+        "tile": [
+          3744,
+          5664,
+          0
+        ],
+        "objectName": "Ore vein"
+      }
+    },
+    {
+      "id": "mining-06",
+      "skill": "mining",
+      "levelRange": [
+        45,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Granite",
+      "description": "Mine granite at the quarry: the fastest members method from level 45, with a bit of effort to learn.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Quarry",
+        "tile": [
+          3172,
+          2912,
+          0
+        ],
+        "objectName": "Granite rocks"
+      }
+    }
+  ]
+}

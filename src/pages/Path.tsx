@@ -7,6 +7,7 @@ import { flashDone } from '../lib/flash';
 import { reachableQuestPoints } from '../lib/qp';
 import { pendingReview } from '../lib/review';
 import { NextStepCard } from '../components/NextStepCard';
+import { TrackedSkillCard } from '../components/TrackedSkillCard';
 import { GearBanner } from '../components/GearPrompt';
 import { ProgressBar } from '../components/ProgressBar';
 import { StageSection } from '../components/StageSection';
@@ -193,6 +194,7 @@ function PathNarrow({ focusStep, focusKey }: { focusStep?: string; focusKey: num
       </section>
 
       <AccountSync compact />
+      <TrackedSkillCard />
       <NextStepCard onDone={completeFromTop} />
       <GearBanner />
 

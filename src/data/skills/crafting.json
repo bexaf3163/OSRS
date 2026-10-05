@@ -1,0 +1,149 @@
+{
+  "skill": "crafting",
+  "start": 1,
+  "f2pCap": 43,
+  "steps": [
+    {
+      "id": "crafting-01",
+      "skill": "crafting",
+      "levelRange": [
+        1,
+        20
+      ],
+      "methodType": "CRAFT",
+      "title": "Leather items",
+      "description": "Craft the best leather item you can with a needle and thread: gloves, boots, then the first body items.",
+      "targetLevel": 20,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Al Kharid Bank",
+        "tile": [
+          3269,
+          3167,
+          0
+        ]
+      },
+      "prerequisites": {
+        "items": [
+          {
+            "id": 1733,
+            "name": "Needle",
+            "quantity": 1
+          },
+          {
+            "id": 1734,
+            "name": "Thread",
+            "quantity": 50
+          }
+        ]
+      }
+    },
+    {
+      "id": "crafting-02",
+      "skill": "crafting",
+      "levelRange": [
+        20,
+        43
+      ],
+      "methodType": "CRAFT",
+      "title": "Cutting gems",
+      "description": "Cut sapphires, emeralds, rubies and diamonds with a chisel: the fastest free-to-play method and safe.",
+      "targetLevel": 43,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      },
+      "prerequisites": {
+        "items": [
+          {
+            "id": 1755,
+            "name": "Chisel",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "crafting-03",
+      "skill": "crafting",
+      "levelRange": [
+        43,
+        62
+      ],
+      "methodType": "CRAFT",
+      "title": "Cutting diamonds",
+      "description": "Keep cutting diamonds with a chisel until level 62.",
+      "targetLevel": 62,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      },
+      "prerequisites": {
+        "items": [
+          {
+            "id": 1755,
+            "name": "Chisel",
+            "quantity": 1
+          }
+        ]
+      }
+    },
+    {
+      "id": "crafting-04",
+      "skill": "crafting",
+      "levelRange": [
+        62,
+        99
+      ],
+      "methodType": "CRAFT",
+      "title": "Dragonhide bodies",
+      "description": "Craft green, blue and red dragonhide bodies: cheap bodies at the level where gem cutting gets expensive.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "crafting-05",
+      "skill": "crafting",
+      "levelRange": [
+        5,
+        99
+      ],
+      "methodType": "CRAFT",
+      "title": "Molten glass",
+      "description": "Make molten glass and craft glass items: low effort, steady XP.",
+      "targetLevel": 99,
+      "lane": "afk",
+      "members": true,
+      "location": {
+        "name": "Edgeville",
+        "tile": [
+          3080,
+          3492,
+          0
+        ]
+      }
+    }
+  ]
+}

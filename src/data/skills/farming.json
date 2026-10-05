@@ -1,0 +1,75 @@
+{
+  "skill": "farming",
+  "start": 1,
+  "f2pCap": 0,
+  "steps": [
+    {
+      "id": "farming-01",
+      "skill": "farming",
+      "levelRange": [
+        1,
+        15
+      ],
+      "methodType": "GATHER",
+      "title": "Farming allotments",
+      "description": "Plant seeds in the allotment patches near Falador: your first levels, with a few trips.",
+      "targetLevel": 15,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Falador",
+        "tile": [
+          3000,
+          3360,
+          0
+        ],
+        "objectName": "Allotment"
+      }
+    },
+    {
+      "id": "farming-02",
+      "skill": "farming",
+      "levelRange": [
+        15,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Tree runs",
+      "description": "Plant tree seeds in the tree patches around Gielinor and come back when they are grown: the standard long-term method.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Falador",
+        "tile": [
+          3000,
+          3360,
+          0
+        ],
+        "objectName": "Tree patch"
+      }
+    },
+    {
+      "id": "farming-03",
+      "skill": "farming",
+      "levelRange": [
+        34,
+        99
+      ],
+      "methodType": "MINIGAME",
+      "title": "Tithe Farm",
+      "description": "Plant and water seeds at the Tithe Farm in Hosidius: a steady low-effort method that also rewards the Farmer's outfit.",
+      "targetLevel": 99,
+      "lane": "afk",
+      "members": true,
+      "location": {
+        "name": "Tithe Farm",
+        "tile": [
+          1796,
+          3505,
+          0
+        ]
+      }
+    }
+  ]
+}

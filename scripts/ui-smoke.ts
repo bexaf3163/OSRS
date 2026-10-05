@@ -358,6 +358,29 @@ async function run(browser: Browser) {
       await fresh.page.context().close();
     }
 
+    // 2.42: the leveling roadmap drawer opens from the Skills page, the filters change the path, "Track Skill Path" pins the skill to the Path card and can be stopped.
+    {
+      const { page, errors } = await open(browser, width, { progress: progressBefore('S9-01') }, '#/skills');
+      await page.getByRole('button', { name: /Leveling roadmap/ }).first().click();
+      await page.waitForSelector('dialog.skill-drawer[open] .skill-timeline', { timeout: 5000 });
+      const before = await text(page, '.skill-timeline');
+      expect(/Levels \d+/.test(before), 'roadmap: the level brackets are shown');
+      expect(await noOverflow(page), 'roadmap: no horizontal scrolling');
+      await page.getByRole('button', { name: /AFK \/ Budget/ }).click();
+      expect((await page.locator('.skill-seg-btn.is-on').allInnerTexts()).some((x) => x.includes('AFK')), 'roadmap: the filter is applied');
+      await page.getByRole('button', { name: /Track Skill Path/ }).click();
+      const tracked = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:skill-track') ?? 'null') as { mode?: string } | null);
+      expect(tracked?.mode === 'afk', 'roadmap: tracking was remembered with the filter');
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(400);
+      await page.evaluate(() => { location.hash = '#/step/S9-01'; });
+      await page.waitForSelector('.tracked-skill', { timeout: 5000 });
+      await page.getByRole('button', { name: /Back to the quest route/ }).click();
+      expect((await page.locator('.tracked-skill').count()) === 0, 'roadmap: stopping gives the quest route back');
+      expect(!errors.length, `roadmap: no console errors ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
     // 2.12: another character does not write into the active profile and gets an offer; XP from the game is visible on the skill page.
     {
       const profiles = JSON.stringify({ active: 'main', list: [{ id: 'main', name: 'Main', player: 'Alpha One' }] });

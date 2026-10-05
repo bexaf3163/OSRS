@@ -1,0 +1,128 @@
+{
+  "skill": "prayer",
+  "start": 1,
+  "f2pCap": 99,
+  "steps": [
+    {
+      "id": "prayer-01",
+      "skill": "prayer",
+      "levelRange": [
+        1,
+        9
+      ],
+      "methodType": "QUEST",
+      "title": "The Restless Ghost (XP skip)",
+      "description": "A short free quest with a Prayer reward: your first levels without bones.",
+      "targetLevel": 9,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Father Aereck",
+        "tile": [
+          3243,
+          3210,
+          0
+        ],
+        "npcName": "Father Aereck"
+      },
+      "reward": {
+        "quest": "The Restless Ghost",
+        "xp": 1125,
+        "routeStepId": "S1-06"
+      }
+    },
+    {
+      "id": "prayer-02",
+      "skill": "prayer",
+      "levelRange": [
+        1,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Offer bones at a gilded altar",
+      "description": "The fastest way: offer bought bones on a gilded altar in your own house, with both incense burners lit. It costs money.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Rimmington",
+        "tile": [
+          2956,
+          3232,
+          0
+        ]
+      }
+    },
+    {
+      "id": "prayer-03",
+      "skill": "prayer",
+      "levelRange": [
+        1,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Bury bones from combat",
+      "description": "Bury every bone you get from combat: free, slow, and passive next to your combat training.",
+      "targetLevel": 99,
+      "lane": "afk",
+      "members": false,
+      "location": {
+        "name": "Lumbridge",
+        "tile": [
+          3188,
+          3220,
+          0
+        ]
+      }
+    },
+    {
+      "id": "prayer-04",
+      "skill": "prayer",
+      "levelRange": [
+        7,
+        99
+      ],
+      "methodType": "MINIGAME",
+      "title": "Camdozaal fish offerings",
+      "description": "Offer raw fish on the altar in the Ruins of Camdozaal: a free way after Below Ice Mountain, and it trains Fishing and Cooking too.",
+      "targetLevel": 99,
+      "lane": "afk",
+      "members": false,
+      "location": {
+        "name": "Ruins of Camdozaal",
+        "tile": [
+          2968,
+          5808,
+          0
+        ]
+      },
+      "prerequisites": {
+        "questIds": [
+          "Below Ice Mountain"
+        ]
+      }
+    },
+    {
+      "id": "prayer-05",
+      "skill": "prayer",
+      "levelRange": [
+        1,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Bury bones bought on the Grand Exchange",
+      "description": "Buy bones on the Grand Exchange and bury them: a simple free-to-play fallback.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": false,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    }
+  ]
+}

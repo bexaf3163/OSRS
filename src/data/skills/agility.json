@@ -1,0 +1,337 @@
+{
+  "skill": "agility",
+  "start": 1,
+  "f2pCap": 0,
+  "steps": [
+    {
+      "id": "agility-01",
+      "skill": "agility",
+      "levelRange": [
+        1,
+        26
+      ],
+      "methodType": "QUEST",
+      "title": "The Tourist Trap (XP skip)",
+      "description": "A members quest with a big Agility reward. Put the reward on Agility when the quest lets you choose.",
+      "targetLevel": 26,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Irena",
+        "tile": [
+          3303,
+          3112,
+          0
+        ],
+        "npcName": "Irena"
+      },
+      "reward": {
+        "quest": "The Tourist Trap",
+        "xp": 9300
+      }
+    },
+    {
+      "id": "agility-02",
+      "skill": "agility",
+      "levelRange": [
+        26,
+        32
+      ],
+      "methodType": "QUEST",
+      "title": "The Grand Tree (XP skip)",
+      "description": "A members quest with a large Agility reward.",
+      "targetLevel": 32,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Tree Gnome Stronghold",
+        "tile": [
+          2440,
+          3460,
+          0
+        ],
+        "npcName": "King Narnode Shareen"
+      },
+      "reward": {
+        "quest": "The Grand Tree",
+        "xp": 7900,
+        "routeStepId": "S7-05"
+      }
+    },
+    {
+      "id": "agility-03",
+      "skill": "agility",
+      "levelRange": [
+        1,
+        10
+      ],
+      "methodType": "GATHER",
+      "title": "Gnome Stronghold course",
+      "description": "Run the gnome agility course in the Tree Gnome Stronghold for your first levels.",
+      "targetLevel": 10,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Gnome Stronghold Agility Course",
+        "tile": [
+          2480,
+          3428,
+          0
+        ],
+        "objectName": "Log balance"
+      }
+    },
+    {
+      "id": "agility-04",
+      "skill": "agility",
+      "levelRange": [
+        10,
+        20
+      ],
+      "methodType": "GATHER",
+      "title": "Draynor Village rooftop",
+      "description": "Run the Draynor Village rooftop course.",
+      "targetLevel": 20,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Draynor Village Rooftop Course",
+        "tile": [
+          3103,
+          3279,
+          0
+        ],
+        "objectName": "Rough wall"
+      }
+    },
+    {
+      "id": "agility-05",
+      "skill": "agility",
+      "levelRange": [
+        20,
+        30
+      ],
+      "methodType": "GATHER",
+      "title": "Al Kharid rooftop",
+      "description": "Run the Al Kharid rooftop course.",
+      "targetLevel": 30,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Al Kharid Rooftop Course",
+        "tile": [
+          3273,
+          3195,
+          0
+        ],
+        "objectName": "Rough wall"
+      }
+    },
+    {
+      "id": "agility-06",
+      "skill": "agility",
+      "levelRange": [
+        30,
+        40
+      ],
+      "methodType": "GATHER",
+      "title": "Varrock rooftop",
+      "description": "Run the Varrock rooftop course.",
+      "targetLevel": 40,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Varrock Rooftop Course",
+        "tile": [
+          3220,
+          3414,
+          0
+        ],
+        "objectName": "Rough wall"
+      }
+    },
+    {
+      "id": "agility-07",
+      "skill": "agility",
+      "levelRange": [
+        40,
+        50
+      ],
+      "methodType": "GATHER",
+      "title": "Canifis rooftop",
+      "description": "Run the Canifis rooftop course.",
+      "targetLevel": 50,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Canifis Rooftop Course",
+        "tile": [
+          3507,
+          3488,
+          0
+        ],
+        "objectName": "Tall tree"
+      }
+    },
+    {
+      "id": "agility-08",
+      "skill": "agility",
+      "levelRange": [
+        50,
+        60
+      ],
+      "methodType": "GATHER",
+      "title": "Falador rooftop",
+      "description": "Run the Falador rooftop course.",
+      "targetLevel": 60,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Falador Rooftop Course",
+        "tile": [
+          3036,
+          3342,
+          0
+        ],
+        "objectName": "Rough wall"
+      }
+    },
+    {
+      "id": "agility-09",
+      "skill": "agility",
+      "levelRange": [
+        60,
+        70
+      ],
+      "methodType": "GATHER",
+      "title": "Seers' Village rooftop",
+      "description": "Run the Seers' Village rooftop course: it has marks of grace and a good rate.",
+      "targetLevel": 70,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Seers' Village Rooftop Course",
+        "tile": [
+          2729,
+          3489,
+          0
+        ],
+        "objectName": "Wall"
+      }
+    },
+    {
+      "id": "agility-10",
+      "skill": "agility",
+      "levelRange": [
+        70,
+        80
+      ],
+      "methodType": "GATHER",
+      "title": "Pollnivneach rooftop",
+      "description": "Run the Pollnivneach rooftop course.",
+      "targetLevel": 80,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Pollnivneach Rooftop Course",
+        "tile": [
+          3351,
+          2963,
+          0
+        ],
+        "objectName": "Basket"
+      }
+    },
+    {
+      "id": "agility-11",
+      "skill": "agility",
+      "levelRange": [
+        80,
+        90
+      ],
+      "methodType": "GATHER",
+      "title": "Rellekka rooftop",
+      "description": "Run the Rellekka rooftop course.",
+      "targetLevel": 90,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Rellekka Rooftop Course",
+        "tile": [
+          2625,
+          3677,
+          0
+        ],
+        "objectName": "Rough wall"
+      }
+    },
+    {
+      "id": "agility-12",
+      "skill": "agility",
+      "levelRange": [
+        90,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Ardougne rooftop",
+      "description": "Run the Ardougne rooftop course: the best rooftop course of all.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": true,
+      "location": {
+        "name": "Ardougne Rooftop Course",
+        "tile": [
+          2673,
+          3298,
+          0
+        ],
+        "objectName": "Wooden Beams"
+      }
+    },
+    {
+      "id": "agility-13",
+      "skill": "agility",
+      "levelRange": [
+        33,
+        47
+      ],
+      "methodType": "MINIGAME",
+      "title": "Brimhaven Agility Arena",
+      "description": "Brimhaven Agility Arena gives the fastest XP from level 20 to 47: pay the entry fee and use the floor spikes trap. Bring food.",
+      "targetLevel": 47,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Brimhaven Agility Arena",
+        "tile": [
+          2809,
+          3194,
+          0
+        ]
+      }
+    },
+    {
+      "id": "agility-14",
+      "skill": "agility",
+      "levelRange": [
+        62,
+        99
+      ],
+      "methodType": "MINIGAME",
+      "title": "Hallowed Sepulchre",
+      "description": "The Hallowed Sepulchre gives the fastest Agility XP from level 62: run the floors as high as you can.",
+      "targetLevel": 99,
+      "lane": "fast",
+      "members": true,
+      "location": {
+        "name": "Hallowed Sepulchre",
+        "tile": [
+          3654,
+          3387,
+          0
+        ],
+        "objectName": "Coffin"
+      }
+    }
+  ]
+}
