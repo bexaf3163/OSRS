@@ -37,6 +37,8 @@ final class GuideList
 		TAB,
 		/** The purchase detour: the arrow and the path to the stop the app suggests. */
 		DETOUR,
+		/** The recommended way that is not walking: the arrow to its first stop and a frame on the item it uses. */
+		TRANSPORT,
 	}
 
 	@Value
@@ -50,6 +52,7 @@ final class GuideList
 		static final Action RESUME = new Action(Kind.RESUME, -1);
 		static final Action TAB = new Action(Kind.TAB, -1);
 		static final Action DETOUR = new Action(Kind.DETOUR, -1);
+		static final Action TRANSPORT = new Action(Kind.TRANSPORT, -1);
 
 		Kind kind;
 		/** The number of the step's point for PLACE. */
@@ -191,6 +194,10 @@ final class GuideList
 		if (v.getPrep() != null && v.getPrep().hasDetour())
 		{
 			out.add(detourRow(v.getPrep(), fm, inner));
+		}
+		if (v.getPrep() != null && v.getPrep().hasTransport())
+		{
+			out.add(transportRow(v.getPrep(), fm, inner));
 		}
 		// A long list (Prince Ali Rescue: 12 items and 8 NPCs) must not cover half the screen: "where to get it" and places go
 		// on one line, in full in the hover hint. What is missing goes on top, what is already in the bag goes down.
@@ -601,9 +608,29 @@ final class GuideList
 	/** The suggested stop on the way, as one clickable row: a click points the arrow there. The app only suggests it. */
 	static Row detourRow(PrepPlan prep, FontMetrics fm, int inner)
 	{
-		String text = prep.getDetour().getText();
+		String text = prep.getActiveDetour().getText();
 		return new Row(clip("", "⚡ " + text, StepGuide.GOOD, fm, inner, 2, true), Action.DETOUR,
-			text + ". Click to point the arrow at " + prep.getDetour().getLabel() + ". The app only suggests it: it buys nothing.");
+			text + ". Click to point the arrow at " + prep.getActiveDetour().getLabel() + ". The app only suggests it: it buys nothing.");
+	}
+
+	/** The recommended transport as one clickable row: a click points the arrow at its first stop and frames the item. It activates nothing. */
+	static Row transportRow(PrepPlan prep, FontMetrics fm, int inner)
+	{
+		PrepPlan.RecommendedTransport t = prep.getRecommendedTransport();
+		return new Row(clip("", "➜ " + t.getText(), StepGuide.GOOD, fm, inner, 2, true), Action.TRANSPORT,
+			t.getText() + ". Click to point the arrow" + (t.getItem() == null ? "" : " and frame " + t.getItem() + " in the bag") + ". The app only suggests it: it uses nothing.");
+	}
+
+	/** What the plan wants out of the bank on the way: one tip line, the items are framed in the open bank. */
+	static Row withdrawalsRow(PrepPlan prep, FontMetrics fm, int inner)
+	{
+		StringBuilder sb = new StringBuilder();
+		for (PrepPlan.BankWithdrawal w : prep.getBankWithdrawals())
+		{
+			sb.append(sb.length() == 0 ? "" : ", ").append(w.getItemName()).append(w.getQuantity() > 1 ? " x" + w.getQuantity() : "");
+		}
+		String text = "Bank: Withdraw " + sb;
+		return new Row(clip("", "⚡ " + text, StepGuide.BANK, fm, inner, 2, true), Action.NONE, text + ". The items are framed when the bank is open.");
 	}
 
 	/** How many tips the app has for the step: a detour, blockers, "will not fit", "don't take now", weight. */
@@ -613,7 +640,7 @@ final class GuideList
 		{
 			return 0;
 		}
-		return (prep.hasDetour() ? 1 : 0) + (prep.getBlockers() == null ? 0 : prep.getBlockers().size())
+		return (prep.hasDetour() ? 1 : 0) + (prep.hasTransport() ? 1 : 0) + (prep.hasWithdrawals() ? 1 : 0) + (prep.getBlockers() == null ? 0 : prep.getBlockers().size())
 			+ (prep.getSlots() != null && !prep.getSlots().isEmpty() ? 1 : 0)
 			+ (prep.getLater() != null && !prep.getLater().isEmpty() ? 1 : 0)
 			+ (prep.getWeight() != null && !prep.getWeight().isEmpty() ? 1 : 0);
@@ -691,6 +718,14 @@ final class GuideList
 		if (prep.hasDetour())
 		{
 			out.add(detourRow(prep, small, inner));
+		}
+		if (prep.hasWithdrawals())
+		{
+			out.add(withdrawalsRow(prep, small, inner));
+		}
+		if (prep.hasTransport())
+		{
+			out.add(transportRow(prep, small, inner));
 		}
 		if (prep.getBlockers() != null)
 		{

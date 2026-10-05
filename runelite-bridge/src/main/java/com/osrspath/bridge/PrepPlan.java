@@ -19,6 +19,7 @@ public class PrepPlan
 	static final int MAX_LATER = 12;
 	static final int MAX_RECOVERY = 5;
 	static final int MAX_BLOCKERS = 4;
+	static final int MAX_WITHDRAWALS = 12;
 
 	private String stepId;
 	private Score score;
@@ -28,7 +29,9 @@ public class PrepPlan
 	private String weight;
 	private String slots;
 	private List<String> blockers;
-	private Detour detour;
+	private ActiveDetour activeDetour;
+	private List<BankWithdrawal> bankWithdrawals;
+	private RecommendedTransport recommendedTransport;
 
 	private transient Map<String, Line> byName = Collections.emptyMap();
 
@@ -68,32 +71,101 @@ public class PrepPlan
 		}
 	}
 
-	/** A stop worth making on the way ("Detour: Buy Orange dye at Aggie (+10 tiles, saves ~3 min)"): the text and where a click leads the arrow. */
+	/** A tile in the world. */
 	@Data
-	public static class Detour
+	public static class Tile
 	{
-		private String text;
-		private String label;
 		private int x;
 		private int y;
 		private int plane;
 
 		boolean valid()
 		{
+			return x > 0 && y > 0 && x < NavTarget.MAX_COORD && y < NavTarget.MAX_COORD && plane >= 0 && plane <= 3;
+		}
+	}
+
+	/** A target for the arrow built from a label and a tile; null when it does not pass the arrow's own checks. */
+	static NavTarget navTargetOf(String label, Tile tile, String stepId)
+	{
+		if (label == null || label.trim().isEmpty() || tile == null)
+		{
+			return null;
+		}
+		NavTarget n = new NavTarget();
+		n.setLabel(label.length() > 60 ? label.substring(0, 59) + "…" : label);
+		n.setX(tile.getX());
+		n.setY(tile.getY());
+		n.setPlane(tile.getPlane());
+		n.setStepId(stepId);
+		return n.prepare() == null ? n : null;
+	}
+
+	/**
+	 * A stop worth making on the way ("Detour: Buy Orange dye at Aggie (+10 tiles, saves ~3 min)"): the text, where a click leads the arrow, what it costs in
+	 * tiles, and what kind of stop it is (BUY, GET or WITHDRAW).
+	 */
+	@Data
+	public static class ActiveDetour
+	{
+		private String text;
+		private String label;
+		private Tile targetTile;
+		private int costTiles;
+		private String actionType;
+
+		boolean valid()
+		{
 			return text != null && !text.trim().isEmpty() && !ActiveTarget.tooLong(text) && label != null && !label.trim().isEmpty() && !ActiveTarget.tooLong(label)
-				&& x > 0 && y > 0 && x < NavTarget.MAX_COORD && y < NavTarget.MAX_COORD && plane >= 0 && plane <= 3;
+				&& targetTile != null && targetTile.valid() && costTiles >= 0 && costTiles <= 100_000 && !ActiveTarget.tooLong(actionType);
 		}
 
 		/** The arrow target of the stop. */
 		NavTarget navTarget(String stepId)
 		{
-			NavTarget n = new NavTarget();
-			n.setLabel(label.length() > 60 ? label.substring(0, 59) + "…" : label);
-			n.setX(x);
-			n.setY(y);
-			n.setPlane(plane);
-			n.setStepId(stepId);
-			return n.prepare() == null ? n : null;
+			return navTargetOf(label, targetTile, stepId);
+		}
+	}
+
+	/** Something in the bank the plan wants taken out. itemId 0 means the app did not know the id. */
+	@Data
+	public static class BankWithdrawal
+	{
+		private int itemId;
+		private String itemName;
+		private int quantity;
+
+		boolean valid()
+		{
+			return itemId >= 0 && itemId <= NavTarget.MAX_ITEM_ID && itemName != null && !itemName.trim().isEmpty() && !ActiveTarget.tooLong(itemName) && quantity >= 1 && quantity <= ShoppingPlan.MAX_COUNT;
+		}
+	}
+
+	/**
+	 * The way to the step that is not walking: the kind, where it ends, what to interact with (an id when known, otherwise the name) and what to use from the
+	 * bag. The plugin points at the first stop and frames the item; it activates nothing.
+	 */
+	@Data
+	public static class RecommendedTransport
+	{
+		private String type;
+		private String destination;
+		private int interactionId;
+		private String interactionName;
+		private String item;
+		private Tile tile;
+		private String text;
+
+		boolean valid()
+		{
+			return type != null && !type.isEmpty() && !ActiveTarget.tooLong(type) && destination != null && !ActiveTarget.tooLong(destination) && interactionId >= 0
+				&& interactionId <= 1_000_000 && !ActiveTarget.tooLong(interactionName) && !ActiveTarget.tooLong(item) && (tile == null || tile.valid())
+				&& text != null && !text.trim().isEmpty() && !ActiveTarget.tooLong(text);
+		}
+
+		NavTarget navTarget(String stepId)
+		{
+			return navTargetOf(destination, tile, stepId);
 		}
 	}
 
@@ -134,9 +206,17 @@ public class PrepPlan
 			}
 			byName = index;
 		}
-		if (detour != null && !detour.valid())
+		if (activeDetour != null && !activeDetour.valid())
 		{
 			return "invalid detour";
+		}
+		if (recommendedTransport != null && !recommendedTransport.valid())
+		{
+			return "invalid transport";
+		}
+		if (bankWithdrawals != null && (bankWithdrawals.size() > MAX_WITHDRAWALS || bankWithdrawals.stream().anyMatch(w -> w == null || !w.valid())))
+		{
+			return "invalid bank withdrawals";
 		}
 		return textProblem(later, MAX_LATER, "don't take now");
 	}
@@ -184,7 +264,40 @@ public class PrepPlan
 
 	boolean hasDetour()
 	{
-		return detour != null && detour.valid();
+		return activeDetour != null && activeDetour.valid();
+	}
+
+	boolean hasTransport()
+	{
+		return recommendedTransport != null && recommendedTransport.valid();
+	}
+
+	boolean hasWithdrawals()
+	{
+		return bankWithdrawals != null && !bankWithdrawals.isEmpty();
+	}
+
+	/** Whether the plan wants this item taken out of the bank: by id when the app knew it, otherwise by name. */
+	boolean withdrawsItem(int itemId, String nameKey)
+	{
+		if (bankWithdrawals == null)
+		{
+			return false;
+		}
+		for (BankWithdrawal w : bankWithdrawals)
+		{
+			if (w != null && ((itemId > 0 && w.getItemId() == itemId) || (nameKey != null && w.getItemName() != null && ActiveTarget.nameKey(w.getItemName()).equals(nameKey))))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/** The item the recommended transport uses, by name key. */
+	boolean usesTransportItem(String nameKey)
+	{
+		return hasTransport() && recommendedTransport.getItem() != null && ActiveTarget.nameKey(recommendedTransport.getItem()).equals(nameKey);
 	}
 
 	boolean hasRecovery()

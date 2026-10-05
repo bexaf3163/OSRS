@@ -1031,6 +1031,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private String snapshotStepKey;
 	/** The preparation plan from the app; null means it did not send one. The "What you need" list draws it. */
 	private volatile PrepPlan prep;
+	/** Until when the transport item is framed in the bag after a click on its row. */
+	private volatile long transportFrameUntil;
+	private static final long TRANSPORT_FRAME_NANOS = 20_000_000_000L;
 
 	@Override
 	public BridgeServer.PrepResult onPrepPlan(PrepEnvelope e, Map<String, String> bad)
@@ -1630,10 +1633,31 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				adviceTab = !adviceTab;
 				refreshGuide();
 				break;
+			case TRANSPORT:
+			{
+				PrepPlan p = prep;
+				if (p == null || !p.hasTransport())
+				{
+					break;
+				}
+				// The item in the bag is framed for a few seconds; the arrow goes to the first stop when the app knew one. Nothing is activated.
+				transportFrameUntil = System.nanoTime() + TRANSPORT_FRAME_NANOS;
+				NavTarget n = p.getRecommendedTransport().navTarget(target == null ? null : target.getStepId());
+				if (n != null && config.autoNavigation())
+				{
+					guideMessage = null;
+					applyNav(n);
+				}
+				else
+				{
+					refreshGuide();
+				}
+				break;
+			}
 			case DETOUR:
 			{
 				PrepPlan p = prep;
-				NavTarget n = p != null && p.hasDetour() ? p.getDetour().navTarget(target == null ? null : target.getStepId()) : null;
+				NavTarget n = p != null && p.hasDetour() ? p.getActiveDetour().navTarget(target == null ? null : target.getStepId()) : null;
 				if (n == null)
 				{
 					break;
@@ -3043,12 +3067,26 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	/** Whether to take this item from the bank per the departure check. */
 	boolean isWantedFromBank(int itemId)
 	{
-		return wantedIds.contains(itemId);
+		PrepPlan p = prep;
+		return wantedIds.contains(itemId) || (p != null && p.withdrawsItem(itemId, null));
 	}
 
 	boolean isWantedFromBank(String nameKey)
 	{
-		return wantedNames.contains(nameKey);
+		PrepPlan p = prep;
+		return wantedNames.contains(nameKey) || (p != null && p.withdrawsItem(0, nameKey));
+	}
+
+	/** The item the recommended transport uses, framed in the bag for a few seconds after a click on its row. */
+	boolean isTransportItem(String nameKey)
+	{
+		PrepPlan p = prep;
+		return p != null && System.nanoTime() < transportFrameUntil && p.usesTransportItem(nameKey);
+	}
+
+	boolean hasTransportFrame()
+	{
+		return System.nanoTime() < transportFrameUntil;
 	}
 
 	private void recomputeShopping()

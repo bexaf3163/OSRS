@@ -22,8 +22,11 @@ public class DetourRowTest
 {
 	private static final FontMetrics FM = metrics(1f);
 	private static final FontMetrics SMALL = metrics(OsrsPathGuideOverlay.SMALL);
-	private static final String PLAN = "{\"stepId\":\"S2-12\",\"lines\":[],\"later\":[],\"detour\":{\"text\":\"Detour: Get Red dye at Aggie (+10 tiles, saves ~3 min)\","
-		+ "\"label\":\"Aggie\",\"x\":3086,\"y\":3257,\"plane\":0}}";
+	private static final String PLAN = "{\"stepId\":\"S2-12\",\"lines\":[],\"later\":[],\"activeDetour\":{\"text\":\"Detour: Get Red dye at Aggie (+10 tiles, saves ~3 min)\","
+		+ "\"label\":\"Aggie\",\"targetTile\":{\"x\":3086,\"y\":3257,\"plane\":0},\"costTiles\":10,\"actionType\":\"GET\"},"
+		+ "\"recommendedTransport\":{\"type\":\"Item teleport\",\"destination\":\"Falador\",\"interactionId\":0,\"item\":\"Falador teleport\","
+		+ "\"tile\":{\"x\":2965,\"y\":3378,\"plane\":0},\"text\":\"Falador teleport saves ~120 tiles\"},"
+		+ "\"bankWithdrawals\":[{\"itemId\":8007,\"itemName\":\"Falador teleport\",\"quantity\":2}]}";
 
 	private static FontMetrics metrics(float scale)
 	{
@@ -51,7 +54,7 @@ public class DetourRowTest
 		PrepPlan p = plan(PLAN);
 		assertNull(p.prepare());
 		assertTrue(p.hasDetour());
-		NavTarget n = p.getDetour().navTarget("S2-12");
+		NavTarget n = p.getActiveDetour().navTarget("S2-12");
 		assertNotNull(n);
 		assertEquals(3086, n.getX());
 		assertEquals("Aggie", n.getLabel());
@@ -62,6 +65,7 @@ public class DetourRowTest
 	public void aBrokenDetourIsRefusedWhole()
 	{
 		assertEquals("invalid detour", plan(PLAN.replace("\"x\":3086", "\"x\":0")).prepare());
+		assertEquals("invalid detour", plan(PLAN.replace("\"costTiles\":10", "\"costTiles\":-5")).prepare());
 		assertEquals("invalid detour", plan(PLAN.replace("Detour: Get Red dye at Aggie (+10 tiles, saves ~3 min)", "")).prepare());
 		assertEquals("invalid detour", plan(PLAN.replace("\"plane\":0", "\"plane\":9")).prepare());
 	}
@@ -85,10 +89,46 @@ public class DetourRowTest
 		p.prepare();
 		StepGuide.View v = view(p);
 		assertTrue(flat(GuideList.rows(v, false, FM, SMALL, OsrsPathGuideOverlay.WIDTH)).contains("Detour: Get Red dye at Aggie"));
-		assertEquals(1, GuideList.adviceCount(p));
+		// The detour, the withdrawal tip and the transport are three tips.
+		assertEquals(3, GuideList.adviceCount(p));
 		java.util.List<GuideList.Row> advice = new java.util.ArrayList<>();
 		GuideList.adviceRows(advice, p, SMALL, OverlayText.inner(OsrsPathGuideOverlay.WIDTH));
 		assertTrue(flat(advice).contains("Detour: Get Red dye at Aggie"));
+	}
+
+	@Test
+	public void theTransportAndTheWithdrawalsAreAcceptedAndShownAsTips()
+	{
+		PrepPlan p = plan(PLAN);
+		assertNull(p.prepare());
+		assertTrue(p.hasTransport());
+		assertTrue(p.hasWithdrawals());
+		assertNotNull(p.getRecommendedTransport().navTarget("S2-12"));
+		assertTrue(p.withdrawsItem(8007, null));
+		assertTrue(p.withdrawsItem(0, ActiveTarget.nameKey("Falador teleport")));
+		assertFalse(p.withdrawsItem(1, ActiveTarget.nameKey("Pot")));
+		assertTrue(p.usesTransportItem(ActiveTarget.nameKey("Falador teleport")));
+		assertEquals(3, GuideList.adviceCount(p));
+		java.util.List<GuideList.Row> advice = new java.util.ArrayList<>();
+		GuideList.adviceRows(advice, p, SMALL, OverlayText.inner(OsrsPathGuideOverlay.WIDTH));
+		String text = flat(advice);
+		assertTrue(text, text.contains("Bank: Withdraw Falador teleport x2"));
+		assertTrue(text, text.contains("Falador teleport saves ~120 tiles"));
+		boolean clickable = false;
+		for (GuideList.Row r : advice)
+		{
+			clickable |= r.getAction().getKind() == GuideList.Kind.TRANSPORT && r.getAction().isClickable();
+		}
+		assertTrue(clickable);
+	}
+
+	@Test
+	public void aBadTransportOrWithdrawalIsRefusedWhole()
+	{
+		assertEquals("invalid transport", plan(PLAN.replace("\"Item teleport\"", "\"\"")).prepare());
+		assertEquals("invalid transport", plan(PLAN.replace("\"plane\":0},\"text\":\"Falador", "\"plane\":7},\"text\":\"Falador")).prepare());
+		assertEquals("invalid bank withdrawals", plan(PLAN.replace("\"quantity\":2", "\"quantity\":0")).prepare());
+		assertEquals("invalid bank withdrawals", plan(PLAN.replace("\"itemName\":\"Falador teleport\"", "\"itemName\":\"\"")).prepare());
 	}
 
 	@Test

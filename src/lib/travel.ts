@@ -62,7 +62,10 @@ export const MIN_SAVING_TILES = 20;
 // Relaxed in 2.39: 60 and 120 tiles starved the live routes. The detour is already counted in the saving (direct - (fetch + tail)), so a separate tight cap
 // on the fetch only hid worthwhile shortcuts: it is now a sanity limit, and 40 tiles (about 12 s of running) is enough saving to say so.
 export const OPPORTUNISTIC_MIN_SAVING_TILES = 40;
+/** The fetch cap for local vendors, crafting NPCs and banks: a short walk, or it is not worth leaving the route. */
 export const OPPORTUNISTIC_MAX_DETOUR_TILES = 300;
+/** The Grand Exchange sells everything, so a longer walk to it is worth it (Al Kharid, Lumbridge and Port Sarim are 320 to 400 tiles away). */
+export const OPPORTUNISTIC_MAX_EXCHANGE_TILES = 500;
 export const OPPORTUNISTIC_MAX_COST = 3000;
 
 /** Why a fetch-first suggestion was dropped (or kept with a caveat). The same reasons are used for the purchase detours in detours.ts. */
@@ -100,7 +103,7 @@ export interface Need { text: string; ok: boolean | null }
 
 export interface Leg { kind: 'walk' | 'teleport' | 'canoe' | 'boat' | 'fairy' | 'charter'; label: string; tiles: number }
 /** Fetching a teleport item first: from the bank (free) or from the exchange (a price). The app only suggests it; it never buys. */
-export interface Acquire { what: string; where: string; point: Point; tiles: number; cost: number | null; source: 'bank' | 'exchange' }
+export interface Acquire { what: string; where: string; point: Point; tiles: number; cost: number | null; source: 'bank' | 'exchange'; /** The teleport that shortens the way there. */ via?: string }
 export interface TravelOption {
   id: string;
   title: string;
@@ -268,13 +271,59 @@ function charterOption(inp: TravelInput): TravelOption | null {
   };
 }
 
-/** Where to fetch an item from: the nearest bank if the bank is known to hold it, otherwise the exchange. */
+/** How far a place is by the best way the player can use right now: on foot, or by a teleport that is surely ready. */
+export interface Reach { tiles: number; /** The teleport that shortens it, if one does. */ via?: string; /** Where that teleport lands. */ landing?: Point }
+
+/**
+ * The tiles to a place, counting the teleports the player can cast or read now: the Chronicle or a tablet in the bag, a spell with the level and the runes in
+ * the bag. A teleport that only may be available (unknown bag, unknown level) is not counted: the planner never assumes it. The walk after the landing is
+ * counted from the landing tile, so a player standing in Al Kharid with a Varrock tablet is 60 tiles from the exchange, not 320.
+ */
+export function reachTiles(inp: Pick<TravelInput, 'from' | 'levels' | 'carried' | 'bankSeen' | 'homeCooldownSec'>, to: Point): Reach {
+  let best: Reach = { tiles: dist(inp.from, to) };
+  const consider = (via: string, dest: Point) => {
+    const tiles = dist(dest, to);
+    if (tiles < best.tiles) best = { tiles, via, landing: dest };
+  };
+  const probe = { ...inp, to } as TravelInput;
+  for (const t of TRANSPORT.teleports) {
+    // The Home Teleport is a teleport like the others, but its cooldown and the long cast make it a poor shortcut: it is left out of the reach.
+    if (t.kind === 'home') continue;
+    // An item teleport (the Chronicle) is "maybe" for its unknown charges, but one in the bag is a way to use: it counts.
+    const held = t.kind === 'item' && inp.carried ? count(inp.carried, t.items ?? []) > 0 : false;
+    if (held || teleportNeeds(t, probe).availability === 'ready') consider(t.name, t.dest);
+  }
+  if (inp.carried) {
+    for (const tb of NET.tablets) {
+      const spell = TRANSPORT.teleports.find((t) => t.id === tb.spell);
+      if (spell && count(inp.carried, [tb.item]) > 0) consider(`${tb.item} tablet`, spell.dest);
+    }
+  }
+  return best;
+}
+
+/** The bank that costs the least extra walk on the way from one place to another (the straight line through it is the shortest). */
+export function bankOnRoute(from: Point, to: Point): (Point & { label: string }) | null {
+  let best: { bank: Point & { label: string }; extra: number } | null = null;
+  for (const b of BANKS) {
+    if (b.plane !== from.plane) continue;
+    const extra = dist(from, b) + dist(b, to) - dist(from, to);
+    if (!best || extra < best.extra) best = { bank: b, extra };
+  }
+  return best?.bank ?? null;
+}
+
+/** Where to fetch an item from: the nearest bank if the bank is known to hold it, otherwise the exchange. The way there counts the teleports in the bag. */
 function acquireFor(item: string, inp: TravelInput): Acquire {
   if (inp.bank?.get(nameKey(item))) {
     const bank = BANKS.reduce<(Point & { label: string }) | null>((m, c) => (!m || dist(inp.from, c) < dist(inp.from, m) ? c : m), null);
-    if (bank) return { what: item, where: bank.label, point: bank, tiles: dist(inp.from, bank), cost: 0, source: 'bank' };
+    if (bank) {
+      const r = reachTiles(inp, bank);
+      return { what: item, where: bank.label, point: bank, tiles: r.tiles, cost: 0, source: 'bank', ...(r.via ? { via: r.via } : {}) };
+    }
   }
-  return { what: item, where: EXCHANGE.label, point: EXCHANGE, tiles: dist(inp.from, EXCHANGE), cost: inp.priceOf?.(item) ?? null, source: 'exchange' };
+  const r = reachTiles(inp, EXCHANGE);
+  return { what: item, where: EXCHANGE.label, point: EXCHANGE, tiles: r.tiles, cost: inp.priceOf?.(item) ?? null, source: 'exchange', ...(r.via ? { via: r.via } : {}) };
 }
 
 /**
@@ -304,9 +353,9 @@ function itemTeleportOptions(inp: TravelInput, direct: number): TravelOption[] {
     }
     const acq = acquireFor(e.item, inp);
     const total = acq.tiles + tail;
-    const detail = { fetch: acq.tiles, tail, direct, saving: direct - total, cost: acq.cost, source: acq.source };
+    const detail = { fetch: acq.tiles, tail, direct, saving: direct - total, cost: acq.cost, source: acq.source, via: acq.via ?? null };
     const reject = (reason: DetourRejection) => { emitDecision({ subject: e.item, outcome: 'rejected', reason, detail }, inp.onDecision); };
-    if (acq.tiles > OPPORTUNISTIC_MAX_DETOUR_TILES) { reject('exceeds_detour_limit'); continue; }
+    if (acq.tiles > (acq.source === 'exchange' ? OPPORTUNISTIC_MAX_EXCHANGE_TILES : OPPORTUNISTIC_MAX_DETOUR_TILES)) { reject('exceeds_detour_limit'); continue; }
     if (direct - total < OPPORTUNISTIC_MIN_SAVING_TILES) { reject('insufficient_savings'); continue; }
     if (acq.cost !== null && acq.cost > OPPORTUNISTIC_MAX_COST) { reject('price_too_high'); continue; }
     const coins = inp.carried ? count(inp.carried, ['Coins']) : null;
@@ -320,7 +369,7 @@ function itemTeleportOptions(inp: TravelInput, direct: number): TravelOption[] {
     out.push({
       id: `${e.id}-acquire`, title: `${e.item}: ${verb} first, then teleport`,
       legs: [
-        { kind: 'walk', label: `to the ${acq.where}: ${verb} ${e.item} (${price})`, tiles: acq.tiles },
+        { kind: 'walk', label: `to the ${acq.where}${acq.via ? ` (by ${acq.via})` : ''}: ${verb} ${e.item} (${price})`, tiles: acq.tiles },
         { kind: 'teleport', label: `${e.item} → ${e.dest.label}`, tiles: 0 },
         { kind: 'walk', label: 'then on foot', tiles: tail },
       ],

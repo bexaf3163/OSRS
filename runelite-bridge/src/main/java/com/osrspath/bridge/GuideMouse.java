@@ -100,6 +100,8 @@ class GuideMouse extends MouseAdapter
 				return "Steps / advice";
 			case DETOUR:
 				return "Arrow to the stop";
+			case TRANSPORT:
+				return "Show the way";
 			default:
 				return "List";
 		}

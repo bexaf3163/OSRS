@@ -57,10 +57,11 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 		}
 		boolean checklist = target != null && inBank && config.showChecklist();
 		boolean wanted = checklist && plugin.isWantedFromBank(itemId);
+		boolean transport = target != null && !inBank && plugin.hasTransportFrame();
 		boolean named = target != null && (!target.getItemNameSet().isEmpty() || plugin.hasLineItems());
 		boolean stepItem = false;
 		boolean upgrade = false;
-		if (!wanted && (named || checklist || upgrades))
+		if (!wanted && (named || checklist || upgrades || transport))
 		{
 			String name = names.computeIfAbsent(itemId, id ->
 			{
@@ -68,7 +69,7 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 				return c == null ? "" : ActiveTarget.nameKey(c.getName());
 			});
 			wanted = checklist && plugin.isWantedFromBank(name);
-			stepItem = named && (target.getItemNameSet().contains(name) || plugin.isLineItem(name));
+			stepItem = (named && (target.getItemNameSet().contains(name) || plugin.isLineItem(name))) || (transport && plugin.isTransportItem(name));
 			upgrade = upgrades && plugin.isUpgradeItem(name);
 		}
 		if (!wanted && !stepItem && !tagged && !upgrade)

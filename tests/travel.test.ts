@@ -87,8 +87,9 @@ import { emptyProgress } from '../src/lib/progress';
 import { nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
 import { stepPlaces } from '../src/lib/stepPlaces';
 import { planPayload } from '../src/lib/prepEnvelope';
+import { recommendedTransport } from '../src/lib/transport';
 import { DETOUR_MAX_EXTRA_TILES, procurementDetour } from '../src/lib/detours';
-import { OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MIN_SAVING_TILES, setDetourLog, type DetourDecision } from '../src/lib/travel';
+import { EXCHANGE, OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MAX_EXCHANGE_TILES, OPPORTUNISTIC_MIN_SAVING_TILES, reachTiles, setDetourLog, type DetourDecision } from '../src/lib/travel';
 import type { PrepPlan } from '../src/lib/prepPlan';
 
 describe('fetch it first: every verdict has a reason, and the thresholds do not starve the routes', () => {
@@ -175,10 +176,11 @@ describe('purchase detours: a thing the next steps need, near where the player i
     const plan = planFor('S2-12', dyes);
     const to = stepPlaces(stepById.get('S2-12')!)[0];
     const d = procurementDetour({ plan, stepId: 'S2-12', from: at(3093, 3244), to, coins: 600 })!;
-    const payload = planPayload(plan, d);
-    expect(payload.detour).toMatchObject({ text: d.text, x: d.stop.x, y: d.stop.y, plane: 0 });
-    expect(planPayload(plan, null).detour).toBeUndefined();
-    expect(planPayload(plan).detour).toBeUndefined();
+    const payload = planPayload(plan, { detour: d });
+    expect(payload.activeDetour).toMatchObject({ text: d.text, label: 'Aggie', targetTile: { x: d.stop.x, y: d.stop.y, plane: 0 }, actionType: 'GET' });
+    expect(payload.activeDetour!.costTiles).toBe(Math.round(d.extraTiles));
+    expect(planPayload(plan, { detour: null }).activeDetour).toBeUndefined();
+    expect(planPayload(plan).activeDetour).toBeUndefined();
   });
 
   it('far from the place, the stop is dropped with the reason', () => {
@@ -217,5 +219,108 @@ describe('purchase detours: a thing the next steps need, near where the player i
     expect(reasons({ ...base, action: { kind: 'BUY', label: 'Buy', nav } }, 500)).toEqual(['price_unknown']);
     expect(reasons({ ...base, action: { kind: 'BUY', label: 'Buy', price: 900, nav } }, 100)).toEqual(['missing_coins']);
     expect(reasons({ ...base, action: { kind: 'EARN', label: 'Earn it first' } }, 500)).toEqual(['not_whitelisted']);
+  });
+});
+
+describe('detour caps by kind of place, and teleports that shorten the way to the exchange', () => {
+  const alKharid = at(3293, 3167);
+  const goblinVillage = at(2957, 3512);
+  const base = { key: 'Orange dye', name: 'Orange dye', count: 1, exact: true, where: 'MISSING' as const, have: { bag: 0, noted: 0, bank: 0, equipped: 0 }, toGet: 1, priority: 'CRITICAL' as const, timing: 'NOW' as const, why: '', usedIn: ['S2-12'] };
+  const ge = { label: 'Grand Exchange: Orange dye', x: 3165, y: 3487, plane: 0, itemName: 'Orange dye' };
+  const orange = { ...base, action: { kind: 'BUY' as const, label: 'Buy', price: 300, nav: ge } };
+
+  it('the caps are 300 tiles for vendors and banks and 500 for the exchange', () => {
+    expect(OPPORTUNISTIC_MAX_DETOUR_TILES).toBe(300);
+    expect(OPPORTUNISTIC_MAX_EXCHANGE_TILES).toBe(500);
+  });
+
+  it('Al Kharid to the exchange (320 tiles) is inside the exchange cap: an active quest blocker is offered', () => {
+    expect(dist(alKharid, at(ge.x, ge.y))).toBeGreaterThan(OPPORTUNISTIC_MAX_DETOUR_TILES);
+    const seen: DetourDecision[] = [];
+    const d = procurementDetour({ plan: { now: [orange], soon: [] }, stepId: 'S2-12', from: alKharid, to: goblinVillage, coins: 600, onDecision: (x) => seen.push(x) });
+    expect(d, JSON.stringify(seen)).not.toBeNull();
+    expect(d).toMatchObject({ actionType: 'BUY' });
+    expect(d!.text).toMatch(/^Detour: Buy Orange dye at the Grand Exchange \(\+\d+ tiles, saves ~/);
+    expect(seen.find((x) => x.outcome === 'offered')?.detail.blocker).toBe(1);
+  });
+
+  it('the same distance to a vendor is over the vendor cap and is dropped with the reason', () => {
+    const vendor = { ...orange, action: { ...orange.action, nav: { ...ge, label: 'Aggie: Orange dye', x: 3293, y: 3480 } } };
+    const seen: DetourDecision[] = [];
+    const d = procurementDetour({ plan: { now: [vendor], soon: [] }, stepId: 'S2-12', from: alKharid, to: goblinVillage, coins: 600, onDecision: (x) => seen.push(x) });
+    expect(d).toBeNull();
+    expect(seen[0]).toMatchObject({ outcome: 'rejected', reason: 'exceeds_detour_limit' });
+  });
+
+  it('beyond 500 tiles even the exchange is dropped', () => {
+    const seen: DetourDecision[] = [];
+    const d = procurementDetour({ plan: { now: [orange], soon: [] }, stepId: 'S2-12', from: at(3293, 2900), to: goblinVillage, coins: 600, onDecision: (x) => seen.push(x) });
+    expect(d).toBeNull();
+    expect(seen[0]).toMatchObject({ reason: 'exceeds_detour_limit' });
+  });
+
+  it('a blocker is judged by time: when making it by hand is quicker than the trip, no stop', () => {
+    const quick = { ...orange, name: 'Orange dye' };
+    // Standing next to the exchange target with the dye still 3 minutes away by hand is a clear win; far away with a long extra walk it is not.
+    const far = procurementDetour({ plan: { now: [quick], soon: [] }, stepId: 'S2-12', from: at(3293, 3167), to: at(3300, 3130), coins: 600 });
+    expect(far).toBeNull();
+  });
+
+  it('a Chronicle or a Varrock tablet in the bag makes the exchange close: the way there is counted from the landing tile', () => {
+    const noTele = reachTiles({ from: alKharid, levels: {}, carried: bag(['Coins', 100]), bankSeen: true }, EXCHANGE);
+    expect(noTele.via).toBeUndefined();
+    const chronicle = reachTiles({ from: alKharid, levels: {}, carried: bag(['Chronicle', 1]), bankSeen: true }, EXCHANGE);
+    expect(chronicle.via).toBe('Chronicle');
+    expect(chronicle.tiles).toBeLessThan(noTele.tiles);
+    const tab = reachTiles({ from: alKharid, levels: {}, carried: bag(['Varrock teleport', 1]), bankSeen: true }, EXCHANGE);
+    expect(tab.via).toBe('Varrock teleport tablet');
+    expect(tab.tiles).toBeLessThan(dist(at(3213, 3424), EXCHANGE) + 1);
+  });
+
+  it('a teleport that may be available (unknown bag) or a spell without runes is never assumed', () => {
+    expect(reachTiles({ from: alKharid, levels: { magic: 99 }, carried: null, bankSeen: false }, EXCHANGE).via).toBeUndefined();
+    expect(reachTiles({ from: alKharid, levels: { magic: 99 }, carried: bag(['Coins', 1]), bankSeen: true }, EXCHANGE).via).toBeUndefined();
+    const withRunes = reachTiles({ from: alKharid, levels: { magic: 25 }, carried: bag(['Law rune', 1], ['Air rune', 3], ['Fire rune', 1]), bankSeen: true }, EXCHANGE);
+    expect(withRunes.via).toMatch(/Varrock Teleport/i);
+  });
+
+  it('with a teleport in the bag the stop is cheaper and says how', () => {
+    const none = procurementDetour({ plan: { now: [orange], soon: [] }, stepId: 'S2-12', from: alKharid, to: goblinVillage, coins: 600 })!;
+    const tele = procurementDetour({ plan: { now: [orange], soon: [] }, stepId: 'S2-12', from: alKharid, to: goblinVillage, coins: 600, travel: { levels: {}, carried: bag(['Varrock teleport', 1]), bankSeen: true } })!;
+    expect(tele.via).toBe('Varrock teleport tablet');
+    expect(tele.extraTiles).toBeLessThan(none.extraTiles);
+    expect(tele.text).toContain('by Varrock teleport tablet');
+  });
+});
+
+describe('bridge payload: the transport and the detour reach the game together', () => {
+  it('a teleport in the bag is the recommended transport, with a destination, a tile or an item, and a text', () => {
+    const o = travelOptions(input({ from: at(3222, 3218), to: at(2957, 3512), levels: { magic: 37 }, carried: bag(['Falador teleport', 1], ['Coins', 100]), bankSeen: true }));
+    const t = recommendedTransport(o);
+    expect(t, JSON.stringify(o.map((x) => x.id))).not.toBeNull();
+    expect(t!.type).not.toBe('walk' as never);
+    expect(t!.text.length).toBeGreaterThan(0);
+    expect(t!.interactionId).toBeGreaterThanOrEqual(0);
+    expect(t!.item ?? t!.interactionName ?? t!.tile).toBeTruthy();
+  });
+
+  it('a payload for an active plan carries both the detour and the transport, never null when both exist', () => {
+    const items = new Map<string, OwnedItem>();
+    for (const [name, o] of Object.entries({ 'Blue dye': { carried: 1 }, 'Yellow dye': { carried: 1 }, 'Orange dye': { carried: 0, bank: 0 }, 'Red dye': { carried: 0, bank: 0 } }))
+      items.set(nameKey(name), { name, noted: 0, ...o, carried: o.carried });
+    const state = buildPlayerState({
+      mode: 'f2p', stats: null, progress: { levels: {} }, owned: { bankSeen: true, items }, gear: { equipment: [], inventory: [], coins: 600, bankCoins: 0 }, questsDone: null, connected: true,
+    });
+    const plan = createReadinessEngine({ steps: routeSteps, progress: emptyProgress(), qp: 0, mode: 'f2p', state }).plan(stepById.get('S2-12')!);
+    const from = at(3093, 3244);
+    const to = at(2957, 3512);
+    const d = procurementDetour({ plan, stepId: 'S2-12', from, to, coins: 600 });
+    const t = recommendedTransport(travelOptions(input({ from, to, levels: { magic: 37 }, carried: bag(['Falador teleport', 1]), bankSeen: true })));
+    expect(d).not.toBeNull();
+    const payload = planPayload(plan, { detour: d, transport: t });
+    expect(payload.activeDetour).toBeTruthy();
+    expect(payload.activeDetour!.targetTile.plane).toBe(0);
+    if (t) expect(payload.recommendedTransport).toMatchObject({ type: t.type, destination: t.destination, interactionId: t.interactionId });
+    expect(planPayload(plan, { detour: d }).recommendedTransport).toBeUndefined();
   });
 });

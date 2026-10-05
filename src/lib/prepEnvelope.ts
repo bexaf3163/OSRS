@@ -11,6 +11,9 @@ import type { ActiveStepPayload, GearHintPayload, ShoppingPlanPayload } from '..
 import { kgText } from './weight';
 import type { PrepLine, PrepPlan, PrepPriority, PrepTiming, PrepWhere, Supply } from './prepPlan';
 import type { Detour } from './detours';
+import type { RecommendedTransport } from './transport';
+import { items as itemData } from '../data';
+import { nameKey } from './checklist';
 
 export const SNAPSHOT_VERSION = 6;
 
@@ -19,6 +22,7 @@ export const MAX_PLAN_LINES = 48;
 const MAX_LATER = 12;
 const MAX_RECOVERY = 5;
 const MAX_BLOCKERS = 4;
+export const MAX_WITHDRAWALS = 12;
 const MAX_TEXT = 200;
 
 export interface PrepPlanPayload {
@@ -31,8 +35,12 @@ export interface PrepPlanPayload {
   weight?: string;
   slots?: string;
   blockers?: string[];
-  /** A stop worth making on the way ("Detour: Buy Orange dye at ..."): the text and where the arrow leads when it is clicked in the game. */
-  detour?: { text: string; x: number; y: number; plane: number; label: string };
+  /** A stop worth making on the way ("Detour: Buy Orange dye at ..."): the text, where the arrow leads when it is clicked in the game, and what it costs. */
+  activeDetour?: { label: string; targetTile: { x: number; y: number; plane: number }; costTiles: number; actionType: string; text: string };
+  /** What lies in the bank and is needed now or soon: the plugin frames it when the bank is open and lists it in the tips. itemId 0 means not known. */
+  bankWithdrawals?: { itemId: number; itemName: string; quantity: number }[];
+  /** The way that is not walking and is clearly shorter: the plugin shows one line, points at the first stop and frames the item to use. */
+  recommendedTransport?: { type: string; destination: string; interactionId: number; interactionName?: string; item?: string; tile?: { x: number; y: number; plane: number }; text: string };
 }
 
 export interface BankTagsPayload {
@@ -91,8 +99,27 @@ export function recoveryPayload(plan: PrepPlan): PrepPlanPayload['recovery'] | u
   return steps.length ? { title: clipText(title), steps } : undefined;
 }
 
+let idByName: Map<string, number> | null = null;
+/** The game item id by name, from the project's item database; 0 when the item is not in it. */
+function itemIdOf(name: string): number {
+  if (!idByName) idByName = new Map(itemData.map((i) => [nameKey(i.nameEn), i.id]));
+  return idByName.get(nameKey(name)) ?? 0;
+}
+
+/** The items the plan says to take out of the bank (needed now or soon): so a stop at a bank is for something. */
+export function bankWithdrawalsOf(plan: Pick<PrepPlan, 'lines'>): NonNullable<PrepPlanPayload['bankWithdrawals']> {
+  return plan.lines
+    .filter((l) => l.where === 'BANK' && (l.timing === 'NOW' || l.timing === 'SOON'))
+    .slice(0, MAX_WITHDRAWALS)
+    .map((l) => ({ itemId: itemIdOf(l.name), itemName: clipText(l.name, 60), quantity: Math.max(1, Math.min(l.toGet ?? l.count, 10_000_000)) }));
+}
+
+export interface PlanExtras { detour?: Detour | null; transport?: RecommendedTransport | null }
+
 /** The preparation plan in the form the plugin draws: without the excess and within its checks. */
-export function planPayload(plan: PrepPlan, detour?: Detour | null): PrepPlanPayload {
+export function planPayload(plan: PrepPlan, extras: PlanExtras = {}): PrepPlanPayload {
+  const { detour, transport } = extras;
+  const withdrawals = bankWithdrawalsOf(plan);
   const lines = plan.lines
     .filter((l) => l.timing !== 'LATER')
     .slice(0, MAX_PLAN_LINES)
@@ -117,7 +144,22 @@ export function planPayload(plan: PrepPlan, detour?: Detour | null): PrepPlanPay
     ...(recovery ? { recovery } : {}),
     ...(weight ? { weight } : {}),
     ...(slots ? { slots } : {}),
-    ...(detour ? { detour: { text: clipText(detour.text), x: detour.stop.x, y: detour.stop.y, plane: detour.stop.plane, label: clipText(detour.stop.label, 60) } } : {}),
+    ...(detour ? {
+      activeDetour: {
+        label: clipText(detour.stop.label, 60), targetTile: { x: detour.stop.x, y: detour.stop.y, plane: detour.stop.plane },
+        costTiles: Math.max(0, Math.round(detour.extraTiles)), actionType: detour.actionType, text: clipText(detour.text),
+      },
+    } : {}),
+    ...(withdrawals.length ? { bankWithdrawals: withdrawals } : {}),
+    ...(transport ? {
+      recommendedTransport: {
+        type: transport.type, destination: clipText(transport.destination, 60), interactionId: transport.interactionId,
+        ...(transport.interactionName ? { interactionName: clipText(transport.interactionName, 60) } : {}),
+        ...(transport.item ? { item: clipText(transport.item, 60) } : {}),
+        ...(transport.tile ? { tile: { x: transport.tile.x, y: transport.tile.y, plane: transport.tile.plane } } : {}),
+        text: clipText(transport.text),
+      },
+    } : {}),
     ...(plan.blockers.length ? { blockers: plan.blockers.slice(0, MAX_BLOCKERS).map((b) => clipText(b.detail ? `${b.label} — ${b.detail}` : b.label)) } : {}),
   };
 }

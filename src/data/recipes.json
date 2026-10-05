@@ -4,6 +4,7 @@
   "recipes": {
     "Orange dye": {
       "makeAt": "Aggie",
+      "manualSeconds": 240,
       "from": [
         { "nameEn": "Red dye", "count": 1, "how": "Aggie in Draynor Village makes it: 3 redberries + 5 gp.", "npc": "Aggie" },
         { "nameEn": "Yellow dye", "count": 1, "how": "Aggie in Draynor Village makes it: 2 onions + 5 gp.", "npc": "Aggie" }
