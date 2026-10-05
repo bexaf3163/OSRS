@@ -1,5 +1,6 @@
 // The desktop shell of OSRS Path: the same app from dist/ in a separate window.
 // The data is in the app folder (%APPDATA%\OSRS Path), and for the portable version — next to the exe (OSRS-Put-data).
+// Copies of the progress also go to %APPDATA%\OSRS Path\progress-copies, so the exe and its data folder can be deleted safely.
 // The progress is stored twice: in the window's localStorage and as the file progress.json — the file survives a storage reset.
 
 const { app, BrowserWindow, Menu, dialog, ipcMain, nativeTheme, session, shell } = require('electron');
@@ -8,7 +9,7 @@ const path = require('node:path');
 const { registerBridge } = require('./runelite-bridge.cjs');
 const { createLauncher } = require('./runelite-launcher.cjs');
 const { createUpdater } = require('./updater.cjs');
-const { backupProgress, dailyBackup, readProgress } = require('./progress-files.cjs');
+const { backupProgress, dailyBackup, latestCopy, readProgress, restoreFromCopies } = require('./progress-files.cjs');
 
 const DIST = path.join(__dirname, '..', 'dist');
 const isWeb = (url) => /^https?:\/\//i.test(url);
@@ -63,6 +64,11 @@ const ui = readJson('ui.json', { zoom: 1, autoZoom: true, alwaysOnTop: false });
 ui.zoom = clamp(Number(ui.zoom) || 1, ZOOM_STEPS[0], ZOOM_STEPS[ZOOM_STEPS.length - 1]);
 
 const saveUi = () => writeAtomic('ui.json', JSON.stringify(ui));
+
+// Copies outside the app folder: deleting the exe and its data folder does not delete them. The data folder of a
+// fresh install is filled back from the freshest copy (the files that already exist are never touched).
+const autoCopyDir = path.join(app.getPath('appData'), 'OSRS Path', 'progress-copies');
+if (ui.backupOff !== true) restoreFromCopies(app.getPath('userData'), autoCopyDir);
 
 function stepZoom(current, dir) {
   if (dir > 0) return ZOOM_STEPS.find((s) => s > current + 0.001) ?? ZOOM_STEPS[ZOOM_STEPS.length - 1];
@@ -146,19 +152,35 @@ if (!app.requestSingleInstanceLock()) {
     progressTimer = setTimeout(flushProgress, 400);
   });
 
-  // A progress copy once a day into the folder chosen by the player (the app settings).
-  const backupState = (error = null) => ({ dir: ui.backupDir || null, last: ui.backupLast || null, error });
-  function runBackup() {
-    if (!ui.backupDir) return backupState();
+  // The list of profiles lives in the window's storage; a file beside the progress keeps it if the storage is gone.
+  ipcMain.on('profiles:load', (e) => {
     flushProgress();
-    try {
-      dailyBackup(app.getPath('userData'), ui.backupDir);
-      ui.backupLast = new Date().toISOString();
-      saveUi();
-      return backupState();
-    } catch (err) {
-      return backupState(String(err && err.code ? err.code : 'write error'));
+    e.returnValue = readProgress(app.getPath('userData'), new Date(), 'profiles.json');
+  });
+  ipcMain.on('profiles:save', (_e, json) => {
+    pending.set('profiles.json', json);
+    clearTimeout(progressTimer);
+    progressTimer = setTimeout(flushProgress, 400);
+  });
+
+  // Progress copies: every hour into a folder outside the app (automatic) and into the folder chosen by the player (the app settings).
+  const backupState = (error = null) => ({ dir: ui.backupDir || null, autoDir: ui.backupOff === true ? null : autoCopyDir, last: ui.backupLast || null, error });
+  function runBackup() {
+    const targets = [ui.backupOff === true ? null : autoCopyDir, ui.backupDir || null].filter(Boolean);
+    if (!targets.length) return backupState();
+    flushProgress();
+    let error = null;
+    for (const target of targets) {
+      try {
+        dailyBackup(app.getPath('userData'), target);
+        latestCopy(app.getPath('userData'), target);
+        ui.backupLast = new Date().toISOString();
+      } catch (err) {
+        error = String(err && err.code ? err.code : 'write error');
+      }
     }
+    saveUi();
+    return backupState(error);
   }
   ipcMain.handle('backup:get', () => backupState());
   ipcMain.handle('backup:choose', async () => {
@@ -169,9 +191,14 @@ if (!app.requestSingleInstanceLock()) {
     return runBackup();
   });
   ipcMain.handle('backup:now', () => runBackup());
+  ipcMain.handle('backup:auto', (_e, on) => {
+    if (on) delete ui.backupOff;
+    else ui.backupOff = true;
+    saveUi();
+    return runBackup();
+  });
   ipcMain.handle('backup:clear', () => {
     delete ui.backupDir;
-    delete ui.backupLast;
     saveUi();
     return backupState();
   });

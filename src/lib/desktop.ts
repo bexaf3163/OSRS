@@ -28,8 +28,10 @@ export interface RuneliteLaunch {
 }
 
 export interface BackupState {
-  /** The folder for copies, or null if copies are off. */
+  /** The folder chosen by the player for extra copies, or null. */
   dir: string | null;
+  /** The automatic folder outside the app (%APPDATA%), or null if the player turned it off. */
+  autoDir: string | null;
   /** When the last copy was made (ISO), or null. */
   last: string | null;
   /** How the last attempt ended: ok, an error, or null. */
@@ -60,11 +62,15 @@ export interface DesktopBridge {
   /** Progress as a file next to the app's data (in the portable version, next to the exe). */
   loadProgressFile(profileId?: string): string | null;
   saveProgressFile(json: string, profileId?: string): void;
+  /** The profile list as a file: the window's storage can be lost, the file is read when it is empty. */
+  loadProfilesFile?(): string | null;
+  saveProfilesFile?(json: string): void;
   /** A scheduled copy of progress (once a day into the chosen folder). Older builds do not have it. */
   backup?: {
     get(): Promise<BackupState>;
     choose(): Promise<BackupState>;
     now(): Promise<BackupState>;
+    setAuto(on: boolean): Promise<BackupState>;
     clear(): Promise<BackupState>;
   };
   /** Where the app's data lives: for a hint in the settings. */

@@ -4,6 +4,7 @@
 // is bound to a profile without a name, and another one does not write levels and marks into it until the player chooses.
 
 import { useSyncExternalStore } from 'react';
+import { desktop } from './desktop';
 
 export interface Profile {
   id: string;
@@ -125,6 +126,13 @@ export function readProfiles(): ProfilesState {
   if (!cache) {
     let raw: string | null = null;
     try { raw = localStorage.getItem(PROFILES_KEY); } catch { /* no storage */ }
+    // The window's storage is empty (a fresh install): the list comes back from the file next to the progress.
+    if (!raw) {
+      try { raw = desktop()?.loadProfilesFile?.() ?? null; } catch { /* no desktop app */ }
+    } else {
+      // Profiles saved before the file existed: it is written once, so the copies carry the list too.
+      try { desktop()?.saveProfilesFile?.(raw); } catch { /* no desktop app */ }
+    }
     cache = parseProfiles(raw);
   }
   return cache;
@@ -133,6 +141,7 @@ export function readProfiles(): ProfilesState {
 export function writeProfiles(s: ProfilesState): void {
   cache = s;
   try { localStorage.setItem(PROFILES_KEY, JSON.stringify(s)); } catch { /* it is remembered until restart */ }
+  try { desktop()?.saveProfilesFile?.(JSON.stringify(s)); } catch { /* no desktop app */ }
   for (const l of listeners) l();
 }
 

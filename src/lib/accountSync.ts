@@ -30,3 +30,26 @@ export function syncCandidates(steps: readonly Step[], p: Progress, questsDone: 
   }
   return out;
 }
+
+/**
+ * Restoring a lost progress: a step the game confirms could only be reached through the steps it requires, so those
+ * were done too — even the ones with no in-game signal. They come after the confirmed steps, in route order, and
+ * only unclosed ones are returned.
+ */
+export function withRequired(steps: readonly Step[], confirmed: readonly SyncCandidate[], p: Progress): SyncCandidate[] {
+  const byId = new Map(steps.map((s) => [s.id, s]));
+  const seen = new Set(confirmed.map((c) => c.step.id));
+  const queue = confirmed.map((c) => c.step);
+  const implied = new Map<string, SyncCandidate>();
+  for (let step = queue.shift(); step; step = queue.shift()) {
+    for (const id of step.requires) {
+      const need = byId.get(id);
+      if (!need || seen.has(id)) continue;
+      seen.add(id);
+      queue.push(need);
+      if (!isClosed(p, id)) implied.set(id, { step: need, why: `required before ${step.id}, which the game confirms` });
+    }
+  }
+  const order = new Map(steps.map((s, i) => [s.id, i]));
+  return [...confirmed, ...[...implied.values()].sort((a, b) => (order.get(a.step.id) ?? 0) - (order.get(b.step.id) ?? 0))];
+}

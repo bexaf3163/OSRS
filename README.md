@@ -376,7 +376,7 @@ and no console errors). A page from `npm run dev` in a browser works without a l
 
 | Request | What it does |
 |---|---|
-| `GET /status` | `{"status":"ok","inGame":true,"activeStepId":"S1-03","stats":{"magic":25,…},"shortestPath":true,"equipment":[…],"inventory":[…],"coins":250,"carriedValue":1200,"navTarget":{"label":"Ned — a house in Draynor Village","x":3099,"y":3259,"plane":0,"npcNames":["Ned"]},"protocol":6,"pluginVersion":"2.28.0"}` — the estimate of items by exchange prices without coins (`carriedValue`, `bankValue`) and the version handshake; protocol 3 — the `guide` list for the side panel; 4 — the "What you need" list on the game screen and `navTarget`, where the temporary target currently leads; 5 — XP, quests, the character name; 6 — the single state snapshot `/prep-plan` |
+| `GET /status` | `{"status":"ok","inGame":true,"activeStepId":"S1-03","stats":{"magic":25,…},"shortestPath":true,"equipment":[…],"inventory":[…],"coins":250,"carriedValue":1200,"navTarget":{"label":"Ned — a house in Draynor Village","x":3099,"y":3259,"plane":0,"npcNames":["Ned"]},"protocol":6,"pluginVersion":"2.29.0"}` — the estimate of items by exchange prices without coins (`carriedValue`, `bankValue`) and the version handshake; protocol 3 — the `guide` list for the side panel; 4 — the "What you need" list on the game screen and `navTarget`, where the temporary target currently leads; 5 — XP, quests, the character name; 6 — the single state snapshot `/prep-plan` |
 | `POST /active-step` | The step target (`InGameTarget` + `stepId`, `title`, `goal`, `checklist`, `pathWaypoints`, `watchItems`, `pacing`, `guide`: `{"items":[{"name":"Eye of newt","id":221,"count":1,"where":"Buy from Betty…","inStep":true}],"places":[{"x":3014,"y":3259,"plane":0,"label":"Eye of newt — Betty, Port Sarim","npc":"Betty","items":["Eye of newt"]}]}` — for the "OSRS Path" panel) |
 | `POST /prep-plan` | The single state snapshot (protocol 6): the step target, the shopping list, the bank tags, the gear hint and the preparation plan in one request with a sequence number; the plugin answers which parts it rejected |
 | `POST /clear` | Remove the arrow, the highlight, the HUD, the path and the temporary target |
@@ -414,6 +414,7 @@ The plugin's compatibility with an installed RuneLite (after its update): `npm r
 
 ## Version history (summary)
 
+- **2.29** — progress copies outside the app folder (every hour, on by default) and an automatic restore into a fresh data folder; the profile list is kept in a file; "Sync with the account" also restores the steps the confirmed ones require.
 - **2.27** — the quest stages are chosen by the Quest Helper machines (chat and dialogue messages, the journal, variables, items, place); a more detailed debug journal.
 - **2.19** — less text: Zen / Inspector, a single status, a smart reveal in the game (a plugin setting, off by default).
 - **2.18** — one readiness engine, auto-preparation (the queue leads the arrow to the bank, the exchange, the training place), "🎯 What to train with" (training methods by level, mode, items and play style), the "calm / efficient" play style, live exchange prices in the resource journal.

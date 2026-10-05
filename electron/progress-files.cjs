@@ -52,6 +52,8 @@ function backupProgress(dir, name = 'progress.json') {
 }
 
 const DAY_KEEP = 14;
+/** What is copied: every profile's progress file and the profile list (profiles.json). */
+const COPIED = /^(progress(-[a-z0-9]{1,12})?|profiles)\.json$/;
 const stampOf = (d) => `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
 
 /**
@@ -63,7 +65,7 @@ function dailyBackup(dir, target, now = new Date()) {
   fs.mkdirSync(target, { recursive: true });
   const today = stampOf(now);
   let made = 0;
-  for (const name of fs.readdirSync(dir).filter((n) => /^progress(-[a-z0-9]{1,12})?\.json$/.test(n))) {
+  for (const name of fs.readdirSync(dir).filter((n) => COPIED.test(n))) {
     const base = name.replace(/\.json$/, '');
     const out = path.join(target, `osrs-put-${base}-${today}.json`);
     let text;
@@ -76,4 +78,57 @@ function dailyBackup(dir, target, now = new Date()) {
   return made;
 }
 
-module.exports = { readProgress, backupProgress, dailyBackup };
+/**
+ * The freshest state next to the dated copies: osrs-put-<name>-latest.json is overwritten whenever the source changes,
+ * so a deletion in the middle of the day loses minutes, not a day. A broken file is not copied.
+ */
+function latestCopy(dir, target) {
+  fs.mkdirSync(target, { recursive: true });
+  for (const name of fs.readdirSync(dir).filter((n) => COPIED.test(n))) {
+    let text;
+    try { text = fs.readFileSync(path.join(dir, name), 'utf8'); } catch { continue; }
+    if (!parses(text)) continue;
+    const out = path.join(target, `osrs-put-${name.replace(/\.json$/, '')}-latest.json`);
+    let same = false;
+    try { same = fs.readFileSync(out, 'utf8') === text; } catch { /* no copy yet */ }
+    if (!same) fs.writeFileSync(out, text);
+  }
+}
+
+const COPY_NAME = /^osrs-put-(progress(?:-[a-z0-9]{1,12})?|profiles)-(\d{8}|latest)\.json$/;
+const stamp = (text) => {
+  const t = Date.parse(String(JSON.parse(text).updatedAt));
+  return Number.isNaN(t) ? -1 : t;
+};
+
+/**
+ * A new data folder with no files (the app was deleted and installed again): every missing file is brought back from the
+ * freshest valid copy in the copies folder — the one with the latest updatedAt, a dated copy wins over "latest" only if newer.
+ * An existing file is never touched. It returns the names restored.
+ */
+function restoreFromCopies(dir, source) {
+  let names;
+  try { names = fs.readdirSync(source); } catch { return []; }
+  const best = new Map();
+  for (const n of names) {
+    const m = COPY_NAME.exec(n);
+    if (!m) continue;
+    let text;
+    try { text = fs.readFileSync(path.join(source, n), 'utf8'); JSON.parse(text); } catch { continue; }
+    let at = -1;
+    try { at = stamp(text); } catch { /* the profile list has no stamp */ }
+    const rank = m[2] === 'latest' ? 1 : 0;
+    const key = [at, m[2] === 'latest' ? 99999999 : Number(m[2]), rank];
+    const cur = best.get(m[1]);
+    if (!cur || key[0] > cur.key[0] || (key[0] === cur.key[0] && (key[1] > cur.key[1] || (key[1] === cur.key[1] && key[2] > cur.key[2])))) best.set(m[1], { key, text });
+  }
+  const done = [];
+  for (const [base, { text }] of best) {
+    const target = path.join(dir, `${base}.json`);
+    if (fs.existsSync(target)) continue;
+    try { fs.writeFileSync(target, text); done.push(`${base}.json`); } catch { /* the folder is not writable */ }
+  }
+  return done;
+}
+
+module.exports = { readProgress, backupProgress, dailyBackup, latestCopy, restoreFromCopies };

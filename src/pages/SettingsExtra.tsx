@@ -78,20 +78,23 @@ export function BackupSection() {
   const run = (f: () => Promise<BackupState>) => void f().then(setState);
   return (
     <section className="card section-card">
-      <h2 className="card-title">Scheduled progress copy</h2>
+      <h2 className="card-title">Progress copies</h2>
       <p className="muted small">
-        Once a day (and at launch) the progress is copied into the chosen folder, for example into OneDrive: one file per profile and day,
-        the last 14 are kept. To restore — "Transferring progress" → "Import progress".
+        Every hour the progress is copied outside the app folder, so deleting the program and its data folder does not lose it: a fresh install
+        takes the newest copy back by itself. You can also copy into a folder of your own, for example into OneDrive. One file per profile and day,
+        the last 14 are kept, plus the latest state. To restore by hand — "Transferring progress" → "Import progress".
       </p>
       <p className="small">
-        {state?.dir ? <>Folder: <code className="code">{state.dir}</code></> : 'Copies are off.'}
-        {state?.last && <> Last copy: {new Date(state.last).toLocaleString('en-US')}.</>}
+        {state?.autoDir ? <>Automatic folder: <code className="code">{state.autoDir}</code></> : 'The automatic copy is off.'}
+        {state?.dir && <><br />Your folder: <code className="code">{state.dir}</code></>}
+        {state?.last && <><br />Last copy: {new Date(state.last).toLocaleString('en-US')}.</>}
       </p>
       {state?.error && <p className="notice is-error small" role="alert">Could not write to the folder ({state.error}). Choose another.</p>}
       <div className="actions">
-        <button type="button" className="btn" onClick={() => run(api.choose)}>{state?.dir ? 'Change folder' : 'Choose a folder'}</button>
-        {state?.dir && <button type="button" className="btn" onClick={() => run(api.now)}>Make a copy now</button>}
-        {state?.dir && <button type="button" className="btn btn-ghost" onClick={() => run(api.clear)}>Turn off</button>}
+        <button type="button" className="btn" onClick={() => run(api.choose)}>{state?.dir ? 'Change my folder' : 'Also copy to my folder'}</button>
+        {(state?.dir || state?.autoDir) && <button type="button" className="btn" onClick={() => run(api.now)}>Make a copy now</button>}
+        {state?.dir && <button type="button" className="btn btn-ghost" onClick={() => run(api.clear)}>Stop copying to my folder</button>}
+        {state && <button type="button" className="btn btn-ghost" onClick={() => run(() => api.setAuto(!state.autoDir))}>{state.autoDir ? 'Turn off the automatic copy' : 'Turn on the automatic copy'}</button>}
       </div>
     </section>
   );

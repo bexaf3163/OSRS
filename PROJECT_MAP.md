@@ -1,6 +1,6 @@
 # OSRS Path — the project map: what exists, where it lies, how it is connected
 
-> This file is written so that it can be dropped whole into another chat with a request to suggest what to add or fix. Project version: **2.28.0** (bridge protocol 6). Repository: https://github.com/bexaf3163/OSRS. The language of the interface and the texts is English.
+> This file is written so that it can be dropped whole into another chat with a request to suggest what to add or fix. Project version: **2.29.0** (bridge protocol 6). Repository: https://github.com/bexaf3163/OSRS. The language of the interface and the texts is English.
 > The inventory is compiled from the sources; a note **[not in the game]** means it was not checked in a live game, only by tests, a browser and a plugin imitation.
 
 ---
@@ -307,7 +307,7 @@ The header: search (`/`), the progress ring and the quest points, the F2P/Member
 |---|---|
 | `main.cjs` | The desktop shell of OSRS Path: the same app from dist/ in a separate window. The data is in the app folder (%APPDATA%\OSRS Path), and for the portable version — next to the exe (OSRS-Put-data). The progress is stored twice: in… |
 | `preload.cjs` | The bridge between the window and the app: scale, "always on top", the progress file and the link with the RuneLite plugin. The window works in a sandbox — only these functions are exposed, without access to Node. |
-| `progress-files.cjs` | The progress file: reading with a broken file set aside and a copy of the last whole state. The write already goes through a temporary file (main.cjs), so corruption is unlikely; but if the file still does not parse, it must not… |
+| `progress-files.cjs` | The progress file: reading with a broken file set aside and a copy of the last whole state; the hourly copies (`dailyBackup`, `latestCopy`) into `%APPDATA%\OSRS Path\progress-copies` and `restoreFromCopies`, which refills a fresh data folder at launch. The write already goes through a temporary file (main.cjs), so corruption is unlikely; but if the file still does not parse, it must not… |
 | `runelite-bridge.cjs` | The link of the window with the RuneLite plugin "OSRS Path Bridge" (http://127.0.0.1:38282) through the main process. The window does not go to localhost itself: this way there is no CORS, and a turned-off RuneLite does not spray… |
 | `runelite-launcher.cjs` | Starting RuneLite with the OSRS Path Bridge plugin right from the "OSRS Path" app. Nothing is downloaded: Java is from the installed RuneLite (%LOCALAPPDATA%\RuneLite\jre), the client classes are from its own cache… |
 | `updater.cjs` | Auto-update of the portable version: compares the version with the latest GitHub release, downloads the new exe next to the old one, checks the size and checksum and, on a button, restarts the app from the new exe. The data is in… |

@@ -89,3 +89,49 @@ describe('profiles and the scheduled copy', () => {
     expect(api.dailyBackup(d, out, new Date(2026, 9, 21))).toBe(1);
   });
 });
+
+describe('copies outside the app and the restore of a fresh data folder', () => {
+  const api = createRequire(import.meta.url)('../electron/progress-files.cjs') as {
+    dailyBackup: (dir: string, target: string, now?: Date) => number;
+    latestCopy: (dir: string, target: string) => void;
+    restoreFromCopies: (dir: string, source: string) => string[];
+  };
+  const at = (s: string) => JSON.stringify({ updatedAt: s, steps: { a: 'done' } });
+
+  it('the latest copy follows the source during the day, a broken source does not overwrite it, the profile list is copied', () => {
+    const d = tmp();
+    const out = join(tmp(), 'copies');
+    writeFileSync(join(d, 'progress.json'), '{"a":1}');
+    writeFileSync(join(d, 'profiles.json'), '{"active":"main"}');
+    api.dailyBackup(d, out, new Date(2026, 9, 2));
+    api.latestCopy(d, out);
+    writeFileSync(join(d, 'progress.json'), '{"a":2}');
+    api.latestCopy(d, out);
+    expect(readFileSync(join(out, 'osrs-put-progress-latest.json'), 'utf8')).toBe('{"a":2}');
+    expect(readFileSync(join(out, 'osrs-put-progress-20261002.json'), 'utf8')).toBe('{"a":1}');
+    expect(readFileSync(join(out, 'osrs-put-profiles-20261002.json'), 'utf8')).toBe('{"active":"main"}');
+    writeFileSync(join(d, 'progress.json'), '{"a":');
+    api.latestCopy(d, out);
+    expect(readFileSync(join(out, 'osrs-put-progress-latest.json'), 'utf8')).toBe('{"a":2}');
+  });
+
+  it('a new data folder is filled from the freshest valid copy, existing files stay as they are', () => {
+    const src = tmp();
+    writeFileSync(join(src, 'osrs-put-progress-20261001.json'), at('2026-10-01T10:00:00Z'));
+    writeFileSync(join(src, 'osrs-put-progress-20261003.json'), at('2026-10-03T10:00:00Z'));
+    writeFileSync(join(src, 'osrs-put-progress-latest.json'), at('2026-10-04T10:00:00Z'));
+    writeFileSync(join(src, 'osrs-put-progress-ab12-20261002.json'), '{"updatedAt":');
+    writeFileSync(join(src, 'osrs-put-progress-ab12-20261001.json'), at('2026-10-01T09:00:00Z'));
+    writeFileSync(join(src, 'osrs-put-profiles-20261003.json'), '{"active":"ab12"}');
+    writeFileSync(join(src, 'notes.txt'), 'x');
+    const d = tmp();
+    writeFileSync(join(d, 'progress-zz.json'), 'mine');
+    expect(api.restoreFromCopies(d, src).sort()).toEqual(['profiles.json', 'progress-ab12.json', 'progress.json']);
+    expect(JSON.parse(readFileSync(join(d, 'progress.json'), 'utf8')).updatedAt).toBe('2026-10-04T10:00:00Z');
+    expect(JSON.parse(readFileSync(join(d, 'progress-ab12.json'), 'utf8')).updatedAt).toBe('2026-10-01T09:00:00Z');
+    expect(readFileSync(join(d, 'profiles.json'), 'utf8')).toBe('{"active":"ab12"}');
+    // The second launch changes nothing, and a missing copies folder is not an error.
+    expect(api.restoreFromCopies(d, src)).toEqual([]);
+    expect(api.restoreFromCopies(d, join(src, 'nope'))).toEqual([]);
+  });
+});

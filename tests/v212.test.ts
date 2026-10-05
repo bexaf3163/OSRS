@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { etaMinutes, etaText, XpTracker } from '../src/lib/xpRate';
 import { sessionSummary } from '../src/lib/session';
-import { questKey, syncCandidates } from '../src/lib/accountSync';
+import { questKey, syncCandidates, withRequired } from '../src/lib/accountSync';
 import { addProfile, defaultProfiles, gateAllows, linkPlayer, MAIN_ID, parseProfiles, profileFileName, profileGate, profileStorageKey, removeProfile, renameProfile } from '../src/lib/profiles';
 import { parsePlayer, parsePos, parseQuests, parseXp } from '../src/services/runeliteBridge';
 import { emptyProgress } from '../src/lib/progress';
@@ -67,6 +67,19 @@ describe('accountSync', () => {
     expect(syncCandidates([quest, lvl], p, [], { attack: 4 })).toEqual([]);
     expect(syncCandidates([quest], emptyProgress(), null, null)).toEqual([]);
     expect(questKey("Cook's Assistant")).toBe(questKey('cooks assistant'));
+  });
+  it('restoring: what a confirmed step requires is added, in route order, once, closed ones are skipped', () => {
+    const mk = (id: string, requires: string[]) => ({ id, requires } as unknown as Step);
+    const a = mk('A', []);
+    const b = mk('B', ['A']);
+    const c = mk('C', ['A', 'B']);
+    const d = mk('D', ['C', 'MISSING']);
+    const confirmed = [{ step: d, why: 'quest' }];
+    expect(withRequired([a, b, c, d], confirmed, emptyProgress()).map((x) => x.step.id)).toEqual(['D', 'A', 'B', 'C']);
+    const p = { ...emptyProgress(), steps: { B: 'done' as const } };
+    // B is closed, but what B itself requires is still followed: A was needed for it.
+    expect(withRequired([a, b, c, d], confirmed, p).map((x) => x.step.id)).toEqual(['D', 'A', 'C']);
+    expect(withRequired([a, b, c, d], [], emptyProgress())).toEqual([]);
   });
 });
 

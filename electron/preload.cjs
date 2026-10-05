@@ -15,11 +15,15 @@ contextBridge.exposeInMainWorld('osrsDesktop', {
   // Synchronous: the progress is needed before the first render, otherwise an empty one would flash.
   loadProgressFile: (profileId) => ipcRenderer.sendSync('progress:load', String(profileId ?? 'main')),
   saveProgressFile: (json, profileId) => ipcRenderer.send('progress:save', String(json), String(profileId ?? 'main')),
-  // A progress copy once a day into the chosen folder.
+  // The profile list as a file next to the progress (the window's storage can be lost).
+  loadProfilesFile: () => ipcRenderer.sendSync('profiles:load'),
+  saveProfilesFile: (json) => ipcRenderer.send('profiles:save', String(json)),
+  // Progress copies: automatic (outside the app folder) and into the chosen folder.
   backup: {
     get: () => ipcRenderer.invoke('backup:get'),
     choose: () => ipcRenderer.invoke('backup:choose'),
     now: () => ipcRenderer.invoke('backup:now'),
+    setAuto: (on) => ipcRenderer.invoke('backup:auto', Boolean(on)),
     clear: () => ipcRenderer.invoke('backup:clear'),
   },
   dataDir: () => ipcRenderer.sendSync('app:data-dir'),
