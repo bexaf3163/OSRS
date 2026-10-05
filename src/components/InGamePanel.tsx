@@ -19,7 +19,7 @@ const GROUPS: [keyof InGameTarget, string][] = [
 ];
 
 export function InGamePanel({ step }: { step: Step }) {
-  const { enabled, state, activeStepId, pointInGame, clear, canLaunch, launchRuneLite, shortestPath, plugin } = useBridge();
+  const { enabled, state, activeStepId, pointInGame, clear, canLaunch, launchRuneLite, shortestPath } = useBridge();
   const [notice, setNotice] = useState<'' | 'sending' | 'offline'>('');
   if (!enabled || !toInGameTarget(step)) return null;
   const active = activeStepId === step.id;
@@ -57,20 +57,12 @@ export function InGamePanel({ step }: { step: Step }) {
         </p>
       )}
       {active && <PluginUpdateNote />}
-      {live && plugin?.compat === 'ok' && (
-        <p className="muted small">
-          🖱 In the game at the top left, under the step plate, is the "What you need" list: what to bring, what is missing and where to get it. A click on a row with
-          a place — the arrow and the path there, the NPC is highlighted; a click on the heading — collapse.
-        </p>
-      )}
       <PacingLine step={step} />
       {trigger && <p className="muted small">The step will be marked by itself when {triggerText(trigger)}.</p>}
-      {active && (
+      {active && !shortestPath && (
         <p className="muted small">
-          {shortestPath
-            ? '🗺 The path over land is laid by Shortest Path — taking walls and doors into account.'
-            : waypoints.length ? `🗺 A route through ${waypoints.length} ${plural(waypoints.length, 'point', 'points')}: the arrow and the HUD lead from point to point. The path with walls is drawn by the Shortest Path plugin from the Plugin Hub.`
-              : '🗺 The arrow shows the straight-line direction. The path with walls is drawn by the Shortest Path plugin from the Plugin Hub.'}
+          {waypoints.length ? `🗺 A route through ${waypoints.length} ${plural(waypoints.length, 'point', 'points')}.` : '🗺 The arrow shows the straight-line direction.'}
+          {' '}Install Shortest Path from the Plugin Hub for the path with walls.
         </p>
       )}
       <PreflightPanel step={step} />

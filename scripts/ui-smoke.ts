@@ -272,6 +272,7 @@ async function run(browser: Browser) {
       }, '#/gear');
       const t = await text(page, '.gear-locked');
       expect(t.includes('needs 20 Ranged') && t.includes('Coif') && t.includes('cannot be worn yet'), 'gear: 🔒 Coif — needs 20 Ranged, lies in the bank');
+      if (process.env.UI_SHOTS) await page.screenshot({ path: `${process.env.UI_SHOTS}/gear-${width}.png`, fullPage: true }).catch(() => {});
       expect(!(await text(page, '.gear-list')).includes('Wear Coif'), 'gear: it is not advised to wear the Coif');
       expect(await noOverflow(page), 'gear: no horizontal scrolling');
       expect(!errors.length, `gear: no console errors ${errors.join('; ')}`);
@@ -350,7 +351,9 @@ async function run(browser: Browser) {
         status: { activeStepId: 'S2-03', protocol: 6, pluginVersion: '2.22.0' },
       }, '#/step/S2-03');
       const f = await text(fresh.page, '.ingame');
-      expect(f.includes('"What you need" list') && !f.includes('old plugin'), 'step: plugin 2.22 — a hint where the "What you need" list is in the game');
+      // The static explanations ("In the game at the top left...", "The path over land is laid by Shortest Path...") were removed on purpose: a current plugin
+      // gets only the status and the buttons; the old-plugin note above stays.
+      expect(!f.includes('old plugin') && !f.includes('at the top left') && !f.includes('laid by Shortest Path') && /Show(n)? in the game/.test(f), 'step: plugin 2.22 — only the status and the buttons, no explanatory paragraphs');
       expect(!fresh.errors.length, `step: no console errors ${fresh.errors.join('; ')}`);
       await fresh.page.context().close();
     }

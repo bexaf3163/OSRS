@@ -1037,9 +1037,12 @@ main:has(.path-wide) { max-width: 1560px; padding-bottom: 16px; }
 }
 .step-view.is-members { box-shadow: inset 3px 0 0 var(--members); }
 @keyframes step-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
-.step-view-head { display: flex; flex-direction: column; gap: 4px; padding: 18px 20px 0; }
+/* Pinned: the step's name, stage and reward stay in view above the hero while the card scrolls. */
+.step-view-head { display: flex; flex-direction: column; gap: 4px; padding: 14px 20px 8px; position: sticky; top: 0; z-index: 3; background: var(--surface); border-radius: var(--radius) var(--radius) 0 0; }
+.step-view-title .code { font-size: 0.7em; vertical-align: 0.1em; }
+.badge-stage { background: var(--surface-2); color: var(--muted); border-color: var(--border); }
 .step-view-kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--muted); }
-.step-view-title { font-size: 1.6rem; line-height: 1.2; outline: none; }
+.step-view-title { font-size: 1.45rem; line-height: 1.25; outline: none; }
 .step-view .step-details { padding: 12px 20px 8px; animation: none; }
 .step-view .step-meta-row { justify-content: flex-end; }
 .step-view .step-meta-row > .muted { display: none; }
@@ -1663,3 +1666,32 @@ select option { background: var(--surface); color: var(--text); }
   .path-wide.no-dock .dock { display: none; }
 }
 .dock-suggested { margin: 14px 18px 0; text-transform: uppercase; letter-spacing: 0.04em; font-size: 0.72rem; }
+
+/* ---------- Gear: loadout dashboard ---------- */
+.gear-top { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 12px; align-items: stretch; }
+@media (max-width: 860px) { .gear-top { grid-template-columns: minmax(0, 1fr); } }
+.gear-paper { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+@media (max-width: 520px) { .gear-paper { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.gear-slot { display: flex; flex-direction: column; gap: 6px; padding: 8px 10px; background: var(--surface-3); border: 1px solid var(--border); border-radius: var(--radius-sm); min-height: 74px; }
+.gear-slot.is-filled { background: var(--surface); border-color: color-mix(in srgb, var(--gold) 40%, var(--border)); }
+.gear-slot-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.gear-slot-item { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.gear-slot-name { font-weight: 600; font-size: 0.9rem; overflow-wrap: anywhere; }
+.badge-tier { background: var(--gold-soft); color: var(--gold-ink); border-color: color-mix(in srgb, var(--gold) 40%, transparent); }
+.gear-metrics { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.gear-metrics.is-empty { opacity: 0.55; }
+.gear-metric { display: flex; flex-direction: column; padding: 8px 12px; background: var(--surface-3); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.gear-metric-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); }
+.gear-metric-value { font-size: 1.6rem; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.gear-chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0; }
+.gear-status { margin: 0; }
+.chip { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); font-size: 0.8rem; color: var(--text); text-decoration: none; }
+.chip.is-warn { background: var(--warn-soft); color: var(--warn); border-color: color-mix(in srgb, var(--warn) 35%, transparent); }
+.chip.is-ready { background: var(--done-soft); color: var(--done); border-color: color-mix(in srgb, var(--done) 35%, transparent); }
+.gear-roadmap { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.roadmap-lock { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; }
+.lock-chip.is-owned { background: var(--gold-soft); color: var(--gold-ink); }
+.gear-gain { color: var(--done); font-weight: 650; font-size: 0.85rem; }
+.req-bar { display: grid; grid-template-columns: minmax(96px, auto) minmax(80px, 1fr) auto; align-items: center; gap: 10px; margin-top: 4px; font-size: 0.85rem; }
+.req-bar-track { height: 8px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--border); overflow: hidden; }
+.req-bar-fill { display: block; height: 100%; background: var(--accent); }

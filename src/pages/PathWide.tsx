@@ -175,10 +175,10 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
         {!selected.foes?.length && <GearBanner />}
         <article className={`step-view ${selected.membersOnly ? 'is-members' : ''}`} key={selected.id}>
           <header className="step-view-head">
+            <h2 className="step-view-title" id="step-view-title" tabIndex={-1}><code className="code">{selected.id}</code> · {selected.title}</h2>
             <p className="step-view-kicker">
-              <code className="code">{selected.id}</code>
               <TypeIcon type={selected.type} />
-              <span>{TYPE_LABEL[selected.type]} · stage {selected.stage}</span>
+              <span className="badge badge-stage">{TYPE_LABEL[selected.type]} · Stage {selected.stage}</span>
               {selected.qp ? <span className="badge badge-qp">+{selected.qp} QP</span> : null}
               {selected.membersOnly && <span className="badge badge-members">Members</span>}
               {selected.optional && <span className="tag">optional</span>}
@@ -186,7 +186,6 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
               {status === 'skipped' && <span className="tag">skipped</span>}
               {selected.id === suggested.id && status !== 'done' && <span className="badge badge-now">now by the plan</span>}
             </p>
-            <h2 className="step-view-title" id="step-view-title" tabIndex={-1}>{selected.title}</h2>
             {blockers && (
               <p className="step-blocked"><IconLock />First: {blockerParts(blockers).join(', ')}</p>
             )}
