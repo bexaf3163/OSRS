@@ -576,6 +576,8 @@ export interface Progress {
   levels: Record<string, number>;
   notes: Record<string, string>;
   updatedAt: string;
+  /** When a step was marked done (ISO), for the time splits; absent for steps marked in bulk from the game or before splits existed. */
+  doneAt?: Record<string, string>;
   gameMode?: GameMode;
   /** Steps marked updatedInV2 that the user has already checked. */
   reviewedV2Steps?: string[];

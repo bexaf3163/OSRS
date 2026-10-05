@@ -11,6 +11,7 @@ import { styleOf } from '../lib/playStyle';
 import { formatGp } from '../lib/shopping';
 import { kgText } from '../lib/weight';
 import { prepChipGroups } from '../lib/prepChips';
+import { bagCleanup, cleanupLine } from '../lib/bagCleanup';
 import { BAG_SLOTS, type PrepPlan, type PrepAction, type PrepLine, type PrepWhere, type Supply } from '../lib/prepPlan';
 import { NavigateButton } from './NavigateButton';
 import { useUpgradeRecommendation } from './UpgradePrompt';
@@ -125,7 +126,9 @@ export function OneTripCard({ step, inStatus = false }: { step: Step; inStatus?:
   const { progress } = useStore();
   const profile = styleOf(useFeatures());
   const upgrade = useUpgradeRecommendation(step);
-  const plan = useReadinessEngine().plan(step, { ahead: profile.lookAhead, upgrade });
+  const engine = useReadinessEngine();
+  const plan = engine.plan(step, { ahead: profile.lookAhead, upgrade });
+  const cleanup = bagCleanup(plan, engine.ctx.state);
   if (isClosed(progress, step.id)) return null;
   const { score, slots } = plan;
   const nothing = !plan.recovery && !plan.lines.length && !plan.coins.need && !plan.optimizations.length && !plan.blockers.length && !plan.weight.items.length;
@@ -190,6 +193,13 @@ export function OneTripCard({ step, inStatus = false }: { step: Step; inStatus?:
             {plan.weight.action && <> <span className="prep-action">{plan.weight.action.label}{plan.weight.action.nav && <> <NavigateButton target={plan.weight.action.nav} label="🧭" compact /></>}</span></>}
           </p>
         </div>
+      )}
+      {cleanup && (
+        <details className="small prep-cleanup" open={cleanup.tight}>
+          <summary className="muted">🧹 Bag cleanup: {cleanup.items.length} {cleanup.items.length === 1 ? 'thing' : 'things'} could stay in the bank, freeing ~{cleanup.slotsFreed} {cleanup.slotsFreed === 1 ? 'slot' : 'slots'}{cleanup.tight ? ' (the bag is tight)' : ''}</summary>
+          <ul>{cleanup.items.map((i) => <li key={i.name}>{cleanupLine(i)}</li>)}</ul>
+          <p className="muted">Not asked for by this step or the nearest ones. Money, food, runes, staffs, teleports and jewellery are never listed.</p>
+        </details>
       )}
       {plan.have.length > 0 && (
         <details className="small">

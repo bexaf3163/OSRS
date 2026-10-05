@@ -250,6 +250,78 @@ public class GuideListTest
 		}
 	}
 
+	private static StepGuide.View withItems(StepGuide.View base, StepGuide.ItemLine... items)
+	{
+		return new StepGuide.View(base.getTitle(), null, java.util.Arrays.asList(items), java.util.Collections.emptyList(), null, null, null, null, base.getStage());
+	}
+
+	@Test
+	public void aLineNamesTheItemsOfTheStep_pluralsAndCountsDoNotMatter()
+	{
+		assertTrue(GuideList.mentions("Have Ned make a wig (3 balls of wool); buy rope too", "Ball of wool ×3"));
+		assertTrue(GuideList.mentions("Dye the wig yellow (Aggie: 2 onions + 5 gp)", "Onion ×2"));
+		assertTrue(GuideList.mentions("Aggie: get skin paste (ashes, redberries, flour, water)", "Redberries"));
+		assertFalse("only whole words in a row", GuideList.mentions("Talk to Leela", "Bronze bar"));
+		assertFalse(GuideList.mentions("Make a ropeway", "Rope"));
+		assertFalse(GuideList.mentions("anything", ""));
+		assertEquals("Ball of wool", GuideList.baseName("Ball of wool ×3"));
+		assertEquals("Redberries", GuideList.baseName("Redberries"));
+	}
+
+	@Test
+	public void anErrandThatTheBagHasDoneIsCutFromTheDetails_onlyThen()
+	{
+		String line = "Have Ned make a wig (3 balls of wool); buy rope too";
+		StepGuide.View base = princeAli(0, null, false);
+		assertEquals("rope is in the bag: the errand is done", "Have Ned make a wig (3 balls of wool)",
+			GuideList.withoutDoneErrands(withItems(base, itemLine("Rope", StepGuide.Have.BAG)), line));
+		assertEquals("rope was handed in or used earlier: done too", "Have Ned make a wig (3 balls of wool)",
+			GuideList.withoutDoneErrands(withItems(base, itemLine("Rope", StepGuide.Have.DONE)), line));
+		for (StepGuide.Have not : new StepGuide.Have[] {StepGuide.Have.NONE, StepGuide.Have.BANK, StepGuide.Have.UNKNOWN})
+		{
+			assertEquals("rope is " + not + ": the errand stays", line, GuideList.withoutDoneErrands(withItems(base, itemLine("Rope", not)), line));
+		}
+		assertEquals("a clause that names no item of the step stays", "Have Ned make a wig; then run east",
+			GuideList.withoutDoneErrands(withItems(base, itemLine("Rope", StepGuide.Have.BAG)), "Have Ned make a wig; then run east"));
+		assertEquals("a clause that is not an errand stays", "Have Ned make a wig; rope is optional",
+			GuideList.withoutDoneErrands(withItems(base, itemLine("Rope", StepGuide.Have.BAG)), "Have Ned make a wig; rope is optional"));
+		assertEquals("one item still missing keeps the whole errand", "Buy it; buy rope and a bucket",
+			GuideList.withoutDoneErrands(withItems(base, itemLine("Rope", StepGuide.Have.BAG), itemLine("Bucket", StepGuide.Have.NONE)), "Buy it; buy rope and a bucket"));
+		assertEquals("", GuideList.withoutDoneErrands(base, null));
+		assertEquals("No semicolon", GuideList.withoutDoneErrands(base, "No semicolon"));
+	}
+
+	@Test
+	public void theBagCheckSaysEachStateApart_unknownIsNeverMissing()
+	{
+		StepGuide.View v = withItems(princeAli(0, null, false), itemLine("Ball of wool ×3", StepGuide.Have.BAG), itemLine("Rope", StepGuide.Have.BAG),
+			itemLine("Onion ×2", StepGuide.Have.NONE), itemLine("Ashes", StepGuide.Have.UNKNOWN), itemLine("Redberries", StepGuide.Have.BANK));
+		GuideList.Row wig = GuideList.bagCheckRow(v, "Have Ned make a wig (3 balls of wool); buy rope too", SMALL, 200);
+		assertEquals("You have: Ball of wool ×3, Rope", flat(java.util.Collections.singletonList(wig)));
+		assertEquals("all in the bag: green", StepGuide.GOOD, wig.getLines().get(0).getLeftColor());
+		GuideList.Row paste = GuideList.bagCheckRow(v, "Aggie: get skin paste (ashes, redberries, flour, water)", SMALL, 400);
+		assertEquals("in the bank: Redberries · not checked: Ashes", flat(java.util.Collections.singletonList(paste)));
+		assertEquals("something is not in the bag: not green", GuideList.MUTED, paste.getLines().get(0).getLeftColor());
+		GuideList.Row dye = GuideList.bagCheckRow(v, "Dye the wig yellow (Aggie: 2 onions + 5 gp)", SMALL, 400);
+		assertEquals("still needed: Onion ×2", flat(java.util.Collections.singletonList(dye)));
+		assertNull("a line that names no item has no row", GuideList.bagCheckRow(v, "Talk to Leela (east of Draynor Village)", SMALL, 200));
+		assertFalse("not a button", wig.getAction().isClickable());
+	}
+
+	@Test
+	public void theOpenCardShowsTheBagCheckUnderTheStep_theClosedCardDoesNot()
+	{
+		StepGuide.View v = princeAli(1, null, false);
+		String closed = flat(GuideList.expandedRows(v, 0, FM, SMALL, OsrsPathGuideOverlay.WIDTH, false));
+		assertFalse(closed, closed.contains("still needed"));
+		String open = flat(GuideList.expandedRows(v, GuideList.EXPAND_STEPS, FM, SMALL, OsrsPathGuideOverlay.WIDTH, false));
+		assertTrue(open, open.contains("still needed: Onion ×2"));
+		String first = flat(GuideList.expandedRows(princeAli(0, null, false), GuideList.EXPAND_STEPS, FM, SMALL, OsrsPathGuideOverlay.WIDTH, false));
+		assertTrue(first, first.contains("Details: Have Ned make a wig (3 balls of wool)"));
+		assertFalse("rope is in the bag, so the errand is gone from the details: " + first, first.contains("Details: Have Ned make a wig (3 balls of wool); buy rope too"));
+		assertTrue(first, first.contains("You have: Ball of wool ×3, Rope"));
+	}
+
 	@Test
 	public void theCompactListIsOnByDefault_underANewStableKey() throws Exception
 	{

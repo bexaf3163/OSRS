@@ -31,6 +31,7 @@ import { InGamePanel } from './InGamePanel';
 import { TravelPlan } from './TravelPlan';
 import { StepTraining } from './TrainingCard';
 import { BranchSuggestions } from './BranchSuggestions';
+import { TravelTip } from './TravelTip';
 
 type TabKey = 'prep' | 'gear' | 'food' | 'route' | 'plan';
 
@@ -145,6 +146,7 @@ export function StepStatus({ step }: { step: Step }) {
         </span>
       </div>
       {recovering && <RecoveryBanner step={step} rec={recovering} />}
+      {!recovering && <TravelTip step={step} />}
       {sent === 'offline' && <p className="small muted" role="status">RuneLite bridge offline{link === 'online' ? ' or refused' : ''}. Start RuneLite with the OSRS Path Bridge plugin.</p>}
       {detour ? (
         <p className="small status-arrow">🧭 The arrow leads to: {detour.label}</p>

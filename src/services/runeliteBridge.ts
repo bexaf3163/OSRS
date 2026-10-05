@@ -40,6 +40,8 @@ export interface BridgeStatus {
   player: string | null;
   /** Where the character stands (protocol 5): game coordinates; null — unknown. */
   pos: { x: number; y: number; plane: number } | null;
+  /** Seconds until the Home Teleport can be cast again (plugin 2.37+); null — it is ready, or the plugin does not know. */
+  homeTeleportSeconds: number | null;
 }
 
 /**
@@ -365,6 +367,11 @@ export function parsePos(raw: unknown): { x: number; y: number; plane: number } 
   return ok(r.x, 0, 20000) && ok(r.y, 0, 20000) && ok(r.plane, 0, 3) ? { x: r.x, y: r.y, plane: r.plane } : null;
 }
 
+/** The seconds left of a cooldown: a whole number up to an hour (the Home Teleport is half an hour); anything else is unknown. */
+export function parseSeconds(raw: unknown): number | null {
+  return typeof raw === 'number' && Number.isInteger(raw) && raw > 0 && raw <= 3600 ? raw : null;
+}
+
 /** The character name: up to 12 characters (as in the game), without control characters. */
 export function parsePlayer(raw: unknown): string | null {
   return typeof raw === 'string' && /^[\w \-\u00a0]{1,12}$/.test(raw) ? raw.replace(/\u00a0/g, ' ') : null;
@@ -466,7 +473,7 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
   const res = await t.request('GET', '/status');
   const d = res.data as {
     status?: string; inGame?: boolean; stats?: unknown; shortestPath?: unknown; activeStepId?: unknown; protocol?: unknown; pluginVersion?: unknown;
-    navTarget?: unknown; xp?: unknown; questsDone?: unknown; player?: unknown; pos?: unknown;
+    navTarget?: unknown; xp?: unknown; questsDone?: unknown; player?: unknown; pos?: unknown; homeTeleportSeconds?: unknown;
   } | undefined;
   const online = res.ok && d?.status === 'ok';
   return {
@@ -483,6 +490,7 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
     questsDone: online ? parseQuests(d?.questsDone) : null,
     player: online ? parsePlayer(d?.player) : null,
     pos: online ? parsePos(d?.pos) : null,
+    homeTeleportSeconds: online ? parseSeconds(d?.homeTeleportSeconds) : null,
   };
 }
 

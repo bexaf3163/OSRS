@@ -23,7 +23,7 @@ export function AccountSync({ compact = false }: { compact?: boolean }) {
   const markUnverified = () => {
     let p = progress;
     for (const c of unverified) {
-      p = withStep(p, c.step.id, 'done');
+      p = withStep(p, c.step.id, 'done', { stamp: false });
       if (stepById.get(c.step.id)?.updatedInV2) p = withReviewed(p, [c.step.id]);
     }
     replace(p, `Earlier steps marked: ${unverified.length}`);
@@ -32,7 +32,7 @@ export function AccountSync({ compact = false }: { compact?: boolean }) {
   const apply = () => {
     let p = progress;
     for (const c of list) {
-      p = withStep(p, c.step.id, 'done');
+      p = withStep(p, c.step.id, 'done', { stamp: false });
       if (stepById.get(c.step.id)?.updatedInV2) p = withReviewed(p, [c.step.id]);
     }
     replace(p, `🎮 Steps marked from the game: ${list.length}`);

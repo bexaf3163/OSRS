@@ -336,6 +336,149 @@ final class GuideList
 		return out.toString().replaceAll("\\s+", " ").replaceAll("\\s+([,.;:!?])", "$1").trim();
 	}
 
+	// ------------------------------------------------------------------------------------------------------------
+	// Stage lines that know the bag. A stage line is the quest's fixed walkthrough text ("buy rope too"), so it cannot know what you already hold. The
+	// item list of the step can, so the items a line talks about are found in it and the line is read against the bag. Nothing is rewritten on a guess:
+	// only a clause whose every mentioned item is in the bag is dropped, and the bag check is a separate row.
+
+	private static final java.util.regex.Pattern WORD = java.util.regex.Pattern.compile("[\\p{L}\\p{N}']+");
+	/** A clause that starts with one of these is an errand ("buy rope too"): it can be done already. */
+	private static final java.util.regex.Pattern ERRAND = java.util.regex.Pattern.compile("^(buy|get|bring|take|grab|pick up|purchase|fetch|obtain|collect)\\b.*", java.util.regex.Pattern.CASE_INSENSITIVE);
+
+	/** The item name without its count: "Ball of wool ×3" is "Ball of wool". */
+	static String baseName(String name)
+	{
+		return name == null ? "" : name.replaceAll("\\s*[×x]\\s*\\d+\\+?\\s*$", "").trim();
+	}
+
+	/** Words in lower case, a plural "s" cut from words longer than three letters (the same cut on both sides): "3 balls of wool" holds "Ball of wool". */
+	static List<String> stems(String s)
+	{
+		List<String> out = new ArrayList<>();
+		java.util.regex.Matcher m = WORD.matcher(s == null ? "" : s.toLowerCase(java.util.Locale.ROOT));
+		while (m.find())
+		{
+			String w = m.group();
+			out.add(w.length() > 3 && w.endsWith("s") ? w.substring(0, w.length() - 1) : w);
+		}
+		return out;
+	}
+
+	/** Whether the text names the item: all the words of the item, in a row. */
+	static boolean mentions(String text, String itemName)
+	{
+		List<String> t = stems(text);
+		List<String> n = stems(baseName(itemName));
+		if (n.isEmpty())
+		{
+			return false;
+		}
+		for (int i = 0; i + n.size() <= t.size(); i++)
+		{
+			if (t.subList(i, i + n.size()).equals(n))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/** The items of the step that a line names. An item obtained during the step ("in step") is not an errand to check. */
+	static List<StepGuide.ItemLine> mentioned(StepGuide.View v, String text)
+	{
+		List<StepGuide.ItemLine> out = new ArrayList<>();
+		for (StepGuide.ItemLine i : v.getItems())
+		{
+			if (i.getHave() != StepGuide.Have.IN_STEP && mentions(text, i.getName()))
+			{
+				out.add(i);
+			}
+		}
+		return out;
+	}
+
+	/**
+	 * The full step text with the errands that are already done cut out: after a ";" a clause that starts with buy, get, bring... and whose every named item is in
+	 * the bag goes ("; buy rope too" when the rope is in the bag). A clause that names no item of the step, or names one that is not in the bag, stays.
+	 */
+	static String withoutDoneErrands(StepGuide.View v, String full)
+	{
+		if (full == null || full.indexOf(';') < 0)
+		{
+			return full == null ? "" : full;
+		}
+		String[] parts = full.split(";");
+		StringBuilder out = new StringBuilder(parts[0].trim());
+		for (int i = 1; i < parts.length; i++)
+		{
+			String clause = parts[i].trim();
+			List<StepGuide.ItemLine> named = mentioned(v, clause);
+			boolean done = ERRAND.matcher(clause).matches() && !named.isEmpty() && named.stream().allMatch(GuideList::got);
+			if (!done)
+			{
+				out.append("; ").append(clause);
+			}
+		}
+		return out.toString();
+	}
+
+	/**
+	 * What the bag says about the items a step line names: "You have: Rope · in the bank: Bronze bar · still needed: Onion ×2 · not checked: Ashes". Every state is
+	 * said apart, so an item that was not checked is never called missing. null when the line names none of the step's items.
+	 */
+	static Row bagCheckRow(StepGuide.View v, String lineText, FontMetrics small, int inner)
+	{
+		List<String> have = new ArrayList<>();
+		List<String> bank = new ArrayList<>();
+		List<String> need = new ArrayList<>();
+		List<String> unknown = new ArrayList<>();
+		for (StepGuide.ItemLine i : mentioned(v, lineText))
+		{
+			switch (i.getHave())
+			{
+				case BAG:
+				case DONE:
+					have.add(i.getName());
+					break;
+				case BANK:
+					bank.add(i.getName());
+					break;
+				case NONE:
+					need.add(i.getName());
+					break;
+				case UNKNOWN:
+					unknown.add(i.getName());
+					break;
+				default:
+					break;
+			}
+		}
+		List<String> parts = new ArrayList<>();
+		if (!have.isEmpty())
+		{
+			parts.add("You have: " + String.join(", ", have));
+		}
+		if (!bank.isEmpty())
+		{
+			parts.add("in the bank: " + String.join(", ", bank));
+		}
+		if (!need.isEmpty())
+		{
+			parts.add("still needed: " + String.join(", ", need));
+		}
+		if (!unknown.isEmpty())
+		{
+			parts.add("not checked: " + String.join(", ", unknown));
+		}
+		if (parts.isEmpty())
+		{
+			return null;
+		}
+		String text = String.join(" · ", parts);
+		boolean allGood = bank.isEmpty() && need.isEmpty() && unknown.isEmpty();
+		return new Row(clip("", text, allGood ? StepGuide.GOOD : MUTED, small, inner, 2, true), Action.NONE, text);
+	}
+
 	/** The step on the cursor of the stage, or null if the list has no stage or it is done. */
 	private static ActiveTarget.StageLine nowLine(StepGuide.View v)
 	{
@@ -414,9 +557,19 @@ final class GuideList
 		List<Row> full = rows(v, false, fm, small, width, terse);
 		ActiveTarget.StageLine now = nowLine(v);
 		List<Row> extra = new ArrayList<>();
-		if (now != null && !concise(now.shown()).equals(now.shown()))
+		if (now != null)
 		{
-			extra.add(new Row(clip("", "Details: " + now.shown(), MUTED, small, OverlayText.inner(width), 2, true), Action.NONE, now.getT()));
+			// The recipe of the step, without the errands the bag has already done; and what the bag says about the items it names.
+			String detail = withoutDoneErrands(v, now.shown());
+			if (!concise(now.shown()).equals(detail))
+			{
+				extra.add(new Row(clip("", "Details: " + detail, MUTED, small, OverlayText.inner(width), 2, true), Action.NONE, now.getT()));
+			}
+			Row bag = bagCheckRow(v, now.shown(), small, OverlayText.inner(width));
+			if (bag != null)
+			{
+				extra.add(bag);
+			}
 		}
 		for (int i = 1; i < full.size(); i++)
 		{

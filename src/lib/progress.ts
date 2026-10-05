@@ -127,6 +127,15 @@ export function normalizeProgress(raw: unknown, known: Known): Normalized | null
   // Notes that are not a string (or are empty) were dropped on reading: we count them too.
   if (!migrated && isObject(raw.notes)) dropped += Object.keys(raw.notes).length - Object.keys(notes).length;
   if (typeof raw.updatedAt === 'string' && !Number.isNaN(Date.parse(raw.updatedAt))) p.updatedAt = raw.updatedAt;
+  // The times of completions: only for known steps that are done, and only real dates.
+  if (isObject(raw.doneAt)) {
+    const doneAt: Record<string, string> = {};
+    for (const [id, at] of Object.entries(raw.doneAt)) {
+      const sid = fromV2 ? V3_FROM_V2[id] ?? id : id;
+      if (!migrated && known.stepIds.has(sid) && p.steps[sid] === 'done' && typeof at === 'string' && !Number.isNaN(Date.parse(at))) doneAt[sid] = at;
+    }
+    if (Object.keys(doneAt).length) p.doneAt = doneAt;
+  }
 
   if (!migrated) {
     if (raw.gameMode === 'f2p' || raw.gameMode === 'members') p.gameMode = raw.gameMode;
@@ -220,11 +229,17 @@ const touch = (p: Progress): Progress => ({ ...p, updatedAt: new Date().toISOStr
 const without = (list: string[] | undefined, id: string) => (list ?? []).filter((x) => x !== id);
 
 /** Marking a step. A step done again clears "points kept": they are counted from the mark again. */
-export function withStep(p: Progress, id: string, status: StepStatus | null): Progress {
+export function withStep(p: Progress, id: string, status: StepStatus | null, opts: { stamp?: boolean } = {}): Progress {
   const steps = { ...p.steps };
   if (status) steps[id] = status;
   else delete steps[id];
   const next: Progress = { ...p, steps };
+  // The time of a real completion, for the splits. Skipping or unmarking drops it; a bulk mark (stamp: false) has no time of its own.
+  const doneAt = { ...p.doneAt };
+  if (status === 'done' && opts.stamp !== false) doneAt[id] = new Date().toISOString();
+  else if (status !== 'done') delete doneAt[id];
+  if (Object.keys(doneAt).length) next.doneAt = doneAt;
+  else delete next.doneAt;
   if (status === 'done' && p.qpKept?.includes(id)) next.qpKept = without(p.qpKept, id);
   return touch(next);
 }

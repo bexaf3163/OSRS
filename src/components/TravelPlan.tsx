@@ -8,7 +8,8 @@ import type { Step } from '../types';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
 import { usePlayerState } from '../playerStateContext';
-import { nameKey } from '../lib/checklist';
+import { checkStatus } from '../services/runeliteBridge';
+import { travelInputOf } from '../lib/travelInput';
 import { stepPlaces } from '../lib/stepPlaces';
 import { dist, travelOptions, TRANSPORT, walkText, type Availability, type Point, type TravelOption } from '../lib/travel';
 
@@ -17,9 +18,10 @@ const BADGE: Record<Availability, string> = { ready: '✓ available now', maybe:
 export function TravelPlan({ step }: { step: Step }) {
   const { progress, mode } = useStore();
   const { prices } = usePlayerState();
-  const { enabled, state, inGame, stats, gear, owned, locate, navigate } = useBridge();
+  const { enabled, state, inGame, stats, gear, owned, navigate } = useBridge();
   const places = useMemo(() => stepPlaces(step), [step]);
   const [pos, setPos] = useState<Point | null>(null);
+  const [homeCooldown, setHomeCooldown] = useState<number | null>(null);
   const [asked, setAsked] = useState(false);
   const [busy, setBusy] = useState(false);
   const [to, setTo] = useState(0);
@@ -28,18 +30,17 @@ export function TravelPlan({ step }: { step: Step }) {
 
   const ask = async () => {
     setBusy(true);
-    setPos(await locate());
+    // One reply gives the place and the Home Teleport cooldown (plugin 2.37+).
+    const st = await checkStatus();
+    const live = st.online && st.inGame;
+    setPos(live ? st.pos : null);
+    setHomeCooldown(live ? st.homeTeleportSeconds : null);
     setAsked(true);
     setBusy(false);
   };
 
-  const levels = { ...progress.levels, ...(stats ?? {}) };
-  const carried = gear && (gear.equipment || gear.inventory) ? [...(gear.equipment ?? []), ...(gear.inventory ?? [])] : null;
   const options: TravelOption[] = pos && pos.plane === 0 && target.plane === 0
-    ? travelOptions({
-      from: pos, to: target, levels, carried, bankSeen: Boolean(owned?.bankSeen),
-      bank: owned?.bankSeen ? bankCounts(owned.items.values()) : null, priceOf: prices.priceOf, members: mode === 'members',
-    })
+    ? travelOptions(travelInputOf({ from: pos, to: target, levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: homeCooldown }))
     : [];
 
   return (
@@ -102,13 +103,6 @@ export function TravelPlan({ step }: { step: Step }) {
 }
 
 /** The arrow in the game — to the canoe station this variant starts from. */
-/** What the bank holds, by name key: the planner looks for tablets there before it suggests buying them. */
-function bankCounts(items: Iterable<{ name: string; bank?: number }>): Map<string, number> {
-  const out = new Map<string, number>();
-  for (const i of items) if ((i.bank ?? 0) > 0) out.set(nameKey(i.name), i.bank!);
-  return out;
-}
-
 async function navigateToStation(o: TravelOption, navigate: ReturnType<typeof useBridge>['navigate']): Promise<void> {
   const name = o.title.replace(/^Canoe\s+/, '').split(' → ')[0];
   const station = TRANSPORT.canoe.stations.find((s) => s.name === name);

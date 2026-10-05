@@ -2618,6 +2618,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		Player me = client.getLocalPlayer();
 		if (me != null && client.getGameState() == GameState.LOGGED_IN)
 		{
+			if (server != null && config.shareStats())
+			{
+				// Two integer reads: the app shows "Home Teleport ready in N min".
+				server.setTeleportMarks(client.getVarpValue(TeleportCooldown.VARP_HOME), client.getVarpValue(TeleportCooldown.VARP_MINIGAME));
+			}
 			shareAccount(me);
 			WorldPoint pos = me.getWorldLocation();
 			// Everything about the player's place only when they changed tile, not every tick.

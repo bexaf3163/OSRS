@@ -102,6 +102,8 @@ export interface TravelInput {
   priceOf?: (name: string) => number | undefined;
   /** A members account or world: false locks the members-only ways, null or absent means unknown. */
   members?: boolean | null;
+  /** Seconds until the Home Teleport can be cast again (from the game); null or absent means it is ready or unknown. */
+  homeCooldownSec?: number | null;
 }
 
 const count = (items: readonly GearItem[], names: readonly string[]): number =>
@@ -116,7 +118,12 @@ const STAFF_OF: Record<string, string[]> = {
 const runeName = (rune: string): string => `${rune[0].toUpperCase()}${rune.slice(1)} rune`;
 
 function teleportNeeds(t: Teleport, inp: TravelInput): { needs: Need[]; availability: Availability } {
-  if (t.kind === 'home') return { needs: [], availability: 'ready' };
+  if (t.kind === 'home') {
+    // The game's cooldown: a locked way with the time left, not a promise the button will work.
+    const left = inp.homeCooldownSec ?? 0;
+    if (left > 0) return { needs: [{ text: `Home Teleport is on cooldown: ready in ${cooldownText(left)}`, ok: false }], availability: 'locked' };
+    return { needs: [], availability: 'ready' };
+  }
   if (t.kind === 'item') {
     const have = inp.carried ? count(inp.carried, t.items ?? []) > 0 : null;
     // Not on hand and the bank was opened: it is not anywhere nearby; the bank was not opened: it may be lying there.
@@ -148,6 +155,11 @@ function teleportNeeds(t: Teleport, inp: TravelInput): { needs: Need[]; availabi
     if (ok === null) unsure = true;
   }
   return { needs, availability: locked ? 'locked' : unsure ? 'maybe' : 'ready' };
+}
+
+/** "12 min" or "45 s". */
+export function cooldownText(seconds: number): string {
+  return seconds < 90 ? `${Math.max(1, Math.round(seconds))} s` : `${Math.ceil(seconds / 60)} min`;
 }
 
 const needFrom = (have: boolean | null, bankSeen: boolean): boolean | null => (have === null ? null : have ? true : bankSeen ? false : null);

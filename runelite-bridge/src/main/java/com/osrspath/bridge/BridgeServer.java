@@ -73,7 +73,7 @@ public final class BridgeServer
 	 */
 	static final int PROTOCOL = 6;
 	/** The plugin version, the same as the app it ships with in one exe. */
-	static final String PLUGIN_VERSION = "2.36.0";
+	static final String PLUGIN_VERSION = "2.37.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	/** The whole snapshot: the step with the quest stages, shopping and plan in one body. */
@@ -160,6 +160,9 @@ public final class BridgeServer
 	/** Where the character stands: {"x":...,"y":...,"plane":...}; only in /status (not broadcast, it changes with every step). Since protocol 5. */
 	private volatile Map<String, Integer> pos;
 	private volatile boolean shortestPath;
+	/** The moment of the last home and minigame teleport as the game keeps it (minutes since the epoch, 0 = never); only for /status. */
+	private volatile int lastHomeTeleport;
+	private volatile int lastMinigameTeleport;
 	/** The current temporary target (like NAV_SET) or null, for /status. */
 	private volatile JsonObject navTarget;
 	/** The last OWNED event, repeated to new connections. */
@@ -277,6 +280,13 @@ public final class BridgeServer
 		p.put("y", y);
 		p.put("plane", plane);
 		pos = p;
+	}
+
+	/** The game's marks of the last home and minigame teleport; /status turns them into the seconds left (omitted when ready or unknown). */
+	public void setTeleportMarks(int home, int minigame)
+	{
+		lastHomeTeleport = home;
+		lastMinigameTeleport = minigame;
 	}
 
 	/** The character name (since protocol 5); comes in the STATUS event. */
@@ -530,6 +540,18 @@ public final class BridgeServer
 					status.put("bankCoins", g == null ? null : g.get("bankCoins"));
 					status.put("carriedValue", g == null ? null : g.get("carriedValue"));
 					status.put("bankValue", g == null ? null : g.get("bankValue"));
+					// Teleport cooldowns in seconds left; absent when the teleport is ready or the game's value does not look like a time (never invented).
+					long nowSeconds = System.currentTimeMillis() / 1000;
+					int homeLeft = inGame ? TeleportCooldown.remainingSeconds(lastHomeTeleport, nowSeconds, TeleportCooldown.HOME_MINUTES) : 0;
+					int minigameLeft = inGame ? TeleportCooldown.remainingSeconds(lastMinigameTeleport, nowSeconds, TeleportCooldown.MINIGAME_MINUTES) : 0;
+					if (homeLeft > 0)
+					{
+						status.put("homeTeleportSeconds", homeLeft);
+					}
+					if (minigameLeft > 0)
+					{
+						status.put("minigameTeleportSeconds", minigameLeft);
+					}
 					// Version handshake: the app checks the protocol and asks to update the plugin if it is older.
 					status.put("protocol", PROTOCOL);
 					status.put("pluginVersion", PLUGIN_VERSION);

@@ -6,6 +6,7 @@ import { isReached } from '../lib/goals';
 import { levelOf } from '../lib/progress';
 import { stageQuestPoints } from '../lib/qp';
 import { IconCheck } from '../components/Icons';
+import { SplitsCard } from '../components/SplitsCard';
 
 export function GoalsPage() {
   const { progress, qp, steps } = useStore();
@@ -88,6 +89,7 @@ export function GoalsPage() {
       {goals.note && <p className="muted">{goals.note}</p>}
       <p className="muted small">Quest points are counted by the V2 route; the levels are a guideline for stages 1–6 (F2P).</p>
       <p className="muted small">A goal like "50–60" counts as reached from the lower bound. Levels are entered on the "Skills" tab or right in the steps.</p>
+      <SplitsCard />
     </div>
   );
 }

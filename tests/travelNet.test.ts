@@ -1,8 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import {
-  EXCHANGE, NET, OPPORTUNISTIC_MAX_COST, OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MIN_SAVING_TILES, TRANSPORT, dist, travelOptions, type TravelInput, type TravelOption,
+  EXCHANGE, NET, OPPORTUNISTIC_MAX_COST, cooldownText, OPPORTUNISTIC_MAX_DETOUR_TILES, OPPORTUNISTIC_MIN_SAVING_TILES, TRANSPORT, dist, travelOptions, type TravelInput, type TravelOption,
 } from '../src/lib/travel';
 import { nameKey } from '../src/lib/checklist';
+import { parseSeconds } from '../src/services/runeliteBridge';
 import type { GearItem } from '../src/services/runeliteBridge';
 
 const at = (x: number, y: number, plane = 0) => ({ x, y, plane });
@@ -183,5 +184,38 @@ describe('opportunistic routing: fetch the teleport first when it is clearly wor
     }
     const rank = (o: TravelOption) => (o.availability === 'ready' ? 0 : o.availability === 'maybe' ? 1 : 2);
     for (let i = 1; i < opts.length; i++) expect(rank(opts[i - 1]) <= rank(opts[i]), `${opts[i - 1].id} before ${opts[i].id}`).toBe(true);
+  });
+});
+
+describe('Home Teleport cooldown from the game', () => {
+  // Draynor to Lumbridge Castle: far enough that Home Teleport is worth listing.
+  const far = { from: at(3700, 3500), to: at(3222, 3218) };
+
+  it('ready: a plain ready option; on cooldown: locked, with the time left', () => {
+    const ready = find(run({ ...far }), 'lumbridge-home')!;
+    expect(ready.availability).toBe('ready');
+    const wait = find(run({ ...far, homeCooldownSec: 12 * 60 }), 'lumbridge-home')!;
+    expect(wait.availability).toBe('locked');
+    expect(wait.needs[0]).toMatchObject({ ok: false });
+    expect(wait.needs[0].text).toContain('ready in 12 min');
+  });
+
+  it('unknown or zero is not a cooldown: it stays ready', () => {
+    for (const v of [null, undefined, 0]) expect(find(run({ ...far, homeCooldownSec: v }), 'lumbridge-home')!.availability).toBe('ready');
+  });
+
+  it('the time is said in minutes, or in seconds when it is nearly over', () => {
+    expect(cooldownText(1800)).toBe('30 min');
+    expect(cooldownText(61 * 1)).toBe('61 s');
+    expect(cooldownText(89)).toBe('89 s');
+    expect(cooldownText(90)).toBe('2 min');
+    expect(cooldownText(0)).toBe('1 s');
+  });
+});
+
+describe('the cooldown field from /status', () => {
+  it('a whole number of seconds up to an hour; anything else is unknown', () => {
+    expect(parseSeconds(600)).toBe(600);
+    for (const bad of [0, -1, 3601, 1.5, '600', null, undefined, NaN, {}]) expect(parseSeconds(bad), String(bad)).toBeNull();
   });
 });
