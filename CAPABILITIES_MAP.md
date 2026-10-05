@@ -424,7 +424,7 @@ A turned-off feature does nothing at all (not just hidden); the matching behavio
 
 **RuneLite events subscribed by `OsrsPathBridgePlugin` (24 handlers):** `onConfigChanged`, `onPluginChanged` (Shortest Path detection), `onPostMenuSort` (menu tooltip over the list), `onNpcSpawned/Changed/Despawned`, `onGameObjectSpawned/Despawned`, `onWallObjectSpawned/Despawned`, `onDecorativeObjectSpawned/Despawned`, `onGroundObjectSpawned/Despawned` (highlight collection), `onGameStateChanged`, `onActorDeath`, `onGameTick` (cursor, HUD, radar, watchdog, completion checks), `onStatChanged`, `onItemContainerChanged`, `onGrandExchangeOfferChanged`, `onChatMessage`, `onWidgetLoaded`, `onMenuOptionClicked`, `onVarbitChanged`. Overlays registered: HUD, guide list, big arrow, world, widget, item, danger, shop card, inventory check, Grand Exchange helper, debug badge.
 
-### 3.3 Configuration keys (`OsrsPathBridgeConfig.java`, 36 items in 3 sections: "In-game helper", "Places, radar, pace", "Developer")
+### 3.3 Configuration keys (`OsrsPathBridgeConfig.java`, 37 items in 3 sections: "In-game helper", "Places, radar, pace", "Developer")
 
 Section ids in the table: `companion` = "In-game helper", `helpers` = "Places, radar, pace", `developer` = "Developer"; `general` = items outside a section.
 
@@ -442,6 +442,7 @@ Section ids in the table: `companion` = "In-game helper", `helpers` = "Places, r
 | `guideCollapsed` | general | (hidden state) | boolean | `false` | The 'What you need' list is collapsed to one line; changed by clicking its heading |
 | `hudOpacity` | companion | HUD background | int | `75` | Opacity of the helper plates' background, in percent |
 | `hudLarge` | companion | Large HUD text | boolean | `false` | Enlarge the text and width of the helper plates by a quarter |
+| `overlayTheme` | companion | Plate style | enum | `GLASS` | Glass (frosted card, state dot, soft glow) or Classic (flat card with a coloured strip); added in 2.32.0 |
 | `showChecklist` | companion | Departure check at the bank | boolean | `true` | With the bank open: which of the step's items are already in the bag and which to take. What is needed is highlighted in the bank |
 | `bigArrow` | companion | Big arrow | boolean | `true` | A large arrow at the top of the screen: it turns with the camera and shows where to go and how many tiles. Draggable with Alt |
 | `arrowSize` | companion | Size | ArrowSize | `MEDIUM` | Size of the big arrow: small, medium or large, to fit the window and screen |

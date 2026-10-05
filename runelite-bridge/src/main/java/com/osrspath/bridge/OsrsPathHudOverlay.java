@@ -149,7 +149,7 @@ class OsrsPathHudOverlay extends OverlayPanel
 			plugin.uiShown("hud", plain(s));
 		}
 		plugin.hudShown(true);
-		OverlayCard.paint(g, last.width, last.height, accent(s), config.hudOpacity());
+		OverlayCard.paint(g, last.width, last.height, accent(s), config.hudOpacity(), config.overlayTheme());
 		Dimension d = super.render(g);
 		last = d == null ? new Dimension() : d;
 		return d;

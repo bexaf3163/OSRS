@@ -169,6 +169,38 @@ public interface OsrsPathBridgeConfig extends Config
 		return false;
 	}
 
+	/** The look of the helper plates: the earlier flat card with a coloured strip, or the frosted glass card with a state dot and glow. */
+	enum OverlayTheme
+	{
+		CLASSIC("Classic"),
+		GLASS("Glass");
+
+		private final String label;
+
+		OverlayTheme(String label)
+		{
+			this.label = label;
+		}
+
+		@Override
+		public String toString()
+		{
+			return label;
+		}
+	}
+
+	@ConfigItem(
+		keyName = "overlayTheme",
+		name = "Plate style",
+		description = "Look of the helper plates: Glass is a frosted card with a state dot and a soft glow, Classic is the earlier flat card with a coloured strip. Only the drawing changes, not the text or the sizes",
+		section = companion,
+		position = 14
+	)
+	default OverlayTheme overlayTheme()
+	{
+		return OverlayTheme.GLASS;
+	}
+
 	@ConfigItem(
 		keyName = "showChecklist",
 		name = "Departure check at the bank",

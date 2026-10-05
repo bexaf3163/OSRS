@@ -29,6 +29,15 @@ final class OverlayCard
 	private static final Color BORDER = new Color(255, 255, 255, 36);
 	private static final Color TRACK = new Color(255, 255, 255, 38);
 
+	/** The glass style: flat fill, never more see-through than this (of 255), a round corner, and the state dot in the left gutter of the text. */
+	static final int GLASS_MIN_ALPHA = 190;
+	static final int GLASS_RADIUS = 14;
+	private static final Color GLASS_FILL = new Color(18, 22, 30);
+	private static final Color GLASS_HIGHLIGHT = new Color(255, 255, 255, 30);
+	static final int DOT = 5;
+	static final int DOT_X = 3;
+	static final int DOT_Y = 11;
+
 	/** State accents: the same colours as the plate text. */
 	static final Color GOLD = OsrsPathHudOverlay.TITLE;
 	static final Color GREEN = OsrsPathHudOverlay.GOOD;
@@ -53,6 +62,12 @@ final class OverlayCard
 	/** A card of size w x h from the top-left corner (RuneLite has already moved the canvas to the plate). */
 	static void paint(Graphics2D g, int w, int h, Color accent, int opacityPercent)
 	{
+		paint(g, w, h, accent, opacityPercent, OsrsPathBridgeConfig.OverlayTheme.CLASSIC);
+	}
+
+	/** The same card in the chosen style. The text and its padding do not depend on the style, so the layout is the same. */
+	static void paint(Graphics2D g, int w, int h, Color accent, int opacityPercent, OsrsPathBridgeConfig.OverlayTheme theme)
+	{
 		if (w <= 2 || h <= 2)
 		{
 			return;
@@ -61,6 +76,11 @@ final class OverlayCard
 		try
 		{
 			c.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			if (theme == OsrsPathBridgeConfig.OverlayTheme.GLASS)
+			{
+				paintGlass(c, w, h, accent, opacityPercent);
+				return;
+			}
 			int a = alpha(opacityPercent);
 			Shape card = new RoundRectangle2D.Float(0.5f, 0.5f, w - 1, h - 1, RADIUS, RADIUS);
 			c.setPaint(new GradientPaint(0, 0, withAlpha(TOP, a), 0, h, withAlpha(BOTTOM, a)));
@@ -79,6 +99,38 @@ final class OverlayCard
 		finally
 		{
 			c.dispose();
+		}
+	}
+
+	/**
+	 * The glass card: a flat translucent fill (never below GLASS_MIN_ALPHA, so the text stays readable over a bright scene), a soft wash of the state
+	 * colour from the top, a 1 px highlight on the top edge, a border tinted by the state, and a dot with a halo in the left gutter instead of the strip.
+	 * Java2D has no backdrop blur, so the "frost" is only the translucency.
+	 */
+	private static void paintGlass(Graphics2D c, int w, int h, Color accent, int opacityPercent)
+	{
+		int a = Math.max(alpha(opacityPercent), GLASS_MIN_ALPHA);
+		Shape card = new RoundRectangle2D.Float(0.5f, 0.5f, w - 1, h - 1, GLASS_RADIUS, GLASS_RADIUS);
+		c.setColor(withAlpha(GLASS_FILL, a));
+		c.fill(card);
+		c.setClip(card);
+		if (accent != null)
+		{
+			c.setPaint(new GradientPaint(0, 0, withAlpha(accent, 40), 0, Math.max(1, h * 0.8f), withAlpha(accent, 0)));
+			c.fillRect(0, 0, w, h);
+		}
+		c.setColor(GLASS_HIGHLIGHT);
+		c.fillRect(GLASS_RADIUS / 2, 1, Math.max(0, w - GLASS_RADIUS), 1);
+		c.setClip(null);
+		c.setColor(accent == null ? BORDER : withAlpha(accent, 95));
+		c.setStroke(new BasicStroke(1f));
+		c.draw(card);
+		if (accent != null)
+		{
+			c.setColor(withAlpha(accent, 60));
+			c.fillOval(DOT_X - 2, DOT_Y - 2, DOT + 4, DOT + 4);
+			c.setColor(accent);
+			c.fillOval(DOT_X, DOT_Y, DOT, DOT);
 		}
 	}
 

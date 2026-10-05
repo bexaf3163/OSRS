@@ -130,7 +130,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			}
 			plugin.uiShown("guide", GuideList.plain(shown));
 		}
-		OverlayCard.paint(g, last.width, last.height, accent(v), config.hudOpacity());
+		OverlayCard.paint(g, last.width, last.height, accent(v), config.hudOpacity(), config.overlayTheme());
 		Dimension d = super.render(g);
 		last = d == null ? new Dimension() : d;
 		remember(d);
