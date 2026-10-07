@@ -2993,7 +2993,7 @@
       {
         "nameEn": "Bones",
         "amount": 25,
-        "howToGet": "For Traiborn. They drop from cows, chickens and goblins; you can hand them in in parts.",
+        "howToGet": "For Traiborn. They drop from cows, chickens and goblins. Bank everything else first: 25 bones leave almost no room in the bag. You can hand them in in parts.",
         "wikiItemId": 526,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bones.png"
       },
@@ -4634,6 +4634,13 @@
       "S5-02"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Elvarg",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3047,3205,0",
+    "mapLocation": {
+      "x": 3047,
+      "y": 3205,
+      "plane": 0,
+      "label": "Port Sarim docks: the Lady Lumbridge"
+    },
     "itemsRequired": [
       {
         "nameEn": "Anti-dragon shield",

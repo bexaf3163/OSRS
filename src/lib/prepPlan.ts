@@ -88,7 +88,7 @@ export interface PrepScore {
 export interface PrepSlots {
   /** Occupied bag slots; null means unknown (an old plugin or it has not yet sent the bag). */
   used: number | null;
-  /** How many slots what has to be taken will occupy. Items in a stack (runes, arrows, coins) take one each. */
+  /** How many slots what has to be taken, and what a quest step hands over on the way, will occupy. Items in a stack (runes, arrows, coins) take one each. */
   adding: number;
   /** Will not fit: by how many slots over 28. 0 means it fits or is unknown. */
   over: number;
@@ -401,6 +401,14 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
     if (l.where === 'UNKNOWN') continue;
     const n = Math.max(0, l.count - ((l.have.bag ?? 0) + l.have.noted));
     adding += stacks(l.name) ? (n > 0 ? 1 : 0) : n;
+  }
+  // A quest hands things over during the step (three goblin mails, map parts): they need room too, so the warning comes before the first one is picked up, not after.
+  // Not for training steps: gathered ore and logs are dropped or banked as they come.
+  if (step.type === 'quest') {
+    for (const l of byTheWay) {
+      const n = Math.max(0, l.count - ((l.have.bag ?? 0) + l.have.noted));
+      adding += stacks(l.name) ? (n > 0 ? 1 : 0) : n;
+    }
   }
   const used = state.bagSlots.known ? state.bagSlots.value : null;
   const slots: PrepSlots = { used, adding, over: used === null ? 0 : Math.max(0, used + adding - BAG_SLOTS) };

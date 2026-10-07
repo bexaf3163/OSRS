@@ -175,7 +175,7 @@ export function OneTripCard({ step, inStatus = false }: { step: Step; inStatus?:
       )}
       {slots.over > 0 && (
         <p className="notice small" role="note">
-          ⚠️ <strong>It will not all fit at once:</strong> {slots.used} of {BAG_SLOTS} bag slots used, {slots.adding} more to take — {slots.over}{' '}
+          ⚠️ <strong>It will not all fit at once:</strong> {slots.used} of {BAG_SLOTS} bag slots used, {slots.adding} more to take or collect — {slots.over}{' '}
           {slots.over === 1 ? 'slot' : 'slots'} too many. Take what this step needs now, the rest later.
         </p>
       )}
