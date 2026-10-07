@@ -70,6 +70,12 @@ final class ItemCounts
 		return Math.max(own, betterToolCount(key));
 	}
 
+	/** Exactly this item: by ID when there is one (two items can share a name), else by name; no better-tool substitutes. */
+	int exact(Integer id, String name)
+	{
+		return id != null ? byId.getOrDefault(id, 0) : byName.getOrDefault(ActiveTarget.nameKey(name), 0);
+	}
+
 	/**
 	 * An axe or pickaxe no worse than the named one: if a Bronze pickaxe is needed, Iron, Steel and above also fit. The sum over tiers from
 	 * the named one and up; a non-tool is 0. Combat "Black axe" and other names outside the pattern are not affected.

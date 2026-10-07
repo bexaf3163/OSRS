@@ -77,6 +77,6 @@ final class SmartView
 		boolean critical = s.isHealthCritical();
 		return new OsrsPathHudOverlay.State(line == null ? "OSRS Path" : line, null, null, s.isNear(), null, false,
 			s.isDangerInside() ? s.getDanger() : null, s.isDangerInside(), null, false, null,
-			critical ? s.getHealth() : null, critical, null, s.getTiles());
+			critical ? s.getHealth() : null, critical, null, s.getTiles(), s.getMissing());
 	}
 }

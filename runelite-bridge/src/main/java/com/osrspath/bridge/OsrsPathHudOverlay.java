@@ -72,25 +72,34 @@ class OsrsPathHudOverlay extends OverlayPanel
 		String action;
 		/** The distance to the target in tiles in a straight line; -1 means unknown (no target, another plane, underground). */
 		int tiles;
+		/** "⚠ Missing Item: Cabbage - Turn back!": the step ahead needs an item that is not in the bag; null means nothing is missing. */
+		String missing;
+
+		/** Without the missing-item chip, as before 2.45. */
+		State(String title, String goal, String distance, boolean near, String bag, boolean bagReady, String danger,
+			boolean dangerInside, String pacing, boolean pacingGood, String upgrade, String health, boolean healthCritical, String action, int tiles)
+		{
+			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, health, healthCritical, action, tiles, null);
+		}
 
 		/** Without the health and action warnings, as before 2.15. */
 		State(String title, String goal, String distance, boolean near, String bag, boolean bagReady, String danger,
 			boolean dangerInside, String pacing, boolean pacingGood, String upgrade)
 		{
-			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, null, false, null, -1);
+			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, null, false, null, -1, null);
 		}
 
 		State(String title, String goal, String distance, boolean near, String bag, boolean bagReady, String danger,
 			boolean dangerInside, String pacing, boolean pacingGood, String upgrade, String health, boolean healthCritical)
 		{
-			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, health, healthCritical, null, -1);
+			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, health, healthCritical, null, -1, null);
 		}
 
 		/** Without the distance in tiles, as before 2.19. */
 		State(String title, String goal, String distance, boolean near, String bag, boolean bagReady, String danger,
 			boolean dangerInside, String pacing, boolean pacingGood, String upgrade, String health, boolean healthCritical, String action)
 		{
-			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, health, healthCritical, action, -1);
+			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, health, healthCritical, action, -1, null);
 		}
 	}
 
@@ -173,20 +182,20 @@ class OsrsPathHudOverlay extends OverlayPanel
 		String goal = guideShown ? null : s.getGoal();
 		String distance = guideShown ? null : s.getDistance();
 		String bag = guideShown || s.isBagReady() ? null : s.getBag();
-		if (isBlank(title) && isBlank(goal) && isBlank(distance) && isBlank(bag) && isBlank(s.getDanger()) && isBlank(s.getHealth())
+		if (isBlank(title) && isBlank(goal) && isBlank(distance) && isBlank(bag) && isBlank(s.getDanger()) && isBlank(s.getHealth()) && isBlank(s.getMissing())
 			&& isBlank(s.getAction()) && isBlank(s.getPacing()) && isBlank(s.getUpgrade()))
 		{
 			return null;
 		}
 		return new State(title, goal, distance, s.isNear(), bag, s.isBagReady(), s.getDanger(), s.isDangerInside(), s.getPacing(),
-			s.isPacingGood(), s.getUpgrade(), s.getHealth(), s.isHealthCritical(), s.getAction(), s.getTiles());
+			s.isPacingGood(), s.getUpgrade(), s.getHealth(), s.isHealthCritical(), s.getAction(), s.getTiles(), s.getMissing());
 	}
 
 	/** The plate text in lines, for the debug log: what the player sees at the top. */
 	static String plain(State s)
 	{
 		java.util.List<String> lines = new java.util.ArrayList<>();
-		for (String t : new String[] {s.getTitle(), s.getDanger(), s.getHealth(), s.getGoal(), s.getAction(), s.getDistance(), s.getPacing(), s.getBag(), s.getUpgrade()})
+		for (String t : new String[] {s.getTitle(), s.getDanger(), s.getHealth(), s.getMissing(), s.getGoal(), s.getAction(), s.getDistance(), s.getPacing(), s.getBag(), s.getUpgrade()})
 		{
 			if (!isBlank(t))
 			{
@@ -204,7 +213,7 @@ class OsrsPathHudOverlay extends OverlayPanel
 	/** The strip colour: danger is red, a target nearby is green, the rest gold. */
 	static Color accent(State s)
 	{
-		if (s.getDanger() != null || s.isHealthCritical())
+		if (s.getDanger() != null || s.isHealthCritical() || s.getMissing() != null)
 		{
 			return OverlayCard.RED;
 		}
@@ -239,6 +248,11 @@ class OsrsPathHudOverlay extends OverlayPanel
 		if (s.getHealth() != null)
 		{
 			OverlayText.line(c, s.getHealth(), s.isHealthCritical() ? OsrsPathDangerOverlay.DANGER : WARN, fm, inner);
+		}
+		if (s.getMissing() != null)
+		{
+			// A missing item of the step ahead: red, right under the name, so the player turns back before using the wrong thing.
+			OverlayText.line(c, s.getMissing(), OsrsPathDangerOverlay.DANGER, fm, inner);
 		}
 		if (s.getGoal() != null && !s.getGoal().isEmpty())
 		{

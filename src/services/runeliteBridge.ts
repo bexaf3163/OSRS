@@ -4,7 +4,7 @@
 
 import type { MoveEvent } from '../lib/recovery';
 import type { PrepEnvelope } from '../lib/prepEnvelope';
-import type { InGameTarget, PacingSkill, StageHighlight, PlayerStats, Progress, Step, StepBranch, StepPacing } from '../types';
+import type { InGameTarget, PacingSkill, StageHighlight, StagePre, PlayerStats, Progress, Step, StepBranch, StepPacing } from '../types';
 import { desktop } from '../lib/desktop';
 import { isClosed, openAfter } from '../lib/next-step';
 import { parseAmount, preflightItems } from '../lib/checklist';
@@ -12,6 +12,7 @@ import { watchedItems } from '../lib/branching';
 import { stepMaxHit } from '../lib/foodAdvice';
 import { npcSpot, stepPlaces } from '../lib/stepPlaces';
 import { shortLine } from '../lib/shortText';
+import { BANK_SPOTS } from '../lib/preflight';
 import { summarizeBridge, type BridgeTelemetry } from '../lib/telemetryReport';
 
 export const BRIDGE_ORIGIN = 'http://127.0.0.1:38282';
@@ -204,9 +205,11 @@ export interface StepGuidePayload {
 }
 
 export interface StagePayload {
+  /** The banks of the surface, for the plugin to turn the arrow to the nearest one when a missing item is in the bank. */
+  banks?: { x: number; y: number; plane: number; label: string }[];
   kind: 'varp' | 'varbit';
   id: number;
-  stages: { at: number; steps: { t: string; s?: string; x?: number; y?: number; plane?: number; has?: string; need?: string; hl?: StageHighlight; k?: string }[]; /** The index of the point in places. */ go?: number; items?: { name: string; id?: number; count?: number; where?: string; inStep?: boolean }[] }[];
+  stages: { at: number; steps: { t: string; s?: string; x?: number; y?: number; plane?: number; has?: string; need?: string; hl?: StageHighlight; k?: string; pre?: StagePre[] }[]; /** The index of the point in places. */ go?: number; items?: { name: string; id?: number; count?: number; where?: string; inStep?: boolean }[] }[];
 }
 
 /** The RuneLite panel: the step's items with "where to get" and the points — the main one (NPC, start) and places from the step map. */
@@ -273,11 +276,12 @@ export function stagePayload(step: Step, places: StepGuidePayload['places']): St
       }
     }
     stages.push({
-      at: st.at, steps: st.do.slice(0, 40).map((l) => ({ t: l.t, ...shortOf(l), ...(l.at ? { x: l.at[0], y: l.at[1], plane: l.at[2] } : {}), ...(l.has ? { has: l.has } : {}), ...(l.need ? { need: l.need } : {}), ...(l.hl ? { hl: l.hl } : {}), ...(l.k ? { k: l.k } : {}) })), ...(go !== undefined ? { go } : {}),
+      at: st.at, steps: st.do.slice(0, 40).map((l) => ({ t: l.t, ...shortOf(l), ...(l.at ? { x: l.at[0], y: l.at[1], plane: l.at[2] } : {}), ...(l.has ? { has: l.has } : {}), ...(l.need ? { need: l.need } : {}), ...(l.hl ? { hl: l.hl } : {}), ...(l.k ? { k: l.k } : {}), ...(l.pre?.length ? { pre: l.pre.slice(0, 8) } : {}) })), ...(go !== undefined ? { go } : {}),
       ...(st.items ? { items: st.items.slice(0, 12).map((i) => ({ ...i })) } : {}),
     });
   }
-  return { kind: qs.var[0], id: qs.var[1], stages };
+  const guarded = stages.some((s) => s.steps.some((l) => l.pre));
+  return { kind: qs.var[0], id: qs.var[1], stages, ...(guarded ? { banks: BANK_SPOTS.slice(0, 40) } : {}) };
 }
 
 /** A bulk list for the exchange hint: name — the English name, count — how many are needed in all. */

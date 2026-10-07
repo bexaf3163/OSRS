@@ -163,11 +163,14 @@ public class ActiveTarget
 	{
 		static final int MAX_STAGES = 40;
 		static final int MAX_STAGE_STEPS = 40;
+		static final int MAX_BANKS = 40;
 
 		/** "varp" or "varbit". */
 		private String kind;
 		private int id;
 		private List<StageStep> stages;
+		/** The banks of the surface: where the arrow turns when a missing item of a step is in the bank. */
+		private List<Spot> banks;
 
 		boolean isVarp()
 		{
@@ -198,6 +201,10 @@ public class ActiveTarget
 			{
 				return "invalid quest stages";
 			}
+			if (banks != null && (banks.size() > MAX_BANKS || banks.stream().anyMatch(b -> b == null || b.problem() != null)))
+			{
+				return "invalid banks";
+			}
 			int last = -1;
 			for (StageStep s : stages)
 			{
@@ -211,7 +218,7 @@ public class ActiveTarget
 					if (line == null || line.t == null || line.t.trim().isEmpty() || line.t.length() > Guide.MAX_WHERE || (line.s != null && line.s.length() > Guide.MAX_WHERE)
 						|| (line.x != null && (line.y == null || line.plane == null || line.x <= 0 || line.y <= 0 || line.x >= NavTarget.MAX_COORD
 						|| line.y >= NavTarget.MAX_COORD || line.plane < 0 || line.plane > 3)) || tooLong(line.has)
-						|| (line.hl != null && line.hl.problem() != null) || (line.k != null && !line.k.matches("[A-Za-z0-9_.]{1,80}")))
+						|| (line.hl != null && line.hl.problem() != null) || Pre.problem(line.pre) != null || (line.k != null && !line.k.matches("[A-Za-z0-9_.]{1,80}")))
 					{
 						return "invalid quest stage step";
 					}
@@ -228,6 +235,77 @@ public class ActiveTarget
 					{
 						return "invalid stage item";
 					}
+				}
+			}
+			return null;
+		}
+	}
+
+	/** A point on the map: a bank. */
+	@Data
+	public static class Spot
+	{
+		private int x;
+		private int y;
+		private int plane;
+		private String label;
+
+		String problem()
+		{
+			return x <= 0 || y <= 0 || x >= NavTarget.MAX_COORD || y >= NavTarget.MAX_COORD || plane < 0 || plane > 3 || label == null || label.isEmpty() || tooLong(label)
+				? "invalid point" : null;
+		}
+	}
+
+	/**
+	 * An item a stage step needs in the bag, and where to get it. With an ID only that exact item counts (the Draynor Manor cabbage is called Cabbage too);
+	 * without one, the name. No tile means the Grand Exchange.
+	 */
+	@Data
+	public static class Pre
+	{
+		static final int MAX = 8;
+		static final int MAX_COUNT = 1000;
+
+		private String item;
+		private Integer id;
+		private Integer n;
+		/** x, y, plane of the place to get the item. */
+		private List<Integer> at;
+		/** What to do there: the label of the arrow. */
+		private String t;
+		/** Object names and an NPC to highlight at that place. */
+		private List<String> on;
+		private String npc;
+
+		int need()
+		{
+			return n == null ? 1 : n;
+		}
+
+		boolean hasPlace()
+		{
+			return at != null && at.size() == 3;
+		}
+
+		static String problem(List<Pre> list)
+		{
+			if (list == null)
+			{
+				return null;
+			}
+			if (list.size() > MAX)
+			{
+				return "too many items";
+			}
+			for (Pre p : list)
+			{
+				if (p == null || p.item == null || p.item.isEmpty() || tooLong(p.item) || tooLong(p.t) || tooLong(p.npc) || (p.id != null && (p.id <= 0 || p.id >= NavTarget.MAX_ITEM_ID))
+					|| (p.n != null && (p.n < 1 || p.n > MAX_COUNT)) || (p.on != null && (p.on.size() > NavTarget.MAX_NPCS || p.on.stream().anyMatch(n -> n == null || n.isEmpty() || tooLong(n))))
+					|| (p.at != null && (p.at.size() != 3 || p.at.stream().anyMatch(v -> v == null) || p.at.get(0) <= 0 || p.at.get(1) <= 0 || p.at.get(0) >= NavTarget.MAX_COORD
+						|| p.at.get(1) >= NavTarget.MAX_COORD || p.at.get(2) < 0 || p.at.get(2) > 3)))
+				{
+					return "invalid pre-flight item";
 				}
 			}
 			return null;
@@ -323,6 +401,8 @@ public class ActiveTarget
 		private Highlight hl;
 		/** The step's name in Quest Helper (talkToLuthasAgain): the state machine uses it to pick the line. null means not a Quest Helper step. */
 		private String k;
+		/** Items that must be in the bag before this step; while one is missing the arrow leads to where to get it. null means no guard. */
+		private List<Pre> pre;
 
 		boolean hasPoint()
 		{

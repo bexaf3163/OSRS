@@ -1523,9 +1523,23 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	 */
 	private final StageTracker stageTracker = new StageTracker();
 
+	/** The item the current stage step needs and the player lacks (the pre-flight guard); null means the step may go on. Client thread. */
+	private Preflight.Block preBlock;
+
+	/** The pre-flight check of a stage step: unknown (the bag not read yet) blocks nothing. */
+	private Preflight.Block guard(ActiveTarget.Stage st, ActiveTarget.StageLine line, WorldPoint pos)
+	{
+		if (line == null || line.getPre() == null || client.getItemContainer(InventoryID.INV) == null)
+		{
+			return null;
+		}
+		return Preflight.check(target.getStepId(), line, true, carried, bank, pos.getX(), pos.getY(), pos.getPlane(), st.getBanks());
+	}
+
 	/** Recompute the current stage step from the player's position and items. Client thread. */
 	private void trackStageCursor(ActiveTarget.Stage st)
 	{
+		preBlock = null;
 		if (st == null)
 		{
 			stageTracker.reset();
@@ -1554,8 +1568,18 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			qhPick(target.getStepId(), value, lines));
 		logStage(st, idx, value, lines, pos);
 		int at = Math.max(0, Math.min(stageTracker.cursor(), lines.size() - 1));
-		applyLineHighlight(target.getStepId() + "#" + idx + "@" + at, lines.get(at).getHl());
+		preBlock = guard(st, lines.get(at), pos);
+		Preflight.Block blocked = preBlock;
+		if (blocked != null && !blocked.equals(lastPreBlock))
+		{
+			tel("preflight", "item", blocked.getItem(), "need", blocked.getNeed(), "have", blocked.getHave(), "via", blocked.getVia().name(), "cursor", at + 1);
+		}
+		lastPreBlock = blocked;
+		// While an item is missing the step's own objects are not highlighted: the arrow and the highlight lead to where to get the item.
+		applyLineHighlight(target.getStepId() + "#" + idx + "@" + at + (blocked == null ? "" : "!" + blocked.key()), blocked == null ? lines.get(at).getHl() : null);
 	}
+
+	private Preflight.Block lastPreBlock;
 
 	/** The log: entering a stage, a quest variable change, where and why the cursor moved, warnings. */
 	private void logStage(ActiveTarget.Stage st, int idx, int value, List<ActiveTarget.StageLine> lines, WorldPoint pos)
@@ -1674,12 +1698,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		ActiveTarget.StageLine now = done || lines.isEmpty() ? null : lines.get(cursor);
 		boolean byStep = now != null && now.hasPoint();
 		String stageOnly = t.getStepId() + "#" + (done ? "done" : String.valueOf(idx));
-		String key = byStep ? stageOnly + "@" + cursor : stageOnly;
+		Preflight.Block block = done ? null : preBlock;
+		String key = (byStep ? stageOnly + "@" + cursor : stageOnly) + (block == null ? "" : "!" + block.key());
 		if (key.equals(stageKey))
 		{
 			return;
 		}
-		boolean sameStage = stageKey != null && stageKey.startsWith(stageOnly) && (stageKey.length() == stageOnly.length() || stageKey.charAt(stageOnly.length()) == '@');
+		boolean sameStage = stageKey != null && stageKey.startsWith(stageOnly) && (stageKey.length() == stageOnly.length() || stageKey.charAt(stageOnly.length()) == '@'
+			|| stageKey.charAt(stageOnly.length()) == '!');
 		stageKey = key;
 		if (done)
 		{
@@ -1703,6 +1729,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (n == null && go != null)
 		{
 			n = StepGuide.navTo(t, go);
+		}
+		if (block != null && block.getTarget() != null)
+		{
+			// The pre-flight guard: the step's tile is not the destination until the item is in the bag.
+			n = block.getTarget();
 		}
 		if (n != null)
 		{
@@ -2430,8 +2461,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		String health = config.hudHealth() && target != null ? healthLine(hp, hpMax, target.getMaxHit()) : null;
 		boolean critical = health != null && target.getMaxHit() != null && hp <= target.getMaxHit();
 		String chip = transportChip(prep, navTarget != null, navViaTransport);
+		Preflight.Block pb = preBlock;
+		String missing = pb != null && me != null && client.getGameState() == GameState.LOGGED_IN
+			&& pb.near(me.getWorldLocation().getX(), me.getWorldLocation().getY(), me.getWorldLocation().getPlane()) ? pb.chip() : null;
 		hud = new OsrsPathHudOverlay.State(title, goal, distance, near, bag, checklist.isReady(), dangerText, inside, pace, paceGood, upgrade,
-			health, critical, chip != null ? chip : navTarget == null ? useLine(target, ItemCounts.sum(carried, noted)) : null, tiles);
+			health, critical, chip != null ? chip : navTarget == null ? useLine(target, ItemCounts.sum(carried, noted)) : null, tiles, missing);
 	}
 
 	/**

@@ -48,7 +48,8 @@ export const NET = netJson as unknown as {
 const LOCATIONS = (locationsJson as unknown as { locations: Record<string, { x: number; y: number; plane: number; label: string; kind: string }> }).locations;
 /** Where tablets and runes are bought. */
 export const EXCHANGE: Point & { label: string } = { x: LOCATIONS['Grand Exchange'].x, y: LOCATIONS['Grand Exchange'].y, plane: 0, label: 'Grand Exchange' };
-const BANKS: (Point & { label: string })[] = Object.values(LOCATIONS).filter((l) => l.kind === 'bank' && l.plane === 0).map((l) => ({ x: l.x, y: l.y, plane: l.plane, label: l.label }));
+/** The banks of the surface: the nearest one is where a missing item is taken from. */
+export const BANKS: (Point & { label: string })[] = Object.values(LOCATIONS).filter((l) => l.kind === 'bank' && l.plane === 0).map((l) => ({ x: l.x, y: l.y, plane: l.plane, label: l.label }));
 
 /** Running is 2 tiles per tick (0.6 s): that is the lower bound of the walking time. */
 export const TILES_PER_SECOND = 2 / 0.6;

@@ -125,6 +125,7 @@
          "Grain"
         ]
        },
+       "pre": [{"item": "Grain", "id": 1947, "at": [3159, 3296, 0], "t": "Pick Grain from the wheat field north of Lumbridge", "on": ["Wheat"]}],
        "k": "fillHopper"
       },
       {
@@ -173,6 +174,7 @@
          "Pot"
         ]
        },
+       "pre": [{"item": "Pot", "id": 1931, "at": [3212, 3247, 0], "t": "Buy a Pot in the Lumbridge General Store"}],
        "k": "collectFlour"
       },
       {
@@ -203,6 +205,7 @@
          4626
         ]
        },
+       "pre": [{"item": "Pot of flour", "id": 1933, "at": [3166, 3306, 0], "t": "Make flour at the Lumbridge windmill"}, {"item": "Bucket of milk", "id": 1927, "at": [3254, 3270, 0], "t": "Milk the dairy cow with a Bucket", "on": ["Dairy cow"]}, {"item": "Egg", "id": 1944, "at": [3230, 3299, 0], "t": "Pick up an Egg at the chicken farm"}],
        "k": "finishQuest"
       }
      ],
@@ -294,6 +297,7 @@
          "Grain"
         ]
        },
+       "pre": [{"item": "Grain", "id": 1947, "at": [3159, 3296, 0], "t": "Pick Grain from the wheat field north of Lumbridge", "on": ["Wheat"]}],
        "k": "fillHopper"
       },
       {
@@ -342,6 +346,7 @@
          "Pot"
         ]
        },
+       "pre": [{"item": "Pot", "id": 1931, "at": [3212, 3247, 0], "t": "Buy a Pot in the Lumbridge General Store"}],
        "k": "collectFlour"
       },
       {
@@ -372,6 +377,7 @@
          4626
         ]
        },
+       "pre": [{"item": "Pot of flour", "id": 1933, "at": [3166, 3306, 0], "t": "Make flour at the Lumbridge windmill"}, {"item": "Bucket of milk", "id": 1927, "at": [3254, 3270, 0], "t": "Milk the dairy cow with a Bucket", "on": ["Dairy cow"]}, {"item": "Egg", "id": 1944, "at": [3230, 3299, 0], "t": "Pick up an Egg at the chicken farm"}],
        "k": "finishQuest"
       }
      ],
@@ -2906,6 +2912,7 @@
          5036
         ]
        },
+       "pre": [{"item": "Cadava berries", "id": 753, "at": [3270, 3369, 0], "t": "Pick Cadava berries south-east of Varrock", "on": ["Cadava bush"]}],
        "k": "talkToApothecary"
       }
      ],
@@ -2941,6 +2948,7 @@
          5036
         ]
        },
+       "pre": [{"item": "Cadava berries", "id": 753, "at": [3270, 3369, 0], "t": "Pick Cadava berries south-east of Varrock", "on": ["Cadava bush"]}],
        "k": "talkToApothecary"
       },
       {
@@ -2957,6 +2965,7 @@
          5035
         ]
        },
+       "pre": [{"item": "Cadava potion", "at": [3195, 3404, 0], "t": "Get the Cadava potion from the Apothecary", "npc": "Apothecary"}],
        "k": "givePotionToJuliet"
       }
      ],
@@ -3149,6 +3158,7 @@
          11434
         ]
        },
+       "pre": [{"item": "Research package", "id": 290, "at": [3103, 9571, 0], "t": "Get the Research package from Archmage Sedridor", "npc": "Archmage Sedridor"}],
        "k": "deliverPackageToAubury"
       }
      ],
@@ -3228,6 +3238,7 @@
          11432
         ]
        },
+       "pre": [{"item": "Research notes", "at": [3253, 3402, 0], "t": "Get the Research notes from Aubury", "npc": "Aubury"}],
        "k": "deliverResearchNotesToSedridor"
       }
      ],
@@ -3362,6 +3373,7 @@
          4733
         ]
        },
+       "pre": [{"item": "Redberry pie", "id": 2325}],
        "k": "talkToThurgo"
       }
      ],
@@ -3500,6 +3512,7 @@
          4733
         ]
        },
+       "pre": [{"item": "Portrait", "at": [2985, 3336, 2], "t": "Take the Portrait from the cupboard in Falador Castle"}],
        "k": "givePortraitToThurgo"
       }
      ],
@@ -3559,6 +3572,7 @@
          4733
         ]
        },
+       "pre": [{"item": "Blurite ore", "id": 668, "at": [3049, 9566, 0], "t": "Mine Blurite ore in the Asgarnian Ice Dungeon"}, {"item": "Iron bar", "id": 2351, "n": 2}],
        "k": "bringThurgoOre"
       },
       {
@@ -3751,6 +3765,7 @@
          3480
         ]
        },
+       "pre": [{"item": "Beer", "id": 1917, "at": [3222, 3398, 0], "t": "Buy a Beer from the bartender in the Blue Moon Inn"}],
        "k": "talkToHarlowAgain"
       },
       {
@@ -3766,6 +3781,7 @@
          134
         ]
        },
+       "pre": [{"item": "Garlic", "id": 1550, "at": [3098, 3268, 1], "t": "Take Garlic from the cupboard on the first floor of Morgan's house"}, {"item": "Stake", "id": 1549, "at": [3222, 3397, 0], "t": "Get the Stake from Dr Harlow (buy him a Beer)", "npc": "Dr Harlow"}, {"item": "Hammer", "id": 2347}],
        "k": "enterDraynorManor"
       },
       {
@@ -3781,6 +3797,7 @@
          2616
         ]
        },
+       "pre": [{"item": "Garlic", "id": 1550, "at": [3098, 3268, 1], "t": "Take Garlic from the cupboard on the first floor of Morgan's house"}, {"item": "Stake", "id": 1549, "at": [3222, 3397, 0], "t": "Get the Stake from Dr Harlow (buy him a Beer)", "npc": "Dr Harlow"}, {"item": "Hammer", "id": 2347}],
        "k": "goDownToBasement"
       },
       {
@@ -3796,6 +3813,7 @@
          "Coffin"
         ]
        },
+       "pre": [{"item": "Garlic", "id": 1550, "at": [3098, 3268, 1], "t": "Take Garlic from the cupboard on the first floor of Morgan's house"}, {"item": "Stake", "id": 1549, "at": [3222, 3397, 0], "t": "Get the Stake from Dr Harlow (buy him a Beer)", "npc": "Dr Harlow"}, {"item": "Hammer", "id": 2347}],
        "k": "openCoffin"
       }
      ],
@@ -3968,6 +3986,7 @@
         ]
        },
        "need": "Karamjan rum",
+       "pre": [{"item": "Karamjan rum", "id": 431, "at": [2927, 3145, 0], "t": "Buy Karamjan rum from Zembo on Karamja", "npc": "Zembo"}],
        "k": "smuggleRum.addRumToCrate"
       },
       {
@@ -4055,6 +4074,7 @@
          3643
         ]
        },
+       "pre": [{"item": "Karamjan rum", "id": 431, "at": [2927, 3145, 0], "t": "Buy Karamjan rum from Zembo on Karamja", "npc": "Zembo"}],
        "k": "smuggleRum.bringRumToRedbeard"
       }
      ],
@@ -4120,6 +4140,7 @@
          "Chest key"
         ]
        },
+       "pre": [{"item": "Chest key", "at": [3052, 3250, 0], "t": "Get the Chest key from Redbeard Frank", "npc": "Redbeard Frank"}],
        "k": "openChest"
       },
       {
@@ -4314,6 +4335,7 @@
       {
        "t": "Dye the wig with yellow dye. Buy a yellow dye with two onions and 5 coins if you still need it from Aggie in Draynor Village.",
        "s": "Dye the wig yellow (Aggie: 2 onions + 5 gp)",
+       "pre": [{"item": "Yellow dye", "at": [3086, 3259, 0], "t": "Get Yellow dye from Aggie (2 Onions and 5 coins)", "npc": "Aggie"}],
        "k": "dyeWig"
       },
       {
@@ -4366,6 +4388,7 @@
          "Key print"
         ]
        },
+       "pre": [{"item": "Bronze bar", "id": 2349}, {"item": "Key print", "at": [3127, 3244, 0], "t": "Get a Key print: press the key into Soft clay, show it to Lady Keli", "npc": "Lady Keli"}],
        "k": "makeKey"
       },
       {
@@ -4408,6 +4431,7 @@
          11577
         ]
        },
+       "pre": [{"item": "Rope", "at": [3099, 3259, 0], "t": "Buy Rope from Ned in Draynor Village", "npc": "Ned"}, {"item": "Pink skirt", "at": [3206, 3416, 0], "t": "Buy a Pink skirt from Thessalia in Varrock", "npc": "Thessalia"}, {"item": "Paste", "at": [3086, 3259, 0], "t": "Get Skin paste from Aggie in Draynor Village", "npc": "Aggie"}, {"item": "Bronze key", "at": [3227, 3256, 0], "t": "Make the Bronze key: use the Key print on a furnace with a Bronze bar", "on": ["Furnace"]}],
        "k": "talkToJoe"
       }
      ],
@@ -4448,6 +4472,7 @@
          11578
         ]
        },
+       "pre": [{"item": "Rope", "at": [3099, 3259, 0], "t": "Buy Rope from Ned in Draynor Village", "npc": "Ned"}, {"item": "Pink skirt", "at": [3206, 3416, 0], "t": "Buy a Pink skirt from Thessalia in Varrock", "npc": "Thessalia"}, {"item": "Paste", "at": [3086, 3259, 0], "t": "Get Skin paste from Aggie in Draynor Village", "npc": "Aggie"}, {"item": "Bronze key", "at": [3227, 3256, 0], "t": "Make the Bronze key: use the Key print on a furnace with a Bronze bar", "on": ["Furnace"]}],
        "k": "useRopeOnKeli"
       }
      ],
@@ -4482,6 +4507,7 @@
          2881
         ]
        },
+       "pre": [{"item": "Bronze key", "at": [3227, 3256, 0], "t": "Make the Bronze key: use the Key print on a furnace with a Bronze bar", "on": ["Furnace"]}, {"item": "Pink skirt", "at": [3206, 3416, 0], "t": "Buy a Pink skirt from Thessalia in Varrock", "npc": "Thessalia"}, {"item": "Paste", "at": [3086, 3259, 0], "t": "Get Skin paste from Aggie in Draynor Village", "npc": "Aggie"}],
        "k": "useKeyOnDoor"
       },
       {
@@ -5410,12 +5436,14 @@
        "t": "Use the blue dye on one of the goblin mail.",
        "s": "Use the blue dye on a goblin mail",
        "has": "Blue goblin mail",
+       "pre": [{"item": "Blue dye", "id": 1767}, {"item": "Goblin mail", "id": 288}],
        "k": "dyeBlue"
       },
       {
        "t": "Use the orange dye on one of the goblin mail.",
        "s": "Use the orange dye on another goblin mail",
        "has": "Orange goblin mail",
+       "pre": [{"item": "Orange dye", "id": 1769}, {"item": "Goblin mail", "id": 288}],
        "k": "dyeOrange"
       },
       {
@@ -5498,12 +5526,14 @@
        "t": "Use the blue dye on one of the goblin mail.",
        "s": "Use the blue dye on a goblin mail",
        "has": "Blue goblin mail",
+       "pre": [{"item": "Blue dye", "id": 1767}, {"item": "Goblin mail", "id": 288}],
        "k": "dyeBlue"
       },
       {
        "t": "Use the orange dye on one of the goblin mail.",
        "s": "Use the orange dye on another goblin mail",
        "has": "Orange goblin mail",
+       "pre": [{"item": "Orange dye", "id": 1769}, {"item": "Goblin mail", "id": 288}],
        "k": "dyeOrange"
       },
       {
@@ -5605,6 +5635,7 @@
        "t": "Use the blue dye on one of the goblin mail.",
        "s": "Use the blue dye on a goblin mail",
        "has": "Blue goblin mail",
+       "pre": [{"item": "Blue dye", "id": 1767}, {"item": "Goblin mail", "id": 288}],
        "k": "dyeBlue"
       },
       {
@@ -5912,6 +5943,7 @@
          2337
         ]
        },
+       "pre": [{"item": "Cabbage", "id": 1965, "at": [3058, 3290, 0], "t": "Pick Cabbage south of Falador (do NOT pick Draynor cabbage)", "on": ["Cabbage"]}],
        "k": "enterFortress"
       },
       {
@@ -6076,6 +6108,7 @@
          2337
         ]
        },
+       "pre": [{"item": "Cabbage", "id": 1965, "at": [3058, 3290, 0], "t": "Pick Cabbage south of Falador (do NOT pick Draynor cabbage)", "on": ["Cabbage"]}],
        "k": "enterFortress"
       },
       {
@@ -6214,6 +6247,7 @@
          "Cabbage (NOT from Draynor Manor)"
         ]
        },
+       "pre": [{"item": "Cabbage", "id": 1965, "at": [3058, 3290, 0], "t": "Pick Cabbage south of Falador (do NOT pick Draynor cabbage)", "on": ["Cabbage"]}],
        "k": "useCabbageOnHole"
       }
      ],
@@ -6401,6 +6435,7 @@
          17424
         ]
        },
+       "pre": [{"item": "Bucket of water", "id": 1929, "at": [3213, 3428, 0], "t": "Fill a Bucket at the fountain in Varrock Square", "on": ["Fountain"]}],
        "k": "useFilledBucketOnDrain"
       },
       {
@@ -6476,6 +6511,7 @@
          5079
         ]
        },
+       "pre": [{"item": "Silverlight", "at": [3203, 3472, 0], "t": "Get Silverlight back from Sir Prysin", "npc": "Sir Prysin"}],
        "k": "killDelrithStep"
       }
      ],
@@ -14701,6 +14737,7 @@
          11867
         ]
        },
+       "pre": [{"item": "Silk", "id": 950}, {"item": "Lobster pot", "id": 301}, {"item": "Unfired bowl", "id": 1791}, {"item": "Wizard's mind bomb", "id": 1907}],
        "k": "goIntoDwarvenMine"
       },
       {
@@ -14720,6 +14757,7 @@
         ]
        },
        "need": "Silk",
+       "pre": [{"item": "Silk", "id": 950}],
        "k": "useSilkOnDoor"
       },
       {
@@ -14739,6 +14777,7 @@
         ]
        },
        "need": "Lobster pot",
+       "pre": [{"item": "Lobster pot", "id": 301}],
        "k": "usePotOnDoor"
       },
       {
@@ -14758,6 +14797,7 @@
         ]
        },
        "need": "Unfired bowl",
+       "pre": [{"item": "Unfired bowl", "id": 1791}],
        "k": "useUnfiredBowlOnDoor"
       },
       {
@@ -14777,6 +14817,7 @@
         ]
        },
        "need": "Wizard's mind bomb",
+       "pre": [{"item": "Wizard's mind bomb", "id": 1907}],
        "k": "useMindBombOnDoor"
       },
       {
@@ -14984,6 +15025,7 @@
         ]
        },
        "need": "Plank",
+       "pre": [{"item": "Plank", "id": 960}, {"item": "Steel nails", "id": 1539}, {"item": "Hammer", "id": 2347}],
        "k": "repairShip"
       },
       {
@@ -15005,6 +15047,7 @@
         ]
        },
        "need": "Plank",
+       "pre": [{"item": "Plank", "id": 960}, {"item": "Steel nails", "id": 1539}, {"item": "Hammer", "id": 2347}],
        "k": "repairShip2"
       },
       {
@@ -15026,6 +15069,7 @@
         ]
        },
        "need": "Plank",
+       "pre": [{"item": "Plank", "id": 960}, {"item": "Steel nails", "id": 1539}, {"item": "Hammer", "id": 2347}],
        "k": "repairShip3"
       }
      ],
@@ -15172,6 +15216,7 @@
          "Anti-dragon shield"
         ]
        },
+       "pre": [{"item": "Anti-dragon shield", "id": 1540, "at": [3211, 3223, 1], "t": "Get the Anti-dragon shield from Duke Horacio in Lumbridge Castle", "npc": "Duke Horacio"}],
        "k": "boardShipToGo"
       },
       {

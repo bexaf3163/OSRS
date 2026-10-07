@@ -320,6 +320,24 @@ export interface QuestStageLine {
   hl?: StageHighlight;
   /** The step's name in Quest Helper: the plugin matches the state machine's choice to a line by it. */
   k?: string;
+  /** Items that must be in the bag (or worn) before this step: the plugin turns the arrow back to where to get a missing one instead of leading on. */
+  pre?: StagePre[];
+}
+
+/** One pre-flight item. With an id only that exact item counts (the Draynor Manor cabbage has the name Cabbage too). */
+export interface StagePre {
+  item: string;
+  id?: number;
+  /** How many are needed; 1 when absent. */
+  n?: number;
+  /** Where to get it when it is not in the bank: a tile; absent means the Grand Exchange. */
+  at?: [number, number, number];
+  /** The instruction shown while going there. */
+  t?: string;
+  /** Object names to highlight at that place (the cabbage patch). */
+  on?: string[];
+  /** The NPC to highlight at that place. */
+  npc?: string;
 }
 
 /** A stage step's highlight: from the Quest Helper sources (scripts outside the repository, data in questStages.json). */
