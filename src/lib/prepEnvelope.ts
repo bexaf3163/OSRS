@@ -41,7 +41,7 @@ export interface PrepPlanPayload {
   /** What lies in the bank and is needed now or soon: the plugin frames it when the bank is open and lists it in the tips. itemId 0 means not known. */
   bankWithdrawals?: { itemId: number; itemName: string; quantity: number }[];
   /** The way that is not walking and is clearly shorter: the plugin shows one line, points at the first stop and frames the item to use. */
-  recommendedTransport?: { type: string; destination: string; interactionId: number; interactionName?: string; item?: string; tile?: { x: number; y: number; plane: number }; text: string };
+  recommendedTransport?: { type: string; destination: string; interactionId: number; interactionName?: string; item?: string; tile?: { x: number; y: number; plane: number }; text: string; chip?: string };
 }
 
 export interface BankTagsPayload {
@@ -160,6 +160,7 @@ export function planPayload(plan: PrepPlan, extras: PlanExtras = {}): PrepPlanPa
         ...(transport.item ? { item: clipText(transport.item, 60) } : {}),
         ...(transport.tile ? { tile: { x: transport.tile.x, y: transport.tile.y, plane: transport.tile.plane } } : {}),
         text: clipText(transport.text),
+        ...(transport.chip ? { chip: clipText(transport.chip, 60) } : {}),
       },
     } : {}),
     ...(plan.blockers.length ? { blockers: plan.blockers.slice(0, MAX_BLOCKERS).map((b) => clipText(b.detail ? `${b.label} — ${b.detail}` : b.label)) } : {}),

@@ -324,3 +324,159 @@ describe('bridge payload: the transport and the detour reach the game together',
     expect(planPayload(plan, { detour: d }).recommendedTransport).toBeUndefined();
   });
 });
+
+// ---------- Fast travel: acquired along the route, chosen over walking, and shown in the game ----------
+import { itemSource } from '../src/lib/stepPlaces';
+import { MIN_SAVING_TILES } from '../src/lib/travel';
+
+describe('fast travel in the route: Chronicle, runes and the unlock levels', () => {
+  const draynor = at(3093, 3244);
+  const varrockSquare = at(3213, 3428);
+  const planFor = (id: string, rows: Record<string, Partial<OwnedItem>>): PrepPlan => {
+    const items = new Map<string, OwnedItem>();
+    for (const [name, o] of Object.entries(rows)) items.set(nameKey(name), { name, carried: 0, noted: 0, ...o });
+    const state = buildPlayerState({
+      mode: 'f2p', stats: null, progress: { levels: {} }, owned: { bankSeen: true, items }, gear: { equipment: [], inventory: [], coins: 3000, bankCoins: 0 }, questsDone: null, connected: true,
+    });
+    return createReadinessEngine({ steps: routeSteps, progress: emptyProgress(), qp: 0, mode: 'f2p', state }).plan(stepById.get(id)!);
+  };
+
+  it('Draynor to Varrock: a Chronicle in the bag is the recommended way, a tablet beats it, and a ready spell is used when there are runes', () => {
+    const chronicle = recommendedTransport(travelOptions(input({ from: draynor, to: varrockSquare, carried: bag(['Chronicle', 1]), bankSeen: true })));
+    expect(chronicle).toMatchObject({ type: 'item_teleport', item: 'Chronicle' });
+    expect(chronicle!.destination).toMatch(/Champions/);
+    const tablet = recommendedTransport(travelOptions(input({ from: draynor, to: varrockSquare, carried: bag(['Chronicle', 1], ['Varrock teleport', 1]), bankSeen: true })));
+    expect(tablet, 'the tablet lands on the square: ready and nearer than the book').toMatchObject({ type: 'tablet', item: 'Varrock teleport' });
+    const spell = recommendedTransport(travelOptions(input({
+      from: draynor, to: varrockSquare, levels: { magic: 25 }, carried: bag(['Law rune', 3], ['Air rune', 9], ['Fire rune', 3]), bankSeen: true,
+    })));
+    expect(spell).toMatchObject({ type: 'spell_teleport' });
+    expect(spell!.text).toMatch(/Varrock Teleport/);
+  });
+
+  it('a ready teleport goes above walking: the engine does not default to the overland path', () => {
+    const o = travelOptions(input({ from: draynor, to: varrockSquare, levels: { magic: 25 }, carried: bag(['Law rune', 1], ['Air rune', 3], ['Fire rune', 1]), bankSeen: true }));
+    expect(o[0].id).toBe('varrock-teleport');
+    expect(o[0].availability).toBe('ready');
+    const walk = o.find((x) => x.id === 'walk')!;
+    expect(o.indexOf(walk)).toBeGreaterThan(0);
+    // Every other way kept is shorter than walking by at least the saving threshold.
+    for (const x of o.filter((y) => y.id !== 'walk')) expect(x.walkTiles + MIN_SAVING_TILES, x.id).toBeLessThanOrEqual(walk.walkTiles);
+  });
+
+  it('the teleport landing is the origin of the rest of the way: from Draynor with a Varrock tablet the exchange is a short walk', () => {
+    const r = reachTiles({ from: draynor, levels: {}, carried: bag(['Varrock teleport', 1]), bankSeen: true }, EXCHANGE);
+    expect(r.via).toBe('Varrock teleport tablet');
+    expect(r.landing).toMatchObject({ x: 3213, y: 3424 });
+    expect(r.tiles).toBeLessThan(dist(draynor, EXCHANGE) - 40);
+  });
+
+  it('the spells unlock at the Magic levels: Varrock 25, Lumbridge 31, Falador 37, locked below and ready at the level with runes', () => {
+    const runes = bag(['Law rune', 5], ['Air rune', 20], ['Fire rune', 5], ['Earth rune', 5], ['Water rune', 5]);
+    const far = (magic: number) => travelOptions({ from: at(3093, 3244), to: at(2957, 3512), levels: { magic }, carried: runes, bankSeen: true });
+    expect(TRANSPORT.teleports.find((t) => t.id === 'varrock-teleport')!.magic).toBe(25);
+    expect(TRANSPORT.teleports.find((t) => t.id === 'lumbridge-teleport')!.magic).toBe(31);
+    expect(TRANSPORT.teleports.find((t) => t.id === 'falador-teleport')!.magic).toBe(37);
+    expect(far(36).find((x) => x.id === 'falador-teleport')!.availability).toBe('locked');
+    expect(far(37).find((x) => x.id === 'falador-teleport')!.availability).toBe('ready');
+    const lum = (magic: number) => travelOptions({ from: at(3213, 3428), to: at(3222, 3218), levels: { magic }, carried: runes, bankSeen: true }).find((x) => x.id === 'lumbridge-teleport');
+    expect(lum(30)!.availability).toBe('locked');
+    expect(lum(31)!.availability).toBe('ready');
+  });
+
+  it('the Chronicle and its cards are bought at Draynor (Diango) on S1-10, before the first step that uses the book', () => {
+    const s = stepById.get('S1-10')!;
+    expect(s.itemsRequired!.find((i) => i.nameEn === 'Chronicle')).toMatchObject({ amount: 1, from: 'Diango' });
+    expect(s.itemsRequired!.find((i) => i.nameEn === 'Teleport card')).toMatchObject({ from: 'Diango' });
+    expect(s.itemsRequired!.find((i) => i.nameEn === 'Chronicle')!.howToGet).toMatch(/300 gp/);
+    expect(s.itemsRequired!.find((i) => i.nameEn === 'Teleport card')!.howToGet).toMatch(/150 gp/);
+    const diango = itemSource('Diango', 'S1-10')!;
+    expect(diango, 'Diango is a place the plan can lead to').toBeDefined();
+    expect(Math.abs(diango.x - 3082)).toBeLessThan(30);
+    const order = routeSteps.map((x) => x.id);
+    const firstUse = routeSteps.find((x) => x.id !== 'S1-10' && (x.branches?.some((b) => b.id === 'chronicle') || /Chronicle/.test(JSON.stringify(x.how ?? ''))))!;
+    expect(order.indexOf('S1-10')).toBeLessThan(order.indexOf(firstUse.id));
+    // In a plan made at S1-10 with nothing owned, the book and the cards are on it (picked up at Diango during the step) and the 1,800 gp they cost is checked.
+    const plan = planFor('S1-10', {});
+    for (const name of ['Chronicle', 'Teleport card']) expect(plan.lines.some((l) => l.name === name), name).toBe(true);
+    expect(plan.coins.need).toBeGreaterThanOrEqual(1800);
+  });
+
+  it('the Varrock Teleport runes are on the route: the Magic 25 step lists Law, Air and Fire runes, and the teleport branches ask for the same three', () => {
+    const magic = stepById.get('S2-04')!;
+    const names = [...(magic.itemsRequired ?? []), ...(magic.itemsRecommended ?? [])].map((i) => i.nameEn);
+    expect(names).toEqual(expect.arrayContaining(['Law rune', 'Air rune', 'Fire rune']));
+    const needs = stepById.get('S2-05')!.branches!.find((b) => b.id === 'varrock-teleport')!.needs!.map((n) => n.items[0]);
+    expect(needs).toEqual(['Law rune', 'Air rune', 'Fire rune']);
+  });
+
+  it('the canoe branches on the Stronghold step follow the canoe table: Woodcutting 12 for one stop, 27 for two, and an axe', () => {
+    const branches = stepById.get('S1-09')!.branches!;
+    const level = (id: string) => (branches.find((b) => b.id === id)!.condition as { minLevel: number }).minLevel;
+    expect(level('canoe-log')).toBe(TRANSPORT.canoe.types.find((t) => t.name === 'Log')!.level);
+    expect(level('canoe-dugout')).toBe(TRANSPORT.canoe.types.find((t) => t.name === 'Dugout')!.level);
+    for (const b of branches) expect(b.needs![0].items).toEqual(TRANSPORT.canoe.axes);
+  });
+});
+
+describe('River Lum canoes and the ferries', () => {
+  const lumbridge = at(3241, 3237);
+  const barbarian = at(3110, 3409);
+  const run = (wc: number | undefined, carried: GearItem[] | null, bankSeen = true) =>
+    travelOptions({ from: lumbridge, to: barbarian, levels: wc === undefined ? {} : { woodcutting: wc }, carried, bankSeen });
+
+  it('with Woodcutting 27 and an axe the canoe from Lumbridge to Barbarian Village is ready and is the recommended way, pointing at the Lumbridge station', () => {
+    const o = run(27, bag(['Bronze axe', 1]));
+    expect(o.find((x) => x.id === 'canoe')).toMatchObject({ availability: 'ready' });
+    expect(o.find((x) => x.id === 'canoe-now')).toBeUndefined();
+    const t = recommendedTransport(o)!;
+    expect(t.type).toBe('canoe');
+    expect(t.destination).toBe('Barbarian Village');
+    expect(t.tile).toMatchObject({ x: 3241, y: 3235, plane: 0 });
+    expect(t.interactionName).toBe('Canoe Station');
+  });
+
+  it('at Woodcutting 12 the two-stop canoe is locked, and the log canoe that the player can chop is offered and recommended instead', () => {
+    const o = run(12, bag(['Iron axe', 1]));
+    expect(o.find((x) => x.id === 'canoe')!.availability).toBe('locked');
+    const now = o.find((x) => x.id === 'canoe-now')!;
+    expect(now.availability).toBe('ready');
+    expect(now.title).toContain("Champions' Guild");
+    expect(recommendedTransport(o)).toMatchObject({ type: 'canoe', destination: "Champions' Guild" });
+    // Below Woodcutting 12 there is no canoe the player can chop.
+    expect(run(11, bag(['Iron axe', 1])).find((x) => x.id === 'canoe-now')).toBeUndefined();
+  });
+
+  it('without an axe the canoe is not ready: none in the bag after the bank was opened is locked, an unknown bag is only possible', () => {
+    expect(run(30, bag(['Coins', 5])).find((x) => x.id === 'canoe')!.availability).toBe('locked');
+    expect(run(30, bag(['Coins', 5]), false).find((x) => x.id === 'canoe')!.availability).toBe('maybe');
+    expect(run(30, null).find((x) => x.id === 'canoe')!.availability).toBe('maybe');
+    expect(recommendedTransport(run(30, bag(['Coins', 5])))?.type).not.toBe('canoe');
+  });
+
+  it('transport.json links the stations in river order and the ferries in both directions, Port Sarim to Musa Point and Rimmington to Corsair Cove', () => {
+    expect(TRANSPORT.canoe.stations.slice(0, 4).map((s) => s.id)).toEqual(['lumbridge', 'champions', 'barbarian', 'edgeville']);
+    const ys = TRANSPORT.canoe.stations.map((s) => s.y);
+    expect(ys).toEqual([...ys].sort((a, b) => a - b));
+    expect(TRANSPORT.canoe.types.map((t) => `${t.name}:${t.level}:${t.stops}`)).toEqual(['Log:12:1', 'Dugout:27:2', 'Stable Dugout:42:3', 'Waka:57:4']);
+    const ids = TRANSPORT.boats.map((b) => b.id);
+    expect(ids).toEqual(expect.arrayContaining(['karamja-boat', 'port-sarim-boat', 'corsair-boat', 'rimmington-boat']));
+    for (const [a, b] of [['karamja-boat', 'port-sarim-boat'], ['corsair-boat', 'rimmington-boat']]) {
+      const x = TRANSPORT.boats.find((t) => t.id === a)!;
+      const y = TRANSPORT.boats.find((t) => t.id === b)!;
+      expect([x.from.x, x.from.y]).toEqual([y.to.x, y.to.y]);
+      expect([x.to.x, x.to.y]).toEqual([y.from.x, y.from.y]);
+    }
+  });
+
+  it('Rimmington to Corsair Cove: the free ferry is possible (the quest must be started), never ready, and points at Captain Tock', () => {
+    const o = travelOptions({ from: at(2915, 3226), to: at(2558, 2858), levels: {}, carried: bag(['Coins', 0]), bankSeen: true });
+    const boat = o.find((x) => x.id === 'corsair-boat')!;
+    expect(boat.availability).toBe('maybe');
+    expect(boat.needs.some((n) => /Corsair Curse/.test(n.text) && n.ok === null)).toBe(true);
+    expect(boat.needs.some((n) => /gp in coins/.test(n.text))).toBe(false);
+    const t = recommendedTransport(o)!;
+    expect(t).toMatchObject({ type: 'ferry', interactionName: 'Captain Tock' });
+    expect(t.tile).toMatchObject({ x: 2910, y: 3226 });
+  });
+});

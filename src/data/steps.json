@@ -899,6 +899,13 @@
         "wikiItemId": 13658,
         "iconUrl": "https://oldschool.runescape.wiki/images/Teleport_card.png",
         "inStep": true
+      },
+      {
+        "nameEn": "Coins",
+        "amount": 1800,
+        "howToGet": "The book 300 and ten cards from 150 each (Diango's price rises when you buy many at once). The money comes from Stronghold of Security (S1-09).",
+        "wikiItemId": 995,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
       }
     ],
     "fields": [
@@ -1749,6 +1756,13 @@
         "howToGet": "Fire Strike (from Magic 13) uses 3 fire runes per cast, unless you have a Staff of fire.",
         "wikiItemId": 554,
         "iconUrl": "https://oldschool.runescape.wiki/images/Fire_rune.png"
+      },
+      {
+        "nameEn": "Law rune",
+        "amount": "10+",
+        "howToGet": "For the teleports once you have the level: one Law rune with 3 Air runes and 1 Fire rune per Varrock Teleport (Magic 25), and again for Lumbridge (31) and Falador (37). Buy them at the Grand Exchange on your next stop in Varrock; they are not needed for training.",
+        "wikiItemId": 563,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Law_rune.png"
       }
     ],
     "fields": [

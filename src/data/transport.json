@@ -192,6 +192,44 @@
       },
       "cost": 30,
       "note": "30 gp; the Customs officer confiscates Karamjan rum."
+    },
+    {
+      "id": "corsair-boat",
+      "name": "Boat: Rimmington to Corsair Cove",
+      "from": {
+        "x": 2910,
+        "y": 3226,
+        "plane": 0,
+        "label": "the west end of Rimmington (Captain Tock, Cabin Boy Colin)"
+      },
+      "to": {
+        "x": 2574,
+        "y": 2835,
+        "plane": 0,
+        "label": "Corsair Cove, the ship at the docks"
+      },
+      "cost": 0,
+      "needs": ["The Corsair Curse started (Captain Tock) or finished (Cabin Boy Colin)"],
+      "note": "Free: speak to Captain Tock during The Corsair Curse, or to Cabin Boy Colin after it. Before the quest is started, Captain Tock stands north of Port Sarim."
+    },
+    {
+      "id": "rimmington-boat",
+      "name": "Boat: Corsair Cove to Rimmington",
+      "from": {
+        "x": 2574,
+        "y": 2835,
+        "plane": 0,
+        "label": "Corsair Cove, the ship at the docks (Captain Tock, Cabin Boy Colin)"
+      },
+      "to": {
+        "x": 2910,
+        "y": 3226,
+        "plane": 0,
+        "label": "the west end of Rimmington"
+      },
+      "cost": 0,
+      "needs": ["The Corsair Curse started (Captain Tock) or finished (Cabin Boy Colin)"],
+      "note": "Free: speak to Captain Tock during The Corsair Curse, or to Cabin Boy Colin after it."
     }
   ]
 }

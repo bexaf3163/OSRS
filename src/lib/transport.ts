@@ -24,6 +24,16 @@ export interface RecommendedTransport {
   tile?: Point;
   /** One line: "Teleport: Falador teleport tablet to Falador (saves ~330 tiles, about 1 min)". */
   text: string;
+  /** The short action for the game screen: "⚡ Use Chronicle → Champions' Guild", "⚡ Break Varrock teleport tablet → Varrock Square". Up to 60 characters. */
+  chip: string;
+}
+
+const CHIP_MAX = 60;
+/** "by Champions' Guild", "Varrock Square by the fountain" and "Musa Point, Karamja" read better as just the place. */
+const placeOf = (label: string) => label.replace(/^(by|at|the)\s+/i, '').replace(/\s*\([^)]*\)\s*$/, '').replace(/,.*$/, '').replace(/\s+(by|at|near)\s+.*$/i, '').trim();
+function chipOf(c: string): string {
+  const s = `⚡ ${c}`;
+  return s.length <= CHIP_MAX ? s : `${s.slice(0, CHIP_MAX - 1)}…`;
 }
 
 const TIP = TIP_MIN_SAVING_TILES;
@@ -57,28 +67,33 @@ export function recommendedTransport(options: readonly TravelOption[]): Recommen
 
   if (best.id === 'fairy') {
     const code = /→\s*([A-Z]{3})/.exec(best.title)?.[1] ?? '';
-    return { ...base, type: 'fairy_ring', destination: `Fairy ring ${code}`.trim(), interactionName: 'Fairy ring', ...(best.go ? { tile: best.go } : {}), text: `Fairy ring: ${best.title} ${tail}` };
+    return { ...base, type: 'fairy_ring', destination: `Fairy ring ${code}`.trim(), interactionName: 'Fairy ring', ...(best.go ? { tile: best.go } : {}), text: `Fairy ring: ${best.title} ${tail}`, chip: chipOf(`Fairy ring: ${best.title.replace(/^Fairy ring /, '')}`) };
   }
   if (best.id === 'charter') {
-    return { ...base, type: 'charter_ship', destination: best.title.replace(/^Charter ship /, '').split('→').pop()!.trim(), interactionName: 'Trader Crewmember', ...(best.go ? { tile: best.go } : {}), text: `Charter: ${best.title} ${tail}` };
+    const to = best.title.replace(/^Charter ship /, '').split('→').pop()!.trim();
+    return { ...base, type: 'charter_ship', destination: to, interactionName: 'Trader Crewmember', ...(best.go ? { tile: best.go } : {}), text: `Charter: ${best.title} ${tail}`, chip: chipOf(`Charter ship → ${to}`) };
   }
-  if (best.id === 'canoe') {
-    return { ...base, type: 'canoe', destination: best.title.replace(/^Canoe /, '').split('→').pop()!.trim(), interactionName: 'Canoe Station', text: `Canoe: ${best.title} ${tail}` };
+  if (best.id === 'canoe' || best.id === 'canoe-now') {
+    const to = best.title.replace(/^Canoe /, '').split('→').pop()!.trim();
+    return { ...base, type: 'canoe', destination: to, interactionName: 'Canoe Station', ...(best.go ? { tile: best.go } : {}), text: `Canoe: ${best.title} ${tail}`, chip: chipOf(`Canoe: ${best.title.replace(/^Canoe /, '')}`) };
   }
   const boat = TRANSPORT.boats.find((b) => b.id === best.id);
   if (boat) {
     const npc = npcsIn(boat.from.label)[0];
-    return { ...base, type: 'ferry', destination: boat.to.label, ...(npc ? { interactionName: npc } : {}), tile: boat.from, text: `Boat: ${boat.name} ${tail}` };
+    return { ...base, type: 'ferry', destination: boat.to.label, ...(npc ? { interactionName: npc } : {}), tile: boat.from, text: `Boat: ${boat.name} ${tail}`, chip: chipOf(npc ? `Ferry: talk to ${npc} → ${placeOf(boat.to.label)}` : `Ferry → ${placeOf(boat.to.label)}`) };
   }
   const spell = TRANSPORT.teleports.find((t) => t.id === best.id);
   if (spell) {
     const item = spell.kind === 'item' ? spell.items?.[0] : undefined;
-    return { ...base, type: item ? 'item_teleport' : 'spell_teleport', destination: spell.dest.label, ...(item ? { item } : {}), text: `Teleport: ${spell.name} to ${spell.dest.label} ${tail}` };
+    return {
+      ...base, type: item ? 'item_teleport' : 'spell_teleport', destination: spell.dest.label, ...(item ? { item } : {}), text: `Teleport: ${spell.name} to ${spell.dest.label} ${tail}`,
+      chip: chipOf(item ? `Use ${item} → ${placeOf(spell.dest.label)}` : `Cast ${spell.name} → ${placeOf(spell.dest.label)}`),
+    };
   }
   const tablet = NET.tablets.find((t) => t.id === best.id);
   if (tablet) {
     const dest = TRANSPORT.teleports.find((t) => t.id === tablet.spell)?.dest.label ?? best.title;
-    return { ...base, type: 'tablet', destination: dest, item: tablet.item, text: `Teleport: ${tablet.item} tablet to ${dest} ${tail}` };
+    return { ...base, type: 'tablet', destination: dest, item: tablet.item, text: `Teleport: ${tablet.item} tablet to ${dest} ${tail}`, chip: chipOf(`Break ${tablet.item} tablet → ${placeOf(dest)}`) };
   }
   return null;
 }

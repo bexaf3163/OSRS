@@ -155,17 +155,56 @@ public class PrepPlan
 		private String item;
 		private Tile tile;
 		private String text;
+		/** The short action for the HUD ("⚡ Use Chronicle → Champions' Guild"); an older app sends none and the text is used. */
+		private String chip;
 
 		boolean valid()
 		{
 			return type != null && !type.isEmpty() && !ActiveTarget.tooLong(type) && destination != null && !ActiveTarget.tooLong(destination) && interactionId >= 0
 				&& interactionId <= 1_000_000 && !ActiveTarget.tooLong(interactionName) && !ActiveTarget.tooLong(item) && (tile == null || tile.valid())
-				&& text != null && !text.trim().isEmpty() && !ActiveTarget.tooLong(text);
+				&& text != null && !text.trim().isEmpty() && !ActiveTarget.tooLong(text) && !ActiveTarget.tooLong(chip);
 		}
 
+		/** What the HUD shows: the app's chip, otherwise a short form of the text. */
+		String chipText()
+		{
+			if (chip != null && !chip.trim().isEmpty())
+			{
+				return chip.trim();
+			}
+			return "⚡ " + (text.length() > 56 ? text.substring(0, 55) + "…" : text);
+		}
+
+		/** A ferry or a charter ship is a person to talk to; a canoe station and a fairy ring are objects to click. */
+		boolean interactsWithNpc()
+		{
+			return "ferry".equals(type) || "charter_ship".equals(type);
+		}
+
+		boolean interactsWithObject()
+		{
+			return "canoe".equals(type) || "fairy_ring".equals(type);
+		}
+
+		/** The arrow to the first stop, with the NPC or the object to interact with highlighted there. null when the app knew no stop. */
 		NavTarget navTarget(String stepId)
 		{
-			return navTargetOf(destination, tile, stepId);
+			// The tile is where the way starts (the dock, the station, the first ring), so the label names who or what is there and where it leads.
+			boolean named = interactionName != null && !interactionName.isEmpty();
+			NavTarget n = navTargetOf(named && (interactsWithNpc() || interactsWithObject()) ? interactionName + " → " + destination : destination, tile, stepId);
+			if (n == null || !named)
+			{
+				return n;
+			}
+			if (interactsWithNpc())
+			{
+				n.setNpcNames(Collections.singletonList(interactionName));
+			}
+			else if (interactsWithObject())
+			{
+				n.setObjectNames(Collections.singletonList(interactionName));
+			}
+			return n.prepare() == null ? n : null;
 		}
 	}
 

@@ -23,7 +23,8 @@ export interface Teleport {
 export interface CanoeStation { id: string; name: string; x: number; y: number; plane: number; wakaOnly?: boolean }
 export interface CanoeType { name: string; level: number; stops: number }
 
-export interface Boat { id: string; name: string; from: Point & { label: string }; to: Point & { label: string }; cost: number; note?: string }
+/** A ferry or a boat from pier to pier. needs: what the wiki says must be true first (a quest started), listed as "not checked" because the app cannot read it. */
+export interface Boat { id: string; name: string; from: Point & { label: string }; to: Point & { label: string }; cost: number; note?: string; needs?: string[] }
 
 export const TRANSPORT = transportJson as unknown as {
   checked: string;
@@ -399,56 +400,73 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
   }
 
   // A canoe: the best pair of stations — from the player to station A, down the river to B (no farther than the canoe type allows), from B to the target.
+  // When the best pair needs a canoe the player cannot chop yet (Woodcutting too low), the best pair they can chop now is offered as well: "canoe-now".
   const stations = TRANSPORT.canoe.stations;
   const types = TRANSPORT.canoe.types;
-  let best: { a: number; b: number; tiles: number; type: CanoeType } | null = null;
-  for (let a = 0; a < stations.length; a++) {
-    for (let b = 0; b < stations.length; b++) {
-      if (a === b) continue;
-      const stops = Math.abs(a - b);
-      const type = types.find((ty) => ty.stops >= stops && (!stations[b].wakaOnly || ty.name === 'Waka'));
-      if (!type) continue;
-      const tiles = dist(inp.from, stations[a]) + dist(stations[b], inp.to);
-      if (!best || tiles < best.tiles) best = { a, b, tiles, type };
+  const wc = inp.levels.woodcutting;
+  const bestCanoe = (usable: (ty: CanoeType) => boolean) => {
+    let best: { a: number; b: number; tiles: number; type: CanoeType } | null = null;
+    for (let a = 0; a < stations.length; a++) {
+      for (let b = 0; b < stations.length; b++) {
+        if (a === b) continue;
+        const stops = Math.abs(a - b);
+        const type = types.find((ty) => ty.stops >= stops && (!stations[b].wakaOnly || ty.name === 'Waka') && usable(ty));
+        if (!type) continue;
+        const tiles = dist(inp.from, stations[a]) + dist(stations[b], inp.to);
+        if (!best || tiles < best.tiles) best = { a, b, tiles, type };
+      }
     }
-  }
-  if (best && best.tiles + MIN_SAVING_TILES <= direct) {
-    const wc = inp.levels.woodcutting;
-    const hasAxe = inp.carried ? count(inp.carried, TRANSPORT.canoe.axes) > 0 : null;
+    return best && best.tiles + MIN_SAVING_TILES <= direct ? best : null;
+  };
+  const canoeOption = (id: string, best: NonNullable<ReturnType<typeof bestCanoe>>): TravelOption => {
+    // An axe in the bag or worn is what makes the station usable; none in the bag after the bank was opened means it is not at hand.
+    const axeOk = needFrom(inp.carried ? count(inp.carried, TRANSPORT.canoe.axes) > 0 : null, inp.bankSeen);
     const levelOk = wc === undefined ? null : wc >= best.type.level;
     const a = stations[best.a];
     const b = stations[best.b];
-    out.push({
-      id: 'canoe', title: `Canoe ${a.name} → ${b.name}`,
+    return {
+      id, title: `Canoe ${a.name} → ${b.name}`,
       legs: [
         { kind: 'walk', label: `to station ${a.name}`, tiles: dist(inp.from, a) },
         { kind: 'canoe', label: `${best.type.name}: ${Math.abs(best.a - best.b)} stops`, tiles: 0 },
         { kind: 'walk', label: `from station ${b.name} to the target`, tiles: dist(b, inp.to) },
       ],
       walkTiles: best.tiles,
-      availability: levelOk === false ? 'locked' : levelOk === null || hasAxe === null ? 'maybe' : 'ready',
+      availability: levelOk === false || axeOk === false ? 'locked' : levelOk === null || axeOk === null ? 'maybe' : 'ready',
       needs: [
         { text: `Woodcutting ${best.type.level} for ${best.type.name}${wc !== undefined ? ` (you have ${wc})` : ''}`, ok: levelOk },
-        { text: 'any axe (can be left at the station)', ok: hasAxe },
+        { text: 'any axe (can be left at the station)', ok: axeOk },
       ],
-    });
+      go: { x: a.x, y: a.y, plane: a.plane, label: `Canoe station — ${a.name}` },
+    };
+  };
+  const bestAny = bestCanoe(() => true);
+  if (bestAny) {
+    out.push(canoeOption('canoe', bestAny));
+    if (wc !== undefined && wc < bestAny.type.level) {
+      const now = bestCanoe((ty) => wc >= ty.level);
+      if (now) out.push(canoeOption('canoe-now', now));
+    }
   }
 
   // Boats: pier to pier for 30 coins.
   for (const b of TRANSPORT.boats) {
     const tiles = dist(inp.from, b.from) + dist(b.to, inp.to);
     const coins = inp.carried ? count(inp.carried, ['Coins']) : null;
-    const ok = coins === null ? null : coins >= b.cost ? true : inp.bankSeen ? false : null;
+    const ok = b.cost <= 0 ? true : coins === null ? null : coins >= b.cost ? true : inp.bankSeen ? false : null;
     out.push({
       id: b.id, title: b.name,
       legs: [
         { kind: 'walk', label: `to ${b.from.label}`, tiles: dist(inp.from, b.from) },
-        { kind: 'boat', label: `boat for ${b.cost} gp`, tiles: 0 },
+        { kind: 'boat', label: b.cost > 0 ? `boat for ${b.cost} gp` : 'free ferry', tiles: 0 },
         { kind: 'walk', label: `from ${b.to.label} to the target`, tiles: dist(b.to, inp.to) },
       ],
       walkTiles: tiles,
-      availability: ok === false ? 'locked' : ok ? 'ready' : 'maybe',
-      needs: [{ text: `${b.cost} gp in coins${coins !== null ? ` (in the bag: ${coins})` : ''}`, ok }],
+      availability: ok === false ? 'locked' : ok && !b.needs?.length ? 'ready' : 'maybe',
+      needs: [
+        ...(b.cost > 0 ? [{ text: `${b.cost} gp in coins${coins !== null ? ` (in the bag: ${coins})` : ''}`, ok }] : []),
+        ...(b.needs ?? []).map((text) => ({ text, ok: null })),
+      ],
       ...(b.note ? { note: b.note } : {}),
     });
   }

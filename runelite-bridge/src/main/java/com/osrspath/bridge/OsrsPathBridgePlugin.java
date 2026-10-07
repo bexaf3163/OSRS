@@ -1034,6 +1034,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private String skillStepKey;
 	/** The preparation plan from the app; null means it did not send one. The "What you need" list draws it. */
 	private volatile PrepPlan prep;
+	/** The temporary target was set by a click on the transport row: its first stop is not the goal, so a teleport or ride ends it. */
+	private volatile boolean navViaTransport;
 	/** Until when the transport item is framed in the bag after a click on its row. */
 	private volatile long transportFrameUntil;
 	private static final long TRANSPORT_FRAME_NANOS = 20_000_000_000L;
@@ -1740,6 +1742,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				{
 					guideMessage = null;
 					applyNav(n);
+					navViaTransport = true;
+					updateHud();
 				}
 				else
 				{
@@ -1826,10 +1830,15 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			return;
 		}
 		navTarget = t;
+		navViaTransport = false;
 		tel("nav", "event", "set", "label", t.getLabel(), "x", t.getX(), "y", t.getY(), "plane", t.getPlane(), "purchase", t.isPurchase());
 		near = false;
 		lastPosition = null;
 		scanNavNpcs();
+		if (!t.getObjectNameSet().isEmpty())
+		{
+			rescan();
+		}
 		if (server != null)
 		{
 			// The app learns the target even if it was chosen in the game (the "What you need" list, the panel), and shows the same one.
@@ -1853,6 +1862,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		navSticky = false;
 		navTarget = null;
 		navNpcs.clear();
+		navViaTransport = false;
+		if (done != null && !done.getObjectNameSet().isEmpty())
+		{
+			rescan();
+		}
 		near = false;
 		lastPosition = null;
 		if (server != null && done != null)
@@ -2415,8 +2429,31 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		int hpMax = client.getGameState() == GameState.LOGGED_IN ? client.getRealSkillLevel(Skill.HITPOINTS) : 0;
 		String health = config.hudHealth() && target != null ? healthLine(hp, hpMax, target.getMaxHit()) : null;
 		boolean critical = health != null && target.getMaxHit() != null && hp <= target.getMaxHit();
+		String chip = transportChip(prep, navTarget != null, navViaTransport);
 		hud = new OsrsPathHudOverlay.State(title, goal, distance, near, bag, checklist.isReady(), dangerText, inside, pace, paceGood, upgrade,
-			health, critical, navTarget == null ? useLine(target, ItemCounts.sum(carried, noted)) : null, tiles);
+			health, critical, chip != null ? chip : navTarget == null ? useLine(target, ItemCounts.sum(carried, noted)) : null, tiles);
+	}
+
+	/**
+	 * The action chip for the recommended transport ("⚡ Use Chronicle → Champions' Guild"): on the HUD while nothing else leads the arrow, and while the arrow
+	 * leads to the transport's own first stop. A purchase stop or another place has its own heading, so the chip stays out of the way there.
+	 */
+	static String transportChip(PrepPlan plan, boolean navActive, boolean navViaTransport)
+	{
+		if (plan == null || !plan.hasTransport() || (navActive && !navViaTransport))
+		{
+			return null;
+		}
+		return plan.getRecommendedTransport().chipText();
+	}
+
+	/**
+	 * A jump (a teleport, a ferry, a canoe, a fairy ring) ends a target that was only the way's first stop: from the landing tile the arrow returns to the step
+	 * and the app judges the way again. A plain place or shop target stays, because its tile is still the goal.
+	 */
+	static boolean transportStopOutdated(boolean navViaTransport, boolean jumped)
+	{
+		return navViaTransport && jumped;
 	}
 
 	/**
@@ -2460,7 +2497,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	{
 		npcs.clear();
 		objects.clear();
-		if (target == null || client.getGameState() != GameState.LOGGED_IN)
+		boolean navObjects = navTarget != null && !navTarget.getObjectNameSet().isEmpty();
+		if ((target == null && !navObjects) || client.getGameState() != GameState.LOGGED_IN)
 		{
 			return;
 		}
@@ -2564,18 +2602,24 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	private void track(TileObject o)
 	{
-		if (o == null || target == null)
+		ActiveTarget step = target;
+		NavTarget nav = navTarget;
+		Set<String> navObjects = nav == null ? Collections.emptySet() : nav.getObjectNameSet();
+		if (o == null || (step == null && navObjects.isEmpty()))
 		{
 			return;
 		}
 		ActiveTarget.LineHighlight line = lineHl;
-		if (target.getObjectIdSet().isEmpty() && target.getObjectNameSet().isEmpty() && line.objectIds.isEmpty() && line.objectNames.isEmpty())
+		Set<Integer> stepIds = step == null ? Collections.emptySet() : step.getObjectIdSet();
+		Set<String> stepNames = step == null ? Collections.emptySet() : step.getObjectNameSet();
+		if (stepIds.isEmpty() && stepNames.isEmpty() && line.objectIds.isEmpty() && line.objectNames.isEmpty() && navObjects.isEmpty())
 		{
 			return;
 		}
 		String name = objectName(o);
-		boolean byId = target.getObjectIdSet().contains(o.getId()) || line.objectIds.contains(o.getId());
-		boolean byName = name != null && (target.getObjectNameSet().contains(ActiveTarget.nameKey(name)) || line.objectNames.contains(ActiveTarget.nameKey(name)));
+		boolean byId = stepIds.contains(o.getId()) || line.objectIds.contains(o.getId());
+		boolean byName = name != null && (stepNames.contains(ActiveTarget.nameKey(name)) || line.objectNames.contains(ActiveTarget.nameKey(name))
+			|| navObjects.contains(ActiveTarget.nameKey(name)));
 		if (byId || byName)
 		{
 			objects.put(o, name == null ? "" : name);
@@ -2823,7 +2867,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 					server.setPos(pos.getX(), pos.getY(), pos.getPlane());
 				}
 				updateDanger(pos);
-				if (arrived(pos))
+				boolean jumped = before != null && MoveDetector.isJump(before.getX(), before.getY(), pos.getX(), pos.getY());
+				if (transportStopOutdated(navViaTransport, jumped))
+				{
+					finishNav("teleported");
+				}
+				else if (arrived(pos))
 				{
 					finishNav("arrived");
 				}

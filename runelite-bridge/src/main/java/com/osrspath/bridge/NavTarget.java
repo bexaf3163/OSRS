@@ -26,6 +26,8 @@ public class NavTarget
 	private int plane;
 	/** The seller or NPC at the place: the world overlay highlights it. */
 	private List<String> npcNames;
+	/** The object at the place (a canoe station, a fairy ring): the world overlay highlights it, by name. */
+	private List<String> objectNames;
 	/** The item being sought: with it the target is cleared when it appears in the bag or is worn. */
 	private String itemName;
 	private Integer itemId;
@@ -33,6 +35,7 @@ public class NavTarget
 	private String stepId;
 
 	private transient Set<String> npcNameSet = Collections.emptySet();
+	private transient Set<String> objectNameSet = Collections.emptySet();
 
 	String prepare()
 	{
@@ -64,6 +67,22 @@ public class NavTarget
 				names.add(ActiveTarget.nameKey(n));
 			}
 		}
+		if (objectNames != null && objectNames.size() > MAX_NPCS)
+		{
+			return "too many objects";
+		}
+		Set<String> objects = new HashSet<>();
+		if (objectNames != null)
+		{
+			for (String n : objectNames)
+			{
+				if (n == null || n.isEmpty() || ActiveTarget.tooLong(n))
+				{
+					return "invalid object name";
+				}
+				objects.add(ActiveTarget.nameKey(n));
+			}
+		}
 		if (itemName != null && (itemName.isEmpty() || ActiveTarget.tooLong(itemName)))
 		{
 			return "invalid item";
@@ -77,6 +96,7 @@ public class NavTarget
 			return "stepId must look like S1-03";
 		}
 		npcNameSet = names;
+		objectNameSet = objects;
 		return null;
 	}
 

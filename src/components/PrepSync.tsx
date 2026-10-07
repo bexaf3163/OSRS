@@ -21,6 +21,8 @@ import { recommendedTransport, type RecommendedTransport } from '../lib/transpor
 
 /** How often the position is read for the purchase detour: the text is rounded, so the snapshot does not change on every step. */
 const DETOUR_POLL_MS = 15_000;
+/** How long the landing tile of a teleport stands in for the position: long enough for the status to catch up, short enough that walking on is not ignored. */
+const FRESH_MOVE_MS = 4_000;
 
 export function PrepSync() {
   const { state, activeStepId, plugin, setPrepPart } = useBridge();
@@ -38,7 +40,7 @@ export function PrepSync() {
 }
 
 function StepPlan({ step }: { step: Step }) {
-  const { setPrepPart, locate, stats, gear, owned } = useBridge();
+  const { setPrepPart, locate, stats, gear, owned, moves } = useBridge();
   const { progress, mode } = useStore();
   const profile = styleOf(useFeatures());
   const upgrade = useUpgradeRecommendation(step);
@@ -52,11 +54,19 @@ function StepPlan({ step }: { step: Step }) {
   const bagRef = useRef({ levels: progress.levels, stats, gear, owned, mode });
   bagRef.current = { levels: progress.levels, stats, gear, owned, mode };
   const to = stepPlaces(step)[0];
+  // A teleport or a boat ride is a jump: the way is judged again at once from where the player landed, not at the next poll.
+  const lastMove = moves[moves.length - 1];
+  const lastMoveAt = lastMove?.at ?? 0;
+  const lastMoveRef = useRef(lastMove);
+  lastMoveRef.current = lastMove;
   const coins = engine.ctx.state.coins.bag.known ? engine.ctx.state.coins.bag.value : null;
   useEffect(() => {
     let dead = false;
     const run = async () => {
-      const pos = await locate();
+      // The landing tile of a jump seen a moment ago is the position (the status call may not have caught up yet); otherwise ask the game.
+      const m = lastMoveRef.current;
+      const landed = m && m.to && Date.now() - m.at < FRESH_MOVE_MS ? m.to : null;
+      const pos = landed ?? await locate();
       if (dead) return;
       if (!pos || !to || pos.plane !== 0 || to.plane !== 0) { setDetour(null); setTransport(null); return; }
       // The bag and the levels: a teleport that is ready shortens the way to the stop.
@@ -69,7 +79,7 @@ function StepPlan({ step }: { step: Step }) {
     return () => { dead = true; window.clearInterval(t); };
     // The plan is read from a ref when the timer fires: a new plan object on every render must not restart the timer.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step.id, locate, to?.x, to?.y, plan.now.length, plan.soon.length, coins]);
+  }, [step.id, locate, to?.x, to?.y, plan.now.length, plan.soon.length, coins, lastMoveAt]);
   const payload = planPayload(plan, { detour, transport });
   const key = JSON.stringify(payload);
   useEffect(() => {

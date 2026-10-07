@@ -95,3 +95,72 @@ describe('links inside the app', () => {
     expect(html('[file](docs/readme.md)')).toBe('<span>file</span>');
   });
 });
+
+// ---------- The recommended transport on its way to the game ----------
+import { stepById } from '../src/data';
+import { buildPlayerState } from '../src/lib/playerState';
+import { createReadinessEngine } from '../src/lib/readinessEngine';
+import { emptyProgress } from '../src/lib/progress';
+import { planPayload, buildEnvelope, EMPTY_PARTS } from '../src/lib/prepEnvelope';
+import { recommendedTransport, type RecommendedTransport } from '../src/lib/transport';
+import { travelOptions, type TravelInput } from '../src/lib/travel';
+import type { GearItem } from '../src/services/runeliteBridge';
+
+describe('bridge serialization: the transport carries its kind, its stop, its interaction and a short chip', () => {
+  const at = (x: number, y: number, plane = 0) => ({ x, y, plane });
+  const bag = (...rows: [string, number][]): GearItem[] => rows.map(([name, count], i) => ({ id: i + 1, name, count }));
+  const plan = () => {
+    const state = buildPlayerState({
+      mode: 'f2p', stats: null, progress: { levels: {} }, owned: { bankSeen: true, items: new Map() }, gear: { equipment: [], inventory: [], coins: 600, bankCoins: 0 }, questsDone: null, connected: true,
+    });
+    return createReadinessEngine({ steps: allSteps, progress: emptyProgress(), qp: 0, mode: 'f2p', state }).plan(stepById.get('S2-12')!);
+  };
+  const best = (over: Partial<TravelInput>): RecommendedTransport => {
+    const t = recommendedTransport(travelOptions({ from: at(3093, 3244), to: at(3213, 3428), levels: {}, carried: null, bankSeen: true, ...over }));
+    expect(t).not.toBeNull();
+    return t!;
+  };
+
+  const cases: [string, Partial<TravelInput>, string][] = [
+    ['item_teleport', { carried: bag(['Chronicle', 1]) }, '⚡ Use Chronicle → Champions\' Guild'],
+    ['tablet', { carried: bag(['Varrock teleport', 1]) }, '⚡ Break Varrock teleport tablet → Varrock Square'],
+    ['spell_teleport', { levels: { magic: 25 }, carried: bag(['Law rune', 1], ['Air rune', 3], ['Fire rune', 1]) }, '⚡ Cast Varrock Teleport → Varrock Square'],
+    ['canoe', { from: at(3241, 3237), to: at(3110, 3409), levels: { woodcutting: 27 }, carried: bag(['Bronze axe', 1]) }, '⚡ Canoe: Lumbridge → Barbarian Village'],
+    ['ferry', { from: at(2915, 3226), to: at(2558, 2858), carried: bag(['Coins', 0]) }, '⚡ Ferry: talk to Captain Tock → Corsair Cove'],
+  ];
+
+  it.each(cases)('%s: the chip says what to click, the record is complete, and nothing is activated by the app', (type, over, chip) => {
+    const t = best(over);
+    expect(t.type).toBe(type);
+    expect(t.chip).toBe(chip);
+    expect(t.chip.length).toBeLessThanOrEqual(60);
+    expect(t.chip.startsWith('⚡ ')).toBe(true);
+    expect(Number.isInteger(t.interactionId) && t.interactionId >= 0).toBe(true);
+    expect(t.text.length).toBeGreaterThan(10);
+    if (type === 'canoe' || type === 'ferry') {
+      expect(t.tile, 'a canoe or a ferry has a first stop for the arrow').toBeDefined();
+      expect(t.interactionName).toBeTruthy();
+    }
+    if (type === 'item_teleport' || type === 'tablet') expect(t.item).toBeTruthy();
+  });
+
+  it('the plan payload carries all of it to the plugin, and the envelope keeps it for the step it was made for', () => {
+    const t = best({ carried: bag(['Chronicle', 1]) });
+    const payload = planPayload(plan(), { transport: t });
+    expect(payload.recommendedTransport).toMatchObject({ type: 'item_teleport', item: 'Chronicle', interactionId: 0, chip: t.chip });
+    const env = buildEnvelope({ ...EMPTY_PARTS, plan: payload }, 7);
+    expect(env.plan?.recommendedTransport?.chip).toBe(t.chip);
+    const ferry = planPayload(plan(), { transport: best({ from: at(2915, 3226), to: at(2558, 2858), carried: bag(['Coins', 0]) }) });
+    expect(ferry.recommendedTransport).toMatchObject({ type: 'ferry', interactionName: 'Captain Tock', tile: { x: 2910, y: 3226, plane: 0 } });
+  });
+
+  it('a transport with no chip (an older record) still serializes without one', () => {
+    const t = { ...best({ carried: bag(['Chronicle', 1]) }), chip: '' };
+    expect(planPayload(plan(), { transport: t }).recommendedTransport).not.toHaveProperty('chip');
+  });
+
+  it('a chip longer than the limit is cut, not refused', () => {
+    const t = { ...best({ carried: bag(['Chronicle', 1]) }), chip: `⚡ ${'x'.repeat(200)}` };
+    expect(planPayload(plan(), { transport: t }).recommendedTransport!.chip!.length).toBeLessThanOrEqual(60);
+  });
+});
