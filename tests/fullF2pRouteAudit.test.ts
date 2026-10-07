@@ -147,7 +147,9 @@ describe('F2P route audit: continuity between places', () => {
       crossings++;
       expect(boat(a, b), `${anchors[i - 1].s.id} -> ${anchors[i].s.id}: ${a} to ${b} has no boat`).toBe(true);
     }
-    expect(crossings).toBeGreaterThan(0);
+    // The food for the dragon is bought now (S4-04), so no step anchor is on Karamja any more; the boat table must still link it, both ways, for the stage lines that go there.
+    expect(crossings).toBeGreaterThanOrEqual(0);
+    expect(boat('mainland', 'karamja') && boat('karamja', 'mainland')).toBe(true);
   });
 
   it('inside a stage table every change of floor, dungeon or island has a named way across (ladder, stairs, trapdoor, rope, boat)', () => {

@@ -53,16 +53,19 @@
           "min": 20
         },
         {
-          "raw": "30",
-          "min": 30
+          "raw": "20–25",
+          "min": 20,
+          "max": 25
         },
         {
-          "raw": "40",
-          "min": 40
+          "raw": "35–40",
+          "min": 35,
+          "max": 40
         },
         {
-          "raw": "44",
-          "min": 44
+          "raw": "40–44",
+          "min": 40,
+          "max": 44
         },
         {
           "raw": "50–60",
@@ -76,24 +79,24 @@
       "label": "Defence",
       "values": [
         {
-          "raw": "10",
-          "min": 10
+          "raw": "1",
+          "min": 1
         },
         {
-          "raw": "20",
-          "min": 20
+          "raw": "1",
+          "min": 1
         },
         {
-          "raw": "30",
-          "min": 30
+          "raw": "1",
+          "min": 1
         },
         {
-          "raw": "40",
-          "min": 40
+          "raw": "1",
+          "min": 1
         },
         {
-          "raw": "44",
-          "min": 44
+          "raw": "33",
+          "min": 33
         },
         {
           "raw": "50–60",
@@ -272,12 +275,12 @@
           "min": 30
         },
         {
-          "raw": "40",
-          "min": 40
+          "raw": "30",
+          "min": 30
         },
         {
-          "raw": "40",
-          "min": 40
+          "raw": "30",
+          "min": 30
         },
         {
           "raw": "50",
@@ -302,12 +305,12 @@
           "min": 30
         },
         {
-          "raw": "40",
-          "min": 40
+          "raw": "30",
+          "min": 30
         },
         {
-          "raw": "40",
-          "min": 40
+          "raw": "30",
+          "min": 30
         },
         {
           "raw": "50",
@@ -468,5 +471,5 @@
       ]
     }
   ],
-  "note": "In stage 5 Strength and Defence rise on their own: Dragon Slayer I gives 18,650 XP in each. Smithing 29 comes from the quest The Knight's Sword (12,725 XP), and Magic 25 and 33 from training in steps S2-04 and S3-09. The values were checked against the V2.1 route on 26 Sep 2026."
+  "note": "In stage 5 Strength and Defence rise on their own: Dragon Slayer I gives 18,650 XP in each, which is Defence 33 from level 1, so Defence is not trained before it. Smithing 29 comes from the quest The Knight's Sword (12,725 XP), and Magic 25 and 33 from training in steps S2-04 and S3-09. Fishing and Cooking stay at 30 until stage 6: the food for the dragon is bought (S4-04). The values were checked against the V2.1 route on 26 Sep 2026."
 }

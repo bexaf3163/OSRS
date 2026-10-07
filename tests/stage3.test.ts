@@ -372,7 +372,8 @@ describe('Steps with a pace', () => {
     for (const id of ['S3-08', 'S4-03']) {
       const s = allSteps.find((x) => x.id === id)!;
       expect(s.pacing!.skill).toBe('attack');
-      expect(s.pacing!.also).toEqual(['strength', 'defence']);
+      // The pace follows Attack alone: Strength has its own, lower goal in the title and the trigger, and Defence is not trained.
+      expect(s.pacing!.also).toBeUndefined();
       expect(s.pacing!.expPerAction).toBe(4 * hp.get(s.foes![0])!);
       expect(s.pacing!.secondsPerAction).toBeUndefined();
     }

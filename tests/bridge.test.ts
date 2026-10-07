@@ -125,7 +125,7 @@ describe('auto-mark triggers on the route', () => {
     expect(step('S1-12').inGame!.completionTrigger!.items).toEqual([
       { names: ['Copper ore'], count: 5 }, { names: ['Tin ore'], count: 1 }, { names: ['Iron ore'], count: 2 },
     ]);
-    expect(step('S4-04').inGame!.completionTrigger!.items).toEqual([{ names: ['Lobster'], count: 30 }]);
+    expect(step('S4-04').inGame!.completionTrigger!.items).toEqual([{ names: ['Lobster'], count: 20 }]);
     expect(step('S1-13').inGame!.completionTrigger).toEqual({ type: 'ITEM_OWNED', items: [{ names: ['Coins'], count: 20000 }] });
   });
 
@@ -371,7 +371,7 @@ describe('step places: where the quest items and NPCs come from — the same in 
 
   it('a shop from the dictionary has a seller — Shop keeper; the step map keeps the earlier order of points', () => {
     expect(stepPlaces(step('S1-02')).find((q) => q.items?.includes('Tinderbox'))).toMatchObject({ label: 'Lumbridge General Store', npc: 'Shop keeper' });
-    expect(mapPlaces(step('S4-04')).slice(0, 2).map((q) => q.label)).toEqual(['Up to 40: fly fishing at Barbarian Village', 'From 40: lobsters at Musa Point']);
+    expect(mapPlaces(step('S4-04')).slice(0, 2).map((q) => q.label)).toEqual(['The Grand Exchange', 'Optional: fly fishing at Barbarian Village']);
   });
 });
 

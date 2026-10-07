@@ -258,6 +258,59 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
+	public void anyOfCompletesOnTheFirstItemThatIsHeld()
+	{
+		// S3-06: 2,500 coins, or 25 iron ore, or the Adamant scimitar itself: whichever comes first.
+		ActiveTarget t = target("S3-06", "ITEM_OWNED");
+		t.getCompletionTrigger().setAnyOf(true);
+		t.getCompletionTrigger().setItems(List.of(item(null, 2500, "Coins"), item(null, 25, "Iron ore"), item(null, 1, "Adamant scimitar")));
+		manager.setTarget(t);
+		byName.put("Coins", 2499);
+		byName.put("Iron ore", 24);
+		manager.onStateChanged();
+		manager.onGameTick();
+		assertTrue("one short of each: nothing yet", completed.isEmpty());
+		byName.put("Iron ore", 25);
+		manager.onStateChanged();
+		manager.onGameTick();
+		assertEquals(List.of("S3-06"), completed);
+	}
+
+	@Test
+	public void anyOfAcceptsTheScimitarAloneAndTheCoinsAlone()
+	{
+		for (String[] held : new String[][] {{"Adamant scimitar", "1"}, {"Coins", "9000"}})
+		{
+			completed.clear();
+			byName.clear();
+			ActiveTarget t = target("S3-06", "ITEM_OWNED");
+			t.getCompletionTrigger().setAnyOf(true);
+			t.getCompletionTrigger().setItems(List.of(item(null, 2500, "Coins"), item(null, 25, "Iron ore"), item(null, 1, "Adamant scimitar")));
+			manager.setTarget(t);
+			byName.put(held[0], Integer.parseInt(held[1]));
+			manager.onStateChanged();
+			manager.onGameTick();
+			assertEquals(held[0], List.of("S3-06"), completed);
+		}
+	}
+
+	@Test
+	public void withoutAnyOfEveryItemIsStillNeeded()
+	{
+		ActiveTarget t = target("S3-06", "ITEM_OWNED");
+		t.getCompletionTrigger().setItems(List.of(item(null, 2500, "Coins"), item(null, 25, "Iron ore")));
+		manager.setTarget(t);
+		byName.put("Coins", 9000);
+		manager.onStateChanged();
+		manager.onGameTick();
+		assertTrue("the coins alone are not enough when all are needed", completed.isEmpty());
+		byName.put("Iron ore", 25);
+		manager.onStateChanged();
+		manager.onGameTick();
+		assertEquals(List.of("S3-06"), completed);
+	}
+
+	@Test
 	public void itemByIdIsNotConfusedWithNamesakes()
 	{
 		// The three Dragon Slayer I map parts are all called "Map part": the Melzar piece (1535) is the one needed.

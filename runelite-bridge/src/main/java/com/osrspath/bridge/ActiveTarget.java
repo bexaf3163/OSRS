@@ -523,6 +523,8 @@ public class ActiveTarget
 		private List<LevelNeed> levels;
 		/** ITEM_OWNED: the items themselves; QUEST_COMPLETED and SKILL_LEVEL have one more condition on top. */
 		private List<ItemNeed> items;
+		/** ITEM_OWNED only: any one of the items is enough (2,500 coins, or 25 ore, or the scimitar itself), not all of them. */
+		private boolean anyOf;
 		private String chatPattern;
 		private Integer varbitId;
 		private Integer targetValue;

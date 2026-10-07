@@ -20,7 +20,8 @@ export function ownedText(i: OwnedItem): string {
 
 /** The tail of the phrase after "The step will be marked by itself when …". */
 export function triggerText(t: CompletionTrigger): string {
-  const items = t.items?.length ? `you will have ${list(t.items.map(ownedText))} (bag, equipped and bank together)` : '';
+  const joined = (parts: string[]) => (t.anyOf && parts.length > 1 ? `${parts.slice(0, -1).join(', ')} or ${parts[parts.length - 1]}` : list(parts));
+  const items = t.items?.length ? `you will have ${t.anyOf && t.items.length > 1 ? 'any of ' : ''}${joined(t.items.map(ownedText))} (bag, equipped and bank together)` : '';
   const and = (head: string) => (items ? `${head}, and ${items}` : head);
   switch (t.type) {
     case 'QUEST_COMPLETED':

@@ -68,9 +68,9 @@ describe('step points', () => {
     expect(initialPoint(step('S1-05'))).toBe(0);
   });
 
-  it('S4-04: the map opens on lobsters, although they are the second point', () => {
+  it('S4-04: the lobsters are bought, so the map opens on the Grand Exchange', () => {
     const s = step('S4-04');
-    expect(stepPoints(s)[initialPoint(s)].label).toContain('Musa Point');
+    expect(stepPoints(s)[initialPoint(s)].label).toContain('Grand Exchange');
   });
 
   it('key steps from the spec on the map (V2.1 numbers)', () => {

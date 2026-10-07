@@ -6,6 +6,9 @@ import type { Target } from '../types/index.ts';
 /** Word stems in step titles → skill level ids. */
 const TITLE_SKILL_WORDS: [RegExp, string[]][] = [
   [/^combat$/, ['attack', 'strength', 'defence']],
+  [/^attack$/, ['attack']],
+  [/^strength$/, ['strength']],
+  [/^defence$/, ['defence']],
   [/^fishing$/, ['fishing']],
   [/^cooking$/, ['cooking']],
   [/^woodcutting$/, ['woodcutting']],

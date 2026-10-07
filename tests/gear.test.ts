@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, itemById, items, plugins, reference, skills, stepsFor } from '../src/data';
 import { emptyProgress, withStep } from '../src/lib/progress';
+import type { Step } from '../src/types';
 import { fightStepFor } from '../src/lib/gearAdvice';
 import { buildIndex, search } from '../src/lib/search';
 import { parseHash } from '../src/lib/router';
@@ -59,9 +60,9 @@ describe('damage formulas (OSRS Wiki, Damage per second/Melee)', () => {
     const lv = { attack: 20, strength: 20, defence: 1 };
     expect(meleeWith(lv, byName('Mithril scimitar'), null).type).toBe('slash');
     expect(meleeWith(lv, byName('Mithril mace'), null).type).toBe('crush');
-    // Against the target\'s defence: the Al Kharid warrior has lower crush defence (10) than slash defence (15).
-    const warrior = foeData.foes.find((f) => f.name === 'Al Kharid warrior')!;
-    const hit = meleeWith(lv, byName('Mithril scimitar'), null, {}, warrior).hitChance;
+    // Against the target's defence: the Flesh Crawler (defence level 10, bonus 15) is harder to hit than a cow.
+    const crawler = foeData.foes.find((f) => f.name === 'Flesh Crawler')!;
+    const hit = meleeWith(lv, byName('Mithril scimitar'), null, {}, crawler).hitChance;
     const vsCow = meleeWith(lv, byName('Mithril scimitar'), null).hitChance;
     expect(hit).toBeLessThan(vsCow);
   });
@@ -141,7 +142,7 @@ describe('gear advice', () => {
     const foes = stepFoes(allSteps.find((s) => s.id === 'S3-08')!);
     const a = adviseGear(input({ foes, levels: { attack: 20, strength: 20, defence: 1 }, gear: gear({ equipment: [item('Steel scimitar', 'weapon')], coins: 10_000, bankCoins: 0 }) }));
     expect(a.actions[0]).toMatchObject({ slot: 'weapon', how: 'buy', item: { name: 'Mithril scimitar' }, source: { kind: 'shop', npc: 'Zeke', price: 1040 } });
-    expect(a.foes.map((f) => f.name)).toEqual(['Al Kharid warrior', 'Flesh Crawler']);
+    expect(a.foes.map((f) => f.name)).toEqual(['Minotaur']);
   });
 
   it('the best weapon is in the bag and a weaker one in the hand — "wear it", no need to buy', () => {
@@ -200,7 +201,7 @@ describe('gear advice', () => {
     const foes = stepFoes(allSteps.find((s) => s.id === 'S3-08')!);
     const a = adviseGear(input({ gear: null, foes, routeNeeds: route, levels: { attack: 1, strength: 1, defence: 1 } }));
     const w = a.goals.find((x) => x.slot === 'weapon')!;
-    // Against a warrior the mace is slightly stronger than the scimitar, but the route buys the scimitar anyway on S2-01.
+    // Against a minotaur the mace and the scimitar are close, and the route buys the scimitar anyway on S2-01.
     expect(w.item.name).toBe('Iron scimitar');
     expect(w.routeStep).toBe('S2-01');
     expect(statsText(w)).toMatch(/^max hit \d+, once every 2\.4 s$/);
@@ -288,8 +289,8 @@ describe('step opponents (monsters.json)', () => {
         if (said.length && s.id !== 'S3-08' && s.id !== 'S4-03') expect(said, `${s.id} ${f.name}`).toContain(f.combat);
       }
     }
-    // The S3-08 and S4-03 opponents are named in "where": the warrior 9 and the giant 42 — their levels are in the text.
-    expect(foeData.foes.find((f) => f.name === 'Al Kharid warrior')!.combat).toBe(9);
+    // The S3-08 and S4-03 opponents are named in "where": the minotaur 12 and the giant 42 — their levels are in the text.
+    expect(foeData.foes.find((f) => f.name === 'Minotaur')!.combat).toBe(12);
     expect(foeData.foes.find((f) => f.name === 'Moss giant')!.combat).toBe(42);
   });
 
@@ -305,8 +306,8 @@ describe('step opponents (monsters.json)', () => {
 
 describe('the first estimate of the combat pace', () => {
   const s308 = allSteps.find((s) => s.id === 'S3-08')!;
-  const warrior = foeData.foes.find((f) => f.name === 'Al Kharid warrior')!;
-  const lv = { attack: 20, strength: 20, defence: 20 };
+  const warrior = foeData.foes.find((f) => f.name === 'Minotaur')!;
+  const lv = { attack: 20, strength: 20, defence: 1 };
   const iron: GearState = { equipment: [{ id: 1323, name: 'Iron scimitar', slot: 'weapon' }], inventory: [], coins: 0, bankCoins: null };
 
   it('seconds per opponent — its health / the damage per second of the current weapon', () => {
@@ -385,6 +386,8 @@ describe('amulets: Amulet of strength and Amulet of power do not argue (§69)', 
   const s308 = allSteps.find((s) => s.id === 'S3-08')!;
   const s403 = allSteps.find((s) => s.id === 'S4-03')!;
   const lv30 = { attack: 30, strength: 30, defence: 30 };
+  // The levels a player really has at the end of each combat step now: Defence is not trained before Dragon Slayer I.
+  const lvOf = (step: Step) => (step === s308 ? { attack: 30, strength: 20, defence: 1 } : { attack: 40, strength: 35, defence: 1 });
   const wearing = (...names: string[]) => gear({ equipment: names.map((n) => item(n, byName(n).slot === 'neck' ? 'amulet' : byName(n).slot)), coins: 50_000, bankCoins: 0 });
   const neckAdvice = (a: ReturnType<typeof adviseGear>) => [...a.actions, ...a.goals].filter((x) => x.slot === 'neck').map((x) => x.item.name);
 
@@ -401,14 +404,14 @@ describe('amulets: Amulet of strength and Amulet of power do not argue (§69)', 
   it('the amulet of strength is worn — the amulet of power is not advised, and vice versa: the difference is below the threshold', () => {
     for (const step of [s308, s403]) {
       const foes = stepFoes(step);
-      expect(neckAdvice(adviseGear(input({ levels: lv30, foes, gear: wearing('Adamant scimitar', 'Amulet of strength') })))).toEqual([]);
-      expect(neckAdvice(adviseGear(input({ levels: lv30, foes, gear: wearing('Adamant scimitar', 'Amulet of power') })))).toEqual([]);
+      expect(neckAdvice(adviseGear(input({ levels: lvOf(step), foes, gear: wearing('Adamant scimitar', 'Amulet of strength') })))).toEqual([]);
+      expect(neckAdvice(adviseGear(input({ levels: lvOf(step), foes, gear: wearing('Adamant scimitar', 'Amulet of power') })))).toEqual([]);
     }
   });
 
   it('without an amulet — one main advice, and it is the amulet of strength, on any combat step', () => {
     for (const step of [s308, s403]) {
-      const a = adviseGear(input({ levels: lv30, foes: stepFoes(step), gear: wearing('Adamant scimitar') }));
+      const a = adviseGear(input({ levels: lvOf(step), foes: stepFoes(step), gear: wearing('Adamant scimitar') }));
       expect(neckAdvice(a)).toEqual(['Amulet of strength']);
     }
   });

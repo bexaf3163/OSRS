@@ -28,14 +28,15 @@
       "members": false
     },
     {
-      "name": "Al Kharid warrior",
-      "combat": 9,
-      "hitpoints": 19,
-      "defenceLevel": 4,
+      "name": "Minotaur",
+      "version": "Level 12",
+      "combat": 12,
+      "hitpoints": 10,
+      "defenceLevel": 10,
       "defence": {
-        "stab": 12,
-        "slash": 15,
-        "crush": 10
+        "stab": -21,
+        "slash": -21,
+        "crush": -21
       },
       "members": false
     },

@@ -38,6 +38,6 @@ describe('money: exact coins apart from the item estimate (§75–77)', () => {
   });
 
   it('the earning goals of steps match "Done when"', () => {
-    expect(allSteps.filter((s) => s.moneyGoal).map((s) => [s.id, s.moneyGoal])).toEqual([['S1-13', 20_000], ['S3-06', 30_000]]);
+    expect(allSteps.filter((s) => s.moneyGoal).map((s) => [s.id, s.moneyGoal])).toEqual([['S1-13', 20_000], ['S3-06', 2_500]]);
   });
 });

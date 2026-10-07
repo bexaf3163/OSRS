@@ -59,6 +59,8 @@ public class AutoCompletionManager
 	private String questName;
 	private List<ActiveTarget.LevelNeed> needLevels = Collections.emptyList();
 	private List<ActiveTarget.ItemNeed> needItems = Collections.emptyList();
+	/** ITEM_OWNED: any one of the items completes the step. */
+	private boolean anyItem;
 	private Pattern chatPattern;
 	private int varbitId;
 	private int targetValue;
@@ -88,6 +90,7 @@ public class AutoCompletionManager
 		questName = null;
 		needLevels = Collections.emptyList();
 		needItems = Collections.emptyList();
+		anyItem = false;
 		chatPattern = null;
 		fired = false;
 		ticks = 0;
@@ -123,6 +126,7 @@ public class AutoCompletionManager
 					return;
 				}
 				needItems = it;
+				anyItem = t.isAnyOf();
 				break;
 			case "CHAT_MESSAGE":
 				try
@@ -271,14 +275,27 @@ public class AutoCompletionManager
 				return;
 			}
 		}
-		for (ActiveTarget.ItemNeed i : needItems)
+		if (!itemsMet())
 		{
-			if (items.owned(i) < i.getCount())
-			{
-				return;
-			}
+			return;
 		}
 		fire();
+	}
+
+	/** All the items are held, or with anyOf at least one of them. No items means nothing to wait for. */
+	private boolean itemsMet()
+	{
+		boolean any = false;
+		for (ActiveTarget.ItemNeed i : needItems)
+		{
+			boolean held = items.owned(i) >= i.getCount();
+			if (anyItem ? held : !held)
+			{
+				return anyItem;
+			}
+			any |= held;
+		}
+		return !anyItem || any;
 	}
 
 	private void fire()

@@ -113,6 +113,8 @@ export interface CompletionTrigger {
   levels?: Target[];
   /** ITEM_OWNED: the items themselves; QUEST_COMPLETED and SKILL_LEVEL have one more condition on top. */
   items?: OwnedItem[];
+  /** ITEM_OWNED: any one of the items completes the step (2,500 coins, or 25 ore, or the scimitar) instead of all of them. */
+  anyOf?: boolean;
   chatPattern?: string;
   varbitId?: number;
   targetValue?: number;

@@ -3330,7 +3330,7 @@
     "id": "S3-06",
     "stage": 3,
     "type": "prep",
-    "title": "Money for adamant: iron ore",
+    "title": "Money for the Adamant scimitar: iron ore",
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_iron_ore",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3286,3365,0",
@@ -3342,35 +3342,48 @@
     },
     "floor": "Ground floor",
     "where": "The mine south-east of Varrock (3 iron veins) or the Al Kharid mine (free passage after Prince Ali). The bank is Varrock East or Al Kharid.",
-    "how": "Mine iron (Iron ore) and sell it on the Grand Exchange. Mining levels along the way: you will need level 60 in S6-03.",
+    "how": "Mine 25 to 30 iron ore (Mining 15) and sell it on the Grand Exchange. Stop as soon as you have 2,500 gp, 25 ores or the scimitar itself: this step pays only for the Adamant scimitar, not for a whole armour set. Mining levels along the way: you will need level 60 in S6-03.",
     "fields": [
       {
         "label": "How much you need",
-        "text": "The adamant set from S3-07 costs about 19,000 gp, and Magic to 33 in S3-09 another 8-12 thousand. The stage 3 quests give about 5,300 coins (Black Knights' Fortress 2,500, Below Ice Mountain 2,000, Shield of Arrav 600, Doric 180): make up the rest with ore."
+        "text": "Only the Adamant scimitar (S3-07): about 1,400 gp at the prices of 26 Sep 2026, so 2,500 gp is the target with room to spare. The stage 3 quests already give about 5,300 coins (Black Knights' Fortress 2,500, Below Ice Mountain 2,000, Shield of Arrav 600, Doric 180), so you may have it before you mine anything. Armour is skipped on purpose: see S3-08. Magic to 33 (S3-09) is not part of this goal: it has its own cost block."
       },
       {
         "label": "Price",
-        "text": "Iron ore is about 73 gp on 26 Sep 2026: 28 ores are about 2,000 gp. If you do not need the ore for quests, sell it at once."
+        "text": "Iron ore is about 73 gp on 26 Sep 2026: 25 ores are about 1,800 gp and 30 about 2,200 gp. If you do not need the ore for quests, sell it at once."
       },
       {
         "label": "Other ways",
-        "text": "Cowhides to leather with Ellis in Al Kharid (about 260 gp per leather), and from Combat 30+ big bones (Big bones, about 310 gp) from moss giants (step S4-03)."
+        "text": "Cowhides to leather with Ellis in Al Kharid (about 260 gp per leather), and from Attack 40 big bones (Big bones, about 310 gp) from moss giants (step S4-03)."
       }
     ],
-    "doneWhen": "30,000+ coins in the bank.",
-    "moneyGoal": 30000,
+    "doneWhen": "2,500+ coins, or 25 iron ore, or the Adamant scimitar in the bag or the bank.",
+    "moneyGoal": 2500,
     "inGame": {
       "objectNames": [
         "Iron rocks"
       ],
       "completionTrigger": {
         "type": "ITEM_OWNED",
+        "anyOf": true,
         "items": [
           {
             "names": [
               "Coins"
             ],
-            "count": 30000
+            "count": 2500
+          },
+          {
+            "names": [
+              "Iron ore"
+            ],
+            "count": 25
+          },
+          {
+            "names": [
+              "Adamant scimitar"
+            ],
+            "count": 1
           }
         ]
       }
@@ -3380,7 +3393,7 @@
     "id": "S3-07",
     "stage": 3,
     "type": "gear",
-    "title": "Buy the adamant gear on the Grand Exchange",
+    "title": "Buy the Adamant scimitar on the Grand Exchange",
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Grand_Exchange",
     "mapLocation": {
@@ -3393,59 +3406,31 @@
       {
         "nameEn": "Adamant scimitar",
         "amount": 1,
-        "howToGet": "Needs 30 Attack.",
+        "howToGet": "Needs 30 Attack. About 1,400 gp.",
         "wikiItemId": 1331,
         "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_scimitar.png",
-        "inStep": true
-      },
-      {
-        "nameEn": "Adamant platebody",
-        "amount": 1,
-        "howToGet": "Needs 30 Defence. The rune platebody opens only after Dragon Slayer I.",
-        "wikiItemId": 1123,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_platebody.png",
-        "inStep": true
-      },
-      {
-        "nameEn": "Adamant platelegs",
-        "amount": 1,
-        "howToGet": "Needs 30 Defence.",
-        "wikiItemId": 1073,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_platelegs.png",
-        "inStep": true
-      },
-      {
-        "nameEn": "Adamant kiteshield",
-        "amount": 1,
-        "howToGet": "Needs 30 Defence.",
-        "wikiItemId": 1199,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_kiteshield.png",
-        "inStep": true
-      },
-      {
-        "nameEn": "Adamant full helm",
-        "amount": 1,
-        "howToGet": "Needs 30 Defence.",
-        "wikiItemId": 1161,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_full_helm.png",
         "inStep": true
       }
     ],
     "fields": [
       {
         "label": "Requirement",
-        "text": "The adamant armour and scimitar can be worn only with 30 Attack and 30 Defence: buy now, wear after step S3-08."
+        "text": "The Adamant scimitar can be wielded only with 30 Attack: buy it now, wield it after step S3-08."
       },
       {
         "label": "Budget",
-        "text": "About 19,000 gp at prices of 26 Sep 2026: the platebody about 9,400, the platelegs about 3,500, the kiteshield about 2,900, the full helm about 1,850, the scimitar about 1,400."
+        "text": "About 1,400 gp at the prices of 26 Sep 2026."
+      },
+      {
+        "label": "Armour",
+        "text": "No armour is bought here. Adamant armour needs 30 Defence, and Defence is left alone on purpose (see S3-08): Dragon Slayer I gives 18,650 Defence XP, which is level 33 from level 1. Wear what you already have."
       },
       {
         "label": "Amulet",
         "text": "A second amulet is not needed: by the damage formulas the Amulet of strength from S2-01 hits faster than the Amulet of power in every combat step (strength +10 against +6). Take the Amulet of power (+6 to accuracy, strength and defence) only if you have no Amulet of strength: almost the same speed and a little defence."
       }
     ],
-    "doneWhen": "The gear is bought and is in the bank.",
+    "doneWhen": "The Adamant scimitar is bought and is in the bank.",
     "branches": [
       {
         "id": "varrock-teleport",
@@ -3508,30 +3493,6 @@
               "Adamant scimitar"
             ],
             "count": 1
-          },
-          {
-            "names": [
-              "Adamant platebody"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Adamant platelegs"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Adamant kiteshield"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Adamant full helm"
-            ],
-            "count": 1
           }
         ]
       }
@@ -3541,38 +3502,32 @@
     "id": "S3-08",
     "stage": 3,
     "type": "skill",
-    "title": "Combat to 30 / 30 / 30 (Attack, Strength, Defence)",
+    "title": "Attack to 30 and Strength to 20",
     "requires": [],
     "floor": "Ground floor",
     "foes": [
-      "Al Kharid warrior",
-      "Flesh Crawler"
+      "Minotaur"
     ],
     "pacing": {
       "skill": "attack",
-      "also": [
-        "strength",
-        "defence"
-      ],
       "targetLevel": 30,
       "targetExp": 13363,
-      "actionName": "warrior|warriors",
-      "expPerAction": 76
+      "actionName": "minotaur|minotaurs",
+      "expPerAction": 40
     },
     "mapLocation": {
-      "x": 3292,
-      "y": 3169,
+      "x": 3081,
+      "y": 3420,
       "plane": 0,
-      "label": "The warriors in the Al Kharid palace"
+      "label": "The Stronghold of Security, floor 1: the minotaurs"
     },
-    "where": "The warriors in the Al Kharid palace (Al Kharid warrior, level 9), with a bank nearby. From Combat 20+, the Flesh Crawler on the 2nd floor of the Stronghold of Security.",
-    "how": "Train the skills in turn: switch the attack style (Accurate for Attack, Aggressive for Strength, Defensive for Defence). Attack to 30 first, then Strength, then Defence.",
+    "where": "The Stronghold of Security, floor 1 (the Vault of War): the Minotaurs, level 12 (and 27 further in). The entrance is in the Barbarian Village mine, the same place as S1-09. There is no bank on the floor: bank in Edgeville or Varrock West first.",
+    "how": "Train Attack to 30 first on the Accurate style, then Strength to 20 on Aggressive (up to 25 if you like). Defence is not trained: Dragon Slayer I (S5-08) gives 18,650 Defence XP, which is level 33 from level 1, so grinding it now would waste the reward.",
     "membersAlternative": "👑 With membership: do not fight mobs by hand: complete Waterfall Quest in 15 minutes and get 30 Attack and 30 Strength at once!",
-    "doneWhen": "Attack 30, Strength 30, Defence 30. Full adamant is worn.",
+    "doneWhen": "Attack 30 and Strength 20. Defence is left alone.",
     "inGame": {
       "npcNames": [
-        "Al Kharid warrior",
-        "Flesh Crawler"
+        "Minotaur"
       ],
       "completionTrigger": {
         "type": "SKILL_LEVEL",
@@ -3583,15 +3538,21 @@
           },
           {
             "skill": "strength",
-            "level": 30
-          },
-          {
-            "skill": "defence",
-            "level": 30
+            "level": 20
           }
         ]
       }
-    }
+    },
+    "fields": [
+      {
+        "label": "Training spot",
+        "text": "A Minotaur has 10 hit points and gives about 40 XP per kill: Attack 30 is about 330 kills and Strength 20 about 110 more. They hit for up to 2 (up to 3 at level 27) and are not aggressive, so you choose when to fight."
+      },
+      {
+        "label": "Defence",
+        "text": "Leave it at 1. The Anti-dragon shield from S5-02 stops Elvarg's fire at any Defence level."
+      }
+    ]
   },
   {
     "id": "S3-09",
@@ -3782,7 +3743,7 @@
     "id": "S4-03",
     "stage": 4,
     "type": "skill",
-    "title": "Combat to 40 / 40 / 40",
+    "title": "Attack to 40 and Strength to 35",
     "requires": [],
     "foes": [
       "Moss giant",
@@ -3790,10 +3751,6 @@
     ],
     "pacing": {
       "skill": "attack",
-      "also": [
-        "strength",
-        "defence"
-      ],
       "targetLevel": 40,
       "targetExp": 37224,
       "actionName": "giant|giants",
@@ -3824,30 +3781,9 @@
     ],
     "itemsRecommended": [
       {
-        "nameEn": "Rune full helm",
-        "amount": 1,
-        "howToGet": "Needs 40 Defence. About 20,500 gp.",
-        "wikiItemId": 1163,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_full_helm.png"
-      },
-      {
-        "nameEn": "Rune platelegs",
-        "amount": 1,
-        "howToGet": "Needs 40 Defence. About 38,000 gp.",
-        "wikiItemId": 1079,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_platelegs.png"
-      },
-      {
-        "nameEn": "Rune kiteshield",
-        "amount": 1,
-        "howToGet": "Needs 40 Defence. About 32,000 gp.",
-        "wikiItemId": 1201,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_kiteshield.png"
-      },
-      {
         "nameEn": "Salmon",
         "amount": 20,
-        "howToGet": "From step S2-13 or on the Grand Exchange for about 30 gp (20 of them about 600). From Fishing 40, lobsters (step S4-04).",
+        "howToGet": "From step S2-13 or on the Grand Exchange for about 30 gp (20 of them about 600).",
         "wikiItemId": 329,
         "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
         "heals": 9
@@ -3864,11 +3800,11 @@
       },
       {
         "label": "Armour",
-        "text": "The rune full helm, platelegs and kiteshield: about 20,500, 38,000 and 32,000 gp. If money is short, adamant armour is enough for Dragon Slayer I; you wear the rune platebody only after defeating the dragon."
+        "text": "No Defence training: the rune armour needs 40 Defence, so wear what you already have. The Anti-dragon shield (S5-02) stops Elvarg's fire whatever your Defence is, and the 18,650 Defence XP from Dragon Slayer I lifts Defence by itself. Eat early: moss giants hit hard."
       }
     ],
     "membersAlternative": "👑 With membership: do not fight mobs by hand: complete Waterfall Quest in 15 minutes and get 30 Attack and 30 Strength at once!",
-    "doneWhen": "Attack 40, Strength 40, Defence 40.",
+    "doneWhen": "Attack 40 and Strength 35. Defence is left alone.",
     "inGame": {
       "npcNames": [
         "Moss giant",
@@ -3883,11 +3819,7 @@
           },
           {
             "skill": "strength",
-            "level": 40
-          },
-          {
-            "skill": "defence",
-            "level": 40
+            "level": 35
           }
         ]
       }
@@ -3896,94 +3828,63 @@
   {
     "id": "S4-04",
     "stage": 4,
-    "type": "skill",
-    "title": "Fishing and Cooking to 40 (lobsters)",
+    "type": "gear",
+    "title": "Food for the dragon: buy 20 Lobster",
     "requires": [],
-    "floor": "Ground floor",
     "mapLocation": {
-      "x": 2923,
-      "y": 3180,
+      "x": 3164,
+      "y": 3487,
       "plane": 0,
-      "label": "From 40: lobsters at Musa Point",
-      "note": "Musa Point on Karamja: the boat from Port Sarim costs 30 gp, from the dock it is about 35 tiles north-west. A Lobster pot, a fishing spot with Cage/Harpoon options."
+      "label": "The Grand Exchange"
     },
     "resourceSpots": [
       {
         "x": 3104,
         "y": 3424,
         "plane": 0,
-        "label": "Up to 40: fly fishing at Barbarian Village",
-        "note": "Trout and salmon up to Fishing 40, a permanent fire by the river."
-      },
-      {
-        "x": 2923,
-        "y": 3180,
-        "plane": 0,
-        "label": "From 40: lobsters at Musa Point",
-        "note": "Musa Point on Karamja: the boat from Port Sarim costs 30 gp, from the dock it is about 35 tiles north-west. A Lobster pot, a fishing spot with Cage/Harpoon options."
+        "label": "Optional: fly fishing at Barbarian Village",
+        "note": "Trout and salmon with a Fly fishing rod and feathers, a permanent fire by the river."
       }
     ],
-    "where": "Up to 40, fly fishing on the river at Barbarian Village (trout and salmon). From 40, lobsters at Musa Point on the island of Karamja (boat from Port Sarim, 30 gp).",
+    "where": "The Grand Exchange: buy the cooked Lobster in one go. No trip to Karamja.",
     "itemsRequired": [
       {
-        "nameEn": "Fly fishing rod",
-        "amount": 1,
-        "howToGet": "For trout and salmon up to 40.",
-        "wikiItemId": 309,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Fly_fishing_rod.png"
-      },
-      {
-        "nameEn": "Lobster pot",
-        "amount": 1,
-        "howToGet": "From Fishing 40. 20 gp in the shop Gerrant's Fishy Business in Port Sarim (more expensive on the Grand Exchange, about 500 gp).",
-        "from": "Gerrant",
-        "wikiItemId": 301,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png"
+        "nameEn": "Lobster",
+        "amount": 20,
+        "howToGet": "Buy cooked Lobster on the Grand Exchange for about 105 gp each (20 of them about 2,100). Heals 12.",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
+        "heals": 12
       }
     ],
     "fields": [
       {
-        "label": "Important",
-        "text": "Lobsters can only be caught from Fishing 40 and cooked only from Cooking 40, so train on trout and salmon up to 40."
+        "label": "Optional: Fishing and Cooking",
+        "text": "If you want Fishing and Cooking higher for your stats, train them at Barbarian Village, not on Karamja: fly fishing (Fly fishing rod and feathers) for trout and salmon, cooked on the permanent fire by the river. Nothing in the route needs them past 30."
       },
       {
-        "label": "Where to cook",
-        "text": "Cook the salmon on the permanent fire in Barbarian Village. Cook the lobsters on the range in Al Kharid next to the bank."
+        "label": "Why not catch them",
+        "text": "Lobsters can be caught only from Fishing 40 and cooked only from Cooking 40, with a Lobster pot and a boat to Musa Point (30 gp each way). Buying them is far faster."
       }
     ],
-    "doneWhen": "Fishing 40, Cooking 40, 30+ cooked lobsters (Lobster) in the bank.",
+    "doneWhen": "20+ cooked Lobster in the bag or the bank.",
     "inGame": {
-      "npcNames": [
-        "Rod Fishing spot",
-        "Fishing spot"
-      ],
       "highlightItems": [
-        "Fly fishing rod",
-        "Feather",
-        "Lobster pot"
+        "Lobster"
       ],
       "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "fishing",
-            "level": 40
-          },
-          {
-            "skill": "cooking",
-            "level": 40
-          }
-        ],
+        "type": "ITEM_OWNED",
         "items": [
           {
             "names": [
               "Lobster"
             ],
-            "count": 30
+            "count": 20
           }
         ]
       }
-    }
+    },
+    "how": "Buy 20 cooked Lobster on the Grand Exchange: about 105 gp each, about 2,100 gp for 20 at the prices of 26 Sep 2026 (keep up to 4,000 gp in mind if the price moves). This replaces the old Karamja cage-fishing loop: lobsters need Fishing 40 and Cooking 40 and a boat each way, hours of work that add nothing to the fight. Any lobsters that drop on the way count towards the 20."
   },
   {
     "id": "S4-05",
@@ -4054,7 +3955,7 @@
       {
         "nameEn": "Lobster pot",
         "amount": 1,
-        "howToGet": "Buy from Gerrant in Port Sarim for 20 gp (more expensive on the Grand Exchange, about 500 gp). Needed for the Oracle (S5-04): do not confuse it with the fishing trap; one is enough for both jobs.",
+        "howToGet": "Buy from Gerrant in Port Sarim for 20 gp (more expensive on the Grand Exchange, about 500 gp). Needed for the Oracle (S5-04).",
         "from": "Gerrant",
         "wikiItemId": 301,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png",
@@ -4673,7 +4574,7 @@
       {
         "nameEn": "Lobster",
         "amount": "20+",
-        "howToGet": "Buy on the Grand Exchange for about 105 gp (20 of them about 2,100). Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
+        "howToGet": "From step S4-04, or buy more on the Grand Exchange for about 105 gp each. The more lobsters, the lower the risk.",
         "wikiItemId": 379,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
         "heals": 12
