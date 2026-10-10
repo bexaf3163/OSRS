@@ -70,7 +70,7 @@ export function StepMap({ step }: { step: Step }) {
       {open && (
         <Suspense fallback={null}>
           <WorldMapModal title={`${step.id} · ${step.title}`} points={points} active={active} onActive={setActive}
-            arrow={arrow} arrowLive={activeStepId === step.id} wikiUrl={step.mapUrl} onClose={() => setOpen(false)} />
+            arrow={arrow?.instanced ? null : arrow} arrowLive={activeStepId === step.id} wikiUrl={step.mapUrl} onClose={() => setOpen(false)} />
         </Suspense>
       )}
     </section>

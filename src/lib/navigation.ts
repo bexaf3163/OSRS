@@ -4,6 +4,7 @@
 
 import type { Step, StepBranch } from '../types';
 import { toInGameTarget, type NavTargetPayload } from '../services/runeliteBridge';
+import { isInstancedPoint } from './instances';
 
 export interface NavigationTarget {
   stepId: string;
@@ -16,6 +17,8 @@ export interface NavigationTarget {
    * npc is to an NPC (to talk, a seller); resource is to a gathering place (ore, fish, wood); detour is a preparation stop.
    */
   source: 'step' | 'branch' | 'shop' | 'wiki' | 'npc' | 'resource' | 'detour';
+  /** The point is inside an instance: the arrow and highlights work there, but it is not a place on the world map. */
+  instanced?: boolean;
 }
 
 export const SOURCE_TEXT: Record<NavigationTarget['source'], string> = {
@@ -41,9 +44,12 @@ export function navigationTarget(
     // A preparation detour wins: the arrow leads to the preparation, and in all places (map, HUD, game) it is one target.
     const source: NavigationTarget['source'] = opts.detourActive ? 'detour' : nav.itemName ? 'shop' : nav.npcNames?.length ? 'npc'
       : step.resourceSpots?.some((p) => p.x === nav.x && p.y === nav.y && p.plane === nav.plane) ? 'resource' : 'wiki';
-    return { stepId: step.id, x: nav.x, y: nav.y, plane: nav.plane, label: nav.label, source };
+    return { stepId: step.id, x: nav.x, y: nav.y, plane: nav.plane, label: nav.label, source, ...(isInstancedPoint(nav) ? { instanced: true } : {}) };
   }
   const wp = toInGameTarget(step, opts.branch)?.worldPoint;
   if (!wp) return null;
-  return { stepId: step.id, x: wp.x, y: wp.y, plane: wp.plane, label: wp.label ?? step.title, source: opts.branch ? 'branch' : 'step' };
+  return {
+    stepId: step.id, x: wp.x, y: wp.y, plane: wp.plane, label: wp.label ?? step.title, source: opts.branch ? 'branch' : 'step',
+    ...(isInstancedPoint(wp) ? { instanced: true } : {}),
+  };
 }

@@ -23,7 +23,14 @@ export interface TravelInputSources {
   priceOf?: (name: string) => number | undefined;
   mode: GameMode;
   homeCooldownSec?: number | null;
+  /** The fairy ring network is unlocked (see fairyRingsUnlocked); absent means unknown. */
+  fairyRings?: boolean | null;
 }
+
+/** The route unlocks the fairy rings at S9-03 (Fairytale II): before that step is closed the rings are not offered. */
+export const FAIRY_RING_STEP = 'S9-03';
+export const fairyRingsUnlocked = (progress: { steps: Record<string, string | undefined> }): boolean =>
+  progress.steps[FAIRY_RING_STEP] === 'done' || progress.steps[FAIRY_RING_STEP] === 'skipped';
 
 export function travelInputOf(s: TravelInputSources): TravelInput {
   const carried = s.gear && (s.gear.equipment || s.gear.inventory) ? [...(s.gear.equipment ?? []), ...(s.gear.inventory ?? [])] : null;
@@ -31,5 +38,6 @@ export function travelInputOf(s: TravelInputSources): TravelInput {
     from: s.from, to: s.to, levels: { ...s.levels, ...(s.stats ?? {}) }, carried, bankSeen: Boolean(s.owned?.bankSeen),
     bank: s.owned?.bankSeen ? bankCounts(s.owned.items.values()) : null,
     priceOf: s.priceOf, members: s.mode === 'members', homeCooldownSec: s.homeCooldownSec ?? null,
+    ...(s.fairyRings === undefined ? {} : { fairyRings: s.fairyRings }),
   };
 }

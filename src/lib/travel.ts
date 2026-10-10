@@ -7,6 +7,7 @@ import netJson from '../data/transportNet.json';
 import locationsJson from '../data/majorLocations.json';
 import { nameKey } from './checklist';
 import type { GearItem } from '../services/runeliteBridge';
+import { isInstancedPoint } from './instances';
 
 export interface Point { x: number; y: number; plane: number }
 export interface Teleport {
@@ -137,6 +138,8 @@ export interface TravelInput {
   priceOf?: (name: string) => number | undefined;
   /** A members account or world: false locks the members-only ways, null or absent means unknown. */
   members?: boolean | null;
+  /** The fairy ring network is unlocked (Fairytale II started): false leaves the rings out, null or absent means unknown. */
+  fairyRings?: boolean | null;
   /** Seconds until the Home Teleport can be cast again (from the game); null or absent means it is ready or unknown. */
   homeCooldownSec?: number | null;
   /** Called with the verdict on every fetch-first candidate: offered, or rejected with the reason. */
@@ -219,7 +222,7 @@ function fairyOption(inp: TravelInput): TravelOption | null {
   const staff = inp.carried ? count(inp.carried, ['Dramen staff', 'Lunar staff']) > 0 : null;
   const needs: Need[] = [
     membersNeed(inp.members),
-    { text: 'Fairytale II - Cure a Queen started (the Fairy Godfather)', ok: null },
+    { text: 'Fairytale II - Cure a Queen started (the Fairy Godfather)', ok: inp.fairyRings === true ? true : null },
     { text: 'a dramen or lunar staff worn or in the bag (not needed after the elite Lumbridge diary)', ok: needFrom(staff, inp.bankSeen) },
   ];
   for (const r of [a, b]) if (r.note) needs.push({ text: `ring ${r.code}: ${r.note}`, ok: null });
@@ -386,6 +389,8 @@ function itemTeleportOptions(inp: TravelInput, direct: number): TravelOption[] {
 
 /** The possible ways to get there: the available ones first, within them by tiles on foot. The useless ones (not shorter on foot) are not shown. */
 export function travelOptions(inp: TravelInput): TravelOption[] {
+  // An instance is not on the world map: there is nothing to route over it, in either direction.
+  if (isInstancedPoint(inp.from) || isInstancedPoint(inp.to)) return [];
   const out: TravelOption[] = [];
   const direct = dist(inp.from, inp.to);
   out.push({ id: 'walk', title: 'On foot', legs: [{ kind: 'walk', label: 'running in a straight line', tiles: direct }], walkTiles: direct, availability: 'ready', needs: [] });
@@ -474,7 +479,7 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
 
   // Fairy rings and charter ships (members), and the tablets that may have to be fetched first.
   // On a known free-to-play account the members-only ways are left out: they are noise there, not "not yet".
-  const fairy = inp.members === false ? null : fairyOption(inp);
+  const fairy = inp.members === false || inp.fairyRings === false ? null : fairyOption(inp);
   if (fairy) out.push(fairy);
   const charter = inp.members === false ? null : charterOption(inp);
   if (charter) out.push(charter);

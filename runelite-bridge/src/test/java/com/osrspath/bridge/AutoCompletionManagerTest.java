@@ -25,7 +25,7 @@ public class AutoCompletionManagerTest
 	private final AutoCompletionManager manager = new AutoCompletionManager(name ->
 	{
 		questChecks++;
-		return "Cook's Assistant".equals(name) || "Monkey Madness I".equals(name) ? questFinished : null;
+		return "Cook's Assistant".equals(name) || "Monkey Madness I".equals(name) || "Dragon Slayer I".equals(name) ? questFinished : null;
 	}, levels::get, need ->
 	{
 		if (need.getId() != null)
@@ -307,16 +307,100 @@ public class AutoCompletionManagerTest
 			}
 		}
 		assertTrue("S3-06 is in the fixtures", real != null);
-		assertTrue(real.getCompletionTrigger().isAnyOf());
+		assertFalse("money is coins only: ore and the scimitar are other steps", real.getCompletionTrigger().isAnyOf());
 		manager.setTarget(real);
 		byName.put("Coins", 2499);
+		byName.put("Iron ore", 30);
+		byName.put("Adamant scimitar", 1);
 		manager.onStateChanged();
 		manager.onGameTick();
-		assertTrue("one coin short and no ore: the step stays", completed.isEmpty());
+		assertTrue("one coin short: ore and the scimitar are not cash", completed.isEmpty());
 		byName.put("Coins", 5280 - 1400);
 		manager.onStateChanged();
 		manager.onGameTick();
 		assertEquals(List.of("S3-06"), completed);
+	}
+
+	/** The target exactly as the app sends it (the fixtures are regenerated from the route data). */
+	private static ActiveTarget real(String stepId)
+	{
+		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
+		{
+			if (stepId.equals(s.target.getStepId()))
+			{
+				return s.target;
+			}
+		}
+		throw new AssertionError(stepId + " is not in the fixtures");
+	}
+
+	private List<String> completedBy(String stepId, Map<Integer, Integer> ids, Map<String, Integer> names)
+	{
+		completed.clear();
+		byId.clear();
+		byName.clear();
+		byId.putAll(ids);
+		byName.putAll(names);
+		manager.setTarget(real(stepId));
+		manager.onStateChanged();
+		manager.onGameTick();
+		return new ArrayList<>(completed);
+	}
+
+	@Test
+	public void eachMapPieceCompletesOnlyItsOwnStepAndTheJoinedMapCompletesAll()
+	{
+		// Melzar's 1535 -> S5-03, Thalzar's 1537 -> S5-04, Wormbrain's 1536 -> S5-05; the three share the name "Map part".
+		String[][] steps = {{"S5-03", "1535"}, {"S5-04", "1537"}, {"S5-05", "1536"}};
+		for (String[] held : steps)
+		{
+			for (String[] asked : steps)
+			{
+				List<String> done = completedBy(asked[0], Map.of(Integer.parseInt(held[1]), 1), Map.of("Map part", 1));
+				assertEquals("piece " + held[1] + " asked by " + asked[0], held[0].equals(asked[0]) ? List.of(asked[0]) : List.of(), done);
+			}
+		}
+		for (String[] asked : steps)
+		{
+			assertEquals("the joined map is all three", List.of(asked[0]), completedBy(asked[0], Map.of(), Map.of("Crandor map", 1)));
+			assertEquals("the name alone is nothing", List.of(), completedBy(asked[0], Map.of(), Map.of("Map part", 3)));
+		}
+	}
+
+	@Test
+	public void theStrongholdIsDoneByEitherPairOfBootsAndNotByCoins()
+	{
+		assertEquals(List.of("S1-09"), completedBy("S1-09", Map.of(), Map.of("Fighting boots", 1)));
+		assertEquals(List.of("S1-09"), completedBy("S1-09", Map.of(), Map.of("Fancy boots", 1)));
+		assertEquals("10,000 coins are not the proof", List.of(), completedBy("S1-09", Map.of(), Map.of("Coins", 10000)));
+	}
+
+	@Test
+	public void theCowMoneyIsLiquidTwelveThousand()
+	{
+		assertEquals(List.of(), completedBy("S1-13", Map.of(), Map.of("Coins", 11999, "Cowhide", 28)));
+		assertEquals(List.of("S1-13"), completedBy("S1-13", Map.of(), Map.of("Coins", 12000)));
+	}
+
+	@Test
+	public void attackFortyAndFiftyBigBonesAreBothNeeded()
+	{
+		levels.put("attack", 40);
+		assertEquals(List.of(), completedBy("S4-03", Map.of(), Map.of("Big bones", 49)));
+		assertEquals(List.of("S4-03"), completedBy("S4-03", Map.of(), Map.of("Big bones", 50)));
+		levels.put("attack", 39);
+		assertEquals("Attack 39 is not enough with the bones", List.of(), completedBy("S4-03", Map.of(), Map.of("Big bones", 50)));
+		levels.clear();
+		assertEquals("an unknown level is not a pass", List.of(), completedBy("S4-03", Map.of(), Map.of("Big bones", 50)));
+	}
+
+	@Test
+	public void dragonSlayerIsCompleteByTheQuestAloneWithoutThePlatebody()
+	{
+		questFinished = true;
+		assertEquals(List.of("S5-09"), completedBy("S5-09", Map.of(), Map.of()));
+		questFinished = null;
+		assertEquals("an unknown quest state does not complete it", List.of(), completedBy("S5-09", Map.of(), Map.of("Rune platebody", 1)));
 	}
 
 	@Test

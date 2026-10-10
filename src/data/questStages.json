@@ -5839,13 +5839,13 @@
       {
        "name": "Copper ore",
        "id": 436,
-       "where": "From step S1-12.",
+       "where": "From step S2-01.",
        "count": 4
       },
       {
        "name": "Iron ore",
        "id": 440,
-       "where": "From step S1-12.",
+       "where": "From step S2-01.",
        "count": 2
       }
      ]
@@ -9405,7 +9405,7 @@
     {
      "title": "Hazelmere",
      "steps": [
-      "Go up to Hazelmere, on the island east of Yanille (fairy ring CLS or the minigame teleport near Yanille).",
+      "Go up to Hazelmere, on the island east of Yanille: on foot from Yanille (the fairy ring CLS opens only after Fairytale II, step S9-03).",
       "Talk to Hazelmere; he takes the bark sample and gives you a message for the king."
      ]
     },
@@ -9484,8 +9484,8 @@
      "at": 10,
      "do": [
       {
-       "t": "Go up to Hazelmere, on the island east of Yanille. Fairy ring CLS or minigame teleport near Yanille.",
-       "s": "Hazelmere (island east of Yanille): fairy ring CLS",
+       "t": "Go up to Hazelmere, on the island east of Yanille, on foot from Yanille. The fairy ring CLS opens only after Fairytale II (step S9-03).",
+       "s": "Hazelmere (island east of Yanille): on foot from Yanille",
        "at": [
         2677,
         3087,

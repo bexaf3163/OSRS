@@ -21,6 +21,15 @@ final class Navigation
 
 	private static final String[] ARROWS = {"→", "↗", "↑", "↖", "←", "↙", "↓", "↘"};
 
+	/**
+	 * The template region of the Misthalin Mystery manor (like src/lib/instances.ts): the game shows an instance at coordinates that are not a place
+	 * on the world map, so a point there is not sent to Shortest Path and not marked on the world map. The arrow and highlights still work inside.
+	 */
+	static boolean isInstanced(int x, int y)
+	{
+		return x >= 1600 && x <= 1700 && y >= 4800 && y <= 4880;
+	}
+
 	private Navigation()
 	{
 	}

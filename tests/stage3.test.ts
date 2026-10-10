@@ -225,7 +225,7 @@ describe('The bridge: new requests and events', () => {
 
   it('a step with a pace goes to the game together with the pace', () => {
     const p = toInGameTarget(step('S1-12'))!;
-    expect(p.pacing).toMatchObject({ skill: 'mining', targetLevel: 15, targetExp: 2411, expPerAction: 17.5 });
+    expect(p.pacing).toMatchObject({ skill: 'mining', targetLevel: 10, targetExp: 1154, expPerAction: 17.5 });
   });
 
   it('a temporary target: ok, offline and a refusal of a turned-off feature', async () => {
@@ -363,7 +363,7 @@ describe('Danger radar: data', () => {
 describe('Steps with a pace', () => {
   it('pace only on training steps', () => {
     const paced: Step[] = allSteps.filter((s) => s.pacing);
-    expect(paced.map((s) => s.id)).toEqual(['S1-08', 'S1-11', 'S1-12', 'S3-08', 'S4-03']);
+    expect(paced.map((s) => s.id)).toEqual(['S1-08', 'S1-12', 'S3-08', 'S4-03']);
     for (const s of paced) expect(s.type).toBe('skill');
   });
 

@@ -15,16 +15,13 @@ const text = (id: string) => JSON.stringify(step(id)).toLowerCase();
 const skillsOf = (id: string) => (step(id).inGame!.completionTrigger!.levels ?? []).map((l) => `${l.skill}:${l.level}`);
 
 describe('S3-06 and S3-07: money for the Adamant scimitar only', () => {
-  it('the goal is 2,500 gp, and any one of 2,500 coins, 25 iron ore or the scimitar completes the step', () => {
+  it('the goal is 2,500 gp of coins: ore or the scimitar in the bag is not cash', () => {
     const s = step('S3-06');
     expect(s.moneyGoal).toBe(2_500);
-    expect(s.inGame!.completionTrigger).toEqual({
-      type: 'ITEM_OWNED', anyOf: true,
-      items: [{ names: ['Coins'], count: 2500 }, { names: ['Iron ore'], count: 25 }, { names: ['Adamant scimitar'], count: 1 }],
-    });
+    expect(s.inGame!.completionTrigger).toEqual({ type: 'ITEM_OWNED', items: [{ names: ['Coins'], count: 2500 }] });
     expect(s.title).toMatch(/Adamant scimitar/);
     expect(text('S3-06')).not.toMatch(/30,000|adamant (platebody|platelegs|kiteshield|full helm)/);
-    expect(triggerText(s.inGame!.completionTrigger!)).toBe('you will have any of 2,500 × Coins, 25 × Iron ore or Adamant scimitar (bag, equipped and bank together)');
+    expect(triggerText(s.inGame!.completionTrigger!)).toBe('you will have 2,500 × Coins (bag, equipped and bank together)');
   });
 
   it('the Exchange step buys the scimitar and nothing that needs Defence 30', () => {
@@ -57,7 +54,8 @@ describe('S3-08 and S4-03: Attack and Strength, no Defence', () => {
     expect(s.pacing).toMatchObject({ skill: 'attack', targetLevel: 40 });
     expect(s.pacing!.also).toBeUndefined();
     expect((s.itemsRecommended ?? []).map((i) => i.nameEn)).toEqual(['Salmon']);
-    expect(s.itemsRequired!.map((i) => i.nameEn)).toContain('Rune scimitar');
+    // The weapon that can be wielded before Attack 40; the Rune scimitar is not part of this step.
+    expect(s.itemsRequired!.map((i) => i.nameEn)).toEqual(['Adamant scimitar']);
   });
 
   it('no step before Dragon Slayer I asks for a Defence level', () => {
@@ -84,9 +82,9 @@ describe('S4-04: the food is bought, not fished on Karamja', () => {
     expect(s.itemsRequired![0]).toMatchObject({ nameEn: 'Lobster', amount: 20 });
     expect(s.inGame!.completionTrigger).toEqual({ type: 'ITEM_OWNED', items: [{ names: ['Lobster'], count: 20 }] });
     expect(s.mapLocation).toMatchObject({ x: 3164, y: 3487 });
-    expect(s.resourceSpots!.map((p) => p.label)).toEqual(['Optional: fly fishing at Barbarian Village']);
+    expect(s.resourceSpots).toBeUndefined();
     const body = [s.where, s.how, ...(s.fields ?? []).filter((f) => !/why not/i.test(f.label)).map((f) => f.text)].join(' ');
-    expect(body).not.toMatch(/Musa Point|Lobster pot/i);
+    expect(body).not.toMatch(/Musa Point|Lobster pot|feather|fly fishing|fishing rod/i);
   });
 
   it('the lobsters are counted once in the shopping list: the voyage step takes them from S4-04', () => {
@@ -146,7 +144,7 @@ describe('S3-09 and S2-13 are out of the route', () => {
       expect(s.requires, s.id).not.toContain('S3-09');
       expect(JSON.stringify(s), s.id).not.toMatch(/S3-09|S2-13/);
     }
-    expect(RETIRED_STEPS).toEqual(['S2-13', 'S3-09']);
+    expect(RETIRED_STEPS).toEqual(['S1-11', 'S2-13', 'S3-09']);
   });
 
   it('a save that still holds them loads without them', () => {
@@ -210,7 +208,8 @@ describe('S3-06 follows S3-05 and skips itself on the stage 3 rewards', () => {
     const total = rewards.reduce((a, b) => a + b, 0);
     expect(total).toBe(5280);
     const trigger = step('S3-06').inGame!.completionTrigger!;
-    expect(trigger).toMatchObject({ type: 'ITEM_OWNED', anyOf: true });
+    expect(trigger).toMatchObject({ type: 'ITEM_OWNED' });
+    expect(trigger.anyOf).toBeUndefined();
     const coins = trigger.items!.find((i) => i.names.includes('Coins'))!;
     expect(coins.count).toBe(2500);
     // After the scimitar (about 1,400 gp) is bought the threshold is still passed.

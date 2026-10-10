@@ -9,7 +9,7 @@ import { usePlayerState } from '../playerStateContext';
 import { checkStatus } from '../services/runeliteBridge';
 import { stepPlaces } from '../lib/stepPlaces';
 import { travelOptions, type Point } from '../lib/travel';
-import { travelInputOf } from '../lib/travelInput';
+import { fairyRingsUnlocked, travelInputOf } from '../lib/travelInput';
 import { travelTip } from '../lib/tips';
 
 export function TravelTip({ step }: { step: Step }) {
@@ -32,7 +32,7 @@ export function TravelTip({ step }: { step: Step }) {
 
   if (!live || !places.length || !seen || seen.stepId !== step.id || !seen.pos || seen.pos.plane !== 0 || places[0].plane !== 0) return null;
   const options = travelOptions(travelInputOf({
-    from: seen.pos, to: places[0], levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: seen.homeCooldown,
+    from: seen.pos, to: places[0], levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: seen.homeCooldown, fairyRings: fairyRingsUnlocked(progress),
   }));
   const tip = travelTip(options);
   return tip ? <p className="small status-tip" role="note">💡 {tip}</p> : null;

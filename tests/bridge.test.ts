@@ -59,10 +59,9 @@ describe('the step target for the game', () => {
     expect(toInGameTarget(step('S1-01'))).toBeNull();
   });
 
-  it('S1-11: the tiles of both fishing points and the warning about the swamp', () => {
-    const s = step('S1-11');
-    expect(s.warning).toMatch(/no fishing in the green pools/);
-    expect(toInGameTarget(s)!.groundTiles!.map((t) => [t.x, t.y])).toEqual([[3244, 3150], [3086, 3227]]);
+  it('S1-12: the mining spot is the start and the ore rocks are highlighted', () => {
+    const p = toInGameTarget(step('S1-12'))!;
+    expect(p.objectNames).toEqual(['Copper rocks', 'Tin rocks', 'Iron rocks']);
   });
 });
 
@@ -93,15 +92,18 @@ describe('auto-mark triggers on the route', () => {
     }
     const names = quests.map(({ t }) => t.questName);
     expect(new Set(names).size).toBe(names.length);
-    expect(step('S5-09').inGame!.completionTrigger).toEqual({ type: 'QUEST_COMPLETED', questName: 'Dragon Slayer I', items: [{ names: ['Rune platebody'], count: 1 }] });
+    // The quest alone completes the step: the Rune platebody is an optional extra.
+    expect(step('S5-09').inGame!.completionTrigger).toEqual({ type: 'QUEST_COMPLETED', questName: 'Dragon Slayer I' });
     expect(step('S9-05').inGame!.completionTrigger!.questName).toBe("Recipe for Disaster - Another Cook's Quest");
   });
 
   it('Dragon Slayer I stages — by their own items, map pieces by ID', () => {
     expect(step('S5-01').inGame!.completionTrigger).toEqual({ type: 'ITEM_OWNED', items: [{ names: ['Maze key'], count: 1 }] });
-    expect(step('S5-03').inGame!.completionTrigger!.items).toEqual([{ names: ['Map part'], id: 1535, count: 1 }]);
-    expect(step('S5-04').inGame!.completionTrigger!.items).toEqual([{ names: ['Map part'], id: 1537, count: 1 }]);
-    expect(step('S5-05').inGame!.completionTrigger!.items).toEqual([{ names: ['Crandor map'], count: 1 }]);
+    // Each piece by its own item ID, or the joined map (which holds all three).
+    expect(step('S5-03').inGame!.completionTrigger!.items).toEqual([{ names: ['Map part'], id: 1535, count: 1 }, { names: ['Crandor map'], count: 1 }]);
+    expect(step('S5-04').inGame!.completionTrigger!.items).toEqual([{ names: ['Map part'], id: 1537, count: 1 }, { names: ['Crandor map'], count: 1 }]);
+    expect(step('S5-05').inGame!.completionTrigger!.items).toEqual([{ names: ['Map part'], id: 1536, count: 1 }, { names: ['Crandor map'], count: 1 }]);
+    for (const id of ['S5-03', 'S5-04', 'S5-05']) expect(step(id).inGame!.completionTrigger!.anyOf, id).toBe(true);
     expect(step('S5-08').inGame!.completionTrigger!.items).toEqual([{ names: ["Elvarg's head"], count: 1 }]);
     // The step does not advise paying Wormbrain 10,000 coins — and we do not highlight it in the game.
     expect(step('S5-05').inGame!.dialogChoices ?? []).toEqual([]);
@@ -113,7 +115,7 @@ describe('auto-mark triggers on the route', () => {
 
   it('levels are counted by the real levels, exactly the targets from the step title', () => {
     const levels = triggers.filter(({ t }) => t.type === 'SKILL_LEVEL');
-    expect(levels.length).toBeGreaterThanOrEqual(13);
+    expect(levels.length).toBeGreaterThanOrEqual(12);
     for (const { s, t } of levels) expect(t.levels).toEqual(s.targets);
     // A new-level message does not come if the level was gained before the step was shown, so levels are checked directly.
     expect(triggers.filter(({ t }) => t.type === 'CHAT_MESSAGE')).toEqual([]);
@@ -121,12 +123,11 @@ describe('auto-mark triggers on the route', () => {
   });
 
   it('"Done when" with items — the items are in the condition too', () => {
-    expect(step('S1-11').inGame!.completionTrigger!.items).toEqual([{ names: ['Shrimps', 'Anchovies'], count: 50 }]);
-    expect(step('S1-12').inGame!.completionTrigger!.items).toEqual([
-      { names: ['Copper ore'], count: 5 }, { names: ['Tin ore'], count: 1 }, { names: ['Iron ore'], count: 2 },
-    ]);
+    // Mining 10 is the whole condition: Doric's ore is bought in S2-01.
+    expect(step('S1-12').inGame!.completionTrigger).toEqual({ type: 'SKILL_LEVEL', levels: [{ skill: 'mining', level: 10 }] });
+    expect(step('S4-03').inGame!.completionTrigger).toEqual({ type: 'SKILL_LEVEL', levels: [{ skill: 'attack', level: 40 }], items: [{ names: ['Big bones'], count: 50 }] });
     expect(step('S4-04').inGame!.completionTrigger!.items).toEqual([{ names: ['Lobster'], count: 20 }]);
-    expect(step('S1-13').inGame!.completionTrigger).toEqual({ type: 'ITEM_OWNED', items: [{ names: ['Coins'], count: 20000 }] });
+    expect(step('S1-13').inGame!.completionTrigger).toEqual({ type: 'ITEM_OWNED', items: [{ names: ['Coins'], count: 12000 }] });
   });
 
   it('shopping steps are counted when everything in the step list is bought', () => {
@@ -371,7 +372,7 @@ describe('step places: where the quest items and NPCs come from — the same in 
 
   it('a shop from the dictionary has a seller — Shop keeper; the step map keeps the earlier order of points', () => {
     expect(stepPlaces(step('S1-02')).find((q) => q.items?.includes('Tinderbox'))).toMatchObject({ label: 'Lumbridge General Store', npc: 'Shop keeper' });
-    expect(mapPlaces(step('S4-04')).slice(0, 2).map((q) => q.label)).toEqual(['The Grand Exchange', 'Optional: fly fishing at Barbarian Village']);
+    expect(mapPlaces(step('S4-04')).map((q) => q.label)).toEqual(['The Grand Exchange']);
   });
 });
 

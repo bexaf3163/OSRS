@@ -9,7 +9,7 @@ import { useBridge } from '../bridge';
 import { useStore } from '../store';
 import { usePlayerState } from '../playerStateContext';
 import { checkStatus } from '../services/runeliteBridge';
-import { travelInputOf } from '../lib/travelInput';
+import { fairyRingsUnlocked, travelInputOf } from '../lib/travelInput';
 import { stepPlaces } from '../lib/stepPlaces';
 import { dist, travelOptions, TRANSPORT, walkText, type Availability, type Point, type TravelOption } from '../lib/travel';
 
@@ -40,7 +40,7 @@ export function TravelPlan({ step }: { step: Step }) {
   };
 
   const options: TravelOption[] = pos && pos.plane === 0 && target.plane === 0
-    ? travelOptions(travelInputOf({ from: pos, to: target, levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: homeCooldown }))
+    ? travelOptions(travelInputOf({ from: pos, to: target, levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: homeCooldown, fairyRings: fairyRingsUnlocked(progress) }))
     : [];
 
   return (

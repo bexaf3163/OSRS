@@ -102,6 +102,19 @@
         "crush": 0
       },
       "members": true
+    },
+    {
+      "name": "Hill Giant",
+      "version": "Level 28",
+      "combat": 28,
+      "hitpoints": 35,
+      "defenceLevel": 26,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      },
+      "members": false
     }
   ]
 }

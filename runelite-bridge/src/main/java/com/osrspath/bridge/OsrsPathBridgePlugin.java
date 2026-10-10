@@ -2294,14 +2294,15 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			arrowSet = true;
 		}
 
-		setMapPoint(loggedIn && config.worldMapMarker() ? nav : null, navLabel());
+		boolean instanced = nav != null && Navigation.isInstanced(nav.getX(), nav.getY());
+		setMapPoint(loggedIn && config.worldMapMarker() && !instanced ? nav : null, navLabel());
 
 		boolean spActive = shortestPathActive();
 		if (server != null)
 		{
 			server.setShortestPath(spActive);
 		}
-		if (nav != null && loggedIn && spActive && config.useShortestPath())
+		if (nav != null && loggedIn && spActive && config.useShortestPath() && !instanced)
 		{
 			if (!nav.equals(pathSent))
 			{

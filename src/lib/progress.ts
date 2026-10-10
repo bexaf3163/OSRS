@@ -19,7 +19,7 @@ export interface Known {
  */
 export const V2_FROM_V1: Record<string, string[]> = {
   'S1-01': ['S1-01'], 'S1-02': ['S1-02'], 'S1-03': ['S1-03'], 'S1-04': ['S1-04'], 'S1-05': ['S1-05'],
-  'S1-06': ['S1-06'], 'S1-07': ['S1-07'], 'S1-08': ['S1-10'], 'S1-09': ['S2-02'], 'S1-11': ['S1-09'], 'S1-12': ['S1-11'],
+  'S1-06': ['S1-06'], 'S1-07': ['S1-07'], 'S1-08': ['S1-10'], 'S1-09': ['S2-02'], 'S1-12': ['S1-11'],
   'S2-01': ['S2-03'], 'S2-02': ['S2-07'], 'S2-03': ['S2-09'], 'S2-05': ['S2-04'], 'S2-06': ['S2-01'],
   'S2-07': ['S3-03'], 'S2-08': ['S3-05'], 'S2-09': ['S2-05'], 'S2-10': ['S2-06'], 'S2-11': ['S2-08'],
   'S2-12': ['S2-10'],
@@ -32,7 +32,7 @@ export const V2_FROM_V1: Record<string, string[]> = {
 };
 
 /** Steps taken out of the route: a save that still has them drops them on load, and the old numbers that led to them are retired too. */
-export const RETIRED_STEPS = ['S2-13', 'S3-09'];
+export const RETIRED_STEPS = ['S1-11', 'S2-13', 'S3-09'];
 
 /**
  * The V2 route (2.0.0) to V2.1: steps with the same content got new numbers: money before purchases,

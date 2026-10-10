@@ -263,8 +263,8 @@
       "label": "Fishing",
       "values": [
         {
-          "raw": "20",
-          "min": 20
+          "raw": "1",
+          "min": 1
         },
         {
           "raw": "1",
@@ -293,8 +293,8 @@
       "label": "Cooking",
       "values": [
         {
-          "raw": "15",
-          "min": 15
+          "raw": "1",
+          "min": 1
         },
         {
           "raw": "1",
@@ -323,12 +323,12 @@
       "label": "Mining",
       "values": [
         {
-          "raw": "15",
-          "min": 15
+          "raw": "10",
+          "min": 10
         },
         {
-          "raw": "15",
-          "min": 15
+          "raw": "10",
+          "min": 10
         },
         {
           "raw": "30",
@@ -471,5 +471,5 @@
       ]
     }
   ],
-  "note": "In stage 5 Strength and Defence rise on their own: Dragon Slayer I gives 18,650 XP in each, which is Defence 33 from level 1 (so Defence is not trained before it) and Strength 35-36 from 20-25. Smithing 29 comes from the quest The Knight's Sword (12,725 XP), and Magic 25 from training in step S2-04: Magic 33 is not trained, Wormbrain's map piece is paid for (S5-05). Fishing and Cooking have no goal after stage 1: no F2P quest needs them and the food is bought (S4-04). The values were checked against the V2.1 route on 26 Sep 2026."
+  "note": "In stage 5 Strength and Defence rise on their own: Dragon Slayer I gives 18,650 XP in each, which is Defence 33 from level 1 (so Defence is not trained before it) and Strength 35-36 from 20-25. Smithing 29 comes from the quest The Knight's Sword (12,725 XP), and Magic 25 from training in step S2-04: Magic 33 is not trained, Wormbrain's map piece is paid for (S5-05). Fishing and Cooking have no goal: Mining is 10 until stage 3 (only The Knight's Sword needs it);  no F2P quest needs Fishing or Cooking and the food is bought (S4-04). The values were checked against the V2.1 route on 26 Sep 2026."
 }

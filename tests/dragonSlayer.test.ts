@@ -64,7 +64,7 @@ describe('Dragon Slayer I: stage data', () => {
     const trigger = (id: string) => (stepById.get(id) as unknown as { inGame: { completionTrigger: { items: { names: string[]; id?: number }[] } } }).inGame.completionTrigger.items[0];
     expect(trigger('S5-03')).toMatchObject({ names: ['Map part'], id: 1535 });
     expect(trigger('S5-04')).toMatchObject({ names: ['Map part'], id: 1537 });
-    expect(trigger('S5-05')).toMatchObject({ names: ['Crandor map'] });
+    expect(trigger('S5-05')).toMatchObject({ names: ['Map part'], id: 1536 });
   });
 
   it('the ship is repaired plank by plank, the Oracle door takes four items one by one, Wormbrain is paid', () => {
@@ -113,8 +113,10 @@ describe('Dragon Slayer I: the checks before the quest and before the ship', () 
   });
 
   it('the recommended loadout is on the step: weapon, food, energy and strength potions', () => {
-    const names = (stepById.get('S5-08') as unknown as { itemsRequired: { nameEn: string }[] }).itemsRequired.map((i) => i.nameEn);
-    expect(names).toEqual(expect.arrayContaining(['Anti-dragon shield', 'Rune sword', 'Lobster', 'Strength potion(4)']));
+    const s = stepById.get('S5-08') as unknown as { itemsRequired: { nameEn: string }[]; itemsRecommended: { nameEn: string }[] };
+    // Only the shield and the food are mandatory; the upgrade and the potions are advice.
+    expect(s.itemsRequired.map((i) => i.nameEn)).toEqual(['Anti-dragon shield', 'Lobster']);
+    expect(s.itemsRecommended.map((i) => i.nameEn)).toEqual(expect.arrayContaining(['Rune sword', 'Energy potion(4)', 'Strength potion(4)']));
   });
 });
 

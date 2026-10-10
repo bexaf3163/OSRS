@@ -107,4 +107,13 @@ public class NavigationTest
 		assertTrue(route.update(3249, 3193, 0));
 		assertTrue(route.finished());
 	}
+
+	@Test
+	public void theMisthalinMysteryManorIsAnInstanceNotAWorldMapPlace()
+	{
+		assertTrue(Navigation.isInstanced(1615, 4829));
+		assertTrue(Navigation.isInstanced(1647, 4836));
+		assertFalse(Navigation.isInstanced(3213, 3428));
+		assertFalse("dungeons north of the surface are not instances", Navigation.isInstanced(3104, 9571));
+	}
 }

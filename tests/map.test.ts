@@ -55,10 +55,10 @@ describe('wiki map tiles', () => {
 describe('step points', () => {
   const step = (id: string) => allSteps.find((s) => s.id === id)!;
 
-  it('S1-11: two shrimp fishing points, the start is not duplicated', () => {
-    const points = stepPoints(step('S1-11'));
-    expect(points.map((p) => [p.x, p.y])).toEqual([[3244, 3150], [3086, 3227]]);
-    expect(initialPoint(step('S1-11'))).toBe(0);
+  it('S1-12: the mining spot is the start and is not duplicated', () => {
+    const points = stepPoints(step('S1-12'));
+    expect(points.length).toBeGreaterThan(0);
+    expect(initialPoint(step('S1-12'))).toBe(0);
   });
 
   it('S1-05: the start at Veos and four treasures', () => {

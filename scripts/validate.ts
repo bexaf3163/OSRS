@@ -6,6 +6,7 @@ import type {
 } from '../src/types/index.ts';
 import { xpForLevel } from '../src/lib/xp.ts';
 import { titleTargets } from '../src/lib/targets.ts';
+import { RETIRED_STEPS } from '../src/lib/progress.ts';
 
 export interface GuideData {
   skills: Skill[];
@@ -129,11 +130,15 @@ export function validate(d: GuideData | null, route: Route): Report {
   check(idSet.size === ids.length, 'Step codes are not repeated', 'There are repeated step codes');
   const badIds = steps.filter((s) => !/^S\d-\d{2}$/.test(s.id) || Number(s.id[1]) !== s.stage).map((s) => s.id);
   check(!badIds.length, 'Every step code matches its stage (S<stage>-<number>)', `The code does not match the stage: ${badIds.join(', ')}`);
+  // A retired step keeps its number, so it leaves a gap: the active steps are never renumbered (saves and notes refer to them).
+  const retired = new Set(RETIRED_STEPS);
   const gaps = steps.filter((s, i) => {
     const prev = steps[i - 1];
-    return Number(s.id.slice(3)) !== (prev && prev.stage === s.stage ? Number(prev.id.slice(3)) + 1 : 1);
+    let want = prev && prev.stage === s.stage ? Number(prev.id.slice(3)) + 1 : 1;
+    while (retired.has(`S${s.stage}-${String(want).padStart(2, '0')}`)) want++;
+    return Number(s.id.slice(3)) !== want;
   }).map((s) => s.id);
-  check(!gaps.length, 'Within every stage the numbers run in order from 01', `The numbers do not run in order: ${gaps.join(', ')}`);
+  check(!gaps.length, 'Within every stage the numbers run in order from 01 (a retired step leaves its number free)', `The numbers do not run in order: ${gaps.join(', ')}`);
 
   const stageIds = new Set(stages.map((s) => s.id));
   const noStage = steps.filter((s) => !stageIds.has(s.stage)).map((s) => s.id);

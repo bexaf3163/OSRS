@@ -76,7 +76,7 @@ describe('F2P route audit: the route itself', () => {
   it('runs from S1-01 to the finale in order, each step requiring only earlier ones', () => {
     expect(route[0].id).toBe('S1-01');
     expect(route[route.length - 1].id).toBe(FINALE);
-    expect(route.length).toBeGreaterThanOrEqual(47);
+    expect(route.length).toBeGreaterThanOrEqual(46);
     const seen = new Set<string>();
     for (const s of route) {
       for (const r of s.requires) expect(seen.has(r), `${s.id} requires ${r} which comes later or is members only`).toBe(true);

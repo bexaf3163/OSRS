@@ -454,7 +454,7 @@
       {
         "nameEn": "Shrimps",
         "amount": 5,
-        "howToGet": "Instead of chicken: catch fish with a Small fishing net on the shore of Lumbridge Swamp by the Fishing tutor (the spots are on the map of step S1-11) and cook them on the castle range or on a fire (axe + tinderbox). About 23 gp on the Grand Exchange.",
+        "howToGet": "Instead of chicken: catch fish with a Small fishing net on the shore of Lumbridge Swamp by the Fishing tutor (on the Lumbridge Swamp shore by the Fishing tutor) and cook them on the castle range or on a fire (axe + tinderbox). About 23 gp on the Grand Exchange.",
         "wikiItemId": 315,
         "iconUrl": "https://oldschool.runescape.wiki/images/Shrimps.png",
         "heals": 3
@@ -726,7 +726,7 @@
       {
         "nameEn": "Shrimps",
         "amount": "15–20",
-        "howToGet": "Instead of chicken: catch fish with a Small fishing net on the shore of Lumbridge Swamp by the Fishing tutor (the spots are on the map of step S1-11) and cook them on the castle range or on a fire (axe + tinderbox). About 23 gp on the Grand Exchange.",
+        "howToGet": "Instead of chicken: catch fish with a Small fishing net on the shore of Lumbridge Swamp by the Fishing tutor (on the Lumbridge Swamp shore by the Fishing tutor) and cook them on the castle range or on a fire (axe + tinderbox). About 23 gp on the Grand Exchange.",
         "wikiItemId": 315,
         "iconUrl": "https://oldschool.runescape.wiki/images/Shrimps.png",
         "heals": 3
@@ -747,7 +747,7 @@
       }
     ],
     "reward": "10,000 Coins (2,000 + 3,000 + 5,000), boots (Fancy boots or Fighting boots) and 4 emotes.",
-    "doneWhen": "All 4 chests are open and 10,000 coins are in the bank.",
+    "doneWhen": "Fighting boots or Fancy boots in the bag, worn or in the bank: the reward of the 4th chest, so all four levels are done. The coins may be spent already.",
     "quickSteps": [
       "The fastest way: talk to Count Check in the Lumbridge graveyard, south of the church: Talk-to, \"Where can I learn more about security?\", \"Yes\". He teleports you for free straight to the entrance, but only once and only if you have never been to the Stronghold.",
       "Without the teleport: a canoe at Woodcutting 12-26 takes you from Lumbridge only as far as Champions' Guild (1 stop), then walk north-west along the river, about 2 minutes. At Woodcutting 27 the canoe goes straight to Barbarian Village.",
@@ -944,127 +944,10 @@
     ]
   },
   {
-    "id": "S1-11",
-    "stage": 1,
-    "type": "skill",
-    "title": "Fishing to 20 and Cooking to 15",
-    "requires": [],
-    "floor": "Ground floor",
-    "mapLocation": {
-      "x": 3244,
-      "y": 3150,
-      "plane": 0,
-      "label": "Spot 1: the River Lum by the Fishing tutor",
-      "note": "The bank of the River Lum, about 55 tiles south of the Lumbridge church along the east edge of the swamp, by the Fishing tutor NPC. Do not go deep into the swamp: fish live only in the river water by the shore."
-    },
-    "resourceSpots": [
-      {
-        "x": 3244,
-        "y": 3150,
-        "plane": 0,
-        "label": "Spot 1: the River Lum by the Fishing tutor",
-        "note": "The bank of the River Lum, about 55 tiles south of the Lumbridge church along the east edge of the swamp, by the Fishing tutor NPC. Do not go deep into the swamp: fish live only in the river water by the shore."
-      },
-      {
-        "x": 3086,
-        "y": 3227,
-        "plane": 0,
-        "label": "Spot 2: the Draynor Village shore",
-        "note": "The Draynor Village shore about 15 tiles south of the bank. It is handy to put the fish into that bank straight away."
-      }
-    ],
-    "pacing": {
-      "skill": "fishing",
-      "targetLevel": 20,
-      "targetExp": 4470,
-      "actionName": "shrimp|shrimps",
-      "expPerAction": 10
-    },
-    "where": "Two spots with shrimp, pick the nearer one. From Fishing 15 anchovies (Anchovies) are caught there too.",
-    "warning": "⚠️ Important: there is no fishing in the green pools inside the swamp. Look for the bubbles on the water strictly on the river bank by the marker.",
-    "itemsRequired": [
-      {
-        "nameEn": "Small fishing net",
-        "amount": 1,
-        "howToGet": "Given on Tutorial Island. If you lost it, there is one beside the Fishing tutor in Lumbridge Swamp (it respawns), or buy one from Gerrant in Port Sarim for 5 gp.",
-        "from": "Fishing tutor",
-        "wikiItemId": 303,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png"
-      }
-    ],
-    "fields": [
-      {
-        "label": "Where to cook",
-        "text": "The Lumbridge Castle kitchen range (Cook's range: after Cook's Assistant food burns less often on it) or a fire next to the fishing spot."
-      },
-      {
-        "label": "RuneLite",
-        "text": "The Fishing plugin highlights active fishing spots, so the bubbles on the water are easier to spot."
-      }
-    ],
-    "doneWhen": "Fishing 20, Cooking 15, 50+ cooked shrimp or anchovies in the bank.",
-    "inGame": {
-      "worldPoint": {
-        "x": 3244,
-        "y": 3150,
-        "plane": 0,
-        "label": "Shrimp by the Fishing tutor"
-      },
-      "groundTiles": [
-        {
-          "x": 3244,
-          "y": 3150,
-          "plane": 0,
-          "label": "Fishing spot"
-        },
-        {
-          "x": 3086,
-          "y": 3227,
-          "plane": 0,
-          "label": "Fishing spot"
-        }
-      ],
-      "npcNames": [
-        "Fishing spot",
-        "Fishing tutor"
-      ],
-      "objectNames": [
-        "Cooking range"
-      ],
-      "highlightItems": [
-        "Small fishing net",
-        "Raw shrimps",
-        "Raw anchovies"
-      ],
-      "completionTrigger": {
-        "type": "SKILL_LEVEL",
-        "levels": [
-          {
-            "skill": "fishing",
-            "level": 20
-          },
-          {
-            "skill": "cooking",
-            "level": 15
-          }
-        ],
-        "items": [
-          {
-            "names": [
-              "Shrimps",
-              "Anchovies"
-            ],
-            "count": 50
-          }
-        ]
-      }
-    }
-  },
-  {
     "id": "S1-12",
     "stage": 1,
     "type": "skill",
-    "title": "Mining to 15",
+    "title": "Mining to 10",
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Free-to-play_Mining_training",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3286,3365,0",
@@ -1076,7 +959,7 @@
     },
     "floor": "Ground floor",
     "where": "The mine south-east of Varrock (South-east Varrock mine): copper, tin and iron in one place, the Varrock East bank is about 60 tiles north-west. From the Chronicle book (Champions' Guild) it is about 1 minute on foot to the east. On the way keep south of the stone circle with the dark wizards (Dark wizard): they attack on their own and hit beginners hard.",
-    "how": "Up to 15 mine copper (Copper) and tin (Tin) and drop the extra (Shift + click). From level 15 move on to iron (Iron).",
+    "how": "Up to 10 mine copper (Copper) and tin (Tin) and drop the extra (Shift + click).",
     "itemsRequired": [
       {
         "nameEn": "Bronze pickaxe",
@@ -1090,18 +973,18 @@
     "fields": [
       {
         "label": "Why",
-        "text": "The Knight's Sword (S2-07) requires Mining 10, and iron (for Doric's Quest and for the money-making in S3-06) can only be mined from 15."
+        "text": "The Knight's Sword (S2-07) requires Mining 10. The ore for Doric's Quest is bought in S2-01, so no iron is mined here."
       },
       {
         "label": "Put in the bank",
-        "text": "4 copper ores and 2 iron ores for Doric's Quest (S3-01), plus 1 copper and 1 tin to smelt a bronze bar for Prince Ali Rescue."
+        "text": "1 copper and 1 tin ore to smelt a bronze bar for Prince Ali Rescue."
       }
     ],
-    "doneWhen": "Mining 15, 5 copper ores, 1 tin ore and 2 iron ores in the bank.",
+    "doneWhen": "Mining 10.",
     "pacing": {
       "skill": "mining",
-      "targetLevel": 15,
-      "targetExp": 2411,
+      "targetLevel": 10,
+      "targetExp": 1154,
       "actionName": "ore",
       "expPerAction": 17.5
     },
@@ -1116,27 +999,7 @@
         "levels": [
           {
             "skill": "mining",
-            "level": 15
-          }
-        ],
-        "items": [
-          {
-            "names": [
-              "Copper ore"
-            ],
-            "count": 5
-          },
-          {
-            "names": [
-              "Tin ore"
-            ],
-            "count": 1
-          },
-          {
-            "names": [
-              "Iron ore"
-            ],
-            "count": 2
+            "level": 10
           }
         ]
       }
@@ -1165,7 +1028,7 @@
     "fields": [
       {
         "label": "How much you need",
-        "text": "The S2-01 shopping costs about 10,500 gp, and the Magic training in S2-04 another 8-10 thousand. After Stronghold and Chronicle you have about 8,500: top it up with 60-100 hides."
+        "text": "The S2-01 shopping costs about 10,500 gp. After Stronghold and Chronicle you have about 8,500: top it up with 40-60 hides and sell them. The Magic training in S2-04 pays for itself with the hides of the cows you train on."
       },
       {
         "label": "Price",
@@ -1176,8 +1039,8 @@
         "text": "Attack, Strength and Defence rise as well, and cows drop bones: bury them for Prayer."
       }
     ],
-    "doneWhen": "20,000+ coins in the bank (together with what is left from Stronghold).",
-    "moneyGoal": 20000,
+    "doneWhen": "12,000+ coins in the bag or the bank (together with what is left from Stronghold). Unsold hides are not coins.",
+    "moneyGoal": 12000,
     "inGame": {
       "npcNames": [
         "Cow"
@@ -1192,7 +1055,7 @@
             "names": [
               "Coins"
             ],
-            "count": 20000
+            "count": 12000
           }
         ]
       }
@@ -1309,6 +1172,22 @@
         "wikiItemId": 434,
         "iconUrl": "https://oldschool.runescape.wiki/images/Clay.png",
         "inStep": true
+      },
+      {
+        "inStep": true,
+        "nameEn": "Copper ore",
+        "amount": 4,
+        "howToGet": "For Doric's Quest, about 30 gp each.",
+        "wikiItemId": 436,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Copper_ore.png"
+      },
+      {
+        "inStep": true,
+        "nameEn": "Iron ore",
+        "amount": 2,
+        "howToGet": "For Doric's Quest, about 70 gp each.",
+        "wikiItemId": 440,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_ore.png"
       },
       {
         "nameEn": "Redberries",
@@ -1453,6 +1332,18 @@
               "Clay"
             ],
             "count": 7
+          },
+          {
+            "names": [
+              "Copper ore"
+            ],
+            "count": 4
+          },
+          {
+            "names": [
+              "Iron ore"
+            ],
+            "count": 2
           },
           {
             "names": [
@@ -2735,14 +2626,14 @@
       {
         "nameEn": "Copper ore",
         "amount": 4,
-        "howToGet": "From step S1-12.",
+        "howToGet": "From step S2-01.",
         "wikiItemId": 436,
         "iconUrl": "https://oldschool.runescape.wiki/images/Copper_ore.png"
       },
       {
         "nameEn": "Iron ore",
         "amount": 2,
-        "howToGet": "From step S1-12.",
+        "howToGet": "From step S2-01.",
         "wikiItemId": 440,
         "iconUrl": "https://oldschool.runescape.wiki/images/Iron_ore.png"
       }
@@ -3233,7 +3124,7 @@
     },
     "floor": "Ground floor",
     "where": "The mine south-east of Varrock (3 iron veins) or the Al Kharid mine (free passage after Prince Ali). The bank is Varrock East or Al Kharid.",
-    "how": "Mine 25 to 30 iron ore (Mining 15) and sell it on the Grand Exchange. Stop as soon as you have 2,500 gp, 25 ores or the scimitar itself: this step pays only for the Adamant scimitar, not for a whole armour set. Mining levels along the way: you will need level 60 in S6-03.",
+    "how": "Mine 25 to 30 iron ore (Mining 15: mine copper and tin up to 15 first) and sell it on the Grand Exchange. Stop as soon as you have 2,500 gp in coins: ore in the bag is not cash until it is sold. This step pays only for the Adamant scimitar, not for a whole armour set. Mining levels along the way: you will need level 60 in S6-03.",
     "fields": [
       {
         "label": "How much you need",
@@ -3248,7 +3139,7 @@
         "text": "Cowhides to leather with Ellis in Al Kharid (about 260 gp per leather), and from Attack 40 big bones (Big bones, about 310 gp) from moss giants (step S4-03)."
       }
     ],
-    "doneWhen": "2,500+ coins, or 25 iron ore, or the Adamant scimitar in the bag or the bank.",
+    "doneWhen": "2,500+ coins in the bag or the bank (unsold ore does not count).",
     "moneyGoal": 2500,
     "inGame": {
       "objectNames": [
@@ -3256,25 +3147,12 @@
       ],
       "completionTrigger": {
         "type": "ITEM_OWNED",
-        "anyOf": true,
         "items": [
           {
             "names": [
               "Coins"
             ],
             "count": 2500
-          },
-          {
-            "names": [
-              "Iron ore"
-            ],
-            "count": 25
-          },
-          {
-            "names": [
-              "Adamant scimitar"
-            ],
-            "count": 1
           }
         ]
       }
@@ -3588,40 +3466,32 @@
     "id": "S4-03",
     "stage": 4,
     "type": "skill",
-    "title": "Attack to 40",
+    "title": "Attack to 40 and bank 50 Big bones",
     "requires": [],
     "foes": [
-      "Moss giant",
-      "Flesh Crawler"
+      "Hill Giant"
     ],
     "pacing": {
       "skill": "attack",
       "targetLevel": 40,
       "targetExp": 37224,
       "actionName": "giant|giants",
-      "expPerAction": 240
+      "expPerAction": 140
     },
-    "where": "The moss giants (Moss giant, level 42) in the Varrock Sewers: the manhole is right east of Varrock Palace. The way is blocked by a web: cut it with a scimitar or a knife. An alternative is the Flesh Crawler on the 2nd floor of the Stronghold of Security.",
+    "where": "The Hill Giants in the Edgeville Dungeon: the trapdoor is in Edgeville, a few steps south-west of the bank, and the giants are in the south-east of the dungeon. If you have a Brass key, the locked door by the giants saves the walk past the skeletons. The Edgeville bank is a minute away: bank the bones there.",
     "mapLocation": {
-      "x": 3237,
-      "y": 3458,
+      "x": 3097,
+      "y": 3468,
       "plane": 0,
-      "label": "The manhole to the Varrock Sewers"
+      "label": "The trapdoor to the Edgeville Dungeon"
     },
     "itemsRequired": [
       {
-        "nameEn": "Rune scimitar",
+        "nameEn": "Adamant scimitar",
         "amount": 1,
-        "howToGet": "For training, needs 40 Attack. About 15,000 gp.",
-        "wikiItemId": 1333,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_scimitar.png"
-      },
-      {
-        "nameEn": "Rune sword",
-        "amount": 1,
-        "howToGet": "For the dragon Elvarg: a stab attack. About 12,000 gp.",
-        "wikiItemId": 1289,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_sword.png"
+        "wikiItemId": 1331,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_scimitar.png",
+        "howToGet": "From step S3-07. Wear it until Attack 40: the Rune scimitar needs 40 Attack."
       }
     ],
     "itemsRecommended": [
@@ -3636,24 +3506,30 @@
     ],
     "fields": [
       {
+        "label": "Goals",
+        "text": "Two in one block: Attack 40 with the Adamant scimitar, and at least 50 Big bones banked. A Hill Giant has 35 hit points, about 140 XP a kill, and always drops Big bones."
+      },
+      {
         "label": "Money",
-        "text": "The giants drop big bones (Big bones, about 310 gp) and nature runes (about 140 gp): pick them up and sell: an inventory of bones is about 8,700 gp. The sewer is a multicombat area: bring 20 salmon and eat when your health is below 20."
+        "text": "Bank the Big bones, do not sell them in the dungeon: 50 of them are about 14,000-16,000 gp at the Grand Exchange (check the price when you sell). This pays for Wormbrain (10,000 gp in S5-05), the ship (2,000 gp in S5-06) and the materials in S4-05; the gap, if the price has moved, is shown by the preparation list. Bones in the bank are not coins until sold."
       },
       {
         "label": "Weapon",
-        "text": "The Rune scimitar (about 15,000 gp) is the main training weapon. The Rune sword (about 12,000 gp) is for the dragon: Elvarg's weakest defence is against stab (20 against 40 for slash)."
+        "text": "Train with the Adamant scimitar. The Rune scimitar can be wielded only from Attack 40: once you reach it, the gear advice may offer it, it is not part of this step."
       },
       {
         "label": "Armour",
-        "text": "No Defence training: the rune armour needs 40 Defence, so wear what you already have. The Anti-dragon shield (S5-02) stops Elvarg's fire whatever your Defence is, and the 18,650 Defence XP from Dragon Slayer I lifts Defence by itself. Eat early: moss giants hit hard."
+        "text": "No Defence training, so wear what you already have. The Anti-dragon shield (S5-02) stops Elvarg's fire whatever your Defence is, and the 18,650 Defence XP from Dragon Slayer I lifts Defence by itself. Hill Giants hit up to 4: eat when your health is below 15."
       }
     ],
     "membersAlternative": "👑 With membership: do not fight mobs by hand: complete Waterfall Quest in 15 minutes and get 30 Attack and 30 Strength at once!",
-    "doneWhen": "Attack 40. Strength and Defence are left alone.",
+    "doneWhen": "Attack 40 and 50+ Big bones in the bank or the bag. Strength and Defence are left alone.",
     "inGame": {
       "npcNames": [
-        "Moss giant",
-        "Flesh Crawler"
+        "Hill Giant"
+      ],
+      "highlightItems": [
+        "Big bones"
       ],
       "completionTrigger": {
         "type": "SKILL_LEVEL",
@@ -3661,6 +3537,14 @@
           {
             "skill": "attack",
             "level": 40
+          }
+        ],
+        "items": [
+          {
+            "names": [
+              "Big bones"
+            ],
+            "count": 50
           }
         ]
       }
@@ -3678,15 +3562,6 @@
       "plane": 0,
       "label": "The Grand Exchange"
     },
-    "resourceSpots": [
-      {
-        "x": 3104,
-        "y": 3424,
-        "plane": 0,
-        "label": "Optional: fly fishing at Barbarian Village",
-        "note": "Trout and salmon with a Fly fishing rod and feathers, a permanent fire by the river."
-      }
-    ],
     "where": "The Grand Exchange: buy the cooked Lobster in one go. No trip to Karamja.",
     "itemsRequired": [
       {
@@ -3700,12 +3575,8 @@
     ],
     "fields": [
       {
-        "label": "Optional: Fishing and Cooking",
-        "text": "If you want Fishing and Cooking higher for your stats, train them at Barbarian Village, not on Karamja: fly fishing (Fly fishing rod and feathers) for trout and salmon, cooked on the permanent fire by the river. Nothing in the route needs them past 30."
-      },
-      {
         "label": "Why not catch them",
-        "text": "Lobsters can be caught only from Fishing 40 and cooked only from Cooking 40, with a Lobster pot and a boat to Musa Point (30 gp each way). Buying them is far faster."
+        "text": "Lobsters need Fishing 40 and Cooking 40 and a boat to Musa Point, hours of work that add nothing to the fight. Buying them is far faster."
       }
     ],
     "doneWhen": "20+ cooked Lobster in the bag or the bank.",
@@ -4088,7 +3959,7 @@
       }
     ],
     "safespot": "Shoot the Lesser demon from a distance with magic or a bow from behind the corner of the purple door!",
-    "doneWhen": "The map piece is taken from the chest.",
+    "doneWhen": "Melzar's map piece (item 1535) is taken from the chest, or the pieces are already joined into the Crandor map.",
     "inGame": {
       "highlightItems": [
         "Maze key",
@@ -4096,12 +3967,19 @@
       ],
       "completionTrigger": {
         "type": "ITEM_OWNED",
+        "anyOf": true,
         "items": [
           {
             "names": [
               "Map part"
             ],
             "id": 1535,
+            "count": 1
+          },
+          {
+            "names": [
+              "Crandor map"
+            ],
             "count": 1
           }
         ]
@@ -4174,7 +4052,7 @@
       "Use 4 items on the door: Silk, Wizard's mind bomb, Unfired bowl, Lobster pot.",
       "Take the second map piece from the chest."
     ],
-    "doneWhen": "The second map piece is in your inventory.",
+    "doneWhen": "Thalzar's map piece (item 1537) is in your inventory, or the pieces are already joined into the Crandor map.",
     "inGame": {
       "npcNames": [
         "Oracle"
@@ -4191,12 +4069,19 @@
       ],
       "completionTrigger": {
         "type": "ITEM_OWNED",
+        "anyOf": true,
         "items": [
           {
             "names": [
               "Map part"
             ],
             "id": 1537,
+            "count": 1
+          },
+          {
+            "names": [
+              "Crandor map"
+            ],
             "count": 1
           }
         ]
@@ -4226,7 +4111,7 @@
       "wikiUrl": "https://oldschool.runescape.wiki/w/Wormbrain"
     },
     "how": "Pay Wormbrain 10,000 coins in the dialogue for Lozar's map piece: no spell, no fight. Bring the coins from the stage 4 loot or buy nothing else with them.",
-    "doneWhen": "The three pieces are joined into the one island map (Crandor map).",
+    "doneWhen": "Wormbrain's map piece (item 1536) is in your inventory, or the pieces are already joined into the Crandor map.",
     "inGame": {
       "npcNames": [
         "Wormbrain"
@@ -4237,7 +4122,15 @@
       ],
       "completionTrigger": {
         "type": "ITEM_OWNED",
+        "anyOf": true,
         "items": [
+          {
+            "names": [
+              "Map part"
+            ],
+            "id": 1536,
+            "count": 1
+          },
           {
             "names": [
               "Crandor map"
@@ -4420,39 +4313,18 @@
         "iconUrl": "https://oldschool.runescape.wiki/images/Anti-dragon_shield.png"
       },
       {
-        "nameEn": "Rune sword",
-        "amount": 1,
-        "howToGet": "A stab attack with the Stab style.",
-        "wikiItemId": 1289,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_sword.png"
-      },
-      {
         "nameEn": "Lobster",
         "amount": "20+",
         "howToGet": "From step S4-04, or buy more on the Grand Exchange for about 105 gp each. The more lobsters, the lower the risk.",
         "wikiItemId": 379,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
         "heals": 12
-      },
-      {
-        "nameEn": "Energy potion(4)",
-        "amount": 1,
-        "howToGet": "From S2-01 or on the Grand Exchange for about 170 gp. Restores run energy on the climb to the volcano.",
-        "wikiItemId": 3008,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png"
-      },
-      {
-        "nameEn": "Strength potion(4)",
-        "amount": 1,
-        "howToGet": "Recommended: one dose before you enter Elvarg's lair. Buy on the Grand Exchange for about 100 gp.",
-        "wikiItemId": 113,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
       }
     ],
     "fields": [
       {
         "label": "Equipment",
-        "text": "The Anti-dragon shield is worn: without it the dragon's fire hits up to 70, with the shield up to 10. A Rune sword on the Stab style (Elvarg's weakest defence is against stab), adamant or rune armour, an Amulet of strength (from S2-01; if you do not have one, an Amulet of power)."
+        "text": "The Anti-dragon shield is worn: without it the dragon's fire hits up to 70, with the shield up to 10. Optional: a Rune sword on the Stab style (Elvarg's weakest defence is against stab), an Amulet of strength (from S2-01; if you do not have one, an Amulet of power)."
       },
       {
         "label": "Inventory",
@@ -4464,7 +4336,7 @@
       },
       {
         "label": "Combat tactics",
-        "text": "Elvarg is level 83 with 80 health. Switch to the Stab style on the Rune sword. Eat a lobster when your health falls below 20. Do not take the shield off for a second!"
+        "text": "Elvarg is level 83 with 80 health. Use the Stab style if you have the Rune sword, otherwise your best scimitar. Eat a lobster when your health falls below 20. Do not take the shield off for a second!"
       }
     ],
     "doneWhen": "The dragon is beheaded and Elvarg's head is in your inventory.",
@@ -4497,6 +4369,29 @@
     },
     "threats": [
       "Elvarg"
+    ],
+    "itemsRecommended": [
+      {
+        "nameEn": "Rune sword",
+        "amount": 1,
+        "howToGet": "Optional: a stab attack on the Stab style (about 12,000 gp, Attack 40). Your Adamant scimitar works without it.",
+        "wikiItemId": 1289,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Rune_sword.png"
+      },
+      {
+        "nameEn": "Energy potion(4)",
+        "amount": 1,
+        "howToGet": "Optional: restores run energy on the climb to the volcano. From S2-01 or on the Grand Exchange for about 170 gp.",
+        "wikiItemId": 3008,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png"
+      },
+      {
+        "nameEn": "Strength potion(4)",
+        "amount": 1,
+        "howToGet": "Optional: one dose before you enter Elvarg's lair. Buy on the Grand Exchange for about 100 gp.",
+        "wikiItemId": 113,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
+      }
     ]
   },
   {
@@ -4524,7 +4419,7 @@
       "wikiUrl": "https://oldschool.runescape.wiki/w/Oziach"
     },
     "reward": "2 QP, 18,650 XP each in Defence and Strength, the right to wear the Rune platebody and the Green d'hide body. All 46 points of F2P quests are collected!",
-    "doneWhen": "The Rune platebody is worn (84,500 gp at Oziach, Defence 40).",
+    "doneWhen": "Dragon Slayer I is complete: Oziach has taken Elvarg's head. The Rune platebody (Defence 40, 84,500 gp) is optional.",
     "inGame": {
       "npcNames": [
         "Oziach"
@@ -4534,27 +4429,19 @@
       ],
       "completionTrigger": {
         "type": "QUEST_COMPLETED",
-        "questName": "Dragon Slayer I",
-        "items": [
-          {
-            "names": [
-              "Rune platebody"
-            ],
-            "count": 1
-          }
-        ]
+        "questName": "Dragon Slayer I"
       }
     },
     "quickSteps": [
       "Make sure you have Elvarg's head (Elvarg's head) in your bag: it is handed over as proof.",
       "Go to Oziach in Edgeville (the hut south of the Wilderness ditch) and talk to him: Dragon Slayer I is complete.",
-      "Buy the Rune platebody from Oziach: the step counts when you have it with you. It costs 84,500 gp (130% of 65,000) and needs Defence 40: if you have no money yet, mark the step as skipped and come back when you have saved up; the quest is not undone by that."
+      "Optional, later: the Rune platebody from Oziach costs 84,500 gp (130% of 65,000) and needs Defence 40. The quest is complete without it: do not wait for the money."
     ],
-    "itemsRequired": [
+    "itemsRecommended": [
       {
         "nameEn": "Rune platebody",
         "amount": 1,
-        "howToGet": "Oziach's shop in Edgeville after the quest: 84,500 gp (130% of the 65,000 value), needs Defence 40. It is expensive: save up for S6-01 onwards; while you have no money the step can be skipped.",
+        "howToGet": "Optional, after the quest: Oziach's shop in Edgeville, 84,500 gp (130% of the 65,000 value), needs Defence 40 and Dragon Slayer I. Not part of the route.",
         "wikiItemId": 1127,
         "iconUrl": "https://oldschool.runescape.wiki/images/Rune_platebody.png"
       }
@@ -5332,7 +5219,7 @@
     "id": "S8-03",
     "stage": 8,
     "type": "skill",
-    "title": "Agility to 40 and collecting the Graceful outfit",
+    "title": "Agility to 40 (the Graceful outfit is optional)",
     "requires": [],
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Rooftop_Agility",
@@ -5355,7 +5242,7 @@
         "text": "The set is bought from Grace in the Rogues' Den under the pub in Burthorpe for Marks of Grace: the full set is 260 marks. It weighs almost nothing, and the full set speeds up run energy recovery by 30%. Most marks are on the Canifis course."
       }
     ],
-    "doneWhen": "Agility 40, at least 2-3 pieces of the Graceful set bought.",
+    "doneWhen": "Agility 40. Graceful pieces and Marks of Grace are a bonus, not a condition.",
     "inGame": {
       "npcNames": [
         "Grace"
@@ -5366,19 +5253,6 @@
           {
             "skill": "agility",
             "level": 40
-          }
-        ],
-        "items": [
-          {
-            "names": [
-              "Graceful hood",
-              "Graceful top",
-              "Graceful legs",
-              "Graceful gloves",
-              "Graceful boots",
-              "Graceful cape"
-            ],
-            "count": 2
           }
         ]
       }

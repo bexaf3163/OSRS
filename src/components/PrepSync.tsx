@@ -15,7 +15,8 @@ import { useUpgradeRecommendation } from './UpgradePrompt';
 import type { Step } from '../types';
 import { procurementDetour, type Detour } from '../lib/detours';
 import { stepPlaces } from '../lib/stepPlaces';
-import { travelInputOf } from '../lib/travelInput';
+import { fairyRingsUnlocked, travelInputOf } from '../lib/travelInput';
+import { isInstancedPoint } from '../lib/instances';
 import { travelOptions } from '../lib/travel';
 import { recommendedTransport, type RecommendedTransport } from '../lib/transport';
 
@@ -51,8 +52,8 @@ function StepPlan({ step }: { step: Step }) {
   const [transport, setTransport] = useState<RecommendedTransport | null>(null);
   const planRef = useRef(plan);
   planRef.current = plan;
-  const bagRef = useRef({ levels: progress.levels, stats, gear, owned, mode });
-  bagRef.current = { levels: progress.levels, stats, gear, owned, mode };
+  const bagRef = useRef({ levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress) });
+  bagRef.current = { levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress) };
   const to = stepPlaces(step)[0];
   // A teleport or a boat ride is a jump: the way is judged again at once from where the player landed, not at the next poll.
   const lastMove = moves[moves.length - 1];
@@ -68,7 +69,7 @@ function StepPlan({ step }: { step: Step }) {
       const landed = m && m.to && Date.now() - m.at < FRESH_MOVE_MS ? m.to : null;
       const pos = landed ?? await locate();
       if (dead) return;
-      if (!pos || !to || pos.plane !== 0 || to.plane !== 0) { setDetour(null); setTransport(null); return; }
+      if (!pos || !to || pos.plane !== 0 || to.plane !== 0 || isInstancedPoint(pos) || isInstancedPoint(to)) { setDetour(null); setTransport(null); return; }
       // The bag and the levels: a teleport that is ready shortens the way to the stop.
       const t = travelInputOf({ from: pos, to, ...bagRef.current });
       setDetour(procurementDetour({ plan: planRef.current, stepId: step.id, from: pos, to, coins, travel: t }));
