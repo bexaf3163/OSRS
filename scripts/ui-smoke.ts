@@ -243,7 +243,7 @@ async function run(browser: Browser) {
     // Bulk shopping: "already have" changes "buy", is saved and goes into the exchange hint.
     {
       const { page, errors } = await open(browser, width, {
-        events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Feather', carried: 120, noted: 0, bank: 200 }] }],
+        events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Clay', carried: 3, noted: 0, bank: 2 }] }],
       }, '#/shopping');
       const input = page.getByLabel('Energy potion(4): how many you already have').first();
       await input.fill('3');
@@ -256,7 +256,7 @@ async function run(browser: Browser) {
       const plan = await page.evaluate(() => ((window as unknown as { __posts: { path: string; body: { items: { name: string; count: number }[] } }[] }).__posts)
         .filter((p) => p.path === '/shopping-plan').pop()?.body.items ?? []);
       expect(plan.find((i) => i.name === 'Energy potion(4)')?.count === 2, 'shopping: "buy 2" goes to the game, not 5');
-      expect(plan.find((i) => i.name === 'Feather')?.count === 500, 'shopping: feathers — by the game data, the plugin subtracts 320 itself');
+      expect(plan.find((i) => i.name === 'Clay')?.count === 7, 'shopping: clay — by the game data, the plugin subtracts the 5 you own itself');
       expect(await noOverflow(page), 'shopping: no horizontal scrolling');
       expect(!errors.length, `shopping: no console errors ${errors.join('; ')}`);
       await page.context().close();
@@ -320,10 +320,10 @@ async function run(browser: Browser) {
 
     // An earning step: coins against the goal.
     {
-      const gear = { equipment: [], inventory: [], coins: 300, bankCoins: 12000, carriedValue: 4200, bankValue: 5000 };
+      const gear = { equipment: [], inventory: [], coins: 300, bankCoins: 8000, carriedValue: 4200, bankValue: 5000 };
       const { page } = await open(browser, width, { progress: progressBefore('S1-13'), status: gear, events: [{ type: 'GEAR', gear }] }, '#/step/S1-13');
       const t = await text(page, '.money-goal');
-      expect(t.includes('12,300 / 20,000') && t.includes('7,700 missing'), 'earning: "Coins: 12,300 / 20,000 gp — 7,700 missing"');
+      expect(t.includes('8,300 / 12,000') && t.includes('3,700 missing'), 'earning: "Coins: 8,300 / 12,000 gp — 3,700 missing"');
       expect(t.includes('~9,200'), 'earning: the items — separately, with "~"');
       await page.context().close();
     }
