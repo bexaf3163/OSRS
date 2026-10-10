@@ -58,14 +58,14 @@
           "max": 25
         },
         {
-          "raw": "35–40",
-          "min": 35,
-          "max": 40
+          "raw": "20–25",
+          "min": 20,
+          "max": 25
         },
         {
-          "raw": "40–44",
-          "min": 40,
-          "max": 44
+          "raw": "35–36",
+          "min": 35,
+          "max": 36
         },
         {
           "raw": "50–60",
@@ -149,16 +149,16 @@
           "min": 25
         },
         {
-          "raw": "33",
-          "min": 33
+          "raw": "25",
+          "min": 25
         },
         {
-          "raw": "33",
-          "min": 33
+          "raw": "25",
+          "min": 25
         },
         {
-          "raw": "33",
-          "min": 33
+          "raw": "25",
+          "min": 25
         },
         {
           "raw": "55",
@@ -267,20 +267,20 @@
           "min": 20
         },
         {
-          "raw": "30",
-          "min": 30
+          "raw": "1",
+          "min": 1
         },
         {
-          "raw": "30",
-          "min": 30
+          "raw": "1",
+          "min": 1
         },
         {
-          "raw": "30",
-          "min": 30
+          "raw": "1",
+          "min": 1
         },
         {
-          "raw": "30",
-          "min": 30
+          "raw": "1",
+          "min": 1
         },
         {
           "raw": "50",
@@ -297,20 +297,20 @@
           "min": 15
         },
         {
-          "raw": "30",
-          "min": 30
+          "raw": "1",
+          "min": 1
         },
         {
-          "raw": "30",
-          "min": 30
+          "raw": "1",
+          "min": 1
         },
         {
-          "raw": "30",
-          "min": 30
+          "raw": "1",
+          "min": 1
         },
         {
-          "raw": "30",
-          "min": 30
+          "raw": "1",
+          "min": 1
         },
         {
           "raw": "50",
@@ -471,5 +471,5 @@
       ]
     }
   ],
-  "note": "In stage 5 Strength and Defence rise on their own: Dragon Slayer I gives 18,650 XP in each, which is Defence 33 from level 1, so Defence is not trained before it. Smithing 29 comes from the quest The Knight's Sword (12,725 XP), and Magic 25 and 33 from training in steps S2-04 and S3-09. Fishing and Cooking stay at 30 until stage 6: the food for the dragon is bought (S4-04). The values were checked against the V2.1 route on 26 Sep 2026."
+  "note": "In stage 5 Strength and Defence rise on their own: Dragon Slayer I gives 18,650 XP in each, which is Defence 33 from level 1 (so Defence is not trained before it) and Strength 35-36 from 20-25. Smithing 29 comes from the quest The Knight's Sword (12,725 XP), and Magic 25 from training in step S2-04: Magic 33 is not trained, Wormbrain's map piece is paid for (S5-05). Fishing and Cooking have no goal after stage 1: no F2P quest needs them and the food is bought (S4-04). The values were checked against the V2.1 route on 26 Sep 2026."
 }

@@ -70,13 +70,13 @@ const ug = (a: number[]) => isUnderground({ y: a[1] });
 const pointOf = (l: Line): Pt | null => (l.at ? { x: l.at[0], y: l.at[1], plane: l.at[2] } : null);
 
 /** The point the arrow leads to for a whole step, with the exemptions the audit knows by name. */
-const NO_WORLD_POINT = new Set(['S1-01', 'S3-09']);
+const NO_WORLD_POINT = new Set(['S1-01']);
 
 describe('F2P route audit: the route itself', () => {
   it('runs from S1-01 to the finale in order, each step requiring only earlier ones', () => {
     expect(route[0].id).toBe('S1-01');
     expect(route[route.length - 1].id).toBe(FINALE);
-    expect(route.length).toBeGreaterThanOrEqual(49);
+    expect(route.length).toBeGreaterThanOrEqual(47);
     const seen = new Set<string>();
     for (const s of route) {
       for (const r of s.requires) expect(seen.has(r), `${s.id} requires ${r} which comes later or is members only`).toBe(true);
@@ -125,7 +125,7 @@ describe('F2P route audit: waypoints and planes', () => {
       }
     }
     expect(bad).toEqual([]);
-    expect(stats.points).toBeGreaterThan(600);
+    expect(stats.points).toBeGreaterThan(590);
   });
 
   it('the arrow of a step does not start on top of the previous step place only by accident of a missing point: no step shares its place with a different region', () => {

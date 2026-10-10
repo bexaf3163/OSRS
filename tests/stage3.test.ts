@@ -363,7 +363,7 @@ describe('Danger radar: data', () => {
 describe('Steps with a pace', () => {
   it('pace only on training steps', () => {
     const paced: Step[] = allSteps.filter((s) => s.pacing);
-    expect(paced.map((s) => s.id)).toEqual(['S1-08', 'S1-11', 'S1-12', 'S2-13', 'S3-08', 'S4-03']);
+    expect(paced.map((s) => s.id)).toEqual(['S1-08', 'S1-11', 'S1-12', 'S3-08', 'S4-03']);
     for (const s of paced) expect(s.type).toBe('skill');
   });
 

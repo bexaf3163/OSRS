@@ -67,12 +67,12 @@ describe('Dragon Slayer I: stage data', () => {
     expect(trigger('S5-05')).toMatchObject({ names: ['Crandor map'] });
   });
 
-  it('the ship is repaired plank by plank, the Oracle door takes four items one by one, Wormbrain has both ways', () => {
+  it('the ship is repaired plank by plank, the Oracle door takes four items one by one, Wormbrain is paid', () => {
     expect(linesOf('S5-06').filter((l) => l.need === 'Plank').map((l) => l.k)).toEqual(['repairShip', 'repairShip2', 'repairShip3']);
     expect(linesOf('S5-04').filter((l) => l.need).map((l) => l.need)).toEqual(['Silk', 'Lobster pot', 'Unfired bowl', "Wizard's mind bomb"]);
     const text = (stepById.get('S5-05') as unknown as { quickSteps: string[] }).quickSteps.join(' ');
     expect(text).toMatch(/10,000/);
-    expect(text).toMatch(/Telekinetic Grab/);
+    expect(text).not.toMatch(/Telekinetic|Magic 33/);
   });
 
   it("Elvarg: the kill is led by Elvarg's head in the bag; the lair has a danger zone that only counts on S5-08 and goes quiet with the shield on", () => {

@@ -330,7 +330,7 @@ describe('the first estimate of the combat pace', () => {
     expect(sent.pacing!.secondsPerAction).toBe(Math.round(killSeconds(s308, lv, iron)! * 10) / 10);
     expect(s308.pacing!.secondsPerAction).toBeUndefined();
     expect(withKillEstimate(s308, lv, null)).toBe(s308);
-    const fishing = allSteps.find((s) => s.id === 'S2-13')!;
+    const fishing = allSteps.find((s) => s.id === 'S1-11')!;
     expect(withKillEstimate(fishing, lv, iron)).toBe(fishing);
   });
 });

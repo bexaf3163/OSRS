@@ -14877,8 +14877,7 @@
     {
      "title": "Wormbrain in Port Sarim Jail",
      "steps": [
-      "Option 1: pay Wormbrain 10,000 coins for Lozar's map piece in the dialogue.",
-      "Option 2: kill him with ranged or magic, then cast Telekinetic Grab (Magic 33, law rune + air rune) on the map piece.",
+      "Pay Wormbrain 10,000 coins for Lozar's map piece in the dialogue.",
       "Use the three Map parts on each other to make the Crandor map."
      ]
     }
@@ -14888,8 +14887,8 @@
      "at": 0,
      "do": [
       {
-       "t": "Go to Port Sarim Jail. Either pay Wormbrain 10,000 coins (Dialogue: “I believe you've got a piece of a map that I need.” → “I suppose I could pay you for the map piece...” → “Alright then, 10,000 it is.”), or kill him with ranged or magic and cast Telekinetic Grab (Magic 33, 1 law rune + 1 air rune) on the map piece.",
-       "s": "Wormbrain (Port Sarim Jail): pay 10,000 gp or Telekinetic Grab",
+       "t": "Go to Port Sarim Jail and pay Wormbrain 10,000 coins (Dialogue: “I believe you've got a piece of a map that I need.” → “I suppose I could pay you for the map piece...” → “Alright then, 10,000 it is.”).",
+       "s": "Wormbrain (Port Sarim Jail): pay 10,000 gp",
        "at": [
         3015,
         3195,
@@ -14924,14 +14923,10 @@
      },
      "items": [
       {
-       "name": "Law rune",
-       "id": 563,
-       "where": "For Telekinetic Grab (Magic 33), together with an air rune or a staff of air."
-      },
-      {
        "name": "Coins",
        "id": 995,
-       "where": "If you pay instead: 10,000 coins."
+       "where": "Wormbrain takes exactly 10,000 coins.",
+       "count": 10000
       },
       {
        "name": "Map part",

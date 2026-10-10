@@ -57,6 +57,28 @@ public class F2pRouteAuditTest
 	}
 
 	@Test
+	public void theRetiredGrindsAreGoneAndWormbrainIsPaid()
+	{
+		boolean sawWormbrain = false;
+		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
+		{
+			String id = s.target.getStepId();
+			assertFalse("S3-09 and S2-13 are not in the route any more: " + id, "S3-09".equals(id) || "S2-13".equals(id));
+			if ("S5-05".equals(id))
+			{
+				sawWormbrain = true;
+				StringBuilder text = new StringBuilder();
+				for (ActiveTarget.StageLine l : s.target.getGuide().getStage().getStages().get(0).getSteps())
+				{
+					text.append(l.getT()).append(' ').append(l.shown()).append(' ');
+				}
+				assertTrue(text.toString(), text.toString().contains("10,000") && !text.toString().contains("Telekinetic"));
+			}
+		}
+		assertTrue("S5-05 is in the fixtures", sawWormbrain);
+	}
+
+	@Test
 	public void everyLineOfTheRouteHasARealPlaneAndAPositiveTile()
 	{
 		int points = 0;

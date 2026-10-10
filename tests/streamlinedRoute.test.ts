@@ -6,6 +6,7 @@ import { aggregateShopping } from '../src/lib/shopping';
 import { titleTargets } from '../src/lib/targets';
 import { triggerText } from '../src/lib/triggers';
 import { xpForLevel } from '../src/lib/xp';
+import { RETIRED_STEPS, normalizeProgress } from '../src/lib/progress';
 
 // Stages 3 and 4 after the streamlining: damage first (Attack and Strength), no Defence grind before Dragon Slayer I, the Adamant scimitar alone, the food bought.
 
@@ -48,10 +49,11 @@ describe('S3-08 and S4-03: Attack and Strength, no Defence', () => {
     expect(text('S3-08')).not.toMatch(/al kharid warrior|cow|defence 30/);
   });
 
-  it('S4-03 is Attack 40 and Strength 35, with no rune armour that needs Defence 40', () => {
+  it('S4-03 is Attack 40 alone (it unlocks the Rune scimitar), with no Strength gate and no rune armour that needs Defence 40', () => {
     const s = step('S4-03');
-    expect(skillsOf('S4-03')).toEqual(['attack:40', 'strength:35']);
-    expect(titleTargets(s.title)).toEqual([{ skill: 'attack', level: 40 }, { skill: 'strength', level: 35 }]);
+    expect(skillsOf('S4-03')).toEqual(['attack:40']);
+    expect(titleTargets(s.title)).toEqual([{ skill: 'attack', level: 40 }]);
+    expect(s.doneWhen).not.toMatch(/Strength 35/);
     expect(s.pacing).toMatchObject({ skill: 'attack', targetLevel: 40 });
     expect(s.pacing!.also).toBeUndefined();
     expect((s.itemsRecommended ?? []).map((i) => i.nameEn)).toEqual(['Salmon']);
@@ -111,22 +113,108 @@ describe('the stage goals follow the streamlined route', () => {
     expect(rows.defence[5].min).toBeGreaterThan(rows.defence[4].min);
   });
 
-  it('Attack stays 30 and 40, Strength is 20-25, then 35-40, then 40-44 with what Dragon Slayer I adds', () => {
+  it('Attack stays 30 and 40, Strength stays 20-25 through stage 4 and reaches 35-36 with what Dragon Slayer I adds', () => {
     expect(rows.attack.map((v) => v.min).slice(2, 4)).toEqual([30, 40]);
-    expect(rows.strength.slice(2, 5)).toMatchObject([{ min: 20, max: 25 }, { min: 35, max: 40 }, { min: 40, max: 44 }]);
-    // Strength 35 plus the quest reward reaches the stage 5 goal (40), and 40 reaches 44.
-    expect(xpForLevel(35) + 18_650).toBeGreaterThanOrEqual(xpForLevel(40));
-    expect(xpForLevel(40) + 18_650).toBeGreaterThanOrEqual(xpForLevel(44));
+    expect(rows.strength.slice(2, 5)).toMatchObject([{ min: 20, max: 25 }, { min: 20, max: 25 }, { min: 35, max: 36 }]);
+    // Strength 20 plus the quest reward reaches 35, and 25 reaches 36.
+    expect(xpForLevel(20) + 18_650).toBeGreaterThanOrEqual(xpForLevel(35));
+    expect(xpForLevel(20) + 18_650).toBeLessThan(xpForLevel(36));
+    expect(xpForLevel(25) + 18_650).toBeGreaterThanOrEqual(xpForLevel(36));
+    expect(xpForLevel(25) + 18_650).toBeLessThan(xpForLevel(37));
   });
 
-  it('Fishing and Cooking stay at 30 until the food is no longer fished', () => {
-    for (const id of ['fishing', 'cooking']) expect(rows[id].slice(2, 5).map((v) => v.min), id).toEqual([30, 30, 30]);
+  it('Fishing and Cooking have no goal after stage 1, and Magic stays at 25 until stage 6 (no Magic 33)', () => {
+    for (const id of ['fishing', 'cooking']) expect(rows[id].slice(1, 5).map((v) => v.min), id).toEqual([1, 1, 1, 1]);
+    expect(rows.magic.slice(1, 5).map((v) => v.min)).toEqual([25, 25, 25, 25]);
   });
 
-  it('no goal goes down from one stage to the next', () => {
-    for (const [id, values] of Object.entries(rows)) {
+  it('no goal goes down from one stage to the next, except the two skills that are no longer trained after stage 1', () => {
+    for (const [id, values] of Object.entries(rows).filter(([id]) => id !== 'fishing' && id !== 'cooking')) {
       const mins = values.map((v) => v.min);
       expect(mins, id).toEqual([...mins].sort((a, b) => a - b));
     }
+  });
+});
+
+// 2.46: the Magic 33 and Fishing 30 grinds are gone, Wormbrain is paid, S3-06 follows S3-05, S4-03 is Attack 40.
+
+describe('S3-09 and S2-13 are out of the route', () => {
+  it('neither step exists, and no step requires or names them', () => {
+    expect(stepById.has('S3-09')).toBe(false);
+    expect(stepById.has('S2-13')).toBe(false);
+    for (const s of allSteps) {
+      expect(s.requires, s.id).not.toContain('S3-09');
+      expect(JSON.stringify(s), s.id).not.toMatch(/S3-09|S2-13/);
+    }
+    expect(RETIRED_STEPS).toEqual(['S2-13', 'S3-09']);
+  });
+
+  it('a save that still holds them loads without them', () => {
+    const known = { stepIds: new Set(allSteps.map((s) => s.id)), levelIds: new Set<string>() };
+    const n = normalizeProgress({ version: 3, steps: { 'S3-09': 'done', 'S2-13': 'done', 'S3-08': 'done' } }, known)!;
+    expect(Object.keys(n.progress.steps)).toEqual(['S3-08']);
+  });
+
+  it('the fly fishing kit is no longer on the big shopping list: it was for S2-13 only', () => {
+    const names = step('S2-01').itemsRequired!.map((i) => i.nameEn);
+    expect(names).not.toContain('Fly fishing rod');
+    expect(names).not.toContain('Feather');
+    expect(JSON.stringify(step('S2-01').inGame!.completionTrigger)).not.toMatch(/Feather|Fly fishing/);
+  });
+
+  it('the food that was to be fished is bought: Salmon says Grand Exchange, never a step', () => {
+    for (const id of ['S4-01', 'S4-02', 'S4-03']) {
+      const salmon = (step(id).itemsRecommended ?? []).find((i) => i.nameEn === 'Salmon')!;
+      expect(salmon.howToGet, id).toMatch(/^Buy on the Grand Exchange/);
+    }
+  });
+});
+
+describe('S5-05: Wormbrain is paid 10,000 gp', () => {
+  const lines = () => step('S5-05').questStages!.stages.flatMap((s) => s.do);
+
+  it('the step requires only S5-01, asks for 10,000 coins, and has no spell, no fight and no runes', () => {
+    const s = step('S5-05');
+    expect(s.requires).toEqual(['S5-01']);
+    expect(s.itemsRequired!.map((i) => [i.nameEn, i.amount])).toEqual([['Coins', 10000]]);
+    const text = JSON.stringify([s.how, s.quickSteps, s.fields, s.questStages]);
+    expect(text).toMatch(/10,000/);
+    expect(text).not.toMatch(/Telekinetic|Magic 33|Wind Strike|Fire Strike|Law rune|law rune/);
+    expect(lines().find((l) => l.k === 'optionsForLozarPiece')!.s).toBe('Wormbrain (Port Sarim Jail): pay 10,000 gp');
+  });
+
+  it('no step up to the finale asks for Magic 33', () => {
+    for (const s of allSteps.filter((x) => !x.membersOnly && x.id <= 'S5-09')) {
+      expect(s.targets?.some((t) => t.skill === 'magic' && t.level >= 33) ?? false, s.id).toBe(false);
+      const levels = s.inGame?.completionTrigger?.levels ?? [];
+      expect(levels.some((l) => l.skill === 'magic' && l.level >= 33), s.id).toBe(false);
+    }
+    expect(step('S5-01').fields!.map((f) => f.text).join(' ')).not.toMatch(/Magic 33/);
+  });
+
+  it('the bribe is on the shopping list as coins the step itself needs', () => {
+    const route = allSteps.filter((x) => !x.membersOnly && x.id <= 'S5-09');
+    expect(aggregateShopping(route).coins).toBeGreaterThanOrEqual(10_000);
+  });
+});
+
+describe('S3-06 follows S3-05 and skips itself on the stage 3 rewards', () => {
+  it('it comes right after Shield of Arrav and requires it', () => {
+    const order = allSteps.filter((x) => !x.membersOnly).map((x) => x.id);
+    expect(order.indexOf('S3-06')).toBe(order.indexOf('S3-05') + 1);
+    expect(step('S3-06').requires).toEqual(['S3-05']);
+  });
+
+  it('the coins from the stage 3 quests alone pass the 2,500 gp threshold, so the mining is bypassed', () => {
+    const rewards = [2500, 2000, 600, 180];
+    const total = rewards.reduce((a, b) => a + b, 0);
+    expect(total).toBe(5280);
+    const trigger = step('S3-06').inGame!.completionTrigger!;
+    expect(trigger).toMatchObject({ type: 'ITEM_OWNED', anyOf: true });
+    const coins = trigger.items!.find((i) => i.names.includes('Coins'))!;
+    expect(coins.count).toBe(2500);
+    // After the scimitar (about 1,400 gp) is bought the threshold is still passed.
+    expect(total - 1_400).toBeGreaterThanOrEqual(coins.count);
+    expect(step('S3-06').moneyGoal).toBe(2500);
   });
 });

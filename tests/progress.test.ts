@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { allSteps, known, stepById } from '../src/data';
 import {
   emptyProgress, exportFileName, exportProgress, gameModeOf, importProgress, loadProgress, normalizeProgress, saveProgress, STORAGE_KEY,
-  V2_FROM_V1, V3_FROM_V2, withGameMode, withLevel, withNote, withReviewed, withStep,
+  RETIRED_STEPS, V2_FROM_V1, V3_FROM_V2, withGameMode, withLevel, withNote, withReviewed, withStep,
 } from '../src/lib/progress';
 import { needsReview, pendingReview } from '../src/lib/review';
 
@@ -175,7 +175,7 @@ describe('progress: moving from V2 (2.0.0) to V2.1', () => {
   it('the rename table is a permutation: every new number is taken by one old step', () => {
     const targets = Object.values(V3_FROM_V2);
     expect(new Set(targets).size).toBe(targets.length);
-    for (const id of targets) expect(stepById.has(id), id).toBe(true);
+    for (const id of targets) expect(stepById.has(id) || RETIRED_STEPS.includes(id), id).toBe(true);
   });
 });
 

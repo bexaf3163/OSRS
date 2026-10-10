@@ -41,18 +41,18 @@ describe('the step target for the game', () => {
   });
 
   it('without inGame — the arrow to the start and the gathering tiles from the step map', () => {
-    const p = toInGameTarget({ ...step('S2-13'), inGame: undefined })!;
-    expect(p.worldPoint).toMatchObject({ x: 3104, y: 3424, plane: 0 });
-    expect(p.groundTiles).toHaveLength(2);
+    const p = toInGameTarget({ ...step('S2-04'), inGame: undefined })!;
+    expect(p.worldPoint).toMatchObject({ x: 3257, y: 3272, plane: 0 });
+    expect(p.groundTiles).toHaveLength(3);
     expect(p.completionTrigger).toBeUndefined();
   });
 
   it('inGame without a point — the point and tiles still come from the step map, the highlight and the auto-mark from inGame', () => {
-    const p = toInGameTarget(step('S2-13'))!;
-    expect(p.worldPoint).toMatchObject({ x: 3104, y: 3424, plane: 0 });
-    expect(p.groundTiles).toHaveLength(2);
-    expect(p.npcNames).toEqual(['Rod Fishing spot']);
-    expect(p.completionTrigger).toEqual({ type: 'SKILL_LEVEL', levels: [{ skill: 'fishing', level: 30 }, { skill: 'cooking', level: 30 }] });
+    const p = toInGameTarget(step('S2-04'))!;
+    expect(p.worldPoint).toMatchObject({ x: 3257, y: 3272, plane: 0 });
+    expect(p.groundTiles).toHaveLength(3);
+    expect(p.npcNames).toEqual(['Cow']);
+    expect(p.completionTrigger).toEqual({ type: 'SKILL_LEVEL', levels: [{ skill: 'magic', level: 25 }] });
   });
 
   it('a step without a map and a highlight has nothing to show in the game', () => {
@@ -113,7 +113,7 @@ describe('auto-mark triggers on the route', () => {
 
   it('levels are counted by the real levels, exactly the targets from the step title', () => {
     const levels = triggers.filter(({ t }) => t.type === 'SKILL_LEVEL');
-    expect(levels.length).toBeGreaterThanOrEqual(15);
+    expect(levels.length).toBeGreaterThanOrEqual(13);
     for (const { s, t } of levels) expect(t.levels).toEqual(s.targets);
     // A new-level message does not come if the level was gained before the step was shown, so levels are checked directly.
     expect(triggers.filter(({ t }) => t.type === 'CHAT_MESSAGE')).toEqual([]);

@@ -295,6 +295,31 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
+	public void theRealS306StepSkipsItselfOnTheStageThreeQuestCoinsAndNotWithoutThem()
+	{
+		// The data the app really sends: after Shield of Arrav the coins from the four stage 3 quests (5,280) pass the 2,500 threshold, so no ore is mined.
+		ActiveTarget real = null;
+		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
+		{
+			if ("S3-06".equals(s.target.getStepId()))
+			{
+				real = s.target;
+			}
+		}
+		assertTrue("S3-06 is in the fixtures", real != null);
+		assertTrue(real.getCompletionTrigger().isAnyOf());
+		manager.setTarget(real);
+		byName.put("Coins", 2499);
+		manager.onStateChanged();
+		manager.onGameTick();
+		assertTrue("one coin short and no ore: the step stays", completed.isEmpty());
+		byName.put("Coins", 5280 - 1400);
+		manager.onStateChanged();
+		manager.onGameTick();
+		assertEquals(List.of("S3-06"), completed);
+	}
+
+	@Test
 	public void withoutAnyOfEveryItemIsStillNeeded()
 	{
 		ActiveTarget t = target("S3-06", "ITEM_OWNED");
