@@ -2117,7 +2117,7 @@
       {
         "nameEn": "Trout",
         "amount": 10,
-        "howToGet": "Catch with fly fishing (Fly fishing rod + Feather from S2-01, from Fishing 20) on the river east of Barbarian Village and cook right there on the permanent fire (Fire) by the river: Cooking 15. Or buy on the Grand Exchange for about 24 gp.",
+        "howToGet": "Buy on the Grand Exchange for about 24 gp.",
         "wikiItemId": 333,
         "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
         "heals": 7
@@ -2247,7 +2247,7 @@
       {
         "nameEn": "Trout",
         "amount": 10,
-        "howToGet": "Catch with fly fishing (Fly fishing rod + Feather from S2-01, from Fishing 20) on the river east of Barbarian Village and cook right there on the permanent fire (Fire) by the river: Cooking 15. Or buy on the Grand Exchange for about 24 gp.",
+        "howToGet": "Buy on the Grand Exchange for about 24 gp.",
         "wikiItemId": 333,
         "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
         "heals": 7
@@ -2835,7 +2835,7 @@
       {
         "nameEn": "Trout",
         "amount": 5,
-        "howToGet": "Catch with fly fishing (Fly fishing rod + Feather from S2-01, from Fishing 20) on the river east of Barbarian Village and cook right there on the permanent fire (Fire) by the river: Cooking 15. Or buy on the Grand Exchange for about 24 gp.",
+        "howToGet": "Buy on the Grand Exchange for about 24 gp.",
         "wikiItemId": 333,
         "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
         "heals": 7
