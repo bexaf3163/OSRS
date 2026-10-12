@@ -535,15 +535,7 @@ public class ActiveTarget
 	/** How many of the item and of its alternatives the container holds together. */
 	static int countWithAlt(ItemCounts items, Integer id, String name, List<String> alt)
 	{
-		int n = items.count(id, name);
-		if (alt != null)
-		{
-			for (String other : alt)
-			{
-				n += items.count(null, other);
-			}
-		}
-		return n;
+		return items.countWithAlt(id, name, alt);
 	}
 
 	static boolean badAlt(List<String> alt)
