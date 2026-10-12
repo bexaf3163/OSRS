@@ -52,6 +52,45 @@ export interface StepItemRequirement {
   heals?: number;
   /** Obtained during the step itself (an NPC hands it out, you pick it up, buy it on the spot): not checked at the bank. */
   inStep?: boolean;
+  /**
+   * The loadout (Step.loadouts id) this item belongs to. Without it the item is part of the first loadout, the one to take before the step starts;
+   * an item of a later loadout is taken on the next visit to the bank, not now (Glarial's Tomb takes no runes, the dungeon after it needs them).
+   */
+  phase?: string;
+  /** Other items that do the same job: any of them counts (every pickaxe tier for "Pickaxe"). */
+  anyOf?: string[];
+}
+
+/** One bank-to-bank stretch of a quest with its own inventory: what to take, what the game refuses at the door. */
+export interface Loadout {
+  id: string;
+  /** "Glarial's Tomb", "Waterfall dungeon". */
+  title: string;
+  /** The quest variable value from which this loadout is the one to prepare; absent means before the step starts. */
+  from?: number;
+  /** What to take: names as in the game, with an optional note. */
+  take: { nameEn: string; amount: string | number; note?: string }[];
+  /** What must stay in the bank: the game refuses entry or it is simply in the way. */
+  leave?: string[];
+  /** Empty slots needed to receive what the phase gives. */
+  freeSlots?: number;
+  note?: string;
+}
+
+/**
+ * Something the step's player keeps for a LATER step. The game says the step is done (the quest is green) but the route is not ready to move on
+ * until the item is held: finishing without it silently costs the player a trip later.
+ */
+export interface CarryItem {
+  /** The item as in the game. */
+  item: string;
+  count: number;
+  /** The route step that needs it: later in the route, and it lists the item in its own itemsRequired. */
+  forStep: string;
+  /** Where to keep it. */
+  where: 'bank' | 'bag';
+  /** One sentence for the player: why. */
+  why: string;
 }
 
 /** A point on the world map in game coordinates (as in RuneLite and on the OSRS Wiki map). */
@@ -118,6 +157,11 @@ export interface CompletionTrigger {
   chatPattern?: string;
   varbitId?: number;
   targetValue?: number;
+  /**
+   * VARBIT_CHANGED: the milestone is reached at this value or above (and is also checked when the step is shown), instead of exactly at the value.
+   * A route milestone earlier than the end of a quest: the fairy rings work from Fairytale II value 40 on.
+   */
+  atLeast?: boolean;
 }
 
 /**
@@ -223,6 +267,11 @@ export interface Step {
   minQp?: number;
   requires: string[];
   /**
+   * Steps that are better done first but never hold this one back: optional quests the route only suggests. A step that is optional
+   * is never listed in `requires` (the validator says so): a "requires" that the player may knowingly skip would block the route.
+   */
+  softRequires?: string[];
+  /**
    * Requirements checked against the player's state (levels, quests), from the quest article on the OSRS Wiki.
    * A step's readiness (lib/readiness.ts) checks them against the levels from the game or the profile and the quest marks.
    */
@@ -238,6 +287,15 @@ export interface Step {
   floor?: string;
   itemsRequired?: StepItemRequirement[];
   itemsRecommended?: StepItemRequirement[];
+  /** Inventories of the quest's phases, in order; the first is the one before the step starts. */
+  loadouts?: Loadout[];
+  /** What this step keeps for a later one (see CarryItem). */
+  carryover?: CarryItem[];
+  /**
+   * The way to a Bond for an account that is not a member yet. In Members mode (membership is active) these steps are not part of the route:
+   * nothing before the Members content is made to wait for them.
+   */
+  bondBranch?: boolean;
   quickSteps?: string[];
   safespot?: string;
   imageUrl?: string;
@@ -300,6 +358,8 @@ export interface QuestStageItem {
   where?: string;
   /** Obtained during the stage: not needed in advance. */
   inStep?: boolean;
+  /** Other items that count in its place: every pickaxe tier for "Pickaxe". */
+  alt?: string[];
 }
 
 /** A stage point: an NPC from the place dictionary or explicit tiles. */
@@ -322,6 +382,8 @@ export interface QuestStageLine {
   k?: string;
   /** Items that must be in the bag (or worn) before this step: the plugin turns the arrow back to where to get a missing one instead of leading on. */
   pre?: StagePre[];
+  /** The strongest usual hit of what attacks the player on this line (from the wiki): the health warning uses it only while this line is current. */
+  mh?: number;
 }
 
 /** One pre-flight item. With an id only that exact item counts (the Draynor Manor cabbage has the name Cabbage too). */
@@ -338,6 +400,8 @@ export interface StagePre {
   on?: string[];
   /** The NPC to highlight at that place. */
   npc?: string;
+  /** Other items that count in its place: every pickaxe tier for "Pickaxe". */
+  alt?: string[];
 }
 
 /** A stage step's highlight: from the Quest Helper sources (scripts outside the repository, data in questStages.json). */

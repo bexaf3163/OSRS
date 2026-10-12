@@ -23,6 +23,7 @@ import { planSources, type SourceOption } from './sourceRouter';
 import { tripWindow, type OneTripPlan } from './oneTrip';
 import { preflightItems } from './checklist';
 import { weightAdvice, type WeightAdvice } from './weight';
+import { carryoverOf } from './carryover';
 import { recoverySteps, type Recovery, type RecoveryStep } from './recovery';
 
 /** Critical: the step cannot be done without it; important: better to prepare before leaving; an improvement saves time or money; optional is a convenience. */
@@ -259,6 +260,12 @@ function recipeLines(parent: PrepLine, step: Step, state: PlayerState): PrepLine
 const ORDER: Record<PrepPriority, number> = { CRITICAL: 0, IMPORTANT: 1, OPTIMIZATION: 2, OPTIONAL: 3 };
 const TIMING: Record<PrepTiming, number> = { NOW: 0, SOON: 1, IN_STEP: 2, LATER: 3 };
 
+/** Every source of the line in this step belongs to a loadout other than the first one. */
+function inLaterLoadout(step: Step | undefined, sources: readonly { phase?: string }[]): boolean {
+  const first = step?.loadouts?.[0]?.id;
+  return Boolean(first) && sources.length > 0 && sources.every((s) => s.phase !== undefined && s.phase !== first);
+}
+
 export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   const { step, state, trip } = i;
   const detail = i.detail ?? ((id: number) => itemById.get(id));
@@ -281,7 +288,9 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
     const groups = new Map<PrepTiming, { need: number; ids: string[]; bag: number; bank: number; missing: number; unknown: number }>();
     for (const a of t.allocation.filter((x) => x.need > 0)) {
       const idx = ids.indexOf(a.stepId);
-      const timing: PrepTiming = inStep ? 'IN_STEP' : idx <= 0 ? 'NOW' : idx <= 2 ? 'SOON' : 'LATER';
+      // An item of a later loadout of the same step is taken on the next visit to the bank, not before the first stretch (no runes into the tomb).
+      const later = !inStep && idx <= 0 && inLaterLoadout(i.steps.find((s) => s.id === a.stepId), t.line.sources.filter((s) => s.stepId === a.stepId));
+      const timing: PrepTiming = inStep ? 'IN_STEP' : later ? 'SOON' : idx <= 0 ? 'NOW' : idx <= 2 ? 'SOON' : 'LATER';
       const g = groups.get(timing) ?? { need: 0, ids: [], bag: 0, bank: 0, missing: 0, unknown: 0 };
       const fromBag = Math.min(bagPool, a.need);
       bagPool -= fromBag;
@@ -435,6 +444,8 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   const needed = new Set<string>();
   for (const l of lines) needed.add(l.name);
   for (const w of window) for (const it of [...(w.itemsRequired ?? []), ...(w.itemsRecommended ?? [])]) needed.add(it.nameEn);
+  // What a step keeps for a later one is not "extra" whatever the bag says.
+  for (const w of window) for (const c of carryoverOf(w)) needed.add(c.item);
   const advice = weightAdvice(step, state, needed, window);
   const bank = nearestBank(step);
   const weight: PrepPlan['weight'] = {

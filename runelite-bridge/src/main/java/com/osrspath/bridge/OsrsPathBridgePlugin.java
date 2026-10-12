@@ -331,6 +331,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	protected void startUp()
 	{
 		completion = new AutoCompletionManager(this::isQuestFinished, stats::get, this::ownedCount, this::onStepCompleted);
+		completion.setVarbitReader(id -> client.getGameState() == GameState.LOGGED_IN ? client.getVarbitValue(id) : null);
 		radar = DangerRadar.load(gson);
 		startTelemetry();
 		startServer();
@@ -2468,8 +2469,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		boolean inside = danger.getLevel() == DangerRadar.Level.INSIDE;
 		int hp = client.getGameState() == GameState.LOGGED_IN ? client.getBoostedSkillLevel(Skill.HITPOINTS) : 0;
 		int hpMax = client.getGameState() == GameState.LOGGED_IN ? client.getRealSkillLevel(Skill.HITPOINTS) : 0;
-		String health = config.hudHealth() && target != null ? healthLine(hp, hpMax, target.getMaxHit()) : null;
-		boolean critical = health != null && target.getMaxHit() != null && hp <= target.getMaxHit();
+		// A stage line may name its own attacker (the Ancient Guardian on the last line of Below Ice Mountain): its hit counts while that line is
+		// current and the step's general figure is not warned about the whole quest.
+		Integer lineHit = currentLineMaxHit();
+		Integer hit = lineHit != null ? lineHit : target == null ? null : target.getMaxHit();
+		String health = config.hudHealth() && target != null ? healthLine(hp, hpMax, hit) : null;
+		boolean critical = health != null && hit != null && hp <= hit;
 		String chip = transportChip(prep, navTarget != null, navViaTransport);
 		Preflight.Block pb = preBlock;
 		String missing = pb != null && me != null && client.getGameState() == GameState.LOGGED_IN
@@ -2518,6 +2523,18 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			}
 		}
 		return null;
+	}
+
+	/** The max hit named by the stage line the cursor is on; null when the line names none or there is no stage. */
+	private Integer currentLineMaxHit()
+	{
+		ActiveTarget.Stage st = target == null ? null : stageOf(target);
+		List<ActiveTarget.StageLine> lines = st == null ? null : currentLines(st);
+		if (lines == null || lines.isEmpty())
+		{
+			return null;
+		}
+		return lines.get(Math.max(0, Math.min(stageTracker.cursor(), lines.size() - 1))).getMh();
 	}
 
 	/**

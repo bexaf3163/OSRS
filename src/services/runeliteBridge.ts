@@ -9,6 +9,8 @@ import { desktop } from '../lib/desktop';
 import { isClosed, openAfter } from '../lib/next-step';
 import { parseAmount, preflightItems } from '../lib/checklist';
 import { watchedItems } from '../lib/branching';
+import { routeTrigger } from '../lib/carryover';
+import { alternativesOf, toolFamilyOf } from '../lib/toolTiers';
 import { stepMaxHit } from '../lib/foodAdvice';
 import { npcSpot, stepPlaces } from '../lib/stepPlaces';
 import { shortLine } from '../lib/shortText';
@@ -176,6 +178,7 @@ export interface ChecklistPayloadItem {
   id?: number;
   count: number;
   heals?: number;
+  alt?: string[];
 }
 
 /** What goes to the plugin: the step target plus the code, the title, the departure check and the items from the quick variants' conditions. */
@@ -196,7 +199,7 @@ export type ActiveStepPayload = InGameTarget & {
  * "Go here" sets a temporary target, the arrow and Shortest Path lead there, and on arrival the arrow returns to the step.
  */
 export interface StepGuidePayload {
-  items: { name: string; id?: number; count?: number; where?: string; inStep?: boolean }[];
+  items: { name: string; id?: number; count?: number; where?: string; inStep?: boolean; alt?: string[] }[];
   places: { x: number; y: number; plane: number; label: string; npc?: string; items?: string[] }[];
   /** The step's quick path in order: when everything is collected, the game shows the last item ("Give everything to Hetty…"). */
   steps?: string[];
@@ -209,7 +212,7 @@ export interface StagePayload {
   banks?: { x: number; y: number; plane: number; label: string }[];
   kind: 'varp' | 'varbit';
   id: number;
-  stages: { at: number; steps: { t: string; s?: string; x?: number; y?: number; plane?: number; has?: string; need?: string; hl?: StageHighlight; k?: string; pre?: StagePre[] }[]; /** The index of the point in places. */ go?: number; items?: { name: string; id?: number; count?: number; where?: string; inStep?: boolean }[] }[];
+  stages: { at: number; steps: { t: string; s?: string; x?: number; y?: number; plane?: number; has?: string; need?: string; hl?: StageHighlight; k?: string; pre?: StagePre[]; mh?: number }[]; /** The index of the point in places. */ go?: number; items?: { name: string; id?: number; count?: number; where?: string; inStep?: boolean }[] }[];
 }
 
 /** The RuneLite panel: the step's items with "where to get" and the points — the main one (NPC, start) and places from the step map. */
@@ -222,6 +225,7 @@ export function stepGuide(step: Step, branch?: StepBranch): StepGuidePayload {
       ...(n !== null ? { count: n } : {}),
       ...(i.howToGet ? { where: i.howToGet } : {}),
       ...(i.inStep ? { inStep: true } : {}),
+      ...(alternativesOf(i.nameEn, i.anyOf).length ? { alt: alternativesOf(i.nameEn, i.anyOf) } : {}),
     };
   });
   // The places are the same as the points on the step map in the app: the step point, places from the map, where items come from, quest NPCs.
@@ -276,7 +280,7 @@ export function stagePayload(step: Step, places: StepGuidePayload['places']): St
       }
     }
     stages.push({
-      at: st.at, steps: st.do.slice(0, 40).map((l) => ({ t: l.t, ...shortOf(l), ...(l.at ? { x: l.at[0], y: l.at[1], plane: l.at[2] } : {}), ...(l.has ? { has: l.has } : {}), ...(l.need ? { need: l.need } : {}), ...(l.hl ? { hl: l.hl } : {}), ...(l.k ? { k: l.k } : {}), ...(l.pre?.length ? { pre: l.pre.slice(0, 8) } : {}) })), ...(go !== undefined ? { go } : {}),
+      at: st.at, steps: st.do.slice(0, 40).map((l) => ({ t: l.t, ...shortOf(l), ...(l.at ? { x: l.at[0], y: l.at[1], plane: l.at[2] } : {}), ...(l.has ? { has: l.has } : {}), ...(l.need ? { need: l.need } : {}), ...(l.hl ? { hl: l.hl } : {}), ...(l.k ? { k: l.k } : {}), ...(l.pre?.length ? { pre: l.pre.slice(0, 8) } : {}), ...(l.mh ? { mh: l.mh } : {}) })), ...(go !== undefined ? { go } : {}),
       ...(st.items ? { items: st.items.slice(0, 12).map((i) => ({ ...i })) } : {}),
     });
   }
@@ -313,15 +317,20 @@ export function toInGameTarget(step: Step, branch?: StepBranch, extraWatch: stri
     : g.worldPoint ?? (start ? { x: start.x, y: start.y, plane: start.plane, label: start.label } : undefined);
   const groundTiles = g.groundTiles ?? step.resourceSpots?.map((p) => ({ x: p.x, y: p.y, plane: p.plane, label: p.label }));
   const payload: ActiveStepPayload = { ...g, stepId: step.id, title: step.title };
+  // What the step keeps for a later one goes on top of the game trigger: the quest is green but the route is not ready (lib/carryover.ts).
+  const trigger = routeTrigger(step);
+  if (trigger) payload.completionTrigger = trigger;
   if (worldPoint) payload.worldPoint = worldPoint;
   if (groundTiles?.length) payload.groundTiles = groundTiles;
   if (alt) delete payload.pathWaypoints;
   const goal = alt ? (alt.label.startsWith(branch!.label) ? alt.label : `${branch!.label}: ${alt.label}`) : g.goal ?? worldPoint?.label;
   if (goal) payload.goal = goal;
-  const checklist = preflightItems(step).map((i) => ({ name: i.nameEn, id: i.id, count: i.count, heals: i.heals }));
+  const checklist = preflightItems(step).map((i) => ({ name: i.nameEn, id: i.id, count: i.count, heals: i.heals, ...(i.alt?.length ? { alt: i.alt } : {}) }));
   if (checklist.length) payload.checklist = checklist;
   // Also — the items of the nearest steps (one trip): the plugin reports how many of them there are, and they are visible in advance.
-  const watch = [...new Set([...watchedItems(step), ...extraWatch])].slice(0, 40);
+  // A tool named by its weakest tier is any tier: the game must report every tier, or a Rune pickaxe in the bag would read as "no pickaxe".
+  const named = [...watchedItems(step), ...extraWatch];
+  const watch = [...new Set([...named, ...named.flatMap((n) => toolFamilyOf(n) ?? [])])].slice(0, 40);
   if (watch.length) payload.watchItems = watch;
   if (step.pacing) payload.pacing = step.pacing;
   const hit = stepMaxHit(step);

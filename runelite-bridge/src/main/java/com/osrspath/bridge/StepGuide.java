@@ -506,8 +506,8 @@ final class StepGuide
 	static ItemLine item(ActiveTarget.GuideItem i, List<ActiveTarget.GuidePlace> places, ItemCounts carried, ItemCounts bank)
 	{
 		int need = i.getCount() == null ? 1 : i.getCount();
-		int have = carried == null ? 0 : carried.count(i.getId(), i.getName());
-		int inBank = bank == null ? -1 : bank.count(i.getId(), i.getName());
+		int have = carried == null ? 0 : ActiveTarget.countWithAlt(carried, i.getId(), i.getName(), i.getAlt());
+		int inBank = bank == null ? -1 : ActiveTarget.countWithAlt(bank, i.getId(), i.getName(), i.getAlt());
 		Have h;
 		String status;
 		String tag;

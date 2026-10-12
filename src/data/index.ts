@@ -74,12 +74,17 @@ export function findSkill(id: string): Skill | undefined {
 export const BASE_QP = 1;
 export const BASE_QUEST = 'Learning the Ropes';
 
+/**
+ * The route in a mode. F2P: the free route, ending in the optional way to a Bond. Members: the whole route, but not the way to a Bond —
+ * an account that already has membership goes straight from Dragon Slayer I to the Members content, nothing waits for a grind meant to pay for it.
+ */
 export function stepsFor(mode: GameMode): Step[] {
-  return mode === 'members' ? allSteps : allSteps.filter((s) => s.membersOnly !== true);
+  return mode === 'members' ? allSteps.filter((s) => s.bondBranch !== true) : allSteps.filter((s) => s.membersOnly !== true);
 }
 
 export function stagesFor(mode: GameMode): Stage[] {
-  return mode === 'members' ? allStages : allStages.filter((s) => s.membersOnly !== true);
+  const inRoute = new Set(stepsFor(mode).map((s) => s.stage));
+  return allStages.filter((s) => (mode === 'members' || s.membersOnly !== true) && inRoute.has(s.id));
 }
 
 export function maxQpFor(mode: GameMode): number {

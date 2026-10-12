@@ -6,6 +6,22 @@ export function isClosed(p: Progress, id: string): boolean {
   return p.steps[id] === 'done' || p.steps[id] === 'skipped';
 }
 
+/**
+ * Where a step stands for the route: done, knowingly skipped by the player, or not decided. An optional step nobody has visited is "open",
+ * never "skipped": only the player's own mark skips it.
+ */
+export type StepState = 'done' | 'skipped' | 'open';
+
+export function stepState(p: Progress, id: string): StepState {
+  const s = p.steps[id];
+  return s === 'done' ? 'done' : s === 'skipped' ? 'skipped' : 'open';
+}
+
+/** The steps that are suggested before this one and not yet closed (they never block, see Step.softRequires). */
+export function suggestedBefore(step: Pick<Step, 'softRequires'>, p: Progress): string[] {
+  return (step.softRequires ?? []).filter((id) => !isClosed(p, id));
+}
+
 export interface Blockers {
   steps: string[];
   qp?: { need: number; have: number };

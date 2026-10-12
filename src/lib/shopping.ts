@@ -28,6 +28,8 @@ export interface ShoppingSource {
   amount: string | number;
   /** The same item as bought/obtained in an earlier selected step: not counted a second time. */
   carryOver: boolean;
+  /** The loadout of the step this item is taken for (Step.loadouts); absent means the opening one. */
+  phase?: string;
 }
 
 export interface ShoppingLine {
@@ -92,7 +94,7 @@ function collect(steps: Step[], pick: (s: Step) => StepItemRequirement[] | undef
       }
       acc.line.iconUrl ??= item.iconUrl;
       byName.set(name, acc);
-      acc.line.sources.push({ stepId: step.id, amount: item.amount, carryOver });
+      acc.line.sources.push({ stepId: step.id, amount: item.amount, carryOver, ...(item.phase ? { phase: item.phase } : {}) });
       if (carryOver) continue;
       if (n === null) acc.line.exact = false;
       // In a purchase step (gear) "during the step" means "buy at the exchange".

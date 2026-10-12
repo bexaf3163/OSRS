@@ -83,7 +83,15 @@ final class Preflight
 	/** How many of the item the container holds: exactly by ID with one, else by name. */
 	static int count(ItemCounts items, ActiveTarget.Pre p)
 	{
-		return items.exact(p.getId(), p.getItem());
+		int n = items.exact(p.getId(), p.getItem());
+		if (p.getAlt() != null)
+		{
+			for (String other : p.getAlt())
+			{
+				n += items.exact(null, other);
+			}
+		}
+		return n;
 	}
 
 	/**

@@ -5,7 +5,7 @@ import { useState, type ReactNode } from 'react';
 import type { Field, Step, StepItemRequirement } from '../types';
 import { levelById } from '../data';
 import { useStore } from '../store';
-import { blockerParts, blockersOf, isClosed } from '../lib/next-step';
+import { blockerParts, blockersOf, isClosed, suggestedBefore } from '../lib/next-step';
 import { levelOf } from '../lib/progress';
 import { needsReview } from '../lib/review';
 import { IconCheck, IconExternal, TYPE_LABEL } from './Icons';
@@ -35,6 +35,7 @@ import { plural } from '../lib/shopping';
 import { LiveXp } from './LiveXp';
 import { SubStepHero, SubStepItems, useSubStep } from './SubStepHero';
 import { QuestOverview } from './QuestOverview';
+import { CarryNote, LoadoutsCard } from './RouteNotes';
 import { QuestPreparation } from './QuestPreparation';
 import { TravelTip } from './TravelTip';
 
@@ -96,6 +97,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep }: { step: Step; on
   const sub = useSubStep(step);
   const status = progress.steps[step.id];
   const blockers = isClosed(progress, step.id) ? null : blockersOf(step, progress, qp);
+  const suggested = isClosed(progress, step.id) ? [] : suggestedBefore(step, progress);
   const reviewing = needsReview(step, progress);
   const links = [
     step.wikiUrl && { href: step.wikiUrl, label: 'Wiki' },
@@ -252,6 +254,13 @@ export function StepBody({ step, onDone, nextId, tab, onPrep }: { step: Step; on
           )}
         </p>
       )}
+      {suggested.length > 0 && (
+        <p className="requires small">
+          <span className="muted">Better after (optional): </span>
+          {suggested.map((r, i) => <span key={r}>{i > 0 && ', '}<a href={`#/step/${r}`} className="step-ref">{r}</a></span>)}
+          <span className="muted"> — you can skip {suggested.length > 1 ? 'them' : 'it'} and this step still opens.</span>
+        </p>
+      )}
       {blockers && <p className="notice small">The step can be marked now too, but by the plan first: {blockerParts(blockers).join(', ')}.</p>}
     </>
   );
@@ -320,6 +329,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep }: { step: Step; on
             <details className="zen-more"><summary className="small">What to do on the step — after returning</summary>{how}</details>
           ) : how)}
           {doneWhen}
+          <CarryNote step={step} />
           {(quick || (sub && how)) && (
             <Fold title="Full walkthrough and dialogue" hint={nQuick ? `${nQuick} ${nQuick === 1 ? 'step' : 'steps'}, with detailed instructions` : 'for reference'}>
               {sub && how}
@@ -336,6 +346,8 @@ export function StepBody({ step, onDone, nextId, tab, onPrep }: { step: Step; on
       return (
         <div className="step-details is-tab">
           <ReadinessPanel step={step} />
+          <LoadoutsCard step={step} />
+          <CarryNote step={step} />
           <OneTripCard step={step} inStatus />
           <MoneyGoal step={step} />
           <StepTraining step={step} />

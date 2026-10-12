@@ -1911,3 +1911,9 @@ button.subtab { background: none; border-top: 0; border-left: 0; border-right: 0
   .workspace-tabs { gap: 0; }
   .workspace-tab { flex: 1 1 0; min-width: 0; padding: 0 4px; font-size: 0.95rem; }
 }
+
+/* Route model cards: what a step keeps for a later one, and the inventories of a quest's phases. */
+.carry-note ul, .loadout-list { margin: 6px 0 0; padding-left: 18px; }
+.loadout { margin: 0 0 10px; }
+.loadout.is-current { border-left: 3px solid var(--accent-ink); padding-left: 8px; }
+.loadout h5 { margin: 0 0 2px; }
