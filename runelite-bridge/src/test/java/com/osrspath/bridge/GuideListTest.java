@@ -84,7 +84,7 @@ public class GuideListTest
 			itemLine("Bronze bar", StepGuide.Have.BANK), itemLine("Beer", StepGuide.Have.DONE), itemLine("Onion", StepGuide.Have.NONE), itemLine("Ashes", StepGuide.Have.UNKNOWN));
 		StepGuide.View v = new StepGuide.View("[S2-10] Prince Ali Rescue", null, items, java.util.Collections.emptyList(), null, null, null, null, sv);
 		String all = GuideList.plain(rows(v, false));
-		assertTrue("2 in the bag of the 5 that count (the handed-in beer is not counted): " + all, all.contains("Quest items in your bag: 2 of 5"));
+		assertTrue("2 in the bag of the 5 that count (the handed-in beer is not counted): " + all, all.contains("Stage items in your bag: 2 of 5"));
 		assertFalse("the held items are not listed by name on a stage: " + all, all.contains("Ball of wool") || all.contains("Rope"));
 		GuideList.Row bag = GuideList.bagRow(items, SMALL, 200);
 		assertNotNull(bag);
@@ -144,7 +144,7 @@ public class GuideListTest
 		assertEquals("S2-10 · Stage 3 of 7 ~▲", GuideList.plain(rows.subList(0, 1)));
 		String all = flat(rows);
 		assertTrue(all, all.contains("▶ [2/6] Dye the wig yellow (Aggie)"));
-		for (String gone : new String[] {"Next:", "Done", "Back", "in your bag", "Where to go", "onions", "Needed now", "Advice"})
+		for (String gone : new String[] {"Next:", "Done", "Back", "in your bag", "Where to go", "onions", "Needed for this stage", "Advice"})
 		{
 			assertFalse(gone + " must wait for the mouse: " + all, all.contains(gone));
 		}
@@ -160,7 +160,7 @@ public class GuideListTest
 		assertEquals("the step line does not move or change", closed.get(1), open.get(1));
 		String all = flat(open);
 		for (String shown : new String[] {"Details: Dye the wig yellow (Aggie: 2 onions + 5 gp)", "Next: Aggie: get skin paste", "✓ Done - next", "◀ Back: Have Ned make a wig",
-			"Quest items in your bag: 2 of 4", "Needed now", "Onion"})
+			"Stage items in your bag: 2 of 4", "Needed for this stage", "Onion"})
 		{
 			assertTrue(shown + " is in the open card: " + all, all.contains(shown));
 		}

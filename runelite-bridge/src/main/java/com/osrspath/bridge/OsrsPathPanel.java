@@ -117,7 +117,7 @@ class OsrsPathPanel extends PluginPanel
 		}
 		if (!v.getItems().isEmpty())
 		{
-			header(stage != null ? "Needed now" : "What you need");
+			header(stage != null ? "Needed for this stage" : "What you need");
 			for (StepGuide.ItemLine i : v.getItems())
 			{
 				JPanel card = card();

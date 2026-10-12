@@ -40,6 +40,24 @@ final class Preflight
 			return chipText(item);
 		}
 
+		/**
+		 * Why guidance is paused and what to do, for the guide plate: the reason and the corrective action in one line. It is what the red chip says on
+		 * the HUD, in words that name the way (bank, the place, the exchange), so the plate and the arrow agree.
+		 */
+		String reason()
+		{
+			String what = need > 1 ? need + " x " + item : item;
+			switch (via)
+			{
+				case BANK:
+					return "Guidance paused: " + what + " is missing from your bag. Take it from the bank first.";
+				case SOURCE:
+					return "Guidance paused: " + what + " is missing from your bag. Get it first, the arrow leads there.";
+				default:
+					return "Guidance paused: " + what + " is missing from your bag. Buy it at the Grand Exchange first.";
+			}
+		}
+
 		/** A short key of what is missing: the stage line key must change with it, so the arrow is recomputed when the bag changes. */
 		String key()
 		{

@@ -1303,7 +1303,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			stage == null ? null : stageValue(stage), stage != null && questDone(target), stageTracker.cursor());
 		if (v.getStage() != null)
 		{
-			v = v.withStage(v.getStage().with(stageTracker.warning(), stageTracker.peeking(), stageTracker.canStepForward(v.getStage().getSteps())));
+			// A pre-flight block is the first thing the plate says (it is also why the arrow points elsewhere); the cursor warning follows it.
+			Preflight.Block pb = preBlock;
+			String warning = pb == null ? stageTracker.warning()
+				: stageTracker.warning() == null ? pb.reason() : pb.reason() + " " + stageTracker.warning();
+			v = v.withStage(v.getStage().with(warning, stageTracker.peeking(), stageTracker.canStepForward(v.getStage().getSteps())));
 		}
 		v = StepGuide.withPlanFor(v, prep, target);
 		v = v.withAdviceTab(adviceTab);

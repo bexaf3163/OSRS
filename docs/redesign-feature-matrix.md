@@ -84,7 +84,8 @@ fixtures and rendered images. No check here ran against a live RuneLite client.
 | Guide panel (240 px), compact and open states | `OsrsPathGuideOverlay` | unchanged geometry | StepGuide.View | J | kept |
 | Steps / advice tabs | One row, a click toggled | Two labels: **Steps** and **Advice · N**, each clicked separately | adviceTab | J (`tabStrip_aClickSelectsTheLabelItLandsOn`) | changed |
 | Hover explanation | Appended to the plate, resized it | **Tooltip beside the plate**, kept inside the canvas | Row.hint | J (`OverlayTooltipTest`) | changed |
-| Quest item count | "In your bag: 2 of 2 items" | "Quest items in your bag: 2 of 2" with a hover that names the scope | StepGuide.items | J | fixed |
+| Item count on a quest stage | "In your bag: 2 of 2 items" | "Stage items in your bag: 2 of 2"; the list is headed "Needed for this stage"; the hover names the scope | StepGuide.items | J | fixed |
+| Pre-flight reason on the plate | HUD chip and a redirected arrow only | One line on the plate, also when collapsed: what is missing and whether to use the bank, the place or the exchange | Preflight.Block.reason | J (`PreflightTest`) | new |
 | Unchecked bank item | "bank not opened" | "? not checked, bank not opened" | Have.UNKNOWN | J | changed |
 | HUD (190 px), danger, preflight block, recovery, pace | HUD overlay | unchanged | - | J | kept |
 | Dock bar, bank checklist, GE helper, shop overlay, arrow, highlights, radar, sounds | Overlays | unchanged | - | J | kept |

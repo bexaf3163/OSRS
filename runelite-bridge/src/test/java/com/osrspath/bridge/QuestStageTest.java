@@ -306,7 +306,7 @@ public class QuestStageTest
 		ItemCounts bag = new ItemCounts();
 		bag.add(1265, ActiveTarget.nameKey("Bronze pickaxe"), 1);
 		String all = text(GuideList.rows(StepGuide.view(t, bag, null, null, 0, 0, 0, got, 6, false, 3), false, FM, FM, 240));
-		assertFalse("'Needed now' is not drawn when nothing is needed: " + all, all.contains("Needed now"));
+		assertFalse("'Needed for this stage' is not drawn when nothing is needed: " + all, all.contains("Needed for this stage"));
 		assertFalse("what was taken and handed in is not listed: " + all, all.contains("✓") || all.contains("Iron bar ×") || all.contains("Bronze pickaxe"));
 		assertTrue(all, all.contains("▶ Bring the sword to the Squire"));
 		assertTrue(all, all.contains("4/4"));
@@ -322,7 +322,7 @@ public class QuestStageTest
 		ItemCounts bag = new ItemCounts();
 		bag.add(1265, ActiveTarget.nameKey("Bronze pickaxe"), 1);
 		String all = text(GuideList.rows(StepGuide.view(t, bag, new ItemCounts(), null, 0, 0, 0, new HashSet<>(), 6, false, 0), false, FM, FM, 240));
-		assertTrue(all, all.contains("Needed now"));
+		assertTrue(all, all.contains("Needed for this stage"));
 		assertTrue("there is no ore and no bars: they are in the list: " + all, all.contains("Blurite ore") && all.contains("Iron bar"));
 		assertFalse("the pickaxe is already in the bag, so it is not in the list: " + all, all.contains("Bronze pickaxe"));
 	}

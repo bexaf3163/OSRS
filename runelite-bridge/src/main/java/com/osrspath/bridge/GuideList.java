@@ -209,12 +209,13 @@ final class GuideList
 		// on one line, in full in the hover hint. What is missing goes on top, what is already in the bag goes down.
 		List<StepGuide.ItemLine> all = ordered(v.getItems());
 		// On a stage only what is still needed: what was taken and handed in ("✓ done", "✓ have") no longer asks for attention and takes space for nothing.
-		// "In step" (you get it yourself in this quest) is not shown among "Needed now": it is not something to take now, and it is already visible in the stage lines
+		// "In step" (you get it yourself in this quest) is not shown among "Needed for this stage": it is not something to take now, and it is already visible in the stage lines
 		// and the highlighted items.
 		List<StepGuide.ItemLine> items = stage != null ? pendingNow(all) : all;
 		if (stage != null && !items.isEmpty())
 		{
-			out.add(new Row(text("Needed now", MUTED, small, inner, true), Action.NONE, null));
+			out.add(new Row(text("Needed for this stage", MUTED, small, inner, true), Action.NONE,
+				"The items of this quest stage that are not in your bag yet. The line above names what the current action asks for."));
 		}
 		int whereLines = terse || items.size() > COMPACT_ITEMS ? 1 : WHERE_LINES;
 		for (int i = 0; i < Math.min(items.size(), maxItems); i++)
@@ -906,7 +907,7 @@ final class GuideList
 	}
 
 	/**
-	 * On a stage the items already in the bag are left out of "Needed now" (a deliberate choice: they take space for nothing), so the list never
+	 * On a stage the items already in the bag are left out of "Needed for this stage" (a deliberate choice: they take space for nothing), so the list never
 	 * said that the bag was read, and the stage lines ("buy rope too") are fixed walkthrough text. This one short row says how many of the step's
 	 * items the game reports in the bag, and the hover hint names them. Only the bag counts as "in your bag"; handed-in items ("done") and ones
 	 * obtained during the step are not part of the total. null means none of them is in the bag.
@@ -930,8 +931,8 @@ final class GuideList
 		{
 			return null;
 		}
-		return new Row(clip("", "Quest items in your bag: " + names.size() + " of " + total, StepGuide.GOOD, small, inner, 1, true), Action.NONE,
-			"Items of this quest in your bag now, as the game reports it: " + String.join(", ", names) + ". This counts the quest's whole item list, not only what the current line needs; the line above names what this action asks for. The step lines are the quest's fixed order; a line about something you already hold can be skipped.");
+		return new Row(clip("", "Stage items in your bag: " + names.size() + " of " + total, StepGuide.GOOD, small, inner, 1, true), Action.NONE,
+			"Items of this quest stage in your bag now, as the game reports it: " + String.join(", ", names) + ". This counts the stage's item list, not only what the current line needs; the line above names what this action asks for. The step lines are the quest's fixed order; a line about something you already hold can be skipped.");
 	}
 
 	/** "S2-07 · " from a heading like "[S2-07] Title"; empty means there is no code. */
@@ -962,7 +963,7 @@ final class GuideList
 				return base;
 			}
 			long missing = v.getItems().stream().filter(i -> !got(i) && i.getHave() != StepGuide.Have.IN_STEP).count();
-			return missing > 0 ? base + " · " + missing + " missing" : base + " · all quest items in bag";
+			return missing > 0 ? base + " · " + missing + " missing" : base + " · all stage items in bag";
 		}
 		if (v.getItems().isEmpty())
 		{

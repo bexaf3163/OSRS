@@ -68,6 +68,19 @@ public class PreflightTest
 	}
 
 	@Test
+	public void theGuidePlateSaysWhyAndWhatToDo_forEachWayTheItemIsFound()
+	{
+		Preflight.Block field = check(line(DOOR), new ItemCounts(), null, 3016, 3514);
+		assertEquals("Guidance paused: Cabbage is missing from your bag. Get it first, the arrow leads there.", field.reason());
+		Preflight.Block exchange = check(line(PIE), new ItemCounts(), null, 3000, 3145);
+		assertEquals("Guidance paused: Redberry pie is missing from your bag. Buy it at the Grand Exchange first.", exchange.reason());
+		Preflight.Block bank = check(line(PIE), new ItemCounts(), bag(2325, "Redberry pie", 1), 3185, 3436);
+		assertEquals("Guidance paused: Redberry pie is missing from your bag. Take it from the bank first.", bank.reason());
+		Preflight.Block several = check(line(BARS), bag(668, "Blurite ore", 1), null, 3000, 3145);
+		assertTrue(several.reason(), several.reason().contains("2 x Iron bar"));
+	}
+
+	@Test
 	public void theDraynorManorCabbageDoesNotCountButTheFieldCabbageDoes()
 	{
 		ActiveTarget.StageLine l = line(DOOR);
