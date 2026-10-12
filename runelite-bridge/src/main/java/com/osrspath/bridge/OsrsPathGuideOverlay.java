@@ -34,6 +34,8 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	/** "Where to get it" and the hint are smaller than the main text. */
 	static final float SMALL = 0.85f;
 	static final Color HOVER = new Color(255, 255, 255, 40);
+	/** A click this close to the left of the right label still counts as on it. */
+	private static final int TAB_SLACK = 6;
 	/**
 	 * For how long after the last frame a click still counts against the lines. If the list has not been drawn for a long time (left the game,
 	 * the plate was hidden), clicks go to the game, not to invisible buttons.
@@ -48,13 +50,21 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		final Rectangle area;
 		final List<Rectangle> rows;
 		final List<GuideList.Action> actions;
+		/** For the tab strip: the x (canvas) where the right label begins; clicks left of it select "Steps", from it "Advice". Else Integer.MAX_VALUE. */
+		final List<Integer> splits;
 		final long at;
 
 		Hits(Rectangle area, List<Rectangle> rows, List<GuideList.Action> actions, long at)
 		{
+			this(area, rows, actions, Collections.nCopies(rows.size(), Integer.MAX_VALUE), at);
+		}
+
+		Hits(Rectangle area, List<Rectangle> rows, List<GuideList.Action> actions, List<Integer> splits, long at)
+		{
 			this.area = area;
 			this.rows = rows;
 			this.actions = actions;
+			this.splits = splits;
 			this.at = at;
 		}
 
@@ -147,9 +157,38 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		OverlayCard.paint(g, last.width, last.height, accent(v), config.hudOpacity(), config.overlayTheme());
 		Dimension d = super.render(g);
 		last = d == null ? new Dimension() : d;
-		remember(d);
+		remember(g, d);
+		paintTooltip(g, d, hovered, small);
 		plugin.guideShown(true);
 		return d;
+	}
+
+	/**
+	 * The explanation of the line under the mouse, drawn beside the plate (see {@link OverlayTooltip}). The plate itself does not change, so the
+	 * lines do not move under the mouse while it is read. The coordinates are the plate's own, as the graphics are already moved to it.
+	 */
+	private void paintTooltip(Graphics2D g, Dimension d, int hovered, Font small)
+	{
+		if (d == null || hovered < 0 || hovered >= components.size())
+		{
+			return;
+		}
+		RowComponent rc = components.get(hovered);
+		String hint = rc.getRow().getHint();
+		if (hint == null || hint.trim().isEmpty())
+		{
+			return;
+		}
+		FontMetrics fm = g.getFontMetrics(small);
+		List<String> lines = OverlayTooltip.wrap(hint, fm);
+		if (lines.isEmpty())
+		{
+			return;
+		}
+		Rectangle at = getBounds();
+		Rectangle canvas = new Rectangle(-at.x, -at.y, Math.max(1, client.getCanvasWidth()), Math.max(1, client.getCanvasHeight()));
+		Rectangle tip = OverlayTooltip.place(new Rectangle(0, 0, d.width, d.height), rc.getBounds(), OverlayTooltip.size(lines, fm), canvas);
+		OverlayTooltip.paint(g, tip, lines, small);
 	}
 
 	/** The strip colour: quest complete is green, going by stages is blue, otherwise gold. */
@@ -214,7 +253,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	}
 
 	/** The line rectangles on the canvas: at drawing time the plate already stands in its place (getBounds). */
-	private void remember(Dimension d)
+	private void remember(Graphics2D g, Dimension d)
 	{
 		if (d == null)
 		{
@@ -224,6 +263,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		Rectangle at = getBounds();
 		List<Rectangle> rects = new ArrayList<>();
 		List<GuideList.Action> actions = new ArrayList<>();
+		List<Integer> splits = new ArrayList<>();
 		for (RowComponent c : components)
 		{
 			if (c.isHint())
@@ -234,8 +274,10 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			r.translate(at.x, at.y);
 			rects.add(r);
 			actions.add(c.getRow().getAction());
+			// The tab strip is two buttons on one row: the right label starts where its painted text starts.
+			splits.add(c.getRow().getAction().getKind() == GuideList.Kind.TAB ? r.x + r.width - c.rightLabelWidth(g) - TAB_SLACK : Integer.MAX_VALUE);
 		}
-		setHits(new Hits(new Rectangle(at.x, at.y, d.width, d.height), rects, actions, System.nanoTime()));
+		setHits(new Hits(new Rectangle(at.x, at.y, d.width, d.height), rects, actions, splits, System.nanoTime()));
 	}
 
 	void setHits(Hits h)
@@ -255,7 +297,16 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			return null;
 		}
 		int row = h.rowAt(p.x, p.y);
-		return row < 0 ? GuideList.Action.NONE : h.actions.get(row);
+		if (row < 0)
+		{
+			return GuideList.Action.NONE;
+		}
+		GuideList.Action a = h.actions.get(row);
+		if (a.getKind() == GuideList.Kind.TAB)
+		{
+			return p.x >= h.splits.get(row) ? GuideList.Action.TAB_ADVICE : GuideList.Action.TAB_STEPS;
+		}
+		return a;
 	}
 
 	/** The plate contents. Static: a test draws it with the real fonts without a client. */
@@ -297,12 +348,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 					sv.isFinished() ? OverlayCard.GREEN : OverlayCard.BLUE));
 			}
 		}
-		if (hovered >= 0 && hovered < rows.size() && rows.get(hovered).getHint() != null)
-		{
-			RowComponent hint = new RowComponent(GuideList.hint(rows.get(hovered).getHint(), smallFm, width), false, true, font, small);
-			out.add(hint);
-			c.add(hint);
-		}
+		// The hint of the hovered line is not a row of the plate: it is drawn beside it (OverlayTooltip), so the plate never changes size under the mouse.
 		return out;
 	}
 
@@ -322,6 +368,20 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		private Point preferredLocation = new Point();
 		@Setter
 		private Dimension preferredSize = new Dimension(OsrsPathGuideOverlay.WIDTH, 0);
+
+		/** The painted width of the right label of the first line (0 when there is none): where a second button on the row begins. */
+		int rightLabelWidth(Graphics2D g)
+		{
+			for (int i = 0; i < row.getLines().size(); i++)
+			{
+				String right = row.getLines().get(i).getRight();
+				if (right != null)
+				{
+					return g.getFontMetrics(fonts.get(i)).stringWidth(right);
+				}
+			}
+			return 0;
+		}
 
 		RowComponent(GuideList.Row row, boolean hovered, boolean hint, Font font, Font small)
 		{

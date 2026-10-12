@@ -144,7 +144,7 @@ public class GuideListTest
 		assertEquals("S2-10 · Stage 3 of 7 ~▲", GuideList.plain(rows.subList(0, 1)));
 		String all = flat(rows);
 		assertTrue(all, all.contains("▶ [2/6] Dye the wig yellow (Aggie)"));
-		for (String gone : new String[] {"Next:", "Done", "Back", "in your bag", "Where to go", "onions", "Needed now", "Tip"})
+		for (String gone : new String[] {"Next:", "Done", "Back", "in your bag", "Where to go", "onions", "Needed now", "Advice"})
 		{
 			assertFalse(gone + " must wait for the mouse: " + all, all.contains(gone));
 		}
@@ -641,6 +641,19 @@ public class GuideListTest
 		// The heading: collapse.
 		mouse.mousePressed(press(50, 58, MouseEvent.BUTTON1, InputEvent.BUTTON1_DOWN_MASK));
 		assertEquals(Collections.singletonList(GuideList.Action.TOGGLE), done);
+	}
+
+	@Test
+	public void tabStrip_aClickSelectsTheLabelItLandsOn()
+	{
+		Client c = client(false, false, entry(null));
+		OsrsPathGuideOverlay o = new OsrsPathGuideOverlay(c, null, null);
+		// A strip across 14..226 whose right label ("Advice · 3") starts at x = 160.
+		o.setHits(new OsrsPathGuideOverlay.Hits(new Rectangle(10, 50, 220, 40),
+			Arrays.asList(new Rectangle(14, 54, 212, 16)), Arrays.asList(GuideList.Action.TAB), Arrays.asList(160), System.nanoTime()));
+		assertEquals("left of the right label: Steps", GuideList.Action.TAB_STEPS, o.actionAt(new java.awt.Point(40, 60)));
+		assertEquals("on the right label: Advice", GuideList.Action.TAB_ADVICE, o.actionAt(new java.awt.Point(200, 60)));
+		assertEquals("the same label again does not toggle back", GuideList.Action.TAB_ADVICE, o.actionAt(new java.awt.Point(165, 60)));
 	}
 
 	@Test

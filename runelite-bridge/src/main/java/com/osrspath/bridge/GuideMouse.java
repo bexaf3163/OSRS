@@ -98,6 +98,10 @@ class GuideMouse extends MouseAdapter
 				return "Collapse / expand";
 			case TAB:
 				return "Steps / advice";
+			case TAB_STEPS:
+				return "Show steps";
+			case TAB_ADVICE:
+				return "Show advice";
 			case DETOUR:
 				return "Arrow to the stop";
 			case TRANSPORT:

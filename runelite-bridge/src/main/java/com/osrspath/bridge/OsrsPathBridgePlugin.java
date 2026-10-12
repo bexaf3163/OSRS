@@ -199,7 +199,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	 */
 	@Getter
 	private volatile StepGuide.View guideView;
-	/** The "Tip" tab is open in the list. Reset when there are no tips. */
+	/** The "Advice" tab is open in the list. Reset when there are no tips. */
 	private boolean adviceTab;
 	private StepGuide.View panelView;
 	/** A message in the list and panel after a click, for example "navigation is off"; cleared by changing the step. */
@@ -1757,6 +1757,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				break;
 			case TAB:
 				adviceTab = !adviceTab;
+				refreshGuide();
+				break;
+			case TAB_STEPS:
+			case TAB_ADVICE:
+				adviceTab = a.getKind() == GuideList.Kind.TAB_ADVICE;
 				refreshGuide();
 				break;
 			case TRANSPORT:

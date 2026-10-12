@@ -255,7 +255,7 @@ public class PrepSnapshotTest
 		assertFalse("the generic text is replaced: " + all, all.contains("Chicken coop"));
 		assertTrue("a supply is low: " + all, all.contains("~low"));
 		// The app's tips are on a separate tab: the "Steps" tab has none of them, only the tab strip with the number of tips.
-		assertTrue("the tab with the number of tips: " + all, all.contains("Steps ~Tip · 3"));
+		assertTrue("the tab with the number of tips: " + all, all.contains("Steps ~Advice · 3"));
 		assertFalse("do not take now is not on the steps tab: " + all, all.contains("Don't take now"));
 		assertFalse("weight is not on the steps tab: " + all, all.contains("Weight:"));
 		assertFalse("the bag is not on the steps tab: " + all, all.contains("Won't fit"));
@@ -269,7 +269,7 @@ public class PrepSnapshotTest
 		assertTrue("don't take now: " + adv, adv.contains("Don't take now: Rune scimitar, Lobster ×20"));
 		assertTrue("weight: " + adv, adv.contains("Weight: Deposit the iron armour in the bank"));
 		assertTrue("bag: " + adv, adv.contains("⚠ Won't fit by 3 slots"));
-		assertTrue("the 'Tip' tab is active, 'Steps' beside it: " + adv, adv.contains("Steps ~Tip · 3"));
+		assertTrue("the 'Advice' tab is active, 'Steps' beside it: " + adv, adv.contains("Steps ~Advice · 3"));
 		assertFalse("there are no step items on the tip tab: " + adv, adv.contains("Pick one up at the farm north"));
 		List<GuideList.Row> rows = GuideList.rows(v.withAdviceTab(true), false, FM, FM, 4000);
 		assertTrue("the tab strip is a button", rows.stream().anyMatch(r -> r.getAction().getKind() == GuideList.Kind.TAB));
@@ -279,7 +279,7 @@ public class PrepSnapshotTest
 	public void withoutTips_noTabs_andAnOpenTipTabReturnsToSteps()
 	{
 		String all = text(GuideList.rows(cook(null).withAdviceTab(true), false, FM, FM, 4000));
-		assertFalse("no tips, no tabs: " + all, all.contains("Tip ·"));
+		assertFalse("no tips, no tabs: " + all, all.contains("Advice ·"));
 		assertTrue("the step list is in place: " + all, all.contains("Chicken coop"));
 	}
 

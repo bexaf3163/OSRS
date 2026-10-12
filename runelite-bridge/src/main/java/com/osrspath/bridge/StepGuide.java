@@ -532,7 +532,7 @@ final class StepGuide
 		else if (inBank < 0)
 		{
 			h = Have.UNKNOWN;
-			status = (have > 0 ? "in bag " + have + "/" + need + ", " : "") + "bank not opened";
+			status = (have > 0 ? "in bag " + have + "/" + need + ", " : "") + "? not checked, bank not opened";
 			tag = have > 0 ? have + "/" + need + " · bank?" : "bank?";
 		}
 		else

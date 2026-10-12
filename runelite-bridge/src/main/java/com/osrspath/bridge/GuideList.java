@@ -33,8 +33,12 @@ final class GuideList
 		PREV,
 		/** End viewing: the cursor follows the facts again. */
 		RESUME,
-		/** Switch the list tab: "Steps" / "Tip". */
+		/** The tab strip as drawn: the overlay resolves a click on it to {@link #TAB_STEPS} or {@link #TAB_ADVICE} by where on the strip it landed. */
 		TAB,
+		/** Show the "Steps" tab. */
+		TAB_STEPS,
+		/** Show the "Advice" tab. */
+		TAB_ADVICE,
 		/** The purchase detour: the arrow and the path to the stop the app suggests. */
 		DETOUR,
 		/** The recommended way that is not walking: the arrow to its first stop and a frame on the item it uses. */
@@ -51,6 +55,8 @@ final class GuideList
 		static final Action PREV = new Action(Kind.PREV, -1);
 		static final Action RESUME = new Action(Kind.RESUME, -1);
 		static final Action TAB = new Action(Kind.TAB, -1);
+		static final Action TAB_STEPS = new Action(Kind.TAB_STEPS, -1);
+		static final Action TAB_ADVICE = new Action(Kind.TAB_ADVICE, -1);
 		static final Action DETOUR = new Action(Kind.DETOUR, -1);
 		static final Action TRANSPORT = new Action(Kind.TRANSPORT, -1);
 
@@ -646,12 +652,12 @@ final class GuideList
 			+ (prep.getWeight() != null && !prep.getWeight().isEmpty() ? 1 : 0);
 	}
 
-	/** The tab strip: "Steps" on the left, "Tip · N" on the right; the active one in gold, the other in link blue (it can be clicked). A click on either switches. */
+	/** The tab strip: "Steps" on the left, "Advice · N" on the right; the active one in gold, the other in link blue. A click selects the label it lands on. */
 	static Row tabRow(boolean onAdvice, int advice, FontMetrics fm, int inner)
 	{
 		List<Line> lines = new ArrayList<>();
-		lines.add(new Line("Steps", onAdvice ? LINK : TITLE, "Tip · " + advice, onAdvice ? TITLE : LINK, true));
-		return new Row(lines, Action.TAB, onAdvice ? "Click to go back to the steps." : "Click for the app's tips: what not to take now, weight, bag.");
+		lines.add(new Line("Steps", onAdvice ? LINK : TITLE, "Advice · " + advice, onAdvice ? TITLE : LINK, true));
+		return new Row(lines, Action.TAB, onAdvice ? "Steps: the quest's lines in order. Click \"Steps\" to go back to them." : "Advice: what not to take now, weight, bag, the way there. Click \"Advice\" to see it.");
 	}
 
 	/** The text of the list lines in a row, as the player sees it, for the debug log and tests: "left ~right", lines separated by newlines. */
