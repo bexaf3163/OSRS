@@ -102,33 +102,64 @@ describe('S4-04: the food is bought, not fished on Karamja', () => {
 });
 
 describe('the stage goals follow the streamlined route', () => {
-  const rows = Object.fromEntries((goalsFile as unknown as { rows: { id: string; values: { raw: string; min: number; max?: number }[] }[] }).rows.map((r) => [r.id, r.values]));
+  type Cell = { raw: string; min: number; max?: number; kind?: string; from?: string[] };
+  const rows = Object.fromEntries((goalsFile as unknown as { rows: { id: string; values: Cell[] }[] }).rows.map((r) => [r.id, r.values]));
+  const guaranteed = (id: string) => rows[id].map((v) => (v.kind === 'optional' ? null : v.min));
 
   it('Defence is 1 through stage 4, and 33 after Dragon Slayer I (18,650 XP from level 1)', () => {
-    expect(rows.defence.slice(0, 5).map((v) => v.min)).toEqual([1, 1, 1, 1, 33]);
+    expect(guaranteed('defence').slice(0, 5)).toEqual([1, 1, 1, 1, 33]);
     expect(xpForLevel(33)).toBeLessThanOrEqual(18_650);
     expect(xpForLevel(34)).toBeGreaterThan(18_650);
-    expect(rows.defence[5].min).toBeGreaterThan(rows.defence[4].min);
   });
 
-  it('Attack stays 30 and 40, Strength stays 20-25 through stage 4 and reaches 35-36 with what Dragon Slayer I adds', () => {
-    expect(rows.attack.map((v) => v.min).slice(2, 4)).toEqual([30, 40]);
-    expect(rows.strength.slice(2, 5)).toMatchObject([{ min: 20, max: 25 }, { min: 20, max: 25 }, { min: 35, max: 36 }]);
+  it('Attack is 20 after Vampyre Slayer, then 30 and 40; Strength is 20 only from S3-08 and 35 with what Dragon Slayer I adds', () => {
+    expect(guaranteed('attack').slice(0, 5)).toEqual([1, 20, 30, 40, 40]);
+    expect(guaranteed('strength').slice(0, 5)).toEqual([1, 1, 20, 20, 35]);
+    expect(rows.strength[2]).toMatchObject({ min: 20, max: 25, from: ['S3-08'] });
     // Strength 20 plus the quest reward reaches 35, and 25 reaches 36.
     expect(xpForLevel(20) + 18_650).toBeGreaterThanOrEqual(xpForLevel(35));
     expect(xpForLevel(20) + 18_650).toBeLessThan(xpForLevel(36));
     expect(xpForLevel(25) + 18_650).toBeGreaterThanOrEqual(xpForLevel(36));
     expect(xpForLevel(25) + 18_650).toBeLessThan(xpForLevel(37));
+    expect(rows.strength[4]).toMatchObject({ min: 35, max: 36 });
   });
 
-  it('Fishing and Cooking have no goal after stage 1, and Magic stays at 25 until stage 6 (no Magic 33)', () => {
-    for (const id of ['fishing', 'cooking']) expect(rows[id].slice(1, 5).map((v) => v.min), id).toEqual([1, 1, 1, 1]);
-    expect(rows.magic.slice(1, 5).map((v) => v.min)).toEqual([25, 25, 25, 25]);
+  it('Mining is 10 until Doric (1,300 XP: 15), and 30 is claimed nowhere; Prayer follows the two lamps and the quests, 43 only at S8-06', () => {
+    expect(guaranteed('mining').slice(0, 5)).toEqual([10, 10, 15, 15, 15]);
+    expect(xpForLevel(10) + 1_300).toBeGreaterThanOrEqual(xpForLevel(15));
+    expect(xpForLevel(10) + 1_300).toBeLessThan(xpForLevel(16));
+    expect(Math.max(...rows.mining.filter((v) => v.kind !== 'optional').map((v) => v.max ?? v.min))).toBeLessThan(30);
+    expect(guaranteed('prayer')).toEqual([11, 11, 11, 15, 15, 15, 15, 43, 43]);
+    expect(rows.prayer[7].from).toContain('S8-06');
+    // The Restless Ghost 1,125 + the lamp 300 is level 11; the Ides of Milk lamp 1,000 on top is level 15.
+    expect(xpForLevel(11)).toBeLessThanOrEqual(1_125 + 300);
+    expect(xpForLevel(12)).toBeGreaterThan(1_125 + 300);
+    expect(xpForLevel(15)).toBeLessThanOrEqual(1_125 + 300 + 1_000);
+    expect(xpForLevel(16)).toBeGreaterThan(1_125 + 300 + 1_000);
   });
 
-  it('no goal goes down from one stage to the next, except the two skills that are no longer trained after stage 1', () => {
-    for (const [id, values] of Object.entries(rows).filter(([id]) => id !== 'fishing' && id !== 'cooking')) {
-      const mins = values.map((v) => v.min);
+  it('Fishing stays 1, Cooking is 4 after the first quest, and Magic stays at 25 until the Grand Tree (no Magic 33)', () => {
+    expect(guaranteed('fishing').filter((v) => v !== null && v !== 1)).toEqual([]);
+    expect(guaranteed('cooking').slice(0, 5)).toEqual([4, 4, 4, 4, 4]);
+    expect(guaranteed('magic').slice(0, 6)).toEqual([1, 25, 25, 25, 25, null]);
+  });
+
+  it('the members route trains what Lost City, Animal Magnetism and Recipe for Disaster ask for: Woodcutting 36, Cooking 10', () => {
+    expect(rows.woodcutting[7].min).toBeGreaterThanOrEqual(36);
+    expect(rows.cooking[7].min).toBeGreaterThanOrEqual(10);
+    expect(skillsOf('S8-04')).toEqual(expect.arrayContaining(['woodcutting:36', 'cooking:10', 'ranged:30', 'slayer:18', 'crafting:31']));
+    expect(titleTargets(step('S8-04').title).map((t) => `${t.skill}:${t.level}`).sort()).toEqual(skillsOf('S8-04').sort());
+  });
+
+  it('the optional Bond branch (stage 6) is marked optional and never lowers a later guaranteed level', () => {
+    const optional = Object.entries(rows).flatMap(([id, v]) => v.map((c, i) => ({ id, stage: i + 1, c }))).filter((x) => x.c.kind === 'optional');
+    expect(optional.length).toBeGreaterThan(0);
+    for (const x of optional) {
+      expect(x.stage, x.id).toBe(6);
+      expect(x.c.from!.every((s) => step(s).bondBranch === true), x.id).toBe(true);
+    }
+    for (const [id, values] of Object.entries(rows)) {
+      const mins = values.filter((v) => v.kind !== 'optional').map((v) => v.min);
       expect(mins, id).toEqual([...mins].sort((a, b) => a - b));
     }
   });

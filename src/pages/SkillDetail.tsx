@@ -34,7 +34,7 @@ export function SkillDetailPage({ id }: { id: string }) {
 type SkillTab = 'overview' | 'roadmap' | 'calculator' | 'reference';
 
 function SkillView({ skill }: { skill: Skill }) {
-  const { progress, steps, mode } = useStore();
+  const { progress, steps, stages, mode } = useStore();
   const [tab, setTab] = useState<SkillTab>('overview');
   const guides = roadmapSkills(skill);
   const tabs: [SkillTab, string][] = [
@@ -51,7 +51,7 @@ function SkillView({ skill }: { skill: Skill }) {
   // "What to train with": the route decides first (a stage goal that is behind), the generic training row only when the route asks for nothing.
   const stage = currentStage(steps, progress);
   const focus = trainingFocus({
-    levelSkills: skill.levelSkills, stage, goals, levelOf: (id) => levelOf(progress, id),
+    levelSkills: skill.levelSkills, stage, goals, levelOf: (id) => levelOf(progress, id), lastStage: stages[stages.length - 1]?.id,
     rowEnd: (_id, lv) => rangeForLevel(skill.plan.ranges, lv)?.range.to ?? null,
   });
 
@@ -161,7 +161,7 @@ function PlanBlocks({ skill, highlight, blocks }: { skill: Skill; highlight?: nu
 
 function defaultTarget(skill: Skill, levelId: string, level: number, stage: number): number {
   const goal = goalFor(goals, levelId, stage);
-  if (goal && goal.min > level) return goal.min;
+  if (goal && goal.kind !== 'optional' && goal.min > level) return goal.min;
   const hit = rangeForLevel(skill.plan.ranges, level);
   if (hit?.range.to && hit.range.to > level) return hit.range.to;
   return Math.min(MAX_LEVEL, level + 1);

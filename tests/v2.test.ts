@@ -99,6 +99,7 @@ describe('quest requirements come before the quests themselves', () => {
   it('skill requirements are given as targets in the step title', () => {
     expect(titleTargets(allSteps.find((s) => s.id === 'S8-04')!.title)).toEqual([
       { skill: 'ranged', level: 30 }, { skill: 'slayer', level: 18 }, { skill: 'crafting', level: 31 },
+      { skill: 'woodcutting', level: 36 }, { skill: 'cooking', level: 10 },
     ]);
   });
 });

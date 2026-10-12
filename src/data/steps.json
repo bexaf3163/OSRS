@@ -3431,7 +3431,7 @@
     "fields": [
       {
         "label": "Training spot",
-        "text": "A Minotaur has 10 hit points and gives about 40 XP per kill: Attack 30 is about 330 kills and Strength 20 about 110 more. They hit for up to 2 (up to 3 at level 27) and are not aggressive, so you choose when to fight."
+        "text": "A Minotaur has 10 hit points and gives about 40 XP per kill; the pace line counts the kills left from your real Attack and Strength XP (earlier quest rewards already count). They hit for up to 2 (up to 3 at level 27) and are not aggressive, so you choose when to fight."
       },
       {
         "label": "Defence",
@@ -5496,29 +5496,41 @@
     "id": "S8-04",
     "stage": 8,
     "type": "skill",
-    "title": "Ranged to 30, Slayer to 18 and Crafting to 31",
+    "title": "Ranged to 30, Slayer to 18, Crafting to 31, Woodcutting to 36 and Cooking to 10",
     "requires": [],
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Quest_skill_requirements",
     "fields": [
       {
         "label": "Why",
-        "text": "Animal Magnetism requires Ranged 30, Slayer 18, Crafting 19 and Woodcutting 35; Lost City needs Crafting 31 and Woodcutting 36. You already have Woodcutting 60 after F2P."
+        "text": "Animal Magnetism (S8-05) needs Ranged 30, Slayer 18, Crafting 19 and Woodcutting 35; Lost City (S9-01) needs Crafting 31 and Woodcutting 36; Recipe for Disaster (S9-05) needs Cooking 10. The route up to here leaves Woodcutting at 15 and Cooking at 4 (stage 6 is only the optional Bond branch), so this step trains all five. It unlocks Animal Magnetism (Ava's device), Lost City (Zanaris and the Dramen staff) and the Culinaromancer's Chest."
       },
       {
-        "label": "Ranged",
-        "text": "A bow and arrows on cows and giants. Tip: train up to 50, and then Animal Magnetism gives Ava's accumulator rather than the weak Ava's attractor."
+        "label": "Ranged 30",
+        "text": "Shoot cows in the Lumbridge pasture from a distance with a bow and arrows set to the Accurate style. Use the best bow your level allows: Oak shortbow (level 5), Willow shortbow (level 20), Maple shortbow (level 30), with Iron or Steel arrows first, Mithril arrows from 20. Bring 200-300 arrows and the bow you will use, and pick the arrows up as you go. Stop at 30 for Animal Magnetism; train to 50 only if you want Ava's accumulator (the S8-05 tip)."
       },
       {
-        "label": "Slayer",
-        "text": "A quick start: the quiz in the Varrock Museum basement (talk to Orlando Smith) gives 1,000 XP, and the short quest A Porcine of Interest (the notice board in Draynor Village) another 1,000. That is level 13. To get to 18, one or two tasks from the master Mazchna in Canifis (after Priest in Peril) are enough; Turael in Burthorpe gives shorter tasks, but little XP for them."
+        "label": "Slayer 18",
+        "text": "Take the cheap XP first: the Varrock Museum quiz (talk to Orlando Smith, basement) gives 1,000 XP and the short quest A Porcine of Interest (the notice board in Draynor Village) another 1,000, which is level 13. For the rest do one or two tasks from the master Mazchna in Canifis (after Priest in Peril); Turael in Burthorpe gives short tasks with little XP. Stop at 18."
       },
       {
-        "label": "Crafting",
-        "text": "Nature Spirit has already given 3,000 XP. After that: leather items from leather (Leather), then gold rings and amulets from gold bars in any furnace."
+        "label": "Crafting 31",
+        "text": "Nature Spirit (S8-02) has already given 3,000 XP. From there make jewellery at a furnace with the mould in the bag: gold amulets from Crafting 8 (30 XP each), sapphire rings from 20 (40 XP each), emerald rings from 27 (55 XP each). Buy gold bars and cut gems on the Grand Exchange rather than mining them. Stop at 31."
+      },
+      {
+        "label": "Woodcutting 36",
+        "text": "Cut oaks (level 15) and then willows (level 30) beside the Draynor Village bank: about 38 XP per oak log and 68 per willow log, and the logs can be sold or burned for Firemaking. 36 needs about 22,000 XP above level 15, roughly 330 willow logs. Use the best axe your level allows."
+      },
+      {
+        "label": "Cooking 10",
+        "text": "Cook what you already hold on a range or a fire: level 10 is 1,154 XP and Cook's Assistant already gave 300. About 13 trout (70 XP each) or 57 shrimps (15 XP each) does it."
+      },
+      {
+        "label": "Order",
+        "text": "Do Slayer first (it needs no money), then Woodcutting and Cooking (they pay for themselves), then Crafting while you wait for arrows to restock, then Ranged. Check the levels with the Skills page: the goals above are the only targets of this step."
       }
     ],
-    "doneWhen": "Ranged 30, Slayer 18, Crafting 31.",
+    "doneWhen": "Ranged 30, Slayer 18, Crafting 31, Woodcutting 36, Cooking 10.",
     "inGame": {
       "npcNames": [
         "Orlando Smith",
@@ -5539,11 +5551,50 @@
           {
             "skill": "crafting",
             "level": 31
+          },
+          {
+            "skill": "woodcutting",
+            "level": 36
+          },
+          {
+            "skill": "cooking",
+            "level": 10
           }
         ]
       }
     },
-    "styleGear": "ranged"
+    "styleGear": "ranged",
+    "where": "Five places in turn: cows in the Lumbridge pasture for Ranged, the Varrock Museum and Draynor Village for the quick Slayer XP, any furnace (Edgeville, Al Kharid or Falador) for Crafting, the Draynor Village willows for Woodcutting and any range for Cooking.",
+    "itemsRecommended": [
+      {
+        "nameEn": "Oak shortbow",
+        "amount": 1,
+        "howToGet": "Buy on the Grand Exchange. Ranged 5. Replace it with a Willow shortbow at 20 and a Maple shortbow at 30.",
+        "wikiItemId": 843,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Oak_shortbow.png"
+      },
+      {
+        "nameEn": "Iron arrow",
+        "amount": 300,
+        "howToGet": "Buy on the Grand Exchange; pick them up again as you shoot. Mithril arrows from Ranged 20.",
+        "wikiItemId": 884,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_arrow_1.png"
+      },
+      {
+        "nameEn": "Gold bar",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange: for the gold amulets and rings of the Crafting part.",
+        "wikiItemId": 2357,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Gold_bar.png"
+      },
+      {
+        "nameEn": "Ring mould",
+        "amount": 1,
+        "howToGet": "General Store or the Grand Exchange.",
+        "wikiItemId": 1592,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ring_mould.png"
+      }
+    ]
   },
   {
     "id": "S8-05",

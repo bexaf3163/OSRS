@@ -617,6 +617,7 @@ main {
 .swatch { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--border-strong); background: var(--surface); }
 .swatch.is-reached { background: var(--done-soft); border-color: var(--done); }
 .swatch.is-current { background: var(--accent-soft); border-color: var(--accent); }
+.swatch.is-optional { border-style: dashed; }
 
 .goals-table { font-variant-numeric: tabular-nums; table-layout: fixed; min-width: 540px; }
 .goals-table thead th:first-child { width: 170px; }
@@ -632,6 +633,7 @@ main {
 .goal { color: var(--muted); }
 .goal .icon { width: 13px; height: 13px; margin-left: 2px; vertical-align: -1px; }
 .goal.is-reached { background: var(--done-soft); color: var(--done); font-weight: 600; }
+.goal.is-optional { font-style: italic; outline: 1px dashed var(--border-strong); outline-offset: -3px; }
 .is-current-col { box-shadow: inset 1px 0 0 var(--accent), inset -1px 0 0 var(--accent); }
 thead .is-current-col { color: var(--accent-ink) !important; }
 .qp-row > * { border-top: 1px solid var(--border-strong); }

@@ -98,7 +98,7 @@ function SkillCard({ skill, stage }: { skill: Skill; stage: number }) {
               <LevelInput id={id} label={many ? name : `Level: ${name}`} hideLabel={!many} compact />
               {goal && (
                 <span className={`goal-chip ${reached ? 'is-reached' : ''}`}>
-                  goal {goal.raw}{reached && <IconCheck />}
+                  {goal.kind === 'optional' ? 'optional ' : ''}goal {goal.raw}{reached && <IconCheck />}
                   <span className="visually-hidden"> at stage {stage}{reached ? ', reached' : ''}</span>
                 </span>
               )}
