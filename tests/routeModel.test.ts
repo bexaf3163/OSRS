@@ -122,13 +122,13 @@ describe('loadouts: a quest that changes what you may carry', () => {
     expect(tomb.take.some((t) => /rune/i.test(t.nameEn))).toBe(false);
     for (const r of ['Air rune', 'Water rune', 'Earth rune', 'Rope']) expect(dungeon.take.map((t) => t.nameEn), r).toContain(r);
     const ids = new Set(s.loadouts!.map((l) => l.id));
-    for (const i of [...s.itemsRequired, ...(s.itemsRecommended ?? [])]) if (i.phase) expect(ids.has(i.phase), `${i.nameEn} phase`).toBe(true);
-    expect(s.itemsRequired.find((i) => i.nameEn === 'Air rune')!.phase).toBe('dungeon');
+    for (const i of [...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])]) if (i.phase) expect(ids.has(i.phase), `${i.nameEn} phase`).toBe(true);
+    expect(s.itemsRequired!.find((i) => i.nameEn === 'Air rune')!.phase).toBe('dungeon');
   });
 
   it('Monkey Madness I is prepared before the first step: gold bar, wool, lockpick, food, prayer, and the Daero choice', () => {
     const s = step('S9-04');
-    const names = s.itemsRequired.map((i) => i.nameEn);
+    const names = s.itemsRequired!.map((i) => i.nameEn);
     expect(names).toEqual(expect.arrayContaining(['Gold bar', 'Ball of wool', 'Lockpick']));
     expect(s.rewardChoice).toBe('daero');
     expect(s.requires).toContain('S8-06');
@@ -187,7 +187,7 @@ describe('S3-04 Below Ice Mountain: the Structural pillar method', () => {
     const items = quest.stages.find((st) => st.at === 35)!.items!.map((i) => i.name);
     expect(items).toEqual(expect.arrayContaining(['Bronze pickaxe', 'Trout']));
     expect(step('S3-04').requirements!.some((r) => r.type === 'skill' && r.skill === 'mining' && r.min === 10)).toBe(true);
-    expect(step('S3-04').itemsRequired.map((i) => i.nameEn)).toContain('Bronze pickaxe');
+    expect(step('S3-04').itemsRequired!.map((i) => i.nameEn)).toContain('Bronze pickaxe');
   });
 
   it('the Guardian\'s biggest hit is known to the health warning, and the pillar is highlighted', () => {

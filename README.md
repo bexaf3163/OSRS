@@ -436,6 +436,7 @@ The plugin's compatibility with an installed RuneLite (after its update): `npm r
 
 ## Version history (summary)
 
+- **2.49.0** — route audit: Below Ice Mountain by the Structural pillars, optional steps that never block, carryover between steps, Waterfall loadouts, the optional Bond branch, Prayer 43 before Monkey Madness I, goals recomputed from the route, Woodcutting 36 and Cooking 10 trained in the Members route. See [release notes](release-notes/v2.49.0.md) and [the audit](docs/route-audit-2.49.md).
 - **2.48.2** — Clear Path composition: side-by-side quest walkthrough, preparation and rewards; clearer native RuneLite headings, action, distance and tabs. See [release notes](release-notes/v2.48.2.md).
 
 - **2.29** — progress copies outside the app folder (every hour, on by default) and an automatic restore into a fresh data folder; the profile list is kept in a file; "Sync with the account" also restores the steps the confirmed ones require.
