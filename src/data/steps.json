@@ -4866,23 +4866,26 @@
       {
         "nameEn": "Air rune",
         "amount": 6,
-        "howToGet": "For the pillars in the tomb.",
+        "howToGet": "For the six pillars in the last room of the Waterfall dungeon, not for the tomb: the tomb refuses runes. Take them from the bank after the tomb.",
         "wikiItemId": 556,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png",
+        "phase": "dungeon"
       },
       {
         "nameEn": "Earth rune",
         "amount": 6,
-        "howToGet": "For the pillars in the tomb.",
+        "howToGet": "For the six pillars in the last room of the Waterfall dungeon, not for the tomb: the tomb refuses runes. Take them from the bank after the tomb.",
         "wikiItemId": 557,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Earth_rune.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Earth_rune.png",
+        "phase": "dungeon"
       },
       {
         "nameEn": "Water rune",
         "amount": 6,
-        "howToGet": "For the pillars in the tomb.",
+        "howToGet": "For the six pillars in the last room of the Waterfall dungeon, not for the tomb: the tomb refuses runes. Take them from the bank after the tomb.",
         "wikiItemId": 555,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Water_rune.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Water_rune.png",
+        "phase": "dungeon"
       },
       {
         "nameEn": "Glarial's pebble",
@@ -4891,23 +4894,25 @@
         "wikiItemId": 294,
         "iconUrl": "https://oldschool.runescape.wiki/images/Glarial's_pebble.png",
         "inStep": true,
-        "from": "Golrie"
+        "from": "Golrie",
+        "phase": "tomb"
       }
     ],
     "itemsRecommended": [
       {
         "nameEn": "Lobster",
         "amount": 10,
-        "howToGet": "Buy on the Grand Exchange for about 105 gp (20 of them about 2,100). Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
+        "howToGet": "Buy on the Grand Exchange (about 105 gp each). Take a few into the tomb too, the rest for the dungeon.",
         "wikiItemId": 379,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
-        "heals": 12
+        "heals": 12,
+        "phase": "dungeon"
       }
     ],
     "fields": [
       {
         "label": "Notes",
-        "text": "There are no combat requirements, but in the Waterfall dungeon there are fire giants (Fire giant, level 86), and in Glarial's tomb a Moss Guardian (level 84). You cannot take weapons or armour into the tomb: only 10 lobsters and runes. Run past the enemies."
+        "text": "There are no combat requirements, but fire giants (level 86) walk the Waterfall dungeon and Moss Guardians (level 84, up to 14) the tomb. The tomb refuses weapons, armour, runes, arrows and logs: go in with Glarial's pebble and food only, then return to the bank for the runes, the rope, the amulet, the urn and food, and run past the giants."
       }
     ],
     "reward": "1 QP, 13,750 Attack XP and 13,750 Strength XP: your melee level jumps instantly from 1 to 30+!",
@@ -4933,7 +4938,85 @@
         "type": "QUEST_COMPLETED",
         "questName": "Waterfall Quest"
       }
-    }
+    },
+    "loadouts": [
+      {
+        "id": "start",
+        "title": "Almera to the Tree Gnome dungeon",
+        "take": [
+          {
+            "nameEn": "Rope",
+            "amount": 1,
+            "note": "Ned in Draynor Village, or the Grand Exchange"
+          }
+        ],
+        "note": "Nothing is hostile here. Talk to Almera, then Hudon on the island, read the Book on Baxtorian, enter the Tree Gnome Village dungeon and talk to Golrie."
+      },
+      {
+        "id": "tomb",
+        "title": "Glarial's Tomb",
+        "take": [
+          {
+            "nameEn": "Glarial's pebble",
+            "amount": 1,
+            "note": "from Golrie"
+          },
+          {
+            "nameEn": "Trout",
+            "amount": 5,
+            "note": "or any food"
+          }
+        ],
+        "leave": [
+          "weapons",
+          "armour (capes too)",
+          "runes",
+          "arrows",
+          "logs"
+        ],
+        "freeSlots": 2,
+        "note": "Jewellery is allowed. Moss Guardians hit up to 14: start a fight with a skeleton or zombie yourself so they cannot attack you first."
+      },
+      {
+        "id": "dungeon",
+        "title": "Waterfall dungeon",
+        "take": [
+          {
+            "nameEn": "Rope",
+            "amount": 1
+          },
+          {
+            "nameEn": "Air rune",
+            "amount": 6
+          },
+          {
+            "nameEn": "Water rune",
+            "amount": 6
+          },
+          {
+            "nameEn": "Earth rune",
+            "amount": 6
+          },
+          {
+            "nameEn": "Glarial's amulet",
+            "amount": 1,
+            "note": "from the tomb"
+          },
+          {
+            "nameEn": "Glarial's urn",
+            "amount": 1,
+            "note": "from the tomb"
+          },
+          {
+            "nameEn": "Trout",
+            "amount": 10,
+            "note": "or any food"
+          }
+        ],
+        "freeSlots": 5,
+        "note": "Weapons and armour are allowed here, but you do not need them: run past the fire giants. Do not click \"Take treasure\" before using the urn on the chalice."
+      }
+    ]
   },
   {
     "id": "S7-02",
@@ -5380,6 +5463,10 @@
     ],
     "fields": [
       {
+        "label": "Optional",
+        "text": "Nothing later in the route needs Agility above 25 (The Grand Tree, S7-04). Agility 40 and the Graceful outfit only make running cheaper: do it when you want it, not before the quests that follow."
+      },
+      {
         "label": "Courses",
         "text": "1-20: Gnome Stronghold Agility Course or Draynor Village Rooftop Course (both from level 1); 20-30: Al Kharid Rooftop Course; 30-40: Varrock Rooftop Course; from 40: Canifis Rooftop Course (needs Priest in Peril). The whole plan to 99 is on the Agility skill page."
       },
@@ -5402,7 +5489,8 @@
           }
         ]
       }
-    }
+    },
+    "optional": true
   },
   {
     "id": "S8-04",
@@ -5617,6 +5705,96 @@
       "completionTrigger": {
         "type": "QUEST_COMPLETED",
         "questName": "Animal Magnetism"
+      }
+    }
+  },
+  {
+    "id": "S8-06",
+    "stage": 8,
+    "type": "skill",
+    "title": "Prayer to 43 (Protect from Melee)",
+    "requires": [],
+    "membersOnly": true,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Ectofuntus",
+    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3660,3520,0",
+    "mapLocation": {
+      "x": 3660,
+      "y": 3520,
+      "plane": 0,
+      "label": "The Ectofuntus, Port Phasmatys"
+    },
+    "where": "The Ectofuntus in Port Phasmatys (Morytania). The bank is in Port Phasmatys, a few steps from the temple.",
+    "how": "Buy the bones, grind them, fill buckets with slime, and worship the Ectofuntus. Each offering gives four times the Prayer XP of burying the same bone.",
+    "itemsRequired": [
+      {
+        "nameEn": "Ghostspeak amulet",
+        "amount": 1,
+        "howToGet": "From The Restless Ghost (S1-06). Worn, it lets you talk to the ghost disciple who pays the ecto-tokens.",
+        "wikiItemId": 552,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ghostspeak_amulet.png"
+      },
+      {
+        "nameEn": "Bones",
+        "amount": 9,
+        "howToGet": "Per trip. Use Big bones (60 XP each) or Dragon bones (288 XP each) instead: buy them on the Grand Exchange, the live price is in the app. Keep the Big bones from S4-03 if you still have them.",
+        "wikiItemId": 526,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bones.png"
+      },
+      {
+        "nameEn": "Pot",
+        "amount": 9,
+        "howToGet": "Per trip: they hold the bonemeal. General Store, 1 gp.",
+        "wikiItemId": 1931,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Pot.png"
+      },
+      {
+        "nameEn": "Bucket",
+        "amount": 9,
+        "howToGet": "Per trip: they hold the slime. General Store, 2 gp.",
+        "wikiItemId": 1925,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bucket.png"
+      }
+    ],
+    "fields": [
+      {
+        "label": "Why",
+        "text": "Monkey Madness I (S9-04) asks for Protect from Melee all through the Ape Atoll dungeon and Protect from Magic against the Jungle Demon, which hits up to 32 with both magic and melee. Protect from Melee needs Prayer 43, so this level is a requirement of that quest, not a bonus."
+      },
+      {
+        "label": "Quest XP first",
+        "text": "The Restless Ghost, Priest in Peril, Recruitment Drive and Holy Grail give 14,531 Prayer XP together, which is level 30. Two of them are already on your route. Holy Grail alone gives 11,000 Prayer XP and 15,300 Defence XP (after Merlin's Crystal, with Attack 20 for Excalibur, and a level 120 Black Knight Titan to beat), so do it first if you want to save the bones. The two lamps (X Marks the Spot, The Ides of Milk) are already counted."
+      },
+      {
+        "label": "Default method",
+        "text": "Offer bones at the Ectofuntus: safe, no skill requirement and four times the XP of burying. A bone gives 18 XP, a Big bone 60 and a Dragon bone 288. About 180 offerings an hour: Big bones are about 10,800 XP an hour, Dragon bones about 52,000. Dragon bones are the fast way and cost more, Big bones the cheap and slow one."
+      },
+      {
+        "label": "How an offering goes",
+        "text": "Use a bucket on the pool of slime (it fills every bucket in the bag). Go upstairs and use the bones on the bone grinder loader, not bury them: it makes bonemeal. Click the Ectofuntus with bonemeal and a bucket of slime to worship. A ghost disciple pays 5 ecto-tokens for each offering while you wear the Ghostspeak amulet."
+      },
+      {
+        "label": "Alternative",
+        "text": "Offering plain bones at the Chaos altar in the Wilderness is cheaper per XP, but other players can attack you there: it is not part of this route."
+      }
+    ],
+    "doneWhen": "Prayer 43.",
+    "inGame": {
+      "npcNames": [
+        "Ghost disciple"
+      ],
+      "objectNames": [
+        "Ectofuntus",
+        "Pool of Slime",
+        "Loader"
+      ],
+      "completionTrigger": {
+        "type": "SKILL_LEVEL",
+        "levels": [
+          {
+            "skill": "prayer",
+            "level": 43
+          }
+        ]
       }
     }
   },
@@ -5902,7 +6080,8 @@
     "qp": 3,
     "requires": [
       "S7-03",
-      "S7-05"
+      "S7-05",
+      "S8-06"
     ],
     "requirements": [
       {
@@ -5912,6 +6091,13 @@
       {
         "type": "quest",
         "quest": "Tree Gnome Village"
+      },
+      {
+        "type": "skill",
+        "skill": "prayer",
+        "min": 43,
+        "when": "start",
+        "boostable": false
       }
     ],
     "membersOnly": true,
@@ -5948,24 +6134,53 @@
       {
         "nameEn": "Lobster",
         "amount": 15,
-        "howToGet": "Buy on the Grand Exchange for about 105 gp (20 of them about 2,100). Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
+        "howToGet": "Buy on the Grand Exchange, or any better food you already have. A multi-combat area of strong monkeys: eat before each room.",
         "wikiItemId": 379,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
-        "heals": 12
+        "heals": 12,
+        "anyOf": [
+          "Trout",
+          "Salmon",
+          "Tuna",
+          "Swordfish",
+          "Monkfish",
+          "Shark",
+          "Cooked meat",
+          "Cake",
+          "Pie"
+        ],
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png"
+      },
+      {
+        "nameEn": "Knife",
+        "amount": 1,
+        "howToGet": "Cut pineapples on Ape Atoll for free healing.",
+        "wikiItemId": 946,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Knife.png"
+      },
+      {
+        "nameEn": "Energy potion(4)",
+        "amount": 2,
+        "howToGet": "The route is long on foot: you may not teleport during the audience with Awowogei.",
+        "wikiItemId": 3008,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png"
       }
     ],
     "fields": [
       {
         "label": "Requirements",
-        "text": "Tree Gnome Village and The Grand Tree."
+        "text": "Tree Gnome Village and The Grand Tree (S7-03, S7-05), Prayer 43 for Protect from Melee (S8-06) and the ability to beat a level 195 Jungle Demon: it hits up to 32 with magic and melee, and only a protection prayer stops it."
       },
       {
-        "label": "Recommended",
-        "text": "Combat level 65+ and Prayer 43 for Protect from Melee: on Ape Atoll there are many strong monkeys in a multicombat area. Bring 4 prayer potions, an antipoison and 15 lobsters."
+        "label": "Before you leave the bank",
+        "text": "Gold bar, Ball of wool and a Lockpick are used at Zooknock and on the island, where there is no bank: take them now. 5 free slots, 4 Prayer potions, an Antipoison and 15 Lobsters. A Knife is worth taking: pineapples heal for free. During the quest you pick up monkey bones on Karamja and 5 bananas on Ape Atoll yourself."
+      },
+      {
+        "label": "Dangers",
+        "text": "Monkey Zombies hit up to 7, Monkey Skeletons up to 12, and the spikes, rock traps and falling rocks of the dungeon take a share of your current health: move through the dungeon with Protect from Melee on and eat before each room."
       }
     ],
     "safespot": "The Jungle demon (level 195) hits in melee and with magic: turn on Protect from Magic or Protect from Melee and hit it with magic or ranged from the far side.",
-    "reward": "3 QP, 10,000 Coins, 3 diamonds, training with Daero: 35,000 XP in Attack and Defence + 20,000 in Strength and Hitpoints (or the other way round), the right to wear the Dragon scimitar (with 60 Attack).",
+    "reward": "3 QP, 10,000 Coins, 3 diamonds, Daero's training (choose: 35,000 XP in Attack and Defence plus 20,000 in Strength and Hitpoints, or the other way round) and the right to wear the Dragon scimitar with 60 Attack.",
     "doneWhen": "The quest is green, a Dragon scimitar is bought (worn with 60 Attack).",
     "inGame": {
       "npcNames": [
@@ -6001,7 +6216,132 @@
           }
         ]
       }
-    }
+    },
+    "rewardChoice": "daero",
+    "itemsRequired": [
+      {
+        "nameEn": "Gold bar",
+        "amount": 1,
+        "howToGet": "Waterfall Quest (S7-01) gives 2 gold bars. Otherwise buy one on the Grand Exchange or smelt it (Smithing 40). Zooknock needs it for the M'speak amulet.",
+        "wikiItemId": 2357,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Gold_bar.png"
+      },
+      {
+        "nameEn": "Ball of wool",
+        "amount": 1,
+        "howToGet": "Spin wool at a spinning wheel or buy one on the Grand Exchange. It strings the M'speak amulet.",
+        "wikiItemId": 1759,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Ball_of_wool.png"
+      },
+      {
+        "nameEn": "Lockpick",
+        "amount": 1,
+        "howToGet": "Thieving shop or the Grand Exchange. It opens your jail cell on the island.",
+        "wikiItemId": 1523,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lockpick.png"
+      }
+    ],
+    "loadouts": [
+      {
+        "id": "karamja",
+        "title": "The Grand Tree and Karamja",
+        "take": [
+          {
+            "nameEn": "Lobster",
+            "amount": 15,
+            "note": "or any food"
+          },
+          {
+            "nameEn": "Antipoison(4)",
+            "amount": 1
+          },
+          {
+            "nameEn": "Lockpick",
+            "amount": 1
+          },
+          {
+            "nameEn": "Gold bar",
+            "amount": 1
+          },
+          {
+            "nameEn": "Ball of wool",
+            "amount": 1
+          }
+        ],
+        "freeSlots": 2,
+        "note": "Leave room for the gnome royal seal and the king's orders: without a free slot they drop on the ground. Monkey bones are picked up on Karamja."
+      },
+      {
+        "id": "atoll",
+        "title": "Crash Island and Ape Atoll",
+        "take": [
+          {
+            "nameEn": "Prayer potion(4)",
+            "amount": 4
+          },
+          {
+            "nameEn": "Lobster",
+            "amount": 15
+          },
+          {
+            "nameEn": "Antipoison(4)",
+            "amount": 1
+          },
+          {
+            "nameEn": "Lockpick",
+            "amount": 1
+          }
+        ],
+        "note": "Keep Protect from Melee on. Heal before the crate fall in the south-east: it hurts. At Zooknock you must hold the monkey dentures, the M'amulet mould, the Ball of wool and the Gold bar."
+      },
+      {
+        "id": "marimbo",
+        "title": "Temple of Marimbo and the talismans",
+        "take": [
+          {
+            "nameEn": "M'amulet mould",
+            "amount": 1,
+            "note": "found on the island"
+          },
+          {
+            "nameEn": "Enchanted bar",
+            "amount": 1,
+            "note": "from Zooknock"
+          },
+          {
+            "nameEn": "Ball of wool",
+            "amount": 1
+          },
+          {
+            "nameEn": "Banana",
+            "amount": 5,
+            "note": "from the garden trees"
+          }
+        ],
+        "note": "String the amulet with the wool, then wear it to talk to the monkey child."
+      },
+      {
+        "id": "final",
+        "title": "The Jungle Demon",
+        "take": [
+          {
+            "nameEn": "10th squad sigil",
+            "amount": 1,
+            "note": "equip it only when you are ready"
+          },
+          {
+            "nameEn": "Prayer potion(4)",
+            "amount": 4
+          },
+          {
+            "nameEn": "Lobster",
+            "amount": 10,
+            "note": "or better food"
+          }
+        ],
+        "note": "Protect from Magic, and stay three or more squares away: its melee reaches two squares. It hits up to 32 and is weakest to Ranged. Do not use any teleport on the walk back for the audience with Awowogei."
+      }
+    ]
   },
   {
     "id": "S9-05",

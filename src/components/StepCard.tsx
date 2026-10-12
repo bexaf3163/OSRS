@@ -35,7 +35,7 @@ import { plural } from '../lib/shopping';
 import { LiveXp } from './LiveXp';
 import { SubStepHero, SubStepItems, useSubStep } from './SubStepHero';
 import { QuestOverview } from './QuestOverview';
-import { CarryNote, LoadoutsCard } from './RouteNotes';
+import { CarryNote, LoadoutsCard, RewardChoice } from './RouteNotes';
 import { QuestPreparation } from './QuestPreparation';
 import { TravelTip } from './TravelTip';
 
@@ -329,6 +329,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep }: { step: Step; on
             <details className="zen-more"><summary className="small">What to do on the step — after returning</summary>{how}</details>
           ) : how)}
           {doneWhen}
+          <RewardChoice step={step} />
           <CarryNote step={step} />
           {(quick || (sub && how)) && (
             <Fold title="Full walkthrough and dialogue" hint={nQuick ? `${nQuick} ${nQuick === 1 ? 'step' : 'steps'}, with detailed instructions` : 'for reference'}>

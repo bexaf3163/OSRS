@@ -197,10 +197,12 @@ describe('S5-05: Wormbrain is paid 10,000 gp', () => {
 });
 
 describe('S3-06 follows S3-05 and skips itself on the stage 3 rewards', () => {
-  it('it comes right after Shield of Arrav and requires it', () => {
+  it('it comes right after Shield of Arrav and is only suggested after it: a skipped optional quest never blocks it', () => {
     const order = allSteps.filter((x) => !x.membersOnly).map((x) => x.id);
     expect(order.indexOf('S3-06')).toBe(order.indexOf('S3-05') + 1);
-    expect(step('S3-06').requires).toEqual(['S3-05']);
+    expect(step('S3-05').optional).toBe(true);
+    expect(step('S3-06').requires).toEqual([]);
+    expect(step('S3-06').softRequires).toEqual(['S3-05']);
   });
 
   it('the coins from the stage 3 quests alone pass the 2,500 gp threshold, so the mining is bypassed', () => {

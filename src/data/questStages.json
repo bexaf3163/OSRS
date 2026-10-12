@@ -8274,8 +8274,8 @@
        "k": "talkToGolrie"
       },
       {
-       "t": "Bank everything besides the pebble and some food. Then use Glarial's pebble on Glarial's Tombstone east of Baxtorian Falls.",
-       "s": "Bank: keep only the pebble and food, no armour",
+       "t": "Bank everything except Glarial's pebble and some food: the tomb refuses weapons, armour (capes too), runes, arrows and logs. Jewellery is fine. Keep at least 2 free slots.",
+       "s": "Bank all but pebble and food: no weapons, armour, runes",
        "at": [
         2559,
         3445,
@@ -8319,8 +8319,8 @@
        "k": "searchGlarialCoffin"
       },
       {
-       "t": "Leave Glarial's Tomb and get 6 air, water, and earth runes, a rope, glarial's amulet, glarial's urn, and some food.",
-       "s": "Take 6 each of air, water, earth runes, rope, amulet, urn, food",
+       "t": "Back at the bank, take the second loadout for the Waterfall dungeon: 6 each of air, water and earth runes, a rope, Glarial's amulet, Glarial's urn and food. Keep 5 free slots for the reward.",
+       "s": "Bank: 6 air, 6 water, 6 earth runes, rope, amulet, urn, food",
        "k": "getFinalItems"
       },
       {
@@ -8336,7 +8336,32 @@
          1987
         ]
        },
-       "k": "boardRaftFinal"
+       "k": "boardRaftFinal",
+       "pre": [
+        {
+         "item": "Rope",
+         "n": 1,
+         "t": "Take a rope from the bank: the waterfall needs it"
+        },
+        {
+         "item": "Air rune",
+         "id": 556,
+         "n": 6,
+         "t": "Take 6 air runes from the bank (the tomb did not allow them)"
+        },
+        {
+         "item": "Water rune",
+         "id": 555,
+         "n": 6,
+         "t": "Take 6 water runes from the bank (the tomb did not allow them)"
+        },
+        {
+         "item": "Earth rune",
+         "id": 557,
+         "n": 6,
+         "t": "Take 6 earth runes from the bank (the tomb did not allow them)"
+        }
+       ]
       },
       {
        "t": "Use a rope on the rock to the south.",
@@ -8461,27 +8486,20 @@
        "inStep": true
       },
       {
-       "name": "Air rune",
-       "id": 556,
-       "where": "For the pillars in the tomb.",
-       "count": 6
-      },
-      {
-       "name": "Earth rune",
-       "id": 557,
-       "where": "For the pillars in the tomb.",
-       "count": 6
-      },
-      {
-       "name": "Water rune",
-       "id": 555,
-       "where": "For the pillars in the tomb.",
-       "count": 6
-      },
-      {
-       "name": "Rope",
-       "id": 954,
-       "where": "Buy from Ned in Draynor Village for 16 gp or on the Grand Exchange for about 65 gp."
+       "name": "Trout",
+       "count": 5,
+       "alt": [
+        "Salmon",
+        "Tuna",
+        "Lobster",
+        "Swordfish",
+        "Monkfish",
+        "Shark",
+        "Cooked meat",
+        "Cake",
+        "Pie"
+       ],
+       "where": "Some food for the tomb. Jewellery is allowed; weapons, armour, runes, arrows and logs are not."
       }
      ]
     },
@@ -8489,8 +8507,8 @@
      "at": 5,
      "do": [
       {
-       "t": "Leave Glarial's Tomb and get 6 air, water, and earth runes, a rope, glarial's amulet, glarial's urn, and some food.",
-       "s": "Take 6 each of air, water, earth runes, rope, amulet, urn, food",
+       "t": "Take 6 each of air, water and earth runes, a rope, Glarial's amulet, Glarial's urn and food. Keep 5 free slots for the reward.",
+       "s": "Bank: 6 air, 6 water, 6 earth runes, rope, amulet, urn, food",
        "k": "getFinalItems"
       },
       {
@@ -8506,7 +8524,32 @@
          1987
         ]
        },
-       "k": "boardRaftFinal"
+       "k": "boardRaftFinal",
+       "pre": [
+        {
+         "item": "Rope",
+         "n": 1,
+         "t": "Take a rope from the bank: the waterfall needs it"
+        },
+        {
+         "item": "Air rune",
+         "id": 556,
+         "n": 6,
+         "t": "Take 6 air runes from the bank"
+        },
+        {
+         "item": "Water rune",
+         "id": 555,
+         "n": 6,
+         "t": "Take 6 water runes from the bank"
+        },
+        {
+         "item": "Earth rune",
+         "id": 557,
+         "n": 6,
+         "t": "Take 6 earth runes from the bank"
+        }
+       ]
       },
       {
        "t": "Use a rope on the rock to the south.",
@@ -8625,27 +8668,42 @@
      },
      "items": [
       {
-       "name": "Air rune",
-       "id": 556,
-       "where": "For the pillars in the tomb.",
-       "count": 6
+       "name": "Rope",
+       "count": 1
       },
       {
-       "name": "Earth rune",
-       "id": 557,
-       "where": "For the pillars in the tomb.",
-       "count": 6
+       "name": "Air rune",
+       "id": 556,
+       "count": 6,
+       "where": "For the six pillars in the last room of the Waterfall dungeon."
       },
       {
        "name": "Water rune",
        "id": 555,
-       "where": "For the pillars in the tomb.",
-       "count": 6
+       "count": 6,
+       "where": "For the six pillars in the last room of the Waterfall dungeon."
       },
       {
-       "name": "Rope",
-       "id": 954,
-       "where": "Buy from Ned in Draynor Village for 16 gp or on the Grand Exchange for about 65 gp."
+       "name": "Earth rune",
+       "id": 557,
+       "count": 6,
+       "where": "For the six pillars in the last room of the Waterfall dungeon."
+      },
+      {
+       "name": "Trout",
+       "count": 10,
+       "alt": [
+        "Salmon",
+        "Tuna",
+        "Lobster",
+        "Swordfish",
+        "Monkfish",
+        "Shark",
+        "Cooked meat",
+        "Cake",
+        "Pie"
+       ],
+       "where": "Fire giants (level 86) are in the dungeon: run past them, eat on the way."
       }
      ]
     }
@@ -13349,15 +13407,45 @@
      },
      "items": [
       {
+       "name": "Lockpick",
+       "count": 1,
+       "where": "It opens your jail cell on the island."
+      },
+      {
+       "name": "Gold bar",
+       "count": 1,
+       "where": "For the M'speak amulet at Zooknock: there is no bank on the island."
+      },
+      {
+       "name": "Ball of wool",
+       "count": 1,
+       "where": "It strings the M'speak amulet."
+      },
+      {
+       "name": "Lobster",
+       "count": 15,
+       "alt": [
+        "Trout",
+        "Salmon",
+        "Tuna",
+        "Swordfish",
+        "Monkfish",
+        "Shark",
+        "Cooked meat",
+        "Cake",
+        "Pie"
+       ],
+       "where": "High-healing food for the monkeys."
+      },
+      {
        "name": "Prayer potion(4)",
-       "id": 2434,
-       "where": "Buy on the Grand Exchange. Keeps Protect from Melee up against the monkeys and the demon.",
-       "count": 4
+       "count": 4,
+       "where": "Protect from Melee all through the dungeon."
       },
       {
        "name": "Antipoison(4)",
-       "id": 2446,
-       "where": "Buy on the Grand Exchange. The island has poisonous snakes and spiders."
+       "count": 1,
+       "where": "There are poisonous snakes and spiders on the island."
       }
      ]
     },
@@ -13515,7 +13603,21 @@
          4780
         ]
        },
-       "k": "enterDungeonForAmuletRun"
+       "k": "enterDungeonForAmuletRun",
+       "pre": [
+        {
+         "item": "Gold bar",
+         "id": 2357,
+         "n": 1,
+         "t": "Take a gold bar from the bank: Zooknock cannot make the amulet without it"
+        },
+        {
+         "item": "Ball of wool",
+         "id": 1759,
+         "n": 1,
+         "t": "Take a ball of wool from the bank: it strings the amulet"
+        }
+       ]
       },
       {
        "t": "Talk to Zooknock in the north east of the dungeon. Dialogue: “What do we need for the monkey amulet?” → “I'll be back later”.",
@@ -13886,15 +13988,43 @@
      },
      "items": [
       {
-       "name": "Antipoison(4)",
-       "id": 2446,
-       "where": "Buy on the Grand Exchange. The island has poisonous snakes and spiders."
+       "name": "Gold bar",
+       "count": 1,
+       "where": "Zooknock needs it for the M'speak amulet."
+      },
+      {
+       "name": "Ball of wool",
+       "count": 1,
+       "where": "It strings the M'speak amulet."
+      },
+      {
+       "name": "Lockpick",
+       "count": 1,
+       "where": "It opens your jail cell."
+      },
+      {
+       "name": "Lobster",
+       "count": 15,
+       "alt": [
+        "Trout",
+        "Salmon",
+        "Tuna",
+        "Swordfish",
+        "Monkfish",
+        "Shark",
+        "Cooked meat",
+        "Cake",
+        "Pie"
+       ],
+       "where": "High-healing food for the monkeys."
       },
       {
        "name": "Prayer potion(4)",
-       "id": 2434,
-       "where": "Buy on the Grand Exchange. Keeps Protect from Melee up against the monkeys and the demon.",
        "count": 4
+      },
+      {
+       "name": "Antipoison(4)",
+       "count": 1
       }
      ]
     },
@@ -14097,9 +14227,24 @@
      "items": [
       {
        "name": "Prayer potion(4)",
-       "id": 2434,
-       "where": "Buy on the Grand Exchange. Keeps Protect from Melee up against the monkeys and the demon.",
-       "count": 4
+       "count": 4,
+       "where": "Protect from Magic against the Jungle Demon."
+      },
+      {
+       "name": "Lobster",
+       "count": 10,
+       "alt": [
+        "Trout",
+        "Salmon",
+        "Tuna",
+        "Swordfish",
+        "Monkfish",
+        "Shark",
+        "Cooked meat",
+        "Cake",
+        "Pie"
+       ],
+       "where": "High-healing food: it hits up to 32."
       }
      ]
     },

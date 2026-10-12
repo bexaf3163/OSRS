@@ -5,6 +5,9 @@ import { useStore } from '../store';
 import { usePlayerState } from '../playerStateContext';
 import { carryoverOf, carryStatus, type CarryState } from '../lib/carryover';
 import { isClosed } from '../lib/next-step';
+import { daeroAdvice } from '../lib/daero';
+import { useBridge } from '../bridge';
+import { levelOf } from '../lib/playerState';
 
 const MARK: Record<CarryState, string> = { OK: '✓', MISSING: '✗', UNKNOWN: '?' };
 const WORD: Record<CarryState, string> = { OK: 'kept', MISSING: 'not kept yet', UNKNOWN: 'not checked' };
@@ -46,6 +49,22 @@ function LoadoutRow({ l, index, current }: { l: Loadout; index: number; current:
       {l.freeSlots ? <p className="small"><strong>Free slots:</strong> at least {l.freeSlots}.</p> : null}
       {l.note && <p className="muted small">{l.note}</p>}
     </li>
+  );
+}
+
+/** Daero's training choice after Monkey Madness I: which pair fits the Attack the player has now (never silent). */
+export function RewardChoice({ step }: { step: Step }) {
+  const { state } = usePlayerState();
+  const { xp } = useBridge();
+  if (step.rewardChoice !== 'daero') return null;
+  const a = daeroAdvice(levelOf(state, 'attack'), xp?.attack);
+  const pair = a.pick === 'ATTACK_DEFENCE' ? 'Attack and Defence (35,000 XP each; Strength and Hitpoints get 20,000)' : 'Strength and Hitpoints (35,000 XP each; Attack and Defence get 20,000)';
+  return (
+    <section className="plaque plaque-tip daero-choice" aria-label="Daero's training choice">
+      <strong>Daero's training: choose {pair}.</strong>
+      <p className="small">{a.reason}</p>
+      <p className="muted small">After the quest you speak to Daero and name two skills for the larger share. The Dragon scimitar needs 60 Attack.</p>
+    </section>
   );
 }
 

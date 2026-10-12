@@ -291,6 +291,8 @@ export interface Step {
   loadouts?: Loadout[];
   /** What this step keeps for a later one (see CarryItem). */
   carryover?: CarryItem[];
+  /** A reward the player chooses at the end: the step shows which choice fits the player's current levels. */
+  rewardChoice?: 'daero';
   /**
    * The way to a Bond for an account that is not a member yet. In Members mode (membership is active) these steps are not part of the route:
    * nothing before the Members content is made to wait for them.

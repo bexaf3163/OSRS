@@ -7547,6 +7547,37 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Lobster_pot"
   },
   {
+    "id": 1523,
+    "nameEn": "Lockpick",
+    "examine": "For picking tough locks.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Lockpick.png",
+    "value": 20,
+    "highAlch": 12,
+    "lowAlch": 8,
+    "buyLocations": [
+      {
+        "shopName": "Martin Thwait's Lost and Found.",
+        "location": "Rogues' Den",
+        "owner": "Martin Thwait",
+        "price": 20,
+        "stock": 25,
+        "members": true
+      }
+    ],
+    "freeSpawns": [
+      "Yanille Agility Dungeon - In the area before Salarin the twisted, near the pile of rubble. (members only)"
+    ],
+    "dropSources": [
+      {
+        "monster": "Scavenger beast",
+        "combatLevel": null,
+        "rate": "2/18"
+      }
+    ],
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Lockpick"
+  },
+  {
     "id": 1511,
     "nameEn": "Logs",
     "examine": "A number of wooden logs.",
