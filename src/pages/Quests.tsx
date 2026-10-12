@@ -41,7 +41,7 @@ function questRow(q: Quest, p: Progress, qp: number): Row {
 
 const matches = (f: Filter, s: Status) => f === 'all' || f === s || (f === 'done' && s === 'skipped');
 
-export function QuestsPage() {
+export function QuestsPage({ embedded = false }: { embedded?: boolean } = {}) {
   const { progress, qp, mode } = useStore();
   const [filter, setFilter] = useState<Filter>('all');
   const rows = allQuests.filter((q) => mode === 'members' || !q.membersOnly).map((q) => questRow(q, progress, qp));
@@ -50,9 +50,9 @@ export function QuestsPage() {
   const visible = rows.filter((r) => matches(filter, r.status));
 
   return (
-    <div className="page">
+    <div className={embedded ? 'journal-pane' : 'page'}>
       <header className="page-head">
-        <h1>Quests</h1>
+        {embedded ? <h2>Quests</h2> : <h1>Quests</h1>}
         <p className="muted">{count('done')} of {rows.length + 1} · quest points {qp}</p>
       </header>
 

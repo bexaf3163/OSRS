@@ -8,16 +8,16 @@ import { stageQuestPoints } from '../lib/qp';
 import { IconCheck } from '../components/Icons';
 import { SplitsCard } from '../components/SplitsCard';
 
-export function GoalsPage() {
+export function GoalsPage({ embedded = false }: { embedded?: boolean } = {}) {
   const { progress, qp, steps } = useStore();
   const stage = currentStage(steps, progress);
   const levelRows = goals.rows.filter((r) => r.id !== 'qp');
   const qpRow = goals.rows.find((r) => r.id === 'qp');
 
   return (
-    <div className="page">
+    <div className={embedded ? 'journal-pane' : 'page'}>
       <header className="page-head">
-        <h1>Goals by stage</h1>
+        {embedded ? <h2>Goals by stage</h2> : <h1>Goals by stage</h1>}
         <p className="muted">{goals.intro}</p>
       </header>
 

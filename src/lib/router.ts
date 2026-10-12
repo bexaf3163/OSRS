@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 
-export type Page = 'path' | 'skills' | 'goals' | 'quests' | 'reference' | 'settings' | 'shopping' | 'gear';
+export type Page = 'path' | 'skills' | 'goals' | 'quests' | 'journal' | 'reference' | 'settings' | 'shopping' | 'gear';
 
 export interface Route {
   page: Page;
@@ -26,6 +26,8 @@ function parsePath(hash: string): Omit<Route, 'key'> {
     case 'skills': return { page: 'skills', param: second };
     case 'goals': return { page: 'goals' };
     case 'quests': return { page: 'quests' };
+    // The Journal groups Quests, Stage goals and Session. #/quests and #/goals keep working and open the matching tab.
+    case 'journal': return { page: 'journal', param: second };
     case 'reference': return { page: 'reference', param: second };
     case 'settings': return { page: 'settings' };
     case 'shopping': return { page: 'shopping' };

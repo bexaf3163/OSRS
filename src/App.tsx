@@ -3,7 +3,7 @@ import { useEffect, useState, type ComponentType } from 'react';
 import { findSkill, reference } from './data';
 import { useStore } from './store';
 import { useRoute, type Page } from './lib/router';
-import { IconBook, IconGoals, IconPath, IconQuests, IconSearch, IconSettings, IconSkills } from './components/Icons';
+import { IconBook, IconCart, IconGear, IconJournal, IconPath, IconSearch, IconSettings, IconSkills } from './components/Icons';
 import { SearchBox } from './components/SearchBox';
 import { ModeToggle } from './components/ModeToggle';
 import { DensityToggle } from './components/DensityToggle';
@@ -18,8 +18,7 @@ import { SkillSync } from './components/TrackedSkillCard';
 import { PathPage } from './pages/Path';
 import { SkillsPage } from './pages/Skills';
 import { SkillDetailPage } from './pages/SkillDetail';
-import { GoalsPage } from './pages/Goals';
-import { QuestsPage } from './pages/Quests';
+import { JournalPage, journalTabOf } from './pages/Journal';
 import { ReferencePage } from './pages/Reference';
 import { SettingsPage } from './pages/Settings';
 import { ShoppingPage } from './pages/Shopping';
@@ -30,18 +29,24 @@ import { UpdateBanner } from './components/UpdateBanner';
 const TABS: { page: Page; href: string; label: string; Icon: ComponentType<{ className?: string }> }[] = [
   { page: 'path', href: '#/', label: 'Path', Icon: IconPath },
   { page: 'skills', href: '#/skills', label: 'Skills', Icon: IconSkills },
-  { page: 'goals', href: '#/goals', label: 'Goals', Icon: IconGoals },
-  { page: 'quests', href: '#/quests', label: 'Quests', Icon: IconQuests },
+  { page: 'gear', href: '#/gear', label: 'Gear', Icon: IconGear },
+  { page: 'shopping', href: '#/shopping', label: 'Shopping', Icon: IconCart },
+  { page: 'journal', href: '#/journal', label: 'Journal', Icon: IconJournal },
   { page: 'reference', href: '#/reference', label: 'Reference', Icon: IconBook },
 ];
+
+/** The section a route belongs to: the old #/quests and #/goals hashes live inside the Journal. */
+function sectionOf(page: Page): Page {
+  return page === 'quests' || page === 'goals' ? 'journal' : page;
+}
 
 function pageTitle(page: Page, param?: string): string {
   if (page === 'skills' && param) return findSkill(param)?.name ?? 'Skills';
   if (page === 'reference' && param) return reference.sections.find((s) => s.id === param)?.title ?? 'Reference';
   if (page === 'settings') return 'Settings';
-  if (page === 'shopping') return 'GE shopping list';
+  if (page === 'shopping') return 'Shopping';
   if (page === 'gear') return 'Gear';
-  return TABS.find((t) => t.page === page)!.label;
+  return TABS.find((t) => t.page === sectionOf(page))!.label;
 }
 
 export function App() {
@@ -71,12 +76,14 @@ export function App() {
     if (!route.step) window.scrollTo(0, 0);
   }, [route]);
 
+  const section = sectionOf(route.page);
   let content;
   switch (route.page) {
     case 'path': content = <PathPage focusStep={route.step} focusKey={route.key} />; break;
     case 'skills': content = route.param ? <SkillDetailPage key={route.param} id={route.param} /> : <SkillsPage />; break;
-    case 'goals': content = <GoalsPage />; break;
-    case 'quests': content = <QuestsPage />; break;
+    case 'goals':
+    case 'quests':
+    case 'journal': content = <JournalPage tab={journalTabOf(route.page, route.param)} />; break;
     case 'reference': content = <ReferencePage key={route.param ?? ''} section={route.param} />; break;
     case 'settings': content = <SettingsPage />; break;
     case 'shopping': content = <ShoppingPage />; break;
@@ -96,8 +103,8 @@ export function App() {
           </a>
           <nav className="tabs tabs-top" aria-label="Sections">
             {TABS.map(({ page, href, label, Icon }) => (
-              <a key={page} href={href} className={`tab ${route.page === page ? 'is-active' : ''}`} title={label}
-                aria-current={route.page === page ? 'page' : undefined}>
+              <a key={page} href={href} className={`tab ${section === page ? 'is-active' : ''}`} title={label}
+                aria-current={section === page ? 'page' : undefined}>
                 <Icon /><span className="tab-label">{label}</span>
               </a>
             ))}
@@ -112,16 +119,6 @@ export function App() {
               <span className="search-trigger-text">Search</span>
               <kbd>/</kbd>
             </button>
-            <a href="#/gear" className={`icon-btn icon-btn-emoji ${route.page === 'gear' ? 'is-active' : ''}`}
-              aria-label="Gear: what to wear and buy to hit faster" title="Gear: what to wear and buy to hit faster"
-              aria-current={route.page === 'gear' ? 'page' : undefined}>
-              <span aria-hidden="true">⚔️</span>
-            </a>
-            <a href="#/shopping" className={`icon-btn icon-btn-emoji ${route.page === 'shopping' ? 'is-active' : ''}`}
-              aria-label="Grand Exchange shopping list" title="Grand Exchange shopping list"
-              aria-current={route.page === 'shopping' ? 'page' : undefined}>
-              <span aria-hidden="true">🛒</span>
-            </a>
             <a href="#/settings" className={`icon-btn ${route.page === 'settings' ? 'is-active' : ''}`} aria-label="Settings"
               aria-current={route.page === 'settings' ? 'page' : undefined}>
               <IconSettings />
@@ -138,8 +135,8 @@ export function App() {
 
       <nav className="tabs tabs-bottom" aria-label="Sections">
         {TABS.map(({ page, href, label, Icon }) => (
-          <a key={page} href={href} className={`tab ${route.page === page ? 'is-active' : ''}`}
-            aria-current={route.page === page ? 'page' : undefined}>
+          <a key={page} href={href} className={`tab ${section === page ? 'is-active' : ''}`}
+            aria-current={section === page ? 'page' : undefined}>
             <Icon />
             <span>{label}</span>
           </a>

@@ -7,26 +7,26 @@
 :root {
   --bg: #f4f5f7;
   --surface: #ffffff;
-  --surface-2: #eef0f3;
+  --surface-2: #e8edf3;
   --surface-3: #f8f9fb;
-  --text: #16181d;
-  --muted: #5d6370;
-  --border: #e1e4ea;
-  --border-strong: #cdd2da;
-  --accent: #2458d3;
-  --accent-ink: #1f4fc0;      /* blue text and links: contrast with the background above 4.5:1 */
-  --accent-soft: #e6eefc;
+  --text: #202a36;
+  --muted: #586575;
+  --border: #dce1e8;
+  --border-strong: #8190a3;   /* the edge of a control or mark: 3:1 against the panel, unlike the decorative --border */
+  --accent: #174f99;
+  --accent-ink: #174f99;      /* navigation, links, focus: 8:1 on the panel */
+  --accent-soft: #e3ecf8;
   --on-accent: #ffffff;
-  --gold: #b8892e;
-  --gold-ink: #875f16;
+  --gold: #a67c1f;
+  --gold-ink: #785416;
   --gold-soft: #f6eddb;
-  --done: #2f7a45;
+  --done: #276b3e;
   --done-soft: #e3f1e7;
-  --warn: #9a4a1f;
-  --warn-soft: #f7e7dc;
-  --focus: #2458d3;
-  --toast-accent: #8fb3ff;   /* the toast is dark on the light theme */
-  --danger: #b3261e;
+  --warn: #785416;
+  --warn-soft: #f7ecd5;
+  --focus: #174f99;
+  --toast-accent: #a8cbff;   /* the toast is dark on the light theme */
+  --danger: #aa2925;
   --danger-soft: #fbe9e7;
   --members: #6d4fb0;
   --members-soft: #efeaf8;
@@ -45,29 +45,29 @@
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #111214;
-    --surface: #191a1d;
-    --surface-2: #222327;
-    --surface-3: #16171a;
-    --text: #e9e9ec;
-    --muted: #9d9fa6;
-    --border: #2c2e33;
-    --border-strong: #3d4046;
-    --accent: #336fe0;
-    --accent-ink: #86b0ff;
-    --accent-soft: #1b2640;
-    --on-accent: #ffffff;
-    --gold: #c99a3e;
-    --gold-ink: #d8ad5c;
-    --gold-soft: #2a261d;
-    --done: #6fb382;
-    --done-soft: #1b2a20;
-    --warn: #e39a6c;
-    --warn-soft: #33221a;
-    --focus: #86b0ff;
-    --toast-accent: #336fe0;
-    --danger: #f08a80;
-    --danger-soft: #3a1f1d;
+    --bg: #11151c;
+    --surface: #1b222d;
+    --surface-2: #252f3d;
+    --surface-3: #161c25;
+    --text: #e7edf5;
+    --muted: #abb8c9;
+    --border: #354151;
+    --border-strong: #6c7d93;   /* the edge of a control or mark: 3:1 against the panel, unlike the decorative --border */
+    --accent: #a8cbff;
+    --accent-ink: #a8cbff;
+    --accent-soft: #1f2e46;
+    --on-accent: #13253d;
+    --gold: #c9a24b;
+    --gold-ink: #e8c17b;
+    --gold-soft: #2e281a;
+    --done: #90d5a4;
+    --done-soft: #1b2e24;
+    --warn: #e8c17b;
+    --warn-soft: #33291a;
+    --focus: #a8cbff;
+    --toast-accent: #174f99;
+    --danger: #ffaaa5;
+    --danger-soft: #3b2224;
     --members: #b69cf0;
     --members-soft: #26213a;
     color-scheme: dark;
@@ -75,29 +75,29 @@
 }
 
 :root[data-theme="dark"] {
-  --bg: #111214;
-  --surface: #191a1d;
-  --surface-2: #222327;
-  --surface-3: #16171a;
-  --text: #e9e9ec;
-  --muted: #9d9fa6;
-  --border: #2c2e33;
-  --border-strong: #3d4046;
-  --accent: #336fe0;
-  --accent-ink: #86b0ff;
-  --accent-soft: #1b2640;
-  --on-accent: #ffffff;
-  --gold: #c99a3e;
-  --gold-ink: #d8ad5c;
-  --gold-soft: #2a261d;
-  --done: #6fb382;
-  --done-soft: #1b2a20;
-  --warn: #e39a6c;
-  --warn-soft: #33221a;
-  --focus: #86b0ff;
-  --toast-accent: #336fe0;
-  --danger: #f08a80;
-  --danger-soft: #3a1f1d;
+  --bg: #11151c;
+  --surface: #1b222d;
+  --surface-2: #252f3d;
+  --surface-3: #161c25;
+  --text: #e7edf5;
+  --muted: #abb8c9;
+  --border: #354151;
+  --border-strong: #6c7d93;   /* the edge of a control or mark: 3:1 against the panel, unlike the decorative --border */
+  --accent: #a8cbff;
+  --accent-ink: #a8cbff;
+  --accent-soft: #1f2e46;
+  --on-accent: #13253d;
+  --gold: #c9a24b;
+  --gold-ink: #e8c17b;
+  --gold-soft: #2e281a;
+  --done: #90d5a4;
+  --done-soft: #1b2e24;
+  --warn: #e8c17b;
+  --warn-soft: #33291a;
+  --focus: #a8cbff;
+  --toast-accent: #174f99;
+  --danger: #ffaaa5;
+  --danger-soft: #3b2224;
   --members: #b69cf0;
   --members-soft: #26213a;
   color-scheme: dark;
@@ -219,7 +219,7 @@ main {
 
 .tabs-bottom {
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
-  display: grid; grid-template-columns: repeat(5, 1fr);
+  display: grid; grid-template-columns: repeat(6, 1fr);
   background: color-mix(in srgb, var(--surface) 94%, transparent);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
@@ -250,14 +250,13 @@ main {
   main { padding-top: 24px; padding-bottom: 48px; }
   .toast-region { bottom: 24px !important; }
 }
-/* 900–1180 px with RuneLite connected: the header also has a link icon — the tabs shrink, otherwise the header overflowed by 11 px. */
-/* 900–1320 px: the header tabs and icons did not fit (at 900 px — by 145 px): the tabs become icons only
-   with a hint, the search becomes an icon. The tab name stays for the screen reader. */
+/* 900–1319 px: six labelled sections and the utilities do not fit one row. The section names keep their words and move to a second
+   row of the header, so no section is reduced to an icon. --topbar-h follows, because the sticky panes below measure from it. */
 @media (min-width: 900px) and (max-width: 1319px) {
-  .topbar-inner { gap: 8px; }
-  .tabs-top { margin-left: 4px; }
-  .tabs-top .tab { padding: 0 10px; }
-  .tabs-top .tab-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  :root { --topbar-h: 100px; }
+  .topbar-inner { gap: 4px 8px; flex-wrap: wrap; height: auto; min-height: var(--topbar-h); align-content: center; padding-top: 4px; padding-bottom: 4px; }
+  .tabs-top { order: 3; flex: 1 0 100%; margin-left: 0; }
+  .tabs-top .tab { padding: 0 12px; }
 }
 @media (min-width: 900px) and (max-width: 1719px) {
   .search-trigger { min-width: 44px; padding: 0 10px; justify-content: center; }
@@ -1524,37 +1523,25 @@ select option { background: var(--surface); color: var(--text); }
 :root:not([data-look="classic"]) {
   --radius: 14px;
   --radius-sm: 10px;
-  --glass: rgba(255, 255, 255, 0.72);
-  --glass-border: rgba(22, 24, 29, 0.1);
+  --glass: rgba(255, 255, 255, 0.86);
+  --glass-border: rgba(32, 42, 54, 0.14);
   --glass-glow: rgba(36, 88, 211, 0.08);
   --bg-art: radial-gradient(900px 480px at 12% -8%, rgba(70, 110, 220, 0.14), transparent 70%),
     radial-gradient(760px 420px at 100% 40%, rgba(40, 170, 130, 0.10), transparent 70%);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-look="classic"]):not([data-theme="light"]) {
-    --bg: #0d0f14; --surface: #171b25; --surface-2: #1e2330; --surface-3: #131720;
-    --border: rgba(255, 255, 255, 0.09); --border-strong: rgba(255, 255, 255, 0.16);
-    --gold: #f5c451; --gold-ink: #f5c451; --gold-soft: rgba(245, 196, 81, 0.12);
-    --done: #34d399; --done-soft: rgba(52, 211, 153, 0.12);
-    --danger: #fb7185; --danger-soft: rgba(244, 63, 94, 0.14);
-    --accent-ink: #7cc4ff;
-    --glass: rgba(24, 28, 38, 0.72); --glass-border: rgba(255, 255, 255, 0.09); --glass-glow: rgba(124, 196, 255, 0.07);
-    --bg-art: radial-gradient(900px 480px at 12% -8%, rgba(59, 91, 219, 0.30), transparent 70%),
-      radial-gradient(760px 420px at 100% 40%, rgba(18, 128, 106, 0.22), transparent 70%),
-      radial-gradient(700px 380px at 40% 110%, rgba(138, 90, 18, 0.18), transparent 70%);
+    --glass: rgba(27, 34, 45, 0.84); --glass-border: rgba(255, 255, 255, 0.12); --glass-glow: rgba(168, 203, 255, 0.06);
+    --bg-art: radial-gradient(900px 480px at 12% -8%, rgba(59, 91, 219, 0.22), transparent 70%),
+      radial-gradient(760px 420px at 100% 40%, rgba(18, 128, 106, 0.14), transparent 70%),
+      radial-gradient(700px 380px at 40% 110%, rgba(138, 90, 18, 0.12), transparent 70%);
   }
 }
 :root:not([data-look="classic"])[data-theme="dark"] {
-  --bg: #0d0f14; --surface: #171b25; --surface-2: #1e2330; --surface-3: #131720;
-  --border: rgba(255, 255, 255, 0.09); --border-strong: rgba(255, 255, 255, 0.16);
-  --gold: #f5c451; --gold-ink: #f5c451; --gold-soft: rgba(245, 196, 81, 0.12);
-  --done: #34d399; --done-soft: rgba(52, 211, 153, 0.12);
-  --danger: #fb7185; --danger-soft: rgba(244, 63, 94, 0.14);
-  --accent-ink: #7cc4ff;
-  --glass: rgba(24, 28, 38, 0.72); --glass-border: rgba(255, 255, 255, 0.09); --glass-glow: rgba(124, 196, 255, 0.07);
-  --bg-art: radial-gradient(900px 480px at 12% -8%, rgba(59, 91, 219, 0.30), transparent 70%),
-    radial-gradient(760px 420px at 100% 40%, rgba(18, 128, 106, 0.22), transparent 70%),
-    radial-gradient(700px 380px at 40% 110%, rgba(138, 90, 18, 0.18), transparent 70%);
+  --glass: rgba(27, 34, 45, 0.84); --glass-border: rgba(255, 255, 255, 0.12); --glass-glow: rgba(168, 203, 255, 0.06);
+  --bg-art: radial-gradient(900px 480px at 12% -8%, rgba(59, 91, 219, 0.22), transparent 70%),
+    radial-gradient(760px 420px at 100% 40%, rgba(18, 128, 106, 0.14), transparent 70%),
+    radial-gradient(700px 380px at 40% 110%, rgba(138, 90, 18, 0.12), transparent 70%);
 }
 
 :root:not([data-look="classic"]) body { background: var(--bg-art), var(--bg); background-attachment: fixed; }
@@ -1730,3 +1717,13 @@ select option { background: var(--surface); color: var(--text); }
 .shop-row.is-unknown { border-style: dashed; }
 .shop-unverified-head { margin: 16px 0 4px; font-size: 1rem; color: var(--muted); }
 .focus-note { margin: -4px 0 0; }
+
+/* ---------- Clear Path: sub-tabs (Journal, Skills) ---------- */
+.subtabs { display: flex; flex-wrap: wrap; gap: 4px; border-bottom: 1px solid var(--border); }
+.subtab {
+  display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; margin-bottom: -1px;
+  border-bottom: 3px solid transparent; color: var(--muted); font-weight: 600; text-decoration: none;
+}
+.subtab:hover { color: var(--text); }
+.subtab.is-active { color: var(--accent-ink); border-bottom-color: var(--accent-ink); }
+.journal-pane { display: flex; flex-direction: column; gap: 16px; }
