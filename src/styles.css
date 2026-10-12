@@ -1854,3 +1854,9 @@ button.subtab { background: none; border-top: 0; border-left: 0; border-right: 0
   .topbar-actions .icon-btn { width: 40px; }
   .brand span { display: none; }
 }
+
+/* The four step tabs share a phone-width row instead of clipping the last one. */
+@media (max-width: 440px) {
+  .workspace-tabs { gap: 0; }
+  .workspace-tab { flex: 1 1 0; min-width: 0; padding: 0 4px; font-size: 0.95rem; }
+}
