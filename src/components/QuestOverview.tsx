@@ -18,7 +18,7 @@ export function QuestOverview({ step, sub }: { step: Step; sub: SubStep | null }
       <h3 className="overview-title">Quest overview</h3>
       <ol className="overview-list">
         {lines.map((l) => (
-          <li key={l.n} className={`overview-item ${current === l.n ? 'is-current' : ''}`} aria-current={current === l.n ? 'step' : undefined}>
+          <li key={l.n} className={`overview-item ${current === l.n ? 'is-current' : current !== null && l.n < current ? 'is-past' : ''}`} aria-current={current === l.n ? 'step' : undefined}>
             <span className="overview-n" aria-hidden="true">{l.n}</span>
             <span className="overview-text">
               <span className="overview-line">{l.title}</span>

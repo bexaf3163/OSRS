@@ -571,6 +571,37 @@ public class OverlayLayoutTest
 	}
 
 	@Test
+	public void guideWithLiveDistanceFitsNativeFontsAndWidths() throws IOException
+	{
+		StepGuide.View view = new StepGuide.View("[S3-03] Demon Slayer", "Varrock Square · Ground floor",
+			java.util.Collections.emptyList(), java.util.Collections.emptyList(), null, null, null, null);
+		Graphics2D scratch = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics();
+		try
+		{
+			for (Font base : fonts())
+			{
+				for (boolean large : new boolean[]{false, true})
+				{
+					float scale = large ? OsrsPathHudOverlay.LARGE : 1f;
+					Font font = OverlayText.font(base, scale);
+					Font small = OverlayText.font(base, scale * OsrsPathGuideOverlay.SMALL);
+					FontMetrics smallFm = scratch.getFontMetrics(small);
+					for (int width : new int[]{170, Math.round(OsrsPathGuideOverlay.WIDTH * scale)})
+					{
+						for (String distance : distances())
+						{
+							int outside = overflow((panel, fm, w) -> OsrsPathGuideOverlay.build(panel, view, false, -1, fm, smallFm,
+								font, small, w, 70, false, true, 0, distance), font, width, null);
+							assertEquals(base + " " + width + " " + distance + " " + lastWhere, 0, outside);
+						}
+					}
+				}
+			}
+		}
+		finally { scratch.dispose(); }
+	}
+
+	@Test
 	public void whatYouNeedListDoesNotStickOut() throws IOException
 	{
 		// The targets exactly as the app sends them (active-steps.json), with all the places and NPCs.

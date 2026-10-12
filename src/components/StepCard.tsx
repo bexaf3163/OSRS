@@ -35,6 +35,7 @@ import { plural } from '../lib/shopping';
 import { LiveXp } from './LiveXp';
 import { SubStepHero, SubStepItems, useSubStep } from './SubStepHero';
 import { QuestOverview } from './QuestOverview';
+import { QuestPreparation } from './QuestPreparation';
 import { TravelTip } from './TravelTip';
 
 const WARN_LABELS = new Set(['Dangerous', 'Attention', 'Combat']);
@@ -87,7 +88,7 @@ function FieldRow({ field }: { field: Field }) {
 export type StepTab = 'steps' | 'prep' | 'travel' | 'details';
 
 /** The step details. nextId — which step opens after the mark (the caption on the button in the wide layout). tab — one view of the workspace. */
-export function StepBody({ step, onDone, nextId, tab }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab }) {
+export function StepBody({ step, onDone, nextId, tab, onPrep }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab; onPrep?: () => void }) {
   const { progress, qp, mode, setStep, review, reactivate } = useStore();
   const { openNpc } = useWiki();
   const zen = !useFeatures().inspector;
@@ -307,9 +308,14 @@ export function StepBody({ step, onDone, nextId, tab }: { step: Step; onDone: (i
           {reviewPlaque}
           {warning}
           {fieldList(fieldsWarn)}
-          <QuestOverview step={step} sub={sub} />
-          {sub && <SubStepHero step={step} sub={sub} bare />}
-          {sub && <SubStepItems step={step} sub={sub} />}
+          <div className="quest-workspace-grid">
+            <div className="quest-panel quest-walkthrough">
+              <QuestOverview step={step} sub={sub} />
+              {sub && <SubStepHero step={step} sub={sub} bare />}
+              {sub && <SubStepItems step={step} sub={sub} />}
+            </div>
+            <QuestPreparation step={step} onReview={onPrep} />
+          </div>
           {!sub && !step.questStages && (recovering ? (
             <details className="zen-more"><summary className="small">What to do on the step — after returning</summary>{how}</details>
           ) : how)}

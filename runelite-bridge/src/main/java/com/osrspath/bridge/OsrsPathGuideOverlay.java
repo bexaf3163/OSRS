@@ -137,11 +137,13 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		// By default the card is two rows and opens while the mouse is over it. The docked bar opens the list itself, so there the list is always whole.
 		boolean compact = config.guideCompact() && !config.dockBar() && !config.guideCollapsed();
 		int reveal = compact ? reveal() : GuideList.EXPAND_STEPS;
-		Object key = Arrays.asList(v, config.guideCollapsed(), hovered, config.hudOpacity(), font, small, width, terse, compact, reveal);
+		OsrsPathHudOverlay.State hud = plugin.getHud();
+		String distance = hud == null ? null : hud.getDistance();
+		Object key = Arrays.asList(v, config.guideCollapsed(), hovered, config.hudOpacity(), font, small, width, terse, compact, reveal, distance);
 		if (!key.equals(builtFor))
 		{
 			components = build(panelComponent, v, config.guideCollapsed(), hovered, g.getFontMetrics(font), g.getFontMetrics(small),
-				font, small, width, config.hudOpacity(), terse, compact, reveal);
+				font, small, width, config.hudOpacity(), terse, compact, reveal, distance);
 			builtFor = key;
 			// What exactly the player sees goes to the debug log (only when the plate was rebuilt, not every frame).
 			List<GuideList.Row> shown = new ArrayList<>();
@@ -327,17 +329,68 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	static List<RowComponent> build(PanelComponent panel, StepGuide.View v, boolean collapsed, int hovered, FontMetrics fm,
 		FontMetrics smallFm, Font font, Font small, int width, int opacity, boolean terse, boolean compact, int reveal)
 	{
+		return build(panel, v, collapsed, hovered, fm, smallFm, font, small, width, opacity, terse, compact, reveal, null);
+	}
+
+	static List<RowComponent> build(PanelComponent panel, StepGuide.View v, boolean collapsed, int hovered, FontMetrics fm,
+		FontMetrics smallFm, Font font, Font small, int width, int opacity, boolean terse, boolean compact, int reveal, String distance)
+	{
 		List<LayoutableRenderableEntity> c = panel.getChildren();
 		c.clear();
 		panel.setPreferredSize(new Dimension(width, 0));
 		OverlayText.frame(panel, fm);
-		List<GuideList.Row> rows = compact && !collapsed ? GuideList.expandedRows(v, reveal, fm, smallFm, width, terse)
-			: GuideList.rows(v, collapsed, fm, smallFm, width, terse);
+		List<GuideList.Row> rows = new ArrayList<>(compact && !collapsed ? GuideList.expandedRows(v, reveal, fm, smallFm, width, terse)
+			: GuideList.rows(v, collapsed, fm, smallFm, width, terse));
+		if (compact && !collapsed)
+		{
+			int at = Math.min(2, rows.size());
+			String place = v.getPlaces().stream().filter(StepGuide.PlaceLine::isActive).map(StepGuide.PlaceLine::getLabel).findFirst().orElse(v.getStage() == null ? v.getGoal() : null);
+			if (place != null && !place.trim().isEmpty())
+			{
+				rows.add(at++, new GuideList.Row(GuideList.clip("", place, GuideList.MUTED, smallFm, OverlayText.inner(width), 2, true),
+					GuideList.Action.NONE, place));
+			}
+			if (distance != null && !distance.trim().isEmpty())
+			{
+				rows.add(at, new GuideList.Row(GuideList.text(distance, GuideList.LINK, fm, OverlayText.inner(width), false), GuideList.Action.NONE, null));
+			}
+			int advice = GuideList.adviceCount(v.getPrep());
+			if (advice > 0 && rows.stream().noneMatch(r -> r.getAction().getKind() == GuideList.Kind.TAB))
+			{
+				rows.add(GuideList.tabRow(v.isAdviceTab(), advice, fm, OverlayText.inner(width)));
+			}
+		}
 		List<RowComponent> out = new ArrayList<>();
+		FontMetrics boldFm = new FontMetrics(font.deriveFont(Font.BOLD))
+		{
+			@Override
+			public int stringWidth(String text)
+			{
+				return (int) Math.ceil(getFont().getStringBounds(text, fm.getFontRenderContext()).getWidth());
+			}
+		};
 		for (int i = 0; i < rows.size(); i++)
 		{
 			GuideList.Row r = rows.get(i);
-			RowComponent rc = new RowComponent(r, i == hovered && r.getAction().isClickable(), false, font, small);
+			boolean heading = i == 0;
+			boolean current = !heading && r.getAction() == GuideList.Action.NONE && !r.getLines().isEmpty()
+				&& r.getLines().get(0).getLeft().contains("▶ [");
+			if (heading)
+			{
+				String title = v.getTitle() == null ? "OSRS Path" : v.getTitle().replaceFirst("^\\[[^\\]]+\\]\\s*", "");
+				List<GuideList.Line> header = new ArrayList<>(GuideList.pair(title, new Color(231, 237, 245), collapsed ? "▼" : "▲",
+					GuideList.MUTED, boldFm, OverlayText.inner(width) - 2, false));
+				String meta = v.getStage() == null ? "Current step" : GuideList.stageTitle(v.getStage());
+				header.addAll(GuideList.text(meta + GuideList.percent(v), GuideList.MUTED, smallFm, OverlayText.inner(width), true));
+				r = new GuideList.Row(header, r.getAction(), r.getHint());
+			}
+			else if (current)
+			{
+				String action = r.getLines().stream().map(GuideList.Line::getLeft).collect(java.util.stream.Collectors.joining(" "))
+					.replaceFirst("▶ \\[\\d+/\\d+\\]\\s*", "");
+				r = new GuideList.Row(GuideList.text(action, r.getLines().get(0).getLeftColor(), boldFm, OverlayText.inner(width) - 2, false), r.getAction(), r.getHint());
+			}
+			RowComponent rc = new RowComponent(r, i == hovered && r.getAction().isClickable(), false, font, small, heading, current);
 			out.add(rc);
 			c.add(rc);
 			if (i == 0 && !collapsed && v.getStage() != null && v.getStage().getTotal() > 0)
@@ -362,6 +415,8 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		private final boolean hint;
 		private final List<LineComponent> lines = new ArrayList<>();
 		private final List<Font> fonts = new ArrayList<>();
+		private final boolean heading;
+		private final boolean current;
 		@Getter
 		private final Rectangle bounds = new Rectangle();
 		@Setter
@@ -385,12 +440,20 @@ class OsrsPathGuideOverlay extends OverlayPanel
 
 		RowComponent(GuideList.Row row, boolean hovered, boolean hint, Font font, Font small)
 		{
+			this(row, hovered, hint, font, small, false, false);
+		}
+
+		RowComponent(GuideList.Row row, boolean hovered, boolean hint, Font font, Font small, boolean heading, boolean current)
+		{
 			this.row = row;
 			this.hovered = hovered;
 			this.hint = hint;
+			this.heading = heading;
+			this.current = current;
 			for (GuideList.Line l : row.getLines())
 			{
 				Font f = l.isSmall() ? small : font;
+				if ((heading || current) && !l.isSmall()) f = f.deriveFont(Font.BOLD);
 				LineComponent.LineComponentBuilder b = LineComponent.builder().left(l.getLeft()).leftColor(l.getLeftColor()).leftFont(f).rightFont(f);
 				if (l.getRight() != null)
 				{
@@ -407,9 +470,12 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			int x = preferredLocation.x;
 			int y = preferredLocation.y;
 			int width = preferredSize.width;
+			boolean tab = row.getAction().getKind() == GuideList.Kind.TAB;
+			int top = heading ? 4 : current ? 8 : tab ? 8 : 4;
+			int bottom = heading ? 10 : tab ? 10 : 6;
 			if (hovered || hint)
 			{
-				int h = 0;
+				int h = top + bottom;
 				for (Font f : fonts)
 				{
 					h += g.getFontMetrics(f).getHeight();
@@ -418,15 +484,38 @@ class OsrsPathGuideOverlay extends OverlayPanel
 				g.setColor(HOVER);
 				g.fillRoundRect(x - 4, y + 1, width + 8, h + 1, 8, 8);
 			}
-			int at = y;
+			boolean warning = !row.getLines().isEmpty() && row.getLines().get(0).getLeft().startsWith("⚠");
+			if (warning)
+			{
+				int height = top + bottom;
+				for (Font f : fonts) height += g.getFontMetrics(f).getHeight();
+				g.setColor(new Color(110, 68, 20, 170));
+				g.fillRoundRect(x - 3, y, width + 6, height, 6, 6);
+				g.setColor(OverlayCard.AMBER);
+				g.drawRoundRect(x - 3, y, width + 6, height, 6, 6);
+			}
+			int at = y + top;
 			for (LineComponent l : lines)
 			{
 				l.setPreferredLocation(new Point(x, at));
 				l.setPreferredSize(new Dimension(width, 0));
 				at += l.render(g).height;
 			}
-			bounds.setBounds(x, y, width, at - y);
-			return new Dimension(width, at - y);
+			if (heading || tab)
+			{
+				g.setColor(new Color(108, 125, 147, 140));
+				g.drawLine(x, at + bottom - 2, x + width, at + bottom - 2);
+			}
+			if (tab && !row.getLines().isEmpty())
+			{
+				GuideList.Line labels = row.getLines().get(0);
+				boolean rightActive = GuideList.TITLE.equals(labels.getRightColor());
+				int underline = g.getFontMetrics(fonts.get(0)).stringWidth(rightActive ? labels.getRight() : labels.getLeft());
+				g.setColor(GuideList.LINK);
+				g.fillRect(rightActive ? x + width - underline : x, at + bottom - 3, underline, 3);
+			}
+			bounds.setBounds(x, y, width, at - y + bottom);
+			return new Dimension(width, at - y + bottom);
 		}
 	}
 }

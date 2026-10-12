@@ -135,7 +135,7 @@ export function StepWorkspace({ step, suggested, onDone, nextId, compact = false
         ))}
       </div>
       <div className="workspace-panel" role="tabpanel" id={`${base}-panel`} aria-labelledby={`${base}-tab-${tab}`}>
-        <StepBody step={step} onDone={onDone} nextId={nextId} tab={tab} />
+        <StepBody step={step} onDone={onDone} nextId={nextId} tab={tab} onPrep={() => setTab('prep')} />
       </div>
       {compact && (
         <p className="muted small compact-more">

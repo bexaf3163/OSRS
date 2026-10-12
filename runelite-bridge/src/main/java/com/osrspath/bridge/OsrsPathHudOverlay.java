@@ -32,8 +32,8 @@ class OsrsPathHudOverlay extends OverlayPanel
 	static final int WIDTH = 190;
 	/** The large HUD: the font and width are a quarter bigger. */
 	static final float LARGE = 1.25f;
-	static final Color TITLE = new Color(255, 210, 90);
-	static final Color TEXT = new Color(230, 230, 230);
+	static final Color TITLE = new Color(232, 193, 123);
+	static final Color TEXT = new Color(231, 237, 245);
 	static final Color DISTANCE = new Color(120, 210, 255);
 	static final Color GOOD = new Color(90, 220, 120);
 	static final Color WARN = new Color(255, 170, 60);

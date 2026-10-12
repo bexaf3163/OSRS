@@ -436,6 +436,8 @@ The plugin's compatibility with an installed RuneLite (after its update): `npm r
 
 ## Version history (summary)
 
+- **2.48.2** — Clear Path composition: side-by-side quest walkthrough, preparation and rewards; clearer native RuneLite headings, action, distance and tabs. See [release notes](release-notes/v2.48.2.md).
+
 - **2.29** — progress copies outside the app folder (every hour, on by default) and an automatic restore into a fresh data folder; the profile list is kept in a file; "Sync with the account" also restores the steps the confirmed ones require.
 - **2.27** — the quest stages are chosen by the Quest Helper machines (chat and dialogue messages, the journal, variables, items, place); a more detailed debug journal.
 - **2.19** — less text: Zen / Inspector, a single status, a smart reveal in the game (a plugin setting, off by default).

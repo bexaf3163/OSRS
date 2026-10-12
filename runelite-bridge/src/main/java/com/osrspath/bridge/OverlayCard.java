@@ -24,8 +24,8 @@ final class OverlayCard
 	static final int RADIUS = 12;
 	/** The width of the coloured strip on the left. */
 	static final int BAR = 3;
-	private static final Color TOP = new Color(32, 36, 49);
-	private static final Color BOTTOM = new Color(15, 17, 24);
+	private static final Color TOP = new Color(27, 34, 45);
+	private static final Color BOTTOM = new Color(22, 28, 37);
 	private static final Color BORDER = new Color(255, 255, 255, 36);
 	private static final Color TRACK = new Color(255, 255, 255, 38);
 

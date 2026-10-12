@@ -1729,6 +1729,57 @@ select option { background: var(--surface); color: var(--text); }
 .journal-pane { display: flex; flex-direction: column; gap: 16px; }
 
 /* ---------- Clear Path: the step workspace ---------- */
+.quest-workspace-grid { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.quest-panel { padding: 20px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-3); min-width: 0; }
+.quest-panel h3 { font-size: 1.125rem; font-weight: 650; }
+.quest-walkthrough { min-height: 380px; }
+.quest-sidebar { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.quest-panel-heading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 14px; }
+.quest-supply-list { list-style: none; padding: 0; margin: 0; }
+.quest-supply { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.quest-supply:last-child { border-bottom: 0; }
+.quest-supply-icon { display: grid; place-items: center; }
+.quest-supply-name { overflow-wrap: anywhere; font-size: 0.9375rem; }
+.quest-supply-state { display: flex; align-items: center; gap: 8px; font-size: 0.8125rem; color: var(--muted); }
+.quest-supply-state > span { font-size: 1.25rem; }
+.quest-supply.is-inventory .quest-supply-state, .quest-supply.is-equipped .quest-supply-state { color: var(--done); }
+.quest-supply.is-missing .quest-supply-state, .quest-supply.is-bank .quest-supply-state { color: var(--warn); }
+.quest-review { width: 100%; margin-top: 16px; border-color: var(--accent-ink); color: var(--accent-ink); background: var(--accent-soft); }
+.quest-empty { padding-block: 16px; }
+.quest-blockers { padding-left: 20px; margin-top: 12px; color: var(--warn); font-size: 0.875rem; }
+.quest-reward { display: flex; flex-direction: column; gap: 14px; }
+.quest-qp { display: flex; align-items: center; gap: 14px; }
+.quest-qp > span { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--gold-soft); color: var(--gold-ink); font-size: 1.625rem; }
+.workspace { container-type: inline-size; }
+@container (max-width: 760px) {
+  .quest-workspace-grid { grid-template-columns: minmax(0, 1fr); }
+  .quest-walkthrough { min-height: 0; }
+}
+@container (min-width: 850px) {
+  .workspace .current-action { grid-template-columns: auto minmax(0, 1fr) minmax(220px, 38%); align-items: center; }
+  .workspace .current-action-link { grid-column: 3; justify-self: end; }
+}
+.path-wide .center { position: static; height: auto; overflow: visible; }
+.path-wide .rail { padding: 16px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-3); }
+.path-wide .step-view { background: var(--surface); }
+.path-wide .step-view-head { position: static; }
+.workspace-tabs { overflow-y: hidden; scrollbar-width: thin; }
+.quest-panel .overview-item { padding-block: 12px; }
+.quest-panel .overview-note { margin-top: 20px; padding-top: 16px; }
+.quest-panel .overview-title { margin-bottom: 12px; }
+.quest-panel .overview-item:not(:last-child)::before { top: 44px; bottom: -12px; }
+.overview-item.is-past .overview-n { color: var(--muted); background: var(--surface-2); }
+.overview-item.is-past .overview-line { color: var(--muted); }
+:root:not([data-look="classic"]) .path-wide .rail-step.is-selected { background: var(--accent-soft); color: var(--accent-ink); box-shadow: 0 0 0 1px var(--accent-ink); }
+:root:not([data-look="classic"]) .path-wide .rail-stage.is-current > .rail-stage-btn { background: var(--surface-2); }
+:root:not([data-look="classic"]) .path-wide .rail-stage.is-current .rail-num { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+@media (min-width: 1400px) {
+  :root { --topbar-h: 76px; }
+  .topbar-inner .tabs-top { gap: 8px; }
+  .topbar-inner .tabs-top .tab { flex-direction: column; gap: 5px; min-width: 76px; padding: 8px 12px; border-radius: 6px; font-size: 0.875rem; }
+  .topbar-inner .tabs-top .icon { width: 22px; height: 22px; }
+  .topbar-inner .brand { color: var(--gold-ink); font-size: 1.25rem; margin-right: 20px; }
+}
 .step-view-head { padding: 16px 20px 4px; gap: 6px; }
 .step-view-kicker { font-size: 0.875rem; }
 .step-view-title { font-size: 1.75rem; line-height: 1.2; }
@@ -1775,7 +1826,7 @@ select option { background: var(--surface); color: var(--text); }
 .overview-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
 .overview-item { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 12px; align-items: start; position: relative; padding: 8px 0; }
 .overview-item:not(:last-child)::before {
-  content: ''; position: absolute; left: 15px; top: 40px; bottom: -8px; width: 2px; background: var(--border);
+  content: ''; position: absolute; left: 15px; top: 40px; bottom: -8px; width: 2px; background: var(--border-strong);
 }
 .overview-n {
   display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%;

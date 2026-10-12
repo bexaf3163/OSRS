@@ -97,7 +97,7 @@ final class GuideList
 
 	static final Color TITLE = OsrsPathHudOverlay.TITLE;
 	static final Color TEXT = OsrsPathHudOverlay.TEXT;
-	static final Color MUTED = new Color(175, 175, 175);
+	static final Color MUTED = new Color(171, 184, 201);
 	/** The "where to get it" of a button line in link colour: it can be clicked. */
 	static final Color LINK = new Color(140, 200, 255);
 	static final int MAX_ITEMS = 8;
