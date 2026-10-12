@@ -37,9 +37,12 @@ export function NavigateButton({ target, label = '🧭 Point the arrow in the ga
   };
 
   if (active) {
+    const live = state === 'online';
     return (
       <span className={`nav-state ${className}`} role="status">
-        <span className="badge badge-ingame">● The arrow leads here</span>
+        {live
+          ? <span className="badge badge-ingame">● The arrow leads here</span>
+          : <span className="badge">○ Target saved. Waiting for RuneLite</span>}
         {!compact && <button type="button" className="btn btn-ghost btn-sm" onClick={() => void clearNav()}>Return to the step</button>}
       </span>
     );

@@ -13,6 +13,7 @@ import { LevelInput } from '../components/LevelInput';
 import { Table } from '../components/Table';
 import { LiveXp } from '../components/LiveXp';
 import { TrainingCard } from '../components/TrainingCard';
+import { trainingFocus, type TrainingFocus } from '../lib/skillFocus';
 
 export function SkillDetailPage({ id }: { id: string }) {
   const skill = findSkill(id);
@@ -33,10 +34,12 @@ function SkillView({ skill }: { skill: Skill }) {
   const level = skillLevel(skill, progress);
   const hit = rangeForLevel(skill.plan.ranges, level);
   const related = steps.filter((s) => s.targets?.some((t) => levelById.get(t.skill)?.skill === skill.id));
-  // "What to train with": for melee — the lagging one of the three skills; the goal is as in the calculator below.
+  // "What to train with": the route decides first (a stage goal that is behind), the generic training row only when the route asks for nothing.
   const stage = currentStage(steps, progress);
-  const lagging = [...skill.levelSkills].sort((a, b) => levelOf(progress, a) - levelOf(progress, b))[0];
-  const trainTarget = defaultTarget(skill, lagging, levelOf(progress, lagging), stage);
+  const focus = trainingFocus({
+    levelSkills: skill.levelSkills, stage, goals, levelOf: (id) => levelOf(progress, id),
+    rowEnd: (_id, lv) => rangeForLevel(skill.plan.ranges, lv)?.range.to ?? null,
+  });
 
   return (
     <div className="page">
@@ -68,7 +71,8 @@ function SkillView({ skill }: { skill: Skill }) {
         )}
       </section>
 
-      <TrainingCard skill={lagging} target={trainTarget} />
+      <FocusNote focus={focus} />
+      <TrainingCard skill={focus.skill} target={focus.target} />
 
       <Calculator levelIds={skill.levelSkills} suggest={(lid, level, stage) => defaultTarget(skill, lid, level, stage)} />
 
@@ -100,6 +104,14 @@ function SkillView({ skill }: { skill: Skill }) {
       ))}
     </div>
   );
+}
+
+/** Says where the goal below comes from: the route stage or only the generic training row. */
+function FocusNote({ focus }: { focus: TrainingFocus }) {
+  const name = levelById.get(focus.skill)?.name ?? focus.skill;
+  if (focus.source === 'route') return <p className="muted small focus-note">Goal {focus.target} {name} comes from the route: stage {focus.stage}.</p>;
+  if (focus.source === 'ahead') return <p className="muted small focus-note">Nothing is behind on the current stage. The next route goal is {name} {focus.target} (stage {focus.stage}).</p>;
+  return <p className="muted small focus-note">The route has no further goal for this skill. Goal {focus.target} is the end of the generic training row.</p>;
 }
 
 function PlanBlocks({ skill, highlight, blocks }: { skill: Skill; highlight?: number; blocks: Skill['sections'][number]['blocks'] }) {

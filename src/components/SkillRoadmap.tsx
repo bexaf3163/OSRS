@@ -10,7 +10,7 @@ import { isClosed } from '../lib/next-step';
 import { levelOf } from '../lib/progress';
 import { nameKey } from '../lib/checklist';
 import { formatXp } from '../lib/goals';
-import { bracketsOf, buildPath, currentIndex, type GuideMode, type SkillName, type SkillStep } from '../lib/skillGuide';
+import { bracketsOf, buildPath, currentIndex, defaultGuideMode, type GuideMode, type SkillName, type SkillStep } from '../lib/skillGuide';
 import { setTracked, useTracked } from '../lib/skillTrack';
 import { IconClose } from './Icons';
 
@@ -64,7 +64,8 @@ export function SkillRoadmapDrawer({ skills, label, onClose }: { skills: SkillNa
 function Roadmap({ skills, label }: { skills: SkillName[]; label: string }) {
   const tracked = useTracked();
   const [skill, setSkill] = useState<SkillName>(() => (tracked && skills.includes(tracked.skill) ? tracked.skill : skills[0]));
-  const [mode, setMode] = useState<GuideMode>(() => (tracked && tracked.skill === skill ? tracked.mode : 'fast'));
+  const account = useStore().mode;
+  const [mode, setMode] = useState<GuideMode>(() => (tracked && tracked.skill === skill ? tracked.mode : defaultGuideMode(guideFor(skill), account)));
   const guide = guideFor(skill);
   const level = useSkillLevel(skill);
   const done = useQuestDone();
@@ -79,7 +80,7 @@ function Roadmap({ skills, label }: { skills: SkillName[]; label: string }) {
         <h2>{label} <span className="muted small">leveling roadmap</span></h2>
         {skills.length > 1 && (
           <div className="skill-seg" role="group" aria-label="Skill">
-            {skills.map((s) => <button key={s} type="button" className={`skill-seg-btn ${s === skill ? 'is-on' : ''}`} aria-pressed={s === skill} onClick={() => setSkill(s)}>{s[0].toUpperCase() + s.slice(1)}</button>)}
+            {skills.map((s) => <button key={s} type="button" className={`skill-seg-btn ${s === skill ? 'is-on' : ''}`} aria-pressed={s === skill} onClick={() => { setSkill(s); if (mode === 'f2p' && guideFor(s).f2pCap === 0) setMode('fast'); }}>{s[0].toUpperCase() + s.slice(1)}</button>)}
           </div>
         )}
         <p className="muted small">Level <strong>{level}</strong>{path.length > 0 && at < path.length && <> · now: <strong>{path[at].title}</strong></>}</p>
@@ -99,6 +100,9 @@ function Roadmap({ skills, label }: { skills: SkillName[]; label: string }) {
         <span className="muted small">{isTracked ? 'The game leads this skill now: the quest route is paused there.' : 'Pins this skill to the card on the Path screen and leads it in the game instead of the quest route.'}</span>
       </div>
 
+      {account === 'f2p' && mode !== 'f2p' && path.some((s) => s.members) && (
+        <p className="notice">Members preview: the steps marked Members need membership. A free account uses the F2P Only filter.</p>
+      )}
       {path.length === 0 && <p className="notice">{mode === 'f2p' ? 'There is no free-to-play method for this skill: switch the filter.' : 'No steps for this filter.'}</p>}
       {mode === 'f2p' && path.length > 0 && guide.f2pCap < 99 && <p className="muted small">Free accounts reach level {guide.f2pCap} in this skill.</p>}
 

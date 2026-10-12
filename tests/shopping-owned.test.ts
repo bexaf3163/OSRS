@@ -87,3 +87,34 @@ describe('manual marks are kept in the progress', () => {
     expect(back.ownedManual!['name:ball of wool'].count).toBe(3);
   });
 });
+
+describe('unverified items are not purchases', () => {
+  it('summarizeShopping keeps confirmed shortages, unverified items and budgets apart', async () => {
+    const { summarizeShopping } = await import('../src/lib/shopping');
+    const s = summarizeShopping([
+      { h: { status: 'MISSING', buy: 2 }, unitPrice: 100 },
+      { h: { status: 'PARTIAL', buy: 1 }, unitPrice: 50 },
+      { h: { status: 'UNKNOWN', buy: 25 }, unitPrice: 10 },
+      { h: { status: 'UNKNOWN', buy: 1 }, unitPrice: null },
+      { h: { status: 'SUFFICIENT', buy: 0 }, unitPrice: 5 },
+      { h: { status: 'UNAVAILABLE', buy: 3 }, unitPrice: 5 },
+    ]);
+    expect(s).toMatchObject({ confirmed: 2, missing: 1, partial: 1, unverified: 2, owned: 1, confirmedGp: 250, unverifiedGp: 250, unpriced: 1 });
+  });
+
+  it('no observation at all: every item is unverified and none is a confirmed purchase', async () => {
+    const { summarizeShopping } = await import('../src/lib/shopping');
+    const rows = ['Bones', 'Bucket', 'Knife'].map((nameEn) => ({
+      h: holdingFor({ nameEn, count: 1, exact: true }, null), unitPrice: 10,
+    }));
+    expect(rows.every((r) => r.h.status === 'UNKNOWN')).toBe(true);
+    expect(summarizeShopping(rows)).toMatchObject({ confirmed: 0, unverified: 3, confirmedGp: 0, unverifiedGp: 30 });
+  });
+
+  it('the copied text lists unverified items apart', () => {
+    expect(shoppingText('GE', [
+      { nameEn: 'Lobster', buy: 7, exact: true },
+      { nameEn: 'Bones', buy: 25, exact: true, unverified: true },
+    ], 0)).toBe('GE\nLobster x7\nUnverified (check your bank first):\nBones x25');
+  });
+});

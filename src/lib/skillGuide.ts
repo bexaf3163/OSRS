@@ -57,6 +57,14 @@ export interface SkillGuideFile {
 const MAX_LEVEL = 99;
 
 /**
+ * The filter a roadmap opens with. A free account starts on "F2P Only", so the recommended method is always one it can use; the Members filters stay
+ * one click away as a labelled preview. A members account (or a members-only skill, which has no free path) starts on "Fastest".
+ */
+export function defaultGuideMode(guide: Pick<SkillGuideFile, 'f2pCap'>, account: 'f2p' | 'members'): GuideMode {
+  return account === 'f2p' && guide.f2pCap > 0 ? 'f2p' : 'fast';
+}
+
+/**
  * The candidates of a filter, in the order of preference: quest XP skips first (they skip the slow levels), then the steps made for the lane, then the ones
  * that fit both. The free filter has no members step. The AFK filter keeps only the quests marked for both lanes (a short free one, or one that unlocks the skill).
  */

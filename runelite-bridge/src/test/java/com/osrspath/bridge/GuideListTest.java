@@ -84,7 +84,7 @@ public class GuideListTest
 			itemLine("Bronze bar", StepGuide.Have.BANK), itemLine("Beer", StepGuide.Have.DONE), itemLine("Onion", StepGuide.Have.NONE), itemLine("Ashes", StepGuide.Have.UNKNOWN));
 		StepGuide.View v = new StepGuide.View("[S2-10] Prince Ali Rescue", null, items, java.util.Collections.emptyList(), null, null, null, null, sv);
 		String all = GuideList.plain(rows(v, false));
-		assertTrue("2 in the bag of the 5 that count (the handed-in beer is not counted): " + all, all.contains("In your bag: 2 of 5 items"));
+		assertTrue("2 in the bag of the 5 that count (the handed-in beer is not counted): " + all, all.contains("Quest items in your bag: 2 of 5"));
 		assertFalse("the held items are not listed by name on a stage: " + all, all.contains("Ball of wool") || all.contains("Rope"));
 		GuideList.Row bag = GuideList.bagRow(items, SMALL, 200);
 		assertNotNull(bag);
@@ -98,7 +98,7 @@ public class GuideListTest
 	public void aStepWithoutAStage_hasNoBagRow_itsItemsAreListedWithTheirStatus()
 	{
 		String all = GuideList.plain(rows(witchsPotion(null, 0, 0), false));
-		assertFalse(all, all.contains("In your bag"));
+		assertFalse(all, all.contains("in your bag"));
 	}
 
 	/** The rows as one string: a long row wraps to two lines at the real card width, and the text must still be found. */
@@ -144,7 +144,7 @@ public class GuideListTest
 		assertEquals("S2-10 · Stage 3 of 7 ~▲", GuideList.plain(rows.subList(0, 1)));
 		String all = flat(rows);
 		assertTrue(all, all.contains("▶ [2/6] Dye the wig yellow (Aggie)"));
-		for (String gone : new String[] {"Next:", "Done", "Back", "In your bag", "Where to go", "onions", "Needed now", "Tip"})
+		for (String gone : new String[] {"Next:", "Done", "Back", "in your bag", "Where to go", "onions", "Needed now", "Tip"})
 		{
 			assertFalse(gone + " must wait for the mouse: " + all, all.contains(gone));
 		}
@@ -160,7 +160,7 @@ public class GuideListTest
 		assertEquals("the step line does not move or change", closed.get(1), open.get(1));
 		String all = flat(open);
 		for (String shown : new String[] {"Details: Dye the wig yellow (Aggie: 2 onions + 5 gp)", "Next: Aggie: get skin paste", "✓ Done - next", "◀ Back: Have Ned make a wig",
-			"In your bag: 2 of 4 items", "Needed now", "Onion"})
+			"Quest items in your bag: 2 of 4", "Needed now", "Onion"})
 		{
 			assertTrue(shown + " is in the open card: " + all, all.contains(shown));
 		}

@@ -924,8 +924,8 @@ final class GuideList
 		{
 			return null;
 		}
-		return new Row(clip("", "In your bag: " + names.size() + " of " + total + " items", StepGuide.GOOD, small, inner, 1, true), Action.NONE,
-			"In your bag now, as the game reports it: " + String.join(", ", names) + ". The step lines above are the quest's fixed order; a line about something you already hold can be skipped.");
+		return new Row(clip("", "Quest items in your bag: " + names.size() + " of " + total, StepGuide.GOOD, small, inner, 1, true), Action.NONE,
+			"Items of this quest in your bag now, as the game reports it: " + String.join(", ", names) + ". This counts the quest's whole item list, not only what the current line needs; the line above names what this action asks for. The step lines are the quest's fixed order; a line about something you already hold can be skipped.");
 	}
 
 	/** "S2-07 · " from a heading like "[S2-07] Title"; empty means there is no code. */
@@ -956,7 +956,7 @@ final class GuideList
 				return base;
 			}
 			long missing = v.getItems().stream().filter(i -> !got(i) && i.getHave() != StepGuide.Have.IN_STEP).count();
-			return missing > 0 ? base + " · " + missing + " missing" : base + " · all in your bag";
+			return missing > 0 ? base + " · " + missing + " missing" : base + " · all quest items in bag";
 		}
 		if (v.getItems().isEmpty())
 		{

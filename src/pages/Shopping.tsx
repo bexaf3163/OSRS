@@ -8,7 +8,7 @@ import { useBridge } from '../bridge';
 import { isClosed, currentStage } from '../lib/next-step';
 import { parseAmount } from '../lib/checklist';
 import {
-  aggregateShopping, formatGp, holdingFor, plural, pluginCount, shoppingText, type Holding, type ShoppingItemStatus, type ShoppingLine,
+  aggregateShopping, formatGp, holdingFor, plural, pluginCount, shoppingText, summarizeShopping, type Holding, type ShoppingItemStatus, type ShoppingLine,
 } from '../lib/shopping';
 import { MAX_OWNED } from '../lib/progress';
 import { getGePrice, getMapping, type GePrice } from '../services/pricesApi';
@@ -19,17 +19,25 @@ const RANGE_KEY = 'osrs-put:shopping-range';
 const FILTER_KEY = 'osrs-put:shopping-filter';
 
 /** What to show: by default what is still to buy (and what is unknown), so the list does not grow from what was bought. */
-type Filter = 'need' | 'partial' | 'have' | 'all';
+type Filter = 'need' | 'confirmed' | 'unverified' | 'partial' | 'have' | 'all';
 const FILTERS: { id: Filter; label: string }[] = [
-  { id: 'need', label: 'Need to buy' },
+  // 'need' keeps its saved id: everything not confirmed as owned, with the unverified items listed apart.
+  { id: 'need', label: 'Still open' },
+  { id: 'confirmed', label: 'To obtain' },
+  { id: 'unverified', label: 'Unverified' },
   { id: 'partial', label: 'Partly owned' },
-  { id: 'have', label: 'Already owned' },
+  { id: 'have', label: 'Owned' },
   { id: 'all', label: 'All' },
 ];
+const STATE_LABEL: Record<ShoppingItemStatus, string> = {
+  MISSING: 'To obtain', PARTIAL: 'Partly owned', SUFFICIENT: 'Owned', UNKNOWN: '? Unverified', UNAVAILABLE: 'Not sold at the exchange',
+};
 const shows = (f: Filter, st: ShoppingItemStatus) => (f === 'all' ? true
   : f === 'have' ? st === 'SUFFICIENT'
     : f === 'partial' ? st === 'PARTIAL'
-      : st !== 'SUFFICIENT');
+      : f === 'confirmed' ? st === 'MISSING' || st === 'PARTIAL'
+        : f === 'unverified' ? st === 'UNKNOWN'
+          : st !== 'SUFFICIENT');
 
 function loadFilter(): Filter {
   try {
@@ -168,14 +176,11 @@ export function ShoppingPage() {
   const notGeRows = list.required.filter((l) => !onGe(l)).map(toRow);
   const recRows = list.recommended.filter(onGe).map(toRow);
 
-  const budget = buyRows.reduce((sum, r) => sum + (r.price ? r.price.buyPrice * r.h.buy : 0), 0);
-  const unpriced = buyRows.filter((r) => r.h.buy > 0 && !r.price).length;
-  const count = (st: ShoppingItemStatus) => buyRows.filter((r) => r.h.status === st).length;
-  const have = count('SUFFICIENT');
-  const partial = count('PARTIAL');
-  const missing = count('MISSING');
-  const unknown = count('UNKNOWN');
-  const left = buyRows.filter((r) => r.h.buy > 0).length;
+  // Confirmed shortages and unverified items are counted apart: an unverified item is not a purchase until ownership is known.
+  const sum = summarizeShopping(buyRows.map((r) => ({ h: r.h, unitPrice: r.price ? r.price.buyPrice : null })));
+  const { confirmed: left, unverified: unknown, unpriced, owned: have, partial, missing } = sum;
+  const budget = sum.confirmedGp;
+  const upTo = sum.confirmedGp + sum.unverifiedGp;
   const stale = [...buyRows, ...gatherRows, ...recRows].filter((r) => r.h.stale);
 
   // The list — into the exchange hint in RuneLite. The plugin subtracts what it sees in the game itself; the manual marks are subtracted here.
@@ -207,7 +212,7 @@ export function ShoppingPage() {
 
   const title = `Grand Exchange — stage${range.from === range.to ? ` ${range.from}` : `s ${range.from}–${range.to}`}`;
   const copyAll = async () => {
-    const text = shoppingText(title, buyRows.map((r) => ({ nameEn: r.line.nameEn, buy: r.h.buy, exact: r.line.exact })), list.coins);
+    const text = shoppingText(title, buyRows.map((r) => ({ nameEn: r.line.nameEn, buy: r.h.buy, exact: r.line.exact, unverified: r.h.status === 'UNKNOWN' })), list.coins);
     notify(await copy(text) ? '📋 The list is copied — paste it into a note next to the game' : 'Could not copy — the browser denied access to the clipboard');
   };
   const copyName = async (name: string) => {
@@ -254,9 +259,10 @@ export function ShoppingPage() {
           {h.status === 'SUFFICIENT'
             ? <strong className="ok-text">✓ {h.owned ?? 0} / {line.count}{line.exact ? '' : '+'}</strong>
             : <strong>×{line.count}{line.exact ? '' : '+'}</strong>}
-          {h.status === 'PARTIAL' && <span className="small">have {h.owned} · buy {h.buy}</span>}
-          {h.status === 'UNKNOWN' && h.source === 'bag' && <span className="muted small">buy up to {h.buy}</span>}
-          {r.price && h.buy > 0 && <span className="muted small">≈ {formatGp(r.price.buyPrice * h.buy)} gp</span>}
+          <span className={`shop-state is-${h.status.toLowerCase()}`}>{STATE_LABEL[h.status]}</span>
+          {h.status === 'PARTIAL' && <span className="small">have {h.owned} · to obtain {h.buy}</span>}
+          {h.status === 'UNKNOWN' && <span className="muted small">owned: ?{h.source === 'bag' ? ` · up to ${h.buy} may be missing` : ''}</span>}
+          {r.price && h.buy > 0 && <span className="muted small">{h.status === 'UNKNOWN' ? 'up to ' : '≈ '}{formatGp(r.price.buyPrice * h.buy)} gp</span>}
           {r.price === null && h.buy > 0 && !pricesError && <span className="muted small">price unknown</span>}
         </div>
         <div className="shop-actions">
@@ -306,12 +312,16 @@ export function ShoppingPage() {
       </div>
 
       <div className="card shop-summary">
-        {buyRows.length > 0 && left === 0 ? (
+        {buyRows.length > 0 && left === 0 && unknown === 0 ? (
           <p><strong>🟢 Everything is already prepared</strong> — no purchases are needed.</p>
         ) : (
           <p>
-            <strong>{left ? `Buy: ${left} ${plural(left, 'item', 'items')}` : 'Nothing to buy'}</strong>
-            {budget > 0 && <> · the budget of the remaining purchases ≈ <strong>{formatGp(budget)} gp</strong></>}
+            <strong>
+              {left ? `To obtain: ${left} ${plural(left, 'item', 'items')}` : unknown ? 'Nothing is confirmed missing' : 'Nothing to buy'}
+            </strong>
+            {unknown > 0 && <> · <strong>{unknown} unverified</strong>, ownership not checked</>}
+            {budget > 0 && <> · confirmed purchases ≈ <strong>{formatGp(budget)} gp</strong></>}
+            {unknown > 0 && upTo > budget && <> · up to <strong>{formatGp(upTo)} gp</strong> if none of the unverified items are owned</>}
             {list.coins > 0 && <> · another {formatGp(list.coins)} gp in coins for the steps themselves</>}
           </p>
         )}
@@ -320,8 +330,8 @@ export function ShoppingPage() {
             {buyRows.length} {plural(buyRows.length, 'item', 'items')}:
             {' '}✓ already have {have}
             {partial > 0 && <> · 🟡 partly {partial}</>}
-            {missing > 0 && <> · ✗ missing {missing}</>}
-            {unknown > 0 && <> · ? unknown {unknown}</>}
+            {missing > 0 && <> · ✗ confirmed missing {missing}</>}
+            {unknown > 0 && <> · ? unverified {unknown}</>}
             {notGeRows.length > 0 && <> · not sold on the exchange {notGeRows.length}</>}
           </p>
         )}
@@ -333,7 +343,7 @@ export function ShoppingPage() {
         </p>
         {stale.length > 0 && <p className="small warn-text">⚠️ The game does not confirm {stale.length} {plural(stale.length, 'manual mark', 'manual marks')} — they are marked in the list.</p>}
         <div className="shop-buttons">
-          <button type="button" className="btn btn-primary" onClick={() => void copyAll()} disabled={!left}>
+          <button type="button" className="btn btn-primary" onClick={() => void copyAll()} disabled={!left && !unknown}>
             📋 Copy the list for the exchange
           </button>
           <button type="button" className="btn" onClick={syncFromGame}>✓ Sync with my bank</button>
@@ -350,9 +360,19 @@ export function ShoppingPage() {
       {buyRows.length > 0 && (
         <section className="shop-group">
           <h2 className="subhead">Buy at the exchange · {visible(buyRows).length} of {buyRows.length}</h2>
-          {visible(buyRows).length
-            ? <ul className="shop-list">{visible(buyRows).map(rowView)}</ul>
-            : <p className="muted small">This filter is empty — choose "All".</p>}
+          {visible(buyRows).length === 0 && <p className="muted small">This filter is empty — choose "All".</p>}
+          {visible(buyRows).some((r) => r.h.status !== 'UNKNOWN') && (
+            <ul className="shop-list">{visible(buyRows).filter((r) => r.h.status !== 'UNKNOWN').map(rowView)}</ul>
+          )}
+          {visible(buyRows).some((r) => r.h.status === 'UNKNOWN') && (
+            <>
+              <h3 className="shop-unverified-head">? Unverified: ownership not checked</h3>
+              <p className="muted small">
+                Open your bank in the game or mark what you own. These items may already be yours, so they are not counted as purchases.
+              </p>
+              <ul className="shop-list">{visible(buyRows).filter((r) => r.h.status === 'UNKNOWN').map(rowView)}</ul>
+            </>
+          )}
         </section>
       )}
       {gatherRows.length > 0 && (

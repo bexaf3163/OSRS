@@ -13,6 +13,7 @@ import { toInGameTarget } from '../services/runeliteBridge';
 import { isClosed } from '../lib/next-step';
 import { STATUS_TEXT } from '../lib/readiness';
 import { plural } from '../lib/shopping';
+import { TARGET_LABEL } from '../lib/linkState';
 import { useReadiness, useReadinessEngine } from '../readinessContext';
 import { useFeatures } from '../lib/features';
 import { styleOf } from '../lib/playStyle';
@@ -136,8 +137,8 @@ export function StepStatus({ step }: { step: Step }) {
             </button>
           )}
           {!prep && !recovering && hasTarget && (ready || r.status === 'UNKNOWN') && (
-            <button type="button" className={`btn btn-sm ${active ? 'btn-ingame-active' : 'btn-primary'}`} onClick={() => void start()} disabled={sent === 'sending'}>
-              {active ? '✓ Shown in the game' : '▶ Start the step'}
+            <button type="button" className={`btn btn-sm ${active && link === 'online' ? 'btn-ingame-active' : active ? '' : 'btn-primary'}`} onClick={() => void start()} disabled={sent === 'sending'}>
+              {active ? (link === 'online' ? '✓ Shown in the game' : TARGET_LABEL.saved) : '▶ Start the step'}
             </button>
           )}
           <button type="button" className="btn btn-ghost btn-sm" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
@@ -149,9 +150,13 @@ export function StepStatus({ step }: { step: Step }) {
       {!recovering && <TravelTip step={step} />}
       {sent === 'offline' && <p className="small muted" role="status">RuneLite bridge offline{link === 'online' ? ' or refused' : ''}. Start RuneLite with the OSRS Path Bridge plugin.</p>}
       {detour ? (
-        <p className="small status-arrow">🧭 The arrow leads to: {detour.label}</p>
+        link === 'online'
+          ? <p className="small status-arrow">🧭 The arrow leads to: {detour.label}</p>
+          : <p className="small status-arrow muted">🧭 Target saved: {detour.label}. The arrow appears when RuneLite connects.</p>
       ) : active ? (
-        <p className="small status-arrow muted">🧭 The step is shown in the game — the arrow leads to it.</p>
+        link === 'online'
+          ? <p className="small status-arrow muted">🧭 The step is shown in the game — the arrow leads to it.</p>
+          : <p className="small status-arrow muted">🧭 Target saved. Live guidance is inactive until RuneLite connects.</p>
       ) : null}
       {open && visibleTabs.length > 1 && (
         <div className="status-tabs" role="tablist" aria-label="Step details">

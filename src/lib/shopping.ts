@@ -136,12 +136,18 @@ export interface CopyLine {
   /** How much to buy. */
   buy: number;
   exact: boolean;
+  /** Ownership was not observed: the quantity is an upper estimate, not a confirmed shortage. */
+  unverified?: boolean;
 }
 
 /** Text for the clipboard: English names, as they are searched at the exchange. */
 export function shoppingText(title: string, lines: CopyLine[], coins: number): string {
-  const rows = lines.filter((l) => l.buy > 0).map((l) => `${l.nameEn} x${l.buy}${l.exact ? '' : '+'}`);
-  const out = [title, ...rows];
+  const text = (l: CopyLine) => `${l.nameEn} x${l.buy}${l.exact ? '' : '+'}`;
+  const open = lines.filter((l) => l.buy > 0);
+  const out = [title, ...open.filter((l) => !l.unverified).map(text)];
+  // Items the app could not check stay in the text, but apart: the player may already own them.
+  const unverified = open.filter((l) => l.unverified);
+  if (unverified.length > 0) out.push('Unverified (check your bank first):', ...unverified.map(text));
   if (coins > 0) out.push(`Coins ~${formatGp(coins)} gp (for the steps themselves)`);
   return out.join('\n');
 }
@@ -215,6 +221,42 @@ export function holdingFor(
     return { ...base, owned: null, buy: required - carried, status: status(null), source: 'bag' };
   }
   return { ...base, owned: null, buy: required, status: status(null), source: 'none' };
+}
+
+/** Counts and budgets of a list: what is confirmed to be missing, what is only unverified, kept apart. */
+export interface ShoppingSummary {
+  /** Items with a confirmed shortage (nothing or part of the quantity is owned). */
+  confirmed: number;
+  /** Items whose ownership was not observed. */
+  unverified: number;
+  owned: number;
+  partial: number;
+  missing: number;
+  /** Price of the confirmed shortages, for the items that have a price. */
+  confirmedGp: number;
+  /** The most the unverified items could still cost if none of them were owned. */
+  unverifiedGp: number;
+  /** Confirmed or unverified items without a price. */
+  unpriced: number;
+}
+
+export function summarizeShopping(rows: { h: Pick<Holding, 'status' | 'buy'>; unitPrice: number | null }[]): ShoppingSummary {
+  const out: ShoppingSummary = { confirmed: 0, unverified: 0, owned: 0, partial: 0, missing: 0, confirmedGp: 0, unverifiedGp: 0, unpriced: 0 };
+  for (const { h, unitPrice } of rows) {
+    if (h.status === 'SUFFICIENT') { out.owned++; continue; }
+    if (h.status === 'UNAVAILABLE' || h.buy <= 0) continue;
+    const cost = unitPrice === null ? 0 : unitPrice * h.buy;
+    if (unitPrice === null) out.unpriced++;
+    if (h.status === 'UNKNOWN') {
+      out.unverified++;
+      out.unverifiedGp += cost;
+    } else {
+      out.confirmed++;
+      out.confirmedGp += cost;
+      if (h.status === 'PARTIAL') out.partial++; else out.missing++;
+    }
+  }
+  return out;
 }
 
 /**
