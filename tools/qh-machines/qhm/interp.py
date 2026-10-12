@@ -648,6 +648,11 @@ class Interp:
             inner = self.env
             self.env = saved_env
             self.imports = saved_imports
+        # Constructor parameters are not bound, so super(questHelper, step) cannot see the step handed in. IncantationStep (Demon Slayer) is the one
+        # helper whose whole job is to wrap that step: the default is the argument. Without it the machine ended in "?" once Silverlight was in the bag
+        # and the cursor stayed on "give Sir Prysin the keys" (S3-03).
+        if typ == 'IncantationStep' and st.kind == 'cond' and st.default is None:
+            st.default = next((a for a in args[1:] if isinstance(a, Step)), None)
         # the names of the inner steps get the owner's prefix (we learn it on assignment)
         st.inner_env = inner
         return st

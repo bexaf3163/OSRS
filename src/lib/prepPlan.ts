@@ -435,7 +435,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   const needed = new Set<string>();
   for (const l of lines) needed.add(l.name);
   for (const w of window) for (const it of [...(w.itemsRequired ?? []), ...(w.itemsRecommended ?? [])]) needed.add(it.nameEn);
-  const advice = weightAdvice(step, state, needed);
+  const advice = weightAdvice(step, state, needed, window);
   const bank = nearestBank(step);
   const weight: PrepPlan['weight'] = {
     ...advice,

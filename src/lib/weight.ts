@@ -60,20 +60,39 @@ export const NO_WEIGHT_ADVICE: WeightAdvice = { current: null, after: null, savi
 
 const COMBAT_SKILLS = new Set(['attack', 'strength', 'defence', 'ranged', 'magic', 'prayer', 'hitpoints']);
 
+/** A fight in the line's own words. Dialogue choices are cut off first: "I'll kill him for you" is something the player says, not does. */
+const FIGHT_WORDS = /\b(kill|defeat|fight|slay|battle|safe-?spot|attack(?:s|ed|ing)?|combat|boss)\b/i;
+
+const withoutDialogue = (text: string): string => text.split(/\bDialogue:/i)[0];
+
 /**
- * A step without combat: no opponents, no threats, not a combat skill training and not a gear step (armor is put on there).
- * In doubt — "not without combat": better not to advise taking it off than to leave the player without armor where it is needed.
+ * A quest chain with a fight anywhere in it, at the end or in the middle. A quest step carries no foes list, but its lines name the fight
+ * ("Kill Delrith with Silverlight"); the whole chain is read, not the line the player stands on now.
  */
-export const isCalm = (step: Pick<Step, 'type' | 'foes' | 'threats' | 'targets'>): boolean =>
-  step.type !== 'gear' && !step.foes?.length && !step.threats?.length && !(step.targets ?? []).some((t) => COMBAT_SKILLS.has(t.skill));
+export const fightInChain = (step: Pick<Step, 'questStages'>): boolean =>
+  (step.questStages?.stages ?? []).some((st) => st.do.some((l) => FIGHT_WORDS.test(withoutDialogue(l.t ?? '')) || FIGHT_WORDS.test(l.s ?? '')));
+
+/**
+ * A step without combat: no opponents, no threats, not a combat skill training, not a gear step (armor is put on there) and no fight anywhere
+ * in its quest chain. In doubt — "not without combat": better not to advise taking it off than to leave the player without armor where it is needed.
+ */
+export const isCalm = (step: Pick<Step, 'type' | 'foes' | 'threats' | 'targets' | 'questStages'>): boolean =>
+  step.type !== 'gear' && !step.foes?.length && !step.threats?.length && !(step.targets ?? []).some((t) => COMBAT_SKILLS.has(t.skill))
+  && !fightInChain(step);
 
 /**
  * What can be left in the bank on a step without combat. needed — the English names of what this step and the nearest ones need
  * (the preparation plan): they are not touched. A combat step — we advise nothing: armor is needed there.
  */
-export function weightAdvice(step: Pick<Step, 'type' | 'foes' | 'threats' | 'targets'>, state: PlayerState, needed: ReadonlySet<string>): WeightAdvice {
+export function weightAdvice(
+  step: Pick<Step, 'type' | 'foes' | 'threats' | 'targets' | 'questStages'>,
+  state: PlayerState,
+  needed: ReadonlySet<string>,
+  /** The other steps of the same trip: a fight there needs the armor too, the player would only walk back for it. */
+  alsoOnTheTrip: readonly Pick<Step, 'type' | 'foes' | 'threats' | 'targets' | 'questStages'>[] = [],
+): WeightAdvice {
   const current = state.weight.known ? state.weight.value : null;
-  if (!isCalm(step)) return { ...NO_WEIGHT_ADVICE, current };
+  if (!isCalm(step) || !alsoOnTheTrip.every(isCalm)) return { ...NO_WEIGHT_ADVICE, current };
   const keep = new Set([...needed].map((n) => nameKey(n)));
   const items: WeightItem[] = [];
   for (const name of Object.values(state.equipment)) {

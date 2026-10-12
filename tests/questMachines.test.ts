@@ -94,6 +94,29 @@ describe('Quest Helper state machines', () => {
     }
   });
 
+  it('no node ends in an unresolved step: it would freeze the list on the line before it', () => {
+    // Occasion: S3-03 — IncantationStep wraps the kill step, the generator did not see through it, the node ended in "?" and the list stayed on
+    // "Give Sir Prysin the three keys" with Silverlight already in the bag.
+    const dead: string[] = [];
+    for (const [id, m] of Object.entries(machines)) {
+      for (const [key, n] of Object.entries(m.nodes)) {
+        const refs = [n.d, ...(n.c ?? []).map(([, child]) => child)];
+        if (refs.some((r) => nodeOf(m, r)?.s === '?')) dead.push(id + ' ' + key + (n.n ? ' (' + n.n + ')' : ''));
+      }
+    }
+    expect(dead).toEqual([]);
+  });
+
+  it('S3-03: with Silverlight owned the machine ends in the kill step, not in the handing in of keys', () => {
+    const m = machines['S3-03'];
+    const out: string[][] = [];
+    leaves(m, m.stages['2'], [], out);
+    const leafNames = out.map((p) => p[p.length - 1]);
+    expect(leafNames).toContain('killDelrithStep');
+    expect(leafNames).toContain('returnToPrysin');
+    expect(leafNames).not.toContain('?');
+  });
+
   it('condition operations are known to the plugin and filled in', () => {
     const used = new Map<string, number>();
     for (const [id, m] of Object.entries(machines)) {

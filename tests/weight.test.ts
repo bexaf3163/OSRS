@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { energyUnits, HEAVY_SAVING, isCalm, kgText, runLengthRatio, weightAdvice, weightOf } from '../src/lib/weight';
 import { buildPlayerState } from '../src/lib/playerState';
 import { parseGear } from '../src/services/runeliteBridge';
+import { allSteps } from '../src/data';
 import type { Step } from '../src/types';
 
 const calm = { type: 'skill' } as Pick<Step, 'type' | 'foes' | 'threats' | 'targets'>;
@@ -76,6 +77,33 @@ describe('weight advice', () => {
     expect(isCalm({ type: 'skill', targets: [{ skill: 'fishing', level: 20 }] } as never)).toBe(true);
     const a = weightAdvice({ type: 'skill', foes: ['Cow'] } as never, stateWith(gear()), new Set());
     expect(a).toMatchObject({ level: 'NONE', items: [], saving: 0, current: 26 });
+  });
+
+  it('a fight at the end or in the middle of a quest chain is combat: no advice to take the armour off', () => {
+    // Occasion: Demon Slayer (S3-03) was advised "leave the armour in the bank" while the chain ends with Delrith (and the Draynor, Black demon,
+    // Melzar's Maze quests have their fights in the middle). The step carries no foes list: its lines name the fight.
+    const byId = (id: string) => allSteps.find((s) => s.id === id) as Step;
+    expect(isCalm(byId('S3-03'))).toBe(false);
+    expect(isCalm(byId('S2-08'))).toBe(false);
+    expect(isCalm(byId('S7-05'))).toBe(false);
+    const a = weightAdvice(byId('S3-03'), stateWith(gear()), new Set());
+    expect(a).toMatchObject({ level: 'NONE', items: [], saving: 0 });
+    // A quest of walking and talking stays advisable.
+    expect(isCalm(byId('S1-03'))).toBe(true);
+    expect(weightAdvice(byId('S1-03'), stateWith(gear()), new Set()).level).toBe('HEAVY');
+  });
+
+  it('what the player says in a dialogue is not a fight; what a line asks for is', () => {
+    const talk = { type: 'quest', questStages: { var: ['varp', 1], stages: [{ at: 0, do: [{ t: 'Talk to Aris. Dialogue: "Okay, where is he? Then I will kill him for you!"', s: 'Talk to Aris' }] }] } } as never;
+    const fight = { type: 'quest', questStages: { var: ['varp', 1], stages: [{ at: 0, do: [{ t: 'Talk to Aris.', s: 'Talk to Aris' }, { t: 'Return.', s: 'Kill Delrith with Silverlight' }] }] } } as never;
+    expect(isCalm(talk)).toBe(true);
+    expect(isCalm(fight)).toBe(false);
+  });
+
+  it('a calm step in a trip with a fight in it: the armour is not advised off (the player would walk back for it)', () => {
+    const fighting = { type: 'skill', foes: ['Cow'] } as never;
+    expect(weightAdvice(calm, stateWith(gear()), new Set(), [calm, calm]).level).toBe('HEAVY');
+    expect(weightAdvice(calm, stateWith(gear()), new Set(), [calm, fighting])).toMatchObject({ level: 'NONE', items: [] });
   });
 
   it('weight from the game is unknown: advise by items, but do not invent the "was → became" number', () => {
