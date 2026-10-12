@@ -5,21 +5,41 @@ import { Blocks } from '../components/Blocks';
 import { IconBack, IconChevron } from '../components/Icons';
 import { Inline } from '../components/Inline';
 
+/** The index is grouped by what the player is trying to do; every section stays in exactly one group. */
+const TOPICS: { title: string; ids: string[] }[] = [
+  { title: 'Getting started', ids: ['setup', 'membership', 'plugins'] },
+  { title: 'Playing the route', ids: ['stuck', 'transport', 'tips'] },
+  { title: 'How things connect', ids: ['skill-graph', 'wiki'] },
+];
+
 export function ReferencePage({ section }: { section?: string }) {
   if (section) return <ReferenceSection id={section} />;
+  const known = new Set(TOPICS.flatMap((t) => t.ids));
+  // A section that is not in a group (a new one) still shows up, after the groups.
+  const rest = reference.sections.filter((s) => !known.has(s.id));
+  const groups = [...TOPICS, ...(rest.length ? [{ title: 'More', ids: rest.map((s) => s.id) }] : [])];
   return (
     <div className="page">
       <header className="page-head">
         <h1>Reference</h1>
         <p className="muted">{reference.description}</p>
       </header>
-      <ul className="nav-list card">
-        {reference.sections.map((s) => (
-          <li key={s.id}>
-            <a href={`#/reference/${s.id}`}><span>{s.title}</span><IconChevron className="chevron" /></a>
-          </li>
-        ))}
-      </ul>
+      {groups.map((g) => {
+        const items = g.ids.map((id) => reference.sections.find((s) => s.id === id)).filter((s): s is NonNullable<typeof s> => !!s);
+        if (!items.length) return null;
+        return (
+          <section key={g.title} className="section" aria-label={g.title}>
+            <h2 className="topic-title">{g.title}</h2>
+            <ul className="nav-list card">
+              {items.map((s) => (
+                <li key={s.id}>
+                  <a href={`#/reference/${s.id}`}><span>{s.title}</span><IconChevron className="chevron" /></a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      })}
     </div>
   );
 }

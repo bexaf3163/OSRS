@@ -20,15 +20,20 @@ export function useSubStep(step: Step): SubStep | null {
   return useMemo(() => (closed ? null : findSubStep(step, navTarget)), [step, navTarget, closed]);
 }
 
-export function SubStepHero({ step, sub }: { step: Step; sub: SubStep }) {
+/** bare: the title is already the current action of the workspace, so only the detail (what to say, the lead button) is drawn. */
+export function SubStepHero({ step, sub, bare = false }: { step: Step; sub: SubStep; bare?: boolean }) {
   const showAction = sub.action && sub.action.replace(/[.\s]+$/, '') !== sub.title.replace(/[….\s]+$/, '');
   return (
-    <section className="sub-hero" aria-label="Current sub-step">
-      <p className="sub-hero-kicker">
-        <span className="badge badge-now">Step {sub.index} of {sub.size}</span>
-        <span className="muted small">in the game now</span>
-      </p>
-      <h3 className="sub-hero-title">{sub.title}</h3>
+    <section className={`sub-hero ${bare ? 'is-bare' : ''}`} aria-label="Current sub-step">
+      {!bare && (
+        <>
+          <p className="sub-hero-kicker">
+            <span className="badge badge-now">Step {sub.index} of {sub.size}</span>
+            <span className="muted small">in the game now</span>
+          </p>
+          <h3 className="sub-hero-title">{sub.title}</h3>
+        </>
+      )}
       {showAction && <p className="sub-hero-action"><Inline text={sub.action} /></p>}
       {sub.dialogue.length > 0 && (
         <div className="sub-hero-say">

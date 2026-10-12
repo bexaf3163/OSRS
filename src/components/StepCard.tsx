@@ -1,14 +1,14 @@
-// The step card: the header in the list and the details by section.
+// The step details by section (StepBody), used by the workspace tabs and by the all-in-one view.
 // The order: status → title → context (NPC, place) → items → actions → tips → completion.
 
-import { useId, useState, type ReactNode } from 'react';
+import { useState, type ReactNode } from 'react';
 import type { Field, Step, StepItemRequirement } from '../types';
 import { levelById } from '../data';
 import { useStore } from '../store';
 import { blockerParts, blockersOf, isClosed } from '../lib/next-step';
 import { levelOf } from '../lib/progress';
 import { needsReview } from '../lib/review';
-import { IconCheck, IconChevron, IconExternal, IconLock, TypeIcon, TYPE_LABEL } from './Icons';
+import { IconCheck, IconExternal, TYPE_LABEL } from './Icons';
 import { Inline } from './Inline';
 import { LevelInput } from './LevelInput';
 import { RangeHints } from './RangeHints';
@@ -34,64 +34,10 @@ import { ItemIcon, useWiki } from './WikiDrawer';
 import { plural } from '../lib/shopping';
 import { LiveXp } from './LiveXp';
 import { SubStepHero, SubStepItems, useSubStep } from './SubStepHero';
+import { QuestOverview } from './QuestOverview';
+import { TravelTip } from './TravelTip';
 
 const WARN_LABELS = new Set(['Dangerous', 'Attention', 'Combat']);
-
-interface Props {
-  step: Step;
-  open: boolean;
-  onToggle: () => void;
-  onDone: (id: string) => void;
-}
-
-export function StepCard({ step, open, onToggle, onDone }: Props) {
-  const { progress, qp, setStep } = useStore();
-  const status = progress.steps[step.id];
-  const blockers = isClosed(progress, step.id) ? null : blockersOf(step, progress, qp);
-  const review = needsReview(step, progress);
-  const detailsId = useId();
-  // The details mount on the first expansion and after that only collapse — an animation without jumps.
-  const [mounted, setMounted] = useState(open);
-  if (open && !mounted) setMounted(true);
-
-  const cls = ['step', status ? `is-${status}` : '', blockers ? 'is-blocked' : '', open ? 'is-open' : '',
-    review ? 'is-review' : '', step.membersOnly ? 'is-members' : '', step.optional ? 'is-optional' : ''].filter(Boolean).join(' ');
-
-  return (
-    <li id={`step-${step.id}`} className={cls}>
-      <div className="step-row">
-        <label className="check">
-          <input type="checkbox" checked={status === 'done'}
-            onChange={(e) => (e.target.checked ? onDone(step.id) : setStep(step.id, null))}
-            aria-label={`${step.id} ${step.title}`} />
-          <span className="check-box" aria-hidden="true"><IconCheck /></span>
-        </label>
-        <button type="button" className="step-toggle" aria-expanded={open} aria-controls={detailsId} onClick={onToggle}>
-          <code className="code step-code">{step.id}</code>
-          <TypeIcon type={step.type} />
-          <span className="step-text">
-            <span className="step-title">{step.title}</span>
-            <span className="step-badges">
-              {step.qp ? <span className="badge badge-qp">+{step.qp} QP</span> : null}
-              {status === 'skipped' && <span className="tag">skipped</span>}
-              {step.optional && status !== 'skipped' && <span className="tag">optional</span>}
-              {review && <span className="badge badge-review">V2: check</span>}
-            </span>
-            {blockers && (
-              <span className="step-blocked"><IconLock />First: {blockerParts(blockers).join(', ')}</span>
-            )}
-          </span>
-          <IconChevron className="chevron" />
-        </button>
-      </div>
-      <div className={`collapse ${open ? 'is-open' : ''}`} id={detailsId} inert={!open}>
-        <div className="collapse-inner">
-          {mounted && <StepBody step={step} onDone={onDone} />}
-        </div>
-      </div>
-    </li>
-  );
-}
 
 function amountText(a: string | number): string {
   return typeof a === 'number' ? `×${a.toLocaleString('ru-RU')}` : /^\d/.test(a) ? `×${a}` : a;
@@ -118,10 +64,10 @@ function ItemChip({ item }: { item: StepItemRequirement }) {
 }
 
 /** A collapsed section ("[+] Future Preparation"): its content mounts on the first opening, so a closed one costs nothing. */
-function Fold({ title, hint, children }: { title: string; hint?: string; children: ReactNode }) {
-  const [opened, setOpened] = useState(false);
+function Fold({ title, hint, children, open }: { title: string; hint?: string; children: ReactNode; open?: boolean }) {
+  const [opened, setOpened] = useState(!!open);
   return (
-    <details className="step-fold" onToggle={(e) => { if ((e.currentTarget as HTMLDetailsElement).open) setOpened(true); }}>
+    <details className="step-fold" open={open || undefined} onToggle={(e) => { if ((e.currentTarget as HTMLDetailsElement).open) setOpened(true); }}>
       <summary><span className="step-fold-title">{title}</span>{hint && <span className="muted small"> · {hint}</span>}</summary>
       {opened && <div className="step-fold-body">{children}</div>}
     </details>
@@ -137,8 +83,11 @@ function FieldRow({ field }: { field: Field }) {
   );
 }
 
-/** The step details. nextId — which step opens after the mark (the caption on the button in the wide layout). */
-export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: string) => void; nextId?: string }) {
+/** The four views of the Path workspace; without one, StepBody renders the whole card (the narrow list). */
+export type StepTab = 'steps' | 'prep' | 'travel' | 'details';
+
+/** The step details. nextId — which step opens after the mark (the caption on the button in the wide layout). tab — one view of the workspace. */
+export function StepBody({ step, onDone, nextId, tab }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab }) {
   const { progress, qp, mode, setStep, review, reactivate } = useStore();
   const { openNpc } = useWiki();
   const zen = !useFeatures().inspector;
@@ -338,6 +287,96 @@ export function StepBody({ step, onDone, nextId }: { step: Step; onDone: (id: st
         : status !== 'done' && <button type="button" className="btn" onClick={() => setStep(step.id, 'skipped')}>Skip</button>)}
     </div>
   );
+
+  if (tab) {
+    const inspector = !zen;
+    // Manual completion is a quiet, explicit action: the recommended action is the one at the top of the workspace.
+    const manual = (
+      <div className="manual-complete">
+        {status === 'done'
+          ? <button type="button" className="btn btn-ghost" onClick={() => setStep(step.id, null)}>Remove the mark</button>
+          : <button type="button" className="btn btn-ghost" onClick={() => onDone(step.id)}><IconCheck /> Mark as manually completed{nextId && <span className="btn-next"> → {nextId}</span>}</button>}
+        {step.optional && (status === 'skipped'
+          ? <button type="button" className="btn btn-ghost" onClick={() => setStep(step.id, null)}>Return to the plan</button>
+          : status !== 'done' && <button type="button" className="btn btn-ghost" onClick={() => setStep(step.id, 'skipped')}>Skip</button>)}
+      </div>
+    );
+    if (tab === 'steps') {
+      return (
+        <div className="step-details is-tab">
+          {reviewPlaque}
+          {warning}
+          {fieldList(fieldsWarn)}
+          <QuestOverview step={step} sub={sub} />
+          {sub && <SubStepHero step={step} sub={sub} bare />}
+          {sub && <SubStepItems step={step} sub={sub} />}
+          {!sub && !step.questStages && (recovering ? (
+            <details className="zen-more"><summary className="small">What to do on the step — after returning</summary>{how}</details>
+          ) : how)}
+          {doneWhen}
+          {(quick || (sub && how)) && (
+            <Fold title="Full walkthrough and dialogue" hint={nQuick ? `${nQuick} ${nQuick === 1 ? 'step' : 'steps'}, with detailed instructions` : 'for reference'}>
+              {sub && how}
+              {step.questStages && !sub && how}
+              {quick}
+            </Fold>
+          )}
+          {!step.questStages && !sub && !quick && where}
+          {manual}
+        </div>
+      );
+    }
+    if (tab === 'prep') {
+      return (
+        <div className="step-details is-tab">
+          <ReadinessPanel step={step} />
+          <OneTripCard step={step} inStatus />
+          <MoneyGoal step={step} />
+          <StepTraining step={step} />
+          <MagicPlan step={step} />
+          <MoneyPlan step={step} />
+          <UpgradePrompt step={step} />
+          <GearPrompt step={step} />
+          <StyleGear step={step} />
+          <FoodAdvice step={step} />
+          <BranchSuggestions step={step} />
+          {bring}
+          {items}
+        </div>
+      );
+    }
+    if (tab === 'travel') {
+      return (
+        <div className="step-details is-tab">
+          <TravelTip step={step} />
+          <StepMap step={step} />
+          <InGamePanel step={step} />
+          <TravelPlan step={step} />
+        </div>
+      );
+    }
+    // details: rewards, requirements, sources, notes and the raw step data
+    return (
+      <div className="step-details is-tab">
+        {where}
+        <p className="small related-reference">
+          <span className="muted">Reference: </span>
+          <a href="#/reference/transport">Teleports, canoes and boats</a> · <a href="#/reference/plugins">RuneLite plugins</a> · <a href="#/reference/stuck">If you do not know what to do</a>
+        </p>
+        {metaRow}
+        {notes}
+        {requires}
+        {targets}
+        {(step.itemsRequired?.length || step.itemsRecommended?.length || image || fieldsRest.length > 0) && (
+          <Fold title="Items, details and fields" hint="the raw step data" open={inspector}>
+            {items}
+            {image}
+            {fieldList(fieldsRest)}
+          </Fold>
+        )}
+      </div>
+    );
+  }
 
   if (zen) {
     // "Zen": the current sub-step as a hero card, its items, the status in one line, the "Done" button and critical warnings.

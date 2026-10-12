@@ -21,10 +21,12 @@ export interface Features {
   efficient: boolean;
   /** The "Inspector" mode: all the step card's blocks are expanded (the default is "Zen": one status line and a "Done" button). */
   inspector: boolean;
+  /** The compact Path view: the current action, its place and the essentials in a narrow window beside the game. Same state, fewer panels. */
+  compact: boolean;
 }
 
 export const FEATURES_KEY = 'osrs-put:features';
-export const DEFAULT_FEATURES: Features = { autoLocation: true, bankTags: true, pacing: true, upgradeRouter: true, levelsFromGame: true, autoPrep: true, efficient: false, inspector: false };
+export const DEFAULT_FEATURES: Features = { autoLocation: true, bankTags: true, pacing: true, upgradeRouter: true, levelsFromGame: true, autoPrep: true, efficient: false, inspector: false, compact: false };
 
 /** What is saved; the unfamiliar and the broken fall back to the default (a new feature is on). */
 export function parseFeatures(raw: string | null): Features {

@@ -70,7 +70,8 @@ function useFilled(keys: TabKey[]) {
   return { refs, filled };
 }
 
-export function StepStatus({ step }: { step: Step }) {
+/** headline: only the verdict line and its actions (the Path workspace shows the details in its own tabs); onPrep opens the Preparation tab. */
+export function StepStatus({ step, headline = false, onPrep }: { step: Step; headline?: boolean; onPrep?: () => void }) {
   const { progress } = useStore();
   const { enabled, activeStepId, navTarget, pointInGame, state: link } = useBridge();
   const r = useReadiness(step);
@@ -82,7 +83,7 @@ export function StepStatus({ step }: { step: Step }) {
   const [sent, setSent] = useState<'' | 'sending' | 'offline'>('');
   const measured: TabKey[] = ['prep', 'gear', 'food', 'plan'];
   const { refs, filled } = useFilled(measured);
-  const openDetails = () => { setTab('prep'); setOpen(true); };
+  const openDetails = () => { if (headline) { onPrep?.(); return; } setTab('prep'); setOpen(true); };
   const { available: canFix, underway, fix } = usePrepFix(step, openDetails);
 
   // The player became ready — the accordion collapses: one clean line remains.
@@ -141,13 +142,15 @@ export function StepStatus({ step }: { step: Step }) {
               {active ? (link === 'online' ? '✓ Shown in the game' : TARGET_LABEL.saved) : '▶ Start the step'}
             </button>
           )}
-          <button type="button" className="btn btn-ghost btn-sm" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
-            More {open ? '▴' : '▾'}
-          </button>
+          {!headline && (
+            <button type="button" className="btn btn-ghost btn-sm" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
+              More {open ? '▴' : '▾'}
+            </button>
+          )}
         </span>
       </div>
       {recovering && <RecoveryBanner step={step} rec={recovering} />}
-      {!recovering && <TravelTip step={step} />}
+      {!recovering && !headline && <TravelTip step={step} />}
       {sent === 'offline' && <p className="small muted" role="status">RuneLite bridge offline{link === 'online' ? ' or refused' : ''}. Start RuneLite with the OSRS Path Bridge plugin.</p>}
       {detour ? (
         link === 'online'
@@ -158,7 +161,7 @@ export function StepStatus({ step }: { step: Step }) {
           ? <p className="small status-arrow muted">🧭 The step is shown in the game — the arrow leads to it.</p>
           : <p className="small status-arrow muted">🧭 Target saved. Live guidance is inactive until RuneLite connects.</p>
       ) : null}
-      {open && visibleTabs.length > 1 && (
+      {!headline && open && visibleTabs.length > 1 && (
         <div className="status-tabs" role="tablist" aria-label="Step details">
           {visibleTabs.map((t) => (
             <button key={t.key} type="button" role="tab" className={`status-tab ${current === t.key ? 'is-active' : ''}`} aria-selected={current === t.key}
@@ -168,13 +171,13 @@ export function StepStatus({ step }: { step: Step }) {
           ))}
         </div>
       )}
-      {panel('prep', <><ReadinessPanel step={step} /><OneTripCard step={step} inStatus /><MoneyGoal step={step} /><MoneyPlan step={step} /><MagicPlan step={step} /></>)}
-      {panel('gear', <><UpgradePrompt step={step} /><GearPrompt step={step} /><StyleGear step={step} /></>)}
-      {panel('food', <FoodAdvice step={step} />)}
-      {open && current === 'route' && (
+      {!headline && panel('prep', <><ReadinessPanel step={step} /><OneTripCard step={step} inStatus /><MoneyGoal step={step} /><MoneyPlan step={step} /><MagicPlan step={step} /></>)}
+      {!headline && panel('gear', <><UpgradePrompt step={step} /><GearPrompt step={step} /><StyleGear step={step} /></>)}
+      {!headline && panel('food', <FoodAdvice step={step} />)}
+      {!headline && open && current === 'route' && (
         <div className="status-panel" role="tabpanel"><StepMap step={step} /><InGamePanel step={step} /><TravelPlan step={step} /></div>
       )}
-      {panel('plan', <><StepTraining step={step} /><BranchSuggestions step={step} /></>)}
+      {!headline && panel('plan', <><StepTraining step={step} /><BranchSuggestions step={step} /></>)}
     </section>
   );
 }

@@ -66,7 +66,7 @@ export function XpTable() {
 }
 
 /** The skills of the card that have a leveling roadmap: the melee card also opens Hitpoints. */
-function roadmapSkills(skill: Skill): SkillName[] {
+export function roadmapSkills(skill: Skill): SkillName[] {
   const ids = skill.id === 'ME' ? [...skill.levelSkills, 'hitpoints'] : skill.levelSkills;
   return ids.filter((id): id is SkillName => (SKILL_NAMES as readonly string[]).includes(id));
 }

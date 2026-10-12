@@ -13,7 +13,7 @@ import type { GearSlot, Step } from '../types';
 import { ItemIcon } from '../components/WikiDrawer';
 import { NavigateButton } from '../components/NavigateButton';
 import { PlaceMapView, usePlaceMap } from '../components/PlaceMap';
-import { ActionNotes, ActionSource, ActionTitle } from '../components/GearPrompt';
+import { ActionNotes, ActionSource, ActionTitle, OwnershipNote } from '../components/GearPrompt';
 
 const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const SLOT_ICON: Record<GearSlot, string> = { weapon: '⚔️', neck: '📿', head: '⛑️', body: '👕', legs: '👖', shield: '🛡️' };
@@ -28,7 +28,7 @@ function ActionRow({ a, stepId, live, onShow }: { a: GearAction; stepId?: string
       <ItemIcon src={a.item.iconUrl} alt="" size={28} />
       <div className="gear-main">
         <p><ActionTitle a={a} /> <span className="muted small">({SLOT_LABEL[a.slot].toLowerCase()})</span></p>
-        <p className="small">{capital(live ? gainText(a) : statsText(a))}{a.short !== undefined ? <> · <strong>{formatGp(a.short)} gp missing</strong></> : null}.<ActionNotes a={a} /></p>
+        <p className="small">{capital(live ? gainText(a) : statsText(a))}{a.short !== undefined ? <> · <strong>{formatGp(a.short)} gp missing</strong></> : null}.<ActionNotes a={a} /><OwnershipNote a={a} /></p>
         {a.how === 'buy' && <p className="small upgrade-where"><ActionSource a={a} onShow={onShow} /></p>}
       </div>
       {nav && a.short === undefined && <NavigateButton target={nav} compact />}
@@ -109,12 +109,16 @@ export function GearPage() {
   return (
     <div className="page gear-page">
       <header className="page-head">
-        <h1>⚔️ Gear</h1>
+        <h1>Gear</h1>
+        <p className="muted">What you wear now, what to change, and what opens next.</p>
       </header>
+
+      <h2 className="gear-group-title">Current equipment</h2>
 
       <div className="gear-top">
         <section className="card section-card gear-worn" aria-labelledby="gear-slots">
           <h2 id="gear-slots" className="card-title">Worn</h2>
+          {!advice.live && <p className="muted small">Not checked: nothing here is read from the game right now.</p>}
           <ul className="gear-paper">
             {SLOTS.map((slot) => {
               const e = advice.live ? advice.equipped[slot] : undefined;
@@ -129,7 +133,7 @@ export function GearPage() {
                       {tier && <span className="badge badge-tier">{tier}</span>}
                       {!e.piece && <span className="muted small">not in the database</span>}
                     </span>
-                  ) : <span className="gear-slot-item muted">{advice.live ? 'empty' : '—'}</span>}
+                  ) : <span className="gear-slot-item muted">{advice.live ? 'empty' : '? Not checked'}</span>}
                 </li>
               );
             })}
@@ -178,6 +182,7 @@ export function GearPage() {
 
       {!advice.live && lastGear && <LastKnown last={lastGear} />}
 
+      <h2 className="gear-group-title">Recommended improvements</h2>
       <section className="card section-card" aria-labelledby="gear-now">
         <h2 id="gear-now" className="card-title">Do now — hit faster</h2>
         {advice.actions.length ? (
@@ -201,8 +206,10 @@ export function GearPage() {
         </section>
       )}
 
+      <h2 className="gear-group-title">Future unlocks</h2>
       <section className="card section-card" aria-labelledby="gear-roadmap">
         <h2 id="gear-roadmap" className="card-title">Upgrade roadmap</h2>
+        <p className="muted small">Better gear becomes available as levels and quests are reached. Each row names what it needs.</p>
         {roadmap.length > 0 && <ul className="gear-roadmap">{roadmap.map((r) => <RoadmapRowView key={r.key} row={r} steps={steps} />)}</ul>}
         <p className="gear-chips gear-prayers" aria-label="Prayers">
           {prayers.map((p) => (

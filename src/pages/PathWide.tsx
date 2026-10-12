@@ -5,23 +5,28 @@ import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from
 import type { Step } from '../types';
 import { stepById } from '../data';
 import { useStore } from '../store';
-import { blockerParts, blockersOf, currentStage, firstOpen, isClosed, nextStep, openAfter } from '../lib/next-step';
+import { blockersOf, currentStage, firstOpen, isClosed, nextStep, openAfter } from '../lib/next-step';
 import { useBridge } from '../bridge';
 import { flashDone } from '../lib/flash';
 import { needsReview, pendingReview } from '../lib/review';
-import { IconCheck, IconChevron, IconLock, TypeIcon, TYPE_LABEL } from '../components/Icons';
-import { StepBody } from '../components/StepCard';
+import { IconCheck, IconChevron, IconLock } from '../components/Icons';
+import { StepWorkspace } from '../components/StepWorkspace';
 import { WikiDock, useWiki } from '../components/WikiDrawer';
 import { findSubStep, subStepNpcInfo } from '../lib/subStep';
 import { GearBanner } from '../components/GearPrompt';
 import { TrackedSkillCard } from '../components/TrackedSkillCard';
+import { AccountSync } from '../components/AccountSync';
+import { useMediaQuery, WIDE } from '../lib/media';
+import { RouteDrawer } from '../components/RouteDrawer';
 
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey: number }) {
-  const { progress, qp, steps, stages, setStep, review, reactivate } = useStore();
+  const { progress, qp, maxQp, steps, stages, setStep, review, reactivate } = useStore();
+  const wide = useMediaQuery(WIDE);
+  const [routeOpen, setRouteOpen] = useState(false);
   const { advance, navTarget } = useBridge();
-  const { setSuggested, chosen } = useWiki();
+  const { setSuggested, pinned } = useWiki();
   const suggested = nextStep(steps, progress, qp) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
   const [selectedId, setSelectedId] = useState(() => focusStep ?? suggested.id);
   // The rail highlights the clicked step at once; the heavy step card follows as a transition with a loading state.
@@ -96,65 +101,83 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   }, [dossierKey, setSuggested]);
 
   const upcoming = nextAfter(selected.id);
-  const blockers = isClosed(progress, selected.id) ? null : blockersOf(selected, progress, qp);
-  const status = progress.steps[selected.id];
+
+  const rail = (
+    <nav className={`rail ${wide ? '' : 'is-drawer'}`} aria-label="Stages and steps">
+      {selected.id !== suggested.id ? (
+        <button type="button" className="rail-now" onClick={() => { select(suggested.id); setRouteOpen(false); }}>
+          To the current step · <code className="code">{suggested.id}</code>
+        </button>
+      ) : (
+        // The same height as the button: the list below does not jump when you leave the current step.
+        <div className="rail-now is-here">You are on the current step · <code className="code">{suggested.id}</code></div>
+      )}
+      <ol className="rail-stages">
+        {stages.map((st) => {
+          const list = steps.filter((s) => s.stage === st.id);
+          const done = list.filter((s) => isClosed(progress, s.id)).length;
+          const complete = done === list.length;
+          const open = openStages.has(st.id);
+          return (
+            <li key={st.id} className={`rail-stage ${st.id === current ? 'is-current' : ''} ${complete ? 'is-complete' : ''} ${st.membersOnly ? 'is-members' : ''}`}>
+              <button type="button" className="rail-stage-btn" aria-expanded={open} onClick={() => toggleStage(st.id)}>
+                <span className="rail-num">{complete ? <IconCheck /> : st.id}</span>
+                <span className="rail-stage-title">{st.title}</span>
+                <span className="rail-count">{done}/{list.length}</span>
+              </button>
+              {open && (
+                <ol className="rail-steps">
+                  {list.map((s) => {
+                    const closed = isClosed(progress, s.id);
+                    const locked = !closed && blockersOf(s, progress, qp);
+                    return (
+                      <li key={s.id}>
+                        <button type="button" id={`rail-${s.id}`}
+                          className={`rail-step ${s.id === railId ? 'is-selected' : ''} ${closed ? 'is-closed' : ''} ${s.id === suggested.id ? 'is-next' : ''}`}
+                          aria-current={s.id === railId ? 'step' : undefined} onClick={() => { select(s.id, false); setRouteOpen(false); }}>
+                          <span className="rail-step-mark" aria-hidden="true">
+                            {progress.steps[s.id] === 'done' ? <IconCheck /> : locked ? <IconLock /> : null}
+                          </span>
+                          <code className="rail-step-code">{s.id}</code>
+                          <span className="rail-step-title">{s.title}</span>
+                          {needsReview(s, progress) && <span className="rail-dot" title="Updated in V2 — check" />}
+                          <span className="visually-hidden">
+                            {progress.steps[s.id] === 'done' ? ', done' : progress.steps[s.id] === 'skipped' ? ', skipped' : locked ? ', locked' : ''}
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ol>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+
+  /** Below the wide layout the route rail is a drawer: the current action stays on top, the route is one tap away. */
+  function RouteBar() {
+    const closed = steps.filter((st) => isClosed(progress, st.id)).length;
+    return (
+      <div className="route-bar">
+        <button type="button" className="btn route-bar-btn" aria-haspopup="dialog" onClick={() => setRouteOpen(true)}>
+          <span aria-hidden="true">☰</span> Route
+          <span className="muted route-bar-now">Stage {selected.stage} · {selected.id}</span>
+        </button>
+        <p className="route-bar-stats muted small">
+          {steps.length ? Math.round((closed / steps.length) * 100) : 0}% done · {qp} / {maxQp} QP
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <div className={`path-wide ${!chosen && !dossierNpc ? 'no-dock' : ''}`}>
+    <div className={`path-wide ${pinned && wide ? '' : 'no-dock'} ${wide ? '' : 'is-narrow'}`}>
       <h1 className="visually-hidden">Path</h1>
 
-      <nav className="rail" aria-label="Stages and steps">
-        {selected.id !== suggested.id ? (
-          <button type="button" className="rail-now" onClick={() => select(suggested.id)}>
-            To the current step · <code className="code">{suggested.id}</code>
-          </button>
-        ) : (
-          // The same height as the button: the list below does not jump when you leave the current step.
-          <div className="rail-now is-here">You are on the current step · <code className="code">{suggested.id}</code></div>
-        )}
-        <ol className="rail-stages">
-          {stages.map((st) => {
-            const list = steps.filter((s) => s.stage === st.id);
-            const done = list.filter((s) => isClosed(progress, s.id)).length;
-            const complete = done === list.length;
-            const open = openStages.has(st.id);
-            return (
-              <li key={st.id} className={`rail-stage ${st.id === current ? 'is-current' : ''} ${complete ? 'is-complete' : ''} ${st.membersOnly ? 'is-members' : ''}`}>
-                <button type="button" className="rail-stage-btn" aria-expanded={open} onClick={() => toggleStage(st.id)}>
-                  <span className="rail-num">{complete ? <IconCheck /> : st.id}</span>
-                  <span className="rail-stage-title">{st.title}</span>
-                  <span className="rail-count">{done}/{list.length}</span>
-                </button>
-                {open && (
-                  <ol className="rail-steps">
-                    {list.map((s) => {
-                      const closed = isClosed(progress, s.id);
-                      const locked = !closed && blockersOf(s, progress, qp);
-                      return (
-                        <li key={s.id}>
-                          <button type="button" id={`rail-${s.id}`}
-                            className={`rail-step ${s.id === railId ? 'is-selected' : ''} ${closed ? 'is-closed' : ''} ${s.id === suggested.id ? 'is-next' : ''}`}
-                            aria-current={s.id === railId ? 'step' : undefined} onClick={() => select(s.id, false)}>
-                            <span className="rail-step-mark" aria-hidden="true">
-                              {progress.steps[s.id] === 'done' ? <IconCheck /> : locked ? <IconLock /> : null}
-                            </span>
-                            <code className="rail-step-code">{s.id}</code>
-                            <span className="rail-step-title">{s.title}</span>
-                            {needsReview(s, progress) && <span className="rail-dot" title="Updated in V2 — check" />}
-                            <span className="visually-hidden">
-                              {progress.steps[s.id] === 'done' ? ', done' : progress.steps[s.id] === 'skipped' ? ', skipped' : locked ? ', locked' : ''}
-                            </span>
-                          </button>
-                        </li>
-                      );
-                    })}
-                  </ol>
-                )}
-              </li>
-            );
-          })}
-        </ol>
-      </nav>
+      {wide ? rail : <RouteBar />}
 
       <section className={`center ${switching ? 'is-switching' : ''}`} ref={center} aria-labelledby="step-view-title" aria-busy={switching}>
         {pending.length > 0 && (
@@ -172,28 +195,13 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
           </div>
         )}
 
+        <AccountSync compact />
         <TrackedSkillCard />
 
         {/* A combat step has its own advice in the card — the banner does not repeat it. */}
         {!selected.foes?.length && <GearBanner />}
         <article className={`step-view ${selected.membersOnly ? 'is-members' : ''}`} key={selected.id}>
-          <header className="step-view-head">
-            <h2 className="step-view-title" id="step-view-title" tabIndex={-1}><code className="code">{selected.id}</code> · {selected.title}</h2>
-            <p className="step-view-kicker">
-              <TypeIcon type={selected.type} />
-              <span className="badge badge-stage">{TYPE_LABEL[selected.type]} · Stage {selected.stage}</span>
-              {selected.qp ? <span className="badge badge-qp">+{selected.qp} QP</span> : null}
-              {selected.membersOnly && <span className="badge badge-members">Members</span>}
-              {selected.optional && <span className="tag">optional</span>}
-              {status === 'done' && <span className="badge badge-f2p"><IconCheck /> done</span>}
-              {status === 'skipped' && <span className="tag">skipped</span>}
-              {selected.id === suggested.id && status !== 'done' && <span className="badge badge-now">now by the plan</span>}
-            </p>
-            {blockers && (
-              <p className="step-blocked"><IconLock />First: {blockerParts(blockers).join(', ')}</p>
-            )}
-          </header>
-          <StepBody step={selected} onDone={complete} nextId={upcoming?.id} />
+          <StepWorkspace step={selected} suggested={selected.id === suggested.id} onDone={complete} nextId={upcoming?.id} />
           <footer className="step-view-nav">
             {(() => {
               const at = steps.findIndex((s) => s.id === selected.id);
@@ -210,7 +218,8 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
         </article>
       </section>
 
-      <WikiDock className="dock" />
+      {wide && <WikiDock className="dock" />}
+      {!wide && <RouteDrawer open={routeOpen} onClose={() => setRouteOpen(false)}>{rail}</RouteDrawer>}
     </div>
   );
 }

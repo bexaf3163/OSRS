@@ -84,7 +84,43 @@ function expect(cond: boolean, what: string) {
 async function noOverflow(page: Page) {
   return page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth <= 0);
 }
-const text = (page: Page, sel: string) => page.locator(sel).allInnerTexts().then((t) => t.join('\n'));
+/**
+ * A step is one workspace with four views (Steps, Preparation, Travel, Details). Opens the view whose content matches the selector, so the
+ * scenarios keep asking "is this on the page" without caring which tab holds it. Nothing happens off the Path page, or when it is already shown.
+ */
+async function reveal(page: Page, sel: string) {
+  if (await page.locator(sel).count()) return;
+  const tabs = page.getByRole('tablist', { name: 'Step views' }).getByRole('tab');
+  const n = await tabs.count();
+  for (let i = 0; i < n; i++) {
+    await tabs.nth(i).click();
+    await page.waitForTimeout(120);
+    if (await page.locator(sel).count()) return;
+  }
+}
+/** waitForSelector for something that may live in another workspace tab. */
+async function waitFor(page: Page, sel: string, timeout: number) {
+  await reveal(page, sel);
+  await page.waitForSelector(sel, { timeout });
+}
+
+/** A button of the step workspace, found in whichever tab holds it. */
+async function stepButton(page: Page, name: string | RegExp, role: 'button' | 'radio' = 'button') {
+  const find = () => page.getByRole(role, { name });
+  if (await find().count()) return find();
+  const tabs = page.getByRole('tablist', { name: 'Step views' }).getByRole('tab');
+  const total = await tabs.count();
+  for (let i = 0; i < total; i++) {
+    await tabs.nth(i).click();
+    await page.waitForTimeout(120);
+    if (await find().count()) return find();
+  }
+  return find();
+}
+const text = async (page: Page, sel: string) => {
+  await reveal(page, sel);
+  return page.locator(sel).allInnerTexts().then((t) => t.join('\n'));
+};
 
 async function run(browser: Browser) {
   for (const width of [390, 1100]) {
@@ -105,7 +141,7 @@ async function run(browser: Browser) {
       // The preparation route: one main thing, the start button, the return to the step; the trip survives a page reload.
       const prep = await text(page, '.prep-route');
       expect(prep.includes('Preparing for S9-01') && prep.includes('Start the preparation') && prep.includes('then we return to S9-01'), 'preparation: the main thing, the button and the return to the step');
-      await page.getByRole('button', { name: /Start the preparation/ }).click();
+      await (await stepButton(page, /Start the preparation/)).click();
       await page.waitForTimeout(300);
       const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:prep') ?? '{}') as { stack?: { sourceStepId: string }[] });
       expect(saved.stack?.length === 1 && saved.stack[0].sourceStepId === 'S9-01', 'preparation: the trip was remembered in the storage');
@@ -154,7 +190,7 @@ async function run(browser: Browser) {
         events: [{ type: 'STATS', stats: { crafting: 40, woodcutting: 40 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Knife', carried: 0, noted: 0, bank: 1 }] }],
         localStorage: { 'osrs-put:prep': JSON.stringify({ stack: [{ sourceStepId: 'S9-01', detourId: 'bank', reason: 'Take it from the bank', startedAt: 1, returnCondition: 'done' }], done: [] }) },
       }, '#/step/S9-01');
-      await page.getByRole('button', { name: /Return to the step now/ }).click();
+      await (await stepButton(page, /Return to the step now/)).click();
       await page.waitForTimeout(700);
       expect((await text(page, '.prep-route')).includes('Continue the preparation'), 'pause: after the arrow is cleared — "Continue the preparation"');
       type Post = { path: string };
@@ -173,7 +209,7 @@ async function run(browser: Browser) {
         status: { stats: { woodcutting: 32 } },
         events: [{ type: 'STATS', stats: { woodcutting: 32 } }],
       }, '#/skills/WC');
-      await page.waitForSelector('.training', { timeout: 5000 });
+      await waitFor(page, '.training', 5000);
       const calm = await text(page, '.training');
       expect(calm.includes('What to train with') && calm.includes('Willow') && !calm.includes('by the wiki speed') && calm.includes('Style: 🌿 Calm'), 'what to train with: at level 32 — willows, the calm style without a time estimate');
       expect(await noOverflow(page), 'what to train with: no horizontal scrolling');
@@ -184,7 +220,7 @@ async function run(browser: Browser) {
       const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { efficient?: boolean });
       expect(feat.efficient === true, 'style: "Efficient" was remembered in the settings');
       await page.goto(`${BASE}#/skills/WC`);
-      await page.waitForSelector('.training', { timeout: 5000 });
+      await waitFor(page, '.training', 5000);
       const fast = await text(page, '.training');
       expect(fast.includes('Style: ⚡ Efficient') && /wiki speed/.test(fast), 'what to train with: the efficient style shows the time and the speed "per the wiki"');
       expect(!errors.length, `what to train with: no console errors ${errors.join('; ')}`);
@@ -200,17 +236,16 @@ async function run(browser: Browser) {
         events: [{ type: 'STATS', stats: { crafting: 28, woodcutting: 40 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Knife', carried: 0, noted: 0, bank: 1 }] }],
         localStorage: { 'osrs-put:features': JSON.stringify({ autoPrep: false }) },
       }, '#/step/S9-01');
-      await page.waitForSelector('.step-status', { timeout: 8000 });
+      await waitFor(page, '.step-status', 8000);
       const line = await text(page, '.status-line');
-      expect(/Preparation required \(\d/.test(line) && line.includes('Fix') && line.includes('More'), `Zen: one status line with the preparation and the buttons (${line.replace(/\s+/g, ' ').slice(0, 90)})`);
-      expect(!(await page.locator('.readiness').first().isVisible()), 'Zen: the readiness panel is folded, it is not on the screen');
-      expect((await text(page, '.step-details')).includes('Done'), 'Zen: the "Done" button is in place');
-      expect(await page.locator('.zen-more').count() === 1, 'Zen: the rest is in "More about the step"');
-      await page.getByRole('button', { name: /More ▾/ }).click();
+      expect(/Preparation required \(\d/.test(line) && line.includes('Fix'), `Zen: one status line with the preparation and the Fix button (${line.replace(/\s+/g, ' ').slice(0, 90)})`);
+      expect(await page.locator('.readiness').count() === 0, 'Zen: the readiness panel is not on the Steps view');
+      expect((await text(page, '.step-details')).includes('Mark as manually completed'), 'Zen: manual completion is a quiet action in the Steps view');
+      expect(await page.getByRole('tab').count() === 4, 'Zen: the workspace has four views: Steps, Preparation, Travel, Details');
+      await page.getByRole('tab', { name: 'Preparation' }).click();
       await page.waitForTimeout(300);
       const open1 = await text(page, '.readiness');
-      expect(open1.includes('Catch up Crafting') && open1.includes('To the bank'), 'Zen: "More" expands the whole earlier preparation panel');
-      expect(await page.locator('.status-tab').count() >= 2, 'Zen: the detail tabs (preparation, route and game…)');
+      expect(open1.includes('Catch up Crafting') && open1.includes('To the bank'), 'Zen: the Preparation view holds the whole preparation panel');
       expect(await noOverflow(page), 'Zen: no horizontal scrolling');
       expect(!errors.length, `Zen: no console errors ${errors.join('; ')}`);
       await page.context().close();
@@ -222,7 +257,7 @@ async function run(browser: Browser) {
         progress: progressBefore('S1-04'),
         status: { stats: {} },
       }, '#/step/S1-04');
-      await page.waitForSelector('.step-status', { timeout: 8000 });
+      await waitFor(page, '.step-status', 8000);
       const line = await text(page, '.status-line');
       expect(line.includes('Ready to set off') && line.includes('Start the step') && !line.includes('Fix'), `Zen: ready — "Ready to set off · Start the step" (${line.replace(/\s+/g, ' ').slice(0, 80)})`);
       expect(await noOverflow(page), 'Zen (ready): no horizontal scrolling');
@@ -235,7 +270,8 @@ async function run(browser: Browser) {
       }
       await page.waitForTimeout(300);
       const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { inspector?: boolean });
-      expect(feat.inspector === true && await page.locator('.step-status').count() === 0, 'Inspector: the header switch expands the blocks and hides the status line');
+      // In a narrow window the switch is on the Settings page (the step page is left), so only the saved choice can be checked there.
+      expect(feat.inspector === true && (width <= 480 || await page.locator('.step-status').count() === 1), 'Inspector: the switch is saved and the status line stays on top');
       expect(!errors.length, `Zen (ready): no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
@@ -286,7 +322,7 @@ async function run(browser: Browser) {
         progress: progressBefore('S2-05'),
         status: { activeStepId: 'S2-05' },
       }, '#/step/S2-05');
-      await page.getByRole('button', { name: '🗺️ World map' }).first().click();
+      await (await stepButton(page, '🗺️ World map')).first().click();
       await page.waitForTimeout(800);
       const t = await text(page, '.map-source');
       expect(t.includes('The in-game arrow leads') && t.includes('Varrock Teleport'), 'map: the marker "The in-game arrow leads to Varrock Teleport"');
@@ -299,15 +335,15 @@ async function run(browser: Browser) {
     // "what you need / where to get it / the step points".
     {
       const { page, errors } = await open(browser, width, { progress: progressBefore('S2-03') }, '#/step/S2-03');
-      await page.getByRole('radio', { name: /Eye of newt — Betty/ }).click();
-      await page.getByRole('button', { name: '🧭 Lead here in the game' }).click();
+      await (await stepButton(page, /Eye of newt — Betty/, 'radio')).click();
+      await (await stepButton(page, '🧭 Lead here in the game')).click();
       await page.waitForTimeout(500);
       type Post = { path: string; body: Record<string, unknown> };
       const posts = () => page.evaluate(() => (window as unknown as { __posts: Post[] }).__posts);
       const nav = (await posts()).filter((p) => p.path === '/nav-target').pop()?.body;
       expect(nav?.x === 3014 && JSON.stringify(nav?.npcNames) === '["Betty"]' && nav?.stepId === 'S2-03',
         'step map: "Lead here in the game" — a target at Betty with the NPC highlighted');
-      await page.getByRole('button', { name: '🧭 Show in the game' }).first().click();
+      await (await stepButton(page, '🧭 Show in the game')).first().click();
       await page.waitForTimeout(500);
       const guide = (await posts()).filter((p) => p.path === '/active-step').pop()?.body.guide as
         { items: { name: string; where?: string }[]; places: { label: string; items?: string[] }[] } | undefined;
@@ -362,7 +398,7 @@ async function run(browser: Browser) {
     {
       const { page, errors } = await open(browser, width, { progress: progressBefore('S9-01') }, '#/skills');
       await page.getByRole('button', { name: /Leveling roadmap/ }).first().click();
-      await page.waitForSelector('dialog.skill-drawer[open] .skill-timeline', { timeout: 5000 });
+      await waitFor(page, 'dialog.skill-drawer[open] .skill-timeline', 5000);
       const before = await text(page, '.skill-timeline');
       expect(/Levels \d+/.test(before), 'roadmap: the level brackets are shown');
       expect(await noOverflow(page), 'roadmap: no horizontal scrolling');
@@ -374,7 +410,7 @@ async function run(browser: Browser) {
       await page.keyboard.press('Escape');
       await page.waitForTimeout(400);
       await page.evaluate(() => { location.hash = '#/step/S9-01'; });
-      await page.waitForSelector('.tracked-skill', { timeout: 5000 });
+      await waitFor(page, '.tracked-skill', 5000);
       await page.getByRole('button', { name: /Back to the quest route/ }).click();
       expect((await page.locator('.tracked-skill').count()) === 0, 'roadmap: stopping gives the quest route back');
       expect(!errors.length, `roadmap: no console errors ${errors.join('; ')}`);
@@ -388,7 +424,7 @@ async function run(browser: Browser) {
         localStorage: { 'osrs-put:profiles': profiles },
         status: { protocol: 5, pluginVersion: '2.12.0', player: 'Beta Two', xp: { woodcutting: 10, strength: 0 } },
       }, '#/skills/WC');
-      await page.waitForSelector('.plaque-warning', { timeout: 5000 });
+      await waitFor(page, '.plaque-warning', 5000);
       const t = await text(page, '.plaque-warning');
       expect(t.includes('new character') && t.includes('Beta Two'), 'profile: another character — an offer to create a profile');
       expect(!errors.length, `profile: no console errors ${errors.join('; ')}`);
@@ -398,7 +434,7 @@ async function run(browser: Browser) {
         localStorage: { 'osrs-put:profiles': profiles },
         status: { protocol: 5, pluginVersion: '2.12.0', player: 'Alpha One', xp: { woodcutting: 10 } },
       }, '#/skills/WC');
-      await ok.page.waitForSelector('.live-xp', { timeout: 5000 });
+      await waitFor(ok.page, '.live-xp', 5000);
       const x = await text(ok.page, '.live-xp');
       expect(x.includes('to ') && x.includes('XP left'), 'skill: XP from the game — "N XP left to the level"');
       expect((await ok.page.locator('.plaque-warning').count()) === 0, 'profile: the own character — no warning');
@@ -419,7 +455,7 @@ async function run(browser: Browser) {
         status: { protocol: 5, pluginVersion: '2.20.0', player: 'Alpha One' },
       }, '#/settings');
       await page.getByRole('tab', { name: 'Progress and copies' }).click();
-      await page.waitForSelector('.ledger-block', { timeout: 5000 });
+      await waitFor(page, '.ledger-block', 5000);
       const t = await text(page, '.ledger-block');
       expect(t.includes('entries 2') && t.includes('Coins +'), 'journal: the records of the earlier launch are in place');
       await page.getByRole('button', { name: 'Clear the journal' }).click();
@@ -437,7 +473,7 @@ async function run(browser: Browser) {
         progress: progressBefore('S2-05'),
         events: [{ type: 'STATS', stats: { magic: 25 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Law rune', carried: 0, noted: 0, bank: 0 }, { name: 'Air rune', carried: 0, noted: 0, bank: 0 }] }],
       }, '#/step/S2-05');
-      await page.waitForSelector('.branch-missing', { timeout: 5000 });
+      await waitFor(page, '.branch-missing', 5000);
       const t = await text(page, '.branch-missing');
       expect(t.includes('Missing') && t.includes('Law rune'), 'quick variant: no runes — "missing Law rune"');
       expect((await page.locator('.branch button:has-text("Lead in the game")').count()) === 0, 'quick variant: without runes it does not lead by teleport in the game');
@@ -452,16 +488,18 @@ async function run(browser: Browser) {
         progress: progressBefore('S2-04'), prices,
         events: [{ type: 'STATS', stats: { magic: 10, mining: 1, attack: 5, strength: 5, defence: 5 } }, { type: 'XP', xp: { magic: 1200 } }],
       }, '#/step/S2-04');
-      await page.waitForSelector('.magic-plan table', { timeout: 6000 });
+      await waitFor(page, '.magic-plan table', 6000);
       const t = await text(page, '.magic-plan');
       expect(t.includes('Wind Strike only') && t.includes('staff of fire') && t.includes('Magic 25'), 'S2-04: the magic calculation — the options and the staff of fire');
       expect(t.includes('hides'), 'S2-04: how many hides pay back the runes');
+      await reveal(page, '.money-plan summary');
       await page.locator('.money-plan summary').click();
       const m = await text(page, '.money-plan');
       expect(m.includes('How to make up the money') && m.includes('gp/h'), 'S2-04: "How to make up the money" — methods with revenue per hour');
       expect((await page.locator('.money-method').count()) > 0, 'S2-04: the money block has methods');
+      await reveal(page, '.style-gear summary');
       await page.locator('.style-gear summary').click();
-      await page.waitForSelector('.style-row', { timeout: 6000 });
+      await waitFor(page, '.style-row', 6000);
       const sg = await text(page, '.style-gear');
       expect(sg.includes('What to wear for magic') && sg.includes('Weapon:') && sg.includes('OSRS Wiki recommendations'), 'S2-04: "What to wear for magic" — the slots and the source');
       expect(await noOverflow(page), 'S2-04: the gear without horizontal scrolling');
@@ -491,8 +529,8 @@ async function run(browser: Browser) {
           coins: 500, equipment: [], inventory: [{ id: 563, name: 'Law rune', count: 1 }, { id: 556, name: 'Air rune', count: 3 }, { id: 554, name: 'Fire rune', count: 1 }],
         },
       }, '#/step/S2-05');
-      await page.getByRole('button', { name: /Where am I/ }).click();
-      await page.waitForSelector('.travel-option', { timeout: 5000 });
+      await (await stepButton(page, /Where am I/)).click();
+      await waitFor(page, '.travel-option', 5000);
       const t = await text(page, '.travel-plan');
       expect(t.includes('Varrock Teleport') && t.includes('available now'), 'how to get there: Varrock Teleport with runes — "available now"');
       expect(t.includes('3222, 3218'), 'how to get there: the position from the game is shown');
@@ -534,9 +572,8 @@ async function run(browser: Browser) {
         status: { protocol: 5, pluginVersion: '2.13.0', pos: { x: 3222, y: 3218, plane: 0 }, stats: {}, coins: 100, bankCoins: 0, equipment: [], inventory: [] },
         events: [{ type: 'OWNED', bankSeen: true, items: [...new Set(names)].map((n) => ({ name: n, carried: 0, noted: 0, bank: 0 })) }],
       }, '#/step/S2-10');
-      // The future preparation is a folded section of the step view: open it, as the player would.
-      await page.locator('summary', { hasText: 'Future Preparation' }).click();
-      await page.waitForSelector('.one-trip', { timeout: 5000 });
+      // The preparation of the next steps lives in the Preparation view of the workspace.
+      await waitFor(page, '.one-trip', 5000);
       const trip = await text(page, '.one-trip');
       expect(trip.includes('What you need') && trip.includes('Needed now') && trip.includes('Open the shopping list'), 'what you need: the "Needed now" list and a link to shopping');
       expect(/ready \d+%/.test(trip) && trip.includes('critical'), 'what you need: the readiness in percent and the number of critical ones');
@@ -555,13 +592,15 @@ async function run(browser: Browser) {
         status: { protocol: 5, pluginVersion: '2.37.3', stats: {}, coins: 0, bankCoins: 0, equipment: [], inventory: [],
           navTarget: { label: 'Lady Keli: use soft clay on the key for a print', x: 3127, y: 3244, plane: 0, stepId: 'S2-10' } },
       }, '#/step/S2-10');
-      await page.waitForSelector('.sub-hero', { timeout: 5000 });
+      await waitFor(page, '.sub-hero', 5000);
       const hero = await text(page, '.sub-hero');
-      expect(hero.includes('Step 4 of 6') && hero.includes('Lady Keli') && hero.includes('Lead to Target in Game'), 'cockpit: the hero names the sub-step and has the lead button');
+      const action = (await text(page, '.current-action')).toLowerCase();
+      expect(action.includes('instruction 4 of 6') && action.includes('lady keli'), 'cockpit: the current action names the sub-step');
+      expect(hero.includes('Lead to Target in Game'), 'cockpit: the sub-step has the lead button');
       expect(hero.includes('Could I touch the key for a moment please?'), 'cockpit: the dialogue options are listed');
       expect((await text(page, '.sub-items')).includes('Soft clay'), 'cockpit: the strip holds the items of this sub-step');
-      expect(await page.locator('details.step-fold:not([open])', { hasText: 'Full Walkthrough Reference' }).count() === 1, 'cockpit: the full walkthrough is folded');
-      expect(await page.locator('details.step-fold:not([open])', { hasText: 'Future Preparation' }).count() === 1, 'cockpit: the future preparation is folded');
+      expect(await page.locator('details.step-fold:not([open])', { hasText: 'Full walkthrough and dialogue' }).count() === 1, 'cockpit: the full walkthrough is folded');
+      expect(await page.locator('.one-trip').count() === 0, 'cockpit: the preparation of later steps is not on the Steps view');
       expect(await noOverflow(page), 'cockpit: no horizontal scrolling');
       expect(!errors.length, `cockpit: no console errors ${errors.join('; ')}`);
       await page.context().close();
@@ -577,12 +616,12 @@ async function run(browser: Browser) {
           { type: 'MOVED', kind: 'TELEPORT', from: { x: 3049, y: 9566, plane: 0 }, to: { x: 3222, y: 3218, plane: 0 } },
         ],
       }, '#/step/S2-07');
-      await page.waitForSelector('.prep-recovery', { timeout: 5000 });
+      await waitFor(page, '.prep-recovery', 5000);
       const t = await text(page, '.prep-recovery');
       expect(t.includes('Recovery mode') && t.includes('died') && t.includes('Collect the things') && t.includes('Go back to step S2-07'), 'recovery: died — the things, the missing, the return');
       expect((await text(page, '.step-status')).includes('recovery mode'), 'recovery: the step status speaks of the mode');
       expect(await noOverflow(page), 'recovery: no horizontal scrolling');
-      await page.getByRole('button', { name: 'This is not a derailment — continue' }).click();
+      await (await stepButton(page, 'This is not a derailment — continue')).click();
       await page.waitForFunction(() => !document.querySelector('.prep-recovery'), null, { timeout: 5000 });
       expect(!errors.length, `recovery: no console errors ${errors.join('; ')}`);
       await page.context().close();
@@ -624,11 +663,12 @@ async function run(browser: Browser) {
     // A quest with an NPC: on the step map — the points of the NPC and where items come from, as in the list in the game.
     {
       const { page, errors } = await open(browser, width, { progress: progressBefore('S2-10') }, '#/step/S2-10');
+      await reveal(page, '.spot-chip');
       const chips = await page.locator('.spot-chip').allInnerTexts();
       expect(chips.some((c) => c.includes('Ned')) && chips.some((c) => c.includes('Lady Keli')) && chips.some((c) => c.includes('Prince Ali')),
         `step map: the quest NPC as points (${chips.length})`);
-      await page.getByRole('radio', { name: /Ned — a house in Draynor Village/ }).click();
-      await page.getByRole('button', { name: '🧭 Lead here in the game' }).click();
+      await (await stepButton(page, /Ned — a house in Draynor Village/, 'radio')).click();
+      await (await stepButton(page, '🧭 Lead here in the game')).click();
       await page.waitForTimeout(500);
       const nav = await page.evaluate(() => (window as unknown as { __posts: { path: string; body: Record<string, unknown> }[] }).__posts
         .filter((p) => p.path === '/nav-target').pop()?.body);
@@ -666,7 +706,8 @@ async function run(browser: Browser) {
     await page.context().close();
   }
 
-  // The dossier column of the wide Path page: never an empty hint. With a current target it shows that NPC; with none, it folds away.
+  // The wiki dossier is on demand: no permanent column. A click on an NPC opens it as a drawer, "Pin to the side" makes it a column that is
+  // remembered; pinned with nothing chosen it shows the current target, never an empty hint; "Unpin" returns the drawer behaviour.
   console.log('dossier');
   {
     const { page, errors } = await open(browser, 1280, {
@@ -674,19 +715,26 @@ async function run(browser: Browser) {
       status: { protocol: 5, pluginVersion: '2.37.3', stats: {}, coins: 0, bankCoins: 0, equipment: [], inventory: [],
         navTarget: { label: 'Lady Keli: use soft clay on the key for a print', x: 3127, y: 3244, plane: 0, stepId: 'S2-10' } },
     }, '#/step/S2-10');
-    await page.waitForSelector('.dock .dock-panel', { timeout: 5000 });
+    await waitFor(page, '.path-wide', 5000);
+    expect(await page.locator('.path-wide.no-dock').count() === 1 && !(await page.locator('.dock').isVisible()), 'dossier: no permanent column by default');
+    await page.getByRole('tab', { name: 'Details' }).click();
+    await page.locator('.npc-name').first().click();
+    await page.waitForSelector('dialog.drawer[open]', { timeout: 5000 });
+    expect(await page.getByRole('button', { name: 'Pin to the side' }).count() === 1, 'dossier: the drawer offers to pin it');
+    await page.getByRole('button', { name: 'Pin to the side' }).click();
+    await page.waitForSelector('.path-wide:not(.no-dock) .dock .dock-panel', { timeout: 5000 });
+    expect(await page.locator('dialog.drawer[open]').count() === 0, 'dossier: pinning closes the drawer and shows the column');
+    await page.reload();
+    await page.waitForTimeout(1500);
     const dock = await text(page, '.dock');
-    expect(/your current target/i.test(dock) && dock.includes('Keli') && !dock.includes('Click an item or NPC'), 'dossier: it shows the target NPC instead of an empty hint');
+    expect(await page.locator('.path-wide:not(.no-dock)').count() === 1, 'dossier: the pin is remembered after a reload');
+    expect(/your current target/i.test(dock) && dock.includes('Keli') && !dock.includes('Click an item or NPC'), 'dossier: pinned with nothing chosen it shows the target NPC instead of an empty hint');
     if (process.env.UI_SHOTS) await page.screenshot({ path: `${process.env.UI_SHOTS}/cockpit-1280.png` }).catch(() => {});
+    await page.getByRole('button', { name: 'Unpin from the side' }).click();
+    await page.waitForTimeout(300);
+    expect(await page.locator('.path-wide.no-dock').count() === 1, 'dossier: unpinning returns the on-demand drawer');
     expect(errors.length === 0, `dossier: no console errors ${errors.join('; ')}`);
     await page.context().close();
-    const route = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; npc?: unknown; questStages?: unknown }[];
-    const plain = route.find((x) => !x.npc && !x.questStages)!;
-    const second = await open(browser, 1280, { progress: progressBefore(plain.id), status: { protocol: 5, stats: {}, equipment: [], inventory: [] } }, `#/step/${plain.id}`);
-    await second.page.waitForSelector('.path-wide', { timeout: 5000 });
-    expect(await second.page.locator('.path-wide.no-dock').count() === 1 && !(await second.page.locator('.dock').isVisible()), 'dossier: with no target the column folds away');
-    expect(second.errors.length === 0, `dossier: no console errors on a plain step ${second.errors.join('; ')}`);
-    await second.page.context().close();
   }
 
   // The Content-Security-Policy of the built page: the meta tag is there, a foreign inline script does not run, and the page

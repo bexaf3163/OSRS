@@ -61,6 +61,11 @@ export function SkillRoadmapDrawer({ skills, label, onClose }: { skills: SkillNa
   );
 }
 
+/** The roadmap as a page section (the skill workspace's Roadmap tab); the drawer on the Skills page shows the same thing. */
+export function RoadmapPane({ skills, label }: { skills: SkillName[]; label: string }) {
+  return <Roadmap skills={skills} label={label} />;
+}
+
 function Roadmap({ skills, label }: { skills: SkillName[]; label: string }) {
   const tracked = useTracked();
   const [skill, setSkill] = useState<SkillName>(() => (tracked && skills.includes(tracked.skill) ? tracked.skill : skills[0]));

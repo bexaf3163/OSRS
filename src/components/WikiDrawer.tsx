@@ -1,5 +1,5 @@
 // The built-in wiki inspector: an item or NPC dossier.
-// On a wide "Path" screen it is a pinned third column, otherwise a slide-out panel on the right.
+// It opens on demand as a slide-out panel on the right. On a wide "Path" screen it can be pinned as a third column, and stays pinned between visits.
 // Opened by a click on an item/NPC in the step card or from the search; closed by ✕, a click on the backdrop or Escape.
 // Places in the dossier (where it lies for free, shops, sellers, towns, the NPC's place) — "📍" onto the world map and "🧭" into the game.
 
@@ -27,6 +27,14 @@ interface WikiContextValue {
   chosen: boolean;
   /** A place for the pinned column: a page registers the element while it is on screen. */
   setDock: (el: HTMLElement | null) => void;
+  /** The dossier is pinned as a column (only possible where the page has a place for it). */
+  pinned: boolean;
+  setPinned: (v: boolean) => void;
+}
+
+const PIN_KEY = 'osrs-put:wiki-pinned';
+function loadPinned(): boolean {
+  try { return localStorage.getItem(PIN_KEY) === '1'; } catch { return false; }
 }
 
 const WikiContext = createContext<WikiContextValue | null>(null);
@@ -42,18 +50,24 @@ export function WikiProvider({ children }: { children: ReactNode }) {
   const [dock, setDock] = useState<HTMLElement | null>(null);
   const [suggested, setSuggested] = useState<StepNpcInfo | null>(null);
   const wide = useMediaQuery(DOCK);
+  const [pinned, setPinnedState] = useState(loadPinned);
+  const setPinned = useCallback((v: boolean) => {
+    setPinnedState(v);
+    try { localStorage.setItem(PIN_KEY, v ? '1' : '0'); } catch { /* until a restart */ }
+  }, []);
   const openItem = useCallback((query: string | number, label?: string) => setTarget({ kind: 'item', query, label }), []);
   const openNpc = useCallback((npc: StepNpcInfo) => setTarget({ kind: 'npc', npc }), []);
   const chosen = target !== null;
-  const value = useMemo(() => ({ openItem, openNpc, setSuggested, chosen, setDock }), [openItem, openNpc, chosen]);
-  const docked = wide && dock !== null;
+  const value = useMemo(() => ({ openItem, openNpc, setSuggested, chosen, setDock, pinned: pinned && wide, setPinned }), [openItem, openNpc, chosen, pinned, wide, setPinned]);
+  const docked = wide && dock !== null && pinned;
+  const canPin = wide && dock !== null;
   const close = useCallback(() => setTarget(null), []);
   return (
     <WikiContext.Provider value={value}>
       {children}
       {docked
-        ? createPortal(<DockedInspector target={target} suggested={suggested} onClose={close} />, dock)
-        : <WikiDrawer target={target} onClose={close} />}
+        ? createPortal(<DockedInspector target={target} suggested={suggested} onClose={close} onUnpin={() => setPinned(false)} />, dock)
+        : <WikiDrawer target={target} onClose={close} onPin={canPin ? () => setPinned(true) : undefined} />}
     </WikiContext.Provider>
   );
 }
@@ -64,12 +78,14 @@ export function WikiDock({ className }: { className?: string }) {
   return <aside className={className} ref={setDock} aria-label="OSRS Wiki inspector" />;
 }
 
-function DockedInspector({ target, suggested, onClose }: { target: Target | null; suggested: StepNpcInfo | null; onClose: () => void }) {
+function DockedInspector({ target, suggested, onClose, onUnpin }: { target: Target | null; suggested: StepNpcInfo | null; onClose: () => void; onUnpin: () => void }) {
+  const unpin = <button type="button" className="btn btn-ghost btn-sm dock-unpin" onClick={onUnpin}>Unpin from the side</button>;
   if (!target && suggested) {
     // Nothing chosen by hand: the target of the current sub-step, so the column is never an empty hint. There is nothing to close.
     return (
       <div className="dock-panel is-suggested" key={suggested.nameEn}>
         <p className="dock-suggested small muted">Your current target</p>
+        {unpin}
         <NpcView npc={suggested} />
       </div>
     );
@@ -79,6 +95,7 @@ function DockedInspector({ target, suggested, onClose }: { target: Target | null
       <div className="dock-empty">
         <p className="dock-empty-title">OSRS Wiki dossier</p>
         <p className="muted small">Click an item or NPC in a step — the exchange price, shops, drops and where to get it for free will appear here.</p>
+        {unpin}
       </div>
     );
   }
@@ -87,6 +104,7 @@ function DockedInspector({ target, suggested, onClose }: { target: Target | null
       <button type="button" className="icon-btn drawer-close" onClick={onClose} aria-label="Close the dossier">
         <IconClose />
       </button>
+      {unpin}
       {target.kind === 'item' ? <ItemView query={target.query} label={target.label} /> : <NpcView npc={target.npc} />}
     </div>
   );
@@ -94,7 +112,7 @@ function DockedInspector({ target, suggested, onClose }: { target: Target | null
 
 const CLOSE_MS = 180;
 
-function WikiDrawer({ target, onClose }: { target: Target | null; onClose: () => void }) {
+function WikiDrawer({ target, onClose, onPin }: { target: Target | null; onClose: () => void; onPin?: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [closing, setClosing] = useState(false);
 
@@ -127,6 +145,9 @@ function WikiDrawer({ target, onClose }: { target: Target | null; onClose: () =>
         <button type="button" className="icon-btn drawer-close" onClick={close} aria-label="Close">
           <IconClose />
         </button>
+        {onPin && target && (
+          <button type="button" className="btn btn-ghost btn-sm drawer-pin" onClick={() => { onPin(); close(); }}>Pin to the side</button>
+        )}
         {target?.kind === 'item' && <ItemView key={String(target.query)} query={target.query} label={target.label} />}
         {target?.kind === 'npc' && <NpcView key={target.npc.nameEn} npc={target.npc} />}
       </div>

@@ -267,10 +267,10 @@ function Appearance() {
           <Stepper id={ids.zoom} label="Interface scale" value={zoom.zoom} steps={ZOOM_STEPS} onChange={(v) => pickZoom({ zoom: v })} />
           <label className="switch">
             <input type="checkbox" checked={zoom.autoZoom} onChange={(e) => pickZoom({ autoZoom: e.target.checked })} />
-            <span>Adapt to the window size</span>
+            <span>Scale up on large windows (small windows keep your scale and rearrange the layout)</span>
           </label>
           <p className="muted small">
-            Now {percent(zoom.effective)}{zoom.autoZoom && Math.abs(zoom.effective - zoom.zoom) > 0.005 ? ' taking the window width into account' : ''}.
+            Now {percent(zoom.effective)}{zoom.autoZoom && Math.abs(zoom.effective - zoom.zoom) > 0.005 ? ' with the large window taken into account' : ''}.
             Keys: <kbd>Ctrl</kbd> + <kbd>+</kbd> / <kbd>−</kbd>, <kbd>Ctrl</kbd> + <kbd>0</kbd> — reset, or <kbd>Ctrl</kbd> + the mouse wheel.
           </p>
         </div>
@@ -314,6 +314,13 @@ function PlayStyleSection() {
           {' '}<strong>Inspector</strong> — all the step blocks are expanded: formulas, XP calculators, branches, item dossiers, economy.
           In the game the list and the HUD are always visible; the plugin setting "Smart reveal" (off by default) hides the extra on the way.
         </p>
+      </div>
+      <div className="setting">
+        <label className="switch">
+          <input type="checkbox" checked={features.compact} onChange={(e) => setFeatures({ compact: e.target.checked })} />
+          <span>Compact view: the current action and what it needs, for a narrow window beside the game</span>
+        </label>
+        <p className="muted small">It changes how Path is shown. The route, progress and every other page stay as they are; "Full workspace" in the header returns.</p>
       </div>
       <div className="setting">
         <div className="mode-toggle style-toggle" role="group" aria-label="Play style">

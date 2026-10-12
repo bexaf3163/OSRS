@@ -13,6 +13,8 @@ import { LevelInput } from '../components/LevelInput';
 import { Table } from '../components/Table';
 import { LiveXp } from '../components/LiveXp';
 import { TrainingCard } from '../components/TrainingCard';
+import { RoadmapPane } from '../components/SkillRoadmap';
+import { roadmapSkills } from './Skills';
 import { trainingFocus, type TrainingFocus } from '../lib/skillFocus';
 
 export function SkillDetailPage({ id }: { id: string }) {
@@ -29,8 +31,20 @@ export function SkillDetailPage({ id }: { id: string }) {
   return <SkillView skill={skill} />;
 }
 
+type SkillTab = 'overview' | 'roadmap' | 'calculator' | 'reference';
+
 function SkillView({ skill }: { skill: Skill }) {
   const { progress, steps, mode } = useStore();
+  const [tab, setTab] = useState<SkillTab>('overview');
+  const guides = roadmapSkills(skill);
+  const tabs: [SkillTab, string][] = [
+    ['overview', 'Overview'], ...(guides.length > 0 ? [['roadmap', 'Roadmap'] as [SkillTab, string]] : []), ['calculator', 'Calculator'], ['reference', 'Reference'],
+  ];
+  /** "Now by the plan" leads to the training plan row, which lives in the Reference tab. */
+  const showPlan = () => {
+    setTab('reference');
+    window.setTimeout(() => document.getElementById('plan')?.scrollIntoView({ behavior: 'smooth' }), 60);
+  };
   const level = skillLevel(skill, progress);
   const hit = rangeForLevel(skill.plan.ranges, level);
   const related = steps.filter((s) => s.targets?.some((t) => levelById.get(t.skill)?.skill === skill.id));
@@ -55,6 +69,16 @@ function SkillView({ skill }: { skill: Skill }) {
         <p className="notice">This skill can be trained only with membership. Switch the mode to Members in the header to see stages 7–9.</p>
       )}
 
+      <nav className="subtabs" aria-label="Skill sections" role="tablist">
+        {tabs.map(([id, label]) => (
+          <button key={id} type="button" role="tab" aria-selected={tab === id} className={`subtab ${tab === id ? 'is-active' : ''}`} onClick={() => setTab(id)}>
+            {label}
+          </button>
+        ))}
+      </nav>
+
+      {tab === 'overview' && (
+      <>
       <section className="card levels-card" aria-label="Levels">
         <div className="levels-row">
           {skill.levelSkills.map((lid) => <LevelInput key={lid} id={lid} label={levelById.get(lid)!.name} />)}
@@ -63,7 +87,7 @@ function SkillView({ skill }: { skill: Skill }) {
         {hit && (
           <p className="current-range">
             Now by the plan:{' '}
-            <button type="button" className="link-btn" onClick={() => document.getElementById('plan')?.scrollIntoView({ behavior: 'smooth' })}>
+            <button type="button" className="link-btn" onClick={showPlan}>
               <code className="code">{hit.range.code}</code>
             </button> · {hit.range.levels}
             {skill.levelSkills.length > 1 && <span className="muted"> (by the lagging one, level {level})</span>}
@@ -73,8 +97,6 @@ function SkillView({ skill }: { skill: Skill }) {
 
       <FocusNote focus={focus} />
       <TrainingCard skill={focus.skill} target={focus.target} />
-
-      <Calculator levelIds={skill.levelSkills} suggest={(lid, level, stage) => defaultTarget(skill, lid, level, stage)} />
 
       {related.length > 0 && (
         <section className="section">
@@ -94,14 +116,25 @@ function SkillView({ skill }: { skill: Skill }) {
         </section>
       )}
 
-      {skill.intro.length > 0 && <div className="prose section"><Blocks blocks={skill.intro} /></div>}
+      </>
+      )}
 
-      {skill.sections.map((sec, i) => (
-        <section key={sec.title} className="section prose" id={i === skill.plan.sectionIndex ? 'plan' : undefined}>
-          <h2>{sec.title}</h2>
-          {i === skill.plan.sectionIndex ? <PlanBlocks skill={skill} highlight={hit?.index} blocks={sec.blocks} /> : <Blocks blocks={sec.blocks} />}
-        </section>
-      ))}
+      {tab === 'roadmap' && <RoadmapPane skills={guides} label={skill.name} />}
+
+      {tab === 'calculator' && <Calculator levelIds={skill.levelSkills} suggest={(lid, level, stage) => defaultTarget(skill, lid, level, stage)} />}
+
+      {tab === 'reference' && (
+        <>
+          {skill.intro.length > 0 && <div className="prose section"><Blocks blocks={skill.intro} /></div>}
+
+          {skill.sections.map((sec, i) => (
+            <section key={sec.title} className="section prose" id={i === skill.plan.sectionIndex ? 'plan' : undefined}>
+              <h2>{sec.title}</h2>
+              {i === skill.plan.sectionIndex ? <PlanBlocks skill={skill} highlight={hit?.index} blocks={sec.blocks} /> : <Blocks blocks={sec.blocks} />}
+            </section>
+          ))}
+        </>
+      )}
     </div>
   );
 }

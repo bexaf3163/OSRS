@@ -230,42 +230,56 @@ export function ShoppingPage() {
     const single = line.count === 1 || line.reusable;
     const setManual = (n: number | null) => setOwnedManual(line.key, n);
     const note = sourceNote(h);
+    const ownedText = h.owned === null ? '?' : String(h.owned);
+    const toObtain = h.status === 'SUFFICIENT' ? '—' : h.status === 'UNKNOWN' ? '?' : String(h.buy);
+    const cost = r.price && h.buy > 0 && h.status !== 'SUFFICIENT'
+      ? `${h.status === 'UNKNOWN' ? 'up to ' : '≈ '}${formatGp(r.price.buyPrice * h.buy)} gp`
+      : r.price === null && h.buy > 0 && !pricesError ? 'price unknown' : '—';
     return (
       <li key={line.key} className={`shop-row is-${h.status.toLowerCase()}`}>
-        <ItemIcon src={line.iconUrl} alt="" />
-        <div className="shop-main">
-          <p className="shop-name"><strong>{line.nameEn}</strong></p>
-          <p className="shop-src muted small">
-            {line.sources.map((s, i) => {
-              const n = parseAmount(s.amount);
-              return (
-                <span key={`${s.stepId}-${i}`}>
-                  {i > 0 && ', '}
-                  <a href={`#/step/${s.stepId}`}>{s.stepId}</a>{n !== null && n > 1 && !s.carryOver ? ` ×${n}` : ''}{s.carryOver ? ' (same)' : ''}
-                </span>
-              );
-            })}
-            {line.reusable && line.sources.length > 1 ? ' · a tool: one is enough' : ''}
-          </p>
-          {note && <p className="muted small">{note}</p>}
-          {h.stale && (
-            <p className="small warn-text">
-              ⚠️ The game no longer confirms the mark "have {h.manual}" — counting by the game.{' '}
-              <button type="button" className="link-btn" onClick={() => setManual(null)}>Remove the mark</button>
+        <div className="shop-cell shop-item" data-label="Item">
+          <ItemIcon src={line.iconUrl} alt="" />
+          <div className="shop-main">
+            <p className="shop-name"><strong>{line.nameEn}</strong></p>
+            <p className="shop-src muted small">
+              {line.sources.map((s, i) => {
+                const n = parseAmount(s.amount);
+                return (
+                  <span key={`${s.stepId}-${i}`}>
+                    {i > 0 && ', '}
+                    <a href={`#/step/${s.stepId}`}>{s.stepId}</a>{n !== null && n > 1 && !s.carryOver ? ` ×${n}` : ''}{s.carryOver ? ' (same)' : ''}
+                  </span>
+                );
+              })}
+              {line.reusable && line.sources.length > 1 ? ' · a tool: one is enough' : ''}
             </p>
-          )}
+            {note && <p className="muted small">{note}</p>}
+            {h.stale && (
+              <p className="small warn-text">
+                ⚠️ The game no longer confirms the mark "have {h.manual}" — counting by the game.{' '}
+                <button type="button" className="link-btn" onClick={() => setManual(null)}>Remove the mark</button>
+              </p>
+            )}
+          </div>
         </div>
-        <div className="shop-count">
-          {h.status === 'SUFFICIENT'
-            ? <strong className="ok-text">✓ {h.owned ?? 0} / {line.count}{line.exact ? '' : '+'}</strong>
-            : <strong>×{line.count}{line.exact ? '' : '+'}</strong>}
+        <div className="shop-cell shop-num" data-label="Required">
+          <strong>×{line.count}{line.exact ? '' : '+'}</strong>
+        </div>
+        <div className="shop-cell shop-num" data-label="Owned">
+          <span className={h.status === 'SUFFICIENT' ? 'ok-text' : undefined}>{h.status === 'SUFFICIENT' ? `✓ ${ownedText}` : ownedText}</span>
+        </div>
+        <div className="shop-cell shop-num" data-label="To obtain">
+          <strong>{toObtain}</strong>
           <span className={`shop-state is-${h.status.toLowerCase()}`}>{STATE_LABEL[h.status]}</span>
-          {h.status === 'PARTIAL' && <span className="small">have {h.owned} · to obtain {h.buy}</span>}
-          {h.status === 'UNKNOWN' && <span className="muted small">owned: ?{h.source === 'bag' ? ` · up to ${h.buy} may be missing` : ''}</span>}
-          {r.price && h.buy > 0 && <span className="muted small">{h.status === 'UNKNOWN' ? 'up to ' : '≈ '}{formatGp(r.price.buyPrice * h.buy)} gp</span>}
-          {r.price === null && h.buy > 0 && !pricesError && <span className="muted small">price unknown</span>}
+          {h.status === 'UNKNOWN' && h.source === 'bag' && <span className="muted small">up to {h.buy} may be missing</span>}
         </div>
-        <div className="shop-actions">
+        <div className="shop-cell shop-source" data-label="Source">
+          <span className="small">{onGe(line) ? 'Grand Exchange' : 'Along the way'}</span>
+        </div>
+        <div className="shop-cell shop-num" data-label="Estimated cost">
+          <span className="muted small">{cost}</span>
+        </div>
+        <div className="shop-cell shop-actions" data-label="Action">
           {h.source === 'live' ? (
             // The bag and bank are known from the game — a manual mark would change nothing.
             <span className="muted small">✓ by the game data</span>
@@ -287,6 +301,11 @@ export function ShoppingPage() {
     );
   };
   const visible = (rows: Row[]) => rows.filter((r) => shows(filter, r.h.status));
+  const tableHead = (
+    <div className="shop-head" aria-hidden="true">
+      <span>Item</span><span>Required</span><span>Owned</span><span>To obtain</span><span>Source</span><span>Estimated cost</span><span>Action</span>
+    </div>
+  );
 
   return (
     <div className="page shop-page">
@@ -362,7 +381,7 @@ export function ShoppingPage() {
           <h2 className="subhead">Buy at the exchange · {visible(buyRows).length} of {buyRows.length}</h2>
           {visible(buyRows).length === 0 && <p className="muted small">This filter is empty — choose "All".</p>}
           {visible(buyRows).some((r) => r.h.status !== 'UNKNOWN') && (
-            <ul className="shop-list">{visible(buyRows).filter((r) => r.h.status !== 'UNKNOWN').map(rowView)}</ul>
+            <>{tableHead}<ul className="shop-list">{visible(buyRows).filter((r) => r.h.status !== 'UNKNOWN').map(rowView)}</ul></>
           )}
           {visible(buyRows).some((r) => r.h.status === 'UNKNOWN') && (
             <>
@@ -370,7 +389,7 @@ export function ShoppingPage() {
               <p className="muted small">
                 Open your bank in the game or mark what you own. These items may already be yours, so they are not counted as purchases.
               </p>
-              <ul className="shop-list">{visible(buyRows).filter((r) => r.h.status === 'UNKNOWN').map(rowView)}</ul>
+              <>{tableHead}<ul className="shop-list">{visible(buyRows).filter((r) => r.h.status === 'UNKNOWN').map(rowView)}</ul></>
             </>
           )}
         </section>

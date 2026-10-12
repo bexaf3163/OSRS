@@ -3,7 +3,7 @@ import { useEffect, useState, type ComponentType } from 'react';
 import { findSkill, reference } from './data';
 import { useStore } from './store';
 import { useRoute, type Page } from './lib/router';
-import { IconBook, IconCart, IconGear, IconJournal, IconPath, IconSearch, IconSettings, IconSkills } from './components/Icons';
+import { IconBook, IconCart, IconCompact, IconGear, IconJournal, IconPath, IconSearch, IconSettings, IconSkills } from './components/Icons';
 import { SearchBox } from './components/SearchBox';
 import { ModeToggle } from './components/ModeToggle';
 import { DensityToggle } from './components/DensityToggle';
@@ -16,6 +16,8 @@ import { GearHintSync } from './components/GearHintSync';
 import { PrepSync } from './components/PrepSync';
 import { SkillSync } from './components/TrackedSkillCard';
 import { PathPage } from './pages/Path';
+import { PathCompact } from './pages/PathCompact';
+import { setFeatures, useFeatures } from './lib/features';
 import { SkillsPage } from './pages/Skills';
 import { SkillDetailPage } from './pages/SkillDetail';
 import { JournalPage, journalTabOf } from './pages/Journal';
@@ -77,9 +79,11 @@ export function App() {
   }, [route]);
 
   const section = sectionOf(route.page);
+  // The compact view is a presentation of Path only; every other page opens as usual.
+  const compact = useFeatures().compact && route.page === 'path';
   let content;
   switch (route.page) {
-    case 'path': content = <PathPage focusStep={route.step} focusKey={route.key} />; break;
+    case 'path': content = compact ? <PathCompact focusStep={route.step} /> : <PathPage focusStep={route.step} focusKey={route.key} />; break;
     case 'skills': content = route.param ? <SkillDetailPage key={route.param} id={route.param} /> : <SkillsPage />; break;
     case 'goals':
     case 'quests':
@@ -95,7 +99,7 @@ export function App() {
       <a className="skip-link" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>
         Skip to content
       </a>
-      <header className="topbar">
+      <header className={`topbar ${compact ? 'is-compact' : ''}`}>
         <div className="topbar-inner">
           <a className="brand" href="#/">
             <img src="./icon.svg" alt="" width="28" height="28" />
@@ -110,10 +114,20 @@ export function App() {
             ))}
           </nav>
           <div className="topbar-actions">
+            {compact && (
+              <button type="button" className="btn btn-sm" onClick={() => setFeatures({ compact: false })}>Full workspace</button>
+            )}
             <HeaderProgress />
             <BridgeIndicator />
             <DensityToggle />
             <ModeToggle />
+            {!compact && (
+              <button type="button" className="icon-btn compact-btn" aria-label="Compact view: keep the current action next to the game"
+                title="Compact view: keep the current action next to the game"
+                onClick={() => { setFeatures({ compact: true }); if (route.page !== 'path') location.hash = '#/'; }}>
+                <IconCompact />
+              </button>
+            )}
             <button type="button" className="search-trigger" onClick={() => setSearchOpen(true)} aria-label="Search" aria-keyshortcuts="/">
               <IconSearch />
               <span className="search-trigger-text">Search</span>
@@ -127,13 +141,13 @@ export function App() {
         </div>
       </header>
 
-      <main id="main" tabIndex={-1}>
+      <main id="main" tabIndex={-1} className={compact ? 'is-compact' : undefined}>
         <UpdateBanner />
         <ProfileBanner />
         <PageBoundary resetKey={`${route.page}/${route.param ?? ''}`}>{content}</PageBoundary>
       </main>
 
-      <nav className="tabs tabs-bottom" aria-label="Sections">
+      <nav className={`tabs tabs-bottom ${compact ? 'is-compact' : ''}`} aria-label="Sections">
         {TABS.map(({ page, href, label, Icon }) => (
           <a key={page} href={href} className={`tab ${section === page ? 'is-active' : ''}`}
             aria-current={section === page ? 'page' : undefined}>

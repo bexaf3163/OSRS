@@ -164,3 +164,33 @@ export function itemStatus(state: Pick<PlayerState, 'bagItems' | 'owned' | 'equi
   if ((held.bank ?? 0) > 0) return 'bank';
   return held.presence === 'MISSING' ? 'missing' : 'unknown';
 }
+
+export interface OverviewLine {
+  /** 1-based number across the whole walkthrough. */
+  n: number;
+  title: string;
+  stageAt: number;
+  /** Index of the line inside its stage; with stageAt it identifies a SubStep. */
+  index: number;
+  hasTarget: boolean;
+}
+
+/** The whole canonical walkthrough as one ordered list (stages by their quest value, lines in Quest Helper order). Empty without stage data. */
+export function overviewOf(step: Step): OverviewLine[] {
+  const qs = step.questStages;
+  if (!qs) return [];
+  const out: OverviewLine[] = [];
+  for (const stage of [...qs.stages].sort((a, b) => a.at - b.at)) {
+    stage.do.forEach((line, i) => {
+      out.push({ n: out.length + 1, title: titleOf(line), stageAt: stage.at, index: i, hasTarget: !!line.at });
+    });
+  }
+  return out;
+}
+
+/** Which overview line the live sub-step is, or null. */
+export function overviewCurrent(lines: OverviewLine[], sub: SubStep | null): number | null {
+  if (!sub) return null;
+  const hit = lines.find((l) => l.stageAt === sub.stage.at && l.index === sub.index - 1);
+  return hit ? hit.n : null;
+}

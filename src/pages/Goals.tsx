@@ -8,6 +8,29 @@ import { stageQuestPoints } from '../lib/qp';
 import { IconCheck } from '../components/Icons';
 import { SplitsCard } from '../components/SplitsCard';
 
+/** The goals of the current stage that are not reached yet: the short answer to "what do I still need here". */
+function RelevantNow({ stage }: { stage: number }) {
+  const { progress } = useStore();
+  const behind = goals.rows
+    .filter((r) => r.id !== 'qp')
+    .map((r) => ({ row: r, goal: r.values[stage - 1], level: levelOf(progress, r.id) }))
+    .filter((x) => x.goal && !isReached(x.level, x.goal));
+  return (
+    <section className="card section-card goals-now" aria-label="Goals for the current stage">
+      <h2 className="card-title">Still to reach in stage {stage}</h2>
+      {behind.length === 0
+        ? <p className="small">Every level goal of this stage is reached.</p>
+        : (
+          <ul className="goals-now-list">
+            {behind.map(({ row, goal, level }) => (
+              <li key={row.id}><a href={`#/skills/${levelSkills.find((l) => l.id === row.id)?.skill}`}>{row.label}</a> {level} <span aria-hidden="true">→</span> <span className="visually-hidden">goal </span><strong>{goal?.raw}</strong></li>
+            ))}
+          </ul>
+        )}
+    </section>
+  );
+}
+
 export function GoalsPage({ embedded = false }: { embedded?: boolean } = {}) {
   const { progress, qp, steps } = useStore();
   const stage = currentStage(steps, progress);
@@ -20,6 +43,8 @@ export function GoalsPage({ embedded = false }: { embedded?: boolean } = {}) {
         {embedded ? <h2>Goals by stage</h2> : <h1>Goals by stage</h1>}
         <p className="muted">{goals.intro}</p>
       </header>
+
+      <RelevantNow stage={stage} />
 
       <div className="legend" aria-hidden="true">
         <span className="legend-item"><span className="swatch is-reached" />reached</span>

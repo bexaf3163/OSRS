@@ -27,3 +27,18 @@ describe('reference advice matches the route', () => {
     expect(text).toMatch(/this route buys its food/);
   });
 });
+
+describe('journal routes', () => {
+  it('the old hashes open their own tab, the journal opens Quests by default', async () => {
+    const { journalTabOf } = await import('../src/pages/Journal');
+    const { parseHash } = await import('../src/lib/router');
+    expect(journalTabOf('quests')).toBe('quests');
+    expect(journalTabOf('goals')).toBe('goals');
+    expect(journalTabOf('journal')).toBe('quests');
+    expect(journalTabOf('journal', 'session')).toBe('session');
+    expect(parseHash('#/journal/session')).toMatchObject({ page: 'journal', param: 'session' });
+    expect(parseHash('#/quests').page).toBe('quests');
+    expect(parseHash('#/goals').page).toBe('goals');
+    expect(parseHash('#/step/S3-03')).toMatchObject({ page: 'path', step: 'S3-03' });
+  });
+});

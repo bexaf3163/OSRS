@@ -83,14 +83,14 @@ if (!app.requestSingleInstanceLock()) {
   let win = null;
 
   /**
-   * The final scale: manual × the adaptation to the window width. A window wider than 1280 — larger (up to 1.5×),
-   * narrower — smaller (down to 0.9×). The window scale (zoomFactor) honestly changes the width for media queries,
-   * so a narrow window still gets the mobile layout.
+   * The final scale: manual × the adaptation to the window width. A window wider than 1280 — larger (up to 1.5×);
+   * a narrower one keeps the manual scale and the layout reflows instead (the route becomes a drawer, panels stack). Shrinking the whole
+   * interface to keep three columns made the text too small to read. The window scale (zoomFactor) honestly changes the width for media queries.
    */
   function effectiveZoom() {
     if (!win || !ui.autoZoom) return ui.zoom;
     const [width] = win.getContentSize();
-    return Math.round(ui.zoom * clamp(width / BASE_WIDTH, 0.9, 1.5) * 100) / 100;
+    return Math.round(ui.zoom * clamp(width / BASE_WIDTH, 1, 1.5) * 100) / 100;
   }
 
   const zoomState = () => ({ zoom: ui.zoom, autoZoom: ui.autoZoom, effective: effectiveZoom(), alwaysOnTop: ui.alwaysOnTop });

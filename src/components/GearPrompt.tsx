@@ -20,11 +20,20 @@ export const foesText = (foes: Foe[]) => `against ${foes.map((f) => `${f.name} (
 
 /** What to do: "Wear Iron scimitar — it is in the bank", "Buy Steel scimitar instead of Bronze sword". */
 export function ActionTitle({ a }: { a: GearAction }) {
+  const { owned } = useBridge();
   const cur = a.current?.name ?? a.currentName;
   if (a.how === 'wear') {
     return <>Wear <strong>{a.item.name}</strong> — {a.source.kind === 'bank' ? 'it is in the bank' : 'it is in the bag'}</>;
   }
-  return <>Buy <strong>{a.item.name}</strong>{cur ? <> instead of {cur}</> : null}</>;
+  // Until the bank has been seen, the item may already be there: the advice is to consider it, not to buy it.
+  return <>{owned?.bankSeen ? 'Buy' : 'Consider buying'} <strong>{a.item.name}</strong>{cur ? <> instead of {cur}</> : null}</>;
+}
+
+/** The caveat under a purchase advice while ownership is unchecked. */
+export function OwnershipNote({ a }: { a: GearAction }) {
+  const { owned } = useBridge();
+  if (a.how !== 'buy' || owned?.bankSeen) return null;
+  return <span className="muted small ownership-note"> Ownership not checked: open your bank in the game first, it may already be there.</span>;
 }
 
 /** Where to get it: a shop — with a map button, the exchange — with a price; the second option — "or …". */
