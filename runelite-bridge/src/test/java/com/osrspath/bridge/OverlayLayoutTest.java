@@ -193,6 +193,9 @@ public class OverlayLayoutTest
 			}
 			n++;
 		}
+		// The pre-flight guard: the red chip near a step whose item is missing.
+		out.add(new OsrsPathHudOverlay.State("[S3-02] Black Knights' Fortress", "Go to: Pick Cabbage south of Falador (do NOT pick Draynor cabbage)", "40 tiles", false,
+			null, false, null, false, null, false, null, null, false, null, 40, Preflight.chipText("Cabbage")));
 		String then = "Then: step " + longestTitle;
 		// Upgrade-router purchases: "Buy Steel axe from Bob", at the exchange from the clerk.
 		JsonObject tools = read("toolProgression.json").getAsJsonObject();
@@ -377,9 +380,13 @@ public class OverlayLayoutTest
 		{
 			return SHOWN;
 		}
-		if (t.startsWith("[S1-11]") && s.getDanger() != null)
+		if (s.getMissing() != null)
 		{
-			return "S1-11-danger";
+			return "missing";
+		}
+		if (s.getDanger() != null && s.getPacing() != null)
+		{
+			return "danger";
 		}
 		if (t.equals("Buy Steel axe from Bob"))
 		{
