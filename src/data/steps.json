@@ -167,7 +167,7 @@
     ],
     "proTip": "Cook your early food on the castle kitchen's range (Cook's range): food burns far less often there!",
     "reward": "1 QP, 300 Cooking XP, access to the castle range.",
-    "doneWhen": "The quest is green in the quest list.",
+    "doneWhen": "The quest is green in the quest list and a second pot of flour is in the bank (for S2-10).",
     "updatedInV2": true,
     "v2ChangesSummary": "V2 adds 1 extra pot of flour (Pot of flour) for the Prince Ali Rescue quest. Check your bank!",
     "inGame": {
@@ -204,7 +204,16 @@
         "type": "QUEST_COMPLETED",
         "questName": "Cook's Assistant"
       }
-    }
+    },
+    "carryover": [
+      {
+        "item": "Pot of flour",
+        "count": 1,
+        "forStep": "S2-10",
+        "where": "bank",
+        "why": "Prince Ali Rescue needs a pot of flour for the paste."
+      }
+    ]
   },
   {
     "id": "S1-04",
@@ -292,7 +301,16 @@
         "type": "QUEST_COMPLETED",
         "questName": "Sheep Shearer"
       }
-    }
+    },
+    "carryover": [
+      {
+        "item": "Ball of wool",
+        "count": 3,
+        "forStep": "S2-10",
+        "where": "bank",
+        "why": "Prince Ali Rescue needs 3 balls of wool for the wig."
+      }
+    ]
   },
   {
     "id": "S1-05",
@@ -404,7 +422,13 @@
       ],
       "completionTrigger": {
         "type": "QUEST_COMPLETED",
-        "questName": "X Marks the Spot"
+        "questName": "X Marks the Spot",
+        "levels": [
+          {
+            "skill": "prayer",
+            "level": 4
+          }
+        ]
       }
     }
   },
@@ -657,7 +681,7 @@
         "text": "1 Ashes in the bank for Prince Ali Rescue. Ashes stay on the ground when a fire burns out."
       }
     ],
-    "doneWhen": "Woodcutting 15, Firemaking 15.",
+    "doneWhen": "Woodcutting 15, Firemaking 15 and 1 Ashes in the bank (for S2-10).",
     "quickSteps": [
       "Leave Lumbridge Castle by the west gate and chop ordinary trees (Tree) in the grove behind the wall.",
       "Burn every log at once: use the tinderbox (Tinderbox) on the logs (Logs). Move along the row of trees: you cannot light a new fire on the spot of an old one.",
@@ -696,7 +720,16 @@
           }
         ]
       }
-    }
+    },
+    "carryover": [
+      {
+        "item": "Ashes",
+        "count": 1,
+        "forStep": "S2-10",
+        "where": "bank",
+        "why": "Prince Ali Rescue needs ashes for the wig dye."
+      }
+    ]
   },
   {
     "id": "S1-09",
@@ -980,7 +1013,7 @@
         "text": "1 copper and 1 tin ore to smelt a bronze bar for Prince Ali Rescue."
       }
     ],
-    "doneWhen": "Mining 10.",
+    "doneWhen": "Mining 10, with 1 copper ore and 1 tin ore in the bank (for S2-10).",
     "pacing": {
       "skill": "mining",
       "targetLevel": 10,
@@ -1003,7 +1036,23 @@
           }
         ]
       }
-    }
+    },
+    "carryover": [
+      {
+        "item": "Copper ore",
+        "count": 1,
+        "forStep": "S2-10",
+        "where": "bank",
+        "why": "Smelted with a tin ore into the Bronze bar of Prince Ali Rescue."
+      },
+      {
+        "item": "Tin ore",
+        "count": 1,
+        "forStep": "S2-10",
+        "where": "bank",
+        "why": "Smelted with a copper ore into the Bronze bar of Prince Ali Rescue."
+      }
+    ]
   },
   {
     "id": "S1-13",
@@ -2338,7 +2387,7 @@
       {
         "nameEn": "Bronze bar",
         "amount": 1,
-        "howToGet": "Smelt the copper and tin ore in a furnace.",
+        "howToGet": "Smelt the copper and tin ore kept from step S1-12 in any furnace.",
         "wikiItemId": 2349,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_bar.png"
       },
@@ -2352,7 +2401,7 @@
       {
         "nameEn": "Ashes",
         "amount": 1,
-        "howToGet": "Stays on the spot of any burnt-out fire.",
+        "howToGet": "The one kept from step S1-08: ashes stay on the spot of a burnt-out fire.",
         "wikiItemId": 592,
         "iconUrl": "https://oldschool.runescape.wiki/images/Ashes.png"
       },
@@ -2514,7 +2563,16 @@
         "type": "QUEST_COMPLETED",
         "questName": "Ernest the Chicken"
       }
-    }
+    },
+    "carryover": [
+      {
+        "item": "Bronze med helm",
+        "count": 1,
+        "forStep": "S3-02",
+        "where": "bank",
+        "why": "Black Knights' Fortress needs a Bronze med helm to get in."
+      }
+    ]
   },
   {
     "id": "S2-12",
@@ -2969,6 +3027,13 @@
         "howToGet": "For Burntof. 2 gp at any pub.",
         "wikiItemId": 1917,
         "iconUrl": "https://oldschool.runescape.wiki/images/Beer.png"
+      },
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "howToGet": "Any pickaxe works: the Bronze pickaxe from step S1-12 is enough. It is for the Structural pillars in the last room, not for ore.",
+        "wikiItemId": 1265,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
       }
     ],
     "reward": "1 QP, 2,000 Coins, access to the Camdozaal ruins, the Flex emote.",
@@ -2999,8 +3064,68 @@
       "completionTrigger": {
         "type": "QUEST_COMPLETED",
         "questName": "Below Ice Mountain"
+      },
+      "objectNames": [
+        "Structural pillar"
+      ]
+    },
+    "warning": "The last fight: the Ancient Guardian keeps attacking while you mine its pillars. Bring a pickaxe and 10-15 Trout or Salmon, check Mining 10, and eat before each pillar. The details are in the lines below.",
+    "requirements": [
+      {
+        "type": "skill",
+        "skill": "mining",
+        "min": 10,
+        "when": "during",
+        "boostable": true
       }
-    }
+    ],
+    "itemsRecommended": [
+      {
+        "nameEn": "Trout",
+        "amount": 10,
+        "howToGet": "10-15 Trout or Salmon (about 30 gp each on the Grand Exchange), or better food you already own. For the Ancient Guardian, which keeps attacking while you mine.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish",
+          "Monkfish",
+          "Shark",
+          "Cooked meat",
+          "Cake",
+          "Pie"
+        ]
+      }
+    ],
+    "fields": [
+      {
+        "label": "Requirements",
+        "text": "Mining 10 (a boost counts) and any pickaxe for the final fight; 16 quest points to start the quest."
+      },
+      {
+        "label": "Combat",
+        "text": "The final room: the Ancient Guardian (level 25) has 40 hit points, hits up to 7 and attacks about every 3 seconds. It does not stop while you mine. Eat before you start the next pillar; do not wait until you are almost dead."
+      },
+      {
+        "label": "Recommended method",
+        "text": "Mine the four Structural pillars in the corners of the room with the Mine option. Each one breaks and hurts the Guardian. You need Mining 10 and any pickaxe, and these are objects of the room, not ore rocks."
+      },
+      {
+        "label": "Bring",
+        "text": "A pickaxe (the Bronze pickaxe from S1-12 is enough) and 10-15 Trout or Salmon, or better food. You will not pass a bank before this fight."
+      },
+      {
+        "label": "Can't mine it?",
+        "text": "Check three things: Mining level 10 or more (a boost counts); a pickaxe in the bag or in your hands (the game says \"You need a pickaxe you have the Mining level to use to mine the pillar\"); and that you clicked a Structural pillar, not a rock, a wall or a Broken pillar."
+      },
+      {
+        "label": "Fallback: safespot",
+        "text": "If the Guardian hurts you faster than you can mine, lure it to the east side of the chamber and retreat into the entrance passage: it gets stuck on the corner. Then attack it with Ranged or Magic. Direct melee works at any level but is the riskiest choice for the account this route produces."
+      }
+    ]
   },
   {
     "id": "S3-05",
@@ -3445,7 +3570,7 @@
       "Brutus"
     ],
     "reward": "1 QP, access to the cow boss Brutus, a 1,000 XP lamp for any combat skill or Prayer (put it into Prayer) and the Cowbell amulet from Gillie Groats.",
-    "doneWhen": "The quest is green.",
+    "doneWhen": "The quest is green and the lamp from Gillie Groats has been used on Prayer.",
     "inGame": {
       "npcNames": [
         "Cassius",
@@ -3458,7 +3583,13 @@
       ],
       "completionTrigger": {
         "type": "QUEST_COMPLETED",
-        "questName": "The Ides of Milk"
+        "questName": "The Ides of Milk",
+        "levels": [
+          {
+            "skill": "prayer",
+            "level": 9
+          }
+        ]
       }
     }
   },

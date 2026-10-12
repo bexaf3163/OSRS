@@ -6569,7 +6569,11 @@
      "steps": [
       "Talk to Willow at the dungeon entrance on the west side of Ice Mountain. Dialogue: “Yes”.",
       "Enter the dungeon again to finish the quest.",
-      "Defeat the level 25 Ancient Guardian. Alternatively, with level 10 Mining, mine the 4 pillars in the corners.",
+      "Before you go in: take a pickaxe (any) and 10-15 Trout or Salmon, and check Mining is 10 or more.",
+      "In the final room do not wait for the Ancient Guardian to leave you alone: it keeps attacking while you mine.",
+      "Mine a Structural pillar in one of the four corners (the Mine option). The pillar breaks and hurts the Guardian.",
+      "Eat when you need to (not later than when your health is within two hits of 7), then move straight to the next Structural pillar.",
+      "Repeat until the Ancient Guardian is defeated. If it hurts you faster than you mine, use the safespot: lure it to the east side and retreat into the entrance passage.",
       "Watch the cutscene at the entrance to finish the quest. Dialogue: “Yes”."
      ]
     }
@@ -6899,17 +6903,38 @@
      "at": 35,
      "do": [
       {
-       "t": "Defeat the Lvl-25 Ancient Guardian. Alternatively, with Level 10 Mining, mine the 4 pillars in the corners.",
-       "s": "Defeat the Ancient Guardian or mine 4 pillars (Mining 10)",
+       "t": "Defeat the level 25 Ancient Guardian (40 hit points, hits up to 7 about every 3 seconds). Recommended: with Mining 10 and any pickaxe, use Mine on the four Structural pillars in the corners of the room; each one breaks and hurts the Guardian. It keeps attacking while you mine, so eat before each pillar. These are not ore rocks. Fallback: lure it to the east side of the chamber and retreat into the entrance passage, it gets stuck on the corner; then use Ranged or Magic.",
+       "s": "Defeat the Ancient Guardian: recommended, mine 4 Structural pillars",
        "hl": {
         "npc": [
          10654
+        ],
+        "on": [
+         "Structural pillar"
         ]
        },
-       "k": "defeatGuardian"
+       "k": "defeatGuardian",
+       "mh": 7,
+       "pre": [
+        {"item": "Bronze pickaxe", "id": 1265, "alt": ["Iron pickaxe","Steel pickaxe","Black pickaxe","Mithril pickaxe","Adamant pickaxe","Rune pickaxe","Dragon pickaxe","Crystal pickaxe","Infernal pickaxe","3rd age pickaxe","Gilded pickaxe"], "t": "Take a pickaxe from the bank: you cannot mine the Structural pillars without one"},
+        {"item": "Trout", "n": 10, "alt": ["Salmon","Tuna","Lobster","Swordfish","Monkfish","Shark","Cooked meat","Cake","Pie"], "t": "Take 10-15 Trout or Salmon: the Guardian keeps attacking while you mine"}
+       ]
       }
      ],
-     "items": []
+     "items": [
+      {
+       "name": "Bronze pickaxe",
+       "id": 1265,
+       "alt": ["Iron pickaxe","Steel pickaxe","Black pickaxe","Mithril pickaxe","Adamant pickaxe","Rune pickaxe","Dragon pickaxe","Crystal pickaxe","Infernal pickaxe","3rd age pickaxe","Gilded pickaxe"],
+       "where": "Any pickaxe works. The Bronze pickaxe from step S1-12 is enough."
+      },
+      {
+       "name": "Trout",
+       "count": 10,
+       "alt": ["Salmon","Tuna","Lobster","Swordfish","Monkfish","Shark","Cooked meat","Cake","Pie"],
+       "where": "10-15 Trout or Salmon, or better food you already own."
+      }
+     ]
     },
     {
      "at": 40,

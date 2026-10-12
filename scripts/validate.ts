@@ -337,7 +337,11 @@ export function validate(d: GuideData | null, route: Route): Report {
       const want = titleTargets(s.title).map((x) => `${x.skill} ${x.level}`).sort().join(', ');
       const got = (t.levels ?? []).map((x) => `${x.skill} ${x.level}`).sort().join(', ');
       if (!t.levels?.length || want !== got) badGame.push(`${s.id}: the auto-mark levels "${got}" ≠ the goals from the title "${want}"`);
-    } else if (t.levels) badGame.push(`${s.id}: levels exist only for SKILL_LEVEL`);
+    } else if (t.levels && t.type !== 'QUEST_COMPLETED') badGame.push(`${s.id}: levels exist only for SKILL_LEVEL and QUEST_COMPLETED`);
+    // A quest with a level on top (the lamp used on Prayer) must name real skills and levels in range.
+    if (t.type === 'QUEST_COMPLETED') {
+      for (const l of t.levels ?? []) if (!(l.level >= 2 && l.level <= 99) || !/^[a-z]+$/.test(l.skill)) badGame.push(`${s.id}: invalid level on a quest trigger: ${l.skill} ${l.level}`);
+    }
     if (t.type === 'ITEM_OWNED' && !t.items?.length) badGame.push(`${s.id}: ITEM_OWNED without items`);
     if (t.items && !['QUEST_COMPLETED', 'SKILL_LEVEL', 'ITEM_OWNED'].includes(t.type)) badGame.push(`${s.id}: items exist only for state conditions`);
     for (const i of t.items ?? []) {
