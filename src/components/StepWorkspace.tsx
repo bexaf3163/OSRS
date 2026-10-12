@@ -108,6 +108,7 @@ export function StepWorkspace({ step, suggested, onDone, nextId, compact = false
           <span>{TYPE_LABEL[step.type]}</span>
           {step.qp ? <span className="badge badge-qp">+{step.qp} QP</span> : null}
           {step.membersOnly && <span className="badge badge-members">Members</span>}
+          {step.bondBranch && <span className="badge" title="The way to a Bond for an account without membership. Not part of the Members route.">Optional · Bond branch</span>}
           {step.optional && <span className="tag">optional</span>}
           {status === 'done' && <span className="badge badge-f2p"><IconCheck /> done</span>}
           {status === 'skipped' && <span className="tag">skipped</span>}

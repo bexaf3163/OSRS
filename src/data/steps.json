@@ -746,7 +746,7 @@
       "label": "Stronghold of Security entrance, Barbarian Village"
     },
     "where": "A hole in the ground (Entrance) in the middle of Barbarian Village, by the mine, north of Draynor and west of Varrock.",
-    "warning": "First turn on two-factor authentication on your Jagex Account: without it the money chests will not open. From the 2nd floor the monsters are aggressive and attack on their own: keep food at hand and eat when your health is below 7.",
+    "warning": "First turn on two-factor authentication on your Jagex Account: without it the money chests will not open. From the 2nd floor the monsters are aggressive and attack on their own: keep food at hand. Eat while your health is still more than two of the biggest hits of the monster next to you, not when it is already low. The deeper floors hit much harder than floor 1, so eat earlier there.",
     "itemsRecommended": [
       {
         "nameEn": "Cooked chicken",
@@ -2057,18 +2057,13 @@
       {
         "nameEn": "Trout",
         "amount": 10,
-        "howToGet": "Buy on the Grand Exchange for about 24 gp.",
+        "howToGet": "Buy on the Grand Exchange for about 24 gp each. Or 8 Salmon instead (about 30 gp each): to catch them yourself you need Fishing 30 and Cooking 25, fly fishing in the same place as the trout (Barbarian Village).",
         "wikiItemId": 333,
         "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
-        "heals": 7
-      },
-      {
-        "nameEn": "Salmon",
-        "amount": "or 8",
-        "howToGet": "Buy on the Grand Exchange for about 30 gp. To catch it yourself you need Fishing 30 and Cooking 25, fly fishing in the same place as the trout (Barbarian Village).",
-        "wikiItemId": 329,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
-        "heals": 9
+        "heals": 7,
+        "anyOf": [
+          "Salmon"
+        ]
       }
     ],
     "fields": [
@@ -2078,7 +2073,7 @@
       },
       {
         "label": "Dangerous",
-        "text": "Blurite ore is mined in the Asgarnian Ice Dungeon: the entrance is at Mudskipper Point south of Port Sarim. There are ice giants (level 53) and ice warriors (level 57): run in, mine the ore and leave at once. Eat trout when your health is below half."
+        "text": "Blurite ore is mined in the Asgarnian Ice Dungeon: the entrance is at Mudskipper Point south of Port Sarim. There are ice giants (level 53) and ice warriors (level 57): run in, mine the ore and leave at once. Eat a trout before your health falls to two hits of the monster next to you; ice giants hit hard."
       }
     ],
     "reward": "1 QP and 12,725 Smithing XP: the skill jumps instantly from 1 straight to level 29 without smelting by hand!",
@@ -2187,18 +2182,13 @@
       {
         "nameEn": "Trout",
         "amount": 10,
-        "howToGet": "Buy on the Grand Exchange for about 24 gp.",
+        "howToGet": "Buy on the Grand Exchange for about 24 gp each. Or 8 Salmon instead (about 30 gp each): to catch them yourself you need Fishing 30 and Cooking 25, fly fishing in the same place as the trout (Barbarian Village).",
         "wikiItemId": 333,
         "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
-        "heals": 7
-      },
-      {
-        "nameEn": "Salmon",
-        "amount": "or 8",
-        "howToGet": "Buy on the Grand Exchange for about 30 gp. To catch it yourself you need Fishing 30 and Cooking 25, fly fishing in the same place as the trout (Barbarian Village).",
-        "wikiItemId": 329,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
-        "heals": 9
+        "heals": 7,
+        "anyOf": [
+          "Salmon"
+        ]
       }
     ],
     "imageUrl": "https://oldschool.runescape.wiki/images/Count_draynor_safespot.png",
@@ -3236,9 +3226,7 @@
     "stage": 3,
     "type": "prep",
     "title": "Money for the Adamant scimitar: iron ore",
-    "requires": [
-      "S3-05"
-    ],
+    "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_iron_ore",
     "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=3286,3365,0",
     "mapLocation": {
@@ -3261,7 +3249,7 @@
       },
       {
         "label": "Other ways",
-        "text": "Cowhides to leather with Ellis in Al Kharid (about 260 gp per leather), and from Attack 40 big bones (Big bones, about 310 gp) from moss giants (step S4-03)."
+        "text": "Cowhides to leather with Ellis in Al Kharid (about 260 gp per leather), and from Attack 40 big bones (Big bones, about 310 gp) from the Hill Giants of step S4-03."
       }
     ],
     "doneWhen": "2,500+ coins in the bag or the bank (unsold ore does not count).",
@@ -3281,7 +3269,10 @@
           }
         ]
       }
-    }
+    },
+    "softRequires": [
+      "S3-05"
+    ]
   },
   {
     "id": "S3-07",
@@ -3483,7 +3474,7 @@
     "fields": [
       {
         "label": "Combat",
-        "text": "Ithoi the Navigator (level 35): hit him in melee or with magic. Eat salmon when your health is below 15."
+        "text": "Ithoi the Navigator (level 35) hits up to 6: hit him in melee or with magic, and eat a salmon before your health falls to 12 (two of his hits), not after."
       }
     ],
     "foes": [
@@ -3563,7 +3554,7 @@
     "fields": [
       {
         "label": "Combat",
-        "text": "At the end you have to defeat a bull: bring 5 salmon."
+        "text": "The final fight is against Brutus. In the quest itself you cannot die (you are left at 1 health), but the same moves matter for him later. His plain hit is up to 3. After 1 to 6 hits he uses a special that is not stopped by food or protection prayers: Snort hits the row in front of him (or an L shape if you stand diagonal), Growl is a charge at you. Step two tiles to either side, or one tile back from Snort, as soon as he winds up. If it goes wrong, run south-west to the gate."
       }
     ],
     "foes": [
@@ -3591,7 +3582,8 @@
           }
         ]
       }
-    }
+    },
+    "warning": "Brutus's specials (Snort and Growl) are avoided by moving two tiles to the side, not by eating. Bring 5 Salmon for the plain hits."
   },
   {
     "id": "S4-03",
@@ -3650,7 +3642,7 @@
       },
       {
         "label": "Armour",
-        "text": "No Defence training, so wear what you already have. The Anti-dragon shield (S5-02) stops Elvarg's fire whatever your Defence is, and the 18,650 Defence XP from Dragon Slayer I lifts Defence by itself. Hill Giants hit up to 4: eat when your health is below 15."
+        "text": "No Defence training, so wear what you already have. The Anti-dragon shield (S5-02) stops Elvarg's fire whatever your Defence is, and the 18,650 Defence XP from Dragon Slayer I lifts Defence by itself. Hill Giants hit up to 4 and are aggressive: eat before your health falls to 8 (two hits), and earlier when two of them are on you."
       }
     ],
     "membersAlternative": "👑 With membership: do not fight mobs by hand: complete Waterfall Quest in 15 minutes and get 30 Attack and 30 Strength at once!",
@@ -4287,7 +4279,7 @@
       {
         "nameEn": "Coins",
         "amount": 10000,
-        "howToGet": "Wormbrain takes exactly 10,000 coins. The stage 4 loot (big bones and nature runes from the moss giants, S4-03) pays for it.",
+        "howToGet": "Wormbrain takes exactly 10,000 coins. The stage 4 loot (the Big bones of the Hill Giants, S4-03) pays for it.",
         "wikiItemId": 995,
         "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
       }
@@ -4467,7 +4459,7 @@
       },
       {
         "label": "Combat tactics",
-        "text": "Elvarg is level 83 with 80 health. Use the Stab style if you have the Rune sword, otherwise your best scimitar. Eat a lobster when your health falls below 20. Do not take the shield off for a second!"
+        "text": "Elvarg is level 83 with 80 health. Use the Stab style if you have the Rune sword, otherwise your best scimitar. With the shield Elvarg hits up to 10: eat a lobster before your health falls to 20 (two hits), not after. Do not take the shield off for a second!"
       }
     ],
     "doneWhen": "The dragon is beheaded and Elvarg's head is in your inventory.",
@@ -4582,7 +4574,7 @@
     "id": "S6-01",
     "stage": 6,
     "type": "skill",
-    "title": "Combat to 50-60 on Ogress Warriors / Shamans",
+    "title": "Ranged to 50 on the Ogress Warriors and Shamans",
     "requires": [
       "S4-01"
     ],
@@ -4615,15 +4607,23 @@
     ],
     "fields": [
       {
+        "label": "Optional branch",
+        "text": "This whole stage is only the way to a Bond for an account without membership. Nothing in it is required for the Members route. If you already have membership, switch the app to Members mode: stage 6 disappears and Waterfall Quest comes next. Do the parts that pay best for you, in any order."
+      },
+      {
         "label": "Why",
-        "text": "One of the best places in F2P for XP and money: ogresses (level 82) drop a Rune med helm, a Rune battleaxe, nature runes and gems."
+        "text": "One of the best places in F2P for money while you train Ranged: ogresses (level 82) drop a Rune med helm, a Rune battleaxe, nature runes and gems."
       },
       {
         "label": "How",
-        "text": "Ogresses hit hard: at Combat 40-50 hit them with a bow or magic from safespots, up close only with rune armour and 20 lobsters or swordfish."
+        "text": "Ogresses hit hard (up to 8) and you train only Ranged here: shoot them from a safespot with a bow and keep melee out of it. Use the best bow your Ranged allows with the best arrows you can afford, and 20 lobsters or swordfish for the walk back."
+      },
+      {
+        "label": "Magic instead",
+        "text": "To train Magic on the same ogresses, use step S6-04: it is a separate goal."
       }
     ],
-    "doneWhen": "Combat skills 50-60, and a store of coins for membership is growing in the bank.",
+    "doneWhen": "Ranged 50.",
     "inGame": {
       "npcNames": [
         "Ogress Warrior",
@@ -4633,15 +4633,7 @@
         "type": "SKILL_LEVEL",
         "levels": [
           {
-            "skill": "attack",
-            "level": 50
-          },
-          {
-            "skill": "strength",
-            "level": 50
-          },
-          {
-            "skill": "defence",
+            "skill": "ranged",
             "level": 50
           }
         ]
@@ -4650,7 +4642,9 @@
     "threats": [
       "Ogress warrior",
       "Ogress shaman"
-    ]
+    ],
+    "bondBranch": true,
+    "optional": true
   },
   {
     "id": "S6-02",
@@ -4686,6 +4680,10 @@
       {
         "label": "Important",
         "text": "Swordfish can only be caught from Fishing 50 and cooked from Cooking 45. Before that, lobsters (from 40) or tuna with a harpoon (from 35)."
+      },
+      {
+        "label": "Optional",
+        "text": "One of the ways to earn towards a Bond. Skip it if another way pays you better."
       }
     ],
     "doneWhen": "Fishing 50, Cooking 50.",
@@ -4713,7 +4711,9 @@
           }
         ]
       }
-    }
+    },
+    "bondBranch": true,
+    "optional": true
   },
   {
     "id": "S6-03",
@@ -4729,6 +4729,10 @@
       {
         "label": "Woodcutting",
         "text": "Up to 60: willows (Willow, from 30) by Draynor Village. Yews (Yew) can only be chopped from 60: by Edgeville, Varrock Palace and south of Falador. Yew logs are about 105 gp: a good passive income."
+      },
+      {
+        "label": "Optional",
+        "text": "One of the ways to earn towards a Bond. Skip it if another way pays you better."
       }
     ],
     "doneWhen": "Mining 60, Woodcutting 60.",
@@ -4753,7 +4757,9 @@
           }
         ]
       }
-    }
+    },
+    "bondBranch": true,
+    "optional": true
   },
   {
     "id": "S6-04",
@@ -4766,8 +4772,8 @@
     "itemsRequired": [
       {
         "nameEn": "Nature rune",
-        "amount": "One per alchemy",
-        "howToGet": "About 140 gp. Alchemy pays only if the item's Grand Exchange price is below its High Alchemy value.",
+        "amount": "As many as casts",
+        "howToGet": "About 140 gp each. The High Level Alchemy value of the item minus the item's price minus this rune must stay above zero: check the live prices in the app before you cast.",
         "wikiItemId": 561,
         "iconUrl": "https://oldschool.runescape.wiki/images/Nature_rune.png"
       }
@@ -4783,7 +4789,15 @@
           }
         ]
       }
-    }
+    },
+    "bondBranch": true,
+    "optional": true,
+    "fields": [
+      {
+        "label": "Optional",
+        "text": "One of the ways to earn towards a Bond. Skip it if another way pays you better."
+      }
+    ]
   },
   {
     "id": "S6-05",
@@ -4798,12 +4812,12 @@
       "plane": 0,
       "label": "The Grand Exchange"
     },
-    "how": "An Old School Bond costs about 11.9 million gp (price of 26 Sep 2026) and gives 14 days of membership. For F2P that is a lot: save up on ogresses and yews, or pay for membership with money: progress does not depend on the method.",
+    "how": "An Old School Bond costs about 11.5 million gp (price of 26 Sep 2026, the live price is in the app) and gives 14 days of membership. For F2P that is a lot: save up on the ogresses, yews and swordfish of this stage, or pay for membership with money: progress does not depend on the method. When membership is active, switch the app to Members mode: that opens the Members route.",
     "itemsRequired": [
       {
         "nameEn": "Old school bond",
         "amount": 1,
-        "howToGet": "Buy on the Grand Exchange for about 11.5 million gp (price of 26 Sep 2026). It gives 14 days of membership: use it on yourself.",
+        "howToGet": "Buy on the Grand Exchange (about 11.5 million gp on 26 Sep 2026, check the live price). It gives 14 days of membership: use it on yourself.",
         "wikiItemId": 13190,
         "iconUrl": "https://oldschool.runescape.wiki/images/Old_school_bond.png",
         "inStep": true
@@ -4814,7 +4828,8 @@
       "highlightItems": [
         "Old school bond"
       ]
-    }
+    },
+    "bondBranch": true
   },
   {
     "id": "S7-01",
@@ -5847,11 +5862,11 @@
     "fields": [
       {
         "label": "Important",
-        "text": "You do not need to complete the whole quest! It is enough to start it with Martin and talk to the Fairy Godfather in Zanaris: after that the fairy rings work. Thieving 40, Farming 49 and Herblore 57 are needed only to finish the quest, not for the rings."
+        "text": "You do not need to complete the whole quest. It is enough to start it with Martin and talk to the Fairy Godfather in Zanaris: the step is marked as soon as the game counts his permission (quest stage 40), and the rings work from then on. Thieving 40, Farming 49 and Herblore 57 are needed only to finish the quest, not for the rings."
       }
     ],
     "reward": "Access to the Fairy rings portal network! With a Dramen staff worn you can teleport all over the mainland of Gielinor in a couple of seconds.",
-    "doneWhen": "The first teleport through a fairy ring is made.",
+    "doneWhen": "The Fairy Godfather has given you permission to use the fairy rings (the game counts it as quest stage 40). The rest of the quest is not part of the route.",
     "inGame": {
       "npcNames": [
         "Martin the Master Gardener",
@@ -5870,7 +5885,13 @@
         "Yes, okay.",
         "The fairy rings.",
         "Why are you carrying that toolbox?"
-      ]
+      ],
+      "completionTrigger": {
+        "type": "VARBIT_CHANGED",
+        "varbitId": 2326,
+        "targetValue": 40,
+        "atLeast": true
+      }
     }
   },
   {

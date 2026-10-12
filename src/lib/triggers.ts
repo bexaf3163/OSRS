@@ -33,6 +33,6 @@ export function triggerText(t: CompletionTrigger): string {
     case 'CHAT_MESSAGE':
       return 'the needed message appears in the game chat';
     case 'VARBIT_CHANGED':
-      return 'the game counts this stage';
+      return t.atLeast ? 'the game counts this point of the quest as reached' : 'the game counts this stage';
   }
 }
