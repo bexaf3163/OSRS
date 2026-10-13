@@ -303,6 +303,28 @@ final class GuideList
 	}
 
 	/**
+	 * Where a second way of doing the same thing begins ("Defeat the Guardian or mine 4 pillars"): the index of " or ", or -1. Only a whole
+	 * alternative is set apart: not an "or" inside a bracket ("essence (rune or pure)") and not one in a restriction after a colon
+	 * ("melee or ranged only"), where muting the tail would hide part of the instruction itself.
+	 */
+	static int alternativeAt(String action)
+	{
+		if (action == null)
+		{
+			return -1;
+		}
+		int at = action.indexOf(" or ");
+		if (at <= 0)
+		{
+			return -1;
+		}
+		String head = action.substring(0, at);
+		long open = head.chars().filter(ch -> ch == '(').count();
+		long close = head.chars().filter(ch -> ch == ')').count();
+		return open != close || head.indexOf(':') >= 0 ? -1 : at;
+	}
+
+	/**
 	 * The step line without its recipe: a tail after ";" goes ("; buy rope too"), a bracket keeps only what stands before a colon, that is who
 	 * ("(Aggie: 2 onions + 5 gp)" becomes "(Aggie)"), and a bracket with no colon is the recipe and goes ("(3 balls of wool)").
 	 */

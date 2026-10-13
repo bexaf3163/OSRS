@@ -171,6 +171,31 @@ public class BridgeServerTest
 		assertFalse(get("/status").body().contains("\"questInstruction\""));
 	}
 
+	/** The app reads the cursor from /status and asks for it on a STATUS event: a moved cursor must send one, an unchanged one must not. */
+	@Test
+	public void aMovedQuestCursorIsAnnouncedOnceSoTheAppFollowsIt() throws Exception
+	{
+		BlockingQueue<String> lines = new LinkedBlockingQueue<>();
+		try (Socket s = openEvents(lines))
+		{
+			assertEquals("{\"type\":\"STATUS\",\"inGame\":false}", lines.poll(3, TimeUnit.SECONDS));
+			server.setInGame(true);
+			assertEquals("{\"type\":\"STATUS\",\"inGame\":true}", lines.poll(3, TimeUnit.SECONDS));
+			server.setQuestInstruction("S1-03", 10, 0, false);
+			assertEquals("the first cursor", "{\"type\":\"STATUS\",\"inGame\":true}", lines.poll(3, TimeUnit.SECONDS));
+			server.setQuestInstruction("S1-03", 10, 0, false);
+			assertNull("the same cursor on the next frame is not news", lines.poll(300, TimeUnit.MILLISECONDS));
+			server.setQuestInstruction("S1-03", 10, 1, false);
+			assertEquals("the next line", "{\"type\":\"STATUS\",\"inGame\":true}", lines.poll(3, TimeUnit.SECONDS));
+			server.setQuestInstruction("S1-03", 10, 0, true);
+			assertEquals("looking back at a line", "{\"type\":\"STATUS\",\"inGame\":true}", lines.poll(3, TimeUnit.SECONDS));
+			server.setQuestInstruction(null, null, 0, false);
+			assertEquals("the quest is done: the cursor is gone", "{\"type\":\"STATUS\",\"inGame\":true}", lines.poll(3, TimeUnit.SECONDS));
+			server.setQuestInstruction(null, null, 0, false);
+			assertNull(lines.poll(300, TimeUnit.MILLISECONDS));
+		}
+	}
+
 	@Test
 	public void statusGivesItemValuation() throws Exception
 	{

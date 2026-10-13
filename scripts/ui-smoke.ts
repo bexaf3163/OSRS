@@ -52,10 +52,12 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
       bridge: {
         request: async (method: string, path: string, body: unknown) => {
           posts.push({ method, path, body });
-          if (path === '/status') return { ok: true, status: 200, data: { status: 'ok', inGame: true, activeStepId: null, shortestPath: true, ...(m.status ?? {}) } };
+          // __status: what a scenario changes in the plugin's answer after the page has loaded (the quest cursor moving on).
+          if (path === '/status') return { ok: true, status: 200, data: { status: 'ok', inGame: true, activeStepId: null, shortestPath: true, ...(m.status ?? {}), ...((w.__status as Record<string, unknown>) ?? {}) } };
           return { ok: true, status: 200, data: { ok: true } };
         },
         openEvents: (onEvent: (d: string) => void, onState: (s: string) => void) => {
+          w.__emit = (e: unknown) => onEvent(JSON.stringify(e));
           setTimeout(() => { onState('open'); for (const e of m.events ?? []) onEvent(JSON.stringify(e)); }, 50);
           return () => {};
         },
@@ -808,6 +810,52 @@ async function run(browser: Browser) {
     const { page } = await open(browser, width, {progress:progressBefore('S3-03'),localStorage:{'osrs-put:text-scale':String(scale)}}, '#/');
     expect(await noOverflow(page), `the header at ${width} px and ${scale*100}% text without horizontal scrolling`);
     if (width >= 1000) expect(await page.locator('.app-sidebar').evaluate(el => el.scrollWidth <= el.clientWidth), `sidebar at ${width} px and ${scale*100}% text without internal horizontal scrolling`);
+    // The old header moved its tabs to a third row below 1200 px and at large text; in the sidebar that rule put the sections under Settings.
+    if (width >= 1000) expect(await page.evaluate(() => {
+      const nav = document.querySelector('.app-sidebar .tabs-top')!.getBoundingClientRect();
+      const foot = document.querySelector('.app-sidebar .sidebar-utilities')!.getBoundingClientRect();
+      return nav.bottom <= foot.top + 1;
+    }), `sidebar at ${width} px and ${scale*100}% text: the sections stand above quest points and Settings`);
+    await page.context().close();
+  }
+
+  // The local strip of a section shows every link: the first one used to take the whole width and push the rest out of view.
+  console.log('Section strip');
+  for (const [hash, least] of [['#/skills/ME', 5], ['#/gear', 4], ['#/shopping', 3], ['#/journal', 3], ['#/reference', 3]] as [string, number][]) {
+    for (const width of [1000, 1440]) {
+      const { page } = await open(browser, width, { progress: progressBefore('S3-03') }, hash);
+      const seen = await page.evaluate(() => {
+        const nav = document.querySelector('.section-rail nav');
+        if (!nav) return -1;
+        const box = nav.getBoundingClientRect();
+        return [...nav.querySelectorAll('.section-nav-item')].filter((el) => {
+          const r = el.getBoundingClientRect();
+          return r.left >= box.left - 1 && r.right <= box.right + 1;
+        }).length;
+      });
+      expect(seen >= least, `section strip ${hash} at ${width} px: ${seen} links in view (at least ${least})`);
+      await page.context().close();
+    }
+  }
+
+  // The desktop action follows the quest cursor while the player stays logged in: the plugin announces a moved cursor with a STATUS event.
+  {
+    const quest = JSON.parse(readFileSync(new URL('../src/data/questStages.json', import.meta.url), 'utf8')).quests['S3-04'];
+    const last = quest.stages.find((s: { do: { t: string }[] }) => s.do.some((l) => /Ancient Guardian/.test(l.t)));
+    const earlier = quest.stages.find((s: { at: number; do: { t: string }[] }) => s.at < last.at && s.do.length > 0 && !/Ancient Guardian/.test(s.do[0].t));
+    const { page } = await open(browser, 1440, {
+      progress: progressBefore('S3-04'), localStorage: { 'osrs-put:active-step': 'S3-04' },
+      status: { protocol: 6, inGame: true, activeStepId: 'S3-04', questInstruction: { stepId: 'S3-04', stageAt: earlier.at, lineIndex: 0, peeking: false } },
+    }, '#/step/S3-04');
+    const before = await text(page, '.current-action-title');
+    await page.evaluate((at: number) => {
+      const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void };
+      w.__status = { questInstruction: { stepId: 'S3-04', stageAt: at, lineIndex: 0, peeking: false } };
+      w.__emit({ type: 'STATUS', inGame: true });
+    }, last.at);
+    await page.waitForTimeout(600);
+    const after = await text(page, '.current-action-title');
+    expect(!before.includes('Ancient Guardian') && after.includes('Ancient Guardian'), 'current instruction: it moves with the quest cursor without a new login');
     await page.context().close();
   }
 }

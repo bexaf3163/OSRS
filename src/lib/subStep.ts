@@ -49,6 +49,20 @@ export function actionOf(text: string): string {
 
 const titleOf = (l: QuestStageLine) => (l.s?.trim() || shortLine(l.t)).trim();
 
+/**
+ * Where a second way of doing the same thing begins ("Defeat the Guardian or mine 4 pillars"): the index of " or ", or -1.
+ * Only a whole alternative is set apart, never an "or" inside a bracket ("essence (rune or pure)") or in a restriction after a colon
+ * ("melee or ranged only"): muting that tail would hide part of the instruction. The plugin has the same rule (GuideList.alternativeAt).
+ */
+export function alternativeAt(action: string): number {
+  const at = action.indexOf(' or ');
+  if (at <= 0) return -1;
+  const head = action.slice(0, at);
+  const open = head.split('(').length;
+  const close = head.split(')').length;
+  return open !== close || head.includes(':') ? -1 : at;
+}
+
 /** Resolve the plugin's existing quest cursor, never the navigation destination. */
 export function instructionSubStep(step: Step, instruction: QuestInstruction | null): SubStep | null {
   if (!instruction || instruction.stepId !== step.id || !Number.isInteger(instruction.lineIndex) || instruction.lineIndex < 0) return null;

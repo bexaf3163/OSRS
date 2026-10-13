@@ -15,7 +15,7 @@ import { StepBody, type StepTab } from './StepCard';
 import { StepStatus } from './StepStatus';
 import { useSubStep } from './SubStepHero';
 import { setFeatures } from '../lib/features';
-import { overviewOf, subStepNpcInfo } from '../lib/subStep';
+import { alternativeAt, overviewOf, subStepNpcInfo } from '../lib/subStep';
 import { ModernStepWorkspace } from './ModernStepWorkspace';
 
 const TABS: { id: StepTab; label: string }[] = [
@@ -48,7 +48,7 @@ export function CurrentAction({ step, children }: { step: Step; children?: React
   const title = closed ? 'This step is done' : sub ? sub.title : start;
   const confirmed = state === 'online' && inGame && questInstruction?.stepId === step.id;
   const kicker = closed ? 'Completed' : sub ? confirmed ? questInstruction.peeking ? 'Viewing an earlier instruction' : 'What to do now' : 'Navigation target' : 'Starting point';
-  const alternative = step.type === 'quest' ? title.indexOf(' or ') : -1;
+  const alternative = step.type === 'quest' ? alternativeAt(title) : -1;
 
   return (
     <section className={`current-action ${closed ? 'is-done' : ''}`} aria-label="Current action">

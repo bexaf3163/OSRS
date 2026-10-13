@@ -323,6 +323,24 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		return build(panel, v, collapsed, hovered, fm, smallFm, font, small, width, opacity, terse, compact, reveal, null);
 	}
 
+	private static String leftText(GuideList.Row r)
+	{
+		return r.getLines().stream().map(GuideList.Line::getLeft).collect(java.util.stream.Collectors.joining(" "));
+	}
+
+	/** The same warning as another row: same action and full text (the hint), whatever size it was set in. */
+	static boolean sameAlert(GuideList.Row a, GuideList.Row b)
+	{
+		return a.getAction().getKind() == b.getAction().getKind() && a.getHint() != null && a.getHint().equals(b.getHint())
+			&& leftText(a).startsWith("⚠") && leftText(b).startsWith("⚠");
+	}
+
+	/** The "Details: ..." row of the open list: the action row of this card already shows that text in full. */
+	static boolean repeatsAction(GuideList.Row r)
+	{
+		return r.getAction() == GuideList.Action.NONE && leftText(r).startsWith("Details: ");
+	}
+
 	static List<RowComponent> build(PanelComponent panel, StepGuide.View v, boolean collapsed, int hovered, FontMetrics fm,
 		FontMetrics smallFm, Font font, Font small, int width, int opacity, boolean terse, boolean compact, int reveal, String distance)
 	{
@@ -337,10 +355,13 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			rows = new ArrayList<>(GuideList.coreRows(v, fm, width));
 			rows.add(new GuideList.Row(GuideList.text("No advice for this step.", GuideList.MUTED, smallFm, OverlayText.inner(width), true), GuideList.Action.NONE, null));
 		}
-		// Critical warnings must also survive an Advice selection or the header-only collapse.
+		// The current action row below already shows the whole recipe of the line: a "Details:" row would repeat it word for word.
+		rows.removeIf(OsrsPathGuideOverlay::repeatsAction);
+		// Critical warnings must also survive an Advice selection or the header-only collapse. The open list already has them
+		// (set in another size, so the rows are not equal): the same warning is never drawn twice.
 		for (GuideList.Row alert : GuideList.alertRows(v, fm, width))
 		{
-			if (alert.getAction().getKind() != GuideList.Kind.DETOUR && !rows.contains(alert)) rows.add(alert);
+			if (alert.getAction().getKind() != GuideList.Kind.DETOUR && rows.stream().noneMatch(r -> sameAlert(r, alert))) rows.add(alert);
 		}
 		if (!collapsed)
 		{
@@ -388,7 +409,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 				StepGuide.StageView stage = v.getStage();
 				if (stage != null && stage.getSteps() != null && stage.getCursor() >= 0 && stage.getCursor() < stage.getSteps().size())
 					action = (stage.isPeeking() ? "Viewing · " : "") + GuideList.withoutDoneErrands(v, stage.getSteps().get(stage.getCursor()).shown());
-				int alternative = action.indexOf(" or ");
+				int alternative = GuideList.alternativeAt(action);
 				List<GuideList.Line> actionLines = new ArrayList<>();
 				if (alternative > 0)
 				{

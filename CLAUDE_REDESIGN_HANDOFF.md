@@ -6,6 +6,18 @@ Read this before modifying desktop presentation, RuneLite overlays, or packaging
 
 The user initially selected **Clear Path**, then on 2026-10-13 explicitly selected the **Modern dark** preview to reduce clutter. The current released implementation is **2.48.8**, following the 2.48.5 Modern Path evolution below. Preserve existing functionality and closely follow the accepted reference `docs/design-preview/modern-dark.png`. Do not restore the dense 2.48.3/2.48.4 layout over it. The user explicitly declined adding the illustrative Loadouts, Comparison, and Price tracking features. Do not create placeholder pages, dead controls, or new engines to reproduce those incidental mock labels.
 
+## Review fixes — 2.48.9
+
+An independent review of 2.48.3–2.48.8 (code, built app at 390–1440 px in both themes, live World 316 guide) found and fixed:
+
+- The desktop "What to do now" read the quest cursor only from `/status`, requested at login/reconnect: it froze on the line seen at login and showed "Starting point" on the next quest. `BridgeServer.setQuestInstruction` now broadcasts the existing STATUS event when the cursor changes (the app already re-reads `/status` on STATUS). Protocol 6 is unchanged.
+- `.section-nav-item` kept `width:100%` from the sidebar era, so every local section strip showed only its first link above 700 px. `.tabs-top` kept `order:3` from the old header below 1200 px and at large text, which put the sections under Settings in the sidebar. Both are reset in `modern-path.css`. When relocating an element, check the old rules that still match its class.
+- The open guide drew a warning twice (the alert rows are set in another size than the list's own rows, so `rows.contains` never matched) and repeated the action as a "Details:" row. `OsrsPathGuideOverlay.sameAlert` / `repeatsAction`.
+- The " or " split is one rule on both sides (`GuideList.alternativeAt`, `alternativeAt` in `src/lib/subStep.ts`): no split inside a bracket or after a colon.
+- `QuestOverview` scrolls its own list to the current line.
+
+`scripts/ui-smoke.ts` now checks strip links in view, the sidebar order at every width and text size, and that the action moves with the cursor on a STATUS event. Not changed, known: the open guide can cover the chat buttons when its list is long; the header is 156px tall at large text; two distances are shown in an instance (Death's Office).
+
 ## Modern guide typography — 2.48.8
 
 The user rejected the inconsistent game-guide fonts after the 2.48.7 native inspection. Glass guide text now uses the desktop's bundled **Inter**, loaded once by `GuideFont`. `runelite-bridge/build.gradle` copies `public/fonts/Inter-variable.ttf` and its OFL license into the plugin's `com/osrspath/bridge/fonts` resources. No OS font installation, external font fetch or settings/profile migration occurs. Classic mode still uses the selected RuneLite font; the guide's large-text scale remains available.

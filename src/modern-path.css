@@ -10,7 +10,8 @@
 :root .app-sidebar .brand { color:var(--text); font-size:1.2rem; gap:10px; margin:0 0 20px; white-space:normal; }
 :root .app-sidebar .compass-mark { width:30px; height:30px; color:var(--gold-ink); }
 :root .app-sidebar .header-mode summary { padding:9px 0 16px; border:0; border-bottom:1px solid var(--border); border-radius:0; background:none; color:var(--muted); font-size:.8rem; }
-:root .app-sidebar .tabs-top { display:flex; flex-direction:column; gap:5px; width:100%; flex:0 0 auto; height:auto; overflow:visible; border:0; margin-left:0; }
+/* order:0 — the old header moved its tabs to a third row (order:3) below 1200px and at large text; in the sidebar that put them under Settings. */
+:root .app-sidebar .tabs-top { display:flex; flex-direction:column; gap:5px; width:100%; flex:0 0 auto; order:0; height:auto; overflow:visible; border:0; margin-left:0; }
 :root .app-sidebar .tabs-top .tab { display:flex; flex-direction:row; gap:12px; justify-content:flex-start; padding:11px 13px; width:100%; min-width:0; border:0; border-radius:8px; color:var(--muted); font-size:.85rem; min-height:43px; height:auto; }
 :root .app-sidebar .tabs-top .tab.is-active { background:var(--accent-soft); color:var(--accent-ink); border:0; box-shadow:none; }
 :root .app-sidebar .tabs-top .tab .icon { width:18px; height:18px; }
@@ -108,7 +109,8 @@
 .section-rail { position:static; padding:0 0 22px; min-width:0; }
 .section-rail h2,.section-rail-foot { display:none; }
 .section-rail nav { display:flex; gap:5px; overflow-x:auto; max-width:100%; }
-.section-nav-item { flex:0 0 auto; font-size:.8rem; padding:8px 12px; }
+/* width:auto — the sidebar-era "width:100%" made the first item fill the strip and pushed every other one out of view. */
+.section-nav-item { flex:0 0 auto; width:auto; font-size:.8rem; padding:8px 12px; }
 .section-nav-item .icon { width:16px; height:16px; }
 .section-content { container-type:inline-size; min-width:0; width:100%; }
 @container(max-width:840px) {

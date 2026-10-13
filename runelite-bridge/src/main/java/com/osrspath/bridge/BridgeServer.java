@@ -73,7 +73,7 @@ public final class BridgeServer
 	 */
 	static final int PROTOCOL = 6;
 	/** The plugin version, the same as the app it ships with in one exe. */
-	static final String PLUGIN_VERSION = "2.48.8";
+	static final String PLUGIN_VERSION = "2.48.9";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	/** The whole snapshot: the step with the quest stages, shopping and plan in one body. */
@@ -233,20 +233,28 @@ public final class BridgeServer
 		broadcast(statusEvent());
 	}
 
-	/** The existing guide cursor is independent of a temporary navigation target. Client thread only. */
+	/**
+	 * The existing guide cursor is independent of a temporary navigation target. Client thread only.
+	 * A change is announced with a STATUS event: the app asks /status again on it, so its "What to do now" follows the quest while the
+	 * player stays logged in (the cursor is only in /status; without the event the app kept the line it saw at login).
+	 */
 	public void setQuestInstruction(String stepId, Integer stageAt, int lineIndex, boolean peeking)
 	{
-		if (stepId == null || stageAt == null || lineIndex < 0)
+		Map<String, Object> next = null;
+		if (stepId != null && stageAt != null && lineIndex >= 0)
 		{
-			questInstruction = null;
+			next = new LinkedHashMap<>();
+			next.put("stepId", stepId);
+			next.put("stageAt", stageAt);
+			next.put("lineIndex", lineIndex);
+			next.put("peeking", peeking);
+		}
+		if (Objects.equals(next, questInstruction))
+		{
 			return;
 		}
-		Map<String, Object> next = new LinkedHashMap<>();
-		next.put("stepId", stepId);
-		next.put("stageAt", stageAt);
-		next.put("lineIndex", lineIndex);
-		next.put("peeking", peeking);
-		if (!next.equals(questInstruction)) questInstruction = next;
+		questInstruction = next;
+		broadcast(statusEvent());
 	}
 
 	/** New skill levels. Identical ones are not broadcast. */

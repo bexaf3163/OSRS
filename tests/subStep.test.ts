@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { actionOf, dialogueOf, findSubStep, instructionSubStep, itemStatus, subStepItems, subStepNpcInfo } from '../src/lib/subStep';
+import { actionOf, alternativeAt, dialogueOf, findSubStep, instructionSubStep, itemStatus, subStepItems, subStepNpcInfo } from '../src/lib/subStep';
 import type { NavTargetPayload } from '../src/services/runeliteBridge';
 
 const ali = stepById.get('S2-10')!;
@@ -76,5 +76,28 @@ describe('item status is three-valued', () => {
   it('a known bag without it and an unopened bank is not checked, never missing', () => {
     expect(itemStatus(bag([{ name: 'Rope', count: 1 }]), 'Key print')).toBe('unknown');
     expect(itemStatus({ ...base, bagItems: { known: false } }, 'Key print')).toBe('unknown');
+  });
+});
+
+describe('an alternative in the current action', () => {
+  it('sets apart only a whole second way, as the plugin does', () => {
+    expect(alternativeAt('Defeat the Ancient Guardian or mine 4 pillars (Mining 10)')).toBe(27);
+    expect(alternativeAt('Use the rope (bought) or ask Ned')).toBe(21);
+    // A restriction after a colon and an "or" inside a bracket are the instruction itself: muting the tail would hide part of it.
+    expect(alternativeAt('Kill the Temple Guardian (level 30): melee or ranged only')).toBe(-1);
+    expect(alternativeAt('Bring Drezel 50 unnoted essence (rune or pure)')).toBe(-1);
+    expect(alternativeAt('Talk to Willow')).toBe(-1);
+  });
+
+  it('no quest line of the route loses a restriction to the muted tail', () => {
+    const cut: string[] = [];
+    for (const s of stepById.values()) {
+      for (const st of s.questStages?.stages ?? []) for (const l of st.do) {
+        const title = (l.s?.trim() || l.t).trim();
+        const at = alternativeAt(title);
+        if (at > 0 && /[(:]/.test(title.slice(0, at)) && title.slice(0, at).split('(').length !== title.slice(0, at).split(')').length) cut.push(`${s.id}: ${title}`);
+      }
+    }
+    expect(cut).toEqual([]);
   });
 });
