@@ -61,7 +61,30 @@ Corrections made after that inspection:
 - Gear distinguishes a connected client waiting for character data from a disconnected client. No unknown item, equipment, XP or bank data becomes zero or missing.
 - The current route code cannot wrap at the hyphen. Sticky sidebars/previews account for the larger, wrapped header when text exceeds 120%.
 
-**Live in-world verification remains a separate acceptance step:** the client reached Play Now and required the user's manual login. A connected bridge, native render tests and screenshots from fixtures are not evidence that every bank/exchange/combat state was exercised in the user's world. Do not claim that unperformed verification passed.
+### Live world inspection — 2026-10-13
+
+The user explicitly authorized selecting World 316 and pressing Play with the saved session, without entering credentials. RuneLite was launched through **OSRS Path's Launch RuneLite with the bridge** action. It was not launched separately through Jagex Launcher. The saved-session Play Now and welcome-screen Play actions successfully opened the world.
+
+The installed portable app was updated from 2.48.3 to **2.48.4 through Settings → App**, then RuneLite was closed and relaunched through the app. Settings confirmed app 2.48.4 / plugin 2.48.4 / protocol 6 compatibility and the character being in the game. Existing profile, route and preferences survived the update. World 316 was selected again because the newly launched client initially chose a different world.
+
+Observed live:
+
+- The Glass quest guide rendered its quest marker/name, stage metadata, progress bar, large gold action, blue distance line and Steps/Advice controls legibly. The current example was Below Ice Mountain, stage 7 of 8, with the Ancient Guardian / four pillars action.
+- Steps and Advice could be selected. After expanding the list, Advice displayed the detail and preparation advice, including the do-not-take-now item. Returning to Steps worked.
+- The header chevron collapsed the guide to its quest header and expanded it again. The micro HUD appeared while the guide was collapsed. Compact reveal state reset after the app/client restart; the configured Glass style and overlay position survived.
+- At the observed approximately 1678 × 1068 game window, the guide remained at the player's existing left-side position, clear of the central character, minimap and bottom game controls. Its expanded list remained above the bottom controls. No forced position reset or global default change was justified by this view.
+- The cyan arrow and distance were visible. Their visible presence is confirmed; actual travel/path correctness was not tested by moving the character.
+- Desktop connection/profile indicators responded to login. Closing the client returned the desktop to offline/saved guidance and unverified preparation items; reconnecting restored live inventory readiness. This validates the 2.48.4 waiting-versus-live fix in the installed app.
+
+No character movement, combat, purchases, skilling, quest marking, bank opening or exchange interaction was performed. Alt-drag was not exercised. Bank/exchange/critical-warning cases remain fixture-tested acceptance scenarios, not live-world passes. Do not claim literal pixel equality or complete live functional coverage from this inspection.
+
+### Priority finding: quest instruction versus navigation target
+
+The live check exposed a remaining semantic mismatch, reproduced after restarting both the app and plugin on 2.48.4: the native guide said **Defeat the Ancient Guardian or mine 4 pillars**, while the desktop hero and overview marked **Talk to Willow (south of Ice Mountain)** as the current instruction/in-game line.
+
+The source explains why these can differ: `useSubStep` in `SubStepHero.tsx` resolves only `findSubStep(step, navTarget)`. `findSubStep` matches the navigation label/tile to canonical walkthrough lines. Native `refreshGuide()` instead uses the quest value and `stageTracker.cursor()` when building `StepGuide.View`. The `/status` response exposes `navTarget`, but does not expose that current quest cursor. Temporary navigation is intentionally independent of the quest cursor, and `followStage()` preserves the player's selected destination while the stage is unchanged.
+
+**Recommended focused follow-up:** expose a validated, optional current quest-instruction identity from the existing plugin guide/cursor through the existing bridge status, and let the desktop resolve that identity against canonical stage data. Keep the navigation target separate and clearly labelled. Do not infer quest completion from a tile, clear the player's destination merely to make headings agree, introduce a second quest engine, or replace quest data with display text. Gate current instruction on in-game state and matching active step; handle completed quests, previous-step inspection, old plugins, missing/invalid identity and late status replies. Add a regression with a later quest stage plus a navigation target at the first NPC, as well as logged-out and completed cases. This follow-up was identified, **not implemented in 2.48.4**.
 
 ## Invariants to retain
 
@@ -83,7 +106,7 @@ The 2.48.3 baseline passed 893 TypeScript tests, 444 Java tests, production brow
 
 For visual acceptance, check both themes, 100%/150% text, wide and narrow viewports, compact/full transitions, offline/connecting/waiting-character/in-game states, readiness unknown/ready/missing, and critical/recovery states. Inspect actual screenshots, not just test counts. Check that long labels do not hide controls, step codes do not split, and sticky panels remain below the header.
 
-For native acceptance after manual login, inspect compact/expanded Steps and Advice, collapse/expand, Alt-drag positioning, bank checklist, exchange checklist, critical warning, distance and world marker. Use fixtures for cases that would require risky gameplay; clearly identify those as simulated rather than live. Restore any temporary configuration changes.
+For native acceptance after authorized login, inspect compact/expanded Steps and Advice, collapse/expand, Alt-drag positioning, bank checklist, exchange checklist, critical warning, distance and world marker. Use fixtures for cases that would require risky gameplay; clearly identify those as simulated rather than live. Restore any temporary configuration changes. The live record above is the actual coverage, not a blanket pass for this checklist.
 
 Before pushing, re-read remote `main` and preserve later changes. Update `package.json`, the root and package entries in `package-lock.json`, the plugin version and release notes consistently. Never force the branch back to the baseline.
 
@@ -91,6 +114,7 @@ A release is finished only after GitHub Checks and Release succeed, its tag targ
 
 ## Remaining work, not new promised features
 
-- Complete and record the live in-world visual check after the user logs in.
+- Resolve the confirmed current quest-instruction / navigation-target mismatch described above.
+- Alt-drag and live bank/exchange/critical states were not exercised; use safe fixtures or an explicitly authorized suitable live scenario.
 - Use screenshot evidence to make small spacing/position corrections if needed; avoid another broad redesign.
 - No new Loadouts, Comparison, or Price tracking engine is part of this redesign scope.
