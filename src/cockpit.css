@@ -74,3 +74,26 @@
 .strip-fold { border-top:1px solid var(--border); padding-top:10px; }
 .strip-fold summary { cursor:pointer; font-weight:600; padding:4px 0; }
 .compact-page { padding-top:4px; }
+
+/* ---------- A step with nothing to bring: the verdict is a slim row under the action, no empty middle column ---------- */
+.cockpit-grid:not(:has(.cockpit-bag .quest-preparation)) .cockpit-bag .step-status { width:fit-content; min-width:min(100%,20rem); }
+@container (min-width:44rem) {
+  .cockpit-grid:not(:has(.cockpit-bag .quest-preparation)) { grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); grid-template-areas:"now where" "bag where" "walk where"; }
+}
+@container (min-width:62rem) {
+  .cockpit-grid:not(:has(.cockpit-bag .quest-preparation)) { grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); grid-template-areas:"now where" "bag where" "walk where"; }
+}
+
+/* ---------- The desktop shell: a search field that fills the bar, a labelled game-mode control ---------- */
+@media (min-width:1000px) {
+  :root .app-shell:not(.is-compact) .workspace-breadcrumb { display:none; }
+  :root .app-shell:not(.is-compact) .topbar-inner { min-height:58px; padding:9px 30px; flex-wrap:nowrap; }
+  :root .app-shell:not(.is-compact) .topbar-actions { flex:1 1 auto; margin-left:0; flex-wrap:nowrap; align-items:center; }
+  :root .app-shell:not(.is-compact) .search-trigger { order:-1; flex:1 1 auto; max-width:30rem; margin-right:auto; display:flex; align-items:center; gap:10px; padding:8px 14px; border:1px solid var(--border); border-radius:10px; background:var(--surface); }
+  :root .app-shell:not(.is-compact) .search-trigger kbd { margin-left:auto; }
+}
+:root .app-sidebar .header-mode summary { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 12px; margin-bottom:18px; border:1px solid var(--border); border-radius:8px; background:var(--surface); color:var(--text); font-size:.85rem; font-weight:600; }
+:root .app-sidebar .header-mode summary::before { content:'Game mode'; color:var(--muted); font-size:.72rem; font-weight:500; margin-right:auto; }
+:root .app-sidebar .header-mode summary::after { content:'▾'; color:var(--muted); font-size:.7rem; }
+/* The ring already says "ready"; the emoji dot after it is the same fact twice. */
+.cockpit-bag .ready-ring + span, .strip .ready-ring + span { display:none; }
