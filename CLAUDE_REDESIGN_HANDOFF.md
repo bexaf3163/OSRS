@@ -4,7 +4,7 @@ Read this before modifying desktop presentation, RuneLite overlays, or packaging
 
 ## Accepted scope and baseline
 
-The user initially selected **Clear Path**, then on 2026-10-13 explicitly selected the **Modern dark** preview to reduce clutter. The current implementation is the 2.48.5 Modern Path evolution below. Preserve existing functionality and closely follow the accepted reference `docs/design-preview/modern-dark.png`. Do not restore the dense 2.48.3/2.48.4 layout over it. The user explicitly declined adding the illustrative Loadouts, Comparison, and Price tracking features. Do not create placeholder pages, dead controls, or new engines to reproduce those incidental mock labels.
+The user initially selected **Clear Path**, then on 2026-10-13 explicitly selected the **Modern dark** preview to reduce clutter. The current released implementation is **2.48.6**, following the 2.48.5 Modern Path evolution below. Preserve existing functionality and closely follow the accepted reference `docs/design-preview/modern-dark.png`. Do not restore the dense 2.48.3/2.48.4 layout over it. The user explicitly declined adding the illustrative Loadouts, Comparison, and Price tracking features. Do not create placeholder pages, dead controls, or new engines to reproduce those incidental mock labels.
 
 ## Modern Path evolution — 2.48.5
 
@@ -31,7 +31,15 @@ The installed Electron inspection exposed a horizontal scrollbar inside the side
 
 The 2.48.6 production build, data consistency, 895 TypeScript tests and Gradle testClasses/jar passed. Its full production UI run passed, including the additional internal sidebar bounds checks at 1000–1920px with 100%/150% text. The earlier 445-test Java pass covers the unchanged cursor logic; the only subsequent Java change is the synchronized plugin version string.
 
-The released redesign baseline is **2.48.3**, commit `ec9586f420e1b1269aaee42dad5efbb464f7f2c5`, following `21b1db6824ef2769e0c27ab58174e01e7fdb489b`. Start future work from current GitHub `main`, preserving any later commits. An older local checkout may contain an earlier, staged design candidate: do not force-push it over newer work, reset someone else's files, or restore old CSS over the redesign. Merge concurrent work deliberately.
+Final 2.48.6 release verification: GitHub Checks `38421760082` and Release `38421759969` succeeded, including the real isolated Windows Electron check. Tag `v2.48.6` targets `5c380f7137ff2ca12cb18ab7cae9e46aa9179dbc`. The downloaded portable asset is 101433509 bytes and matches SHA-256 `21f48547d6c68b22123bbe509119bbfbf0a9b6db6e00c92c8e98e0901f2fafab`.
+
+The existing installation was then updated through Settings → App to **2.48.6**. The actual installed window confirmed that the sidebar's horizontal scrollbar is gone, Dark theme is selected, and the existing 39/46 quest points and S3-04 route selection survived. RuneLite launched automatically through OSRS Path; World 316 and saved-session Play were used again. Both the game guide and desktop showed the Ancient Guardian / four pillars instruction at stage 7 of 8. Detailed views were left collapsed. No movement, marking, combat or purchases were performed. Live bank/GE/critical states and Alt-drag remain outside this inspection's coverage.
+
+The public screenshot `docs/design-preview/modern-implemented-2.48.6.png` is a capture of the compiled UI with fictional QA fixtures, not the player's account screenshot.
+
+### Historical Clear Path baseline
+
+The original released redesign baseline was **2.48.3**, commit `ec9586f420e1b1269aaee42dad5efbb464f7f2c5`, following `21b1db6824ef2769e0c27ab58174e01e7fdb489b`. Start future work from current GitHub `main`, preserving any later commits. An older local checkout may contain an earlier, staged design candidate: do not force-push it over newer work, reset someone else's files, or restore old CSS over the redesign. Merge concurrent work deliberately.
 
 Reference board names supplied to the user:
 
