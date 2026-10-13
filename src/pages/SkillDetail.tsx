@@ -2,11 +2,13 @@ import { useEffect, useId, useState } from 'react';
 import type { Skill } from '../types';
 import { findSkill, goals, levelById } from '../data';
 import { useStore } from '../store';
+import { useBridge } from '../bridge';
 import { currentStage, isClosed } from '../lib/next-step';
 import { formatXp, goalFor } from '../lib/goals';
 import { levelOf } from '../lib/progress';
 import { rangeForLevel, skillLevel } from '../lib/ranges';
 import { clampLevel, levelForXp, MAX_LEVEL, xpForLevel } from '../lib/xp';
+import { SkillGlyph } from '../components/SectionShell';
 import { Blocks } from '../components/Blocks';
 import { IconBack, IconCheck, IconExternal, TypeIcon } from '../components/Icons';
 import { LevelInput } from '../components/LevelInput';
@@ -35,6 +37,7 @@ type SkillTab = 'overview' | 'roadmap' | 'calculator' | 'reference';
 
 function SkillView({ skill }: { skill: Skill }) {
   const { progress, steps, mode } = useStore();
+  const { xp } = useBridge();
   const [tab, setTab] = useState<SkillTab>('overview');
   const guides = roadmapSkills(skill);
   const tabs: [SkillTab, string][] = [
@@ -56,10 +59,10 @@ function SkillView({ skill }: { skill: Skill }) {
   });
 
   return (
-    <div className="page">
-      <a className="back" href="#/skills"><IconBack />Skills</a>
+    <div className="page skill-detail">
       <header className="page-head">
-        <h1>{skill.name}{skill.membersOnly && <> <span className="badge badge-members">Members</span></>}</h1>
+        <SkillGlyph skill={skill.levelSkills[0]} size={48} />
+        <h1>{skill.name}<span className="skill-level-goal">Level {level} → Goal {focus.target}</span>{skill.membersOnly && <> <span className="badge badge-members">Members</span></>}</h1>
         <p className="muted">
           {skill.nameEn ?? skill.subtitle}
           {skill.wiki && <> · <a href={skill.wiki} target="_blank" rel="noopener noreferrer">Wiki <IconExternal /></a></>}
@@ -79,7 +82,8 @@ function SkillView({ skill }: { skill: Skill }) {
 
       {tab === 'overview' && (
       <>
-      <section className="card levels-card" aria-label="Levels">
+      <details className="card skill-level-editor" open={skill.levelSkills.some(id => xp?.[id] != null)}><summary>Levels and live experience</summary>
+      <section className="levels-card" aria-label="Levels">
         <div className="levels-row">
           {skill.levelSkills.map((lid) => <LevelInput key={lid} id={lid} label={levelById.get(lid)!.name} />)}
         </div>
@@ -94,13 +98,21 @@ function SkillView({ skill }: { skill: Skill }) {
           </p>
         )}
       </section>
+      </details>
 
       <FocusNote focus={focus} />
       <TrainingCard skill={focus.skill} target={focus.target} />
+      <section className="skill-milestones" aria-label="Training milestones"><h3>Skill roadmap</h3><div className="milestone-track">
+        {skill.plan.ranges.slice(Math.max(0, (hit?.index ?? 0) - 1), Math.max(0, (hit?.index ?? 0) - 1) + 3).map(range => (
+          <button key={range.code} type="button" className={`skill-milestone ${range === hit?.range ? 'is-current' : ''}`} onClick={showPlan}>
+            <span className="milestone-node"><SkillGlyph skill={skill.levelSkills[0]} size={36} /></span><strong>{range.what}</strong><span>{range.levels}</span>
+          </button>
+        ))}
+      </div></section>
 
       {related.length > 0 && (
-        <section className="section">
-          <h2>Path steps with this skill</h2>
+        <details className="section skill-related">
+          <summary>Path steps with this skill</summary>
           <ul className="link-list">
             {related.map((s) => (
               <li key={s.id} className={isClosed(progress, s.id) ? 'is-done' : ''}>
@@ -113,7 +125,7 @@ function SkillView({ skill }: { skill: Skill }) {
               </li>
             ))}
           </ul>
-        </section>
+        </details>
       )}
 
       </>

@@ -2,14 +2,14 @@
 // then four views of the same step — Steps, Preparation, Travel, Details. The data and engines are the existing ones;
 // this component only decides where each of them is shown.
 
-import { useId, useRef, useState, type KeyboardEvent } from 'react';
+import { useId, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import type { Step } from '../types';
 import { useStore } from '../store';
 import { useBridge } from '../bridge';
 import { blockerParts, blockersOf, isClosed } from '../lib/next-step';
 import { needsReview } from '../lib/review';
 import { LINK_LABEL, linkStatus, TARGET_LABEL, targetStatus } from '../lib/linkState';
-import { IconCheck, IconLock, TypeIcon, TYPE_LABEL } from './Icons';
+import { IconCheck, IconLock, IconTalk, TypeIcon, TYPE_LABEL } from './Icons';
 import { Inline } from './Inline';
 import { StepBody, type StepTab } from './StepCard';
 import { StepStatus } from './StepStatus';
@@ -31,14 +31,15 @@ export function placeOf(step: Step): string {
   return [where, floor].filter(Boolean).join(' · ');
 }
 
-function CurrentAction({ step }: { step: Step }) {
+export function CurrentAction({ step, children }: { step: Step; children?: ReactNode }) {
   const { progress } = useStore();
   const { enabled, state, inGame, activeStepId, navTarget } = useBridge();
   const sub = useSubStep(step);
   const closed = isClosed(progress, step.id);
   const link = linkStatus(state, inGame);
   const target = targetStatus(activeStepId === step.id || navTarget?.stepId === step.id, state);
-  const place = placeOf(step);
+  // The quest's starting NPC is not the location of every later instruction.
+  const place = sub ? null : placeOf(step);
 
   // Live evidence (the arrow follows a line of this step) names the instruction. Without it the card names where the step starts and says so.
   const start = step.npc ? `Talk to ${step.npc.nameEn}` : overviewOf(step)[0]?.title ?? step.quickSteps?.[0] ?? step.title;
@@ -47,12 +48,13 @@ function CurrentAction({ step }: { step: Step }) {
 
   return (
     <section className={`current-action ${closed ? 'is-done' : ''}`} aria-label="Current action">
-      <span className="current-action-icon" aria-hidden="true"><TypeIcon type={step.type} /></span>
+      <span className="current-action-icon" aria-hidden="true">{step.npc ? <IconTalk /> : <TypeIcon type={step.type} />}</span>
       <div className="current-action-body">
         <p className="eyebrow">{kicker}</p>
         <h3 className="current-action-title"><Inline text={title} /></h3>
         {place && <p className="current-action-place muted"><Inline text={place} /></p>}
       </div>
+      <div className="current-action-side">
       {enabled && !closed && (
         <div className="current-action-link">
           {state === 'online' ? (
@@ -72,6 +74,8 @@ function CurrentAction({ step }: { step: Step }) {
           )}
         </div>
       )}
+      {children}
+      </div>
     </section>
   );
 }
@@ -121,8 +125,7 @@ export function StepWorkspace({ step, suggested, onDone, nextId, compact = false
       </header>
 
       <div className="workspace-top">
-        <CurrentAction step={step} />
-        <StepStatus step={step} headline onPrep={() => setTab('prep')} />
+        <CurrentAction step={step}><StepStatus step={step} headline onPrep={() => setTab('prep')} /></CurrentAction>
       </div>
 
       <div className="workspace-tabs" role="tablist" aria-label="Step views" onKeyDown={onKey}>
@@ -135,7 +138,7 @@ export function StepWorkspace({ step, suggested, onDone, nextId, compact = false
         ))}
       </div>
       <div className="workspace-panel" role="tabpanel" id={`${base}-panel`} aria-labelledby={`${base}-tab-${tab}`}>
-        <StepBody step={step} onDone={onDone} nextId={nextId} tab={tab} onPrep={() => setTab('prep')} />
+        <StepBody step={step} onDone={onDone} nextId={nextId} tab={tab} onPrep={() => setTab('prep')} compact={compact} />
       </div>
       {compact && (
         <p className="muted small compact-more">

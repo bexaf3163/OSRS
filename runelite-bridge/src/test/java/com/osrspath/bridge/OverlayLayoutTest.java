@@ -368,6 +368,16 @@ public class OverlayLayoutTest
 		{
 			OUT.mkdirs();
 			ImageIO.write(img, "png", new File(OUT, save + ".png"));
+			BufferedImage glass = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+			Graphics2D glassGraphics = glass.createGraphics();
+			glassGraphics.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			glassGraphics.setFont(font);
+			glassGraphics.translate(MARGIN, MARGIN);
+			OverlayCard.paint(glassGraphics, size.width, size.height, OverlayCard.GOLD, 85, OsrsPathBridgeConfig.OverlayTheme.GLASS);
+			glassGraphics.translate(-MARGIN, -MARGIN);
+			panel.render(glassGraphics);
+			glassGraphics.dispose();
+			ImageIO.write(glass, "png", new File(OUT, save + "-glass.png"));
 		}
 		return outside;
 	}
@@ -675,7 +685,7 @@ public class OverlayLayoutTest
 							String id = v.getTitle().substring(1, 6);
 							String name = "guide-" + id + (v.getStage() != null ? "-stage" + v.getStage().getIndex() + "c" + v.getStage().getCursor() : "") + "-" + (compact ? (reveal > 0 ? "compact-open" : "compact-closed") : collapsed ? "collapsed" : h >= 0 ? "hover" : "list") + "-" + fontName(base) + (large ? "-large" : "");
 							// For the eye: the first view (the bank was not opened): S2-03 as for the player in the screenshot, a quest with many NPCs and Cook's Assistant.
-							if (width == standard && (id.equals("S2-03") || id.equals("S2-10") || id.equals("S1-03") || (id.equals("S2-07") && v.getStage() != null && v.getStage().getCursor() > 0)) && v.getDetour() == null && saved.add(name))
+							if (width == standard && (id.equals("S2-03") || id.equals("S3-03") || id.equals("S2-10") || id.equals("S1-03") || (id.equals("S2-07") && v.getStage() != null && v.getStage().getCursor() > 0)) && v.getDetour() == null && saved.add(name))
 							{
 								save = name;
 							}

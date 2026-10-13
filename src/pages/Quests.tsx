@@ -4,7 +4,8 @@ import type { Progress, Quest } from '../types';
 import { allQuests, BASE_QP, BASE_QUEST, stepById } from '../data';
 import { useStore } from '../store';
 import { blockerParts, blockersOf, isClosed } from '../lib/next-step';
-import { IconCheck, IconChevron, IconLock } from '../components/Icons';
+import { IconCheck, IconChevron, IconLock, TypeIcon } from '../components/Icons';
+import { ItemIcon } from '../components/WikiDrawer';
 
 type Status = 'done' | 'skipped' | 'available' | 'blocked';
 type Filter = 'all' | 'done' | 'available' | 'blocked';
@@ -44,10 +45,13 @@ const matches = (f: Filter, s: Status) => f === 'all' || f === s || (f === 'done
 export function QuestsPage({ embedded = false }: { embedded?: boolean } = {}) {
   const { progress, qp, mode } = useStore();
   const [filter, setFilter] = useState<Filter>('all');
+  const [selectedId, setSelectedId] = useState<string>();
   const rows = allQuests.filter((q) => mode === 'members' || !q.membersOnly).map((q) => questRow(q, progress, qp));
   const base: Status = 'done';
   const count = (f: Filter) => rows.filter((r) => matches(f, r.status)).length + (matches(f, base) ? 1 : 0);
   const visible = rows.filter((r) => matches(filter, r.status));
+  const selected = visible.find(r => r.quest.stepId === selectedId) ?? visible.find(r => r.status === 'available') ?? visible[0];
+  const selectedStep = selected ? stepById.get(selected.quest.stepId) : undefined;
 
   return (
     <div className={embedded ? 'journal-pane' : 'page'}>
@@ -65,6 +69,7 @@ export function QuestsPage({ embedded = false }: { embedded?: boolean } = {}) {
         ))}
       </div>
 
+      <div className="quest-workspace">
       <ul className="quest-list">
         {matches(filter, base) && (
           <li className="quest is-done">
@@ -78,8 +83,8 @@ export function QuestsPage({ embedded = false }: { embedded?: boolean } = {}) {
           </li>
         )}
         {visible.map((r) => (
-          <li key={r.quest.stepId} className={`quest is-${r.status}`}>
-            <a className="quest-link" href={r.href}>
+          <li key={r.quest.stepId} className={`quest is-${r.status} ${selected === r ? 'is-selected' : ''}`}>
+            <button type="button" className="quest-select" aria-pressed={selected === r} onClick={() => setSelectedId(r.quest.stepId)}><span className="quest-link">
               <span className="quest-status">
                 {r.status === 'done' ? <IconCheck /> : r.status === 'blocked' ? <IconLock /> : null}
               </span>
@@ -94,10 +99,23 @@ export function QuestsPage({ embedded = false }: { embedded?: boolean } = {}) {
                 {r.blocked && <span className="quest-blocked">First: {r.blocked}</span>}
               </span>
               <IconChevron className="chevron" />
-            </a>
+            </span></button>
           </li>
         ))}
       </ul>
+      {selected && <aside className="card quest-preview" aria-label="Selected quest">
+        <div className="quest-preview-heading"><TypeIcon type="quest" /><h2>{selected.quest.title}</h2></div>
+        <p className="muted">Stage {selected.quest.stage} · {selected.status}</p>
+        {selected.quest.qp > 0 && <p className="badge badge-qp">+{selected.quest.qp} quest points</p>}
+        {selected.quest.parts.length > 0 && <p>{selected.partsDone} / {selected.quest.parts.length} route steps completed</p>}
+        {selected.blocked && <p className="notice">First: {selected.blocked}</p>}
+        <a className="btn btn-primary" href={selected.href}>View route <IconChevron /></a>
+        <details className="quest-preview-requirements"><summary>Requirements</summary>
+          {selectedStep?.itemsRequired?.length ? <ul>{selectedStep.itemsRequired.map((item,i) => <li key={`${item.nameEn}-${i}`}><ItemIcon src={item.iconUrl} alt="" size={28} /><span>{item.nameEn}{item.amount ? ` ×${item.amount}` : ''}</span></li>)}</ul> : <p className="muted small">No preparation items listed.</p>}
+          {selectedStep?.doneWhen && <p className="muted small">Done when: {selectedStep.doneWhen}</p>}
+        </details>
+      </aside>}
+      </div>
       {!visible.length && !matches(filter, base) && <p className="muted empty">Nothing here.</p>}
     </div>
   );

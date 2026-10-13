@@ -8,7 +8,7 @@ import { buildIndex, search, type SearchHit, type SearchKind } from '../lib/sear
 import { formatXp } from '../lib/goals';
 import { go } from '../lib/router';
 import { getGePrice } from '../services/pricesApi';
-import { IconClose, IconSearch, TYPE_LABEL } from './Icons';
+import { IconBook, IconClose, IconJournal, IconSearch, IconSkills, TYPE_LABEL } from './Icons';
 import { ItemIcon, useWiki } from './WikiDrawer';
 
 const KIND_LABEL: Record<SearchKind, string> = {
@@ -104,13 +104,14 @@ export function SearchBox({ open, onClose }: { open: boolean; onClose: () => voi
   return (
     <dialog ref={dialog} className="search-dialog" aria-label="Search" onClose={onClose}
       onClick={(e) => { if (e.target === dialog.current) onClose(); }}>
+      <header className="search-heading"><IconSearch /><div><h2>Search OSRS Path</h2><p>Find steps, items, and Wiki pages</p></div><button type="button" className="icon-btn" onClick={onClose} aria-label="Close the search"><IconClose /></button></header>
       <div className="search-box">
         <IconSearch />
         <input ref={input} type="search" className="search-input" placeholder="Step, quest, NPC, item, skill…"
           value={query} onChange={(e) => setQuery(e.target.value)} onKeyDown={onKey}
           role="combobox" aria-expanded={rows > 0} aria-controls={listId} aria-autocomplete="list"
           aria-activedescendant={rows ? `${listId}-${active}` : undefined} aria-label="Search" enterKeyHint="go" />
-        <button type="button" className="icon-btn" onClick={onClose} aria-label="Close the search"><IconClose /></button>
+        {query && <button type="button" className="icon-btn" onClick={() => { setQuery(''); input.current?.focus(); }} aria-label="Clear search"><IconClose /></button>}
       </div>
       <ul className="search-results" id={listId} role="listbox" aria-label="Results">
         {groups.map((g) => (
@@ -124,7 +125,7 @@ export function SearchBox({ open, onClose }: { open: boolean; onClose: () => voi
                   className={`search-hit ${h.item.kind === 'item' ? 'is-item' : ''} ${i === active ? 'is-active' : ''}`}
                   onClick={() => pick(h)} onMouseMove={() => setActive(i)}>
                   <span className="search-hit-head">
-                    {h.item.icon !== undefined && <ItemIcon src={h.item.icon} alt="" />}
+                    <span className="search-result-glyph">{h.item.icon !== undefined ? <ItemIcon src={h.item.icon} alt="" size={36} /> : h.item.kind === 'step' ? <IconJournal /> : h.item.kind === 'skill' || h.item.kind === 'range' ? <IconSkills /> : <IconBook />}</span>
                     {h.item.code && <code className="code">{h.item.code}</code>}
                     <span className="search-hit-title">{h.item.title}</span>
                     {h.item.kind === 'item' && (

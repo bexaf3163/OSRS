@@ -24,15 +24,15 @@ final class OverlayCard
 	static final int RADIUS = 12;
 	/** The width of the coloured strip on the left. */
 	static final int BAR = 3;
-	private static final Color TOP = new Color(27, 34, 45);
-	private static final Color BOTTOM = new Color(22, 28, 37);
+	private static final Color TOP = new Color(20, 33, 48);
+	private static final Color BOTTOM = new Color(13, 24, 35);
 	private static final Color BORDER = new Color(255, 255, 255, 36);
 	private static final Color TRACK = new Color(255, 255, 255, 38);
 
 	/** The glass style: flat fill, never more see-through than this (of 255), a round corner, and the state dot in the left gutter of the text. */
 	static final int GLASS_MIN_ALPHA = 190;
-	static final int GLASS_RADIUS = 14;
-	private static final Color GLASS_FILL = new Color(18, 22, 30);
+	static final int GLASS_RADIUS = 8;
+	private static final Color GLASS_FILL = new Color(16, 29, 41);
 	private static final Color GLASS_HIGHLIGHT = new Color(255, 255, 255, 30);
 	static final int DOT = 5;
 	static final int DOT_X = 3;

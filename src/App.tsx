@@ -5,7 +5,8 @@ import { useStore } from './store';
 import { useRoute, type Page } from './lib/router';
 import { IconBook, IconCart, IconCompact, IconGear, IconJournal, IconPath, IconSearch, IconSettings, IconSkills } from './components/Icons';
 import { SearchBox } from './components/SearchBox';
-import { ModeToggle } from './components/ModeToggle';
+import { HeaderMode } from './components/ModeToggle';
+import { CompassMark } from './components/CompassMark';
 import { DensityToggle } from './components/DensityToggle';
 import { HeaderProgress } from './components/HeaderProgress';
 import { BridgeIndicator } from './components/BridgeIndicator';
@@ -27,6 +28,7 @@ import { ShoppingPage } from './pages/Shopping';
 import { GearPage } from './pages/Gear';
 import { ProfileBanner } from './components/ProfileBanner';
 import { UpdateBanner } from './components/UpdateBanner';
+import { SectionShell } from './components/SectionShell';
 
 const TABS: { page: Page; href: string; label: string; Icon: ComponentType<{ className?: string }> }[] = [
   { page: 'path', href: '#/', label: 'Path', Icon: IconPath },
@@ -101,10 +103,13 @@ export function App() {
       </a>
       <header className={`topbar ${compact ? 'is-compact' : ''}`}>
         <div className="topbar-inner">
+          <div className="header-identity">
           <a className="brand" href="#/">
-            <img src="./icon.svg" alt="" width="28" height="28" />
+            <CompassMark />
             <span>OSRS Path</span>
           </a>
+          <HeaderMode /><HeaderProgress />
+          </div>
           <nav className="tabs tabs-top" aria-label="Sections">
             {TABS.map(({ page, href, label, Icon }) => (
               <a key={page} href={href} className={`tab ${section === page ? 'is-active' : ''}`} title={label}
@@ -117,10 +122,8 @@ export function App() {
             {compact && (
               <button type="button" className="btn btn-sm" onClick={() => setFeatures({ compact: false })}>Full workspace</button>
             )}
-            <HeaderProgress />
             <BridgeIndicator />
             <DensityToggle />
-            <ModeToggle />
             {!compact && (
               <button type="button" className="icon-btn compact-btn" aria-label="Compact view: keep the current action next to the game"
                 title="Compact view: keep the current action next to the game"
@@ -135,7 +138,7 @@ export function App() {
             </button>
             <a href="#/settings" className={`icon-btn ${route.page === 'settings' ? 'is-active' : ''}`} aria-label="Settings"
               aria-current={route.page === 'settings' ? 'page' : undefined}>
-              <IconSettings />
+              <IconSettings /><span className="settings-link-label">Settings</span>
             </a>
           </div>
         </div>
@@ -144,7 +147,7 @@ export function App() {
       <main id="main" tabIndex={-1} className={compact ? 'is-compact' : undefined}>
         <UpdateBanner />
         <ProfileBanner />
-        <PageBoundary resetKey={`${route.page}/${route.param ?? ''}`}>{content}</PageBoundary>
+        <PageBoundary resetKey={`${route.page}/${route.param ?? ''}`}><SectionShell key={route.page} page={route.page} param={route.param}>{content}</SectionShell></PageBoundary>
       </main>
 
       <nav className={`tabs tabs-bottom ${compact ? 'is-compact' : ''}`} aria-label="Sections">

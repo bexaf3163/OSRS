@@ -9,7 +9,7 @@ export function HeaderProgress() {
   const closed = steps.filter((s) => isClosed(progress, s.id)).length;
   const pct = steps.length ? Math.round((closed / steps.length) * 100) : 0;
   return (
-    <a className="header-progress" href="#/" aria-label={`Done ${pct}%, quest points ${qp} of ${maxQp}`}>
+    <a className="header-progress" href="#/" title={`Done ${pct}%, quest points ${qp} of ${maxQp}`} aria-label={`Done ${pct}%, quest points ${qp} of ${maxQp}`}>
       <span className="ring" style={{ '--p': `${pct}%` } as CSSProperties} aria-hidden="true">
         <span className="ring-value">{pct}%</span>
       </span>

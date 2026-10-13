@@ -35,7 +35,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	static final float SMALL = 0.85f;
 	static final Color HOVER = new Color(255, 255, 255, 40);
 	/** A click this close to the left of the right label still counts as on it. */
-	private static final int TAB_SLACK = 6;
+	private static final int TAB_SLACK = 20;
 	/**
 	 * For how long after the last frame a click still counts against the lines. If the list has not been drawn for a long time (left the game,
 	 * the plate was hidden), clicks go to the game, not to invisible buttons.
@@ -352,16 +352,23 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			}
 			if (distance != null && !distance.trim().isEmpty())
 			{
-				rows.add(at, new GuideList.Row(GuideList.text(distance, GuideList.LINK, fm, OverlayText.inner(width), false), GuideList.Action.NONE, null));
+				rows.add(at++, new GuideList.Row(GuideList.text(distance, GuideList.LINK, fm, OverlayText.inner(width), false), GuideList.Action.NONE, null));
 			}
 			int advice = GuideList.adviceCount(v.getPrep());
-			if (advice > 0 && rows.stream().noneMatch(r -> r.getAction().getKind() == GuideList.Kind.TAB))
-			{
-				rows.add(GuideList.tabRow(v.isAdviceTab(), advice, fm, OverlayText.inner(width)));
-			}
+			// Keep the same tab actions directly under the current action in both reveal states.
+			rows.removeIf(r -> r.getAction().getKind() == GuideList.Kind.TAB);
+			rows.add(at, GuideList.tabRow(v.isAdviceTab(), advice, fm, OverlayText.inner(width)));
 		}
 		List<RowComponent> out = new ArrayList<>();
 		FontMetrics boldFm = new FontMetrics(font.deriveFont(Font.BOLD))
+		{
+			@Override
+			public int stringWidth(String text)
+			{
+				return (int) Math.ceil(getFont().getStringBounds(text, fm.getFontRenderContext()).getWidth());
+			}
+		};
+		FontMetrics actionFm = new FontMetrics(font.deriveFont(Font.BOLD, font.getSize2D() * 1.2f))
 		{
 			@Override
 			public int stringWidth(String text)
@@ -378,19 +385,20 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			if (heading)
 			{
 				String title = v.getTitle() == null ? "OSRS Path" : v.getTitle().replaceFirst("^\\[[^\\]]+\\]\\s*", "");
-				List<GuideList.Line> header = new ArrayList<>(GuideList.pair(title, new Color(231, 237, 245), collapsed ? "▼" : "▲",
-					GuideList.MUTED, boldFm, OverlayText.inner(width) - 2, false));
+				List<GuideList.Line> header = new ArrayList<>(GuideList.pair(title, new Color(231, 237, 245), "",
+					GuideList.MUTED, boldFm, OverlayText.inner(width) - 40, false));
 				String meta = v.getStage() == null ? "Current step" : GuideList.stageTitle(v.getStage());
-				header.addAll(GuideList.text(meta + GuideList.percent(v), GuideList.MUTED, smallFm, OverlayText.inner(width), true));
+				header.addAll(GuideList.text(meta + GuideList.percent(v), GuideList.MUTED, smallFm, OverlayText.inner(width) - 28, true));
 				r = new GuideList.Row(header, r.getAction(), r.getHint());
 			}
 			else if (current)
 			{
 				String action = r.getLines().stream().map(GuideList.Line::getLeft).collect(java.util.stream.Collectors.joining(" "))
 					.replaceFirst("▶ \\[\\d+/\\d+\\]\\s*", "");
-				r = new GuideList.Row(GuideList.text(action, r.getLines().get(0).getLeftColor(), boldFm, OverlayText.inner(width) - 2, false), r.getAction(), r.getHint());
+				r = new GuideList.Row(GuideList.text(action, OverlayCard.GOLD, actionFm, OverlayText.inner(width) - 2, false), r.getAction(), r.getHint());
 			}
 			RowComponent rc = new RowComponent(r, i == hovered && r.getAction().isClickable(), false, font, small, heading, current);
+			rc.folded = collapsed || (compact && reveal <= 0);
 			out.add(rc);
 			c.add(rc);
 			if (i == 0 && !collapsed && v.getStage() != null && v.getStage().getTotal() > 0)
@@ -417,6 +425,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		private final List<Font> fonts = new ArrayList<>();
 		private final boolean heading;
 		private final boolean current;
+		private boolean folded;
 		@Getter
 		private final Rectangle bounds = new Rectangle();
 		@Setter
@@ -453,7 +462,8 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			for (GuideList.Line l : row.getLines())
 			{
 				Font f = l.isSmall() ? small : font;
-				if ((heading || current) && !l.isSmall()) f = f.deriveFont(Font.BOLD);
+				if (current && !l.isSmall()) f = f.deriveFont(Font.BOLD, font.getSize2D() * 1.2f);
+				else if (heading && !l.isSmall()) f = f.deriveFont(Font.BOLD);
 				LineComponent.LineComponentBuilder b = LineComponent.builder().left(l.getLeft()).leftColor(l.getLeftColor()).leftFont(f).rightFont(f);
 				if (l.getRight() != null)
 				{
@@ -495,10 +505,46 @@ class OsrsPathGuideOverlay extends OverlayPanel
 				g.drawRoundRect(x - 3, y, width + 6, height, 6, 6);
 			}
 			int at = y + top;
+			if (heading)
+			{
+				// Native vector quest marker, independent of the selected RuneLite font.
+				int cx = x + 10;
+				int cy = at + 14;
+				g.setColor(new Color(63, 48, 20, 220));
+				int[] px = {cx, cx + 9, cx + 9, cx, cx - 9, cx - 9};
+				int[] py = {cy - 13, cy - 7, cy + 7, cy + 13, cy + 7, cy - 7};
+				g.fillPolygon(px, py, 6);
+				g.setColor(OverlayCard.GOLD);
+				g.drawPolygon(px, py, 6);
+				g.fillPolygon(new int[] {cx, cx + 4, cx, cx - 4}, new int[] {cy - 9, cy, cy + 9, cy}, 4);
+				int arrowX = x + width - 6;
+				g.setColor(GuideList.MUTED);
+				if (folded)
+				{
+					g.drawLine(arrowX - 3, cy - 4, arrowX + 1, cy);
+					g.drawLine(arrowX + 1, cy, arrowX - 3, cy + 4);
+				}
+				else
+				{
+					g.drawLine(arrowX - 4, cy - 2, arrowX, cy + 2);
+					g.drawLine(arrowX, cy + 2, arrowX + 4, cy - 2);
+				}
+			}
+			if (tab)
+			{
+				g.setColor(GuideList.MUTED);
+				g.drawRoundRect(x + 1, at + 2, 9, 12, 2, 2);
+				g.drawLine(x + 3, at + 6, x + 8, at + 6);
+				g.drawLine(x + 3, at + 9, x + 8, at + 9);
+				int adviceX = x + width - rightLabelWidth(g) - 14;
+				g.fillRoundRect(adviceX, at + 3, 10, 8, 5, 5);
+				g.fillPolygon(new int[] {adviceX + 2, adviceX + 2, adviceX + 6}, new int[] {at + 9, at + 15, at + 9}, 3);
+			}
 			for (LineComponent l : lines)
 			{
-				l.setPreferredLocation(new Point(x, at));
-				l.setPreferredSize(new Dimension(width, 0));
+				int inset = heading ? 26 : tab ? 16 : 0;
+				l.setPreferredLocation(new Point(x + inset, at));
+				l.setPreferredSize(new Dimension(width - inset, 0));
 				at += l.render(g).height;
 			}
 			if (heading || tab)
@@ -510,7 +556,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			{
 				GuideList.Line labels = row.getLines().get(0);
 				boolean rightActive = GuideList.TITLE.equals(labels.getRightColor());
-				int underline = g.getFontMetrics(fonts.get(0)).stringWidth(rightActive ? labels.getRight() : labels.getLeft());
+				int underline = g.getFontMetrics(fonts.get(0)).stringWidth(rightActive ? labels.getRight() : labels.getLeft()) + 16;
 				g.setColor(GuideList.LINK);
 				g.fillRect(rightActive ? x + width - underline : x, at + bottom - 3, underline, 3);
 			}

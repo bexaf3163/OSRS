@@ -8,7 +8,7 @@ import { formatGp } from '../lib/shopping';
 
 const LABEL = { EQUIPPED: 'Equipped', INVENTORY: 'In your bag', BANK: 'Take from bank', MISSING: 'Missing', UNKNOWN: 'Not checked' };
 
-export function QuestPreparation({ step, onReview }: { step: Step; onReview?: () => void }) {
+export function QuestPreparation({ step, onReview, showReward = true }: { step: Step; onReview?: () => void; showReward?: boolean }) {
   const plan = useReadinessEngine().plan(step, { ahead: 0 });
   const lines = plan.lines.filter(l => l.timing === 'NOW');
   const unknown = lines.filter(l => l.where === 'UNKNOWN').length;
@@ -37,7 +37,7 @@ export function QuestPreparation({ step, onReview }: { step: Step; onReview?: ()
         {plan.blockers.length > 0 && <ul className="quest-blockers">{plan.blockers.map(b => <li key={b.label}>{b.label}</li>)}</ul>}
         <button type="button" className="btn quest-review" onClick={onReview}>☷ Review preparation</button>
       </section>
-      {(step.reward || (step.qp ?? 0) > 0) && <section className="quest-panel quest-reward">
+      {showReward && (step.reward || (step.qp ?? 0) > 0) && <section className="quest-panel quest-reward">
         <h3>{step.type === 'quest' ? 'Quest reward' : 'Step reward'}</h3>
         {(step.qp ?? 0) > 0 && <p className="quest-qp"><span aria-hidden="true">✦</span> {step.qp} quest {step.qp === 1 ? 'point' : 'points'}</p>}
         {step.reward && <p className="muted"><Inline text={step.reward} /></p>}

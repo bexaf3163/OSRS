@@ -34,3 +34,17 @@ CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ```
+
+## Inter font
+
+`public/fonts/Inter-variable.ttf` is distributed under the SIL Open Font License 1.1, included in `public/fonts/OFL.txt`. Copyright 2020 The Inter Project Authors. Source: https://github.com/google/fonts/tree/main/ofl/inter .
+
+## RuneLite skill icons
+
+The skill icons in `public/skill-icons` are copied from RuneLite client 1.12.39.
+Source: https://github.com/runelite/runelite/tree/master/runelite-client/src/main/resources/skill_icons
+The RuneLite BSD 2-Clause notice is included in `public/skill-icons/LICENSE.txt`.
+
+## Old School RuneScape item artwork
+
+The bundled item icons in `public/item-icons` are copies of the image URLs already referenced by the item catalog, downloaded from https://oldschool.runescape.wiki/ . They display the same game items when the app is offline. The artwork belongs to Jagex; caching these files does not change ownership. `src/data/iconAssets.json` records each source URL.

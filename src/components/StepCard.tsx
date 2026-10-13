@@ -88,7 +88,7 @@ function FieldRow({ field }: { field: Field }) {
 export type StepTab = 'steps' | 'prep' | 'travel' | 'details';
 
 /** The step details. nextId — which step opens after the mark (the caption on the button in the wide layout). tab — one view of the workspace. */
-export function StepBody({ step, onDone, nextId, tab, onPrep }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab; onPrep?: () => void }) {
+export function StepBody({ step, onDone, nextId, tab, onPrep, compact = false }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab; onPrep?: () => void; compact?: boolean }) {
   const { progress, qp, mode, setStep, review, reactivate } = useStore();
   const { openNpc } = useWiki();
   const zen = !useFeatures().inspector;
@@ -303,6 +303,17 @@ export function StepBody({ step, onDone, nextId, tab, onPrep }: { step: Step; on
       </div>
     );
     if (tab === 'steps') {
+      if (compact) return (
+        <div className="step-details is-tab">
+          {reviewPlaque}{warning}{fieldList(fieldsWarn)}
+          <QuestPreparation step={step} onReview={onPrep} showReward={false} />
+          <details className="compact-instruction">
+            <summary>Instruction and completion</summary>
+            {sub ? <><SubStepHero step={step} sub={sub} bare /><SubStepItems step={step} sub={sub} /></> : how}
+            {doneWhen}{manual}
+          </details>
+        </div>
+      );
       return (
         <div className="step-details is-tab">
           {reviewPlaque}
@@ -310,11 +321,11 @@ export function StepBody({ step, onDone, nextId, tab, onPrep }: { step: Step; on
           {fieldList(fieldsWarn)}
           <div className="quest-workspace-grid">
             <div className="quest-panel quest-walkthrough">
-              <QuestOverview step={step} sub={sub} />
+              {compact ? <details className="compact-overview"><summary>Quest overview</summary><QuestOverview step={step} sub={sub} /></details> : <QuestOverview step={step} sub={sub} />}
               {sub && <SubStepHero step={step} sub={sub} bare />}
               {sub && <SubStepItems step={step} sub={sub} />}
             </div>
-            <QuestPreparation step={step} onReview={onPrep} />
+            <QuestPreparation step={step} onReview={onPrep} showReward={!compact} />
           </div>
           {!sub && !step.questStages && (recovering ? (
             <details className="zen-more"><summary className="small">What to do on the step — after returning</summary>{how}</details>

@@ -310,7 +310,7 @@ export function ShoppingPage() {
   return (
     <div className="page shop-page">
       <header className="page-head">
-        <h1>🛒 Grand Exchange shopping list</h1>
+        <h1>Preparation shopping</h1>
         <p className="muted">Everything needed for several stages ahead — in one purchase. Identical items are merged, tools are not repeated.</p>
       </header>
 
@@ -330,6 +330,62 @@ export function ShoppingPage() {
         </label>
       </div>
 
+        <div className="segmented shop-filter" role="group" aria-label="What to show">
+          {FILTERS.map((f) => (
+            <button key={f.id} type="button" className={`seg ${filter === f.id ? 'is-active' : ''}`} aria-pressed={filter === f.id} onClick={() => setFilter(f.id)}>
+              {f.label} <span className="seg-count">{buyRows.filter((r) => shows(f.id, r.h.status)).length}</span>
+            </button>
+          ))}
+        </div>
+
+      {buyRows.length > 0 && (
+        <section className="shop-group">
+          <h2 className="subhead">Buy at the exchange · {visible(buyRows).length} of {buyRows.length}</h2>
+          {visible(buyRows).length === 0 && <p className="muted small">This filter is empty — choose "All".</p>}
+          {visible(buyRows).some((r) => r.h.status !== 'UNKNOWN') && (
+            <>{tableHead}<ul className="shop-list">{visible(buyRows).filter((r) => r.h.status !== 'UNKNOWN').map(rowView)}</ul></>
+          )}
+          {visible(buyRows).some((r) => r.h.status === 'UNKNOWN') && (
+            <>
+              <h3 className="shop-unverified-head">? Unverified: ownership not checked</h3>
+              <p className="muted small">
+                Open your bank in the game or mark what you own. These items may already be yours, so they are not counted as purchases.
+              </p>
+              <>{tableHead}<ul className="shop-list">{visible(buyRows).filter((r) => r.h.status === 'UNKNOWN').map(rowView)}</ul></>
+            </>
+          )}
+        </section>
+      )}
+      {gatherRows.length > 0 && (
+        <details id="shop-gather" className="shop-group">
+          <summary className="subhead">You will get these along the way — you can buy them to avoid gathering · {gatherRows.length}</summary>
+          <ul className="shop-list">{visible(gatherRows).map(rowView)}</ul>
+        </details>
+      )}
+      {recRows.length > 0 && (
+        <details id="shop-recommended" className="shop-group">
+          <summary className="subhead">Recommended, not required · {recRows.length}</summary>
+          <ul className="shop-list">{visible(recRows).map(rowView)}</ul>
+        </details>
+      )}
+      {notGeRows.length > 0 && (
+        <details className="shop-group">
+          <summary className="subhead">Not sold at the exchange — you get them along the way · {notGeRows.length}</summary>
+          <ul className="shop-list">
+            {notGeRows.map((r) => (
+              <li key={r.line.key} className="shop-row is-quest">
+                <ItemIcon src={r.line.iconUrl} alt="" />
+                <div className="shop-main">
+                  <p className="shop-name"><strong>{r.line.nameEn}</strong></p>
+                  <p className="muted small">{r.line.howToGet}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
+      {!list.required.length && !list.recommended.length && <p className="muted empty">There is nothing to buy in the chosen stages.</p>}
+      <p className="muted small">The app buys nothing by itself: you place the exchange orders.</p>
       <div className="card shop-summary">
         {buyRows.length > 0 && left === 0 && unknown === 0 ? (
           <p><strong>🟢 Everything is already prepared</strong> — no purchases are needed.</p>
@@ -367,63 +423,7 @@ export function ShoppingPage() {
           </button>
           <button type="button" className="btn" onClick={syncFromGame}>✓ Sync with my bank</button>
         </div>
-        <div className="segmented shop-filter" role="group" aria-label="What to show">
-          {FILTERS.map((f) => (
-            <button key={f.id} type="button" className={`seg ${filter === f.id ? 'is-active' : ''}`} aria-pressed={filter === f.id} onClick={() => setFilter(f.id)}>
-              {f.label} <span className="seg-count">{buyRows.filter((r) => shows(f.id, r.h.status)).length}</span>
-            </button>
-          ))}
-        </div>
       </div>
-
-      {buyRows.length > 0 && (
-        <section className="shop-group">
-          <h2 className="subhead">Buy at the exchange · {visible(buyRows).length} of {buyRows.length}</h2>
-          {visible(buyRows).length === 0 && <p className="muted small">This filter is empty — choose "All".</p>}
-          {visible(buyRows).some((r) => r.h.status !== 'UNKNOWN') && (
-            <>{tableHead}<ul className="shop-list">{visible(buyRows).filter((r) => r.h.status !== 'UNKNOWN').map(rowView)}</ul></>
-          )}
-          {visible(buyRows).some((r) => r.h.status === 'UNKNOWN') && (
-            <>
-              <h3 className="shop-unverified-head">? Unverified: ownership not checked</h3>
-              <p className="muted small">
-                Open your bank in the game or mark what you own. These items may already be yours, so they are not counted as purchases.
-              </p>
-              <>{tableHead}<ul className="shop-list">{visible(buyRows).filter((r) => r.h.status === 'UNKNOWN').map(rowView)}</ul></>
-            </>
-          )}
-        </section>
-      )}
-      {gatherRows.length > 0 && (
-        <details className="shop-group">
-          <summary className="subhead">You will get these along the way — you can buy them to avoid gathering · {gatherRows.length}</summary>
-          <ul className="shop-list">{visible(gatherRows).map(rowView)}</ul>
-        </details>
-      )}
-      {recRows.length > 0 && (
-        <details className="shop-group">
-          <summary className="subhead">Recommended, not required · {recRows.length}</summary>
-          <ul className="shop-list">{visible(recRows).map(rowView)}</ul>
-        </details>
-      )}
-      {notGeRows.length > 0 && (
-        <details className="shop-group">
-          <summary className="subhead">Not sold at the exchange — you get them along the way · {notGeRows.length}</summary>
-          <ul className="shop-list">
-            {notGeRows.map((r) => (
-              <li key={r.line.key} className="shop-row is-quest">
-                <ItemIcon src={r.line.iconUrl} alt="" />
-                <div className="shop-main">
-                  <p className="shop-name"><strong>{r.line.nameEn}</strong></p>
-                  <p className="muted small">{r.line.howToGet}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </details>
-      )}
-      {!list.required.length && !list.recommended.length && <p className="muted empty">There is nothing to buy in the chosen stages.</p>}
-      <p className="muted small">The app buys nothing by itself: you place the exchange orders.</p>
     </div>
   );
 }

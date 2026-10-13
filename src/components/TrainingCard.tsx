@@ -82,8 +82,10 @@ export function TrainingCard({ skill, target }: { skill: string; target: number 
       </p>
       {best ? (
         <>
-          <p className="training-now"><strong>{best.method.name}</strong><span className="muted"> — {best.method.where}</span></p>
-          <p className="small muted">{advice.reason}</p>
+          <div className="training-recommendation">
+            <div className="training-method"><h3>Recommended method</h3><p className="training-now"><strong>{best.method.name}</strong></p><p className="small muted">{advice.reason}</p></div>
+            <div className="training-location"><h3>Location</h3><p>{best.method.where}</p>{nav && <NavigateButton target={nav} label={`To the place: ${nav.label}`} />}</div>
+          </div>
           {count !== null && best.method.act && (
             <p className="small">≈ {count.toLocaleString('en-US')} more {actionForm(best.method.act, count)}{legEnd < target ? ` to level ${legEnd}` : ` to level ${target}`}.</p>
           )}
@@ -96,7 +98,6 @@ export function TrainingCard({ skill, target }: { skill: string; target: number 
           {best.unchecked.length > 0 && <p className="small muted">Not checked: {best.unchecked.map((x) => x.label).join(', ')} — open the bank in the game.</p>}
           {best.method.note && <p className="small muted">{best.method.note}</p>}
           <div className="actions">
-            {nav && <NavigateButton target={nav} label={`🧭 To the place: ${nav.label}`} />}
             <a className="btn btn-ghost btn-sm" href={best.method.url} target="_blank" rel="noopener noreferrer">Wiki ↗</a>
           </div>
         </>
@@ -115,12 +116,10 @@ export function TrainingCard({ skill, target }: { skill: string; target: number 
           <ul>{advice.others.slice(0, profile.alternatives || 3).map((v) => <Alternative key={v.method.id} v={v} />)}</ul>
         </details>
       )}
-      <p className="small muted">
-        Style: {profile.label} ·{' '}
-        <button type="button" className="link-btn" onClick={() => setFeatures({ efficient: !features.efficient })}>
-          {features.efficient ? 'make it calmer' : 'show the fastest'}
-        </button>
-      </p>
+      <div className="training-mode" role="group" aria-label="Training style"><span>Training mode</span><div className="training-mode-buttons">
+        <button type="button" className={`btn ${!features.efficient ? 'btn-primary' : ''}`} aria-pressed={!features.efficient} onClick={()=>setFeatures({efficient:false})}>Calm</button>
+        <button type="button" className={`btn ${features.efficient ? 'btn-primary' : ''}`} aria-pressed={features.efficient} onClick={()=>setFeatures({efficient:true})}>Efficient</button>
+      </div></div>
     </section>
   );
 }

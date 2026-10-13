@@ -3,6 +3,7 @@
 
 import type { GameMode } from '../types';
 import { useStore } from '../store';
+import { useRef } from 'react';
 
 const MODES: [GameMode, string, string, string][] = [
   ['f2p', '🛡️', 'F2P', 'Free version: stages 1–6'],
@@ -22,4 +23,13 @@ export function ModeToggle() {
       ))}
     </div>
   );
+}
+
+export function HeaderMode() {
+  const { mode } = useStore();
+  const menu = useRef<HTMLDetailsElement>(null);
+  return <details className="header-mode" ref={menu} onKeyDown={e => { if (e.key === 'Escape') { menu.current?.removeAttribute('open'); menu.current?.querySelector('summary')?.focus(); } }}>
+    <summary aria-label="Choose game mode">{mode === 'members' ? 'Members' : 'F2P'}</summary>
+    <div className="header-mode-panel" onClick={e => { if ((e.target as HTMLElement).closest('button')) menu.current?.removeAttribute('open'); }}><ModeToggle /></div>
+  </details>;
 }

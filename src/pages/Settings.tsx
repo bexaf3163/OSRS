@@ -15,9 +15,11 @@ import { PluginUpdateNote } from '../components/PluginUpdateNote';
 import { plural } from '../lib/shopping';
 import { AccountSync } from '../components/AccountSync';
 import { BackupSection, DiagnosticsSection, UpdatesSection, ProfilesSection, SessionSection } from './SettingsExtra';
+import { CurrentAction } from '../components/StepWorkspace';
+import { nextStep } from '../lib/next-step';
 
 type SettingsTab = 'look' | 'game' | 'progress' | 'app';
-const SETTINGS_TABS: [SettingsTab, string][] = [['look', 'Look'], ['game', 'RuneLite'], ['progress', 'Progress and copies'], ['app', 'App']];
+const SETTINGS_TABS: [SettingsTab, string][] = [['look', 'Appearance'], ['game', 'RuneLite'], ['progress', 'Progress and copies'], ['app', 'App']];
 const TAB_KEY = 'osrs-put-settings-tab';
 function loadTab(): SettingsTab {
   try {
@@ -42,7 +44,9 @@ function download(name: string, text: string) {
 }
 
 export function SettingsPage() {
-  const { progress, replace, reset } = useStore();
+  const { progress, replace, reset, steps, qp } = useStore();
+  const { activeStepId } = useBridge();
+  const previewStep = steps.find(step => step.id === activeStepId) ?? nextStep(steps, progress, qp);
   const [pending, setPending] = useState<Extract<ImportResult, { ok: true }> | null>(null);
   const [importError, setImportError] = useState('');
   const [confirmReset, setConfirmReset] = useState(false);
@@ -72,16 +76,23 @@ export function SettingsPage() {
         <h1>Settings</h1>
       </header>
 
+      <div className="settings-layout">
       <div className="mode-toggle settings-tabs" role="tablist" aria-label="Settings sections">
         {SETTINGS_TABS.map(([k, label]) => (
           <button key={k} type="button" role="tab" aria-selected={tab === k} className={`mode-btn ${tab === k ? 'is-active' : ''}`} onClick={() => chooseTab(k)}>{label}</button>
         ))}
       </div>
 
+      <div className="settings-content">
       {tab === 'look' && (
         <>
+        <div className="appearance-workspace">
+          <div>
           <Appearance />
-          <PlayStyleSection />
+          </div>
+          <aside className="appearance-preview"><h2>Preview</h2><p className="muted small">Your current action, with the selected appearance.</p>{previewStep ? <CurrentAction step={previewStep} /> : <p className="notice">All route steps are completed.</p>}</aside>
+        </div>
+        <PlayStyleSection />
         </>
       )}
       {tab === 'game' && (
@@ -160,6 +171,8 @@ export function SettingsPage() {
         </>
       )}
 
+      </div>
+      </div>
       <p className="muted small">
         OSRS Path {__APP_VERSION__}
         {bridge?.isPortable() ? ' · portable version' : ''}
@@ -167,6 +180,19 @@ export function SettingsPage() {
       </p>
     </div>
   );
+}
+
+function FontScale({ id, value, onChange }: { id:string; value:number; onChange:(value:number)=>void }) {
+  return <div className="scale-setting font-scale" role="group" aria-labelledby={id}>
+    <span className="setting-label" id={id}>Font size</span>
+    <span className="font-slider-row">
+      <button type="button" className="stepper-btn" aria-label="Font size: less" disabled={value <= TEXT_STEPS[0]} onClick={()=>onChange(stepScale(TEXT_STEPS,value,-1))}>−</button>
+      <input type="range" min="90" max="150" step="1" value={Math.round(value*100)} aria-label="Font size slider" aria-valuetext={percent(value)} onChange={e=>onChange(Number(e.target.value)/100)} />
+      <output>{percent(value)}</output>
+      <button type="button" className="stepper-btn" aria-label="Font size: more" disabled={value >= TEXT_STEPS[TEXT_STEPS.length-1]} onClick={()=>onChange(stepScale(TEXT_STEPS,value,1))}>+</button>
+    </span>
+    {value!==1 && <button type="button" className="btn btn-ghost" onClick={()=>onChange(1)}>Reset to 100%</button>}
+  </div>;
 }
 
 function Stepper({ id, label, value, steps, onChange }: { id: string; label: string; value: number; steps: number[]; onChange: (v: number) => void }) {
@@ -189,6 +215,7 @@ function Stepper({ id, label, value, steps, onChange }: { id: string; label: str
 
 function Appearance() {
   const bridge = desktop();
+  const features = useFeatures();
   const [theme, setTheme] = useState<Theme>(loadTheme);
   const [look, setLook] = useState<Look>(loadLook);
   const [solid, setSolid] = useState(loadSolid);
@@ -245,6 +272,14 @@ function Appearance() {
         </div>
       </div>
 
+      <div className="setting"><span className="setting-label">Density</span><DensityPills /></div>
+      <div className="setting"><span className="setting-label">View</span><div className="mode-toggle appearance-view" role="group" aria-label="Workspace view"><button type="button" className={`mode-btn ${!features.compact ? 'is-active' : ''}`} aria-pressed={!features.compact} onClick={() => setFeatures({compact:false})}>Full</button><button type="button" className={`mode-btn ${features.compact ? 'is-active' : ''}`} aria-pressed={features.compact} onClick={() => setFeatures({compact:true})}>Compact</button></div></div>
+      <div className="setting">
+        <FontScale id={ids.text} value={text} onChange={pickText} />
+        <p className="muted small">It changes only the text — the spacing and layout stay the same.</p>
+      </div>
+
+      <details className="appearance-advanced"><summary>Panel style, interface scale and window behavior</summary>
       <div className="setting">
         <span className="setting-label" id={ids.look}>Look</span>
         <div className="segmented" role="group" aria-labelledby={ids.look}>
@@ -276,11 +311,6 @@ function Appearance() {
         </div>
       )}
 
-      <div className="setting">
-        <Stepper id={ids.text} label="Font size" value={text} steps={TEXT_STEPS} onChange={pickText} />
-        <p className="muted small">It changes only the text — the spacing and layout stay the same.</p>
-      </div>
-
       {bridge && zoom && (
         <div className="setting">
           <label className="switch">
@@ -290,6 +320,7 @@ function Appearance() {
           </label>
         </div>
       )}
+      </details>
     </section>
   );
 }
@@ -308,7 +339,6 @@ function PlayStyleSection() {
     <section className="card section-card" aria-label="Play style">
       <h2 className="card-title">Play style and preparation</h2>
       <div className="setting">
-        <DensityPills />
         <p className="muted small">
           <strong>Zen</strong> — the screen has the step, one status line, the "Done" button and critical warnings; the rest — under "More".
           {' '}<strong>Inspector</strong> — all the step blocks are expanded: formulas, XP calculators, branches, item dossiers, economy.

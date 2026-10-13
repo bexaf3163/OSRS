@@ -16,7 +16,17 @@ import { PlaceMapView, usePlaceMap } from '../components/PlaceMap';
 import { ActionNotes, ActionSource, ActionTitle, OwnershipNote } from '../components/GearPrompt';
 
 const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
-const SLOT_ICON: Record<GearSlot, string> = { weapon: '⚔️', neck: '📿', head: '⛑️', body: '👕', legs: '👖', shield: '🛡️' };
+function SlotGlyph({ slot }: { slot: GearSlot }) {
+  const paths: Record<GearSlot, string> = {
+    weapon: 'M30 3 15 20l-3-3-3 3 4 4-7 7 2 2 7-7 4 4 3-3-3-3L32 7Z',
+    head: 'M8 29V14a10 10 0 0 1 20 0v15l-7-4v-9h-6v9Z',
+    body: 'M11 6 5 10 2 18l7 3v11h18V21l7-3-3-8-6-4-7 3Z',
+    neck: 'M8 7c0 16 5 20 10 20S28 23 28 7l-7-3h-6Zm7 24 3-4 3 4-3 3Z',
+    legs: 'M10 4h16l3 29h-8l-3-19-3 19H7Z',
+    shield: 'M18 3 5 7v10c0 8 6 13 13 17 7-4 13-9 13-17V7Z',
+  };
+  return <svg className="gear-slot-glyph" viewBox="0 0 36 36" aria-hidden="true"><path d={paths[slot]} fill="currentColor" /></svg>;
+}
 const SKILL_EN = { attack: 'Attack', strength: 'Strength', defence: 'Defence', ranged: 'Ranged', magic: 'Magic', prayer: 'Prayer' } as const;
 /** Where to lead for what is missing: the skill page (the training plan). */
 const SKILL_PAGE = { attack: 'ME', strength: 'ME', defence: 'ME', ranged: 'RA', magic: 'MA', prayer: 'PR' } as const;
@@ -125,23 +135,23 @@ export function GearPage() {
               const tier = e?.piece?.metal ? capital(e.piece.metal) : null;
               return (
                 <li key={slot} className={`gear-slot ${e ? 'is-filled' : 'is-empty'}`}>
-                  <span className="gear-slot-label"><span aria-hidden="true">{SLOT_ICON[slot]}</span> {SLOT_LABEL[slot]}</span>
+                  <span className="gear-slot-label">{SLOT_LABEL[slot]}</span>
                   {e ? (
                     <span className="gear-slot-item">
-                      {e.piece && <ItemIcon src={e.piece.iconUrl} alt="" size={28} />}
+                      {e.piece ? <ItemIcon src={e.piece.iconUrl} alt="" size={48} /> : <SlotGlyph slot={slot} />}
                       <span className="gear-slot-name">{e.name}</span>
                       {tier && <span className="badge badge-tier">{tier}</span>}
                       {!e.piece && <span className="muted small">not in the database</span>}
                     </span>
-                  ) : <span className="gear-slot-item muted">{advice.live ? 'empty' : '? Not checked'}</span>}
+                  ) : <span className="gear-slot-item muted"><SlotGlyph slot={slot} />{advice.live ? 'Empty' : 'Not checked'}</span>}
                 </li>
               );
             })}
           </ul>
         </section>
 
-        <section className="card section-card gear-combat" aria-labelledby="gear-metrics">
-          <h2 id="gear-metrics" className="card-title">Combat</h2>
+        <details className="card section-card gear-combat" aria-labelledby="gear-metrics">
+          <summary id="gear-metrics" className="card-title">Combat details</summary>
           {advice.live ? (
             <>
               <div className="gear-metrics">
@@ -164,7 +174,7 @@ export function GearPage() {
               <Metric label="Target TTK" value="—" />
             </div>
           )}
-        </section>
+        </details>
       </div>
 
       <p className="gear-chips gear-status" aria-label="Levels and coins">

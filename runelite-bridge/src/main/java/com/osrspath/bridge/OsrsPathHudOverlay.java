@@ -242,17 +242,17 @@ class OsrsPathHudOverlay extends OverlayPanel
 		if (s.getDanger() != null)
 		{
 			// Danger comes right under the name, above the target: it cannot be missed.
-			OverlayText.line(c, s.isDangerInside() ? "⚠ DANGER - you are in the zone!" : "⚠ WARNING", OsrsPathDangerOverlay.DANGER, fm, inner);
-			OverlayText.line(c, s.getDanger(), OsrsPathDangerOverlay.DANGER, fm, inner);
+			c.add(new OverlayAlert((s.isDangerInside() ? "DANGER - you are in the zone! " : "WARNING: ") + s.getDanger(), fm, inner));
 		}
 		if (s.getHealth() != null)
 		{
-			OverlayText.line(c, s.getHealth(), s.isHealthCritical() ? OsrsPathDangerOverlay.DANGER : WARN, fm, inner);
+			if (s.isHealthCritical()) c.add(new OverlayAlert(s.getHealth(), fm, inner));
+			else OverlayText.line(c, s.getHealth(), WARN, fm, inner);
 		}
 		if (s.getMissing() != null)
 		{
 			// A missing item of the step ahead: red, right under the name, so the player turns back before using the wrong thing.
-			OverlayText.line(c, s.getMissing(), OsrsPathDangerOverlay.DANGER, fm, inner);
+			c.add(new OverlayAlert(s.getMissing(), fm, inner));
 		}
 		if (s.getGoal() != null && !s.getGoal().isEmpty())
 		{

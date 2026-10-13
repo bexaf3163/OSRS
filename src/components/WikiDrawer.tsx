@@ -11,6 +11,7 @@ import { findLocalItem, getItemDetail, getNpcDetail } from '../services/wikiServ
 import type { NpcInfo } from '../services/wikiApi';
 import { formatXp } from '../lib/goals';
 import { IconClose, IconExternal } from './Icons';
+import iconAssets from '../data/iconAssets.json';
 import { useFeatures } from '../lib/features';
 import { PlaceButton, PlaceMapView, PlaceNavButton, usePlaceMap, type PlaceQuery } from './PlaceMap';
 
@@ -359,10 +360,11 @@ function NpcView({ npc }: { npc: StepNpcInfo }) {
 
 /** A fixed-size wiki icon without stretching; on error — an empty plate. */
 export function ItemIcon({ src, alt, size = 20 }: { src?: string; alt: string; size?: number }) {
-  const [failed, setFailed] = useState(false);
-  if (!src || failed) return <span className="item-icon item-icon-empty" style={{ width: size, height: size }} aria-hidden="true" />;
+  const [failedSource, setFailedSource] = useState<string>();
+  const source = src ? (iconAssets as Record<string, string>)[src] ?? src : undefined;
+  if (!source || failedSource === source) return <span className="item-icon item-icon-empty" style={{ width: size, height: size }} aria-hidden="true" />;
   return (
-    <img className="item-icon" src={src} alt={alt} width={size} height={size} loading="lazy"
-      referrerPolicy="no-referrer" onError={() => setFailed(true)} />
+    <img className="item-icon" src={source} alt={alt} width={size} height={size} loading="lazy"
+      referrerPolicy="no-referrer" onError={() => setFailedSource(source)} />
   );
 }

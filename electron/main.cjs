@@ -11,6 +11,16 @@ const { createLauncher } = require('./runelite-launcher.cjs');
 const { createUpdater } = require('./updater.cjs');
 const { backupProgress, dailyBackup, latestCopy, readProgress, restoreFromCopies } = require('./progress-files.cjs');
 
+// Development-only end-to-end checks use an empty home, never the player's profiles or backup folder.
+const isE2E = !app.isPackaged && Boolean(process.env.OSRS_PUT_E2E_ROOT);
+if (isE2E) {
+  const testRoot = path.resolve(process.env.OSRS_PUT_E2E_ROOT);
+  for (const [key, dir] of [['home', testRoot], ['appData', path.join(testRoot, 'appdata')], ['userData', path.join(testRoot, 'profile')]]) {
+    fs.mkdirSync(dir, { recursive: true });
+    app.setPath(key, dir);
+  }
+}
+
 const DIST = path.join(__dirname, '..', 'dist');
 const isWeb = (url) => /^https?:\/\//i.test(url);
 
@@ -259,12 +269,13 @@ if (!app.requestSingleInstanceLock()) {
         nodeIntegration: false,
         sandbox: true,
         spellcheck: false,
+        backgroundThrottling: !isE2E,
       },
     });
     if (saved.maximized) win.maximize();
     // The page has its own <title>; the window keeps the running version in its name.
     win.on('page-title-updated', (e) => e.preventDefault());
-    win.once('ready-to-show', () => win.show());
+    win.once('ready-to-show', () => { if (!isE2E) win.show(); });
     win.on('close', () => {
       saveWindowState();
       flushProgress();

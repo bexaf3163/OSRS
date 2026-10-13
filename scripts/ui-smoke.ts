@@ -211,7 +211,7 @@ async function run(browser: Browser) {
       }, '#/skills/WC');
       await waitFor(page, '.training', 5000);
       const calm = await text(page, '.training');
-      expect(calm.includes('What to train with') && calm.includes('Willow') && !calm.includes('by the wiki speed') && calm.includes('Style: 🌿 Calm'), 'what to train with: at level 32 — willows, the calm style without a time estimate');
+      expect(calm.includes('Willow') && !calm.includes('by the wiki speed') && await page.locator('.training').getByRole('button', { name: 'Calm', exact:true }).getAttribute('aria-pressed') === 'true', 'what to train with: at level 32 — willows, the calm style without a time estimate');
       expect(await noOverflow(page), 'what to train with: no horizontal scrolling');
       await page.goto(`${BASE}#/settings`);
       await page.waitForTimeout(400);
@@ -222,7 +222,7 @@ async function run(browser: Browser) {
       await page.goto(`${BASE}#/skills/WC`);
       await waitFor(page, '.training', 5000);
       const fast = await text(page, '.training');
-      expect(fast.includes('Style: ⚡ Efficient') && /wiki speed/.test(fast), 'what to train with: the efficient style shows the time and the speed "per the wiki"');
+      expect(await page.locator('.training').getByRole('button', { name:'Efficient', exact:true }).getAttribute('aria-pressed') === 'true' && /wiki speed/.test(fast), 'what to train with: the efficient style shows the time and the speed "per the wiki"');
       expect(!errors.length, `what to train with: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
