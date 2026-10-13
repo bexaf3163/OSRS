@@ -7,6 +7,8 @@ import { useStore } from '../store';
 import { isClosed } from '../lib/next-step';
 import { useReadinessEngine, useRecovery } from '../readinessContext';
 import { useFeatures } from '../lib/features';
+import { isOutOfStage, scopedPercent } from '../lib/stageScope';
+import { useStageScope } from '../lib/useStageScope';
 import { styleOf } from '../lib/playStyle';
 import { formatGp } from '../lib/shopping';
 import { kgText } from '../lib/weight';
@@ -128,23 +130,30 @@ export function OneTripCard({ step, inStatus = false, plain = false }: { step: S
   const upgrade = useUpgradeRecommendation(step);
   const engine = useReadinessEngine();
   const plan = engine.plan(step, { ahead: profile.lookAhead, upgrade });
+  // The quest items the confirmed stage no longer asks for are not listed as needed (the list below is the stage's, as in the game).
+  const scope = useStageScope(step);
+  const inStage = (l: PrepLine) => !isOutOfStage(scope, l.name);
+  const now = plan.now.filter(inStage);
+  const soon = plan.soon.filter(inStage);
+  const byTheWay = plan.byTheWay.filter(inStage);
+  const percent = scopedPercent(plan.lines, scope, plan.score.percent);
   const cleanup = bagCleanup(plan, engine.ctx.state);
   if (isClosed(progress, step.id)) return null;
   const { score, slots } = plan;
   const nothing = !plan.recovery && !plan.lines.length && !plan.coins.need && !plan.optimizations.length && !plan.blockers.length && !plan.weight.items.length;
   if (nothing) return null;
-  const pending = plan.now.length + plan.soon.length + plan.byTheWay.length;
+  const pending = now.length + soon.length + byTheWay.length;
   const coinsShort = plan.coins.missing !== null && plan.coins.missing > 0;
-  const quiet = score.verdict === 'READY' && !pending && !coinsShort && slots.over === 0 && plan.weight.level !== 'HEAVY' && !plan.recovery;
+  const quiet = (scope ? true : score.verdict === 'READY') && !pending && !coinsShort && slots.over === 0 && plan.weight.level !== 'HEAVY' && !plan.recovery;
   const unknownCoins = plan.coins.need > 0 && plan.coins.have === null;
   return (
     <section className="one-trip" aria-label="What you need">
       <p className="readiness-head">
         🧳 <strong>What you need</strong>
         <span className="muted"> — for {plan.stepIds.length} {plan.stepIds.length === 1 ? 'step' : 'steps'} ahead</span>
-        {score.percent !== null && <span className={`prep-score is-${score.verdict.toLowerCase()}`}> · ready {score.percent}%</span>}
+        {percent !== null && <span className={`prep-score is-${scope ? (percent === 100 ? 'ready' : 'not_ready') : score.verdict.toLowerCase()}`}> · ready {percent}%</span>}
       </p>
-      {(score.critical > 0 || score.important > 0 || score.optimizations > 0 || score.unknown > 0) && (
+      {!scope && (score.critical > 0 || score.important > 0 || score.optimizations > 0 || score.unknown > 0) && (
         <p className="small prep-chips">
           {score.critical > 0 && <span className="prep-chip is-critical">🔴 critical: {score.critical}</span>}
           {score.important > 0 && <span className="prep-chip is-important">🟡 important: {score.important}</span>}
@@ -160,10 +169,10 @@ export function OneTripCard({ step, inStatus = false, plain = false }: { step: S
           {plan.blockers.map((b) => <li key={b.label} className="prep-line is-missing p-critical"><span className="prep-where" aria-hidden="true">🔒</span><strong>{b.label}</strong>{b.detail && <span className="muted"> — {b.detail}</span>}</li>)}
         </ul>
       )}
-      <Section title="🔴 Needed now" lines={plan.now} />
-      <Section title="🟡 Meanwhile" hint="will be needed in the next steps" lines={plan.soon} />
-      {plan.byTheWay.length > 0 && (
-        <p className="small prep-title"><strong>⚪ Along the way:</strong> <span className="muted">{plan.byTheWay.map((l) => `${l.name}${countOf(l)}`).join(', ')} — no need to take them in advance</span></p>
+      <Section title="🔴 Needed now" lines={now} />
+      <Section title="🟡 Meanwhile" hint="will be needed in the next steps" lines={soon} />
+      {byTheWay.length > 0 && (
+        <p className="small prep-title"><strong>⚪ Along the way:</strong> <span className="muted">{byTheWay.map((l) => `${l.name}${countOf(l)}`).join(', ')} — no need to take them in advance</span></p>
       )}
       {(coinsShort || unknownCoins) && (
         <p className="small">

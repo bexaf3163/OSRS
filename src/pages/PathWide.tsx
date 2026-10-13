@@ -11,7 +11,7 @@ import { useBridge } from '../bridge';
 import { flashDone } from '../lib/flash';
 import { needsReview, pendingReview } from '../lib/review';
 import { IconCheck, IconChevron, IconLock } from '../components/Icons';
-import { StepWorkspace } from '../components/StepWorkspace';
+import { CockpitWorkspace } from '../components/CockpitWorkspace';
 import { WikiDock, useWiki } from '../components/WikiDrawer';
 import { findSubStep, instructionSubStep, subStepNpcInfo } from '../lib/subStep';
 import { GearBanner } from '../components/GearPrompt';
@@ -213,7 +213,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
         {/* A combat step has its own advice in the card — the banner does not repeat it. */}
         {!selected.foes?.length && <GearBanner />}
         <article className={`step-view ${selected.membersOnly ? 'is-members' : ''}`} key={selected.id}>
-          <StepWorkspace step={selected} suggested={selected.id === suggested.id} onDone={complete} nextId={upcoming?.id} />
+          <CockpitWorkspace step={selected} suggested={selected.id === suggested.id} onDone={complete} nextId={upcoming?.id} />
           <footer className="step-view-nav">
             {(() => {
               const at = steps.findIndex((s) => s.id === selected.id);

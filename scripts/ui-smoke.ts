@@ -92,12 +92,16 @@ async function noOverflow(page: Page) {
  */
 async function reveal(page: Page, sel: string) {
   if (await page.locator(sel).count()) return;
-  const tabs = page.getByRole('tablist', { name: 'Step views' }).getByRole('tab');
-  const n = await tabs.count();
-  for (let i = 0; i < n; i++) {
-    await tabs.nth(i).click();
-    await page.waitForTimeout(120);
-    if (await page.locator(sel).count()) return;
+  // The cockpit: Preparation, Travel and Details are drawers. The companion strip: Now, Bag, Route and More are tabs.
+  const openers = [page.getByRole('navigation', { name: 'Step views' }).getByRole('button'), page.getByRole('tablist', { name: 'Companion views' }).getByRole('tab')];
+  for (const group of openers) {
+    const n = await group.count();
+    for (let i = 0; i < n; i++) {
+      await group.nth(i).click();
+      await page.waitForTimeout(150);
+      if (await page.locator(sel).count()) return;
+      await page.keyboard.press('Escape');
+    }
   }
 }
 /** waitForSelector for something that may live in another workspace tab. */
@@ -108,14 +112,18 @@ async function waitFor(page: Page, sel: string, timeout: number) {
 
 /** A button of the step workspace, found in whichever tab holds it. */
 async function stepButton(page: Page, name: string | RegExp, role: 'button' | 'radio' = 'button') {
-  const find = () => page.getByRole(role, { name });
+  // The map and its button are on the cockpit and in the Travel drawer when that is open: the last one is the drawer's, which is the one in front.
+  const find = () => page.getByRole(role, { name }).last();
   if (await find().count()) return find();
-  const tabs = page.getByRole('tablist', { name: 'Step views' }).getByRole('tab');
-  const total = await tabs.count();
-  for (let i = 0; i < total; i++) {
-    await tabs.nth(i).click();
-    await page.waitForTimeout(120);
-    if (await find().count()) return find();
+  const openers = [page.getByRole('navigation', { name: 'Step views' }).getByRole('button'), page.getByRole('tablist', { name: 'Companion views' }).getByRole('tab')];
+  for (const group of openers) {
+    const total = await group.count();
+    for (let i = 0; i < total; i++) {
+      await group.nth(i).click();
+      await page.waitForTimeout(150);
+      if (await find().count()) return find();
+      await page.keyboard.press('Escape');
+    }
   }
   return find();
 }
@@ -241,11 +249,11 @@ async function run(browser: Browser) {
       await waitFor(page, '.step-status', 8000);
       const line = await text(page, '.status-line');
       expect(/Preparation required \(\d/.test(line) && line.includes('Fix'), `Zen: one status line with the preparation and the Fix button (${line.replace(/\s+/g, ' ').slice(0, 90)})`);
-      expect(await page.locator('.readiness').count() > 0, 'Zen: opening Preparation exposes the readiness panel');
-      await page.getByRole('tab', { name: 'Steps', exact:true }).click();
-      expect((await text(page, '.step-details')).includes('Mark as manually completed'), 'Zen: manual completion is a quiet action in the Steps view');
-      expect(await page.getByRole('tab').count() === 4, 'Zen: the workspace has four views: Steps, Preparation, Travel, Details');
-      await page.getByRole('tab', { name: 'Preparation' }).click();
+      expect((await text(page, '.readiness')).length > 0, 'Zen: Preparation exposes the readiness panel');
+      await page.keyboard.press('Escape');
+      expect((await text(page, '.step-details')).includes('Mark as manually completed'), 'Zen: manual completion is a quiet action next to the walkthrough');
+      expect(await page.getByRole('navigation', { name: 'Step views' }).getByRole('button').count() === 3, 'Zen: the reference views are three buttons: Preparation, Travel, Details');
+      await page.getByRole('navigation', { name: 'Step views' }).getByRole('button', { name: /Preparation/ }).click();
       await page.waitForTimeout(300);
       const open1 = await text(page, '.readiness');
       expect(open1.includes('Catch up Crafting') && open1.includes('To the bank'), 'Zen: the Preparation view holds the whole preparation panel');
@@ -262,7 +270,7 @@ async function run(browser: Browser) {
       }, '#/step/S1-04');
       await waitFor(page, '.step-status', 8000);
       const line = await text(page, '.status-line');
-      expect(line.includes('Ready to set off') && line.includes('Start the step') && !line.includes('Fix'), `Zen: ready — "Ready to set off · Start the step" (${line.replace(/\s+/g, ' ').slice(0, 80)})`);
+      expect(line.includes('Ready to set off') && !line.includes('Fix') && await page.getByRole('button', { name: /Show in game/ }).count() > 0, `Zen: ready — "Ready to set off" and the step has its own "Show in game" (${line.replace(/s+/g, ' ').slice(0, 80)})`);
       expect(await noOverflow(page), 'Zen (ready): no horizontal scrolling');
       // The switch in the header: "Inspector" brings back all the blocks.
       // In a narrow window the header icon is hidden (like ⚔️ and 🛒) — the switch is always in Settings.
@@ -720,13 +728,13 @@ async function run(browser: Browser) {
     }, '#/step/S2-10');
     await waitFor(page, '.path-wide', 5000);
     expect(await page.locator('.path-wide.no-dock').count() === 1 && !(await page.locator('.dock').isVisible()), 'dossier: no permanent column by default');
-    await page.getByRole('tab', { name: 'Details' }).click();
+    await page.getByRole('navigation', { name: 'Step views' }).getByRole('button', { name: /Details/ }).click();
     await page.locator('.npc-name').first().click();
     await page.waitForSelector('dialog.drawer[open]', { timeout: 5000 });
     expect(await page.getByRole('button', { name: 'Pin to the side' }).count() === 1, 'dossier: the drawer offers to pin it');
     await page.getByRole('button', { name: 'Pin to the side' }).click();
     await page.waitForSelector('.path-wide:not(.no-dock) .dock .dock-panel', { timeout: 5000 });
-    expect(await page.locator('dialog.drawer[open]').count() === 0, 'dossier: pinning closes the drawer and shows the column');
+    expect(await page.locator('dialog.drawer[open][aria-label="OSRS Wiki inspector"]').count() === 0, 'dossier: pinning closes the drawer and shows the column');
     await page.reload();
     await page.waitForTimeout(1500);
     const dock = await text(page, '.dock');
@@ -751,19 +759,59 @@ async function run(browser: Browser) {
     },'#/step/S3-04');
     expect((await text(page,'.current-action-title')).includes('Ancient Guardian') && !(await text(page,'.current-action-title')).includes('Willow'),'current instruction: the quest cursor wins over the earlier arrow destination');
     const actionBox = await page.locator('.current-action-title').boundingBox();
-    expect(!!actionBox && actionBox.width > 500 && actionBox.height < 180,'modern Path: the main action has readable desktop width');
-    expect(await page.getByRole('tab',{name:'Steps',exact:true}).getAttribute('aria-selected') === 'true' && await page.locator('.modern-workspace .workspace-panel .overview').isVisible(),'modern Path: the walkthrough is open without a click');
-    const rail = await page.locator('.modern-rail .quest-preparation').boundingBox();
-    expect(!!rail && !!actionBox && rail.x > actionBox.x + actionBox.width - 1 && rail.y < actionBox.y + actionBox.height && await page.locator('.quest-preparation').count() === 1,'modern Path: on a wide window the preparation list stands beside the action, once');
-    await page.getByRole('tab',{name:'Steps',exact:true}).click();
+    // Three columns at this width: the action keeps a readable measure (not squeezed into a sliver) and stays within four lines.
+    expect(!!actionBox && actionBox.width >= 420 && actionBox.height < 180,'modern Path: the main action has readable desktop width');
+    expect(await page.locator('.cockpit-walk .overview').isVisible(),'cockpit: the walkthrough is open without a click');
+    const bag = await page.locator('.cockpit-bag .quest-preparation').boundingBox();
+    expect(!!bag && !!actionBox && bag.x > actionBox.x + actionBox.width - 1 && bag.y < actionBox.y + 400 && await page.locator('.quest-preparation').count() === 1,'cockpit: on a wide window the stage list stands beside the action, once');
+    const need = await text(page,'.cockpit-bag .quest-preparation');
+    expect(need.includes('Needed for this stage') && need.includes('Used earlier in this quest') && !need.includes('Missing') && !need.includes('Not checked'),'cockpit: the quest items the stage no longer asks for are folded away, not listed as missing');
+    expect((await text(page,'.cockpit-bag .status-line')).includes('Ready to set off'),'cockpit: the verdict follows the stage too');
     expect((await text(page,'.overview')).includes('In the game now'),'current instruction: the canonical walkthrough identifies the confirmed line');
-    expect(await page.locator('.manual-complete').isVisible(),'modern Path: manual completion stays accessible');
-    await page.getByRole('tab',{name:'Details',exact:true}).press('Home');
-    expect(await page.getByRole('tab',{name:'Steps',exact:true}).getAttribute('aria-selected') === 'true','modern Path: keyboard navigation selects the first view');
-    await page.getByRole('tab',{name:'Steps',exact:true}).press('ArrowRight');
-    const prepText = await text(page,'.modern-workspace .workspace-panel');
-    expect(await page.getByRole('tab',{name:'Preparation',exact:true}).getAttribute('aria-selected') === 'true' && prepText.split('not everything was checked').length === 1 && await page.locator('.workspace-panel .prep-strip').count() === 0,'modern Path: Preparation gives the verdict once and no chip copy of the list');
+    expect(await page.locator('.manual-complete').isVisible(),'cockpit: manual completion stays accessible');
+    await page.keyboard.press('p');
+    await page.waitForSelector('dialog.step-drawer[open]',{timeout:3000});
+    expect((await text(page,'dialog.step-drawer[open]')).includes('Preparation') && await page.locator('dialog.step-drawer[open] .one-trip').count() === 1,'cockpit: P opens the Preparation drawer with the whole plan');
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(300);
+    expect(await page.locator('dialog.step-drawer[open]').count() === 0,'cockpit: Esc closes the drawer');
+    await page.keyboard.press('t');
+    await page.waitForSelector('dialog.step-drawer[open]',{timeout:3000});
+    await page.keyboard.press('Escape');
     expect(errors.length === 0 && await noOverflow(page),'modern Path: no runtime errors or horizontal overflow');
+    await page.context().close();
+  }
+
+  // The companion strip (compact view): four tabs of the same step, the same stage-aware list, Done and Skip, a way back to the full workspace.
+  {
+    const questData = JSON.parse(readFileSync(new URL('../src/data/questStages.json', import.meta.url),'utf8')).quests['S3-04'];
+    const stage = questData.stages.find((s: {do: {t:string}[]}) => s.do.some(l => /Ancient Guardian/.test(l.t)));
+    const lineIndex = stage.do.findIndex((l: {t:string}) => /Ancient Guardian/.test(l.t));
+    const {page, errors} = await open(browser, 420, {
+      progress:progressBefore('S3-04'),
+      localStorage:{'osrs-put:active-step':'S3-04','osrs-put:features':JSON.stringify({compact:true})},
+      status:{protocol:6,inGame:true,activeStepId:'S3-04',questInstruction:{stepId:'S3-04',stageAt:stage.at,lineIndex,peeking:false},navTarget:{stepId:'S3-04',label:'Talk to Willow (south of Ice Mountain)',x:0,y:0,plane:0}},
+    }, '#/step/S3-04');
+    await waitFor(page, '.strip', 5000);
+    const tabs = page.getByRole('tablist', { name: 'Companion views' }).getByRole('tab');
+    expect(await tabs.count() === 4 && (await tabs.allInnerTexts()).join('|') === 'Now|Bag|Route|More', 'strip: four tabs - Now, Bag, Route, More');
+    expect((await text(page, '.strip .current-action-title')).includes('Ancient Guardian'), 'strip: Now shows the confirmed game line');
+    expect(await page.locator('.strip .strip-next li').count() > 0, 'strip: Now lists the next lines');
+    expect(await page.locator('.strip .step-status').count() === 0 && await page.locator('.strip .overview').count() === 0, 'strip: Now carries no readiness panel or walkthrough (they are Bag and More)');
+    await tabs.nth(1).click();
+    const bag = await text(page, '#strip-panel');
+    expect(bag.includes('Needed for this stage') && bag.includes('Used earlier in this quest') && !bag.includes('Missing'), 'strip: Bag is stage-aware, earlier items are folded away');
+    await tabs.nth(2).click();
+    expect(await page.locator('.strip .strip-route li').count() > 1 && await page.locator('.strip .strip-step.is-current').count() === 1, 'strip: Route lists the stage with the current step marked');
+    await tabs.nth(3).click();
+    expect(await page.locator('.strip details.strip-fold').count() === 2, 'strip: More holds Travel and Details');
+    await tabs.nth(0).click();
+    expect(await page.getByRole('button', { name: /^Done/ }).count() === 1, 'strip: Done is one click away');
+    expect(await page.getByRole('button', { name: 'Full workspace' }).count() === 1, 'strip: a way back to the full workspace');
+    expect(errors.length === 0 && await noOverflow(page), `strip: no runtime errors or horizontal overflow ${errors.join('; ')}`);
+    await page.getByRole('button', { name: 'Full workspace' }).click();
+    await waitFor(page, '.cockpit, .path-wide', 5000);
+    expect(await page.locator('.strip').count() === 0, 'strip: Full workspace returns to the cockpit');
     await page.context().close();
   }
 
@@ -787,9 +835,8 @@ async function run(browser: Browser) {
     const hero = await text(page, '.current-action');
     expect(hero.includes('Waiting for character') && !hero.includes('Shown in the game'), 'login screen: the action waits for the character');
     expect(!(await text(page, '.step-status')).includes('the arrow leads to it'), 'login screen: the step status does not claim a live arrow');
-    const code = await page.locator('.modern-workspace .step-id').boundingBox();
+    const code = await page.locator('.cockpit .step-id').boundingBox();
     expect(!!code && code.height <= 20, 'route rail: the current step code stays on one line');
-    await page.getByRole('tab',{name:'Travel',exact:true}).click();
     const hints = await text(page, '.ingame');
     expect(hints.includes('Saved target') && !hints.includes('Shown in the game') && !hints.includes('Active in RuneLite'), 'login screen: travel keeps the saved target without a live badge');
     await page.goto(BASE+'#/settings');

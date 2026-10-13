@@ -7,6 +7,7 @@ import { useBridge } from '../bridge';
 import { isClosed } from '../lib/next-step';
 import { STATUS_TEXT, type ReadinessAction, type RequirementStatus, type StepReadiness } from '../lib/readiness';
 import { useReadiness, useReadinessEngine } from '../readinessContext';
+import { useScopedReadiness } from '../lib/useStageScope';
 import { NavigateButton } from './NavigateButton';
 import { PrepRouteBlock } from './PrepRoute';
 
@@ -77,7 +78,7 @@ function Chain({ step }: { step: Step }) {
 export function ReadinessPanel({ step, bare = false }: { step: Step; bare?: boolean }) {
   const { progress } = useStore();
   const { navTarget, clearNav } = useBridge();
-  const r = useReadiness(step);
+  const r = useScopedReadiness(step);
   if (!r || isClosed(progress, step.id)) return null;
   if (r.goalMet && !r.problems.length) return <GoalMet step={step} r={r} />;
   if (!r.requirements.length) return null;

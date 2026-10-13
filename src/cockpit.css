@@ -1,0 +1,76 @@
+/* The Path workspace as a cockpit (the big window) and as a companion strip (the compact view). Loaded after modern-path.css, which holds the
+   shared presentation of the action card. Layout only: the colours are the theme tokens, so both themes and the Classic look follow. */
+
+/* ---------- Cockpit ---------- */
+.cockpit { width:100%; max-width:94rem; margin-inline:auto; }
+.cockpit .step-view-head { margin-bottom:20px; }
+.cockpit .quest-cursor-progress { margin-bottom:24px; }
+.cockpit-recovery { margin-bottom:16px; }
+.cockpit-grid { display:grid; grid-template-columns:minmax(0,1fr); gap:20px 28px; align-items:start; }
+.cockpit-now,.cockpit-walk,.cockpit-bag,.cockpit-where { min-width:0; display:flex; flex-direction:column; gap:16px; }
+.cockpit-now { order:1; } .cockpit-bag { order:2; } .cockpit-walk { order:3; } .cockpit-where { order:4; }
+:root .cockpit .current-action { margin-bottom:6px; padding-top:4px; }
+:root .cockpit .current-action-title { font-size:clamp(1.7rem,2.6vw,2.4rem); margin:12px 0 10px; }
+:root .cockpit .current-action-side { margin-top:18px; }
+.cockpit-views { display:flex; flex-wrap:wrap; gap:8px; }
+.cockpit-views .btn kbd, .cockpit-where-card .btn kbd { margin-left:8px; font-size:.68rem; padding:1px 6px; opacity:.75; }
+.cockpit-bag .step-status { border:1px solid var(--border); background:var(--surface); border-radius:12px; padding:16px 18px; }
+.cockpit-bag .quest-panel, .cockpit-where .quest-panel, .strip .quest-panel { background:var(--surface); }
+.cockpit-where-card { display:flex; flex-direction:column; gap:12px; align-items:flex-start; }
+.cockpit-where-card .step-map { width:100%; }
+.cockpit-where-card .map-actions { flex-wrap:wrap; gap:6px; justify-content:flex-start; }
+.cockpit-where-card .map-actions .btn { white-space:nowrap; }
+/* The other points are chips in Travel; here the map shows the one the arrow is on. */
+.cockpit-where-card .spot-switch { display:none; }
+.cockpit-bag .ready-ring, .strip .ready-ring { width:52px; height:52px; }
+.cockpit-bag .ready-ring i, .strip .ready-ring i { width:42px; height:42px; font-size:.64rem; letter-spacing:-.04em; }
+.cockpit-bag .status-line { gap:10px; }
+.cockpit .quest-walkthrough { min-height:0; }
+.cockpit .modern-next { margin-top:0; }
+.quest-handled { margin-top:10px; border-top:1px solid var(--border); padding-top:10px; }
+.quest-handled summary { cursor:pointer; color:var(--muted); font-size:.8rem; }
+.quest-supply.is-quiet { opacity:.6; }
+.quest-supply.is-quiet .quest-supply-state { color:var(--muted); }
+
+/* two columns: the action and the walkthrough, then the bag and where */
+@container (min-width:44rem) {
+  .cockpit-grid { grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); grid-template-areas:"now bag" "walk bag" "walk where"; }
+  .cockpit-now { grid-area:now; order:0; } .cockpit-walk { grid-area:walk; order:0; } .cockpit-bag { grid-area:bag; order:0; } .cockpit-where { grid-area:where; order:0; }
+}
+/* three columns: everything for the step on one screen */
+@container (min-width:62rem) {
+  .cockpit-grid { grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,.95fr); grid-template-areas:"now bag where" "walk bag where"; }
+  .cockpit .quest-walkthrough .overview-list { max-height:max(16rem,calc(100dvh - 42rem)); min-height:0; }
+}
+
+/* ---------- The step drawers (Preparation, Travel, Details) ---------- */
+.drawer.step-drawer { width:min(52rem,100vw); }
+.step-drawer-head { position:sticky; top:0; z-index:1; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 20px; background:var(--surface); border-bottom:1px solid var(--border); }
+.step-drawer-head h2 { font-size:1.1rem; font-weight:600; }
+.step-drawer-body { padding-top:18px; }
+
+/* ---------- Companion strip ---------- */
+.strip { display:flex; flex-direction:column; gap:14px; width:100%; max-width:30rem; margin-inline:auto; }
+.strip-head { display:flex; align-items:center; gap:10px; }
+:root .strip .strip-head .step-view-title { font-size:1.05rem; font-weight:600; margin:0; flex:1; min-width:0; }
+.strip-tabs { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:4px; padding:4px; border-radius:12px; background:var(--surface-3); border:1px solid var(--border); }
+.strip-tab { min-height:42px; border:0; border-radius:9px; background:none; color:var(--muted); font:inherit; font-size:.85rem; font-weight:600; cursor:pointer; }
+.strip-tab:hover { color:var(--text); }
+.strip-tab.is-active { background:var(--accent-soft); color:var(--accent-ink); }
+.strip-body { display:flex; flex-direction:column; gap:14px; min-width:0; }
+:root .strip .current-action { padding-top:4px; margin-bottom:0; }
+:root .strip .current-action-title { font-size:clamp(1.35rem,6vw,1.7rem); margin:10px 0 8px; }
+:root .strip .current-action-side { margin-top:14px; }
+.strip-h { font-size:.7rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-bottom:8px; }
+.strip-next ol, .strip-route { list-style:none; margin:0; padding:0; display:flex; flex-direction:column; }
+.strip-next li { display:grid; grid-template-columns:26px minmax(0,1fr); gap:10px; padding:8px 0; border-bottom:1px solid var(--border); font-size:.9rem; }
+.strip-next li:last-child { border-bottom:0; }
+.strip-n { width:24px; height:24px; border-radius:50%; display:grid; place-items:center; font-size:.7rem; font-weight:700; background:var(--surface-2); color:var(--muted); flex:none; }
+.strip-step { width:100%; display:grid; grid-template-columns:28px minmax(0,1fr); gap:10px; align-items:center; text-align:left; padding:10px 6px; border:0; border-bottom:1px solid var(--border); background:none; color:var(--text); font:inherit; font-size:.9rem; cursor:pointer; }
+.strip-step.is-done { color:var(--muted); }
+.strip-step.is-current { background:var(--accent-soft); border-radius:8px; }
+.strip-step.is-current .strip-n { background:var(--accent); color:var(--on-accent); }
+.strip-done { display:flex; flex-wrap:wrap; gap:8px; }
+.strip-fold { border-top:1px solid var(--border); padding-top:10px; }
+.strip-fold summary { cursor:pointer; font-weight:600; padding:4px 0; }
+.compact-page { padding-top:4px; }

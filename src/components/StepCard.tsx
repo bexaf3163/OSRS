@@ -88,8 +88,8 @@ function FieldRow({ field }: { field: Field }) {
 /** The four views of the Path workspace; without one, StepBody renders the whole card (the narrow list). */
 export type StepTab = 'steps' | 'prep' | 'travel' | 'details';
 
-/** The step details. nextId — which step opens after the mark (the caption on the button in the wide layout). tab — one view of the workspace. noAside — the workspace shows the preparation list in its own side column, Steps does not repeat it. */
-export function StepBody({ step, onDone, nextId, tab, onPrep, compact = false, safetyShown = false, noAside = false }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab | 'safety'; onPrep?: () => void; compact?: boolean; safetyShown?: boolean; noAside?: boolean }) {
+/** The step details. nextId — which step opens after the mark (the caption on the button in the wide layout). tab — one view of the workspace. noAside — the workspace shows the preparation list in its own column, Steps does not repeat it. statusAbove — the verdict is on a status line above, so Preparation does not say it again. */
+export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = false, noAside = false, statusAbove = false }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab | 'safety'; onPrep?: () => void; safetyShown?: boolean; noAside?: boolean; statusAbove?: boolean }) {
   const { progress, qp, mode, setStep, review, reactivate } = useStore();
   const { openNpc } = useWiki();
   const zen = !useFeatures().inspector;
@@ -305,17 +305,6 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, compact = false, s
       </div>
     );
     if (tab === 'steps') {
-      if (compact) return (
-        <div className="step-details is-tab">
-          {reviewPlaque}{warning}{fieldList(fieldsWarn)}
-          <QuestPreparation step={step} onReview={onPrep} showReward={false} />
-          <details className="compact-instruction">
-            <summary>Instruction and completion</summary>
-            {sub ? <><SubStepHero step={step} sub={sub} bare /><SubStepItems step={step} sub={sub} /></> : how}
-            {doneWhen}{manual}
-          </details>
-        </div>
-      );
       // A step without a walkthrough and without a current line has nothing for the walkthrough panel: it is not drawn as an empty box.
       const walkthrough = !!sub || overviewOf(step).length > 0;
       return (
@@ -329,7 +318,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, compact = false, s
               {sub && <SubStepHero step={step} sub={sub} bare />}
               {sub && <SubStepItems step={step} sub={sub} />}
             </div>}
-            {!noAside && <QuestPreparation step={step} onReview={onPrep} showReward={!compact} />}
+            {!noAside && <QuestPreparation step={step} onReview={onPrep} showReward />}
           </div>}
           {!sub && !step.questStages && (recovering ? (
             <details className="zen-more"><summary className="small">What to do on the step — after returning</summary>{how}</details>
@@ -358,7 +347,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, compact = false, s
       return (
         <div className="step-details is-tab">
           {/* The status line above already says when nothing is checked, and the list below names every thing once. */}
-          <ReadinessPanel step={step} bare={!recovering} />
+          <ReadinessPanel step={step} bare={statusAbove && !recovering} />
           <OneTripCard step={step} inStatus plain />
           <MoneyGoal step={step} />
           <StepTraining step={step} />

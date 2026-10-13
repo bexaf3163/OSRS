@@ -11,6 +11,7 @@ import { applyTextScale, loadTextScale } from './lib/ui-scale';
 import './styles.css';
 import './clear-path.css';
 import './modern-path.css';
+import './cockpit.css';
 
 applyTextScale(loadTextScale());
 

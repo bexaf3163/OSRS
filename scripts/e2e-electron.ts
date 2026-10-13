@@ -113,8 +113,7 @@ try {
   // The progress: a step mark goes into progress.json with an atomic write.
   await page.evaluate(() => { location.hash = '#/'; });
   await page.waitForTimeout(1000);
-  // The wide layout has a "Done" button on the open step; the narrow list has a checkbox on every step.
-  await page.getByRole('tab', { name: 'Steps', exact:true }).click();
+  // The cockpit has the manual-completion button next to the open walkthrough, without a tab to open first.
   await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
   await page.waitForTimeout(2500);
   const file = join(home, 'OSRS-Put-data', 'progress.json');

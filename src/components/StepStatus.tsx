@@ -14,7 +14,9 @@ import { isClosed } from '../lib/next-step';
 import { STATUS_TEXT } from '../lib/readiness';
 import { plural } from '../lib/shopping';
 import { TARGET_LABEL } from '../lib/linkState';
-import { useReadiness, useReadinessEngine } from '../readinessContext';
+import { useReadinessEngine } from '../readinessContext';
+import { useScopedReadiness, useStageScope } from '../lib/useStageScope';
+import { scopedPercent } from '../lib/stageScope';
 import { useFeatures } from '../lib/features';
 import { styleOf } from '../lib/playStyle';
 import { usePrepFix } from './PrepRoute';
@@ -70,14 +72,16 @@ function useFilled(keys: TabKey[]) {
   return { refs, filled };
 }
 
-/** headline: only the verdict line and its actions (the Path workspace shows the details in its own tabs); onPrep opens the Preparation tab. */
-export function StepStatus({ step, headline = false, onPrep }: { step: Step; headline?: boolean; onPrep?: () => void }) {
+/** headline: only the verdict line and its actions (the Path workspace shows the details in its own views); onPrep opens Preparation. noStart: the workspace has its own "Show in game" button, so the status does not offer a second one. */
+export function StepStatus({ step, headline = false, noStart = false, onPrep }: { step: Step; headline?: boolean; noStart?: boolean; onPrep?: () => void }) {
   const { progress } = useStore();
   const { enabled, activeStepId, navTarget, pointInGame, state: link, inGame } = useBridge();
   const live = link === 'online' && inGame;
-  const r = useReadiness(step);
+  // The quest items the current stage no longer asks for are not a problem: the verdict, the ring and the Fix button follow the stage the game confirms.
+  const r = useScopedReadiness(step);
+  const scope = useStageScope(step);
   const planNow = useReadinessEngine().plan(step, { ahead: styleOf(useFeatures()).lookAhead });
-  const percent = planNow.score.percent;
+  const percent = scopedPercent(planNow.lines, scope, planNow.score.percent);
   const recovering = planNow.recovery;
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<TabKey>('prep');
@@ -138,7 +142,7 @@ export function StepStatus({ step, headline = false, onPrep }: { step: Step; hea
               {underway ? '⚡ Preparation underway' : '▶ Fix'}
             </button>
           )}
-          {!prep && !recovering && hasTarget && (ready || r.status === 'UNKNOWN') && (
+          {!noStart && !prep && !recovering && hasTarget && (ready || r.status === 'UNKNOWN') && (
             <button type="button" className={`btn btn-sm ${active && live ? 'btn-ingame-active' : active ? '' : 'btn-primary'}`} onClick={() => void start()} disabled={sent === 'sending'}>
               {active ? (live ? '✓ Shown in the game' : TARGET_LABEL.saved) : '▶ Start the step'}
             </button>
@@ -157,7 +161,7 @@ export function StepStatus({ step, headline = false, onPrep }: { step: Step; hea
         live
           ? <p className="small status-arrow">🧭 The arrow leads to: {detour.label}</p>
           : <p className="small status-arrow muted">🧭 Target saved: {detour.label}. The arrow appears when RuneLite connects.</p>
-      ) : active ? (
+      ) : active && !noStart ? (
         live
           ? <p className="small status-arrow muted">🧭 The step is shown in the game — the arrow leads to it.</p>
           // In the workspace the current action above already says the target is saved and guidance is inactive.

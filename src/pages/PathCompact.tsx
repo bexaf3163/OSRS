@@ -1,6 +1,5 @@
-// The compact Path view: the current action and what it needs, in a narrow window kept next to the game.
-// It is the same workspace (StepWorkspace) on the same state; only the route rail, the summary and the secondary tabs are left out.
-// Everything else is one click away through "Full workspace".
+// The compact Path view: the companion strip, a narrow window kept next to the game (Now, Bag, Route, More).
+// It is the same state as the big window; the route rail and the long reference views are one click away through "Full workspace".
 
 import { useEffect, useRef, useState } from 'react';
 import { stepById } from '../data';
@@ -8,7 +7,7 @@ import { useStore } from '../store';
 import { useBridge } from '../bridge';
 import { firstOpen, nextStep, openAfter } from '../lib/next-step';
 import { IconChevron } from '../components/Icons';
-import { StepWorkspace } from '../components/StepWorkspace';
+import { CompanionStrip } from '../components/CompanionStrip';
 import { AccountSync } from '../components/AccountSync';
 import { TrackedSkillCard } from '../components/TrackedSkillCard';
 
@@ -44,7 +43,7 @@ export function PathCompact({ focusStep }: { focusStep?: string }) {
       <AccountSync compact />
       <TrackedSkillCard />
       <article className="step-view" key={selected.id}>
-        <StepWorkspace step={selected} suggested={selected.id === suggested.id} onDone={complete} nextId={upcoming?.id} compact />
+        <CompanionStrip step={selected} suggested={selected.id === suggested.id} onDone={complete} nextId={upcoming?.id} onSelect={setSelectedId} />
         <footer className="step-view-nav">
           {steps[at - 1]
             ? <button type="button" className="btn btn-ghost" onClick={() => setSelectedId(steps[at - 1].id)}><IconChevron className="flip" /> {steps[at - 1].id}</button>
