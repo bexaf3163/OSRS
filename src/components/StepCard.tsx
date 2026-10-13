@@ -35,6 +35,7 @@ import { plural } from '../lib/shopping';
 import { LiveXp } from './LiveXp';
 import { SubStepHero, SubStepItems, useSubStep } from './SubStepHero';
 import { QuestOverview } from './QuestOverview';
+import { overviewOf } from '../lib/subStep';
 import { QuestPreparation } from './QuestPreparation';
 import { TravelTip } from './TravelTip';
 
@@ -87,8 +88,8 @@ function FieldRow({ field }: { field: Field }) {
 /** The four views of the Path workspace; without one, StepBody renders the whole card (the narrow list). */
 export type StepTab = 'steps' | 'prep' | 'travel' | 'details';
 
-/** The step details. nextId — which step opens after the mark (the caption on the button in the wide layout). tab — one view of the workspace. */
-export function StepBody({ step, onDone, nextId, tab, onPrep, compact = false, safetyShown = false }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab | 'safety'; onPrep?: () => void; compact?: boolean; safetyShown?: boolean }) {
+/** The step details. nextId — which step opens after the mark (the caption on the button in the wide layout). tab — one view of the workspace. noAside — the workspace shows the preparation list in its own side column, Steps does not repeat it. */
+export function StepBody({ step, onDone, nextId, tab, onPrep, compact = false, safetyShown = false, noAside = false }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab | 'safety'; onPrep?: () => void; compact?: boolean; safetyShown?: boolean; noAside?: boolean }) {
   const { progress, qp, mode, setStep, review, reactivate } = useStore();
   const { openNpc } = useWiki();
   const zen = !useFeatures().inspector;
@@ -315,24 +316,33 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, compact = false, s
           </details>
         </div>
       );
+      // A step without a walkthrough and without a current line has nothing for the walkthrough panel: it is not drawn as an empty box.
+      const walkthrough = !!sub || overviewOf(step).length > 0;
       return (
         <div className="step-details is-tab">
           {!safetyShown && reviewPlaque}
           {!safetyShown && warning}
           {!safetyShown && fieldList(fieldsWarn)}
-          <div className="quest-workspace-grid">
-            <div className="quest-panel quest-walkthrough">
-              {compact ? <details className="compact-overview"><summary>Quest overview</summary><QuestOverview step={step} sub={sub} /></details> : <QuestOverview step={step} sub={sub} />}
+          {(walkthrough || !noAside) && <div className={walkthrough && !noAside ? "quest-workspace-grid" : "quest-workspace-grid is-single"}>
+            {walkthrough && <div className="quest-panel quest-walkthrough">
+              <QuestOverview step={step} sub={sub} />
               {sub && <SubStepHero step={step} sub={sub} bare />}
               {sub && <SubStepItems step={step} sub={sub} />}
-            </div>
-            <QuestPreparation step={step} onReview={onPrep} showReward={!compact} />
-          </div>
+            </div>}
+            {!noAside && <QuestPreparation step={step} onReview={onPrep} showReward={!compact} />}
+          </div>}
           {!sub && !step.questStages && (recovering ? (
             <details className="zen-more"><summary className="small">What to do on the step — after returning</summary>{how}</details>
           ) : how)}
+          {/* No stage data and no live line: the quick path is the walkthrough itself, so it is open, not folded away as a reference. */}
+          {!walkthrough && quick && (
+            <section className="quest-panel quest-quick" aria-label="Walkthrough">
+              <h3 className="overview-title">Walkthrough</h3>
+              {quick}
+            </section>
+          )}
           {doneWhen}
-          {(quick || (sub && how)) && (
+          {walkthrough && (quick || (sub && how)) && (
             <Fold title="Full walkthrough and dialogue" hint={nQuick ? `${nQuick} ${nQuick === 1 ? 'step' : 'steps'}, with detailed instructions` : 'for reference'}>
               {sub && how}
               {step.questStages && !sub && how}
@@ -347,8 +357,9 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, compact = false, s
     if (tab === 'prep') {
       return (
         <div className="step-details is-tab">
-          <ReadinessPanel step={step} />
-          <OneTripCard step={step} inStatus />
+          {/* The status line above already says when nothing is checked, and the list below names every thing once. */}
+          <ReadinessPanel step={step} bare={!recovering} />
+          <OneTripCard step={step} inStatus plain />
           <MoneyGoal step={step} />
           <StepTraining step={step} />
           <MagicPlan step={step} />

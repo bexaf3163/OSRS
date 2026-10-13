@@ -121,8 +121,8 @@ function Section({ title, hint, lines }: { title: string; hint?: string; lines: 
   );
 }
 
-/** inStatus — the recovery mode is already shown above, in the step status (Zen): we do not repeat it here. */
-export function OneTripCard({ step, inStatus = false }: { step: Step; inStatus?: boolean }) {
+/** inStatus — the recovery mode is already shown above, in the step status (Zen): we do not repeat it here. plain — without the chip summary: the lines below say the same. */
+export function OneTripCard({ step, inStatus = false, plain = false }: { step: Step; inStatus?: boolean; plain?: boolean }) {
   const { progress } = useStore();
   const profile = styleOf(useFeatures());
   const upgrade = useUpgradeRecommendation(step);
@@ -152,7 +152,7 @@ export function OneTripCard({ step, inStatus = false }: { step: Step; inStatus?:
           {score.unknown > 0 && <span className="prep-chip is-unknown">? not checked: {score.unknown}</span>}
         </p>
       )}
-      <ChipStrip plan={plan} showLater={profile.showLater} />
+      {!plain && <ChipStrip plan={plan} showLater={profile.showLater} />}
       {plan.recovery && !inStatus && <RecoveryBanner step={step} rec={plan.recovery} />}
       {quiet && <p className="small">🟢 <strong>All ready</strong> — you can go.</p>}
       {plan.blockers.length > 0 && (

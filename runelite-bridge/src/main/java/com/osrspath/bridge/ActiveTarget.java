@@ -165,6 +165,12 @@ public class ActiveTarget
 		static final int MAX_STAGE_STEPS = 40;
 		static final int MAX_BANKS = 40;
 
+		/**
+		 * A quest the app has no stage data for (Shield of Arrav): its walkthrough lines are one stage with no game variable behind it, and the player
+		 * moves through it with "done". Never sent by the app: {@link ActiveTarget#prepare} builds it from the quick path.
+		 */
+		static final String MANUAL = "manual";
+
 		/** "varp" or "varbit". */
 		private String kind;
 		private int id;
@@ -175,6 +181,32 @@ public class ActiveTarget
 		boolean isVarp()
 		{
 			return "varp".equals(kind);
+		}
+
+		boolean isManual()
+		{
+			return MANUAL.equals(kind);
+		}
+
+		/** One hand-advanced stage from the lines of a quick path. */
+		static Stage manual(List<String> lines)
+		{
+			List<StageLine> steps = new ArrayList<>();
+			for (String text : lines)
+			{
+				StageLine line = new StageLine();
+				line.setT(text.trim());
+				// The line is the whole instruction ("...pay 20 coins"): the card shows all of it, not a first-sentence cut.
+				line.setS(text.trim());
+				steps.add(line);
+			}
+			StageStep only = new StageStep();
+			only.setAt(0);
+			only.setSteps(steps);
+			Stage stage = new Stage();
+			stage.setKind(MANUAL);
+			stage.setStages(Collections.singletonList(only));
+			return stage;
 		}
 
 		/** The stage number (zero-based) for a variable value: the last one whose at is not above the value; if there is none, the first. */
@@ -193,6 +225,14 @@ public class ActiveTarget
 
 		String problem(int placeCount)
 		{
+			if (isManual())
+			{
+				// Built by prepare() from an already checked quick path; a saved target is prepared again when the client starts.
+				boolean ok = stages != null && stages.size() == 1 && stages.get(0) != null && stages.get(0).steps != null && !stages.get(0).steps.isEmpty()
+					&& stages.get(0).steps.size() <= MAX_LIST
+					&& stages.get(0).steps.stream().allMatch(l -> l != null && l.t != null && !l.t.trim().isEmpty() && l.t.length() <= Guide.MAX_WHERE);
+				return ok ? null : "invalid walkthrough";
+			}
 			if (!isVarp() && !"varbit".equals(kind))
 			{
 				return "unknown quest variable kind";
@@ -824,6 +864,12 @@ public class ActiveTarget
 		}
 		npcIdSet = npcIds == null ? Collections.emptySet() : new HashSet<>(npcIds);
 		objectIdSet = objectIds == null ? Collections.emptySet() : new HashSet<>(objectIds);
+		// A quest without stage data still has its walkthrough: without this the game showed only "Reldo, ~7 tiles" for the whole of Shield of Arrav.
+		if (guide != null && guide.stage == null && guide.steps != null && guide.steps.size() >= 2
+			&& completionTrigger != null && "QUEST_COMPLETED".equals(completionTrigger.getType()))
+		{
+			guide.stage = Stage.manual(guide.steps);
+		}
 		return null;
 	}
 

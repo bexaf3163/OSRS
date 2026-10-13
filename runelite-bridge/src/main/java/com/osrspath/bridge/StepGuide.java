@@ -364,7 +364,10 @@ final class StepGuide
 		{
 			int idx = stageValue == null ? stage.getStages().size() - 1 : stage.indexFor(stageValue);
 			cur = stage.getStages().get(idx);
-			stageView = new StageView(idx + 1, stage.getStages().size(), cur.getSteps(), Math.max(0, Math.min(cursor, cur.getSteps().size() - 1)), questDone);
+			int at = Math.max(0, Math.min(cursor, cur.getSteps().size() - 1));
+			// A hand-advanced walkthrough is one stage: the heading and the progress strip count its lines instead of "Stage 1 of 1".
+			stageView = stage.isManual() ? new StageView(at + 1, cur.getSteps().size(), cur.getSteps(), at, questDone)
+				: new StageView(idx + 1, stage.getStages().size(), cur.getSteps(), at, questDone);
 			if (questDone)
 			{
 				source = Collections.emptyList();

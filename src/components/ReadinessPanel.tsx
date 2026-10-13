@@ -73,7 +73,8 @@ function Chain({ step }: { step: Step }) {
   );
 }
 
-export function ReadinessPanel({ step }: { step: Step }) {
+/** bare — the status line beside it already says "not everything is checked": that verdict is not repeated. A named problem (levels, items, coins, a quest) always keeps its heading. */
+export function ReadinessPanel({ step, bare = false }: { step: Step; bare?: boolean }) {
   const { progress } = useStore();
   const { navTarget, clearNav } = useBridge();
   const r = useReadiness(step);
@@ -85,7 +86,7 @@ export function ReadinessPanel({ step }: { step: Step }) {
   const ok = r.requirements.filter((x) => x.state === 'OK');
   return (
     <section className={`readiness is-${r.status.toLowerCase()}`} aria-label="Step readiness">
-      <p className="readiness-head" role="status"><span aria-hidden="true">{s.icon}</span> <strong>{s.text}</strong></p>
+      {!(bare && r.status === 'UNKNOWN') && <p className="readiness-head" role="status"><span aria-hidden="true">{s.icon}</span> <strong>{s.text}</strong></p>}
       {detour && (
         // A detour: the in-game arrow leads for the preparation; when the item is in the bag (or you reach the place),
         // the plugin clears the target by itself, and the arrow returns to this step.

@@ -56,7 +56,8 @@
 :root .path-wide .dock { position:sticky; align-self:start; top:90px; max-height:calc(100dvh - 110px); }
 :root .path-wide .step-view { background:transparent; border:0; box-shadow:none; border-radius:0; overflow:visible; }
 :root .path-wide .step-view-nav { padding:22px 0 0; border:0; }
-.modern-workspace { width:100%; max-width:960px; margin-inline:auto; }
+.modern-workspace { width:100%; max-width:64rem; margin-inline:auto; }
+.modern-workspace.is-split { max-width:90rem; }
 :root .modern-workspace .step-view-head { position:static; display:flex; flex-direction:row; align-items:center; gap:14px; padding:0; margin:0 0 30px; background:none; border:0; }
 .modern-quest-icon { width:44px; height:44px; display:grid; place-items:center; color:var(--gold-ink); background:var(--surface); border-radius:12px; flex-shrink:0; }
 .modern-quest-icon .icon { width:24px; height:24px; }
@@ -82,20 +83,26 @@
 :root .modern-primary-nav > .btn { color:var(--on-accent); background:var(--accent); border-color:var(--accent); }
 .workspace-safety:empty { display:none; }
 .workspace-safety { margin:0 0 20px; }
-.modern-disclosures { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; }
-.modern-disclosure { min-width:0; border-top:1px solid var(--border); }
-.modern-preparation { grid-column:1 / -1; border:0; background:var(--surface); border-radius:12px; padding:0 20px; margin-bottom:10px; }
-.modern-disclosure.is-open { grid-column:1 / -1; }
-.modern-disclosure-button { display:flex; align-items:center; gap:12px; width:100%; padding:20px 0; border:0; background:none; color:var(--text); text-align:left; cursor:pointer; font:inherit; }
-.modern-disclosure-button > span:not(.type-icon) { display:flex; flex-direction:column; gap:4px; min-width:0; }
-.modern-disclosure-button strong { font-size:.85rem; font-weight:500; }
-.modern-disclosure-button .small { font-size:.7rem; }
-.modern-disclosure-button > .icon { margin-left:auto; width:14px; height:14px; flex-shrink:0; color:var(--muted); }
-.modern-preparation .modern-disclosure-button > span:not(.type-icon) { flex-direction:row; align-items:center; gap:18px; flex-wrap:wrap; }
-.modern-preparation .modern-disclosure-button .type-icon { display:grid; place-items:center; width:34px; height:34px; border-radius:9px; color:var(--gold-ink); background:var(--gold-soft); }
-.modern-preparation .modern-disclosure-button .type-icon .icon { width:20px; height:20px; }
-.modern-fold-open { transform:rotate(90deg); }
-:root .modern-workspace .workspace-panel { padding:0 0 22px; border:0; }
+/* Wide: the action and the open view on the left, the "what you need" list beside them. Narrow: one column, the list sits inside Steps. */
+.modern-columns { display:grid; grid-template-columns:minmax(0,1fr); gap:32px; align-items:start; }
+.modern-workspace.is-split .modern-columns { grid-template-columns:minmax(0,1fr) minmax(0,clamp(21rem,30%,26rem)); gap:40px; }
+.modern-workspace.is-split .quest-cursor-progress { margin-bottom:26px; }
+:root .modern-workspace.is-split .current-action { padding-top:6px; margin-bottom:26px; }
+.modern-main { min-width:0; }
+.modern-rail { position:sticky; top:calc(var(--topbar-h) + 24px); max-height:calc(100dvh - var(--topbar-h) - 48px); overflow:auto; min-width:0; }
+.quest-workspace-grid.is-single { grid-template-columns:minmax(0,1fr); }
+.quest-workspace-grid:empty { display:none; }
+.quest-quick { margin-block:4px 16px; }
+.quest-quick .quick-steps { margin:0; }
+.quest-workspace-grid:not(:has(> .quest-sidebar)) { grid-template-columns:minmax(0,1fr); }
+/* The list starts under the action, about 40rem down: its box ends at the bottom of the window, so the current line is in view without scrolling the page. */
+@media(min-width:1000px) { .modern-workspace .quest-walkthrough .overview-list { max-height:max(17.5rem,calc(100dvh - 44rem)); min-height:0; } .modern-workspace .quest-walkthrough { min-height:0; } }
+.modern-tabs { display:flex; gap:4px; margin:0 0 22px; overflow-x:auto; box-shadow:inset 0 -1px var(--border); }
+.modern-tab { display:flex; align-items:center; gap:8px; flex:0 0 auto; min-height:44px; padding:10px 14px; border:0; background:none; color:var(--muted); font:inherit; font-size:.85rem; font-weight:500; white-space:nowrap; cursor:pointer; }
+.modern-tab:hover { color:var(--text); }
+.modern-tab.is-active { color:var(--accent-ink); box-shadow:inset 0 -2px var(--accent); }
+.modern-tab-badge { min-width:18px; padding:1px 6px; border-radius:9px; background:var(--gold-soft); color:var(--gold-ink); font-size:.7rem; text-align:center; }
+:root .modern-workspace .workspace-panel { padding:0 0 10px; border:0; }
 :root .modern-workspace .step-details { padding:0; }
 :root .modern-workspace .step-status { box-shadow:none; border:0; background:transparent; padding:12px 0; }
 .modern-next { display:flex; align-items:center; gap:15px; padding-top:22px; margin-top:36px; border-top:1px solid var(--border); color:var(--text); font-size:.8rem; }
@@ -104,7 +111,6 @@
 .modern-completed { display:flex; gap:8px; align-items:center; margin-top:20px; }
 :root .card,:root .training,:root .quest,:root .settings-block { box-shadow:none; border-radius:10px; }
 :root[data-look="classic"] .card,:root[data-look="classic"] .settings-block { border-radius:4px; }
-:root[data-look="classic"] .modern-preparation { border:1px solid var(--border); border-radius:4px; background:transparent; }
 .section-shell { display:block; padding:12px 0; }
 .section-rail { position:static; padding:0 0 22px; min-width:0; }
 .section-rail h2,.section-rail-foot { display:none; }
@@ -138,8 +144,6 @@
  :root main#main,:root main#main:has(.path-wide) { padding:24px 20px 90px; }
  :root .path-wide:has(.dock .dock-panel) { grid-template-columns:minmax(0,1fr); }
  :root .path-wide .dock { display:none; }
- .modern-disclosures { grid-template-columns:minmax(0,1fr); gap:10px; }
- .modern-preparation { padding:0 15px; }
  .modern-workspace .current-action-title { font-size:1.9rem; }
 }
 @media(max-width:520px) {

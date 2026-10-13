@@ -423,3 +423,23 @@ describe('the "OSRS Path" panel in RuneLite: what is needed and the step points 
     expect(g.places[0].npc).toBeUndefined();
   });
 });
+
+// Shield of Arrav has no stage data: in the game its quick path is the whole walkthrough, so every line must arrive.
+// It used to be five paragraphs, two of them over the 500-character limit and silently dropped (both gangs).
+describe('a quest without stage data sends its whole walkthrough', () => {
+  it('Shield of Arrav: every line fits and none is cut from the middle', () => {
+    const s = allSteps.find((x) => x.id === 'S3-05')!;
+    expect(s.questStages).toBeUndefined();
+    const sent = toInGameTarget(s)!.guide!.steps!;
+    expect(sent).toEqual(s.quickSteps);
+    expect(Math.max(...sent.map((q) => q.length))).toBeLessThanOrEqual(200);
+    for (const who of ['Reldo', 'Baraek', 'Straven', 'Jonny the beard', 'Katrine', 'Weaponsmaster', 'Haig Halen', 'King Roald']) {
+      expect(sent.join('\n'), who).toContain(who);
+    }
+  });
+  it('no step loses a quick-path line to the size limit', () => {
+    for (const s of allSteps) {
+      for (const q of s.quickSteps ?? []) expect(q.length, `${s.id}: ${q.slice(0, 60)}`).toBeLessThanOrEqual(500);
+    }
+  });
+});

@@ -12,14 +12,15 @@ export function QuestOverview({ step, sub }: { step: Step; sub: SubStep | null }
   const lines = overviewOf(step);
   const current = overviewCurrent(lines, sub);
   const list = useRef<HTMLOListElement>(null);
-  // On a wide screen the list scrolls inside its own box: the current line of a long quest would sit below its fold. Only the list moves, never the page.
+  // On a wide screen the list scrolls inside its own box, and the box itself may reach below the window: the current line goes to the top of the box,
+  // with one earlier line above it for context. Only the list moves, never the page.
   useEffect(() => {
     const ol = list.current;
     const li = ol?.querySelector<HTMLElement>('.overview-item.is-current');
     if (!ol || !li || ol.scrollHeight <= ol.clientHeight) return;
     const box = ol.getBoundingClientRect();
     const row = li.getBoundingClientRect();
-    if (row.top < box.top || row.bottom > box.bottom) ol.scrollTop += row.top - box.top - box.height / 3;
+    ol.scrollTop += row.top - box.top - row.height;
   }, [current, step.id]);
   if (lines.length === 0) return null;
   const live = current !== null && state === 'online' && inGame;

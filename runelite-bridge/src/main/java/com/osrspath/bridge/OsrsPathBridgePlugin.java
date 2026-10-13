@@ -1331,7 +1331,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (server != null)
 		{
 			StepGuide.StageView current = v.getStage();
-			boolean known = stage != null && stageValue(stage) != null && current != null && !current.isFinished()
+			// A hand-advanced walkthrough is not a quest stage the app knows: it has no identity to announce.
+			boolean known = stage != null && !stage.isManual() && stageValue(stage) != null && current != null && !current.isFinished()
 				&& !current.getSteps().isEmpty() && client.getGameState() == GameState.LOGGED_IN;
 			server.setQuestInstruction(known ? target.getStepId() : null,
 				known ? stage.getStages().get(current.getIndex() - 1).getAt() : null,
@@ -1579,6 +1580,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		List<ActiveTarget.StageLine> lines = st.getStages().get(idx).getSteps();
 		stageTracker.update(target.getStepId(), idx, lines, pos.getX(), pos.getY(), pos.getPlane(), ItemCounts.sum(carried, noted),
 			qhPick(target.getStepId(), value, lines));
+		restoreWalk(st, lines);
 		logStage(st, idx, value, lines, pos);
 		int at = Math.max(0, Math.min(stageTracker.cursor(), lines.size() - 1));
 		preBlock = guard(st, lines.get(at), pos);
@@ -1593,6 +1595,30 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	}
 
 	private Preflight.Block lastPreBlock;
+
+	/** The step whose hand-advanced walkthrough was already put back on its saved line in this session. */
+	private String walkRestored;
+
+	private static String walkKey(String stepId)
+	{
+		return "walk." + stepId;
+	}
+
+	/** Only "done" moves a hand-advanced walkthrough, so a client restart would put the player back on line 1: the reached line is kept in the config. */
+	private void restoreWalk(ActiveTarget.Stage st, List<ActiveTarget.StageLine> lines)
+	{
+		String stepId = target.getStepId();
+		if (!st.isManual() || stepId.equals(walkRestored))
+		{
+			return;
+		}
+		walkRestored = stepId;
+		Integer saved = configManager.getConfiguration(OsrsPathBridgeConfig.GROUP, walkKey(stepId), Integer.class);
+		if (saved != null && saved > stageTracker.cursor() && saved < lines.size())
+		{
+			stageTracker.restore(saved);
+		}
+	}
 
 	/** The log: entering a stage, a quest variable change, where and why the cursor moved, warnings. */
 	private void logStage(ActiveTarget.Stage st, int idx, int value, List<ActiveTarget.StageLine> lines, WorldPoint pos)
@@ -1670,6 +1696,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (client.getGameState() != GameState.LOGGED_IN)
 		{
 			return null;
+		}
+		if (st.isManual())
+		{
+			// No game variable behind a hand-advanced walkthrough: it is always its one stage.
+			return 0;
 		}
 		return st.isVarp() ? client.getVarpValue(st.getId()) : client.getVarbitValue(st.getId());
 	}
@@ -1838,6 +1869,10 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				Integer value = st == null ? null : stageValue(st);
 				if (value != null && stageTracker.forward(st.getStages().get(st.indexFor(value)).getSteps()))
 				{
+					if (st.isManual())
+					{
+						configManager.setConfiguration(OsrsPathBridgeConfig.GROUP, walkKey(target.getStepId()), stageTracker.cursor());
+					}
 					refreshGuide();
 				}
 				break;
@@ -3509,7 +3544,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			completion.onVarbitChanged(e.getVarbitId(), e.getValue());
 		}
 		ActiveTarget.Stage st = stageOf(target);
-		boolean questVar = st != null && (st.isVarp() ? e.getVarpId() == st.getId() : e.getVarbitId() == st.getId());
+		boolean questVar = st != null && !st.isManual() && (st.isVarp() ? e.getVarpId() == st.getId() : e.getVarbitId() == st.getId());
 		if (questVar)
 		{
 			updateHud();

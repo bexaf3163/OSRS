@@ -195,3 +195,17 @@ A release is finished only after GitHub Checks and Release succeed, its tag targ
 - Alt-drag and live bank/exchange/critical states were not exercised; use safe fixtures or an explicitly authorized suitable live scenario.
 - Use screenshot evidence to make small spacing/position corrections if needed; avoid another broad redesign.
 - No new Loadouts, Comparison, or Price tracking engine is part of this redesign scope.
+
+## Path layout and walkthrough fallback — 2.49.0
+
+Asked for by the owner after 2.48.9 ("inconvenient, a lot of empty space"; "the addon shows nothing in the game on Shield of Arrav").
+
+- `ModernStepWorkspace` is tabs, not disclosures: Steps is selected from the start. On a wide column (58rem and up, measured on the parent, so large text and a pinned dossier count) `QuestPreparation` stands in `.modern-rail` beside the action and `StepBody` gets `noAside`; narrower, the list stays inside Steps. The rail is drawn only when it has something to say.
+- `QuestPreparation` returns null when there is nothing to bring and no reward; the walkthrough panel is not drawn empty; a step without stage data shows `quickSteps` open (`.quest-quick`).
+- Preparation tab: `OneTripCard plain` (no chip copy), `ReadinessPanel bare` (drops only the UNKNOWN heading, named problems keep theirs), `StepStatus headline` drops the offline "target saved" note that the current action already shows.
+- The overview list box ends at the window bottom (`max(17.5rem, 100dvh - 44rem)`) and `QuestOverview` puts the current line at its top.
+- Plugin: `ActiveTarget.prepare()` builds `Stage.manual(guide.steps)` for a QUEST_COMPLETED step that arrives without stage data (only S3-05 today). `stageValue` is 0 for it, the cursor moves only with "done" (`StageTracker.needsManualStep`), the reached line is saved in config key `walk.<stepId>` and restored once per session. No quest instruction is announced for it. Nothing in the protocol changed.
+- `steps.json` S3-05: 18 short lines instead of 5 paragraphs (two were over 500 characters and never reached the game). `stepGuide` sends up to 40 quick-path lines (was 15 and the last).
+- Regression review of 2.48.3–2.48.9 against 2.48.2: no component or screen removed, guide/HUD visibility rules unchanged, data unchanged apart from `iconAssets.json`.
+
+Not done: map points and highlights for the Shield of Arrav lines (needs Quest Helper data for both gangs), the desktop does not follow the hand-advanced line.

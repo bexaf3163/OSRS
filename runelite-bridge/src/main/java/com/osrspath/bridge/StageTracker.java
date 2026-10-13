@@ -562,6 +562,15 @@ final class StageTracker
 		return true;
 	}
 
+	/** A hand-advanced walkthrough after a client restart: back to the line the player had reached with "done". */
+	void restore(int line)
+	{
+		cursor = line;
+		floor = line;
+		warning = null;
+		reason = "RESTORED: line " + line + " (reached with 'done' in an earlier session)";
+	}
+
 	/** Click "to current": viewing is over, the cursor is counted by the facts again, at once, without waiting. */
 	void resume()
 	{

@@ -752,13 +752,29 @@ async function run(browser: Browser) {
     expect((await text(page,'.current-action-title')).includes('Ancient Guardian') && !(await text(page,'.current-action-title')).includes('Willow'),'current instruction: the quest cursor wins over the earlier arrow destination');
     const actionBox = await page.locator('.current-action-title').boundingBox();
     expect(!!actionBox && actionBox.width > 500 && actionBox.height < 180,'modern Path: the main action has readable desktop width');
-    expect(await page.locator('.modern-workspace .workspace-panel').count() === 0,'modern Path: detailed views are collapsed initially');
+    expect(await page.getByRole('tab',{name:'Steps',exact:true}).getAttribute('aria-selected') === 'true' && await page.locator('.modern-workspace .workspace-panel .overview').isVisible(),'modern Path: the walkthrough is open without a click');
+    const rail = await page.locator('.modern-rail .quest-preparation').boundingBox();
+    expect(!!rail && !!actionBox && rail.x > actionBox.x + actionBox.width - 1 && rail.y < actionBox.y + actionBox.height && await page.locator('.quest-preparation').count() === 1,'modern Path: on a wide window the preparation list stands beside the action, once');
     await page.getByRole('tab',{name:'Steps',exact:true}).click();
     expect((await text(page,'.overview')).includes('In the game now'),'current instruction: the canonical walkthrough identifies the confirmed line');
     expect(await page.locator('.manual-complete').isVisible(),'modern Path: manual completion stays accessible');
     await page.getByRole('tab',{name:'Details',exact:true}).press('Home');
-    expect(await page.getByRole('tab',{name:'Preparation',exact:true}).getAttribute('aria-expanded') === 'true','modern Path: keyboard navigation opens the first disclosure');
+    expect(await page.getByRole('tab',{name:'Steps',exact:true}).getAttribute('aria-selected') === 'true','modern Path: keyboard navigation selects the first view');
+    await page.getByRole('tab',{name:'Steps',exact:true}).press('ArrowRight');
+    const prepText = await text(page,'.modern-workspace .workspace-panel');
+    expect(await page.getByRole('tab',{name:'Preparation',exact:true}).getAttribute('aria-selected') === 'true' && prepText.split('not everything was checked').length === 1 && await page.locator('.workspace-panel .prep-strip').count() === 0,'modern Path: Preparation gives the verdict once and no chip copy of the list');
     expect(errors.length === 0 && await noOverflow(page),'modern Path: no runtime errors or horizontal overflow');
+    await page.context().close();
+  }
+
+  // A quest without stage data (Shield of Arrav): Steps shows its walkthrough open, not an empty overview panel.
+  {
+    const {page, errors} = await open(browser,1440,{
+      progress:progressBefore('S3-05'), status:{protocol:6,inGame:true,activeStepId:'S3-05'}, localStorage:{'osrs-put:active-step':'S3-05'},
+    },'#/step/S3-05');
+    await waitFor(page,'.quest-quick',5000);
+    expect(await page.locator('.quest-quick .quick-steps li').count() === 18 && await page.locator('.quest-walkthrough').count() === 0,'no stage data: the walkthrough is open in Steps, with no empty overview panel');
+    expect(errors.length === 0 && await noOverflow(page),'no stage data: no runtime errors or horizontal overflow');
     await page.context().close();
   }
 

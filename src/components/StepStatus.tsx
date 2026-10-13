@@ -160,7 +160,8 @@ export function StepStatus({ step, headline = false, onPrep }: { step: Step; hea
       ) : active ? (
         live
           ? <p className="small status-arrow muted">🧭 The step is shown in the game — the arrow leads to it.</p>
-          : <p className="small status-arrow muted">🧭 Target saved. Live guidance is inactive until RuneLite connects.</p>
+          // In the workspace the current action above already says the target is saved and guidance is inactive.
+          : !headline && <p className="small status-arrow muted">🧭 Target saved. Live guidance is inactive until RuneLite connects.</p>
       ) : null}
       {!headline && open && visibleTabs.length > 1 && (
         <div className="status-tabs" role="tablist" aria-label="Step details">

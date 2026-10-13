@@ -233,8 +233,9 @@ export function stepGuide(step: Step, branch?: StepBranch): StepGuidePayload {
   // Always sent, even if empty: without guide the plugin considers the app old and asks to update it
   // (in 2.10 steps without items and with one point went without it — the panel wrote "Update the app" for nothing).
   const all = (step.quickSteps ?? []).filter((q) => q.length > 0 && q.length <= 500);
-  // A long route: the plugin needs only the last item ("Next"), and the list is limited — the first fifteen and the last.
-  const steps = all.length > 16 ? [...all.slice(0, 15), all[all.length - 1]] : all;
+  // The plugin shows the last item as "Next", and for a quest without stage data (Shield of Arrav) the whole list is its walkthrough in the game:
+  // a cut in the middle would lose instructions. Forty lines is the plugin's own limit for one stage; beyond it the first thirty-nine and the last.
+  const steps = all.length > 40 ? [...all.slice(0, 39), all[all.length - 1]] : all;
   const stage = stagePayload(step, places);
   return { items: items.slice(0, 64), places: places.slice(0, 64), ...(steps.length ? { steps } : {}), ...(stage ? { stage } : {}) };
 }
