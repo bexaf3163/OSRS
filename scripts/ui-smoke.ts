@@ -758,9 +758,9 @@ async function run(browser: Browser) {
 
   // The header fits at any width when RuneLite is connected (it used to overflow by 11–193 px).
   console.log('Header');
-  for (const width of [320, 390, 900, 1000, 1100, 1280, 1400, 1600, 1720, 1920]) {
-    const { page } = await open(browser, width, {}, '#/');
-    expect(await noOverflow(page), `the header at ${width} px without horizontal scrolling`);
+  for (const scale of [1, 1.5]) for (const width of [320, 390, 900, 1000, 1100, 1280, 1400, 1600, 1720, 1920]) {
+    const { page } = await open(browser, width, {progress:progressBefore('S3-03'),localStorage:{'osrs-put:text-scale':String(scale)}}, '#/');
+    expect(await noOverflow(page), `the header at ${width} px and ${scale*100}% text without horizontal scrolling`);
     await page.context().close();
   }
 }

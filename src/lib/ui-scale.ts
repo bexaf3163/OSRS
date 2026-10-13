@@ -38,6 +38,7 @@ export function loadTextScale(): number {
 
 export function applyTextScale(scale: number): void {
   document.documentElement.style.setProperty('--text-scale', String(scale));
+  document.documentElement.dataset.textSize = scale > 1.2 ? 'large' : 'normal';
   try {
     if (scale === 1) localStorage.removeItem(TEXT_KEY);
     else localStorage.setItem(TEXT_KEY, String(scale));

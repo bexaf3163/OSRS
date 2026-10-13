@@ -175,6 +175,11 @@ main:has(.section-shell) { padding-top:8px; }
 }
 
 /* Reference-aligned presentation of the existing controls. */
+@media(min-width:900px) and (max-width:1919px) {
+ :root[data-text-size="large"] { --topbar-h:156px; }
+ :root[data-text-size="large"] .topbar-inner { flex-wrap:wrap; height:auto; min-height:var(--topbar-h); padding-block:6px; align-content:center; }
+ :root[data-text-size="large"] .tabs-top { order:3; flex:1 0 100%; margin-left:0; }
+}
 .topbar-actions > .icon-btn { text-decoration:none; }
 .current-action-side { grid-column:1 / -1; display:flex; flex-direction:column; gap:8px; min-width:0; }
 :root:not([data-look="classic"]) .current-action-side .step-status { border:0; box-shadow:none; background:transparent; margin:0; padding:0; }

@@ -101,10 +101,11 @@ try {
   await page.evaluate(() => { location.hash = '#/settings'; });
   await page.waitForTimeout(1500);
   await page.getByRole('tab', { name: 'RuneLite', exact: true }).click();
-  const settings = await page.locator('main').innerText();
-  expect(settings.includes('E2E Tester'), 'bridge: the character name from the plugin is visible in the settings');
+  await page.waitForSelector('.bridge-indicator.is-online');
+  expect((await page.locator('main').innerText()).includes('the plugin is connected'), 'bridge: the plugin connection is shown in RuneLite settings');
   await page.getByRole('tab', { name: 'Progress and copies', exact:true }).click();
   expect((await page.locator('main').innerText()).includes('Character profiles'), 'settings: character profiles are accessible');
+  expect((await page.locator('main').innerText()).includes('E2E Tester'), 'bridge: the test character is shown in character profiles');
   await page.getByRole('tab', { name:'App', exact:true }).click();
   expect((await page.locator('main').innerText()).includes('Diagnostics'), 'settings: diagnostics are accessible');
 
