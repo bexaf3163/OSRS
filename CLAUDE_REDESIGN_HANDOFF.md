@@ -19,7 +19,17 @@ The user initially selected **Clear Path**, then on 2026-10-13 explicitly select
 
 The original Clear Path implementation/audit below is historical context. Its named files and data invariants still apply where this evolution does not supersede presentation. The 2.48.4 World 316 inspection is historical evidence; it is not a claim that the 2.48.5 cursor reporting has already been exercised in the live account.
 
-Local 2.48.5 verification: production build, data consistency (zero errors/warnings), 895 TypeScript tests and 445 Java tests passed; final Gradle testClasses/jar passed. Production UI scenarios passed, including all 94 routes at 390/1280px, header widths 320–1920px at 100%/150% text, collapsed initial views, canonical later instruction versus earlier navigation, manual completion, keyboard disclosure navigation, logged-out guidance and existing preparation/profile/shopping flows. Dedicated captures inspected the new Path at 1440/390px and at 1000px with 150% text. GitHub's release workflow must still pass its real isolated Electron check before publication.
+Local 2.48.5 verification: production build, data consistency (zero errors/warnings), 895 TypeScript tests and 445 Java tests passed; final Gradle testClasses/jar passed. Production UI scenarios passed, including all 94 routes at 390/1280px, header widths 320–1920px at 100%/150% text, collapsed initial views, canonical later instruction versus earlier navigation, manual completion, keyboard disclosure navigation, logged-out guidance and existing preparation/profile/shopping flows. Dedicated captures inspected the new Path at 1440/390px and at 1000px with 150% text.
+
+GitHub Checks `38416232751` and Release `38416232994` succeeded for 2.48.5, including the real isolated Electron shell, six workspaces, bundled font, bridge/profile display and atomic progress persistence. The release tag targets `96f58b1f82fca1691f323614ca00244f42853984`. The downloaded portable asset is 101433241 bytes and matches SHA-256 `329c7b2b22b753fc11ba6af5b9f65e6852bbe2931ea7ed2ce548b58bf20d4dd2`.
+
+The installed Windows app was then updated through Settings → App to 2.48.5. Its existing profile and route survived. RuneLite was restarted through the application's automatic launch, World 316 was selected and the saved-session Play actions opened the world without credentials. **Live confirmation:** the native guide and the desktop hero both displayed the Ancient Guardian / four pillars instruction and stage 7 of 8. The former Willow/current-instruction mismatch no longer reproduced. No character movement, quest marking, purchases or combat were automated.
+
+### Sidebar refinement — 2.48.6
+
+The installed Electron inspection exposed a horizontal scrollbar inside the sidebar, although the document itself did not overflow. The old top-navigation `margin-left: 12px` still applied to the relocated navigation. Version 2.48.6 explicitly resets that margin and permits brand wrapping at increased text sizes. UI checks now measure the **sidebar's own** scrollWidth/clientWidth at desktop widths with 100%/150% text; checking only document overflow misses this defect. No quest-cursor logic changed after the live 2.48.5 check.
+
+The 2.48.6 production build, data consistency, 895 TypeScript tests and Gradle testClasses/jar passed. Its full production UI run passed, including the additional internal sidebar bounds checks at 1000–1920px with 100%/150% text. The earlier 445-test Java pass covers the unchanged cursor logic; the only subsequent Java change is the synchronized plugin version string.
 
 The released redesign baseline is **2.48.3**, commit `ec9586f420e1b1269aaee42dad5efbb464f7f2c5`, following `21b1db6824ef2769e0c27ab58174e01e7fdb489b`. Start future work from current GitHub `main`, preserving any later commits. An older local checkout may contain an earlier, staged design candidate: do not force-push it over newer work, reset someone else's files, or restore old CSS over the redesign. Merge concurrent work deliberately.
 
@@ -129,7 +139,7 @@ A release is finished only after GitHub Checks and Release succeed, its tag targ
 
 ## Remaining work, not new promised features
 
-- The current quest-instruction / navigation-target mismatch is addressed by 2.48.5's validated cursor identity. Verify it after launching both updated app and plugin; do not test a new app against an already running old plugin and assume the new identity exists.
+- The current quest-instruction / navigation-target mismatch is addressed by 2.48.5's validated cursor identity and was confirmed in the live World 316 inspection. Keep testing updated app/plugin pairs; an already running old plugin does not gain the identity field until restarted.
 - Alt-drag and live bank/exchange/critical states were not exercised; use safe fixtures or an explicitly authorized suitable live scenario.
 - Use screenshot evidence to make small spacing/position corrections if needed; avoid another broad redesign.
 - No new Loadouts, Comparison, or Price tracking engine is part of this redesign scope.

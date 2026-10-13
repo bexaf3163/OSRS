@@ -7,10 +7,10 @@
 .app-content { min-width:0; }
 .app-sidebar { position:sticky; top:0; align-self:start; height:100dvh; overflow:auto; display:flex; flex-direction:column; padding:26px 18px 20px; background:var(--surface-3); border-right:1px solid var(--border); }
 .sidebar-identity { padding:0 9px 20px; }
-:root .app-sidebar .brand { color:var(--text); font-size:1.2rem; gap:10px; margin:0 0 20px; }
+:root .app-sidebar .brand { color:var(--text); font-size:1.2rem; gap:10px; margin:0 0 20px; white-space:normal; }
 :root .app-sidebar .compass-mark { width:30px; height:30px; color:var(--gold-ink); }
 :root .app-sidebar .header-mode summary { padding:9px 0 16px; border:0; border-bottom:1px solid var(--border); border-radius:0; background:none; color:var(--muted); font-size:.8rem; }
-:root .app-sidebar .tabs-top { display:flex; flex-direction:column; gap:5px; width:100%; flex:0 0 auto; height:auto; overflow:visible; border:0; }
+:root .app-sidebar .tabs-top { display:flex; flex-direction:column; gap:5px; width:100%; flex:0 0 auto; height:auto; overflow:visible; border:0; margin-left:0; }
 :root .app-sidebar .tabs-top .tab { display:flex; flex-direction:row; gap:12px; justify-content:flex-start; padding:11px 13px; width:100%; min-width:0; border:0; border-radius:8px; color:var(--muted); font-size:.85rem; min-height:43px; height:auto; }
 :root .app-sidebar .tabs-top .tab.is-active { background:var(--accent-soft); color:var(--accent-ink); border:0; box-shadow:none; }
 :root .app-sidebar .tabs-top .tab .icon { width:18px; height:18px; }

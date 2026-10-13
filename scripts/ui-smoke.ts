@@ -807,6 +807,7 @@ async function run(browser: Browser) {
   for (const scale of [1, 1.5]) for (const width of [320, 390, 900, 1000, 1100, 1280, 1400, 1600, 1720, 1920]) {
     const { page } = await open(browser, width, {progress:progressBefore('S3-03'),localStorage:{'osrs-put:text-scale':String(scale)}}, '#/');
     expect(await noOverflow(page), `the header at ${width} px and ${scale*100}% text without horizontal scrolling`);
+    if (width >= 1000) expect(await page.locator('.app-sidebar').evaluate(el => el.scrollWidth <= el.clientWidth), `sidebar at ${width} px and ${scale*100}% text without internal horizontal scrolling`);
     await page.context().close();
   }
 }
