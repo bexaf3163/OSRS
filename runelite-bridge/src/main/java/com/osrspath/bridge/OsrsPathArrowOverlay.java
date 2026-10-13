@@ -25,7 +25,7 @@ import net.runelite.client.ui.overlay.OverlayPosition;
  */
 class OsrsPathArrowOverlay extends Overlay
 {
-	static final Color FAR = new Color(120, 210, 255);
+	static final Color FAR = OsrsPathGuideOverlay.MODERN_LINK;
 	static final Color CLOSE = new Color(255, 210, 90);
 	static final Color NEAR = new Color(90, 220, 120);
 	static final Color OTHER = new Color(255, 170, 60);
@@ -74,8 +74,11 @@ class OsrsPathArrowOverlay extends Overlay
 		angle = ArrowGeometry.smooth(angle, ArrowGeometry.screenAngle(dx, dy, client.getCameraYawTarget()));
 		OsrsPathHudOverlay.State hud = plugin.getHud();
 		String text = hud != null ? label(hud.getDistance()) : null;
+		boolean modernGuide = config.overlayTheme() == OsrsPathBridgeConfig.OverlayTheme.GLASS && plugin.guideOnScreen();
+		// The guide already carries the distance. Retain layer/arrival feedback on the marker itself.
+		if (modernGuide && layer == 0 && state != ArrowGeometry.State.VERY_CLOSE) text = null;
 		Font font = OverlayText.font(g.getFont(), config.hudLarge() ? OsrsPathHudOverlay.LARGE : 1f);
-		return draw(g, font, state, angle, layer, text, config.arrowSize().diameter);
+		return draw(g, font, state, angle, layer, text, modernGuide ? Math.round(config.arrowSize().diameter * .65f) : config.arrowSize().diameter);
 	}
 
 	/**

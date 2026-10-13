@@ -30,7 +30,9 @@ import net.runelite.client.ui.overlay.components.PanelComponent;
 class OsrsPathGuideOverlay extends OverlayPanel
 {
 	/** Wider than the HUD: items have a status on the right, and "where to get it" under them. */
-	static final int WIDTH = 240;
+	static final int WIDTH = 300;
+	static final Color MODERN_LINK = new Color(177, 180, 255);
+	static final Color MODERN_TEXT = new Color(235, 238, 245);
 	/** "Where to get it" and the hint are smaller than the main text. */
 	static final float SMALL = 0.85f;
 	static final Color HOVER = new Color(255, 255, 255, 40);
@@ -89,10 +91,13 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	private List<RowComponent> components = Collections.emptyList();
 	private volatile Hits hits = Hits.NONE;
 	private Dimension last = new Dimension();
-	/** The strict two-line view: when the mouse was last over the card (nanoTime, or Long.MIN_VALUE), and when the card started to open. */
-	private long lastOver = Long.MIN_VALUE;
-	private long openedAt;
-	private boolean open;
+	private final GuideDisclosure disclosure = new GuideDisclosure();
+
+	void selectDetails(boolean advice)
+	{
+		disclosure.select(advice);
+		builtFor = null;
+	}
 
 	@Inject
 	OsrsPathGuideOverlay(Client client, OsrsPathBridgePlugin plugin, OsrsPathBridgeConfig config)
@@ -136,7 +141,8 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		boolean terse = config.smartOverlays();
 		// By default the card is two rows and opens while the mouse is over it. The docked bar opens the list itself, so there the list is always whole.
 		boolean compact = config.guideCompact() && !config.dockBar() && !config.guideCollapsed();
-		int reveal = compact ? reveal() : GuideList.EXPAND_STEPS;
+		disclosure.forStep(GuideList.code(v));
+		int reveal = compact && !disclosure.isOpen() ? 0 : GuideList.EXPAND_STEPS;
 		OsrsPathHudOverlay.State hud = plugin.getHud();
 		String distance = hud == null ? null : hud.getDistance();
 		Object key = Arrays.asList(v, config.guideCollapsed(), hovered, config.hudOpacity(), font, small, width, terse, compact, reveal, distance);
@@ -156,7 +162,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			}
 			plugin.uiShown("guide", GuideList.plain(shown));
 		}
-		OverlayCard.paint(g, last.width, last.height, accent(v), config.hudOpacity(), config.overlayTheme());
+		OverlayCard.paintGuide(g, last.width, last.height, accent(v), config.hudOpacity(), config.overlayTheme());
 		Dimension d = super.render(g);
 		last = d == null ? new Dimension() : d;
 		remember(g, d);
@@ -225,33 +231,6 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			return null;
 		}
 		return m;
-	}
-
-	/**
-	 * How much of the card is open now, 0 to {@link GuideList#EXPAND_STEPS}: it opens while the mouse is over the card (by the rectangle of the previous
-	 * frame) and for {@link GuideList#COLLAPSE_GRACE_NANOS} after, so it does not blink at the edge. While the game menu is open the state is kept.
-	 */
-	private int reveal()
-	{
-		long now = System.nanoTime();
-		net.runelite.api.Point m = freeMouse();
-		Rectangle b = getBounds();
-		boolean over = m != null && b != null && b.width > 0 && b.contains(m.getX(), m.getY());
-		if (client.isMenuOpen())
-		{
-			over = open;
-		}
-		if (over)
-		{
-			lastOver = now;
-		}
-		boolean want = GuideList.expandWanted(over, lastOver == Long.MIN_VALUE ? -1 : now - lastOver);
-		if (want && !open)
-		{
-			openedAt = now;
-		}
-		open = want;
-		return open ? GuideList.revealSteps(now - openedAt) : 0;
 	}
 
 	/** The line rectangles on the canvas: at drawing time the plate already stands in its place (getBounds). */
@@ -339,9 +318,19 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		c.clear();
 		panel.setPreferredSize(new Dimension(width, 0));
 		OverlayText.frame(panel, fm);
-		List<GuideList.Row> rows = new ArrayList<>(compact && !collapsed ? GuideList.expandedRows(v, reveal, fm, smallFm, width, terse)
-			: GuideList.rows(v, collapsed, fm, smallFm, width, terse));
-		if (compact && !collapsed)
+		List<GuideList.Row> rows = new ArrayList<>(collapsed ? GuideList.rows(v, true, fm, smallFm, width, terse)
+			: GuideList.expandedRows(v, compact ? reveal : GuideList.EXPAND_STEPS, fm, smallFm, width, terse));
+		if (!collapsed && (!compact || reveal > 0) && v.isAdviceTab() && GuideList.adviceCount(v.getPrep()) == 0)
+		{
+			rows = new ArrayList<>(GuideList.coreRows(v, fm, width));
+			rows.add(new GuideList.Row(GuideList.text("No advice for this step.", GuideList.MUTED, smallFm, OverlayText.inner(width), true), GuideList.Action.NONE, null));
+		}
+		// Critical warnings must also survive an Advice selection or the header-only collapse.
+		for (GuideList.Row alert : GuideList.alertRows(v, fm, width))
+		{
+			if (alert.getAction().getKind() != GuideList.Kind.DETOUR && !rows.contains(alert)) rows.add(alert);
+		}
+		if (!collapsed)
 		{
 			int at = Math.min(2, rows.size());
 			String place = v.getPlaces().stream().filter(StepGuide.PlaceLine::isActive).map(StepGuide.PlaceLine::getLabel).findFirst().orElse(v.getStage() == null ? v.getGoal() : null);
@@ -350,24 +339,13 @@ class OsrsPathGuideOverlay extends OverlayPanel
 				rows.add(at++, new GuideList.Row(GuideList.clip("", place, GuideList.MUTED, smallFm, OverlayText.inner(width), 2, true),
 					GuideList.Action.NONE, place));
 			}
-			if (distance != null && !distance.trim().isEmpty())
-			{
-				rows.add(at++, new GuideList.Row(GuideList.text(distance, GuideList.LINK, fm, OverlayText.inner(width), false), GuideList.Action.NONE, null));
-			}
 			int advice = GuideList.adviceCount(v.getPrep());
 			// Keep the same tab actions directly under the current action in both reveal states.
 			rows.removeIf(r -> r.getAction().getKind() == GuideList.Kind.TAB);
 			rows.add(at, GuideList.tabRow(v.isAdviceTab(), advice, fm, OverlayText.inner(width)));
+			if (compact && reveal <= 0) rows.removeIf(r -> r.getAction().getKind() == GuideList.Kind.DETOUR);
 		}
 		List<RowComponent> out = new ArrayList<>();
-		FontMetrics boldFm = new FontMetrics(font.deriveFont(Font.BOLD))
-		{
-			@Override
-			public int stringWidth(String text)
-			{
-				return (int) Math.ceil(getFont().getStringBounds(text, fm.getFontRenderContext()).getWidth());
-			}
-		};
 		FontMetrics actionFm = new FontMetrics(font.deriveFont(Font.BOLD, font.getSize2D() * 1.2f))
 		{
 			@Override
@@ -386,16 +364,27 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			{
 				String title = v.getTitle() == null ? "OSRS Path" : v.getTitle().replaceFirst("^\\[[^\\]]+\\]\\s*", "");
 				List<GuideList.Line> header = new ArrayList<>(GuideList.pair(title, new Color(231, 237, 245), "",
-					GuideList.MUTED, boldFm, OverlayText.inner(width) - 40, false));
+					GuideList.MUTED, fm, OverlayText.inner(width) - 40, false));
 				String meta = v.getStage() == null ? "Current step" : GuideList.stageTitle(v.getStage());
-				header.addAll(GuideList.text(meta + GuideList.percent(v), GuideList.MUTED, smallFm, OverlayText.inner(width) - 28, true));
+				header.addAll(GuideList.pair(meta, GuideList.MUTED, distance == null ? "" : distance, GuideList.MUTED, smallFm, OverlayText.inner(width) - 28, true));
 				r = new GuideList.Row(header, r.getAction(), r.getHint());
 			}
 			else if (current)
 			{
 				String action = r.getLines().stream().map(GuideList.Line::getLeft).collect(java.util.stream.Collectors.joining(" "))
 					.replaceFirst("▶ \\[\\d+/\\d+\\]\\s*", "");
-				r = new GuideList.Row(GuideList.text(action, OverlayCard.GOLD, actionFm, OverlayText.inner(width) - 2, false), r.getAction(), r.getHint());
+				StepGuide.StageView stage = v.getStage();
+				if (stage != null && stage.getSteps() != null && stage.getCursor() >= 0 && stage.getCursor() < stage.getSteps().size())
+					action = (stage.isPeeking() ? "Viewing · " : "") + GuideList.withoutDoneErrands(v, stage.getSteps().get(stage.getCursor()).shown());
+				int alternative = action.indexOf(" or ");
+				List<GuideList.Line> actionLines = new ArrayList<>();
+				if (alternative > 0)
+				{
+					actionLines.addAll(GuideList.text(action.substring(0, alternative), MODERN_TEXT, actionFm, OverlayText.inner(width) - 2, false));
+					actionLines.addAll(GuideList.text(action.substring(alternative + 1), GuideList.MUTED, smallFm, OverlayText.inner(width) - 2, true));
+				}
+				else actionLines.addAll(GuideList.text(action, MODERN_TEXT, actionFm, OverlayText.inner(width) - 2, false));
+				r = new GuideList.Row(actionLines, r.getAction(), r.getHint());
 			}
 			RowComponent rc = new RowComponent(r, i == hovered && r.getAction().isClickable(), false, font, small, heading, current);
 			rc.folded = collapsed || (compact && reveal <= 0);
@@ -405,8 +394,8 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			{
 				// Under the stage heading is the quest progress strip.
 				StepGuide.StageView sv = v.getStage();
-				c.add(new OverlayCard.Bar(sv.isFinished() ? 1 : (double) (sv.getIndex() - 1) / sv.getTotal(),
-					sv.isFinished() ? OverlayCard.GREEN : OverlayCard.BLUE));
+				c.add(new OverlayCard.Bar(sv.isFinished() ? 1 : (double) sv.getIndex() / sv.getTotal(),
+					sv.isFinished() ? OverlayCard.GREEN : MODERN_LINK, sv.getTotal()));
 			}
 		}
 		// The hint of the hovered line is not a row of the plate: it is drawn beside it (OverlayTooltip), so the plate never changes size under the mouse.
@@ -463,11 +452,11 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			{
 				Font f = l.isSmall() ? small : font;
 				if (current && !l.isSmall()) f = f.deriveFont(Font.BOLD, font.getSize2D() * 1.2f);
-				else if (heading && !l.isSmall()) f = f.deriveFont(Font.BOLD);
-				LineComponent.LineComponentBuilder b = LineComponent.builder().left(l.getLeft()).leftColor(l.getLeftColor()).leftFont(f).rightFont(f);
+				// Quest titles stay secondary to the current action.
+				LineComponent.LineComponentBuilder b = LineComponent.builder().left(l.getLeft()).leftColor(row.getAction().getKind() == GuideList.Kind.TAB ? MODERN_LINK : l.getLeftColor()).leftFont(f).rightFont(f);
 				if (l.getRight() != null)
 				{
-					b.right(l.getRight()).rightColor(l.getRightColor());
+					b.right(l.getRight()).rightColor(row.getAction().getKind() == GuideList.Kind.TAB ? MODERN_LINK : l.getRightColor());
 				}
 				lines.add(b.build());
 				fonts.add(f);
@@ -547,17 +536,17 @@ class OsrsPathGuideOverlay extends OverlayPanel
 				l.setPreferredSize(new Dimension(width - inset, 0));
 				at += l.render(g).height;
 			}
-			if (heading || tab)
+			if (tab)
 			{
 				g.setColor(new Color(108, 125, 147, 140));
 				g.drawLine(x, at + bottom - 2, x + width, at + bottom - 2);
 			}
-			if (tab && !row.getLines().isEmpty())
+			if (tab && !folded && !row.getLines().isEmpty())
 			{
 				GuideList.Line labels = row.getLines().get(0);
 				boolean rightActive = GuideList.TITLE.equals(labels.getRightColor());
 				int underline = g.getFontMetrics(fonts.get(0)).stringWidth(rightActive ? labels.getRight() : labels.getLeft()) + 16;
-				g.setColor(GuideList.LINK);
+				g.setColor(MODERN_LINK);
 				g.fillRect(rightActive ? x + width - underline : x, at + bottom - 3, underline, 3);
 			}
 			bounds.setBounds(x, y, width, at - y + bottom);

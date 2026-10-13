@@ -216,7 +216,7 @@ public interface OsrsPathBridgeConfig extends Config
 	@ConfigItem(
 		keyName = "guideCompact",
 		name = "Compact list",
-		description = "The 'What you need' list is two rows (the step code and stage with the progress, and the step you are on) and opens in full while the mouse is over it: the recipe, the next steps, the buttons, the bag, the items and the places. Off shows the whole list all the time",
+		description = "Keep the quest and current action visible. Click Steps or Advice to open details; click the selected tab again to close them. Warnings remain visible. Off shows the whole list all the time",
 		section = companion,
 		position = 14
 	)

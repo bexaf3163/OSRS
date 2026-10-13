@@ -4,7 +4,23 @@ Read this before modifying desktop presentation, RuneLite overlays, or packaging
 
 ## Accepted scope and baseline
 
-The user initially selected **Clear Path**, then on 2026-10-13 explicitly selected the **Modern dark** preview to reduce clutter. The current released implementation is **2.48.6**, following the 2.48.5 Modern Path evolution below. Preserve existing functionality and closely follow the accepted reference `docs/design-preview/modern-dark.png`. Do not restore the dense 2.48.3/2.48.4 layout over it. The user explicitly declined adding the illustrative Loadouts, Comparison, and Price tracking features. Do not create placeholder pages, dead controls, or new engines to reproduce those incidental mock labels.
+The user initially selected **Clear Path**, then on 2026-10-13 explicitly selected the **Modern dark** preview to reduce clutter. The current released implementation is **2.48.7**, following the 2.48.5 Modern Path evolution below. Preserve existing functionality and closely follow the accepted reference `docs/design-preview/modern-dark.png`. Do not restore the dense 2.48.3/2.48.4 layout over it. The user explicitly declined adding the illustrative Loadouts, Comparison, and Price tracking features. Do not create placeholder pages, dead controls, or new engines to reproduce those incidental mock labels.
+
+## Modern expandable RuneLite guide — 2.48.7
+
+The user approved combining the compact/expanded modern addon preview into one clickable card. `OsrsPathGuideOverlay` now uses the existing `GuideList` rows and hit regions with a presentation-only `GuideDisclosure`: Steps/Advice open details, selecting the same tab closes them, switching tabs stays open, and changing route-step identity resets the disclosure. Hover no longer changes the card's height. Existing full-list/docked behavior, global header collapse, fonts, font scale and saved placement remain supported.
+
+The default guide width is 300px; an explicitly resized width still wins. Glass guide rendering uses `OverlayCard.paintGuide`, a flat charcoal surface with a minimum alpha of 235/255 and restrained border, without changing other cards' Glass rendering. The current canonical instruction is light text; alternative clauses are muted. Stage and distance share header metadata; quest position uses a segmented bar. This bar represents the stage position, not inventory-readiness percentage or inferred completion of the current stage. No canonical instructions, requirements or progression values are invented for the mock.
+
+Warnings and recovery alerts survive closed details, the Advice view and the header-only collapse. Noncritical detours are excluded from the closed card and remain available in the existing expanded controls/Advice. Manual next/back/resume, temporary place/transport navigation, bag/item states, and tooltip details reuse the original systems. Empty Advice has an explicit message. `GuideMouse` continues consuming card press/release/click events and respecting Alt-drag, menu, bank/widget and world-map precedence.
+
+While the Glass guide is actually on screen, the directional marker uses 65% of its configured diameter and omits duplicate same-level distance; floor/underground and Nearby feedback are retained. With the guide hidden, the standalone marker retains its configured diameter and distance. The normal navigation accent is periwinkle; approaching/arrival/layer warning colors remain semantic. No movement, clicking into the world, purchases, item use or quest marking is added.
+
+The native rendering previews `docs/design-preview/runelite-modern-{compact,expanded}-2.48.7.png` are exported by `ModernGuideTest` from the actual Java2D implementation with fictional data. They are not account screenshots. `GuideDisclosureTest` checks click transitions/reset; `ModernGuideTest` checks canonical requirement/warning retention and one distance/tab row across disclosure states. The broader native layout suite checks the existing quest/item/place texts with supported fonts, large text and narrow widths.
+
+Local final verification for 2.48.7: production build and data consistency passed (zero errors/warnings), all 895 TypeScript tests passed, and Gradle testClasses/test/jar passed with **448 tests across 56 suites**, zero failures/errors/skips. Native rendered compact/expanded previews were visually inspected. The full layout suite passed supported fonts, normal/large text, standard/narrow widths and existing hover/collapse scenarios.
+
+Desktop presentation, the 2.48.5 quest cursor/status identity, protocol 6, route data, readiness and existing profile/settings files are unchanged. Version strings in package/lock/plugin are synchronized to 2.48.7. The 2.48.6 live/release evidence below is historical; record the 2.48.7 release and native click inspection separately once complete.
 
 ## Modern Path evolution — 2.48.5
 

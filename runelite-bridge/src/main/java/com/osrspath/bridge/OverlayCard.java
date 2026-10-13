@@ -134,6 +134,23 @@ final class OverlayCard
 		}
 	}
 
+	/** The modern guide uses a quiet surface; other overlay styles retain their existing rendering. */
+	static void paintGuide(Graphics2D g, int w, int h, Color accent, int opacity, OsrsPathBridgeConfig.OverlayTheme theme)
+	{
+		if (theme != OsrsPathBridgeConfig.OverlayTheme.GLASS) { paint(g, w, h, accent, opacity, theme); return; }
+		if (w <= 2 || h <= 2) return;
+		Graphics2D c = (Graphics2D) g.create();
+		try {
+			c.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			Shape card = new RoundRectangle2D.Float(.5f, .5f, w - 1, h - 1, 8, 8);
+			c.setColor(new Color(18, 24, 33, Math.max(alpha(opacity), 235)));
+			c.fill(card);
+			c.setColor(new Color(60, 69, 85, 230));
+			c.setStroke(new BasicStroke(1f));
+			c.draw(card);
+		} finally { c.dispose(); }
+	}
+
 	/** A thin progress bar: "stage 3 of 9", "collected 4 of 6". */
 	static final class Bar implements LayoutableRenderableEntity
 	{
@@ -141,6 +158,7 @@ final class OverlayCard
 		private static final int THICK = 4;
 
 		private final double fraction;
+		private final int segments;
 		private final Color color;
 		@Setter
 		private Point preferredLocation = new Point();
@@ -150,6 +168,12 @@ final class OverlayCard
 
 		Bar(double fraction, Color color)
 		{
+			this(fraction, color, 0);
+		}
+
+		Bar(double fraction, Color color, int segments)
+		{
+			this.segments = Math.max(0, Math.min(segments, 32));
 			this.fraction = Math.max(0, Math.min(1, fraction));
 			this.color = color;
 		}
@@ -157,7 +181,14 @@ final class OverlayCard
 		@Override
 		public Dimension render(Graphics2D g)
 		{
-			paint(g, preferredLocation.x, preferredLocation.y, preferredSize.width, fraction, color);
+			if (segments > 0) {
+				int gap = 3;
+				for (int i = 0; i < segments; i++) {
+					int left = i * preferredSize.width / segments;
+					int right = (i + 1) * preferredSize.width / segments;
+					paint(g, preferredLocation.x + left, preferredLocation.y, Math.max(1, right - left - gap), i < Math.round(fraction * segments) ? 1 : 0, color);
+				}
+			} else paint(g, preferredLocation.x, preferredLocation.y, preferredSize.width, fraction, color);
 			bounds.setBounds(preferredLocation.x, preferredLocation.y, preferredSize.width, HEIGHT);
 			return new Dimension(preferredSize.width, HEIGHT);
 		}

@@ -1774,6 +1774,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				break;
 			case TAB_STEPS:
 			case TAB_ADVICE:
+				guideOverlay.selectDetails(a.getKind() == GuideList.Kind.TAB_ADVICE);
 				adviceTab = a.getKind() == GuideList.Kind.TAB_ADVICE;
 				refreshGuide();
 				break;
