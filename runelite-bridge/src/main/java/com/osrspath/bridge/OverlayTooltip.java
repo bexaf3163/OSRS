@@ -97,11 +97,11 @@ final class OverlayTooltip
 			c.draw(box);
 			c.setFont(font);
 			c.setColor(TEXT);
-			FontMetrics fm = c.getFontMetrics();
+			FontMetrics fm = GuideFont.metrics(c, font);
 			int y = at.y + PAD + fm.getAscent();
 			for (String l : lines)
 			{
-				c.drawString(l, at.x + PAD, y);
+				GuideFont.draw(c, l, font, at.x + PAD, y);
 				y += fm.getHeight();
 			}
 		}

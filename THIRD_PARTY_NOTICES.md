@@ -37,6 +37,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ## Inter font
 
+The RuneLite plugin also bundles this same font and its OFL license for the modern Glass guide. It does not install a system font.
+
 `public/fonts/Inter-variable.ttf` is distributed under the SIL Open Font License 1.1, included in `public/fonts/OFL.txt`. Copyright 2020 The Inter Project Authors. Source: https://github.com/google/fonts/tree/main/ofl/inter .
 
 ## RuneLite skill icons

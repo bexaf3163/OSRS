@@ -30,10 +30,11 @@ public class ModernGuideTest
 			PanelComponent panel = new PanelComponent();
 			BufferedImage image = new BufferedImage(500, 1200, BufferedImage.TYPE_INT_ARGB);
 			Graphics2D g = image.createGraphics();
-			Font font = new Font("Dialog", Font.PLAIN, 14);
-			Font small = font.deriveFont(12f);
+			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			Font font = GuideFont.font(1f);
+			Font small = GuideFont.font(OsrsPathGuideOverlay.SMALL);
 			List<OsrsPathGuideOverlay.RowComponent> rows = OsrsPathGuideOverlay.build(panel, view(advice), collapsed, -1,
-				g.getFontMetrics(font), g.getFontMetrics(small), font, small, 300, 85, false, true, reveal, "167 tiles");
+				GuideFont.metrics(g, font), GuideFont.metrics(g, small), font, small, 300, 85, false, true, reveal, "167 tiles");
 			String text = GuideList.plain(rows.stream().map(OsrsPathGuideOverlay.RowComponent::getRow).collect(java.util.stream.Collectors.toList()));
 			assertTrue(text, text.contains("Keep the required supplies"));
 			if (!collapsed) {
@@ -55,11 +56,12 @@ public class ModernGuideTest
 			PanelComponent panel = new PanelComponent();
 			panel.setBackgroundColor(new Color(0, 0, 0, 0));
 			Graphics2D scratch = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics();
-			Font font = new Font("Dialog", Font.PLAIN, 14);
-			Font small = font.deriveFont(12f);
+			scratch.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			Font font = GuideFont.font(1f);
+			Font small = GuideFont.font(OsrsPathGuideOverlay.SMALL);
 			StepGuide.View sample = view(false);
 			sample = sample.withStage(sample.getStage().with(null, false, false));
-			OsrsPathGuideOverlay.build(panel, sample, false, -1, scratch.getFontMetrics(font), scratch.getFontMetrics(small), font, small, 300, 94, false, true, reveal, "167 tiles");
+			OsrsPathGuideOverlay.build(panel, sample, false, -1, GuideFont.metrics(scratch, font), GuideFont.metrics(scratch, small), font, small, 300, 94, false, true, reveal, "167 tiles");
 			panel.render(scratch);
 			Dimension size = panel.render(scratch);
 			scratch.dispose();

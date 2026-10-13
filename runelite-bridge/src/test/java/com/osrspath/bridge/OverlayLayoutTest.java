@@ -61,6 +61,13 @@ public class OverlayLayoutTest
 			FontManager.getRunescapeSmallFont(), FontManager.getDefaultFont());
 	}
 
+	private static List<Font> guideFonts()
+	{
+		List<Font> all = new ArrayList<>(fonts());
+		all.add(GuideFont.font(1f));
+		return all;
+	}
+
 	private static JsonElement read(String name) throws IOException
 	{
 		return GSON.fromJson(new String(Files.readAllBytes(new File(DATA, name).toPath()), "UTF-8"), JsonElement.class);
@@ -325,8 +332,11 @@ public class OverlayLayoutTest
 	{
 		PanelComponent panel = new PanelComponent();
 		Graphics2D scratch = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics();
+		scratch.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		scratch.setFont(font);
-		builder.build(panel, scratch.getFontMetrics(font), width);
+		scratch.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		scratch.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+		builder.build(panel, GuideFont.metrics(scratch, font), width);
 		panel.setPreferredLocation(new Point(MARGIN, MARGIN));
 		panel.render(scratch);
 		Dimension size = panel.render(scratch);
@@ -586,16 +596,17 @@ public class OverlayLayoutTest
 		StepGuide.View view = new StepGuide.View("[S3-03] Demon Slayer", "Varrock Square · Ground floor",
 			java.util.Collections.emptyList(), java.util.Collections.emptyList(), null, null, null, null);
 		Graphics2D scratch = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics();
+		scratch.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		try
 		{
-			for (Font base : fonts())
+			for (Font base : guideFonts())
 			{
 				for (boolean large : new boolean[]{false, true})
 				{
 					float scale = large ? OsrsPathHudOverlay.LARGE : 1f;
 					Font font = OverlayText.font(base, scale);
 					Font small = OverlayText.font(base, scale * OsrsPathGuideOverlay.SMALL);
-					FontMetrics smallFm = scratch.getFontMetrics(small);
+					FontMetrics smallFm = GuideFont.metrics(scratch, small);
 					for (int width : new int[]{170, Math.round(OsrsPathGuideOverlay.WIDTH * scale)})
 					{
 						for (String distance : distances())
@@ -654,14 +665,15 @@ public class OverlayLayoutTest
 		List<String> bad = new ArrayList<>();
 		Set<String> saved = new LinkedHashSet<>();
 		Graphics2D scratch = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics();
-		for (Font base : fonts())
+		scratch.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		for (Font base : guideFonts())
 		{
 			for (boolean large : new boolean[]{false, true})
 			{
 				float scale = large ? OsrsPathHudOverlay.LARGE : 1f;
 				Font font = OverlayText.font(base, scale);
 				Font small = OverlayText.font(base, scale * OsrsPathGuideOverlay.SMALL);
-				FontMetrics smallFm = scratch.getFontMetrics(small);
+				FontMetrics smallFm = GuideFont.metrics(scratch, small);
 				int standard = Math.round(OsrsPathGuideOverlay.WIDTH * scale);
 				for (int width : new int[]{standard, 170})
 				{

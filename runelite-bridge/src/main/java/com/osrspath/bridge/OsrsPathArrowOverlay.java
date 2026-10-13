@@ -77,7 +77,9 @@ class OsrsPathArrowOverlay extends Overlay
 		boolean modernGuide = config.overlayTheme() == OsrsPathBridgeConfig.OverlayTheme.GLASS && plugin.guideOnScreen();
 		// The guide already carries the distance. Retain layer/arrival feedback on the marker itself.
 		if (modernGuide && layer == 0 && state != ArrowGeometry.State.VERY_CLOSE) text = null;
-		Font font = OverlayText.font(g.getFont(), config.hudLarge() ? OsrsPathHudOverlay.LARGE : 1f);
+		Font font = config.overlayTheme() == OsrsPathBridgeConfig.OverlayTheme.GLASS
+			? GuideFont.font(config.hudLarge() ? OsrsPathHudOverlay.LARGE : 1f)
+			: OverlayText.font(g.getFont(), config.hudLarge() ? OsrsPathHudOverlay.LARGE : 1f);
 		return draw(g, font, state, angle, layer, text, modernGuide ? Math.round(config.arrowSize().diameter * .65f) : config.arrowSize().diameter);
 	}
 

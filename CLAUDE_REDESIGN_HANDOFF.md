@@ -4,7 +4,19 @@ Read this before modifying desktop presentation, RuneLite overlays, or packaging
 
 ## Accepted scope and baseline
 
-The user initially selected **Clear Path**, then on 2026-10-13 explicitly selected the **Modern dark** preview to reduce clutter. The current released implementation is **2.48.7**, following the 2.48.5 Modern Path evolution below. Preserve existing functionality and closely follow the accepted reference `docs/design-preview/modern-dark.png`. Do not restore the dense 2.48.3/2.48.4 layout over it. The user explicitly declined adding the illustrative Loadouts, Comparison, and Price tracking features. Do not create placeholder pages, dead controls, or new engines to reproduce those incidental mock labels.
+The user initially selected **Clear Path**, then on 2026-10-13 explicitly selected the **Modern dark** preview to reduce clutter. The current released implementation is **2.48.8**, following the 2.48.5 Modern Path evolution below. Preserve existing functionality and closely follow the accepted reference `docs/design-preview/modern-dark.png`. Do not restore the dense 2.48.3/2.48.4 layout over it. The user explicitly declined adding the illustrative Loadouts, Comparison, and Price tracking features. Do not create placeholder pages, dead controls, or new engines to reproduce those incidental mock labels.
+
+## Modern guide typography — 2.48.8
+
+The user rejected the inconsistent game-guide fonts after the 2.48.7 native inspection. Glass guide text now uses the desktop's bundled **Inter**, loaded once by `GuideFont`. `runelite-bridge/build.gradle` copies `public/fonts/Inter-variable.ttf` and its OFL license into the plugin's `com/osrspath/bridge/fonts` resources. No OS font installation, external font fetch or settings/profile migration occurs. Classic mode still uses the selected RuneLite font; the guide's large-text scale remains available.
+
+The modern guide has a consistent 14px regular / 13px metadata / 16px bold action hierarchy at normal scale. Action sizes are rounded through one helper shared by layout and painting. `RowComponent` paints the ready-made canonical rows directly, avoiding RuneLite `LineComponent`'s game shadow. A graphics copy scopes antialiasing/fractional-metrics settings to the guide; it does not change the game's renderer. Guide tooltips and the Glass arrow label use the same typeface. Other RuneLite/game interfaces are not reskinned.
+
+Inter covers the warning/check/direction symbols but lacks some advice glyphs (for example the lightning bolt). `GuideFont.metrics` and `GuideFont.draw` therefore use the local Dialog fallback only for the unsupported code point, never for the surrounding sentence. Their advances agree; metrics are cached by font and render context. Missing font resources degrade safely, while tests assert that the packaged resource actually loads as Inter so an unnoticed packaging fallback cannot pass.
+
+Click-to-expand behavior, hit regions, the saved resized width/position, canonical instructions, recovery/critical alerts, readiness, navigation, protocol and the confirmed desktop quest cursor are unchanged. `GuideFontTest` guards font packaging, integer sizing/scaling and fallback advances. Native layout tests additionally draw Inter at standard/narrow widths and normal/large sizes. `ModernGuideTest`'s exports now use the actual bundled Inter.
+
+Local verification: production build, data consistency (zero errors/warnings), and all 895 TypeScript tests passed. The first full Java run exercised 450 tests; its only failure was the font-boundary suite using a different text-antialiasing context for measuring versus painting. The harness now uses the runtime's antialiasing and glyph-aware metrics. The final relevant 12 tests (all eight native layout tests plus the font and modern-guide tests) passed; testClasses/jar passed. The other Java tests were unaffected and passed in the full run. Native compact/expanded Inter renders were visually inspected. Keep measurement and painting render contexts aligned; do not hide clipping by changing assertions or clipping away text.
 
 ## Modern expandable RuneLite guide — 2.48.7
 

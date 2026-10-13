@@ -19,7 +19,6 @@ import net.runelite.client.ui.overlay.OverlayLayer;
 import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
 import net.runelite.client.ui.overlay.components.LayoutableRenderableEntity;
-import net.runelite.client.ui.overlay.components.LineComponent;
 import net.runelite.client.ui.overlay.components.PanelComponent;
 
 /**
@@ -34,7 +33,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	static final Color MODERN_LINK = new Color(177, 180, 255);
 	static final Color MODERN_TEXT = new Color(235, 238, 245);
 	/** "Where to get it" and the hint are smaller than the main text. */
-	static final float SMALL = 0.85f;
+	static final float SMALL = 0.9f;
 	static final Color HOVER = new Color(255, 255, 255, 40);
 	/** A click this close to the left of the right label still counts as on it. */
 	private static final int TAB_SLACK = 20;
@@ -117,6 +116,18 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	@Override
 	public Dimension render(Graphics2D g)
 	{
+		Graphics2D own = (Graphics2D) g.create();
+		try
+		{
+			own.setRenderingHint(java.awt.RenderingHints.KEY_TEXT_ANTIALIASING, java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			own.setRenderingHint(java.awt.RenderingHints.KEY_FRACTIONALMETRICS, java.awt.RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+			return renderGuide(own);
+		}
+		finally { own.dispose(); }
+	}
+
+	private Dimension renderGuide(Graphics2D g)
+	{
 		StepGuide.View v = plugin.getGuideView();
 		// Smart reveal: while travelling and at the exchange the step list would block the view; it is needed at the bank and near the step.
 		if (!GuideList.shown(config.showGuide(), false, v, config.smartOverlays(), plugin.overlayContext()))
@@ -133,8 +144,9 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			return null;
 		}
 		float scale = config.hudLarge() ? OsrsPathHudOverlay.LARGE : 1f;
-		Font font = OverlayText.font(g.getFont(), scale);
-		Font small = OverlayText.font(g.getFont(), scale * SMALL);
+		boolean modern = config.overlayTheme() == OsrsPathBridgeConfig.OverlayTheme.GLASS;
+		Font font = modern ? GuideFont.font(scale) : OverlayText.font(g.getFont(), scale);
+		Font small = modern ? GuideFont.font(scale * SMALL) : OverlayText.font(g.getFont(), scale * SMALL);
 		g.setFont(font);
 		int width = OsrsPathHudOverlay.panelWidth(this, Math.round(WIDTH * scale));
 		int hovered = hovered();
@@ -148,7 +160,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		Object key = Arrays.asList(v, config.guideCollapsed(), hovered, config.hudOpacity(), font, small, width, terse, compact, reveal, distance);
 		if (!key.equals(builtFor))
 		{
-			components = build(panelComponent, v, config.guideCollapsed(), hovered, g.getFontMetrics(font), g.getFontMetrics(small),
+			components = build(panelComponent, v, config.guideCollapsed(), hovered, GuideFont.metrics(g, font), GuideFont.metrics(g, small),
 				font, small, width, config.hudOpacity(), terse, compact, reveal, distance);
 			builtFor = key;
 			// What exactly the player sees goes to the debug log (only when the plate was rebuilt, not every frame).
@@ -187,7 +199,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		{
 			return;
 		}
-		FontMetrics fm = g.getFontMetrics(small);
+		FontMetrics fm = GuideFont.metrics(g, small);
 		List<String> lines = OverlayTooltip.wrap(hint, fm);
 		if (lines.isEmpty())
 		{
@@ -346,7 +358,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			if (compact && reveal <= 0) rows.removeIf(r -> r.getAction().getKind() == GuideList.Kind.DETOUR);
 		}
 		List<RowComponent> out = new ArrayList<>();
-		FontMetrics actionFm = new FontMetrics(font.deriveFont(Font.BOLD, font.getSize2D() * 1.2f))
+		FontMetrics actionFm = new FontMetrics(GuideFont.action(font))
 		{
 			@Override
 			public int stringWidth(String text)
@@ -410,7 +422,6 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		private final boolean hovered;
 		@Getter
 		private final boolean hint;
-		private final List<LineComponent> lines = new ArrayList<>();
 		private final List<Font> fonts = new ArrayList<>();
 		private final boolean heading;
 		private final boolean current;
@@ -430,7 +441,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 				String right = row.getLines().get(i).getRight();
 				if (right != null)
 				{
-					return g.getFontMetrics(fonts.get(i)).stringWidth(right);
+					return GuideFont.metrics(g, fonts.get(i)).stringWidth(right);
 				}
 			}
 			return 0;
@@ -451,14 +462,8 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			for (GuideList.Line l : row.getLines())
 			{
 				Font f = l.isSmall() ? small : font;
-				if (current && !l.isSmall()) f = f.deriveFont(Font.BOLD, font.getSize2D() * 1.2f);
+				if (current && !l.isSmall()) f = GuideFont.action(f);
 				// Quest titles stay secondary to the current action.
-				LineComponent.LineComponentBuilder b = LineComponent.builder().left(l.getLeft()).leftColor(row.getAction().getKind() == GuideList.Kind.TAB ? MODERN_LINK : l.getLeftColor()).leftFont(f).rightFont(f);
-				if (l.getRight() != null)
-				{
-					b.right(l.getRight()).rightColor(row.getAction().getKind() == GuideList.Kind.TAB ? MODERN_LINK : l.getRightColor());
-				}
-				lines.add(b.build());
 				fonts.add(f);
 			}
 		}
@@ -477,7 +482,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 				int h = top + bottom;
 				for (Font f : fonts)
 				{
-					h += g.getFontMetrics(f).getHeight();
+					h += GuideFont.metrics(g, f).getHeight();
 				}
 				// The highlight stays within the panel frame (4 points on each side): nothing sticks out beyond the plate.
 				g.setColor(HOVER);
@@ -487,7 +492,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			if (warning)
 			{
 				int height = top + bottom;
-				for (Font f : fonts) height += g.getFontMetrics(f).getHeight();
+				for (Font f : fonts) height += GuideFont.metrics(g, f).getHeight();
 				g.setColor(new Color(110, 68, 20, 170));
 				g.fillRoundRect(x - 3, y, width + 6, height, 6, 6);
 				g.setColor(OverlayCard.AMBER);
@@ -529,12 +534,20 @@ class OsrsPathGuideOverlay extends OverlayPanel
 				g.fillRoundRect(adviceX, at + 3, 10, 8, 5, 5);
 				g.fillPolygon(new int[] {adviceX + 2, adviceX + 2, adviceX + 6}, new int[] {at + 9, at + 15, at + 9}, 3);
 			}
-			for (LineComponent l : lines)
+			for (int i = 0; i < row.getLines().size(); i++)
 			{
+				GuideList.Line l = row.getLines().get(i);
+				Font f = fonts.get(i);
+				FontMetrics fm = GuideFont.metrics(g, f);
 				int inset = heading ? 26 : tab ? 16 : 0;
-				l.setPreferredLocation(new Point(x + inset, at));
-				l.setPreferredSize(new Dimension(width - inset, 0));
-				at += l.render(g).height;
+				g.setColor(tab ? MODERN_LINK : l.getLeftColor());
+				GuideFont.draw(g, l.getLeft(), f, x + inset, at + fm.getAscent());
+				if (l.getRight() != null)
+				{
+					g.setColor(tab ? MODERN_LINK : l.getRightColor());
+					GuideFont.draw(g, l.getRight(), f, x + width - fm.stringWidth(l.getRight()), at + fm.getAscent());
+				}
+				at += fm.getHeight();
 			}
 			if (tab)
 			{
