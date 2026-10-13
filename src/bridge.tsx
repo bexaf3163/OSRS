@@ -14,7 +14,7 @@ import { desktop, type RuneliteLaunch } from './lib/desktop';
 import {
   checkStatus, clearActiveStep, clearNavTarget, connectEvents, getTelemetry, parseGear, parseNavTarget, parseMove, parsePacing, parsePlayer, parseQuests, parseStats, parseXp, planAutoComplete, setNavTarget,
   postPrepPlan, supportsSnapshot, syncActiveStep, syncBankTags, syncShoppingPlan, toInGameTarget,
-  pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type ShoppingPlanPayload,
+  pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type ShoppingPlanPayload, type QuestInstruction,
 } from './services/runeliteBridge';
 import { parseOwned, preflightItems, type OwnedState } from './lib/checklist';
 import { tripWindow } from './lib/oneTrip';
@@ -85,6 +85,7 @@ interface BridgeValue {
   pacing: PacingState | null;
   /** The temporary target in the game (a place or a shop); null — the arrow leads to the step. */
   navTarget: NavTargetPayload | null;
+  questInstruction: QuestInstruction | null;
   /** Set a temporary target. Without a link or on a refusal by the plugin — an answer with the reason. */
   navigate: (target: NavTargetPayload) => Promise<NavResult | { ok: false; reason: 'off' }>;
   clearNav: () => Promise<void>;
@@ -263,6 +264,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const profiles = useProfiles();
   const gate = useMemo(() => profileGate(profiles, player), [profiles, player]);
   const [navTarget, setNavTargetState] = useState<NavTargetPayload | null>(null);
+  const [questInstruction, setQuestInstruction] = useState<QuestInstruction | null>(null);
   const [plugin, setPlugin] = useState<BridgeValue['plugin']>(null);
   const features = useFeatures();
   /** Which stage items are already in the plugin — so as not to send the same on every render. */
@@ -399,6 +401,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const forget = () => {
+      setQuestInstruction(null);
       setInGame(false);
       setStats(null);
       setOwned(null);
@@ -426,14 +429,17 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     }
     setState('connecting');
     let alive = true;
+    let statusPoll = 0;
     const refresh = (resync = false) => {
       const seq = navSeq.current;
-      void checkStatus().then((s) => onStatus(s, resync, seq));
+      const poll = ++statusPoll;
+      void checkStatus().then((s) => { if (poll === statusPoll) onStatus(s, resync, seq); });
     };
     const onStatus = (s: Awaited<ReturnType<typeof checkStatus>>, resync: boolean, seq: number) => {
       if (!alive) return;
       setState(s.online ? 'online' : 'offline');
       setInGame(s.inGame);
+      setQuestInstruction(s.questInstruction);
       setShortestPath(s.shortestPath);
       setPlugin(s.online ? { protocol: s.protocol, version: s.pluginVersion, compat: pluginCompat(s.protocol) } : null);
       pluginProtocol.current = s.online ? s.protocol : null;
@@ -482,6 +488,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       else if (e.type === 'STATUS') {
         setPlayer(parsePlayer((e as { player?: unknown }).player));
         setInGame(Boolean((e as { inGame?: unknown }).inGame));
+        if (!(e as { inGame?: unknown }).inGame) setQuestInstruction(null);
         // Entering and leaving the game is a reason to ask about Shortest Path again.
         refresh();
       } else if (e.type === 'STATS') setStats(parseStats((e as { stats?: unknown }).stats));
@@ -698,11 +705,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     () => ({
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, navigate, clearNav, userClearedAt, plugin,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, navigate, clearNav, userClearedAt, plugin,
       xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, navigate, clearNav, userClearedAt, plugin,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, navigate, clearNav, userClearedAt, plugin,
       xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;

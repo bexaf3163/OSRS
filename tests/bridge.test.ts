@@ -4,13 +4,27 @@ import { allSteps, stepsFor } from '../src/data';
 import { emptyProgress, withStep } from '../src/lib/progress';
 import { ownedText, triggerText } from '../src/lib/triggers';
 import {
-  APP_PROTOCOL, backoffMs, BRIDGE_PATHS, checkStatus, clearActiveStep, connectEvents, missingWithPlugin, parseEvent, parseNavTarget, planAutoComplete,
+  APP_PROTOCOL, backoffMs, BRIDGE_PATHS, checkStatus, clearActiveStep, connectEvents, missingWithPlugin, parseEvent, parseNavTarget, parseQuestInstruction, planAutoComplete,
   pluginCompat, syncActiveStep, toInGameTarget, type BridgeEvent, type BridgeTransport,
 } from '../src/services/runeliteBridge';
 import { mapPlaces, stepPlaces } from '../src/lib/stepPlaces';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;
 const f2p = stepsFor('f2p');
+
+describe('quest instruction status', () => {
+  it('accepts a validated identity only while in game and for the active step', async () => {
+    const instruction = { stepId: 'S3-04', stageAt: 60, lineIndex: 0, peeking: false };
+    const status = async (extra: Record<string, unknown>) => checkStatus({ request: async () => ({ ok: true, status: 200, data: { status: 'ok', inGame: true, activeStepId: 'S3-04', questInstruction: instruction, ...extra } }), openEvents: () => () => {} });
+    expect((await status({})).questInstruction).toEqual(instruction);
+    expect((await status({ inGame: false })).questInstruction).toBeNull();
+    expect((await status({ activeStepId: 'S2-10' })).questInstruction).toBeNull();
+    expect((await status({ questInstruction: undefined })).questInstruction).toBeNull();
+    expect(parseQuestInstruction({ ...instruction, lineIndex: -1 })).toBeNull();
+    expect(parseQuestInstruction({ ...instruction, peeking: 'false' })).toBeNull();
+    expect(parseQuestInstruction({ ...instruction, stageAt: 1.2 })).toBeNull();
+  });
+});
 
 /** A transport stub: remembers the requests, the event stream opens and breaks on command. */
 function fakeTransport(online = true) {

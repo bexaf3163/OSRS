@@ -114,6 +114,7 @@ try {
   await page.evaluate(() => { location.hash = '#/'; });
   await page.waitForTimeout(1000);
   // The wide layout has a "Done" button on the open step; the narrow list has a checkbox on every step.
+  await page.getByRole('tab', { name: 'Steps', exact:true }).click();
   await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
   await page.waitForTimeout(2500);
   const file = join(home, 'OSRS-Put-data', 'progress.json');

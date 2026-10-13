@@ -18,6 +18,8 @@ import { summarizeBridge, type BridgeTelemetry } from '../lib/telemetryReport';
 export const BRIDGE_ORIGIN = 'http://127.0.0.1:38282';
 
 export interface BridgeStatus {
+  /** Canonical quest cursor, separate from navigation; absent in older protocol-6 plugins. */
+  questInstruction: QuestInstruction | null;
   online: boolean;
   inGame: boolean;
   /** Skill levels from the game; null — not in the game, the plugin is old or sending is turned off in its settings. */
@@ -473,14 +475,26 @@ export function defaultTransport(): BridgeTransport {
 
 // ---------- Requests ----------
 
+export interface QuestInstruction { stepId: string; stageAt: number; lineIndex: number; peeking: boolean }
+
+export function parseQuestInstruction(raw: unknown): QuestInstruction | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const r = raw as Record<string, unknown>;
+  if (typeof r.stepId !== 'string' || !r.stepId || r.stepId.length > 100 || !Number.isInteger(r.stageAt) || !Number.isInteger(r.lineIndex)
+    || (r.stageAt as number) < 0 || (r.lineIndex as number) < 0 || typeof r.peeking !== 'boolean') return null;
+  return { stepId: r.stepId, stageAt: r.stageAt as number, lineIndex: r.lineIndex as number, peeking: r.peeking };
+}
+
 export async function checkStatus(t: BridgeTransport = defaultTransport()): Promise<BridgeStatus> {
   const res = await t.request('GET', '/status');
   const d = res.data as {
     status?: string; inGame?: boolean; stats?: unknown; shortestPath?: unknown; activeStepId?: unknown; protocol?: unknown; pluginVersion?: unknown;
-    navTarget?: unknown; xp?: unknown; questsDone?: unknown; player?: unknown; pos?: unknown; homeTeleportSeconds?: unknown;
+    navTarget?: unknown; questInstruction?: unknown; xp?: unknown; questsDone?: unknown; player?: unknown; pos?: unknown; homeTeleportSeconds?: unknown;
   } | undefined;
   const online = res.ok && d?.status === 'ok';
+  const instruction = online && d?.inGame === true ? parseQuestInstruction(d.questInstruction) : null;
   return {
+    questInstruction: instruction?.stepId === d?.activeStepId ? instruction : null,
     online,
     inGame: Boolean(online && d?.inGame),
     stats: online ? parseStats(d?.stats) : null,

@@ -101,14 +101,14 @@ export function App() {
       <a className="skip-link" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus(); }}>
         Skip to content
       </a>
-      <header className={`topbar ${compact ? 'is-compact' : ''}`}>
-        <div className="topbar-inner">
-          <div className="header-identity">
+      <div className={`app-shell ${compact ? 'is-compact' : ''}`}>
+        <aside className="app-sidebar" aria-label="Workspace navigation">
+          <div className="sidebar-identity">
           <a className="brand" href="#/">
             <CompassMark />
             <span>OSRS Path</span>
           </a>
-          <HeaderMode /><HeaderProgress />
+          <HeaderMode />
           </div>
           <nav className="tabs tabs-top" aria-label="Sections">
             {TABS.map(({ page, href, label, Icon }) => (
@@ -118,6 +118,18 @@ export function App() {
               </a>
             ))}
           </nav>
+          <div id="app-route-slot" />
+          <div className="sidebar-utilities">
+            <HeaderProgress />
+            <a href="#/settings" className={`sidebar-settings ${route.page === 'settings' ? 'is-active' : ''}`} aria-current={route.page === 'settings' ? 'page' : undefined}><IconSettings />Settings</a>
+          </div>
+        </aside>
+        <div className="app-content">
+      <header className={`topbar ${compact ? 'is-compact' : ''}`}>
+        <div className="topbar-inner">
+          <a className="mobile-brand brand" href="#/"><CompassMark /><span>OSRS Path</span></a>
+          <div className="mobile-mode"><HeaderMode /></div>
+          <span className="workspace-breadcrumb">{pageTitle(route.page, route.param)}</span>
           <div className="topbar-actions">
             {compact && (
               <button type="button" className="btn btn-sm" onClick={() => setFeatures({ compact: false })}>Full workspace</button>
@@ -149,6 +161,8 @@ export function App() {
         <ProfileBanner />
         <PageBoundary resetKey={`${route.page}/${route.param ?? ''}`}><SectionShell key={route.page} page={route.page} param={route.param}>{content}</SectionShell></PageBoundary>
       </main>
+        </div>
+      </div>
 
       <nav className={`tabs tabs-bottom ${compact ? 'is-compact' : ''}`} aria-label="Sections">
         {TABS.map(({ page, href, label, Icon }) => (

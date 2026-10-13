@@ -88,7 +88,7 @@ function FieldRow({ field }: { field: Field }) {
 export type StepTab = 'steps' | 'prep' | 'travel' | 'details';
 
 /** The step details. nextId — which step opens after the mark (the caption on the button in the wide layout). tab — one view of the workspace. */
-export function StepBody({ step, onDone, nextId, tab, onPrep, compact = false }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab; onPrep?: () => void; compact?: boolean }) {
+export function StepBody({ step, onDone, nextId, tab, onPrep, compact = false, safetyShown = false }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab | 'safety'; onPrep?: () => void; compact?: boolean; safetyShown?: boolean }) {
   const { progress, qp, mode, setStep, review, reactivate } = useStore();
   const { openNpc } = useWiki();
   const zen = !useFeatures().inspector;
@@ -290,6 +290,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, compact = false }:
   );
 
   if (tab) {
+    if (tab === 'safety') return <div className="workspace-safety">{reviewPlaque}{warning}{fieldList(fieldsWarn)}</div>;
     const inspector = !zen;
     // Manual completion is a quiet, explicit action: the recommended action is the one at the top of the workspace.
     const manual = (
@@ -316,9 +317,9 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, compact = false }:
       );
       return (
         <div className="step-details is-tab">
-          {reviewPlaque}
-          {warning}
-          {fieldList(fieldsWarn)}
+          {!safetyShown && reviewPlaque}
+          {!safetyShown && warning}
+          {!safetyShown && fieldList(fieldsWarn)}
           <div className="quest-workspace-grid">
             <div className="quest-panel quest-walkthrough">
               {compact ? <details className="compact-overview"><summary>Quest overview</summary><QuestOverview step={step} sub={sub} /></details> : <QuestOverview step={step} sub={sub} />}

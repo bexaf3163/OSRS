@@ -1328,6 +1328,15 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			}
 		}
 		guideView = v;
+		if (server != null)
+		{
+			StepGuide.StageView current = v.getStage();
+			boolean known = stage != null && stageValue(stage) != null && current != null && !current.isFinished()
+				&& !current.getSteps().isEmpty() && client.getGameState() == GameState.LOGGED_IN;
+			server.setQuestInstruction(known ? target.getStepId() : null,
+				known ? stage.getStages().get(current.getIndex() - 1).getAt() : null,
+				known ? current.getCursor() : 0, known && current.isPeeking());
+		}
 		OsrsPathPanel p = panel;
 		if (p == null || v.equals(panelView))
 		{

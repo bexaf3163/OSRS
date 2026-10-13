@@ -1,10 +1,25 @@
-# OSRS Path — Clear Path redesign handoff
+# OSRS Path — Modern Path redesign handoff
 
 Read this before modifying desktop presentation, RuneLite overlays, or packaging. It supplements `PROJECT_GUIDELINES.md`; it does not replace the existing architecture or the user's current instructions.
 
 ## Accepted scope and baseline
 
-The user selected **Clear Path**. Preserve existing functionality and closely follow the visual references. The user explicitly declined adding the illustrative Loadouts, Comparison, and Price tracking features. Do not create placeholder pages, dead controls, or new engines to reproduce those incidental mock labels.
+The user initially selected **Clear Path**, then on 2026-10-13 explicitly selected the **Modern dark** preview to reduce clutter. The current implementation is the 2.48.5 Modern Path evolution below. Preserve existing functionality and closely follow the accepted reference `docs/design-preview/modern-dark.png`. Do not restore the dense 2.48.3/2.48.4 layout over it. The user explicitly declined adding the illustrative Loadouts, Comparison, and Price tracking features. Do not create placeholder pages, dead controls, or new engines to reproduce those incidental mock labels.
+
+## Modern Path evolution — 2.48.5
+
+- `src/modern-path.css` is imported **after both** `styles.css` and `clear-path.css`. It provides the charcoal/periwinkle palette, restrained surfaces and responsive desktop shell. Light/system, Classic, font scaling and compact view remain supported; no profile/settings migration occurs.
+- `App.tsx` places the existing six section links and mode picker in a sidebar, with quest points and Settings below. Connection, Search and existing utility actions stay in the header. Below 1000px the existing bottom navigation and mobile header remain available. Compact Path retains its established presentation.
+- `PathWide.tsx` portals a concise route summary into the sidebar. **All stages** opens the existing `RouteDrawer` with the full canonical rail, stage expansion and step selection. No route state or dependency engine is duplicated. The previous/next controls and Wiki pin/drawer behavior remain accessible.
+- `ModernStepWorkspace.tsx` presents the action prominently and keeps Preparation / Steps / Travel / Details collapsed initially. Selecting a view opens its original `StepBody`; selecting again closes it. Keyboard navigation is supported. Manual completion, remove/skip marks and full walkthrough/dialogue remain in Steps. Recovery and critical step warnings stay outside collapsed views.
+- Other pages reuse their existing controls; their section navigation is a horizontal local strip instead of a second permanent sidebar. Shopping switches to labelled rows when its **available container width**, rather than screen width, is too narrow for the table.
+- The confirmed quest cursor is now an optional `questInstruction` identity on the **existing `/status`** endpoint: `{ stepId, stageAt, lineIndex, peeking }`. The plugin forwards its existing `StepGuide.StageView` / stage-tracker selection; it does not create a new quest engine. Completed, logged-out, empty or mismatched selections return no identity. Protocol 6 remains compatible with older consumers/plugins.
+- The desktop validates that identity and resolves it against canonical quest-stage data. The current action, canonical overview and suggested NPC use it independently of a temporary navigation destination. Old plugins fall back to the prior navigation resolver with the explicit **Navigation target** caption rather than pretending that target proves current quest progress. Latest status requests supersede older delayed replies.
+- The native overlay appearance itself retains the previously audited Clear Path style. This version's Java change concerns reporting the existing cursor, not game automation or a second overlay redesign.
+
+The original Clear Path implementation/audit below is historical context. Its named files and data invariants still apply where this evolution does not supersede presentation. The 2.48.4 World 316 inspection is historical evidence; it is not a claim that the 2.48.5 cursor reporting has already been exercised in the live account.
+
+Local 2.48.5 verification: production build, data consistency (zero errors/warnings), 895 TypeScript tests and 445 Java tests passed; final Gradle testClasses/jar passed. Production UI scenarios passed, including all 94 routes at 390/1280px, header widths 320–1920px at 100%/150% text, collapsed initial views, canonical later instruction versus earlier navigation, manual completion, keyboard disclosure navigation, logged-out guidance and existing preparation/profile/shopping flows. Dedicated captures inspected the new Path at 1440/390px and at 1000px with 150% text. GitHub's release workflow must still pass its real isolated Electron check before publication.
 
 The released redesign baseline is **2.48.3**, commit `ec9586f420e1b1269aaee42dad5efbb464f7f2c5`, following `21b1db6824ef2769e0c27ab58174e01e7fdb489b`. Start future work from current GitHub `main`, preserving any later commits. An older local checkout may contain an earlier, staged design candidate: do not force-push it over newer work, reset someone else's files, or restore old CSS over the redesign. Merge concurrent work deliberately.
 
@@ -114,7 +129,7 @@ A release is finished only after GitHub Checks and Release succeed, its tag targ
 
 ## Remaining work, not new promised features
 
-- Resolve the confirmed current quest-instruction / navigation-target mismatch described above.
+- The current quest-instruction / navigation-target mismatch is addressed by 2.48.5's validated cursor identity. Verify it after launching both updated app and plugin; do not test a new app against an already running old plugin and assume the new identity exists.
 - Alt-drag and live bank/exchange/critical states were not exercised; use safe fixtures or an explicitly authorized suitable live scenario.
 - Use screenshot evidence to make small spacing/position corrections if needed; avoid another broad redesign.
 - No new Loadouts, Comparison, or Price tracking engine is part of this redesign scope.

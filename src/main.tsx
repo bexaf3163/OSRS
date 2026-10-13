@@ -10,6 +10,7 @@ import { WikiProvider } from './components/WikiDrawer';
 import { applyTextScale, loadTextScale } from './lib/ui-scale';
 import './styles.css';
 import './clear-path.css';
+import './modern-path.css';
 
 applyTextScale(loadTextScale());
 

@@ -7,17 +7,21 @@ import { useBridge } from '../bridge';
 import { useStore } from '../store';
 import { isClosed } from '../lib/next-step';
 import { usePlayerState } from '../playerStateContext';
-import { findSubStep, itemStatus, subStepItems, type ItemStatus, type SubStep } from '../lib/subStep';
+import { findSubStep, instructionSubStep, itemStatus, subStepItems, type ItemStatus, type SubStep } from '../lib/subStep';
 import { Inline } from './Inline';
 import { NavigateButton } from './NavigateButton';
 import { ItemIcon } from './WikiDrawer';
 
 /** The sub-step the arrow is on for this step; null while closed, offline, or on a detour. */
 export function useSubStep(step: Step): SubStep | null {
-  const { navTarget } = useBridge();
+  const { navTarget, questInstruction, state, inGame, activeStepId } = useBridge();
   const { progress } = useStore();
   const closed = isClosed(progress, step.id);
-  return useMemo(() => (closed ? null : findSubStep(step, navTarget)), [step, navTarget, closed]);
+  return useMemo(() => {
+    if (closed) return null;
+    if (state === 'online' && inGame && activeStepId === step.id && questInstruction) return instructionSubStep(step, questInstruction);
+    return findSubStep(step, navTarget);
+  }, [step, navTarget, questInstruction, state, inGame, activeStepId, closed]);
 }
 
 /** bare: the title is already the current action of the workspace, so only the detail (what to say, the lead button) is drawn. */

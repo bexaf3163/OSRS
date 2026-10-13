@@ -73,7 +73,7 @@ public final class BridgeServer
 	 */
 	static final int PROTOCOL = 6;
 	/** The plugin version, the same as the app it ships with in one exe. */
-	static final String PLUGIN_VERSION = "2.48.4";
+	static final String PLUGIN_VERSION = "2.48.5";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	/** The whole snapshot: the step with the quest stages, shopping and plan in one body. */
@@ -165,6 +165,7 @@ public final class BridgeServer
 	private volatile int lastMinigameTeleport;
 	/** The current temporary target (like NAV_SET) or null, for /status. */
 	private volatile JsonObject navTarget;
+	private volatile Map<String, Object> questInstruction;
 	/** The last OWNED event, repeated to new connections. */
 	private volatile Map<String, Object> lastOwned;
 	/** Gear, bag and coins: {"equipment":[...],"inventory":[...],"coins":...,"bankCoins":...}; null means unknown. */
@@ -223,12 +224,29 @@ public final class BridgeServer
 
 	public void setInGame(boolean value)
 	{
+		if (!value) questInstruction = null;
 		if (inGame == value)
 		{
 			return;
 		}
 		inGame = value;
 		broadcast(statusEvent());
+	}
+
+	/** The existing guide cursor is independent of a temporary navigation target. Client thread only. */
+	public void setQuestInstruction(String stepId, Integer stageAt, int lineIndex, boolean peeking)
+	{
+		if (stepId == null || stageAt == null || lineIndex < 0)
+		{
+			questInstruction = null;
+			return;
+		}
+		Map<String, Object> next = new LinkedHashMap<>();
+		next.put("stepId", stepId);
+		next.put("stageAt", stageAt);
+		next.put("lineIndex", lineIndex);
+		next.put("peeking", peeking);
+		if (!next.equals(questInstruction)) questInstruction = next;
 	}
 
 	/** New skill levels. Identical ones are not broadcast. */
@@ -533,6 +551,8 @@ public final class BridgeServer
 					status.put("shortestPath", shortestPath);
 					// Where the temporary target leads now: after a restart the app shows the same one as in the game.
 					status.put("navTarget", navTarget);
+					Map<String, Object> instruction = questInstruction;
+					status.put("questInstruction", inGame && instruction != null && Objects.equals(instruction.get("stepId"), activeStepId) ? instruction : null);
 					Map<String, Object> g = gear;
 					status.put("equipment", g == null ? null : g.get("equipment"));
 					status.put("inventory", g == null ? null : g.get("inventory"));

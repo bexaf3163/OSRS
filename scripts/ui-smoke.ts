@@ -239,7 +239,8 @@ async function run(browser: Browser) {
       await waitFor(page, '.step-status', 8000);
       const line = await text(page, '.status-line');
       expect(/Preparation required \(\d/.test(line) && line.includes('Fix'), `Zen: one status line with the preparation and the Fix button (${line.replace(/\s+/g, ' ').slice(0, 90)})`);
-      expect(await page.locator('.readiness').count() === 0, 'Zen: the readiness panel is not on the Steps view');
+      expect(await page.locator('.readiness').count() > 0, 'Zen: opening Preparation exposes the readiness panel');
+      await page.getByRole('tab', { name: 'Steps', exact:true }).click();
       expect((await text(page, '.step-details')).includes('Mark as manually completed'), 'Zen: manual completion is a quiet action in the Steps view');
       expect(await page.getByRole('tab').count() === 4, 'Zen: the workspace has four views: Steps, Preparation, Travel, Details');
       await page.getByRole('tab', { name: 'Preparation' }).click();
@@ -595,7 +596,7 @@ async function run(browser: Browser) {
       await waitFor(page, '.sub-hero', 5000);
       const hero = await text(page, '.sub-hero');
       const action = (await text(page, '.current-action')).toLowerCase();
-      expect(action.includes('instruction 4 of 6') && action.includes('lady keli'), 'cockpit: the current action names the sub-step');
+      expect(action.includes('navigation target') && action.includes('lady keli'), 'legacy cockpit: a navigation target is labelled as navigation, not confirmed quest progress');
       expect(hero.includes('Lead to Target in Game'), 'cockpit: the sub-step has the lead button');
       expect(hero.includes('Could I touch the key for a moment please?'), 'cockpit: the dialogue options are listed');
       expect((await text(page, '.sub-items')).includes('Soft clay'), 'cockpit: the strip holds the items of this sub-step');
@@ -739,6 +740,28 @@ async function run(browser: Browser) {
 
   // A connected client at the login screen is not live guidance. Keep the target without claiming a visible arrow.
   {
+    const questData = JSON.parse(readFileSync(new URL('../src/data/questStages.json', import.meta.url),'utf8')).quests['S3-04'];
+    const stage = questData.stages.find((s: {do: {t:string}[]}) => s.do.some(l => /Ancient Guardian/.test(l.t)));
+    const lineIndex = stage.do.findIndex((l: {t:string}) => /Ancient Guardian/.test(l.t));
+    const {page, errors} = await open(browser,1440,{
+      progress:progressBefore('S3-04'),localStorage:{'osrs-put:active-step':'S3-04'},
+      status:{protocol:6,inGame:true,activeStepId:'S3-04',questInstruction:{stepId:'S3-04',stageAt:stage.at,lineIndex,peeking:false},navTarget:{stepId:'S3-04',label:'Talk to Willow (south of Ice Mountain)',x:0,y:0,plane:0}},
+    },'#/step/S3-04');
+    expect((await text(page,'.current-action-title')).includes('Ancient Guardian') && !(await text(page,'.current-action-title')).includes('Willow'),'current instruction: the quest cursor wins over the earlier arrow destination');
+    const actionBox = await page.locator('.current-action-title').boundingBox();
+    expect(!!actionBox && actionBox.width > 500 && actionBox.height < 180,'modern Path: the main action has readable desktop width');
+    expect(await page.locator('.modern-workspace .workspace-panel').count() === 0,'modern Path: detailed views are collapsed initially');
+    await page.getByRole('tab',{name:'Steps',exact:true}).click();
+    expect((await text(page,'.overview')).includes('In the game now'),'current instruction: the canonical walkthrough identifies the confirmed line');
+    expect(await page.locator('.manual-complete').isVisible(),'modern Path: manual completion stays accessible');
+    await page.getByRole('tab',{name:'Details',exact:true}).press('Home');
+    expect(await page.getByRole('tab',{name:'Preparation',exact:true}).getAttribute('aria-expanded') === 'true','modern Path: keyboard navigation opens the first disclosure');
+    expect(errors.length === 0 && await noOverflow(page),'modern Path: no runtime errors or horizontal overflow');
+    await page.context().close();
+  }
+
+  // A connected client at the login screen is not live guidance. Keep the target without claiming a visible arrow.
+  {
     const {page, errors} = await open(browser, 1280, {
       progress:progressBefore('S3-04'), status:{protocol:6, inGame:false, activeStepId:'S3-04'}, localStorage:{'osrs-put:active-step':'S3-04'},
     }, '#/step/S3-04');
@@ -746,7 +769,7 @@ async function run(browser: Browser) {
     const hero = await text(page, '.current-action');
     expect(hero.includes('Waiting for character') && !hero.includes('Shown in the game'), 'login screen: the action waits for the character');
     expect(!(await text(page, '.step-status')).includes('the arrow leads to it'), 'login screen: the step status does not claim a live arrow');
-    const code = await page.locator('.rail-now .code').boundingBox();
+    const code = await page.locator('.modern-workspace .step-id').boundingBox();
     expect(!!code && code.height <= 20, 'route rail: the current step code stays on one line');
     await page.getByRole('tab',{name:'Travel',exact:true}).click();
     const hints = await text(page, '.ingame');

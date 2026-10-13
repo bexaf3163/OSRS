@@ -2,6 +2,7 @@
 // on the right the pinned wiki dossier. The whole route, the step and the dossier are visible at once, without page scrolling.
 
 import { useCallback, useEffect, useMemo, useRef, useState, useTransition } from 'react';
+import { createPortal } from 'react-dom';
 import type { Step } from '../types';
 import { stepById } from '../data';
 import { useStore } from '../store';
@@ -12,7 +13,7 @@ import { needsReview, pendingReview } from '../lib/review';
 import { IconCheck, IconChevron, IconLock } from '../components/Icons';
 import { StepWorkspace } from '../components/StepWorkspace';
 import { WikiDock, useWiki } from '../components/WikiDrawer';
-import { findSubStep, subStepNpcInfo } from '../lib/subStep';
+import { findSubStep, instructionSubStep, subStepNpcInfo } from '../lib/subStep';
 import { GearBanner } from '../components/GearPrompt';
 import { TrackedSkillCard } from '../components/TrackedSkillCard';
 import { AccountSync } from '../components/AccountSync';
@@ -25,7 +26,9 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   const { progress, qp, maxQp, steps, stages, setStep, review, reactivate } = useStore();
   const wide = useMediaQuery(WIDE);
   const [routeOpen, setRouteOpen] = useState(false);
-  const { advance, navTarget } = useBridge();
+  const [routeSlot, setRouteSlot] = useState<HTMLElement | null>(null);
+  useEffect(() => { setRouteSlot(document.getElementById('app-route-slot')); }, []);
+  const { advance, navTarget, questInstruction, state, inGame, activeStepId } = useBridge();
   const { setSuggested, pinned } = useWiki();
   const suggested = nextStep(steps, progress, qp) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
   const [selectedId, setSelectedId] = useState(() => focusStep ?? suggested.id);
@@ -89,9 +92,10 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   // The dossier column is never an empty hint: with nothing chosen by hand it shows the NPC of the current sub-step (or the step's own NPC);
   // with neither, the column folds away and the step takes its width.
   const dossierNpc = useMemo(() => {
-    const sub = isClosed(progress, selected.id) ? null : findSubStep(selected, navTarget);
-    return (sub ? subStepNpcInfo(selected, sub) : null) ?? selected.npc ?? null;
-  }, [selected, progress, navTarget]);
+    const confirmed = state === 'online' && inGame && activeStepId === selected.id && questInstruction?.stepId === selected.id;
+    const sub = isClosed(progress, selected.id) ? null : confirmed ? instructionSubStep(selected, questInstruction) : findSubStep(selected, navTarget);
+    return (sub ? subStepNpcInfo(selected, sub) : null) ?? (confirmed ? null : selected.npc ?? null);
+  }, [selected, progress, navTarget, questInstruction, state, inGame, activeStepId]);
   const dossierKey = dossierNpc?.nameEn ?? null;
   useEffect(() => {
     setSuggested(dossierNpc);
@@ -177,7 +181,15 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
     <div className={`path-wide ${pinned && wide ? '' : 'no-dock'} ${wide ? '' : 'is-narrow'}`}>
       <h1 className="visually-hidden">Path</h1>
 
-      {wide ? rail : <RouteBar />}
+      {wide && routeSlot ? createPortal(
+        <section className="sidebar-route" aria-label="Current route">
+          <p className="eyebrow">Your route</p>
+          <p className="sidebar-route-stage">Stage {selected.stage}<span>{steps.filter(s => s.stage === selected.stage && isClosed(progress, s.id)).length} / {steps.filter(s => s.stage === selected.stage).length}</span></p>
+          <p className="muted small">{stages.find(s => s.id === selected.stage)?.title}</p>
+          <p className="sidebar-route-current">{selected.title}</p>
+          {upcoming && <a className="sidebar-route-next" href={`#/step/${upcoming.id}`}>{upcoming.title}</a>}
+          <button type="button" className="btn btn-ghost" aria-haspopup="dialog" onClick={() => setRouteOpen(true)}>All stages <IconChevron /></button>
+        </section>, routeSlot) : <RouteBar />}
 
       <section className={`center ${switching ? 'is-switching' : ''}`} ref={center} aria-labelledby="step-view-title" aria-busy={switching}>
         {pending.length > 0 && (
@@ -219,7 +231,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
       </section>
 
       {wide && <WikiDock className="dock" />}
-      {!wide && <RouteDrawer open={routeOpen} onClose={() => setRouteOpen(false)}>{rail}</RouteDrawer>}
+      <RouteDrawer open={routeOpen} onClose={() => setRouteOpen(false)}>{rail}</RouteDrawer>
     </div>
   );
 }

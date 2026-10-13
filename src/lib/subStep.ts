@@ -4,7 +4,7 @@
 // Nothing is guessed: with no link, another step's target or a detour (a label that is none of the step's lines), there is no sub-step and the card falls back.
 
 import type { Step, StepNpcInfo, QuestStage, QuestStageLine } from '../types';
-import type { NavTargetPayload } from '../services/runeliteBridge';
+import type { NavTargetPayload, QuestInstruction } from '../services/runeliteBridge';
 import { nameKey } from './checklist';
 import { shortLine } from './shortText';
 import { npcSpot } from './stepPlaces';
@@ -48,6 +48,14 @@ export function actionOf(text: string): string {
 }
 
 const titleOf = (l: QuestStageLine) => (l.s?.trim() || shortLine(l.t)).trim();
+
+/** Resolve the plugin's existing quest cursor, never the navigation destination. */
+export function instructionSubStep(step: Step, instruction: QuestInstruction | null): SubStep | null {
+  if (!instruction || instruction.stepId !== step.id || !Number.isInteger(instruction.lineIndex) || instruction.lineIndex < 0) return null;
+  const stage = step.questStages?.stages.find(s => s.at === instruction.stageAt);
+  const line = stage?.do[instruction.lineIndex];
+  return stage && line ? build(step, stage, line, instruction.lineIndex) : null;
+}
 
 /** The sub-step the arrow is on, or null. */
 export function findSubStep(step: Step, nav: NavTargetPayload | null): SubStep | null {

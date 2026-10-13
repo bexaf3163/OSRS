@@ -1,12 +1,24 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { actionOf, dialogueOf, findSubStep, itemStatus, subStepItems, subStepNpcInfo } from '../src/lib/subStep';
+import { actionOf, dialogueOf, findSubStep, instructionSubStep, itemStatus, subStepItems, subStepNpcInfo } from '../src/lib/subStep';
 import type { NavTargetPayload } from '../src/services/runeliteBridge';
 
 const ali = stepById.get('S2-10')!;
 const nav = (label: string, extra: Partial<NavTargetPayload> = {}): NavTargetPayload => ({ label, x: 0, y: 0, plane: 0, stepId: 'S2-10', ...extra });
 
 describe('the active sub-step', () => {
+  it('uses the current quest cursor independently of an earlier navigation target', () => {
+    const mountain = stepById.get('S3-04')!;
+    const stage = mountain.questStages!.stages.find(s => s.do.some(l => /Ancient Guardian/.test(l.t)))!;
+    const lineIndex = stage.do.findIndex(l => /Ancient Guardian/.test(l.t));
+    const current = instructionSubStep(mountain, { stepId: mountain.id, stageAt: stage.at, lineIndex, peeking: false });
+    expect(current?.title).toMatch(/Ancient Guardian/);
+    expect(findSubStep(mountain, { label: 'Talk to Willow (south of Ice Mountain)', x: 0, y: 0, plane: 0, stepId: mountain.id })?.title).toMatch(/Willow/);
+    expect(instructionSubStep(mountain, { stepId: 'S2-10', stageAt: stage.at, lineIndex, peeking: false })).toBeNull();
+    expect(instructionSubStep(mountain, { stepId: mountain.id, stageAt: -1, lineIndex, peeking: false })).toBeNull();
+    expect(instructionSubStep(mountain, { stepId: mountain.id, stageAt: stage.at, lineIndex: 9999, peeking: false })).toBeNull();
+    expect(instructionSubStep(mountain, null)).toBeNull();
+  });
   it('is found from the label of the arrow target the game follows', () => {
     const s = findSubStep(ali, nav('Lady Keli: use soft clay on the key for a print'))!;
     expect(s.index).toBe(4);

@@ -156,6 +156,22 @@ public class BridgeServerTest
 	}
 
 	@Test
+	public void questInstructionIsSeparateAndClearedOnLogout() throws Exception
+	{
+		post("/active-step", COOK, BridgeServer.HEADER, "1");
+		server.setInGame(true);
+		server.setQuestInstruction("S1-03", 10, 1, false);
+		String body = get("/status").body();
+		assertTrue(body, body.contains("\"questInstruction\":{\"stepId\":\"S1-03\",\"stageAt\":10,\"lineIndex\":1,\"peeking\":false}"));
+		server.setQuestInstruction("S2-10", 10, 1, false);
+		assertFalse(get("/status").body().contains("\"questInstruction\""));
+		server.setQuestInstruction("S1-03", 10, 1, true);
+		server.setInGame(false);
+		server.setInGame(true);
+		assertFalse(get("/status").body().contains("\"questInstruction\""));
+	}
+
+	@Test
 	public void statusGivesItemValuation() throws Exception
 	{
 		java.util.Map<String, Object> gear = new java.util.LinkedHashMap<>();

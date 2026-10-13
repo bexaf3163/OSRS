@@ -15,7 +15,8 @@ import { StepBody, type StepTab } from './StepCard';
 import { StepStatus } from './StepStatus';
 import { useSubStep } from './SubStepHero';
 import { setFeatures } from '../lib/features';
-import { overviewOf } from '../lib/subStep';
+import { overviewOf, subStepNpcInfo } from '../lib/subStep';
+import { ModernStepWorkspace } from './ModernStepWorkspace';
 
 const TABS: { id: StepTab; label: string }[] = [
   { id: 'steps', label: 'Steps' },
@@ -33,33 +34,36 @@ export function placeOf(step: Step): string {
 
 export function CurrentAction({ step, children }: { step: Step; children?: ReactNode }) {
   const { progress } = useStore();
-  const { enabled, state, inGame, activeStepId, navTarget } = useBridge();
+  const { enabled, state, inGame, activeStepId, navTarget, questInstruction } = useBridge();
   const sub = useSubStep(step);
   const closed = isClosed(progress, step.id);
   const link = linkStatus(state, inGame);
   const target = targetStatus(activeStepId === step.id || navTarget?.stepId === step.id, state, inGame);
   // The quest's starting NPC is not the location of every later instruction.
-  const place = sub ? null : placeOf(step);
+  const npc = sub ? subStepNpcInfo(step, sub) : null;
+  const place = sub ? npc ? [npc.location, npc.floor].filter(Boolean).join(' · ') : null : placeOf(step);
 
   // Live evidence (the arrow follows a line of this step) names the instruction. Without it the card names where the step starts and says so.
   const start = step.npc ? `Talk to ${step.npc.nameEn}` : overviewOf(step)[0]?.title ?? step.quickSteps?.[0] ?? step.title;
   const title = closed ? 'This step is done' : sub ? sub.title : start;
-  const kicker = closed ? 'Completed' : sub ? `Instruction ${sub.index} of ${sub.size}` : 'Starting point';
+  const confirmed = state === 'online' && inGame && questInstruction?.stepId === step.id;
+  const kicker = closed ? 'Completed' : sub ? confirmed ? questInstruction.peeking ? 'Viewing an earlier instruction' : 'What to do now' : 'Navigation target' : 'Starting point';
+  const alternative = step.type === 'quest' ? title.indexOf(' or ') : -1;
 
   return (
     <section className={`current-action ${closed ? 'is-done' : ''}`} aria-label="Current action">
       <span className="current-action-icon" aria-hidden="true">{step.npc ? <IconTalk /> : <TypeIcon type={step.type} />}</span>
       <div className="current-action-body">
         <p className="eyebrow">{kicker}</p>
-        <h3 className="current-action-title"><Inline text={title} /></h3>
+        <h3 className="current-action-title">{alternative > 0 ? <><Inline text={title.slice(0, alternative)} />{' '}<span className="action-alternative"><Inline text={title.slice(alternative + 1)} /></span></> : <Inline text={title} />}</h3>
         {place && <p className="current-action-place muted"><Inline text={place} /></p>}
       </div>
       <div className="current-action-side">
-      {enabled && !closed && (
+      {enabled && !closed && link !== 'connected' && (
         <div className="current-action-link">
           {state === 'online' ? (
             <p className={`link-chip-status is-${link}`} role="status">
-              <span aria-hidden="true">{link === 'connected' ? '●' : '○'}</span> {LINK_LABEL[link]}
+              <span aria-hidden="true">○</span> {LINK_LABEL[link]}
               {target === 'live' && <> · {TARGET_LABEL.live}</>}
             </p>
           ) : (
@@ -89,6 +93,8 @@ export function StepWorkspace({ step, suggested, onDone, nextId, compact = false
   const status = progress.steps[step.id];
   const blockers = isClosed(progress, step.id) ? null : blockersOf(step, progress, qp);
   const review = needsReview(step, progress);
+
+  if (!compact) return <ModernStepWorkspace step={step} suggested={suggested} onDone={onDone} nextId={nextId} />;
 
   const onKey = (e: KeyboardEvent) => {
     const at = tabs.findIndex((t) => t.id === tab);
