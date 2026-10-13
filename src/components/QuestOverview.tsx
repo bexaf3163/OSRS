@@ -7,12 +7,12 @@ import { overviewCurrent, overviewOf, type SubStep } from '../lib/subStep';
 import { TARGET_LABEL, targetStatus } from '../lib/linkState';
 
 export function QuestOverview({ step, sub }: { step: Step; sub: SubStep | null }) {
-  const { state, activeStepId } = useBridge();
+  const { state, activeStepId, inGame } = useBridge();
   const lines = overviewOf(step);
   if (lines.length === 0) return null;
   const current = overviewCurrent(lines, sub);
-  const live = current !== null && state === 'online';
-  const saved = targetStatus(activeStepId === step.id, state) === 'saved';
+  const live = current !== null && state === 'online' && inGame;
+  const saved = targetStatus(activeStepId === step.id, state, inGame) === 'saved';
   return (
     <section className="overview" aria-label="Quest overview">
       <h3 className="overview-title">Quest overview</h3>
@@ -28,7 +28,7 @@ export function QuestOverview({ step, sub }: { step: Step; sub: SubStep | null }
           </li>
         ))}
       </ol>
-      {!live && <p className="muted small overview-note">Overview only. Live instructions resume when RuneLite is connected.</p>}
+      {!live && <p className="muted small overview-note">Overview only. Live instructions resume when RuneLite is connected and your character is in the game.</p>}
     </section>
   );
 }

@@ -32,12 +32,12 @@ export const LINK_SHORT: Record<LinkStatus, string> = {
 export type TargetStatus = 'none' | 'live' | 'saved';
 
 /**
- * What a target means: nothing selected, leading in the game right now (the link is up), or saved and waiting for RuneLite.
+ * What a target means: nothing selected, leading in the game right now (connected and logged in), or saved and waiting.
  * The saved target is shown as a plan, never as an arrow that exists.
  */
-export function targetStatus(hasTarget: boolean, state: LinkState): TargetStatus {
+export function targetStatus(hasTarget: boolean, state: LinkState, inGame: boolean): TargetStatus {
   if (!hasTarget) return 'none';
-  return state === 'online' ? 'live' : 'saved';
+  return state === 'online' && inGame ? 'live' : 'saved';
 }
 
 export const TARGET_LABEL: Record<Exclude<TargetStatus, 'none'>, string> = {

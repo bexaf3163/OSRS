@@ -20,12 +20,12 @@ const GROUPS: [keyof InGameTarget, string][] = [
 ];
 
 export function InGamePanel({ step }: { step: Step }) {
-  const { enabled, state, activeStepId, pointInGame, clear, canLaunch, launchRuneLite, shortestPath } = useBridge();
+  const { enabled, state, inGame, activeStepId, pointInGame, clear, canLaunch, launchRuneLite, shortestPath } = useBridge();
   const [notice, setNotice] = useState<'' | 'sending' | 'offline'>('');
   if (!enabled || !toInGameTarget(step)) return null;
   const active = activeStepId === step.id;
   // Without a link the step is not "active in RuneLite" but waits for the connection — it will return there by itself.
-  const live = active && state === 'online';
+  const live = active && state === 'online' && inGame;
   const g = step.inGame;
   const trigger = g?.completionTrigger;
   const waypoints = g?.pathWaypoints ?? [];
@@ -41,12 +41,12 @@ export function InGamePanel({ step }: { step: Step }) {
     <section className="step-section ingame" aria-label="In-game hints">
       <div className="ingame-row">
         <button type="button" className={`btn ${live ? 'btn-ingame-active' : ''}`} onClick={point} disabled={notice === 'sending'}
-          title={active ? 'The step already guides you in the game. Click to send it again' : undefined}
+          title={live ? 'The step already guides you in the game. Click to send it again' : active ? 'The target is saved. Click to send it again' : undefined}
           aria-describedby={notice === 'offline' ? `ingame-${step.id}` : undefined}>
           {live ? '✓ Shown in the game' : active ? TARGET_LABEL.saved : '🧭 Show in the game'}
         </button>
         {live && <span className="badge badge-ingame">● Active in RuneLite</span>}
-        {active && !live && <span className="badge">○ Saved target. It returns to the game when RuneLite connects</span>}
+        {active && !live && <span className="badge">○ Saved target. It returns to the game when {state === 'online' ? 'your character logs in' : 'RuneLite connects'}</span>}
         {active && <button type="button" className="btn btn-ghost btn-sm" onClick={() => void clear()}>Remove from the game</button>}
       </div>
       {notice === 'offline' && (

@@ -114,7 +114,7 @@ export function GearPage() {
   const now = advice.weaponNow;
   const roadmap = buildRoadmap(advice);
   const prayers = prayerChips(advice.prayers);
-  const link = advice.live ? null : state === 'off' ? 'RuneLite link off — levels from the profile' : 'RuneLite not connected — levels from the profile';
+  const link = advice.live ? null : state === 'off' ? 'RuneLite link off — levels from the profile' : state === 'online' ? 'Waiting for character data — levels from the profile' : 'RuneLite not connected — levels from the profile';
 
   return (
     <div className="page gear-page">

@@ -73,7 +73,8 @@ function useFilled(keys: TabKey[]) {
 /** headline: only the verdict line and its actions (the Path workspace shows the details in its own tabs); onPrep opens the Preparation tab. */
 export function StepStatus({ step, headline = false, onPrep }: { step: Step; headline?: boolean; onPrep?: () => void }) {
   const { progress } = useStore();
-  const { enabled, activeStepId, navTarget, pointInGame, state: link } = useBridge();
+  const { enabled, activeStepId, navTarget, pointInGame, state: link, inGame } = useBridge();
+  const live = link === 'online' && inGame;
   const r = useReadiness(step);
   const planNow = useReadinessEngine().plan(step, { ahead: styleOf(useFeatures()).lookAhead });
   const percent = planNow.score.percent;
@@ -138,8 +139,8 @@ export function StepStatus({ step, headline = false, onPrep }: { step: Step; hea
             </button>
           )}
           {!prep && !recovering && hasTarget && (ready || r.status === 'UNKNOWN') && (
-            <button type="button" className={`btn btn-sm ${active && link === 'online' ? 'btn-ingame-active' : active ? '' : 'btn-primary'}`} onClick={() => void start()} disabled={sent === 'sending'}>
-              {active ? (link === 'online' ? '✓ Shown in the game' : TARGET_LABEL.saved) : '▶ Start the step'}
+            <button type="button" className={`btn btn-sm ${active && live ? 'btn-ingame-active' : active ? '' : 'btn-primary'}`} onClick={() => void start()} disabled={sent === 'sending'}>
+              {active ? (live ? '✓ Shown in the game' : TARGET_LABEL.saved) : '▶ Start the step'}
             </button>
           )}
           {!headline && (
@@ -153,11 +154,11 @@ export function StepStatus({ step, headline = false, onPrep }: { step: Step; hea
       {!recovering && !headline && <TravelTip step={step} />}
       {sent === 'offline' && <p className="small muted" role="status">RuneLite bridge offline{link === 'online' ? ' or refused' : ''}. Start RuneLite with the OSRS Path Bridge plugin.</p>}
       {detour ? (
-        link === 'online'
+        live
           ? <p className="small status-arrow">🧭 The arrow leads to: {detour.label}</p>
           : <p className="small status-arrow muted">🧭 Target saved: {detour.label}. The arrow appears when RuneLite connects.</p>
       ) : active ? (
-        link === 'online'
+        live
           ? <p className="small status-arrow muted">🧭 The step is shown in the game — the arrow leads to it.</p>
           : <p className="small status-arrow muted">🧭 Target saved. Live guidance is inactive until RuneLite connects.</p>
       ) : null}

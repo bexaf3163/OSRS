@@ -22,7 +22,7 @@ interface Props {
 }
 
 export function NavigateButton({ target, label = '🧭 Point the arrow in the game', compact, className = '' }: Props) {
-  const { enabled, state, navigate, navTarget, clearNav } = useBridge();
+  const { enabled, state, inGame, navigate, navTarget, clearNav } = useBridge();
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState('');
   if (!enabled) return null;
@@ -37,7 +37,7 @@ export function NavigateButton({ target, label = '🧭 Point the arrow in the ga
   };
 
   if (active) {
-    const live = state === 'online';
+    const live = state === 'online' && inGame;
     return (
       <span className={`nav-state ${className}`} role="status">
         {live

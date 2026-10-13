@@ -16,6 +16,7 @@ import { chromium } from 'playwright';
 const require = createRequire(import.meta.url);
 const electronPath = require('electron') as unknown as string;
 const root = fileURLToPath(new URL('..', import.meta.url));
+const packageVersion = (JSON.parse(readFileSync(join(root, 'package.json'), 'utf8')) as {version:string}).version;
 const failures: string[] = [];
 const expect = (cond: boolean, what: string) => {
   if (cond) console.log(`  ✓ ${what}`);
@@ -24,7 +25,7 @@ const expect = (cond: boolean, what: string) => {
 
 // --- The plugin stub ---
 const status = {
-  status: 'ok', inGame: true, protocol: 6, pluginVersion: '2.48.3', shortestPath: false, player: 'E2E Tester',
+  status: 'ok', inGame: true, protocol: 6, pluginVersion: packageVersion, shortestPath: false, player: 'E2E Tester',
   stats: { magic: 10, woodcutting: 15, attack: 5, strength: 5, defence: 5 }, xp: { magic: 1200 }, questsDone: ['Rune Mysteries'],
   pos: { x: 3222, y: 3218, plane: 0 }, coins: 500, equipment: [], inventory: [],
 };

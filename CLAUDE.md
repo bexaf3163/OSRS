@@ -2,6 +2,8 @@
 
 Binding operating contract for every task in this repo: @PROJECT_GUIDELINES.md (verbatim copy of `OSRS_Path_Master_Project_Guidelines.md`). Follow it strictly; it overrides default habits.
 
+For desktop or RuneLite interface work, also read @CLAUDE_REDESIGN_HANDOFF.md. It records the accepted Clear Path design, preserved functionality, implementation map, audit findings and regression checks; do not restore an older design over it.
+
 Key points to keep in mind every time:
 - Reply in concise English. Player-facing UI text (desktop, HUD, overlays, dialogs, warnings) is native English with canonical OSRS Wiki / Quest Helper names — no Cyrillic, no dual naming (section 3, amended). Code comments, commit messages and docs are English. The whole project is English now; do not reintroduce Cyrillic text (`tests/questStages.test.ts` guards the quest data).
 - Inspect existing code first, reuse existing systems, make small surgical diffs, no parallel implementations.

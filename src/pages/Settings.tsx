@@ -434,9 +434,9 @@ function RuneLiteBridge() {
           <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />
           <span>RuneLite link</span>
         </label>
-        <p className="muted small">Now: {status}.{activeStepId && (state === 'online'
+        <p className="muted small">Now: {status}.{activeStepId && (state === 'online' && inGame
           ? <> The game shows the step <code className="code">{activeStepId}</code>.</>
-          : <> The step <code className="code">{activeStepId}</code> will return to the game when RuneLite connects.</>)}</p>
+          : <> The step <code className="code">{activeStepId}</code> will return to the game when {state === 'online' ? 'your character logs in' : 'RuneLite connects'}.</>)}</p>
         {activeStepId && <div className="actions"><button type="button" className="btn" onClick={() => void clear()}>Remove the hints from the game</button></div>}
         {plugin && (plugin.compat === 'ok'
           ? <p className="muted small">✓ The plugin {plugin.version ?? ''} is compatible with the app {__APP_VERSION__} (protocol {plugin.protocol}).</p>

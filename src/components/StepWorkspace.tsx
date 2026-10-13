@@ -37,7 +37,7 @@ export function CurrentAction({ step, children }: { step: Step; children?: React
   const sub = useSubStep(step);
   const closed = isClosed(progress, step.id);
   const link = linkStatus(state, inGame);
-  const target = targetStatus(activeStepId === step.id || navTarget?.stepId === step.id, state);
+  const target = targetStatus(activeStepId === step.id || navTarget?.stepId === step.id, state, inGame);
   // The quest's starting NPC is not the location of every later instruction.
   const place = sub ? null : placeOf(step);
 

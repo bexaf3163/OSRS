@@ -737,6 +737,29 @@ async function run(browser: Browser) {
     await page.context().close();
   }
 
+  // A connected client at the login screen is not live guidance. Keep the target without claiming a visible arrow.
+  {
+    const {page, errors} = await open(browser, 1280, {
+      progress:progressBefore('S3-04'), status:{protocol:6, inGame:false, activeStepId:'S3-04'}, localStorage:{'osrs-put:active-step':'S3-04'},
+    }, '#/step/S3-04');
+    await waitFor(page, '.current-action', 5000);
+    const hero = await text(page, '.current-action');
+    expect(hero.includes('Waiting for character') && !hero.includes('Shown in the game'), 'login screen: the action waits for the character');
+    expect(!(await text(page, '.step-status')).includes('the arrow leads to it'), 'login screen: the step status does not claim a live arrow');
+    const code = await page.locator('.rail-now .code').boundingBox();
+    expect(!!code && code.height <= 20, 'route rail: the current step code stays on one line');
+    await page.getByRole('tab',{name:'Travel',exact:true}).click();
+    const hints = await text(page, '.ingame');
+    expect(hints.includes('Saved target') && !hints.includes('Shown in the game') && !hints.includes('Active in RuneLite'), 'login screen: travel keeps the saved target without a live badge');
+    await page.goto(BASE+'#/settings');
+    await page.getByRole('tab',{name:'RuneLite',exact:true}).click();
+    expect((await text(page, 'main')).includes('your character logs in'), 'login screen: settings explain when guidance resumes');
+    const launch = await page.getByRole('button',{name:/RuneLite with the bridge is running/}).boundingBox();
+    expect(!!launch && launch.width > 260 && launch.height <= 60, 'RuneLite settings: the launch button uses a full action row');
+    expect(errors.length === 0, `login screen: no runtime errors ${errors.join('; ')}`);
+    await page.context().close();
+  }
+
   // The Content-Security-Policy of the built page: the meta tag is there, a foreign inline script does not run, and the page
   // with our theme script and the network only to the wiki works (there are no console errors).
   console.log('CSP');

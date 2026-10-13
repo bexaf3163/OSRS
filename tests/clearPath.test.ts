@@ -12,10 +12,12 @@ describe('link and target vocabulary', () => {
     expect(new Set(Object.values(LINK_LABEL)).size).toBe(5);
   });
 
-  it('a saved target is shown in the game only while the link is up', () => {
-    expect(targetStatus(false, 'online')).toBe('none');
-    expect(targetStatus(true, 'online')).toBe('live');
-    for (const s of ['offline', 'connecting', 'off'] as const) expect(targetStatus(true, s)).toBe('saved');
+  it('a saved target is shown in the game only while connected and logged in', () => {
+    expect(targetStatus(false, 'online', true)).toBe('none');
+    expect(targetStatus(true, 'online', false)).toBe('saved');
+    expect(targetStatus(true, 'online', true)).toBe('live');
+    expect(targetStatus(false, 'online', false)).toBe('none');
+    for (const s of ['offline', 'connecting', 'off'] as const) expect(targetStatus(true, s, true)).toBe('saved');
     expect(TARGET_LABEL.saved).not.toMatch(/Shown in the game/);
   });
 });
