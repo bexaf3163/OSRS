@@ -3,7 +3,7 @@ import { useEffect, useState, type ComponentType } from 'react';
 import { findSkill, reference } from './data';
 import { useStore } from './store';
 import { useRoute, type Page } from './lib/router';
-import { IconBook, IconCart, IconCompact, IconGear, IconJournal, IconPath, IconSearch, IconSettings, IconSkills } from './components/Icons';
+import { IconCart, IconCompact, IconGear, IconJournal, IconPath, IconSearch, IconSettings, IconSkills } from './components/Icons';
 import { SearchBox } from './components/SearchBox';
 import { HeaderMode } from './components/ModeToggle';
 import { CompassMark } from './components/CompassMark';
@@ -36,7 +36,6 @@ const TABS: { page: Page; href: string; label: string; Icon: ComponentType<{ cla
   { page: 'gear', href: '#/gear', label: 'Gear', Icon: IconGear },
   { page: 'shopping', href: '#/shopping', label: 'Shopping', Icon: IconCart },
   { page: 'journal', href: '#/journal', label: 'Journal', Icon: IconJournal },
-  { page: 'reference', href: '#/reference', label: 'Reference', Icon: IconBook },
 ];
 
 /** The section a route belongs to: the old #/quests and #/goals hashes live inside the Journal. */
@@ -47,6 +46,7 @@ function sectionOf(page: Page): Page {
 function pageTitle(page: Page, param?: string): string {
   if (page === 'skills' && param) return findSkill(param)?.name ?? 'Skills';
   if (page === 'reference' && param) return reference.sections.find((s) => s.id === param)?.title ?? 'Reference';
+  if (page === 'reference') return 'Reference';
   if (page === 'settings') return 'Settings';
   if (page === 'shopping') return 'Shopping';
   if (page === 'gear') return 'Gear';
