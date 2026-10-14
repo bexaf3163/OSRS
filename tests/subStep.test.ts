@@ -9,8 +9,8 @@ const nav = (label: string, extra: Partial<NavTargetPayload> = {}): NavTargetPay
 describe('the active sub-step', () => {
   it('uses the current quest cursor independently of an earlier navigation target', () => {
     const mountain = stepById.get('S3-04')!;
-    const stage = mountain.questStages!.stages.find(s => s.do.some(l => /Ancient Guardian/.test(l.t)))!;
-    const lineIndex = stage.do.findIndex(l => /Ancient Guardian/.test(l.t));
+    const stage = mountain.questStages!.stages.find(s => s.do.some(l => l.k === 'defeatGuardian'))!;
+    const lineIndex = stage.do.findIndex(l => l.k === 'defeatGuardian');
     const current = instructionSubStep(mountain, { stepId: mountain.id, stageAt: stage.at, lineIndex, peeking: false });
     expect(current?.title).toMatch(/Ancient Guardian/);
     expect(findSubStep(mountain, { label: 'Talk to Willow (south of Ice Mountain)', x: 0, y: 0, plane: 0, stepId: mountain.id })?.title).toMatch(/Willow/);

@@ -31,13 +31,15 @@ export interface PreflightBlock {
   npc?: string;
 }
 
-/** How many of the item the container holds: by exact id when the data gives one, else by name. */
-export function countOf(items: GearItem[], p: Pick<StagePre, 'item' | 'id'>): number {
+/** How many of the item the container holds: by exact id when the data gives one, else by name; the alternatives count by name (Preflight.count). */
+export function countOf(items: GearItem[], p: Pick<StagePre, 'item' | 'id' | 'alt'>): number {
   const key = nameKey(p.item);
+  const alts = new Set((p.alt ?? []).map(nameKey));
   let n = 0;
   for (const i of items) {
     const c = i.count ?? 1;
     if (p.id !== undefined ? i.id === p.id : nameKey(i.name) === key) n += c;
+    else if (alts.has(nameKey(i.name))) n += c;
   }
   return n;
 }

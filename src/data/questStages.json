@@ -6592,8 +6592,8 @@
      "title": "The dig",
      "steps": [
       "Talk to Willow at the dungeon entrance on the west side of Ice Mountain. Dialogue: “Yes”.",
+      "Before you go in: take a pickaxe (any) and 10-15 Trout or Salmon, and check Mining is 10 or more. There is no bank inside.",
       "Enter the dungeon again to finish the quest.",
-      "Before you go in: take a pickaxe (any) and 10-15 Trout or Salmon, and check Mining is 10 or more.",
       "In the final room do not wait for the Ancient Guardian to leave you alone: it keeps attacking while you mine.",
       "Mine a Structural pillar in one of the four corners (the Mine option). The pillar breaks and hurts the Guardian.",
       "Eat when you need to (not later than when your health is within two hits of 7), then move straight to the next Structural pillar.",
@@ -6882,7 +6882,7 @@
      "at": 20,
      "do": [
       {
-       "t": "Talk with Willow at the dungeon entrance on the west side of Ice Mountain. Dialogue: “Yes”.",
+       "t": "Talk with Willow at the dungeon entrance on the west side of Ice Mountain. Dialogue: “Yes”. Bring a pickaxe and 10-15 Trout or Salmon: the next part is a fight and there is no bank inside.",
        "s": "Talk to Willow at the dungeon entrance (west Ice Mountain)",
        "at": [
         2996,
@@ -6904,20 +6904,37 @@
       "label": "Willow — Ice Mountain dungeon entrance",
       "npc": "Willow"
      },
-     "items": []
+     "items": [
+      {
+       "name": "Bronze pickaxe",
+       "id": 1265,
+       "alt": ["Iron pickaxe","Steel pickaxe","Black pickaxe","Mithril pickaxe","Adamant pickaxe","Rune pickaxe","Dragon pickaxe","Crystal pickaxe","Infernal pickaxe","3rd age pickaxe","Gilded pickaxe"],
+       "where": "Any pickaxe works. The Bronze pickaxe from step S1-12 is enough. The last room is the fight; there is no bank inside."
+      },
+      {
+       "name": "Trout",
+       "count": 10,
+       "alt": ["Salmon","Tuna","Lobster","Swordfish","Monkfish","Shark","Cooked meat","Cake","Pie"],
+       "where": "10-15 Trout or Salmon, or better food you already own."
+      }
+     ]
     },
     {
      "at": 30,
      "do": [
       {
-       "t": "Re-enter the dungeon to finish the quest. Dialogue: “Yes.”.",
-       "s": "Enter the dungeon again",
+       "t": "Before you go in, carry a pickaxe and 10-15 Trout or Salmon (or better food): the Ancient Guardian keeps attacking while you mine, and there is no bank inside. Then re-enter the dungeon. Dialogue: “Yes.”.",
+       "s": "Take a pickaxe and food, then enter the dungeon",
        "at": [
         3000,
         3494,
         0
        ],
-       "k": "reenterDungeon"
+       "k": "reenterDungeon",
+       "pre": [
+        {"item": "Bronze pickaxe", "id": 1265, "alt": ["Iron pickaxe","Steel pickaxe","Black pickaxe","Mithril pickaxe","Adamant pickaxe","Rune pickaxe","Dragon pickaxe","Crystal pickaxe","Infernal pickaxe","3rd age pickaxe","Gilded pickaxe"], "t": "Take a pickaxe: the last room needs one to mine the Structural pillars"},
+        {"item": "Trout", "n": 10, "alt": ["Salmon","Tuna","Lobster","Swordfish","Monkfish","Shark","Cooked meat","Cake","Pie"], "t": "Take 10-15 Trout or Salmon: the Guardian keeps attacking while you mine"}
+       ]
       }
      ],
      "go": {
@@ -6926,7 +6943,20 @@
       "plane": 0,
       "label": "Ice Mountain dungeon entrance"
      },
-     "items": []
+     "items": [
+      {
+       "name": "Bronze pickaxe",
+       "id": 1265,
+       "alt": ["Iron pickaxe","Steel pickaxe","Black pickaxe","Mithril pickaxe","Adamant pickaxe","Rune pickaxe","Dragon pickaxe","Crystal pickaxe","Infernal pickaxe","3rd age pickaxe","Gilded pickaxe"],
+       "where": "Any pickaxe works. The Bronze pickaxe from step S1-12 is enough. The last room is the fight; there is no bank inside."
+      },
+      {
+       "name": "Trout",
+       "count": 10,
+       "alt": ["Salmon","Tuna","Lobster","Swordfish","Monkfish","Shark","Cooked meat","Cake","Pie"],
+       "where": "10-15 Trout or Salmon, or better food you already own."
+      }
+     ]
     },
     {
      "at": 35,

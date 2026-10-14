@@ -1,4 +1,4 @@
-# OSRS Path - full route export (app version 2.53.2)
+# OSRS Path - full route export (app version 2.53.3)
 
 Exported 2026-10-14 from the program's data files (steps.json, questStages.json, stages.json, goals.json). Every step is written out with everything the program shows for it: where to go, what to bring and where each item comes from, the quick options, the walkthrough, what the game plugin highlights and when it ticks the step off by itself, and, for quests, the stage table line by line (what the game shows for each value of the quest variable).
 
@@ -3098,8 +3098,8 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   12. Give Burntof the Asgarnian Ale.
   13. Beat Burntof in a match of Rock-Paper-Scissors. Your choices of Rock, Paper and Scissors do not matter. Dialogue: “Rock”.
   14. Talk to Willow at the dungeon entrance on the west side of Ice Mountain. Dialogue: “Yes”.
-  15. Enter the dungeon again to finish the quest.
-  16. Before you go in: take a pickaxe (any) and 10-15 Trout or Salmon, and check Mining is 10 or more.
+  15. Before you go in: take a pickaxe (any) and 10-15 Trout or Salmon, and check Mining is 10 or more. There is no bank inside.
+  16. Enter the dungeon again to finish the quest.
   17. In the final room do not wait for the Ancient Guardian to leave you alone: it keeps attacking while you mine.
   18. Mine a Structural pillar in one of the four corners (the Mine option). The pillar breaks and hurts the Guardian.
   19. Eat when you need to (not later than when your health is within two hits of 7), then move straight to the next Structural pillar.
@@ -3125,8 +3125,8 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
       4. Beat Burntof in a match of Rock-Paper-Scissors. Your choices of Rock, Paper and Scissors do not matter. Dialogue: “Rock”.
   - The dig
       1. Talk to Willow at the dungeon entrance on the west side of Ice Mountain. Dialogue: “Yes”.
-      2. Enter the dungeon again to finish the quest.
-      3. Before you go in: take a pickaxe (any) and 10-15 Trout or Salmon, and check Mining is 10 or more.
+      2. Before you go in: take a pickaxe (any) and 10-15 Trout or Salmon, and check Mining is 10 or more. There is no bank inside.
+      3. Enter the dungeon again to finish the quest.
       4. In the final room do not wait for the Ancient Guardian to leave you alone: it keeps attacking while you mine.
       5. Mine a Structural pillar in one of the four corners (the Mine option). The pillar breaks and hurts the Guardian.
       6. Eat when you need to (not later than when your health is within two hits of 7), then move straight to the next Structural pillar.
@@ -3219,18 +3219,24 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - key playRPS
   - Value 20 and above:
       Go to: Willow — Ice Mountain dungeon entrance (2996, 3494, plane 0), NPC Willow
-      Items for this stage: none
-      1. Talk with Willow at the dungeon entrance on the west side of Ice Mountain. Dialogue: “Yes”.
+      Items for this stage:
+        - Bronze pickaxe - Any pickaxe works. The Bronze pickaxe from step S1-12 is enough. The last room is the fight; there is no bank inside. [or Iron pickaxe, Steel pickaxe, Black pickaxe, Mithril pickaxe, Adamant pickaxe, Rune pickaxe, Dragon pickaxe, Crystal pickaxe, Infernal pickaxe, 3rd age pickaxe, Gilded pickaxe]
+        - Trout x10 - 10-15 Trout or Salmon, or better food you already own. [or Salmon, Tuna, Lobster, Swordfish, Monkfish, Shark, Cooked meat, Cake, Pie]
+      1. Talk with Willow at the dungeon entrance on the west side of Ice Mountain. Dialogue: “Yes”. Bring a pickaxe and 10-15 Trout or Salmon: the next part is a fight and there is no bank inside.
          In the game list: Talk to Willow at the dungeon entrance (west Ice Mountain)
          - at 2996, 3494, plane 0
          - highlighted: NPC ids 10655
          - key goToDungeon
   - Value 30 and above:
       Go to: Ice Mountain dungeon entrance (3000, 3494, plane 0)
-      Items for this stage: none
-      1. Re-enter the dungeon to finish the quest. Dialogue: “Yes.”.
-         In the game list: Enter the dungeon again
+      Items for this stage:
+        - Bronze pickaxe - Any pickaxe works. The Bronze pickaxe from step S1-12 is enough. The last room is the fight; there is no bank inside. [or Iron pickaxe, Steel pickaxe, Black pickaxe, Mithril pickaxe, Adamant pickaxe, Rune pickaxe, Dragon pickaxe, Crystal pickaxe, Infernal pickaxe, 3rd age pickaxe, Gilded pickaxe]
+        - Trout x10 - 10-15 Trout or Salmon, or better food you already own. [or Salmon, Tuna, Lobster, Swordfish, Monkfish, Shark, Cooked meat, Cake, Pie]
+      1. Before you go in, carry a pickaxe and 10-15 Trout or Salmon (or better food): the Ancient Guardian keeps attacking while you mine, and there is no bank inside. Then re-enter the dungeon. Dialogue: “Yes.”.
+         In the game list: Take a pickaxe and food, then enter the dungeon
          - at 3000, 3494, plane 0
+         - must have: Bronze pickaxe (or Iron pickaxe, Steel pickaxe, Black pickaxe, Mithril pickaxe, Adamant pickaxe, Rune pickaxe, Dragon pickaxe, Crystal pickaxe, Infernal pickaxe, 3rd age pickaxe, Gilded pickaxe) - bank or Grand Exchange
+         - must have: Trout x10 (or Salmon, Tuna, Lobster, Swordfish, Monkfish, Shark, Cooked meat, Cake, Pie) - bank or Grand Exchange
          - key reenterDungeon
   - Value 35 and above:
       Items for this stage:
@@ -3780,7 +3786,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
 - Map: Cassius by the Lumbridge pond (3168, 3275, plane 0)
 - NPC: Cassius - By the pond in Lumbridge, Ground floor
 - Warning: Brutus's specials (Snort and Growl) are avoided by moving two tiles to the side, not by eating. Bring 5 Salmon for the plain hits.
-- Combat: The final fight is against Brutus. In the quest itself you cannot die (you are left at 1 health), but the same moves matter for him later. His plain hit is up to 3. After 1 to 6 hits he uses a special that is not stopped by food or protection prayers: Snort hits the row in front of him (or an L shape if you stand diagonal), Growl is a charge at you. Step two tiles to either side, or one tile back from Snort, as soon as he winds up. If it goes wrong, run south-west to the gate.
+- Combat: The final fight is against Brutus. In the quest his plain hits cannot kill you (they leave you at 1 health), but his specials can: they ignore protection prayers and kill you if they land. His plain hit is up to 3. After 1 to 6 hits he uses a special that is not stopped by food or protection prayers: Snort hits the row in front of him (or an L shape if you stand diagonal), Growl is a charge at you. Step two tiles to either side, or one tile back from Snort, as soon as he winds up. If it goes wrong, run south-west to the gate.
 - Reward: 1 QP, access to the cow boss Brutus, a 1,000 XP lamp for any combat skill or Prayer (put it into Prayer) and the Cowbell amulet from Gillie Groats.
 - Done when: The quest is green and the lamp from Gillie Groats has been used on Prayer.
 - Fights in melee: Brutus
@@ -6024,7 +6030,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
 - Slayer 18: Take the cheap XP first: the Varrock Museum quiz (talk to Orlando Smith, basement) gives 1,000 XP and the short quest A Porcine of Interest (the notice board in Draynor Village) another 1,000, which is level 13. For the rest do one or two tasks from the master Mazchna in Canifis (after Priest in Peril); Turael in Burthorpe gives short tasks with little XP. Stop at 18.
 - Crafting 31: Nature Spirit (S8-02) has already given 3,000 XP. From there make jewellery at a furnace with the mould in the bag: gold amulets from Crafting 8 (30 XP each), sapphire rings from 20 (40 XP each), emerald rings from 27 (55 XP each). Buy gold bars and cut gems on the Grand Exchange rather than mining them. Stop at 31.
 - Woodcutting 36: Cut oaks (level 15) and then willows (level 30) beside the Draynor Village bank: about 38 XP per oak log and 68 per willow log, and the logs can be sold or burned for Firemaking. 36 needs about 22,000 XP above level 15, roughly 330 willow logs. Use the best axe your level allows.
-- Cooking 10: Cook what you already hold on a range or a fire: level 10 is 1,154 XP and Cook's Assistant already gave 300. About 13 trout (70 XP each) or 57 shrimps (15 XP each) does it.
+- Cooking 10: Cook what you already hold on a range or a fire: level 10 is 1,154 XP and Cook's Assistant already gave 300, so 854 XP is left. Cook raw shrimps (30 XP each, about 29 successful cooks) or raw sardines (40 XP each, about 22; both from level 1), or herring from level 5 (50 XP). Trout needs Cooking 15 and cannot be cooked yet. Bring 10-15 more than that: some burn.
 - Order: Do Slayer first (it needs no money), then Woodcutting and Cooking (they pay for themselves), then Crafting while you wait for arrows to restock, then Ranged. Check the levels with the Skills page: the goals above are the only targets of this step.
 - Done when: Ranged 30, Slayer 18, Crafting 31, Woodcutting 36, Cooking 10.
 - Shows the ranged gear advice for your levels and coins
@@ -6847,7 +6853,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
 - Requirements: Tree Gnome Village and The Grand Tree (S7-03, S7-05), Prayer 43 for Protect from Melee (S8-06) and the ability to beat a level 195 Jungle Demon: it hits up to 32 with magic and melee, and only a protection prayer stops it.
 - Before you leave the bank: Gold bar, Ball of wool and a Lockpick are used at Zooknock and on the island, where there is no bank: take them now. 5 free slots, 4 Prayer potions, an Antipoison and 15 Lobsters. A Knife is worth taking: pineapples heal for free. During the quest you pick up monkey bones on Karamja and 5 bananas on Ape Atoll yourself.
 - Dangers: Monkey Zombies hit up to 7, Monkey Skeletons up to 12, and the spikes, rock traps and falling rocks of the dungeon take a share of your current health: move through the dungeon with Protect from Melee on and eat before each room.
-- Safespot: The Jungle demon (level 195) hits in melee and with magic: turn on Protect from Magic or Protect from Melee and hit it with magic or ranged from the far side.
+- Safespot: The Jungle demon (level 195) hits in melee and with magic: turn on Protect from Magic, stay three or more squares away so its melee cannot reach you, and hit it with Ranged (it is weakest to Ranged) from the far side.
 - Reward: 3 QP, 10,000 Coins, 3 diamonds, Daero's training (choose: 35,000 XP in Attack and Defence plus 20,000 in Strength and Hitpoints, or the other way round) and the right to wear the Dragon scimitar with 60 Attack.
 - The reward is a choice: the program shows the option that fits your levels (daero).
 - Done when: The quest is green, a Dragon scimitar is bought (worn with 60 Attack).

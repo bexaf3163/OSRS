@@ -155,6 +155,23 @@ describe('the quests named in the audit', () => {
     expect(itemPreflight(ship, { carried: bag(['Anti-dragon shield', 1540]), from: at(3047, 3205) })).toBeNull();
     expect(itemPreflight(ship, { carried: [], from: at(3047, 3205) })!.target).toMatchObject({ x: 3211, y: 3223, plane: 1 });
   });
+
+  it('Below Ice Mountain: the pickaxe and the food are asked for at the entrance, before the fight room (a user died there without them)', () => {
+    const entry = lineOf('S3-04', 'reenterDungeon');
+    expect(namesOf(entry)).toEqual(['Bronze pickaxe', 'Trout']);
+    const door = at(3000, 3494);
+    expect(itemPreflight(entry, { carried: [], from: door })!.item).toBe('Bronze pickaxe');
+    // Any pickaxe tier and any listed food count, in amounts: ten Salmon open the door, nine do not.
+    const kit = (salmon: number) => bag(['Iron pickaxe', 1267], ['Salmon', 329, salmon]);
+    expect(itemPreflight(entry, { carried: kit(10), from: door })).toBeNull();
+    expect(itemPreflight(entry, { carried: kit(9), from: door })!.item).toBe('Trout');
+    // An unread bag blocks nothing.
+    expect(itemPreflight(entry, { carried: null, from: door })).toBeNull();
+    // The two stages before the fight name the kit, so the hint is there while the player is still near a bank.
+    const row = (n: number) => stepById.get('S3-04')!.questStages!.stages.find((s) => s.at === n)!;
+    expect((row(30).items ?? []).map((i) => i.name)).toEqual(['Bronze pickaxe', 'Trout']);
+    expect((row(20).items ?? []).map((i) => i.name)).toEqual(['Bronze pickaxe', 'Trout']);
+  });
 });
 
 describe('every step that uses an item on an object or an NPC is guarded', () => {

@@ -13,11 +13,13 @@ describe('what a quest stage still asks for (Below Ice Mountain, real data)', ()
     return scope ? NAMES.filter((n) => isOutOfStage(scope, n)) : [];
   };
 
-  it('the data: stages 10, 15 and 35 list what they need, the others say "nothing", the first has no list', () => {
+  it('the data: stages 15, 20, 30 and 35 list what they need (the fight kit from the walk to the entrance on), the others say "nothing", the first has no list', () => {
     const lists = Object.fromEntries(mountain.questStages!.stages.map((s) => [s.at, s.items?.map((i) => i.name)]));
     expect(lists[15]).toEqual(['Cooked meat', 'Bread', 'Knife', 'Beer']);
+    expect(lists[20]).toEqual(['Bronze pickaxe', 'Trout']);
+    expect(lists[30]).toEqual(['Bronze pickaxe', 'Trout']);
     expect(lists[35]).toEqual(['Bronze pickaxe', 'Trout']);
-    expect(lists[20]).toEqual([]);
+    expect(lists[40]).toEqual([]);
     expect(lists[0]).toBeUndefined();
   });
 

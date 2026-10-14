@@ -3567,7 +3567,7 @@
     "fields": [
       {
         "label": "Combat",
-        "text": "The final fight is against Brutus. In the quest itself you cannot die (you are left at 1 health), but the same moves matter for him later. His plain hit is up to 3. After 1 to 6 hits he uses a special that is not stopped by food or protection prayers: Snort hits the row in front of him (or an L shape if you stand diagonal), Growl is a charge at you. Step two tiles to either side, or one tile back from Snort, as soon as he winds up. If it goes wrong, run south-west to the gate."
+        "text": "The final fight is against Brutus. In the quest his plain hits cannot kill you (they leave you at 1 health), but his specials can: they ignore protection prayers and kill you if they land. His plain hit is up to 3. After 1 to 6 hits he uses a special that is not stopped by food or protection prayers: Snort hits the row in front of him (or an L shape if you stand diagonal), Growl is a charge at you. Step two tiles to either side, or one tile back from Snort, as soon as he winds up. If it goes wrong, run south-west to the gate."
       }
     ],
     "foes": [
@@ -5608,7 +5608,7 @@
       },
       {
         "label": "Cooking 10",
-        "text": "Cook what you already hold on a range or a fire: level 10 is 1,154 XP and Cook's Assistant already gave 300. About 13 trout (70 XP each) or 57 shrimps (15 XP each) does it."
+        "text": "Cook what you already hold on a range or a fire: level 10 is 1,154 XP and Cook's Assistant already gave 300, so 854 XP is left. Cook raw shrimps (30 XP each, about 29 successful cooks) or raw sardines (40 XP each, about 22; both from level 1), or herring from level 5 (50 XP). Trout needs Cooking 15 and cannot be cooked yet. Bring 10-15 more than that: some burn."
       },
       {
         "label": "Order",
@@ -6315,7 +6315,7 @@
         "text": "Monkey Zombies hit up to 7, Monkey Skeletons up to 12, and the spikes, rock traps and falling rocks of the dungeon take a share of your current health: move through the dungeon with Protect from Melee on and eat before each room."
       }
     ],
-    "safespot": "The Jungle demon (level 195) hits in melee and with magic: turn on Protect from Magic or Protect from Melee and hit it with magic or ranged from the far side.",
+    "safespot": "The Jungle demon (level 195) hits in melee and with magic: turn on Protect from Magic, stay three or more squares away so its melee cannot reach you, and hit it with Ranged (it is weakest to Ranged) from the far side.",
     "reward": "3 QP, 10,000 Coins, 3 diamonds, Daero's training (choose: 35,000 XP in Attack and Defence plus 20,000 in Strength and Hitpoints, or the other way round) and the right to wear the Dragon scimitar with 60 Attack.",
     "doneWhen": "The quest is green, a Dragon scimitar is bought (worn with 60 Attack).",
     "inGame": {

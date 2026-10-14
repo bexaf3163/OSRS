@@ -747,8 +747,8 @@ async function run(browser: Browser) {
   // A connected client at the login screen is not live guidance. Keep the target without claiming a visible arrow.
   {
     const questData = JSON.parse(readFileSync(new URL('../src/data/questStages.json', import.meta.url),'utf8')).quests['S3-04'];
-    const stage = questData.stages.find((s: {do: {t:string}[]}) => s.do.some(l => /Ancient Guardian/.test(l.t)));
-    const lineIndex = stage.do.findIndex((l: {t:string}) => /Ancient Guardian/.test(l.t));
+    const stage = questData.stages.find((s: {do: {t:string;k?:string}[]}) => s.do.some(l => l.k === 'defeatGuardian'));
+    const lineIndex = stage.do.findIndex((l: {t:string;k?:string}) => l.k === 'defeatGuardian');
     const {page, errors} = await open(browser,1440,{
       progress:progressBefore('S3-04'),localStorage:{'osrs-put:active-step':'S3-04'},
       status:{protocol:6,inGame:true,activeStepId:'S3-04',questInstruction:{stepId:'S3-04',stageAt:stage.at,lineIndex,peeking:false},navTarget:{stepId:'S3-04',label:'Talk to Willow (south of Ice Mountain)',x:0,y:0,plane:0}},
@@ -783,8 +783,8 @@ async function run(browser: Browser) {
   // The companion strip (compact view): four tabs of the same step, the same stage-aware list, Done and Skip, a way back to the full workspace.
   {
     const questData = JSON.parse(readFileSync(new URL('../src/data/questStages.json', import.meta.url),'utf8')).quests['S3-04'];
-    const stage = questData.stages.find((s: {do: {t:string}[]}) => s.do.some(l => /Ancient Guardian/.test(l.t)));
-    const lineIndex = stage.do.findIndex((l: {t:string}) => /Ancient Guardian/.test(l.t));
+    const stage = questData.stages.find((s: {do: {t:string;k?:string}[]}) => s.do.some(l => l.k === 'defeatGuardian'));
+    const lineIndex = stage.do.findIndex((l: {t:string;k?:string}) => l.k === 'defeatGuardian');
     const {page, errors} = await open(browser, 420, {
       progress:progressBefore('S3-04'),
       localStorage:{'osrs-put:active-step':'S3-04','osrs-put:features':JSON.stringify({compact:true})},
@@ -903,8 +903,8 @@ async function run(browser: Browser) {
   // The desktop action follows the quest cursor while the player stays logged in: the plugin announces a moved cursor with a STATUS event.
   {
     const quest = JSON.parse(readFileSync(new URL('../src/data/questStages.json', import.meta.url), 'utf8')).quests['S3-04'];
-    const last = quest.stages.find((s: { do: { t: string }[] }) => s.do.some((l) => /Ancient Guardian/.test(l.t)));
-    const earlier = quest.stages.find((s: { at: number; do: { t: string }[] }) => s.at < last.at && s.do.length > 0 && !/Ancient Guardian/.test(s.do[0].t));
+    const last = quest.stages.find((s: { do: { t: string; k?: string }[] }) => s.do.some((l) => l.k === 'defeatGuardian'));
+    const earlier = quest.stages.find((s: { at: number; do: { t: string; k?: string }[] }) => s.at < last.at && s.do.length > 0 && s.do[0].k !== 'defeatGuardian');
     const { page } = await open(browser, 1440, {
       progress: progressBefore('S3-04'), localStorage: { 'osrs-put:active-step': 'S3-04' },
       status: { protocol: 6, inGame: true, activeStepId: 'S3-04', questInstruction: { stepId: 'S3-04', stageAt: earlier.at, lineIndex: 0, peeking: false } },
