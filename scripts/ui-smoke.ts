@@ -225,6 +225,7 @@ async function run(browser: Browser) {
       expect(await noOverflow(page), 'what to train with: no horizontal scrolling');
       await page.goto(`${BASE}#/settings`);
       await page.waitForTimeout(400);
+      await page.locator('details.settings-advanced > summary').click();
       await page.getByRole('button', { name: /Efficient/ }).click();
       await page.waitForTimeout(200);
       const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { efficient?: boolean });
@@ -251,7 +252,7 @@ async function run(browser: Browser) {
       expect(/Preparation required \(\d/.test(line) && line.includes('Fix'), `Zen: one status line with the preparation and the Fix button (${line.replace(/\s+/g, ' ').slice(0, 90)})`);
       expect((await text(page, '.readiness')).length > 0, 'Zen: Preparation exposes the readiness panel');
       await page.keyboard.press('Escape');
-      expect((await text(page, '.step-details')).includes('Mark as manually completed'), 'Zen: manual completion is a quiet action next to the walkthrough');
+      expect((await text(page, '.manual-complete')).includes('Done'),'Zen: Done is one clear action under the current instruction');
       expect(await page.getByRole('navigation', { name: 'Step views' }).getByRole('button').count() === 3, 'Zen: the reference views are three buttons: Preparation, Travel, Details');
       await page.getByRole('navigation', { name: 'Step views' }).getByRole('button', { name: /Preparation/ }).click();
       await page.waitForTimeout(300);
@@ -272,17 +273,12 @@ async function run(browser: Browser) {
       const line = await text(page, '.status-line');
       expect(line.includes('Ready to set off') && !line.includes('Fix') && await page.getByRole('button', { name: /Show in game/ }).count() > 0, `Zen: ready — "Ready to set off" and the step has its own "Show in game" (${line.replace(/s+/g, ' ').slice(0, 80)})`);
       expect(await noOverflow(page), 'Zen (ready): no horizontal scrolling');
-      // The switch in the header: "Inspector" brings back all the blocks.
-      // In a narrow window the header icon is hidden (like ⚔️ and 🛒) — the switch is always in Settings.
-      if (width > 480) await page.getByRole('button', { name: /switch to "Inspector"/ }).click();
-      else {
-        await page.goto(`${BASE}#/settings`);
-        await page.getByRole('button', { name: /^Inspector$/ }).click();
-      }
+      // "Inspector" brings back all the blocks; the switch is in Settings, Appearance.
+      await page.goto(`${BASE}#/settings`);
+      await page.getByRole('button', { name: /^Inspector$/ }).click();
       await page.waitForTimeout(300);
       const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { inspector?: boolean });
-      // In a narrow window the switch is on the Settings page (the step page is left), so only the saved choice can be checked there.
-      expect(feat.inspector === true && (width <= 480 || await page.locator('.step-status').count() === 1), 'Inspector: the switch is saved and the status line stays on top');
+      expect(feat.inspector === true, 'Inspector: the switch in Settings is saved');
       expect(!errors.length, `Zen (ready): no console errors ${errors.join('; ')}`);
       await page.context().close();
     }

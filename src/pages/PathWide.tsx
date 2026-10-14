@@ -17,6 +17,7 @@ import { findSubStep, instructionSubStep, subStepNpcInfo } from '../lib/subStep'
 import { GearBanner } from '../components/GearPrompt';
 import { TrackedSkillCard } from '../components/TrackedSkillCard';
 import { AccountSync } from '../components/AccountSync';
+import { Welcome } from '../components/Welcome';
 import { useMediaQuery, WIDE } from '../lib/media';
 import { RouteDrawer } from '../components/RouteDrawer';
 
@@ -207,6 +208,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
           </div>
         )}
 
+        <Welcome />
         <AccountSync compact />
         <TrackedSkillCard />
 
@@ -221,8 +223,8 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
               const next = steps[at + 1];
               return (
                 <>
-                  {prev ? <button type="button" className="btn btn-ghost" onClick={() => select(prev.id)}><IconChevron className="flip" /> {prev.id}</button> : <span />}
-                  {next && <button type="button" className="btn btn-ghost" onClick={() => select(next.id)}>{next.id} <IconChevron /></button>}
+                  {prev ? <button type="button" className="btn btn-ghost" title={prev.title} onClick={() => select(prev.id)}><IconChevron className="flip" /> Previous step</button> : <span />}
+                  {next && <button type="button" className="btn btn-ghost" title={next.title} onClick={() => select(next.id)}>Next step <IconChevron /></button>}
                 </>
               );
             })()}

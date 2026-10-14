@@ -9,6 +9,7 @@ import { firstOpen, nextStep, openAfter } from '../lib/next-step';
 import { IconChevron } from '../components/Icons';
 import { CompanionStrip } from '../components/CompanionStrip';
 import { AccountSync } from '../components/AccountSync';
+import { Welcome } from '../components/Welcome';
 import { TrackedSkillCard } from '../components/TrackedSkillCard';
 
 export function PathCompact({ focusStep }: { focusStep?: string }) {
@@ -40,19 +41,20 @@ export function PathCompact({ focusStep }: { focusStep?: string }) {
   return (
     <div className="page compact-page">
       <h1 className="visually-hidden">Path</h1>
+      <Welcome compact />
       <AccountSync compact />
       <TrackedSkillCard />
       <article className="step-view" key={selected.id}>
         <CompanionStrip step={selected} suggested={selected.id === suggested.id} onDone={complete} nextId={upcoming?.id} onSelect={setSelectedId} />
         <footer className="step-view-nav">
           {steps[at - 1]
-            ? <button type="button" className="btn btn-ghost" onClick={() => setSelectedId(steps[at - 1].id)}><IconChevron className="flip" /> {steps[at - 1].id}</button>
+            ? <button type="button" className="btn btn-ghost" title={steps[at - 1].title} onClick={() => setSelectedId(steps[at - 1].id)}><IconChevron className="flip" /> Previous</button>
             : <span />}
           {selected.id !== suggested.id
             ? <button type="button" className="btn btn-ghost" onClick={() => setSelectedId(suggested.id)}>To the current step</button>
             : <span />}
           {steps[at + 1]
-            ? <button type="button" className="btn btn-ghost" onClick={() => setSelectedId(steps[at + 1].id)}>{steps[at + 1].id} <IconChevron /></button>
+            ? <button type="button" className="btn btn-ghost" title={steps[at + 1].title} onClick={() => setSelectedId(steps[at + 1].id)}>Next <IconChevron /></button>
             : <span />}
         </footer>
       </article>

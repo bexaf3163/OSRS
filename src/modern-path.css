@@ -1,5 +1,5 @@
 /* Accepted modern Path direction. Theme preferences, Classic and compact views remain available. */
-:root { --radius:12px; --radius-sm:8px; --topbar-h:72px; --accent:#5262be; --accent-ink:#5262be; --accent-soft:#e7ebfa; --bg:#fbfcfe; --surface:#ffffff; --surface-2:#f2f5fa; --surface-3:#f2f4f8; --border:#e5e9f0; --text:#202737; --muted:#667387; --gold:#b18a43; --gold-ink:#916d30; --on-accent:#ffffff; --bg-art:none; }
+:root { --radius:12px; --radius-sm:8px; --topbar-h:72px; --accent:#5262be; --accent-ink:#5262be; --accent-soft:#e7ebfa; --bg:#fbfcfe; --surface:#ffffff; --surface-2:#f2f5fa; --surface-3:#f2f4f8; --border:#e5e9f0; --text:#202737; --muted:#586478; --gold:#b18a43; --gold-ink:#7f5f24; --on-accent:#ffffff; --bg-art:none; }
 :root[data-theme="dark"],:root:not([data-look="classic"])[data-theme="dark"] { --bg:#11151d; --surface:#1a202c; --surface-2:#20283d; --surface-3:#0d1118; --border:#293140; --text:#eef1f7; --muted:#9aa6b8; --accent:#b0baff; --accent-ink:#b0baff; --accent-soft:#20283d; --gold:#ddbd81; --gold-ink:#ddbd81; --on-accent:#121726; --bg-art:none; }
 @media(prefers-color-scheme:dark) { :root:not([data-theme="light"]),:root:not([data-look="classic"]):not([data-theme="light"]) { --bg:#11151d; --surface:#1a202c; --surface-2:#20283d; --surface-3:#0d1118; --border:#293140; --text:#eef1f7; --muted:#9aa6b8; --accent:#b0baff; --accent-ink:#b0baff; --accent-soft:#20283d; --gold:#ddbd81; --gold-ink:#ddbd81; --on-accent:#121726; --bg-art:none; } }
 :root body { background:var(--bg); }
@@ -28,7 +28,7 @@
 .sidebar-settings .icon { width:18px; height:18px; }
 .sidebar-settings.is-active { color:var(--accent-ink); }
 .sidebar-route { margin:36px 11px 24px; font-size:.8rem; }
-.sidebar-route > .eyebrow { margin-bottom:20px; font-size:.65rem; letter-spacing:.1em; color:var(--muted); }
+.sidebar-route > .eyebrow { margin-bottom:20px; font-size:.7rem; letter-spacing:.1em; color:var(--muted); }
 .sidebar-route-stage { display:flex; justify-content:space-between; margin-bottom:8px; }
 .sidebar-route-stage span { color:var(--muted); }
 .sidebar-route-current { padding-top:20px; color:var(--accent-ink); font-weight:500; }
@@ -61,7 +61,7 @@
 .modern-quest-icon .icon { width:24px; height:24px; }
 .cockpit .step-view-head > div, .strip .step-view-head > div { min-width:0; }
 :root .cockpit .step-view-title, :root .strip .step-view-title { font-size:1.1rem; font-weight:500; margin:4px 0 0; line-height:1.4; }
-.cockpit .step-view-head .eyebrow, .strip .step-view-head .eyebrow { font-size:.65rem; letter-spacing:.075em; color:var(--muted); }
+.cockpit .step-view-head .eyebrow, .strip .step-view-head .eyebrow { font-size:.7rem; letter-spacing:.075em; color:var(--muted); }
 .cockpit .step-id, .strip .step-id { margin-left:auto; font-size:.7rem; color:var(--muted); white-space:nowrap; }
 .quest-cursor-progress { margin:0 0 45px; }
 .quest-cursor-progress > div:first-child { display:flex; justify-content:space-between; gap:12px; font-size:.75rem; color:var(--muted); margin-bottom:10px; }
@@ -90,7 +90,7 @@
 :root .cockpit .step-details, :root .strip .step-details { padding:0; }
 :root .cockpit .step-status, :root .strip .step-status { box-shadow:none; border:0; background:transparent; padding:12px 0; }
 .modern-next { display:flex; align-items:center; gap:15px; padding-top:22px; margin-top:36px; border-top:1px solid var(--border); color:var(--text); font-size:.8rem; }
-.modern-next .eyebrow { color:var(--muted); font-size:.65rem; letter-spacing:.1em; }
+.modern-next .eyebrow { color:var(--muted); font-size:.7rem; letter-spacing:.1em; }
 .modern-next .icon { margin-left:auto; width:15px; height:15px; }
 .modern-completed { display:flex; gap:8px; align-items:center; margin-top:20px; }
 :root .card,:root .training,:root .quest,:root .settings-block { box-shadow:none; border-radius:10px; }

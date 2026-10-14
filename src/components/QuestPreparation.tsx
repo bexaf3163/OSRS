@@ -2,6 +2,7 @@
 // The list is the stage's own once the game confirms the line the player is on: what the quest used up earlier is folded away, not listed as missing.
 import type { Step } from '../types';
 import { useReadinessEngine } from '../readinessContext';
+import { useBridge } from '../bridge';
 import { useStageScope } from '../lib/useStageScope';
 import { isOutOfStage } from '../lib/stageScope';
 import type { PrepLine } from '../lib/prepPlan';
@@ -12,7 +13,7 @@ import { formatGp } from '../lib/shopping';
 
 const LABEL = { EQUIPPED: 'Equipped', INVENTORY: 'In your bag', BANK: 'Take from bank', MISSING: 'Missing', UNKNOWN: 'Not checked' };
 
-function Row({ step, l, quiet = false }: { step: Step; l: PrepLine; quiet?: boolean }) {
+function Row({ step, l, quiet = false, linked = true }: { step: Step; l: PrepLine; quiet?: boolean; linked?: boolean }) {
   const item = step.itemsRequired?.find((i) => i.nameEn.toLowerCase() === l.name.toLowerCase());
   return (
     <li className={`quest-supply is-${l.where.toLowerCase()} ${quiet ? 'is-quiet' : ''}`}>
@@ -20,7 +21,7 @@ function Row({ step, l, quiet = false }: { step: Step; l: PrepLine; quiet?: bool
       <span className="quest-supply-name">{l.name}{l.count > 1 && <> ×{l.count}{!l.exact && '+'}</>}</span>
       {quiet
         ? <span className="quest-supply-state">Handled</span>
-        : <span className="quest-supply-state"><span aria-hidden="true">{l.where === 'UNKNOWN' ? '○' : l.where === 'MISSING' ? '!' : l.where === 'BANK' ? '↗' : '✓'}</span> {LABEL[l.where]}</span>}
+        : <span className="quest-supply-state"><span aria-hidden="true">{l.where === 'UNKNOWN' ? '○' : l.where === 'MISSING' ? '!' : l.where === 'BANK' ? '↗' : '✓'}</span> {l.where === 'UNKNOWN' && !linked ? 'Bring' : LABEL[l.where]}</span>}
     </li>
   );
 }
@@ -29,6 +30,8 @@ function Row({ step, l, quiet = false }: { step: Step; l: PrepLine; quiet?: bool
 export function QuestSupplies({ step, onReview }: { step: Step; onReview?: () => void }) {
   const plan = useReadinessEngine().plan(step, { ahead: 0 });
   const scope = useStageScope(step);
+  // Without RuneLite nothing can be checked: "Not checked" on every line says nothing, so the list is simply what to bring.
+  const linked = useBridge().state === 'online';
   const all = plan.lines.filter((l) => l.timing === 'NOW');
   const lines = all.filter((l) => !isOutOfStage(scope, l.name));
   const handled = all.filter((l) => isOutOfStage(scope, l.name));
@@ -39,11 +42,11 @@ export function QuestSupplies({ step, onReview }: { step: Step; onReview?: () =>
     <section className="quest-panel quest-preparation">
       <header className="quest-panel-heading">
         <h3>{scope ? 'Needed for this stage' : `Prepare for this ${step.type === 'quest' ? 'quest' : 'step'}`}</h3>
-        {unknown > 0 && <span className="badge">{unknown} unverified</span>}
+        {linked && unknown > 0 && <span className="badge">{unknown} unverified</span>}
       </header>
       {lines.length > 0 || plan.coins.need > 0 ? (
         <ul className="quest-supply-list">
-          {lines.map((l) => <Row key={l.key} step={step} l={l} />)}
+          {lines.map((l) => <Row key={l.key} step={step} l={l} linked={linked} />)}
           {plan.coins.need > 0 && <li className="quest-supply">
             <span className="quest-supply-icon"><ItemIcon src={findLocalItem('Coins')?.iconUrl} alt="" size={32} /></span>
             <span className="quest-supply-name">Preparation budget<br /><span className="muted small">{formatGp(plan.coins.need)}</span></span>

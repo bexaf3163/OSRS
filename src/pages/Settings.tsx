@@ -92,7 +92,10 @@ export function SettingsPage() {
           </div>
           <aside className="appearance-preview"><h2>Preview</h2><p className="muted small">Your current action, with the selected appearance.</p>{previewStep ? <CurrentAction step={previewStep} /> : <p className="notice">All route steps are completed.</p>}</aside>
         </div>
-        <PlayStyleSection />
+        <details className="settings-advanced">
+          <summary>Advanced: play style, preparation and automation</summary>
+          <PlayStyleSection />
+        </details>
         </>
       )}
       {tab === 'game' && (
@@ -386,22 +389,25 @@ function PlayStyleSection() {
 function Helpers() {
   const features = useFeatures();
   return (
-    <section className="card section-card">
-      <h2 className="card-title">The helper: places, bank, pace, upgrades</h2>
-      <p className="muted small">
-        A turned-off feature is not only hidden but does nothing. What is drawn in the game itself (the danger radar,
-        the highlight, the sound) is also configured in the OSRS Path Bridge plugin: RuneLite → plugin settings → "Places, radar, pace".
-      </p>
-      {HELPERS.map((h) => (
-        <div className="setting" key={h.key}>
-          <label className="switch">
-            <input type="checkbox" checked={features[h.key]} onChange={(e) => setFeatures({ [h.key]: e.target.checked })} />
-            <span>{h.title}</span>
-          </label>
-          <p className="muted small">{h.text}</p>
-        </div>
-      ))}
-    </section>
+    <details className="settings-advanced">
+      <summary>More helpers: places, bank, training pace, upgrades</summary>
+      <section className="card section-card">
+        <h2 className="card-title">The helper: places, bank, pace, upgrades</h2>
+        <p className="muted small">
+          A turned-off feature is not only hidden but does nothing. What is drawn in the game itself (the danger radar,
+          the highlight, the sound) is also configured in the OSRS Path Bridge plugin: RuneLite → plugin settings → "Places, radar, pace".
+        </p>
+        {HELPERS.map((h) => (
+          <div className="setting" key={h.key}>
+            <label className="switch">
+              <input type="checkbox" checked={features[h.key]} onChange={(e) => setFeatures({ [h.key]: e.target.checked })} />
+              <span>{h.title}</span>
+            </label>
+            <p className="muted small">{h.text}</p>
+          </div>
+        ))}
+      </section>
+    </details>
   );
 }
 
@@ -425,24 +431,9 @@ function RuneLiteBridge() {
     <section className="card section-card">
       <h2 className="card-title">RuneLite</h2>
       <p className="muted">
-        The OSRS Path Bridge plugin for RuneLite shows the current step right in the game: an arrow to the place, a highlight of NPCs, objects,
-        tiles, the needed dialogue option and inventory items — and it marks the step itself when the quest is counted.
-        The link stays inside the computer: <code className="code">{BRIDGE_ORIGIN}</code>.
+        The OSRS Path plugin for RuneLite shows the current step in the game: an arrow to the place, highlighted NPCs and objects, and the items to bring.
+        It also ticks a step by itself when the game confirms it. Everything stays on this computer (<code className="code">{BRIDGE_ORIGIN}</code>).
       </p>
-      <div className="setting">
-        <label className="switch">
-          <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />
-          <span>RuneLite link</span>
-        </label>
-        <p className="muted small">Now: {status}.{activeStepId && (state === 'online' && inGame
-          ? <> The game shows the step <code className="code">{activeStepId}</code>.</>
-          : <> The step <code className="code">{activeStepId}</code> will return to the game when {state === 'online' ? 'your character logs in' : 'RuneLite connects'}.</>)}</p>
-        {activeStepId && <div className="actions"><button type="button" className="btn" onClick={() => void clear()}>Remove the hints from the game</button></div>}
-        {plugin && (plugin.compat === 'ok'
-          ? <p className="muted small">✓ The plugin {plugin.version ?? ''} is compatible with the app {__APP_VERSION__} (protocol {plugin.protocol}).</p>
-          : <PluginUpdateNote />)}
-      </div>
-
       {canLaunch ? (
         <div className="setting">
           <label className="switch">
@@ -491,6 +482,21 @@ function RuneLiteBridge() {
           desktop app, so there is no button here.
         </p>
       )}
+
+      <div className="setting">
+        <label className="switch">
+          <input type="checkbox" checked={enabled} onChange={(e) => setEnabled(e.target.checked)} />
+          <span>RuneLite link</span>
+        </label>
+        <p className="muted small">Now: {status}.{activeStepId && (state === 'online' && inGame
+          ? <> The game shows the step <code className="code">{activeStepId}</code>.</>
+          : <> The step <code className="code">{activeStepId}</code> will return to the game when {state === 'online' ? 'your character logs in' : 'RuneLite connects'}.</>)}</p>
+        {activeStepId && <div className="actions"><button type="button" className="btn" onClick={() => void clear()}>Remove the hints from the game</button></div>}
+        {plugin && (plugin.compat === 'ok'
+          ? <p className="muted small">✓ The plugin {plugin.version ?? ''} is compatible with the app {__APP_VERSION__} (protocol {plugin.protocol}).</p>
+          : <PluginUpdateNote />)}
+      </div>
+
     </section>
   );
 }

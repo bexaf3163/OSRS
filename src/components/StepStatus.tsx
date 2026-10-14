@@ -73,7 +73,7 @@ function useFilled(keys: TabKey[]) {
 }
 
 /** headline: only the verdict line and its actions (the Path workspace shows the details in its own views); onPrep opens Preparation. noStart: the workspace has its own "Show in game" button, so the status does not offer a second one. */
-export function StepStatus({ step, headline = false, noStart = false, onPrep }: { step: Step; headline?: boolean; noStart?: boolean; onPrep?: () => void }) {
+export function StepStatus({ step, headline = false, noStart = false, quiet = false, onPrep }: { step: Step; headline?: boolean; noStart?: boolean; quiet?: boolean; onPrep?: () => void }) {
   const { progress } = useStore();
   const { enabled, activeStepId, navTarget, pointInGame, state: link, inGame } = useBridge();
   const live = link === 'online' && inGame;
@@ -104,6 +104,10 @@ export function StepStatus({ step, headline = false, noStart = false, onPrep }: 
   const s = STATUS_TEXT[r.status];
   const n = r.problems.length;
   const ready = r.status === 'READY' || (!!r.goalMet && n === 0);
+  // quiet: a step with nothing to check has nothing to say about it — no box that only repeats "ready".
+  if (quiet && ready && n === 0 && !recovering && planNow.lines.length === 0) return null;
+  // Offline nothing can be checked: the list of what to bring says it all, a "not everything is checked" box would only repeat it.
+  if (quiet && !ready && n === 0 && r.status === 'UNKNOWN' && link !== 'online' && !recovering) return null;
   const prep = !ready && n > 0 && r.status !== 'BLOCKED' && r.status !== 'MISSING_QUEST';
   const text = ready ? 'Ready to set off'
     : prep ? `Preparation required (${n} ${plural(n, 'item', 'items')})`

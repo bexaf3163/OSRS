@@ -7,7 +7,6 @@ import { IconCart, IconCompact, IconGear, IconJournal, IconPath, IconSearch, Ico
 import { SearchBox } from './components/SearchBox';
 import { HeaderMode } from './components/ModeToggle';
 import { CompassMark } from './components/CompassMark';
-import { DensityToggle } from './components/DensityToggle';
 import { HeaderProgress } from './components/HeaderProgress';
 import { BridgeIndicator } from './components/BridgeIndicator';
 import { ToastView } from './components/ToastView';
@@ -127,7 +126,7 @@ export function App() {
         <div className="app-content">
       <header className={`topbar ${compact ? 'is-compact' : ''}`}>
         <div className="topbar-inner">
-          <a className="mobile-brand brand" href="#/"><CompassMark /><span>OSRS Path</span></a>
+          <a className="mobile-brand brand" href="#/" aria-label="OSRS Path"><CompassMark /><span>OSRS Path</span></a>
           <div className="mobile-mode"><HeaderMode /></div>
           <span className="workspace-breadcrumb">{pageTitle(route.page, route.param)}</span>
           <div className="topbar-actions">
@@ -135,7 +134,6 @@ export function App() {
               <button type="button" className="btn btn-sm" onClick={() => setFeatures({ compact: false })}>Full workspace</button>
             )}
             <BridgeIndicator />
-            <DensityToggle />
             {!compact && (
               <button type="button" className="icon-btn compact-btn" aria-label="Compact view: keep the current action next to the game"
                 title="Compact view: keep the current action next to the game"

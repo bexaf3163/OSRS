@@ -4,12 +4,12 @@
 
 import { useEffect, useState } from 'react';
 import type { Step } from '../types';
-import { stepById } from '../data';
 import { useStore } from '../store';
 import { useBridge } from '../bridge';
 import { useReadinessEngine } from '../readinessContext';
 import { blockerParts, blockersOf, isClosed } from '../lib/next-step';
-import { TYPE_LABEL, TypeIcon, IconChevron, IconCheck, IconLock } from './Icons';
+import { toInGameTarget } from '../services/runeliteBridge';
+import { TYPE_LABEL, TypeIcon, IconLock } from './Icons';
 import { CurrentAction } from './StepWorkspace';
 import { StepBody, type StepTab } from './StepCard';
 import { StepStatus } from './StepStatus';
@@ -18,6 +18,7 @@ import { StepDrawer } from './StepDrawer';
 import { StepMap } from './StepMap';
 import { TravelTip } from './TravelTip';
 import { ShowInGame } from './ShowInGame';
+import { StepDone } from './StepDone';
 
 type View = Exclude<StepTab, 'steps'>;
 
@@ -55,15 +56,18 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId }: { step: St
   useEffect(() => setView(null), [step.id]);
 
   const open = VIEWS.find((v) => v.id === view);
+  // A step with no place on the map (set up the client, read a guide) has no "Where" card at all.
+  const hasPlace = !!toInGameTarget(step);
   const where = <>
-    <section className="quest-panel cockpit-where-card" aria-label="Where">
-      <header className="quest-panel-heading"><h3>Where</h3></header>
-      <TravelTip step={step} />
-      <StepMap step={step} />
-      <button type="button" className="btn btn-sm" onClick={() => setView('travel')}>Travel and directions <kbd>T</kbd></button>
-    </section>
+    {hasPlace && (
+      <section className="quest-panel cockpit-where-card" aria-label="Where">
+        <header className="quest-panel-heading"><h3>Where</h3></header>
+        <TravelTip step={step} />
+        <StepMap step={step} />
+        <button type="button" className="btn btn-sm" onClick={() => setView('travel')}>Travel and directions</button>
+      </section>
+    )}
     <QuestReward step={step} />
-    {nextId && <a className="modern-next" href={`#/step/${nextId}`}><span className="eyebrow">Up next</span><span>{stepById.get(nextId)?.title ?? nextId}</span><IconChevron /></a>}
   </>;
 
   return <div className="workspace cockpit">
@@ -85,30 +89,28 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId }: { step: St
 
     <div className="cockpit-grid">
       <div className="cockpit-now">
-        <CurrentAction step={step}><ShowInGame step={step} /></CurrentAction>
+        <CurrentAction step={step}><div className="action-row"><ShowInGame step={step} /><StepDone step={step} onDone={onDone} nextId={nextId} /></div></CurrentAction>
         <StepBody step={step} onDone={onDone} nextId={nextId} tab="safety" />
         <nav className="cockpit-views" aria-label="Step views">
           {VIEWS.map((v) => (
-            <button key={v.id} type="button" className="btn btn-ghost btn-sm" aria-haspopup="dialog" aria-keyshortcuts={v.key} onClick={() => setView(v.id)}>
-              {v.title} <kbd>{v.key}</kbd>
+            <button key={v.id} type="button" className="btn btn-ghost btn-sm" aria-haspopup="dialog" aria-keyshortcuts={v.key} title={`${v.title} (${v.key})`} onClick={() => setView(v.id)}>
+              {v.title}
             </button>
           ))}
         </nav>
       </div>
 
       <div className="cockpit-walk">
-        <StepBody step={step} onDone={onDone} nextId={nextId} tab="steps" onPrep={() => setView('prep')} safetyShown noAside />
+        <StepBody step={step} onDone={onDone} nextId={nextId} tab="steps" onPrep={() => setView('prep')} safetyShown noAside noManual />
       </div>
 
       <div className="cockpit-bag">
-        {!recovery && <StepStatus step={step} headline noStart onPrep={() => setView('prep')} />}
+        {!recovery && <StepStatus step={step} headline noStart quiet onPrep={() => setView('prep')} />}
         <QuestSupplies step={step} onReview={() => setView('prep')} />
       </div>
 
       <div className="cockpit-where">{where}</div>
     </div>
-
-    {closed && <p className="modern-completed muted small"><IconCheck /> Completed. The mark can be removed at the end of the walkthrough.</p>}
 
     <StepDrawer open={!!open} title={open?.title ?? ''} onClose={() => setView(null)}>
       {view && <StepBody step={step} onDone={onDone} nextId={nextId} tab={view} onPrep={() => setView('prep')} safetyShown />}

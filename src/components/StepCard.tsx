@@ -89,7 +89,7 @@ function FieldRow({ field }: { field: Field }) {
 export type StepTab = 'steps' | 'prep' | 'travel' | 'details';
 
 /** The step details. nextId — which step opens after the mark (the caption on the button in the wide layout). tab — one view of the workspace. noAside — the workspace shows the preparation list in its own column, Steps does not repeat it. statusAbove — the verdict is on a status line above, so Preparation does not say it again. */
-export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = false, noAside = false, statusAbove = false }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab | 'safety'; onPrep?: () => void; safetyShown?: boolean; noAside?: boolean; statusAbove?: boolean }) {
+export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = false, noAside = false, statusAbove = false, noManual = false }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab | 'safety'; onPrep?: () => void; safetyShown?: boolean; noAside?: boolean; statusAbove?: boolean; noManual?: boolean }) {
   const { progress, qp, mode, setStep, review, reactivate } = useStore();
   const { openNpc } = useWiki();
   const zen = !useFeatures().inspector;
@@ -338,8 +338,8 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
               {quick}
             </Fold>
           )}
-          {!step.questStages && !sub && !quick && where}
-          {manual}
+          {!step.questStages && !sub && !quick && !noAside && where}
+          {!noManual && manual}
         </div>
       );
     }

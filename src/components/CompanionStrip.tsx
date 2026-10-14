@@ -6,12 +6,13 @@ import type { Step } from '../types';
 import { useStore } from '../store';
 import { blockerParts, blockersOf, isClosed } from '../lib/next-step';
 import { overviewCurrent, overviewOf } from '../lib/subStep';
-import { IconCheck, IconLock } from './Icons';
+import { IconLock } from './Icons';
 import { CurrentAction } from './StepWorkspace';
 import { StepBody } from './StepCard';
 import { StepStatus } from './StepStatus';
 import { QuestReward, QuestSupplies } from './QuestPreparation';
 import { ShowInGame } from './ShowInGame';
+import { StepDone } from './StepDone';
 import { useSubStep } from './SubStepHero';
 
 type Tab = 'now' | 'bag' | 'route' | 'more';
@@ -43,7 +44,7 @@ function Next({ step }: { step: Step }) {
 export function CompanionStrip({ step, suggested, onDone, nextId, onSelect }: {
   step: Step; suggested: boolean; onDone: (id: string) => void; nextId?: string; onSelect: (id: string) => void;
 }) {
-  const { progress, qp, steps, setStep } = useStore();
+  const { progress, qp, steps } = useStore();
   const [tab, setTab] = useState<Tab>('now');
   const closed = isClosed(progress, step.id);
   const blockers = closed ? null : blockersOf(step, progress, qp);
@@ -71,12 +72,7 @@ export function CompanionStrip({ step, suggested, onDone, nextId, onSelect }: {
             <StepBody step={step} onDone={onDone} nextId={nextId} tab="safety" />
             <Next step={step} />
             <QuestSupplies step={step} onReview={() => setTab('bag')} />
-            <div className="strip-done">
-              {closed
-                ? <button type="button" className="btn btn-ghost" onClick={() => setStep(step.id, null)}>Remove the mark</button>
-                : <button type="button" className="btn btn-ghost" onClick={() => onDone(step.id)}><IconCheck /> Done{nextId ? ` → ${nextId}` : ''}</button>}
-              {step.optional && !closed && progress.steps[step.id] !== 'skipped' && <button type="button" className="btn btn-ghost" onClick={() => setStep(step.id, 'skipped')}>Skip</button>}
-            </div>
+            <div className="strip-done"><StepDone step={step} onDone={onDone} nextId={nextId} /></div>
           </>
         )}
 
@@ -111,7 +107,7 @@ export function CompanionStrip({ step, suggested, onDone, nextId, onSelect }: {
 
         {tab === 'more' && (
           <>
-            <StepBody step={step} onDone={onDone} nextId={nextId} tab="steps" safetyShown noAside />
+            <StepBody step={step} onDone={onDone} nextId={nextId} tab="steps" safetyShown noAside noManual />
             <details className="strip-fold"><summary>Travel</summary><StepBody step={step} onDone={onDone} nextId={nextId} tab="travel" safetyShown /></details>
             <details className="strip-fold"><summary>Details</summary><StepBody step={step} onDone={onDone} nextId={nextId} tab="details" safetyShown /></details>
           </>

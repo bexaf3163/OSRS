@@ -84,7 +84,7 @@ function SkillCard({ skill, stage }: { skill: Skill; stage: number }) {
       <a className="skill-card-link" href={`#/skills/${skill.id}`}>
         <span>
           <span className="skill-name">{skill.name}</span>
-          <span className="skill-en">{skill.nameEn ?? skill.subtitle}</span>
+          {(skill.nameEn ?? skill.subtitle) !== skill.name && <span className="skill-en">{skill.nameEn ?? skill.subtitle}</span>}
         </span>
         <IconChevron className="chevron" />
       </a>

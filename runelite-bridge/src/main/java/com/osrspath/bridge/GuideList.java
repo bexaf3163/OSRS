@@ -678,8 +678,10 @@ final class GuideList
 	/** The tab strip: "Steps" on the left, "Advice · N" on the right; the active one in gold, the other in link blue. A click selects the label it lands on. */
 	static Row tabRow(boolean onAdvice, int advice, FontMetrics fm, int inner)
 	{
+		onAdvice = onAdvice && advice > 0;
 		List<Line> lines = new ArrayList<>();
-		lines.add(new Line("Steps", onAdvice ? LINK : TITLE, "Advice · " + advice, onAdvice ? TITLE : LINK, true));
+		// No tips: no "Advice · 0" label, only the Steps tab (a tab with nothing behind it is noise for a new player).
+		lines.add(new Line("Steps", onAdvice ? LINK : TITLE, advice > 0 ? "Advice · " + advice : null, onAdvice ? TITLE : LINK, true));
 		return new Row(lines, Action.TAB, onAdvice ? "Steps: the quest's lines in order. Click \"Steps\" to go back to them." : "Advice: what not to take now, weight, bag, the way there. Click \"Advice\" to see it.");
 	}
 

@@ -42,7 +42,7 @@ export function CurrentAction({ step, children }: { step: Step; children?: React
       <span className="current-action-icon" aria-hidden="true">{step.npc ? <IconTalk /> : <TypeIcon type={step.type} />}</span>
       <div className="current-action-body">
         <p className="eyebrow">{kicker}</p>
-        <h3 className="current-action-title">{alternative > 0 ? <><Inline text={title.slice(0, alternative)} />{' '}<span className="action-alternative"><Inline text={title.slice(alternative + 1)} /></span></> : <Inline text={title} />}</h3>
+        <h3 className={`current-action-title ${title.length > 64 ? 'is-long' : ''}`}>{alternative > 0 ? <><Inline text={title.slice(0, alternative)} />{' '}<span className="action-alternative"><Inline text={title.slice(alternative + 1)} /></span></> : <Inline text={title} />}</h3>
         {place && <p className="current-action-place muted"><Inline text={place} /></p>}
       </div>
       <div className="current-action-side">
@@ -54,13 +54,14 @@ export function CurrentAction({ step, children }: { step: Step; children?: React
               {target === 'live' && <> · {TARGET_LABEL.live}</>}
             </p>
           ) : (
-            <p className="link-chip-status is-offline" role="status">
-              <span aria-hidden="true">⚠</span>{' '}
+            <p className="link-chip-status is-offline is-quiet" role="status">
+              <span aria-hidden="true">○</span>{' '}
               {state === 'connecting'
                 ? LINK_LABEL.connecting
                 : target === 'saved'
-                  ? 'RuneLite is offline. Target saved; live guidance is inactive.'
-                  : 'RuneLite is offline. Live guidance is inactive.'}
+                  ? 'RuneLite is not connected. The target is saved and the arrow appears when it connects.'
+                  : 'RuneLite is not connected, so the arrow and highlights in the game are off.'}
+              {state !== 'connecting' && <> <a href="#/settings" onClick={() => { try { localStorage.setItem('osrs-put-settings-tab', 'game'); } catch { /* the tab opens on its own */ } }}>Set up RuneLite</a></>}
             </p>
           )}
         </div>

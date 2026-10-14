@@ -8,12 +8,6 @@ import { SessionSection } from './SettingsExtra';
 
 export type JournalTab = 'quests' | 'goals' | 'session';
 
-const TABS: { id: JournalTab; label: string; href: string }[] = [
-  { id: 'quests', label: 'Quests', href: '#/quests' },
-  { id: 'goals', label: 'Stage goals', href: '#/goals' },
-  { id: 'session', label: 'Session', href: '#/journal/session' },
-];
-
 /** The Journal tab a route stands for: the old hashes keep opening their own tab. */
 export function journalTabOf(page: string, param?: string): JournalTab {
   if (page === 'goals') return 'goals';
@@ -29,13 +23,6 @@ export function JournalPage({ tab }: { tab: JournalTab }) {
         <h1>Journal</h1>
         <p className="muted">Track your progress and plan ahead.</p>
       </header>
-      <nav className="subtabs" aria-label="Journal sections">
-        {TABS.map((t) => (
-          <a key={t.id} href={t.href} className={`subtab ${tab === t.id ? 'is-active' : ''}`} aria-current={tab === t.id ? 'page' : undefined}>
-            {t.label}
-          </a>
-        ))}
-      </nav>
       {tab === 'quests' && <QuestsPage embedded />}
       {tab === 'goals' && <GoalsPage embedded />}
       {tab === 'session' && (
