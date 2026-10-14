@@ -9,6 +9,7 @@ import { desktop } from '../lib/desktop';
 import { isClosed, openAfter } from '../lib/next-step';
 import { parseAmount, preflightItems } from '../lib/checklist';
 import { watchedItems } from '../lib/branching';
+import { methodToolNames } from '../lib/methodStep';
 import { routeTrigger } from '../lib/carryover';
 import { alternativesOf, toolFamilyOf } from '../lib/toolTiers';
 import { stepMaxHit } from '../lib/foodAdvice';
@@ -345,7 +346,7 @@ export function toInGameTarget(step: Step, branch?: StepBranch, extraWatch: stri
   if (checklist.length) payload.checklist = checklist;
   // Also — the items of the nearest steps (one trip): the plugin reports how many of them there are, and they are visible in advance.
   // A tool named by its weakest tier is any tier: the game must report every tier, or a Rune pickaxe in the bag would read as "no pickaxe".
-  const named = [...watchedItems(step), ...extraWatch];
+  const named = [...watchedItems(step), ...methodToolNames(step), ...extraWatch];
   const own = [...new Set([...named, ...named.flatMap((n) => toolFamilyOf(n) ?? [])])].slice(0, 40);
   // And what the ways there need (runes, a teleport item, an axe): the game reports how many the bank holds, so "withdraw it" is said only for what is there.
   // They go after the step's own items and never push one out.

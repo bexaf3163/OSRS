@@ -10,6 +10,8 @@ import {
 import { profileStorageKey, readProfiles } from './lib/profiles';
 import { questPoints } from './lib/qp';
 import { desktop } from './lib/desktop';
+import { samePicks } from './lib/methodPick';
+import { withTrainingMethod } from './lib/methodStep';
 
 export interface Toast {
   id: number;
@@ -36,6 +38,8 @@ interface StoreValue {
   setSellRestrictions: (value: 'lifted' | 'active' | null) => void;
   /** Ticks or unticks a step's task that has no game check (key "<stepId>:<taskId>"). */
   setTaskDone: (key: string, done: boolean) => void;
+  /** The training method each skill step that follows one is on now (step id -> method id): set by the provider that owns the player state. */
+  setMethodPicks: (picks: Record<string, string>) => void;
   review: (ids: string[]) => void;
   reactivate: (ids: string[]) => void;
   /** "✕ Skip" the upgrade hint on a step (dismissed=false — bring it back). */
@@ -201,17 +205,21 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const notify = useCallback((message: string) => show(message), [show]);
 
   const mode = gameModeOf(progress);
-  const steps = useMemo(() => stepsFor(mode), [mode]);
+  const [methodPicks, setPicks] = useState<Record<string, string>>({});
+  const setMethodPicks = useCallback((p: Record<string, string>) => setPicks((prev) => (samePicks(prev, p) ? prev : p)), []);
+  const baseSteps = useMemo(() => stepsFor(mode), [mode]);
+  // A step that follows a training method asks for that method's tools and place; every other step is the same object as in the data.
+  const steps = useMemo(() => baseSteps.map((s) => withTrainingMethod(s, methodPicks[s.id])), [baseSteps, methodPicks]);
   const stages = useMemo(() => stagesFor(mode), [mode]);
   const qp = useMemo(() => questPoints(steps, progress, BASE_QP), [steps, progress]);
   const maxQp = useMemo(() => maxQpFor(mode), [mode]);
 
   const value = useMemo<StoreValue>(
     () => ({
-      progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
+      progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
       toast, notify, undo, dismissToast,
     }),
-    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
+    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
       toast, notify, undo, dismissToast],
   );
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

@@ -5,6 +5,10 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { items } from './data';
 import { useBridge } from './bridge';
 import { useStore } from './store';
+import { stepsFor } from './data';
+import { useFeatures } from './lib/features';
+import { styleOf } from './lib/playStyle';
+import { pickMethods } from './lib/methodPick';
 import { useProfiles } from './lib/profiles';
 import { ledgerKey, LEDGER_LIMIT, loadLedger, saveLedger, since } from './lib/ledgerStore';
 import { nameKey } from './lib/checklist';
@@ -66,7 +70,8 @@ function ls(): Storage | undefined {
 }
 
 export function PlayerStateProvider({ children }: { children: ReactNode }) {
-  const { progress, mode } = useStore();
+  const { progress, mode, setMethodPicks } = useStore();
+  const features = useFeatures();
   const { stats, owned, gear, questsDone, player, state: link } = useBridge();
   const profiles = useProfiles();
   const next = useMemo(
@@ -118,6 +123,11 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
     saveLedger(ls(), key, []);
     setBook({ key, entries: [] });
   }, [key]);
+
+  // The training method of the steps that follow one: the card's own answer, given to the store so the steps ask for that method's tools.
+  const style = styleOf(features).style;
+  const picks = useMemo(() => pickMethods(stepsFor(mode), state, mode, style), [state, mode, style]);
+  useEffect(() => { setMethodPicks(picks); }, [picks, setMethodPicks]);
 
   const priced = useMemo(() => reprice(ledger, prices), [ledger, prices]);
   const summary = useMemo(() => summarize(priced), [priced]);

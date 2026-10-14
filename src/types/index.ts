@@ -348,6 +348,12 @@ export interface Step {
   /** The step's skill training pace (fishing, woodcutting, cooking, mining). */
   pacing?: StepPacing;
   /**
+   * A skill id (levels.json) whose training method this step follows: the tools it asks for, the place of the arrow and the in-game list are the
+   * recommended method's for the player's real level ("What to train with"), so a tool of another method (a harpoon at Fishing 1) never makes the
+   * step ready. The static itemsRequired / mapLocation are the fallback while the level is unknown. See lib/methodStep.ts.
+   */
+  followsMethod?: string;
+  /**
    * Who the step fights in melee: wiki article names (monsters.json). The gear advisor uses them to
    * compare weapons and show a hint on the step. Absent from steps where you fight with a special weapon or magic.
    */

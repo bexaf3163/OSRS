@@ -9,7 +9,7 @@ import type { Step } from '../types';
 import { useStore } from '../store';
 import { useBridge } from '../bridge';
 import type { ReadinessAction } from '../lib/readiness';
-import { reconcile, startDetour, type PrepTask } from '../lib/prepRoute';
+import { navKeyOf, reconcile, staleArrows, startDetour, type PrepTask } from '../lib/prepRoute';
 import { decideAuto, type QueueTask } from '../lib/prepQueue';
 import { declined, usePrep } from '../lib/usePrep';
 import { setFeatures, useFeatures } from '../lib/features';
@@ -159,16 +159,19 @@ export function PrepWatcher() {
   const { notify } = useStore();
   const engine = useReadinessEngine();
   const { prep, set } = usePrep();
+  const { navTarget, releaseNav } = useBridge();
   useEffect(() => {
     if (!prep.stack.length) return;
     const res = reconcile(prep, (stepId) => engine.openTasks(stepId));
     if (res.state.stack.length === prep.stack.length && res.state.done.length === prep.done.length) return;
     set(res.state);
+    // The task went away (the requirement changed with the level) and its arrow is still up: take it down so the new task can be given one.
+    if (staleArrows(prep, res.state, navTarget)) void releaseNav();
     if (res.returnTo) {
       const left = res.state.stack.length;
       notify(left ? `🟢 One preparation trip is ready — next we return to ${res.returnTo}.` : `🟢 The preparation is ready — return to ${res.returnTo}.`);
     }
-  }, [prep, set, engine, notify]);
+  }, [prep, set, engine, notify, navTarget, releaseNav]);
   return null;
 }
 
@@ -204,7 +207,7 @@ export function PrepAuto() {
     const now = Date.now();
     const d = decideAuto({
       queue, stepId: focus.id, prep, enabled: features.autoPrep, online: link === 'online' && engine.ctx.state.connected,
-      navActive: navTarget !== null, announce: profile.announce, now, recent: recent.current, declined,
+      navActive: navTarget !== null, standing: navTarget, announce: profile.announce, now, recent: recent.current, declined,
     });
     if (!d) return;
     if (d.kind === 'start') {
@@ -214,12 +217,17 @@ export function PrepAuto() {
         void navigate(d.task.guide.target);
       }
       notify(`🧭 Preparing for ${focus.id}: ${d.task.label}. The arrow leads there; to return — "Return to the step".`);
-    } else if (d.kind === 'renav') {
+    } else if (d.kind === 'renav' || d.kind === 'retarget') {
       // No more than three times per target: if the plugin clears it at once (the player is already there), we do not loop.
       const n = (renavs.current.get(d.key) ?? 0) + 1;
       renavs.current.set(d.key, n);
       recent.current.set(d.key, now);
-      if (n <= 3 && d.task.guide?.kind === 'nav') void navigate(d.task.guide.target);
+      if (n <= 3 && d.task.guide?.kind === 'nav') {
+        const target = d.task.guide.target;
+        void navigate(target);
+        // The frame remembers the arrow it set last, so a later change of the task is recognised as its own.
+        set({ ...prep, stack: prep.stack.map((f) => (f === d.frame ? { ...f, nav: navKeyOf(target) } : f)) });
+      }
     } else if (!announced.current.has(d.key)) {
       announced.current.add(d.key);
       notify(`➡️ Next in the preparation for ${focus.id}: ${d.task.label}.`);

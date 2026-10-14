@@ -5,7 +5,7 @@ import { buildPlayerState } from '../src/lib/playerState';
 import { contextOf, type ReadinessInput } from '../src/lib/readiness';
 import { createReadinessEngine } from '../src/lib/readinessEngine';
 import { decideAuto, RENAV_GAP_MS, buildQueue, type AutoInput, type PrepQueue } from '../src/lib/prepQueue';
-import { emptyPrep, reconcile, startDetour, type PrepState } from '../src/lib/prepRoute';
+import { emptyPrep, navKeyOf, reconcile, staleArrows, startDetour, type PrepState } from '../src/lib/prepRoute';
 import { preflightItems } from '../src/lib/checklist';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;
@@ -143,5 +143,63 @@ describe('the preparation auto-queue', () => {
     const route = e.prep(itemStep);
     const q = buildQueue(route, { state: e.ctx.state, mode: 'members', style: 'chill' });
     for (const t of q.tasks) if (t.guide) expect(t.guide.kind).toBe('nav');
+  });
+});
+
+describe('an arrow the queue set for a task that has since changed (the live check: a stale "buy a lobster pot" after the method changed)', () => {
+  const frameFor = (q: PrepQueue, over: Partial<PrepState['stack'][number]> = {}): PrepState => {
+    const started = startDetour(emptyPrep(), { sourceStepId: itemStep.id, detourId: q.tasks[0].id, reason: 'x', startedAt: 1, returnCondition: 'y', ...over });
+    if (!started.ok) throw new Error('did not start');
+    return started.state;
+  };
+  const guide = (q: PrepQueue) => {
+    const g = q.tasks[0].guide;
+    if (g?.kind !== 'nav') throw new Error('no arrow');
+    return g.target;
+  };
+
+  it('a detour remembers the arrow it set', () => {
+    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'chill');
+    const d = decideAuto(base(q));
+    if (d?.kind !== 'start') throw new Error('no start');
+    expect(d.frame.nav).toBe(navKeyOf(guide(q)));
+  });
+
+  it('the task now leads elsewhere while its own arrow stands: the arrow is moved', () => {
+    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'chill');
+    const target = guide(q);
+    const old = { x: target.x + 40, y: target.y, itemName: 'Lobster pot' };
+    const prep = frameFor(q, { nav: navKeyOf(old) });
+    const d = decideAuto(base(q, { prep, navActive: true, standing: old }));
+    expect(d?.kind).toBe('retarget');
+    if (d?.kind !== 'retarget') throw new Error('no decision');
+    expect(d.frame).toBe(prep.stack[0]);
+    // The same arrow and the same task: nothing to do.
+    expect(decideAuto(base(q, { prep: frameFor(q, { nav: navKeyOf(target) }), navActive: true, standing: target }))).toBeNull();
+  });
+
+  it('an arrow the player or another tool set is never taken over', () => {
+    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'chill');
+    const target = guide(q);
+    const mine = { x: target.x + 40, y: target.y, itemName: 'Lobster pot' };
+    const theirs = { x: 3100, y: 3100, itemName: null };
+    const prep = frameFor(q, { nav: navKeyOf(mine) });
+    expect(decideAuto(base(q, { prep, navActive: true, standing: theirs }))).toBeNull();
+    // A frame from an older version has no memory of its arrow: also left alone.
+    expect(decideAuto(base(q, { prep: frameFor(q), navActive: true, standing: mine }))).toBeNull();
+  });
+
+  it('a detour that went away without its task being done leaves its arrow to be taken down; a done one does not', () => {
+    const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'chill');
+    const target = guide(q);
+    const before = frameFor(q, { nav: navKeyOf(target) });
+    const gone: PrepState = { stack: [], done: [] };
+    expect(staleArrows(before, gone, target)).toBe(true);
+    // The plugin cleared the arrow (the item was taken): nothing stands.
+    expect(staleArrows(before, gone, null)).toBe(false);
+    // Another arrow is standing: not this detour's.
+    expect(staleArrows(before, gone, { x: 1, y: 2, itemName: null })).toBe(false);
+    // The detour is still there.
+    expect(staleArrows(before, before, target)).toBe(false);
   });
 });

@@ -10,7 +10,7 @@
 
 import type { GameMode } from '../types';
 import type { ReadinessAction } from './readiness';
-import { startDetour, type DetourFrame, type PrepRoute, type PrepState, type PrepTask } from './prepRoute';
+import { navKeyOf, startDetour, type DetourFrame, type PrepRoute, type PrepState, type PrepTask } from './prepRoute';
 import type { PlayerState } from './playerState';
 import { adviseTraining } from './trainingRouter';
 import { exchangeNav, trainingNav } from './trainingNav';
@@ -70,6 +70,8 @@ export interface AutoInput {
   online: boolean;
   /** Some arrow target is already set in the game. */
   navActive: boolean;
+  /** That arrow target, when there is one: a detour's own arrow whose task has changed is taken over, any other is left alone. */
+  standing?: { x: number; y: number; itemName?: string | null } | null;
   announce: 'quiet' | 'full';
   now: number;
   /** When this task was last retargeted: key to time. Not more than once a minute. */
@@ -82,7 +84,9 @@ export type AutoDecision =
   /** Start a detour and set the arrow. */
   | { kind: 'start'; task: QueueTask; frame: DetourFrame; state: PrepState }
   /** A detour is going on and the plugin cleared the arrow (the item was taken, the place reached), the task is not done yet: set it to the next. */
-  | { kind: 'renav'; task: QueueTask; key: string }
+  | { kind: 'renav'; task: QueueTask; key: string; frame: DetourFrame }
+  /** The arrow standing is this detour's own, but its task now points elsewhere (the step's requirement changed with the level): move the arrow. */
+  | { kind: 'retarget'; task: QueueTask; key: string; frame: DetourFrame }
   /** The next task without a place: just say what is next. */
   | { kind: 'announce'; task: QueueTask; key: string };
 
@@ -100,11 +104,19 @@ export function decideAuto(i: AutoInput): AutoDecision | null {
     // A detour is going on: we retarget only if there is no arrow while the task is still open and has a place.
     const top = mine[mine.length - 1];
     const task = queue.tasks.find((t) => t.id === top.detourId);
-    if (!task || i.navActive || task.guide?.kind !== 'nav') return null;
+    if (!task || task.guide?.kind !== 'nav') return null;
     const key = `${stepId}:${task.id}:${targetKey(task.guide)}`;
+    if (i.navActive) {
+      // Only an arrow this detour set itself, and only when its task now leads elsewhere: the arrow of the player's own choosing stays.
+      const own = top.nav !== undefined && i.standing ? navKeyOf(i.standing) === top.nav : false;
+      if (!own || top.nav === targetKey(task.guide)) return null;
+      const lastMove = i.recent.get(key);
+      if (lastMove !== undefined && i.now - lastMove < RENAV_GAP_MS) return null;
+      return { kind: 'retarget', task, key, frame: top };
+    }
     const last = i.recent.get(key);
     if (last !== undefined && i.now - last < RENAV_GAP_MS) return null;
-    return { kind: 'renav', task, key };
+    return { kind: 'renav', task, key, frame: top };
   }
 
   const task = queue.tasks.find((t) => t.need === 'REQUIRED');
@@ -114,6 +126,7 @@ export function decideAuto(i: AutoInput): AutoDecision | null {
     const frame: DetourFrame = {
       sourceStepId: stepId, detourId: task.id, reason: task.label, startedAt: i.now,
       returnCondition: `${task.label} - done`,
+      ...(task.guide.target ? { nav: navKeyOf(task.guide.target) } : {}),
     };
     const res = startDetour(i.prep, frame);
     return res.ok ? { kind: 'start', task, frame, state: res.state } : null;

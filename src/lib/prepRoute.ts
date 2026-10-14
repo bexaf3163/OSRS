@@ -139,6 +139,8 @@ export interface DetourFrame {
   returnCondition: string;
   /** The player removed the arrow themselves: auto-prepare no longer sets it until they press "Continue". */
   paused?: boolean;
+  /** The arrow this detour set ("x,y,item"), so it can be taken down if the task goes away without being done: the requirement changed. */
+  nav?: string;
 }
 
 export interface PrepState {
@@ -183,6 +185,21 @@ export function reconcile(state: PrepState, openTasks: (stepId: string) => Set<s
     returnTo = top.sourceStepId;
   }
   return { state: { stack, done: [...done].slice(-200) }, returnTo: stack.length ? stack[stack.length - 1].sourceStepId : returnTo };
+}
+
+/** The key of an arrow target as stored in DetourFrame.nav. */
+export const navKeyOf = (t: { x: number; y: number; itemName?: string | null }): string => `${t.x},${t.y},${t.itemName ?? ''}`;
+
+/**
+ * The arrows set by detours that were just removed and are still standing in the game. A detour whose task is done leaves no arrow (the plugin clears it
+ * when the item is taken or the place reached); one whose task simply went away — the step's requirement changed with the level — leaves its arrow
+ * pointing at something nobody needs any more, and the new task is not given the arrow while one is standing.
+ */
+export function staleArrows(before: PrepState, after: PrepState, standing: { x: number; y: number; itemName?: string | null } | null): boolean {
+  if (!standing) return false;
+  const key = navKeyOf(standing);
+  const left = new Set(after.stack.map((f) => f.nav).filter((n): n is string => Boolean(n)));
+  return before.stack.some((f) => f.nav === key && !after.stack.includes(f)) && !left.has(key);
 }
 
 export const PREP_KEY = 'osrs-put:prep';

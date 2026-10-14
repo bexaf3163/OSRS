@@ -134,8 +134,11 @@ export function StepTraining({ step }: { step: Step }) {
     const rows = trig.levels.map((l) => ({ skill: l.skill, target: l.level, lv: levelOf(state, l.skill) }));
     const open = rows.filter((r) => r.lv === undefined || r.lv < r.target);
     if (!open.length) return null;
+    // A step that follows a skill's method shows that skill's card while it is open: the card, the tools and the arrow are one answer.
+    const followed = open.find((r) => r.skill === step.followsMethod);
+    if (followed) return followed;
     return open.sort((a, b) => (a.lv ?? 0) - a.target - ((b.lv ?? 0) - b.target))[0];
-  }, [trig, state]);
+  }, [trig, state, step.followsMethod]);
   if (!pick) return null;
   return <TrainingCard skill={pick.skill} target={pick.target} />;
 }

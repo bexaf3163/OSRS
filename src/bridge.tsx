@@ -96,6 +96,8 @@ interface BridgeValue {
   /** Set a temporary target. Without a link or on a refusal by the plugin — an answer with the reason. */
   navigate: (target: NavTargetPayload) => Promise<NavResult | { ok: false; reason: 'off' }>;
   clearNav: () => Promise<void>;
+  /** Take down a temporary target the app itself set and no longer wants (a preparation whose task changed). Unlike clearNav it is not the player's word: auto preparation goes on. */
+  releaseNav: () => Promise<void>;
   /** When the player cleared the arrow target themselves (ms); 0 — never. Auto preparation does not take over the arrow after that. */
   userClearedAt: number;
   /** The plugin version and compatibility with the app; null — no link. */
@@ -600,6 +602,23 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     void sendStep(next, branch);
   }, [activeStepId, progress, steps, sendStep, clearStep]);
 
+  // A step that follows a training method asks for different tools, and leads to another place, when the level (or what is carried) moves the player to
+  // another method: the game gets the new list and place without a press. The first sight of a step is not a change: whoever activated it sent it.
+  const shown = activeStepId ? steps.find((s) => s.id === activeStepId) : undefined;
+  const followKey = shown?.followsMethod
+    ? JSON.stringify([shown.itemsRequired?.map((i) => [i.nameEn, i.amount]), shown.mapLocation && [shown.mapLocation.x, shown.mapLocation.y, shown.mapLocation.plane]])
+    : null;
+  const sentFollow = useRef<string | null>(null);
+  useEffect(() => {
+    if (!shown || followKey === null) { sentFollow.current = null; return; }
+    const key = `${shown.id}:${followKey}`;
+    const before = sentFollow.current;
+    sentFollow.current = key;
+    if (before === null || before === key || !before.startsWith(`${shown.id}:`)) return;
+    if (isClosed(latest.current.progress, shown.id)) return;
+    void sendStep(shown, chosenBranch(shown, latest.current.branchChoice));
+  }, [shown, followKey, sendStep]);
+
   const pointInGame = useCallback(async (step: Step): Promise<PointResult> => {
     const branch = chosenBranch(step, latest.current.branchChoice);
     if (!toInGameTarget(step, branch)) return 'empty';
@@ -653,6 +672,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const [userClearedAt, setUserClearedAt] = useState(0);
   const clearNav = useCallback(async () => {
     setUserClearedAt(Date.now());
+    await clearNavTarget();
+    setNavFromPlugin(null);
+  }, [setNavFromPlugin]);
+
+  const releaseNav = useCallback(async () => {
     await clearNavTarget();
     setNavFromPlugin(null);
   }, [setNavFromPlugin]);
@@ -723,11 +747,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     () => ({
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, navigate, clearNav, userClearedAt, plugin,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, navigate, clearNav, releaseNav, userClearedAt, plugin,
       xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, navigate, clearNav, userClearedAt, plugin,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, navigate, clearNav, releaseNav, userClearedAt, plugin,
       xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;

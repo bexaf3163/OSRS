@@ -4767,14 +4767,9 @@
       {
         "nameEn": "Small fishing net",
         "amount": 1,
-        "howToGet": "To start at Fishing 1-20: Gerrant's Fishy Business in Port Sarim. Any of the fishing tools below counts when you are past that level.",
+        "howToGet": "The first tool of the climb, from Gerrant's Fishy Business in Port Sarim. With your level known, this list follows the method for it: net, rod and bait, fly fishing rod and feathers, then the lobster pot.",
         "wikiItemId": 303,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png",
-        "anyOf": [
-          "Fly fishing rod",
-          "Lobster pot",
-          "Harpoon"
-        ]
+        "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png"
       }
     ],
     "fields": [
@@ -4800,10 +4795,7 @@
         "Range"
       ],
       "highlightItems": [
-        "Small fishing net",
-        "Fly fishing rod",
-        "Lobster pot",
-        "Harpoon"
+        "Small fishing net"
       ],
       "completionTrigger": {
         "type": "SKILL_LEVEL",
@@ -4821,36 +4813,6 @@
     },
     "bondBranch": true,
     "optional": true,
-    "itemsRecommended": [
-      {
-        "nameEn": "Fly fishing rod",
-        "amount": 1,
-        "howToGet": "Fishing 20-40: Gerrant's Fishy Business in Port Sarim.",
-        "wikiItemId": 309,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Fly_fishing_rod.png"
-      },
-      {
-        "nameEn": "Feather",
-        "amount": 200,
-        "howToGet": "Bait for the fly fishing rod: Gerrant's Fishy Business in Port Sarim, or from chickens.",
-        "wikiItemId": 314,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Feather.png"
-      },
-      {
-        "nameEn": "Lobster pot",
-        "amount": 1,
-        "howToGet": "Lobsters from Fishing 40, up to 50.",
-        "wikiItemId": 301,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png"
-      },
-      {
-        "nameEn": "Harpoon",
-        "amount": 1,
-        "howToGet": "Tuna from Fishing 35 and swordfish from 50. From Gerrant in Port Sarim it is 5 gp (about 450 gp on the Grand Exchange).",
-        "wikiItemId": 311,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Harpoon.png"
-      }
-    ],
     "resourceSpots": [
       {
         "x": 3086,
@@ -4873,7 +4835,8 @@
         "label": "Lobsters and swordfish — Musa Point, Karamja (Fishing 40-50)",
         "note": "By boat from Port Sarim (30 gp). Lobster pot from 40, harpoon for tuna from 35 and swordfish from 50."
       }
-    ]
+    ],
+    "followsMethod": "fishing"
   },
   {
     "id": "S6-03",

@@ -165,7 +165,8 @@
         },
         {
           "type": "item",
-          "name": "Fishing bait"
+          "name": "Fishing bait",
+          "count": 100
         }
       ],
       "xph": [
@@ -193,7 +194,8 @@
         },
         {
           "type": "item",
-          "name": "Feather"
+          "name": "Feather",
+          "count": 100
         }
       ],
       "xph": [
