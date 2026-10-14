@@ -262,7 +262,7 @@ Asked for by the owner after Shield of Arrav's card stayed on "Talk to Reldo" in
 - Places added from the project's own data: S6-03, S8-03, S8-04. S6-04 (Magic) has no place on purpose.
 - Every QUEST_COMPLETED name matches a RuneLite quest (`RouteTargetsTest` checks it).
 
-## Codex audit pack (2026-10-14) — status after 2.54.2
+## Codex audit pack (2026-10-14) — status after 2.55.0
 
 The pack (`OSRS-Path-Full-Audit-2.53.0-EN.md` + a mega-prompt) was written against the 2.53.0 export. It is a backlog, not a task to run whole; each
 item is checked against the current data and the OSRS Wiki before it changes. Evidence is kept in four kinds: **implemented**, **automated** (tests),
@@ -308,11 +308,54 @@ item is checked against the current data and the OSRS Wiki before it changes. Ev
     recommended. Before this a level-1 account was sent to the Exchange for a harpoon first. Test: `tests/fishingClimb.test.ts`; the readiness golden
     and `active-steps.json` changed for S6-02 only.
 
+- 2.55.0, S6-02 follows the training method (the owner's review of 2.54.2: "a harpoon or lobster pot must not satisfy readiness for level-1 net fishing"):
+  - `Step.followsMethod` (S6-02: `fishing`). `lib/methodPick.ts` `pickMethods` picks, per such step, the method `adviseTraining` ranks first for the real
+    level, mode and style (level unknown: no pick; level at the target: `GOAL_REACHED`). `PlayerStateProvider` sends the picks to the store
+    (`setMethodPicks`, `samePicks` guard); the store's `steps` are `withTrainingMethod(step, pick)` (`lib/methodStep.ts`): the method's `needs` become
+    `itemsRequired` and the in-game highlights, its spot becomes `mapLocation`. No pick returns the step object unchanged.
+  - The `anyOf` substitution of 2.54.2 is gone; the step's own list (the net) stands while the level is unknown.
+  - The plugin is asked to count every tool of the step's methods (`methodToolNames` in `toInGameTarget`); without that, a tool the game had not counted
+    was UNKNOWN, ranked READY, and the choice flipped (fixed point pinned in `tests/fishingClimb.test.ts`).
+  - `trainingMethods.json`: fi-bait asks for 100 Fishing bait, fi-fly for 100 feathers.
+  - The bridge re-sends the active step when its resolved items or place change (`followKey`), so a level-up moves the arrow without a press.
+  - Queue arrows: a detour frame records the arrow it set (`DetourFrame.nav`); when its task changes (e.g. "buy a lobster pot" after the method changed),
+    `decideAuto` returns `retarget` and the arrow moves; `staleArrows` + `releaseNav` take down an arrow whose task is gone. The queue never takes over an
+    arrow it did not set.
+- 2.55.0, transport networks (each fact checked on the OSRS Wiki on 2026-10-15; data in `transport.json`, options in `travel.ts`, mapping in `transport.ts`):
+  - River Dougne canoes (`dougne`, members): Castle Wars / Lara, Tree Gnome Village / Porkai, Ardougne Zoo / Pete, Chaos Druid Tower / Amergin, Combat
+    Training Camp / Kaiquir. Same canoe types and levels as the Lum (`pushRiver`); ids `canoe-dougne`, `canoe-dougne-now`; the Lum keeps `canoe`.
+  - Spirit trees (`spiritTrees`, members, Tree Gnome Village): Gnome Village, Gnome Stronghold (leaving it needs The Grand Tree), Battlefield, Grand
+    Exchange, Feldip Hills. `TravelInput.questsDone` from `/status`: absent means "check", reported missing means "locked".
+  - Gnome gliders (`gliders`, members, The Grand Tree): the hub Ta Quir Priw on plane 3 (its stairs count), two flights between outer stations, Lemanto Andra
+    arrive-only, Ape Atoll needs Monkey Madness II, Feldip stays "check" (One Small Favour is reported only as done or not).
+  - Cowbell amulet (`cowbell`, F2P): ids 33103 empty / 33104 charged; charged is ready, empty with an Air rune in the bag is ready after "use an Air rune on
+    it", an item without an id is "check"; locked above Wilderness level 20; never offered when not carried (it cannot be bought).
+  - The plugin: a glider is a captain to talk to, a spirit tree an object to click (`PrepPlan.interactsWithNpc/Object`).
+  - Left out on purpose: planted spirit trees (growth unreadable), Poison Waste (The Path of Glouphrie), Prifddinas and Laguna Aurorae (not on the main map).
+- 2.55.0, the stock-up trip (`supplyStop`, `planTravelSupplies` now carries `inBag` / `inBank` / `covered` per item and the coins):
+  - One trip for the whole kit: what the bank holds and the bag does not is taken from the nearest bank; the rest is bought at its source. A way counts only
+    when every item it lacks (to buy and to withdraw) is on the trip.
+  - A stop is on the trip when the player stands by it (40 tiles) or it is on the way (at most 60 extra tiles) and what it gives is confirmed.
+  - The trip must pay: the ways' saving minus the stops' detour (greedy nearest-first order, stairs counted) must reach `SUPPLY_MIN_TOTAL_TILES`.
+  - Coins: a known total below the cost means no trip; short in the bag but in the bank adds a Coins withdrawal; unknown coins add "check you have the coins".
+  - Unconfirmed items are named ("check your bank for Law rune", "up to N").
+
 ### Automated
 
 `tests/tradeRestriction.test.ts`, `tests/stepTasks.test.ts`, `tests/oneTimeWay.test.ts`, `tests/fishingClimb.test.ts`, `tests/travelSupplies.test.ts`,
 `tests/questPreflight.test.ts` (food guards), `BridgeServerTest.questPointsAndTotalLevel...`, `TransportChipTest`, UI smoke scenarios (trade note, step tasks).
 2.54.2: tsc, build, 1014 Vitest tests, check-data 0 errors, full Java suite, UI smoke.
+2.55.0: tsc, build, 1053 Vitest tests (new: `tests/transportNets.test.ts` 19, `tests/fishingClimb.test.ts` 14, the stock-up describe in
+`tests/travelSupplies.test.ts`, the queue-arrow describe in `tests/prepQueue.test.ts`), check-data, full Java suite
+(493 tests, `TransportChipTest.aGliderPointsAtItsCaptainAndASpiritTreeIsTheObjectToClick`), UI smoke. `tests/fuzz.test.ts` advisers: an explicit 20 s timeout (the
+default 5 s failed under load; the assertions are unchanged).
+
+### Installation
+
+- 2.54.2 installed 2026-10-14 as `Downloads\OSRS-Put-2.54.2-portable.exe`; SHA-256 `4d2ad047…dfa4c2b` equals the release asset's digest. Data backed up to
+  `Downloads\OSRS-Put-data-backup-2.53.1-before-2.54.2-20261014`. Plugin 2.54.2 reported by `/status` with the app 2.54.2.
+- The 2.53.1 exe kept beside it as a rollback is gone: the app's own `sweepOld` (`electron/updater.cjs`) deletes every older `OSRS-Put-x.y.z-portable.exe`
+  in its folder when a newer one starts. A rollback copy must live in another folder (from 2.55.0: `Downloads\OSRS-Put-rollback\`).
 
 ### Live
 
@@ -339,9 +382,8 @@ Not verifiable on this account, so not claimed:
 
 ### Open
 
-- Not modelled on purpose (no verified coordinates or order, or unreadable state): River Dougne canoes (5 stations, 1 April 2026: the wiki's two pages
-  disagree on names and on Members-only, and give no tiles), spirit trees, gnome gliders, the Cowbell amulet as a planner way (charges unreadable; the
-  engine's charge logic is Chronicle-only: `inp.chronicleCharges`).
+- The four transport networks of 2.55.0 cannot be ridden on this F2P account (members-only, or the Cowbell amulet not owned); only their data, tests and
+  the mapping are verified. The Cowbell's charge count is not read (only charged vs empty by item id).
 - Resumption of the quest objective after travel, missing-rune preparation and the three states are the 2.52/2.53 pipeline (`PrepSync`, `travelSupplies`);
   not re-verified in the live game in this group.
 - The pack's other P1/P2 items not listed above are unchanged and unverified.
