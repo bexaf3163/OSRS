@@ -6999,7 +6999,7 @@
      "title": "Start the quest",
      "steps": [
       "Talk to Reldo in the Varrock Palace library. Dialogue: “I'm in search of a quest.” → “Yes.”.",
-      "Search the marked bookcase in the library and read the book you find.",
+      "Search the marked bookcase in the library for the book, then read it (left-click the book in your inventory).",
       "Talk to Reldo again. Dialogue: “Okay, I've read that book about the Shield of Arrav.”."
      ]
     },
@@ -7069,8 +7069,8 @@
      "at": 1,
      "do": [
       {
-       "t": "Search the marked bookcase in the library (a bright blue book on the top shelf) and read the book you find.",
-       "s": "Search the bookcase and read the book",
+       "t": "Search the marked bookcase in the library (a bright blue book on the top shelf) for the book.",
+       "s": "Search the marked bookcase for the book",
        "at": [
         3212,
         3493,
@@ -7081,7 +7081,18 @@
          2402
         ]
        },
+       "has": "Book",
        "k": "searchBookcase"
+      },
+      {
+       "t": "Read the book in your inventory (left-click it). The quest moves on once you have read it.",
+       "s": "Read the book in your inventory",
+       "hl": {
+        "item": [
+         "Book"
+        ]
+       },
+       "k": "readBook"
       }
      ]
     },

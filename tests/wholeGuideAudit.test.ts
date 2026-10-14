@@ -72,3 +72,24 @@ describe('the whole guide: every step says where to go', () => {
     }
   });
 });
+
+describe('the whole guide: an item the player holds does not keep the "get it" line', () => {
+  it('a line that fetches an item and a line that uses it are two lines, so the card moves on once the item is in the bag (Shield of Arrav\'s book, live game)', () => {
+    const obtain = /^(Search|Pick up|Pick|Take|Grab|Get|Buy|Purchase|Mine|Collect|Obtain|Gather|Steal|Dig|Cut|Shear|Fill|Make|Craft|Loot)\b/i;
+    const then = /\b(and|then)\s+(read|use|give|bring|wear|equip|drink|eat|light|put|hand|return|deliver|smith|cook|mix|combine|burn|plant|offer|sell|show)\b/i;
+    const known = new Set([
+      'S1-07#100:pwSolveFireplacePuzzle', 'S2-08#2:openCoffin', 'S2-09#1:smuggleRum.talkToLuthas', 'S2-09#3:digUpTreasure', 'S9-01#2:goToEntrana',
+      'S9-02#60:enterGrotto', 'S9-04#3:goDownFromDentures', 'S9-04#3:goUpToDaeroForAmuletRun', 'S9-04#3:goUpToDaeroForAmuletMake',
+      'S9-04#3:goUpToDaeroForTalismanRun', 'S7-05#100:findInvasionPlans', 'S5-03#0:openMelzarChest',
+    ]);
+    const found: string[] = [];
+    for (const [id, q] of Object.entries(quests)) {
+      for (const r of q.stages) {
+        for (const l of r.do as (Line & { k?: string })[]) {
+          if (obtain.test(l.t) && then.test(l.t.replace(/Dialogue:.*/, '')) && !l.has && !l.need) found.push(`${id}#${r.at}:${l.k}`);
+        }
+      }
+    }
+    expect(found.filter((f) => !known.has(f)), 'a new "fetch it and use it" line: split it in two with a has on the first').toEqual([]);
+  });
+});
