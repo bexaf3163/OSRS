@@ -40,7 +40,7 @@ public class PacingSetTest
 		// 8,363 XP at 76 per warrior is 110.04: the 111th is needed to reach the target.
 		assertEquals(111, s.getActionsLeft());
 		assertEquals(List.of("defence"), set.left());
-		assertEquals("111 warriors to 30 Strength (calculating the time...)", set.hudLine(s));
+		assertEquals("111 warriors to 30 Strength on Aggressive (calculating the time...)", set.hudLine(s));
 	}
 
 	@Test
@@ -95,7 +95,7 @@ public class PacingSetTest
 		set.update("attack", XP_30 + 30, 2_400);
 		PacingTracker.Snapshot s = set.snapshot();
 		assertTrue(s.isDone());
-		assertEquals("✓ 30 Attack - next Strength: change attack style", set.hudLine(s));
+		assertEquals("✓ 30 Attack - next Strength: switch to Aggressive", set.hudLine(s));
 		// Changed the style: strength grows and is shown at once, there is no need to wait 10 seconds (attack is already done).
 		set.update("strength", 1_040, 3_000);
 		assertEquals("strength", set.getActive());
@@ -147,6 +147,88 @@ public class PacingSetTest
 		set.update("fishing", 4475, 0);
 		assertEquals("✓ Target level reached: 20 Fishing", set.hudLine(set.snapshot()));
 		assertTrue(set.left().isEmpty());
+	}
+
+	/** S3-08 from 2.55.1: Strength to 20 first (4,470 XP), then Attack to 30; a Minotaur is 40 style XP. */
+	private static ActiveTarget.Pacing minotaurs()
+	{
+		ActiveTarget.Pacing p = new ActiveTarget.Pacing();
+		p.setSkill("strength");
+		p.setAlso(List.of("attack"));
+		p.setTargetLevel(20);
+		p.setTargetExp(4_470);
+		ActiveTarget.Pacing.Goal attack = new ActiveTarget.Pacing.Goal();
+		attack.setLevel(30);
+		attack.setExp(XP_30);
+		p.setGoals(java.util.Map.of("attack", attack));
+		p.setActionName("minotaur|minotaurs");
+		p.setExpPerAction(40);
+		return p;
+	}
+
+	@Test
+	public void eachSkillCountsToItsOwnGoal()
+	{
+		ActiveTarget.Pacing p = minotaurs();
+		assertNull(p.problem());
+		assertFalse(p.oneGoal());
+		PacingSet set = new PacingSet(p);
+		// The live account on 2026-10-15: Attack 22 (5,937 XP), Strength 16 (3,070 XP).
+		set.update("attack", 5_937, 0);
+		set.update("strength", 3_070, 0);
+		assertEquals("strength", set.getActive());
+		PacingTracker.Snapshot s = set.snapshot();
+		assertEquals(4_470 - 3_070, s.getRemainingXp());
+		assertEquals(35, s.getActionsLeft());
+		assertEquals("35 minotaurs to 20 Strength on Aggressive (calculating the time...)", set.hudLine(s));
+		assertEquals("attack is 22, short of its own 30: it is still to train", List.of("attack"), set.left());
+	}
+
+	@Test
+	public void strengthDoneNamesTheStyleForAttack()
+	{
+		PacingSet set = new PacingSet(minotaurs());
+		set.update("attack", 5_937, 0);
+		set.update("strength", 4_460, 0);
+		set.update("strength", 4_480, 2_400);
+		PacingTracker.Snapshot s = set.snapshot();
+		assertTrue(s.isDone());
+		assertEquals("✓ 20 Strength - next Attack: switch to Accurate", set.hudLine(s));
+		set.update("attack", 5_977, 4_800);
+		assertEquals("attack", set.getActive());
+		assertEquals(XP_30 - 5_977, set.snapshot().getRemainingXp());
+		assertEquals("185 minotaurs to 30 Attack on Accurate (calculating the time...)", set.hudLine(set.snapshot()));
+	}
+
+	@Test
+	public void bothGoalsDoneAreNamedEach()
+	{
+		PacingSet set = new PacingSet(minotaurs());
+		set.update("attack", XP_30, 0);
+		set.update("strength", 4_470, 0);
+		assertEquals("✓ Target levels reached: 20 Strength, 30 Attack", set.hudLine(set.snapshot()));
+	}
+
+	@Test
+	public void goalsAreChecked()
+	{
+		ActiveTarget.Pacing defence = minotaurs();
+		ActiveTarget.Pacing.Goal g = new ActiveTarget.Pacing.Goal();
+		g.setLevel(30);
+		g.setExp(XP_30);
+		defence.setGoals(java.util.Map.of("defence", g));
+		assertEquals("a goal for a skill the step does not train", "invalid pacing target", defence.problem());
+		ActiveTarget.Pacing silly = minotaurs();
+		ActiveTarget.Pacing.Goal bad = new ActiveTarget.Pacing.Goal();
+		bad.setLevel(120);
+		bad.setExp(XP_30);
+		silly.setGoals(java.util.Map.of("attack", bad));
+		assertEquals("invalid pacing target", silly.problem());
+		// Without goals (an app before 2.55.1) every skill has the one goal, as before.
+		ActiveTarget.Pacing old = minotaurs();
+		old.setGoals(null);
+		assertTrue(old.oneGoal());
+		assertEquals(20, old.targetLevelOf("attack"));
 	}
 
 	@Test

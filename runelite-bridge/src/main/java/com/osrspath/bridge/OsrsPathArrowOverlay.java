@@ -64,9 +64,10 @@ class OsrsPathArrowOverlay extends Overlay
 			return null;
 		}
 		WorldPoint pos = me.getWorldLocation();
-		boolean underTarget = Navigation.underground(target.getY());
-		boolean underMe = Navigation.underground(pos.getY());
-		int layer = underTarget == underMe ? Integer.compare(target.getPlane(), pos.getPlane()) : (underTarget ? -2 : 2);
+		// The surface, a separate area (the Stronghold of Security) and a dungeon: between two of them a chevron, the direction on the map means nothing.
+		int targetLayer = Navigation.layer(target.getY());
+		int myLayer = Navigation.layer(pos.getY());
+		int layer = targetLayer == myLayer ? Integer.compare(target.getPlane(), pos.getPlane()) : (targetLayer > myLayer ? -2 : 2);
 		int dx = target.getX() - pos.getX();
 		int dy = target.getY() - pos.getY();
 		ArrowGeometry.State state = ArrowGeometry.state(Navigation.distance(pos.getX(), pos.getY(), target.getX(), target.getY()),

@@ -3477,16 +3477,25 @@
     "id": "S3-08",
     "stage": 3,
     "type": "skill",
-    "title": "Attack to 30 and Strength to 20",
+    "title": "Strength to 20 and Attack to 30",
     "requires": [],
     "floor": "Ground floor",
     "foes": [
       "Minotaur"
     ],
     "pacing": {
-      "skill": "attack",
-      "targetLevel": 30,
-      "targetExp": 13363,
+      "skill": "strength",
+      "also": [
+        "attack"
+      ],
+      "targetLevel": 20,
+      "targetExp": 4470,
+      "goals": {
+        "attack": {
+          "level": 30,
+          "exp": 13363
+        }
+      },
       "actionName": "minotaur|minotaurs",
       "expPerAction": 40
     },
@@ -3494,34 +3503,116 @@
       "x": 3081,
       "y": 3420,
       "plane": 0,
-      "label": "The Stronghold of Security, floor 1: the minotaurs"
+      "label": "The Stronghold of Security entrance, Barbarian Village mine"
     },
-    "where": "The Stronghold of Security, floor 1 (the Vault of War): the Minotaurs, level 12 (and 27 further in). The entrance is in the Barbarian Village mine, the same place as S1-09. There is no bank on the floor: bank in Edgeville or Varrock West first.",
-    "how": "Train Attack to 30 first on the Accurate style, then Strength to 20 on Aggressive (up to 25 if you like). Defence is not trained: Dragon Slayer I (S5-08) gives 18,650 Defence XP, which is level 33 from level 1, so grinding it now would waste the reward.",
+    "where": "The Stronghold of Security, floor 1 (the Vault of War): the level 12 Minotaurs (the level 27 ones are further in). The entrance is in the Barbarian Village mine, the same place as S1-09. There is no bank on the floor: bank in Edgeville first.",
+    "how": "Strength first: the Aggressive style (Slash on a scimitar) until Strength 20, then Accurate (Chop) until Attack 30. With a Strength potion dose active, this order is about 10 minutes faster over the step than Attack first (an estimate from the combat formulas at Attack 22 and Strength 16); without potions both orders take about the same. Defence is not trained: Dragon Slayer I (S5-08) gives 18,650 Defence XP, which is level 33 from level 1, so grinding it now would waste the reward.",
     "membersAlternative": "👑 With membership: do not fight mobs by hand: complete Waterfall Quest in 15 minutes and get 30 Attack and 30 Strength at once!",
-    "doneWhen": "Attack 30 and Strength 20. Defence is left alone.",
+    "doneWhen": "Strength 20 and Attack 30. Defence is left alone.",
+    "itemsRequired": [
+      {
+        "nameEn": "Mithril scimitar",
+        "amount": 1,
+        "howToGet": "From S2-01: wield it.",
+        "wikiItemId": 1329,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_scimitar.png"
+      },
+      {
+        "nameEn": "Salmon",
+        "amount": 20,
+        "howToGet": "One trip of food: about 60 kills. Grand Exchange, about 34 gp each (15 Oct 2026); Trout (about 22 gp, heals 7), Tuna, Lobster or Swordfish count too. Or catch and cook your own at Barbarian Village (fly fishing, Fishing 30 for salmon).",
+        "wikiItemId": 329,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
+        "heals": 9,
+        "anyOf": [
+          "Trout",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ]
+      }
+    ],
+    "itemsRecommended": [
+      {
+        "nameEn": "Strength potion(4)",
+        "amount": 3,
+        "howToGet": "Grand Exchange, about 160 gp each (15 Oct 2026). A dose about every 5 minutes; 3 potions (12 doses) are about an hour. Potions with fewer doses left count the same.",
+        "wikiItemId": 113,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
+      },
+      {
+        "nameEn": "Amulet of strength",
+        "amount": 1,
+        "howToGet": "From S2-01: wear it (+10 strength, one more max hit at these levels).",
+        "wikiItemId": 1725,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_strength.png"
+      },
+      {
+        "nameEn": "Adamant scimitar",
+        "amount": 1,
+        "howToGet": "From S3-07: Attack 30 ends this step, then wield it for S4-03.",
+        "wikiItemId": 1331,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_scimitar.png"
+      }
+    ],
+    "quickSteps": [
+      "Bank in Edgeville: take 20 Salmon (or other fish) and the Strength potions; wear the Mithril scimitar and the Amulet of strength. 20 Salmon is about 60 kills: come back to the bank for more.",
+      "Enter the Stronghold of Security in the Barbarian Village mine and go to the Minotaurs on floor 1 (the Vault of War).",
+      "Fight the level 12 Minotaurs: Aggressive (Slash) to Strength 20, then Accurate (Chop) to Attack 30. Eat at 4 health; drink a Strength potion dose every 5 minutes."
+    ],
     "inGame": {
       "npcNames": [
         "Minotaur"
+      ],
+      "goal": "Stronghold of Security floor 1: the level 12 Minotaurs",
+      "pathWaypoints": [
+        {
+          "x": 3081,
+          "y": 3420,
+          "plane": 0,
+          "label": "The Stronghold of Security entrance: climb down"
+        },
+        {
+          "x": 1876,
+          "y": 5216,
+          "plane": 0,
+          "label": "Floor 1 (Vault of War): the level 12 Minotaurs"
+        }
       ],
       "completionTrigger": {
         "type": "SKILL_LEVEL",
         "levels": [
           {
-            "skill": "attack",
-            "level": 30
-          },
-          {
             "skill": "strength",
             "level": 20
+          },
+          {
+            "skill": "attack",
+            "level": 30
           }
         ]
       }
     },
     "fields": [
       {
-        "label": "Training spot",
-        "text": "A Minotaur has 10 hit points and gives about 40 XP per kill; the pace line counts the kills left from your real Attack and Strength XP (earlier quest rewards already count). They hit for up to 2 (up to 3 at level 27) and are not aggressive, so you choose when to fight."
+        "label": "Which Minotaurs",
+        "text": "The level 12 ones. At Defence 1 a level 12 Minotaur hits about 2 times in 3 for up to 2; a level 27 one about 3 times in 4 for up to 3. For the same XP the level 27 ones take about twice the food (an estimate from the wiki stats and the combat formulas). Neither is aggressive, so you choose when to fight."
+      },
+      {
+        "label": "Food",
+        "text": "At Defence 1 a level 12 Minotaur takes about 3 hit points a kill, and you heal 1 a minute: plan about 1 Salmon for every 3 kills (an estimate). Eat when your health drops to 4, two of their hits. 20 Salmon is one trip of about 60 kills, roughly a quarter of an hour; the whole step from Attack 22 and Strength 16 is about 80 Salmon."
+      },
+      {
+        "label": "Strength potions",
+        "text": "A dose raises Strength by 3 plus 10% (+4 or +5 here). The higher max hit kills faster in both parts of the step, so the potion speeds up Attack training as well. The boost drops 1 level a minute: drink a dose about every 5 minutes."
+      },
+      {
+        "label": "Pace",
+        "text": "A level 12 Minotaur has 10 hit points: 40 XP per kill in the skill of your style. The pace line counts the kills left from your real XP, first to Strength 20 and then to Attack 30, and names the style. Its time is an estimate until a few kills are measured."
+      },
+      {
+        "label": "Weapon",
+        "text": "Wield the Mithril scimitar and wear the Amulet of strength. The Adamant scimitar needs Attack 30, which ends this step: take it along and wield it for S4-03."
       },
       {
         "label": "Defence",

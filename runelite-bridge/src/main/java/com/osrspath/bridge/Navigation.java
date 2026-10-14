@@ -18,6 +18,11 @@ final class Navigation
 	static final int WAYPOINT_REACH = 3;
 	/** Dungeons in the game lie 6400 tiles north of the surface (like src/lib/map.ts isUnderground). */
 	static final int UNDERGROUND_Y = 6400;
+	/**
+	 * The surface of the world map ends here; between it and the dungeons lie the separate areas: the Stronghold of Security floors, instances
+	 * (like src/lib/instances.ts OVERWORLD_MAX_Y). A straight line from one of them to the surface is not a distance.
+	 */
+	static final int OVERWORLD_MAX_Y = 4200;
 
 	private static final String[] ARROWS = {"→", "↗", "↑", "↖", "←", "↙", "↓", "↘"};
 
@@ -77,6 +82,12 @@ final class Navigation
 		return y > UNDERGROUND_Y;
 	}
 
+	/** 0 the surface, 1 a separate area (the Stronghold of Security, an instance), 2 a dungeon. */
+	static int layer(int y)
+	{
+		return underground(y) ? 2 : y >= OVERWORLD_MAX_Y ? 1 : 0;
+	}
+
 	/** "tile / tiles". */
 	static String tiles(int n)
 	{
@@ -86,11 +97,20 @@ final class Navigation
 	/** The distance line for the HUD. wasNear is whether it was "Nearby" on the previous tick. */
 	static Readout readout(int px, int py, int pPlane, int tx, int ty, int tPlane, boolean wasNear)
 	{
-		boolean pUnder = underground(py);
-		boolean tUnder = underground(ty);
-		if (pUnder != tUnder)
+		int pLayer = layer(py);
+		int tLayer = layer(ty);
+		if (pLayer != tLayer)
 		{
-			return new Readout(tUnder ? "Target is underground - find the way down" : "Target is on the surface - get back up", false);
+			// Inside the Stronghold of Security the surface entrance was "~2180 tiles" away (2.55.0, S3-08): a number that meant nothing.
+			if (tLayer == 2)
+			{
+				return new Readout("Target is underground - find the way down", false);
+			}
+			if (tLayer == 1)
+			{
+				return new Readout("Target is in a separate area - find the way in", false);
+			}
+			return new Readout(pLayer == 2 ? "Target is on the surface - get back up" : "Target is outside this area - find the way out", false);
 		}
 		int d = distance(px, py, tx, ty);
 		if (pPlane != tPlane)
@@ -122,7 +142,11 @@ final class Navigation
 			this.points = points == null ? Collections.emptyList() : points;
 		}
 
-		/** The player's position changed. true means the current point changed. */
+		/**
+		 * The player's position changed. true means the current point changed. A player already inside the area the route ends in (the
+		 * Stronghold of Security, S3-08's minotaurs) is past the waypoints that lead in from another layer (the entrance on the surface): only
+		 * when the rest of the route, from its first waypoint in the player's layer, stays in that layer, and never on the surface.
+		 */
 		boolean update(int x, int y, int plane)
 		{
 			for (int i = index; i < points.size(); i++)
@@ -134,7 +158,29 @@ final class Navigation
 					return true;
 				}
 			}
-			return false;
+			int here = layer(y);
+			if (here == 0 || finished() || layer(points.get(index).getY()) == here)
+			{
+				return false;
+			}
+			int first = index;
+			while (first < points.size() && layer(points.get(first).getY()) != here)
+			{
+				first++;
+			}
+			if (first == points.size())
+			{
+				return false;
+			}
+			for (int i = first; i < points.size(); i++)
+			{
+				if (layer(points.get(i).getY()) != here)
+				{
+					return false;
+				}
+			}
+			index = first;
+			return true;
 		}
 
 		/** The current point or null if the route is done. */

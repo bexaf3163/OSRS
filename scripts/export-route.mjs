@@ -140,7 +140,7 @@ function step(s) {
   if (s.targets?.length) w(`- Skill goals: ${s.targets.map((t) => `${t.skill} ${t.level}`).join(', ')}`);
   if (s.pacing) {
     const p = s.pacing;
-    w(`- Pace: ${p.skill}${p.also?.length ? ` (also ${list(p.also)})` : ''} to level ${p.targetLevel} (${p.targetExp.toLocaleString('en-US')} XP): ${p.actionName}, ${p.expPerAction} XP each${p.secondsPerAction ? `, about ${p.secondsPerAction} s each` : ''}`);
+    w(`- Pace: ${p.skill}${p.also?.length ? ` (also ${list(p.also)})` : ''} to level ${p.targetLevel} (${p.targetExp.toLocaleString('en-US')} XP)${p.goals ? `; own goals: ${Object.entries(p.goals).map(([k, g]) => `${k} ${g.level}`).join(', ')}` : ''}: ${p.actionName}, ${p.expPerAction} XP each${p.secondsPerAction ? `, about ${p.secondsPerAction} s each` : ''}`);
   }
   if (s.foes?.length) w(`- Fights in melee: ${list(s.foes)}`);
   if (s.threats?.length) w(`- Other opponents (food advice): ${list(s.threats)}`);

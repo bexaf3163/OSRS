@@ -20,3 +20,8 @@ export const OVERWORLD_MAX_Y = 4200;
 export function isOverworld(p: Pick<Point, 'y'> | null | undefined): boolean {
   return !!p && p.y < OVERWORLD_MAX_Y;
 }
+
+/** A separate area between the surface and the dungeons (the Stronghold of Security floors: S3-08's minotaurs): not a place on the world map. */
+export function isSeparateArea(p: Pick<Point, 'y'> | null | undefined): boolean {
+  return !!p && p.y >= OVERWORLD_MAX_Y && p.y <= 6400;
+}

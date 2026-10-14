@@ -108,6 +108,53 @@ public class NavigationTest
 		assertTrue(route.finished());
 	}
 
+	/** S3-08 in 2.55.0: inside the Stronghold of Security the HUD read "~2180 tiles" to the surface entrance. */
+	@Test
+	public void theStrongholdIsASeparateAreaNotADistance()
+	{
+		assertEquals(0, Navigation.layer(3420));
+		assertEquals(1, Navigation.layer(5241));
+		assertEquals(2, Navigation.layer(9571));
+		assertEquals("Target is outside this area - find the way out", Navigation.readout(1899, 5241, 0, 3081, 3420, 0, false).getText());
+		assertEquals(-1, Navigation.readout(1899, 5241, 0, 3081, 3420, 0, false).getTiles());
+		assertEquals("Target is in a separate area - find the way in", Navigation.readout(3081, 3420, 0, 1876, 5216, 0, false).getText());
+		// Inside the same area it is a distance as usual: from the north-east room to the level 12 Minotaurs.
+		assertEquals("~34 tiles ↙", Navigation.readout(1899, 5241, 0, 1876, 5216, 0, false).getText());
+	}
+
+	@Test
+	public void insideTheStepsAreaTheSurfaceWaypointsAreBehind()
+	{
+		ActiveTarget.WorldPointDto room = p(1876, 5216, "Minotaurs");
+		Navigation.Breadcrumbs route = new Navigation.Breadcrumbs(Arrays.asList(p(3081, 3420, "Entrance"), room));
+		// On the surface the entrance comes first.
+		assertFalse(route.update(3100, 3430, 0));
+		assertEquals("Entrance", route.current().getLabel());
+		// The step is shown while the player is already inside: the entrance is behind, the arrow leads to the room.
+		Navigation.Breadcrumbs inside = new Navigation.Breadcrumbs(Arrays.asList(p(3081, 3420, "Entrance"), room));
+		assertTrue(inside.update(1899, 5241, 0));
+		assertEquals("Minotaurs", inside.current().getLabel());
+		assertFalse(inside.update(1898, 5240, 0));
+		// Reaching the room ends the route.
+		assertTrue(inside.update(1877, 5217, 0));
+		assertTrue(inside.finished());
+	}
+
+	@Test
+	public void aDungeonWaypointOnTheWayIsNeverSkippedFromTheSurface()
+	{
+		// Surface, a dungeon, back to the surface: a player on the surface is not "past" the dungeon waypoint.
+		Navigation.Breadcrumbs route = new Navigation.Breadcrumbs(Arrays.asList(p(3097, 3468, "Trapdoor"), p(3115, 9840, "Giants"), p(3094, 3491, "Bank")));
+		assertTrue(route.update(3097, 3469, 0));
+		assertEquals("Giants", route.current().getLabel());
+		assertFalse(route.update(3094, 3480, 0));
+		assertEquals("Giants", route.current().getLabel());
+		// Underground, with the route going back to the surface after the dungeon point: nothing is skipped either (as before 2.55.1).
+		Navigation.Breadcrumbs back = new Navigation.Breadcrumbs(Arrays.asList(p(3097, 3468, "Trapdoor"), p(3115, 9840, "Giants"), p(3094, 3491, "Bank")));
+		assertFalse(back.update(3110, 9850, 0));
+		assertEquals("Trapdoor", back.current().getLabel());
+	}
+
 	@Test
 	public void theMisthalinMysteryManorIsAnInstanceNotAWorldMapPlace()
 	{

@@ -2201,8 +2201,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		ActiveTarget.Pacing p = pacing.getPacing();
 		Map<String, Object> m = new LinkedHashMap<>();
 		m.put("skill", pacing.getActive());
-		m.put("targetLevel", p.getTargetLevel());
-		m.put("targetExp", p.getTargetExp());
+		// The goal of the skill shown now: a combat step can have one per skill (S3-08: Strength 20, Attack 30).
+		m.put("targetLevel", p.targetLevelOf(pacing.getActive()));
+		m.put("targetExp", p.targetExpOf(pacing.getActive()));
 		m.put("xp", s.getXp());
 		m.put("remainingXp", s.getRemainingXp());
 		m.put("actionsLeft", s.getActionsLeft());

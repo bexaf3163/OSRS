@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 import lombok.Data;
@@ -601,6 +602,45 @@ public class ActiveTarget
 		private double expPerAction;
 		/** Seconds per action: a first estimate until there are own measurements. */
 		private Double secondsPerAction;
+		/**
+		 * Combat skills with a goal of their own (S3-08: Strength 20, then Attack 30); a skill not named here has targetLevel / targetExp.
+		 * Absent from an app before 2.55.1: every skill has the one goal.
+		 */
+		private Map<String, Goal> goals;
+
+		@Data
+		public static class Goal
+		{
+			private int level;
+			private int exp;
+		}
+
+		/** The level the skill is trained to on this step. */
+		int targetLevelOf(String s)
+		{
+			Goal g = goals == null ? null : goals.get(s);
+			return g == null ? targetLevel : g.getLevel();
+		}
+
+		/** The XP of that level. */
+		int targetExpOf(String s)
+		{
+			Goal g = goals == null ? null : goals.get(s);
+			return g == null ? targetExp : g.getExp();
+		}
+
+		/** Every skill of the step has the same goal (the usual case: Attack, Strength, Defence to 30). */
+		boolean oneGoal()
+		{
+			for (String s : skills())
+			{
+				if (targetLevelOf(s) != targetLevel)
+				{
+					return false;
+				}
+			}
+			return true;
+		}
 
 		/** The step's skill followed by the skills from also, in the order the step recommends training them. */
 		List<String> skills()
@@ -641,6 +681,21 @@ public class ActiveTarget
 			if (targetLevel < 2 || targetLevel > 99 || targetExp < 1 || targetExp > 13_034_431)
 			{
 				return "invalid pacing target";
+			}
+			if (goals != null)
+			{
+				if (goals.size() > 3)
+				{
+					return "invalid pacing target";
+				}
+				for (Map.Entry<String, Goal> e : goals.entrySet())
+				{
+					Goal g = e.getValue();
+					if (!skills().contains(e.getKey()) || g == null || g.getLevel() < 2 || g.getLevel() > 99 || g.getExp() < 1 || g.getExp() > 13_034_431)
+					{
+						return "invalid pacing target";
+					}
+				}
 			}
 			if (!(expPerAction > 0 && expPerAction <= 10_000) || actionName == null || actionName.isEmpty() || tooLong(actionName))
 			{

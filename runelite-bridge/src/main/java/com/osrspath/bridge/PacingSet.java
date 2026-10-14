@@ -113,7 +113,7 @@ final class PacingSet
 
 	/**
 	 * The HUD line. For one skill, like PacingTracker. In combat, when the shown skill reached the goal
-	 * and others did not: "✓ 30 Attack - next Strength: change attack style".
+	 * and others did not: "✓ 20 Strength - next Attack: switch to Accurate".
 	 */
 	String hudLine(PacingTracker.Snapshot s)
 	{
@@ -130,10 +130,21 @@ final class PacingSet
 			{
 				names.add(PacingTracker.skillName(skill));
 			}
-			return "✓ Target level reached: " + pacing.getTargetLevel() + " " + String.join(", ", names);
+			if (pacing.oneGoal())
+			{
+				return "✓ Target level reached: " + pacing.getTargetLevel() + " " + String.join(", ", names);
+			}
+			List<String> each = new ArrayList<>();
+			for (String skill : trackers.keySet())
+			{
+				each.add(pacing.targetLevelOf(skill) + " " + PacingTracker.skillName(skill));
+			}
+			return "✓ Target levels reached: " + String.join(", ", each);
 		}
-		return "✓ " + pacing.getTargetLevel() + " " + PacingTracker.skillName(active)
-			+ " - next " + PacingTracker.skillName(left.get(0)) + ": change attack style";
+		String next = left.get(0);
+		String style = PacingTracker.styleOf(next);
+		return "✓ " + pacing.targetLevelOf(active) + " " + PacingTracker.skillName(active)
+			+ " - next " + PacingTracker.skillName(next) + ": " + (style == null ? "change attack style" : "switch to " + style);
 	}
 
 	private String firstUnfinished()

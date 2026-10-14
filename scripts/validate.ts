@@ -411,8 +411,14 @@ export function validate(d: GuideData | null, route: Route): Report {
     if (!(p.expPerAction > 0)) out.push(`${s.id}: XP per action ${p.expPerAction}`);
     const forms = p.actionName.split('|');
     if (!(forms.length === 1 || forms.length === 2) || forms.some((f) => !f.trim())) out.push(`${s.id}: the action forms "${p.actionName}"`);
+    // A skill's own goal (goals) replaces targetLevel for it; its XP is by the same formula.
+    for (const [skill, g] of Object.entries(p.goals ?? {})) {
+      if (![p.skill, ...(p.also ?? [])].includes(skill as typeof p.skill)) out.push(`${s.id}: a goal for ${skill}, which the pace does not train`);
+      else if (!g || g.exp !== xpForLevel(g.level)) out.push(`${s.id}: the ${skill} goal XP ${g?.exp} ≠ ${g ? xpForLevel(g.level) : '?'} for ${g?.level}`);
+    }
     for (const skill of [p.skill, ...(p.also ?? [])]) {
-      if (!titleTargets(s.title).some((t) => t.skill === skill && t.level === p.targetLevel)) out.push(`${s.id}: the goal ${skill} ${p.targetLevel} is not in the title`);
+      const level = p.goals?.[skill]?.level ?? p.targetLevel;
+      if (!titleTargets(s.title).some((t) => t.skill === skill && t.level === level)) out.push(`${s.id}: the goal ${skill} ${level} is not in the title`);
     }
     // Several skills — only combat: they are trained in turn, changing the attack style.
     if (p.also && (!COMBAT.has(p.skill) || p.also.some((a) => !COMBAT.has(a) || a === p.skill) || new Set(p.also).size !== p.also.length)) {

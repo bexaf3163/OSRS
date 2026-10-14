@@ -339,6 +339,29 @@ item is checked against the current data and the OSRS Wiki before it changes. Ev
   - The trip must pay: the ways' saving minus the stops' detour (greedy nearest-first order, stairs counted) must reach `SUPPLY_MIN_TOTAL_TILES`.
   - Coins: a known total below the cost means no trip; short in the bag but in the bank adds a Coins withdrawal; unknown coins add "check you have the coins".
   - Unconfirmed items are named ("check your bank for Law rune", "up to N").
+- 2.55.1, S3-08 (the owner's report from the Stronghold: "nothing shows what to do", "nothing about food, just kill minotaurs", and the combat brief):
+  - Title "Strength to 20 and Attack to 30": Aggressive first, then Accurate. The numbers behind the text (scratchpad simulation from the wiki infoboxes and
+    the melee formulas, live gear: iron armour crush defence +39, Defence 1, Mithril scimitar, Amulet of strength): with a Strength potion, Strength first
+    is about 10 minutes faster to the step's end; without, both orders are about equal. The brief's "prefer the level 27 Minotaurs" is NOT adopted: the
+    level 27 one (Attack 23, Defence 25, defences -10, 22 HP, max hit 3) costs about twice the food per XP at Defence 1 (L12: ~3.4 HP per kill; L27:
+    ~15.5 HP per kill for 2.2x the XP). The brief's claim that both have -21 slash defence is wrong (wiki: -21 and -10).
+  - Kit: required Mithril scimitar and 20 Salmon with `anyOf` Trout/Tuna/Lobster/Swordfish (the step is not READY with an empty bag); recommended
+    3 Strength potion(4), Amulet of strength, Adamant scimitar (for S4-03: Attack 30 ends the step). Prices from the wiki price API on 2026-10-15.
+  - Readiness counts a required item's own `anyOf` together (`readiness.ts`, `heldAll`; the `alternative` requirement), and the game is asked to count
+    those alternatives (`toInGameTarget` watch list), so "short" is never a guess. Tool families keep their old path (`heldOf`). The parity test compares
+    against the same requirement.
+  - Pace: `StepPacing.goals` gives a skill its own goal (S3-08: Strength 20 with `also` Attack, Attack's goal 30). The plugin (`ActiveTarget.Pacing.goals`,
+    `targetLevelOf/ExpOf`, `oneGoal`) counts each skill to its own goal and reports the shown skill's goal; an app before 2.55.1 sends no goals and nothing
+    changes. Combat lines name the style: "35 minotaurs to 20 Strength on Aggressive", "next Attack: switch to Accurate" (plugin and app alike).
+  - In the game: `quickSteps` (the panel and the guide's "Next" line); `inGame.goal` "Stronghold of Security floor 1: the level 12 Minotaurs";
+    `pathWaypoints` entrance (3081,3420) then the level 12 room (1876,5216, the wiki spawn list). The step's anchor stays the surface entrance: the F2P route
+    audits require surface anchors for the travel between steps.
+  - Plugin navigation: `Navigation.layer` (surface below y 4200, separate area 4200-6400, dungeon above 6400, as `src/lib/instances.ts`); between layers the
+    HUD says where to go instead of a straight-line number (inside the Stronghold it read "~2180 tiles"); the big arrow shows a chevron. A player already
+    inside the area a route ends in skips the waypoints that lead in from another layer, only when the rest of the route stays in that layer and never on
+    the surface (`Breadcrumbs.update`). App: a target in a separate area is not drawn on the world map (`isSeparateArea`).
+  - "Block 2" of the owner's screenshot is the empty space under "Previous step / Next step" on the 2.54.2 S3-08 page: no element is there (the page ends
+    and the window is taller). Nothing was removed; the 2.55.1 page carries the kit, the fields and the three steps.
 
 ### Automated
 
@@ -349,6 +372,9 @@ item is checked against the current data and the OSRS Wiki before it changes. Ev
 `tests/travelSupplies.test.ts`, the queue-arrow describe in `tests/prepQueue.test.ts`), check-data, full Java suite
 (493 tests, `TransportChipTest.aGliderPointsAtItsCaptainAndASpiritTreeIsTheObjectToClick`), UI smoke. `tests/fuzz.test.ts` advisers: an explicit 20 s timeout (the
 default 5 s failed under load; the assertions are unchanged).
+2.55.1: tsc, build, 1068 Vitest tests (new: `tests/minotaurTraining.test.ts`; the S3-08 expectations in `tests/streamlinedRoute.test.ts` and
+`tests/stage3.test.ts` follow the new order; `tests/parity.test.ts` compares alternatives against the `alternative` requirement), check-data, full Java
+suite (500 tests; `PacingSetTest` goals and styles, `NavigationTest` layers and waypoints), UI smoke. The readiness golden changed for S3-08 only.
 
 ### Installation
 

@@ -1,6 +1,7 @@
 // The training pace texts for the app (the same as the plugin writes in the micro HUD).
 
 import type { PacingState } from '../services/runeliteBridge';
+import type { StepPacing } from '../types';
 
 export const PACING_ICON: Record<PacingState['skill'], string> = {
   fishing: '🐟', woodcutting: '🪵', cooking: '🍖', mining: '⛏️', attack: '⚔️', strength: '💪', defence: '🛡️',
@@ -23,14 +24,34 @@ export function etaText(p: Pick<PacingState, 'etaSeconds' | 'estimated'>): strin
   return `${p.estimated ? 'approx. ' : '≈ '}${min < 1 ? 'under a minute' : `${min} min`}`;
 }
 
+/** The melee attack style whose XP goes to the skill, as the plugin names it; undefined for a skill that is not melee. */
+export const PACING_STYLE: Partial<Record<PacingState['skill'], string>> = { attack: 'Accurate', strength: 'Aggressive', defence: 'Defensive' };
+
+/** Each skill's goal on the step: its own (`goals`, S3-08's Attack 30) or the step's targetLevel. */
+export function pacingLevels(sp: Pick<StepPacing, 'skill' | 'also' | 'targetLevel' | 'goals'>): Partial<Record<PacingState['skill'], number>> {
+  return Object.fromEntries([sp.skill, ...(sp.also ?? [])].map((k) => [k, sp.goals?.[k]?.level ?? sp.targetLevel]));
+}
+
 /**
- * "34 shrimps to 20 Fishing". Combat (several skills with one goal): when the shown skill has reached the goal
- * and the others have not: "✓ 30 Attack - next Strength: change attack style"; when all are ready, all are named.
+ * "34 shrimps to 20 Fishing"; a combat skill names its style: "35 minotaurs to 20 Strength on Aggressive". Several combat skills: when the shown
+ * skill has reached its goal and the others have not: "✓ 20 Strength - next Attack: switch to Accurate"; when all are ready, all are named,
+ * each with its own level when the step's goals differ (`levels`, from pacingLevels).
  */
-export function pacingText(p: PacingState, actionName: string, all: readonly PacingState['skill'][] = [p.skill]): string {
-  if (p.done && p.left.length) return `✓ ${p.targetLevel} ${PACING_SKILL[p.skill]} - next ${PACING_SKILL[p.left[0]]}: change attack style`;
-  if (p.done) return `✓ Target level reached: ${p.targetLevel} ${(all.length > 1 ? all : [p.skill]).map((k) => PACING_SKILL[k]).join(', ')}`;
-  const line = `${p.actionsLeft} ${actionForm(actionName, p.actionsLeft)} to ${p.targetLevel} ${PACING_SKILL[p.skill]}`;
+export function pacingText(
+  p: PacingState, actionName: string, all: readonly PacingState['skill'][] = [p.skill],
+  levels?: Partial<Record<PacingState['skill'], number>>,
+): string {
+  if (p.done && p.left.length) {
+    const style = PACING_STYLE[p.left[0]];
+    return `✓ ${p.targetLevel} ${PACING_SKILL[p.skill]} - next ${PACING_SKILL[p.left[0]]}: ${style ? `switch to ${style}` : 'change attack style'}`;
+  }
+  const skills = all.length > 1 ? all : [p.skill];
+  if (p.done && levels && new Set(skills.map((k) => levels[k] ?? p.targetLevel)).size > 1) {
+    return `✓ Target levels reached: ${skills.map((k) => `${levels[k] ?? p.targetLevel} ${PACING_SKILL[k]}`).join(', ')}`;
+  }
+  if (p.done) return `✓ Target level reached: ${p.targetLevel} ${skills.map((k) => PACING_SKILL[k]).join(', ')}`;
+  const style = PACING_STYLE[p.skill];
+  const line = `${p.actionsLeft} ${actionForm(actionName, p.actionsLeft)} to ${p.targetLevel} ${PACING_SKILL[p.skill]}${style ? ` on ${style}` : ''}`;
   return p.almost ? `✓ Almost done: ${line}` : line;
 }
 

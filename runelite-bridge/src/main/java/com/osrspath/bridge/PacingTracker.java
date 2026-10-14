@@ -113,7 +113,7 @@ final class PacingTracker
 
 	Snapshot snapshot()
 	{
-		int remaining = Math.max(pacing.getTargetExp() - Math.max(xp, 0), 0);
+		int remaining = Math.max(pacing.targetExpOf(skill) - Math.max(xp, 0), 0);
 		int actions = (int) Math.ceil(remaining / pacing.getExpPerAction());
 		boolean done = xp >= 0 && remaining == 0;
 		Double perMinute = null;
@@ -146,21 +146,42 @@ final class PacingTracker
 		return new Snapshot(Math.max(xp, 0), remaining, actions, perMinute, eta, estimated, !done && actions < ALMOST, done);
 	}
 
-	/** The HUD line: "34 shrimps to 20 Fishing (~7 min)", "Almost done", "Target level reached". */
+	/**
+	 * The HUD line: "34 shrimps to 20 Fishing (~7 min)", "Almost done", "Target level reached". A combat skill names the attack style that
+	 * trains it ("to 20 Strength on Aggressive"): what to do is on the line itself.
+	 */
 	String hudLine(Snapshot s)
 	{
 		String name = skillName(skill);
+		int level = pacing.targetLevelOf(skill);
 		if (s.isDone())
 		{
-			return "✓ Target level reached: " + pacing.getTargetLevel() + " " + name;
+			return "✓ Target level reached: " + level + " " + name;
 		}
+		String style = styleOf(skill);
 		String line = s.getActionsLeft() + " " + actionForm(pacing.getActionName(), s.getActionsLeft())
-			+ " to " + pacing.getTargetLevel() + " " + name;
+			+ " to " + level + " " + name + (style == null ? "" : " on " + style);
 		if (s.isAlmost())
 		{
 			return "✓ Almost done: " + line;
 		}
 		return line + " (" + eta(s) + ")";
+	}
+
+	/** The melee attack style whose XP goes to the skill (the Controlled style splits it); null for a skill that is not melee. */
+	static String styleOf(String skill)
+	{
+		switch (skill)
+		{
+			case "attack":
+				return "Accurate";
+			case "strength":
+				return "Aggressive";
+			case "defence":
+				return "Defensive";
+			default:
+				return null;
+		}
 	}
 
 	/** "fishing" -> "Fishing": how the skill is called in the game's skills tab. */

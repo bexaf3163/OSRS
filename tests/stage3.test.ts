@@ -299,12 +299,12 @@ describe('The bridge: new requests and events', () => {
     // Unknown skills in left are dropped.
     expect(p.left).toEqual(['defence', 'attack']);
     const all = ['attack', 'strength', 'defence'] as const;
-    expect(pacingText(p, 'warrior|warriors', all)).toBe('111 warriors to 30 Strength');
+    expect(pacingText(p, 'warrior|warriors', all)).toBe('111 warriors to 30 Strength on Aggressive');
     expect(etaText(p)).toBe('approx. 35 min');
     expect(pacingNext(p)).toBe('then Defence and Attack');
     expect(pacingNext({ ...p, left: ['defence'] })).toBe('then Defence');
     const doneOne = { ...p, done: true, actionsLeft: 0, left: ['defence' as const] };
-    expect(pacingText(doneOne, 'warrior|warriors', all)).toBe('✓ 30 Strength - next Defence: change attack style');
+    expect(pacingText(doneOne, 'warrior|warriors', all)).toBe('✓ 30 Strength - next Defence: switch to Defensive');
     expect(pacingNext(doneOne)).toBe('');
     expect(pacingText({ ...doneOne, left: [] }, 'warrior|warriors', all)).toBe('✓ Target level reached: 30 Attack, Strength, Defence');
     // An old plugin does not send left — that is just an empty list.
@@ -367,15 +367,20 @@ describe('Steps with a pace', () => {
     for (const s of paced) expect(s.type).toBe('skill');
   });
 
-  it('combat pace: three skills to one goal, experience per opponent — 4 × its health', () => {
+  it('combat pace: the skills of the step, each to its goal, experience per opponent — 4 × its health', () => {
     const hp = new Map(foeData.foes.map((f) => [f.name, f.hitpoints]));
     for (const id of ['S3-08', 'S4-03']) {
       const s = allSteps.find((x) => x.id === id)!;
-      expect(s.pacing!.skill).toBe('attack');
-      // The pace follows Attack alone: Strength has its own, lower goal in the title and the trigger, and Defence is not trained.
-      expect(s.pacing!.also).toBeUndefined();
       expect(s.pacing!.expPerAction).toBe(4 * hp.get(s.foes![0])!);
       expect(s.pacing!.secondsPerAction).toBeUndefined();
     }
+    // S3-08: Strength to 20 first (Aggressive), then Attack to 30 with its own goal; Defence is not trained.
+    const s308 = allSteps.find((x) => x.id === 'S3-08')!.pacing!;
+    expect([s308.skill, ...(s308.also ?? [])]).toEqual(['strength', 'attack']);
+    expect(s308.goals?.attack?.level).toBe(30);
+    // S4-03: Attack alone.
+    const s403 = allSteps.find((x) => x.id === 'S4-03')!.pacing!;
+    expect(s403.skill).toBe('attack');
+    expect(s403.also).toBeUndefined();
   });
 });

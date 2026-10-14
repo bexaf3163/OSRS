@@ -11,8 +11,9 @@ import { isClosed, blockersOf } from './next-step';
 import { nameKey, preflightItems, type OwnedState } from './checklist';
 import type { GearState, NavTargetPayload } from '../services/runeliteBridge';
 import { plural } from './shopping';
-import { buildPlayerState, coinsOf, heldOf, questOf, type PlayerState } from './playerState';
+import { buildPlayerState, coinsOf, heldOf, questOf, type Held, type PlayerState } from './playerState';
 import { evaluate } from './requirements';
+import { toolFamilyOf } from './toolTiers';
 
 export type ReadinessStatus =
   | 'READY'
@@ -228,9 +229,17 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
       continue;
     }
     const key = it.id !== undefined ? `id:${it.id}` : `name:${nameKey(it.nameEn)}`;
-    const res = evaluate({ type: 'item', name: it.nameEn, count: it.count, manualKey: key, ...(it.id !== undefined ? { id: it.id } : {}) }, state);
-    const h = heldOf(state, it.nameEn, key);
-    const label = `${it.nameEn}${it.count > 1 ? ` ×${it.count}${it.exact ? '' : '+'}` : ''}`;
+    // Any of several items does the job (S3-08's food: Salmon, or Trout, Tuna...): they count together, as the plugin's guide counts them. A tool
+    // family (every pickaxe tier) is counted by heldOf already.
+    const alt = it.alt?.length && !toolFamilyOf(it.nameEn) ? it.alt : null;
+    const res = alt
+      ? evaluate({
+        type: 'alternative', requiredCount: it.count,
+        alternatives: [{ name: it.nameEn, manualKey: key, ...(it.id !== undefined ? { id: it.id } : {}) }, ...alt.map((n) => ({ name: n, manualKey: `name:${nameKey(n)}` }))],
+      }, state)
+      : evaluate({ type: 'item', name: it.nameEn, count: it.count, manualKey: key, ...(it.id !== undefined ? { id: it.id } : {}) }, state);
+    const h = alt ? heldAll(state, [it.nameEn, ...alt], key) : heldOf(state, it.nameEn, key);
+    const label = `${it.nameEn}${it.count > 1 ? ` ×${it.count}${it.exact ? '' : '+'}` : ''}${alt ? ` (or ${alt.slice(0, 2).join(', ')}${alt.length > 2 ? '…' : ''})` : ''}`;
     const shop: ReadinessAction = { kind: 'link', label: '🛒 To shopping', href: '#/shopping' };
     const manual = h.source === 'manual';
     const source: RequirementStatus['source'] = manual ? 'manual' : 'game';
@@ -320,6 +329,17 @@ export function fixChainOf(
 
 export function fixChain(input: ReadinessInput, maxDepth = 3): ChainLink[] {
   return fixChainOf(input.step, contextOf(input), maxDepth);
+}
+
+/** Several items that do one job, held together: the bag and the bank summed; a bank no part of which is known stays unknown (null). */
+function heldAll(state: PlayerState, names: readonly string[], key: string): Pick<Held, 'bag' | 'noted' | 'bank' | 'source'> {
+  const parts = names.map((n, i) => heldOf(state, n, i === 0 ? key : `name:${nameKey(n)}`));
+  const sum = (pick: (h: Held) => number | null): number | null => {
+    const known = parts.map(pick).filter((v): v is number => v !== null);
+    return known.length ? known.reduce((a, b) => a + b, 0) : null;
+  };
+  const source = parts.find((p) => p.source === 'game')?.source ?? parts.find((p) => p.source === 'manual')?.source ?? parts[0].source;
+  return { bag: sum((p) => p.bag), noted: parts.reduce((a, p) => a + p.noted, 0), bank: sum((p) => p.bank), source };
 }
 
 function bankNav(bank: Place, step: Step, itemName: string): ReadinessAction {

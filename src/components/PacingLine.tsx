@@ -5,7 +5,7 @@
 import type { Step } from '../types';
 import { useBridge } from '../bridge';
 import { useFeatures } from '../lib/features';
-import { etaText, PACING_ICON as ICON, pacingNext, pacingText } from '../lib/pacing';
+import { etaText, PACING_ICON as ICON, pacingLevels, pacingNext, pacingText } from '../lib/pacing';
 
 export function PacingLine({ step }: { step: Step }) {
   const { pacing, activeStepId } = useBridge();
@@ -23,7 +23,7 @@ export function PacingLine({ step }: { step: Step }) {
   return (
     <p className={`pacing ${good ? 'is-good' : ''}`} role="status" aria-live="polite">
       <span className="pacing-icon" aria-hidden="true">{ICON[pacing.skill]}</span>
-      <span className="pacing-main">{pacingText(pacing, step.pacing.actionName, all)}</span>
+      <span className="pacing-main">{pacingText(pacing, step.pacing.actionName, all, pacingLevels(step.pacing))}</span>
       {!pacing.done && !pacing.almost && <span className="pacing-eta">{etaText(pacing)}</span>}
       {pacing.actionsPerMinute !== null && !pacing.done && (
         <span className="pacing-rate muted small">{pacing.estimated ? 'estimate' : 'pace'} {pacing.actionsPerMinute.toLocaleString('en-US')} per minute</span>

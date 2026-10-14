@@ -9,6 +9,7 @@ import { emptyProgress } from '../src/lib/progress';
 import { nameKey, preflightItems, type OwnedItem, type OwnedState } from '../src/lib/checklist';
 import type { GearState } from '../src/services/runeliteBridge';
 import type { Step } from '../src/types';
+import { toolFamilyOf } from '../src/lib/toolTiers';
 
 // The new requirements engine and the step readiness — one state, one answer.
 // If they diverge, one screen will say "short", another — "ready".
@@ -21,8 +22,15 @@ type Scenario = { name: string; stats: Record<string, number> | null; owned: (s:
 function ownedFor(s: Step, mk: (need: number) => Partial<OwnedItem>, bankSeen: boolean): OwnedState {
   const map = new Map<string, OwnedItem>();
   for (const it of preflightItems(s)) map.set(nameKey(it.nameEn), { name: it.nameEn, id: it.id, carried: 0, noted: 0, ...mk(it.count) });
+  // The alternatives of an item (S3-08's food) are watched, so the game reports them too: here none of them is held.
+  for (const it of preflightItems(s)) {
+    for (const n of ownAlternatives(it) ?? []) if (!map.has(nameKey(n))) map.set(nameKey(n), { name: n, carried: 0, noted: 0, ...(bankSeen ? { bank: 0 } : {}) });
+  }
   return { bankSeen, items: map };
 }
+
+/** The step's own alternatives (anyOf), which readiness counts together; a tool family is counted by heldOf inside the plain item check. */
+const ownAlternatives = (it: ReturnType<typeof preflightItems>[number]) => (it.alt?.length && !toolFamilyOf(it.nameEn) ? it.alt : null);
 
 const scenarios: Scenario[] = [
   { name: 'everything present', stats: Object.fromEntries(['attack', 'strength', 'defence', 'ranged', 'magic', 'prayer', 'mining', 'smithing', 'fishing', 'cooking', 'firemaking', 'woodcutting', 'agility', 'crafting', 'runecraft', 'herblore', 'thieving', 'fletching', 'slayer', 'farming', 'construction', 'hunter'].map((k) => [k, 99])), owned: (s) => ownedFor(s, (n) => ({ carried: n + 5 }), true), gear: gearOf(10_000_000, 10_000_000) },
@@ -54,7 +62,10 @@ describe('readiness and the unified requirements give one answer', () => {
           if (it.id === COINS || nameKey(it.nameEn) === 'coins') continue;
           const row = r.requirements.find((x) => x.kind === 'item' && x.label.startsWith(it.nameEn));
           if (!row) continue;
-          const req: Requirement = { type: 'item', name: it.nameEn, count: it.count };
+          const alt = ownAlternatives(it);
+          const req: Requirement = alt
+            ? { type: 'alternative', requiredCount: it.count, alternatives: [it.nameEn, ...alt].map((name) => ({ name })) }
+            : { type: 'item', name: it.nameEn, count: it.count };
           const got = evaluate(req, ps).state;
           // "Not the whole item in the bag, the rest unknown" is read the same way: the unknown is not "no".
           expect(got, `${sc.name} · ${step.id} · ${it.nameEn}`).toBe(row.state);

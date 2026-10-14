@@ -33,14 +33,15 @@ describe('S3-06 and S3-07: money for the Adamant scimitar only', () => {
 });
 
 describe('S3-08 and S4-03: Attack and Strength, no Defence', () => {
-  it('S3-08 is Attack 30 and Strength 20 on the Stronghold of Security minotaurs, and nothing else', () => {
+  // 2.55.1 (the owner's combat brief): Strength first on Aggressive, then Attack on Accurate; each skill paced to its own goal.
+  it('S3-08 is Strength 20, then Attack 30, on the Stronghold of Security minotaurs, and nothing else', () => {
     const s = step('S3-08');
-    expect(skillsOf('S3-08')).toEqual(['attack:30', 'strength:20']);
-    expect(titleTargets(s.title)).toEqual([{ skill: 'attack', level: 30 }, { skill: 'strength', level: 20 }]);
+    expect(skillsOf('S3-08')).toEqual(['strength:20', 'attack:30']);
+    expect(titleTargets(s.title)).toEqual([{ skill: 'strength', level: 20 }, { skill: 'attack', level: 30 }]);
     expect(s.foes).toEqual(['Minotaur']);
-    expect(s.pacing).toMatchObject({ skill: 'attack', targetLevel: 30, actionName: 'minotaur|minotaurs', expPerAction: 40 });
-    expect(s.pacing!.also).toBeUndefined();
-    expect(s.pacing!.targetExp).toBe(xpForLevel(30));
+    expect(s.pacing).toMatchObject({ skill: 'strength', also: ['attack'], targetLevel: 20, actionName: 'minotaur|minotaurs', expPerAction: 40 });
+    expect(s.pacing!.targetExp).toBe(xpForLevel(20));
+    expect(s.pacing!.goals).toEqual({ attack: { level: 30, exp: xpForLevel(30) } });
     expect(s.mapLocation).toMatchObject({ x: 3081, y: 3420, plane: 0 });
     expect(s.where).toMatch(/Stronghold of Security/);
     expect(text('S3-08')).not.toMatch(/al kharid warrior|cow|defence 30/);
