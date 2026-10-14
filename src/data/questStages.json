@@ -2877,6 +2877,11 @@
       {
        "t": "Pick cadava berries from the bushes south-east of Varrock.",
        "s": "Pick cadava berries south-east of Varrock",
+       "at": [
+        3271,
+        3367,
+        0
+       ],
        "k": "getBerries"
       }
      ],
@@ -2895,6 +2900,11 @@
       {
        "t": "Pick cadava berries from the bushes south-east of Varrock.",
        "s": "Pick cadava berries south-east of Varrock",
+       "at": [
+        3271,
+        3367,
+        0
+       ],
        "has": "Cadava berries",
        "k": "getBerries"
       },
@@ -4718,6 +4728,13 @@
       {
        "t": "Use the poison on the fish food",
        "s": "Use the poison on the fish food",
+       "hl": {
+        "item": [
+         "Poison",
+         "Fish food"
+        ]
+       },
+       "has": "Poisoned fish food",
        "k": "usePoisonOnFishFood"
       },
       {
@@ -5070,6 +5087,13 @@
       {
        "t": "Use the poison on the fish food",
        "s": "Use the poison on the fish food",
+       "hl": {
+        "item": [
+         "Poison",
+         "Fish food"
+        ]
+       },
+       "has": "Poisoned fish food",
        "k": "usePoisonOnFishFood"
       },
       {
@@ -6962,6 +6986,542 @@
       "label": "Ice Mountain dungeon entrance"
      },
      "items": []
+    }
+   ]
+  },
+  "S3-05": {
+   "var": [
+    "varp",
+    145
+   ],
+   "route": [
+    {
+     "title": "Start the quest",
+     "steps": [
+      "Talk to Reldo in the Varrock Palace library. Dialogue: “I'm in search of a quest.” → “Yes.”.",
+      "Search the marked bookcase in the library and read the book you find.",
+      "Talk to Reldo again. Dialogue: “Okay, I've read that book about the Shield of Arrav.”."
+     ]
+    },
+    {
+     "title": "Choose a gang",
+     "steps": [
+      "You and a partner join different gangs: one the Phoenix Gang, the other the Black Arm Gang. You cannot change later. The chat channel “OSRS SOA” finds a partner."
+     ]
+    },
+    {
+     "title": "Phoenix Gang",
+     "steps": [
+      "Talk to Baraek in Varrock Square. Dialogue: “Can you tell me where I can find the Phoenix Gang?” → “Okay. Have 20 gold coins.”.",
+      "Climb down the ladder into the Phoenix Gang hideout in south-east Varrock and talk to Straven. Dialogue: “I know who you are!” → “I'd like to offer you my services.”.",
+      "Kill Jonny the Beard (level 2) in the Blue Moon Inn and pick up the Intel report.",
+      "Give the Intel report to Straven in the hideout: he gives you the Weapon store key.",
+      "Search the chest in the hideout for half of the Shield of Arrav."
+     ]
+    },
+    {
+     "title": "Black Arm Gang",
+     "steps": [
+      "Talk to Charlie the Tramp at the south entrance of Varrock. Dialogue: “Is there anything down this alleyway?” → “I'm looking for the Black Arm Gang.” → “Do you think they would let me join?”.",
+      "Talk to Katrine down the alley to the west and join her gang. Dialogue: “I want to become a member of your gang.” → “Well, you can give me a try can't you?” → “Ok, no problem.”.",
+      "Get the Weapon store key from your Phoenix Gang partner, climb the ladder into the weapon storeroom in south-east Varrock, kill the Weaponsmaster (level 23) and pick up both Phoenix crossbows.",
+      "Bring both crossbows to Katrine, go up the stairs in the gang base and search the cupboard for half of the Shield of Arrav."
+     ]
+    },
+    {
+     "title": "Finish together",
+     "steps": [
+      "Pass the Weapon store key to your partner, then take your half of the shield to Curator Haig Halen in the Varrock Museum: he gives you half of a certificate.",
+      "Swap certificate halves with your partner and use the two halves together to make the Certificate.",
+      "Give the Certificate to King Roald in Varrock Palace to finish the quest."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to Reldo in the Varrock Palace library. Dialogue: “I'm in search of a quest.” → “Yes.”.",
+       "s": "Talk to Reldo (Varrock Palace library)",
+       "at": [
+        3210,
+        3494,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4243
+        ]
+       },
+       "k": "startQuest"
+      }
+     ],
+     "go": {
+      "x": 3210,
+      "y": 3494,
+      "plane": 0,
+      "label": "Reldo — Varrock Palace library",
+      "npc": "Reldo"
+     }
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Search the marked bookcase in the library (a bright blue book on the top shelf) and read the book you find.",
+       "s": "Search the bookcase and read the book",
+       "at": [
+        3212,
+        3493,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2402
+        ]
+       },
+       "k": "searchBookcase"
+      }
+     ]
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Talk to Reldo again. Dialogue: “Okay, I've read that book about the Shield of Arrav.”.",
+       "s": "Talk to Reldo again",
+       "at": [
+        3210,
+        3494,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4243
+        ]
+       },
+       "k": "talkToReldoAgain"
+      }
+     ],
+     "go": {
+      "x": 3210,
+      "y": 3494,
+      "plane": 0,
+      "label": "Reldo — Varrock Palace library",
+      "npc": "Reldo"
+     }
+    },
+    {
+     "at": 3,
+     "do": [
+      {
+       "t": "Choose a gang with your partner: one of you joins the Phoenix Gang, the other the Black Arm Gang (you cannot change later; the chat channel “OSRS SOA” finds a partner). Phoenix Gang: talk to Baraek in Varrock Square. Dialogue: “Can you tell me where I can find the Phoenix Gang?” → “Okay. Have 20 gold coins.”.",
+       "s": "Phoenix: pay Baraek 20 coins (Varrock Square)",
+       "at": [
+        3218,
+        3435,
+        0
+       ],
+       "hl": {
+        "npc": [
+         2881
+        ]
+       },
+       "k": "talkToBaraek"
+      },
+      {
+       "t": "Black Arm Gang instead: talk to Charlie the Tramp at the south entrance of Varrock. Dialogue: “Is there anything down this alleyway?” → “I'm looking for the Black Arm Gang.” → “Do you think they would let me join?”.",
+       "s": "Black Arm: talk to Charlie the Tramp",
+       "at": [
+        3208,
+        3392,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5209
+        ]
+       },
+       "k": "talkToCharlie"
+      },
+      {
+       "t": "Black Arm Gang: talk to Katrine down the alley to the west. Dialogue: “I've heard you're the Black Arm Gang.” → “I'd rather not reveal my sources.” → “I want to become a member of your gang.” → “Well, you can give me a try can't you?” → “Ok, no problem.”.",
+       "s": "Black Arm: join Katrine's gang",
+       "at": [
+        3185,
+        3385,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5210
+        ]
+       },
+       "k": "talkToKatrine"
+      },
+      {
+       "t": "Get the Weapon store key from your Phoenix Gang partner (if they cannot trade, they use it on you to drop it at your feet).",
+       "s": "Get the Weapon store key from your partner",
+       "has": "Weapon store key",
+       "k": "getWeaponStoreKey"
+      },
+      {
+       "t": "Climb the ladder in south-east Varrock into the Phoenix weapon storeroom (the key opens the door).",
+       "s": "Climb up to the weapon storeroom",
+       "at": [
+        3252,
+        3384,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11794
+        ]
+       },
+       "k": "goUpToWeaponStore"
+      },
+      {
+       "t": "Kill the Weaponsmaster (level 23), or have someone else kill him.",
+       "s": "Kill the Weaponsmaster",
+       "at": [
+        3247,
+        3384,
+        1
+       ],
+       "hl": {
+        "npc": [
+         14137
+        ]
+       },
+       "k": "killWeaponsMaster"
+      },
+      {
+       "t": "Pick up both Phoenix crossbows.",
+       "s": "Pick up two Phoenix crossbows",
+       "has": "Phoenix crossbow x2",
+       "k": "pickupTwoCrossbows"
+      },
+      {
+       "t": "Climb back down the ladder from the storeroom.",
+       "s": "Climb down from the storeroom",
+       "at": [
+        3252,
+        3384,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11802
+        ]
+       },
+       "k": "goDownFromWeaponStore"
+      },
+      {
+       "t": "Bring both Phoenix crossbows to Katrine.",
+       "s": "Give Katrine the two crossbows",
+       "at": [
+        3185,
+        3385,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5210
+        ]
+       },
+       "need": "Phoenix crossbow",
+       "pre": [{"item": "Phoenix crossbow", "id": 767, "n": 2, "at": [3247, 3384, 1], "t": "Pick up two Phoenix crossbows in the weapon storeroom"}],
+       "k": "returnToKatrine"
+      },
+      {
+       "t": "Go up the stairs in the Black Arm Gang base.",
+       "s": "Up the stairs in the gang base",
+       "at": [
+        3189,
+        3390,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11796
+        ]
+       },
+       "k": "goUpstairsInBase"
+      },
+      {
+       "t": "Search the cupboard for half of the Shield of Arrav.",
+       "s": "Search the cupboard: half of the shield",
+       "at": [
+        3189,
+        3386,
+        1
+       ],
+       "hl": {
+        "obj": [
+         2400,
+         2401
+        ]
+       },
+       "has": "Broken shield",
+       "k": "getShieldFromCupboard"
+      },
+      {
+       "t": "Go back down the stairs.",
+       "s": "Back down the stairs",
+       "at": [
+        3189,
+        3391,
+        1
+       ],
+       "hl": {
+        "obj": [
+         11799
+        ]
+       },
+       "k": "goDownstairsInBase"
+      },
+      {
+       "t": "Pass the Weapon store key to your partner if you still have it, then take your half of the shield to Curator Haig Halen in the Varrock Museum: he gives you half of a certificate.",
+       "s": "Give the shield half to Curator Haig (Museum)",
+       "at": [
+        3255,
+        3449,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5214
+        ]
+       },
+       "need": "Broken shield",
+       "pre": [{"item": "Broken shield", "id": 765, "at": [3189, 3386, 1], "t": "Search the cupboard upstairs in the Black Arm Gang base"}],
+       "k": "talkToHaig"
+      },
+      {
+       "t": "Swap certificate halves with your partner (if you cannot trade, use yours on them to drop it at their feet), then use the two halves together to make the Certificate.",
+       "s": "Swap halves, make the Certificate",
+       "has": "Certificate",
+       "k": "combineCertificate"
+      },
+      {
+       "t": "Give the Certificate to King Roald in Varrock Palace to finish the quest.",
+       "s": "Give King Roald the Certificate",
+       "at": [
+        3222,
+        3473,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5215,
+         1399
+        ]
+       },
+       "need": "Certificate",
+       "k": "talkToRoald"
+      }
+     ],
+     "items": [
+      {
+       "name": "Phoenix crossbow",
+       "id": 767,
+       "where": "Black Arm Gang only: two lie in the Phoenix weapon storeroom in south-east Varrock.",
+       "inStep": true
+      }
+     ],
+     "go": {
+      "x": 3218,
+      "y": 3435,
+      "plane": 0,
+      "label": "Baraek — Varrock Square",
+      "npc": "Baraek"
+     }
+    },
+    {
+     "at": 4,
+     "do": [
+      {
+       "t": "Climb down the ladder into the Phoenix Gang hideout in south-east Varrock.",
+       "s": "Down the ladder to the Phoenix Gang",
+       "at": [
+        3244,
+        3383,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11803
+        ]
+       },
+       "k": "goDownToPhoenixGang"
+      },
+      {
+       "t": "Talk to Straven. Dialogue: “I know who you are!” → “I'd like to offer you my services.”.",
+       "s": "Talk to Straven",
+       "at": [
+        3247,
+        9781,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5212
+        ]
+       },
+       "k": "talkToStraven"
+      }
+     ]
+    },
+    {
+     "at": 8,
+     "do": [
+      {
+       "t": "Climb back up the ladder to the surface.",
+       "s": "Climb up to the surface",
+       "at": [
+        3244,
+        9783,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2405
+        ]
+       },
+       "k": "goUpFromPhoenixGang"
+      },
+      {
+       "t": "Kill Jonny the Beard (level 2) in the Blue Moon Inn in Varrock.",
+       "s": "Kill Jonny the Beard (Blue Moon Inn)",
+       "at": [
+        3222,
+        3395,
+        0
+       ],
+       "hl": {
+        "npc": [
+         14139
+        ]
+       },
+       "k": "killJonny"
+      },
+      {
+       "t": "Pick up the Intel report he drops.",
+       "s": "Pick up the Intel report",
+       "has": "Intel report",
+       "k": "pickupIntelReport"
+      },
+      {
+       "t": "Return to the hideout: climb down the ladder in south-east Varrock.",
+       "s": "Back down the ladder to the hideout",
+       "at": [
+        3244,
+        3383,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11803
+        ]
+       },
+       "k": "returnDownLadder"
+      },
+      {
+       "t": "Give the Intel report to Straven: he gives you the Weapon store key.",
+       "s": "Give Straven the Intel report",
+       "at": [
+        3247,
+        9781,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5212
+        ]
+       },
+       "need": "Intel report",
+       "pre": [{"item": "Intel report", "id": 761, "at": [3222, 3395, 0], "t": "Kill Jonny the Beard in the Blue Moon Inn for the Intel report"}],
+       "k": "talkToStravenAgain"
+      }
+     ]
+    },
+    {
+     "at": 9,
+     "do": [
+      {
+       "t": "Search the chest in the south-west corner of the hideout for half of the Shield of Arrav.",
+       "s": "Search the chest: half of the shield",
+       "at": [
+        3235,
+        9761,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2403,
+         2404
+        ]
+       },
+       "has": "Broken shield",
+       "k": "getShieldHalf"
+      },
+      {
+       "t": "Climb back up the ladder to the surface.",
+       "s": "Climb up to the surface",
+       "at": [
+        3244,
+        9783,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2405
+        ]
+       },
+       "k": "leaveAfterGettingShieldHalf"
+      },
+      {
+       "t": "Pass the Weapon store key to your partner if you still have it, then take your half of the shield to Curator Haig Halen in the Varrock Museum: he gives you half of a certificate.",
+       "s": "Give the shield half to Curator Haig (Museum)",
+       "at": [
+        3255,
+        3449,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5214
+        ]
+       },
+       "need": "Broken shield",
+       "pre": [{"item": "Broken shield", "id": 763, "at": [3235, 9761, 0], "t": "Search the chest in the Phoenix Gang hideout"}],
+       "k": "talkToHaig"
+      },
+      {
+       "t": "Swap certificate halves with your partner (if you cannot trade, use yours on them to drop it at their feet), then use the two halves together to make the Certificate.",
+       "s": "Swap halves, make the Certificate",
+       "has": "Certificate",
+       "k": "combineCertificate"
+      },
+      {
+       "t": "Give the Certificate to King Roald in Varrock Palace to finish the quest.",
+       "s": "Give King Roald the Certificate",
+       "at": [
+        3222,
+        3473,
+        0
+       ],
+       "hl": {
+        "npc": [
+         5215,
+         1399
+        ]
+       },
+       "need": "Certificate",
+       "k": "talkToRoald"
+      }
+     ]
     }
    ]
   },
@@ -14280,6 +14840,111 @@
       "npc": "King Narnode Shareen"
      },
      "items": []
+    }
+   ]
+  },
+  "S9-05": {
+   "var": [
+    "varbit",
+    1850
+   ],
+   "route": [
+    {
+     "title": "Another Cook's Quest",
+     "steps": [
+      "Talk to the Cook in Lumbridge Castle's kitchen. Dialogue: “Do you have any other quests for me?” → “Angry! It makes me angry!” → “What seems to be the problem?” → “YES”.",
+      "Use the Ashes on the Fruit blast to make a Dirty blast.",
+      "Talk to the Cook again with the Eye of newt, Greenman's ale, Rotten tomato and Dirty blast. Dialogue: “About those ingredients you wanted for the banquet...”.",
+      "Enter the castle dining room through the door west of the kitchen and watch the cutscene."
+     ]
+    }
+   ],
+   "stages": [
+    {
+     "at": 0,
+     "do": [
+      {
+       "t": "Talk to the Cook in Lumbridge Castle's kitchen. Dialogue: “Do you have any other quests for me?” → “Angry! It makes me angry!” → “What seems to be the problem?” → “YES”.",
+       "s": "Talk to the Cook (Lumbridge Castle kitchen)",
+       "at": [
+        3209,
+        3215,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4626
+        ]
+       },
+       "k": "talkToCook"
+      }
+     ],
+     "go": {
+      "x": 3209,
+      "y": 3215,
+      "plane": 0,
+      "label": "Cook — Lumbridge Castle kitchen",
+      "npc": "Cook"
+     }
+    },
+    {
+     "at": 1,
+     "do": [
+      {
+       "t": "Use the Ashes on the Fruit blast to make a Dirty blast.",
+       "s": "Use Ashes on the Fruit blast",
+       "hl": {
+        "item": [
+         "Ashes",
+         "Fruit blast"
+        ]
+       },
+       "has": "Dirty blast",
+       "k": "useAshesOnFruitBlast"
+      },
+      {
+       "t": "Talk to the Cook again with the Eye of newt, Greenman's ale, Rotten tomato and Dirty blast. Dialogue: “About those ingredients you wanted for the banquet...”.",
+       "s": "Bring the Cook the four ingredients",
+       "at": [
+        3209,
+        3215,
+        0
+       ],
+       "hl": {
+        "npc": [
+         4626
+        ]
+       },
+       "k": "talkToCookAgain"
+      }
+     ],
+     "go": {
+      "x": 3209,
+      "y": 3215,
+      "plane": 0,
+      "label": "Cook — Lumbridge Castle kitchen",
+      "npc": "Cook"
+     }
+    },
+    {
+     "at": 2,
+     "do": [
+      {
+       "t": "Enter the castle dining room through the door west of the kitchen and watch the cutscene.",
+       "s": "Enter the dining room (west of the kitchen)",
+       "at": [
+        3207,
+        3217,
+        0
+       ],
+       "hl": {
+        "obj": [
+         12348
+        ]
+       },
+       "k": "enterDiningRoom"
+      }
+     ]
     }
    ]
   },

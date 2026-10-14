@@ -4734,6 +4734,32 @@
     "type": "skill",
     "title": "Mining to 60 (Mining Guild) and Woodcutting to 60 (yews)",
     "requires": [],
+    "mapLocation": {
+      "x": 3286,
+      "y": 3365,
+      "plane": 0,
+      "label": "Iron ore — the mine south-east of Varrock"
+    },
+    "resourceSpots": [
+      {
+        "x": 3286,
+        "y": 3365,
+        "plane": 0,
+        "label": "Iron ore — the mine south-east of Varrock (Mining up to 60)"
+      },
+      {
+        "x": 3298,
+        "y": 3293,
+        "plane": 0,
+        "label": "Iron ore — Al Kharid mine (Mining up to 60)"
+      },
+      {
+        "x": 3103,
+        "y": 3265,
+        "plane": 0,
+        "label": "Willow trees — Draynor Village (Woodcutting 30-60)"
+      }
+    ],
     "fields": [
       {
         "label": "Mining",
@@ -5463,6 +5489,26 @@
     "type": "skill",
     "title": "Agility to 40 (the Graceful outfit is optional)",
     "requires": [],
+    "mapLocation": {
+      "x": 3273,
+      "y": 3195,
+      "plane": 0,
+      "label": "Al Kharid Rooftop Course (Agility 20-30)"
+    },
+    "resourceSpots": [
+      {
+        "x": 3273,
+        "y": 3195,
+        "plane": 0,
+        "label": "Al Kharid Rooftop Course (Agility 20-30)"
+      },
+      {
+        "x": 3220,
+        "y": 3414,
+        "plane": 0,
+        "label": "Varrock Rooftop Course (Agility 30-40)"
+      }
+    ],
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Rooftop_Agility",
     "itemsRecommended": [
@@ -5511,6 +5557,32 @@
     "type": "skill",
     "title": "Ranged to 30, Slayer to 18, Crafting to 31, Woodcutting to 36 and Cooking to 10",
     "requires": [],
+    "mapLocation": {
+      "x": 3255,
+      "y": 3449,
+      "plane": 0,
+      "label": "Varrock Museum — Orlando Smith's quiz in the basement (Slayer)"
+    },
+    "resourceSpots": [
+      {
+        "x": 3255,
+        "y": 3449,
+        "plane": 0,
+        "label": "Varrock Museum — Orlando Smith's quiz in the basement (Slayer)"
+      },
+      {
+        "x": 3103,
+        "y": 3265,
+        "plane": 0,
+        "label": "Draynor Village — the Porcine of Interest notice board (Slayer), willows (Woodcutting)"
+      },
+      {
+        "x": 3257,
+        "y": 3272,
+        "plane": 0,
+        "label": "The cow field east of Lumbridge (Ranged)"
+      }
+    ],
     "membersOnly": true,
     "wikiUrl": "https://oldschool.runescape.wiki/w/Quest_skill_requirements",
     "fields": [

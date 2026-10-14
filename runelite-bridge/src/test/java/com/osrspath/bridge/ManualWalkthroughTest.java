@@ -16,22 +16,18 @@ import net.runelite.client.ui.overlay.components.PanelComponent;
 import org.junit.Test;
 
 /**
- * A quest the app has no stage data for (Shield of Arrav) is not an empty guide: in the live game it showed only "Reldo, ~7 tiles" from the first
- * line to the last. Its walkthrough lines become one stage that the player moves through with "done". The lines are the real ones, as the app sends them.
+ * A quest the app has no stage data for is not an empty guide: in the live game Shield of Arrav showed only "Reldo, ~7 tiles" from the first
+ * line to the last. Its walkthrough lines become one stage that the player moves through with "done". The sample is Shield of Arrav exactly as the
+ * app sent it before 2.53 (manual-walkthrough.json); since 2.53 the app sends its stage table instead, and every route quest has one.
  */
 public class ManualWalkthroughTest
 {
 	private static ActiveTarget arrav()
 	{
-		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
-		{
-			if (s.name.equals("S3-05"))
-			{
-				assertNull(s.target.prepare());
-				return s.target;
-			}
-		}
-		throw new AssertionError("S3-05 is not among the targets the app sends");
+		ActiveTarget t = new Gson().fromJson(new java.io.InputStreamReader(ManualWalkthroughTest.class.getResourceAsStream("/manual-walkthrough.json"),
+			java.nio.charset.StandardCharsets.UTF_8), ActiveTarget.class);
+		assertNull(t.prepare());
+		return t;
 	}
 
 	@Test public void theQuestWithoutStageDataGetsItsWholeWalkthrough()
@@ -62,8 +58,9 @@ public class ManualWalkthroughTest
 		{
 			assertNull(s.name, s.target.prepare());
 			ActiveTarget.Stage st = s.target.getGuide() == null ? null : s.target.getGuide().getStage();
-			assertEquals(s.name + ": only Shield of Arrav has no stage data", s.name.startsWith("S3-05"), st != null && st.isManual());
+			assertFalse(s.name + ": every quest the app sends has stage data (Shield of Arrav since 2.53)", st != null && st.isManual());
 		}
+		assertTrue("the old sample still becomes a walkthrough", arrav().getGuide().getStage().isManual());
 	}
 
 	@Test public void theGuideShowsTheLineAndCountsLinesNotStages()

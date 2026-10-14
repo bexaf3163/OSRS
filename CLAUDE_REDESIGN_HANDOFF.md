@@ -252,3 +252,12 @@ Asked for by the owner: stock up before a long run (cards for the Chronicle, run
 - Banks: `majorLocations.json` has the Grand Exchange bank and Lumbridge Castle's top floor (plane 2). `bankTiles` adds `STAIRS_TILES_PER_FLOOR` (15) per floor of difference; `Preflight.nearest` in Java does the same. `BANK_SPOTS` = `BANKS` (the exchange is in it once).
 - Plugin payload: `recommendedTransport.buy` (max 8, `PrepPlan.Buy`); `ShopWindow.build(place, view, atTransportStop)` lists them as "For the road: …".
 - Tests: `tests/travelSupplies.test.ts`, `ChronicleChargesTest` (renders `build/overlay-render/shop-road.png`), `PreflightTest.anUpstairsBankCostsItsStairs`, `BridgeServerTest` (status field), `bridge.test.ts` (status parse).
+
+## Whole-guide check — 2.53.0
+
+Asked for by the owner after Shield of Arrav's card stayed on "Talk to Reldo" in the live game: every stage, every quest.
+
+- Every route quest now has a stage table: S3-05 Shield of Arrav (varp 145, Quest Helper's Phoenix variable, which also counts the shared start; the Black Arm Gang's lines sit in row 3 and move by place and items, because varp 146 cannot be followed by the same table) and S9-05 Recipe for Disaster's first chapter (varbit 1850). `tests/wholeGuideAudit.test.ts` keeps it so: every quest on a table, every step on a place (exemptions by name with a reason), rows that start with no place pinned.
+- The manual-walkthrough fallback (a quest without stage data) is still in the plugin; its test sample is the pre-2.53 Shield of Arrav target in `runelite-bridge/src/test/resources/manual-walkthrough.json`.
+- Places added from the project's own data: S6-03, S8-03, S8-04. S6-04 (Magic) has no place on purpose.
+- Every QUEST_COMPLETED name matches a RuneLite quest (`RouteTargetsTest` checks it).

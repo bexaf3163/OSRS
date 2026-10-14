@@ -813,14 +813,15 @@ async function run(browser: Browser) {
     await page.context().close();
   }
 
-  // A quest without stage data (Shield of Arrav): Steps shows its walkthrough open, not an empty overview panel.
+  // Shield of Arrav had no stage data until 2.53 (the card never moved past Reldo). Now its overview lists the lines of both gangs.
   {
     const {page, errors} = await open(browser,1440,{
       progress:progressBefore('S3-05'), status:{protocol:6,inGame:true,activeStepId:'S3-05'}, localStorage:{'osrs-put:active-step':'S3-05'},
     },'#/step/S3-05');
-    await waitFor(page,'.quest-quick',5000);
-    expect(await page.locator('.quest-quick .quick-steps li').count() === 18 && await page.locator('.quest-walkthrough').count() === 0,'no stage data: the walkthrough is open in Steps, with no empty overview panel');
-    expect(errors.length === 0 && await noOverflow(page),'no stage data: no runtime errors or horizontal overflow');
+    await waitFor(page,'.quest-walkthrough',5000);
+    const overview = await page.locator('.quest-walkthrough').first().innerText();
+    expect(['Reldo', 'Baraek', 'Charlie the Tramp', 'Katrine', 'Straven', 'King Roald'].every((n) => overview.includes(n)),'Shield of Arrav: the overview lists both gangs\' lines');
+    expect(errors.length === 0 && await noOverflow(page),'Shield of Arrav: no runtime errors or horizontal overflow');
     await page.context().close();
   }
 

@@ -436,16 +436,19 @@ describe('the "OSRS Path" panel in RuneLite: what is needed and the step points 
   });
 });
 
-// Shield of Arrav has no stage data: in the game its quick path is the whole walkthrough, so every line must arrive.
-// It used to be five paragraphs, two of them over the 500-character limit and silently dropped (both gangs).
-describe('a quest without stage data sends its whole walkthrough', () => {
-  it('Shield of Arrav: every line fits and none is cut from the middle', () => {
+// Shield of Arrav had no stage data until 2.53: the card stayed on "Talk to Reldo" after Reldo was talked to (seen live). It now follows varp 145, the
+// Phoenix Gang's variable, which also counts the shared start; the Black Arm Gang's lines are led by places and items. Its walkthrough must still
+// arrive whole, both gangs (it once was five paragraphs, two over the 500-character limit and silently dropped).
+describe('Shield of Arrav sends its stage table and its whole walkthrough', () => {
+  it('stages on varp 145; every walkthrough line fits and both gangs are in it', () => {
     const s = allSteps.find((x) => x.id === 'S3-05')!;
-    expect(s.questStages).toBeUndefined();
-    const sent = toInGameTarget(s)!.guide!.steps!;
+    const g = toInGameTarget(s)!.guide!;
+    expect(g.stage).toMatchObject({ kind: 'varp', id: 145 });
+    expect(g.stage!.stages.map((st) => st.at)).toEqual([0, 1, 2, 3, 4, 8, 9]);
+    const sent = g.steps!;
     expect(sent).toEqual(s.quickSteps);
     expect(Math.max(...sent.map((q) => q.length))).toBeLessThanOrEqual(200);
-    for (const who of ['Reldo', 'Baraek', 'Straven', 'Jonny the beard', 'Katrine', 'Weaponsmaster', 'Haig Halen', 'King Roald']) {
+    for (const who of ['Reldo', 'Baraek', 'Straven', 'Jonny the Beard', 'Charlie the Tramp', 'Katrine', 'Weaponsmaster', 'Haig Halen', 'King Roald']) {
       expect(sent.join('\n'), who).toContain(who);
     }
   });

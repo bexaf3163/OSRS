@@ -31,6 +31,7 @@ const EXEMPT: Record<string, string> = {
   'S5-07:talkToNed': 'the map is made from three parts, not bought',
   'S5-08:enterElvargArea': 'on Crandor: there is no way back to a shop, the shield is checked on the ship',
   'S5-09:finishQuest': "Elvarg's head cannot be fetched, only killed again",
+  'S3-05:talkToRoald': 'the certificate is made from two halves, one of them from the partner in the other gang',
 };
 const exempt = (r: Row) => r.step === 'S1-07' || `${r.step}:${r.line.k}` in EXEMPT;
 
