@@ -1,6 +1,6 @@
 import type { QuestStageLine, StagePre } from '../types';
 import type { GearItem } from '../services/runeliteBridge';
-import { BANKS, EXCHANGE, dist, type Point } from './travel';
+import { BANKS, EXCHANGE, bankTiles, type Point } from './travel';
 import { nameKey } from './checklist';
 
 /**
@@ -44,10 +44,11 @@ export function countOf(items: GearItem[], p: Pick<StagePre, 'item' | 'id'>): nu
 
 export const missingChip = (item: string): string => `⚠ Missing Item: ${item} - Turn back!`;
 
-/** Where a banked item is taken from: the banks of the surface and the Grand Exchange (it has booths). */
-export const BANK_SPOTS: (Point & { label: string })[] = [...BANKS, EXCHANGE];
+/** Where a banked item is taken from: the banks, the Grand Exchange's bankers and Lumbridge Castle's top floor among them. */
+export const BANK_SPOTS: (Point & { label: string })[] = BANKS;
 
-const nearest = <T extends Point>(from: Point, list: T[]): T | null => list.reduce<T | null>((m, c) => (!m || dist(from, c) < dist(from, m) ? c : m), null);
+/** The nearest bank, the stairs to an upstairs one counted (the plugin's Preflight.nearest weighs them the same way). */
+const nearest = <T extends Point>(from: Point, list: T[]): T | null => list.reduce<T | null>((m, c) => (!m || bankTiles(from, c) < bankTiles(from, m) ? c : m), null);
 
 /** The first missing item of the step and where to get it; null when the step may go on. */
 export function itemPreflight(line: Pick<QuestStageLine, 'pre'>, inp: PreflightInput): PreflightBlock | null {

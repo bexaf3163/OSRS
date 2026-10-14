@@ -82,9 +82,48 @@
         "plane": 0,
         "label": "by Champions' Guild"
       },
-      "note": "Right-click the book, Teleport; charges: Check charges."
+      "note": "Right-click the book, Teleport. Charges: Check charges, or use Teleport cards on it.",
+      "charges": {
+        "item": "Teleport card",
+        "perItem": 1,
+        "max": 1000,
+        "note": "A new book has no charges: it is charged with Teleport cards (Diango's Toy Store, Draynor Village). One card is one charge; one teleport uses one."
+      }
     }
   ],
+  "staves": {
+    "source": "https://oldschool.runescape.wiki/w/Elemental_staves ; https://oldschool.runescape.wiki/w/Combination_runes",
+    "checked": "2026-10-14",
+    "note": "Wielded (not in the bag), a staff gives unlimited runes of its element or elements. Members staves cannot be wielded on a free-to-play world.",
+    "list": [
+      { "item": "Staff of air", "runes": ["air"], "members": false },
+      { "item": "Staff of water", "runes": ["water"], "members": false },
+      { "item": "Staff of earth", "runes": ["earth"], "members": false },
+      { "item": "Staff of fire", "runes": ["fire"], "members": false },
+      { "item": "Air battlestaff", "runes": ["air"], "members": true },
+      { "item": "Water battlestaff", "runes": ["water"], "members": true },
+      { "item": "Earth battlestaff", "runes": ["earth"], "members": true },
+      { "item": "Fire battlestaff", "runes": ["fire"], "members": true },
+      { "item": "Mystic air staff", "runes": ["air"], "members": true },
+      { "item": "Mystic water staff", "runes": ["water"], "members": true },
+      { "item": "Mystic earth staff", "runes": ["earth"], "members": true },
+      { "item": "Mystic fire staff", "runes": ["fire"], "members": true },
+      { "item": "Mist battlestaff", "runes": ["air", "water"], "members": true },
+      { "item": "Dust battlestaff", "runes": ["air", "earth"], "members": true },
+      { "item": "Mud battlestaff", "runes": ["water", "earth"], "members": true },
+      { "item": "Smoke battlestaff", "runes": ["air", "fire"], "members": true },
+      { "item": "Steam battlestaff", "runes": ["water", "fire"], "members": true },
+      { "item": "Lava battlestaff", "runes": ["earth", "fire"], "members": true },
+      { "item": "Mystic mist staff", "runes": ["air", "water"], "members": true },
+      { "item": "Mystic dust staff", "runes": ["air", "earth"], "members": true },
+      { "item": "Mystic mud staff", "runes": ["water", "earth"], "members": true },
+      { "item": "Mystic smoke staff", "runes": ["air", "fire"], "members": true },
+      { "item": "Mystic steam staff", "runes": ["water", "fire"], "members": true },
+      { "item": "Mystic lava staff", "runes": ["earth", "fire"], "members": true },
+      { "item": "Twinflame staff", "runes": ["fire", "water"], "members": true },
+      { "item": "Kodai wand", "runes": ["water"], "members": true }
+    ]
+  },
   "canoe": {
     "stations": [
       {

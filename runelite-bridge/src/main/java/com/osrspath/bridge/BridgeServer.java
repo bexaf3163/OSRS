@@ -73,7 +73,7 @@ public final class BridgeServer
 	 */
 	static final int PROTOCOL = 6;
 	/** The plugin version, the same as the app it ships with in one exe. */
-	static final String PLUGIN_VERSION = "2.52.0";
+	static final String PLUGIN_VERSION = "2.53.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	/** The whole snapshot: the step with the quest stages, shopping and plan in one body. */
@@ -167,6 +167,8 @@ public final class BridgeServer
 	private volatile boolean teleportMarksRead;
 	/** The active spellbook (0 standard, 1 Ancient, 2 Lunar, 3 Arceuus); -1 until it is read. */
 	private volatile int spellbook = -1;
+	/** The Chronicle's charges as the game last told them; null is unknown (never zero). */
+	private volatile Integer chronicleCharges;
 	/** The current temporary target (like NAV_SET) or null, for /status. */
 	private volatile JsonObject navTarget;
 	private volatile Map<String, Object> questInstruction;
@@ -324,6 +326,19 @@ public final class BridgeServer
 	public void setSpellbook(int value)
 	{
 		spellbook = value >= 0 && value <= 3 ? value : -1;
+	}
+
+	/** The Chronicle's charges from the game's messages (or the last saved count); null when unknown. */
+	public void setChronicleCharges(Integer value)
+	{
+		Integer next = value != null && value >= 0 && value <= ChronicleCharges.MAX ? value : null;
+		if (Objects.equals(next, chronicleCharges))
+		{
+			return;
+		}
+		chronicleCharges = next;
+		// The app re-reads /status on STATUS: the count reaches the shopping list and the transport line at once.
+		broadcast(statusEvent());
 	}
 
 	/** The character name (since protocol 5); comes in the STATUS event. */
@@ -599,6 +614,11 @@ public final class BridgeServer
 						if (book >= 0)
 						{
 							status.put("spellbook", book);
+						}
+						Integer charges = chronicleCharges;
+						if (charges != null)
+						{
+							status.put("chronicleCharges", charges);
 						}
 					}
 					// Version handshake: the app checks the protocol and asks to update the plugin if it is older.

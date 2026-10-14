@@ -166,6 +166,17 @@ public class PreflightTest
 	}
 
 	@Test
+	public void anUpstairsBankCostsItsStairs()
+	{
+		ActiveTarget.Spot castle = spot(3208, 3220, "Lumbridge Bank (castle top floor)");
+		castle.setPlane(2);
+		List<ActiveTarget.Spot> banks = List.of(spot(3093, 3243, "Draynor Bank"), castle);
+		assertEquals("in the courtyard the castle's bank is nearest", castle, Preflight.nearest(banks, 3222, 3219, 0));
+		assertEquals("halfway to Draynor the stairs tip it", "Draynor Bank", Preflight.nearest(banks, 3162, 3235, 0).getLabel());
+		assertEquals("on the top floor already, no stairs", castle, Preflight.nearest(banks, 3150, 3225, 2));
+	}
+
+	@Test
 	public void theHudCarriesTheChipThroughTheLeanAndTheCompactViews()
 	{
 		OsrsPathHudOverlay.State s = new OsrsPathHudOverlay.State("[S3-02] Black Knights' Fortress", "Go to: Cabbage", "40 tiles", false, null, false, null, false, null, false,

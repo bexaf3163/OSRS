@@ -75,6 +75,13 @@ describe('S3-02 Black Knights Fortress: the cabbage comes first', () => {
     // A bank holding only the Draynor cabbage does not help.
     expect(itemPreflight(door, { carried: [], bank: bag(['Cabbage', 1967]), from: at(2965, 3380) })!.via).toBe('source');
   });
+
+  it('the banks include the Grand Exchange’s bankers once and Lumbridge Castle’s top floor, whose stairs count', () => {
+    expect(BANK_SPOTS.filter((b) => dist(b, EXCHANGE) <= 6)).toHaveLength(1);
+    // In the castle courtyard the castle's bank is nearest, stairs and all; halfway to Draynor its stairs tip the choice to Draynor.
+    expect(itemPreflight(door, { carried: [], bank: bag(['Cabbage', 1965]), from: at(3222, 3219) })!.target.label).toBe('Lumbridge Bank (castle top floor)');
+    expect(itemPreflight(door, { carried: [], bank: bag(['Cabbage', 1965]), from: at(3162, 3235) })!.target.label).toBe('Draynor Bank');
+  });
 });
 
 describe('unknown is not missing', () => {
@@ -218,7 +225,8 @@ describe('the data of the guards', () => {
     const lines = g.stage!.stages.flatMap((s) => s.steps);
     expect(lines.filter((l) => l.pre).map((l) => l.k).sort()).toEqual(['enterFortress', 'enterFortress', 'useCabbageOnHole']);
     expect(g.stage!.banks!.length).toBeGreaterThan(5);
-    expect(g.stage!.banks).toContainEqual(expect.objectContaining({ label: 'Grand Exchange' }));
+    expect(g.stage!.banks).toContainEqual(expect.objectContaining({ label: 'Grand Exchange bank' }));
+    expect(g.stage!.banks).toContainEqual(expect.objectContaining({ label: 'Lumbridge Bank (castle top floor)', plane: 2 }));
     expect(stepGuide(stepById.get('S1-04')!).stage?.banks).toBeUndefined();
   });
 

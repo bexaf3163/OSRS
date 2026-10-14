@@ -21,7 +21,7 @@ export function TravelTip({ step }: { step: Step }) {
   const { prices, state: player } = usePlayerState();
   const places = useMemo(() => stepPlaces(step), [step]);
   const decision = useSyncExternalStore(subscribeTransport, lastTransport, lastTransport);
-  const [seen, setSeen] = useState<{ stepId: string; pos: Point | null; homeCooldown: number | null; homeKnown: boolean | null; spellbook: number | null } | null>(null);
+  const [seen, setSeen] = useState<{ stepId: string; pos: Point | null; homeCooldown: number | null; homeKnown: boolean | null; spellbook: number | null; charges: number | null } | null>(null);
   const live = enabled && state === 'online' && inGame;
   const shown = live && activeStepId === step.id && decision?.stepId === step.id;
 
@@ -30,7 +30,7 @@ export function TravelTip({ step }: { step: Step }) {
     if (!live || !places.length || shown) return;
     let dead = false;
     void checkStatus().then((st) => {
-      if (!dead) setSeen({ stepId: step.id, pos: st.online && st.inGame ? st.pos : null, homeCooldown: st.homeTeleportSeconds, homeKnown: st.homeTeleportKnown, spellbook: st.spellbook });
+      if (!dead) setSeen({ stepId: step.id, pos: st.online && st.inGame ? st.pos : null, homeCooldown: st.homeTeleportSeconds, homeKnown: st.homeTeleportKnown, spellbook: st.spellbook, charges: st.chronicleCharges });
     });
     return () => { dead = true; };
   }, [live, step.id, places.length, shown]);
@@ -43,7 +43,7 @@ export function TravelTip({ step }: { step: Step }) {
   if (!live || !places.length || !seen || seen.stepId !== step.id || !seen.pos || !isOverworld(seen.pos) || !isOverworld(places[0])) return null;
   const options = travelOptions(travelInputOf({
     from: seen.pos, to: places[0], levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: seen.homeCooldown, fairyRings: fairyRingsUnlocked(progress),
-    ...(seen.homeKnown !== null ? { homeCooldownKnown: seen.homeKnown } : {}), spellbook: seen.spellbook, sourceOf: transportSources(player, prices.priceOf),
+    ...(seen.homeKnown !== null ? { homeCooldownKnown: seen.homeKnown } : {}), spellbook: seen.spellbook, chronicleCharges: seen.charges, sourceOf: transportSources(player, prices.priceOf),
   }));
   const tip = travelTip(options);
   return tip ? <p className="small status-tip" role="note">💡 {tip}</p> : null;

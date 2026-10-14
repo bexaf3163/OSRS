@@ -24,6 +24,14 @@ describe('quest instruction status', () => {
     expect(parseQuestInstruction({ ...instruction, peeking: 'false' })).toBeNull();
     expect(parseQuestInstruction({ ...instruction, stageAt: 1.2 })).toBeNull();
   });
+
+  it('the Chronicle’s charges: a whole number from 0 to 1000 while in game, otherwise unknown', async () => {
+    const status = async (extra: Record<string, unknown>) => checkStatus({ request: async () => ({ ok: true, status: 200, data: { status: 'ok', inGame: true, ...extra } }), openEvents: () => () => {} });
+    expect((await status({ chronicleCharges: 12 })).chronicleCharges).toBe(12);
+    expect((await status({ chronicleCharges: 0 })).chronicleCharges).toBe(0);
+    expect((await status({})).chronicleCharges).toBeNull();
+    for (const bad of [1001, -1, 2.5, '12']) expect((await status({ chronicleCharges: bad })).chronicleCharges).toBeNull();
+  });
 });
 
 /** A transport stub: remembers the requests, the event stream opens and breaks on command. */

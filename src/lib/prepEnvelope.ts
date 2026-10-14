@@ -24,6 +24,8 @@ const MAX_LATER = 12;
 const MAX_RECOVERY = 5;
 const MAX_BLOCKERS = 4;
 export const MAX_WITHDRAWALS = 12;
+/** Purchases of a transport listed in the shop window (PrepPlan.RecommendedTransport.MAX_BUYS). */
+export const MAX_BUYS = 8;
 const MAX_TEXT = 200;
 
 export interface PrepPlanPayload {
@@ -47,6 +49,8 @@ export interface PrepPlanPayload {
     state?: string; summary?: string;
     /** What is short and where to get it, in words: the hint of the line. */
     prepare?: string;
+    /** What to buy for it and where: plugin 2.53+ lists these in the shop and exchange windows. */
+    buy?: { name: string; quantity: number; where: string }[];
   };
 }
 
@@ -178,6 +182,7 @@ export function planPayload(plan: PrepPlan, extras: PlanExtras = {}): PrepPlanPa
         ...(transport.state ? { state: transport.state } : {}),
         ...(transport.summary ? { summary: clipText(transport.summary, MAX_SUMMARY) } : {}),
         ...(transport.prepare ? { prepare: clipText(transport.prepare.text) } : {}),
+        ...(transport.prepare?.buy.length ? { buy: transport.prepare.buy.slice(0, MAX_BUYS).map((b) => ({ name: clipText(b.name, 60), quantity: Math.max(1, Math.min(b.quantity, 10_000_000)), where: clipText(b.where, 60) })) } : {}),
       },
     } : {}),
     ...(plan.blockers.length ? { blockers: plan.blockers.slice(0, MAX_BLOCKERS).map((b) => clipText(b.detail ? `${b.label} — ${b.detail}` : b.label)) } : {}),

@@ -17,6 +17,8 @@ export interface TransportPreparation {
   text: string;
   /** What the bank should hand over: the plugin frames these when the bank is open. */
   withdraw: { name: string; quantity: number }[];
+  /** What to buy and where: the plugin lists these in the shop or exchange window. */
+  buy: { name: string; quantity: number; where: string }[];
   stops: PrepStop[];
   /** gp for what is bought; null when a price is not known. */
   cost: number | null;
@@ -43,6 +45,8 @@ export interface RecommendedTransport {
   summary: string;
   /** What to check first, in a few words; only with state "check". */
   check?: string;
+  /** What to do on the spot first with what is on hand: "wield your Staff of fire", "use a Teleport card on the Chronicle". */
+  actions?: string[];
   /** What to get first; only with state "prepare". */
   prepare?: TransportPreparation;
   /** Tiles of running saved over walking, with the stops and the cast time counted. */
@@ -131,6 +135,7 @@ export function judgeTransport(options: readonly TravelOption[]): { best: Travel
 /** What cannot be seen from the app and has to be checked before relying on the way. */
 function checkOf(o: TravelOption): string {
   const spell = TRANSPORT.teleports.find((t) => t.id === o.id);
+  // A book whose charges are not known (the game tells them when it is checked or used).
   if (spell?.kind === 'item') return 'check charges';
   if (spell?.kind === 'home') return 'check the cooldown';
   const open = o.needs.find((n) => n.ok === null);
@@ -144,9 +149,13 @@ function preparationOf(o: TravelOption): TransportPreparation | undefined {
   if (!p) return undefined;
   const missing = p.missing.map((m) => qty({ name: m.name, n: m.need - (m.have ?? 0) }));
   const stops = p.stops.map((s) => cap(stopText(s)));
+  // Cards bought for a book are used on it: one card, one charge.
+  const book = TRANSPORT.teleports.find((t) => t.charges && p.missing.some((m) => m.name === t.charges!.item));
+  const charge = book ? ` Use the ${book.charges!.item} on the ${book.items![0]} (one card, one charge).` : '';
   return {
-    text: `Missing: ${missing.join(', ')}. ${stops.join('; ')}.`,
+    text: `Missing: ${missing.join(', ')}. ${stops.join('; ')}.${charge}`,
     withdraw: p.stops.filter((s) => s.action === 'withdraw').flatMap((s) => s.items.map((i) => ({ name: i.name, quantity: i.qty }))),
+    buy: p.stops.filter((s) => s.action === 'buy').flatMap((s) => s.items.map((i) => ({ name: i.name, quantity: i.qty, where: s.where }))),
     stops: p.stops, cost: p.cost,
   };
 }
@@ -167,15 +176,19 @@ export function recommendedTransport(options: readonly TravelOption[]): Recommen
   const time = sec(saved);
   const tail = `(saves ~${saved} tiles, about ${time})`;
   const check = state === 'check' ? checkOf(best) : undefined;
+  // On-the-spot steps with what is already on hand (wield a staff, charge the book with a card in the bag).
+  const actions = [...new Set(best.needs.flatMap((n) => (n.action && n.ok === true ? [n.action] : [])))];
+  const doFirst = actions.length ? ` · ${actions.join(', ')}` : '';
   // The prepared and the fetched variants carry the id of the way they prepare.
   const id = best.id.replace(/-(prepare|acquire)$/, '');
   const finish = (r: Omit<RecommendedTransport, 'state' | 'summary' | 'savedTiles' | 'interactionId'>, use: string, name: string): RecommendedTransport => {
     const summary = state === 'prepare' && first
       ? `${name} saves ~${time}: ${stopText(first)}${best.prepare!.stops.length > 1 ? `, then ${best.prepare!.stops.slice(1).map((s) => stopText(s)).join(', then ')}` : ''}`
-      : `${use} · saves ~${time}${check ? ` · ${check}` : ''}`;
+      : `${use} · saves ~${time}${doFirst}${check ? ` · ${check}` : ''}`;
     return {
       ...r, interactionId: 0, state, summary, savedTiles: saved,
       ...(check ? { check } : {}),
+      ...(actions.length ? { actions, text: `${r.text}. First: ${actions.join(', ')}` } : {}),
       ...(prepare ? { prepare, text: `${name} ${tail}. ${prepare.text}`, chip: chipOf(`${cap(stopText(first!))}`) } : {}),
       // The first stop of a preparation is where the arrow leads; the transport's own stop comes after it.
       ...(first ? { tile: first.point } : {}),

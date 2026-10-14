@@ -21,8 +21,12 @@ export interface Teleport {
   cooldownMin?: number;
   /** How long the cast itself takes, in seconds (the wiki's upper bound): counted against the saving. Absent means it is short or not known. */
   castSeconds?: number;
+  /** A charged item (the Chronicle): what charges it, how many charges one gives, the most it holds. */
+  charges?: { item: string; perItem: number; max: number; note?: string };
   note?: string;
 }
+/** A staff that, wielded, gives unlimited runes of its elements. */
+export interface RuneStaff { item: string; runes: string[]; members: boolean }
 export interface CanoeStation { id: string; name: string; x: number; y: number; plane: number; wakaOnly?: boolean }
 export interface CanoeType { name: string; level: number; stops: number }
 
@@ -33,6 +37,7 @@ export const TRANSPORT = transportJson as unknown as {
   checked: string;
   teleports: Teleport[];
   boats: Boat[];
+  staves: { list: RuneStaff[] };
   canoe: { stations: CanoeStation[]; types: CanoeType[]; axes: string[] };
 };
 
@@ -51,8 +56,12 @@ export const NET = netJson as unknown as {
 const LOCATIONS = (locationsJson as unknown as { locations: Record<string, { x: number; y: number; plane: number; label: string; kind: string }> }).locations;
 /** Where tablets and runes are bought. */
 export const EXCHANGE: Point & { label: string } = { x: LOCATIONS['Grand Exchange'].x, y: LOCATIONS['Grand Exchange'].y, plane: 0, label: 'Grand Exchange' };
-/** The banks of the surface: the nearest one is where a missing item is taken from. */
-export const BANKS: (Point & { label: string })[] = Object.values(LOCATIONS).filter((l) => l.kind === 'bank' && l.plane === 0).map((l) => ({ x: l.x, y: l.y, plane: l.plane, label: l.label }));
+/** The banks: the nearest one is where a missing item is taken from. One upstairs (Lumbridge Castle's top floor) costs the climb as well. */
+export const BANKS: (Point & { label: string })[] = Object.values(LOCATIONS).filter((l) => l.kind === 'bank').map((l) => ({ x: l.x, y: l.y, plane: l.plane, label: l.label }));
+/** The stairs to a bank on an upper floor and back down, as tiles of running per floor: a straight line on the map does not see them. */
+export const STAIRS_TILES_PER_FLOOR = 15;
+/** The walk to a bank as a stop: the straight line, and the stairs between the player's floor and the bank's. */
+export const bankTiles = (from: Point, bank: Point): number => dist(from, bank) + Math.abs(bank.plane - from.plane) * STAIRS_TILES_PER_FLOOR;
 
 /** Running is 2 tiles per tick (0.6 s): that is the lower bound of the walking time. */
 export const TILES_PER_SECOND = 2 / 0.6;
@@ -106,7 +115,14 @@ export const dist = (a: Point, b: Point): number => Math.max(Math.abs(a.x - b.x)
 export type Availability = 'ready' | 'maybe' | 'locked';
 /** A thing a way needs on hand: how many, how many are in the bag or worn, and how many the bank holds. null is "not known", never zero. */
 export interface NeedItem { name: string; need: number; have: number | null; bank: number | null }
-export interface Need { text: string; ok: boolean | null; /** Set when the need is a countable thing to carry (runes, coins, an axe). */ item?: NeedItem }
+export interface Need {
+  text: string;
+  ok: boolean | null;
+  /** Set when the need is a countable thing to carry (runes, coins, an axe). */
+  item?: NeedItem;
+  /** Something to do on the spot before using the way, with what is already on hand: "wield your Staff of fire", "use a Teleport card on the Chronicle". */
+  action?: string;
+}
 
 /** Where a missing thing can be got, as the app's source router says (sourceRouter.ts): a shop, the exchange or a free spawn, with a place to lead to. */
 export interface ItemSource { kind: 'shop' | 'exchange' | 'free'; where: string; point: Point; /** gp per piece; null: not known. */ price: number | null }
@@ -160,6 +176,10 @@ export interface TravelInput {
   levels: Readonly<Record<string, number | undefined>>;
   /** Equipped items and the bag from the game; null — no game. */
   carried: readonly GearItem[] | null;
+  /** The equipped items alone: a staff gives its runes only while wielded. null: not known; absent: not told apart (a staff anywhere counts). */
+  worn?: readonly GearItem[] | null;
+  /** The Chronicle's charges from the game's messages; null or absent: unknown (a thing to check, never zero). */
+  chronicleCharges?: number | null;
   /** The bank was opened (an item missing from the bag may be in the bank). */
   bankSeen: boolean;
   /** What the bank holds, by nameKey; null or absent means unknown. */
@@ -185,15 +205,27 @@ export interface TravelInput {
 const count = (items: readonly GearItem[], names: readonly string[]): number =>
   items.filter((i) => names.includes(i.name)).reduce((s, i) => s + (i.count ?? 1), 0);
 
-const STAFF_OF: Record<string, string[]> = {
-  air: ['Staff of air', 'Air battlestaff', 'Mystic air staff'],
-  fire: ['Staff of fire', 'Fire battlestaff', 'Mystic fire staff', 'Lava battlestaff', 'Mystic lava staff'],
-  water: ['Staff of water', 'Water battlestaff', 'Mystic water staff'],
-  earth: ['Staff of earth', 'Earth battlestaff', 'Mystic earth staff'],
-};
-/** Every staff that stands in for a rune of a teleport. */
-export const STAFF_NAMES: readonly string[] = Object.values(STAFF_OF).flat();
-const runeName = (rune: string): string => `${rune[0].toUpperCase()}${rune.slice(1)} rune`;
+/** Every staff that stands in for a rune of a teleport (the wiki's elemental, battle, mystic and combination staves). */
+export const STAFF_NAMES: readonly string[] = TRANSPORT.staves.list.map((s) => s.item);
+/** The staves that give a rune; a members staff is not wielded on a known free-to-play account. */
+export function stavesFor(rune: string, members?: boolean | null): string[] {
+  return TRANSPORT.staves.list.filter((s) => s.runes.includes(rune) && !(s.members && members === false)).map((s) => s.item);
+}
+export const runeName = (rune: string): string => `${rune[0].toUpperCase()}${rune.slice(1)} rune`;
+
+/**
+ * A rune a staff gives: worn, it costs nothing; in the bag, it does once the staff is wielded (an action on the spot). null: no staff on hand for it.
+ * When the game does not tell worn from carried (no `worn`), a staff anywhere on the player counts as worn, as before.
+ */
+export function staffCover(rune: string, inp: Pick<TravelInput, 'carried' | 'worn' | 'members'>): { staff: string; worn: boolean } | null {
+  const names = stavesFor(rune, inp.members);
+  if (!names.length) return null;
+  const pick = (items: readonly GearItem[] | null | undefined) => items?.find((i) => names.includes(i.name))?.name ?? null;
+  const worn = inp.worn === undefined ? pick(inp.carried) : pick(inp.worn);
+  if (worn) return { staff: worn, worn: true };
+  const bag = inp.worn === undefined ? null : pick(inp.carried);
+  return bag ? { staff: bag, worn: false } : null;
+}
 
 /** How many of a thing the bank holds: null when the bank was not seen or the game did not report this thing (unknown is not zero). */
 function bankOf(inp: Pick<TravelInput, 'bankSeen' | 'bank'>, name: string): number | null {
@@ -215,9 +247,22 @@ function teleportNeeds(t: Teleport, inp: TravelInput): { needs: Need[]; availabi
     const have = held === null ? null : held > 0;
     // Not on hand and the bank was opened: it is not anywhere nearby; the bank was not opened: it may be lying there.
     const ok = have === null ? null : have ? true : inp.bankSeen ? false : null;
+    const book: Need = { text: `${t.items![0]} on you`, ok, item: { name: t.items![0], need: 1, have: held, bank: bankOf(inp, t.items![0]) } };
+    const charges = t.charges && have ? inp.chronicleCharges ?? null : null;
+    if (!t.charges || !have || charges === null) {
+      // Not on hand, or the charges were never told: they are a thing to check.
+      return { needs: [{ ...book, text: `${book.text}${t.charges ? ' (charges: Check charges)' : ''}` }], availability: ok === false ? 'locked' : 'maybe' };
+    }
+    if (charges > 0) return { needs: [{ ...book, text: `${book.text} (${charges} ${charges === 1 ? 'charge' : 'charges'})` }], availability: 'ready' };
+    // Out of charges: a card in the bag charges it on the spot; otherwise cards are what it lacks (bought or withdrawn first).
+    const card = t.charges.item;
+    const cards = inp.carried ? count(inp.carried, [card]) : null;
+    if (cards !== null && cards > 0) {
+      return { needs: [{ ...book, text: `${book.text} (no charges: use a ${card} on it)`, action: `use a ${card} on the ${t.items![0]}` }], availability: 'ready' };
+    }
     return {
-      needs: [{ text: `${t.items![0]} on you (charges: Check charges)`, ok, item: { name: t.items![0], need: 1, have: held, bank: bankOf(inp, t.items![0]) } }],
-      availability: ok === false ? 'locked' : 'maybe',
+      needs: [book, { text: `${t.items![0]} charges: none left (a ${card} adds one)`, ok: false, item: { name: card, need: 1, have: cards, bank: bankOf(inp, card) } }],
+      availability: 'locked',
     };
   }
   const needs: Need[] = [];
@@ -239,8 +284,12 @@ function teleportNeeds(t: Teleport, inp: TravelInput): { needs: Need[]; availabi
     unsure = true;
   }
   for (const [rune, qty] of Object.entries(t.runes ?? {})) {
-    if (inp.carried && STAFF_OF[rune] && count(inp.carried, STAFF_OF[rune]) > 0) {
-      needs.push({ text: `${runeName(rune)} ×${qty} — replaces the staff`, ok: true });
+    // A staff gives the rune: wielded, nothing to carry; in the bag, wield it first.
+    const staff = staffCover(rune, inp);
+    if (staff) {
+      needs.push(staff.worn
+        ? { text: `${runeName(rune)} ×${qty}: your ${staff.staff} gives it`, ok: true }
+        : { text: `${runeName(rune)} ×${qty}: wield your ${staff.staff}`, ok: true, action: `wield your ${staff.staff}` });
       continue;
     }
     const have = inp.carried ? count(inp.carried, [runeName(rune)]) : null;
@@ -355,7 +404,7 @@ export interface Reach { tiles: number; /** The teleport that shortens it, if on
  * the bag. A teleport that only may be available (unknown bag, unknown level) is not counted: the planner never assumes it. The walk after the landing is
  * counted from the landing tile, so a player standing in Al Kharid with a Varrock tablet is 60 tiles from the exchange, not 320.
  */
-export function reachTiles(inp: Pick<TravelInput, 'from' | 'levels' | 'carried' | 'bankSeen' | 'homeCooldownSec'> & Pick<Partial<TravelInput>, 'members' | 'standardSpellbook'>, to: Point): Reach {
+export function reachTiles(inp: Pick<TravelInput, 'from' | 'levels' | 'carried' | 'bankSeen' | 'homeCooldownSec'> & Pick<Partial<TravelInput>, 'members' | 'standardSpellbook' | 'worn' | 'chronicleCharges'>, to: Point): Reach {
   let best: Reach = { tiles: dist(inp.from, to) };
   const consider = (via: string, dest: Point) => {
     const tiles = dist(dest, to);
@@ -366,7 +415,7 @@ export function reachTiles(inp: Pick<TravelInput, 'from' | 'levels' | 'carried' 
     // The Home Teleport is a teleport like the others, but its cooldown and the long cast make it a poor shortcut: it is left out of the reach.
     if (t.kind === 'home') continue;
     // An item teleport (the Chronicle) is "maybe" for its unknown charges, but one in the bag is a way to use: it counts.
-    const held = t.kind === 'item' && inp.carried ? count(inp.carried, t.items ?? []) > 0 : false;
+    const held = t.kind === 'item' && inp.carried ? count(inp.carried, t.items ?? []) > 0 && !(t.charges && inp.chronicleCharges === 0) : false;
     if (held || teleportNeeds(t, probe).availability === 'ready') consider(t.name, t.dest);
   }
   if (inp.carried && inp.members !== false) {
@@ -390,7 +439,7 @@ export function bankOnRoute(from: Point, to: Point): (Point & { label: string })
 }
 
 const nearestBank = (from: Point): (Point & { label: string }) | null =>
-  BANKS.reduce<(Point & { label: string }) | null>((m, c) => (!m || dist(from, c) < dist(from, m) ? c : m), null);
+  BANKS.reduce<(Point & { label: string }) | null>((m, c) => (!m || bankTiles(from, c) < bankTiles(from, m) ? c : m), null);
 const isExchangePoint = (p: Point) => dist(p, EXCHANGE) <= 6;
 
 /**
@@ -402,7 +451,7 @@ function acquireFor(item: string, inp: TravelInput): Acquire | null {
     const bank = nearestBank(inp.from);
     if (bank) {
       const r = reachTiles(inp, bank);
-      return { what: item, where: bank.label, point: bank, tiles: r.tiles, cost: 0, source: 'bank', ...(r.via ? { via: r.via } : {}) };
+      return { what: item, where: bank.label, point: bank, tiles: r.tiles + bank.plane * STAIRS_TILES_PER_FLOOR, cost: 0, source: 'bank', ...(r.via ? { via: r.via } : {}) };
     }
   }
   if (inp.sourceOf) {
@@ -455,7 +504,8 @@ export function prepareFor(missing: readonly NeedItem[], inp: TravelInput): { pr
     let reach: Reach = { tiles: Infinity };
     groups.forEach((g, i) => {
       const r = stops.length ? { tiles: dist(at, g.point) } : reachTiles(inp, g.point);
-      if (r.tiles < reach.tiles) { reach = r; best = i; }
+      const stairs = g.action === 'withdraw' ? g.point.plane * STAIRS_TILES_PER_FLOOR : 0;
+      if (r.tiles + stairs < reach.tiles) { reach = { ...r, tiles: r.tiles + stairs }; best = i; }
     });
     const g = groups.splice(best, 1)[0];
     stops.push({ ...g, tiles: reach.tiles, ...(reach.via ? { via: reach.via } : {}) });
@@ -519,14 +569,14 @@ function withPreparation(o: TravelOption, inp: TravelInput, direct: number, rest
  */
 function itemTeleportOptions(inp: TravelInput, direct: number): TravelOption[] {
   const out: TravelOption[] = [];
-  const entries: { id: string; item: string; title: string; dest: Teleport['dest']; note?: string; plain: boolean }[] = [];
+  const entries: { id: string; item: string; title: string; dest: Teleport['dest']; note?: string; plain: boolean; charges?: Teleport['charges'] }[] = [];
   // Teleport tablets are members' items (the wiki's item cards): on a known free-to-play account they are not offered, in the bag or to buy.
   for (const tb of inp.members === false ? [] : NET.tablets) {
     const spell = TRANSPORT.teleports.find((t) => t.id === tb.spell);
     if (spell) entries.push({ id: tb.id, item: tb.item, title: `${tb.item} tablet`, dest: spell.dest, plain: true });
   }
   for (const t of TRANSPORT.teleports) {
-    if (t.kind === 'item' && t.items?.length) entries.push({ id: t.id, item: t.items[0], title: t.name, dest: t.dest, plain: false, ...(t.note ? { note: t.note } : {}) });
+    if (t.kind === 'item' && t.items?.length) entries.push({ id: t.id, item: t.items[0], title: t.name, dest: t.dest, plain: false, ...(t.note ? { note: t.note } : {}), ...(t.charges ? { charges: t.charges } : {}) });
   }
   for (const e of entries) {
     const tail = dist(e.dest, inp.to);
@@ -539,8 +589,15 @@ function itemTeleportOptions(inp: TravelInput, direct: number): TravelOption[] {
       }
       continue;
     }
-    const acq = acquireFor(e.item, inp);
-    if (!acq) { emitDecision({ subject: e.item, outcome: 'rejected', reason: 'no_source', detail: { tail, direct } }, inp.onDecision); continue; }
+    const found = acquireFor(e.item, inp);
+    if (!found) { emitDecision({ subject: e.item, outcome: 'rejected', reason: 'no_source', detail: { tail, direct } }, inp.onDecision); continue; }
+    // A new book has no charges, and a banked one known to be empty has none either: one card is bought with it (the same shop sells both).
+    const charge = e.charges && (found.source !== 'bank' || inp.chronicleCharges === 0) ? e.charges.item : null;
+    const cardSource = charge ? inp.sourceOf?.(charge, 1) ?? null : null;
+    const cardPrice = charge ? cardSource?.price ?? inp.priceOf?.(charge) ?? null : 0;
+    // A card sold elsewhere than the book is fetched on the way: that walk is part of the fetch.
+    const cardTiles = charge && cardSource && dist(found.point, cardSource.point) > 6 ? dist(found.point, cardSource.point) : 0;
+    const acq: Acquire = charge ? { ...found, tiles: found.tiles + cardTiles, cost: found.cost === null || cardPrice === null ? null : found.cost + cardPrice } : found;
     const total = acq.tiles + tail;
     const detail = { fetch: acq.tiles, tail, direct, saving: direct - total, cost: acq.cost, source: acq.source, via: acq.via ?? null };
     const reject = (reason: DetourRejection) => { emitDecision({ subject: e.item, outcome: 'rejected', reason, detail }, inp.onDecision); };
@@ -548,28 +605,45 @@ function itemTeleportOptions(inp: TravelInput, direct: number): TravelOption[] {
     if (direct - total < OPPORTUNISTIC_MIN_SAVING_TILES) { reject('insufficient_savings'); continue; }
     if (acq.cost !== null && acq.cost > OPPORTUNISTIC_MAX_COST) { reject('price_too_high'); continue; }
     const coins = inp.carried ? count(inp.carried, ['Coins']) : null;
-    const afford = acq.source === 'bank' || acq.cost === null || coins === null ? null : needFrom(coins >= acq.cost, inp.bankSeen);
+    const buying = acq.source !== 'bank' || charge !== null;
+    const afford = !buying || acq.cost === null || coins === null ? null : needFrom(coins >= acq.cost, inp.bankSeen);
     emitDecision({
       subject: e.item, outcome: 'offered', detail,
-      ...(acq.source !== 'bank' && acq.cost === null ? { caveat: 'price_unknown' as const } : afford === false ? { caveat: 'missing_coins' as const } : {}),
+      ...(buying && acq.cost === null ? { caveat: 'price_unknown' as const } : afford === false ? { caveat: 'missing_coins' as const } : {}),
     }, inp.onDecision);
     const verb = acq.source === 'bank' ? 'withdraw' : 'buy';
-    const price = acq.source === 'bank' ? 'free' : acq.cost === null ? 'price unknown' : `~${acq.cost} gp`;
+    const price = acq.source === 'bank' && !charge ? 'free' : acq.cost === null ? 'price unknown' : `~${acq.cost} gp`;
     // "the Grand Exchange", "the Draynor Bank", but "Diango's Toy Store".
     const place = acq.source === 'bank' || acq.where === EXCHANGE.label ? `the ${acq.where}` : acq.where;
     out.push({
       id: `${e.id}-acquire`, title: `${e.item}: ${verb} first, then teleport`,
       legs: [
-        { kind: 'walk', label: `to ${place}${acq.via ? ` (by ${acq.via})` : ''}: ${verb} ${e.item} (${price})`, tiles: acq.tiles },
+        { kind: 'walk', label: `to ${place}${acq.via ? ` (by ${acq.via})` : ''}: ${verb} ${e.item}${charge ? ` and get a ${charge} to charge it` : ''} (${price})`, tiles: acq.tiles },
         { kind: 'teleport', label: `${e.item} → ${e.dest.label}`, tiles: 0 },
         { kind: 'walk', label: 'then on foot', tiles: tail },
       ],
       walkTiles: total, availability: afford === false ? 'locked' : 'maybe',
-      needs: [{ text: acq.source === 'bank' ? `${e.item} in the bank (${acq.where})` : `${e.item} from ${place} (${price})`, ok: afford }],
+      needs: [
+        { text: acq.source === 'bank' ? `${e.item} in the bank (${acq.where})` : `${e.item} from ${place} (${price})`, ok: afford },
+        ...(charge ? [{ text: `a ${charge} to charge it (one card, one charge)`, ok: afford }] : []),
+      ],
       acquire: acq, go: { ...acq.point, label: acq.where },
       prepare: {
-        stops: [{ action: acq.source === 'bank' ? 'withdraw' : 'buy', where: acq.where, point: acq.point, items: [{ name: e.item, qty: 1, price: acq.cost }], tiles: acq.tiles, ...(acq.via ? { via: acq.via } : {}) }],
-        missing: [{ name: e.item, need: 1, have: carried === null ? null : 0, bank: bankOf(inp, e.item) }], cost: acq.source === 'bank' ? 0 : acq.cost,
+        stops: ([
+          { action: acq.source === 'bank' ? 'withdraw' : 'buy', where: acq.where, point: acq.point, items: [{ name: e.item, qty: 1, price: acq.source === 'bank' ? 0 : found.cost }], tiles: acq.tiles, ...(acq.via ? { via: acq.via } : {}) },
+          // The card: at the same shop as the book, or where the router says for a book from the bank.
+          ...(charge ? [{ action: 'buy', where: cardSource?.where ?? acq.where, point: cardSource?.point ?? acq.point, items: [{ name: charge, qty: 1, price: cardPrice }], tiles: cardTiles }] : []),
+        ] as PrepStop[]).reduce<PrepStop[]>((all, stop) => {
+          // The book and the card from one shop are one stop.
+          const same = all.find((x) => x.action === stop.action && dist(x.point, stop.point) <= 6);
+          if (same) same.items.push(...stop.items); else all.push({ ...stop, items: [...stop.items] });
+          return all;
+        }, []),
+        missing: [
+          { name: e.item, need: 1, have: carried === null ? null : 0, bank: bankOf(inp, e.item) },
+          ...(charge ? [{ name: charge, need: 1, have: inp.carried ? count(inp.carried, [charge]) : null, bank: bankOf(inp, charge) }] : []),
+        ],
+        cost: acq.source === 'bank' ? (charge ? cardPrice : 0) : acq.cost,
       },
       ...(e.note ? { note: e.note } : {}),
     });
@@ -596,8 +670,9 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
       ...(t.castSeconds ? { overheadTiles: Math.round(t.castSeconds * TILES_PER_SECOND) } : {}),
     };
     out.push(option);
-    // A spell that is short of runes: the same spell after a stop at the bank or the shop, when the whole trip is still clearly shorter.
-    if (t.kind === 'spell') {
+    // A spell that is short of runes, or a book that is out of charges: the same way after a stop at the bank or the shop, when the whole trip is still
+    // clearly shorter. A book that is not on hand is fetched by itemTeleportOptions instead.
+    if (t.kind === 'spell' || (t.kind === 'item' && t.charges && needs.some((n) => n.item?.name === t.charges!.item))) {
       const prepared = withPreparation(option, inp, direct, () => ({ legs, tiles: tail }));
       if (prepared) out.push(prepared);
     }

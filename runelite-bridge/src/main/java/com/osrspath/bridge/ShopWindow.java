@@ -61,11 +61,23 @@ final class ShopWindow
 	/** What to show at this game window; null means nothing to show (no step or items). */
 	static Result build(Place place, StepGuide.View v)
 	{
+		return build(place, v, false);
+	}
+
+	/**
+	 * As above; atTransportStop: the player stands at the shop the transport's preparation leads to, so its purchases ("Teleport card ×6") are listed
+	 * there. At the exchange the exchange's purchases are listed wherever the arrow was.
+	 */
+	static Result build(Place place, StepGuide.View v, boolean atTransportStop)
+	{
 		if (v == null || v.getItems() == null)
 		{
 			return null;
 		}
 		PrepPlan plan = v.getPrep();
+		List<String> travel = plan == null || !plan.hasTransport() || place == Place.BANK ? new ArrayList<>()
+			: place == Place.EXCHANGE ? plan.getRecommendedTransport().buysFor(true)
+			: atTransportStop ? plan.getRecommendedTransport().buysFor(false) : new ArrayList<>();
 		List<String> take = new ArrayList<>();
 		List<String> missing = new ArrayList<>();
 		List<String> inBank = new ArrayList<>();
@@ -119,7 +131,7 @@ final class ShopWindow
 				}
 			}
 		}
-		if (take.isEmpty() && missing.isEmpty() && inBag.isEmpty())
+		if (take.isEmpty() && missing.isEmpty() && inBag.isEmpty() && travel.isEmpty())
 		{
 			return null;
 		}
@@ -159,10 +171,12 @@ final class ShopWindow
 		}
 		else
 		{
-			todo = missing.size();
+			todo = missing.size() + travel.size();
 			title = (place == Place.EXCHANGE ? "Exchange · what to buy" : "Shop · what to buy") + (id.isEmpty() ? "" : " · " + id);
 			add(rows, missing, "Buy: ", Mark.TODO);
-			if (missing.isEmpty())
+			// The supplies of the way (cards for the Chronicle, runes for a teleport): the app suggests them, the player buys.
+			add(rows, travel, "For the road: ", Mark.TODO);
+			if (missing.isEmpty() && travel.isEmpty())
 			{
 				rows.add(new Row("Nothing to buy here ✓", Mark.GOOD));
 			}

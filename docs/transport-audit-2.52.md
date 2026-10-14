@@ -84,6 +84,9 @@ position or bank (unit tests), plus the plugin's native rendering where noted.
 
 ## Limitations
 
+2.53.0 addressed the Chronicle charges and the upstairs and Grand Exchange banks below, and added the road's supplies and staves: see
+`docs/travel-supplies-2.53.md`.
+
 - Law runes have no free-to-play shop in the item data (all law rune shops are members-only); for F2P the source is the Grand Exchange, so a
   Varrock Teleport preparation is offered only when the bank holds the runes or the exchange is on the way.
 - When the bank was seen but a rune was not reported (an older plugin, or a watch list cut at 64), the bank count is unknown: the preparation

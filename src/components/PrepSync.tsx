@@ -18,6 +18,7 @@ import { procurementDetour, type Detour } from '../lib/detours';
 import { fairyRingsUnlocked, transportKey, travelInputOf } from '../lib/travelInput';
 import { decideTransport, publishTransport, transportSources, transportTarget } from '../lib/liveTransport';
 import type { RecommendedTransport } from '../lib/transport';
+import { planTravelSupplies, roadSteps } from '../lib/travelSupplies';
 
 /** How often the position is read for the purchase detour: the text is rounded, so the snapshot does not change on every step. */
 const DETOUR_POLL_MS = 15_000;
@@ -40,7 +41,7 @@ export function PrepSync() {
 }
 
 function StepPlan({ step }: { step: Step }) {
-  const { setPrepPart, stats, gear, owned, moves, questInstruction } = useBridge();
+  const { setPrepPart, stats, gear, owned, moves, questInstruction, chronicleCharges } = useBridge();
   const { progress, mode, steps } = useStore();
   const { prices } = usePlayerState();
   const profile = styleOf(useFeatures());
@@ -53,8 +54,11 @@ function StepPlan({ step }: { step: Step }) {
   const planRef = useRef(plan);
   planRef.current = plan;
   const nextStep = openAfter(steps, progress, step.id) ?? null;
-  const bagRef = useRef({ levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress), state: engine.ctx.state, priceOf: prices.priceOf, questInstruction, nextStep });
-  bagRef.current = { levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress), state: engine.ctx.state, priceOf: prices.priceOf, questInstruction, nextStep };
+  // The road ahead: this step and the next open ones, for the supplies the teleports on it need.
+  const road = roadSteps(steps, (id) => !isClosed(progress, id), step.id);
+  const roadKey = road.map((s) => s.id).join(',');
+  const bagRef = useRef({ levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress), state: engine.ctx.state, priceOf: prices.priceOf, questInstruction, nextStep, road });
+  bagRef.current = { levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress), state: engine.ctx.state, priceOf: prices.priceOf, questInstruction, nextStep, road };
   // The objective: the quest line the game confirms (never a temporary arrow), otherwise the step's own place.
   const to = transportTarget(step, questInstruction)?.point;
   // A teleport or a boat ride is a jump: the way is judged again at once from where the player landed, not at the next poll.
@@ -76,14 +80,22 @@ function StepPlan({ step }: { step: Step }) {
       const live = st.online && st.inGame;
       const pos = landed ?? (live ? st.pos : null);
       const b = bagRef.current;
+      const sourceOf = transportSources(b.state, b.priceOf);
+      const charges = live ? st.chronicleCharges : null;
+      // What the road ahead needs: a shop by the way that sells it becomes a "stock up" line. The road starts at the current objective, not at the
+      // player: a shop passed on this leg can only serve the legs after it (this leg's own way is judged by decideTransport itself).
+      const supplies = pos ? planTravelSupplies({
+        steps: b.road, from: null, instruction: b.questInstruction, levels: { ...b.levels, ...(b.stats ?? {}) }, members: b.mode === 'members',
+        gear: b.gear, owned: b.owned, spellbook: live ? st.spellbook : null, chronicleCharges: charges, sourceOf,
+      }) : null;
       const decision = decideTransport({
         step, pos, instruction: b.questInstruction, nextStep: b.nextStep,
         levels: b.levels, stats: b.stats, gear: b.gear, owned: b.owned, mode: b.mode, fairyRings: b.fairyRings, priceOf: b.priceOf,
         homeCooldownSec: live ? st.homeTeleportSeconds : null,
         // An older plugin does not say whether the Home Teleport is ready: then it is as before (ready unless it reports a cooldown).
         ...(live && st.homeTeleportKnown !== null ? { homeCooldownKnown: st.homeTeleportKnown } : {}),
-        ...(live ? { spellbook: st.spellbook } : {}),
-        sourceOf: transportSources(b.state, b.priceOf),
+        ...(live ? { spellbook: st.spellbook, chronicleCharges: charges } : {}),
+        sourceOf, supplies,
       });
       publishTransport(decision);
       setTransport(decision.recommended);
@@ -98,7 +110,7 @@ function StepPlan({ step }: { step: Step }) {
     return () => { dead = true; window.clearInterval(t); };
     // The plan is read from a ref when the timer fires: a new plan object on every render must not restart the timer.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step.id, to?.x, to?.y, to?.plane, plan.now.length, plan.soon.length, coins, lastMoveAt, things, mode, nextStep?.id]);
+  }, [step.id, to?.x, to?.y, to?.plane, plan.now.length, plan.soon.length, coins, lastMoveAt, things, mode, nextStep?.id, roadKey, chronicleCharges]);
   // The step left the game: its decision is not the current one any more.
   useEffect(() => () => publishTransport(null), [step.id]);
   const payload = planPayload(plan, { detour, transport });

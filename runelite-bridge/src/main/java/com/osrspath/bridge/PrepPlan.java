@@ -163,13 +163,36 @@ public class PrepPlan
 		private String summary;
 		/** With "prepare": what is short and where to get it, in words. */
 		private String prepare;
+		/** What to buy for it and where (app 2.53+): listed in the shop and exchange windows. */
+		private List<Buy> buy;
+
+		static final int MAX_BUYS = 8;
 
 		boolean valid()
 		{
 			return type != null && !type.isEmpty() && !ActiveTarget.tooLong(type) && destination != null && !ActiveTarget.tooLong(destination) && interactionId >= 0
 				&& interactionId <= 1_000_000 && !ActiveTarget.tooLong(interactionName) && !ActiveTarget.tooLong(item) && (tile == null || tile.valid())
 				&& text != null && !text.trim().isEmpty() && !ActiveTarget.tooLong(text) && !ActiveTarget.tooLong(chip)
-				&& !ActiveTarget.tooLong(state) && !ActiveTarget.tooLong(summary) && !ActiveTarget.tooLong(prepare);
+				&& !ActiveTarget.tooLong(state) && !ActiveTarget.tooLong(summary) && !ActiveTarget.tooLong(prepare)
+				&& (buy == null || buy.size() <= MAX_BUYS && buy.stream().allMatch(b -> b != null && b.valid()));
+		}
+
+		/** The purchases listed in this kind of window: the exchange's at the exchange, a shop's at the shop the arrow leads to. */
+		List<String> buysFor(boolean exchange)
+		{
+			List<String> out = new java.util.ArrayList<>();
+			if (buy == null || !needsPreparation())
+			{
+				return out;
+			}
+			for (Buy b : buy)
+			{
+				if (b.atExchange() == exchange)
+				{
+					out.add(b.getName() + (b.getQuantity() > 1 ? " ×" + b.getQuantity() : ""));
+				}
+			}
+			return out;
 		}
 
 		/** The way is usable only after a stop (runes, a tablet, coins, an axe to get first): the tile is that stop, not the transport. */
@@ -236,6 +259,26 @@ public class PrepPlan
 				n.setObjectNames(Collections.singletonList(interactionName));
 			}
 			return n.prepare() == null ? n : null;
+		}
+	}
+
+	/** One purchase of a transport's preparation: what, how many, and the shop or the exchange. */
+	@Data
+	public static class Buy
+	{
+		private String name;
+		private int quantity;
+		private String where;
+
+		boolean valid()
+		{
+			return name != null && !name.trim().isEmpty() && !ActiveTarget.tooLong(name) && quantity >= 1 && quantity <= ShoppingPlan.MAX_COUNT
+				&& where != null && !ActiveTarget.tooLong(where);
+		}
+
+		boolean atExchange()
+		{
+			return where.toLowerCase(java.util.Locale.ROOT).contains("grand exchange");
 		}
 	}
 

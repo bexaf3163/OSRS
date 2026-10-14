@@ -23,12 +23,16 @@ export function bankReport(items: Iterable<Pick<OwnedItem, 'name' | 'bank'>>, ba
   return out;
 }
 
-/** The names of the things the ways need, for the game to count in the bag and the bank: the runes of the spells, the teleport items, the canoe axes. */
+/**
+ * The names of the things the ways need, for the game to count in the bag and the bank: the runes of the spells, the teleport items and what charges
+ * them (Teleport cards), the canoe axes; for a members account the tablets.
+ */
 export function transportWatch(mode: GameMode): string[] {
   const out = new Set<string>();
   for (const t of TRANSPORT.teleports) {
     for (const rune of Object.keys(t.runes ?? {})) out.add(`${rune[0].toUpperCase()}${rune.slice(1)} rune`);
     for (const item of t.items ?? []) out.add(item);
+    if (t.charges) out.add(t.charges.item);
   }
   for (const axe of TRANSPORT.canoe.axes) out.add(axe);
   // Tablets are members' items: a free-to-play account is not asked about them.
@@ -70,6 +74,8 @@ export interface TravelInputSources {
   homeCooldownKnown?: boolean;
   /** The spellbook from the game: 0 is the standard one; null or absent means the game did not say. */
   spellbook?: number | null;
+  /** The Chronicle's charges from the game; null or absent: unknown. */
+  chronicleCharges?: number | null;
   /** Where a missing thing can be got (the app's source router). */
   sourceOf?: (name: string, need: number) => ItemSource | null;
 }
@@ -83,6 +89,9 @@ export function travelInputOf(s: TravelInputSources): TravelInput {
   const carried = s.gear && (s.gear.equipment || s.gear.inventory) ? [...(s.gear.equipment ?? []), ...(s.gear.inventory ?? [])] : null;
   return {
     from: s.from, to: s.to, levels: { ...s.levels, ...(s.stats ?? {}) }, carried, bankSeen: Boolean(s.owned?.bankSeen),
+    // What is worn, apart from the bag: a staff gives its runes only wielded. A plugin that sends no equipment list leaves it unknown.
+    ...(s.gear ? { worn: s.gear.equipment ?? null } : {}),
+    ...(s.chronicleCharges !== undefined ? { chronicleCharges: s.chronicleCharges } : {}),
     bank: s.owned?.bankSeen ? bankReport(s.owned.items.values(), s.gear?.bankCoins) : null,
     priceOf: s.priceOf, members: s.mode === 'members', homeCooldownSec: s.homeCooldownSec ?? null,
     ...(s.fairyRings === undefined ? {} : { fairyRings: s.fairyRings }),

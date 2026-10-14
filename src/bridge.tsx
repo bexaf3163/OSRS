@@ -87,6 +87,9 @@ interface BridgeValue {
   /** The temporary target in the game (a place or a shop); null — the arrow leads to the step. */
   navTarget: NavTargetPayload | null;
   questInstruction: QuestInstruction | null;
+  /** The Chronicle's charges and the spellbook as the game last told them (plugin 2.53+ / 2.52+); null — unknown. */
+  chronicleCharges: number | null;
+  spellbook: number | null;
   /** Set a temporary target. Without a link or on a refusal by the plugin — an answer with the reason. */
   navigate: (target: NavTargetPayload) => Promise<NavResult | { ok: false; reason: 'off' }>;
   clearNav: () => Promise<void>;
@@ -266,6 +269,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const gate = useMemo(() => profileGate(profiles, player), [profiles, player]);
   const [navTarget, setNavTargetState] = useState<NavTargetPayload | null>(null);
   const [questInstruction, setQuestInstruction] = useState<QuestInstruction | null>(null);
+  const [chronicleCharges, setChronicleCharges] = useState<number | null>(null);
+  const [spellbook, setSpellbook] = useState<number | null>(null);
   const [plugin, setPlugin] = useState<BridgeValue['plugin']>(null);
   const features = useFeatures();
   /** Which stage items are already in the plugin — so as not to send the same on every render. */
@@ -405,6 +410,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     const forget = () => {
       setQuestInstruction(null);
       setInGame(false);
+      setChronicleCharges(null);
+      setSpellbook(null);
       setStats(null);
       setOwned(null);
       setShortestPath(false);
@@ -454,6 +461,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       if (s.questsDone) setQuestsDone(s.questsDone);
       setPlayer(s.player);
       setGear(s.gear);
+      setChronicleCharges(s.inGame ? s.chronicleCharges : null);
+      setSpellbook(s.inGame ? s.spellbook : null);
       // RuneLite was restarted (or the app) — the plugin does not know the step: we send it again. We do not
       // send the same step twice, so as not to reset the waypoints and the pace measurement in the plugin.
       const want = latest.current.activeStepId;
@@ -707,11 +716,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     () => ({
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, navigate, clearNav, userClearedAt, plugin,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, chronicleCharges, spellbook, navigate, clearNav, userClearedAt, plugin,
       xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, navigate, clearNav, userClearedAt, plugin,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, chronicleCharges, spellbook, navigate, clearNav, userClearedAt, plugin,
       xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;

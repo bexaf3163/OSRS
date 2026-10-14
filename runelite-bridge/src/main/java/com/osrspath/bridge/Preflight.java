@@ -117,7 +117,7 @@ final class Preflight
 			Integer sp = line.hasPoint() ? line.getPlane() : null;
 			if (bank != null && count(bank, p) >= p.need() - have)
 			{
-				ActiveTarget.Spot b = nearest(banks, px, py);
+				ActiveTarget.Spot b = nearest(banks, px, py, plane);
 				if (b != null)
 				{
 					return new Block(p.getItem(), p.need(), have, Via.BANK,
@@ -136,13 +136,17 @@ final class Preflight
 		return null;
 	}
 
-	private static ActiveTarget.Spot nearest(List<ActiveTarget.Spot> banks, int px, int py)
+	/** The stairs to a bank on another floor (Lumbridge Castle's top floor), as tiles of running per floor; the app's STAIRS_TILES_PER_FLOOR. */
+	static final int STAIRS_TILES_PER_FLOOR = 15;
+
+	/** The nearest bank, the stairs to one on another floor counted as the app's bankTiles does. */
+	static ActiveTarget.Spot nearest(List<ActiveTarget.Spot> banks, int px, int py, int plane)
 	{
 		ActiveTarget.Spot best = null;
-		long bestD = Long.MAX_VALUE;
+		double bestD = Double.MAX_VALUE;
 		for (ActiveTarget.Spot b : banks == null ? Collections.<ActiveTarget.Spot>emptyList() : banks)
 		{
-			long d = DangerRadar.distanceSq(px, py, b.getX(), b.getY());
+			double d = Math.sqrt(DangerRadar.distanceSq(px, py, b.getX(), b.getY())) + Math.abs(b.getPlane() - plane) * STAIRS_TILES_PER_FLOOR;
 			if (d < bestD)
 			{
 				best = b;

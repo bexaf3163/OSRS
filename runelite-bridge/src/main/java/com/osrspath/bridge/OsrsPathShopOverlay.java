@@ -85,14 +85,32 @@ class OsrsPathShopOverlay extends Overlay
 			return null;
 		}
 		Open o = open();
-		return o == null ? null : ShopWindow.build(o.place, plugin.getGuideView());
+		return o == null ? null : ShopWindow.build(o.place, plugin.getGuideView(), atTransportStop());
 	}
+
+	/** The player stands by the stop the transport's preparation leads to (the shop that sells its supplies). */
+	private boolean atTransportStop()
+	{
+		StepGuide.View v = plugin.getGuideView();
+		PrepPlan p = v == null ? null : v.getPrep();
+		PrepPlan.Tile t = p != null && p.hasTransport() ? p.getRecommendedTransport().getTile() : null;
+		net.runelite.api.Player me = client.getLocalPlayer();
+		if (t == null || me == null)
+		{
+			return false;
+		}
+		net.runelite.api.coords.WorldPoint at = me.getWorldLocation();
+		return at.getPlane() == t.getPlane() && Math.max(Math.abs(at.getX() - t.getX()), Math.abs(at.getY() - t.getY())) <= STOP_TILES;
+	}
+
+	/** How close to the stop's tile a shop window counts as that stop's shop. */
+	static final int STOP_TILES = 15;
 
 	@Override
 	public Dimension render(Graphics2D g)
 	{
 		Open o = config.showShopWindow() ? open() : null;
-		ShopWindow.Result r = o == null ? null : ShopWindow.build(o.place, plugin.getGuideView());
+		ShopWindow.Result r = o == null ? null : ShopWindow.build(o.place, plugin.getGuideView(), atTransportStop());
 		if (r == null)
 		{
 			plugin.shopWindowShown(false);

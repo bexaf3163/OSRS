@@ -1427,6 +1427,8 @@ th .place-link { font-weight: inherit; }
 /* 2.14: how to get there */
 .travel-plan { margin-top: 12px; }
 .travel-list { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; }
+/* 2.53: supplies for the road */
+.road-supplies { margin-top: 16px; }
 .travel-option { padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); }
 .travel-option p { margin: 0; }
 .travel-option.is-locked { opacity: 0.75; }

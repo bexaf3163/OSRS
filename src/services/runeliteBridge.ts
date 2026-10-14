@@ -51,6 +51,8 @@ export interface BridgeStatus {
   homeTeleportKnown: boolean | null;
   /** The active spellbook (plugin 2.52+): 0 standard, 1 Ancient, 2 Lunar, 3 Arceuus; null — not in the game or an older plugin. */
   spellbook: number | null;
+  /** The Chronicle's charges as the game last told them (plugin 2.53+); null — unknown, never zero. */
+  chronicleCharges: number | null;
 }
 
 /**
@@ -511,7 +513,7 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
   const d = res.data as {
     status?: string; inGame?: boolean; stats?: unknown; shortestPath?: unknown; activeStepId?: unknown; protocol?: unknown; pluginVersion?: unknown;
     navTarget?: unknown; questInstruction?: unknown; xp?: unknown; questsDone?: unknown; player?: unknown; pos?: unknown; homeTeleportSeconds?: unknown;
-    homeTeleportKnown?: unknown; spellbook?: unknown;
+    homeTeleportKnown?: unknown; spellbook?: unknown; chronicleCharges?: unknown;
   } | undefined;
   const online = res.ok && d?.status === 'ok';
   const instruction = online && d?.inGame === true ? parseQuestInstruction(d.questInstruction) : null;
@@ -533,6 +535,8 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
     homeTeleportSeconds: online ? parseSeconds(d?.homeTeleportSeconds) : null,
     homeTeleportKnown: online && typeof d?.homeTeleportKnown === 'boolean' ? d.homeTeleportKnown : null,
     spellbook: online && typeof d?.spellbook === 'number' && Number.isInteger(d.spellbook) && d.spellbook >= 0 && d.spellbook <= 3 ? d.spellbook : null,
+    chronicleCharges: online && typeof d?.chronicleCharges === 'number' && Number.isInteger(d.chronicleCharges) && d.chronicleCharges >= 0 && d.chronicleCharges <= 1000
+      ? d.chronicleCharges : null,
   };
 }
 

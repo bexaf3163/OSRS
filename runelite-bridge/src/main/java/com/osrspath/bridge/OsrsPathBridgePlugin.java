@@ -262,6 +262,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private long bankWrittenAt;
 	/** Ticks since login while looking for a bank snapshot: the RuneLite profile does not appear at the same moment as login. */
 	private int bankLoadTicks;
+	/** The Chronicle's charges were looked up for this login (our copy, else what the Item Charges plugin saved). */
+	private boolean chronicleLoaded;
+	private int chronicleLoadTicks;
 	static final long BANK_SAVE_GAP_MS = 3_000;
 	static final int BANK_LOAD_TICKS = 30;
 	private final Map<Integer, String> itemNames = new HashMap<>();
@@ -2926,6 +2929,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			bankFromSave = false;
 			bankDirty = false;
 			bankLoadTicks = 0;
+			chronicleLoaded = false;
+			chronicleLoadTicks = 0;
+			if (server != null)
+			{
+				server.setChronicleCharges(null);
+			}
 			radar.reset();
 			danger = DangerRadar.QUIET;
 			lastPosition = null;
@@ -3013,6 +3022,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			varBurst = 0;
 			debugTick(me);
 			persistBank();
+			loadChronicle();
 			if (journalReadTick >= 0 && tickCount >= journalReadTick)
 			{
 				journalReadTick = -1;
@@ -3199,6 +3209,45 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			log.warn("Bank save: {}", ex.toString());
 		}
+	}
+
+	/**
+	 * The Chronicle's charges after login: our own last count for this RuneScape profile, otherwise the one RuneLite's Item Charges plugin saved.
+	 * Read once the profile is there (it appears a little after login); with neither, the count stays unknown.
+	 */
+	private void loadChronicle()
+	{
+		if (chronicleLoaded || chronicleLoadTicks >= BANK_LOAD_TICKS)
+		{
+			return;
+		}
+		chronicleLoadTicks++;
+		Integer n = ChronicleCharges.read(configManager.getRSProfileConfiguration(OsrsPathBridgeConfig.GROUP, ChronicleCharges.KEY));
+		if (n == null)
+		{
+			n = ChronicleCharges.read(configManager.getRSProfileConfiguration(ChronicleCharges.ITEM_CHARGE_GROUP, ChronicleCharges.ITEM_CHARGE_KEY));
+		}
+		if (n == null && chronicleLoadTicks < BANK_LOAD_TICKS)
+		{
+			return;
+		}
+		chronicleLoaded = true;
+		if (server != null)
+		{
+			server.setChronicleCharges(n);
+		}
+	}
+
+	/** A game message told the Chronicle's charges: kept for this profile and reported to the app. */
+	private void chronicleCharges(int n)
+	{
+		chronicleLoaded = true;
+		configManager.setRSProfileConfiguration(OsrsPathBridgeConfig.GROUP, ChronicleCharges.KEY, n);
+		if (server != null)
+		{
+			server.setChronicleCharges(n);
+		}
+		tel("chronicle", "charges", n);
 	}
 
 	private void loadBank()
@@ -3519,6 +3568,15 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (completion != null && (e.getType() == ChatMessageType.GAMEMESSAGE || e.getType() == ChatMessageType.SPAM))
 		{
 			completion.onChatMessage(e.getMessage());
+		}
+		if ((e.getType() == ChatMessageType.GAMEMESSAGE || e.getType() == ChatMessageType.SPAM) && e.getMessage() != null)
+		{
+			// "Your book has 14 charges left.": the Chronicle's count, when it was checked, used or charged.
+			Integer charges = ChronicleCharges.parse(Text.removeTags(e.getMessage()));
+			if (charges != null)
+			{
+				chronicleCharges(charges);
+			}
 		}
 		ChatMessageType t = e.getType();
 		String msg = e.getMessage();

@@ -584,6 +584,28 @@
       "kind": "bank",
       "page": "Edgeville bank"
     },
+    "Grand Exchange bank": {
+      "x": 3164,
+      "y": 3489,
+      "plane": 0,
+      "label": "Grand Exchange bank",
+      "kind": "bank",
+      "aliases": [
+        "GE bank"
+      ],
+      "page": "Grand Exchange"
+    },
+    "Lumbridge Bank": {
+      "x": 3208,
+      "y": 3220,
+      "plane": 2,
+      "label": "Lumbridge Bank (castle top floor)",
+      "kind": "bank",
+      "aliases": [
+        "Lumbridge Castle bank"
+      ],
+      "page": "Lumbridge Castle"
+    },
     "Bob's Brilliant Axes": {
       "x": 3229,
       "y": 3204,

@@ -18,6 +18,7 @@ import { TIP_MIN_SAVING_TILES } from './tips';
 import { judgeTransport, journeyTiles, recommendedTransport, type RecommendedTransport, type TransportVerdict } from './transport';
 import { EXCHANGE, NET, TRANSPORT, dist, effectiveTiles, prepareFor, shortOf, travelOptions, type DetourDecision, type ItemSource, type Point, type TravelOption } from './travel';
 import { travelInputOf, type TravelInputSources } from './travelInput';
+import { SUPPLY_MIN_TOTAL_TILES, savedText, type SupplyItem, type TravelSupplies } from './travelSupplies';
 
 /** Where the transport has to bring the player: the tile of the quest line the game confirms, otherwise the step's own place. */
 export interface TransportTarget { point: Point & { label?: string }; source: 'instruction' | 'step' }
@@ -77,6 +78,8 @@ export interface TransportDecision {
   fetch: DetourDecision[];
   /** The same for the next leg, when the recommendation prepares it ahead. */
   ahead?: { stepId: string; to: Point & { label?: string }; verdicts: TransportVerdict[] };
+  /** The supplies of the road ahead, when the line is a stop to stock up for it. */
+  supply?: { where: string; items: string[]; savedTiles: number; steps: number; tiles: number };
 }
 
 export interface TransportInput extends Omit<TravelInputSources, 'from' | 'to'> {
@@ -86,6 +89,8 @@ export interface TransportInput extends Omit<TravelInputSources, 'from' | 'to'> 
   instruction: QuestInstruction | null;
   /** The next open step of the route, for the "get it before you leave" look-ahead; null: none. */
   nextStep?: Step | null;
+  /** What the road ahead needs (travelSupplies.ts): a shop on the way that sells it becomes a "stock up here" line. */
+  supplies?: TravelSupplies | null;
   now?: number;
 }
 
@@ -140,6 +145,63 @@ function prepareAhead(i: TransportInput, pos: Point, to: Point, sources: TravelI
   };
 }
 
+/** A stop to stock up is suggested when the player stands this close to the shop... */
+export const SUPPLY_NEAR_TILES = 40;
+
+/**
+ * Stock up for the road: the shop or the exchange where the road's teleport supplies are sold, when the player stands by it, or when it is on the way
+ * and what is short there is confirmed. Near the shop an unconfirmed count is said as "up to N" with what to check (the book's charges, the bank).
+ * The saving is the road's: the uses those supplies pay for. null when nothing qualifies.
+ */
+export function supplyStop(supplies: TravelSupplies, pos: Point, to: Point): { rec: RecommendedTransport; detail: NonNullable<TransportDecision['supply']> } | null {
+  const groups: { where: string; point: Point; items: SupplyItem[] }[] = [];
+  for (const it of supplies.items) {
+    if (it.buy <= 0 || !it.source || it.source.kind === 'free') continue;
+    const g = groups.find((x) => dist(x.point, it.source!.point) <= 6);
+    if (g) g.items.push(it); else groups.push({ where: it.source.where, point: it.source.point, items: [it] });
+  }
+  let best: { g: (typeof groups)[number]; items: SupplyItem[]; saved: number; tiles: number } | null = null;
+  for (const g of groups) {
+    const tiles = dist(pos, g.point);
+    const near = tiles <= SUPPLY_NEAR_TILES;
+    const extra = tiles + dist(g.point, to) - dist(pos, to);
+    // On the way but not at the shop: only what is confirmed to be short is worth the detour.
+    const items = near ? g.items : extra <= AHEAD_MAX_EXTRA_TILES ? g.items.filter((x) => x.certain) : [];
+    if (!items.length) continue;
+    const ways = new Set(items.flatMap((x) => x.for.map((f) => f.replace(/ ×\d+$/, ''))));
+    const saved = supplies.uses.filter((u) => ways.has(u.way)).reduce((sum, u) => sum + u.savedTiles, 0);
+    if (saved < SUPPLY_MIN_TOTAL_TILES) continue;
+    if (!best || saved > best.saved) best = { g, items, saved, tiles };
+  }
+  if (!best) return null;
+  const { g, items, saved } = best;
+  const what = items.map((x) => `${x.name} ×${x.buy}`);
+  const unsure = items.some((x) => !x.certain);
+  const price = items.some((x) => x.cost === null) ? '' : ` (~${items.reduce((sum, x) => sum + (x.cost ?? 0), 0)} gp)`;
+  const ways = [...new Set(items.flatMap((x) => x.for))];
+  const place = g.where === EXCHANGE.label ? `the ${g.where}` : g.where.replace(/ — .*$/, '');
+  const uses = items.flatMap((x) => (x.use ? [x.use] : []));
+  const check = unsure ? (items.some((x) => x.name === 'Teleport card' && !x.certain) ? 'check the book’s charges first' : 'check your bank first') : '';
+  const summary = `Stock up for the road: buy ${unsure ? 'up to ' : ''}${what.join(', ')} at ${place}${price} · ${ways.join(', ')} save ${savedText(saved)}${check ? ` · ${check}` : ''}`;
+  const chronicle = items.some((x) => x.name === 'Teleport card' || x.name === 'Chronicle');
+  const stop = { action: 'buy' as const, where: g.where, point: g.point, items: items.map((x) => ({ name: x.name, qty: x.buy, price: x.source?.price ?? null })), tiles: best.tiles };
+  const text = `For the next ${supplies.steps} steps: ${ways.join(', ')} save ${savedText(saved)}. Buy ${unsure ? 'up to ' : ''}${what.join(', ')} at ${place}${price}.${uses.length ? ` Then ${uses.join('; ')}.` : ''}${check ? ` ${check[0].toUpperCase()}${check.slice(1)}.` : ''}`;
+  return {
+    rec: {
+      type: chronicle ? 'item_teleport' : 'spell_teleport', destination: place, interactionId: 0, tile: { x: g.point.x, y: g.point.y, plane: g.point.plane },
+      text: text.length <= 200 ? text : `${text.slice(0, 199)}…`,
+      chip: `⚡ Buy ${what.join(', ')}`.slice(0, 60),
+      state: 'prepare', summary,
+      prepare: {
+        text: `Buy ${what.join(', ')} at ${place}${price}.${uses.length ? ` Then ${uses.join('; ')}.` : ''}`,
+        withdraw: [], buy: items.map((x) => ({ name: x.name, quantity: x.buy, where: g.where })), stops: [stop], cost: items.some((x) => x.cost === null) ? null : items.reduce((sum, x) => sum + (x.cost ?? 0), 0),
+      },
+      savedTiles: saved,
+    },
+    detail: { where: g.where, items: what, savedTiles: saved, steps: supplies.steps, tiles: best.tiles },
+  };
+}
+
 /**
  * The decision for the step shown in the game. Unknown stays unknown: no position gives no recommendation, an unreported bank is never "empty",
  * and a point off the world map (a dungeon, an instance) is not routed over.
@@ -153,12 +215,16 @@ export function decideTransport(i: TransportInput): TransportDecision {
   const to = target.point;
   if (!isOverworld(i.pos) || !isOverworld(to) || isInstancedPoint(i.pos) || isInstancedPoint(to)) return { ...base, skipped: 'off_map' };
   const fetch: DetourDecision[] = [];
-  const { step: _s, pos: _p, instruction: _q, nextStep: _n, now: _t, ...sources } = i;
+  const { step: _s, pos: _p, instruction: _q, nextStep: _n, now: _t, supplies: _u, ...sources } = i;
   const src: TravelInputSources = { ...sources, from: i.pos, to };
   const options = travelOptions({ ...travelInputOf(src), onDecision: (d) => fetch.push(d) });
   const { verdicts } = judgeTransport(options);
   const here = recommendedTransport(options);
   const walkTiles = dist(i.pos, to);
+  // A shop that sells what the road ahead needs (cards for the book, runes for the spells): standing by it, stocking up comes first (it takes a moment
+  // and the way of this leg is still there afterwards); on the way to it, only when this leg has no way of its own.
+  const stock = i.supplies ? supplyStop(i.supplies, i.pos, to) : null;
+  if (stock && (!here || stock.detail.tiles <= SUPPLY_NEAR_TILES)) return { ...base, walkTiles, recommended: stock.rec, verdicts, fetch, supply: stock.detail };
   if (here) return { ...base, walkTiles, recommended: here, verdicts, fetch };
   const ahead = prepareAhead(i, i.pos, to, src, (d) => fetch.push(d));
   return {
@@ -211,6 +277,7 @@ export function transportReport(d: TransportDecision): Record<string, unknown> {
     candidates: d.verdicts.map(row),
     fetch: d.fetch.map((f) => `${f.outcome} ${f.subject}${f.reason ? ` — ${f.reason}` : ''}${f.caveat ? ` (${f.caveat})` : ''} ${JSON.stringify(f.detail)}`),
     ...(d.ahead ? { nextLeg: { step: d.ahead.stepId, to: d.ahead.to, candidates: d.ahead.verdicts.map(row) } } : {}),
+    ...(d.supply ? { supply: d.supply } : {}),
   };
 }
 

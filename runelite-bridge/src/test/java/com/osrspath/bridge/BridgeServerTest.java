@@ -148,6 +148,21 @@ public class BridgeServerTest
 	}
 
 	@Test
+	public void theChroniclesChargesAreReportedOnlyWhenKnownAndInGame() throws Exception
+	{
+		server.setInGame(true);
+		assertFalse(get("/status").body().contains("chronicleCharges"));
+		server.setChronicleCharges(12);
+		assertTrue(get("/status").body().contains("\"chronicleCharges\":12"));
+		server.setChronicleCharges(5000);
+		assertFalse("more than the book holds is unknown", get("/status").body().contains("chronicleCharges"));
+		server.setChronicleCharges(0);
+		assertTrue(get("/status").body().contains("\"chronicleCharges\":0"));
+		server.setInGame(false);
+		assertFalse(get("/status").body().contains("chronicleCharges"));
+	}
+
+	@Test
 	public void statusReportsVersionsForTheHandshake() throws Exception
 	{
 		String body = get("/status").body();

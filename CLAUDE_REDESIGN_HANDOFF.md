@@ -240,3 +240,15 @@ Asked for by the owner: the transport system "does not perform its intended role
 - Developer diagnostics only behind `localStorage['osrs-put:debug-transport'] = '1'` (console line on change, `window.__osrsPathTransport`). Keep it out of the player UI and the support report.
 - Tests: `tests/transportLive.test.ts` (the eleven scenarios that can be simulated), `TransportChipTest`, `DetourRowTest`, `ModernGuideTest` (renders `build/overlay-render/modern-travel-*.png`).
 - Live-test notes: start RuneLite only through the app; a Chronicle teleport spends a charge (do not use it for tests); the Home Teleport is free. If the external monitor drops, 117 HD stops presenting (white canvas): switch it off for the test and back on. A Windows "input experience" window can hold focus after RuneLite starts and block automated clicks; it needs one real click on the game window.
+
+## Travel supplies — 2.53.0
+
+Asked for by the owner: stock up before a long run (cards for the Chronicle, runes for the spells), a staff instead of its runes. Record and live/simulated split: `docs/travel-supplies-2.53.md`.
+
+- One road planner: `src/lib/travelSupplies.ts` (`planTravelSupplies`, `roadLegs`, `roadSteps`, horizon 8 steps). It reuses `travelOptions` with a "stocked" input; a leg counts only when a spell or the Chronicle beats every free way by `TIP_MIN_SAVING_TILES`. Do not write a second estimate for the UI.
+- Where it shows: `RoadSupplies` (Travel drawer with `locate`, Shopping page) and the game card through `supplyStop` in `decideTransport`. The card's road starts at the current objective (`from: null` in `PrepSync`): planned from the player, a shop next to the objective looked "on the way" for the very leg that leads there (seen live).
+- Chronicle charges: `ChronicleCharges.java` parses the book's messages (as RuneLite's Item Charges does), falls back to the `itemCharge.chronicle` RS-profile config, stores its own copy (`chronicleCharges`), `/status.chronicleCharges` (0–1000, absent = unknown). In the planner: known > 0 = ready without "check charges", 0 = locked with a Teleport card as the need.
+- Staves: `transport.json` `staves` (wiki, 2026-10-14), `staffCover` in `travel.ts`. A worn staff covers its runes; a carried one adds "wield your X" (`RecommendedTransport.actions`). Members staves are ignored on F2P. Without a separate worn list (old plugin) a carried staff counts as worn, as before.
+- Banks: `majorLocations.json` has the Grand Exchange bank and Lumbridge Castle's top floor (plane 2). `bankTiles` adds `STAIRS_TILES_PER_FLOOR` (15) per floor of difference; `Preflight.nearest` in Java does the same. `BANK_SPOTS` = `BANKS` (the exchange is in it once).
+- Plugin payload: `recommendedTransport.buy` (max 8, `PrepPlan.Buy`); `ShopWindow.build(place, view, atTransportStop)` lists them as "For the road: …".
+- Tests: `tests/travelSupplies.test.ts`, `ChronicleChargesTest` (renders `build/overlay-render/shop-road.png`), `PreflightTest.anUpstairsBankCostsItsStairs`, `BridgeServerTest` (status field), `bridge.test.ts` (status parse).
