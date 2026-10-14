@@ -9,6 +9,7 @@ import { PreflightPanel } from './PreflightPanel';
 import { PacingLine } from './PacingLine';
 import { PluginUpdateNote } from './PluginUpdateNote';
 import { triggerText } from '../lib/triggers';
+import { routeTrigger } from '../lib/carryover';
 import { plural } from '../lib/shopping';
 import { TARGET_LABEL } from '../lib/linkState';
 
@@ -27,7 +28,8 @@ export function InGamePanel({ step }: { step: Step }) {
   // Without a link the step is not "active in RuneLite" but waits for the connection — it will return there by itself.
   const live = active && state === 'online' && inGame;
   const g = step.inGame;
-  const trigger = g?.completionTrigger;
+  // What the game is told to wait for, with what the step keeps for a later one on top (lib/carryover.ts).
+  const trigger = routeTrigger(step);
   const waypoints = g?.pathWaypoints ?? [];
   const chips = GROUPS.flatMap(([key, kind]) => ((g?.[key] as string[] | undefined) ?? []).map((name) => ({ kind, name })));
 

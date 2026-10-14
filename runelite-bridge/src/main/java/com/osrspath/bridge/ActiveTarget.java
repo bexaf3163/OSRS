@@ -139,7 +139,7 @@ public class ActiveTarget
 			for (GuideItem i : nonNull(items))
 			{
 				if (i == null || i.name == null || i.name.isEmpty() || tooLong(i.name)
-					|| (i.where != null && i.where.length() > MAX_WHERE) || (i.count != null && (i.count < 1 || i.count > ShoppingPlan.MAX_COUNT)))
+					|| (i.where != null && i.where.length() > MAX_WHERE) || (i.count != null && (i.count < 1 || i.count > ShoppingPlan.MAX_COUNT)) || badAlt(i.alt))
 				{
 					return "invalid panel item";
 				}
@@ -258,7 +258,7 @@ public class ActiveTarget
 					if (line == null || line.t == null || line.t.trim().isEmpty() || line.t.length() > Guide.MAX_WHERE || (line.s != null && line.s.length() > Guide.MAX_WHERE)
 						|| (line.x != null && (line.y == null || line.plane == null || line.x <= 0 || line.y <= 0 || line.x >= NavTarget.MAX_COORD
 						|| line.y >= NavTarget.MAX_COORD || line.plane < 0 || line.plane > 3)) || tooLong(line.has)
-						|| (line.hl != null && line.hl.problem() != null) || Pre.problem(line.pre) != null || (line.k != null && !line.k.matches("[A-Za-z0-9_.]{1,80}")))
+						|| (line.hl != null && line.hl.problem() != null) || Pre.problem(line.pre) != null || (line.mh != null && (line.mh < 1 || line.mh > 200)) || (line.k != null && !line.k.matches("[A-Za-z0-9_.]{1,80}")))
 					{
 						return "invalid quest stage step";
 					}
@@ -271,7 +271,7 @@ public class ActiveTarget
 				for (GuideItem i : nonNull(s.items))
 				{
 					if (i == null || i.name == null || i.name.isEmpty() || tooLong(i.name)
-						|| (i.where != null && i.where.length() > Guide.MAX_WHERE) || (i.count != null && (i.count < 1 || i.count > ShoppingPlan.MAX_COUNT)))
+						|| (i.where != null && i.where.length() > Guide.MAX_WHERE) || (i.count != null && (i.count < 1 || i.count > ShoppingPlan.MAX_COUNT)) || badAlt(i.alt))
 					{
 						return "invalid stage item";
 					}
@@ -317,6 +317,8 @@ public class ActiveTarget
 		/** Object names and an NPC to highlight at that place. */
 		private List<String> on;
 		private String npc;
+		/** Other items that do the same job: any of them counts (every pickaxe tier for "Pickaxe"). null means only the item itself. */
+		private List<String> alt;
 
 		int need()
 		{
@@ -341,7 +343,8 @@ public class ActiveTarget
 			for (Pre p : list)
 			{
 				if (p == null || p.item == null || p.item.isEmpty() || tooLong(p.item) || tooLong(p.t) || tooLong(p.npc) || (p.id != null && (p.id <= 0 || p.id >= NavTarget.MAX_ITEM_ID))
-					|| (p.n != null && (p.n < 1 || p.n > MAX_COUNT)) || (p.on != null && (p.on.size() > NavTarget.MAX_NPCS || p.on.stream().anyMatch(n -> n == null || n.isEmpty() || tooLong(n))))
+					|| (p.n != null && (p.n < 1 || p.n > MAX_COUNT)) || (p.alt != null && (p.alt.size() > 16 || p.alt.stream().anyMatch(n -> n == null || n.isEmpty() || tooLong(n))))
+					|| (p.on != null && (p.on.size() > NavTarget.MAX_NPCS || p.on.stream().anyMatch(n -> n == null || n.isEmpty() || tooLong(n))))
 					|| (p.at != null && (p.at.size() != 3 || p.at.stream().anyMatch(v -> v == null) || p.at.get(0) <= 0 || p.at.get(1) <= 0 || p.at.get(0) >= NavTarget.MAX_COORD
 						|| p.at.get(1) >= NavTarget.MAX_COORD || p.at.get(2) < 0 || p.at.get(2) > 3)))
 				{
@@ -443,6 +446,8 @@ public class ActiveTarget
 		private String k;
 		/** Items that must be in the bag before this step; while one is missing the arrow leads to where to get it. null means no guard. */
 		private List<Pre> pre;
+		/** The strongest usual hit of what attacks the player on this line; the health warning uses it while this line is current. null means none. */
+		private Integer mh;
 
 		boolean hasPoint()
 		{
@@ -538,6 +543,8 @@ public class ActiveTarget
 		private String where;
 		/** Obtained during the step itself, no need to take it beforehand. */
 		private boolean inStep;
+		/** Other items that count in its place (every pickaxe tier for "Bronze pickaxe"). null means only the item itself. */
+		private List<String> alt;
 	}
 
 	@Data
@@ -561,6 +568,19 @@ public class ActiveTarget
 		private int count;
 		/** How much health it heals, for food. */
 		private Integer heals;
+		/** Other items that count in its place (every pickaxe tier for "Bronze pickaxe"). null means only the item itself. */
+		private List<String> alt;
+	}
+
+	/** How many of the item and of its alternatives the container holds together. */
+	static int countWithAlt(ItemCounts items, Integer id, String name, List<String> alt)
+	{
+		return items.countWithAlt(id, name, alt);
+	}
+
+	static boolean badAlt(List<String> alt)
+	{
+		return alt != null && (alt.size() > 16 || alt.stream().anyMatch(n -> n == null || n.isEmpty() || tooLong(n)));
 	}
 
 	/** The same as StepPacing in src/types/index.ts. */
@@ -648,6 +668,8 @@ public class ActiveTarget
 		private String chatPattern;
 		private Integer varbitId;
 		private Integer targetValue;
+		/** VARBIT_CHANGED: the milestone counts from this value upwards (and is also read when the step is shown), not only at exactly the value. */
+		private boolean atLeast;
 
 		String problem()
 		{

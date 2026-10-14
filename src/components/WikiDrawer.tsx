@@ -10,10 +10,29 @@ import type { StepNpcInfo, WikiItemDetail } from '../types';
 import { findLocalItem, getItemDetail, getNpcDetail } from '../services/wikiService';
 import type { NpcInfo } from '../services/wikiApi';
 import { formatXp } from '../lib/goals';
+import { alchMargin, NATURE_RUNE_ID } from '../lib/alchemy';
+import { getGePrice } from '../services/pricesApi';
 import { IconClose, IconExternal } from './Icons';
 import iconAssets from '../data/iconAssets.json';
 import { useFeatures } from '../lib/features';
 import { PlaceButton, PlaceMapView, PlaceNavButton, usePlaceMap, type PlaceQuery } from './PlaceMap';
+
+/** The real margin of a High Alchemy cast: the Nature rune is part of the cost. Nothing is shown while a price is unknown. */
+function AlchProfit({ highAlch, price }: { highAlch?: number; price?: number }) {
+  const [nature, setNature] = useState<number | undefined>(undefined);
+  useEffect(() => {
+    let live = true;
+    void getGePrice(NATURE_RUNE_ID).then((p) => { if (live && p) setNature(p.buyPrice); }).catch(() => undefined);
+    return () => { live = false; };
+  }, []);
+  const m = alchMargin(highAlch, price, nature);
+  if (!m) return null;
+  return (
+    <span className={`tile-sub ${m.worth ? 'is-good' : 'is-bad'}`}>
+      {m.worth ? 'Profit' : 'Loss'} per cast {gp(Math.abs(m.profit))} after the Nature rune ({gp(nature ?? 0)})
+    </span>
+  );
+}
 
 type Target =
   | { kind: 'item'; query: string | number; label?: string }
@@ -223,6 +242,7 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
           <span className="tile-label">⚗️ High Alchemy</span>
           <span className="tile-value">{item.highAlch !== undefined ? gp(item.highAlch) : '—'}</span>
           {item.lowAlch !== undefined && <span className="tile-sub">Low Alchemy {gp(item.lowAlch)}</span>}
+          <AlchProfit highAlch={item.highAlch} price={item.gePrice?.buyPrice} />
         </div>
         <div className="tile">
           <span className="tile-label">🏪 Store value</span>

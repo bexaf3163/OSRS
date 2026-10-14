@@ -22,16 +22,22 @@ interface FocusInput {
   /** The end of the training plan row that holds this level, when there is one above it. */
   rowEnd: (id: string, level: number) => number | null;
   maxLevel?: number;
+  /** The last stage of the mode the player is in (F2P ends at 6): later cells are not looked at. */
+  lastStage?: number;
 }
 
-const LAST_GOAL_STAGE = 6;
+export function trainingFocus({ levelSkills, stage, goals, levelOf, rowEnd, maxLevel = 99, lastStage = goals.stages.length }: FocusInput): TrainingFocus {
+  // An optional cell (the Bond branch) is a target of a step the player may skip: it never steers the training.
+  const required = (id: string, s: number) => {
+    const g = goalFor(goals, id, s);
+    return g && g.kind !== 'optional' ? g : undefined;
+  };
 
-export function trainingFocus({ levelSkills, stage, goals, levelOf, rowEnd, maxLevel = 99 }: FocusInput): TrainingFocus {
   // 1. A skill that is behind the goal of the current stage — the biggest gap first.
   let best: TrainingFocus | null = null;
   let bestGap = 0;
   for (const id of levelSkills) {
-    const goal = goalFor(goals, id, stage);
+    const goal = required(id, stage);
     const gap = goal ? goal.min - levelOf(id) : 0;
     if (goal && gap > bestGap) {
       bestGap = gap;
@@ -42,11 +48,11 @@ export function trainingFocus({ levelSkills, stage, goals, levelOf, rowEnd, maxL
 
   // 2. The stage is satisfied: the nearest later stage that asks for more. A single skill keeps its own training row instead:
   //    only a combined section needs the route to say which of its skills comes first.
-  for (let s = stage + 1; levelSkills.length > 1 && s <= LAST_GOAL_STAGE; s++) {
+  for (let s = stage + 1; levelSkills.length > 1 && s <= lastStage; s++) {
     let pick: TrainingFocus | null = null;
     let gap = 0;
     for (const id of levelSkills) {
-      const goal = goalFor(goals, id, s);
+      const goal = required(id, s);
       const g = goal ? goal.min - levelOf(id) : 0;
       if (goal && g > gap) {
         gap = g;

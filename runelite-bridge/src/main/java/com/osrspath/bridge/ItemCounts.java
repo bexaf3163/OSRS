@@ -70,6 +70,44 @@ final class ItemCounts
 		return Math.max(own, betterToolCount(key));
 	}
 
+	/**
+	 * The item and the items that do the same job (the step's alt list), together. A tool tier that count() already takes as a better tool of
+	 * the named one is not added a second time.
+	 */
+	int countWithAlt(Integer id, String name, java.util.List<String> alt)
+	{
+		int n = count(id, name);
+		if (alt == null)
+		{
+			return n;
+		}
+		String key = ActiveTarget.nameKey(name);
+		for (String other : alt)
+		{
+			String otherKey = ActiveTarget.nameKey(other);
+			if (!otherKey.equals(key) && !isBetterTool(key, otherKey))
+			{
+				n += byName.getOrDefault(otherKey, 0);
+			}
+		}
+		return n;
+	}
+
+	/** Whether "other" is a tier of the same tool at or above the named one (count() already includes it). */
+	private static boolean isBetterTool(String key, String other)
+	{
+		for (String kind : new String[]{" pickaxe", " axe"})
+		{
+			if (key.endsWith(kind) && other.endsWith(kind))
+			{
+				int from = java.util.Arrays.asList(TIERS).indexOf(key.substring(0, key.length() - kind.length()));
+				int to = java.util.Arrays.asList(TIERS).indexOf(other.substring(0, other.length() - kind.length()));
+				return from >= 0 && to >= from;
+			}
+		}
+		return false;
+	}
+
 	/** Exactly this item: by ID when there is one (two items can share a name), else by name; no better-tool substitutes. */
 	int exact(Integer id, String name)
 	{

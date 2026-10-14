@@ -7,6 +7,7 @@
 import type { GameMode, PlayerStats, Progress } from '../types';
 import type { GearState } from '../services/runeliteBridge';
 import { nameKey, type OwnedState } from './checklist';
+import { toolFamilyOf } from './toolTiers';
 
 export type StateSource = 'game' | 'profile' | 'manual';
 
@@ -132,6 +133,26 @@ export interface Held {
  * are counted and the bag does not refute them; otherwise if it is in the bag it is known "have", and if not it is UNKNOWN, not MISSING.
  */
 export function heldOf(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'>, nameEn: string, manualKey?: string): Held {
+  const base = heldExact(s, nameEn, manualKey);
+  const family = toolFamilyOf(nameEn);
+  if (!family) return base;
+  // "Bronze pickaxe" in a route step means "a pickaxe": a better tier does the same job, so a better tier that is seen counts.
+  // A tier that is not seen proves nothing: without one the answer is exactly what it was for the name itself.
+  const parts = family.map((n) => (nameKey(n) === nameKey(nameEn) ? base : heldExact(s, n)));
+  if (!parts.some((p) => p !== base && p.presence === 'PRESENT')) return base;
+  const sum = (pick: (h: Held) => number | null): number | null => {
+    const known = parts.map(pick).filter((v): v is number => v !== null);
+    return known.length ? known.reduce((a, b) => a + b, 0) : null;
+  };
+  const presence: Presence = parts.some((p) => p.presence === 'PRESENT') ? 'PRESENT' : parts.every((p) => p.presence === 'MISSING') ? 'MISSING' : 'UNKNOWN';
+  const source = parts.find((p) => p.source === 'game')?.source ?? parts.find((p) => p.source === 'manual')?.source ?? parts[0].source;
+  return {
+    presence, bag: sum((p) => p.bag), noted: parts.reduce((a, p) => a + p.noted, 0), bank: sum((p) => p.bank),
+    equipped: parts.reduce((a, p) => a + p.equipped, 0), total: sum((p) => p.total), source,
+  };
+}
+
+function heldExact(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'>, nameEn: string, manualKey?: string): Held {
   const o = s.owned?.items.get(nameKey(nameEn));
   const equipped = Object.values(s.equipment).filter((n) => nameKey(n) === nameKey(nameEn)).length;
   const manual = manualKey ? s.manual[manualKey] : undefined;

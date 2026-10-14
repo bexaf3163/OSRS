@@ -47,7 +47,7 @@ describe('members skills: plans from the guide', () => {
 
   it('route steps with agility and slayer show a plan row', () => {
     expect(stepSkills(stepById.get('S7-04')!).map((s) => s.id)).toEqual(['AG']);
-    expect(stepSkills(stepById.get('S8-04')!).map((s) => s.id).sort()).toEqual(['CR', 'RA', 'SL']);
+    expect(stepSkills(stepById.get('S8-04')!).map((s) => s.id).sort()).toEqual(['CO', 'CR', 'RA', 'SL', 'WC']);
     const ag = skillById.get('AG')!;
     expect(skillRange(ag, progress({ agility: 1 }))?.range.code).toBe('AG-1');
     expect(skillRange(ag, progress({ agility: 25 }))?.range.code).toBe('AG-2');

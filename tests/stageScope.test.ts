@@ -7,23 +7,31 @@ const mountain = stepById.get('S3-04')!;
 const at = (stageAt: number) => ({ stepId: 'S3-04', stageAt, lineIndex: 0, peeking: false });
 
 describe('what a quest stage still asks for (Below Ice Mountain, real data)', () => {
-  it('the data: the stages with their own list are 10 and 15, the later ones are empty', () => {
+  const NAMES = ['Beer', 'Cooked meat', 'Bread', 'Knife', 'Bronze pickaxe', 'Trout'];
+  const hidden = (stage: number) => {
+    const scope = stageScope(mountain, at(stage));
+    return scope ? NAMES.filter((n) => isOutOfStage(scope, n)) : [];
+  };
+
+  it('the data: stages 10, 15 and 35 list what they need, the others say "nothing", the first has no list', () => {
     const lists = Object.fromEntries(mountain.questStages!.stages.map((s) => [s.at, s.items?.map((i) => i.name)]));
-    expect(lists[15]).toEqual(['Cooked meat', 'Bread', 'Knife']);
-    expect(lists[35]).toEqual([]);
+    expect(lists[15]).toEqual(['Cooked meat', 'Bread', 'Knife', 'Beer']);
+    expect(lists[35]).toEqual(['Bronze pickaxe', 'Trout']);
+    expect(lists[20]).toEqual([]);
     expect(lists[0]).toBeUndefined();
   });
 
-  it('past the last stage that asks for anything, every item of the quest is out', () => {
-    for (const stage of [20, 30, 35, 40]) {
-      const scope = stageScope(mountain, at(stage))!;
-      for (const name of ['Beer', 'Cooked meat', 'Bread', 'Knife']) expect(isOutOfStage(scope, name), `${stage} ${name}`).toBe(true);
-    }
+  it('what an earlier stage used is out later, what a later stage lists is not', () => {
+    for (const stage of [20, 30, 35]) expect(hidden(stage), `${stage}`).toEqual(['Beer', 'Cooked meat', 'Bread', 'Knife']);
   });
 
-  it('while an item can still be needed nothing is hidden: the ale is bought inside stage 15 and no stage lists it', () => {
-    expect(stageScope(mountain, at(15))).toBeNull();
-    expect(stageScope(mountain, at(10))).toBeNull();
+  it('past the last stage that asks for anything, every item of the quest is out', () => {
+    expect(hidden(40)).toEqual(NAMES);
+  });
+
+  it('while an item can still be needed nothing is hidden (stages 10 and 15)', () => {
+    expect(hidden(15)).toEqual([]);
+    expect(hidden(10)).toEqual([]);
   });
 
   it('is unknown without a confirmed line, for another step, an unknown stage and a stage without a list', () => {

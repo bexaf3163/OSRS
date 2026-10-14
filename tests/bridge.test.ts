@@ -51,7 +51,9 @@ describe('the step target for the game', () => {
     expect(p.title).toBe("Cook's Assistant");
     expect(p.npcNames).toContain('Cook');
     expect(p.dialogChoices).toEqual(["What's wrong?", 'Can I help?']);
-    expect(p.completionTrigger).toEqual({ type: 'QUEST_COMPLETED', questName: "Cook's Assistant" });
+    // The quest is the game's signal; the spare pot of flour that Prince Ali Rescue needs goes on top of it (lib/carryover.ts).
+    expect(step('S1-03').inGame!.completionTrigger).toEqual({ type: 'QUEST_COMPLETED', questName: "Cook's Assistant" });
+    expect(p.completionTrigger).toEqual({ type: 'QUEST_COMPLETED', questName: "Cook's Assistant", items: [{ names: ['Pot of flour'], count: 1 }] });
   });
 
   it('without inGame — the arrow to the start and the gathering tiles from the step map', () => {
@@ -123,8 +125,10 @@ describe('auto-mark triggers on the route', () => {
     expect(step('S5-05').inGame!.dialogChoices ?? []).toEqual([]);
   });
 
-  it('VARBIT_CHANGED is not used without verified varbits', () => {
-    expect(triggers.filter(({ t }) => t.type === 'VARBIT_CHANGED')).toEqual([]);
+  it('VARBIT_CHANGED is used only for a verified milestone: Fairytale II permission, Quest Helper value 40', () => {
+    const varbits = triggers.filter(({ t }) => t.type === 'VARBIT_CHANGED');
+    expect(varbits.map(({ s }) => s.id)).toEqual(['S9-03']);
+    expect(varbits[0].t).toMatchObject({ varbitId: 2326, targetValue: 40, atLeast: true });
   });
 
   it('levels are counted by the real levels, exactly the targets from the step title', () => {

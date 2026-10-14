@@ -2,6 +2,7 @@
 // The count comes from RuneLite (the OWNED event); the rules are the same as in the plugin (Checklist.java).
 
 import type { Step, StepItemRequirement } from '../types';
+import { alternativesOf } from './toolTiers';
 
 /** How many of an item the player has, by the plugin's data. bank is undefined until the bank was opened in this session. */
 export interface OwnedItem {
@@ -46,6 +47,8 @@ export interface PreflightItem {
   /** false means the route's quantity is not a number: "at least one is there" is checked. */
   exact: boolean;
   heals?: number;
+  /** Other items that count in its place (every pickaxe tier for "Bronze pickaxe"). */
+  alt?: string[];
 }
 
 /** What to check at the bank: the required items except those obtained during the step itself. */
@@ -54,7 +57,8 @@ export function preflightItems(step: Step): PreflightItem[] {
     .filter((i: StepItemRequirement) => !i.inStep)
     .map((i) => {
       const n = parseAmount(i.amount);
-      return { nameEn: i.nameEn, id: i.wikiItemId, count: n ?? 1, exact: n !== null, heals: i.heals };
+      const alt = alternativesOf(i.nameEn, i.anyOf);
+      return { nameEn: i.nameEn, id: i.wikiItemId, count: n ?? 1, exact: n !== null, heals: i.heals, ...(alt.length ? { alt } : {}) };
     });
 }
 
@@ -77,9 +81,10 @@ export interface PreflightResult {
 
 export function evaluatePreflight(items: PreflightItem[], owned: OwnedState): PreflightResult {
   const rows = items.map((item): PreflightRow => {
-    const o = owned.items.get(nameKey(item.nameEn));
-    const have = o?.carried ?? 0;
-    const inBank = owned.bankSeen ? o?.bank ?? 0 : null;
+    const names = [item.nameEn, ...(item.alt ?? [])];
+    const all = names.map((n) => owned.items.get(nameKey(n)));
+    const have = all.reduce((s, o) => s + (o?.carried ?? 0), 0);
+    const inBank = owned.bankSeen ? all.reduce((s, o) => s + (o?.bank ?? 0), 0) : null;
     let state: PreflightState;
     if (have >= item.count) state = 'IN_BAG_READY';
     else if (inBank === null || have + inBank >= item.count) state = 'MISSING_FROM_BAG';

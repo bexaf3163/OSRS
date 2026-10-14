@@ -337,7 +337,11 @@ export function validate(d: GuideData | null, route: Route): Report {
       const want = titleTargets(s.title).map((x) => `${x.skill} ${x.level}`).sort().join(', ');
       const got = (t.levels ?? []).map((x) => `${x.skill} ${x.level}`).sort().join(', ');
       if (!t.levels?.length || want !== got) badGame.push(`${s.id}: the auto-mark levels "${got}" ≠ the goals from the title "${want}"`);
-    } else if (t.levels) badGame.push(`${s.id}: levels exist only for SKILL_LEVEL`);
+    } else if (t.levels && t.type !== 'QUEST_COMPLETED') badGame.push(`${s.id}: levels exist only for SKILL_LEVEL and QUEST_COMPLETED`);
+    // A quest with a level on top (the lamp used on Prayer) must name real skills and levels in range.
+    if (t.type === 'QUEST_COMPLETED') {
+      for (const l of t.levels ?? []) if (!(l.level >= 2 && l.level <= 99) || !/^[a-z]+$/.test(l.skill)) badGame.push(`${s.id}: invalid level on a quest trigger: ${l.skill} ${l.level}`);
+    }
     if (t.type === 'ITEM_OWNED' && !t.items?.length) badGame.push(`${s.id}: ITEM_OWNED without items`);
     if (t.items && !['QUEST_COMPLETED', 'SKILL_LEVEL', 'ITEM_OWNED'].includes(t.type)) badGame.push(`${s.id}: items exist only for state conditions`);
     for (const i of t.items ?? []) {
@@ -435,6 +439,18 @@ export function validate(d: GuideData | null, route: Route): Report {
   lines.push('Text');
   const vague = steps.flatMap((s) => userTexts(s).filter(([, t]) => VAGUE.test(t)).map(([where]) => `${s.id} "${where}"`));
   check(!vague.length, 'The food is named and counted everywhere', `Food without a name or quantity: ${vague.join(', ')}`);
+  // A quantity is a number, a range "15–20", "100+" or a phrase that says it is not a number; never two quantities glued into one ("xor 8").
+  const badQty: string[] = [];
+  const qtyOk = (v: string | number) => typeof v === 'number' ? Number.isInteger(v) && v > 0
+    : /^(\d[\d,]*\+?|\d[\d,]*–\d[\d,]*|As many as [a-z ]+|\d+ \([^)]+\))$/.test(v);
+  for (const s of steps) {
+    for (const it of [...(s.itemsRequired ?? []), ...(s.itemsRecommended ?? [])]) {
+      if (!qtyOk(it.amount)) badQty.push(`${s.id} ${it.nameEn}: "${it.amount}"`);
+      if (/\bxor\b|\bxOne\b|\bx\d|\bor \d+\b/i.test(it.nameEn)) badQty.push(`${s.id} "${it.nameEn}": a quantity inside the name`);
+    }
+    for (const l of s.loadouts ?? []) for (const x of l.take) if (!qtyOk(x.amount)) badQty.push(`${s.id} loadout ${l.id} ${x.nameEn}: "${x.amount}"`);
+  }
+  check(!badQty.length, 'Every item quantity is a number, a range or a plain phrase', `Malformed quantities: ${badQty.join('; ')}`);
   const lower: string[] = [];
   const typos: string[] = [];
   const unbalanced: string[] = [];
@@ -486,7 +502,72 @@ export function validate(d: GuideData | null, route: Route): Report {
     check(!badMembers.length, 'Members skills have their own level, their own code and a wiki link',
       `A members skill without its own level, with a foreign code or without a wiki link: ${badMembers.join(', ')}`);
     const goalRows = d.goals.rows.filter((r) => r.id !== 'qp');
-    check(goalRows.length === d.levels.length, `"Goals by stage": ${goalRows.length} skills × ${d.goals.stages.length} stages`, '"Goals by stage" is incomplete');
+    const memberLevels = new Set(ms.map((m) => m.levelSkills[0]));
+    const allLevels = new Set([...f2pLevels, ...memberLevels]);
+    const missingRows = d.levels.filter((l) => !goalRows.some((r) => r.id === l.id)).map((l) => l.id);
+    const foreignRows = goalRows.filter((r) => !allLevels.has(r.id)).map((r) => r.id);
+    check(!missingRows.length && !foreignRows.length, `"Goals by stage": ${goalRows.length} skills × ${d.goals.stages.length} stages`,
+      `"Goals by stage" is incomplete or names an unknown skill: missing ${missingRows.join(', ') || 'none'}, unknown ${foreignRows.join(', ') || 'none'}`);
+
+    // Every goal is something the route itself produces: the rise comes from steps that exist, in the cell's stage or earlier, that
+    // train or pay that skill; an optional cell belongs to an optional step; the quest points are the route's own sum; and no step
+    // asks for a level the route does not guarantee by the end of its stage.
+    const stepOf = new Map(steps.map((s) => [s.id, s]));
+    const stageCount = d.goals.stages.length;
+    const badGoals: string[] = [];
+    const produces = (s: Step, row: { id: string; label: string }): boolean =>
+      titleTargets(s.title).some((x) => x.skill === row.id)
+      || !!s.inGame?.completionTrigger?.levels?.some((l) => l.skill === row.id)
+      || new RegExp(`\\b${row.label}\\b`, 'i').test(s.reward ?? '');
+    for (const r of d.goals.rows) {
+      if (r.values.length !== stageCount) badGoals.push(`${r.id}: ${r.values.length} cells for ${stageCount} stages`);
+      let prev = 1;
+      r.values.forEach((v, i) => {
+        const st = i + 1;
+        const where = `${r.id} stage ${st}`;
+        const raw = v.max !== undefined ? `${v.min}–${v.max}` : String(v.min);
+        if (v.raw !== raw) badGoals.push(`${where}: "${v.raw}" is not "${raw}"`);
+        if (v.max !== undefined && v.max <= v.min) badGoals.push(`${where}: the upper number is not above the lower`);
+        const sources = (v.from ?? []).map((id) => stepOf.get(id));
+        (v.from ?? []).forEach((id, k) => {
+          const s = sources[k];
+          if (!s) { badGoals.push(`${where}: no step ${id}`); return; }
+          if (s.stage > st) badGoals.push(`${where}: ${id} is a step of stage ${s.stage}, after the cell`);
+          if (r.id !== 'qp' && !produces(s, r)) badGoals.push(`${where}: ${id} does not train or pay ${r.label}`);
+          if (v.kind === 'optional' && !s.optional && !s.bondBranch) badGoals.push(`${where}: an optional cell comes from the required step ${id}`);
+        });
+        if (v.kind === 'optional') return;
+        if (r.id !== 'qp' && v.min < prev) badGoals.push(`${where}: ${v.min} is below the earlier ${prev}`);
+        if (r.id !== 'qp' && v.min > prev && !sources.some((s) => s && !s.optional && !s.bondBranch)) {
+          badGoals.push(`${where}: rises to ${v.min} but no required step of the route produces it`);
+        }
+        prev = Math.max(prev, v.min);
+      });
+    }
+    const qpRow = d.goals.rows.find((r) => r.id === 'qp');
+    if (!qpRow) badGoals.push('no quest points row');
+    else {
+      let lo = EXPECTED.baseQp;
+      let hi = EXPECTED.baseQp;
+      for (let st = 1; st <= stageCount; st++) {
+        for (const s of steps.filter((x) => x.stage === st && !x.bondBranch)) {
+          hi += s.qp ?? 0;
+          if (!s.optional) lo += s.qp ?? 0;
+        }
+        const v = qpRow.values[st - 1];
+        if (!v || v.min !== lo || (v.max ?? lo) !== hi) badGoals.push(`quest points stage ${st}: the route gives ${lo}–${hi}, the table says "${v?.raw}"`);
+      }
+    }
+    for (const s of steps.filter((x) => !x.optional && !x.bondBranch)) {
+      for (const q of s.requirements ?? []) {
+        if (q.type !== 'skill') continue;
+        const cell = d.goals.rows.find((r) => r.id === q.skill)?.values[s.stage - 1];
+        if (!cell) badGoals.push(`${s.id}: ${q.skill} ${q.min} is required but the goals table has no ${q.skill} row`);
+        else if (cell.min < q.min) badGoals.push(`${s.id}: needs ${q.skill} ${q.min}, the route guarantees ${cell.min} by the end of stage ${s.stage}`);
+      }
+    }
+    check(!badGoals.length, `The goals follow the route: every rise has a source step, the quest points match, every skill requirement is met`,
+      `Goals against the route: ${badGoals.join('; ')}`);
     const xpBad = d.xp.points.filter((p) => xpForLevel(p.level) !== p.xp).map((p) => `${p.level}: ${p.xp} ≠ ${xpForLevel(p.level)}`);
     check(!xpBad.length, `The XP formula matches all ${d.xp.points.length} rows of the XP table`, `The formula differs from the XP table: ${xpBad.join('; ')}`);
   }

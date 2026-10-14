@@ -15,11 +15,16 @@ describe('game mode', () => {
     expect(stepsFor('f2p').some((s) => s.membersOnly)).toBe(false);
   });
 
-  it('Members adds stages 7–9 and nothing more', () => {
-    expect(stagesFor('members').map((s) => s.id)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  it('Members adds stages 7–9 and drops the way to a Bond (stage 6), which an account with membership does not need', () => {
+    expect(stagesFor('f2p').map((s) => s.id)).toEqual([1, 2, 3, 4, 5, 6]);
+    expect(stagesFor('members').map((s) => s.id)).toEqual([1, 2, 3, 4, 5, 7, 8, 9]);
     expect(allStages.filter((s) => s.membersOnly).map((s) => s.id)).toEqual([7, 8, 9]);
     const extra = stepsFor('members').filter((s) => !stepsFor('f2p').includes(s));
     expect(extra.every((s) => s.membersOnly && s.stage >= 7)).toBe(true);
+    // Nothing is lost from the free route except the bond branch itself.
+    const dropped = stepsFor('f2p').filter((s) => !stepsFor('members').includes(s));
+    expect(dropped.length).toBeGreaterThan(0);
+    expect(dropped.every((s) => s.bondBranch === true && s.stage === 6)).toBe(true);
   });
 
   it('members steps do not depend on anything outside Members, F2P steps — on members steps', () => {
@@ -94,6 +99,7 @@ describe('quest requirements come before the quests themselves', () => {
   it('skill requirements are given as targets in the step title', () => {
     expect(titleTargets(allSteps.find((s) => s.id === 'S8-04')!.title)).toEqual([
       { skill: 'ranged', level: 30 }, { skill: 'slayer', level: 18 }, { skill: 'crafting', level: 31 },
+      { skill: 'woodcutting', level: 36 }, { skill: 'cooking', level: 10 },
     ]);
   });
 });

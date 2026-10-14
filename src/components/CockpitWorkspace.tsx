@@ -74,7 +74,7 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId }: { step: St
     <header className="step-view-head">
       <span className="modern-quest-icon" aria-hidden="true"><TypeIcon type={step.type} /></span>
       <div>
-        <p className="eyebrow">{TYPE_LABEL[step.type]} · Route stage {step.stage}{step.membersOnly ? ' · Members' : ''}{step.optional ? ' · Optional' : ''}</p>
+        <p className="eyebrow">{TYPE_LABEL[step.type]} · Route stage {step.stage}{step.membersOnly ? ' · Members' : ''}{step.bondBranch ? ' · Optional, Bond branch' : step.optional ? ' · Optional' : ''}</p>
         <h2 className="step-view-title" id="step-view-title" tabIndex={-1}>{step.title}</h2>
       </div>
       <code className="code step-id">{step.id}</code>

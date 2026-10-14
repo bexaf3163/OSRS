@@ -94,8 +94,8 @@ final class Checklist
 		for (ActiveTarget.ChecklistItem item : items)
 		{
 			int need = Math.max(1, item.getCount());
-			int have = carried.count(item.getId(), item.getName());
-			int inBank = bank == null ? -1 : bank.count(item.getId(), item.getName());
+			int have = ActiveTarget.countWithAlt(carried, item.getId(), item.getName(), item.getAlt());
+			int inBank = bank == null ? -1 : ActiveTarget.countWithAlt(bank, item.getId(), item.getName(), item.getAlt());
 			State state;
 			if (have >= need)
 			{

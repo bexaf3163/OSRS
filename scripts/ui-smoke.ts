@@ -761,8 +761,10 @@ async function run(browser: Browser) {
     const bag = await page.locator('.cockpit-bag .quest-preparation').boundingBox();
     expect(!!bag && !!actionBox && bag.x > actionBox.x + actionBox.width - 1 && bag.y < actionBox.y + 400 && await page.locator('.quest-preparation').count() === 1,'cockpit: on a wide window the stage list stands beside the action, once');
     const need = await text(page,'.cockpit-bag .quest-preparation');
-    expect(need.includes('Needed for this stage') && need.includes('Used earlier in this quest') && !need.includes('Missing') && !need.includes('Not checked'),'cockpit: the quest items the stage no longer asks for are folded away, not listed as missing');
-    expect((await text(page,'.cockpit-bag .status-line')).includes('Ready to set off'),'cockpit: the verdict follows the stage too');
+    // The last fight asks for a pickaxe and food; the meat, bread, knife and beer of stage 15 are used up and folded away.
+    expect(need.includes('Needed for this stage') && need.includes('Used earlier in this quest') && need.includes('Bronze pickaxe') && !need.includes('Missing')
+      && !need.includes('Cooked meat') && !need.includes('Bread') && !need.includes('Knife') && !need.includes('Beer'),'cockpit: the quest items the stage no longer asks for are folded away, not listed as missing');
+    expect(/checked|Ready to set off/.test(await text(page,'.cockpit-bag .status-line')) && !(await text(page,'.cockpit-bag .status-line')).includes('Missing'),'cockpit: the verdict follows the stage too');
     expect((await text(page,'.overview')).includes('In the game now'),'current instruction: the canonical walkthrough identifies the confirmed line');
     expect(await page.locator('.manual-complete').isVisible(),'cockpit: manual completion stays accessible');
     await page.keyboard.press('p');

@@ -24,6 +24,8 @@ export function syncCandidates(steps: readonly Step[], p: Progress, questsDone: 
     const t = step.inGame?.completionTrigger;
     if (!t || (t.items?.length && t.type !== 'SKILL_LEVEL')) continue;
     if (t.type === 'QUEST_COMPLETED' && t.questName && done.has(questKey(t.questName))) {
+      // A quest that also names a level (the lamp used on Prayer) is closed only when the level proves it.
+      if (t.levels?.length && !(levels && t.levels.every((l) => (levels[l.skill] ?? 0) >= l.level))) continue;
       out.push({ step, why: `quest ${t.questName} complete` });
     } else if (t.type === 'SKILL_LEVEL' && levels && t.levels?.length && t.levels.every((l) => (levels[l.skill] ?? 0) >= l.level)) {
       out.push({ step, why: 'the required levels are already reached' });
