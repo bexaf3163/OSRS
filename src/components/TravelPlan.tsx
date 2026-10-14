@@ -9,7 +9,7 @@ import { useBridge } from '../bridge';
 import { useStore } from '../store';
 import { usePlayerState } from '../playerStateContext';
 import { checkStatus } from '../services/runeliteBridge';
-import { fairyRingsUnlocked, travelInputOf } from '../lib/travelInput';
+import { fairyRingsUnlocked, oneTimeUsedOf, travelInputOf } from '../lib/travelInput';
 import { stepPlaces } from '../lib/stepPlaces';
 import { dist, travelOptions, TRANSPORT, walkText, type Availability, type Point, type TravelOption } from '../lib/travel';
 import { isOverworld } from '../lib/instances';
@@ -55,7 +55,7 @@ export function TravelPlan({ step }: { step: Step }) {
   const onMap = Boolean(pos) && isOverworld(pos) && isOverworld(target);
   const all: TravelOption[] = pos && onMap
     ? travelOptions(travelInputOf({
-      from: pos, to: target, levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: homeCooldown, fairyRings: fairyRingsUnlocked(progress),
+      from: pos, to: target, levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: homeCooldown, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress),
       ...(homeKnown !== null ? { homeCooldownKnown: homeKnown } : {}), spellbook, chronicleCharges: charges, sourceOf: transportSources(player, prices.priceOf),
     }))
     : [];

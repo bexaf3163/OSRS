@@ -4762,7 +4762,7 @@
       "plane": 0,
       "label": "Lobsters and swordfish at Musa Point"
     },
-    "where": "40-50: lobsters at Musa Point (Karamja). From 50: swordfish (Swordfish) with a harpoon in the same place. Cook on the range in Al Kharid.",
+    "where": "1-20: net fishing at Draynor Village. 20-40: fly fishing at Barbarian Village. 40-50: lobsters at Musa Point (Karamja). From 50: swordfish (Swordfish) with a harpoon in the same place. Cook on the range in Al Kharid.",
     "itemsRequired": [
       {
         "nameEn": "Lobster pot",
@@ -4780,6 +4780,10 @@
       }
     ],
     "fields": [
+      {
+        "label": "Fishing 1-40 first",
+        "text": "The route reaches this step at Fishing 1, so lobsters (level 40) are the end of the climb, not the start. 1-20: net shrimps at the Draynor Village spots (anchovies from 15). 20-40: fly fish at the Barbarian Village spots with a fly fishing rod and feathers (trout from 20, salmon from 30). Tuna with a harpoon at Musa Point is open from 35. Cook what you catch for the Cooking half, or drop it; raw fish sells for little."
+      },
       {
         "label": "Important",
         "text": "Swordfish can only be caught from Fishing 50 and cooked from Cooking 45. Before that, lobsters (from 40) or tuna with a harpoon (from 35)."
@@ -4816,7 +4820,30 @@
       }
     },
     "bondBranch": true,
-    "optional": true
+    "optional": true,
+    "itemsRecommended": [
+      {
+        "nameEn": "Small fishing net",
+        "amount": 1,
+        "howToGet": "Fishing 1-20: Gerrant's Fishy Business in Port Sarim.",
+        "wikiItemId": 303,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Small_fishing_net.png"
+      },
+      {
+        "nameEn": "Fly fishing rod",
+        "amount": 1,
+        "howToGet": "Fishing 20-40: Gerrant's Fishy Business in Port Sarim.",
+        "wikiItemId": 309,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Fly_fishing_rod.png"
+      },
+      {
+        "nameEn": "Feather",
+        "amount": 200,
+        "howToGet": "Bait for the fly fishing rod: Gerrant's Fishy Business in Port Sarim, or from chickens.",
+        "wikiItemId": 314,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Feather.png"
+      }
+    ]
   },
   {
     "id": "S6-03",

@@ -61,6 +61,21 @@ public class TransportChipTest
 		assertTrue(n.getObjectNameSet().isEmpty());
 	}
 
+	private static final String COUNT_CHECK = "{\"type\":\"npc_teleport\",\"destination\":\"Stronghold of Security entrance, Barbarian Village\",\"interactionId\":0,"
+		+ "\"interactionName\":\"Count Check\",\"tile\":{\"x\":3240,\"y\":3199,\"plane\":0},\"state\":\"check\","
+		+ "\"text\":\"Count Check: one free teleport to Stronghold of Security entrance (saves ~140 tiles)\",\"chip\":\"⚡ Talk to Count Check → Stronghold of Security entrance\"}";
+
+	@Test
+	public void aOneTimeNpcTeleportPointsAtTheNpcWithItHighlighted()
+	{
+		NavTarget n = transport(COUNT_CHECK).navTarget("S1-09");
+		assertNotNull(n);
+		assertEquals(3240, n.getX());
+		assertEquals(3199, n.getY());
+		assertTrue(n.getNpcNameSet().contains(ActiveTarget.nameKey("Count Check")));
+		assertTrue(n.getObjectNameSet().isEmpty());
+	}
+
 	@Test
 	public void aCanoePointsAtTheStationWithTheStationHighlighted()
 	{

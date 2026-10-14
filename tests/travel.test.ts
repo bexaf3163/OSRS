@@ -447,11 +447,16 @@ describe('River Lum canoes and the ferries', () => {
     expect(run(11, bag(['Iron axe', 1])).find((x) => x.id === 'canoe-now')).toBeUndefined();
   });
 
-  it('without an axe the canoe is not ready: none in the bag after the bank was opened is locked, an unknown bag is only possible', () => {
-    expect(run(30, bag(['Coins', 5])).find((x) => x.id === 'canoe')!.availability).toBe('locked');
+  it('without an axe in the bag the canoe is only possible, never locked: an axe stored at a station is shared and cannot be read (since 1 April 2026)', () => {
+    // The bank was opened and holds no axe either: the player may still have one stored at a canoe station.
+    const noAxe = run(30, bag(['Coins', 5])).find((x) => x.id === 'canoe')!;
+    expect(noAxe.availability).toBe('maybe');
+    expect(noAxe.needs.find((n) => /axe/.test(n.text))!.text).toMatch(/stored at a canoe station/);
     expect(run(30, bag(['Coins', 5]), false).find((x) => x.id === 'canoe')!.availability).toBe('maybe');
     expect(run(30, null).find((x) => x.id === 'canoe')!.availability).toBe('maybe');
+    // A possible canoe is not the recommendation while a ready way exists, and an axe in the bag makes it ready.
     expect(recommendedTransport(run(30, bag(['Coins', 5])))?.type).not.toBe('canoe');
+    expect(run(30, bag(['Coins', 5], ['Steel axe', 1])).find((x) => x.id === 'canoe')!.availability).toBe('ready');
   });
 
   it('transport.json links the stations in river order and the ferries in both directions, Port Sarim to Musa Point and Rimmington to Corsair Cove', () => {

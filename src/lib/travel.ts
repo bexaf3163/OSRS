@@ -33,9 +33,26 @@ export interface CanoeType { name: string; level: number; stops: number }
 /** A ferry or a boat from pier to pier. needs: what the wiki says must be true first (a quest started), listed as "not checked" because the app cannot read it. */
 export interface Boat { id: string; name: string; from: Point & { label: string }; to: Point & { label: string }; cost: number; note?: string; needs?: string[] }
 
+/**
+ * A teleport that exists once, from a person: walk to them, talk, arrive. Whether the player already used it is not in the game's data, so it is a
+ * possible way ("maybe"), and it is dropped once the route step that uses it is closed (TravelInput.oneTimeUsed).
+ */
+export interface OneTimeWay {
+  id: string;
+  name: string;
+  at: Point & { label: string };
+  dest: Point & { label: string };
+  /** The route step that is the use of it: closed means used. */
+  usedAfter: string;
+  /** What must be true, in a few words (it is "not checked": the app cannot read it). */
+  needs: string;
+  note?: string;
+}
+
 export const TRANSPORT = transportJson as unknown as {
   checked: string;
   teleports: Teleport[];
+  oneTime?: OneTimeWay[];
   boats: Boat[];
   staves: { list: RuneStaff[] };
   canoe: { stations: CanoeStation[]; types: CanoeType[]; axes: string[] };
@@ -200,6 +217,8 @@ export interface TravelInput {
   sourceOf?: (name: string, need: number) => ItemSource | null;
   /** Called with the verdict on every fetch-first candidate: offered, or rejected with the reason. */
   onDecision?: (d: DetourDecision) => void;
+  /** The ids of one-time ways the route says were used (OneTimeWay.usedAfter closed): they are not offered again. */
+  oneTimeUsed?: readonly string[];
 }
 
 const count = (items: readonly GearItem[], names: readonly string[]): number =>
@@ -698,9 +717,10 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
     return best && best.tiles + MIN_SAVING_TILES <= direct ? best : null;
   };
   const canoeOption = (id: string, best: NonNullable<ReturnType<typeof bestCanoe>>): TravelOption => {
-    // An axe in the bag or worn is what makes the station usable; none in the bag after the bank was opened means it is not at hand.
+    // An axe in the bag or worn makes the station usable. None in the bag is not "no axe": since 1 April 2026 an axe stored at any canoe station is
+    // shared by all of them and is not read from the game, so "not carried" is unknown, never false (the fetch-first option below still offers one).
     const axes = inp.carried ? count(inp.carried, TRANSPORT.canoe.axes) : null;
-    const axeOk = needFrom(axes === null ? null : axes > 0, inp.bankSeen);
+    const axeOk: boolean | null = axes !== null && axes > 0 ? true : null;
     const levelOk = wc === undefined ? null : wc >= best.type.level;
     const a = stations[best.a];
     const b = stations[best.b];
@@ -716,10 +736,10 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
         { kind: 'walk', label: `from station ${b.name} to the target`, tiles: dist(b, inp.to) },
       ],
       walkTiles: best.tiles,
-      availability: levelOk === false || axeOk === false ? 'locked' : levelOk === null || axeOk === null ? 'maybe' : 'ready',
+      availability: levelOk === false ? 'locked' : levelOk === null || axeOk === null ? 'maybe' : 'ready',
       needs: [
         { text: `Woodcutting ${best.type.level} for ${best.type.name}${wc !== undefined ? ` (you have ${wc})` : ''}`, ok: levelOk },
-        { text: 'any axe (can be left at the station)', ok: axeOk, item: axeItem },
+        { text: 'any axe in the bag or in your hands, or one you stored at a canoe station (stored axes are shared by all stations and cannot be read)', ok: axeOk, item: axeItem },
       ],
       go: { x: a.x, y: a.y, plane: a.plane, label: `Canoe station — ${a.name}` },
     };
@@ -743,6 +763,25 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
       const now = bestCanoe((ty) => wc >= ty.level);
       if (now) pushCanoe('canoe-now', now);
     }
+  }
+
+  // One-time NPC teleports (Count Check): walk to the person, talk, arrive. Never "ready": whether the player ever entered the Stronghold is not in the
+  // game's data, so the way is possible, and it goes away when the route step that uses it is closed.
+  for (const w of TRANSPORT.oneTime ?? []) {
+    if (inp.oneTimeUsed?.includes(w.id)) continue;
+    const toNpc = dist(inp.from, w.at);
+    const tail = dist(w.dest, inp.to);
+    if (toNpc + tail + MIN_SAVING_TILES > direct) continue;
+    out.push({
+      id: w.id, title: `${w.name}: one free teleport`,
+      legs: [
+        { kind: 'walk', label: `to ${w.name} (${w.at.label})`, tiles: toNpc },
+        { kind: 'teleport', label: `${w.name} → ${w.dest.label}`, tiles: 0 },
+        { kind: 'walk', label: 'then on foot', tiles: tail },
+      ],
+      walkTiles: toNpc + tail, availability: 'maybe', needs: [{ text: w.needs, ok: null }],
+      ...(w.note ? { note: w.note } : {}), go: { x: w.at.x, y: w.at.y, plane: w.at.plane, label: w.name },
+    });
   }
 
   // Boats: pier to pier for 30 coins.

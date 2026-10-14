@@ -124,6 +124,27 @@
       { "item": "Kodai wand", "runes": ["water"], "members": true }
     ]
   },
+  "oneTime": [
+    {
+      "id": "count-check",
+      "name": "Count Check",
+      "at": {
+        "x": 3240,
+        "y": 3199,
+        "plane": 0,
+        "label": "Count Check, Lumbridge graveyard south of the church"
+      },
+      "dest": {
+        "x": 3081,
+        "y": 3420,
+        "plane": 0,
+        "label": "Stronghold of Security entrance, Barbarian Village"
+      },
+      "usedAfter": "S1-09",
+      "needs": "you never entered the Stronghold",
+      "note": "Talk-to, \"Where can I learn more about security?\", \"Yes\". One free teleport to the entrance, only once and only if you have never been to the Stronghold of Security."
+    }
+  ],
   "canoe": {
     "stations": [
       {

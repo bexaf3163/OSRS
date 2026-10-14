@@ -78,7 +78,13 @@ export interface TravelInputSources {
   chronicleCharges?: number | null;
   /** Where a missing thing can be got (the app's source router). */
   sourceOf?: (name: string, need: number) => ItemSource | null;
+  /** The one-time ways the route says were used (see oneTimeUsedOf). */
+  oneTimeUsed?: readonly string[];
 }
+
+/** The one-time ways (Count Check) whose route step is closed: they were used, or knowingly skipped, and are not offered again. */
+export const oneTimeUsedOf = (progress: { steps: Record<string, string | undefined> }): string[] =>
+  (TRANSPORT.oneTime ?? []).filter((w) => progress.steps[w.usedAfter] === 'done' || progress.steps[w.usedAfter] === 'skipped').map((w) => w.id);
 
 /** The route unlocks the fairy rings at S9-03 (Fairytale II): before that step is closed the rings are not offered. */
 export const FAIRY_RING_STEP = 'S9-03';
@@ -99,5 +105,6 @@ export function travelInputOf(s: TravelInputSources): TravelInput {
     // Free-to-play has only the standard spellbook; a members account is asked, and an unanswered question stays a thing to check.
     ...(typeof s.spellbook === 'number' ? { standardSpellbook: s.spellbook === 0 } : s.mode === 'members' && s.spellbook === null ? { standardSpellbook: null } : {}),
     ...(s.sourceOf ? { sourceOf: s.sourceOf } : {}),
+    ...(s.oneTimeUsed ? { oneTimeUsed: s.oneTimeUsed } : {}),
   };
 }

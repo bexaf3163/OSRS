@@ -55,16 +55,19 @@ describe('S3-02 Black Knights Fortress: the cabbage comes first', () => {
     const manor = bag(['Cabbage', 1967]);
     expect(itemPreflight(door, { carried: manor, from: entrance })).not.toBeNull();
     expect(countOf(manor, { item: 'Cabbage', id: 1965 })).toBe(0);
-    expect(itemPreflight(door, { carried: bag(['Cabbage', 1965]), from: entrance })).toBeNull();
-    expect(guardedDestination(door, { carried: bag(['Cabbage', 1965]), from: entrance })).toEqual(at(3016, 3514));
+    // With the field cabbage the next thing the door asks for is the food (5 pieces: the knights are aggressive); with both the door is open.
+    expect(itemPreflight(door, { carried: bag(['Cabbage', 1965]), from: entrance })!.item).toBe('Trout');
+    const ready = bag(['Cabbage', 1965], ['Trout', 333, 5]);
+    expect(itemPreflight(door, { carried: ready, from: entrance })).toBeNull();
+    expect(guardedDestination(door, { carried: ready, from: entrance })).toEqual(at(3016, 3514));
   });
 
   it('both stages that enter the fortress and the hole line carry the guard', () => {
     const doors = rows.filter((r) => r.step === 'S3-02' && r.line.k === 'enterFortress');
     expect(doors).toHaveLength(2);
-    for (const r of [...doors, ...rows.filter((x) => x.step === 'S3-02' && x.line.k === 'useCabbageOnHole')]) {
-      expect(r.line.pre, `${r.step} stage ${r.stage}`).toEqual([expect.objectContaining({ item: 'Cabbage', id: 1965, at: [3058, 3290, 0] })]);
-    }
+    const cabbage = expect.objectContaining({ item: 'Cabbage', id: 1965, at: [3058, 3290, 0] });
+    for (const r of doors) expect(r.line.pre, `${r.step} stage ${r.stage}`).toEqual([cabbage, expect.objectContaining({ item: 'Trout', n: 5 })]);
+    for (const r of rows.filter((x) => x.step === 'S3-02' && x.line.k === 'useCabbageOnHole')) expect(r.line.pre, `${r.step} stage ${r.stage}`).toEqual([cabbage]);
   });
 
   it('a cabbage in the bank turns the arrow to the nearest bank instead of the field', () => {
@@ -118,11 +121,12 @@ describe('the quests named in the audit', () => {
 
   it('Demon Slayer: the bucket of water before the drain, Silverlight before Delrith', () => {
     expect(items('S3-03', 'useFilledBucketOnDrain')).toEqual(['Bucket of water']);
-    expect(items('S3-03', 'killDelrithStep')).toEqual(['Silverlight']);
+    expect(items('S3-03', 'killDelrithStep')).toEqual(['Silverlight', 'Trout']);
     const delrith = itemPreflight(lineOf('S3-03', 'killDelrithStep'), { carried: bag(['Bucket', 1925]), from: at(3227, 3370) })!;
     expect(delrith.target).toMatchObject({ x: 3203, y: 3472 });
     expect(delrith.npc).toBe('Sir Prysin');
-    expect(itemPreflight(lineOf('S3-03', 'killDelrithStep'), { carried: bag(['Silverlight', 2402]), from: at(3227, 3370) })).toBeNull();
+    expect(itemPreflight(lineOf('S3-03', 'killDelrithStep'), { carried: bag(['Silverlight', 2402]), from: at(3227, 3370) })!.item).toBe('Trout');
+    expect(itemPreflight(lineOf('S3-03', 'killDelrithStep'), { carried: bag(['Silverlight', 2402], ['Trout', 333, 5]), from: at(3227, 3370) })).toBeNull();
   });
 
   it("The Knight's Sword: the pie before Thurgo, blurite ore and two iron bars before the smithing", () => {
@@ -131,7 +135,9 @@ describe('the quests named in the audit', () => {
   });
 
   it('Vampyre Slayer: garlic, a stake and a hammer before the manor trapdoor', () => {
-    for (const k of ['enterDraynorManor', 'goDownToBasement', 'openCoffin']) expect(items('S2-08', k), k).toEqual(['Garlic', 'Stake', 'Hammer']);
+    // The manor door also asks for the food: Count Draynor and the manor monsters hit for several points a turn.
+    expect(items('S2-08', 'enterDraynorManor')).toEqual(['Garlic', 'Stake', 'Hammer', 'Trout']);
+    for (const k of ['goDownToBasement', 'openCoffin']) expect(items('S2-08', k), k).toEqual(['Garlic', 'Stake', 'Hammer']);
     const b = itemPreflight(lineOf('S2-08', 'goDownToBasement'), { carried: bag(['Garlic', 1550], ['Hammer', 2347]), from: at(3116, 3358) })!;
     expect(b.item).toBe('Stake');
     expect(b.target).toMatchObject({ x: 3222, y: 3397 });
@@ -150,9 +156,12 @@ describe('the quests named in the audit', () => {
     expect(items('S5-04', 'goIntoDwarvenMine')).toEqual(['Silk', 'Lobster pot', 'Unfired bowl', "Wizard's mind bomb"]);
     expect(items('S5-04', 'useMindBombOnDoor')).toEqual(["Wizard's mind bomb"]);
     const ship = lineOf('S5-08', 'boardShipToGo');
-    expect(namesOf(ship)).toEqual(['Anti-dragon shield']);
-    // Worn counts as carried: the plugin merges the bag and the worn items.
-    expect(itemPreflight(ship, { carried: bag(['Anti-dragon shield', 1540]), from: at(3047, 3205) })).toBeNull();
+    expect(namesOf(ship)).toEqual(['Anti-dragon shield', 'Lobster']);
+    // Worn counts as carried: the plugin merges the bag and the worn items. The shield is asked for first, then 20 pieces of food: nothing on Crandor sells any.
+    const kit = bag(['Anti-dragon shield', 1540], ['Swordfish', 373, 20]);
+    expect(itemPreflight(ship, { carried: kit, from: at(3047, 3205) })).toBeNull();
+    expect(itemPreflight(ship, { carried: bag(['Anti-dragon shield', 1540]), from: at(3047, 3205) })!.item).toBe('Lobster');
+    expect(itemPreflight(ship, { carried: bag(['Anti-dragon shield', 1540], ['Lobster', 379, 19]), from: at(3047, 3205) })!.need).toBe(20);
     expect(itemPreflight(ship, { carried: [], from: at(3047, 3205) })!.target).toMatchObject({ x: 3211, y: 3223, plane: 1 });
   });
 
@@ -250,5 +259,39 @@ describe('the data of the guards', () => {
 
   it('the chip says what is missing and to turn back', () => {
     expect(missingChip('Stake')).toBe('⚠ Missing Item: Stake - Turn back!');
+  });
+});
+
+// The audit's rule for dangerous encounters: food is asked for BEFORE the dangerous entry, on the stage's own list (what the game screen shows) and
+// as a guard on the entry line, not only inside the fight (a player died at the Ancient Guardian because the stage before it said "nothing").
+describe('food before a dangerous entry', () => {
+  const FOOD = ['Trout', 'Salmon', 'Tuna', 'Lobster', 'Swordfish', 'Monkfish', 'Shark'];
+  const ENTRIES: [string, number, string][] = [
+    ['S2-07', 6, 'enterDungeon'], ['S2-08', 2, 'enterDraynorManor'], ['S3-02', 1, 'enterFortress'], ['S3-02', 2, 'enterFortress'],
+    ['S3-03', 2, 'killDelrithStep'], ['S3-04', 30, 'reenterDungeon'], ['S4-01', 52, 'killIthoi'], ['S4-02', 18, 'openBullPen'],
+    ['S5-08', 0, 'boardShipToGo'], ['S7-02', 4, 'openCell'], ['S7-03', 7, 'talkToTheWarlord'], ['S7-05', 130, 'climbDownTrapDoor'],
+    ['S8-01', 2, 'killTheDog'], ['S8-02', 1, 'enterSwamp'], ['S9-02', 70, 'enterZanarisForFight'], ['S9-04', 5, 'prepareForBattle'],
+  ];
+
+  it('each entry line has a food guard of at least five pieces and its stage row lists the food', () => {
+    for (const [id, at_, k] of ENTRIES) {
+      const row = stepById.get(id)!.questStages!.stages.find((s) => s.at === at_);
+      expect(row, `${id}@${at_}`).toBeDefined();
+      const line = row!.do.find((l) => l.k === k);
+      expect(line, `${id}@${at_}:${k}`).toBeDefined();
+      const guard = (line!.pre ?? []).find((p) => FOOD.includes(p.item));
+      expect(guard, `${id}@${at_}:${k} guard`).toBeDefined();
+      expect(guard!.n ?? 1, `${id}@${at_}:${k} count`).toBeGreaterThanOrEqual(5);
+      expect((row!.items ?? []).some((i) => FOOD.includes(i.name)), `${id}@${at_} row list`).toBe(true);
+    }
+  });
+
+  it('the guard counts any listed food, in pieces, and an unread bag blocks nothing', () => {
+    const line = lineOf('S4-01', 'killIthoi');
+    const mixed = bag(['Lobster', 379, 4], ['Swordfish', 373, 3], ['Salmon', 329, 3]);
+    expect(itemPreflight(line, { carried: mixed, from: at(2578, 2838) })).toBeNull();
+    const few = bag(['Lobster', 379, 4]);
+    expect(itemPreflight(line, { carried: few, from: at(2578, 2838) })!).toMatchObject({ item: 'Salmon', need: 10, have: 4 });
+    expect(itemPreflight(line, { carried: null, from: at(2578, 2838) })).toBeNull();
   });
 });

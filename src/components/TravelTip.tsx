@@ -10,7 +10,7 @@ import { usePlayerState } from '../playerStateContext';
 import { checkStatus } from '../services/runeliteBridge';
 import { stepPlaces } from '../lib/stepPlaces';
 import { travelOptions, type Point } from '../lib/travel';
-import { fairyRingsUnlocked, travelInputOf } from '../lib/travelInput';
+import { fairyRingsUnlocked, oneTimeUsedOf, travelInputOf } from '../lib/travelInput';
 import { travelTip } from '../lib/tips';
 import { isOverworld } from '../lib/instances';
 import { lastTransport, subscribeTransport, transportSources } from '../lib/liveTransport';
@@ -42,7 +42,7 @@ export function TravelTip({ step }: { step: Step }) {
   }
   if (!live || !places.length || !seen || seen.stepId !== step.id || !seen.pos || !isOverworld(seen.pos) || !isOverworld(places[0])) return null;
   const options = travelOptions(travelInputOf({
-    from: seen.pos, to: places[0], levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: seen.homeCooldown, fairyRings: fairyRingsUnlocked(progress),
+    from: seen.pos, to: places[0], levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: seen.homeCooldown, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress),
     ...(seen.homeKnown !== null ? { homeCooldownKnown: seen.homeKnown } : {}), spellbook: seen.spellbook, chronicleCharges: seen.charges, sourceOf: transportSources(player, prices.priceOf),
   }));
   const tip = travelTip(options);

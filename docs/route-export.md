@@ -1,4 +1,4 @@
-# OSRS Path - full route export (app version 2.54.0)
+# OSRS Path - full route export (app version 2.54.1)
 
 Exported 2026-10-14 from the program's data files (steps.json, questStages.json, stages.json, goals.json). Every step is written out with everything the program shows for it: where to go, what to bring and where each item comes from, the quick options, the walkthrough, what the game plugin highlights and when it ticks the step off by itself, and, for quests, the stage table line by line (what the game shows for each value of the quest variable).
 
@@ -1741,10 +1741,12 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
         - Iron bar x2 - From step S2-01.
         - Bronze pickaxe - Any pickaxe from the bank; the bronze one from Tutorial Island works.
         - Blurite ore - Mine it in the Asgarnian Ice Dungeon at Mudskipper Point. [obtained during the stage]
+        - Trout x10 - 10 or more, or better food you already own: the Ice Dungeon has ice warriors that hit hard and no bank inside. [or Salmon, Tuna, Lobster, Swordfish, Monkfish, Shark]
       1. Go down the ladder south of Port Sarim. Be prepared for ice giants and ice warriors to attack you.
          In the game list: Climb down to the Asgarnian Ice Dungeon
          - at 3008, 3150, plane 0
          - highlighted: object ids 1738
+         - must have: Trout x10 (or Salmon, Tuna, Lobster, Swordfish, Monkfish, Shark) - bank or Grand Exchange
          - key enterDungeon
       2. Mine a blurite ore in the eastern cavern.
          In the game list: Mine a blurite ore in the eastern cavern
@@ -1846,6 +1848,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
         - Garlic - From the cupboard upstairs in Morgan's house. [obtained during the stage]
         - Stake - Given by Dr. Harlow in the Blue Moon Inn after you give him a beer. [obtained during the stage]
         - Hammer - Buy from the General Store north of the Blue Moon Inn in Varrock for 1 gp.
+        - Trout x10 - 10 or more, or better food you already own: count Draynor and the manor monsters hit for several points a turn and there is no bank inside. [or Salmon, Tuna, Lobster, Swordfish, Monkfish, Shark]
       1. Buy a beer from the bartender in the Blue Moon Inn in Varrock. Dialogue: “A glass of your finest ale please”.
          In the game list: Buy a beer from the Blue Moon Inn bartender
          - done when the bag has: Beer
@@ -1866,6 +1869,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - must have: Garlic - get it at 3098, 3268, plane 1 (Take Garlic from the cupboard on the first floor of Morgan's house)
          - must have: Stake - get it at 3222, 3397, plane 0 (Get the Stake from Dr Harlow (buy him a Beer)), NPC Dr Harlow
          - must have: Hammer - bank or Grand Exchange
+         - must have: Trout x10 (or Salmon, Tuna, Lobster, Swordfish, Monkfish, Shark) - bank or Grand Exchange
          - key enterDraynorManor
       4. Enter Draynor Manor's basement.
          In the game list: Go down to the Draynor Manor basement
@@ -2838,11 +2842,13 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
         - Iron chainbody - Buy from Horvik in Varrock or Wayne in Falador.
         - Bronze med helm - From step S2-11, or buy from the helmet shop in Barbarian Village.
         - Cabbage - Pick from the cabbage field south of Falador; the cabbage from Draynor Manor will not work! [obtained during the stage]
+        - Trout x5 - 5 or more, or better food you already own: the Black Knights are aggressive inside the fortress. [or Salmon, Tuna, Lobster, Swordfish, Monkfish, Shark]
       1. Enter the Black Knights' Fortress. Be prepared for multiple level 33 Black Knights to attack you.
          In the game list: Enter the Black Knights' Fortress (iron chainbody, bronze med helm)
          - at 3016, 3514, plane 0
          - highlighted: object ids 2337
          - must have: Cabbage - get it at 3058, 3290, plane 0 (Pick Cabbage south of Falador (do NOT pick Draynor cabbage)), objects Cabbage
+         - must have: Trout x5 (or Salmon, Tuna, Lobster, Swordfish, Monkfish, Shark) - bank or Grand Exchange
          - key enterFortress
       2. Push the wall to enter a secret room.
          In the game list: Push the wall to enter the secret room
@@ -2890,11 +2896,13 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
         - Iron chainbody - Buy from Horvik in Varrock or Wayne in Falador.
         - Bronze med helm - From step S2-11, or buy from the helmet shop in Barbarian Village.
         - Cabbage - Pick from the cabbage field south of Falador; the cabbage from Draynor Manor will not work! [obtained during the stage]
+        - Trout x5 - 5 or more, or better food you already own: the Black Knights are aggressive inside the fortress. [or Salmon, Tuna, Lobster, Swordfish, Monkfish, Shark]
       1. Enter the Black Knights' Fortress. Be prepared for multiple level 33 Black Knights to attack you.
          In the game list: Enter the Black Knights' Fortress (iron chainbody, bronze med helm)
          - at 3016, 3514, plane 0
          - highlighted: object ids 2337
          - must have: Cabbage - get it at 3058, 3290, plane 0 (Pick Cabbage south of Falador (do NOT pick Draynor cabbage)), objects Cabbage
+         - must have: Trout x5 (or Salmon, Tuna, Lobster, Swordfish, Monkfish, Shark) - bank or Grand Exchange
          - key enterFortress
       2. Climb back up the ladder from the listening room.
          In the game list: Climb up out of the listening room
@@ -3021,6 +3029,8 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - key talkToPrysin
   - Value 2 and above:
       Go to: Captain Rovin — top of Varrock Castle (3205, 3498, plane 2), NPC Captain Rovin
+      Items for this stage:
+        - Trout x5 - 5 or more, or better food you already own: the dark wizards at the stone circle and Delrith hit for several points a turn. [or Salmon, Tuna, Lobster, Swordfish, Monkfish, Shark]
       1. Talk to Captain Rovin upstairs in the north west of Varrock Castle. Dialogue: “Yes I know, but this is important” → “There's a demon who wants to invade this city” → “Yes, very” → “It's not them who are going to fight the demon, it's me” → “Sir Prysin said you would give me the key” → “Why did he give you one of the keys then?”.
          In the game list: Talk to Captain Rovin (NW Varrock Castle, top floor)
          - at 3205, 3498, plane 2
@@ -3057,6 +3067,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - at 3227, 3370, plane 0
          - highlighted: NPC ids 5079
          - must have: Silverlight - get it at 3203, 3472, plane 0 (Get Silverlight back from Sir Prysin), NPC Sir Prysin
+         - must have: Trout x5 (or Salmon, Tuna, Lobster, Swordfish, Monkfish, Shark) - bank or Grand Exchange
          - key killDelrithStep
 
 ### S3-04 - Below Ice Mountain
@@ -3773,11 +3784,13 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - key talkToTockShip3
   - Value 52 and above:
       Go to: Ithoi — south-western hut (2529, 2840, plane 1), NPC Ithoi the Navigator
-      Items for this stage: none
+      Items for this stage:
+        - Salmon x10 - 10 or more, or better food you already own: ithoi hits hard and there is no bank on the way. [or Trout, Tuna, Lobster, Swordfish, Monkfish, Shark]
       1. Kill Ithoi (level 35). Eat when your health is below 15.
          In the game list: Kill Ithoi (level 35); eat below 15 health
          - at 2529, 2840, plane 1
          - highlighted: NPC ids 7964
+         - must have: Salmon x10 (or Trout, Tuna, Lobster, Swordfish, Monkfish, Shark) - bank or Grand Exchange
          - key killIthoi
   - Value 55 and above:
       Go to: Captain Tock — ship (2574, 2835, plane 1), NPC Captain Tock
@@ -3931,9 +3944,12 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - key talkToGillieAfterDrink
   - Value 18 and above:
       Go to: Bull pen — cow field (3262, 3294, plane 0)
+      Items for this stage:
+        - Salmon x5 - 5 or more, or better food you already own: the bull and Brutus hit for several points a turn; Brutus special attacks are avoided by moving, not by eating. [or Trout, Tuna, Lobster, Swordfish, Monkfish, Shark]
       1. Open the bull pen gate in the north-east corner of the cow field to fight the Bull (level 30). Dialogue: “Yes”.
          In the game list: Open the bull pen gate (NE), fight the bull (level 30)
          - at 3262, 3294, plane 0
+         - must have: Salmon x5 (or Trout, Tuna, Lobster, Swordfish, Monkfish, Shark) - bank or Grand Exchange
          - key openBullPen
   - Value 20 and above:
       Go to: Talk to Gillie Groats after beating the bull (3253, 3270, plane 0)
@@ -4548,6 +4564,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - at 3047, 3205, plane 0
          - highlighted: object ids 2593; items Anti-dragon shield
          - must have: Anti-dragon shield - get it at 3211, 3223, plane 1 (Get the Anti-dragon shield from Duke Horacio in Lumbridge Castle), NPC Duke Horacio
+         - must have: Lobster x20 (or Swordfish, Shark, Monkfish, Tuna) - bank or Grand Exchange
          - key boardShipToGo
       2. Talk to Ned on the deck. Dialogue: “Yes, let's go!”.
          In the game list: Ship deck: talk to Ned to sail to Crandor
@@ -4634,15 +4651,20 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
 ### S6-02 - Fishing to 50 and Cooking to 50
 
 - stage 6 (Optional: earn a Bond in F2P (skip it if you already have membership)); type skill; optional; the way to a Bond (skipped on a members account)
-- Where: 40-50: lobsters at Musa Point (Karamja). From 50: swordfish (Swordfish) with a harpoon in the same place. Cook on the range in Al Kharid.
+- Where: 1-20: net fishing at Draynor Village. 20-40: fly fishing at Barbarian Village. 40-50: lobsters at Musa Point (Karamja). From 50: swordfish (Swordfish) with a harpoon in the same place. Cook on the range in Al Kharid.
 - Floor: Ground floor
 - Map: Lobsters and swordfish at Musa Point (2923, 3180, plane 0)
+- Fishing 1-40 first: The route reaches this step at Fishing 1, so lobsters (level 40) are the end of the climb, not the start. 1-20: net shrimps at the Draynor Village spots (anchovies from 15). 20-40: fly fish at the Barbarian Village spots with a fly fishing rod and feathers (trout from 20, salmon from 30). Tuna with a harpoon at Musa Point is open from 35. Cook what you catch for the Cooking half, or drop it; raw fish sells for little.
 - Important: Swordfish can only be caught from Fishing 50 and cooked from Cooking 45. Before that, lobsters (from 40) or tuna with a harpoon (from 35).
 - Optional: One of the ways to earn towards a Bond. Skip it if another way pays you better.
 - Done when: Fishing 50, Cooking 50.
 - Items required:
   - Lobster pot x1 - For lobsters up to 50. [item id 301]
   - Harpoon x1 - For tuna and swordfish. From Gerrant in Port Sarim it is 5 gp (about 450 gp on the Grand Exchange). [item id 311]
+- Items recommended:
+  - Small fishing net x1 - Fishing 1-20: Gerrant's Fishy Business in Port Sarim. [item id 303]
+  - Fly fishing rod x1 - Fishing 20-40: Gerrant's Fishy Business in Port Sarim. [item id 309]
+  - Feather x200 - Bait for the fly fishing rod: Gerrant's Fishy Business in Port Sarim, or from chickens. [item id 314]
 - In the game (RuneLite plugin):
   - NPCs highlighted: Fishing spot
   - Objects highlighted: Range
@@ -5100,6 +5122,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
       Items for this stage:
         - Khazard helmet - Take from the chest in the arena's armoury during the quest. [obtained during the stage]
         - Khazard armour - Take from the chest in the arena's armoury during the quest. [obtained during the stage]
+        - Lobster x10 - 10 or more, or better food you already own: the Khazard Ogre and the arena creatures hit up to 20 and there is no bank in the arena. [or Trout, Salmon, Tuna, Swordfish, Monkfish, Shark]
       1. Search the chest to the east for some Khazard armour.
          In the game list: Search the chest to the east for Khazard armour
          - at 2613, 3189, plane 0
@@ -5115,6 +5138,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          In the game list: Fight prep: unlock Sammy's cell; Khazard Ogre (level 63) first
          - at 2617, 3167, plane 0
          - highlighted: object ids 80
+         - must have: Lobster x10 (or Trout, Salmon, Tuna, Swordfish, Monkfish, Shark) - bank or Grand Exchange
          - key openCell
   - Value 6 and above:
       Go to: Khazard Arena (2601, 3163, plane 0)
@@ -5277,11 +5301,13 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - key returnFirstOrb
   - Value 7 and above:
       Go to: Khazard warlord — south-west of West Ardougne (2456, 3301, plane 0), NPC Khazard warlord
-      Items for this stage: none
+      Items for this stage:
+        - Lobster x10 - 10 or more, or better food you already own: the Khazard warlord (level 112) hits hard and there is no bank nearby. [or Trout, Salmon, Tuna, Swordfish, Monkfish, Shark]
       1. Talk to the Khazard warlord, south west of West Ardougne, ready to fight him.
          In the game list: Talk to the Khazard warlord (SW of West Ardougne); ready to fight
          - at 2456, 3301, plane 0
          - highlighted: NPC ids 7621
+         - must have: Lobster x10 (or Trout, Salmon, Tuna, Swordfish, Monkfish, Shark) - bank or Grand Exchange
          - key talkToTheWarlord
       2. Defeat the Khazard warlord and retrieve orbs.
          In the game list: Defeat the Khazard warlord (level 112), take the orbs
@@ -5510,10 +5536,12 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - highlighted: object ids 16683/2447/2440/2441/2442/2443
          - key placeTwigs
   - Value 130 and above:
-      Items for this stage: none
+      Items for this stage:
+        - Lobster x10 - 10 or more, or better food you already own: the Black demon (level 172) hits hard; fight it from range and eat before you are low. [or Trout, Salmon, Tuna, Swordfish, Monkfish, Shark]
       1. Go down the trap door. Be prepared for the fight against a Black Demon (level 172).
          In the game list: Go down the trapdoor; prepare for the Black demon (level 172)
          - highlighted: object ids 26243
+         - must have: Lobster x10 (or Trout, Salmon, Tuna, Swordfish, Monkfish, Shark) - bank or Grand Exchange
          - key climbDownTrapDoor
       2. Kill the black Demon. You can safespot from where Glough stands.
          In the game list: Kill the Black demon: stand north of the stairs, attack from range
@@ -5614,11 +5642,13 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - key goToTemple
   - Value 2 and above:
       Go to: Temple Guardian — temple dungeon (3405, 9901, plane 0)
-      Items for this stage: none
+      Items for this stage:
+        - Lobster x10 - 10 or more, or better food you already own: the Temple Guardian is immune to magic and hits for several points a turn. [or Trout, Salmon, Tuna, Swordfish, Monkfish, Shark]
       1. Kill the Temple Guardian (level 30). It is immune to magic so you will need to use either ranged or melee.
          In the game list: Kill the Temple Guardian (level 30): melee or ranged only
          - at 3405, 9901, plane 0
          - highlighted: NPC ids 7620
+         - must have: Lobster x10 (or Trout, Salmon, Tuna, Swordfish, Monkfish, Shark) - bank or Grand Exchange
          - key killTheDog
   - Value 3 and above:
       Go to: King Roald — Varrock Castle (3222, 3473, plane 0), NPC King Roald
@@ -5833,10 +5863,12 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
       Go to: Mort Myre north gate (3444, 3458, plane 0)
       Items for this stage:
         - Ghostspeak amulet - From The Restless Ghost.
+        - Lobster x15 - 15 or more, or better food you already own: the ghasts of Mort Myre hit through the swamp and there is no bank near the Grotto. [or Trout, Salmon, Tuna, Swordfish, Monkfish, Shark]
       1. Enter the Mort Myre from the north gate.
          In the game list: Enter Mort Myre through the north gate
          - at 3444, 3458, plane 0
          - highlighted: object ids 3506
+         - must have: Lobster x15 (or Trout, Salmon, Tuna, Swordfish, Monkfish, Shark) - bank or Grand Exchange
          - key enterSwamp
   - Value 10 and above:
       Go to: Grotto — south Mort Myre (3440, 3337, plane 0)
@@ -6100,7 +6132,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   10. Give the two undead chickens to Ava.
   11. Talk to the witch in the manor twice.
   12. Go to the iron mine in Rimmington north-east of the house portal.
-  13. While looking north, use the hammer on the selected iron ore.
+  13. While looking north, use the hammer on the Selected iron.
   14. Give the bar magnet to Ava.
   15. Try to chop an undead tree outside Draynor Manor.
   16. Talk to Turael in Burthorpe twice, giving him the mithril axe and holy symbol. Dialogue: “I'm here about a quest” → “Hello, I'm here about those trees again” → “I'd love one, thanks”.
@@ -6127,7 +6159,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   - The magnet
       1. Talk to the witch in the manor twice.
       2. Go to the iron mine in Rimmington north-east of the house portal.
-      3. While looking north, use the hammer on the selected iron ore.
+      3. While looking north, use the hammer on the Selected iron.
       4. Give the bar magnet to Ava.
   - Undead twigs
       1. Try to chop an undead tree outside Draynor Manor.
@@ -6259,7 +6291,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - at 2978, 3240, plane 0
          - key goToIronMine
       2. While looking north, use the hammer on the Selected iron.
-         In the game list: Face north, use the hammer on the selected iron ore
+         In the game list: Face north, use the hammer on the Selected iron
          - highlighted: items Hammer/Selected Iron
          - key useHammerOnMagnet
       3. Give the Bar magnet to Ava.
@@ -6625,10 +6657,13 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - key talkToSpirit
   - Value 70 and above:
       Go to: Go to Zanaris, ready to fight the Tanglefoot (3202, 3169, plane 0)
+      Items for this stage:
+        - Lobster x10 - 10 or more, or better food you already own: the Tanglefoot hits hard and cannot be skipped. [or Trout, Salmon, Tuna, Swordfish, Monkfish, Shark]
       1. Travel to Zanaris, ready to fight the Tanglefoot.
          In the game list: Go to Zanaris, ready to fight the Tanglefoot
          - at 3202, 3169, plane 0
          - highlighted: object ids 2406
+         - must have: Lobster x10 (or Trout, Salmon, Tuna, Swordfish, Monkfish, Shark) - bank or Grand Exchange
          - key enterZanarisForFight
       2. Enter the tanglefoot lair in the south of Zanaris, near the cosmic altar.
          In the game list: Enter the Tanglefoot lair (south Zanaris)
@@ -7352,6 +7387,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - key talkToGarkorForSigil
       2. Prepare to fight the Jungle Demon. Once you're ready, equip the 10th squad sigil.
          In the game list: Prepare for the Jungle Demon; equip the 10th squad sigil
+         - must have: Lobster x15 (or Trout, Salmon, Tuna, Swordfish, Monkfish, Shark) - bank or Grand Exchange
          - key prepareForBattle
       3. Kill the Jungle Demon. Use Protect from Magic and keep your distance to kill it safely.
          In the game list: Kill the Jungle Demon: Protect from Magic, keep your distance

@@ -262,7 +262,7 @@ Asked for by the owner after Shield of Arrav's card stayed on "Talk to Reldo" in
 - Places added from the project's own data: S6-03, S8-03, S8-04. S6-04 (Magic) has no place on purpose.
 - Every QUEST_COMPLETED name matches a RuneLite quest (`RouteTargetsTest` checks it).
 
-## Codex audit pack (2026-10-14) — status after 2.54.0
+## Codex audit pack (2026-10-14) — status after 2.54.1
 
 The pack (`OSRS-Path-Full-Audit-2.53.0-EN.md` + a mega-prompt) was written against the 2.53.0 export. It is a backlog, not a task to run whole; each
 item is checked against the current data and the OSRS Wiki before it changes. Evidence is kept in four kinds: **implemented**, **automated** (tests),
@@ -286,6 +286,18 @@ item is checked against the current data and the OSRS Wiki before it changes. Ev
   goals range through `validate.ts`), S8-05 (wear Ava's), S9-04 (Attack 60, wield). Their `doneWhen` text now matches the trigger.
 - Carryover (S1-03, S1-04, S1-08, S1-12, S2-11) was already in the app; the route export now prints the real trigger ("and holding ...").
 - `docs/route-reorder-proposal.md`: the reorder, documented, not done.
+- 2.54.1, food before dangerous entries: row `items` and a `pre` guard (min 5 pieces, any of Trout/Salmon/Tuna/Lobster/Swordfish/Monkfish/Shark) on the
+  entry line of S2-07, S2-08, S3-02 (two rows), S3-03, S3-04, S4-01, S4-02, S5-08 (20), S7-02, S7-03, S7-05, S8-01, S8-02, S9-02, S9-04. The list is pinned in
+  `tests/questPreflight.test.ts` "food before a dangerous entry". Counts for S3-03, S7-03, S7-05, S8-01 are my own conservative numbers (the step data had no
+  food); the others follow the step's own recommended food. Not guarded: S7-01 (phased loadouts already ask for food), S9-01 (no encounter entry line verified).
+- 2.54.1, transport:
+  - Canoe axe: a not-carried axe is "possible", never "locked" (`travel.ts` canoeOption): stored axes are shared across stations since 1 April 2026 and
+    unreadable. Test: `tests/travel.test.ts` "without an axe in the bag the canoe is only possible".
+  - Count Check: `transport.json` `oneTime[]` (`OneTimeWay`), built in `travelOptions` after the canoe, id `count-check`, state "check"; dropped once
+    `usedAfter` (S1-09) is closed (`oneTimeUsedOf(progress)` is passed by TravelPlan, TravelTip and PrepSync into `TravelInput.oneTimeUsed`).
+    Recommendation type `npc_teleport`; the plugin treats it as a person to talk to (`PrepPlan.interactsWithNpc`). Tests: `tests/oneTimeWay.test.ts`,
+    `TransportChipTest.aOneTimeNpcTeleportPointsAtTheNpcWithItHighlighted`.
+  - S6-02: "Fishing 1-40 first" field, `where`, recommended net / fly rod / feathers (Gerrant's Fishy Business).
 
 ### Automated
 
@@ -297,6 +309,10 @@ Not yet for these groups (see the final report of the session that shipped them)
 
 ### Open
 
-- Fishing 1-40 before lobsters (S6-02); transport: stored canoe axes, River Dougne, missing-rune preparation, resumption after travel.
+- Not modelled on purpose (no verified coordinates or order, or unreadable state): River Dougne canoes (5 stations, 1 April 2026: the wiki's two pages
+  disagree on names and on Members-only, and give no tiles), spirit trees, gnome gliders, the Cowbell amulet as a planner way (charges unreadable; the
+  engine's charge logic is Chronicle-only: `inp.chronicleCharges`).
+- Resumption of the quest objective after travel, missing-rune preparation and the three states are the 2.52/2.53 pipeline (`PrepSync`, `travelSupplies`);
+  not re-verified in the live game in this group.
 - The pack's other P1/P2 items not listed above are unchanged and unverified.
 - Not adopted: a 67-step ledger and a single mega-release; reordering (see the proposal).

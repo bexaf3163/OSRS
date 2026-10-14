@@ -8,7 +8,7 @@
 import { TILES_PER_SECOND, NET, TRANSPORT, effectiveTiles, shortOf, shortOnHand, stopText, type Point, type PrepStop, type TravelOption } from './travel';
 import { TIP_MIN_SAVING_TILES } from './tips';
 
-export type TransportType = 'item_teleport' | 'tablet' | 'spell_teleport' | 'fairy_ring' | 'charter_ship' | 'canoe' | 'ferry';
+export type TransportType = 'item_teleport' | 'tablet' | 'spell_teleport' | 'fairy_ring' | 'charter_ship' | 'canoe' | 'ferry' | 'npc_teleport';
 /** ready: usable now. check: usable if what the app cannot see is fine (charges, a cooldown, a quest). prepare: usable after the listed stop. */
 export type TransportState = 'ready' | 'check' | 'prepare';
 
@@ -215,6 +215,14 @@ export function recommendedTransport(options: readonly TravelOption[]): Recommen
     const npc = npcsIn(boat.from.label)[0];
     const to = placeOf(boat.to.label);
     return finish({ type: 'ferry', destination: boat.to.label, ...(npc ? { interactionName: npc } : {}), tile: boat.from, text: `Boat: ${boat.name} ${tail}`, chip: chipOf(npc ? `Ferry: talk to ${npc} → ${to}` : `Ferry → ${to}`) }, npc ? `Ferry: talk to ${npc} → ${to}` : `Ferry → ${to}`, `The ferry to ${to}`);
+  }
+  const once = TRANSPORT.oneTime?.find((w) => w.id === id);
+  if (once) {
+    const to = placeOf(once.dest.label);
+    const use = `Talk to ${once.name} → ${to}`;
+    return finish({
+      type: 'npc_teleport', destination: once.dest.label, interactionName: once.name, tile: once.at, text: `${once.name}: one free teleport to ${to} ${tail}`, chip: chipOf(use),
+    }, use, once.name);
   }
   const spell = TRANSPORT.teleports.find((t) => t.id === id);
   if (spell) {

@@ -3550,6 +3550,7 @@
          1738
         ]
        },
+       "pre": [{"item": "Trout", "id": 333, "n": 10, "alt": ["Salmon", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"], "t": "The Ice Dungeon has ice warriors that hit hard and no bank inside"}],
        "k": "enterDungeon"
       },
       {
@@ -3624,6 +3625,13 @@
        "id": 668,
        "where": "Mine it in the Asgarnian Ice Dungeon at Mudskipper Point.",
        "inStep": true
+      },
+      {
+       "name": "Trout",
+       "id": 333,
+       "count": 10,
+       "alt": ["Salmon", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"],
+       "where": "10 or more, or better food you already own: the Ice Dungeon has ice warriors that hit hard and no bank inside."
       }
      ]
     }
@@ -3791,7 +3799,12 @@
          134
         ]
        },
-       "pre": [{"item": "Garlic", "id": 1550, "at": [3098, 3268, 1], "t": "Take Garlic from the cupboard on the first floor of Morgan's house"}, {"item": "Stake", "id": 1549, "at": [3222, 3397, 0], "t": "Get the Stake from Dr Harlow (buy him a Beer)", "npc": "Dr Harlow"}, {"item": "Hammer", "id": 2347}],
+       "pre": [
+        {"item": "Garlic", "id": 1550, "at": [3098, 3268, 1], "t": "Take Garlic from the cupboard on the first floor of Morgan's house"},
+        {"item": "Stake", "id": 1549, "at": [3222, 3397, 0], "t": "Get the Stake from Dr Harlow (buy him a Beer)", "npc": "Dr Harlow"},
+        {"item": "Hammer", "id": 2347},
+        {"item": "Trout", "id": 333, "n": 10, "alt": ["Salmon", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"], "t": "Count Draynor and the manor monsters hit for several points a turn and there is no bank inside"}
+       ],
        "k": "enterDraynorManor"
       },
       {
@@ -3851,6 +3864,13 @@
        "name": "Hammer",
        "id": 2347,
        "where": "Buy from the General Store north of the Blue Moon Inn in Varrock for 1 gp."
+      },
+      {
+       "name": "Trout",
+       "id": 333,
+       "count": 10,
+       "alt": ["Salmon", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"],
+       "where": "10 or more, or better food you already own: count Draynor and the manor monsters hit for several points a turn and there is no bank inside."
       }
      ]
     }
@@ -5967,7 +5987,10 @@
          2337
         ]
        },
-       "pre": [{"item": "Cabbage", "id": 1965, "at": [3058, 3290, 0], "t": "Pick Cabbage south of Falador (do NOT pick Draynor cabbage)", "on": ["Cabbage"]}],
+       "pre": [
+        {"item": "Cabbage", "id": 1965, "at": [3058, 3290, 0], "t": "Pick Cabbage south of Falador (do NOT pick Draynor cabbage)", "on": ["Cabbage"]},
+        {"item": "Trout", "id": 333, "n": 5, "alt": ["Salmon", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"], "t": "The Black Knights are aggressive inside the fortress"}
+       ],
        "k": "enterFortress"
       },
       {
@@ -6113,6 +6136,13 @@
        "id": 1965,
        "where": "Pick from the cabbage field south of Falador; the cabbage from Draynor Manor will not work!",
        "inStep": true
+      },
+      {
+       "name": "Trout",
+       "id": 333,
+       "count": 5,
+       "alt": ["Salmon", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"],
+       "where": "5 or more, or better food you already own: the Black Knights are aggressive inside the fortress."
       }
      ]
     },
@@ -6132,7 +6162,10 @@
          2337
         ]
        },
-       "pre": [{"item": "Cabbage", "id": 1965, "at": [3058, 3290, 0], "t": "Pick Cabbage south of Falador (do NOT pick Draynor cabbage)", "on": ["Cabbage"]}],
+       "pre": [
+        {"item": "Cabbage", "id": 1965, "at": [3058, 3290, 0], "t": "Pick Cabbage south of Falador (do NOT pick Draynor cabbage)", "on": ["Cabbage"]},
+        {"item": "Trout", "id": 333, "n": 5, "alt": ["Salmon", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"], "t": "The Black Knights are aggressive inside the fortress"}
+       ],
        "k": "enterFortress"
       },
       {
@@ -6297,6 +6330,13 @@
        "id": 1965,
        "where": "Pick from the cabbage field south of Falador; the cabbage from Draynor Manor will not work!",
        "inStep": true
+      },
+      {
+       "name": "Trout",
+       "id": 333,
+       "count": 5,
+       "alt": ["Salmon", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"],
+       "where": "5 or more, or better food you already own: the Black Knights are aggressive inside the fortress."
       }
      ]
     },
@@ -6535,7 +6575,10 @@
          5079
         ]
        },
-       "pre": [{"item": "Silverlight", "at": [3203, 3472, 0], "t": "Get Silverlight back from Sir Prysin", "npc": "Sir Prysin"}],
+       "pre": [
+        {"item": "Silverlight", "at": [3203, 3472, 0], "t": "Get Silverlight back from Sir Prysin", "npc": "Sir Prysin"},
+        {"item": "Trout", "id": 333, "n": 5, "alt": ["Salmon", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"], "t": "The dark wizards at the stone circle and Delrith hit for several points a turn"}
+       ],
        "k": "killDelrithStep"
       }
      ],
@@ -6545,7 +6588,16 @@
       "plane": 2,
       "label": "Captain Rovin — top of Varrock Castle",
       "npc": "Captain Rovin"
-     }
+     },
+     "items": [
+      {
+       "name": "Trout",
+       "id": 333,
+       "count": 5,
+       "alt": ["Salmon", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"],
+       "where": "5 or more, or better food you already own: the dark wizards at the stone circle and Delrith hit for several points a turn."
+      }
+     ]
     }
    ]
   },
@@ -8116,6 +8168,7 @@
          7964
         ]
        },
+       "pre": [{"item": "Salmon", "id": 329, "n": 10, "alt": ["Trout", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"], "t": "Ithoi hits hard and there is no bank on the way"}],
        "k": "killIthoi"
       }
      ],
@@ -8126,7 +8179,15 @@
       "label": "Ithoi — south-western hut",
       "npc": "Ithoi the Navigator"
      },
-     "items": []
+     "items": [
+      {
+       "name": "Salmon",
+       "id": 329,
+       "count": 10,
+       "alt": ["Trout", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"],
+       "where": "10 or more, or better food you already own: ithoi hits hard and there is no bank on the way."
+      }
+     ]
     },
     {
      "at": 55,
@@ -8519,6 +8580,7 @@
         3294,
         0
        ],
+       "pre": [{"item": "Salmon", "id": 329, "n": 5, "alt": ["Trout", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"], "t": "The bull and Brutus hit for several points a turn; Brutus special attacks are avoided by moving, not by eating"}],
        "k": "openBullPen"
       }
      ],
@@ -8527,7 +8589,16 @@
       "y": 3294,
       "plane": 0,
       "label": "Bull pen — cow field"
-     }
+     },
+     "items": [
+      {
+       "name": "Salmon",
+       "id": 329,
+       "count": 5,
+       "alt": ["Trout", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"],
+       "where": "5 or more, or better food you already own: the bull and Brutus hit for several points a turn; Brutus special attacks are avoided by moving, not by eating."
+      }
+     ]
     },
     {
      "at": 20,
@@ -9588,6 +9659,7 @@
          80
         ]
        },
+       "pre": [{"item": "Lobster", "id": 379, "n": 10, "alt": ["Trout", "Salmon", "Tuna", "Swordfish", "Monkfish", "Shark"], "t": "The Khazard Ogre and the arena creatures hit up to 20 and there is no bank in the arena"}],
        "k": "openCell"
       }
      ],
@@ -9609,6 +9681,13 @@
        "id": 75,
        "where": "Take from the chest in the arena's armoury during the quest.",
        "inStep": true
+      },
+      {
+       "name": "Lobster",
+       "id": 379,
+       "count": 10,
+       "alt": ["Trout", "Salmon", "Tuna", "Swordfish", "Monkfish", "Shark"],
+       "where": "10 or more, or better food you already own: the Khazard Ogre and the arena creatures hit up to 20 and there is no bank in the arena."
       }
      ]
     },
@@ -10035,6 +10114,7 @@
          7621
         ]
        },
+       "pre": [{"item": "Lobster", "id": 379, "n": 10, "alt": ["Trout", "Salmon", "Tuna", "Swordfish", "Monkfish", "Shark"], "t": "The Khazard warlord (level 112) hits hard and there is no bank nearby"}],
        "k": "talkToTheWarlord"
       },
       {
@@ -10060,7 +10140,15 @@
       "label": "Khazard warlord — south-west of West Ardougne",
       "npc": "Khazard warlord"
      },
-     "items": []
+     "items": [
+      {
+       "name": "Lobster",
+       "id": 379,
+       "count": 10,
+       "alt": ["Trout", "Salmon", "Tuna", "Swordfish", "Monkfish", "Shark"],
+       "where": "10 or more, or better food you already own: the Khazard warlord (level 112) hits hard and there is no bank nearby."
+      }
+     ]
     },
     {
      "at": 8,
@@ -10583,6 +10671,7 @@
          26243
         ]
        },
+       "pre": [{"item": "Lobster", "id": 379, "n": 10, "alt": ["Trout", "Salmon", "Tuna", "Swordfish", "Monkfish", "Shark"], "t": "The Black demon (level 172) hits hard; fight it from range and eat before you are low"}],
        "k": "climbDownTrapDoor"
       },
       {
@@ -10596,7 +10685,15 @@
        "k": "killBlackDemon"
       }
      ],
-     "items": []
+     "items": [
+      {
+       "name": "Lobster",
+       "id": 379,
+       "count": 10,
+       "alt": ["Trout", "Salmon", "Tuna", "Swordfish", "Monkfish", "Shark"],
+       "where": "10 or more, or better food you already own: the Black demon (level 172) hits hard; fight it from range and eat before you are low."
+      }
+     ]
     },
     {
      "at": 140,
@@ -10784,6 +10881,7 @@
          7620
         ]
        },
+       "pre": [{"item": "Lobster", "id": 379, "n": 10, "alt": ["Trout", "Salmon", "Tuna", "Swordfish", "Monkfish", "Shark"], "t": "The Temple Guardian is immune to magic and hits for several points a turn"}],
        "k": "killTheDog"
       }
      ],
@@ -10793,7 +10891,15 @@
       "plane": 0,
       "label": "Temple Guardian — temple dungeon"
      },
-     "items": []
+     "items": [
+      {
+       "name": "Lobster",
+       "id": 379,
+       "count": 10,
+       "alt": ["Trout", "Salmon", "Tuna", "Swordfish", "Monkfish", "Shark"],
+       "where": "10 or more, or better food you already own: the Temple Guardian is immune to magic and hits for several points a turn."
+      }
+     ]
     },
     {
      "at": 3,
@@ -11284,6 +11390,7 @@
          3506
         ]
        },
+       "pre": [{"item": "Lobster", "id": 379, "n": 15, "alt": ["Trout", "Salmon", "Tuna", "Swordfish", "Monkfish", "Shark"], "t": "The ghasts of Mort Myre hit through the swamp and there is no bank near the Grotto"}],
        "k": "enterSwamp"
       }
      ],
@@ -11298,6 +11405,13 @@
        "name": "Ghostspeak amulet",
        "id": 552,
        "where": "From The Restless Ghost."
+      },
+      {
+       "name": "Lobster",
+       "id": 379,
+       "count": 15,
+       "alt": ["Trout", "Salmon", "Tuna", "Swordfish", "Monkfish", "Shark"],
+       "where": "15 or more, or better food you already own: the ghasts of Mort Myre hit through the swamp and there is no bank near the Grotto."
       }
      ]
     },
@@ -11887,7 +12001,7 @@
      "steps": [
       "Talk to the witch in the manor twice.",
       "Go to the iron mine in Rimmington north-east of the house portal.",
-      "While looking north, use the hammer on the selected iron ore.",
+      "While looking north, use the hammer on the Selected iron.",
       "Give the bar magnet to Ava."
      ]
     },
@@ -12320,7 +12434,7 @@
       },
       {
        "t": "While looking north, use the hammer on the Selected iron.",
-       "s": "Face north, use the hammer on the selected iron ore",
+       "s": "Face north, use the hammer on the Selected iron",
        "hl": {
         "item": [
          "Hammer",
@@ -13182,6 +13296,7 @@
          2406
         ]
        },
+       "pre": [{"item": "Lobster", "id": 379, "n": 10, "alt": ["Trout", "Salmon", "Tuna", "Swordfish", "Monkfish", "Shark"], "t": "The Tanglefoot hits hard and cannot be skipped"}],
        "k": "enterZanarisForFight"
       },
       {
@@ -13220,7 +13335,16 @@
       "y": 3169,
       "plane": 0,
       "label": "Go to Zanaris, ready to fight the Tanglefoot"
-     }
+     },
+     "items": [
+      {
+       "name": "Lobster",
+       "id": 379,
+       "count": 10,
+       "alt": ["Trout", "Salmon", "Tuna", "Swordfish", "Monkfish", "Shark"],
+       "where": "10 or more, or better food you already own: the Tanglefoot hits hard and cannot be skipped."
+      }
+     ]
     },
     {
      "at": 80,
@@ -14821,6 +14945,7 @@
       {
        "t": "Prepare to fight the Jungle Demon. Once you're ready, equip the 10th squad sigil.",
        "s": "Prepare for the Jungle Demon; equip the 10th squad sigil",
+       "pre": [{"item": "Lobster", "id": 379, "n": 15, "alt": ["Trout", "Salmon", "Tuna", "Swordfish", "Monkfish", "Shark"], "t": "The Jungle Demon hits up to 32 and there is no bank on the island"}],
        "k": "prepareForBattle"
       },
       {
@@ -16097,7 +16222,10 @@
          "Anti-dragon shield"
         ]
        },
-       "pre": [{"item": "Anti-dragon shield", "id": 1540, "at": [3211, 3223, 1], "t": "Get the Anti-dragon shield from Duke Horacio in Lumbridge Castle", "npc": "Duke Horacio"}],
+       "pre": [
+        {"item": "Anti-dragon shield", "id": 1540, "at": [3211, 3223, 1], "t": "Get the Anti-dragon shield from Duke Horacio in Lumbridge Castle", "npc": "Duke Horacio"},
+        {"item": "Lobster", "id": 379, "n": 20, "alt": ["Swordfish", "Shark", "Monkfish", "Tuna"], "t": "Take 20 or more lobsters or other good food: there is no bank on Crandor"}
+       ],
        "k": "boardShipToGo"
       },
       {
