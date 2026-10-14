@@ -4,7 +4,7 @@ import { buildPlayerState } from '../src/lib/playerState';
 import { nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
 import { decideTransport, supplyStop, SUPPLY_NEAR_TILES, transportSources } from '../src/lib/liveTransport';
 import { planTravelSupplies, roadLegs, roadSteps, stepTargets, SUPPLY_MIN_TOTAL_TILES, type TravelSupplies } from '../src/lib/travelSupplies';
-import { BANKS, STAFF_NAMES, STAIRS_TILES_PER_FLOOR, bankTiles, staffCover, stavesFor, travelOptions, type TravelInput } from '../src/lib/travel';
+import { BANKS, EXCHANGE, STAFF_NAMES, STAIRS_TILES_PER_FLOOR, TILES_PER_SECOND, bankTiles, staffCover, stavesFor, travelOptions, type TravelInput } from '../src/lib/travel';
 import { recommendedTransport } from '../src/lib/transport';
 import { planPayload } from '../src/lib/prepEnvelope';
 import { createReadinessEngine } from '../src/lib/readinessEngine';
@@ -170,6 +170,38 @@ describe('"stock up here" on the game card', () => {
     const small = { ...supplies(true), uses: [{ wayId: 'chronicle', way: 'Chronicle', count: 1, savedTiles: SUPPLY_MIN_TOTAL_TILES - 1 }] };
     expect(supplyStop(small, at(3085, 3250), at(3190, 3360))).toBeNull();
     expect(SUPPLY_NEAR_TILES).toBeGreaterThan(0);
+  });
+
+  describe('a way is stocked for only when everything it lacks can be had on the trip (the live check, Varrock east)', () => {
+    const AUBURY = at(3253, 3401);
+    const GE = { x: EXCHANGE.x, y: EXCHANGE.y, plane: EXCHANGE.plane };
+    const runes = (lawCertain: boolean): TravelSupplies => ({
+      legs: [], steps: 8, staffHints: [], savedTiles: 290,
+      uses: [{ wayId: 'varrock-teleport', way: 'Varrock Teleport', count: 1, savedTiles: 290 }],
+      items: [
+        { name: 'Fire rune', need: 1, have: 0, buy: 1, certain: true, source: { kind: 'shop', where: "Aubury's Rune Shop — Varrock", point: AUBURY, price: 4 }, cost: 4, for: ['Varrock Teleport ×1'] },
+        { name: 'Law rune', need: 1, have: lawCertain ? 0 : null, buy: 1, certain: lawCertain, source: { kind: 'exchange', where: EXCHANGE.label, point: GE, price: 160 }, cost: 160, for: ['Varrock Teleport ×1'] },
+      ],
+    });
+    const varrockEast = at(3256, 3447);
+    const musaPoint = at(2923, 3180);
+
+    it('a Fire rune alone is not a teleport: with the Law rune short and the exchange far off, there is nothing to stock up', () => {
+      expect(supplyStop(runes(true), varrockEast, musaPoint)).toBeNull();
+    });
+
+    it('what is not known to be short does not hold the way back: the confirmed Fire rune is still suggested', () => {
+      const stop = supplyStop(runes(false), varrockEast, musaPoint)!;
+      expect(stop.rec.prepare!.buy).toEqual([{ name: 'Fire rune', quantity: 1, where: "Aubury's Rune Shop — Varrock" }]);
+    });
+
+    it('by the exchange, with the rune shop on the way, both are one trip: nearest first, each with its own stop', () => {
+      const stop = supplyStop(runes(true), at(3170, 3480), at(3253, 3430))!;
+      expect(stop.rec.prepare!.stops.map((s) => s.where)).toEqual([EXCHANGE.label, "Aubury's Rune Shop — Varrock"]);
+      expect(stop.rec.prepare!.buy.map((b) => b.name)).toEqual(['Law rune', 'Fire rune']);
+      expect(stop.rec.summary).toBe(`Stock up for the road: buy Law rune ×1 at the ${EXCHANGE.label}; Fire rune ×1 at Aubury's Rune Shop (~164 gp) · Varrock Teleport ×1 save ~${Math.ceil(290 / TILES_PER_SECOND)} s`);
+      expect(stop.rec.tile).toMatchObject({ x: GE.x, y: GE.y });
+    });
   });
 
   it('the card plans from the objective: a shop next to it cannot serve the leg that leads there (the live check, Lumbridge to Reldo)', () => {

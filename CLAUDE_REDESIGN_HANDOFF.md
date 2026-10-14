@@ -262,7 +262,7 @@ Asked for by the owner after Shield of Arrav's card stayed on "Talk to Reldo" in
 - Places added from the project's own data: S6-03, S8-03, S8-04. S6-04 (Magic) has no place on purpose.
 - Every QUEST_COMPLETED name matches a RuneLite quest (`RouteTargetsTest` checks it).
 
-## Codex audit pack (2026-10-14) — status after 2.54.1
+## Codex audit pack (2026-10-14) — status after 2.54.2
 
 The pack (`OSRS-Path-Full-Audit-2.53.0-EN.md` + a mega-prompt) was written against the 2.53.0 export. It is a backlog, not a task to run whole; each
 item is checked against the current data and the OSRS Wiki before it changes. Evidence is kept in four kinds: **implemented**, **automated** (tests),
@@ -297,15 +297,45 @@ item is checked against the current data and the OSRS Wiki before it changes. Ev
     `usedAfter` (S1-09) is closed (`oneTimeUsedOf(progress)` is passed by TravelPlan, TravelTip and PrepSync into `TravelInput.oneTimeUsed`).
     Recommendation type `npc_teleport`; the plugin treats it as a person to talk to (`PrepPlan.interactsWithNpc`). Tests: `tests/oneTimeWay.test.ts`,
     `TransportChipTest.aOneTimeNpcTeleportPointsAtTheNpcWithItHighlighted`.
-  - S6-02: "Fishing 1-40 first" field, `where`, recommended net / fly rod / feathers (Gerrant's Fishy Business).
+  - S6-02: "Fishing 1-40 first" field, `where`, recommended net / fly rod / feathers (Gerrant's Fishy Business). Finished in 2.54.2 (below).
+- 2.54.2, two defects the first live check of 2.54.1 found:
+  - `supplyStop` (`lib/liveTransport.ts`) suggested buying only a Fire rune for a Varrock Teleport while the Law rune was also short and the Exchange was
+    off the way. A way now counts only when every item it still lacks is reachable on the same trip (near, or on the way and confirmed short); items not
+    known to be short do not block it; several shops make one trip, nearest first, one stop each. Tests: `tests/travelSupplies.test.ts` "a way is stocked
+    for only when everything it lacks can be had on the trip".
+  - S6-02: `mapLocation` and `resourceSpots` follow the climb (Draynor nets 1-20, Barbarian Village fly fishing 20-40, Musa Point 40-50, coordinates from
+    `majorLocations.json`). `itemsRequired` is the small fishing net with `anyOf` fly rod / lobster pot / harpoon; rod, feathers, pot and harpoon are
+    recommended. Before this a level-1 account was sent to the Exchange for a harpoon first. Test: `tests/fishingClimb.test.ts`; the readiness golden
+    and `active-steps.json` changed for S6-02 only.
 
 ### Automated
 
-`tests/tradeRestriction.test.ts`, `tests/stepTasks.test.ts`, `BridgeServerTest.questPointsAndTotalLevel...`, UI smoke scenarios (trade note, step tasks).
+`tests/tradeRestriction.test.ts`, `tests/stepTasks.test.ts`, `tests/oneTimeWay.test.ts`, `tests/fishingClimb.test.ts`, `tests/travelSupplies.test.ts`,
+`tests/questPreflight.test.ts` (food guards), `BridgeServerTest.questPointsAndTotalLevel...`, `TransportChipTest`, UI smoke scenarios (trade note, step tasks).
+2.54.2: tsc, build, 1014 Vitest tests, check-data 0 errors, full Java suite, UI smoke.
 
 ### Live
 
-Not yet for these groups (see the final report of the session that shipped them).
+2026-10-14, World 316, account Bexqq (F2P, QP 40, total level 249), plugin 2.54.1 then the 2.54.2 app over the same plugin, RuneLite restarted through the
+app from the worktree. Evidence is the bridge `/status`, the app's own screens and the transport report (`window.__osrsPathTransport`).
+
+Verified in the game:
+- Plugin reports version and protocol 6; `questPoints` 40 and `totalLevel` 249 arrive in `/status`.
+- Trade note on S3-06: both numeric conditions shown as reached, the 20 hours as "cannot be read": state UNKNOWN, not RESTRICTED.
+- Step tasks against the worn items: S2-08 "wield the mithril scimitar" shows done with a Mithril scimitar worn; S4-02 Cowbell amulet shows "not checked"
+  with the bank unread. S8-04 / S8-05 / S9-04 are not in the F2P route of this account, so their tasks were not seen.
+- Supplies: for S6-02 from Varrock east the 2.54.1 build suggested buying a Fire rune alone (the defect above); the 2.54.2 build suggests nothing and
+  walks, as the planner's own fetch check says.
+- S6-02: the arrow led to Musa Point in 2.54.1; in 2.54.2 it reads "Draynor Bank: take Small fishing net" (the net is in the bank). The active step was
+  put back to S3-05 afterwards and the debug flag removed.
+
+Not verifiable on this account, so not claimed:
+- Ancient Guardian: only the entrance guard is tested (data and unit tests); the encounter itself was not replayed and the quest is complete here.
+- Count Check: S1-09 is done, so the way is correctly absent; it was not seen.
+- Canoe "possible": the account was not near a station with a target that a canoe would shorten.
+- RESTRICTED state, funding plan numbers against a real restricted account, the Draynor Manor / Fortress / Delrith food guards in their encounters.
+- A stale step payload: after the app rebuild without a RuneLite restart the plugin kept the previous item list for the already active step until the step
+  was cleared and shown again; a normal update restarts RuneLite, so this was only a test-procedure effect.
 
 ### Open
 

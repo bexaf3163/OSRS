@@ -160,45 +160,64 @@ export function supplyStop(supplies: TravelSupplies, pos: Point, to: Point): { r
     const g = groups.find((x) => dist(x.point, it.source!.point) <= 6);
     if (g) g.items.push(it); else groups.push({ where: it.source.where, point: it.source.point, items: [it] });
   }
-  let best: { g: (typeof groups)[number]; items: SupplyItem[]; saved: number; tiles: number } | null = null;
+  // What this trip can get: what the player stands by, and what is on the way and confirmed to be short.
+  const reach: { g: (typeof groups)[number]; items: SupplyItem[]; tiles: number }[] = [];
   for (const g of groups) {
     const tiles = dist(pos, g.point);
     const near = tiles <= SUPPLY_NEAR_TILES;
     const extra = tiles + dist(g.point, to) - dist(pos, to);
     // On the way but not at the shop: only what is confirmed to be short is worth the detour.
     const items = near ? g.items : extra <= AHEAD_MAX_EXTRA_TILES ? g.items.filter((x) => x.certain) : [];
-    if (!items.length) continue;
-    const ways = new Set(items.flatMap((x) => x.for.map((f) => f.replace(/ ×\d+$/, ''))));
-    const saved = supplies.uses.filter((u) => ways.has(u.way)).reduce((sum, u) => sum + u.savedTiles, 0);
-    if (saved < SUPPLY_MIN_TOTAL_TILES) continue;
-    if (!best || saved > best.saved) best = { g, items, saved, tiles };
+    if (items.length) reach.push({ g, items, tiles });
   }
-  if (!best) return null;
-  const { g, items, saved } = best;
+  const reachable = new Set(reach.flatMap((r) => r.items));
+  const wayOf = (f: string) => f.replace(/ ×\d+$/, '');
+  // A way is worth stocking for only when everything it still lacks can be had on this trip: a Fire rune alone does not make a Varrock Teleport
+  // while the Law rune is missing too (the live check, Varrock east). What is not known to be short does not hold a way back.
+  const paying = supplies.uses.filter((u) => {
+    const lacks = supplies.items.filter((x) => x.buy > 0 && x.for.some((f) => wayOf(f) === u.way));
+    return lacks.some((x) => reachable.has(x)) && lacks.every((x) => reachable.has(x) || !x.certain);
+  });
+  const saved = paying.reduce((sum, u) => sum + u.savedTiles, 0);
+  if (saved < SUPPLY_MIN_TOTAL_TILES) return null;
+  const wayNames = new Set(paying.map((u) => u.way));
+  const trip = reach
+    .map((r) => ({ ...r, items: r.items.filter((x) => x.for.some((f) => wayNames.has(wayOf(f)))) }))
+    .filter((r) => r.items.length)
+    .sort((a, b) => a.tiles - b.tiles);
+  if (!trip.length) return null;
+  const items = trip.flatMap((r) => r.items);
+  const first = trip[0];
+  const placeOf = (where: string) => (where === EXCHANGE.label ? `the ${where}` : where.replace(/ — .*$/, ''));
   const what = items.map((x) => `${x.name} ×${x.buy}`);
   const unsure = items.some((x) => !x.certain);
   const price = items.some((x) => x.cost === null) ? '' : ` (~${items.reduce((sum, x) => sum + (x.cost ?? 0), 0)} gp)`;
   const ways = [...new Set(items.flatMap((x) => x.for))];
-  const place = g.where === EXCHANGE.label ? `the ${g.where}` : g.where.replace(/ — .*$/, '');
+  // One shop: "X at the shop"; several: "X at one; Y at another", nearest first.
+  const buying = trip.map((r) => `${r.items.map((x) => `${x.name} ×${x.buy}`).join(', ')} at ${placeOf(r.g.where)}`).join('; ');
+  const place = trip.map((r) => placeOf(r.g.where)).join(' and ');
   const uses = items.flatMap((x) => (x.use ? [x.use] : []));
   const check = unsure ? (items.some((x) => x.name === 'Teleport card' && !x.certain) ? 'check the book’s charges first' : 'check your bank first') : '';
-  const summary = `Stock up for the road: buy ${unsure ? 'up to ' : ''}${what.join(', ')} at ${place}${price} · ${ways.join(', ')} save ${savedText(saved)}${check ? ` · ${check}` : ''}`;
+  const summary = `Stock up for the road: buy ${unsure ? 'up to ' : ''}${buying}${price} · ${ways.join(', ')} save ${savedText(saved)}${check ? ` · ${check}` : ''}`;
   const chronicle = items.some((x) => x.name === 'Teleport card' || x.name === 'Chronicle');
-  const stop = { action: 'buy' as const, where: g.where, point: g.point, items: items.map((x) => ({ name: x.name, qty: x.buy, price: x.source?.price ?? null })), tiles: best.tiles };
-  const text = `For the next ${supplies.steps} steps: ${ways.join(', ')} save ${savedText(saved)}. Buy ${unsure ? 'up to ' : ''}${what.join(', ')} at ${place}${price}.${uses.length ? ` Then ${uses.join('; ')}.` : ''}${check ? ` ${check[0].toUpperCase()}${check.slice(1)}.` : ''}`;
+  const stops = trip.map((r) => ({
+    action: 'buy' as const, where: r.g.where, point: r.g.point, items: r.items.map((x) => ({ name: x.name, qty: x.buy, price: x.source?.price ?? null })), tiles: r.tiles,
+  }));
+  const text = `For the next ${supplies.steps} steps: ${ways.join(', ')} save ${savedText(saved)}. Buy ${unsure ? 'up to ' : ''}${buying}${price}.${uses.length ? ` Then ${uses.join('; ')}.` : ''}${check ? ` ${check[0].toUpperCase()}${check.slice(1)}.` : ''}`;
   return {
     rec: {
-      type: chronicle ? 'item_teleport' : 'spell_teleport', destination: place, interactionId: 0, tile: { x: g.point.x, y: g.point.y, plane: g.point.plane },
+      type: chronicle ? 'item_teleport' : 'spell_teleport', destination: place, interactionId: 0, tile: { x: first.g.point.x, y: first.g.point.y, plane: first.g.point.plane },
       text: text.length <= 200 ? text : `${text.slice(0, 199)}…`,
       chip: `⚡ Buy ${what.join(', ')}`.slice(0, 60),
       state: 'prepare', summary,
       prepare: {
-        text: `Buy ${what.join(', ')} at ${place}${price}.${uses.length ? ` Then ${uses.join('; ')}.` : ''}`,
-        withdraw: [], buy: items.map((x) => ({ name: x.name, quantity: x.buy, where: g.where })), stops: [stop], cost: items.some((x) => x.cost === null) ? null : items.reduce((sum, x) => sum + (x.cost ?? 0), 0),
+        text: `Buy ${buying}${price}.${uses.length ? ` Then ${uses.join('; ')}.` : ''}`,
+        withdraw: [], buy: trip.flatMap((r) => r.items.map((x) => ({ name: x.name, quantity: x.buy, where: r.g.where }))), stops,
+        cost: items.some((x) => x.cost === null) ? null : items.reduce((sum, x) => sum + (x.cost ?? 0), 0),
       },
       savedTiles: saved,
     },
-    detail: { where: g.where, items: what, savedTiles: saved, steps: supplies.steps, tiles: best.tiles },
+    detail: { where: trip.map((r) => r.g.where).join(' and '), items: what, savedTiles: saved, steps: supplies.steps, tiles: first.tiles },
   };
 }
 
