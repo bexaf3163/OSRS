@@ -49,20 +49,22 @@ position or bank (unit tests), plus the plugin's native rendering where noted.
 | # | Scenario | Initial conditions | Expected | Observed | Result |
 |---|---|---|---|---|---|
 | 1 | Beneficial transport in the addon | Live. Varrock Palace, S5-01 (Champions' Guild, ~130 tiles), Chronicle in the bag | A line in the main card | 2.51.0: only under Advice (evidence 02, 03). 2.52.0: "➜ Use Chronicle → Champions' Guild · saves ~36 s · check charges" in the closed card (04); a click framed the Chronicle, the character did not move, the arrow stayed on the quest objective (05) | Fixed, live |
-| 2 | Teleport lacks runes | Simulated. Draynor, objective in Varrock Palace, Magic 25, bag empty, bank Law 1 / Air 3 / Fire 1 | Specific preparation | "Varrock Teleport saves ~32 s: withdraw Law rune, Air rune ×3, Fire rune at Draynor Bank"; arrow to the bank first | Pass (`transportLive.test.ts`, render `modern-travel-prepare.png`) |
+| 2 | Teleport lacks runes | Simulated (the account has no Law or Fire runes and stands in Varrock, so no preparation is worth it live; the live report rejects it with its numbers). Draynor, objective in Varrock Palace, Magic 25, bag empty, bank Law 1 / Air 3 / Fire 1 | Specific preparation | "Varrock Teleport saves ~32 s: withdraw Law rune, Air rune ×3, Fire rune at Draynor Bank"; arrow to the bank first | Pass (`transportLive.test.ts`, render `modern-travel-prepare.png`) |
 | 3 | Partly owned | Simulated. As 2 with Air rune ×1 in the bag | Only the rest | "Air rune ×2" | Pass |
 | 4 | Resource in the bank | Simulated (counts as the plugin reports them live) | Withdrawal, items framed in the bank | Stop "withdraw … at Draynor Bank"; the items join `bankWithdrawals` | Pass |
 | 5 | Resource obtained | Simulated. Runes moved into the bag | Preparation disappears, spell ready | `transportKey` changes, the decision becomes "Cast Varrock Teleport → Varrock Square" | Pass |
-| 6 | Transport used → guidance resumes | Live, see below | | | see below |
+| 6 | Transport used → guidance resumes | Live. S5-01 shown, Varrock Palace; the free Lumbridge Home Teleport cast by hand | The same quest line and objective from the new position; the way judged again | Landed at 3222,3219: the card kept "Guildmaster (Champions' Guild): ask for a quest", the arrow kept the Guildmaster, the distance went to ~145 tiles, the line was re-judged from the landing tile at once ("saves ~39 s"), the cooldown is now known (1745 s). The app tip showed the same decision ("Teleport: Chronicle to Champions' Guild (saves ~130 tiles, about 39 s) — check charges"). The existing "You are in Lumbridge: step is far away" note also appeared (07) | Pass, live |
 | 7 | Canoe beneficial | Simulated. Lumbridge, S5-01, Woodcutting 15, axe in the bag | Canoe line | "Canoe Lumbridge → Champions' Guild · saves ~31 s"; with the axe only in the bank the stop costs more than it saves and nothing is shown | Pass |
 | 8 | Requirements block | Live state + simulated | Never presented as usable | Live report: "Canoe Edgeville → Champions' Guild [locked] … Woodcutting 27 for Dugout (you have 15)", Varrock Teleport locked without runes; card shows neither. Magic 20: the spell is `locked` | Pass |
 | 9 | Objective nearby | Live. Palace, S3-05 (Reldo, 4 tiles) | No transport | No line on 2.51.0 and on 2.52.0 | Pass, live |
-| 10 | Objective changes | Live. S5-01 → S3-05 | Obsolete line and arrow cleared | Line cleared at once. Defect 13 found (stale arrow and distance) | Fixed; see below |
-| 11 | Disconnect / reconnect | Live. RuneLite restarted through the app | Unknown, then reconciled | Logged out: `skipped: no_position`, no line, no tip. See below for the logged-in part | see below |
+| 10 | Objective changes | Live. S5-01 → S3-05 | Obsolete line and arrow cleared | 2.52.0 before the fix: line cleared, but the arrow and "~132 tiles" stayed (defect 13). After the fix: the plugin logged `nav done: cleared` for the Guildmaster, the card said "✓ Nearby", no line (06); back to S5-01 the line returned | Fixed, live |
+| 11 | Disconnect / reconnect | Live. RuneLite restarted through the app (twice), logged in again | Unknown, then reconciled | Logged out: `skipped: no_position`, no line, no tip. Logged in: the position and the bank counts came back (Air rune 632, Law 0, Fire 0, Bronze axe 1 — reported, not assumed) and the decision was recomputed | Pass, live |
 
 ## Other systems checked
 
 - App pages (Path, Skills, Gear, Shopping, Journal, Settings, Reference) in the running app: no console errors or warnings.
+- Live evidence (local only): 01–03 before (2.51.0), 04 the line in the main card, 05 the click framing the Chronicle, 06 the objective change
+  with the arrow cleared, 07 guidance after the Home Teleport.
 - UI smoke test in an isolated browser profile (334 checks): passed, including profiles (own / other character), the quest cursor moving on
   STATUS, section strips at every width.
 - Profiles, import/export and file backups: covered by `progress.test.ts` and `progress-files.test.ts` on temporary data; the real profile was
@@ -87,5 +89,8 @@ position or bank (unit tests), plus the plugin's native rendering where noted.
 - When the bank was seen but a rune was not reported (an older plugin, or a watch list cut at 64), the bank count is unknown: the preparation
   then says where to buy, not "withdraw". It never claims the bank is empty.
 - Chronicle charges are not visible to the plugin: the line always says "check charges".
+- Banks on upper floors (Lumbridge Castle) and the Grand Exchange bankers are not preparation stops: the planner knows ground-floor banks only
+  and does not model stairs. From Lumbridge the nearest stop is Draynor or Al Kharid.
+- After the Home Teleport test the character stays in Lumbridge (it was in Varrock Palace) and the Home Teleport is on its 30-minute cooldown.
 - Using the recommended Chronicle in the live test would spend a charge (a teleport card costs 150 coins); it was not used. The free Home
   Teleport was used instead for the "transport used" scenario.
