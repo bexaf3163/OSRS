@@ -261,3 +261,12 @@ Asked for by the owner after Shield of Arrav's card stayed on "Talk to Reldo" in
 - The manual-walkthrough fallback (a quest without stage data) is still in the plugin; its test sample is the pre-2.53 Shield of Arrav target in `runelite-bridge/src/test/resources/manual-walkthrough.json`.
 - Places added from the project's own data: S6-03, S8-03, S8-04. S6-04 (Magic) has no place on purpose.
 - Every QUEST_COMPLETED name matches a RuneLite quest (`RouteTargetsTest` checks it).
+
+## Codex audit pack (2026-10-14) — status after 2.53.3
+
+The pack (`OSRS-Path-Full-Audit-2.53.0-EN.md` + a mega-prompt) was written against the 2.53.0 export. It is a backlog, not a task to run whole; each item is checked against the current data and the OSRS Wiki before it is changed.
+
+- Fixed in 2.53.3 (verified true): S3-04 kit asked for only at the fight (stage 30 said "items: none"; now rows 20 and 30 carry the kit and row 30 has the `pre` guard); Brutus specials can kill (the plain hits cannot); S8-04 Cooking 10 (trout needs 15, shrimps 30 XP); S9-04 Jungle Demon protection.
+- Confirmed true, still open: S1-13/S2-01/S3-06 sell cowhides and iron ore, which a new F2P account cannot sell until 20 h played, 10 QP and 100 total level (Wiki: Account); completion text vs preparation text differ for S1-03, S1-04, S1-05, S1-08, S1-12, S2-08, S2-11, S4-02, S4-03, S8-05, S9-04 (audit table); Dragon scimitar vs Attack 60 (S9-04); Porcine of Interest not tracked in the QP forecast; Fishing 1-40 missing from S6-02.
+- Not checked yet: the April 2026 River Dougne canoe stations, Count Check as a primary teleport, all P0/P1 "verify in game" items. Sources for Brutus/Porcine in the pack are third-party mirrors: confirm on the Wiki.
+- Not adopted: the pack's prompt asks for a 67-step ledger, route reordering (Doric before Knight's Sword) and a release in one go. Reordering touches saved progress and is a separate, owner-approved task.
