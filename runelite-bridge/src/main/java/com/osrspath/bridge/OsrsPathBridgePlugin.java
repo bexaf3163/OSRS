@@ -954,6 +954,40 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
+	/** The lines of the stage the dialogue keys below were built for (compared by identity), and the keys. */
+	private List<ActiveTarget.StageLine> dialogLines;
+	private Set<String> dialogKeys = Collections.emptySet();
+
+	/**
+	 * The dialogue options to frame now: the step's own list and the answers named by every line of the stage the player is in (a stage with several
+	 * conversations, such as Shield of Arrav's Baraek, Charlie and Katrine, offers each of them). Client thread, as the overlay that asks.
+	 */
+	Set<String> dialogKeysNow()
+	{
+		ActiveTarget t = target;
+		if (t == null)
+		{
+			return Collections.emptySet();
+		}
+		ActiveTarget.Stage st = stageOf(t);
+		List<ActiveTarget.StageLine> lines = st == null ? null : currentLines(st);
+		if (lines == null || lines.isEmpty())
+		{
+			return t.getDialogSet();
+		}
+		if (lines != dialogLines)
+		{
+			Set<String> keys = new HashSet<>(t.getDialogSet());
+			for (ActiveTarget.StageLine l : lines)
+			{
+				keys.addAll(ActiveTarget.dialogKeysOf(l.getT()));
+			}
+			dialogLines = lines;
+			dialogKeys = keys;
+		}
+		return dialogKeys;
+	}
+
 	private List<ActiveTarget.StageLine> currentLines(ActiveTarget.Stage st)
 	{
 		Integer value = st == null ? null : stageValue(st);

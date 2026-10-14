@@ -43,7 +43,12 @@ class OsrsPathWidgetOverlay extends Overlay
 	{
 		renderShopItem(g);
 		ActiveTarget target = plugin.getTarget();
-		if (target == null || target.getDialogSet().isEmpty())
+		if (target == null)
+		{
+			return null;
+		}
+		java.util.Set<String> wanted = plugin.dialogKeysNow();
+		if (wanted.isEmpty())
 		{
 			return null;
 		}
@@ -64,7 +69,7 @@ class OsrsPathWidgetOverlay extends Overlay
 			{
 				continue;
 			}
-			if (!target.getDialogSet().contains(ActiveTarget.dialogKey(option.getText())))
+			if (!wanted.contains(ActiveTarget.dialogKey(option.getText())))
 			{
 				continue;
 			}

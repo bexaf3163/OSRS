@@ -895,6 +895,34 @@ public class ActiveTarget
 		return null;
 	}
 
+	/** A quoted answer in a line's "Dialogue: “A” → “B”". */
+	private static final Pattern QUOTED = Pattern.compile("[“\"]([^”\"]{1,120})[”\"]");
+
+	/**
+	 * The dialogue options a stage line names, as comparison keys: what follows "Dialogue:" in its text, each answer in quotes. The game offers the
+	 * options of a conversation one menu at a time; the widget overlay frames the one whose key is in this set (the step's own list in dialogChoices
+	 * covers only the conversation the step starts with, and a stage line has its own: Baraek's "Can you tell me where I can find the Phoenix Gang?").
+	 */
+	static Set<String> dialogKeysOf(String text)
+	{
+		Set<String> out = new HashSet<>();
+		int at = text == null ? -1 : text.indexOf("Dialogue:");
+		if (at < 0)
+		{
+			return out;
+		}
+		java.util.regex.Matcher m = QUOTED.matcher(text.substring(at));
+		while (m.find())
+		{
+			String key = dialogKey(m.group(1));
+			if (!key.isEmpty())
+			{
+				out.add(key);
+			}
+		}
+		return out;
+	}
+
 	/** A name as a comparison key: without tags, without non-breaking spaces, in lower case. */
 	static String nameKey(String s)
 	{

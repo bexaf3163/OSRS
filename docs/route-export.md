@@ -1,4 +1,4 @@
-# OSRS Path - full route export (app version 2.53.1)
+# OSRS Path - full route export (app version 2.53.2)
 
 Exported 2026-10-14 from the program's data files (steps.json, questStages.json, stages.json, goals.json). Every step is written out with everything the program shows for it: where to go, what to bring and where each item comes from, the quick options, the walkthrough, what the game plugin highlights and when it ticks the step off by itself, and, for quests, the stage table line by line (what the game shows for each value of the quest variable).
 
@@ -3228,7 +3228,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   - Value 30 and above:
       Go to: Ice Mountain dungeon entrance (3000, 3494, plane 0)
       Items for this stage: none
-      1. Re-enter the dungeon to finish the quest.
+      1. Re-enter the dungeon to finish the quest. Dialogue: “Yes.”.
          In the game list: Enter the dungeon again
          - at 3000, 3494, plane 0
          - key reenterDungeon
@@ -3275,7 +3275,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   2. Search the marked bookcase in the library for the book, then read it (left-click the book in your inventory).
   3. Talk to Reldo again. Dialogue: “Okay, I've read that book about the Shield of Arrav.”.
   4. You and a partner join different gangs: one the Phoenix Gang, the other the Black Arm Gang. You cannot change later. The chat channel “OSRS SOA” finds a partner.
-  5. Talk to Baraek in Varrock Square. Dialogue: “Can you tell me where I can find the Phoenix Gang?” → “Okay. Have 20 gold coins.”.
+  5. Talk to Baraek in Varrock Square: ask about the Phoenix Gang, not furs. Dialogue: “Can you tell me where I can find the Phoenix Gang?” → “Okay. Have 20 gold coins.”.
   6. Climb down the ladder into the Phoenix Gang hideout in south-east Varrock and talk to Straven. Dialogue: “I know who you are!” → “I'd like to offer you my services.”.
   7. Kill Jonny the Beard (level 2) in the Blue Moon Inn and pick up the Intel report.
   8. Give the Intel report to Straven in the hideout: he gives you the Weapon store key.
@@ -3285,7 +3285,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   12. Get the Weapon store key from your Phoenix Gang partner, climb the ladder into the weapon storeroom in south-east Varrock, kill the Weaponsmaster (level 23) and pick up both Phoenix crossbows.
   13. Bring both crossbows to Katrine, go up the stairs in the gang base and search the cupboard for half of the Shield of Arrav.
   14. Pass the Weapon store key to your partner, then take your half of the shield to Curator Haig Halen in the Varrock Museum: he gives you half of a certificate.
-  15. Swap certificate halves with your partner and use the two halves together to make the Certificate.
+  15. Swap certificate halves with a player of the other gang (a partner or a second account; alone, skip the quest: it is optional) and use the two halves together.
   16. Give the Certificate to King Roald in Varrock Palace to finish the quest.
 - Quest outline (sections, as in the Quest Helper panel):
   - Start the quest
@@ -3295,7 +3295,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   - Choose a gang
       1. You and a partner join different gangs: one the Phoenix Gang, the other the Black Arm Gang. You cannot change later. The chat channel “OSRS SOA” finds a partner.
   - Phoenix Gang
-      1. Talk to Baraek in Varrock Square. Dialogue: “Can you tell me where I can find the Phoenix Gang?” → “Okay. Have 20 gold coins.”.
+      1. Talk to Baraek in Varrock Square: ask about the Phoenix Gang, not furs. Dialogue: “Can you tell me where I can find the Phoenix Gang?” → “Okay. Have 20 gold coins.”.
       2. Climb down the ladder into the Phoenix Gang hideout in south-east Varrock and talk to Straven. Dialogue: “I know who you are!” → “I'd like to offer you my services.”.
       3. Kill Jonny the Beard (level 2) in the Blue Moon Inn and pick up the Intel report.
       4. Give the Intel report to Straven in the hideout: he gives you the Weapon store key.
@@ -3307,7 +3307,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
       4. Bring both crossbows to Katrine, go up the stairs in the gang base and search the cupboard for half of the Shield of Arrav.
   - Finish together
       1. Pass the Weapon store key to your partner, then take your half of the shield to Curator Haig Halen in the Varrock Museum: he gives you half of a certificate.
-      2. Swap certificate halves with your partner and use the two halves together to make the Certificate.
+      2. Swap certificate halves with a player of the other gang (a partner or a second account; alone, skip the quest: it is optional) and use the two halves together.
       3. Give the Certificate to King Roald in Varrock Palace to finish the quest.
 - Quest stage table (game variable: varp 145). The game shows the row with the largest value not above the variable.
   - Value 0 and above:
@@ -3339,8 +3339,8 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
       Go to: Baraek — Varrock Square (3218, 3435, plane 0), NPC Baraek
       Items for this stage:
         - Phoenix crossbow - Black Arm Gang only: two lie in the Phoenix weapon storeroom in south-east Varrock. [obtained during the stage]
-      1. Choose a gang with your partner: one of you joins the Phoenix Gang, the other the Black Arm Gang (you cannot change later; the chat channel “OSRS SOA” finds a partner). Phoenix Gang: talk to Baraek in Varrock Square. Dialogue: “Can you tell me where I can find the Phoenix Gang?” → “Okay. Have 20 gold coins.”.
-         In the game list: Phoenix: pay Baraek 20 coins (Varrock Square)
+      1. This quest needs two players, one in each gang, to swap the certificate halves: the chat channel “OSRS SOA” finds a partner (alone you can do your half and then skip the quest: it is optional). Phoenix Gang: ask Baraek in Varrock Square where to find the gang (20 coins). Do not buy his furs. Dialogue: “Can you tell me where I can find the Phoenix Gang?” → “Okay. Have 20 gold coins.”.
+         In the game list: Phoenix: ask Baraek about the gang (20 coins, no furs)
          - at 3218, 3435, plane 0
          - highlighted: NPC ids 2881
          - key talkToBaraek
@@ -3363,9 +3363,10 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - at 3252, 3384, plane 0
          - highlighted: object ids 11794
          - key goUpToWeaponStore
-      6. Kill the Weaponsmaster (level 23), or have someone else kill him.
-         In the game list: Kill the Weaponsmaster
+      6. Kill the Weaponsmaster (level 23), or have someone else kill him, then pick up both Phoenix crossbows he drops.
+         In the game list: Kill the Weaponsmaster, pick up two crossbows
          - at 3247, 3384, plane 1
+         - done when the bag has: Phoenix crossbow x2
          - highlighted: NPC ids 14137
          - key killWeaponsMaster
       7. Pick up both Phoenix crossbows.
@@ -3407,8 +3408,8 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - highlighted: NPC ids 5214
          - must have: Broken shield - get it at 3189, 3386, plane 1 (Search the cupboard upstairs in the Black Arm Gang base)
          - key talkToHaig
-      14. Swap certificate halves with your partner (if you cannot trade, use yours on them to drop it at their feet), then use the two halves together to make the Certificate.
-         In the game list: Swap halves, make the Certificate
+      14. You hold half of the certificate; the other half is with a player of the other gang. Trade halves with them (if trading is blocked, use your half on them to drop it at their feet), then use the two halves together. Alone: you need a partner or a second account; otherwise skip the quest, it is optional (1 quest point, 600 coins).
+         In the game list: Swap halves with the other gang's player (alone: skip)
          - done when the bag has: Certificate
          - key combineCertificate
       15. Give the Certificate to King Roald in Varrock Palace to finish the quest.
@@ -3434,9 +3435,10 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - at 3244, 9783, plane 0
          - highlighted: object ids 2405
          - key goUpFromPhoenixGang
-      2. Kill Jonny the Beard (level 2) in the Blue Moon Inn in Varrock.
-         In the game list: Kill Jonny the Beard (Blue Moon Inn)
+      2. Kill Jonny the Beard (level 2) in the Blue Moon Inn in Varrock, then pick up the Intel report he drops (it lies on the floor where he died).
+         In the game list: Kill Jonny, then pick up the Intel report he drops
          - at 3222, 3395, plane 0
+         - done when the bag has: Intel report
          - highlighted: NPC ids 14139
          - key killJonny
       3. Pick up the Intel report he drops.
@@ -3474,8 +3476,8 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - highlighted: NPC ids 5214
          - must have: Broken shield - get it at 3235, 9761, plane 0 (Search the chest in the Phoenix Gang hideout)
          - key talkToHaig
-      4. Swap certificate halves with your partner (if you cannot trade, use yours on them to drop it at their feet), then use the two halves together to make the Certificate.
-         In the game list: Swap halves, make the Certificate
+      4. You hold half of the certificate; the other half is with a player of the other gang. Trade halves with them (if trading is blocked, use your half on them to drop it at their feet), then use the two halves together. Alone: you need a partner or a second account; otherwise skip the quest, it is optional (1 quest point, 600 coins).
+         In the game list: Swap halves with the other gang's player (alone: skip)
          - done when the bag has: Certificate
          - key combineCertificate
       5. Give the Certificate to King Roald in Varrock Palace to finish the quest.
@@ -5620,9 +5622,10 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - at 3408, 3488, plane 0
          - highlighted: object ids 3490
          - key returnToTemple
-      2. Kill a Monk of Zamorak (level 30) for a golden key. You can safespot using the pews.
-         In the game list: Kill a Monk of Zamorak (level 30) for the golden key
+      2. Kill a Monk of Zamorak (level 30) for a golden key, then pick the key up. You can safespot using the pews.
+         In the game list: Kill a Monk of Zamorak, pick up the golden key
          - at 3412, 3488, plane 0
+         - done when the bag has: Golden key
          - highlighted: NPC ids 3486
          - key killMonk
       3. Talk to Drezel on the top floor of the temple. Dialogue: “So, what now?” → “Yes, of course”.
@@ -5639,9 +5642,10 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          - at 3408, 3488, plane 0
          - highlighted: object ids 3490
          - key returnToTemple
-      2. Kill a Monk of Zamorak (level 30) for a golden key. You can safespot using the pews.
-         In the game list: Kill a Monk of Zamorak (level 30) for the golden key
+      2. Kill a Monk of Zamorak (level 30) for a golden key, then pick the key up. You can safespot using the pews.
+         In the game list: Kill a Monk of Zamorak, pick up the golden key
          - at 3412, 3488, plane 0
+         - done when the bag has: Golden key
          - highlighted: NPC ids 3486
          - key killMonk
       3. Go down to the underground of the temple through the trapdoor.
@@ -6790,8 +6794,9 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
          In the game list: Fairy ring D.I.R. - ready to fight a Gorak
          - highlighted: object ids 29560
          - key goToDir
-      5. Kill Goraks for their claws.
-         In the game list: Kill Goraks for their claws
+      5. Kill Goraks for their claws, then pick the claws up (they lie on the floor where the Gorak died).
+         In the game list: Kill Goraks, pick up their claws
+         - done when the bag has: Gorak claws
          - highlighted: NPC ids 1834
          - key killGorak
       6. Pickup the gorak's claws.
@@ -7364,20 +7369,20 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   - Dialogue choices to pick: “Do you have any other quests for me?” → “Angry! It makes me angry!” → “What seems to be the problem?” → “YES”
   - Marked done automatically when: quest completed: Recipe for Disaster - Another Cook's Quest
 - Walkthrough:
-  1. Talk to the Cook in Lumbridge Castle's kitchen. Dialogue: “Do you have any other quests for me?” → “Angry! It makes me angry!” → “What seems to be the problem?” → “YES”.
+  1. Talk to the Cook in Lumbridge Castle's kitchen. Dialogue: “Do you have any other quests for me?” → “Angry! It makes me angry!” (or “I don't really care to be honest.”) → “What seems to be the problem?” → “YES”.
   2. Use the Ashes on the Fruit blast to make a Dirty blast.
   3. Talk to the Cook again with the Eye of newt, Greenman's ale, Rotten tomato and Dirty blast. Dialogue: “About those ingredients you wanted for the banquet...”.
   4. Enter the castle dining room through the door west of the kitchen and watch the cutscene.
 - Quest outline (sections, as in the Quest Helper panel):
   - Another Cook's Quest
-      1. Talk to the Cook in Lumbridge Castle's kitchen. Dialogue: “Do you have any other quests for me?” → “Angry! It makes me angry!” → “What seems to be the problem?” → “YES”.
+      1. Talk to the Cook in Lumbridge Castle's kitchen. Dialogue: “Do you have any other quests for me?” → “Angry! It makes me angry!” (or “I don't really care to be honest.”) → “What seems to be the problem?” → “YES”.
       2. Use the Ashes on the Fruit blast to make a Dirty blast.
       3. Talk to the Cook again with the Eye of newt, Greenman's ale, Rotten tomato and Dirty blast. Dialogue: “About those ingredients you wanted for the banquet...”.
       4. Enter the castle dining room through the door west of the kitchen and watch the cutscene.
 - Quest stage table (game variable: varbit 1850). The game shows the row with the largest value not above the variable.
   - Value 0 and above:
       Go to: Cook — Lumbridge Castle kitchen (3209, 3215, plane 0), NPC Cook
-      1. Talk to the Cook in Lumbridge Castle's kitchen. Dialogue: “Do you have any other quests for me?” → “Angry! It makes me angry!” → “What seems to be the problem?” → “YES”.
+      1. Talk to the Cook in Lumbridge Castle's kitchen. Dialogue: “Do you have any other quests for me?” → “Angry! It makes me angry!” (or “I don't really care to be honest.”) → “What seems to be the problem?” → “YES”.
          In the game list: Talk to the Cook (Lumbridge Castle kitchen)
          - at 3209, 3215, plane 0
          - highlighted: NPC ids 4626
