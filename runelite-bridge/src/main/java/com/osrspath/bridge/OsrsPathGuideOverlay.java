@@ -173,6 +173,10 @@ class OsrsPathGuideOverlay extends OverlayPanel
 				}
 			}
 			plugin.uiShown("guide", GuideList.plain(shown));
+			// The card is painted under the rows, so it needs the size of THIS content. The panel reports the size of its previous pass: a card that had
+			// just grown (a wrapped heading, an opened list, a new stage) drew its last rows outside its background (seen live).
+			Dimension now = dryRun(g, super::render);
+			last = now == null ? new Dimension() : now;
 		}
 		OverlayCard.paintGuide(g, last.width, last.height, accent(v), config.hudOpacity(), config.overlayTheme());
 		Dimension d = super.render(g);
@@ -181,6 +185,25 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		paintTooltip(g, d, hovered, small);
 		plugin.guideShown(true);
 		return d;
+	}
+
+	/**
+	 * Lay the rows out without painting them (an empty clip) and return the size they take. RuneLite's panel returns the size of the children of its
+	 * previous pass, so it is laid out twice. Only when the content was rebuilt, never per frame.
+	 */
+	static Dimension dryRun(Graphics2D g, java.util.function.Function<Graphics2D, Dimension> render)
+	{
+		Graphics2D dry = (Graphics2D) g.create();
+		try
+		{
+			dry.setClip(0, 0, 0, 0);
+			render.apply(dry);
+			return render.apply(dry);
+		}
+		finally
+		{
+			dry.dispose();
+		}
 	}
 
 	/**
@@ -376,7 +399,16 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			// Keep the same tab actions directly under the current action in both reveal states.
 			rows.removeIf(r -> r.getAction().getKind() == GuideList.Kind.TAB);
 			rows.add(at, GuideList.tabRow(v.isAdviceTab(), advice, fm, OverlayText.inner(width)));
-			if (compact && reveal <= 0) rows.removeIf(r -> r.getAction().getKind() == GuideList.Kind.DETOUR);
+			if (compact && reveal <= 0)
+			{
+				// The closed card: one travel line above the tabs (a shortcut, what to get for it, or a stop on the way), never two.
+				rows.removeIf(r -> r.getAction().getKind() == GuideList.Kind.DETOUR || r.getAction().getKind() == GuideList.Kind.TRANSPORT);
+				GuideList.Row travel = GuideList.travelRow(v, smallFm, width);
+				if (travel != null)
+				{
+					rows.add(Math.min(at, rows.size()), travel);
+				}
+			}
 		}
 		List<RowComponent> out = new ArrayList<>();
 		FontMetrics actionFm = new FontMetrics(GuideFont.action(font))

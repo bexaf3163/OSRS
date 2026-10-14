@@ -157,12 +157,38 @@ public class PrepPlan
 		private String text;
 		/** The short action for the HUD ("⚡ Use Chronicle → Champions' Guild"); an older app sends none and the text is used. */
 		private String chip;
+		/** "ready", "check" (what the app cannot see must be fine: charges, a cooldown) or "prepare" (a stop first). An older app sends none. */
+		private String state;
+		/** The line for the main card, without the marker ("Use Chronicle → Champions' Guild · saves ~37 s"). An older app sends none and the text is used. */
+		private String summary;
+		/** With "prepare": what is short and where to get it, in words. */
+		private String prepare;
 
 		boolean valid()
 		{
 			return type != null && !type.isEmpty() && !ActiveTarget.tooLong(type) && destination != null && !ActiveTarget.tooLong(destination) && interactionId >= 0
 				&& interactionId <= 1_000_000 && !ActiveTarget.tooLong(interactionName) && !ActiveTarget.tooLong(item) && (tile == null || tile.valid())
-				&& text != null && !text.trim().isEmpty() && !ActiveTarget.tooLong(text) && !ActiveTarget.tooLong(chip);
+				&& text != null && !text.trim().isEmpty() && !ActiveTarget.tooLong(text) && !ActiveTarget.tooLong(chip)
+				&& !ActiveTarget.tooLong(state) && !ActiveTarget.tooLong(summary) && !ActiveTarget.tooLong(prepare);
+		}
+
+		/** The way is usable only after a stop (runes, a tablet, coins, an axe to get first): the tile is that stop, not the transport. */
+		boolean needsPreparation()
+		{
+			return "prepare".equals(state);
+		}
+
+		/** The one line of the main card: the app's summary, otherwise the full text. */
+		String cardText()
+		{
+			return summary != null && !summary.trim().isEmpty() ? summary.trim() : text;
+		}
+
+		/** The stop of a preparation in words ("Withdraw Law rune at Varrock West Bank"): the chip without its marker. */
+		String stopLabel()
+		{
+			String c = chip == null ? "" : chip.replaceFirst("^⚡\\s*", "").trim();
+			return c.isEmpty() ? destination : c;
 		}
 
 		/** What the HUD shows: the app's chip, otherwise a short form of the text. */
@@ -190,6 +216,11 @@ public class PrepPlan
 		NavTarget navTarget(String stepId)
 		{
 			// The tile is where the way starts (the dock, the station, the first ring), so the label names who or what is there and where it leads.
+			if (needsPreparation())
+			{
+				// The arrow leads to the bank or the shop; who to talk to at the transport is not there.
+				return navTargetOf(stopLabel(), tile, stepId);
+			}
 			boolean named = interactionName != null && !interactionName.isEmpty();
 			NavTarget n = navTargetOf(named && (interactsWithNpc() || interactsWithObject()) ? interactionName + " → " + destination : destination, tile, stepId);
 			if (n == null || !named)

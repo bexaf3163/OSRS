@@ -140,4 +140,41 @@ public class DetourRowTest
 		assertEquals(0, GuideList.alertRows(view(p), FM, OsrsPathGuideOverlay.WIDTH).size());
 		assertEquals(0, GuideList.adviceCount(p));
 	}
+
+	@Test
+	public void theOneTravelLineOfTheClosedCardIsTheTransportBeforeTheDetour()
+	{
+		PrepPlan p = plan(PLAN);
+		p.prepare();
+		GuideList.Row travel = GuideList.travelRow(view(p), SMALL, OsrsPathGuideOverlay.WIDTH);
+		assertNotNull(travel);
+		assertEquals(GuideList.Kind.TRANSPORT, travel.getAction().getKind());
+		assertTrue(travel.getAction().isClickable());
+		assertTrue(flat(Collections.singletonList(travel)), flat(Collections.singletonList(travel)).startsWith("➜ Falador teleport saves ~120 tiles"));
+		// No transport: the stop on the way takes the line.
+		PrepPlan detourOnly = plan(PLAN.substring(0, PLAN.indexOf(",\"recommendedTransport\"")) + "}");
+		assertNull(detourOnly.prepare());
+		assertFalse(detourOnly.hasTransport());
+		assertEquals(GuideList.Kind.DETOUR, GuideList.travelRow(view(detourOnly), SMALL, OsrsPathGuideOverlay.WIDTH).getAction().getKind());
+		// Neither: no line.
+		PrepPlan none = plan("{\"stepId\":\"S2-12\",\"lines\":[],\"later\":[]}");
+		none.prepare();
+		assertNull(GuideList.travelRow(view(none), SMALL, OsrsPathGuideOverlay.WIDTH));
+		assertNull(GuideList.travelRow(view(null), SMALL, OsrsPathGuideOverlay.WIDTH));
+	}
+
+	@Test
+	public void aWayThatNeedsAStopFirstIsAnAmberLineWithItsSummary()
+	{
+		PrepPlan p = plan("{\"stepId\":\"S2-12\",\"lines\":[],\"later\":[],\"recommendedTransport\":{\"type\":\"spell_teleport\",\"destination\":\"Varrock Square\","
+			+ "\"interactionId\":0,\"tile\":{\"x\":3093,\"y\":3243,\"plane\":0},\"state\":\"prepare\","
+			+ "\"summary\":\"Varrock Teleport saves ~1 min: withdraw Law rune at Draynor Bank\","
+			+ "\"text\":\"Varrock Teleport (saves ~200 tiles, about 1 min). Missing: Law rune. Withdraw Law rune at Draynor Bank.\"}}");
+		assertNull(p.prepare());
+		GuideList.Row row = GuideList.travelRow(view(p), SMALL, OsrsPathGuideOverlay.WIDTH);
+		String text = flat(Collections.singletonList(row));
+		assertTrue(text, text.startsWith("➜ Varrock Teleport saves ~1 min: withdraw Law rune"));
+		assertTrue(row.getHint(), row.getHint().contains("Missing: Law rune. Withdraw Law rune at Draynor Bank"));
+		assertTrue(row.getHint(), row.getHint().contains("it buys and withdraws nothing"));
+	}
 }

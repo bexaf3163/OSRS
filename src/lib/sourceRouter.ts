@@ -56,6 +56,8 @@ export interface SourceInput {
   manualKey?: string;
   /** The Al Kharid toll gate is free. */
   freeToll?: boolean;
+  /** Only these kinds of source are considered (a teleport's runes are bought, not picked up one by one at a spawn). Absent: all of them. */
+  kinds?: readonly SourceKind[];
 }
 
 /**
@@ -104,7 +106,8 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
   for (const b of d?.buyLocations ?? []) {
     if (b.members && s.mode === 'f2p') continue;
     if (typeof b.stock === 'number' && b.stock === 0) continue;
-    const p = matchStrict(b.location) ?? matchStrict(b.shopName);
+    // The shop's own tile when the place dictionary has it; the town it stands in otherwise.
+    const p = matchStrict(b.shopName) ?? matchStrict(b.location);
     const toll = b.location === 'Al Kharid' && !input.freeToll ? 10 : 0;
     shops.push({
       kind: 'shop', label: `${b.shopName.replace(/\.$/, '')} — ${b.location}`, price: b.price + toll,
@@ -129,6 +132,7 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
   const rank = (o: SourceOption): number =>
     o.kind === 'bag' || o.kind === 'bank' ? 0 : o.kind === 'free' ? (o.distance === undefined || o.distance <= FREE_NEAR ? 1 : 2.5) : o.kind === 'drop' ? 3 : 2;
   const ordered = out
+    .filter((o) => !input.kinds || input.kinds.includes(o.kind))
     .map((o, i) => ({ o, i }))
     .sort((a, b) => rank(a.o) - rank(b.o) || a.i - b.i)
     .map((x) => x.o);

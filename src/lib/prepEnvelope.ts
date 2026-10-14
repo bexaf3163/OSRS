@@ -41,7 +41,13 @@ export interface PrepPlanPayload {
   /** What lies in the bank and is needed now or soon: the plugin frames it when the bank is open and lists it in the tips. itemId 0 means not known. */
   bankWithdrawals?: { itemId: number; itemName: string; quantity: number }[];
   /** The way that is not walking and is clearly shorter: the plugin shows one line, points at the first stop and frames the item to use. */
-  recommendedTransport?: { type: string; destination: string; interactionId: number; interactionName?: string; item?: string; tile?: { x: number; y: number; plane: number }; text: string; chip?: string };
+  recommendedTransport?: {
+    type: string; destination: string; interactionId: number; interactionName?: string; item?: string; tile?: { x: number; y: number; plane: number }; text: string; chip?: string;
+    /** ready, check (what the app cannot see must be fine) or prepare (a stop first); and the line for the main card. Plugin 2.52+ draws them. */
+    state?: string; summary?: string;
+    /** What is short and where to get it, in words: the hint of the line. */
+    prepare?: string;
+  };
 }
 
 export interface BankTagsPayload {
@@ -118,10 +124,18 @@ export function bankWithdrawalsOf(plan: Pick<PrepPlan, 'lines'>): NonNullable<Pr
 
 export interface PlanExtras { detour?: Detour | null; transport?: RecommendedTransport | null }
 
+/** The main-card line is at most two lines of the game card; the rest is in the hint. */
+const MAX_SUMMARY = 160;
+
 /** The preparation plan in the form the plugin draws: without the excess and within its checks. */
 export function planPayload(plan: PrepPlan, extras: PlanExtras = {}): PrepPlanPayload {
   const { detour, transport } = extras;
+  // What the plan takes out of the bank, and what the recommended way needs from it (its runes, its tablet): framed together when the bank is open.
   const withdrawals = bankWithdrawalsOf(plan);
+  for (const w of transport?.prepare?.withdraw ?? []) {
+    if (withdrawals.length >= MAX_WITHDRAWALS || withdrawals.some((x) => nameKey(x.itemName) === nameKey(w.name))) continue;
+    withdrawals.push({ itemId: itemIdOf(w.name), itemName: clipText(w.name, 60), quantity: Math.max(1, Math.min(w.quantity, 10_000_000)) });
+  }
   const lines = plan.lines
     .filter((l) => l.timing !== 'LATER')
     .slice(0, MAX_PLAN_LINES)
@@ -161,6 +175,9 @@ export function planPayload(plan: PrepPlan, extras: PlanExtras = {}): PrepPlanPa
         ...(transport.tile ? { tile: { x: transport.tile.x, y: transport.tile.y, plane: transport.tile.plane } } : {}),
         text: clipText(transport.text),
         ...(transport.chip ? { chip: clipText(transport.chip, 60) } : {}),
+        ...(transport.state ? { state: transport.state } : {}),
+        ...(transport.summary ? { summary: clipText(transport.summary, MAX_SUMMARY) } : {}),
+        ...(transport.prepare ? { prepare: clipText(transport.prepare.text) } : {}),
       },
     } : {}),
     ...(plan.blockers.length ? { blockers: plan.blockers.slice(0, MAX_BLOCKERS).map((b) => clipText(b.detail ? `${b.label} — ${b.detail}` : b.label)) } : {}),

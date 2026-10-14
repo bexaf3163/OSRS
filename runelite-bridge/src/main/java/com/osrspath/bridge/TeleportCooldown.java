@@ -12,6 +12,8 @@ final class TeleportCooldown
 	/** VarPlayer.LAST_HOME_TELEPORT and VarPlayer.LAST_MINIGAME_TELEPORT in the RuneLite API. */
 	static final int VARP_HOME = 892;
 	static final int VARP_MINIGAME = 888;
+	/** Varbits.SPELLBOOK in the RuneLite API: 0 standard, 1 Ancient, 2 Lunar, 3 Arceuus. The teleport spells of the route are on the standard one. */
+	static final int VARBIT_SPELLBOOK = 4070;
 	static final int HOME_MINUTES = 30;
 	static final int MINIGAME_MINUTES = 20;
 	/** A mark in the future by more than this is not a time (a small clock difference between the PC and the game is allowed). */

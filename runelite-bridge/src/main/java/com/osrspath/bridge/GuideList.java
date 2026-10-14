@@ -646,8 +646,30 @@ final class GuideList
 	static Row transportRow(PrepPlan prep, FontMetrics fm, int inner)
 	{
 		PrepPlan.RecommendedTransport t = prep.getRecommendedTransport();
-		return new Row(clip("", "➜ " + t.getText(), StepGuide.GOOD, fm, inner, 2, true), Action.TRANSPORT,
-			t.getText() + ". Click to point the arrow" + (t.getItem() == null ? "" : " and frame " + t.getItem() + " in the bag") + ". The app only suggests it: it uses nothing.");
+		String full = t.getText().replaceFirst("[.\\s]+$", "");
+		if (t.needsPreparation())
+		{
+			// Something to get first: amber, like every "do this before you go" line. A click leads to the stop; nothing is bought or withdrawn.
+			return new Row(clip("", "➜ " + t.cardText(), StepGuide.BANK, fm, inner, 2, true), Action.TRANSPORT,
+				full + ". Click to point the arrow at the stop. The app only suggests it: it buys and withdraws nothing.");
+		}
+		return new Row(clip("", "➜ " + t.cardText(), StepGuide.GOOD, fm, inner, 2, true), Action.TRANSPORT,
+			full + ". Click to point the arrow" + (t.getItem() == null ? "" : " and frame " + t.getItem() + " in the bag") + ". The app only suggests it: it uses nothing.");
+	}
+
+	/**
+	 * The one travel line of the closed card: the way that is clearly shorter than walking (or what to get first to use it), otherwise a stop worth
+	 * making on the way. null when the app suggests neither. The card stays two rows and this line; the rest waits in the open list and under Advice.
+	 */
+	static Row travelRow(StepGuide.View v, FontMetrics small, int width)
+	{
+		PrepPlan prep = v.getPrep();
+		if (prep == null)
+		{
+			return null;
+		}
+		int inner = OverlayText.inner(width);
+		return prep.hasTransport() ? transportRow(prep, small, inner) : prep.hasDetour() ? detourRow(prep, small, inner) : null;
 	}
 
 	/** What the plan wants out of the bank on the way: one tip line, the items are framed in the open bank. */

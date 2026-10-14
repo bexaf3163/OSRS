@@ -73,7 +73,7 @@ public final class BridgeServer
 	 */
 	static final int PROTOCOL = 6;
 	/** The plugin version, the same as the app it ships with in one exe. */
-	static final String PLUGIN_VERSION = "2.51.0";
+	static final String PLUGIN_VERSION = "2.52.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	/** The whole snapshot: the step with the quest stages, shopping and plan in one body. */
@@ -163,6 +163,10 @@ public final class BridgeServer
 	/** The moment of the last home and minigame teleport as the game keeps it (minutes since the epoch, 0 = never); only for /status. */
 	private volatile int lastHomeTeleport;
 	private volatile int lastMinigameTeleport;
+	/** The teleport marks were read from the game at least once this session: before that "ready" would be a guess. */
+	private volatile boolean teleportMarksRead;
+	/** The active spellbook (0 standard, 1 Ancient, 2 Lunar, 3 Arceuus); -1 until it is read. */
+	private volatile int spellbook = -1;
 	/** The current temporary target (like NAV_SET) or null, for /status. */
 	private volatile JsonObject navTarget;
 	private volatile Map<String, Object> questInstruction;
@@ -313,6 +317,13 @@ public final class BridgeServer
 	{
 		lastHomeTeleport = home;
 		lastMinigameTeleport = minigame;
+		teleportMarksRead = true;
+	}
+
+	/** The spellbook varbit as the game holds it; anything outside 0..3 is reported as unknown. */
+	public void setSpellbook(int value)
+	{
+		spellbook = value >= 0 && value <= 3 ? value : -1;
 	}
 
 	/** The character name (since protocol 5); comes in the STATUS event. */
@@ -579,6 +590,16 @@ public final class BridgeServer
 					if (minigameLeft > 0)
 					{
 						status.put("minigameTeleportSeconds", minigameLeft);
+					}
+					if (inGame)
+					{
+						// Whether the Home Teleport state is known at all: without the seconds above, true means "ready", false means "the game did not say".
+						status.put("homeTeleportKnown", teleportMarksRead && homeLeft >= 0);
+						int book = spellbook;
+						if (book >= 0)
+						{
+							status.put("spellbook", book);
+						}
 					}
 					// Version handshake: the app checks the protocol and asks to update the plugin if it is older.
 					status.put("protocol", PROTOCOL);

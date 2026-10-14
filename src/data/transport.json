@@ -14,7 +14,8 @@
         "label": "Lumbridge Castle"
       },
       "cooldownMin": 30,
-      "note": "Free, with no runes or level; takes about 14 seconds to cast, once every 30 minutes, does not work in combat."
+      "castSeconds": 15,
+      "note": "Free, with no runes or level; the cast takes 11 to 15 seconds (19 to 25 game ticks), once every 30 minutes. It cannot be cast within 10 seconds of combat, and most actions interrupt it."
     },
     {
       "id": "lumbridge-teleport",

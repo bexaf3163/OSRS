@@ -33,12 +33,22 @@ describe('the one-line travel tip', () => {
   });
 
   it('a way that starts with a purchase or a withdrawal says what and where', () => {
-    // With a bag and the bank seen, the Falador spell is locked (no runes), so the tablet is the way.
+    // With a bag and the bank seen, the Falador spell is locked (no runes), so the tablet is the way. A members account: tablets are members' items.
     const coins = [{ id: 1, name: 'Coins', count: 5000 }];
-    const buy = travelTip(travelOptions(input({ from: at(3165, 3440), to: at(2970, 3380), members: false, carried: coins, bankSeen: true, priceOf: (n) => (n === 'Falador teleport' ? 640 : undefined) })))!;
+    const buy = travelTip(travelOptions(input({ from: at(3165, 3440), to: at(2970, 3380), members: true, carried: coins, bankSeen: true, priceOf: (n) => (n === 'Falador teleport' ? 640 : undefined) })))!;
     expect(buy).toContain('buy it at the Grand Exchange first (~640 gp)');
-    const bank = travelTip(travelOptions(input({ from: at(3165, 3440), to: at(2970, 3380), members: false, carried: coins, bankSeen: true, bank: new Map([['falador teleport', 2]]) })))!;
+    const bank = travelTip(travelOptions(input({ from: at(3165, 3440), to: at(2970, 3380), members: true, carried: coins, bankSeen: true, bank: new Map([['falador teleport', 2]]) })))!;
     expect(bank).toMatch(/withdraw it at the .*Bank first/);
+  });
+
+  it('a teleport tablet is a members item: a known free-to-play account is never told to buy, withdraw or break one', () => {
+    const coins = [{ id: 1, name: 'Coins', count: 5000 }];
+    const f2p = { from: at(3165, 3440), to: at(2970, 3380), members: false, bankSeen: true, priceOf: (n: string) => (n === 'Falador teleport' ? 640 : undefined) };
+    const buy = travelOptions(input({ ...f2p, carried: coins }));
+    const banked = travelOptions(input({ ...f2p, carried: coins, bank: new Map([['falador teleport', 2]]) }));
+    const held = travelOptions(input({ ...f2p, carried: [...coins, { id: 2, name: 'Falador teleport', count: 1 }] }));
+    for (const opts of [buy, banked, held]) expect(opts.filter((o) => /-tab/.test(o.id)).map((o) => o.id)).toEqual([]);
+    expect(travelTip(buy)).toBeNull();
   });
 
   it('the threshold is a real saving: just under it is quiet', () => {

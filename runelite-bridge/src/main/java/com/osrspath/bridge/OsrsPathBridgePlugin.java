@@ -1243,12 +1243,26 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private final Set<String> gotItems = new HashSet<>();
 	private String gotStep;
 
+	/**
+	 * The arrow belongs to another step than the one now shown: it was set by that step's stage (sticky), or it carries that step's id. The player's own
+	 * target with no step behind it is not touched.
+	 */
+	static boolean navOutdatedFor(NavTarget nav, boolean setByStage, String stepId)
+	{
+		if (nav == null)
+		{
+			return false;
+		}
+		return setByStage || (nav.getStepId() != null && !nav.getStepId().equals(stepId));
+	}
+
 	private void applyTarget(ActiveTarget t)
 	{
 		String stepId = t == null ? null : t.getStepId();
 		tel("step", "stepId", stepId, "title", t == null ? null : t.getTitle(), "goal", t == null ? null : t.getGoal(),
 			"stage", t != null && stageOf(t) != null);
-		if (!Objects.equals(stepId, gotStep))
+		boolean stepChanged = !Objects.equals(stepId, gotStep);
+		if (stepChanged)
 		{
 			gotItems.clear();
 			gotStep = stepId;
@@ -1273,6 +1287,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			WorldPoint pos = me.getWorldLocation();
 			breadcrumbs.update(pos.getX(), pos.getY(), pos.getPlane());
+		}
+		if (stepChanged && navOutdatedFor(navTarget, navSticky, stepId))
+		{
+			// The arrow of the step that was shown is not this step's: a line with no tile of its own would keep pointing at the old objective.
+			// Cleared with the new step already in place, so the stage that follows sets its own arrow (or none).
+			finishNav("cleared");
 		}
 		rescan();
 		recomputeChecklist();
@@ -2953,6 +2973,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			{
 				// Two integer reads: the app shows "Home Teleport ready in N min".
 				server.setTeleportMarks(client.getVarpValue(TeleportCooldown.VARP_HOME), client.getVarpValue(TeleportCooldown.VARP_MINIGAME));
+				server.setSpellbook(client.getVarbitValue(TeleportCooldown.VARBIT_SPELLBOOK));
 			}
 			shareAccount(me);
 			WorldPoint pos = me.getWorldLocation();

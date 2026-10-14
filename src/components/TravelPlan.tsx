@@ -12,16 +12,22 @@ import { checkStatus } from '../services/runeliteBridge';
 import { fairyRingsUnlocked, travelInputOf } from '../lib/travelInput';
 import { stepPlaces } from '../lib/stepPlaces';
 import { dist, travelOptions, TRANSPORT, walkText, type Availability, type Point, type TravelOption } from '../lib/travel';
+import { isOverworld } from '../lib/instances';
+import { transportSources } from '../lib/liveTransport';
 
 const BADGE: Record<Availability, string> = { ready: '✓ available now', maybe: '? check', locked: '🔒 not yet' };
+/** A way that starts with a stop (runes, a tablet, coins, an axe to get first) is neither "now" nor "check": it says what to do first. */
+const badgeOf = (o: TravelOption) => (o.availability !== 'locked' && (o.prepare || o.acquire) ? '⇢ after a stop' : BADGE[o.availability]);
 
 export function TravelPlan({ step }: { step: Step }) {
   const { progress, mode } = useStore();
-  const { prices } = usePlayerState();
+  const { prices, state: player } = usePlayerState();
   const { enabled, state, inGame, stats, gear, owned, navigate } = useBridge();
   const places = useMemo(() => stepPlaces(step), [step]);
   const [pos, setPos] = useState<Point | null>(null);
   const [homeCooldown, setHomeCooldown] = useState<number | null>(null);
+  const [homeKnown, setHomeKnown] = useState<boolean | null>(null);
+  const [spellbook, setSpellbook] = useState<number | null>(null);
   const [asked, setAsked] = useState(false);
   const [busy, setBusy] = useState(false);
   const [to, setTo] = useState(0);
@@ -35,13 +41,21 @@ export function TravelPlan({ step }: { step: Step }) {
     const live = st.online && st.inGame;
     setPos(live ? st.pos : null);
     setHomeCooldown(live ? st.homeTeleportSeconds : null);
+    setHomeKnown(live ? st.homeTeleportKnown : null);
+    setSpellbook(live ? st.spellbook : null);
     setAsked(true);
     setBusy(false);
   };
 
-  const options: TravelOption[] = pos && pos.plane === 0 && target.plane === 0
-    ? travelOptions(travelInputOf({ from: pos, to: target, levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: homeCooldown, fairyRings: fairyRingsUnlocked(progress) }))
+  const onMap = Boolean(pos) && isOverworld(pos) && isOverworld(target);
+  const all: TravelOption[] = pos && onMap
+    ? travelOptions(travelInputOf({
+      from: pos, to: target, levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: homeCooldown, fairyRings: fairyRingsUnlocked(progress),
+      ...(homeKnown !== null ? { homeCooldownKnown: homeKnown } : {}), spellbook, sourceOf: transportSources(player, prices.priceOf),
+    }))
     : [];
+  // A way and the same way "after a stop" are one line: the one with the stop says what is missing and where to get it.
+  const options = all.filter((o) => !all.some((x) => x.id === `${o.id}-prepare`));
 
   return (
     <section className="step-section travel-plan" aria-label="How to get there">
@@ -62,8 +76,8 @@ export function TravelPlan({ step }: { step: Step }) {
       {asked && !pos && state === 'online' && inGame && (
         <p className="muted small" role="status">The plugin did not report the position: plugin 2.12+ and the "levels and XP" sending turned on in its settings are needed.</p>
       )}
-      {pos && (pos.plane !== 0 || target.plane !== 0) && (
-        <p className="muted small">You or the target are not on the ground (floor {pos.plane} / {target.plane}): a straight line cannot be counted.</p>
+      {pos && !onMap && (
+        <p className="muted small">You or the target are underground or in an instance: a straight line over the world map cannot be counted there.</p>
       )}
       {pos && options.length > 0 && (
         <>
@@ -73,7 +87,7 @@ export function TravelPlan({ step }: { step: Step }) {
               <li key={o.id} className={`travel-option is-${o.availability}`}>
                 <div className="travel-head">
                   <strong className="travel-title">{o.title}</strong>
-                  <span className={`badge travel-badge is-${o.availability}`}>{BADGE[o.availability]}</span>
+                  <span className={`badge travel-badge is-${o.availability}`}>{badgeOf(o)}</span>
                 </div>
                 <p className="muted small travel-walk">on foot {walkText(o.walkTiles)}</p>
                 {o.legs.length > 1 && <p className="muted small">{o.legs.map((l) => l.label).join(' → ')}</p>}

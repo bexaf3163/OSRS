@@ -47,6 +47,10 @@ export interface BridgeStatus {
   pos: { x: number; y: number; plane: number } | null;
   /** Seconds until the Home Teleport can be cast again (plugin 2.37+); null — it is ready, or the plugin does not know. */
   homeTeleportSeconds: number | null;
+  /** The plugin read the Home Teleport state (plugin 2.52+): true — ready or the seconds above; false — the game's value is not a time; null — an older plugin. */
+  homeTeleportKnown: boolean | null;
+  /** The active spellbook (plugin 2.52+): 0 standard, 1 Ancient, 2 Lunar, 3 Arceuus; null — not in the game or an older plugin. */
+  spellbook: number | null;
 }
 
 /**
@@ -306,12 +310,16 @@ export function parseEvent(text: string): BridgeEvent | null {
   return null;
 }
 
+/** The plugin refuses a longer watch list (ActiveTarget.MAX_LIST). */
+export const WATCH_MAX = 64;
+
 /**
  * The step target for the game. An explicit inGame from the route wins; without it — the start point and the gathering places from the step map,
  * so the arrow and tiles work for steps whose highlight is not yet written out.
  * branch — the chosen quick variant: its point replaces the step point, and the waypoints of the ordinary path are not needed.
+ * travelWatch — the things the ways to the step need (runes, a teleport item, an axe): counted by the game like the step's own items.
  */
-export function toInGameTarget(step: Step, branch?: StepBranch, extraWatch: string[] = []): ActiveStepPayload | null {
+export function toInGameTarget(step: Step, branch?: StepBranch, extraWatch: string[] = [], travelWatch: string[] = []): ActiveStepPayload | null {
   const g = step.inGame ?? {};
   const start = step.mapLocation;
   const alt = branch?.replacementTarget;
@@ -333,7 +341,10 @@ export function toInGameTarget(step: Step, branch?: StepBranch, extraWatch: stri
   // Also — the items of the nearest steps (one trip): the plugin reports how many of them there are, and they are visible in advance.
   // A tool named by its weakest tier is any tier: the game must report every tier, or a Rune pickaxe in the bag would read as "no pickaxe".
   const named = [...watchedItems(step), ...extraWatch];
-  const watch = [...new Set([...named, ...named.flatMap((n) => toolFamilyOf(n) ?? [])])].slice(0, 40);
+  const own = [...new Set([...named, ...named.flatMap((n) => toolFamilyOf(n) ?? [])])].slice(0, 40);
+  // And what the ways there need (runes, a teleport item, an axe): the game reports how many the bank holds, so "withdraw it" is said only for what is there.
+  // They go after the step's own items and never push one out.
+  const watch = [...new Set([...own, ...travelWatch])].slice(0, WATCH_MAX);
   if (watch.length) payload.watchItems = watch;
   if (step.pacing) payload.pacing = step.pacing;
   const hit = stepMaxHit(step);
@@ -500,6 +511,7 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
   const d = res.data as {
     status?: string; inGame?: boolean; stats?: unknown; shortestPath?: unknown; activeStepId?: unknown; protocol?: unknown; pluginVersion?: unknown;
     navTarget?: unknown; questInstruction?: unknown; xp?: unknown; questsDone?: unknown; player?: unknown; pos?: unknown; homeTeleportSeconds?: unknown;
+    homeTeleportKnown?: unknown; spellbook?: unknown;
   } | undefined;
   const online = res.ok && d?.status === 'ok';
   const instruction = online && d?.inGame === true ? parseQuestInstruction(d.questInstruction) : null;
@@ -519,6 +531,8 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
     player: online ? parsePlayer(d?.player) : null,
     pos: online ? parsePos(d?.pos) : null,
     homeTeleportSeconds: online ? parseSeconds(d?.homeTeleportSeconds) : null,
+    homeTeleportKnown: online && typeof d?.homeTeleportKnown === 'boolean' ? d.homeTeleportKnown : null,
+    spellbook: online && typeof d?.spellbook === 'number' && Number.isInteger(d.spellbook) && d.spellbook >= 0 && d.spellbook <= 3 ? d.spellbook : null,
   };
 }
 

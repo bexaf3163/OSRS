@@ -127,4 +127,55 @@ public class TransportChipTest
 		t.setChip(new String(new char[600]).replace('\0', 'x'));
 		assertFalse(t.valid());
 	}
+
+	private static final String PREPARE = "{\"type\":\"spell_teleport\",\"destination\":\"Varrock Square\",\"interactionId\":0,"
+		+ "\"tile\":{\"x\":3093,\"y\":3243,\"plane\":0},\"state\":\"prepare\","
+		+ "\"summary\":\"Varrock Teleport saves ~1 min: withdraw Law rune, Air rune ×3 at Draynor Bank\","
+		+ "\"prepare\":\"Missing: Law rune, Air rune ×3. Withdraw Law rune, Air rune ×3 at Draynor Bank.\","
+		+ "\"text\":\"Varrock Teleport (saves ~200 tiles, about 1 min). Missing: Law rune, Air rune ×3. Withdraw Law rune, Air rune ×3 at Draynor Bank.\","
+		+ "\"chip\":\"⚡ Withdraw Law rune, Air rune ×3 at Draynor Bank\"}";
+
+	@Test
+	public void aWayThatNeedsAStopFirstSaysSoOnTheCardAndPointsAtTheStop()
+	{
+		PrepPlan.RecommendedTransport t = transport(PREPARE);
+		assertTrue(t.needsPreparation());
+		assertEquals("Varrock Teleport saves ~1 min: withdraw Law rune, Air rune ×3 at Draynor Bank", t.cardText());
+		NavTarget n = t.navTarget("S3-07");
+		assertNotNull("the stop is where the arrow leads", n);
+		assertEquals("Withdraw Law rune, Air rune ×3 at Draynor Bank", n.getLabel());
+		assertEquals(3093, n.getX());
+		assertEquals("S3-07", n.getStepId());
+		assertTrue("nobody to talk to at a bank stop", n.getNpcNameSet().isEmpty());
+		assertTrue(n.getObjectNameSet().isEmpty());
+	}
+
+	@Test
+	public void anOlderAppSendsNoStateAndNoSummary()
+	{
+		PrepPlan.RecommendedTransport t = transport(CHRONICLE);
+		assertFalse(t.needsPreparation());
+		assertEquals("Teleport: Chronicle to by Champions' Guild (saves ~120 tiles, about 1 min)", t.cardText());
+	}
+
+	@Test
+	public void theArrowOfTheStepThatWasShownDoesNotOutliveIt()
+	{
+		NavTarget stage = new NavTarget();
+		stage.setLabel("Guildmaster");
+		stage.setX(3190);
+		stage.setY(3360);
+		stage.setStepId("S5-01");
+		// The live case: Champions' Guild stayed on the arrow and "~132 tiles" on the card after the step became a walkthrough line with no tile.
+		assertTrue(OsrsPathBridgePlugin.navOutdatedFor(stage, true, "S3-05"));
+		assertTrue("a stop made for the old step", OsrsPathBridgePlugin.navOutdatedFor(stage, false, "S3-05"));
+		assertTrue("the step was cleared", OsrsPathBridgePlugin.navOutdatedFor(stage, false, null));
+		assertFalse("the same step keeps its stop", OsrsPathBridgePlugin.navOutdatedFor(stage, false, "S5-01"));
+		NavTarget own = new NavTarget();
+		own.setLabel("Varrock West Bank");
+		own.setX(3185);
+		own.setY(3440);
+		assertFalse("the player's own place has no step behind it", OsrsPathBridgePlugin.navOutdatedFor(own, false, "S3-05"));
+		assertFalse(OsrsPathBridgePlugin.navOutdatedFor(null, true, "S3-05"));
+	}
 }

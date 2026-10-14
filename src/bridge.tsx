@@ -25,6 +25,7 @@ import { isClosed, openAfter } from './lib/next-step';
 import { withKillEstimate } from './services/gearAdvisor';
 import { buildEnvelope, EMPTY_PARTS, envelopeKey, nextSeq, type SnapshotParts } from './lib/prepEnvelope';
 import type { SkillPathPayload } from './lib/skillGuide';
+import { transportWatch } from './lib/travelInput';
 
 const ENABLED_KEY = 'osrs-put:runelite-bridge';
 const AUTOLAUNCH_KEY = 'osrs-put:runelite-autolaunch';
@@ -288,8 +289,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // The event handler outlives a render — it takes fresh data from refs.
-  const latest = useRef({ progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear, gate });
-  latest.current = { progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear, gate };
+  const latest = useRef({ progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear, gate, mode });
+  latest.current = { progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear, gate, mode };
   /** Already handled auto-marks: one event does not mark a step twice and does not move the route twice. */
   const handled = useRef(new Set<string>());
   const nonce = useRef(0);
@@ -336,7 +337,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     const ahead = tripWindow(list, p, step.id).slice(1).flatMap((s) => preflightItems(s).map((i) => i.nameEn));
     const target = withKillEstimate(step, { ...p.levels, ...(live ?? {}) }, g);
     if (!supportsSnapshot(pluginProtocol.current)) return syncActiveStep(target, undefined, branch, ahead);
-    const payload = toInGameTarget(target, branch, ahead);
+    // What the ways to the step need is counted too: the planner says "withdraw it" only for what the bank is known to hold.
+    const payload = toInGameTarget(target, branch, ahead, transportWatch(latest.current.mode));
     if (!payload) return false;
     const sn = snapshot.current;
     sn.parts = { ...sn.parts, step: payload };
