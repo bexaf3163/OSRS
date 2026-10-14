@@ -360,8 +360,23 @@ item is checked against the current data and the OSRS Wiki before it changes. Ev
     HUD says where to go instead of a straight-line number (inside the Stronghold it read "~2180 tiles"); the big arrow shows a chevron. A player already
     inside the area a route ends in skips the waypoints that lead in from another layer, only when the rest of the route stays in that layer and never on
     the surface (`Breadcrumbs.update`). App: a target in a separate area is not drawn on the world map (`isSeparateArea`).
-  - "Block 2" of the owner's screenshot is the empty space under "Previous step / Next step" on the 2.54.2 S3-08 page: no element is there (the page ends
-    and the window is taller). Nothing was removed; the 2.55.1 page carries the kit, the fields and the three steps.
+  - "Block 2": first read as the empty space under the app's "Previous step / Next step"; the owner's next screenshot (2026-10-15) showed it is the in-game
+    guide card. Answered in 2.55.2 below; nothing was removed in the app.
+- 2.55.2, the training view (the owner: "after everything is bought and the fighting started, show the monsters left and the progress, like the top block;
+  remove the card, without breaking anything"):
+  - `PacingSet.trainingAt` (a gain in any paced skill within `TRAINING_MS` = 2 min) and `progress()` (the shown skill's XP over its goal's XP).
+  - `SmartView.training(gaining, bankOpen, temporaryTarget)`; the plugin's `trainingNow()` puts `training` and `progress` into the HUD `State` (two new
+    fields; the 16-argument constructor and the older ones keep their meaning). A per-tick check refreshes the HUD when the flag flips.
+  - While training: `OsrsPathGuideOverlay` draws nothing; the HUD takes `lean` even when the compact HUD is off and ignores the smart reveal's one-line
+    mode, so it shows the step title, the pace line, the bar (`OverlayProgress`, own component: RuneLite's ProgressBarComponent put its label a point below
+    the plate with the large RuneScape font) and the warnings; goal, distance and bag wait. The card is back two minutes after the last XP, at the open bank
+    or with a temporary target. Quest steps have no pace and are unchanged.
+- 2.55.2, S4-03 (the combat brief, numbers checked): Hill Giant (wiki: 35 HP, Attack 18, attack bonus +18, Defence 26, max hit 4, every 6 ticks,
+  aggressive) at Defence 1 in iron armour against an Adamant scimitar at Strength 20: ~25 HP taken a kill without a potion, ~21 with one; Attack 30-40 is
+  ~170 kills, ~370 Salmon with potions (the brief's "Salmon x25" is one trip of ~12 giants, said so). Big bones ~330 gp (price API 2026-10-15) pay ~10 Salmon
+  each, so the giants stay. Compared and NOT adopted: L12 Minotaurs (half the food, same time, no bones), L27 Minotaurs (more food). Kit: required Adamant
+  scimitar and 25 Salmon (`anyOf` fish); recommended 4 Strength potion(4) and the Amulet of strength; `quickSteps`; `inGame.goal` and `pathWaypoints`
+  trapdoor (3097,3468) then the giants (3111,9838, wiki spawn mean) so the HUD inside the dungeon leads to them.
 
 ### Automated
 
@@ -375,6 +390,10 @@ default 5 s failed under load; the assertions are unchanged).
 2.55.1: tsc, build, 1068 Vitest tests (new: `tests/minotaurTraining.test.ts`; the S3-08 expectations in `tests/streamlinedRoute.test.ts` and
 `tests/stage3.test.ts` follow the new order; `tests/parity.test.ts` compares alternatives against the `alternative` requirement), check-data, full Java
 suite (500 tests; `PacingSetTest` goals and styles, `NavigationTest` layers and waypoints), UI smoke. The readiness golden changed for S3-08 only.
+2.55.2: tsc, build, 1074 Vitest tests (new: `tests/hillGiants.test.ts`; `tests/auditFixes.test.ts` and `tests/streamlinedRoute.test.ts` follow the food
+moving into S4-03's required kit, the "Salmon is bought" check now covers S3-08 too), check-data, full Java suite (505 tests; `HudLeanTest` training view and percent,
+`PacingSetTest` training window and progress, `OverlayLayoutTest` draws a training plate for every paced step in every font), UI smoke. The readiness golden
+changed for S4-03 only.
 
 ### Installation
 
@@ -382,6 +401,22 @@ suite (500 tests; `PacingSetTest` goals and styles, `NavigationTest` layers and 
   `Downloads\OSRS-Put-data-backup-2.53.1-before-2.54.2-20261014`. Plugin 2.54.2 reported by `/status` with the app 2.54.2.
 - The 2.53.1 exe kept beside it as a rollback is gone: the app's own `sweepOld` (`electron/updater.cjs`) deletes every older `OSRS-Put-x.y.z-portable.exe`
   in its folder when a newer one starts. A rollback copy must live in another folder (from 2.55.0: `Downloads\OSRS-Put-rollback\`).
+- 2026-10-15: the owner installed 2.55.0 (00:59) and 2.55.1 (01:13) with the app's own update button (an install is only ever a click, `update:install`);
+  each restarted RuneLite. `OSRS-Put-2.55.1-portable.exe` SHA-256 `4b9c6eb8…5c7b45` equals the release digest; plugin 2.55.1, protocol 6 in `/status`.
+  Rollback: `Downloads\OSRS-Put-rollback\OSRS-Put-2.55.0-portable.exe` (`83be087f…f203d4`, the release digest), outside the swept folder. The 2.54.2 exe
+  was swept by the 2.55.0 start.
+
+### Live 2.55.1 (2026-10-15)
+
+World 316, Bexqq, fighting in the Stronghold of Security, Vault of War, on S3-08 with plugin 2.55.1 (no automated input; screenshots and `/status` only, the
+game was not clicked while the owner played):
+- HUD pace: "10 minotaurs to 20 Strength on Aggressive (estimate ~2 min)", then 9: Strength counted to its own goal 20, the style named.
+- Guide card: "Strength to 20 and Attack to 30 · Current step · ~23 tiles ↓" and "Stronghold of Security floor 1: the level 12 Minotaurs": the route leads
+  inside instead of "~2180 tiles" to the surface entrance.
+- "What you need: in bank 1": 13 Salmon in the bag of the 20, the rest in the bank. Honest, but it stays on while food is eaten during a trip (see Open).
+- The owner trains Strength on Aggressive with Strength potions and Salmon, as the step now says.
+- Not seen live: the app window (minimised while the owner played; the same build was checked on the S3-08 page in a browser), the "next Attack: switch to
+  Accurate" line (Strength 20 not reached yet), the training view (2.55.2, not released at the time).
 
 ### Live
 
@@ -412,5 +447,11 @@ Not verifiable on this account, so not claimed:
   the mapping are verified. The Cowbell's charge count is not read (only charged vs empty by item id).
 - Resumption of the quest objective after travel, missing-rune preparation and the three states are the 2.52/2.53 pipeline (`PrepSync`, `travelSupplies`);
   not re-verified in the live game in this group.
+- Consumable kit during a step (food eaten mid-trip keeps "in bank: Salmon"): a departure check versus an in-progress check belongs to the unified readiness
+  work (stages 1-7 of the owner's spec), not started.
+- Combat brief, not done yet: S4-01, S4-02, S5-03 kits (S4-01/S4-02 have food guards at the fight's entry line since 2.54.1 but no required food; S5-03 has
+  no food), S2-01/S3-07 shopping amounts, members steps S7-02/S7-03/S7-05/S8-04. The brief's "prefer L27 Minotaurs" and "S4-03 Salmon x25 is enough" were
+  checked against the wiki stats and not adopted as written.
+- Inventory cleanup assistant, unified readiness stages 1-7, the full visual review at 100/125/150%: not started.
 - The pack's other P1/P2 items not listed above are unchanged and unverified.
 - Not adopted: a 67-step ledger and a single mega-release; reordering (see the proposal).

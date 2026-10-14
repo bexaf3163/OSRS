@@ -2583,8 +2583,19 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		Preflight.Block pb = preBlock;
 		String missing = pb != null && me != null && client.getGameState() == GameState.LOGGED_IN
 			&& pb.near(me.getWorldLocation().getX(), me.getWorldLocation().getY(), me.getWorldLocation().getPlane()) ? pb.chip() : null;
+		boolean training = pace != null && trainingNow();
 		hud = new OsrsPathHudOverlay.State(title, goal, distance, near, bag, checklist.isReady(), dangerText, inside, pace, paceGood, upgrade,
-			health, critical, chip != null ? chip : navTarget == null ? useLine(target, ItemCounts.sum(carried, noted)) : null, tiles, missing);
+			health, critical, chip != null ? chip : navTarget == null ? useLine(target, ItemCounts.sum(carried, noted)) : null, tiles, missing,
+			training ? pacing.progress() : null, training);
+	}
+
+	/** Training now on a paced step (2.55.1): its skills grew within {@link PacingSet#TRAINING_MS}, no temporary target, the bank closed. */
+	private boolean trainingNow()
+	{
+		PacingSet p = pacing;
+		return p != null && target != null && config.hudPacing() && client.getGameState() == GameState.LOGGED_IN
+			&& SmartView.training(p.trainingAt(System.currentTimeMillis()),
+				InventoryCheckOverlay.visible(client.getWidget(InterfaceID.Bankmain.ITEMS_CONTAINER)), navTarget != null);
 	}
 
 	/**
@@ -3067,6 +3078,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				readJournal();
 			}
 			qhTick();
+			// The training view ends by itself two minutes after the last XP, or when the bank opens: nothing else would refresh a player standing still.
+			OsrsPathHudOverlay.State h = hud;
+			if (h != null && h.isTraining() != (h.getPacing() != null && trainingNow()))
+			{
+				updateHud();
+			}
 		}
 		flush();
 	}

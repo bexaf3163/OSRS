@@ -136,6 +136,14 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			plugin.guideShown(false);
 			return null;
 		}
+		// Training on a paced step: the HUD carries the step, the kills left and the progress; the card comes back when the fighting stops or the bank opens.
+		OsrsPathHudOverlay.State trainingHud = plugin.getHud();
+		if (trainingHud != null && trainingHud.isTraining() && config.showHud())
+		{
+			hits = Hits.NONE;
+			plugin.guideShown(false);
+			return null;
+		}
 		// The docked bar keeps the list closed until the mouse is over the bar or the list, or the bank is open.
 		if (config.dockBar() && plugin.dockHidesList())
 		{

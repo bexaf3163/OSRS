@@ -210,6 +210,25 @@ public class PacingSetTest
 	}
 
 	@Test
+	public void trainingLastsTwoMinutesAfterTheLastGain_andProgressIsTheShareOfTheGoal()
+	{
+		PacingSet set = new PacingSet(minotaurs());
+		set.update("attack", 5_937, 0);
+		set.update("strength", 3_070, 0);
+		assertFalse("the first reading is not a gain", set.trainingAt(0));
+		set.update("strength", 3_090, 10_000);
+		assertTrue(set.trainingAt(10_000 + PacingSet.TRAINING_MS));
+		assertFalse(set.trainingAt(10_001 + PacingSet.TRAINING_MS));
+		// Strength 3,090 of the 4,470 of level 20.
+		assertEquals(3_090 / 4_470.0, set.progress(), 1e-9);
+		// An Attack hit counts as training too; Strength has been still for long, so Attack is shown and its own goal is the measure.
+		set.update("attack", 5_941, 200_000);
+		assertTrue(set.trainingAt(250_000));
+		assertEquals("attack", set.getActive());
+		assertEquals(5_941 / (double) XP_30, set.progress(), 1e-9);
+	}
+
+	@Test
 	public void goalsAreChecked()
 	{
 		ActiveTarget.Pacing defence = minotaurs();

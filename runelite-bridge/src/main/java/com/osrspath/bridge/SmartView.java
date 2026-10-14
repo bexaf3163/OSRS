@@ -59,6 +59,15 @@ final class SmartView
 		return c == Context.TRAVEL || c == Context.EXCHANGE;
 	}
 
+	/**
+	 * The training view (2.55.1): on a paced step while its skills are growing, the guide card is hidden and the HUD carries the step, the kills left
+	 * and the progress. Not at the open bank (restocking needs the list) and not while a temporary target leads the arrow (a shop, a detour).
+	 */
+	static boolean training(boolean gaining, boolean bankOpen, boolean temporaryTarget)
+	{
+		return gaining && !bankOpen && !temporaryTarget;
+	}
+
 	/** The radar warning in the HUD: the smart view only when the player is already in the zone; the usual one also on the approach. */
 	static boolean dangerVisible(boolean smart, DangerRadar.Level level)
 	{

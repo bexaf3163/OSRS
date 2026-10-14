@@ -17,12 +17,19 @@ final class PacingSet
 {
 	/** This long without XP in the shown skill, and the pace moves to the skill that is growing. */
 	static final long SWITCH_MS = 10_000L;
+	/**
+	 * A gain in any of the step's skills this recently means the player is training: the guide card makes room for the pace and its progress
+	 * (the owner's report from S3-08). Two minutes covers a walk to the next minotaur and eating; a bank trip is longer.
+	 */
+	static final long TRAINING_MS = 120_000L;
 
 	private final ActiveTarget.Pacing pacing;
 	private final Map<String, PacingTracker> trackers = new LinkedHashMap<>();
 	private String active;
 	/** When the shown skill last got XP; null means there have been no gains yet. */
 	private Long activeGainAt;
+	/** When any of the step's skills last got XP; null means there have been no gains yet (the first reading is not a gain). */
+	private Long lastGainAt;
 
 	PacingSet(ActiveTarget.Pacing pacing)
 	{
@@ -70,6 +77,7 @@ final class PacingSet
 		}
 		if (before > 0 && xp > before)
 		{
+			lastGainAt = nowMs;
 			if (skill.equals(active))
 			{
 				activeGainAt = nowMs;
@@ -90,6 +98,20 @@ final class PacingSet
 	boolean hasXp()
 	{
 		return trackers.get(active).hasXp();
+	}
+
+	/** The player is training now: one of the step's skills grew within {@link #TRAINING_MS}. */
+	boolean trainingAt(long nowMs)
+	{
+		return lastGainAt != null && nowMs - lastGainAt <= TRAINING_MS;
+	}
+
+	/** The shown skill's XP as a share of the XP of its goal, 0 to 1: the progress bar under the pace. */
+	double progress()
+	{
+		int goal = pacing.targetExpOf(active);
+		int xp = Math.max(0, trackers.get(active).getXp());
+		return goal <= 0 ? 0 : Math.min(1.0, xp / (double) goal);
 	}
 
 	PacingTracker.Snapshot snapshot()

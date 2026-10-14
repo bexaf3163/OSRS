@@ -3520,7 +3520,7 @@
       {
         "nameEn": "Salmon",
         "amount": 20,
-        "howToGet": "One trip of food: about 60 kills. Grand Exchange, about 34 gp each (15 Oct 2026); Trout (about 22 gp, heals 7), Tuna, Lobster or Swordfish count too. Or catch and cook your own at Barbarian Village (fly fishing, Fishing 30 for salmon).",
+        "howToGet": "Buy on the Grand Exchange, about 34 gp each (15 Oct 2026); Trout (about 22 gp, heals 7), Tuna, Lobster or Swordfish count too. One trip of food: about 60 kills. Or catch and cook your own at Barbarian Village (fly fishing, Fishing 30 for salmon).",
         "wikiItemId": 329,
         "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
         "heals": 9,
@@ -3809,16 +3809,36 @@
         "wikiItemId": 1331,
         "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_scimitar.png",
         "howToGet": "From step S3-07. Wear it until Attack 40: the Rune scimitar needs 40 Attack."
+      },
+      {
+        "nameEn": "Salmon",
+        "amount": 25,
+        "howToGet": "Buy on the Grand Exchange, about 34 gp each (15 Oct 2026); Trout, Tuna, Lobster or Swordfish count too. One trip of food: about 12 giants at Defence 1 (an estimate). One Big bone (about 330 gp) pays for about 10 Salmon.",
+        "wikiItemId": 329,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
+        "heals": 9,
+        "anyOf": [
+          "Trout",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ]
       }
     ],
     "itemsRecommended": [
       {
-        "nameEn": "Salmon",
-        "amount": 20,
-        "howToGet": "Buy on the Grand Exchange for about 30 gp (20 of them about 600).",
-        "wikiItemId": 329,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
-        "heals": 9
+        "nameEn": "Strength potion(4)",
+        "amount": 4,
+        "howToGet": "Grand Exchange, about 160 gp each (15 Oct 2026). A dose every 4-5 minutes: a higher max hit shortens every fight, so it saves food too.",
+        "wikiItemId": 113,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
+      },
+      {
+        "nameEn": "Amulet of strength",
+        "amount": 1,
+        "howToGet": "From S2-01: wear it (+10 strength).",
+        "wikiItemId": 1725,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_strength.png"
       }
     ],
     "fields": [
@@ -3835,6 +3855,10 @@
         "text": "Train with the Adamant scimitar. The Rune scimitar can be wielded only from Attack 40: once you reach it, the gear advice may offer it, it is not part of this step."
       },
       {
+        "label": "Food",
+        "text": "At Defence 1 a Hill Giant hits about 4 times in 5 for up to 4, every 3.6 seconds, and with the Adamant scimitar at Strength 20 a fight lasts about a minute: plan about 2 Salmon a giant with a Strength potion, nearly 3 without (an estimate from the wiki stats and the combat formulas). Attack 30 to 40 is about 170 giants, roughly 370 Salmon with potions. The bones pay for it: every giant drops a Big bone, about 330 gp, the price of about 10 Salmon (15 Oct 2026)."
+      },
+      {
         "label": "Armour",
         "text": "No Defence training, so wear what you already have. The Anti-dragon shield (S5-02) stops Elvarg's fire whatever your Defence is, and the 18,650 Defence XP from Dragon Slayer I lifts Defence by itself. Hill Giants hit up to 4 and are aggressive: eat before your health falls to 8 (two hits), and earlier when two of them are on you."
       }
@@ -3844,6 +3868,21 @@
     "inGame": {
       "npcNames": [
         "Hill Giant"
+      ],
+      "goal": "Edgeville Dungeon: the Hill Giants",
+      "pathWaypoints": [
+        {
+          "x": 3097,
+          "y": 3468,
+          "plane": 0,
+          "label": "The trapdoor to the Edgeville Dungeon: climb down"
+        },
+        {
+          "x": 3111,
+          "y": 9838,
+          "plane": 0,
+          "label": "Edgeville Dungeon: the Hill Giants"
+        }
       ],
       "highlightItems": [
         "Big bones"
@@ -3865,7 +3904,12 @@
           }
         ]
       }
-    }
+    },
+    "quickSteps": [
+      "Bank in Edgeville: take 25 Salmon (or other fish) and the Strength potions; wield the Adamant scimitar and wear the Amulet of strength.",
+      "Climb down the trapdoor a few steps south-west of the bank; the Hill Giants are in the south-east of the dungeon.",
+      "Fight the Hill Giants on Accurate (Chop) to Attack 40. Eat at 8 health; drink a Strength potion dose every 4-5 minutes. When the food runs out, bank the Big bones in Edgeville and come back."
+    ]
   },
   {
     "id": "S4-04",

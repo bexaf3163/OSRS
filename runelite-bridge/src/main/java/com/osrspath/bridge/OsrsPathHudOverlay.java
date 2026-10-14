@@ -74,6 +74,20 @@ class OsrsPathHudOverlay extends OverlayPanel
 		int tiles;
 		/** "⚠ Missing Item: Cabbage - Turn back!": the step ahead needs an item that is not in the bag; null means nothing is missing. */
 		String missing;
+		/** The pace's skill XP as a share of its goal, 0 to 1, drawn as a bar under the pace line; null means no bar. */
+		Double progress;
+		/**
+		 * Training now on a paced step (XP in its skills within two minutes, no temporary target, the bank closed): the guide card is hidden and this
+		 * plate carries the step, the kills left and the progress (the owner's report from S3-08, 2.55.1).
+		 */
+		boolean training;
+
+		/** Without the training view, as before 2.55.1. */
+		State(String title, String goal, String distance, boolean near, String bag, boolean bagReady, String danger,
+			boolean dangerInside, String pacing, boolean pacingGood, String upgrade, String health, boolean healthCritical, String action, int tiles, String missing)
+		{
+			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, health, healthCritical, action, tiles, missing, null, false);
+		}
 
 		/** Without the missing-item chip, as before 2.45. */
 		State(String title, String goal, String distance, boolean near, String bag, boolean bagReady, String danger,
@@ -138,14 +152,16 @@ class OsrsPathHudOverlay extends OverlayPanel
 			return null;
 		}
 		// Smart reveal: while travelling and at the exchange one line (the action and distance), the rest is not needed in the game.
-		if (config.smartOverlays() && SmartView.compactHud(plugin.overlayContext()))
+		// Training: the plate replaces the hidden guide card (the step, the kills left, the progress) whatever the reveal mode says.
+		if (config.smartOverlays() && SmartView.compactHud(plugin.overlayContext()) && !s.isTraining())
 		{
 			s = SmartView.compact(s);
 		}
-		else if (config.hudLean())
+		else if (config.hudLean() || s.isTraining())
 		{
 			// Compact HUD: the step, target, distance and "bag" are already in the "What you need" list; the plate stays only if it has something to say.
-			s = lean(s, GuideList.shown(config.showGuide(), config.guideCollapsed(), plugin.getGuideView(), config.smartOverlays(), plugin.overlayContext()));
+			s = lean(s, !s.isTraining()
+				&& GuideList.shown(config.showGuide(), config.guideCollapsed(), plugin.getGuideView(), config.smartOverlays(), plugin.overlayContext()));
 			if (s == null)
 			{
 				plugin.hudShown(false);
@@ -179,16 +195,17 @@ class OsrsPathHudOverlay extends OverlayPanel
 	static State lean(State s, boolean guideShown)
 	{
 		String title = guideShown ? null : s.getTitle();
-		String goal = guideShown ? null : s.getGoal();
-		String distance = guideShown ? null : s.getDistance();
-		String bag = guideShown || s.isBagReady() ? null : s.getBag();
+		// Training: the step's name, the kills left and the progress; where to go and what to bring wait until the fighting stops.
+		String goal = guideShown || s.isTraining() ? null : s.getGoal();
+		String distance = guideShown || s.isTraining() ? null : s.getDistance();
+		String bag = guideShown || s.isTraining() || s.isBagReady() ? null : s.getBag();
 		if (isBlank(title) && isBlank(goal) && isBlank(distance) && isBlank(bag) && isBlank(s.getDanger()) && isBlank(s.getHealth()) && isBlank(s.getMissing())
 			&& isBlank(s.getAction()) && isBlank(s.getPacing()) && isBlank(s.getUpgrade()))
 		{
 			return null;
 		}
 		return new State(title, goal, distance, s.isNear(), bag, s.isBagReady(), s.getDanger(), s.isDangerInside(), s.getPacing(),
-			s.isPacingGood(), s.getUpgrade(), s.getHealth(), s.isHealthCritical(), s.getAction(), s.getTiles(), s.getMissing());
+			s.isPacingGood(), s.getUpgrade(), s.getHealth(), s.isHealthCritical(), s.getAction(), s.getTiles(), s.getMissing(), s.getProgress(), s.isTraining());
 	}
 
 	/** The plate text in lines, for the debug log: what the player sees at the top. */
@@ -269,6 +286,10 @@ class OsrsPathHudOverlay extends OverlayPanel
 		if (s.getPacing() != null)
 		{
 			OverlayText.line(c, s.getPacing(), s.isPacingGood() ? ALMOST : TEXT, fm, inner);
+			if (s.getProgress() != null)
+			{
+				c.add(progressBar(s.getProgress(), s.isPacingGood(), fm, inner));
+			}
 		}
 		if (s.getBag() != null)
 		{
@@ -278,6 +299,12 @@ class OsrsPathHudOverlay extends OverlayPanel
 		{
 			OverlayText.line(c, s.getUpgrade(), UPGRADE, fm, inner);
 		}
+	}
+
+	/** The pace's progress: a bar the width of the text with the percent in it. */
+	static OverlayProgress progressBar(double progress, boolean good, FontMetrics fm, int inner)
+	{
+		return new OverlayProgress(progress, good ? ALMOST : new Color(70, 150, 90), fm, inner);
 	}
 
 	/** The standard RuneLite plate background with the transparency from the settings. */

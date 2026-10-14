@@ -101,4 +101,48 @@ public class HudLeanTest
 		assertTrue("at the bank it shows", GuideList.shown(true, false, v, true, SmartView.Context.BANK));
 		assertTrue("smart view is off: the context does not matter", GuideList.shown(true, false, v, false, SmartView.Context.TRAVEL));
 	}
+
+	/** The owner's report from S3-08 (2.55.1): while fighting, the guide card goes and the top plate shows the kills left and the progress. */
+	@Test
+	public void training_thePlateKeepsTheStepThePaceAndTheProgress_dropsWhereToGoAndTheBag()
+	{
+		OsrsPathHudOverlay.State s = new OsrsPathHudOverlay.State("[S3-08] Strength to 20 and Attack to 30", "Point 2/2: Floor 1 (Vault of War): the level 12 Minotaurs",
+			"~21 tiles ↓", false, "Bag: missing Salmon 7", false, null, false, "9 minotaurs to 20 Strength on Aggressive (~2 min)", false, null,
+			"HP 6/19 - eat! Hits up to 2", false, null, 21, null, 0.79, true);
+		OsrsPathHudOverlay.State lean = OsrsPathHudOverlay.lean(s, false);
+		assertEquals("[S3-08] Strength to 20 and Attack to 30", lean.getTitle());
+		assertEquals("9 minotaurs to 20 Strength on Aggressive (~2 min)", lean.getPacing());
+		assertEquals(0.79, lean.getProgress(), 1e-9);
+		assertTrue(lean.isTraining());
+		assertNull("where to go waits until the fighting stops", lean.getGoal());
+		assertNull(lean.getDistance());
+		assertNull("what to bring waits for the bank", lean.getBag());
+		assertEquals("warnings stay", "HP 6/19 - eat! Hits up to 2", lean.getHealth());
+	}
+
+	@Test
+	public void training_onlyWhileGaining_notAtTheBank_notOnADetour()
+	{
+		assertTrue(SmartView.training(true, false, false));
+		assertFalse("no XP for two minutes: the card is back", SmartView.training(false, false, false));
+		assertFalse("the bank is open: the list is needed to restock", SmartView.training(true, true, false));
+		assertFalse("a shop or a detour leads the arrow", SmartView.training(true, false, true));
+	}
+
+	@Test
+	public void theBarSaysWholePercents_andNever100BeforeTheGoal()
+	{
+		assertEquals("78.97% is shown as 78%", "78%", OverlayProgress.percent(3_530 / 4_470.0));
+		assertEquals("99%", OverlayProgress.percent(4_469 / 4_470.0));
+		assertEquals("100%", OverlayProgress.percent(1.0));
+		assertEquals("0%", OverlayProgress.percent(-0.2));
+	}
+
+	@Test
+	public void olderStatesAreNotTraining()
+	{
+		OsrsPathHudOverlay.State s = new OsrsPathHudOverlay.State("Step", null, null, false, null, false, null, false, "34 shrimps to 20 Fishing", false, null);
+		assertFalse(s.isTraining());
+		assertNull(s.getProgress());
+	}
 }

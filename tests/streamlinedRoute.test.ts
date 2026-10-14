@@ -54,9 +54,10 @@ describe('S3-08 and S4-03: Attack and Strength, no Defence', () => {
     expect(s.doneWhen).not.toMatch(/Strength 35/);
     expect(s.pacing).toMatchObject({ skill: 'attack', targetLevel: 40 });
     expect(s.pacing!.also).toBeUndefined();
-    expect((s.itemsRecommended ?? []).map((i) => i.nameEn)).toEqual(['Salmon']);
+    // 2.55.1 (the combat brief): the food is part of the kit, the Strength potions and the amulet are advice.
+    expect((s.itemsRecommended ?? []).map((i) => i.nameEn)).toEqual(['Strength potion(4)', 'Amulet of strength']);
     // The weapon that can be wielded before Attack 40; the Rune scimitar is not part of this step.
-    expect(s.itemsRequired!.map((i) => i.nameEn)).toEqual(['Adamant scimitar']);
+    expect(s.itemsRequired!.map((i) => i.nameEn)).toEqual(['Adamant scimitar', 'Salmon']);
   });
 
   it('no step before Dragon Slayer I asks for a Defence level', () => {
@@ -193,8 +194,9 @@ describe('S3-09 and S2-13 are out of the route', () => {
   });
 
   it('the food that was to be fished is bought: Salmon says Grand Exchange, never a step', () => {
-    for (const id of ['S4-01', 'S4-02', 'S4-03']) {
-      const salmon = (step(id).itemsRecommended ?? []).find((i) => i.nameEn === 'Salmon')!;
+    // S3-08 and S4-03 carry the Salmon in the required kit since 2.55.1; it is still bought.
+    for (const id of ['S3-08', 'S4-01', 'S4-02', 'S4-03']) {
+      const salmon = [...(step(id).itemsRequired ?? []), ...(step(id).itemsRecommended ?? [])].find((i) => i.nameEn === 'Salmon')!;
       expect(salmon.howToGet, id).toMatch(/^Buy on the Grand Exchange/);
     }
   });

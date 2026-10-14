@@ -175,6 +175,9 @@ public class OverlayLayoutTest
 			for (String p : pace)
 			{
 				out.add(new OsrsPathHudOverlay.State(title, goal, d, false, null, false, null, false, p, false, null));
+				// The training view (2.55.1): the step, the pace and its progress bar, with a health warning at times.
+				out.add(new OsrsPathHudOverlay.State(title, null, null, false, null, false, null, false, p, false, null,
+					n % 3 == 0 ? "HP 6/19 - eat! Hits up to 2" : null, false, null, -1, null, (n % 10) / 9.0, true));
 			}
 			for (JsonElement b : arr(step, "branches"))
 			{

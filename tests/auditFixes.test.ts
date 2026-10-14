@@ -34,7 +34,8 @@ const ready = (id: string, o: OwnedState | null, g: GearState | null) => {
 describe('S4-03: a weapon that can be wielded, Hill Giants, 50 Big bones', () => {
   it('the step needs the Adamant scimitar and never the Rune scimitar before Attack 40', () => {
     const s = step('S4-03');
-    expect(names(s.itemsRequired)).toEqual(['Adamant scimitar']);
+    // 2.55.1: the food joined the kit (the combat brief); the weapon is still the Adamant scimitar alone.
+    expect(names(s.itemsRequired)).toEqual(['Adamant scimitar', 'Salmon']);
     expect([...names(s.itemsRequired), ...names(s.itemsRecommended)]).not.toContain('Rune scimitar');
     expect(s.foes).toEqual(['Hill Giant']);
     expect(s.pacing).toMatchObject({ skill: 'attack', targetLevel: 40, expPerAction: 140 });
