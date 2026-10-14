@@ -27,7 +27,35 @@ export interface Teleport {
 }
 /** A staff that, wielded, gives unlimited runes of its elements. */
 export interface RuneStaff { item: string; runes: string[]; members: boolean }
-export interface CanoeStation { id: string; name: string; x: number; y: number; plane: number; wakaOnly?: boolean }
+export interface CanoeStation { id: string; name: string; x: number; y: number; plane: number; wakaOnly?: boolean; /** The station attendant (River Dougne). */ npc?: string }
+
+/**
+ * A node of a network that goes from node to node (spirit trees, gnome gliders). quest / departQuest / check are what must be true to arrive or to leave
+ * from it; the game's completed-quest list answers the first two, a check is something the game does not tell (shown as "not checked").
+ */
+export interface NetNode {
+  id: string; name: string; x: number; y: number; plane: number;
+  /** The person to talk to (a glider captain). */
+  npc?: string;
+  /** Needed to use this node at all. */
+  quest?: string;
+  /** Needed only to leave from this node. */
+  departQuest?: string;
+  check?: string;
+  /** A one-way destination: nothing leaves from it (the crashed glider at Lemanto Andra). */
+  arriveOnly?: boolean;
+  /** A walk the straight line does not see (the Gnome Maze), in tiles. */
+  extraTiles?: number;
+  note?: string;
+}
+export interface SpiritTreeNet { quest: string; overheadSeconds: number; trees: NetNode[]; note?: string }
+/** Gliders fly from the hub to every station and from every station to the hub only: a trip between two outer stations is two flights. */
+export interface GliderNet { quest: string; hub: string; overheadSeconds: number; stations: NetNode[]; note?: string }
+/** The Cowbell amulet: one item name for two states, told apart by the item id the game reports (empty or charged). */
+export interface CowbellWay {
+  item: string; emptyId: number; chargedId: number; chargeWith: string; maxCharges: number; castSeconds: number; maxWilderness: number;
+  dest: Point & { label: string }; note?: string;
+}
 export interface CanoeType { name: string; level: number; stops: number }
 
 /** A ferry or a boat from pier to pier. needs: what the wiki says must be true first (a quest started), listed as "not checked" because the app cannot read it. */
@@ -56,6 +84,11 @@ export const TRANSPORT = transportJson as unknown as {
   boats: Boat[];
   staves: { list: RuneStaff[] };
   canoe: { stations: CanoeStation[]; types: CanoeType[]; axes: string[] };
+  /** The River Dougne canoes (members): the same canoe types as the River Lum, stations in river order. */
+  dougne?: { members: boolean; stations: CanoeStation[]; note?: string };
+  spiritTrees?: SpiritTreeNet;
+  gliders?: GliderNet;
+  cowbell?: CowbellWay;
 };
 
 export interface FairyRing { code: string; x: number; y: number; place: string; note: string; underground: boolean }
@@ -163,7 +196,7 @@ export interface Preparation {
   cost: number | null;
 }
 
-export interface Leg { kind: 'walk' | 'teleport' | 'canoe' | 'boat' | 'fairy' | 'charter'; label: string; tiles: number }
+export interface Leg { kind: 'walk' | 'teleport' | 'canoe' | 'boat' | 'fairy' | 'charter' | 'spirit' | 'glider'; label: string; tiles: number }
 /** Fetching a teleport item first: from the bank (free) or from the exchange (a price). The app only suggests it; it never buys. */
 export interface Acquire { what: string; where: string; point: Point; tiles: number; cost: number | null; source: 'bank' | 'shop' | 'exchange'; /** The teleport that shortens the way there. */ via?: string }
 export interface TravelOption {
@@ -219,6 +252,8 @@ export interface TravelInput {
   onDecision?: (d: DetourDecision) => void;
   /** The ids of one-time ways the route says were used (OneTimeWay.usedAfter closed): they are not offered again. */
   oneTimeUsed?: readonly string[];
+  /** The quests the game reports completed; null or absent: not known (an unlock is then a thing to check, never "locked"). */
+  questsDone?: readonly string[] | null;
 }
 
 const count = (items: readonly GearItem[], names: readonly string[]): number =>
@@ -376,6 +411,119 @@ function fairyOption(inp: TravelInput): TravelOption | null {
     ],
     walkTiles: best.tiles, availability: locked ? 'locked' : unsure ? 'maybe' : 'ready', needs,
     go: { x: a.x, y: a.y, plane: 0, label: `Fairy ring ${a.code} — ${a.place}` },
+  };
+}
+
+/** A quest the way needs, from the game's completed list: unknown when the game did not send it. */
+const questNeed = (inp: Pick<TravelInput, 'questsDone'>, quest: string, what = `${quest} completed`): Need =>
+  ({ text: what, ok: inp.questsDone === null || inp.questsDone === undefined ? null : inp.questsDone.includes(quest) });
+
+/** The walk to or from a network node: the straight line, the stairs between floors and a walk the line does not see. */
+const nodeTiles = (a: Point, n: NetNode): number => dist(a, n) + Math.abs(a.plane - n.plane) * STAIRS_TILES_PER_FLOOR + (n.extraTiles ?? 0);
+
+const availabilityOf = (needs: readonly Need[]): Availability => (needs.some((n) => n.ok === false) ? 'locked' : needs.some((n) => n.ok === null) ? 'maybe' : 'ready');
+
+/** Spirit trees (members, Tree Gnome Village): any tree to any other; the Stronghold tree is left from only after The Grand Tree. */
+function spiritTreeOption(inp: TravelInput): TravelOption | null {
+  const net = TRANSPORT.spiritTrees;
+  if (!net || inp.members === false) return null;
+  const overhead = Math.round(net.overheadSeconds * TILES_PER_SECOND);
+  let best: { a: NetNode; b: NetNode; tiles: number } | null = null;
+  for (const a of net.trees) {
+    for (const b of net.trees) {
+      if (a.id === b.id || a.arriveOnly) continue;
+      const tiles = nodeTiles(inp.from, a) + nodeTiles(inp.to, b);
+      if (!best || tiles < best.tiles) best = { a, b, tiles };
+    }
+  }
+  if (!best) return null;
+  const { a, b } = best;
+  const needs: Need[] = [membersNeed(inp.members), questNeed(inp, net.quest)];
+  if (a.departQuest) needs.push(questNeed(inp, a.departQuest, `${a.departQuest} completed, to leave from the ${a.name} tree`));
+  for (const n of [a, b]) if (n.check) needs.push({ text: n.check, ok: null });
+  return {
+    id: 'spirit-tree', title: `Spirit tree ${a.name} → ${b.name}`,
+    legs: [
+      { kind: 'walk', label: `to the spirit tree at ${a.name}${a.note ? ` (${a.note})` : ''}`, tiles: nodeTiles(inp.from, a) },
+      { kind: 'spirit', label: `spirit tree → ${b.name}`, tiles: 0 },
+      { kind: 'walk', label: `from the ${b.name} tree to the target${b.note ? ` (${b.note})` : ''}`, tiles: nodeTiles(inp.to, b) },
+    ],
+    walkTiles: best.tiles, overheadTiles: overhead, availability: availabilityOf(needs), needs,
+    ...(net.note ? { note: net.note } : {}),
+    go: { x: a.x, y: a.y, plane: a.plane, label: `Spirit tree — ${a.name}` },
+  };
+}
+
+/** Gnome gliders (members, The Grand Tree): the hub flies everywhere, every other station to the hub; two outer stations are two flights. */
+function gliderOption(inp: TravelInput): TravelOption | null {
+  const net = TRANSPORT.gliders;
+  if (!net || inp.members === false) return null;
+  const hub = net.stations.find((s) => s.id === net.hub);
+  if (!hub) return null;
+  const perFlight = Math.round(net.overheadSeconds * TILES_PER_SECOND);
+  let best: { a: NetNode; b: NetNode; tiles: number; flights: number } | null = null;
+  for (const a of net.stations) {
+    if (a.arriveOnly) continue;
+    for (const b of net.stations) {
+      if (a.id === b.id) continue;
+      const flights = a.id === hub.id || b.id === hub.id ? 1 : 2;
+      const tiles = nodeTiles(inp.from, a) + nodeTiles(inp.to, b);
+      if (!best || tiles + flights * perFlight < best.tiles + best.flights * perFlight) best = { a, b, tiles, flights };
+    }
+  }
+  if (!best) return null;
+  const { a, b, flights } = best;
+  const needs: Need[] = [membersNeed(inp.members), questNeed(inp, net.quest)];
+  for (const n of [a, b]) {
+    if (n.quest) needs.push(questNeed(inp, n.quest, `${n.quest} completed, for the glider at ${n.name}`));
+    if (n.check) needs.push({ text: n.check, ok: null });
+  }
+  const via = flights === 2 ? ` (two flights, through ${hub.name})` : '';
+  return {
+    id: 'glider', title: `Glider ${a.name} → ${b.name}`,
+    legs: [
+      { kind: 'walk', label: `to ${a.npc ?? 'the glider'} at ${a.name}`, tiles: nodeTiles(inp.from, a) },
+      { kind: 'glider', label: `glider → ${b.name}${via}`, tiles: 0 },
+      { kind: 'walk', label: `from ${b.name} to the target`, tiles: nodeTiles(inp.to, b) },
+    ],
+    walkTiles: best.tiles, overheadTiles: flights * perFlight, availability: availabilityOf(needs), needs,
+    ...(net.note ? { note: net.note } : {}),
+    go: { x: a.x, y: a.y, plane: a.plane, label: `${a.npc ?? 'Glider'} — ${a.name}` },
+  };
+}
+
+/** The Wilderness level of a surface tile, 0 outside it (the main Wilderness: x 2944-3391, y 3520-3967; one level per eight tiles north). */
+export function wildernessLevel(p: Point): number {
+  if (p.plane !== 0 || p.x < 2944 || p.x > 3391 || p.y < 3520 || p.y > 3967) return 0;
+  return Math.floor((p.y - 3520) / 8) + 1;
+}
+
+/**
+ * The Cowbell amulet (free-to-play, from The Ides of Milk): only a carried or worn one is a way (it is untradeable, so it is never bought). The game
+ * reports one name for the empty and the charged amulet; the item id tells them apart. Charged means at least one charge; an empty one needs an Air
+ * rune used on it first (one rune, one teleport). A carried amulet whose id is not known is a thing to check.
+ */
+function cowbellOption(inp: TravelInput): TravelOption | null {
+  const c = TRANSPORT.cowbell;
+  if (!c || !inp.carried) return null;
+  const held = inp.carried.filter((i) => i.name === c.item);
+  if (!held.length) return null;
+  const charged = held.some((i) => i.id === c.chargedId);
+  const empty = !charged && held.some((i) => i.id === c.emptyId);
+  const air = count(inp.carried, [c.chargeWith]);
+  const wild = wildernessLevel(inp.from);
+  const needs: Need[] = [];
+  if (wild > c.maxWilderness) needs.push({ text: `not above level ${c.maxWilderness} Wilderness (you are at level ${wild})`, ok: false });
+  if (charged) needs.push({ text: `${c.item}, charged (at least one charge; the count is not read)`, ok: true });
+  else if (empty && air > 0) needs.push({ text: `${c.item} is empty: use an ${c.chargeWith} on it (one rune, one teleport)`, ok: true, action: `use an ${c.chargeWith} on the ${c.item}` });
+  else if (empty) needs.push({ text: `${c.item} is empty: it needs an ${c.chargeWith} (one per teleport)`, ok: inp.bankSeen ? false : null, item: { name: c.chargeWith, need: 1, have: air, bank: bankOf(inp, c.chargeWith) } });
+  else needs.push({ text: `${c.item}: charged or empty is not known (check it)`, ok: null });
+  const tail = dist(c.dest, inp.to);
+  return {
+    id: 'cowbell', title: c.item,
+    legs: [{ kind: 'teleport', label: `${c.item} → ${c.dest.label}`, tiles: 0 }, { kind: 'walk', label: 'then on foot', tiles: tail }],
+    walkTiles: tail, overheadTiles: Math.round(c.castSeconds * TILES_PER_SECOND), availability: availabilityOf(needs), needs,
+    ...(c.note ? { note: c.note } : {}),
   };
 }
 
@@ -699,71 +847,76 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
 
   // A canoe: the best pair of stations — from the player to station A, down the river to B (no farther than the canoe type allows), from B to the target.
   // When the best pair needs a canoe the player cannot chop yet (Woodcutting too low), the best pair they can chop now is offered as well: "canoe-now".
-  const stations = TRANSPORT.canoe.stations;
   const types = TRANSPORT.canoe.types;
   const wc = inp.levels.woodcutting;
-  const bestCanoe = (usable: (ty: CanoeType) => boolean) => {
-    let best: { a: number; b: number; tiles: number; type: CanoeType } | null = null;
-    for (let a = 0; a < stations.length; a++) {
-      for (let b = 0; b < stations.length; b++) {
-        if (a === b) continue;
-        const stops = Math.abs(a - b);
-        const type = types.find((ty) => ty.stops >= stops && (!stations[b].wakaOnly || ty.name === 'Waka') && usable(ty));
-        if (!type) continue;
-        const tiles = dist(inp.from, stations[a]) + dist(stations[b], inp.to);
-        if (!best || tiles < best.tiles) best = { a, b, tiles, type };
+  const pushRiver = (stations: readonly CanoeStation[], idBase: string, extra: Need[]) => {
+    const bestCanoe = (usable: (ty: CanoeType) => boolean) => {
+      let best: { a: number; b: number; tiles: number; type: CanoeType } | null = null;
+      for (let a = 0; a < stations.length; a++) {
+        for (let b = 0; b < stations.length; b++) {
+          if (a === b) continue;
+          const stops = Math.abs(a - b);
+          const type = types.find((ty) => ty.stops >= stops && (!stations[b].wakaOnly || ty.name === 'Waka') && usable(ty));
+          if (!type) continue;
+          const tiles = dist(inp.from, stations[a]) + dist(stations[b], inp.to);
+          if (!best || tiles < best.tiles) best = { a, b, tiles, type };
+        }
+      }
+      return best && best.tiles + MIN_SAVING_TILES <= direct ? best : null;
+    };
+    const canoeOption = (id: string, best: NonNullable<ReturnType<typeof bestCanoe>>): TravelOption => {
+      // An axe in the bag or worn makes the station usable. None in the bag is not "no axe": since 1 April 2026 an axe stored at any canoe station is
+      // shared by all of them and is not read from the game, so "not carried" is unknown, never false (the fetch-first option below still offers one).
+      const axes = inp.carried ? count(inp.carried, TRANSPORT.canoe.axes) : null;
+      const axeOk: boolean | null = axes !== null && axes > 0 ? true : null;
+      const levelOk = wc === undefined ? null : wc >= best.type.level;
+      const a = stations[best.a];
+      const b = stations[best.b];
+      // The axe to fetch: one the bank is known to hold, otherwise the cheapest one a shop sells.
+      const banked = TRANSPORT.canoe.axes.map((name) => ({ name, n: bankOf(inp, name) }));
+      const inBank = banked.find((x) => (x.n ?? 0) > 0);
+      const axeItem: NeedItem = { name: inBank?.name ?? TRANSPORT.canoe.axes[0], need: 1, have: axes, bank: inBank ? inBank.n : banked.every((x) => x.n === 0) ? 0 : null };
+      return {
+        id, title: `Canoe ${a.name} → ${b.name}`,
+        legs: [
+          { kind: 'walk', label: `to station ${a.name}`, tiles: dist(inp.from, a) },
+          { kind: 'canoe', label: `${best.type.name}: ${Math.abs(best.a - best.b)} stops`, tiles: 0 },
+          { kind: 'walk', label: `from station ${b.name} to the target`, tiles: dist(b, inp.to) },
+        ],
+        walkTiles: best.tiles,
+        availability: levelOk === false || extra.some((n) => n.ok === false) ? 'locked' : levelOk === null || axeOk === null || extra.some((n) => n.ok === null) ? 'maybe' : 'ready',
+        needs: [
+          ...extra,
+          { text: `Woodcutting ${best.type.level} for ${best.type.name}${wc !== undefined ? ` (you have ${wc})` : ''}`, ok: levelOk },
+          { text: 'any axe in the bag or in your hands, or one you stored at a canoe station (stored axes are shared by all stations and cannot be read)', ok: axeOk, item: axeItem },
+        ],
+        go: { x: a.x, y: a.y, plane: a.plane, label: `Canoe station — ${a.name}` },
+      };
+    };
+    const pushCanoe = (id: string, best: NonNullable<ReturnType<typeof bestCanoe>>) => {
+      const option = canoeOption(id, best);
+      out.push(option);
+      // No axe on hand: the same canoe after fetching one, walking to the station from where the axe is.
+      const a = stations[best.a];
+      const b = stations[best.b];
+      const prepared = withPreparation(option, inp, direct, (from) => ({
+        legs: [{ kind: 'walk', label: `to station ${a.name}`, tiles: dist(from, a) }, option.legs[1], option.legs[2]],
+        tiles: dist(from, a) + dist(b, inp.to),
+      }));
+      if (prepared) out.push(prepared);
+    };
+    const bestAny = bestCanoe(() => true);
+    if (bestAny) {
+      pushCanoe(idBase, bestAny);
+      if (wc !== undefined && wc < bestAny.type.level) {
+        const now = bestCanoe((ty) => wc >= ty.level);
+        if (now) pushCanoe(`${idBase}-now`, now);
       }
     }
-    return best && best.tiles + MIN_SAVING_TILES <= direct ? best : null;
   };
-  const canoeOption = (id: string, best: NonNullable<ReturnType<typeof bestCanoe>>): TravelOption => {
-    // An axe in the bag or worn makes the station usable. None in the bag is not "no axe": since 1 April 2026 an axe stored at any canoe station is
-    // shared by all of them and is not read from the game, so "not carried" is unknown, never false (the fetch-first option below still offers one).
-    const axes = inp.carried ? count(inp.carried, TRANSPORT.canoe.axes) : null;
-    const axeOk: boolean | null = axes !== null && axes > 0 ? true : null;
-    const levelOk = wc === undefined ? null : wc >= best.type.level;
-    const a = stations[best.a];
-    const b = stations[best.b];
-    // The axe to fetch: one the bank is known to hold, otherwise the cheapest one a shop sells.
-    const banked = TRANSPORT.canoe.axes.map((name) => ({ name, n: bankOf(inp, name) }));
-    const inBank = banked.find((x) => (x.n ?? 0) > 0);
-    const axeItem: NeedItem = { name: inBank?.name ?? TRANSPORT.canoe.axes[0], need: 1, have: axes, bank: inBank ? inBank.n : banked.every((x) => x.n === 0) ? 0 : null };
-    return {
-      id, title: `Canoe ${a.name} → ${b.name}`,
-      legs: [
-        { kind: 'walk', label: `to station ${a.name}`, tiles: dist(inp.from, a) },
-        { kind: 'canoe', label: `${best.type.name}: ${Math.abs(best.a - best.b)} stops`, tiles: 0 },
-        { kind: 'walk', label: `from station ${b.name} to the target`, tiles: dist(b, inp.to) },
-      ],
-      walkTiles: best.tiles,
-      availability: levelOk === false ? 'locked' : levelOk === null || axeOk === null ? 'maybe' : 'ready',
-      needs: [
-        { text: `Woodcutting ${best.type.level} for ${best.type.name}${wc !== undefined ? ` (you have ${wc})` : ''}`, ok: levelOk },
-        { text: 'any axe in the bag or in your hands, or one you stored at a canoe station (stored axes are shared by all stations and cannot be read)', ok: axeOk, item: axeItem },
-      ],
-      go: { x: a.x, y: a.y, plane: a.plane, label: `Canoe station — ${a.name}` },
-    };
-  };
-  const pushCanoe = (id: string, best: NonNullable<ReturnType<typeof bestCanoe>>) => {
-    const option = canoeOption(id, best);
-    out.push(option);
-    // No axe on hand: the same canoe after fetching one, walking to the station from where the axe is.
-    const a = stations[best.a];
-    const b = stations[best.b];
-    const prepared = withPreparation(option, inp, direct, (from) => ({
-      legs: [{ kind: 'walk', label: `to station ${a.name}`, tiles: dist(from, a) }, option.legs[1], option.legs[2]],
-      tiles: dist(from, a) + dist(b, inp.to),
-    }));
-    if (prepared) out.push(prepared);
-  };
-  const bestAny = bestCanoe(() => true);
-  if (bestAny) {
-    pushCanoe('canoe', bestAny);
-    if (wc !== undefined && wc < bestAny.type.level) {
-      const now = bestCanoe((ty) => wc >= ty.level);
-      if (now) pushCanoe('canoe-now', now);
-    }
-  }
+  pushRiver(TRANSPORT.canoe.stations, 'canoe', []);
+  // The River Dougne (members, added 1 April 2026): left out on a known free-to-play account.
+  if (TRANSPORT.dougne && inp.members !== false) pushRiver(TRANSPORT.dougne.stations, 'canoe-dougne', [membersNeed(inp.members)]);
 
   // One-time NPC teleports (Count Check): walk to the person, talk, arrive. Never "ready": whether the player ever entered the Stronghold is not in the
   // game's data, so the way is possible, and it goes away when the route step that uses it is closed.
@@ -817,6 +970,17 @@ export function travelOptions(inp: TravelInput): TravelOption[] {
   if (fairy) out.push(fairy);
   const charter = inp.members === false ? null : charterOption(inp);
   if (charter) out.push(charter);
+  const spirit = spiritTreeOption(inp);
+  if (spirit) out.push(spirit);
+  const glider = gliderOption(inp);
+  if (glider) out.push(glider);
+  const cowbell = cowbellOption(inp);
+  if (cowbell) {
+    out.push(cowbell);
+    // Empty, with Air runes in the bank: the same teleport after a stop there.
+    const prepared = withPreparation(cowbell, inp, direct, () => ({ legs: cowbell.legs, tiles: cowbell.walkTiles }));
+    if (prepared) out.push(prepared);
+  }
   out.push(...itemTeleportOptions(inp, direct));
 
   const rank = (o: TravelOption) => (o.availability === 'ready' ? 0 : o.availability === 'maybe' ? 1 : 2);

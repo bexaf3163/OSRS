@@ -8,7 +8,7 @@
 import { TILES_PER_SECOND, NET, TRANSPORT, effectiveTiles, shortOf, shortOnHand, stopText, type Point, type PrepStop, type TravelOption } from './travel';
 import { TIP_MIN_SAVING_TILES } from './tips';
 
-export type TransportType = 'item_teleport' | 'tablet' | 'spell_teleport' | 'fairy_ring' | 'charter_ship' | 'canoe' | 'ferry' | 'npc_teleport';
+export type TransportType = 'item_teleport' | 'tablet' | 'spell_teleport' | 'fairy_ring' | 'charter_ship' | 'canoe' | 'ferry' | 'npc_teleport' | 'spirit_tree' | 'glider';
 /** ready: usable now. check: usable if what the app cannot see is fine (charges, a cooldown, a quest). prepare: usable after the listed stop. */
 export type TransportState = 'ready' | 'check' | 'prepare';
 
@@ -204,11 +204,29 @@ export function recommendedTransport(options: readonly TravelOption[]): Recommen
     const to = best.title.replace(/^Charter ship /, '').replace(/:.*$/, '').split('→').pop()!.trim();
     return finish({ type: 'charter_ship', destination: to, interactionName: 'Trader Crewmember', ...(best.go ? { tile: best.go } : {}), text: `Charter: ${best.title} ${tail}`, chip: chipOf(`Charter ship → ${to}`) }, `Charter ship → ${to}`, `The charter ship to ${to}`);
   }
-  if (id === 'canoe' || id === 'canoe-now') {
+  if (id === 'canoe' || id === 'canoe-now' || id === 'canoe-dougne' || id === 'canoe-dougne-now') {
     const pair = best.title.replace(/^Canoe /, '').replace(/:.*$/, '');
     const to = pair.split('→').pop()!.trim();
-    const station = TRANSPORT.canoe.stations.find((s) => s.name === pair.split('→')[0].trim());
+    const river = id.startsWith('canoe-dougne') ? TRANSPORT.dougne?.stations ?? [] : TRANSPORT.canoe.stations;
+    const station = river.find((s) => s.name === pair.split('→')[0].trim());
     return finish({ type: 'canoe', destination: to, interactionName: 'Canoe Station', ...(station ? { tile: { x: station.x, y: station.y, plane: station.plane } } : best.go ? { tile: best.go } : {}), text: `Canoe: ${best.title} ${tail}`, chip: chipOf(`Canoe: ${pair}`) }, `Canoe ${pair}`, `The canoe ${pair}`);
+  }
+  if (id === 'spirit-tree') {
+    const pair = best.title.replace(/^Spirit tree /, '').replace(/:.*$/, '');
+    const to = pair.split('→').pop()!.trim();
+    return finish({ type: 'spirit_tree', destination: to, interactionName: 'Spirit tree', ...(best.go ? { tile: best.go } : {}), text: `Spirit tree: ${pair} ${tail}`, chip: chipOf(`Spirit tree → ${to}`) }, `Spirit tree → ${to}`, `The spirit tree to ${to}`);
+  }
+  if (id === 'glider') {
+    const pair = best.title.replace(/^Glider /, '').replace(/:.*$/, '');
+    const [from, to] = pair.split('→').map((s) => s.trim());
+    const captain = TRANSPORT.gliders?.stations.find((s) => s.name === from)?.npc;
+    const short = placeOf(to);
+    return finish({ type: 'glider', destination: to, ...(captain ? { interactionName: captain } : {}), ...(best.go ? { tile: best.go } : {}), text: `Glider: ${pair} ${tail}`, chip: chipOf(captain ? `Glider: talk to ${captain} → ${short}` : `Glider → ${short}`) }, `Glider → ${short}`, `The glider to ${short}`);
+  }
+  if (id === 'cowbell' && TRANSPORT.cowbell) {
+    const c = TRANSPORT.cowbell;
+    const use = `Use ${c.item} → ${placeOf(c.dest.label)}`;
+    return finish({ type: 'item_teleport', destination: c.dest.label, item: c.item, text: `Teleport: ${c.item} to ${placeOf(c.dest.label)} ${tail}`, chip: chipOf(use) }, use, c.item);
   }
   const boat = TRANSPORT.boats.find((b) => b.id === id);
   if (boat) {

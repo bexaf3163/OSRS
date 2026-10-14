@@ -35,6 +35,8 @@ export function transportWatch(mode: GameMode): string[] {
     if (t.charges) out.add(t.charges.item);
   }
   for (const axe of TRANSPORT.canoe.axes) out.add(axe);
+  // The Cowbell amulet (free-to-play): the bag and the bank are counted like the other teleport items; empty or charged comes from the item id.
+  if (TRANSPORT.cowbell) out.add(TRANSPORT.cowbell.item);
   // Tablets are members' items: a free-to-play account is not asked about them.
   if (mode === 'members') for (const tb of NET.tablets) out.add(tb.item);
   return [...out];
@@ -80,6 +82,8 @@ export interface TravelInputSources {
   sourceOf?: (name: string, need: number) => ItemSource | null;
   /** The one-time ways the route says were used (see oneTimeUsedOf). */
   oneTimeUsed?: readonly string[];
+  /** The quests the game reports completed; null or absent: unknown. */
+  questsDone?: readonly string[] | null;
 }
 
 /** The one-time ways (Count Check) whose route step is closed: they were used, or knowingly skipped, and are not offered again. */
@@ -106,5 +110,6 @@ export function travelInputOf(s: TravelInputSources): TravelInput {
     ...(typeof s.spellbook === 'number' ? { standardSpellbook: s.spellbook === 0 } : s.mode === 'members' && s.spellbook === null ? { standardSpellbook: null } : {}),
     ...(s.sourceOf ? { sourceOf: s.sourceOf } : {}),
     ...(s.oneTimeUsed ? { oneTimeUsed: s.oneTimeUsed } : {}),
+    ...(s.questsDone !== undefined ? { questsDone: s.questsDone } : {}),
   };
 }

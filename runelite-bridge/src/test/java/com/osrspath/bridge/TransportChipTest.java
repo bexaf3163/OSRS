@@ -86,6 +86,26 @@ public class TransportChipTest
 		assertTrue(n.getNpcNameSet().isEmpty());
 	}
 
+	private static final String GLIDER = "{\"type\":\"glider\",\"destination\":\"Sindarpos (White Wolf Mountain)\",\"interactionId\":0,\"interactionName\":\"Captain Dalbur\","
+		+ "\"tile\":{\"x\":3282,\"y\":3212,\"plane\":0},\"text\":\"Glider: Kar-Hewo (Al Kharid) → Sindarpos (White Wolf Mountain) (saves ~300 tiles)\"}";
+	private static final String SPIRIT_TREE = "{\"type\":\"spirit_tree\",\"destination\":\"Battlefield of Khazard\",\"interactionId\":0,\"interactionName\":\"Spirit tree\","
+		+ "\"tile\":{\"x\":3185,\"y\":3510,\"plane\":0},\"text\":\"Spirit tree: Grand Exchange → Battlefield of Khazard (saves ~600 tiles)\"}";
+
+	@Test
+	public void aGliderPointsAtItsCaptainAndASpiritTreeIsTheObjectToClick()
+	{
+		NavTarget g = transport(GLIDER).navTarget("S7-05");
+		assertNotNull(g);
+		assertEquals(3282, g.getX());
+		assertTrue(g.getNpcNameSet().contains(ActiveTarget.nameKey("Captain Dalbur")));
+		assertTrue(g.getObjectNameSet().isEmpty());
+		NavTarget s = transport(SPIRIT_TREE).navTarget("S7-05");
+		assertNotNull(s);
+		assertEquals(3185, s.getX());
+		assertTrue(s.getObjectNameSet().contains(ActiveTarget.nameKey("Spirit tree")));
+		assertTrue(s.getNpcNameSet().isEmpty());
+	}
+
 	@Test
 	public void aTeleportHasNoStopToPointAt()
 	{

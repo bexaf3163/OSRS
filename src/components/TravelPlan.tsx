@@ -25,7 +25,7 @@ const badgeOf = (o: TravelOption) => (o.availability !== 'locked' && (o.prepare 
 export function TravelPlan({ step }: { step: Step }) {
   const { progress, mode, steps } = useStore();
   const { prices, state: player } = usePlayerState();
-  const { enabled, state, inGame, stats, gear, owned, navigate } = useBridge();
+  const { enabled, state, inGame, stats, gear, owned, navigate, questsDone } = useBridge();
   const places = useMemo(() => stepPlaces(step), [step]);
   const [pos, setPos] = useState<Point | null>(null);
   const [homeCooldown, setHomeCooldown] = useState<number | null>(null);
@@ -55,7 +55,7 @@ export function TravelPlan({ step }: { step: Step }) {
   const onMap = Boolean(pos) && isOverworld(pos) && isOverworld(target);
   const all: TravelOption[] = pos && onMap
     ? travelOptions(travelInputOf({
-      from: pos, to: target, levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: homeCooldown, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress),
+      from: pos, to: target, levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: homeCooldown, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress), questsDone,
       ...(homeKnown !== null ? { homeCooldownKnown: homeKnown } : {}), spellbook, chronicleCharges: charges, sourceOf: transportSources(player, prices.priceOf),
     }))
     : [];

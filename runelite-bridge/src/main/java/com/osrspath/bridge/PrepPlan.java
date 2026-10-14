@@ -224,15 +224,15 @@ public class PrepPlan
 			return "⚡ " + (text.length() > 56 ? text.substring(0, 55) + "…" : text);
 		}
 
-		/** A ferry, a charter ship or a one-time NPC teleport (Count Check) is a person to talk to; a canoe station and a fairy ring are objects to click. */
+		/** A ferry, a charter ship, a one-time NPC teleport (Count Check) or a glider captain is a person to talk to; a canoe station, a fairy ring and a spirit tree are objects to click. */
 		boolean interactsWithNpc()
 		{
-			return "ferry".equals(type) || "charter_ship".equals(type) || "npc_teleport".equals(type);
+			return "ferry".equals(type) || "charter_ship".equals(type) || "npc_teleport".equals(type) || "glider".equals(type);
 		}
 
 		boolean interactsWithObject()
 		{
-			return "canoe".equals(type) || "fairy_ring".equals(type);
+			return "canoe".equals(type) || "fairy_ring".equals(type) || "spirit_tree".equals(type);
 		}
 
 		/** The arrow to the first stop, with the NPC or the object to interact with highlighted there. null when the app knew no stop. */

@@ -41,7 +41,7 @@ export function PrepSync() {
 }
 
 function StepPlan({ step }: { step: Step }) {
-  const { setPrepPart, stats, gear, owned, moves, questInstruction, chronicleCharges } = useBridge();
+  const { setPrepPart, stats, gear, owned, moves, questInstruction, chronicleCharges, questsDone } = useBridge();
   const { progress, mode, steps } = useStore();
   const { prices } = usePlayerState();
   const profile = styleOf(useFeatures());
@@ -57,8 +57,8 @@ function StepPlan({ step }: { step: Step }) {
   // The road ahead: this step and the next open ones, for the supplies the teleports on it need.
   const road = roadSteps(steps, (id) => !isClosed(progress, id), step.id);
   const roadKey = road.map((s) => s.id).join(',');
-  const bagRef = useRef({ levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress), state: engine.ctx.state, priceOf: prices.priceOf, questInstruction, nextStep, road });
-  bagRef.current = { levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress), state: engine.ctx.state, priceOf: prices.priceOf, questInstruction, nextStep, road };
+  const bagRef = useRef({ levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress), questsDone, state: engine.ctx.state, priceOf: prices.priceOf, questInstruction, nextStep, road });
+  bagRef.current = { levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress), questsDone, state: engine.ctx.state, priceOf: prices.priceOf, questInstruction, nextStep, road };
   // The objective: the quest line the game confirms (never a temporary arrow), otherwise the step's own place.
   const to = transportTarget(step, questInstruction)?.point;
   // A teleport or a boat ride is a jump: the way is judged again at once from where the player landed, not at the next poll.
@@ -90,7 +90,7 @@ function StepPlan({ step }: { step: Step }) {
       }) : null;
       const decision = decideTransport({
         step, pos, instruction: b.questInstruction, nextStep: b.nextStep,
-        levels: b.levels, stats: b.stats, gear: b.gear, owned: b.owned, mode: b.mode, fairyRings: b.fairyRings, oneTimeUsed: b.oneTimeUsed, priceOf: b.priceOf,
+        levels: b.levels, stats: b.stats, gear: b.gear, owned: b.owned, mode: b.mode, fairyRings: b.fairyRings, oneTimeUsed: b.oneTimeUsed, questsDone: b.questsDone, priceOf: b.priceOf,
         homeCooldownSec: live ? st.homeTeleportSeconds : null,
         // An older plugin does not say whether the Home Teleport is ready: then it is as before (ready unless it reports a cooldown).
         ...(live && st.homeTeleportKnown !== null ? { homeCooldownKnown: st.homeTeleportKnown } : {}),
@@ -102,7 +102,7 @@ function StepPlan({ step }: { step: Step }) {
       const at = decision.to;
       if (!pos || !at || decision.skipped) { setDetour(null); return; }
       // The bag and the levels: a teleport that is ready shortens the way to the stop.
-      const t = travelInputOf({ from: pos, to: at, levels: b.levels, stats: b.stats, gear: b.gear, owned: b.owned, mode: b.mode, fairyRings: b.fairyRings, oneTimeUsed: b.oneTimeUsed });
+      const t = travelInputOf({ from: pos, to: at, levels: b.levels, stats: b.stats, gear: b.gear, owned: b.owned, mode: b.mode, fairyRings: b.fairyRings, oneTimeUsed: b.oneTimeUsed, questsDone: b.questsDone });
       setDetour(procurementDetour({ plan: planRef.current, stepId: step.id, from: pos, to: at, coins, travel: t }));
     };
     void run();

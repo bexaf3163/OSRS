@@ -17,7 +17,7 @@ import { lastTransport, subscribeTransport, transportSources } from '../lib/live
 
 export function TravelTip({ step }: { step: Step }) {
   const { progress, mode } = useStore();
-  const { enabled, state, inGame, stats, gear, owned, activeStepId } = useBridge();
+  const { enabled, state, inGame, stats, gear, owned, activeStepId, questsDone } = useBridge();
   const { prices, state: player } = usePlayerState();
   const places = useMemo(() => stepPlaces(step), [step]);
   const decision = useSyncExternalStore(subscribeTransport, lastTransport, lastTransport);
@@ -42,7 +42,7 @@ export function TravelTip({ step }: { step: Step }) {
   }
   if (!live || !places.length || !seen || seen.stepId !== step.id || !seen.pos || !isOverworld(seen.pos) || !isOverworld(places[0])) return null;
   const options = travelOptions(travelInputOf({
-    from: seen.pos, to: places[0], levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: seen.homeCooldown, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress),
+    from: seen.pos, to: places[0], levels: progress.levels, stats, gear, owned, priceOf: prices.priceOf, mode, homeCooldownSec: seen.homeCooldown, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress), questsDone,
     ...(seen.homeKnown !== null ? { homeCooldownKnown: seen.homeKnown } : {}), spellbook: seen.spellbook, chronicleCharges: seen.charges, sourceOf: transportSources(player, prices.priceOf),
   }));
   const tip = travelTip(options);

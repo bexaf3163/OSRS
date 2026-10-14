@@ -292,5 +292,182 @@
       "needs": ["The Corsair Curse started (Captain Tock) or finished (Cabin Boy Colin)"],
       "note": "Free: speak to Captain Tock during The Corsair Curse, or to Cabin Boy Colin after it."
     }
-  ]
+  ],
+  "dougne": {
+    "source": "OSRS Wiki: Canoe (River Dougne section, added 1 April 2026), the station attendants Lara, Porkai, Pete, Amergin, Kaiquir (map pins), \"River Dougne canoe map\" (the order 1 to 5)",
+    "members": true,
+    "note": "Members only (Kandarin). The tiles are the attendants' map pins; the canoe station stands beside them. The same canoes and levels as the River Lum: one stop per Log, up to two per Dugout, three per Stable Dugout, any with a Waka.",
+    "stations": [
+      {
+        "id": "dougne-castle-wars",
+        "name": "Castle Wars",
+        "x": 2439,
+        "y": 3136,
+        "plane": 0,
+        "npc": "Lara"
+      },
+      {
+        "id": "dougne-tree-gnome-village",
+        "name": "Tree Gnome Village",
+        "x": 2485,
+        "y": 3192,
+        "plane": 0,
+        "npc": "Porkai"
+      },
+      {
+        "id": "dougne-ardougne-zoo",
+        "name": "Ardougne Zoo",
+        "x": 2577,
+        "y": 3261,
+        "plane": 0,
+        "npc": "Pete"
+      },
+      {
+        "id": "dougne-chaos-druid-tower",
+        "name": "Chaos Druid Tower",
+        "x": 2575,
+        "y": 3358,
+        "plane": 0,
+        "npc": "Amergin"
+      },
+      {
+        "id": "dougne-combat-training-camp",
+        "name": "Combat Training Camp",
+        "x": 2527,
+        "y": 3408,
+        "plane": 0,
+        "npc": "Kaiquir"
+      }
+    ]
+  },
+  "spiritTrees": {
+    "source": "OSRS Wiki: Spirit tree (locations with map links; members; Tree Gnome Village to use, The Grand Tree to travel from the Stronghold tree)",
+    "quest": "Tree Gnome Village",
+    "overheadSeconds": 5,
+    "note": "Any tree to any other. Left out: the planted trees (whether one is grown cannot be read), Poison Waste (needs part of The Path of Glouphrie), Prifddinas and Laguna Aurorae (not on the main map).",
+    "trees": [
+      {
+        "id": "spirit-tree-gnome-village",
+        "name": "Tree Gnome Village",
+        "x": 2539,
+        "y": 3166,
+        "plane": 0,
+        "extraTiles": 40,
+        "note": "In the middle of the Gnome Maze: Elkoy leads you in or out of the maze."
+      },
+      {
+        "id": "spirit-gnome-stronghold",
+        "name": "Gnome Stronghold",
+        "x": 2460,
+        "y": 3446,
+        "plane": 0,
+        "departQuest": "The Grand Tree"
+      },
+      {
+        "id": "spirit-battlefield",
+        "name": "Battlefield of Khazard",
+        "x": 2555,
+        "y": 3259,
+        "plane": 0
+      },
+      {
+        "id": "spirit-grand-exchange",
+        "name": "Grand Exchange",
+        "x": 3185,
+        "y": 3510,
+        "plane": 0
+      },
+      {
+        "id": "spirit-feldip-hills",
+        "name": "Feldip Hills",
+        "x": 2486,
+        "y": 2850,
+        "plane": 0
+      }
+    ]
+  },
+  "gliders": {
+    "source": "OSRS Wiki: Gnome glider (stations and requirements) and the captains' pages (only Captain Errdo at the Grand Tree flies to every station; the others fly to the Grand Tree)",
+    "quest": "The Grand Tree",
+    "hub": "ta-quir-priw",
+    "overheadSeconds": 10,
+    "note": "Members only. A trip between two outer stations is two flights through the Grand Tree. Lemanto Andra is one way: the glider crashes there.",
+    "stations": [
+      {
+        "id": "ta-quir-priw",
+        "name": "Ta Quir Priw (the Grand Tree, top floor)",
+        "x": 2466,
+        "y": 3496,
+        "plane": 3,
+        "npc": "Captain Errdo"
+      },
+      {
+        "id": "sindarpos",
+        "name": "Sindarpos (White Wolf Mountain)",
+        "x": 2849,
+        "y": 3500,
+        "plane": 0,
+        "npc": "Captain Bleemadge"
+      },
+      {
+        "id": "kar-hewo",
+        "name": "Kar-Hewo (Al Kharid)",
+        "x": 3282,
+        "y": 3212,
+        "plane": 0,
+        "npc": "Captain Dalbur"
+      },
+      {
+        "id": "gandius",
+        "name": "Gandius (Karamja, south of the Ship Yard)",
+        "x": 2972,
+        "y": 2974,
+        "plane": 0,
+        "npc": "Captain Klemfoodle"
+      },
+      {
+        "id": "lemanto-andra",
+        "name": "Lemanto Andra (west of the Digsite)",
+        "x": 3325,
+        "y": 3429,
+        "plane": 0,
+        "arriveOnly": true
+      },
+      {
+        "id": "lemantolly-undri",
+        "name": "Lemantolly Undri (Feldip Hills)",
+        "x": 2544,
+        "y": 2971,
+        "plane": 0,
+        "npc": "Gnormadium Avlafrim",
+        "check": "One Small Favour partly done (the game does not say how far)"
+      },
+      {
+        "id": "ookookolly-undri",
+        "name": "Ookookolly Undri (Ape Atoll)",
+        "x": 2714,
+        "y": 2803,
+        "plane": 0,
+        "npc": "Captain Shoracks",
+        "quest": "Monkey Madness II"
+      }
+    ]
+  },
+  "cowbell": {
+    "source": "OSRS Wiki: Cowbell amulet (free-to-play, untradeable; ids 33103 empty, 33104 charged; one Air rune per charge, up to 1,000; teleport line x 3259 y 3277; not above level 20 Wilderness)",
+    "item": "Cowbell amulet",
+    "emptyId": 33103,
+    "chargedId": 33104,
+    "chargeWith": "Air rune",
+    "maxCharges": 1000,
+    "castSeconds": 3,
+    "maxWilderness": 20,
+    "dest": {
+      "x": 3259,
+      "y": 3277,
+      "plane": 0,
+      "label": "Lumbridge cow field"
+    },
+    "note": "From Gillie Groats after The Ides of Milk (S4-02). The charged amulet has at least one charge; how many is not read from the game. Uncharging gives the Air runes back."
+  }
 }

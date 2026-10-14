@@ -82,5 +82,6 @@ describe('garbage input does not crash the program', () => {
       const pos = parsePos({ x: Math.floor(r() * 5000), y: Math.floor(r() * 5000), plane: Math.floor(r() * 4) });
       if (pos) expect(() => travelOptions({ from: pos, to: { x: 3213, y: 3424, plane: 0 }, levels: stats ?? {}, carried: gear ? [...(gear.equipment ?? []), ...(gear.inventory ?? [])] : null, bankSeen: r() < 0.5 })).not.toThrow();
     }
-  });
+    // 1,500 rounds of three advisers take 4 to 6 s here when the whole suite runs in parallel: the default 5 s limit made the run flaky, not the code.
+  }, 20_000);
 });
