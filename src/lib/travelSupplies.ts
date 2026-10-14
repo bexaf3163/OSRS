@@ -74,6 +74,12 @@ export interface SupplyItem {
   for: string[];
   /** How to use it once bought ("use them on the Chronicle: one card, one charge"). */
   use?: string;
+  /** In the bag and worn; null: no game. Absent: not split (the stop then only buys). */
+  inBag?: number | null;
+  /** In the bank as last read, when the game reported this item; null: not known. */
+  inBank?: number | null;
+  /** What already counts without being carried (the charges in the book). */
+  covered?: number;
 }
 
 export interface TravelSupplies {
@@ -86,6 +92,8 @@ export interface TravelSupplies {
   steps: number;
   /** Staves the player carries but does not wield that would save runes on the road: "wield your Staff of air: no Air runes needed". */
   staffHints: string[];
+  /** The coins in the bag and in the bank as the game last told them; null: not known. Absent: not given. */
+  coins?: { bag: number | null; bank: number | null };
 }
 
 export interface SupplyInput {
@@ -222,13 +230,19 @@ export function planTravelSupplies(inp: SupplyInput): TravelSupplies {
     }
     const buy = Math.max(0, e.need - (have ?? 0));
     const source = buy > 0 ? inp.sourceOf?.(name, buy) ?? null : null;
+    // Bag and bank apart: what the bank holds and the bag does not is a withdrawal on the same trip, not "already there".
+    const inBag = inp.gear ? counted(inp.gear.inventory, name) + counted(inp.gear.equipment, name) : null;
+    const banked = inp.owned?.bankSeen ? inp.owned.items.get(nameKey(name))?.bank : undefined;
+    const covered = CHRONICLE?.charges && name === CHRONICLE.charges.item ? inp.chronicleCharges ?? 0 : 0;
     items.push({
       name, need: e.need, have, buy, certain: have !== null, source,
       cost: source && source.price !== null ? source.price * buy : buy === 0 ? 0 : null,
       for: e.for, ...(e.use ? { use: e.use } : {}),
+      inBag, inBank: typeof banked === 'number' ? banked : null, ...(covered ? { covered } : {}),
     });
   }
-  return { legs, uses, items, savedTiles: legs.reduce((s, l) => s + l.savedTiles, 0), steps: inp.steps.length, staffHints: [...new Set(staffHints)] };
+  const coins = inp.gear ? { bag: typeof inp.gear.coins === 'number' ? inp.gear.coins : null, bank: typeof inp.gear.bankCoins === 'number' ? inp.gear.bankCoins : null } : undefined;
+  return { legs, uses, items, savedTiles: legs.reduce((s, l) => s + l.savedTiles, 0), steps: inp.steps.length, staffHints: [...new Set(staffHints)], ...(coins ? { coins } : {}) };
 }
 
 /** "~6 min" for the tiles saved. */

@@ -605,7 +605,8 @@ export function bankOnRoute(from: Point, to: Point): (Point & { label: string })
   return best?.bank ?? null;
 }
 
-const nearestBank = (from: Point): (Point & { label: string }) | null =>
+/** The bank nearest to a point, the stairs to an upper-floor bank counted. */
+export const nearestBank = (from: Point): (Point & { label: string }) | null =>
   BANKS.reduce<(Point & { label: string }) | null>((m, c) => (!m || bankTiles(from, c) < bankTiles(from, m) ? c : m), null);
 const isExchangePoint = (p: Point) => dist(p, EXCHANGE) <= 6;
 

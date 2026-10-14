@@ -3,8 +3,8 @@ import { allSteps, stepById } from '../src/data';
 import { buildPlayerState } from '../src/lib/playerState';
 import { nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
 import { decideTransport, supplyStop, SUPPLY_NEAR_TILES, transportSources } from '../src/lib/liveTransport';
-import { planTravelSupplies, roadLegs, roadSteps, stepTargets, SUPPLY_MIN_TOTAL_TILES, type TravelSupplies } from '../src/lib/travelSupplies';
-import { BANKS, EXCHANGE, STAFF_NAMES, STAIRS_TILES_PER_FLOOR, TILES_PER_SECOND, bankTiles, staffCover, stavesFor, travelOptions, type TravelInput } from '../src/lib/travel';
+import { planTravelSupplies, roadLegs, roadSteps, savedText, stepTargets, SUPPLY_MIN_TOTAL_TILES, type TravelSupplies } from '../src/lib/travelSupplies';
+import { BANKS, EXCHANGE, STAFF_NAMES, STAIRS_TILES_PER_FLOOR, bankTiles, dist, staffCover, stavesFor, travelOptions, type TravelInput } from '../src/lib/travel';
 import { recommendedTransport } from '../src/lib/transport';
 import { planPayload } from '../src/lib/prepEnvelope';
 import { createReadinessEngine } from '../src/lib/readinessEngine';
@@ -199,7 +199,12 @@ describe('"stock up here" on the game card', () => {
       const stop = supplyStop(runes(true), at(3170, 3480), at(3253, 3430))!;
       expect(stop.rec.prepare!.stops.map((s) => s.where)).toEqual([EXCHANGE.label, "Aubury's Rune Shop — Varrock"]);
       expect(stop.rec.prepare!.buy.map((b) => b.name)).toEqual(['Law rune', 'Fire rune']);
-      expect(stop.rec.summary).toBe(`Stock up for the road: buy Law rune ×1 at the ${EXCHANGE.label}; Fire rune ×1 at Aubury's Rune Shop (~164 gp) · Varrock Teleport ×1 save ~${Math.ceil(290 / TILES_PER_SECOND)} s`);
+      // The saving is the road's minus the detour of the stops (player > exchange > rune shop > target against going straight).
+      const pos = at(3170, 3480);
+      const target = at(3253, 3430);
+      const detour = dist(pos, GE) + dist(GE, AUBURY) + dist(AUBURY, target) - dist(pos, target);
+      expect(stop.rec.savedTiles).toBe(290 - detour);
+      expect(stop.rec.summary).toBe(`Stock up for the road: buy Law rune ×1 at the ${EXCHANGE.label}; Fire rune ×1 at Aubury's Rune Shop (~164 gp) · Varrock Teleport ×1 save ${savedText(290 - detour)}`);
       expect(stop.rec.tile).toMatchObject({ x: GE.x, y: GE.y });
     });
   });
@@ -215,8 +220,9 @@ describe('"stock up here" on the game card', () => {
     const fromPlayer = planTravelSupplies({ ...base, from: lumbridge });
     expect(fromPlayer.legs[0]).toMatchObject({ stepId: 'S3-05', wayId: 'varrock-teleport' });
     expect(fromPlayer.items.find((i) => i.name === 'Law rune')).toMatchObject({ have: 0, buy: 1, certain: true });
-    // Planned from the player, the exchange (next to Reldo) looked like a stop "on the way": the bug seen live.
-    expect(supplyStop(fromPlayer, lumbridge, reldo)).not.toBeNull();
+    // Planned from the player, the exchange (next to Reldo) looked like a stop "on the way" (the bug seen live in 2.53). Since 2.55 the trip also has to
+    // fetch the Air runes from the castle bank upstairs and pay for its detour, so even planned from the player it is not offered.
+    expect(supplyStop(fromPlayer, lumbridge, reldo)).toBeNull();
     // The card's road starts at the objective, so there is no stop to suggest on this leg.
     const fromObjective = planTravelSupplies({ ...base, from: null });
     expect(fromObjective.legs.some((l) => l.stepId === 'S3-05')).toBe(false);
@@ -238,5 +244,70 @@ describe('"stock up here" on the game card', () => {
     const payload = planPayload(engine.plan(step), { transport: d.recommended });
     expect(payload.recommendedTransport!.buy).toEqual([{ name: 'Teleport card', quantity: 5, where: "Diango's Toy Store — Draynor Village" }]);
     expect(payload.recommendedTransport!.state).toBe('prepare');
+  });
+});
+
+describe('the stock-up trip covers the whole kit, pays for its detour and says what it does not know (2.55)', () => {
+  const AUBURY = at(3253, 3401);
+  const GE = { x: EXCHANGE.x, y: EXCHANGE.y, plane: EXCHANGE.plane };
+  const shop = (name: string, point: { x: number; y: number; plane: number }, price: number, kind: 'shop' | 'exchange' = 'shop') => ({ kind, where: name, point, price });
+  const item = (over: Partial<TravelSupplies['items'][number]> & { name: string; need: number }): TravelSupplies['items'][number] => ({
+    have: 0, buy: over.need, certain: true, source: null, cost: 0, for: ['Varrock Teleport ×1'], inBag: 0, inBank: 0, ...over,
+  });
+  const road = (items: TravelSupplies['items'], saved = 400, coins?: TravelSupplies['coins']): TravelSupplies => ({
+    legs: [], steps: 8, staffHints: [], savedTiles: saved, uses: [{ wayId: 'varrock-teleport', way: 'Varrock Teleport', count: 1, savedTiles: saved }], items, ...(coins ? { coins } : {}),
+  });
+  // Standing by Aubury's, the target to the north.
+  const here = at(3250, 3405);
+  const target = at(3240, 3480);
+
+  it('what the bank holds and the bag does not is taken from the bank on the same trip, before or after buying the rest', () => {
+    const s = road([
+      item({ name: 'Fire rune', need: 1, buy: 1, source: shop("Aubury's Rune Shop — Varrock", AUBURY, 4), cost: 4 }),
+      item({ name: 'Air rune', need: 3, have: 632, buy: 0, inBag: 0, inBank: 632 }),
+      item({ name: 'Law rune', need: 1, have: 5, buy: 0, inBag: 0, inBank: 5 }),
+    ]);
+    const stop = supplyStop(s, here, target)!;
+    expect(stop).not.toBeNull();
+    expect(stop.rec.prepare!.withdraw).toEqual(expect.arrayContaining([{ name: 'Air rune', quantity: 3 }, { name: 'Law rune', quantity: 1 }]));
+    expect(stop.rec.prepare!.buy).toEqual([{ name: 'Fire rune', quantity: 1, where: "Aubury's Rune Shop — Varrock" }]);
+    expect(stop.rec.prepare!.stops.map((x) => x.action).sort()).toEqual(['buy', 'withdraw']);
+    expect(stop.rec.summary).toMatch(/take .*Air rune ×3.* from /);
+  });
+
+  it('quantities are the road\'s, less what the bag already holds; the bag and the bank are not both counted', () => {
+    const s = road([item({ name: 'Law rune', need: 3, have: 1, buy: 2, inBag: 1, inBank: 0, source: shop("Aubury's Rune Shop — Varrock", AUBURY, 160), cost: 320 })]);
+    const stop = supplyStop(s, here, target)!;
+    expect(stop.rec.prepare!.buy).toEqual([{ name: 'Law rune', quantity: 2, where: "Aubury's Rune Shop — Varrock" }]);
+    expect(stop.rec.prepare!.withdraw).toEqual([]);
+    expect(stop.rec.prepare!.cost).toBe(320);
+  });
+
+  it('a trip whose detour eats the saving is not offered, however good the teleports are', () => {
+    const items = [item({ name: 'Law rune', need: 1, buy: 1, source: shop(EXCHANGE.label, GE, 160, 'exchange'), cost: 160 })];
+    // By the exchange the trip is free: offered.
+    expect(supplyStop(road(items, 200), at(3165, 3485), at(3220, 3430))).not.toBeNull();
+    // From the rune shop the exchange is a detour of about 170 tiles against a 200-tile saving: what is left is under the minimum, not offered.
+    expect(supplyStop(road(items, 200), here, at(3260, 3340))).toBeNull();
+  });
+
+  it('an unconfirmed item off the trip does not hide: the summary says to check the bank for it', () => {
+    const s = road([
+      item({ name: 'Fire rune', need: 1, buy: 1, source: shop("Aubury's Rune Shop — Varrock", AUBURY, 4), cost: 4 }),
+      item({ name: 'Law rune', need: 1, have: null, buy: 1, certain: false, inBag: 0, inBank: null, source: shop(EXCHANGE.label, GE, 160, 'exchange'), cost: 160 }),
+    ]);
+    const stop = supplyStop(s, here, at(3250, 3300))!;
+    expect(stop.rec.prepare!.buy.map((b) => b.name)).toEqual(['Fire rune']);
+    expect(stop.rec.summary).toMatch(/check your bank for Law rune/);
+  });
+
+  it('coins: a known total too small is no trip; short in the bag but in the bank is a withdrawal on the way; unknown is said', () => {
+    const items = [item({ name: 'Law rune', need: 2, buy: 2, source: shop("Aubury's Rune Shop — Varrock", AUBURY, 160), cost: 320 })];
+    expect(supplyStop(road(items, 400, { bag: 100, bank: 50 }), here, target)).toBeNull();
+    const withdraw = supplyStop(road(items, 400, { bag: 100, bank: 5000 }), here, target)!;
+    expect(withdraw.rec.prepare!.withdraw).toEqual([{ name: 'Coins', quantity: 220 }]);
+    const unknown = supplyStop(road(items, 400, { bag: 100, bank: null }), here, target)!;
+    expect(unknown.rec.summary).toMatch(/check you have the coins/);
+    expect(supplyStop(road(items, 400, { bag: 1000, bank: null }), here, target)!.rec.summary).not.toMatch(/coins/);
   });
 });
