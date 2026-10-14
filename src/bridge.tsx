@@ -90,6 +90,9 @@ interface BridgeValue {
   /** The Chronicle's charges and the spellbook as the game last told them (plugin 2.53+ / 2.52+); null — unknown. */
   chronicleCharges: number | null;
   spellbook: number | null;
+  /** The quest points and the total level as the game holds them (plugin 2.54+); null — unknown, never zero. */
+  questPoints: number | null;
+  totalLevel: number | null;
   /** Set a temporary target. Without a link or on a refusal by the plugin — an answer with the reason. */
   navigate: (target: NavTargetPayload) => Promise<NavResult | { ok: false; reason: 'off' }>;
   clearNav: () => Promise<void>;
@@ -271,6 +274,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const [questInstruction, setQuestInstruction] = useState<QuestInstruction | null>(null);
   const [chronicleCharges, setChronicleCharges] = useState<number | null>(null);
   const [spellbook, setSpellbook] = useState<number | null>(null);
+  const [questPoints, setQuestPoints] = useState<number | null>(null);
+  const [totalLevel, setTotalLevel] = useState<number | null>(null);
   const [plugin, setPlugin] = useState<BridgeValue['plugin']>(null);
   const features = useFeatures();
   /** Which stage items are already in the plugin — so as not to send the same on every render. */
@@ -463,6 +468,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       setGear(s.gear);
       setChronicleCharges(s.inGame ? s.chronicleCharges : null);
       setSpellbook(s.inGame ? s.spellbook : null);
+      setQuestPoints(s.inGame ? s.questPoints : null);
+      setTotalLevel(s.inGame ? s.totalLevel : null);
       // RuneLite was restarted (or the app) — the plugin does not know the step: we send it again. We do not
       // send the same step twice, so as not to reset the waypoints and the pace measurement in the plugin.
       const want = latest.current.activeStepId;
@@ -716,11 +723,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     () => ({
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, chronicleCharges, spellbook, navigate, clearNav, userClearedAt, plugin,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, navigate, clearNav, userClearedAt, plugin,
       xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, chronicleCharges, spellbook, navigate, clearNav, userClearedAt, plugin,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, navigate, clearNav, userClearedAt, plugin,
       xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;

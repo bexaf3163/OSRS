@@ -8,6 +8,8 @@ import { nameKey } from '../lib/checklist';
 import { formatGp } from '../lib/shopping';
 import { wealthOf } from '../lib/wealth';
 import { adviseMoney, hoursToCover, MONEY, reqText, type MethodView } from '../lib/moneyAdvisor';
+import { RESTRICTED_METHOD_IDS } from '../lib/tradeRestriction';
+import { useTradeRestriction } from '../lib/useTradeRestriction';
 
 const SHOWN = 5;
 const INVEST_SHOWN = 3;
@@ -18,6 +20,7 @@ const hoursText = (h: number): string => (h < 1 ? `≈ ${Math.max(5, Math.round(
 export function MoneyPlan({ step }: { step: Step }) {
   const { progress, steps } = useStore();
   const { stats, gear, questsDone: gameQuests } = useBridge();
+  const trade = useTradeRestriction();
   if (!step.moneyGoal && !step.magicPlan) return null;
 
   const levels = { ...progress.levels, ...(stats ?? {}) };
@@ -30,8 +33,11 @@ export function MoneyPlan({ step }: { step: Step }) {
   const advice = adviseMoney(levels, steps, done, undefined, cash);
   const missing = step.moneyGoal && cash !== null ? Math.max(0, step.moneyGoal - cash) : null;
   const known = Object.keys(levels).length > 0;
-  const top = advice.free.slice(0, SHOWN);
-  const invest = advice.invest.slice(0, INVEST_SHOWN);
+  // A restricted account cannot sell what these methods produce (cowhides, ore, logs...): they are shown apart, not as the way to the money.
+  const stuck = (v: MethodView) => trade.state === 'RESTRICTED' && RESTRICTED_METHOD_IDS.includes(v.method.id);
+  const blocked = [...advice.free, ...advice.invest].filter(stuck);
+  const top = advice.free.filter((v) => !stuck(v)).slice(0, SHOWN);
+  const invest = advice.invest.filter((v) => !stuck(v)).slice(0, INVEST_SHOWN);
   const soon = advice.soon.slice(0, SOON_SHOWN);
 
   const row = (v: MethodView, soonRow = false) => {
@@ -68,6 +74,12 @@ export function MoneyPlan({ step }: { step: Step }) {
         <>
           <h5 className="subhead">If you have something to invest{cash !== null ? ` (you have ${formatGp(cash)} gp)` : ''}</h5>
           <ul className="money-list">{invest.map((v) => row(v))}</ul>
+        </>
+      )}
+      {blocked.length > 0 && (
+        <>
+          <h5 className="subhead">Not yet: the account cannot sell these items</h5>
+          <p className="muted small">{blocked.map((v) => v.method.title).join('; ')}. They work after 20 hours of play, 10 quest points and total level 100.</p>
         </>
       )}
       {soon.length > 0 && (

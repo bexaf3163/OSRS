@@ -75,6 +75,7 @@ import net.runelite.api.events.WallObjectDespawned;
 import net.runelite.api.events.WallObjectSpawned;
 import net.runelite.api.gameval.InventoryID;
 import net.runelite.api.gameval.ItemID;
+import net.runelite.api.gameval.VarPlayerID;
 import net.runelite.client.RuneLite;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
@@ -3017,6 +3018,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				// Two integer reads: the app shows "Home Teleport ready in N min".
 				server.setTeleportMarks(client.getVarpValue(TeleportCooldown.VARP_HOME), client.getVarpValue(TeleportCooldown.VARP_MINIGAME));
 				server.setSpellbook(client.getVarbitValue(TeleportCooldown.VARBIT_SPELLBOOK));
+				// Two integer reads: the app tells whether a new account's trade restrictions can still apply (10 quest points, total level 100).
+				server.setProgressTotals(client.getVarpValue(VarPlayerID.QP), client.getTotalLevel());
 			}
 			shareAccount(me);
 			WorldPoint pos = me.getWorldLocation();

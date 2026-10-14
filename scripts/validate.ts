@@ -553,6 +553,8 @@ export function validate(d: GuideData | null, route: Route): Report {
         for (const s of steps.filter((x) => x.stage === st && !x.bondBranch)) {
           hi += s.qp ?? 0;
           if (!s.optional) lo += s.qp ?? 0;
+          // A step's optional tasks (an optional quest that feeds the step's goal) are in the top of the range, like an optional step.
+          for (const t of s.tasks ?? []) hi += t.qp ?? 0;
         }
         const v = qpRow.values[st - 1];
         if (!v || v.min !== lo || (v.max ?? lo) !== hi) badGoals.push(`quest points stage ${st}: the route gives ${lo}–${hi}, the table says "${v?.raw}"`);

@@ -153,6 +153,15 @@ export function normalizeProgress(raw: unknown, known: Known): Normalized | null
     if (dismissed.length) p.upgradeDismissedForSteps = dismissed;
     const manual = ownedManualOf(raw.ownedManual);
     if (Object.keys(manual).length) p.ownedManual = manual;
+    if (raw.sellRestrictions === 'lifted' || raw.sellRestrictions === 'active') p.sellRestrictions = raw.sellRestrictions;
+    if (isObject(raw.tasksDone)) {
+      const ticks: Record<string, true> = {};
+      for (const [key, v] of Object.entries(raw.tasksDone)) {
+        const m = /^(S\d-\d{2}):[a-z0-9-]{1,40}$/.exec(key);
+        if (v === true && m && known.stepIds.has(m[1])) ticks[key] = true;
+      }
+      if (Object.keys(ticks).length) p.tasksDone = ticks;
+    }
     if (isObject(raw.legacy)) p.legacy = { steps: statusMap(raw.legacy.steps), notes: stringMap(raw.legacy.notes) };
   }
   return { progress: p, dropped, migrated };
@@ -271,6 +280,21 @@ export function withNote(p: Progress, id: string, note: string): Progress {
 
 export function withGameMode(p: Progress, mode: GameMode): Progress {
   return touch({ ...p, gameMode: mode });
+}
+
+/** Ticks or unticks a step's task (key "<stepId>:<taskId>"). */
+export function withTaskDone(p: Progress, key: string, done: boolean): Progress {
+  const { tasksDone, ...rest } = p;
+  const next = { ...(tasksDone ?? {}) };
+  if (done) next[key] = true;
+  else delete next[key];
+  return touch(Object.keys(next).length ? { ...rest, tasksDone: next } : rest);
+}
+
+/** The player's word on the sale restrictions; null goes back to deciding from the game. */
+export function withSellRestrictions(p: Progress, value: 'lifted' | 'active' | null): Progress {
+  const { sellRestrictions: _drop, ...rest } = p;
+  return touch(value === null ? rest : { ...rest, sellRestrictions: value });
 }
 
 /** "✕ Skip" on a gear upgrade hint: on this step it is no longer shown. The step's progress is not touched. */

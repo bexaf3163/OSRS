@@ -33,7 +33,7 @@ const list = (a) => (a ?? []).map(clean).filter(Boolean).join(', ');
 /** Keys printed explicitly; any other key of a step is dumped at the end as JSON, so nothing the data holds is lost. */
 const HANDLED = new Set([
   'id', 'stage', 'type', 'title', 'qp', 'minQp', 'requires', 'softRequires', 'requirements', 'optional', 'wikiUrl', 'quickGuideUrl', 'mapUrl', 'npc', 'floor',
-  'itemsRequired', 'itemsRecommended', 'loadouts', 'carryover', 'rewardChoice', 'bondBranch', 'quickSteps', 'safespot', 'imageUrl', 'imageCaption', 'proTip',
+  'itemsRequired', 'itemsRecommended', 'loadouts', 'carryover', 'tasks', 'rewardChoice', 'bondBranch', 'quickSteps', 'safespot', 'imageUrl', 'imageCaption', 'proTip',
   'mapLocation', 'resourceSpots', 'mapPreviewImage', 'warning', 'inGame', 'branches', 'pacing', 'foes', 'where', 'bring', 'how', 'tips', 'reward', 'doneWhen',
   'moneyGoal', 'threats', 'styleGear', 'useOn', 'magicPlan', 'questStages', 'fields', 'targets', 'updatedInV2', 'v2ChangesSummary', 'membersOnly',
   'membersAlternative',
@@ -160,6 +160,13 @@ function step(s) {
     }
   }
   for (const c of s.carryover ?? []) w(`- Keep for ${c.forStep}: ${c.item} x${c.count} (${c.where}) - ${clean(c.why)}`);
+  for (const t of s.tasks ?? []) {
+    const c = t.check;
+    const how = !c ? 'you tick it' : c.kind === 'worn' ? `checked from the worn items: ${list(c.items)}`
+      : c.kind === 'owned' ? `checked from the bag and bank: ${c.count ?? 1} x ${list(c.items)}`
+        : c.kind === 'level' ? `checked from the level: ${c.skill} ${c.level}` : `checked from the quest list: ${c.name}`;
+    w(`- Also tracked (does not block the step): ${clean(t.text)}${t.qp ? ` +${t.qp} QP.` : ''} [${how}]`);
+  }
 
   if (s.branches?.length) {
     w('- Quick options (offered when you qualify):');
@@ -188,8 +195,15 @@ function step(s) {
     if (g.dialogChoices?.length) w(`  - Dialogue choices to pick: ${g.dialogChoices.map((d) => `“${clean(d)}”`).join(' → ')}`);
     const t = g.completionTrigger;
     if (t) {
-      const what = t.type === 'QUEST_COMPLETED' ? `quest completed: ${t.questName}`
-        : t.type === 'SKILL_LEVEL' ? `levels reached: ${(t.levels ?? []).map((l) => `${l.skill} ${l.level}`).join(', ')}`
+      // The app keeps the carried-over items on top of a quest or level trigger (lib/carryover.ts routeTrigger): the export says so too.
+      const extra = [...(t.items ?? [])];
+      if ((t.type === 'QUEST_COMPLETED' || t.type === 'SKILL_LEVEL') && !t.anyOf) {
+        const have = new Set(extra.flatMap((i) => i.names.map((n) => n.toLowerCase())));
+        for (const c of s.carryover ?? []) if (!have.has(c.item.toLowerCase())) extra.push({ names: [c.item], count: c.count });
+      }
+      const also = extra.length && (t.type === 'QUEST_COMPLETED' || t.type === 'SKILL_LEVEL') ? ` and holding ${extra.map((i) => `${i.count} x ${list(i.names)}`).join('; ')}` : '';
+      const what = t.type === 'QUEST_COMPLETED' ? `quest completed: ${t.questName}${also}`
+        : t.type === 'SKILL_LEVEL' ? `levels reached: ${(t.levels ?? []).map((l) => `${l.skill} ${l.level}`).join(', ')}${also}`
           : t.type === 'ITEM_OWNED' ? `${t.anyOf ? 'any of' : 'all of'}: ${(t.items ?? []).map((i) => `${i.count} x ${list(i.names)}`).join('; ')}`
             : t.type === 'CHAT_MESSAGE' ? `game message matching: ${t.chatPattern}`
               : `variable ${t.varbitId} ${t.atLeast ? 'at least ' : '= '}${t.targetValue}`;

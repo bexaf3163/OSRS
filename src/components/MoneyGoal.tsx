@@ -8,14 +8,20 @@ import { moneyGoalProgress, wealthOf } from '../lib/wealth';
 import { usePlayerState } from '../playerStateContext';
 import { ratePerMinute, resourceGoal } from '../lib/ledger';
 import { priceNote } from '../lib/priceBook';
+import { isRestrictedItem } from '../lib/tradeRestriction';
+import { useTradeRestriction } from '../lib/useTradeRestriction';
 
 export function MoneyGoal({ step }: { step: Step }) {
   const { gear, state } = useBridge();
   const { ledger, summary, session: now, since: from, prices } = usePlayerState();
+  const trade = useTradeRestriction();
   if (!step.moneyGoal) return null;
+  // The loot estimate counts every item at its price; on a restricted account the step's own loot cannot be sold, so it is not a way to the goal.
+  const lootStuck = trade.state === 'RESTRICTED' && (step.sells ?? []).some(isRestrictedItem);
+  const goalCoins = lootStuck && step.moneyGoalNoSale !== undefined ? step.moneyGoalNoSale : step.moneyGoal;
   const w = wealthOf(gear);
-  const p = moneyGoalProgress(step.moneyGoal, w);
-  const goal = formatGp(step.moneyGoal);
+  const p = moneyGoalProgress(goalCoins, w);
+  const goal = formatGp(goalCoins);
   let body;
   if (!w) {
     body = <p className="small muted">{state === 'online' ? 'Log in to the game — the app will count the coins.' : 'The app learns how many coins you have from RuneLite. Without a link — check the bank yourself.'}</p>;
@@ -36,7 +42,8 @@ export function MoneyGoal({ step }: { step: Step }) {
         {p.itemsValue !== null && p.itemsValue > 0 && (
           <p className="small muted">
             Items in the bag and bank — ~{formatGp(p.itemsValue)} gp at exchange prices (an estimate, not money).
-            {p.doneIfSold && <strong> Sell the loot — the goal is covered: ~{formatGp(p.withItems!)} gp.</strong>}
+            {lootStuck && <strong> This account cannot sell {(step.sells ?? []).filter(isRestrictedItem).join(', ')} yet: do not count them.</strong>}
+            {!lootStuck && p.doneIfSold && <strong> Sell the loot — the goal is covered: ~{formatGp(p.withItems!)} gp.</strong>}
           </p>
         )}
       </>

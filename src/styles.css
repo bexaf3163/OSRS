@@ -1921,3 +1921,7 @@ button.subtab { background: none; border-top: 0; border-left: 0; border-right: 0
 .loadout { margin: 0 0 10px; }
 .loadout.is-current { border-left: 3px solid var(--accent-ink); padding-left: 8px; }
 .loadout h5 { margin: 0 0 2px; }
+.trade-note { box-shadow: inset 3px 0 0 var(--warn); }
+p.trade-note { margin: 6px 0; }
+.step-tasks ul { margin: 4px 0 0; padding-left: 18px; }
+.task-tick { margin-left: 4px; white-space: nowrap; font-size: .92em; }

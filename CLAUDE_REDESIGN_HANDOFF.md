@@ -262,11 +262,41 @@ Asked for by the owner after Shield of Arrav's card stayed on "Talk to Reldo" in
 - Places added from the project's own data: S6-03, S8-03, S8-04. S6-04 (Magic) has no place on purpose.
 - Every QUEST_COMPLETED name matches a RuneLite quest (`RouteTargetsTest` checks it).
 
-## Codex audit pack (2026-10-14) — status after 2.53.3
+## Codex audit pack (2026-10-14) — status after 2.54.0
 
-The pack (`OSRS-Path-Full-Audit-2.53.0-EN.md` + a mega-prompt) was written against the 2.53.0 export. It is a backlog, not a task to run whole; each item is checked against the current data and the OSRS Wiki before it is changed.
+The pack (`OSRS-Path-Full-Audit-2.53.0-EN.md` + a mega-prompt) was written against the 2.53.0 export. It is a backlog, not a task to run whole; each
+item is checked against the current data and the OSRS Wiki before it changes. Evidence is kept in four kinds: **implemented**, **automated** (tests),
+**live** (in the game), **open**.
 
-- Fixed in 2.53.3 (verified true): S3-04 kit asked for only at the fight (stage 30 said "items: none"; now rows 20 and 30 carry the kit and row 30 has the `pre` guard); Brutus specials can kill (the plain hits cannot); S8-04 Cooking 10 (trout needs 15, shrimps 30 XP); S9-04 Jungle Demon protection.
-- Confirmed true, still open: S1-13/S2-01/S3-06 sell cowhides and iron ore, which a new F2P account cannot sell until 20 h played, 10 QP and 100 total level (Wiki: Account); completion text vs preparation text differ for S1-03, S1-04, S1-05, S1-08, S1-12, S2-08, S2-11, S4-02, S4-03, S8-05, S9-04 (audit table); Dragon scimitar vs Attack 60 (S9-04); Porcine of Interest not tracked in the QP forecast; Fishing 1-40 missing from S6-02.
-- Not checked yet: the April 2026 River Dougne canoe stations, Count Check as a primary teleport, all P0/P1 "verify in game" items. Sources for Brutus/Porcine in the pack are third-party mirrors: confirm on the Wiki.
-- Not adopted: the pack's prompt asks for a 67-step ledger, route reordering (Doric before Knight's Sword) and a release in one go. Reordering touches saved progress and is a separate, owner-approved task.
+### Implemented
+
+- 2.53.3: S3-04 kit asked for at the entrance (rows 20 and 30, `pre` guard on row 30); Brutus specials can kill; S8-04 Cooking 10 methods; S9-04 Jungle
+  Demon protection; the app copy of the item guard counts `alt` items like the plugin.
+- 2.54.0, new-account trade restrictions (wiki "Account": 20 h of play, 10 QP, total level 100 lift the Grand Exchange sale ban on 40 items; buying is free):
+  - `lib/tradeRestriction.ts`: state RESTRICTED / UNKNOWN / LIFTED from the game's quest points and total level (plugin 2.54 sends `questPoints` and
+    `totalLevel` in /status, additive, no protocol bump; absent means unknown). The hours are never readable, so a met pair is UNKNOWN, not LIFTED. The
+    route's own QP count is NOT an input (it is a lower bound). The player's word (`progress.sellRestrictions` lifted/active, kept across a progress
+    reset) wins.
+  - `lib/fundingPlan.ts`: the shopping list cut by tier from the coins (S2-01 items carry `gp` and `tier`; tier 2 is all or nothing). S1-13 has
+    `moneyGoalNoSale` 8,000 (tests keep it above tiers 1-2 and below the full list). Steps S1-13, S2-01, S3-06 declare `sells`; each has a "New account" field.
+  - UI: `TradeRestrictionNote` before MoneyGoal; MoneyGoal does not count unsellable loot; MoneyPlan lists blocked methods apart (`RESTRICTED_METHOD_IDS`).
+- 2.54.0, step tasks (`Step.tasks`, `StepTask`, `lib/stepTasks.ts`, `StepTasks.tsx`): follow-ups tracked beside a step, never blocking it.
+  Checks: worn / owned / level / quest; no check means the player ticks it (`progress.tasksDone["<step>:<task>"]`). `PlayerState.equipmentKnown`
+  tells "worn items not read" from "nothing worn". Used by S2-08 (wield), S4-02 (Cowbell amulet), S8-04 (Museum quiz, A Porcine of Interest +1 QP, in the
+  goals range through `validate.ts`), S8-05 (wear Ava's), S9-04 (Attack 60, wield). Their `doneWhen` text now matches the trigger.
+- Carryover (S1-03, S1-04, S1-08, S1-12, S2-11) was already in the app; the route export now prints the real trigger ("and holding ...").
+- `docs/route-reorder-proposal.md`: the reorder, documented, not done.
+
+### Automated
+
+`tests/tradeRestriction.test.ts`, `tests/stepTasks.test.ts`, `BridgeServerTest.questPointsAndTotalLevel...`, UI smoke scenarios (trade note, step tasks).
+
+### Live
+
+Not yet for these groups (see the final report of the session that shipped them).
+
+### Open
+
+- Fishing 1-40 before lobsters (S6-02); transport: stored canoe axes, River Dougne, missing-rune preparation, resumption after travel.
+- The pack's other P1/P2 items not listed above are unchanged and unverified.
+- Not adopted: a 67-step ledger and a single mega-release; reordering (see the proposal).

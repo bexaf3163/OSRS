@@ -1,4 +1,4 @@
-# OSRS Path - full route export (app version 2.53.3)
+# OSRS Path - full route export (app version 2.54.0)
 
 Exported 2026-10-14 from the program's data files (steps.json, questStages.json, stages.json, goals.json). Every step is written out with everything the program shows for it: where to go, what to bring and where each item comes from, the quick options, the walkthrough, what the game plugin highlights and when it ticks the step off by itself, and, for quests, the stage table line by line (what the game shows for each value of the quest variable).
 
@@ -72,7 +72,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   - Objects highlighted: Cooking range, Wheat, Hopper, Hopper controls, Flour bin
   - Items highlighted in the bag: Pot of flour, Bucket of milk, Egg, Pot, Bucket, Grain
   - Dialogue choices to pick: “What's wrong?” → “Can I help?”
-  - Marked done automatically when: quest completed: Cook's Assistant
+  - Marked done automatically when: quest completed: Cook's Assistant and holding 1 x Pot of flour
 - Walkthrough:
   1. Buy a bucket from the Lumbridge General Store.
   2. Buy a pot from the Lumbridge General Store.
@@ -248,7 +248,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   - Objects highlighted: Spinning wheel
   - Items highlighted in the bag: Shears, Wool, Ball of wool
   - Dialogue choices to pick: “I'm looking for a quest.” → “Yes.”
-  - Marked done automatically when: quest completed: Sheep Shearer
+  - Marked done automatically when: quest completed: Sheep Shearer and holding 3 x Ball of wool
 - Walkthrough:
   1. Talk to Fred the Farmer north of Lumbridge to start the quest. Dialogue: “I'm looking for a quest” → “Yes, okay. I can do that” → “Yes”.
   2. Pick up the shears in Fred's house.
@@ -1046,7 +1046,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   - Arrow to: The trees behind the castle's west wall (3190, 3222, plane 0)
   - Objects highlighted: Tree, Oak tree, Canoe Station
   - Items highlighted in the bag: Bronze axe, Tinderbox, Logs, Ashes
-  - Marked done automatically when: levels reached: woodcutting 15, firemaking 15
+  - Marked done automatically when: levels reached: woodcutting 15, firemaking 15 and holding 1 x Ashes
 - Walkthrough:
   1. Leave Lumbridge Castle by the west gate and chop ordinary trees (Tree) in the grove behind the wall.
   2. Burn every log at once: use the tinderbox (Tinderbox) on the logs (Logs). Move along the row of trees: you cannot light a new fire on the spot of an old one.
@@ -1136,7 +1136,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
 - Keep for S2-10: Tin ore x1 (bank) - Smelted with a copper ore into the Bronze bar of Prince Ali Rescue.
 - In the game (RuneLite plugin):
   - Objects highlighted: Copper rocks, Tin rocks, Iron rocks
-  - Marked done automatically when: levels reached: mining 10
+  - Marked done automatically when: levels reached: mining 10 and holding 1 x Copper ore; 1 x Tin ore
 
 ### S1-13 - Money for the shopping: cowhides
 
@@ -1148,6 +1148,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
 - How much you need: The S2-01 shopping costs about 10,500 gp. After Stronghold and Chronicle you have about 8,500: top it up with 40-60 hides and sell them. The Magic training in S2-04 pays for itself with the hides of the cows you train on.
 - Price: A hide is about 110 gp on the Grand Exchange (prices of 26 Sep 2026): 28 hides are about 3,000 gp. Leather costs about 260 gp: after Prince Ali Rescue take the hides to the tanner Ellis in Al Kharid (1 gp each), which earns about twice as much.
 - Bonus: Attack, Strength and Defence rise as well, and cows drop bones: bury them for Prayer.
+- New account: A new free-to-play account cannot sell cowhides or leather on the Grand Exchange until it has 20 hours of play, 10 quest points and total level 100. Then the hides are not money: after Stronghold and the Chronicle you have about 8,500 gp, which already covers the S2-01 quest materials, the Imp Catcher beads and the first scimitars (about 8,000 gp). Skip the hide grind, kill cows only for combat levels and bones, and let the amulet, the potions and the mithril scimitar wait for money from quests (Below Ice Mountain gives 2,000) or from items that can be sold.
 - Money goal: 12,000 coins in the bag and the bank by the end of the step
 - Done when: 12,000+ coins in the bag or the bank (together with what is left from Stronghold). Unsold hides are not coins.
 - Fights in melee: Cow
@@ -1155,6 +1156,8 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   - NPCs highlighted: Cow
   - Items highlighted in the bag: Cowhide
   - Marked done automatically when: all of: 12000 x Coins
+- sells: ["Cowhide","Leather"]
+- moneyGoalNoSale: 8000
 
 ## Stage 2 - Varrock, teleport magic and key quests
 
@@ -1164,6 +1167,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
 - Map: The Grand Exchange (3164, 3487, plane 0)
 - How: Teleport with the Chronicle book (right-click the book, Teleport) to Champions' Guild and go north to the Grand Exchange, away from the stone circle of dark wizards to the north-east. Sell the hides first, then buy. The prices are approximate, of 26 Sep 2026; the inspector (click an item) shows the exact price.
 - Budget: About 10,500 gp, of which about 5,300 is the beads for Imp Catcher. To save: buy the pink skirt from Thessalia in Varrock for 2 gp and make the dyes with the witch Aggie in Draynor (5 gp + 2 onions, 3 redberries or 2 Woad leaves).
+- New account: A new free-to-play account cannot sell cowhides (or leather, iron ore, clay, copper or tin ore, coal, steel bars, oak or yew logs, lobsters, ashes, feathers, the low runes and a few more) on the Grand Exchange until it has 20 hours of play, 10 quest points and total level 100; buying is not restricted. Without selling, buy in this order: the quest materials (about 2,400 gp), then the Imp Catcher beads and the iron and steel scimitars (about 5,400 gp), then, as coins allow, the mithril scimitar, the amulet of strength and the energy potions. Do not skip the first two groups for the third.
 - Done when: All the items are bought and are in your Grand Exchange bank.
 - Items required:
   - Red bead x1 - For Imp Catcher, about 2,000 gp. [obtained during the step; item id 1470]
@@ -1191,6 +1195,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
       instead: Right-click the Chronicle book, Teleport (uses 1 charge): you arrive at Champions' Guild, and from there walk north through Varrock to the Exchange. Avoid the stone circle with the dark wizards to the north-east.
 - In the game (RuneLite plugin):
   - Marked done automatically when: all of: 1 x Red bead; 1 x Yellow bead; 1 x Black bead; 1 x White bead; 1 x Amulet of strength; 1 x Iron scimitar; 1 x Steel scimitar; 1 x Mithril scimitar; 5 x Energy potion(4); 1 x Redberry pie; 2 x Iron bar; 7 x Clay; 4 x Copper ore; 2 x Iron ore; 1 x Redberries; 2 x Yellow dye; 1 x Red dye; 1 x Blue dye; 1 x Pink skirt
+- sells: ["Cowhide"]
 
 ### S2-02 - Imp Catcher
 
@@ -1771,7 +1776,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
 - Combat: Count Draynor, level 34.
 - Safespot: Garlic in your inventory weakens the vampire. Stand behind the chair (safespot) and hit him with Fire Strike, or fight him in melee with a sword, healing with trout (+7) or salmon (+9).
 - Reward: 3 QP and 4,825 Attack XP: your Attack level jumps instantly from 1 to 20!
-- Done when: The quest is green, Attack 20+. The Mithril scimitar from step S2-01 is wielded.
+- Done when: The quest is green and Attack is 20 or more.
 - Fights in melee: Count Draynor
 - Picture: A safespot against Count Draynor
 - Items required:
@@ -1781,6 +1786,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   - Garlic x1 - From the cupboard on the 1st floor of Morgan's house. [obtained during the step; item id 1550]
 - Items recommended:
   - Trout x10 - Buy on the Grand Exchange for about 24 gp each. Or 8 Salmon instead (about 30 gp each): to catch them yourself you need Fishing 30 and Cooking 25, fly fishing in the same place as the trout (Barbarian Village). [any of: Salmon; heals 7; item id 333]
+- Also tracked (does not block the step): Wield the Mithril scimitar bought in S2-01: Attack 20 is reached with this quest. [checked from the worn items: Mithril scimitar, Adamant scimitar, Rune scimitar, Dragon scimitar]
 - In the game (RuneLite plugin):
   - Arrow to: Morgan's house in Draynor Village (3098, 3268, plane 0)
   - NPCs highlighted: Morgan, Dr Harlow, Count Draynor
@@ -2214,7 +2220,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   - NPCs highlighted: Veronica, Professor Oddenstein
   - Items highlighted in the bag: Pressure gauge, Rubber tube, Oil can
   - Dialogue choices to pick: “Aha, sounds like a quest. I'll help.” → “I'm looking for a guy called Ernest.” → “Change him back this instant!”
-  - Marked done automatically when: quest completed: Ernest the Chicken
+  - Marked done automatically when: quest completed: Ernest the Chicken and holding 1 x Bronze med helm
 - Walkthrough:
   1. Talk to Veronica outside of Draynor Manor. Dialogue: “Aha, sounds like a quest. I'll help”.
   2. Enter Draynor Manor's ground floor.
@@ -3504,11 +3510,13 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
 - How much you need: Only the Adamant scimitar (S3-07): about 1,400 gp at the prices of 26 Sep 2026, so 2,500 gp is the target with room to spare. The stage 3 quests already give about 5,300 coins (Black Knights' Fortress 2,500, Below Ice Mountain 2,000, Shield of Arrav 600, Doric 180), so you may have it before you mine anything. Armour is skipped on purpose: see S3-08. The 10,000 gp for Wormbrain (S5-05) is paid later, from the stage 4 loot (S4-03).
 - Price: Iron ore is about 73 gp on 26 Sep 2026: 25 ores are about 1,800 gp and 30 about 2,200 gp. If you do not need the ore for quests, sell it at once.
 - Other ways: Cowhides to leather with Ellis in Al Kharid (about 260 gp per leather), and from Attack 40 big bones (Big bones, about 310 gp) from the Hill Giants of step S4-03.
+- New account: A new free-to-play account cannot sell iron ore (or leather) on the Grand Exchange until it has 20 hours of play, 10 quest points and total level 100. The stage 3 quests usually pay the 2,500 gp anyway; if they have not, mine only what the quests need and wait for the big bones of S4-03, which can be sold.
 - Money goal: 2,500 coins in the bag and the bank by the end of the step
 - Done when: 2,500+ coins in the bag or the bank (unsold ore does not count).
 - In the game (RuneLite plugin):
   - Objects highlighted: Iron rocks
   - Marked done automatically when: all of: 2500 x Coins
+- sells: ["Iron ore","Leather"]
 
 ### S3-07 - Buy the Adamant scimitar on the Grand Exchange
 
@@ -3792,6 +3800,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
 - Fights in melee: Brutus
 - Items recommended:
   - Salmon x5 - Buy on the Grand Exchange for about 30 gp. [heals 9; item id 329]
+- Also tracked (does not block the step): Take the Cowbell amulet from Gillie Groats: she gives it and the XP lamp after the fight. [checked from the bag and bank: 1 x Cowbell amulet]
 - In the game (RuneLite plugin):
   - NPCs highlighted: Cassius, Gillie Groats, Brutus
   - Dialogue choices to pick: “Yes.” → “Can you share what makes your cows so productive?”
@@ -3963,7 +3972,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
 - In the game (RuneLite plugin):
   - NPCs highlighted: Hill Giant
   - Items highlighted in the bag: Big bones
-  - Marked done automatically when: levels reached: attack 40
+  - Marked done automatically when: levels reached: attack 40 and holding 50 x Big bones
 
 ### S4-04 - Food for the dragon: buy 20 Lobster
 
@@ -6039,6 +6048,8 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   - Iron arrow x300 - Buy on the Grand Exchange; pick them up again as you shoot. Mithril arrows from Ranged 20. [item id 884]
   - Gold bar x10 - Buy on the Grand Exchange: for the gold amulets and rings of the Crafting part. [item id 2357]
   - Ring mould x1 - General Store or the Grand Exchange. [item id 1592]
+- Also tracked (does not block the step): Varrock Museum quiz: talk to Orlando Smith in the basement (1,000 Slayer XP). [you tick it]
+- Also tracked (does not block the step): A Porcine of Interest (optional quest): read the notice board in Draynor Village, talk to Sarah at the South Falador Farm, use a rope on the Strange Hole east of Draynor Manor, then kill Sourhog (level 37) and cut off its foot. Bring a rope, a knife or slash weapon, combat gear and food. +1 QP. [checked from the quest list: A Porcine of Interest]
 - In the game (RuneLite plugin):
   - NPCs highlighted: Orlando Smith, Mazchna, Turael
   - Marked done automatically when: levels reached: ranged 30, slayer 18, crafting 31, woodcutting 36, cooking 10
@@ -6060,7 +6071,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
 - Pro tip: With 50 Ranged the reward is Ava's accumulator: it returns 72% of fired arrows straight to the quiver. Below 50 you get Ava's attractor, which is worse. If your Ranged is almost 50, train it before handing in the quest.
 - Requirements: The Restless Ghost, Ernest the Chicken, Priest in Peril; Slayer 18, Crafting 19, Ranged 30, Woodcutting 35.
 - Reward: 1 QP, 1,000 Crafting XP, 1,000 Fletching XP, 1,000 Slayer XP, 2,500 Woodcutting XP, Ava's accumulator (with 50 Ranged) or Ava's attractor.
-- Done when: Ava's accumulator or attractor is worn.
+- Done when: The quest is green.
 - Items required:
   - Mithril axe x1 - Only a mithril one: no other axe will do. About 150 gp. [item id 1355]
   - Iron bar x5 - Not as banknotes. [item id 2351]
@@ -6070,6 +6081,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
   - Polished buttons x1 - They drop in the H.A.M. sewers or buy on the Grand Exchange. [obtained during the step; item id 10496]
   - Hard leather x1 - Have a cowhide tanned by the tanner (3 gp) or buy one (about 180 gp). [item id 1743]
   - Ecto-token x20 - Get them at the Ectofuntus in Port Phasmatys (4 bones + 4 buckets + 4 pots): Prayer levels along the way. [item id 4278]
+- Also tracked (does not block the step): Wear Ava's accumulator (needs 50 Ranged) or Ava's attractor, whichever the quest gave you. [checked from the worn items: Ava's accumulator, Ava's attractor]
 - In the game (RuneLite plugin):
   - NPCs highlighted: Ava, Alice, Old crone, Malcolm, Turael
   - Items highlighted in the bag: Mithril axe, Iron bar, Hammer, Ghostspeak amulet, Holy symbol, Polished buttons, Hard leather, Ecto-token
@@ -6856,7 +6868,7 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
 - Safespot: The Jungle demon (level 195) hits in melee and with magic: turn on Protect from Magic, stay three or more squares away so its melee cannot reach you, and hit it with Ranged (it is weakest to Ranged) from the far side.
 - Reward: 3 QP, 10,000 Coins, 3 diamonds, Daero's training (choose: 35,000 XP in Attack and Defence plus 20,000 in Strength and Hitpoints, or the other way round) and the right to wear the Dragon scimitar with 60 Attack.
 - The reward is a choice: the program shows the option that fits your levels (daero).
-- Done when: The quest is green, a Dragon scimitar is bought (worn with 60 Attack).
+- Done when: The quest is green and a Dragon scimitar is bought.
 - Items required:
   - Gold bar x1 - Waterfall Quest (S7-01) gives 2 gold bars. Otherwise buy one on the Grand Exchange or smelt it (Smithing 40). Zooknock needs it for the M'speak amulet. [item id 2357]
   - Ball of wool x1 - Spin wool at a spinning wheel or buy one on the Grand Exchange. It strings the M'speak amulet. [item id 1759]
@@ -6888,10 +6900,12 @@ Exported 2026-10-14 from the program's data files (steps.json, questStages.json,
       take 10th squad sigil x1 - equip it only when you are ready
       take Prayer potion(4) x4
       take Lobster x10 - or better food
+- Also tracked (does not block the step): Reach Attack 60: the Dragon scimitar cannot be wielded below it. Daero's training takes you to about Attack 52 at most; the rest is yours to train and is not a step of the route. [checked from the level: attack 60]
+- Also tracked (does not block the step): Wield the Dragon scimitar. [checked from the worn items: Dragon scimitar]
 - In the game (RuneLite plugin):
   - NPCs highlighted: King Narnode Shareen, Daero, Waydar
   - Dialogue choices to pick: “Yes” → “Talk about the journey...” → “Return to previous menu” → “Talk about the 1-th squad...” → “Talk about Caranock...” → “Leave...” → “Who is it?” → “I cannot convince Lumdo to take us to the island.” → “Yes, I'm sure.” → “Well I'll be a monkey's uncle!” → “How many bananas did Aunty want?” → “I've lost that toy you gave me...” → “Wow - can I borrow it?” → “Ok, I promise!”
-  - Marked done automatically when: quest completed: Monkey Madness I
+  - Marked done automatically when: quest completed: Monkey Madness I and holding 1 x Dragon scimitar
 - Walkthrough:
   1. Talk to King Narnode Shareen in the Tree Gnome Stronghold. Dialogue: “Yes”.
   2. Fly with Captain Errdo to Gandius.
@@ -7434,7 +7448,7 @@ The levels the route itself gives you by the end of each stage. A single number 
 | Runecraft | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 1 |
 | Agility | 1 | 1 | 1 | 1 | 1 | 1 | 31 | 31–40 | 31 |
 | Slayer | 1 | 1 | 1 | 1 | 1 | 1 | 1 | 20 | 20 |
-| Quest points | 6 | 32 | 40–41 | 43–44 | 45–46 | 45–46 | 55–56 | 59–60 | 68–69 |
+| Quest points | 6 | 32 | 40–41 | 43–44 | 45–46 | 45–46 | 55–56 | 59–61 | 68–70 |
 
-These are the levels the route produces, not a training plan: Defence stays at 1 until Dragon Slayer I, and only the training steps name a target (Attack 30/40, Strength 20, Magic 25, Mining 10, Woodcutting 36, Ranged 30, Prayer 43...). Stage 5 gives Defence 33 and Strength 35 on its own: Dragon Slayer I pays 18,650 XP in each. Quest points count the optional Shield of Arrav (S3-05) in the top of the range. Attack 60 for the Dragon scimitar is not guaranteed by this route: Monkey Madness I pays 35,000 XP in the pair you choose (Daero's training), which is Attack 52 at most from here. The values were recomputed from the route rewards on 13 Oct 2026.
+These are the levels the route produces, not a training plan: Defence stays at 1 until Dragon Slayer I, and only the training steps name a target (Attack 30/40, Strength 20, Magic 25, Mining 10, Woodcutting 36, Ranged 30, Prayer 43...). Stage 5 gives Defence 33 and Strength 35 on its own: Dragon Slayer I pays 18,650 XP in each. Quest points count the optional Shield of Arrav (S3-05) and, from stage 8, the optional A Porcine of Interest (a task of S8-04) in the top of the range. Attack 60 for the Dragon scimitar is not guaranteed by this route: Monkey Madness I pays 35,000 XP in the pair you choose (Daero's training), which is Attack 52 at most from here. The values were recomputed from the route rewards on 13 Oct 2026.
 

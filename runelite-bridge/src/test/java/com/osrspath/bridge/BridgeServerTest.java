@@ -163,6 +163,26 @@ public class BridgeServerTest
 	}
 
 	@Test
+	public void questPointsAndTotalLevelAreReportedOnlyWhenKnownInRangeAndInGame() throws Exception
+	{
+		server.setInGame(true);
+		String none = get("/status").body();
+		assertFalse(none, none.contains("questPoints") || none.contains("totalLevel"));
+		server.setProgressTotals(7, 63);
+		String body = get("/status").body();
+		assertTrue(body, body.contains("\"questPoints\":7") && body.contains("\"totalLevel\":63"));
+		server.setProgressTotals(0, 32);
+		assertTrue("zero quest points is a real zero", get("/status").body().contains("\"questPoints\":0"));
+		server.setProgressTotals(-1, 9999);
+		body = get("/status").body();
+		assertFalse("a value outside the game range is unknown, not clamped", body.contains("questPoints") || body.contains("totalLevel"));
+		server.setProgressTotals(12, 140);
+		server.setInGame(false);
+		body = get("/status").body();
+		assertFalse(body, body.contains("questPoints") || body.contains("totalLevel"));
+	}
+
+	@Test
 	public void statusReportsVersionsForTheHandshake() throws Exception
 	{
 		String body = get("/status").body();

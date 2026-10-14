@@ -59,6 +59,10 @@ export interface StepItemRequirement {
   phase?: string;
   /** Other items that do the same job: any of them counts (every pickaxe tier for "Pickaxe"). */
   anyOf?: string[];
+  /** The route's planning price of one, in coins; only items that take part in a funding plan have it (lib/fundingPlan.ts). */
+  gp?: number;
+  /** Funding priority: 1 materials of the quests ahead, 2 what the next steps are built on, 3 comfort that can wait. */
+  tier?: 1 | 2 | 3;
 }
 
 /** One bank-to-bank stretch of a quest with its own inventory: what to take, what the game refuses at the door. */
@@ -91,6 +95,29 @@ export interface CarryItem {
   where: 'bank' | 'bag';
   /** One sentence for the player: why. */
   why: string;
+}
+
+/** How the app checks a step's task against the player's state. A task without a check is ticked by the player. */
+export type TaskCheck =
+  | { kind: 'worn'; items: string[] }
+  | { kind: 'owned'; items: string[]; count?: number }
+  | { kind: 'level'; skill: string; level: number }
+  | { kind: 'quest'; name: string };
+
+/**
+ * Something that belongs to a step but is not what the game's completion check measures: wielding the weapon the step bought, claiming a reward,
+ * an optional quest that feeds the step's skill goal. It is tracked beside the step and never blocks it (the step's own trigger, and Carryover for
+ * what must be kept, stay as they are).
+ */
+export interface StepTask {
+  /** Stable within the step: the saved tick is keyed by "<stepId>:<id>". */
+  id: string;
+  text: string;
+  /** One sentence for the player: why it matters. */
+  why?: string;
+  check?: TaskCheck;
+  /** Quest points the task gives when done (an optional quest). Only the forecast uses it: the route's points count steps. */
+  qp?: number;
 }
 
 /** A point on the world map in game coordinates (as in RuneLite and on the OSRS Wiki map). */
@@ -291,6 +318,8 @@ export interface Step {
   loadouts?: Loadout[];
   /** What this step keeps for a later one (see CarryItem). */
   carryover?: CarryItem[];
+  /** Follow-ups and optional tasks tracked beside the step: they do not complete or block it (see StepTask). */
+  tasks?: StepTask[];
   /** A reward the player chooses at the end: the step shows which choice fits the player's current levels. */
   rewardChoice?: 'daero';
   /**
@@ -332,6 +361,10 @@ export interface Step {
   doneWhen: string;
   /** An earning step: how many coins you should have by the end of the step (in the bag and bank). Progress is in lib/wealth.ts. */
   moneyGoal?: number;
+  /** The goal for an account that cannot sell restricted items on the Grand Exchange yet (lib/tradeRestriction.ts): coins that need no sale. */
+  moneyGoalNoSale?: number;
+  /** The items this step sells on the Grand Exchange: the step shows the new-account restrictions when one of them is restricted. */
+  sells?: string[];
   /** Opponents without a combat card in foes (a boss, a quest monster): threats.json keys, for the food advice. */
   threats?: string[];
   /** Show what to wear for magic or ranged (wiki recommendations) for the player's levels and coins. */
@@ -684,6 +717,13 @@ export interface Progress {
    * (`id:1725` by item ID, `name:...` for items without an ID). Data from the game wins if it is complete.
    */
   ownedManual?: Record<string, ManualOwned>;
+  /**
+   * The player's own word on a new account's Grand Exchange sale restrictions: "lifted" - they can sell the restricted items, "active" - they cannot.
+   * Absent means the app decides from the game's quest points and total level (lib/tradeRestriction.ts).
+   */
+  sellRestrictions?: 'lifted' | 'active';
+  /** The player's ticks of tasks that have no game check: "<stepId>:<taskId>" to true (a task with a game check is not stored here). */
+  tasksDone?: Record<string, true>;
 }
 
 export interface ManualOwned {

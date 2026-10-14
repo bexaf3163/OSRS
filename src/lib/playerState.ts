@@ -38,6 +38,8 @@ export interface PlayerState {
   bankSeen: boolean;
   /** What is worn: slot to name. */
   equipment: Record<string, string>;
+  /** The worn items were read from the game; false means unknown, not "nothing is worn". Absent in a hand-built state is read as unknown. */
+  equipmentKnown?: boolean;
   /** The manual "I already have it" marks from shopping (the list row key to the quantity). */
   manual: Record<string, number>;
   owned: OwnedState | null;
@@ -88,6 +90,7 @@ export function buildPlayerState(i: PlayerStateInput): PlayerState {
     position: i.position ? known(i.position, 'game') : unknown,
     bankSeen: i.owned?.bankSeen === true,
     equipment,
+    equipmentKnown: Array.isArray(i.gear?.equipment),
     manual,
     owned: i.owned,
     fingerprint: '',

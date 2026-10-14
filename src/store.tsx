@@ -5,7 +5,7 @@ import type { GameMode, Progress, Stage, Step, StepStatus } from './types';
 import { BASE_QP, known, maxQpFor, stagesFor, stepById, stepsFor } from './data';
 import {
   emptyProgress, gameModeOf, loadProgress, normalizeProgress, saveProgress, STORAGE_KEY,
-  withGameMode, withLevel, withLevels, withNote, withReactivated, withReviewed, withStep, withUpgradeDismissed, withOwnedManual,
+  withGameMode, withLevel, withLevels, withNote, withReactivated, withReviewed, withStep, withUpgradeDismissed, withOwnedManual, withSellRestrictions, withTaskDone,
 } from './lib/progress';
 import { profileStorageKey, readProfiles } from './lib/profiles';
 import { questPoints } from './lib/qp';
@@ -32,6 +32,10 @@ interface StoreValue {
   setLevels: (levels: Record<string, number>) => void;
   setNote: (id: string, note: string) => void;
   setMode: (mode: GameMode) => void;
+  /** The player's word on the Grand Exchange sale restrictions of a new account; null — decide from the game. */
+  setSellRestrictions: (value: 'lifted' | 'active' | null) => void;
+  /** Ticks or unticks a step's task that has no game check (key "<stepId>:<taskId>"). */
+  setTaskDone: (key: string, done: boolean) => void;
   review: (ids: string[]) => void;
   reactivate: (ids: string[]) => void;
   /** "✕ Skip" the upgrade hint on a step (dismissed=false — bring it back). */
@@ -144,6 +148,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setProgress((p) => (gameModeOf(p) === mode ? p : withGameMode(p, mode)));
   }, []);
 
+  const setSellRestrictions = useCallback((value: 'lifted' | 'active' | null) => {
+    setProgress((p) => ((p.sellRestrictions ?? null) === value ? p : withSellRestrictions(p, value)));
+  }, []);
+
+  const setTaskDone = useCallback((key: string, done: boolean) => {
+    setProgress((p) => ((p.tasksDone?.[key] === true) === done ? p : withTaskDone(p, key, done)));
+  }, []);
+
   const review = useCallback((ids: string[]) => {
     const before = current.current;
     setProgress(withReviewed(before, ids));
@@ -172,8 +184,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const reset = useCallback(() => {
     const before = current.current;
-    // The game mode is a setting, not progress: a reset does not touch it.
-    setProgress({ ...emptyProgress(), ...(before.gameMode ? { gameMode: before.gameMode } : {}) });
+    // The game mode and the sale restrictions' answer are settings, not progress: a reset does not touch them.
+    setProgress({
+      ...emptyProgress(), ...(before.gameMode ? { gameMode: before.gameMode } : {}), ...(before.sellRestrictions ? { sellRestrictions: before.sellRestrictions } : {}),
+    });
     show('Progress reset', before);
   }, [show]);
 
@@ -194,10 +208,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<StoreValue>(
     () => ({
-      progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
+      progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
       toast, notify, undo, dismissToast,
     }),
-    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
+    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
       toast, notify, undo, dismissToast],
   );
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

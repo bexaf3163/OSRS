@@ -23,6 +23,7 @@ import { usePrepFix } from './PrepRoute';
 import { ReadinessPanel } from './ReadinessPanel';
 import { OneTripCard, RecoveryBanner } from './OneTripCard';
 import { MoneyGoal } from './MoneyGoal';
+import { TradeRestrictionNote } from './TradeRestrictionNote';
 import { MoneyPlan } from './MoneyPlan';
 import { MagicPlan } from './MagicPlan';
 import { UpgradePrompt } from './UpgradePrompt';
@@ -181,7 +182,7 @@ export function StepStatus({ step, headline = false, noStart = false, quiet = fa
           ))}
         </div>
       )}
-      {!headline && panel('prep', <><ReadinessPanel step={step} /><OneTripCard step={step} inStatus /><MoneyGoal step={step} /><MoneyPlan step={step} /><MagicPlan step={step} /></>)}
+      {!headline && panel('prep', <><ReadinessPanel step={step} /><OneTripCard step={step} inStatus /><TradeRestrictionNote step={step} /><MoneyGoal step={step} /><MoneyPlan step={step} /><MagicPlan step={step} /></>)}
       {!headline && panel('gear', <><UpgradePrompt step={step} /><GearPrompt step={step} /><StyleGear step={step} /></>)}
       {!headline && panel('food', <FoodAdvice step={step} />)}
       {!headline && open && current === 'route' && (

@@ -25,6 +25,8 @@ import { ReadinessPanel } from './ReadinessPanel';
 import { OneTripCard } from './OneTripCard';
 import { useReadinessEngine } from '../readinessContext';
 import { MoneyGoal } from './MoneyGoal';
+import { TradeRestrictionNote } from './TradeRestrictionNote';
+import { StepTasks } from './StepTasks';
 import { StepTraining } from './TrainingCard';
 import { StepStatus } from './StepStatus';
 import { useFeatures } from '../lib/features';
@@ -160,6 +162,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
   const helpers = (
     <>
       <ReadinessPanel step={step} />
+      <TradeRestrictionNote step={step} />
       <MoneyGoal step={step} />
       <StepTraining step={step} />
       <MagicPlan step={step} />
@@ -342,6 +345,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
           {doneWhen}
           <RewardChoice step={step} />
           <CarryNote step={step} />
+          <StepTasks step={step} />
           {walkthrough && (quick || (sub && how)) && (
             <Fold title="Full walkthrough and dialogue" hint={nQuick ? `${nQuick} ${nQuick === 1 ? 'step' : 'steps'}, with detailed instructions` : 'for reference'}>
               {sub && how}
@@ -361,7 +365,9 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
           <ReadinessPanel step={step} bare={statusAbove && !recovering} />
           <LoadoutsCard step={step} />
           <CarryNote step={step} />
+          <StepTasks step={step} />
           <OneTripCard step={step} inStatus plain />
+          <TradeRestrictionNote step={step} />
           <MoneyGoal step={step} />
           <StepTraining step={step} />
           <MagicPlan step={step} />

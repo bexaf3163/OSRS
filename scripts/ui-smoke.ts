@@ -920,6 +920,38 @@ async function run(browser: Browser) {
     expect(!before.includes('Ancient Guardian') && after.includes('Ancient Guardian'), 'current instruction: it moves with the quest cursor without a new login');
     await page.context().close();
   }
+
+  // A step's tasks: buying the Dragon scimitar completes the step; wielding it needs Attack 60 and is tracked beside the step, not inside it.
+  {
+    const { page, errors } = await open(browser, 1440, {
+      progress: progressBefore('S9-04'), localStorage: { 'osrs-put:active-step': 'S9-04' },
+      status: { protocol: 6, inGame: true, activeStepId: 'S9-04', stats: { attack: 52 }, equipment: [], inventory: [], coins: 1000, bankCoins: 0 },
+    }, '#/step/S9-04');
+    await page.waitForTimeout(500);
+    const tasks = await text(page, '.step-tasks');
+    expect(/Attack 52 of 60/.test(tasks) && /Wield the Dragon scimitar/.test(tasks), 'step tasks: Attack 60 and wielding are tracked beside the step');
+    expect(errors.length === 0, `step tasks: no console errors ${errors.join('; ')}`);
+    await page.context().close();
+  }
+
+  // A new account's sale restrictions: the hide-selling step warns when the game's own numbers say it is restricted, and only hints otherwise.
+  for (const [label, qp, total, banner] of [['restricted', 4, 41, true], ['unknown', 30, 320, false]] as const) {
+    const { page, errors } = await open(browser, 1440, {
+      progress: progressBefore('S1-13', { gameMode: 'f2p' }), localStorage: { 'osrs-put:active-step': 'S1-13' },
+      status: { protocol: 6, inGame: true, activeStepId: 'S1-13', questPoints: qp, totalLevel: total, coins: 8400, bankCoins: 0 },
+    }, '#/step/S1-13');
+    await page.waitForTimeout(500);
+    const note = await text(page, '.trade-note');
+    expect(banner ? /cannot sell Cowhide, Leather yet/.test(note) && /quest points 4 of 10/.test(note) : /20 hours of play/.test(note) && !/cannot sell Cowhide, Leather yet/.test(note),
+      `trade restrictions (${label}): the note matches the account's numbers`);
+    expect(errors.length === 0, `trade restrictions (${label}): no console errors ${errors.join('; ')}`);
+    if (banner) {
+      await page.getByRole('button', { name: 'I can already sell these' }).first().click();
+      await page.waitForTimeout(200);
+      expect(/You marked the sale restrictions as lifted/.test(await text(page, '.trade-note')), 'trade restrictions: the player can say the restrictions are lifted');
+    }
+    await page.context().close();
+  }
 }
 
 // The address is set explicitly: without --host the server on some machines (GitHub CI) listens on IPv6 ::1 only, and 127.0.0.1 does not answer.

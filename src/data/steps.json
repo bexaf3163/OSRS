@@ -1086,6 +1086,10 @@
       {
         "label": "Bonus",
         "text": "Attack, Strength and Defence rise as well, and cows drop bones: bury them for Prayer."
+      },
+      {
+        "label": "New account",
+        "text": "A new free-to-play account cannot sell cowhides or leather on the Grand Exchange until it has 20 hours of play, 10 quest points and total level 100. Then the hides are not money: after Stronghold and the Chronicle you have about 8,500 gp, which already covers the S2-01 quest materials, the Imp Catcher beads and the first scimitars (about 8,000 gp). Skip the hide grind, kill cows only for combat levels and bones, and let the amulet, the potions and the mithril scimitar wait for money from quests (Below Ice Mountain gives 2,000) or from items that can be sold."
       }
     ],
     "doneWhen": "12,000+ coins in the bag or the bank (together with what is left from Stronghold). Unsold hides are not coins.",
@@ -1108,7 +1112,12 @@
           }
         ]
       }
-    }
+    },
+    "sells": [
+      "Cowhide",
+      "Leather"
+    ],
+    "moneyGoalNoSale": 8000
   },
   {
     "id": "S2-01",
@@ -1132,7 +1141,9 @@
         "howToGet": "For Imp Catcher, about 2,000 gp.",
         "wikiItemId": 1470,
         "iconUrl": "https://oldschool.runescape.wiki/images/Red_bead.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 2000,
+        "tier": 2
       },
       {
         "nameEn": "Yellow bead",
@@ -1140,7 +1151,9 @@
         "howToGet": "For Imp Catcher, about 900 gp.",
         "wikiItemId": 1472,
         "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_bead.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 900,
+        "tier": 2
       },
       {
         "nameEn": "Black bead",
@@ -1148,7 +1161,9 @@
         "howToGet": "For Imp Catcher, about 1,200 gp.",
         "wikiItemId": 1474,
         "iconUrl": "https://oldschool.runescape.wiki/images/Black_bead.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 1200,
+        "tier": 2
       },
       {
         "nameEn": "White bead",
@@ -1156,7 +1171,9 @@
         "howToGet": "For Imp Catcher, about 1,150 gp.",
         "wikiItemId": 1476,
         "iconUrl": "https://oldschool.runescape.wiki/images/White_bead.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 1150,
+        "tier": 2
       },
       {
         "nameEn": "Amulet of strength",
@@ -1164,7 +1181,9 @@
         "howToGet": "+10 strength bonus: you hit harder and melee levels much faster. About 1,350 gp.",
         "wikiItemId": 1725,
         "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_strength.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 1350,
+        "tier": 3
       },
       {
         "nameEn": "Iron scimitar",
@@ -1172,7 +1191,9 @@
         "howToGet": "Can be worn at once. About 60 gp.",
         "wikiItemId": 1323,
         "iconUrl": "https://oldschool.runescape.wiki/images/Iron_scimitar.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 60,
+        "tier": 2
       },
       {
         "nameEn": "Steel scimitar",
@@ -1180,7 +1201,9 @@
         "howToGet": "Wear it from Attack 5. About 100 gp.",
         "wikiItemId": 1325,
         "iconUrl": "https://oldschool.runescape.wiki/images/Steel_scimitar.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 100,
+        "tier": 2
       },
       {
         "nameEn": "Mithril scimitar",
@@ -1188,7 +1211,9 @@
         "howToGet": "Wear it from Attack 20, after Vampyre Slayer. About 400 gp.",
         "wikiItemId": 1329,
         "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_scimitar.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 400,
+        "tier": 3
       },
       {
         "nameEn": "Energy potion(4)",
@@ -1196,7 +1221,9 @@
         "howToGet": "Restores run energy during quests, about 170 gp.",
         "wikiItemId": 3008,
         "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png",
-        "inStep": true
+        "inStep": true,
+        "gp": 170,
+        "tier": 3
       },
       {
         "nameEn": "Redberry pie",
@@ -1204,7 +1231,9 @@
         "howToGet": "For The Knight's Sword, about 70 gp.",
         "wikiItemId": 2325,
         "iconUrl": "https://oldschool.runescape.wiki/images/Redberry_pie.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 70,
+        "tier": 1
       },
       {
         "nameEn": "Iron bar",
@@ -1212,7 +1241,9 @@
         "howToGet": "For The Knight's Sword, about 200 gp each.",
         "wikiItemId": 2351,
         "iconUrl": "https://oldschool.runescape.wiki/images/Iron_bar.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 200,
+        "tier": 1
       },
       {
         "nameEn": "Clay",
@@ -1220,7 +1251,9 @@
         "howToGet": "6 for Doric's Quest, 1 to soak in water for Prince Ali Rescue. About 80 gp each.",
         "wikiItemId": 434,
         "iconUrl": "https://oldschool.runescape.wiki/images/Clay.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 80,
+        "tier": 1
       },
       {
         "inStep": true,
@@ -1228,7 +1261,9 @@
         "amount": 4,
         "howToGet": "For Doric's Quest, about 30 gp each.",
         "wikiItemId": 436,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Copper_ore.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Copper_ore.png",
+        "gp": 30,
+        "tier": 1
       },
       {
         "inStep": true,
@@ -1236,7 +1271,9 @@
         "amount": 2,
         "howToGet": "For Doric's Quest, about 70 gp each.",
         "wikiItemId": 440,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_ore.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Iron_ore.png",
+        "gp": 70,
+        "tier": 1
       },
       {
         "nameEn": "Redberries",
@@ -1244,7 +1281,9 @@
         "howToGet": "For the paste in Prince Ali Rescue, about 50 gp.",
         "wikiItemId": 1951,
         "iconUrl": "https://oldschool.runescape.wiki/images/Redberries.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 50,
+        "tier": 1
       },
       {
         "nameEn": "Yellow dye",
@@ -1252,7 +1291,9 @@
         "howToGet": "One for the wig in Prince Ali Rescue, the other for the orange dye in Goblin Diplomacy. About 230 gp.",
         "wikiItemId": 1765,
         "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_dye.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 230,
+        "tier": 1
       },
       {
         "nameEn": "Red dye",
@@ -1260,7 +1301,9 @@
         "howToGet": "Mix with yellow to make orange for Goblin Diplomacy, about 290 gp.",
         "wikiItemId": 1763,
         "iconUrl": "https://oldschool.runescape.wiki/images/Red_dye.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 290,
+        "tier": 1
       },
       {
         "nameEn": "Blue dye",
@@ -1268,7 +1311,9 @@
         "howToGet": "For Goblin Diplomacy, about 290 gp.",
         "wikiItemId": 1767,
         "iconUrl": "https://oldschool.runescape.wiki/images/Blue_dye.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 290,
+        "tier": 1
       },
       {
         "nameEn": "Pink skirt",
@@ -1277,13 +1322,19 @@
         "from": "Thessalia",
         "wikiItemId": 1013,
         "iconUrl": "https://oldschool.runescape.wiki/images/Pink_skirt.png",
-        "inStep": true
+        "inStep": true,
+        "gp": 2,
+        "tier": 1
       }
     ],
     "fields": [
       {
         "label": "Budget",
         "text": "About 10,500 gp, of which about 5,300 is the beads for Imp Catcher. To save: buy the pink skirt from Thessalia in Varrock for 2 gp and make the dyes with the witch Aggie in Draynor (5 gp + 2 onions, 3 redberries or 2 Woad leaves)."
+      },
+      {
+        "label": "New account",
+        "text": "A new free-to-play account cannot sell cowhides (or leather, iron ore, clay, copper or tin ore, coal, steel bars, oak or yew logs, lobsters, ashes, feathers, the low runes and a few more) on the Grand Exchange until it has 20 hours of play, 10 quest points and total level 100; buying is not restricted. Without selling, buy in this order: the quest materials (about 2,400 gp), then the Imp Catcher beads and the iron and steel scimitars (about 5,400 gp), then, as coins allow, the mithril scimitar, the amulet of strength and the energy potions. Do not skip the first two groups for the third."
       }
     ],
     "doneWhen": "All the items are bought and are in your Grand Exchange bank.",
@@ -1426,7 +1477,10 @@
           }
         ]
       }
-    }
+    },
+    "sells": [
+      "Cowhide"
+    ]
   },
   {
     "id": "S2-02",
@@ -2204,7 +2258,7 @@
       "Count Draynor"
     ],
     "reward": "3 QP and 4,825 Attack XP: your Attack level jumps instantly from 1 to 20!",
-    "doneWhen": "The quest is green, Attack 20+. The Mithril scimitar from step S2-01 is wielded.",
+    "doneWhen": "The quest is green and Attack is 20 or more.",
     "inGame": {
       "worldPoint": {
         "x": 3098,
@@ -2236,7 +2290,22 @@
         "type": "QUEST_COMPLETED",
         "questName": "Vampyre Slayer"
       }
-    }
+    },
+    "tasks": [
+      {
+        "id": "wield-mithril",
+        "text": "Wield the Mithril scimitar bought in S2-01: Attack 20 is reached with this quest.",
+        "check": {
+          "kind": "worn",
+          "items": [
+            "Mithril scimitar",
+            "Adamant scimitar",
+            "Rune scimitar",
+            "Dragon scimitar"
+          ]
+        }
+      }
+    ]
   },
   {
     "id": "S2-09",
@@ -3263,6 +3332,10 @@
       {
         "label": "Other ways",
         "text": "Cowhides to leather with Ellis in Al Kharid (about 260 gp per leather), and from Attack 40 big bones (Big bones, about 310 gp) from the Hill Giants of step S4-03."
+      },
+      {
+        "label": "New account",
+        "text": "A new free-to-play account cannot sell iron ore (or leather) on the Grand Exchange until it has 20 hours of play, 10 quest points and total level 100. The stage 3 quests usually pay the 2,500 gp anyway; if they have not, mine only what the quests need and wait for the big bones of S4-03, which can be sold."
       }
     ],
     "doneWhen": "2,500+ coins in the bag or the bank (unsold ore does not count).",
@@ -3285,6 +3358,10 @@
     },
     "softRequires": [
       "S3-05"
+    ],
+    "sells": [
+      "Iron ore",
+      "Leather"
     ]
   },
   {
@@ -3596,7 +3673,20 @@
         ]
       }
     },
-    "warning": "Brutus's specials (Snort and Growl) are avoided by moving two tiles to the side, not by eating. Bring 5 Salmon for the plain hits."
+    "warning": "Brutus's specials (Snort and Growl) are avoided by moving two tiles to the side, not by eating. Bring 5 Salmon for the plain hits.",
+    "tasks": [
+      {
+        "id": "cowbell-amulet",
+        "text": "Take the Cowbell amulet from Gillie Groats: she gives it and the XP lamp after the fight.",
+        "why": "It is a teleport to the Lumbridge cow field once charged with Air runes.",
+        "check": {
+          "kind": "owned",
+          "items": [
+            "Cowbell amulet"
+          ]
+        }
+      }
+    ]
   },
   {
     "id": "S4-03",
@@ -5679,6 +5769,22 @@
         "wikiItemId": 1592,
         "iconUrl": "https://oldschool.runescape.wiki/images/Ring_mould.png"
       }
+    ],
+    "tasks": [
+      {
+        "id": "museum-quiz",
+        "text": "Varrock Museum quiz: talk to Orlando Smith in the basement (1,000 Slayer XP)."
+      },
+      {
+        "id": "porcine",
+        "text": "A Porcine of Interest (optional quest): read the notice board in Draynor Village, talk to Sarah at the South Falador Farm, use a rope on the Strange Hole east of Draynor Manor, then kill Sourhog (level 37) and cut off its foot. Bring a rope, a knife or slash weapon, combat gear and food.",
+        "why": "Pays 1,000 Slayer XP and 5,000 coins.",
+        "check": {
+          "kind": "quest",
+          "name": "A Porcine of Interest"
+        },
+        "qp": 1
+      }
     ]
   },
   {
@@ -5809,7 +5915,7 @@
     ],
     "proTip": "With 50 Ranged the reward is Ava's accumulator: it returns 72% of fired arrows straight to the quiver. Below 50 you get Ava's attractor, which is worse. If your Ranged is almost 50, train it before handing in the quest.",
     "reward": "1 QP, 1,000 Crafting XP, 1,000 Fletching XP, 1,000 Slayer XP, 2,500 Woodcutting XP, Ava's accumulator (with 50 Ranged) or Ava's attractor.",
-    "doneWhen": "Ava's accumulator or attractor is worn.",
+    "doneWhen": "The quest is green.",
     "inGame": {
       "npcNames": [
         "Ava",
@@ -5842,7 +5948,20 @@
         "type": "QUEST_COMPLETED",
         "questName": "Animal Magnetism"
       }
-    }
+    },
+    "tasks": [
+      {
+        "id": "wear-ava",
+        "text": "Wear Ava's accumulator (needs 50 Ranged) or Ava's attractor, whichever the quest gave you.",
+        "check": {
+          "kind": "worn",
+          "items": [
+            "Ava's accumulator",
+            "Ava's attractor"
+          ]
+        }
+      }
+    ]
   },
   {
     "id": "S8-06",
@@ -6317,7 +6436,7 @@
     ],
     "safespot": "The Jungle demon (level 195) hits in melee and with magic: turn on Protect from Magic, stay three or more squares away so its melee cannot reach you, and hit it with Ranged (it is weakest to Ranged) from the far side.",
     "reward": "3 QP, 10,000 Coins, 3 diamonds, Daero's training (choose: 35,000 XP in Attack and Defence plus 20,000 in Strength and Hitpoints, or the other way round) and the right to wear the Dragon scimitar with 60 Attack.",
-    "doneWhen": "The quest is green, a Dragon scimitar is bought (worn with 60 Attack).",
+    "doneWhen": "The quest is green and a Dragon scimitar is bought.",
     "inGame": {
       "npcNames": [
         "King Narnode Shareen",
@@ -6476,6 +6595,27 @@
           }
         ],
         "note": "Protect from Magic, and stay three or more squares away: its melee reaches two squares. It hits up to 32 and is weakest to Ranged. Do not use any teleport on the walk back for the audience with Awowogei."
+      }
+    ],
+    "tasks": [
+      {
+        "id": "attack-60",
+        "text": "Reach Attack 60: the Dragon scimitar cannot be wielded below it. Daero's training takes you to about Attack 52 at most; the rest is yours to train and is not a step of the route.",
+        "check": {
+          "kind": "level",
+          "skill": "attack",
+          "level": 60
+        }
+      },
+      {
+        "id": "wield-dragon",
+        "text": "Wield the Dragon scimitar.",
+        "check": {
+          "kind": "worn",
+          "items": [
+            "Dragon scimitar"
+          ]
+        }
       }
     ]
   },

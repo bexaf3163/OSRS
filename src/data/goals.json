@@ -870,17 +870,17 @@
           "max": 56
         },
         {
-          "raw": "59–60",
+          "raw": "59–61",
           "min": 59,
-          "max": 60
+          "max": 61
         },
         {
-          "raw": "68–69",
+          "raw": "68–70",
           "min": 68,
-          "max": 69
+          "max": 70
         }
       ]
     }
   ],
-  "note": "These are the levels the route produces, not a training plan: Defence stays at 1 until Dragon Slayer I, and only the training steps name a target (Attack 30/40, Strength 20, Magic 25, Mining 10, Woodcutting 36, Ranged 30, Prayer 43...). Stage 5 gives Defence 33 and Strength 35 on its own: Dragon Slayer I pays 18,650 XP in each. Quest points count the optional Shield of Arrav (S3-05) in the top of the range. Attack 60 for the Dragon scimitar is not guaranteed by this route: Monkey Madness I pays 35,000 XP in the pair you choose (Daero's training), which is Attack 52 at most from here. The values were recomputed from the route rewards on 13 Oct 2026."
+  "note": "These are the levels the route produces, not a training plan: Defence stays at 1 until Dragon Slayer I, and only the training steps name a target (Attack 30/40, Strength 20, Magic 25, Mining 10, Woodcutting 36, Ranged 30, Prayer 43...). Stage 5 gives Defence 33 and Strength 35 on its own: Dragon Slayer I pays 18,650 XP in each. Quest points count the optional Shield of Arrav (S3-05) and, from stage 8, the optional A Porcine of Interest (a task of S8-04) in the top of the range. Attack 60 for the Dragon scimitar is not guaranteed by this route: Monkey Madness I pays 35,000 XP in the pair you choose (Daero's training), which is Attack 52 at most from here. The values were recomputed from the route rewards on 13 Oct 2026."
 }
