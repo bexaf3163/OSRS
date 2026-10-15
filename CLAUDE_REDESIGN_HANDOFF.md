@@ -378,6 +378,12 @@ item is checked against the current data and the OSRS Wiki before it changes. Ev
   scimitar and 25 Salmon (`anyOf` fish); recommended 4 Strength potion(4) and the Amulet of strength; `quickSteps`; `inGame.goal` and `pathWaypoints`
   trapdoor (3097,3468) then the giants (3111,9838, wiki spawn mean) so the HUD inside the dungeon leads to them.
 
+- 2.55.3, S5-03 (wiki 2026-10-15: Lesser demon (Melzar's Maze) 79 HP, max hit 8, Magic 1, magic defence -10, weak to water; iron armour magic attack
+  -68 with the boots): required 10 Salmon (anyOf fish); recommended Staff of air (the item database has no Staff of water and `build-items` is not run),
+  Mind/Air/Water runes x50 for ~45 Water Strikes; fields "Lesser demon" (safespot, armour off: ~18% vs ~89% hit chance at Magic 25) and "Melzar the Mad";
+  the stage line `killLesserDemon` rewritten; a food `pre` guard (5) on `enterMelzarsMaze`, pinned in `tests/questPreflight.test.ts`. Tests in
+  `tests/hillGiants.test.ts`. Melee on the demon at Defence 1 estimated at ~200 HP taken: not advised.
+
 ### Automated
 
 `tests/tradeRestriction.test.ts`, `tests/stepTasks.test.ts`, `tests/oneTimeWay.test.ts`, `tests/fishingClimb.test.ts`, `tests/travelSupplies.test.ts`,

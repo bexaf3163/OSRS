@@ -62,3 +62,29 @@ describe('S4-03 in the game', () => {
     expect(p.highlightItems).toEqual(['Big bones']);
   });
 });
+
+// S5-03 (Melzar's Maze), same brief: food for the rooms, the Water Strike kit for the lesser demon's safespot, the armour tip. Wiki 2026-10-15:
+// Lesser demon (Melzar's Maze) 79 HP, max hit 8, Magic 1, magic defence -10, weak to water, aggressive; iron armour magic attack -65 together.
+describe('S5-03: Melzar the Mad and the lesser demon', () => {
+  const m = stepById.get('S5-03')!;
+  const lines = m.questStages!.stages.flatMap((st) => st.do);
+
+  it('food is part of the kit; the staff, runes are advice', () => {
+    expect((m.itemsRequired ?? []).map((i) => i.nameEn)).toEqual(['Maze key', 'Salmon']);
+    expect((m.itemsRecommended ?? []).map((i) => i.nameEn)).toEqual(['Staff of air', 'Mind rune', 'Air rune', 'Water rune']);
+  });
+
+  it('the maze door has a food guard of five pieces of any listed fish', () => {
+    const enter = lines.find((l) => l.k === 'enterMelzarsMaze')!;
+    expect(enter.pre![0]).toMatchObject({ item: 'Salmon', n: 5 });
+    expect(enter.pre![0].alt).toEqual(expect.arrayContaining(['Trout', 'Lobster']));
+  });
+
+  it('the demon line names the safespot, the weakness and the armour', () => {
+    const t = lines.find((l) => l.k === 'killLesserDemon')!.t;
+    expect(t).toMatch(/one square east of the magenta door/);
+    expect(t).toMatch(/Water Strike/);
+    expect(t).toMatch(/armour off/);
+    expect(m.fields!.find((f) => f.label === 'Lesser demon')!.text).toMatch(/an estimate/);
+  });
+});

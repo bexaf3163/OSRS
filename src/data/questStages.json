@@ -15400,6 +15400,7 @@
          2595
         ]
        },
+       "pre": [{"item": "Salmon", "id": 329, "n": 5, "alt": ["Trout", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"]}],
        "k": "enterMelzarsMaze"
       },
       {
@@ -15633,7 +15634,7 @@
        "k": "openMagntaDoor"
       },
       {
-       "t": "Kill the lesser demon (level 82) for the green key. Safespot it with ranged or magic from the spot east of the magenta door.",
+       "t": "Kill the lesser demon (level 82) for the green key from the spot one square east of the magenta door, where it cannot reach you. Cast Water Strike (it is weak to water) with the iron armour off: armour cuts magic accuracy to about a fifth.",
        "s": "Basement: kill the lesser demon (green key)",
        "at": [
         2936,

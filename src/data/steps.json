@@ -4309,6 +4309,20 @@
         "howToGet": "From step S5-01.",
         "wikiItemId": 1542,
         "iconUrl": "https://oldschool.runescape.wiki/images/Maze_key.png"
+      },
+      {
+        "nameEn": "Salmon",
+        "amount": 10,
+        "howToGet": "Buy on the Grand Exchange, about 34 gp each (15 Oct 2026); Trout, Tuna, Lobster or Swordfish count too. For the rooms and Melzar the Mad (hits up to 5); the demon is fought from the safespot.",
+        "wikiItemId": 329,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
+        "heals": 9,
+        "anyOf": [
+          "Trout",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ]
       }
     ],
     "imageUrl": "https://oldschool.runescape.wiki/images/Melzar%27s_Maze_map.png",
@@ -4317,6 +4331,14 @@
       {
         "label": "Enemies by room",
         "text": "Zombie rat (red key), ghost (orange), skeleton (yellow), zombie (blue), Melzar the Mad, level 43 (purple), Lesser demon, level 82 (green key)."
+      },
+      {
+        "label": "Lesser demon",
+        "text": "It hits up to 8 and is aggressive, so do not melee it at Defence 1: from the spot one square east of the magenta door (the right side, looking north) it cannot reach you. It has 79 hit points, Magic 1 and is weak to water, so Water Strike is the cheap way: about 45 casts. Take the iron armour off in the safespot first: helmet, platebody, plateskirt and kiteshield cut magic accuracy to about a fifth (wiki magic attack bonuses, -65 together); without them about 9 casts in 10 hit (an estimate from the combat formulas at Magic 25)."
+      },
+      {
+        "label": "Melzar the Mad",
+        "text": "Level 43, hits up to 5: melee him and eat before your health falls to 10 (two of his hits)."
       }
     ],
     "safespot": "Shoot the Lesser demon from a distance with magic or a bow from behind the corner of the purple door!",
@@ -4349,6 +4371,36 @@
     "threats": [
       "Melzar the Mad",
       "Lesser demon"
+    ],
+    "itemsRecommended": [
+      {
+        "nameEn": "Staff of air",
+        "amount": 1,
+        "howToGet": "Grand Exchange, about 1,050 gp (15 Oct 2026). Gives the Air runes and lets you autocast Water Strike; any staff is enough to autocast if you bring Air runes.",
+        "wikiItemId": 1381,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_air.png"
+      },
+      {
+        "nameEn": "Mind rune",
+        "amount": 50,
+        "howToGet": "Water Strike: 1 Mind, 1 Air and 1 Water rune a cast (Magic 5). About 45 casts kill the demon. Grand Exchange, about 4 gp each.",
+        "wikiItemId": 558,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mind_rune.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 50,
+        "howToGet": "Water Strike: 1 a cast; not needed with the Staff of air. Grand Exchange, about 6 gp each.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      },
+      {
+        "nameEn": "Water rune",
+        "amount": 50,
+        "howToGet": "Water Strike: 1 a cast. Grand Exchange, about 6 gp each.",
+        "wikiItemId": 555,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Water_rune.png"
+      }
     ]
   },
   {

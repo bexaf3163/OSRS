@@ -269,7 +269,7 @@ describe('food before a dangerous entry', () => {
   const ENTRIES: [string, number, string][] = [
     ['S2-07', 6, 'enterDungeon'], ['S2-08', 2, 'enterDraynorManor'], ['S3-02', 1, 'enterFortress'], ['S3-02', 2, 'enterFortress'],
     ['S3-03', 2, 'killDelrithStep'], ['S3-04', 30, 'reenterDungeon'], ['S4-01', 52, 'killIthoi'], ['S4-02', 18, 'openBullPen'],
-    ['S5-08', 0, 'boardShipToGo'], ['S7-02', 4, 'openCell'], ['S7-03', 7, 'talkToTheWarlord'], ['S7-05', 130, 'climbDownTrapDoor'],
+    ['S5-03', 0, 'enterMelzarsMaze'], ['S5-08', 0, 'boardShipToGo'], ['S7-02', 4, 'openCell'], ['S7-03', 7, 'talkToTheWarlord'], ['S7-05', 130, 'climbDownTrapDoor'],
     ['S8-01', 2, 'killTheDog'], ['S8-02', 1, 'enterSwamp'], ['S9-02', 70, 'enterZanarisForFight'], ['S9-04', 5, 'prepareForBattle'],
   ];
 
