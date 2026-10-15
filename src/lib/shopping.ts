@@ -67,7 +67,8 @@ function collect(steps: Step[], pick: (s: Step) => StepItemRequirement[] | undef
   const order: Acc[] = [];
   for (const step of steps) {
     for (const item of pick(step) ?? []) {
-      const n = parseAmount(item.amount);
+      // Food with a personal plan: the shopping list buys for the whole goal, not one trip.
+      const n = item.totalAmount ?? parseAmount(item.amount);
       if (item.wikiItemId === COINS_ID || nameKey(item.nameEn) === 'coins') {
         if (coinsOut && n) coinsOut.n += n;
         continue;
@@ -94,7 +95,7 @@ function collect(steps: Step[], pick: (s: Step) => StepItemRequirement[] | undef
       }
       acc.line.iconUrl ??= item.iconUrl;
       byName.set(name, acc);
-      acc.line.sources.push({ stepId: step.id, amount: item.amount, carryOver, ...(item.phase ? { phase: item.phase } : {}) });
+      acc.line.sources.push({ stepId: step.id, amount: item.totalAmount ?? item.amount, carryOver, ...(item.phase ? { phase: item.phase } : {}) });
       if (carryOver) continue;
       if (n === null) acc.line.exact = false;
       // In a purchase step (gear) "during the step" means "buy at the exchange".

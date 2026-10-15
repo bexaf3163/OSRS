@@ -57,6 +57,30 @@ export interface BridgeStatus {
   /** The quest points and the total level as the game holds them (plugin 2.54+); null — unknown, never zero. */
   questPoints: number | null;
   totalLevel: number | null;
+  /** The fights recorded on the combat training step (plugin 2.57+); null — none recorded or an older plugin. */
+  combatLog: CombatLogState | null;
+}
+
+/** Recent clean kills per opponent version on a combat training step: the seconds between them and the damage taken (plugin CombatLog). */
+export interface CombatLogState {
+  stepId: string;
+  foes: { name: string; combat: number; kills: number; seconds: number; damage: number }[];
+}
+
+export function parseCombatLog(v: unknown): CombatLogState | null {
+  const o = v as { stepId?: unknown; foes?: unknown } | null;
+  if (!o || typeof o.stepId !== 'string' || !Array.isArray(o.foes)) return null;
+  const n = (x: unknown, max: number) => (typeof x === 'number' && Number.isFinite(x) && x >= 0 && x <= max ? x : null);
+  const foes = o.foes.flatMap((f) => {
+    const e = f as Record<string, unknown>;
+    const name = typeof e?.name === 'string' && e.name.length <= 60 ? e.name : null;
+    const combat = n(e?.combat, 2000);
+    const kills = n(e?.kills, 1000);
+    const seconds = n(e?.seconds, 1e6);
+    const damage = n(e?.damage, 1e6);
+    return name && combat !== null && kills !== null && seconds !== null && damage !== null ? [{ name, combat, kills, seconds, damage }] : [];
+  });
+  return foes.length ? { stepId: o.stepId, foes } : null;
 }
 
 /**
@@ -520,6 +544,7 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
     status?: string; inGame?: boolean; stats?: unknown; shortestPath?: unknown; activeStepId?: unknown; protocol?: unknown; pluginVersion?: unknown;
     navTarget?: unknown; questInstruction?: unknown; xp?: unknown; questsDone?: unknown; player?: unknown; pos?: unknown; homeTeleportSeconds?: unknown;
     homeTeleportKnown?: unknown; spellbook?: unknown; chronicleCharges?: unknown; questPoints?: unknown; totalLevel?: unknown;
+    combatLog?: unknown;
   } | undefined;
   const online = res.ok && d?.status === 'ok';
   const instruction = online && d?.inGame === true ? parseQuestInstruction(d.questInstruction) : null;
@@ -545,6 +570,7 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
       ? d.chronicleCharges : null,
     questPoints: online && typeof d?.questPoints === 'number' && Number.isInteger(d.questPoints) && d.questPoints >= 0 && d.questPoints <= 500 ? d.questPoints : null,
     totalLevel: online && typeof d?.totalLevel === 'number' && Number.isInteger(d.totalLevel) && d.totalLevel >= 0 && d.totalLevel <= 2277 ? d.totalLevel : null,
+    combatLog: online ? parseCombatLog(d?.combatLog) : null,
   };
 }
 

@@ -73,7 +73,7 @@ public final class BridgeServer
 	 */
 	static final int PROTOCOL = 6;
 	/** The plugin version, the same as the app it ships with in one exe. */
-	static final String PLUGIN_VERSION = "2.55.3";
+	static final String PLUGIN_VERSION = "2.56.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	/** The whole snapshot: the step with the quest stages, shopping and plan in one body. */
@@ -172,6 +172,8 @@ public final class BridgeServer
 	/** The quest points and the total level as the game holds them (additive in /status since 2.54.0); null is unknown (never zero). */
 	private volatile Integer questPoints;
 	private volatile Integer totalLevel;
+	/** The fights of the combat training step (additive in /status since 2.57.0): {"stepId":..., "foes":[...]}; null — none recorded. */
+	private volatile Map<String, Object> combatLog;
 	/** The current temporary target (like NAV_SET) or null, for /status. */
 	private volatile JsonObject navTarget;
 	private volatile Map<String, Object> questInstruction;
@@ -352,6 +354,34 @@ public final class BridgeServer
 	{
 		questPoints = quests != null && quests >= 0 && quests <= 500 ? quests : null;
 		totalLevel = total != null && total >= 0 && total <= 2277 ? total : null;
+	}
+
+	/**
+	 * The fights recorded on a combat training step (CombatLog): kills, seconds and damage taken per opponent version. The app calibrates its food and
+	 * time estimate with them; nothing recorded (or no combat step) leaves the field out, never zeros.
+	 */
+	public void setCombatLog(String stepId, List<CombatLog.Entry> foes)
+	{
+		if (stepId == null || foes == null || foes.isEmpty())
+		{
+			combatLog = null;
+			return;
+		}
+		List<Map<String, Object>> list = new ArrayList<>();
+		for (CombatLog.Entry f : foes)
+		{
+			Map<String, Object> m = new LinkedHashMap<>();
+			m.put("name", f.getName());
+			m.put("combat", f.getCombat());
+			m.put("kills", f.getKills());
+			m.put("seconds", Math.round(f.getSeconds() * 10) / 10.0);
+			m.put("damage", f.getDamage());
+			list.add(m);
+		}
+		Map<String, Object> out = new LinkedHashMap<>();
+		out.put("stepId", stepId);
+		out.put("foes", list);
+		combatLog = out;
 	}
 
 	/** The character name (since protocol 5); comes in the STATUS event. */
@@ -642,6 +672,11 @@ public final class BridgeServer
 						if (total != null)
 						{
 							status.put("totalLevel", total);
+						}
+						Map<String, Object> fights = combatLog;
+						if (fights != null)
+						{
+							status.put("combatLog", fights);
 						}
 					}
 					// Version handshake: the app checks the protocol and asks to update the plugin if it is older.

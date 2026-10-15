@@ -208,3 +208,13 @@ describe('trip and total', () => {
     expect(slow(100).combatMinutes.mid).toBeLessThan(e.combatMinutes.mid * 2.1);
   });
 });
+
+describe('the combat log from /status', () => {
+  it('parses what the plugin sends and drops what does not look like it', async () => {
+    const { parseCombatLog } = await import('../src/services/runeliteBridge');
+    expect(parseCombatLog({ stepId: 'S3-08', foes: [{ name: 'Minotaur', combat: 12, kills: 14, seconds: 120.5, damage: 40 }, { name: 'x', combat: -1 }] }))
+      .toEqual({ stepId: 'S3-08', foes: [{ name: 'Minotaur', combat: 12, kills: 14, seconds: 120.5, damage: 40 }] });
+    expect(parseCombatLog({ stepId: 'S3-08', foes: [] })).toBeNull();
+    expect(parseCombatLog(null)).toBeNull();
+  });
+});

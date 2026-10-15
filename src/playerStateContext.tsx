@@ -9,6 +9,7 @@ import { stepsFor } from './data';
 import { useFeatures } from './lib/features';
 import { styleOf } from './lib/playStyle';
 import { pickMethods } from './lib/methodPick';
+import { foodPicks } from './lib/foodPlan';
 import { useProfiles } from './lib/profiles';
 import { ledgerKey, LEDGER_LIMIT, loadLedger, saveLedger, since } from './lib/ledgerStore';
 import { nameKey } from './lib/checklist';
@@ -70,9 +71,9 @@ function ls(): Storage | undefined {
 }
 
 export function PlayerStateProvider({ children }: { children: ReactNode }) {
-  const { progress, mode, setMethodPicks } = useStore();
+  const { progress, mode, setMethodPicks, setFoodPicks } = useStore();
   const features = useFeatures();
-  const { stats, owned, gear, questsDone, player, state: link } = useBridge();
+  const { stats, owned, gear, questsDone, player, state: link, xp, combatLog } = useBridge();
   const profiles = useProfiles();
   const next = useMemo(
     () => buildPlayerState({ mode, stats, progress, owned, gear, questsDone, player, connected: link === 'online' }),
@@ -128,6 +129,14 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
   const style = styleOf(features).style;
   const picks = useMemo(() => pickMethods(stepsFor(mode), state, mode, style), [state, mode, style]);
   useEffect(() => { setMethodPicks(picks); }, [picks, setMethodPicks]);
+
+  // The food of the combat training steps from this player's estimate: readiness asks for one trip, the shopping list buys the whole goal.
+  const food = useMemo(() => {
+    return foodPicks(stepsFor(mode), progress, {
+      stats: stats as Partial<Record<string, number>> | null, xp: xp as Partial<Record<string, number>> | null, gear, owned, combatLog,
+    });
+  }, [mode, progress, stats, xp, gear, owned, combatLog]);
+  useEffect(() => { setFoodPicks(food); }, [food, setFoodPicks]);
 
   const priced = useMemo(() => reprice(ledger, prices), [ledger, prices]);
   const summary = useMemo(() => summarize(priced), [priced]);

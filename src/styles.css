@@ -1487,6 +1487,8 @@ select option { background: var(--surface); color: var(--text); }
 .zen-more > summary { cursor: pointer; color: var(--muted); }
 .zen-more[open] > summary { margin-bottom: 8px; }
 .zen-more[open] { display: flex; flex-direction: column; gap: 14px; }
+.combat-plan .zen-more[open] { gap: 6px; }
+.combat-plan .zen-more ul { margin: 0; }
 .prep-more { margin: 0; }
 .training { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; background: var(--surface-3); box-shadow: inset 3px 0 0 var(--accent, var(--gold)); }
 .training p, .training ul { margin: 0; }

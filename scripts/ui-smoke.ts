@@ -322,6 +322,33 @@ async function run(browser: Browser) {
       await page.context().close();
     }
 
+    // The food plan of a combat training step (S3-08) from the game data: the next trip, the whole goal, what to buy; the level 27
+    // Minotaur and the potions behind "Details".
+    {
+      const equipment = [[1329, 'Mithril scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']]
+        .map(([id, name, slot]) => ({ id, name, slot }));
+      const gear = { equipment, inventory: [], coins: 500, bankCoins: 3000 };
+      const stats = { attack: 22, strength: 16, defence: 1, hitpoints: 22 };
+      const xp = { attack: 5624, strength: 2746, defence: 0, hitpoints: 2400 };
+      const { page, errors } = await open(browser, width, {
+        progress: progressBefore('S3-08'),
+        localStorage: { 'osrs-put:active-step': 'S3-08' },
+        status: { protocol: 5, ...gear, stats, xp, activeStepId: 'S3-08' },
+        events: [{ type: 'STATS', stats }, { type: 'XP', xp }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 0, bank: 13 }] }],
+      }, '#/step/S3-08');
+      await waitFor(page, '.combat-plan', 8000);
+      const t = await text(page, '.combat-plan');
+      expect(t.includes('Next trip: 26 Salmon') && t.includes('You have 13 Salmon') && t.includes('buy about'), `food plan: next trip, owned, deficit (${t.replace(/\s+/g, ' ').slice(0, 160)})`);
+      expect(!(await page.locator('.food-advice').count()), 'food plan: the generic food block is not repeated');
+      await page.locator('.combat-plan summary').click();
+      const d = await text(page, '.combat-plan');
+      expect(d.includes('Minotaur (level 27) instead') && d.includes('Strength 16 → 20'), 'food plan: the details hold the phases and the level 27 Minotaur');
+      if (process.env.UI_SHOTS) await page.locator('.combat-plan').screenshot({ path: `${process.env.UI_SHOTS}/combat-plan-${width}.png` }).catch(() => {});
+      expect(await noOverflow(page), 'food plan: no horizontal scrolling');
+      expect(!errors.length, `food plan: no console errors ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
     // The big map: the arrow target (a quick variant) is visible as a separate marker.
     {
       const { page, errors } = await open(browser, width, {

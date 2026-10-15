@@ -50,6 +50,11 @@ export interface StepItemRequirement {
   wikiItemId?: number;
   /** How many health points it restores (for food). */
   heals?: number;
+  /**
+   * Food on a combat training step, set at run time by this player's estimate (lib/foodPlan.ts): what the whole remaining goal needs. `amount` is then
+   * one trip (what readiness asks for), and the shopping list buys this.
+   */
+  totalAmount?: number;
   /** Obtained during the step itself (an NPC hands it out, you pick it up, buy it on the spot): not checked at the bank. */
   inStep?: boolean;
   /**

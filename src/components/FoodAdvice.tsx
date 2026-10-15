@@ -1,13 +1,17 @@
-// "🍖 Food for combat": how and when the step's opponent hits (wiki) and what food you already have. Health — from the game or from the skills page.
+// "🍖 Food for combat" (a combat training step with the game linked: CombatPlan, the food planned for this player): how and when the step's opponent hits (wiki) and what food you already have. Health — from the game or from the skills page.
 
 import type { Step } from '../types';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
 import { foodInBag, foodsCovering, threatKeys, THREATS_DATE, viewThreat } from '../lib/foodAdvice';
+import { CombatPlan, useCombatPlan } from './CombatPlan';
 
 export function FoodAdvice({ step }: { step: Step }) {
   const { progress } = useStore();
   const { stats, gear } = useBridge();
+  // A combat training step with the game linked: the food is planned for this player (trip, whole goal, what to buy) instead.
+  const plan = useCombatPlan(step);
+  if (plan) return <CombatPlan v={plan} />;
   const keys = threatKeys(step);
   if (!keys.length) return null;
   const hp = stats?.hitpoints ?? progress.levels.hitpoints;

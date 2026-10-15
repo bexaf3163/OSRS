@@ -455,9 +455,54 @@ Not verifiable on this account, so not claimed:
   not re-verified in the live game in this group.
 - Consumable kit during a step (food eaten mid-trip keeps "in bank: Salmon"): a departure check versus an in-progress check belongs to the unified readiness
   work (stages 1-7 of the owner's spec), not started.
-- Combat brief, not done yet: S4-01, S4-02, S5-03 kits (S4-01/S4-02 have food guards at the fight's entry line since 2.54.1 but no required food; S5-03 has
-  no food), S2-01/S3-07 shopping amounts, members steps S7-02/S7-03/S7-05/S8-04. The brief's "prefer L27 Minotaurs" and "S4-03 Salmon x25 is enough" were
+- Combat brief, not done yet: S4-01, S4-02 kits (food guards at the fight's entry line since 2.54.1 but no required food), S2-01/S3-07 shopping amounts, members steps S7-02/S7-03/S7-05/S8-04. The brief's "prefer L27 Minotaurs" and "S4-03 Salmon x25 is enough" were
   checked against the wiki stats and not adopted as written.
 - Inventory cleanup assistant, unified readiness stages 1-7, the full visual review at 100/125/150%: not started.
 - The pack's other P1/P2 items not listed above are unchanged and unverified.
 - Not adopted: a 67-step ledger and a single mega-release; reordering (see the proposal).
+
+## Personal combat estimate (owner's spec 2026-10-15) — from 2.56.0
+
+The spec asks for seven groups: (1) the calculation model, (2) the Minotaur example with trip / total / reserve / owned / deficit, (3) calibration from
+the game, (4) readiness and shopping integration, (5) desktop simplification, (6) overlay simplification, (7) wider coverage.
+
+- 2.56.0, groups 1-2:
+  - `scripts/build-combat-foes.ts` → `src/data/combatFoes.json`: every free version of the training opponents (Minotaur L12 / L27, Hill Giant, Cow,
+    Flesh Crawler, Moss giant) with attack level and bonus, style, max hit, speed, aggression; identical location versions collapse to one. check-data:
+    every combat pace has its opponent there, and monsters.json's version matches one of them number for number (mutation-checked).
+  - `src/lib/combatEstimate.ts` reuses gearAdvisor's `meleeHit` through the new `meleeAs` (a fixed style; `TrainStyle` adds Defensive). Kills are exact
+    (4 XP a damage point, the last kill of a phase is whole). Attacks to kill: the exact count distribution (`attackCounts`) and moments. The opponent's
+    swings per fight from that distribution (it answers a tick after the first attack, every speedTicks, none on the kill tick), its accuracy against the
+    worn armour's bonus for its attack type. Level gains segment by segment; Strength potion doses level by level (each boost holds a minute);
+    eating 3 ticks; 1 HP a minute; 2-6 s between kills; 3-6 min a bank trip; the start-of-trip health above two max hits is free. Ranges: 1.65 sd plus a
+    model margin (formula 15%, calibrated 8%, basic 35%, +10% for aggressive opponents). Unknown worn items: "basic" and said; missing XP or health:
+    said in `assumed`. No levels, no gear, or an unknown weapon: no estimate.
+  - `src/lib/combatPlan.ts` + `CombatPlan.tsx` (inside `FoodAdvice`, which falls back to the old block for anything else): picks the version with the
+    least food among those within 15% of the fastest; next trip = min(26, high); plan = rounded high; reserve = plan - expected; owned food by healing;
+    deficit only when the bank was seen. Details: phases, bag duration, the other version, the potions verdict, the assumptions.
+  - Finding: with the Mithril scimitar alone, Strength potions do not change the max hit between Strength 16 and 23 (it stays 4); with the Amulet of
+    strength they do. The S3-08 "Strength potions" field assumes the amulet, which the "Weapon" field asks for.
+  - Tests: `tests/combatEstimate.test.ts` against an independent tick-by-tick dice simulation (own XP table, own rolls, potion decay), `tests/combatPlan.test.ts`
+    (the Minotaur example), a UI smoke scenario (`.combat-plan`, at 1100 and 390 px). Not live yet: RuneLite was closed while this was built.
+- 2.56.0, group 3, calibration:
+  - Plugin `CombatLog` (pure, `CombatLogTest`): on a step whose pace is melee, `ActorDeath` of an NPC the player was fighting (either side's
+    `getInteracting`) is a kill of "name|combat level"; `HitsplatApplied` on the player is damage, attributed to the next kill. A kill more than 60 s
+    after the previous one is no sample and its damage is dropped (bank trips, breaks, the first kill); the last 60 samples per version are kept; a new
+    step or weapon id clears it. `BridgeServer.setCombatLog` → additive `/status.combatLog` `{stepId, foes:[{name, combat, kills, seconds, damage}]}`,
+    left out when empty (no protocol bump).
+  - App: `parseCombatLog`, `useBridge().combatLog`. `observedFor` matches name and combat level; from 10 kills (`CALIBRATED_KILLS`) the basis is
+    "calibrated", the weight is kills/(kills+30). `chooseVariant` plans for the version being fought (most kills, at least 10). Details show
+    "N kills measured in the game: s and damage a kill".
+  - Not counted: food eaten by name (damage taken is the better measure: it is what the food pays for); damage from other sources between kills is
+    in (it is real cost).
+- 2.56.0, group 4, readiness and shopping:
+  - `lib/foodPlan.ts`: `foodPicks` (PlayerStateProvider, from stats, XP, gear, bank, combat log) → `setFoodPicks` in the store → `withFoodPlan`
+    after `withTrainingMethod`: the first food item's `amount` becomes the next trip (what readiness and the in-game list ask for), `totalAmount`
+    the plan (high end, rounded); no food needed at all removes the item. `aggregateShopping` buys `totalAmount`. No levels or gear: no picks, the
+    route amounts stand.
+  - `assumptionsFor`: a step after an open combat step starts from the XP goals of the open combat steps before it and the weapon it asks for
+    (`stepWeapon`); the step view uses the same assumptions, so the page and the shopping list agree.
+  - `foodPicks` over the whole route runs well under 150 ms (test), so it follows every XP drop. The pick changes do not re-send the active step to
+    the plugin (`followKey` is only for method steps): the in-game list takes the new amount at the next activation.
+- Not done yet: groups 5-7. The in-game "in bank: Salmon" while food is eaten mid-trip is group 6.
+

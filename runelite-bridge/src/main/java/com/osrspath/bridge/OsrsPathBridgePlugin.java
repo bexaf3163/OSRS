@@ -61,6 +61,7 @@ import net.runelite.api.events.GameObjectSpawned;
 import net.runelite.api.events.GameStateChanged;
 import net.runelite.api.events.GameTick;
 import net.runelite.api.events.GrandExchangeOfferChanged;
+import net.runelite.api.events.HitsplatApplied;
 import net.runelite.api.events.GroundObjectDespawned;
 import net.runelite.api.events.GroundObjectSpawned;
 import net.runelite.api.events.ItemContainerChanged;
@@ -319,6 +320,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	/** The pacing of the current step; null means the step has none or it is off. */
 	private PacingSet pacing;
+	/** The fights of a combat training step, for the app's food and time estimate (2.57.0). */
+	private final CombatLog combatLog = new CombatLog();
 
 	private Plugin shortestPath;
 	private boolean shortestPathLooked;
@@ -3006,6 +3009,16 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	public void onActorDeath(ActorDeath e)
 	{
 		Player me = client.getLocalPlayer();
+		// An opponent the player fought on a combat training step: one kill for the estimate (the level 12 and level 27 Minotaur apart).
+		if (me != null && e.getActor() instanceof NPC && combatLog.getStepId() != null)
+		{
+			NPC npc = (NPC) e.getActor();
+			if (me.getInteracting() == npc || npc.getInteracting() == me)
+			{
+				combatLog.kill(npc.getName(), npc.getCombatLevel(), System.currentTimeMillis());
+			}
+			return;
+		}
 		if (me == null || e.getActor() != me || server == null || !config.shareStats())
 		{
 			return;
@@ -3013,6 +3026,28 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		WorldPoint at = me.getWorldLocation();
 		tel("moved", "what", "DEATH", "at", at == null ? null : new int[] {at.getX(), at.getY(), at.getPlane()});
 		server.moved("DEATH", at == null ? null : new int[] {at.getX(), at.getY(), at.getPlane()}, null);
+	}
+
+	/** Damage the player took on a combat training step: it goes with the next kill (CombatLog). */
+	@Subscribe
+	public void onHitsplatApplied(HitsplatApplied e)
+	{
+		if (combatLog.getStepId() != null && e.getActor() != null && e.getActor() == client.getLocalPlayer())
+		{
+			combatLog.damage(e.getHitsplat().getAmount());
+		}
+	}
+
+	/** The combat log follows the active step and the weapon in hand; the app reads it from /status. */
+	private void updateCombatLog()
+	{
+		PacingSet p = pacing;
+		ActiveTarget t = target;
+		String step = p != null && t != null && ActiveTarget.Pacing.COMBAT.contains(p.getPacing().getSkill()) ? t.getStepId() : null;
+		ItemContainer worn = client.getItemContainer(InventoryID.WORN);
+		Item weapon = worn == null ? null : worn.getItem(EquipmentInventorySlot.WEAPON.getSlotIdx());
+		combatLog.context(step, weapon == null ? -1 : weapon.getId());
+		server.setCombatLog(step, step == null ? null : combatLog.snapshot());
 	}
 
 	@Subscribe
@@ -3032,6 +3067,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				server.setSpellbook(client.getVarbitValue(TeleportCooldown.VARBIT_SPELLBOOK));
 				// Two integer reads: the app tells whether a new account's trade restrictions can still apply (10 quest points, total level 100).
 				server.setProgressTotals(client.getVarpValue(VarPlayerID.QP), client.getTotalLevel());
+				updateCombatLog();
 			}
 			shareAccount(me);
 			WorldPoint pos = me.getWorldLocation();

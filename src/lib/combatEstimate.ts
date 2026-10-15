@@ -153,8 +153,14 @@ function swingDamage(chance: number, maxHit: number): { mean: number; square: nu
 export type Basis = 'formula' | 'calibrated' | 'basic';
 export interface Range { low: number; mid: number; high: number }
 
-/** What the game measured on this opponent (the plugin's pace and the food eaten). */
-export interface Observed { kills: number; seconds: number; healed?: number }
+/** What the game measured on this opponent version: clean kills, the seconds between them, the damage taken (the plugin's CombatLog). */
+export interface Observed { kills: number; seconds: number; damage?: number }
+
+/** One opponent version's fights as the plugin reports them. */
+export interface Fights { name: string; combat: number; kills: number; seconds: number; damage: number }
+
+/** Measured kills that make an estimate "calibrated". */
+export const CALIBRATED_KILLS = 10;
 
 export interface EstimateInput {
   foe: CombatFoe;
@@ -333,14 +339,14 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
   // Calibration: the measured seconds a kill and healing a kill pull the formulas their way, a little at a time.
   let basis: Basis = inp.unknownPieces ? 'basic' : 'formula';
   const obs = inp.observed;
-  if (obs && obs.kills >= 10 && obs.seconds > 0) {
+  if (obs && obs.kills >= CALIBRATED_KILLS && obs.seconds > 0) {
     const w = obs.kills / (obs.kills + CALIBRATION_KILLS);
     const modelPerKill = fightMean / kills + (BETWEEN_KILLS[0] + BETWEEN_KILLS[1]) / 2;
     const ratio = (1 - w) + (w * (obs.seconds / obs.kills)) / modelPerKill;
     fightMean *= ratio;
     fightVar *= ratio ** 2;
-    if (obs.healed !== undefined) {
-      const dRatio = (1 - w) + (w * (obs.healed / obs.kills)) / Math.max(1e-6, damageMean / kills);
+    if (obs.damage !== undefined) {
+      const dRatio = (1 - w) + (w * (obs.damage / obs.kills)) / Math.max(1e-6, damageMean / kills);
       damageMean *= dRatio;
       damageVar *= dRatio ** 2;
     }
@@ -420,8 +426,20 @@ export interface StepEstimateContext {
   gear: GearState | null;
   strengthDoses?: number;
   foodSlots?: number;
-  observed?: Observed | null;
+  /** The fights the plugin recorded on this step, per opponent version; each version is calibrated with its own. */
+  fights?: Fights[] | null;
+  /**
+   * A step later on the route: the XP the earlier steps will have reached (never below the real XP) and the weapon the step asks for. The current
+   * step leaves both out: its estimate is from the game as it is.
+   */
+  assume?: { xp?: Partial<Record<MeleeSkill, number>>; weapon?: GearPiece | null } | null;
   data?: GearData;
+}
+
+/** The recorded fights of one opponent version, as an observation. */
+export function observedFor(foe: CombatFoe, fights: Fights[] | null | undefined): Observed | null {
+  const f = fights?.find((x) => x.name === foe.name && x.combat === foe.combat);
+  return f ? { kills: f.kills, seconds: f.seconds, damage: f.damage } : null;
 }
 
 /**
@@ -437,6 +455,7 @@ export function estimateStep(step: Pick<Step, 'pacing' | 'foes' | 'itemsRequired
   const need = (k: string) => (typeof st[k] === 'number' && (st[k] as number) >= 1 ? (st[k] as number) : null);
   const levels = { attack: need('attack'), strength: need('strength'), defence: need('defence'), hitpoints: need('hitpoints') };
   if (Object.values(levels).some((v) => v === null)) return [];
+  const later = ctx.assume?.xp ?? {};
   const foodItem = (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
   const food = foodItem ? { name: foodItem.nameEn, heals: foodItem.heals! } : null;
   if (!food) return [];
@@ -445,14 +464,24 @@ export function estimateStep(step: Pick<Step, 'pacing' | 'foes' | 'itemsRequired
   const armour = (['head', 'body', 'legs', 'shield'] as const).map((s) => equipped[s]?.piece).filter((p): p is GearPiece => Boolean(p));
   const unknownPieces = SLOTS.filter((s) => s !== 'weapon' && equipped[s] && !equipped[s]!.piece).length;
   const xp = ctx.xp ?? null;
-  const xpOf = (k: MeleeSkill) => (xp && typeof xp[k] === 'number' ? (xp[k] as number) : undefined);
-  const haveXp = xp && (['attack', 'strength', 'defence'] as const).every((k) => xpOf(k) !== undefined);
+  const real = (k: MeleeSkill) => (xp && typeof xp[k] === 'number' ? (xp[k] as number) : undefined);
+  const xpOf = (k: MeleeSkill) => {
+    const r = real(k);
+    return r === undefined ? undefined : Math.max(r, later[k] ?? 0);
+  };
+  const haveXp = xp && (['attack', 'strength', 'defence'] as const).every((k) => real(k) !== undefined);
+  // The levels a later step starts from.
+  for (const k of ['attack', 'strength', 'defence'] as const) {
+    const x = xpOf(k) ?? later[k];
+    if (x !== undefined) levels[k] = Math.max(levels[k]!, levelForXp(x));
+  }
+  const weapon = ctx.assume?.weapon !== undefined && ctx.assume.weapon !== null ? ctx.assume.weapon : equipped.weapon?.piece ?? null;
   return foeVariants(name).flatMap((foe) => {
     const e = estimateCombat({
       foe, levels: levels as EstimateInput['levels'], goals, food, armour, unknownPieces,
       ...(haveXp ? { xp: { attack: xpOf('attack'), strength: xpOf('strength'), defence: xpOf('defence') } } : {}),
-      weapon: equipped.weapon?.piece ?? null, neck: equipped.neck?.piece ?? null,
-      strengthDoses: ctx.strengthDoses, foodSlots: ctx.foodSlots, observed: ctx.observed,
+      weapon, neck: equipped.neck?.piece ?? null,
+      strengthDoses: ctx.strengthDoses, foodSlots: ctx.foodSlots, observed: observedFor(foe, ctx.fights),
     });
     return e ? [e] : [];
   });

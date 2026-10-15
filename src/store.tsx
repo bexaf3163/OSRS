@@ -12,6 +12,7 @@ import { questPoints } from './lib/qp';
 import { desktop } from './lib/desktop';
 import { samePicks } from './lib/methodPick';
 import { withTrainingMethod } from './lib/methodStep';
+import { sameFoodPicks, withFoodPlan, type FoodPick } from './lib/foodPlan';
 
 export interface Toast {
   id: number;
@@ -40,6 +41,8 @@ interface StoreValue {
   setTaskDone: (key: string, done: boolean) => void;
   /** The training method each skill step that follows one is on now (step id -> method id): set by the provider that owns the player state. */
   setMethodPicks: (picks: Record<string, string>) => void;
+  /** The food of combat training steps from this player's estimate (lib/foodPlan.ts): one trip for readiness, the whole goal for shopping. */
+  setFoodPicks: (picks: Record<string, FoodPick>) => void;
   review: (ids: string[]) => void;
   reactivate: (ids: string[]) => void;
   /** "✕ Skip" the upgrade hint on a step (dismissed=false — bring it back). */
@@ -207,19 +210,22 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const mode = gameModeOf(progress);
   const [methodPicks, setPicks] = useState<Record<string, string>>({});
   const setMethodPicks = useCallback((p: Record<string, string>) => setPicks((prev) => (samePicks(prev, p) ? prev : p)), []);
+  const [foodPicks, setFood] = useState<Record<string, FoodPick>>({});
+  const setFoodPicks = useCallback((p: Record<string, FoodPick>) => setFood((prev) => (sameFoodPicks(prev, p) ? prev : p)), []);
   const baseSteps = useMemo(() => stepsFor(mode), [mode]);
-  // A step that follows a training method asks for that method's tools and place; every other step is the same object as in the data.
-  const steps = useMemo(() => baseSteps.map((s) => withTrainingMethod(s, methodPicks[s.id])), [baseSteps, methodPicks]);
+  // A step that follows a training method asks for that method's tools and place; a combat training step with an estimate asks for one trip of
+  // food and the shopping list buys its whole goal; every other step is the same object as in the data.
+  const steps = useMemo(() => baseSteps.map((s) => withFoodPlan(withTrainingMethod(s, methodPicks[s.id]), foodPicks[s.id])), [baseSteps, methodPicks, foodPicks]);
   const stages = useMemo(() => stagesFor(mode), [mode]);
   const qp = useMemo(() => questPoints(steps, progress, BASE_QP), [steps, progress]);
   const maxQp = useMemo(() => maxQpFor(mode), [mode]);
 
   const value = useMemo<StoreValue>(
     () => ({
-      progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
+      progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, setFoodPicks, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
       toast, notify, undo, dismissToast,
     }),
-    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
+    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, setFoodPicks, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
       toast, notify, undo, dismissToast],
   );
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
