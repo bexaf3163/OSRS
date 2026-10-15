@@ -504,5 +504,28 @@ the game, (4) readiness and shopping integration, (5) desktop simplification, (6
     (`stepWeapon`); the step view uses the same assumptions, so the page and the shopping list agree.
   - `foodPicks` over the whole route runs well under 150 ms (test), so it follows every XP drop. The pick changes do not re-send the active step to
     the plugin (`followKey` is only for method steps): the in-game list takes the new amount at the next activation.
-- Not done yet: groups 5-7. The in-game "in bank: Salmon" while food is eaten mid-trip is group 6.
+- 2.57.0 (first prepared as 2.56.1, released together), the visual review of 2.56.0 (Zen S3-08 page, `zen-s308-*.png` from the smoke) found the whole-goal amount in the wrong places:
+  - `aggregateShopping` took `totalAmount` for every caller, so the step's "Prepare for this step" card and `OneTripCard` showed "Salmon ×110 Missing".
+    Now only the Shopping page passes `{ wholeGoal: true }`; `oneTrip` and `prepPlan` stay at one trip. Pinned in `tests/foodPlan.test.ts`.
+  - `PreflightItem.total` (from `totalAmount`) lets the readiness food row say "have 13, 13 short; buy about 97 for the whole goal" (BANK rows: "take it
+    from the bank; buy about N for the whole goal").
+  - `StepTraining` returns nothing for a step with `foes` and `pacing` (it suggested Al Kharid warriors for Attack beside the Minotaurs).
+  - Zen Preparation: the `items` cards behind `details.item-sources` "Where to get each item"; `OneTripCard` rows short of a part read "13 of 26 (bank
+    included)".
+  - S3-08 / S4-03 quick steps "fill the bag with Salmon"; the S3-08 Food field and both Salmon `howToGet` texts no longer state a trip size.
+  - Known, not fixed: on the first render with fresh game data the auto preparation can start a purchase toast with the route amount (×20) before
+    the food pick arrives; the panel shows ×26 a moment later.
+- 2.57.0, group 6, the food on the training plate:
+  - The overlay already had the compact default the spec describes (the guide card closed: step, status line, place, "Steps" and the expand chevron;
+    the 2.55.2 training view while fighting). What it lacked was the food. `TrainingFood` (pure, `TrainingFoodTest`): the step's first checklist row
+    with healing, its bag count (alternatives counted, `countWithAlt`), "Food: 8 Salmon · ~21 kills" with `pacing.foodHpPerKill` from the app (absent:
+    the count only); 2 or fewer is an alert "- bank soon", none "No Salmon left - bank now".
+  - `OsrsPathHudOverlay.State` gained `food` and `foodLow` (an explicit 18-argument constructor keeps the older calls); the low line is an
+    `OverlayAlert` right under the health (safety first), the normal one under the progress bar; `accent` is red when low; `lean` keeps it; `plain`
+    lists it. `bag` still waits for the bank while training (the 2.55.2 test stands). `OverlayLayoutTest` draws both food states for every paced step.
+  - App: `CombatEstimate.hpPerKill` / `secondsPerKill`; `FoodPick.hpPerKill` (to a tenth); `withFoodPlan` puts `foodHpPerKill` into the step's pacing,
+    which goes to the plugin whole; `ActiveTarget.Pacing.foodHpPerKill` validated (0, 500].
+  - Limit: the pacing is sent when the step is activated; a pick that arrives later (fresh game data) reaches the game at the next activation.
+- Not done yet: group 7 (wider coverage). Group 5 beyond 2.57.0's Preparation fixes (one primary action per view) is not attempted further: the
+  Zen view already has one status line, one primary button and the three reference views.
 

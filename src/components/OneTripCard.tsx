@@ -39,13 +39,20 @@ function Action({ a }: { a: PrepAction }) {
   );
 }
 
+/** Short of a part: "13 of 26" says more than "missing". */
+function partOf(l: PrepLine): string | null {
+  const have = (l.have.bag ?? 0) + l.have.noted + (l.have.bank ?? 0) + l.have.equipped;
+  return l.where === 'MISSING' && have > 0 && l.count > have ? `${have} of ${l.count}${l.have.bank ? ' (bank included)' : ''}` : null;
+}
+
 function Row({ l, showWhy = true }: { l: PrepLine; showWhy?: boolean }) {
   const w = WHERE[l.where];
+  const part = partOf(l);
   return (
     <li className={`prep-line is-${l.where.toLowerCase()} p-${l.priority.toLowerCase()}`}>
       <span className="prep-where" aria-hidden="true">{w.icon}</span>
       <strong>{l.name}{countOf(l)}</strong>
-      <span className="muted"> — {w.text}</span>
+      <span className="muted"> — {part ?? w.text}</span>
       {l.supply && <span className={`prep-supply is-${l.supply.toLowerCase()}`}> · {SUPPLY[l.supply]}</span>}
       {l.action && l.where !== 'UNKNOWN' && <> · <Action a={l.action} /></>}
       {showWhy && l.why && <span className="prep-why muted small">{l.why}</span>}

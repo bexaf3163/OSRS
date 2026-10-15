@@ -347,6 +347,32 @@ async function run(browser: Browser) {
       expect(await noOverflow(page), 'food plan: no horizontal scrolling');
       expect(!errors.length, `food plan: no console errors ${errors.join('; ')}`);
       await page.context().close();
+
+      // The same in the default "Zen" view: the step page and its Preparation view, for the visual review.
+      const zen = await open(browser, width, {
+        zen: true,
+        progress: progressBefore('S3-08'),
+        localStorage: { 'osrs-put:active-step': 'S3-08' },
+        status: { protocol: 5, ...gear, stats, xp, activeStepId: 'S3-08' },
+        // As the plugin reports it: the step's fish alternatives are counted too (0 here).
+        events: [{ type: 'STATS', stats }, { type: 'XP', xp }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [
+          { name: 'Salmon', carried: 0, noted: 0, bank: 13 }, { name: 'Mithril scimitar', carried: 1, noted: 0, bank: 0 },
+          ...['Trout', 'Tuna', 'Lobster', 'Swordfish'].map((name) => ({ name, carried: 0, noted: 0, bank: 0 })),
+        ] }],
+      }, '#/step/S3-08');
+      await waitFor(zen.page, '.step-status', 8000);
+      await zen.page.keyboard.press('Escape');
+      if (process.env.UI_SHOTS) await zen.page.screenshot({ path: `${process.env.UI_SHOTS}/zen-s308-${width}.png`, fullPage: true }).catch(() => {});
+      await zen.page.getByRole('navigation', { name: 'Step views' }).getByRole('button', { name: /Preparation/ }).click();
+      await zen.page.waitForTimeout(300);
+      if (process.env.UI_SHOTS) await zen.page.screenshot({ path: `${process.env.UI_SHOTS}/zen-s308-prep-${width}.png`, fullPage: true }).catch(() => {});
+      const prep = await zen.page.locator('body').innerText();
+      expect(prep.includes('Salmon ×26') && !prep.includes('Salmon ×110'), 'food plan (Zen): Preparation asks for one bag (26), not the whole goal');
+      expect(!prep.includes('What to train with'), 'food plan (Zen): no other training place beside the Minotaurs of the step');
+      expect(prep.includes('Where to get each item') && !prep.includes('Required items and food'), 'food plan (Zen): the item cards wait behind "Where to get each item"');
+      expect(await noOverflow(zen.page), 'food plan (Zen): no horizontal scrolling');
+      expect(!zen.errors.length, `food plan (Zen): no console errors ${zen.errors.join('; ')}`);
+      await zen.page.context().close();
     }
 
     // The big map: the arrow target (a quick variant) is visible as a separate marker.

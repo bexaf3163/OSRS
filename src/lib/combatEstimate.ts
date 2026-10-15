@@ -215,6 +215,10 @@ export interface CombatEstimate {
   foodSlots: number;
   /** Kills one bag of food lasts; Infinity — regeneration keeps up, no food needed. */
   killsPerTrip: number;
+  /** Health a kill costs, net of the regeneration while it lasts (mean, never below 0): the game turns the bag's food into kills with it. */
+  hpPerKill: number;
+  /** Seconds a kill with finding the next target, mean. */
+  secondsPerKill: number;
   trips: Range;
   /** Pieces to take on the next trip. */
   nextTrip: number;
@@ -388,6 +392,7 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
 
   return {
     basis, foe, phases, kills, combatMinutes, totalMinutes, damage, food, foodSlots, killsPerTrip, trips,
+    hpPerKill: Math.max(0, perKillNet), secondsPerKill: fightMean / kills + avg(BETWEEN_KILLS),
     nextTrip: Math.min(foodSlots, food.high), reserve: food.high - food.mid, assumed,
   };
 }

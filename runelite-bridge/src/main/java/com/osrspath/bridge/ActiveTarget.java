@@ -607,6 +607,11 @@ public class ActiveTarget
 		 * Absent from an app before 2.55.1: every skill has the one goal.
 		 */
 		private Map<String, Goal> goals;
+		/**
+		 * Health a kill costs net of regeneration, from the app's food plan (2.57.0): the training plate turns the food in the bag into kills.
+		 * Absent from an older app or without an estimate: the plate counts the food only.
+		 */
+		private Double foodHpPerKill;
 
 		@Data
 		public static class Goal
@@ -700,6 +705,10 @@ public class ActiveTarget
 			if (!(expPerAction > 0 && expPerAction <= 10_000) || actionName == null || actionName.isEmpty() || tooLong(actionName))
 			{
 				return "invalid pacing action";
+			}
+			if (foodHpPerKill != null && !(foodHpPerKill > 0 && foodHpPerKill <= 500))
+			{
+				return "invalid food per kill";
 			}
 			if (secondsPerAction != null && !(secondsPerAction > 0 && secondsPerAction <= 600))
 			{

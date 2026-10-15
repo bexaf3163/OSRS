@@ -142,7 +142,7 @@ export function ShoppingPage() {
     () => steps.filter((s) => s.stage >= range.from && s.stage <= range.to && (!range.openOnly || !isClosed(progress, s.id))),
     [steps, range, progress],
   );
-  const list = useMemo(() => aggregateShopping(selected), [selected]);
+  const list = useMemo(() => aggregateShopping(selected, { wholeGoal: true }), [selected]);
 
   // What is sold on the exchange: the item reference from the price API. null — still loading or unavailable.
   const [tradeable, setTradeable] = useState<Set<number> | null>(null);

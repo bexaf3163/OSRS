@@ -3520,7 +3520,7 @@
       {
         "nameEn": "Salmon",
         "amount": 20,
-        "howToGet": "Buy on the Grand Exchange, about 34 gp each (15 Oct 2026); Trout (about 22 gp, heals 7), Tuna, Lobster or Swordfish count too. One trip of food: about 60 kills. Or catch and cook your own at Barbarian Village (fly fishing, Fishing 30 for salmon).",
+        "howToGet": "Buy on the Grand Exchange, about 34 gp each (15 Oct 2026); Trout (about 22 gp, heals 7), Tuna, Lobster or Swordfish count too. About 1 Salmon every 3 kills at Defence 1. Or catch and cook your own at Barbarian Village (fly fishing, Fishing 30 for salmon).",
         "wikiItemId": 329,
         "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
         "heals": 9,
@@ -3556,7 +3556,7 @@
       }
     ],
     "quickSteps": [
-      "Bank in Edgeville: take 20 Salmon (or other fish) and the Strength potions; wear the Mithril scimitar and the Amulet of strength. 20 Salmon is about 60 kills: come back to the bank for more.",
+      "Bank in Edgeville: fill the bag with Salmon (or other fish) and take the Strength potions; wear the Mithril scimitar and the Amulet of strength. Come back to the bank when the food runs out.",
       "Enter the Stronghold of Security in the Barbarian Village mine and go to the Minotaurs on floor 1 (the Vault of War).",
       "Fight the level 12 Minotaurs: Aggressive (Slash) to Strength 20, then Accurate (Chop) to Attack 30. Eat at 4 health; drink a Strength potion dose every 5 minutes."
     ],
@@ -3600,7 +3600,7 @@
       },
       {
         "label": "Food",
-        "text": "At Defence 1 a level 12 Minotaur takes about 3 hit points a kill, and you heal 1 a minute: plan about 1 Salmon for every 3 kills (an estimate). Eat when your health drops to 4, two of their hits. 20 Salmon is one trip of about 60 kills, roughly a quarter of an hour; the whole step from Attack 22 and Strength 16 is about 80 Salmon."
+        "text": "At Defence 1 a level 12 Minotaur takes about 3 hit points a kill, and you heal 1 a minute: plan about 1 Salmon for every 3 kills (an estimate). Eat when your health drops to 4, two of their hits. A full bag (about 26 Salmon) lasts about 70 kills; the whole step from Attack 22 and Strength 16 is about 80 Salmon. With the game linked, Food and time works it out from your own levels, gear and kills."
       },
       {
         "label": "Strength potions",
@@ -3813,7 +3813,7 @@
       {
         "nameEn": "Salmon",
         "amount": 25,
-        "howToGet": "Buy on the Grand Exchange, about 34 gp each (15 Oct 2026); Trout, Tuna, Lobster or Swordfish count too. One trip of food: about 12 giants at Defence 1 (an estimate). One Big bone (about 330 gp) pays for about 10 Salmon.",
+        "howToGet": "Buy on the Grand Exchange, about 34 gp each (15 Oct 2026); Trout, Tuna, Lobster or Swordfish count too. About 2 Salmon a giant at Defence 1 (an estimate). One Big bone (about 330 gp) pays for about 10 Salmon.",
         "wikiItemId": 329,
         "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
         "heals": 9,
@@ -3906,7 +3906,7 @@
       }
     },
     "quickSteps": [
-      "Bank in Edgeville: take 25 Salmon (or other fish) and the Strength potions; wield the Adamant scimitar and wear the Amulet of strength.",
+      "Bank in Edgeville: fill the bag with Salmon (or other fish) and take the Strength potions; wield the Adamant scimitar and wear the Amulet of strength.",
       "Climb down the trapdoor a few steps south-west of the bank; the Hill Giants are in the south-east of the dungeon.",
       "Fight the Hill Giants on Accurate (Chop) to Attack 40. Eat at 8 health; drink a Strength potion dose every 4-5 minutes. When the food runs out, bank the Big bones in Edgeville and come back."
     ]

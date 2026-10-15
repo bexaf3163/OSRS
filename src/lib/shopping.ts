@@ -61,14 +61,18 @@ interface Acc {
   allInStep: boolean;
 }
 
+/** The item as the exchange list buys it: food with a personal plan for the whole goal. */
+function wholeGoal(i: StepItemRequirement): StepItemRequirement {
+  return i.totalAmount === undefined ? i : { ...i, amount: i.totalAmount };
+}
+
 function collect(steps: Step[], pick: (s: Step) => StepItemRequirement[] | undefined, selected: Set<string>, coinsOut?: { n: number }): ShoppingLine[] {
   const byId = new Map<number, Acc>();
   const byName = new Map<string, Acc>();
   const order: Acc[] = [];
   for (const step of steps) {
     for (const item of pick(step) ?? []) {
-      // Food with a personal plan: the shopping list buys for the whole goal, not one trip.
-      const n = item.totalAmount ?? parseAmount(item.amount);
+      const n = parseAmount(item.amount);
       if (item.wikiItemId === COINS_ID || nameKey(item.nameEn) === 'coins') {
         if (coinsOut && n) coinsOut.n += n;
         continue;
@@ -95,7 +99,7 @@ function collect(steps: Step[], pick: (s: Step) => StepItemRequirement[] | undef
       }
       acc.line.iconUrl ??= item.iconUrl;
       byName.set(name, acc);
-      acc.line.sources.push({ stepId: step.id, amount: item.totalAmount ?? item.amount, carryOver, ...(item.phase ? { phase: item.phase } : {}) });
+      acc.line.sources.push({ stepId: step.id, amount: item.amount, carryOver, ...(item.phase ? { phase: item.phase } : {}) });
       if (carryOver) continue;
       if (n === null) acc.line.exact = false;
       // In a purchase step (gear) "during the step" means "buy at the exchange".
@@ -114,10 +118,14 @@ function collect(steps: Step[], pick: (s: Step) => StepItemRequirement[] | undef
 }
 
 /** The summary list for the selected steps (in route order). */
-export function aggregateShopping(steps: Step[]): ShoppingList {
+/**
+ * wholeGoal — the Grand Exchange list: food with a personal plan counts for the whole remaining goal (`totalAmount`), so one trip to the exchange is
+ * enough. Without it (what to carry now, the next steps' kit) the food is one trip, as readiness asks.
+ */
+export function aggregateShopping(steps: Step[], opts: { wholeGoal?: boolean } = {}): ShoppingList {
   const selected = new Set(steps.map((s) => s.id));
   const coins = { n: 0 };
-  const required = collect(steps, (s) => s.itemsRequired, selected, coins);
+  const required = collect(steps, (s) => (opts.wholeGoal ? s.itemsRequired?.map(wholeGoal) : s.itemsRequired), selected, coins);
   const requiredKeys = new Set(required.flatMap((l) => [l.key, `name:${nameKey(l.nameEn)}`]));
   // A recommended item that is already in the required list (by ID or by name) is not shown a second time.
   const recommended = collect(steps, (s) => s.itemsRecommended, selected)

@@ -241,6 +241,8 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     const h = alt ? heldAll(state, [it.nameEn, ...alt], key) : heldOf(state, it.nameEn, key);
     const label = `${it.nameEn}${it.count > 1 ? ` ×${it.count}${it.exact ? '' : '+'}` : ''}${alt ? ` (or ${alt.slice(0, 2).join(', ')}${alt.length > 2 ? '…' : ''})` : ''}`;
     const shop: ReadinessAction = { kind: 'link', label: '🛒 To shopping', href: '#/shopping' };
+    // Food with a personal plan: the row is about one trip, and says what the whole goal still needs bought, so one exchange visit does it.
+    const whole = (have: number) => (it.total !== undefined && it.total > have ? `; buy about ${it.total - have} for the whole goal` : '');
     const manual = h.source === 'manual';
     const source: RequirementStatus['source'] = manual ? 'manual' : 'game';
     if (res.state === 'OK') {
@@ -251,7 +253,7 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     } else if (res.state === 'BANK') {
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: 'BANK', hard: true, source: 'game',
-        detail: `${(h.bag ?? 0) + h.noted} in the bag, ${h.bank ?? 0} in the bank: take it from the bank`,
+        detail: `${(h.bag ?? 0) + h.noted} in the bag, ${h.bank ?? 0} in the bank: take it from the bank${whole((h.bag ?? 0) + h.noted + (h.bank ?? 0))}`,
         ...(bank ? { action: bankNav(bank, step, it.nameEn) } : {}),
       });
     } else if (res.state === 'UNKNOWN') {
@@ -263,7 +265,7 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
       const have = res.have ?? 0;
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: res.state, hard: true, source,
-        detail: manual ? `marked ${state.manual[key]}, ${res.missing} short` : have ? `have ${have}, ${res.missing} short` : 'in neither the bag nor the bank',
+        detail: (manual ? `marked ${state.manual[key]}, ${res.missing} short` : have ? `have ${have}, ${res.missing} short` : 'in neither the bag nor the bank') + whole(have),
         action: shop,
       });
     }

@@ -124,12 +124,17 @@ export function TrainingCard({ skill, target }: { skill: string; target: number 
   );
 }
 
-/** For a training step: takes the lagging skill of the step's goal and shows "what to train with". Other steps — nothing. */
+/**
+ * For a training step: takes the lagging skill of the step's goal and shows "what to train with". Other steps, and combat steps that name their own
+ * opponents and pace — nothing.
+ */
 export function StepTraining({ step }: { step: Step }) {
   const { state } = usePlayerState();
   const trig = step.inGame?.completionTrigger;
+  // A combat step with its own opponents and pace (S3-08 Minotaurs, S4-03 Hill Giants) is itself the method: another place would contradict it.
+  const ownMethod = Boolean(step.foes?.length && step.pacing);
   const pick = useMemo(() => {
-    if (trig?.type !== 'SKILL_LEVEL' || !trig.levels?.length || trig.items?.length) return null;
+    if (ownMethod || trig?.type !== 'SKILL_LEVEL' || !trig.levels?.length || trig.items?.length) return null;
     // How much is left to the goal — for the lagging skill; the level is unknown — we take the first.
     const rows = trig.levels.map((l) => ({ skill: l.skill, target: l.level, lv: levelOf(state, l.skill) }));
     const open = rows.filter((r) => r.lv === undefined || r.lv < r.target);
@@ -138,7 +143,7 @@ export function StepTraining({ step }: { step: Step }) {
     const followed = open.find((r) => r.skill === step.followsMethod);
     if (followed) return followed;
     return open.sort((a, b) => (a.lv ?? 0) - a.target - ((b.lv ?? 0) - b.target))[0];
-  }, [trig, state, step.followsMethod]);
+  }, [ownMethod, trig, state, step.followsMethod]);
   if (!pick) return null;
   return <TrainingCard skill={pick.skill} target={pick.target} />;
 }

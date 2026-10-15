@@ -178,6 +178,11 @@ public class OverlayLayoutTest
 				// The training view (2.55.1): the step, the pace and its progress bar, with a health warning at times.
 				out.add(new OsrsPathHudOverlay.State(title, null, null, false, null, false, null, false, p, false, null,
 					n % 3 == 0 ? "HP 6/19 - eat! Hits up to 2" : null, false, null, -1, null, (n % 10) / 9.0, true));
+				// With the food line (2.57.0), and nearly out: the alert.
+				out.add(new OsrsPathHudOverlay.State(title, null, null, false, null, false, null, false, p, false, null,
+					null, false, null, -1, null, (n % 10) / 9.0, true, TrainingFood.line("Swordfish", 18, 14, 3.4), false));
+				out.add(new OsrsPathHudOverlay.State(title, null, null, false, null, false, null, false, p, false, null,
+					"HP 6/19 - eat! Hits up to 2", false, null, -1, null, (n % 10) / 9.0, true, TrainingFood.line("Salmon", 2, 9, 3.4), true));
 			}
 			for (JsonElement b : arr(step, "branches"))
 			{
@@ -402,6 +407,11 @@ public class OverlayLayoutTest
 		if (t.startsWith("[" + SHOWN + "]") && !s.isNear() && s.getPacing() == null)
 		{
 			return SHOWN;
+		}
+		// The training plate with its food line (2.57.0), on the first Minotaur step of the route: normal and nearly out.
+		if (s.getFood() != null && t.startsWith("[S3-08]"))
+		{
+			return s.isFoodLow() ? "training-food-low" : "training-food";
 		}
 		if (s.getMissing() != null)
 		{

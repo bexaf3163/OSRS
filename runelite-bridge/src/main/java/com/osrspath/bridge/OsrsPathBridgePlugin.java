@@ -2587,9 +2587,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		String missing = pb != null && me != null && client.getGameState() == GameState.LOGGED_IN
 			&& pb.near(me.getWorldLocation().getX(), me.getWorldLocation().getY(), me.getWorldLocation().getPlane()) ? pb.chip() : null;
 		boolean training = pace != null && trainingNow();
+		// Training on a step with food: the bag's food and about how many kills it lasts; nearly out, an alert.
+		Checklist.Row food = training ? TrainingFood.foodRow(checklist.getRows()) : null;
+		String foodLine = food == null ? null : TrainingFood.line(food.getName(), food.getHave(), food.getHeals(), pacing.getPacing().getFoodHpPerKill());
 		hud = new OsrsPathHudOverlay.State(title, goal, distance, near, bag, checklist.isReady(), dangerText, inside, pace, paceGood, upgrade,
 			health, critical, chip != null ? chip : navTarget == null ? useLine(target, ItemCounts.sum(carried, noted)) : null, tiles, missing,
-			training ? pacing.progress() : null, training);
+			training ? pacing.progress() : null, training, foodLine, food != null && TrainingFood.low(food.getHave()));
 	}
 
 	/** Training now on a paced step (2.55.1): its skills grew within {@link PacingSet#TRAINING_MS}, no temporary target, the bank closed. */

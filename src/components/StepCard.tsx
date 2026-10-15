@@ -378,7 +378,13 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
           <FoodAdvice step={step} />
           <BranchSuggestions step={step} />
           {bring}
-          {items}
+          {/* "What you need" above names every item and its state once; the cards with where to get each one are a click away. */}
+          {(step.itemsRequired?.length || step.itemsRecommended?.length) ? (
+            <details className="zen-more item-sources">
+              <summary className="small">Where to get each item</summary>
+              {items}
+            </details>
+          ) : null}
         </div>
       );
     }

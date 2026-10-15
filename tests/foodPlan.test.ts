@@ -78,7 +78,7 @@ describe('the picks', () => {
 
 describe('into readiness and shopping', () => {
   const s = stepById.get('S3-08')!;
-  const picked = withFoodPlan(s, { trip: 26, total: 110 });
+  const picked = withFoodPlan(s, { trip: 26, total: 110, hpPerKill: 3.4 });
 
   it('the food asks for one trip and carries the whole goal; other items are untouched', () => {
     const salmon = picked.itemsRequired!.find((i) => i.nameEn === 'Salmon')!;
@@ -96,12 +96,35 @@ describe('into readiness and shopping', () => {
   });
 
   it('the shopping list buys the whole goal', () => {
-    const line = aggregateShopping([picked]).required.find((l) => l.nameEn === 'Salmon')!;
+    const line = aggregateShopping([picked], { wholeGoal: true }).required.find((l) => l.nameEn === 'Salmon')!;
     expect(line.count).toBe(110);
-    expect(aggregateShopping([s]).required.find((l) => l.nameEn === 'Salmon')!.count).toBe(20);
+    expect(aggregateShopping([s], { wholeGoal: true }).required.find((l) => l.nameEn === 'Salmon')!.count).toBe(20);
+    // What to carry now (the next steps' kit) is one trip.
+    expect(aggregateShopping([picked]).required.find((l) => l.nameEn === 'Salmon')!.count).toBe(26);
   });
 
   it('no food needed at all: the food is not asked for', () => {
-    expect(withFoodPlan(s, { trip: 0, total: 0 }).itemsRequired!.some((i) => i.nameEn === 'Salmon')).toBe(false);
+    expect(withFoodPlan(s, { trip: 0, total: 0, hpPerKill: 0 }).itemsRequired!.some((i) => i.nameEn === 'Salmon')).toBe(false);
+  });
+});
+
+describe('one number to buy', () => {
+  it('the food row is about the trip and names the whole-goal purchase', () => {
+    const picked = withFoodPlan(stepById.get('S3-08')!, { trip: 26, total: 110, hpPerKill: 3.4 });
+    const o: OwnedState = owned({ 'Mithril scimitar': 1, Salmon: 13, Trout: 0, Tuna: 0, Lobster: 0, Swordfish: 0 });
+    const row = stepReadiness({ step: picked, steps: allSteps, progress, qp: 20, mode: 'f2p', stats, owned: o, gear })
+      .requirements.find((q) => q.label.startsWith('Salmon'))!;
+    expect(row.detail).toBe('have 13, 13 short; buy about 97 for the whole goal');
+  });
+});
+
+describe('the food line in the game', () => {
+  it('the pace carries the health a kill costs; the level 12 Minotaur about 3 to 4 at Defence 1 in iron', () => {
+    const pick = foodPicks(allSteps, progress, live)['S3-08'];
+    expect(pick.hpPerKill).toBeGreaterThan(2.5);
+    expect(pick.hpPerKill).toBeLessThan(4.5);
+    expect(withFoodPlan(stepById.get('S3-08')!, pick).pacing!.foodHpPerKill).toBe(pick.hpPerKill);
+    // Health that comes back faster than it goes: nothing to send.
+    expect(withFoodPlan(stepById.get('S3-08')!, { trip: 0, total: 0, hpPerKill: 0 }).pacing!.foodHpPerKill).toBeUndefined();
   });
 });

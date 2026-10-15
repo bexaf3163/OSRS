@@ -81,6 +81,19 @@ class OsrsPathHudOverlay extends OverlayPanel
 		 * plate carries the step, the kills left and the progress (the owner's report from S3-08, 2.55.1).
 		 */
 		boolean training;
+		/** While training on a step with food: "Food: 8 Salmon · ~24 kills" ({@link TrainingFood}); null otherwise. */
+		String food;
+		/** The food is nearly out: the line is a red alert, right under the name. */
+		boolean foodLow;
+
+		/** Without the food line, as before 2.57.0. */
+		State(String title, String goal, String distance, boolean near, String bag, boolean bagReady, String danger,
+			boolean dangerInside, String pacing, boolean pacingGood, String upgrade, String health, boolean healthCritical, String action, int tiles, String missing,
+			Double progress, boolean training)
+		{
+			this(title, goal, distance, near, bag, bagReady, danger, dangerInside, pacing, pacingGood, upgrade, health, healthCritical, action, tiles, missing,
+				progress, training, null, false);
+		}
 
 		/** Without the training view, as before 2.55.1. */
 		State(String title, String goal, String distance, boolean near, String bag, boolean bagReady, String danger,
@@ -200,19 +213,21 @@ class OsrsPathHudOverlay extends OverlayPanel
 		String distance = guideShown || s.isTraining() ? null : s.getDistance();
 		String bag = guideShown || s.isTraining() || s.isBagReady() ? null : s.getBag();
 		if (isBlank(title) && isBlank(goal) && isBlank(distance) && isBlank(bag) && isBlank(s.getDanger()) && isBlank(s.getHealth()) && isBlank(s.getMissing())
-			&& isBlank(s.getAction()) && isBlank(s.getPacing()) && isBlank(s.getUpgrade()))
+			&& isBlank(s.getAction()) && isBlank(s.getPacing()) && isBlank(s.getUpgrade()) && isBlank(s.getFood()))
 		{
 			return null;
 		}
 		return new State(title, goal, distance, s.isNear(), bag, s.isBagReady(), s.getDanger(), s.isDangerInside(), s.getPacing(),
-			s.isPacingGood(), s.getUpgrade(), s.getHealth(), s.isHealthCritical(), s.getAction(), s.getTiles(), s.getMissing(), s.getProgress(), s.isTraining());
+			s.isPacingGood(), s.getUpgrade(), s.getHealth(), s.isHealthCritical(), s.getAction(), s.getTiles(), s.getMissing(), s.getProgress(), s.isTraining(),
+			s.getFood(), s.isFoodLow());
 	}
 
 	/** The plate text in lines, for the debug log: what the player sees at the top. */
 	static String plain(State s)
 	{
 		java.util.List<String> lines = new java.util.ArrayList<>();
-		for (String t : new String[] {s.getTitle(), s.getDanger(), s.getHealth(), s.getMissing(), s.getGoal(), s.getAction(), s.getDistance(), s.getPacing(), s.getBag(), s.getUpgrade()})
+		for (String t : new String[] {s.getTitle(), s.getDanger(), s.getHealth(), s.isFoodLow() ? s.getFood() : null, s.getMissing(), s.getGoal(), s.getAction(),
+			s.getDistance(), s.getPacing(), s.isFoodLow() ? null : s.getFood(), s.getBag(), s.getUpgrade()})
 		{
 			if (!isBlank(t))
 			{
@@ -230,7 +245,7 @@ class OsrsPathHudOverlay extends OverlayPanel
 	/** The strip colour: danger is red, a target nearby is green, the rest gold. */
 	static Color accent(State s)
 	{
-		if (s.getDanger() != null || s.isHealthCritical() || s.getMissing() != null)
+		if (s.getDanger() != null || s.isHealthCritical() || s.getMissing() != null || s.isFoodLow())
 		{
 			return OverlayCard.RED;
 		}
@@ -266,6 +281,11 @@ class OsrsPathHudOverlay extends OverlayPanel
 			if (s.isHealthCritical()) c.add(new OverlayAlert(s.getHealth(), fm, inner));
 			else OverlayText.line(c, s.getHealth(), WARN, fm, inner);
 		}
+		if (s.getFood() != null && s.isFoodLow())
+		{
+			// Food nearly out mid-fight: safety first, right under the name and the health.
+			c.add(new OverlayAlert(s.getFood(), fm, inner));
+		}
 		if (s.getMissing() != null)
 		{
 			// A missing item of the step ahead: red, right under the name, so the player turns back before using the wrong thing.
@@ -290,6 +310,10 @@ class OsrsPathHudOverlay extends OverlayPanel
 			{
 				c.add(progressBar(s.getProgress(), s.isPacingGood(), fm, inner));
 			}
+		}
+		if (s.getFood() != null && !s.isFoodLow())
+		{
+			OverlayText.line(c, s.getFood(), TEXT, fm, inner);
 		}
 		if (s.getBag() != null)
 		{

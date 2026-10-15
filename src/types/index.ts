@@ -222,6 +222,8 @@ export interface StepPacing {
    * style; the pace shows the one that is growing now.
    */
   also?: PacingSkill[];
+  /** Set at run time from this player's food plan (lib/foodPlan.ts): health a kill costs net of regeneration, for the game's food line. */
+  foodHpPerKill?: number;
   targetLevel: number;
   /** The XP at targetLevel by the game's XP table. */
   targetExp: number;

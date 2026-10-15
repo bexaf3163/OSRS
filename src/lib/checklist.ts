@@ -49,6 +49,8 @@ export interface PreflightItem {
   heals?: number;
   /** Other items that count in its place (every pickaxe tier for "Bronze pickaxe"). */
   alt?: string[];
+  /** Food with a personal plan: what the whole remaining goal needs (`count` is one trip). */
+  total?: number;
 }
 
 /** What to check at the bank: the required items except those obtained during the step itself. */
@@ -58,7 +60,10 @@ export function preflightItems(step: Step): PreflightItem[] {
     .map((i) => {
       const n = parseAmount(i.amount);
       const alt = alternativesOf(i.nameEn, i.anyOf);
-      return { nameEn: i.nameEn, id: i.wikiItemId, count: n ?? 1, exact: n !== null, heals: i.heals, ...(alt.length ? { alt } : {}) };
+      return {
+        nameEn: i.nameEn, id: i.wikiItemId, count: n ?? 1, exact: n !== null, heals: i.heals, ...(alt.length ? { alt } : {}),
+        ...(i.totalAmount !== undefined && n !== null && i.totalAmount > n ? { total: i.totalAmount } : {}),
+      };
     });
 }
 

@@ -16,6 +16,8 @@ export interface FoodPick {
   trip: number;
   /** Pieces for the whole remaining goal (the plan, with the reserve): the shopping list buys these. */
   total: number;
+  /** Health a kill costs net of regeneration, to a tenth: the game's training plate turns the bag's food into kills. */
+  hpPerKill: number;
 }
 
 type Live = Omit<StepEstimateContext, 'assume' | 'fights'> & {
@@ -60,14 +62,15 @@ export function foodPicks(steps: Step[], progress: Progress, live: Live): Record
     if (isClosed(progress, s.id) || !stepGoals(s).length) continue;
     const fights = live.combatLog?.stepId === s.id ? live.combatLog.foes : null;
     const v = combatPlanView(s, { ...live, fights, assume: assumptionsFor(s, steps, progress) });
-    if (v) out[s.id] = { trip: v.nextTrip, total: v.plan };
+    if (v) out[s.id] = { trip: v.nextTrip, total: v.plan, hpPerKill: Math.round(v.primary.hpPerKill * 10) / 10 };
   }
   return out;
 }
 
 export function sameFoodPicks(a: Record<string, FoodPick>, b: Record<string, FoodPick>): boolean {
   const ka = Object.keys(a);
-  return ka.length === Object.keys(b).length && ka.every((k) => b[k] && a[k].trip === b[k].trip && a[k].total === b[k].total);
+  return ka.length === Object.keys(b).length
+    && ka.every((k) => b[k] && a[k].trip === b[k].trip && a[k].total === b[k].total && a[k].hpPerKill === b[k].hpPerKill);
 }
 
 /**
@@ -80,5 +83,7 @@ export function withFoodPlan(step: Step, pick: FoodPick | undefined): Step {
   const items = [...step.itemsRequired!];
   if (pick.trip <= 0 && pick.total <= 0) items.splice(at, 1);
   else items[at] = { ...items[at], amount: pick.trip, totalAmount: pick.total };
-  return { ...step, itemsRequired: items };
+  // The game's training plate: the food in the bag as kills (plugin 2.57+; an older plugin ignores the field).
+  const pacing = step.pacing && pick.hpPerKill > 0 && pick.hpPerKill <= 500 ? { ...step.pacing, foodHpPerKill: pick.hpPerKill } : step.pacing;
+  return { ...step, itemsRequired: items, ...(pacing ? { pacing } : {}) };
 }
