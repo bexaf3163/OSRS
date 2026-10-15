@@ -1,0 +1,248 @@
+{
+  "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/build-combat-foes.ts)",
+  "generatedAt": "2026-10-15",
+  "foes": [
+    {
+      "name": "Minotaur",
+      "version": "Level 12",
+      "combat": 12,
+      "members": false,
+      "hitpoints": 10,
+      "attackLevel": 12,
+      "strengthLevel": 10,
+      "defenceLevel": 10,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": -21,
+        "slash": -21,
+        "crush": -21,
+        "magic": -21
+      },
+      "attackStyle": "crush",
+      "maxHit": 2,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Minotaur",
+      "version": "Level 27",
+      "combat": 27,
+      "members": false,
+      "hitpoints": 22,
+      "attackLevel": 23,
+      "strengthLevel": 25,
+      "defenceLevel": 25,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": -10,
+        "slash": -10,
+        "crush": -10,
+        "magic": -21
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Hill Giant",
+      "version": "1",
+      "combat": 28,
+      "members": false,
+      "hitpoints": 35,
+      "attackLevel": 18,
+      "strengthLevel": 22,
+      "defenceLevel": 26,
+      "magicLevel": 1,
+      "attackBonus": 18,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 4,
+      "speedTicks": 6,
+      "aggressive": true
+    },
+    {
+      "name": "Cow",
+      "version": "1",
+      "combat": 2,
+      "members": false,
+      "hitpoints": 8,
+      "attackLevel": 1,
+      "strengthLevel": 1,
+      "defenceLevel": 1,
+      "magicLevel": 1,
+      "attackBonus": -15,
+      "defence": {
+        "stab": -21,
+        "slash": -21,
+        "crush": -21,
+        "magic": -21
+      },
+      "attackStyle": "crush",
+      "maxHit": 1,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Cow",
+      "version": "Isle of Souls",
+      "combat": 2,
+      "members": true,
+      "hitpoints": 8,
+      "attackLevel": 1,
+      "strengthLevel": 1,
+      "defenceLevel": 1,
+      "magicLevel": 1,
+      "attackBonus": -15,
+      "defence": {
+        "stab": -21,
+        "slash": -21,
+        "crush": -21,
+        "magic": -21
+      },
+      "attackStyle": "crush",
+      "maxHit": 1,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Flesh Crawler",
+      "version": "Level 28",
+      "combat": 28,
+      "members": false,
+      "hitpoints": 25,
+      "attackLevel": 60,
+      "strengthLevel": 2,
+      "defenceLevel": 10,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 15,
+        "slash": 15,
+        "crush": 15,
+        "magic": 15
+      },
+      "attackStyle": "slash",
+      "maxHit": 1,
+      "speedTicks": 3,
+      "aggressive": true
+    },
+    {
+      "name": "Flesh Crawler",
+      "version": "Level 35",
+      "combat": 35,
+      "members": false,
+      "hitpoints": 25,
+      "attackLevel": 80,
+      "strengthLevel": 2,
+      "defenceLevel": 10,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 15,
+        "slash": 15,
+        "crush": 15,
+        "magic": 15
+      },
+      "attackStyle": "slash",
+      "maxHit": 1,
+      "speedTicks": 3,
+      "aggressive": true
+    },
+    {
+      "name": "Flesh Crawler",
+      "version": "Level 41",
+      "combat": 41,
+      "members": false,
+      "hitpoints": 25,
+      "attackLevel": 100,
+      "strengthLevel": 2,
+      "defenceLevel": 10,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 15,
+        "slash": 15,
+        "crush": 15,
+        "magic": 15
+      },
+      "attackStyle": "slash",
+      "maxHit": 1,
+      "speedTicks": 3,
+      "aggressive": true
+    },
+    {
+      "name": "Moss giant",
+      "version": "Level 42",
+      "combat": 42,
+      "members": false,
+      "hitpoints": 60,
+      "attackLevel": 30,
+      "strengthLevel": 30,
+      "defenceLevel": 30,
+      "magicLevel": 1,
+      "attackBonus": 33,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 6,
+      "speedTicks": 6,
+      "aggressive": true
+    },
+    {
+      "name": "Moss giant",
+      "version": "Level 48",
+      "combat": 48,
+      "members": true,
+      "hitpoints": 85,
+      "attackLevel": 30,
+      "strengthLevel": 30,
+      "defenceLevel": 30,
+      "magicLevel": 1,
+      "attackBonus": 33,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 6,
+      "speedTicks": 6,
+      "aggressive": true
+    },
+    {
+      "name": "Moss giant",
+      "version": "Level 42 (Varlamore)",
+      "combat": 42,
+      "members": true,
+      "hitpoints": 60,
+      "attackLevel": 30,
+      "strengthLevel": 30,
+      "defenceLevel": 30,
+      "magicLevel": 1,
+      "attackBonus": 33,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 6,
+      "speedTicks": 6,
+      "aggressive": true
+    }
+  ]
+}

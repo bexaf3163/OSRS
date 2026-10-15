@@ -24,6 +24,7 @@
     "build-gear": "node scripts/build-gear.ts",
     "build-money": "node scripts/build-money.ts",
     "build-threats": "node scripts/build-threats.ts",
+    "build-combat-foes": "node scripts/build-combat-foes.ts",
     "build-style-gear": "node scripts/build-style-gear.ts",
     "check-links": "node scripts/check-links.ts",
     "bridge:jar": "node scripts/build-bridge-jar.ts",

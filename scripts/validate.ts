@@ -27,6 +27,8 @@ export interface Route {
   items: WikiItemDetail[];
   /** The opponents of the steps (monsters.json): for the combat pace — health, from which the XP per opponent comes. */
   monsters?: FoeData;
+  /** Every version of the training opponents with their attack (combatFoes.json): for the time and food estimate. */
+  combatFoes?: { foes: { name: string; version?: string; members: boolean; hitpoints: number; defenceLevel: number; defence: Record<string, number>; maxHit: number; speedTicks: number }[] };
   /** Where the steps' NPCs stand (npcLocations.json) — for "Where to go" and the step map points. */
   npcs?: Record<string, { x: number; y: number; plane: number; area: string; page: string; steps?: string[] }[]>;
   /** The place dictionary (majorLocations.json): shops and places where items come from. */
@@ -434,6 +436,24 @@ export function validate(d: GuideData | null, route: Route): Report {
     return out;
   });
   const paced = steps.filter((s) => s.pacing).length;
+  // The time and food estimate: every combat pace has its opponent's versions with an attack; the version monsters.json keeps for the gear
+  // advisor is one of them, number for number (the two files come from the same infobox by two scripts).
+  if (route.combatFoes) {
+    const cf = route.combatFoes.foes;
+    const badFoes = steps.filter((s) => s.pacing && COMBAT.has(s.pacing.skill)).flatMap((s) => {
+      const name = s.foes?.[0] ?? '';
+      const versions = cf.filter((f) => f.name === name && !f.members);
+      if (!versions.length) return [`${s.id}: no ${name} in combatFoes.json`];
+      const kept = route.monsters?.foes.find((f) => f.name === name);
+      const same = (f: (typeof cf)[number]) => kept && f.hitpoints === kept.hitpoints && f.defenceLevel === kept.defenceLevel
+        && (['stab', 'slash', 'crush'] as const).every((t) => f.defence[t] === kept.defence[t]);
+      return [
+        ...(kept && !versions.some(same) ? [`${s.id}: ${name} in monsters.json matches no version in combatFoes.json`] : []),
+        ...versions.filter((f) => !(f.maxHit >= 0 && f.speedTicks > 0)).map((f) => `${name} ${f.version ?? ''}: max hit ${f.maxHit}, speed ${f.speedTicks}`),
+      ];
+    });
+    check(!badFoes.length, 'The combat estimate has every training opponent, and it agrees with monsters.json', `The combat opponents: ${badFoes.join('; ')}`);
+  }
   check(!badPacing.length, `The training pace at ${paced} steps: the skill, level and XP agree with the title and the formula`, `The training pace: ${badPacing.join('; ')}`);
 
   // Wiki markup in the item database: HTML entities and "[UK]/[US]" are a sign of the old text cleaning.

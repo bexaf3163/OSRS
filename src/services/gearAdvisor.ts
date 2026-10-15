@@ -55,6 +55,8 @@ const UNARMED_SPEED = 4;
 export const WINDOW = 10;
 
 export type Style = 'accurate' | 'aggressive';
+/** The style a training phase is fought in: Defensive (+3 Defence) trains Defence and adds nothing to the hit. */
+export type TrainStyle = Style | 'defensive';
 export type AttackType = 'stab' | 'slash' | 'crush';
 
 /**
@@ -82,8 +84,8 @@ export interface MeleeResult {
   hitChance: number;
   /** Average damage per second. */
   dps: number;
-  /** The style with higher damage: Accurate (+3 attack) or Aggressive (+3 strength). */
-  style: Style;
+  /** The style with higher damage: Accurate (+3 attack) or Aggressive (+3 strength); Defensive when asked for. */
+  style: TrainStyle;
   /** The hit type of this style: stab, slash or crush. */
   type?: AttackType;
   /** Seconds between hits. */
@@ -94,7 +96,7 @@ export interface Prayers { attack?: number; strength?: number }
 
 /** Damage with one style. All roundings as on the wiki: down, at each step. target — the target's defence. */
 export function meleeHit(
-  lv: Levels, attackBonus: number, strengthBonus: number, speedTicks: number, style: Style, prayers: Prayers = {},
+  lv: Levels, attackBonus: number, strengthBonus: number, speedTicks: number, style: TrainStyle, prayers: Prayers = {},
   target: { defenceLevel: number; defenceBonus: number } = TARGET,
 ): MeleeResult {
   const effStr = Math.floor(lv.strength * (prayers.strength ?? 1)) + (style === 'aggressive' ? 3 : 0) + 8;
@@ -117,6 +119,23 @@ export function meleeWith(lv: Levels, weapon: GearPiece | null, neck: GearPiece 
   const speed = weapon?.speed ?? UNARMED_SPEED;
   let best: MeleeResult | null = null;
   for (const { type, style } of styles) {
+    const attack = (weapon?.attack[type] ?? 0) + (neck?.attack[type] ?? 0);
+    const r = meleeHit(lv, attack, strength, speed, style, prayers, { defenceLevel: foe.defenceLevel, defenceBonus: foe.defence[type] });
+    if (!best || r.dps > best.dps) best = { ...r, type };
+  }
+  return best!;
+}
+
+/**
+ * Damage in one fixed style (the one that trains the phase's skill) with the weapon's best hit type for it: the training
+ * estimate needs the style the player is told to use, not the strongest one. Defensive fights with the Accurate hit type.
+ */
+export function meleeAs(lv: Levels, weapon: GearPiece | null, neck: GearPiece | null, style: TrainStyle, foe: Pick<Foe, 'defenceLevel' | 'defence'>, prayers: Prayers = {}): MeleeResult {
+  const styles = STYLES[weapon ? CATEGORY[weapon.kind] ?? 'unarmed' : 'unarmed'];
+  const strength = (weapon?.strength ?? 0) + (neck?.strength ?? 0);
+  const speed = weapon?.speed ?? UNARMED_SPEED;
+  let best: MeleeResult | null = null;
+  for (const { type } of styles.filter((x) => x.style === (style === 'defensive' ? 'accurate' : style))) {
     const attack = (weapon?.attack[type] ?? 0) + (neck?.attack[type] ?? 0);
     const r = meleeHit(lv, attack, strength, speed, style, prayers, { defenceLevel: foe.defenceLevel, defenceBonus: foe.defence[type] });
     if (!best || r.dps > best.dps) best = { ...r, type };
@@ -320,7 +339,7 @@ function pieceOf(id: number, name: string, data: GearData): GearPiece | null {
 }
 
 /** Worn items by slot: the slot from the game, and for an old plugin (no slot) — from the item database. */
-function equippedBySlot(gear: GearState | null, data: GearData): Partial<Record<GearSlot, Equipped>> {
+export function equippedBySlot(gear: GearState | null, data: GearData): Partial<Record<GearSlot, Equipped>> {
   const out: Partial<Record<GearSlot, Equipped>> = {};
   for (const it of gear?.equipment ?? []) {
     const piece = pieceOf(it.id, it.name, data);
