@@ -127,7 +127,8 @@ public class ArrowGeometryTest
 	{
 		File out = new File("build/overlay-render");
 		out.mkdirs();
-		String[] texts = {null, "~62 tiles", "~139 tiles, a floor up", "Target is underground - find the way down"};
+		String[] texts = {null, "~62 tiles", "~139 tiles, a floor up", "Target is underground - find the way down",
+			"Way down: Climb-down Staircase · ~123 tiles", "Go up to the watchtower in Gloug… · ~1234 tiles"};
 		for (Font font : new Font[]{FontManager.getRunescapeFont(), FontManager.getRunescapeBoldFont(), FontManager.getRunescapeSmallFont()})
 		{
 			for (OsrsPathBridgeConfig.ArrowSize size : OsrsPathBridgeConfig.ArrowSize.values())

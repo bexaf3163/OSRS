@@ -258,6 +258,17 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private boolean arrowSet;
 	private boolean near;
 	private WorldPoint lastPosition;
+	/** The layer (surface, separate area, dungeon) and floor of the last tile: a change re-aims the arrow at a way in or out, or a staircase (Portals). */
+	private int lastLayer = -1;
+	/** Quest Helper's current step when its condition is met (not "by default", not undecided); null otherwise. */
+	private String qhLeaf;
+	/** Where Quest Helper's step points when it is not our line's own step (the hole to Chief Tess's cave); null when the line leads there itself. */
+	private volatile QhVia.Via stageVia;
+	/** The way in or out the arrow points at instead of a target in another layer; null when the target is in the player's layer. */
+	private volatile Portals.Portal portalShown;
+	/** NPC and object names by id for via labels: definitions are not free and do not change. */
+	private final Map<Integer, String> npcDefNames = new HashMap<>();
+	private final Map<Integer, String> objDefNames = new HashMap<>();
 
 	/** Bag and worn items (without notes), notes separately, bank null until it has been opened. */
 	private ItemCounts carried = ItemCounts.EMPTY;
@@ -1477,6 +1488,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		qhLastKey = "";
 		qhDescribe = "—";
 		qhHint = null;
+		qhLeaf = null;
+		stageVia = null;
 	}
 
 	/**
@@ -1486,6 +1499,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private StageTracker.QhPick qhPick(String stepId, int value, List<ActiveTarget.StageLine> lines)
 	{
 		qhHint = null;
+		qhLeaf = null;
 		stageTracker.qhUndecided(false);
 		if (!config.qhMachine())
 		{
@@ -1517,6 +1531,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			return null;
 		}
 		stageTracker.qhUndecided(v.isUndecided());
+		qhLeaf = !v.isUndecided() && v.isStrong() ? v.getLeaf() : null;
 		int line = v.isUndecided() || !v.isStrong() ? -1 : m.lineFor(v, lines);
 		// The Quest Helper "sync" step: it has nothing to tell which step the player is on until they open the quest journal.
 		qhHint = !v.isUndecided() && !v.isStrong() && v.getLeaf() != null && v.getLeaf().endsWith("syncStep")
@@ -1625,6 +1640,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private void trackStageCursor(ActiveTarget.Stage st)
 	{
 		preBlock = null;
+		stageVia = null;
 		if (st == null)
 		{
 			stageTracker.reset();
@@ -1662,7 +1678,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		lastPreBlock = blocked;
 		// While an item is missing the step's own objects are not highlighted: the arrow and the highlight lead to where to get the item.
-		applyLineHighlight(target.getStepId() + "#" + idx + "@" + at + (blocked == null ? "" : "!" + blocked.key()), blocked == null ? lines.get(at).getHl() : null);
+		// Quest Helper's own step when our line does not lead there itself (a ladder, a hole, a step with no line): the arrow and the highlight follow it.
+		QhVia.Via via = blocked == null ? currentVia(target, lines.get(at)) : null;
+		stageVia = via;
+		applyLineHighlight(target.getStepId() + "#" + idx + "@" + at + (blocked == null ? "" : "!" + blocked.key()) + (via == null ? "" : "~" + via.getLeaf()),
+			blocked != null ? null : via != null ? via.highlight() : lines.get(at).getHl());
 	}
 
 	private Preflight.Block lastPreBlock;
@@ -1814,7 +1834,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		boolean byStep = now != null && now.hasPoint();
 		String stageOnly = t.getStepId() + "#" + (done ? "done" : String.valueOf(idx));
 		Preflight.Block block = done ? null : preBlock;
-		String key = (byStep ? stageOnly + "@" + cursor : stageOnly) + (block == null ? "" : "!" + block.key());
+		QhVia.Via via = done ? null : stageVia;
+		String key = (byStep ? stageOnly + "@" + cursor : stageOnly) + (block == null ? "" : "!" + block.key()) + (via == null ? "" : "~" + via.getLeaf());
 		if (key.equals(stageKey))
 		{
 			return;
@@ -1844,6 +1865,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (n == null && go != null)
 		{
 			n = StepGuide.navTo(t, go);
+		}
+		if (via != null)
+		{
+			NavTarget vn = navToVia(t, via);
+			if (vn != null)
+			{
+				n = vn;
+			}
 		}
 		if (block != null && block.getTarget() != null)
 		{
@@ -2386,12 +2415,135 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	 */
 	private WorldPoint navTarget()
 	{
+		WorldPoint base;
 		if (navTarget != null)
 		{
-			return new WorldPoint(navTarget.getX(), navTarget.getY(), navTarget.getPlane());
+			base = new WorldPoint(navTarget.getX(), navTarget.getY(), navTarget.getPlane());
 		}
-		ActiveTarget.WorldPointDto p = stepPoint();
-		return p == null ? null : new WorldPoint(p.getX(), p.getY(), p.getPlane());
+		else
+		{
+			ActiveTarget.WorldPointDto p = stepPoint();
+			base = p == null ? null : new WorldPoint(p.getX(), p.getY(), p.getPlane());
+		}
+		return throughPortal(base);
+	}
+
+	/**
+	 * A target in another layer than the player (a dungeon from the surface, the surface from a dungeon) is reached through a way in or out: the arrow
+	 * points at that way (the hole on the beach for Chief Tess, 2026-10-17), not at coordinates the player's map does not have. A target on another floor:
+	 * the staircase or ladder. No way known: the target.
+	 */
+	private WorldPoint throughPortal(WorldPoint base)
+	{
+		Player me = client.getLocalPlayer();
+		if (base == null || me == null || client.getGameState() != GameState.LOGGED_IN || Navigation.isInstanced(base.getX(), base.getY()))
+		{
+			portalFor = null;
+			setPortal(null);
+			return base;
+		}
+		WorldPoint pos = me.getWorldLocation();
+		// The arrow asks every frame: the pick is only redone when the target or the player's tile changed.
+		if (base.equals(portalFor) && pos.equals(portalFrom))
+		{
+			Portals.Portal same = portalShown;
+			return same == null ? base : new WorldPoint(same.getX(), same.getY(), same.getPlane());
+		}
+		portalFor = base;
+		portalFrom = pos;
+		Portals.Portal p = Navigation.layer(pos.getY()) != Navigation.layer(base.getY()) ? Portals.pick(pos.getX(), pos.getY(), base.getX(), base.getY())
+			// Another floor of the same place: the staircase or ladder, not "a floor up" with nothing to climb.
+			: pos.getPlane() != base.getPlane() ? Portals.pickFloor(pos.getX(), pos.getY(), pos.getPlane(), base.getX(), base.getY(), base.getPlane()) : null;
+		setPortal(p);
+		return p == null ? base : new WorldPoint(p.getX(), p.getY(), p.getPlane());
+	}
+
+	/** The target and the player's tile the last way was picked for. */
+	private WorldPoint portalFor;
+	private WorldPoint portalFrom;
+
+	private void setPortal(Portals.Portal p)
+	{
+		Portals.Portal before = portalShown;
+		portalShown = p;
+		if (!Objects.equals(before, p))
+		{
+			tel("portal", "label", p == null ? null : p.label(), "at", p == null ? null : new int[] {p.getX(), p.getY(), p.getPlane()}, "id", p == null ? null : p.getId());
+			if ((before == null ? 0 : before.getId()) != (p == null ? 0 : p.getId()))
+			{
+				clientThread.invokeLater(this::rescan);
+			}
+		}
+	}
+
+	/** Quest Helper's step as a via, or null (see QhVia). Client thread: the NPC and object names come from the game's definitions. */
+	private QhVia.Via currentVia(ActiveTarget t, ActiveTarget.StageLine line)
+	{
+		String leaf = qhLeaf;
+		if (t == null || leaf == null || !config.qhMachine())
+		{
+			return null;
+		}
+		QhSteps.Tile tile = QhSteps.tile(t.getStepId(), leaf);
+		if (tile == null)
+		{
+			return null;
+		}
+		String name = null;
+		if (tile.getId() > 0 && tile.isNpc())
+		{
+			name = npcDefNames.computeIfAbsent(tile.getId(), id ->
+			{
+				NPCComposition c = client.getNpcDefinition(id);
+				return c == null ? "" : c.getName();
+			});
+		}
+		else if (tile.getId() > 0 && tile.isObject())
+		{
+			name = objDefNames.computeIfAbsent(tile.getId(), id ->
+			{
+				ObjectComposition c = client.getObjectDefinition(id);
+				return c == null ? "" : c.getName();
+			});
+		}
+		return QhVia.of(leaf, tile, line, name, properWordsOf(t));
+	}
+
+	private String properStep;
+	private final Set<String> properWords = new HashSet<>();
+
+	/** The names in the step's own lines (Tess, Colin, Gnocci): they keep their capital in a via label. */
+	private Set<String> properWordsOf(ActiveTarget t)
+	{
+		if (!Objects.equals(properStep, t.getStepId()))
+		{
+			properStep = t.getStepId();
+			properWords.clear();
+			QhVia.properWords(t.getTitle(), properWords);
+			ActiveTarget.Stage st = stageOf(t);
+			if (st != null && st.getStages() != null)
+			{
+				for (ActiveTarget.StageStep e : st.getStages())
+				{
+					for (ActiveTarget.StageLine l : e.getSteps())
+					{
+						QhVia.properWords(l.getT(), properWords);
+					}
+				}
+			}
+		}
+		return properWords;
+	}
+
+	private static NavTarget navToVia(ActiveTarget t, QhVia.Via via)
+	{
+		NavTarget n = new NavTarget();
+		n.setLabel(via.getLabel());
+		n.setX(via.getX());
+		n.setY(via.getY());
+		n.setPlane(via.getPlane());
+		n.setStepId(t.getStepId());
+		return n.prepare() == null ? n : null;
 	}
 
 	/** The step's point without a temporary target: the current waypoint or the step's point. null means no step or the route is done. */
@@ -2572,6 +2724,18 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			near = r.isNear();
 			distance = r.getText();
 			tiles = r.getTiles();
+			// Where the arrow goes when it is not the line's own place: a way in or out, or Quest Helper's step (a ladder, a hole).
+			Portals.Portal portal = portalShown;
+			QhVia.Via via = stageVia;
+			if (portal != null)
+			{
+				distance = portal.label() + " · " + distance;
+			}
+			else if (via != null && navSticky && navTarget != null && navTarget.getX() == via.getX() && navTarget.getY() == via.getY())
+			{
+				String shown = via.getLabel().length() > 34 ? via.getLabel().substring(0, 33) + "…" : via.getLabel();
+				distance = shown + " · " + distance;
+			}
 		}
 		String bag = null;
 		if (!checklist.getRows().isEmpty())
@@ -2815,7 +2979,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			return;
 		}
 		String name = objectName(o);
-		boolean byId = stepIds.contains(o.getId()) || line.objectIds.contains(o.getId());
+		Portals.Portal portal = portalShown;
+		boolean byId = stepIds.contains(o.getId()) || line.objectIds.contains(o.getId()) || (portal != null && portal.getId() > 0 && portal.getId() == o.getId());
 		boolean byName = name != null && (stepNames.contains(ActiveTarget.nameKey(name)) || line.objectNames.contains(ActiveTarget.nameKey(name))
 			|| navObjects.contains(ActiveTarget.nameKey(name)));
 		if (byId || byName)
@@ -3125,6 +3290,13 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 					server.setPos(pos.getX(), pos.getY(), pos.getPlane());
 				}
 				updateDanger(pos);
+				int layerNow = Navigation.layer(pos.getY()) * 4 + pos.getPlane();
+				if (layerNow != lastLayer)
+				{
+					// Down the hole, up the ladder, up the stairs: the arrow goes from the way to the target itself (or to the next way).
+					lastLayer = layerNow;
+					updateNavigation();
+				}
 				boolean jumped = before != null && MoveDetector.isJump(before.getX(), before.getY(), pos.getX(), pos.getY());
 				if (transportStopOutdated(navViaTransport, jumped))
 				{

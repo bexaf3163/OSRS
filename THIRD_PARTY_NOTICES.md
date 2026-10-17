@@ -5,12 +5,49 @@
 The quest stages (`src/data/questStages.json`), the step state machines (`src/data/questMachines.json`), the reference files
 (`tests/fixtures/qh-steps.json`, `runelite-bridge/src/test/resources/qh-golden.json`) and the generators (`tools/qh-machines`) were derived from the sources of the
 [Quest Helper](https://github.com/Zoinkwiz/quest-helper) RuneLite plugin: the order of steps, the conditions, the tiles and the highlights. The step texts were written and
-checked by hand.
+checked by hand. The step tiles (`tests/fixtures/qh-steps.json`) are also bundled in the RuneLite plugin
+(`qh-steps.json`): the arrow follows Quest Helper's own step when it is a ladder, a hole or a step our list has no line for.
 
 ```
 BSD 2-Clause License
 
 Copyright (c) 2020, Zoinkwiz
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+```
+
+## Shortest Path
+
+The ways between the surface, separate areas and dungeons, and the staircases and ladders between floors (`src/data/portals.json`, bundled in the RuneLite
+plugin as `portals.json`), were derived from the transport table (`src/main/resources/transports/transports.tsv`, commit `99735452`) of the
+[Shortest Path](https://github.com/Skretzo/shortest-path) RuneLite plugin by Skretzo and contributors, by `scripts/build-portals.ts`: only the rows that change the
+layer or the floor, with their tiles, object ids, menu words and requirements. The license of that repository, as published (its copyright line is a
+placeholder):
+
+```
+BSD 2-Clause License
+
+Copyright (c) <YEAR>, <COPYRIGHT HOLDER>
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

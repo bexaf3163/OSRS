@@ -582,3 +582,30 @@ the game, (4) readiness and shopping integration, (5) desktop simplification, (6
   - Not done: the in-game card and slot highlights (planned design: append the lines to the existing bank/merchant `ShopWindow` card rather than a new window,
     so the window count does not grow again; a `/cleanup-hint` endpoint with `player`, expire after ~10 minutes, drop lines whose item left the bag, highlight by item id
     with lower priority than quest-item frames, a setting off by default); bank contents; High Alchemy; live verification.
+
+## 2.60.0 — the way in, Quest Helper's step as the arrow, a walk through every quest
+
+- **Owner's reports (2026-10-17, The Corsair Curse):** "Took the spade and it does not go on" (= 2.59.0's movement leaf `goOntoShip`), "Target is underground - find
+  the way down, but where?" (Chief Tess). Telemetry showed the machine's strong leaf `goDownToTess` (a hole on the beach) while our line `talkToTess` sat in the cave.
+- **`QhVia`** (pure, `QhViaTest`): when the machine's strong leaf is not the line's own `k` and its Quest Helper tile (`QhSteps`, the bundled
+  `tests/fixtures/qh-steps.json`) is more than `SAME_PLACE` (2) tiles from the line's tile (or on another floor), `followStage` sends the arrow there
+  (`navToVia`, sticky like a stage target) and `trackStageCursor` highlights the step's NPC or object instead of the line's. The key includes the leaf, so a new
+  leaf re-aims. Label: the leaf humanised (names that are capitalised inside the quest's line texts keep their capital) + the game's NPC/object name,
+  shown as the distance prefix (cut at 34) and as the target label. A pre-flight block still wins.
+- **`Portals`** (Java) / `src/lib/portals.ts` (TS twin, `tests/portals.test.ts`): `src/data/portals.json` from Shortest Path's `transports.tsv` at a pinned commit
+  (`npm run build-portals`, needs network; notice in THIRD_PARTY_NOTICES.md). `portals`: rows that change layer (surface / separate area / dungeon), deduped
+  by object+action+destination clustered within 3 tiles. `floors`: same layer, another plane. `throughPortal` in `navTarget()`: a target in another layer than the
+  player → `Portals.pick` (into an area: the way whose far end is nearest the target, ≤ `AREA_REACH` 400; out of one: a way ≤ `EXIT_REACH` 250 from the player whose
+  far end is nearest the target; requirement-free first); another floor of the same layer → `pickFloor` (up: comes out ≤ 20 from the target; down: ≤ 40 from the
+  player). Memoised on (target, player tile). The way's object is highlighted (`track`), the HUD distance gets "Way down: Enter Hole · ". A layer or floor change
+  calls `updateNavigation` (the hint arrow is only set there).
+  - Not covered: instances (`Navigation.isInstanced`), multi-hop routes (only the first way is shown; after it the next is picked), ladders missing from
+    Shortest Path's table (the Corsair Cove huts — Quest Helper's step covers that quest).
+- **Quest walk** (`QuestWalkTest`, `QhLineCoverageTest`, real data): every quest × machine stage value × leaf the machine can pick strongly (`QhMachine.leafPaths`
+  now follows the machine: an unreadable condition stops the list; an "and" with an unreadable part is never taken; a leaf reached only by defaults is not a pick).
+  Fails on: a leaf with neither a line nor a Quest Helper tile; a place off the surface with no way in from Lumbridge (ways out — `exit…`, `leave…` — excluded);
+  a surface place in a stage that also has underground places with no way back up; a route step (`steps.json` map location and waypoints) underground with no way in.
+  Baseline: three Grand Tree leaves (S7-05@140/150, no tile in Quest Helper; the king's cave has a way in, asserted).
+  - Lines added to `questStages.json` (Quest Helper's texts, commit 75b623a; inserted in place by `scratchpad/add-lines.cjs`-style text insertion, the file does not
+    round-trip): S1-07@75 `pwPlayPiano` (D, E, A, D), S2-11@1/2 `pullUpLeverC`, `pullUpLeverD` (at the end of the list: only the machine leads there), S9-04@3 `useWool`,
+    S9-01@3 `getAnotherBranch` (end), S2-10@30/40/50 `dyeWig` (end).

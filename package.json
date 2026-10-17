@@ -2,7 +2,7 @@
   "name": "osrs-put",
   "productName": "OSRS Path",
   "private": true,
-  "version": "2.59.0",
+  "version": "2.60.0",
   "description": "A personal progress tracker for Old School RuneScape (free version)",
   "author": "Mark",
   "type": "module",
@@ -32,7 +32,8 @@
     "test:e2e": "node scripts/e2e-electron.ts",
     "check-runelite": "node scripts/check-runelite-compat.ts",
     "telemetry": "node scripts/analyze-telemetry.ts",
-    "build-weights": "node scripts/build-weights.ts"
+    "build-weights": "node scripts/build-weights.ts",
+    "build-portals": "node scripts/build-portals.ts"
   },
   "devDependencies": {
     "@types/leaflet": "^1.9.22",

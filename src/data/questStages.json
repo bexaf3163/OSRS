@@ -1888,6 +1888,21 @@
         ]
        },
        "k": "climbWall"
+      },
+      {
+       "t": "Play the piano in the room to the south for the emerald key: D, E, A, D. A wrong key restarts the tune.",
+       "s": "Play the piano: D, E, A, D",
+       "at": [
+        1647,
+        4841,
+        0
+       ],
+       "hl": {
+        "obj": [
+         29658
+        ]
+       },
+       "k": "pwPlayPiano"
       }
      ],
      "go": {
@@ -4463,6 +4478,23 @@
        },
        "pre": [{"item": "Rope", "at": [3099, 3259, 0], "t": "Buy Rope from Ned in Draynor Village", "npc": "Ned"}, {"item": "Pink skirt", "at": [3206, 3416, 0], "t": "Buy a Pink skirt from Thessalia in Varrock", "npc": "Thessalia"}, {"item": "Paste", "at": [3086, 3259, 0], "t": "Get Skin paste from Aggie in Draynor Village", "npc": "Aggie"}, {"item": "Bronze key", "at": [3227, 3256, 0], "t": "Make the Bronze key: use the Key print on a furnace with a Bronze bar", "on": ["Furnace"]}],
        "k": "talkToJoe"
+      },
+      {
+       "t": "Dye the wig with yellow dye. Buy a yellow dye with two onions and 5 coins if you still need it from Aggie in Draynor Village.",
+       "s": "Dye the wig yellow (Aggie: 2 onions + 5 gp)",
+       "pre": [
+        {
+         "item": "Yellow dye",
+         "at": [
+          3086,
+          3259,
+          0
+         ],
+         "t": "Get Yellow dye from Aggie (2 Onions and 5 coins)",
+         "npc": "Aggie"
+        }
+       ],
+       "k": "dyeWig"
       }
      ],
      "go": {
@@ -4504,6 +4536,23 @@
        },
        "pre": [{"item": "Rope", "at": [3099, 3259, 0], "t": "Buy Rope from Ned in Draynor Village", "npc": "Ned"}, {"item": "Pink skirt", "at": [3206, 3416, 0], "t": "Buy a Pink skirt from Thessalia in Varrock", "npc": "Thessalia"}, {"item": "Paste", "at": [3086, 3259, 0], "t": "Get Skin paste from Aggie in Draynor Village", "npc": "Aggie"}, {"item": "Bronze key", "at": [3227, 3256, 0], "t": "Make the Bronze key: use the Key print on a furnace with a Bronze bar", "on": ["Furnace"]}],
        "k": "useRopeOnKeli"
+      },
+      {
+       "t": "Dye the wig with yellow dye. Buy a yellow dye with two onions and 5 coins if you still need it from Aggie in Draynor Village.",
+       "s": "Dye the wig yellow (Aggie: 2 onions + 5 gp)",
+       "pre": [
+        {
+         "item": "Yellow dye",
+         "at": [
+          3086,
+          3259,
+          0
+         ],
+         "t": "Get Yellow dye from Aggie (2 Onions and 5 coins)",
+         "npc": "Aggie"
+        }
+       ],
+       "k": "dyeWig"
       }
      ],
      "go": {
@@ -4554,6 +4603,23 @@
         ]
        },
        "k": "talkToAli"
+      },
+      {
+       "t": "Dye the wig with yellow dye. Buy a yellow dye with two onions and 5 coins if you still need it from Aggie in Draynor Village.",
+       "s": "Dye the wig yellow (Aggie: 2 onions + 5 gp)",
+       "pre": [
+        {
+         "item": "Yellow dye",
+         "at": [
+          3086,
+          3259,
+          0
+         ],
+         "t": "Get Yellow dye from Aggie (2 Onions and 5 coins)",
+         "npc": "Aggie"
+        }
+       ],
+       "k": "dyeWig"
       }
      ],
      "go": {
@@ -5026,6 +5092,36 @@
         ]
        },
        "k": "talkToOddenstein"
+      },
+      {
+       "t": "A lever is in the wrong position: pull up lever C.",
+       "s": "Reset: pull up lever C",
+       "at": [
+        3112,
+        9760,
+        0
+       ],
+       "hl": {
+        "obj": [
+         148
+        ]
+       },
+       "k": "pullUpLeverC"
+      },
+      {
+       "t": "A lever is in the wrong position: pull up lever D.",
+       "s": "Reset: pull up lever D",
+       "at": [
+        3108,
+        9767,
+        0
+       ],
+       "hl": {
+        "obj": [
+         149
+        ]
+       },
+       "k": "pullUpLeverD"
       }
      ],
      "go": {
@@ -5385,6 +5481,36 @@
         ]
        },
        "k": "talkToOddenteinAgain"
+      },
+      {
+       "t": "A lever is in the wrong position: pull up lever C.",
+       "s": "Reset: pull up lever C",
+       "at": [
+        3112,
+        9760,
+        0
+       ],
+       "hl": {
+        "obj": [
+         148
+        ]
+       },
+       "k": "pullUpLeverC"
+      },
+      {
+       "t": "A lever is in the wrong position: pull up lever D.",
+       "s": "Reset: pull up lever D",
+       "at": [
+        3108,
+        9767,
+        0
+       ],
+       "hl": {
+        "obj": [
+         149
+        ]
+       },
+       "k": "pullUpLeverD"
       }
      ],
      "go": {
@@ -12951,6 +13077,21 @@
         ]
        },
        "k": "enterZanaris"
+      },
+      {
+       "t": "Lost the Dramen branch or staff? Go back to Entrana, climb down the ladder and cut another. The Tree Spirit does not have to be fought again.",
+       "s": "Lost the branch? Back to Entrana for another",
+       "at": [
+        2820,
+        3374,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2408
+        ]
+       },
+       "k": "getAnotherBranch"
       }
      ],
      "go": {
@@ -14481,6 +14622,16 @@
         ]
        },
        "k": "useBarOnFlame"
+      },
+      {
+       "t": "Use the ball of wool on the unstrung amulet.",
+       "s": "String the amulet with the ball of wool",
+       "hl": {
+        "item": [
+         "Ball of wool"
+        ]
+       },
+       "k": "useWool"
       },
       {
        "t": "Climb the rope out. If you plan on doing Recipe for Disaster, also kill a Zombie Monkey for its bones whilst here, and a gorilla upstairs.",

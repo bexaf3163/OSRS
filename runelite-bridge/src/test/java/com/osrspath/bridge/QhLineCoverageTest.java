@@ -133,10 +133,9 @@ public class QhLineCoverageTest
 			}
 		}
 		assertTrue("moving steps were checked: " + checked, checked > 20);
-		// Known: the Watchtower's travel legs to the Black demon and back; its stage lines are the fight and the king, no neighbour is a place to show.
+		// Known: The Grand Tree's way back into the tunnels after the fight (stage 150 lines are the daconia rock and the king); the arrow reaches the king through a way in (QuestWalkTest).
 		// The place-and-items logic decides there. A new name in this list is a gap to close, not a thing to add here.
 		assertEquals("moving steps with no line to show", new TreeSet<String>(Arrays.asList(
-			"S7-05@130 climbUpToGloughForWatchtower", "S7-05@130 climbUpToWatchtower", "S7-05@150 climbDownTrapDoorAfterFight",
-			"S7-05@150 climbUpToGloughForWatchtower", "S7-05@150 climbUpToWatchtower")), unmapped);
+			"S7-05@150 climbDownTrapDoorAfterFight", "S7-05@150 climbUpToWatchtower")), unmapped);
 	}
 }

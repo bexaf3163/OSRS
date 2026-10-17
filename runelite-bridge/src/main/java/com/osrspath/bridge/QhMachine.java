@@ -187,19 +187,23 @@ final class QhMachine
 		}
 	}
 
-	/** Every leaf the machine can pick for a quest variable value, with the path to it (outer step names first). For the coverage test. */
+	/**
+	 * Every leaf the machine can pick with a met condition for a quest variable value, with the path to it (outer step names first). For the
+	 * coverage tests. As the machine runs: a condition it cannot read (Quest Helper's settings, an item on the ground) stops the list there, so the
+	 * entries after it and the default are never picked; a leaf reached only through defaults is not a pick (the old logic decides).
+	 */
 	List<List<String>> leafPaths(int varValue)
 	{
 		List<List<String>> out = new ArrayList<>();
 		JsonElement root = stages.get(String.valueOf(varValue));
 		if (root != null)
 		{
-			walkLeaves(root, new ArrayList<String>(), out, 0);
+			walkLeaves(root, new ArrayList<String>(), out, 0, false);
 		}
 		return out;
 	}
 
-	private void walkLeaves(JsonElement ref, List<String> path, List<List<String>> out, int depth)
+	private void walkLeaves(JsonElement ref, List<String> path, List<List<String>> out, int depth, boolean strong)
 	{
 		if (depth > 40)
 		{
@@ -213,21 +217,101 @@ final class QhMachine
 		}
 		if (n.has("s"))
 		{
-			here.add(n.get("s").getAsString());
-			out.add(here);
+			if (strong)
+			{
+				here.add(n.get("s").getAsString());
+				out.add(here);
+			}
 			return;
 		}
 		if (n.has("c"))
 		{
 			for (JsonElement entry : n.getAsJsonArray("c"))
 			{
-				walkLeaves(entry.getAsJsonArray().get(1), here, out, depth + 1);
+				JsonArray pair = entry.getAsJsonArray();
+				JsonElement cond = pair.get(0);
+				if (directlyUnreadable(cond))
+				{
+					// The machine stops here: "does not decide".
+					return;
+				}
+				// An "and" with an unreadable part is never true (false or unknown): its step is never picked, but the next entries may be.
+				if (!(isAnd(cond) && unreadable(cond, 0)))
+				{
+					walkLeaves(pair.get(1), here, out, depth + 1, true);
+				}
 			}
 		}
 		if (n.has("d"))
 		{
-			walkLeaves(n.get("d"), here, out, depth + 1);
+			walkLeaves(n.get("d"), here, out, depth + 1, strong);
 		}
+	}
+
+	private JsonObject condObject(JsonElement cond)
+	{
+		if (cond == null)
+		{
+			return null;
+		}
+		if (cond.isJsonPrimitive())
+		{
+			return reqs.getAsJsonObject(cond.getAsString());
+		}
+		return cond.isJsonObject() ? cond.getAsJsonObject() : null;
+	}
+
+	private boolean directlyUnreadable(JsonElement cond)
+	{
+		JsonObject o = condObject(cond);
+		return o == null || o.has("o") && "?".equals(o.get("o").getAsString());
+	}
+
+	private boolean isAnd(JsonElement cond)
+	{
+		JsonObject o = condObject(cond);
+		return o != null && o.has("o") && ("and".equals(o.get("o").getAsString()) || "nand".equals(o.get("o").getAsString()));
+	}
+
+	/** A condition the plugin cannot read ("o": "?"), directly or inside "and"/"or"/"nand". */
+	private boolean unreadable(JsonElement cond, int depth)
+	{
+		if (cond == null || depth > 20)
+		{
+			return false;
+		}
+		JsonObject o;
+		if (cond.isJsonPrimitive())
+		{
+			o = reqs.getAsJsonObject(cond.getAsString());
+		}
+		else if (cond.isJsonObject())
+		{
+			o = cond.getAsJsonObject();
+		}
+		else
+		{
+			return false;
+		}
+		if (o == null)
+		{
+			return true;
+		}
+		if (o.has("o") && "?".equals(o.get("o").getAsString()))
+		{
+			return true;
+		}
+		if (o.has("a") && o.get("a").isJsonArray())
+		{
+			for (JsonElement x : o.getAsJsonArray("a"))
+			{
+				if (unreadable(x, depth + 1))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/** The names of stages' variable values this machine has. */

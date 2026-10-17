@@ -58,11 +58,20 @@ processResources {
 	from('../src/data/questMachines.json') {
 		into 'com/osrspath/bridge'
 	}
+	// The ways in and out of dungeons and areas (built from the Shortest Path plugin's table, src/data/portals.json) and the tile of every Quest Helper step
+	// (tests/fixtures/qh-steps.json): the arrow points at the hole or the ladder, not at a cave the player's map does not have.
+	from('../src/data/portals.json') {
+		into 'com/osrspath/bridge'
+	}
+	from('../tests/fixtures/qh-steps.json') {
+		into 'com/osrspath/bridge'
+	}
 }
 
 // The tests read the app's route to check quest names and message patterns.
 test {
 	systemProperty 'osrsPath.steps', file('../src/data/steps.json').absolutePath
+	systemProperty 'osrsPath.stages', file('../src/data/questStages.json').absolutePath
 	// RuneLite fonts (FontManager) create the ~/.runelite/fonts folder on loading: in tests it is a separate one,
 	// the player's real RuneLite folder is not touched. Pictures are drawn without a window.
 	systemProperty 'user.home', layout.buildDirectory.dir('test-home').get().asFile.absolutePath
