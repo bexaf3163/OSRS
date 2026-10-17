@@ -1,6 +1,7 @@
 // The "Goals" screen: the levels for each stage.
 import { BASE_QP, goals, levelById } from '../data';
 import { useStore } from '../store';
+import { useQuestPoints } from '../lib/useQuestPoints';
 import { currentStage } from '../lib/next-step';
 import { isReached } from '../lib/goals';
 import { levelOf } from '../lib/progress';
@@ -33,7 +34,8 @@ function RelevantNow({ stage }: { stage: number }) {
 }
 
 export function GoalsPage({ embedded = false }: { embedded?: boolean } = {}) {
-  const { progress, qp, steps, stages } = useStore();
+  const { progress, steps, stages } = useStore();
+  const qp = useQuestPoints();
   const stage = currentStage(steps, progress);
   const shown = stages.map((s) => s.id);
   const hasOptional = goals.rows.some((r) => r.values.some((v, i) => v.kind === 'optional' && shown.includes(i + 1)));
@@ -120,7 +122,7 @@ export function GoalsPage({ embedded = false }: { embedded?: boolean } = {}) {
         <p className="muted small">* The points goal is lowered by the points of a skipped optional quest.</p>
       )}
       {goals.note && <p className="muted">{goals.note}</p>}
-      <p className="muted small">Quest points are counted from the route steps of your mode. The levels are what the route itself gives by the end of each stage.</p>
+      <p className="muted small">Your quest points are the game's own count while it is connected, else counted from the route steps of your mode; the stage targets come from the route. The levels are what the route itself gives by the end of each stage.</p>
       <p className="muted small">A goal like "20–25" counts as reached from the lower bound: the upper number is what the likely extras reach. Levels are entered on the "Skills" tab or right in the steps.</p>
       <SplitsCard />
     </div>

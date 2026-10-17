@@ -2,6 +2,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { known } from '../data';
 import { useStore } from '../store';
+import { useQuestPoints } from '../lib/useQuestPoints';
 import { exportFileName, exportProgress, importProgress, type ImportResult } from '../lib/progress';
 import { applyTheme, loadTheme, type Theme } from '../lib/theme';
 import { applyLook, applySolid, loadLook, loadSolid, type Look } from '../lib/look';
@@ -44,7 +45,8 @@ function download(name: string, text: string) {
 }
 
 export function SettingsPage() {
-  const { progress, replace, reset, steps, qp } = useStore();
+  const { progress, replace, reset, steps } = useStore();
+  const qp = useQuestPoints();
   const { activeStepId } = useBridge();
   const previewStep = steps.find(step => step.id === activeStepId) ?? nextStep(steps, progress, qp);
   const [pending, setPending] = useState<Extract<ImportResult, { ok: true }> | null>(null);

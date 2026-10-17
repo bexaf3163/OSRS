@@ -312,7 +312,8 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
           <ul className="drop-list">
             {item.dropSources.map((d) => (
               <li key={d.monster}>
-                <span>{d.monster}</span>
+                {/* "Scurrius#non-MVP": the wiki's drop table anchor reads as a note. */}
+                <span>{d.monster.replace(/#(.+)$/, ' ($1)')}</span>
                 <span className="muted">{d.combatLevel !== null ? `lvl ${d.combatLevel}` : ''}</span>
                 <span className="drop-rate">{d.rate}</span>
               </li>

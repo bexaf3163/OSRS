@@ -689,3 +689,29 @@ the game, (4) readiness and shopping integration, (5) desktop simplification, (6
   character, so the minotaur and Guardian cards cannot be shown live.
 - Known, not changed: the Journal's quest list scrolls inside its box while the page also scrolls about 140 px (all scales, as before). Full-page
   screenshots show the sticky sidebar ending at the first screen (a screenshot effect, not the app).
+
+## 2.63.2 — the live check (2026-10-18)
+
+- Owner's request: update everything and check the app and the plugin live. Computer-use control of the app window was declined, so the
+  update was done like the updater does it. The v2.63.1 asset was downloaded to an empty folder and its size and sha256 checked against the
+  release digest. The data was backed up to `Downloads\OSRS-Put-data-backup-2.59.0-before-2.63.1-20261018`, the old app closed (`CloseMainWindow`),
+  and the new exe started (`sweepOld` removed 2.59.0). RuneLite was closed while logged out and relaunched with "Launch RuneLite with the
+  bridge" (plugin 2.63.1, bridge up in ~9 s). Login was on World 316, no credentials. The app was driven over CDP (`--remote-debugging-port=9333`)
+  with DOM clicks: Playwright's mouse click hangs on that window, and `Page.captureScreenshot` hangs while it is covered.
+- Found live and fixed:
+  - Cleanup offered the active quest's relic (Ogre artefact) as "untradeable, no use ahead". New `lib/questItems.ts` reads the item
+    requirements of `questMachines.json` (43 item checks in 28 quests). `cleanupAdvice` keeps an item an open step's quest checks for, when no
+    shopping line names it.
+  - The same blind spot in the Preparation drawer: `bagCleanup` (now given `plan.stepIds`, skips `questUsing` items; potions joined
+    `KEEP`) and the weight advice (`prepPlan` adds `questItemKeys(window)` to `needed`).
+  - `sourceRouter`: a drop label drops the wiki anchor ("Scurrius#non-MVP" -> "Scurrius"); `WikiDrawer` shows it as a note.
+  - QP 41 in the app vs 40 in the game: S3-05 Shield of Arrav (optional, cannot be finished alone) is marked done. `lib/useQuestPoints.ts`
+    (game's `questPoints` while connected, else `store.qp`) is now used by all 11 places that showed or checked `qp`. The journal adds "not
+    finished in the game" from `questsDone`.
+  - `StepMap`: mid-quest, the live arrow target (not `step`/`branch`, not instanced, not one of the places) is the first point, "Now: …", and
+    chosen until the player picks another. The selection is keyed by place, not index.
+  - `overviewOf`: a line equal to the previous one is merged (`also`), and `overviewCurrent` matches either.
+- Checked and fine: plugin compatibility with RuneLite 1.13.1 (261 references); RuneLite logs (only World Hopper ping and NpcAggroArea
+  login warnings, RuneLite's own); all app pages with live data (no console errors, no overflow); the in-game Advice tab (readiness: bank
+  last seen 2 days ago).
+- Not checkable here: the bank card and the shop/exchange cards (Corsair Cove has no bank until the quest is done); the pre-entry guards.

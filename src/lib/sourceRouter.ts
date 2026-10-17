@@ -125,7 +125,8 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
   for (const sh of shops.slice(1, 2)) out.push(sh);
   if (d?.dropSources?.length) {
     const top = d.dropSources[0];
-    out.push({ kind: 'drop', label: `Dropped by ${top.monster}`, note: top.rate });
+    // The wiki names some drop tables with an anchor ("Scurrius#non-MVP"): the monster is the part before it.
+    out.push({ kind: 'drop', label: `Dropped by ${top.monster.replace(/#.*/, '')}`, note: top.rate });
   }
   // First the free and the already owned, the rest in the found order.
   // "Free nearby" is no farther than FREE_NEAR tiles; farther, the free one goes on a par with the shop and the exchange.

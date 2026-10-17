@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import type { Step } from '../types';
 import { useStore } from '../store';
+import { useQuestPoints } from '../lib/useQuestPoints';
 import { blockerParts, blockersOf, isClosed } from '../lib/next-step';
 import { overviewCurrent, overviewOf } from '../lib/subStep';
 import { IconLock } from './Icons';
@@ -44,7 +45,8 @@ function Next({ step }: { step: Step }) {
 export function CompanionStrip({ step, suggested, onDone, nextId, onSelect }: {
   step: Step; suggested: boolean; onDone: (id: string) => void; nextId?: string; onSelect: (id: string) => void;
 }) {
-  const { progress, qp, steps } = useStore();
+  const { progress, steps } = useStore();
+  const qp = useQuestPoints();
   const [tab, setTab] = useState<Tab>('now');
   const closed = isClosed(progress, step.id);
   const blockers = closed ? null : blockersOf(step, progress, qp);

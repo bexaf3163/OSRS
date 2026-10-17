@@ -4,6 +4,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { stepById } from '../data';
 import { useStore } from '../store';
+import { useQuestPoints } from '../lib/useQuestPoints';
 import { useBridge } from '../bridge';
 import { firstOpen, nextStep, openAfter } from '../lib/next-step';
 import { IconChevron } from '../components/Icons';
@@ -13,7 +14,8 @@ import { Welcome } from '../components/Welcome';
 import { TrackedSkillCard } from '../components/TrackedSkillCard';
 
 export function PathCompact({ focusStep }: { focusStep?: string }) {
-  const { progress, qp, steps, setStep } = useStore();
+  const { progress, steps, setStep } = useStore();
+  const qp = useQuestPoints();
   const { advance } = useBridge();
   const suggested = nextStep(steps, progress, qp) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
   const [selectedId, setSelectedId] = useState(() => focusStep ?? suggested.id);

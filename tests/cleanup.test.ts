@@ -265,3 +265,18 @@ describe('verified drop table', () => {
     expect(r.keeps.some((k) => k.name === 'Research package')).toBe(true);
   });
 });
+
+describe('quest items the quest itself checks for', () => {
+  it('the relic an open quest hands over is kept, though no list names it and it cannot be traded', () => {
+    const r = cleanupAdvice(input({ openSteps: open('S4-01'), tradeable: () => false, bag: [{ id: 21837, name: 'Ogre artefact', count: 1 }] }));
+    expect(r.recs).toEqual([]);
+    expect(by(r, 'Ogre artefact')[0]?.reason).toBe('A quest item: The Corsair Curse checks for it, and that quest is still open.');
+  });
+
+  it('is matched by id as well as by name, and is judged as before once its quest is closed', () => {
+    const byId = cleanupAdvice(input({ openSteps: open('S4-01'), tradeable: () => false, bag: [{ id: 21837, name: 'Relic', count: 1 }] }));
+    expect(byId.recs).toEqual([]);
+    const closed = cleanupAdvice(input({ openSteps: open('S4-02'), tradeable: () => false, bag: [{ id: 21837, name: 'Ogre artefact', count: 1 }] }));
+    expect(closed.recs.map((x) => x.action)).toEqual(['review']);
+  });
+});

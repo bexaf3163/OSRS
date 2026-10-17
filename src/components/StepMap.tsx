@@ -20,17 +20,29 @@ const PREVIEW_H = 132;
 /** The marker at 42% of the height — like .map-marker in the styles. */
 const ANCHOR_Y = 0.42;
 
+/** A map point; `now` marks the game's current target for this step. */
+type Spot = MapLocation & { now?: boolean };
+const spotKey = (p: MapLocation) => `${p.x},${p.y},${p.plane}`;
+
 export function StepMap({ step }: { step: Step }) {
   // The step map points, where items and quest NPCs are — the same places as in the "What you need" list in the game.
-  const points = mapPlaces(step);
-  const [active, setActive] = useState(() => initialPoint(step));
+  const places = mapPlaces(step);
+  // The point the player picked, by place: the list can gain the game's current target while the card is open.
+  const [chosen, setChosen] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [zoomed, setZoomed] = useState(false);
   const { navTarget, activeStepId, branchChoice } = useBridge();
   const branch = step.branches?.find((b) => b.id === branchChoice[step.id]);
   const { prep } = usePrep();
   const arrow = navigationTarget(step, { branch, navTarget, activeStepId, detourActive: prep.stack.some((f) => f.sourceStepId === step.id) });
+  // Mid-quest the game's arrow leads past the step's own places (a quest's are where it starts): that target comes first and is
+  // chosen until the player picks another point, so "Where" and "Lead here" agree with the arrow.
+  const live: Spot | null = arrow && activeStepId === step.id && arrow.source !== 'step' && arrow.source !== 'branch' && !arrow.instanced
+    && !places.some((p) => spotKey(p) === spotKey(arrow)) ? { label: arrow.label, x: arrow.x, y: arrow.y, plane: arrow.plane, now: true } : null;
+  const points: Spot[] = live ? [live, ...places] : places;
   if (!points.length) return null;
+  const picked = chosen ? points.findIndex((p) => spotKey(p) === chosen) : -1;
+  const active = picked >= 0 ? picked : live ? 0 : initialPoint(step);
   const point = points[Math.min(active, points.length - 1)];
 
   return (
@@ -39,8 +51,8 @@ export function StepMap({ step }: { step: Step }) {
         <div className="spot-switch" role="radiogroup" aria-label="Points on the map">
           {points.map((p, i) => (
             <button key={`${p.x},${p.y},${p.plane}`} type="button" role="radio" aria-checked={i === active}
-              className={`spot-chip ${i === active ? 'is-active' : ''}`} onClick={() => setActive(i)}>
-              📍 {p.label}
+              className={`spot-chip ${i === active ? 'is-active' : ''}`} onClick={() => setChosen(spotKey(p))}>
+              {p.now ? '🧭 Now: ' : '📍 '}{p.label}
             </button>
           ))}
         </div>
@@ -69,7 +81,7 @@ export function StepMap({ step }: { step: Step }) {
       )}
       {open && (
         <Suspense fallback={null}>
-          <WorldMapModal title={`${step.id} · ${step.title}`} points={points} active={active} onActive={setActive}
+          <WorldMapModal title={`${step.id} · ${step.title}`} points={points} active={active} onActive={(i) => setChosen(spotKey(points[i]))}
             arrow={arrow?.instanced ? null : arrow} arrowLive={activeStepId === step.id} wikiUrl={step.mapUrl} onClose={() => setOpen(false)} />
         </Suspense>
       )}
@@ -77,17 +89,17 @@ export function StepMap({ step }: { step: Step }) {
   );
 }
 
-function MapCaption({ point }: { point: MapLocation }) {
+function MapCaption({ point }: { point: Spot }) {
   return (
     <span className="map-caption">
-      <span className="map-caption-label">📍 {point.label}</span>
+      <span className="map-caption-label">{point.now ? '🧭 Now: ' : '📍 '}{point.label}</span>
       <span className="map-caption-floor">{isUnderground(point) ? 'Underground' : floorLabel(point.plane)}</span>
     </span>
   );
 }
 
 /** A static preview: several tiles around the point and a visible marker in the centre. */
-function MapPreview({ point, onOpen }: { point: MapLocation; onOpen: () => void }) {
+function MapPreview({ point, onOpen }: { point: Spot; onOpen: () => void }) {
   const zoom = point.zoom ?? DEFAULT_ZOOM;
   const tiles = tilesAround(point, zoom, PREVIEW_W, PREVIEW_H, ANCHOR_Y);
   const key = `${point.x},${point.y},${point.plane},${zoom}`;

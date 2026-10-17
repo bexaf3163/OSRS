@@ -214,7 +214,7 @@ export function OneTripCard({ step, inStatus = false, plain = false }: { step: S
         <details className="small prep-cleanup" open={cleanup.tight}>
           <summary className="muted">🧹 Bag cleanup: {cleanup.items.length} {cleanup.items.length === 1 ? 'thing' : 'things'} could stay in the bank, freeing ~{cleanup.slotsFreed} {cleanup.slotsFreed === 1 ? 'slot' : 'slots'}{cleanup.tight ? ' (the bag is tight)' : ''}</summary>
           <ul>{cleanup.items.map((i) => <li key={i.name}>{cleanupLine(i)}</li>)}</ul>
-          <p className="muted">Not asked for by this step or the nearest ones. Money, food, runes, staffs, teleports and jewellery are never listed.</p>
+          <p className="muted">Not asked for by this step or the nearest ones. Money, food, potions, runes, staffs, teleports and jewellery are never listed.</p>
         </details>
       )}
       {plan.have.length > 0 && (

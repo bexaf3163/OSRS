@@ -4,6 +4,7 @@
 import { createContext, useContext, useMemo, type ReactNode } from 'react';
 import type { Step } from './types';
 import { useStore } from './store';
+import { useQuestPoints } from './lib/useQuestPoints';
 import { usePlayerState } from './playerStateContext';
 import { createReadinessEngine, type ReadinessEngine } from './lib/readinessEngine';
 import type { StepReadiness } from './lib/readiness';
@@ -13,7 +14,8 @@ const Ctx = createContext<ReadinessEngine | null>(null);
 const RecoveryCtx = createContext<{ active: ActiveRecovery | null; dismiss: () => void }>({ active: null, dismiss: () => {} });
 
 export function ReadinessProvider({ children }: { children: ReactNode }) {
-  const { progress, qp, mode, steps } = useStore();
+  const { progress, mode, steps } = useStore();
+  const qp = useQuestPoints();
   const { state } = usePlayerState();
   const recovery = useRecoveryTracker();
   const engine = useMemo(

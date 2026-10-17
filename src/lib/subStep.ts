@@ -195,6 +195,8 @@ export interface OverviewLine {
   /** Index of the line inside its stage; with stageAt it identifies a SubStep. */
   index: number;
   hasTarget: boolean;
+  /** The next stages' lines that repeat this one word for word (talk to him again to go on): one line for the player, any of them is it. */
+  also?: { stageAt: number; index: number }[];
 }
 
 /** The whole canonical walkthrough as one ordered list (stages by their quest value, lines in Quest Helper order). Empty without stage data. */
@@ -204,7 +206,14 @@ export function overviewOf(step: Step): OverviewLine[] {
   const out: OverviewLine[] = [];
   for (const stage of [...qs.stages].sort((a, b) => a.at - b.at)) {
     stage.do.forEach((line, i) => {
-      out.push({ n: out.length + 1, title: titleOf(line), stageAt: stage.at, index: i, hasTarget: !!line.at });
+      const title = titleOf(line);
+      const prev = out[out.length - 1];
+      if (prev && prev.title === title) {
+        (prev.also ??= []).push({ stageAt: stage.at, index: i });
+        prev.hasTarget ||= !!line.at;
+        return;
+      }
+      out.push({ n: out.length + 1, title, stageAt: stage.at, index: i, hasTarget: !!line.at });
     });
   }
   return out;
@@ -213,6 +222,7 @@ export function overviewOf(step: Step): OverviewLine[] {
 /** Which overview line the live sub-step is, or null. */
 export function overviewCurrent(lines: OverviewLine[], sub: SubStep | null): number | null {
   if (!sub) return null;
-  const hit = lines.find((l) => l.stageAt === sub.stage.at && l.index === sub.index - 1);
+  const is = (l: { stageAt: number; index: number }) => l.stageAt === sub.stage.at && l.index === sub.index - 1;
+  const hit = lines.find((l) => is(l) || l.also?.some(is));
   return hit ? hit.n : null;
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { stepById } from '../src/data';
-import { actionOf, alternativeAt, dialogueOf, findSubStep, instructionSubStep, itemStatus, subStepItems, subStepNpcInfo } from '../src/lib/subStep';
+import { actionOf, alternativeAt, dialogueOf, findSubStep, instructionSubStep, itemStatus, overviewCurrent, overviewOf, subStepItems, subStepNpcInfo, type SubStep } from '../src/lib/subStep';
 import type { NavTargetPayload } from '../src/services/runeliteBridge';
 
 const ali = stepById.get('S2-10')!;
@@ -99,5 +99,18 @@ describe('an alternative in the current action', () => {
       }
     }
     expect(cut).toEqual([]);
+  });
+});
+
+describe('quest overview lines', () => {
+  it('a stage that repeats the line before it word for word is one line, and the live sub-step on either finds it', () => {
+    const step = stepById.get('S4-01')!;
+    const lines = overviewOf(step);
+    expect(lines.some((l, i) => i > 0 && l.title === lines[i - 1].title)).toBe(false);
+    const merged = lines.find((l) => l.also?.length)!;
+    expect(merged).toBeDefined();
+    const [again] = merged.also!;
+    const sub = { stage: { at: again.stageAt }, index: again.index + 1 } as unknown as SubStep;
+    expect(overviewCurrent(lines, sub)).toBe(merged.n);
   });
 });

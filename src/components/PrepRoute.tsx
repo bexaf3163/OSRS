@@ -7,6 +7,7 @@
 import { useEffect, useRef } from 'react';
 import type { Step } from '../types';
 import { useStore } from '../store';
+import { useQuestPoints } from '../lib/useQuestPoints';
 import { useBridge } from '../bridge';
 import type { ReadinessAction } from '../lib/readiness';
 import { navKeyOf, reconcile, staleArrows, startDetour, type PrepTask } from '../lib/prepRoute';
@@ -182,7 +183,8 @@ export function PrepWatcher() {
 export function PrepAuto() {
   const features = useFeatures();
   const profile = styleOf(features);
-  const { steps, progress, qp, notify } = useStore();
+  const { steps, progress, notify } = useStore();
+  const qp = useQuestPoints();
   const { activeStepId, navTarget, navigate, state: link, userClearedAt } = useBridge();
   const engine = useReadinessEngine();
   const { prep, set } = usePrep();

@@ -2,7 +2,9 @@
 import { useState } from 'react';
 import type { Progress, Quest } from '../types';
 import { allQuests, BASE_QP, BASE_QUEST, stepById } from '../data';
+import { useBridge } from '../bridge';
 import { useStore } from '../store';
+import { useQuestPoints } from '../lib/useQuestPoints';
 import { blockerParts, blockersOf, isClosed } from '../lib/next-step';
 import { IconCheck, IconChevron, IconLock, TypeIcon } from '../components/Icons';
 import { ItemIcon } from '../components/WikiDrawer';
@@ -41,9 +43,15 @@ function questRow(q: Quest, p: Progress, qp: number): Row {
 }
 
 const matches = (f: Filter, s: Status) => f === 'all' || f === s || (f === 'done' && s === 'skipped');
+const questKey = (title: string) => title.trim().toLowerCase().replace(/[’`]/g, "'");
 
 export function QuestsPage({ embedded = false }: { embedded?: boolean } = {}) {
-  const { progress, qp, mode } = useStore();
+  const { progress, mode } = useStore();
+  const qp = useQuestPoints();
+  const { questsDone } = useBridge();
+  // Marked done here but not finished in the game (an optional quest that cannot be finished alone): said, and not in the game's points.
+  const gameDone = questsDone ? new Set(questsDone.map(questKey)) : null;
+  const notInGame = (r: Row) => r.status === 'done' && gameDone !== null && !gameDone.has(questKey(r.quest.title));
   const [filter, setFilter] = useState<Filter>('all');
   const [selectedId, setSelectedId] = useState<string>();
   const rows = allQuests.filter((q) => mode === 'members' || !q.membersOnly).map((q) => questRow(q, progress, qp));
@@ -95,6 +103,7 @@ export function QuestsPage({ embedded = false }: { embedded?: boolean } = {}) {
                   {r.quest.parts.length > 0 && ` · steps ${r.partsDone} / ${r.quest.parts.length}`}
                   {' · '}
                   <span className="quest-state">{{ done: 'done', skipped: 'skipped', available: 'available', blocked: 'blocked' }[r.status]}</span>
+                  {notInGame(r) && ' · not finished in the game'}
                 </span>
                 {r.blocked && <span className="quest-blocked">First: {r.blocked}</span>}
               </span>
@@ -107,6 +116,7 @@ export function QuestsPage({ embedded = false }: { embedded?: boolean } = {}) {
         <div className="quest-preview-heading"><TypeIcon type="quest" /><h2>{selected.quest.title}</h2></div>
         <p className="muted">Stage {selected.quest.stage} · {selected.status}</p>
         {selected.quest.qp > 0 && <p className="badge badge-qp">+{selected.quest.qp} quest points</p>}
+        {notInGame(selected) && <p className="notice">Marked done here, but the game does not count it as finished: its quest points are not in your total.</p>}
         {selected.quest.parts.length > 0 && <p>{selected.partsDone} / {selected.quest.parts.length} route steps completed</p>}
         {selected.blocked && <p className="notice">First: {selected.blocked}</p>}
         <a className="btn btn-primary" href={selected.href}>View route <IconChevron /></a>

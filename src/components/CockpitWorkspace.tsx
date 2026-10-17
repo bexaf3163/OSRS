@@ -5,6 +5,7 @@
 import { useEffect, useState } from 'react';
 import type { Step } from '../types';
 import { useStore } from '../store';
+import { useQuestPoints } from '../lib/useQuestPoints';
 import { useBridge } from '../bridge';
 import { useReadinessEngine } from '../readinessContext';
 import { blockerParts, blockersOf, isClosed } from '../lib/next-step';
@@ -29,7 +30,8 @@ const VIEWS: { id: View; title: string; key: string }[] = [
 ];
 
 export function CockpitWorkspace({ step, suggested, onDone, nextId }: { step: Step; suggested: boolean; onDone: (id: string) => void; nextId?: string }) {
-  const { progress, qp } = useStore();
+  const { progress } = useStore();
+  const qp = useQuestPoints();
   const { questInstruction, state, inGame, activeStepId } = useBridge();
   const recovery = useReadinessEngine().plan(step, { ahead: 0 }).recovery;
   const [view, setView] = useState<View | null>(null);

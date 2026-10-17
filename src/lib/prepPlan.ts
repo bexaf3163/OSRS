@@ -24,6 +24,7 @@ import { tripWindow, type OneTripPlan } from './oneTrip';
 import { preflightItems } from './checklist';
 import { weightAdvice, type WeightAdvice } from './weight';
 import { carryoverOf } from './carryover';
+import { questItemKeys } from './questItems';
 import { recoverySteps, type Recovery, type RecoveryStep } from './recovery';
 
 /** Critical: the step cannot be done without it; important: better to prepare before leaving; an improvement saves time or money; optional is a convenience. */
@@ -444,8 +445,9 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   const needed = new Set<string>();
   for (const l of lines) needed.add(l.name);
   for (const w of window) for (const it of [...(w.itemsRequired ?? []), ...(w.itemsRecommended ?? [])]) needed.add(it.nameEn);
-  // What a step keeps for a later one is not "extra" whatever the bag says.
+  // What a step keeps for a later one is not "extra" whatever the bag says, nor what the window's quests check for themselves.
   for (const w of window) for (const c of carryoverOf(w)) needed.add(c.item);
+  for (const k of questItemKeys(window)) needed.add(k);
   const advice = weightAdvice(step, state, needed, window);
   const bank = nearestBank(step);
   const weight: PrepPlan['weight'] = {

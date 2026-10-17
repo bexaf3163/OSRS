@@ -6,6 +6,7 @@ import { createPortal } from 'react-dom';
 import type { Step } from '../types';
 import { stepById } from '../data';
 import { useStore } from '../store';
+import { useQuestPoints } from '../lib/useQuestPoints';
 import { blockersOf, currentStage, firstOpen, isClosed, nextStep, openAfter } from '../lib/next-step';
 import { useBridge } from '../bridge';
 import { flashDone } from '../lib/flash';
@@ -24,7 +25,8 @@ import { RouteDrawer } from '../components/RouteDrawer';
 const reduceMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey: number }) {
-  const { progress, qp, maxQp, steps, stages, setStep, review, reactivate } = useStore();
+  const { progress, maxQp, steps, stages, setStep, review, reactivate } = useStore();
+  const qp = useQuestPoints();
   const wide = useMediaQuery(WIDE);
   const [routeOpen, setRouteOpen] = useState(false);
   const [routeSlot, setRouteSlot] = useState<HTMLElement | null>(null);

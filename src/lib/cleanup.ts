@@ -10,6 +10,7 @@
 import type { Step } from '../types';
 import { nameKey } from './checklist';
 import { FOODS } from './foodAdvice';
+import { questUsing } from './questItems';
 import { aggregateShopping, REUSABLE, type ShoppingLine } from './shopping';
 import { isRestrictedItem } from './tradeRestriction';
 
@@ -237,6 +238,12 @@ export function cleanupAdvice(i: CleanupInput): CleanupResult {
         continue;
       }
       if (!need.exact) { keepAll(`Needed for ${stepsPhrase(need.titles)}: the amount depends on you, so nothing is called surplus.`); continue; }
+    }
+
+    // An item the open quest's own steps check for (the relic it hands over, a key): kept while that quest is open, though no list names it.
+    if (!need || need.count <= 0) {
+      const quest = questUsing(i.openSteps, { id: stacks.find((s) => s.id !== undefined)?.id, name });
+      if (quest) { keepAll(`A quest item: ${quest.title} checks for it, and that quest is still open.`); continue; }
     }
 
     // Beyond this point something may be surplus: all of it, or what the route does not ask for.

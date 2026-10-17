@@ -25,6 +25,12 @@ describe('bag cleanup', () => {
       .toEqual(['Iron axe', 'Mithril scimitar', 'Tinderbox']);
   });
 
+  it('what an open quest of the window checks for stays (the relic, the spade, the tinderbox), and potions are never listed', () => {
+    const p = { ...plan([], 1), stepIds: ['S4-01'] };
+    const bag: [string, number][] = [['Ogre artefact', 1], ['Tinderbox', 1], ['Spade', 2], ['Strength potion(2)', 1], ['Mithril scimitar', 1]];
+    expect(bagCleanup(p, state(bag))!.items.map((i) => i.name)).toEqual(['Mithril scimitar']);
+  });
+
   it('money, food, runes, staffs, teleports and jewellery are never listed', () => {
     const keep: [string, number][] = [['Coins', 500], ['Lobster', 4], ['Air rune', 90], ['Staff of fire', 1], ['Varrock teleport', 3], ['Chronicle', 1],
       ['Amulet of glory', 1], ['Ring of dueling', 1], ['Rune pouch', 1], ['Fire cape', 1]];

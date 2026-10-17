@@ -708,6 +708,26 @@ async function run(browser: Browser) {
       await page.context().close();
     }
 
+    // 2.63.2: the live game wins. Mid-quest "Where" starts at the game's current target; the quest points are the game's; a quest marked
+    // done here that the game has not finished is said in the journal.
+    {
+      const { page, errors } = await open(browser, width, {
+        localStorage: { 'osrs-put:active-step': 'S2-10' }, progress: progressBefore('S2-10'),
+        status: { protocol: 6, inGame: true, activeStepId: 'S2-10', questPoints: 3, questsDone: [], stats: {}, coins: 0, bankCoins: 0, equipment: [], inventory: [],
+          navTarget: { label: 'Go down to the test target', x: 3200, y: 3300, plane: 0, stepId: 'S2-10' } },
+      }, '#/step/S2-10');
+      await waitFor(page, '.cockpit-where-card', 5000);
+      const where = await text(page, '.cockpit-where-card');
+      expect(where.includes('Now: Go down to the test target'), 'live: mid-quest "Where" starts at the game\'s current target');
+      await page.evaluate(() => { location.hash = '#/journal'; });
+      await page.waitForTimeout(800);
+      const journal = await text(page, 'main');
+      expect(journal.includes('quest points 3') && journal.includes('not finished in the game'), 'live: the journal counts the game\'s quest points and names a quest the game has not finished');
+      expect(await noOverflow(page), 'live: no horizontal scrolling');
+      expect(!errors.length, `live: no console errors ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
     // The recovery mode: died in a dungeon and respawned in Lumbridge — instead of "kill zombies" a plan "collect the things, go back".
     {
       const { page, errors } = await open(browser, width, {

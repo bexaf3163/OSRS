@@ -2,10 +2,12 @@
 
 import type { CSSProperties } from 'react';
 import { useStore } from '../store';
+import { useQuestPoints } from '../lib/useQuestPoints';
 import { isClosed } from '../lib/next-step';
 
 export function HeaderProgress() {
-  const { progress, steps, qp, maxQp } = useStore();
+  const { progress, steps, maxQp } = useStore();
+  const qp = useQuestPoints();
   const closed = steps.filter((s) => isClosed(progress, s.id)).length;
   const pct = steps.length ? Math.round((closed / steps.length) * 100) : 0;
   return (
