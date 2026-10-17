@@ -10,12 +10,15 @@ import { combatReadiness, type CombatReadiness } from '../lib/combatReadiness';
 import { healsOf } from '../lib/combatEstimate';
 import { GROUP_LABEL, readinessVerdict, type ReadinessVerdict, type ReasonGroup } from '../lib/readinessVerdict';
 import { useCombatPlan } from './CombatPlan';
+import { ownedFood } from '../lib/combatPlan';
+import { estimateStepFights, fightLine } from '../lib/fightEstimate';
+import { foeLabel } from '../lib/combatEstimate';
 import { equippedBySlot, gearData } from '../services/gearAdvisor';
 
 /** The verdict for a step with what the app knows now; recomputed when the plan, the kit or the bank changes. */
 export function useReadinessVerdict(step: Step): { verdict: ReadinessVerdict; combat: CombatReadiness | null } {
   const plan = useReadinessEngine().plan(step, { ahead: 0 });
-  const { state, owned, gear } = useBridge();
+  const { state, owned, gear, stats } = useBridge();
   const view = useCombatPlan(step);
   const connected = state === 'online';
   return useMemo(() => {
@@ -24,8 +27,12 @@ export function useReadinessVerdict(step: Step): { verdict: ReadinessVerdict; co
     const combat = combatReadiness(step, view, gear, owned?.bankSeen === true);
     const w = gear?.equipment ? equippedBySlot(gear, gearData).weapon : undefined;
     const worn = w ? { weapon: w.name, twoHanded: Boolean(w.piece?.twoHanded) } : null;
-    return { verdict: readinessVerdict({ plan, connected, owned, isFood, combat, worn }), combat };
-  }, [step, plan, view, gear, owned, connected]);
+    // A quest fight: one fight with the kit worn now, and the step's food carried, counted by healing.
+    const fights = estimateStepFights(step, stats as Partial<Record<string, number>> | null, gear)
+      .map((f) => ({ line: fightLine(f), foodHigh: f.food.high, foodName: f.foodName, foe: foeLabel(f.foe) }));
+    const carriedFood = ownedFood(step, owned)?.carriedEq ?? null;
+    return { verdict: readinessVerdict({ plan, connected, owned, isFood, combat, worn, fights, carriedFood }), combat };
+  }, [step, plan, view, gear, owned, connected, stats]);
 }
 
 const ORDER: ReasonGroup[] = ['access', 'equipment', 'safety', 'unknown', 'optional'];

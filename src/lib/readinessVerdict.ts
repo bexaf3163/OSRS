@@ -65,6 +65,10 @@ export interface VerdictInput {
   /** Food for this step: its line is judged by healing in the kit check, not by pieces. */
   isFood: (name: string) => boolean;
   combat?: CombatReadiness | null;
+  /** One quest fight each with the player's kit (fightEstimate.ts): its line, and the food it may take at the high end. */
+  fights?: { line: string; foodHigh: number; foodName: string; foe: string }[];
+  /** The step's food carried now, in pieces of that food by healing; null — unknown. */
+  carriedFood?: number | null;
   /** The worn weapon, when known: a two-handed one leaves no room for a shield a safety rule asks to be worn (Elvarg's Anti-dragon shield). */
   worn?: { weapon: string | null; twoHanded: boolean } | null;
   now?: number;
@@ -150,6 +154,11 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
     reasons.push({ group: 'equipment', state: combat.weapon.ok === false ? 'missing' : combat.weapon.ok === null ? 'unknown' : 'ok', text: combat.weapon.text });
     reasons.push({ group: 'safety', state: combat.armour.empty.length ? 'caution' : 'ok', text: combat.armour.text });
     cautions.push(...combat.cautions.filter((c) => c !== combat.weapon.text));
+  }
+  for (const f of i.fights ?? []) {
+    const short = i.carriedFood !== null && i.carriedFood !== undefined && i.carriedFood < f.foodHigh;
+    reasons.push({ group: 'safety', state: short ? 'caution' : 'ok', text: f.line });
+    if (short) cautions.push(`${f.foe} may take up to ${f.foodHigh} ${f.foodName} with your kit (an estimate); you carry ${i.carriedFood}.`);
   }
   for (const l of plan.optimizations.slice(0, 4)) {
     reasons.push({ group: 'optional', state: l.where === 'BANK' ? 'bank' : l.where === 'UNKNOWN' ? 'unknown' : 'missing', text: `${l.name}: ${l.why}${l.action?.label ? ` — ${l.action.label}` : ''}.` });

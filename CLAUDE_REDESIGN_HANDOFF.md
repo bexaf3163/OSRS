@@ -651,3 +651,17 @@ the game, (4) readiness and shopping integration, (5) desktop simplification, (6
   1100 and 390 px). Totals: Vitest 1196, Java 573.
 - Not verified live: the owner's character is past S3-08 and Below Ice Mountain; the cards render in the smoke with the minotaur fixture
   (`readiness-s308-*.png`).
+
+## 2.63.0 — combat estimate group 7: quest fights
+
+- `scripts/build-combat-foes.ts` PAGES += Count Draynor, Ithoi the Navigator, Brutus, Delrith (skipped: no max hit), Elvarg, Melzar the Mad, Lesser
+  demon, Black Knight, Ancient Guardian; rerun 2026-10-17, the existing training versions byte-identical.
+- `src/lib/fightEstimate.ts`: `estimateFight` (one fight, the least-damage melee style; magic attackers against the player's magic defence),
+  `estimateStepFights` (a step's foes and threats, free versions, not paced steps), `OTHER_METHOD` (Lesser demon safespot, Ancient Guardian pillars),
+  `fightLine`. `combatEstimate.ts` now exports `spread` and `swingDamage`.
+- UI: `FoodAdvice` shows `.fight-plan` above the threat list with "How this is worked out". Verdict: `VerdictInput.fights` + `carriedFood` → a safety
+  line per fight and a caution when the carried food (by healing) is below the high end.
+- Not adopted as written (owner's combat brief): S2-01/S3-07 fixed amounts (Strength potion ×5, Salmon ×50, S3-07 Salmon ×40-50, potions ×4). The
+  readiness spec asks for quantities from the activity; the Shopping page already buys the whole-goal food from the personal plan, and the plan says
+  when potions do not help with the player's gear. Recorded in the release notes.
+- Tests: `tests/fightEstimate.test.ts` (7), verdict fight cases (2), UI smoke S2-08 `.fight-plan` at both widths. Vitest 1205.

@@ -591,6 +591,29 @@ async function run(browser: Browser) {
       await page.context().close();
     }
 
+    // 2.63.0: a quest fight with the real kit (S2-08 Count Draynor): how long, how much damage, the food, and how it is worked out.
+    {
+      const equipment = [[1329, 'Mithril scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']]
+        .map(([id, name, slot]) => ({ id, name, slot }));
+      const gear = { equipment, inventory: [{ id: 333, name: 'Trout', count: 5 }], coins: 100, bankCoins: 0 };
+      const stats = { attack: 20, strength: 20, defence: 1, hitpoints: 20 };
+      const { page, errors } = await open(browser, width, {
+        progress: progressBefore('S2-08'),
+        status: { protocol: 5, ...gear, stats, activeStepId: 'S2-08' },
+        events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }],
+      }, '#/step/S2-08');
+      await waitFor(page, '.fight-plan', 8000);
+      const f = await text(page, '.fight-plan');
+      expect(/Count Draynor: about \d+ s on (Accurate|Aggressive|Defensive); you take about \d+ damage/.test(f), `S2-08: the fight with your kit (${f.replace(/\s+/g, ' ').slice(0, 160)})`);
+      await page.locator('.fight-plan summary').click();
+      const d = await text(page, '.fight-plan');
+      expect(d.includes('you hit') && d.includes('No kit guarantees survival'), 'S2-08: how the fight estimate is worked out');
+      if (process.env.UI_SHOTS) await page.locator('.food-advice').screenshot({ path: `${process.env.UI_SHOTS}/fight-s208-${width}.png` }).catch(() => {});
+      expect(await noOverflow(page), 'S2-08: no horizontal scrolling');
+      expect(!errors.length, `S2-08: no console errors ${errors.join('; ')}`);
+      await page.context().close();
+    }
+
     // 2.14: "Where am I? How to get there" — the position from the game, the options to Varrock (S2-05) and their availability.
     {
       const { page, errors } = await open(browser, width, {

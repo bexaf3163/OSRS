@@ -4,6 +4,8 @@ import type { Step } from '../types';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
 import { foodInBag, foodsCovering, threatKeys, THREATS_DATE, viewThreat } from '../lib/foodAdvice';
+import { estimateStepFights, fightLine, OTHER_METHOD } from '../lib/fightEstimate';
+import { COMBAT_FOES_DATE, foeLabel } from '../lib/combatEstimate';
 import { CombatPlan, useCombatPlan } from './CombatPlan';
 
 export function FoodAdvice({ step }: { step: Step }) {
@@ -20,10 +22,35 @@ export function FoodAdvice({ step }: { step: Step }) {
   const bag = foodInBag(gear?.inventory ?? null);
   const covering = foodsCovering(worst);
   const best = bag[0];
+  // One fight with your kit (2.63.0): how long, how much damage, how much food; the fights the route does another way say so.
+  const fights = estimateStepFights(step, stats as Partial<Record<string, number>> | null, gear);
+  const other = keys.filter((k) => OTHER_METHOD[k]);
 
   return (
     <section className="step-section food-advice" aria-label="Food for combat">
       <h4 className="subhead">🍖 Food for combat</h4>
+      {fights.length > 0 && (
+        <div className="fight-plan">
+          <ul className="small">{fights.map((f) => <li key={foeLabel(f.foe)}><strong>{fightLine(f)}</strong></li>)}</ul>
+          <details className="zen-more">
+            <summary className="small">How this is worked out</summary>
+            <ul className="small">
+              {fights.map((f) => (
+                <li key={`d-${foeLabel(f.foe)}`}>
+                  {foeLabel(f.foe)}: you hit {Math.round(f.hitChance * 100)}% of swings for up to {f.maxHit}; it hits you {Math.round(f.foeHitChance * 100)}% of its
+                  swings for up to {f.foe.maxHit}. {f.style[0].toUpperCase() + f.style.slice(1)} is the style that takes the least damage.
+                  {f.assumed.length ? ` Assumed: ${f.assumed.join('; ')}.` : ''}
+                </li>
+              ))}
+            </ul>
+            <p className="small muted">
+              Your levels and worn gear from the game against the wiki stats ({COMBAT_FOES_DATE}), with the combat formulas; one fight at your
+              current levels; the range holds about 9 outcomes in 10. The health above two of its max hits is counted before food. No kit guarantees survival.
+            </p>
+          </details>
+        </div>
+      )}
+      {other.map((k) => <p key={`o-${k}`} className="small">{k}: {OTHER_METHOD[k]}.</p>)}
       <ul className="small">
         {views.map((v) => (
           <li key={v.key}>

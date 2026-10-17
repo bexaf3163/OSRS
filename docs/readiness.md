@@ -1,4 +1,4 @@
-# Readiness verdict (2.62.0)
+# Readiness verdict (2.62.0, quest fights 2.63.0)
 
 One answer on top of the preparation plan (`src/lib/prepPlan.ts`, the single decision of what a step needs): `src/lib/readinessVerdict.ts`.
 It adds no requirement of its own. For a combat training step the kit check `src/lib/combatReadiness.ts` (on the personal estimate,
@@ -44,11 +44,23 @@ tools are not tiers: a harpoon never stands in for a net.
 top of the bank card and first under the Advice tab; not on the Steps tab (no flicker while eating). The pre-entry guards behave as before except
 for healing and tool levels.
 
+## Quest fights (2.63.0)
+
+`src/lib/fightEstimate.ts`: one fight at the current levels with the worn gear, the same rolls as the training estimate, the melee style that takes the
+least damage. Magic attackers (Ithoi, Melzar) are rolled against the player's magic defence (70% Magic, 30% Defence; their magic attack bonus counted
+as 0, Magic counted as 1 when unknown). Attacks above the modelled max hit (dragonfire, specials) are named and the food is called a lower bound.
+`OTHER_METHOD` keeps the fights the route does another way out of the melee estimate (the Lesser demon from the safespot, the Ancient Guardian by
+the pillars). The opponents come from `npm run build-combat-foes` (wiki infoboxes; Delrith has no max hit there and is left out). In the verdict:
+a safety line per fight, and a caution when the carried food is below the high end.
+
 ## Supported
 
 - Supported: combat training steps with an opponent in `combatFoes.json` (Minotaur L12/L27, Hill Giant and the other route trainers), the
   pre-entry guards in `questStages.json` (Below Ice Mountain, the Black Knights' Fortress, Draynor Manor, Delrith, Ithoi and the rest), Elvarg's
   shield.
-- Partially: quest fights without a combat model get the plan's items and guards, not a trip-food estimate.
+- Supported (2.63.0): the quest fights Count Draynor, Ithoi the Navigator, Brutus, Melzar the Mad, Elvarg (dragonfire named, not modelled) and the
+  Black Knights, one fight each with the worn kit.
+- Partially: Delrith (no max hit in the wiki infobox), the Lesser demon and the Ancient Guardian (the route's method is not melee) keep the plan's
+  items, the guards and the method note, without a food estimate.
 - Not modelled: prayer, poison, ranged and magic kits, gathering trip lengths. The app has no account-build (pure) setting; the advice never
   trains Defence.

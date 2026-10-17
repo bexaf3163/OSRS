@@ -143,7 +143,7 @@ export function swingsPerFight(counts: number[], weaponTicks: number, foeTicks: 
 }
 
 /** One swing of the opponent: mean and second moment of its damage. Its hit rolls 0..max. */
-function swingDamage(chance: number, maxHit: number): { mean: number; square: number } {
+export function swingDamage(chance: number, maxHit: number): { mean: number; square: number } {
   return { mean: (chance * maxHit) / 2, square: (chance * maxHit * (2 * maxHit + 1)) / 6 };
 }
 
@@ -400,7 +400,7 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
 const avg = (r: readonly [number, number]) => (r[0] + r[1]) / 2;
 
 /** Mean with the luck of the rolls (Z standard deviations) and the model margin on both sides. */
-function spread(mean: number, variance: number, margin: number): Range {
+export function spread(mean: number, variance: number, margin: number): Range {
   const sd = Math.sqrt(Math.max(0, variance));
   return { low: Math.max(0, mean * (1 - margin) - Z * sd), mid: mean, high: mean * (1 + margin) + Z * sd };
 }

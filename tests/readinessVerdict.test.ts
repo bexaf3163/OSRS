@@ -258,3 +258,22 @@ describe('a shield the fight needs, displaced by a two-handed weapon', () => {
     expect(readinessVerdict({ ...base, worn: { weapon: 'Mithril scimitar', twoHanded: false } }).level).toBe('READY');
   });
 });
+
+describe('a quest fight in the verdict', () => {
+  const fight = mk('Q1', [item('Trout', 5, { heals: 7 })]);
+  const o = owned({ Trout: [5, 0] });
+  const base = { plan: planFor(fight, o), connected: true, owned: o, isFood };
+
+  it('carried food below the high end of the estimate is a caution, not a block', () => {
+    const v = readinessVerdict({ ...base, fights: [{ line: 'Ithoi the Navigator: about 79 s …', foodHigh: 9, foodName: 'Trout', foe: 'Ithoi the Navigator' }], carriedFood: 5 });
+    expect(v.level).toBe('READY_CAUTIONS');
+    expect(v.cautions[0]).toBe('Ithoi the Navigator may take up to 9 Trout with your kit (an estimate); you carry 5.');
+    expect(v.reasons.find((r) => r.text.startsWith('Ithoi'))).toMatchObject({ group: 'safety', state: 'caution' });
+  });
+
+  it('enough food: the fight line is there, the verdict stays Ready', () => {
+    const v = readinessVerdict({ ...base, fights: [{ line: 'Count Draynor: about 54 s …', foodHigh: 2, foodName: 'Trout', foe: 'Count Draynor' }], carriedFood: 5 });
+    expect(v.level).toBe('READY');
+    expect(v.reasons.find((r) => r.text.startsWith('Count Draynor'))).toMatchObject({ state: 'ok' });
+  });
+});

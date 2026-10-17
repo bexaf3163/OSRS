@@ -12,7 +12,9 @@ const UA = 'OSRS-Put tracker (https://github.com/bexaf3163/OSRS)';
 const API = 'https://oldschool.runescape.wiki/api.php';
 
 /** The opponents of the training steps whose time and food are estimated. */
-const PAGES = ['Minotaur', 'Hill Giant', 'Cow', 'Flesh Crawler', 'Moss giant'];
+const PAGES = ['Minotaur', 'Hill Giant', 'Cow', 'Flesh Crawler', 'Moss giant',
+  // The quest fights of the route (2.63.0): one fight each, with the kit the player has (lib/fightEstimate.ts).
+  'Count Draynor', 'Ithoi the Navigator', 'Brutus', 'Delrith', 'Elvarg', 'Melzar the Mad', 'Lesser demon', 'Black Knight', 'Ancient Guardian'];
 
 let last = 0;
 async function wikitext(page: string): Promise<string> {

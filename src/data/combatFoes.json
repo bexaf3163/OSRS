@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/build-combat-foes.ts)",
-  "generatedAt": "2026-10-15",
+  "generatedAt": "2026-10-17",
   "foes": [
     {
       "name": "Minotaur",
@@ -242,6 +242,243 @@
       "attackStyle": "crush",
       "maxHit": 6,
       "speedTicks": 6,
+      "aggressive": true
+    },
+    {
+      "name": "Count Draynor",
+      "combat": 34,
+      "members": false,
+      "hitpoints": 35,
+      "attackLevel": 30,
+      "strengthLevel": 25,
+      "defenceLevel": 30,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 2,
+        "slash": 1,
+        "crush": 3,
+        "magic": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Ithoi the Navigator",
+      "combat": 35,
+      "members": false,
+      "hitpoints": 55,
+      "attackLevel": 1,
+      "strengthLevel": 1,
+      "defenceLevel": 30,
+      "magicLevel": 30,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0
+      },
+      "attackStyle": "magic",
+      "maxHit": 6,
+      "speedTicks": 5,
+      "aggressive": true
+    },
+    {
+      "name": "Brutus",
+      "combat": 30,
+      "members": false,
+      "hitpoints": 58,
+      "attackLevel": 12,
+      "strengthLevel": 25,
+      "defenceLevel": 10,
+      "magicLevel": 8,
+      "attackBonus": 0,
+      "defence": {
+        "stab": -7,
+        "slash": -7,
+        "crush": -7,
+        "magic": -3
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 5,
+      "aggressive": true
+    },
+    {
+      "name": "Elvarg",
+      "combat": 83,
+      "members": false,
+      "hitpoints": 80,
+      "attackLevel": 70,
+      "strengthLevel": 70,
+      "defenceLevel": 70,
+      "magicLevel": 70,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 20,
+        "slash": 40,
+        "crush": 40,
+        "magic": 30
+      },
+      "attackStyle": "slash",
+      "maxHit": 8,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Melzar the Mad",
+      "combat": 43,
+      "members": false,
+      "hitpoints": 44,
+      "attackLevel": 37,
+      "strengthLevel": 37,
+      "defenceLevel": 34,
+      "magicLevel": 40,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0
+      },
+      "attackStyle": "magic",
+      "maxHit": 5,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Lesser demon",
+      "version": "Level 82",
+      "combat": 82,
+      "members": false,
+      "hitpoints": 79,
+      "attackLevel": 68,
+      "strengthLevel": 70,
+      "defenceLevel": 71,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -10
+      },
+      "attackStyle": "slash",
+      "maxHit": 8,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Lesser demon",
+      "version": "Level 87",
+      "combat": 87,
+      "members": true,
+      "hitpoints": 87,
+      "attackLevel": 80,
+      "strengthLevel": 70,
+      "defenceLevel": 71,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -10
+      },
+      "attackStyle": "slash",
+      "maxHit": 8,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Lesser demon",
+      "version": "Level 94",
+      "combat": 94,
+      "members": true,
+      "hitpoints": 98,
+      "attackLevel": 80,
+      "strengthLevel": 70,
+      "defenceLevel": 85,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -10
+      },
+      "attackStyle": "slash",
+      "maxHit": 8,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Lesser demon",
+      "version": "Level 94 (Wilderness Slayer Cave)",
+      "combat": 94,
+      "members": true,
+      "hitpoints": 110,
+      "attackLevel": 68,
+      "strengthLevel": 85,
+      "defenceLevel": 71,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": -10
+      },
+      "attackStyle": "slash",
+      "maxHit": 9,
+      "speedTicks": 4,
+      "aggressive": true
+    },
+    {
+      "name": "Black Knight",
+      "version": "Hostile, male",
+      "combat": 33,
+      "members": false,
+      "hitpoints": 42,
+      "attackLevel": 25,
+      "strengthLevel": 25,
+      "defenceLevel": 25,
+      "magicLevel": 1,
+      "attackBonus": 18,
+      "defence": {
+        "stab": 73,
+        "slash": 76,
+        "crush": 70,
+        "magic": -11
+      },
+      "attackStyle": "slash",
+      "maxHit": 4,
+      "speedTicks": 5,
+      "aggressive": true
+    },
+    {
+      "name": "Ancient Guardian",
+      "version": "Golem",
+      "combat": 25,
+      "members": false,
+      "hitpoints": 40,
+      "attackLevel": 25,
+      "strengthLevel": 33,
+      "defenceLevel": 25,
+      "magicLevel": 1,
+      "attackBonus": 20,
+      "defence": {
+        "stab": 40,
+        "slash": 40,
+        "crush": 0,
+        "magic": 5
+      },
+      "attackStyle": "crush",
+      "maxHit": 7,
+      "speedTicks": 5,
       "aggressive": true
     }
   ]
