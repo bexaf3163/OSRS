@@ -2243,6 +2243,13 @@
         "anyOf": [
           "Salmon"
         ]
+      },
+      {
+        "nameEn": "Strength potion(4)",
+        "amount": 1,
+        "howToGet": "Grand Exchange, about 160 gp (15 Oct 2026). One dose just before the fight: Count Draynor has 35 hit points, so a higher max hit ends it sooner.",
+        "wikiItemId": 113,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
       }
     ],
     "imageUrl": "https://oldschool.runescape.wiki/images/Count_draynor_safespot.png",
@@ -2250,7 +2257,7 @@
     "fields": [
       {
         "label": "Combat",
-        "text": "Count Draynor, level 34."
+        "text": "Count Draynor, level 34: 35 hit points, hits up to 3 (crush), aggressive. Fight on Aggressive with a Strength potion dose; eat a trout when your health falls to 6 (two of his hits)."
       }
     ],
     "safespot": "Garlic in your inventory weakens the vampire. Stand behind the chair (safespot) and hit him with Fire Strike, or fight him in melee with a sword, healing with trout (+7) or salmon (+9).",
@@ -2926,7 +2933,7 @@
     "fields": [
       {
         "label": "Combat",
-        "text": "The demon Delrith (level 27) at the stone circle south of Varrock. Finish him only with the sword Silverlight, speaking the incantation from the gypsy."
+        "text": "The demon Delrith (level 27) at the stone circle south of Varrock. Finish him only with the sword Silverlight, speaking the incantation from the gypsy. Delrith has 7 hit points and hits up to 3; the dark wizards around the circle (levels 7 and 20) attack on sight and hit up to 6 with magic: eat when your health falls to 12."
       }
     ],
     "reward": "3 QP, the sword Silverlight.",
@@ -3031,6 +3038,16 @@
           "Bones"
         ],
         "npc": "Cow"
+      }
+    ],
+    "itemsRecommended": [
+      {
+        "nameEn": "Trout",
+        "amount": 5,
+        "howToGet": "Buy on the Grand Exchange for about 24 gp each. For the dark wizards at the stone circle: they attack on sight and hit up to 6 with magic.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7
       }
     ]
   },
@@ -3403,6 +3420,10 @@
       {
         "label": "Amulet",
         "text": "A second amulet is not needed: by the damage formulas the Amulet of strength from S2-01 hits faster than the Amulet of power in every combat step (strength +10 against +6). Take the Amulet of power (+6 to accuracy, strength and defence) only if you have no Amulet of strength: almost the same speed and a little defence."
+      },
+      {
+        "label": "Food and potions",
+        "text": "Buy the Minotaur food and Strength potions for S3-08 in the same trip, so you go straight to the Stronghold. With the game linked, the Shopping list buys the whole goal from your own plan (Food and time on S3-08 shows it); without it, about 80 Salmon and 3 Strength potion(4) from Attack 22 and Strength 16."
       }
     ],
     "doneWhen": "The Adamant scimitar is bought and is in the bank.",
@@ -3650,12 +3671,19 @@
         "wikiItemId": 329,
         "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
         "heals": 9
+      },
+      {
+        "nameEn": "Strength potion(4)",
+        "amount": 1,
+        "howToGet": "Grand Exchange, about 160 gp (15 Oct 2026). One dose before the fight: Ithoi has 55 hit points.",
+        "wikiItemId": 113,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
       }
     ],
     "fields": [
       {
         "label": "Combat",
-        "text": "Ithoi the Navigator (level 35) hits up to 6: hit him in melee or with magic, and eat a salmon before your health falls to 12 (two of his hits), not after."
+        "text": "Ithoi the Navigator (level 35) has 55 hit points and hits up to 6 with magic: wield the Adamant scimitar, drink a Strength potion dose and hit him in melee, and eat a salmon before your health falls to 12 (two of his hits), not after."
       }
     ],
     "foes": [
@@ -3730,12 +3758,19 @@
         "wikiItemId": 329,
         "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
         "heals": 9
+      },
+      {
+        "nameEn": "Strength potion(4)",
+        "amount": 1,
+        "howToGet": "Grand Exchange, about 160 gp (15 Oct 2026). One dose before the fight: Brutus has 58 hit points.",
+        "wikiItemId": 113,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
       }
     ],
     "fields": [
       {
         "label": "Combat",
-        "text": "The final fight is against Brutus. In the quest his plain hits cannot kill you (they leave you at 1 health), but his specials can: they ignore protection prayers and kill you if they land. His plain hit is up to 3. After 1 to 6 hits he uses a special that is not stopped by food or protection prayers: Snort hits the row in front of him (or an L shape if you stand diagonal), Growl is a charge at you. Step two tiles to either side, or one tile back from Snort, as soon as he winds up. If it goes wrong, run south-west to the gate."
+        "text": "The final fight is against Brutus. In the quest his plain hits cannot kill you (they leave you at 1 health), but his specials can: they ignore protection prayers and kill you if they land. His plain hit is up to 3. After 1 to 6 hits he uses a special that is not stopped by food or protection prayers: Snort hits the row in front of him (or an L shape if you stand diagonal), Growl is a charge at you. Step two tiles to either side, or one tile back from Snort, as soon as he winds up. If it goes wrong, run south-west to the gate. Wield the Adamant scimitar and drink a Strength potion dose before the fight: he has 58 hit points."
       }
     ],
     "foes": [
@@ -5411,6 +5446,27 @@
         "wikiItemId": 379,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
         "heals": 12
+      },
+      {
+        "nameEn": "Staff of fire",
+        "amount": 1,
+        "howToGet": "Grand Exchange, about 900 gp (15 Oct 2026). Wield it and autocast Fire Bolt: the staff gives the Fire runes.",
+        "wikiItemId": 1387,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
+      },
+      {
+        "nameEn": "Chaos rune",
+        "amount": 60,
+        "howToGet": "Fire Bolt (Magic 35): 1 Chaos and 3 Air runes a cast with the Staff of fire. 60 casts with a margin for misses. Grand Exchange, about 106 gp each (15 Oct 2026).",
+        "wikiItemId": 562,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_rune.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 180,
+        "howToGet": "Fire Bolt: 3 a cast. Grand Exchange, about 5 gp each (15 Oct 2026).",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
       }
     ],
     "safespot": "All the opponents, the scorpion (44), the ogre (63) and the Bouncer (137), can be hit from cover with a bow or magic: they all fight only up close. General Khazard (142) is optional: you do not need to kill him for the quest.",
@@ -5434,7 +5490,13 @@
         "type": "QUEST_COMPLETED",
         "questName": "Fight Arena"
       }
-    }
+    },
+    "fields": [
+      {
+        "label": "Magic from a safespot",
+        "text": "Every arena opponent can be safespotted behind the skeletons, so fight them with Fire Bolt rather than melee (wiki quick guide). They all have Magic 1: with the armour off, at Magic 55 about 9 casts in 10 hit for up to 12. The Khazard Ogre (60 hit points, hits up to 8), the Khazard Scorpion (40, weak to fire) and Bouncer (116, hits up to 13) take about 40 casts together; bring 60. General Khazard (170 hit points) is optional: leave the arena instead. Take the metal armour off in the safespot first: iron or steel armour cuts magic accuracy to about half (wiki magic attack bonuses)."
+      }
+    ]
   },
   {
     "id": "S7-03",
@@ -5491,7 +5553,36 @@
         "type": "QUEST_COMPLETED",
         "questName": "Tree Gnome Village"
       }
-    }
+    },
+    "itemsRecommended": [
+      {
+        "nameEn": "Staff of fire",
+        "amount": 1,
+        "howToGet": "Grand Exchange, about 900 gp (15 Oct 2026). Wield it and autocast Fire Bolt: the staff gives the Fire runes.",
+        "wikiItemId": 1387,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
+      },
+      {
+        "nameEn": "Chaos rune",
+        "amount": 50,
+        "howToGet": "Fire Bolt (Magic 35): 1 Chaos and 3 Air runes a cast with the Staff of fire. 50 casts with a margin for misses. Grand Exchange, about 106 gp each (15 Oct 2026).",
+        "wikiItemId": 562,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_rune.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 150,
+        "howToGet": "Fire Bolt: 3 a cast. Grand Exchange, about 5 gp each (15 Oct 2026).",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      }
+    ],
+    "fields": [
+      {
+        "label": "Magic from a safespot",
+        "text": "Safespot the Khazard warlord (170 hit points, hits up to 10): start the fight, walk west until he stops following near the large dead tree, step a little south and cast Fire Bolt from outside his range; he gets caught between the West Ardougne wall and the tree (wiki quick guide). He has Magic 1: about 31 casts; bring 50. Take the metal armour off in the safespot first: iron or steel armour cuts magic accuracy to about half (wiki magic attack bonuses)."
+      }
+    ]
   },
   {
     "id": "S7-04",
@@ -5577,6 +5668,10 @@
       {
         "label": "Requirement",
         "text": "Agility 25: needed during the quest, you can start without it."
+      },
+      {
+        "label": "Magic from a safespot",
+        "text": "The Black demon (157 hit points, hits up to 16) is safespotted from the spot directly north of the entrance ladder, where Glough stands (wiki quick guide). It has Magic 1 and magic defence -10: Fire Bolt takes about 29 casts; bring 50. It is weak to water: Water Bolt (Magic 23; 2 Water, 2 Air, 1 Chaos rune) hits it harder if you have the runes. Take the metal armour off in the safespot first: iron or steel armour cuts magic accuracy to about half (wiki magic attack bonuses)."
       }
     ],
     "safespot": "In the fight with the Black demon (level 172) use the safespot behind the rocks.",
@@ -5608,7 +5703,30 @@
         "type": "QUEST_COMPLETED",
         "questName": "The Grand Tree"
       }
-    }
+    },
+    "itemsRecommended": [
+      {
+        "nameEn": "Staff of fire",
+        "amount": 1,
+        "howToGet": "Grand Exchange, about 900 gp (15 Oct 2026). Wield it and autocast Fire Bolt: the staff gives the Fire runes.",
+        "wikiItemId": 1387,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
+      },
+      {
+        "nameEn": "Chaos rune",
+        "amount": 50,
+        "howToGet": "Fire Bolt (Magic 35): 1 Chaos and 3 Air runes a cast with the Staff of fire. 50 casts with a margin for misses. Grand Exchange, about 106 gp each (15 Oct 2026).",
+        "wikiItemId": 562,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_rune.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 150,
+        "howToGet": "Fire Bolt: 3 a cast. Grand Exchange, about 5 gp each (15 Oct 2026).",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      }
+    ]
   },
   {
     "id": "S8-01",
@@ -5889,7 +6007,7 @@
       },
       {
         "label": "Ranged 30",
-        "text": "Shoot cows in the Lumbridge pasture from a distance with a bow and arrows set to the Accurate style. Use the best bow your level allows: Oak shortbow (level 5), Willow shortbow (level 20), Maple shortbow (level 30), with Iron or Steel arrows first, Mithril arrows from 20. Bring 200-300 arrows and the bow you will use, and pick the arrows up as you go. Stop at 30 for Animal Magnetism; train to 50 only if you want Ava's accumulator (the S8-05 tip)."
+        "text": "Shoot cows in the Lumbridge pasture from a distance with a bow and arrows set to the Accurate style. Use the best bow your level allows: Oak shortbow (level 5), Willow shortbow (level 20), Maple shortbow (level 30), with Iron or Steel arrows first, Mithril arrows from 20. Bring 200-300 arrows and the bow you will use, and pick the arrows up as you go. Faster, as this is a members world: darts on the Rapid style, a throw every 2 ticks against 3 for a shortbow on Rapid (wiki attack speeds: dart 3, shortbow 4, Rapid one less). Steel darts from Ranged 5, Mithril darts from 20, about 5-6 gp each on the Grand Exchange (15 Oct 2026); bring about 500 and pick them up, they reach only 3 tiles. Stop at 30 for Animal Magnetism; train to 50 only if you want Ava's accumulator (the S8-05 tip)."
       },
       {
         "label": "Slayer 18",
