@@ -11,8 +11,9 @@ const { createLauncher } = require('./runelite-launcher.cjs');
 const { createUpdater } = require('./updater.cjs');
 const { backupProgress, dailyBackup, latestCopy, readProgress, restoreFromCopies } = require('./progress-files.cjs');
 
-// Development-only end-to-end checks use an empty home, never the player's profiles or backup folder.
-const isE2E = !app.isPackaged && Boolean(process.env.OSRS_PUT_E2E_ROOT);
+// End-to-end checks use an empty home, never the player's profiles or backup folder: the source tree in development, and a packaged release
+// candidate (E2E_EXE=... npm run test:e2e). The variable only ever moves the data away from the player's, never toward it.
+const isE2E = Boolean(process.env.OSRS_PUT_E2E_ROOT);
 if (isE2E) {
   const testRoot = path.resolve(process.env.OSRS_PUT_E2E_ROOT);
   for (const [key, dir] of [['home', testRoot], ['appData', path.join(testRoot, 'appdata')], ['userData', path.join(testRoot, 'profile')]]) {

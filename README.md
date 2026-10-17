@@ -431,7 +431,8 @@ plate width (and by the one the player set with the mouse), and a number does no
 the radar borders and outlines, the sound, the seller and shop cell highlight, the gear line and the amber frame.
 The code uses only the API found in the RuneLite 1.12.39 jar, and the tests check the route against it.
 
-Checks: `npm test`, `npm run test:ui`, `npm run test:e2e` (a real Electron, locally), `./gradlew test`.
+Checks: `npm test`, `npm run test:ui`, `npm run test:e2e` (a real Electron, locally; `E2E_EXE=<portable exe>` runs a release candidate from a
+folder of its own), `./gradlew test`.
 The plugin's compatibility with an installed RuneLite (after its update): `npm run check-runelite`.
 
 ## Version history (summary)

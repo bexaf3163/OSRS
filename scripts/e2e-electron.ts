@@ -1,15 +1,16 @@
 // An end-to-end check of the real Electron: the window opens, the bridge answers, the progress is written to disk as a file.
 // Run: npm run build && npm run test:e2e (a display is needed — it does not run on CI; locally on Windows/Mac/Linux).
+// A release candidate: E2E_EXE=<path to OSRS-Put-x.y.z-portable.exe> npm run test:e2e (the exe in a folder of its own).
 //
 // Safety: the data and "AppData" are in a temporary folder, RuneLite is not started (LOCALAPPDATA is empty), and the app's bridge
 // looks at a stub on a free port (OSRS_PUT_BRIDGE_PORT) — it does not go to the player's real plugin.
 
 import { spawn, spawnSync, type ChildProcess } from 'node:child_process';
-import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
 import http from 'node:http';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
-import { dirname, join, resolve } from 'node:path';
+import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
 
@@ -22,6 +23,42 @@ const expect = (cond: boolean, what: string) => {
   if (cond) console.log(`  ✓ ${what}`);
   else { console.log(`  ✗ ${what}`); failures.push(what); }
 };
+
+// --- A release candidate (E2E_EXE) ---
+// The packaged portable exe instead of the source tree's Electron, with the same isolation. Its launcher always sets PORTABLE_EXECUTABLE_DIR to
+// the exe's own folder, so the data goes next to the exe: the folder must hold nothing but the exe (never a player's download folder), and the
+// data the run made there is removed afterwards. A fresh build only: a copy of the exe the player is running would unpack over its folder.
+const exe = process.env.E2E_EXE ? resolve(process.env.E2E_EXE) : undefined;
+if (exe) {
+  const others = existsSync(exe) ? readdirSync(dirname(exe)).filter((name) => name.toLowerCase() !== basename(exe).toLowerCase()) : [];
+  if (!existsSync(exe) || others.length) {
+    console.log(existsSync(exe) ? `E2E_EXE must be alone in its folder (also there: ${others.join(', ')}): the run writes OSRS-Put-data next to it.` : `E2E_EXE not found: ${exe}`);
+    process.exit(1);
+  }
+  console.log(`  (packaged: ${exe})`);
+}
+
+/** The processes a launcher started (Windows), with their exe paths: the portable exe runs the app from an unpacked copy in TEMP. */
+function childProcs(pid: number): { pid: number; path: string }[] {
+  const out = spawnSync('powershell.exe', ['-NoProfile', '-Command',
+    `Get-CimInstance Win32_Process -Filter 'ParentProcessId=${pid}' | ForEach-Object { '{0}|{1}' -f $_.ProcessId, $_.ExecutablePath }`], { encoding: 'utf8' }).stdout ?? '';
+  return out.split(/\r?\n/).map((line) => line.trim().split('|')).filter(([id, path]) => Number(id) > 0 && Boolean(path)).map(([id, path]) => ({ pid: Number(id), path }));
+}
+
+/** Removes a folder of this run. Processes ended by force hold their files for a moment after taskkill returns, and rmSync gives up on such a
+ *  lock at once (EPERM), so it is tried again for up to ten seconds. */
+function removeDir(dir: string) {
+  for (let i = 1; ; i++) {
+    try { rmSync(dir, { recursive: true, force: true }); return; } catch (e) {
+      if (i === 20) { console.log(`  (left in place: ${(e as Error).message})`); return; }
+      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 500);
+    }
+  }
+}
+
+/** Whether any process still runs from the folder: a copy something else runs is never removed. */
+const runningFrom = (dir: string) =>
+  (spawnSync('powershell.exe', ['-NoProfile', '-Command', `@(Get-Process | Where-Object { $_.Path -like '${dir}\*' }).Count`], { encoding: 'utf8' }).stdout ?? '').trim() !== '0';
 
 // --- The plugin stub ---
 const status = {
@@ -47,37 +84,56 @@ const bridgePort = (bridge.address() as { port: number }).port;
 
 // --- Launch ---
 const home = mkdtempSync(join(tmpdir(), 'osrs-put-e2e-'));
+const dataDir = join(exe ? dirname(exe) : home, 'OSRS-Put-data');
 const probe = http.createServer();
 await new Promise<void>(r => probe.listen(0, '127.0.0.1', r));
 const cdpPort = (probe.address() as { port:number }).port;
 await new Promise<void>(r => probe.close(() => r()));
-const app: ChildProcess = spawn(electronPath, ['.', `--remote-debugging-port=${cdpPort}`], {
-  cwd: root, stdio: ['ignore', 'pipe', 'pipe'],
+const app: ChildProcess = spawn(exe ?? electronPath, exe ? [`--remote-debugging-port=${cdpPort}`] : ['.', `--remote-debugging-port=${cdpPort}`], {
+  cwd: exe ? dirname(exe) : root, stdio: ['ignore', 'pipe', 'pipe'],
   env: { ...process.env, USERPROFILE: home, HOME: home, APPDATA: join(home, 'appdata'), LOCALAPPDATA: home, OSRS_PUT_E2E_ROOT: home, PORTABLE_EXECUTABLE_DIR: home, OSRS_PUT_BRIDGE_PORT: String(bridgePort) },
 });
 let startupLog = '';
 app.stdout?.on('data', data => { startupLog += String(data); });
 app.stderr?.on('data', data => { startupLog += String(data); });
 
+// The candidate's unpacked copy (TEMP\<build id>): the launcher removes it when the app ends; what is still locked then goes in stop().
+let unpacked: string | undefined;
+
 function stop() {
   try {
-    if (process.platform === 'win32' && app.pid && app.exitCode === null) spawnSync('taskkill', ['/T', '/F', '/PID', String(app.pid)]);
-    else app.kill('SIGKILL');
+    if (process.platform === 'win32' && app.pid && app.exitCode === null) {
+      // A portable exe: the app under the launcher is ended first, so the launcher removes its unpacked copy and temporary files itself
+      // (ending the launcher leaves about 800 MB in TEMP).
+      if (exe) {
+        for (const p of childProcs(app.pid)) spawnSync('taskkill', ['/T', '/F', '/PID', String(p.pid)]);
+        spawnSync('powershell.exe', ['-NoProfile', '-Command', `Wait-Process -Id ${app.pid} -Timeout 90 -ErrorAction SilentlyContinue`]);
+      }
+      spawnSync('taskkill', ['/T', '/F', '/PID', String(app.pid)]);
+    } else app.kill('SIGKILL');
   } catch { /* already closed */ }
   bridge.close();
   if (dirname(resolve(home)) !== resolve(tmpdir()) || !home.startsWith(join(tmpdir(), 'osrs-put-e2e-'))) throw new Error('Unsafe temporary cleanup path');
-  try { rmSync(home, { recursive: true, force: true }); } catch { /* busy — not a problem */ }
+  removeDir(home);
+  // The candidate's folder held only the exe, so the data next to it is this run's.
+  if (exe) removeDir(dataDir);
+  if (unpacked && existsSync(join(unpacked, 'OSRS Path.exe')) && !runningFrom(unpacked)) removeDir(unpacked);
 }
 
 try {
   let up = false;
-  for (let i = 0; i < 60 && !up; i++) {
+  // A portable exe first unpacks itself (about 100 MB): it gets two minutes, the source tree thirty seconds.
+  for (let i = 0; i < (exe ? 240 : 60) && !up; i++) {
     try { up = (await fetch(`http://127.0.0.1:${cdpPort}/json/version`)).ok; } catch { await new Promise((r) => setTimeout(r, 500)); }
   }
   if (!up) throw new Error(`Electron did not come up (exit ${app.exitCode}): ${startupLog.slice(-4000)}`);
+  if (exe && app.pid) unpacked = childProcs(app.pid).map((p) => dirname(p.path)).find((dir) => dirname(resolve(dir)) === resolve(tmpdir()));
   const browser = await chromium.connectOverCDP(`http://127.0.0.1:${cdpPort}`);
   const page = browser.contexts()[0].pages()[0];
-  await page.waitForURL(url => url.href.startsWith(pathToFileURL(join(root, 'dist', 'index.html')).href));
+  // The source tree serves its own dist/; a release candidate the dist/ inside its app.asar.
+  await page.waitForURL(url => exe
+    ? url.protocol === 'file:' && /\/resources\/app\.asar\/dist\/index\.html$/.test(url.pathname)
+    : url.href.startsWith(pathToFileURL(join(root, 'dist', 'index.html')).href));
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(String(e)));
   page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource|net::/.test(m.text())) errors.push(m.text()); });
@@ -116,13 +172,19 @@ try {
   // The cockpit has the manual-completion button next to the open walkthrough, without a tab to open first.
   await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
   await page.waitForTimeout(2500);
-  const file = join(home, 'OSRS-Put-data', 'progress.json');
+  const file = join(dataDir, 'progress.json');
   expect(existsSync(file), 'progress: progress.json was created in the data folder');
   const saved = existsSync(file) ? (JSON.parse(readFileSync(file, 'utf8')) as { steps?: Record<string, string> }) : {};
   expect(Object.values(saved.steps ?? {}).includes('done'), 'progress: the marked step is in the file');
   expect(!existsSync(`${file}.tmp`), 'progress: no temporary write file is left');
 
   expect(!errors.length, `console: no errors ${errors.join('; ')}`);
+  if (exe) {
+    // A normal close: the window closes, the app quits and the launcher exits by itself.
+    await page.close();
+    for (let i = 0; i < 120 && app.exitCode === null; i++) await new Promise((r) => setTimeout(r, 500));
+    expect(app.exitCode !== null, 'release candidate: closing the window ends the app and its launcher');
+  }
   await browser.close();
 } catch (e) {
   failures.push(`run failure: ${(e as Error).message}`);

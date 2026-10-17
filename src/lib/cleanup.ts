@@ -241,7 +241,7 @@ export function cleanupAdvice(i: CleanupInput): CleanupResult {
 
     // Beyond this point something may be surplus: all of it, or what the route does not ask for.
     const keepQty = need && need.exact ? need.count : 0;
-    const keepPhrase = keepQty > 0 ? `Keep ${keepQty} for ${stepsPhrase(need!.titles)}; ` : '';
+    const keepPhrase = keepQty > 0 ? `Keep ${keepQty} for ${stepsPhrase(need!.titles)}` : '';
     const noUse = keepQty > 0 ? 'The rest has no future use identified in the selected route.' : 'No future use identified in the selected route.';
     // The plain stack covers the route's need first (a step wants the item itself, not a banknote); what is left over is the surplus.
     let toKeep = keepQty;
@@ -251,16 +251,17 @@ export function cleanupAdvice(i: CleanupInput): CleanupResult {
       return { s, kept, extra: s.count - kept };
     });
     let said = false;
-    const lead = () => {
+    // A sale continues the sentence ("Keep 3 for X; sell the remaining 2."); a review reason is a sentence of its own ("Keep 1 for X. The item list …").
+    const lead = (join: '; ' | '. ') => {
       if (said || keepQty === 0) return '';
       said = true;
-      return keepPhrase;
+      return keepPhrase + join;
     };
     const keptLine = (st: BagStack, kept: number) => keeps.push(make(st, { action: 'keep', qty: kept, reason: `Needed for ${stepsPhrase(need!.titles)}.` }));
     const reviewAll = (reason: string, short: string) => {
       for (const { s: st, kept, extra } of parts) {
         if (kept > 0) keptLine(st, kept);
-        if (extra > 0) recs.push(make(st, { action: 'review', qty: extra, reason: `${lead()}${reason}`, short: keepQty > 0 ? `keep ${keepQty}; ${short}` : short }));
+        if (extra > 0) recs.push(make(st, { action: 'review', qty: extra, reason: `${lead('. ')}${reason}`, short: keepQty > 0 ? `keep ${keepQty}; ${short}` : short }));
       }
     };
 
@@ -308,7 +309,7 @@ export function cleanupAdvice(i: CleanupInput): CleanupResult {
       if (extra <= 0) continue;
       const p = unit !== null ? unit * extra : null;
       if (p !== null) proceeds += p;
-      const lead0 = lead();
+      const lead0 = lead('; ');
       const what = lead0 ? `${lead0}sell the remaining ${extra}` : keepQty > 0 ? `Sell the remaining ${extra}` : noUse.slice(0, -1);
       recs.push(make(st, {
         action: 'sell', qty: extra, proceeds: p, short: keepQty > 0 ? `keep ${keepQty}, the rest has no use ahead` : 'no use ahead',

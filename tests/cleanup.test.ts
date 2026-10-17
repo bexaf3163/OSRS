@@ -238,6 +238,8 @@ describe('cleanup wording across stacks', () => {
     const reviews = r.recs.filter((x) => x.action === 'review');
     expect(reviews.map((x) => `${x.qty}${x.noted ? 'n' : ''}`).sort()).toEqual(['20', '7n']);
     expect(reviews.filter((x) => /Keep 3 for Prince Ali Rescue/.test(x.reason))).toHaveLength(1);
+    // The review reason is a sentence of its own after the keep, not glued on with a semicolon.
+    expect(reviews.find((x) => /Keep 3/.test(x.reason))?.reason).toBe('Keep 3 for Prince Ali Rescue. The item list has not loaded, so it is not known whether this can be sold.');
     expect(r.keeps.find((k) => k.name === 'Ball of wool' && !k.noted)?.qty).toBe(3);
   });
 });

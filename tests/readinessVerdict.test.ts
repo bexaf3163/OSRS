@@ -39,7 +39,7 @@ describe('S3-08 Minotaurs: the kit, the version and the food for the next trip',
   it('iron armour and a Mithril scimitar with no food: both versions compared, the weapon fits, food is the thing to get', () => {
     const c = combatOf(owned({ Salmon: [0, 0] }))!;
     expect(c.foe).toBe('Minotaur (level 12)');
-    expect(c.variant).toMatch(/^Minotaur \(level 12\) suit your current kit best: 238 kills, about \d+ Salmon in all, /);
+    expect(c.variant).toMatch(/^Minotaur \(level 12\) suits your current kit best: 238 kills, about \d+ Salmon in all, /);
     expect(c.variant).toMatch(/\. Minotaur \(level 27\): 108 kills, about \d+ Salmon in all, /);
     expect(c.weapon).toEqual({ ok: true, text: expect.stringMatching(/^Mithril scimitar: suitable for training Strength and Attack, a hit every 2\.4 s\.$/) });
     expect(c.armour.empty).toEqual([]);
@@ -65,7 +65,7 @@ describe('S3-08 Minotaurs: the kit, the version and the food for the next trip',
     const c = combatOf(owned({ Salmon: [5, 0] }))!;
     expect(c.food.short).toBeGreaterThan(0);
     // Both versions need more than 5 a trip at Defence 1, so the best one stays, and the food is what to get.
-    expect(c.variant).toMatch(/suit your current kit best/);
+    expect(c.variant).toMatch(/suits your current kit best/);
   });
 
   it('no armour on the body: said as a caution, the food counts what is worn', () => {

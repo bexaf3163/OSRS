@@ -474,6 +474,8 @@ The header: search (`/`), the progress ring and the quest points, the F2P/Member
 | `npm run check-links` | wiki links (network) |
 | `npm run test:ui` | the interface in a browser (needs `npm run build`) |
 | `npm run test:e2e` | a real Electron |
+| `E2E_EXE=<exe> npm run test:e2e` | the packaged portable exe (a release candidate), alone in a folder of its own, isolated like the source run |
+| `UI_SCALES=1 npm run test:ui` | also the main pages at 100/125/150% interface scale (screenshots with `UI_SHOTS`) |
 | `npm run bridge:jar` | build the plugin jar (JDK 17) |
 | `npm run check-runelite` | the plugin's compatibility with RuneLite |
 | `npm run desktop` | run Electron from the sources |

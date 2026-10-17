@@ -105,6 +105,7 @@ export function GearPage() {
   const { state, stats, gear, lastGear } = useBridge();
   const { mode, steps } = useStore();
   const { advice, fightStep, pricesReady, pricesFailed } = useGearAdvice();
+  const priceUnknown = !pricesReady && advice.goals.length > 0;
   const places = usePlaceMap();
   const lv = advice.levels;
   const fromGame = Boolean(stats?.attack);
@@ -198,13 +199,16 @@ export function GearPage() {
         {advice.actions.length ? (
           <ul className="gear-list">{advice.actions.map((a) => <ActionRow key={`${a.slot}-${a.item.id}`} a={a} stepId={fightStep?.id} live={advice.live} onShow={places.show} />)}</ul>
         ) : (
-          <p className="small">{advice.live ? '✓ The weapon and amulet are the best possible at your levels and money.' : 'Needs RuneLite data — see the best by level below.'}</p>
+          <p className="small">{!advice.live ? 'Needs RuneLite data — see the best by level below.'
+            // Without exchange prices an exchange upgrade has no price: "the best your money buys" is not known then.
+            : priceUnknown ? (pricesFailed ? 'The exchange prices did not load, so it is not known whether the upgrades below fit your money.' : 'The exchange prices are still loading: whether the upgrades below fit your money is not known yet.')
+            : '✓ The weapon and amulet are the best possible at your levels and money.'}</p>
         )}
       </section>
 
       {advice.goals.length > 0 && (
         <section className="card section-card" aria-labelledby="gear-goals">
-          <h2 id="gear-goals" className="card-title">{advice.live ? 'Save up — better than what you can afford now' : 'The best by level'}</h2>
+          <h2 id="gear-goals" className="card-title">{!advice.live ? 'The best by level' : priceUnknown ? 'Upgrades — the price is not known yet' : 'Save up — better than what you can afford now'}</h2>
           <ul className="gear-list">{advice.goals.map((a) => <ActionRow key={`${a.slot}-${a.item.id}`} a={a} stepId={fightStep?.id} live={advice.live} onShow={places.show} />)}</ul>
         </section>
       )}

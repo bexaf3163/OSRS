@@ -112,9 +112,9 @@ function variantText(v: CombatPlanView): string | null {
   const fits = owned !== null && owned < v.primary.food.high
     ? others.filter((e) => e.food.high <= owned).sort((a, b) => a.totalMinutes.mid - b.totalMinutes.mid)[0] : undefined;
   if (fits) {
-    return `With the food you own (${owned} ${f} by healing), ${foeLabel(fits.foe)} fit without buying more: ${detail(fits)}. ${foeLabel(v.primary.foe)}: ${detail(v.primary)}.`;
+    return `With the food you own (${owned} ${f} by healing), ${foeLabel(fits.foe)} fits without buying more: ${detail(fits)}. ${foeLabel(v.primary.foe)}: ${detail(v.primary)}.`;
   }
-  return `${foeLabel(v.primary.foe)} suit your current kit best: ${detail(v.primary)}. ${others.map((e) => `${foeLabel(e.foe)}: ${detail(e)}`).join('. ')}.`;
+  return `${foeLabel(v.primary.foe)} suits your current kit best: ${detail(v.primary)}. ${others.map((e) => `${foeLabel(e.foe)}: ${detail(e)}`).join('. ')}.`;
 }
 
 export function combatReadiness(

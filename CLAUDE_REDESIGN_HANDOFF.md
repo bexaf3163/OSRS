@@ -665,3 +665,27 @@ the game, (4) readiness and shopping integration, (5) desktop simplification, (6
   readiness spec asks for quantities from the activity; the Shopping page already buys the whole-goal food from the personal plan, and the plan says
   when potions do not help with the player's gear. Recorded in the release notes.
 - Tests: `tests/fightEstimate.test.ts` (7), verdict fight cases (2), UI smoke S2-08 `.fight-plan` at both widths. Vitest 1205.
+
+## 2.63.1 — final verification (readiness spec, the last stage)
+
+- Gate: Vitest 1205 (89 files), Java 573, check-data 0/0, `npm run build`, UI smoke 460 (with `UI_SCALES=1`: home, step S3-08, shopping,
+  skills, gear, journal and settings at 100/125/150%, `deviceScaleFactor` with a viewport of 1920/scale; no overflow, no clipped button text, no
+  console errors; every screenshot looked at), e2e 17 (source tree) and 18 (packaged).
+- Packaged candidate: `E2E_EXE=<exe> npm run test:e2e`. The NSIS launcher always sets `PORTABLE_EXECUTABLE_DIR` to the exe's folder, so the data
+  goes next to the exe: the script refuses unless the exe is alone in its folder, and removes the data it made. `electron/main.cjs` now honours
+  `OSRS_PUT_E2E_ROOT` in packaged builds too (it only moves data away from the player's). Without it, `app.getPath('userData')` failed under the
+  test's env ("Failed to get 'userData' path"). The run ends with a normal close (`page.close()` → `window-all-closed` → the launcher exits and
+  removes its unpacked copy). A forced end of the launcher leaves about 800 MB in TEMP (`ns*.tmp` plus `TEMP\<build id>`), so `stop()` ends the
+  app under the launcher first. `removeDir` retries for ten seconds because rmSync gives up at once on EPERM while just-killed processes still hold
+  their files. Never run a copy of the build the player runs: it would unpack over the running app's folder (same build id).
+- Fixed from the review: Settings Preview at 150% (flex-wrap instead of a 1.3fr/0.7fr grid with a 260 px minimum); Gear claims without exchange
+  prices (`priceUnknown`); the cleanup review reason as its own sentence after "Keep N for …" (`lead('. ')`, sales keep `lead('; ')`);
+  "suits"/"fits" in `combatReadiness.variantText`.
+- Isolation checked after every candidate run: `%APPDATA%\OSRS Path\progress-copies` unchanged (last 12:21:56), `Downloads\OSRS-Put-data` written
+  only by the owner's own 2.59.0 hourly backup timer (`backupLast`), the owner's processes untouched, nothing left in TEMP.
+- Not verified live: everything in-game from 2.60.0 on (the way in and Quest Helper's step as the arrow; cleanup rows and frames; the verdict on
+  the bank card and the Advice tab; tool tiers and food by healing at entrances). RuneLite runs plugin 2.59.0 until the owner presses the
+  app's update. The quest-fight estimates (2.63.0) are app-side and checked with fixtures only; S3-08 and Below Ice Mountain are behind the
+  character, so the minotaur and Guardian cards cannot be shown live.
+- Known, not changed: the Journal's quest list scrolls inside its box while the page also scrolls about 140 px (all scales, as before). Full-page
+  screenshots show the sticky sidebar ending at the first screen (a screenshot effect, not the app).

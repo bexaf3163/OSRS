@@ -20,6 +20,8 @@ interface Mock {
   zen?: boolean;
   /** The exchange prices by item ID: they stand in for the prices.runescape.wiki reply (without them the network to the wiki is closed). */
   prices?: Record<number, number>;
+  /** Windows display scaling (1.25 = 125%): the device pixel ratio; the viewport width passed is then in CSS pixels. */
+  scale?: number;
 }
 
 /** The progress: everything before the step is closed. */
@@ -30,7 +32,10 @@ function progressBefore(id: string, extra: Record<string, unknown> = {}) {
 }
 
 async function open(browser: Browser, width: number, mock: Mock, hash: string): Promise<{ page: Page; errors: string[] }> {
-  const ctx = await browser.newContext({ viewport: { width, height: 900 }, colorScheme: width < 600 ? 'light' : 'dark' });
+  const ctx = await browser.newContext({
+    viewport: { width, height: mock.scale ? Math.round(1040 / mock.scale) : 900 }, colorScheme: width < 600 ? 'light' : 'dark',
+    ...(mock.scale ? { deviceScaleFactor: mock.scale } : {}),
+  });
   await ctx.addInitScript((m: Mock) => {
     for (const [k, v] of Object.entries(m.localStorage ?? {})) localStorage.setItem(k, v);
     try {
@@ -317,6 +322,9 @@ async function run(browser: Browser) {
       expect(t.includes('needs 20 Ranged') && t.includes('Coif') && t.includes('cannot be worn yet'), 'gear: 🔒 Coif — needs 20 Ranged, lies in the bank');
       if (process.env.UI_SHOTS) await page.screenshot({ path: `${process.env.UI_SHOTS}/gear-${width}.png`, fullPage: true }).catch(() => {});
       expect(!(await text(page, '.gear-list')).includes('Wear Coif'), 'gear: it is not advised to wear the Coif');
+      // No exchange prices here: an exchange upgrade is neither called beyond the money nor is the kit called the best the money buys.
+      const goals = await text(page, '[aria-labelledby="gear-goals"]');
+      expect(goals.includes('the price is not known yet') && !goals.includes('than what you can afford') && !(await text(page, '[aria-labelledby="gear-now"]')).includes('best possible'), 'gear: without exchange prices nothing is called beyond or within your money');
       expect(await noOverflow(page), 'gear: no horizontal scrolling');
       expect(!errors.length, `gear: no console errors ${errors.join('; ')}`);
       await page.context().close();
@@ -372,7 +380,7 @@ async function run(browser: Browser) {
       const verdict = await text(zen.page, '.readiness-verdict');
       expect(verdict.includes('Preparation needed') && verdict.includes('Bank: withdraw 13 Salmon') && verdict.includes('Then buy about 13 Salmon'),
         `readiness (Zen): the next action names the bank and the purchase (${verdict.replace(/\s+/g, ' ').slice(0, 200)})`);
-      expect(verdict.includes('Minotaur (level 12) suit your current kit best') && verdict.includes('Minotaur (level 27):'), 'readiness (Zen): both Minotaur versions are compared');
+      expect(verdict.includes('Minotaur (level 12) suits your current kit best') && verdict.includes('Minotaur (level 27):'), 'readiness (Zen): both Minotaur versions are compared');
       // Preparation opens as a drawer over the step page: its own card is the one in the dialog.
       await zen.page.locator('dialog[aria-label="Preparation"] .readiness-verdict summary').first().click();
       const why = await text(zen.page, 'dialog[aria-label="Preparation"] .readiness-verdict');
@@ -1073,6 +1081,37 @@ async function run(browser: Browser) {
     expect(/You marked it/.test(await page.evaluate(() => document.querySelector('.cleanup-keeps')?.textContent ?? '')) && /Stop always keeping/.test(await page.evaluate(() => document.querySelector('.cleanup-keeps')?.textContent ?? '')), `inventory cleanup (${width} px): Always keep moves the line to the kept list`);
     expect(errors.length === 0, `inventory cleanup (${width} px): no console errors ${errors.join('; ')}`);
     await page.context().close();
+  }
+
+  // The visual review at Windows display scaling (UI_SCALES=1): a 1920×1040 screen at 100, 125 and 150%, every main page with a linked game on the
+  // Minotaur step. Screenshots go to UI_SHOTS as scale-<percent>-<page>.png for the eye; the checks are the ones a review needs every time.
+  if (process.env.UI_SCALES) {
+    const equipment = [[1329, 'Mithril scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']]
+      .map(([id, name, slot]) => ({ id, name, slot }));
+    const gear = { equipment, inventory: [{ id: 1759, name: 'Ball of wool', count: 23 }], coins: 500, bankCoins: 3000 };
+    const stats = { attack: 22, strength: 16, defence: 1, hitpoints: 22 };
+    const xp = { attack: 5624, strength: 2746, defence: 0, hitpoints: 2400 };
+    const pages: [string, string][] = [['home', '#/'], ['step', '#/step/S3-08'], ['shopping', '#/shopping'], ['skills', '#/skills'], ['gear', '#/gear'], ['journal', '#/journal'], ['settings', '#/settings']];
+    for (const scale of [1, 1.25, 1.5]) {
+      for (const [name, hash] of pages) {
+        const { page, errors } = await open(browser, Math.round(1920 / scale), {
+          scale, zen: true, progress: progressBefore('S3-08'), localStorage: { 'osrs-put:active-step': 'S3-08' },
+          status: { protocol: 6, ...gear, stats, xp, activeStepId: 'S3-08', player: 'Scale Test' },
+          events: [{ type: 'STATS', stats }, { type: 'XP', xp }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 0, bank: 13 }] }],
+        }, hash);
+        await page.waitForTimeout(400);
+        const pct = Math.round(scale * 100);
+        expect(await noOverflow(page), `scale ${pct}%: ${name} without horizontal scrolling`);
+        const clipped = await page.evaluate(() => [...document.querySelectorAll('button, .btn')].filter((b) => {
+          const el = b as HTMLElement;
+          return el.offsetParent !== null && el.scrollWidth > el.clientWidth + 2 && getComputedStyle(el).overflow !== 'visible';
+        }).length);
+        expect(clipped === 0, `scale ${pct}%: ${name} has no clipped button text (${clipped})`);
+        expect(errors.length === 0, `scale ${pct}%: ${name} no console errors ${errors.join('; ')}`);
+        if (process.env.UI_SHOTS) await page.screenshot({ path: `${process.env.UI_SHOTS}/scale-${pct}-${name}.png`, fullPage: true }).catch(() => {});
+        await page.context().close();
+      }
+    }
   }
 }
 
