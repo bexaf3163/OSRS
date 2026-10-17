@@ -57,6 +57,8 @@ export interface BridgeStatus {
   /** The quest points and the total level as the game holds them (plugin 2.54+); null — unknown, never zero. */
   questPoints: number | null;
   totalLevel: number | null;
+  /** The account kind from the game (plugin 2.59+); null — unknown or an older plugin. */
+  accountType?: 'normal' | 'ironman' | null;
   /** The fights recorded on the combat training step (plugin 2.57+); null — none recorded or an older plugin. */
   combatLog: CombatLogState | null;
 }
@@ -123,6 +125,8 @@ export interface GearItem {
   count?: number;
   /** The slot of a worn item as in RuneLite (EquipmentInventorySlot): weapon, head, amulet… An old plugin does not send it. */
   slot?: string;
+  /** A banknote (plugin 2.59+); absent means the item itself. */
+  noted?: boolean;
 }
 
 /** Equipment and coins for the upgrade hint. null in a field — the game has not yet sent that container. */
@@ -442,12 +446,12 @@ function gearItems(raw: unknown): GearItem[] | null {
   if (!Array.isArray(raw)) return null;
   const out: GearItem[] = [];
   for (const r of raw) {
-    const o = r as { id?: unknown; name?: unknown; count?: unknown; slot?: unknown } | null;
+    const o = r as { id?: unknown; name?: unknown; count?: unknown; slot?: unknown; noted?: unknown } | null;
     const id = int(o?.id, 1);
     if (id === null || typeof o?.name !== 'string') continue;
     const count = int(o.count, 1);
     const slot = typeof o.slot === 'string' && /^[a-z]{2,10}$/.test(o.slot) ? o.slot : undefined;
-    out.push({ id, name: o.name, ...(count !== null ? { count } : {}), ...(slot ? { slot } : {}) });
+    out.push({ id, name: o.name, ...(count !== null ? { count } : {}), ...(slot ? { slot } : {}), ...(o.noted === true ? { noted: true } : {}) });
   }
   return out;
 }
@@ -544,7 +548,7 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
     status?: string; inGame?: boolean; stats?: unknown; shortestPath?: unknown; activeStepId?: unknown; protocol?: unknown; pluginVersion?: unknown;
     navTarget?: unknown; questInstruction?: unknown; xp?: unknown; questsDone?: unknown; player?: unknown; pos?: unknown; homeTeleportSeconds?: unknown;
     homeTeleportKnown?: unknown; spellbook?: unknown; chronicleCharges?: unknown; questPoints?: unknown; totalLevel?: unknown;
-    combatLog?: unknown;
+    combatLog?: unknown; accountType?: unknown;
   } | undefined;
   const online = res.ok && d?.status === 'ok';
   const instruction = online && d?.inGame === true ? parseQuestInstruction(d.questInstruction) : null;
@@ -571,6 +575,7 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
     questPoints: online && typeof d?.questPoints === 'number' && Number.isInteger(d.questPoints) && d.questPoints >= 0 && d.questPoints <= 500 ? d.questPoints : null,
     totalLevel: online && typeof d?.totalLevel === 'number' && Number.isInteger(d.totalLevel) && d.totalLevel >= 0 && d.totalLevel <= 2277 ? d.totalLevel : null,
     combatLog: online ? parseCombatLog(d?.combatLog) : null,
+    accountType: online && (d?.accountType === 'normal' || d?.accountType === 'ironman') ? d.accountType : null,
   };
 }
 

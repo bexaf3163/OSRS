@@ -35,6 +35,7 @@ import net.runelite.api.GrandExchangeOffer;
 import net.runelite.api.GrandExchangeOfferState;
 import net.runelite.api.Item;
 import net.runelite.api.ItemComposition;
+import net.runelite.api.vars.AccountType;
 import net.runelite.api.EquipmentInventorySlot;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.NPC;
@@ -2280,7 +2281,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			inventory = new ArrayList<>();
 			for (Map.Entry<Integer, Integer> e : stacks.entrySet())
 			{
-				inventory.add(itemRow(e.getKey(), e.getValue()));
+				Map<String, Object> row = itemRow(e.getKey(), e.getValue());
+				// A banknote is the same name as the item but not the item: the cleanup advice keeps them apart (additive, since 2.59.0).
+				ItemComposition comp = itemManager.getItemComposition(e.getKey());
+				if (comp != null && comp.getNote() != -1)
+				{
+					row.put("noted", true);
+				}
+				inventory.add(row);
 			}
 			coins = stacks.getOrDefault(ItemID.COINS, 0);
 		}
@@ -3093,6 +3101,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 				server.setSpellbook(client.getVarbitValue(TeleportCooldown.VARBIT_SPELLBOOK));
 				// Two integer reads: the app tells whether a new account's trade restrictions can still apply (10 quest points, total level 100).
 				server.setProgressTotals(client.getVarpValue(VarPlayerID.QP), client.getTotalLevel());
+				// A varbit read: Ironmen cannot sell on the Grand Exchange, so the cleanup advice must know.
+				AccountType kind = client.getAccountType();
+				server.setAccountType(kind == null ? null : kind.isIronman() || kind.isGroupIronman() ? "ironman" : "normal");
 				updateCombatLog();
 			}
 			shareAccount(me);

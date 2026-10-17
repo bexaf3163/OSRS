@@ -289,7 +289,7 @@ public interface OsrsPathBridgeConfig extends Config
 	@ConfigItem(
 		keyName = "useShortestPath",
 		name = "Via Shortest Path",
-		description = "If the Shortest Path plugin (Plugin Hub) is installed, pass it the step's target; it lays out a path that accounts for walls and doors",
+		description = "If the Shortest Path plugin (Plugin Hub) is installed, pass it the step's target: it draws the route on the minimap and the ground. A line in its \"unreachable\" colour (purple by default) means it found no full route and shows the way to the nearest point, for example to a spot upstairs. Quest Helper's own lines are separate: its settings \"Display navigation paths\" and \"Display arrows on the mini-map\"",
 		section = companion,
 		position = 18
 	)

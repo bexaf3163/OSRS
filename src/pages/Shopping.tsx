@@ -15,6 +15,7 @@ import { getGePrice, getMapping, type GePrice } from '../services/pricesApi';
 import { ItemIcon } from '../components/WikiDrawer';
 import { copyText as copy } from '../lib/clipboard';
 import { RoadSupplies } from '../components/RoadSupplies';
+import { InventoryCleanup } from '../components/InventoryCleanup';
 
 const RANGE_KEY = 'osrs-put:shopping-range';
 const FILTER_KEY = 'osrs-put:shopping-filter';
@@ -390,6 +391,7 @@ export function ShoppingPage() {
         {/* From where the player stands when the chosen stages start at the current one (only the open steps: the next one is where they go). */}
         <RoadSupplies steps={selected} locate={range.openOnly && range.from <= currentStage(steps, progress)} heading="For the road: teleport supplies for these stages" />
       </div>
+      <InventoryCleanup />
       <p className="muted small">The app buys nothing by itself: you place the exchange orders.</p>
       <div className="card shop-summary">
         {buyRows.length > 0 && left === 0 && unknown === 0 ? (

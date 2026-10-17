@@ -94,6 +94,13 @@ final class QhMachine
 	private final JsonObject nodes;
 	private final JsonObject reqs;
 	private final Map<String, List<String>> alias = new HashMap<>();
+	/**
+	 * For a leaf: the leaves next to it in the same list of conditions, the previous ones first. A "go up / go down / climb" step has no line of
+	 * its own: Quest Helper lists it right after the step it leads to, so that step's line is the one to show. Used only when nothing else maps.
+	 */
+	private final Map<String, List<String>> neighbours = new HashMap<>();
+	/** The names of steps that only move the player: the ones that may borrow a neighbour's line. */
+	private static final java.util.regex.Pattern MOVEMENT = java.util.regex.Pattern.compile("^(go|climb|enter|leave|walk|exit|cross|swim|sail|board|descend|ascend)[A-Z0-9]");
 
 	QhMachine(JsonObject quest)
 	{
@@ -112,6 +119,127 @@ final class QhMachine
 				alias.put(e.getKey(), parents);
 			}
 		}
+		IdentityHashMap<Object, Boolean> seen = new IdentityHashMap<>();
+		for (Map.Entry<String, JsonElement> e : stages.entrySet())
+		{
+			collectNeighbours(e.getValue(), seen);
+		}
+		for (Map.Entry<String, JsonElement> e : nodes.entrySet())
+		{
+			collectNeighbours(e.getValue(), seen);
+		}
+	}
+
+	private void collectNeighbours(JsonElement ref, IdentityHashMap<Object, Boolean> seen)
+	{
+		JsonObject n = node(ref);
+		if (seen.put(n, Boolean.TRUE) != null)
+		{
+			return;
+		}
+		List<JsonObject> kids = new ArrayList<>();
+		if (n.has("c"))
+		{
+			for (JsonElement entry : n.getAsJsonArray("c"))
+			{
+				JsonArray pair = entry.getAsJsonArray();
+				if (pair.size() > 1)
+				{
+					kids.add(node(pair.get(1)));
+				}
+			}
+		}
+		if (n.has("d"))
+		{
+			kids.add(node(n.get("d")));
+		}
+		List<String> leaves = new ArrayList<>();
+		for (JsonObject k : kids)
+		{
+			leaves.add(k.has("s") ? k.get("s").getAsString() : null);
+		}
+		for (int i = 0; i < leaves.size(); i++)
+		{
+			String leaf = leaves.get(i);
+			if (leaf == null || !MOVEMENT.matcher(leaf).find())
+			{
+				continue;
+			}
+			List<String> list = neighbours.computeIfAbsent(leaf, x -> new ArrayList<>());
+			for (int j = i - 1; j >= 0; j--)
+			{
+				if (leaves.get(j) != null && !list.contains(leaves.get(j)))
+				{
+					list.add(leaves.get(j));
+				}
+			}
+			for (int j = i + 1; j < leaves.size(); j++)
+			{
+				if (leaves.get(j) != null && !list.contains(leaves.get(j)))
+				{
+					list.add(leaves.get(j));
+				}
+			}
+		}
+		for (JsonObject k : kids)
+		{
+			collectNeighbours(k, seen);
+		}
+	}
+
+	/** Every leaf the machine can pick for a quest variable value, with the path to it (outer step names first). For the coverage test. */
+	List<List<String>> leafPaths(int varValue)
+	{
+		List<List<String>> out = new ArrayList<>();
+		JsonElement root = stages.get(String.valueOf(varValue));
+		if (root != null)
+		{
+			walkLeaves(root, new ArrayList<String>(), out, 0);
+		}
+		return out;
+	}
+
+	private void walkLeaves(JsonElement ref, List<String> path, List<List<String>> out, int depth)
+	{
+		if (depth > 40)
+		{
+			return;
+		}
+		JsonObject n = node(ref);
+		List<String> here = new ArrayList<>(path);
+		if (n.has("n"))
+		{
+			here.add(n.get("n").getAsString());
+		}
+		if (n.has("s"))
+		{
+			here.add(n.get("s").getAsString());
+			out.add(here);
+			return;
+		}
+		if (n.has("c"))
+		{
+			for (JsonElement entry : n.getAsJsonArray("c"))
+			{
+				walkLeaves(entry.getAsJsonArray().get(1), here, out, depth + 1);
+			}
+		}
+		if (n.has("d"))
+		{
+			walkLeaves(n.get("d"), here, out, depth + 1);
+		}
+	}
+
+	/** The names of stages' variable values this machine has. */
+	List<Integer> stageValues()
+	{
+		List<Integer> out = new ArrayList<>();
+		for (String k : stages.keySet())
+		{
+			out.add(Integer.parseInt(k));
+		}
+		Collections.sort(out);
+		return out;
 	}
 
 	/** Whether Quest Helper has a step for this value of the quest variable. */
@@ -565,6 +693,28 @@ final class QhMachine
 				if (name.equals(lines.get(i).getK()))
 				{
 					return i;
+				}
+			}
+		}
+		// A step that only moves the player (go down the ladder, enter the cave) has no line: show the line of the step it leads to. Before, the
+		// guide stayed on the line the player had just finished (The Corsair Curse: "Talk to Colin" until the player went down the stairs).
+		List<String> next = neighbours.get(v.getLeaf());
+		if (next != null)
+		{
+			for (String near : next)
+			{
+				List<String> candidates = new ArrayList<>();
+				candidates.add(near);
+				candidates.addAll(aliases(near));
+				for (String name : candidates)
+				{
+					for (int i = 0; i < lines.size(); i++)
+					{
+						if (name.equals(lines.get(i).getK()))
+						{
+							return i;
+						}
+					}
 				}
 			}
 		}

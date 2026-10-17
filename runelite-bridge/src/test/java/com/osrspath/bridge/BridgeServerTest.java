@@ -163,6 +163,22 @@ public class BridgeServerTest
 	}
 
 	@Test
+	public void accountTypeIsReportedOnlyWhenKnownAndInGame() throws Exception
+	{
+		server.setInGame(true);
+		assertFalse(get("/status").body().contains("accountType"));
+		server.setAccountType("ironman");
+		assertTrue(get("/status").body().contains("\"accountType\":\"ironman\""));
+		server.setAccountType("normal");
+		assertTrue(get("/status").body().contains("\"accountType\":\"normal\""));
+		server.setAccountType("hardcore");
+		assertFalse("a stray word is unknown, not a guess", get("/status").body().contains("accountType"));
+		server.setAccountType("ironman");
+		server.setInGame(false);
+		assertFalse(get("/status").body().contains("accountType"));
+	}
+
+	@Test
 	public void questPointsAndTotalLevelAreReportedOnlyWhenKnownInRangeAndInGame() throws Exception
 	{
 		server.setInGame(true);

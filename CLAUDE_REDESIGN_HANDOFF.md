@@ -554,3 +554,31 @@ the game, (4) readiness and shopping integration, (5) desktop simplification, (6
   open exchange the guide list is hidden (`GuideList.shown`) and the HUD is the one-line compact form, **whatever the smart reveal setting says** (it is off by default).
   Bank and merchant windows are unchanged (the bank list is interactive and the owner's complaint was the exchange).
 
+
+## 2.59.0 — stuck cursor, Inventory cleanup, a pink line
+
+- **The cursor stuck after a finished step (Corsair Curse, 2026-10-17).** Telemetry (`osrs-path-telemetry/session-20261017-*.jsonl`, kind `qh`): the machine picked
+  `goDownFromArsen` ("strong", no `line` field = no line) and `qhPick` returned null, so the old place-and-items logic kept "Talk to Colin" (the player stood next to him)
+  until the player went down the stairs and the machine picked `goUpToGnocci`. `QhMachine.lineFor` now falls back, for steps whose name starts with a movement verb
+  (`MOVEMENT`: go, climb, enter, leave, walk, exit, cross, swim, sail, board, descend, ascend + a capital or digit), to the line of a neighbour in the same list of
+  conditions (the previous leaf first: Quest Helper lists "go to X" right after "talk to X"). `QhLineCoverageTest` walks every quest, stage and leaf of the real data
+  (`questMachines.json` + `../src/data/questStages.json`) and fails for a moving step with no line in a stage that has several lines. Known remaining: five Watchtower
+  (S7-05) travel legs at 130/150 (their stage has only the fight and the king).
+  - **Known data gaps, not moving steps, not fixed**: machine leaves with no line in our stage data, found by the same walk: S1-07@75 `pwPlayPiano`, @115/120
+    `continueThroughSapphireDoor`; S2-10@30..50 `reobtainKey`, `talkToAggie`, `dyeWig`, `talkToNed` (stage has only `talkToJoe`/`useRopeOnKeli`/…); S2-11 levers
+    (`pullUpLeverC/D`, `pullLeverToLeave`); S2-12 `searchBehindGenerals`, `searchWestHut`; S9-01 `getAnotherBranch`; S9-02 `pickUpSecateurs`; S9-04
+    `talkToDaeroTravel`, `useWool`, `enterGate`. They need lines in `questStages.json` (a content job: text, tile, highlight), not a heuristic: a guessed neighbour would
+    send the player to a wrong place.
+- **Minimap lines (owner's report).** Nothing in this plugin draws on the minimap (`grep -i minimap` hits only comments). The purple dotted line is **Shortest Path**:
+  `shortestpath.colourPathUnreachable` is rgb(200,40,240); it draws that colour when it cannot find a full route to our target (here a spot upstairs in Corsair Cove) and shows
+  the way to the nearest point. The red solid line in older screenshots is its normal `colourPath`. The Quest Helper lines vanished because **its settings
+  `questhelper.showWorldLines` ("Display navigation paths") and `showMiniMapArrow` ("Display arrows on the mini-map") are `false` in the RuneLite profile** (true in the backups
+  of 25–26 September, already false in the 12 October backup). This plugin never writes them (`setConfiguration` is only used for its own group). The owner has to switch them
+  on in RuneLite; we do not edit another plugin's profile while the client runs (it rewrites the file on exit).
+  - The `useShortestPath` setting text now explains the purple line.
+- **Inventory cleanup**, `docs/inventory-cleanup.md` (rules, table, limits). `src/lib/cleanup.ts` (pure engine), `cleanupPrefs.ts` (per profile and character),
+  `components/InventoryCleanup.tsx` (Shopping page), `tests/cleanup.test.ts`, UI smoke at 1440 and 390 px. Plugin additive fields: `accountType` in `/status`
+  (`Client.getAccountType()`, deprecated in 1.12.39 but working; `BridgeServerTest.accountTypeIsReportedOnlyWhenKnownAndInGame`) and `noted` on bag rows.
+  - Not done: the in-game card and slot highlights (planned design: append the lines to the existing bank/merchant `ShopWindow` card rather than a new window,
+    so the window count does not grow again; a `/cleanup-hint` endpoint with `player`, expire after ~10 minutes, drop lines whose item left the bag, highlight by item id
+    with lower priority than quest-item frames, a setting off by default); bank contents; High Alchemy; live verification.

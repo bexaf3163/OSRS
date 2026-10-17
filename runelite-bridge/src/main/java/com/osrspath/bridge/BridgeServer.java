@@ -73,7 +73,7 @@ public final class BridgeServer
 	 */
 	static final int PROTOCOL = 6;
 	/** The plugin version, the same as the app it ships with in one exe. */
-	static final String PLUGIN_VERSION = "2.58.0";
+	static final String PLUGIN_VERSION = "2.59.0";
 	public static final String HEADER = "X-OSRS-Path";
 	static final int MAX_BODY = 64 * 1024;
 	/** The whole snapshot: the step with the quest stages, shopping and plan in one body. */
@@ -172,6 +172,8 @@ public final class BridgeServer
 	/** The quest points and the total level as the game holds them (additive in /status since 2.54.0); null is unknown (never zero). */
 	private volatile Integer questPoints;
 	private volatile Integer totalLevel;
+	/** "normal" or "ironman" (any Ironman kind) as the game holds it (additive in /status since 2.59.0); null is unknown. The cleanup advice reads it: Ironmen cannot sell. */
+	private volatile String accountType;
 	/** The fights of the combat training step (additive in /status since 2.57.0): {"stepId":..., "foes":[...]}; null — none recorded. */
 	private volatile Map<String, Object> combatLog;
 	/** The current temporary target (like NAV_SET) or null, for /status. */
@@ -354,6 +356,12 @@ public final class BridgeServer
 	{
 		questPoints = quests != null && quests >= 0 && quests <= 500 ? quests : null;
 		totalLevel = total != null && total >= 0 && total <= 2277 ? total : null;
+	}
+
+	/** "normal", "ironman" or null (unknown). Anything else is unknown: the app never guesses an account kind from a stray word. */
+	public void setAccountType(String kind)
+	{
+		accountType = "normal".equals(kind) || "ironman".equals(kind) ? kind : null;
 	}
 
 	/**
@@ -672,6 +680,11 @@ public final class BridgeServer
 						if (total != null)
 						{
 							status.put("totalLevel", total);
+						}
+						String account = accountType;
+						if (account != null)
+						{
+							status.put("accountType", account);
 						}
 						Map<String, Object> fights = combatLog;
 						if (fights != null)

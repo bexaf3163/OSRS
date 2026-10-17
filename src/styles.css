@@ -1927,3 +1927,16 @@ button.subtab { background: none; border-top: 0; border-left: 0; border-right: 0
 p.trade-note { margin: 6px 0; }
 .step-tasks ul { margin: 4px 0 0; padding-left: 18px; }
 .task-tick { margin-left: 4px; white-space: nowrap; font-size: .92em; }
+
+/* Inventory cleanup */
+.cleanup-card > summary { cursor: pointer; }
+.cleanup-list { list-style: none; margin: 8px 0; padding: 0; display: grid; gap: 8px; }
+.cleanup-row { display: flex; gap: 10px; justify-content: space-between; align-items: flex-start; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface-3); }
+.cleanup-main { min-width: 0; }
+.cleanup-why { margin: 2px 0 0; }
+.cleanup-btns { display: flex; gap: 6px; flex-wrap: wrap; flex: none; }
+.cleanup-act { display: inline-block; margin-right: 8px; padding: 0 7px; border-radius: 999px; border: 1px solid var(--border-strong); font-size: 0.75rem; }
+.cleanup-act.act-sell { background: var(--done-soft); color: var(--done); }
+.cleanup-act.act-drop { background: var(--danger-soft); color: var(--danger); }
+.cleanup-act.act-review { background: var(--warn-soft); color: var(--warn); }
+@media (max-width: 640px) { .cleanup-row { flex-direction: column; } }

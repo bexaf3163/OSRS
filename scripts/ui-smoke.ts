@@ -1005,6 +1005,31 @@ async function run(browser: Browser) {
     }
     await page.context().close();
   }
+
+  // Inventory cleanup: the bag is checked against the open steps, "Always keep" moves a line to the kept list and survives a reload.
+  for (const width of [1440, 390]) {
+    const { page, errors } = await open(browser, width, {
+      progress: progressBefore('S2-10', { gameMode: 'f2p' }),
+      status: {
+        protocol: 6, inGame: true, player: 'Cleanup Test', questPoints: 4, totalLevel: 41, coins: 100, bankCoins: 0,
+        equipment: [], inventory: [{ id: 1759, name: 'Ball of wool', count: 23 }, { id: 1760, name: 'Ball of wool', count: 7, noted: true }, { id: 315, name: 'Shrimps', count: 4 }, { id: 995, name: 'Coins', count: 100 }],
+      },
+    }, '#/shopping');
+    await page.waitForTimeout(800);
+    const card = await text(page, '.cleanup-card');
+    expect(/Inventory cleanup/.test(card) && /Ball of wool/.test(card), `inventory cleanup (${width} px): the section lists the bag`);
+    expect(/Keep 3 for Prince Ali Rescue/.test(card), `inventory cleanup (${width} px): the quantity kept for the route is named`);
+    expect(!/Shrimps ×4[^]*Sell/.test(card.split('Staying in the bag')[0] ?? ''), `inventory cleanup (${width} px): food is never offered for sale`);
+    expect(/sells, drops and destroys nothing/.test(card), `inventory cleanup (${width} px): it says it is advice only`);
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
+    expect(!overflow, `inventory cleanup (${width} px): no horizontal scroll`);
+    if (process.env.UI_SHOTS) await page.locator('.cleanup-card').screenshot({ path: `${process.env.UI_SHOTS}/cleanup-${width}.png` }).catch(() => {});
+    await page.getByRole('button', { name: 'Always keep' }).first().click();
+    await page.waitForTimeout(300);
+    expect(/You marked it/.test(await page.evaluate(() => document.querySelector('.cleanup-keeps')?.textContent ?? '')) && /Stop always keeping/.test(await page.evaluate(() => document.querySelector('.cleanup-keeps')?.textContent ?? '')), `inventory cleanup (${width} px): Always keep moves the line to the kept list`);
+    expect(errors.length === 0, `inventory cleanup (${width} px): no console errors ${errors.join('; ')}`);
+    await page.context().close();
+  }
 }
 
 // The address is set explicitly: without --host the server on some machines (GitHub CI) listens on IPv6 ::1 only, and 127.0.0.1 does not answer.
