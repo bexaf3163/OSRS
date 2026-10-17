@@ -111,6 +111,11 @@ class OsrsPathShopOverlay extends Overlay
 	{
 		Open o = config.showShopWindow() ? open() : null;
 		ShopWindow.Result r = o == null ? null : ShopWindow.build(o.place, plugin.getGuideView(), atTransportStop());
+		// One card at the exchange: when the bulk list draws, this one stays out (ExchangeView).
+		if (r != null && o.place == ShopWindow.Place.EXCHANGE && ExchangeView.choose(plugin.exchangeBulk(), r) != ExchangeView.Card.STEP)
+		{
+			r = null;
+		}
 		if (r == null)
 		{
 			plugin.shopWindowShown(false);

@@ -121,7 +121,7 @@ final class GuideList
 	 */
 	static boolean shown(boolean enabled, boolean collapsed, StepGuide.View v, boolean smart, SmartView.Context context)
 	{
-		return enabled && !collapsed && worthShowing(v) && !(smart && !SmartView.showsGuide(context));
+		return enabled && !collapsed && worthShowing(v) && !SmartView.exchangeFocus(context) && !(smart && !SmartView.showsGuide(context));
 	}
 
 	/** Whether to show the list: there are items, several places, a temporary target or a message. Otherwise the HUD is enough. */

@@ -147,12 +147,66 @@ public class NavigationTest
 		Navigation.Breadcrumbs route = new Navigation.Breadcrumbs(Arrays.asList(p(3097, 3468, "Trapdoor"), p(3115, 9840, "Giants"), p(3094, 3491, "Bank")));
 		assertTrue(route.update(3097, 3469, 0));
 		assertEquals("Giants", route.current().getLabel());
-		assertFalse(route.update(3094, 3480, 0));
+		// A few steps from the trapdoor, about to climb down: the point stays (no flip-flop at the entrance).
+		assertFalse(route.update(3094, 3472, 0));
+		assertEquals("Giants", route.current().getLabel());
+		// Walked well away on the surface without going down: the arrow leads back to the trapdoor (the dungeon point is not skipped, it is next).
+		assertTrue(route.update(3094, 3480, 0));
+		assertEquals("Trapdoor", route.current().getLabel());
+		assertTrue("back at the trapdoor the route goes on to the giants", route.update(3097, 3469, 0));
 		assertEquals("Giants", route.current().getLabel());
 		// Underground, with the route going back to the surface after the dungeon point: nothing is skipped either (as before 2.55.1).
 		Navigation.Breadcrumbs back = new Navigation.Breadcrumbs(Arrays.asList(p(3097, 3468, "Trapdoor"), p(3115, 9840, "Giants"), p(3094, 3491, "Bank")));
 		assertFalse(back.update(3110, 9850, 0));
 		assertEquals("Trapdoor", back.current().getLabel());
+	}
+
+	/** The owner, 2026-10-15: out of the Minotaur cave, "the arrow does not show where to go back". */
+	@Test
+	public void outOfTheCave_theArrowLeadsBackToTheWayIn()
+	{
+		ActiveTarget.WorldPointDto room = p(1876, 5216, "Minotaurs");
+		Navigation.Breadcrumbs route = new Navigation.Breadcrumbs(Arrays.asList(p(3081, 3420, "Entrance"), room));
+		assertTrue(route.update(3082, 3421, 0));
+		assertEquals("Minotaurs", route.current().getLabel());
+		// Fighting in the room, not within 3 tiles of its point: the point stays.
+		assertFalse(route.update(1899, 5241, 0));
+		assertEquals("Minotaurs", route.current().getLabel());
+		// Out on the surface for food: the entrance again, and a distance the HUD can show.
+		assertTrue(route.update(3100, 3430, 0));
+		assertEquals("Entrance", route.current().getLabel());
+		assertTrue(Navigation.readout(3100, 3430, 0, route.current().getX(), route.current().getY(), 0, false).getText().startsWith("~"));
+		// Back at the entrance and down again: on to the room.
+		assertTrue(route.update(3081, 3421, 0));
+		assertEquals("Minotaurs", route.current().getLabel());
+	}
+
+	@Test
+	public void afterTheLastPoint_outOfTheArea_theWayInIsLedToo_notTheLeadingWaypointsFarBehind()
+	{
+		Navigation.Breadcrumbs route = new Navigation.Breadcrumbs(Arrays.asList(p(3000, 3000, "Far"), p(3081, 3420, "Entrance"), p(1876, 5216, "Minotaurs")));
+		assertTrue(route.update(3000, 3001, 0));
+		assertTrue(route.update(3081, 3421, 0));
+		assertTrue(route.update(1877, 5217, 0));
+		assertTrue(route.finished());
+		// Home teleport or the ladder up: the route is done, but the player is no longer in the area it ended in.
+		assertTrue(route.update(3222, 3218, 0));
+		assertFalse(route.finished());
+		assertEquals("the nearest earlier point on the surface, not the first one", "Entrance", route.current().getLabel());
+	}
+
+	@Test
+	public void aRouteOnOneLayerNeverRewinds()
+	{
+		Navigation.Breadcrumbs route = new Navigation.Breadcrumbs(Arrays.asList(p(3243, 3210, "A"), p(3148, 3175, "B"), p(3250, 3193, "C")));
+		assertTrue(route.update(3244, 3211, 0));
+		assertTrue(route.update(3149, 3176, 0));
+		assertFalse(route.update(3300, 3300, 0));
+		assertEquals("C", route.current().getLabel());
+		assertTrue(route.update(3250, 3194, 0));
+		assertTrue(route.finished());
+		assertFalse("done on the same layer: stays done", route.update(3300, 3300, 0));
+		assertTrue(route.finished());
 	}
 
 	@Test

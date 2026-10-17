@@ -54,19 +54,26 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 	@Override
 	public Dimension render(Graphics2D g)
 	{
-		List<ShoppingPlan.Row> rows = plugin.getShopping();
-		if (!config.showGeHelper() || rows.isEmpty() || !InventoryCheckOverlay.visible(client.getWidget(InterfaceID.GeOffers.UNIVERSE)))
+		List<ShoppingPlan.Row> rows = plugin.exchangeBulk();
+		if (rows.isEmpty() || !InventoryCheckOverlay.visible(client.getWidget(InterfaceID.GeOffers.UNIVERSE)))
 		{
 			return null;
 		}
+		// One card at the exchange: the bulk list or the step's "what to buy", never both (ExchangeView).
+		ShopWindow.Result step = config.showShopWindow() ? ShopWindow.build(ShopWindow.Place.EXCHANGE, plugin.getGuideView()) : null;
+		if (ExchangeView.choose(rows, step) != ExchangeView.Card.BULK)
+		{
+			return null;
+		}
+		List<String> extras = ExchangeView.extras(rows, step);
 		boolean large = config.hudLarge();
 		Font font = OverlayText.font(g.getFont(), large ? OsrsPathHudOverlay.LARGE : 1f);
 		g.setFont(font);
 		int width = OsrsPathHudOverlay.panelWidth(this, standardWidth(large));
-		Object key = Arrays.asList(rows, config.hudOpacity(), font, width);
+		Object key = Arrays.asList(rows, extras, step == null ? null : step.getTitle(), config.hudOpacity(), font, width);
 		if (!Objects.equals(key, builtFor))
 		{
-			build(panelComponent, rows, g.getFontMetrics(font), width, config.hudOpacity());
+			build(panelComponent, rows, extras, step == null ? null : ShopWindow.stepId(plugin.getGuideView()), g.getFontMetrics(font), width, config.hudOpacity());
 			builtFor = key;
 		}
 		OverlayCard.paint(g, last.width, last.height, accent(rows), Math.max(config.hudOpacity(), 85), config.overlayTheme());
@@ -98,6 +105,12 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 	/** The panel contents. Static: a test draws it with the real fonts without a client. */
 	static void build(PanelComponent panel, List<ShoppingPlan.Row> rows, FontMetrics fm, int width, int opacity)
 	{
+		build(panel, rows, java.util.Collections.emptyList(), null, fm, width, opacity);
+	}
+
+	/** As above, with the step's purchases the list does not hold ({@link ExchangeView#extras}): they follow the rows as "Also for S3-08". */
+	static void build(PanelComponent panel, List<ShoppingPlan.Row> rows, List<String> extras, String stepId, FontMetrics fm, int width, int opacity)
+	{
 		int inner = OverlayText.inner(width);
 		List<LayoutableRenderableEntity> c = panel.getChildren();
 		c.clear();
@@ -120,6 +133,14 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 				break;
 			}
 			line(c, r, fm, inner);
+		}
+		if (!extras.isEmpty())
+		{
+			OverlayText.line(c, "Also for " + (stepId == null || stepId.isEmpty() ? "the step" : stepId) + ":", OsrsPathHudOverlay.TITLE, fm, inner);
+			for (String x : extras)
+			{
+				OverlayText.line(c, "• " + x, OsrsPathHudOverlay.TEXT, fm, inner);
+			}
 		}
 		OverlayText.line(c, "Name: use the 'Copy' button in OSRS Path", MUTED, fm, inner);
 	}

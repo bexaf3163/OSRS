@@ -166,7 +166,8 @@ class OsrsPathHudOverlay extends OverlayPanel
 		}
 		// Smart reveal: while travelling and at the exchange one line (the action and distance), the rest is not needed in the game.
 		// Training: the plate replaces the hidden guide card (the step, the kills left, the progress) whatever the reveal mode says.
-		if (config.smartOverlays() && SmartView.compactHud(plugin.overlayContext()) && !s.isTraining())
+		SmartView.Context context = plugin.overlayContext();
+		if ((SmartView.exchangeFocus(context) || config.smartOverlays() && SmartView.compactHud(context)) && !s.isTraining())
 		{
 			s = SmartView.compact(s);
 		}
@@ -174,7 +175,7 @@ class OsrsPathHudOverlay extends OverlayPanel
 		{
 			// Compact HUD: the step, target, distance and "bag" are already in the "What you need" list; the plate stays only if it has something to say.
 			s = lean(s, !s.isTraining()
-				&& GuideList.shown(config.showGuide(), config.guideCollapsed(), plugin.getGuideView(), config.smartOverlays(), plugin.overlayContext()));
+				&& GuideList.shown(config.showGuide(), config.guideCollapsed(), plugin.getGuideView(), config.smartOverlays(), context));
 			if (s == null)
 			{
 				plugin.hudShown(false);

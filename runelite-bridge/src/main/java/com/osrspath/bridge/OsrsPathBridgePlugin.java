@@ -246,6 +246,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	@Getter
 	private List<ShoppingPlan.Row> shopping = Collections.emptyList();
 
+	/** The bulk list as the exchange card sees it: empty when its setting is off (then the step's card is the exchange card). */
+	List<ShoppingPlan.Row> exchangeBulk()
+	{
+		return config.showGeHelper() ? shopping : Collections.emptyList();
+	}
+
 	private BridgeServer server;
 	private AutoCompletionManager completion;
 	private boolean arrowSet;
@@ -322,6 +328,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private PacingSet pacing;
 	/** The fights of a combat training step, for the app's food and time estimate (2.57.0). */
 	private final CombatLog combatLog = new CombatLog();
+	/** Reads that run a client script (quest states) run only inside the game tick, never inside a script (2.57.1: "scripts are not reentrant" froze the game). */
+	private final ScriptGuard scripts = new ScriptGuard();
 
 	private Plugin shortestPath;
 	private boolean shortestPathLooked;
@@ -3056,6 +3064,21 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	@Subscribe
 	public void onGameTick(GameTick e)
 	{
+		// The tick is posted between scripts: the one place where a script may be started (Quest.getState). Event handlers fired from inside a
+		// script (a chat message, a varbit, a widget) read the values kept from the last tick instead.
+		scripts.safe(true);
+		try
+		{
+			tick(e);
+		}
+		finally
+		{
+			scripts.safe(false);
+		}
+	}
+
+	private void tick(GameTick e)
+	{
 		if (completion != null && client.getGameState() == GameState.LOGGED_IN)
 		{
 			completion.onGameTick();
@@ -3203,7 +3226,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		List<String> done = new ArrayList<>();
 		for (Quest quest : Quest.values())
 		{
-			if (quest.getState(client) == QuestState.FINISHED)
+			if (Boolean.TRUE.equals(scripts.read(quest.name(), () -> quest.getState(client) == QuestState.FINISHED)))
 			{
 				done.add(quest.getName());
 			}
@@ -3747,7 +3770,10 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 	}
 
-	/** Called on the client thread (from onGameTick). */
+	/**
+	 * Whether the quest is finished; null — unknown. Runs the game's script only inside the tick ({@link ScriptGuard}); an event handler that is posted from
+	 * inside a script (the chat message of a level-up) gets the value of the last tick.
+	 */
 	private Boolean isQuestFinished(String questName)
 	{
 		Quest quest = QUESTS.get(ActiveTarget.nameKey(questName));
@@ -3755,7 +3781,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			return null;
 		}
-		return quest.getState(client) == QuestState.FINISHED;
+		return scripts.read(quest.name(), () -> quest.getState(client) == QuestState.FINISHED);
 	}
 
 	private void onStepCompleted(String stepId)

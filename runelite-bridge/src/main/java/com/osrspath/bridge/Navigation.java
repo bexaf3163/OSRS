@@ -16,6 +16,11 @@ final class Navigation
 	static final int NEAR_EXIT = 7;
 	/** A waypoint counts if it is no more than this many tiles away on either axis. */
 	static final int WAYPOINT_REACH = 3;
+	/**
+	 * Back out of the area the route ends in (the Stronghold, a dungeon), the arrow returns to the way in only when the player is this far from it:
+	 * standing at the entrance to climb down must not flip the route back and forth.
+	 */
+	static final int REWIND_BEYOND = 8;
 	/** Dungeons in the game lie 6400 tiles north of the surface (like src/lib/map.ts isUnderground). */
 	static final int UNDERGROUND_Y = 6400;
 	/**
@@ -143,12 +148,23 @@ final class Navigation
 		}
 
 		/**
-		 * The player's position changed. true means the current point changed. A player already inside the area the route ends in (the
-		 * Stronghold of Security, S3-08's minotaurs) is past the waypoints that lead in from another layer (the entrance on the surface): only
-		 * when the rest of the route, from its first waypoint in the player's layer, stays in that layer, and never on the surface.
+		 * The player's position changed. true means the current point changed.
+		 *
+		 * A player already inside the area the route ends in (the Stronghold of Security, S3-08's minotaurs) is past the waypoints that lead in
+		 * from another layer (the entrance on the surface): only when the rest of the route, from its first waypoint in the player's layer, stays
+		 * in that layer, and never on the surface.
+		 *
+		 * A player back out of that area (out of the cave for food, or after the last point) is led to the way in again: the nearest earlier
+		 * waypoint in the player's own layer. Before, the point stayed inside the cave and the game arrow pointed at coordinates that are not on the
+		 * player's map at all: nothing to follow (the owner, 2026-10-15). The way in is only chosen once the player has walked
+		 * {@link #REWIND_BEYOND} tiles from it.
 		 */
 		boolean update(int x, int y, int plane)
 		{
+			if (points.isEmpty())
+			{
+				return false;
+			}
 			for (int i = index; i < points.size(); i++)
 			{
 				ActiveTarget.WorldPointDto p = points.get(i);
@@ -159,10 +175,35 @@ final class Navigation
 				}
 			}
 			int here = layer(y);
-			if (here == 0 || finished() || layer(points.get(index).getY()) == here)
+			// The point that leads now; after the last one, the last.
+			int cur = finished() ? points.size() - 1 : index;
+			if (layer(points.get(cur).getY()) == here)
 			{
 				return false;
 			}
+			if (here != 0 && !finished() && skipToArea(here))
+			{
+				return true;
+			}
+			for (int j = cur - 1; j >= 0; j--)
+			{
+				ActiveTarget.WorldPointDto p = points.get(j);
+				if (layer(p.getY()) == here)
+				{
+					if (Math.max(Math.abs(p.getX() - x), Math.abs(p.getY() - y)) <= REWIND_BEYOND)
+					{
+						return false;
+					}
+					index = j;
+					return true;
+				}
+			}
+			return false;
+		}
+
+		/** The route from its first waypoint in the player's layer stays in that layer: the waypoints before it lead in and are behind. */
+		private boolean skipToArea(int here)
+		{
 			int first = index;
 			while (first < points.size() && layer(points.get(first).getY()) != here)
 			{

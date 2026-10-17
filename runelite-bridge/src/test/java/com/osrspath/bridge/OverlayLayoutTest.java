@@ -597,6 +597,13 @@ public class OverlayLayoutTest
 					{
 						bad.add("exchange " + tag + " #" + i + " - " + out + " points (" + lastWhere + ")");
 					}
+					// With the step purchases the list does not hold (one card at the exchange, ExchangeView): the same frame.
+					int extra = overflow((panel, fm, w) -> GrandExchangeHelperOverlay.build(panel, rows, Arrays.asList("Strength potion(4) x3 - Grand Exchange, about 160 gp each", "Staff of fire"), "S3-08", fm, w, 70), font,
+						GrandExchangeHelperOverlay.standardWidth(large), i == 0 ? "ge-extras-" + tag : null);
+					if (extra > 0)
+					{
+						bad.add("exchange extras " + tag + " #" + i + " - " + extra + " points (" + lastWhere + ")");
+					}
 				}
 			}
 		}

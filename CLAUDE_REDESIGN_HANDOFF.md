@@ -529,3 +529,28 @@ the game, (4) readiness and shopping integration, (5) desktop simplification, (6
 - Not done yet: group 7 (wider coverage). Group 5 beyond 2.57.0's Preparation fixes (one primary action per view) is not attempted further: the
   Zen view already has one status line, one primary button and the three reference views.
 
+## 2.58.0 — the owner's report of 2026-10-15/17 (screenshot with four plates, no arrow back, a freeze)
+
+- **Freeze, root cause found in `~/.runelite/logs/client_2026-10-15.0.log` (19:38:14): `AssertionError: scripts are not reentrant`** from
+  `Quest.getState` ← `isQuestFinished` ← `questDone` ← `trackStageCursor` ← `refreshGuide` ← `updateHud` ← `onChatMessage` (the Attack 30 level-up line,
+  which the game posts from inside a script). RuneLite runs with `-ea`, the assertion killed the client thread mid-script: the game froze, the telemetry
+  stops ticking (no more `varx` events). The same stack is in the logs of 5 and 7 October (the "this already happened"). No other plugin error in any log
+  (the 2 October `getItemPrice` NoSuchMethodError is an old API mismatch).
+  - `ScriptGuard` (pure, `ScriptGuardTest`): quest reads run only while `safe` (inside `onGameTick`, which is now `scripts.safe(true)` around `tick(e)`);
+    elsewhere the last value (null before there is one); an `AssertionError` from the read is swallowed. `isQuestFinished` and `completedQuests` use it.
+    `questDone` is therefore false until the first tick after a restart: harmless.
+  - Rule for the future: never call `Quest.getState` (or anything that runs a client script) from an event handler. Chat, varbit and widget events can come from
+    inside a script.
+- **Arrow back to the cave**: `Navigation.Breadcrumbs.update` only moved forward, so after reaching or entering the area the route ends in, leaving it left the
+  current point inside the cave: the hint arrow was set at coordinates of another layer (nothing to draw) and the HUD said "find the way in". Now, when the player
+  is on a layer other than the current point's (after the last point: the last point's), the route rewinds to the nearest earlier waypoint in the player's own layer,
+  but only once the player is more than `REWIND_BEYOND` (8) tiles from it, so standing at the trapdoor does not flip. `aDungeonWaypointOnTheWayIsNeverSkippedFromTheSurface`
+  now also pins the rewind (the dungeon point is still never skipped, it is next after the entrance). New tests: out of the cave, after the last point, one-layer route.
+  - Not covered: a step with no `pathWaypoints` whose target is in a dungeon (nothing earlier to lead to), and leaving a dungeon towards a surface target (the HUD
+    says "find the way out"; the exit tile is not known to the data).
+- **Four plates at the exchange**: HUD + guide list + `OsrsPathShopOverlay` ("Exchange · what to buy") + `GrandExchangeHelperOverlay` ("Bulk list").
+  `ExchangeView` (pure, `ExchangeViewTest`): exactly one of the two cards draws; the bulk list while it has something to buy (the step's purchases it does not hold follow
+  as "Also for S3-08"), else the step's card if it has something to buy, else the bulk list's "have everything", else the step's checkmark. `SmartView.exchangeFocus`: at the
+  open exchange the guide list is hidden (`GuideList.shown`) and the HUD is the one-line compact form, **whatever the smart reveal setting says** (it is off by default).
+  Bank and merchant windows are unchanged (the bank list is interactive and the owner's complaint was the exchange).
+

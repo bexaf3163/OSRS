@@ -47,6 +47,16 @@ final class SmartView
 		return tiles > TRAVEL_TILES ? Context.TRAVEL : Context.STEP;
 	}
 
+	/**
+	 * The crowded moment, whatever the smart reveal setting says: at the exchange the one card is the exchange card, so the "What you need" list
+	 * stays away and the HUD is one line (four windows at once, the owner's screenshot of 2026-10-15). A danger the player is in and health below
+	 * one hit stay.
+	 */
+	static boolean exchangeFocus(Context c)
+	{
+		return c == Context.EXCHANGE;
+	}
+
 	/** The "What you need" list at the bank and near the step; while travelling and at the exchange it would block the view. */
 	static boolean showsGuide(Context c)
 	{
