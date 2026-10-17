@@ -46,6 +46,22 @@ final class Preflight
 		 */
 		String reason()
 		{
+			Integer h = Foods.heals(item);
+			if (h != null && need > 1)
+			{
+				// Food is counted by healing: say it in health, so 10 Cooked meat next to "10 Trout" is not a riddle.
+				String food = "Guidance paused: bring food before entering — " + need * h + " health (" + need + " " + item
+					+ " or food that heals as much); you carry " + have * h + ".";
+				switch (via)
+				{
+					case BANK:
+						return food + " Take it from the bank first.";
+					case SOURCE:
+						return food + " Get it first, the arrow leads there.";
+					default:
+						return food + " Buy it at the Grand Exchange first.";
+				}
+			}
 			String what = need > 1 ? need + " x " + item : item;
 			switch (via)
 			{
@@ -80,18 +96,35 @@ final class Preflight
 		return "⚠ Missing Item: " + item + " - Turn back!";
 	}
 
-	/** How many of the item the container holds: exactly by ID with one, else by name. */
+	/**
+	 * How many of the item the container holds: exactly by ID with one, else by name. Food counts by healing, in pieces of the named food: 10 Cooked meat
+	 * (3 each) are 4 Trout (7 each). A food the table does not know counts as one piece of the named one, never more.
+	 */
 	static int count(ItemCounts items, ActiveTarget.Pre p)
 	{
+		Integer unit = Foods.heals(p.getItem());
 		int n = items.exact(p.getId(), p.getItem());
+		long healing = unit == null ? 0 : (long) n * unit;
 		if (p.getAlt() != null)
 		{
 			for (String other : p.getAlt())
 			{
-				n += items.exact(null, other);
+				// A Rune pickaxe at Mining 10 is no pickaxe for the step: a tier the level cannot use is not counted.
+				if (!ItemCounts.usable(other))
+				{
+					continue;
+				}
+				int k = items.exact(null, other);
+				if (unit == null)
+				{
+					n += k;
+					continue;
+				}
+				Integer h = Foods.heals(other);
+				healing += (long) k * (h == null ? unit : h);
 			}
 		}
-		return n;
+		return unit == null ? n : (int) Math.min(Integer.MAX_VALUE, healing / unit);
 	}
 
 	/**

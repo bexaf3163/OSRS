@@ -629,3 +629,25 @@ the game, (4) readiness and shopping integration, (5) desktop simplification, (6
 - Tests: `tests/cleanupHint.test.ts` (8), `CleanupHintTest` (11, renders `build/overlay-render/shop-bank-cleanup.png`), UI smoke (the snapshot carries the
   lines for the character; "Always keep" removes them from the snapshot).
 - Not verified live: the cards and frames in RuneLite (needs the owner logged in with surplus in the bag; no item is to be disposed of for the check).
+
+## 2.62.0 — readiness verdict, kit check, tool levels, food by healing
+
+- Owner's spec (readiness stages 1–7, scratchpad `specs/full.txt`): one answer over the existing plan, not a second system. `docs/readiness.md` has
+  the rules, statuses, groups, bank freshness, food, tools, in-game display and the supported list.
+- `lib/readinessVerdict.ts` (`readinessVerdict`, `bankFreshness`), `lib/combatReadiness.ts` (weapon/armour/trip food/version text),
+  `combatPlan.ts` (`ownedFood` → `carriedEq`/`bankEq`/`reserved`; `foodReservations`; `CombatPlanView.variants`), `components/ReadinessVerdict.tsx`
+  (`useReadinessVerdict`, `ReadinessVerdictCard` at the top of QuestSupplies, the helpers block and the Preparation tab).
+- Tool levels: `toolTiers.ts` `toolUse`/`usableAt`; `playerState.heldOf` filters the family by `levels`; `unusableTools` feeds the readiness
+  row detail; `preflight.ts` `countOf(items, p, levels)`. Plugin: `ItemCounts.setToolLevels` (from `onStatChanged`), `ItemCounts.usable`,
+  `Preflight.count` skips unusable alternatives.
+- Food by healing at entrances: `Foods.java` (bundled `src/data/threats.json`), `Preflight.count` and `Block.reason()` ("… 70 health …; you carry
+  28."); the app's `countOf` the same. `tests/questPreflight.test.ts` expectations moved from pieces to healing (8 Salmon now cover "10 Trout").
+- Snapshot: `PrepPlanPayload.readiness` (additive), `PrepPlan.Readiness` (Java; an invalid one is dropped and the plan stands), the bank card row
+  (`ShopWindow.build`, BANK), the Advice tab's first row (`GuideList.adviceRows`, counted in `adviceCount`). Not on the Steps tab: the trip food
+  drops below the plan as the player eats, and a row there would flicker mid-fight.
+- Two-handed weapon + a safety shield rule (S5-08): `VerdictInput.worn` → "Iron 2h sword is two-handed: it leaves no room for the Anti-dragon shield".
+- Fixed in passing: `checklist.nameKey` had a literal `/00a0/` since the 2.28.0 translation (harmless: `\s` covers nbsp) → `/ /`.
+- Tests: `tests/readinessVerdict.test.ts` (25), `ToolLevelTest` (4), `ReadinessRowTest` (4), UI smoke readiness (the Zen Preparation drawer at
+  1100 and 390 px). Totals: Vitest 1196, Java 573.
+- Not verified live: the owner's character is past S3-08 and Below Ice Mountain; the cards render in the smoke with the minotaur fixture
+  (`readiness-s308-*.png`).

@@ -1940,3 +1940,22 @@ p.trade-note { margin: 6px 0; }
 .cleanup-act.act-drop { background: var(--danger-soft); color: var(--danger); }
 .cleanup-act.act-review { background: var(--warn-soft); color: var(--warn); }
 @media (max-width: 640px) { .cleanup-row { flex-direction: column; } }
+
+/* Readiness verdict: the status and the next action above the preparation list */
+.readiness-verdict { margin: 0 0 10px; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface-3); box-shadow: inset 3px 0 0 var(--border-strong); }
+.readiness-verdict.is-ready { box-shadow: inset 3px 0 0 var(--done); }
+.readiness-verdict.is-ready_cautions { box-shadow: inset 3px 0 0 var(--gold); }
+.readiness-verdict.is-prep_needed { box-shadow: inset 3px 0 0 var(--warn); }
+.readiness-verdict.is-not_met { box-shadow: inset 3px 0 0 var(--danger); }
+.verdict-head { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: baseline; margin: 0; }
+.verdict-pill { flex: none; padding: 0 8px; border-radius: 999px; border: 1px solid var(--border-strong); font-size: 0.75rem; font-weight: 600; }
+.is-ready .verdict-pill { background: var(--done-soft); color: var(--done); }
+.is-ready_cautions .verdict-pill, .is-prep_needed .verdict-pill { background: var(--warn-soft); color: var(--warn); }
+.is-not_met .verdict-pill { background: var(--danger-soft); color: var(--danger); }
+.verdict-line { min-width: 0; overflow-wrap: anywhere; }
+.verdict-variant, .verdict-bank { margin: 4px 0 0; }
+.verdict-why > summary { cursor: pointer; }
+.verdict-group .subhead { margin: 6px 0 2px; }
+.verdict-reasons, .verdict-cautions { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.verdict-reasons .is-missing { color: var(--danger); }
+.verdict-reasons .is-bank, .verdict-reasons .is-caution { color: var(--warn); }

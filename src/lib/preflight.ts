@@ -2,6 +2,8 @@ import type { QuestStageLine, StagePre } from '../types';
 import type { GearItem } from '../services/runeliteBridge';
 import { BANKS, EXCHANGE, bankTiles, type Point } from './travel';
 import { nameKey } from './checklist';
+import { usableAt } from './toolTiers';
+import { FOODS } from './foodAdvice';
 
 /**
  * The item pre-flight guard for a quest stage step: while an item the step uses is not in the bag (or worn), the arrow does not lead to the step.
@@ -15,6 +17,8 @@ export interface PreflightInput {
   /** The bank snapshot, or null when the bank has never been opened. */
   bank?: GearItem[] | null;
   from: Point;
+  /** The player's real levels: a pickaxe or axe tier above them does not count (Preflight.java the same). Absent — unknown, every tier counts. */
+  levels?: Partial<Record<string, number>> | null;
 }
 
 export interface PreflightBlock {
@@ -31,18 +35,33 @@ export interface PreflightBlock {
   npc?: string;
 }
 
-/** How many of the item the container holds: by exact id when the data gives one, else by name; the alternatives count by name (Preflight.count). */
-export function countOf(items: GearItem[], p: Pick<StagePre, 'item' | 'id' | 'alt'>): number {
+/**
+ * How many of the item the container holds: by exact id when the data gives one, else by name; the alternatives count by name (Preflight.count).
+ * Food counts by healing, in pieces of the named food: 10 Cooked meat (3 each) are 4 Trout (7 each). A food the table does not know counts as one
+ * piece of the named one, never more. A pickaxe or axe tier the player's level cannot use is not counted.
+ */
+export function countOf(items: GearItem[], p: Pick<StagePre, 'item' | 'id' | 'alt'>, levels?: Partial<Record<string, number>> | null): number {
   const key = nameKey(p.item);
-  const alts = new Set((p.alt ?? []).map(nameKey));
+  const level = (skill: string) => (typeof levels?.[skill] === 'number' ? (levels[skill] as number) : null);
+  const alts = new Set((p.alt ?? []).filter((n) => usableAt(n, level)).map(nameKey));
+  const unit = healOf(p.item);
   let n = 0;
+  let healing = 0;
   for (const i of items) {
     const c = i.count ?? 1;
-    if (p.id !== undefined ? i.id === p.id : nameKey(i.name) === key) n += c;
-    else if (alts.has(nameKey(i.name))) n += c;
+    if (p.id !== undefined ? i.id === p.id : nameKey(i.name) === key) {
+      n += c;
+      healing += c * (unit ?? 0);
+    } else if (alts.has(nameKey(i.name))) {
+      if (unit === null) n += c;
+      else healing += c * (healOf(i.name) ?? unit);
+    }
   }
-  return n;
+  return unit === null ? n : Math.floor(healing / unit);
 }
+
+const HEALS = new Map(FOODS.map((f) => [nameKey(f.name), f.heals]));
+const healOf = (name: string): number | null => HEALS.get(nameKey(name)) ?? null;
 
 export const missingChip = (item: string): string => `⚠ Missing Item: ${item} - Turn back!`;
 
@@ -57,10 +76,10 @@ export function itemPreflight(line: Pick<QuestStageLine, 'pre'>, inp: PreflightI
   if (!line.pre?.length || inp.carried === null) return null;
   for (const p of line.pre) {
     const need = p.n ?? 1;
-    const have = countOf(inp.carried, p);
+    const have = countOf(inp.carried, p, inp.levels);
     if (have >= need) continue;
     const base = { item: p.item, need, have, chip: missingChip(p.item) };
-    if (inp.bank && countOf(inp.bank, p) >= need - have) {
+    if (inp.bank && countOf(inp.bank, p, inp.levels) >= need - have) {
       const bank = nearest(inp.from, BANK_SPOTS);
       if (bank) return { ...base, via: 'bank', target: bank, instruction: `Take ${p.item} from the bank` };
     }

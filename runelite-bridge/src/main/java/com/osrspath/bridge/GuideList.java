@@ -724,7 +724,8 @@ final class GuideList
 		{
 			return 0;
 		}
-		return (prep.hasDetour() ? 1 : 0) + (prep.hasTransport() ? 1 : 0) + (prep.hasWithdrawals() ? 1 : 0) + (prep.getBlockers() == null ? 0 : prep.getBlockers().size())
+		return (prep.hasReadiness() ? 1 : 0) + (prep.hasDetour() ? 1 : 0) + (prep.hasTransport() ? 1 : 0) + (prep.hasWithdrawals() ? 1 : 0)
+			+ (prep.getBlockers() == null ? 0 : prep.getBlockers().size())
 			+ (prep.getSlots() != null && !prep.getSlots().isEmpty() ? 1 : 0)
 			+ (prep.getLater() != null && !prep.getLater().isEmpty() ? 1 : 0)
 			+ (prep.getWeight() != null && !prep.getWeight().isEmpty() ? 1 : 0);
@@ -800,6 +801,13 @@ final class GuideList
 		if (prep == null)
 		{
 			return;
+		}
+		if (prep.hasReadiness())
+		{
+			// The app's verdict first: the status and the next action ("Preparation needed — Bank: withdraw 13 Salmon").
+			PrepPlan.Readiness r = prep.getReadiness();
+			Color c = "NOT_MET".equals(r.getStatus()) ? StepGuide.MISSING : "PREP_NEEDED".equals(r.getStatus()) ? StepGuide.BANK : MUTED;
+			out.add(new Row(clip("", r.line(), c, small, inner, 3, true), Action.NONE, r.line()));
 		}
 		if (prep.hasDetour())
 		{

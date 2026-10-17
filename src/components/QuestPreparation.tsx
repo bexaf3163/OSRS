@@ -10,6 +10,7 @@ import { Inline } from './Inline';
 import { ItemIcon } from './WikiDrawer';
 import { findLocalItem } from '../services/wikiService';
 import { formatGp } from '../lib/shopping';
+import { ReadinessVerdictCard } from './ReadinessVerdict';
 
 const LABEL = { EQUIPPED: 'Equipped', INVENTORY: 'In your bag', BANK: 'Take from bank', MISSING: 'Missing', UNKNOWN: 'Not checked' };
 
@@ -44,6 +45,7 @@ export function QuestSupplies({ step, onReview }: { step: Step; onReview?: () =>
         <h3>{scope ? 'Needed for this stage' : `Prepare for this ${step.type === 'quest' ? 'quest' : 'step'}`}</h3>
         {linked && unknown > 0 && <span className="badge">{unknown} unverified</span>}
       </header>
+      <ReadinessVerdictCard step={step} />
       {lines.length > 0 || plan.coins.need > 0 ? (
         <ul className="quest-supply-list">
           {lines.map((l) => <Row key={l.key} step={step} l={l} linked={linked} />)}

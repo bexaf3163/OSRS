@@ -19,6 +19,7 @@ import { fairyRingsUnlocked, oneTimeUsedOf, transportKey, travelInputOf } from '
 import { decideTransport, publishTransport, transportSources, transportTarget } from '../lib/liveTransport';
 import type { RecommendedTransport } from '../lib/transport';
 import { planTravelSupplies, roadSteps } from '../lib/travelSupplies';
+import { useReadinessVerdict } from './ReadinessVerdict';
 
 /** How often the position is read for the purchase detour: the text is rounded, so the snapshot does not change on every step. */
 const DETOUR_POLL_MS = 15_000;
@@ -113,7 +114,9 @@ function StepPlan({ step }: { step: Step }) {
   }, [step.id, to?.x, to?.y, to?.plane, plan.now.length, plan.soon.length, coins, lastMoveAt, things, mode, nextStep?.id, roadKey, chronicleCharges]);
   // The step left the game: its decision is not the current one any more.
   useEffect(() => () => publishTransport(null), [step.id]);
-  const payload = planPayload(plan, { detour, transport });
+  // The verdict of this step as the app shows it: the plugin puts it on the bank card and under the Advice tab.
+  const { verdict } = useReadinessVerdict(step);
+  const payload = planPayload(plan, { detour, transport, readiness: { status: verdict.level, headline: verdict.headline } });
   const key = JSON.stringify(payload);
   useEffect(() => {
     setPrepPart('plan', payload);

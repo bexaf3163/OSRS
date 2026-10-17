@@ -5,14 +5,18 @@ import type { Step } from '../types';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
 import { assumptionsFor } from '../lib/foodPlan';
-import { combatPlanView, type CombatPlanView } from '../lib/combatPlan';
+import { combatPlanView, foodReservations, type CombatPlanView } from '../lib/combatPlan';
+import { isClosed } from '../lib/next-step';
 import { foeLabel, COMBAT_FOES_DATE } from '../lib/combatEstimate';
 
 export function useCombatPlan(step: Step): CombatPlanView | null {
   const { stats, xp, gear, owned, combatLog } = useBridge();
   const { steps, progress } = useStore();
   const fights = combatLog?.stepId === step.id ? combatLog.foes : null;
+  // Edible items a later quest needs are kept for it: they are not counted as food for the fight.
+  const reserved = foodReservations(step, steps.filter((x) => !isClosed(progress, x.id)));
   return combatPlanView(step, {
+    reserved,
     stats: stats as Partial<Record<string, number>> | null, xp: xp as Partial<Record<string, number>> | null, gear, owned, fights,
     assume: assumptionsFor(step, steps, progress),
   });

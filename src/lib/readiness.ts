@@ -11,7 +11,7 @@ import { isClosed, blockersOf } from './next-step';
 import { nameKey, preflightItems, type OwnedState } from './checklist';
 import type { GearState, NavTargetPayload } from '../services/runeliteBridge';
 import { plural } from './shopping';
-import { buildPlayerState, coinsOf, heldOf, questOf, type Held, type PlayerState } from './playerState';
+import { buildPlayerState, coinsOf, heldOf, questOf, unusableTools, type Held, type PlayerState } from './playerState';
 import { evaluate } from './requirements';
 import { toolFamilyOf } from './toolTiers';
 
@@ -243,6 +243,11 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     const shop: ReadinessAction = { kind: 'link', label: '🛒 To shopping', href: '#/shopping' };
     // Food with a personal plan: the row is about one trip, and says what the whole goal still needs bought, so one exchange visit does it.
     const whole = (have: number) => (it.total !== undefined && it.total > have ? `; buy about ${it.total - have} for the whole goal` : '');
+    // A tool you own but cannot use yet is said, so "no pickaxe" next to a Rune pickaxe in the bag is not a riddle.
+    const tooHigh = (name: string) => {
+      const list = unusableTools(state, name);
+      return list.length ? `; ${list.join(', ')}: too high for your level yet` : '';
+    };
     const manual = h.source === 'manual';
     const source: RequirementStatus['source'] = manual ? 'manual' : 'game';
     if (res.state === 'OK') {
@@ -259,13 +264,13 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     } else if (res.state === 'UNKNOWN') {
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: 'UNKNOWN', hard: true,
-        detail: h.bag !== null ? `${h.bag + h.noted} in the bag; the bank was not opened in this session` : 'not checked: it needs a RuneLite connection or an "already have" mark in shopping',
+        detail: (h.bag !== null ? `${h.bag + h.noted} in the bag; the bank was not opened in this session` : 'not checked: it needs a RuneLite connection or an "already have" mark in shopping') + tooHigh(it.nameEn),
       });
     } else {
       const have = res.have ?? 0;
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: res.state, hard: true, source,
-        detail: (manual ? `marked ${state.manual[key]}, ${res.missing} short` : have ? `have ${have}, ${res.missing} short` : 'in neither the bag nor the bank') + whole(have),
+        detail: (manual ? `marked ${state.manual[key]}, ${res.missing} short` : have ? `have ${have}, ${res.missing} short` : 'in neither the bag nor the bank') + whole(have) + tooHigh(it.nameEn),
         action: shop,
       });
     }

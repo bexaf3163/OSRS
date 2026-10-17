@@ -41,6 +41,11 @@ export interface PrepPlanPayload {
   blockers?: string[];
   /** A stop worth making on the way ("Detour: Buy Orange dye at ..."): the text, where the arrow leads when it is clicked in the game, and what it costs. */
   activeDetour?: { label: string; targetTile: { x: number; y: number; plane: number }; costTiles: number; actionType: string; text: string };
+  /**
+   * The readiness verdict (lib/readinessVerdict.ts, 2.62.0): the status and the next action in one sentence. Plugin 2.62.0+ puts it at the top of the
+   * bank card and under the Advice tab; an older one ignores the field.
+   */
+  readiness?: { status: 'READY' | 'READY_CAUTIONS' | 'PREP_NEEDED' | 'NOT_MET' | 'UNKNOWN'; headline: string };
   /** What lies in the bank and is needed now or soon: the plugin frames it when the bank is open and lists it in the tips. itemId 0 means not known. */
   bankWithdrawals?: { itemId: number; itemName: string; quantity: number }[];
   /** The way that is not walking and is clearly shorter: the plugin shows one line, points at the first stop and frames the item to use. */
@@ -129,14 +134,18 @@ export function bankWithdrawalsOf(plan: Pick<PrepPlan, 'lines'>): NonNullable<Pr
     .map((l) => ({ itemId: itemIdOf(l.name), itemName: clipText(l.name, 60), quantity: Math.max(1, Math.min(l.toGet ?? l.count, 10_000_000)) }));
 }
 
-export interface PlanExtras { detour?: Detour | null; transport?: RecommendedTransport | null }
+export interface PlanExtras {
+  detour?: Detour | null;
+  transport?: RecommendedTransport | null;
+  readiness?: { status: NonNullable<PrepPlanPayload['readiness']>['status']; headline: string } | null;
+}
 
 /** The main-card line is at most two lines of the game card; the rest is in the hint. */
 const MAX_SUMMARY = 160;
 
 /** The preparation plan in the form the plugin draws: without the excess and within its checks. */
 export function planPayload(plan: PrepPlan, extras: PlanExtras = {}): PrepPlanPayload {
-  const { detour, transport } = extras;
+  const { detour, transport, readiness } = extras;
   // What the plan takes out of the bank, and what the recommended way needs from it (its runes, its tablet): framed together when the bank is open.
   const withdrawals = bankWithdrawalsOf(plan);
   for (const w of transport?.prepare?.withdraw ?? []) {
@@ -167,6 +176,7 @@ export function planPayload(plan: PrepPlan, extras: PlanExtras = {}): PrepPlanPa
     ...(recovery ? { recovery } : {}),
     ...(weight ? { weight } : {}),
     ...(slots ? { slots } : {}),
+    ...(readiness ? { readiness: { status: readiness.status, headline: clipText(readiness.headline) } } : {}),
     ...(detour ? {
       activeDetour: {
         label: clipText(detour.stop.label, 60), targetTile: { x: detour.stop.x, y: detour.stop.y, plane: detour.stop.plane },

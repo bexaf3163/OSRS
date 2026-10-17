@@ -25,7 +25,7 @@ export interface OwnedState {
 
 /** The name as a comparison key, the same way as ActiveTarget.nameKey in the plugin. */
 export function nameKey(s: string): string {
-  return s.replace(/<[^>]*>/g, '').replace(/00a0/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
+  return s.replace(/<[^>]*>/g, '').replace(/\u00a0/g, ' ').replace(/\s+/g, ' ').trim().toLowerCase();
 }
 
 /**

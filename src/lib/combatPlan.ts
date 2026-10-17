@@ -21,12 +21,43 @@ export interface OwnedFood {
   bank: number;
   /** All of it in pieces of the step's food, by healing: 3 Lobsters (12) are 4 Salmon (9). */
   equivalent: number;
+  /** What is carried (bag and banknotes) in pieces of the step's food, by healing. */
+  carriedEq: number;
+  /** What the bank holds, the same way; 0 when the bank was not seen. */
+  bankEq: number;
+  /** Edible items a later quest needs, kept out of the count: "2 Cooked meat for S1-05". */
+  reserved: string[];
   /** "13 Salmon, 2 Lobster". */
   text: string;
 }
 
+/** Edible items open quest steps still need (an ingredient that happens to be food): the count and the first step, by name key. */
+export type FoodReservations = ReadonlyMap<string, { count: number; stepId: string }>;
+
+/** What open steps other than this one need of each food the step accepts: those pieces are for the quest, never to be eaten. */
+export function foodReservations(step: Pick<Step, 'id' | 'itemsRequired'>, open: readonly Pick<Step, 'id' | 'itemsRequired'>[]): FoodReservations {
+  const item = (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
+  const out = new Map<string, { count: number; stepId: string }>();
+  if (!item) return out;
+  const foods = new Set([item.nameEn, ...(item.anyOf ?? [])].map(nameKey));
+  for (const s of open) {
+    if (s.id === step.id) continue;
+    for (const r of s.itemsRequired ?? []) {
+      const k = nameKey(r.nameEn);
+      if (!foods.has(k) || typeof r.heals === 'number') continue;
+      const n = typeof r.amount === 'number' ? r.amount : Number.parseInt(String(r.amount), 10);
+      if (!Number.isFinite(n) || n <= 0) continue;
+      const prev = out.get(k);
+      out.set(k, { count: (prev?.count ?? 0) + n, stepId: prev?.stepId ?? s.id });
+    }
+  }
+  return out;
+}
+
 export interface CombatPlanView {
   primary: CombatEstimate;
+  /** Every free version of the opponent, the primary among them. */
+  variants: CombatEstimate[];
   food: string;
   heals: number;
   nextTrip: number;
@@ -64,25 +95,43 @@ export const minutesText = (r: Range) => {
 };
 
 /** The food of the step and its alternatives you own, counted in pieces of the step's food by healing. Unknown — null. */
-export function ownedFood(step: Pick<Step, 'itemsRequired'>, owned: OwnedState | null): OwnedFood | null {
+export function ownedFood(step: Pick<Step, 'itemsRequired'>, owned: OwnedState | null, reserved: FoodReservations = new Map()): OwnedFood | null {
   const item = (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
   if (!item || !owned) return null;
   let carried = 0;
   let bank = 0;
   let healing = 0;
+  let carriedHealing = 0;
+  let bankHealing = 0;
   const parts: string[] = [];
+  const kept: string[] = [];
   for (const name of [item.nameEn, ...(item.anyOf ?? [])]) {
     const o = owned.items.get(nameKey(name));
     const heals = name === item.nameEn ? item.heals! : healsOf(name);
     if (!o || heals === null) continue;
-    const n = o.carried + o.noted + (o.bank ?? 0);
+    // A quest's pieces come out of the bag first: they must not be counted as food for the trip.
+    let hold = reserved.get(nameKey(name))?.count ?? 0;
+    let inBag = o.carried + o.noted;
+    let inBank = o.bank ?? 0;
+    const fromBag = Math.min(hold, inBag);
+    inBag -= fromBag;
+    hold -= fromBag;
+    inBank -= Math.min(hold, inBank);
+    const held = o.carried + o.noted + (o.bank ?? 0) - inBag - inBank;
+    if (held > 0) kept.push(`${held} ${name} for ${reserved.get(nameKey(name))!.stepId}`);
+    const n = inBag + inBank;
     if (!n) continue;
-    carried += o.carried + o.noted;
-    bank += o.bank ?? 0;
+    carried += inBag;
+    bank += inBank;
     healing += n * heals;
+    carriedHealing += inBag * heals;
+    bankHealing += inBank * heals;
     parts.push(`${n} ${name}`);
   }
-  return { carried, bank, equivalent: Math.floor(healing / item.heals!), text: parts.join(', ') };
+  return {
+    carried, bank, equivalent: Math.floor(healing / item.heals!), carriedEq: Math.floor(carriedHealing / item.heals!),
+    bankEq: Math.floor(bankHealing / item.heals!), reserved: kept, text: parts.join(', '),
+  };
 }
 
 function measuredText(o: ReturnType<typeof observedFor>): string | null {
@@ -124,7 +173,10 @@ export function chooseVariant(list: CombatEstimate[], fights?: Fights[] | null):
   return near.reduce((a, b) => (b.food.mid < a.food.mid ? b : a));
 }
 
-export function combatPlanView(step: Pick<Step, 'pacing' | 'foes' | 'itemsRequired' | 'itemsRecommended'>, ctx: StepEstimateContext & { owned: OwnedState | null }): CombatPlanView | null {
+export function combatPlanView(
+  step: Pick<Step, 'pacing' | 'foes' | 'itemsRequired' | 'itemsRecommended'>,
+  ctx: StepEstimateContext & { owned: OwnedState | null; reserved?: FoodReservations },
+): CombatPlanView | null {
   const doses = strengthDoses(ctx.owned);
   const list = estimateStep(step, { ...ctx, strengthDoses: doses });
   const primary = chooseVariant(list, ctx.fights);
@@ -132,7 +184,7 @@ export function combatPlanView(step: Pick<Step, 'pacing' | 'foes' | 'itemsRequir
   if (!primary || !item) return null;
   const food = item.nameEn;
   const total = roundPieces(primary.food);
-  const owned = ownedFood(step, ctx.owned);
+  const owned = ownedFood(step, ctx.owned, ctx.reserved);
   const buy = owned && ctx.owned?.bankSeen ? Math.max(0, total.high - owned.equivalent) : null;
 
   const phases = primary.phases.map((p) =>
@@ -160,7 +212,7 @@ export function combatPlanView(step: Pick<Step, 'pacing' | 'foes' | 'itemsRequir
   }
 
   return {
-    primary, food, heals: item.heals!, nextTrip: primary.nextTrip, total, plan: total.high, owned, buy,
+    primary, variants: list, food, heals: item.heals!, nextTrip: primary.nextTrip, total, plan: total.high, owned, buy,
     time: minutesText(primary.totalMinutes),
     trips: Number.isFinite(primary.killsPerTrip) ? span(primary.trips.low, primary.trips.high, primary.trips.high === 1 ? ' trip' : ' trips') : 'no banking for food',
     basis: BASIS_LABEL[primary.basis], phases, compare, potion, measured: measuredText(observedFor(primary.foe, ctx.fights)), assumed: primary.assumed,

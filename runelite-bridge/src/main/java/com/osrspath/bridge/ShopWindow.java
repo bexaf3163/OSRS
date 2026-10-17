@@ -150,6 +150,12 @@ final class ShopWindow
 		{
 			todo = take.size() + missing.size();
 			title = "Bank · what to take" + (id.isEmpty() ? "" : " · " + id);
+			if (plan != null && plan.hasReadiness())
+			{
+				// The app's verdict first: at the bank is where it is acted on ("Bank: withdraw 13 Salmon — you already own it.").
+				PrepPlan.Readiness r = plan.getReadiness();
+				rows.add(new Row(r.line(), "NOT_MET".equals(r.getStatus()) ? Mark.BAD : Mark.INFO));
+			}
 			add(rows, take, "Take: ", Mark.TODO);
 			add(rows, missing, "Not in the bank: ", Mark.BAD);
 			if (take.isEmpty() && missing.isEmpty())

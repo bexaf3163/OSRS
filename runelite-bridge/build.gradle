@@ -66,6 +66,10 @@ processResources {
 	from('../tests/fixtures/qh-steps.json') {
 		into 'com/osrspath/bridge'
 	}
+	// How much each food heals (OSRS Wiki, the app's src/data/threats.json): a pre-entry guard counts food by healing, not by pieces.
+	from('../src/data/threats.json') {
+		into 'com/osrspath/bridge'
+	}
 }
 
 // The tests read the app's route to check quest names and message patterns.

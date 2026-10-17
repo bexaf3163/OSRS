@@ -170,10 +170,12 @@ describe('the quests named in the audit', () => {
     expect(namesOf(entry)).toEqual(['Bronze pickaxe', 'Trout']);
     const door = at(3000, 3494);
     expect(itemPreflight(entry, { carried: [], from: door })!.item).toBe('Bronze pickaxe');
-    // Any pickaxe tier and any listed food count, in amounts: ten Salmon open the door, nine do not.
+    // Any pickaxe tier and any listed food count, food by healing (2.62.0): "10 Trout" is 70 health, so eight Salmon (72) open the door and seven
+    // (63) do not; ten Cooked meat (30) are far from it.
     const kit = (salmon: number) => bag(['Iron pickaxe', 1267], ['Salmon', 329, salmon]);
-    expect(itemPreflight(entry, { carried: kit(10), from: door })).toBeNull();
-    expect(itemPreflight(entry, { carried: kit(9), from: door })!.item).toBe('Trout');
+    expect(itemPreflight(entry, { carried: kit(8), from: door })).toBeNull();
+    expect(itemPreflight(entry, { carried: kit(7), from: door })).toMatchObject({ item: 'Trout', need: 10, have: 9 });
+    expect(itemPreflight(entry, { carried: bag(['Iron pickaxe', 1267], ['Cooked meat', 2142, 10]), from: door })).toMatchObject({ item: 'Trout', have: 4 });
     // An unread bag blocks nothing.
     expect(itemPreflight(entry, { carried: null, from: door })).toBeNull();
     // The two stages before the fight name the kit, so the hint is there while the player is still near a bank.
@@ -286,12 +288,13 @@ describe('food before a dangerous entry', () => {
     }
   });
 
-  it('the guard counts any listed food, in pieces, and an unread bag blocks nothing', () => {
+  it('the guard counts any listed food by healing, and an unread bag blocks nothing', () => {
     const line = lineOf('S4-01', 'killIthoi');
     const mixed = bag(['Lobster', 379, 4], ['Swordfish', 373, 3], ['Salmon', 329, 3]);
     expect(itemPreflight(line, { carried: mixed, from: at(2578, 2838) })).toBeNull();
     const few = bag(['Lobster', 379, 4]);
-    expect(itemPreflight(line, { carried: few, from: at(2578, 2838) })!).toMatchObject({ item: 'Salmon', need: 10, have: 4 });
+    // 4 Lobsters heal 48: five Salmon's worth, not four.
+    expect(itemPreflight(line, { carried: few, from: at(2578, 2838) })!).toMatchObject({ item: 'Salmon', need: 10, have: 5 });
     expect(itemPreflight(line, { carried: null, from: at(2578, 2838) })).toBeNull();
   });
 });

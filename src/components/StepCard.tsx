@@ -22,6 +22,7 @@ import { BranchSuggestions } from './BranchSuggestions';
 import { UpgradePrompt } from './UpgradePrompt';
 import { GearPrompt } from './GearPrompt';
 import { ReadinessPanel } from './ReadinessPanel';
+import { ReadinessVerdictCard } from './ReadinessVerdict';
 import { OneTripCard } from './OneTripCard';
 import { useReadinessEngine } from '../readinessContext';
 import { MoneyGoal } from './MoneyGoal';
@@ -161,6 +162,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
 
   const helpers = (
     <>
+      <ReadinessVerdictCard step={step} />
       <ReadinessPanel step={step} />
       <TradeRestrictionNote step={step} />
       <MoneyGoal step={step} />
@@ -362,6 +364,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
       return (
         <div className="step-details is-tab">
           {/* The status line above already says when nothing is checked, and the list below names every thing once. */}
+          <ReadinessVerdictCard step={step} />
           <ReadinessPanel step={step} bare={statusAbove && !recovering} />
           <LoadoutsCard step={step} />
           <CarryNote step={step} />

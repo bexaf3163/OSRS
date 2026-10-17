@@ -368,6 +368,17 @@ async function run(browser: Browser) {
       if (process.env.UI_SHOTS) await zen.page.screenshot({ path: `${process.env.UI_SHOTS}/zen-s308-prep-${width}.png`, fullPage: true }).catch(() => {});
       const prep = await zen.page.locator('body').innerText();
       expect(prep.includes('Salmon ×26') && !prep.includes('Salmon ×110'), 'food plan (Zen): Preparation asks for one bag (26), not the whole goal');
+      // The readiness verdict (2.62.0): the status, the bank first (13 Salmon owned), then what to buy; both Minotaur versions; the weapon judged.
+      const verdict = await text(zen.page, '.readiness-verdict');
+      expect(verdict.includes('Preparation needed') && verdict.includes('Bank: withdraw 13 Salmon') && verdict.includes('Then buy about 13 Salmon'),
+        `readiness (Zen): the next action names the bank and the purchase (${verdict.replace(/\s+/g, ' ').slice(0, 200)})`);
+      expect(verdict.includes('Minotaur (level 12) suit your current kit best') && verdict.includes('Minotaur (level 27):'), 'readiness (Zen): both Minotaur versions are compared');
+      // Preparation opens as a drawer over the step page: its own card is the one in the dialog.
+      await zen.page.locator('dialog[aria-label="Preparation"] .readiness-verdict summary').first().click();
+      const why = await text(zen.page, 'dialog[aria-label="Preparation"] .readiness-verdict');
+      expect(why.includes('Mithril scimitar: suitable for training') && why.includes('Armour: Iron full helm'), 'readiness (Zen): the weapon and the armour are judged');
+      expect(why.includes('not a chance of surviving'), 'readiness (Zen): the percent is never a survival chance');
+      if (process.env.UI_SHOTS) await zen.page.locator('dialog[aria-label="Preparation"] .readiness-verdict').first().screenshot({ path: `${process.env.UI_SHOTS}/readiness-s308-${width}.png` }).catch(() => {});
       expect(!prep.includes('What to train with'), 'food plan (Zen): no other training place beside the Minotaurs of the step');
       expect(prep.includes('Where to get each item') && !prep.includes('Required items and food'), 'food plan (Zen): the item cards wait behind "Where to get each item"');
       expect(await noOverflow(zen.page), 'food plan (Zen): no horizontal scrolling');

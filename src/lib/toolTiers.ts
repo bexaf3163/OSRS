@@ -15,6 +15,31 @@ export function toolFamilyOf(nameEn: string): readonly string[] | null {
   return null;
 }
 
+/**
+ * The level a tier needs to be used for its skill (OSRS Wiki, "Pickaxe" and "Axe"): a Rune pickaxe needs Mining 41. Wielding is another matter
+ * (Attack); a tool in the bag is used by its skill level alone.
+ */
+const TIER_LEVEL: Record<string, number> = {
+  bronze: 1, iron: 1, steel: 6, black: 11, mithril: 21, adamant: 31, rune: 41, gilded: 41, dragon: 61, infernal: 61, '3rd age': 61, crystal: 71,
+};
+
+/** What a pickaxe or axe tier needs: the skill and the level; null for anything else. */
+export function toolUse(nameEn: string): { skill: 'mining' | 'woodcutting'; level: number } | null {
+  const k = key(nameEn);
+  const kind = k.endsWith(' pickaxe') ? 'pickaxe' : k.endsWith(' axe') ? 'axe' : null;
+  if (!kind) return null;
+  const level = TIER_LEVEL[k.slice(0, k.length - kind.length - 1)];
+  return level === undefined ? null : { skill: kind === 'pickaxe' ? 'mining' : 'woodcutting', level };
+}
+
+/** Whether the player can use this tool for its skill; an unknown level counts as able (unknown is not missing). */
+export function usableAt(nameEn: string, levelOf: (skill: string) => number | null): boolean {
+  const u = toolUse(nameEn);
+  if (!u) return true;
+  const lv = levelOf(u.skill);
+  return lv === null || lv >= u.level;
+}
+
 /** The other names that count in place of this one: the step's own list, else the tool family without the name itself. */
 export function alternativesOf(nameEn: string, own?: readonly string[]): string[] {
   const names = own?.length ? own : toolFamilyOf(nameEn) ?? [];

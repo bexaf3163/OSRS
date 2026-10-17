@@ -7,7 +7,7 @@
 import type { GameMode, PlayerStats, Progress } from '../types';
 import type { GearState } from '../services/runeliteBridge';
 import { nameKey, type OwnedState } from './checklist';
-import { toolFamilyOf } from './toolTiers';
+import { toolFamilyOf, toolUse, usableAt } from './toolTiers';
 
 export type StateSource = 'game' | 'profile' | 'manual';
 
@@ -135,13 +135,18 @@ export interface Held {
  * How much of an item the player has. The game knows both the bag and the bank, which is the main thing. If the bank is unknown, the player's words ("I already have N")
  * are counted and the bag does not refute them; otherwise if it is in the bag it is known "have", and if not it is UNKNOWN, not MISSING.
  */
-export function heldOf(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'>, nameEn: string, manualKey?: string): Held {
+export function heldOf(
+  s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'> & { levels?: PlayerState['levels'] }, nameEn: string, manualKey?: string,
+): Held {
   const base = heldExact(s, nameEn, manualKey);
   const family = toolFamilyOf(nameEn);
   if (!family) return base;
   // "Bronze pickaxe" in a route step means "a pickaxe": a better tier does the same job, so a better tier that is seen counts.
   // A tier that is not seen proves nothing: without one the answer is exactly what it was for the name itself.
-  const parts = family.map((n) => (nameKey(n) === nameKey(nameEn) ? base : heldExact(s, n)));
+  // A tier the player's level cannot use does not do the job: a Rune pickaxe at Mining 10 is not "a pickaxe" for the step.
+  const parts = family
+    .filter((n) => nameKey(n) === nameKey(nameEn) || usableAt(n, (skill) => levelValue(s, skill)))
+    .map((n) => (nameKey(n) === nameKey(nameEn) ? base : heldExact(s, n)));
   if (!parts.some((p) => p !== base && p.presence === 'PRESENT')) return base;
   const sum = (pick: (h: Held) => number | null): number | null => {
     const known = parts.map(pick).filter((v): v is number => v !== null);
@@ -153,6 +158,25 @@ export function heldOf(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | '
     presence, bag: sum((p) => p.bag), noted: parts.reduce((a, p) => a + p.noted, 0), bank: sum((p) => p.bank),
     equipped: parts.reduce((a, p) => a + p.equipped, 0), total: sum((p) => p.total), source,
   };
+}
+
+function levelValue(s: { levels?: PlayerState['levels'] }, skill: string): number | null {
+  const l = s.levels?.[skill];
+  return l && l.known ? l.value : null;
+}
+
+/** Tiers of the tool the player holds but cannot use yet: "Rune pickaxe (needs Mining 41)". Empty when none or the level is unknown. */
+export function unusableTools(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen' | 'levels'>, nameEn: string): string[] {
+  const family = toolFamilyOf(nameEn);
+  if (!family) return [];
+  const out: string[] = [];
+  for (const n of family) {
+    const u = toolUse(n);
+    const lv = u ? levelValue(s, u.skill) : null;
+    if (!u || lv === null || lv >= u.level) continue;
+    if (heldExact(s, n).presence === 'PRESENT') out.push(`${n} (needs ${u.skill === 'mining' ? 'Mining' : 'Woodcutting'} ${u.level})`);
+  }
+  return out;
 }
 
 function heldExact(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'>, nameEn: string, manualKey?: string): Held {

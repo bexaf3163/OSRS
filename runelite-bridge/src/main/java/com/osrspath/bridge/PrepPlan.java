@@ -32,6 +32,53 @@ public class PrepPlan
 	private ActiveDetour activeDetour;
 	private List<BankWithdrawal> bankWithdrawals;
 	private RecommendedTransport recommendedTransport;
+	/** The app's readiness verdict (2.62.0): the status and the next action; null from an older app. */
+	private Readiness readiness;
+
+	/** "Preparation needed" and "Bank: withdraw 13 Salmon — you already own it.": shown on the bank card and under the Advice tab. */
+	@Data
+	public static class Readiness
+	{
+		static final java.util.Set<String> STATUSES = java.util.Set.of("READY", "READY_CAUTIONS", "PREP_NEEDED", "NOT_MET", "UNKNOWN");
+		private String status;
+		private String headline;
+
+		boolean valid()
+		{
+			return status != null && STATUSES.contains(status) && headline != null && !headline.isEmpty() && !ActiveTarget.tooLong(headline);
+		}
+
+		/** Worth saying: anything but a plain "Ready". */
+		boolean worthSaying()
+		{
+			return valid() && !"READY".equals(status);
+		}
+
+		/** The words of the status, as the app shows them on its pill. */
+		String label()
+		{
+			switch (status)
+			{
+				case "READY":
+					return "Ready";
+				case "READY_CAUTIONS":
+					return "Ready with cautions";
+				case "PREP_NEEDED":
+					return "Preparation needed";
+				case "NOT_MET":
+					return "Requirements not met";
+				default:
+					return "Cannot assess yet";
+			}
+		}
+
+		/** One line: the headline, with the status in front unless the headline already starts with it. */
+		String line()
+		{
+			String l = label();
+			return headline.startsWith(l) || headline.startsWith("Ready") || headline.startsWith("Cannot assess") ? headline : l + " — " + headline;
+		}
+	}
 
 	private transient Map<String, Line> byName = Collections.emptyMap();
 
@@ -323,6 +370,11 @@ public class PrepPlan
 		{
 			return "invalid detour";
 		}
+		if (readiness != null && !readiness.valid())
+		{
+			// A verdict the plugin cannot read is left out; the plan itself still stands.
+			readiness = null;
+		}
 		if (recommendedTransport != null && !recommendedTransport.valid())
 		{
 			return "invalid transport";
@@ -373,6 +425,12 @@ public class PrepPlan
 	Integer pendingPercent()
 	{
 		return score != null && score.percent != null && score.percent < 100 ? score.percent : null;
+	}
+
+	/** A readiness verdict worth a line: anything but a plain "Ready". */
+	boolean hasReadiness()
+	{
+		return readiness != null && readiness.worthSaying();
 	}
 
 	boolean hasDetour()

@@ -61,6 +61,34 @@ final class ItemCounts
 
 	/** Tool tiers in ascending order: an Iron pickaxe will do instead of a Bronze pickaxe. */
 	private static final String[] TIERS = {"bronze", "iron", "steel", "black", "mithril", "adamant", "rune", "dragon"};
+	/** The level each tier needs to be used for its skill (OSRS Wiki, "Pickaxe" and "Axe"); the same table as toolTiers.ts in the app. */
+	private static final int[] TIER_LEVEL = {1, 1, 6, 11, 21, 31, 41, 61};
+	/** The player's real Mining and Woodcutting levels; 0 while unknown, and then every tier counts (unknown is not missing). */
+	private static volatile int miningLevel;
+	private static volatile int woodcuttingLevel;
+
+	/** A better tier the player cannot use yet (a Rune pickaxe at Mining 10) does not stand in for the named one. Set from the game's levels. */
+	static void setToolLevels(int mining, int woodcutting)
+	{
+		miningLevel = mining;
+		woodcuttingLevel = woodcutting;
+	}
+
+	/** Whether the player can use this item for its skill: false only for a pickaxe or axe tier above a known level. */
+	static boolean usable(String name)
+	{
+		String key = ActiveTarget.nameKey(name);
+		for (String kind : new String[]{" pickaxe", " axe"})
+		{
+			if (key.endsWith(kind))
+			{
+				int i = java.util.Arrays.asList(TIERS).indexOf(key.substring(0, key.length() - kind.length()));
+				int level = " pickaxe".equals(kind) ? miningLevel : woodcuttingLevel;
+				return i < 0 || level <= 0 || TIER_LEVEL[i] <= level;
+			}
+		}
+		return true;
+	}
 
 	int count(Integer id, String name)
 	{
@@ -132,9 +160,14 @@ final class ItemCounts
 			{
 				return 0;
 			}
+			int level = " pickaxe".equals(kind) ? miningLevel : woodcuttingLevel;
 			int total = 0;
 			for (int i = from; i < TIERS.length; i++)
 			{
+				if (i > from && level > 0 && TIER_LEVEL[i] > level)
+				{
+					continue;
+				}
 				total += byName.getOrDefault(TIERS[i] + kind, 0);
 			}
 			return total;
