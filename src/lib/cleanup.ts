@@ -70,6 +70,8 @@ export interface CleanupRec {
   keepQty: number;
   action: CleanupAction;
   reason: string;
+  /** A few words for the in-game card ("no use ahead", "its quest is done"); empty on keep lines. */
+  short: string;
   /** What the sale gives, before the exchange tax. An estimate; null — no price. */
   proceeds: number | null;
   /** The recovery note for drop/destroy: where to get it again. */
@@ -214,7 +216,7 @@ export function cleanupAdvice(i: CleanupInput): CleanupResult {
     const name = stacks[0].name;
     const need = needs.get(key);
     const make = (stack: BagStack, p: Partial<CleanupRec> & Pick<CleanupRec, 'action' | 'reason'>): CleanupRec => ({
-      key, name, ...(stack.id !== undefined ? { id: stack.id } : {}), noted: !!stack.noted, qty: stack.count, have, keepQty: need?.count ?? 0, proceeds: null, ...p,
+      key, name, ...(stack.id !== undefined ? { id: stack.id } : {}), noted: !!stack.noted, qty: stack.count, have, keepQty: need?.count ?? 0, proceeds: null, short: '', ...p,
     });
     const keepAll = (reason: string) => stacks.forEach((s) => keeps.push(make(s, { action: 'keep', reason })));
 
@@ -255,47 +257,47 @@ export function cleanupAdvice(i: CleanupInput): CleanupResult {
       return keepPhrase;
     };
     const keptLine = (st: BagStack, kept: number) => keeps.push(make(st, { action: 'keep', qty: kept, reason: `Needed for ${stepsPhrase(need!.titles)}.` }));
-    const reviewAll = (reason: string) => {
+    const reviewAll = (reason: string, short: string) => {
       for (const { s: st, kept, extra } of parts) {
         if (kept > 0) keptLine(st, kept);
-        if (extra > 0) recs.push(make(st, { action: 'review', qty: extra, reason: `${lead()}${reason}` }));
+        if (extra > 0) recs.push(make(st, { action: 'review', qty: extra, reason: `${lead()}${reason}`, short: keepQty > 0 ? `keep ${keepQty}; ${short}` : short }));
       }
     };
 
     if (VARIANT.test(name)) {
-      reviewAll(`Charged or transformed item: charges or stored contents are lost when it is sold, and it is not the plain item. Check it yourself.`);
+      reviewAll(`Charged or transformed item: charges or stored contents are lost when it is sold, and it is not the plain item. Check it yourself.`, 'charged or changed, check it');
       continue;
     }
     const gone = OBSOLETE[key];
     if (gone && keepQty === 0) {
       if (gone.after.every((id) => i.closedSteps?.has(id))) {
-        stacks.forEach((s) => recs.push(make(s, { action: 'drop', reason: `${gone.why}${gone.action === 'destroy' ? ' Use Destroy.' : ' Drop it.'}`, recovery: gone.recovery })));
+        stacks.forEach((s) => recs.push(make(s, { action: 'drop', reason: `${gone.why}${gone.action === 'destroy' ? ' Use Destroy.' : ' Drop it.'}`, recovery: gone.recovery, short: 'its quest is done, no other use' })));
       } else {
-        reviewAll('A quest item: its quest is not finished in your route, so it may still be needed.');
+        reviewAll('A quest item: its quest is not finished in your route, so it may still be needed.', 'its quest is not done yet');
       }
       continue;
     }
     if (GEAR.test(name)) {
-      reviewAll(`Gear: an older piece can be a deliberate backup. Sell it only if you no longer want it.`);
+      reviewAll(`Gear: an older piece can be a deliberate backup. Sell it only if you no longer want it.`, 'gear, maybe a backup');
       continue;
     }
 
     const trade = i.tradeable(name);
-    if (trade === null) { reviewAll(`The item list has not loaded, so it is not known whether this can be sold.`); continue; }
+    if (trade === null) { reviewAll(`The item list has not loaded, so it is not known whether this can be sold.`, 'item list not loaded'); continue; }
     if (trade === false) {
-      reviewAll(`Cannot be traded, so it cannot be sold. ${noUse} Destroy or drop it only if you are sure you will not need it.`);
+      reviewAll(`Cannot be traded, so it cannot be sold. ${noUse} Destroy or drop it only if you are sure you will not need it.`, 'untradeable, no use ahead');
       continue;
     }
     if (i.account === 'ironman') {
-      reviewAll(`Ironman accounts cannot trade on the Grand Exchange. ${noUse}`);
+      reviewAll(`Ironman accounts cannot trade on the Grand Exchange. ${noUse}`, 'no use ahead (Ironman)');
       continue;
     }
     if (!sellOpen) {
-      reviewAll(`The account type is not known, and Ironman accounts cannot sell. ${noUse}`);
+      reviewAll(`The account type is not known, and Ironman accounts cannot sell. ${noUse}`, 'no use ahead; account type unknown');
       continue;
     }
     if (i.restriction !== 'LIFTED' && isRestrictedItem(name)) {
-      reviewAll(`${i.restriction === 'RESTRICTED' ? 'New-account restrictions still stop' : 'It is not known whether new-account restrictions still stop'} the sale of this item on the Grand Exchange.`);
+      reviewAll(`${i.restriction === 'RESTRICTED' ? 'New-account restrictions still stop' : 'It is not known whether new-account restrictions still stop'} the sale of this item on the Grand Exchange.`, 'new-account trade limit');
       continue;
     }
 
@@ -309,7 +311,7 @@ export function cleanupAdvice(i: CleanupInput): CleanupResult {
       const lead0 = lead();
       const what = lead0 ? `${lead0}sell the remaining ${extra}` : keepQty > 0 ? `Sell the remaining ${extra}` : noUse.slice(0, -1);
       recs.push(make(st, {
-        action: 'sell', qty: extra, proceeds: p,
+        action: 'sell', qty: extra, proceeds: p, short: keepQty > 0 ? `keep ${keepQty}, the rest has no use ahead` : 'no use ahead',
         reason: `${what}${st.noted ? ' (banknotes)' : ''}.${p === null ? ' No exchange price available.' : ''}`,
       }));
     }

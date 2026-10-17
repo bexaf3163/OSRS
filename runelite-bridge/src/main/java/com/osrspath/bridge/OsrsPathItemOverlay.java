@@ -19,6 +19,8 @@ import net.runelite.client.ui.overlay.WidgetItemOverlay;
  * In the bank, also a green fill on what the departure check says to take into the bag, and a quiet golden
  * frame on the items of the whole stage (POST /bank-tags), like the Bank Tags tab but without creating one.
  * An item from the gear advice (POST /gear-hint: "wear it, it is in the bank") gets an amber pulsing frame.
+ * With "Cleanup slot frames" on, a bag slot the inventory cleanup names gets a quiet dashed frame (blue sell, red drop or destroy, grey look at it):
+ * the lowest of the frames, so a quest or step item is never marked for cleanup on top of its own frame.
  * WidgetItemOverlay is RuneLite's standard way to draw over item cells.
  */
 class OsrsPathItemOverlay extends WidgetItemOverlay
@@ -32,6 +34,7 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 	/** A stage item in the bank: a quiet golden frame with no pulsation, a background and not a call to action. */
 	private static final Color BANK_TAG = new Color(255, 210, 90, 150);
 	private static final BasicStroke BANK_TAG_STROKE = new BasicStroke(1.5f);
+	private static final BasicStroke CLEANUP_STROKE = new BasicStroke(1.5f, BasicStroke.CAP_BUTT, BasicStroke.JOIN_ROUND, 1f, new float[] {4f, 3f}, 0f);
 
 	@Inject
 	OsrsPathItemOverlay(OsrsPathBridgePlugin plugin, OsrsPathBridgeConfig config, ItemManager itemManager)
@@ -51,7 +54,9 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 		// The stage's items (Bank Tags) only in the bank, with a soft frame, even with no step.
 		boolean tagged = inBank && config.bankHighlight() && plugin.isBankTagged(itemId);
 		boolean upgrades = plugin.hasUpgradeItems();
-		if (target == null && !tagged && !upgrades)
+		// The cleanup names bag stacks only, never the bank's.
+		Color clean = inBank ? null : plugin.cleanupFrame(itemId);
+		if (target == null && !tagged && !upgrades && clean == null)
 		{
 			return;
 		}
@@ -72,7 +77,7 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 			stepItem = (named && (target.getItemNameSet().contains(name) || plugin.isLineItem(name))) || (transport && plugin.isTransportItem(name));
 			upgrade = upgrades && plugin.isUpgradeItem(name);
 		}
-		if (!wanted && !stepItem && !tagged && !upgrade)
+		if (!wanted && !stepItem && !tagged && !upgrade && clean == null)
 		{
 			return;
 		}
@@ -95,6 +100,13 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 			g.setColor(OsrsPathWidgetOverlay.pulse(stepItem ? config.highlightColor() : OsrsPathHudOverlay.UPGRADE));
 			g.setStroke(new BasicStroke(2f));
 			g.drawRoundRect(b.x - 1, b.y - 1, b.width + 1, b.height + 1, 6, 6);
+			return;
+		}
+		if (clean != null)
+		{
+			g.setColor(new Color(clean.getRed(), clean.getGreen(), clean.getBlue(), 200));
+			g.setStroke(CLEANUP_STROKE);
+			g.drawRoundRect(b.x, b.y, b.width - 1, b.height - 1, 6, 6);
 			return;
 		}
 		g.setColor(BANK_TAG);

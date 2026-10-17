@@ -1,62 +1,13 @@
 // "Inventory cleanup": what in the bag can be sold or looked at because nothing ahead in the route asks for it. Advice only: the app sells,
 // drops and destroys nothing. The engine is lib/cleanup.ts; the player's "Always keep" and dismissals are saved per profile and character.
 
-import { useEffect, useMemo, useState } from 'react';
-import { useBridge } from '../bridge';
-import { useStore } from '../store';
-import { stepsFor } from '../data';
-import { nameKey } from '../lib/checklist';
-import { isClosed } from '../lib/next-step';
-import { ACTION_LABEL, cleanupAdvice, proceedsText, recLabel, type AccountKind, type CleanupRec } from '../lib/cleanup';
-import { useCleanupPrefs, withAccount, withDismissed, withKeep } from '../lib/cleanupPrefs';
-import { buildPriceBook, type PriceBook } from '../lib/priceBook';
-import { useTradeRestriction } from '../lib/useTradeRestriction';
-import { getAllPrices, getMapping } from '../services/pricesApi';
+import { ACTION_LABEL, proceedsText, recLabel, type AccountKind, type CleanupRec } from '../lib/cleanup';
+import { withAccount, withDismissed, withKeep } from '../lib/cleanupPrefs';
+import { useCleanupAdvice } from '../lib/useCleanupAdvice';
 import { formatGp } from '../lib/shopping';
 
-const NO_PRICES: PriceBook = { priceOf: () => undefined, source: 'baked', at: null };
-
 export function InventoryCleanup() {
-  const { gear, player, accountType, state } = useBridge();
-  const { progress, mode } = useStore();
-  const trade = useTradeRestriction();
-  const { prefs, update } = useCleanupPrefs(player ?? null);
-  const [tradeable, setTradeable] = useState<Set<string> | null>(null);
-  const [book, setBook] = useState<PriceBook>(NO_PRICES);
-
-  useEffect(() => {
-    let alive = true;
-    Promise.all([getMapping(), getAllPrices()])
-      .then(([mapping, live]) => {
-        if (!alive) return;
-        setTradeable(new Set([...mapping.values()].map((m) => nameKey(m.name))));
-        setBook(buildPriceBook(live, mapping, new Map()));
-      })
-      .catch(() => { /* no network: nothing is known to be sellable, so nothing is advised for sale */ });
-    return () => { alive = false; };
-  }, []);
-
-  const bag = gear?.inventory ?? null;
-  const online = state === 'online';
-  const account: AccountKind | null = accountType ?? prefs.account ?? null;
-  const { openSteps, closedSteps } = useMemo(() => {
-    const all = stepsFor(mode);
-    return { openSteps: all.filter((s) => !isClosed(progress, s.id)), closedSteps: new Set(all.filter((s) => isClosed(progress, s.id)).map((s) => s.id)) };
-  }, [mode, progress]);
-  const result = useMemo(
-    () => cleanupAdvice({
-      bag: online && bag ? bag.map((b) => ({ id: b.id, name: b.name, count: b.count ?? 1, noted: b.noted })) : null,
-      worn: (gear?.equipment ?? []).map((e) => e.name),
-      openSteps, closedSteps,
-      bankSeen: gear?.bankCoins !== null && gear?.bankCoins !== undefined,
-      account,
-      restriction: trade.state,
-      price: (n) => book.priceOf(n) ?? null,
-      tradeable: (n) => (tradeable ? tradeable.has(nameKey(n)) : null),
-      prefs,
-    }),
-    [online, bag, gear?.equipment, gear?.bankCoins, openSteps, closedSteps, account, trade.state, book, tradeable, prefs],
-  );
+  const { result, prefs, update, account, live } = useCleanupAdvice();
 
   const hidden = prefs.dismissed.length;
   const kept = new Set(prefs.keep);
@@ -81,9 +32,9 @@ export function InventoryCleanup() {
   return (
     <details className="card cleanup-card" open={actionable.length > 0}>
       <summary className="subhead">
-        🧹 Inventory cleanup{online && bag ? ` · ${actionable.length} ${actionable.length === 1 ? 'suggestion' : 'suggestions'}` : ''}
+        🧹 Inventory cleanup{live ? ` · ${actionable.length} ${actionable.length === 1 ? 'suggestion' : 'suggestions'}` : ''}
       </summary>
-      {!online || !bag ? (
+      {!live ? (
         <p className="muted small">Connect the game (plugin on, character logged in) and the bag will be checked against the route. Nothing is guessed without it.</p>
       ) : (
         <>
@@ -127,7 +78,7 @@ export function InventoryCleanup() {
           {hidden > 0 && <p className="small"><button type="button" className="btn btn-sm" onClick={() => update((p) => ({ ...p, dismissed: [] }))}>Show dismissed suggestions ({hidden})</button></p>}
         </>
       )}
-      <p className="small muted">Advice only: the app sells, drops and destroys nothing. “No future use identified” means only that nothing in your route asks for it; it is not a promise.</p>
+      <p className="small muted">Advice only: the app sells, drops and destroys nothing. “No future use identified” means only that nothing in your route asks for it; it is not a promise. The same lines show in the game on the bank, shop and exchange card and under the guide's Advice tab (plugin 2.61.0 or later).</p>
     </details>
   );
 }

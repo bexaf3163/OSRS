@@ -85,7 +85,13 @@ class OsrsPathShopOverlay extends Overlay
 			return null;
 		}
 		Open o = open();
-		return o == null ? null : ShopWindow.build(o.place, plugin.getGuideView(), atTransportStop());
+		return o == null ? null : result(o);
+	}
+
+	/** The step's card for this game window with the inventory cleanup under it (or the cleanup alone); null means nothing to show. */
+	private ShopWindow.Result result(Open o)
+	{
+		return ShopWindow.withCleanup(ShopWindow.build(o.place, plugin.getGuideView(), atTransportStop()), o.place, plugin.cleanupLines());
 	}
 
 	/** The player stands by the stop the transport's preparation leads to (the shop that sells its supplies). */
@@ -110,7 +116,7 @@ class OsrsPathShopOverlay extends Overlay
 	public Dimension render(Graphics2D g)
 	{
 		Open o = config.showShopWindow() ? open() : null;
-		ShopWindow.Result r = o == null ? null : ShopWindow.build(o.place, plugin.getGuideView(), atTransportStop());
+		ShopWindow.Result r = o == null ? null : result(o);
 		// One card at the exchange: when the bulk list draws, this one stays out (ExchangeView).
 		if (r != null && o.place == ShopWindow.Place.EXCHANGE && ExchangeView.choose(plugin.exchangeBulk(), r) != ExchangeView.Card.STEP)
 		{
@@ -224,6 +230,12 @@ class OsrsPathShopOverlay extends Overlay
 				return OverlayCard.RED;
 			case GOOD:
 				return OsrsPathHudOverlay.GOOD;
+			case SELL:
+				return CleanupHint.SELL;
+			case DROP:
+				return CleanupHint.DROP;
+			case REVIEW:
+				return CleanupHint.REVIEW;
 			default:
 				return new Color(170, 170, 170);
 		}

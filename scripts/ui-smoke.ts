@@ -1024,8 +1024,18 @@ async function run(browser: Browser) {
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
     expect(!overflow, `inventory cleanup (${width} px): no horizontal scroll`);
     if (process.env.UI_SHOTS) await page.locator('.cleanup-card').screenshot({ path: `${process.env.UI_SHOTS}/cleanup-${width}.png` }).catch(() => {});
+    // The same advice goes to the game in the snapshot: the surplus wool with its ids, for this character; food and coins never.
+    const lastCleanup = async () => {
+      const posts = await page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts);
+      const snaps = posts.filter((p) => p.path === '/prep-plan');
+      return snaps.length ? (snaps[snaps.length - 1].body.cleanup ?? null) : undefined;
+    };
+    const sentHint = await lastCleanup();
+    expect(sentHint?.player === 'Cleanup Test' && sentHint.lines.some((l: any) => l.id === 1760 && l.qty === 7 && l.noted)
+      && !sentHint.lines.some((l: any) => l.id === 315 || l.id === 995), `inventory cleanup (${width} px): the game gets the same lines in the snapshot`);
     await page.getByRole('button', { name: 'Always keep' }).first().click();
-    await page.waitForTimeout(300);
+    await page.waitForTimeout(800);
+    expect((await lastCleanup()) === null, `inventory cleanup (${width} px): "Always keep" takes the lines out of the game too`);
     expect(/You marked it/.test(await page.evaluate(() => document.querySelector('.cleanup-keeps')?.textContent ?? '')) && /Stop always keeping/.test(await page.evaluate(() => document.querySelector('.cleanup-keeps')?.textContent ?? '')), `inventory cleanup (${width} px): Always keep moves the line to the kept list`);
     expect(errors.length === 0, `inventory cleanup (${width} px): no console errors ${errors.join('; ')}`);
     await page.context().close();

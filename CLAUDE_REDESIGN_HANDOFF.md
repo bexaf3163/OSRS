@@ -609,3 +609,23 @@ the game, (4) readiness and shopping integration, (5) desktop simplification, (6
   - Lines added to `questStages.json` (Quest Helper's texts, commit 75b623a; inserted in place by `scratchpad/add-lines.cjs`-style text insertion, the file does not
     round-trip): S1-07@75 `pwPlayPiano` (D, E, A, D), S2-11@1/2 `pullUpLeverC`, `pullUpLeverD` (at the end of the list: only the machine leads there), S9-04@3 `useWool`,
     S9-01@3 `getAnotherBranch` (end), S2-10@30/40/50 `dyeWig` (end).
+
+## 2.61.0 — Inventory cleanup in the game
+
+- **Snapshot part `cleanup`** (protocol 6, additive; only present when there is at least one line, so an app with nothing to clean sends byte for byte
+  what older plugins know, and an older plugin ignores the field). `src/lib/cleanupHint.ts` builds it from `cleanupAdvice` (the same result the Shopping
+  card shows): non-keep lines with an item id, at most 16, `why` = the new `CleanupRec.short` (a few words set at each verdict in `cleanup.ts`),
+  `action` drop → `OBSOLETE[key].action` (drop/destroy), `proceeds` only on sells. `useCleanupAdvice` (lib) is now shared by `InventoryCleanup` and
+  `components/CleanupSync.tsx` (mounted in App beside GearHintSync; `setPrepPart('cleanup', …)`).
+- **Plugin** `CleanupHint` (DTO + `prepare()` + pure `visible(me, bagById, now, appSeenAt)`): the character must match (nbsp/underscore/case-insensitive),
+  a line whose id is not in the bag is hidden, a smaller stack caps the count and scales the estimate, nothing after `STALE_MS` (10 min) without the app
+  (`appSeenAt` = an open `/events` stream on a tick, or a snapshot). `bagIds` (raw id → count, banknotes under their own id) is rebuilt in `rebuildCarried`.
+  `cleanupLines()` (client thread) feeds: `ShopWindow.withCleanup` (bank/merchant: all lines; exchange: sells only; own card title when the step has none;
+  never changes `todo`; up to `CLEANUP_SHOWN` 5 + "… and N more"; Marks SELL/DROP/REVIEW coloured by `CleanupHint.SELL/DROP/REVIEW`),
+  `StepGuide.View.cleanup` → `GuideList.adviceCount(View)` (+1) and `cleanupRows` under the Advice tab (4 shown), and `cleanupShown` → `cleanupFrame(id)`
+  for `OsrsPathItemOverlay` (dashed 1.5 px, bag only, drawn only when no wanted/step/transport/upgrade frame applies). A tick compares `cleanupLines()` with
+  `cleanupShown` and refreshes the guide on change (bag, setting, expiry).
+- **Settings**: `cleanupInGame` (default true), `cleanupHighlights` (default false), section "Places, radar, pace", positions 32–33.
+- Tests: `tests/cleanupHint.test.ts` (8), `CleanupHintTest` (11, renders `build/overlay-render/shop-bank-cleanup.png`), UI smoke (the snapshot carries the
+  lines for the character; "Always keep" removes them from the snapshot).
+- Not verified live: the cards and frames in RuneLite (needs the owner logged in with surplus in the bag; no item is to be disposed of for the check).

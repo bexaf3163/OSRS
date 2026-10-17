@@ -1096,6 +1096,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private String skillStepKey;
 	/** The preparation plan from the app; null means it did not send one. The "What you need" list draws it. */
 	private volatile PrepPlan prep;
+	/** The inventory cleanup advice from the app (snapshot part "cleanup"); null means none. Shown, never acted on. */
+	private volatile CleanupHint cleanup;
+	/** When the app was last connected (an open event stream or a snapshot): the cleanup advice expires CleanupHint.STALE_MS after it. */
+	private volatile long appSeenAt;
+	/** The bag by item id (a banknote under its own id), for the cleanup lines. */
+	private volatile Map<Integer, Integer> bagIds = Collections.emptyMap();
+	/** The cleanup lines the guide shows now; the slot frames read them. A change refreshes the guide. */
+	private volatile List<CleanupHint.Line> cleanupShown = Collections.emptyList();
 	/** The temporary target was set by a click on the transport row: its first stop is not the goal, so a teleport or ride ends it. */
 	private volatile boolean navViaTransport;
 	/** Until when the transport item is framed in the bag after a click on its row. */
@@ -1126,13 +1134,15 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			refused.put(PrepEnvelope.BANK_TAGS, "stage items from the app are turned off in the OSRS Path Bridge plugin settings");
 		}
 		lastSnapshotAt = System.currentTimeMillis();
+		appSeenAt = lastSnapshotAt;
 		lastSnapshotSeq = e.getSeq();
 		// The readiness percent belongs to the quest step: while a skill is led there is none.
 		planPercent = e.getSkillPath() != null || e.getPlan() == null || e.getPlan().getScore() == null ? null : e.getPlan().getScore().getPercent();
 		Map<String, String> allRejected = new LinkedHashMap<>(bad);
 		allRejected.putAll(refused);
 		tel("snapshot", "seq", e.getSeq(), "step", e.getStep() == null ? null : e.getStep().getStepId(), "plan", e.getPlan() != null, "percent", planPercent,
-			"shopping", e.getShopping() != null, "bankTags", e.getBankTags() != null, "gearHint", e.getGearHint() != null, "rejected", allRejected.isEmpty() ? null : allRejected);
+			"shopping", e.getShopping() != null, "bankTags", e.getBankTags() != null, "gearHint", e.getGearHint() != null,
+			"cleanup", e.getCleanup() == null || e.getCleanup().getLines() == null ? 0 : e.getCleanup().getLines().size(), "rejected", allRejected.isEmpty() ? null : allRejected);
 		Telemetry t = telemetry;
 		if (t != null)
 		{
@@ -1212,7 +1222,43 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			prep = e.getPlan();
 		}
+		if (!bad.containsKey(PrepEnvelope.CLEANUP))
+		{
+			cleanup = e.getCleanup();
+		}
 		updateHud();
+	}
+
+	/**
+	 * The inventory cleanup lines to show now: for the character logged in, the stack still in the bag, the app not gone too long; empty when the
+	 * setting is off. The bank and shop card, the Advice tab and the slot frames show them; nothing else happens with them.
+	 */
+	List<CleanupHint.Line> cleanupLines()
+	{
+		CleanupHint h = cleanup;
+		Player me = client.getLocalPlayer();
+		if (h == null || !config.cleanupInGame() || me == null || client.getGameState() != GameState.LOGGED_IN)
+		{
+			return Collections.emptyList();
+		}
+		return h.visible(me.getName(), bagIds, System.currentTimeMillis(), appSeenAt);
+	}
+
+	/** The cleanup frame colour for a bag slot, or null: frames off, or no cleanup line names this item. Lower than the step's own frames. */
+	java.awt.Color cleanupFrame(int itemId)
+	{
+		if (!config.cleanupHighlights())
+		{
+			return null;
+		}
+		for (CleanupHint.Line l : cleanupShown)
+		{
+			if (l.getId() == itemId)
+			{
+				return l.color();
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -1393,6 +1439,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		v = StepGuide.withPlanFor(v, prep, target);
 		v = v.withAdviceTab(adviceTab);
+		List<CleanupHint.Line> clean = cleanupLines();
+		cleanupShown = clean;
+		v = v.withCleanup(clean);
 		if (guideMessage != null)
 		{
 			v = v.withNote(guideMessage);
@@ -3256,6 +3305,15 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			completion.onGameTick();
 		}
+		if (server != null && server.streamCount() > 0)
+		{
+			appSeenAt = System.currentTimeMillis();
+		}
+		// The cleanup lines follow the bag, the setting and the app's absence (expiry): a change redraws the guide.
+		if ((cleanup != null || !cleanupShown.isEmpty()) && !cleanupLines().equals(cleanupShown))
+		{
+			updateHud();
+		}
 		Player me = client.getLocalPlayer();
 		if (me != null && client.getGameState() == GameState.LOGGED_IN)
 		{
@@ -3624,8 +3682,27 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		}
 		carried = c;
 		noted = n;
+		bagIds = idCounts(client.getItemContainer(InventoryID.INV));
 		containersChanged();
 		refreshDanger();
+	}
+
+	/** The count by item id as the game holds it (a banknote under its own id). */
+	static Map<Integer, Integer> idCounts(ItemContainer container)
+	{
+		if (container == null)
+		{
+			return Collections.emptyMap();
+		}
+		Map<Integer, Integer> out = new HashMap<>();
+		for (Item it : container.getItems())
+		{
+			if (it.getId() > 0 && it.getQuantity() > 0)
+			{
+				out.merge(it.getId(), it.getQuantity(), Integer::sum);
+			}
+		}
+		return out;
 	}
 
 	/** Lays a container out by counters. Notes go into notes (as the item they stand for). */

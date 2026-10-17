@@ -381,7 +381,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		OverlayText.frame(panel, fm);
 		List<GuideList.Row> rows = new ArrayList<>(collapsed ? GuideList.rows(v, true, fm, smallFm, width, terse)
 			: GuideList.expandedRows(v, compact ? reveal : GuideList.EXPAND_STEPS, fm, smallFm, width, terse));
-		if (!collapsed && (!compact || reveal > 0) && v.isAdviceTab() && GuideList.adviceCount(v.getPrep()) == 0)
+		if (!collapsed && (!compact || reveal > 0) && v.isAdviceTab() && GuideList.adviceCount(v) == 0)
 		{
 			rows = new ArrayList<>(GuideList.coreRows(v, fm, width));
 			rows.add(new GuideList.Row(GuideList.text("No advice for this step.", GuideList.MUTED, smallFm, OverlayText.inner(width), true), GuideList.Action.NONE, null));
@@ -403,7 +403,7 @@ class OsrsPathGuideOverlay extends OverlayPanel
 				rows.add(at++, new GuideList.Row(GuideList.clip("", place, GuideList.MUTED, smallFm, OverlayText.inner(width), 2, true),
 					GuideList.Action.NONE, place));
 			}
-			int advice = GuideList.adviceCount(v.getPrep());
+			int advice = GuideList.adviceCount(v);
 			// Keep the same tab actions directly under the current action in both reveal states.
 			rows.removeIf(r -> r.getAction().getKind() == GuideList.Kind.TAB);
 			rows.add(at, GuideList.tabRow(v.isAdviceTab(), advice, fm, OverlayText.inner(width)));

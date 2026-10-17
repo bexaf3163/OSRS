@@ -1,6 +1,7 @@
 package com.osrspath.bridge;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,7 +33,13 @@ final class ShopWindow
 		/** Already have. */
 		GOOD,
 		/** A note. */
-		INFO
+		INFO,
+		/** Inventory cleanup: can be sold. */
+		SELL,
+		/** Inventory cleanup: can be dropped or destroyed. */
+		DROP,
+		/** Inventory cleanup: look at it yourself. */
+		REVIEW
 	}
 
 	@Value
@@ -190,6 +197,44 @@ final class ShopWindow
 			}
 		}
 		return new Result(title, rows, todo);
+	}
+
+	/** How many cleanup lines the card names; the rest are counted. */
+	static final int CLEANUP_SHOWN = 5;
+
+	/**
+	 * The inventory cleanup under the card's own rows (2.61.0): at the bank and at a merchant every line, at the exchange only the sales (that is where
+	 * they are made). With no step card the cleanup gets a card of its own. It adds nothing to do: the card's colour and count stay the step's.
+	 */
+	static Result withCleanup(Result r, Place place, List<CleanupHint.Line> lines)
+	{
+		List<CleanupHint.Line> here = new ArrayList<>();
+		for (CleanupHint.Line l : lines == null ? Collections.<CleanupHint.Line>emptyList() : lines)
+		{
+			if (place != Place.EXCHANGE || "sell".equals(l.getAction()))
+			{
+				here.add(l);
+			}
+		}
+		if (here.isEmpty())
+		{
+			return r;
+		}
+		List<Row> rows = r == null ? new ArrayList<>() : new ArrayList<>(r.getRows());
+		String title = r != null ? r.getTitle()
+			: place == Place.BANK ? "Bank · inventory cleanup" : place == Place.EXCHANGE ? "Exchange · what can be sold" : "Shop · inventory cleanup";
+		rows.add(new Row("Inventory cleanup (advice only):", Mark.INFO));
+		int n = Math.min(here.size(), CLEANUP_SHOWN);
+		for (int i = 0; i < n; i++)
+		{
+			CleanupHint.Line l = here.get(i);
+			rows.add(new Row(l.text(), "sell".equals(l.getAction()) ? Mark.SELL : "review".equals(l.getAction()) ? Mark.REVIEW : Mark.DROP));
+		}
+		if (here.size() > n)
+		{
+			rows.add(new Row("... and " + (here.size() - n) + " more in the app (Shopping)", Mark.INFO));
+		}
+		return new Result(title, rows, r == null ? 0 : r.getTodo());
 	}
 
 	/** How many items already with you we name in the window: a long list of the whole bag only bloats the window. */

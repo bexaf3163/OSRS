@@ -1,9 +1,29 @@
-# Inventory cleanup (2.59.0)
+# Inventory cleanup (2.59.0, in the game since 2.61.0)
 
 Advice only. The app and the plugin never sell, drop, destroy, alchemise or move anything.
 
 Where: the **Inventory cleanup** card on the Shopping page. It needs the game connected (the bag comes from RuneLite); without it the card says so and
 guesses nothing.
+
+## In the game (plugin 2.61.0+)
+
+The same lines, in a few words ("Sell: Oak logs ×40 (noted) — no use ahead · ~3.6k gp"):
+
+* **Bank and merchant card**: under the step's own rows, "Inventory cleanup (advice only):" and up to 5 lines; the rest are counted. With no step card the
+  cleanup gets a card of its own ("Bank · inventory cleanup"). It never changes the card's colour or its "to do" count.
+* **Grand Exchange**: only the Sell lines, and only when the step's card is the one shown (the bulk shopping list wins while it still has things to buy).
+* **Guide, Advice tab**: the cleanup counts as one tip ("Advice · 1") and lists its first 4 lines. Never on the Steps tab.
+* **Slot frames** (setting "Cleanup slot frames", **off** by default): a quiet dashed frame on the bag slot, blue to sell, red to drop or destroy, grey to
+  look at. Bag only, never the bank. The lowest of all frames: a step or quest item, a gear-advice item or a transport item keeps its own frame.
+* Setting "Inventory cleanup" (on by default) turns all of it off.
+
+What the plugin checks by itself, without the app: the advice is shown only to the character it was made for; a line whose stack has left the bag
+disappears, a smaller stack shows what is left (and a smaller estimate); everything is hidden once the app has been disconnected for 10 minutes (it
+can no longer follow the route). "Always keep" and "Dismiss" in the app take the line out of the game within a second.
+
+Wire format: snapshot part `cleanup` = `{player, lines:[{name, id, qty, noted?, action: sell|drop|destroy|review, why, proceeds?}]}`, at most 16
+lines, sent only when there is at least one (an app with nothing to clean sends exactly the snapshot older plugins know). Lines without an item id are
+not sent. Built by `src/lib/cleanupHint.ts`; checked by `CleanupHint.java`.
 
 ## The four verdicts
 
@@ -55,5 +75,5 @@ Dramen staff, Ghostspeak amulet, Anti-dragon shield, Holy symbol, Lobster pot: k
 
 * The bank is not read: only the bag (`GearState.inventory`) and the worn items are judged. Surplus is computed against the bag only, which is safe (a bank only adds). A note says when the bank has not been opened.
 * High Alchemy is not suggested (no check of access, runes and value against selling yet).
-* In-game card and slot highlights: not in 2.59.0 (the plugin receives nothing yet). Planned: the lines appended to the bank/merchant card (not a new window), an optional highlight setting, and priority to quest-item highlights.
-* Live verification in the game: not done for 2.59.0; the engine is covered by automated tests (`tests/cleanup.test.ts`) and the UI smoke.
+* Live verification in the game: not done yet; the engine and the in-game part are covered by automated tests (`tests/cleanup.test.ts`,
+  `tests/cleanupHint.test.ts`, `CleanupHintTest.java` with a rendered bank card) and the UI smoke (including the snapshot the game receives).

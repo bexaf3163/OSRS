@@ -21,6 +21,7 @@ public class PrepEnvelope
 	static final String GEAR_HINT = "gearHint";
 	static final String PLAN = "plan";
 	static final String SKILL_PATH = "skillPath";
+	static final String CLEANUP = "cleanup";
 
 	/** The snapshot version; 6. */
 	private int v;
@@ -32,6 +33,8 @@ public class PrepEnvelope
 	private PrepPlan plan;
 	/** The tracked skill's path: while it is there the plugin leads that skill instead of the quest step. Absent means no skill is tracked. */
 	private SkillPath skillPath;
+	/** The inventory cleanup advice for the bag (since 2.61.0). Absent means none. */
+	private CleanupHint cleanup;
 
 	/** The step as it came (JSON): if it did not change, the plugin does not restart the target and arrow. Set by the server. */
 	private transient String stepKey;
@@ -46,6 +49,7 @@ public class PrepEnvelope
 		check(bad, GEAR_HINT, gearHint == null ? null : gearHint.prepare());
 		check(bad, PLAN, plan == null ? null : plan.prepare());
 		check(bad, SKILL_PATH, skillPath == null ? null : skillPath.prepare());
+		check(bad, CLEANUP, cleanup == null ? null : cleanup.prepare());
 		return bad;
 	}
 

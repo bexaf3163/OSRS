@@ -87,6 +87,8 @@ final class StepGuide
 		PrepPlan prep;
 		/** The in-game list has the "Tip" tab open (the red and grey from the app: "Don't take now", weight, bag) rather than "Steps". */
 		boolean adviceTab;
+		/** The inventory cleanup lines to show now ({@link CleanupHint#visible}); empty when none or turned off. Under the Advice tab. */
+		List<CleanupHint.Line> cleanup;
 
 		View(String title, String goal, List<ItemLine> items, List<PlaceLine> places, String detour, String note, String next, String finale)
 		{
@@ -108,6 +110,13 @@ final class StepGuide
 		View(String title, String goal, List<ItemLine> items, List<PlaceLine> places, String detour, String note, String next,
 			String finale, StageView stage, PrepPlan prep, boolean adviceTab)
 		{
+			this(title, goal, items, places, detour, note, next, finale, stage, prep, adviceTab, Collections.emptyList());
+		}
+
+		View(String title, String goal, List<ItemLine> items, List<PlaceLine> places, String detour, String note, String next,
+			String finale, StageView stage, PrepPlan prep, boolean adviceTab, List<CleanupHint.Line> cleanup)
+		{
+			this.cleanup = cleanup == null ? Collections.emptyList() : cleanup;
 			this.adviceTab = adviceTab;
 			this.prep = prep;
 			this.title = title;
@@ -124,25 +133,31 @@ final class StepGuide
 		/** The same with another stage state (a warning and "manually"). */
 		View withStage(StageView s)
 		{
-			return new View(title, goal, items, places, detour, note, next, finale, s, prep, adviceTab);
+			return new View(title, goal, items, places, detour, note, next, finale, s, prep, adviceTab, cleanup);
 		}
 
 		/** The same with the preparation plan from the app. */
 		View withPrep(PrepPlan p)
 		{
-			return new View(title, goal, items, places, detour, note, next, finale, stage, p, adviceTab);
+			return new View(title, goal, items, places, detour, note, next, finale, stage, p, adviceTab, cleanup);
 		}
 
 		/** The same with another message (the plugin's guideMessage). */
 		View withNote(String message)
 		{
-			return new View(title, goal, items, places, detour, message, next, finale, stage, prep, adviceTab);
+			return new View(title, goal, items, places, detour, message, next, finale, stage, prep, adviceTab, cleanup);
 		}
 
 		/** The same with the "Tip" (or "Steps") tab open. */
 		View withAdviceTab(boolean on)
 		{
-			return new View(title, goal, items, places, detour, note, next, finale, stage, prep, on);
+			return new View(title, goal, items, places, detour, note, next, finale, stage, prep, on, cleanup);
+		}
+
+		/** The same with the inventory cleanup lines to show. */
+		View withCleanup(List<CleanupHint.Line> lines)
+		{
+			return new View(title, goal, items, places, detour, note, next, finale, stage, prep, adviceTab, lines);
 		}
 	}
 

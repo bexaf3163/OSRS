@@ -480,6 +480,32 @@ public interface OsrsPathBridgeConfig extends Config
 		return true;
 	}
 
+	@ConfigItem(
+		keyName = "cleanupInGame",
+		name = "Inventory cleanup",
+		description = "The app's advice on what in the bag can go (sell the surplus, drop a finished quest's item, look at the rest): rows on the bank, "
+			+ "shop and exchange card and a section under the guide's Advice tab. Advice only: sells, drops and destroys nothing",
+		section = helpers,
+		position = 32
+	)
+	default boolean cleanupInGame()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "cleanupHighlights",
+		name = "Cleanup slot frames",
+		description = "A dashed frame on the bag slots the inventory cleanup names: blue to sell, red to drop or destroy, grey to look at. "
+			+ "Quest and step items keep their own frame and are never marked",
+		section = helpers,
+		position = 33
+	)
+	default boolean cleanupHighlights()
+	{
+		return false;
+	}
+
 	@ConfigSection(
 		name = "Developer",
 		description = "A badge with the engine status, a log and screenshots for troubleshooting",

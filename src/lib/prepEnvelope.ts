@@ -13,6 +13,7 @@ import type { PrepLine, PrepPlan, PrepPriority, PrepTiming, PrepWhere, Supply } 
 import type { Detour } from './detours';
 import type { RecommendedTransport } from './transport';
 import type { SkillPathPayload } from './skillGuide';
+import type { CleanupHintPayload } from './cleanupHint';
 import { items as itemData } from '../data';
 import { nameKey } from './checklist';
 
@@ -68,6 +69,8 @@ export interface PrepEnvelope {
   gearHint: GearHintPayload | null;
   plan: PrepPlanPayload | null;
   skillPath?: SkillPathPayload;
+  /** The inventory cleanup lines for the game (plugin 2.61.0 and later; an older one ignores the field). Absent means none. */
+  cleanup?: CleanupHintPayload;
 }
 
 /** A string no longer than the plugin's limit: cut at a word, with an ellipsis. */
@@ -197,6 +200,8 @@ export interface SnapshotParts {
   plan: PrepPlanPayload | null;
   /** The tracked skill's whole path (Skills → "Track Skill Path"): while it is there the plugin leads the skill step and ignores the quest step. */
   skillPath?: SkillPathPayload | null;
+  /** The inventory cleanup advice for the bag (lib/cleanupHint.ts). */
+  cleanup?: CleanupHintPayload | null;
 }
 
 export const EMPTY_PARTS: SnapshotParts = { step: null, shopping: null, bankTags: null, gearHint: null, plan: null };
@@ -219,6 +224,8 @@ export function buildEnvelope(parts: SnapshotParts, seq: number): PrepEnvelope {
     plan: parts.plan && (!parts.step || parts.plan.stepId === parts.step.stepId) ? parts.plan : null,
     // Only when there is one: an app that tracks no skill sends the same snapshot as before.
     ...(parts.skillPath && parts.skillPath.steps.length ? { skillPath: parts.skillPath } : {}),
+    // The same: an app with nothing to clean sends the snapshot an older plugin knows, byte for byte.
+    ...(parts.cleanup && parts.cleanup.lines.length ? { cleanup: parts.cleanup } : {}),
   };
 }
 

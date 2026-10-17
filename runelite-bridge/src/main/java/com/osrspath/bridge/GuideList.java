@@ -163,7 +163,7 @@ final class GuideList
 		}
 		recoveryRows(out, v.getPrep(), fm, small, inner);
 		// The app's tips ("Don't take now", weight, bag) are on a separate tab: on the game screen they do not belong among the steps.
-		int advice = adviceCount(v.getPrep());
+		int advice = adviceCount(v);
 		boolean onAdvice = v.isAdviceTab() && advice > 0;
 		if (advice > 0)
 		{
@@ -172,6 +172,7 @@ final class GuideList
 		if (onAdvice)
 		{
 			adviceRows(out, v.getPrep(), small, inner);
+			cleanupRows(out, v.getCleanup(), small, inner);
 			return out;
 		}
 		if (v.getNote() != null)
@@ -685,6 +686,38 @@ final class GuideList
 	}
 
 	/** How many tips the app has for the step: a detour, blockers, "will not fit", "don't take now", weight. */
+	/** The Advice tab's count: the app's tips, and the inventory cleanup as one more when it has lines. */
+	static int adviceCount(StepGuide.View v)
+	{
+		return adviceCount(v.getPrep()) + (v.getCleanup().isEmpty() ? 0 : 1);
+	}
+
+	static final int CLEANUP_SHOWN = 4;
+
+	/**
+	 * Under the Advice tab: "Inventory cleanup (advice only)" and its first lines ("Sell: Oak logs ×40 — no use ahead · ~3.6k gp"), in the colours of
+	 * the slot frames. The rest are on the bank card and in the app. Nothing is clickable: the plugin does nothing with the items.
+	 */
+	static void cleanupRows(List<Row> out, List<CleanupHint.Line> lines, FontMetrics small, int inner)
+	{
+		if (lines == null || lines.isEmpty())
+		{
+			return;
+		}
+		out.add(new Row(clip("", "Inventory cleanup (advice only):", MUTED, small, inner, 1, true), Action.NONE,
+			"What in the bag can go because nothing ahead in your route asks for it. Nothing is sold, dropped or destroyed for you."));
+		int n = Math.min(lines.size(), CLEANUP_SHOWN);
+		for (int i = 0; i < n; i++)
+		{
+			CleanupHint.Line l = lines.get(i);
+			out.add(new Row(clip("", l.text(), l.color(), small, inner, 2, true), Action.NONE, l.text()));
+		}
+		if (lines.size() > n)
+		{
+			out.add(new Row(clip("", "... and " + (lines.size() - n) + " more on the bank card and in the app", MUTED, small, inner, 1, true), Action.NONE, null));
+		}
+	}
+
 	static int adviceCount(PrepPlan prep)
 	{
 		if (prep == null)
@@ -704,7 +737,7 @@ final class GuideList
 		List<Line> lines = new ArrayList<>();
 		// No tips: no "Advice · 0" label, only the Steps tab (a tab with nothing behind it is noise for a new player).
 		lines.add(new Line("Steps", onAdvice ? LINK : TITLE, advice > 0 ? "Advice · " + advice : null, onAdvice ? TITLE : LINK, true));
-		return new Row(lines, Action.TAB, onAdvice ? "Steps: the quest's lines in order. Click \"Steps\" to go back to them." : "Advice: what not to take now, weight, bag, the way there. Click \"Advice\" to see it.");
+		return new Row(lines, Action.TAB, onAdvice ? "Steps: the quest's lines in order. Click \"Steps\" to go back to them." : "Advice: what not to take now, weight, bag, the way there, what in the bag can go. Click \"Advice\" to see it.");
 	}
 
 	/** The text of the list lines in a row, as the player sees it, for the debug log and tests: "left ~right", lines separated by newlines. */
