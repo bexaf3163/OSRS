@@ -732,3 +732,38 @@ the game, (4) readiness and shopping integration, (5) desktop simplification, (6
   `public/fonts/Sora-variable.ttf` and `OFL-Sora.txt` instead of Inter. The app's CSS still uses Inter. `GuideFontTest` expects "Sora".
 - Owner picked Sora from six options (Inter, Manrope, Plus Jakarta Sans, DM Sans, Outfit, Sora, Figtree). Whether the app should follow was
   offered, not decided.
+
+## 2.64.0 — funding system (app side)
+
+Owner request 2026-10-18: an integrated, personalised money-making and funding system. Shipped in blocks (owner: "deploy after each large block"):
+this release is the app side; the plugin line and the Shopping-page summary are next. Nothing here was live-verified in the game: **automated only**
+(vitest 1350+, UI smoke with the exchange mocked from a real 2026-10-18 capture).
+
+Where things are (all under `src/lib/funding/`, not to be confused with the older `src/lib/fundingPlan.ts`, the tiered shopping plan for restricted accounts):
+
+- `ge.ts` tax (2% per item, floor, 5,000,000 cap, `data/geTaxExempt.json`, verified 2026-10-18). `quotes.ts` side-aware `PriceView` (buy = high, sell = low), confidence from age,
+  spread, thin volume and spikes; `usePriceView.ts` + `quoteStore.ts` one shared board, one fetch loop while a card is open. `services/pricesApi.ts` is the v2 service
+  (`getQuoteBoard` never throws; 429 does not fall back to v1).
+- `methods.ts` + `data/fundingMethods.json` (12 curated methods, every one with sources and a revision), `data/fundingCoverage.json` (91 guides, 12 supported, the rest with a
+  reason), `docs/FUNDING_COVERAGE.md` (generated: `npm run funding-coverage`). `validateCatalogue` is enforced by `tests/funding/catalogue.test.ts`, not by `check-data`.
+- `snapshot.ts` one player snapshot (unknown stays unknown; protections = items the window of steps needs); `need.ts` four tiers (minimum, recommended, objective, optional)
+  read from the existing prep plan and shopping list; `budget.ts` liquid coins, surplus from the cleanup advice; `cheaper.ts`; `evaluate.ts` per method: eligibility, working capital,
+  bag-slot trips, absorption cap (25% of hourly volume), buy limit cap, fast/typical/slow minutes with a price haircut; `combatAdapter.ts` calls the real combat model, there is no second one;
+  `rank.ts` two-stage (eligibility, then conservative time with a confidence penalty, 25% hysteresis); `assess.ts` the answer for a step; `plan.ts` the plan state machine;
+  `session.ts` realized coins vs unsold loot from the ledger and the observed pace (4 h window).
+- App wiring: `src/fundingContext.tsx` (provider mounted in `main.tsx`; keys `osrs-put:funding-plan:<profile>:<character>` and `osrs-put:funding-rates:...`), `components/FundingCard.tsx`
+  (mounted inside `OneTripCard` when `inStatus`; the old coin line is its fallback), `FundingStatusLine` in `StepStatus`.
+
+Invariants (do not break):
+
+1. The plan never completes, reorders or renames a route step; `sourceStepId` stays open. Its arrow label starts with `Funding: ` and carries no `stepId`; only the plan takes that arrow down.
+2. A sub-step advances only on something the game shows. Arrival is not "done", loot value is not a sale, bank moves are not income. What cannot be seen asks the player.
+3. Reserved items (route needs, completion triggers, carry-over, quest items) are never in the surplus, whatever a stale cleanup list says (`budget.surplusOf` checks again).
+4. Unknown stays unknown: no coins, no bank, no price means `UNKNOWN`, never `COVERED`. A line the plan calls a drop but the exchange sells (food) is a purchase (`need.buyable`).
+5. Dependable income only (chance 1/16 or better); no Wilderness, no flipping, no rare-drop gambling, no members default.
+6. The player's position is not tracked by the app: the provider asks `/status` every 4 s while a plan runs and each open card every 30 s.
+
+Found while building (worth knowing): the item database has no exchange price for food, so the prep plan's cheapest source for Salmon is a monster drop table; the first
+version of `need` skipped such lines and the card never appeared. `assess` also said "Nothing to pay for" for an unpriced shortage; both fixed with tests that fail without the fix.
+
+Not done yet: the plugin line (`funding` part of the `/prep-plan` envelope, HUD/guide line), the Shopping-page summary (part of the Shopping rework), live verification.

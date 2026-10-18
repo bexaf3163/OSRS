@@ -22,6 +22,7 @@ import { styleOf } from '../lib/playStyle';
 import { usePrepFix } from './PrepRoute';
 import { ReadinessPanel } from './ReadinessPanel';
 import { OneTripCard, RecoveryBanner } from './OneTripCard';
+import { FundingStatusLine } from './FundingCard';
 import { MoneyGoal } from './MoneyGoal';
 import { TradeRestrictionNote } from './TradeRestrictionNote';
 import { MoneyPlan } from './MoneyPlan';
@@ -160,6 +161,7 @@ export function StepStatus({ step, headline = false, noStart = false, quiet = fa
         </span>
       </div>
       {recovering && <RecoveryBanner step={step} rec={recovering} />}
+      <FundingStatusLine step={step} onOpen={openDetails} />
       {!recovering && !headline && <TravelTip step={step} />}
       {sent === 'offline' && <p className="small muted" role="status">RuneLite bridge offline{link === 'online' ? ' or refused' : ''}. Start RuneLite with the OSRS Path Bridge plugin.</p>}
       {detour ? (

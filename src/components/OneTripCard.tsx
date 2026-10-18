@@ -2,6 +2,7 @@
 // (take, buy and from whom, earn, obtain), why it is needed, and whether the consumable is enough. The critical is separated from "meanwhile"
 // and "later": not everything at once, not everything into the bag. What is unknown is not passed off as "missing". It buys nothing: the player decides.
 
+import { FundingCard } from './FundingCard';
 import type { Step } from '../types';
 import { useStore } from '../store';
 import { isClosed } from '../lib/next-step';
@@ -153,6 +154,14 @@ export function OneTripCard({ step, inStatus = false, plain = false }: { step: S
   const coinsShort = plan.coins.missing !== null && plan.coins.missing > 0;
   const quiet = (scope ? true : score.verdict === 'READY') && !pending && !coinsShort && slots.over === 0 && plan.weight.level !== 'HEAVY' && !plan.recovery;
   const unknownCoins = plan.coins.need > 0 && plan.coins.have === null;
+  const coinLine = (coinsShort || unknownCoins) && (
+    <p className="small">
+      💰 <strong>Coins for the steps:</strong>{' '}
+      {coinsShort
+        ? <>{formatGp(plan.coins.missing!)} gp of {formatGp(plan.coins.need)} missing{plan.coins.action?.href && <> · <a href={plan.coins.action.href}>how to make up →</a></>}</>
+        : <span className="muted">{formatGp(plan.coins.need)} gp needed — I do not know yet how much you have</span>}
+    </p>
+  );
   return (
     <section className="one-trip" aria-label="What you need">
       <p className="readiness-head">
@@ -181,14 +190,7 @@ export function OneTripCard({ step, inStatus = false, plain = false }: { step: S
       {byTheWay.length > 0 && (
         <p className="small prep-title"><strong>⚪ Along the way:</strong> <span className="muted">{byTheWay.map((l) => `${l.name}${countOf(l)}`).join(', ')} — no need to take them in advance</span></p>
       )}
-      {(coinsShort || unknownCoins) && (
-        <p className="small">
-          💰 <strong>Coins for the steps:</strong>{' '}
-          {coinsShort
-            ? <>{formatGp(plan.coins.missing!)} gp of {formatGp(plan.coins.need)} missing{plan.coins.action?.href && <> · <a href={plan.coins.action.href}>how to make up →</a></>}</>
-            : <span className="muted">{formatGp(plan.coins.need)} gp needed — I do not know yet how much you have</span>}
-        </p>
-      )}
+      {inStatus ? <FundingCard step={step}>{coinLine}</FundingCard> : coinLine}
       {slots.over > 0 && (
         <p className="notice small" role="note">
           ⚠️ <strong>It will not all fit at once:</strong> {slots.used} of {BAG_SLOTS} bag slots used, {slots.adding} more to take or collect — {slots.over}{' '}

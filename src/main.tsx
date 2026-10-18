@@ -6,6 +6,7 @@ import { StoreProvider } from './store';
 import { BridgeProvider } from './bridge';
 import { PlayerStateProvider } from './playerStateContext';
 import { ReadinessProvider } from './readinessContext';
+import { FundingProvider } from './fundingContext';
 import { WikiProvider } from './components/WikiDrawer';
 import { applyTextScale, loadTextScale } from './lib/ui-scale';
 import './styles.css';
@@ -21,9 +22,11 @@ createRoot(document.getElementById('root')!).render(
       <BridgeProvider>
         <PlayerStateProvider>
           <ReadinessProvider>
-            <WikiProvider>
-              <App />
-            </WikiProvider>
+            <FundingProvider>
+              <WikiProvider>
+                <App />
+              </WikiProvider>
+            </FundingProvider>
           </ReadinessProvider>
         </PlayerStateProvider>
       </BridgeProvider>

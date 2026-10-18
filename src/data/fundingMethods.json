@@ -1,0 +1,592 @@
+{
+  "version": 1,
+  "generatedAt": "2026-10-18",
+  "methods": [
+    {
+      "id": "hill-giants",
+      "title": "Kill Hill Giants",
+      "family": "combat",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Big bones on every kill, plus coins, limpwurt roots and runes.",
+      "requirements": [
+        { "kind": "check", "text": "A Brass key opens the locked door by the giants and saves the walk past the skeletons; it is not required." }
+      ],
+      "inputs": [],
+      "outputs": [
+        { "item": { "id": 532, "name": "Big bones" }, "qty": 1 },
+        { "item": { "id": 995, "name": "Coins" }, "qty": 5, "chance": [18, 128], "stack": true },
+        { "item": { "id": 995, "name": "Coins" }, "qty": 38, "chance": [14, 128], "stack": true },
+        { "item": { "id": 995, "name": "Coins" }, "qty": 52, "chance": [10, 128], "stack": true },
+        { "item": { "id": 995, "name": "Coins" }, "qty": 15, "chance": [8, 128], "stack": true },
+        { "item": { "id": 995, "name": "Coins" }, "qty": 10, "chance": [7, 128], "stack": true },
+        { "item": { "id": 995, "name": "Coins" }, "qty": 8, "chance": [6, 128], "stack": true },
+        { "item": { "id": 995, "name": "Coins" }, "qty": 88, "chance": [2, 128], "stack": true },
+        { "item": { "id": 225, "name": "Limpwurt root" }, "qty": 1, "chance": [11, 128] },
+        { "item": { "id": 563, "name": "Law rune" }, "qty": 2, "chance": [3, 128], "stack": true },
+        { "item": { "id": 886, "name": "Steel arrow" }, "qty": 10, "chance": [2, 128], "stack": true },
+        { "item": { "id": 564, "name": "Cosmic rune" }, "qty": 2, "chance": [2, 128], "stack": true },
+        { "item": { "id": 561, "name": "Nature rune" }, "qty": 6, "chance": [2, 128], "stack": true },
+        { "item": { "id": 562, "name": "Chaos rune" }, "qty": 2, "chance": [1, 128], "stack": true },
+        { "item": { "id": 560, "name": "Death rune" }, "qty": 2, "chance": [1, 128], "stack": true },
+        { "item": { "id": 1446, "name": "Body talisman" }, "qty": 1, "chance": [2, 128] },
+        { "item": { "id": 1623, "name": "Uncut sapphire" }, "qty": 1, "chance": [96, 16384] },
+        { "item": { "id": 1621, "name": "Uncut emerald" }, "qty": 1, "chance": [48, 16384] },
+        { "item": { "id": 1619, "name": "Uncut ruby" }, "qty": 1, "chance": [24, 16384] },
+        { "item": { "id": 1617, "name": "Uncut diamond" }, "qty": 1, "chance": [6, 16384] }
+      ],
+      "rate": {
+        "unit": "kill",
+        "perHour": { "slow": 70, "typical": 90, "fast": 110 },
+        "basis": "combat-model",
+        "assumes": "The published 110 kills an hour assumes an adamant or better weapon and an amulet of strength. With your gear the combat model gives the pace; these figures are used only when it cannot run."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 75, "note": "The Edgeville bank is about a minute from the giants (trapdoor, ladder and the walk inside)." },
+      "spot": { "x": 3111, "y": 9838, "plane": 0, "label": "Hill Giants, Edgeville Dungeon" },
+      "bank": { "x": 3093, "y": 3495, "plane": 0, "label": "Edgeville Bank" },
+      "saleSeconds": 60,
+      "risk": "moderate",
+      "intensity": "moderate",
+      "marketDependence": "The spot is crowded at busy hours; world hopping is the remedy and is not modelled.",
+      "combat": { "foe": "Hill Giant", "versions": ["1"], "food": ["Trout", "Salmon", "Tuna", "Lobster", "Swordfish"] },
+      "guide": [
+        { "kind": "prepare", "text": "Take food from the bank. Keep the Big bones the route needs." },
+        { "kind": "travel", "text": "Go to the Hill Giants in the Edgeville Dungeon." },
+        { "kind": "perform", "text": "Kill giants until the bag is full of loot or the food runs low." },
+        { "kind": "bank", "text": "Bank the loot in Edgeville." },
+        { "kind": "sell", "text": "Sell the loot you do not need to keep at the Grand Exchange." },
+        { "kind": "restock", "text": "Buy the supplies you were short of, then go back to your step." }
+      ],
+      "sources": [
+        { "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_hill_giants", "title": "Money making guide/Killing hill giants", "revision": 14931407, "revisedAt": "2025-07-03", "retrievedAt": "2026-10-18", "used": "drops per kill (Mmgtable), published pace, location and banking" },
+        { "url": "https://oldschool.runescape.wiki/w/Hill_Giant", "title": "Hill Giant", "revision": 15362162, "revisedAt": "2026-10-03", "retrievedAt": "2026-10-18", "used": "monster page checked against the drop table" }
+      ],
+      "verifiedAt": "2026-10-18",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Giant keys (1/128) and beginner clues are ignored: the Obor fight and clue rewards are not modelled.",
+        "Armour and weapon drops are not picked up.",
+        "Drops under 1/16 per kill are shown as upside and never counted on."
+      ]
+    },
+    {
+      "id": "cows-cowhide",
+      "title": "Kill cows for cowhide",
+      "family": "combat",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "A cowhide on every kill from the Lumbridge cow field; cows hit for 1.",
+      "requirements": [],
+      "inputs": [],
+      "outputs": [
+        { "item": { "id": 1739, "name": "Cowhide" }, "qty": 1 }
+      ],
+      "rate": {
+        "unit": "kill",
+        "perHour": { "slow": 180, "typical": 260, "fast": 325 },
+        "basis": "combat-model",
+        "assumes": "The published 325 hides an hour assumes mithril or better equipment and a teleport back to the field. The combat model gives the pace for your gear."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 120, "note": "The Lumbridge bank is on the castle roof: stairs both ways." },
+      "spot": { "x": 3253, "y": 3278, "plane": 0, "label": "Lumbridge cow field" },
+      "bank": { "x": 3208, "y": 3220, "plane": 2, "label": "Lumbridge Bank" },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "combat": { "foe": "Cow", "versions": ["1"], "food": [] },
+      "guide": [
+        { "kind": "travel", "text": "Go to the cow field north of Lumbridge." },
+        { "kind": "perform", "text": "Kill cows and pick up the hides until the bag is full." },
+        { "kind": "bank", "text": "Bank the hides in the Lumbridge castle." },
+        { "kind": "sell", "text": "Sell the hides at the Grand Exchange." },
+        { "kind": "restock", "text": "Buy the supplies you were short of, then go back to your step." }
+      ],
+      "sources": [
+        { "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Killing_cows_and_tanning_cowhide", "title": "Money making guide/Killing cows and tanning cowhide", "revision": 15235891, "revisedAt": "2026-06-19", "retrievedAt": "2026-10-18", "used": "cows always drop a cowhide, 8 hitpoints, the field, published pace" }
+      ],
+      "verifiedAt": "2026-10-18",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Hides are sold raw: tanning them is a separate, unmodelled step.",
+        "Bones and raw beef are left on the ground to keep the bag for hides.",
+        "A new free-to-play account cannot sell cowhide until its trade restrictions lift."
+      ]
+    },
+    {
+      "id": "mine-iron-dwarven",
+      "title": "Mine iron ore",
+      "family": "gathering",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Iron ore in the Dwarven Mine, banked in Falador.",
+      "requirements": [
+        { "kind": "level", "skill": "mining", "level": 15 },
+        { "kind": "item", "role": "tool", "any": [], "family": "pickaxe", "note": "Carried or wielded: a pickaxe is used by Mining level alone." },
+        { "kind": "check", "text": "Combat level 65 or more keeps the king scorpions from being aggressive." }
+      ],
+      "inputs": [],
+      "outputs": [
+        { "item": { "id": 440, "name": "Iron ore" }, "qty": 1 },
+        { "item": { "id": 1623, "name": "Uncut sapphire" }, "qty": 1, "chance": [1, 1024] },
+        { "item": { "id": 1621, "name": "Uncut emerald" }, "qty": 1, "chance": [1, 2048] },
+        { "item": { "id": 1619, "name": "Uncut ruby" }, "qty": 1, "chance": [1, 4096] },
+        { "item": { "id": 1617, "name": "Uncut diamond" }, "qty": 1, "chance": [1, 16384] }
+      ],
+      "rate": {
+        "unit": "ore",
+        "perHour": { "slow": 308, "typical": 448, "fast": 560 },
+        "basis": "wiki-guide",
+        "assumes": "560 ores an hour is the published figure for a rune pickaxe at Mining 41 and more, banking included. Slow is 55% and typical 80% of it.",
+        "levelScale": { "skill": "mining", "fromLevel": 15, "atLevel": 41, "minFactor": 0.4 },
+        "toolScale": { "assumed": "Rune pickaxe", "better": ["Rune pickaxe", "Dragon pickaxe", "Crystal pickaxe", "Infernal pickaxe", "3rd age pickaxe", "Gilded pickaxe"], "below": 0.6 }
+      },
+      "trip": { "bagSlots": 27, "overheadSeconds": 90, "note": "Falador east bank is the nearest to the Dwarven Mine." },
+      "spot": { "x": 3018, "y": 3450, "plane": 0, "label": "Dwarven Mine entrance (the iron rocks are inside)" },
+      "bank": { "x": 3017, "y": 3356, "plane": 0, "label": "Falador East Bank" },
+      "saleSeconds": 60,
+      "risk": "moderate",
+      "intensity": "low",
+      "guide": [
+        { "kind": "prepare", "text": "Take your pickaxe from the bank." },
+        { "kind": "travel", "text": "Go to the Dwarven Mine north of Falador." },
+        { "kind": "perform", "text": "Mine iron ore until the bag is full." },
+        { "kind": "bank", "text": "Bank the ore in Falador." },
+        { "kind": "sell", "text": "Sell the ore at the Grand Exchange." },
+        { "kind": "restock", "text": "Buy the supplies you were short of, then go back to your step." }
+      ],
+      "sources": [
+        { "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_iron_ore_(free-to-play)", "title": "Money making guide/Mining iron ore (free-to-play)", "revision": 14444202, "revisedAt": "2023-07-30", "retrievedAt": "2026-10-18", "used": "published pace, gem chances, location, scorpion warning" }
+      ],
+      "verifiedAt": "2026-10-18",
+      "confidence": "LOW",
+      "assumptions": [
+        "The published pace is scaled down for lower levels and lesser pickaxes by a simple stated rule, not a measured one; an observed pace replaces it.",
+        "The tile is the mine entrance; the rocks are a short walk inside.",
+        "A new free-to-play account cannot sell iron ore until its trade restrictions lift."
+      ]
+    },
+    {
+      "id": "mine-coal-dwarven",
+      "title": "Mine coal",
+      "family": "gathering",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Coal in the Dwarven Mine, banked in Falador.",
+      "requirements": [
+        { "kind": "level", "skill": "mining", "level": 30 },
+        { "kind": "item", "role": "tool", "any": [], "family": "pickaxe", "note": "Carried or wielded: a pickaxe is used by Mining level alone." },
+        { "kind": "check", "text": "Combat level 65 or more keeps the king scorpions from being aggressive." }
+      ],
+      "inputs": [],
+      "outputs": [
+        { "item": { "id": 453, "name": "Coal" }, "qty": 1 }
+      ],
+      "rate": {
+        "unit": "ore",
+        "perHour": { "slow": 127, "typical": 184, "fast": 230 },
+        "basis": "wiki-guide",
+        "assumes": "230 coal an hour is the published figure for a rune pickaxe at Mining 41 and more. Slow is 55% and typical 80% of it.",
+        "levelScale": { "skill": "mining", "fromLevel": 30, "atLevel": 41, "minFactor": 0.5 },
+        "toolScale": { "assumed": "Rune pickaxe", "better": ["Rune pickaxe", "Dragon pickaxe", "Crystal pickaxe", "Infernal pickaxe", "3rd age pickaxe", "Gilded pickaxe"], "below": 0.6 }
+      },
+      "trip": { "bagSlots": 27, "overheadSeconds": 90, "note": "Falador east bank is the nearest to the Dwarven Mine." },
+      "spot": { "x": 3018, "y": 3450, "plane": 0, "label": "Dwarven Mine entrance (the coal rocks are inside)" },
+      "bank": { "x": 3017, "y": 3356, "plane": 0, "label": "Falador East Bank" },
+      "saleSeconds": 60,
+      "risk": "moderate",
+      "intensity": "low",
+      "guide": [
+        { "kind": "prepare", "text": "Take your pickaxe from the bank." },
+        { "kind": "travel", "text": "Go to the Dwarven Mine north of Falador." },
+        { "kind": "perform", "text": "Mine coal until the bag is full." },
+        { "kind": "bank", "text": "Bank the coal in Falador." },
+        { "kind": "sell", "text": "Sell the coal at the Grand Exchange." },
+        { "kind": "restock", "text": "Buy the supplies you were short of, then go back to your step." }
+      ],
+      "sources": [
+        { "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Mining_coal_(free-to-play)", "title": "Money making guide/Mining coal (free-to-play)", "revision": 14997913, "revisedAt": "2025-10-02", "retrievedAt": "2026-10-18", "used": "published pace, location, scorpion warning" }
+      ],
+      "verifiedAt": "2026-10-18",
+      "confidence": "LOW",
+      "assumptions": [
+        "The wiki lists Mining 35 for coal; the game needs 30. 30 is used as the level that unlocks the rock.",
+        "The published pace is scaled by a stated rule for lower levels and lesser pickaxes.",
+        "Gems found while mining (about 1/282) are ignored.",
+        "A new free-to-play account cannot sell coal until its trade restrictions lift."
+      ]
+    },
+    {
+      "id": "chop-oak-draynor",
+      "title": "Chop oak logs",
+      "family": "gathering",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Oak trees beside the Draynor bank: almost no walking.",
+      "requirements": [
+        { "kind": "level", "skill": "woodcutting", "level": 15 },
+        { "kind": "item", "role": "tool", "any": [], "family": "axe", "note": "Carried or wielded: an axe is used by Woodcutting level alone; wielding one needs Attack." }
+      ],
+      "inputs": [],
+      "outputs": [
+        { "item": { "id": 1521, "name": "Oak logs" }, "qty": 1 }
+      ],
+      "rate": {
+        "unit": "log",
+        "perHour": { "slow": 440, "typical": 640, "fast": 800 },
+        "basis": "wiki-guide",
+        "assumes": "800 logs an hour sits inside the wiki's 500 to 1,100 range for the levels and axes it lists. Slow is 55% and typical 80% of it.",
+        "levelScale": { "skill": "woodcutting", "fromLevel": 15, "atLevel": 60, "minFactor": 0.4 },
+        "toolScale": { "assumed": "Rune axe", "better": ["Rune axe", "Dragon axe", "Crystal axe", "Infernal axe", "3rd age axe", "Gilded axe"], "below": 0.6 }
+      },
+      "trip": { "bagSlots": 27, "overheadSeconds": 20, "note": "The oak tree is just east of the Draynor bank." },
+      "spot": { "x": 3101, "y": 3245, "plane": 0, "label": "Oak tree east of Draynor Bank" },
+      "bank": { "x": 3093, "y": 3243, "plane": 0, "label": "Draynor Bank" },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        { "kind": "prepare", "text": "Take your axe from the bank." },
+        { "kind": "travel", "text": "Go to the oak tree east of the Draynor bank." },
+        { "kind": "perform", "text": "Chop oaks until the bag is full." },
+        { "kind": "bank", "text": "Bank the logs." },
+        { "kind": "sell", "text": "Sell the logs at the Grand Exchange." },
+        { "kind": "restock", "text": "Buy the supplies you were short of, then go back to your step." }
+      ],
+      "sources": [
+        { "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cutting_oak_logs", "title": "Money making guide/Cutting oak logs", "revision": 14917558, "revisedAt": "2025-06-09", "retrievedAt": "2026-10-18", "used": "published pace range, location beside the bank" }
+      ],
+      "verifiedAt": "2026-10-18",
+      "confidence": "LOW",
+      "assumptions": [
+        "The tile of the tree is approximate (a few tiles); the arrow stops beside the bank.",
+        "Oak leaves are ignored.",
+        "A new free-to-play account cannot sell oak logs until its trade restrictions lift."
+      ]
+    },
+    {
+      "id": "chop-yew-edgeville",
+      "title": "Chop yew logs",
+      "family": "gathering",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Yew trees near the Edgeville bank.",
+      "requirements": [
+        { "kind": "level", "skill": "woodcutting", "level": 60 },
+        { "kind": "item", "role": "tool", "any": [], "family": "axe", "note": "Carried or wielded: an axe is used by Woodcutting level alone; wielding one needs Attack." }
+      ],
+      "inputs": [],
+      "outputs": [
+        { "item": { "id": 1515, "name": "Yew logs" }, "qty": 1 }
+      ],
+      "rate": {
+        "unit": "log",
+        "perHour": { "slow": 83, "typical": 120, "fast": 150 },
+        "basis": "wiki-guide",
+        "assumes": "150 logs an hour sits inside the wiki's 100 to 200 range. Slow is 55% and typical 80% of it.",
+        "levelScale": { "skill": "woodcutting", "fromLevel": 60, "atLevel": 80, "minFactor": 0.65 },
+        "toolScale": { "assumed": "Rune axe", "better": ["Rune axe", "Dragon axe", "Crystal axe", "Infernal axe", "3rd age axe", "Gilded axe"], "below": 0.7 }
+      },
+      "trip": { "bagSlots": 27, "overheadSeconds": 30, "note": "The Edgeville yews are a short walk from the bank." },
+      "spot": { "x": 3087, "y": 3472, "plane": 0, "label": "Yew trees near Edgeville" },
+      "bank": { "x": 3093, "y": 3495, "plane": 0, "label": "Edgeville Bank" },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "marketDependence": "Forestry events and crowds change the pace; bots on busy worlds crowd the trees.",
+      "guide": [
+        { "kind": "prepare", "text": "Take your axe from the bank." },
+        { "kind": "travel", "text": "Go to the yew trees near Edgeville." },
+        { "kind": "perform", "text": "Chop yews until the bag is full." },
+        { "kind": "bank", "text": "Bank the logs." },
+        { "kind": "sell", "text": "Sell the logs at the Grand Exchange." },
+        { "kind": "restock", "text": "Buy the supplies you were short of, then go back to your step." }
+      ],
+      "sources": [
+        { "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Cutting_yew_logs_(free-to-play)", "title": "Money making guide/Cutting yew logs (free-to-play)", "revision": 14925409, "revisedAt": "2025-06-25", "retrievedAt": "2026-10-18", "used": "published pace range, locations" }
+      ],
+      "verifiedAt": "2026-10-18",
+      "confidence": "LOW",
+      "assumptions": [
+        "The tile of the trees is approximate (within about ten tiles).",
+        "Anima-infused bark from Forestry events is ignored.",
+        "A new free-to-play account cannot sell yew logs until its trade restrictions lift."
+      ]
+    },
+    {
+      "id": "fish-lobster-musa",
+      "title": "Catch lobsters at Musa Point",
+      "family": "gathering",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Raw lobsters on Karamja; the ferry costs 60 coins a round trip.",
+      "requirements": [
+        { "kind": "level", "skill": "fishing", "level": 40 },
+        { "kind": "item", "role": "tool", "any": [{ "id": 301, "name": "Lobster pot" }] },
+        { "kind": "fare", "coins": 60, "reason": "The ferry from Port Sarim, there and back" }
+      ],
+      "inputs": [
+        { "item": { "id": 995, "name": "Coins" }, "qty": 2.2222, "stack": true, "note": "60 coins for the ferry per trip of 27 catches" }
+      ],
+      "outputs": [
+        { "item": { "id": 377, "name": "Raw lobster" }, "qty": 1 }
+      ],
+      "rate": {
+        "unit": "catch",
+        "perHour": { "slow": 122, "typical": 178, "fast": 222 },
+        "basis": "wiki-guide",
+        "assumes": "222 catches an hour is the published figure with the trips included. Slow is 55% and typical 80% of it.",
+        "levelScale": { "skill": "fishing", "fromLevel": 40, "atLevel": 60, "minFactor": 0.5 }
+      },
+      "trip": { "bagSlots": 27, "overheadSeconds": 150, "note": "Ferry both ways and the walk to a bank." },
+      "spot": { "x": 2925, "y": 3180, "plane": 0, "label": "Musa Point fishing spots" },
+      "bank": { "x": 3093, "y": 3243, "plane": 0, "label": "Draynor Bank" },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "low",
+      "guide": [
+        { "kind": "prepare", "text": "Take your lobster pot and the ferry fare." },
+        { "kind": "travel", "text": "Take the ferry from Port Sarim to Karamja and go to Musa Point." },
+        { "kind": "perform", "text": "Catch lobsters until the bag is full." },
+        { "kind": "bank", "text": "Ferry back and bank the lobsters." },
+        { "kind": "sell", "text": "Sell the lobsters at the Grand Exchange." },
+        { "kind": "restock", "text": "Buy the supplies you were short of, then go back to your step." }
+      ],
+      "sources": [
+        { "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Catching_lobsters", "title": "Money making guide/Catching lobsters", "revision": 14355587, "revisedAt": "2022-12-28", "retrievedAt": "2026-10-18", "used": "published pace, the 60 coin ferry per trip, location" }
+      ],
+      "verifiedAt": "2026-10-18",
+      "confidence": "LOW",
+      "assumptions": [
+        "Raw lobsters are sold raw; cooking them is a separate, unmodelled step.",
+        "The bank used is Draynor, the nearest to the Port Sarim dock; the walk is part of the trip overhead.",
+        "A new free-to-play account cannot sell raw lobster until its trade restrictions lift."
+      ]
+    },
+    {
+      "id": "collect-iron-al-kharid",
+      "title": "Collect dropped iron ore",
+      "family": "collecting",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Pick up ore another player is power-mining at Al Kharid.",
+      "requirements": [
+        { "kind": "fare", "coins": 20, "reason": "The Al Kharid toll gate, both ways", "unlessQuest": "Prince Ali Rescue" }
+      ],
+      "inputs": [],
+      "outputs": [
+        { "item": { "id": 440, "name": "Iron ore" }, "qty": 1 }
+      ],
+      "rate": {
+        "unit": "ore",
+        "perHour": { "slow": 180, "typical": 400, "fast": 600 },
+        "basis": "wiki-guide",
+        "assumes": "600 ores an hour needs a world where another player is power-mining. The slow figure is a world with little ore."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 80, "note": "The Al Kharid bank is about 130 tiles from the mine." },
+      "spot": { "x": 3298, "y": 3293, "plane": 0, "label": "Al Kharid mine" },
+      "bank": { "x": 3269, "y": 3167, "plane": 0, "label": "Al Kharid Bank" },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "marketDependence": "Depends on other players dropping ore; an empty world gives nothing.",
+      "guide": [
+        { "kind": "travel", "text": "Go to the Al Kharid mine and find a world where someone is mining." },
+        { "kind": "perform", "text": "Pick up the iron ore that is dropped, until the bag is full." },
+        { "kind": "bank", "text": "Bank the ore in Al Kharid." },
+        { "kind": "sell", "text": "Sell the ore at the Grand Exchange." },
+        { "kind": "restock", "text": "Buy the supplies you were short of, then go back to your step." }
+      ],
+      "sources": [
+        { "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_iron_ore", "title": "Money making guide/Collecting iron ore", "revision": 14719651, "revisedAt": "2024-08-14", "retrievedAt": "2026-10-18", "used": "published pace, location" }
+      ],
+      "verifiedAt": "2026-10-18",
+      "confidence": "LOW",
+      "assumptions": [
+        "The pace depends on other players and cannot be modelled; the range is wide on purpose.",
+        "A new free-to-play account cannot sell iron ore until its trade restrictions lift."
+      ]
+    },
+    {
+      "id": "oziach-shields",
+      "title": "Buy anti-dragon shields from Oziach",
+      "family": "shop",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Buy shields from Oziach's shop and sell them at the exchange.",
+      "requirements": [
+        { "kind": "quest", "quest": "Dragon Slayer I", "state": "complete" }
+      ],
+      "inputs": [
+        { "item": { "id": 995, "name": "Coins" }, "qty": 30.6154, "stack": true, "note": "796 coins for 26 shields" }
+      ],
+      "outputs": [
+        { "item": { "id": 1540, "name": "Anti-dragon shield" }, "qty": 1 }
+      ],
+      "rate": {
+        "unit": "shield",
+        "perHour": { "slow": 1870, "typical": 2720, "fast": 3400 },
+        "basis": "wiki-guide",
+        "assumes": "3,400 shields an hour is 130 trips of 26 with full focus. The market takes far fewer: the evaluator caps the pace by the hour's trades."
+      },
+      "trip": { "bagSlots": 26, "overheadSeconds": 30, "note": "Oziach's shop in Edgeville is a few steps from the bank." },
+      "spot": { "x": 3067, "y": 3516, "plane": 0, "label": "Oziach's shop, Edgeville" },
+      "bank": { "x": 3093, "y": 3495, "plane": 0, "label": "Edgeville Bank" },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "marketDependence": "The shield trades only about 800 times an hour: the market is the limit, not the shop.",
+      "guide": [
+        { "kind": "prepare", "text": "Take coins from the bank." },
+        { "kind": "travel", "text": "Go to Oziach's shop in Edgeville." },
+        { "kind": "perform", "text": "Buy shields, 26 at a time." },
+        { "kind": "bank", "text": "Bank the shields." },
+        { "kind": "sell", "text": "Sell the shields at the Grand Exchange." },
+        { "kind": "restock", "text": "Buy the supplies you were short of, then go back to your step." }
+      ],
+      "sources": [
+        { "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Collecting_anti-dragon_shields_(free-to-play)", "title": "Money making guide/Collecting anti-dragon shields (free-to-play)", "revision": 14286022, "revisedAt": "2022-05-15", "retrievedAt": "2026-10-18", "used": "shop price per 26, restock, published pace" }
+      ],
+      "verifiedAt": "2026-10-18",
+      "confidence": "LOW",
+      "assumptions": [
+        "The shield usually sells below its guide price: the evaluator uses the sell side of the quote.",
+        "The shop price is the wiki's; it is not re-read from the game."
+      ]
+    },
+    {
+      "id": "smelt-steel-bars",
+      "title": "Smelt steel bars",
+      "family": "processing",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Buy iron ore and coal, smelt at the Edgeville furnace, sell the bars.",
+      "requirements": [
+        { "kind": "level", "skill": "smithing", "level": 30 }
+      ],
+      "inputs": [
+        { "item": { "id": 440, "name": "Iron ore" }, "qty": 1 },
+        { "item": { "id": 453, "name": "Coal" }, "qty": 2 }
+      ],
+      "outputs": [
+        { "item": { "id": 2353, "name": "Steel bar" }, "qty": 1 }
+      ],
+      "rate": {
+        "unit": "bar",
+        "perHour": { "slow": 426, "typical": 620, "fast": 775 },
+        "basis": "wiki-guide",
+        "assumes": "775 bars an hour is the published figure at the Edgeville furnace, 9 bars an inventory. Slow is 55% and typical 80% of it."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 10, "note": "The Edgeville furnace is a few steps from the bank." },
+      "spot": { "x": 3109, "y": 3499, "plane": 0, "label": "Edgeville furnace" },
+      "bank": { "x": 3093, "y": 3495, "plane": 0, "label": "Edgeville Bank" },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        { "kind": "prepare", "text": "Buy iron ore and coal at the Grand Exchange, or take them from the bank." },
+        { "kind": "travel", "text": "Go to the Edgeville furnace." },
+        { "kind": "perform", "text": "Smelt 9 iron ore with 18 coal at a time." },
+        { "kind": "bank", "text": "Bank the bars." },
+        { "kind": "sell", "text": "Sell the bars at the Grand Exchange." },
+        { "kind": "restock", "text": "Buy the supplies you were short of, then go back to your step." }
+      ],
+      "sources": [
+        { "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_steel_bars", "title": "Money making guide/Smelting steel bars", "revision": 15094948, "revisedAt": "2025-12-26", "retrievedAt": "2026-10-18", "used": "recipe, furnace, published pace" }
+      ],
+      "verifiedAt": "2026-10-18",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Iron ore and coal are bought at the exchange at the instant-buy price.",
+        "A new free-to-play account cannot sell steel bars until its trade restrictions lift."
+      ]
+    },
+    {
+      "id": "pie-shells",
+      "title": "Make pie shells",
+      "family": "production",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Use pastry dough on pie dishes and sell the shells.",
+      "requirements": [],
+      "inputs": [
+        { "item": { "id": 1953, "name": "Pastry dough" }, "qty": 1 },
+        { "item": { "id": 2313, "name": "Pie dish" }, "qty": 1 }
+      ],
+      "outputs": [
+        { "item": { "id": 2315, "name": "Pie shell" }, "qty": 1 }
+      ],
+      "rate": {
+        "unit": "shell",
+        "perHour": { "slow": 1350, "typical": 1960, "fast": 2450 },
+        "basis": "wiki-guide",
+        "assumes": "2,450 shells an hour is 175 inventories of 14 with the space bar held. Slow is 55% and typical 80% of it."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 8, "note": "The Grand Exchange bank booths are beside the counters." },
+      "spot": { "x": 3165, "y": 3490, "plane": 0, "label": "Grand Exchange" },
+      "bank": { "x": 3164, "y": 3489, "plane": 0, "label": "Grand Exchange bank" },
+      "saleSeconds": 40,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        { "kind": "prepare", "text": "Buy pastry dough and pie dishes at the Grand Exchange." },
+        { "kind": "perform", "text": "Withdraw 14 dough and 14 dishes, use the dough on the dishes." },
+        { "kind": "bank", "text": "Bank the shells." },
+        { "kind": "sell", "text": "Sell the shells at the Grand Exchange." },
+        { "kind": "restock", "text": "Buy the supplies you were short of, then go back to your step." }
+      ],
+      "sources": [
+        { "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_pie_shells", "title": "Money making guide/Making pie shells", "revision": 14221361, "revisedAt": "2021-12-28", "retrievedAt": "2026-10-18", "used": "recipe, inventories of 14, published pace" }
+      ],
+      "verifiedAt": "2026-10-18",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The pie dish exchange buy limit (500 every four hours) caps the pace; the evaluator applies it.",
+        "The 2021 revision is old: the margin is re-read from live prices every time."
+      ]
+    },
+    {
+      "id": "feather-packs",
+      "title": "Buy feather packs",
+      "family": "shop",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Buy feather packs at Gerrant's Fishy Business and sell the feathers.",
+      "requirements": [],
+      "inputs": [
+        { "item": { "id": 995, "name": "Coins" }, "qty": 209, "stack": true, "note": "Ten packs at a time average 209 coins a pack" }
+      ],
+      "outputs": [
+        { "item": { "id": 314, "name": "Feather" }, "qty": 100, "stack": true }
+      ],
+      "rate": {
+        "unit": "pack",
+        "perHour": { "slow": 1425, "typical": 2070, "fast": 2592 },
+        "basis": "wiki-guide",
+        "assumes": "2,592 packs an hour is the published figure. Slow is 55% and typical 80% of it."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 20, "note": "Gerrant's shop and the Port Sarim deposit box are close." },
+      "spot": { "x": 3014, "y": 3225, "plane": 0, "label": "Gerrant's Fishy Business, Port Sarim" },
+      "bank": { "x": 3093, "y": 3243, "plane": 0, "label": "Draynor Bank" },
+      "saleSeconds": 40,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        { "kind": "prepare", "text": "Take coins from the bank." },
+        { "kind": "travel", "text": "Go to Gerrant's shop in Port Sarim." },
+        { "kind": "perform", "text": "Buy ten packs at a time and open them." },
+        { "kind": "bank", "text": "Bank the feathers." },
+        { "kind": "sell", "text": "Sell the feathers at the Grand Exchange." },
+        { "kind": "restock", "text": "Buy the supplies you were short of, then go back to your step." }
+      ],
+      "sources": [
+        { "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_feather_packs", "title": "Money making guide/Buying feather packs", "revision": 14368997, "revisedAt": "2023-01-29", "retrievedAt": "2026-10-18", "used": "price per pack, 100 feathers a pack, break-even note" }
+      ],
+      "verifiedAt": "2026-10-18",
+      "confidence": "LOW",
+      "assumptions": [
+        "The wiki notes the method pays only while feathers sell for 3 coins or more; the evaluator reads the live sell side and turns negative when it is lower.",
+        "The shop tile is approximate."
+      ]
+    }
+  ]
+}

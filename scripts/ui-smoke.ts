@@ -20,6 +20,8 @@ interface Mock {
   zen?: boolean;
   /** The exchange prices by item ID: they stand in for the prices.runescape.wiki reply (without them the network to the wiki is closed). */
   prices?: Record<number, number>;
+  /** The exchange as captured on 2026-10-18 (tests/funding/fixtures), with its times moved to now: latest, hourly and the item reference. */
+  market?: boolean;
   /** The plugin does not answer (RuneLite is not running). */
   offline?: boolean;
   /** Windows display scaling (1.25 = 125%): the device pixel ratio; the viewport width passed is then in CSS pixels. */
@@ -81,6 +83,17 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
     const data = Object.fromEntries(Object.entries(mock.prices).map(([id, p]) => [id, { high: p, highTime: 1, low: p, lowTime: 1 }]));
     await page.route(/prices\.runescape\.wiki\/api\/v1\/osrs\/latest/, (r) => r.fulfill({ json: { data } }));
   }
+  if (mock.market) {
+    type Row = { id: number; limit: number | null; high: number | null; low: number | null; avgHigh: number | null; avgLow: number | null; highVolume: number; lowVolume: number };
+    const rows = (JSON.parse(readFileSync(new URL('../tests/funding/fixtures/market-2026-10-18.json', import.meta.url), 'utf8')) as { items: Record<string, Row> }).items;
+    await page.route(/prices\.runescape\.wiki\/api\/v2\/osrs\/(latest|1h|mapping)/, (r) => {
+      const kind = /\/osrs\/(latest|1h|mapping)/.exec(r.request().url())![1];
+      const now = Math.floor(Date.now() / 1000);
+      if (kind === 'mapping') return r.fulfill({ json: Object.entries(rows).map(([name, x]) => ({ id: x.id, name, limit: x.limit ?? undefined, members: false })) });
+      if (kind === 'latest') return r.fulfill({ json: { data: Object.fromEntries(Object.values(rows).map((x) => [x.id, { high: x.high, highTime: x.high === null ? null : now - 90, low: x.low, lowTime: x.low === null ? null : now - 120 }])) } });
+      return r.fulfill({ json: { timestamp: now, data: Object.fromEntries(Object.values(rows).map((x) => [x.id, { avgHighPrice: x.avgHigh, highPriceVolume: x.highVolume, avgLowPrice: x.avgLow, lowPriceVolume: x.lowVolume }])) } });
+    });
+  }
   await page.goto(BASE + hash);
   await page.waitForTimeout(1200);
   return { page, errors };
@@ -141,6 +154,7 @@ const text = async (page: Page, sel: string) => {
 };
 
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'funding') { await fundingScenarios(browser); return; }
   for (const width of [390, 1100]) {
     console.log(`Width ${width}`);
 
@@ -1156,6 +1170,68 @@ async function run(browser: Browser) {
         await page.context().close();
       }
     }
+  }
+
+  await fundingScenarios(browser);
+}
+
+// Raising coins for the Hill Giants step: a character with 400 coins and an empty bank is short of food. The card says so in one line with one button;
+// Start sets an arrow and a status line, Cancel takes both away and the route step is untouched.
+async function fundingScenarios(browser: Browser) {
+  console.log('funding');
+  const equipment = ([[1331, 'Adamant scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']] as [number, string, string][])
+    .map(([id, name, slot]) => ({ id, name, slot }));
+  const gear = { equipment, inventory: [], coins: 400, bankCoins: 0 };
+  // The plugin reports every item the route asks about, zero included; what is worn counts as carried.
+  const all = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string }[] }[];
+  const from = all.findIndex((x) => x.id === 'S4-03');
+  const worn = new Set(equipment.map((e) => e.name));
+  const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).map((i) => i.nameEn)))];
+  const owned = asked.map((name) => ({ name, carried: worn.has(name) ? 1 : 0, noted: 0, bank: 0 }));
+  for (const width of [1440, 390]) {
+    const { page, errors } = await open(browser, width, {
+      progress: progressBefore('S4-03', { gameMode: 'f2p' }),
+      status: {
+        protocol: 6, inGame: true, player: 'Funding Test', activeStepId: 'S4-03', questPoints: 30, totalLevel: 150,
+        stats: { attack: 30, strength: 21, defence: 1, hitpoints: 24 }, pos: { x: 3093, y: 3495, plane: 0 }, ...gear,
+      },
+      events: [
+        { type: 'OWNED', bankSeen: true, items: owned }, { type: 'GEAR', gear }, { type: 'QUESTS', done: [] },
+        { type: 'STATS', stats: { attack: 30, strength: 21, defence: 1, hitpoints: 24 } }, { type: 'XP', xp: { attack: 13363, strength: 2000, defence: 0, hitpoints: 3500 } },
+      ],
+      market: true,
+    }, '#/step/S4-03');
+    await reveal(page, '.one-trip');
+    await page.waitForTimeout(1500);
+    const posts = async () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts);
+    const card = await text(page, '.funding-card');
+    expect(/gp short/.test(card), `funding (${width} px): the card names the shortage in one line`);
+    expect(await page.locator('.funding-card .btn-primary').count() === 1, `funding (${width} px): one primary button`);
+    expect(await page.locator('.funding-card details').count() === 1 && !(await page.locator('.funding-card details').evaluate((d) => (d as HTMLDetailsElement).open)), `funding (${width} px): the details are folded`);
+    expect(!/Coins for the steps/.test(await text(page, '.one-trip')), `funding (${width} px): the coin shortage is said once`);
+    expect(await noOverflow(page), `funding (${width} px): no horizontal scroll`);
+    if (process.env.UI_SHOTS) await page.locator('.funding-card').screenshot({ path: `${process.env.UI_SHOTS}/funding-${width}.png` }).catch(() => {});
+    await page.locator('.funding-card details > summary').click();
+    if (process.env.UI_SHOTS) await page.locator('.funding-card').screenshot({ path: `${process.env.UI_SHOTS}/funding-open-${width}.png` }).catch(() => {});
+    expect(/Your coins: 400 gp/.test(await text(page, '.funding-card')), `funding (${width} px): the details state the coins`);
+    await page.locator('.funding-card .btn-primary').click();
+    await page.waitForTimeout(800);
+    const nav = (await posts()).filter((p) => p.path === '/nav-target');
+    expect(nav.length > 0 && String(nav[nav.length - 1].body.label).startsWith('Funding: ') && !('stepId' in nav[nav.length - 1].body), `funding (${width} px): Start sets one arrow that is not a route step`);
+    expect(await page.locator('.status-funding').count() >= 1, `funding (${width} px): the plan shows as one line in the step status`);
+    expect(await page.locator('.funding-card.is-running').count() === 1, `funding (${width} px): the card shows the step in hand`);
+    const saved = await page.evaluate(() => Object.entries(localStorage).filter(([k]) => k.startsWith('osrs-put:funding-plan')).map(([, v]) => JSON.parse(v)));
+    expect(saved.length === 1 && saved[0].sourceStepId === 'S4-03' && saved[0].character === 'Funding Test', `funding (${width} px): the plan is saved for this character`);
+    if (process.env.UI_SHOTS) await page.locator('.funding-card').screenshot({ path: `${process.env.UI_SHOTS}/funding-running-${width}.png` }).catch(() => {});
+    await page.getByRole('button', { name: 'Cancel' }).first().click();
+    await page.waitForTimeout(500);
+    expect(await page.locator('.funding-card.is-running').count() === 0 && await page.locator('.status-funding').count() === 0, `funding (${width} px): Cancel closes the plan`);
+    const gone = await page.evaluate(() => Object.keys(localStorage).filter((k) => k.startsWith('osrs-put:funding-plan')).length);
+    expect(gone === 0, `funding (${width} px): nothing is left saved`);
+    const done = await page.evaluate(() => { const j = (window as unknown as { __saved?: string }).__saved; return j ? JSON.parse(j) : null; });
+    expect(!done || !done.steps || done.steps['S4-03'] === undefined, `funding (${width} px): the route step was not touched`);
+    expect(errors.length === 0, `funding (${width} px): no console errors ${errors.join('; ')}`);
+    await page.context().close();
   }
 }
 

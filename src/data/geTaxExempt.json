@@ -1,0 +1,17 @@
+{
+  "source": "https://oldschool.runescape.wiki/w/Grand_Exchange",
+  "section": "Exempt from tax",
+  "retrievedAt": "2026-10-18",
+  "rule": "2% of the sale price per item, rounded down, at most 5,000,000 per item; the items below pay nothing. Unchanged by the 30 September 2026 \"Beyond Max Cash\" update.",
+  "rate": 0.02,
+  "cap": 5000000,
+  "names": [
+    "Old school bond",
+    "Energy potion(1)", "Energy potion(2)", "Energy potion(3)", "Energy potion(4)", "Energy potion",
+    "Bronze arrow", "Bronze dart", "Iron arrow", "Iron dart", "Mind rune", "Steel arrow", "Steel dart",
+    "Bass", "Bread", "Cake", "Cooked chicken", "Cooked meat", "Herring", "Lobster", "Mackerel", "Meat pie", "Pike", "Salmon", "Shrimps", "Tuna",
+    "Ardougne teleport", "Camelot teleport", "Civitas illa fortis teleport", "Falador teleport", "Games necklace(8)", "Kourend castle teleport",
+    "Lumbridge teleport", "Ring of dueling(8)", "Teleport to house", "Varrock teleport",
+    "Chisel", "Gardening trowel", "Glassblowing pipe", "Hammer", "Needle", "Pestle and mortar", "Rake", "Saw", "Secateurs", "Seed dibber", "Shears", "Spade", "Watering can"
+  ]
+}

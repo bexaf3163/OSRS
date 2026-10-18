@@ -127,7 +127,11 @@ describe('exchange prices', () => {
     const f = fetchFn();
     const svc = createPriceService(f, () => t);
     const p = await svc.getGePrice(1540);
-    expect(p).toEqual({ buyPrice: 9000, sellPrice: 8500, updatedAt: new Date(1_790_000_100 * 1000).toISOString() });
+    // The old three fields are unchanged; updatedAt is the OLDER side (the high side, 1_790_000_000), and each side has its own time.
+    expect(p).toEqual({
+      buyPrice: 9000, sellPrice: 8500, updatedAt: new Date(1_790_000_000 * 1000).toISOString(),
+      highAt: new Date(1_790_000_000 * 1000).toISOString(), lowAt: new Date(1_790_000_100 * 1000).toISOString(),
+    });
     await svc.getGePrice(1540);
     t = PRICE_TTL_MS - 1;
     await svc.getGePrice(999);
