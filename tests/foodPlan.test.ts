@@ -128,3 +128,33 @@ describe('the food line in the game', () => {
     expect(withFoodPlan(stepById.get('S3-08')!, { trip: 0, total: 0, hpPerKill: 0 }).pacing!.foodHpPerKill).toBeUndefined();
   });
 });
+
+describe('the food of a quest fight (combat audit, 2.66.0)', () => {
+  const at = before('S4-01');
+  const weak = { ...live, stats: { attack: 10, strength: 10, defence: 1, hitpoints: 14 }, owned: owned({}) };
+
+  it("a kit that needs more than the route writes raises the step's food, up to one bag", () => {
+    const pick = foodPicks(allSteps, at, weak)['S4-01'];
+    expect(pick).toBeTruthy();
+    expect(pick.trip).toBeGreaterThan(10);
+    expect(pick.trip).toBeLessThanOrEqual(26);
+    expect(pick.total).toBe(pick.trip);
+    const s = withFoodPlan(stepById.get('S4-01')!, pick);
+    expect(s.itemsRequired!.find((i) => i.nameEn === 'Salmon')!.amount).toBe(pick.trip);
+    expect(aggregateShopping([s], { wholeGoal: true }).required.find((l) => l.nameEn === 'Salmon')?.count).toBe(pick.trip);
+  });
+
+  it("never lowers the route's amount: a strong kit keeps what the route writes", () => {
+    const strong = { ...live, stats: { attack: 60, strength: 60, defence: 60, hitpoints: 60 }, owned: owned({}) };
+    expect(foodPicks(allSteps, at, strong)['S4-01']).toBeUndefined();
+  });
+
+  it('a fight after an open training step is not sized from the levels of now', () => {
+    expect(foodPicks(allSteps, before('S3-08'), weak)['S4-01']).toBeUndefined();
+  });
+
+  it('without levels or gear from the game nothing is picked', () => {
+    expect(foodPicks(allSteps, at, { ...weak, stats: null })['S4-01']).toBeUndefined();
+    expect(foodPicks(allSteps, at, { ...weak, gear: null })['S4-01']).toBeUndefined();
+  });
+});

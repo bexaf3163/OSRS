@@ -9,7 +9,8 @@ import { isClosed } from './next-step';
 import { stepGoals, type Fights, type StepEstimateContext } from './combatEstimate';
 import { combatPlanView } from './combatPlan';
 import type { OwnedState } from './checklist';
-import { nameKey } from './checklist';
+import { nameKey, parseAmount } from './checklist';
+import { estimateStepFights } from './fightEstimate';
 
 export interface FoodPick {
   /** Pieces for the next trip: readiness asks for these. */
@@ -55,11 +56,35 @@ export function assumptionsFor(step: Step, steps: Step[], progress: Progress): S
   return earlier ? { xp, weapon: stepWeapon(step) } : null;
 }
 
+/**
+ * A quest fight is one trip: the high end of the estimate for each fight with the kit worn now, added up, never below what the route writes (the
+ * estimate leaves out specials and dragonfire, so it only ever raises the route's amount). Only for a fight with no open training step before it:
+ * the levels it would reach are not the game's yet.
+ */
+function fightPick(s: Step, steps: Step[], progress: Progress, live: Live): FoodPick | null {
+  const food = (s.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
+  if (!food || assumptionsFor(s, steps, progress) !== null) return null;
+  const fights = estimateStepFights(s, live.stats as Partial<Record<string, number>> | null, live.gear ?? null, { name: food.nameEn, heals: food.heals! });
+  if (!fights.length) return null;
+  const need = fights.reduce((a, f) => a + Math.max(0, f.food.high), 0);
+  const written = parseAmount(food.amount) ?? 0;
+  // One bag at most, beside the step's other items: a fight that needs more is not won by buying more, and the readiness verdict says so.
+  const others = (s.itemsRequired ?? []).filter((i) => i !== food && !i.inStep).length;
+  const slots = Math.max(1, Math.min(26, 28 - others));
+  const trip = Math.min(Math.max(need, written), Math.max(slots, written));
+  return trip > written ? { trip, total: trip, hpPerKill: 0 } : null;
+}
+
 /** The food picks of the open combat steps; a step without an estimate gets none. */
 export function foodPicks(steps: Step[], progress: Progress, live: Live): Record<string, FoodPick> {
   const out: Record<string, FoodPick> = {};
   for (const s of steps) {
-    if (isClosed(progress, s.id) || !stepGoals(s).length) continue;
+    if (isClosed(progress, s.id)) continue;
+    if (!stepGoals(s).length) {
+      const p = fightPick(s, steps, progress, live);
+      if (p) out[s.id] = p;
+      continue;
+    }
     const fights = live.combatLog?.stepId === s.id ? live.combatLog.foes : null;
     const v = combatPlanView(s, { ...live, fights, assume: assumptionsFor(s, steps, progress) });
     if (v) out[s.id] = { trip: v.nextTrip, total: v.plan, hpPerKill: Math.round(v.primary.hpPerKill * 10) / 10 };

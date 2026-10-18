@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/build-combat-foes.ts)",
-  "generatedAt": "2026-10-17",
+  "generatedAt": "2026-10-18",
   "foes": [
     {
       "name": "Minotaur",
@@ -480,6 +480,48 @@
       "maxHit": 7,
       "speedTicks": 5,
       "aggressive": true
+    },
+    {
+      "name": "Temple Guardian",
+      "combat": 30,
+      "members": true,
+      "hitpoints": 45,
+      "attackLevel": 20,
+      "strengthLevel": 20,
+      "defenceLevel": 20,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0
+      },
+      "attackStyle": "stab",
+      "maxHit": 3,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Ghast",
+      "combat": 30,
+      "members": true,
+      "hitpoints": 45,
+      "attackLevel": 22,
+      "strengthLevel": 22,
+      "defenceLevel": 18,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0
+      },
+      "attackStyle": "slash",
+      "maxHit": 3,
+      "speedTicks": 4,
+      "aggressive": false
     }
   ]
 }

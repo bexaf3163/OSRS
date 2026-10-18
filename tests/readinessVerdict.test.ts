@@ -277,3 +277,37 @@ describe('a quest fight in the verdict', () => {
     expect(v.reasons.find((r) => r.text.startsWith('Count Draynor'))).toMatchObject({ state: 'ok' });
   });
 });
+
+describe('a quest fight that cannot be judged is never Ready (combat audit, 2.66.0)', () => {
+  const fight = mk('Q2', [item('Trout', 5, { heals: 7 })]);
+  const o = owned({ Trout: [5, 0] });
+  const base = { plan: planFor(fight, o), connected: true, owned: o, isFood };
+  const ithoi = { line: 'Ithoi the Navigator: about 79 s …', foodHigh: 9, foodName: 'Trout', foe: 'Ithoi the Navigator', name: 'Ithoi the Navigator' };
+
+  it('food the fight needs, with the bag not read: not checked, not fine', () => {
+    const v = readinessVerdict({ ...base, fights: [ithoi], carriedFood: null });
+    expect(v.level).toBe('UNKNOWN');
+    expect(v.reasons.find((r) => r.text.startsWith('Ithoi'))).toMatchObject({ group: 'unknown', state: 'unknown' });
+    expect(v.reasons.find((r) => r.text.startsWith('Ithoi'))!.text).toMatch(/food in your bag has not been read/);
+  });
+
+  it('no estimate because the levels or the worn gear were not read: not assessed, not Ready', () => {
+    const v = readinessVerdict({ ...base, fights: [], fightNames: [{ name: 'Ithoi the Navigator', known: true }], carriedFood: 5 });
+    expect(v.level).toBe('UNKNOWN');
+    expect(v.headline).toMatch(/Ithoi the Navigator: this fight is not assessed yet/);
+  });
+
+  it('an opponent the app has no numbers for: a caution to prepare as written, not a silent Ready', () => {
+    const v = readinessVerdict({ ...base, fights: [], fightNames: [{ name: 'Gorak', known: false }], carriedFood: 5 });
+    expect(v.level).toBe('READY_CAUTIONS');
+    expect(v.cautions).toContain('Gorak: the app has no combat numbers for it; prepare as the walkthrough says.');
+  });
+
+  it('an estimated fight is not reported twice, and a fight that needs no food does not wait for the bag', () => {
+    const v = readinessVerdict({ ...base, fights: [ithoi], fightNames: [{ name: 'Ithoi the Navigator', known: true }], carriedFood: 9 });
+    expect(v.level).toBe('READY');
+    expect(v.reasons.filter((r) => r.text.startsWith('Ithoi')).length).toBe(1);
+    const cows = readinessVerdict({ ...base, fights: [{ ...ithoi, line: 'Cow: about 10 s …', foodHigh: 0, foe: 'Cow', name: 'Cow' }], carriedFood: null });
+    expect(cows.level).toBe('READY');
+  });
+});

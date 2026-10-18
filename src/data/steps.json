@@ -2230,9 +2230,7 @@
         "wikiItemId": 1550,
         "iconUrl": "https://oldschool.runescape.wiki/images/Garlic.png",
         "inStep": true
-      }
-    ],
-    "itemsRecommended": [
+      },
       {
         "nameEn": "Trout",
         "amount": 10,
@@ -2241,9 +2239,14 @@
         "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
         "heals": 7,
         "anyOf": [
-          "Salmon"
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
         ]
-      },
+      }
+    ],
+    "itemsRecommended": [
       {
         "nameEn": "Strength potion(4)",
         "amount": 1,
@@ -2844,16 +2847,20 @@
         "wikiItemId": 1965,
         "iconUrl": "https://oldschool.runescape.wiki/images/Cabbage.png",
         "inStep": true
-      }
-    ],
-    "itemsRecommended": [
+      },
       {
         "nameEn": "Trout",
         "amount": 5,
-        "howToGet": "Buy on the Grand Exchange for about 24 gp.",
+        "howToGet": "Buy on the Grand Exchange for about 24 gp. Salmon, Tuna, Lobster or Swordfish count too. The Black Knights (level 33) inside attack: eat before your health falls low.",
         "wikiItemId": 333,
         "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
-        "heals": 7
+        "heals": 7,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ]
       }
     ],
     "fields": [
@@ -3110,6 +3117,25 @@
         "howToGet": "Any pickaxe works: the Bronze pickaxe from step S1-12 is enough. It is for the Structural pillars in the last room, not for ore.",
         "wikiItemId": 1265,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 10,
+        "howToGet": "10-15 Trout or Salmon (about 30 gp each on the Grand Exchange), or better food you already own. For the Ancient Guardian, which keeps attacking while you mine.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish",
+          "Monkfish",
+          "Shark",
+          "Cooked meat",
+          "Cake",
+          "Pie"
+        ]
       }
     ],
     "reward": "1 QP, 2,000 Coins, access to the Camdozaal ruins, the Flex emote.",
@@ -3155,27 +3181,6 @@
         "boostable": true
       }
     ],
-    "itemsRecommended": [
-      {
-        "nameEn": "Trout",
-        "amount": 10,
-        "howToGet": "10-15 Trout or Salmon (about 30 gp each on the Grand Exchange), or better food you already own. For the Ancient Guardian, which keeps attacking while you mine.",
-        "wikiItemId": 333,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
-        "heals": 7,
-        "anyOf": [
-          "Salmon",
-          "Tuna",
-          "Lobster",
-          "Swordfish",
-          "Monkfish",
-          "Shark",
-          "Cooked meat",
-          "Cake",
-          "Pie"
-        ]
-      }
-    ],
     "fields": [
       {
         "label": "Requirements",
@@ -3201,6 +3206,9 @@
         "label": "Fallback: safespot",
         "text": "If the Guardian hurts you faster than you can mine, lure it to the east side of the chamber and retreat into the entrance passage: it gets stuck on the corner. Then attack it with Ranged or Magic. Direct melee works at any level but is the riskiest choice for the account this route produces."
       }
+    ],
+    "threats": [
+      "Ancient Guardian"
     ]
   },
   {
@@ -3726,7 +3734,23 @@
         "type": "QUEST_COMPLETED",
         "questName": "The Corsair Curse"
       }
-    }
+    },
+    "itemsRequired": [
+      {
+        "nameEn": "Salmon",
+        "wikiItemId": 329,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
+        "heals": 9,
+        "amount": 10,
+        "anyOf": [
+          "Trout",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "howToGet": "Buy on the Grand Exchange, about 34 gp each (15 Oct 2026); Trout, Tuna, Lobster or Swordfish count too. For Ithoi the Navigator (hits up to 6 with magic): eat before your health falls to 12. Preparation sizes the amount for your levels and armour."
+      }
+    ]
   },
   {
     "id": "S4-02",
@@ -3811,6 +3835,22 @@
             "Cowbell amulet"
           ]
         }
+      }
+    ],
+    "itemsRequired": [
+      {
+        "nameEn": "Trout",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7,
+        "amount": 5,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "howToGet": "Buy on the Grand Exchange for about 24 gp each; Salmon, Tuna, Lobster or Swordfish count too. In the quest his plain hits leave you at 1 health, but a special that lands (up to 19) can kill: keep your health above it. Food cannot stop a special once it lands."
       }
     ]
   },
@@ -5767,6 +5807,20 @@
         "from": "Varrock General Store",
         "wikiItemId": 1925,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bucket.png"
+      },
+      {
+        "nameEn": "Trout",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
+        "heals": 7,
+        "amount": 5,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "howToGet": "Your own catch from S6-02, or the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. For the Temple Guardian (level 30, hits up to 3; immune to magic). Preparation sizes the amount for your levels and armour."
       }
     ],
     "reward": "1 QP, 1,406 Prayer XP, the Wolfbane dagger, access to the region of Morytania and the town of Canifis.",
@@ -5793,7 +5847,10 @@
         "type": "QUEST_COMPLETED",
         "questName": "Priest in Peril"
       }
-    }
+    },
+    "threats": [
+      "Temple Guardian"
+    ]
   },
   {
     "id": "S8-02",
@@ -5845,6 +5902,19 @@
         "howToGet": "From The Restless Ghost.",
         "wikiItemId": 552,
         "iconUrl": "https://oldschool.runescape.wiki/images/Ghostspeak_amulet.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
+        "heals": 12,
+        "amount": 15,
+        "anyOf": [
+          "Swordfish",
+          "Tuna",
+          "Salmon"
+        ],
+        "howToGet": "Your own catch from S6-02, or the Grand Exchange for about 105 gp each. Ghasts turn food in your inventory into rot, so bring spares: three ghasts must be killed."
       }
     ],
     "itemsRecommended": [
@@ -6650,7 +6720,10 @@
         "targetValue": 40,
         "atLeast": true
       }
-    }
+    },
+    "threats": [
+      "Gorak"
+    ]
   },
   {
     "id": "S9-04",

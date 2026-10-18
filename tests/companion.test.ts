@@ -240,8 +240,10 @@ describe('what goes to the plugin', () => {
   it('the HUD target, the departure check without "during the step" items', () => {
     const p = toInGameTarget(byId('S2-08'))!;
     expect(p.goal).toBe("Morgan's house in Draynor Village");
-    expect(p.checklist!.map((i) => i.name)).toEqual(['Hammer']);
+    // The food for Count Draynor is checked before leaving too (combat audit, 2.66.0): it used to be only recommended, so nothing checked it.
+    expect(p.checklist!.map((i) => i.name)).toEqual(['Hammer', 'Trout']);
     expect(p.checklist![0]).toMatchObject({ id: 2347, count: 1 });
+    expect(p.checklist![1]).toMatchObject({ id: 333, count: 10, heals: 7 });
   });
 
   it('the waypoints of The Restless Ghost', () => {

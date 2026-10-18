@@ -66,7 +66,12 @@ export interface VerdictInput {
   isFood: (name: string) => boolean;
   combat?: CombatReadiness | null;
   /** One quest fight each with the player's kit (fightEstimate.ts): its line, and the food it may take at the high end. */
-  fights?: { line: string; foodHigh: number; foodName: string; foe: string }[];
+  fights?: { line: string; foodHigh: number; foodName: string; foe: string; name?: string }[];
+  /**
+   * The step's quest fights by name (fightEstimate.stepFightNames). One without an estimate is not assessed: the game has not given the levels and the
+   * worn gear, or the app has no numbers for that opponent. Never "ok".
+   */
+  fightNames?: { name: string; known: boolean }[];
   /** The step's food carried now, in pieces of that food by healing; null — unknown. */
   carriedFood?: number | null;
   /** The worn weapon, when known: a two-handed one leaves no room for a shield a safety rule asks to be worn (Elvarg's Anti-dragon shield). */
@@ -156,9 +161,17 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
     cautions.push(...combat.cautions.filter((c) => c !== combat.weapon.text));
   }
   for (const f of i.fights ?? []) {
-    const short = i.carriedFood !== null && i.carriedFood !== undefined && i.carriedFood < f.foodHigh;
-    reasons.push({ group: 'safety', state: short ? 'caution' : 'ok', text: f.line });
+    // Food the fight needs, with the bag not read: unknown, not fine.
+    const unread = f.foodHigh > 0 && (i.carriedFood === null || i.carriedFood === undefined);
+    const short = !unread && f.foodHigh > 0 && i.carriedFood! < f.foodHigh;
+    if (unread) reasons.push({ group: 'unknown', state: 'unknown', text: `${f.line} The food in your bag has not been read.` });
+    else reasons.push({ group: 'safety', state: short ? 'caution' : 'ok', text: f.line });
     if (short) cautions.push(`${f.foe} may take up to ${f.foodHigh} ${f.foodName} with your kit (an estimate); you carry ${i.carriedFood}.`);
+  }
+  const assessed = new Set((i.fights ?? []).map((f) => f.name ?? f.foe));
+  for (const n of (i.fightNames ?? []).filter((x) => !assessed.has(x.name))) {
+    if (n.known) reasons.push({ group: 'unknown', state: 'unknown', text: `${n.name}: this fight is not assessed yet: your levels and worn gear have not been read from the game.` });
+    else cautions.push(`${n.name}: the app has no combat numbers for it; prepare as the walkthrough says.`);
   }
   for (const l of plan.optimizations.slice(0, 4)) {
     reasons.push({ group: 'optional', state: l.where === 'BANK' ? 'bank' : l.where === 'UNKNOWN' ? 'unknown' : 'missing', text: `${l.name}: ${l.why}${l.action?.label ? ` — ${l.action.label}` : ''}.` });

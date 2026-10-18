@@ -812,3 +812,20 @@ Not done yet (block 2b): the audit ledger of every combat stage, mandatory quest
   If one was held back this way, the reason says so (`heldReason`). An adopted Defence plan still stays (explicit choice), and a route that is not safe does not hold Defence plans back.
 - UI: each eligible row in "Compare the plans" has its own Use button; the no-offer card shows `report.reason` instead of a fixed sentence.
 - Tests: `tests/combatRoute/later.test.ts` (4), 4 more in `plans.test.ts`; smoke picks Defence 20 from the list and checks the note and the game payload (Defence on the cows).
+
+## 2.66.0 — combat audit ledger and mandatory-fight preparation (Task 2, block 2b)
+
+- Ledger `src/data/combatAudit.json` (one entry per combat stage: kind, mandatory, objective, enemies, method, detected quest-stage lines, assumptions, problems, alternatives,
+  decision retain/revise/branch/defer, changed, evidence, zones). Detection in `src/lib/combatAudit.ts` (`detectCombatStages`: foes, threats, combat pacing, safespot, quest-stage lines
+  with kill/fight/attack). `tests/combatAudit.test.ts` keeps them in step (ids and lines must match the detector, claims about the table and estimates must be true, mandatory fights
+  fought up close must have required food) and writes `docs/COMBAT_AUDIT.md` with `UPDATE_FIXTURES=1 npx vitest run tests/combatAudit.test.ts`.
+- Data: food promoted from recommended to required on S2-08, S3-02, S3-04; added on S4-01 (Salmon 10), S4-02 (Trout 5), S8-01 (Trout 5), S8-02 (Lobster 15); threats on S3-04
+  (Ancient Guardian, shows the pillar method), S8-01 (Temple Guardian), S9-03 (Gorak, no numbers). `combatFoes.json` regenerated with Temple Guardian and Ghast (members; nothing else changed).
+  S3-03 was tried and reverted: Bones ×25 + food exceed 28 slots (fullF2pRouteAudit); deferred in the ledger.
+- `fightEstimate.stepFightFoes` uses the members version when there is no free one; `stepFightNames` lists the fights before the table lookup.
+- `foodPlan.foodPicks` sizes quest-fight food: sum of the fights' high ends, never below the route's amount, at most one bag (26 or 28 minus the step's other items), only when no
+  open training step comes first (current levels). Same overlay as training, so prep, shopping and the plugin read it.
+- `readinessVerdict`: a fight that needs food with the bag unread is `unknown`; a named fight with no estimate is `unknown` when the table knows it (levels or gear unread) and a
+  caution when it does not. Never "ok" by default.
+- Invariants: unknown is never Ready; food picks only raise the route's amount; a fight the route does another way (OTHER_METHOD) gets no melee estimate.
+- Not verified live in the game (automated only).

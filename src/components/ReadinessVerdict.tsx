@@ -11,8 +11,8 @@ import { healsOf } from '../lib/combatEstimate';
 import { GROUP_LABEL, readinessVerdict, type ReadinessVerdict, type ReasonGroup } from '../lib/readinessVerdict';
 import { useCombatPlan } from './CombatPlan';
 import { ownedFood } from '../lib/combatPlan';
-import { estimateStepFights, fightLine } from '../lib/fightEstimate';
-import { foeLabel } from '../lib/combatEstimate';
+import { estimateStepFights, fightLine, stepFightNames } from '../lib/fightEstimate';
+import { COMBAT_FOES, foeLabel } from '../lib/combatEstimate';
 import { equippedBySlot, gearData } from '../services/gearAdvisor';
 
 /** The verdict for a step with what the app knows now; recomputed when the plan, the kit or the bank changes. */
@@ -29,9 +29,10 @@ export function useReadinessVerdict(step: Step): { verdict: ReadinessVerdict; co
     const worn = w ? { weapon: w.name, twoHanded: Boolean(w.piece?.twoHanded) } : null;
     // A quest fight: one fight with the kit worn now, and the step's food carried, counted by healing.
     const fights = estimateStepFights(step, stats as Partial<Record<string, number>> | null, gear)
-      .map((f) => ({ line: fightLine(f), foodHigh: f.food.high, foodName: f.foodName, foe: foeLabel(f.foe) }));
+      .map((f) => ({ line: fightLine(f), foodHigh: f.food.high, foodName: f.foodName, foe: foeLabel(f.foe), name: f.foe.name }));
+    const fightNames = stepFightNames(step).map((name) => ({ name, known: COMBAT_FOES.some((f) => f.name === name) }));
     const carriedFood = ownedFood(step, owned)?.carriedEq ?? null;
-    return { verdict: readinessVerdict({ plan, connected, owned, isFood, combat, worn, fights, carriedFood }), combat };
+    return { verdict: readinessVerdict({ plan, connected, owned, isFood, combat, worn, fights, fightNames, carriedFood }), combat };
   }, [step, plan, view, gear, owned, connected, stats]);
 }
 

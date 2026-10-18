@@ -113,11 +113,19 @@ export const OTHER_METHOD: Readonly<Record<string, string>> = {
   'Ancient Guardian': 'the route beats it by mining the four Structural pillars; it keeps attacking while you mine, so eat before each one',
 };
 
-/** The quest fights of a step the table knows: its foes and its threats, free versions only, not the ones the route does another way. */
-export function stepFightFoes(step: Pick<Step, 'foes' | 'threats' | 'pacing'>): CombatFoe[] {
+/** The quest fights of a step: its foes and its threats, not the ones the route does another way. */
+export function stepFightNames(step: Pick<Step, 'foes' | 'threats' | 'pacing'>): string[] {
   if (step.pacing) return [];
-  const names = [...new Set([...(step.foes ?? []), ...(step.threats ?? [])])].filter((n) => !OTHER_METHOD[n]);
-  return names.flatMap((n) => COMBAT_FOES.filter((f) => f.name === n && !f.members).slice(0, 1));
+  return [...new Set([...(step.foes ?? []), ...(step.threats ?? [])])].filter((n) => !OTHER_METHOD[n]);
+}
+
+/** The quest fights of a step the table knows: the free version where there is one, else the members one (a members quest: Temple Guardian, Ghast). */
+export function stepFightFoes(step: Pick<Step, 'foes' | 'threats' | 'pacing'>): CombatFoe[] {
+  return stepFightNames(step).flatMap((n) => {
+    const all = COMBAT_FOES.filter((f) => f.name === n);
+    const free = all.filter((f) => !f.members);
+    return (free.length ? free : all).slice(0, 1);
+  });
 }
 
 /** The estimate for each quest fight of the step with the player's worn gear and levels; empty when the game has not given them. */

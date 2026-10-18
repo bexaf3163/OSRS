@@ -61,3 +61,16 @@ describe('one quest fight with your kit', () => {
     expect(estimateStepFights(stepById.get('S2-08')!, { attack: 20, strength: 20, defence: 1, hitpoints: 20 }, null)).toEqual([]);
   });
 });
+
+describe('the opponents of a step (combat audit, 2.66.0)', () => {
+  it('a members quest fight is estimated with its members version when there is no free one', async () => {
+    const { stepFightFoes, stepFightNames } = await import('../src/lib/fightEstimate');
+    const { stepById } = await import('../src/data');
+    expect(stepFightFoes(stepById.get('S8-01')!).map((f) => [f.name, f.members])).toEqual([['Temple Guardian', true]]);
+    expect(stepFightFoes(stepById.get('S8-02')!).map((f) => f.name)).toEqual(['Ghast']);
+    // A free version wins where there is one; the demon fought from the safespot is not estimated in melee.
+    expect(stepFightFoes(stepById.get('S5-03')!).map((f) => [f.name, f.members])).toEqual([['Melzar the Mad', false]]);
+    expect(stepFightNames(stepById.get('S3-04')!)).toEqual([]);
+    expect(stepFightNames(stepById.get('S4-03')!)).toEqual([]);
+  });
+});
