@@ -1309,6 +1309,16 @@ async function combatRouteScenarios(browser: Browser) {
     await page.waitForTimeout(1500);
     const back = await lastStep();
     expect(back?.worldPoint?.label !== COWS && back?.npcNames?.[0] === 'Hill Giant', `combat route (${width} px): the route plan brings the arrow back to the giants`);
+    // Any plan in the comparison can be picked, and a Defence plan says what the route gives later.
+    const d20 = page.locator('.combat-plan-row', { hasText: 'Defence 20 first' });
+    if (!(await page.locator('.combat-route details').evaluate((d) => (d as HTMLDetailsElement).open))) await page.locator('.combat-route details > summary').click();
+    expect(/S5-09 .Triumph at Oziach. gives 18,650 Defence XP/.test(await d20.innerText()), `combat route (${width} px): a Defence plan names the Defence the route gives later`);
+    await d20.getByRole('button', { name: 'Use this plan' }).click();
+    await page.waitForTimeout(1500);
+    const dstep = await lastStep();
+    expect(dstep?.worldPoint?.label === COWS && dstep.pacing?.skill === 'defence', `combat route (${width} px): a plan picked from the list leads the game (Defence on the cows)`);
+    await page.getByRole('button', { name: "Back to the route's plan" }).click();
+    await page.waitForTimeout(1200);
     expect(await noOverflow(page), `combat route (${width} px): no horizontal scroll`);
     expect(errors.length === 0, `combat route (${width} px): no console errors ${errors.join('; ')}`);
     await page.context().close();

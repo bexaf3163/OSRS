@@ -24,6 +24,7 @@ import { levelForXp, xpForLevel } from '../xp';
 import { netSale } from '../funding/ge';
 import { absorbs, type PriceView } from '../funding/quotes';
 import { isRestrictedItem, type TradeRestriction } from '../tradeRestriction';
+import { laterDefence, type LaterDefence } from './later';
 import { GUARANTEED_DROPS, SELL_DROP, spotsOf, TRAINER_LEVELS, TRAINERS, type Spot } from './spots';
 
 export type MeleeSkill = 'attack' | 'strength' | 'defence';
@@ -71,6 +72,8 @@ export interface EvaluatedPlan {
   net: number | null;
   basis: Basis;
   risks: string[];
+  /** Things worth knowing about the plan that are not dangers (the Defence the route gives later). */
+  notes: string[];
   blockers: string[];
   eligible: boolean;
   /** Conservative minutes with the penalty for a rough estimate: the number plans are compared by. */
@@ -109,6 +112,8 @@ export interface PlanInput {
   prices?: PriceView | null;
   /** Whether the account may sell yet: items a new account cannot sell are not counted as income. */
   restriction?: TradeRestriction['state'];
+  /** Whether a route step is already closed (its reward is not ahead any more). */
+  done?: (stepId: string) => boolean;
 }
 
 /** A plan must beat the route by this much (of the route's score) to be recommended over it. */
@@ -235,7 +240,7 @@ export function incomeOf(phases: readonly PlanPhase[], reserve: { name: string; 
   return { net: lines.filter((l) => l.counted).reduce((a, l) => a + l.net, 0), lines };
 }
 
-function assemble(id: PlanId, key: string, title: string, phases: PlanPhase[], hp: number, price: number | null, income: PlanIncome, extraBlockers: string[] = []): EvaluatedPlan {
+function assemble(id: PlanId, key: string, title: string, phases: PlanPhase[], hp: number, price: number | null, income: PlanIncome, extraBlockers: string[] = [], notes: string[] = []): EvaluatedPlan {
   const minutes = phases.reduce((a, p) => sum(a, p.minutes), ZERO);
   const food = phases.reduce((a, p) => sum(a, p.food), ZERO);
   const basis = phases.reduce<Basis>((a, p) => worst(a, p.basis), 'calibrated');
@@ -243,7 +248,7 @@ function assemble(id: PlanId, key: string, title: string, phases: PlanPhase[], h
   const all = [...blockers, ...extraBlockers];
   return {
     id, key, title, phases, minutes, food, foodCost: price === null ? null : Math.round(food.mid * price), income, net: price === null ? null : income.net - Math.round(food.mid * price),
-    basis, risks, blockers: all, eligible: all.length === 0,
+    basis, risks, notes, blockers: all, eligible: all.length === 0,
     score: minutes.high * BASIS_PENALTY[basis],
   };
 }
@@ -276,8 +281,8 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
     `${foeLabel(routeEst.foe)}: ${goalText(goals)}${item && item.missing > 0 ? ` and ${item.count} ${item.name}` : ''} (${Math.max(routeEst.kills, itemKills)} kills)`, undefined, Math.max(routeEst.kills, itemKills));
   // What the step asks to be banked is reserved: it is never counted as something to sell.
   const reserve = item && item.missing > 0 ? { name: item.name, qty: item.missing } : null;
-  const make = (id: PlanId, key: string, title: string, phases: PlanPhase[], extra: string[] = []) =>
-    assemble(id, key, title, phases, hp, price, incomeOf(phases, reserve, inp.prices, inp.restriction), extra);
+  const make = (id: PlanId, key: string, title: string, phases: PlanPhase[], extra: string[] = [], notes: string[] = []) =>
+    assemble(id, key, title, phases, hp, price, incomeOf(phases, reserve, inp.prices, inp.restriction), extra, notes);
   const plans: EvaluatedPlan[] = [make('route', 'route', 'The route\'s plan', [routePhase])];
   const compared = new Set<string>([foeLabel(routeEst.foe)]);
 
@@ -313,6 +318,8 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
 
   // --- Defence first
   const defenceNow = ctx.xp && typeof ctx.xp.defence === 'number' ? ctx.xp.defence : xpForLevel(ctx.stats.defence ?? 1);
+  const later = laterDefence(inp.steps, step.id, inp.done);
+  const laterXp = later.reduce((a, l) => a + l.xp, 0);
   const defenceTrainer = (n: number) => bestOf(estimates(step, 'Cow', [{ skill: 'defence', exp: xpForLevel(n) }], live).filter((e) => e.foe.maxHit * 2 < hp));
   for (const n of DEFENCE_STEPS) {
     if (xpForLevel(n) <= defenceNow) continue;
@@ -325,7 +332,7 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
     plans.push(make('defence-first', `defence-first:${n}`, `Defence ${n} first, then the route`, [
       phaseOf('defence', trainDef, dSpot, [{ skill: 'defence', exp: xpForLevel(n) }], `${foeLabel(trainDef.foe)}: Defence to ${n} (${trainDef.kills} kills)`),
       phaseOf('route', rest, routeSpot, goals, `${foeLabel(rest.foe)}: ${goalText(goals)} (${rest.kills} kills)`),
-    ], inp.keepDefenceOne ? ['Your build keeps Defence at 1'] : []));
+    ], inp.keepDefenceOne ? ['Your build keeps Defence at 1'] : [], later.length ? [laterNote(later, defenceNow)] : []));
   }
 
   // Unknown is not zero: with the bank unread the player may already hold some of the item, and every plan's item part is then a ceiling.
@@ -340,18 +347,23 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
     if (Math.abs(a.score - b.score) <= Math.min(a.score, b.score) * TIE_BAND) return (a.net ?? -a.food.mid) - (b.net ?? -b.food.mid) > 0 ? -1 : 1;
     return a.score - b.score;
   };
-  const best = [...eligible].sort(byTime)[0] ?? route;
+  // The route gives Defence later for nothing: a Defence plan only helps the fights before that, so it must beat a working route by a clear margin on the
+  // middle estimate as well, not only at the slow end.
+  const worthEarly = (p: EvaluatedPlan) => p.id !== 'defence-first' || laterXp === 0 || !route.eligible || (route.minutes.mid - p.minutes.mid) / route.minutes.mid >= MIN_GAIN;
+  const best = [...eligible.filter(worthEarly)].sort(byTime)[0] ?? route;
   let recommended = best;
   // Another plan must clearly beat a route that works.
   if (route.eligible && best.id !== 'route' && (route.score - best.score) / route.score < MIN_GAIN) recommended = route;
   // The plan the player adopted stays while it is not clearly beaten.
   const adopted = inp.adopted ? plans.find((p) => p.key === inp.adopted && p.eligible) : undefined;
   if (adopted && adopted.score <= best.score * KEEP_MARGIN) recommended = adopted;
+  // A Defence plan that looks better at the slow end only: the route's plan stays and the sentence says why.
+  const held = recommended.id === 'route' ? [...eligible].sort(byTime).find((p) => !worthEarly(p) && route.eligible && (route.score - p.score) / route.score >= MIN_GAIN) : undefined;
 
   const confidence: PlanReport['confidence'] = recommended.basis === 'calibrated' ? 'HIGH' : recommended.basis === 'formula' ? 'MEDIUM' : 'LOW';
   return {
     stepId: step.id, objective, plans, recommended: recommended.key, confidence, compared: [...compared],
-    reason: reasonOf(recommended, route, price),
+    reason: held ? heldReason(held, route, later) : reasonOf(recommended, route, price),
     food: { name: foodItem.nameEn, heals: foodItem.heals!, price },
   };
 }
@@ -373,4 +385,20 @@ export function reasonOf(plan: EvaluatedPlan, route: EvaluatedPlan, price: numbe
   if (fewer >= 5) parts.push(`${Math.round(fewer / 5) * 5} fewer pieces of food${price !== null ? ` (about ${gpText(fewer * price)} gp)` : ''}`);
   else if (fewer <= -5) parts.push(`${Math.round(-fewer / 5) * 5} more pieces of food`);
   return `${plan.title}: ${parts.length ? parts.join(' and ') : 'about the same time and food'} than the route's plan.`;
+}
+
+const levelAfter = (xp: number, grant: number) => levelForXp(xp + grant);
+
+function laterNote(later: readonly LaterDefence[], defenceNow: number): string {
+  const xp = later.reduce((a, l) => a + l.xp, 0);
+  const first = later[0];
+  return `Later in the route, ${first.stepId} (${first.title}) gives ${gpText(first.xp)} Defence XP${later.length > 1 ? ` and the steps after it ${gpText(xp - first.xp)} more` : ''}, about Defence ${levelAfter(defenceNow, xp)} with no training. Defence trained now only helps the fights before that.`;
+}
+
+/** The route's plan stays although a Defence plan looks faster at the slow end: the reward ahead gives the Defence anyway. */
+function heldReason(held: EvaluatedPlan, route: EvaluatedPlan, later: readonly LaterDefence[]): string {
+  const faster = route.minutes.mid - held.minutes.mid;
+  const first = later[0];
+  const gain = faster >= 5 ? `about ${durationText(faster)} faster` : 'about the same speed';
+  return `The route's plan stays. ${held.title} is ${gain} on the middle estimate, but ${first.stepId} (${first.title}) gives ${gpText(first.xp)} Defence XP later for nothing, so Defence trained now only helps the fights before it.`;
 }

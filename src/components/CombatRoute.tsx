@@ -47,6 +47,7 @@ export function useCombatRoute(step: Step): CombatRouteState {
     return evaluatePlans({
       step: routeStep, steps: base, ctx: estimateContext(routeStep, live, base, progress), owned, prices,
       foodPrice: foodPriceOf(routeStep, prices), keepDefenceOne: features.keepDefenceOne, adopted, restriction: trade.state,
+      done: (id) => isClosed(progress, id),
     });
   }, [wanted, routeStep, base, stats, xp, gear, combatLog, progress, owned, prices, features.keepDefenceOne, adopted, trade.state]);
   return { report, adopted, adopt: (k) => adoptPlan(key, step.id, k) };
@@ -63,12 +64,13 @@ const minutesText = (m: number) => {
 };
 const gp = (n: number) => `${n < 0 ? '−' : ''}${formatGp(Math.abs(Math.round(n)))} gp`;
 
-function PlanRow({ p, now, route }: { p: EvaluatedPlan; now: boolean; route: boolean }) {
+function PlanRow({ p, now, route, onUse }: { p: EvaluatedPlan; now: boolean; route: boolean; onUse: () => void }) {
   return (
     <li className={`combat-plan-row${now ? ' is-now' : ''}`}>
       <p className="small">
         <strong>{p.title}</strong>{now && <span className="muted"> · in use</span>}{route && !now && <span className="muted"> · as written</span>}
         {!p.eligible && <span className="muted"> · not offered: {p.blockers[0]}</span>}
+        {p.eligible && !now && <> <button type="button" className="btn btn-ghost btn-sm" onClick={onUse}>{route ? "Use the route's plan" : 'Use this plan'}</button></>}
       </p>
       <p className="small muted">
         {minutesText(p.minutes.mid)} ({minutesText(p.minutes.low)} to {minutesText(p.minutes.high)}) · food about {Math.round(p.food.mid / 5) * 5}{p.foodCost !== null ? ` (${gp(p.foodCost)})` : ''}
@@ -76,6 +78,7 @@ function PlanRow({ p, now, route }: { p: EvaluatedPlan; now: boolean; route: boo
       </p>
       <p className="small muted">{p.phases.map((x) => x.text).join(' → ')}</p>
       {p.income.lines.filter((l) => !l.counted || l.note).map((l) => <p key={l.name} className="small muted">{l.name}: {l.note}.</p>)}
+      {p.notes.map((n) => <p key={n} className="small muted">{n}</p>)}
       {p.risks.map((r) => <p key={r} className="small muted">⚠ {r}</p>)}
     </li>
   );
@@ -102,7 +105,7 @@ export function CombatRoute({ step }: { step: Step }) {
           <span className="plan-line">{report.reason}</span>
         </p>
       ) : (
-        <p className="small muted">The route's plan is as good as any this model can compare for your levels and gear.</p>
+        <p className="small muted">{report.reason}</p>
       )}
       {using && <p className="small muted">{using.phases.map((x) => x.text).join(' → ')}</p>}
       <p className="plan-actions">
@@ -112,7 +115,7 @@ export function CombatRoute({ step }: { step: Step }) {
       <details className="zen-more combat-route-details">
         <summary className="small">Compare the plans</summary>
         <p className="small">For {report.objective}. Estimated for your levels, XP and worn gear, with the same combat model as the food plan.</p>
-        <ul className="combat-plan-rows">{report.plans.map((p) => <PlanRow key={p.key} p={p} now={p.key === (using?.key ?? 'route')} route={p.id === 'route'} />)}</ul>
+        <ul className="combat-plan-rows">{report.plans.map((p) => <PlanRow key={p.key} p={p} now={p.key === (using?.key ?? 'route')} route={p.id === 'route'} onUse={() => adopt(p.key)} />)}</ul>
         <p className="small muted">
           Compared: {report.compared.join(', ')}. The Big bones the step asks for are never counted as something to sell. Drops are valued at the exchange's sell side after the tax;
           what this account cannot sell yet is not counted. Defence training {report.plans.some((p) => p.id === 'defence-first' && p.blockers.some((b) => /keeps Defence at 1/.test(b))) ? 'is off: you keep Defence at 1 (Settings)' : 'is offered like any other plan (you can switch it off in Settings)'}.

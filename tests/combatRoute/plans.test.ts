@@ -216,3 +216,38 @@ describe('where the plans can lead', () => {
     expect(spots.get('Hill Giant')!.waypoints!.length).toBeGreaterThan(1);
   });
 });
+
+describe('Defence the route gives later (Dragon Slayer I)', () => {
+  const noSplit = { items: { 'Big bones': [0, 50] } as Record<string, [number, number]> };
+  const closed = () => true;
+
+  it('every Defence plan says what the reward ahead gives, with no training', () => {
+    const r = evaluatePlans(withMarket())!;
+    for (const p of r.plans.filter((x) => x.id === 'defence-first')) expect(p.notes[0]).toMatch(/S5-09 \(Triumph at Oziach\) gives 18,650 Defence XP.*about Defence 3\d with no training/);
+    expect(r.plans[0].notes).toEqual([]);
+  });
+
+  it('a Defence plan that is only a few percent faster on the middle estimate is not recommended, and the sentence says why', () => {
+    const r = evaluatePlans(withMarket(noSplit))!;
+    const d20 = r.plans.find((p) => p.key === 'defence-first:20')!;
+    const route = r.plans[0];
+    // It does look better at the slow end ...
+    expect((route.score - d20.score) / route.score).toBeGreaterThanOrEqual(MIN_GAIN);
+    // ... but by the middle estimate it is under the margin a route that works must be beaten by.
+    expect((route.minutes.mid - d20.minutes.mid) / route.minutes.mid).toBeLessThan(MIN_GAIN);
+    expect(r.recommended).toBe('route');
+    expect(r.reason).toMatch(/route's plan stays.*Defence 20 first.*S5-09.*18,650 Defence XP later for nothing/);
+  });
+
+  it('with no Defence reward left ahead the same plan is recommended again: the training is not duplicated by anything', () => {
+    const r = evaluatePlans({ ...withMarket(noSplit), done: closed })!;
+    expect(r.plans.every((p) => p.notes.length === 0)).toBe(true);
+    expect(r.recommended).toBe('defence-first:20');
+  });
+
+  it('the player can still adopt it: an adopted Defence plan stays, and a route that is not safe does not hold it back', () => {
+    expect(evaluatePlans(withMarket({ ...noSplit, adopted: 'defence-first:20' }))!.recommended).toBe('defence-first:20');
+    const weak = evaluatePlans(withMarket({ stats: { ...HISTORICAL.stats, hitpoints: 8 } }))!;
+    expect(weak.reason).not.toMatch(/route's plan stays/);
+  });
+});

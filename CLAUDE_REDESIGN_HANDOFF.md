@@ -803,3 +803,12 @@ Invariants (do not break):
 Tests: `tests/combatRoute/plans.test.ts` (21), `pick.test.ts` (15), UI smoke `UI_ONLY=combat` (card, folded comparison, adopt, game payload follows, back to the route). Screenshots at 1440 and 390 looked at; not checked live in the game (automated only).
 
 Not done yet (block 2b): the audit ledger of every combat stage, mandatory quest-fight preparation (Ancient Guardian, Brutus, Count Draynor, Ithoi, Melzar, Elvarg, Black Knights, ...), observed-performance notes, potions with/without.
+
+## 2.65.1 — combat plans count the Defence the route gives later
+
+- Owner's point: Dragon Slayer I gives 18,650 Defence XP (about level 33) later, so is it worth training Defence early? `combatRoute/later.ts` reads the Defence XP from the `reward` text of the steps still ahead
+  (`defenceXpOf`: "N XP each in Defence", "N Defence XP"; a reward with "choose", Daero's, is not counted; closed steps are skipped via `PlanInput.done`). After S4-03: S5-09 18,650, then S8-02 2,000.
+- `plans.ts`: Defence-first plans carry a note (`EvaluatedPlan.notes`). While Defence XP is ahead and the route's plan works, a Defence plan is recommended only if it is also `MIN_GAIN` faster on `minutes.mid`, not only on the conservative score.
+  If one was held back this way, the reason says so (`heldReason`). An adopted Defence plan still stays (explicit choice), and a route that is not safe does not hold Defence plans back.
+- UI: each eligible row in "Compare the plans" has its own Use button; the no-offer card shows `report.reason` instead of a fixed sentence.
+- Tests: `tests/combatRoute/later.test.ts` (4), 4 more in `plans.test.ts`; smoke picks Defence 20 from the list and checks the note and the game payload (Defence on the cows).
