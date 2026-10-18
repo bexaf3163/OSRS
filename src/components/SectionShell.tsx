@@ -25,8 +25,10 @@ export function SectionShell({ page, param, children }: { page: Page; param?: st
         ? [{ label: 'Overview', href: '#/reference', id: '' }, ...reference.sections.map(s => ({ label: s.title, href: `#/reference/${s.id}`, id: s.id }))]
         : page === 'gear'
           ? [{ label: 'Equipment', selector: '.gear-worn' }, { label: 'Improvements', selector: '#gear-now' }, { label: 'Future unlocks', selector: '#gear-roadmap' }, { label: 'Combat details', selector: '.gear-combat' }]
-          : [{ label: 'Shopping list', selector: '.shop-controls' }, { label: 'Ownership', selector: '.shop-filter' }, { label: 'Budget and sync', selector: '.shop-summary' }];
+          // Shopping is one list with its own scope control: no jump links.
+          : [];
   const activeId = page === 'goals' ? 'goals' : page === 'quests' ? '' : param ?? '';
+  if (!links.length) return <div className={`section-shell section-${title.toLowerCase()} no-rail`}><div className="section-content">{children}</div></div>;
   return <div className={`section-shell section-${skill ? 'skills' : title.toLowerCase()}`}>
     <aside className="section-rail">
       <h2>{title}</h2>

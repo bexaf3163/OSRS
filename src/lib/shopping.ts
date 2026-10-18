@@ -4,6 +4,8 @@
 import type { Step, StepItemRequirement } from '../types';
 import { nameKey, parseAmount, type OwnedState } from './checklist';
 import { heldOf } from './playerState';
+import { toolFamilyOf } from './toolTiers';
+import gearJson from '../data/gear.json';
 
 /**
  * Tools and gear: they are not used up, so one is enough for all the steps: the largest
@@ -14,6 +16,15 @@ export const REUSABLE = new Set([
   'tinderbox', 'spade', 'hammer', 'knife', 'shears', 'chisel', 'secateurs', 'ghostspeak amulet', 'dramen staff',
   'anti-dragon shield', 'rune sword', 'rune scimitar', 'adamant scimitar', 'holy symbol',
 ]);
+
+/** Anything worn (weapons, armour, amulets) is not used up either: the gear data knows every one of them. */
+const WORN = new Set((gearJson as { items: { name: string; slot?: string }[] }).items.filter((p) => p.slot).map((p) => nameKey(p.name)));
+
+/** One is enough for every step: a tool of any tier, or something worn. */
+export function isReusable(nameEn: string): boolean {
+  const k = nameKey(nameEn);
+  return REUSABLE.has(k) || WORN.has(k) || toolFamilyOf(nameEn) !== null;
+}
 
 const COINS_ID = 995;
 /** "From step S2-01", "From S4-05: ...", "The ones saved from S1-04!", "The spare one from step S1-03". */
@@ -46,6 +57,10 @@ export interface ShoppingLine {
   sources: ShoppingSource[];
   /** Where to get it: from the first step where the item is needed. */
   howToGet: string;
+  /** Items that do the same job (any of them counts): food of another kind, another tier of a tool. */
+  anyOf?: string[];
+  /** For food: the health one piece restores; alternatives are counted by healing. */
+  heals?: number;
 }
 
 export interface ShoppingList {
@@ -86,7 +101,7 @@ function collect(steps: Step[], pick: (s: Step) => StepItemRequirement[] | undef
           line: {
             key: item.wikiItemId !== undefined ? `id:${item.wikiItemId}` : `name:${name}`,
             nameEn: item.nameEn, id: item.wikiItemId, iconUrl: item.iconUrl,
-            count: 0, exact: true, reusable: REUSABLE.has(name), inStepOnly: true, sources: [], howToGet: item.howToGet,
+            count: 0, exact: true, reusable: isReusable(item.nameEn), inStepOnly: true, sources: [], howToGet: item.howToGet,
           },
           perStep: new Map(),
           allInStep: true,
@@ -98,6 +113,8 @@ function collect(steps: Step[], pick: (s: Step) => StepItemRequirement[] | undef
         acc.line.id ??= item.wikiItemId;
       }
       acc.line.iconUrl ??= item.iconUrl;
+      if (item.heals !== undefined) acc.line.heals ??= item.heals;
+      if (item.anyOf?.length) acc.line.anyOf = [...new Set([...(acc.line.anyOf ?? []), ...item.anyOf])].filter((n) => nameKey(n) !== name);
       byName.set(name, acc);
       acc.line.sources.push({ stepId: step.id, amount: item.amount, carryOver, ...(item.phase ? { phase: item.phase } : {}) });
       if (carryOver) continue;

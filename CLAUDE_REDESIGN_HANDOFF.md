@@ -829,3 +829,17 @@ Not done yet (block 2b): the audit ledger of every combat stage, mandatory quest
   caution when it does not. Never "ok" by default.
 - Invariants: unknown is never Ready; food picks only raise the route's amount; a fight the route does another way (OTHER_METHOD) gets no melee estimate.
 - Not verified live in the game (automated only).
+
+## 2.67.0 — Shopping around the next action (Task 3, block 3a)
+
+- Model: `src/lib/shoppingView.ts` (pure, tested in `tests/shoppingView.test.ts`): `scopeSteps` (trip = `oneTrip.tripWindow`, step, range), `scopeList` (whole-goal list + one-trip counts),
+  `ownershipOf` (shared `heldOf` + worn + alternatives by healing, minus what other lines reserve; a bag-only count is never a total), `shopRows` (channel ge/shop/bank/equip/along/unknown/have,
+  shop source from `sourceRouter` only when its stock covers the batch and it is known to be nearer than the exchange, or the item is not on the exchange), `budgetOf`, `emptyStateOf`
+  (error, no-plan, no-requirements, all-owned, offline, not-loaded), `syncLine`, `geListText` (exchange rows only).
+- `shopping.ts`: lines carry `anyOf` and `heals`; `isReusable` = the old tool list + anything in gear.json + any tool family (`toolTiers`).
+- Page `src/pages/Shopping.tsx` rewritten; `SectionShell` shows no jump links for Shopping (`no-rail`). Scope saved at `osrs-put:shopping-scope`; range key unchanged. Manual marks
+  (`progress.ownedManual`, key `id:<n>`) unchanged and edited under each row's "Why and what you have".
+- Tradeable: the price service's item list; until it loads, gear.json's `tradeable`, else assumed sold; an item without an id is never an exchange item.
+- Plugin: unchanged contract (`syncPlan` with exchange + unconfirmed rows; the plugin subtracts what it sees, a manual mark is subtracted here).
+- Smoke `UI_ONLY=shopping`: real shortage with shortfall and link, all owned, bank withdrawal, unknown bank, offline; the old bulk/cleanup/strip scenarios updated.
+- Not done: potion dose conversion; shop access requirements (quests/areas) in `sourceRouter`. Not verified live in the game.

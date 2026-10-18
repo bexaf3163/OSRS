@@ -156,6 +156,7 @@ const text = async (page: Page, sel: string) => {
 async function run(browser: Browser) {
   if (process.env.UI_ONLY === 'funding') { await fundingScenarios(browser); return; }
   if (process.env.UI_ONLY === 'combat') { await combatRouteScenarios(browser); return; }
+  if (process.env.UI_ONLY === 'shopping') { await shoppingScenarios(browser); return; }
   for (const width of [390, 1100]) {
     console.log(`Width ${width}`);
 
@@ -311,12 +312,17 @@ async function run(browser: Browser) {
       const { page, errors } = await open(browser, width, {
         events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Clay', carried: 3, noted: 0, bank: 2 }] }],
       }, '#/shopping');
-      const input = page.getByLabel('Energy potion(4): how many you already have').first();
+      // The stages the old page opened on: the next trip is the default now, a range is chosen.
+      await page.getByRole('button', { name: 'Stages', exact: true }).click();
+      await page.waitForTimeout(300);
+      const potion = page.locator('.shop-item-row', { hasText: 'Energy potion(4)' }).first();
+      await potion.locator('.shop-why > summary').click();
+      const input = potion.getByLabel('Energy potion(4): how many you already have');
       await input.fill('3');
       await input.press('Enter');
       await page.waitForTimeout(900);
-      const tally = await text(page, '.shop-tally');
-      expect(/partly \d/.test(tally), 'shopping: 3 of 5 marked — "partly"');
+      const row = await page.locator('.shop-item-row', { hasText: 'Energy potion(4)' }).first().innerText();
+      expect(/×2/.test(row) && /Buy at/.test(row), 'shopping: 3 of 5 marked — 2 left to buy');
       const saved = await page.evaluate(() => JSON.parse(String((window as unknown as Record<string, unknown>).__saved ?? '{}')));
       expect(saved.ownedManual?.['id:3008']?.count === 3, 'shopping: the mark "already have 3" is saved in the progress');
       const plan = await page.evaluate(() => ((window as unknown as { __posts: { path: string; body: { items: { name: string; count: number }[] } }[] }).__posts)
@@ -1037,7 +1043,8 @@ async function run(browser: Browser) {
 
   // The local strip of a section shows every link: the first one used to take the whole width and push the rest out of view.
   console.log('Section strip');
-  for (const [hash, least] of [['#/skills/ME', 5], ['#/gear', 4], ['#/shopping', 3], ['#/journal', 3], ['#/reference', 3]] as [string, number][]) {
+  // Shopping has no strip since 2.67: one list with its own scope control.
+  for (const [hash, least] of [['#/skills/ME', 5], ['#/gear', 4], ['#/journal', 3], ['#/reference', 3]] as [string, number][]) {
     for (const width of [1000, 1440]) {
       const { page } = await open(browser, width, { progress: progressBefore('S3-03') }, hash);
       const seen = await page.evaluate(() => {
@@ -1117,6 +1124,9 @@ async function run(browser: Browser) {
       },
     }, '#/shopping');
     await page.waitForTimeout(800);
+    // Cleanup is folded away on the shopping page and mounted when opened.
+    await page.locator('.shop-cleanup > summary').click();
+    await page.waitForTimeout(400);
     const card = await text(page, '.cleanup-card');
     expect(/Inventory cleanup/.test(card) && /Ball of wool/.test(card), `inventory cleanup (${width} px): the section lists the bag`);
     expect(/Keep 3 for Prince Ali Rescue/.test(card), `inventory cleanup (${width} px): the quantity kept for the route is named`);
@@ -1175,6 +1185,7 @@ async function run(browser: Browser) {
 
   await fundingScenarios(browser);
   await combatRouteScenarios(browser);
+  await shoppingScenarios(browser);
 }
 
 // Raising coins for the Hill Giants step: a character with 400 coins and an empty bank is short of food. The card says so in one line with one button;
@@ -1249,6 +1260,83 @@ async function fundingScenarios(browser: Browser) {
 
 // Another way to do the Hill Giants step: the character with 24 hitpoints and Defence 1 is offered a split (cows for Attack, then the giants for the bones).
 // Adopting it moves the arrow, the pace line and the food to the cows for the app and the game alike, and leaves the route's own step open; going back undoes it.
+// Shopping 2.67: one list for the step in progress, grouped by what to do; each state said as what it is (lib/shoppingView.ts).
+async function shoppingScenarios(browser: Browser) {
+  console.log('shopping');
+  const scim = { id: 1329, name: 'Mithril scimitar', slot: 'weapon' };
+  const base = (o: { worn?: boolean; coins?: number; bankSeen?: boolean; items?: { name: string; carried: number; noted: number; bank?: number }[]; offline?: boolean }) => {
+    const gear = { equipment: o.worn ? [scim] : [], inventory: [], coins: o.coins ?? 100, bankCoins: o.bankSeen === false ? null : 0 };
+    return {
+      progress: progressBefore('S3-08'),
+      localStorage: { 'osrs-put:active-step': 'S3-08', 'osrs-put:shopping-scope': 'step' },
+      market: true,
+      ...(o.offline ? { offline: true } : {
+        status: { protocol: 6, inGame: true, player: 'Shop Test', activeStepId: 'S3-08', questPoints: 20, totalLevel: 120, ...gear },
+        events: [{ type: 'OWNED', bankSeen: o.bankSeen !== false, items: o.items ?? [] }, { type: 'GEAR', gear }],
+      }),
+    };
+  };
+  const shot = async (page: Page, name: string) => {
+    if (process.env.UI_SHOTS) await page.locator('.shop-page').screenshot({ path: `${process.env.UI_SHOTS}/shopping-${name}.png` }).catch(() => {});
+  };
+  for (const width of [1440, 390]) {
+    // Real shortages: the purchases, the money short, the way to the coin plan, the exchange list.
+    {
+      const { page, errors } = await open(browser, width, base({ items: [{ name: 'Mithril scimitar', carried: 0, noted: 0, bank: 0 }, { name: 'Salmon', carried: 0, noted: 0, bank: 5 }] }), '#/shopping');
+      await page.waitForTimeout(1200);
+      const body = await text(page, '.shop-page');
+      expect(/Buy · 2/.test(body) && /Salmon[^]*×15/.test(body) && /5 more in the bank/.test(body), `shopping (${width} px): the buy list with the bank stock named`);
+      expect(/short [\d,]+ gp/.test(body) && await page.getByRole('link', { name: 'Raise the coins' }).count() === 1, `shopping (${width} px): the shortfall links to the coin plan`);
+      expect(await page.getByRole('button', { name: /Copy the exchange list/ }).count() === 1, `shopping (${width} px): one copy button for the exchange purchases`);
+      expect(!/Still open|Partly owned|Unverified/.test(body), `shopping (${width} px): no status filter bar`);
+      expect(/Bag and bank checked in this session/.test(body), `shopping (${width} px): the sync line says what was read`);
+      expect(await noOverflow(page), `shopping (${width} px): no horizontal scroll`);
+      expect(!errors.length, `shopping (${width} px): no console errors ${errors.join('; ')}`);
+      await shot(page, `missing-${width}`);
+      await page.context().close();
+    }
+    // Everything owned: worn and in the bag. The way back to the step, no copy button, no budget.
+    {
+      const { page, errors } = await open(browser, width, base({ worn: true, items: [{ name: 'Mithril scimitar', carried: 1, noted: 0, bank: 0 }, { name: 'Salmon', carried: 20, noted: 0, bank: 0 }] }), '#/shopping');
+      await page.waitForTimeout(1200);
+      const body = await text(page, '.shop-page');
+      expect(/Everything for this step is with you/.test(body) && await page.getByRole('link', { name: 'Back to the step' }).count() === 1, `shopping all owned (${width} px): said, with the way back`);
+      expect(await page.getByRole('button', { name: /Copy the exchange list/ }).count() === 0 && !/Purchases/.test(body), `shopping all owned (${width} px): no copy button, no budget`);
+      expect(!errors.length, `shopping all owned (${width} px): no console errors ${errors.join('; ')}`);
+      await shot(page, `owned-${width}`);
+      await page.context().close();
+    }
+    // In the bank, not with you: take, not buy.
+    {
+      const { page } = await open(browser, width, base({ worn: true, items: [{ name: 'Mithril scimitar', carried: 1, noted: 0, bank: 0 }, { name: 'Salmon', carried: 0, noted: 0, bank: 30 }] }), '#/shopping');
+      await page.waitForTimeout(1200);
+      const body = await text(page, '.shop-page');
+      expect(/Take from the bank · 1/.test(body) && /Take 20 from the bank/.test(body) && !/Buy · /.test(body), `shopping bank (${width} px): a withdrawal, not a purchase`);
+      expect(await page.getByRole('button', { name: /Copy the exchange list/ }).count() === 0, `shopping bank (${width} px): a withdrawal is not in the exchange list`);
+      await page.context().close();
+    }
+    // The bank not opened: not confirmed, never "missing" or "owned".
+    {
+      const { page } = await open(browser, width, base({ bankSeen: false, items: [{ name: 'Salmon', carried: 3, noted: 0 }] }), '#/shopping');
+      await page.waitForTimeout(1200);
+      const body = await text(page, '.shop-page');
+      expect(/Not confirmed · \d/.test(body) && /Open your bank in RuneLite to refresh/.test(body), `shopping unknown bank (${width} px): not confirmed, with the honest way to refresh`);
+      expect(!/Everything for/.test(body), `shopping unknown bank (${width} px): no success message`);
+      await shot(page, `unknown-${width}`);
+      await page.context().close();
+    }
+    // Offline: said as offline, the steps' needs listed as not confirmed.
+    {
+      const { page } = await open(browser, width, base({ offline: true }), '#/shopping');
+      await page.waitForTimeout(1500);
+      const body = await text(page, '.shop-page');
+      expect(/Offline — ownership not confirmed/.test(body) && !/Nothing to/.test(body), `shopping offline (${width} px): offline is said, not "nothing to buy"`);
+      await shot(page, `offline-${width}`);
+      await page.context().close();
+    }
+  }
+}
+
 async function combatRouteScenarios(browser: Browser) {
   console.log('combat route');
   const equipment = ([[1331, 'Adamant scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']] as [number, string, string][])
