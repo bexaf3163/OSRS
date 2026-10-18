@@ -11,6 +11,7 @@
 
 import gearJson from '../data/gear.json';
 import monstersJson from '../data/monsters.json';
+import combatFoesJson from '../data/combatFoes.json';
 import type { Foe, FoeData, GameMode, GearData, GearPiece, GearSlot, Step } from '../types';
 import { nameKey, type OwnedState } from '../lib/checklist';
 import { matchStrict } from './locationResolver';
@@ -159,7 +160,33 @@ export function meleeValue(lv: Levels, weapon: GearPiece | null, neck: GearPiece
   return sum / n;
 }
 
-const defenceSum = (p: GearPiece | null) => (p ? p.defence.stab + p.defence.slash + p.defence.crush : 0);
+/** The opponent's attack: from the wiki infobox in combatFoes.json (the version of the same combat level); null when the table does not know it. */
+export type IncomingStyle = 'stab' | 'slash' | 'crush' | 'magic' | 'ranged';
+export interface FoeAttack { style: IncomingStyle; level: number; bonus: number; maxHit: number }
+const ATTACKS = (combatFoesJson as { foes: { name: string; combat: number; attackStyle: string; attackLevel: number; attackBonus: number; maxHit: number }[] }).foes;
+export function foeAttack(foe: Pick<Foe, 'name' | 'combat'>): FoeAttack | null {
+  const list = ATTACKS.filter((f) => f.name === foe.name);
+  const v = list.find((f) => f.combat === foe.combat) ?? list[0];
+  if (!v || !['stab', 'slash', 'crush', 'magic', 'ranged'].includes(v.attackStyle)) return null;
+  return { style: v.attackStyle as IncomingStyle, level: v.attackLevel, bonus: v.attackBonus, maxHit: v.maxHit };
+}
+
+/**
+ * The defence of an item that matters: against the opponent's attack style when it is known; otherwise the weakest of the three melee
+ * styles, so a gain holds whatever hits. Never the sum of stab, slash and crush: one attack is rolled against one of them.
+ */
+export function relevantDefence(p: GearPiece | null, style: IncomingStyle | null): number {
+  if (!p) return 0;
+  return style ? p.defence[style] : Math.min(p.defence.stab, p.defence.slash, p.defence.crush);
+}
+
+/** How often a melee opponent hits the player: its attack roll against the player's Defence level and the worn defence bonus of its style. */
+export function incomingChance(att: FoeAttack, defenceLevel: number, defenceBonus: number): number | null {
+  if (att.style === 'magic' || att.style === 'ranged') return null;
+  const attRoll = (att.level + 9) * (att.bonus + 64);
+  const defRoll = (defenceLevel + 9) * (defenceBonus + 64);
+  return attRoll > defRoll ? 1 - (defRoll + 2) / (2 * (attRoll + 1)) : attRoll / (2 * (defRoll + 1));
+}
 
 /**
  * The first estimate of a combat step's pace: seconds per opponent — its health divided by the damage per second
@@ -200,9 +227,22 @@ export type Source =
   | { kind: 'shop'; shop: string; location: string; price: number; npc?: string; coords?: { x: number; y: number; plane: number }; toll?: number }
   | { kind: 'ge'; price?: number };
 
+/** The defence numbers of a gain: of one style (the opponent's) or "every melee style" when it is not known. */
+export interface DefenceBasis {
+  style: IncomingStyle | 'melee';
+  /** The opponent's chance to hit with the whole worn set, before and after; absent when its attack is not known or not melee. */
+  hitBefore?: number;
+  hitAfter?: number;
+  foe?: string;
+}
+
 export type Gain =
-  | { kind: 'dps'; before: MeleeResult; after: MeleeResult; ratio: number; defenceBefore?: number; defenceAfter?: number }
-  | { kind: 'defence'; before: number; after: number };
+  | ({
+    kind: 'dps'; before: MeleeResult; after: MeleeResult; ratio: number; defenceBefore?: number; defenceAfter?: number; shieldLoss?: number;
+    /** The new kit on the style that is best now, when the best style changes with it: "max hit 7 instead of 6 on Aggressive". */
+    kept?: MeleeResult;
+  } & Partial<DefenceBasis>)
+  | ({ kind: 'defence'; before: number; after: number } & DefenceBasis);
 
 export interface GearAction {
   slot: GearSlot;
@@ -253,6 +293,10 @@ export interface GearAdvice {
   levels: Levels;
   equipped: Partial<Record<GearSlot, Equipped>>;
   coins: { bag: number | null; bank: number | null; total: number | null };
+  /** Coins kept for the next steps' supplies, not spent on gear. */
+  reserve: number;
+  /** The attack of the first opponent, when the table knows it: defence is judged against its style. */
+  incoming: FoeAttack | null;
   /** What the weapon was compared with: the step's opponents or a cow. */
   foes: Foe[];
   /** Damage now — against the first of them, at the current levels. */
@@ -287,6 +331,8 @@ export interface AdvisorInput {
   foes?: readonly Foe[];
   /** Completed quests. An item with a quest in its requirements (Rune platebody — Dragon Slayer I) is not advised without it. */
   questsDone?: ReadonlySet<string>;
+  /** Coins kept for the supplies the next steps need (food, runes): gear is bought only from what is left. */
+  reserve?: number;
   data?: GearData;
 }
 
@@ -442,8 +488,27 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   const weaponNow = meleeWith(lv, weaponPiece, neckPiece, {}, foes[0]);
   const valueNow = meleeValue(lv, weaponPiece, neckPiece, foes);
   const candidates: GearAction[] = [];
+  const incoming = foeAttack(foes[0]);
+  const defStyle = incoming && incoming.style !== 'magic' && incoming.style !== 'ranged' ? incoming.style : null;
+  /** The worn defence bonus of the opponent's style, with some slots changed (null takes the slot off). */
+  const wornDefence = (over: Partial<Record<GearSlot, GearPiece | null>> = {}) => (defStyle
+    ? SLOTS.reduce((a, sl) => a + ((sl in over ? over[sl] : equipped[sl]?.piece)?.defence[defStyle] ?? 0), 0)
+    : 0);
+  const basis = (slot: GearSlot, p: GearPiece | null): DefenceBasis => {
+    const chanceBefore = incoming && defStyle ? incomingChance(incoming, lv.defence, wornDefence()) : null;
+    // A two-handed weapon takes the shield off.
+    const over: Partial<Record<GearSlot, GearPiece | null>> = p?.twoHanded && slot === 'weapon' ? { weapon: p, shield: null } : { [slot]: p };
+    const chanceAfter = incoming && defStyle ? incomingChance(incoming, lv.defence, wornDefence(over)) : null;
+    return {
+      style: defStyle ?? 'melee',
+      ...(chanceBefore !== null && chanceAfter !== null ? { hitBefore: chanceBefore, hitAfter: chanceAfter } : {}),
+      foe: foes[0].name,
+    };
+  };
 
   const route = (p: GearPiece) => input.routeNeeds?.get(nameKey(p.name));
+  /** When the best style changes with the new kit, the same kit on the style that is best now: what the player sees without switching. */
+  const kept = (w: GearPiece | null, n: GearPiece | null, after: MeleeResult) => (after.style !== weaponNow.style ? { kept: meleeAs(lv, w, n, weaponNow.style, foes[0]) } : {});
 
   // Weapon: the best damage per second at your levels. A weapon in hand unknown to the app cannot be compared —
   // then the damage "now" is counted without it, and the advice text speaks only about the new weapon (gainText).
@@ -455,18 +520,26 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   function gainOf(slot: GearSlot, p: GearPiece, cur: Equipped | undefined): Gain | null {
     if (slot === 'weapon') {
       const ratio = meleeValue(lv, p, neckPiece, foes) / valueNow;
-      return ratio < WORTH.dps ? null : { kind: 'dps', before: weaponNow, after: meleeWith(lv, p, neckPiece, {}, foes[0]), ratio };
+      if (ratio < WORTH.dps) return null;
+      // A two-handed weapon: the shield comes off, and what it gave is lost.
+      const shield = p.twoHanded ? equipped.shield?.piece ?? null : null;
+      const after = meleeWith(lv, p, neckPiece, {}, foes[0]);
+      return {
+        kind: 'dps', before: weaponNow, after, ratio, ...kept(p, neckPiece, after),
+        ...(shield ? { shieldLoss: relevantDefence(shield, defStyle), ...basis(slot, p) } : {}),
+      };
     }
     if (slot === 'neck') {
       const ratio = meleeValue(lv, weaponPiece, p, foes) / valueNow;
-      const defBefore = defenceSum(neckPiece);
-      const defAfter = defenceSum(p);
+      const defBefore = relevantDefence(neckPiece, defStyle);
+      const defAfter = relevantDefence(p, defStyle);
       if (!(ratio >= WORTH.dps || (ratio >= 0.999 && defAfter - defBefore >= WORTH.defence))) return null;
-      return { kind: 'dps', before: weaponNow, after: meleeWith(lv, weaponPiece, p, {}, foes[0]), ratio, defenceBefore: defBefore, defenceAfter: defAfter };
+      const after = meleeWith(lv, weaponPiece, p, {}, foes[0]);
+      return { kind: 'dps', before: weaponNow, after, ratio, ...kept(weaponPiece, p, after), defenceBefore: defBefore, defenceAfter: defAfter, ...basis(slot, p) };
     }
-    const before = defenceSum(cur?.piece ?? null);
-    const after = defenceSum(p);
-    return after - before < WORTH.defence ? null : { kind: 'defence', before, after };
+    const before = relevantDefence(cur?.piece ?? null, defStyle);
+    const after = relevantDefence(p, defStyle);
+    return after - before < WORTH.defence ? null : { kind: 'defence', before, after, ...basis(slot, p) };
   }
 
   for (const slot of SLOTS) {
@@ -491,7 +564,9 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   const actions: GearAction[] = [];
   const armour: GearAction[] = [];
   const goals: GearAction[] = [];
-  let left = total ?? 0;
+  const reserve = Math.max(0, input.reserve ?? 0);
+  // Gear is bought from what is left after the next steps' supplies: a marginal upgrade never takes the money for the food.
+  let left = Math.max(0, (total ?? 0) - reserve);
   const order: GearSlot[] = ['weapon', 'neck', 'body', 'legs', 'head', 'shield'];
   // First what is already owned: wear it for free.
   const wearBest = new Map<GearSlot, GearAction>();
@@ -597,6 +672,8 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
     levels: lv,
     equipped,
     coins: { bag, bank, total },
+    reserve,
+    incoming,
     foes,
     weaponNow,
     ...(weapon && !weaponPiece ? { weaponUnknown: weapon.name } : {}),
@@ -633,18 +710,45 @@ const gp = (n: number) => n.toLocaleString('en-US');
 const pct = (r: number) => `${Math.round((r - 1) * 100)}%`;
 
 /** "max hit 3 instead of 2, damage per second +45%" — how the action is better. */
+const STYLE_WORD: Record<IncomingStyle | 'melee', string> = { stab: 'stab', slash: 'slash', crush: 'crush', magic: 'magic', ranged: 'ranged', melee: 'melee' };
+const pc = (x: number) => `${Math.round(x * 100)}%`;
+const STYLE_NAME: Record<string, string> = { accurate: 'Accurate', aggressive: 'Aggressive', defensive: 'Defensive' };
+
+/** "Hill Giant hits you 74% → 70% of the time": only when the model has its attack. */
+function hitText(g: Partial<DefenceBasis>): string {
+  return g.hitBefore !== undefined && g.hitAfter !== undefined && Math.round(g.hitBefore * 100) !== Math.round(g.hitAfter * 100)
+    ? `${g.foe ?? 'the opponent'} hits you ${pc(g.hitBefore)} → ${pc(g.hitAfter)} of the time`
+    : '';
+}
+
+/** The defence of a gain in words: one style, or every melee style when the opponent's is not known. */
+function defenceText(d: number, style: IncomingStyle | 'melee' | undefined): string {
+  return style === 'melee' || style === undefined ? `defence +${d} against every melee style` : `${STYLE_WORD[style]} defence +${d}`;
+}
+
 export function gainText(a: Pick<GearAction, 'gain' | 'slot' | 'currentName'>): string {
   const g = a.gain;
-  if (g.kind === 'defence') return `defence +${g.after - g.before} (${g.before} → ${g.after})`;
+  if (g.kind === 'defence') {
+    const hit = hitText(g);
+    return `${defenceText(g.after - g.before, g.style)} (${g.before} → ${g.after})${hit ? `: ${hit}` : ''}`;
+  }
   // What is in hand now is unknown to the app: there is nothing to compare with, we speak only about the new weapon.
   if (a.currentName && a.slot === 'weapon') {
     return `max hit ${g.after.maxHit}, once every ${g.after.speed.toFixed(1)} s — compare with ${a.currentName} in the Equipment Stats tab`;
   }
   const parts: string[] = [];
-  if (g.after.maxHit !== g.before.maxHit) parts.push(`max hit ${g.after.maxHit} instead of ${g.before.maxHit}`);
+  // The best style can change with the kit (the amulet's strength lets Accurate reach the old max hit): the style is named then, and a higher
+  // max hit on the style used now comes first, since that is what the player sees without switching.
+  const moved = g.after.style !== g.before.style;
+  const on = (st: string) => (moved ? ` on ${STYLE_NAME[st] ?? st}` : '');
+  if (moved && g.kept && g.kept.maxHit > g.before.maxHit) parts.push(`max hit ${g.kept.maxHit} instead of ${g.before.maxHit}${on(g.before.style)}`);
+  else if (g.after.maxHit !== g.before.maxHit) parts.push(`max hit ${g.after.maxHit} instead of ${g.before.maxHit}${on(g.after.style)}`);
+  else if (g.after.hitChance - g.before.hitChance >= 0.01) parts.push(`same max hit, more accurate${on(g.after.style)} (hit chance ${pc(g.before.hitChance)} → ${pc(g.after.hitChance)})`);
+  // "Faster" only when the attack interval itself changes.
   if (Math.abs(g.after.speed - g.before.speed) > 0.01) parts.push(`one hit every ${g.after.speed.toFixed(1)} s instead of ${g.before.speed.toFixed(1)} s`);
-  if (g.ratio >= 1.01) parts.push(`damage per second +${pct(g.ratio)}`);
-  if (g.defenceAfter !== undefined && g.defenceBefore !== undefined && g.defenceAfter > g.defenceBefore) parts.push(`defence +${g.defenceAfter - g.defenceBefore}`);
+  if (g.ratio >= 1.01) parts.push(`expected damage +${pct(g.ratio)}`);
+  if (g.defenceAfter !== undefined && g.defenceBefore !== undefined && g.defenceAfter > g.defenceBefore) parts.push(defenceText(g.defenceAfter - g.defenceBefore, g.style));
+  if (g.shieldLoss) parts.push(`but the shield comes off (${defenceText(g.shieldLoss, g.style).replace('+', '−')})`);
   return parts.join(', ') || 'slightly stronger';
 }
 
@@ -656,7 +760,7 @@ export function statsText(a: Pick<GearAction, 'gain' | 'slot' | 'item'>): string
     // For an amulet — its bonuses: a hit with an unknown weapon says nothing.
     const p = a.item;
     const accuracy = Math.max(p.attack.stab, p.attack.slash, p.attack.crush);
-    const parts = [p.strength && `strength +${p.strength}`, accuracy && `accuracy +${accuracy}`, defenceSum(p) && `defence +${defenceSum(p)}`];
+    const parts = [p.strength && `strength +${p.strength}`, accuracy && `accuracy +${accuracy}`, (p.defence.stab || p.defence.slash || p.defence.crush) && `defence ${p.defence.stab}/${p.defence.slash}/${p.defence.crush} (stab/slash/crush)`];
     return parts.filter(Boolean).join(', ');
   }
   return `max hit ${g.after.maxHit}, once every ${g.after.speed.toFixed(1)} s`;
@@ -697,6 +801,8 @@ export function watchNames(input: AdvisorInput, limit = 3): string[] {
   const lv = levelsOf(input.levels);
   const equipped = equippedBySlot(input.gear, data);
   const foes = input.foes?.length ? input.foes : [DEFAULT_FOE];
+  const att = foeAttack(foes[0]);
+  const style = att && att.style !== 'magic' && att.style !== 'ranged' ? att.style : null;
   const out: string[] = [];
   for (const slot of SLOTS) {
     const cur = equipped[slot]?.piece ?? null;
@@ -705,7 +811,7 @@ export function watchNames(input: AdvisorInput, limit = 3): string[] {
     const known = new Map<GearPiece | null, number>();
     const value = (p: GearPiece | null) => {
       if (!known.has(p)) {
-        known.set(p, slot === 'weapon' ? meleeValue(lv, p, neck, foes) : slot === 'neck' ? meleeValue(lv, weapon, p, foes) * 1000 + defenceSum(p) : defenceSum(p));
+        known.set(p, slot === 'weapon' ? meleeValue(lv, p, neck, foes) : slot === 'neck' ? meleeValue(lv, weapon, p, foes) * 1000 + relevantDefence(p, style) : relevantDefence(p, style));
       }
       return known.get(p)!;
     };

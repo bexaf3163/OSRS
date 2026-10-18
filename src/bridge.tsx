@@ -82,6 +82,8 @@ interface BridgeValue {
   gear: GearState | null;
   /** The last known gear, bag and coins — recorded while the game was running; shown when RuneLite is closed. Not "now". */
   lastGear: LastGear | null;
+  /** The last known gear of every character seen, by the character's name (lower case): characters never share a snapshot. */
+  lastGears: Record<string, LastGear>;
   /** The training pace of the step shown in the game. */
   pacing: PacingState | null;
   /** The temporary target in the game (a place or a shop); null — the arrow leads to the step. */
@@ -174,8 +176,30 @@ export function parseLastGear(raw: unknown): LastGear | null {
   return { at: o.at, player: o.player, gear };
 }
 
-function loadLastGear(): LastGear | null {
-  return parseLastGear(loadJson<Record<string, unknown>>(GEAR_KEY, null));
+/** The stored snapshots: the map by character (2.68), or the single one an older version wrote. */
+export function parseLastGears(raw: unknown): Record<string, LastGear> {
+  const out: Record<string, LastGear> = {};
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return out;
+  const by = (raw as { byPlayer?: unknown }).byPlayer;
+  if (by && typeof by === 'object' && !Array.isArray(by)) {
+    for (const v of Object.values(by as Record<string, unknown>).slice(0, 20)) {
+      const g = parseLastGear(v);
+      if (g) out[g.player.toLowerCase()] = g;
+    }
+    return out;
+  }
+  const one = parseLastGear(raw);
+  if (one) out[one.player.toLowerCase()] = one;
+  return out;
+}
+
+function loadLastGears(): Record<string, LastGear> {
+  return parseLastGears(loadJson<Record<string, unknown>>(GEAR_KEY, null));
+}
+
+/** The most recent snapshot of all. */
+export function newestGear(all: Record<string, LastGear>): LastGear | null {
+  return Object.values(all).reduce<LastGear | null>((a, g) => (!a || g.at > a.at ? g : a), null);
 }
 
 /** The choice of branch by steps: we take only "step → string" pairs. */
@@ -250,7 +274,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const [shortestPath, setShortestPath] = useState(false);
   const [branchChoice, setBranchChoice] = useState<Record<string, string>>(loadBranchChoice);
   const [gear, setGear] = useState<GearState | null>(null);
-  const [lastGear, setLastGear] = useState<LastGear | null>(loadLastGear);
+  const [lastGears, setLastGears] = useState<Record<string, LastGear>>(loadLastGears);
+  const lastGear = useMemo(() => newestGear(lastGears), [lastGears]);
   const [pacing, setPacing] = useState<PacingState | null>(null);
   const [xp, setXp] = useState<PlayerStats | null>(null);
   const [questsDone, setQuestsDone] = useState<string[] | null>(null);
@@ -262,8 +287,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     if (!gear || !player) return undefined;
     const t = setTimeout(() => {
       const saved: LastGear = { at: Date.now(), player, gear };
-      saveJson(GEAR_KEY, saved);
-      setLastGear(saved);
+      setLastGears((all) => {
+        const next = { ...all, [player.toLowerCase()]: saved };
+        saveJson(GEAR_KEY, { byPlayer: next });
+        return next;
+      });
     }, 2000);
     return () => clearTimeout(t);
   }, [gear, player]);
@@ -770,11 +798,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     () => ({
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, accountType, combatLog, navigate, clearNav, releaseNav, userClearedAt, plugin,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, lastGears, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, accountType, combatLog, navigate, clearNav, releaseNav, userClearedAt, plugin,
       xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, accountType, combatLog, navigate, clearNav, releaseNav, userClearedAt, plugin,
+      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, lastGears, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, accountType, combatLog, navigate, clearNav, releaseNav, userClearedAt, plugin,
       xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;

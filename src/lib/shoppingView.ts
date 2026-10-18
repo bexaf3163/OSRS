@@ -285,3 +285,13 @@ export function geListText(title: string, rows: readonly ShopRow[], coinsForStep
   if (coinsForSteps > 0) out.push(`Coins ~${formatGp(coinsForSteps)} gp (for the steps themselves)`);
   return out.join('\n');
 }
+
+/**
+ * Coins to keep for the supplies of a scope (food, runes, materials): the required purchases that are not worn gear. Gear advice spends only what
+ * is left, so a marginal upgrade never takes the money for the food.
+ */
+export function supplyReserve(rows: readonly ShopRow[], coinsForSteps = 0): number {
+  return coinsForSteps + rows
+    .filter((r) => !r.optional && (r.channel === 'ge' || r.channel === 'shop') && !wearable.has(nameKey(r.name)))
+    .reduce((a, r) => a + (r.cost ?? 0), 0);
+}

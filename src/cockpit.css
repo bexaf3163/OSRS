@@ -177,3 +177,22 @@
 .shop-page .shop-scope .seg { min-height: 34px; padding: 4px 14px; }
 .shop-page .page-head.shop-head-v2 { flex-direction: row; align-items: center; justify-content: space-between; align-self: stretch; width: 100%; }
 .shop-group-v2 > summary { display: list-item; }
+
+/* Gear 2.68: context, worn, one recommendation, the rest folded */
+.gear-page .gear-context { margin: 0; }
+.gear-now { display: flex; flex-direction: column; gap: 6px; }
+.gear-now .subhead { margin: 0; }
+.gear-worn-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 6px; }
+.gear-worn-item { display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--surface); min-width: 0; }
+.gear-worn-item.is-empty { opacity: 0.7; }
+.gear-worn-list.is-stale .gear-worn-item { border-style: dashed; opacity: 0.85; }
+.gear-worn-text { display: flex; flex-direction: column; min-width: 0; }
+.gear-worn-text > span:last-child { overflow-wrap: anywhere; }
+.gear-worn-item .gear-slot-glyph { width: 28px; height: 28px; flex: none; color: var(--muted); }
+.gear-reco { display: flex; flex-direction: column; gap: 4px; }
+.gear-reco p { margin: 0; }
+.gear-reco-head { font-size: 1.02rem; }
+.gear-reco-actions { margin-top: 6px !important; }
+.gear-connect p { margin: 0; }
+.gear-more > summary { cursor: pointer; width: fit-content; display: list-item; }
+.gear-more[open] > summary { margin-bottom: 6px; }

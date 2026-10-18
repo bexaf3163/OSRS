@@ -17,14 +17,15 @@ export function SectionShell({ page, param, children }: { page: Page; param?: st
   const title = titles[page];
   if (!title) return <>{children}</>;
   const icon = page === 'gear' ? <IconGear /> : page === 'shopping' ? <IconCart /> : page === 'reference' ? <IconBook /> : <IconJournal />;
-  const links = skill
+  const links: ({ label: string; href: string; id: string; glyph?: string } | { label: string; selector: string })[] = skill
     ? [{ label: 'Overall', href: '#/skills', id: '', glyph: 'overall' }, ...levels.filter((l, i) => levels.findIndex(other => other.skill === l.skill) === i && (mode === 'members' || !findSkill(l.skill)?.membersOnly)).map(l => ({ label: l.skill === 'ME' ? 'Melee' : l.name, href: `#/skills/${l.skill}`, id: l.skill, glyph: l.id }))]
     : page === 'journal' || page === 'quests' || page === 'goals'
       ? [{ label: 'Quests', href: '#/journal', id: '' }, { label: 'Stage goals', href: '#/journal/goals', id: 'goals' }, { label: 'Session log', href: '#/journal/session', id: 'session' }]
       : page === 'reference'
         ? [{ label: 'Overview', href: '#/reference', id: '' }, ...reference.sections.map(s => ({ label: s.title, href: `#/reference/${s.id}`, id: s.id }))]
         : page === 'gear'
-          ? [{ label: 'Equipment', selector: '.gear-worn' }, { label: 'Improvements', selector: '#gear-now' }, { label: 'Future unlocks', selector: '#gear-roadmap' }, { label: 'Combat details', selector: '.gear-combat' }]
+          // Gear is one short page since 2.68: context, worn, one recommendation, the rest folded.
+          ? []
           // Shopping is one list with its own scope control: no jump links.
           : [];
   const activeId = page === 'goals' ? 'goals' : page === 'quests' ? '' : param ?? '';

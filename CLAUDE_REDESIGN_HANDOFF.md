@@ -843,3 +843,19 @@ Not done yet (block 2b): the audit ledger of every combat stage, mandatory quest
 - Plugin: unchanged contract (`syncPlan` with exchange + unconfirmed rows; the plugin subtracts what it sees, a manual mark is subtracted here).
 - Smoke `UI_ONLY=shopping`: real shortage with shortfall and link, all owned, bank withdrawal, unknown bank, offline; the old bulk/cleanup/strip scenarios updated.
 - Not done: potion dose conversion; shop access requirements (quests/areas) in `sourceRouter`. Not verified live in the game.
+
+## 2.68.0 — Gear in context (Task 3, block 3b)
+
+- `services/gearAdvisor.ts`: `foeAttack` (style, level, bonus, max hit from combatFoes.json), `relevantDefence(p, style)` (the opponent's style, else the min of the three melee styles; never a sum),
+  `incomingChance` (the wiki hit formula, opponent against the player). Gains carry a `DefenceBasis` (`style`, `hitBefore`/`hitAfter`, `foe`); a two-handed weapon carries `shieldLoss`;
+  a dps gain whose best style changes carries `kept` (the new kit on the style best now). `AdvisorInput.reserve`: purchases come only from `total - reserve`; `GearAdvice.reserve` and `.incoming`.
+- `gainText`: "max hit X instead of Y" only when it changes (on the style named when the best style moved), "same max hit, more accurate (hit chance a% → b%)", "one hit every" only when
+  the interval changes, never "faster"; defence as "<style> defence +N (a → b): <foe> hits you a% → b% of the time".
+- Reserve source: `shoppingView.supplyReserve(rows, coinsForSteps)` over the trip scope (required exchange/shop rows that are not wearable) — the same rows Shopping shows.
+- `bridge.tsx`: last gear per character (`osrs-put:last-gear` = `{byPlayer: {name: {at, player, gear}}}`; the old single record is read as that character's). `parseLastGears`, `newestGear`.
+  Gear page uses the active profile's bound character, else the newest snapshot (named).
+- `pages/Gear.tsx` rewritten: context line, Worn now / Last known / connect card, one `Recommendation` (first wear action, else first action) or "No worthwhile change for this fight" with a
+  reason, folded "Other options", "Combat numbers", "Future unlocks" (`#gear-roadmap`). Unknown levels hide the level line and the roadmap.
+- Tests: `tests/gearContext.test.ts` (17: amulet sweep over levels/styles/opponents, style-change wording, relevant defence, unknown attacker, no worthwhile change, owned before bought,
+  unaffordable goal, reserve, unpriced items, two-handed shield loss, per-character snapshots); smoke `UI_ONLY=gear` (recommendation, no change, offline snapshot, offline nothing known).
+- Not verified live in the game (automated only).

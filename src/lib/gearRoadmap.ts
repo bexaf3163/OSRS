@@ -21,10 +21,12 @@ export interface RoadmapRow {
 
 /** "+7% DPS", "+3 Def", "+7% DPS, +2 Def"; undefined when the gain is too small to name. */
 export function gainLabel(g: Gain): string | undefined {
-  if (g.kind === 'defence') return g.after > g.before ? `+${g.after - g.before} Def` : undefined;
+  // The style the defence is for, when the opponent's is known: never a sum of three styles.
+  const of = (st: string | undefined) => (st && st !== 'melee' ? `${st} ` : '');
+  if (g.kind === 'defence') return g.after > g.before ? `+${g.after - g.before} ${of(g.style)}Def` : undefined;
   const parts: string[] = [];
   if (g.ratio >= 1.01) parts.push(`+${Math.round((g.ratio - 1) * 100)}% DPS`);
-  if (g.defenceAfter !== undefined && g.defenceBefore !== undefined && g.defenceAfter > g.defenceBefore) parts.push(`+${g.defenceAfter - g.defenceBefore} Def`);
+  if (g.defenceAfter !== undefined && g.defenceBefore !== undefined && g.defenceAfter > g.defenceBefore) parts.push(`+${g.defenceAfter - g.defenceBefore} ${of(g.style)}Def`);
   return parts.join(', ') || undefined;
 }
 

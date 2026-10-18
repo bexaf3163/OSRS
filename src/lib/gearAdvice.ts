@@ -46,7 +46,7 @@ export interface GearAdviceView {
   pricesFailed: boolean;
 }
 
-export function useGearAdvice(step?: Step | null): GearAdviceView {
+export function useGearAdvice(step?: Step | null, opts: { reserve?: number } = {}): GearAdviceView {
   const { progress, mode, steps } = useStore();
   const { gear, stats, owned } = useBridge();
   const [prices, setPrices] = useState<ReadonlyMap<number, number>>(new Map());
@@ -72,7 +72,8 @@ export function useGearAdvice(step?: Step | null): GearAdviceView {
     routeNeeds: routeNeeds(steps, (id) => isClosed(progress, id)),
     foes: fightStep ? stepFoes(fightStep) : [],
     questsDone: questsDone(steps, progress),
-  }), [progress, stats, gear, owned, mode, prices, steps, fightStep]);
+    ...(opts.reserve ? { reserve: opts.reserve } : {}),
+  }), [progress, stats, gear, owned, mode, prices, steps, fightStep, opts.reserve]);
   const advice = useMemo(() => adviseGear(input), [input]);
   return { advice, input, fightStep, pricesReady: prices.size > 0, pricesFailed };
 }

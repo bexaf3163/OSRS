@@ -78,11 +78,17 @@ describe('the "🔒 needs …" lock: better, but cannot be worn yet', () => {
     items: new Map(names.map((n) => [n.toLowerCase(), { name: n, carried: 0, noted: 0, bank: 1 }])),
   });
 
-  it('Steel full helm at 1 Defence — the lock "needs 5 Defence": it is noticeably stronger than the Iron full helm, which can be worn right now', () => {
-    const a = adviseGear({ ...base, levels: { defence: 1 } });
+  it('Steel full helm at 1 Defence — the lock "needs 5 Defence" when it is noticeably stronger against the opponent\'s style than the Iron full helm', () => {
+    // A stab attacker (the Temple Guardian): stab defence 9 against 6, +3.
+    const stabber = { name: 'Temple Guardian', combat: 30, hitpoints: 45, defenceLevel: 20, defence: { stab: 0, slash: 0, crush: 0 }, members: true };
+    const a = adviseGear({ ...base, levels: { defence: 1 }, foes: [stabber] });
     expect(a.locked.find((l) => l.slot === 'head')).toMatchObject({ item: { name: 'Steel full helm' }, missing: [{ kind: 'skill', skill: 'defence', need: 5, have: 1 }] });
-    // Coif (defence 18) is not stronger than the Iron full helm (18) — a lock on it would be noise.
-    expect(adviseGear({ ...base, levels: { ranged: 17, defence: 1 } }).locked.some((l) => l.item.name === 'Coif')).toBe(false);
+    // A cow hits with crush: 7 against 5 is +2, not worth a lock. The old sum of stab, slash and crush (+8) said otherwise.
+    expect(adviseGear({ ...base, levels: { defence: 1 } }).locked.some((l) => l.item.name === 'Steel full helm')).toBe(false);
+    // The Coif (needs 20 Ranged) against the Iron full helm, by the opponent's style: crush 8 against 5 is a real gain against a cow,
+    // stab 4 against 6 is a loss against a stabber. The old sum (18 against 18) called both a tie.
+    expect(adviseGear({ ...base, levels: { ranged: 17, defence: 1 } }).locked.some((l) => l.item.name === 'Coif')).toBe(true);
+    expect(adviseGear({ ...base, levels: { ranged: 17, defence: 1 }, foes: [stabber] }).locked.some((l) => l.item.name === 'Coif')).toBe(false);
     expect(adviseGear({ ...base, levels: { defence: 5 } }).locked.some((l) => l.item.name === 'Steel full helm')).toBe(false);
   });
 

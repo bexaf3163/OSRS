@@ -100,7 +100,9 @@ describe('gear advice', () => {
     // On the route it is bought anyway in the big shopping.
     expect(first.routeStep).toBe('S2-01');
     expect(first.current?.name).toBe('Bronze sword');
-    expect(gainText(first)).toMatch(/damage per second \+\d+%/);
+    // Accuracy is not speed: the interval is the same, so the text says "more accurate" and "expected damage", never "faster".
+    expect(gainText(first)).toMatch(/expected damage \+\d+%/);
+    expect(gainText(first)).not.toMatch(/faster/);
     expect(sourceText(first.source)).toBe("from Zeke at Zeke's Superior Scimitars (Al Kharid) — 400 gp + 10 gp toll into Al Kharid");
     expect(hudHint(first)).toBe('⚡ Stronger: Steel scimitar from Zeke (Al Kharid), 400 gp');
     // Coins — the bag and the bank together.
@@ -247,10 +249,15 @@ describe('gear advice', () => {
     expect(mem.goals.concat(mem.actions).some((x) => x.item.name === 'Dragon scimitar')).toBe(true);
   });
 
-  it('armour: at 1 defence — iron, the arrow leads to the seller with an item for the auto-removal', () => {
-    const a = adviseGear(input({ gear: gear({ coins: 5000, bankCoins: 0 }) }));
+  it('armour: at 1 defence — iron, judged against the opponent\'s style; the arrow leads to the seller with an item for the auto-removal', () => {
+    // A slash attacker: the platebody (slash +20) beats the chainbody (+15).
+    const slasher = { name: 'Ghast', combat: 30, hitpoints: 45, defenceLevel: 18, defence: { stab: 0, slash: 0, crush: 0 }, members: true };
+    const a = adviseGear(input({ gear: gear({ coins: 5000, bankCoins: 0 }), foes: [slasher] }));
     const body = a.armour.find((x) => x.slot === 'body')!;
     expect(body.item.name).toBe('Iron platebody');
+    expect(gainText(body)).toMatch(/^slash defence \+20 \(0 → 20\)/);
+    // A cow hits with crush: the chainbody's crush +19 beats the platebody's +12, and the sum of the three styles is never the measure.
+    expect(adviseGear(input({ gear: gear({ coins: 5000, bankCoins: 0 }) })).armour.find((x) => x.slot === 'body')!.item.name).toBe('Iron chainbody');
     const nav = actionNav(body, 'S1-13')!;
     const horvik = matchStrict("Horvik's Armour Shop")!;
     expect(nav).toMatchObject({ label: "Horvik's Armour Shop", x: horvik.x, y: horvik.y, npcNames: ['Horvik'], itemName: 'Iron platebody', itemId: body.item.id, stepId: 'S1-13' });
@@ -391,7 +398,7 @@ describe('amulets: Amulet of strength and Amulet of power do not argue (§69)', 
   const wearing = (...names: string[]) => gear({ equipment: names.map((n) => item(n, byName(n).slot === 'neck' ? 'amulet' : byName(n).slot)), coins: 50_000, bankCoins: 0 });
   const neckAdvice = (a: ReturnType<typeof adviseGear>) => [...a.actions, ...a.goals].filter((x) => x.slot === 'neck').map((x) => x.item.name);
 
-  it('on all combat steps the amulet of strength hits faster than the amulet of power', () => {
+  it('on all combat steps the amulet of strength does more damage than the amulet of power', () => {
     for (const step of allSteps.filter((s) => s.foes?.length)) {
       const foes = stepFoes(step);
       if (!foes.length) continue;

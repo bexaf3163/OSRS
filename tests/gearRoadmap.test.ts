@@ -12,7 +12,7 @@ describe('gain labels', () => {
   it('name the damage and defence gain, and nothing for a negligible one', () => {
     expect(gainLabel(dps(1.07))).toBe('+7% DPS');
     expect(gainLabel(dps(1.07, { defenceBefore: 0, defenceAfter: 2 }))).toBe('+7% DPS, +2 Def');
-    expect(gainLabel({ kind: 'defence', before: 0, after: 18 })).toBe('+18 Def');
+    expect(gainLabel({ kind: 'defence', before: 0, after: 18, style: 'melee' })).toBe('+18 Def');
     expect(gainLabel(dps(1.001))).toBeUndefined();
   });
 });
@@ -25,8 +25,8 @@ describe('the upgrade roadmap', () => {
     const rows = buildRoadmap({
       locked: [
         locked(1, 'Adamant scimitar', 'weapon', attack30, dps(1.07)),
-        locked(2, 'Steel platebody', 'body', def5, { kind: 'defence', before: 0, after: 46 }),
-        locked(3, 'Steel platelegs', 'legs', def5, { kind: 'defence', before: 0, after: 28 }),
+        locked(2, 'Steel platebody', 'body', def5, { kind: 'defence', before: 0, after: 46, style: 'melee' }),
+        locked(3, 'Steel platelegs', 'legs', def5, { kind: 'defence', before: 0, after: 28, style: 'melee' }),
       ],
       unlocks: [],
     });
@@ -39,8 +39,8 @@ describe('the upgrade roadmap', () => {
   it('an item already owned is its own row and goes first; a quest-only lock goes last', () => {
     const rows = buildRoadmap({
       locked: [
-        locked(1, 'Quest hat', 'head', [{ kind: 'quest', quest: 'Some Quest' }] as LockedItem['missing'], { kind: 'defence', before: 0, after: 5 }),
-        locked(2, 'Coif', 'head', [{ kind: 'skill', skill: 'ranged', need: 20, have: 17 }] as LockedItem['missing'], { kind: 'defence', before: 0, after: 18 }, 'bank'),
+        locked(1, 'Quest hat', 'head', [{ kind: 'quest', quest: 'Some Quest' }] as LockedItem['missing'], { kind: 'defence', before: 0, after: 5, style: 'melee' }),
+        locked(2, 'Coif', 'head', [{ kind: 'skill', skill: 'ranged', need: 20, have: 17 }] as LockedItem['missing'], { kind: 'defence', before: 0, after: 18, style: 'melee' }, 'bank'),
         locked(3, 'Adamant scimitar', 'weapon', attack30, dps(1.07)),
       ],
       unlocks: [],

@@ -65,7 +65,7 @@ export function ActionNotes({ a }: { a: GearAction }) {
   return (
     <>
       {a.routeStep && (
-        <> The route buys it at step <a href={`#/step/${a.routeStep}`}>{a.routeStep}</a> — taking it earlier means hitting faster sooner.</>
+        <> The route buys it at step <a href={`#/step/${a.routeStep}`}>{a.routeStep}</a> — taking it earlier gives its benefit sooner.</>
       )}
       {a.twoHanded && <> Two-handed: the shield will have to come off.</>}
     </>

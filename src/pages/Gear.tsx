@@ -1,13 +1,22 @@
-// "⚔️ Gear": a loadout dashboard — what is worn, the combat numbers, and the upgrade roadmap (wear the best from the bag and bank, buy, save up,
-// what opens next). Counted by the OSRS Wiki damage formulas against the opponent of the nearest combat step. The gear data is from RuneLite;
-// without it — by the levels from the profile.
+// Gear: "what change, if any, is worth making for what I am doing now?" In order: the context (the fight ahead and the opponent's attack), what is
+// worn (live, or the last known snapshot of this character with its time), one recommendation or "no worthwhile change", and the rest folded away:
+// other options, the combat numbers and the future unlocks. Counted by the OSRS Wiki damage formulas (services/gearAdvisor.ts); defence is judged
+// against the opponent's attack style, never as a sum of three styles; gear is bought only from what the next trip's supplies leave.
 
+import { useMemo } from 'react';
 import { useBridge, type LastGear } from '../bridge';
 import { useStore } from '../store';
-import { formatGp } from '../lib/shopping';
-import { wealthOf } from '../lib/wealth';
+import { usePlayerState } from '../playerStateContext';
+import { useProfiles } from '../lib/profiles';
+import { formatGp, type ShoppingLine } from '../lib/shopping';
 import { useGearAdvice } from '../lib/gearAdvice';
-import { actionNav, gainText, SLOT_LABEL, SLOTS, statsText, type GearAction } from '../services/gearAdvisor';
+import { nextStep } from '../lib/next-step';
+import { scopeList, scopeSteps, shopRows, supplyReserve } from '../lib/shoppingView';
+import { usePriceView } from '../lib/funding/usePriceView';
+import { itemById } from '../data';
+import {
+  actionNav, equippedBySlot, gainText, gearData, SLOT_LABEL, SLOTS, statsText, type Equipped, type GearAction, type GearAdvice,
+} from '../services/gearAdvisor';
 import { buildRoadmap, prayerChips, type RoadmapRow } from '../lib/gearRoadmap';
 import type { GearSlot, Step } from '../types';
 import { ItemIcon } from '../components/WikiDrawer';
@@ -101,156 +110,183 @@ function RoadmapRowView({ row, steps }: { row: RoadmapRow; steps: Step[] }) {
   );
 }
 
+/** The worn items, one row per slot: live, or a snapshot that says it is one. */
+function WornList({ equipped, stale }: { equipped: Partial<Record<GearSlot, Equipped>>; stale: boolean }) {
+  return (
+    <ul className={`gear-worn-list${stale ? ' is-stale' : ''}`}>
+      {SLOTS.map((slot) => {
+        const e = equipped[slot];
+        return (
+          <li key={slot} className={`gear-worn-item ${e ? 'is-filled' : 'is-empty'}`}>
+            {e?.piece ? <ItemIcon src={e.piece.iconUrl} alt="" size={28} /> : <SlotGlyph slot={slot} />}
+            <span className="gear-worn-text"><span className="muted small">{SLOT_LABEL[slot]}</span><span>{e ? e.name : '—'}</span></span>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+/** The one thing to do, or the reason there is nothing worth doing. */
+function Recommendation({ advice, stepId, onShow, priceUnknown, pricesFailed }: {
+  advice: GearAdvice; stepId?: string; onShow: ReturnType<typeof usePlaceMap>['show']; priceUnknown: boolean; pricesFailed: boolean;
+}) {
+  const top = advice.actions.find((a) => a.how === 'wear') ?? advice.actions[0];
+  if (top) {
+    const nav = actionNav(top, stepId);
+    const cur = top.current?.name ?? top.currentName;
+    return (
+      <section className="card gear-reco" aria-label="Recommendation">
+        <p className="gear-reco-head"><ActionTitle a={top} /></p>
+        <p className="small gear-reco-swap">
+          <span className="muted">{SLOT_LABEL[top.slot]}:</span> {cur ?? 'nothing'} → <strong>{top.item.name}</strong>
+        </p>
+        <p className="small">{capital(gainText(top))}.<ActionNotes a={top} /><OwnershipNote a={top} /></p>
+        {top.how === 'buy' && (
+          <p className="small upgrade-where">
+            <ActionSource a={top} onShow={onShow} />
+            {advice.coins.total !== null && top.cost !== null && <span className="muted"> · leaves {formatGp(Math.max(0, advice.coins.total - advice.reserve - top.cost))} gp after the supplies</span>}
+          </p>
+        )}
+        {nav && <p className="gear-reco-actions"><NavigateButton target={nav} /></p>}
+      </section>
+    );
+  }
+  const next = advice.goals[0];
+  const lock = advice.locked[0];
+  const why = priceUnknown
+    ? (pricesFailed ? 'The exchange prices did not load, so purchases cannot be judged against your money.' : 'The exchange prices are still loading.')
+    : next
+      ? (advice.reserve > 0 && advice.coins.total !== null && advice.coins.total < advice.reserve
+        // Less than the supplies need: nothing is kept, the supplies come first.
+        ? `The next real step up is ${next.item.name}${next.cost !== null ? ` (${formatGp(next.cost)} gp)` : ''}, after the ${formatGp(advice.reserve)} gp the next supplies need.`
+        : `The next real step up is ${next.item.name}${next.short !== undefined ? `: ${formatGp(next.short)} gp short` : ''}${advice.reserve > 0 ? ` after keeping ${formatGp(advice.reserve)} gp for the next supplies` : ''}.`)
+      : lock
+        ? `The next step up is ${lock.item.name}, once you reach its requirements.`
+        : 'What you wear is the best you can wear and afford at these levels.';
+  return (
+    <section className="card gear-reco is-none" aria-label="Recommendation" role="status">
+      <p className="gear-reco-head"><strong>No worthwhile change for this fight</strong></p>
+      <p className="small muted">{why}</p>
+    </section>
+  );
+}
+
 export function GearPage() {
-  const { state, stats, gear, lastGear } = useBridge();
-  const { mode, steps } = useStore();
-  const { advice, fightStep, pricesReady, pricesFailed } = useGearAdvice();
+  const { state, stats, lastGears, lastGear } = useBridge();
+  const { mode, steps, progress, qp } = useStore();
+  const { state: player } = usePlayerState();
+  const profiles = useProfiles();
+  const prices = usePriceView(true);
+
+  // Coins kept for the next trip's supplies: the same list as Shopping.
+  const reserve = useMemo(() => {
+    const current = nextStep(steps, progress, qp)?.id ?? null;
+    const { list, trip } = scopeList(scopeSteps('trip', steps, progress, current, { from: 1, to: 1, openOnly: true }));
+    const rows = shopRows(list, {
+      state: player, trip, detail: (id) => itemById.get(id),
+      onGe: (l: ShoppingLine) => l.id !== undefined, gePrice: (l) => prices.buy(l.nameEn, l.id)?.price ?? null,
+    });
+    return supplyReserve(rows, list.coins);
+  }, [steps, progress, qp, player, prices]);
+
+  const { advice, fightStep, pricesReady, pricesFailed } = useGearAdvice(null, { reserve });
   const priceUnknown = !pricesReady && advice.goals.length > 0;
   const places = usePlaceMap();
   const lv = advice.levels;
-  const fromGame = Boolean(stats?.attack);
-  const coins = advice.coins;
-  const wealth = wealthOf(gear);
   const foe = advice.foes[0];
   const now = advice.weaponNow;
   const roadmap = buildRoadmap(advice);
   const prayers = prayerChips(advice.prayers);
-  const link = advice.live ? null : state === 'off' ? 'RuneLite link off — levels from the profile' : state === 'online' ? 'Waiting for character data — levels from the profile' : 'RuneLite not connected — levels from the profile';
+
+  // Offline: this character's snapshot only (the profile's bound name), else the newest one, named.
+  const bound = profiles.list.find((p) => p.id === profiles.active)?.player;
+  const snapshot: LastGear | null = advice.live ? null : bound ? lastGears[bound.toLowerCase()] ?? null : lastGear;
+  const staleWorn = snapshot ? equippedBySlot(snapshot.gear, gearData) : null;
+  const incoming = advice.incoming;
+  const context = fightStep && foe
+    ? <>For <a href={`#/step/${fightStep.id}`}>{fightStep.id}</a>: {foe.name}{incoming ? <>, attacks with {incoming.style}{incoming.maxHit ? `, hits up to ${incoming.maxHit}` : ''}</> : null}.</>
+    : <>No fight ahead on the route: compared against a cow.</>;
+  const coins = advice.coins;
+  // Levels from the game or entered on the Skills page; without either the advisor works from level 1, which is not shown as the player's.
+  const levelsKnown = Boolean(stats?.attack || progress.levels.attack);
 
   return (
     <div className="page gear-page">
       <header className="page-head">
         <h1>Gear</h1>
-        <p className="muted">What you wear now, what to change, and what opens next.</p>
+        <p className="muted small gear-context">
+          {context}{' '}
+          {levelsKnown
+            ? <>Attack {lv.attack} · Strength {lv.strength} · Defence {lv.defence}{!stats?.attack && <> (<a href="#/skills">from your profile</a>)</>}</>
+            : <a href="#/skills">Your levels are not known yet</a>}
+          {coins.total !== null && <> · {formatGp(coins.total)} gp{coins.bank === null ? ' (bank not checked)' : ''}{advice.reserve > 0 ? (coins.total < advice.reserve ? `, the next supplies need ${formatGp(advice.reserve)}` : `, ${formatGp(advice.reserve)} kept for the next supplies`) : ''}</>}
+        </p>
       </header>
 
-      <h2 className="gear-group-title">Current equipment</h2>
-
-      <div className="gear-top">
-        <section className="card section-card gear-worn" aria-labelledby="gear-slots">
-          <h2 id="gear-slots" className="card-title">Worn</h2>
-          {!advice.live && <p className="muted small">Not checked: nothing here is read from the game right now.</p>}
-          <ul className="gear-paper">
-            {SLOTS.map((slot) => {
-              const e = advice.live ? advice.equipped[slot] : undefined;
-              const tier = e?.piece?.metal ? capital(e.piece.metal) : null;
-              return (
-                <li key={slot} className={`gear-slot ${e ? 'is-filled' : 'is-empty'}`}>
-                  <span className="gear-slot-label">{SLOT_LABEL[slot]}</span>
-                  {e ? (
-                    <span className="gear-slot-item">
-                      {e.piece ? <ItemIcon src={e.piece.iconUrl} alt="" size={48} /> : <SlotGlyph slot={slot} />}
-                      <span className="gear-slot-name">{e.name}</span>
-                      {tier && <span className="badge badge-tier">{tier}</span>}
-                      {!e.piece && <span className="muted small">not in the database</span>}
-                    </span>
-                  ) : <span className="gear-slot-item muted"><SlotGlyph slot={slot} />{advice.live ? 'Empty' : 'Not checked'}</span>}
-                </li>
-              );
-            })}
-          </ul>
+      {advice.live ? (
+        <section className="gear-now" aria-label="Worn now">
+          <h2 className="subhead">Worn now</h2>
+          <WornList equipped={advice.equipped} stale={false} />
         </section>
+      ) : snapshot && staleWorn ? (
+        <section className="gear-now" aria-label="Last known">
+          <h2 className="subhead">Last known <span className="muted">· {snapshot.player}, {new Date(snapshot.at).toLocaleString('en-US')}</span></h2>
+          <WornList equipped={staleWorn} stale />
+          <p className="small muted">Not live: {state === 'online' ? 'log in to the game' : 'connect RuneLite'} to compare what you wear now.</p>
+        </section>
+      ) : (
+        <div className="card gear-connect" role="status">
+          <p><strong>{state === 'online' ? 'Waiting for your character' : 'RuneLite is not connected'}</strong></p>
+          <p className="small muted">The app reads what you wear from the game, then says whether a change is worth making.</p>
+        </div>
+      )}
 
-        <details className="card section-card gear-combat" aria-labelledby="gear-metrics">
-          <summary id="gear-metrics" className="card-title">Combat details</summary>
-          {advice.live ? (
+      {advice.live && <Recommendation advice={advice} stepId={fightStep?.id} onShow={places.show} priceUnknown={priceUnknown} pricesFailed={pricesFailed} />}
+
+      {advice.live && (advice.actions.length > 1 || advice.armour.length > 0 || advice.goals.length > 0) && (
+        <details className="gear-more">
+          <summary className="subhead">Other options <span className="muted">· {Math.max(0, advice.actions.length - 1) + advice.armour.length + advice.goals.length}</span></summary>
+          {advice.actions.length > 1 && <ul className="gear-list">{advice.actions.filter((a) => a !== (advice.actions.find((x) => x.how === 'wear') ?? advice.actions[0])).map((a) => <ActionRow key={`${a.slot}-${a.item.id}`} a={a} stepId={fightStep?.id} live onShow={places.show} />)}</ul>}
+          {advice.armour.length > 0 && (
             <>
-              <div className="gear-metrics">
-                <Metric label="Max Hit" value={String(now.maxHit)} />
-                <Metric label="DPS" value={now.dps.toFixed(2)} />
-                <Metric label="Speed" value={`${now.speed.toFixed(1)}s`} />
-                <Metric label="Target TTK" value={now.dps > 0 && foe ? `~${Math.round(foe.hitpoints / now.dps)}s` : '—'} hint={foe ? `vs ${foe.name}` : undefined} />
-              </div>
-              <p className="gear-chips">
-                {foe && fightStep && <a className="chip" href={`#/step/${fightStep.id}`}>{fightStep.id} · {foe.name}, {foe.hitpoints} HP</a>}
-                <span className="chip">{Math.round(now.hitChance * 100)}% hit chance</span>
-                {advice.weaponUnknown && <span className="chip is-warn" title="Its bonuses are not in the app database: counted without it">in hand: {advice.weaponUnknown}</span>}
-              </p>
+              <p className="small muted">Armour within means: it saves food, it does not speed up the fight.</p>
+              <ul className="gear-list">{advice.armour.map((a) => <ActionRow key={`${a.slot}-${a.item.id}`} a={a} stepId={fightStep?.id} live onShow={places.show} />)}</ul>
             </>
-          ) : (
-            <div className="gear-metrics is-empty">
-              <Metric label="Max Hit" value="—" />
-              <Metric label="DPS" value="—" />
-              <Metric label="Speed" value="—" />
-              <Metric label="Target TTK" value="—" />
-            </div>
+          )}
+          {advice.goals.length > 0 && (
+            <>
+              <p className="small muted">{priceUnknown ? 'The price is not known yet:' : 'Better than what your money allows now:'}</p>
+              <ul className="gear-list">{advice.goals.map((a) => <ActionRow key={`${a.slot}-${a.item.id}`} a={a} stepId={fightStep?.id} live onShow={places.show} />)}</ul>
+            </>
           )}
         </details>
-      </div>
-
-      <p className="gear-chips gear-status" aria-label="Levels and coins">
-        <span className="chip">Atk {lv.attack}</span><span className="chip">Str {lv.strength}</span><span className="chip">Def {lv.defence}</span>
-        {lv.ranged ? <span className="chip">Rng {lv.ranged}</span> : null}
-        {lv.magic ? <span className="chip">Mag {lv.magic}</span> : null}
-        {lv.prayer ? <span className="chip">Pray {lv.prayer}</span> : null}
-        {!fromGame && <a className="chip" href="#/skills" title="Levels are entered on the Skills page">levels: profile</a>}
-        {coins.total !== null && <span className="chip">{formatGp(coins.total)} gp{coins.bank === null ? ' · bank unknown' : ''}</span>}
-        {wealth?.items.total != null && wealth.items.total > 0 && <span className="chip" title="Items at exchange prices (an estimate, not money)">items ~{formatGp(wealth.items.total)} gp</span>}
-        {link && <span className="chip is-warn">{link}</span>}
-        {pricesFailed ? <span className="chip is-warn">exchange prices unavailable</span> : !pricesReady ? <span className="chip">loading prices…</span> : null}
-        {mode === 'members' && <span className="chip" title="The database holds only free-world weapons and armor so far">free-world items only</span>}
-      </p>
-
-      {!advice.live && lastGear && <LastKnown last={lastGear} />}
-
-      <h2 className="gear-group-title">Recommended improvements</h2>
-      <section className="card section-card" aria-labelledby="gear-now">
-        <h2 id="gear-now" className="card-title">Do now — hit faster</h2>
-        {advice.actions.length ? (
-          <ul className="gear-list">{advice.actions.map((a) => <ActionRow key={`${a.slot}-${a.item.id}`} a={a} stepId={fightStep?.id} live={advice.live} onShow={places.show} />)}</ul>
-        ) : (
-          <p className="small">{!advice.live ? 'Needs RuneLite data — see the best by level below.'
-            // Without exchange prices an exchange upgrade has no price: "the best your money buys" is not known then.
-            : priceUnknown ? (pricesFailed ? 'The exchange prices did not load, so it is not known whether the upgrades below fit your money.' : 'The exchange prices are still loading: whether the upgrades below fit your money is not known yet.')
-            : '✓ The weapon and amulet are the best possible at your levels and money.'}</p>
-        )}
-      </section>
-
-      {advice.goals.length > 0 && (
-        <section className="card section-card" aria-labelledby="gear-goals">
-          <h2 id="gear-goals" className="card-title">{!advice.live ? 'The best by level' : priceUnknown ? 'Upgrades — the price is not known yet' : 'Save up — better than what you can afford now'}</h2>
-          <ul className="gear-list">{advice.goals.map((a) => <ActionRow key={`${a.slot}-${a.item.id}`} a={a} stepId={fightStep?.id} live={advice.live} onShow={places.show} />)}</ul>
-        </section>
       )}
 
-      {advice.armour.length > 0 && (
-        <section className="card section-card" aria-labelledby="gear-armour">
-          <h2 id="gear-armour" className="card-title">Armor within means — optional</h2>
-          <ul className="gear-list">{advice.armour.map((a) => <ActionRow key={`${a.slot}-${a.item.id}`} a={a} stepId={fightStep?.id} live={advice.live} onShow={places.show} />)}</ul>
-        </section>
+      {advice.live && (
+        <details className="gear-more gear-combat">
+          <summary className="subhead">Combat numbers</summary>
+          <div className="gear-metrics">
+            <Metric label="Max hit" value={String(now.maxHit)} />
+            <Metric label="Hit chance" value={`${Math.round(now.hitChance * 100)}%`} hint={foe ? `vs ${foe.name}` : undefined} />
+            <Metric label="Damage per second" value={now.dps.toFixed(2)} />
+            <Metric label="Attack interval" value={`${now.speed.toFixed(1)} s`} />
+          </div>
+          {advice.weaponUnknown && <p className="small muted">The weapon in hand ({advice.weaponUnknown}) is not in the app's data: counted without it.</p>}
+          {mode === 'members' && <p className="small muted">The item data holds free-world weapons and armour so far.</p>}
+        </details>
       )}
 
-      <h2 className="gear-group-title">Future unlocks</h2>
-      <section className="card section-card" aria-labelledby="gear-roadmap">
-        <h2 id="gear-roadmap" className="card-title">Upgrade roadmap</h2>
-        <p className="muted small">Better gear becomes available as levels and quests are reached. Each row names what it needs.</p>
-        {roadmap.length > 0 && <ul className="gear-roadmap">{roadmap.map((r) => <RoadmapRowView key={r.key} row={r} steps={steps} />)}</ul>}
+      {levelsKnown && <details className="gear-more" id="gear-roadmap">
+        <summary className="subhead">Future unlocks <span className="muted">· {roadmap.length}</span></summary>
+        {roadmap.length > 0 ? <ul className="gear-roadmap">{roadmap.map((r) => <RoadmapRowView key={r.key} row={r} steps={steps} />)}</ul> : <p className="small muted">Nothing better within reach of your levels.</p>}
         <p className="gear-chips gear-prayers" aria-label="Prayers">
           {prayers.map((p) => (
             <span key={p.name} className={`chip ${p.ready ? 'is-ready' : ''}`} title={p.title}>🙏 {p.name}{p.ready ? '' : ' · 4 Prayer'}</span>
           ))}
         </p>
-      </section>
+      </details>}
       <PlaceMapView view={places.view} onClose={places.close} />
     </div>
-  );
-}
-
-/** What the character had when the game was closed: not "now" but a record — so with a date and a name. */
-function LastKnown({ last }: { last: LastGear }) {
-  const g = last.gear;
-  const worn = (g.equipment ?? []).map((i) => i.name);
-  const bag = (g.inventory ?? []).map((i) => (i.count && i.count > 1 ? `${i.name} ×${i.count}` : i.name));
-  return (
-    <section className="card section-card" aria-labelledby="gear-last">
-      <h2 id="gear-last" className="card-title">Last known — {last.player}, {new Date(last.at).toLocaleString('en-US')}</h2>
-      {worn.length > 0 && <p className="small"><strong>Worn:</strong> {worn.join(', ')}</p>}
-      {bag.length > 0 && <p className="small"><strong>In the bag:</strong> {bag.join(', ')}</p>}
-      {g.coins !== null && (
-        <p className="small">
-          <strong>Coins:</strong> {formatGp(g.coins)} gp{g.bankCoins != null ? `, in the bank ${formatGp(g.bankCoins)}` : ''}
-        </p>
-      )}
-    </section>
   );
 }
