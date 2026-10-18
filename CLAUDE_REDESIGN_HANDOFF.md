@@ -779,3 +779,27 @@ Not done yet: the plugin line (`funding` part of the `/prep-plan` envelope, HUD/
 - Agreement is tested from the app's own output: `tests/prepEnvelope.test.ts` writes a funding row into `prep-snapshots.json`, `FundingHintTest` parses it and checks the line; the UI smoke
   checks that the snapshot's `action` equals the app's status line and that Cancel removes the part.
 - Not verified live in the game (automated only). To check live: start a plan at a step that is short of coins, look at the HUD under the arrow while walking and while killing cows.
+
+## 2.65.0 — combat route: plan comparison (Task 2, block 2a)
+
+Where things are (`src/lib/combatRoute/`, UI in `components/CombatRoute.tsx`, shown inside `FoodAdvice` above the food plan and as one line in `StepStatus`):
+
+- `spots.ts` the opponents plans may lead to (`TRAINERS` = Cow, Minotaur level 12 only, Hill Giant) and where, taken from route steps that already send the player there (`spotsOf`), never invented.
+- `plans.ts` `evaluatePlans`: plans `route` (the existing `combatPlanView` answer, not a second model), `split` (trainer for the XP goal, then the item-drop phase), `defence-first:10|20|30` (Defence on cows, then the route with the Defence it gave). Two-stage rank: eligibility (foe max hit x2 below HP), then
+  `minutes.high` x a basis penalty (formula / calibrated / basic), 5% tie band decided by net (drop income minus food). A non-route plan is recommended only at a 10% gain; an adopted plan is kept within 1.25x of the best.
+- `pick.ts` `withCombatPlan` rewrites the step (foes, map location, NPC names, goal "Plan: ...", pace line, a "Your plan" field) and leaves id, title, `completionTrigger` and `itemsRequired` alone. The phase is derived each time from XP and held items, never saved.
+- `adopt.ts` the choice only, per profile and character (`osrs-put:combat-plans:<profile>:<char>`, `{stepId: {key, at}}`). `context.ts` builds the estimate context from live data. Overlay order in `store.tsx`: combat plan, then training method, then food plan, so food and shopping count the opponent in hand.
+- `bridge.tsx` re-sends the active step to the game when the plan or its phase changes. `Settings` has "Keep Defence at 1" (`features.keepDefenceOne`, off by default).
+
+Invariants (do not break):
+
+1. A plan never completes, reorders or renames a step. The route's completion trigger is what closes it.
+2. Reserved items (the Big bones the step asks for) are never income. A kill requirement is never replaced by buying the drop.
+3. Cowhide is income only when the trade restriction is LIFTED; RESTRICTED and UNKNOWN count nothing. Unread bank = unknown (whole count planned, risk stated).
+4. An explicit Defence 1 build blocks Defence plans (listed as not offered, never recommended). With no preference they are compared like any other.
+5. Adoption is explicit (a button); a recommendation alone changes nothing. A plan whose conditions are gone (bones already in hand) is dropped silently and the route's own plan stands.
+6. Nothing is computed in Java: the game gets the same step payload (`toInGameTarget`) as always.
+
+Tests: `tests/combatRoute/plans.test.ts` (21), `pick.test.ts` (15), UI smoke `UI_ONLY=combat` (card, folded comparison, adopt, game payload follows, back to the route). Screenshots at 1440 and 390 looked at; not checked live in the game (automated only).
+
+Not done yet (block 2b): the audit ledger of every combat stage, mandatory quest-fight preparation (Ancient Guardian, Brutus, Count Draynor, Ithoi, Melzar, Elvarg, Black Knights, ...), observed-performance notes, potions with/without.

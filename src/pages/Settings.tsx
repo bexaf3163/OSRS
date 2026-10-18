@@ -384,6 +384,15 @@ function PlayStyleSection() {
           It buys and does nothing for you.
         </p>
       </div>
+      <div className="setting">
+        <label className="switch">
+          <input type="checkbox" checked={features.keepDefenceOne} onChange={(e) => setFeatures({ keepDefenceOne: e.target.checked })} />
+          <span>⚔️ Keep Defence at 1</span>
+        </label>
+        <p className="muted small">
+          Combat plans then never offer Defence training. Off by default: with no preference, training Defence first is compared with the rest, by time and food, like any other plan.
+        </p>
+      </div>
     </section>
   );
 }

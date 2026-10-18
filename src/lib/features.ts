@@ -23,10 +23,12 @@ export interface Features {
   inspector: boolean;
   /** The compact Path view: the current action, its place and the essentials in a narrow window beside the game. Same state, fewer panels. */
   compact: boolean;
+  /** The build keeps Defence at 1: combat plans never offer Defence training (lib/combatRoute/plans.ts). Off by default: with no preference Defence is a candidate. */
+  keepDefenceOne: boolean;
 }
 
 export const FEATURES_KEY = 'osrs-put:features';
-export const DEFAULT_FEATURES: Features = { autoLocation: true, bankTags: true, pacing: true, upgradeRouter: true, levelsFromGame: true, autoPrep: true, efficient: false, inspector: false, compact: false };
+export const DEFAULT_FEATURES: Features = { autoLocation: true, bankTags: true, pacing: true, upgradeRouter: true, levelsFromGame: true, autoPrep: true, efficient: false, inspector: false, compact: false, keepDefenceOne: false };
 
 /** What is saved; the unfamiliar and the broken fall back to the default (a new feature is on). */
 export function parseFeatures(raw: string | null): Features {

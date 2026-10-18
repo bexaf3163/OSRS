@@ -10,10 +10,15 @@ import { useFeatures } from './lib/features';
 import { styleOf } from './lib/playStyle';
 import { pickMethods } from './lib/methodPick';
 import { foodPicks } from './lib/foodPlan';
+import { adoptStorageKey, useAdopted } from './lib/combatRoute/adopt';
+import { estimateContext } from './lib/combatRoute/context';
+import { evaluatePlans } from './lib/combatRoute/plans';
+import { resolvePick, withCombatPlan, type CombatPick } from './lib/combatRoute/pick';
+import { isClosed } from './lib/next-step';
 import { useProfiles } from './lib/profiles';
 import { ledgerKey, LEDGER_LIMIT, loadLedger, saveLedger, since } from './lib/ledgerStore';
 import { nameKey } from './lib/checklist';
-import { buildPlayerState, diffPlayerState, type PlayerState, type StateChange } from './lib/playerState';
+import { buildPlayerState, diffPlayerState, heldOf, type PlayerState, type StateChange } from './lib/playerState';
 import { entriesFor, summarize, type LedgerEntry, type LedgerSummary } from './lib/ledger';
 import { buildPriceBook, reprice, type PriceBook } from './lib/priceBook';
 import { getAllPrices, getMapping, PRICE_TTL_MS } from './services/pricesApi';
@@ -71,7 +76,7 @@ function ls(): Storage | undefined {
 }
 
 export function PlayerStateProvider({ children }: { children: ReactNode }) {
-  const { progress, mode, setMethodPicks, setFoodPicks } = useStore();
+  const { progress, mode, setMethodPicks, setFoodPicks, setCombatPicks } = useStore();
   const features = useFeatures();
   const { stats, owned, gear, questsDone, player, state: link, xp, combatLog } = useBridge();
   const profiles = useProfiles();
@@ -130,12 +135,36 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
   const picks = useMemo(() => pickMethods(stepsFor(mode), state, mode, style), [state, mode, style]);
   useEffect(() => { setMethodPicks(picks); }, [picks, setMethodPicks]);
 
+  // The combat plans the player adopted, in the phase each is in now: the step is then fought where and against what the plan says, for every screen and
+  // for the game. A plan whose conditions are gone (the item is in hand already) is dropped and the route's own plan stands.
+  const adopted = useAdopted(adoptStorageKey(profiles.active, player));
+  const keepDefenceOne = features.keepDefenceOne;
+  const combat = useMemo(() => {
+    const out: Record<string, CombatPick> = {};
+    const base = stepsFor(mode);
+    for (const s of base) {
+      const a = adopted[s.id];
+      if (!a || isClosed(progress, s.id)) continue;
+      const live = { stats: stats as Partial<Record<string, number>> | null, xp: xp as Partial<Record<string, number>> | null, gear, combatLog };
+      const report = evaluatePlans({ step: s, steps: base, ctx: estimateContext(s, live, base, progress), owned, keepDefenceOne, adopted: a.key });
+      const pick = resolvePick(report, a.key, {
+        xp: xp as Partial<Record<'attack' | 'strength' | 'defence', number>> | null,
+        held: (name) => { const h = heldOf(state, name); return h.total; },
+      });
+      if (pick) out[s.id] = pick;
+    }
+    return out;
+    // state carries what the player holds; the rest is what the estimate reads.
+  }, [adopted, mode, progress, stats, xp, gear, combatLog, owned, keepDefenceOne, state]);
+  useEffect(() => { setCombatPicks(combat); }, [combat, setCombatPicks]);
+
   // The food of the combat training steps from this player's estimate: readiness asks for one trip, the shopping list buys the whole goal.
+  // It is counted for the step as the adopted plan has it (the cows' food, not the giants').
   const food = useMemo(() => {
-    return foodPicks(stepsFor(mode), progress, {
+    return foodPicks(stepsFor(mode).map((s) => withCombatPlan(s, combat[s.id])), progress, {
       stats: stats as Partial<Record<string, number>> | null, xp: xp as Partial<Record<string, number>> | null, gear, owned, combatLog,
     });
-  }, [mode, progress, stats, xp, gear, owned, combatLog]);
+  }, [mode, progress, stats, xp, gear, owned, combatLog, combat]);
   useEffect(() => { setFoodPicks(food); }, [food, setFoodPicks]);
 
   const priced = useMemo(() => reprice(ledger, prices), [ledger, prices]);

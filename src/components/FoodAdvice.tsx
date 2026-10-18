@@ -7,13 +7,14 @@ import { foodInBag, foodsCovering, threatKeys, THREATS_DATE, viewThreat } from '
 import { estimateStepFights, fightLine, OTHER_METHOD } from '../lib/fightEstimate';
 import { COMBAT_FOES_DATE, foeLabel } from '../lib/combatEstimate';
 import { CombatPlan, useCombatPlan } from './CombatPlan';
+import { CombatRoute } from './CombatRoute';
 
 export function FoodAdvice({ step }: { step: Step }) {
   const { progress } = useStore();
   const { stats, gear } = useBridge();
   // A combat training step with the game linked: the food is planned for this player (trip, whole goal, what to buy) instead.
   const plan = useCombatPlan(step);
-  if (plan) return <CombatPlan v={plan} />;
+  if (plan) return <><CombatRoute step={step} /><CombatPlan v={plan} /></>;
   const keys = threatKeys(step);
   if (!keys.length) return null;
   const hp = stats?.hitpoints ?? progress.levels.hitpoints;

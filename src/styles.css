@@ -1975,3 +1975,17 @@ p.trade-note { margin: 6px 0; }
 .funding-facts li.has-action { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; justify-content: space-between; }
 .funding-done { margin: 8px 0; }
 .status-funding { margin: 6px 0 0; }
+/* Another way to do a combat step: one line, one button; the comparison is folded. */
+.combat-route { margin: 8px 0; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface-3); box-shadow: inset 3px 0 0 var(--gold); }
+.combat-route.is-using { box-shadow: inset 3px 0 0 var(--accent); }
+.plan-head { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: baseline; margin: 0; }
+.plan-pill { flex: none; padding: 0 8px; border-radius: 999px; border: 1px solid var(--border-strong); background: var(--accent-soft); color: var(--accent-ink); font-size: 0.75rem; font-weight: 600; }
+.plan-pill.is-offer { background: var(--warn-soft); color: var(--warn); }
+.plan-line { min-width: 0; overflow-wrap: anywhere; font-weight: 600; }
+.combat-route > p.small { margin: 4px 0 0; }
+.plan-actions { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 0; }
+.combat-route-details { margin-top: 8px; }
+.combat-plan-rows { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.combat-plan-row > p { margin: 0; overflow-wrap: anywhere; }
+.combat-plan-row.is-now { border-left: 2px solid var(--accent); padding-left: 6px; }
+.status-combat-route { margin: 6px 0 0; }

@@ -627,6 +627,21 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     void sendStep(shown, chosenBranch(shown, latest.current.branchChoice));
   }, [shown, followKey, sendStep]);
 
+  // An adopted combat plan moves the step to another opponent and place (and back): the game gets the new target and pace line without a press. The key is
+  // the plan and its phase, not the food: those figures follow the player's XP and would resend the step every few kills.
+  const planKeyNow = shown ? JSON.stringify([shown.combatPlan ?? null, shown.foes?.[0] ?? null, shown.mapLocation && [shown.mapLocation.x, shown.mapLocation.y]]) : null;
+  const sentPlan = useRef<string | null>(null);
+  useEffect(() => {
+    if (!shown || planKeyNow === null) { sentPlan.current = null; return; }
+    const before = sentPlan.current;
+    const key = `${shown.id}:${planKeyNow}`;
+    sentPlan.current = key;
+    // The first sight of a step is not a change: whoever activated it sent it.
+    if (before === null || before === key || !before.startsWith(`${shown.id}:`)) return;
+    if (isClosed(latest.current.progress, shown.id)) return;
+    void sendStep(shown, chosenBranch(shown, latest.current.branchChoice));
+  }, [shown, planKeyNow, sendStep]);
+
   const pointInGame = useCallback(async (step: Step): Promise<PointResult> => {
     const branch = chosenBranch(step, latest.current.branchChoice);
     if (!toInGameTarget(step, branch)) return 'empty';

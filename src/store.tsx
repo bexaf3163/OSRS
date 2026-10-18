@@ -13,6 +13,7 @@ import { desktop } from './lib/desktop';
 import { samePicks } from './lib/methodPick';
 import { withTrainingMethod } from './lib/methodStep';
 import { sameFoodPicks, withFoodPlan, type FoodPick } from './lib/foodPlan';
+import { samePicks as sameCombatPicks, withCombatPlan, type CombatPick } from './lib/combatRoute/pick';
 
 export interface Toast {
   id: number;
@@ -43,6 +44,8 @@ interface StoreValue {
   setMethodPicks: (picks: Record<string, string>) => void;
   /** The food of combat training steps from this player's estimate (lib/foodPlan.ts): one trip for readiness, the whole goal for shopping. */
   setFoodPicks: (picks: Record<string, FoodPick>) => void;
+  /** The combat plans the player adopted, in the phase they are in now (lib/combatRoute/pick.ts): the step is fought where and against what the plan says. */
+  setCombatPicks: (picks: Record<string, CombatPick>) => void;
   review: (ids: string[]) => void;
   reactivate: (ids: string[]) => void;
   /** "✕ Skip" the upgrade hint on a step (dismissed=false — bring it back). */
@@ -212,20 +215,26 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const setMethodPicks = useCallback((p: Record<string, string>) => setPicks((prev) => (samePicks(prev, p) ? prev : p)), []);
   const [foodPicks, setFood] = useState<Record<string, FoodPick>>({});
   const setFoodPicks = useCallback((p: Record<string, FoodPick>) => setFood((prev) => (sameFoodPicks(prev, p) ? prev : p)), []);
+  const [combatPicks, setCombat] = useState<Record<string, CombatPick>>({});
+  const setCombatPicks = useCallback((p: Record<string, CombatPick>) => setCombat((prev) => (sameCombatPicks(prev, p) ? prev : p)), []);
   const baseSteps = useMemo(() => stepsFor(mode), [mode]);
   // A step that follows a training method asks for that method's tools and place; a combat training step with an estimate asks for one trip of
   // food and the shopping list buys its whole goal; every other step is the same object as in the data.
-  const steps = useMemo(() => baseSteps.map((s) => withFoodPlan(withTrainingMethod(s, methodPicks[s.id]), foodPicks[s.id])), [baseSteps, methodPicks, foodPicks]);
+  // An adopted combat plan first (it decides the opponent and the place), then the method and the food that follow from it.
+  const steps = useMemo(
+    () => baseSteps.map((s) => withFoodPlan(withTrainingMethod(withCombatPlan(s, combatPicks[s.id]), methodPicks[s.id]), foodPicks[s.id])),
+    [baseSteps, combatPicks, methodPicks, foodPicks],
+  );
   const stages = useMemo(() => stagesFor(mode), [mode]);
   const qp = useMemo(() => questPoints(steps, progress, BASE_QP), [steps, progress]);
   const maxQp = useMemo(() => maxQpFor(mode), [mode]);
 
   const value = useMemo<StoreValue>(
     () => ({
-      progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, setFoodPicks, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
+      progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, setFoodPicks, setCombatPicks, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
       toast, notify, undo, dismissToast,
     }),
-    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, setFoodPicks, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
+    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, setFoodPicks, setCombatPicks, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
       toast, notify, undo, dismissToast],
   );
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

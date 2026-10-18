@@ -155,6 +155,7 @@ const text = async (page: Page, sel: string) => {
 
 async function run(browser: Browser) {
   if (process.env.UI_ONLY === 'funding') { await fundingScenarios(browser); return; }
+  if (process.env.UI_ONLY === 'combat') { await combatRouteScenarios(browser); return; }
   for (const width of [390, 1100]) {
     console.log(`Width ${width}`);
 
@@ -1173,6 +1174,7 @@ async function run(browser: Browser) {
   }
 
   await fundingScenarios(browser);
+  await combatRouteScenarios(browser);
 }
 
 // Raising coins for the Hill Giants step: a character with 400 coins and an empty bank is short of food. The card says so in one line with one button;
@@ -1241,6 +1243,74 @@ async function fundingScenarios(browser: Browser) {
     const done = await page.evaluate(() => { const j = (window as unknown as { __saved?: string }).__saved; return j ? JSON.parse(j) : null; });
     expect(!done || !done.steps || done.steps['S4-03'] === undefined, `funding (${width} px): the route step was not touched`);
     expect(errors.length === 0, `funding (${width} px): no console errors ${errors.join('; ')}`);
+    await page.context().close();
+  }
+}
+
+// Another way to do the Hill Giants step: the character with 24 hitpoints and Defence 1 is offered a split (cows for Attack, then the giants for the bones).
+// Adopting it moves the arrow, the pace line and the food to the cows for the app and the game alike, and leaves the route's own step open; going back undoes it.
+async function combatRouteScenarios(browser: Browser) {
+  console.log('combat route');
+  const equipment = ([[1331, 'Adamant scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']] as [number, string, string][])
+    .map(([id, name, slot]) => ({ id, name, slot }));
+  const gear = { equipment, inventory: [], coins: 5000, bankCoins: 0 };
+  const all = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string }[] }[];
+  const from = all.findIndex((x) => x.id === 'S4-03');
+  const worn = new Set(equipment.map((e) => e.name));
+  const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).map((i) => i.nameEn)))];
+  const owned = asked.map((name) => ({ name, carried: worn.has(name) ? 1 : 0, noted: 0, bank: 0 }));
+  const COWS = 'The cow field east of Lumbridge';
+  for (const width of [1440, 390]) {
+    const { page, errors } = await open(browser, width, {
+      progress: progressBefore('S4-03', { gameMode: 'f2p' }),
+      localStorage: { 'osrs-put:active-step': 'S4-03' },
+      status: {
+        protocol: 6, inGame: true, player: 'Combat Test', activeStepId: 'S4-03', questPoints: 30, totalLevel: 150,
+        stats: { attack: 30, strength: 21, defence: 1, hitpoints: 24 }, pos: { x: 3093, y: 3495, plane: 0 }, ...gear,
+      },
+      events: [
+        { type: 'OWNED', bankSeen: true, items: owned }, { type: 'GEAR', gear }, { type: 'QUESTS', done: [] },
+        { type: 'STATS', stats: { attack: 30, strength: 21, defence: 1, hitpoints: 24 } }, { type: 'XP', xp: { attack: 13363, strength: 2000, defence: 0, hitpoints: 3500 } },
+      ],
+      market: true,
+    }, '#/step/S4-03');
+    await reveal(page, '.combat-route');
+    await page.waitForTimeout(1200);
+    const posts = async () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts);
+    const lastStep = async () => {
+      const snaps = (await posts()).filter((p) => p.path === '/prep-plan');
+      return snaps.length ? snaps[snaps.length - 1].body.step : undefined;
+    };
+    const card = await text(page, '.combat-route');
+    expect(/Another way/.test(card) && /Use this plan/.test(card), `combat route (${width} px): the better way is offered in one line with one button`);
+    expect(await page.locator('.combat-route .btn-primary').count() === 1, `combat route (${width} px): one primary button`);
+    expect(await page.locator('.combat-route details').count() === 1 && !(await page.locator('.combat-route details').evaluate((d) => (d as HTMLDetailsElement).open)), `combat route (${width} px): the comparison is folded`);
+    expect((await lastStep())?.worldPoint?.label !== COWS, `combat route (${width} px): offering a plan does not move the arrow`);
+    if (process.env.UI_SHOTS) await page.locator('.combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-${width}.png` }).catch(() => {});
+    await page.locator('.combat-route details > summary').click();
+    const rows = await page.locator('.combat-plan-row').count();
+    expect(rows >= 4, `combat route (${width} px): the comparison lists the plans (${rows})`);
+    expect(/Compared: .*Cow/.test(await text(page, '.combat-route')), `combat route (${width} px): it says what was compared`);
+    if (process.env.UI_SHOTS) await page.locator('.combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-open-${width}.png` }).catch(() => {});
+    await page.locator('.combat-route .btn-primary').click();
+    await page.waitForTimeout(1500);
+    const step = await lastStep();
+    expect(step?.stepId === 'S4-03' && step.worldPoint?.label === COWS && step.npcNames?.[0] === 'Cow', `combat route (${width} px): the game is sent to the cows`);
+    expect(step?.pacing?.actionName === 'cow|cows' && step.pacing.expPerAction === 32, `combat route (${width} px): the game's pace line counts cows`);
+    const trigger = JSON.stringify(step?.completionTrigger ?? {});
+    expect(trigger.includes('Big bones') && trigger.includes('"attack"'), `combat route (${width} px): the step still completes by the route's own trigger`);
+    expect(/Your plan/.test(await text(page, '.combat-route')) && await page.getByRole('button', { name: "Back to the route's plan" }).count() === 1, `combat route (${width} px): the plan in use is named, with the way back`);
+    const saved = await page.evaluate(() => Object.entries(localStorage).filter(([k]) => k.startsWith('osrs-put:combat-plans')).map(([, v]) => JSON.parse(v)));
+    expect(saved.length === 1 && typeof saved[0]['S4-03']?.key === 'string' && Object.keys(saved[0]['S4-03']).sort().join() === 'at,key', `combat route (${width} px): only the choice is saved`);
+    const done = await page.evaluate(() => { const j = (window as unknown as { __saved?: string }).__saved; return j ? JSON.parse(j) : null; });
+    expect(!done || !done.steps || done.steps['S4-03'] === undefined, `combat route (${width} px): the route step is still open`);
+    if (process.env.UI_SHOTS) await page.locator('.combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-using-${width}.png` }).catch(() => {});
+    await page.getByRole('button', { name: "Back to the route's plan" }).click();
+    await page.waitForTimeout(1500);
+    const back = await lastStep();
+    expect(back?.worldPoint?.label !== COWS && back?.npcNames?.[0] === 'Hill Giant', `combat route (${width} px): the route plan brings the arrow back to the giants`);
+    expect(await noOverflow(page), `combat route (${width} px): no horizontal scroll`);
+    expect(errors.length === 0, `combat route (${width} px): no console errors ${errors.join('; ')}`);
     await page.context().close();
   }
 }
