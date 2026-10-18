@@ -48,7 +48,7 @@ tasks.withType(JavaCompile).configureEach {
 // The danger zones are the same data as the app: src/data/dangerZones.json goes into the jar next to the classes.
 processResources {
 	from('../public/fonts') {
-		include 'Inter-variable.ttf', 'OFL.txt'
+		include 'Sora-variable.ttf', 'OFL-Sora.txt'
 		into 'com/osrspath/bridge/fonts'
 	}
 	from('../src/data/dangerZones.json') {

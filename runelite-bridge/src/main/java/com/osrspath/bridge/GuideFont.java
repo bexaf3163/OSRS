@@ -5,7 +5,7 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.io.InputStream;
 
-/** The desktop's bundled Inter face, loaded once. Missing icon glyphs use a local fallback only for that glyph. */
+/** The in-game panel face (Sora, SIL OFL, from the owner's pick 2026-10-18), loaded once. Missing icon glyphs use a local fallback only for that glyph. */
 final class GuideFont
 {
 	private static final Font BASE = load();
@@ -13,7 +13,7 @@ final class GuideFont
 
 	private static Font load()
 	{
-		try (InputStream in = GuideFont.class.getResourceAsStream("fonts/Inter-variable.ttf"))
+		try (InputStream in = GuideFont.class.getResourceAsStream("fonts/Sora-variable.ttf"))
 		{
 			if (in != null) return Font.createFont(Font.TRUETYPE_FONT, in);
 		}

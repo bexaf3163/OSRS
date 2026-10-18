@@ -725,3 +725,10 @@ the game, (4) readiness and shopping integration, (5) desktop simplification, (6
   like the big arrow; the overload without a yaw stays the compass version. `OsrsPathBridgePlugin.updateHud` passes `client.getCameraYawTarget()`;
   it is refreshed per `updateHud` call (game tick), not per frame. Owner report 2026-10-18: "Go up to Ithoi (Stairs) ~15 tiles ↘" while the
   world arrow pointed up-right. Not verified in the live game after the change (the owner did not log in).
+
+## 2.63.4 — Sora in the game
+
+- `GuideFont` loads `fonts/Sora-variable.ttf` (default instance wght 400, like Inter; bold is synthesized as before); `build.gradle` bundles
+  `public/fonts/Sora-variable.ttf` and `OFL-Sora.txt` instead of Inter. The app's CSS still uses Inter. `GuideFontTest` expects "Sora".
+- Owner picked Sora from six options (Inter, Manrope, Plus Jakarta Sans, DM Sans, Outfit, Sora, Figtree). Whether the app should follow was
+  offered, not decided.
