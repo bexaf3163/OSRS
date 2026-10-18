@@ -20,6 +20,8 @@ interface Mock {
   zen?: boolean;
   /** The exchange prices by item ID: they stand in for the prices.runescape.wiki reply (without them the network to the wiki is closed). */
   prices?: Record<number, number>;
+  /** The plugin does not answer (RuneLite is not running). */
+  offline?: boolean;
   /** Windows display scaling (1.25 = 125%): the device pixel ratio; the viewport width passed is then in CSS pixels. */
   scale?: number;
 }
@@ -53,10 +55,11 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
       loadProgressFile: () => progress,
       saveProgressFile: (j: string) => { progress = j; w.__saved = j; },
       dataDir: () => 'C:/OSRS', isPortable: () => true,
-      runelite: { check: async () => ({ ok: true, problems: [], clientVersion: '1.12.39', credentials: true }), launch: async () => ({ ok: true, state: 'running' }) },
+      runelite: { check: async () => ({ ok: true, problems: [], clientVersion: '1.12.39', credentials: true }), launch: async () => { w.__launched = ((w.__launched as number) ?? 0) + 1; return { ok: true, state: 'started' }; } },
       bridge: {
         request: async (method: string, path: string, body: unknown) => {
           posts.push({ method, path, body });
+          if (m.offline) return { ok: false, status: 0, data: null };
           // __status: what a scenario changes in the plugin's answer after the page has loaded (the quest cursor moving on).
           if (path === '/status') return { ok: true, status: 200, data: { status: 'ok', inGame: true, activeStepId: null, shortestPath: true, ...(m.status ?? {}), ...((w.__status as Record<string, unknown>) ?? {}) } };
           return { ok: true, status: 200, data: { ok: true } };
@@ -308,6 +311,27 @@ async function run(browser: Browser) {
       expect(await noOverflow(page), 'shopping: no horizontal scrolling');
       expect(!errors.length, `shopping: no console errors ${errors.join('; ')}`);
       await page.context().close();
+    }
+
+    // 2.63.3: "Launch RuneLite" in the header while the plugin does not answer; gone once it is connected.
+    {
+      const off = await open(browser, width, { offline: true }, '#/');
+      const btn = off.page.locator('.topbar .launch-runelite');
+      expect(await btn.count() === 1, `header (${width} px): the launch button is there while the plugin does not answer`);
+      if (await btn.count()) {
+        // The app's own start-up launch (auto-launch) is counted already: the click is one more.
+        const launched = () => off.page.evaluate(() => (window as unknown as { __launched?: number }).__launched ?? 0);
+        const before = await launched();
+        await btn.click();
+        await off.page.waitForTimeout(300);
+        expect(await launched() === before + 1 && await btn.isDisabled(), `header (${width} px): a click starts RuneLite once and the button waits`);
+      }
+      if (process.env.UI_SHOTS) await off.page.screenshot({ path: `${process.env.UI_SHOTS}/header-launch-${width}.png`, clip: { x: 0, y: 0, width, height: 90 } }).catch(() => {});
+      expect(await noOverflow(off.page), `header (${width} px): launch button, no horizontal scrolling`);
+      await off.page.context().close();
+      const on = await open(browser, width, {}, '#/');
+      expect(await on.page.locator('.topbar .launch-runelite').count() === 0, `header (${width} px): no launch button once the plugin is connected`);
+      await on.page.context().close();
     }
 
     // Gear: a Coif in the bank at 17 Ranged — "you have it but cannot wear it", not advice to wear it.

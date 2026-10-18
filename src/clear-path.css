@@ -248,3 +248,5 @@ main:has(.section-shell) { padding-top:8px; }
  .skill-milestone { padding:0 3px; font-size:.8rem; }
  .milestone-node { transform:scale(.85); }
 }
+.launch-runelite { display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
+@media(max-width:700px) { .launch-runelite .launch-label { display:none; } }

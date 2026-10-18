@@ -36,6 +36,20 @@ public class NavigationTest
 	}
 
 	@Test
+	public void arrowAsSeenOnTheScreen()
+	{
+		// Camera facing north (yaw 0): the same as the compass. Turned a quarter (4096 units, the way the big arrow and the minimap turn): north is to the right, east is down.
+		assertEquals("↑", Navigation.arrow(0, 10, 0));
+		assertEquals("↘", Navigation.arrow(7, -7, 0));
+		assertEquals("→", Navigation.arrow(0, 10, 4096));
+		assertEquals("↓", Navigation.arrow(10, 0, 4096));
+		assertEquals("↓", Navigation.arrow(0, 10, 8192));
+		assertEquals("", Navigation.arrow(0, 0, 4096));
+		assertEquals("~10 tiles →", Navigation.readout(0, 0, 0, 0, 10, 0, false, 4096).getText());
+		assertEquals("~10 tiles ↑", Navigation.readout(0, 0, 0, 0, 10, 0, false).getText());
+	}
+
+	@Test
 	public void nearWithHysteresis()
 	{
 		Navigation.Readout far = Navigation.readout(3200, 3200, 0, 3200, 3342, 0, false);

@@ -82,6 +82,21 @@ final class Navigation
 		return ARROWS[Math.floorMod(sector, 8)];
 	}
 
+	/**
+	 * An arrow as it looks on the screen: the offset is turned by the camera like the big arrow and the minimap, so "↑" is ahead of the camera, not
+	 * north. A compass glyph showed ↘ for a target the big arrow pointed up-right to (the owner, 2026-10-18).
+	 */
+	static String arrow(int dx, int dy, int cameraYaw)
+	{
+		if (dx == 0 && dy == 0)
+		{
+			return "";
+		}
+		// screenAngle: 0 right, pi/2 down; the glyph table runs counter-clockwise from the right, so the angle is negated.
+		double angle = Math.toDegrees(-ArrowGeometry.screenAngle(dx, dy, cameraYaw));
+		return ARROWS[Math.floorMod((int) Math.round(angle / 45.0), 8)];
+	}
+
 	static boolean underground(int y)
 	{
 		return y > UNDERGROUND_Y;
@@ -101,6 +116,12 @@ final class Navigation
 
 	/** The distance line for the HUD. wasNear is whether it was "Nearby" on the previous tick. */
 	static Readout readout(int px, int py, int pPlane, int tx, int ty, int tPlane, boolean wasNear)
+	{
+		return readout(px, py, pPlane, tx, ty, tPlane, wasNear, null);
+	}
+
+	/** As above; with a camera yaw the direction is as seen on the screen, without it the compass direction (north is up). */
+	static Readout readout(int px, int py, int pPlane, int tx, int ty, int tPlane, boolean wasNear, Integer cameraYaw)
 	{
 		int pLayer = layer(py);
 		int tLayer = layer(ty);
@@ -123,13 +144,18 @@ final class Navigation
 			String floor = tPlane > pPlane ? "a floor up" : "a floor down";
 			return d < NEAR
 				? new Readout("Target is " + floor, false)
-				: new Readout("~" + tiles(d) + " " + arrow(tx - px, ty - py) + ", " + floor, false);
+				: new Readout("~" + tiles(d) + " " + direction(tx - px, ty - py, cameraYaw) + ", " + floor, false);
 		}
 		if (d < NEAR || (wasNear && d < NEAR_EXIT))
 		{
 			return new Readout("✓ Nearby", true, d);
 		}
-		return new Readout("~" + tiles(d) + " " + arrow(tx - px, ty - py), false, d);
+		return new Readout("~" + tiles(d) + " " + direction(tx - px, ty - py, cameraYaw), false, d);
+	}
+
+	private static String direction(int dx, int dy, Integer cameraYaw)
+	{
+		return cameraYaw == null ? arrow(dx, dy) : arrow(dx, dy, cameraYaw);
 	}
 
 	/**

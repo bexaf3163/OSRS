@@ -715,3 +715,13 @@ the game, (4) readiness and shopping integration, (5) desktop simplification, (6
   login warnings, RuneLite's own); all app pages with live data (no console errors, no overflow); the in-game Advice tab (readiness: bank
   last seen 2 days ago).
 - Not checkable here: the bank card and the shop/exchange cards (Corsair Cove has no bank until the quest is done); the pre-entry guards.
+
+## 2.63.3 — header launch button, camera-relative HUD arrow
+
+- `components/LaunchRuneLiteButton.tsx` in the top bar (before `BridgeIndicator`): desktop only, link on, state not online; busy for 12 s after a click
+  (RuneLite needs ~10 s for the bridge). The UI smoke's desktop stub now counts launches (`__launched`) and has `offline` (every bridge request fails);
+  the app's own start-up auto-launch is one of the counted launches.
+- `Navigation.arrow(dx, dy, cameraYaw)` and `readout(..., Integer cameraYaw)`: the distance line's glyph is turned by `ArrowGeometry.screenAngle`
+  like the big arrow; the overload without a yaw stays the compass version. `OsrsPathBridgePlugin.updateHud` passes `client.getCameraYawTarget()`;
+  it is refreshed per `updateHud` call (game tick), not per frame. Owner report 2026-10-18: "Go up to Ithoi (Stairs) ~15 tiles ↘" while the
+  world arrow pointed up-right. Not verified in the live game after the change (the owner did not log in).

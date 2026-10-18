@@ -9,6 +9,7 @@ import { HeaderMode } from './components/ModeToggle';
 import { CompassMark } from './components/CompassMark';
 import { HeaderProgress } from './components/HeaderProgress';
 import { BridgeIndicator } from './components/BridgeIndicator';
+import { LaunchRuneLiteButton } from './components/LaunchRuneLiteButton';
 import { ToastView } from './components/ToastView';
 import { PrepAuto, PrepWatcher } from './components/PrepRoute';
 import { PageBoundary } from './components/PageBoundary';
@@ -134,6 +135,7 @@ export function App() {
             {compact && (
               <button type="button" className="btn btn-sm" onClick={() => setFeatures({ compact: false })}>Full workspace</button>
             )}
+            <LaunchRuneLiteButton />
             <BridgeIndicator />
             {!compact && (
               <button type="button" className="icon-btn compact-btn" aria-label="Compact view: keep the current action next to the game"

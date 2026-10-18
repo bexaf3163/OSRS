@@ -2769,7 +2769,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (nav != null && me != null && client.getGameState() == GameState.LOGGED_IN)
 		{
 			WorldPoint pos = me.getWorldLocation();
-			Navigation.Readout r = Navigation.readout(pos.getX(), pos.getY(), pos.getPlane(), nav.getX(), nav.getY(), nav.getPlane(), near);
+			Navigation.Readout r = Navigation.readout(pos.getX(), pos.getY(), pos.getPlane(), nav.getX(), nav.getY(), nav.getPlane(), near, client.getCameraYawTarget());
 			near = r.isNear();
 			distance = r.getText();
 			tiles = r.getTiles();
