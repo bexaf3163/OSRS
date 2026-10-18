@@ -767,3 +767,15 @@ Found while building (worth knowing): the item database has no exchange price fo
 version of `need` skipped such lines and the card never appeared. `assess` also said "Nothing to pay for" for an unpriced shortage; both fixed with tests that fail without the fix.
 
 Not done yet: the plugin line (`funding` part of the `/prep-plan` envelope, HUD/guide line), the Shopping-page summary (part of the Shopping rework), live verification.
+
+## 2.64.1 — funding system, plugin line
+
+- Snapshot part `funding` (additive, envelope version stays 6): `lib/fundingHint.ts` builds it from the same `FundingView` the Preparation panel draws, `components/FundingSync.tsx`
+  sends it (same dedupe pattern as `CleanupSync`). Fields: player, planId, version, status (ACTIVE only; a paused plan sends nothing), title, action, `brief` (a few words for the narrow
+  plate: the activity's title while working, the first sentence otherwise), progress, estimated, stepIndex/stepCount, needsConfirm.
+- Java: `FundingHint` (validation like `CleanupHint`; `hudLine(me, now, appSeenAt)` = "Raising coins: <brief> · <progress> (estimated)", null for another character or an app gone more than
+  10 minutes); `OsrsPathBridgePlugin` keeps `funding`, puts the line in the HUD `action` slot unless the plan's own arrow is the heading, and the heading drops the `Funding: ` marker
+  (`FundingHint.arrowText`). The tick redraws the HUD when the line changes (expiry, character). Nothing is computed in Java.
+- Agreement is tested from the app's own output: `tests/prepEnvelope.test.ts` writes a funding row into `prep-snapshots.json`, `FundingHintTest` parses it and checks the line; the UI smoke
+  checks that the snapshot's `action` equals the app's status line and that Cancel removes the part.
+- Not verified live in the game (automated only). To check live: start a plan at a step that is short of coins, look at the HUD under the arrow while walking and while killing cows.

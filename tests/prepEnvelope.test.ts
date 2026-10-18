@@ -11,6 +11,12 @@ import type { Recovery } from '../src/lib/recovery';
 import { buildEnvelope, clipText, envelopeKey, MAX_PLAN_LINES, nextSeq, planPayload, EMPTY_PARTS, SNAPSHOT_VERSION, type SnapshotParts } from '../src/lib/prepEnvelope';
 import { supportsSnapshot, toInGameTarget, APP_PROTOCOL, BRIDGE_PATHS, missingWithPlugin } from '../src/services/runeliteBridge';
 import type { Step } from '../src/types';
+import { fundingHintPayload } from '../src/lib/fundingHint';
+import { startPlan, tick, viewOf } from '../src/lib/funding/plan';
+import { methodById } from '../src/lib/funding/methods';
+import { market } from './funding/market';
+import { scenario } from './funding/scenario';
+import { fakeSnap } from './funding/helpers';
 
 const FILE = new URL('../runelite-bridge/src/test/resources/prep-snapshots.json', import.meta.url);
 
@@ -120,6 +126,14 @@ describe('the state snapshot for the game (protocol 6)', () => {
       ['S2-03: the bag is almost full', mkParts('S2-03', planOf('S2-03', { Onion: { carried: 1 } }, { slots: 27 }), {
         gearHint: { text: '⚡ Wear Iron scimitar — it is in the bank', watchItems: ['Iron scimitar'], highlightItems: ['Iron scimitar'] },
       })],
+      ['S4-03: raising coins, the cow field reached and 12 hides taken', (() => {
+        // The plan as the app runs it: started for the Hill Giants step, then ticked with what the game shows at the field.
+        const f = scenario(market(), { bagCoins: 400, bankCoins: 0 });
+        const started = startPlan(f.assessment, f.assessment.recommendation!, f.snap, methodById('cows-cowhide'), 1_792_000_000_000)!;
+        const at = fakeSnap({ character: 'Tester', position: { x: 3253, y: 3278, plane: 0 }, bag: [{ name: 'Cowhide', count: 12 }], bagCoins: 400, bankCoins: 0 });
+        const plan = tick(started, at, 1_792_000_060_000);
+        return mkParts('S4-03', planOf('S4-03', {}), { funding: fundingHintPayload(plan, viewOf(plan, at), 'Tester') });
+      })()],
       ['no step: everything cleared', { ...EMPTY_PARTS }],
     ];
     const rows = cases.map(([name, parts], i) => JSON.stringify({ name, envelope: buildEnvelope(parts, 1000 + i) }));

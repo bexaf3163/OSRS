@@ -1098,6 +1098,10 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private volatile PrepPlan prep;
 	/** The inventory cleanup advice from the app (snapshot part "cleanup"); null means none. Shown, never acted on. */
 	private volatile CleanupHint cleanup;
+	/** The running funding plan from the app (snapshot part "funding"); null means none. One HUD line and the app's own arrow; nothing is acted on. */
+	private volatile FundingHint funding;
+	/** The funding line the HUD shows now, so that a change (the app gone too long, another character) redraws it. */
+	private volatile String fundingShown;
 	/** When the app was last connected (an open event stream or a snapshot): the cleanup advice expires CleanupHint.STALE_MS after it. */
 	private volatile long appSeenAt;
 	/** The bag by item id (a banknote under its own id), for the cleanup lines. */
@@ -1142,7 +1146,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		allRejected.putAll(refused);
 		tel("snapshot", "seq", e.getSeq(), "step", e.getStep() == null ? null : e.getStep().getStepId(), "plan", e.getPlan() != null, "percent", planPercent,
 			"shopping", e.getShopping() != null, "bankTags", e.getBankTags() != null, "gearHint", e.getGearHint() != null,
-			"cleanup", e.getCleanup() == null || e.getCleanup().getLines() == null ? 0 : e.getCleanup().getLines().size(), "rejected", allRejected.isEmpty() ? null : allRejected);
+			"cleanup", e.getCleanup() == null || e.getCleanup().getLines() == null ? 0 : e.getCleanup().getLines().size(), "funding", e.getFunding() != null, "rejected", allRejected.isEmpty() ? null : allRejected);
 		Telemetry t = telemetry;
 		if (t != null)
 		{
@@ -1226,6 +1230,10 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			cleanup = e.getCleanup();
 		}
+		if (!bad.containsKey(PrepEnvelope.FUNDING))
+		{
+			funding = e.getFunding();
+		}
 		updateHud();
 	}
 
@@ -1242,6 +1250,21 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			return Collections.emptyList();
 		}
 		return h.visible(me.getName(), bagIds, System.currentTimeMillis(), appSeenAt);
+	}
+
+	/**
+	 * The HUD line of the funding plan the app is running, or null: none, another character is logged in, or the app has been gone too long.
+	 * The sentence and the figure are the app's; nothing is computed here.
+	 */
+	String fundingLine()
+	{
+		FundingHint h = funding;
+		Player me = client.getLocalPlayer();
+		if (h == null || me == null || client.getGameState() != GameState.LOGGED_IN)
+		{
+			return null;
+		}
+		return h.hudLine(me.getName(), System.currentTimeMillis(), appSeenAt);
 	}
 
 	/** The cleanup frame colour for a bag slot, or null: frames off, or no cleanup line names this item. Lower than the step's own frames. */
@@ -2727,8 +2750,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		GearHint h = gearHint;
 		// The gear advice only while we are not going to buy (then the heading is "Buy ..." anyway).
 		String upgrade = navTarget == null && h != null && h.getText() != null && config.upgradeRouter() ? h.getText() : null;
-		if (target == null && navTarget == null && !dangerShown && upgrade == null)
+		if (target == null && navTarget == null && !dangerShown && upgrade == null && fundingLine() == null)
 		{
+			fundingShown = null;
 			hud = null;
 			return;
 		}
@@ -2742,7 +2766,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			title = navTarget.isPurchase()
 				? "Buy " + (navTarget.getItemName() != null ? navTarget.getItemName() : navTarget.getLabel())
 					+ (sellers != null && !sellers.isEmpty() ? " from " + sellers.get(0) : "")
-				: "Go to: " + navTarget.getLabel();
+				: FundingHint.isArrow(navTarget.getLabel()) ? FundingHint.arrowText(navTarget.getLabel()) : "Go to: " + navTarget.getLabel();
 			goal = stepTitle == null ? null : "Then: step " + stepTitle;
 		}
 		else if (target != null)
@@ -2812,6 +2836,13 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		String health = config.hudHealth() && target != null ? healthLine(hp, hpMax, hit) : null;
 		boolean critical = health != null && hit != null && hp <= hit;
 		String chip = transportChip(prep, navTarget != null, navViaTransport);
+		// The funding plan's line takes the chip slot while its arrow is not on screen (then the heading already says the same).
+		String raising = fundingLine();
+		fundingShown = raising;
+		if (raising != null && !(navTarget != null && FundingHint.isArrow(navTarget.getLabel())))
+		{
+			chip = raising;
+		}
 		Preflight.Block pb = preBlock;
 		String missing = pb != null && me != null && client.getGameState() == GameState.LOGGED_IN
 			&& pb.near(me.getWorldLocation().getX(), me.getWorldLocation().getY(), me.getWorldLocation().getPlane()) ? pb.chip() : null;
@@ -3308,6 +3339,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (server != null && server.streamCount() > 0)
 		{
 			appSeenAt = System.currentTimeMillis();
+		}
+		// The funding line follows the character and the app's absence (expiry): a change redraws the HUD.
+		if ((funding != null || fundingShown != null) && !Objects.equals(fundingLine(), fundingShown))
+		{
+			updateHud();
 		}
 		// The cleanup lines follow the bag, the setting and the app's absence (expiry): a change redraws the guide.
 		if ((cleanup != null || !cleanupShown.isEmpty()) && !cleanupLines().equals(cleanupShown))

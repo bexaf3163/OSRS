@@ -14,6 +14,7 @@ import type { Detour } from './detours';
 import type { RecommendedTransport } from './transport';
 import type { SkillPathPayload } from './skillGuide';
 import type { CleanupHintPayload } from './cleanupHint';
+import type { FundingHintPayload } from './fundingHint';
 import { items as itemData } from '../data';
 import { nameKey } from './checklist';
 
@@ -76,6 +77,8 @@ export interface PrepEnvelope {
   skillPath?: SkillPathPayload;
   /** The inventory cleanup lines for the game (plugin 2.61.0 and later; an older one ignores the field). Absent means none. */
   cleanup?: CleanupHintPayload;
+  /** The running funding plan for the HUD (plugin 2.64.1 and later; an older one ignores the field). Absent means none. */
+  funding?: FundingHintPayload;
 }
 
 /** A string no longer than the plugin's limit: cut at a word, with an ellipsis. */
@@ -212,6 +215,8 @@ export interface SnapshotParts {
   skillPath?: SkillPathPayload | null;
   /** The inventory cleanup advice for the bag (lib/cleanupHint.ts). */
   cleanup?: CleanupHintPayload | null;
+  /** The running funding plan (lib/fundingHint.ts). */
+  funding?: FundingHintPayload | null;
 }
 
 export const EMPTY_PARTS: SnapshotParts = { step: null, shopping: null, bankTags: null, gearHint: null, plan: null };
@@ -236,6 +241,8 @@ export function buildEnvelope(parts: SnapshotParts, seq: number): PrepEnvelope {
     ...(parts.skillPath && parts.skillPath.steps.length ? { skillPath: parts.skillPath } : {}),
     // The same: an app with nothing to clean sends the snapshot an older plugin knows, byte for byte.
     ...(parts.cleanup && parts.cleanup.lines.length ? { cleanup: parts.cleanup } : {}),
+    // The same: no plan running, no field.
+    ...(parts.funding ? { funding: parts.funding } : {}),
   };
 }
 

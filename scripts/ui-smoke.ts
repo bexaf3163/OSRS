@@ -1219,6 +1219,14 @@ async function fundingScenarios(browser: Browser) {
     const nav = (await posts()).filter((p) => p.path === '/nav-target');
     expect(nav.length > 0 && String(nav[nav.length - 1].body.label).startsWith('Funding: ') && !('stepId' in nav[nav.length - 1].body), `funding (${width} px): Start sets one arrow that is not a route step`);
     expect(await page.locator('.status-funding').count() >= 1, `funding (${width} px): the plan shows as one line in the step status`);
+    await page.waitForTimeout(900);
+    const lastFunding = async () => {
+      const snaps = (await posts()).filter((p) => p.path === '/prep-plan');
+      return snaps.length ? (snaps[snaps.length - 1].body.funding ?? null) : undefined;
+    };
+    const sentPlan = await lastFunding();
+    expect(sentPlan?.player === 'Funding Test' && sentPlan.status === 'ACTIVE' && typeof sentPlan.action === 'string' && sentPlan.stepCount >= 2, `funding (${width} px): the game gets the same plan in the snapshot`);
+    expect((await text(page, '.status-funding')).includes(String(sentPlan?.action ?? ' ')), `funding (${width} px): the app and the game say the same sentence`);
     expect(await page.locator('.funding-card.is-running').count() === 1, `funding (${width} px): the card shows the step in hand`);
     const saved = await page.evaluate(() => Object.entries(localStorage).filter(([k]) => k.startsWith('osrs-put:funding-plan')).map(([, v]) => JSON.parse(v)));
     expect(saved.length === 1 && saved[0].sourceStepId === 'S4-03' && saved[0].character === 'Funding Test', `funding (${width} px): the plan is saved for this character`);
@@ -1226,6 +1234,8 @@ async function fundingScenarios(browser: Browser) {
     await page.getByRole('button', { name: 'Cancel' }).first().click();
     await page.waitForTimeout(500);
     expect(await page.locator('.funding-card.is-running').count() === 0 && await page.locator('.status-funding').count() === 0, `funding (${width} px): Cancel closes the plan`);
+    await page.waitForTimeout(900);
+    expect((await lastFunding()) === undefined || (await lastFunding()) === null, `funding (${width} px): Cancel takes the line out of the game too`);
     const gone = await page.evaluate(() => Object.keys(localStorage).filter((k) => k.startsWith('osrs-put:funding-plan')).length);
     expect(gone === 0, `funding (${width} px): nothing is left saved`);
     const done = await page.evaluate(() => { const j = (window as unknown as { __saved?: string }).__saved; return j ? JSON.parse(j) : null; });

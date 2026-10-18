@@ -116,7 +116,7 @@ interface BridgeValue {
    * A part of the snapshot for the game (protocol 6): gear advice, items for the bank, the preparation plan. It goes to the plugin together
    * with everything else in one request; for a plugin older than protocol 6 the call does nothing — it has its own separate requests.
    */
-  setPrepPart: <K extends 'gearHint' | 'bankTags' | 'plan' | 'cleanup'>(key: K, value: SnapshotParts[K]) => void;
+  setPrepPart: <K extends 'gearHint' | 'bankTags' | 'plan' | 'cleanup' | 'funding'>(key: K, value: SnapshotParts[K]) => void;
   /** The tracked skill's path for the game (null: stop tracking). While there is one the plugin leads that skill instead of the quest step. */
   setSkillPath: (value: SkillPathPayload | null) => void;
   /** Which profile and character are current: whether levels and marks from the game may be written into the profile. */
@@ -328,7 +328,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     return true;
   }, []);
 
-  const setPrepPart = useCallback(<K extends 'gearHint' | 'bankTags' | 'plan' | 'cleanup'>(key: K, value: SnapshotParts[K]) => {
+  const setPrepPart = useCallback(<K extends 'gearHint' | 'bankTags' | 'plan' | 'cleanup' | 'funding'>(key: K, value: SnapshotParts[K]) => {
     const sn = snapshot.current;
     sn.parts = { ...sn.parts, [key]: value };
     if (!supportsSnapshot(pluginProtocol.current) || !sn.synced) return;
