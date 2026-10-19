@@ -950,3 +950,12 @@ Not done yet (block 2b): the audit ledger of every combat stage, mandatory quest
 - `runeliteBridge.stepGuide`: a leading "Then: " is dropped from the steps sent to the game (the plugin labels the last one "Next: "); the app's own list keeps it.
 - Tests: `gearContext` (chainbody against a cow not advised; every defence advice moves the hit chance 3 points), `browse` (row figure = check figure,
   sort by the shown figure), `evaluate` (no money-runs-out caution when smaller batches get there), `pick` (no "Then: " in the game's steps), `progress` (hitpoints kept on load).
+
+## 2.72.2 — fixes from the second live check (2.72.1)
+
+- Live: Money, Gear, the HUD and "Next: Fight the Hill Giants…" were right on 2.72.1, and Hitpoints was saved with the levels (24). Two defects found.
+- `foodPlan.ts`: `foodPlanApplied(step)` (no food item, the one with `heals`, is left without `totalAmount`) and `stepResendKey(step)` = plan, phase, foe, place
+  and `foodPlanApplied`. `bridge.tsx` resends the shown step when that key changes (was the same key without the food flag). Live: the plan switched at
+  log-in before the food plan settled (it waits for prices and gear), so the game kept the route's 25 Salmon while the app said 21; "Show in game" fixed it.
+- `sourceRouter.unusableSpawn`: a spawn named in the Wilderness is never a free source (live: three planks from the Graveyard of Shadows were "On the way").
+- Tests: `pick` (the resend key changes once when the food plan settles, not when its figures move), `ledger` (no free source in the Wilderness).

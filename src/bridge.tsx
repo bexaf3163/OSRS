@@ -22,6 +22,7 @@ import type { MoveEvent } from './lib/recovery';
 import { stageBankItemIds } from './lib/bankTags';
 import { useFeatures } from './lib/features';
 import { isClosed, openAfter } from './lib/next-step';
+import { stepResendKey } from './lib/foodPlan';
 import { withKillEstimate } from './services/gearAdvisor';
 import { buildEnvelope, EMPTY_PARTS, envelopeKey, nextSeq, type SnapshotParts } from './lib/prepEnvelope';
 import type { SkillPathPayload } from './lib/skillGuide';
@@ -656,8 +657,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   }, [shown, followKey, sendStep]);
 
   // An adopted combat plan moves the step to another opponent and place (and back): the game gets the new target and pace line without a press. The key is
-  // the plan and its phase, not the food: those figures follow the player's XP and would resend the step every few kills.
-  const planKeyNow = shown ? JSON.stringify([shown.combatPlan ?? null, shown.foes?.[0] ?? null, shown.mapLocation && [shown.mapLocation.x, shown.mapLocation.y]]) : null;
+  // the plan and its phase and whether the food plan has settled, not the food figures (lib/foodPlan.ts stepResendKey).
+  const planKeyNow = shown ? stepResendKey(shown) : null;
   const sentPlan = useRef<string | null>(null);
   useEffect(() => {
     if (!shown || planKeyNow === null) { sentPlan.current = null; return; }

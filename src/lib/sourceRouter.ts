@@ -61,11 +61,14 @@ export interface SourceInput {
 }
 
 /**
- * A place where the item lies but the player cannot get it: a members-only zone in F2P mode, a drop only by telekinesis
- * or in an inaccessible place, a task zone. We do not pass such places off as "take it free nearby".
+ * A place where the item lies but the player cannot or should not get it: a members-only zone in F2P mode, a drop only by telekinesis
+ * or in an inaccessible place, a task zone, the Wilderness. We do not pass such places off as "take it free nearby".
  */
 export function unusableSpawn(spawn: string, mode: 'f2p' | 'members'): boolean {
   if (/inaccessible|telegrab|telekinetic|task-only/i.test(spawn)) return true;
+  // Other players can attack in the Wilderness and take what you carry: a few free coins' worth is never worth it (2.72.2, live: Shopping put three
+  // planks from the Graveyard of Shadows "on the way" for a Defence 1 character).
+  if (/wilderness/i.test(spawn)) return true;
   return mode === 'f2p' && /members only/i.test(spawn);
 }
 

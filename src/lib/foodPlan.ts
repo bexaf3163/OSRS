@@ -102,6 +102,20 @@ export function sameFoodPicks(a: Record<string, FoodPick>, b: Record<string, Foo
  * The step with its food set to the pick: `amount` one trip, `totalAmount` the whole goal. No food needed at all (health comes back faster than it
  * goes) — the food is not asked for. No pick — the same object.
  */
+/** The personal food plan has replaced the route's own food amount, or there is no food to plan: no food item is left without a total. */
+export function foodPlanApplied(step: Pick<Step, 'itemsRequired'>): boolean {
+  return !(step.itemsRequired ?? []).some((i) => typeof i.heals === 'number' && i.totalAmount === undefined);
+}
+
+/**
+ * What sends a combat training step to the game again by itself (bridge.tsx): its plan and phase, the opponent, the place, and whether the food plan has
+ * replaced the route's amount yet. Not the food figures themselves: they follow the player's XP and would resend the step every few kills. The food plan
+ * settles after the plan (it waits for prices and gear), and without it in the key the game kept the route's 25 Salmon while the app said 21 (2.72.2, live).
+ */
+export function stepResendKey(step: Step): string {
+  return JSON.stringify([step.combatPlan ?? null, step.foes?.[0] ?? null, step.mapLocation && [step.mapLocation.x, step.mapLocation.y], foodPlanApplied(step)]);
+}
+
 export function withFoodPlan(step: Step, pick: FoodPick | undefined): Step {
   const at = step.itemsRequired?.findIndex((i) => typeof i.heals === 'number') ?? -1;
   if (!pick || at < 0) return step;

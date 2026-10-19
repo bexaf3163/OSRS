@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { adoptStorageKey, loadAdopted, saveAdopted, withAdopted } from '../../src/lib/combatRoute/adopt';
 import { evaluatePlans } from '../../src/lib/combatRoute/plans';
 import { currentPhase, phaseDone, resolvePick, samePicks, withCombatPlan } from '../../src/lib/combatRoute/pick';
-import { foodPicks, withFoodPlan } from '../../src/lib/foodPlan';
+import { foodPicks, foodPlanApplied, stepResendKey, withFoodPlan } from '../../src/lib/foodPlan';
 import { aggregateShopping } from '../../src/lib/shopping';
 import { emptyProgress } from '../../src/lib/progress';
 import { stepGuide, toInGameTarget } from '../../src/services/runeliteBridge';
@@ -133,6 +133,19 @@ describe('the whole app reads the same step: food, shopping, arrow, game', () =>
     expect(cows.total).toBeLessThan(40);
     const planned = withFoodPlan(adopted, cows);
     expect(planned.itemsRequired!.find((i) => i.nameEn === 'Salmon')?.totalAmount ?? 0).toBeLessThan(40);
+  });
+
+  it('the game gets the step again once the food plan settles, not when its figures move (live, 2.72.1: the game kept the route’s 25 Salmon)', () => {
+    const cows = foodPicks([adopted], emptyProgress(), live)['S4-03'];
+    expect(foodPlanApplied(adopted)).toBe(false);
+    const planned = withFoodPlan(adopted, cows);
+    expect(foodPlanApplied(planned)).toBe(true);
+    expect(stepResendKey(planned)).not.toBe(stepResendKey(adopted));
+    // A few kills later the figures follow the XP: the same key, so no resend.
+    const later = withFoodPlan(adopted, { ...cows, trip: Math.max(1, cows.trip - 1), total: Math.max(1, cows.total - 3) });
+    expect(stepResendKey(later)).toBe(stepResendKey(planned));
+    // A step without food has nothing to wait for.
+    expect(foodPlanApplied({ itemsRequired: [{ nameEn: 'Hammer', amount: 1 }] } as never)).toBe(true);
   });
 
   it('the shopping list buys what the plan needs, not what the route would', () => {

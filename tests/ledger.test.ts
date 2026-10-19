@@ -158,6 +158,16 @@ describe('where to get an item', () => {
     expect([p.primary, ...p.alternatives].some((o) => o?.label.includes('Silk merchant'))).toBe(false);
   });
 
+  it('a free item in the Wilderness is never offered: the exchange instead (live, 2.72.1: planks from the Graveyard of Shadows)', () => {
+    const d = detail({
+      gePrice: { buyPrice: 60, sellPrice: 55, updatedAt: '' },
+      freeSpawns: ['Wilderness - Graveyard of Shadows', 'Wilderness - by Larran’s small chest', 'Port Khazard (members only)'],
+    });
+    const p = planSources({ name: 'Plank', need: 3, detail: d }, at({ owned: owned({ Plank: { carried: 0 } }, true) }));
+    expect(p.primary).toMatchObject({ kind: 'ge' });
+    expect([p.primary, ...p.alternatives].some((o) => o?.kind === 'free')).toBe(false);
+  });
+
   it('Al Kharid: the toll is included in the price, after Prince Ali Rescue — it is not', () => {
     const d = detail({ buyLocations: [{ shopName: 'Zeke', location: 'Al Kharid', price: 20, stock: 10 }] });
     const s = at({ owned: owned({ Thing: { carried: 0 } }, false) });
