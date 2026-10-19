@@ -8,8 +8,8 @@ import { rangeForLevel } from '../lib/ranges';
 import { useStore } from '../store';
 import { useBridge } from '../bridge';
 import { usePlayerState } from '../playerStateContext';
-import { setFeatures, useFeatures } from '../lib/features';
-import { styleOf } from '../lib/playStyle';
+import { useFeatures } from '../lib/features';
+import { priorityOf, styleOf } from '../lib/playStyle';
 import { adviseTraining, formatHours, type MethodView, type TrainingAdvice } from '../lib/trainingRouter';
 import { actionForm } from '../lib/pacing';
 import { levelOf } from '../lib/playerState';
@@ -24,11 +24,12 @@ export function useTrainingAdvice(skill: string | null, target: number): Trainin
   const { xp, xpRate } = useBridge();
   const features = useFeatures();
   const style = styleOf(features).style;
+  const priority = priorityOf(features);
   const have = skill ? xp?.[skill] ?? null : null;
   const measured = skill ? xpRate(skill) : null;
   return useMemo(
-    () => (skill ? adviseTraining({ skill, target, state, mode, style, xp: have, measuredXph: measured }) : null),
-    [skill, target, state, mode, style, have, measured],
+    () => (skill ? adviseTraining({ skill, target, state, mode, style, priority, xp: have, measuredXph: measured }) : null),
+    [skill, target, state, mode, style, priority, have, measured],
   );
 }
 
@@ -116,10 +117,6 @@ export function TrainingCard({ skill, target }: { skill: string; target: number 
           <ul>{advice.others.slice(0, profile.alternatives || 3).map((v) => <Alternative key={v.method.id} v={v} />)}</ul>
         </details>
       )}
-      <div className="training-mode" role="group" aria-label="Training style"><span>Training mode</span><div className="training-mode-buttons">
-        <button type="button" className={`btn ${!features.efficient ? 'btn-primary' : ''}`} aria-pressed={!features.efficient} onClick={()=>setFeatures({efficient:false})}>Calm</button>
-        <button type="button" className={`btn ${features.efficient ? 'btn-primary' : ''}`} aria-pressed={features.efficient} onClick={()=>setFeatures({efficient:true})}>Efficient</button>
-      </div></div>
     </section>
   );
 }

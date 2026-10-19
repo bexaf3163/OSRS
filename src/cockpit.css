@@ -196,3 +196,8 @@
 .gear-connect p { margin: 0; }
 .gear-more > summary { cursor: pointer; width: fit-content; display: list-item; }
 .gear-more[open] > summary { margin-bottom: 6px; }
+
+/* 2.69: the plan in effect, one line in the step status; "Why this plan?" opens the comparison. */
+.status-combat-route p { margin: 4px 0 0; }
+.btn.btn-link { background: none; border: 0; padding: 0 2px; min-height: 0; color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; box-shadow: none; }
+.btn.btn-link:hover { background: none; text-decoration-thickness: 2px; }

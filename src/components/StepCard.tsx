@@ -228,6 +228,17 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
     </Fold>
   );
 
+  // A plan in effect (a combat plan, 2.69) replaced the route's own instructions: they stay readable here, folded, never beside the plan's.
+  const asWritten = step.routeAsWritten;
+  const routeWritten = asWritten && (
+    <Fold title="The route as written" hint="replaced by the plan in effect">
+      {asWritten.where && <p><Inline text={asWritten.where} /></p>}
+      {asWritten.how && <p className="step-how"><Inline text={asWritten.how} /></p>}
+      {asWritten.quickSteps?.length ? <ol className="quick-steps">{asWritten.quickSteps.map((q, i) => <li key={i}><Inline text={q} /></li>)}</ol> : null}
+      {asWritten.fields?.length ? <dl className="fields">{asWritten.fields.map((fl, i) => <FieldRow key={i} field={fl} />)}</dl> : null}
+    </Fold>
+  );
+
   // The critical field warnings ("Dangerous", "Attention", "Combat") are always visible, the other fields — in the details.
   const fieldsAll = step.fields ?? [];
   const fieldsWarn = fieldsAll.filter((f) => WARN_LABELS.has(f.label));
@@ -413,6 +424,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
         </p>
         {metaRow}
         {notes}
+        {routeWritten}
         {requires}
         {targets}
         {(step.itemsRequired?.length || step.itemsRecommended?.length || image || fieldsRest.length > 0) && (
@@ -445,6 +457,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
         {actions}
         {future}
         {reference}
+        {routeWritten}
         <details className="zen-more">
           <summary className="small">More about the step</summary>
           {metaRow}
@@ -479,6 +492,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
       {actions}
       {future}
       {reference}
+      {routeWritten}
       {(step.itemsRequired?.length || step.itemsRecommended?.length || image || fieldsRest.length > 0) && (
         <Fold title="Items, details and fields" hint="the raw step data">
           {items}

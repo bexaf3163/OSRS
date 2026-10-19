@@ -87,8 +87,12 @@ describe('the step as an adopted plan has it', () => {
     expect(s.pacing).toMatchObject({ skill: 'attack', targetLevel: 40, targetExp: 37224, actionName: 'cow|cows', expPerAction: 32 });
     expect(s.fields?.[0]).toMatchObject({ label: 'Your plan' });
     expect(s.fields?.[0].text).toMatch(/Cow: Attack to 40/);
-    // The route's own notes are still there, below.
-    expect(s.fields!.length).toBe((route.fields ?? []).length + 1);
+    // One set of instructions (2.69): the plan's own lead, the route's text is kept folded as "the route as written", never beside it.
+    expect(s.quickSteps?.[0]).toMatch(/^Fight the cows on Accurate until Attack 40 \(about \d+ kills\): The cow field east of Lumbridge\.$/);
+    expect(s.quickSteps?.[1]).toMatch(/^Then: fight the Hill Giants until 50 Big bones are in the bank/);
+    expect(s.where).toMatch(/cow field/);
+    expect(s.routeAsWritten).toEqual({ where: route.where, quickSteps: route.quickSteps, fields: route.fields });
+    expect(s.fields!.every((f) => f.label === 'Your plan' || ['Dangerous', 'Attention', 'Combat'].includes(f.label))).toBe(true);
   });
 
   it('the second phase leads back to the giants, with no XP pace line (the item is the goal) and the bones to bank', () => {
@@ -141,7 +145,7 @@ describe('the whole app reads the same step: food, shopping, arrow, game', () =>
     expect(payload.stepId).toBe('S4-03');
     expect(payload.worldPoint).toMatchObject({ label: 'The cow field east of Lumbridge' });
     expect(payload.npcNames).toEqual(['Cow']);
-    expect(payload.goal).toBe('Plan: The cow field east of Lumbridge');
+    expect(payload.goal).toBe('Cows: Attack 40');
     expect(payload.pacing).toMatchObject({ actionName: 'cow|cows', expPerAction: 32, targetExp: 37224 });
     expect(payload.completionTrigger).toEqual(toInGameTarget(route)!.completionTrigger);
   });
@@ -158,15 +162,22 @@ describe('what is saved: the choice, never the numbers', () => {
     return { m, s: { getItem: (k: string) => m.get(k) ?? null, setItem: (k: string, v: string) => void m.set(k, v), removeItem: (k: string) => void m.delete(k) } };
   };
 
-  it('is kept per profile and character, and the route\'s own plan removes the entry', () => {
+  it('is kept per profile and character with who chose it; the route chosen by the player is kept, null goes back to the recommendation', () => {
     const { m, s } = store();
     const key = adoptStorageKey('main', 'Funding Test');
     expect(adoptStorageKey('main', 'Other')).not.toBe(key);
     expect(adoptStorageKey('alt', 'Funding Test')).not.toBe(key);
     const map = withAdopted({}, 'S4-03', 'split', 1000);
     saveAdopted(s, key, map);
-    expect(loadAdopted(s, key)).toEqual({ 'S4-03': { key: 'split', at: 1000 } });
-    const back = withAdopted(map, 'S4-03', 'route', 2000);
+    expect(loadAdopted(s, key)).toEqual({ 'S4-03': { key: 'split', at: 1000, by: 'player' } });
+    // The guide's own choice is written as such.
+    expect(withAdopted({}, 'S4-03', 'split', 1000, 'auto')).toEqual({ 'S4-03': { key: 'split', at: 1000, by: 'auto' } });
+    // The same choice again is the same map: nothing is written.
+    expect(withAdopted(map, 'S4-03', 'split', 5000)).toBe(map);
+    // The route as written, chosen by the player, is a choice like any other: the guide must not replace it.
+    const route = withAdopted(map, 'S4-03', 'route', 2000);
+    expect(route).toEqual({ 'S4-03': { key: 'route', at: 2000, by: 'player' } });
+    const back = withAdopted(route, 'S4-03', null, 3000);
     expect(back).toEqual({});
     saveAdopted(s, key, back);
     expect(m.has(key)).toBe(false);
@@ -182,6 +193,9 @@ describe('what is saved: the choice, never the numbers', () => {
     m.set(key, '[1,2]');
     expect(loadAdopted(s, key)).toEqual({});
     m.set(key, JSON.stringify({ 'S4-03': { key: 'split', at: 5 }, bad: { key: 7, at: 1 }, worse: 'x', long: { key: 'x'.repeat(80), at: 1 } }));
-    expect(loadAdopted(s, key)).toEqual({ 'S4-03': { key: 'split', at: 5 } });
+    // An entry from before 2.69 has no "by": it was made with a button, so it is the player's.
+    expect(loadAdopted(s, key)).toEqual({ 'S4-03': { key: 'split', at: 5, by: 'player' } });
+    m.set(key, JSON.stringify({ 'S4-03': { key: 'split', at: 5, by: 'auto' }, 'S3-08': { key: 'defence-first:10', at: 6, by: 'nonsense' } }));
+    expect(loadAdopted(s, key)).toEqual({ 'S4-03': { key: 'split', at: 5, by: 'auto' }, 'S3-08': { key: 'defence-first:10', at: 6, by: 'player' } });
   });
 });

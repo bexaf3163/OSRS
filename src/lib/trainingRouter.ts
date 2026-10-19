@@ -14,7 +14,7 @@ import toolProgressionJson from '../data/toolProgression.json';
 import { evaluate, type ReqState, type Requirement } from './requirements';
 import { levelOf, type PlayerState } from './playerState';
 import { xpForLevel } from './xp';
-import type { PlayStyle } from './playStyle';
+import type { MethodPriority, PlayStyle } from './playStyle';
 
 export type Effort = 'afk' | 'low' | 'medium' | 'high';
 export type MethodCost = 'free' | 'profit' | 'cost';
@@ -137,19 +137,49 @@ const STATUS_RANK: Record<MethodStatus, number> = { READY: 0, PREP: 1, LOCKED: 2
 /** For ordering we take the lower speed bound: the wiki's upper one often needs special tricks (ticks, inventory). */
 const rateLow = (m: TrainingMethod): number | null => (m.xph ? m.xph[0] : null);
 
+/** How much of its listed speed a method keeps in practice: attention it needs, materials it costs and risk it carries (2.69, "balanced"). */
+const EFFORT_FACTOR: Record<Effort, number> = { afk: 1, low: 1, medium: 0.9, high: 0.6 };
+const COST_FACTOR: Record<MethodCost, number> = { profit: 1, free: 1, cost: 0.85 };
+const RISK_FACTOR: Record<Risk, number> = { none: 1, low: 0.95, high: 0.5 };
+/** Hours a method whose items are missing loses to getting them (a bank or exchange stop). */
+export const SETUP_HOURS = 0.25;
+/** A later method replaces the one in hand on the path only when it is this much better in practice. */
+export const SWITCH_GAIN = 1.1;
+
+/** The practical XP per hour of a method: the wiki's lower bound, less what attention, materials and risk take from it. null - no speed listed. */
+export function practicalRate(m: TrainingMethod): number | null {
+  const r = rateLow(m);
+  return r === null ? null : r * EFFORT_FACTOR[m.effort] * COST_FACTOR[m.cost] * RISK_FACTOR[m.risk];
+}
+
 /**
- * The order of methods. Calm style: first the ready ones, without risk, with fewer clicks, not at a loss — speed only
- * on a tie. Efficient: first the ready ones, then by speed (for methods without a speed — by entry level).
+ * The order of methods. Balanced (the default since 2.69): the practical hours to the goal, a method whose items are missing paying its setup; locked
+ * ones last. Relaxed (the old "Calm"): first the ready ones, without risk, with fewer clicks, not at a loss — speed only on a tie. Fastest (the old
+ * "Efficient"): first the ready ones, then by speed (for methods without a speed — by entry level).
  */
-function compare(style: PlayStyle) {
+function compare(priority: MethodPriority, xpLeft?: number) {
   return (a: MethodView, b: MethodView): number => {
     const s = STATUS_RANK[a.status] - STATUS_RANK[b.status];
-    if (s) return s;
     const ra = rateLow(a.method);
     const rb = rateLow(b.method);
     const byRate = (rb ?? -1) - (ra ?? -1);
     const byEntry = b.method.from - a.method.from;
-    if (style === 'chill') {
+    if (priority === 'balanced') {
+      if (a.status === 'LOCKED' || b.status === 'LOCKED') { if (s) return s; }
+      const pa = practicalRate(a.method);
+      const pb = practicalRate(b.method);
+      if (pa && pb && xpLeft && xpLeft > 0) {
+        const ha = xpLeft / pa + (a.status === 'PREP' ? SETUP_HOURS : 0);
+        const hb = xpLeft / pb + (b.status === 'PREP' ? SETUP_HOURS : 0);
+        if (Math.abs(ha - hb) > Math.min(ha, hb) * 0.05) return ha - hb;
+      } else {
+        if (s) return s;
+        if ((pa ?? -1) !== (pb ?? -1)) return (pb ?? -1) - (pa ?? -1);
+      }
+      return s || EFFORT_RANK[a.method.effort] - EFFORT_RANK[b.method.effort] || COST_RANK[a.method.cost] - COST_RANK[b.method.cost] || byRate || byEntry;
+    }
+    if (s) return s;
+    if (priority === 'relaxed') {
       return RISK_RANK[a.method.risk] - RISK_RANK[b.method.risk]
         || EFFORT_RANK[a.method.effort] - EFFORT_RANK[b.method.effort]
         || COST_RANK[a.method.cost] - COST_RANK[b.method.cost]
@@ -205,6 +235,8 @@ export interface AdviceInput {
   state: PlayerState;
   mode: GameMode;
   style: PlayStyle;
+  /** How methods are chosen; absent - from the style (calm: relaxed, efficient: fastest), as before 2.69. */
+  priority?: MethodPriority;
   /** The skill's current XP (if known): otherwise counted from the start of the level. */
   xp?: number | null;
   /** XP per hour from the player's measurements. */
@@ -214,10 +246,14 @@ export interface AdviceInput {
 
 const fmtK = (n: number) => (n >= 1000 ? `${Math.round(n / 1000)}k` : String(n));
 
-function reasonFor(v: MethodView, style: PlayStyle, level: number): string {
+function reasonFor(v: MethodView, priority: MethodPriority, level: number): string {
   const m = v.method;
   const parts: string[] = [];
-  if (style === 'chill') {
+  if (priority === 'balanced') {
+    if (m.xph) parts.push(m.xph[0] === m.xph[1] ? `≈ ${fmtK(m.xph[0])} XP per hour` : `≈ ${fmtK(m.xph[0])}–${fmtK(m.xph[1])} XP per hour`);
+    parts.push(m.effort === 'afk' ? 'almost no clicks' : m.effort === 'low' ? 'few clicks' : m.effort === 'medium' ? 'steady clicking' : 'needs full attention');
+    if (m.risk !== 'none') parts.push(m.risk === 'high' ? 'risky' : 'small risk');
+  } else if (priority === 'relaxed') {
     const quiet = m.effort === 'afk' ? 'almost no clicks' : m.effort === 'low' ? 'few clicks' : m.effort === 'medium' ? 'relaxed pace' : 'needs attention';
     parts.push(m.risk === 'none' ? `no risk, ${quiet}` : `${quiet}, small risk`);
   } else if (m.xph) {
@@ -233,17 +269,25 @@ function reasonFor(v: MethodView, style: PlayStyle, level: number): string {
   return parts.join('; ');
 }
 
-/** The best method on each leg of the path to the goal: identical consecutive ones merge. */
-function buildPath(skill: string, level: number, target: number, input: AdviceInput, cmp: ReturnType<typeof compare>): PathLeg[] {
+/**
+ * The best method on each leg of the path to the goal: identical consecutive ones merge. Except for "fastest", a new unlock replaces the method in hand
+ * only when it is clearly better in practice (SWITCH_GAIN): changing method for a sliver costs a trip and a new setup.
+ */
+function buildPath(skill: string, level: number, target: number, input: AdviceInput, cmp: ReturnType<typeof compare>, priority: MethodPriority): PathLeg[] {
   const methods = input.methods ?? trainingMethods;
   const legs: PathLeg[] = [];
   for (let lv = level; lv < target; lv++) {
     // For future levels the item requirements are not counted: "what will be needed", not "what there is now".
     const cands = methodsFor(skill, methods).filter((m) => availableAt(m, lv, input.mode)).map((m) => viewMethod(m, input.state)).filter((v) => v.status !== 'LOCKED' || v.missing.every((x) => x.kind === 'skill'));
     cands.sort(cmp);
-    const pick = cands[0]?.method;
+    let pick = cands[0]?.method;
     if (!pick) continue;
     const last = legs[legs.length - 1];
+    if (priority !== 'fastest' && last && last.method.id !== pick.id && cands.some((c) => c.method.id === last.method.id)) {
+      const now = practicalRate(last.method);
+      const next = practicalRate(pick);
+      if (now !== null && next !== null && next < now * SWITCH_GAIN) pick = last.method;
+    }
     if (last && last.method.id === pick.id) last.toLevel = lv + 1;
     else legs.push({ method: pick, fromLevel: lv, toLevel: lv + 1 });
   }
@@ -258,12 +302,14 @@ export function adviseTraining(input: AdviceInput): TrainingAdvice {
   if (level === null) return { ...empty, reason: 'Level unknown: log in to the game with RuneLite or enter it on the skill page.' };
   if (level >= target) return { ...empty, reason: 'The goal is already reached.' };
 
-  const cmp = compare(style);
+  const priority: MethodPriority = input.priority ?? (style === 'efficient' ? 'fastest' : 'relaxed');
+  const xpNow0 = input.xp ?? xpForLevel(level);
+  const cmp = compare(priority, Math.max(0, xpForLevel(target) - xpNow0));
   const views = methodsFor(skill, methods).filter((m) => availableAt(m, level, mode)).map((m) => viewMethod(m, state)).sort(cmp);
   const best = views.find((v) => v.status !== 'LOCKED') ?? null;
   const others = views.filter((v) => v !== best).slice(0, 3);
   const quests = methodsFor(skill, methods).filter((m) => m.kind === 'quest' && m.from <= level && (m.to === null || level < m.to) && (mode === 'members' || !m.members));
-  const path = buildPath(skill, level, target, input, cmp);
+  const path = buildPath(skill, level, target, input, compare(priority), priority);
 
   const xpNow = input.xp ?? xpForLevel(level);
   const xpLeft = Math.max(0, xpForLevel(target) - xpNow);
@@ -281,7 +327,7 @@ export function adviseTraining(input: AdviceInput): TrainingAdvice {
   }
   return {
     ...empty, best, others, quests, path, xpLeft, actionsLeft, time,
-    reason: best ? reasonFor(best, style, level) : 'There is no method in the list for this level and mode: see the skill training plan.',
+    reason: best ? reasonFor(best, priority, level) : 'There is no method in the list for this level and mode: see the skill training plan.',
   };
 }
 

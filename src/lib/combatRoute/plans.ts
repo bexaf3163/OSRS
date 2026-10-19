@@ -85,8 +85,10 @@ export interface PlanReport {
   /** What the step asks, for the card: "Attack to 40, 50 Big bones". */
   objective: string;
   plans: EvaluatedPlan[];
-  /** The plan to offer; the route's own when nothing is clearly better. */
+  /** The plan to offer; the route's own when nothing is clearly better. A plan in effect (`adopted`) stays unless another is clearly better. */
   recommended: string;
+  /** The plan the guide would pick with nothing in effect yet: what a player's own choice is compared with (2.69). */
+  fresh: string;
   /** Why, in a sentence. */
   reason: string;
   /** How sure the model is of the recommendation. */
@@ -116,8 +118,15 @@ export interface PlanInput {
   done?: (stepId: string) => boolean;
 }
 
-/** A plan must beat the route by this much (of the route's score) to be recommended over it. */
+/** A Defence plan must beat a working route by this much on the middle estimate while the route still gives Defence XP later (Dragon Slayer I). */
 export const MIN_GAIN = 0.1;
+/**
+ * Any other plan must beat a working route by this much (of the route's score) to be selected over it (2.69: 0.05, was MIN_GAIN). The cost of the extra
+ * walk between spots is counted in the plan's own minutes (SWITCH_MINUTES), so this margin is only for the uncertainty of the estimates.
+ */
+export const ROUTE_MARGIN = 0.05;
+/** Minutes a plan loses for each change of fighting spot: the walk, a bank stop on the way, finding the spot. */
+export const SWITCH_MINUTES = 6;
 /** The adopted plan stays while its score is within this factor of the best. */
 export const KEEP_MARGIN = 1.25;
 const BASIS_PENALTY: Record<Basis, number> = { calibrated: 1, formula: 1.05, basic: 1.3 };
@@ -241,7 +250,10 @@ export function incomeOf(phases: readonly PlanPhase[], reserve: { name: string; 
 }
 
 function assemble(id: PlanId, key: string, title: string, phases: PlanPhase[], hp: number, price: number | null, income: PlanIncome, extraBlockers: string[] = [], notes: string[] = []): EvaluatedPlan {
-  const minutes = phases.reduce((a, p) => sum(a, p.minutes), ZERO);
+  // Changing spots costs time too: the walk between them is part of the plan, not free.
+  const switches = phases.slice(1).filter((p, i) => p.spot.foe !== phases[i].spot.foe).length;
+  const walk = SWITCH_MINUTES * switches;
+  const minutes = sum(phases.reduce((a, p) => sum(a, p.minutes), ZERO), { low: walk, mid: walk, high: walk });
   const food = phases.reduce((a, p) => sum(a, p.food), ZERO);
   const basis = phases.reduce<Basis>((a, p) => worst(a, p.basis), 'calibrated');
   const { risks, blockers } = risksOf(phases, hp);
@@ -351,9 +363,9 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   // middle estimate as well, not only at the slow end.
   const worthEarly = (p: EvaluatedPlan) => p.id !== 'defence-first' || laterXp === 0 || !route.eligible || (route.minutes.mid - p.minutes.mid) / route.minutes.mid >= MIN_GAIN;
   const best = [...eligible.filter(worthEarly)].sort(byTime)[0] ?? route;
-  let recommended = best;
   // Another plan must clearly beat a route that works.
-  if (route.eligible && best.id !== 'route' && (route.score - best.score) / route.score < MIN_GAIN) recommended = route;
+  const fresh = route.eligible && best.id !== 'route' && (route.score - best.score) / route.score < ROUTE_MARGIN ? route : best;
+  let recommended = fresh;
   // The plan the player adopted stays while it is not clearly beaten.
   const adopted = inp.adopted ? plans.find((p) => p.key === inp.adopted && p.eligible) : undefined;
   if (adopted && adopted.score <= best.score * KEEP_MARGIN) recommended = adopted;
@@ -362,7 +374,7 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
 
   const confidence: PlanReport['confidence'] = recommended.basis === 'calibrated' ? 'HIGH' : recommended.basis === 'formula' ? 'MEDIUM' : 'LOW';
   return {
-    stepId: step.id, objective, plans, recommended: recommended.key, confidence, compared: [...compared],
+    stepId: step.id, objective, plans, recommended: recommended.key, fresh: fresh.key, confidence, compared: [...compared],
     reason: held ? heldReason(held, route, later) : reasonOf(recommended, route, price),
     food: { name: foodItem.nameEn, heals: foodItem.heals!, price },
   };
@@ -374,9 +386,8 @@ const durationText = (m: number) => {
   return r >= 120 ? `${Math.floor(r / 60)} h${r % 60 ? ` ${r % 60} min` : ''}` : `${r} min`;
 };
 
-/** Why this plan, against the route's, in a sentence the player can check. */
-export function reasonOf(plan: EvaluatedPlan, route: EvaluatedPlan, price: number | null): string {
-  if (plan.id === 'route') return route.eligible ? 'The route\'s plan is as good as any this model can compare, so it stays.' : 'No plan could be recommended: ' + (route.blockers[0] ?? 'the route\'s plan is not safe for you') + '.';
+/** How a plan compares with the route's own: "about 10 min faster and 310 fewer pieces of food (about 10,197 gp)". */
+function comparison(plan: EvaluatedPlan, route: EvaluatedPlan, price: number | null): string {
   const faster = route.minutes.mid - plan.minutes.mid;
   const fewer = route.food.mid - plan.food.mid;
   const parts: string[] = [];
@@ -384,7 +395,26 @@ export function reasonOf(plan: EvaluatedPlan, route: EvaluatedPlan, price: numbe
   else if (faster <= -5) parts.push(`about ${durationText(-faster)} slower`);
   if (fewer >= 5) parts.push(`${Math.round(fewer / 5) * 5} fewer pieces of food${price !== null ? ` (about ${gpText(fewer * price)} gp)` : ''}`);
   else if (fewer <= -5) parts.push(`${Math.round(-fewer / 5) * 5} more pieces of food`);
-  return `${plan.title}: ${parts.length ? parts.join(' and ') : 'about the same time and food'} than the route's plan.`;
+  return parts.length ? parts.join(' and ') : 'about the same time and food';
+}
+
+/** Why this plan, against the route's, in a sentence the player can check. */
+export function reasonOf(plan: EvaluatedPlan, route: EvaluatedPlan, price: number | null): string {
+  if (plan.id === 'route') return route.eligible ? 'The route as written is as good as any plan this model can compare, so it stays.' : 'No plan could be recommended: ' + (route.blockers[0] ?? 'the route\'s plan is not safe for you') + '.';
+  return `${plan.title}: ${comparison(plan, route, price)} than the route as written.`;
+}
+
+/**
+ * The one short sentence the step shows under the plan in effect (2.69): why the guide selected it, or that it is the player's own choice. The full
+ * comparison stays behind "Why this plan?".
+ */
+export function planWhy(report: PlanReport, key: string, source: 'auto' | 'player'): string {
+  const plan = report.plans.find((p) => p.key === key);
+  const route = report.plans[0];
+  if (!plan) return '';
+  if (source === 'player') return plan.id === 'route' ? 'You chose the route as written.' : `You chose this plan: ${comparison(plan, route, report.food.price)} than the route as written.`;
+  if (plan.id === 'route') return report.plans.length > 1 ? 'Recommended for your levels and kit: no other plan is clearly better.' : '';
+  return `Recommended for your levels and kit: ${comparison(plan, route, report.food.price)} than the route as written.`;
 }
 
 const levelAfter = (xp: number, grant: number) => levelForXp(xp + grant);
@@ -400,5 +430,5 @@ function heldReason(held: EvaluatedPlan, route: EvaluatedPlan, later: readonly L
   const faster = route.minutes.mid - held.minutes.mid;
   const first = later[0];
   const gain = faster >= 5 ? `about ${durationText(faster)} faster` : 'about the same speed';
-  return `The route's plan stays. ${held.title} is ${gain} on the middle estimate, but ${first.stepId} (${first.title}) gives ${gpText(first.xp)} Defence XP later for nothing, so Defence trained now only helps the fights before it.`;
+  return `The route as written stays. ${held.title} is ${gain} on the middle estimate, but ${first.stepId} (${first.title}) gives ${gpText(first.xp)} Defence XP later for nothing, so Defence trained now only helps the fights before it.`;
 }

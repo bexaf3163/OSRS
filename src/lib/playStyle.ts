@@ -28,3 +28,11 @@ export const STYLES: Record<PlayStyle, StyleProfile> = {
 };
 
 export const styleOf = (f: Pick<Features, 'efficient'>): StyleProfile => (f.efficient ? STYLES.efficient : STYLES.chill);
+
+/**
+ * How training methods are chosen (2.69). "balanced" is the default: the practical time to the goal, counting the setup of missing items, attention and
+ * material cost. "fastest" (the old "Efficient", an explicit choice) puts speed first; "relaxed" puts no risk and fewer clicks first. Before 2.69 the
+ * default ("Calm") put AFK methods first; a save that never chose gets "balanced", a save that chose "Efficient" keeps it as "fastest".
+ */
+export type MethodPriority = 'balanced' | 'fastest' | 'relaxed';
+export const priorityOf = (f: Pick<Features, 'efficient' | 'relaxedTraining'>): MethodPriority => (f.efficient ? 'fastest' : f.relaxedTraining ? 'relaxed' : 'balanced');

@@ -10,6 +10,7 @@ import { desktop, type RuneliteCheck, type ZoomState } from '../lib/desktop';
 import { applyTextScale, loadTextScale, percent, stepScale, TEXT_EVENT, TEXT_STEPS, ZOOM_STEPS } from '../lib/ui-scale';
 import { useBridge } from '../bridge';
 import { setFeatures, useFeatures, type Features } from '../lib/features';
+import { priorityOf } from '../lib/playStyle';
 import { DensityPills } from '../components/DensityToggle';
 import { BRIDGE_ORIGIN } from '../services/runeliteBridge';
 import { PluginUpdateNote } from '../components/PluginUpdateNote';
@@ -358,19 +359,21 @@ function PlayStyleSection() {
         <p className="muted small">It changes how Path is shown. The route, progress and every other page stay as they are; "Full workspace" in the header returns.</p>
       </div>
       <div className="setting">
-        <div className="mode-toggle style-toggle" role="group" aria-label="Play style">
-          {([['chill', '🌿', 'Calm'], ['efficient', '⚡', 'Efficient']] as const).map(([k, icon, label]) => {
-            const on = (k === 'efficient') === features.efficient;
+        <div className="mode-toggle style-toggle" role="group" aria-label="Training choices">
+          {([['balanced', 'Balanced'], ['fastest', 'Fastest'], ['relaxed', 'Relaxed']] as const).map(([k, label]) => {
+            const on = priorityOf(features) === k;
             return (
-              <button key={k} type="button" className={`mode-btn ${on ? 'is-active' : ''}`} aria-pressed={on} onClick={() => setFeatures({ efficient: k === 'efficient' })}>
-                <span aria-hidden="true">{icon}</span> <span className="style-label">{label}</span>
+              <button key={k} type="button" className={`mode-btn ${on ? 'is-active' : ''}`} aria-pressed={on}
+                onClick={() => setFeatures({ efficient: k === 'fastest', relaxedTraining: k === 'relaxed' })}>
+                <span className="style-label">{label}</span>
               </button>
             );
           })}
         </div>
         <p className="muted small">
-          <strong>Calm</strong> — less on the screen, nothing is pushed; training methods — without risk and without extra clicks; messages only about the main thing.
-          {' '}<strong>Efficient</strong> — more hints and comparisons; methods — the fastest of the available, with a time estimate; "one trip" sees further. The step requirements and safety do not depend on the style.
+          How the guide picks training methods. <strong>Balanced</strong> (the default): the quickest practical way to the goal, counting getting the items, how much attention it
+          takes and what the materials cost. <strong>Fastest</strong>: speed first, with more hints and a look further ahead. <strong>Relaxed</strong>: no risk and fewer clicks first.
+          Combat plans, the step requirements and safety do not depend on this.
         </p>
       </div>
       <div className="setting">

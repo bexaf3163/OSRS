@@ -17,8 +17,10 @@ export interface Features {
   levelsFromGame: boolean;
   /** Auto-prepare: the app itself leads the arrow to what is missing (a bank, a shop) and returns to the step. */
   autoPrep: boolean;
-  /** The "efficient" style (the default is "calm"): lib/playStyle.ts. */
+  /** The "efficient" style (the default is "calm"): lib/playStyle.ts. Since 2.69 it is also the "Fastest" training preference. */
   efficient: boolean;
+  /** The "Relaxed" training preference (2.69): fewer clicks and no risk before speed. With neither this nor "efficient" the guide picks "Balanced". */
+  relaxedTraining: boolean;
   /** The "Inspector" mode: all the step card's blocks are expanded (the default is "Zen": one status line and a "Done" button). */
   inspector: boolean;
   /** The compact Path view: the current action, its place and the essentials in a narrow window beside the game. Same state, fewer panels. */
@@ -28,7 +30,7 @@ export interface Features {
 }
 
 export const FEATURES_KEY = 'osrs-put:features';
-export const DEFAULT_FEATURES: Features = { autoLocation: true, bankTags: true, pacing: true, upgradeRouter: true, levelsFromGame: true, autoPrep: true, efficient: false, inspector: false, compact: false, keepDefenceOne: false };
+export const DEFAULT_FEATURES: Features = { autoLocation: true, bankTags: true, pacing: true, upgradeRouter: true, levelsFromGame: true, autoPrep: true, efficient: false, relaxedTraining: false, inspector: false, compact: false, keepDefenceOne: false };
 
 /** What is saved; the unfamiliar and the broken fall back to the default (a new feature is on). */
 export function parseFeatures(raw: string | null): Features {

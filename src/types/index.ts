@@ -365,8 +365,10 @@ export interface Step {
    * step ready. The static itemsRequired / mapLocation are the fallback while the level is unknown. See lib/methodStep.ts.
    */
   followsMethod?: string;
-  /** Set at run time while an adopted combat plan leads the step (lib/combatRoute/pick.ts): the plan's key and the phase in hand. Never in the data. */
-  combatPlan?: { key: string; phase: number };
+  /** Set at run time while a combat plan other than the route's own leads the step (lib/combatRoute/pick.ts): the plan's key, the phase in hand and who chose it. Never in the data. */
+  combatPlan?: { key: string; phase: number; source: 'auto' | 'player' };
+  /** Set at run time with combatPlan: the route's own instructions the plan replaced, shown folded as "the route as written". Never in the data. */
+  routeAsWritten?: { where?: string; how?: string; quickSteps?: string[]; fields?: Field[] };
   /**
    * Who the step fights in melee: wiki article names (monsters.json). The gear advisor uses them to
    * compare weapons and show a hint on the step. Absent from steps where you fight with a special weapon or magic.

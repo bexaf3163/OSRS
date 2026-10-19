@@ -7,10 +7,10 @@
 import type { GameMode, Step } from '../types';
 import { followedGoal, GOAL_REACHED } from './methodStep';
 import { levelOf, type PlayerState } from './playerState';
-import type { PlayStyle } from './playStyle';
+import type { MethodPriority, PlayStyle } from './playStyle';
 import { adviseTraining } from './trainingRouter';
 
-export function pickMethods(steps: readonly Step[], state: PlayerState, mode: GameMode, style: PlayStyle): Record<string, string> {
+export function pickMethods(steps: readonly Step[], state: PlayerState, mode: GameMode, style: PlayStyle, priority?: MethodPriority): Record<string, string> {
   const picks: Record<string, string> = {};
   for (const step of steps) {
     const goal = followedGoal(step);
@@ -21,7 +21,7 @@ export function pickMethods(steps: readonly Step[], state: PlayerState, mode: Ga
       picks[step.id] = GOAL_REACHED;
       continue;
     }
-    const best = adviseTraining({ skill: goal.skill, target: goal.target, state, mode, style }).best;
+    const best = adviseTraining({ skill: goal.skill, target: goal.target, state, mode, style, priority }).best;
     if (best) picks[step.id] = best.method.id;
   }
   return picks;

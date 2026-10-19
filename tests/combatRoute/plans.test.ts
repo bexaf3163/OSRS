@@ -151,7 +151,7 @@ describe('choosing, with a steady hand', () => {
       stats: { attack: 38, strength: 60, defence: 45, hitpoints: 60 }, xp: { attack: 33000, strength: 273742, defence: 61512, hitpoints: 400000 },
     }))!;
     expect(r.recommended).toBe('route');
-    expect(r.reason).toMatch(/route's plan/);
+    expect(r.reason).toMatch(/route as written/);
   });
 
   it("the plan the player adopted stays while it is not clearly beaten, and the route's own can be chosen back", () => {
@@ -236,7 +236,7 @@ describe('Defence the route gives later (Dragon Slayer I)', () => {
     // ... but by the middle estimate it is under the margin a route that works must be beaten by.
     expect((route.minutes.mid - d20.minutes.mid) / route.minutes.mid).toBeLessThan(MIN_GAIN);
     expect(r.recommended).toBe('route');
-    expect(r.reason).toMatch(/route's plan stays.*Defence 20 first.*S5-09.*18,650 Defence XP later for nothing/);
+    expect(r.reason).toMatch(/route as written stays.*Defence 20 first.*S5-09.*18,650 Defence XP later for nothing/);
   });
 
   it('with no Defence reward left ahead the same plan is recommended again: the training is not duplicated by anything', () => {
@@ -248,6 +248,6 @@ describe('Defence the route gives later (Dragon Slayer I)', () => {
   it('the player can still adopt it: an adopted Defence plan stays, and a route that is not safe does not hold it back', () => {
     expect(evaluatePlans(withMarket({ ...noSplit, adopted: 'defence-first:20' }))!.recommended).toBe('defence-first:20');
     const weak = evaluatePlans(withMarket({ stats: { ...HISTORICAL.stats, hitpoints: 8 } }))!;
-    expect(weak.reason).not.toMatch(/route's plan stays/);
+    expect(weak.reason).not.toMatch(/route as written stays/);
   });
 });

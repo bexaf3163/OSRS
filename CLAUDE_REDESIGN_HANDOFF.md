@@ -859,3 +859,26 @@ Not done yet (block 2b): the audit ledger of every combat stage, mandatory quest
 - Tests: `tests/gearContext.test.ts` (17: amulet sweep over levels/styles/opponents, style-change wording, relevant defence, unknown attacker, no worthwhile change, owned before bought,
   unaffordable goal, reserve, unpriced items, two-handed shield loss, per-character snapshots); smoke `UI_ONLY=gear` (recommendation, no change, offline snapshot, offline nothing known).
 - Not verified live in the game (automated only).
+
+## 2.69.0 — sensible training plans selected by default
+
+- Owner's request: no "Default → improved" switch; one plan in effect, explained in one line; alternatives behind "Why this plan?"; app and addon from one state.
+- `combatRoute/selection.ts` `selectPlan(report, stored, trip)`: no entry → the recommendation (an older save had the route by default); `by: 'auto'` → the recommendation with
+  hysteresis (`evaluatePlans` gets the stored key as `adopted`, KEEP_MARGIN); `by: 'player'` → kept while usable, `offer` when `report.fresh` (the guide's pick with nothing in effect)
+  is MIN_GAIN better; mid-trip (`inProgress`) a change is `pending` (the old plan stays) unless the old plan is gone or unsafe.
+- `adopt.ts`: entries `{key, at, by}`; legacy entries without `by` are the player's (made with the old button). `withAdopted(..., 'route', 'player')` stores the explicit route;
+  `null` removes the entry (back to the recommendation).
+- `playerStateContext.tsx` evaluates the plans of every open combat training step once (prices, food price, trade restriction, `done`), offline from the profile's last levels and
+  the character's last gear (`lastKnown`), selects, persists auto choices (never over the player's), and resolves picks for the store overlay. `usePlayerState().combatPlans`
+  and `choosePlan` are the only way screens read or change plans (CombatRoute, CombatRouteLine).
+- Trip in progress = linked, in game, the step active in the game, the plugin measuring its pace (`pacing.actionsPerMinute !== null`) and the step's food (or an alternative) in the bag.
+- `pick.ts` `withCombatPlan`: the plan's instructions replace the route's `quickSteps`/`where` (`phaseInstruction`), the plate goal is "Cows: Attack 40", fields keep only warnings
+  plus a "Plan"/"Your plan" field, and the route's own text goes to `step.routeAsWritten` (StepCard folds it as "The route as written").
+- `plans.ts`: `SWITCH_MINUTES` (6) per change of spot is part of a plan's minutes; `ROUTE_MARGIN` 0.05 replaces MIN_GAIN as the route bias (MIN_GAIN 0.1 stays for early Defence
+  and offers); `report.fresh`; `planWhy(report, key, source)` is the one-line reason.
+- Methods: `MethodPriority` 'balanced' (default) | 'fastest' | 'relaxed' (`priorityOf(features)`: `efficient` → fastest, `relaxedTraining` → relaxed). Balanced orders by practical
+  hours (`practicalRate` = wiki low bound × effort × cost × risk factors, + `SETUP_HOURS` for a method with missing items); the path keeps the method in hand unless a new one is
+  `SWITCH_GAIN` better. Presentation (look-ahead etc.) still follows `efficient`.
+- Tests: `tests/combatRoute/selection.test.ts` (16, the owner's representative states), `tests/trainingPriority.test.ts` (7), `tests/defaultPlans.test.ts` writes `docs/DEFAULT_PLANS.md`;
+  smoke `UI_ONLY=combat` rewritten (plan in effect without a press, payload to cows, one set of instructions, choose the route, offer, Defence 20, follow the recommendation).
+- Travel variants (canoe, teleports; `BranchSuggestions`) are not training plans and still need a press. Not verified live in the game yet.

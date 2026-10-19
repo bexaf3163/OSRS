@@ -1,12 +1,15 @@
-// An adopted combat plan, applied to its step. The route's step is the identity: its id, its completion trigger, its title and its items stay. What the plan
-// changes is the part of the step that says where to fight and what: the opponent, the place the arrow leads to, the pace line the game draws and the
-// notes. It is applied the same way for the preparation list, the shopping list, the food plan, the arrow and the plugin, because all of them read the
-// step the store hands out (the way the training method and the food plan already do): one change here, no second copy anywhere.
+// The combat plan in effect, applied to its step. The route's step is the identity: its id, its completion trigger, its title and its items stay. What the
+// plan changes is the part of the step that says where to fight and what: the opponent, the place the arrow leads to, the pace line the game draws, the
+// instructions the step page shows first and the notes. It is applied the same way for the preparation list, the shopping list, the food plan, the arrow
+// and the plugin, because all of them read the step the store hands out (the way the training method and the food plan already do): one change here, no
+// second copy anywhere.
 //
 // The step is never completed by a plan: the trigger is the route's own (Attack 40 and 50 Big bones). A phase ends when its own goal is met by what the
 // game shows (the XP reached, the item in hand), and the next phase starts; with every phase met the last one stays until the step itself closes.
+//
+// Since 2.69 the plan's own instructions replace the route's on the page: one set of instructions, the route's text folded as "the route as written".
 
-import type { InGameTarget, Step, StepPacing } from '../../types';
+import type { Field, InGameTarget, Step, StepPacing } from '../../types';
 import { levelForXp } from '../xp';
 import type { EvaluatedPlan, Goal, MeleeSkill, PlanPhase, PlanReport } from './plans';
 import type { Spot } from './spots';
@@ -15,6 +18,10 @@ export interface CombatPick {
   /** The plan's key: "split", "defence-first:20". */
   key: string;
   title: string;
+  /** Who chose the plan: the guide by its recommendation, or the player. */
+  source: 'auto' | 'player';
+  /** One sentence: why this plan (the comparison with the route's own, or "your choice"). */
+  why: string;
   /** The phase in hand, 1-based. */
   phase: number;
   phases: number;
@@ -27,6 +34,8 @@ export interface CombatPick {
   item?: { name: string; count: number };
   /** The phase as one line: "Cow: Attack to 40 (746 kills)". */
   text: string;
+  /** The instruction of every phase from the one in hand on, in order. */
+  steps: string[];
 }
 
 export interface Progress {
@@ -51,23 +60,45 @@ export function currentPhase(plan: EvaluatedPlan, st: Progress): number {
   return at < 0 ? plan.phases.length - 1 : at;
 }
 
-/** The pick for an adopted plan, or null: the plan is gone (the conditions changed: the bones are already in hand) or not safe - the route's plan stands. */
-export function resolvePick(report: PlanReport | null, adoptedKey: string | null | undefined, st: Progress): CombatPick | null {
-  if (!report || !adoptedKey || adoptedKey === 'route') return null;
-  const plan = report.plans.find((p) => p.key === adoptedKey);
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+const STYLE_WORD: Record<MeleeSkill, string> = { attack: 'Accurate', strength: 'Aggressive', defence: 'Defensive' };
+const PLURAL: Record<string, string> = { Cow: 'cows', Minotaur: 'Minotaurs', 'Hill Giant': 'Hill Giants' };
+const plural = (foe: string) => PLURAL[foe] ?? `${foe}s`;
+const goalText = (goals: readonly Goal[]) => goals.map((g) => `${cap(g.skill)} ${levelForXp(g.exp)}`).join(' and ');
+
+/** What to do in one phase, in one sentence the page and the game can show. */
+export function phaseInstruction(p: PlanPhase): string {
+  const where = p.spot.place.label;
+  if (p.kind === 'item' && p.item) return `Fight the ${plural(p.foe.name)} until ${p.item.count} ${p.item.name} are in the bank (about ${p.kills} kills): ${where}.`;
+  const style = p.goals[0] ? ` on ${STYLE_WORD[p.goals[0].skill]}` : '';
+  return `Fight the ${plural(p.foe.name)}${style} until ${goalText(p.goals)} (about ${p.kills} kills): ${where}.`;
+}
+
+/**
+ * The pick for the plan in effect, or null when the route's own plan applies: none is selected, it is the route's own, or the plan is gone (its
+ * conditions changed: the bones are already in hand) or not safe.
+ */
+export function resolvePick(report: PlanReport | null, key: string | null | undefined, st: Progress, source: 'auto' | 'player' = 'player', why = ''): CombatPick | null {
+  if (!report || !key || key === 'route') return null;
+  const plan = report.plans.find((p) => p.key === key);
   if (!plan || !plan.eligible || plan.id === 'route') return null;
   const i = currentPhase(plan, st);
   const ph = plan.phases[i];
+  const steps = plan.phases.slice(i).map((p, n) => {
+    const line = phaseInstruction(p);
+    return n === 0 ? line : `Then: ${line.charAt(0).toLowerCase()}${line.slice(1)}`;
+  });
   return {
-    key: plan.key, title: plan.title, phase: i + 1, phases: plan.phases.length, kind: ph.kind, foe: ph.foe.name, xpPerKill: 4 * ph.foe.hitpoints, spot: ph.spot, goals: ph.goals,
-    ...(ph.item ? { item: ph.item } : {}), text: ph.text,
+    key: plan.key, title: plan.title, source, why, phase: i + 1, phases: plan.phases.length, kind: ph.kind, foe: ph.foe.name, xpPerKill: 4 * ph.foe.hitpoints, spot: ph.spot, goals: ph.goals,
+    ...(ph.item ? { item: ph.item } : {}), text: ph.text, steps,
   };
 }
 
 export function samePicks(a: Record<string, CombatPick>, b: Record<string, CombatPick>): boolean {
   const ka = Object.keys(a);
   return ka.length === Object.keys(b).length
-    && ka.every((k) => b[k] && a[k].key === b[k].key && a[k].phase === b[k].phase && a[k].foe === b[k].foe && a[k].text === b[k].text);
+    && ka.every((k) => b[k] && a[k].key === b[k].key && a[k].phase === b[k].phase && a[k].foe === b[k].foe && a[k].text === b[k].text
+      && a[k].source === b[k].source && a[k].why === b[k].why && a[k].steps.join('|') === b[k].steps.join('|'));
 }
 
 /** The pace line of a phase: the XP goals the phase trains, with the opponent's XP a kill; an item phase has none (the XP goal is met, the item is the goal). */
@@ -89,21 +120,41 @@ function pacingOf(step: Step, pick: CombatPick): StepPacing | undefined {
   return base;
 }
 
-/** The step as the adopted plan has it for the phase in hand. No pick - the same object. */
+/** The fields that stay in view under a plan: the warnings. The route's other notes describe its own way and go to the folded "route as written". */
+const KEEP_FIELDS = new Set(['Dangerous', 'Attention', 'Combat']);
+
+/** The one line the game's plate shows for the phase: the opponent and what the phase is for. */
+function plateGoal(pick: CombatPick): string {
+  const what = pick.kind === 'item' && pick.item ? `${pick.item.count} ${pick.item.name}` : goalText(pick.goals);
+  return `${cap(plural(pick.foe))}: ${what}`;
+}
+
+/** The step as the plan in effect has it for the phase in hand. No pick - the same object. */
 export function withCombatPlan(step: Step, pick: CombatPick | undefined): Step {
   if (!pick) return step;
   const g = step.inGame ?? {};
-  const inGame: InGameTarget = { ...g, npcNames: pick.spot.npcNames, goal: `Plan: ${pick.spot.goal}` };
+  const inGame: InGameTarget = { ...g, npcNames: pick.spot.npcNames, goal: plateGoal(pick) };
   if (pick.spot.waypoints?.length) inGame.pathWaypoints = pick.spot.waypoints;
   else delete inGame.pathWaypoints;
   delete inGame.worldPoint;
   const pacing = pacingOf(step, pick);
-  const note = `${pick.title}${pick.phases > 1 ? ` (part ${pick.phase} of ${pick.phases})` : ''}: ${pick.text}. This is the plan you chose; the notes below describe the route's own plan.`;
+  const note: Field = {
+    label: pick.source === 'player' ? 'Your plan' : 'Plan',
+    text: `${pick.title}${pick.phases > 1 ? ` (part ${pick.phase} of ${pick.phases})` : ''}: ${pick.text}.${pick.why ? ` ${pick.why}` : ''}`,
+  };
   const rest: Step = { ...step };
   delete rest.pacing;
+  delete rest.how;
+  const asWritten: NonNullable<Step['routeAsWritten']> = {
+    ...(step.where ? { where: step.where } : {}), ...(step.how ? { how: step.how } : {}),
+    ...(step.quickSteps?.length ? { quickSteps: step.quickSteps } : {}), ...(step.fields?.length ? { fields: step.fields } : {}),
+  };
   return {
-    ...rest, combatPlan: { key: pick.key, phase: pick.phase }, foes: [pick.foe], mapLocation: { ...pick.spot.place }, inGame, where: pick.spot.where || step.where,
+    ...rest, combatPlan: { key: pick.key, phase: pick.phase, source: pick.source }, foes: [pick.foe], mapLocation: { ...pick.spot.place }, inGame,
+    // The reason is said once, in the step status line (CombatRouteLine); the route's own how-to is folded with the rest of its text.
+    where: pick.spot.where || step.where, quickSteps: pick.steps,
     ...(pacing ? { pacing } : {}),
-    fields: [{ label: 'Your plan', text: note }, ...(step.fields ?? [])],
+    fields: [note, ...(step.fields ?? []).filter((f) => KEEP_FIELDS.has(f.label))],
+    routeAsWritten: asWritten,
   };
 }

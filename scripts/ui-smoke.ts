@@ -237,7 +237,7 @@ async function run(browser: Browser) {
       await page.context().close();
     }
 
-    // The play style and "what to train with": calm by default; switching in settings; the method card on the skill page.
+    // "What to train with": the balanced choice by default (2.69), with no mode switch on the card; "Fastest" in Settings shows the time estimate.
     {
       const { page, errors } = await open(browser, width, {
         progress: progressBefore('S1-08', { levels: { woodcutting: 32 } }),
@@ -246,19 +246,19 @@ async function run(browser: Browser) {
       }, '#/skills/WC');
       await waitFor(page, '.training', 5000);
       const calm = await text(page, '.training');
-      expect(calm.includes('Willow') && !calm.includes('by the wiki speed') && await page.locator('.training').getByRole('button', { name: 'Calm', exact:true }).getAttribute('aria-pressed') === 'true', 'what to train with: at level 32 — willows, the calm style without a time estimate');
+      expect(calm.includes('Willow') && !calm.includes('by the wiki speed') && await page.locator('.training').getByRole('button', { name: /Calm|Efficient/ }).count() === 0, 'what to train with: at level 32 — willows, no time estimate and no mode switch on the card');
       expect(await noOverflow(page), 'what to train with: no horizontal scrolling');
       await page.goto(`${BASE}#/settings`);
       await page.waitForTimeout(400);
       await page.locator('details.settings-advanced > summary').click();
-      await page.getByRole('button', { name: /Efficient/ }).click();
+      await page.getByRole('group', { name: 'Training choices' }).getByRole('button', { name: 'Fastest' }).click();
       await page.waitForTimeout(200);
-      const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { efficient?: boolean });
-      expect(feat.efficient === true, 'style: "Efficient" was remembered in the settings');
+      const feat = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:features') ?? '{}') as { efficient?: boolean; relaxedTraining?: boolean });
+      expect(feat.efficient === true && feat.relaxedTraining === false, 'training choices: "Fastest" was remembered in the settings');
       await page.goto(`${BASE}#/skills/WC`);
       await waitFor(page, '.training', 5000);
       const fast = await text(page, '.training');
-      expect(await page.locator('.training').getByRole('button', { name:'Efficient', exact:true }).getAttribute('aria-pressed') === 'true' && /wiki speed/.test(fast), 'what to train with: the efficient style shows the time and the speed "per the wiki"');
+      expect(/wiki speed/.test(fast), 'what to train with: "Fastest" shows the time and the speed "per the wiki"');
       expect(!errors.length, `what to train with: no console errors ${errors.join('; ')}`);
       await page.context().close();
     }
@@ -1370,51 +1370,61 @@ async function combatRouteScenarios(browser: Browser) {
       ],
       market: true,
     }, '#/step/S4-03');
-    await reveal(page, '.combat-route');
-    await page.waitForTimeout(1200);
+    await page.waitForTimeout(1500);
     const posts = async () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts);
     const lastStep = async () => {
       const snaps = (await posts()).filter((p) => p.path === '/prep-plan');
       return snaps.length ? snaps[snaps.length - 1].body.step : undefined;
     };
-    const card = await text(page, '.combat-route');
-    expect(/Another way/.test(card) && /Use this plan/.test(card), `combat route (${width} px): the better way is offered in one line with one button`);
-    expect(await page.locator('.combat-route .btn-primary').count() === 1, `combat route (${width} px): one primary button`);
-    expect(await page.locator('.combat-route details').count() === 1 && !(await page.locator('.combat-route details').evaluate((d) => (d as HTMLDetailsElement).open)), `combat route (${width} px): the comparison is folded`);
-    expect((await lastStep())?.worldPoint?.label !== COWS, `combat route (${width} px): offering a plan does not move the arrow`);
-    if (process.env.UI_SHOTS) await page.locator('.combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-${width}.png` }).catch(() => {});
+    const savedPlans = async () => page.evaluate(() => Object.entries(localStorage).filter(([k]) => k.startsWith('osrs-put:combat-plans')).map(([, v]) => JSON.parse(v)));
+    // 2.69: nothing to press. The recommended plan is in effect, named in one line with one short reason.
+    const line = await text(page, '.status-combat-route');
+    expect(/Plan: Cows, then Hill Giant for the Big bones\./.test(line) && /Recommended for your levels and kit/.test(line), `combat route (${width} px): the recommended plan is in effect, said in one line`);
+    expect(!/Another way|Use this plan/.test(await page.locator('body').innerText()), `combat route (${width} px): no "Default → better" switch to press`);
+    const step = await lastStep();
+    expect(step?.stepId === 'S4-03' && step.worldPoint?.label === COWS && step.npcNames?.[0] === 'Cow', `combat route (${width} px): the game is sent to the cows without a press`);
+    expect(step?.goal === 'Cows: Attack 40', `combat route (${width} px): the game's plate says what the phase is for`);
+    expect(step?.pacing?.actionName === 'cow|cows' && step.pacing.expPerAction === 32, `combat route (${width} px): the game's pace line counts cows`);
+    const trigger = JSON.stringify(step?.completionTrigger ?? {});
+    expect(trigger.includes('Big bones') && trigger.includes('"attack"'), `combat route (${width} px): the step still completes by the route's own trigger`);
+    const page1 = await page.locator('body').innerText();
+    expect(/Fight the cows on Accurate until Attack 40/.test(page1) && !/Climb down the trapdoor/.test(page1), `combat route (${width} px): one set of instructions on the page, the plan's`);
+    const saved = await savedPlans();
+    expect(saved.length === 1 && saved[0]['S4-03']?.key === 'split' && saved[0]['S4-03']?.by === 'auto' && Object.keys(saved[0]['S4-03']).sort().join() === 'at,by,key', `combat route (${width} px): the guide's own choice is remembered as such, nothing else`);
+    const done = await page.evaluate(() => { const j = (window as unknown as { __saved?: string }).__saved; return j ? JSON.parse(j) : null; });
+    expect(!done || !done.steps || done.steps['S4-03'] === undefined, `combat route (${width} px): the route step is still open`);
+    if (process.env.UI_SHOTS) await page.locator('.status-combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-line-${width}.png` }).catch(() => {});
+    // "Why this plan?": the comparison, folded, and any plan can be chosen from it.
+    await reveal(page, '.combat-route');
+    const fold = page.locator('.combat-route details');
+    expect(await fold.count() === 1 && !(await fold.evaluate((d) => (d as HTMLDetailsElement).open)), `combat route (${width} px): the comparison is folded under "Why this plan?"`);
     await page.locator('.combat-route details > summary').click();
     const rows = await page.locator('.combat-plan-row').count();
     expect(rows >= 4, `combat route (${width} px): the comparison lists the plans (${rows})`);
     expect(/Compared: .*Cow/.test(await text(page, '.combat-route')), `combat route (${width} px): it says what was compared`);
     if (process.env.UI_SHOTS) await page.locator('.combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-open-${width}.png` }).catch(() => {});
-    await page.locator('.combat-route .btn-primary').click();
-    await page.waitForTimeout(1500);
-    const step = await lastStep();
-    expect(step?.stepId === 'S4-03' && step.worldPoint?.label === COWS && step.npcNames?.[0] === 'Cow', `combat route (${width} px): the game is sent to the cows`);
-    expect(step?.pacing?.actionName === 'cow|cows' && step.pacing.expPerAction === 32, `combat route (${width} px): the game's pace line counts cows`);
-    const trigger = JSON.stringify(step?.completionTrigger ?? {});
-    expect(trigger.includes('Big bones') && trigger.includes('"attack"'), `combat route (${width} px): the step still completes by the route's own trigger`);
-    expect(/Your plan/.test(await text(page, '.combat-route')) && await page.getByRole('button', { name: "Back to the route's plan" }).count() === 1, `combat route (${width} px): the plan in use is named, with the way back`);
-    const saved = await page.evaluate(() => Object.entries(localStorage).filter(([k]) => k.startsWith('osrs-put:combat-plans')).map(([, v]) => JSON.parse(v)));
-    expect(saved.length === 1 && typeof saved[0]['S4-03']?.key === 'string' && Object.keys(saved[0]['S4-03']).sort().join() === 'at,key', `combat route (${width} px): only the choice is saved`);
-    const done = await page.evaluate(() => { const j = (window as unknown as { __saved?: string }).__saved; return j ? JSON.parse(j) : null; });
-    expect(!done || !done.steps || done.steps['S4-03'] === undefined, `combat route (${width} px): the route step is still open`);
-    if (process.env.UI_SHOTS) await page.locator('.combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-using-${width}.png` }).catch(() => {});
-    await page.getByRole('button', { name: "Back to the route's plan" }).click();
+    // The player's own choice: the route as written. The arrow goes back to the giants, the choice is kept, and the better plan is offered.
+    await page.locator('.combat-plan-row', { hasText: 'The route as written' }).getByRole('button', { name: 'Use this instead' }).click();
     await page.waitForTimeout(1500);
     const back = await lastStep();
-    expect(back?.worldPoint?.label !== COWS && back?.npcNames?.[0] === 'Hill Giant', `combat route (${width} px): the route plan brings the arrow back to the giants`);
-    // Any plan in the comparison can be picked, and a Defence plan says what the route gives later.
+    expect(back?.worldPoint?.label !== COWS && back?.npcNames?.[0] === 'Hill Giant', `combat route (${width} px): the route as written, chosen, brings the arrow back to the giants`);
+    const mine = await text(page, '.status-combat-route');
+    expect(/Your plan: The route as written/.test(mine) && /Looks better now: Cows, then Hill Giant/.test(mine), `combat route (${width} px): the player's choice is named and the better plan offered, not forced`);
+    expect((await savedPlans())[0]['S4-03']?.by === 'player', `combat route (${width} px): the player's choice is saved as theirs`);
+    // Any plan from the list, and a Defence plan says what the route gives later.
+    if (!(await fold.evaluate((d) => (d as HTMLDetailsElement).open))) await page.locator('.combat-route details > summary').click();
     const d20 = page.locator('.combat-plan-row', { hasText: 'Defence 20 first' });
-    if (!(await page.locator('.combat-route details').evaluate((d) => (d as HTMLDetailsElement).open))) await page.locator('.combat-route details > summary').click();
     expect(/S5-09 .Triumph at Oziach. gives 18,650 Defence XP/.test(await d20.innerText()), `combat route (${width} px): a Defence plan names the Defence the route gives later`);
-    await d20.getByRole('button', { name: 'Use this plan' }).click();
+    await d20.getByRole('button', { name: 'Use this instead' }).click();
     await page.waitForTimeout(1500);
     const dstep = await lastStep();
     expect(dstep?.worldPoint?.label === COWS && dstep.pacing?.skill === 'defence', `combat route (${width} px): a plan picked from the list leads the game (Defence on the cows)`);
-    await page.getByRole('button', { name: "Back to the route's plan" }).click();
-    await page.waitForTimeout(1200);
+    // Back to the recommendation.
+    if (!(await fold.evaluate((d) => (d as HTMLDetailsElement).open))) await page.locator('.combat-route details > summary').click();
+    await page.getByRole('button', { name: 'Follow the recommendation' }).click();
+    await page.waitForTimeout(1500);
+    const again = await lastStep();
+    expect(again?.npcNames?.[0] === 'Cow' && again.pacing?.skill === 'attack' && (await savedPlans())[0]?.['S4-03']?.by === 'auto', `combat route (${width} px): "Follow the recommendation" hands the plan back to the guide`);
     expect(await noOverflow(page), `combat route (${width} px): no horizontal scroll`);
     expect(errors.length === 0, `combat route (${width} px): no console errors ${errors.join('; ')}`);
     await page.context().close();
@@ -1447,7 +1457,8 @@ async function gearScenarios(browser: Browser) {
       await page.waitForTimeout(1200);
       const head = await text(page, '.gear-page .page-head');
       const reco = await text(page, '.gear-reco');
-      expect(/For S4-03: Hill Giant, attacks with crush/.test(head), `gear (${width} px): the context names the fight and the style that hits`);
+      // The opponent of the plan in effect (2.69): for this character the guide selects the cows first, and Gear judges against them.
+      expect(/For S4-03: (Cow|Hill Giant), attacks with crush/.test(head), `gear (${width} px): the context names the fight in the plan in effect and the style that hits`);
       expect(await page.locator('.gear-reco').count() === 1 && /Mithril scimitar/.test(reco) && /bank/i.test(reco), `gear (${width} px): one recommendation, to wear the scimitar from the bank`);
       expect(!/faster/.test(reco), `gear (${width} px): accuracy is not called speed`);
       expect(/Bronze scimitar/.test(await text(page, '.gear-now')), `gear (${width} px): what is worn now is shown`);
