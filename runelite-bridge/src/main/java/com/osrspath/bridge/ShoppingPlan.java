@@ -18,6 +18,29 @@ public class ShoppingPlan
 	static final int MAX_COUNT = 10_000_000;
 
 	private List<Item> items;
+	/**
+	 * What the app wants counted and reported back without listing it here: every Shopping row. Counting only the rows still to buy made a row
+	 * flicker (2.72.2): found in the bank, it left the list, stopped being counted, read "not confirmed" and was asked about again.
+	 */
+	private List<String> watch;
+
+	/** The names to count for the app: the items and the watch list. */
+	List<String> counted()
+	{
+		List<String> out = new ArrayList<>();
+		if (items != null)
+		{
+			for (Item i : items)
+			{
+				out.add(i.getName());
+			}
+		}
+		if (watch != null)
+		{
+			out.addAll(watch);
+		}
+		return out;
+	}
 
 	@Data
 	public static class Item
@@ -25,6 +48,8 @@ public class ShoppingPlan
 		private String name;
 		private Integer id;
 		private int count;
+		/** A potion: the doses needed, every size counted (ItemCounts.doses); count is then potions, for an older plugin. null for anything else. */
+		private Integer doses;
 	}
 
 	/** The error text or null. */
@@ -34,9 +59,13 @@ public class ShoppingPlan
 		{
 			return "items required";
 		}
-		if (items.size() > MAX_ITEMS)
+		if (items.size() > MAX_ITEMS || (watch != null && watch.size() > MAX_ITEMS))
 		{
 			return "list too long";
+		}
+		if (watch != null && watch.stream().anyMatch(n -> n == null || n.isEmpty() || n.length() > ActiveTarget.MAX_TEXT))
+		{
+			return "invalid name";
 		}
 		for (Item i : items)
 		{
@@ -44,7 +73,7 @@ public class ShoppingPlan
 			{
 				return "invalid name";
 			}
-			if (i.count < 0 || i.count > MAX_COUNT)
+			if (i.count < 0 || i.count > MAX_COUNT || (i.doses != null && (i.doses < 0 || i.doses > MAX_COUNT)))
 			{
 				return "invalid count";
 			}
@@ -84,6 +113,24 @@ public class ShoppingPlan
 		String offer;
 		/** The next thing to search for at the exchange. */
 		boolean next;
+		/** A potion: need and have are doses of every size. */
+		boolean doses;
+
+		Row(String name, int need, int have, RowState state, String offer, boolean next)
+		{
+			this(name, need, have, state, offer, next, false);
+		}
+
+		Row(String name, int need, int have, RowState state, String offer, boolean next, boolean doses)
+		{
+			this.name = name;
+			this.need = need;
+			this.have = have;
+			this.state = state;
+			this.offer = offer;
+			this.next = next;
+			this.doses = doses;
+		}
 	}
 
 	/**
@@ -100,8 +147,10 @@ public class ShoppingPlan
 		boolean nextTaken = false;
 		for (Item i : items)
 		{
-			int need = i.getCount();
-			int have = owned.count(i.getId(), i.getName());
+			// A potion: doses of every size toward the doses needed, so a (3) and a (1) are not "0 of 1 Strength potion(4)".
+			boolean dose = i.getDoses() != null && ItemCounts.doseBase(i.getName()) != null;
+			int need = dose ? i.getDoses() : i.getCount();
+			int have = dose ? owned.doses(i.getName()) : owned.count(i.getId(), i.getName());
 			Offer offer = i.getId() == null ? null : offers.get(i.getId());
 			RowState state;
 			String offerText = null;
@@ -125,7 +174,7 @@ public class ShoppingPlan
 			}
 			boolean next = state == RowState.NEEDED && !nextTaken;
 			nextTaken |= next;
-			rows.add(new Row(i.getName(), need, have, state, offerText, next));
+			rows.add(new Row(i.getName(), need, have, state, offerText, next, dose));
 		}
 		return Collections.unmodifiableList(rows);
 	}

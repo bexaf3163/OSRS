@@ -6,7 +6,7 @@
 // shown, counts checked items in place and is never a chance of survival; no kit is promised to keep anyone alive.
 
 import type { OwnedState } from './checklist';
-import { SAFETY, safetyBlockers, type PrepLine, type PrepPlan } from './prepPlan';
+import { SAFETY, lineAmount, safetyBlockers, unitsOf, type PrepLine, type PrepPlan } from './prepPlan';
 import type { CombatReadiness } from './combatReadiness';
 
 export type ReadinessLevel = 'READY' | 'READY_CAUTIONS' | 'PREP_NEEDED' | 'NOT_MET' | 'UNKNOWN';
@@ -102,7 +102,7 @@ export function bankFreshness(connected: boolean, owned: OwnedState | null, now 
   return { state: 'live', text: 'Bank checked in this session.' };
 }
 
-const count = (l: PrepLine, n = l.count) => `${l.name}${n > 1 ? ` ×${n}` : ''}`;
+const count = (l: PrepLine, n = l.count) => `${l.name}${l.unit === 'dose' ? lineAmount(l, n) : n > 1 ? ` ×${n}` : ''}`;
 
 function lineReason(l: PrepLine, group: ReasonGroup): Reason {
   const bag = (l.have.bag ?? 0) + l.have.noted + l.have.equipped;
@@ -111,9 +111,9 @@ function lineReason(l: PrepLine, group: ReasonGroup): Reason {
     case 'INVENTORY':
       return { group, state: 'ok', text: `${count(l)}: with you.` };
     case 'BANK':
-      return { group, state: 'bank', text: `${count(l)}: ${bag > 0 ? `${bag} with you, ` : ''}take ${l.toGet ?? l.count} from the bank.` };
+      return { group, state: 'bank', text: `${count(l)}: ${bag > 0 ? `${unitsOf(l, bag)} with you, ` : ''}take ${unitsOf(l, l.toGet ?? l.count)} from the bank.` };
     case 'MISSING':
-      return { group, state: 'missing', text: `${count(l)}: ${bag > 0 ? `${bag} with you, ` : ''}${l.toGet ?? l.count} still to get${l.action?.label ? ` — ${l.action.label}` : ''}.` };
+      return { group, state: 'missing', text: `${count(l)}: ${bag > 0 ? `${unitsOf(l, bag)} with you, ` : ''}${unitsOf(l, l.toGet ?? l.count)} still to get${l.action?.label ? ` — ${l.action.label}` : ''}.` };
     default:
       return { group: 'unknown', state: 'unknown', text: `${count(l)}: not in the bag; the bank has not been checked.` };
   }
@@ -180,7 +180,7 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
   // Cautions that do not stop the trip.
   const soon = plan.soon.filter((l) => l.where === 'BANK' || l.where === 'MISSING');
   if (soon.length) cautions.push(`Also for the next steps: ${soon.slice(0, 3).map((l) => count(l)).join(', ')}.`);
-  for (const l of now) if (l.supply === 'LOW' && !(combat && i.isFood(l.name))) cautions.push(`${l.name} is low for this step: ${(l.have.bag ?? 0) + l.have.noted} of ${l.count} with you.`);
+  for (const l of now) if (l.supply === 'LOW' && !(combat && i.isFood(l.name))) cautions.push(`${l.name} is low for this step: ${(l.have.bag ?? 0) + l.have.noted} of ${unitsOf(l, l.count)} with you.`);
   if (plan.slots.over > 0) cautions.push(`It will not all fit: ${plan.slots.over} ${plan.slots.over === 1 ? 'slot' : 'slots'} too many.`);
   if (plan.weight.level === 'HEAVY') cautions.push('Heavy: leave what this step does not need in the bank.');
   const reliesOnBank = reasons.some((r) => r.state === 'bank');

@@ -89,7 +89,7 @@ export function clipText(s: string, max = MAX_TEXT): string {
   return `${cut.slice(0, Math.max(cut.lastIndexOf(' '), Math.floor(max / 2)))}…`;
 }
 
-const countOf = (l: Pick<PrepLine, 'name' | 'count'>) => (l.count > 1 ? `${l.name} ×${l.count}` : l.name);
+const countOf = (l: Pick<PrepLine, 'name' | 'count' | 'unit'>) => (l.unit === 'dose' ? `${l.name} (${l.count} ${l.count === 1 ? 'dose' : 'doses'})` : l.count > 1 ? `${l.name} ×${l.count}` : l.name);
 
 /** The weight text for the game: what to leave in the bank and what that gives. Empty means nothing to advise. */
 export function weightText(plan: PrepPlan): string | undefined {
@@ -131,10 +131,14 @@ function itemIdOf(name: string): number {
 
 /** The items the plan says to take out of the bank (needed now or soon): so a stop at a bank is for something. */
 export function bankWithdrawalsOf(plan: Pick<PrepPlan, 'lines'>): NonNullable<PrepPlanPayload['bankWithdrawals']> {
+  // A potion is taken as the exact potions that hold the doses (2 × Strength potion(4), 1 × Strength potion(3)), never "×8" of one size.
   return plan.lines
     .filter((l) => l.where === 'BANK' && (l.timing === 'NOW' || l.timing === 'SOON'))
+    .flatMap((l) => (l.unit === 'dose' && l.potions?.length
+      ? l.potions.map((p) => ({ name: p.name, quantity: p.count }))
+      : [{ name: l.name, quantity: l.toGet ?? l.count }]))
     .slice(0, MAX_WITHDRAWALS)
-    .map((l) => ({ itemId: itemIdOf(l.name), itemName: clipText(l.name, 60), quantity: Math.max(1, Math.min(l.toGet ?? l.count, 10_000_000)) }));
+    .map((w) => ({ itemId: itemIdOf(w.name), itemName: clipText(w.name, 60), quantity: Math.max(1, Math.min(w.quantity, 10_000_000)) }));
 }
 
 export interface PlanExtras {

@@ -13,6 +13,7 @@ import type { OwnedState } from '../checklist';
 import type { PrepLine, PrepPlan } from '../prepPlan';
 import { healsOf } from '../combatEstimate';
 import { aggregateShopping, holdingFor } from '../shopping';
+import { dosePackage } from '../doses';
 import type { Confidence, PriceStatus, PriceView } from './quotes';
 
 export type NeedKind = 'buy' | 'tool' | 'upgrade';
@@ -71,6 +72,18 @@ function priceLine(
   return { key: l.key, name: l.name, ...(l.id !== undefined ? { id: l.id } : {}), qty: l.qty, unit: null, cost: null, confidence: null, priced: 'none', why: l.why, kind: l.kind };
 }
 
+/**
+ * A potion short by doses is priced as the potions that cover them (doses.ts: whole potions of the named size, the last doses in the cheapest size
+ * that holds them), never as that many of the named potion. Anything else is one line as it is.
+ */
+function needLines(
+  l: { key: string; name: string; id?: number; qty: number; fallback?: number; why: string; kind: NeedKind }, doses: boolean, prices: PriceView,
+): NeedLine[] {
+  const pack = doses ? dosePackage(l.name, l.qty, (n) => prices.buy(n)?.price ?? null) : null;
+  if (!pack) return [priceLine(l, prices)];
+  return pack.lines.map((p) => priceLine({ key: `${l.key}#${p.size}`, name: p.name, qty: p.count, why: l.why, kind: l.kind }, prices));
+}
+
 const tierOf = (lines: NeedLine[]): Tier => ({
   cost: lines.reduce((s, l) => s + (l.cost ?? 0), 0),
   unpriced: lines.filter((l) => l.cost === null).length,
@@ -95,7 +108,7 @@ function buyable(l: PrepLine, prices: PriceView): boolean {
 function shortLines(lines: readonly PrepLine[], prices: PriceView): NeedLine[] {
   return lines
     .filter((l) => l.where === 'MISSING' && (l.toGet ?? 0) > 0 && buyable(l, prices))
-    .map((l) => priceLine({ key: l.key, name: l.name, qty: l.toGet as number, fallback: l.action?.price, why: l.why, kind: 'buy' }, prices));
+    .flatMap((l) => needLines({ key: l.key, name: l.name, qty: l.toGet as number, fallback: l.action?.price, why: l.why, kind: 'buy' }, l.unit === 'dose', prices));
 }
 
 export function buildNeed(i: NeedInput): FundingNeed {
@@ -112,7 +125,7 @@ export function buildNeed(i: NeedInput): FundingNeed {
     const h = holdingFor(line, i.owned, i.manual[line.key]);
     // Ownership not observed is not a shortage: it is counted in `unknown` of the next trip, and never priced here.
     if (h.status === 'UNKNOWN' || h.status === 'UNAVAILABLE' || h.buy <= 0) continue;
-    objective.push(priceLine({ key: line.key, name: line.nameEn, id: line.id, qty: h.buy, why: line.howToGet, kind: line.reusable ? 'tool' : 'buy' }, prices));
+    objective.push(...needLines({ key: line.key, name: line.nameEn, id: line.id, qty: h.buy, why: line.howToGet, kind: line.reusable ? 'tool' : 'buy' }, Boolean(line.dose), prices));
   }
 
   const optional: NeedLine[] = prep.optimizations

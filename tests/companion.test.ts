@@ -267,7 +267,8 @@ describe('what goes to the plugin', () => {
 
   it('items from the conditions — to the plugin for counting', () => {
     expect(watchedItems(byId('S2-01'))).toEqual(['Chronicle']);
-    expect(toInGameTarget(byId('S2-01'))!.watchItems).toEqual(['Chronicle']);
+    // The step's Energy potions are counted in doses of every size (2.73.0): the game is asked about all four sizes.
+    expect(toInGameTarget(byId('S2-01'))!.watchItems).toEqual(['Chronicle', 'Energy potion(4)', 'Energy potion(1)', 'Energy potion(2)', 'Energy potion(3)']);
   });
 
   it('a step with only items also goes to the game — for the departure check', () => {
@@ -323,6 +324,7 @@ describe('a quick option checks that what is needed is on hand (Varrock Teleport
   it('the plugin gets both the runes and the staffs — so that it counts them', () => {
     const w = watchedItems(real);
     expect(w).toEqual(expect.arrayContaining(['Law rune', 'Air rune', 'Fire rune', 'Staff of air']));
-    expect(toInGameTarget(real)!.watchItems).toEqual(w);
+    // Then the step's own potions, every size (S2-01's Energy potions, counted in doses since 2.73.0).
+    expect(toInGameTarget(real)!.watchItems).toEqual([...w, 'Energy potion(4)', 'Energy potion(1)', 'Energy potion(2)', 'Energy potion(3)']);
   });
 });

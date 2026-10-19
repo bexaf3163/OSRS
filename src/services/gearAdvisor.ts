@@ -15,6 +15,7 @@ import combatFoesJson from '../data/combatFoes.json';
 import type { Foe, FoeData, GameMode, GearData, GearPiece, GearSlot, Step } from '../types';
 import { nameKey, type OwnedState } from '../lib/checklist';
 import { matchStrict } from './locationResolver';
+import { shopAccess } from '../lib/shopAccess';
 import type { GearState, NavTargetPayload } from './runeliteBridge';
 
 export const gearData = gearJson as GearData;
@@ -395,10 +396,20 @@ export function equippedBySlot(gear: GearState | null, data: GearData): Partial<
   return out;
 }
 
-/** Shops reachable with the arrow: they are in the place dictionary. The others (guilds, Wilderness) we do not advise. */
-function shopsOf(p: GearPiece, freeToll: boolean): Extract<Source, { kind: 'shop' }>[] {
+/**
+ * Shops reachable with the arrow: they are in the place dictionary. The others (guilds, Wilderness) we do not advise, and a shop the player may not
+ * walk into is not advised either (shopAccess.ts: the Champions' Guild's door, Oziach before Dragon Slayer I, the Wilderness).
+ */
+function shopsOf(p: GearPiece, input: Pick<AdvisorInput, 'freeToll' | 'mode' | 'questsDone' | 'levels'>): Extract<Source, { kind: 'shop' }>[] {
+  const freeToll = Boolean(input.freeToll);
+  const access = {
+    mode: input.mode, qp: null,
+    quests: input.questsDone ? { known: true as const, value: [...input.questsDone], source: 'game' as const } : { known: false as const },
+    level: (skill: string) => input.levels[skill] ?? null,
+  };
   const out: Extract<Source, { kind: 'shop' }>[] = [];
   for (const s of p.shops ?? []) {
+    if (shopAccess(s.shop, s.location, access).state !== 'open') continue;
     const place = matchStrict(s.shop);
     if (!place) continue;
     out.push({
@@ -430,7 +441,7 @@ function sourcesOf(p: GearPiece, input: AdvisorInput): Source[] {
   if (input.gear?.inventory?.some((i) => i.id === p.id || nameKey(i.name) === nameKey(p.name))) out.push({ kind: 'bag' });
   const bank = input.owned?.items.get(nameKey(p.name))?.bank;
   if (bank && bank > 0) out.push({ kind: 'bank' });
-  const shops = shopsOf(p, Boolean(input.freeToll));
+  const shops = shopsOf(p, input);
   const ge: Source[] = p.tradeable ? [{ kind: 'ge', ...(input.gePrices?.has(p.id) ? { price: input.gePrices.get(p.id) } : {}) }] : [];
   const priced = [...shops, ...ge].sort((a, b) => priceOf(a, Infinity) - priceOf(b, Infinity));
   // A shop slightly dearer than the exchange — the shop first: the price is exact, there is no waiting for a deal, and at the start of the route

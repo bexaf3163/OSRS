@@ -10,7 +10,13 @@ const PORT = 4181;
 const BASE = `http://127.0.0.1:${PORT}/`;
 const OUT = process.env.REVIEW_OUT ?? 'review-shots';
 const FILTER = process.argv[2] ?? '';
-const steps = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; anyOf?: string[] }[] }[];
+type ShotItem = { nameEn: string; anyOf?: string[] };
+const steps = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: ShotItem[]; itemsRecommended?: ShotItem[] }[];
+/** The game reports every size of a potion once one is asked about (ItemCounts.report, 2.73.0). */
+const sizesOf = (name: string) => {
+  const m = /^(.*\S)\((\d)\)$/.exec(name);
+  return m && /potion$/i.test(m[1]) ? [1, 2, 3, 4].map((d) => `${m[1]}(${d})`) : [name];
+};
 
 interface Mock {
   progress?: unknown;
@@ -86,15 +92,19 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string, h
 // --- The characters
 
 /** The reported Hill Giants character: Attack 30, Strength 21, Defence 1, 24 HP, Adamant scimitar and iron armour, little money. */
-function hillGiants(opts: { coins?: number; bankSeen?: boolean; storage?: Record<string, string>; carriedFood?: number } = {}): Mock {
+function hillGiants(opts: { coins?: number; bankSeen?: boolean; storage?: Record<string, string>; carriedFood?: number; items?: Record<string, [number, number]> } = {}): Mock {
   const equipment = ([[1331, 'Adamant scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']] as [number, string, string][])
     .map(([id, name, slot]) => ({ id, name, slot }));
   const inventory = opts.carriedFood ? [{ id: 329, name: 'Salmon', count: opts.carriedFood }] : [];
   const gear = { equipment, inventory, coins: opts.coins ?? 400, bankCoins: opts.bankSeen === false ? null : 0 };
   const from = steps.findIndex((x) => x.id === 'S4-03');
   const worn = new Set(equipment.map((e) => e.name));
-  const asked = [...new Set(steps.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])])))];
-  const owned = asked.map((name) => ({ name, carried: worn.has(name) ? 1 : name === 'Salmon' ? opts.carriedFood ?? 0 : 0, noted: 0, bank: 0 }));
+  const asked = [...new Set(steps.slice(from, from + 8).flatMap((x) => [...(x.itemsRequired ?? []), ...(x.itemsRecommended ?? [])])
+    .flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])]).flatMap(sizesOf))];
+  const owned = asked.map((name) => {
+    const [carried, bank] = opts.items?.[name] ?? [worn.has(name) ? 1 : name === 'Salmon' ? opts.carriedFood ?? 0 : 0, 0];
+    return { name, carried, noted: 0, bank };
+  });
   const stats = { attack: 30, strength: 21, defence: 1, hitpoints: 24 };
   return {
     progress: progressBefore('S4-03'),
@@ -147,6 +157,16 @@ const SHOTS: Shot[] = [
   { name: 'hill-giants-step', area: 'T4', caption: 'S4-03 step as the guide opens it for the reported character', width: 1440, hash: '#/step/S4-03', mock: hillGiants() },
   { name: 'hill-giants-step-390', area: 'T4', caption: 'S4-03 step at phone width', width: 390, hash: '#/step/S4-03', mock: hillGiants() },
   { name: 'shopping', area: 'T7', caption: 'Shopping for the next trip', width: 1440, hash: '#/shopping', mock: hillGiants() },
+  {
+    name: 'shopping-ahead', area: 'T7', caption: 'Shopping, next trip: S4-03 needs nothing; the purchases for S4-04 and S4-05 are folded apart, the sum adds up', width: 1440,
+    hash: '#/shopping', mock: hillGiants({ carriedFood: 25, coins: 1827 }),
+    act: async (p) => { await p.locator('.shop-group-v2.is-ahead > summary').click(); await p.waitForTimeout(300); },
+  },
+  {
+    name: 'shopping-doses', area: 'T7', caption: 'Shopping: 3 Strength potion doses owned for a 16-dose plan; the shortfall bought as a package of sizes', width: 1440,
+    hash: '#/shopping', mock: hillGiants({ carriedFood: 25, coins: 1827, items: { 'Strength potion(3)': [0, 1] } }),
+    act: async (p) => { await p.locator('.shop-group-v2.is-optional > summary').click(); await p.waitForTimeout(300); },
+  },
   { name: 'gear', area: 'T6', caption: 'Gear for the fight ahead', width: 1440, hash: '#/gear', mock: hillGiants() },
   { name: 'skills', area: 'T5', caption: 'Skills overview', width: 1440, hash: '#/skills', mock: skiller(SKILLER) },
   { name: 'skill-woodcutting', area: 'T5', caption: 'Woodcutting: the near-term goal and one recommended method', width: 1440, hash: '#/skills/WC', mock: skiller(SKILLER) },

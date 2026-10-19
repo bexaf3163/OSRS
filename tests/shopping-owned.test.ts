@@ -77,6 +77,13 @@ describe('manual marks are kept in the progress', () => {
     expect(p.ownedManual).toBeUndefined();
   });
 
+  it('a potion is marked in doses under its own key, and the mark survives a restart (2.73.0)', () => {
+    const p = withOwnedManual(emptyProgress(), 'dose:energy potion', 12);
+    expect(p.ownedManual).toMatchObject({ 'dose:energy potion': { count: 12 } });
+    const back = normalizeProgress(JSON.parse(JSON.stringify(p)), known)!.progress;
+    expect(back.ownedManual!['dose:energy potion'].count).toBe(12);
+  });
+
   it('they survive a restart (reading the save), broken records are dropped', () => {
     const saved = JSON.parse(JSON.stringify(withOwnedManual(emptyProgress(), 'name:ball of wool', 3)));
     saved.ownedManual['id:1'] = { count: -5 };

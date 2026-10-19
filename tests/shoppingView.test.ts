@@ -2,7 +2,7 @@
 // Fixtures are built by hand from the route's own items (S3-08's Salmon, S4-05's tools) and a player state the game could send.
 
 import { describe, expect, it } from 'vitest';
-import { budgetOf, emptyStateOf, geListText, ownershipOf, scopeList, scopeSteps, shopRows, syncLine, type ShopRow } from '../src/lib/shoppingView';
+import { budgetOf, emptyStateOf, exchangePlan, geListText, ownershipOf, scopeList, scopeSteps, shopRows, syncLine, type ShopRow } from '../src/lib/shoppingView';
 import { aggregateShopping, type ShoppingLine } from '../src/lib/shopping';
 import { buildPlayerState } from '../src/lib/playerState';
 import { nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
@@ -119,7 +119,7 @@ describe('quantities across steps', () => {
 });
 
 describe('the budget', () => {
-  const rows = rowsOf([step('A', [item('Salmon', 20, SALMON)], [item('Strength potion(4)', 1, { wikiItemId: 113 })])], state(owned({ Salmon: [0, 0], 'Strength potion(4)': [0, 0] })));
+  const rows = rowsOf([step('A', [item('Salmon', 20, SALMON)], [item('Strength potion(4)', 1, { wikiItemId: 113 })])], state(owned({ Salmon: [0, 0], 'Strength potion(4)': [0, 0], 'Strength potion(3)': [0, 0], 'Strength potion(2)': [0, 0], 'Strength potion(1)': [0, 0] })));
 
   it('required and optional costs are apart; the shortfall needs both bag and bank coins', () => {
     const b = budgetOf(rows, 50, { bag: 100, bank: 200 });
@@ -206,5 +206,21 @@ describe('one stack, one use', () => {
     // 10 Lobsters: 5 are the Lobster line's, the other 5 heal 60 = 6 Salmon.
     expect(byName(rows, 'Lobster')).toMatchObject({ channel: 'bank', qty: 5 });
     expect(byName(rows, 'Salmon')).toMatchObject({ channel: 'ge', qty: 14 });
+  });
+});
+
+describe('what the game is asked to count does not depend on the count (2.72.2: a row flickered)', () => {
+  it('a row found in the bank stays counted: the watch list is the same before and after, only the exchange list changes', () => {
+    const steps = [step('A', [item('Unfired bowl', 1, { wikiItemId: 1791 }), item('Salmon', 20, SALMON)])];
+    // Not counted yet: the bowl is "not confirmed" and listed at the exchange.
+    const before = exchangePlan(rowsOf(steps, state(owned({ Salmon: [0, 0] }))));
+    expect(byName(rowsOf(steps, state(owned({ Salmon: [0, 0] }))), 'Unfired bowl').channel).toBe('unknown');
+    // Counted: one is in the bank, so it leaves the exchange list.
+    const after = exchangePlan(rowsOf(steps, state(owned({ Salmon: [0, 0], 'Unfired bowl': [0, 1] }))));
+    expect(before.items.map((i) => i.name)).toContain('Unfired bowl');
+    expect(after.items.map((i) => i.name)).not.toContain('Unfired bowl');
+    // …but the game keeps counting it, so it never falls back to "not confirmed".
+    expect(after.watch).toEqual(before.watch);
+    expect(after.watch).toEqual(expect.arrayContaining(['Unfired bowl', 'Salmon']));
   });
 });

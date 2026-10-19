@@ -523,43 +523,46 @@ final class StepGuide
 
 	static ItemLine item(ActiveTarget.GuideItem i, List<ActiveTarget.GuidePlace> places, ItemCounts carried, ItemCounts bank)
 	{
-		int need = i.getCount() == null ? 1 : i.getCount();
-		int have = carried == null ? 0 : ActiveTarget.countWithAlt(carried, i.getId(), i.getName(), i.getAlt());
-		int inBank = bank == null ? -1 : ActiveTarget.countWithAlt(bank, i.getId(), i.getName(), i.getAlt());
+		// A potion is counted in doses of every size (the app sends how many): a (3) and a (1) are 4 doses of "Strength potion(4)".
+		boolean dose = i.getDoses() != null && i.getDoses() > 0 && ItemCounts.doseBase(i.getName()) != null;
+		int need = dose ? i.getDoses() : i.getCount() == null ? 1 : i.getCount();
+		int have = carried == null ? 0 : dose ? carried.doses(i.getName()) : ActiveTarget.countWithAlt(carried, i.getId(), i.getName(), i.getAlt());
+		int inBank = bank == null ? -1 : dose ? bank.doses(i.getName()) : ActiveTarget.countWithAlt(bank, i.getId(), i.getName(), i.getAlt());
+		String u = dose ? " doses" : "";
 		Have h;
 		String status;
 		String tag;
 		if (have >= need)
 		{
 			h = Have.BAG;
-			status = "✓ in bag" + (need > 1 ? " " + have + "/" + need : "");
+			status = "✓ in bag" + (need > 1 ? " " + have + "/" + need + u : "");
 			tag = need > 1 ? have + "/" + need : "have";
 		}
 		else if (inBank >= 0 && have + inBank >= need)
 		{
 			h = Have.BANK;
-			status = "in bank - take it" + (need > 1 ? " (" + have + "+" + inBank + "/" + need + ")" : "");
+			status = "in bank - take it" + (need > 1 ? " (" + have + "+" + inBank + "/" + need + u + ")" : "");
 			tag = "in bank";
 		}
 		else if (i.isInStep())
 		{
 			h = Have.IN_STEP;
-			status = "you get it during the step" + (have > 0 ? " (" + have + "/" + need + ")" : "");
+			status = "you get it during the step" + (have > 0 ? " (" + have + "/" + need + u + ")" : "");
 			tag = have > 0 ? have + "/" + need : "in step";
 		}
 		else if (inBank < 0)
 		{
 			h = Have.UNKNOWN;
-			status = (have > 0 ? "in bag " + have + "/" + need + ", " : "") + "? not checked, bank not opened";
+			status = (have > 0 ? "in bag " + have + "/" + need + u + ", " : "") + "? not checked, bank not opened";
 			tag = have > 0 ? have + "/" + need + " · bank?" : "bank?";
 		}
 		else
 		{
 			h = Have.NONE;
-			status = "missing" + (have + inBank > 0 ? " - have " + (have + inBank) + " of " + need : "");
+			status = "missing" + (have + inBank > 0 ? " - have " + (have + inBank) + " of " + need + u : "");
 			tag = have + inBank > 0 ? (have + inBank) + "/" + need : "none";
 		}
-		String name = i.getName() + (i.getCount() != null && need > 1 ? " ×" + need : "");
+		String name = i.getName() + (i.getCount() != null && i.getCount() > 1 ? " ×" + i.getCount() : "");
 		return new ItemLine(name, status, h, i.getWhere(), placeOf(i.getName(), places), name, tag);
 	}
 

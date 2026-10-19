@@ -40,7 +40,7 @@ export function PreflightPanel({ step }: { step: Step }) {
                 {item.heals ? <span className="badge badge-heal">+{item.heals} HP</span> : null}
               </span>
               <span className="preflight-count">
-                {have}/{item.count}{item.exact ? '' : '+'}
+                {have}/{item.doses ?? item.count}{item.exact ? '' : '+'}{item.doses !== undefined ? ' doses' : ''}
                 {s !== 'IN_BAG_READY' && inBank !== null && (
                   <span className="muted"> · {inBank > 0 ? `in the bank ${inBank}` : 'not in the bank'}</span>
                 )}

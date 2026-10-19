@@ -5,8 +5,9 @@
 
 import type { Step } from '../types';
 import { aggregateShopping, type ShoppingLine } from './shopping';
-import { parseAmount } from './checklist';
-import { heldOf, type Held, type PlayerState } from './playerState';
+import { nameKey, parseAmount } from './checklist';
+import type { PlayerState } from './playerState';
+import { heldUnits, type HeldUnits } from './doses';
 import { isClosed } from './next-step';
 import type { Progress } from '../types';
 import type { Urgency } from './prepRoute';
@@ -25,7 +26,8 @@ export interface TripAllocation {
 
 export interface TripLine {
   line: ShoppingLine;
-  held: Held;
+  /** In the line's units: doses for a potion (doses.ts). */
+  held: HeldUnits;
   allocation: TripAllocation[];
   /** How much more to take (to buy or collect); null means unknown (the bank was not opened). */
   toGet: number | null;
@@ -72,7 +74,7 @@ function perStepNeed(line: ShoppingLine, stepIds: string[]): { stepId: string; n
   for (const stepId of stepIds) {
     const src = line.sources.filter((s) => s.stepId === stepId && !s.carryOver);
     if (!src.length) continue;
-    const n = src.reduce((sum, s) => sum + (parseAmount(s.amount) ?? 1), 0);
+    const n = src.reduce((sum, s) => sum + (parseAmount(s.amount) ?? 1) * (s.per ?? 1), 0);
     if (line.reusable) {
       // One tool serves all the steps: take the largest, not the sum.
       if (reusableTaken) continue;
@@ -85,13 +87,19 @@ function perStepNeed(line: ShoppingLine, stepIds: string[]): { stepId: string; n
   return out;
 }
 
+/** Manual marks made before a potion was counted in doses: kept under the item's own key, in potions of the named size. */
+export function legacyKeys(line: Pick<ShoppingLine, 'dose' | 'id' | 'nameEn'>): string[] | undefined {
+  if (!line.dose) return undefined;
+  return [...(line.id !== undefined ? [`id:${line.id}`] : []), `name:${nameKey(line.nameEn)}`];
+}
+
 export function planOneTrip(steps: Step[], progress: Progress, currentId: string, state: PlayerState, ahead = LOOK_AHEAD): OneTripPlan {
   const window = tripWindow(steps, progress, currentId, ahead);
   const ids = window.map((s) => s.id);
   const list = aggregateShopping(window);
   const lines: TripLine[] = [];
   for (const line of list.required) {
-    const held = heldOf(state, line.nameEn, line.key);
+    const held = heldUnits(state, line.nameEn, line.key, legacyKeys(line));
     const needs = perStepNeed(line, ids);
     // Assign what is already owned to the nearest steps: 13 of 20 is on hand, the first steps are covered, the last is not.
     let pool = held.total ?? 0;

@@ -137,7 +137,7 @@ describe('the preparation plan: consumables, money, sources', () => {
   });
 
   it('buy: the source and the price; not enough coins — "earn first", not an empty "buy"', () => {
-    const detail = (): WikiItemDetail => ({ buyLocations: [{ shopName: "Bob's Axes", location: 'Lumbridge', price: 215 }] } as unknown as WikiItemDetail);
+    const detail = (): WikiItemDetail => ({ buyLocations: [{ shopName: "Bob's Brilliant Axes.", location: 'Lumbridge', price: 215 }] } as unknown as WikiItemDetail);
     const list = [mk('B1', [item('Steel axe', 1, { wikiItemId: 1 })])];
     const rich = plan(state(owned({ 'Steel axe': { carried: 0, bank: 0 } }, true), { coins: { bag: 500, bank: 0 } }), { list, id: 'B1', detail });
     expect(line(rich, 'Steel axe').action).toMatchObject({ kind: 'BUY', price: 215 });

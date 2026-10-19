@@ -3,6 +3,7 @@
 
 import type { Step, StepItemRequirement } from '../types';
 import { alternativesOf } from './toolTiers';
+import { doseKind, doseName } from './doseKind';
 
 /** How many of an item the player has, by the plugin's data. bank is undefined until the bank was opened in this session. */
 export interface OwnedItem {
@@ -51,6 +52,8 @@ export interface PreflightItem {
   alt?: string[];
   /** Food with a personal plan: what the whole remaining goal needs (`count` is one trip). */
   total?: number;
+  /** A potion: the doses `count` potions hold ("Strength potion(4)" ×4 is 16); every size counts toward them (doses.ts, Checklist.java). */
+  doses?: number;
 }
 
 /** What to check at the bank: the required items except those obtained during the step itself. */
@@ -60,9 +63,11 @@ export function preflightItems(step: Step): PreflightItem[] {
     .map((i) => {
       const n = parseAmount(i.amount);
       const alt = alternativesOf(i.nameEn, i.anyOf);
+      const dose = doseKind(i.nameEn);
       return {
         nameEn: i.nameEn, id: i.wikiItemId, count: n ?? 1, exact: n !== null, heals: i.heals, ...(alt.length ? { alt } : {}),
         ...(i.totalAmount !== undefined && n !== null && i.totalAmount > n ? { total: i.totalAmount } : {}),
+        ...(dose ? { doses: (n ?? 1) * dose.per } : {}),
       };
     });
 }
@@ -86,19 +91,24 @@ export interface PreflightResult {
 
 export function evaluatePreflight(items: PreflightItem[], owned: OwnedState): PreflightResult {
   const rows = items.map((item): PreflightRow => {
-    const names = [item.nameEn, ...(item.alt ?? [])];
-    const all = names.map((n) => owned.items.get(nameKey(n)));
-    const have = all.reduce((s, o) => s + (o?.carried ?? 0), 0);
-    const inBank = owned.bankSeen ? all.reduce((s, o) => s + (o?.bank ?? 0), 0) : null;
+    // A potion counts in doses across its four sizes, each potion by its own doses: a (3) and a (1) are 4.
+    const dose = item.doses !== undefined ? doseKind(item.nameEn) : null;
+    const all = dose
+      ? [1, 2, 3, 4].map((d) => ({ o: owned.items.get(nameKey(doseName(dose.base, d))), w: d }))
+      : [item.nameEn, ...(item.alt ?? [])].map((n) => ({ o: owned.items.get(nameKey(n)), w: 1 }));
+    const need = item.doses ?? item.count;
+    const have = all.reduce((s, { o, w }) => s + (o?.carried ?? 0) * w, 0);
+    const inBank = owned.bankSeen ? all.reduce((s, { o, w }) => s + (o?.bank ?? 0) * w, 0) : null;
     let state: PreflightState;
-    if (have >= item.count) state = 'IN_BAG_READY';
-    else if (inBank === null || have + inBank >= item.count) state = 'MISSING_FROM_BAG';
+    if (have >= need) state = 'IN_BAG_READY';
+    else if (inBank === null || have + inBank >= need) state = 'MISSING_FROM_BAG';
     else state = 'NOT_FOUND_IN_BANK';
     return { item, have, inBank, state };
   });
   const missing = rows.filter((r) => r.state !== 'IN_BAG_READY').length;
   return { rows, ready: rows.length > 0 && missing === 0, missing };
 }
+
 
 /** Parsing of the OWNED event from the plugin; junk is dropped. */
 export function parseOwned(e: unknown): OwnedState | null {

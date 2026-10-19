@@ -7,6 +7,7 @@
 import type { GameMode } from '../types';
 import { nameKey } from './checklist';
 import { coinsOf, heldOf, levelOf, questOf, type PlayerState } from './playerState';
+import { heldUnits, needUnits } from './doses';
 
 export type ItemRef = { name: string; id?: number; /** The manual "already have" mark key. */ manualKey?: string };
 
@@ -25,7 +26,7 @@ export type ReqState = 'OK' | 'BANK' | 'PARTIAL' | 'MISSING' | 'UNKNOWN';
 
 export interface ReqResult {
   state: ReqState;
-  /** How much there is and how much is needed (levels, pieces, coins): for "N short". */
+  /** How much there is and how much is needed (levels, pieces, coins; doses for a potion): for "N short". */
   have?: number;
   need?: number;
   missing?: number;
@@ -44,26 +45,29 @@ export function evaluate(req: Requirement, s: PlayerState): ReqResult {
         : { state: 'MISSING', have: lv, need: req.min, missing: req.min - lv, detail: `now ${lv}, ${req.min - lv} short` };
     }
     case 'item': {
-      const h = heldOf(s, req.name, req.manualKey);
+      // A potion is counted in doses across its sizes (doses.ts): 4 × Strength potion(4) is 16 doses, a (3) and a (1) are 4 of them.
+      const h = heldUnits(s, req.name, req.manualKey);
+      const count = needUnits(req.name, req.count);
+      const u = h.unit === 'dose' ? ' doses' : '';
       if (h.presence === 'UNKNOWN') {
         const bag = h.bag ?? 0;
         // Enough in the bag: it is known; otherwise the rest could be in the bank.
-        return bag >= req.count ? { state: 'OK', have: bag, need: req.count, missing: 0, detail: 'in the bag' }
-          : { state: 'UNKNOWN', have: bag, need: req.count, detail: bag ? `${bag} in the bag, the bank was not opened` : 'the bank was not opened' };
+        return bag >= count ? { state: 'OK', have: bag, need: count, missing: 0, detail: 'in the bag' }
+          : { state: 'UNKNOWN', have: bag, need: count, detail: bag ? `${bag}${u} in the bag, the bank was not opened` : 'the bank was not opened' };
       }
       const bag = (h.bag ?? 0) + h.noted;
       const total = h.total ?? bag;
       // The player's words ("I already have it"): not "in the bank" but simply there: nothing to collect.
       if (h.source === 'manual') {
-        if (total >= req.count) return { state: 'OK', have: total, need: req.count, missing: 0, detail: 'marked "already have"' };
-        return { state: total > 0 ? 'PARTIAL' : 'MISSING', have: total, need: req.count, missing: req.count - total, detail: `marked ${total}, ${req.count - total} short` };
+        if (total >= count) return { state: 'OK', have: total, need: count, missing: 0, detail: 'marked "already have"' };
+        return { state: total > 0 ? 'PARTIAL' : 'MISSING', have: total, need: count, missing: count - total, detail: `marked ${total}${u}, ${count - total} short` };
       }
-      if (bag >= req.count) return { state: 'OK', have: bag, need: req.count, missing: 0, detail: 'in the bag' };
+      if (bag >= count) return { state: 'OK', have: bag, need: count, missing: 0, detail: 'in the bag' };
       // The bank was not opened: the rest could be there, that is "unknown", not "short".
-      if (h.bank === null && h.source === 'game') return { state: 'UNKNOWN', have: bag, need: req.count, detail: `${bag} in the bag, the bank was not opened` };
-      if (total >= req.count) return { state: 'BANK', have: total, need: req.count, missing: 0, detail: `${bag} in the bag, the rest in the bank` };
-      if (total > 0) return { state: 'PARTIAL', have: total, need: req.count, missing: req.count - total, detail: `have ${total}, ${req.count - total} short` };
-      return { state: 'MISSING', have: 0, need: req.count, missing: req.count, detail: 'in neither the bag nor the bank' };
+      if (h.bank === null && h.source === 'game') return { state: 'UNKNOWN', have: bag, need: count, detail: `${bag}${u} in the bag, the bank was not opened` };
+      if (total >= count) return { state: 'BANK', have: total, need: count, missing: 0, detail: `${bag}${u} in the bag, the rest in the bank` };
+      if (total > 0) return { state: 'PARTIAL', have: total, need: count, missing: count - total, detail: `have ${total}${u}, ${count - total} short` };
+      return { state: 'MISSING', have: 0, need: count, missing: count, detail: 'in neither the bag nor the bank' };
     }
     case 'equipment': {
       const worn = Object.entries(s.equipment).some(([slot, n]) => (!req.slot || slot === req.slot) && nameKey(n) === nameKey(req.name));

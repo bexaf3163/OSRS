@@ -3947,6 +3947,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			{
 				report(out, i.getName(), i.getId());
 			}
+			// Every Shopping row, owned or not: what is counted must not depend on the count (a row found in the bank flickered in 2.72.2).
+			for (String name : plan.counted())
+			{
+				report(out, name, null);
+			}
 		}
 		GearHint h = gearHint;
 		if (h != null)
@@ -3959,7 +3964,20 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return new ArrayList<>(out.values());
 	}
 
+	/**
+	 * One item's counts for the app. A potion brings its other sizes along: the app counts doses of every size (doses.ts), and a size it was not told
+	 * about would read as "not counted" rather than "none".
+	 */
 	private void report(Map<String, Map<String, Object>> out, String name, Integer id)
+	{
+		reportOne(out, name, id);
+		for (String size : ItemCounts.doseNames(name))
+		{
+			reportOne(out, size, null);
+		}
+	}
+
+	private void reportOne(Map<String, Map<String, Object>> out, String name, Integer id)
 	{
 		String key = ActiveTarget.nameKey(name);
 		if (out.containsKey(key))

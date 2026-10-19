@@ -959,3 +959,35 @@ Not done yet (block 2b): the audit ledger of every combat stage, mandatory quest
   log-in before the food plan settled (it waits for prices and gear), so the game kept the route's 25 Salmon while the app said 21; "Show in game" fixed it.
 - `sourceRouter.unusableSpawn`: a spawn named in the Wilderness is never a free source (live: three planks from the Graveyard of Shadows were "On the way").
 - Tests: `pick` (the resend key changes once when the food plan settles, not when its figures move), `ledger` (no free source in the Wilderness).
+
+## 2.73.0 — repair block 1: doses, acquisition access, the next-trip scope, the Shopping flicker
+
+- The owner's repair brief for 2.72.2 is worked in blocks, each released: 1 Shopping (this), 2 Path + the in-game HUD + unknown states, 3 combat stages,
+  the bones case and estimate scopes, 4 Skills costs and funding claims, 5 the review package and live checks.
+- `doseKind.ts` (no imports: `checklist.ts` uses it) and `doses.ts`: `doseKind` (a name ending "(1)".."(4)" whose base is a potion; charges such as Amulet of
+  glory(4) are not doses), `needUnits`, `heldUnits(state, name, key, legacy)` (a potion in doses across its four sizes with heldOf's rules: complete only
+  when the bank is seen and all four sizes were reported; a size not reported is "not counted", never none), `carryOf` (largest potions first; a
+  "pour them together" note when the doses fill more potions than they need), `takeFromBank` (the exact potions to withdraw), `dosePackage` (whole potions
+  of the named size, the last doses in the cheapest size that holds them; the alternative named), `shortText` (the same without prices).
+- Shopping lines for a potion are one line per potion, key `dose:<base>`, `count` in doses, sources with `per`; old manual marks (`id:113`, in potions)
+  are read through `legacyKeys`. Requirements (`evaluate` 'item'), readiness rows, `planOneTrip`, `buildPrepPlan` (lines carry `unit: 'dose'` and the
+  bank `potions`; slots count potions), `holdingFor`, funding `needLines` (a dose shortfall priced as the package) and `strengthDoses` all go through it.
+  A mark is saved under that key (`progress.ts` `OWNED_KEY` accepts `dose:`; the UI smoke caught the save dropping it before this was added).
+- Game payloads: checklist and guide items carry `doses`, the exchange items `doses` (count stays potions for an older plugin), and the watch lists name all
+  four sizes. Plugin: `ItemCounts.doseBase/doseNames/doses`; `Checklist`, `StepGuide.item` and `ShoppingPlan.progress` count doses when the app sends them
+  (rows say "3/4 doses"); `ownedReport` reports every size of a potion once one is asked about. Test: `PotionDoseTest`.
+- `shopAccess.ts`: `shopAccess(shop, town, ctx)` and `spawnAccess(place, ctx)` → open / conditional / blocked / unverified, with the requirement. Rules from
+  the OSRS Wiki: Champions' Guild shops 32 QP, Mining Guild Mining 60, Oziach Dragon Slayer I, Crafting Guild spawns Crafting 40, Cooks' Guild Cooking 32,
+  Crandor / Corsair Cove / Camdozaal while their quest is under way, Bandit Duty Free and every Wilderness place blocked, Karamja's boat fare. Quest
+  points count only from the game (the route's own count is not proof). `planSources` skips blocked sources and never makes a conditional or
+  unverified one the primary source (it ranks after the exchange, labelled "(if you have …)" / "(entry not checked)"); the Al Kharid toll is free once
+  the game counts Prince Ali Rescue; a shop without a town takes it from `SHOP_TOWN` (Silk trader — Al Kharid). The gear advisor advises open shops only.
+  Shopping's "On the way" prefers the route's own instruction to an unchecked monster drop table.
+- Next trip (`Shopping.tsx`): `timingOf(row, nowIds)` — a row is "now" when the step in progress (or a followed skill plan) needs it, else "ahead".
+  The budget shows the step, the next steps (optional now) and `budgetSum` (purchases + coins the steps pay out − coins you have = short, with the coin
+  lines' step and reason from `ShoppingList.coinLines`). Ahead rows are folded under "For the next steps"; the exchange list puts them under their own
+  heading.
+- The flicker: `exchangePlan(rows)` sends `items` (what the game lists to buy) and `watch` (every row, whatever its state); the plugin's
+  `ShoppingPlan.counted()` reports both. What is counted no longer depends on the count.
+- Tests: `doses`, `shopAccess`, `shoppingView` (the watch list is the same before and after an item is found), `ShoppingPlanTest`, `PotionDoseTest`;
+  routing tests now use real shop names (a made-up shop is "not checked" and never primary). Fixtures regenerated (watch lists name potion sizes).

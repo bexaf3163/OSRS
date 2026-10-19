@@ -12,6 +12,7 @@ import { watchedItems } from '../lib/branching';
 import { methodToolNames } from '../lib/methodStep';
 import { routeTrigger } from '../lib/carryover';
 import { alternativesOf, toolFamilyOf } from '../lib/toolTiers';
+import { doseKind, doseNames } from '../lib/doseKind';
 import { stepMaxHit } from '../lib/foodAdvice';
 import { npcSpot, stepPlaces } from '../lib/stepPlaces';
 import { shortLine } from '../lib/shortText';
@@ -219,6 +220,8 @@ export interface ChecklistPayloadItem {
   count: number;
   heals?: number;
   alt?: string[];
+  /** A potion: the doses `count` potions hold; the game counts every size toward them (Checklist.java). Absent for anything else. */
+  doses?: number;
 }
 
 /** What goes to the plugin: the step target plus the code, the title, the departure check and the items from the quick variants' conditions. */
@@ -239,7 +242,7 @@ export type ActiveStepPayload = InGameTarget & {
  * "Go here" sets a temporary target, the arrow and Shortest Path lead there, and on arrival the arrow returns to the step.
  */
 export interface StepGuidePayload {
-  items: { name: string; id?: number; count?: number; where?: string; inStep?: boolean; alt?: string[] }[];
+  items: { name: string; id?: number; count?: number; where?: string; inStep?: boolean; alt?: string[]; doses?: number }[];
   places: { x: number; y: number; plane: number; label: string; npc?: string; items?: string[] }[];
   /** The step's quick path in order: when everything is collected, the game shows the last item ("Give everything to Hetty…"). */
   steps?: string[];
@@ -259,10 +262,13 @@ export interface StagePayload {
 export function stepGuide(step: Step, branch?: StepBranch): StepGuidePayload {
   const items = (step.itemsRequired ?? []).map((i) => {
     const n = parseAmount(i.amount);
+    const dose = doseKind(i.nameEn);
     return {
       name: i.nameEn,
       ...(i.wikiItemId !== undefined ? { id: i.wikiItemId } : {}),
       ...(n !== null ? { count: n } : {}),
+      // A potion: the game counts doses of every size toward it (StepGuide.item), so a (3) and a (1) are 4 of a "Strength potion(4)".
+      ...(dose ? { doses: (n ?? 1) * dose.per } : {}),
       ...(i.howToGet ? { where: i.howToGet } : {}),
       ...(i.inStep ? { inStep: true } : {}),
       ...(alternativesOf(i.nameEn, i.anyOf).length ? { alt: alternativesOf(i.nameEn, i.anyOf) } : {}),
@@ -333,7 +339,10 @@ export function stagePayload(step: Step, places: StepGuidePayload['places']): St
 
 /** A bulk list for the exchange hint: name — the English name, count — how many are needed in all. */
 export interface ShoppingPlanPayload {
-  items: { name: string; id?: number; count: number }[];
+  /** doses: a potion, counted in doses of every size (ShoppingPlan.java); count stays potions for an older plugin. */
+  items: { name: string; id?: number; count: number; doses?: number }[];
+  /** Counted and reported back, not listed at the exchange: every Shopping row, so what is counted does not depend on the count. */
+  watch?: string[];
 }
 
 export function parseEvent(text: string): BridgeEvent | null {
@@ -372,14 +381,18 @@ export function toInGameTarget(step: Step, branch?: StepBranch, extraWatch: stri
   if (alt) delete payload.pathWaypoints;
   const goal = alt ? (alt.label.startsWith(branch!.label) ? alt.label : `${branch!.label}: ${alt.label}`) : g.goal ?? worldPoint?.label;
   if (goal) payload.goal = goal;
-  const checklist = preflightItems(step).map((i) => ({ name: i.nameEn, id: i.id, count: i.count, heals: i.heals, ...(i.alt?.length ? { alt: i.alt } : {}) }));
+  const checklist = preflightItems(step).map((i) => ({
+    name: i.nameEn, id: i.id, count: i.count, heals: i.heals, ...(i.alt?.length ? { alt: i.alt } : {}), ...(i.doses !== undefined ? { doses: i.doses } : {}),
+  }));
   if (checklist.length) payload.checklist = checklist;
   // Also — the items of the nearest steps (one trip): the plugin reports how many of them there are, and they are visible in advance.
   // A tool named by its weakest tier is any tier: the game must report every tier, or a Rune pickaxe in the bag would read as "no pickaxe".
   // The alternatives of a required item (S3-08's food: Trout, Tuna... besides Salmon) are counted too: unread, they would make "short" unknown.
   const alternatives = (step.itemsRequired ?? []).flatMap((i) => (i.inStep ? [] : i.anyOf ?? []));
-  const named = [...watchedItems(step), ...methodToolNames(step), ...alternatives, ...extraWatch];
-  const own = [...new Set([...named, ...named.flatMap((n) => toolFamilyOf(n) ?? [])])].slice(0, 40);
+  // A potion is counted in doses of every size: the game must report all four, or a (3) in the bag would read as "no potion" (doses.ts).
+  const potions = [...(step.itemsRequired ?? []), ...(step.itemsRecommended ?? [])].filter((i) => doseKind(i.nameEn)).map((i) => i.nameEn);
+  const named = [...watchedItems(step), ...methodToolNames(step), ...alternatives, ...extraWatch, ...potions];
+  const own = [...new Set([...named, ...named.flatMap((n) => toolFamilyOf(n) ?? doseNames(n))])].slice(0, 40);
   // And what the ways there need (runes, a teleport item, an axe): the game reports how many the bank holds, so "withdraw it" is said only for what is there.
   // They go after the step's own items and never push one out.
   const watch = [...new Set([...own, ...travelWatch])].slice(0, WATCH_MAX);

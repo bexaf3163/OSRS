@@ -1,7 +1,7 @@
 // The "What you need" plan as a strip of chips grouped by timing (take now / meanwhile / along the way / not now).
 // A chip says where the thing is in words, not only in colour; an unchecked thing stays "not checked" — it is never turned into "missing".
 
-import type { PrepLine, PrepPlan, PrepWhere } from './prepPlan';
+import { lineAmount, type PrepLine, type PrepPlan, type PrepWhere } from './prepPlan';
 
 export type ChipState = 'ok' | 'bank' | 'missing' | 'unknown';
 export interface Chip { key: string; text: string; state: ChipState }
@@ -12,7 +12,7 @@ const SUFFIX: Record<ChipState, string> = { ok: '', bank: ' · in the bank', mis
 
 export function chipOf(l: PrepLine): Chip {
   const state = STATE[l.where];
-  const count = l.count > 1 ? ` ×${l.count}${l.exact ? '' : '+'}` : '';
+  const count = lineAmount(l);
   return { key: l.key, text: `${l.name}${count}${SUFFIX[state]}`, state };
 }
 

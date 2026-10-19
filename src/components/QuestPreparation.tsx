@@ -5,7 +5,7 @@ import { useReadinessEngine } from '../readinessContext';
 import { useBridge } from '../bridge';
 import { useStageScope } from '../lib/useStageScope';
 import { isOutOfStage } from '../lib/stageScope';
-import type { PrepLine } from '../lib/prepPlan';
+import { lineAmount, type PrepLine } from '../lib/prepPlan';
 import { Inline } from './Inline';
 import { ItemIcon } from './WikiDrawer';
 import { findLocalItem } from '../services/wikiService';
@@ -19,7 +19,7 @@ function Row({ step, l, quiet = false, linked = true }: { step: Step; l: PrepLin
   return (
     <li className={`quest-supply is-${l.where.toLowerCase()} ${quiet ? 'is-quiet' : ''}`}>
       <span className="quest-supply-icon"><ItemIcon src={item?.iconUrl ?? findLocalItem(l.name)?.iconUrl} alt="" size={32} /></span>
-      <span className="quest-supply-name">{l.name}{l.count > 1 && <> ×{l.count}{!l.exact && '+'}</>}</span>
+      <span className="quest-supply-name">{l.name}{lineAmount(l)}</span>
       {quiet
         ? <span className="quest-supply-state">Handled</span>
         : <span className="quest-supply-state"><span aria-hidden="true">{l.where === 'UNKNOWN' ? '○' : l.where === 'MISSING' ? '!' : l.where === 'BANK' ? '↗' : '✓'}</span> {l.where === 'UNKNOWN' && !linked ? 'Bring' : LABEL[l.where]}</span>}

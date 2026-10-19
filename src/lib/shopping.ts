@@ -3,8 +3,8 @@
 
 import type { Step, StepItemRequirement } from '../types';
 import { nameKey, parseAmount, type OwnedState } from './checklist';
-import { heldOf } from './playerState';
 import { toolFamilyOf } from './toolTiers';
+import { doseKind, heldUnits } from './doses';
 import gearJson from '../data/gear.json';
 
 /**
@@ -41,6 +41,8 @@ export interface ShoppingSource {
   carryOver: boolean;
   /** The loadout of the step this item is taken for (Step.loadouts); absent means the opening one. */
   phase?: string;
+  /** A potion: the doses in one of the step's potions ("Strength potion(4)" is 4); amount × per is what the step needs. */
+  per?: number;
 }
 
 export interface ShoppingLine {
@@ -61,6 +63,11 @@ export interface ShoppingLine {
   anyOf?: string[];
   /** For food: the health one piece restores; alternatives are counted by healing. */
   heals?: number;
+  /**
+   * A potion: `count` is in doses and every size counts ("Strength potion(4)" ×4 is 16 doses; a (3) and a (1) are 4 of them). One line per potion
+   * whatever sizes the steps name; nameEn is the size the first step names.
+   */
+  dose?: { base: string; per: number };
 }
 
 export interface ShoppingList {
@@ -68,6 +75,8 @@ export interface ShoppingList {
   recommended: ShoppingLine[];
   /** How many coins the steps themselves need (fare, an NPC's fee). */
   coins: number;
+  /** The same coins by step, with what they pay for ("For buying the ship Lady Lumbridge."): kept apart from purchases in the budget. */
+  coinLines?: { stepId: string; amount: number; why: string }[];
 }
 
 interface Acc {
@@ -81,7 +90,10 @@ function wholeGoal(i: StepItemRequirement): StepItemRequirement {
   return i.totalAmount === undefined ? i : { ...i, amount: i.totalAmount };
 }
 
-function collect(steps: Step[], pick: (s: Step) => StepItemRequirement[] | undefined, selected: Set<string>, coinsOut?: { n: number }): ShoppingLine[] {
+function collect(
+  steps: Step[], pick: (s: Step) => StepItemRequirement[] | undefined, selected: Set<string>,
+  coinsOut?: { n: number; lines: { stepId: string; amount: number; why: string }[] },
+): ShoppingLine[] {
   const byId = new Map<number, Acc>();
   const byName = new Map<string, Acc>();
   const order: Acc[] = [];
@@ -89,26 +101,32 @@ function collect(steps: Step[], pick: (s: Step) => StepItemRequirement[] | undef
     for (const item of pick(step) ?? []) {
       const n = parseAmount(item.amount);
       if (item.wikiItemId === COINS_ID || nameKey(item.nameEn) === 'coins') {
-        if (coinsOut && n) coinsOut.n += n;
+        if (coinsOut && n) {
+          coinsOut.n += n;
+          coinsOut.lines.push({ stepId: step.id, amount: n, why: item.howToGet });
+        }
         continue;
       }
       const from = carryOverFrom(item);
       const carryOver = from !== null && selected.has(from);
-      const name = nameKey(item.nameEn);
-      let acc = (item.wikiItemId !== undefined ? byId.get(item.wikiItemId) : undefined) ?? byName.get(name);
+      // A potion is one line in doses whatever size a step names: a (4) of one step and a (3) of another are one need.
+      const dose = doseKind(item.nameEn);
+      const name = dose ? `dose:${nameKey(dose.base)}` : nameKey(item.nameEn);
+      let acc = (!dose && item.wikiItemId !== undefined ? byId.get(item.wikiItemId) : undefined) ?? byName.get(name);
       if (!acc) {
         acc = {
           line: {
-            key: item.wikiItemId !== undefined ? `id:${item.wikiItemId}` : `name:${name}`,
+            key: dose ? name : item.wikiItemId !== undefined ? `id:${item.wikiItemId}` : `name:${name}`,
             nameEn: item.nameEn, id: item.wikiItemId, iconUrl: item.iconUrl,
             count: 0, exact: true, reusable: isReusable(item.nameEn), inStepOnly: true, sources: [], howToGet: item.howToGet,
+            ...(dose ? { dose } : {}),
           },
           perStep: new Map(),
           allInStep: true,
         };
         order.push(acc);
       }
-      if (item.wikiItemId !== undefined) {
+      if (item.wikiItemId !== undefined && !dose) {
         byId.set(item.wikiItemId, acc);
         acc.line.id ??= item.wikiItemId;
       }
@@ -116,13 +134,13 @@ function collect(steps: Step[], pick: (s: Step) => StepItemRequirement[] | undef
       if (item.heals !== undefined) acc.line.heals ??= item.heals;
       if (item.anyOf?.length) acc.line.anyOf = [...new Set([...(acc.line.anyOf ?? []), ...item.anyOf])].filter((n) => nameKey(n) !== name);
       byName.set(name, acc);
-      acc.line.sources.push({ stepId: step.id, amount: item.amount, carryOver, ...(item.phase ? { phase: item.phase } : {}) });
+      acc.line.sources.push({ stepId: step.id, amount: item.amount, carryOver, ...(item.phase ? { phase: item.phase } : {}), ...(dose ? { per: dose.per } : {}) });
       if (carryOver) continue;
       if (n === null) acc.line.exact = false;
       // In a purchase step (gear) "during the step" means "buy at the exchange".
       if (!item.inStep || step.type === 'gear') acc.allInStep = false;
       // Two rows of one item in one step are different needs (a trap for fish and for the Oracle): they are summed.
-      acc.perStep.set(step.id, (acc.perStep.get(step.id) ?? 0) + (n ?? 1));
+      acc.perStep.set(step.id, (acc.perStep.get(step.id) ?? 0) + (n ?? 1) * (dose?.per ?? 1));
     }
   }
   return order
@@ -141,13 +159,13 @@ function collect(steps: Step[], pick: (s: Step) => StepItemRequirement[] | undef
  */
 export function aggregateShopping(steps: Step[], opts: { wholeGoal?: boolean } = {}): ShoppingList {
   const selected = new Set(steps.map((s) => s.id));
-  const coins = { n: 0 };
+  const coins = { n: 0, lines: [] as { stepId: string; amount: number; why: string }[] };
   const required = collect(steps, (s) => (opts.wholeGoal ? s.itemsRequired?.map(wholeGoal) : s.itemsRequired), selected, coins);
   const requiredKeys = new Set(required.flatMap((l) => [l.key, `name:${nameKey(l.nameEn)}`]));
   // A recommended item that is already in the required list (by ID or by name) is not shown a second time.
   const recommended = collect(steps, (s) => s.itemsRecommended, selected)
     .filter((l) => !requiredKeys.has(l.key) && !requiredKeys.has(`name:${nameKey(l.nameEn)}`));
-  return { required, recommended, coins: coins.n };
+  return { required, recommended, coins: coins.n, coinLines: coins.lines };
 }
 
 /** English plural: plural(21, 'item', 'items') gives "items"; plural(1, ...) gives "item". */
@@ -214,8 +232,8 @@ export function holdingFor(
   onGe = true,
 ): Holding {
   const required = line.count;
-  // The same "how much there is" calculation as readiness and the single requirements (playerState.heldOf).
-  const h = heldOf({ owned: owned as OwnedState | null, equipment: {}, manual: manual !== undefined ? { m: manual } : {}, bankSeen: owned?.bankSeen === true }, line.nameEn, manual !== undefined ? 'm' : undefined);
+  // The same "how much there is" calculation as readiness and the single requirements (playerState.heldOf; a potion in doses, doses.ts).
+  const h = heldUnits({ owned: owned as OwnedState | null, equipment: {}, manual: manual !== undefined ? { m: manual } : {}, bankSeen: owned?.bankSeen === true }, line.nameEn, manual !== undefined ? 'm' : undefined);
   const inGame = h.bag !== null;
   const carried = inGame ? (h.bag ?? 0) + h.noted : undefined;
   const bank = inGame ? h.bank : undefined;

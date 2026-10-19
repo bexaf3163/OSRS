@@ -31,6 +31,30 @@ final class Checklist
 		int inBank;
 		Integer heals;
 		State state;
+		/** A potion: have, need and inBank are doses of every size. */
+		boolean doses;
+
+		Row(String name, int have, int need, int inBank, Integer heals, State state)
+		{
+			this(name, have, need, inBank, heals, state, false);
+		}
+
+		Row(String name, int have, int need, int inBank, Integer heals, State state, boolean doses)
+		{
+			this.name = name;
+			this.have = have;
+			this.need = need;
+			this.inBank = inBank;
+			this.heals = heals;
+			this.state = state;
+			this.doses = doses;
+		}
+
+		/** "3/4" or, for a potion, "3/4 doses". */
+		String amount()
+		{
+			return have + "/" + need + (doses ? " doses" : "");
+		}
 	}
 
 	@Value
@@ -60,7 +84,7 @@ final class Checklist
 		{
 			if (row.getState() != State.IN_BAG_READY)
 			{
-				names.add(row.getNeed() > 1 ? row.getName() + " " + row.getHave() + "/" + row.getNeed() : row.getName());
+				names.add(row.getNeed() > 1 ? row.getName() + " " + row.amount() : row.getName());
 				only = row;
 			}
 		}
@@ -93,9 +117,11 @@ final class Checklist
 		boolean ready = true;
 		for (ActiveTarget.ChecklistItem item : items)
 		{
-			int need = Math.max(1, item.getCount());
-			int have = ActiveTarget.countWithAlt(carried, item.getId(), item.getName(), item.getAlt());
-			int inBank = bank == null ? -1 : ActiveTarget.countWithAlt(bank, item.getId(), item.getName(), item.getAlt());
+			// A potion is counted in doses of every size (the app sends them): a (3) and a (1) cover a "Strength potion(4)".
+			boolean dose = item.getDoses() != null && item.getDoses() > 0 && ItemCounts.doseBase(item.getName()) != null;
+			int need = dose ? item.getDoses() : Math.max(1, item.getCount());
+			int have = dose ? carried.doses(item.getName()) : ActiveTarget.countWithAlt(carried, item.getId(), item.getName(), item.getAlt());
+			int inBank = bank == null ? -1 : dose ? bank.doses(item.getName()) : ActiveTarget.countWithAlt(bank, item.getId(), item.getName(), item.getAlt());
 			State state;
 			if (have >= need)
 			{
@@ -110,7 +136,7 @@ final class Checklist
 				state = State.NOT_FOUND_IN_BANK;
 			}
 			ready &= state == State.IN_BAG_READY;
-			rows.add(new Row(item.getName(), have, need, inBank, item.getHeals(), state));
+			rows.add(new Row(item.getName(), have, need, inBank, item.getHeals(), state, dose));
 		}
 		return new Result(Collections.unmodifiableList(rows), ready);
 	}

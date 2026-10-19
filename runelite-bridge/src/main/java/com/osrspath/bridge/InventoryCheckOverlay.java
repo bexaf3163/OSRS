@@ -152,7 +152,7 @@ class InventoryCheckOverlay extends OverlayPanel
 	{
 		String mark;
 		Color color;
-		String right = row.getHave() + "/" + row.getNeed();
+		String right = row.amount();
 		switch (row.getState())
 		{
 			case IN_BAG_READY:

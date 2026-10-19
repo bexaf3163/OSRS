@@ -11,7 +11,7 @@ import { currentStage, nextStep } from '../lib/next-step';
 import { coinsOf } from '../lib/playerState';
 import { formatGp, plural, type ShoppingLine } from '../lib/shopping';
 import {
-  budgetOf, emptyStateOf, geListText, scopeList, scopeSteps, shopRows, syncLine, type Channel, type EmptyKind, type ScopeKind, type ShopRow, type StageRange,
+  budgetOf, budgetSum, emptyStateOf, exchangePlan, geListText, scopeList, scopeSteps, shopRows, syncLine, timingOf, type Channel, type EmptyKind, type ScopeKind, type ShopRow, type StageRange,
 } from '../lib/shoppingView';
 import { MAX_OWNED } from '../lib/progress';
 import { itemById } from '../data';
@@ -70,7 +70,7 @@ const GROUPS: { channels: Channel[]; title: string }[] = [
 ];
 
 /** The "already have" field: −, a number, +. Garbage is not saved: the field returns to the previous value. */
-function OwnedInput({ value, max, name, onSet }: { value: number; max: number; name: string; onSet: (n: number) => void }) {
+function OwnedInput({ value, max, name, onSet, unit }: { value: number; max: number; name: string; onSet: (n: number) => void; unit?: string }) {
   const [draft, setDraft] = useState(String(value));
   useEffect(() => setDraft(String(value)), [value]);
   const commit = () => {
@@ -81,27 +81,31 @@ function OwnedInput({ value, max, name, onSet }: { value: number; max: number; n
   return (
     <span className="owned-input">
       <button type="button" className="btn btn-ghost btn-sm" onClick={() => onSet(Math.max(0, value - 1))} disabled={value <= 0} aria-label={`${name}: one less`}>−</button>
-      <input type="text" inputMode="numeric" value={draft} aria-label={`${name}: how many you already have`}
+      <input type="text" inputMode="numeric" value={draft} aria-label={`${name}: how many ${unit ? `${unit} ` : ''}you already have`}
         onChange={(e) => setDraft(e.target.value.replace(/[^\d]/g, ''))} onBlur={commit}
         onKeyDown={(e) => { if (e.key === 'Enter') (e.target as HTMLInputElement).blur(); }} />
       <button type="button" className="btn btn-ghost btn-sm" onClick={() => onSet(Math.min(MAX_OWNED, value + 1))} aria-label={`${name}: one more`}>+</button>
-      <span className="muted small">of {max}</span>
+      <span className="muted small">of {max}{unit ? ` ${unit}` : ''}</span>
     </span>
   );
 }
 
 function whereText(r: ShopRow): string {
   const o = r.own;
-  if (o.source === 'manual') return `Marked by hand: ${o.total ?? 0}`;
+  const u = r.unit === 'dose' ? ' doses' : '';
+  if (o.source === 'manual') return `Marked by hand: ${o.total ?? 0}${u}`;
   if (o.withYou === null) return 'Not checked: the game has not sent your bag yet';
-  const parts = [`with you ${o.withYou}${o.worn ? ` (${o.worn} worn)` : ''}`, o.bank === null ? 'bank not checked' : `in the bank ${o.bank}`];
+  const parts = [`with you ${o.withYou}${u}${o.worn ? ` (${o.worn} worn)` : ''}`, o.bank === null ? 'bank not checked' : `in the bank ${o.bank}${u}`];
   if (o.viaAlternatives > 0) parts.push(`${o.viaAlternatives} of it from items that do the same job`);
+  // A potion: which sizes hold the doses, so "4 doses" in a (3) and a (1) is not read as one potion.
+  const sizes = (o.sizes ?? []).filter((x) => x.bag + x.noted + (x.bank ?? 0) > 0).map((x) => `${x.bag + x.noted + (x.bank ?? 0)} × (${x.size})`);
+  if (sizes.length) parts.push(sizes.join(', '));
   return parts.join(' · ');
 }
 
 export function ShoppingPage() {
   const { steps, stages, progress, qp, notify, setOwnedManual } = useStore();
-  const { state: link, owned, activeStepId, syncPlan } = useBridge();
+  const { state: link, owned, activeStepId, syncPlan, questPoints } = useBridge();
   const { state: player } = usePlayerState();
   const prices = usePriceView(true);
   const [scope, setScopeState] = useState<ScopeKind>(loadScope);
@@ -162,12 +166,14 @@ export function ShoppingPage() {
       const rows = shopRows(list, {
         state: player, onGe, detail: (id) => itemById.get(id), trip,
         gePrice: (l) => prices.buy(l.nameEn, l.id)?.price ?? null,
+        priceOf: (name) => prices.buy(name)?.price ?? null,
+        qp: questPoints,
       });
       return { selected, list, rows, error: false };
     } catch {
       return { selected: [], list: { required: [], recommended: [], coins: 0 }, rows: [] as ShopRow[], error: true };
     }
-  }, [scope, steps, progress, current, range, player, mapping, prices, followed]);
+  }, [scope, steps, progress, current, range, player, mapping, prices, followed, questPoints]);
   const { selected, list, rows, error } = built;
 
   const connected = link === 'online';
@@ -175,22 +181,36 @@ export function ShoppingPage() {
   const empty: EmptyKind | null = emptyStateOf({ error, scope, current, rows, connected, hasSnapshot: Boolean(owned?.bankSavedAt), loaded });
   const sync = syncLine({ connected, loaded, bankSeen: owned?.bankSeen === true, ...(owned?.bankSavedAt ? { bankSavedAt: owned.bankSavedAt } : {}) });
   const coins = coinsOf(player);
-  const budget = budgetOf(rows, list.coins, { bag: coins.bag, bank: coins.bank });
-  const required = rows.filter((r) => !r.optional);
+  // The next trip: what the step in progress needs, apart from advance purchases for the next steps of the window (S4-04 and S4-05 are purchase
+  // steps of their own; their list is not what S4-03 needs before going on).
+  const split = scope === 'trip' && current !== null;
+  // A followed skill plan leads the game: its tools are needed now too.
+  const nowIds = new Set([current, followed && scope !== 'range' ? followed.id : null].filter((x): x is string => x !== null));
+  const isAhead = (r: ShopRow) => split && timingOf(r, nowIds) === 'ahead';
+  const coinLines = list.coinLines ?? [];
+  const nowCoins = split ? coinLines.filter((c) => nowIds.has(c.stepId)) : coinLines;
+  const aheadCoins = split ? coinLines.filter((c) => !nowIds.has(c.stepId)) : [];
+  const sumOf = (ls: readonly { amount: number }[]) => ls.reduce((a, c) => a + c.amount, 0);
+  const funds = { bag: coins.bag, bank: coins.bank };
+  const budget = budgetOf(rows.filter((r) => !isAhead(r)), split ? sumOf(nowCoins) : list.coins, funds);
+  const aheadBudget = split ? budgetOf(rows.filter(isAhead), sumOf(aheadCoins), funds) : null;
+  const total = split ? budgetOf(rows, list.coins, funds) : budget;
+  const required = rows.filter((r) => !r.optional && !isAhead(r));
+  const ahead = rows.filter((r) => !r.optional && isAhead(r) && r.channel !== 'have');
   const optional = rows.filter((r) => r.optional && r.channel !== 'have');
-  const have = required.filter((r) => r.channel === 'have');
+  const have = rows.filter((r) => !r.optional && r.channel === 'have');
+  const aheadIds = [...new Set(ahead.flatMap((r) => r.sources.filter((s) => !s.carryOver && !nowIds.has(s.stepId)).map((s) => s.stepId)))];
 
   // The exchange hint in RuneLite: the exchange rows (and the ones not confirmed). The plugin subtracts what it sees itself; a manual mark is
   // subtracted here.
-  const planItems = required
-    .filter((r) => (r.channel === 'ge' || (r.channel === 'unknown' && r.tradeable)) && r.qty > 0)
-    .map((r) => ({ name: r.name, id: r.id, count: r.own.source === 'manual' ? r.qty + (r.own.withYou ?? 0) : r.required }));
-  const planKey = planItems.map((i) => `${i.name}:${i.count}`).join('|');
+  // What the game counts (every row of the scope) is sent apart from what it lists to buy, so finding an item in the bank never stops it being counted.
+  const plan = exchangePlan(rows);
+  const planKey = JSON.stringify(plan);
   useEffect(() => {
     if (link !== 'online') return;
-    const timer = setTimeout(() => { void syncPlan({ items: planItems }); }, 400);
+    const timer = setTimeout(() => { void syncPlan(plan); }, 400);
     return () => clearTimeout(timer);
-    // planItems is recomputed on every render: its content is watched through planKey.
+    // plan is recomputed on every render: its content is watched through planKey.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planKey, link, syncPlan]);
 
@@ -200,7 +220,7 @@ export function ShoppingPage() {
     : current
       ? `${scope === 'trip' ? selected.map((s) => s.id).join(', ') : current}.`
       : '';
-  const exchange = geListText(`Grand Exchange: ${scopeName}`, rows, list.coins);
+  const exchange = geListText(`Grand Exchange: ${scopeName}`, rows, list.coins, split ? isAhead : undefined);
   const copyList = async () => {
     if (!exchange) return;
     notify(await copy(exchange) ? '📋 The exchange list is copied' : 'Could not copy: the clipboard is not available');
@@ -217,14 +237,19 @@ export function ShoppingPage() {
         <div className="shop-item-main">
           <p className="shop-item-line">
             <strong>{r.name}</strong>
-            {r.channel !== 'have' && r.qty > 0 && <span className="shop-qty">×{formatGp(r.qty)}{r.exact ? '' : '+'}</span>}
+            {r.channel !== 'have' && r.qty > 0 && (r.unit === 'dose'
+              ? <span className="shop-qty">{r.qty} {r.qty === 1 ? 'dose' : 'doses'}{r.channel === 'bank' ? '' : ' short'}</span>
+              : <span className="shop-qty">×{formatGp(r.qty)}{r.exact ? '' : '+'}</span>)}
             {r.cost !== null && r.channel !== 'have' && <span className="muted small shop-cost">{r.channel === 'unknown' ? 'up to ' : '≈ '}{formatGp(r.cost)} gp</span>}
           </p>
           <p className="small shop-action">{r.action}</p>
           <details className="shop-why">
             <summary className="small muted">Why and what you have</summary>
-            <p className="small muted">For {r.why}{r.reusable && r.sources.length > 1 ? ' (one is enough for all of them)' : ''}.{r.required !== r.qty && r.channel !== 'have' ? ` The steps need ${formatGp(r.required)} in all.` : ''}</p>
+            <p className="small muted">For {r.why}{r.reusable && r.sources.length > 1 ? ' (one is enough for all of them)' : ''}.{r.unit === 'dose' ? ` The steps need ${r.required} doses in all.` : r.required !== r.qty && r.channel !== 'have' ? ` The steps need ${formatGp(r.required)} in all.` : ''}</p>
             <p className="small muted">{whereText(r)}</p>
+            {r.package?.alternative && <p className="small muted">{r.package.alternative}.</p>}
+            {r.package && r.package.spare > 0 && <p className="small muted">The package holds {r.package.spare} spare {r.package.spare === 1 ? 'dose' : 'doses'}.</p>}
+            {r.carry?.combine && <p className="small">{r.carry.combine}.</p>}
             {!live && (
               <p className="small shop-manual">
                 {single ? (
@@ -233,7 +258,7 @@ export function ShoppingPage() {
                     : <button type="button" className="btn btn-ghost btn-sm" onClick={() => setManual(r.required)}>I already have it</button>
                 ) : (
                   <>
-                    <OwnedInput value={r.own.source === 'manual' ? r.own.total ?? 0 : 0} max={r.required} name={r.name} onSet={setManual} />
+                    <OwnedInput value={r.own.source === 'manual' ? r.own.total ?? 0 : 0} max={r.required} name={r.name} onSet={setManual} {...(r.unit === 'dose' ? { unit: 'doses' } : {})} />
                     {r.own.source === 'manual' && <button type="button" className="btn btn-ghost btn-sm" onClick={() => setManual(null)}>Remove my mark</button>}
                   </>
                 )}
@@ -266,7 +291,9 @@ export function ShoppingPage() {
   };
 
   const listShown = empty === null || empty === 'offline' || empty === 'not-loaded';
-  const purchase = required.some((r) => r.channel === 'ge' || r.channel === 'shop') || budget.unknownRows > 0;
+  const purchase = rows.some((r) => !r.optional && (r.channel === 'ge' || r.channel === 'shop')) || total.unknownRows > 0 || total.coinsForSteps > 0;
+  const nowNothing = budget.required === 0 && budget.coinsForSteps === 0 && budget.unknownRows === 0;
+  const sum = budgetSum(total, coinLines);
 
   return (
     <div className="page shop-page">
@@ -302,16 +329,37 @@ export function ShoppingPage() {
 
       {listShown && purchase && (
         <div className="shop-budget" aria-label="Budget">
-          <p className="small">
-            {budget.required > 0 ? <>Purchases <strong>≈ {formatGp(budget.required)} gp</strong></> : <>No confirmed purchases</>}
-            {budget.coinsForSteps > 0 && <> · {formatGp(budget.coinsForSteps)} gp for the steps</>}
-            {budget.funds !== null ? <> · you have {formatGp(budget.funds)} gp</> : <> · your coins are not known yet</>}
-            {budget.shortfall !== null && budget.shortfall > 0 && <> · <strong className="warn-text">short {formatGp(budget.shortfall)} gp</strong></>}
-            {budget.unpriced > 0 && <> · {budget.unpriced} without a price</>}
-          </p>
-          {budget.unknownRows > 0 && <p className="small muted">{budget.unknownRows} not confirmed{budget.unknownMax > 0 ? `: up to ${formatGp(budget.unknownMax)} gp more if none of them is owned` : ''}.</p>}
-          {budget.optional > 0 && <p className="small muted">Optional extras ≈ {formatGp(budget.optional)} gp, not counted above.</p>}
-          {budget.shortfall !== null && budget.shortfall > 0 && current && (
+          {split ? (
+            <>
+              <p className="small">
+                <strong>{current}</strong>:{' '}
+                {nowNothing ? <>nothing to buy before you go on</> : <>
+                  {budget.required > 0 ? <>buy <strong>≈ {formatGp(budget.required)} gp</strong></> : <>no confirmed purchases</>}
+                  {budget.coinsForSteps > 0 && <> · {formatGp(budget.coinsForSteps)} gp the step pays out</>}
+                  {budget.shortfall !== null && budget.shortfall > 0 && <> · <strong className="warn-text">short {formatGp(budget.shortfall)} gp</strong></>}
+                </>}
+              </p>
+              {aheadBudget && (aheadBudget.required > 0 || aheadBudget.coinsForSteps > 0 || aheadBudget.unknownRows > 0) && (
+                <p className="small">
+                  Next steps ({aheadIds.join(', ')}), optional now:{' '}
+                  {aheadBudget.required > 0 ? <>buy ≈ {formatGp(aheadBudget.required)} gp</> : <>no confirmed purchases</>}
+                  {aheadBudget.coinsForSteps > 0 && <> · {formatGp(aheadBudget.coinsForSteps)} gp kept for {aheadCoins.map((c) => c.stepId).join(', ')}</>}
+                </p>
+              )}
+            </>
+          ) : (
+            <p className="small">
+              {budget.required > 0 ? <>Purchases <strong>≈ {formatGp(budget.required)} gp</strong></> : <>No confirmed purchases</>}
+              {budget.coinsForSteps > 0 && <> · {formatGp(budget.coinsForSteps)} gp the steps pay out</>}
+              {budget.shortfall !== null && budget.shortfall > 0 && <> · <strong className="warn-text">short {formatGp(budget.shortfall)} gp</strong></>}
+            </p>
+          )}
+          {/* The figures added up, with what the coins kept for the steps pay for, so the shortfall can be checked against them. */}
+          {sum ? <p className="small muted">{split ? 'All of it: ' : ''}{sum}</p> : <p className="small muted">Your coins are not known yet: open your bank in RuneLite.</p>}
+          {total.unpriced > 0 && <p className="small muted">{total.unpriced} without a price, not counted.</p>}
+          {total.unknownRows > 0 && <p className="small muted">{total.unknownRows} not confirmed{total.unknownMax > 0 ? `: up to ${formatGp(total.unknownMax)} gp more if none of them is owned` : ''}.</p>}
+          {total.optional > 0 && <p className="small muted">Optional extras ≈ {formatGp(total.optional)} gp, not counted above.</p>}
+          {total.shortfall !== null && total.shortfall > 0 && current && (
             <p className="small"><a href={backHref}>Raise the coins</a> <span className="muted">— the step's coin plan picks a way that suits your account.</span> <a href="#/money">Browse earning methods</a></p>
           )}
           <p className="small muted">Prices are estimates from the exchange's recent trades, not offers.</p>
@@ -330,6 +378,21 @@ export function ShoppingPage() {
         );
       })}
 
+      {listShown && ahead.length > 0 && (
+        <details className="shop-group-v2 is-ahead">
+          <summary className="subhead">For the next steps <span className="muted">· {ahead.length} · {aheadIds.join(', ')}</span></summary>
+          <p className="small muted">Not needed for {current}. Buy them now only if you are at the exchange anyway.</p>
+          {GROUPS.map((g) => {
+            const items = ahead.filter((r) => g.channels.includes(r.channel));
+            return items.length ? (
+              <section key={g.title} className={`is-${g.channels[0]}`}>
+                <h3 className="small muted">{g.title} · {items.length}</h3>
+                <ul className="shop-items">{items.map(rowView)}</ul>
+              </section>
+            ) : null;
+          })}
+        </details>
+      )}
       {listShown && have.length > 0 && (
         <details className="shop-group-v2 is-have">
           <summary className="subhead">Already have <span className="muted">· {have.length}</span></summary>

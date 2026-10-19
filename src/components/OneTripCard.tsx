@@ -15,7 +15,7 @@ import { formatGp } from '../lib/shopping';
 import { kgText } from '../lib/weight';
 import { prepChipGroups } from '../lib/prepChips';
 import { bagCleanup, cleanupLine } from '../lib/bagCleanup';
-import { BAG_SLOTS, type PrepPlan, type PrepAction, type PrepLine, type PrepWhere, type Supply } from '../lib/prepPlan';
+import { BAG_SLOTS, lineAmount, unitsOf, type PrepPlan, type PrepAction, type PrepLine, type PrepWhere, type Supply } from '../lib/prepPlan';
 import { NavigateButton } from './NavigateButton';
 import { useUpgradeRecommendation } from './UpgradePrompt';
 
@@ -28,7 +28,7 @@ const WHERE: Record<PrepWhere, { icon: string; text: string }> = {
 };
 const SUPPLY: Record<Supply, string> = { ENOUGH: 'enough', LOW: 'low', CRITICAL: 'very low' };
 
-const countOf = (l: PrepLine) => (l.count > 1 ? ` ×${l.count}${l.exact ? '' : '+'}` : '');
+const countOf = (l: PrepLine) => lineAmount(l);
 
 function Action({ a }: { a: PrepAction }) {
   return (
@@ -43,7 +43,7 @@ function Action({ a }: { a: PrepAction }) {
 /** Short of a part: "13 of 26" says more than "missing". */
 function partOf(l: PrepLine): string | null {
   const have = (l.have.bag ?? 0) + l.have.noted + (l.have.bank ?? 0) + l.have.equipped;
-  return l.where === 'MISSING' && have > 0 && l.count > have ? `${have} of ${l.count}${l.have.bank ? ' (bank included)' : ''}` : null;
+  return l.where === 'MISSING' && have > 0 && l.count > have ? `${have} of ${unitsOf(l, l.count)}${l.have.bank ? ' (bank included)' : ''}` : null;
 }
 
 function Row({ l, showWhy = true }: { l: PrepLine; showWhy?: boolean }) {

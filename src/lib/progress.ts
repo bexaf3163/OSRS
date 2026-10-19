@@ -310,7 +310,8 @@ export function withUpgradeDismissed(p: Progress, stepId: string, dismissed = tr
 
 /** How much of an item the player can enter manually: there is no more in the game (a stack is up to 2,147,483,647). */
 export const MAX_OWNED = 2_147_483_647;
-const OWNED_KEY = /^(id:\d{1,9}|name:.{1,200})$/;
+/** An item by id or name; a potion by its doses across all four sizes ("dose:strength potion", 2.73.0). */
+const OWNED_KEY = /^(id:\d{1,9}|name:.{1,200}|dose:.{1,200})$/;
 
 /** The manual "already have" values from a save: only valid keys and whole quantities from 0; the rest is dropped. */
 export function ownedManualOf(v: unknown): Record<string, ManualOwned> {

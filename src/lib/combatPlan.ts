@@ -8,6 +8,7 @@ import {
   CALIBRATED_KILLS, estimateStep, foeLabel, healsOf, observedFor, type Basis, type CombatEstimate, type Fights, type Range, type StepEstimateContext,
 } from './combatEstimate';
 import { durationText } from './splits';
+import { heldUnits } from './doses';
 
 export const BASIS_LABEL: Record<Basis, string> = {
   formula: 'estimate from the combat formulas',
@@ -141,14 +142,10 @@ function measuredText(o: ReturnType<typeof observedFor>): string | null {
   return `${o.kills} kills measured in the game: ${per(o.seconds)} s and ${per(o.damage ?? 0)} damage taken a kill (${counted}).`;
 }
 
-/** Strength potion doses you own (bag, banknotes, bank). */
+/** Strength potion doses you own (bag, banknotes, bank), counted by the shared dose rules (doses.ts) so the plan and Shopping agree. */
 export function strengthDoses(owned: OwnedState | null): number {
-  let n = 0;
-  for (let d = 1; d <= 4; d++) {
-    const o = owned?.items.get(nameKey(`Strength potion(${d})`));
-    if (o) n += d * (o.carried + o.noted + (o.bank ?? 0));
-  }
-  return n;
+  const h = heldUnits({ owned, equipment: {}, manual: {}, bankSeen: owned?.bankSeen === true }, 'Strength potion(4)');
+  return h.total ?? (h.bag ?? 0) + h.noted;
 }
 
 /** Doses the step recommends taking (Strength potion(4) × amount). */

@@ -69,4 +69,19 @@ public class ShoppingPlanTest
 		plan.setItems(Collections.singletonList(item("Rope", 954, -1)));
 		assertEquals("invalid count", plan.prepare());
 	}
+
+	@Test
+	public void theWatchListIsCountedButNotListed()
+	{
+		// 2.72.2: a row found in the bank left the exchange list, stopped being counted and flickered back to "not confirmed".
+		ShoppingPlan plan = new ShoppingPlan();
+		plan.setItems(Collections.singletonList(item("Steel nails", 1539, 90)));
+		plan.setWatch(Arrays.asList("Unfired bowl", "Hammer"));
+		assertNull(plan.prepare());
+		assertEquals(Arrays.asList("Steel nails", "Unfired bowl", "Hammer"), plan.counted());
+		// Only the items are rows at the exchange.
+		assertEquals(1, ShoppingPlan.progress(plan.getItems(), new ItemCounts(), Collections.emptyMap()).size());
+		plan.setWatch(Collections.singletonList(""));
+		assertEquals("invalid name", plan.prepare());
+	}
 }

@@ -17,6 +17,7 @@ import {
   pluginCompat, type BridgeEvent, type GearState, type NavResult, type NavTargetPayload, type PacingState, type PluginCompat, type CombatLogState, type ShoppingPlanPayload, type QuestInstruction,
 } from './services/runeliteBridge';
 import { parseOwned, preflightItems, type OwnedState } from './lib/checklist';
+import { doseKind } from './lib/doseKind';
 import { tripWindow } from './lib/oneTrip';
 import type { MoveEvent } from './lib/recovery';
 import { stageBankItemIds } from './lib/bankTags';
@@ -381,7 +382,10 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const sendStep = useCallback(async (step: Step, branch?: StepBranch): Promise<boolean> => {
     const { progress: p, stats: live, gear: g, steps: list } = latest.current;
     // The items of the current and the nearest steps — the plugin counts them in advance: "one trip" knows what is already there.
-    const ahead = tripWindow(list, p, step.id).slice(1).flatMap((s) => preflightItems(s).map((i) => i.nameEn));
+    // Potions the window recommends are counted too (every size, in doses): Shopping's optional rows and the trip read them.
+    const ahead = tripWindow(list, p, step.id).slice(1).flatMap((s) => [
+      ...preflightItems(s).map((i) => i.nameEn), ...(s.itemsRecommended ?? []).filter((i) => doseKind(i.nameEn)).map((i) => i.nameEn),
+    ]);
     const target = withKillEstimate(step, { ...p.levels, ...(live ?? {}) }, g);
     if (!supportsSnapshot(pluginProtocol.current)) return syncActiveStep(target, undefined, branch, ahead);
     // What the ways to the step need is counted too: the planner says "withdraw it" only for what the bank is known to hold.

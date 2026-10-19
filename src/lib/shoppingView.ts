@@ -6,6 +6,8 @@
 import type { Progress, Step, WikiItemDetail } from '../types';
 import { aggregateShopping, formatGp, type ShoppingLine, type ShoppingList, type ShoppingSource } from './shopping';
 import { heldOf, type PlayerState } from './playerState';
+import { carryOf, doseKind, dosePackage, heldUnits, takeFromBank, type Carry, type DosePackage, type DoseSize } from './doses';
+import { legacyKeys } from './oneTrip';
 import { planSources } from './sourceRouter';
 import { healsOf } from './combatEstimate';
 import { nameKey, parseAmount } from './checklist';
@@ -27,6 +29,8 @@ export interface Ownership {
   source: 'game' | 'manual' | 'bag' | 'none';
   /** Pieces of another item that does the same job, counted in (food by healing). */
   viaAlternatives: number;
+  /** A potion: the counts above are doses; these are the potions of each size, largest first. */
+  sizes?: DoseSize[];
 }
 
 export interface ShopRow {
@@ -53,6 +57,14 @@ export interface ShopRow {
   why: string;
   sources: ShoppingSource[];
   howToGet: string;
+  /** A potion: required, qty and the ownership are doses (doses.ts). */
+  unit?: 'dose';
+  /** A potion to buy: the potions that cover the doses short, priced per size. */
+  package?: DosePackage;
+  /** A potion to carry: the potions it takes and whether pouring them together frees slots. */
+  carry?: Carry;
+  /** A potion in the bank: the exact potions to take for the doses. */
+  potions?: { name: string; count: number }[];
 }
 
 // Worn items are not used up (the gear data has no ammunition slot).
@@ -63,9 +75,10 @@ const wearable = new Set(gearData.items.filter((p) => p.slot).map((p) => nameKey
  * list need of an alternative (the Lobsters a step asks for are not also the Salmon of another): only the rest of that stack counts here.
  */
 export function ownershipOf(
-  state: PlayerState, line: Pick<ShoppingLine, 'nameEn' | 'key' | 'anyOf' | 'heals'>, reserved?: ReadonlyMap<string, number>,
+  state: PlayerState, line: Pick<ShoppingLine, 'nameEn' | 'key' | 'anyOf' | 'heals'> & Partial<Pick<ShoppingLine, 'dose' | 'id'>>, reserved?: ReadonlyMap<string, number>,
 ): Ownership {
-  const base = heldOf(state, line.nameEn, line.key);
+  // A potion is counted in doses across its sizes (doses.ts), as the step's readiness and preparation count it.
+  const base = heldUnits(state, line.nameEn, line.key, legacyKeys({ dose: line.dose, id: line.id, nameEn: line.nameEn }));
   // Worn is with you even when the game was not asked to count the item.
   let withYou = base.bag === null ? (base.equipped > 0 ? base.equipped : null) : base.bag + base.noted;
   let bank = base.bank;
@@ -89,7 +102,7 @@ export function ownershipOf(
   const complete = base.source === 'manual' || (base.source === 'game' && base.bank !== null);
   const total = complete && base.total !== null ? base.total + alt : null;
   const source = base.source === 'manual' ? 'manual' : complete ? 'game' : withYou !== null ? 'bag' : 'none';
-  return { total, withYou, bank, worn, source, viaAlternatives: alt };
+  return { total, withYou, bank, worn, source, viaAlternatives: alt, ...(base.sizes ? { sizes: base.sizes } : {}) };
 }
 
 export interface RowContext {
@@ -102,6 +115,10 @@ export interface RowContext {
   gePrice: (line: ShoppingLine) => number | null;
   /** Pieces the next trip needs, by line key: a long training step buys the whole goal but takes one bag at a time. */
   trip?: ReadonlyMap<string, number>;
+  /** The exchange's buy side for one item by name: the sizes of a potion are priced one by one. Absent: only the line's own price is known. */
+  priceOf?: (name: string) => number | null;
+  /** The game's quest points, for the guild shops (shopAccess.ts); absent or null: not known, such a shop is only "if …". */
+  qp?: number | null;
 }
 
 const why = (sources: readonly ShoppingSource[]) => sources.map((s) => {
@@ -112,6 +129,7 @@ const why = (sources: readonly ShoppingSource[]) => sources.map((s) => {
 const firstSentence = (t: string) => (t.split(/(?<=[.!?])\s/)[0] ?? t).replace(/\.$/, '');
 
 function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: ReadonlyMap<string, number>): ShopRow {
+  if (line.dose) return doseRow(line, optional, ctx);
   const own = ownershipOf(ctx.state, line, reserved);
   const required = line.count;
   const tradeable = ctx.onGe(line);
@@ -151,7 +169,7 @@ function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: R
   const detail = line.id !== undefined ? ctx.detail(line.id) : undefined;
   const plan = planSources({
     name: line.nameEn, need: missing, manualKey: line.key, ...(detail ? { detail } : {}),
-    ...(tradeable && ctx.gePrice(line) !== null ? { gePrice: ctx.gePrice(line)! } : {}), kinds: ['shop', 'ge', 'free', 'drop'],
+    ...(tradeable && ctx.gePrice(line) !== null ? { gePrice: ctx.gePrice(line)! } : {}), kinds: ['shop', 'ge', 'free', 'drop'], qp: ctx.qp ?? null,
   }, ctx.state);
   const src = plan.primary;
   const geOption = [plan.primary, ...plan.alternatives].find((o) => o?.kind === 'ge');
@@ -161,16 +179,82 @@ function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: R
   // then bought at the exchange; a shop wins only when it is known to be nearer.
   const near = src?.distance !== undefined && (geOption?.distance === undefined || src.distance <= geOption.distance);
   const fits = !tradeable || ((typeof stock !== 'number' || stock >= missing) && near);
-  if (src?.kind === 'shop' && fits) {
+  // Only a shop the player may walk into is a destination (shopAccess.ts): a guild shop with unknown quest points, or one this app has not checked,
+  // is offered as "if …" beside a verified way, never in its place.
+  if (src?.kind === 'shop' && src.access === 'open' && fits) {
     const unit = src.price ?? null;
-    return { ...base, qty: missing, channel: 'shop', action: `Buy at ${src.label}${also}`, unitPrice: unit, cost: unit === null ? null : unit * missing };
+    // The gate toll or the boat fare is said with the shop: it is part of going there.
+    return { ...base, qty: missing, channel: 'shop', action: `Buy at ${src.label}${src.note ? ` (${src.note})` : ''}${also}`, unitPrice: unit, cost: unit === null ? null : unit * missing };
   }
+  const maybe = [plan.primary, ...plan.alternatives].find((o) => o?.kind === 'shop' && o.access !== 'open');
+  const orMaybe = maybe ? ` · or ${maybe.label}` : '';
   if (tradeable && src?.kind !== 'free') {
-    const unit = ctx.gePrice(line) ?? src?.price ?? null;
+    const unit = ctx.gePrice(line) ?? (src?.kind === 'shop' && src.access !== 'open' ? null : src?.price ?? null);
     return { ...base, qty: missing, channel: 'ge', action: `Buy at the Grand Exchange${also}`, unitPrice: unit, cost: unit === null ? null : unit * missing };
   }
-  const how = src?.kind === 'free' || src?.kind === 'drop' ? src.label : line.howToGet ? firstSentence(line.howToGet) : 'Not sold at the exchange';
-  return { ...base, qty: missing, channel: 'along', action: how, unitPrice: null, cost: null };
+  // A monster's drop table is a way to get an item, not a checked one (the item data does not say where the monster lives or whether a free account
+  // can reach it: Steel nails 'dropped by Zombie (Tarn's Lair)'): the route's own instruction comes first.
+  const how = src?.kind === 'free' ? src.label : line.howToGet ? firstSentence(line.howToGet) : src?.kind === 'drop' ? src.label : 'Not sold at the exchange';
+  return { ...base, qty: missing, channel: 'along', action: `${how}${src?.kind === 'shop' ? '' : orMaybe}`, unitPrice: null, cost: null };
+}
+
+const doseWord = (n: number) => `${n} ${n === 1 ? 'dose' : 'doses'}`;
+
+/**
+ * A potion row. Everything is doses: what the steps need, what the bag and the bank hold (every size), what is short. The shortfall is bought as a
+ * package of potions (whole ones of the named size, the last doses in the cheapest size that holds them), never as "one more potion" per dose missing.
+ * Owned doses spread over more potions than they need are not pretended to be one: the row says that pouring them together frees slots.
+ */
+function doseRow(line: ShoppingLine, optional: boolean, ctx: RowContext): ShopRow {
+  const kind = doseKind(line.nameEn)!;
+  const own = ownershipOf(ctx.state, line);
+  const required = line.count;
+  const tradeable = ctx.onGe(line);
+  const tripNeed = Math.min(required, ctx.trip?.get(line.key) ?? required);
+  const price = (name: string) => ctx.priceOf?.(name) ?? (name === line.nameEn ? ctx.gePrice(line) : null);
+  const base = {
+    key: line.key, name: line.nameEn, ...(line.id !== undefined ? { id: line.id } : {}), ...(line.iconUrl ? { iconUrl: line.iconUrl } : {}),
+    required, exact: line.exact, optional, reusable: false, tradeable, own, why: why(line.sources), sources: line.sources, howToGet: line.howToGet,
+    unit: 'dose' as const,
+  };
+  const withYou = own.withYou ?? 0;
+  const carry = own.sizes ? carryOf(own.sizes, tripNeed, kind.base.toLowerCase()) : undefined;
+  const withCarry = carry && carry.potions > 0 ? { carry } : {};
+  const enough = (own.total !== null && own.total >= required) || withYou >= required;
+  if (line.inStepOnly && !enough) {
+    const first = line.sources.find((s) => !s.carryOver)?.stepId ?? line.sources[0]?.stepId;
+    return { ...base, qty: Math.max(0, required - (own.total ?? withYou)), channel: 'along', action: `You get it during ${first}`, unitPrice: null, cost: null };
+  }
+  if (enough) {
+    if (withYou < tripNeed && (own.bank ?? 0) > 0) {
+      const qty = Math.min(tripNeed - withYou, own.bank ?? 0);
+      const potions = own.sizes ? takeFromBank(kind.base, own.sizes, qty) : [];
+      const list = potions.map((p) => `${p.count} × ${p.name}`).join(', ');
+      return {
+        ...base, ...withCarry, qty, channel: 'bank', action: `Take ${doseWord(qty)} from the bank${list ? `: ${list}` : ''}`, unitPrice: null, cost: null,
+        ...(potions.length ? { potions } : {}),
+      };
+    }
+    return { ...base, ...withCarry, qty: 0, channel: 'have', action: withYou >= tripNeed ? 'With you' : 'Owned', unitPrice: null, cost: null };
+  }
+  const short = own.total === null ? Math.max(0, required - withYou) : required - own.total;
+  const pack = tradeable ? dosePackage(line.nameEn, short, price) : null;
+  if (own.total === null) {
+    // Not confirmed: the most it could cost if none is owned, as a package; it is not counted as a purchase.
+    const fallback = tradeable ? 'the Grand Exchange' : line.howToGet ? firstSentence(line.howToGet) : 'on the way';
+    return {
+      ...base, qty: short, channel: 'unknown', action: `If you do not have it: ${fallback}${pack ? ` (${pack.text})` : ''}`, unitPrice: null, cost: pack?.cost ?? null,
+      ...(pack ? { package: pack } : {}),
+    };
+  }
+  const banked = own.bank ?? 0;
+  const also = banked > 0 ? ` · ${doseWord(banked)} more in the bank` : '';
+  if (pack) {
+    return {
+      ...base, ...withCarry, qty: short, channel: 'ge', action: `Buy ${pack.text} at the Grand Exchange${also}`, unitPrice: null, cost: pack.cost, package: pack,
+    };
+  }
+  return { ...base, qty: short, channel: 'along', action: line.howToGet ? firstSentence(line.howToGet) : 'Not sold at the exchange', unitPrice: null, cost: null };
 }
 
 /** The rows of a list: the required ones, then the optional ones. */
@@ -201,6 +285,15 @@ export function scopeList(steps: Step[]): { list: ShoppingList; trip: Map<string
 }
 
 // ---------------------------------------------------------------------------
+// Now and ahead: in the next-trip scope a row the current step needs is "now"; a row only a later step of the window needs is an advance purchase,
+// shown apart and never folded into what the step needs before the player can go on.
+
+/** Whether the row is needed by the step in progress or a followed skill plan (now), or only by later steps of the scope (ahead). */
+export function timingOf(r: Pick<ShopRow, 'sources'>, now: ReadonlySet<string>): 'now' | 'ahead' {
+  return r.sources.some((s) => now.has(s.stepId) && !s.carryOver) ? 'now' : 'ahead';
+}
+
+// ---------------------------------------------------------------------------
 // Budget: what the required purchases cost against what the player has, the optional ones apart
 
 export interface Budget {
@@ -219,6 +312,25 @@ export interface Budget {
   funds: number | null;
   /** What is short; null means not known (the bank was not read). */
   shortfall: number | null;
+}
+
+/**
+ * The budget line in words that add up: "Purchases ≈ 5,409 gp + 2,000 gp kept for S4-05 (the ship) − 1,827 gp you have = short 5,582 gp". The coins
+ * the steps spend are named with their step and reason, so the shortfall reconciles with the figures beside it.
+ */
+const lowerFirst = (t: string) => t.charAt(0).toLowerCase() + t.slice(1);
+
+export function budgetSum(b: Budget, coinLines: readonly { stepId: string; amount: number; why: string }[] = []): string | null {
+  if (b.funds === null || b.shortfall === null) return null;
+  const parts = [`${formatGp(b.required)} gp to buy`];
+  if (b.coinsForSteps > 0) {
+    const where = coinLines.length ? ` (${coinLines.map((c) => `${c.stepId}: ${lowerFirst(firstSentence(c.why).replace(/^For /, '')) || 'paid in the step'}`).join('; ')})` : '';
+    parts.push(`${formatGp(b.coinsForSteps)} gp the steps pay out${where}`);
+  }
+  const need = b.required + b.coinsForSteps;
+  return b.shortfall > 0
+    ? `${parts.join(' + ')} = ${formatGp(need)} gp; you have ${formatGp(b.funds)} gp, so ${formatGp(b.shortfall)} gp short.`
+    : `${parts.join(' + ')} = ${formatGp(need)} gp; you have ${formatGp(b.funds)} gp, enough.`;
 }
 
 export function budgetOf(rows: readonly ShopRow[], coinsForSteps: number, coins: { bag: number | null; bank: number | null }): Budget {
@@ -274,13 +386,46 @@ export function syncLine(i: { connected: boolean; loaded: boolean; bankSeen: boo
   return 'Bag and bank checked in this session.';
 }
 
+export interface ExchangePlan {
+  /** What the game lists at the exchange: the purchases and the rows not confirmed (count = what the steps need; the game subtracts what it sees). */
+  items: { name: string; id?: number; count: number; doses?: number }[];
+  /**
+   * What the game counts and reports back: every row of the scope, whatever its state. It must not depend on the count itself: when it did (2.72.2),
+   * an item found in the bank left the list, was no longer counted, read "not confirmed", was asked about again, and the row flickered.
+   */
+  watch: string[];
+}
+
+/** The exchange hint for the game, from the rows of a scope. */
+export function exchangePlan(rows: readonly ShopRow[]): ExchangePlan {
+  const required = rows.filter((r) => !r.optional);
+  // A potion goes as doses: the game counts every size toward them (ShoppingPlan.java); `count` stays potions for an older plugin.
+  const items = required
+    .filter((r) => (r.channel === 'ge' || (r.channel === 'unknown' && r.tradeable)) && r.qty > 0)
+    .map((r) => {
+      const count = r.own.source === 'manual' ? r.qty + (r.own.withYou ?? 0) : r.required;
+      const per = r.unit === 'dose' ? doseKind(r.name)?.per ?? 1 : 1;
+      return { name: r.name, ...(r.id !== undefined ? { id: r.id } : {}), count: Math.ceil(count / per), ...(r.unit === 'dose' ? { doses: count } : {}) };
+    });
+  const watch = [...new Set(rows.map((r) => r.name))].slice(0, EXCHANGE_WATCH_MAX);
+  return { items, watch };
+}
+
+/** The plugin refuses a longer list (ShoppingPlan.MAX_ITEMS). */
+export const EXCHANGE_WATCH_MAX = 200;
+
 /** The exchange list for the clipboard: exchange purchases only, the ones not confirmed apart; no bank withdrawals, no shop or quest items. */
-export function geListText(title: string, rows: readonly ShopRow[], coinsForSteps: number): string | null {
-  const line = (r: ShopRow) => `${r.name} x${r.qty}${r.exact ? '' : '+'}`;
+export function geListText(title: string, rows: readonly ShopRow[], coinsForSteps: number, ahead?: (r: ShopRow) => boolean): string | null {
+  // A potion goes in as the potions to buy (Strength potion(4) x3, Strength potion(1) x1), as they are searched at the exchange.
+  const line = (r: ShopRow) => (r.package ? r.package.lines.map((p) => `${p.name} x${p.count}`).join('\n') : `${r.name} x${r.qty}${r.exact ? '' : '+'}`);
   const buy = rows.filter((r) => !r.optional && r.channel === 'ge' && r.qty > 0);
   const check = rows.filter((r) => !r.optional && r.channel === 'unknown' && r.tradeable && r.qty > 0);
   if (!buy.length && !check.length) return null;
-  const out = [title, ...buy.map(line)];
+  // Advance purchases for the next steps come after what the current step needs, under their own heading.
+  const now = ahead ? buy.filter((r) => !ahead(r)) : buy;
+  const later = ahead ? buy.filter(ahead) : [];
+  const out = [title, ...now.map(line)];
+  if (later.length) out.push('For the next steps (optional now):', ...later.map(line));
   if (check.length) out.push('Not confirmed (check your bank first):', ...check.map(line));
   if (coinsForSteps > 0) out.push(`Coins ~${formatGp(coinsForSteps)} gp (for the steps themselves)`);
   return out.join('\n');

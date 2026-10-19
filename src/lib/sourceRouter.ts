@@ -6,7 +6,9 @@
 import type { WikiItemDetail } from '../types';
 import { matchStrict } from '../services/locationResolver';
 import { SAVE_GP } from '../services/gearAdvisor';
-import { heldOf, type PlayerState, type WorldPoint } from './playerState';
+import { heldOf, levelOf, type PlayerState, type WorldPoint } from './playerState';
+import { SHOP_TOWN, accessSuffix, shopAccess, shopKey, spawnAccess, type AccessState } from './shopAccess';
+import { nameKey } from './checklist';
 import locationsJson from '../data/majorLocations.json';
 
 export type SourceKind = 'bag' | 'bank' | 'free' | 'shop' | 'ge' | 'drop';
@@ -20,6 +22,8 @@ export interface SourceOption {
   distance?: number;
   point?: WorldPoint & { label: string };
   note?: string;
+  /** A shop: whether the player may walk in (shopAccess.ts). Only an open shop is ever the primary source. */
+  access?: AccessState;
 }
 
 export interface SourcePlan {
@@ -58,6 +62,8 @@ export interface SourceInput {
   freeToll?: boolean;
   /** Only these kinds of source are considered (a teleport's runes are bought, not picked up one by one at a spawn). Absent: all of them. */
   kinds?: readonly SourceKind[];
+  /** The game's quest points, for the guild shops; absent or null: not known, and such a shop is only "if …". */
+  qp?: number | null;
 }
 
 /**
@@ -65,11 +71,9 @@ export interface SourceInput {
  * or in an inaccessible place, a task zone, the Wilderness. We do not pass such places off as "take it free nearby".
  */
 export function unusableSpawn(spawn: string, mode: 'f2p' | 'members'): boolean {
-  if (/inaccessible|telegrab|telekinetic|task-only/i.test(spawn)) return true;
   // Other players can attack in the Wilderness and take what you carry: a few free coins' worth is never worth it (2.72.2, live: Shopping put three
-  // planks from the Graveyard of Shadows "on the way" for a Defence 1 character).
-  if (/wilderness/i.test(spawn)) return true;
-  return mode === 'f2p' && /members only/i.test(spawn);
+  // planks from the Graveyard of Shadows "on the way" for a Defence 1 character). Guild doors and quest islands are checked too (shopAccess.ts).
+  return spawnAccess(spawn, { mode, quests: { known: false }, qp: null, level: () => null }).state === 'blocked';
 }
 
 /** A shop price at or above this is the item data's "not sold here" placeholder, not a price. */
@@ -100,11 +104,17 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
       note: 'the deal may take time',
     }
     : null;
+  // Who may walk in: a guild's door, a quest, a members area, the Wilderness (shopAccess.ts). The Al Kharid toll is free once the game counts Prince Ali Rescue.
+  const quests = s.quests;
+  const freeToll = input.freeToll || (quests.known && quests.value.some((q) => nameKey(q) === 'prince ali rescue'));
+  const ctx = { mode: s.mode, quests, qp: input.qp ?? null, level: (skill: string) => levelOf(s, skill) ?? null };
   for (const spawn of d?.freeSpawns ?? []) {
-    if (unusableSpawn(spawn, s.mode)) continue;
+    // A free item is free only where the player may stand: the Crafting Guild's hammer needs Crafting 40, Crandor's planks Dragon Slayer I.
+    const access = spawnAccess(spawn, ctx);
+    if (access.state === 'blocked') continue;
     const p = matchStrict(spawn);
     out.push({
-      kind: 'free', label: `Free: ${spawn}`, price: 0,
+      kind: 'free', label: `Free: ${spawn}${accessSuffix(access)}`, price: 0, access: access.state,
       ...(p ? { point: { x: p.x, y: p.y, plane: p.plane, label: p.label }, distance: here ? dist(p, here) : undefined } : {}),
     });
   }
@@ -114,21 +124,25 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
     if (typeof b.stock === 'number' && b.stock === 0) continue;
     // The item data marks a trader that does not sell the item for coins with a placeholder price (10,000,000,000, stock "N/A").
     if (!(b.price < NOT_SOLD_PRICE)) continue;
+    const town = b.location.trim() || SHOP_TOWN[shopKey(b.shopName)] || '';
+    const access = shopAccess(b.shopName, town, ctx);
+    if (access.state === 'blocked') continue;
     // The shop's own tile when the place dictionary has it; the town it stands in otherwise.
-    const p = matchStrict(b.shopName) ?? matchStrict(b.location);
-    const toll = b.location === 'Al Kharid' && !input.freeToll ? 10 : 0;
+    const p = matchStrict(b.shopName) ?? (town ? matchStrict(town) : null);
+    const toll = town === 'Al Kharid' && !freeToll ? 10 : 0;
     // Some shops in the item data have no town: the name alone, not "Silk trader — ".
     const name = b.shopName.replace(/\.$/, '');
+    const notes = [toll ? `gate toll ${toll} gp` : '', access.fare ? access.note ?? '' : '', access.state !== 'open' ? access.note ?? '' : ''].filter(Boolean);
     shops.push({
-      kind: 'shop', label: b.location.trim() ? `${name} — ${b.location}` : name, price: b.price + toll,
+      kind: 'shop', label: `${town ? `${name} — ${town}` : name}${accessSuffix(access)}`, price: b.price + toll, access: access.state,
       ...(p ? { point: { x: p.x, y: p.y, plane: p.plane, label: p.label }, distance: here ? dist(p, here) : undefined } : {}),
-      ...(toll ? { note: `gate toll ${toll} gp` } : {}),
+      ...(notes.length ? { note: notes.join('; ') } : {}),
     });
   }
-  // The nearest shop; among equal ones — the cheaper.
-  shops.sort((a, b) => (a.distance ?? Infinity) - (b.distance ?? Infinity) || (a.price ?? 0) - (b.price ?? 0));
+  // The nearest open shop; among equal ones — the cheaper. A shop the player may not be able to enter comes after the exchange, never first.
+  shops.sort((a, b) => Number(a.access !== 'open') - Number(b.access !== 'open') || (a.distance ?? Infinity) - (b.distance ?? Infinity) || (a.price ?? 0) - (b.price ?? 0));
   const shop = shops[0];
-  const cheapShopFirst = shop && (ge === undefined || (shop.price ?? Infinity) - ge < SAVE_GP);
+  const cheapShopFirst = shop && shop.access === 'open' && (ge === undefined || (shop.price ?? Infinity) - ge < SAVE_GP);
   if (shop && cheapShopFirst) out.push(shop);
   if (geOption) out.push(geOption);
   if (shop && !cheapShopFirst) out.push(shop);
@@ -141,11 +155,15 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
   // First the free and the already owned, the rest in the found order.
   // "Free nearby" is no farther than FREE_NEAR tiles; farther, the free one goes on a par with the shop and the exchange.
   const rank = (o: SourceOption): number =>
-    o.kind === 'bag' || o.kind === 'bank' ? 0 : o.kind === 'free' ? (o.distance === undefined || o.distance <= FREE_NEAR ? 1 : 2.5) : o.kind === 'drop' ? 3 : 2;
+    o.kind === 'bag' || o.kind === 'bank' ? 0 : o.access !== undefined && o.access !== 'open' ? 2.6
+      : o.kind === 'free' ? (o.distance === undefined || o.distance <= FREE_NEAR ? 1 : 2.5) : o.kind === 'drop' ? 3 : 2;
   const ordered = out
     .filter((o) => !input.kinds || input.kinds.includes(o.kind))
     .map((o, i) => ({ o, i }))
     .sort((a, b) => rank(a.o) - rank(b.o) || a.i - b.i)
     .map((x) => x.o);
-  return { satisfied: false, primary: ordered[0] ?? null, alternatives: ordered.slice(1, 3), total: ordered.length };
+  // The primary source is always one the player can use: a shop that needs an unconfirmed unlock (or that this app has not checked) is only ever an
+  // alternative, labelled with its condition.
+  const primary = ordered.find((o) => o.access === undefined || o.access === 'open') ?? null;
+  return { satisfied: false, primary, alternatives: ordered.filter((o) => o !== primary).slice(0, 2), total: ordered.length };
 }

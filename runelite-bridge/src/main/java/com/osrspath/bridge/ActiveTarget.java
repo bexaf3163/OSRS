@@ -140,7 +140,8 @@ public class ActiveTarget
 			for (GuideItem i : nonNull(items))
 			{
 				if (i == null || i.name == null || i.name.isEmpty() || tooLong(i.name)
-					|| (i.where != null && i.where.length() > MAX_WHERE) || (i.count != null && (i.count < 1 || i.count > ShoppingPlan.MAX_COUNT)) || badAlt(i.alt))
+					|| (i.where != null && i.where.length() > MAX_WHERE) || (i.count != null && (i.count < 1 || i.count > ShoppingPlan.MAX_COUNT)) || badAlt(i.alt)
+					|| (i.doses != null && (i.doses < 1 || i.doses > ShoppingPlan.MAX_COUNT)))
 				{
 					return "invalid panel item";
 				}
@@ -546,6 +547,8 @@ public class ActiveTarget
 		private boolean inStep;
 		/** Other items that count in its place (every pickaxe tier for "Bronze pickaxe"). null means only the item itself. */
 		private List<String> alt;
+		/** A potion: the doses the step needs; every size counts toward them (ItemCounts.doses). null for anything else. */
+		private Integer doses;
 	}
 
 	@Data
@@ -571,6 +574,8 @@ public class ActiveTarget
 		private Integer heals;
 		/** Other items that count in its place (every pickaxe tier for "Bronze pickaxe"). null means only the item itself. */
 		private List<String> alt;
+		/** A potion: the doses `count` potions hold; every size counts toward them (ItemCounts.doses). null for anything else. */
+		private Integer doses;
 	}
 
 	/** How many of the item and of its alternatives the container holds together. */
@@ -876,7 +881,8 @@ public class ActiveTarget
 		{
 			for (ChecklistItem i : checklist)
 			{
-				if (i == null || i.name == null || i.name.isEmpty() || tooLong(i.name) || i.count < 1 || i.count > ShoppingPlan.MAX_COUNT)
+				if (i == null || i.name == null || i.name.isEmpty() || tooLong(i.name) || i.count < 1 || i.count > ShoppingPlan.MAX_COUNT
+					|| (i.doses != null && (i.doses < 1 || i.doses > ShoppingPlan.MAX_COUNT)))
 				{
 					return "invalid check item";
 				}

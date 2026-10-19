@@ -319,14 +319,15 @@ async function run(browser: Browser) {
       await page.waitForTimeout(300);
       const potion = page.locator('.shop-item-row', { hasText: 'Energy potion(4)' }).first();
       await potion.locator('.shop-why > summary').click();
-      const input = potion.getByLabel('Energy potion(4): how many you already have');
-      await input.fill('3');
+      // Potions are marked in doses (2.73.0): 12 doses are three Energy potion(4) of the five, so 8 doses are left, bought as 2 potions.
+      const input = potion.getByLabel('Energy potion(4): how many doses you already have');
+      await input.fill('12');
       await input.press('Enter');
       await page.waitForTimeout(900);
       const row = await page.locator('.shop-item-row', { hasText: 'Energy potion(4)' }).first().innerText();
-      expect(/×2/.test(row) && /Buy at/.test(row), 'shopping: 3 of 5 marked — 2 left to buy');
+      expect(/8 doses short/.test(row) && /Buy 2 × Energy potion\(4\)/.test(row), `shopping: 12 of 20 doses marked — 8 left, bought as 2 potions (${row.replace(/\s+/g, ' ').slice(0, 120)})`);
       const saved = await page.evaluate(() => JSON.parse(String((window as unknown as Record<string, unknown>).__saved ?? '{}')));
-      expect(saved.ownedManual?.['id:3008']?.count === 3, 'shopping: the mark "already have 3" is saved in the progress');
+      expect(saved.ownedManual?.['dose:energy potion']?.count === 12, 'shopping: the mark "already have 12 doses" is saved in the progress');
       const plan = await page.evaluate(() => ((window as unknown as { __posts: { path: string; body: { items: { name: string; count: number }[] } }[] }).__posts)
         .filter((p) => p.path === '/shopping-plan').pop()?.body.items ?? []);
       expect(plan.find((i) => i.name === 'Energy potion(4)')?.count === 2, 'shopping: "buy 2" goes to the game, not 5');

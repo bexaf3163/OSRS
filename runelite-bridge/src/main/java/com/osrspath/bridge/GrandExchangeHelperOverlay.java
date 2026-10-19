@@ -147,7 +147,7 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 
 	private static void line(List<LayoutableRenderableEntity> c, ShoppingPlan.Row r, FontMetrics fm, int inner)
 	{
-		String amount = r.getNeed() > 0 ? r.getHave() + "/" + r.getNeed() : (r.getHave() > 0 ? "have " + r.getHave() : "as needed");
+		String amount = r.getNeed() > 0 ? r.getHave() + "/" + r.getNeed() + (r.isDoses() ? " doses" : "") : (r.getHave() > 0 ? "have " + r.getHave() : "as needed");
 		switch (r.getState())
 		{
 			case HAVE:

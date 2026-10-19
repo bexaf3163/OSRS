@@ -14,6 +14,7 @@ import { plural } from './shopping';
 import { buildPlayerState, coinsOf, heldOf, questOf, unusableTools, type Held, type PlayerState } from './playerState';
 import { evaluate } from './requirements';
 import { toolFamilyOf } from './toolTiers';
+import { doseKind, heldUnits, needUnits } from './doses';
 
 export type ReadinessStatus =
   | 'READY'
@@ -238,8 +239,11 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
         alternatives: [{ name: it.nameEn, manualKey: key, ...(it.id !== undefined ? { id: it.id } : {}) }, ...alt.map((n) => ({ name: n, manualKey: `name:${nameKey(n)}` }))],
       }, state)
       : evaluate({ type: 'item', name: it.nameEn, count: it.count, manualKey: key, ...(it.id !== undefined ? { id: it.id } : {}) }, state);
-    const h = alt ? heldAll(state, [it.nameEn, ...alt], key) : heldOf(state, it.nameEn, key);
-    const label = `${it.nameEn}${it.count > 1 ? ` ×${it.count}${it.exact ? '' : '+'}` : ''}${alt ? ` (or ${alt.slice(0, 2).join(', ')}${alt.length > 2 ? '…' : ''})` : ''}`;
+    const h = alt ? heldAll(state, [it.nameEn, ...alt], key) : heldUnits(state, it.nameEn, key);
+    // A potion is counted in doses (doses.ts): the label keeps the route's "×5" and says what that is in doses.
+    const doses = !alt && doseKind(it.nameEn) ? needUnits(it.nameEn, it.count) : null;
+    const u = doses !== null ? ' doses' : '';
+    const label = `${it.nameEn}${it.count > 1 ? ` ×${it.count}${it.exact ? '' : '+'}` : ''}${doses !== null ? ` (${doses} doses)` : ''}${alt ? ` (or ${alt.slice(0, 2).join(', ')}${alt.length > 2 ? '…' : ''})` : ''}`;
     const shop: ReadinessAction = { kind: 'link', label: '🛒 To shopping', href: '#/shopping' };
     // Food with a personal plan: the row is about one trip, and says what the whole goal still needs bought, so one exchange visit does it.
     const whole = (have: number) => (it.total !== undefined && it.total > have ? `; buy about ${it.total - have} for the whole goal` : '');
@@ -258,19 +262,19 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     } else if (res.state === 'BANK') {
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: 'BANK', hard: true, source: 'game',
-        detail: `${(h.bag ?? 0) + h.noted} in the bag, ${h.bank ?? 0} in the bank: take it from the bank${whole((h.bag ?? 0) + h.noted + (h.bank ?? 0))}`,
+        detail: `${(h.bag ?? 0) + h.noted}${u} in the bag, ${h.bank ?? 0} in the bank: take it from the bank${whole((h.bag ?? 0) + h.noted + (h.bank ?? 0))}`,
         ...(bank ? { action: bankNav(bank, step, it.nameEn) } : {}),
       });
     } else if (res.state === 'UNKNOWN') {
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: 'UNKNOWN', hard: true,
-        detail: (h.bag !== null ? `${h.bag + h.noted} in the bag; the bank was not opened in this session` : 'not checked: it needs a RuneLite connection or an "already have" mark in shopping') + tooHigh(it.nameEn),
+        detail: (h.bag !== null ? `${h.bag + h.noted}${u} in the bag; the bank was not opened in this session` : 'not checked: it needs a RuneLite connection or an "already have" mark in shopping') + tooHigh(it.nameEn),
       });
     } else {
       const have = res.have ?? 0;
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: res.state, hard: true, source,
-        detail: (manual ? `marked ${state.manual[key]}, ${res.missing} short` : have ? `have ${have}, ${res.missing} short` : 'in neither the bag nor the bank') + whole(have) + tooHigh(it.nameEn),
+        detail: (manual ? `marked ${state.manual[key]}${u}, ${res.missing} short` : have ? `have ${have}${u}, ${res.missing} short` : 'in neither the bag nor the bank') + whole(have) + tooHigh(it.nameEn),
         action: shop,
       });
     }

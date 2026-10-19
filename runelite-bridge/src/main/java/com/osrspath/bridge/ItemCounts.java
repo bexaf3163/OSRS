@@ -136,6 +136,58 @@ final class ItemCounts
 		return false;
 	}
 
+	/** A potion with a dose count in its name: "Strength potion(4)". The same test as doseKind.ts in the app. */
+	private static final java.util.regex.Pattern SIZED = java.util.regex.Pattern.compile("^(.*\\S)\\s*\\(([1-4])\\)$");
+	private static final java.util.regex.Pattern POTION = java.util.regex.Pattern.compile(
+		"(potion|brew|restore|antipoison|antidote\\+*|serum|balm|guthix rest|super (attack|strength|defence|energy|combat))$", java.util.regex.Pattern.CASE_INSENSITIVE);
+
+	/** The potion's name without its size ("Strength potion" for "Strength potion(4)"); null for anything that is not a potion counted in doses. */
+	static String doseBase(String name)
+	{
+		if (name == null)
+		{
+			return null;
+		}
+		java.util.regex.Matcher m = SIZED.matcher(name.trim());
+		return m.matches() && POTION.matcher(m.group(1)).find() ? m.group(1) : null;
+	}
+
+	/** The four sizes of the potion a name belongs to, (1) to (4); empty for anything else. */
+	static java.util.List<String> doseNames(String name)
+	{
+		String base = doseBase(name);
+		if (base == null)
+		{
+			return java.util.Collections.emptyList();
+		}
+		java.util.List<String> out = new java.util.ArrayList<>(4);
+		for (int d = 1; d <= 4; d++)
+		{
+			out.add(base + "(" + d + ")");
+		}
+		return out;
+	}
+
+	/**
+	 * Doses of a potion across its four sizes: a (3) and a (1) are 4 doses of "Strength potion(4)". Counted by name, every size by its own doses
+	 * (doses.ts in the app counts the same way). 0 for anything that is not a potion.
+	 */
+	int doses(String name)
+	{
+		String base = doseBase(name);
+		if (base == null)
+		{
+			return 0;
+		}
+		String key = ActiveTarget.nameKey(base);
+		int n = 0;
+		for (int d = 1; d <= 4; d++)
+		{
+			n += d * byName.getOrDefault(key + "(" + d + ")", 0);
+		}
+		return n;
+	}
+
 	/** Exactly this item: by ID when there is one (two items can share a name), else by name; no better-tool substitutes. */
 	int exact(Integer id, String name)
 	{

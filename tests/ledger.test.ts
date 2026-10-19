@@ -122,7 +122,8 @@ describe('where to get an item', () => {
   it('free nearby comes before the shop, a shop slightly pricier than the exchange comes before the exchange', () => {
     const d = detail({
       freeSpawns: ['Lumbridge'],
-      buyLocations: [{ shopName: 'Shop', location: 'Varrock', price: 150, stock: 10 }],
+      // A real shop: a made-up name is a shop the access table does not know, never the primary source (2.73.0).
+      buyLocations: [{ shopName: 'Varrock General Store', location: 'Varrock', price: 150, stock: 10 }],
       gePrice: { buyPrice: 100, sellPrice: 90, updatedAt: '' },
     });
     const near = planSources({ name: 'Thing', need: 1, detail: d }, at({ owned: owned({ Thing: { carried: 0 } }, false) }, { x: 3222, y: 3218, plane: 0 }));
@@ -146,15 +147,18 @@ describe('where to get an item', () => {
     expect(p.alternatives.some((a) => a.label.includes('Empty') || a.label.includes('Members'))).toBe(false);
   });
 
-  it('a shop with no town in the item data is named alone (not "Silk trader — "), and a "not sold here" placeholder price is not a shop', () => {
+  it('a shop with no town in the item data takes its town from the shop table (toll included), none is named with a dangling dash, and a "not sold here" placeholder price is not a shop', () => {
     const d = detail({
       buyLocations: [
         { shopName: 'Silk trader', location: '', price: 2, stock: '∞' },
         { shopName: 'Silk merchant', location: '', price: 10_000_000_000, stock: 'N/A' },
+        { shopName: 'Barmaid', location: '', price: 5, stock: 3 },
       ],
     });
     const p = planSources({ name: 'Thing', need: 1, detail: d }, at({ owned: owned({ Thing: { carried: 0 } }, false) }));
-    expect(p.primary).toMatchObject({ kind: 'shop', label: 'Silk trader', price: 2 });
+    expect(p.primary).toMatchObject({ kind: 'shop', label: 'Silk trader — Al Kharid', price: 12 });
+    // A townless shop the table does not know: named alone, not "Barmaid — ", and only as an unchecked alternative.
+    expect(p.alternatives.find((o) => o.label.startsWith('Barmaid'))?.label).toBe('Barmaid (entry not checked)');
     expect([p.primary, ...p.alternatives].some((o) => o?.label.includes('Silk merchant'))).toBe(false);
   });
 
@@ -169,7 +173,7 @@ describe('where to get an item', () => {
   });
 
   it('Al Kharid: the toll is included in the price, after Prince Ali Rescue — it is not', () => {
-    const d = detail({ buyLocations: [{ shopName: 'Zeke', location: 'Al Kharid', price: 20, stock: 10 }] });
+    const d = detail({ buyLocations: [{ shopName: "Zeke's Superior Scimitars.", location: 'Al Kharid', price: 20, stock: 10 }] });
     const s = at({ owned: owned({ Thing: { carried: 0 } }, false) });
     expect(planSources({ name: 'Thing', need: 1, detail: d }, s).primary?.price).toBe(30);
     expect(planSources({ name: 'Thing', need: 1, detail: d, freeToll: true }, s).primary?.price).toBe(20);
