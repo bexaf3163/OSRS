@@ -201,3 +201,8 @@
 .status-combat-route p { margin: 4px 0 0; }
 .btn.btn-link { background: none; border: 0; padding: 0 2px; min-height: 0; color: var(--accent-ink); text-decoration: underline; text-underline-offset: 2px; font-weight: 500; box-shadow: none; }
 .btn.btn-link:hover { background: none; text-decoration-thickness: 2px; }
+
+/* 2.70: a met route goal on the skill page, and the roadmap's two controls side by side. */
+.focus-reached { margin: 6px 0 2px; color: var(--done); display: flex; align-items: center; gap: 6px; }
+.skill-roadmap-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin: 8px 0; }
+.skill-roadmap-filters .skill-seg { margin: 0; }

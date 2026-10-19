@@ -6,8 +6,8 @@ import { guideFor } from '../data/skillGuideRegistry';
 import { useBridge } from '../bridge';
 import { supportsSnapshot } from '../services/runeliteBridge';
 import { buildPath, chipText, currentIndex, skillPathPayload, type GuideMode, type SkillName } from '../lib/skillGuide';
-import { setTracked, useTracked } from '../lib/skillTrack';
-import { useQuestDone, useSkillLevel } from './SkillRoadmap';
+import { freeOnlyOf, setTracked, useTracked } from '../lib/skillTrack';
+import { laneLabel, useQuestDone, useSkillLevel } from './SkillRoadmap';
 
 /** Sends the tracked skill's path with every change of the quests done; nothing is sent while no skill is tracked. */
 export function SkillSync() {
@@ -17,7 +17,8 @@ export function SkillSync() {
   const live = state === 'online' && supportsSnapshot(plugin?.protocol ?? null);
   const payload = useMemo(() => {
     if (!tracked) return null;
-    const path = buildPath(guideFor(tracked.skill), tracked.mode, done);
+    const guide = guideFor(tracked.skill);
+    const path = buildPath(guide, tracked.mode, done, guide.start, freeOnlyOf(tracked));
     return path.length ? skillPathPayload(tracked.skill, tracked.mode, path) : null;
   }, [tracked, done]);
   const key = JSON.stringify(payload);
@@ -32,19 +33,19 @@ export function SkillSync() {
 export function TrackedSkillCard() {
   const tracked = useTracked();
   if (!tracked) return null;
-  return <TrackedCard skill={tracked.skill} mode={tracked.mode} />;
+  return <TrackedCard skill={tracked.skill} mode={tracked.mode} freeOnly={freeOnlyOf(tracked)} />;
 }
 
-function TrackedCard({ skill, mode }: { skill: SkillName; mode: GuideMode }) {
+function TrackedCard({ skill, mode, freeOnly }: { skill: SkillName; mode: GuideMode; freeOnly: boolean }) {
   const level = useSkillLevel(skill);
   const done = useQuestDone();
-  const path = useMemo(() => buildPath(guideFor(skill), mode, done), [skill, mode, done]);
+  const path = useMemo(() => { const g = guideFor(skill); return buildPath(g, mode, done, g.start, freeOnly); }, [skill, mode, done, freeOnly]);
   const at = currentIndex(path, level);
   const step = path[at];
   const name = skill[0].toUpperCase() + skill.slice(1);
   return (
     <section className="tracked-skill card" aria-label="Tracked skill">
-      <p className="eyebrow">Tracking {name} · {mode === 'fast' ? 'Fastest' : mode === 'afk' ? 'AFK / Budget' : 'F2P only'}</p>
+      <p className="eyebrow">Your {name} plan · {laneLabel(mode)}{freeOnly ? ' · free steps' : ''}</p>
       {step ? (
         <>
           <h2 className="next-title">{chipText(step, level)}</h2>

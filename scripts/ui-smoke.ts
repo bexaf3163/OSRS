@@ -525,7 +525,8 @@ async function run(browser: Browser) {
       await fresh.page.context().close();
     }
 
-    // 2.42: the leveling roadmap drawer opens from the Skills page, the filters change the path, "Track Skill Path" pins the skill to the Path card and can be stopped.
+    // 2.42/2.70: the leveling roadmap drawer opens from the Skills page, the priority changes the path, "Follow this plan" pins the skill to the Path card and
+    // "Back to the quest route" stops it. A group's label covers its steps (no "Levels 30–40" over "Lvl 30 → 60").
     {
       const { page, errors } = await open(browser, width, { progress: progressBefore('S9-01') }, '#/skills');
       await page.getByRole('button', { name: /Leveling roadmap/ }).first().click();
@@ -533,11 +534,19 @@ async function run(browser: Browser) {
       const before = await text(page, '.skill-timeline');
       expect(/Levels \d+/.test(before), 'roadmap: the level brackets are shown');
       expect(await noOverflow(page), 'roadmap: no horizontal scrolling');
-      await page.getByRole('button', { name: /AFK \/ Budget/ }).click();
-      expect((await page.locator('.skill-seg-btn.is-on').allInnerTexts()).some((x) => x.includes('AFK')), 'roadmap: the filter is applied');
-      await page.getByRole('button', { name: /Track Skill Path/ }).click();
+      const covered = await page.locator('.skill-bracket').evaluateAll((els) => els.every((el) => {
+        const head = /Levels (\d+)–(\d+)/.exec(el.querySelector('h3')?.textContent ?? '');
+        if (!head) return false;
+        const to = Number(head[2]);
+        return [...el.querySelectorAll('.skill-step-range')].every((r) => { const m = /→ (\d+)/.exec(r.textContent ?? ''); return !m || Number(m[1]) <= to; });
+      }));
+      expect(covered, 'roadmap: every group label covers the levels of its steps');
+      await page.getByRole('group', { name: 'Priority' }).getByRole('button', { name: 'Low effort' }).click();
+      expect((await page.locator('.skill-seg-btn.is-on').allInnerTexts()).some((x) => x.includes('Low effort')), 'roadmap: the priority is applied');
+      expect(await page.getByRole('button', { name: /AFK \/ Budget|F2P Only|Quest-Driven/ }).count() === 0, 'roadmap: no mixed filters');
+      await page.getByRole('button', { name: /Follow this plan/ }).click();
       const tracked = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:skill-track') ?? 'null') as { mode?: string } | null);
-      expect(tracked?.mode === 'afk', 'roadmap: tracking was remembered with the filter');
+      expect(tracked?.mode === 'afk', 'roadmap: the followed plan was remembered with its priority');
       await page.keyboard.press('Escape');
       await page.waitForTimeout(400);
       await page.evaluate(() => { location.hash = '#/step/S9-01'; });

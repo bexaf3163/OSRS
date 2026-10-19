@@ -22,6 +22,10 @@ import { ItemIcon } from '../components/WikiDrawer';
 import { copyText as copy } from '../lib/clipboard';
 import { RoadSupplies } from '../components/RoadSupplies';
 import { InventoryCleanup } from '../components/InventoryCleanup';
+import { useQuestDone, useSkillLevel } from '../components/SkillRoadmap';
+import { guideFor } from '../data/skillGuideRegistry';
+import { buildPath, currentIndex, followedShoppingStep } from '../lib/skillGuide';
+import { freeOnlyOf, useTracked } from '../lib/skillTrack';
 
 const RANGE_KEY = 'osrs-put:shopping-range';
 const SCOPE_KEY = 'osrs-put:shopping-scope';
@@ -138,10 +142,22 @@ export function ShoppingPage() {
     return () => { alive = false; };
   }, []);
 
+  // A followed skill plan (Skills → Follow this plan) leads the game instead of the quest route: its current step's tools come first in the list.
+  const tracked = useTracked();
+  const trackedLevel = useSkillLevel(tracked?.skill ?? 'attack');
+  const questDone = useQuestDone();
+  const followed = useMemo(() => {
+    if (!tracked) return null;
+    const g = guideFor(tracked.skill);
+    const path = buildPath(g, tracked.mode, questDone, g.start, freeOnlyOf(tracked));
+    const st = path[currentIndex(path, trackedLevel)];
+    return st ? followedShoppingStep(tracked.skill, st) : null;
+  }, [tracked, trackedLevel, questDone]);
+
   const built = useMemo(() => {
     const onGe = (l: ShoppingLine) => (l.id === undefined ? false : mapping ? mapping.has(l.id) : gearById.get(l.id)?.tradeable ?? true);
     try {
-      const selected = scopeSteps(scope, steps, progress, current, range);
+      const selected = [...(followed && scope !== 'range' ? [followed] : []), ...scopeSteps(scope, steps, progress, current, range)];
       const { list, trip } = scopeList(selected);
       const rows = shopRows(list, {
         state: player, onGe, detail: (id) => itemById.get(id), trip,
@@ -151,7 +167,7 @@ export function ShoppingPage() {
     } catch {
       return { selected: [], list: { required: [], recommended: [], coins: 0 }, rows: [] as ShopRow[], error: true };
     }
-  }, [scope, steps, progress, current, range, player, mapping, prices]);
+  }, [scope, steps, progress, current, range, player, mapping, prices, followed]);
   const { selected, list, rows, error } = built;
 
   const connected = link === 'online';

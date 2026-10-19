@@ -8,7 +8,7 @@ A = STEPS.append
 # ---------------------------------------------------------------- Woodcutting
 A(s('woodcutting', 1, 26, 'QUEST', "Monk's Friend (XP skip)", 'A short quest with a Woodcutting reward: no chopping needed.', 'wiki:Brother Omad', 'fast', True, quest="Monk's Friend", npc='Brother Omad'))
 A(s('woodcutting', 26, 30, 'QUEST', 'Enlightened Journey (XP skip)', 'A balloon quest with a Woodcutting reward.', 'wiki:Auguste', 'fast', True, quest='Enlightened Journey', npc='Auguste'))
-A(s('woodcutting', 1, 15, 'GATHER', 'Regular trees', 'Chop ordinary trees by Lumbridge Castle. Use the best axe you can wield.', 'Lumbridge', 'both', False, obj='Tree', rate='~12k xp/hr'))
+A(s('woodcutting', 1, 15, 'GATHER', 'Regular trees', 'Chop ordinary trees by Lumbridge Castle. Use the best axe your Woodcutting level allows: it works from the bag (wielding it needs an Attack level).', 'Lumbridge', 'both', False, obj='Tree', rate='~12k xp/hr'))
 A(s('woodcutting', 15, 30, 'GATHER', 'Oak trees', 'Chop oak trees: by the Draynor bank, west of Varrock, or at Port Sarim.', 'Draynor Bank', 'both', False, obj='Oak tree'))
 A(s('woodcutting', 30, 60, 'GATHER', 'Willow trees', 'Chop willows by Draynor Village and bank or drop the logs. Dark wizards wander nearby: stay alert.', 'Draynor Village', 'both', False, obj='Willow tree', rate='~20-35k xp/hr'))
 A(s('woodcutting', 60, 99, 'GATHER', 'Yew trees', 'Chop yews south of the Edgeville bank: free to play and good money.', 'Edgeville Bank', 'both', False, obj='Yew tree'))

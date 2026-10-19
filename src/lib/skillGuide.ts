@@ -1,6 +1,8 @@
 // The skill leveling guides (src/data/skills/<skill>.json, built by tools/skill-guides from the OSRS Wiki): the step schema, the path for a filter, and what goes to
 // the game. A path is a list of level brackets in the order to train them: quest XP skips first, then the methods. Pure logic: the registry loads the files.
 
+import type { Step } from '../types';
+
 export const SKILL_NAMES = [
   'attack', 'strength', 'defence', 'ranged', 'prayer', 'magic', 'runecraft', 'construction', 'hitpoints', 'agility', 'herblore', 'thieving', 'crafting',
   'fletching', 'slayer', 'hunter', 'mining', 'smithing', 'fishing', 'cooking', 'firemaking', 'woodcutting', 'farming',
@@ -8,9 +10,12 @@ export const SKILL_NAMES = [
 export type SkillName = (typeof SKILL_NAMES)[number];
 
 export type SkillMethodType = 'QUEST' | 'GATHER' | 'CRAFT' | 'COMBAT' | 'MINIGAME';
-/** fast: quest skips and the fastest methods; afk: low effort and budget; both: fits either. */
+/** fast: quest skips and the fastest methods; afk: low-effort methods; both: fits either. */
 export type GuideLane = 'fast' | 'afk' | 'both';
-/** The three filters of the roadmap: "Fastest / Quest-Driven", "AFK / Budget" and "F2P Only". */
+/**
+ * The roadmap's priority: 'fast' (quest XP skips and the fastest methods) or 'afk' (low effort). 'f2p' is the pre-2.70 third filter, the fast lane
+ * without members steps; it is still read from older saves. Eligibility (free account or members) is a separate flag since 2.70 (`freeOnly`).
+ */
 export type GuideMode = 'fast' | 'afk' | 'f2p';
 
 export interface SkillStep {
@@ -68,9 +73,9 @@ export function defaultGuideMode(guide: Pick<SkillGuideFile, 'f2pCap'>, account:
  * The candidates of a filter, in the order of preference: quest XP skips first (they skip the slow levels), then the steps made for the lane, then the ones
  * that fit both. The free filter has no members step. The AFK filter keeps only the quests marked for both lanes (a short free one, or one that unlocks the skill).
  */
-export function candidatesFor(guide: SkillGuideFile, mode: GuideMode): SkillStep[] {
+export function candidatesFor(guide: SkillGuideFile, mode: GuideMode, freeOnly = mode === 'f2p'): SkillStep[] {
   const lane: GuideLane = mode === 'afk' ? 'afk' : 'fast';
-  const fit = guide.steps.filter((s) => (mode === 'f2p' ? !s.members : true) && (s.lane === lane || s.lane === 'both'));
+  const fit = guide.steps.filter((s) => (freeOnly ? !s.members : true) && (s.lane === lane || s.lane === 'both'));
   const quest = fit.filter((s) => s.methodType === 'QUEST');
   const rest = fit.filter((s) => s.methodType !== 'QUEST');
   return [...quest, ...rest.filter((s) => s.lane === lane), ...rest.filter((s) => s.lane === 'both')];
@@ -80,8 +85,8 @@ export function candidatesFor(guide: SkillGuideFile, mode: GuideMode): SkillStep
  * The brackets in the order to train them, from `from` (the guide's start by default) to 99. isDone: a quest step whose quest the player has done is skipped.
  * A step that fits both lanes is cut where a step made for the lane begins (iron until 45, then granite), so the lane's own methods are not hidden behind it.
  */
-export function buildPath(guide: SkillGuideFile, mode: GuideMode, isDone: (step: SkillStep) => boolean = () => false, from = guide.start): SkillStep[] {
-  const pool = candidatesFor(guide, mode).filter((s) => !isDone(s));
+export function buildPath(guide: SkillGuideFile, mode: GuideMode, isDone: (step: SkillStep) => boolean = () => false, from = guide.start, freeOnly = mode === 'f2p'): SkillStep[] {
+  const pool = candidatesFor(guide, mode, freeOnly).filter((s) => !isDone(s));
   const out: SkillStep[] = [];
   let level = Math.max(1, from);
   while (level < MAX_LEVEL) {
@@ -122,6 +127,20 @@ export function chipText(step: Pick<SkillStep, 'title' | 'targetLevel'>, level: 
 export function onStatChanged(path: readonly SkillStep[], cursor: number, level: number): { cursor: number; advanced: boolean } {
   const next = currentIndex(path, level);
   return next > cursor ? { cursor: next, advanced: true } : { cursor, advanced: false };
+}
+
+/**
+ * The followed skill plan's current step as a route-shaped step for the shopping list (2.70): its tools and materials, so "Follow this plan" changes
+ * what to obtain as well as where the game leads. Only the items; nothing else of a route step is invented. null - the step needs no item.
+ */
+export function followedShoppingStep(skill: SkillName, step: SkillStep): Step | null {
+  const items = step.prerequisites?.items ?? [];
+  if (!items.length) return null;
+  return {
+    id: `skill:${skill}`, stage: 0, type: 'skill', requires: [], doneWhen: `The ${skill} plan step reaches level ${step.targetLevel}.`,
+    title: `Your ${skill[0].toUpperCase()}${skill.slice(1)} plan: ${step.title}`,
+    itemsRequired: items.map((i) => ({ nameEn: i.name, amount: i.quantity, wikiItemId: i.id, howToGet: `For your ${skill} plan (${step.title}).` })),
+  } as Step;
 }
 
 // ---------------------------------------------------------------- To the game
@@ -167,16 +186,23 @@ export function skillPathPayload(skill: SkillName, mode: GuideMode, path: readon
   };
 }
 
-/** Level brackets for the timeline: 1–29, 29–40, 40–60, 60–99 style groups of the path (a step stays whole, a group starts where a step starts). */
+/**
+ * Level groups for the timeline: the path's steps grouped where they start (under 30, 30–39, 40–59, 60+), each group labelled by the levels its steps
+ * really cover. A step stays whole, so a group's label is never narrower than its steps: "Levels 30–60" for a step "Lvl 30 → 60" (before 2.70 the
+ * label was the fixed bracket, "Levels 30–40", over a step that ran to 60).
+ */
 export function bracketsOf(path: readonly SkillStep[]): { from: number; to: number; steps: SkillStep[] }[] {
   const edges = [0, 30, 40, 60, 99];
-  const groups: { from: number; to: number; steps: SkillStep[] }[] = [];
+  const groups: { edge: number; steps: SkillStep[] }[] = [];
   for (const step of path) {
-    const lo = step.levelRange[0];
-    const to = edges.find((e) => e > lo) ?? 99;
+    const edge = edges.find((e) => e > step.levelRange[0]) ?? 99;
     const last = groups[groups.length - 1];
-    if (last && last.to === to) last.steps.push(step);
-    else groups.push({ from: edges[edges.indexOf(to) - 1] ?? 1, to, steps: [step] });
+    if (last && last.edge === edge) last.steps.push(step);
+    else groups.push({ edge, steps: [step] });
   }
-  return groups.map((g) => ({ ...g, from: Math.max(1, g.from) }));
+  return groups.map((g) => ({
+    from: Math.max(1, Math.min(...g.steps.map((x) => x.levelRange[0]))),
+    to: Math.max(...g.steps.map((x) => x.targetLevel)),
+    steps: g.steps,
+  }));
 }

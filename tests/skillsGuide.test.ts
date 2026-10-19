@@ -4,9 +4,11 @@ import { skillGuides } from '../src/data/skillGuideRegistry';
 import locationsJson from '../src/data/majorLocations.json';
 import { membersSkills } from '../src/data';
 import {
-  SKILL_NAMES, bracketsOf, buildPath, chipText, currentIndex, f2pCovered, onStatChanged, skillPathPayload,
+  SKILL_NAMES, bracketsOf, buildPath, chipText, currentIndex, f2pCovered, followedShoppingStep, onStatChanged, skillPathPayload,
   type GuideMode, type SkillGuideFile, type SkillStep,
 } from '../src/lib/skillGuide';
+import { aggregateShopping } from '../src/lib/shopping';
+import { parseTracked, freeOnlyOf } from '../src/lib/skillTrack';
 
 // The 23 skill guides (src/data/skills/*.json): the schema, the coverage of every filter, the quest skips first, and the StatChanged rule the plugin follows.
 
@@ -169,10 +171,34 @@ describe('skill guides: the paths', () => {
     expect(f2pCovered(skillGuides.mining)).toBe(99);
   });
 
-  it('the timeline groups the path by level brackets', () => {
-    const groups = bracketsOf(buildPath(skillGuides.mining, 'fast'));
-    expect(groups.map((g) => [g.from, g.to])).toEqual(expect.arrayContaining([[1, 30]]));
-    for (const g of groups) for (const s of g.steps) expect(s.levelRange[0]).toBeLessThan(g.to);
+  it('the timeline groups the path, and a group is labelled by the levels its steps really cover (no "Levels 30-40" over "Lvl 30 → 60")', () => {
+    for (const f of files) {
+      for (const mode of MODES) {
+        const groups = bracketsOf(buildPath(f, mode));
+        groups.forEach((g, i) => {
+          const where = `${f.skill}/${mode} ${g.from}-${g.to}`;
+          expect(g.from, where).toBe(Math.max(1, Math.min(...g.steps.map((x) => x.levelRange[0]))));
+          expect(g.to, where).toBe(Math.max(...g.steps.map((x) => x.targetLevel)));
+          for (const st of g.steps) expect(st.levelRange[0] >= g.from && st.targetLevel <= g.to, `${where} ${st.id}`).toBe(true);
+          if (i) expect(g.from, where).toBe(groups[i - 1].to);
+        });
+      }
+    }
+    expect(bracketsOf(buildPath(skillGuides.mining, 'fast')).map((g) => [g.from, g.to])).toEqual([[1, 31], [31, 45], [45, 99]]);
+  });
+
+  it('eligibility is its own flag: a free account leaves members steps out of either priority', () => {
+    for (const f of files.filter((x) => x.f2pCap > 0)) {
+      for (const mode of ['fast', 'afk'] as const) {
+        for (const st of buildPath(f, mode, () => false, f.start, true)) expect(st.members, `${f.skill}/${mode} ${st.id}`).toBe(false);
+      }
+    }
+    // The pre-2.70 "F2P Only" filter is the fast lane, free only.
+    expect(buildPath(skillGuides.woodcutting, 'f2p')).toEqual(buildPath(skillGuides.woodcutting, 'fast', () => false, skillGuides.woodcutting.start, true));
+  });
+
+  it('a tool is used from the bag at the skill level: no guide step tells you to use what you can wield', () => {
+    for (const f of files) for (const st of f.steps) expect(/best (axe|pickaxe) you can wield/i.test(st.description), `${f.skill} ${st.id}`).toBe(false);
   });
 });
 
@@ -242,3 +268,21 @@ describe('skill guides: what goes to the game', () => {
   });
 });
 
+
+describe('a followed skill plan (2.70)', () => {
+  it('feeds the shopping list: the current step\'s tools become required lines; a step without items adds nothing', () => {
+    const path = buildPath(skillGuides.crafting, 'fast', () => false, skillGuides.crafting.start, true);
+    const leather = path.find((x) => x.id === 'crafting-01')!;
+    const step = followedShoppingStep('crafting', leather)!;
+    const list = aggregateShopping([step]);
+    expect(list.required.map((l) => [l.nameEn, l.count])).toEqual(expect.arrayContaining([['Needle', 1], ['Thread', 50]]));
+    expect(followedShoppingStep('woodcutting', buildPath(skillGuides.woodcutting, 'fast')[0])).toBeNull();
+  });
+
+  it('an older save\'s "F2P Only" plan is read as the fast lane with free steps only; the new flag is kept as saved', () => {
+    expect(freeOnlyOf(parseTracked({ skill: 'mining', mode: 'f2p' })!)).toBe(true);
+    expect(freeOnlyOf(parseTracked({ skill: 'mining', mode: 'afk', freeOnly: true })!)).toBe(true);
+    expect(freeOnlyOf(parseTracked({ skill: 'mining', mode: 'fast' })!)).toBe(false);
+    expect(parseTracked({ skill: 'mining', mode: 'turbo' })).toBeNull();
+  });
+});

@@ -66,7 +66,7 @@
       ],
       "methodType": "GATHER",
       "title": "Regular trees",
-      "description": "Chop ordinary trees by Lumbridge Castle. Use the best axe you can wield.",
+      "description": "Chop ordinary trees by Lumbridge Castle. Use the best axe your Woodcutting level allows: it works from the bag (wielding it needs an Attack level).",
       "targetLevel": 15,
       "lane": "both",
       "members": false,

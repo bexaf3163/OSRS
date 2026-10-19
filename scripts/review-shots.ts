@@ -108,6 +108,19 @@ function hillGiants(opts: { coins?: number; bankSeen?: boolean; storage?: Record
   };
 }
 
+/** A skiller between quests: real levels for the gathering skills, a free account, the bank read. */
+function skiller(levels: Record<string, number>, storage: Record<string, string> = {}): Mock {
+  return {
+    progress: progressBefore('S4-03', { levels }),
+    localStorage: { 'osrs-put:active-step': 'S4-03', ...storage },
+    status: { protocol: 6, inGame: true, player: 'Review Hero', stats: levels, coins: 2500, bankCoins: 12000, equipment: [], inventory: [] },
+    events: [{ type: 'STATS', stats: levels }, { type: 'OWNED', bankSeen: true, items: [] }],
+    market: true,
+  };
+}
+
+const SKILLER = { woodcutting: 32, firemaking: 30, fishing: 24, cooking: 30, mining: 31, smithing: 20, crafting: 12, magic: 33, prayer: 20, runecraft: 1, attack: 30, strength: 21, defence: 1, hitpoints: 24, ranged: 15 };
+
 interface Shot {
   name: string;
   area: string;
@@ -126,7 +139,14 @@ const SHOTS: Shot[] = [
   { name: 'hill-giants-step-390', area: 'T4', caption: 'S4-03 step at phone width', width: 390, hash: '#/step/S4-03', mock: hillGiants() },
   { name: 'shopping', area: 'T7', caption: 'Shopping for the next trip', width: 1440, hash: '#/shopping', mock: hillGiants() },
   { name: 'gear', area: 'T6', caption: 'Gear for the fight ahead', width: 1440, hash: '#/gear', mock: hillGiants() },
-  { name: 'skills', area: 'T5', caption: 'Skills overview', width: 1440, hash: '#/skills', mock: hillGiants() },
+  { name: 'skills', area: 'T5', caption: 'Skills overview', width: 1440, hash: '#/skills', mock: skiller(SKILLER) },
+  { name: 'skill-woodcutting', area: 'T5', caption: 'Woodcutting: the near-term goal and one recommended method', width: 1440, hash: '#/skills/WC', mock: skiller(SKILLER) },
+  {
+    name: 'skill-roadmap', area: 'T5', caption: 'Mining roadmap: priority and members preview as separate controls, groups labelled by the levels they cover', width: 1440,
+    hash: '#/skills/MI', mock: skiller(SKILLER),
+    act: async (p) => { await p.getByRole('tab', { name: 'Roadmap' }).click(); await p.waitForTimeout(300); },
+  },
+  { name: 'skill-magic', area: 'T4', caption: 'Magic 33: the balanced default picks a method that is not the slowest AFK one', width: 1440, hash: '#/skills/MA', mock: skiller(SKILLER) },
   { name: 'settings', area: 'T8', caption: 'Settings', width: 1440, hash: '#/settings', mock: hillGiants() },
 ];
 

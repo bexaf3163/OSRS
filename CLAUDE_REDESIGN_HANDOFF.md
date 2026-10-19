@@ -882,3 +882,15 @@ Not done yet (block 2b): the audit ledger of every combat stage, mandatory quest
 - Tests: `tests/combatRoute/selection.test.ts` (16, the owner's representative states), `tests/trainingPriority.test.ts` (7), `tests/defaultPlans.test.ts` writes `docs/DEFAULT_PLANS.md`;
   smoke `UI_ONLY=combat` rewritten (plan in effect without a press, payload to cows, one set of instructions, choose the route, offer, Defence 20, follow the recommendation).
 - Travel variants (canoe, teleports; `BranchSuggestions`) are not training plans and still need a press. Not verified live in the game yet.
+
+## 2.70.0 — Skills consolidation (Task 3, block 3c)
+
+- `skillGuide.ts`: eligibility is its own flag (`candidatesFor/buildPath(..., freeOnly)`; the old `'f2p'` mode = fast lane, free only, still read); `bracketsOf` labels a group by the
+  levels its steps cover; `followedShoppingStep(skill, step)` turns the followed plan's current step items into a route-shaped step for Shopping.
+- `skillTrack.ts`: `{skill, mode, freeOnly?}`, `freeOnlyOf` (an old `'f2p'` save = free only). `SkillRoadmap.tsx`: Priority (Fastest / Low effort) + members preview switch
+  (free accounts), default lane from `priorityOf(features)`; "Follow this plan" / "Back to the quest route". `TrackedSkillCard` and `SkillSync` pass `freeOnly`.
+- `Shopping.tsx`: the followed plan's step goes first in the selected steps (not in the Stages range).
+- `SkillDetail.tsx` `ReachedNote`: the current stage's met goal. Woodcutting guide text fixed in data and in `tools/skill-guides/content_skilling.py`.
+- Tests: `tests/skillsGuide.test.ts` (labels cover steps, free paths, wording, followed plan → shopping, old saves), `tests/skillsCoverage.test.ts` writes `docs/SKILLS_COVERAGE.md`;
+  smoke roadmap scenario (labels, priority, follow, back to the route).
+- Not done: per-method cost model, members method research beyond the guide, quest-XP path costs. Not verified live in the game.

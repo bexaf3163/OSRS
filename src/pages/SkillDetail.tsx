@@ -100,6 +100,7 @@ function SkillView({ skill }: { skill: Skill }) {
       </section>
       </details>
 
+      <ReachedNote skill={skill} stage={stage} focus={focus} />
       <FocusNote focus={focus} />
       <TrainingCard skill={focus.skill} target={focus.target} />
       <section className="skill-milestones" aria-label="Training milestones"><h3>Skill roadmap</h3><div className="milestone-track">
@@ -152,6 +153,21 @@ function SkillView({ skill }: { skill: Skill }) {
 }
 
 /** Says where the goal below comes from: the route stage or only the generic training row. */
+/** The route's goal for this stage, when it is met: said plainly (2.70), so a finished goal never reads as work still to do. */
+function ReachedNote({ skill, stage, focus }: { skill: Skill; stage: number; focus: TrainingFocus }) {
+  const { progress } = useStore();
+  if (focus.source === 'route') return null;
+  const met = skill.levelSkills
+    .map((id) => ({ id, goal: goalFor(goals, id, stage) }))
+    .filter((g) => g.goal && g.goal.kind !== 'optional' && levelOf(progress, g.id) >= g.goal.min);
+  if (!met.length) return null;
+  return (
+    <p className="small focus-reached" role="status">
+      <IconCheck /> Stage {stage} goal reached: {met.map((g) => `${levelById.get(g.id)?.name ?? g.id} ${g.goal!.min}`).join(', ')}.
+    </p>
+  );
+}
+
 function FocusNote({ focus }: { focus: TrainingFocus }) {
   const name = levelById.get(focus.skill)?.name ?? focus.skill;
   if (focus.source === 'route') return <p className="muted small focus-note">Goal {focus.target} {name} comes from the route: stage {focus.stage}.</p>;
