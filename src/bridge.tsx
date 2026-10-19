@@ -736,7 +736,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!features.levelsFromGame || !stats || !gateAllows(gate)) return;
     const known: Record<string, number> = {};
-    for (const [id, v] of Object.entries(stats)) if (levelById.has(id)) known[id] = v;
+    // Hitpoints too, though it has no level field: without it the last levels cannot work out a combat plan while the game is away (2.72.1).
+    for (const [id, v] of Object.entries(stats)) if (levelById.has(id) || id === 'hitpoints') known[id] = v;
     setLevels(known);
   }, [stats, features.levelsFromGame, gate, setLevels]);
 

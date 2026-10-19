@@ -73,6 +73,13 @@ describe('progress: export and import', () => {
 });
 
 describe('progress: storage', () => {
+  it('Hitpoints from the game is kept, though it has no level field: the combat plan is worked out from the last levels while the game is away (2.72.1)', () => {
+    // Live: the saved levels had no Hitpoints, so before the game connected the step fell back to the route as written (Hill Giants).
+    const n = normalizeProgress({ version: 3, steps: {}, levels: { attack: 30, defence: 1, hitpoints: 24 }, notes: {} }, known)!;
+    expect(n.progress.levels).toEqual({ attack: 30, defence: 1, hitpoints: 24 });
+    expect(n.dropped).toBe(0);
+  });
+
   it('is saved and read', () => {
     const s = memoryStorage();
     const p = withStep(emptyProgress(), 'S1-03', 'done');

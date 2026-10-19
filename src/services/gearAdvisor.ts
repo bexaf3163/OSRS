@@ -465,10 +465,11 @@ const PRAYERS: { name: string; level: number; kind: 'attack' | 'strength'; mult:
 ];
 
 /**
- * From what benefit we advise: damage per second at least +3% (averaged over the training), defence — at least +3.
- * The threshold is low on purpose: any speed-up is worth showing, and the percent in the advice says how big it is.
+ * From what benefit we advise: damage per second at least +3% (averaged over the training), defence — at least +3, and for advice to act
+ * on, when the opponent's attack is known, it must hit at least 3 points less often (2.72.1, live: +7 crush against a cow moved 23% → 22%
+ * and was the HUD's first line). The threshold is low on purpose: any speed-up is worth showing, and the percent in the advice says how big it is.
  */
-const WORTH = { dps: 1.03, defence: 3 };
+const WORTH = { dps: 1.03, defence: 3, hitDrop: 0.03 };
 /** Among nearly equal ones we take the cheap one if it is at least twice as cheap and saves at least this much. */
 export const SAVE_GP = 100;
 
@@ -552,6 +553,16 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
     }
   }
 
+  /**
+   * Advice to act on (wear, buy, save up for) must change the fight: a gain that is only defence makes the opponent hit at least 3 points
+   * less often when the model knows its attack. The locks below still compare with every candidate: they say what a level opens.
+   */
+  const worthDoing = (a: GearAction) => {
+    const g = a.gain;
+    const defenceOnly = g.kind === 'defence' || (g.kind === 'dps' && g.ratio < WORTH.dps);
+    return !defenceOnly || g.hitBefore === undefined || g.hitAfter === undefined || g.hitBefore - g.hitAfter >= WORTH.hitDrop;
+  };
+  const doable = candidates.filter(worthDoing);
   // In each slot — one best "wear" (free) and one best purchase by money.
   // Damage matters more than defence: an amulet's defence decides only at equal damage. Otherwise the +6 defence of the Amulet of power
   // outweighed the 3% damage of the Amulet of strength, and the amulet advice depended on random numbers.
@@ -570,7 +581,7 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   const order: GearSlot[] = ['weapon', 'neck', 'body', 'legs', 'head', 'shield'];
   // First what is already owned: wear it for free.
   const wearBest = new Map<GearSlot, GearAction>();
-  for (const a of candidates.filter((c) => c.how === 'wear')) {
+  for (const a of doable.filter((c) => c.how === 'wear')) {
     const cur = wearBest.get(a.slot);
     if (!cur || score(a) > score(cur)) wearBest.set(a.slot, a);
   }
@@ -594,7 +605,7 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
   // A purchase must be noticeably better than what can be worn for free.
   for (const slot of order) {
     const worn = wearBest.get(slot);
-    const buys = candidates.filter((c) => c.slot === slot && c.how === 'buy' && (!worn || better(c, worn)));
+    const buys = doable.filter((c) => c.slot === slot && c.how === 'buy' && (!worn || better(c, worn)));
     if (!buys.length) continue;
     const top = choose(buys);
     // "Missing" — from the money to the purchase in this slot: a cheap sword now does not make the goal more expensive.

@@ -77,9 +77,11 @@ export function netText(e: Pick<MethodEvaluation, 'netPerHour' | 'eligible' | 'b
   return lo === hi ? `${k(lo)} gp/h net` : `${k(lo)}–${k(hi)} gp/h net`;
 }
 
-/** Coins to start: the tool and a first trip's supplies, or "No coins needed". */
+/** Coins to start: the tool and the smallest batch's supplies, or "No coins needed". */
 export function capitalText(e: Pick<MethodEvaluation, 'upfront'>): string {
-  const c = Math.ceil(e.upfront.setup + e.upfront.firstTrip);
+  // The least to start with (the tool and the smallest batch): the same figure as "Coins to start" in the details. A full first trip
+  // was shown here before, so a row said 2,030 gp to start while its details said 435 (2.72.1).
+  const c = Math.ceil(e.upfront.minimum);
   return c > 0 ? `${c.toLocaleString('en-US')} gp to start` : 'No coins needed';
 }
 
@@ -104,7 +106,7 @@ export interface BrowseResult {
 }
 
 const INTENSITY_RANK: Record<FundingMethod['intensity'], number> = { low: 0, moderate: 1, high: 2 };
-const capitalOf = (e: MethodEvaluation) => e.upfront.setup + e.upfront.firstTrip;
+const capitalOf = (e: MethodEvaluation) => e.upfront.minimum;
 const profitOf = (e: MethodEvaluation) => (e.netPerHour ? e.netPerHour.slow : -Infinity);
 
 /** The list for the Money section: the ranking's order by default, filtered and sorted as asked. */

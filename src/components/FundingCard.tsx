@@ -36,7 +36,7 @@ export function Economics({ e, earn }: { e: MethodEvaluation | undefined; earn: 
   return (
     <ul className="small funding-facts">
       {earn && hr.typical > 0 && <li>About {gp(hr.typical)} an hour after tax and supplies (between {gp(hr.slow)} and {gp(hr.fast)}).</li>}
-      {e.workingCapital !== null && e.workingCapital > 0 && <li>It needs about {gp(e.workingCapital)} of your own coins at its lowest point.</li>}
+      {e.workingCapital !== null && e.workingCapital > 0 && <li>With full trips, up to about {gp(e.workingCapital)} of your own coins is tied up before the sales come in.</li>}
       {e.upfront.setup > 0 && <li>A tool you do not have yet: about {gp(e.upfront.setup)}.</li>}
       {e.upfront.owned.length > 0 && <li>Uses what you already carry: {e.upfront.owned.map((o) => `${o.qty} ${o.name}`).join(', ')}.</li>}
       {e.synergy && <li>{e.synergy}</li>}

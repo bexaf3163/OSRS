@@ -932,3 +932,21 @@ Not done yet (block 2b): the audit ledger of every combat stage, mandatory quest
 - Known and left: the auto-preparation toast is announced from the first state after start-up (it can say the route's 25 Salmon before the personal food
   plan settles at 24); readiness counts unreported alternatives as unknown while the one-trip plan counts the named item only (the plugin reports the
   active step's alternatives, so this shows only for other steps).
+
+## 2.72.1 — fixes from the live check of 2.72.0
+
+- Live check (World 316, F2P, S4-03, Defence 1 in full iron): the cows plan was in effect in the app and the game ("733 cows to 40 Attack on Accurate"),
+  the in-game card compact and expanded rendered, Money/Gear/step pages matched the game's state. Four defects found and fixed here.
+- `gearAdvisor.ts`: `WORTH.hitDrop` (0.03). `worthDoing(action)`: a gain that is only defence (armour, or an amulet admitted for defence) must lower the
+  opponent's hit chance by 3 points when the model knows its attack. Applied to `doable` (wear and buy selection: actions, armour, goals, so also the HUD
+  hint and the highlight); the locks still compare with every candidate (`candidates`), so "needs 5 Defence" lines are unchanged.
+- `evaluate.ts`: `MONEY_RUNS_OUT` is the sim's failure reason and the working-capital caution is pushed only when `minutesReason === MONEY_RUNS_OUT`
+  (the badge says the same). The "Coins to start" check rounds up (`Math.ceil(minimum)`).
+- `browse.ts`: `capitalText` and `capitalOf` (sort "Coins to start", filter "No coins needed") use `upfront.minimum`. `FundingCard.Economics`: "With full
+  trips, up to about N gp of your own coins is tied up before the sales come in."
+- Offline plans (2.69's "from the profile's last levels") never worked on real saves: `progress.levels` had no hitpoints (not a level field), and
+  `playerStateContext` needs hitpoints and attack for `lastStats`. Now `known.levelIds` includes 'hitpoints' (kept on load) and the bridge's level
+  sync writes it; the level fields still list only `levelSkills`. Live: before the game logged in, S4-03 showed the route as written (Hill Giants).
+- `runeliteBridge.stepGuide`: a leading "Then: " is dropped from the steps sent to the game (the plugin labels the last one "Next: "); the app's own list keeps it.
+- Tests: `gearContext` (chainbody against a cow not advised; every defence advice moves the hit chance 3 points), `browse` (row figure = check figure,
+  sort by the shown figure), `evaluate` (no money-runs-out caution when smaller batches get there), `pick` (no "Then: " in the game's steps), `progress` (hitpoints kept on load).

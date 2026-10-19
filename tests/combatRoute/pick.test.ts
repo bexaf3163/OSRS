@@ -5,7 +5,7 @@ import { currentPhase, phaseDone, resolvePick, samePicks, withCombatPlan } from 
 import { foodPicks, withFoodPlan } from '../../src/lib/foodPlan';
 import { aggregateShopping } from '../../src/lib/shopping';
 import { emptyProgress } from '../../src/lib/progress';
-import { toInGameTarget } from '../../src/services/runeliteBridge';
+import { stepGuide, toInGameTarget } from '../../src/services/runeliteBridge';
 import { allSteps, stepById } from '../../src/data';
 import { market } from '../funding/market';
 import { gearOf, HISTORICAL, planInput } from './fixture';
@@ -90,6 +90,10 @@ describe('the step as an adopted plan has it', () => {
     // One set of instructions (2.69): the plan's own lead, the route's text is kept folded as "the route as written", never beside it.
     expect(s.quickSteps?.[0]).toMatch(/^Fight the cows on Accurate until Attack 40 \(about \d+ kills\): The cow field east of Lumbridge\.$/);
     expect(s.quickSteps?.[1]).toMatch(/^Then: fight the Hill Giants until 50 Big bones are in the bank/);
+    // The game labels the last part "Next: " itself, so the app's "Then: " joiner is not sent ("Next: Then: ..." in the card, live 2.72.1).
+    const sent = stepGuide(s).steps ?? [];
+    expect(sent.some((q) => q.startsWith('Then: '))).toBe(false);
+    expect(sent[sent.length - 1]).toMatch(/^Fight the Hill Giants until 50 Big bones are in the bank/);
     expect(s.where).toMatch(/cow field/);
     expect(s.routeAsWritten).toEqual({ where: route.where, quickSteps: route.quickSteps, fields: route.fields });
     expect(s.fields!.every((f) => f.label === 'Your plan' || ['Dangerous', 'Attention', 'Combat'].includes(f.label))).toBe(true);

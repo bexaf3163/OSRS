@@ -162,6 +162,8 @@ describe('the Hill Giants case, worked by hand', () => {
     // One trip of 14 kills costs 924 and brings back more than it cost, bones included: the most that is ever out is that one trip.
     expect(e.workingCapital).toBe(924);
     expect(e.minutes).not.toBeNull();
+    // It gets there with smaller first batches, so nothing says the money runs out ("Can do now" beside that sentence, live 2.72.1).
+    expect(e.cautions.join(' ')).not.toMatch(/is out before it pays for itself/);
     // 7 kills: 462 for the food, back 69 coins + 127.5 limpwurt + 7 x 319 bones: positive from the first trip.
   });
 

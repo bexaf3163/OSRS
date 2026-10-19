@@ -95,5 +95,6 @@ export const allQuests = deriveQuests(allSteps);
 
 export const known = {
   stepIds: new Set(allSteps.map((s) => s.id)),
-  levelIds: new Set(allLevelSkills.map((l) => l.id)),
+  // Hitpoints is kept from the game though it has no level field: the combat plan is worked out from the last levels while the game is away (2.72.1).
+  levelIds: new Set([...allLevelSkills.map((l) => l.id), 'hitpoints']),
 };

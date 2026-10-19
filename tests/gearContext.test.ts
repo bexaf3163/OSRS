@@ -141,6 +141,27 @@ describe('defence is judged against the style that hits', () => {
 });
 
 describe('what is worth doing now', () => {
+  it('a defence change that barely moves the hit chance is not advised (live, 2.72.1: a chainbody against a cow, 23% to 22%)', () => {
+    const a = adviseGear(input({
+      levels: { attack: 30, strength: 21, defence: 1 },
+      gear: wearing(['Adamant scimitar', 'Iron platebody', 'Iron kiteshield', 'Iron full helm', 'Iron plateskirt'], 0, 1827),
+      owned: owned({ 'Iron chainbody': 1 }), foes: [foe('Cow')],
+    }));
+    expect(all(a).some((x) => x.item.name === 'Iron chainbody')).toBe(false);
+    // What is still offered against an opponent the model knows makes it hit at least 3 points less often.
+    let judged = 0;
+    for (const opponent of ['Cow', 'Hill Giant']) {
+      const b = adviseGear(input({ levels: { attack: 30, strength: 21, defence: 1 }, gear: wearing(['Adamant scimitar'], 100_000), foes: [foe(opponent)] }));
+      for (const x of all(b)) {
+        const g = x.gain as { kind: string; hitBefore?: number; hitAfter?: number };
+        if (g.kind !== 'defence' || g.hitBefore === undefined || g.hitAfter === undefined) continue;
+        judged++;
+        expect(g.hitBefore - g.hitAfter, x.item.name + ' against ' + opponent).toBeGreaterThanOrEqual(0.03);
+      }
+    }
+    expect(judged).toBeGreaterThan(0);
+  });
+
   it('no worthwhile change: with the best wearable weapon and amulet and no coins there is nothing to do now', () => {
     const a = adviseGear(input({ levels: { attack: 40, strength: 40, defence: 1 }, gear: wearing(['Rune scimitar', 'Amulet of strength'], 0), foes: [foe('Hill Giant')] }));
     expect(a.actions).toEqual([]);

@@ -194,6 +194,9 @@ interface SimInput {
 
 interface SimResult { ok: boolean; seconds: number; trips: number; units: number; peakOut: number; reason?: string }
 
+/** Why a run with the player's own coins stops: the badge and the working-capital caution say the same sentence. */
+const MONEY_RUNS_OUT = 'The money runs out before the method pays for itself';
+
 function simulate(p: SimInput): SimResult {
   let cash = p.cash;
   const start = p.cash;
@@ -219,7 +222,7 @@ function simulate(p: SimInput): SimResult {
     const u = lo;
     if (u < Math.min(p.minUnits, p.unitsPerTrip)) {
       if (pending > 0) { sell(); continue; }
-      return { ok: false, seconds, trips, units, peakOut, reason: 'The money runs out before the method pays for itself' };
+      return { ok: false, seconds, trips, units, peakOut, reason: MONEY_RUNS_OUT };
     }
     const spend = cashFor(u);
     cash -= spend;
@@ -458,13 +461,13 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
   if (spendable === null) {
     cautions.push('Your coins are not known');
     cap('MEDIUM', 'coins unknown');
-    checks.push({ text: minimum > 0 ? `Coins to start, about ${gp(minimum)} gp: yours are not known` : 'No coins needed to start', status: minimum > 0 ? 'unknown' : 'ok' });
+    checks.push({ text: minimum > 0 ? `Coins to start, about ${gp(Math.ceil(minimum))} gp: yours are not known` : 'No coins needed to start', status: minimum > 0 ? 'unknown' : 'ok' });
   } else if (spendable < minimum) {
-    const text = setup > 0 && spendable < setup ? `The ${tool!.name} alone costs ${gp(setup)} gp` : `A first batch costs about ${gp(minimum)} gp`;
+    const text = setup > 0 && spendable < setup ? `The ${tool!.name} alone costs ${gp(setup)} gp` : `A first batch costs about ${gp(Math.ceil(minimum))} gp`;
     blockers.push({ kind: 'capital', text, fixable: true });
     checks.push({ text: `${text} (you have ${gp(spendable)} gp)`, status: 'missing' });
   } else {
-    checks.push({ text: minimum > 0 ? `Coins to start, about ${gp(minimum)} gp (you have ${gp(spendable)} gp)` : 'No coins needed to start', status: 'ok' });
+    checks.push({ text: minimum > 0 ? `Coins to start, about ${gp(Math.ceil(minimum))} gp (you have ${gp(spendable)} gp)` : 'No coins needed to start', status: 'ok' });
   }
 
   // --- Economics per unit
@@ -528,7 +531,9 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
   if (ctx.mode === 'earn' && blockers.every((b) => b.kind === 'capital')) {
     const dry = simulate({ ...baseSim(sec.typical, 0, 1e12), cash: 1e12, target: Math.max(target, 1), sellEveryTrip: true });
     workingCapital = Math.round(dry.peakOut) + setup;
-    if (spendable !== null && workingCapital > spendable && blockers.length === 0) {
+    // Only when the run with the player's own coins does not get there, as the badge says. When smaller first batches do (the time
+    // already counts them), "Can do now" next to "is out before it pays for itself" read as a contradiction (2.72.1, live: pie shells).
+    if (spendable !== null && workingCapital > spendable && blockers.length === 0 && minutesReason === MONEY_RUNS_OUT) {
       cautions.push(`About ${gp(workingCapital)} gp is out before it pays for itself; you have ${gp(spendable)} gp`);
     }
   }

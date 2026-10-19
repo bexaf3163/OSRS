@@ -119,8 +119,23 @@ describe('prices: a missing estimate is never a zero, earlier prices are still e
   });
 
   it('the coins to start are rounded up, and nothing to pay says so', () => {
-    expect(capitalText({ upfront: { setup: 0, minimum: 0, firstTrip: 239.001, owned: [] } })).toBe('240 gp to start');
+    expect(capitalText({ upfront: { setup: 0, minimum: 239.001, firstTrip: 239.001, owned: [] } })).toBe('240 gp to start');
     expect(capitalText({ upfront: { setup: 0, minimum: 0, firstTrip: 0, owned: [] } })).toBe('No coins needed');
+  });
+
+  it('a row says the least to start with, the same figure as "Coins to start" in its details (live, 2.72.1: 2,030 in the row, 435 below)', () => {
+    expect(capitalText({ upfront: { setup: 0, minimum: 435, firstTrip: 2030, owned: [] } })).toBe('435 gp to start');
+    const s = scenario(market(), { bagCoins: 1827, bankCoins: 0, stats: SKILLED, items: { 'Bronze pickaxe': [1, 0], 'Bronze axe': [1, 0] } });
+    const list = moneyList(s.base, s.assessment);
+    let paid = 0;
+    for (const e of list.evals) {
+      const check = e.checks.find((c) => c.text.startsWith('Coins to start') || c.text.startsWith('No coins needed to start'));
+      if (!check) continue;
+      const row = capitalText(e);
+      if (row === 'No coins needed') expect(check.text, e.method.id).toBe('No coins needed to start');
+      else { paid++; expect(check.text, e.method.id).toContain('about ' + row.replace(' gp to start', ' gp')); }
+    }
+    expect(paid).toBeGreaterThan(0);
   });
 });
 
@@ -154,7 +169,7 @@ describe('search, filters and sort', () => {
   it('sorts by profit, by coins to start and by effort; the default order is the ranking', () => {
     const profit = browse(list.evals, list.ranking, all, 'profit').rows.map((r) => r.evaluation.netPerHour.slow);
     expect([...profit].sort((a, b) => b - a)).toEqual(profit);
-    const capital = browse(list.evals, list.ranking, all, 'capital').rows.map((r) => r.evaluation.upfront.setup + r.evaluation.upfront.firstTrip);
+    const capital = browse(list.evals, list.ranking, all, 'capital').rows.map((r) => r.evaluation.upfront.minimum);
     expect([...capital].sort((a, b) => a - b)).toEqual(capital);
     const rank = { low: 0, moderate: 1, high: 2 };
     const effort = browse(list.evals, list.ranking, all, 'intensity').rows.map((r) => rank[r.evaluation.method.intensity]);
