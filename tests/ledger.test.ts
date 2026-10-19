@@ -146,6 +146,18 @@ describe('where to get an item', () => {
     expect(p.alternatives.some((a) => a.label.includes('Empty') || a.label.includes('Members'))).toBe(false);
   });
 
+  it('a shop with no town in the item data is named alone (not "Silk trader — "), and a "not sold here" placeholder price is not a shop', () => {
+    const d = detail({
+      buyLocations: [
+        { shopName: 'Silk trader', location: '', price: 2, stock: '∞' },
+        { shopName: 'Silk merchant', location: '', price: 10_000_000_000, stock: 'N/A' },
+      ],
+    });
+    const p = planSources({ name: 'Thing', need: 1, detail: d }, at({ owned: owned({ Thing: { carried: 0 } }, false) }));
+    expect(p.primary).toMatchObject({ kind: 'shop', label: 'Silk trader', price: 2 });
+    expect([p.primary, ...p.alternatives].some((o) => o?.label.includes('Silk merchant'))).toBe(false);
+  });
+
   it('Al Kharid: the toll is included in the price, after Prince Ali Rescue — it is not', () => {
     const d = detail({ buyLocations: [{ shopName: 'Zeke', location: 'Al Kharid', price: 20, stock: 10 }] });
     const s = at({ owned: owned({ Thing: { carried: 0 } }, false) });

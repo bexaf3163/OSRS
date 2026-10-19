@@ -55,7 +55,7 @@ export function CombatRoute({ step }: { step: Step }) {
   const recommended = report.plans.find((p) => p.key === selection.recommended);
   return (
     <section className="combat-route" aria-label="Combat plan">
-      <details className="zen-more combat-route-details">
+      <details className="zen-more combat-route-details" data-step={step.id}>
         <summary className="small">Why this plan?</summary>
         <p className="small">
           For {report.objective}. Estimated for your {lastKnown ? 'last known ' : ''}levels, XP and worn gear, with the same combat model as the food plan; the walk between
@@ -76,6 +76,18 @@ export function CombatRoute({ step }: { step: Step }) {
   );
 }
 
+/** Open the step's "Why this plan?" folds once the view holding them is on screen (it may be drawn a moment after the press). */
+function openWhyFolds(stepId: string, tries = 10) {
+  const folds = document.querySelectorAll<HTMLDetailsElement>(`.combat-route-details[data-step="${stepId}"]`);
+  const shown = [...folds].filter((d) => d.offsetParent !== null);
+  if (!shown.length) {
+    if (tries > 0) window.setTimeout(() => openWhyFolds(stepId, tries - 1), 50);
+    return;
+  }
+  for (const d of shown) d.open = true;
+  shown[0].scrollIntoView({ block: 'nearest' });
+}
+
 /**
  * One line for the step's status: the plan in effect and why, in one sentence. Silent when the route as written is the plan and no other was even close.
  * A better plan waiting for the next bank trip, or offered against the player's own choice, is said here too.
@@ -94,7 +106,7 @@ export function CombatRouteLine({ step, onOpen }: { step: Step; onOpen: () => vo
     <div className="status-combat-route" role="status">
       <p className="small">
         <span aria-hidden="true">⚔️</span> <strong>{selection.source === 'player' ? 'Your plan' : 'Plan'}: {titleOf(plan)}.</strong> <span className="muted">{why}</span>
-        {' '}<button type="button" className="btn btn-link btn-sm" onClick={onOpen}>Why this plan?</button>
+        {' '}<button type="button" className="btn btn-link btn-sm" onClick={() => { onOpen(); openWhyFolds(step.id); }}>Why this plan?</button>
       </p>
       {offer && (
         <p className="small">

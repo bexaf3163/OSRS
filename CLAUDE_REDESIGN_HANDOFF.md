@@ -915,3 +915,20 @@ Not done yet (block 2b): the audit ledger of every combat stage, mandatory quest
   1440 and 390 px: browse, search, sort, locked filter, details change nothing, start with a goal, arrow, game line, pause/resume, step status, switch, stop, card link and same
   recommendation, unread bank, offline). Review shots `money*` in `scripts/review-shots.ts`.
 - Not verified live in the game: a real multi-trip run with sales. No addon change (the plugin shows the plan's line as before).
+
+## 2.72.0 — integration fixes (consolidation review)
+
+- `StepStatus.tsx`: the readiness ring uses the step's own items (`scopedPercent(lines, scope ?? STEP_ONLY, …)`), the scope of "Preparation required (N items)";
+  the trip-wide share stays on the one-trip card. No ring beside "Not everything is checked" (status UNKNOWN without problems).
+- `CombatRoute.tsx`: "Why this plan?" in the status line also opens the step's `.combat-route-details[data-step]` fold once its view is on screen.
+- `sourceRouter.ts`: a shop with an empty location is labelled by its name only; `price >= 1e9` (the item data's "not sold here" placeholder) is not a shop.
+- `Shopping.tsx`: "Browse earning methods" beside "Raise the coins". Smoke: the scaling review covers `#/money`; combat scenario checks no ring beside
+  "Not everything is checked" and that the status link opens the fold.
+- `FontCompareSheetTest.java` writes `runelite-bridge/build/font-compare/fonts-compare-{normal,large}.png` (Java2D, overlay sizes and hints) for the owner's
+  font choice. Finding: Sora's default instance is Regular (wght 400, fvar default), so the body is right; the action line's bold is synthesized by Java2D
+  (no axis access), and with fractional metrics off the advances are whole pixels.
+- `scripts/review-shots.ts`: fixtures report the step's item alternatives (as the plugin is asked to), toasts hidden unless a shot asks for them, scroll reset
+  before full-page captures; shots for the coin card, a running coin plan and "Why this plan?".
+- Known and left: the auto-preparation toast is announced from the first state after start-up (it can say the route's 25 Salmon before the personal food
+  plan settles at 24); readiness counts unreported alternatives as unknown while the one-trip plan counts the named item only (the plugin reports the
+  active step's alternatives, so this shows only for other steps).

@@ -69,6 +69,9 @@ export function unusableSpawn(spawn: string, mode: 'f2p' | 'members'): boolean {
   return mode === 'f2p' && /members only/i.test(spawn);
 }
 
+/** A shop price at or above this is the item data's "not sold here" placeholder, not a price. */
+const NOT_SOLD_PRICE = 1e9;
+
 export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
   const here = s.position.known ? s.position.value : undefined;
   const held = heldOf(s, input.name, input.manualKey);
@@ -106,11 +109,15 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
   for (const b of d?.buyLocations ?? []) {
     if (b.members && s.mode === 'f2p') continue;
     if (typeof b.stock === 'number' && b.stock === 0) continue;
+    // The item data marks a trader that does not sell the item for coins with a placeholder price (10,000,000,000, stock "N/A").
+    if (!(b.price < NOT_SOLD_PRICE)) continue;
     // The shop's own tile when the place dictionary has it; the town it stands in otherwise.
     const p = matchStrict(b.shopName) ?? matchStrict(b.location);
     const toll = b.location === 'Al Kharid' && !input.freeToll ? 10 : 0;
+    // Some shops in the item data have no town: the name alone, not "Silk trader — ".
+    const name = b.shopName.replace(/\.$/, '');
     shops.push({
-      kind: 'shop', label: `${b.shopName.replace(/\.$/, '')} — ${b.location}`, price: b.price + toll,
+      kind: 'shop', label: b.location.trim() ? `${name} — ${b.location}` : name, price: b.price + toll,
       ...(p ? { point: { x: p.x, y: p.y, plane: p.plane, label: p.label }, distance: here ? dist(p, here) : undefined } : {}),
       ...(toll ? { note: `gate toll ${toll} gp` } : {}),
     });

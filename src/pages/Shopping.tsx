@@ -312,7 +312,7 @@ export function ShoppingPage() {
           {budget.unknownRows > 0 && <p className="small muted">{budget.unknownRows} not confirmed{budget.unknownMax > 0 ? `: up to ${formatGp(budget.unknownMax)} gp more if none of them is owned` : ''}.</p>}
           {budget.optional > 0 && <p className="small muted">Optional extras ≈ {formatGp(budget.optional)} gp, not counted above.</p>}
           {budget.shortfall !== null && budget.shortfall > 0 && current && (
-            <p className="small"><a href={backHref}>Raise the coins</a> <span className="muted">— the step's coin plan picks a way that suits your account.</span></p>
+            <p className="small"><a href={backHref}>Raise the coins</a> <span className="muted">— the step's coin plan picks a way that suits your account.</span> <a href="#/money">Browse earning methods</a></p>
           )}
           <p className="small muted">Prices are estimates from the exchange's recent trades, not offers.</p>
         </div>

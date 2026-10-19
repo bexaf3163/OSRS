@@ -1177,7 +1177,7 @@ async function run(browser: Browser) {
     const gear = { equipment, inventory: [{ id: 1759, name: 'Ball of wool', count: 23 }], coins: 500, bankCoins: 3000 };
     const stats = { attack: 22, strength: 16, defence: 1, hitpoints: 22 };
     const xp = { attack: 5624, strength: 2746, defence: 0, hitpoints: 2400 };
-    const pages: [string, string][] = [['home', '#/'], ['step', '#/step/S3-08'], ['shopping', '#/shopping'], ['skills', '#/skills'], ['gear', '#/gear'], ['journal', '#/journal'], ['settings', '#/settings']];
+    const pages: [string, string][] = [['home', '#/'], ['step', '#/step/S3-08'], ['shopping', '#/shopping'], ['skills', '#/skills'], ['gear', '#/gear'], ['money', '#/money'], ['journal', '#/journal'], ['settings', '#/settings']];
     for (const scale of [1, 1.25, 1.5]) {
       for (const [name, hash] of pages) {
         const { page, errors } = await open(browser, Math.round(1920 / scale), {
@@ -1586,6 +1586,8 @@ async function combatRouteScenarios(browser: Browser) {
       return snaps.length ? snaps[snaps.length - 1].body.step : undefined;
     };
     const savedPlans = async () => page.evaluate(() => Object.entries(localStorage).filter(([k]) => k.startsWith('osrs-put:combat-plans')).map(([, v]) => JSON.parse(v)));
+    const verdict = await page.locator('.step-status .status-text').first().innerText().catch(() => '');
+    if (/Not everything is checked/.test(verdict)) expect(await page.locator('.step-status .ready-ring').count() === 0, `combat route (${width} px): no percentage beside "Not everything is checked"`);
     // 2.69: nothing to press. The recommended plan is in effect, named in one line with one short reason.
     const line = await text(page, '.status-combat-route');
     expect(/Plan: Cows, then Hill Giant for the Big bones\./.test(line) && /Recommended for your levels and kit/.test(line), `combat route (${width} px): the recommended plan is in effect, said in one line`);
@@ -1607,7 +1609,12 @@ async function combatRouteScenarios(browser: Browser) {
     await reveal(page, '.combat-route');
     const fold = page.locator('.combat-route details');
     expect(await fold.count() === 1 && !(await fold.evaluate((d) => (d as HTMLDetailsElement).open)), `combat route (${width} px): the comparison is folded under "Why this plan?"`);
-    await page.locator('.combat-route details > summary').click();
+    // The status line's link opens the comparison itself, not only the view it is in (2.72). The view opened above is closed first, as a player would.
+    await page.keyboard.press('Escape');
+    await page.waitForTimeout(300);
+    await page.locator('.status-combat-route:visible').getByRole('button', { name: 'Why this plan?' }).first().click();
+    await page.waitForTimeout(600);
+    expect(await fold.evaluate((d) => (d as HTMLDetailsElement).open), `combat route (${width} px): the status line's "Why this plan?" opens the comparison itself`);
     const rows = await page.locator('.combat-plan-row').count();
     expect(rows >= 4, `combat route (${width} px): the comparison lists the plans (${rows})`);
     expect(/Compared: .*Cow/.test(await text(page, '.combat-route')), `combat route (${width} px): it says what was compared`);

@@ -16,7 +16,10 @@ import { plural } from '../lib/shopping';
 import { TARGET_LABEL } from '../lib/linkState';
 import { useReadinessEngine } from '../readinessContext';
 import { useScopedReadiness, useStageScope } from '../lib/useStageScope';
-import { scopedPercent } from '../lib/stageScope';
+import { scopedPercent, type StageScope } from '../lib/stageScope';
+
+/** No stage cut: the step's own items (the "now" lines) only. */
+const STEP_ONLY: StageScope = { stageAt: 0, out: new Set() };
 import { useFeatures } from '../lib/features';
 import { styleOf } from '../lib/playStyle';
 import { usePrepFix } from './PrepRoute';
@@ -84,7 +87,9 @@ export function StepStatus({ step, headline = false, noStart = false, quiet = fa
   const r = useScopedReadiness(step);
   const scope = useStageScope(step);
   const planNow = useReadinessEngine().plan(step, { ahead: styleOf(useFeatures()).lookAhead });
-  const percent = scopedPercent(planNow.lines, scope, planNow.score.percent);
+  // The ring beside the step's verdict counts the step's own items, the same scope as "Preparation required (N items)": the whole trip's share (the
+  // next steps' items too) is the trip card's. "1 item" next to "ready 9%" read as a contradiction.
+  const percent = scopedPercent(planNow.lines, scope ?? STEP_ONLY, planNow.score.percent);
   const recovering = planNow.recovery;
   const [open, setOpen] = useState(false);
   const [tab, setTab] = useState<TabKey>('prep');
@@ -117,6 +122,8 @@ export function StepStatus({ step, headline = false, noStart = false, quiet = fa
       : r.status === 'UNKNOWN' ? 'Not everything is checked' : s.text;
   const shown = recovering ? (recovering.recovery.reason === 'DEATH' ? 'You died — recovery mode' : 'Route derailment — recovery mode') : !ready && percent !== null && prep ? `${text} · ready ${percent}%` : text;
   const icon = recovering ? '🔁' : ready ? '🟢' : prep ? '🟡' : s.icon;
+  // "Not everything is checked" has no share to show: unknown is not a percentage (a ring of 9% beside it read as a verdict).
+  const ring = percent !== null && (ready || prep || recovering || r.status !== 'UNKNOWN');
   const tone = recovering ? 'is-prep' : ready ? 'is-ready' : prep ? 'is-prep' : r.status === 'UNKNOWN' ? 'is-unknown' : 'is-blocked';
   const hasTarget = enabled && !!toInGameTarget(step);
   const active = activeStepId === step.id;
@@ -140,7 +147,7 @@ export function StepStatus({ step, headline = false, noStart = false, quiet = fa
     <section className={`step-status ${tone}`} aria-label="Step status">
       <div className="status-line">
         <span className="status-text" role="status">
-          {percent !== null && <span className="ready-ring" aria-hidden="true" style={{ '--p': percent } as CSSProperties}><i>{percent}%</i></span>}
+          {ring && <span className="ready-ring" aria-hidden="true" style={{ '--p': percent } as CSSProperties}><i>{percent}%</i></span>}
           <span aria-hidden="true">{icon}</span> <strong>{shown}</strong>
         </span>
         <span className="status-actions">

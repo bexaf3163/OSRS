@@ -132,7 +132,16 @@ interface Shot {
   act?: (page: Page) => Promise<void>;
   /** The element to capture; the full page when absent. */
   sel?: string;
+  /** Keep the toasts (the preparation announcement) in the picture; by default they are hidden so they do not cover the area under review. */
+  toasts?: boolean;
 }
+
+/** Opens the step's Preparation view (the coin card and the food plan live there). */
+const prepView = async (p: Page) => {
+  const tab = p.getByRole('tab', { name: 'Preparation' }).or(p.getByRole('link', { name: 'Preparation' })).or(p.getByRole('button', { name: 'Preparation' }));
+  if (await tab.count()) await tab.first().click();
+  await p.waitForTimeout(400);
+};
 
 const SHOTS: Shot[] = [
   { name: 'hill-giants-step', area: 'T4', caption: 'S4-03 step as the guide opens it for the reported character', width: 1440, hash: '#/step/S4-03', mock: hillGiants() },
@@ -148,6 +157,15 @@ const SHOTS: Shot[] = [
   },
   { name: 'skill-magic', area: 'T4', caption: 'Magic 33: the balanced default picks a method that is not the slowest AFK one', width: 1440, hash: '#/skills/MA', mock: skiller(SKILLER) },
   { name: 'settings', area: 'T8', caption: 'Settings', width: 1440, hash: '#/settings', mock: hillGiants() },
+  { name: 'funding-card', area: 'T1', caption: 'The coin card on S4-03: the shortfall, one way to raise it, Start, and the link to the Money section', width: 1440, hash: '#/step/S4-03', mock: hillGiants(), act: prepView, sel: '.funding-card' },
+  {
+    name: 'funding-running', area: 'T1', caption: 'The coin plan running: the step in hand, its count, Pause and Cancel', width: 1440, hash: '#/step/S4-03', mock: hillGiants(),
+    act: async (p) => { await prepView(p); await p.locator('.funding-card .btn-primary').click(); await p.waitForTimeout(800); }, sel: '.funding-card',
+  },
+  {
+    name: 'combat-why', area: 'T3', caption: 'S4-03: "Why this plan?" from the status line opens the comparison of plans', width: 1440, hash: '#/step/S4-03', mock: hillGiants(),
+    act: async (p) => { await p.locator('.status-combat-route').getByRole('button', { name: 'Why this plan?' }).first().click(); await p.waitForTimeout(600); }, sel: '.combat-route',
+  },
   { name: 'money', area: 'T2', caption: 'Money: the reported character, 400 gp, S4-03 short of coins: ranked for the shortfall', width: 1440, hash: '#/money', mock: hillGiants() },
   {
     name: 'money-details', area: 'T2', caption: 'Money: the recommendation\'s details (requirements, where and how, the money, sources folded)', width: 1440, hash: '#/money', mock: hillGiants(),
@@ -174,8 +192,11 @@ async function main(browser: Browser) {
     n++;
     if (FILTER && !s.name.includes(FILTER)) continue;
     const page = await open(browser, s.width, s.mock, s.hash);
+    if (!s.toasts) await page.addStyleTag({ content: '.toast-region { display: none !important; }' });
     if (s.act) await s.act(page);
     await page.waitForTimeout(400);
+    // A full-page capture of a scrolled page draws the fixed sidebar where the scroll left it.
+    if (!s.sel) await page.evaluate(() => window.scrollTo(0, 0));
     const file = `${String(n).padStart(2, '0')}-${s.name}.png`;
     if (s.sel) await page.locator(s.sel).first().screenshot({ path: `${OUT}/${file}` });
     else await page.screenshot({ path: `${OUT}/${file}`, fullPage: true });
