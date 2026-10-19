@@ -46,6 +46,7 @@ export const IconGoals = (p: IconProps) => <Svg {...p}><circle cx="12" cy="12" r
 export const IconQuests = (p: IconProps) => <Svg {...p}><path d="M6 21V4" /><path d="M6 4h11l-2.5 4L17 12H6" /></Svg>;
 export const IconGear = (p: IconProps) => <Svg {...p}><path d="M4 20V10a8 8 0 0 1 16 0v10l-6-4v-5h-4v5Z" fill="currentColor" stroke="none"/></Svg>;
 export const IconCart = (p: IconProps) => <Svg {...p}><ellipse cx="12" cy="5" rx="7" ry="3"/><path d="M5 5v4c0 4 14 4 14 0V5M5 10v4c0 4 14 4 14 0M5 15v4c0 4 14 4 14 0"/></Svg>;
+export const IconMoney = (p: IconProps) => <Svg {...p}><circle cx="12" cy="12" r="8.5" /><path d="M14.8 9.2c-.4-1-1.5-1.6-2.8-1.6-1.6 0-2.8.9-2.8 2.1 0 2.9 5.8 1.5 5.8 4.5 0 1.2-1.2 2.2-3 2.2-1.4 0-2.6-.7-3-1.7M12 6v1.6M12 16.4V18" /></Svg>;
 export const IconJournal = (p: IconProps) => <Svg {...p}><rect x="5" y="3.5" width="14" height="17" rx="2" /><path d="M9 8h6M9 12h6M9 16h3" /></Svg>;
 export const IconCompact = (p: IconProps) => <Svg {...p}><rect x="7" y="3.5" width="10" height="17" rx="2" /><path d="M10 8h4M10 12h4" /></Svg>;
 export const IconBook = (p: IconProps) => <Svg {...p}><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v16H5.5A1.5 1.5 0 0 1 4 18.5v-13Z" /><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v16h5.5a1.5 1.5 0 0 0 1.5-1.5v-13Z" /></Svg>;

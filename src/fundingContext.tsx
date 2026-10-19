@@ -1,5 +1,5 @@
 // The money plan of the app: the temporary detour that raises the coins a route step is short of, kept for one character, ticked by what the game shows, and
-// read by the screens (FundingCard) and by the game's panel (FundingSync) through the same view.
+// read by the screens (FundingCard, the Money section) and by the game's panel (FundingSync) through the same view.
 //
 // What lives here is wiring. The arithmetic is in lib/funding/*: the assessment (assess.ts), the plan's state machine (plan.ts), the earnings and pace
 // from the resource journal (session.ts), the shared price board (quoteStore.ts). Nothing here changes the route: the step the plan was started for stays
@@ -25,12 +25,13 @@ import { combatPersonaliser } from './lib/funding/combatAdapter';
 import { buildSnapshot, type FundingSnapshot } from './lib/funding/snapshot';
 import {
   cancel as cancelPlan, confirm as confirmPlan, GRAND_EXCHANGE, loadPlan, mainOutputOf, NEAR_TILES, pause as pausePlan, planKey,
-  resume as resumePlan, savePlan, startPlan, tick, viewOf, type FundingPlanState, type FundingView,
+  resume as resumePlan, savePlan, startMethodPlan, startPlan, tick, viewOf, type FundingPlanState, type FundingView,
 } from './lib/funding/plan';
 import { addWork, loadRates, observedRates, ratesKey, realizedSince, saveRates, unitsOf, type RateBook, type Realized } from './lib/funding/session';
 import { methodById } from './lib/funding/methods';
 import { usePriceView } from './lib/funding/usePriceView';
-import type { ObservedRate } from './lib/funding/evaluate';
+import type { EvalContext, MethodEvaluation, ObservedRate } from './lib/funding/evaluate';
+import { moneyList, type MoneyGoal, type MoneyList } from './lib/funding/browse';
 import type { PriceView } from './lib/funding/quotes';
 import type { Step } from './types';
 
@@ -99,6 +100,11 @@ interface FundingValue {
   arrowOff: boolean;
   showArrow: () => void;
   start: (assessment: FundingAssessment, option: FundingOption, snap: FundingSnapshot) => void;
+  /**
+   * One earning method toward the goal the player chose (the Money section). A plan that runs or waits is ended first (an explicit switch); the route step
+   * is not touched. false - it cannot start now (lib/funding/plan.ts goalBlocker says why).
+   */
+  startMethod: (e: MethodEvaluation, goal: MoneyGoal, stepId: string, snap: FundingSnapshot) => boolean;
   pause: () => void;
   resume: (snap: FundingSnapshot) => void;
   cancel: () => void;
@@ -268,15 +274,33 @@ export function FundingProvider({ children }: { children: ReactNode }) {
     void navigate({ label, x: place.x, y: place.y, plane: place.plane });
   }, [plan, snap, navTarget, arrowOff, navigate, releaseNav]);
 
+  /** A new plan replaces the one that runs or waits: what that one taught about the pace is kept, its arrow comes down, its route step stays as it was. */
+  const replaceRunning = useCallback(() => {
+    const cur = planRef.current;
+    if (cur) finish(cancelPlan(cur, Date.now()), 'CANCELLED');
+  }, [finish]);
+
   const start = useCallback((assessment: FundingAssessment, option: FundingOption, s: FundingSnapshot) => {
     const method = option.evaluation?.method;
     const made = startPlan(assessment, option, s, method, Date.now());
     if (!made) return;
+    replaceRunning();
     setEnded(null);
     setArrowOff(false);
     if (made.status === 'DONE') { finish(made, 'DONE'); return; }
     commit(made, true);
-  }, [commit, finish]);
+  }, [commit, finish, replaceRunning]);
+
+  const startMethod = useCallback((e: MethodEvaluation, goal: MoneyGoal, stepId: string, s: FundingSnapshot) => {
+    const made = startMethodPlan(e, goal, stepId, s, Date.now());
+    if (!made) return false;
+    replaceRunning();
+    setEnded(null);
+    setArrowOff(false);
+    if (made.status === 'DONE') finish(made, 'DONE');
+    else commit(made, true);
+    return true;
+  }, [commit, finish, replaceRunning]);
 
   const pause = useCallback(() => {
     const cur = planRef.current;
@@ -303,8 +327,8 @@ export function FundingProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<FundingValue>(() => ({
     plan, ended, dismissEnded: () => setEnded(null), position, refreshPosition, observed, arrowOff, showArrow: () => { tries.current.clear(); setArrowOff(false); },
-    start, pause, resume, cancel, confirm,
-  }), [plan, ended, position, refreshPosition, observed, arrowOff, start, pause, resume, cancel, confirm]);
+    start, startMethod, pause, resume, cancel, confirm,
+  }), [plan, ended, position, refreshPosition, observed, arrowOff, start, startMethod, pause, resume, cancel, confirm]);
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
@@ -350,6 +374,37 @@ function trainingSkill(steps: readonly Step[], progress: Parameters<typeof isClo
   return null;
 }
 
+type EvalBase = Omit<EvalContext, 'cash' | 'mode' | 'target' | 'needItems'>;
+
+/**
+ * What the evaluator needs besides the money and the target, for one step: the walk with the player's teleports, the combat model from the live levels
+ * and gear, the player's own pace. The coin card and the Money section take it from here, so the two never judge a method differently. null - no step or
+ * no snapshot.
+ */
+function useEvalBase(step: Step | null, snap: FundingSnapshot | null, prices: PriceView): EvalBase | null {
+  const { state } = usePlayerState();
+  const { progress, mode } = useStore();
+  const bridge = useBridge();
+  const { observed } = useFunding();
+  return useMemo(() => {
+    if (!step || !snap) return null;
+    const route = stepsFor(mode);
+    const reach = (from: { x: number; y: number; plane: number } | null, to: { x: number; y: number; plane: number }) => {
+      if (!from) return null;
+      const inp = travelInputOf({ from, to, levels: progress.levels, stats: bridge.stats, gear: bridge.gear, owned: state.owned, mode });
+      return reachTiles(inp, to).tiles;
+    };
+    const live = {
+      stats: bridge.stats as Partial<Record<string, number>> | null,
+      xp: bridge.xp as Partial<Record<string, number>> | null,
+      gear: bridge.gear,
+      fights: bridge.combatLog?.foes ?? null,
+      train: trainingSkill(route, progress, step),
+    };
+    return { now: Date.now(), prices, snap, reach, exchange: GRAND_EXCHANGE, personalise: combatPersonaliser(live, prices), observed, active: { foes: step.foes } };
+  }, [step, snap, prices, mode, progress, state.owned, bridge.stats, bridge.xp, bridge.gear, bridge.combatLog, observed]);
+}
+
 /**
  * The funding answer for one step: what it needs in coins, what the player has, and what to do about a shortage. Prices are loaded only while `wanted` -
  * a step that costs nothing never asks the exchange for anything.
@@ -357,9 +412,9 @@ function trainingSkill(steps: readonly Step[], progress: Parameters<typeof isClo
 export function useFundingScreen(step: Step, wanted: boolean): FundingScreen {
   const engine = useReadinessEngine();
   const { state, ledger } = usePlayerState();
-  const { progress, mode } = useStore();
+  const { progress } = useStore();
   const bridge = useBridge();
-  const { plan: running, observed, refreshPosition } = useFunding();
+  const { plan: running, refreshPosition } = useFunding();
   const prices = usePriceView(wanted);
   const snap = useFundingSnapshot(wanted ? step.id : null);
   const cleanup = useCleanupAdvice();
@@ -377,36 +432,47 @@ export function useFundingScreen(step: Step, wanted: boolean): FundingScreen {
 
   // The way last shown for this step stays on top while another is not clearly better, so the card does not change its mind with every price tick.
   const shown = useRef<{ stepId: string; id: string } | null>(null);
+  // A running plan shows its own step in hand; the advice is not recomputed under it.
+  const base = useEvalBase(wanted && !plan ? step : null, snap, prices);
   const assessment = useMemo(() => {
-    // A running plan shows its own step in hand; the advice is not recomputed under it.
-    if (!wanted || !snap || plan) return null;
+    if (!wanted || !snap || plan || !base) return null;
     const prep = engine.plan(step, { ahead });
     const manual = Object.fromEntries(Object.entries(progress.ownedManual ?? {}).map(([k, v]) => [k, v.count]));
     const need = buildNeed({ step, prep, prices, owned: state.owned, manual });
-    const route = stepsFor(mode);
-    const reach = (from: { x: number; y: number; plane: number } | null, to: { x: number; y: number; plane: number }) => {
-      if (!from) return null;
-      const inp = travelInputOf({ from, to, levels: progress.levels, stats: bridge.stats, gear: bridge.gear, owned: state.owned, mode });
-      return reachTiles(inp, to).tiles;
-    };
-    const live = {
-      stats: bridge.stats as Partial<Record<string, number>> | null,
-      xp: bridge.xp as Partial<Record<string, number>> | null,
-      gear: bridge.gear,
-      fights: bridge.combatLog?.foes ?? null,
-      train: trainingSkill(route, progress, step),
-    };
     const keep = shown.current?.stepId === step.id ? shown.current.id : null;
     const out = assess({
-      step, need, snap, prices, recs: cleanup.live ? cleanup.result.recs : [], bankValue: bridge.gear?.bankValue ?? null,
-      base: { now: Date.now(), prices, snap, reach, exchange: GRAND_EXCHANGE, personalise: combatPersonaliser(live, prices), observed, active: { foes: step.foes } },
-      activeId: keep,
+      step, need, snap, prices, recs: cleanup.live ? cleanup.result.recs : [], bankValue: bridge.gear?.bankValue ?? null, base, activeId: keep,
     });
     shown.current = out.recommendation ? { stepId: step.id, id: out.recommendation.id } : null;
     return out;
-  }, [wanted, snap, plan, engine, step, progress, state.owned, prices, mode, bridge.stats, bridge.xp, bridge.gear, bridge.combatLog, cleanup.live, cleanup.result.recs, observed, ahead]);
+  }, [wanted, snap, plan, base, engine, step, progress, state.owned, prices, bridge.gear, cleanup.live, cleanup.result.recs, ahead]);
 
   const { view } = useFundingView(step.id);
   const realized = useMemo(() => (plan ? realizedSince(ledger, plan.startedAt) : null), [plan, ledger]);
   return { assessment, snap, prices, plan, view, realized, live: cleanup.live };
+}
+
+// ---------------------------------------------------------------------------
+// The Money section (2.71)
+
+export interface MoneyScreen extends MoneyList {
+  snap: FundingSnapshot | null;
+  prices: PriceView;
+  /** The plan that runs or waits, whichever step it was started from. */
+  plan: FundingPlanState | null;
+}
+
+/**
+ * The Money section's list for the step the player is on: every method of the catalogue judged with the same snapshot, prices, walk and combat model as
+ * the coin card, ranked by the same rule. Browsing reads; it never starts, changes or closes anything.
+ */
+export function useMoneyScreen(step: Step): MoneyScreen {
+  const { plan } = useFunding();
+  const { assessment: a, snap, prices } = useFundingScreen(step, true);
+  const base = useEvalBase(step, snap, prices);
+  const activeId = plan?.methodId ?? null;
+  const list = useMemo((): MoneyList => (base ? moneyList(base, a, { activeId }) : {
+    evals: [], ranking: { best: null, list: [], needsAttention: [], cannotReach: [], kept: false }, rankedFor: { coins: 0, stepId: null }, shortfall: null,
+  }), [base, a, activeId]);
+  return { ...list, snap, prices, plan };
 }

@@ -894,3 +894,24 @@ Not done yet (block 2b): the audit ledger of every combat stage, mandatory quest
 - Tests: `tests/skillsGuide.test.ts` (labels cover steps, free paths, wording, followed plan → shopping, old saves), `tests/skillsCoverage.test.ts` writes `docs/SKILLS_COVERAGE.md`;
   smoke roadmap scenario (labels, priority, follow, back to the route).
 - Not done: per-method cost model, members method research beyond the guide, quest-XP path costs. Not verified live in the game.
+
+## 2.71.0 — Money section (Task 6)
+
+- Owner's spec (memory `project_osrs_money_section_queue`): browse earning methods any time, over the existing funding system, no second engine.
+- `lib/funding/browse.ts`: `moneyList(base, assessment)` judges every catalogue method with the coin card's evaluator and ranks with `rankMethods`; when the step is SHORT
+  it uses the card's own target (gap less the spare items) and cash (`budget.spendable`), otherwise `BROWSE_TARGET` (10,000) out of the coins in hand. `browse()` filters
+  (available only by default, no capital, category, relaxed), searches title/summary/spot and sorts (ranking order, profit, capital, effort). `badgeOf`: locked = first
+  blocker; "Not confirmed: <what>" for unknown level, quest, quest points, tool, coins or combat model (position and market notes are not requirements); else "Can do now".
+- `evaluate.ts` adds `checks` (one line per requirement with ok / missing / buy / unknown / info, plus the coins to start) from the same loop as the blockers.
+- `plan.ts`: `startMethodPlan(e, goal, stepId, snap, now)` (`MoneyGoal` amount / shortfall / open), `goalBlocker` (amount needs the bank's coins: `liquid.complete`),
+  `coinsMade`. EARN plans carry `loop {from: travel, to: sell}`: when the sale leaves the coins short (or the session is open) the trip restarts (`trips` counts). With a
+  step to go back to and coins unknown it goes on to the restock as before. Amount and open goals have no restock/resume tail.
+- `fundingContext.tsx`: `useEvalBase` (shared by the coin card and Money), `startMethod` (ends a running plan first: explicit switch), `useMoneyScreen(step)`.
+  `start` also ends a running plan of another step properly (its pace is credited).
+- `pages/Money.tsx` (`#/money`, nav tab with `IconMoney`): recommendation card, search, sort, a Filters button, rows with details folded under them, `GoalChooser`.
+  The running plan is shown by `FundingCard` itself (no second card). The coin card links to it ("Browse earning methods").
+- Tests: `tests/funding/browse.test.ts` (15: consistency with the coin card, no coins, unknown bank, unknown level, restricted trading, members-only, no/stale prices, search,
+  filters, sort, details), `tests/funding/moneyPlan.test.ts` (9: goals, multi-trip, open session, shortfall, blockers, coin card loop, save). Smoke `UI_ONLY=money` (68 checks at
+  1440 and 390 px: browse, search, sort, locked filter, details change nothing, start with a goal, arrow, game line, pause/resume, step status, switch, stop, card link and same
+  recommendation, unread bank, offline). Review shots `money*` in `scripts/review-shots.ts`.
+- Not verified live in the game: a real multi-trip run with sales. No addon change (the plugin shows the plan's line as before).

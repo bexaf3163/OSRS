@@ -3,7 +3,7 @@ import { useEffect, useState, type ComponentType } from 'react';
 import { findSkill, reference } from './data';
 import { useStore } from './store';
 import { useRoute, type Page } from './lib/router';
-import { IconCart, IconCompact, IconGear, IconJournal, IconPath, IconSearch, IconSettings, IconSkills } from './components/Icons';
+import { IconCart, IconCompact, IconGear, IconJournal, IconMoney, IconPath, IconSearch, IconSettings, IconSkills } from './components/Icons';
 import { SearchBox } from './components/SearchBox';
 import { HeaderMode } from './components/ModeToggle';
 import { CompassMark } from './components/CompassMark';
@@ -28,6 +28,7 @@ import { ReferencePage } from './pages/Reference';
 import { SettingsPage } from './pages/Settings';
 import { ShoppingPage } from './pages/Shopping';
 import { GearPage } from './pages/Gear';
+import { MoneyPage } from './pages/Money';
 import { ProfileBanner } from './components/ProfileBanner';
 import { UpdateBanner } from './components/UpdateBanner';
 import { SectionShell } from './components/SectionShell';
@@ -37,6 +38,7 @@ const TABS: { page: Page; href: string; label: string; Icon: ComponentType<{ cla
   { page: 'skills', href: '#/skills', label: 'Skills', Icon: IconSkills },
   { page: 'gear', href: '#/gear', label: 'Gear', Icon: IconGear },
   { page: 'shopping', href: '#/shopping', label: 'Shopping', Icon: IconCart },
+  { page: 'money', href: '#/money', label: 'Money', Icon: IconMoney },
   { page: 'journal', href: '#/journal', label: 'Journal', Icon: IconJournal },
 ];
 
@@ -52,6 +54,7 @@ function pageTitle(page: Page, param?: string): string {
   if (page === 'settings') return 'Settings';
   if (page === 'shopping') return 'Shopping';
   if (page === 'gear') return 'Gear';
+  if (page === 'money') return 'Money';
   return TABS.find((t) => t.page === sectionOf(page))!.label;
 }
 
@@ -96,6 +99,7 @@ export function App() {
     case 'settings': content = <SettingsPage />; break;
     case 'shopping': content = <ShoppingPage />; break;
     case 'gear': content = <GearPage />; break;
+    case 'money': content = <MoneyPage />; break;
   }
 
   return (

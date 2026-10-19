@@ -13,6 +13,8 @@
 
 import { nameKey } from '../checklist';
 import type { FundingAssessment, FundingOption } from './assess';
+import { goalText, type MoneyGoal } from './browse';
+import type { MethodEvaluation } from './evaluate';
 import type { FundingSnapshot } from './snapshot';
 import type { FundingMethod, GuideKind, Place } from './types';
 
@@ -50,7 +52,7 @@ export interface FundingPlanState {
   methodId?: string;
   title: string;
   sourceStepId: string;
-  target: { required: number; gap: number; liquidAtStart: number | null };
+  target: { required: number; gap: number; liquidAtStart: number | null; /** The coins at the start included the bank, so a later count is comparable. */ completeAtStart?: boolean };
   /** Items that must stay out of any sale while the plan runs (the route's reserve, copied at the start). */
   reserved: { name: string; qty: number }[];
   status: PlanStatus;
@@ -66,6 +68,17 @@ export interface FundingPlanState {
   lastTickAt: number;
   /** The expected net proceeds the sale should bring, for the sell sub-step's detection and the "estimated" label. */
   expectedNet: number;
+  /** Started from the Money section (2.71): the goal the player chose. Absent for a plan started from a step's coin card. */
+  goal?: MoneyGoal;
+  /** An open session: coins never end it, only the player does. */
+  openEnded?: boolean;
+  /**
+   * The sub-steps of one trip (the way there to the sale), repeated while the coins are still short (2.71): a goal larger than a trip's worth is reached
+   * trip by trip instead of being sent to the restock with too few coins. Absent for plans that are one pass (gathering, a sale, a cheaper supply).
+   */
+  loop?: { from: number; to: number };
+  /** Trips started, the first included. */
+  trips?: number;
 }
 
 /** Where the Grand Exchange is: the place to sell and to buy. */
@@ -107,13 +120,18 @@ export function mainOutputOf(method: FundingMethod): { name: string; perUnit: nu
   return best ? { name: best.item.name, perUnit: per(best) } : null;
 }
 
-function subSteps(option: FundingOption, assessment: FundingAssessment, method: FundingMethod | undefined): { steps: SubStep[]; expectedNet: number } {
+/** What the sub-steps need of the shortfall: the coins still short (null - none in particular) and what the spare items would bring. */
+interface Shortfall { gap: number | null; surplusNet: number }
+
+interface Built { steps: SubStep[]; expectedNet: number; loop?: { from: number; to: number } }
+
+function subSteps(option: FundingOption, assessment: Shortfall, method: FundingMethod | undefined, tail = true): Built {
   const GE = GRAND_EXCHANGE;
   const steps: SubStep[] = [];
   const add = (s: Omit<SubStep, 'done'>) => steps.push({ ...s, done: false });
 
   if (option.kind === 'SELL_SURPLUS') {
-    const net = assessment.budget.surplus.net;
+    const net = assessment.surplusNet;
     add({ id: 'travel', kind: 'travel', text: 'Go to the Grand Exchange.', place: GE, detect: { type: 'near', place: GE, radius: NEAR_TILES } });
     add({ id: 'sell', kind: 'sell', text: 'Sell your spare items.', place: GE, detect: { type: 'coinsRise', by: Math.floor(Math.min(net, assessment.gap ?? net) * SALE_SHARE) } });
     add({ id: 'resume', kind: 'resume', text: 'Back to your step.', detect: { type: 'manual' } });
@@ -152,18 +170,22 @@ function subSteps(option: FundingOption, assessment: FundingAssessment, method: 
     add({ id: 'bank', kind: 'bank', text: method.guide.find((g) => g.kind === 'bank')?.text ?? 'Bank the loot.', place: method.bank, detect: main ? { type: 'bagAtMost', item: main.name, qty: Math.floor(goalQty * 0.1), near: method.bank } : { type: 'manual' } });
     add({ id: 'sell', kind: 'sell', text: method.guide.find((g) => g.kind === 'sell')?.text ?? 'Sell at the Grand Exchange.', place: GE, detect: { type: 'coinsRise', by: 0 } });
   }
-  add({ id: 'restock', kind: 'restock', text: 'Buy the supplies you were short of.', place: GE, detect: { type: 'manual' } });
-  add({ id: 'resume', kind: 'resume', text: 'Back to your step.', detect: { type: 'manual' } });
+  if (tail) {
+    add({ id: 'restock', kind: 'restock', text: 'Buy the supplies you were short of.', place: GE, detect: { type: 'manual' } });
+    add({ id: 'resume', kind: 'resume', text: 'Back to your step.', detect: { type: 'manual' } });
+  }
   const expectedNet = e ? Math.round(Math.max(0, e.perUnit.net) * units) : 0;
   // The sale is taken as made when the coins have risen by most of what this trip should bring.
   const sell = steps.find((s) => s.id === 'sell');
   if (sell) sell.detect = { type: 'coinsRise', by: Math.floor(Math.min(expectedNet, assessment.gap ?? expectedNet) * SALE_SHARE) };
-  return { steps, expectedNet };
+  const from = steps.findIndex((s) => s.id === 'travel');
+  const to = steps.findIndex((s) => s.id === 'sell');
+  return { steps, expectedNet, ...(from >= 0 && to > from ? { loop: { from, to } } : {}) };
 }
 
 export function startPlan(assessment: FundingAssessment, option: FundingOption, snap: FundingSnapshot, method: FundingMethod | undefined, now: number): FundingPlanState | null {
   if (!snap.character || assessment.state !== 'SHORT' || assessment.gap === null) return null;
-  const built = subSteps(option, assessment, method);
+  const built = subSteps(option, { gap: assessment.gap, surplusNet: assessment.budget.surplus.net }, method);
   const steps = built.steps;
   const reserved = [...snap.protections.values()].filter((p) => Number.isFinite(p.qty) && p.qty > 0).map((p) => ({ name: p.name, qty: p.qty }));
   const plan: FundingPlanState = {
@@ -172,8 +194,48 @@ export function startPlan(assessment: FundingAssessment, option: FundingOption, 
     target: { required: assessment.required, gap: assessment.gap, liquidAtStart: snap.liquid.amount },
     reserved, status: 'ACTIVE', startedAt: now, updatedAt: now, active: 0, subSteps: steps,
     baseline: baselineOf(snap), workSeconds: 0, lastTickAt: now, expectedNet: built.expectedNet,
+    ...(built.loop ? { loop: built.loop, trips: 1 } : {}),
   };
   return settle(plan, snap, now);
+}
+
+/**
+ * A plan started from the Money section (2.71): one earning method toward the goal the player chose. The same sub-steps and the same detection as a plan
+ * started from a step's coin card, so the app, the arrow and the game panel follow it the same way. "More coins" counts only coins made after the start
+ * (unsold loot is not coins); an open session ends when the player stops it. The route is not touched: `stepId` is the step to go back to.
+ */
+export function startMethodPlan(e: MethodEvaluation, goal: MoneyGoal, stepId: string, snap: FundingSnapshot, now: number): FundingPlanState | null {
+  if (!e.eligible || goalBlocker(goal, snap)) return null;
+  const liquid = snap.liquid.amount;
+  const gap = goal.kind === 'open' ? null : goal.coins;
+  const required = goal.kind === 'open' ? 0 : (liquid as number) + goal.coins;
+  const option: FundingOption = {
+    kind: 'EARN', id: `earn:${e.method.id}`, title: e.method.title, detail: goalText(goal), closes: gap ?? 0, confidence: e.confidence, minutes: e.minutes, evaluation: e,
+  };
+  // Supplies to buy and a step to go back to only when the goal is that step's shortfall; "more coins" and an open session are trips until stopped.
+  const built = subSteps(option, { gap, surplusNet: 0 }, e.method, goal.kind === 'shortfall');
+  const reserved = [...snap.protections.values()].filter((p) => Number.isFinite(p.qty) && p.qty > 0).map((p) => ({ name: p.name, qty: p.qty }));
+  const plan: FundingPlanState = {
+    v: 1, id: `${option.id}@${now}`, version: 1, character: snap.character!, optionId: option.id, kind: 'EARN', methodId: e.method.id, title: e.method.title,
+    sourceStepId: stepId, target: { required, gap: gap ?? 0, liquidAtStart: liquid, completeAtStart: snap.liquid.complete },
+    reserved, status: 'ACTIVE', startedAt: now, updatedAt: now, active: 0, subSteps: built.steps,
+    baseline: baselineOf(snap), workSeconds: 0, lastTickAt: now, expectedNet: built.expectedNet, goal, ...(goal.kind === 'open' ? { openEnded: true } : {}),
+    ...(built.loop ? { loop: built.loop, trips: 1 } : {}),
+  };
+  return settle(plan, snap, now);
+}
+
+/**
+ * Why a goal cannot be started now, in one sentence; null - it can. "More coins" counts the coins in hand against the coins at the start, so it needs
+ * the bank's coins too (a bank opened later would otherwise read as coins made). An open session counts nothing and needs only the character.
+ */
+export function goalBlocker(goal: MoneyGoal, snap: FundingSnapshot): string | null {
+  if (!snap.character) return snap.connected ? 'Log in to the game first.' : 'Connect RuneLite and log in to start.';
+  if (goal.kind === 'open') return null;
+  if (snap.liquid.amount === null) return 'Your coins are not known yet.';
+  if (goal.kind === 'amount' && !snap.liquid.complete) return 'Open your bank once, so the coins you make can be counted.';
+  if (!(goal.coins > 0)) return 'Choose how many coins.';
+  return null;
 }
 
 // ---------------------------------------------------------------------------
@@ -214,14 +276,31 @@ function settle(plan: FundingPlanState, snap: FundingSnapshot, now: number): Fun
     const subSteps = p.subSteps.map((x, i) => (i === p.active ? { ...x, done: true, doneAt: now, doneBy: 'observed' as const } : x));
     p = advanceTo({ ...p, subSteps, updatedAt: now }, p.active + 1, snap);
   }
-  return finishIfCovered(p, snap, now);
+  return finishIfCovered(nextTripIfShort(p, snap, now), snap, now);
+}
+
+/**
+ * The trip's last sub-step (the sale) is done and the coins are still short, or the session is open: the next trip starts at the way there. With a step
+ * to go back to and coins that cannot be read, the plan goes on to the restock as before rather than sending the player round again on a guess.
+ */
+function nextTripIfShort(plan: FundingPlanState, snap: FundingSnapshot, now: number): FundingPlanState {
+  const l = plan.loop;
+  if (plan.status !== 'ACTIVE' || !l || plan.active !== l.to + 1) return plan;
+  const have = snap.liquid.amount;
+  const tail = plan.subSteps.length > l.to + 1;
+  if (!plan.openEnded) {
+    if (have !== null && have >= plan.target.required) return plan;
+    if (have === null && tail) return plan;
+  }
+  const subSteps = plan.subSteps.map((x, i) => (i >= l.from && i <= l.to ? { ...x, done: false, doneAt: undefined, doneBy: undefined } : x));
+  return advanceTo({ ...plan, subSteps, trips: (plan.trips ?? 1) + 1, updatedAt: now }, l.from, snap);
 }
 
 /** The plan is done when the coins it set out to raise are in hand; the route's own progress is not touched. */
 function finishIfCovered(plan: FundingPlanState, snap: FundingSnapshot, now: number): FundingPlanState {
   if (plan.status !== 'ACTIVE') return plan;
   const have = snap.liquid.amount;
-  const closed = have !== null && have >= plan.target.required;
+  const closed = !plan.openEnded && have !== null && have >= plan.target.required;
   const allDone = plan.subSteps.every((s) => s.done);
   if (closed || allDone) return { ...plan, status: 'DONE', updatedAt: now };
   return plan;
@@ -294,15 +373,29 @@ export interface FundingView {
 
 const gp = (n: number) => Math.round(n).toLocaleString('en-US');
 
+/**
+ * Coins in hand now less the coins at the start: what a plan has really made (unsold loot is not coins). null - the two cannot be compared (the coins are
+ * not known, or one of the counts had the bank and the other did not).
+ */
+export function coinsMade(plan: Pick<FundingPlanState, 'target'>, snap: Pick<FundingSnapshot, 'liquid'>): number | null {
+  const was = plan.target.liquidAtStart;
+  const have = snap.liquid.amount;
+  if (was === null || have === null || !plan.target.completeAtStart || !snap.liquid.complete) return null;
+  return have - was;
+}
+
 export function viewOf(plan: FundingPlanState, snap: FundingSnapshot): FundingView {
   const s = plan.subSteps[Math.min(plan.active, plan.subSteps.length - 1)];
   let progress: string | null = null;
   if (s.goal) {
     const n = Math.max(0, bagCount(snap, s.goal.item));
     progress = `${Math.min(n, s.goal.qty)} / ${s.goal.qty} ${s.goal.item}`;
-  } else if (s.kind === 'sell' || s.kind === 'resume') {
+  } else if ((s.kind === 'sell' || s.kind === 'resume') && !plan.openEnded) {
     const have = snap.liquid.amount;
     if (have !== null) progress = have >= plan.target.required ? 'Enough coins' : `${gp(plan.target.required - have)} gp to go`;
+  } else if (s.kind === 'sell' && plan.openEnded) {
+    const made = coinsMade(plan, snap);
+    if (made !== null) progress = made > 0 ? `${gp(made)} gp made so far` : 'No coins made yet';
   }
   return {
     planId: plan.id, version: plan.version, status: plan.status, sourceStepId: plan.sourceStepId, title: plan.title,

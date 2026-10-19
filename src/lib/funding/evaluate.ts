@@ -74,11 +74,19 @@ export interface EvalContext {
 export type BlockerKind = 'membership' | 'ironman' | 'level' | 'quest' | 'qp' | 'tool' | 'sale' | 'price' | 'capital' | 'combat' | 'market';
 export interface Blocker { kind: BlockerKind; text: string; /** true — the player can fix it (train, buy, finish a quest). */ fixable: boolean }
 
+/**
+ * One requirement as this player meets it, for the details of the Money section (2.71): the same checks that make the blockers and the cautions, one line
+ * each. ok - met; missing - not met (a blocker); buy - met by buying (a tool); unknown - could not be checked; info - a fact the game cannot tell.
+ */
+export interface RequirementCheck { text: string; status: 'ok' | 'missing' | 'buy' | 'unknown' | 'info' }
+
 export interface MethodEvaluation {
   method: FundingMethod;
   eligible: boolean;
   blockers: Blocker[];
   cautions: string[];
+  /** Every requirement and how this player meets it, in the catalogue's order, then the coins to start. */
+  checks: RequirementCheck[];
   confidence: Confidence;
   confidenceReasons: string[];
   unitsPerHour: Range3;
@@ -248,6 +256,7 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
   const { snap, prices } = ctx;
   const blockers: Blocker[] = [];
   const cautions: string[] = [];
+  const checks: RequirementCheck[] = [];
   const notes: string[] = [];
   const reasons: string[] = [];
   let confidence: Confidence = m.confidence;
@@ -257,32 +266,44 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
 
   // --- Access
   if (m.access === 'members' && !snap.members) blockers.push({ kind: 'membership', text: 'Needs membership', fixable: false });
+  checks.push(m.access === 'members' ? { text: snap.members ? 'Membership' : 'Needs membership', status: snap.members ? 'ok' : 'missing' } : { text: 'Free-to-play', status: 'ok' });
   const usesExchange = ctx.mode === 'earn';
-  if (usesExchange && snap.ironman === true) blockers.push({ kind: 'ironman', text: 'An ironman account cannot use the Grand Exchange', fixable: false });
+  if (usesExchange && snap.ironman === true) {
+    blockers.push({ kind: 'ironman', text: 'An ironman account cannot use the Grand Exchange', fixable: false });
+    checks.push({ text: 'An ironman account cannot use the Grand Exchange', status: 'missing' });
+  }
 
   let faresPerTrip = 0;
   let tool: ToolPlan | null = null;
   for (const r of m.requirements) {
     if (r.kind === 'level') {
       const lv = snap.level(r.skill);
-      if (lv === undefined) { cautions.push(`Your ${r.skill} level is not known`); cap('MEDIUM', `${r.skill} level unknown`); }
-      else if (lv < r.level) blockers.push({ kind: 'level', text: `Needs ${r.skill} ${r.level} (you have ${lv})`, fixable: true });
+      if (lv === undefined) { cautions.push(`Your ${r.skill} level is not known`); cap('MEDIUM', `${r.skill} level unknown`); checks.push({ text: `${r.skill} ${r.level}: your level is not known`, status: 'unknown' }); }
+      else if (lv < r.level) { blockers.push({ kind: 'level', text: `Needs ${r.skill} ${r.level} (you have ${lv})`, fixable: true }); checks.push({ text: `Needs ${r.skill} ${r.level} (you have ${lv})`, status: 'missing' }); }
+      else checks.push({ text: `${r.skill} ${r.level} (you have ${lv})`, status: 'ok' });
     } else if (r.kind === 'quest') {
       const q = snap.quest(r.quest);
-      if (q === 'NOT_DONE') blockers.push({ kind: 'quest', text: `Needs ${r.quest}${r.state === 'started' ? ' started' : ''}`, fixable: true });
-      else if (q === 'UNKNOWN') { cautions.push(`${r.quest} could not be checked`); cap('MEDIUM', `${r.quest} unknown`); }
+      const what = `${r.quest}${r.state === 'started' ? ' started' : ''}`;
+      if (q === 'NOT_DONE') { blockers.push({ kind: 'quest', text: `Needs ${what}`, fixable: true }); checks.push({ text: `Needs ${what}`, status: 'missing' }); }
+      else if (q === 'UNKNOWN') { cautions.push(`${r.quest} could not be checked`); cap('MEDIUM', `${r.quest} unknown`); checks.push({ text: `${what}: could not be checked`, status: 'unknown' }); }
+      else checks.push({ text: what, status: 'ok' });
     } else if (r.kind === 'qp') {
-      if (snap.questPoints === null) { cautions.push('Quest points are not known'); cap('MEDIUM', 'quest points unknown'); }
-      else if (snap.questPoints < r.points) blockers.push({ kind: 'qp', text: `Needs ${r.points} quest points (you have ${snap.questPoints})`, fixable: true });
+      if (snap.questPoints === null) { cautions.push('Quest points are not known'); cap('MEDIUM', 'quest points unknown'); checks.push({ text: `${r.points} quest points: not known`, status: 'unknown' }); }
+      else if (snap.questPoints < r.points) { blockers.push({ kind: 'qp', text: `Needs ${r.points} quest points (you have ${snap.questPoints})`, fixable: true }); checks.push({ text: `Needs ${r.points} quest points (you have ${snap.questPoints})`, status: 'missing' }); }
+      else checks.push({ text: `${r.points} quest points (you have ${snap.questPoints})`, status: 'ok' });
     } else if (r.kind === 'item' && r.role === 'tool') {
       tool = planTool(r, ctx);
-      if (tool.blocker) blockers.push(tool.blocker);
-      if (tool.unknown) { cautions.push('Whether you own a suitable tool is not known: open the bank'); cap('MEDIUM', 'tool unknown'); }
+      if (tool.blocker) { blockers.push(tool.blocker); checks.push({ text: tool.blocker.text, status: 'missing' }); }
+      if (tool.unknown) { cautions.push('Whether you own a suitable tool is not known: open the bank'); cap('MEDIUM', 'tool unknown'); checks.push({ text: 'A suitable tool: not known, open the bank', status: 'unknown' }); }
+      else if (tool.owned) checks.push({ text: `${tool.name} (you have one)`, status: 'ok' });
+      else if (tool.name && !tool.blocker) checks.push({ text: `${tool.name}: buy one, about ${gp(tool.cost)} gp`, status: 'buy' });
     } else if (r.kind === 'fare') {
       const waived = r.unlessQuest ? snap.quest(r.unlessQuest) === 'DONE' : false;
       if (!waived) faresPerTrip += r.coins;
+      checks.push(waived ? { text: `${r.reason}: free after ${r.unlessQuest}`, status: 'ok' } : { text: `${r.reason}: ${gp(r.coins)} gp a trip`, status: 'info' });
     } else if (r.kind === 'check') {
       cautions.push(r.text);
+      checks.push({ text: r.text, status: 'info' });
     }
   }
 
@@ -437,12 +458,13 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
   if (spendable === null) {
     cautions.push('Your coins are not known');
     cap('MEDIUM', 'coins unknown');
+    checks.push({ text: minimum > 0 ? `Coins to start, about ${gp(minimum)} gp: yours are not known` : 'No coins needed to start', status: minimum > 0 ? 'unknown' : 'ok' });
   } else if (spendable < minimum) {
-    blockers.push({
-      kind: 'capital',
-      text: setup > 0 && spendable < setup ? `The ${tool!.name} alone costs ${gp(setup)} gp` : `A first batch costs about ${gp(minimum)} gp`,
-      fixable: true,
-    });
+    const text = setup > 0 && spendable < setup ? `The ${tool!.name} alone costs ${gp(setup)} gp` : `A first batch costs about ${gp(minimum)} gp`;
+    blockers.push({ kind: 'capital', text, fixable: true });
+    checks.push({ text: `${text} (you have ${gp(spendable)} gp)`, status: 'missing' });
+  } else {
+    checks.push({ text: minimum > 0 ? `Coins to start, about ${gp(minimum)} gp (you have ${gp(spendable)} gp)` : 'No coins needed to start', status: 'ok' });
   }
 
   // --- Economics per unit
@@ -520,7 +542,7 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
   return {
     method: m,
     eligible: blockers.length === 0,
-    blockers, cautions,
+    blockers, cautions, checks,
     confidence,
     confidenceReasons: reasons,
     unitsPerHour, netPerHour,

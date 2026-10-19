@@ -13,7 +13,7 @@ export function SectionShell({ page, param, children }: { page: Page; param?: st
   const { mode } = useStore();
   const [selected, setSelected] = useState(0);
   const skill = page === 'skills';
-  const titles: Partial<Record<Page, string>> = { skills: 'Skills', gear: 'Gear', shopping: 'Shopping', journal: 'Journal', quests: 'Journal', goals: 'Journal', reference: 'Reference' };
+  const titles: Partial<Record<Page, string>> = { skills: 'Skills', gear: 'Gear', shopping: 'Shopping', money: 'Money', journal: 'Journal', quests: 'Journal', goals: 'Journal', reference: 'Reference' };
   const title = titles[page];
   if (!title) return <>{children}</>;
   const icon = page === 'gear' ? <IconGear /> : page === 'shopping' ? <IconCart /> : page === 'reference' ? <IconBook /> : <IconJournal />;

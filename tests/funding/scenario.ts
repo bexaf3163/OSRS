@@ -5,7 +5,7 @@ import { stepById, stepsFor } from '../../src/data';
 import { gearById } from '../../src/services/gearAdvisor';
 import { nameKey, type OwnedItem, type OwnedState } from '../../src/lib/checklist';
 import { combatPersonaliser } from '../../src/lib/funding/combatAdapter';
-import { assess, type FundingAssessment } from '../../src/lib/funding/assess';
+import { assess, type AssessInput, type FundingAssessment } from '../../src/lib/funding/assess';
 import { buildNeed, type FundingNeed } from '../../src/lib/funding/need';
 import { buildSnapshot, type FundingSnapshot } from '../../src/lib/funding/snapshot';
 import type { SurplusRec } from '../../src/lib/funding/budget';
@@ -60,6 +60,8 @@ export interface Scenario {
   need: FundingNeed;
   snap: FundingSnapshot;
   assessment: FundingAssessment;
+  /** The evaluator's context the assessment used, for the Money section's list (moneyList). */
+  base: AssessInput['base'];
 }
 
 export function scenario(prices: PriceView, o: ScenarioOpts = {}): Scenario {
@@ -96,12 +98,14 @@ export function scenario(prices: PriceView, o: ScenarioOpts = {}): Scenario {
     totalLevel: o.totalLevel === undefined ? 150 : o.totalLevel, ironman: o.ironman === undefined ? false : o.ironman, sellOverride: o.sellOverride,
   });
   const live = { stats: o.stats ?? HISTORICAL.stats, xp: o.xp ?? HISTORICAL.xp, gear: state.owned ? ({ equipment: worn.map((n) => ({ id: gearId(n), name: n })), inventory: [], coins: 0, bankCoins: 0 } as never) : null, train: o.train === undefined ? 'attack' as const : o.train };
+  const base: AssessInput['base'] = {
+    now: 1_792_000_000_000, prices, snap, reach: walk, exchange: GE, personalise: combatPersonaliser(live, prices), observed: o.observed, active: { foes: step.foes },
+  };
   const assessment = assess({
-    step, need, snap, prices, recs: o.recs ?? [], bankValue: null,
-    base: { now: 1_792_000_000_000, prices, snap, reach: walk, exchange: GE, personalise: combatPersonaliser(live, prices), observed: o.observed, active: { foes: step.foes } },
+    step, need, snap, prices, recs: o.recs ?? [], bankValue: null, base,
     activeId: o.activeId, allowHighEffort: o.allowHighEffort,
   });
-  return { step, state, prep, need, snap, assessment };
+  return { step, state, prep, need, snap, assessment, base };
 }
 
 export function summary(a: FundingAssessment): string[] {

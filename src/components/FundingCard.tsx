@@ -12,12 +12,13 @@ import { useFeatures } from '../lib/features';
 import { styleOf } from '../lib/playStyle';
 import { formatGp } from '../lib/shopping';
 import type { FundingAssessment, FundingOption } from '../lib/funding/assess';
+import type { MethodEvaluation } from '../lib/funding/evaluate';
 import type { PriceView } from '../lib/funding/quotes';
 import type { Realized } from '../lib/funding/session';
 
 const gp = (n: number) => `${formatGp(Math.round(n))} gp`;
 
-function PriceNote({ prices }: { prices: PriceView }) {
+export function PriceNote({ prices }: { prices: PriceView }) {
   const text = prices.status === 'live'
     ? 'Prices: from the Grand Exchange, a few minutes old.'
     : prices.status === 'stale'
@@ -28,13 +29,13 @@ function PriceNote({ prices }: { prices: PriceView }) {
   return <p className="small muted">{text}</p>;
 }
 
-function Economics({ option }: { option: FundingOption }) {
-  const e = option.evaluation;
+/** The money side of one method, in the same words on the coin card and in the Money section. `earn` - the method is judged for the coins it brings. */
+export function Economics({ e, earn }: { e: MethodEvaluation | undefined; earn: boolean }) {
   if (!e) return null;
   const hr = e.netPerHour;
   return (
     <ul className="small funding-facts">
-      {option.kind === 'EARN' && hr.typical > 0 && <li>About {gp(hr.typical)} an hour after tax and supplies (between {gp(hr.slow)} and {gp(hr.fast)}).</li>}
+      {earn && hr.typical > 0 && <li>About {gp(hr.typical)} an hour after tax and supplies (between {gp(hr.slow)} and {gp(hr.fast)}).</li>}
       {e.workingCapital !== null && e.workingCapital > 0 && <li>It needs about {gp(e.workingCapital)} of your own coins at its lowest point.</li>}
       {e.upfront.setup > 0 && <li>A tool you do not have yet: about {gp(e.upfront.setup)}.</li>}
       {e.upfront.owned.length > 0 && <li>Uses what you already carry: {e.upfront.owned.map((o) => `${o.qty} ${o.name}`).join(', ')}.</li>}
@@ -71,7 +72,7 @@ function Details({ a, prices, onUse }: { a: FundingAssessment; prices: PriceView
         {need.optional.cost > 0 && <li className="muted">Optional upgrades: {gp(need.optional.cost)}</li>}
         {budget.surplus.excluded.slice(0, 3).map((x) => <li key={x.name} className="muted">Not for sale: {x.name} ({x.why})</li>)}
       </ul>
-      {a.recommendation && <Economics option={a.recommendation} />}
+      {a.recommendation && <Economics e={a.recommendation.evaluation} earn={a.recommendation.kind === 'EARN'} />}
       {a.alternatives.length > 0 && (
         <div>
           <p className="small subhead">Other ways</p>
@@ -158,11 +159,10 @@ function Body({ step, fallback }: { step: Step; fallback: ReactNode }) {
         <span className="funding-line">{rec ? rec.title : 'No safe way to raise it could be worked out.'}</span>
       </p>
       <p className="small muted">{rec ? rec.detail : 'What is known about your account and the market does not point to one. Details below.'}</p>
-      {rec && (
-        <p className="funding-actions">
-          <button type="button" className="btn btn-primary" disabled={!snap} onClick={() => snap && f.start(a, rec, snap)}>Start</button>
-        </p>
-      )}
+      <p className="funding-actions">
+        {rec && <button type="button" className="btn btn-primary" disabled={!snap} onClick={() => snap && f.start(a, rec, snap)}>Start</button>}
+        <a className="small funding-browse" href="#/money">Browse earning methods</a>
+      </p>
       <Details a={a} prices={prices} onUse={snap ? (o) => f.start(a, o, snap) : undefined} />
     </section>
   );

@@ -206,3 +206,54 @@
 .focus-reached { margin: 6px 0 2px; color: var(--done); display: flex; align-items: center; gap: 6px; }
 .skill-roadmap-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; margin: 8px 0; }
 .skill-roadmap-filters .skill-seg { margin: 0; }
+
+/* 2.71: the Money section. One recommendation, a compact list, the details under a row. */
+.funding-browse { align-self: center; margin-left: 4px; }
+.money-page .money-context { margin: 0; }
+.money-running { display: flex; flex-direction: column; gap: 2px; }
+.money-running .funding-card { margin: 0; }
+.money-running > p { margin: 0; }
+.money-reco { display: flex; flex-direction: column; gap: 4px; }
+.money-reco p { margin: 0; }
+.money-reco-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 8px; font-size: 1.02rem; }
+.money-kicker { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); flex-basis: 100%; }
+.money-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 6px 0 0 !important; }
+.money-badge { display: inline-flex; align-items: center; padding: 0 8px; border-radius: 999px; border: 1px solid var(--border); font-size: 0.75rem; font-weight: 600; line-height: 1.6; max-width: 100%; overflow-wrap: anywhere; }
+.money-badge.is-ok { background: var(--done-soft); color: var(--done); border-color: color-mix(in srgb, var(--done) 35%, transparent); }
+.money-badge.is-unknown { background: var(--warn-soft); color: var(--warn); border-color: color-mix(in srgb, var(--warn) 35%, transparent); }
+.money-badge.is-locked { background: var(--surface-2); color: var(--muted); }
+.money-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.money-search { flex: 1 1 220px; min-width: 0; min-height: 34px; padding: 4px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); font: inherit; }
+.money-sort { display: inline-flex; align-items: center; gap: 6px; }
+.money-filter-list { flex-basis: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; }
+.money-filter-list label { display: inline-flex; align-items: center; gap: 6px; }
+.money-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+.money-row { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); }
+.money-row.is-open { border-color: var(--border-strong); }
+/* The badge goes to its own line when the title and it do not both fit: a title never shrinks to a letter a line. */
+.money-row-head { all: unset; box-sizing: border-box; width: 100%; cursor: pointer; display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; padding: 8px 10px; border-radius: var(--radius-sm); }
+.money-row-head:focus-visible { outline: 2px solid var(--accent-ink); outline-offset: 2px; }
+.money-row-head:hover .money-row-title { text-decoration: underline; text-underline-offset: 2px; }
+.money-row-title { flex: 1 1 14ch; min-width: 0; font-weight: 600; overflow-wrap: break-word; }
+.money-row-head .money-badge { flex: 0 1 auto; margin-left: auto; }
+.money-row-facts { flex-basis: 100%; overflow-wrap: anywhere; }
+.money-row > .money-details, .money-row > .money-actions, .money-row > .money-goal { margin: 0 10px 10px !important; }
+.money-details { display: flex; flex-direction: column; gap: 4px; border-top: 1px solid var(--border); padding-top: 8px; }
+.money-details p { margin: 0; }
+.money-details .subhead { margin-top: 4px; }
+.money-checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.money-checks li { display: flex; gap: 6px; overflow-wrap: anywhere; }
+.money-check-mark { flex: none; width: 1.2em; text-align: center; }
+.money-checks li.is-ok .money-check-mark { color: var(--done); }
+.money-checks li.is-missing { color: var(--text); }
+.money-checks li.is-missing .money-check-mark { color: var(--danger); }
+.money-checks li.is-unknown .money-check-mark { color: var(--warn); }
+.money-checks li.is-info { color: var(--muted); }
+.money-guide { margin: 0; padding-left: 1.4rem; display: grid; gap: 2px; }
+.money-calc > summary { cursor: pointer; width: fit-content; }
+.money-goal { border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 10px; margin: 6px 0 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.money-goal p { margin: 0; }
+.money-goal-option { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.money-amount { width: 7.5em; min-height: 30px; padding: 2px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); font: inherit; font-variant-numeric: tabular-nums; }
+.money-blocker { color: var(--warn); }
+.money-empty p { margin: 0; }

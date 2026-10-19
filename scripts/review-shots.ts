@@ -10,7 +10,7 @@ const PORT = 4181;
 const BASE = `http://127.0.0.1:${PORT}/`;
 const OUT = process.env.REVIEW_OUT ?? 'review-shots';
 const FILTER = process.argv[2] ?? '';
-const steps = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string }[] }[];
+const steps = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string; anyOf?: string[] }[] }[];
 
 interface Mock {
   progress?: unknown;
@@ -93,7 +93,7 @@ function hillGiants(opts: { coins?: number; bankSeen?: boolean; storage?: Record
   const gear = { equipment, inventory, coins: opts.coins ?? 400, bankCoins: opts.bankSeen === false ? null : 0 };
   const from = steps.findIndex((x) => x.id === 'S4-03');
   const worn = new Set(equipment.map((e) => e.name));
-  const asked = [...new Set(steps.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).map((i) => i.nameEn)))];
+  const asked = [...new Set(steps.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).flatMap((i) => [i.nameEn, ...(i.anyOf ?? [])])))];
   const owned = asked.map((name) => ({ name, carried: worn.has(name) ? 1 : name === 'Salmon' ? opts.carriedFood ?? 0 : 0, noted: 0, bank: 0 }));
   const stats = { attack: 30, strength: 21, defence: 1, hitpoints: 24 };
   return {
@@ -148,6 +148,22 @@ const SHOTS: Shot[] = [
   },
   { name: 'skill-magic', area: 'T4', caption: 'Magic 33: the balanced default picks a method that is not the slowest AFK one', width: 1440, hash: '#/skills/MA', mock: skiller(SKILLER) },
   { name: 'settings', area: 'T8', caption: 'Settings', width: 1440, hash: '#/settings', mock: hillGiants() },
+  { name: 'money', area: 'T2', caption: 'Money: the reported character, 400 gp, S4-03 short of coins: ranked for the shortfall', width: 1440, hash: '#/money', mock: hillGiants() },
+  {
+    name: 'money-details', area: 'T2', caption: 'Money: the recommendation\'s details (requirements, where and how, the money, sources folded)', width: 1440, hash: '#/money', mock: hillGiants(),
+    act: async (p) => { await p.locator('.money-reco').getByRole('button', { name: 'Details' }).click(); await p.waitForTimeout(300); },
+  },
+  {
+    name: 'money-start', area: 'T2', caption: 'Money: Start asks for the goal (more coins, the step\'s shortfall, an open session)', width: 1440, hash: '#/money', mock: hillGiants(),
+    act: async (p) => { await p.locator('.money-reco').getByRole('button', { name: 'Start…' }).click(); await p.waitForTimeout(300); },
+  },
+  { name: 'money-skiller', area: 'T2', caption: 'Money: a skiller with 14,500 gp and the bank read, no shortfall: ranked for 10,000 more', width: 1440, hash: '#/money', mock: skiller(SKILLER) },
+  {
+    name: 'money-locked', area: 'T2', caption: 'Money: "Show locked methods" lists what is missing for each', width: 1440, hash: '#/money', mock: skiller(SKILLER),
+    act: async (p) => { await p.locator('.money-filters-toggle').click(); await p.getByLabel('Show locked methods').check(); await p.waitForTimeout(300); },
+  },
+  { name: 'money-offline', area: 'T2', caption: 'Money: RuneLite not connected: published figures, nothing confirmed', width: 1440, hash: '#/money', mock: { ...hillGiants(), offline: true } },
+  { name: 'money-390', area: 'T2', caption: 'Money at phone width', width: 390, hash: '#/money', mock: hillGiants() },
 ];
 
 async function main(browser: Browser) {
