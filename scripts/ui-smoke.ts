@@ -212,6 +212,26 @@ async function run(browser: Browser) {
     await page.context().close();
   }
   if (process.env.UI_ONLY === 'stabilization') return;
+  for (const width of [390, 1280]) {
+    const equipment = [[1329, 'Mithril scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']]
+      .map(([id, name, slot]) => ({ id, name, slot }));
+    const stats = { attack: 22, strength: 16, defence: 1, hitpoints: 22 };
+    const gear = { equipment, inventory: [{ id: 330, name: 'Salmon', count: 40, noted: true }], coins: 500, bankCoins: 3000 };
+    const { page, errors } = await open(browser, width, {
+      zen: true, progress: progressBefore('S3-08'), localStorage: { 'osrs-put:active-step': 'S3-08' },
+      status: { protocol: 6, ...gear, stats, activeStepId: 'S3-08' },
+      events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 40, bank: 0, exactCarried: 0, exactNoted: 40, exactBank: 0 }] }],
+    }, '#/step/S3-08');
+    await page.getByText(/Bank: unnote/i).first().waitFor({ timeout: 8000 });
+    expect((await page.locator('main').innerText()).includes('Unnote at bank'), `notes (${width}): notes are an action, not ready-to-eat food`);
+    expect(await page.evaluate(() => (window as unknown as { __posts: { path: string; body?: { plan?: { lines: { name: string; unnote?: number }[] } } }[] }).__posts.some((p) => p.path === '/prep-plan' && p.body?.plan?.lines.some((l) => l.name === 'Salmon' && (l.unnote ?? 0) > 0))), `notes (${width}): the actual game snapshot carries the unnote action`);
+    expect(await noOverflow(page) && !errors.length, `notes (${width}): no overflow or console errors`);
+    await page.evaluate(() => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 26, noted: 14, bank: 0, exactCarried: 26, exactNoted: 14, exactBank: 0 }] }));
+    await page.waitForTimeout(800);
+    expect(!(await page.locator('main').innerText()).includes('Unnote at bank'), `notes (${width}): unnoting clears the action after the live ownership update`);
+    await page.context().close();
+  }
+  if (process.env.UI_ONLY === 'items') return;
   if (process.env.UI_ONLY === 'funding') { await fundingScenarios(browser); return; }
   if (process.env.UI_ONLY === 'combat') { await combatRouteScenarios(browser); return; }
   if (process.env.UI_ONLY === 'shopping') { await shoppingScenarios(browser); return; }

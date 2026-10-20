@@ -262,7 +262,8 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     } else if (res.state === 'BANK') {
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: 'BANK', hard: true, source: 'game',
-        detail: `${(h.bag ?? 0) + h.noted}${u} in the bag, ${h.bank ?? 0} in the bank: take it from the bank${whole((h.bag ?? 0) + h.noted + (h.bank ?? 0))}`,
+        detail: h.noted > 0 ? `${h.bag ?? 0}${u} usable, ${h.noted}${u} as banknotes: unnote at a bank before use`
+          : `${h.bag ?? 0}${u} in the bag, ${h.bank ?? 0} in the bank: take it from the bank${whole((h.bag ?? 0) + (h.bank ?? 0))}`,
         ...(bank ? { action: bankNav(bank, step, it.nameEn) } : {}),
       });
     } else if (res.state === 'UNKNOWN') {

@@ -33,7 +33,7 @@ const MAX_TEXT = 200;
 export interface PrepPlanPayload {
   stepId: string;
   score: { percent: number | null; verdict: 'READY' | 'NOT_READY' | 'UNKNOWN'; critical: number; important: number; optimizations: number; unknown: number };
-  lines: { name: string; need: number; where: PrepWhere; priority: PrepPriority; timing: PrepTiming; supply?: Exclude<Supply, 'ENOUGH'>; action?: string }[];
+  lines: { name: string; need: number; where: PrepWhere; priority: PrepPriority; timing: PrepTiming; supply?: Exclude<Supply, 'ENOUGH'>; action?: string; unnote?: number }[];
   /** "Do not take now": what will be needed later. */
   later: string[];
   recovery?: { title: string; steps: string[] };
@@ -170,6 +170,7 @@ export function planPayload(plan: PrepPlan, extras: PlanExtras = {}): PrepPlanPa
       timing: l.timing,
       ...(l.supply && l.supply !== 'ENOUGH' ? { supply: l.supply } : {}),
       ...(l.action ? { action: clipText(l.action.label, 90) } : {}),
+      ...(l.unnote ? { unnote: l.unnote } : {}),
     }));
   const weight = weightText(plan);
   const slots = slotsText(plan);

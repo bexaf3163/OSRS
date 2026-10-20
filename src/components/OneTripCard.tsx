@@ -42,12 +42,12 @@ function Action({ a }: { a: PrepAction }) {
 
 /** Short of a part: "13 of 26" says more than "missing". */
 function partOf(l: PrepLine): string | null {
-  const have = (l.have.bag ?? 0) + l.have.noted + (l.have.bank ?? 0) + l.have.equipped;
+  const have = (l.have.bag ?? 0) + l.have.noted + (l.have.bank ?? 0);
   return l.where === 'MISSING' && have > 0 && l.count > have ? `${have} of ${unitsOf(l, l.count)}${l.have.bank ? ' (bank included)' : ''}` : null;
 }
 
 function Row({ l, showWhy = true }: { l: PrepLine; showWhy?: boolean }) {
-  const w = WHERE[l.where];
+  const w = l.unnote ? { icon: '🏦', text: 'banknotes: unnote first' } : WHERE[l.where];
   const part = partOf(l);
   return (
     <li className={`prep-line is-${l.where.toLowerCase()} p-${l.priority.toLowerCase()}`}>

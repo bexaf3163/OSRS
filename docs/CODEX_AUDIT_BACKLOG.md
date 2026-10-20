@@ -11,11 +11,11 @@ Current work and evidence are in [the stabilization handoff](CODEX_STABILIZATION
 | --- | --- | --- |
 | T01 | P1 | Progress recovery/migrations implemented; browser and basic packaged recovery passed. Write-error reporting and broader native profile/format cases remain open. |
 | T02 | P1 | Update digest verification implemented/tested; a real isolated two-version update remains open. |
-| T03 | P1 | Exact quantities, usable items and tool substitutions: open. |
+| T03 | P1 | Additive exact counts, conservative legacy tool aggregation and notes/usable separation implemented in the item-contract follow-up. Exact-ID and complete eligibility parity remain open. |
 | T04 | P1 | Snapshot fingerprint corrected; account/logout/async lifecycle remains open. |
 | T05 | P1 | Skip vs game prerequisite, quest milestones and completion: open. |
 | T06 | P1 | Shared reserves across preparation, shopping, funding and cleanup: open. |
-| T07 | P1/P2 | Preparation deficits, doses, slots and phases: open. |
+| T07 | P1/P2 | Recipe deficits, unnoting and physical potion-slot corrections implemented in the item-contract follow-up. Current phase and full acquisition/allocation parity remain open. |
 | T08 | P1 | Payload limits corrected/tested; snapshot apply ordering and session boundaries remain open. |
 | T09 | P1 | Java SSE slow-reader isolation/backpressure: open, reproduce and measure first. |
 | T10 | P1 user impact | Complete combat-plan comparison: open. |

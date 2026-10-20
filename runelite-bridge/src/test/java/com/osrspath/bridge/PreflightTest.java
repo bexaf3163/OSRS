@@ -13,6 +13,15 @@ import org.junit.Test;
 /** The item pre-flight guard: the arrow turns to where a missing item is instead of the step, and the HUD says to turn back. */
 public class PreflightTest
 {
+	@Test
+	public void ownedNotesLeadToABankButDoNotSatisfyTheUsableGuard()
+	{
+		Preflight.Block b = Preflight.check("S2-07", line(PIE), true, bag(), bag(2325, "Redberry pie", 1), null, 3000, 3145, 0, BANKS);
+		assertNotNull(b);
+		assertEquals(Preflight.Via.BANK, b.getVia());
+		assertEquals(0, b.getHave());
+		assertNull(Preflight.check("S2-07", line(PIE), true, bag(2325, "Redberry pie", 1), bag(), null, 3000, 3145, 0, BANKS));
+	}
 	private static final String DOOR = "{\"t\":\"Enter the Black Knights' Fortress.\",\"x\":3016,\"y\":3514,\"plane\":0,\"k\":\"enterFortress\","
 		+ "\"pre\":[{\"item\":\"Cabbage\",\"id\":1965,\"at\":[3058,3290,0],\"t\":\"Pick Cabbage south of Falador (do NOT pick Draynor cabbage)\",\"on\":[\"Cabbage\"]}]}";
 	private static final String PIE = "{\"t\":\"Talk to Thurgo.\",\"x\":3000,\"y\":3145,\"plane\":0,\"pre\":[{\"item\":\"Redberry pie\",\"id\":2325}]}";

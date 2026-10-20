@@ -1,0 +1,33 @@
+[
+  {
+    "name": "one Rune pickaxe remains one physical tool",
+    "mining": 41, "woodcutting": 1,
+    "bag": [{"id":1275,"name":"Rune pickaxe","count":1}], "notes": [], "bank": [],
+    "watch": [{"name":"Bronze pickaxe","id":1265},{"name":"Iron pickaxe"},{"name":"Steel pickaxe"},{"name":"Rune pickaxe"}],
+    "rows": [
+      {"name":"Bronze pickaxe","id":1265,"carried":1,"noted":0,"exactCarried":0,"exactNoted":0,"bank":0,"exactBank":0},
+      {"name":"Iron pickaxe","carried":1,"noted":0,"exactCarried":0,"exactNoted":0,"bank":0,"exactBank":0},
+      {"name":"Steel pickaxe","carried":1,"noted":0,"exactCarried":0,"exactNoted":0,"bank":0,"exactBank":0},
+      {"name":"Rune pickaxe","carried":1,"noted":0,"exactCarried":1,"exactNoted":0,"bank":0,"exactBank":0}
+    ]
+  },
+  {
+    "name": "food notes remain separate from usable bag food",
+    "mining": 1, "woodcutting": 1,
+    "bag": [{"id":329,"name":"Salmon","count":3}],
+    "notes": [{"id":329,"name":"Salmon","count":20}],
+    "bank": [{"id":329,"name":"Salmon","count":5}],
+    "watch": [{"name":"Salmon","id":329}],
+    "rows": [{"name":"Salmon","id":329,"carried":3,"noted":20,"exactCarried":3,"exactNoted":20,"bank":5,"exactBank":5}]
+  },
+  {
+    "name": "unread bank is absent rather than known empty",
+    "mining": 10, "woodcutting": 1,
+    "bag": [{"id":1275,"name":"Rune pickaxe","count":1}], "notes": [], "bank": null,
+    "watch": [{"name":"Bronze pickaxe"},{"name":"Rune pickaxe"}],
+    "rows": [
+      {"name":"Bronze pickaxe","carried":0,"noted":0,"exactCarried":0,"exactNoted":0},
+      {"name":"Rune pickaxe","carried":1,"noted":0,"exactCarried":1,"exactNoted":0}
+    ]
+  }
+]

@@ -122,6 +122,30 @@ describe('the preparation plan: where an item is and what to do with it', () => 
 });
 
 describe('the preparation plan: consumables, money, sources', () => {
+  it('notes preserve ownership but require unnoting, and never satisfy edible stock', () => {
+    const one = [mk('N1', [item('Lobster', 20, { heals: 12 })], { foes: ['Cow'] })];
+    const p = plan(state(owned({ Lobster: { carried: 0, noted: 20, bank: 0 } }, true)), { list: one, id: 'N1' });
+    expect(line(p, 'Lobster')).toMatchObject({ where: 'BANK', unnote: 20, toGet: 20, have: { bag: 0, noted: 20, bank: 0 }, supply: 'CRITICAL' });
+    expect(line(p, 'Lobster').action?.label).toMatch(/Unnote Lobster.*bank/);
+    expect(p.score.verdict).toBe('NOT_READY');
+    expect(p.slots.adding).toBe(20);
+  });
+
+  it('one-dose bottles in the bank occupy their real slots rather than doses divided by four', () => {
+    const one = [mk('P1', [item('Strength potion(4)', 2)])];
+    const p = plan(state(owned({
+      'Strength potion(1)': { carried: 0, bank: 8 }, 'Strength potion(2)': { bank: 0 },
+      'Strength potion(3)': { bank: 0 }, 'Strength potion(4)': { bank: 0 },
+    }, true)), { list: one, id: 'P1' });
+    expect(line(p, 'Strength potion(4)').potions).toEqual([{ name: 'Strength potion(1)', count: 8 }]);
+    expect(p.slots.adding).toBe(8);
+  });
+
+  it('bag supplies are not subtracted again from the next deadline and an existing rune stack needs no new slot', () => {
+    const one = [mk('Q1', [item('Lobster', 20), item('Air rune', 10)]), mk('Q2', [item('Lobster', 20)])];
+    const p = plan(state(owned({ Lobster: { carried: 20, bank: 20 }, 'Air rune': { carried: 1, bank: 9 } }, true)), { list: one, id: 'Q1' });
+    expect(p.slots.adding).toBe(20);
+  });
   it('enough / low / very low; on a combat step the threshold is stricter', () => {
     const fight = [steps[0]];
     const calm = [{ ...steps[0], foes: undefined } as Step];
@@ -264,6 +288,13 @@ describe('the preparation plan: the engine', () => {
 });
 
 describe('made items: the ingredients are planned too (Goblin Diplomacy, Orange dye)', () => {
+  it('one ingredient out of three remains short and does not say INVENTORY', () => {
+    const list = [mk('D1', [item('Orange dye', 3)])];
+    const p = plan(state(owned({ 'Orange dye': { bank: 0 }, 'Red dye': { carried: 1, bank: 0 }, 'Yellow dye': { bank: 0 } }, true)), { list, id: 'D1' });
+    expect(line(p, 'Red dye')).toMatchObject({ count: 3, where: 'MISSING', toGet: 2 });
+    const bank = plan(state(owned({ 'Orange dye': { bank: 0 }, 'Red dye': { carried: 1, bank: 2 }, 'Yellow dye': { bank: 0 } }, true)), { list, id: 'D1' });
+    expect(line(bank, 'Red dye')).toMatchObject({ count: 3, where: 'BANK', toGet: 2 });
+  });
   const dye = [mk('G1', [item('Blue dye', 1), item('Orange dye', 1)])];
   const held = (o: Record<string, Partial<OwnedItem>>) => state(owned({ 'Blue dye': { carried: 1 }, 'Orange dye': { carried: 0, bank: 0 }, 'Red dye': { carried: 0, bank: 0 }, 'Yellow dye': { carried: 0, bank: 0 }, ...o }, true));
 

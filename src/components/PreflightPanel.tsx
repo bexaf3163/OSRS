@@ -8,7 +8,7 @@ import { nameKey } from '../lib/checklist';
 import { evaluatePreflight, preflightItems } from '../lib/checklist';
 
 export function PreflightPanel({ step }: { step: Step }) {
-  const { state, inGame, activeStepId, owned, questsDone } = useBridge();
+  const { state, inGame, activeStepId, owned, questsDone, stats } = useBridge();
   const { progress } = useStore();
   const items = preflightItems(step);
   if (items.length === 0 || state !== 'online') return null;
@@ -25,7 +25,7 @@ export function PreflightPanel({ step }: { step: Step }) {
   } else if (!inGame || !owned) {
     body = <p className="muted small">Log in to the game in RuneLite — the bag will be checked by itself.</p>;
   } else {
-    const r = evaluatePreflight(items, owned);
+    const r = evaluatePreflight(items, owned, { ...progress.levels, ...(stats ?? {}) });
     body = (
       <>
         {/* All ready: the list folds to one line, so it does not repeat what the status above already says. */}

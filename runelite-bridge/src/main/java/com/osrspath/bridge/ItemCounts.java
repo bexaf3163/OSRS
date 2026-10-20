@@ -194,6 +194,27 @@ final class ItemCounts
 		return id != null ? byId.getOrDefault(id, 0) : byName.getOrDefault(ActiveTarget.nameKey(name), 0);
 	}
 
+	/** Additive wire contract: old clients keep substituted counts; new clients read exact physical quantities. */
+	static Map<String, Object> report(String name, Integer id, ItemCounts carried, ItemCounts noted, ItemCounts bank)
+	{
+		Map<String, Object> row = new java.util.LinkedHashMap<>();
+		row.put("name", name);
+		if (id != null)
+		{
+			row.put("id", id);
+		}
+		row.put("carried", carried.count(id, name));
+		row.put("noted", noted.count(id, name));
+		row.put("exactCarried", carried.exact(id, name));
+		row.put("exactNoted", noted.exact(id, name));
+		if (bank != null)
+		{
+			row.put("bank", bank.count(id, name));
+			row.put("exactBank", bank.exact(id, name));
+		}
+		return row;
+	}
+
 	/**
 	 * An axe or pickaxe no worse than the named one: if a Bronze pickaxe is needed, Iron, Steel and above also fit. The sum over tiers from
 	 * the named one and up; a non-tool is 0. Combat "Black axe" and other names outside the pattern are not affected.

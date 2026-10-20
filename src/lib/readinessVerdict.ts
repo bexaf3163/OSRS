@@ -105,12 +105,13 @@ export function bankFreshness(connected: boolean, owned: OwnedState | null, now 
 const count = (l: PrepLine, n = l.count) => `${l.name}${l.unit === 'dose' ? lineAmount(l, n) : n > 1 ? ` ×${n}` : ''}`;
 
 function lineReason(l: PrepLine, group: ReasonGroup): Reason {
-  const bag = (l.have.bag ?? 0) + l.have.noted + l.have.equipped;
+  const bag = l.have.bag ?? 0;
   switch (l.where) {
     case 'EQUIPPED':
     case 'INVENTORY':
       return { group, state: 'ok', text: `${count(l)}: with you.` };
     case 'BANK':
+      if (l.unnote) return { group, state: 'bank', text: `${count(l)}: ${unitsOf(l, l.unnote)} as banknotes; unnote at a bank before use.` };
       return { group, state: 'bank', text: `${count(l)}: ${bag > 0 ? `${unitsOf(l, bag)} with you, ` : ''}take ${unitsOf(l, l.toGet ?? l.count)} from the bank.` };
     case 'MISSING':
       return { group, state: 'missing', text: `${count(l)}: ${bag > 0 ? `${unitsOf(l, bag)} with you, ` : ''}${unitsOf(l, l.toGet ?? l.count)} still to get${l.action?.label ? ` — ${l.action.label}` : ''}.` };
@@ -180,7 +181,7 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
   // Cautions that do not stop the trip.
   const soon = plan.soon.filter((l) => l.where === 'BANK' || l.where === 'MISSING');
   if (soon.length) cautions.push(`Also for the next steps: ${soon.slice(0, 3).map((l) => count(l)).join(', ')}.`);
-  for (const l of now) if (l.supply === 'LOW' && !(combat && i.isFood(l.name))) cautions.push(`${l.name} is low for this step: ${(l.have.bag ?? 0) + l.have.noted} of ${unitsOf(l, l.count)} with you.`);
+  for (const l of now) if (l.supply === 'LOW' && !(combat && i.isFood(l.name))) cautions.push(`${l.name} is low for this step: ${l.have.bag ?? 0} of ${unitsOf(l, l.count)} with you.`);
   if (plan.slots.over > 0) cautions.push(`It will not all fit: ${plan.slots.over} ${plan.slots.over === 1 ? 'slot' : 'slots'} too many.`);
   if (plan.weight.level === 'HEAVY') cautions.push('Heavy: leave what this step does not need in the bank.');
   const reliesOnBank = reasons.some((r) => r.state === 'bank');
@@ -220,6 +221,9 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
 
 /** The next action when something is to be taken or got: the bank first (it is already yours), then what to get, food named as food. */
 function prepHeadline(plan: PrepPlan, combat: CombatReadiness | null, isFood: (n: string) => boolean): string {
+  if (combat?.food.unnote) return combat.food.text;
+  const notes = plan.lines.find((l) => l.timing === 'NOW' && l.unnote && l.priority !== 'OPTIONAL');
+  if (notes) return `Bank: unnote ${count(notes, notes.unnote)} before using it${isFood(notes.name) ? ' as food' : ''}.`;
   const now = plan.lines.filter((l) => l.timing === 'NOW' && l.priority !== 'OPTIONAL' && !(combat && isFood(l.name)));
   const bank = now.filter((l) => l.where === 'BANK').map((l) => count(l, l.toGet ?? l.count));
   if (combat && combat.food.fromBank > 0) bank.push(`${combat.food.fromBank} ${combat.food.name}`);

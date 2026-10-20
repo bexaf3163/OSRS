@@ -75,6 +75,10 @@ export interface PrepLine {
   unit?: 'dose';
   /** A potion in the bank: the exact potions to take for the doses, largest first (the game frames them in the open bank). */
   potions?: { name: string; count: number }[];
+  /** Physical notes remain in have.noted; this many units must be unnoted at a bank before use. */
+  unnote?: number;
+  /** Additional usable units allocated to this deadline; the same bag stock cannot cover another deadline again. */
+  bagShortfall?: number;
 }
 
 export interface PrepScore {
@@ -191,11 +195,12 @@ function whyOf(line: ShoppingLine, group: string[], all: string[], currentId: st
   return parts.join(' · ');
 }
 
-function bankAction(step: Step, name: string, n: number, doses = false): PrepAction {
+function bankAction(step: Step, name: string, n: number, doses = false, unnote = 0): PrepAction {
   const b = nearestBank(step);
   return {
     kind: 'TAKE',
-    label: doses ? `Take ${n} ${n === 1 ? 'dose' : 'doses'} from the bank` : `Take from the bank${n > 1 ? ` ×${n}` : ''}`,
+    label: unnote > 0 ? `Unnote ${name}${unnote > 1 ? ` (${unnote}${doses ? ' doses' : ''})` : ''} at a bank${n > unnote ? '; withdraw the rest' : ''}`
+      : doses ? `Take ${n} ${n === 1 ? 'dose' : 'doses'} from the bank` : `Take from the bank${n > 1 ? ` ×${n}` : ''}`,
     ...(b ? { nav: { label: `${b.label}: take ${name}`, x: b.x, y: b.y, plane: b.plane, itemName: name, stepId: step.id } } : {}),
   };
 }
@@ -258,15 +263,19 @@ function recipeLines(parent: PrepLine, step: Step, state: PlayerState): PrepLine
   const out: PrepLine[] = [];
   for (const ing of recipe.from) {
     const held = heldOf(state, ing.nameEn);
-    const count = ing.count * Math.max(1, parent.count - ((parent.have.bag ?? 0) + parent.have.noted));
-    if ((held.bag ?? 0) + held.noted >= count) continue;
-    const where: PrepWhere = held.presence === 'UNKNOWN' ? 'UNKNOWN' : (held.bank ?? 0) > 0 ? 'BANK' : held.presence === 'MISSING' ? 'MISSING' : 'INVENTORY';
+    const count = ing.count * Math.max(1, parent.count - ((parent.have.bag ?? 0) + parent.have.noted + (parent.have.bank ?? 0)));
+    const usable = held.bag ?? 0;
+    if (usable >= count) continue;
+    const total = held.total ?? usable;
+    const where: PrepWhere = total >= count ? 'BANK' : held.presence === 'UNKNOWN' || held.bank === null ? 'UNKNOWN' : 'MISSING';
+    const unnote = Math.min(held.noted, Math.max(0, count - usable));
     const spot = ing.npc ? npcSpot(ing.npc, step.id) : undefined;
     out.push({
       key: `recipe:${parent.key}:${ing.nameEn}`, name: ing.nameEn, count, exact: true, where,
       have: { bag: held.bag, noted: held.noted, bank: held.bank, equipped: held.equipped },
-      toGet: where === 'MISSING' ? count : null, priority: 'IMPORTANT', timing: parent.timing,
-      action: where === 'BANK' ? bankAction(step, ing.nameEn, count)
+      toGet: where === 'MISSING' ? Math.max(0, count - total) : where === 'BANK' ? count - usable : null, priority: 'IMPORTANT', timing: parent.timing,
+      ...(unnote > 0 ? { unnote } : {}),
+      action: where === 'BANK' ? bankAction(step, ing.nameEn, count - usable, false, unnote)
         : { kind: 'GATHER', label: ing.how, ...(spot ? { nav: { label: `${recipe.makeAt}: ${ing.nameEn}`, x: spot.x, y: spot.y, plane: spot.plane, itemName: ing.nameEn, stepId: step.id } } : {}) },
       why: `${parent.name} is made from ${recipe.from.map((f) => f.nameEn).join(' + ')} — or buy it`, usedIn: parent.usedIn,
     });
@@ -299,20 +308,24 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
     const allIds = t.allocation.filter((x) => x.need > 0).map((x) => x.stepId);
     // One item is divided by deadlines: how much this step needs, how much the nearest ones, how much later. What is in the bag is spent first,
     // then what is in the bank: so it is visible what to do with what, rather than "need 40, have 20".
-    let bagPool = (t.held.bag ?? 0) + t.held.noted;
+    let bagPool = t.held.bag ?? 0;
+    let notedPool = t.held.noted;
     const bankKnown = t.held.bank !== null || t.held.source === 'manual';
-    let bankPool = t.held.bank ?? Math.max(0, (t.held.total ?? 0) - bagPool);
+    let bankPool = t.held.bank ?? Math.max(0, (t.held.total ?? 0) - bagPool - notedPool);
     const known = t.held.presence !== 'UNKNOWN';
-    const groups = new Map<PrepTiming, { need: number; ids: string[]; bag: number; bank: number; missing: number; unknown: number }>();
+    const groups = new Map<PrepTiming, { need: number; ids: string[]; bag: number; bank: number; noted: number; missing: number; unknown: number }>();
     for (const a of t.allocation.filter((x) => x.need > 0)) {
       const idx = ids.indexOf(a.stepId);
       // An item of a later loadout of the same step is taken on the next visit to the bank, not before the first stretch (no runes into the tomb).
       const later = !inStep && idx <= 0 && inLaterLoadout(i.steps.find((s) => s.id === a.stepId), t.line.sources.filter((s) => s.stepId === a.stepId));
       const timing: PrepTiming = inStep ? 'IN_STEP' : later ? 'SOON' : idx <= 0 ? 'NOW' : idx <= 2 ? 'SOON' : 'LATER';
-      const g = groups.get(timing) ?? { need: 0, ids: [], bag: 0, bank: 0, missing: 0, unknown: 0 };
+      const g = groups.get(timing) ?? { need: 0, ids: [], bag: 0, bank: 0, noted: 0, missing: 0, unknown: 0 };
       const fromBag = Math.min(bagPool, a.need);
       bagPool -= fromBag;
       let rest = a.need - fromBag;
+      const fromNotes = Math.min(notedPool, rest);
+      notedPool -= fromNotes;
+      rest -= fromNotes;
       let fromBank = 0;
       if (rest > 0 && known && bankKnown) {
         fromBank = Math.min(bankPool, rest);
@@ -322,7 +335,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       } else if (rest > 0) {
         g.unknown += rest;
       }
-      g.need += a.need; g.bag += fromBag; g.bank += fromBank;
+      g.need += a.need; g.bag += fromBag; g.bank += fromBank + fromNotes; g.noted += fromNotes;
       g.ids.push(a.stepId);
       groups.set(timing, g);
     }
@@ -335,7 +348,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       if (inStep && !satisfied) {
         action = { kind: 'GATHER', label: 'You get it during the step' };
       } else if (where === 'BANK') {
-        action = bankAction(step, t.line.nameEn, g.bank, dose);
+        action = bankAction(step, t.line.nameEn, g.bank, dose, g.noted);
       } else if (where === 'MISSING' && dose) {
         // Doses, not potions: the shortfall and the sizes that cover it; Shopping prices every size and names the package.
         action = { kind: 'BUY', label: shortText(t.line.nameEn, g.missing), href: '#/shopping' };
@@ -356,7 +369,11 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       // Doses in more potions than they need: pouring them together frees bag slots, and the line says how.
       const carry = dose && timing === 'NOW' && t.held.sizes ? carryOf(t.held.sizes, g.need, displayName(t.line.nameEn).toLowerCase()) : null;
       const kind = dose ? doseKind(t.line.nameEn) : null;
-      const potions = kind && where === 'BANK' && t.held.sizes ? takeFromBank(kind.base, t.held.sizes, g.bank) : [];
+      const packages = kind && where === 'BANK' && t.held.sizes ? [
+        ...takeFromBank(kind.base, t.held.sizes, g.bank - g.noted),
+        ...takeFromBank(kind.base, t.held.sizes.map((x) => ({ ...x, bank: x.noted })), g.noted),
+      ] : [];
+      const potions = [...packages.reduce((m, p) => m.set(p.name, (m.get(p.name) ?? 0) + p.count), new Map<string, number>())].map(([name, count]) => ({ name, count }));
       const why = whyOf(t.line, g.ids, allIds, step.id, ids, heals.get(t.line.nameEn.toLowerCase()));
       lines.push({
         key: timing === 'NOW' || timing === 'IN_STEP' ? t.line.key : `${t.line.key}@${timing.toLowerCase()}`,
@@ -365,6 +382,8 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
         toGet, priority, timing, ...(supply ? { supply } : {}), ...(action ? { action } : {}),
         why: carry?.combine ? [why, carry.combine].filter(Boolean).join(' · ') : why, usedIn: g.ids, ...(dose ? { unit: 'dose' as const } : {}),
         ...(potions.length ? { potions } : {}),
+        ...(g.noted > 0 ? { unnote: g.noted } : {}),
+        bagShortfall: g.need - g.bag,
       });
     }
   }
@@ -379,10 +398,10 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   for (const r of recommended.slice(0, 6)) {
     // A potion in doses, every size counted, as the required lines and Shopping count it.
     const held = heldUnits(state, r.nameEn, r.key);
-    if (held.presence === 'PRESENT' && (held.bag ?? 0) + held.noted >= r.count) continue;
+    if (held.presence === 'PRESENT' && (held.bag ?? 0) >= r.count) continue;
     const inCurrent = r.sources.some((s) => s.stepId === step.id);
-    const bank = (held.bank ?? 0) > 0;
-    const bagHas = (held.bag ?? 0) + held.noted;
+    const bank = (held.bank ?? 0) > 0 || held.noted > 0;
+    const bagHas = held.bag ?? 0;
     const short = held.total !== null && held.bank !== null ? Math.max(0, r.count - held.total) : 0;
     const buy: PrepAction | null = r.dose && short > 0 ? { kind: 'BUY', label: shortText(r.nameEn, short), href: '#/shopping' } : null;
     optimizations.push({
@@ -390,7 +409,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       where: held.presence === 'UNKNOWN' ? 'UNKNOWN' : bank ? 'BANK' : 'MISSING',
       have: { bag: held.bag, noted: held.noted, bank: held.bank, equipped: held.equipped },
       toGet: null, priority: inCurrent ? 'OPTIMIZATION' : 'OPTIONAL', timing: inCurrent ? 'NOW' : 'SOON',
-      ...(bank ? { action: bankAction(step, r.nameEn, r.dose ? Math.min(held.bank ?? 0, Math.max(0, r.count - bagHas)) : 1, Boolean(r.dose)) } : buy ? { action: buy } : {}),
+      ...(bank ? { action: bankAction(step, r.nameEn, Math.min((held.bank ?? 0) + held.noted, Math.max(0, r.count - bagHas)), Boolean(r.dose), Math.min(held.noted, Math.max(0, r.count - bagHas))) } : buy ? { action: buy } : {}),
       why: r.sources[0] ? `Recommended in ${r.sources[0].stepId}` : 'Recommended', usedIn: r.sources.map((s) => s.stepId),
       ...(r.dose ? { unit: 'dose' as const } : {}),
     });
@@ -442,11 +461,25 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
 
   // How many slots what must be taken now and along the way will occupy: "≈", because we know an item's packing only by its name.
   let adding = 0;
+  const doseNeeds = new Map<string, { name: string; need: number }>();
   for (const l of [...now, ...soon]) {
     if (l.where === 'UNKNOWN') continue;
-    const n = Math.max(0, l.count - ((l.have.bag ?? 0) + l.have.noted));
-    // Doses come in potions of up to four: the slots are the potions, not the doses.
-    adding += l.unit === 'dose' ? Math.ceil(n / 4) : stacks(l.name) ? (n > 0 ? 1 : 0) : n;
+    const n = l.bagShortfall ?? Math.max(0, l.count - (l.have.bag ?? 0));
+    if (l.unit === 'dose') {
+      const base = doseKind(l.name)!.base;
+      const previous = doseNeeds.get(base);
+      doseNeeds.set(base, { name: l.name, need: (previous?.need ?? 0) + n });
+    } else {
+      adding += stacks(l.name) ? (n > 0 && !(l.have.bag && l.have.bag > 0) ? 1 : 0) : n;
+    }
+  }
+  for (const { name, need } of doseNeeds.values()) {
+    const h = heldUnits(state, name);
+    const kind = doseKind(name)!;
+    // Each known (1)/(2)/(3)/(4) is a physical bottle, including notes that must first be unnoted.
+    const pulls = takeFromBank(kind.base, (h.sizes ?? []).map((x) => ({ ...x, bank: (x.bank ?? 0) + x.noted })), need);
+    const supplied = pulls.reduce((a, p) => a + doseKind(p.name)!.per * p.count, 0);
+    adding += pulls.reduce((a, p) => a + p.count, 0) + Math.ceil(Math.max(0, need - supplied) / 4);
   }
   // A quest hands things over during the step (three goblin mails, map parts): they need room too, so the warning comes before the first one is picked up, not after.
   // Not for training steps: gathered ore and logs are dropped or banked as they come.

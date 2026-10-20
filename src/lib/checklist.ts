@@ -2,7 +2,7 @@
 // The count comes from RuneLite (the OWNED event); the rules are the same as in the plugin (Checklist.java).
 
 import type { Step, StepItemRequirement } from '../types';
-import { alternativesOf } from './toolTiers';
+import { alternativesOf, toolUse, toolFamilyOf, usableAt } from './toolTiers';
 import { doseKind, doseName } from './doseKind';
 
 /** How many of an item the player has, by the plugin's data. bank is undefined until the bank was opened in this session. */
@@ -14,6 +14,8 @@ export interface OwnedItem {
   /** As banknotes in the bag. */
   noted: number;
   bank?: number;
+  /** Older plugins may already include higher tiers in these tool quantities. Never sum them again. */
+  legacyToolCount?: boolean;
 }
 
 export interface OwnedState {
@@ -89,16 +91,20 @@ export interface PreflightResult {
   missing: number;
 }
 
-export function evaluatePreflight(items: PreflightItem[], owned: OwnedState): PreflightResult {
+export function evaluatePreflight(items: PreflightItem[], owned: OwnedState, levels?: Partial<Record<string, number>> | null): PreflightResult {
   const rows = items.map((item): PreflightRow => {
     // A potion counts in doses across its four sizes, each potion by its own doses: a (3) and a (1) are 4.
     const dose = item.doses !== undefined ? doseKind(item.nameEn) : null;
     const all = dose
       ? [1, 2, 3, 4].map((d) => ({ o: owned.items.get(nameKey(doseName(dose.base, d))), w: d }))
-      : [item.nameEn, ...(item.alt ?? [])].map((n) => ({ o: owned.items.get(nameKey(n)), w: 1 }));
+      : [...new Set([item.nameEn, ...(item.alt ?? [])].map(nameKey))]
+        .filter((n) => usableAt(n, (skill) => levels?.[skill] ?? null))
+        .map((n) => ({ o: owned.items.get(n), w: 1 }));
     const need = item.doses ?? item.count;
-    const have = all.reduce((s, { o, w }) => s + (o?.carried ?? 0) * w, 0);
-    const inBank = owned.bankSeen ? all.reduce((s, { o, w }) => s + (o?.bank ?? 0) * w, 0) : null;
+    const legacy = Boolean(toolFamilyOf(item.nameEn)) && all.some(({ o }) => o?.legacyToolCount);
+    const count = (where: 'carried' | 'bank') => legacy ? Math.max(0, ...all.map(({ o }) => o?.[where] ?? 0)) : all.reduce((s, { o, w }) => s + (o?.[where] ?? 0) * w, 0);
+    const have = count('carried');
+    const inBank = owned.bankSeen && all.every(({ o }) => o !== undefined) ? count('bank') : null;
     let state: PreflightState;
     if (have >= need) state = 'IN_BAG_READY';
     else if (inBank === null || have + inBank >= need) state = 'MISSING_FROM_BAG';
@@ -120,13 +126,18 @@ export function parseOwned(e: unknown): OwnedState | null {
     if (!raw || typeof raw !== 'object') continue;
     const r = raw as Record<string, unknown>;
     if (typeof r.name !== 'string') continue;
+    const exact = Object.hasOwn(r, 'exactCarried');
+    const valid = (v: unknown): v is number => typeof v === 'number' && Number.isSafeInteger(v) && v >= 0;
+    // A malformed exact record cannot fall back to the inflated legacy fields or turn into known zero.
+    if (exact && (!valid(r.exactCarried) || !valid(r.exactNoted) || (bankSeen === true && !valid(r.exactBank)) || (r.exactBank !== undefined && !valid(r.exactBank)))) continue;
     const num = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) && v >= 0 ? v : 0);
     map.set(nameKey(r.name), {
       name: r.name,
       id: typeof r.id === 'number' ? r.id : undefined,
-      carried: num(r.carried),
-      noted: num(r.noted),
-      bank: typeof r.bank === 'number' ? num(r.bank) : undefined,
+      carried: exact ? r.exactCarried as number : num(r.carried),
+      noted: exact ? r.exactNoted as number : num(r.noted),
+      bank: exact ? (valid(r.exactBank) ? r.exactBank : undefined) : typeof r.bank === 'number' ? num(r.bank) : undefined,
+      ...(!exact && (toolUse(r.name) || toolFamilyOf(r.name)) ? { legacyToolCount: true } : {}),
     });
   }
   const saved = typeof bankSavedAt === 'number' && Number.isFinite(bankSavedAt) && bankSavedAt > 0 ? bankSavedAt : undefined;

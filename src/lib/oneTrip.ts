@@ -109,7 +109,7 @@ export function planOneTrip(steps: Step[], progress: Progress, currentId: string
       return { stepId: n.stepId, need: n.need, covered };
     });
     const missing = allocation.reduce((sum, a) => sum + (a.need - a.covered), 0);
-    const bagHas = (held.bag ?? 0) + held.noted;
+    const bagHas = held.bag ?? 0;
     let status: TripStatus;
     let toGet: number | null;
     if (held.presence === 'UNKNOWN' || (held.bank === null && held.source === 'game' && missing > 0)) {

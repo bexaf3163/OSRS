@@ -36,6 +36,9 @@ const EXEMPT: Record<string, string> = {
 const exempt = (r: Row) => r.step === 'S1-07' || `${r.step}:${r.line.k}` in EXEMPT;
 
 describe('S3-02 Black Knights Fortress: the cabbage comes first', () => {
+  it('a banknote cannot satisfy the usable-item guard', () => {
+    expect(countOf([{ id: 1965, name: 'Cabbage', count: 10, noted: true }], { item: 'Cabbage', id: 1965 })).toBe(0);
+  });
   const door = lineOf('S3-02', 'enterFortress');
   const entrance = at(3016, 3514);
 

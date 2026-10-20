@@ -79,3 +79,5 @@ Follow-up browser acceptance passed: explicit compatible import resumes saving w
 - Other independent-audit findings: exact Java/TS item quantities, notes vs usable items, shared reserves, prerequisites vs skips, bridge ordering/backpressure and dependency advisories.
 
 Record each follow-up here with its actual verification scope. Automated, browser, native and live-game checks are different evidence levels.
+
+Next package: [item ownership and usable preparation](CODEX_ITEM_READINESS_HANDOFF.md), branch `codex/item-readiness-contract`. It is based on this package and addresses part of T03/T07; read its remaining scope before resuming the old prompts.
