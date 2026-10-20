@@ -26,6 +26,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.RejectedExecutionException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -142,7 +145,13 @@ public final class BridgeServer
 	private final int requestedPort;
 	private final Gson gson;
 	private final Listener listener;
-	private final List<Stream> streams = new CopyOnWriteArrayList<>();
+	private final List<AsyncEventStream> streams = new CopyOnWriteArrayList<>();
+	private final Object streamLock = new Object();
+	private ExecutorService streamWriters;
+	private ExecutorService streamClosers;
+	private String pendingCompletionStep;
+	private String pendingCompletionPlayer;
+	private String pendingCompletionFrame;
 
 	private HttpServer server;
 	private ExecutorService executor;
@@ -203,18 +212,28 @@ public final class BridgeServer
 		executor = Executors.newCachedThreadPool(daemon("osrs-path-bridge-http"));
 		server.setExecutor(executor);
 		server.createContext("/", this::handle);
+		streamWriters = streamPool("osrs-path-bridge-events");
+		streamClosers = streamPool("osrs-path-bridge-close");
 		server.start();
 		pinger = Executors.newSingleThreadScheduledExecutor(daemon("osrs-path-bridge-ping"));
-		pinger.scheduleAtFixedRate(() -> sendAll(": ping\n\n"), PING_SECONDS, PING_SECONDS, TimeUnit.SECONDS);
+		int[] seconds = {0};
+		pinger.scheduleAtFixedRate(() -> {
+			for (AsyncEventStream stream : streams)
+			{
+				stream.expire(System.nanoTime(), TimeUnit.SECONDS.toNanos(10));
+				if (stream.isClosed()) streams.remove(stream);
+			}
+			if (++seconds[0] % PING_SECONDS == 0) sendAll(": ping\n\n");
+		}, 1, 1, TimeUnit.SECONDS);
 		log.info("OSRS Path Bridge listening on http://127.0.0.1:{}", getPort());
 	}
 
 	public void stop()
 	{
 		synchronized (prepLock) { stopped = true; }
-		for (Stream s : streams)
+		for (AsyncEventStream s : streams)
 		{
-			s.close();
+			s.closeAsync();
 		}
 		streams.clear();
 		if (server != null)
@@ -232,6 +251,8 @@ public final class BridgeServer
 			executor.shutdownNow();
 			executor = null;
 		}
+		if (streamWriters != null) streamWriters.shutdownNow();
+		if (streamClosers != null) streamClosers.shutdownNow();
 	}
 
 	/** The actual port: in tests the server takes a free one (port 0). */
@@ -242,6 +263,10 @@ public final class BridgeServer
 
 	public void setInGame(boolean value)
 	{
+		if (!value)
+		{
+			synchronized (streamLock) { if (pendingCompletionPlayer == null) clearPendingCompletion(); }
+		}
 		if (!value) questInstruction = null;
 		if (inGame == value)
 		{
@@ -404,6 +429,10 @@ public final class BridgeServer
 		{
 			return;
 		}
+		synchronized (streamLock)
+		{
+			if (value != null && !Objects.equals(pendingCompletionPlayer, value)) clearPendingCompletion();
+		}
 		player = value;
 		broadcast(statusEvent());
 	}
@@ -536,7 +565,28 @@ public final class BridgeServer
 		Map<String, Object> e = new LinkedHashMap<>();
 		e.put("type", "STEP_AUTO_COMPLETED");
 		e.put("stepId", stepId);
-		broadcast(e);
+		String frame = "data: " + gson.toJson(e) + "\n\n";
+		synchronized (streamLock)
+		{
+			pendingCompletionStep = stepId;
+			pendingCompletionPlayer = player;
+			pendingCompletionFrame = frame;
+			sendAll(frame);
+		}
+	}
+
+	private void clearPendingCompletion()
+	{
+		synchronized (streamLock) { pendingCompletionStep = null; pendingCompletionPlayer = null; pendingCompletionFrame = null; }
+	}
+
+	private void reportedStep(String id)
+	{
+		synchronized (streamLock)
+		{
+			if (!Objects.equals(activeStepId, id)) clearPendingCompletion();
+			activeStepId = id;
+		}
 	}
 
 	int streamCount()
@@ -592,11 +642,12 @@ public final class BridgeServer
 
 	private void sendAll(String frame)
 	{
-		for (Stream s : streams)
+		byte[] bytes = frame.getBytes(StandardCharsets.UTF_8);
+		synchronized (streamLock)
 		{
-			if (!s.send(frame))
+			for (AsyncEventStream s : streams)
 			{
-				streams.remove(s);
+				if (!s.offer(bytes)) streams.remove(s);
 			}
 		}
 	}
@@ -730,7 +781,7 @@ public final class BridgeServer
 						json(ex, 400, error(problem));
 						return;
 					}
-					activeStepId = target.getStepId();
+					reportedStep(target.getStepId());
 					listener.onActiveTarget(target);
 					json(ex, 200, ok());
 					return;
@@ -864,7 +915,7 @@ public final class BridgeServer
 						result = stopped ? null : listener.onPrepPlan(env, bad);
 						if (result != null && !result.stale && !bad.containsKey(PrepEnvelope.STEP))
 						{
-							activeStepId = env.getStep() == null ? null : env.getStep().getStepId();
+							reportedStep(env.getStep() == null ? null : env.getStep().getStepId());
 						}
 					}
 					if (result == null) { json(ex, 503, error("bridge stopping")); return; }
@@ -890,7 +941,7 @@ public final class BridgeServer
 					{
 						return;
 					}
-					activeStepId = null;
+					reportedStep(null);
 					listener.onClear();
 					json(ex, 200, ok());
 					return;
@@ -900,8 +951,7 @@ public final class BridgeServer
 						json(ex, 405, error("method"));
 						return;
 					}
-					openStream(ex);
-					keepOpen = true;
+					keepOpen = openStream(ex);
 					return;
 				default:
 					json(ex, 404, error("not found"));
@@ -967,20 +1017,28 @@ public final class BridgeServer
 		return true;
 	}
 
-	private void openStream(HttpExchange ex) throws IOException
+	private boolean openStream(HttpExchange ex) throws IOException
 	{
 		Headers h = ex.getResponseHeaders();
 		h.set("Content-Type", "text/event-stream; charset=utf-8");
 		h.set("Cache-Control", "no-cache");
 		ex.sendResponseHeaders(200, 0);
-		Stream s = new Stream(ex);
+		AsyncEventStream s = new AsyncEventStream(ex.getResponseBody(), ex::close, streamClosers);
+		synchronized (streamLock)
+		{
+			return registerStream(s);
+		}
+	}
+
+	/** Initial snapshot and following events are queued in order under streamLock; no socket I/O here. */
+	private boolean registerStream(AsyncEventStream s)
+	{
 		// Extra connections (forgotten tabs) are closed, starting from the old ones.
 		while (streams.size() >= MAX_STREAMS)
 		{
-			Stream old = streams.remove(0);
-			old.close();
+			AsyncEventStream old = streams.remove(0);
+			old.closeAsync();
 		}
-		streams.add(s);
 		StringBuilder hello = new StringBuilder("retry: 5000\n\ndata: ").append(gson.toJson(statusEvent())).append("\n\n");
 		if (stats != null)
 		{
@@ -1008,10 +1066,22 @@ public final class BridgeServer
 		{
 			hello.append("data: ").append(gson.toJson(pace)).append("\n\n");
 		}
-		if (!s.send(hello.toString()))
+		// The unacknowledged completion of the current target is replayed until the app advances/clears it.
+		// Keep only this one current-character receipt, never historic completions after a manual reactivation.
+		if (inGame && Objects.equals(pendingCompletionStep, activeStepId) && Objects.equals(pendingCompletionPlayer, player) && pendingCompletionFrame != null)
+		{
+			hello.append(pendingCompletionFrame);
+		}
+		if (!s.offer(hello.toString().getBytes(StandardCharsets.UTF_8))) return false;
+		streams.add(s);
+		try { streamWriters.execute(s); }
+		catch (RejectedExecutionException ignored)
 		{
 			streams.remove(s);
+			s.closeAsync();
+			return false;
 		}
+		return true;
 	}
 
 	static boolean hostAllowed(String host)
@@ -1084,44 +1154,9 @@ public final class BridgeServer
 		};
 	}
 
-	/** An open event stream of one client. */
-	private static final class Stream
+	private static ExecutorService streamPool(String name)
 	{
-		private final HttpExchange exchange;
-		private final OutputStream out;
-
-		Stream(HttpExchange exchange)
-		{
-			this.exchange = exchange;
-			this.out = exchange.getResponseBody();
-		}
-
-		synchronized boolean send(String frame)
-		{
-			try
-			{
-				out.write(frame.getBytes(StandardCharsets.UTF_8));
-				out.flush();
-				return true;
-			}
-			catch (IOException e)
-			{
-				close();
-				return false;
-			}
-		}
-
-		void close()
-		{
-			try
-			{
-				out.close();
-			}
-			catch (IOException ignored)
-			{
-				// The client has already left.
-			}
-			exchange.close();
-		}
+		return new ThreadPoolExecutor(MAX_STREAMS, MAX_STREAMS, 0L, TimeUnit.MILLISECONDS,
+			new ArrayBlockingQueue<>(MAX_STREAMS), daemon(name), new ThreadPoolExecutor.AbortPolicy());
 	}
 }

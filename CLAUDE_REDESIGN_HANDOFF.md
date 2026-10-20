@@ -1026,3 +1026,5 @@ Follow-up contracts: `docs/CODEX_ITEM_READINESS_HANDOFF.md` (exact counts/notes)
 `docs/CODEX_SESSION_HANDOFF.md` records the active-character and async-response contract. Do not reintroduce truthy-only status setters or treat disconnected raw snapshots as current bank/equipment facts. Java queued snapshot ordering remains a separate task.
 
 Java queue ordering is now covered by `docs/CODEX_SNAPSHOT_ORDER_HANDOFF.md`: preserve the accept/apply lifetime tickets and keep metadata tied to actual application. Broader account/protocol and live acceptance is still open; SSE output isolation is the next bridge task.
+
+SSE slow-reader isolation is documented in `docs/CODEX_SSE_HANDOFF.md`. Keep socket writes/closes off the producer/game thread, bounded pools/queues and current-target completion replay. Do not turn the synthetic socket timings into claims about live FPS; that acceptance remains open.
