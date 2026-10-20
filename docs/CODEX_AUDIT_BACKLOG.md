@@ -16,7 +16,7 @@ Current work and evidence are in [the stabilization handoff](CODEX_STABILIZATION
 | T05 | P1 | Skip vs hard prerequisite, live quest precedence, eligible next-step selection and Fairytale II partial scope implemented in the prerequisite follow-up; producer/cursor/branch live acceptance remains open. |
 | T06 | P1 | Shared reserves across preparation, shopping, funding and cleanup: open. |
 | T07 | P1/P2 | Recipe deficits, unnoting and physical potion-slot corrections implemented in the item-contract follow-up. Current phase and full acquisition/allocation parity remain open. |
-| T08 | P1 | Payload limits corrected/tested; snapshot apply ordering and session boundaries remain open. |
+| T08 | P1 | Payload limits and queued apply ordering/server-lifetime guards implemented/tested; broader wire/account restart acceptance remains open. |
 | T09 | P1 | Java SSE slow-reader isolation/backpressure: open, reproduce and measure first. |
 | T10 | P1 user impact | Complete combat-plan comparison: open. |
 | T11 | P2 | Skills availability and meaningful Gear comparisons: open. |

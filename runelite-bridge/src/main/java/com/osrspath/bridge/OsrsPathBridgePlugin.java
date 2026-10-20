@@ -473,14 +473,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		gearHint = null;
 		prep = null;
 		snapshotStepKey = null;
-		synchronized (snapshotLock)
-		{
-			lastSnapshot = -1;
-		}
+		snapshotOrder.reset();
 	}
 
 	private void startServer()
 	{
+		snapshotOrder.reset();
 		BridgeServer s = new BridgeServer(config.port(), gson, this);
 		try
 		{
@@ -501,6 +499,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			server.stop();
 			server = null;
 		}
+		// No callback already queued by the stopped server may apply to its replacement.
+		snapshotOrder.reset();
 	}
 
 	@Subscribe
@@ -1062,9 +1062,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 
 	// ---------- State snapshot from the app (protocol 6) ----------
 
-	/** The number of the last applied snapshot: a late, older one is discarded. */
-	private final Object snapshotLock = new Object();
-	private long lastSnapshot = -1;
+	private final SnapshotOrder snapshotOrder = new SnapshotOrder();
 	/** The step of the last snapshot (JSON): the same step does not restart the target and arrow. null means the step is not from a snapshot or was cleared. */
 	private String snapshotStepKey;
 	/** The tracked skill's path from the app and the step of it that is applied now ("2:mining-04"); null while no skill is led. Client thread. */
@@ -1093,14 +1091,10 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	@Override
 	public BridgeServer.PrepResult onPrepPlan(PrepEnvelope e, Map<String, String> bad)
 	{
-		synchronized (snapshotLock)
+		SnapshotOrder.Ticket ticket = snapshotOrder.accept(e.getSeq());
+		if (ticket == null)
 		{
-			if (e.getSeq() <= lastSnapshot)
-			{
-				tel("snapshot", "seq", e.getSeq(), "stale", true);
-				return new BridgeServer.PrepResult(true, Collections.emptyMap());
-			}
-			lastSnapshot = e.getSeq();
+			return new BridgeServer.PrepResult(true, Collections.emptyMap());
 		}
 		// A part the player turned off in the plugin settings is not applied; the others are.
 		Map<String, String> refused = new LinkedHashMap<>();
@@ -1113,34 +1107,17 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			refused.put(PrepEnvelope.BANK_TAGS, "stage items from the app are turned off in the OSRS Path Bridge plugin settings");
 		}
-		lastSnapshotAt = System.currentTimeMillis();
-		appSeenAt = lastSnapshotAt;
-		lastSnapshotSeq = e.getSeq();
-		// The readiness percent belongs to the quest step: while a skill is led there is none.
-		planPercent = e.getSkillPath() != null || e.getPlan() == null || e.getPlan().getScore() == null ? null : e.getPlan().getScore().getPercent();
-		Map<String, String> allRejected = new LinkedHashMap<>(bad);
-		allRejected.putAll(refused);
-		tel("snapshot", "seq", e.getSeq(), "step", e.getStep() == null ? null : e.getStep().getStepId(), "plan", e.getPlan() != null, "percent", planPercent,
-			"shopping", e.getShopping() != null, "bankTags", e.getBankTags() != null, "gearHint", e.getGearHint() != null,
-			"cleanup", e.getCleanup() == null || e.getCleanup().getLines() == null ? 0 : e.getCleanup().getLines().size(), "funding", e.getFunding() != null, "rejected", allRejected.isEmpty() ? null : allRejected);
-		Telemetry t = telemetry;
-		if (t != null)
-		{
-			for (Map.Entry<String, String> r : bad.entrySet())
-			{
-				t.anomaly("SNAPSHOT_REJECT", r.getKey(), "Part of the snapshot '" + r.getKey() + "' was rejected: " + r.getValue());
-			}
-		}
-		clientThread.invokeLater(() -> applySnapshot(e, bad, refused));
+		clientThread.invokeLater(() -> applySnapshot(e, bad, refused, ticket));
 		return new BridgeServer.PrepResult(false, refused);
 	}
 
-	/**
-	 * Apply the snapshot whole in one pass of the client thread. Invalid and disabled parts are not touched, the previous one
-	 * stays; the others are replaced, and whatever is absent from the snapshot is cleared (the snapshot is complete).
-	 */
-	private void applySnapshot(PrepEnvelope e, Map<String, String> bad, Map<String, String> refused)
+	private void applySnapshot(PrepEnvelope e, Map<String, String> bad, Map<String, String> refused, SnapshotOrder.Ticket ticket)
 	{
+		if (!snapshotOrder.apply(ticket)) return;
+		lastSnapshotAt = System.currentTimeMillis();
+		appSeenAt = lastSnapshotAt;
+		lastSnapshotSeq = e.getSeq();
+		// Invalid and disabled parts retain their last applied values; valid absent parts are cleared.
 		boolean skillLed = skillPath != null;
 		if (!bad.containsKey(PrepEnvelope.SKILL_PATH))
 		{
@@ -1209,6 +1186,20 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (!bad.containsKey(PrepEnvelope.FUNDING))
 		{
 			funding = e.getFunding();
+		}
+		planPercent = skillPath != null || prep == null || prep.getScore() == null ? null : prep.getScore().getPercent();
+		Map<String, String> allRejected = new LinkedHashMap<>(bad);
+		allRejected.putAll(refused);
+		tel("snapshot", "seq", e.getSeq(), "step", e.getStep() == null ? null : e.getStep().getStepId(), "plan", e.getPlan() != null, "percent", planPercent,
+			"shopping", e.getShopping() != null, "bankTags", e.getBankTags() != null, "gearHint", e.getGearHint() != null,
+			"cleanup", e.getCleanup() == null || e.getCleanup().getLines() == null ? 0 : e.getCleanup().getLines().size(), "funding", e.getFunding() != null, "rejected", allRejected.isEmpty() ? null : allRejected);
+		Telemetry log = telemetry;
+		if (log != null)
+		{
+			for (Map.Entry<String, String> r : bad.entrySet())
+			{
+				log.anomaly("SNAPSHOT_REJECT", r.getKey(), "Part of the snapshot '" + r.getKey() + "' was rejected: " + r.getValue());
+			}
 		}
 		updateHud();
 	}

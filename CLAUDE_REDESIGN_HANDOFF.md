@@ -1024,3 +1024,5 @@ regression evidence and remaining work. Do not rerun the old prompts over alread
 Follow-up contracts: `docs/CODEX_ITEM_READINESS_HANDOFF.md` (exact counts/notes) and `docs/CODEX_PREREQUISITES_HANDOFF.md` (skip, live prerequisites, partial Fairytale II). Preserve these fixes when continuing blocks 2b–5; the audit ledger still labels incomplete acceptance explicitly.
 
 `docs/CODEX_SESSION_HANDOFF.md` records the active-character and async-response contract. Do not reintroduce truthy-only status setters or treat disconnected raw snapshots as current bank/equipment facts. Java queued snapshot ordering remains a separate task.
+
+Java queue ordering is now covered by `docs/CODEX_SNAPSHOT_ORDER_HANDOFF.md`: preserve the accept/apply lifetime tickets and keep metadata tied to actual application. Broader account/protocol and live acceptance is still open; SSE output isolation is the next bridge task.
