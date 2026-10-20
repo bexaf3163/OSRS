@@ -18,7 +18,7 @@ Current work and evidence are in [the stabilization handoff](CODEX_STABILIZATION
 | T07 | P1/P2 | Recipe deficits, unnoting, physical potion slots and confirmed Waterfall phase scoping implemented. Other phase inventories and full acquisition/allocation/live parity remain open. |
 | T08 | P1 | Payload limits and queued apply ordering/server-lifetime guards implemented/tested; broader wire/account restart acceptance remains open. |
 | T09 | P1 | Real stalled-reader reproduction, bounded async SSE output, expiry and current-completion replay implemented/tested; exact-tree CI passed. Real frame-time and telemetry-cost acceptance remain open. |
-| T10 | P1 user impact | Combined-objective phase order, earned XP, item-only fallback, completed-stock XP alternatives and sequential dose allocation implemented. Catalogue, full cost/capacity/gear and live comparison remain open. |
+| T10 | P1 user impact | Combined-objective order/XP, item fallback, stock-complete alternatives, dose allocation, mandatory loot-trip minimum and unscheduled-income exclusion implemented. Catalogue, full packing/cost/gear and live comparison remain open. |
 | T11 | P2 | Skills availability and meaningful Gear comparisons: open. |
 | T12 | P2 | Separate tool/input preparation, affordable first batches, repeat-trip replenishment and known-total sale observation implemented. GE window modelling, complete travel and live acceptance remain open. |
 | T13 | P2 | Review every route step as a continuous feasible progression: open. |

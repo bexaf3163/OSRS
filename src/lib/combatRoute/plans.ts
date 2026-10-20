@@ -19,13 +19,12 @@ import type { Step } from '../../types';
 import type { OwnedState } from '../checklist';
 import { nameKey } from '../checklist';
 import {
-  estimateStep, foeLabel, foeVariants, stepGoals, type Basis, type CombatEstimate, type CombatFoe, type Range, type StepEstimateContext,
+  DEFAULT_FOOD_SLOTS, estimateStep, foeLabel, foeVariants, stepGoals, type Basis, type CombatEstimate, type CombatFoe, type Range, type StepEstimateContext,
 } from '../combatEstimate';
 import { chooseVariant, strengthDoses } from '../combatPlan';
 import { levelForXp, xpForLevel } from '../xp';
-import { netSale } from '../funding/ge';
-import { absorbs, type PriceView } from '../funding/quotes';
-import { isRestrictedItem, type TradeRestriction } from '../tradeRestriction';
+import type { PriceView } from '../funding/quotes';
+import type { TradeRestriction } from '../tradeRestriction';
 import { laterDefence, type LaterDefence } from './later';
 import { GUARANTEED_DROPS, SELL_DROP, spotsOf, TRAINER_LEVELS, TRAINERS, type Spot } from './spots';
 
@@ -50,6 +49,8 @@ export interface PlanPhase {
   text: string;
   basis: Basis;
   killsPerTrip: number;
+  /** Minimum required banking for retained drops; actual combined food/loot capacity can require more. */
+  requiredLootTrips?: number;
 }
 
 /** What the plan's drops bring when sold, apart from what the step reserves: an estimate, never counted against the item the step asks to be banked. */
@@ -166,13 +167,24 @@ function asked(step: Step, foe: string, goals: readonly Goal[]): Pick<Step, 'pac
   };
 }
 
-function phaseOf(kind: PlanPhase['kind'], e: CombatEstimate, spot: Spot, goals: Goal[], text: string, item?: PlanPhase['item'], killsOverride?: number): PlanPhase {
+function phaseOf(kind: PlanPhase['kind'], e: CombatEstimate, spot: Spot, goals: Goal[], text: string, item?: PlanPhase['item'], killsOverride?: number, remainingItems?: number): PlanPhase {
   // An item phase stops at the number of kills the item needs, not at the XP the estimate was asked for.
   const k = killsOverride ?? e.kills;
   const f = e.kills > 0 ? k / e.kills : 1;
   const scale = (r: Range): Range => ({ low: r.low * f, mid: r.mid * f, high: r.high * f });
+  const food = scale(e.food);
+  const minutes = scale(e.totalMinutes);
+  // Reserve two cells as the estimator does. This is a minimum on loot trips, not
+  // a claim that food and drops always fit together. Do not add two independent
+  // bank-trip totals: the same visit can deposit drops and replenish food.
+  const lootTrips = item ? Math.max(1, Math.ceil((remainingItems ?? Math.min(item.count, k)) / DEFAULT_FOOD_SLOTS)) : 1;
+  const bank = e.bankTripMinutes ?? { low: 3, mid: 4.5, high: 6 };
+  for (const bound of ['low', 'mid', 'high'] as const) {
+    const visits = Math.max(1, Math.ceil(food[bound] / e.foodSlots), lootTrips);
+    minutes[bound] = Math.max(0, minutes[bound] - (e.trips[bound] - 1) * bank[bound] * f + (visits - 1) * bank[bound]);
+  }
   return {
-    kind, foe: e.foe, spot, goals, ...(item ? { item } : {}), kills: Math.round(k), minutes: scale(e.totalMinutes), food: scale(e.food), text, basis: e.basis,
+    kind, foe: e.foe, spot, goals, ...(item ? { item, requiredLootTrips: lootTrips } : {}), kills: Math.round(k), minutes, food, text, basis: e.basis,
     killsPerTrip: e.killsPerTrip,
   };
 }
@@ -215,6 +227,21 @@ function dropEstimates(step: Step, foe: string, count: number, skill: MeleeSkill
     .filter(e => e.foe.combat === v.combat && e.foe.version === v.version));
 }
 
+/** Estimate enough actual combat for both objectives. Scaling a one-kill estimate
+ * repeats its initial free-health buffer and can incorrectly make fifty kills food-free. */
+function objectiveEstimates(step: Step, foe: string, goals: Goal[], count: number, ctx: StepEstimateContext): CombatEstimate[] {
+  const base = estimates(step, foe, goals, ctx);
+  if (count <= 0) return base;
+  return foeVariants(foe).flatMap(v => {
+    const first = base.find(e => e.foe.combat === v.combat && e.foe.version === v.version);
+    if (first && first.kills >= count) return [first];
+    const extra = Math.max(0, count - (first?.kills ?? 0));
+    const main = goals[0];
+    const extended = [{ ...main, exp: Math.max(main.exp, currentXp(ctx, main.skill)) + extra * 4 * v.hitpoints }, ...goals.slice(1)];
+    return estimates(step, foe, extended, ctx).filter(e => e.foe.combat === v.combat && e.foe.version === v.version);
+  });
+}
+
 function afterPhase(ctx: StepEstimateContext, first: CombatEstimate, xp: Partial<Record<MeleeSkill, number>>): StepEstimateContext {
   return { ...ctx, assume: assumeXp(ctx.assume, xp), strengthDoses: first.strengthDosesLeft ?? 0 };
 }
@@ -237,31 +264,23 @@ function risksOf(phases: PlanPhase[], hp: number): { risks: string[]; blockers: 
 }
 
 /**
- * What the drops of a plan bring: one sellable drop a kill (SELL_DROP), less what the step reserves (the Big bones it asks to be banked), at the exchange's
- * sell side after the tax, only for what the market can take in about the plan's hours, and not at all for an item the account cannot sell yet.
+ * Potential optional drops, kept separate from the mandatory stock. XP-only instructions do not include pickup and sale work, so their value is not income.
  */
-export function incomeOf(phases: readonly PlanPhase[], reserve: { name: string; qty: number } | null, prices: PriceView | null | undefined, restriction: TradeRestriction['state'] | undefined): PlanIncome {
+export function incomeOf(phases: readonly PlanPhase[], reserve: { name: string; qty: number } | null, _prices: PriceView | null | undefined, _restriction: TradeRestriction['state'] | undefined): PlanIncome {
   const dropped = new Map<string, number>();
   for (const p of phases) {
     const name = SELL_DROP[p.foe.name];
     if (name) dropped.set(name, (dropped.get(name) ?? 0) + p.kills);
   }
-  const hours = Math.max(1, phases.reduce((a, p) => a + p.minutes.mid, 0) / 60);
   const lines: PlanIncome['lines'] = [];
   for (const [name, total] of dropped) {
     const kept = reserve && nameKey(reserve.name) === nameKey(name) ? reserve.qty : 0;
     const qty = Math.max(0, total - kept);
     if (qty <= 0) continue;
-    const unit = prices?.sell(name) ?? null;
-    if (!unit) { lines.push({ name, qty, net: 0, counted: false, note: 'no exchange price' }); continue; }
-    if (isRestrictedItem(name) && restriction !== 'LIFTED') {
-      lines.push({ name, qty, net: 0, counted: false, note: restriction === 'RESTRICTED' ? 'this account cannot sell it yet' : 'it is not known whether this account can sell it yet' });
-      continue;
-    }
-    // The market takes about a quarter of an hour's trades from one seller; the rest of a big batch is not counted.
-    const room = unit.volumePerHour === null ? qty : Math.floor(Math.min(qty, absorbs(unit, 1).share === null ? qty : (unit.volumePerHour * 0.25) * hours));
-    const sold = Math.max(0, room);
-    lines.push({ name, qty: sold, net: netSale(unit.price, sold, name), counted: true, ...(sold < qty ? { note: `only ${sold} of ${qty} counted: more than the market takes in about ${Math.round(hours)} h` } : {}) });
+    // XP instructions do not ask the player to collect, carry and sell every drop.
+    // Keep potential value visible only as uncounted context until that workload
+    // has an executable collection/capacity/sale plan of its own.
+    lines.push({ name, qty, net: 0, counted: false, note: 'Pickup, carrying, banking and sale are not included in this XP plan' });
   }
   return { net: lines.filter((l) => l.counted).reduce((a, l) => a + l.net, 0), lines };
 }
@@ -303,12 +322,11 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   const objective = [goalText(goals), item ? `${item.count} ${item.name}` : null].filter(Boolean).join(', ');
 
   // --- The route as written
-  const routeEst = chooseVariant(estimates(step, foe, goals, live), ctx.fights)
-    ?? chooseVariant(dropEstimates(step, foe, item?.missing ?? 0, goals[0].skill, live), ctx.fights);
+  const routeEst = chooseVariant(objectiveEstimates(step, foe, goals, item?.missing ?? 0, live), ctx.fights);
   if (!routeEst) return null;
   const itemKills = item && item.missing > 0 ? item.missing : 0;
   const routePhase = phaseOf('route', routeEst, routeSpot, goals,
-    `${foeLabel(routeEst.foe)}: ${goalText(goals)}${item && item.missing > 0 ? ` and ${item.count} ${item.name}` : ''} (${Math.max(routeEst.kills, itemKills)} kills)`, item && item.missing > 0 ? { name: item.name, count: item.count } : undefined, Math.max(routeEst.kills, itemKills));
+    `${foeLabel(routeEst.foe)}: ${goalText(goals)}${item && item.missing > 0 ? ` and ${item.count} ${item.name}` : ''} (${Math.max(routeEst.kills, itemKills)} kills)`, item && item.missing > 0 ? { name: item.name, count: item.count } : undefined, Math.max(routeEst.kills, itemKills), item?.missing);
   // What the step asks to be banked is reserved: it is never counted as something to sell.
   const reserve = item && item.missing > 0 ? { name: item.name, qty: item.missing } : null;
   const make = (id: PlanId, key: string, title: string, phases: PlanPhase[], extra: string[] = [], notes: string[] = []) =>
@@ -347,7 +365,7 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
       const spot = spots.get(trainer.foe.name)!;
       plans.push(make('split', 'split', `${trainer.foe.name === 'Cow' ? 'Cows' : trainer.foe.name}, then ${routeEst.foe.name} for the ${item.name}`, [
         phaseOf('train', trainer, spot, goals, `${foeLabel(trainer.foe)}: ${goalText(goals)} (${trainer.kills} kills)`),
-        phaseOf('item', collect, routeSpot, [], `${foeLabel(collect.foe)}: ${item.missing} ${item.name} (${item.missing} kills)`, { name: item.name, count: item.count }, item.missing),
+        phaseOf('item', collect, routeSpot, [], `${foeLabel(collect.foe)}: ${item.missing} ${item.name} (${item.missing} kills)`, { name: item.name, count: item.count }, item.missing, item.missing),
       ]));
     }
   }
@@ -364,7 +382,7 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
         .filter(e => e.foe.maxHit * 2 < hp && (!TRAINER_LEVELS[e.foe.name] || TRAINER_LEVELS[e.foe.name].includes(e.foe.combat))));
       if (follow && follow.foe.name !== routeEst.foe.name) {
         plans.push(make('item-first', 'item-first', `${item.name} first, then train on ${follow.foe.name === 'Cow' ? 'cows' : follow.foe.name}`, [
-          phaseOf('item', collect, routeSpot, [{ skill: main, exp: earned }], `${foeLabel(collect.foe)}: collect ${item.missing} ${item.name} on ${cap(main)} (${item.missing} kills)`, { name: item.name, count: item.count }, item.missing),
+          phaseOf('item', collect, routeSpot, [{ skill: main, exp: earned }], `${foeLabel(collect.foe)}: collect ${item.missing} ${item.name} and train ${cap(main)} (${item.missing} kills)`, { name: item.name, count: item.count }, item.missing, item.missing),
           phaseOf('train', follow, spots.get(follow.foe.name)!, goals, `${foeLabel(follow.foe)}: ${goalText(goals)} (${follow.kills} kills)`),
         ]));
       }
@@ -381,14 +399,13 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
     const trainDef = defenceTrainer(n);
     if (!trainDef) continue;
     const laterCtx = afterPhase(live, trainDef, { defence: xpForLevel(n) });
-    const rest = chooseVariant(estimateStep(asked(step, foe, goals), laterCtx), ctx.fights)
-      ?? chooseVariant(dropEstimates(step, foe, item?.missing ?? 0, goals[0].skill, laterCtx), ctx.fights);
+    const rest = chooseVariant(objectiveEstimates(step, foe, goals, item?.missing ?? 0, laterCtx), ctx.fights);
     if (!rest) continue;
     const dSpot = spots.get(trainDef.foe.name);
     if (!dSpot) continue;
     plans.push(make('defence-first', `defence-first:${n}`, `Defence ${n} first, then the route`, [
       phaseOf('defence', trainDef, dSpot, [{ skill: 'defence', exp: xpForLevel(n) }], `${foeLabel(trainDef.foe)}: Defence to ${n} (${trainDef.kills} kills)`),
-      phaseOf('route', rest, routeSpot, goals, `${foeLabel(rest.foe)}: ${goalText(goals)}${item && item.missing > 0 ? ` and ${item.count} ${item.name}` : ''} (${Math.max(rest.kills, itemKills)} kills)`, item && item.missing > 0 ? { name: item.name, count: item.count } : undefined, Math.max(rest.kills, itemKills)),
+      phaseOf('route', rest, routeSpot, goals, `${foeLabel(rest.foe)}: ${goalText(goals)}${item && item.missing > 0 ? ` and ${item.count} ${item.name}` : ''} (${Math.max(rest.kills, itemKills)} kills)`, item && item.missing > 0 ? { name: item.name, count: item.count } : undefined, Math.max(rest.kills, itemKills), item?.missing),
     ], inp.keepDefenceOne ? ['Your build keeps Defence at 1'] : [], later.length ? [laterNote(later, defenceNow)] : []));
   }
 

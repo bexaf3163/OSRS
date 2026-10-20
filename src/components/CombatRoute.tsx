@@ -40,7 +40,7 @@ function PlanRow({ p, now, recommended, onUse }: { p: EvaluatedPlan; now: boolea
         {p.income.net > 0 ? ` · drops sold about ${gp(p.income.net)} (an estimate)` : ''}
       </p>
       <p className="small muted">{p.phases.map((x) => x.text).join(' → ')}</p>
-      {p.income.lines.filter((l) => !l.counted || l.note).map((l) => <p key={l.name} className="small muted">{l.name}: {l.note}.</p>)}
+      {p.income.lines.filter((l) => l.counted && l.note).map((l) => <p key={l.name} className="small muted">{l.name}: {l.note}.</p>)}
       {p.notes.map((n) => <p key={n} className="small muted">{n}</p>)}
       {p.risks.map((r) => <p key={r} className="small muted">⚠ {r}</p>)}
     </li>
@@ -68,8 +68,8 @@ export function CombatRoute({ step }: { step: Step }) {
           <p className="small"><button type="button" className="btn btn-ghost btn-sm" onClick={() => choose(null)}>Follow the recommendation</button> <span className="muted">({titleOf(recommended)})</span></p>
         )}
         <p className="small muted">
-          Compared: {report.compared.join(', ')}. The Big bones the step asks for are never counted as something to sell. Drops are valued at the exchange's sell side after the tax;
-          what this account cannot sell yet is not counted. Defence training {report.plans.some((p) => p.id === 'defence-first' && p.blockers.some((b) => /keeps Defence at 1/.test(b))) ? 'is off: you keep Defence at 1 (Settings)' : 'is compared like any other plan (you can switch it off in Settings)'}.
+          Compared: {report.compared.join(', ')}. The Big bones the step asks for are kept. Optional drops are not counted as income from XP training.
+          Defence training {report.plans.some((p) => p.id === 'defence-first' && p.blockers.some((b) => /keeps Defence at 1/.test(b))) ? 'is off: you keep Defence at 1 (Settings)' : 'is compared like any other plan (you can switch it off in Settings)'}.
         </p>
       </details>
     </section>

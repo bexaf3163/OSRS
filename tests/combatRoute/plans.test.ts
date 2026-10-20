@@ -66,23 +66,22 @@ describe('what the drops bring, and what is never counted', () => {
     expect(split.income.lines.some((l) => l.name === 'Big bones')).toBe(false);
   });
 
-  it('cowhides are income only once the account may sell them; unknown is not counted either', () => {
-    const lifted = evaluatePlans(withMarket({}, 'LIFTED'))!.plans.find((p) => p.id === 'split')!;
-    expect(lifted.income.net).toBeGreaterThan(0);
-    for (const state of ['RESTRICTED', 'UNKNOWN'] as const) {
+  it('optional cowhides are not income without their pickup and bank workload, even when selling is allowed', () => {
+    for (const state of ['LIFTED', 'RESTRICTED', 'UNKNOWN'] as const) {
       const s = evaluatePlans(withMarket({}, state))!.plans.find((p) => p.id === 'split')!;
       const hides = s.income.lines.find((l) => l.name === 'Cowhide')!;
       expect(hides.counted).toBe(false);
       expect(s.income.net).toBe(0);
-      expect(hides.note).toMatch(/cannot sell|not known/);
+      expect(hides.note).toMatch(/Pickup, carrying, banking and sale are not included/);
     }
   });
 
-  it("income is the exchange's sell side after the 2% tax", () => {
+  it('a high exchange price cannot turn uncollected drops into funded training', () => {
     const split = evaluatePlans(withMarket())!.plans.find((p) => p.id === 'split')!;
     const hides = split.income.lines.find((l) => l.name === 'Cowhide')!;
-    const unit = prices.sell('Cowhide')!.price;
-    expect(hides.net).toBe(hides.qty * (unit - Math.floor(unit * 0.02)));
+    expect(hides.qty).toBeGreaterThan(0);
+    expect(hides.net).toBe(0);
+    expect(split.net).toBe(-split.foodCost!);
   });
 
   it('without prices no income is counted and the food has no cost: nothing is invented', () => {
