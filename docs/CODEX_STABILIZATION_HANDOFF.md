@@ -6,7 +6,7 @@ The owner authorized continuing the unfinished repair blocks. This is an isolate
 ## Coordination
 
 Read this file and the current diff before resuming the old repair prompt. Do not repeat completed work or restore the removed second HUD.
-The independent audit's T01–T17 list supplements the earlier blocks 2b–5; matching an old block label alone does not close the newer audit findings.
+The [consolidated T01–T17 backlog and all 30 Gemini dispositions](CODEX_AUDIT_BACKLOG.md) supplement the earlier blocks 2b–5; matching an old block label alone does not close the newer audit findings.
 No version bump or release is included in these stabilization commits. Keep them reviewable before publishing an executable.
 
 ## T01: progress recovery and migration
@@ -22,7 +22,7 @@ No version bump or release is included in these stabilization commits. Keep them
 Verification: 1,601 Vitest tests passed at this checkpoint, including new recovery/profile/file cases; build and data validation passed; Java testClasses passed. The full browser UI smoke passed, including six new assertions through the actual StoreProvider.
 Native source Electron E2E was attempted in a disposable home but the process exited before its debugging endpoint was available (`2147483651`). This is NOT a successful native/portable check. Do not report live-game verification.
 
-Follow-up browser acceptance passed: explicit compatible import resumes saving while retaining the original recovery copy; reset saves a fresh state; an unsupported cross-window event preserves the working file and pauses saving. The native E2E now also exercises corrupted-browser/valid-file recovery, but that new native case has not passed locally. Remaining T01: packaged verification and storage-write error reporting. Do not infer completion of every data-integrity issue from parser tests.
+Follow-up browser acceptance passed: explicit compatible import resumes saving while retaining the original recovery copy; reset saves a fresh state; an unsupported cross-window event preserves the working file and pauses saving. The native E2E also exercises corrupted-browser/valid-file recovery and passed on the packaged EXE in Windows CI (see below). Remaining T01 includes storage-write error reporting and broader native profile/future-format acceptance. Do not infer completion of every data-integrity issue from parser tests.
 
 ## T02: update-cache integrity
 
@@ -54,11 +54,21 @@ Follow-up browser acceptance passed: explicit compatible import resumes saving w
 - Verification at this checkpoint: all 1,616 Vitest tests, build, data checks and 588 Java tests passed. The focused browser recovery/size-refusal scenarios passed. No live RuneLite check is claimed.
 - Still open in T08: accepted-vs-applied sequence ordering and session lifetime. T09 Java SSE backpressure also remains open. The new desktop buffer bound does not solve slow-client writes on the game thread.
 
-## T15: release verification gates (pending CI)
+## T15: release verification gates
 
 - Pull requests now have a Windows job that builds the real portable EXE and runs the existing native E2E against an isolated copy, alone in a disposable runner directory.
 - Release now gates publication on the full Java suite, browser UI smoke, source Electron E2E and packaged EXE E2E. The helper verifies that the source/candidate digest matches and the publication artifact has not changed during its test.
-- These workflow additions do not publish anything on this branch and do not bump the version. Native source execution was blocked locally before window startup; the Windows CI result is required before calling portable acceptance passed.
+- These workflow additions do not publish anything on this branch and do not bump the version. Native source execution was blocked locally before window startup; packaged acceptance passed independently on the Windows runner below.
+
+## Consolidated local acceptance
+
+- Baseline remains 2.74.0; no game/account settings or installed app files changed.
+- 117 Vitest files / 1,616 tests passed; data validation has 0 errors and 0 warnings; TypeScript/Vite build passed.
+- 75 Java suites / 588 tests passed, 0 failures/errors/skips.
+- Full Chromium smoke passed: 649 assertions across existing functional/visual cases plus recovery and explicit snapshot-refusal scenarios. This is browser evidence with bridge fixtures, not a RuneLite session.
+- Windows packaged E2E passed on implementation commit `027d65a956a11289b07e17a7ea1fa0dabc9b765c`, job [118752780781](https://github.com/bexaf3163/OSRS/actions/runs/39458872254/job/118752780781). Artifact SHA-256: `ca606d91dd7268151ad114506b1b6d4f32311ca0923ef475ec1c5a4392df8ab9`. It verified the actual EXE window, Inter font, six workspace routes, stub bridge/profile/diagnostics, atomic progress file, damaged-browser recovery, no console errors and normal launcher exit. This CI artifact was not published or installed on the player's machine.
+- Java CI also passed for that implementation commit. The full browser CI result is separate from the locally passing 649-assertion smoke. No live RuneLite session or actual two-version update was performed. Local native startup failure remains recorded above.
+- Draft PR: https://github.com/bexaf3163/OSRS/pull/1. The uploaded commit trees were verified identical to the tested local trees. No merge or release is included.
 
 ## Still open
 
