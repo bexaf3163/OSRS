@@ -21,7 +21,7 @@ import type { PriceView } from './lib/funding/quotes';
 import { useTradeRestriction } from './lib/useTradeRestriction';
 import type { Step } from './types';
 import { isClosed } from './lib/next-step';
-import { useProfiles } from './lib/profiles';
+import { gateAllows, useProfiles } from './lib/profiles';
 import { ledgerKey, LEDGER_LIMIT, loadLedger, saveLedger, since } from './lib/ledgerStore';
 import { nameKey } from './lib/checklist';
 import { buildPlayerState, diffPlayerState, heldOf, type PlayerState, type StateChange } from './lib/playerState';
@@ -110,11 +110,11 @@ function ls(): Storage | undefined {
 export function PlayerStateProvider({ children }: { children: ReactNode }) {
   const { progress, mode, setMethodPicks, setFoodPicks, setCombatPicks } = useStore();
   const features = useFeatures();
-  const { stats, owned, gear, questsDone, player, state: link, xp, combatLog, inGame, activeStepId, pacing, lastGears, lastGear } = useBridge();
+  const { stats, owned, gear, questsDone, player, state: link, xp, combatLog, inGame, activeStepId, pacing, lastGears, lastGear, gate, position } = useBridge();
   const profiles = useProfiles();
   const next = useMemo(
-    () => buildPlayerState({ mode, stats, progress, owned, gear, questsDone, player, connected: link === 'online' }),
-    [mode, stats, progress, owned, gear, questsDone, player, link],
+    () => buildPlayerState({ mode, stats, progress, owned, gear, questsDone, player, position, connected: link === 'online' && inGame && gateAllows(gate) }),
+    [mode, stats, progress, owned, gear, questsDone, player, link, inGame, gate, position],
   );
   // The same fingerprint — the same object: consumers do not recompute for nothing.
   const stable = useRef(next);

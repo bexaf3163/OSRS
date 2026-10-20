@@ -49,8 +49,8 @@ const s308 = report({ stepId: 'S3-08', stats: { attack: 22, strength: 16, defenc
 }
 
 // --- Skill training (lib/trainingRouter): before 2.69 the default "Calm" style put AFK methods first; "Balanced" is the default now.
-const progress = { version: 3, steps: {}, levels: {}, notes: {}, updatedAt: '' } as never;
-const stateAt = (skill: string, level: number) => buildPlayerState({ mode: 'f2p', stats: { [skill]: level } as never, progress, owned: null, gear: null, questsDone: null, player: null, connected: false });
+const progress = { version: 3, steps: {}, levels: {}, notes: {}, updatedAt: '' };
+const stateAt = (skill: string, level: number) => buildPlayerState({ mode: 'f2p', stats: null, progress: { ...progress, levels: { [skill]: level } }, owned: null, gear: null, questsDone: null, player: null, connected: false });
 const methodSteps = allSteps.filter((s) => followedGoal(s));
 for (const s of methodSteps) {
   const goal = followedGoal(s)!;

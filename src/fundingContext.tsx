@@ -71,7 +71,7 @@ function useSnapshotFor(stepId: string | null, position: Pos): FundingSnapshot |
     if (!stepId) return null;
     const window = engine.trip(stepId).stepIds.map((id) => stepById.get(id)).filter((s): s is Step => Boolean(s));
     return buildSnapshot({
-      state, window, questPoints, totalLevel, ironman: accountType === null ? null : accountType === 'ironman', sellOverride: override, position,
+      state, window, questPoints, totalLevel, ironman: accountType === null ? null : accountType === 'ironman', sellOverride: override, position: state.connected ? position : null,
     });
   }, [engine, state, stepId, questPoints, totalLevel, accountType, override, position]);
 }
@@ -156,15 +156,26 @@ export function FundingProvider({ children }: { children: ReactNode }) {
   // Where the player stands: asked of the game every few seconds while a plan runs (the sub-steps are "get to the place"), and once per card by the screens.
   const { enabled, state: link, inGame } = useBridge();
   const [position, setPosition] = useState<Pos>(null);
-  const live = enabled && link === 'online' && inGame;
+  const live = enabled && link === 'online' && inGame && state.connected;
+  const positionOwner = useRef({ live, character, generation: 0, request: 0 });
+  if (positionOwner.current.live !== live || positionOwner.current.character !== character) {
+    positionOwner.current = { live, character, generation: positionOwner.current.generation + 1, request: 0 };
+  }
+  useEffect(() => { setPosition(null); }, [live, character]);
+  useEffect(() => () => { positionOwner.current.generation++; }, []);
   const refreshPosition = useCallback(() => {
     if (!live) { setPosition((p) => (p === null ? p : null)); return; }
+    const generation = positionOwner.current.generation;
+    const request = ++positionOwner.current.request;
     void checkStatus().then((st) => {
+      const owner = positionOwner.current;
+      if (generation !== owner.generation || request !== owner.request || !owner.live) return;
+      if (character && st.player && character.toLowerCase() !== st.player.toLowerCase()) return;
       const next = st.online && st.inGame ? st.pos : null;
       // The same tile is the same value: nothing downstream recomputes for a player standing still.
       setPosition((p) => (p === next || (p && next && p.x === next.x && p.y === next.y && p.plane === next.plane) ? p : next));
     }).catch(() => undefined);
-  }, [live]);
+  }, [live, character]);
   const running = plan?.status === 'ACTIVE';
   useEffect(() => {
     if (!running) return undefined;

@@ -17,6 +17,19 @@ function state(over: Partial<PlayerStateInput> = {}) {
 }
 
 describe('the single player state', () => {
+  it('explicitly disconnected facts cannot be treated as live gear, money, bank, quests or position', () => {
+    const s = state({ connected: false, stats: { attack: 80 }, progress: { levels: { attack: 30 } },
+      gear: gear({ coins: 900, bankCoins: 500, equipment: [{ id: 1333, name: 'Rune scimitar', slot: 'weapon' }], inventorySlots: 10 }),
+      owned: owned({ Salmon: { carried: 20, bank: 100 } }, true), questsDone: ["Cook's Assistant"], position: { x: 3200, y: 3200, plane: 0 },
+    });
+    expect(s.levels.attack).toEqual({ known: true, value: 30, source: 'profile' });
+    expect(s.equipmentKnown).toBe(false);
+    expect(s.equipment).toEqual({});
+    expect(s.owned).toBeNull();
+    expect(s.bankSeen).toBe(false);
+    expect(s.coins.bag.known || s.coins.bank.known || s.bagSlots.known || s.quests.known || s.position.known).toBe(false);
+    expect(heldOf(s, 'Salmon').presence).toBe('UNKNOWN');
+  });
   it('the level from the game wins over the one entered by hand; no data — unknown, not 1', () => {
     const s = state({ stats: { ranged: 17 }, progress: { levels: { ranged: 30, magic: 25 } } });
     expect(levelOf(s, 'ranged')).toBe(17);

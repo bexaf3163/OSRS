@@ -65,7 +65,11 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
           posts.push({ method, path, body });
           if (m.offline) return { ok: false, status: 0, data: null };
           // __status: what a scenario changes in the plugin's answer after the page has loaded (the quest cursor moving on).
-          if (path === '/status') return { ok: true, status: 200, data: { status: 'ok', inGame: true, activeStepId: null, shortestPath: true, ...(m.status ?? {}), ...((w.__status as Record<string, unknown>) ?? {}) } };
+          if (path === '/status') {
+            const reply = { ok: true, status: 200, data: { status: 'ok', inGame: true, activeStepId: null, shortestPath: true, ...(m.status ?? {}), ...((w.__status as Record<string, unknown>) ?? {}) } };
+            if (w.__holdStatus) return new Promise(resolve => { w.__releaseStatus = () => resolve(reply); });
+            return reply;
+          }
           if (path === '/prep-plan' && m.oversizedSnapshot) return { ok: false, status: 413, data: { error: 'body too large' } };
           return { ok: true, status: 200, data: { ok: true } };
         },
@@ -246,6 +250,54 @@ async function run(browser: Browser) {
     await page.context().close();
   }
   if (process.env.UI_ONLY === 'prerequisites') return;
+  {
+    const oldGear = { equipment: [{ id: 1329, name: 'Mithril scimitar', slot: 'weapon' }], inventory: [], coins: 100, bankCoins: 200 };
+    const newGear = { ...oldGear, equipment: [{ id: 1331, name: 'Adamant scimitar', slot: 'weapon' }] };
+    const { page, errors } = await open(browser, 1280, {
+      zen: true, progress: progressBefore('S3-08'),
+      status: { protocol: 6, player: 'Session Test', stats: { attack: 22, strength: 20, defence: 1 }, ...oldGear },
+    }, '#/gear');
+    await page.getByRole('region', { name: 'Worn now', exact: true }).waitFor();
+    await page.evaluate((gear) => {
+      const w = window as unknown as { __holdStatus: boolean; __emit: (e: unknown) => void };
+      w.__holdStatus = true;
+      w.__emit({ type: 'STATUS', inGame: true, player: 'Session Test' });
+      w.__emit({ type: 'STATS', stats: { attack: 30, strength: 20, defence: 1 } });
+      w.__emit({ type: 'GEAR', gear });
+    }, newGear);
+    await page.evaluate(() => (window as unknown as { __releaseStatus: () => void }).__releaseStatus());
+    await page.waitForTimeout(700);
+    expect((await page.getByRole('region', { name: 'Worn now', exact: true }).innerText()).includes('Adamant scimitar') && (await page.locator('.gear-context').innerText()).includes('Attack 30'), 'session: a delayed status cannot overwrite newer gear or skill events');
+    await page.evaluate(() => {
+      const w = window as unknown as { __emit: (e: unknown) => void; __status: unknown; __releaseStatus: () => void; __releaseOldStatus: () => void };
+      w.__emit({ type: 'STATUS', inGame: true, player: 'Session Test' });
+      w.__releaseOldStatus = w.__releaseStatus;
+      w.__status = { inGame: false, player: null };
+      w.__emit({ type: 'STATUS', inGame: false, player: 'Session Test' });
+      w.__emit({ type: 'GEAR', gear: { equipment: [{ id: 1331, name: 'Adamant scimitar', slot: 'weapon' }], inventory: [], coins: 999 } });
+    });
+    await page.waitForTimeout(500);
+    expect(await page.getByRole('region', { name: 'Worn now', exact: true }).count() === 0 && (await page.locator('.gear-page').innerText()).includes('Waiting for your character'), 'session: logout with SSE open clears live equipment and ignores post-logout gear');
+    await page.evaluate(() => (window as unknown as { __releaseOldStatus: () => void }).__releaseOldStatus());
+    await page.waitForTimeout(400);
+    expect(await page.getByRole('region', { name: 'Worn now', exact: true }).count() === 0, 'session: an old in-game reply cannot restore a logged-out character');
+    await page.evaluate((gear) => {
+      const w = window as unknown as { __emit: (e: unknown) => void };
+      w.__emit({ type: 'STATUS', inGame: true, player: 'Other Hero' });
+      w.__emit({ type: 'STATS', stats: { attack: 99, strength: 99, defence: 99 } });
+      w.__emit({ type: 'GEAR', gear });
+      w.__emit({ type: 'STEP_AUTO_COMPLETED', stepId: 'S3-08' });
+    }, newGear);
+    await page.waitForTimeout(600);
+    expect(await page.getByRole('region', { name: 'Worn now', exact: true }).count() === 0, 'session: another character is not presented as the active profile live loadout');
+    expect(await page.evaluate(() => {
+      const p = JSON.parse((window as unknown as { __saved: string }).__saved);
+      return p.levels.attack !== 99 && p.steps['S3-08'] !== 'done';
+    }), 'session: same-batch stats and auto-completion from a different character cannot overwrite this profile');
+    expect(await noOverflow(page) && !errors.length, 'session: async changes do not crash or overflow the interface');
+    await page.context().close();
+  }
+  if (process.env.UI_ONLY === 'session') return;
   if (process.env.UI_ONLY === 'funding') { await fundingScenarios(browser); return; }
   if (process.env.UI_ONLY === 'combat') { await combatRouteScenarios(browser); return; }
   if (process.env.UI_ONLY === 'shopping') { await shoppingScenarios(browser); return; }

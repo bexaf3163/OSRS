@@ -23,6 +23,7 @@ import type { MoveEvent } from './lib/recovery';
 import { stageBankItemIds } from './lib/bankTags';
 import { useFeatures } from './lib/features';
 import { isClosed, openAfter, questDependencyFacts } from './lib/next-step';
+import { BridgeFreshness, type StatusTicket } from './lib/bridgeFreshness';
 import { stepResendKey } from './lib/foodPlan';
 import { withKillEstimate } from './services/gearAdvisor';
 import { buildEnvelope, EMPTY_PARTS, envelopeKey, nextSeq, type SnapshotParts } from './lib/prepEnvelope';
@@ -116,6 +117,8 @@ interface BridgeValue {
   questsDone: string[] | null;
   /** The character name from the game (protocol 5). */
   player: string | null;
+  /** Last current-session position from status or a move event; funding also polls while its plan is active. */
+  position: { x: number; y: number; plane: number } | null;
   /**
    * A part of the snapshot for the game (protocol 6): gear advice, items for the bank, the preparation plan. It goes to the plugin together
    * with everything else in one request; for a plugin older than protocol 6 the call does nothing — it has its own separate requests.
@@ -284,6 +287,10 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   // Character jumps (death, teleport): kept for a short time — after an app restart the recovery mode is not lost.
   const [moves, setMoves] = useState<MoveEvent[]>(() => (loadJson<{ list: MoveEvent[] }>(MOVES_KEY, null)?.list ?? []).filter((m) => m && typeof m.at === 'number' && Date.now() - m.at < 3_600_000).slice(-8));
   const [player, setPlayer] = useState<string | null>(null);
+  const [position, setPosition] = useState<BridgeValue['position']>(null);
+  const liveIdentity = useRef<{ inGame: boolean | null; player: string | null }>({ inGame: null, player: null });
+  const sessionEpoch = useRef(0);
+  const stepIntent = useRef(0);
   // The bag, the worn items and the coins are remembered while the game is running: if RuneLite or the app is closed, the last known stays.
   useEffect(() => {
     if (!gear || !player) return undefined;
@@ -347,6 +354,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
 
   /** Send the snapshot now. true — the plugin received it (or already had the same). */
   const flushSnapshot = useCallback(async (): Promise<boolean> => {
+    if (!gateAllows(profileGate(readProfiles(), liveIdentity.current.player))) return false;
+    const epoch = sessionEpoch.current;
     const sn = snapshot.current;
     if (sn.timer) { clearTimeout(sn.timer); sn.timer = null; }
     const key = envelopeKey(sn.parts);
@@ -354,6 +363,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     const seq = nextSeq(sn.seq);
     sn.seq = seq;
     const r = await postPrepPlan(buildEnvelope(sn.parts, seq));
+    if (epoch !== sessionEpoch.current) return false;
     if (!r.ok) {
       if (sn.seq === seq) {
         sn.sentKey = null;
@@ -393,6 +403,8 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
 
   /** A step into the game. For a combat step — with a first time estimate per opponent by the current weapon and levels. */
   const sendStep = useCallback(async (step: Step, branch?: StepBranch): Promise<boolean> => {
+    if (!gateAllows(profileGate(readProfiles(), liveIdentity.current.player))) return false;
+    const epoch = sessionEpoch.current;
     const { progress: p, stats: live, gear: g, steps: list } = latest.current;
     // The items of the current and the nearest steps — the plugin counts them in advance: "one trip" knows what is already there.
     // Potions the window recommends are counted too (every size, in doses): Shopping's optional rows and the trip read them.
@@ -400,7 +412,10 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       ...preflightItems(s).map((i) => i.nameEn), ...(s.itemsRecommended ?? []).filter((i) => doseKind(i.nameEn)).map((i) => i.nameEn),
     ]);
     const target = withKillEstimate(step, { ...p.levels, ...(live ?? {}) }, g);
-    if (!supportsSnapshot(pluginProtocol.current)) return syncActiveStep(target, undefined, branch, ahead);
+    if (!supportsSnapshot(pluginProtocol.current)) {
+      const ok = await syncActiveStep(target, undefined, branch, ahead);
+      return epoch === sessionEpoch.current && ok;
+    }
     // What the ways to the step need is counted too: the planner says "withdraw it" only for what the bank is known to hold.
     const payload = toInGameTarget(target, branch, ahead, transportWatch(latest.current.mode));
     if (!payload) return false;
@@ -427,16 +442,18 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const onCompleted = useCallback((id: string) => {
     const { progress: p, steps: list, setStep: mark, activeStepId: active } = latest.current;
     // The game has a different character than this profile — its quests and levels are not written here.
-    if (!gateAllows(latest.current.gate)) return;
+    if (liveIdentity.current.inGame === false || !gateAllows(profileGate(readProfiles(), liveIdentity.current.player))) return;
+    const epoch = sessionEpoch.current;
     const plan = planAutoComplete(list, p, id, active, handled.current, latest.current.qp, questDependencyFacts(list, latest.current.questsDone));
     handled.current.add(id);
     if (!plan.mark) return;
+    const intent = ++stepIntent.current;
     const next = plan.next;
     mark(id, 'done', `🎮 RuneLite: ${id} done in the game${next ? ` — next ${next.id}` : ''}`);
     setAdvance({ from: id, to: next?.id, nonce: ++nonce.current });
     if (plan.inGame === 'sync-next' && next) {
       handled.current.delete(next.id);
-      void sendStep(next, chosenBranch(next, latest.current.branchChoice)).then((ok) => setActiveStepId(ok ? next.id : null));
+      void sendStep(next, chosenBranch(next, latest.current.branchChoice)).then((ok) => { if (epoch === sessionEpoch.current && intent === stepIntent.current) setActiveStepId(ok ? next.id : null); });
     } else if (plan.inGame === 'clear') {
       void clearStep();
       setActiveStepId(null);
@@ -466,7 +483,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   }, [activeStepId]);
 
   useEffect(() => {
-    const forget = () => {
+    const freshness = new BridgeFreshness();
+    const clearCharacter = () => {
+      sessionEpoch.current++;
+      handled.current.clear();
+      liveIdentity.current = { inGame: false, player: null };
       setQuestInstruction(null);
       setInGame(false);
       setChronicleCharges(null);
@@ -479,7 +500,16 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       setXp(null);
       setQuestsDone(null);
       setPlayer(null);
+      setPosition(null);
+      setQuestPoints(null);
+      setTotalLevel(null);
+      setAccountType(null);
+      setCombatLog(null);
       tracker.current.reset();
+    };
+    const forget = () => {
+      freshness.reset();
+      clearCharacter();
       setPlugin(null);
       // RuneLite was closed — there is no temporary target there any more.
       setNavFromPlugin(null);
@@ -501,10 +531,19 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     const refresh = (resync = false) => {
       const seq = navSeq.current;
       const poll = ++statusPoll;
-      void checkStatus().then((s) => { if (poll === statusPoll) onStatus(s, resync, seq); });
+      const ticket = freshness.capture();
+      void checkStatus().then((s) => { if (poll === statusPoll) onStatus(s, resync, seq, ticket); });
     };
-    const onStatus = (s: Awaited<ReturnType<typeof checkStatus>>, resync: boolean, seq: number) => {
-      if (!alive) return;
+    const onStatus = (s: Awaited<ReturnType<typeof checkStatus>>, resync: boolean, seq: number, ticket: StatusTicket) => {
+      if (!alive || !freshness.accepts(ticket)) return;
+      if (!s.online) {
+        // A request timeout cannot override a live event delivered while it waited.
+        if (!freshness.unchanged(ticket)) return;
+        setState('offline'); forget(); return;
+      }
+      const previous = liveIdentity.current;
+      if (!s.inGame || (previous.player !== null && previous.player.toLowerCase() !== s.player?.toLowerCase())) clearCharacter();
+      liveIdentity.current = { inGame: s.inGame, player: s.inGame ? s.player : null };
       setState(s.online ? 'online' : 'offline');
       setInGame(s.inGame);
       setQuestInstruction(s.questInstruction);
@@ -515,11 +554,16 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       // (before 2.11) does not report the target — then we keep the one the app knows. If an event about the target came while waiting
       // for the reply — it is newer than the reply.
       if (s.online && s.protocol !== null && s.protocol >= 4 && seq === navSeq.current) setNavTargetState(s.navTarget);
-      if (s.stats) setStats(s.stats);
-      if (s.xp) { setXp(s.xp); tracker.current.push(s.xp, Date.now()); }
-      if (s.questsDone) setQuestsDone(s.questsDone);
-      setPlayer(s.player);
-      setGear(s.gear);
+      if (freshness.accepts(ticket, 'STATS')) setStats(s.inGame ? s.stats : null);
+      if (freshness.accepts(ticket, 'XP')) {
+        setXp(s.inGame ? s.xp : null);
+        if (s.inGame && s.xp) tracker.current.push(s.xp, Date.now());
+        else tracker.current.reset();
+      }
+      if (freshness.accepts(ticket, 'QUESTS')) setQuestsDone(s.inGame ? s.questsDone : null);
+      setPlayer(s.inGame ? s.player : null);
+      if (freshness.accepts(ticket, 'GEAR')) setGear(s.inGame ? s.gear : null);
+      if (freshness.accepts(ticket, 'MOVED')) setPosition(s.inGame ? s.pos : null);
       setChronicleCharges(s.inGame ? s.chronicleCharges : null);
       setSpellbook(s.inGame ? s.spellbook : null);
       setQuestPoints(s.inGame ? s.questPoints : null);
@@ -529,6 +573,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       // RuneLite was restarted (or the app) — the plugin does not know the step: we send it again. We do not
       // send the same step twice, so as not to reset the waypoints and the pace measurement in the plugin.
       const want = latest.current.activeStepId;
+      if (!gateAllows(profileGate(readProfiles(), s.player))) return;
       if (s.online && supportsSnapshot(s.protocol)) {
         // Protocol 6: the snapshot is full and the plugin does not re-reset the same step — after a restart of either side we simply
         // send everything anew: the step, shopping, the bank highlight, the advice and the plan.
@@ -552,7 +597,11 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       }
     };
     const onEvent = (e: BridgeEvent) => {
+      if (!alive) return;
       logEvent(eventLog.current, e);
+      if (e.type !== 'STATUS' && liveIdentity.current.inGame === false
+        && ['XP', 'QUESTS', 'STATS', 'OWNED', 'GEAR', 'PACING', 'MOVED', 'STEP_AUTO_COMPLETED'].includes(e.type)) return;
+      freshness.event(e.type);
       if (e.type === 'XP') {
         const next = parseXp((e as { xp?: unknown }).xp);
         setXp(next);
@@ -560,9 +609,13 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
         else tracker.current.reset();
       } else if (e.type === 'QUESTS') setQuestsDone(parseQuests((e as { done?: unknown }).done));
       else if (e.type === 'STATUS') {
-        setPlayer(parsePlayer((e as { player?: unknown }).player));
-        setInGame(Boolean((e as { inGame?: unknown }).inGame));
-        if (!(e as { inGame?: unknown }).inGame) setQuestInstruction(null);
+        const loggedIn = (e as { inGame?: unknown }).inGame === true;
+        const nextPlayer = loggedIn ? parsePlayer((e as { player?: unknown }).player) : null;
+        freshness.reset();
+        if (!loggedIn || liveIdentity.current.player?.toLowerCase() !== nextPlayer?.toLowerCase()) clearCharacter();
+        liveIdentity.current = { inGame: loggedIn, player: nextPlayer };
+        setPlayer(nextPlayer);
+        setInGame(loggedIn);
         // Entering and leaving the game is a reason to ask about Shortest Path again.
         refresh();
       } else if (e.type === 'STATS') setStats(parseStats((e as { stats?: unknown }).stats));
@@ -572,6 +625,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
       else if (e.type === 'MOVED') {
         const m = parseMove(e);
         if (m) {
+          setPosition(m.to);
           setMoves((prev) => {
             const next = [...prev, { ...m, at: Date.now() }].slice(-8);
             saveJson(MOVES_KEY, { list: next });
@@ -590,12 +644,15 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
         forget();
         return;
       }
+      freshness.reset();
       // The stream is open — we check against /status: the indicator must show what the plugin answers,
       // and the step shown in the game must be in the plugin too.
       refresh(true);
     });
     return () => {
       alive = false;
+      freshness.reset();
+      sessionEpoch.current++;
       handle.close();
     };
   }, [enabled, onCompleted, onNavDone, sendStep, setNavFromPlugin, flushSnapshot]);
@@ -691,8 +748,9 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const pointInGame = useCallback(async (step: Step): Promise<PointResult> => {
     const branch = chosenBranch(step, latest.current.branchChoice);
     if (!toInGameTarget(step, branch)) return 'empty';
+    const intent = ++stepIntent.current;
     const ok = await sendStep(step, branch);
-    if (!ok) return 'offline';
+    if (!ok || intent !== stepIntent.current) return 'offline';
     // The step is in the game again — its new auto-mark must work even if there already was one earlier.
     handled.current.delete(step.id);
     setActiveStepId(step.id);
@@ -700,8 +758,10 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   }, [sendStep]);
 
   const clear = useCallback(async () => {
+    const epoch = sessionEpoch.current;
+    const intent = ++stepIntent.current;
     await clearStep();
-    setActiveStepId(null);
+    if (epoch === sessionEpoch.current && intent === stepIntent.current) setActiveStepId(null);
   }, [clearStep]);
 
   const chooseBranch = useCallback((step: Step, branchId: string | null) => {
@@ -731,33 +791,41 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
 
   const navigate = useCallback(async (target: NavTargetPayload) => {
     if (!enabled) return { ok: false as const, reason: 'off' as const };
+    if (!gateAllows(profileGate(readProfiles(), liveIdentity.current.player))) return { ok: false as const, reason: 'refused' as const, message: 'Switch to this character’s profile before setting a game target.' };
+    const epoch = sessionEpoch.current;
+    const seq = ++navSeq.current;
     const r = await setNavTarget(target);
+    if (epoch !== sessionEpoch.current) return { ok: false as const, reason: 'offline' as const };
     // Plugin 2.11+ reports the target itself (NAV_SET) — and clears it if the item is already in the bag (NAV_DONE): setting it here
     // means risking bringing back an already cleared one. An old plugin does not report — then we remember ourselves.
-    if (r.ok && (pluginProtocol.current ?? 0) < 4) setNavTargetState(target);
+    if (r.ok && seq === navSeq.current && (pluginProtocol.current ?? 0) < 4) setNavTargetState(target);
     return r;
   }, [enabled]);
 
   const [userClearedAt, setUserClearedAt] = useState(0);
   const clearNav = useCallback(async () => {
     setUserClearedAt(Date.now());
+    const epoch = sessionEpoch.current;
+    const seq = ++navSeq.current;
     await clearNavTarget();
-    setNavFromPlugin(null);
+    if (epoch === sessionEpoch.current && seq === navSeq.current) setNavFromPlugin(null);
   }, [setNavFromPlugin]);
 
   const releaseNav = useCallback(async () => {
+    const epoch = sessionEpoch.current;
+    const seq = ++navSeq.current;
     await clearNavTarget();
-    setNavFromPlugin(null);
+    if (epoch === sessionEpoch.current && seq === navSeq.current) setNavFromPlugin(null);
   }, [setNavFromPlugin]);
 
   // Levels from the game go into the level fields by themselves — only when the character is the same as in the profile.
   useEffect(() => {
-    if (!features.levelsFromGame || !stats || !gateAllows(gate)) return;
+    if (!features.levelsFromGame || !stats || state !== 'online' || !inGame || !gateAllows(gate)) return;
     const known: Record<string, number> = {};
     // Hitpoints too, though it has no level field: without it the last levels cannot work out a combat plan while the game is away (2.72.1).
     for (const [id, v] of Object.entries(stats)) if (levelById.has(id) || id === 'hitpoints') known[id] = v;
     setLevels(known);
-  }, [stats, features.levelsFromGame, gate, setLevels]);
+  }, [stats, features.levelsFromGame, gate, setLevels, state, inGame]);
 
   // The first character seen is bound to the profile without a name.
   useEffect(() => {
@@ -786,8 +854,9 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   const xpRate = useCallback((skill: string) => tracker.current.rate(skill), []);
 
   const locate = useCallback(async () => {
+    const epoch = sessionEpoch.current;
     const st = await checkStatus();
-    return st.online && st.inGame ? st.pos : null;
+    return epoch === sessionEpoch.current && gateAllows(profileGate(readProfiles(), st.player)) && st.online && st.inGame ? st.pos : null;
   }, []);
 
   const diagnostics = useCallback(async () => {
@@ -813,16 +882,24 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     return JSON.stringify(report, null, 2);
   }, [enabled, state, inGame, plugin, activeStepId, autoLaunch, features, gate.kind]);
 
+  const currentCharacter = state === 'online' && inGame && gateAllows(gate);
   const value = useMemo<BridgeValue>(
     () => ({
       enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance,
       canLaunch: Boolean(runelite), launchRuneLite: () => launchRuneLite(), autoLaunch, setAutoLaunch,
-      stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, lastGears, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, accountType, combatLog, navigate, clearNav, releaseNav, userClearedAt, plugin,
-      xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath,
+      stats: currentCharacter ? stats : null, owned: currentCharacter ? owned : null,
+      shortestPath, branchChoice, chooseBranch, syncPlan, gear: currentCharacter ? gear : null, lastGear, lastGears,
+      pacing: currentCharacter ? pacing : null, navTarget, questInstruction: currentCharacter ? questInstruction : null,
+      chronicleCharges: currentCharacter ? chronicleCharges : null, spellbook: currentCharacter ? spellbook : null,
+      questPoints: currentCharacter ? questPoints : null, totalLevel: currentCharacter ? totalLevel : null,
+      accountType: currentCharacter ? accountType : null, combatLog: currentCharacter ? combatLog : null,
+      navigate, clearNav, releaseNav, userClearedAt, plugin,
+      xp: currentCharacter ? xp : null, questsDone: currentCharacter ? questsDone : null, player,
+      position: currentCharacter ? position : null, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath,
     }),
     [enabled, setEnabled, state, inGame, activeStepId, pointInGame, clear, advance, runelite, launchRuneLite, autoLaunch, setAutoLaunch,
       stats, owned, shortestPath, branchChoice, chooseBranch, syncPlan, gear, lastGear, lastGears, pacing, navTarget, questInstruction, chronicleCharges, spellbook, questPoints, totalLevel, accountType, combatLog, navigate, clearNav, releaseNav, userClearedAt, plugin,
-      xp, questsDone, player, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath],
+      xp, questsDone, player, position, gate, xpRate, session, diagnostics, locate, moves, setPrepPart, setSkillPath, currentCharacter],
   );
   return <BridgeContext.Provider value={value}>{children}</BridgeContext.Provider>;
 }
