@@ -362,7 +362,8 @@ public class HudModelTest
 		HudModel.Card c = HudModel.build(input(view(S403, null), s, attack(30)));
 		assertNotNull(c.getWarning());
 		assertEquals(HudModel.Tone.DANGER, c.getWarning().getTone());
-		assertTrue(c.getWarning().getText(), c.getWarning().getText().startsWith("You are in a danger zone"));
+		assertEquals("HP 7/24 - EAT NOW! Hits up to 8", c.getWarning().getText());
+		assertTrue(collapsed(c).contains("EAT NOW"));
 		String open = expanded(c);
 		assertEquals(open, 1, open.split("EAT NOW", -1).length - 1);
 		assertEquals(open, 1, open.split("danger zone", -1).length - 1);

@@ -39,6 +39,12 @@ Remaining T01 follow-up: exercise explicit import/reset and cross-window corrupt
 - All 14 playerState tests passed; the combined package passes all 1,608 Vitest tests, build and data validation.
 - This does NOT close logout/account event ordering or stale async responses. The provider still does not publish a reactive position stream; funding retains its existing position source.
 
+## T14: single-guide corrections (partial)
+
+- Critical HP now outranks a generic danger-zone warning. The zone remains in expanded details; the closed card still has at most one warning.
+- Explicit header disclosure is respected while travelling and at the Exchange. Default disclosure, position, typography and the single-overlay layout are retained.
+- The full Java suite passed (587 tests). Closed/open render fixtures were generated; these are test images, not live-game screenshots. Saved placement, Alt-drag and click hit regions still need live acceptance.
+
 ## Still open
 
 - Block 2b: Path simplification, ownership semantics, stale async responses and logout/account lifecycle.
@@ -46,6 +52,5 @@ Remaining T01 follow-up: exercise explicit import/reset and cross-window corrupt
 - Block 4: Skills availability, funding batch limits and complete acquisition plans.
 - Block 5: final release gates, packaged-artifact verification, live acceptance and review package.
 - Other independent-audit findings: exact Java/TS item quantities, notes vs usable items, shared reserves, prerequisites vs skips, bridge limits/order/backpressure and dependency advisories.
-- Two 2.74.0 HUD issues: urgent health should outrank a generic zone warning; manual disclosure should not be silently overridden by travel compacting.
 
 Record each follow-up here with its actual verification scope. Automated, browser, native and live-game checks are different evidence levels.

@@ -181,7 +181,7 @@ class OsrsPathGuideOverlay extends Overlay
 			own.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			own.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
 			own.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			boolean expanded = expanded(config.hudExpanded(), config.smartOverlays(), plugin.overlayContext());
+            boolean expanded = expanded(config.hudExpanded());
 			float scale = config.hudLarge() ? Hud.LARGE : 1f;
 			Font font = GuideFont.font(scale);
 			Font small = GuideFont.font(scale * SMALL);
@@ -210,12 +210,11 @@ class OsrsPathGuideOverlay extends Overlay
 	}
 
 	/**
-	 * Whether the card is drawn open: the player's choice (the header click), except at the exchange and, with the smart reveal, while travelling, where it
-	 * stays closed for the moment. That does not change the saved choice, and nothing but the player opens the card.
+	 * Only an explicit header choice opens the details. Travel and exchange contexts must not make that click appear to do nothing.
 	 */
-	static boolean expanded(boolean chosen, boolean smart, SmartView.Context context)
+	static boolean expanded(boolean chosen)
 	{
-		return chosen && !(SmartView.exchangeFocus(context) || smart && SmartView.compactHud(context));
+		return chosen;
 	}
 
 	/** The player's width (Alt-stretched) kept within the limits, scaled with the text. */

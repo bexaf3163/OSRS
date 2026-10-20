@@ -4,9 +4,9 @@ package com.osrspath.bridge;
  * The "smart reveal" of the overlays: what to show in the game now. The game is the operational level: where to click, how many tiles
  * are left, whether they are hitting. Everything else (what to buy in bulk, where to get it, formulas) stays in the app window.
  *
- *  - while travelling (the target is farther than {@link #TRAVEL_TILES} tiles): the arrow and the guide closed to its headline;
+ *  - while travelling (the target is farther than {@link #TRAVEL_TILES} tiles): the arrow and the guide as the player left it;
  *  - at the bank (the bank window is open): the guide as the player left it and the departure check;
- *  - at the exchange (GE offers are open): the bulk list; the guide closed;
+ *  - at the exchange (GE offers are open): the bulk list; the guide as the player left it;
  *  - near the step or with no target: the guide as the player left it.
  * The critical things, a danger zone the player is already in and health below one hit, are always visible: the guide's one warning shows when closed.
  *
@@ -58,7 +58,7 @@ final class SmartView
 	}
 
 
-	/** The guide stays closed while travelling and at the exchange (with the smart reveal; at the exchange always). */
+	/** Context hint for compact presentation; it must not override the player's explicit guide disclosure choice. */
 	static boolean compactHud(Context c)
 	{
 		return c == Context.TRAVEL || c == Context.EXCHANGE;

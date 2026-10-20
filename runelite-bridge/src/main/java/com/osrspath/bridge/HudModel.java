@@ -15,7 +15,7 @@ import lombok.Value;
  * a client; {@link OsrsPathGuideOverlay} only draws it.
  *
  * What goes first, highest first:
- *  1. safety: a danger zone, health below a hit, food gone mid-fight, an item a fight ahead needs (the one warning on the collapsed card);
+ *  1. safety: critical health before a general danger zone, food gone mid-fight, an item a fight ahead needs (the one warning on the collapsed card);
  *  2. preparation that stops the activity: a required item that is not with you, by the app's plan and the live counts (the headline, "Then:" names the activity);
  *  3. the current action of the selected plan (training, the quest's stage line, the step) and the way there;
  *  4. optional improvements (a stop on the way, gear advice, weight, cleanup): under "More advice", never on the collapsed card.
@@ -783,13 +783,13 @@ final class HudModel
 		StepGuide.View v = in.getView();
 		if (s != null)
 		{
-			if (s.getDanger() != null && s.isDangerInside())
-			{
-				out.add(warning(Tone.DANGER, "You are in a danger zone: " + clean(s.getDanger())));
-			}
 			if (s.getHealth() != null && s.isHealthCritical())
 			{
 				out.add(warning(Tone.DANGER, s.getHealth()));
+			}
+			if (s.getDanger() != null && s.isDangerInside())
+			{
+				out.add(warning(Tone.DANGER, "You are in a danger zone: " + clean(s.getDanger())));
 			}
 			if (s.getFood() != null && s.isFoodLow())
 			{

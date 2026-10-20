@@ -11,11 +11,12 @@ import org.junit.Test;
 public class SmartViewTest
 {
 	@Test
-	public void whileTravelling_farFromTarget_onlyTheArrowAndOneLine()
+	public void whileTravelling_compactIsTheDefault_butThePlayerCanOpenDetails()
 	{
 		SmartView.Context c = SmartView.of(false, false, SmartView.TRAVEL_TILES + 1);
 		assertEquals(SmartView.Context.TRAVEL, c);
-		assertFalse("the open guide would block the view while travelling", OsrsPathGuideOverlay.expanded(true, true, c));
+		assertFalse(OsrsPathGuideOverlay.expanded(false));
+		assertTrue("the header click must open details while travelling", OsrsPathGuideOverlay.expanded(true));
 		assertTrue(SmartView.compactHud(c));
 	}
 
@@ -26,7 +27,7 @@ public class SmartViewTest
 		{
 			SmartView.Context c = SmartView.of(false, false, tiles);
 			assertEquals("tiles: " + tiles, SmartView.Context.STEP, c);
-			assertTrue(OsrsPathGuideOverlay.expanded(true, true, c));
+			assertTrue(OsrsPathGuideOverlay.expanded(true));
 			assertFalse(SmartView.compactHud(c));
 		}
 	}
@@ -36,16 +37,17 @@ public class SmartViewTest
 	{
 		SmartView.Context c = SmartView.of(true, false, 500);
 		assertEquals(SmartView.Context.BANK, c);
-		assertTrue(OsrsPathGuideOverlay.expanded(true, true, c));
+		assertTrue(OsrsPathGuideOverlay.expanded(true));
 		assertFalse("at the bank the guide is as the player left it: the departure check is drawn separately", SmartView.compactHud(c));
 	}
 
 	@Test
-	public void atTheExchange_theGuideStaysClosed()
+	public void atTheExchange_theGuideHonorsTheExplicitChoice()
 	{
 		SmartView.Context c = SmartView.of(false, true, 3);
 		assertEquals(SmartView.Context.EXCHANGE, c);
-		assertFalse(OsrsPathGuideOverlay.expanded(true, false, c));
+		assertFalse(OsrsPathGuideOverlay.expanded(false));
+		assertTrue(OsrsPathGuideOverlay.expanded(true));
 		assertTrue(SmartView.compactHud(c));
 	}
 
@@ -104,8 +106,9 @@ public class SmartViewTest
 		assertEquals("You are in a danger zone: Dark wizards", inside.getWarning().getText());
 		assertEquals(HudModel.Tone.DANGER, inside.getWarning().getTone());
 		HudModel.Card low = card(full("Dark wizards", true, "HP 5/40 - EAT NOW! Hits up to 8", true));
-		assertEquals("safety first: the zone, then the health once, in the details", "You are in a danger zone: Dark wizards", low.getWarning().getText());
+		assertEquals("critical health takes precedence over a general zone warning", "HP 5/40 - EAT NOW! Hits up to 8", low.getWarning().getText());
 		assertTrue(low.plain(true, false), low.plain(true, false).contains("HP 5/40 - EAT NOW!"));
+		assertTrue(low.plain(true, false).contains("You are in a danger zone: Dark wizards"));
 		HudModel.Card eat = card(full(null, false, "HP 15/40 - time to eat. Hits up to 8", false));
 		assertEquals(HudModel.Tone.CAUTION, eat.getWarning().getTone());
 	}

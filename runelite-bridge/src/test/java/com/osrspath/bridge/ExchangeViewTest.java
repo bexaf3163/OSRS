@@ -85,23 +85,12 @@ public class ExchangeViewTest
 	}
 
 	@Test
-	public void atTheExchangeTheGuideStaysClosed_whateverTheSmartRevealSays()
+	public void exchangeFocusDoesNotOverrideThePlayersGuideChoice()
 	{
-		assertTrue("open near the step when the player opened it", OsrsPathGuideOverlay.expanded(true, false, SmartView.Context.STEP));
-		assertTrue(OsrsPathGuideOverlay.expanded(true, true, SmartView.Context.BANK));
 		assertTrue(SmartView.exchangeFocus(SmartView.Context.EXCHANGE));
 		assertFalse(SmartView.exchangeFocus(SmartView.Context.BANK));
 		assertFalse(SmartView.exchangeFocus(SmartView.Context.STEP));
-		// Closed at the exchange with the smart reveal off too: the exchange card has the room.
-		assertFalse(OsrsPathGuideOverlay.expanded(true, false, SmartView.Context.EXCHANGE));
-		assertFalse(OsrsPathGuideOverlay.expanded(true, true, SmartView.Context.EXCHANGE));
-		// While travelling only with the smart reveal; and nothing opens a card the player closed.
-		assertFalse(OsrsPathGuideOverlay.expanded(true, true, SmartView.Context.TRAVEL));
-		assertTrue(OsrsPathGuideOverlay.expanded(true, false, SmartView.Context.TRAVEL));
-		for (SmartView.Context c : SmartView.Context.values())
-		{
-			assertFalse(c.name(), OsrsPathGuideOverlay.expanded(false, true, c));
-			assertFalse(c.name(), OsrsPathGuideOverlay.expanded(false, false, c));
-		}
+		assertTrue("the header can open the guide even while the exchange is open", OsrsPathGuideOverlay.expanded(true));
+		assertFalse("changing context never opens details by itself", OsrsPathGuideOverlay.expanded(false));
 	}
 }
