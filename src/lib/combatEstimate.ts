@@ -226,6 +226,8 @@ export interface CombatEstimate {
   reserve: number;
   /** Assumptions made where data was missing, in words. */
   assumed: string[];
+  /** Whole unused Strength doses after this estimate; a partly elapsed dose is conservatively not carried into a later bank visit. */
+  strengthDosesLeft?: number;
 }
 
 /** Model margin on top of the luck of the rolls, by how much is known. */
@@ -394,6 +396,7 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
     basis, foe, phases, kills, combatMinutes, totalMinutes, damage, food, foodSlots, killsPerTrip, trips,
     hpPerKill: Math.max(0, perKillNet), secondsPerKill: fightMean / kills + avg(BETWEEN_KILLS),
     nextTrip: Math.min(foodSlots, food.high), reserve: food.high - food.mid, assumed,
+    strengthDosesLeft: Math.max(0, Math.floor(potionSeconds / (boost * 60))),
   };
 }
 

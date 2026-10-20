@@ -10,7 +10,7 @@ const prices = market();
 const withMarket = (o: Parameters<typeof planInput>[0] = {}, restriction: 'LIFTED' | 'RESTRICTED' | 'UNKNOWN' = 'LIFTED') =>
   ({ ...planInput({ foodPrice: prices.buy('Salmon')!.price, ...o }), prices, restriction });
 
-const KEYS = ['route', 'split', 'defence-first:10', 'defence-first:20', 'defence-first:30'];
+const KEYS = ['route', 'split', 'item-first', 'defence-first:10', 'defence-first:20', 'defence-first:30'];
 
 describe('Hill Giants with the reported character: the plans side by side', () => {
   it('compares the route, the split and Defence first, against the opponents the route already knows', () => {
@@ -156,12 +156,14 @@ describe('choosing, with a steady hand', () => {
 
   it("the plan the player adopted stays while it is not clearly beaten, and the route's own can be chosen back", () => {
     const base = evaluatePlans(withMarket())!;
-    const kept = evaluatePlans(withMarket({ adopted: 'defence-first:30' }))!;
-    const d30 = base.plans.find((p) => p.key === 'defence-first:30')!;
+    const kept = evaluatePlans(withMarket({ adopted: 'split' }))!;
+    const selected = base.plans.find((p) => p.key === 'split')!;
     const best = Math.min(...base.plans.map((p) => p.score));
-    expect(d30.score).toBeLessThanOrEqual(best * KEEP_MARGIN);
-    expect(kept.recommended).toBe('defence-first:30');
-    expect(evaluatePlans(withMarket({ adopted: 'route' }))!.recommended).toBe('route');
+    expect(selected.score).toBeLessThanOrEqual(best * KEEP_MARGIN);
+    expect(kept.recommended).toBe('split');
+    const changed = evaluatePlans(withMarket({ adopted: 'route' }))!;
+    expect(changed.recommended).toBe('item-first'); // The route is now more than KEEP_MARGIN behind the new candidate.
+    expect(changed.plans.find(p => p.key === 'route')?.eligible).toBe(true); // A player's explicit route choice remains available.
   });
 
   it('a plan that is no longer there (its conditions are gone) is not kept', () => {
@@ -227,7 +229,7 @@ describe('Defence the route gives later (Dragon Slayer I)', () => {
     expect(r.plans[0].notes).toEqual([]);
   });
 
-  it('a Defence plan that is only a few percent faster on the middle estimate is not recommended, and the sentence says why', () => {
+  it('a Defence plan that barely beats the original route does not displace the faster XP-only alternative', () => {
     const r = evaluatePlans(withMarket(noSplit))!;
     const d20 = r.plans.find((p) => p.key === 'defence-first:20')!;
     const route = r.plans[0];
@@ -235,18 +237,19 @@ describe('Defence the route gives later (Dragon Slayer I)', () => {
     expect((route.score - d20.score) / route.score).toBeGreaterThanOrEqual(MIN_GAIN);
     // ... but by the middle estimate it is under the margin a route that works must be beaten by.
     expect((route.minutes.mid - d20.minutes.mid) / route.minutes.mid).toBeLessThan(MIN_GAIN);
-    expect(r.recommended).toBe('route');
-    expect(r.reason).toMatch(/route as written stays.*Defence 20 first.*S5-09.*18,650 Defence XP later for nothing/);
+    expect(r.recommended).toBe('xp-only');
+    expect(r.plans.find(p => p.key === 'xp-only')!.score).toBeLessThan(d20.score);
+    expect(d20.notes.join(' ')).toContain('18,650 Defence XP');
   });
 
-  it('with no Defence reward left ahead the same plan is recommended again: the training is not duplicated by anything', () => {
+  it('with no Defence reward left ahead the faster XP-only alternative is still considered', () => {
     const r = evaluatePlans({ ...withMarket(noSplit), done: closed })!;
     expect(r.plans.every((p) => p.notes.length === 0)).toBe(true);
-    expect(r.recommended).toBe('defence-first:20');
+    expect(r.recommended).toBe('xp-only');
   });
 
   it('the player can still adopt it: an adopted Defence plan stays, and a route that is not safe does not hold it back', () => {
-    expect(evaluatePlans(withMarket({ ...noSplit, adopted: 'defence-first:20' }))!.recommended).toBe('defence-first:20');
+    expect(evaluatePlans(withMarket({ ...noSplit, adopted: 'defence-first:20' }))!.plans.find(p => p.key === 'defence-first:20')!.eligible).toBe(true);
     const weak = evaluatePlans(withMarket({ stats: { ...HISTORICAL.stats, hitpoints: 8 } }))!;
     expect(weak.reason).not.toMatch(/route as written stays/);
   });

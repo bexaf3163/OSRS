@@ -26,10 +26,10 @@ const STRONG: Over = { stats: { attack: 38, strength: 60, defence: 45, hitpoints
 const route = stepById.get('S4-03') as Step;
 
 describe('a sensible plan is in effect without a press', () => {
-  it('low Defence and little money (the reported character): the cows-then-giants plan applies at once, said in one sentence', () => {
+  it('the reported character: the combined-objective recommendation applies at once, said in one sentence', () => {
     const r = report();
     const sel = selectPlan(r, undefined, idle);
-    expect(sel).toEqual({ key: 'split', source: 'auto', recommended: 'split' });
+    expect(sel).toEqual({ key: 'item-first', source: 'auto', recommended: 'item-first' });
     expect(planWhy(r, sel.key, sel.source)).toMatch(/^Recommended for your levels and kit: .*fewer pieces of food .* than the route as written\.$/);
   });
 
@@ -41,16 +41,16 @@ describe('a sensible plan is in effect without a press', () => {
   it('bank not read: still a plan, the whole bones count is planned and the risk is stated, never a guess that the bank is empty', () => {
     const r = report({ bankSeen: false });
     const sel = selectPlan(r, undefined, idle);
-    expect(sel.key).toBe('split');
-    const plan = r.plans.find((p) => p.key === 'split')!;
-    expect(plan.phases[1].item).toEqual({ name: 'Big bones', count: 50 });
+    expect(sel.key).toBe('item-first');
+    const plan = r.plans.find((p) => p.key === 'item-first')!;
+    expect(plan.phases[0].item).toEqual({ name: 'Big bones', count: 50 });
     expect(plan.risks.join(' ')).toMatch(/bank has not been read/);
   });
 
-  it('the bones already banked: no split is possible, and the route as written is what applies', () => {
+  it('the bones already banked: collection is omitted and the XP-only alternative applies', () => {
     const r = report({ items: { 'Big bones': [0, 50] } });
     expect(r.plans.some((p) => p.key === 'split')).toBe(false);
-    expect(selectPlan(r, undefined, idle).key).toBe('route');
+    expect(selectPlan(r, undefined, idle).key).toBe('xp-only');
   });
 });
 
@@ -60,19 +60,19 @@ describe('the player\'s own choice', () => {
     const sel = selectPlan(r, mine('route'), idle);
     expect(sel.key).toBe('route');
     expect(sel.source).toBe('player');
-    expect(sel.offer).toBe('split');
+    expect(sel.offer).toBe('item-first');
   });
 
   it('a chosen alternative within reach of the best is kept without an offer', () => {
-    const r = report({ adopted: 'defence-first:20' });
-    const sel = selectPlan(r, mine('defence-first:20'), idle);
-    expect(sel).toMatchObject({ key: 'defence-first:20', source: 'player' });
+    const r = report({ adopted: 'item-first' });
+    const sel = selectPlan(r, mine('item-first'), idle);
+    expect(sel).toMatchObject({ key: 'item-first', source: 'player' });
     expect(sel.offer).toBeUndefined();
   });
 
   it('a choice that is no longer possible (the bones are in hand) gives way to the recommendation', () => {
     const r = report({ items: { 'Big bones': [0, 50] }, adopted: 'split' });
-    expect(selectPlan(r, mine('split'), idle)).toMatchObject({ key: 'route', source: 'auto' });
+    expect(selectPlan(r, mine('split'), idle)).toMatchObject({ key: 'xp-only', source: 'auto' });
   });
 
   it('a Defence 1 build never gets a Defence plan, even one chosen earlier', () => {
@@ -83,13 +83,13 @@ describe('the player\'s own choice', () => {
 
 describe('an older save and a trip in progress', () => {
   it('an older save had the route by default (no entry): the recommendation replaces it', () => {
-    expect(selectPlan(report(), undefined, idle)).toMatchObject({ key: 'split', source: 'auto' });
+    expect(selectPlan(report(), undefined, idle)).toMatchObject({ key: 'item-first', source: 'auto' });
   });
 
   it('in the middle of a trip the route stays and the better plan waits for the next bank trip; after it, the plan applies', () => {
     const r = report();
-    expect(selectPlan(r, undefined, busy)).toEqual({ key: 'route', source: 'auto', recommended: 'split', pending: 'split' });
-    expect(selectPlan(r, undefined, idle).key).toBe('split');
+    expect(selectPlan(r, undefined, busy)).toEqual({ key: 'route', source: 'auto', recommended: 'item-first', pending: 'item-first' });
+    expect(selectPlan(r, undefined, idle).key).toBe('item-first');
   });
 
   it('a plan the guide chose stays while it is not clearly beaten, even when the numbers move a little', () => {
@@ -112,20 +112,20 @@ describe('one plan for every screen and the game', () => {
     const sel = selectPlan(r, undefined, idle);
     const pick = resolvePick(r, sel.key, { xp: HISTORICAL.xp, held: () => 0 }, sel.source, planWhy(r, sel.key, sel.source))!;
     const step = withCombatPlan(route, pick);
-    // The training phase is told by the pace; the phase after it goes to the game as the next action (HUD 2.74.0), without its "Then: ".
-    expect(step.combatPlan).toEqual({ key: 'split', phase: 1, source: 'auto', next: expect.stringMatching(/^Fight the Hill Giants until 50 Big bones/) });
-    expect(stepGuide(step).plan).toEqual({ next: step.combatPlan!.next });
+    // The item phase names the training style so the XP credit is executable; the next phase trains only what remains.
+    expect(step.combatPlan).toEqual({ key: 'item-first', phase: 1, source: 'auto', now: 'Collect 50 Big bones from Hill Giants on Accurate', next: expect.stringMatching(/^Fight the cows on Accurate/) });
+    expect(stepGuide(step).plan).toEqual({ now: step.combatPlan!.now, next: step.combatPlan!.next });
     expect(step.fields?.[0]).toMatchObject({ label: 'Plan' });
-    expect(step.quickSteps?.[0]).toMatch(/^Fight the cows/);
+    expect(step.quickSteps?.[0]).toMatch(/^Fight the Hill Giants on Accurate/);
     const payload = toInGameTarget(step)!;
-    expect(payload.npcNames).toEqual(['Cow']);
-    expect(payload.goal).toBe('Cows: Attack 40');
-    // The food is counted for the cows, not the giants: far less than the route's own plan.
+    expect(payload.npcNames).toEqual(['Hill Giant']);
+    expect(payload.goal).toBe('Hill Giants: 50 Big bones');
+    // Food models the fifty collection kills rather than the entire Attack goal on giants.
     const live = { stats: HISTORICAL.stats, xp: HISTORICAL.xp, gear: gearOf(HISTORICAL.worn), owned: null, combatLog: null };
-    const cows = foodPicks([step], emptyProgress(), live)[route.id];
+    const collection = foodPicks([step], emptyProgress(), live)[route.id];
     const giants = foodPicks([route], emptyProgress(), live)[route.id];
-    expect(cows && giants).toBeTruthy();
-    expect(withFoodPlan(step, cows).itemsRequired?.find((i) => i.heals)?.amount).toBeLessThan(withFoodPlan(route, giants).itemsRequired!.find((i) => i.heals)!.amount as number);
+    expect(collection && giants).toBeTruthy();
+    expect(withFoodPlan(step, collection).itemsRequired?.find((i) => i.heals)?.totalAmount).toBeLessThan(withFoodPlan(route, giants).itemsRequired!.find((i) => i.heals)!.totalAmount as number);
   });
 
   it('an item phase goes to the game as a short action, not the whole sentence', () => {

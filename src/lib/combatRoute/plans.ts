@@ -6,6 +6,8 @@
 //   route          - the step as written: its opponent for every goal.
 //   split          - the XP goals on the opponent the model finds fastest and cheapest in food, then the step's opponent only for what it alone gives
 //                    (the item the step asks to be collected: 50 Big bones). Only when the step has such an item and another opponent is better.
+//   item-first     - collect the required drops on the main skill first; credit that XP before estimating the remaining training.
+//   xp-only        - compare training targets even when the item stock is already complete or there is no item objective.
 //   defence-first  - Defence trained first (on the best opponent for it) to a level, then the route: less damage for the rest. Left out when the
 //                    player's build keeps Defence at 1.
 //
@@ -17,7 +19,7 @@ import type { Step } from '../../types';
 import type { OwnedState } from '../checklist';
 import { nameKey } from '../checklist';
 import {
-  estimateStep, foeLabel, stepGoals, type Basis, type CombatEstimate, type CombatFoe, type Range, type StepEstimateContext,
+  estimateStep, foeLabel, foeVariants, stepGoals, type Basis, type CombatEstimate, type CombatFoe, type Range, type StepEstimateContext,
 } from '../combatEstimate';
 import { chooseVariant, strengthDoses } from '../combatPlan';
 import { levelForXp, xpForLevel } from '../xp';
@@ -30,7 +32,7 @@ import { GUARANTEED_DROPS, SELL_DROP, spotsOf, TRAINER_LEVELS, TRAINERS, type Sp
 export type MeleeSkill = 'attack' | 'strength' | 'defence';
 export interface Goal { skill: MeleeSkill; exp: number }
 
-export type PlanId = 'route' | 'split' | 'defence-first';
+export type PlanId = 'route' | 'split' | 'item-first' | 'xp-only' | 'defence-first';
 
 export interface PlanPhase {
   /** train: the XP goals; item: the drops; defence: Defence first; route: the step as written. */
@@ -202,6 +204,21 @@ function estimates(step: Step, foe: string, goals: Goal[], ctx: StepEstimateCont
   return estimateStep(asked(step, foe, goals), ctx);
 }
 
+function currentXp(ctx: StepEstimateContext, skill: MeleeSkill): number {
+  return Math.max(ctx.xp?.[skill] ?? xpForLevel(ctx.stats?.[skill] ?? 1), ctx.assume?.xp?.[skill] ?? 0);
+}
+
+/** Item collection still needs an estimate after the XP goal has already been reached. */
+function dropEstimates(step: Step, foe: string, count: number, skill: MeleeSkill, ctx: StepEstimateContext): CombatEstimate[] {
+  if (count <= 0) return [];
+  return foeVariants(foe).flatMap(v => estimates(step, foe, [{ skill, exp: currentXp(ctx, skill) + count * 4 * v.hitpoints }], ctx)
+    .filter(e => e.foe.combat === v.combat && e.foe.version === v.version));
+}
+
+function afterPhase(ctx: StepEstimateContext, first: CombatEstimate, xp: Partial<Record<MeleeSkill, number>>): StepEstimateContext {
+  return { ...ctx, assume: assumeXp(ctx.assume, xp), strengthDoses: first.strengthDosesLeft ?? 0 };
+}
+
 /** The fastest of the estimates by the conservative end, the one with the least food among equals. */
 function bestOf(list: CombatEstimate[]): CombatEstimate | null {
   return [...list].sort((a, b) => a.totalMinutes.high - b.totalMinutes.high || a.food.mid - b.food.mid || (a.foe.combat - b.foe.combat))[0] ?? null;
@@ -286,11 +303,12 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   const objective = [goalText(goals), item ? `${item.count} ${item.name}` : null].filter(Boolean).join(', ');
 
   // --- The route as written
-  const routeEst = chooseVariant(estimates(step, foe, goals, live), ctx.fights);
+  const routeEst = chooseVariant(estimates(step, foe, goals, live), ctx.fights)
+    ?? chooseVariant(dropEstimates(step, foe, item?.missing ?? 0, goals[0].skill, live), ctx.fights);
   if (!routeEst) return null;
   const itemKills = item && item.missing > 0 ? item.missing : 0;
   const routePhase = phaseOf('route', routeEst, routeSpot, goals,
-    `${foeLabel(routeEst.foe)}: ${goalText(goals)}${item && item.missing > 0 ? ` and ${item.count} ${item.name}` : ''} (${Math.max(routeEst.kills, itemKills)} kills)`, undefined, Math.max(routeEst.kills, itemKills));
+    `${foeLabel(routeEst.foe)}: ${goalText(goals)}${item && item.missing > 0 ? ` and ${item.count} ${item.name}` : ''} (${Math.max(routeEst.kills, itemKills)} kills)`, item && item.missing > 0 ? { name: item.name, count: item.count } : undefined, Math.max(routeEst.kills, itemKills));
   // What the step asks to be banked is reserved: it is never counted as something to sell.
   const reserve = item && item.missing > 0 ? { name: item.name, qty: item.missing } : null;
   const make = (id: PlanId, key: string, title: string, phases: PlanPhase[], extra: string[] = [], notes: string[] = []) =>
@@ -311,13 +329,19 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   const safe = candidates.filter((e) => e.foe.maxHit * 2 < hp);
   const trainer = bestOf(safe);
 
+  if ((!item || item.missing === 0) && trainer && trainer.foe.name !== routeEst.foe.name) {
+    plans.push(make('xp-only', 'xp-only', `Train on ${trainer.foe.name === 'Cow' ? 'cows' : trainer.foe.name}`, [
+      phaseOf('train', trainer, spots.get(trainer.foe.name)!, goals, `${foeLabel(trainer.foe)}: ${goalText(goals)} (${trainer.kills} kills)`),
+    ]));
+  }
+
   // --- Split: the goals on the trainer, the item from the step's opponent
   if (item && item.missing > 0 && trainer && trainer.foe !== routeEst.foe && trainer.foe.name !== routeEst.foe.name) {
     const after: Partial<Record<MeleeSkill, number>> = {};
     for (const g of goals) after[g.skill] = g.exp;
     const main = goals[0].skill;
     const perKill = 4 * routeEst.foe.hitpoints;
-    const collect = estimateStep(asked(step, foe, [{ skill: main, exp: (after[main] ?? 0) + item.missing * perKill }]), { ...live, assume: assumeXp(live.assume, after) })
+    const collect = estimateStep(asked(step, foe, [{ skill: main, exp: (after[main] ?? 0) + item.missing * perKill }]), afterPhase(live, trainer, after))
       .find((e) => e.foe.combat === routeEst.foe.combat);
     if (collect) {
       const spot = spots.get(trainer.foe.name)!;
@@ -325,6 +349,25 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
         phaseOf('train', trainer, spot, goals, `${foeLabel(trainer.foe)}: ${goalText(goals)} (${trainer.kills} kills)`),
         phaseOf('item', collect, routeSpot, [], `${foeLabel(collect.foe)}: ${item.missing} ${item.name} (${item.missing} kills)`, { name: item.name, count: item.count }, item.missing),
       ]));
+    }
+  }
+
+  // Collect the required drops first, then train only the XP that remains. The item
+  // phase explicitly trains the main skill so its projected XP is never free credit.
+  if (item && item.missing > 0) {
+    const main = goals[0].skill;
+    const collect = dropEstimates(step, foe, item.missing, main, live).find(e => e.foe.combat === routeEst.foe.combat && e.foe.version === routeEst.foe.version);
+    if (collect) {
+      const earned = currentXp(live, main) + item.missing * 4 * collect.foe.hitpoints;
+      const after = afterPhase(live, collect, { [main]: earned });
+      const follow = bestOf(TRAINERS.filter(name => spots.has(name)).flatMap(name => estimates(step, name, goals, after))
+        .filter(e => e.foe.maxHit * 2 < hp && (!TRAINER_LEVELS[e.foe.name] || TRAINER_LEVELS[e.foe.name].includes(e.foe.combat))));
+      if (follow && follow.foe.name !== routeEst.foe.name) {
+        plans.push(make('item-first', 'item-first', `${item.name} first, then train on ${follow.foe.name === 'Cow' ? 'cows' : follow.foe.name}`, [
+          phaseOf('item', collect, routeSpot, [{ skill: main, exp: earned }], `${foeLabel(collect.foe)}: collect ${item.missing} ${item.name} on ${cap(main)} (${item.missing} kills)`, { name: item.name, count: item.count }, item.missing),
+          phaseOf('train', follow, spots.get(follow.foe.name)!, goals, `${foeLabel(follow.foe)}: ${goalText(goals)} (${follow.kills} kills)`),
+        ]));
+      }
     }
   }
 
@@ -337,13 +380,15 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
     if (xpForLevel(n) <= defenceNow) continue;
     const trainDef = defenceTrainer(n);
     if (!trainDef) continue;
-    const rest = chooseVariant(estimateStep(asked(step, foe, goals), { ...live, assume: assumeXp(live.assume, { defence: xpForLevel(n) }) }), ctx.fights);
+    const laterCtx = afterPhase(live, trainDef, { defence: xpForLevel(n) });
+    const rest = chooseVariant(estimateStep(asked(step, foe, goals), laterCtx), ctx.fights)
+      ?? chooseVariant(dropEstimates(step, foe, item?.missing ?? 0, goals[0].skill, laterCtx), ctx.fights);
     if (!rest) continue;
     const dSpot = spots.get(trainDef.foe.name);
     if (!dSpot) continue;
     plans.push(make('defence-first', `defence-first:${n}`, `Defence ${n} first, then the route`, [
       phaseOf('defence', trainDef, dSpot, [{ skill: 'defence', exp: xpForLevel(n) }], `${foeLabel(trainDef.foe)}: Defence to ${n} (${trainDef.kills} kills)`),
-      phaseOf('route', rest, routeSpot, goals, `${foeLabel(rest.foe)}: ${goalText(goals)} (${rest.kills} kills)`),
+      phaseOf('route', rest, routeSpot, goals, `${foeLabel(rest.foe)}: ${goalText(goals)}${item && item.missing > 0 ? ` and ${item.count} ${item.name}` : ''} (${Math.max(rest.kills, itemKills)} kills)`, item && item.missing > 0 ? { name: item.name, count: item.count } : undefined, Math.max(rest.kills, itemKills)),
     ], inp.keepDefenceOne ? ['Your build keeps Defence at 1'] : [], later.length ? [laterNote(later, defenceNow)] : []));
   }
 
@@ -356,7 +401,7 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   const eligible = plans.filter((p) => p.eligible);
   // The conservative time decides; plans within a few percent of each other are told apart by what they cost net of what the drops bring.
   const byTime = (a: EvaluatedPlan, b: EvaluatedPlan) => {
-    if (Math.abs(a.score - b.score) <= Math.min(a.score, b.score) * TIE_BAND) return (a.net ?? -a.food.mid) - (b.net ?? -b.food.mid) > 0 ? -1 : 1;
+    if (Math.abs(a.score - b.score) <= Math.min(a.score, b.score) * TIE_BAND) return (b.net ?? -b.food.mid) - (a.net ?? -a.food.mid) || a.score - b.score || a.key.localeCompare(b.key);
     return a.score - b.score;
   };
   // The route gives Defence later for nothing: a Defence plan only helps the fights before that, so it must beat a working route by a clear margin on the

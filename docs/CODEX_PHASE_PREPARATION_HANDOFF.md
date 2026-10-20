@@ -17,3 +17,5 @@ The final full suite passed 1,663 Vitest tests, including null-cursor/invalid-bo
 The focused Chromium run passed tomb selection, later rune supplies in the game payload, manual future-view stability, the confirmed transition within stage 3 and cleared-cursor behavior. These are mock-bridge observations, not real-game evidence.
 
 T07 remains partial. Monkey Madness I's return trips need verified non-monotonic phase metadata; none was guessed. Complete merging of every phase-card take/leave/free-slot rule into the shared acquisition and food model, heterogeneous phase quantities, and live quest replay remain open. This patch scopes the existing required-item contract; it does not claim that every textual loadout is now a fully enforced executable inventory.
+
+Exact-tree CI 39497483922 subsequently passed all gates, including Java, full Chromium and the isolated packaged Windows EXE.
