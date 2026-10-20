@@ -119,6 +119,27 @@ final class PacingSet
 		return trackers.get(active).snapshot();
 	}
 
+	/** Another skill's figures: the HUD names the next skill to train once the shown one is done. */
+	PacingTracker.Snapshot snapshotOf(String skill)
+	{
+		PacingTracker t = trackers.get(skill);
+		return t == null ? snapshot() : t.snapshot();
+	}
+
+	/** That skill's XP as a share of its goal, 0 to 1. */
+	double progressOf(String skill)
+	{
+		PacingTracker t = trackers.get(skill);
+		int goal = pacing.targetExpOf(skill);
+		return t == null || goal <= 0 ? 0 : Math.min(1.0, Math.max(0, t.getXp()) / (double) goal);
+	}
+
+	/** One of the step's skills grew since the pace started: the activity is under way (its food is in use, not still to take). */
+	boolean started()
+	{
+		return lastGainAt != null;
+	}
+
 	/** The skills that have not reached the goal yet, besides the shown one, in the step's order. */
 	List<String> left()
 	{

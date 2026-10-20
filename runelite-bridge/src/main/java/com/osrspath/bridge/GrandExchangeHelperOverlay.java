@@ -67,9 +67,9 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 		}
 		List<String> extras = ExchangeView.extras(rows, step);
 		boolean large = config.hudLarge();
-		Font font = OverlayText.font(g.getFont(), large ? OsrsPathHudOverlay.LARGE : 1f);
+		Font font = OverlayText.font(g.getFont(), large ? Hud.LARGE : 1f);
 		g.setFont(font);
-		int width = OsrsPathHudOverlay.panelWidth(this, standardWidth(large));
+		int width = Hud.panelWidth(this, standardWidth(large));
 		Object key = Arrays.asList(rows, extras, step == null ? null : step.getTitle(), config.hudOpacity(), font, width);
 		if (!Objects.equals(key, builtFor))
 		{
@@ -99,7 +99,7 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 
 	static int standardWidth(boolean large)
 	{
-		return Math.round((OsrsPathHudOverlay.WIDTH + 30) * (large ? OsrsPathHudOverlay.LARGE : 1f));
+		return Math.round((Hud.WIDTH + 30) * (large ? Hud.LARGE : 1f));
 	}
 
 	/** The panel contents. Static: a test draws it with the real fonts without a client. */
@@ -118,7 +118,7 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 		OverlayText.frame(panel, fm);
 		long left = rows.stream().filter(r -> r.getState() != ShoppingPlan.RowState.HAVE).count();
 		OverlayText.title(c, left == 0 ? "Bulk list: have everything" : "Bulk list · buy " + left,
-			left == 0 ? OsrsPathHudOverlay.GOOD : OsrsPathHudOverlay.TITLE, fm, inner);
+			left == 0 ? Hud.GOOD : Hud.TITLE, fm, inner);
 		c.add(new OverlayCard.Bar(progress(rows), left == 0 ? OverlayCard.GREEN : OverlayCard.GOLD));
 		// First what is left to buy: the finished ones go down.
 		List<ShoppingPlan.Row> ordered = rows.stream()
@@ -136,10 +136,10 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 		}
 		if (!extras.isEmpty())
 		{
-			OverlayText.line(c, "Also for " + (stepId == null || stepId.isEmpty() ? "the step" : stepId) + ":", OsrsPathHudOverlay.TITLE, fm, inner);
+			OverlayText.line(c, "Also for " + (stepId == null || stepId.isEmpty() ? "the step" : stepId) + ":", Hud.TITLE, fm, inner);
 			for (String x : extras)
 			{
-				OverlayText.line(c, "• " + x, OsrsPathHudOverlay.TEXT, fm, inner);
+				OverlayText.line(c, "• " + x, Hud.TEXT, fm, inner);
 			}
 		}
 		OverlayText.line(c, "Name: use the 'Copy' button in OSRS Path", MUTED, fm, inner);
@@ -151,15 +151,15 @@ class GrandExchangeHelperOverlay extends OverlayPanel
 		switch (r.getState())
 		{
 			case HAVE:
-				OverlayText.pair(c, "✓ " + r.getName(), OsrsPathHudOverlay.GOOD, amount, OsrsPathHudOverlay.GOOD, fm, inner);
+				OverlayText.pair(c, "✓ " + r.getName(), Hud.GOOD, amount, Hud.GOOD, fm, inner);
 				return;
 			case BOUGHT:
 			case BUYING:
-				OverlayText.pair(c, "… " + r.getName(), OsrsPathHudOverlay.TEXT, r.getOffer() == null ? "" : r.getOffer(),
-					r.getState() == ShoppingPlan.RowState.BOUGHT ? OsrsPathHudOverlay.GOOD : MUTED, fm, inner);
+				OverlayText.pair(c, "… " + r.getName(), Hud.TEXT, r.getOffer() == null ? "" : r.getOffer(),
+					r.getState() == ShoppingPlan.RowState.BOUGHT ? Hud.GOOD : MUTED, fm, inner);
 				return;
 			default:
-				Color color = r.isNext() ? NEXT : OsrsPathHudOverlay.TEXT;
+				Color color = r.isNext() ? NEXT : Hud.TEXT;
 				OverlayText.pair(c, (r.isNext() ? "▶ " : "• ") + r.getName(), color, amount, color, fm, inner);
 		}
 	}

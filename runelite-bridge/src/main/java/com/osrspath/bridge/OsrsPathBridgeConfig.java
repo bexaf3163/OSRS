@@ -19,7 +19,7 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigSection(
 		name = "In-game helper",
-		description = "Micro HUD, departure check, route, exchange hint and quick variants",
+		description = "The in-game guide, departure check, route, exchange hint and quick variants",
 		position = 10
 	)
 	String companion = "companion";
@@ -84,8 +84,8 @@ public interface OsrsPathBridgeConfig extends Config
 	@ConfigItem(
 		keyName = "smartView",
 		name = "Smart reveal",
-		description = "Off by default: the 'What you need' list and HUD are always visible. If enabled, only the arrow and "
-			+ "one HUD line remain while travelling; the list appears at the bank and near the step's place, the bulk list at the exchange, the radar when you are already in a zone",
+		description = "Off by default: the guide keeps the size you chose. If enabled, the guide stays closed while travelling (the arrow and its "
+			+ "headline remain), the bulk list shows at the exchange and the radar only when you are already in a zone",
 		section = companion,
 		position = 10
 	)
@@ -95,35 +95,10 @@ public interface OsrsPathBridgeConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "showHud",
-		name = "Show micro HUD",
-		description = "The current step, the target and the distance to it. The plate can be dragged while holding Alt",
-		section = companion,
-		position = 11
-	)
-	default boolean showHud()
-	{
-		return true;
-	}
-
-	@ConfigItem(
-		keyName = "hudLean",
-		name = "Compact HUD",
-		description = "Do not repeat in the HUD what the 'What you need' list already shows: the step name, target, distance and 'Bag ready'. "
-			+ "The plate stays only when there is a warning (danger, health, action, pace) or no list",
-		section = companion,
-		position = 11
-	)
-	default boolean hudLean()
-	{
-		return true;
-	}
-
-	@ConfigItem(
 		keyName = "showGuide",
-		name = "'What you need' list",
-		description = "Under the HUD: the step's items (have, in bank, missing) with 'where to get it' and the step's places with NPCs. "
-			+ "A click on a line gives the arrow and path there, a click on the heading collapses it. Draggable with Alt",
+		name = "In-game guide",
+		description = "One card: what to do now, its progress and the most important warning. Click its header for the details (preparation, what comes "
+			+ "next, more advice). Move it or stretch its width while holding Alt",
 		section = companion,
 		position = 12
 	)
@@ -133,12 +108,12 @@ public interface OsrsPathBridgeConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "guideCollapsed",
+		keyName = "hudExpanded",
 		name = "",
-		description = "The 'What you need' list is collapsed to one line; changed by clicking its heading",
+		description = "The in-game guide shows its details; changed by clicking its header",
 		hidden = true
 	)
-	default boolean guideCollapsed()
+	default boolean hudExpanded()
 	{
 		return false;
 	}
@@ -201,29 +176,6 @@ public interface OsrsPathBridgeConfig extends Config
 		return OverlayTheme.GLASS;
 	}
 
-	@ConfigItem(
-		keyName = "dockBar",
-		name = "Docked bar",
-		description = "Replace the HUD plate with a single bar (step, what to do, distance, items in the bag / bank / missing, readiness). The 'What you need' list opens under it only while the mouse is over the bar or the list, at the open bank, or for a moment after. Off by default",
-		section = companion,
-		position = 14
-	)
-	default boolean dockBar()
-	{
-		return false;
-	}
-
-	@ConfigItem(
-		keyName = "guideCompact",
-		name = "Compact list",
-		description = "Keep the quest and current action visible. Click Steps or Advice to open details; click the selected tab again to close them. Warnings remain visible. Off shows the whole list all the time",
-		section = companion,
-		position = 14
-	)
-	default boolean guideCompact()
-	{
-		return true;
-	}
 
 	@ConfigItem(
 		keyName = "showChecklist",
@@ -359,7 +311,7 @@ public interface OsrsPathBridgeConfig extends Config
 		keyName = "upgradeRouter",
 		name = "Upgrade hints",
 		description = "Send gear and coins to the app so it can suggest a better tool, weapon, amulet and armour. "
-			+ "On a combat step the advice is a ⚡ line in the HUD, and the best item from the bag and bank is highlighted. "
+			+ "On a combat step the advice is a line under 'More advice' in the guide, and the best item from the bag and bank is highlighted. "
 			+ "With the 'Navigate' button, the seller and the needed item in the shop are highlighted. Buys and equips nothing by itself",
 		section = helpers,
 		position = 22
@@ -432,8 +384,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "hudPacing",
-		name = "Pace in micro HUD",
-		description = "A line like '34 shrimps to 20 Fishing (~7 min)' on the step plate",
+		name = "Training pace in the guide",
+		description = "On a training step the guide's headline is the skill to train, with the levels, the progress strip and, in its details, the kills left and the time",
 		section = helpers,
 		position = 28
 	)
@@ -444,8 +396,8 @@ public interface OsrsPathBridgeConfig extends Config
 
 	@ConfigItem(
 		keyName = "hudHealth",
-		name = "Health in HUD",
-		description = "A red line on the step plate when health drops below two max hits of the step's enemy",
+		name = "Health in the guide",
+		description = "A warning on the guide when health drops below two max hits of the step's enemy",
 		section = helpers,
 		position = 29
 	)
@@ -457,8 +409,8 @@ public interface OsrsPathBridgeConfig extends Config
 	@ConfigItem(
 		keyName = "stageFollow",
 		name = "Arrow by stages",
-		description = "For quests with stages the 'What you need' list shows the current stage, and the arrow itself leads to its NPC and moves "
-			+ "when the quest moves to the next stage. When off, the arrow stays at the step; the list still shows the stage",
+		description = "For quests with stages the guide shows the current stage, and the arrow itself leads to its NPC and moves "
+			+ "when the quest moves to the next stage. When off, the arrow stays at the step; the guide still shows the stage",
 		section = helpers,
 		position = 30
 	)

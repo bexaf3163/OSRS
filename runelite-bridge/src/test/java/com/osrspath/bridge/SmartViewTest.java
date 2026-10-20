@@ -5,9 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.awt.FontMetrics;
-import java.util.List;
-import net.runelite.client.ui.overlay.components.PanelComponent;
 import org.junit.Test;
 
 /** "Smart view": what is visible in the game while travelling, at the bank, at the exchange and near the step; what always stays. */
@@ -18,7 +15,7 @@ public class SmartViewTest
 	{
 		SmartView.Context c = SmartView.of(false, false, SmartView.TRAVEL_TILES + 1);
 		assertEquals(SmartView.Context.TRAVEL, c);
-		assertFalse("the step list would block the view while travelling", SmartView.showsGuide(c));
+		assertFalse("the open guide would block the view while travelling", OsrsPathGuideOverlay.expanded(true, true, c));
 		assertTrue(SmartView.compactHud(c));
 	}
 
@@ -29,7 +26,7 @@ public class SmartViewTest
 		{
 			SmartView.Context c = SmartView.of(false, false, tiles);
 			assertEquals("tiles: " + tiles, SmartView.Context.STEP, c);
-			assertTrue(SmartView.showsGuide(c));
+			assertTrue(OsrsPathGuideOverlay.expanded(true, true, c));
 			assertFalse(SmartView.compactHud(c));
 		}
 	}
@@ -39,16 +36,16 @@ public class SmartViewTest
 	{
 		SmartView.Context c = SmartView.of(true, false, 500);
 		assertEquals(SmartView.Context.BANK, c);
-		assertTrue(SmartView.showsGuide(c));
-		assertFalse("at the bank the HUD is normal: the departure check is drawn separately", SmartView.compactHud(c));
+		assertTrue(OsrsPathGuideOverlay.expanded(true, true, c));
+		assertFalse("at the bank the guide is as the player left it: the departure check is drawn separately", SmartView.compactHud(c));
 	}
 
 	@Test
-	public void atTheExchange_theStepListHides_theHudIsOneLine()
+	public void atTheExchange_theGuideStaysClosed()
 	{
 		SmartView.Context c = SmartView.of(false, true, 3);
 		assertEquals(SmartView.Context.EXCHANGE, c);
-		assertFalse(SmartView.showsGuide(c));
+		assertFalse(OsrsPathGuideOverlay.expanded(true, false, c));
 		assertTrue(SmartView.compactHud(c));
 	}
 
@@ -71,64 +68,64 @@ public class SmartViewTest
 		assertFalse(SmartView.dangerVisible(false, DangerRadar.Level.NEAR));
 	}
 
-	private static OsrsPathHudOverlay.State full(String danger, boolean inside, String health, boolean critical)
+	private static Hud.State full(String danger, boolean inside, String health, boolean critical)
 	{
-		return new OsrsPathHudOverlay.State("Go to: Draynor Bank", "Then: step [S9-01] Lost City", "~42 tiles ↗", false,
+		return new Hud.State("Go to: Draynor Bank", "Then: step [S9-01] Lost City", "~42 tiles ↗", false,
 			"Bag: missing 2", false, danger, inside, "34 shrimps to 20 Fishing", false, "⚡ Wear Iron scimitar",
 			health, critical, "Use Knife on Tree", 42);
 	}
 
-	@Test
-	public void compactHud_actionAndDistanceInOneLine_restRemoved()
+	/** A stop on the way over a step, with everything the plugin can know at once. */
+	private static HudModel.Card card(Hud.State s)
 	{
-		OsrsPathHudOverlay.State s = SmartView.compact(full(null, false, null, false));
-		assertEquals("Go to: Draynor Bank · ~42 tiles ↗", s.getTitle());
-		assertNull(s.getGoal());
-		assertNull(s.getDistance());
-		assertNull(s.getBag());
-		assertNull(s.getPacing());
-		assertNull(s.getUpgrade());
-		assertNull(s.getAction());
-		assertNull(s.getDanger());
-		assertEquals(42, s.getTiles());
+		StepGuide.View v = new StepGuide.View("[S9-01] Lost City", null, java.util.Collections.emptyList(), java.util.Collections.emptyList(), null, null, null, null);
+		return HudModel.build(HudModelTest.with(HudModelTest.input(v, s, null), "detour", s.getTitle()));
 	}
 
 	@Test
-	public void compactHud_criticalRemains_dangerOnlyInsideTheZone()
+	public void theClosedCard_actionAndDistance_theRestInTheDetails()
 	{
-		assertNull("on approach we do not show it", SmartView.compact(full("Dark wizards", false, null, false)).getDanger());
-		OsrsPathHudOverlay.State inside = SmartView.compact(full("Dark wizards", true, null, false));
-		assertEquals("Dark wizards", inside.getDanger());
-		assertTrue(inside.isDangerInside());
-		OsrsPathHudOverlay.State low = SmartView.compact(full(null, false, "HP 5/40 - EAT NOW! Hits up to 8", true));
-		assertEquals("HP 5/40 - EAT NOW! Hits up to 8", low.getHealth());
-		assertTrue(low.isHealthCritical());
-		assertNull("time to eat, but not critical: that is not for one line", SmartView.compact(full(null, false, "HP 15/40 - time to eat. Hits up to 8", false)).getHealth());
+		HudModel.Card c = card(full(null, false, null, false));
+		assertEquals("Go to: Draynor Bank", c.getHeadline());
+		assertEquals("~42 tiles ↗", c.getStatus());
+		assertEquals("a quest name keeps its capital", "Then: Lost City", c.getThen());
+		String closed = c.plain(false, false);
+		for (String gone : new String[] {"Bag:", "34 shrimps", "Iron scimitar", "Use Knife on Tree"})
+		{
+			assertFalse(gone + " is not on the closed card: " + closed, closed.contains(gone));
+		}
+		assertNull(c.getWarning());
 	}
 
 	@Test
-	public void compactHud_withoutTitleOrDistance_doesNotCrash()
+	public void theClosedCard_carriesTheOneWarningThatMatters()
 	{
-		OsrsPathHudOverlay.State onlyDistance = SmartView.compact(new OsrsPathHudOverlay.State(null, null, "~30 tiles", false, null, false, null, false, null, false, null));
-		assertEquals("~30 tiles", onlyDistance.getTitle());
-		OsrsPathHudOverlay.State onlyTitle = SmartView.compact(new OsrsPathHudOverlay.State("[S1-01] Step", null, null, false, null, false, null, false, null, false, null));
-		assertEquals("[S1-01] Step", onlyTitle.getTitle());
-		OsrsPathHudOverlay.State nothing = SmartView.compact(new OsrsPathHudOverlay.State("", null, null, false, null, false, null, false, null, false, null));
-		assertEquals("OSRS Path", nothing.getTitle());
+		HudModel.Card inside = card(full("Dark wizards", true, null, false));
+		assertEquals("You are in a danger zone: Dark wizards", inside.getWarning().getText());
+		assertEquals(HudModel.Tone.DANGER, inside.getWarning().getTone());
+		HudModel.Card low = card(full("Dark wizards", true, "HP 5/40 - EAT NOW! Hits up to 8", true));
+		assertEquals("safety first: the zone, then the health once, in the details", "You are in a danger zone: Dark wizards", low.getWarning().getText());
+		assertTrue(low.plain(true, false), low.plain(true, false).contains("HP 5/40 - EAT NOW!"));
+		HudModel.Card eat = card(full(null, false, "HP 15/40 - time to eat. Hits up to 8", false));
+		assertEquals(HudModel.Tone.CAUTION, eat.getWarning().getTone());
 	}
 
 	@Test
-	public void compactHud_drawnAsAShortCard()
+	public void withoutAStepOrATarget_noCard_andNoCrash()
 	{
-		FontMetrics fm = new java.awt.image.BufferedImage(1, 1, java.awt.image.BufferedImage.TYPE_INT_ARGB).createGraphics()
-			.getFontMetrics(OverlayText.font(net.runelite.client.ui.FontManager.getRunescapeFont(), 1f));
-		PanelComponent normal = new PanelComponent();
-		PanelComponent compact = new PanelComponent();
-		OsrsPathHudOverlay.build(normal, full(null, false, null, false), fm, OsrsPathHudOverlay.WIDTH, 70);
-		OsrsPathHudOverlay.build(compact, SmartView.compact(full(null, false, null, false)), fm, OsrsPathHudOverlay.WIDTH, 70);
-		List<?> a = normal.getChildren();
-		List<?> b = compact.getChildren();
-		assertTrue("while travelling there are noticeably fewer lines (" + b.size() + " against " + a.size() + ")", b.size() < a.size());
+		assertNull(HudModel.build(HudModelTest.input(null, new Hud.State(null, null, "~30 tiles", false, null, false, null, false, null, false, null), null)));
+		StepGuide.View v = new StepGuide.View("[S1-01] Step", null, java.util.Collections.emptyList(), java.util.Collections.emptyList(), null, null, null, null);
+		assertEquals("Step", HudModel.build(HudModelTest.input(v, new Hud.State("[S1-01] Step", null, null, false, null, false, null, false, null, false, null), null))
+			.getHeadline());
+	}
+
+	@Test
+	public void theClosedCardIsMuchShorterThanTheOpenOne()
+	{
+		HudModel.Card c = card(full("Dark wizards", false, "HP 15/40 - time to eat. Hits up to 8", false));
+		int closed = HudRenderTest.layout(c, false, false, OsrsPathGuideOverlay.WIDTH, 1f, 2000).getSize().height;
+		int open = HudRenderTest.layout(c, true, true, OsrsPathGuideOverlay.WIDTH, 1f, 2000).getSize().height;
+		assertTrue("closed " + closed + " against open " + open, closed < open);
 	}
 
 	@Test

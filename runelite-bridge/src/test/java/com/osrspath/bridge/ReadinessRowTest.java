@@ -6,20 +6,14 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.google.gson.Gson;
-import java.awt.FontMetrics;
-import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
-import net.runelite.client.ui.FontManager;
 import org.junit.Test;
 
-/** The app's readiness verdict in the game (2.62.0): at the top of the bank card and under the Advice tab; never on the Steps tab. */
+/** The app's readiness verdict in the game (2.62.0): at the top of the bank card. The one HUD (2.74.0) says its own live preparation instead. */
 public class ReadinessRowTest
 {
 	private static final Gson GSON = new Gson();
-	private static final FontMetrics FM = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics()
-		.getFontMetrics(OverlayText.font(FontManager.getRunescapeFont(), 1f));
 
 	private static PrepPlan plan(String readiness)
 	{
@@ -35,19 +29,6 @@ public class ReadinessRowTest
 			new StepGuide.ItemLine("Salmon ×26", "status", StepGuide.Have.BANK, "exchange", -1, "Salmon ×26", "tag")), Collections.emptyList(), null, null, null, null, null, p);
 	}
 
-	private static String text(List<GuideList.Row> rows)
-	{
-		StringBuilder sb = new StringBuilder();
-		for (GuideList.Row r : rows)
-		{
-			for (GuideList.Line l : r.getLines())
-			{
-				sb.append(l.getLeft()).append(l.getRight() == null ? "" : " ~" + l.getRight()).append('|');
-			}
-		}
-		return sb.toString();
-	}
-
 	private static final String PREP = "{\"status\":\"PREP_NEEDED\",\"headline\":\"Bank: withdraw 13 Salmon — you already own it. Then buy about 13 Salmon.\"}";
 
 	@Test
@@ -61,14 +42,14 @@ public class ReadinessRowTest
 	}
 
 	@Test
-	public void theAdviceTabListsItFirst_theStepsTabDoesNot()
+	public void theGuideSaysItsOwnLivePreparation_notTheVerdictAgain()
 	{
+		// The verdict is the app's reading of a moment; the guide counts the bag and the bank itself, so it does not repeat the verdict (2.74.0).
 		StepGuide.View v = view(plan(PREP));
-		assertEquals("the verdict is one tip", 1, GuideList.adviceCount(v));
-		String adv = text(GuideList.rows(v.withAdviceTab(true), false, FM, FM, 4000));
-		assertTrue(adv, adv.contains("Preparation needed — Bank: withdraw 13 Salmon"));
-		String steps = text(GuideList.rows(v, false, FM, FM, 4000));
-		assertFalse(steps, steps.contains("Preparation needed"));
+		HudModel.Card c = HudModel.build(HudModelTest.input(v, HudModelTest.quiet(), null));
+		String all = c.plain(true, true);
+		assertFalse(all, all.contains("Preparation needed"));
+		assertEquals("the live preparation leads", "Withdraw Salmon", c.getHeadline());
 	}
 
 	@Test
@@ -76,7 +57,6 @@ public class ReadinessRowTest
 	{
 		PrepPlan ready = plan("{\"status\":\"READY\",\"headline\":\"Ready: your kit and food suit Minotaur (level 12).\"}");
 		assertFalse(ready.hasReadiness());
-		assertEquals(0, GuideList.adviceCount(view(ready)));
 		PrepPlan p = plan("{\"status\":\"PREP_NEEDED\",\"headline\":\"Preparation needed: bring food before going.\"}");
 		assertEquals("Preparation needed: bring food before going.", p.getReadiness().line());
 		PrepPlan unknown = plan("{\"status\":\"UNKNOWN\",\"headline\":\"Bank contents have not been checked; visit a bank to assess owned supplies.\"}");

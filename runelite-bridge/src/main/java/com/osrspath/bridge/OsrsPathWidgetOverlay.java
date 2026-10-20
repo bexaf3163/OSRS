@@ -136,7 +136,7 @@ class OsrsPathWidgetOverlay extends Overlay
 		{
 			return;
 		}
-		g.setColor(pulse(OsrsPathHudOverlay.TITLE));
+		g.setColor(pulse(Hud.TITLE));
 		g.setStroke(new BasicStroke(2f));
 		g.drawRoundRect(b.x - 2, b.y - 2, b.width + 3, b.height + 3, 6, 6);
 	}

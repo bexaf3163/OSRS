@@ -7,11 +7,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.google.gson.Gson;
-import java.awt.FontMetrics;
-import java.awt.image.BufferedImage;
 import java.util.HashSet;
 import java.util.List;
-import net.runelite.client.ui.FontManager;
 import org.junit.Test;
 
 /**
@@ -21,8 +18,6 @@ import org.junit.Test;
 public class QuestStageTest
 {
 	private static final Gson GSON = new Gson();
-	private static final FontMetrics FM = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics()
-		.getFontMetrics(OverlayText.font(FontManager.getRunescapeFont(), 1f));
 
 	/** S2-06 as the app sends it: the places are Horacio, Sedridor, Aubury; the stages refer to them by number. */
 	static ActiveTarget runeMysteries()
@@ -109,9 +104,9 @@ public class QuestStageTest
 		assertTrue(v.getItems().isEmpty());
 		assertTrue(v.getPlaces().isEmpty());
 		assertEquals("Quest complete ✓", GuideList.stageTitle(v.getStage()));
-		String all = text(GuideList.rows(v, false, FM, FM, 240));
-		assertTrue(all, all.contains("Quest complete"));
-		assertFalse(all, all.contains("Air talisman"));
+		HudModel.Card c = card(v);
+		assertEquals("Quest complete", c.getHeadline());
+		assertFalse(c.plain(true, true), c.plain(true, true).contains("Air talisman"));
 	}
 
 	@Test
@@ -133,25 +128,30 @@ public class QuestStageTest
 	}
 
 	@Test
-	public void listRows_stageTextItemsPoint()
+	public void theGuideHasTheStageLine_itsItemFirst_andItsPoint()
 	{
 		StepGuide.View v = view(3, false, new ItemCounts());
-		String all = text(GuideList.rows(v, false, FM, FM, 240));
-		assertTrue(all, all.contains("Stage 3 of 4"));
-		assertTrue(all, all.contains("Bring the research package to Aubury"));
-		assertTrue(all, all.contains("Research package"));
-		assertTrue(all, all.contains("Aubury"));
-		assertFalse("items of other stages are not shown: " + all, all.contains("Air talisman"));
-		assertEquals("Stage 3 of 4 · 1 missing", GuideList.summary(v));
-		assertTrue(GuideList.worthShowing(v));
+		HudModel.Card c = card(v);
+		// The package is not with you and the bank was not seen: getting it comes first, the stage line is what follows.
+		assertEquals("Get Research package", c.getHeadline());
+		assertEquals("Research package: 0 / 1 · bank not checked", c.getStatus());
+		assertEquals("Then: bring the research package to Aubury", c.getThen());
+		String open = c.plain(true, true);
+		assertTrue(open, open.contains("Stage 3 of 4"));
+		assertTrue("Aubury's point is a button: " + open, c.getNext().stream().anyMatch(l -> l.getAction().equals(GuideList.Action.place(2))));
+		assertFalse("items of other stages are not shown: " + open, open.contains("Air talisman"));
+		ItemCounts bag = new ItemCounts();
+		bag.add(290, ActiveTarget.nameKey("Research package"), 1);
+		HudModel.Card ready = card(view(3, false, bag));
+		assertEquals("Bring the research package to Aubury", ready.getHeadline());
+		assertEquals("Stage 3 of 4", ready.getStatus());
 	}
 
 	@Test
-	public void collapsedList_oneLine()
+	public void theClosedCardIsTheLineAndItsStage()
 	{
-		StepGuide.View v = view(0, false, new ItemCounts());
-		assertEquals("Stage 1 of 4", GuideList.summary(v));
-		assertEquals(1, GuideList.rows(v, true, FM, FM, 240).size());
+		HudModel.Card c = card(view(0, false, new ItemCounts()));
+		assertEquals("Talk to Duke Horacio\nStage 1 of 4", c.plain(false, false));
 	}
 
 	@Test
@@ -195,78 +195,68 @@ public class QuestStageTest
 	}
 
 	@Test
-	public void stageRows_currentCounterNextAndBack()
+	public void theStageLine_theNextOne_andBack()
 	{
-		StepGuide.StageView sv = new StepGuide.StageView(1, 1, manor(), 2, false);
-		java.util.ArrayList<GuideList.Row> rows = new java.util.ArrayList<>();
-		GuideList.stageRows(rows, sv, FM, FM, 220);
-		String all = text(rows);
-		assertTrue(all, all.contains("▶ C"));
-		assertTrue("the counter on the right: step 3 of 6", all.contains("3/6"));
-		assertTrue("one 'Next' line instead of two grey items: " + all, all.contains("Next: D"));
-		assertTrue("how many more after it", all.contains("+2"));
-		assertFalse("we do not show more than one ahead: " + all, all.contains("C-again") || all.contains("• "));
-		assertFalse("'steps done' and the reference to the panel are gone: " + all, all.contains("steps done") || all.contains("in the panel"));
-		assertTrue("the step is not the first: there is 'Back': " + all, all.contains("◀ Back: B"));
-		assertEquals("the current step is not a button: you cannot skip forward by click", GuideList.Action.NONE, rows.get(0).getAction());
-		assertFalse("no 'To current' outside viewing: " + all, all.contains("To current"));
-		assertEquals("back is a button", GuideList.Action.PREV, rows.get(rows.size() - 1).getAction());
+		HudModel.Card c = card(stage(new StepGuide.StageView(1, 1, manor(), 2, false)));
+		assertEquals("C", c.getHeadline());
+		assertEquals("the counter: line 3 of 6", "Line 3 of 6", c.getStatus());
+		HudModel.Line next = c.getNext().get(0);
+		assertEquals("one next line", "D", next.getText());
+		assertEquals("how many more after it", "+2", next.getRight());
+		String open = c.plain(true, true);
+		assertFalse("not more than one ahead: " + open, open.contains("C-again"));
+		HudModel.Line back = c.getNext().stream().filter(l -> l.getAction().equals(GuideList.Action.PREV)).findFirst().orElse(null);
+		assertNotNull("the line is not the first: there is 'Previous line': " + open, back);
+		assertTrue(back.getHint(), back.getHint().contains("B"));
+		assertFalse("no 'Back to the current line' outside viewing: " + open, open.contains("Back to the current line"));
+		assertTrue("the next line is not a button: you cannot skip forward by click", !next.getAction().isClickable());
 	}
 
 	@Test
-	public void stageRows_firstStepWithoutBack_lastWithoutNext()
+	public void theFirstLineHasNoPrevious_theLastNoNext()
 	{
-		java.util.ArrayList<GuideList.Row> first = new java.util.ArrayList<>();
-		GuideList.stageRows(first, new StepGuide.StageView(1, 1, manor(), 0, false), FM, FM, 220);
-		assertFalse(text(first), text(first).contains("Back"));
-		java.util.ArrayList<GuideList.Row> last = new java.util.ArrayList<>();
-		GuideList.stageRows(last, new StepGuide.StageView(1, 1, manor(), 5, false), FM, FM, 220);
-		assertFalse(text(last), text(last).contains("Next"));
-		assertTrue(text(last), text(last).contains("6/6"));
+		HudModel.Card first = card(stage(new StepGuide.StageView(1, 1, manor(), 0, false)));
+		assertFalse(first.plain(true, true), first.plain(true, true).contains("Previous line"));
+		HudModel.Card last = card(stage(new StepGuide.StageView(1, 1, manor(), 5, false)));
+		assertTrue(last.plain(true, true), last.getNext().stream().noneMatch(l -> l.getIcon() == HudModel.Icon.NEXT && !l.getAction().isClickable()));
+		assertEquals("Line 6 of 6", last.getStatus());
 	}
 
 	@Test
-	public void stageRows_shortTextInListAndFullInHint()
+	public void theShortTextLeads_theFullOneIsInTheDetails()
 	{
 		List<ActiveTarget.StageLine> l = GSON.fromJson("[{\"t\":\"Talk to the Squire in the courtyard of White Knights' castle in Falador. Dialogue: “Yes”.\",\"s\":\"Talk to the Squire (Falador)\"},{\"t\":\"Second step. In detail.\"}]",
 			new com.google.gson.reflect.TypeToken<List<ActiveTarget.StageLine>>() { }.getType());
-		java.util.ArrayList<GuideList.Row> rows = new java.util.ArrayList<>();
-		GuideList.stageRows(rows, new StepGuide.StageView(1, 1, l, 0, false), FM, FM, 220);
-		assertTrue(text(rows), text(rows).contains("▶ Talk to the Squire (Falador)"));
-		assertFalse("the dialogue does not get into the list", text(rows).contains("Dialogue"));
-		assertTrue("the full text is in the hint", rows.get(0).getHint().contains("White Knights"));
-		assertTrue("a step without a short text shortens itself", text(rows).contains("Next: Second step"));
-		assertFalse(text(rows), text(rows).contains("In detail"));
+		HudModel.Card c = card(stage(new StepGuide.StageView(1, 1, l, 0, false)));
+		assertEquals("Talk to the Squire (Falador)", c.getHeadline());
+		assertFalse("the dialogue is not on the closed card", c.plain(false, false).contains("Dialogue"));
+		assertTrue("the full text is in the details: " + c.plain(true, false), c.plain(true, false).contains("White Knights"));
+		assertEquals("a line without a short text shortens itself", "Second step", c.getNext().get(0).getText());
 	}
 
 	@Test
-	public void doneButton_onlyOnStepsTheGameCannotSee()
+	public void doneButton_onlyOnLinesTheGameCannotSee()
 	{
-		// manor(): A (3100,3300), B without a place, C (3110,3300)... after A the next step has no place: the game will not show it.
-		StepGuide.StageView manual = new StepGuide.StageView(1, 1, manor(), 0, false, null, false, true);
-		java.util.ArrayList<GuideList.Row> rows = new java.util.ArrayList<>();
-		GuideList.stageRows(rows, manual, FM, FM, 220);
-		GuideList.Row next = rows.stream().filter(r -> r.getAction().equals(GuideList.Action.NEXT)).findFirst().orElse(null);
-		assertNotNull("a step the game does not see has 'Done - next': " + text(rows), next);
-		assertTrue(text(java.util.Collections.singletonList(next)), text(java.util.Collections.singletonList(next)).contains("Done - next"));
-		assertEquals("the current step itself is not a button", GuideList.Action.NONE, rows.get(0).getAction());
-		java.util.ArrayList<GuideList.Row> auto = new java.util.ArrayList<>();
-		GuideList.stageRows(auto, new StepGuide.StageView(1, 1, manor(), 0, false), FM, FM, 220);
-		assertTrue("a step the game sees has no button: " + text(auto), auto.stream().noneMatch(r -> r.getAction().equals(GuideList.Action.NEXT)));
+		// manor(): A (3100,3300), B without a place, C (3110,3300)... after A the next line has no place: the game will not show it.
+		HudModel.Card manual = card(stage(new StepGuide.StageView(1, 1, manor(), 0, false, null, false, true)));
+		HudModel.Line done = manual.getNext().stream().filter(r -> r.getAction().equals(GuideList.Action.NEXT)).findFirst().orElse(null);
+		assertNotNull("a line the game does not see has 'Done': " + manual.plain(true, true), done);
+		assertEquals("Done - show the next line", done.getText());
+		HudModel.Card auto = card(stage(new StepGuide.StageView(1, 1, manor(), 0, false)));
+		assertTrue("a line the game sees has no button: " + auto.plain(true, true), auto.getNext().stream().noneMatch(r -> r.getAction().equals(GuideList.Action.NEXT)));
 	}
 
 	@Test
-	public void warningAndViewing_visibleInTheList()
+	public void warningAndViewing_saidOnTheCard()
 	{
 		StepGuide.StageView sv = new StepGuide.StageView(1, 1, manor(), 2, false, "Blurite ore is still in your bag - first: Give Thurgo", true);
-		java.util.ArrayList<GuideList.Row> rows = new java.util.ArrayList<>();
-		GuideList.stageRows(rows, sv, FM, FM, 220);
-		assertTrue("the warning is the first line: " + text(rows.subList(0, 1)), text(rows.subList(0, 1)).contains("⚠ Blurite ore is still in your bag - first: Give Thurgo"));
-		assertTrue(text(rows), text(rows).contains("viewing"));
-		assertFalse("the word 'manually' is no more", text(rows).contains("manually"));
-		GuideList.Row resume = rows.stream().filter(r -> r.getAction().equals(GuideList.Action.RESUME)).findFirst().orElse(null);
-		assertNotNull("while viewing there is 'To current step'", resume);
-		assertTrue(text(java.util.Collections.singletonList(resume)), text(java.util.Collections.singletonList(resume)).contains("To current step"));
+		HudModel.Card c = card(stage(sv));
+		assertEquals("the warning is the one on the closed card", "Blurite ore is still in your bag - first: Give Thurgo", c.getWarning().getText());
+		assertTrue(c.getStatus(), c.getStatus().startsWith("Viewing an earlier line"));
+		assertFalse("the word 'manually' is no more", c.plain(true, true).contains("manually"));
+		HudModel.Line resume = c.getNext().stream().filter(r -> r.getAction().equals(GuideList.Action.RESUME)).findFirst().orElse(null);
+		assertNotNull("while viewing there is 'Back to the current line'", resume);
+		assertEquals("Back to the current line", resume.getText());
 	}
 
 	@Test
@@ -298,21 +288,21 @@ public class QuestStageTest
 	}
 
 	@Test
-	public void stageDone_neededNowBlockNotDrawn_onlyTheStepRemains()
+	public void stageDone_nothingToGet_onlyTheLineRemains()
 	{
 		ActiveTarget t = thurgoOre();
 		// The bars and ore were handed in (they were in the bag, now they are not), the pickaxe is in the bag: everything needed is already done.
 		HashSet<String> got = new HashSet<>(java.util.Arrays.asList(ActiveTarget.nameKey("Iron bar"), ActiveTarget.nameKey("Blurite ore")));
 		ItemCounts bag = new ItemCounts();
 		bag.add(1265, ActiveTarget.nameKey("Bronze pickaxe"), 1);
-		String all = text(GuideList.rows(StepGuide.view(t, bag, null, null, 0, 0, 0, got, 6, false, 3), false, FM, FM, 240));
-		assertFalse("'Needed for this stage' is not drawn when nothing is needed: " + all, all.contains("Needed for this stage"));
-		assertFalse("what was taken and handed in is not listed: " + all, all.contains("✓") || all.contains("Iron bar ×") || all.contains("Bronze pickaxe"));
-		assertTrue(all, all.contains("▶ Bring the sword to the Squire"));
-		assertTrue(all, all.contains("4/4"));
-		assertTrue("the step code instead of a HUD with a name: " + all, all.contains("S2-07 · Stage 1 of 1"));
-		assertTrue("you can go back: " + all, all.contains("◀ Back: Give Thurgo"));
-		assertFalse("the step itself says where to go, so there is no stage point ('dungeon entrance'): " + all, all.contains("Where to go") || all.contains("Ice Dungeon"));
+		HudModel.Card c = card(StepGuide.view(t, bag, null, null, 0, 0, 0, got, 6, false, 3));
+		String all = c.plain(true, true);
+		assertEquals("Bring the sword to the Squire", c.getHeadline());
+		assertEquals("Line 4 of 4", c.getStatus());
+		assertFalse("what was taken and handed in is not asked for: " + all, all.contains("Iron bar") || all.contains("Blurite ore"));
+		assertTrue("you can go back: " + all, all.contains("Previous line"));
+		assertFalse("the line says where to go, so there is no stage point ('dungeon entrance'): " + all, all.contains("Ice Dungeon entrance"));
+		assertTrue("the route step in full when open: " + all, all.contains("S2-07 · The Knight's Sword"));
 	}
 
 	@Test
@@ -321,10 +311,11 @@ public class QuestStageTest
 		ActiveTarget t = thurgoOre();
 		ItemCounts bag = new ItemCounts();
 		bag.add(1265, ActiveTarget.nameKey("Bronze pickaxe"), 1);
-		String all = text(GuideList.rows(StepGuide.view(t, bag, new ItemCounts(), null, 0, 0, 0, new HashSet<>(), 6, false, 0), false, FM, FM, 240));
-		assertTrue(all, all.contains("Needed for this stage"));
-		assertTrue("there is no ore and no bars: they are in the list: " + all, all.contains("Blurite ore") && all.contains("Iron bar"));
-		assertFalse("the pickaxe is already in the bag, so it is not in the list: " + all, all.contains("Bronze pickaxe"));
+		HudModel.Card c = card(StepGuide.view(t, bag, new ItemCounts(), null, 0, 0, 0, new HashSet<>(), 6, false, 0));
+		String all = c.plain(true, true);
+		assertTrue("there is no ore and no bars: they are asked for: " + all, all.contains("Blurite ore") && all.contains("Iron bar"));
+		assertTrue("the pickaxe is with you: " + all, all.contains("1 item with you"));
+		assertTrue(c.getPrepare().stream().noneMatch(l -> l.getText().contains("Bronze pickaxe")));
 	}
 
 	private static ActiveTarget sword()
@@ -408,23 +399,15 @@ public class QuestStageTest
 		assertEquals("Rune platebody is not a tool", 0, bag.count(1127, "Bronze platebody"));
 	}
 
-	private static String text(List<GuideList.Row> rows)
+	private static HudModel.Card card(StepGuide.View v)
 	{
-		// Strings of one record are joined with a space: a long text wraps by width, and is checked as a whole.
-		StringBuilder sb = new StringBuilder();
-		for (GuideList.Row r : rows)
-		{
-			sb.append('|');
-			for (GuideList.Line l : r.getLines())
-			{
-				sb.append(l.getLeft()).append(' ');
-				if (l.getRight() != null)
-				{
-					sb.append('~').append(l.getRight()).append(' ');
-				}
-			}
-		}
-		return sb.toString();
+		return HudModel.build(HudModelTest.input(v, HudModelTest.quiet(), null));
+	}
+
+	/** A step with only this stage view: no items, no places. */
+	private static StepGuide.View stage(StepGuide.StageView sv)
+	{
+		return new StepGuide.View("[S2-05] Manor", null, java.util.Collections.emptyList(), java.util.Collections.emptyList(), null, null, null, null, sv);
 	}
 
 	private static String bad(String stageJson)

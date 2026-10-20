@@ -248,6 +248,8 @@ export interface StepGuidePayload {
   steps?: string[];
   /** Quest stages: the plugin reads the quest variable and shows only the current stage. */
   stage?: StagePayload;
+  /** The selected combat plan's phase in hand and the one after it, short: the in-game guide leads with them (HUD 2.74.0). */
+  plan?: { now?: string; next?: string };
 }
 
 export interface StagePayload {
@@ -287,7 +289,9 @@ export function stepGuide(step: Step, branch?: StepBranch): StepGuidePayload {
   // a cut in the middle would lose instructions. Forty lines is the plugin's own limit for one stage; beyond it the first thirty-nine and the last.
   const steps = all.length > 40 ? [...all.slice(0, 39), all[all.length - 1]] : all;
   const stage = stagePayload(step, places);
-  return { items: items.slice(0, 64), places: places.slice(0, 64), ...(steps.length ? { steps } : {}), ...(stage ? { stage } : {}) };
+  const cp = step.combatPlan;
+  const plan = cp && (cp.now || cp.next) ? { ...(cp.now ? { now: cp.now.slice(0, 200) } : {}), ...(cp.next ? { next: cp.next.slice(0, 300) } : {}) } : undefined;
+  return { items: items.slice(0, 64), places: places.slice(0, 64), ...(steps.length ? { steps } : {}), ...(stage ? { stage } : {}), ...(plan ? { plan } : {}) };
 }
 
 const near = (a: { x: number; y: number; plane: number }, b: { x: number; y: number; plane: number }) =>

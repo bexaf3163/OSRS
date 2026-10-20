@@ -114,7 +114,7 @@ class OsrsPathWorldOverlay extends Overlay
 	 */
 	private void renderNav(Graphics2D g, WorldView wv, NavTarget nav)
 	{
-		Color gold = OsrsPathHudOverlay.TITLE;
+		Color gold = Hud.TITLE;
 		String buy = nav.isPurchase() && config.upgradeRouter()
 			? "[Buy: " + (nav.getItemName() != null ? nav.getItemName() : nav.getLabel()) + "]"
 			: null;

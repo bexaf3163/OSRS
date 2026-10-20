@@ -37,19 +37,26 @@ public class TrainingFoodTest
 	}
 
 	@Test
-	public void thePlateWhileTrainingCarriesTheFoodAndTurnsRedWhenItRunsOut()
+	public void theGuideWhileTrainingCarriesTheFood_andWarnsWhenItRunsOut()
 	{
-		OsrsPathHudOverlay.State s = new OsrsPathHudOverlay.State("[S3-08] Strength to 20 and Attack to 30", "Point 2/2", "~21 tiles", false,
+		Hud.State s = new Hud.State("[S3-08] Strength to 20 and Attack to 30", "Point 2/2", "~21 tiles", false,
 			"Bag: missing Salmon 7", false, null, false, "9 minotaurs to 20 Strength on Aggressive (~2 min)", false, null, null, false, null, 21, null, 0.5, true,
 			TrainingFood.line("Salmon", 8, 9, 3.4), false);
-		OsrsPathHudOverlay.State lean = OsrsPathHudOverlay.lean(s, false);
-		assertEquals("Food: 8 Salmon · ~21 kills", lean.getFood());
-		assertNull("the departure check still waits for the bank", lean.getBag());
-		assertEquals(OverlayCard.GOLD, OsrsPathHudOverlay.accent(lean));
-		OsrsPathHudOverlay.State low = new OsrsPathHudOverlay.State(s.getTitle(), null, null, false, null, false, null, false, s.getPacing(), false, null,
+		StepGuide.View v = new StepGuide.View(s.getTitle(), null, java.util.Collections.emptyList(), java.util.Collections.emptyList(), null, null, null, null);
+		HudModel.Pace pace = new HudModel.Pace("Strength", 19, 20, "Aggressive", false, 9, "minotaurs", "~2 min", true, 0.5, false, "Strength 20, Attack 30");
+		HudModel.Card c = HudModel.build(HudModelTest.input(v, s, pace));
+		assertNull("enough food: no warning", c.getWarning());
+		assertTrue("the food in the details: " + c.plain(true, false), c.plain(true, false).contains("Food: 8 Salmon · ~21 kills"));
+		assertFalse("the departure check still waits for the bank", c.plain(true, true).contains("Bag:"));
+		Hud.State low = new Hud.State(s.getTitle(), null, null, false, null, false, null, false, s.getPacing(), false, null,
 			null, false, null, -1, null, 0.5, true, TrainingFood.line("Salmon", 1, 9, 3.4), true);
-		assertEquals(OverlayCard.RED, OsrsPathHudOverlay.accent(low));
-		assertTrue(OsrsPathHudOverlay.plain(low).startsWith("[S3-08] Strength to 20 and Attack to 30\nFood: 1 Salmon"));
+		HudModel.Card lowCard = HudModel.build(HudModelTest.input(v, low, pace));
+		assertEquals("Food: 1 Salmon · ~2 kills - bank soon", lowCard.getWarning().getText());
+		assertEquals(HudModel.Tone.CAUTION, lowCard.getWarning().getTone());
+		assertTrue(lowCard.plain(false, false).startsWith("Train Strength to 20\n"));
+		Hud.State none = new Hud.State(s.getTitle(), null, null, false, null, false, null, false, s.getPacing(), false, null,
+			null, false, null, -1, null, 0.5, true, TrainingFood.line("Salmon", 0, 9, 3.4), true);
+		assertEquals(HudModel.Tone.DANGER, HudModel.build(HudModelTest.input(v, none, pace)).getWarning().getTone());
 	}
 
 	@Test

@@ -8,7 +8,7 @@ import { selectPlan } from '../../src/lib/combatRoute/selection';
 import type { Adopted } from '../../src/lib/combatRoute/adopt';
 import { foodPicks, withFoodPlan } from '../../src/lib/foodPlan';
 import { emptyProgress } from '../../src/lib/progress';
-import { toInGameTarget } from '../../src/services/runeliteBridge';
+import { stepGuide, toInGameTarget } from '../../src/services/runeliteBridge';
 import { allSteps, stepById } from '../../src/data';
 import { stepGoals } from '../../src/lib/combatEstimate';
 import { levelForXp } from '../../src/lib/xp';
@@ -112,7 +112,9 @@ describe('one plan for every screen and the game', () => {
     const sel = selectPlan(r, undefined, idle);
     const pick = resolvePick(r, sel.key, { xp: HISTORICAL.xp, held: () => 0 }, sel.source, planWhy(r, sel.key, sel.source))!;
     const step = withCombatPlan(route, pick);
-    expect(step.combatPlan).toEqual({ key: 'split', phase: 1, source: 'auto' });
+    // The training phase is told by the pace; the phase after it goes to the game as the next action (HUD 2.74.0), without its "Then: ".
+    expect(step.combatPlan).toEqual({ key: 'split', phase: 1, source: 'auto', next: expect.stringMatching(/^Fight the Hill Giants until 50 Big bones/) });
+    expect(stepGuide(step).plan).toEqual({ next: step.combatPlan!.next });
     expect(step.fields?.[0]).toMatchObject({ label: 'Plan' });
     expect(step.quickSteps?.[0]).toMatch(/^Fight the cows/);
     const payload = toInGameTarget(step)!;
@@ -124,6 +126,19 @@ describe('one plan for every screen and the game', () => {
     const giants = foodPicks([route], emptyProgress(), live)[route.id];
     expect(cows && giants).toBeTruthy();
     expect(withFoodPlan(step, cows).itemsRequired?.find((i) => i.heals)?.amount).toBeLessThan(withFoodPlan(route, giants).itemsRequired!.find((i) => i.heals)!.amount as number);
+  });
+
+  it('an item phase goes to the game as a short action, not the whole sentence', () => {
+    const r = report();
+    const plan = r.plans.find((p) => p.eligible && p.phases.some((ph) => ph.kind === 'item'))!;
+    expect(plan).toBeTruthy();
+    const goals = stepGoals(route);
+    const xp = Object.fromEntries(goals.map((g) => [g.skill, g.exp]));
+    const pick = resolvePick(r, plan.key, { xp, held: () => 0 }, 'player')!;
+    expect(pick.kind).toBe('item');
+    const guide = stepGuide(withCombatPlan(route, pick));
+    expect(guide.plan?.now).toBe(`Collect ${pick.item!.count} ${pick.item!.name} from Hill Giants`);
+    expect(guide.plan?.now?.length).toBeLessThan(60);
   });
 
   it('every plan offered for Attack 40 and 50 Big bones still reaches both: no plan drops part of a combined objective', () => {

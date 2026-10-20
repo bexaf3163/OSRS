@@ -66,9 +66,9 @@ class InventoryCheckOverlay extends OverlayPanel
 			return null;
 		}
 		boolean large = config.hudLarge();
-		Font font = OverlayText.font(g.getFont(), large ? OsrsPathHudOverlay.LARGE : 1f);
+		Font font = OverlayText.font(g.getFont(), large ? Hud.LARGE : 1f);
 		g.setFont(font);
-		int width = OsrsPathHudOverlay.panelWidth(this, standardWidth(large));
+		int width = Hud.panelWidth(this, standardWidth(large));
 		Object key = Arrays.asList(r, target.getStepId(), config.hudOpacity(), font, width);
 		if (!Objects.equals(key, builtFor))
 		{
@@ -105,7 +105,7 @@ class InventoryCheckOverlay extends OverlayPanel
 
 	static int standardWidth(boolean large)
 	{
-		return Math.round((OsrsPathHudOverlay.WIDTH + 20) * (large ? OsrsPathHudOverlay.LARGE : 1f));
+		return Math.round((Hud.WIDTH + 20) * (large ? Hud.LARGE : 1f));
 	}
 
 	/** The panel contents. Static: a test draws it with the real fonts without a client. */
@@ -116,7 +116,7 @@ class InventoryCheckOverlay extends OverlayPanel
 		c.clear();
 		panel.setPreferredSize(new Dimension(width, 0));
 		OverlayText.frame(panel, fm);
-		OverlayText.title(c, "Departure check · " + stepId, OsrsPathHudOverlay.TITLE, fm, inner);
+		OverlayText.title(c, "Departure check · " + stepId, Hud.TITLE, fm, inner);
 		c.add(new OverlayCard.Bar(progress(r), accent(r)));
 		int shown = 0;
 		for (Checklist.Row row : r.getRows())
@@ -133,17 +133,17 @@ class InventoryCheckOverlay extends OverlayPanel
 		if (r.isReady())
 		{
 			footer = "Ready to depart";
-			color = OsrsPathHudOverlay.GOOD;
+			color = Hud.GOOD;
 		}
 		else if (r.getRows().stream().anyMatch(x -> x.getState() == Checklist.State.NOT_FOUND_IN_BANK))
 		{
 			footer = "Missing in the bank too - see 'where to get it' in the app";
-			color = OsrsPathHudOverlay.WARN;
+			color = Hud.WARN;
 		}
 		else
 		{
 			footer = "Take the highlighted items from the bank";
-			color = OsrsPathHudOverlay.WARN;
+			color = Hud.WARN;
 		}
 		OverlayText.line(c, footer, color, fm, inner);
 	}
@@ -157,11 +157,11 @@ class InventoryCheckOverlay extends OverlayPanel
 		{
 			case IN_BAG_READY:
 				mark = "✓ ";
-				color = OsrsPathHudOverlay.GOOD;
+				color = Hud.GOOD;
 				break;
 			case NOT_FOUND_IN_BANK:
 				mark = "✗ ";
-				color = OsrsPathHudOverlay.WARN;
+				color = Hud.WARN;
 				right += row.getInBank() > 0 ? " · in bank " + row.getInBank() : " · not in bank";
 				break;
 			default:

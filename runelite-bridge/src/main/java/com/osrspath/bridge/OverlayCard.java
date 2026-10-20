@@ -39,9 +39,9 @@ final class OverlayCard
 	static final int DOT_Y = 11;
 
 	/** State accents: the same colours as the plate text. */
-	static final Color GOLD = OsrsPathHudOverlay.TITLE;
-	static final Color GREEN = OsrsPathHudOverlay.GOOD;
-	static final Color AMBER = OsrsPathHudOverlay.WARN;
+	static final Color GOLD = Hud.TITLE;
+	static final Color GREEN = Hud.GOOD;
+	static final Color AMBER = Hud.WARN;
 	static final Color RED = OsrsPathDangerOverlay.DANGER;
 	static final Color BLUE = GuideList.LINK;
 

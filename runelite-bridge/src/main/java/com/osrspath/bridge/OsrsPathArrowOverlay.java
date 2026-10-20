@@ -20,12 +20,12 @@ import net.runelite.client.ui.overlay.OverlayPosition;
 /**
  * The big arrow to the current target: top centre of the screen, over the scene but under the game windows, so it does not cover
  * the minimap, chat and bag and does not get in the way of clicks. It turns with the camera, like the minimap; near the target
- * it turns into "✓ Nearby", with no target it is not drawn. The label is the same distance as in the micro HUD.
+ * it turns into "✓ Nearby", with no target it is not drawn. Its distance label shows while the in-game guide is not on screen (the guide says it).
  * Draggable with the mouse while holding Alt, the size is in the settings.
  */
 class OsrsPathArrowOverlay extends Overlay
 {
-	static final Color FAR = OsrsPathGuideOverlay.MODERN_LINK;
+	static final Color FAR = new Color(177, 180, 255);
 	static final Color CLOSE = new Color(255, 210, 90);
 	static final Color NEAR = new Color(90, 220, 120);
 	static final Color OTHER = new Color(255, 170, 60);
@@ -73,14 +73,14 @@ class OsrsPathArrowOverlay extends Overlay
 		ArrowGeometry.State state = ArrowGeometry.state(Navigation.distance(pos.getX(), pos.getY(), target.getX(), target.getY()),
 			layer == 0, plugin.isNavNear());
 		angle = ArrowGeometry.smooth(angle, ArrowGeometry.screenAngle(dx, dy, client.getCameraYawTarget()));
-		OsrsPathHudOverlay.State hud = plugin.getHud();
+		Hud.State hud = plugin.getHud();
 		String text = hud != null ? label(hud.getDistance()) : null;
-		boolean modernGuide = config.overlayTheme() == OsrsPathBridgeConfig.OverlayTheme.GLASS && plugin.guideOnScreen();
+		boolean modernGuide = plugin.guideOnScreen();
 		// The guide already carries the distance. Retain layer/arrival feedback on the marker itself.
 		if (modernGuide && layer == 0 && state != ArrowGeometry.State.VERY_CLOSE) text = null;
 		Font font = config.overlayTheme() == OsrsPathBridgeConfig.OverlayTheme.GLASS
-			? GuideFont.font(config.hudLarge() ? OsrsPathHudOverlay.LARGE : 1f)
-			: OverlayText.font(g.getFont(), config.hudLarge() ? OsrsPathHudOverlay.LARGE : 1f);
+			? GuideFont.font(config.hudLarge() ? Hud.LARGE : 1f)
+			: OverlayText.font(g.getFont(), config.hudLarge() ? Hud.LARGE : 1f);
 		return draw(g, font, state, angle, layer, text, modernGuide ? Math.round(config.arrowSize().diameter * .65f) : config.arrowSize().diameter);
 	}
 

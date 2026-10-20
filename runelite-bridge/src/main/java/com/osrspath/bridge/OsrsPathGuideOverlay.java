@@ -1,5 +1,6 @@
 package com.osrspath.bridge;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -7,43 +8,110 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.geom.Path2D;
+import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import javax.inject.Inject;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Value;
 import net.runelite.api.Client;
+import net.runelite.api.GameState;
+import net.runelite.client.ui.overlay.Overlay;
 import net.runelite.client.ui.overlay.OverlayLayer;
-import net.runelite.client.ui.overlay.OverlayPanel;
 import net.runelite.client.ui.overlay.OverlayPosition;
-import net.runelite.client.ui.overlay.components.LayoutableRenderableEntity;
-import net.runelite.client.ui.overlay.components.PanelComponent;
 
 /**
- * The "What you need" list on the game screen: under the HUD, top left (draggable with Alt). {@link GuideList} computes the
- * lines; the line under the mouse is highlighted, with a hint for it at the bottom. After each frame the list
- * remembers where its lines are on the canvas, and {@link GuideMouse} uses those rectangles to tell where a click landed.
+ * The one OSRS Path HUD on the game screen (2.74.0): {@link HudModel} decides what it says, this class draws it and tells clicks where they landed.
+ *
+ * Collapsed (the default): the current action, one status line, a progress strip when there is progress, "Then: ..." when something comes first, and at most
+ * one warning. A click on the header (or its chevron) opens the details on the same card: the route step in full, how to do the action, the preparation,
+ * what comes next and, on request, "More advice". The open or closed choice is saved (the hidden setting hudExpanded) and is never changed by the mouse
+ * passing over the card or by a state update.
+ *
+ * The class keeps its old name, from when it was the "What you need" card beside a second HUD plate: RuneLite saves an overlay's place and size under the
+ * class name, so a player who moved the card keeps that place. A fresh layout puts the card top right, beside the minimap: clear of RuneLite's hover text
+ * (top left), the chat (bottom left), the inventory (bottom right) and the middle of the game. RuneLite keeps it inside the window when the window or the
+ * scaling changes, and an Alt-drag moves it or stretches its width.
+ *
+ * Clicks: the card is opaque, so a click on it never walks the character to whatever lies under it ({@link GuideMouse}); outside its drawn rectangle every
+ * click goes to the game. It reads no keys.
  */
-class OsrsPathGuideOverlay extends OverlayPanel
+class OsrsPathGuideOverlay extends Overlay
 {
-	/** Wider than the HUD: items have a status on the right, and "where to get it" under them. */
+	/** The card width in logical pixels at the normal text size; stretched with Alt, it keeps the player's width within the limits. */
 	static final int WIDTH = 300;
-	static final Color MODERN_LINK = new Color(177, 180, 255);
-	static final Color MODERN_TEXT = new Color(235, 238, 245);
-	/** "Where to get it" and the hint are smaller than the main text. */
+	static final int MIN_WIDTH = 240;
+	static final int MAX_WIDTH = 420;
+	/** The secondary text and the headline, as a share of the body text size. */
 	static final float SMALL = 0.9f;
-	static final Color HOVER = new Color(255, 255, 255, 40);
-	/** A click this close to the left of the right label still counts as on it. */
-	private static final int TAB_SLACK = 20;
-	/**
-	 * For how long after the last frame a click still counts against the lines. If the list has not been drawn for a long time (left the game,
-	 * the plate was hidden), clicks go to the game, not to invisible buttons.
-	 */
+	static final float HEAD = 1.14f;
+	/** The open card takes at most this share of the window height; the rest is in the side panel. */
+	static final double MAX_HEIGHT_SHARE = 0.6;
+	static final int PAD_X = 10;
+	static final int PAD_TOP = 9;
+	static final int PAD_BOTTOM = 9;
+	static final int ICON = 12;
+	static final int ICON_GAP = 7;
+	static final int CHEVRON = 10;
+	static final int HEAD_LINES = 3;
+
+	static final Color TEXT = new Color(231, 237, 245);
+	static final Color MUTED = new Color(160, 173, 191);
+	static final Color LINK = GuideList.LINK;
+	static final Color GOOD = new Color(110, 205, 135);
+	static final Color CAUTION = new Color(240, 185, 85);
+	static final Color DANGER = new Color(250, 110, 95);
+	static final Color GOLD = Hud.TITLE;
+	static final Color TRAIN = new Color(125, 185, 245);
+	static final Color FILL = new Color(17, 23, 32);
+	static final Color BORDER = new Color(64, 74, 92);
+	static final Color RULE = new Color(255, 255, 255, 26);
+	static final Color HOVER = new Color(255, 255, 255, 24);
+	static final Color TRACK = new Color(255, 255, 255, 36);
+	/** For how long after the last frame a click still counts against the card: hidden for longer, clicks go to the game. */
 	private static final long FRESH_NANOS = 500_000_000L;
 
-	/** Where the list and its lines are on the canvas: a snapshot of the last frame for the mouse thread. */
+	/** What a row of the card is, for drawing. */
+	enum Part
+	{
+		HEADER, STATUS, PROGRESS, THEN, WARNING, STEP, LABEL, LINE, MORE, RULE
+	}
+
+	/** One drawn row of the card, in the card's own coordinates. */
+	@Value
+	static class Row
+	{
+		Part part;
+		/** The row's area: the hover highlight and the clicks. */
+		Rectangle box;
+		/** Where the text starts and its wrapped lines. */
+		int textX;
+		List<String> texts;
+		String right;
+		Font font;
+		Color color;
+		HudModel.Icon icon;
+		Color iconColor;
+		GuideList.Action action;
+		String hint;
+	}
+
+	/** The card laid out for one width and state: its rows and size. */
+	@Value
+	static class Layout
+	{
+		List<Row> rows;
+		Dimension size;
+		Double progress;
+		int segments;
+		Color accent;
+		HudModel.Tone warningTone;
+	}
+
+	/** Where the card and its buttons are on the canvas: a snapshot of the last frame for the mouse thread. */
 	static final class Hits
 	{
 		static final Hits NONE = new Hits(new Rectangle(), Collections.emptyList(), Collections.emptyList(), 0);
@@ -51,25 +119,17 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		final Rectangle area;
 		final List<Rectangle> rows;
 		final List<GuideList.Action> actions;
-		/** For the tab strip: the x (canvas) where the right label begins; clicks left of it select "Steps", from it "Advice". Else Integer.MAX_VALUE. */
-		final List<Integer> splits;
 		final long at;
 
 		Hits(Rectangle area, List<Rectangle> rows, List<GuideList.Action> actions, long at)
 		{
-			this(area, rows, actions, Collections.nCopies(rows.size(), Integer.MAX_VALUE), at);
-		}
-
-		Hits(Rectangle area, List<Rectangle> rows, List<GuideList.Action> actions, List<Integer> splits, long at)
-		{
 			this.area = area;
 			this.rows = rows;
 			this.actions = actions;
-			this.splits = splits;
 			this.at = at;
 		}
 
-		/** The number of the line under a point; -1 means not over a line. */
+		/** The number of the button under a point; -1 means none. */
 		int rowAt(int x, int y)
 		{
 			for (int i = 0; i < rows.size(); i++)
@@ -87,16 +147,8 @@ class OsrsPathGuideOverlay extends OverlayPanel
 	private final OsrsPathBridgePlugin plugin;
 	private final OsrsPathBridgeConfig config;
 	private Object builtFor;
-	private List<RowComponent> components = Collections.emptyList();
+	private Layout layout;
 	private volatile Hits hits = Hits.NONE;
-	private Dimension last = new Dimension();
-	private final GuideDisclosure disclosure = new GuideDisclosure();
-
-	void selectDetails(boolean advice)
-	{
-		disclosure.select(advice);
-		builtFor = null;
-	}
 
 	@Inject
 	OsrsPathGuideOverlay(Client client, OsrsPathBridgePlugin plugin, OsrsPathBridgeConfig config)
@@ -105,162 +157,593 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		this.client = client;
 		this.plugin = plugin;
 		this.config = config;
-		setPosition(OverlayPosition.TOP_LEFT);
+		setPosition(OverlayPosition.TOP_RIGHT);
 		setLayer(OverlayLayer.UNDER_WIDGETS);
-		// Below the HUD in the top-left stack: the HUD has higher priority.
 		setPriority(PRIORITY_LOW);
-		setClearChildren(false);
 		setMovable(true);
+		setResizable(true);
+		setMinimumSize(MIN_WIDTH);
 	}
 
 	@Override
 	public Dimension render(Graphics2D g)
 	{
+		HudModel.Card card = plugin.getHudCard();
+		if (card == null || !config.showGuide() || client.getGameState() != GameState.LOGGED_IN)
+		{
+			hits = Hits.NONE;
+			plugin.guideShown(false);
+			return null;
+		}
 		Graphics2D own = (Graphics2D) g.create();
 		try
 		{
-			own.setRenderingHint(java.awt.RenderingHints.KEY_TEXT_ANTIALIASING, java.awt.RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			own.setRenderingHint(java.awt.RenderingHints.KEY_FRACTIONALMETRICS, java.awt.RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
-			return renderGuide(own);
-		}
-		finally { own.dispose(); }
-	}
-
-	private Dimension renderGuide(Graphics2D g)
-	{
-		StepGuide.View v = plugin.getGuideView();
-		// Smart reveal: while travelling and at the exchange the step list would block the view; it is needed at the bank and near the step.
-		if (!GuideList.shown(config.showGuide(), false, v, config.smartOverlays(), plugin.overlayContext()))
-		{
-			hits = Hits.NONE;
-			plugin.guideShown(false);
-			return null;
-		}
-		// Training on a paced step: the HUD carries the step, the kills left and the progress; the card comes back when the fighting stops or the bank opens.
-		OsrsPathHudOverlay.State trainingHud = plugin.getHud();
-		if (trainingHud != null && trainingHud.isTraining() && config.showHud())
-		{
-			hits = Hits.NONE;
-			plugin.guideShown(false);
-			return null;
-		}
-		// The docked bar keeps the list closed until the mouse is over the bar or the list, or the bank is open.
-		if (config.dockBar() && plugin.dockHidesList())
-		{
-			hits = Hits.NONE;
-			plugin.guideShown(false);
-			return null;
-		}
-		float scale = config.hudLarge() ? OsrsPathHudOverlay.LARGE : 1f;
-		boolean modern = config.overlayTheme() == OsrsPathBridgeConfig.OverlayTheme.GLASS;
-		Font font = modern ? GuideFont.font(scale) : OverlayText.font(g.getFont(), scale);
-		Font small = modern ? GuideFont.font(scale * SMALL) : OverlayText.font(g.getFont(), scale * SMALL);
-		g.setFont(font);
-		int width = OsrsPathHudOverlay.panelWidth(this, Math.round(WIDTH * scale));
-		int hovered = hovered();
-		boolean terse = config.smartOverlays();
-		// By default the card is two rows and opens while the mouse is over it. The docked bar opens the list itself, so there the list is always whole.
-		boolean compact = config.guideCompact() && !config.dockBar() && !config.guideCollapsed();
-		disclosure.forStep(GuideList.code(v));
-		int reveal = compact && !disclosure.isOpen() ? 0 : GuideList.EXPAND_STEPS;
-		OsrsPathHudOverlay.State hud = plugin.getHud();
-		String distance = hud == null ? null : hud.getDistance();
-		Object key = Arrays.asList(v, config.guideCollapsed(), hovered, config.hudOpacity(), font, small, width, terse, compact, reveal, distance);
-		if (!key.equals(builtFor))
-		{
-			components = build(panelComponent, v, config.guideCollapsed(), hovered, GuideFont.metrics(g, font), GuideFont.metrics(g, small),
-				font, small, width, config.hudOpacity(), terse, compact, reveal, distance);
-			builtFor = key;
-			// What exactly the player sees goes to the debug log (only when the plate was rebuilt, not every frame).
-			List<GuideList.Row> shown = new ArrayList<>();
-			for (RowComponent rc : components)
+			own.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			own.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+			own.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			boolean expanded = expanded(config.hudExpanded(), config.smartOverlays(), plugin.overlayContext());
+			float scale = config.hudLarge() ? Hud.LARGE : 1f;
+			Font font = GuideFont.font(scale);
+			Font small = GuideFont.font(scale * SMALL);
+			Font head = GuideFont.font(scale * HEAD);
+			int width = width(Hud.panelWidth(this, Math.round(WIDTH * scale)), scale);
+			int maxHeight = Math.max(160, (int) (client.getCanvasHeight() * MAX_HEIGHT_SHARE));
+			boolean advice = plugin.isAdviceOpen();
+			Object key = Arrays.asList(card, expanded, advice, width, font, maxHeight);
+			if (!key.equals(builtFor))
 			{
-				if (!rc.isHint())
-				{
-					shown.add(rc.getRow());
-				}
+				layout = layout(card, expanded, advice, own, font, small, head, width, maxHeight);
+				builtFor = key;
+				plugin.uiShown("hud", card.plain(expanded, advice));
 			}
-			plugin.uiShown("guide", GuideList.plain(shown));
-			// The card is painted under the rows, so it needs the size of THIS content. The panel reports the size of its previous pass: a card that had
-			// just grown (a wrapped heading, an opened list, a new stage) drew its last rows outside its background (seen live).
-			Dimension now = dryRun(g, super::render);
-			last = now == null ? new Dimension() : now;
-		}
-		OverlayCard.paintGuide(g, last.width, last.height, accent(v), config.hudOpacity(), config.overlayTheme());
-		Dimension d = super.render(g);
-		last = d == null ? new Dimension() : d;
-		remember(g, d);
-		paintTooltip(g, d, hovered, small);
-		plugin.guideShown(true);
-		return d;
-	}
-
-	/**
-	 * Lay the rows out without painting them (an empty clip) and return the size they take. RuneLite's panel returns the size of the children of its
-	 * previous pass, so it is laid out twice. Only when the content was rebuilt, never per frame.
-	 */
-	static Dimension dryRun(Graphics2D g, java.util.function.Function<Graphics2D, Dimension> render)
-	{
-		Graphics2D dry = (Graphics2D) g.create();
-		try
-		{
-			dry.setClip(0, 0, 0, 0);
-			render.apply(dry);
-			return render.apply(dry);
+			Row under = under(layout);
+			paint(own, layout, under, config.hudOpacity());
+			remember(layout);
+			paintTooltip(own, layout, under, small);
+			plugin.guideShown(true);
+			return layout.getSize();
 		}
 		finally
 		{
-			dry.dispose();
+			own.dispose();
 		}
 	}
 
 	/**
-	 * The explanation of the line under the mouse, drawn beside the plate (see {@link OverlayTooltip}). The plate itself does not change, so the
-	 * lines do not move under the mouse while it is read. The coordinates are the plate's own, as the graphics are already moved to it.
+	 * Whether the card is drawn open: the player's choice (the header click), except at the exchange and, with the smart reveal, while travelling, where it
+	 * stays closed for the moment. That does not change the saved choice, and nothing but the player opens the card.
 	 */
-	private void paintTooltip(Graphics2D g, Dimension d, int hovered, Font small)
+	static boolean expanded(boolean chosen, boolean smart, SmartView.Context context)
 	{
-		if (d == null || hovered < 0 || hovered >= components.size())
-		{
-			return;
-		}
-		RowComponent rc = components.get(hovered);
-		String hint = rc.getRow().getHint();
-		if (hint == null || hint.trim().isEmpty())
-		{
-			return;
-		}
-		FontMetrics fm = GuideFont.metrics(g, small);
-		List<String> lines = OverlayTooltip.wrap(hint, fm);
-		if (lines.isEmpty())
-		{
-			return;
-		}
-		Rectangle at = getBounds();
-		Rectangle canvas = new Rectangle(-at.x, -at.y, Math.max(1, client.getCanvasWidth()), Math.max(1, client.getCanvasHeight()));
-		Rectangle tip = OverlayTooltip.place(new Rectangle(0, 0, d.width, d.height), rc.getBounds(), OverlayTooltip.size(lines, fm), canvas);
-		OverlayTooltip.paint(g, tip, lines, small);
+		return chosen && !(SmartView.exchangeFocus(context) || smart && SmartView.compactHud(context));
 	}
 
-	/** The strip colour: quest complete is green, going by stages is blue, otherwise gold. */
-	static Color accent(StepGuide.View v)
+	/** The player's width (Alt-stretched) kept within the limits, scaled with the text. */
+	static int width(int wanted, float scale)
 	{
-		StepGuide.StageView s = v.getStage();
-		if (s != null)
-		{
-			return s.isFinished() ? OverlayCard.GREEN : OverlayCard.BLUE;
-		}
-		return OverlayCard.GOLD;
+		return Math.max(Math.round(MIN_WIDTH * scale), Math.min(Math.round(MAX_WIDTH * scale), wanted));
 	}
 
-	/** The line under the mouse by the previous frame; -1 means the mouse is not over the list, the game menu is open or a game window is over the list. */
-	private int hovered()
+	// ------------------------------------------------------------------------------------------------------------
+	// Layout: pure, so a test lays the card out with the real fonts and checks every row is inside it.
+
+	static Layout layout(HudModel.Card c, boolean expanded, boolean adviceOpen, Graphics2D g, Font font, Font small, Font head, int width, int maxHeight)
+	{
+		FontMetrics fm = GuideFont.metrics(g, font);
+		FontMetrics sm = GuideFont.metrics(g, small);
+		FontMetrics hm = GuideFont.metrics(g, head);
+		List<Row> rows = new ArrayList<>();
+		Color accent = accent(c);
+		int textX = PAD_X + ICON + ICON_GAP;
+		int headW = width - textX - PAD_X - CHEVRON - 6;
+		int y = PAD_TOP;
+		List<String> wrapped = OverlayText.wrap(c.getHeadline(), hm, headW);
+		List<String> headline = clip(wrapped, HEAD_LINES, hm, headW);
+		int h = headline.size() * hm.getHeight();
+		String toggle = expanded ? "Click to close the details." : "Click for the details: the route step, how, what to prepare, what comes next.";
+		rows.add(new Row(Part.HEADER, new Rectangle(2, 2, width - 4, y + h - 2), textX, headline, null, head, TEXT, c.getIcon(), accent,
+			GuideList.Action.TOGGLE, headline == wrapped ? toggle : c.getHeadline() + ". " + toggle));
+		y += h;
+		int bodyW = width - textX - PAD_X;
+		if (c.getStatus() != null)
+		{
+			List<String> st = clip(OverlayText.wrap(c.getStatus(), sm, bodyW), 2, sm, bodyW);
+			rows.add(new Row(Part.STATUS, new Rectangle(textX, y, bodyW, st.size() * sm.getHeight()), textX, st, null, small,
+				c.getTone() == HudModel.Tone.TEXT ? MUTED : TEXT, HudModel.Icon.NONE, null, GuideList.Action.NONE, null));
+			y += st.size() * sm.getHeight();
+		}
+		if (c.getProgress() != null)
+		{
+			y += 5;
+			rows.add(new Row(Part.PROGRESS, new Rectangle(textX, y, bodyW, 4), textX, Collections.emptyList(), null, small, accent, HudModel.Icon.NONE,
+				null, GuideList.Action.NONE, null));
+			y += 4;
+		}
+		if (c.getThen() != null)
+		{
+			y += 3;
+			List<String> th = clip(OverlayText.wrap(c.getThen(), sm, bodyW), 2, sm, bodyW);
+			rows.add(new Row(Part.THEN, new Rectangle(textX, y, bodyW, th.size() * sm.getHeight()), textX, th, null, small, MUTED, HudModel.Icon.NONE,
+				null, GuideList.Action.NONE, null));
+			y += th.size() * sm.getHeight();
+		}
+		if (c.getWarning() != null)
+		{
+			y += 8;
+			HudModel.Line w = c.getWarning();
+			int wx = PAD_X + ICON + ICON_GAP;
+			int ww = width - wx - PAD_X - 4;
+			List<String> wl = clip(OverlayText.wrap(w.getText(), sm, ww), 3, sm, ww);
+			int wh = wl.size() * sm.getHeight() + 10;
+			rows.add(new Row(Part.WARNING, new Rectangle(PAD_X - 4, y, width - 2 * PAD_X + 8, wh), wx, wl, null, small, TEXT, w.getIcon(), toneColor(w.getTone()),
+				GuideList.Action.NONE, w.getHint()));
+			y += wh;
+		}
+		if (expanded)
+		{
+			y = details(rows, c, adviceOpen, fm, sm, font, small, width, y, maxHeight);
+		}
+		y += PAD_BOTTOM;
+		return new Layout(Collections.unmodifiableList(rows), new Dimension(width, y), c.getProgress(), c.getSegments(), accent,
+			c.getWarning() == null ? null : c.getWarning().getTone());
+	}
+
+	/** The open card's sections, cut short (with a pointer to the side panel) when they would pass maxHeight. */
+	private static int details(List<Row> rows, HudModel.Card c, boolean adviceOpen, FontMetrics fm, FontMetrics sm, Font font, Font small, int width, int y,
+		int maxHeight)
+	{
+		int inner = width - 2 * PAD_X;
+		y += 8;
+		rows.add(new Row(Part.RULE, new Rectangle(PAD_X, y, inner, 1), PAD_X, Collections.emptyList(), null, small, RULE, HudModel.Icon.NONE, null,
+			GuideList.Action.NONE, null));
+		y += 7;
+		List<Part> parts = new ArrayList<>();
+		List<HudModel.Line> lines = new ArrayList<>();
+		if (c.getStep() != null)
+		{
+			parts.add(Part.STEP);
+			lines.add(HudModel.Line.small(HudModel.Icon.NONE, c.getStep(), HudModel.Tone.MUTED));
+		}
+		for (HudModel.Line l : c.getNow())
+		{
+			parts.add(Part.LINE);
+			lines.add(l);
+		}
+		section(parts, lines, "Prepare", c.getPrepare());
+		section(parts, lines, "Next", c.getNext());
+		if (!c.getAdvice().isEmpty())
+		{
+			parts.add(Part.MORE);
+			lines.add(new HudModel.Line(HudModel.Icon.MORE, "More advice · " + c.adviceCount(), null, HudModel.Tone.LINK, true, GuideList.Action.MORE,
+				adviceOpen ? "Click to hide the optional advice." : "Click for the optional advice: stops on the way, gear, weight, cleanup."));
+			if (adviceOpen)
+			{
+				for (HudModel.Line l : c.getAdvice())
+				{
+					parts.add(Part.LINE);
+					lines.add(l);
+				}
+			}
+		}
+		for (int i = 0; i < lines.size(); i++)
+		{
+			Part part = parts.get(i);
+			Row r = lineRow(part, lines.get(i), fm, sm, font, small, width, y + (part == Part.LABEL || part == Part.MORE ? 6 : 0));
+			int bottom = r.getBox().y + r.getBox().height;
+			// The row must leave room for the pointer to the side panel, unless it is the last of all.
+			boolean last = i == lines.size() - 1;
+			if (bottom + PAD_BOTTOM + (last ? 0 : 2 * sm.getHeight() + 8) > maxHeight)
+			{
+				Row more = lineRow(Part.LINE, HudModel.Line.small(HudModel.Icon.DOT, "More in the OSRS Path panel on the right", HudModel.Tone.MUTED), fm, sm, font,
+					small, width, y + 2);
+				rows.add(more);
+				return more.getBox().y + more.getBox().height;
+			}
+			rows.add(r);
+			y = bottom + (part == Part.STEP ? 4 : 2);
+		}
+		return y;
+	}
+
+	private static void section(List<Part> parts, List<HudModel.Line> lines, String label, List<HudModel.Line> section)
+	{
+		if (section.isEmpty())
+		{
+			return;
+		}
+		parts.add(Part.LABEL);
+		lines.add(HudModel.Line.small(HudModel.Icon.NONE, label, HudModel.Tone.MUTED));
+		for (HudModel.Line l : section)
+		{
+			parts.add(Part.LINE);
+			lines.add(l);
+		}
+	}
+
+	private static Row lineRow(Part part, HudModel.Line l, FontMetrics fm, FontMetrics sm, Font font, Font small, int width, int y)
+	{
+		boolean isSmall = l.isSmall() || part != Part.LINE;
+		FontMetrics m = isSmall ? sm : fm;
+		boolean icon = l.getIcon() != HudModel.Icon.NONE;
+		int textX = PAD_X + (icon ? ICON + 5 : 0);
+		int rightW = l.getRight() == null ? 0 : m.stringWidth(l.getRight()) + 8;
+		int textW = width - textX - PAD_X - rightW;
+		int max = part == Part.STEP ? 2 : isSmall ? 3 : 2;
+		List<String> wrapped = OverlayText.wrap(l.getText(), m, textW);
+		List<String> texts = clip(wrapped, max, m, textW);
+		int h = texts.size() * m.getHeight();
+		Color color = part == Part.LABEL ? MUTED : part == Part.MORE ? LINK : toneColor(l.getTone());
+		// A line cut short keeps its whole text in the hint beside the card.
+		String hint = texts == wrapped || l.getHint() != null && l.getHint().startsWith(l.getText()) ? l.getHint()
+			: l.getText() + (l.getHint() == null ? "" : ". " + l.getHint());
+		return new Row(part, new Rectangle(PAD_X - 4, y, width - 2 * PAD_X + 8, h + 2), textX, texts, l.getRight(), isSmall ? small : font, color, l.getIcon(),
+			toneColor(l.getTone()), l.getAction(), hint);
+	}
+
+	/** At most max lines: the last is cut with an ellipsis, the whole text stays in the hover hint. */
+	static List<String> clip(List<String> lines, int max, FontMetrics fm, int width)
+	{
+		if (lines.size() <= max)
+		{
+			return lines;
+		}
+		List<String> out = new ArrayList<>(lines.subList(0, max));
+		String last = out.get(max - 1);
+		while (!last.isEmpty() && fm.stringWidth(last + "…") > width)
+		{
+			last = last.substring(0, last.length() - 1).trim();
+		}
+		out.set(max - 1, last + "…");
+		return out;
+	}
+
+	/** The headline icon's colour: what kind of moment it is. */
+	static Color accent(HudModel.Card c)
+	{
+		if (c.getTone() == HudModel.Tone.DANGER)
+		{
+			return DANGER;
+		}
+		if (c.getTone() == HudModel.Tone.CAUTION || c.getIcon() == HudModel.Icon.PREPARE)
+		{
+			return CAUTION;
+		}
+		switch (c.getIcon())
+		{
+			case TRAIN:
+				return TRAIN;
+			case CHECK:
+				return GOOD;
+			case GO:
+				return LINK;
+			default:
+				return GOLD;
+		}
+	}
+
+	static Color toneColor(HudModel.Tone t)
+	{
+		switch (t)
+		{
+			case MUTED:
+				return MUTED;
+			case LINK:
+				return LINK;
+			case GOOD:
+				return GOOD;
+			case CAUTION:
+				return CAUTION;
+			case DANGER:
+				return DANGER;
+			default:
+				return TEXT;
+		}
+	}
+
+	// ------------------------------------------------------------------------------------------------------------
+	// Painting.
+
+	/** Draws the laid-out card from (0, 0), the button under the mouse highlighted. Static: a test paints it into an image. */
+	static void paint(Graphics2D g, Layout l, Row hovered, int opacity)
+	{
+		Dimension d = l.getSize();
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		RoundRectangle2D card = new RoundRectangle2D.Float(0.5f, 0.5f, d.width - 1, d.height - 1, 9, 9);
+		// Dark and nearly opaque whatever the setting says, so the text reads over snow and grass alike.
+		g.setColor(new Color(FILL.getRed(), FILL.getGreen(), FILL.getBlue(), Math.max(OverlayCard.alpha(opacity), 236)));
+		g.fill(card);
+		g.setColor(BORDER);
+		g.setStroke(new BasicStroke(1f));
+		g.draw(card);
+		for (Row r : l.getRows())
+		{
+			if (r == hovered && r.getAction().isClickable())
+			{
+				g.setColor(HOVER);
+				Rectangle b = r.getBox();
+				g.fillRoundRect(b.x, b.y, b.width, b.height, 7, 7);
+			}
+			paintRow(g, r, l);
+		}
+	}
+
+	private static void paintRow(Graphics2D g, Row r, Layout l)
+	{
+		Rectangle b = r.getBox();
+		FontMetrics fm = GuideFont.metrics(g, r.getFont());
+		switch (r.getPart())
+		{
+			case RULE:
+				g.setColor(RULE);
+				g.fillRect(b.x, b.y, b.width, 1);
+				return;
+			case PROGRESS:
+				paintProgress(g, b, l.getProgress() == null ? 0 : l.getProgress(), l.getSegments(), r.getColor());
+				return;
+			case WARNING:
+			{
+				Color tone = r.getIconColor();
+				g.setColor(new Color(tone.getRed() / 3, tone.getGreen() / 4, tone.getBlue() / 5, 150));
+				g.fillRoundRect(b.x, b.y, b.width, b.height, 7, 7);
+				g.setColor(new Color(tone.getRed(), tone.getGreen(), tone.getBlue(), 170));
+				g.drawRoundRect(b.x, b.y, b.width, b.height, 7, 7);
+				paintIcon(g, r.getIcon(), PAD_X, b.y + 5 + (fm.getAscent() - ICON) / 2 + 1, ICON, tone);
+				paintText(g, r, b.y + 5);
+				return;
+			}
+			case HEADER:
+			{
+				int top = PAD_TOP;
+				paintIcon(g, r.getIcon(), PAD_X, top + (fm.getAscent() - ICON) / 2 + 2, ICON, r.getIconColor());
+				paintText(g, r, top);
+				boolean open = r.getHint() != null && r.getHint().startsWith("Click to close");
+				paintChevron(g, b.x + b.width - PAD_X + 2 - CHEVRON, top + (fm.getAscent() - CHEVRON) / 2 + 2, CHEVRON, open, MUTED);
+				return;
+			}
+			default:
+			{
+				if (r.getIcon() != HudModel.Icon.NONE)
+				{
+					int size = ICON - 2;
+					paintIcon(g, r.getIcon(), PAD_X, b.y + 1 + (fm.getAscent() - size) / 2 + 1, size, r.getIconColor());
+				}
+				paintText(g, r, b.y + 1);
+				if (r.getRight() != null)
+				{
+					g.setColor(TEXT);
+					GuideFont.draw(g, r.getRight(), r.getFont(), b.x + b.width - 4 - fm.stringWidth(r.getRight()), b.y + 1 + fm.getAscent());
+				}
+			}
+		}
+	}
+
+	private static void paintText(Graphics2D g, Row r, int top)
+	{
+		FontMetrics fm = GuideFont.metrics(g, r.getFont());
+		g.setColor(r.getColor());
+		int y = top + fm.getAscent();
+		for (String t : r.getTexts())
+		{
+			GuideFont.draw(g, t, r.getFont(), r.getTextX(), y);
+			y += fm.getHeight();
+		}
+	}
+
+	/** A thin strip: plain, or one segment per quest stage. */
+	static void paintProgress(Graphics2D g, Rectangle b, double fraction, int segments, Color color)
+	{
+		double f = Math.max(0, Math.min(1, fraction));
+		if (segments > 1)
+		{
+			int gap = 3;
+			int done = (int) Math.round(f * segments);
+			for (int i = 0; i < segments; i++)
+			{
+				int left = b.x + i * b.width / segments;
+				int right = b.x + (i + 1) * b.width / segments - gap;
+				g.setColor(i < done ? color : TRACK);
+				g.fillRoundRect(left, b.y, Math.max(1, right - left), b.height, b.height, b.height);
+			}
+			return;
+		}
+		g.setColor(TRACK);
+		g.fillRoundRect(b.x, b.y, b.width, b.height, b.height, b.height);
+		int filled = (int) Math.round(b.width * f);
+		if (filled > 0)
+		{
+			g.setColor(color);
+			g.fillRoundRect(b.x, b.y, Math.max(b.height, filled), b.height, b.height, b.height);
+		}
+	}
+
+	/** The chevron of the header: down to open, up to close. */
+	static void paintChevron(Graphics2D g, int x, int y, int size, boolean open, Color c)
+	{
+		Graphics2D k = (Graphics2D) g.create();
+		try
+		{
+			k.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			k.setColor(c);
+			k.setStroke(new BasicStroke(1.6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+			Path2D p = new Path2D.Float();
+			float m = size / 2f;
+			float q = size * 0.28f;
+			float dir = open ? -1 : 1;
+			p.moveTo(x + m - q * 1.4f, y + m - dir * q * 0.6f);
+			p.lineTo(x + m, y + m + dir * q * 0.6f);
+			p.lineTo(x + m + q * 1.4f, y + m - dir * q * 0.6f);
+			k.draw(p);
+		}
+		finally
+		{
+			k.dispose();
+		}
+	}
+
+	/** The card's small vector icons, all from the same strokes: no emoji, no font glyphs. (x, y) is the icon box's top left. */
+	static void paintIcon(Graphics2D g, HudModel.Icon icon, int x, int y, int s, Color c)
+	{
+		if (icon == HudModel.Icon.NONE || c == null)
+		{
+			return;
+		}
+		Graphics2D k = (Graphics2D) g.create();
+		try
+		{
+			k.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			k.setColor(c);
+			k.setStroke(new BasicStroke(1.5f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+			float m = s / 2f;
+			Path2D p = new Path2D.Float();
+			switch (icon)
+			{
+				case QUEST:
+				{
+					// A small hexagon: the quest marker of the old card, smaller.
+					for (int i = 0; i < 6; i++)
+					{
+						double a = Math.PI / 3 * i - Math.PI / 2;
+						float px = (float) (x + m + Math.cos(a) * (m - 0.5));
+						float py = (float) (y + m + Math.sin(a) * (m - 0.5));
+						if (i == 0)
+						{
+							p.moveTo(px, py);
+						}
+						else
+						{
+							p.lineTo(px, py);
+						}
+					}
+					p.closePath();
+					k.draw(p);
+					k.fillOval(Math.round(x + m - 1.5f), Math.round(y + m - 1.5f), 3, 3);
+					return;
+				}
+				case TRAIN:
+					// A target: what the training aims at.
+					k.drawOval(x + 1, y + 1, s - 2, s - 2);
+					k.fillOval(Math.round(x + m - 2), Math.round(y + m - 2), 4, 4);
+					return;
+				case PREPARE:
+					// A bag with a handle.
+					k.drawRoundRect(x + 1, y + 4, s - 2, s - 5, 3, 3);
+					k.drawArc(Math.round(x + m - 3), y + 1, 6, 6, 0, 180);
+					return;
+				case GO:
+					p.moveTo(x + 1.5f, y + m);
+					p.lineTo(x + s - 2f, y + m);
+					p.moveTo(x + s - 6f, y + m - 3.5f);
+					p.lineTo(x + s - 2f, y + m);
+					p.lineTo(x + s - 6f, y + m + 3.5f);
+					k.draw(p);
+					return;
+				case NEXT:
+					p.moveTo(x + m - 2f, y + m - 3.5f);
+					p.lineTo(x + m + 1.5f, y + m);
+					p.lineTo(x + m - 2f, y + m + 3.5f);
+					k.draw(p);
+					return;
+				case BACK:
+					p.moveTo(x + m + 2f, y + m - 3.5f);
+					p.lineTo(x + m - 1.5f, y + m);
+					p.lineTo(x + m + 2f, y + m + 3.5f);
+					k.draw(p);
+					return;
+				case MORE:
+					p.moveTo(x + m - 3.5f, y + m - 1.5f);
+					p.lineTo(x + m, y + m + 2f);
+					p.lineTo(x + m + 3.5f, y + m - 1.5f);
+					k.draw(p);
+					return;
+				case CHECK:
+					p.moveTo(x + 2f, y + m);
+					p.lineTo(x + m - 1f, y + s - 3f);
+					p.lineTo(x + s - 1.5f, y + 2.5f);
+					k.draw(p);
+					return;
+				case MISSING:
+					k.drawOval(x + 1, y + 1, s - 2, s - 2);
+					k.drawLine(Math.round(x + m - 2.5f), Math.round(y + m - 2.5f), Math.round(x + m + 2.5f), Math.round(y + m + 2.5f));
+					k.drawLine(Math.round(x + m + 2.5f), Math.round(y + m - 2.5f), Math.round(x + m - 2.5f), Math.round(y + m + 2.5f));
+					return;
+				case BANK:
+					// A chest: the bank.
+					k.drawRoundRect(x + 1, y + 3, s - 2, s - 5, 2, 2);
+					k.drawLine(x + 1, Math.round(y + m), x + s - 1, Math.round(y + m));
+					return;
+				case UNKNOWN:
+				{
+					// A dashed circle: not checked.
+					float r = m - 1;
+					for (int i = 0; i < 8; i += 2)
+					{
+						k.drawArc(Math.round(x + m - r), Math.round(y + m - r), Math.round(2 * r), Math.round(2 * r), i * 45 + 10, 25);
+					}
+					return;
+				}
+				case WARN:
+				case DANGER:
+				{
+					p.moveTo(x + m, y + 1f);
+					p.lineTo(x + s - 0.5f, y + s - 1.5f);
+					p.lineTo(x + 0.5f, y + s - 1.5f);
+					p.closePath();
+					if (icon == HudModel.Icon.DANGER)
+					{
+						k.fill(p);
+						k.setColor(FILL);
+					}
+					else
+					{
+						k.draw(p);
+					}
+					k.fillRect(Math.round(x + m - 0.75f), y + 4, 2, Math.max(2, s - 9));
+					k.fillRect(Math.round(x + m - 0.75f), y + s - 4, 2, 2);
+					return;
+				}
+				case DOT:
+					k.fillOval(Math.round(x + m - 1.5f), Math.round(y + m - 1.5f), 3, 3);
+					return;
+				default:
+			}
+		}
+		finally
+		{
+			k.dispose();
+		}
+	}
+
+	// ------------------------------------------------------------------------------------------------------------
+	// The mouse: hover by the previous frame, clicks by the remembered buttons.
+
+	/**
+	 * The row under the mouse by the previous frame, when it is a button or has a hint; null when there is none, the game menu is open or a game window
+	 * covers the card. A button is highlighted; a hint (what a click does, a line's whole text) is shown beside the card.
+	 */
+	private Row under(Layout l)
 	{
 		net.runelite.api.Point m = freeMouse();
-		return m == null ? -1 : hits.rowAt(m.getX(), m.getY());
+		if (m == null)
+		{
+			return null;
+		}
+		return rowAt(l, m.getX() - getBounds().x, m.getY() - getBounds().y);
 	}
 
-	/** The mouse point, or null if there is none, the game menu is open, or a game window (bank, shop, world map) is over the list. */
+	/** The row at a point of the card: a button or a line with a hint; null for none. */
+	static Row rowAt(Layout l, int x, int y)
+	{
+		for (Row r : l.getRows())
+		{
+			if ((r.getAction().isClickable() || r.getHint() != null) && r.getBox().contains(x, y))
+			{
+				return r;
+			}
+		}
+		return null;
+	}
+
+	/** The mouse point, or null if there is none, the game menu is open, or a game window (bank, shop, world map) is over the card. */
 	private net.runelite.api.Point freeMouse()
 	{
 		if (client.isMenuOpen())
@@ -276,32 +759,24 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		return m;
 	}
 
-	/** The line rectangles on the canvas: at drawing time the plate already stands in its place (getBounds). */
-	private void remember(Graphics2D g, Dimension d)
+	/** The buttons on the canvas: at drawing time the card already stands in its place (getBounds). */
+	private void remember(Layout l)
 	{
-		if (d == null)
-		{
-			hits = Hits.NONE;
-			return;
-		}
 		Rectangle at = getBounds();
 		List<Rectangle> rects = new ArrayList<>();
 		List<GuideList.Action> actions = new ArrayList<>();
-		List<Integer> splits = new ArrayList<>();
-		for (RowComponent c : components)
+		for (Row r : l.getRows())
 		{
-			if (c.isHint())
+			if (!r.getAction().isClickable())
 			{
 				continue;
 			}
-			Rectangle r = new Rectangle(c.getBounds());
-			r.translate(at.x, at.y);
-			rects.add(r);
-			actions.add(c.getRow().getAction());
-			// The tab strip is two buttons on one row: the right label starts where its painted text starts.
-			splits.add(c.getRow().getAction().getKind() == GuideList.Kind.TAB ? r.x + r.width - c.rightLabelWidth(g) - TAB_SLACK : Integer.MAX_VALUE);
+			Rectangle b = new Rectangle(r.getBox());
+			b.translate(at.x, at.y);
+			rects.add(b);
+			actions.add(r.getAction());
 		}
-		setHits(new Hits(new Rectangle(at.x, at.y, d.width, d.height), rects, actions, splits, System.nanoTime()));
+		hits = new Hits(new Rectangle(at.x, at.y, l.getSize().width, l.getSize().height), rects, actions, System.nanoTime());
 	}
 
 	void setHits(Hits h)
@@ -309,9 +784,28 @@ class OsrsPathGuideOverlay extends OverlayPanel
 		hits = h;
 	}
 
+	/** The explanation of the row under the mouse, beside the card (it never covers the card or the line it explains). */
+	private void paintTooltip(Graphics2D g, Layout l, Row r, Font small)
+	{
+		if (r == null || r.getHint() == null || r.getHint().trim().isEmpty())
+		{
+			return;
+		}
+		FontMetrics fm = GuideFont.metrics(g, small);
+		List<String> lines = OverlayTooltip.wrap(r.getHint(), fm);
+		if (lines.isEmpty())
+		{
+			return;
+		}
+		Rectangle at = getBounds();
+		Rectangle canvas = new Rectangle(-at.x, -at.y, Math.max(1, client.getCanvasWidth()), Math.max(1, client.getCanvasHeight()));
+		Rectangle tip = OverlayTooltip.place(new Rectangle(0, 0, l.getSize().width, l.getSize().height), r.getBox(), OverlayTooltip.size(lines, fm), canvas);
+		OverlayTooltip.paint(g, tip, lines, small);
+	}
+
 	/**
-	 * What is under a canvas point (mouse thread). null means not the list, the click goes to the game; Action.NONE means the list but not a button:
-	 * the click must not go to the game and walk the character to whatever is under the plate.
+	 * What is under a canvas point (mouse thread). null means not the card: the click goes to the game. Action.NONE means the card but not a button: the
+	 * click must not go to the game and walk the character to whatever lies under the card.
 	 */
 	GuideList.Action actionAt(Point p)
 	{
@@ -321,310 +815,6 @@ class OsrsPathGuideOverlay extends OverlayPanel
 			return null;
 		}
 		int row = h.rowAt(p.x, p.y);
-		if (row < 0)
-		{
-			return GuideList.Action.NONE;
-		}
-		GuideList.Action a = h.actions.get(row);
-		if (a.getKind() == GuideList.Kind.TAB)
-		{
-			return p.x >= h.splits.get(row) ? GuideList.Action.TAB_ADVICE : GuideList.Action.TAB_STEPS;
-		}
-		return a;
-	}
-
-	/** The plate contents. Static: a test draws it with the real fonts without a client. */
-	static List<RowComponent> build(PanelComponent panel, StepGuide.View v, boolean collapsed, int hovered, FontMetrics fm,
-		FontMetrics smallFm, Font font, Font small, int width, int opacity)
-	{
-		return build(panel, v, collapsed, hovered, fm, smallFm, font, small, width, opacity, false);
-	}
-
-	/** terse is the brief view for the game (smart reveal): the details stay in the hint and in the app window. */
-	static List<RowComponent> build(PanelComponent panel, StepGuide.View v, boolean collapsed, int hovered, FontMetrics fm,
-		FontMetrics smallFm, Font font, Font small, int width, int opacity, boolean terse)
-	{
-		return build(panel, v, collapsed, hovered, fm, smallFm, font, small, width, opacity, terse, false, GuideList.EXPAND_STEPS);
-	}
-
-	/** compact is the strict two-line view; reveal is how much of the rest is open (0 is closed), see {@link GuideList#expandedRows}. */
-	static List<RowComponent> build(PanelComponent panel, StepGuide.View v, boolean collapsed, int hovered, FontMetrics fm,
-		FontMetrics smallFm, Font font, Font small, int width, int opacity, boolean terse, boolean compact, int reveal)
-	{
-		return build(panel, v, collapsed, hovered, fm, smallFm, font, small, width, opacity, terse, compact, reveal, null);
-	}
-
-	private static String leftText(GuideList.Row r)
-	{
-		return r.getLines().stream().map(GuideList.Line::getLeft).collect(java.util.stream.Collectors.joining(" "));
-	}
-
-	/** The same warning as another row: same action and full text (the hint), whatever size it was set in. */
-	static boolean sameAlert(GuideList.Row a, GuideList.Row b)
-	{
-		return a.getAction().getKind() == b.getAction().getKind() && a.getHint() != null && a.getHint().equals(b.getHint())
-			&& leftText(a).startsWith("⚠") && leftText(b).startsWith("⚠");
-	}
-
-	/** The "Details: ..." row of the open list: the action row of this card already shows that text in full. */
-	static boolean repeatsAction(GuideList.Row r)
-	{
-		return r.getAction() == GuideList.Action.NONE && leftText(r).startsWith("Details: ");
-	}
-
-	static List<RowComponent> build(PanelComponent panel, StepGuide.View v, boolean collapsed, int hovered, FontMetrics fm,
-		FontMetrics smallFm, Font font, Font small, int width, int opacity, boolean terse, boolean compact, int reveal, String distance)
-	{
-		List<LayoutableRenderableEntity> c = panel.getChildren();
-		c.clear();
-		panel.setPreferredSize(new Dimension(width, 0));
-		OverlayText.frame(panel, fm);
-		List<GuideList.Row> rows = new ArrayList<>(collapsed ? GuideList.rows(v, true, fm, smallFm, width, terse)
-			: GuideList.expandedRows(v, compact ? reveal : GuideList.EXPAND_STEPS, fm, smallFm, width, terse));
-		if (!collapsed && (!compact || reveal > 0) && v.isAdviceTab() && GuideList.adviceCount(v) == 0)
-		{
-			rows = new ArrayList<>(GuideList.coreRows(v, fm, width));
-			rows.add(new GuideList.Row(GuideList.text("No advice for this step.", GuideList.MUTED, smallFm, OverlayText.inner(width), true), GuideList.Action.NONE, null));
-		}
-		// The current action row below already shows the whole recipe of the line: a "Details:" row would repeat it word for word.
-		rows.removeIf(OsrsPathGuideOverlay::repeatsAction);
-		// Critical warnings must also survive an Advice selection or the header-only collapse. The open list already has them
-		// (set in another size, so the rows are not equal): the same warning is never drawn twice.
-		for (GuideList.Row alert : GuideList.alertRows(v, fm, width))
-		{
-			if (alert.getAction().getKind() != GuideList.Kind.DETOUR && rows.stream().noneMatch(r -> sameAlert(r, alert))) rows.add(alert);
-		}
-		if (!collapsed)
-		{
-			int at = Math.min(2, rows.size());
-			String place = v.getPlaces().stream().filter(StepGuide.PlaceLine::isActive).map(StepGuide.PlaceLine::getLabel).findFirst().orElse(v.getStage() == null ? v.getGoal() : null);
-			if (place != null && !place.trim().isEmpty())
-			{
-				rows.add(at++, new GuideList.Row(GuideList.clip("", place, GuideList.MUTED, smallFm, OverlayText.inner(width), 2, true),
-					GuideList.Action.NONE, place));
-			}
-			int advice = GuideList.adviceCount(v);
-			// Keep the same tab actions directly under the current action in both reveal states.
-			rows.removeIf(r -> r.getAction().getKind() == GuideList.Kind.TAB);
-			rows.add(at, GuideList.tabRow(v.isAdviceTab(), advice, fm, OverlayText.inner(width)));
-			if (compact && reveal <= 0)
-			{
-				// The closed card: one travel line above the tabs (a shortcut, what to get for it, or a stop on the way), never two.
-				rows.removeIf(r -> r.getAction().getKind() == GuideList.Kind.DETOUR || r.getAction().getKind() == GuideList.Kind.TRANSPORT);
-				GuideList.Row travel = GuideList.travelRow(v, smallFm, width);
-				if (travel != null)
-				{
-					rows.add(Math.min(at, rows.size()), travel);
-				}
-			}
-		}
-		List<RowComponent> out = new ArrayList<>();
-		FontMetrics actionFm = new FontMetrics(GuideFont.action(font))
-		{
-			@Override
-			public int stringWidth(String text)
-			{
-				return (int) Math.ceil(getFont().getStringBounds(text, fm.getFontRenderContext()).getWidth());
-			}
-		};
-		for (int i = 0; i < rows.size(); i++)
-		{
-			GuideList.Row r = rows.get(i);
-			boolean heading = i == 0;
-			boolean current = !heading && r.getAction() == GuideList.Action.NONE && !r.getLines().isEmpty()
-				&& r.getLines().get(0).getLeft().contains("▶ [");
-			if (heading)
-			{
-				String title = v.getTitle() == null ? "OSRS Path" : v.getTitle().replaceFirst("^\\[[^\\]]+\\]\\s*", "");
-				List<GuideList.Line> header = new ArrayList<>(GuideList.pair(title, new Color(231, 237, 245), "",
-					GuideList.MUTED, fm, OverlayText.inner(width) - 40, false));
-				String meta = v.getStage() == null ? "Current step" : GuideList.stageTitle(v.getStage());
-				header.addAll(GuideList.pair(meta, GuideList.MUTED, distance == null ? "" : distance, GuideList.MUTED, smallFm, OverlayText.inner(width) - 28, true));
-				r = new GuideList.Row(header, r.getAction(), r.getHint());
-			}
-			else if (current)
-			{
-				String action = r.getLines().stream().map(GuideList.Line::getLeft).collect(java.util.stream.Collectors.joining(" "))
-					.replaceFirst("▶ \\[\\d+/\\d+\\]\\s*", "");
-				StepGuide.StageView stage = v.getStage();
-				if (stage != null && stage.getSteps() != null && stage.getCursor() >= 0 && stage.getCursor() < stage.getSteps().size())
-					action = (stage.isPeeking() ? "Viewing · " : "") + GuideList.withoutDoneErrands(v, stage.getSteps().get(stage.getCursor()).shown());
-				int alternative = GuideList.alternativeAt(action);
-				List<GuideList.Line> actionLines = new ArrayList<>();
-				if (alternative > 0)
-				{
-					actionLines.addAll(GuideList.text(action.substring(0, alternative), MODERN_TEXT, actionFm, OverlayText.inner(width) - 2, false));
-					actionLines.addAll(GuideList.text(action.substring(alternative + 1), GuideList.MUTED, smallFm, OverlayText.inner(width) - 2, true));
-				}
-				else actionLines.addAll(GuideList.text(action, MODERN_TEXT, actionFm, OverlayText.inner(width) - 2, false));
-				r = new GuideList.Row(actionLines, r.getAction(), r.getHint());
-			}
-			RowComponent rc = new RowComponent(r, i == hovered && r.getAction().isClickable(), false, font, small, heading, current);
-			rc.folded = collapsed || (compact && reveal <= 0);
-			out.add(rc);
-			c.add(rc);
-			if (i == 0 && !collapsed && v.getStage() != null && v.getStage().getTotal() > 0)
-			{
-				// Under the stage heading is the quest progress strip.
-				StepGuide.StageView sv = v.getStage();
-				c.add(new OverlayCard.Bar(sv.isFinished() ? 1 : (double) sv.getIndex() / sv.getTotal(),
-					sv.isFinished() ? OverlayCard.GREEN : MODERN_LINK, sv.getTotal()));
-			}
-		}
-		// The hint of the hovered line is not a row of the plate: it is drawn beside it (OverlayTooltip), so the plate never changes size under the mouse.
-		return out;
-	}
-
-	/** A list line: its text lines and the highlight when the mouse is over a button. The size and place are set after drawing. */
-	static final class RowComponent implements LayoutableRenderableEntity
-	{
-		@Getter
-		private final GuideList.Row row;
-		private final boolean hovered;
-		@Getter
-		private final boolean hint;
-		private final List<Font> fonts = new ArrayList<>();
-		private final boolean heading;
-		private final boolean current;
-		private boolean folded;
-		@Getter
-		private final Rectangle bounds = new Rectangle();
-		@Setter
-		private Point preferredLocation = new Point();
-		@Setter
-		private Dimension preferredSize = new Dimension(OsrsPathGuideOverlay.WIDTH, 0);
-
-		/** The painted width of the right label of the first line (0 when there is none): where a second button on the row begins. */
-		int rightLabelWidth(Graphics2D g)
-		{
-			for (int i = 0; i < row.getLines().size(); i++)
-			{
-				String right = row.getLines().get(i).getRight();
-				if (right != null)
-				{
-					return GuideFont.metrics(g, fonts.get(i)).stringWidth(right);
-				}
-			}
-			return 0;
-		}
-
-		RowComponent(GuideList.Row row, boolean hovered, boolean hint, Font font, Font small)
-		{
-			this(row, hovered, hint, font, small, false, false);
-		}
-
-		RowComponent(GuideList.Row row, boolean hovered, boolean hint, Font font, Font small, boolean heading, boolean current)
-		{
-			this.row = row;
-			this.hovered = hovered;
-			this.hint = hint;
-			this.heading = heading;
-			this.current = current;
-			for (GuideList.Line l : row.getLines())
-			{
-				Font f = l.isSmall() ? small : font;
-				if (current && !l.isSmall()) f = GuideFont.action(f);
-				// Quest titles stay secondary to the current action.
-				fonts.add(f);
-			}
-		}
-
-		@Override
-		public Dimension render(Graphics2D g)
-		{
-			int x = preferredLocation.x;
-			int y = preferredLocation.y;
-			int width = preferredSize.width;
-			boolean tab = row.getAction().getKind() == GuideList.Kind.TAB;
-			int top = heading ? 4 : current ? 8 : tab ? 8 : 4;
-			int bottom = heading ? 10 : tab ? 10 : 6;
-			if (hovered || hint)
-			{
-				int h = top + bottom;
-				for (Font f : fonts)
-				{
-					h += GuideFont.metrics(g, f).getHeight();
-				}
-				// The highlight stays within the panel frame (4 points on each side): nothing sticks out beyond the plate.
-				g.setColor(HOVER);
-				g.fillRoundRect(x - 4, y + 1, width + 8, h + 1, 8, 8);
-			}
-			boolean warning = !row.getLines().isEmpty() && row.getLines().get(0).getLeft().startsWith("⚠");
-			if (warning)
-			{
-				int height = top + bottom;
-				for (Font f : fonts) height += GuideFont.metrics(g, f).getHeight();
-				g.setColor(new Color(110, 68, 20, 170));
-				g.fillRoundRect(x - 3, y, width + 6, height, 6, 6);
-				g.setColor(OverlayCard.AMBER);
-				g.drawRoundRect(x - 3, y, width + 6, height, 6, 6);
-			}
-			int at = y + top;
-			if (heading)
-			{
-				// Native vector quest marker, independent of the selected RuneLite font.
-				int cx = x + 10;
-				int cy = at + 14;
-				g.setColor(new Color(63, 48, 20, 220));
-				int[] px = {cx, cx + 9, cx + 9, cx, cx - 9, cx - 9};
-				int[] py = {cy - 13, cy - 7, cy + 7, cy + 13, cy + 7, cy - 7};
-				g.fillPolygon(px, py, 6);
-				g.setColor(OverlayCard.GOLD);
-				g.drawPolygon(px, py, 6);
-				g.fillPolygon(new int[] {cx, cx + 4, cx, cx - 4}, new int[] {cy - 9, cy, cy + 9, cy}, 4);
-				int arrowX = x + width - 6;
-				g.setColor(GuideList.MUTED);
-				if (folded)
-				{
-					g.drawLine(arrowX - 3, cy - 4, arrowX + 1, cy);
-					g.drawLine(arrowX + 1, cy, arrowX - 3, cy + 4);
-				}
-				else
-				{
-					g.drawLine(arrowX - 4, cy - 2, arrowX, cy + 2);
-					g.drawLine(arrowX, cy + 2, arrowX + 4, cy - 2);
-				}
-			}
-			if (tab)
-			{
-				g.setColor(GuideList.MUTED);
-				g.drawRoundRect(x + 1, at + 2, 9, 12, 2, 2);
-				g.drawLine(x + 3, at + 6, x + 8, at + 6);
-				g.drawLine(x + 3, at + 9, x + 8, at + 9);
-				int adviceX = x + width - rightLabelWidth(g) - 14;
-				g.fillRoundRect(adviceX, at + 3, 10, 8, 5, 5);
-				g.fillPolygon(new int[] {adviceX + 2, adviceX + 2, adviceX + 6}, new int[] {at + 9, at + 15, at + 9}, 3);
-			}
-			for (int i = 0; i < row.getLines().size(); i++)
-			{
-				GuideList.Line l = row.getLines().get(i);
-				Font f = fonts.get(i);
-				FontMetrics fm = GuideFont.metrics(g, f);
-				int inset = heading ? 26 : tab ? 16 : 0;
-				g.setColor(tab ? MODERN_LINK : l.getLeftColor());
-				GuideFont.draw(g, l.getLeft(), f, x + inset, at + fm.getAscent());
-				if (l.getRight() != null)
-				{
-					g.setColor(tab ? MODERN_LINK : l.getRightColor());
-					GuideFont.draw(g, l.getRight(), f, x + width - fm.stringWidth(l.getRight()), at + fm.getAscent());
-				}
-				at += fm.getHeight();
-			}
-			if (tab)
-			{
-				g.setColor(new Color(108, 125, 147, 140));
-				g.drawLine(x, at + bottom - 2, x + width, at + bottom - 2);
-			}
-			if (tab && !folded && !row.getLines().isEmpty())
-			{
-				GuideList.Line labels = row.getLines().get(0);
-				boolean rightActive = GuideList.TITLE.equals(labels.getRightColor());
-				int underline = g.getFontMetrics(fonts.get(0)).stringWidth(rightActive ? labels.getRight() : labels.getLeft()) + 16;
-				g.setColor(MODERN_LINK);
-				g.fillRect(rightActive ? x + width - underline : x, at + bottom - 3, underline, 3);
-			}
-			bounds.setBounds(x, y, width, at - y + bottom);
-			return new Dimension(width, at - y + bottom);
-		}
+		return row < 0 ? GuideList.Action.NONE : h.actions.get(row);
 	}
 }

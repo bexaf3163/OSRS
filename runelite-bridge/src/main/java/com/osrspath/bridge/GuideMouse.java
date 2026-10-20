@@ -10,14 +10,14 @@ import net.runelite.api.widgets.Widget;
 import net.runelite.client.input.MouseAdapter;
 
 /**
- * Clicks on the "What you need" list on the game screen. A left click on a line with a place gives the arrow and path there (the action
- * goes to the client thread), a click on the heading collapses or expands. A click on the list does not reach the game, like the RuneLite
- * dungeon map (InstanceMapInputListener): the character does not walk to whatever is under the plate. It is a RuneLite
- * window button, nothing is sent into the game.
+ * Clicks on the in-game guide. A left click on a line with a place gives the arrow and path there (the action goes to the client thread), a click on
+ * the header opens or closes the details. A click on the card does not reach the game, like the RuneLite dungeon map (InstanceMapInputListener): the
+ * character does not walk to whatever is under the card. It is a RuneLite window button, nothing is sent into the game. Outside the card's drawn
+ * rectangle nothing is taken.
  *
  * The click goes to the game if: not the left button; Alt is held (RuneLite moves the plates); the game menu is open (its entry is being
- * chosen); a spell or "Use" is selected; a game window is over the list (bank, shop) and the point has its action:
- * the list is drawn under the game windows, and the bank buttons matter more than invisible lines under them.
+ * chosen); a spell or "Use" is selected; a game window is over the card (bank, shop) and the point has its action:
+ * the card is drawn under the game windows, and the bank buttons matter more than invisible lines under them.
  */
 class GuideMouse extends MouseAdapter
 {
@@ -95,13 +95,15 @@ class GuideMouse extends MouseAdapter
 			case BACK:
 				return "Arrow back to step";
 			case TOGGLE:
-				return "Collapse / expand";
-			case TAB:
-				return "Steps / advice";
-			case TAB_STEPS:
-				return "Show steps";
-			case TAB_ADVICE:
-				return "Show advice";
+				return "Details";
+			case MORE:
+				return "More advice";
+			case NEXT:
+				return "Line done";
+			case PREV:
+				return "Previous line";
+			case RESUME:
+				return "Current line";
 			case DETOUR:
 				return "Arrow to the stop";
 			case TRANSPORT:

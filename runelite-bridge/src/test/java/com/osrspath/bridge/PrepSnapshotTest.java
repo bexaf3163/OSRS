@@ -7,8 +7,6 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import com.google.gson.Gson;
-import java.awt.FontMetrics;
-import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -20,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
-import net.runelite.client.ui.FontManager;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,8 +29,6 @@ import org.junit.Test;
 public class PrepSnapshotTest
 {
 	private static final Gson GSON = new Gson();
-	private static final FontMetrics FM = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics()
-		.getFontMetrics(OverlayText.font(FontManager.getRunescapeFont(), 1f));
 
 	private final List<PrepEnvelope> received = new CopyOnWriteArrayList<>();
 	private final List<Map<String, String>> badParts = new CopyOnWriteArrayList<>();
@@ -214,23 +209,9 @@ public class PrepSnapshotTest
 		assertNull("ready at one hundred: the percent is not written", done.pendingPercent());
 	}
 
-	private static List<GuideList.Row> rows(StepGuide.View v)
+	private static HudModel.Card card(StepGuide.View v)
 	{
-		return GuideList.rows(v, false, FM, FM, 240);
-	}
-
-	private static String text(List<GuideList.Row> rows)
-	{
-		StringBuilder sb = new StringBuilder();
-		for (GuideList.Row r : rows)
-		{
-			sb.append('|');
-			for (GuideList.Line l : r.getLines())
-			{
-				sb.append(l.getLeft()).append(l.getRight() == null ? "" : " ~" + l.getRight()).append(' ');
-			}
-		}
-		return sb.toString();
+		return HudModel.build(HudModelTest.input(v, HudModelTest.quiet(), null));
 	}
 
 	private static StepGuide.View cook(PrepPlan p)
@@ -245,64 +226,57 @@ public class PrepSnapshotTest
 	}
 
 	@Test
-	public void thePlanIsDrawnInTheList_percentPriorityLowDoNotTakeNow()
+	public void thePlanShapesTheGuide_itsActionInsteadOfTheGenericWhere_itsTipsUnderMoreAdvice()
 	{
-		// The width has a margin: where a line is cut depends on the machine's font, and here we only check that the plan lines are drawn at all.
-		// Wrapping by width is checked by the other tests.
-		String all = text(GuideList.rows(cook(plan()), false, FM, FM, 4000));
-		assertTrue("the percent in the heading: " + all, all.contains("S1-03 · What you need · 62%"));
-		assertTrue("the app's advice instead of the generic 'where to get it': " + all, all.contains("Pick one up at the farm north"));
-		assertFalse("the generic text is replaced: " + all, all.contains("Chicken coop"));
-		assertTrue("a supply is low: " + all, all.contains("~low"));
-		// The app's tips are on a separate tab: the "Steps" tab has none of them, only the tab strip with the number of tips.
-		assertTrue("the tab with the number of tips: " + all, all.contains("Steps ~Advice · 3"));
-		assertFalse("do not take now is not on the steps tab: " + all, all.contains("Don't take now"));
-		assertFalse("weight is not on the steps tab: " + all, all.contains("Weight:"));
-		assertFalse("the bag is not on the steps tab: " + all, all.contains("Won't fit"));
+		HudModel.Card c = card(cook(plan()));
+		assertEquals("the missing egg comes first", "Get Egg", c.getHeadline());
+		assertEquals("Egg: 0 / 1 · not in the bank", c.getStatus());
+		String open = c.plain(true, false);
+		assertTrue("the app's advice instead of the generic 'where to get it': " + open, open.contains("Pick one up at the farm north"));
+		assertFalse("the generic text is replaced: " + open, open.contains("Chicken coop"));
+		assertTrue("the lobsters are with you: " + open, open.contains("1 item with you"));
+		// The app's tips are behind "More advice": counted, not shown until asked for.
+		assertTrue("the control with the number of tips: " + open, open.contains("More advice · 3"));
+		assertFalse("do not take now is not shown before it is asked for: " + open, open.contains("Don't take now"));
+		assertFalse(open, open.contains("Weight:") || open.contains("Won't fit"));
+		assertFalse("never on the closed card", c.plain(false, false).contains("Don't take now"));
 	}
 
 	@Test
-	public void theAppsTips_onTheTipTab_stepsOnTheStepsTab()
+	public void theAppsTips_underMoreAdvice_theStepsItemsNotAmongThem()
 	{
-		StepGuide.View v = cook(plan());
-		String adv = text(GuideList.rows(v.withAdviceTab(true), false, FM, FM, 4000));
+		HudModel.Card c = card(cook(plan()));
+		String adv = c.plain(true, true);
 		assertTrue("don't take now: " + adv, adv.contains("Don't take now: Rune scimitar, Lobster ×20"));
 		assertTrue("weight: " + adv, adv.contains("Weight: Deposit the iron armour in the bank"));
-		assertTrue("bag: " + adv, adv.contains("⚠ Won't fit by 3 slots"));
-		assertTrue("the 'Advice' tab is active, 'Steps' beside it: " + adv, adv.contains("Steps ~Advice · 3"));
-		assertFalse("there are no step items on the tip tab: " + adv, adv.contains("Pick one up at the farm north"));
-		List<GuideList.Row> rows = GuideList.rows(v.withAdviceTab(true), false, FM, FM, 4000);
-		assertTrue("the tab strip is a button", rows.stream().anyMatch(r -> r.getAction().getKind() == GuideList.Kind.TAB));
+		assertTrue("bag: " + adv, adv.contains("Won't fit by 3 slots"));
+		assertTrue("the control is a button", c.getAdvice().size() == 3 && adv.contains("More advice · 3"));
+		assertTrue("there are no step items among the tips", c.getAdvice().stream().noneMatch(l -> l.getText().contains("Pick one up at the farm north")));
 	}
 
 	@Test
-	public void withoutTips_noTabs_andAnOpenTipTabReturnsToSteps()
+	public void withoutAPlan_noTips_theStepsOwnWords()
 	{
-		String all = text(GuideList.rows(cook(null).withAdviceTab(true), false, FM, FM, 4000));
-		assertFalse("no tips, no tabs: " + all, all.contains("Advice ·"));
-		assertTrue("the step list is in place: " + all, all.contains("Chicken coop"));
-	}
-
-	@Test
-	public void withoutAPlan_theListIsAsItWas()
-	{
-		String all = text(rows(cook(null)));
+		HudModel.Card c = card(cook(null));
+		String all = c.plain(true, true);
+		assertFalse("no tips, no control: " + all, all.contains("More advice"));
 		assertFalse(all, all.contains("%") || all.contains("Don't take now") || all.contains("Weight:"));
-		assertTrue(all, all.contains("Chicken coop"));
-		assertTrue(all, all.contains("~20/20"));
+		assertTrue("the step's own where: " + all, all.contains("Chicken coop"));
+		assertEquals("Get Egg", c.getHeadline());
 	}
 
 	@Test
-	public void recoveryMode_onTop_threeItemsAtMost()
+	public void recoveryMode_saidFirst_threeStepsAtMost()
 	{
 		PrepPlan p = GSON.fromJson("{\"stepId\":\"S1-03\",\"recovery\":{\"title\":\"You died - step S1-03 is far away (~90 tiles)\",\"steps\":["
 			+ "\"Retrieve your items from the grave\",\"Take a spare key\",\"Return to the step\",\"Fourth\"]}}", PrepPlan.class);
 		assertNull(p.prepare());
-		List<GuideList.Row> rows = rows(cook(p));
-		assertTrue(text(rows.subList(0, 3)), text(rows.subList(1, 2)).contains("⚠ You died - step S1-03 is far away"));
-		String all = text(rows);
-		assertTrue(all, all.contains("1) Retrieve your items from the grave") && all.contains("3) Return to the step"));
-		assertFalse("three are shown, the rest is in the app: " + all, all.contains("Fourth"));
+		HudModel.Card c = card(cook(p));
+		assertEquals("You died - step S1-03 is far away (~90 tiles)", c.getWarning().getText());
+		String hint = c.getWarning().getHint();
+		assertTrue(hint, hint.contains("1) Retrieve your items from the grave") && hint.contains("3) Return to the step"));
+		assertFalse("three are shown, the rest is in the app: " + hint, hint.contains("Fourth"));
+		assertTrue(hint, hint.contains("in the app"));
 	}
 
 	@Test

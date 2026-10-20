@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import lombok.AllArgsConstructor;
 import lombok.Value;
 
 /**
@@ -37,6 +38,7 @@ final class StepGuide
 	static final Color UNKNOWN = new Color(170, 170, 170);
 
 	@Value
+	@AllArgsConstructor
 	static class ItemLine
 	{
 		/** For the panel: "Lobster ×5". */
@@ -51,6 +53,37 @@ final class StepGuide
 		String name;
 		/** For the in-game list: short on the right, "have", "in bank", "none", "2/5", "in step", "bank?". */
 		String tag;
+		/**
+		 * The live figures behind the state (2.74.0, the HUD's "Salmon: 0 / 21"): with you (bag, worn and banknotes), needed, in the bank (-1 = the bank
+		 * was not seen), worn. Doses for a potion. A count of -1 means a line built without figures.
+		 */
+		int count;
+		int need;
+		int inBank;
+		int worn;
+		/** One piece's healing when the item is food (threats.json), else null: a supply used up as a fight goes on. */
+		Integer heals;
+		/** A potion counted in doses. */
+		boolean doses;
+		/** The app lists other items that count for it (Trout for Salmon): the count includes them. */
+		boolean substitutes;
+
+		ItemLine(String title, String status, Have have, String where, int place, String name, String tag)
+		{
+			this(title, status, have, where, place, name, tag, -1, 0, -1, 0, null, false, false);
+		}
+
+		/** The same item and figures in another state: handed in or used up. */
+		ItemLine as(String newStatus, Have newHave, String newTag)
+		{
+			return new ItemLine(title, newStatus, newHave, where, place, name, newTag, count, need, inBank, worn, heals, doses, substitutes);
+		}
+
+		/** A consumable: food or a potion, which a fight or a trip uses up. */
+		boolean consumable()
+		{
+			return heals != null || doses;
+		}
 	}
 
 	@Value
@@ -365,6 +398,13 @@ final class StepGuide
 	static View view(ActiveTarget t, ItemCounts carried, ItemCounts bank, String navLabel, int navX, int navY, int navPlane, Set<String> got,
 		Integer stageValue, boolean questDone, int cursor)
 	{
+		return view(t, carried, bank, navLabel, navX, navY, navPlane, got, stageValue, questDone, cursor, null);
+	}
+
+	/** worn is what the player wears (part of carried): the HUD says "worn" rather than "in your bag". null means not known. */
+	static View view(ActiveTarget t, ItemCounts carried, ItemCounts bank, String navLabel, int navX, int navY, int navPlane, Set<String> got,
+		Integer stageValue, boolean questDone, int cursor, ItemCounts worn)
+	{
 		if (t == null)
 		{
 			return EMPTY;
@@ -395,11 +435,11 @@ final class StepGuide
 		List<ItemLine> items = new ArrayList<>();
 		for (ActiveTarget.GuideItem i : source)
 		{
-			ItemLine line = remembered(item(i, places, carried, bank), i.getName(), got);
+			ItemLine line = remembered(item(i, places, carried, bank, worn), i.getName(), got);
 			// The stage has no list of its own, so the quest's whole list stands in: what the finished lines used up (wool for the wig) is not "needed now".
 			if (stageView != null && !questDone && cur.getItems() == null && spentByEarlierLines(line, i.getName(), stageView.getSteps(), stageView.getCursor()))
 			{
-				line = new ItemLine(line.getTitle(), "✓ already handled - handed in or used", Have.DONE, line.getWhere(), line.getPlace(), line.getName(), "done");
+				line = line.as("✓ already handled - handed in or used", Have.DONE, "done");
 			}
 			items.add(line);
 		}
@@ -494,7 +534,7 @@ final class StepGuide
 		}
 		if (got.contains(key))
 		{
-			return new ItemLine(l.getTitle(), "✓ already handled - handed in or used", Have.DONE, l.getWhere(), l.getPlace(), l.getName(), "done");
+			return l.as("✓ already handled - handed in or used", Have.DONE, "done");
 		}
 		return l;
 	}
@@ -523,11 +563,17 @@ final class StepGuide
 
 	static ItemLine item(ActiveTarget.GuideItem i, List<ActiveTarget.GuidePlace> places, ItemCounts carried, ItemCounts bank)
 	{
+		return item(i, places, carried, bank, null);
+	}
+
+	static ItemLine item(ActiveTarget.GuideItem i, List<ActiveTarget.GuidePlace> places, ItemCounts carried, ItemCounts bank, ItemCounts worn)
+	{
 		// A potion is counted in doses of every size (the app sends how many): a (3) and a (1) are 4 doses of "Strength potion(4)".
 		boolean dose = i.getDoses() != null && i.getDoses() > 0 && ItemCounts.doseBase(i.getName()) != null;
 		int need = dose ? i.getDoses() : i.getCount() == null ? 1 : i.getCount();
 		int have = carried == null ? 0 : dose ? carried.doses(i.getName()) : ActiveTarget.countWithAlt(carried, i.getId(), i.getName(), i.getAlt());
 		int inBank = bank == null ? -1 : dose ? bank.doses(i.getName()) : ActiveTarget.countWithAlt(bank, i.getId(), i.getName(), i.getAlt());
+		int wearing = worn == null || dose ? 0 : ActiveTarget.countWithAlt(worn, i.getId(), i.getName(), i.getAlt());
 		String u = dose ? " doses" : "";
 		Have h;
 		String status;
@@ -563,7 +609,8 @@ final class StepGuide
 			tag = have + inBank > 0 ? (have + inBank) + "/" + need : "none";
 		}
 		String name = i.getName() + (i.getCount() != null && i.getCount() > 1 ? " ×" + i.getCount() : "");
-		return new ItemLine(name, status, h, i.getWhere(), placeOf(i.getName(), places), name, tag);
+		return new ItemLine(name, status, h, i.getWhere(), placeOf(i.getName(), places), name, tag, have, need, inBank, wearing,
+			dose ? null : Foods.heals(i.getName()), dose, i.getAlt() != null && !i.getAlt().isEmpty());
 	}
 
 	/** A temporary target at step point number index; null means there is no point. No item is set: the target is cleared on arrival. */

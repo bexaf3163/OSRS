@@ -61,7 +61,7 @@ final class OverlayProgress implements LayoutableRenderableEntity
 		int y = location.y + 3 + fm.getAscent();
 		g.setColor(SHADOW);
 		g.drawString(text, x + 1, y + 1);
-		g.setColor(OsrsPathHudOverlay.TEXT);
+		g.setColor(Hud.TEXT);
 		g.drawString(text, x, y);
 		bounds.setBounds(location.x, location.y, width, height);
 		return new Dimension(width, height);

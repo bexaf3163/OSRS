@@ -9,7 +9,6 @@ import static org.junit.Assert.assertTrue;
 
 import com.google.gson.Gson;
 import java.awt.Dimension;
-import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.RenderingHints;
@@ -30,8 +29,6 @@ import org.junit.Test;
 public class CleanupHintTest
 {
 	private static final Gson GSON = new Gson();
-	private static final FontMetrics FM = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics()
-		.getFontMetrics(OverlayText.font(FontManager.getRunescapeFont(), 1f));
 	private static final long NOW = 1_000_000_000L;
 
 	private static final String JSON = "{\"player\":\"Bexqq\",\"lines\":["
@@ -181,19 +178,30 @@ public class CleanupHintTest
 	}
 
 	@Test
-	public void theAdviceTabCountsTheCleanupAsOne_andListsItsFirstLines()
+	public void theGuideHasTheCleanupUnderMoreAdvice_itsFirstLinesOnly()
 	{
 		StepGuide.View v = vampyre().withCleanup(hint(JSON).visible("Bexqq", FULL, NOW, NOW));
-		assertEquals(1, GuideList.adviceCount(v));
-		assertEquals(0, GuideList.adviceCount(v.withCleanup(Collections.emptyList())));
-		String steps = text(GuideList.rows(v, false, FM, FM, 4000));
-		assertTrue("the tab strip names it: " + steps, steps.contains("Advice · 1"));
-		assertFalse("not on the Steps tab: " + steps, steps.contains("Inventory cleanup"));
-		String adv = text(GuideList.rows(v.withAdviceTab(true), false, FM, FM, 4000));
+		HudModel.Card c = HudModel.build(HudModelTest.input(v, HudModelTest.quiet(), null));
+		assertEquals("each line is one suggestion; the label is not counted", 4, c.adviceCount());
+		assertEquals(0, HudModel.build(HudModelTest.input(v.withCleanup(Collections.emptyList()), HudModelTest.quiet(), null)).adviceCount());
+		String closed = c.plain(true, false);
+		assertTrue("the control counts it: " + closed, closed.contains("More advice · 4"));
+		assertFalse("not before it is asked for: " + closed, closed.contains("Inventory cleanup"));
+		assertFalse("never on the closed card", c.plain(false, false).contains("Oak logs"));
+		String adv = c.plain(true, true);
 		assertTrue(adv, adv.contains("Inventory cleanup (advice only):"));
 		assertTrue(adv, adv.contains("Sell: Oak logs ×40 (noted) — no use ahead · ~3.6k gp"));
 		assertTrue(adv, adv.contains("Review: Bronze sword"));
+		assertTrue("nothing in it is a button: the plugin does nothing with the items",
+			c.getAdvice().stream().noneMatch(l -> l.getAction().isClickable()));
 		assertEquals("the view keeps its lines through the other withers", 4, v.withAdviceTab(true).withNote("n").withPrep(null).getCleanup().size());
+		List<CleanupHint.Line> many = new ArrayList<>();
+		for (int i = 0; i < 9; i++)
+		{
+			many.add(new CleanupHint.Line("Thing " + i, 100 + i, 1, false, "drop", "x", 0));
+		}
+		String long_ = HudModel.build(HudModelTest.input(v.withCleanup(many), HudModelTest.quiet(), null)).plain(true, true);
+		assertTrue(long_, long_.contains("and 5 more on the bank card and in the app"));
 	}
 
 	@Test
@@ -224,19 +232,5 @@ public class CleanupHintTest
 			out.add(row.getText());
 		}
 		return out;
-	}
-
-	private static String text(List<GuideList.Row> rows)
-	{
-		StringBuilder sb = new StringBuilder();
-		for (GuideList.Row r : rows)
-		{
-			sb.append('|');
-			for (GuideList.Line l : r.getLines())
-			{
-				sb.append(l.getLeft()).append(l.getRight() == null ? "" : " ~" + l.getRight()).append(' ');
-			}
-		}
-		return sb.toString();
 	}
 }

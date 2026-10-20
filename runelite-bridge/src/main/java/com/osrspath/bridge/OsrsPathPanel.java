@@ -290,7 +290,7 @@ class OsrsPathPanel extends PluginPanel
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		g.setColor(new Color(20, 20, 20));
 		g.fillOval(0, 0, 20, 20);
-		g.setColor(OsrsPathHudOverlay.TITLE);
+		g.setColor(Hud.TITLE);
 		g.fillOval(2, 2, 16, 16);
 		g.setColor(new Color(20, 20, 20));
 		g.fillPolygon(ArrowGeometry.arrow(10, 10, 6.5, -Math.PI / 2));

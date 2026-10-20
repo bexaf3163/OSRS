@@ -12,7 +12,7 @@ public class GuideFontTest
 		assertEquals("Sora", GuideFont.font(1).getFamily());
 		assertEquals(14, GuideFont.font(1).getSize());
 		assertEquals(13, GuideFont.font(OsrsPathGuideOverlay.SMALL).getSize());
-		assertEquals(18, GuideFont.font(OsrsPathHudOverlay.LARGE).getSize());
+		assertEquals(18, GuideFont.font(Hud.LARGE).getSize());
 		assertEquals("Sora", GuideFont.action(GuideFont.font(1)).getFamily());
 		assertEquals(16, GuideFont.action(GuideFont.font(1)).getSize());
 		assertTrue(GuideFont.action(GuideFont.font(1)).isBold());

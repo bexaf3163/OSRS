@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.imageio.ImageIO;
 import net.runelite.client.ui.FontManager;
@@ -31,7 +32,8 @@ import net.runelite.client.ui.overlay.components.TitleComponent;
 import org.junit.Test;
 
 /**
- * The plugin plates drawn with the real RuneLite fonts: no line sticks out of its frame.
+ * The plugin plates drawn with the real fonts: no line sticks out of its frame. The one in-game guide (2.74.0) uses its own face (Sora), the bank and
+ * exchange cards the RuneLite fonts the player picks.
  *
  * A pixel check: the panel is drawn on a transparent picture, and everything opaque outside its rectangle is
  * text that stuck out. The texts are everything the plugin can show: the titles and targets of 69 steps and branches, waypoints,
@@ -59,13 +61,6 @@ public class OverlayLayoutTest
 	{
 		return Arrays.asList(FontManager.getRunescapeFont(), FontManager.getRunescapeBoldFont(),
 			FontManager.getRunescapeSmallFont(), FontManager.getDefaultFont());
-	}
-
-	private static List<Font> guideFonts()
-	{
-		List<Font> all = new ArrayList<>(fonts());
-		all.add(GuideFont.font(1f));
-		return all;
 	}
 
 	private static JsonElement read(String name) throws IOException
@@ -147,9 +142,9 @@ public class OverlayLayoutTest
 	}
 
 	/** All the HUD states the plugin can assemble from the app's data. */
-	private static List<OsrsPathHudOverlay.State> hudStates() throws IOException
+	private static List<Hud.State> hudStates() throws IOException
 	{
-		List<OsrsPathHudOverlay.State> out = new ArrayList<>();
+		List<Hud.State> out = new ArrayList<>();
 		List<String> dist = distances();
 		List<String> danger = new ArrayList<>();
 		for (DangerRadar.Zone z : DangerRadar.load(GSON).getZones())
@@ -168,20 +163,20 @@ public class OverlayLayoutTest
 			List<String> pace = pacing(step);
 			String d = dist.get(n % dist.size());
 			String zone = danger.get(n % danger.size());
-			out.add(new OsrsPathHudOverlay.State(title, goal, d, false, "Bag: missing 12 of 14", false,
+			out.add(new Hud.State(title, goal, d, false, "Bag: missing 12 of 14", false,
 				null, false, pace.isEmpty() ? null : pace.get(0), false, null));
-			out.add(new OsrsPathHudOverlay.State(title, goal, "✓ Nearby", true, "Bag ready to leave", true,
+			out.add(new Hud.State(title, goal, "✓ Nearby", true, "Bag ready to leave", true,
 				zone, n % 2 == 0, pace.isEmpty() ? null : pace.get(pace.size() - 1), true, null));
 			for (String p : pace)
 			{
-				out.add(new OsrsPathHudOverlay.State(title, goal, d, false, null, false, null, false, p, false, null));
+				out.add(new Hud.State(title, goal, d, false, null, false, null, false, p, false, null));
 				// The training view (2.55.1): the step, the pace and its progress bar, with a health warning at times.
-				out.add(new OsrsPathHudOverlay.State(title, null, null, false, null, false, null, false, p, false, null,
+				out.add(new Hud.State(title, null, null, false, null, false, null, false, p, false, null,
 					n % 3 == 0 ? "HP 6/19 - eat! Hits up to 2" : null, false, null, -1, null, (n % 10) / 9.0, true));
 				// With the food line (2.57.0), and nearly out: the alert.
-				out.add(new OsrsPathHudOverlay.State(title, null, null, false, null, false, null, false, p, false, null,
+				out.add(new Hud.State(title, null, null, false, null, false, null, false, p, false, null,
 					null, false, null, -1, null, (n % 10) / 9.0, true, TrainingFood.line("Swordfish", 18, 14, 3.4), false));
-				out.add(new OsrsPathHudOverlay.State(title, null, null, false, null, false, null, false, p, false, null,
+				out.add(new Hud.State(title, null, null, false, null, false, null, false, p, false, null,
 					"HP 6/19 - eat! Hits up to 2", false, null, -1, null, (n % 10) / 9.0, true, TrainingFood.line("Salmon", 2, 9, 3.4), true));
 			}
 			for (JsonElement b : arr(step, "branches"))
@@ -192,7 +187,7 @@ public class OverlayLayoutTest
 				if (alt != null)
 				{
 					String g = alt.startsWith(label) ? alt : label + ": " + alt;
-					out.add(new OsrsPathHudOverlay.State(title, g, d, false, null, false, null, false, null, false, null));
+					out.add(new Hud.State(title, g, d, false, null, false, null, false, null, false, null));
 				}
 			}
 			JsonArray way = arr(obj(step, "inGame"), "pathWaypoints");
@@ -200,16 +195,16 @@ public class OverlayLayoutTest
 			{
 				String label = str(way.get(i).getAsJsonObject(), "label");
 				String g = "Point " + (i + 1) + "/" + way.size() + (label != null ? ": " + label : "");
-				out.add(new OsrsPathHudOverlay.State(title, g, d, false, null, false, null, false, null, false, null));
+				out.add(new Hud.State(title, g, d, false, null, false, null, false, null, false, null));
 			}
 			if (way.size() > 0)
 			{
-				out.add(new OsrsPathHudOverlay.State(title, "Route complete · " + goal, d, false, null, false, null, false, null, false, null));
+				out.add(new Hud.State(title, "Route complete · " + goal, d, false, null, false, null, false, null, false, null));
 			}
 			n++;
 		}
 		// The pre-flight guard: the red chip near a step whose item is missing.
-		out.add(new OsrsPathHudOverlay.State("[S3-02] Black Knights' Fortress", "Go to: Pick Cabbage south of Falador (do NOT pick Draynor cabbage)", "40 tiles", false,
+		out.add(new Hud.State("[S3-02] Black Knights' Fortress", "Go to: Pick Cabbage south of Falador (do NOT pick Draynor cabbage)", "40 tiles", false,
 			null, false, null, false, null, false, null, null, false, null, 40, Preflight.chipText("Cabbage")));
 		String then = "Then: step " + longestTitle;
 		// Upgrade-router purchases: "Buy Steel axe from Bob", at the exchange from the clerk.
@@ -225,7 +220,7 @@ public class OverlayLayoutTest
 				JsonObject tier = t.getAsJsonObject();
 				String seller = str(obj(tier, "shop"), "npc");
 				String title = "Buy " + str(tier, "tier") + " from " + (seller != null ? seller : "Grand Exchange Clerk");
-				out.add(new OsrsPathHudOverlay.State(title, then, dist.get(1), false, null, false, null, false, null, false, null));
+				out.add(new Hud.State(title, then, dist.get(1), false, null, false, null, false, null, false, null));
 			}
 		}
 		// Gear (gear.json): a purchase from a seller and at the exchange, a HUD hint - as the app writes them
@@ -234,17 +229,17 @@ public class OverlayLayoutTest
 		{
 			JsonObject item = e.getAsJsonObject();
 			String name = str(item, "name");
-			out.add(new OsrsPathHudOverlay.State("Buy " + name + " from Grand Exchange Clerk", then, dist.get(1), false, null, false, null, false, null, false, null));
-			out.add(new OsrsPathHudOverlay.State(longestTitle, "Cow field east of Lumbridge", dist.get(0), false, null, false, null, false, null, false,
+			out.add(new Hud.State("Buy " + name + " from Grand Exchange Clerk", then, dist.get(1), false, null, false, null, false, null, false, null));
+			out.add(new Hud.State(longestTitle, "Cow field east of Lumbridge", dist.get(0), false, null, false, null, false, null, false,
 				"⚡ Wear " + name + " - it is in the bank"));
-			out.add(new OsrsPathHudOverlay.State(longestTitle, "Cow field east of Lumbridge", dist.get(0), false, null, false, null, false, null, false,
+			out.add(new Hud.State(longestTitle, "Cow field east of Lumbridge", dist.get(0), false, null, false, null, false, null, false,
 				"⚡ Stronger: " + name + " at the exchange, ~" + gp(1_234_567)));
 			for (JsonElement sh : arr(item, "shops"))
 			{
 				JsonObject shop = sh.getAsJsonObject();
 				String seller = str(shop, "owner") != null ? str(shop, "owner") : str(shop, "shop");
-				out.add(new OsrsPathHudOverlay.State("Buy " + name + " from " + seller, then, dist.get(1), false, null, false, null, false, null, false, null));
-				out.add(new OsrsPathHudOverlay.State(longestTitle, "Cow field east of Lumbridge", dist.get(0), false, "Bag: missing 12 of 14", false,
+				out.add(new Hud.State("Buy " + name + " from " + seller, then, dist.get(1), false, null, false, null, false, null, false, null));
+				out.add(new Hud.State(longestTitle, "Cow field east of Lumbridge", dist.get(0), false, "Bag: missing 12 of 14", false,
 					null, false, null, false, "⚡ Stronger: " + name + " from " + seller + " (" + str(shop, "location") + "), " + gp(shop.get("price").getAsInt())));
 			}
 		}
@@ -274,7 +269,7 @@ public class OverlayLayoutTest
 		places.remove(null);
 		for (String place : places)
 		{
-			out.add(new OsrsPathHudOverlay.State("Go to: " + place, then, dist.get(0), false, null, false, null, false, null, false, null));
+			out.add(new Hud.State("Go to: " + place, then, dist.get(0), false, null, false, null, false, null, false, null));
 		}
 		return out;
 	}
@@ -400,38 +395,6 @@ public class OverlayLayoutTest
 		return outside;
 	}
 
-	/** States saved as a picture for the eye: as in the game for the player, danger with pace, a purchase, a place. */
-	private static String sample(OsrsPathHudOverlay.State s)
-	{
-		String t = s.getTitle();
-		if (t.startsWith("[" + SHOWN + "]") && !s.isNear() && s.getPacing() == null)
-		{
-			return SHOWN;
-		}
-		// The training plate with its food line (2.57.0), on the first Minotaur step of the route: normal and nearly out.
-		if (s.getFood() != null && t.startsWith("[S3-08]"))
-		{
-			return s.isFoodLow() ? "training-food-low" : "training-food";
-		}
-		if (s.getMissing() != null)
-		{
-			return "missing";
-		}
-		if (s.getDanger() != null && s.getPacing() != null)
-		{
-			return "danger";
-		}
-		if (t.equals("Buy Steel axe from Bob"))
-		{
-			return "buy";
-		}
-		if (t.equals("Go to: Lumbridge Swamp fishing spots"))
-		{
-			return "place";
-		}
-		return null;
-	}
-
 	private static String fontName(Font f)
 	{
 		return f.getFamily().replaceAll("[^A-Za-z]", "");
@@ -444,10 +407,10 @@ public class OverlayLayoutTest
 		Builder old = (panel, fm, width) ->
 		{
 			panel.setPreferredSize(new Dimension(width, 0));
-			panel.setBackgroundColor(OsrsPathHudOverlay.background(70));
+			panel.setBackgroundColor(new java.awt.Color(0, 0, 0, 180));
 			panel.getChildren().add(TitleComponent.builder().text("[S1-13] Earning money for supplies: selling cowhides and buying leather").build());
 		};
-		assertTrue(overflow(old, FontManager.getRunescapeFont(), OsrsPathHudOverlay.WIDTH, "old-title") > 0);
+		assertTrue(overflow(old, FontManager.getRunescapeFont(), Hud.WIDTH, "old-title") > 0);
 	}
 
 	@Test
@@ -530,34 +493,134 @@ public class OverlayLayoutTest
 		}
 	}
 
+	/**
+	 * How many opaque points of the one HUD (2.74.0) ended up outside its card: it is laid out and painted with the real face on a transparent picture with a
+	 * margin. The hovered variant highlights the first button after the header.
+	 */
+	private static int overflowHud(HudModel.Card c, boolean expanded, boolean advice, float scale, int width, boolean hover, String save) throws IOException
+	{
+		OsrsPathGuideOverlay.Layout l = HudRenderTest.layout(c, expanded, advice, width, scale, 2000);
+		Dimension d = l.getSize();
+		int w = MARGIN * 2 + d.width + SPARE;
+		int h = MARGIN * 2 + d.height;
+		OsrsPathGuideOverlay.Row hovered = null;
+		for (int i = 1; hover && i < l.getRows().size() && hovered == null; i++)
+		{
+			hovered = l.getRows().get(i).getAction().isClickable() ? l.getRows().get(i) : null;
+		}
+		BufferedImage img = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+		Graphics2D g = img.createGraphics();
+		g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+		g.setRenderingHint(RenderingHints.KEY_FRACTIONALMETRICS, RenderingHints.VALUE_FRACTIONALMETRICS_OFF);
+		g.translate(MARGIN, MARGIN);
+		OsrsPathGuideOverlay.paint(g, l, hovered, 85);
+		g.dispose();
+		int[] px = ((DataBufferInt) img.getRaster().getDataBuffer()).getData();
+		int outside = 0;
+		int left = 0;
+		int right = 0;
+		int top = 0;
+		int bottom = 0;
+		for (int y = 0; y < h; y++)
+		{
+			for (int x = 0; x < w; x++)
+			{
+				boolean inside = x >= MARGIN && x < MARGIN + d.width && y >= MARGIN && y < MARGIN + d.height;
+				if (!inside && (px[y * w + x] >>> 24) != 0)
+				{
+					outside++;
+					left = Math.max(left, MARGIN - x);
+					right = Math.max(right, x - (MARGIN + d.width - 1));
+					top = Math.max(top, MARGIN - y);
+					bottom = Math.max(bottom, y - (MARGIN + d.height - 1));
+				}
+			}
+		}
+		lastWhere = "left " + left + ", right " + right + ", top " + top + ", bottom " + bottom;
+		if (save != null)
+		{
+			OUT.mkdirs();
+			ImageIO.write(img.getSubimage(MARGIN - 8, MARGIN - 8, d.width + 16, d.height + 16), "png", new File(OUT, save + ".png"));
+		}
+		return outside;
+	}
+
+	/** The pace of a step as the HUD gets it: its skill and goal from the app, a mid-way level and the longest action word. */
+	private static HudModel.Pace pace(JsonObject step, double progress, boolean switchStyle)
+	{
+		if (obj(step, "pacing") == null)
+		{
+			return null;
+		}
+		ActiveTarget.Pacing p = GSON.fromJson(obj(step, "pacing"), ActiveTarget.Pacing.class);
+		String skill = PacingTracker.skillName(p.getSkill());
+		return new HudModel.Pace(skill, Math.max(1, p.getTargetLevel() - 9), p.getTargetLevel(), PacingTracker.styleOf(p.getSkill()), switchStyle, 1733,
+			PacingTracker.actionForm(p.getActionName(), 1733), "~193 min", progress > 0.5, progress, false, skill + " " + p.getTargetLevel());
+	}
+
+	/**
+	 * The HUD cards the plugin can assemble from the app's data: each HUD state above as the card's live part, the step as its view (a purchase or a place
+	 * without a step is a temporary target over the longest step), and on paced steps the training pace.
+	 */
+	private static List<HudModel.Card> hudCards() throws IOException
+	{
+		Map<String, JsonObject> byTitle = new java.util.HashMap<>();
+		String longestTitle = "";
+		for (JsonElement e : steps())
+		{
+			JsonObject step = e.getAsJsonObject();
+			String title = "[" + str(step, "id") + "] " + str(step, "title");
+			byTitle.put(title, step);
+			longestTitle = title.length() > longestTitle.length() ? title : longestTitle;
+		}
+		List<HudModel.Card> out = new ArrayList<>();
+		int n = 0;
+		for (Hud.State s : hudStates())
+		{
+			boolean step = s.getTitle().startsWith("[");
+			String title = step ? s.getTitle() : longestTitle;
+			StepGuide.View v = new StepGuide.View(title, s.getGoal(), java.util.Collections.emptyList(), java.util.Collections.emptyList(), null, null, null, null);
+			HudModel.Pace pace = s.getPacing() == null ? null : pace(byTitle.get(title), (n % 10) / 9.0, n % 4 == 0);
+			HudModel.Input in = HudModelTest.input(v, s, pace);
+			if (!step)
+			{
+				in = HudModelTest.with(HudModelTest.with(in, "detour", s.getTitle()), "detourBuys", s.getTitle().startsWith("Buy "));
+			}
+			out.add(HudModel.build(in));
+			n++;
+		}
+		return out;
+	}
+
 	@Test
 	public void hudDoesNotStickOutOfTheFrame() throws IOException
 	{
-		List<OsrsPathHudOverlay.State> states = hudStates();
-		assertTrue("too few states: " + states.size(), states.size() > 300);
+		List<HudModel.Card> cards = hudCards();
+		assertTrue("too few states: " + cards.size(), cards.size() > 300);
 		List<String> bad = new ArrayList<>();
 		Set<String> saved = new LinkedHashSet<>();
-		for (Font base : fonts())
+		for (boolean large : new boolean[]{false, true})
 		{
-			for (boolean large : new boolean[]{false, true})
+			float scale = large ? Hud.LARGE : 1f;
+			// Its own width, the narrowest and the widest the player can stretch it to.
+			for (int width : new int[]{OsrsPathGuideOverlay.WIDTH, OsrsPathGuideOverlay.MIN_WIDTH, OsrsPathGuideOverlay.MAX_WIDTH})
 			{
-				Font font = OverlayText.font(base, large ? OsrsPathHudOverlay.LARGE : 1f);
-				int standard = large ? Math.round(OsrsPathHudOverlay.WIDTH * OsrsPathHudOverlay.LARGE) : OsrsPathHudOverlay.WIDTH;
-				// Its own width and one narrowed by the player with the mouse.
-				for (int width : new int[]{standard, 140})
+				for (HudModel.Card c : cards)
 				{
-					for (OsrsPathHudOverlay.State s : states)
+					for (boolean expanded : new boolean[]{false, true})
 					{
 						String save = null;
-						String sample = sample(s);
-						if (width == standard && sample != null && saved.add(sample + fontName(base) + large))
+						String sample = c.getStep() != null && c.getStep().startsWith(SHOWN) ? SHOWN
+							: c.getHeadline().equals("Buy Steel axe from Bob") ? "buy" : c.getHeadline().equals("Go to: Lumbridge Swamp fishing spots") ? "place" : null;
+						if (width == OsrsPathGuideOverlay.WIDTH && sample != null && saved.add(sample + large + expanded))
 						{
-							save = "hud-" + sample + "-" + fontName(base) + (large ? "-large" : "");
+							save = "hud-data-" + sample + (expanded ? "-open" : "-closed") + (large ? "-large" : "");
 						}
-						int out = overflow((panel, fm, w) -> OsrsPathHudOverlay.build(panel, s, fm, w, 70), font, width, save);
+						int out = overflowHud(c, expanded, true, scale, width, false, save);
 						if (out > 0)
 						{
-							bad.add(fontName(base) + (large ? " large" : "") + " " + width + "px: " + s.getTitle() + " / " + s.getGoal() + " - " + out + " points (" + lastWhere + ")");
+							bad.add((large ? "large " : "") + width + "px " + (expanded ? "open" : "closed") + ": " + c.getHeadline() + " / " + c.getStatus() + " - " + out
+								+ " points (" + lastWhere + ")");
 						}
 					}
 				}
@@ -576,7 +639,7 @@ public class OverlayLayoutTest
 		{
 			for (boolean large : new boolean[]{false, true})
 			{
-				Font font = OverlayText.font(base, large ? OsrsPathHudOverlay.LARGE : 1f);
+				Font font = OverlayText.font(base, large ? Hud.LARGE : 1f);
 				String tag = fontName(base) + (large ? "-large" : "");
 				for (int i = 0; i < checks.size(); i++)
 				{
@@ -611,39 +674,29 @@ public class OverlayLayoutTest
 	}
 
 	@Test
-	public void guideWithLiveDistanceFitsNativeFontsAndWidths() throws IOException
+	public void guideWithLiveDistanceFitsEveryWidth() throws IOException
 	{
 		StepGuide.View view = new StepGuide.View("[S3-03] Demon Slayer", "Varrock Square · Ground floor",
 			java.util.Collections.emptyList(), java.util.Collections.emptyList(), null, null, null, null);
-		Graphics2D scratch = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics();
-		scratch.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		try
+		for (boolean large : new boolean[]{false, true})
 		{
-			for (Font base : guideFonts())
+			float scale = large ? Hud.LARGE : 1f;
+			for (int width : new int[]{OsrsPathGuideOverlay.MIN_WIDTH, OsrsPathGuideOverlay.WIDTH, OsrsPathGuideOverlay.MAX_WIDTH})
 			{
-				for (boolean large : new boolean[]{false, true})
+				for (String distance : distances())
 				{
-					float scale = large ? OsrsPathHudOverlay.LARGE : 1f;
-					Font font = OverlayText.font(base, scale);
-					Font small = OverlayText.font(base, scale * OsrsPathGuideOverlay.SMALL);
-					FontMetrics smallFm = GuideFont.metrics(scratch, small);
-					for (int width : new int[]{170, Math.round(OsrsPathGuideOverlay.WIDTH * scale)})
+					HudModel.Card c = HudModel.build(HudModelTest.input(view, HudModelTest.state(distance, 9999), null));
+					for (boolean expanded : new boolean[]{false, true})
 					{
-						for (String distance : distances())
-						{
-							int outside = overflow((panel, fm, w) -> OsrsPathGuideOverlay.build(panel, view, false, -1, fm, smallFm,
-								font, small, w, 70, false, true, 0, distance), font, width, null);
-							assertEquals(base + " " + width + " " + distance + " " + lastWhere, 0, outside);
-						}
+						assertEquals(width + " " + distance + " " + lastWhere, 0, overflowHud(c, expanded, false, scale, width, false, null));
 					}
 				}
 			}
 		}
-		finally { scratch.dispose(); }
 	}
 
 	@Test
-	public void whatYouNeedListDoesNotStickOut() throws IOException
+	public void theGuideForEveryStepDoesNotStickOut() throws IOException
 	{
 		// The targets exactly as the app sends them (active-steps.json), with all the places and NPCs.
 		List<StepGuide.View> views = new ArrayList<>();
@@ -651,7 +704,7 @@ public class OverlayLayoutTest
 		{
 			ActiveTarget t = sent.target;
 			assertTrue(sent.name, t.prepare() == null);
-			// The bank was not opened; opened and empty; everything on hand; the arrow leads to the first point (there is "← to the step").
+			// The bank was not opened; opened and empty; everything on hand; the arrow leads to the first point (there is "Arrow back to the step").
 			views.add(StepGuide.view(t, new ItemCounts(), null, null, 0, 0, 0));
 			views.add(StepGuide.view(t, new ItemCounts(), new ItemCounts(), null, 0, 0, 0));
 			ItemCounts all = new ItemCounts();
@@ -680,53 +733,35 @@ public class OverlayLayoutTest
 				views.add(StepGuide.view(t, new ItemCounts(), new ItemCounts(), null, 0, 0, 0, null, null, true, 0));
 			}
 		}
-		views.removeIf(v -> !GuideList.worthShowing(v));
-		assertTrue("too few steps with a list: " + views.size(), views.size() > 100);
+		assertTrue("too few views: " + views.size(), views.size() > 200);
 		List<String> bad = new ArrayList<>();
 		Set<String> saved = new LinkedHashSet<>();
-		Graphics2D scratch = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics();
-		scratch.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-		for (Font base : guideFonts())
+		for (boolean large : new boolean[]{false, true})
 		{
-			for (boolean large : new boolean[]{false, true})
+			float scale = large ? Hud.LARGE : 1f;
+			for (int width : new int[]{OsrsPathGuideOverlay.WIDTH, OsrsPathGuideOverlay.MIN_WIDTH})
 			{
-				float scale = large ? OsrsPathHudOverlay.LARGE : 1f;
-				Font font = OverlayText.font(base, scale);
-				Font small = OverlayText.font(base, scale * OsrsPathGuideOverlay.SMALL);
-				FontMetrics smallFm = GuideFont.metrics(scratch, small);
-				int standard = Math.round(OsrsPathGuideOverlay.WIDTH * scale);
-				for (int width : new int[]{standard, 170})
+				for (StepGuide.View v : views)
 				{
-					for (StepGuide.View v : views)
+					HudModel.Card c = HudModel.build(HudModelTest.input(v, HudModelTest.state("~62 tiles ↓", 62), null));
+					assertTrue(v.getTitle(), c != null);
+					// Closed; open; open with the advice and the mouse over the first button after the header.
+					for (int mode = 0; mode < 3; mode++)
 					{
-						// The mouse is over the first button after the heading - with the tooltip at the bottom; and collapsed.
-						List<GuideList.Row> rows = GuideList.rows(v, false, scratch.getFontMetrics(font), smallFm, width);
-						int hover = -1;
-						for (int i = 1; i < rows.size() && hover < 0; i++)
+						String id = v.getTitle().substring(1, 6);
+						String name = "guide-" + id + (v.getStage() != null ? "-stage" + v.getStage().getIndex() + "c" + v.getStage().getCursor() : "")
+							+ (mode == 0 ? "-closed" : mode == 1 ? "-open" : "-hover") + (large ? "-large" : "");
+						String save = null;
+						// For the eye: the first view (the bank was not opened) of S2-03 as in the old screenshot, a quest with many NPCs and Cook's Assistant.
+						if (width == OsrsPathGuideOverlay.WIDTH && (id.equals("S2-03") || id.equals("S3-03") || id.equals("S2-10") || id.equals("S1-03")
+							|| (id.equals("S2-07") && v.getStage() != null && v.getStage().getCursor() > 0)) && v.getDetour() == null && saved.add(name))
 						{
-							hover = rows.get(i).getAction().isClickable() ? i : -1;
+							save = name;
 						}
-						for (int mode = 0; mode < 5; mode++)
+						int out = overflowHud(c, mode > 0, mode == 2, scale, width, mode == 2, save);
+						if (out > 0)
 						{
-							boolean collapsed = mode == 2;
-							// Modes 3 and 4 are the strict two-line card: closed, and opened by the mouse.
-							boolean compact = mode >= 3;
-							int reveal = mode == 4 ? GuideList.EXPAND_STEPS : 0;
-							int h = mode == 1 ? hover : -1;
-							String save = null;
-							String id = v.getTitle().substring(1, 6);
-							String name = "guide-" + id + (v.getStage() != null ? "-stage" + v.getStage().getIndex() + "c" + v.getStage().getCursor() : "") + "-" + (compact ? (reveal > 0 ? "compact-open" : "compact-closed") : collapsed ? "collapsed" : h >= 0 ? "hover" : "list") + "-" + fontName(base) + (large ? "-large" : "");
-							// For the eye: the first view (the bank was not opened): S2-03 as for the player in the screenshot, a quest with many NPCs and Cook's Assistant.
-							if (width == standard && (id.equals("S2-03") || id.equals("S3-03") || id.equals("S2-10") || id.equals("S1-03") || (id.equals("S2-07") && v.getStage() != null && v.getStage().getCursor() > 0)) && v.getDetour() == null && saved.add(name))
-							{
-								save = name;
-							}
-							int out = overflow((panel, fm, w) -> OsrsPathGuideOverlay.build(panel, v, collapsed, h, fm, smallFm, font, small, w, 70, false, compact, compact ? reveal : GuideList.EXPAND_STEPS),
-								font, width, save);
-							if (out > 0)
-							{
-								bad.add(fontName(base) + (large ? " large" : "") + " " + width + "px " + v.getTitle() + " mode " + mode + " - " + out + " points (" + lastWhere + ")");
-							}
+							bad.add((large ? "large " : "") + width + "px " + v.getTitle() + " mode " + mode + " - " + out + " points (" + lastWhere + ")");
 						}
 					}
 				}

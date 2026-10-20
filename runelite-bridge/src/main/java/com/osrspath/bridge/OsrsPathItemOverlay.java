@@ -90,14 +90,14 @@ class OsrsPathItemOverlay extends WidgetItemOverlay
 		{
 			g.setColor(WANTED_FILL);
 			g.fillRoundRect(b.x, b.y, b.width, b.height, 6, 6);
-			g.setColor(OsrsPathWidgetOverlay.pulse(OsrsPathHudOverlay.GOOD));
+			g.setColor(OsrsPathWidgetOverlay.pulse(Hud.GOOD));
 			g.setStroke(new BasicStroke(2f));
 			g.drawRoundRect(b.x - 1, b.y - 1, b.width + 1, b.height + 1, 6, 6);
 			return;
 		}
 		if (stepItem || upgrade)
 		{
-			g.setColor(OsrsPathWidgetOverlay.pulse(stepItem ? config.highlightColor() : OsrsPathHudOverlay.UPGRADE));
+			g.setColor(OsrsPathWidgetOverlay.pulse(stepItem ? config.highlightColor() : Hud.UPGRADE));
 			g.setStroke(new BasicStroke(2f));
 			g.drawRoundRect(b.x - 1, b.y - 1, b.width + 1, b.height + 1, 6, 6);
 			return;

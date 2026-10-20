@@ -150,7 +150,11 @@ export function withCombatPlan(step: Step, pick: CombatPick | undefined): Step {
     ...(step.quickSteps?.length ? { quickSteps: step.quickSteps } : {}), ...(step.fields?.length ? { fields: step.fields } : {}),
   };
   return {
-    ...rest, combatPlan: { key: pick.key, phase: pick.phase, source: pick.source }, foes: [pick.foe], mapLocation: { ...pick.spot.place }, inGame,
+    ...rest, combatPlan: {
+      key: pick.key, phase: pick.phase, source: pick.source,
+      ...(pick.kind === 'item' && pick.item ? { now: `Collect ${pick.item.count} ${pick.item.name} from ${cap(plural(pick.foe))}` } : {}),
+      ...(pick.steps[1] ? { next: cap(pick.steps[1].replace(/^Then: /, '')) } : {}),
+    }, foes: [pick.foe], mapLocation: { ...pick.spot.place }, inGame,
     // The reason is said once, in the step status line (CombatRouteLine); the route's own how-to is folded with the rest of its text.
     where: pick.spot.where || step.where, quickSteps: pick.steps,
     ...(pacing ? { pacing } : {}),

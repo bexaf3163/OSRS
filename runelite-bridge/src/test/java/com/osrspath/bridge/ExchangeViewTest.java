@@ -85,15 +85,23 @@ public class ExchangeViewTest
 	}
 
 	@Test
-	public void atTheExchangeTheGuideCardStaysAway_whateverTheSmartRevealSays()
+	public void atTheExchangeTheGuideStaysClosed_whateverTheSmartRevealSays()
 	{
-		StepGuide.StageView sv = new StepGuide.StageView(1, 1, Collections.emptyList(), 0, false);
-		StepGuide.View v = new StepGuide.View("[S3-08] Strength to 20 and Attack to 30", null, Collections.emptyList(), Collections.emptyList(), null, null, null, null, sv);
-		assertTrue("the list shows near the step", GuideList.shown(true, false, v, false, SmartView.Context.STEP));
+		assertTrue("open near the step when the player opened it", OsrsPathGuideOverlay.expanded(true, false, SmartView.Context.STEP));
+		assertTrue(OsrsPathGuideOverlay.expanded(true, true, SmartView.Context.BANK));
 		assertTrue(SmartView.exchangeFocus(SmartView.Context.EXCHANGE));
 		assertFalse(SmartView.exchangeFocus(SmartView.Context.BANK));
 		assertFalse(SmartView.exchangeFocus(SmartView.Context.STEP));
-		// Not shown with the smart reveal off either (GuideList.shown is also what the lean HUD asks).
-		assertFalse(GuideList.shown(true, false, v, false, SmartView.Context.EXCHANGE));
+		// Closed at the exchange with the smart reveal off too: the exchange card has the room.
+		assertFalse(OsrsPathGuideOverlay.expanded(true, false, SmartView.Context.EXCHANGE));
+		assertFalse(OsrsPathGuideOverlay.expanded(true, true, SmartView.Context.EXCHANGE));
+		// While travelling only with the smart reveal; and nothing opens a card the player closed.
+		assertFalse(OsrsPathGuideOverlay.expanded(true, true, SmartView.Context.TRAVEL));
+		assertTrue(OsrsPathGuideOverlay.expanded(true, false, SmartView.Context.TRAVEL));
+		for (SmartView.Context c : SmartView.Context.values())
+		{
+			assertFalse(c.name(), OsrsPathGuideOverlay.expanded(false, true, c));
+			assertFalse(c.name(), OsrsPathGuideOverlay.expanded(false, false, c));
+		}
 	}
 }

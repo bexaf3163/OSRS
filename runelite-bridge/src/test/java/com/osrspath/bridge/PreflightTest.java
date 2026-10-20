@@ -177,16 +177,24 @@ public class PreflightTest
 	}
 
 	@Test
-	public void theHudCarriesTheChipThroughTheLeanAndTheCompactViews()
+	public void theGuideCarriesTheChip_onceAndRed()
 	{
-		OsrsPathHudOverlay.State s = new OsrsPathHudOverlay.State("[S3-02] Black Knights' Fortress", "Go to: Cabbage", "40 tiles", false, null, false, null, false, null, false,
+		Hud.State s = new Hud.State("[S3-02] Black Knights' Fortress", "Go to: Cabbage", "40 tiles", false, null, false, null, false, null, false,
 			null, null, false, null, 40, "⚠ Missing Item: Cabbage - Turn back!");
 		assertEquals("⚠ Missing Item: Cabbage - Turn back!", s.getMissing());
-		assertEquals(s.getMissing(), OsrsPathHudOverlay.lean(s, true).getMissing());
-		assertEquals(s.getMissing(), SmartView.compact(s).getMissing());
-		assertTrue(OsrsPathHudOverlay.plain(s).contains("Turn back!"));
-		assertEquals(OverlayCard.RED, OsrsPathHudOverlay.accent(s));
+		StepGuide.View v = new StepGuide.View("[S3-02] Black Knights' Fortress", null, java.util.Collections.emptyList(), java.util.Collections.emptyList(), null, null,
+			null, null);
+		// Without the guard holding the arrow (the chip came first): the chip is the one warning, red, without its marker.
+		HudModel.Card c = HudModel.build(HudModelTest.input(v, s, null));
+		assertEquals("Missing Item: Cabbage - Turn back!", c.getWarning().getText());
+		assertEquals(HudModel.Tone.DANGER, c.getWarning().getTone());
+		// With the guard: the headline says what to get, red, and the chip is not repeated.
+		Preflight.Block pb = new Preflight.Block("Cabbage", 1, 0, Preflight.Via.SOURCE, null, 2965, 3380, 0);
+		HudModel.Card held = HudModel.build(HudModelTest.with(HudModelTest.input(v, s, null), "preflight", pb));
+		assertEquals("Get Cabbage", held.getHeadline());
+		assertEquals(HudModel.Tone.DANGER, held.getTone());
+		assertTrue(held.plain(true, true), !held.plain(true, true).contains("Turn back"));
 		// An older call without the chip still builds.
-		assertNull(new OsrsPathHudOverlay.State("t", null, null, false, null, false, null, false, null, false, null, null, false, null, -1).getMissing());
+		assertNull(new Hud.State("t", null, null, false, null, false, null, false, null, false, null, null, false, null, -1).getMissing());
 	}
 }

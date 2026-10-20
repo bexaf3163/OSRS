@@ -109,7 +109,7 @@ public class FontCompareSheetTest
 
 		File dir = new File("build/font-compare");
 		assertTrue(dir.isDirectory() || dir.mkdirs());
-		for (float scale : new float[] {1f, OsrsPathHudOverlay.LARGE})
+		for (float scale : new float[] {1f, Hud.LARGE})
 		{
 			int width = Math.round(430 * scale);
 			BufferedImage probe = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB);

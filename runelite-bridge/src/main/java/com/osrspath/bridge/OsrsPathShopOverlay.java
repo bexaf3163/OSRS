@@ -130,7 +130,7 @@ class OsrsPathShopOverlay extends Overlay
 		plugin.shopWindowShown(true);
 		plugin.uiShown("shop", ShopWindow.plain(r));
 		Rectangle frame = o.frame != null && !o.frame.isHidden() ? o.frame.getBounds() : null;
-		Dimension size = paint(g, r, WIDTH, config.hudLarge() ? OsrsPathHudOverlay.LARGE : 1f, config.hudOpacity(), place(frame, client.getCanvasWidth(), client.getCanvasHeight(), r, g), config.overlayTheme());
+		Dimension size = paint(g, r, WIDTH, config.hudLarge() ? Hud.LARGE : 1f, config.hudOpacity(), place(frame, client.getCanvasWidth(), client.getCanvasHeight(), r, g), config.overlayTheme());
 		return size;
 	}
 
@@ -170,7 +170,7 @@ class OsrsPathShopOverlay extends Overlay
 		for (String l : OverlayText.wrap(r.getTitle(), fm, inner))
 		{
 			lines.add(l);
-			colors.add(OsrsPathHudOverlay.TITLE);
+			colors.add(Hud.TITLE);
 		}
 		for (ShopWindow.Row row : r.getRows())
 		{
@@ -225,11 +225,11 @@ class OsrsPathShopOverlay extends Overlay
 		switch (m)
 		{
 			case TODO:
-				return OsrsPathHudOverlay.TEXT;
+				return Hud.TEXT;
 			case BAD:
 				return OverlayCard.RED;
 			case GOOD:
-				return OsrsPathHudOverlay.GOOD;
+				return Hud.GOOD;
 			case SELL:
 				return CleanupHint.SELL;
 			case DROP:

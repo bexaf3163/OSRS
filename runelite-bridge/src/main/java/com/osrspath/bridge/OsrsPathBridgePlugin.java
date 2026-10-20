@@ -143,8 +143,6 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	@Inject
 	private OsrsPathItemOverlay itemOverlay;
 
-	@Inject
-	private OsrsPathHudOverlay hudOverlay;
 
 	@Inject
 	private InventoryCheckOverlay checklistOverlay;
@@ -161,8 +159,6 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	@Inject
 	private OsrsPathGuideOverlay guideOverlay;
 
-	@Inject
-	private OsrsPathDockOverlay dockOverlay;
 
 	@Inject
 	private MouseManager mouseManager;
@@ -202,8 +198,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	 */
 	@Getter
 	private volatile StepGuide.View guideView;
-	/** The "Advice" tab is open in the list. Reset when there are no tips. */
-	private boolean adviceTab;
+	/** "More advice" is open on the in-game guide. Closed again when the step changes: a new step's advice is new. */
+	@Getter
+	private boolean adviceOpen;
+	/** The in-game guide's card, built from one snapshot of the state each time it changes ({@link #rebuildCard}); null means nothing to show. */
+	@Getter
+	private volatile HudModel.Card hudCard;
 	private StepGuide.View panelView;
 	/** A message in the list and panel after a click, for example "navigation is off"; cleared by changing the step. */
 	private String guideMessage;
@@ -230,9 +230,9 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	@Getter
 	private final Map<TileObject, String> objects = new HashMap<>();
 
-	/** The micro HUD: recomputed once per tick and when the target or bag changes. */
+	/** The per-tick state the in-game guide is built from: recomputed once per tick and when the target or bag changes. */
 	@Getter
-	private OsrsPathHudOverlay.State hud;
+	private Hud.State hud;
 
 	/**
 	 * The route stops of the current step (gate -> bridge -> ladder -> NPC); null means the step has none. They
@@ -385,13 +385,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		overlayManager.add(worldOverlay);
 		overlayManager.add(widgetOverlay);
 		overlayManager.add(itemOverlay);
-		overlayManager.add(hudOverlay);
 		overlayManager.add(checklistOverlay);
 		overlayManager.add(geOverlay);
 		overlayManager.add(dangerOverlay);
 		overlayManager.add(arrowOverlay);
+		// The one in-game guide (2.74.0). The top-left plate and the docked bar it replaced are gone: do not add a second HUD overlay here.
 		overlayManager.add(guideOverlay);
-		overlayManager.add(dockOverlay);
 		guideMouse = new GuideMouse(client, guideOverlay, a -> clientThread.invokeLater(() -> guideAction(a)));
 		mouseManager.registerMouseListener(guideMouse);
 		panel = new OsrsPathPanel(new OsrsPathPanel.Actions()
@@ -451,13 +450,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		overlayManager.remove(worldOverlay);
 		overlayManager.remove(widgetOverlay);
 		overlayManager.remove(itemOverlay);
-		overlayManager.remove(hudOverlay);
 		overlayManager.remove(checklistOverlay);
 		overlayManager.remove(geOverlay);
 		overlayManager.remove(dangerOverlay);
 		overlayManager.remove(arrowOverlay);
 		overlayManager.remove(guideOverlay);
-		overlayManager.remove(dockOverlay);
 		mouseManager.unregisterMouseListener(guideMouse);
 		clientToolbar.removeNavigation(panelButton);
 		clientThread.invoke(() ->
@@ -681,7 +678,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private volatile boolean debugVisible;
 	private HotkeyListener debugHotkey;
 	private HotkeyListener shotHotkey;
-	private volatile boolean hudOnScreen;
+	/** The in-game guide was drawn in the last frame (the watchdog's "step but empty screen" check). */
 	private volatile boolean guideOnScreen;
 	private final Map<String, String> lastUi = new HashMap<>();
 	private int shots;
@@ -751,9 +748,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		telemetry = new Telemetry(new File(RuneLite.RUNELITE_DIR, "osrs-path-telemetry"), gson, System::currentTimeMillis);
 		Map<String, Object> cfg = new LinkedHashMap<>();
 		cfg.put("smartView", config.smartOverlays());
-		cfg.put("hudLean", config.hudLean());
-		cfg.put("showHud", config.showHud());
 		cfg.put("showGuide", config.showGuide());
+		cfg.put("hudExpanded", config.hudExpanded());
 		cfg.put("hudLarge", config.hudLarge());
 		cfg.put("stageFollow", config.stageFollow());
 		cfg.put("autoNavigation", config.autoNavigation());
@@ -782,11 +778,6 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		shopShown = shown;
 	}
 
-	void hudShown(boolean shown)
-	{
-		hudOnScreen = shown;
-	}
-
 	void guideShown(boolean shown)
 	{
 		guideOnScreen = shown;
@@ -797,21 +788,6 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return guideOnScreen;
 	}
 
-	private volatile boolean dockOnScreen;
-	private volatile boolean dockExpanded;
-
-	/** The docked bar tells whether it is on screen and whether the list under it should be open. */
-	void dockShown(boolean onScreen, boolean expanded)
-	{
-		dockOnScreen = onScreen;
-		dockExpanded = expanded;
-	}
-
-	/** The list is hidden by the docked bar: the bar is on screen and nothing opened the list. */
-	boolean dockHidesList()
-	{
-		return dockOnScreen && !dockExpanded;
-	}
 
 	/** What the player sees (badge or list text): into the log only when it changed. */
 	void uiShown(String view, String text)
@@ -949,7 +925,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			lastBeat = now;
 			WorldPoint p = me.getWorldLocation();
 			t.event("beat", "step", target == null ? null : target.getStepId(), "stage", lastStageKey, "cursor", lastStageCursor,
-				"pos", new int[] {p.getX(), p.getY(), p.getPlane()}, "tick", tickCount, "hud", hudOnScreen, "guide", guideOnScreen);
+				"pos", new int[] {p.getX(), p.getY(), p.getPlane()}, "tick", tickCount, "hud", guideOnScreen, "guide", guideOnScreen);
 		}
 		if (t != null && tickCount % WATCH_TICKS == 0)
 		{
@@ -962,7 +938,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			StepGuide.StageView sv = v == null ? null : v.getStage();
 			EngineWatchdog.Observation o = new EngineWatchdog.Observation(now, target == null ? null : target.getStepId(),
 				st == null ? null : stageTracker.key(), cur, lines == null ? 0 : lines.size(), manual, stageTracker.peeking(), stageTracker.warning() != null,
-				p.getX(), p.getY(), p.getPlane(), carried.fingerprint(), hudOnScreen, guideOnScreen, st != null && questDone(target),
+				p.getX(), p.getY(), p.getPlane(), carried.fingerprint(), guideOnScreen, guideOnScreen, st != null && questDone(target),
 				sv != null && sv.isFinished(), client.getGameState() == GameState.LOGGED_IN);
 			for (EngineWatchdog.Finding f : watchdog.observe(o))
 			{
@@ -1079,7 +1055,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			line == null ? null : line.shown(), lines != null && StageTracker.needsManualStep(lines, cur), stageTracker.peeking(), stageTracker.warning(),
 			conditions, completion == null ? new ArrayList<>() : completion.describe(), queue,
 			lastSnapshotAt == 0 ? null : "seq " + lastSnapshotSeq + ", " + Math.max(0, (now - lastSnapshotAt) / 1000) + " s ago", planPercent,
-			stageTracker.reason(), used + "/28", p == null ? "—" : p.getX() + "," + p.getY() + "," + p.getPlane(), tickCount, hudOnScreen, guideOnScreen,
+			stageTracker.reason(), used + "/28", p == null ? "—" : p.getX() + "," + p.getY() + "," + p.getPlane(), tickCount, guideOnScreen, guideOnScreen,
 			t != null, t == null || t.file() == null ? null : t.file().getName(), t == null ? 0 : t.events(), t == null ? 0 : t.anomalyCount(), an,
 			lastShotName);
 	}
@@ -1398,6 +1374,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			gotStep = stepId;
 			stageKey = null;
 			qhReset();
+			adviceOpen = false;
 		}
 		target = t;
 		lineHlKey = null;
@@ -1451,7 +1428,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		NavTarget n = navTarget;
 		StepGuide.View v = StepGuide.view(target, ItemCounts.sum(carried, noted), bank,
 			n == null ? null : n.getLabel(), n == null ? 0 : n.getX(), n == null ? 0 : n.getY(), n == null ? 0 : n.getPlane(), gotItems,
-			stage == null ? null : stageValue(stage), stage != null && questDone(target), stageTracker.cursor());
+			stage == null ? null : stageValue(stage), stage != null && questDone(target), stageTracker.cursor(), worn);
 		if (v.getStage() != null)
 		{
 			// A pre-flight block is the first thing the plate says (it is also why the arrow points elsewhere); the cursor warning follows it.
@@ -1461,7 +1438,6 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			v = v.withStage(v.getStage().with(warning, stageTracker.peeking(), stageTracker.canStepForward(v.getStage().getSteps())));
 		}
 		v = StepGuide.withPlanFor(v, prep, target);
-		v = v.withAdviceTab(adviceTab);
 		List<CleanupHint.Line> clean = cleanupLines();
 		cleanupShown = clean;
 		v = v.withCleanup(clean);
@@ -1482,6 +1458,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			}
 		}
 		guideView = v;
+		rebuildCard();
 		if (server != null)
 		{
 			StepGuide.StageView current = v.getStage();
@@ -1966,20 +1943,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		switch (a.getKind())
 		{
 			case TOGGLE:
-				configManager.setConfiguration(OsrsPathBridgeConfig.GROUP, "guideCollapsed", !config.guideCollapsed());
+				// The details open or close by this click only, and the choice is kept across steps and log-ins.
+				configManager.setConfiguration(OsrsPathBridgeConfig.GROUP, "hudExpanded", !config.hudExpanded());
+				break;
+			case MORE:
+				adviceOpen = !adviceOpen;
 				break;
 			case PLACE:
 				goToPlace(a.getPlace());
-				break;
-			case TAB:
-				adviceTab = !adviceTab;
-				refreshGuide();
-				break;
-			case TAB_STEPS:
-			case TAB_ADVICE:
-				guideOverlay.selectDetails(a.getKind() == GuideList.Kind.TAB_ADVICE);
-				adviceTab = a.getKind() == GuideList.Kind.TAB_ADVICE;
-				refreshGuide();
 				break;
 			case TRANSPORT:
 			{
@@ -2736,7 +2707,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	 */
 	SmartView.Context overlayContext()
 	{
-		OsrsPathHudOverlay.State h = hud;
+		Hud.State h = hud;
 		return SmartView.of(
 			InventoryCheckOverlay.visible(client.getWidget(InterfaceID.Bankmain.ITEMS_CONTAINER)),
 			InventoryCheckOverlay.visible(client.getWidget(InterfaceID.GeOffers.UNIVERSE)),
@@ -2754,6 +2725,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			fundingShown = null;
 			hud = null;
+			rebuildCard();
 			return;
 		}
 		String stepTitle = target == null ? null : "[" + target.getStepId() + "] " + (target.getTitle() == null ? "" : target.getTitle());
@@ -2850,9 +2822,83 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		// Training on a step with food: the bag's food and about how many kills it lasts; nearly out, an alert.
 		Checklist.Row food = training ? TrainingFood.foodRow(checklist.getRows()) : null;
 		String foodLine = food == null ? null : TrainingFood.line(food.getName(), food.getHave(), food.getHeals(), pacing.getPacing().getFoodHpPerKill());
-		hud = new OsrsPathHudOverlay.State(title, goal, distance, near, bag, checklist.isReady(), dangerText, inside, pace, paceGood, upgrade,
+		hud = new Hud.State(title, goal, distance, near, bag, checklist.isReady(), dangerText, inside, pace, paceGood, upgrade,
 			health, critical, chip != null ? chip : navTarget == null ? useLine(target, ItemCounts.sum(carried, noted)) : null, tiles, missing,
 			training ? pacing.progress() : null, training, foodLine, food != null && TrainingFood.low(food.getHave()));
+		rebuildCard();
+	}
+
+	/**
+	 * The in-game guide's card from one snapshot: the guide view, the per-tick state, the pace and the plan as they are now (client thread). Called whenever
+	 * either the view or the state changes, so the card never mixes a new instruction with old figures.
+	 */
+	private void rebuildCard()
+	{
+		StepGuide.View v = guideView;
+		Hud.State s = hud;
+		NavTarget n = navTarget;
+		boolean loggedIn = client.getGameState() == GameState.LOGGED_IN;
+		ActiveTarget.Plan plan = target == null || target.getGuide() == null ? null : target.getGuide().getPlan();
+		// A temporary target the step does not lead to by itself: a place the player chose, a purchase, a stop on the way. The funding plan's arrow is the
+		// funding plan's own line, and a stage's arrow is the stage's.
+		String detour = null;
+		if (n != null && !FundingHint.isArrow(n.getLabel()) && (v == null || v.getTitle() == null || v.getDetour() != null))
+		{
+			List<String> sellers = n.getNpcNames();
+			detour = n.isPurchase()
+				? "Buy " + (n.getItemName() != null ? n.getItemName() : n.getLabel()) + (sellers != null && !sellers.isEmpty() ? " from " + sellers.get(0) : "")
+				: "Go to " + n.getLabel();
+		}
+		FundingHint f = funding;
+		Player me = client.getLocalPlayer();
+		HudModel.Funding fund = f == null || fundingLine() == null ? null
+			: new HudModel.Funding(f.getBrief() != null && !f.getBrief().trim().isEmpty() ? f.getBrief() : f.getAction(), f.getProgress(), f.isEstimated());
+		boolean bankOpen = InventoryCheckOverlay.visible(client.getWidget(InterfaceID.Bankmain.ITEMS_CONTAINER));
+		PacingSet p = pacing;
+		HudModel.Input in = new HudModel.Input(v, s, hudPace(), plan == null ? null : plan.getNow(), plan == null ? null : plan.getNext(),
+			detour, n != null && n.isPurchase(), fund, n == null ? useLine(target, ItemCounts.sum(carried, noted)) : null,
+			loggedIn && me != null ? preBlock : null, bankOpen, p != null && p.started(), bankFromSave,
+			loggedIn && bank == null && bankLoadTicks < BANK_LOAD_TICKS);
+		hudCard = HudModel.build(in);
+	}
+
+	/** The training pace for the guide: the skill to train now (the next one once the growing one is done), its level, goal, style and time. */
+	private HudModel.Pace hudPace()
+	{
+		PacingSet p = pacing;
+		if (p == null || target == null || !config.hudPacing())
+		{
+			return null;
+		}
+		ActiveTarget.Pacing pc = p.getPacing();
+		String shown = p.getActive();
+		PacingTracker.Snapshot snap = p.snapshot();
+		boolean switchStyle = false;
+		if (snap.isDone() && !p.left().isEmpty())
+		{
+			// The growing skill reached its goal: the next one in the step's order, and the style to switch to.
+			shown = p.left().get(0);
+			snap = p.snapshotOf(shown);
+			switchStyle = true;
+		}
+		boolean done = snap.isDone() && p.left().isEmpty();
+		List<String> goals = new ArrayList<>();
+		for (String skill : pc.skills())
+		{
+			goals.add(PacingTracker.skillName(skill) + " " + pc.targetLevelOf(skill));
+		}
+		int level = 0;
+		Integer known = stats.get(shown);
+		if (known != null)
+		{
+			level = known;
+		}
+		boolean xp = p.hasXp();
+		Long eta = xp ? snap.getEtaSeconds() : null;
+		String time = eta == null ? null : Math.round(eta / 60.0) < 1 ? "<1 min" : "~" + Math.round(eta / 60.0) + " min";
+		return new HudModel.Pace(PacingTracker.skillName(shown), level, pc.targetLevelOf(shown), PacingTracker.styleOf(shown), switchStyle,
+			xp ? snap.getActionsLeft() : -1, PacingTracker.actionForm(pc.getActionName(), xp ? snap.getActionsLeft() : 2), time, xp && !snap.isEstimated(),
+			xp ? p.progressOf(shown) : 0, done, String.join(", ", goals));
 	}
 
 	/** Training now on a paced step (2.55.1): its skills grew within {@link PacingSet#TRAINING_MS}, no temporary target, the bank closed. */
@@ -3418,7 +3464,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			}
 			qhTick();
 			// The training view ends by itself two minutes after the last XP, or when the bank opens: nothing else would refresh a player standing still.
-			OsrsPathHudOverlay.State h = hud;
+			Hud.State h = hud;
 			if (h != null && h.isTraining() != (h.getPacing() != null && trainingNow()))
 			{
 				updateHud();

@@ -366,7 +366,13 @@ export interface Step {
    */
   followsMethod?: string;
   /** Set at run time while a combat plan other than the route's own leads the step (lib/combatRoute/pick.ts): the plan's key, the phase in hand and who chose it. Never in the data. */
-  combatPlan?: { key: string; phase: number; source: 'auto' | 'player' };
+  combatPlan?: {
+    key: string; phase: number; source: 'auto' | 'player';
+    /** The phase in hand in a few words for the in-game guide ("Collect 50 Big bones from Hill Giants"); absent for a phase the training pace says by itself. */
+    now?: string;
+    /** The instruction of the phase after it (without "Then: "); absent for the last. */
+    next?: string;
+  };
   /** Set at run time with combatPlan: the route's own instructions the plan replaced, shown folded as "the route as written". Never in the data. */
   routeAsWritten?: { where?: string; how?: string; quickSteps?: string[]; fields?: Field[] };
   /**

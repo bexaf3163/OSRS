@@ -991,3 +991,27 @@ Not done yet (block 2b): the audit ledger of every combat stage, mandatory quest
   `ShoppingPlan.counted()` reports both. What is counted no longer depends on the count.
 - Tests: `doses`, `shopAccess`, `shoppingView` (the watch list is the same before and after an item is found), `ShoppingPlanTest`, `PotionDoseTest`;
   routing tests now use real shop names (a made-up shop is "not checked" and never primary). Fixtures regenerated (watch lists name potion sizes).
+
+## 2.74.0 — repair block 2a: the single in-game guide
+
+- **Architecture.** One overlay draws the guide: `OsrsPathGuideOverlay` (the class name is kept on purpose: RuneLite saves an overlay's position and size under
+  its simple class name, so a player's place survives). What it says is decided by `HudModel.build(Input)` (pure, no client): one snapshot of the guide view
+  (`StepGuide.View`: bag, worn, bank, quest stage, the app's `PrepPlan`), the per-tick `Hud.State` (distance, danger, health, food) and the training pace.
+  The plugin rebuilds the card in `rebuildCard()` whenever `updateHud` or `refreshGuide` runs and stores it in `hudCard`; the overlay only lays out and
+  paints it. `Hud` is now only a data holder (`Hud.State`) and `panelWidth`: it is NOT an overlay, never register it.
+- **Removed**: `OsrsPathHudOverlay` (the plate), `OsrsPathDockOverlay` and `DockBar`, `GuideDisclosure`, the old row builder in `GuideList`, and the config
+  `showHud`, `hudLean`, `guideCollapsed`, `dockBar`, `guideCompact`. `showGuide` ("In-game guide") turns the one card off; the hidden `hudExpanded` keeps the
+  open/closed choice. Where each function lives now: the plate's title/distance/pace → the card's headline/status/progress; the plate's food and health →
+  the card's warning; the departure check chip (`Preflight`) → the headline "Get/Withdraw …"; the "What you need" list → "Prepare" in the details; the Tips tab
+  → "More advice"; stage buttons (Done, Previous line, Back to the current line) → "Next" in the details; the dock bar's clicks → the header toggle.
+- **Priority** (HudModel class comment): 1 safety (danger zone, health, food gone), 2 preparation that stops the activity, 3 the current action and the way,
+  4 optional advice. Only the first warning is on the closed card; the others sit once in the details. A required item blocks when the app's plan says
+  CRITICAL + NOW (or there is no plan line), a consumable by the plan's supply verdict before the activity and by the training food line once it has
+  started; a loading or stale bank is said, not guessed.
+- **How not to bring a second HUD back**: new in-game lines go into `HudModel` (a `Line` in `now`, `prepare`, `next` or `advice`), never into a new overlay or
+  `OverlayPanel`. `HudModelTest` holds the brief's regression cases; `HudRenderTest` lays the card out with the real face at widths 240–420 and both text
+  sizes and checks every row and button is inside the card and the open card stays within its height share; `OverlayLayoutTest` runs every step, place,
+  purchase and distance through the card and checks nothing paints outside it. Pictures: `runelite-bridge/build/overlay-render/hud-*.png`.
+- **App**: `Step.combatPlan` carries `now` (an item phase: "Collect 50 Big bones from Hill Giants") and `next` (the following phase without "Then: ");
+  `stepGuide()` sends them as `guide.plan`; the plugin validates them (`ActiveTarget.Plan`). The training phase is told by the pace, not by `now`.
+- **Not verified in 2.74.0 yet**: see the live-check list in the release report.

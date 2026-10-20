@@ -2,17 +2,10 @@ package com.osrspath.bridge;
 
 import static org.junit.Assert.*;
 import com.google.gson.Gson;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
-import net.runelite.client.ui.overlay.components.PanelComponent;
 import org.junit.Test;
 
 /**
@@ -71,12 +64,9 @@ public class ManualWalkthroughTest
 		assertNotNull(v.getStage());
 		assertEquals(4, v.getStage().getIndex());
 		assertEquals(n, v.getStage().getTotal());
-		assertTrue("the list is drawn, not only the small target plate", GuideList.worthShowing(v));
-		Graphics2D g = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics();
-		FontMetrics fm = GuideFont.metrics(g, GuideFont.font(1f));
-		String core = GuideList.plain(GuideList.coreRows(v, fm, 300));
-		g.dispose();
-		assertTrue(core, core.contains("[4/" + n + "]") && core.contains("Choose a gang"));
+		HudModel.Card c = HudModel.build(HudModelTest.input(v, HudModelTest.quiet(), null));
+		String closed = c.plain(false, false);
+		assertTrue(closed, closed.contains("4 of " + n) && c.getHeadline().contains("Choose a gang"));
 		StepGuide.View done = StepGuide.view(t, new ItemCounts(), new ItemCounts(), null, 0, 0, 0, null, 0, true, 3);
 		assertTrue("the game says the quest is complete: the walkthrough is over", done.getStage().isFinished());
 	}
@@ -113,31 +103,19 @@ public class ManualWalkthroughTest
 		ActiveTarget t = arrav();
 		StepGuide.View v = StepGuide.view(t, new ItemCounts(), new ItemCounts(), null, 0, 0, 0, null, 0, false, 4);
 		v = v.withStage(v.getStage().with(null, false, true));
-		for (int reveal : new int[]{0, GuideList.EXPAND_STEPS})
+		HudModel.Card c = HudModel.build(HudModelTest.input(v, HudModelTest.state("~7 tiles ↑", 7), null));
+		for (boolean open : new boolean[]{false, true})
 		{
-			PanelComponent panel = new PanelComponent();
-			panel.setBackgroundColor(new java.awt.Color(0, 0, 0, 0));
-			Graphics2D scratch = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB).createGraphics();
-			scratch.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			Font font = GuideFont.font(1f);
-			Font small = GuideFont.font(OsrsPathGuideOverlay.SMALL);
-			List<OsrsPathGuideOverlay.RowComponent> rows = OsrsPathGuideOverlay.build(panel, v, false, -1, GuideFont.metrics(scratch, font), GuideFont.metrics(scratch, small),
-				font, small, 300, 94, false, true, reveal, "7 tiles");
-			String text = GuideList.plain(rows.stream().map(OsrsPathGuideOverlay.RowComponent::getRow).collect(Collectors.toList()));
-			String flat = text.replaceAll("\\s+", " ");
-			assertTrue("the whole line, to its last word: " + text, flat.contains("Phoenix Gang: ask the fur trader Baraek") && flat.contains("(pay 20 coins)"));
-			panel.render(scratch);
-			Dimension size = panel.render(scratch);
-			scratch.dispose();
-			BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_ARGB);
-			Graphics2D g = image.createGraphics();
-			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			OverlayCard.paintGuide(g, size.width, size.height, OsrsPathGuideOverlay.MODERN_LINK, 94, OsrsPathBridgeConfig.OverlayTheme.GLASS);
-			panel.render(g);
-			g.dispose();
-			File out = new File("build/overlay-render/walkthrough-" + (reveal == 0 ? "compact" : "expanded") + ".png");
+			OsrsPathGuideOverlay.Layout l = HudRenderTest.layout(c, open, false, OsrsPathGuideOverlay.WIDTH, 1f, 2000);
+			if (open)
+			{
+				String flat = c.plain(true, false).replaceAll("\\s+", " ");
+				assertTrue("the whole line, to its last word: " + flat, flat.contains("Phoenix Gang: ask the fur trader Baraek") && flat.contains("(pay 20 coins)"));
+				assertTrue("a line the game cannot see has its Done button", c.getNext().stream().anyMatch(x -> x.getAction().equals(GuideList.Action.NEXT)));
+			}
+			File out = new File("build/overlay-render/walkthrough-" + (open ? "expanded" : "compact") + ".png");
 			out.getParentFile().mkdirs();
-			ImageIO.write(image, "png", out);
+			ImageIO.write(HudRenderTest.paint(l), "png", out);
 		}
 	}
 }

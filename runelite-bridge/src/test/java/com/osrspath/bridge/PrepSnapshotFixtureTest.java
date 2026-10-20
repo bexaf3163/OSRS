@@ -1,6 +1,7 @@
 package com.osrspath.bridge;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -25,8 +26,6 @@ import org.junit.Test;
 public class PrepSnapshotFixtureTest
 {
 	private static final Gson GSON = new Gson();
-	private static final java.awt.FontMetrics FM = new java.awt.image.BufferedImage(1, 1, java.awt.image.BufferedImage.TYPE_INT_ARGB).createGraphics()
-		.getFontMetrics(OverlayText.font(net.runelite.client.ui.FontManager.getRunescapeFont(), 1f));
 
 	private static List<JsonObject> rows()
 	{
@@ -72,8 +71,9 @@ public class PrepSnapshotFixtureTest
 			StepGuide.View v = StepGuide.view(e.getStep(), new ItemCounts(), null, null, 0, 0, 0, new HashSet<>());
 			StepGuide.View withPlan = StepGuide.withPlanFor(v, e.getPlan(), e.getStep());
 			assertNotNull(withPlan.getPrep());
-			List<GuideList.Row> rows = GuideList.rows(withPlan, false, FM, FM, OsrsPathGuideOverlay.WIDTH);
-			assertTrue(row.get("name").getAsString(), rows.size() >= 1);
+			HudModel.Card c = HudModel.build(HudModelTest.input(withPlan, HudModelTest.quiet(), null));
+			assertNotNull(row.get("name").getAsString(), c);
+			assertFalse(row.get("name").getAsString(), c.getHeadline().trim().isEmpty());
 		}
 	}
 
@@ -90,16 +90,9 @@ public class PrepSnapshotFixtureTest
 			assertNull(e.prepare().get("plan"));
 			assertTrue(e.getPlan().hasRecovery());
 			StepGuide.View v = StepGuide.withPlanFor(StepGuide.view(e.getStep(), new ItemCounts(), null, null, 0, 0, 0, new HashSet<>()), e.getPlan(), e.getStep());
-			List<GuideList.Row> rows = GuideList.rows(v, false, FM, FM, OsrsPathGuideOverlay.WIDTH);
-			StringBuilder sb = new StringBuilder();
-			for (GuideList.Row r : rows)
-			{
-				for (GuideList.Line l : r.getLines())
-				{
-					sb.append(l.getLeft()).append(' ');
-				}
-			}
-			assertTrue(sb.toString(), sb.toString().contains("You died"));
+			HudModel.Card c = HudModel.build(HudModelTest.input(v, HudModelTest.quiet(), null));
+			String closed = c.plain(false, false);
+			assertTrue("on the closed card: " + closed, closed.contains("You died"));
 			return;
 		}
 		throw new AssertionError("the snapshot copy has no death case");
