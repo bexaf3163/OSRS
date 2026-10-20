@@ -46,9 +46,10 @@ export interface Progress {
 
 /** Whether a phase has what it set out to get, by what the game shows. Unknown is not done. */
 export function phaseDone(p: PlanPhase, st: Progress): boolean {
+  const haveItem = p.item ? st.held(p.item.name) : null;
+  if (p.item && (haveItem === null || haveItem < p.item.count)) return false;
   if (p.kind === 'item') {
-    const have = p.item ? st.held(p.item.name) : null;
-    return p.item !== undefined && have !== null && have >= p.item.count;
+    return p.item !== undefined;
   }
   if (!p.goals.length || !st.xp) return false;
   return p.goals.every((g) => typeof st.xp![g.skill] === 'number' && (st.xp![g.skill] as number) >= g.exp);
@@ -69,9 +70,9 @@ const goalText = (goals: readonly Goal[]) => goals.map((g) => `${cap(g.skill)} $
 /** What to do in one phase, in one sentence the page and the game can show. */
 export function phaseInstruction(p: PlanPhase): string {
   const where = p.spot.place.label;
-  if (p.kind === 'item' && p.item) return `Fight the ${plural(p.foe.name)} until ${p.item.count} ${p.item.name} are in the bank (about ${p.kills} kills): ${where}.`;
   const style = p.goals[0] ? ` on ${STYLE_WORD[p.goals[0].skill]}` : '';
-  return `Fight the ${plural(p.foe.name)}${style} until ${goalText(p.goals)} (about ${p.kills} kills): ${where}.`;
+  if (p.kind === 'item' && p.item) return `Fight the ${plural(p.foe.name)}${style} until ${p.item.count} ${p.item.name} are in the bank (about ${p.kills} kills): ${where}.`;
+  return `Fight the ${plural(p.foe.name)}${style} until ${goalText(p.goals)}${p.item ? ` and ${p.item.count} ${p.item.name} are in the bank` : ''} (about ${p.kills} kills): ${where}.`;
 }
 
 /**
@@ -101,9 +102,9 @@ export function samePicks(a: Record<string, CombatPick>, b: Record<string, Comba
       && a[k].source === b[k].source && a[k].why === b[k].why && a[k].steps.join('|') === b[k].steps.join('|'));
 }
 
-/** The pace line of a phase: the XP goals the phase trains, with the opponent's XP a kill; an item phase has none (the XP goal is met, the item is the goal). */
+/** The combat model follows the phase's XP/style; an item phase with explicit training has a projection too. The guide's current action remains its item goal. */
 function pacingOf(step: Step, pick: CombatPick): StepPacing | undefined {
-  if (pick.kind === 'item' || !pick.goals.length || !step.pacing) return undefined;
+  if (!pick.goals.length || !step.pacing) return undefined;
   const [first, ...rest] = pick.goals;
   // The route's own opponent keeps the route's words; another one is named by its own.
   const same = pick.foe === step.foes?.[0];
@@ -125,7 +126,7 @@ const KEEP_FIELDS = new Set(['Dangerous', 'Attention', 'Combat']);
 
 /** The one line the game's plate shows for the phase: the opponent and what the phase is for. */
 function plateGoal(pick: CombatPick): string {
-  const what = pick.kind === 'item' && pick.item ? `${pick.item.count} ${pick.item.name}` : goalText(pick.goals);
+  const what = pick.kind === 'item' && pick.item ? `${pick.item.count} ${pick.item.name}` : `${goalText(pick.goals)}${pick.item ? ` and ${pick.item.count} ${pick.item.name}` : ''}`;
   return `${cap(plural(pick.foe))}: ${what}`;
 }
 
@@ -152,7 +153,7 @@ export function withCombatPlan(step: Step, pick: CombatPick | undefined): Step {
   return {
     ...rest, combatPlan: {
       key: pick.key, phase: pick.phase, source: pick.source,
-      ...(pick.kind === 'item' && pick.item ? { now: `Collect ${pick.item.count} ${pick.item.name} from ${cap(plural(pick.foe))}` } : {}),
+      ...(pick.kind === 'item' && pick.item ? { now: `Collect ${pick.item.count} ${pick.item.name} from ${cap(plural(pick.foe))}${pick.goals[0] ? ` on ${STYLE_WORD[pick.goals[0].skill]}` : ''}` } : {}),
       ...(pick.steps[1] ? { next: cap(pick.steps[1].replace(/^Then: /, '')) } : {}),
     }, foes: [pick.foe], mapLocation: { ...pick.spot.place }, inGame,
     // The reason is said once, in the step status line (CombatRouteLine); the route's own how-to is folded with the rest of its text.

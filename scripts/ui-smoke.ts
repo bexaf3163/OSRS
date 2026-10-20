@@ -1819,18 +1819,18 @@ async function combatRouteScenarios(browser: Browser) {
     if (/Not everything is checked/.test(verdict)) expect(await page.locator('.step-status .ready-ring').count() === 0, `combat route (${width} px): no percentage beside "Not everything is checked"`);
     // 2.69: nothing to press. The recommended plan is in effect, named in one line with one short reason.
     const line = await text(page, '.status-combat-route');
-    expect(/Plan: Cows, then Hill Giant for the Big bones\./.test(line) && /Recommended for your levels and kit/.test(line), `combat route (${width} px): the recommended plan is in effect, said in one line`);
+    expect(/Plan: Big bones first, then train on cows\./.test(line) && /Recommended for your levels and kit/.test(line), `combat route (${width} px): the combined-objective recommendation is in effect, said in one line`);
     expect(!/Another way|Use this plan/.test(await page.locator('body').innerText()), `combat route (${width} px): no "Default → better" switch to press`);
     const step = await lastStep();
-    expect(step?.stepId === 'S4-03' && step.worldPoint?.label === COWS && step.npcNames?.[0] === 'Cow', `combat route (${width} px): the game is sent to the cows without a press`);
-    expect(step?.goal === 'Cows: Attack 40', `combat route (${width} px): the game's plate says what the phase is for`);
-    expect(step?.pacing?.actionName === 'cow|cows' && step.pacing.expPerAction === 32, `combat route (${width} px): the game's pace line counts cows`);
+    expect(step?.stepId === 'S4-03' && step.npcNames?.[0] === 'Hill Giant', `combat route (${width} px): the game starts at required bone collection without a press`);
+    expect(step?.goal === 'Hill Giants: 50 Big bones', `combat route (${width} px): the game's plate says what the phase is for`);
+    expect(step?.pacing?.skill === 'attack' && step.pacing.expPerAction === 140 && step.pacing.targetExp === 20363, `combat route (${width} px): the collection phase trains the Attack XP credited by the estimate`);
     const trigger = JSON.stringify(step?.completionTrigger ?? {});
     expect(trigger.includes('Big bones') && trigger.includes('"attack"'), `combat route (${width} px): the step still completes by the route's own trigger`);
     const page1 = await page.locator('body').innerText();
-    expect(/Fight the cows on Accurate until Attack 40/.test(page1) && !/Climb down the trapdoor/.test(page1), `combat route (${width} px): one set of instructions on the page, the plan's`);
+    expect(/Fight the Hill Giants on Accurate until 50 Big bones/.test(page1) && !/Climb down the trapdoor/.test(page1), `combat route (${width} px): one set of instructions on the page, the plan's`);
     const saved = await savedPlans();
-    expect(saved.length === 1 && saved[0]['S4-03']?.key === 'split' && saved[0]['S4-03']?.by === 'auto' && Object.keys(saved[0]['S4-03']).sort().join() === 'at,by,key', `combat route (${width} px): the guide's own choice is remembered as such, nothing else`);
+    expect(saved.length === 1 && saved[0]['S4-03']?.key === 'item-first' && saved[0]['S4-03']?.by === 'auto' && Object.keys(saved[0]['S4-03']).sort().join() === 'at,by,key', `combat route (${width} px): the guide's own choice is remembered as such, nothing else`);
     const done = await page.evaluate(() => { const j = (window as unknown as { __saved?: string }).__saved; return j ? JSON.parse(j) : null; });
     expect(!done || !done.steps || done.steps['S4-03'] === undefined, `combat route (${width} px): the route step is still open`);
     if (process.env.UI_SHOTS) await page.locator('.status-combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-line-${width}.png` }).catch(() => {});
@@ -1845,7 +1845,7 @@ async function combatRouteScenarios(browser: Browser) {
     await page.waitForTimeout(600);
     expect(await fold.evaluate((d) => (d as HTMLDetailsElement).open), `combat route (${width} px): the status line's "Why this plan?" opens the comparison itself`);
     const rows = await page.locator('.combat-plan-row').count();
-    expect(rows >= 4, `combat route (${width} px): the comparison lists the plans (${rows})`);
+    expect(rows >= 6, `combat route (${width} px): the folded comparison includes both collection orders (${rows})`);
     expect(/Compared: .*Cow/.test(await text(page, '.combat-route')), `combat route (${width} px): it says what was compared`);
     if (process.env.UI_SHOTS) await page.locator('.combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-open-${width}.png` }).catch(() => {});
     // The player's own choice: the route as written. The arrow goes back to the giants, the choice is kept, and the better plan is offered.
@@ -1854,7 +1854,7 @@ async function combatRouteScenarios(browser: Browser) {
     const back = await lastStep();
     expect(back?.worldPoint?.label !== COWS && back?.npcNames?.[0] === 'Hill Giant', `combat route (${width} px): the route as written, chosen, brings the arrow back to the giants`);
     const mine = await text(page, '.status-combat-route');
-    expect(/Your plan: The route as written/.test(mine) && /Looks better now: Cows, then Hill Giant/.test(mine), `combat route (${width} px): the player's choice is named and the better plan offered, not forced`);
+    expect(/Your plan: The route as written/.test(mine) && /Looks better now: Big bones first/.test(mine), `combat route (${width} px): the player's choice is named and the better plan offered, not forced`);
     expect((await savedPlans())[0]['S4-03']?.by === 'player', `combat route (${width} px): the player's choice is saved as theirs`);
     // Any plan from the list, and a Defence plan says what the route gives later.
     if (!(await fold.evaluate((d) => (d as HTMLDetailsElement).open))) await page.locator('.combat-route details > summary').click();
@@ -1869,7 +1869,15 @@ async function combatRouteScenarios(browser: Browser) {
     await page.getByRole('button', { name: 'Follow the recommendation' }).click();
     await page.waitForTimeout(1500);
     const again = await lastStep();
-    expect(again?.npcNames?.[0] === 'Cow' && again.pacing?.skill === 'attack' && (await savedPlans())[0]?.['S4-03']?.by === 'auto', `combat route (${width} px): "Follow the recommendation" hands the plan back to the guide`);
+    expect(again?.npcNames?.[0] === 'Hill Giant' && again.pacing?.skill === 'attack' && (await savedPlans())[0]?.['S4-03']?.by === 'auto', `combat route (${width} px): "Follow the recommendation" hands the plan back to the guide`);
+    await page.evaluate(items => {
+      const emit = (window as unknown as { __emit: (e: unknown) => void }).__emit;
+      emit({ type: 'XP', xp: { attack: 20363, strength: 2000, defence: 0, hitpoints: 3500 } });
+      emit({ type: 'OWNED', bankSeen: true, items: [...items.filter(i => i.name !== 'Big bones'), { name: 'Big bones', carried: 0, noted: 0, bank: 50 }] });
+    }, owned);
+    await page.waitForTimeout(1500);
+    const trained = await lastStep();
+    expect(trained?.npcNames?.[0] === 'Cow' && trained.pacing?.targetExp === 37224 && (await savedPlans())[0]?.['S4-03']?.key === 'xp-only', `combat route (${width} px): observed banked bones move to remaining XP without recollecting them`);
     expect(await noOverflow(page), `combat route (${width} px): no horizontal scroll`);
     expect(errors.length === 0, `combat route (${width} px): no console errors ${errors.join('; ')}`);
     await page.context().close();
