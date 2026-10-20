@@ -35,6 +35,8 @@ export interface SubStep {
   detect: Detect;
   /** What the sub-step is working towards, for the progress line ("27 Cowhide"). */
   goal?: { item: string; qty: number };
+  /** Per-batch supplies, used to refresh ownership when a repeated trip starts. */
+  preparation?: { inputs: { name: string; qty: number }[]; tools: string[]; unknownTools: boolean; bank: Place };
   done: boolean;
   doneAt?: number;
   doneBy?: 'observed' | 'manual';
@@ -62,7 +64,7 @@ export interface FundingPlanState {
   active: number;
   subSteps: SubStep[];
   /** What the bag held and the coins at the start of the sub-step in progress, to tell what the work changed. */
-  baseline: { bagCoins: number | null; bag: Record<string, number> };
+  baseline: { bagCoins: number | null; bag: Record<string, number>; /** Absent on older plans; null when bag and bank could not both be checked. */ totalCoins?: number | null };
   /** Seconds of actual work, counted only while a perform sub-step is active and the game is reporting. */
   workSeconds: number;
   lastTickAt: number;
@@ -107,7 +109,7 @@ const near = (snap: FundingSnapshot, place: Place, radius: number): boolean => {
 function baselineOf(snap: FundingSnapshot): FundingPlanState['baseline'] {
   const bag: Record<string, number> = {};
   for (const b of snap.bag ?? []) bag[nameKey(b.name)] = (bag[nameKey(b.name)] ?? 0) + b.count;
-  return { bagCoins: snap.coins.bag, bag };
+  return { bagCoins: snap.coins.bag, bag, totalCoins: snap.liquid.complete ? snap.liquid.amount : null };
 }
 
 // ---------------------------------------------------------------------------
@@ -152,14 +154,26 @@ function subSteps(option: FundingOption, assessment: Shortfall, method: FundingM
 
   const e = option.evaluation;
   const main = mainOutputOf(method);
-  const units = Math.max(1, Math.min(e?.unitsPerTrip ?? 1, 1000));
+  const units = Math.max(1, Math.min(e?.preparation?.units ?? e?.unitsPerTrip ?? 1, 1000));
   const goalQty = main ? Math.max(1, Math.floor(units * main.perUnit)) : 0;
   const gather = option.kind === 'SELF_GATHER';
   const tool = method.requirements.find((r) => r.kind === 'item' && r.role === 'tool');
-  if (tool && e && e.upfront.setup > 0) {
-    add({ id: 'prepare', kind: 'prepare', text: `Get a pickaxe or axe you can use (about ${e.upfront.setup} gp).`, place: GE, detect: { type: 'manual' } });
-  } else if (method.inputs.some((i) => i.item.id !== 995) || tool) {
-    add({ id: 'prepare', kind: 'prepare', text: method.guide.find((g) => g.kind === 'prepare')?.text ?? 'Take what you need from the bank.', place: method.bank, detect: { type: 'manual' } });
+  const buyTools = e?.preparation?.tools.filter(t => !t.owned && !t.unknown && t.cost > 0) ?? [];
+  if (buyTools.length || (tool && e && e.upfront.setup > 0)) {
+    const names = buyTools.length ? buyTools.map(t => t.name).join(', ') : tool?.kind === 'item' ? tool.any.map(t => t.name).join(' or ') : 'the required tool';
+    add({ id: 'prepare-tool', kind: 'prepare', text: `Get ${names} (about ${e!.upfront.setup} gp).`, place: GE, detect: { type: 'manual' } });
+  }
+  const inputs = e?.preparation?.inputs ?? [];
+  const needsInputs = inputs.length > 0 || method.inputs.some(i => i.item.id !== 995);
+  if (needsInputs || tool) {
+    const supplies = inputs.map(i => `${i.qty} ${i.name}${i.missing > 0 ? ` (use ${i.owned} you own; buy ${i.missing})` : ' (use what you own)'}`).join(', ');
+    const takeTools = e?.preparation?.tools.filter(t => t.owned && t.name).map(t => t.name).join(', ');
+    const unknownTools = e?.preparation?.tools.some(t => t.unknown);
+    const text = supplies ? `Prepare ${supplies}${takeTools ? `; take ${takeTools}` : ''}${unknownTools ? '; open the bank to check your tool' : ''}.`
+      : method.guide.find((g) => g.kind === 'prepare')?.text ?? 'Take what you need from the bank.';
+    add({ id: 'prepare', kind: 'prepare', text, place: inputs.some(i => i.missing > 0) ? GE : method.bank, detect: { type: 'manual' },
+      ...(inputs.length ? { preparation: { inputs: inputs.map(({ name, qty }) => ({ name, qty })), tools: e?.preparation?.tools.filter(t => t.owned && t.name).map(t => t.name!) ?? [], unknownTools: !!unknownTools, bank: method.bank } } : {}),
+    });
   }
   add({ id: 'travel', kind: 'travel', text: method.guide.find((g) => g.kind === 'travel')?.text ?? `Go to ${method.spot.label}.`, place: method.spot, detect: { type: 'near', place: method.spot, radius: NEAR_TILES } });
   add({
@@ -178,7 +192,8 @@ function subSteps(option: FundingOption, assessment: Shortfall, method: FundingM
   // The sale is taken as made when the coins have risen by most of what this trip should bring.
   const sell = steps.find((s) => s.id === 'sell');
   if (sell) sell.detect = { type: 'coinsRise', by: Math.floor(Math.min(expectedNet, assessment.gap ?? expectedNet) * SALE_SHARE) };
-  const from = steps.findIndex((s) => s.id === 'travel');
+  // Consumed inputs must be prepared again on each trip; reusable tools are bought only once.
+  const from = steps.findIndex((s) => s.id === (needsInputs ? 'prepare' : 'travel'));
   const to = steps.findIndex((s) => s.id === 'sell');
   return { steps, expectedNet, ...(from >= 0 && to > from ? { loop: { from, to } } : {}) };
 }
@@ -254,9 +269,8 @@ function detected(plan: FundingPlanState, s: SubStep, snap: FundingSnapshot): bo
       return n >= 0 && n <= d.qty && near(snap, d.near, NEAR_TILES);
     }
     case 'coinsRise': {
-      const bag = snap.coins.bag;
-      const was = plan.baseline.bagCoins;
-      return d.by > 0 && bag !== null && was !== null && bag - was >= d.by;
+      const was = plan.baseline.totalCoins;
+      return d.by > 0 && was !== null && was !== undefined && snap.liquid.complete && snap.liquid.amount !== null && snap.liquid.amount - was >= d.by;
     }
     case 'manual': return false;
   }
@@ -264,7 +278,18 @@ function detected(plan: FundingPlanState, s: SubStep, snap: FundingSnapshot): bo
 
 /** The next sub-step starts from what the game shows now. */
 function advanceTo(plan: FundingPlanState, index: number, snap: FundingSnapshot): FundingPlanState {
-  return { ...plan, active: index, baseline: baselineOf(snap) };
+  const prep = plan.subSteps[index]?.preparation;
+  if (!prep) return { ...plan, active: index, baseline: baselineOf(snap) };
+  let buy = false;
+  const supplies = prep.inputs.map(i => {
+    const h = snap.held(i.name);
+    const reserve = snap.protections.get(nameKey(i.name))?.qty ?? 0;
+    const have = h.total === null ? null : Math.min(i.qty, Math.max(0, h.total - reserve));
+    if (have !== null && have < i.qty) buy = true;
+    return `${i.qty} ${i.name}${have === null ? ' (open the bank to check)' : have < i.qty ? ` (use ${have} you own; buy ${i.qty - have})` : ' (use what you own)'}`;
+  }).join(', ');
+  const text = `Prepare ${supplies}${prep.tools.length ? `; take ${prep.tools.join(', ')}` : ''}${prep.unknownTools ? '; open the bank to check your tool' : ''}.`;
+  return { ...plan, active: index, baseline: baselineOf(snap), subSteps: plan.subSteps.map((s, n) => n === index ? { ...s, text, place: buy ? GRAND_EXCHANGE : prep.bank } : s) };
 }
 
 /** Mark finished sub-steps in order; one observation can finish several (a player who is already at the place). */

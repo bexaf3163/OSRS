@@ -20,7 +20,7 @@ Current work and evidence are in [the stabilization handoff](CODEX_STABILIZATION
 | T09 | P1 | Real stalled-reader reproduction, bounded async SSE output, expiry and current-completion replay implemented/tested; exact-tree CI passed. Real frame-time and telemetry-cost acceptance remain open. |
 | T10 | P1 user impact | Complete combat-plan comparison: open. |
 | T11 | P2 | Skills availability and meaningful Gear comparisons: open. |
-| T12 | P2 | Funding acquisition/batches and executable travel preparation: open. |
+| T12 | P2 | Separate tool/input preparation, affordable first batches, repeat-trip replenishment and known-total sale observation implemented. GE window modelling, complete travel and live acceptance remain open. |
 | T13 | P2 | Review every route step as a continuous feasible progression: open. |
 | T14 | P2 | Claude's single HUD retained; health/disclosure corrected. Path simplification and live visual acceptance remain open. |
 | T15 | P1 | Java/browser/packaged-EXE gates added; actual Windows packaged E2E passed. Full release/live acceptance remains broader. |
