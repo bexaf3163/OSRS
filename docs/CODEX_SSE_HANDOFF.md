@@ -14,4 +14,6 @@ Initial state and subsequent events are queued in order under the registration l
 
 The full suite passed 601 Java tests before the final registration-helper extraction. It includes real sockets, stalled writes, exact byte/frame bounds, expiry without producer-thread closure, FIFO completion order, replay for the same character after reconnect, and no replay after changing target/character. The strengthened socket test sent 256 distinct 512-item reports in 228 ms total on this machine, including serialization. This is a synthetic producer measurement, not game frame time or a promised FPS improvement. The final helper extraction must pass compilation/server tests and the exact-tree CI gate before merge.
 
+The exact-tree GitHub Checks run 39491403525 subsequently passed all gates, including the full Java suite and the isolated packaged-EXE check.
+
 An OS write/close that ignores interruption can still occupy a bounded worker until the socket/server closes; logical disconnection/queue cleanup is immediate and does not wait on it. Socket closure is intentionally never performed inline on a game broadcast. RuneLite API reads remain where the existing plugin constructs its DTOs. Telemetry disk/render cost and actual game frame-time measurement remain separate acceptance items.

@@ -184,7 +184,8 @@ export function unusableTools(s: Pick<PlayerState, 'owned' | 'equipment' | 'manu
   return out;
 }
 
-function heldExact(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'>, nameEn: string, manualKey?: string): Held {
+/** Physical named stock, without generic tool substitution. Allocation must not spend one Rune pickaxe through several tier names. */
+export function heldExact(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'>, nameEn: string, manualKey?: string): Held {
   const o = s.owned?.items.get(nameKey(nameEn));
   const equipped = Object.values(s.equipment).filter((n) => nameKey(n) === nameKey(nameEn)).length;
   const manual = manualKey ? s.manual[manualKey] : undefined;

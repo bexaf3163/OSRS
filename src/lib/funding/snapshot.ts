@@ -7,7 +7,11 @@
 import type { Step } from '../../types';
 import { nameKey, parseAmount } from '../checklist';
 import { carryoverOf } from '../carryover';
-import { heldOf, levelOf, questOf, type Held, type PlayerState, type QuestPresence, type WorldPoint } from '../playerState';
+import { heldExact, heldOf, levelOf, questOf, type Held, type PlayerState, type QuestPresence, type WorldPoint } from '../playerState';
+import { aggregateShopping } from '../shopping';
+import { doseKind, doseNames } from '../doseKind';
+import { FOODS } from '../foodAdvice';
+import { toolFamilyOf, usableAt } from '../toolTiers';
 import { questItemKeys } from '../questItems';
 import { totalLevelOf, tradeRestriction, type SellOverride, type TradeRestriction } from '../tradeRestriction';
 
@@ -60,24 +64,85 @@ export function liquidOf(s: Pick<PlayerState, 'coins'>): Liquid {
  * What must not be sold, spent or counted as stock for the window of steps: the items the steps require (the food and the tools too), the items a step
  * is completed by (bank 50 Big bones), the carry-over a step keeps for a later one, and the quest items the quest machines check for.
  */
-export function protectionsFor(window: readonly Step[]): Map<string, Protection> {
+export function protectionsFor(window: readonly Step[], state?: PlayerState): Map<string, Protection> {
   const out = new Map<string, Protection>();
   const add = (name: string, qty: number, why: string) => {
     const k = nameKey(name);
     const have = out.get(k);
-    // The same item asked for by several steps: the largest single need, not the sum (one stock serves them in turn).
     if (!have || qty > have.qty) out.set(k, { name, qty, why });
   };
+  // Use the same demand ledger as Shopping: independent consumables add, tools reuse,
+  // and a carried stock from a selected producer is not bought again for its consumer.
+  const list = aggregateShopping(window.map(s => ({ ...s, itemsRequired: s.itemsRequired?.filter(i => !i.inStep) })));
+  const used = new Map<string, number>();
+  const heals = new Map(FOODS.map(f => [nameKey(f.name), f.heals]));
+  const stock = (name: string, key?: string) => state ? heldExact(state, name, key).total ?? 0 : 0;
+  for (const line of list.required) {
+    const foodHeal = line.heals ?? heals.get(nameKey(line.nameEn));
+    let remaining = line.count * (foodHeal ?? 1);
+    const family = toolFamilyOf(line.nameEn);
+    const sourceItems = window.flatMap(s => line.sources.some(src => src.stepId === s.id) ? (s.itemsRequired ?? []).filter(i => !i.inStep && (nameKey(i.nameEn) === nameKey(line.nameEn) || (line.id !== undefined && i.wikiItemId === line.id))) : []);
+    // A merged shopping row may have different alternatives on different steps. Only a common
+    // alternative can cover the whole merged demand; keep the primary deficit otherwise.
+    const common = (line.anyOf ?? []).filter(n => sourceItems.every(i => i.anyOf?.some(a => nameKey(a) === nameKey(n))));
+    const names = [...new Map([line.nameEn, ...common, ...(family ?? []), ...doseNames(line.nameEn)].map(n => [nameKey(n), n])).values()];
+    if (!line.exact) {
+      for (const name of [...names, ...(line.anyOf ?? [])]) add(name, Infinity, `Quantity not confirmed for ${line.sources.map(s => s.stepId).join(', ')}`);
+      continue;
+    }
+    // A row with heterogeneous alternatives cannot yet be split into source allocations by
+    // Shopping. Protect its held partial alternatives as well as the conservative primary
+    // deficit: losing that protection would make useful stock look safe to sell.
+    for (const name of (line.anyOf ?? []).filter(n => !common.some(c => nameKey(c) === nameKey(n)))) {
+      const key = nameKey(name);
+      const possibleNeed = sourceItems.filter(it => it.anyOf?.some(n => nameKey(n) === key)).reduce((sum, it) => {
+        const n = parseAmount(it.amount);
+        return n === null ? Infinity : sum + n * (it.heals ?? foodHeal ?? 1);
+      }, 0);
+      const per = foodHeal ? heals.get(key) ?? foodHeal : 1;
+      const qty = Math.min(Math.max(0, stock(name) - (used.get(key) ?? 0)), Math.ceil(possibleNeed / per));
+      if (qty > 0) {
+        add(name, (out.get(key)?.qty ?? 0) + qty, `Alternative needed for ${line.sources.map(s => s.stepId).join(', ')}`);
+        used.set(key, (used.get(key) ?? 0) + qty);
+      }
+    }
+    let primaryPicked = 0;
+    // Prefer already held stock; keep the named item as the deficit for future procurement.
+    for (const name of names) {
+      const key = nameKey(name);
+      if (family && state && !usableAt(name, skill => levelOf(state, skill) ?? null)) continue;
+      const per = line.dose ? doseKind(name)?.per ?? line.dose.per : foodHeal ? heals.get(key) ?? foodHeal : 1;
+      const available = Math.max(0, stock(name, key === nameKey(line.nameEn) ? line.key : undefined) - (line.reusable ? 0 : used.get(key) ?? 0));
+      const qty = Math.min(available, Math.ceil(remaining / per));
+      if (qty <= 0) continue;
+      const previous = out.get(key)?.qty ?? 0;
+      add(name, line.reusable ? Math.max(previous, qty) : previous + qty, `Needed for ${line.sources.map(s => s.stepId).join(', ')}`);
+      if (key === nameKey(line.nameEn)) primaryPicked += qty;
+      if (!line.reusable) used.set(key, (used.get(key) ?? 0) + qty);
+      remaining = Math.max(0, remaining - qty * per);
+      if (remaining === 0) break;
+    }
+    if (remaining > 0) {
+      const per = line.dose?.per ?? foodHeal ?? 1;
+      const k = nameKey(line.nameEn);
+      const qty = Math.ceil(remaining / per);
+      add(line.nameEn, line.reusable ? Math.max(out.get(k)?.qty ?? 0, primaryPicked + qty) : (out.get(k)?.qty ?? 0) + qty, `Needed for ${line.sources.map(s => s.stepId).join(', ')}`);
+    }
+  }
   for (const s of window) {
-    for (const i of s.itemsRequired ?? []) {
-      if (i.inStep) continue;
-      add(i.nameEn, parseAmount(i.amount) ?? 1, `Needed for ${s.id}`);
-      for (const alt of i.anyOf ?? []) add(alt, 0, `Can stand in for ${i.nameEn}`);
+    const trigger = s.inGame?.completionTrigger;
+    const goals = trigger?.items ?? [];
+    const chosen = trigger?.anyOf ? [goals.find(it => it.names.reduce((sum, n) => sum + stock(n), 0) >= it.count) ?? goals[0]].filter(Boolean) : goals;
+    for (const it of chosen) {
+      let remaining = it.count;
+      for (const name of it.names) {
+        const qty = Math.min(stock(name), remaining);
+        if (qty > 0) add(name, qty, `${s.id} is done when you hold ${it.count}`);
+        remaining -= qty;
+      }
+      if (remaining > 0 && it.names[0]) add(it.names[0], remaining + Math.min(stock(it.names[0]), it.count), `${s.id} is done when you hold ${it.count}`);
     }
-    for (const it of s.inGame?.completionTrigger?.items ?? []) {
-      for (const n of it.names) add(n, it.count, `${s.id} is done when you hold ${it.count}`);
-    }
-    for (const c of carryoverOf(s)) add(c.item, Infinity, `Kept for a later step`);
+    for (const c of carryoverOf(s)) add(c.item, c.count, `Kept for ${c.forStep}`);
   }
   for (const k of questItemKeys(window)) add(k, Infinity, 'A quest checks for it');
   return out;
@@ -118,7 +183,7 @@ export function buildSnapshot(i: SnapshotInput): FundingSnapshot {
     bag: s.bagItems.known ? s.bagItems.value : null,
     position: i.position !== undefined ? i.position : s.position.known ? s.position.value : null,
     restriction: tradeRestriction({ questPoints: i.questPoints, totalLevel: total, override: i.sellOverride }),
-    protections: protectionsFor(i.window),
+    protections: protectionsFor(i.window, s),
   };
 }
 

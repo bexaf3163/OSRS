@@ -4,9 +4,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
+import { usePlayerState } from '../playerStateContext';
+import { protectionsFor } from './funding/snapshot';
 import { stepsFor } from '../data';
 import { nameKey } from './checklist';
-import { isClosed } from './next-step';
+import { isClosed, isCompleted, questDependencyFacts } from './next-step';
 import { cleanupAdvice, type AccountKind, type CleanupPrefs, type CleanupResult } from './cleanup';
 import { useCleanupPrefs } from './cleanupPrefs';
 import { buildPriceBook, type PriceBook } from './priceBook';
@@ -28,8 +30,9 @@ export interface CleanupState {
 }
 
 export function useCleanupAdvice(): CleanupState {
-  const { gear, player, accountType, state } = useBridge();
-  const { progress, mode } = useStore();
+  const { state: playerState } = usePlayerState();
+  const { gear, player, accountType, state, questsDone } = useBridge();
+  const { progress, mode, steps } = useStore();
   const trade = useTradeRestriction();
   const { prefs, update } = useCleanupPrefs(player ?? null);
   const [tradeable, setTradeable] = useState<Set<string> | null>(null);
@@ -51,14 +54,17 @@ export function useCleanupAdvice(): CleanupState {
   const online = state === 'online';
   const account: AccountKind | null = accountType ?? prefs.account ?? null;
   const { openSteps, closedSteps } = useMemo(() => {
-    const all = stepsFor(mode);
-    return { openSteps: all.filter((s) => !isClosed(progress, s.id)), closedSteps: new Set(all.filter((s) => isClosed(progress, s.id)).map((s) => s.id)) };
-  }, [mode, progress]);
+    const selected = new Map(steps.map(s => [s.id, s]));
+    const all = stepsFor(mode).map(s => selected.get(s.id) ?? s);
+    const fact = questDependencyFacts(all, questsDone);
+    return { openSteps: all.filter((s) => !isClosed(progress, s.id)), closedSteps: new Set(all.filter((s) => fact(s.id) ?? isCompleted(progress, s.id)).map((s) => s.id)) };
+  }, [mode, progress, steps, questsDone]);
+  const reserves = useMemo(() => protectionsFor(openSteps, playerState), [openSteps, playerState]);
   const result = useMemo(
     () => cleanupAdvice({
       bag: online && bag ? bag.map((b) => ({ id: b.id, name: b.name, count: b.count ?? 1, noted: b.noted })) : null,
       worn: (gear?.equipment ?? []).map((e) => e.name),
-      openSteps, closedSteps,
+      openSteps, closedSteps, reserves,
       bankSeen: gear?.bankCoins !== null && gear?.bankCoins !== undefined,
       account,
       restriction: trade.state,
@@ -66,7 +72,7 @@ export function useCleanupAdvice(): CleanupState {
       tradeable: (n) => (tradeable ? tradeable.has(nameKey(n)) : null),
       prefs,
     }),
-    [online, bag, gear?.equipment, gear?.bankCoins, openSteps, closedSteps, account, trade.state, book, tradeable, prefs],
+    [online, bag, gear?.equipment, gear?.bankCoins, openSteps, closedSteps, reserves, account, trade.state, book, tradeable, prefs],
   );
   return { result, prefs, update, account, live: online && !!bag, bag, player: player ?? null };
 }
