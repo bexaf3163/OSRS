@@ -146,6 +146,29 @@ public class PrepSnapshotTest
 	}
 
 	@Test
+	public void concurrentSnapshotsKeepAcceptanceAndStatusInSequenceOrder() throws Exception
+	{
+		List<java.util.concurrent.CompletableFuture<HttpResponse<String>>> pending = new ArrayList<>();
+		for (int i = 1; i <= 16; i++)
+		{
+			String id = String.format(java.util.Locale.ROOT, "S1-%02d", i);
+			String step = STEP.replace("S1-03", id);
+			pending.add(http.sendAsync(HttpRequest.newBuilder(URI.create(base + "/prep-plan")).timeout(Duration.ofSeconds(5))
+				.header(BridgeServer.HEADER, "1").POST(HttpRequest.BodyPublishers.ofString(snapshot(1000 + i, step, "null"))).build(), HttpResponse.BodyHandlers.ofString()));
+		}
+		for (java.util.concurrent.CompletableFuture<HttpResponse<String>> request : pending) assertEquals(200, request.get().statusCode());
+		long previous = -1;
+		for (PrepEnvelope e : received)
+		{
+			assertTrue("Accepted snapshots regressed", e.getSeq() > previous);
+			previous = e.getSeq();
+		}
+		assertEquals(1016, previous);
+		String status = http.send(HttpRequest.newBuilder(URI.create(base + "/status")).GET().build(), HttpResponse.BodyHandlers.ofString()).body();
+		assertTrue(status, status.contains("\"activeStepId\":\"S1-16\""));
+	}
+
+	@Test
 	public void wrongKindOfSnapshot_junk_andNoHeader() throws Exception
 	{
 		assertEquals(400, post("{\"v\":5,\"seq\":1}").statusCode());

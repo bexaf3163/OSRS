@@ -193,8 +193,12 @@ public final class BridgeServer
 		this.listener = listener;
 	}
 
+	private final Object prepLock = new Object();
+	private boolean stopped;
+
 	public void start() throws IOException
 	{
+		synchronized (prepLock) { stopped = false; }
 		server = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), requestedPort), 16);
 		executor = Executors.newCachedThreadPool(daemon("osrs-path-bridge-http"));
 		server.setExecutor(executor);
@@ -207,6 +211,7 @@ public final class BridgeServer
 
 	public void stop()
 	{
+		synchronized (prepLock) { stopped = true; }
 		for (Stream s : streams)
 		{
 			s.close();
@@ -853,11 +858,16 @@ public final class BridgeServer
 						return;
 					}
 					Map<String, String> bad = env.prepare();
-					PrepResult result = listener.onPrepPlan(env, bad);
-					if (!result.stale && !bad.containsKey(PrepEnvelope.STEP))
+					PrepResult result;
+					synchronized (prepLock)
 					{
-						activeStepId = env.getStep() == null ? null : env.getStep().getStepId();
+						result = stopped ? null : listener.onPrepPlan(env, bad);
+						if (result != null && !result.stale && !bad.containsKey(PrepEnvelope.STEP))
+						{
+							activeStepId = env.getStep() == null ? null : env.getStep().getStepId();
+						}
 					}
+					if (result == null) { json(ex, 503, error("bridge stopping")); return; }
 					Map<String, String> rejected = new LinkedHashMap<>(bad);
 					rejected.putAll(result.rejected);
 					Map<String, Object> answer = ok();
