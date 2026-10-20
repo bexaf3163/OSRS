@@ -1020,3 +1020,5 @@ Not done yet (block 2b): the audit ledger of every combat stage, mandatory quest
 
 Read `docs/CODEX_STABILIZATION_HANDOFF.md` before continuing repair blocks 2b–5. It records the owner's authorized continuation, baseline, focused changes,
 regression evidence and remaining work. Do not rerun the old prompts over already repaired code, and do not assume that a unit test is a live-game check.
+
+Follow-up contracts: `docs/CODEX_ITEM_READINESS_HANDOFF.md` (exact counts/notes) and `docs/CODEX_PREREQUISITES_HANDOFF.md` (skip, live prerequisites, partial Fairytale II). Preserve these fixes when continuing blocks 2b–5; the audit ledger still labels incomplete acceptance explicitly.

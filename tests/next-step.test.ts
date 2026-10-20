@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { GameMode, Progress, Step, StepStatus } from '../src/types';
 import { BASE_QP, stepsFor } from '../src/data';
-import { blockersOf, currentStage, nextStep } from '../src/lib/next-step';
+import { blockersOf, currentStage, nextStep, openAfter, questDependencyFacts } from '../src/lib/next-step';
 import { emptyProgress } from '../src/lib/progress';
 import { questPoints } from '../src/lib/qp';
 
@@ -66,11 +66,34 @@ describe('"What to do now"', () => {
     expect(blockersOf(s, p, 16)).toBeNull();
   });
 
-  it('a skipped step counts as closed for dependencies', () => {
+  it('a skipped step closes the queue but cannot satisfy a hard dependency', () => {
     const list = [step({ id: 'A', optional: true }), step({ id: 'B', requires: ['A'] })];
     const p = progressWith({ A: 'skipped' });
-    expect(blockersOf(list[1], p, 0)).toBeNull();
-    expect(nextStep(list, p, 0)?.id).toBe('B');
+    expect(blockersOf(list[1], p, 0)).toEqual({ steps: ['A'] });
+    expect(nextStep(list, p, 0)).toBeNull();
+    expect(openAfter(list, p, 'A', 0)).toBeUndefined();
+    expect(blockersOf(step({ id: 'C', softRequires: ['A'] }), p, 0)).toBeNull();
+  });
+
+  it('uses known quest completion ahead of manual marks, but keeps an offline done fallback', () => {
+    const list = [step({ id: 'A', inGame: { completionTrigger: { type: 'QUEST_COMPLETED', questName: 'Test Quest' } } }), step({ id: 'B', requires: ['A'] })];
+    const marked = progressWith({ A: 'done' });
+    expect(blockersOf(list[1], marked, 0, questDependencyFacts(list, []))).toEqual({ steps: ['A'] });
+    expect(blockersOf(list[1], marked, 0, questDependencyFacts(list, null))).toBeNull();
+    expect(blockersOf(list[1], progressWith({ A: 'skipped' }), 0, questDependencyFacts(list, ['Test Quest']))).toBeNull();
+  });
+
+  it('completion preview skips blocked destinations and never changes saved progress', () => {
+    const list = [step({ id: 'A' }), step({ id: 'B', requires: ['A'], minQp: 10 }), step({ id: 'C', requires: ['A'] })];
+    const p = emptyProgress();
+    expect(openAfter(list, p, 'A', 2)?.id).toBe('C');
+    expect(p.steps).toEqual({});
+    expect(openAfter(list, p, 'A', 10)?.id).toBe('B');
+  });
+
+  it('a partial quest milestone cannot be inferred from a completed quest list', () => {
+    const partial = step({ id: 'P', inGame: { completionTrigger: { type: 'VARBIT_CHANGED', varbitId: 1, targetValue: 10 } } });
+    expect(questDependencyFacts([partial], [])('P')).toBeUndefined();
   });
 
   it('when everything is closed — null; the last F2P stage is 6, Members — 9', () => {

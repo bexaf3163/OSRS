@@ -12,9 +12,11 @@ import { buildQueue, type PrepQueue } from './prepQueue';
 import type { PlayStyle } from './playStyle';
 import { buildPrepPlan, type PrepPlan } from './prepPlan';
 import type { UpgradeRecommendation } from '../services/gearUpgradeRouter';
+import { questDependencyFacts, type DependencyFact } from './next-step';
 
 export interface ReadinessEngine {
   readonly ctx: ReadinessContext;
+  readonly dependencies: DependencyFact;
   /** A step's readiness (with memory). */
   readiness(step: Step): StepReadiness;
   /** The preparation route for a step: the main task, then no more than two. */
@@ -74,6 +76,7 @@ export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
   };
 
   return {
+    dependencies: questDependencyFacts(ctx.steps, ctx.state.quests.known ? ctx.state.quests.value : null),
     ctx,
     readiness,
     prep,

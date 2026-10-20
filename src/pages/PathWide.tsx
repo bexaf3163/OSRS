@@ -9,6 +9,7 @@ import { useStore } from '../store';
 import { useQuestPoints } from '../lib/useQuestPoints';
 import { blockersOf, currentStage, firstOpen, isClosed, nextStep, openAfter } from '../lib/next-step';
 import { useBridge } from '../bridge';
+import { useReadinessEngine } from '../readinessContext';
 import { flashDone } from '../lib/flash';
 import { needsReview, pendingReview } from '../lib/review';
 import { IconCheck, IconChevron, IconLock } from '../components/Icons';
@@ -33,7 +34,8 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
   useEffect(() => { setRouteSlot(document.getElementById('app-route-slot')); }, []);
   const { advance, navTarget, questInstruction, state, inGame, activeStepId } = useBridge();
   const { setSuggested, pinned } = useWiki();
-  const suggested = nextStep(steps, progress, qp) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
+  const dependencies = useReadinessEngine().dependencies;
+  const suggested = nextStep(steps, progress, qp, dependencies) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
   const [selectedId, setSelectedId] = useState(() => focusStep ?? suggested.id);
   // The rail highlights the clicked step at once; the heavy step card follows as a transition with a loading state.
   const [railId, setRailId] = useState(selectedId);
@@ -69,7 +71,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
     return n;
   });
 
-  const nextAfter = (id: string): Step | undefined => openAfter(steps, progress, id);
+  const nextAfter = (id: string): Step | undefined => openAfter(steps, progress, id, qp, dependencies);
 
   // The step is done in the game (RuneLite): as after the "Mark as done" button — the next one is in the centre.
   const seenAdvance = useRef(advance?.nonce);
@@ -136,7 +138,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
                 <ol className="rail-steps">
                   {list.map((s) => {
                     const closed = isClosed(progress, s.id);
-                    const locked = !closed && blockersOf(s, progress, qp);
+                    const locked = !closed && blockersOf(s, progress, qp, dependencies);
                     return (
                       <li key={s.id}>
                         <button type="button" id={`rail-${s.id}`}

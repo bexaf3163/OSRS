@@ -232,6 +232,20 @@ async function run(browser: Browser) {
     await page.context().close();
   }
   if (process.env.UI_ONLY === 'items') return;
+  {
+    const { page, errors } = await open(browser, 1280, {
+      zen: true, progress: progressBefore('S8-02'),
+      status: { protocol: 6, questsDone: [], questPoints: 60 },
+      events: [{ type: 'QUESTS', done: [] }],
+    }, '#/step/S8-02');
+    expect((await page.locator('.step-blocked').allInnerTexts()).some(t => t.includes('S8-01')), 'prerequisites: live unfinished quest overrides an old route done mark');
+    await page.evaluate(() => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'QUESTS', done: ['Priest in Peril', 'The Restless Ghost'] }));
+    await page.waitForTimeout(500);
+    expect(await page.locator('.step-blocked').count() === 0, 'prerequisites: live completion clears the hard blocker without changing route marks');
+    expect(await noOverflow(page) && !errors.length, 'prerequisites: no overflow or page errors');
+    await page.context().close();
+  }
+  if (process.env.UI_ONLY === 'prerequisites') return;
   if (process.env.UI_ONLY === 'funding') { await fundingScenarios(browser); return; }
   if (process.env.UI_ONLY === 'combat') { await combatRouteScenarios(browser); return; }
   if (process.env.UI_ONLY === 'shopping') { await shoppingScenarios(browser); return; }

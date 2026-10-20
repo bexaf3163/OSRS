@@ -193,7 +193,7 @@ export function PrepAuto() {
   const seenClear = useRef(userClearedAt);
   const renavs = useRef(new Map<string, number>());
 
-  const focus = (activeStepId ? steps.find((s) => s.id === activeStepId && !isClosed(progress, s.id)) : undefined) ?? nextStep(steps, progress, qp);
+  const focus = (activeStepId ? steps.find((s) => s.id === activeStepId && !isClosed(progress, s.id)) : undefined) ?? nextStep(steps, progress, qp, engine.dependencies);
 
   useEffect(() => {
     if (!focus) return;

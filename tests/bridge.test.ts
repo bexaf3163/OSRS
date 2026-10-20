@@ -231,6 +231,21 @@ describe('the event stream', () => {
 });
 
 describe('auto-mark from the game', () => {
+  it('advances only to a destination whose other prerequisites and quest points are satisfied', () => {
+    const base = f2p[0];
+    const list = [
+      { ...base, id: 'A', requires: [] },
+      { ...base, id: 'B', requires: ['A'], minQp: 10 },
+      { ...base, id: 'C', requires: ['X'] },
+      { ...base, id: 'D', requires: ['A'] },
+    ];
+    const p = emptyProgress();
+    const plan = planAutoComplete(list, p, 'A', 'A', new Set(), 1, () => false);
+    expect(plan.mark).toBe(true);
+    expect(plan.next?.id).toBe('D');
+    expect(p.steps).toEqual({});
+  });
+
   it('marks the step and sends the next one to the game, if this one was in the game', () => {
     const plan = planAutoComplete(f2p, emptyProgress(), 'S1-03', 'S1-03', new Set());
     expect(plan.mark).toBe(true);

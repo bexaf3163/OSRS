@@ -99,10 +99,11 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
   const qp = useQuestPoints();
   const { openNpc } = useWiki();
   const zen = !useFeatures().inspector;
-  const recovering = useReadinessEngine().ctx.recovery?.stepId === step.id;
+  const engine = useReadinessEngine();
+  const recovering = engine.ctx.recovery?.stepId === step.id;
   const sub = useSubStep(step);
   const status = progress.steps[step.id];
-  const blockers = isClosed(progress, step.id) ? null : blockersOf(step, progress, qp);
+  const blockers = isClosed(progress, step.id) ? null : blockersOf(step, progress, qp, engine.dependencies);
   const suggested = isClosed(progress, step.id) ? [] : suggestedBefore(step, progress);
   const reviewing = needsReview(step, progress);
   const links = [

@@ -90,10 +90,10 @@ export interface TravelInputSources {
 export const oneTimeUsedOf = (progress: { steps: Record<string, string | undefined> }): string[] =>
   (TRANSPORT.oneTime ?? []).filter((w) => progress.steps[w.usedAfter] === 'done' || progress.steps[w.usedAfter] === 'skipped').map((w) => w.id);
 
-/** The route unlocks the fairy rings at S9-03 (Fairytale II): before that step is closed the rings are not offered. */
+/** The route unlocks the fairy rings at the completed S9-03 milestone; skipping is not an unlock. */
 export const FAIRY_RING_STEP = 'S9-03';
 export const fairyRingsUnlocked = (progress: { steps: Record<string, string | undefined> }): boolean =>
-  progress.steps[FAIRY_RING_STEP] === 'done' || progress.steps[FAIRY_RING_STEP] === 'skipped';
+  progress.steps[FAIRY_RING_STEP] === 'done';
 
 export function travelInputOf(s: TravelInputSources): TravelInput {
   const carried = s.gear && (s.gear.equipment || s.gear.inventory) ? [...(s.gear.equipment ?? []), ...(s.gear.inventory ?? [])] : null;

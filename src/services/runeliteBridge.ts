@@ -6,7 +6,7 @@ import type { MoveEvent } from '../lib/recovery';
 import type { PrepEnvelope } from '../lib/prepEnvelope';
 import type { InGameTarget, PacingSkill, StageHighlight, StagePre, PlayerStats, Progress, Step, StepBranch, StepPacing } from '../types';
 import { desktop } from '../lib/desktop';
-import { isClosed, openAfter } from '../lib/next-step';
+import { isClosed, openAfter, type DependencyFact } from '../lib/next-step';
 import { parseAmount, preflightItems } from '../lib/checklist';
 import { watchedItems } from '../lib/branching';
 import { methodToolNames } from '../lib/methodStep';
@@ -789,12 +789,13 @@ export interface AutoCompletePlan {
  * What to do with the STEP_AUTO_COMPLETED event. handled — the events already processed: a repeat changes nothing.
  * The next step goes to the game only if the game was showing exactly the completed one — we do not override someone else's.
  */
-export function planAutoComplete(steps: Step[], p: Progress, stepId: string, activeStepId: string | null, handled: ReadonlySet<string>): AutoCompletePlan {
+export function planAutoComplete(steps: Step[], p: Progress, stepId: string, activeStepId: string | null, handled: ReadonlySet<string>, qp = Number.POSITIVE_INFINITY, fact?: DependencyFact): AutoCompletePlan {
   const idle: AutoCompletePlan = { mark: false, inGame: 'keep' };
   if (handled.has(stepId)) return idle;
   const step = steps.find((s) => s.id === stepId);
   if (!step || isClosed(p, stepId)) return idle;
-  const next = openAfter(steps, p, stepId);
+  // This event confirms this milestone only. Other prerequisites still need their own evidence.
+  const next = openAfter(steps, p, stepId, qp, (id) => id === stepId ? true : fact?.(id));
   if (activeStepId !== stepId) return { mark: true, next, inGame: 'keep' };
   return { mark: true, next, inGame: next && toInGameTarget(next) ? 'sync-next' : 'clear' };
 }

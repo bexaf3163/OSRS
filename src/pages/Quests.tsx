@@ -5,7 +5,8 @@ import { allQuests, BASE_QP, BASE_QUEST, stepById } from '../data';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
 import { useQuestPoints } from '../lib/useQuestPoints';
-import { blockerParts, blockersOf, isClosed } from '../lib/next-step';
+import { blockerParts, blockersOf, isClosed, type DependencyFact } from '../lib/next-step';
+import { useReadinessEngine } from '../readinessContext';
 import { IconCheck, IconChevron, IconLock, TypeIcon } from '../components/Icons';
 import { ItemIcon } from '../components/WikiDrawer';
 
@@ -27,7 +28,7 @@ interface Row {
   blocked?: string;
 }
 
-function questRow(q: Quest, p: Progress, qp: number): Row {
+function questRow(q: Quest, p: Progress, qp: number, fact: DependencyFact): Row {
   const final = p.steps[q.stepId];
   const parts = q.parts.length ? q.parts : [q.stepId];
   const partsDone = parts.filter((id) => isClosed(p, id)).length;
@@ -36,9 +37,9 @@ function questRow(q: Quest, p: Progress, qp: number): Row {
   if (final === 'done') return { quest: q, status: 'done', href, partsDone };
   if (final === 'skipped') return { quest: q, status: 'skipped', href, partsDone };
   const open = parts.filter((id) => !isClosed(p, id)).map((id) => stepById.get(id)!);
-  const ready = open.find((s) => !blockersOf(s, p, qp));
+  const ready = open.find((s) => !blockersOf(s, p, qp, fact));
   if (ready) return { quest: q, status: 'available', href: `#/step/${ready.id}`, partsDone };
-  const b = blockersOf(open[0], p, qp);
+  const b = blockersOf(open[0], p, qp, fact);
   return { quest: q, status: 'blocked', href, partsDone, blocked: b ? blockerParts(b).join(', ') : undefined };
 }
 
@@ -48,13 +49,14 @@ const questKey = (title: string) => title.trim().toLowerCase().replace(/[’`]/g
 export function QuestsPage({ embedded = false }: { embedded?: boolean } = {}) {
   const { progress, mode } = useStore();
   const qp = useQuestPoints();
+  const { dependencies } = useReadinessEngine();
   const { questsDone } = useBridge();
   // Marked done here but not finished in the game (an optional quest that cannot be finished alone): said, and not in the game's points.
   const gameDone = questsDone ? new Set(questsDone.map(questKey)) : null;
   const notInGame = (r: Row) => r.status === 'done' && gameDone !== null && !gameDone.has(questKey(r.quest.title));
   const [filter, setFilter] = useState<Filter>('all');
   const [selectedId, setSelectedId] = useState<string>();
-  const rows = allQuests.filter((q) => mode === 'members' || !q.membersOnly).map((q) => questRow(q, progress, qp));
+  const rows = allQuests.filter((q) => mode === 'members' || !q.membersOnly).map((q) => questRow(q, progress, qp, dependencies));
   const base: Status = 'done';
   const count = (f: Filter) => rows.filter((r) => matches(f, r.status)).length + (matches(f, base) ? 1 : 0);
   const visible = rows.filter((r) => matches(filter, r.status));

@@ -291,18 +291,6 @@
       "evidence": ["Step field \"Combat\"; quest stage lines 4.0 and 4.2."]
     },
     {
-      "stepId": "S9-03", "kind": "quest-fight", "mandatory": true, "method": "melee",
-      "objective": "Kill Goraks for their claws; they hit through protection prayers.",
-      "enemies": [{ "name": "Gorak" }],
-      "lines": ["2.3", "2.4"],
-      "assumptions": [],
-      "problems": ["The route gives no preparation for the Goraks: no food, no style, no numbers. Readiness cannot judge this fight."],
-      "alternatives": ["Stop the route before this part until it is written (it is the start of Fairytale II only)."],
-      "decision": "defer",
-      "changed": ["2.66.0: the Gorak is the step's threat, so readiness shows \"the app has no combat numbers for it\" instead of a plain Ready."],
-      "evidence": ["Quest stage lines 2.3 and 2.4; no step fields about the fight."]
-    },
-    {
       "stepId": "S9-04", "kind": "quest-fight", "mandatory": true, "method": "safespot",
       "objective": "Monkey Madness I: monkeys for bones (optional), and the Jungle Demon (195, hits up to 32) with Protect from Magic from three squares away.",
       "enemies": [{ "name": "Jungle demon", "level": 195, "maxHit": 32 }, { "name": "Monkey zombie", "maxHit": 7 }, { "name": "Gorilla" }],

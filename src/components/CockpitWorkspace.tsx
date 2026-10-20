@@ -33,10 +33,11 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId }: { step: St
   const { progress } = useStore();
   const qp = useQuestPoints();
   const { questInstruction, state, inGame, activeStepId } = useBridge();
-  const recovery = useReadinessEngine().plan(step, { ahead: 0 }).recovery;
+  const engine = useReadinessEngine();
+  const recovery = engine.plan(step, { ahead: 0 }).recovery;
   const [view, setView] = useState<View | null>(null);
   const closed = isClosed(progress, step.id);
-  const blockers = closed ? null : blockersOf(step, progress, qp);
+  const blockers = closed ? null : blockersOf(step, progress, qp, engine.dependencies);
   const confirmed = state === 'online' && inGame && activeStepId === step.id && questInstruction?.stepId === step.id;
   const stages = step.questStages?.stages.slice().sort((a, b) => a.at - b.at) ?? [];
   const stageIndex = confirmed ? stages.findIndex((s) => s.at === questInstruction.stageAt) : -1;

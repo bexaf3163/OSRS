@@ -5,6 +5,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useStore } from '../store';
+import { useReadinessEngine } from '../readinessContext';
 import { useBridge } from '../bridge';
 import { usePlayerState } from '../playerStateContext';
 import { currentStage, nextStep } from '../lib/next-step';
@@ -104,7 +105,7 @@ function whereText(r: ShopRow): string {
 }
 
 export function ShoppingPage() {
-  const { steps, stages, progress, qp, notify, setOwnedManual } = useStore();
+  const { steps, stages, progress, notify, setOwnedManual } = useStore();
   const { state: link, owned, activeStepId, syncPlan, questPoints } = useBridge();
   const { state: player } = usePlayerState();
   const prices = usePriceView(true);
@@ -132,10 +133,11 @@ export function ShoppingPage() {
   };
 
   // The step in progress: the one started in the game, else the next open one the route allows.
+  const { dependencies, ctx: { qp: effectiveQp } } = useReadinessEngine();
   const current = useMemo(() => {
     const started = activeStepId && steps.some((s) => s.id === activeStepId) ? activeStepId : null;
-    return started ?? nextStep(steps, progress, qp)?.id ?? null;
-  }, [activeStepId, steps, progress, qp]);
+    return started ?? nextStep(steps, progress, effectiveQp, dependencies)?.id ?? null;
+  }, [activeStepId, steps, progress, effectiveQp, dependencies]);
 
   // What the exchange sells: the price service's item list. Until it answers (offline), worn gear says it itself and anything else of the route is
   // taken as sold, as before; an item without an id is never an exchange item.
