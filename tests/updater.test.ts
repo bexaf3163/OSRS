@@ -3,13 +3,14 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { createRequire } from 'node:module';
+import { createHash } from 'node:crypto';
 
 type Rel = { version: string; name: string; url: string; size: number; sha256: string | null; notes: string };
 interface Updater {
   state: { state: string; latest: string | null; progress: number; error: string | null; canInstall: boolean };
   check(): Promise<unknown>;
   download(): Promise<unknown>;
-  install(): boolean;
+  install(): Promise<boolean>;
   cleanup(): void;
   sweepOld(): void;
 }
@@ -22,11 +23,12 @@ const m = createRequire(import.meta.url)('../electron/updater.cjs') as {
 };
 
 const SIZE = 25 * 1024 * 1024;
+const DIGEST = createHash('sha256').update(Buffer.alloc(SIZE)).digest('hex');
 const asset = (v: string, over: Record<string, unknown> = {}) => ({
   name: `OSRS-Put-${v}-portable.exe`,
   size: SIZE,
   browser_download_url: `https://github.com/bexaf3163/OSRS/releases/download/v${v}/OSRS-Put-${v}-portable.exe`,
-  digest: `sha256:${'ab'.repeat(32)}`,
+  digest: `sha256:${DIGEST}`,
   ...over,
 });
 const release = (v: string, over: Record<string, unknown> = {}, assetOver: Record<string, unknown> = {}) => ({
@@ -50,10 +52,10 @@ describe('versions', () => {
 describe('what to download from a GitHub release', () => {
   it('a normal release: version, file, address, size, checksum, the first line of the description', () => {
     const r = m.pickRelease(release('2.25.0'));
-    expect(r).toMatchObject({ version: '2.25.0', name: 'OSRS-Put-2.25.0-portable.exe', size: SIZE, sha256: 'ab'.repeat(32), notes: 'Window by the bank and more' });
+    expect(r).toMatchObject({ version: '2.25.0', name: 'OSRS-Put-2.25.0-portable.exe', size: SIZE, sha256: DIGEST, notes: 'Window by the bank and more' });
   });
 
-  it('the checksum may be absent — then only the size is checked', () => {
+  it('metadata can identify an unchecked release; the installer must reject it', () => {
     expect(m.pickRelease(release('2.25.0', {}, { digest: undefined }))?.sha256).toBeNull();
     expect(m.pickRelease(release('2.25.0', {}, { digest: 'md5:abc' }))?.sha256).toBeNull();
   });
@@ -121,12 +123,12 @@ describe('the app update', () => {
     const { u, states } = make();
     await u.check();
     expect(u.state).toMatchObject({ state: 'available', latest: '2.25.0', canInstall: true });
-    expect(u.install(), 'not downloaded yet — cannot install').toBe(false);
+    expect(await u.install(), 'not downloaded yet — cannot install').toBe(false);
     await u.download();
     expect(u.state.state).toBe('ready');
     expect(existsSync(join(dir, 'OSRS-Put-2.25.0-portable.exe'))).toBe(true);
     expect(states).toContain('downloading');
-    expect(u.install()).toBe(true);
+    expect(await u.install()).toBe(true);
     expect(quit.n).toBe(1);
     expect(spawned).toHaveLength(1);
     expect(spawned[0].opts).toMatchObject({ detached: true, windowsVerbatimArguments: true });
@@ -162,6 +164,50 @@ describe('the app update', () => {
     expect(u.state.state).toBe('available');
   });
 
+  it('a corrupt cache of the right size is downloaded again and verified', async () => {
+    const file = join(dir, 'OSRS-Put-2.25.0-portable.exe');
+    writeFileSync(file, 'wrong bytes'); truncateSync(file, SIZE);
+    let downloads = 0;
+    const { u } = make({ downloader: async (_rel: Rel, dest: string) => { downloads++; writeFileSync(dest, ''); truncateSync(dest, SIZE); } });
+    await u.check();
+    expect(u.state.state).toBe('available');
+    expect(await u.install()).toBe(false);
+    await u.download();
+    expect(downloads).toBe(1);
+    expect(u.state.state).toBe('ready');
+  });
+
+  it('verifies the bytes again immediately before installing a previously verified cache', async () => {
+    const file = join(dir, 'OSRS-Put-2.25.0-portable.exe');
+    writeFileSync(file, ''); truncateSync(file, SIZE);
+    const { u } = make();
+    await u.check();
+    expect(u.state.state).toBe('ready');
+    writeFileSync(file, 'changed after check'); truncateSync(file, SIZE);
+    expect(await u.install()).toBe(false);
+    expect(u.state.error).toContain('checksum');
+    expect(spawned).toHaveLength(0);
+    expect(quit.n).toBe(0);
+  });
+
+  it('a downloader resolving with bad bytes cannot mark an update ready', async () => {
+    const { u } = make({ downloader: async (_rel: Rel, dest: string) => { writeFileSync(dest, 'corrupt'); truncateSync(dest, SIZE); } });
+    await u.check(); await u.download();
+    expect(u.state.state).toBe('error');
+    expect(u.state.error).toContain('checksum');
+    expect(await u.install()).toBe(false);
+    expect(spawned).toHaveLength(0);
+  });
+
+  it.each([undefined, 'md5:abc'])('never installs a release without a trusted SHA-256 digest: %s', async (digest) => {
+    const { u } = make({ fetchRelease: async () => release('2.25.0', {}, { digest }) });
+    await u.check(); await u.download();
+    expect(u.state.state).toBe('error');
+    expect(u.state.error).toContain('SHA-256');
+    expect(await u.install()).toBe(false);
+    expect(spawned).toHaveLength(0);
+  });
+
   it('a network failure and a download failure — an error with text, the program is intact', async () => {
     const { u } = make({ fetchRelease: async () => { throw new Error('no network'); } });
     await u.check();
@@ -170,7 +216,7 @@ describe('the app update', () => {
     await u2.check();
     await u2.download();
     expect(u2.state).toMatchObject({ state: 'error', error: 'the checksum did not match' });
-    expect(u2.install()).toBe(false);
+    expect(await u2.install()).toBe(false);
     expect(quit.n).toBe(0);
   });
 
@@ -180,7 +226,7 @@ describe('the app update', () => {
     expect(u.state).toMatchObject({ state: 'available', canInstall: false });
     await u.download();
     expect(u.state.state).toBe('available');
-    expect(u.install()).toBe(false);
+    expect(await u.install()).toBe(false);
   });
 
   it('an unsafe path does not go into the command line', async () => {
@@ -191,7 +237,7 @@ describe('the app update', () => {
     await u.check();
     await u.download();
     expect(u.state.state).toBe('ready');
-    expect(u.install()).toBe(false);
+    expect(await u.install()).toBe(false);
     expect(spawned).toHaveLength(0);
     expect(quit.n).toBe(0);
   });

@@ -114,6 +114,7 @@ function fetchRelease() {
 
 /** Download into dest through .part, check the size and sha256; the result is a whole file or an error (a partial one is deleted). */
 function download(rel, dest, onProgress) {
+  if (!rel.sha256) return Promise.reject(new Error('The release has no SHA-256 checksum. Automatic installation is unavailable.'));
   const part = `${dest}.part`;
   return new Promise((resolve, reject) => {
     const fail = (err) => {
@@ -142,7 +143,7 @@ function download(rel, dest, onProgress) {
       res.pipe(out);
       out.on('finish', () => {
         if (got !== rel.size) { fail(new Error('the file size did not match')); return; }
-        if (rel.sha256 && hash.digest('hex') !== rel.sha256) { fail(new Error('the checksum did not match')); return; }
+        if (hash.digest('hex') !== rel.sha256) { fail(new Error('the checksum did not match')); return; }
         try {
           fs.renameSync(part, dest);
           onProgress(1);
@@ -181,6 +182,22 @@ function createUpdater({ version, env, userData, onState, quit, fetchRelease: fe
   /** Already downloaded earlier (the app was closed before the restart) — ready to install without a new download. */
   const target = () => (rel && dir ? path.join(dir, rel.name) : null);
 
+  /** A previous download is untrusted until its bytes match the release digest. Stream it to bound memory, including just before handoff. */
+  async function matchesRelease(file, release) {
+    if (!file || !release.sha256) return false;
+    try {
+      if (!fsApi.existsSync(file) || fsApi.statSync(file).size !== release.size) return false;
+      const hash = crypto.createHash('sha256');
+      let size = 0;
+      for await (const chunk of fsApi.createReadStream(file)) {
+        size += chunk.length;
+        if (size > release.size) return false;
+        hash.update(chunk);
+      }
+      return size === release.size && hash.digest('hex') === release.sha256;
+    } catch { return false; }
+  }
+
   async function check() {
     if (busy) return state;
     busy = true;
@@ -193,8 +210,12 @@ function createUpdater({ version, env, userData, onState, quit, fetchRelease: fe
         return state;
       }
       rel = picked;
+      if (canInstall && !picked.sha256) {
+        rel = null;
+        throw new Error('The release has no SHA-256 checksum. Automatic installation is unavailable.');
+      }
       const file = target();
-      const have = canInstall && file && fsApi.existsSync(file) && fsApi.statSync(file).size === picked.size;
+      const have = canInstall && await matchesRelease(file, picked);
       set({ state: have ? 'ready' : 'available', latest: picked.version, notes: picked.notes, progress: have ? 1 : 0 });
     } catch (err) {
       set({ state: 'error', error: String(err && err.message ? err.message : err) });
@@ -210,9 +231,10 @@ function createUpdater({ version, env, userData, onState, quit, fetchRelease: fe
     set({ state: 'downloading', progress: 0, error: null });
     try {
       const file = target();
-      if (!(fsApi.existsSync(file) && fsApi.statSync(file).size === rel.size)) {
+      if (!await matchesRelease(file, rel)) {
         await downloader(rel, file, (p) => set({ progress: p }));
       }
+      if (!await matchesRelease(file, rel)) throw new Error('The downloaded file checksum did not match. Please download the update again.');
       set({ state: 'ready', progress: 1 });
     } catch (err) {
       set({ state: 'error', error: String(err && err.message ? err.message : err) });
@@ -223,10 +245,12 @@ function createUpdater({ version, env, userData, onState, quit, fetchRelease: fe
   }
 
   /** Start the new version after exiting this one and close the app. false — it did not work, nothing is closed. */
-  function install() {
+  async function install() {
     const file = target();
-    if (state.state !== 'ready' || !canInstall || !file || !fsApi.existsSync(file) || !safeForCmd(file)) return false;
+    if (busy || state.state !== 'ready' || !canInstall || !file || !safeForCmd(file)) return false;
+    busy = true;
     try {
+      if (!await matchesRelease(file, rel)) throw new Error('The cached update checksum did not match. Please download the update again.');
       // The new version will delete the old exe itself when it is freed.
       fsApi.writeFileSync(path.join(userData, 'update-cleanup.json'), JSON.stringify({ delete: exe }));
       const cmd = env.ComSpec || 'cmd.exe';
@@ -239,6 +263,8 @@ function createUpdater({ version, env, userData, onState, quit, fetchRelease: fe
     } catch (err) {
       set({ state: 'error', error: String(err && err.message ? err.message : err) });
       return false;
+    } finally {
+      busy = false;
     }
   }
 

@@ -24,13 +24,21 @@ Native source Electron E2E was attempted in a disposable home but the process ex
 
 Remaining T01 follow-up: exercise explicit import/reset and cross-window corruption through the UI; verify recovery on a packaged executable and storage-write error reporting. Do not infer completion of every data-integrity issue from parser tests.
 
+## T02: update-cache integrity
+
+- Cached EXEs are streamed through SHA-256 before they are called ready, after a download and immediately before installation. Matching file size alone no longer suffices.
+- Portable automatic installation fails closed when the release has no valid SHA-256 digest. Non-portable builds can still display release metadata.
+- `install()` is now asynchronous; the existing IPC and renderer already use Promise<boolean>. Busy protection prevents the release changing while its cache is being checked.
+- The delayed portable handoff, path validation, atomic download and existing cleanup rules are retained. No real update was installed during testing.
+- All 22 updater tests pass, including same-size corruption, cache modification after check, invalid downloader output, missing digest and successful verified reuse/handoff.
+
 ## Still open
 
 - Block 2b: Path simplification, ownership semantics, stale async responses and logout/account lifecycle.
 - Block 3: combat plan candidates, complete costs, bones/XP ordering and meaningful equipment preparation.
 - Block 4: Skills availability, funding batch limits and complete acquisition plans.
 - Block 5: final release gates, packaged-artifact verification, live acceptance and review package.
-- Other independent-audit findings: update-cache integrity, exact Java/TS item quantities, notes vs usable items, shared reserves, prerequisites vs skips, bridge limits/order/backpressure and dependency advisories.
+- Other independent-audit findings: exact Java/TS item quantities, notes vs usable items, shared reserves, prerequisites vs skips, bridge limits/order/backpressure and dependency advisories.
 - Two 2.74.0 HUD issues: urgent health should outrank a generic zone warning; manual disclosure should not be silently overridden by travel compacting.
 
 Record each follow-up here with its actual verification scope. Automated, browser, native and live-game checks are different evidence levels.
