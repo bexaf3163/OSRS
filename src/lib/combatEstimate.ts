@@ -41,6 +41,8 @@ export interface CombatFoe {
 
 export const COMBAT_FOES = (combatFoesJson as { foes: CombatFoe[] }).foes;
 export const COMBAT_FOES_DATE = (combatFoesJson as { generatedAt: string }).generatedAt;
+/** Two inventory cells kept for potions/other supplies in the default training estimate. */
+export const DEFAULT_FOOD_SLOTS = 26;
 
 /** The versions of an opponent the training can be done on, members-only ones left out (the route is free to play). */
 export function foeVariants(name: string): CombatFoe[] {
@@ -228,6 +230,8 @@ export interface CombatEstimate {
   assumed: string[];
   /** Whole unused Strength doses after this estimate; a partly elapsed dose is conservatively not carried into a later bank visit. */
   strengthDosesLeft?: number;
+  /** The bank-trip assumptions used in totalMinutes, for a planner that adds required loot trips. */
+  bankTripMinutes?: Range;
 }
 
 /** Model margin on top of the luck of the rolls, by how much is known. */
@@ -377,7 +381,7 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
   };
   const eatSeconds = (n: number) => n * EAT_SECONDS;
 
-  const foodSlots = Math.max(1, Math.min(28, inp.foodSlots ?? 26));
+  const foodSlots = Math.max(1, Math.min(28, inp.foodSlots ?? DEFAULT_FOOD_SLOTS));
   // One bag lasts until its healing and the regeneration on the way are used up.
   const perKillNet = damageMean / kills - (fightMean / kills + avg(BETWEEN_KILLS)) * REGEN_PER_SECOND;
   const killsPerTrip = perKillNet > 0 ? (foodSlots * heals * avg(USABLE)) / perKillNet : Infinity;
@@ -397,6 +401,7 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
     hpPerKill: Math.max(0, perKillNet), secondsPerKill: fightMean / kills + avg(BETWEEN_KILLS),
     nextTrip: Math.min(foodSlots, food.high), reserve: food.high - food.mid, assumed,
     strengthDosesLeft: Math.max(0, Math.floor(potionSeconds / (boost * 60))),
+    bankTripMinutes: { low: trip[0], mid: avg(trip), high: trip[1] },
   };
 }
 
