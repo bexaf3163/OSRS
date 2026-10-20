@@ -231,6 +231,17 @@ public class HudModelTest
 	}
 
 	@Test
+	public void notesAreAnUnnoteActionRatherThanEdibleFoodOrANewPurchase()
+	{
+		PrepPlan p = plan(line("Salmon", 21, "BANK", "CRITICAL", "NOW", "CRITICAL", "Unnote Salmon (21) at a bank"));
+		p.line("Salmon").setUnnote(21);
+		HudModel.Card c = HudModel.build(input(view(S403, p, salmon(StepGuide.Have.NONE, 0, 0)), quiet(), attack(30)));
+		assertEquals("Unnote food", c.getHeadline());
+		assertTrue(c.getStatus(), c.getStatus().contains("banknotes in your bag"));
+		assertTrue(expanded(c), expanded(c).contains("Unnote Salmon (21) at a bank"));
+	}
+
+	@Test
 	public void acceptedSubstitutesCount_noBankingBecauseOneNamedFishIsAbsent()
 	{
 		// The app lists Trout and Tuna beside Salmon: 21 Trout in the bag are the step's food (the shared count with alternatives).

@@ -17,13 +17,15 @@ export const BASIS_LABEL: Record<Basis, string> = {
 };
 
 export interface OwnedFood {
-  /** In the bag (and worn, never for food) and as banknotes. */
+  /** Usable food in the bag; banknotes are separate. */
   carried: number;
   bank: number;
   /** All of it in pieces of the step's food, by healing: 3 Lobsters (12) are 4 Salmon (9). */
   equivalent: number;
-  /** What is carried (bag and banknotes) in pieces of the step's food, by healing. */
+  /** Usable carried food in pieces of the step's food, by healing. */
   carriedEq: number;
+  /** Owned as banknotes, in equivalent healing units; cannot be eaten before unnoting. */
+  notedEq?: number;
   /** What the bank holds, the same way; 0 when the bank was not seen. */
   bankEq: number;
   /** Edible items a later quest needs, kept out of the count: "2 Cooked meat for S1-05". */
@@ -104,34 +106,40 @@ export function ownedFood(step: Pick<Step, 'itemsRequired'>, owned: OwnedState |
   let healing = 0;
   let carriedHealing = 0;
   let bankHealing = 0;
+  let notedHealing = 0;
   const parts: string[] = [];
   const kept: string[] = [];
-  for (const name of [item.nameEn, ...(item.anyOf ?? [])]) {
+  for (const name of [...new Map([item.nameEn, ...(item.anyOf ?? [])].map((n) => [nameKey(n), n])).values()]) {
     const o = owned.items.get(nameKey(name));
     const heals = name === item.nameEn ? item.heals! : healsOf(name);
     if (!o || heals === null) continue;
     // A quest's pieces come out of the bag first: they must not be counted as food for the trip.
     let hold = reserved.get(nameKey(name))?.count ?? 0;
-    let inBag = o.carried + o.noted;
+    let inBag = o.carried;
+    let inNotes = o.noted;
     let inBank = o.bank ?? 0;
     const fromBag = Math.min(hold, inBag);
     inBag -= fromBag;
     hold -= fromBag;
+    const fromNotes = Math.min(hold, inNotes);
+    inNotes -= fromNotes;
+    hold -= fromNotes;
     inBank -= Math.min(hold, inBank);
-    const held = o.carried + o.noted + (o.bank ?? 0) - inBag - inBank;
+    const held = o.carried + o.noted + (o.bank ?? 0) - inBag - inNotes - inBank;
     if (held > 0) kept.push(`${held} ${name} for ${reserved.get(nameKey(name))!.stepId}`);
-    const n = inBag + inBank;
+    const n = inBag + inNotes + inBank;
     if (!n) continue;
     carried += inBag;
     bank += inBank;
     healing += n * heals;
     carriedHealing += inBag * heals;
     bankHealing += inBank * heals;
+    notedHealing += inNotes * heals;
     parts.push(`${n} ${name}`);
   }
   return {
     carried, bank, equivalent: Math.floor(healing / item.heals!), carriedEq: Math.floor(carriedHealing / item.heals!),
-    bankEq: Math.floor(bankHealing / item.heals!), reserved: kept, text: parts.join(', '),
+    bankEq: Math.floor(bankHealing / item.heals!), notedEq: Math.floor(notedHealing / item.heals!), reserved: kept, text: parts.join(', '),
   };
 }
 

@@ -111,6 +111,8 @@ public class PrepPlan
 		private String supply;
 		/** What to do, briefly: "Take it from the bank", "Buy from Betty - 3 gp". */
 		private String action;
+		/** Units physically held as notes, requiring a bank action before use; absent in older clients. */
+		private Integer unnote;
 
 		boolean lowSupply()
 		{
@@ -358,7 +360,7 @@ public class PrepPlan
 			for (Line l : lines)
 			{
 				if (l == null || l.name == null || l.name.isEmpty() || ActiveTarget.tooLong(l.name) || l.need < 0 || l.need > ShoppingPlan.MAX_COUNT
-					|| ActiveTarget.tooLong(l.action))
+					|| ActiveTarget.tooLong(l.action) || (l.unnote != null && (l.unnote < 0 || l.unnote > l.need)))
 				{
 					return "invalid plan row";
 				}

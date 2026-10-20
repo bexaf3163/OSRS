@@ -101,7 +101,7 @@ export function buildPlayerState(i: PlayerStateInput): PlayerState {
 
 function fingerprintOf(s: PlayerState): string {
   const lv = Object.entries(s.levels).map(([k, v]) => `${k}${v.known ? v.value : '?'}`).sort().join(',');
-  const items = s.owned ? [...s.owned.items.entries()].map(([k, o]) => `${k}:${o.carried}/${o.noted}/${o.bank ?? '?'}`).sort().join(';') : '-';
+  const items = s.owned ? [...s.owned.items.entries()].map(([k, o]) => `${k}:${o.carried}/${o.noted}/${o.bank ?? '?'}/${o.legacyToolCount ? 'legacy' : 'exact'}`).sort().join(';') : '-';
   const c = (k: Known<number>) => (k.known ? k.value : '?');
   const q = s.quests.known ? JSON.stringify([...new Set(s.quests.value.map(nameKey))].sort()) : '?';
   const eq = Object.entries(s.equipment).map(([k, v]) => `${k}=${v}`).sort().join(',');
@@ -146,17 +146,18 @@ export function heldOf(
   // A tier that is not seen proves nothing: without one the answer is exactly what it was for the name itself.
   // A tier the player's level cannot use does not do the job: a Rune pickaxe at Mining 10 is not "a pickaxe" for the step.
   const parts = family
-    .filter((n) => nameKey(n) === nameKey(nameEn) || usableAt(n, (skill) => levelValue(s, skill)))
+    .filter((n) => usableAt(n, (skill) => levelValue(s, skill)))
     .map((n) => (nameKey(n) === nameKey(nameEn) ? base : heldExact(s, n)));
   if (!parts.some((p) => p !== base && p.presence === 'PRESENT')) return base;
+  const legacy = family.some((n) => s.owned?.items.get(nameKey(n))?.legacyToolCount);
   const sum = (pick: (h: Held) => number | null): number | null => {
     const known = parts.map(pick).filter((v): v is number => v !== null);
-    return known.length ? known.reduce((a, b) => a + b, 0) : null;
+    return known.length ? legacy ? Math.max(...known) : known.reduce((a, b) => a + b, 0) : null;
   };
   const presence: Presence = parts.some((p) => p.presence === 'PRESENT') ? 'PRESENT' : parts.every((p) => p.presence === 'MISSING') ? 'MISSING' : 'UNKNOWN';
   const source = parts.find((p) => p.source === 'game')?.source ?? parts.find((p) => p.source === 'manual')?.source ?? parts[0].source;
   return {
-    presence, bag: sum((p) => p.bag), noted: parts.reduce((a, p) => a + p.noted, 0), bank: sum((p) => p.bank),
+    presence, bag: sum((p) => p.bag), noted: sum((p) => p.noted) ?? 0, bank: sum((p) => p.bank),
     equipped: parts.reduce((a, p) => a + p.equipped, 0), total: sum((p) => p.total), source,
   };
 }

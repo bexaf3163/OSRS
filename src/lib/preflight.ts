@@ -48,6 +48,7 @@ export function countOf(items: GearItem[], p: Pick<StagePre, 'item' | 'id' | 'al
   let n = 0;
   let healing = 0;
   for (const i of items) {
+    if (i.noted) continue;
     const c = i.count ?? 1;
     if (p.id !== undefined ? i.id === p.id : nameKey(i.name) === key) {
       n += c;

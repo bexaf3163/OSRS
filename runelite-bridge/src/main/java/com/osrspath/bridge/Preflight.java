@@ -134,6 +134,12 @@ final class Preflight
 	static Block check(String stepId, ActiveTarget.StageLine line, boolean bagKnown, ItemCounts carried, ItemCounts bank, int px, int py, int plane,
 		List<ActiveTarget.Spot> banks)
 	{
+		return check(stepId, line, bagKnown, carried, ItemCounts.EMPTY, bank, px, py, plane, banks);
+	}
+
+	static Block check(String stepId, ActiveTarget.StageLine line, boolean bagKnown, ItemCounts carried, ItemCounts notes, ItemCounts bank, int px, int py, int plane,
+		List<ActiveTarget.Spot> banks)
+	{
 		if (line == null || line.getPre() == null || line.getPre().isEmpty() || !bagKnown || carried == null)
 		{
 			return null;
@@ -148,7 +154,7 @@ final class Preflight
 			Integer sx = line.hasPoint() ? line.getX() : null;
 			Integer sy = line.hasPoint() ? line.getY() : null;
 			Integer sp = line.hasPoint() ? line.getPlane() : null;
-			if (bank != null && count(bank, p) >= p.need() - have)
+			if ((bank == null ? 0 : count(bank, p)) + count(notes, p) >= p.need() - have)
 			{
 				ActiveTarget.Spot b = nearest(banks, px, py, plane);
 				if (b != null)

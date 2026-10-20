@@ -1682,7 +1682,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			return null;
 		}
-		return Preflight.check(target.getStepId(), line, true, carried, bank, pos.getX(), pos.getY(), pos.getPlane(), st.getBanks());
+		return Preflight.check(target.getStepId(), line, true, carried, noted, bank, pos.getX(), pos.getY(), pos.getPlane(), st.getBanks());
 	}
 
 	/** Recompute the current stage step from the player's position and items. Client thread. */
@@ -4030,19 +4030,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			return;
 		}
-		Map<String, Object> row = new LinkedHashMap<>();
-		row.put("name", name);
-		if (id != null)
-		{
-			row.put("id", id);
-		}
-		row.put("carried", carried.count(id, name));
-		row.put("noted", noted.count(id, name));
-		if (bank != null)
-		{
-			row.put("bank", bank.count(id, name));
-		}
-		out.put(key, row);
+		out.put(key, ItemCounts.report(name, id, carried, noted, bank));
 	}
 
 	@Subscribe

@@ -644,13 +644,16 @@ final class HudModel
 		{
 			Block b = new Block();
 			boolean food = Foods.heals(pb.getItem()) != null;
-			String verb = pb.getVia() == Preflight.Via.BANK ? "Withdraw" : pb.getVia() == Preflight.Via.SOURCE ? "Get" : "Buy";
+			PrepPlan currentPrep = in.getView() == null ? null : in.getView().getPrep();
+			PrepPlan.Line currentLine = currentPrep == null ? null : currentPrep.line(pb.getItem());
+			boolean unnote = currentLine != null && currentLine.getUnnote() != null && currentLine.getUnnote() > 0;
+			String verb = unnote ? "Unnote" : pb.getVia() == Preflight.Via.BANK ? "Withdraw" : pb.getVia() == Preflight.Via.SOURCE ? "Get" : "Buy";
 			b.headline = verb + " " + (food ? "food" : pb.getItem());
 			b.status = pb.getItem() + (food ? " or similar" : "") + ": " + pb.getHave() + " / " + pb.getNeed() + " · "
-				+ (pb.getVia() == Preflight.Via.BANK ? "in the bank" : pb.getVia() == Preflight.Via.SOURCE ? "the arrow leads where to get it" : "at the Grand Exchange");
+				+ (unnote ? "banknotes in your bag" : pb.getVia() == Preflight.Via.BANK ? "in the bank" : pb.getVia() == Preflight.Via.SOURCE ? "the arrow leads where to get it" : "at the Grand Exchange");
 			b.danger = s != null && s.getMissing() != null;
 			b.key = ActiveTarget.nameKey(pb.getItem());
-			b.now.add(Line.small(Icon.DOT, pb.reason().replaceFirst("^Guidance paused: ", "The arrow waits: "), Tone.TEXT));
+			b.now.add(Line.small(Icon.DOT, unnote ? currentLine.getAction() == null ? "Deposit the notes and withdraw usable items at a bank." : currentLine.getAction() : pb.reason().replaceFirst("^Guidance paused: ", "The arrow waits: "), Tone.TEXT));
 			return b;
 		}
 		StepGuide.View v = in.getView();
@@ -670,6 +673,11 @@ final class HudModel
 			b.status = figure(i) + " · " + whereWord(i, in);
 			b.key = ActiveTarget.nameKey(name);
 			PrepPlan.Line plan = prep == null ? null : prep.line(i.getName());
+			if (plan != null && plan.getUnnote() != null && plan.getUnnote() > 0)
+			{
+				b.headline = "Unnote " + noun;
+				b.status = figure(i) + " · banknotes in your bag";
+			}
 			String how = plan != null && plan.getAction() != null && !plan.getAction().isEmpty() ? plan.getAction() : i.getWhere();
 			if (how != null && !how.isEmpty())
 			{
