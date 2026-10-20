@@ -22,7 +22,7 @@ export interface StageScope {
  * ("buy an ale for Burntof"), so its absence from a stage's list proves nothing.
  */
 export function stageScope(step: Step, instruction: QuestInstruction | null): StageScope | null {
-  if (!instruction || instruction.stepId !== step.id || !step.questStages) return null;
+  if (!instruction || instruction.peeking || instruction.stepId !== step.id || !step.questStages) return null;
   const stages = step.questStages.stages;
   const current = stages.find((s) => s.at === instruction.stageAt);
   if (!current || !Array.isArray(current.items)) return null;

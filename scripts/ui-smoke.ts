@@ -342,6 +342,46 @@ async function run(browser: Browser) {
     await page.context().close();
   }
   if (process.env.UI_ONLY === 'reserves') return;
+  {
+    const id = 'S7-01';
+    const gear = { equipment: [], inventory: [{ id: 294, name: "Glarial's pebble", count: 1 }], coins: 1000, bankCoins: 0 };
+    const { page, errors } = await open(browser, 1280, {
+      progress: progressBefore(id), localStorage: { 'osrs-put:active-step': id },
+      status: { protocol: 6, inGame: true, activeStepId: id, player: 'Phase Test', ...gear, questInstruction: { stepId: id, stageAt: 3, lineIndex: 4, peeking: false } },
+      events: [{ type: 'GEAR', ...gear }, { type: 'OWNED', bankSeen: true, items: ['Rope', 'Air rune', 'Earth rune', 'Water rune', "Glarial's pebble"].map(name => ({ name, carried: name.includes('pebble') ? 1 : 0, noted: 0, bank: 0 })) }],
+    }, '#/step/S7-01');
+    await page.getByRole('button', { name: 'Preparation', exact: true }).click();
+    expect((await text(page, '.loadout.is-current')).includes("Glarial's Tomb"), 'phase: confirmed tomb cursor selects the tomb inventory');
+    const timing = () => page.evaluate(() => {
+      const posts = (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan');
+      const plan = posts.at(-1)?.body?.plan;
+      return plan?.lines?.find((l: { name: string }) => l.name === 'Air rune')?.timing ?? (plan?.later?.some((l: string) => l.includes('Air rune')) ? 'LATER' : undefined);
+    });
+    await page.waitForTimeout(800);
+    expect(await timing() === 'LATER', 'phase: rune supplies are sent to the game as later, not required inside the tomb');
+    const move = async (peeking: boolean) => {
+      await page.evaluate(({ id, peeking }) => {
+        const w = window as unknown as { __status: unknown; __emit: (e: unknown) => void };
+        w.__status = { questInstruction: { stepId: id, stageAt: 3, lineIndex: 7, peeking } };
+        w.__emit({ type: 'STATUS', inGame: true, player: 'Phase Test' });
+      }, { id, peeking });
+      await page.waitForTimeout(1200);
+    };
+    await move(true);
+    expect((await text(page, '.loadout.is-current')).includes("Glarial's Tomb") && await timing() === 'LATER', 'phase: manually viewing the future dungeon does not change current preparation');
+    await move(false);
+    expect((await text(page, '.loadout.is-current')).includes('Waterfall dungeon') && await timing() === 'NOW', 'phase: a confirmed within-stage transition makes the rune supply current in the app and game payload');
+    await page.evaluate(() => {
+      const w = window as unknown as { __status: unknown; __emit: (e: unknown) => void };
+      w.__status = { questInstruction: null };
+      w.__emit({ type: 'STATUS', inGame: true, player: 'Phase Test' });
+    });
+    await page.waitForTimeout(1200);
+    expect(await page.locator('.loadout.is-current').count() === 0, 'phase: an authoritative cleared cursor removes the confirmed phase badge');
+    expect(await noOverflow(page) && !errors.length, 'phase: no overflow or console errors');
+    await page.context().close();
+  }
+  if (process.env.UI_ONLY === 'phase') return;
   if (process.env.UI_ONLY === 'funding') { await fundingScenarios(browser); return; }
   if (process.env.UI_ONLY === 'combat') { await combatRouteScenarios(browser); return; }
   if (process.env.UI_ONLY === 'shopping') { await shoppingScenarios(browser); return; }

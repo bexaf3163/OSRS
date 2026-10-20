@@ -8,6 +8,8 @@ import { isClosed } from '../lib/next-step';
 import { daeroAdvice } from '../lib/daero';
 import { useBridge } from '../bridge';
 import { levelOf } from '../lib/playerState';
+import { useReadinessEngine } from '../readinessContext';
+import { loadoutPhase } from '../lib/loadoutPhase';
 
 const MARK: Record<CarryState, string> = { OK: '✓', MISSING: '✗', UNKNOWN: '?' };
 const WORD: Record<CarryState, string> = { OK: 'kept', MISSING: 'not kept yet', UNKNOWN: 'not checked' };
@@ -43,7 +45,7 @@ export function CarryNote({ step }: { step: Step }) {
 function LoadoutRow({ l, index, current }: { l: Loadout; index: number; current: boolean }) {
   return (
     <li className={`loadout ${current ? 'is-current' : ''}`}>
-      <h5 className="subhead">{index + 1}. {l.title}{current && <span className="badge"> next</span>}</h5>
+      <h5 className="subhead">{index + 1}. {l.title}{current && <span className="badge"> current</span>}</h5>
       <p className="small"><strong>Take:</strong> {l.take.map((t) => `${typeof t.amount === 'number' && t.amount === 1 ? '' : `${t.amount} × `}${t.nameEn}${t.note ? ` (${t.note})` : ''}`).join(', ') || 'nothing special'}.</p>
       {l.leave?.length ? <p className="small"><strong>Leave in the bank:</strong> {l.leave.join(', ')}.</p> : null}
       {l.freeSlots ? <p className="small"><strong>Free slots:</strong> at least {l.freeSlots}.</p> : null}
@@ -70,13 +72,15 @@ export function RewardChoice({ step }: { step: Step }) {
 
 /** The quest's inventories in order, so one impossible all-purpose bag is never asked for. */
 export function LoadoutsCard({ step }: { step: Step }) {
+  const engine = useReadinessEngine();
+  const phase = loadoutPhase(step, engine.ctx.questInstruction);
   if (!step.loadouts?.length) return null;
   return (
     <section className="step-section loadouts" aria-label="Inventory by phase">
       <h4 className="subhead">🎒 Inventory by phase</h4>
       <p className="muted small">This quest has stretches with different bags. Visit the bank between them.</p>
       <ol className="loadout-list">
-        {step.loadouts.map((l, i) => <LoadoutRow key={l.id} l={l} index={i} current={i === 0} />)}
+        {step.loadouts.map((l, i) => <LoadoutRow key={l.id} l={l} index={i} current={!!phase?.confirmed && i === phase.index} />)}
       </ol>
     </section>
   );

@@ -5365,6 +5365,7 @@
       },
       {
         "id": "tomb",
+        "fromLine": "usePebble",
         "title": "Glarial's Tomb",
         "take": [
           {
@@ -5390,6 +5391,7 @@
       },
       {
         "id": "dungeon",
+        "fromLine": "getFinalItems",
         "title": "Waterfall dungeon",
         "take": [
           {

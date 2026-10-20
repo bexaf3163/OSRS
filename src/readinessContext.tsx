@@ -1,7 +1,7 @@
 // The single readiness engine for the screens: one for the whole app, recreated only when what affects
 // the calculations changes (player state, step marks, quest points, mode, route). The calculations and answers are in lib/readinessEngine.ts.
 
-import { createContext, useContext, useMemo, type ReactNode } from 'react';
+import { createContext, useContext, useMemo, useRef, type ReactNode } from 'react';
 import type { Step } from './types';
 import { useStore } from './store';
 import { useQuestPoints } from './lib/useQuestPoints';
@@ -9,6 +9,8 @@ import { usePlayerState } from './playerStateContext';
 import { createReadinessEngine, type ReadinessEngine } from './lib/readinessEngine';
 import type { StepReadiness } from './lib/readiness';
 import { useRecoveryTracker, type ActiveRecovery } from './lib/useRecoveryTracker';
+import { useBridge } from './bridge';
+import type { QuestInstruction } from './services/runeliteBridge';
 
 const Ctx = createContext<ReadinessEngine | null>(null);
 const RecoveryCtx = createContext<{ active: ActiveRecovery | null; dismiss: () => void }>({ active: null, dismiss: () => {} });
@@ -18,9 +20,16 @@ export function ReadinessProvider({ children }: { children: ReactNode }) {
   const qp = useQuestPoints();
   const { state } = usePlayerState();
   const recovery = useRecoveryTracker();
+  const bridge = useBridge();
+  const cursor = useRef<{ player: string | null; step: string; instruction: QuestInstruction } | null>(null);
+  if (bridge.state !== 'online' || !bridge.inGame || !bridge.activeStepId || !bridge.questInstruction || cursor.current?.player !== (bridge.player ?? null) || cursor.current?.step !== bridge.activeStepId) cursor.current = null;
+  if (bridge.state === 'online' && bridge.inGame && bridge.questInstruction && !bridge.questInstruction.peeking && bridge.questInstruction.stepId === bridge.activeStepId) {
+    cursor.current = { player: bridge.player ?? null, step: bridge.activeStepId, instruction: bridge.questInstruction };
+  }
+  const questInstruction = cursor.current?.instruction ?? null;
   const engine = useMemo(
-    () => createReadinessEngine({ steps, progress, qp, mode, state, recovery: recovery.active }),
-    [steps, progress, qp, mode, state, recovery.active],
+    () => createReadinessEngine({ steps, progress, qp, mode, state, recovery: recovery.active, questInstruction }),
+    [steps, progress, qp, mode, state, recovery.active, questInstruction],
   );
   return (
     <Ctx.Provider value={engine}>

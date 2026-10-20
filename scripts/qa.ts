@@ -11,7 +11,7 @@ export interface QaInput {
   questStages: { quests: Record<string, {
     var: [string, number];
     route?: { title: string; steps: string[] }[];
-    stages: { at: number; do: { t: string; s?: string; at?: number[]; has?: string; need?: string; hl?: { npc?: unknown; obj?: unknown; on?: unknown; item?: unknown } }[]; go?: unknown; items?: { name: string }[] }[];
+    stages: { at: number; do: { t: string; s?: string; k?: string; at?: number[]; has?: string; need?: string; hl?: { npc?: unknown; obj?: unknown; on?: unknown; item?: unknown } }[]; go?: unknown; items?: { name: string }[] }[];
   }> };
   /** The training methods (src/data/trainingMethods.json) and the place dictionary — for the method router rules. If absent — the rules are not applied. */
   training?: { methods: { id: string; skill: string | string[]; from: number; to?: number | null; name: string; where: string; place?: string; url: string; xph?: number[]; xpa?: number; kind?: string; xpTotal?: number }[] };
@@ -85,6 +85,12 @@ export function qa(input: QaInput): QaIssue[] {
   // --- Quest stages ---
   const ids = new Set(input.steps.map((s) => s.id));
   const stepItems = new Map(input.steps.map((s) => [s.id, (s.itemsRequired ?? []).map((i) => ({ name: i.nameEn }))]));
+  for (const step of input.steps) {
+    const lines = new Set(input.questStages.quests[step.id]?.stages.flatMap(s => s.do.map(d => d.k)) ?? []);
+    for (const loadout of step.loadouts ?? []) {
+      if (loadout.fromLine && !lines.has(loadout.fromLine)) add('loadout-line', step.id, `loadout ${loadout.id} starts at unknown line ${loadout.fromLine}`);
+    }
+  }
   for (const [id, q] of Object.entries(input.questStages.quests)) {
     if (!ids.has(id)) add('stages-step', id, 'there is no such step on the route');
     if (!['varp', 'varbit'].includes(q.var[0]) || !Number.isInteger(q.var[1]) || q.var[1] < 1) add('stages-var', id, `the variable ${q.var.join(' ')}`);

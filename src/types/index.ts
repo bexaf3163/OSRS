@@ -77,6 +77,8 @@ export interface Loadout {
   title: string;
   /** The quest variable value from which this loadout is the one to prepare; absent means before the step starts. */
   from?: number;
+  /** Canonical questStages line key where this bank-to-bank phase starts, including within a single coarse var stage. */
+  fromLine?: string;
   /** What to take: names as in the game, with an optional note. */
   take: { nameEn: string; amount: string | number; note?: string }[];
   /** What must stay in the bank: the game refuses entry or it is simply in the way. */

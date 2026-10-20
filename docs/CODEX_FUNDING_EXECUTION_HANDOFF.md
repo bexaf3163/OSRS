@@ -17,3 +17,5 @@ Unit coverage includes a 1,200 gp account preparing three steel bars instead of 
 The full Vitest suite passed 1,649 tests. TypeScript, production build and check-data passed. Browser evidence is recorded in the PR; it uses mocked bridge facts, not the actual character. Installed files and saves remain untouched.
 
 This is partial T12 acceptance: four-hour GE throughput versus short-session purchase availability, historical buy-limit usage, complete travel detours and live collection testing remain open. Total-coin changes are an observation heuristic, not transaction attribution; unrelated income can satisfy a sale threshold. Changed prices or cash during a running plan do not yet rebuild its batch size automatically. No exact live-game proceeds are claimed.
+
+Exact-tree CI 39494789008 passed all gates, including Java, Chromium and the isolated packaged Windows EXE.

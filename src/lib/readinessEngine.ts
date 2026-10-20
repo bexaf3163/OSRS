@@ -109,7 +109,7 @@ export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
       computed.plan++;
       const p = buildPrepPlan({
         step, steps: ctx.steps, progress: ctx.progress, state: ctx.state,
-        trip: tripOf(step.id, opts.ahead), readiness: readiness(step), upgrade: up ?? null, recovery: rec,
+        trip: tripOf(step.id, opts.ahead), readiness: readiness(step), upgrade: up ?? null, recovery: rec, questInstruction: ctx.state.connected ? ctx.questInstruction : null,
       });
       planMemo.set(key, p);
       return p;

@@ -9,13 +9,13 @@ Current work and evidence are in [the stabilization handoff](CODEX_STABILIZATION
 
 | ID | Priority | Current scope/status |
 | --- | --- | --- |
-| T01 | P1 | Progress recovery/migrations and physical write-error reporting implemented; browser and basic packaged recovery passed. New native write-failure gate and broader profile/format cases remain open. |
+| T01 | P1 | Progress recovery/migrations and physical write-error reporting implemented; isolated packaged recovery/write-failure/retry gates passed. Broader profile/format and secondary-copy reporting remain open. |
 | T02 | P1 | Update digest verification implemented/tested; a real isolated two-version update remains open. |
 | T03 | P1 | Additive exact counts, conservative legacy tool aggregation and notes/usable separation implemented in the item-contract follow-up. Exact-ID and complete eligibility parity remain open. |
 | T04 | P1 | Fingerprint, logout clearing, profile gating and delayed status/event guards implemented; final native/live lifecycle acceptance remains open. |
 | T05 | P1 | Skip vs hard prerequisite, live quest precedence, eligible next-step selection and Fairytale II partial scope implemented in the prerequisite follow-up; producer/cursor/branch live acceptance remains open. |
 | T06 | P1 | Selected-plan demand ledger, held alternative allocation and cleanup protection implemented. Phase-specific and heterogeneous-source acquisition parity remain open. |
-| T07 | P1/P2 | Recipe deficits, unnoting and physical potion-slot corrections implemented in the item-contract follow-up. Current phase and full acquisition/allocation parity remain open. |
+| T07 | P1/P2 | Recipe deficits, unnoting, physical potion slots and confirmed Waterfall phase scoping implemented. Other phase inventories and full acquisition/allocation/live parity remain open. |
 | T08 | P1 | Payload limits and queued apply ordering/server-lifetime guards implemented/tested; broader wire/account restart acceptance remains open. |
 | T09 | P1 | Real stalled-reader reproduction, bounded async SSE output, expiry and current-completion replay implemented/tested; exact-tree CI passed. Real frame-time and telemetry-cost acceptance remain open. |
 | T10 | P1 user impact | Complete combat-plan comparison: open. |
