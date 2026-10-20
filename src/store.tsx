@@ -4,7 +4,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import type { GameMode, Progress, Stage, Step, StepStatus } from './types';
 import { BASE_QP, known, maxQpFor, stagesFor, stepById, stepsFor } from './data';
 import {
-  emptyProgress, gameModeOf, saveProgress, STORAGE_KEY,
+  emptyProgress, gameModeOf, STORAGE_KEY,
   withGameMode, withLevel, withLevels, withNote, withReactivated, withReviewed, withStep, withUpgradeDismissed, withOwnedManual, withSellRestrictions, withTaskDone,
 } from './lib/progress';
 import { profileStorageKey, readProfiles } from './lib/profiles';
@@ -15,6 +15,7 @@ import { samePicks } from './lib/methodPick';
 import { withTrainingMethod } from './lib/methodStep';
 import { sameFoodPicks, withFoodPlan, type FoodPick } from './lib/foodPlan';
 import { samePicks as sameCombatPicks, withCombatPlan, type CombatPick } from './lib/combatRoute/pick';
+import { persistProgress } from './lib/persistProgress';
 
 export interface Toast {
   id: number;
@@ -83,15 +84,6 @@ function progressKey(): string {
   return profileStorageKey(STORAGE_KEY, readProfiles().active);
 }
 
-function persist(p: Progress) {
-  saveProgress(storage(), p, progressKey());
-  try {
-    desktop()?.saveProgressFile(JSON.stringify(p), readProfiles().active);
-  } catch {
-    // The file was not written — localStorage is saved anyway.
-  }
-}
-
 const qpOf = (id: string) => stepById.get(id)?.qp ?? 0;
 
 export function StoreProvider({ children }: { children: ReactNode }) {
@@ -110,8 +102,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   // What came from another tab is not written back, otherwise the tabs start bouncing the write between them.
   const fromOtherTab = useRef(false);
   useEffect(() => {
+    let alive = true;
+    const profile = readProfiles().active;
     if (fromOtherTab.current) fromOtherTab.current = false;
-    else if (canPersist.current) persist(progress);
+    else if (canPersist.current) {
+      void persistProgress(progress, storage(), progressKey(), desktop(), profile).then(warning => {
+        if (alive && canPersist.current && readProfiles().active === profile) setPersistenceWarning(warning);
+      });
+    }
+    return () => { alive = false; };
   }, [progress]);
 
   useEffect(() => {

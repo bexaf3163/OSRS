@@ -9,7 +9,7 @@ Current work and evidence are in [the stabilization handoff](CODEX_STABILIZATION
 
 | ID | Priority | Current scope/status |
 | --- | --- | --- |
-| T01 | P1 | Progress recovery/migrations implemented; browser and basic packaged recovery passed. Write-error reporting and broader native profile/format cases remain open. |
+| T01 | P1 | Progress recovery/migrations and physical write-error reporting implemented; browser and basic packaged recovery passed. New native write-failure gate and broader profile/format cases remain open. |
 | T02 | P1 | Update digest verification implemented/tested; a real isolated two-version update remains open. |
 | T03 | P1 | Additive exact counts, conservative legacy tool aggregation and notes/usable separation implemented in the item-contract follow-up. Exact-ID and complete eligibility parity remain open. |
 | T04 | P1 | Fingerprint, logout clearing, profile gating and delayed status/event guards implemented; final native/live lifecycle acceptance remains open. |

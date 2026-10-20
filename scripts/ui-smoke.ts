@@ -26,6 +26,8 @@ interface Mock {
   offline?: boolean;
   /** A reachable bridge rejects the guide snapshot for its size. */
   oversizedSnapshot?: boolean;
+  /** A physical file-save failure, independent of working browser storage. */
+  fileWriteFailure?: boolean;
   /** Windows display scaling (1.25 = 125%): the device pixel ratio; the viewport width passed is then in CSS pixels. */
   scale?: number;
 }
@@ -52,12 +54,19 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
     const w = window as unknown as Record<string, unknown>;
     const posts: unknown[] = [];
     w.__posts = posts;
+    w.__fileWriteFailure = !!m.fileWriteFailure;
     let progress = m.progress ? JSON.stringify(m.progress) : null;
     w.osrsDesktop = {
       getZoom: async () => ({ zoom: 1, autoZoom: false, effective: 1, alwaysOnTop: false }),
       setZoom() {}, setAlwaysOnTop() {}, onZoom: () => () => {},
       loadProgressFile: () => progress,
       saveProgressFile: (j: string) => { progress = j; w.__saved = j; },
+      saveProgressFileChecked: async (j: string) => {
+        if (w.__holdSave) return new Promise(resolve => { w.__releaseSave = () => resolve({ ok: false, error: 'ENOSPC' }); });
+        if (w.__fileWriteFailure) return { ok: false, error: 'ENOSPC' };
+        progress = j; w.__saved = j;
+        return { ok: true, error: null };
+      },
       dataDir: () => 'C:/OSRS', isPortable: () => true,
       runelite: { check: async () => ({ ok: true, problems: [], clientVersion: '1.12.39', credentials: true }), launch: async () => { w.__launched = ((w.__launched as number) ?? 0) + 1; return { ok: true, state: 'started' }; } },
       bridge: {
@@ -213,6 +222,22 @@ async function run(browser: Browser) {
     await page.getByText(/The game guide could not sync: its data exceeds/).waitFor({ timeout: 5000 });
     expect(await page.locator('.bridge-indicator.is-online').count() === 1, 'bridge limits: snapshot 413 does not mark a reachable game offline');
     expect(!errors.length, 'bridge limits: snapshot refusal has an explanation without a page crash');
+    await page.context().close();
+  }
+  {
+    const { page, errors } = await open(browser, 1280, { offline: true, fileWriteFailure: true, progress: progressBefore('S2-07'), zen: true }, '#/step/S2-07');
+    expect((await text(page, '.progress-storage-warning')).includes('desktop file could not be written'), 'save failure: working browser storage does not hide a failed desktop write');
+    await page.evaluate(() => { const w = window as unknown as Record<string, unknown>; w.__fileWriteFailure = false; w.__holdSave = true; });
+    await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
+    await page.waitForTimeout(200);
+    await page.evaluate(() => { (window as unknown as Record<string, unknown>).__holdSave = false; });
+    // A second edit has a newer successful acknowledgement than the first edit's delayed failure.
+    await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
+    await page.waitForTimeout(400);
+    await page.evaluate(() => { ((window as unknown as { __releaseSave?: () => void }).__releaseSave)?.(); });
+    await page.waitForTimeout(200);
+    expect(await page.locator('.progress-storage-warning').count() === 0, 'save retry: an old delayed failure cannot overwrite the newer successful write');
+    expect(await noOverflow(page) && !errors.length, 'save failure/retry: no overflow or console errors');
     await page.context().close();
   }
   if (process.env.UI_ONLY === 'stabilization') return;

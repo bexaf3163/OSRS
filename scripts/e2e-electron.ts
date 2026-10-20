@@ -6,7 +6,7 @@
 // looks at a stub on a free port (OSRS_PUT_BRIDGE_PORT) — it does not go to the player's real plugin.
 
 import { spawn, spawnSync, type ChildProcess } from 'node:child_process';
-import { existsSync, mkdtempSync, readdirSync, readFileSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmdirSync, rmSync } from 'node:fs';
 import http from 'node:http';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
@@ -142,7 +142,7 @@ try {
 
   expect((await page.title()).includes('OSRS Path'), 'window: the title "OSRS Path"');
   const api = await page.evaluate(() => Object.keys((window as unknown as { osrsDesktop?: object }).osrsDesktop ?? {}).sort());
-  expect(['backup', 'bridge', 'loadProgressFile', 'saveProgressFile'].every((k) => api.includes(k)), `window: the shell API is in place (${api.length} methods)`);
+  expect(['backup', 'bridge', 'loadProgressFile', 'saveProgressFile', 'saveProgressFileChecked'].every((k) => api.includes(k)), `window: the shell API is in place (${api.length} methods)`);
   const localFont = await page.evaluate(async () => {
     const faces = await document.fonts.load('16px Inter');
     return faces.some(face => face.family === 'Inter' && face.status === 'loaded');
@@ -177,6 +177,20 @@ try {
   const saved = existsSync(file) ? (JSON.parse(readFileSync(file, 'utf8')) as { steps?: Record<string, string> }) : {};
   expect(Object.values(saved.steps ?? {}).includes('done'), 'progress: the marked step is in the file');
   expect(!existsSync(`${file}.tmp`), 'progress: no temporary write file is left');
+
+  // Block only this isolated run's temporary path, never the player's save. A directory
+  // cannot be written as a file; the actual writer must report failure and retain the old save.
+  const priorText = readFileSync(file, 'utf8');
+  mkdirSync(`${file}.tmp`);
+  try {
+    await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
+    await page.waitForSelector('.progress-storage-warning');
+    expect((await page.locator('.progress-storage-warning').innerText()).includes('desktop file could not be written'), 'progress write failure: the real IPC acknowledgement exposes a failed file write');
+    expect(readFileSync(file, 'utf8') === priorText, 'progress write failure: the previous native save remains intact');
+  } finally { rmdirSync(`${file}.tmp`); }
+  await page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ }).first().click();
+  await page.waitForFunction(() => !document.querySelector('.progress-storage-warning'));
+  expect(readFileSync(file, 'utf8') !== priorText, 'progress write retry: a later successful write clears the warning and persists the latest state');
 
   // Exercise the recovery through the native preload/file reader, not only the browser transport stub.
   await page.evaluate(() => localStorage.setItem('osrs-put:progress', '{broken'));
