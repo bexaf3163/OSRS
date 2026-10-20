@@ -13,6 +13,16 @@ const step = (id: string) => allSteps.find((s) => s.id === id)!;
 const f2p = stepsFor('f2p');
 
 describe('quest instruction status', () => {
+  it('a connected plugin at the login screen exposes no stale character facts', async () => {
+    const s = await checkStatus({ request: async () => ({ ok: true, status: 200, data: {
+      status: 'ok', inGame: false, player: 'Old Hero', stats: { attack: 70 }, xp: { attack: 100000 }, questsDone: ["Cook's Assistant"],
+      equipment: [], inventory: [], coins: 500, bankCoins: 2000, questPoints: 50, totalLevel: 900,
+      pos: { x: 3200, y: 3200, plane: 0 }, chronicleCharges: 2, spellbook: 0, accountType: 'normal',
+    } }), openEvents: () => () => {} });
+    expect(s.online).toBe(true);
+    expect(s.inGame).toBe(false);
+    for (const key of ['player', 'stats', 'xp', 'questsDone', 'gear', 'questPoints', 'totalLevel', 'pos', 'chronicleCharges', 'spellbook', 'accountType'] as const) expect(s[key], key).toBeNull();
+  });
   it('accepts a validated identity only while in game and for the active step', async () => {
     const instruction = { stepId: 'S3-04', stageAt: 60, lineIndex: 0, peeking: false };
     const status = async (extra: Record<string, unknown>) => checkStatus({ request: async () => ({ ok: true, status: 200, data: { status: 'ok', inGame: true, activeStepId: 'S3-04', questInstruction: instruction, ...extra } }), openEvents: () => () => {} });

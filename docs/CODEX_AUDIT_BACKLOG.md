@@ -12,7 +12,7 @@ Current work and evidence are in [the stabilization handoff](CODEX_STABILIZATION
 | T01 | P1 | Progress recovery/migrations implemented; browser and basic packaged recovery passed. Write-error reporting and broader native profile/format cases remain open. |
 | T02 | P1 | Update digest verification implemented/tested; a real isolated two-version update remains open. |
 | T03 | P1 | Additive exact counts, conservative legacy tool aggregation and notes/usable separation implemented in the item-contract follow-up. Exact-ID and complete eligibility parity remain open. |
-| T04 | P1 | Snapshot fingerprint corrected; account/logout/async lifecycle remains open. |
+| T04 | P1 | Fingerprint, logout clearing, profile gating and delayed status/event guards implemented; final native/live lifecycle acceptance remains open. |
 | T05 | P1 | Skip vs hard prerequisite, live quest precedence, eligible next-step selection and Fairytale II partial scope implemented in the prerequisite follow-up; producer/cursor/branch live acceptance remains open. |
 | T06 | P1 | Shared reserves across preparation, shopping, funding and cleanup: open. |
 | T07 | P1/P2 | Recipe deficits, unnoting and physical potion-slot corrections implemented in the item-contract follow-up. Current phase and full acquisition/allocation parity remain open. |

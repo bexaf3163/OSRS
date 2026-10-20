@@ -570,31 +570,32 @@ export async function checkStatus(t: BridgeTransport = defaultTransport()): Prom
     combatLog?: unknown; accountType?: unknown;
   } | undefined;
   const online = res.ok && d?.status === 'ok';
+  const inGame = online && d?.inGame === true;
   const instruction = online && d?.inGame === true ? parseQuestInstruction(d.questInstruction) : null;
   return {
     questInstruction: instruction?.stepId === d?.activeStepId ? instruction : null,
     online,
-    inGame: Boolean(online && d?.inGame),
-    stats: online ? parseStats(d?.stats) : null,
+    inGame,
+    stats: inGame ? parseStats(d?.stats) : null,
     shortestPath: Boolean(online && d?.shortestPath === true),
-    gear: online ? parseGear(d) : null,
+    gear: inGame ? parseGear(d) : null,
     activeStepId: online && typeof d?.activeStepId === 'string' ? d.activeStepId : null,
     protocol: online && typeof d?.protocol === 'number' && Number.isInteger(d.protocol) && d.protocol > 0 ? d.protocol : null,
     pluginVersion: online && typeof d?.pluginVersion === 'string' && d.pluginVersion.length <= 20 ? d.pluginVersion : null,
     navTarget: online ? parseNavTarget(d?.navTarget) : null,
-    xp: online ? parseXp(d?.xp) : null,
-    questsDone: online ? parseQuests(d?.questsDone) : null,
-    player: online ? parsePlayer(d?.player) : null,
-    pos: online ? parsePos(d?.pos) : null,
-    homeTeleportSeconds: online ? parseSeconds(d?.homeTeleportSeconds) : null,
-    homeTeleportKnown: online && typeof d?.homeTeleportKnown === 'boolean' ? d.homeTeleportKnown : null,
-    spellbook: online && typeof d?.spellbook === 'number' && Number.isInteger(d.spellbook) && d.spellbook >= 0 && d.spellbook <= 3 ? d.spellbook : null,
-    chronicleCharges: online && typeof d?.chronicleCharges === 'number' && Number.isInteger(d.chronicleCharges) && d.chronicleCharges >= 0 && d.chronicleCharges <= 1000
+    xp: inGame ? parseXp(d?.xp) : null,
+    questsDone: inGame ? parseQuests(d?.questsDone) : null,
+    player: inGame ? parsePlayer(d?.player) : null,
+    pos: inGame ? parsePos(d?.pos) : null,
+    homeTeleportSeconds: inGame ? parseSeconds(d?.homeTeleportSeconds) : null,
+    homeTeleportKnown: inGame && typeof d?.homeTeleportKnown === 'boolean' ? d.homeTeleportKnown : null,
+    spellbook: inGame && typeof d?.spellbook === 'number' && Number.isInteger(d.spellbook) && d.spellbook >= 0 && d.spellbook <= 3 ? d.spellbook : null,
+    chronicleCharges: inGame && typeof d?.chronicleCharges === 'number' && Number.isInteger(d.chronicleCharges) && d.chronicleCharges >= 0 && d.chronicleCharges <= 1000
       ? d.chronicleCharges : null,
-    questPoints: online && typeof d?.questPoints === 'number' && Number.isInteger(d.questPoints) && d.questPoints >= 0 && d.questPoints <= 500 ? d.questPoints : null,
-    totalLevel: online && typeof d?.totalLevel === 'number' && Number.isInteger(d.totalLevel) && d.totalLevel >= 0 && d.totalLevel <= 2277 ? d.totalLevel : null,
-    combatLog: online ? parseCombatLog(d?.combatLog) : null,
-    accountType: online && (d?.accountType === 'normal' || d?.accountType === 'ironman') ? d.accountType : null,
+    questPoints: inGame && typeof d?.questPoints === 'number' && Number.isInteger(d.questPoints) && d.questPoints >= 0 && d.questPoints <= 500 ? d.questPoints : null,
+    totalLevel: inGame && typeof d?.totalLevel === 'number' && Number.isInteger(d.totalLevel) && d.totalLevel >= 0 && d.totalLevel <= 2277 ? d.totalLevel : null,
+    combatLog: inGame ? parseCombatLog(d?.combatLog) : null,
+    accountType: inGame && (d?.accountType === 'normal' || d?.accountType === 'ironman') ? d.accountType : null,
   };
 }
 

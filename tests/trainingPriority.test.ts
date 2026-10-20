@@ -9,9 +9,9 @@ import { DEFAULT_FEATURES, parseFeatures } from '../src/lib/features';
 import { xpForLevel } from '../src/lib/xp';
 import type { OwnedState } from '../src/lib/checklist';
 
-const progress = { version: 3, steps: {}, levels: {}, notes: {}, updatedAt: '' } as never;
+const progress = { version: 3, steps: {}, levels: {}, notes: {}, updatedAt: '' };
 const stateAt = (skill: string, level: number, owned: OwnedState | null = null) =>
-  buildPlayerState({ mode: 'f2p', stats: { [skill]: level } as never, progress, owned, gear: null, questsDone: null, player: null, connected: owned !== null });
+  buildPlayerState({ mode: 'f2p', stats: null, progress: { ...progress, levels: { [skill]: level } }, owned, gear: null, questsDone: null, player: null, connected: owned !== null });
 const method = (o: Partial<TrainingMethod> & { id: string }): TrainingMethod => ({
   skills: ['fishing'], from: 1, to: null, name: o.id, members: false, needs: [], xph: [10_000, 10_000], xpa: null, act: null, effort: 'low', cost: 'free', risk: 'none',
   where: 'somewhere', url: 'https://oldschool.runescape.wiki/', kind: 'method', xpTotal: null, ...o,

@@ -68,31 +68,34 @@ export function levelsOf(stats: PlayerStats | null, profile: Record<string, numb
 }
 
 export function buildPlayerState(i: PlayerStateInput): PlayerState {
-  const live = i.connected ?? (i.stats !== null || i.owned !== null || i.gear !== null);
+  const live = i.connected ?? (i.stats !== null || i.owned !== null || i.gear !== null || i.questsDone !== null || i.position != null);
+  // Callers may retain last-known raw objects for history. They are never current game facts after logout/disconnect.
+  const gear = live ? i.gear : null;
+  const owned = live ? i.owned : null;
   const equipment: Record<string, string> = {};
-  for (const g of i.gear?.equipment ?? []) if (g.slot) equipment[g.slot] = g.name;
+  for (const g of gear?.equipment ?? []) if (g.slot) equipment[g.slot] = g.name;
   const manual: Record<string, number> = {};
   for (const [k, v] of Object.entries(i.progress.ownedManual ?? {})) if (typeof v?.count === 'number') manual[k] = v.count;
   const coins = {
-    bag: i.gear && i.gear.coins !== null ? known(i.gear.coins, 'game') : unknown,
-    bank: i.gear && i.gear.bankCoins !== null ? known(i.gear.bankCoins, 'game') : unknown,
+    bag: gear && gear.coins !== null ? known(gear.coins, 'game') : unknown,
+    bank: gear && gear.bankCoins !== null ? known(gear.bankCoins, 'game') : unknown,
   };
   const state: PlayerState = {
     mode: i.mode,
     connected: live,
     player: i.player ?? null,
-    levels: levelsOf(i.stats, i.progress.levels ?? {}),
+    levels: levelsOf(live ? i.stats : null, i.progress.levels ?? {}),
     coins,
-    bagSlots: i.gear && typeof i.gear.inventorySlots === 'number' ? known(i.gear.inventorySlots, 'game') : unknown,
-    weight: i.gear && typeof i.gear.weight === 'number' ? known(i.gear.weight, 'game') : unknown,
-    bagItems: i.gear?.inventory ? known(i.gear.inventory.map((g) => ({ name: g.name, count: g.count ?? 1 })), 'game') : unknown,
-    quests: i.questsDone ? known(i.questsDone, 'game') : unknown,
-    position: i.position ? known(i.position, 'game') : unknown,
-    bankSeen: i.owned?.bankSeen === true,
+    bagSlots: gear && typeof gear.inventorySlots === 'number' ? known(gear.inventorySlots, 'game') : unknown,
+    weight: gear && typeof gear.weight === 'number' ? known(gear.weight, 'game') : unknown,
+    bagItems: gear?.inventory ? known(gear.inventory.map((g) => ({ name: g.name, count: g.count ?? 1 })), 'game') : unknown,
+    quests: live && i.questsDone ? known(i.questsDone, 'game') : unknown,
+    position: live && i.position ? known(i.position, 'game') : unknown,
+    bankSeen: owned?.bankSeen === true,
     equipment,
-    equipmentKnown: Array.isArray(i.gear?.equipment),
+    equipmentKnown: Array.isArray(gear?.equipment),
     manual,
-    owned: i.owned,
+    owned,
     fingerprint: '',
   };
   state.fingerprint = fingerprintOf(state);
