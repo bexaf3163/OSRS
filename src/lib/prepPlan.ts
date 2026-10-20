@@ -27,6 +27,8 @@ import { weightAdvice, type WeightAdvice } from './weight';
 import { carryoverOf } from './carryover';
 import { questItemKeys } from './questItems';
 import { recoverySteps, type Recovery, type RecoveryStep } from './recovery';
+import { loadoutNeed, loadoutPhase } from './loadoutPhase';
+import type { QuestInstruction } from '../services/runeliteBridge';
 
 /** Critical: the step cannot be done without it; important: better to prepare before leaving; an improvement saves time or money; optional is a convenience. */
 export type PrepPriority = 'CRITICAL' | 'IMPORTANT' | 'OPTIMIZATION' | 'OPTIONAL';
@@ -146,6 +148,7 @@ export interface PrepPlanInput {
   detail?: (id: number) => WikiItemDetail | undefined;
   /** A setback on this step (a death, a teleport); null means none. */
   recovery?: Recovery | null;
+  questInstruction?: QuestInstruction | null;
 }
 
 /** A line's amount after its name: "×16" for pieces, " (16 doses)" for a potion: every view of a preparation line says it the same way. */
@@ -287,11 +290,6 @@ const ORDER: Record<PrepPriority, number> = { CRITICAL: 0, IMPORTANT: 1, OPTIMIZ
 const TIMING: Record<PrepTiming, number> = { NOW: 0, SOON: 1, IN_STEP: 2, LATER: 3 };
 
 /** Every source of the line in this step belongs to a loadout other than the first one. */
-function inLaterLoadout(step: Step | undefined, sources: readonly { phase?: string }[]): boolean {
-  const first = step?.loadouts?.[0]?.id;
-  return Boolean(first) && sources.length > 0 && sources.every((s) => s.phase !== undefined && s.phase !== first);
-}
-
 export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   const { step, state, trip } = i;
   const detail = i.detail ?? ((id: number) => itemById.get(id));
@@ -300,9 +298,10 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   const coinsTotal = trip.coins.have;
   const danger = Boolean(step.foes?.length);
   const lines: PrepLine[] = [];
+  const phase = loadoutPhase(step, i.questInstruction);
 
   for (const t of trip.lines) {
-    const inStep = t.line.inStepOnly;
+    const inStep = t.line.inStepOnly && !(phase?.confirmed && t.line.sources.some(s => s.stepId === step.id && s.phase === phase.id));
     const dose = Boolean(t.line.dose);
     const equipped = t.held.equipped;
     const allIds = t.allocation.filter((x) => x.need > 0).map((x) => x.stepId);
@@ -317,8 +316,10 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
     for (const a of t.allocation.filter((x) => x.need > 0)) {
       const idx = ids.indexOf(a.stepId);
       // An item of a later loadout of the same step is taken on the next visit to the bank, not before the first stretch (no runes into the tomb).
-      const later = !inStep && idx <= 0 && inLaterLoadout(i.steps.find((s) => s.id === a.stepId), t.line.sources.filter((s) => s.stepId === a.stepId));
-      const timing: PrepTiming = inStep ? 'IN_STEP' : later ? 'SOON' : idx <= 0 ? 'NOW' : idx <= 2 ? 'SOON' : 'LATER';
+      const phaseNeed = idx <= 0 ? loadoutNeed(step, t.line.nameEn, t.line.sources.filter(s => s.stepId === a.stepId), phase) : 'NOW';
+      if (idx <= 0 && phaseNeed === 'PAST') continue;
+      const later = !inStep && idx <= 0 && phaseNeed === 'SOON';
+      const timing: PrepTiming = inStep ? 'IN_STEP' : later ? 'LATER' : idx <= 0 ? 'NOW' : idx <= 2 ? 'SOON' : 'LATER';
       const g = groups.get(timing) ?? { need: 0, ids: [], bag: 0, bank: 0, noted: 0, missing: 0, unknown: 0 };
       const fromBag = Math.min(bagPool, a.need);
       bagPool -= fromBag;
@@ -345,10 +346,14 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       const priority: PrepPriority = inStep ? 'OPTIONAL' : timing === 'NOW' ? 'CRITICAL' : 'IMPORTANT';
       const toGet = where === 'UNKNOWN' ? null : where === 'MISSING' ? g.missing : where === 'BANK' ? g.bank : 0;
       let action: PrepAction | undefined;
+      const acquired = phase?.confirmed ? step.itemsRequired?.find(item => item.inStep && item.phase === phase.id && item.nameEn === t.line.nameEn) : undefined;
       if (inStep && !satisfied) {
         action = { kind: 'GATHER', label: 'You get it during the step' };
       } else if (where === 'BANK') {
         action = bankAction(step, t.line.nameEn, g.bank, dose, g.noted);
+      } else if (where === 'MISSING' && acquired) {
+        const spot = acquired.from ? npcSpot(acquired.from, step.id) : undefined;
+        action = { kind: 'GATHER', label: acquired.howToGet, ...(spot ? { nav: { label: `${acquired.from}: ${acquired.nameEn}`, x: spot.x, y: spot.y, plane: spot.plane, itemName: acquired.nameEn, stepId: step.id } } : {}) };
       } else if (where === 'MISSING' && dose) {
         // Doses, not potions: the shortfall and the sizes that cover it; Shopping prices every size and names the package.
         action = { kind: 'BUY', label: shortText(t.line.nameEn, g.missing), href: '#/shopping' };

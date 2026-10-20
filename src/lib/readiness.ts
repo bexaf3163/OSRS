@@ -15,6 +15,9 @@ import { buildPlayerState, coinsOf, heldOf, questOf, unusableTools, type Held, t
 import { evaluate } from './requirements';
 import { toolFamilyOf } from './toolTiers';
 import { doseKind, heldUnits, needUnits } from './doses';
+import { currentLoadoutStep, loadoutPhase } from './loadoutPhase';
+import { npcSpot } from './stepPlaces';
+import type { QuestInstruction } from '../services/runeliteBridge';
 
 export type ReadinessStatus =
   | 'READY'
@@ -116,6 +119,8 @@ export interface ReadinessContext {
   qp: number;
   mode: GameMode;
   state: PlayerState;
+  /** Last confirmed cursor for the active character/step; manual peeks do not replace it. */
+  questInstruction?: QuestInstruction | null;
   /** A setback on a step shown in the game (a death, a teleport): the preparation plan goes into recovery mode. */
   recovery?: { stepId: string; recovery: import('./recovery').Recovery } | null;
 }
@@ -204,7 +209,7 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
 
   // Items taken along (not obtained during the step) and coins.
   const bank = nearestBank(step);
-  for (const it of preflightItems(step)) {
+  for (const it of preflightItems(currentLoadoutStep(step, state.connected ? ctx.questInstruction : null))) {
     const isCoins = it.id === COINS_ID || nameKey(it.nameEn) === 'coins';
     if (isCoins) {
       const res = evaluate({ type: 'money', amount: it.count }, state);
@@ -281,6 +286,15 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     }
   }
 
+  const phase = loadoutPhase(step, state.connected ? ctx.questInstruction : null);
+  // An acquired quest item is required once its phase begins, but cannot become a GE purchase.
+  for (const item of phase?.confirmed ? step.itemsRequired?.filter(i => i.inStep && i.phase === phase.id) ?? [] : []) {
+    const req = reqs.find(r => r.kind === 'item' && r.item === item.nameEn && (r.state === 'MISSING' || r.state === 'PARTIAL'));
+    if (!req) continue;
+    const spot = item.from ? npcSpot(item.from, step.id) : undefined;
+    req.detail = item.howToGet;
+    req.action = spot ? { kind: 'nav', label: `Get from ${item.from}`, target: { label: `${item.from}: ${item.nameEn}`, x: spot.x, y: spot.y, plane: spot.plane, itemName: item.nameEn, stepId: step.id } } : undefined;
+  }
   const rank: Record<RequirementState, number> = { MISSING: 0, PARTIAL: 1, BANK: 2, UNKNOWN: 3, OK: 4 };
   const kindRank: Record<RequirementStatus['kind'], number> = { mode: 0, step: 1, qp: 2, quest: 3, skill: 4, item: 5, coins: 6 };
   const sorted = [...reqs].sort((a, b2) => rank[a.state] - rank[b2.state] || Number(b2.hard) - Number(a.hard) || kindRank[a.kind] - kindRank[b2.kind]);

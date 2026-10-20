@@ -15,3 +15,5 @@ Browser storage and desktop file writes are independent attempts. An absent brow
 The isolated packaged-EXE gate now creates an empty directory at its own temporary write path to induce a real write error, checks the warning and previous save, then removes that empty directory and verifies retry. This added native scenario requires exact-tree CI before being called passed. The local Electron launch limitation is unchanged; no installed app, profile or player save was used.
 
 Profile-list write errors and secondary backup-folder failures still use their existing contracts; they are not silently promoted to confirmed saves by this change, but their broader reporting/format acceptance remains open. Recovery and full multi-profile/native acceptance are still larger than this write-result patch. Nothing guarantees zero regressions.
+
+Exact-tree CI 39495627813 subsequently passed all three jobs, including the new physical write-failure and retry scenario on the isolated packaged Windows EXE.
