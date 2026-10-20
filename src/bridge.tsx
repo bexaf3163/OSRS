@@ -22,7 +22,7 @@ import { tripWindow } from './lib/oneTrip';
 import type { MoveEvent } from './lib/recovery';
 import { stageBankItemIds } from './lib/bankTags';
 import { useFeatures } from './lib/features';
-import { isClosed, openAfter } from './lib/next-step';
+import { isClosed, openAfter, questDependencyFacts } from './lib/next-step';
 import { stepResendKey } from './lib/foodPlan';
 import { withKillEstimate } from './services/gearAdvisor';
 import { buildEnvelope, EMPTY_PARTS, envelopeKey, nextSeq, type SnapshotParts } from './lib/prepEnvelope';
@@ -259,7 +259,7 @@ const LAUNCH_TEXT: Partial<Record<RuneliteLaunch['state'], string>> = {
 };
 
 export function BridgeProvider({ children }: { children: ReactNode }) {
-  const { progress, steps, setStep, setLevels, notify, mode } = useStore();
+  const { progress, steps, setStep, setLevels, notify, mode, qp: routeQp } = useStore();
   const [enabled, setEnabledState] = useState(loadEnabled);
   const [autoLaunch, setAutoLaunchState] = useState(loadAutoLaunch);
   const runelite = desktop()?.runelite;
@@ -337,8 +337,9 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   // The event handler outlives a render — it takes fresh data from refs.
-  const latest = useRef({ progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear, gate, mode });
-  latest.current = { progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear, gate, mode };
+  const qp = questPoints ?? routeQp;
+  const latest = useRef({ progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear, gate, mode, qp, questsDone });
+  latest.current = { progress, steps, setStep, activeStepId, branchChoice, notify, stats, gear, gate, mode, qp, questsDone };
   /** Already handled auto-marks: one event does not mark a step twice and does not move the route twice. */
   const handled = useRef(new Set<string>());
   const nonce = useRef(0);
@@ -427,7 +428,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     const { progress: p, steps: list, setStep: mark, activeStepId: active } = latest.current;
     // The game has a different character than this profile — its quests and levels are not written here.
     if (!gateAllows(latest.current.gate)) return;
-    const plan = planAutoComplete(list, p, id, active, handled.current);
+    const plan = planAutoComplete(list, p, id, active, handled.current, latest.current.qp, questDependencyFacts(list, latest.current.questsDone));
     handled.current.add(id);
     if (!plan.mark) return;
     const next = plan.next;
@@ -643,7 +644,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     if (!activeStepId) return;
     if (!isClosed(progress, activeStepId)) { activeWasOpen.current = activeStepId; return; }
     if (activeWasOpen.current !== activeStepId || handled.current.has(activeStepId)) return;
-    const next = openAfter(steps, progress, activeStepId);
+    const next = openAfter(steps, progress, activeStepId, qp, questDependencyFacts(steps, questsDone));
     const branch = next ? chosenBranch(next, latest.current.branchChoice) : undefined;
     if (!next || !toInGameTarget(next, branch)) {
       void clearStep();
@@ -653,7 +654,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     handled.current.delete(next.id);
     setActiveStepId(next.id);
     void sendStep(next, branch);
-  }, [activeStepId, progress, steps, sendStep, clearStep]);
+  }, [activeStepId, progress, steps, sendStep, clearStep, qp, questsDone]);
 
   // A step that follows a training method asks for different tools, and leads to another place, when the level (or what is carried) moves the player to
   // another method: the game gets the new list and place without a press. The first sight of a step is not a change: whoever activated it sent it.

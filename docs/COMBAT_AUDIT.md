@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/combatAudit.json` (revisio
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-27 stages: 12 retained, 7 revised, 2 with a branch, 6 deferred.
+26 stages: 12 retained, 7 revised, 2 with a branch, 5 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -33,7 +33,6 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S8-02 Nature Spirit | quest-fight | yes | Ghast (30) | melee | Ghast | Lobster 15 | Revised |
 | S9-01 Lost City | quest-fight | yes | Zombie, Tree spirit (101) | safespot | - | - | Deferred |
 | S9-02 Fairytale I - Growing Pains | quest-fight | yes | Tanglefoot (111) | other | - | - | Deferred |
-| S9-03 Fairytale II - Cure a Queen (the start only) | quest-fight | yes | Gorak | melee | - | - | Deferred |
 | S9-04 Monkey Madness I | quest-fight | yes | Jungle demon (195), Monkey zombie, Gorilla | safespot | - | - | Retain |
 
 ## S1-06 The Restless Ghost
@@ -543,28 +542,6 @@ Problems:
 Evidence:
 
 - Step field "Combat"; quest stage lines 4.0 and 4.2.
-
-## S9-03 Fairytale II - Cure a Queen (the start only)
-
-**Deferred.** Kill Goraks for their claws; they hit through protection prayers.
-
-Quest stage lines: 2.3, 2.4.
-
-Problems:
-
-- The route gives no preparation for the Goraks: no food, no style, no numbers. Readiness cannot judge this fight.
-
-Alternatives:
-
-- Stop the route before this part until it is written (it is the start of Fairytale II only).
-
-Changed:
-
-- 2.66.0: the Gorak is the step's threat, so readiness shows "the app has no combat numbers for it" instead of a plain Ready.
-
-Evidence:
-
-- Quest stage lines 2.3 and 2.4; no step fields about the fight.
 
 ## S9-04 Monkey Madness I
 

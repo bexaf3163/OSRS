@@ -6,6 +6,7 @@
 import { useMemo } from 'react';
 import { useBridge, type LastGear } from '../bridge';
 import { useStore } from '../store';
+import { useReadinessEngine } from '../readinessContext';
 import { usePlayerState } from '../playerStateContext';
 import { useProfiles } from '../lib/profiles';
 import { formatGp, type ShoppingLine } from '../lib/shopping';
@@ -173,22 +174,23 @@ function Recommendation({ advice, stepId, onShow, priceUnknown, pricesFailed }: 
 }
 
 export function GearPage() {
+  const { dependencies, ctx: { qp: effectiveQp } } = useReadinessEngine();
   const { state, stats, lastGears, lastGear } = useBridge();
-  const { mode, steps, progress, qp } = useStore();
+  const { mode, steps, progress } = useStore();
   const { state: player } = usePlayerState();
   const profiles = useProfiles();
   const prices = usePriceView(true);
 
   // Coins kept for the next trip's supplies: the same list as Shopping.
   const reserve = useMemo(() => {
-    const current = nextStep(steps, progress, qp)?.id ?? null;
+    const current = nextStep(steps, progress, effectiveQp, dependencies)?.id ?? null;
     const { list, trip } = scopeList(scopeSteps('trip', steps, progress, current, { from: 1, to: 1, openOnly: true }));
     const rows = shopRows(list, {
       state: player, trip, detail: (id) => itemById.get(id),
       onGe: (l: ShoppingLine) => l.id !== undefined, gePrice: (l) => prices.buy(l.nameEn, l.id)?.price ?? null,
     });
     return supplyReserve(rows, list.coins);
-  }, [steps, progress, qp, player, prices]);
+  }, [steps, progress, effectiveQp, dependencies, player, prices]);
 
   const { advice, fightStep, pricesReady, pricesFailed } = useGearAdvice(null, { reserve });
   const priceUnknown = !pricesReady && advice.goals.length > 0;

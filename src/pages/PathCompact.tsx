@@ -6,6 +6,7 @@ import { stepById } from '../data';
 import { useStore } from '../store';
 import { useQuestPoints } from '../lib/useQuestPoints';
 import { useBridge } from '../bridge';
+import { useReadinessEngine } from '../readinessContext';
 import { firstOpen, nextStep, openAfter } from '../lib/next-step';
 import { IconChevron } from '../components/Icons';
 import { CompanionStrip } from '../components/CompanionStrip';
@@ -17,11 +18,12 @@ export function PathCompact({ focusStep }: { focusStep?: string }) {
   const { progress, steps, setStep } = useStore();
   const qp = useQuestPoints();
   const { advance } = useBridge();
-  const suggested = nextStep(steps, progress, qp) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
+  const dependencies = useReadinessEngine().dependencies;
+  const suggested = nextStep(steps, progress, qp, dependencies) ?? firstOpen(steps, progress) ?? steps[steps.length - 1];
   const [selectedId, setSelectedId] = useState(() => focusStep ?? suggested.id);
   const selected = steps.find((s) => s.id === selectedId) ?? suggested;
   const at = steps.findIndex((s) => s.id === selected.id);
-  const upcoming = openAfter(steps, progress, selected.id);
+  const upcoming = openAfter(steps, progress, selected.id, qp, dependencies);
 
   // A link to a step (#/step/S3-05) picks it; the step done in the game moves on, as the "Mark as done" button does.
   useEffect(() => {
@@ -35,7 +37,7 @@ export function PathCompact({ focusStep }: { focusStep?: string }) {
   }, [advance]);
 
   const complete = (id: string) => {
-    const next = openAfter(steps, progress, id);
+    const next = openAfter(steps, progress, id, qp, dependencies);
     setStep(id, 'done');
     if (next) setSelectedId(next.id);
   };

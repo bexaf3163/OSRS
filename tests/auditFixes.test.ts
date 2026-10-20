@@ -142,6 +142,7 @@ describe('S7-05: no fairy ring before the route unlocks them', () => {
 
   it('the route unlocks the rings at S9-03, and the stage text no longer sends the player to CLS', () => {
     expect(fairyRingsUnlocked(emptyProgress())).toBe(false);
+    expect(fairyRingsUnlocked(withStep(emptyProgress(), 'S9-03', 'skipped'))).toBe(false);
     expect(fairyRingsUnlocked(withStep(emptyProgress(), 'S9-03', 'done'))).toBe(true);
     const lines = step('S7-05').questStages!.stages.flatMap((s) => s.do);
     const hazelmere = lines.find((l) => /Hazelmere/.test(l.t) && /island east of Yanille/.test(l.t))!;

@@ -7,7 +7,7 @@
 import type { GameMode, PlayerStats, Progress, Step } from '../types';
 import { levelById } from '../data';
 import locationsJson from '../data/majorLocations.json';
-import { isClosed, blockersOf } from './next-step';
+import { isCompleted, blockersOf, questDependencyFacts } from './next-step';
 import { nameKey, preflightItems, type OwnedState } from './checklist';
 import type { GearState, NavTargetPayload } from '../services/runeliteBridge';
 import { plural } from './shopping';
@@ -144,7 +144,7 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
   if (step.membersOnly && mode === 'f2p') {
     reqs.push({ kind: 'mode', label: 'Members only', state: 'MISSING', hard: true, detail: 'A Members step: it is not needed in F2P mode.', source: 'route' });
   }
-  const b = blockersOf(step, p, qp);
+  const b = blockersOf(step, p, qp, questDependencyFacts(steps, state.quests.known ? state.quests.value : null));
   for (const id of b?.steps ?? []) {
     const s = steps.find((x) => x.id === id);
     reqs.push({
@@ -184,20 +184,20 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     } else {
       const qs = questStepOf(steps, r.quest);
       const game = questOf(state, r.quest);
-      if (qs && isClosed(p, qs.id)) {
-        reqs.push({ kind: 'quest', label: r.quest, state: 'OK', hard: true, detail: `step ${qs.id} is marked`, source: 'route' });
-      } else if (game === 'DONE') {
+      if (game === 'DONE') {
         // The game knows better than the marks: the quest is counted even if the step on the route is not closed yet.
         reqs.push({ kind: 'quest', label: r.quest, state: 'OK', hard: true, detail: 'counted in the game', source: 'game' });
-      } else if (qs) {
-        reqs.push({
-          kind: 'quest', label: r.quest, state: 'MISSING', hard: true, detail: `step ${qs.id} is not marked yet`, source: 'route',
-          action: { kind: 'link', label: `🧭 To the quest: ${qs.id}`, href: `#/step/${qs.id}` },
-        });
       } else if (game === 'NOT_DONE') {
-        reqs.push({ kind: 'quest', label: r.quest, state: 'MISSING', hard: true, detail: 'the quest is not on the route and is not counted in the game', source: 'game' });
+        reqs.push({
+          kind: 'quest', label: r.quest, state: 'MISSING', hard: true, detail: 'not completed in the game', source: 'game',
+          ...(qs ? { action: { kind: 'link' as const, label: `🧭 To the quest: ${qs.id}`, href: `#/step/${qs.id}` } } : {}),
+        });
+      } else if (qs && isCompleted(p, qs.id)) {
+        reqs.push({ kind: 'quest', label: r.quest, state: 'OK', hard: true, detail: `step ${qs.id} is marked done; game completion has not been checked`, source: 'route' });
       } else {
-        reqs.push({ kind: 'quest', label: r.quest, state: 'UNKNOWN', hard: true, detail: 'the quest is not on the route: the app cannot mark it done' });
+        reqs.push({ kind: 'quest', label: r.quest, state: 'UNKNOWN', hard: true, detail: qs && p.steps[qs.id] === 'skipped' ? `step ${qs.id} was skipped; game completion has not been checked` : 'game quest completion has not been checked',
+          ...(qs ? { action: { kind: 'link' as const, label: `🧭 To the quest: ${qs.id}`, href: `#/step/${qs.id}` } } : {}),
+        });
       }
     }
   }
@@ -328,7 +328,7 @@ export function fixChainOf(
         if (seen.has(id)) continue;
         seen.add(id);
         const s = ctx.steps.find((x) => x.id === id);
-        if (s && !isClosed(ctx.progress, id)) visit(s, depth + 1);
+        if (s && (!isCompleted(ctx.progress, id) || questDependencyFacts(ctx.steps, ctx.state.quests.known ? ctx.state.quests.value : null)(id) === false)) visit(s, depth + 1);
       }
     }
     if (cur.id !== step.id) {

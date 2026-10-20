@@ -4,6 +4,7 @@
 import { useState } from 'react';
 import type { Step } from '../types';
 import { useStore } from '../store';
+import { useReadinessEngine } from '../readinessContext';
 import { useQuestPoints } from '../lib/useQuestPoints';
 import { blockerParts, blockersOf, isClosed } from '../lib/next-step';
 import { overviewCurrent, overviewOf } from '../lib/subStep';
@@ -47,9 +48,10 @@ export function CompanionStrip({ step, suggested, onDone, nextId, onSelect }: {
 }) {
   const { progress, steps } = useStore();
   const qp = useQuestPoints();
+  const dependencies = useReadinessEngine().dependencies;
   const [tab, setTab] = useState<Tab>('now');
   const closed = isClosed(progress, step.id);
-  const blockers = closed ? null : blockersOf(step, progress, qp);
+  const blockers = closed ? null : blockersOf(step, progress, qp, dependencies);
   const stage = steps.filter((s) => s.stage === step.stage);
 
   return (

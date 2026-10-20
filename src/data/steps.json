@@ -6721,8 +6721,14 @@
         "atLeast": true
       }
     },
-    "threats": [
-      "Gorak"
+    "itemsRequired": [
+      {
+        "nameEn": "Dramen staff",
+        "amount": 1,
+        "howToGet": "From Lost City.",
+        "wikiItemId": 772,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Dramen_staff.png"
+      }
     ]
   },
   {

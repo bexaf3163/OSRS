@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { allSteps, items, allStages } from '../src/data';
 import { emptyProgress, withOwnedManual, withStep } from '../src/lib/progress';
-import { nearestBank, stepReadiness, type ReadinessInput } from '../src/lib/readiness';
+import { contextOf, nearestBank, readinessOf, stepReadiness, type ReadinessInput } from '../src/lib/readiness';
+import { buildPlayerState } from '../src/lib/playerState';
 import { validate } from '../scripts/validate';
 import type { Progress, Step } from '../src/types';
 
@@ -49,21 +50,37 @@ describe('step readiness', () => {
     expect(r.problems[0]).toMatchObject({ label: 'Agility 25', hard: false });
   });
 
-  it('quest: not marked — MISSING_QUEST with a link to the quest step; marked — ok', () => {
+  it('an unmarked offline quest is unknown; its explicit route prerequisite still blocks', () => {
     const s = step('S8-02'); // Nature Spirit: Priest in Peril, The Restless Ghost
     const p = withStep(before(s.id), 'S8-01', null);
     const r = stepReadiness(input(s, { progress: p }));
     expect(r.status).toBe('BLOCKED'); // S8-01 is also in requires
-    expect(r.problems.map((x) => x.kind)).toEqual(['step', 'quest']);
-    expect(r.problems[1]).toMatchObject({ label: 'Priest in Peril', action: { href: '#/step/S8-01' } });
+    expect(r.problems.map((x) => x.kind)).toEqual(['step']);
+    expect(r.unknown).toContainEqual(expect.objectContaining({ label: 'Priest in Peril', action: expect.objectContaining({ href: '#/step/S8-01' }) }));
     expect(stepReadiness(input(s)).problems).toEqual([]);
   });
 
-  it('a quest without a step in requires: MISSING_QUEST', () => {
+  it('a quest without a route prerequisite remains unknown until checked', () => {
     const s = step('S9-05'); // Cook's Assistant — S1-03
     const p = withStep(before(s.id), 'S1-03', null);
     const r = stepReadiness(input(s, { progress: p, stats: { cooking: 15 } }));
-    expect(r.status).toBe('MISSING_QUEST');
+    expect(r.status).toBe('UNKNOWN');
+  });
+
+  it('live quest facts override both skipped and manually completed route marks', () => {
+    const s = step('S8-02');
+    const i = input(s);
+    const withQuests = (questsDone: string[], progress = i.progress) => readinessOf(s, {
+      ...contextOf({ ...i, progress }),
+      state: buildPlayerState({ ...i, progress, questsDone }),
+    });
+    const missing = withQuests([]);
+    expect(missing.problems).toContainEqual(expect.objectContaining({ kind: 'quest', label: 'Priest in Peril', source: 'game', state: 'MISSING' }));
+    expect(missing.problems).toContainEqual(expect.objectContaining({ kind: 'step', label: expect.stringContaining('S8-01') }));
+    const skipped = withStep(i.progress, 'S8-01', 'skipped');
+    const met = withQuests(['Priest in Peril', 'The Restless Ghost'], skipped);
+    expect(met.requirements.find(r => r.label === 'Priest in Peril')).toMatchObject({ state: 'OK', source: 'game' });
+    expect(met.problems.filter(r => r.kind === 'step' || r.kind === 'quest')).toEqual([]);
   });
 
   it('items: in the bag — ok; in the bank — "to the bank" with a goal that clears when the item is in the bag; none — to the shopping list', () => {

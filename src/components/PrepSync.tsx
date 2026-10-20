@@ -54,7 +54,7 @@ function StepPlan({ step }: { step: Step }) {
   const [transport, setTransport] = useState<RecommendedTransport | null>(null);
   const planRef = useRef(plan);
   planRef.current = plan;
-  const nextStep = openAfter(steps, progress, step.id) ?? null;
+  const nextStep = openAfter(steps, progress, step.id, engine.ctx.qp, engine.dependencies) ?? null;
   // The road ahead: this step and the next open ones, for the supplies the teleports on it need.
   const road = roadSteps(steps, (id) => !isClosed(progress, id), step.id);
   const roadKey = road.map((s) => s.id).join(',');

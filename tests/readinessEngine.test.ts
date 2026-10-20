@@ -66,7 +66,7 @@ describe('the single readiness engine', () => {
     const p = withStep(input('S8-02').progress, 'S8-01', null);
     const base = { ...input('S8-02', { progress: p }) };
     const ctx = contextOf(base);
-    expect(readinessOf(s, ctx).problems.some((x) => x.kind === 'quest')).toBe(true);
+    expect(readinessOf(s, ctx).unknown.some((x) => x.kind === 'quest')).toBe(true);
     const withGame = { ...ctx, state: buildPlayerState({ mode: 'members', stats: null, progress: p, owned: null, gear: null, questsDone: ['Priest in Peril', 'The Restless Ghost'] }) };
     const q = readinessOf(s, withGame).requirements.find((x) => x.label === 'Priest in Peril')!;
     expect(q).toMatchObject({ state: 'OK', source: 'game' });
