@@ -19,7 +19,7 @@ No version bump or release is included in these stabilization commits. Keep them
 - A damaged profile list no longer gets mirrored into the file before validation; a valid file can restore the active profile. Recovery text is retained separately.
 - Cross-window invalid/unsupported progress updates do not replace the working snapshot and pause writes until recovery.
 
-Verification so far: 1,601 Vitest tests passed, including new recovery/profile/file cases; build and data validation passed; Java testClasses passed. Six new browser assertions passed through the actual StoreProvider, and the full UI smoke is still running at this checkpoint.
+Verification: 1,601 Vitest tests passed at this checkpoint, including new recovery/profile/file cases; build and data validation passed; Java testClasses passed. The full browser UI smoke passed, including six new assertions through the actual StoreProvider.
 Native source Electron E2E was attempted in a disposable home but the process exited before its debugging endpoint was available (`2147483651`). This is NOT a successful native/portable check. Do not report live-game verification.
 
 Remaining T01 follow-up: exercise explicit import/reset and cross-window corruption through the UI; verify recovery on a packaged executable and storage-write error reporting. Do not infer completion of every data-integrity issue from parser tests.
@@ -31,6 +31,13 @@ Remaining T01 follow-up: exercise explicit import/reset and cross-window corrupt
 - `install()` is now asynchronous; the existing IPC and renderer already use Promise<boolean>. Busy protection prevents the release changing while its cache is being checked.
 - The delayed portable handoff, path validation, atomic download and existing cleanup rules are retained. No real update was installed during testing.
 - All 22 updater tests pass, including same-size corruption, cache modification after check, invalid downloader output, missing digest and successful verified reuse/handoff.
+
+## T04: snapshot invalidation (partial)
+
+- The player-state fingerprint includes player identity, the actual normalized quest set (not just its length), equipment-known status and supplied position/plane.
+- Quest order alone does not invalidate the state. Same-length quest replacements and a different character do invalidate it.
+- All 14 playerState tests passed; the combined package passes all 1,608 Vitest tests, build and data validation.
+- This does NOT close logout/account event ordering or stale async responses. The provider still does not publish a reactive position stream; funding retains its existing position source.
 
 ## Still open
 

@@ -103,10 +103,11 @@ function fingerprintOf(s: PlayerState): string {
   const lv = Object.entries(s.levels).map(([k, v]) => `${k}${v.known ? v.value : '?'}`).sort().join(',');
   const items = s.owned ? [...s.owned.items.entries()].map(([k, o]) => `${k}:${o.carried}/${o.noted}/${o.bank ?? '?'}`).sort().join(';') : '-';
   const c = (k: Known<number>) => (k.known ? k.value : '?');
-  const q = s.quests.known ? s.quests.value.length : '?';
+  const q = s.quests.known ? JSON.stringify([...new Set(s.quests.value.map(nameKey))].sort()) : '?';
   const eq = Object.entries(s.equipment).map(([k, v]) => `${k}=${v}`).sort().join(',');
   const man = Object.entries(s.manual).map(([k, v]) => `${k}=${v}`).sort().join(',');
-  return [s.mode, s.connected ? 1 : 0, s.bankSeen ? 1 : 0, lv, c(s.coins.bag), c(s.coins.bank), c(s.bagSlots), c(s.weight), s.bagItems.known ? s.bagItems.value.map((b) => `${b.name}:${b.count}`).sort().join(',') : '?', q, eq, man, items].join('|');
+  const pos = s.position.known ? `${s.position.value.x},${s.position.value.y},${s.position.value.plane}` : '?';
+  return [s.mode, s.connected ? 1 : 0, s.bankSeen ? 1 : 0, JSON.stringify(s.player), s.equipmentKnown ? 1 : 0, pos, lv, c(s.coins.bag), c(s.coins.bank), c(s.bagSlots), c(s.weight), s.bagItems.known ? s.bagItems.value.map((b) => `${b.name}:${b.count}`).sort().join(',') : '?', q, eq, man, items].join('|');
 }
 
 /** The skill's level; undefined means unknown. */

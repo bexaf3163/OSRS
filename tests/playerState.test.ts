@@ -72,6 +72,20 @@ describe('the single player state', () => {
     expect(a.fingerprint).toBe(b.fingerprint);
     expect(a.fingerprint).not.toBe(state({ stats: { a: 1, b: 3 } }).fingerprint);
   });
+
+  it('invalidates a snapshot when the player, exact quest set or equipment certainty changes', () => {
+    expect(state({ player: 'First' }).fingerprint).not.toBe(state({ player: 'Second' }).fingerprint);
+    expect(state({ questsDone: ["Cook's Assistant"] }).fingerprint).not.toBe(state({ questsDone: ["Doric's Quest"] }).fingerprint);
+    expect(state({ questsDone: ["Cook's Assistant", "Doric's Quest"] }).fingerprint).toBe(state({ questsDone: ["Doric's Quest", "Cook's Assistant"] }).fingerprint);
+    expect(state({ connected: true, gear: null }).fingerprint).not.toBe(state({ connected: true, gear: { equipment: [], inventory: [], coins: null, bankCoins: null } }).fingerprint);
+  });
+
+  it('invalidates on position and plane changes, including unknown becoming known', () => {
+    const a = state({ position: { x: 3200, y: 3200, plane: 0 } });
+    expect(a.fingerprint).not.toBe(state({ position: { x: 3201, y: 3200, plane: 0 } }).fingerprint);
+    expect(a.fingerprint).not.toBe(state({ position: { x: 3200, y: 3200, plane: 1 } }).fingerprint);
+    expect(a.fingerprint).not.toBe(state().fingerprint);
+  });
 });
 
 describe('the unified requirements', () => {
