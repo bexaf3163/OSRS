@@ -1030,3 +1030,5 @@ Java queue ordering is now covered by `docs/CODEX_SNAPSHOT_ORDER_HANDOFF.md`: pr
 SSE slow-reader isolation is documented in `docs/CODEX_SSE_HANDOFF.md`. Keep socket writes/closes off the producer/game thread, bounded pools/queues and current-target completion replay. Do not turn the synthetic socket timings into claims about live FPS; that acceptance remains open.
 
 Selected-route reserves and cleanup protection are documented in `docs/CODEX_RESERVES_HANDOFF.md`. Preserve consumable addition, one-time alternative allocation and skip-versus-completion disposal guards. Heterogeneous alternatives remain conservatively protected pending source-level allocation.
+
+Funding execution is documented in `docs/CODEX_FUNDING_EXECUTION_HANDOFF.md`: tool acquisition must not suppress inputs; repeated processing trips prepare their inputs again; output goals use affordable first-batch quantities. Sale observation requires comparable total-coin baselines, with manual fallback for old/unknown data. GE windows, travel and live acceptance remain open.

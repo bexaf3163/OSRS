@@ -106,6 +106,12 @@ export interface MethodEvaluation {
   /** The most money the method has out before it pays for itself; null when it needs none or cannot be judged. */
   workingCapital: number | null;
   unitsPerTrip: number;
+  /** Executable first batch at the available cash, distinct from bag capacity and four-hour market throughput. */
+  preparation?: {
+    units: number;
+    tools: { name: string | null; owned: boolean; unknown: boolean; cost: number }[];
+    inputs: { name: string; qty: number; owned: number; missing: number }[];
+  };
   /** Minutes until the target is met, fast / typical / slow; null — it cannot be reached (see reason). */
   minutes: Range3 | null;
   minutesReason?: string;
@@ -278,6 +284,7 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
 
   let faresPerTrip = 0;
   let tool: ToolPlan | null = null;
+  const tools: ToolPlan[] = [];
   for (const r of m.requirements) {
     if (r.kind === 'level') {
       const lv = snap.level(r.skill);
@@ -296,6 +303,7 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
       else checks.push({ text: `${r.points} quest points (you have ${snap.questPoints})`, status: 'ok' });
     } else if (r.kind === 'item' && r.role === 'tool') {
       tool = planTool(r, ctx);
+      tools.push(tool);
       if (tool.blocker) { blockers.push(tool.blocker); checks.push({ text: tool.blocker.text, status: 'missing' }); }
       if (tool.unknown) { cautions.push('Whether you own a suitable tool is not known: open the bank'); cap('MEDIUM', 'tool unknown'); checks.push({ text: 'A suitable tool: not known, open the bank', status: 'unknown' }); }
       else if (tool.owned) checks.push({ text: `${tool.name} (you have one)`, status: 'ok' });
@@ -451,8 +459,8 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
   const saleSeconds = (toGe + fromGe) / TILES_PER_SECOND + m.saleSeconds;
 
   // --- Setup (a reusable tool) and the cash
-  const setup = tool && !tool.owned && !tool.unknown ? tool.cost : 0;
-  if (setup > 0) notes.push(`Needs a ${tool!.name} first (${gp(setup)} gp, bought once)`);
+  const setup = tools.reduce((sum, t) => sum + (!t.owned && !t.unknown ? t.cost : 0), 0);
+  if (setup > 0) notes.push(`Needs ${tools.filter(t => !t.owned && !t.unknown && t.cost > 0).map(t => t.name).join(', ')} first (${gp(setup)} gp, bought once)`);
   const cashEach = (u: number) => inputs.reduce((s, i) => s + i.price * Math.max(0, i.per * u - i.owned), 0) + faresPerTrip;
   const firstTrip = cashEach(unitsPerTrip);
   const minimumBatch = cashEach(Math.min(MIN_BATCH_UNITS, unitsPerTrip));
@@ -463,12 +471,24 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
     cap('MEDIUM', 'coins unknown');
     checks.push({ text: minimum > 0 ? `Coins to start, about ${gp(Math.ceil(minimum))} gp: yours are not known` : 'No coins needed to start', status: minimum > 0 ? 'unknown' : 'ok' });
   } else if (spendable < minimum) {
-    const text = setup > 0 && spendable < setup ? `The ${tool!.name} alone costs ${gp(setup)} gp` : `A first batch costs about ${gp(Math.ceil(minimum))} gp`;
+    const text = setup > 0 && spendable < setup ? tools.length === 1 ? `The ${tool!.name} alone costs ${gp(setup)} gp` : `The tools alone cost ${gp(setup)} gp` : `A first batch costs about ${gp(Math.ceil(minimum))} gp`;
     blockers.push({ kind: 'capital', text, fixable: true });
     checks.push({ text: `${text} (you have ${gp(spendable)} gp)`, status: 'missing' });
   } else {
     checks.push({ text: minimum > 0 ? `Coins to start, about ${gp(Math.ceil(minimum))} gp (you have ${gp(spendable)} gp)` : 'No coins needed to start', status: 'ok' });
   }
+
+  let firstUnits = spendable === null ? Math.min(MIN_BATCH_UNITS, unitsPerTrip) : unitsPerTrip;
+  while (firstUnits > 1 && spendable !== null && setup + cashEach(firstUnits) > spendable) firstUnits--;
+  const preparation: NonNullable<MethodEvaluation['preparation']> = {
+    units: firstUnits,
+    tools: tools.map(({ name, owned, unknown, cost }) => ({ name, owned, unknown, cost })),
+    inputs: inputs.filter(i => i.flow.item.id !== 995).map(i => {
+      const qty = Math.ceil(i.per * firstUnits);
+      const owned = Math.min(qty, Math.floor(i.owned));
+      return { name: i.flow.item.name, qty, owned, missing: qty - owned };
+    }),
+  };
 
   // --- Economics per unit
   const netPerUnit = coinsPerUnit + saleGrossPerUnit - taxPerUnit - inputCashPerUnit;
@@ -555,6 +575,7 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
     upfront: { setup, minimum, firstTrip, owned: ownedUsed },
     workingCapital,
     unitsPerTrip,
+    preparation,
     minutes, ...(minutesReason ? { minutesReason } : {}),
     saves, synergy,
     notes: rateNote ? [`Pace from ${rateNote}`, ...notes] : notes,
