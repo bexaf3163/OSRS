@@ -6,7 +6,7 @@
 // open and exactly where it was, and a plan ending only takes down its own arrow.
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
-import { stepById, stepsFor } from './data';
+import { stepsFor } from './data';
 import { useBridge } from './bridge';
 import { checkStatus } from './services/runeliteBridge';
 import { useStore } from './store';
@@ -69,7 +69,8 @@ function useSnapshotFor(stepId: string | null, position: Pos): FundingSnapshot |
   const override = progress.sellRestrictions;
   return useMemo(() => {
     if (!stepId) return null;
-    const window = engine.trip(stepId).stepIds.map((id) => stepById.get(id)).filter((s): s is Step => Boolean(s));
+    const selected = new Map(engine.ctx.steps.map(s => [s.id, s]));
+    const window = engine.trip(stepId).stepIds.map((id) => selected.get(id)).filter((s): s is Step => Boolean(s));
     return buildSnapshot({
       state, window, questPoints, totalLevel, ironman: accountType === null ? null : accountType === 'ironman', sellOverride: override, position: state.connected ? position : null,
     });

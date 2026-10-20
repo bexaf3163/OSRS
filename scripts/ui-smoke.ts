@@ -298,6 +298,25 @@ async function run(browser: Browser) {
     await page.context().close();
   }
   if (process.env.UI_ONLY === 'session') return;
+  {
+    const p = progressBefore('S2-07');
+    p.steps['S2-06'] = 'skipped';
+    const gear = { equipment: [], inventory: [{ id: 290, name: 'Research package', count: 1 }], coins: 100, bankCoins: 0 };
+    const { page, errors } = await open(browser, 1280, {
+      progress: p, status: { protocol: 6, player: 'Reserve Test', questsDone: [], accountType: 'normal', ...gear },
+      events: [{ type: 'GEAR', gear }, { type: 'QUESTS', done: [] }], market: true,
+    }, '#/shopping');
+    await page.locator('.shop-cleanup > summary').click();
+    const row = page.locator('.cleanup-row').filter({ hasText: 'Research package' });
+    await row.waitFor();
+    expect(await row.locator('.act-review').count() === 1 && await row.locator('.act-drop').count() === 0, 'cleanup: skipping a quest cannot authorize destruction of its quest item');
+    await page.evaluate(() => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'QUESTS', done: ['Rune Mysteries'] }));
+    await page.waitForTimeout(600);
+    expect(await row.locator('.act-drop').count() === 1 && (await row.innerText()).includes('Destroy'), 'cleanup: verified game completion can release the obsolete item');
+    expect(await noOverflow(page) && !errors.length, 'cleanup reserves: no overflow or console errors');
+    await page.context().close();
+  }
+  if (process.env.UI_ONLY === 'reserves') return;
   if (process.env.UI_ONLY === 'funding') { await fundingScenarios(browser); return; }
   if (process.env.UI_ONLY === 'combat') { await combatRouteScenarios(browser); return; }
   if (process.env.UI_ONLY === 'shopping') { await shoppingScenarios(browser); return; }

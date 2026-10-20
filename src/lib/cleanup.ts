@@ -43,6 +43,8 @@ export interface CleanupInput {
   worn?: string[];
   /** The steps that are still open, in route order. Partly done quests are open steps: all of their remaining needs count. */
   openSteps: Step[];
+  /** Shared allocated stock protection from the selected plans. This is an additional floor, never a permission to discard. */
+  reserves?: ReadonlyMap<string, { qty: number; why: string }>;
   /** The bank was opened in this session. Only changes how sure the words are. */
   bankSeen: boolean;
   /** From the game when the plugin sent it, else the player's word, else null. */
@@ -54,7 +56,7 @@ export interface CleanupInput {
   /** Whether the item can be traded at all: null while the item list has not loaded. */
   tradeable: (name: string) => boolean | null;
   prefs: CleanupPrefs;
-  /** The route steps that are closed (done or skipped); the verified drop table only applies once its quest is closed. */
+  /** Steps proven completed (live quest facts, or an explicit done fallback); skips cannot authorize disposal. */
   closedSteps?: ReadonlySet<string>;
 }
 
@@ -215,7 +217,13 @@ export function cleanupAdvice(i: CleanupInput): CleanupResult {
   for (const [key, stacks] of groups) {
     const have = stacks.reduce((n, s) => n + s.count, 0);
     const name = stacks[0].name;
-    const need = needs.get(key);
+    const baseNeed = needs.get(key);
+    const reserved = i.reserves?.get(key);
+    const need = reserved && reserved.qty > 0 ? {
+      count: Math.max(baseNeed?.count ?? 0, reserved.qty),
+      exact: Number.isFinite(reserved.qty) && (baseNeed?.exact ?? true),
+      titles: baseNeed?.titles ?? ['the selected route'], recommended: false,
+    } : baseNeed;
     const make = (stack: BagStack, p: Partial<CleanupRec> & Pick<CleanupRec, 'action' | 'reason'>): CleanupRec => ({
       key, name, ...(stack.id !== undefined ? { id: stack.id } : {}), noted: !!stack.noted, qty: stack.count, have, keepQty: need?.count ?? 0, proceeds: null, short: '', ...p,
     });
