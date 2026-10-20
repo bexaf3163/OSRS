@@ -1032,3 +1032,5 @@ SSE slow-reader isolation is documented in `docs/CODEX_SSE_HANDOFF.md`. Keep soc
 Selected-route reserves and cleanup protection are documented in `docs/CODEX_RESERVES_HANDOFF.md`. Preserve consumable addition, one-time alternative allocation and skip-versus-completion disposal guards. Heterogeneous alternatives remain conservatively protected pending source-level allocation.
 
 Funding execution is documented in `docs/CODEX_FUNDING_EXECUTION_HANDOFF.md`: tool acquisition must not suppress inputs; repeated processing trips prepare their inputs again; output goals use affordable first-batch quantities. Sale observation requires comparable total-coin baselines, with manual fallback for old/unknown data. GE windows, travel and live acceptance remain open.
+
+Progress write receipts are documented in `docs/CODEX_WRITE_STATUS_HANDOFF.md`. Preserve the additive checked preload API, debounced physical acknowledgement, independent browser/file results and stale-result guards. An IPC send or unavailable browser store must not count as a successful file save. Exact-tree native write-failure acceptance is tracked separately.

@@ -62,6 +62,8 @@ export interface DesktopBridge {
   /** Progress as a file next to the app's data (in the portable version, next to the exe). */
   loadProgressFile(profileId?: string): string | null;
   saveProgressFile(json: string, profileId?: string): void;
+  /** Resolves after the debounced physical write; absent on older desktop builds. */
+  saveProgressFileChecked?(json: string, profileId?: string): Promise<{ ok: boolean; error: string | null }>;
   /** The profile list as a file: the window's storage can be lost, the file is read when it is empty. */
   loadProfilesFile?(): string | null;
   saveProfilesFile?(json: string): void;

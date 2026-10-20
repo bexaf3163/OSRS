@@ -10,6 +10,8 @@ const { registerBridge } = require('./runelite-bridge.cjs');
 const { createLauncher } = require('./runelite-launcher.cjs');
 const { createUpdater } = require('./updater.cjs');
 const { backupProgress, dailyBackup, latestCopy, readProgress, restoreFromCopies } = require('./progress-files.cjs');
+const { atomicWrite } = require('./atomic-write.cjs');
+const { createProgressWriter } = require('./progress-writer.cjs');
 
 // End-to-end checks use an empty home, never the player's profiles or backup folder: the source tree in development, and a packaged release
 // candidate (E2E_EXE=... npm run test:e2e). The variable only ever moves the data away from the player's, never toward it.
@@ -59,14 +61,7 @@ function readJson(name, fallback) {
 
 /** A write through a temporary file: if it fails in the middle of a write, the old file stays whole. */
 function writeAtomic(name, text) {
-  const target = file(name);
-  const tmp = `${target}.tmp`;
-  try {
-    fs.writeFileSync(tmp, text);
-    fs.renameSync(tmp, target);
-  } catch {
-    // The disk is unavailable — the window's localStorage is saved anyway.
-  }
+  return atomicWrite(file(name), text);
 }
 
 // --- Scale ---
@@ -126,27 +121,19 @@ if (!app.requestSingleInstanceLock()) {
   }
 
   // The progress is written on every change (a note — on every letter), so with a delay.
-  const pending = new Map();
-  const backedUp = new Set();
-  let progressTimer = null;
   /** A profile's progress file: the main one keeps the old progress.json. The identifier is letters and digits only. */
   const progressFile = (id) => (/^[a-z0-9]{1,12}$/.test(String(id)) && id !== 'main' ? `progress-${id}.json` : 'progress.json');
-  function flushProgress() {
-    clearTimeout(progressTimer);
-    for (const [name, json] of pending) {
-      if (!backedUp.has(name)) {
-        // The first write of the session: the earlier whole file stays as a copy (progress.bak.json).
-        backedUp.add(name);
-        backupProgress(app.getPath('userData'), name);
+  const progressWriter = createProgressWriter({
+    write: writeAtomic,
+    backup: name => backupProgress(app.getPath('userData'), name),
+    afterFlush: () => {
+      // The freshest copy follows every change, so a deleted folder loses seconds, not an hour.
+      if (ui.backupOff !== true) {
+        try { latestCopy(app.getPath('userData'), autoCopyDir); } catch { /* the copies folder is unavailable */ }
       }
-      writeAtomic(name, json);
-    }
-    pending.clear();
-    // The freshest copy follows every change, so a deleted folder loses seconds, not an hour.
-    if (ui.backupOff !== true) {
-      try { latestCopy(app.getPath('userData'), autoCopyDir); } catch { /* the copies folder is unavailable */ }
-    }
-  }
+    },
+  });
+  const flushProgress = () => progressWriter.flush();
 
   ipcMain.handle('zoom:get', () => zoomState());
   ipcMain.on('zoom:set', (_e, s) => {
@@ -164,10 +151,11 @@ if (!app.requestSingleInstanceLock()) {
     e.returnValue = readProgress(app.getPath('userData'), new Date(), progressFile(profileId), true);
   });
   ipcMain.on('progress:save', (_e, json, profileId) => {
-    pending.set(progressFile(profileId), json);
-    clearTimeout(progressTimer);
-    progressTimer = setTimeout(flushProgress, 400);
+    progressWriter.queue(progressFile(profileId), json);
   });
+  // Additive API: old renderers keep their fire-and-forget call; new ones wait for
+  // the debounced physical write rather than mistaking IPC acceptance for success.
+  ipcMain.handle('progress:save-checked', (_e, json, profileId) => progressWriter.save(progressFile(profileId), String(json)));
 
   // The list of profiles lives in the window's storage; a file beside the progress keeps it if the storage is gone.
   ipcMain.on('profiles:load', (e) => {
@@ -175,9 +163,7 @@ if (!app.requestSingleInstanceLock()) {
     e.returnValue = readProgress(app.getPath('userData'), new Date(), 'profiles.json');
   });
   ipcMain.on('profiles:save', (_e, json) => {
-    pending.set('profiles.json', json);
-    clearTimeout(progressTimer);
-    progressTimer = setTimeout(flushProgress, 400);
+    progressWriter.queue('profiles.json', json);
   });
 
   // Progress copies: every hour into a folder outside the app (automatic) and into the folder chosen by the player (the app settings).

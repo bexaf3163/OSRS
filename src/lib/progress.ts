@@ -182,7 +182,8 @@ export function loadProgress(storage: Pick<Storage, 'getItem'> | undefined, know
 
 export function saveProgress(storage: Pick<Storage, 'setItem'> | undefined, p: Progress, key: string = STORAGE_KEY): boolean {
   try {
-    storage?.setItem(key, JSON.stringify(p));
+    if (!storage) return false;
+    storage.setItem(key, JSON.stringify(p));
     return true;
   } catch {
     return false;
