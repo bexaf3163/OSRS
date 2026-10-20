@@ -41,3 +41,24 @@ jobs:
           cache: gradle
       # The plugin is compiled against RuneLite 1.12.39; the tests compare the route quest names with the client API.
       - run: chmod +x gradlew && ./gradlew --no-daemon test
+
+  portable:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+          cache: gradle
+      - run: npm ci
+      - run: node node_modules/electron/install.js
+      - run: npm run dist:win
+      - name: Verify the isolated portable executable
+        shell: pwsh
+        run: ./.github/scripts/test-portable.ps1

@@ -56,9 +56,19 @@ jobs:
       - if: steps.v.outputs.exists == 'false'
         run: npm test
       - if: steps.v.outputs.exists == 'false'
+        run: ./runelite-bridge/gradlew.bat --project-dir ./runelite-bridge --no-daemon test
+      - if: steps.v.outputs.exists == 'false'
         run: npm run dist:win
       - if: steps.v.outputs.exists == 'false'
+        run: npx playwright install chromium
+      - if: steps.v.outputs.exists == 'false'
+        run: npm run test:ui
+      - if: steps.v.outputs.exists == 'false'
         run: npm run test:e2e
+      - if: steps.v.outputs.exists == 'false'
+        name: Verify the isolated portable executable before publishing
+        shell: pwsh
+        run: ./.github/scripts/test-portable.ps1
       - if: steps.v.outputs.exists == 'false'
         uses: softprops/action-gh-release@v2
         with:

@@ -1,5 +1,5 @@
 // An end-to-end check of the real Electron: the window opens, the bridge answers, the progress is written to disk as a file.
-// Run: npm run build && npm run test:e2e (a display is needed — it does not run on CI; locally on Windows/Mac/Linux).
+// Run: npm run build && npm run test:e2e (a display is needed; Windows CI also checks the packaged EXE).
 // A release candidate: E2E_EXE=<path to OSRS-Put-x.y.z-portable.exe> npm run test:e2e (the exe in a folder of its own).
 //
 // Safety: the data and "AppData" are in a temporary folder, RuneLite is not started (LOCALAPPDATA is empty), and the app's bridge
@@ -177,6 +177,15 @@ try {
   const saved = existsSync(file) ? (JSON.parse(readFileSync(file, 'utf8')) as { steps?: Record<string, string> }) : {};
   expect(Object.values(saved.steps ?? {}).includes('done'), 'progress: the marked step is in the file');
   expect(!existsSync(`${file}.tmp`), 'progress: no temporary write file is left');
+
+  // Exercise the recovery through the native preload/file reader, not only the browser transport stub.
+  await page.evaluate(() => localStorage.setItem('osrs-put:progress', '{broken'));
+  await page.reload();
+  await page.waitForTimeout(2500);
+  const recovered = JSON.parse(readFileSync(file, 'utf8')) as { steps?: Record<string, string> };
+  expect(Object.entries(saved.steps ?? {}).every(([id, value]) => recovered.steps?.[id] === value), 'progress recovery: a damaged browser record cannot erase the native file marks');
+  expect(await page.evaluate(() => localStorage.getItem('osrs-put:progress:recovery:local')) === '{broken', 'progress recovery: the damaged native browser record is preserved');
+  expect(await page.locator('.progress-storage-warning').count() === 0, 'progress recovery: valid native file recovery leaves saving enabled');
 
   expect(!errors.length, `console: no errors ${errors.join('; ')}`);
   if (exe) {
