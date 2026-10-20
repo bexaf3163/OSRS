@@ -13,6 +13,11 @@ const REQUEST_TIMEOUT_MS = 1500;
 /** The plugin sends a ping every 15 seconds; silence longer than that — the connection is dead. */
 const IDLE_TIMEOUT_MS = 45_000;
 const MAX_BODY = 64 * 1024;
+// Protocol 6 combines several parts in /prep-plan. Keep this equal to BridgeServer.MAX_SNAPSHOT.
+const MAX_SNAPSHOT = 384 * 1024;
+// Status/events can include the whole known bank, unlike a small command body.
+const MAX_RESPONSE = 384 * 1024;
+const MAX_EVENT = 384 * 1024;
 
 function request({ method, path, body }) {
   return new Promise((resolve) => {
@@ -21,8 +26,9 @@ function request({ method, path, body }) {
       return;
     }
     const data = body === undefined ? null : JSON.stringify(body);
-    if (data && data.length > MAX_BODY) {
-      resolve({ ok: false, status: 0 });
+    const limit = path === '/prep-plan' ? MAX_SNAPSHOT : MAX_BODY;
+    if (data && Buffer.byteLength(data, 'utf8') > limit) {
+      resolve({ ok: false, status: 413, data: { status: 'error', error: 'body too large', limitBytes: limit } });
       return;
     }
     const req = http.request({
@@ -33,13 +39,23 @@ function request({ method, path, body }) {
       timeout: REQUEST_TIMEOUT_MS,
       headers: { 'X-OSRS-Path': '1', ...(data ? { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(data) } : {}) },
     }, (res) => {
-      let text = '';
-      res.setEncoding('utf8');
+      const chunks = [];
+      let bytes = 0;
+      let tooLarge = false;
       res.on('data', (chunk) => {
-        text += chunk;
-        if (text.length > MAX_BODY) req.destroy();
+        if (tooLarge) return;
+        bytes += chunk.length;
+        if (bytes > MAX_RESPONSE) {
+          tooLarge = true;
+          resolve({ ok: false, status: 413, data: { status: 'error', error: 'response too large', limitBytes: MAX_RESPONSE } });
+          req.destroy();
+          return;
+        }
+        chunks.push(chunk);
       });
       res.on('end', () => {
+        if (tooLarge) return;
+        const text = Buffer.concat(chunks).toString('utf8');
         let json;
         try { json = text ? JSON.parse(text) : undefined; } catch { json = undefined; }
         resolve({ ok: res.statusCode >= 200 && res.statusCode < 300, status: res.statusCode, data: json });
@@ -54,18 +70,34 @@ function request({ method, path, body }) {
 }
 
 /** Parsing text/event-stream: the events are separated by an empty line, the data is in the "data:" lines. */
-function sseParser(onData) {
+function sseParser(onData, onOverflow = () => {}) {
   let buf = '';
+  let failed = false;
+  let pendingCR = false;
   return (chunk) => {
+    if (failed) return;
+    // A CRLF separator may itself be split between network chunks.
+    if (pendingCR && chunk.startsWith('\n')) chunk = chunk.slice(1);
+    pendingCR = chunk.endsWith('\r');
     buf += chunk.replace(/\r\n?/g, '\n');
     let at;
     while ((at = buf.indexOf('\n\n')) >= 0) {
       const block = buf.slice(0, at);
+      if (Buffer.byteLength(block, 'utf8') > MAX_EVENT) {
+        failed = true;
+        buf = '';
+        onOverflow();
+        return;
+      }
       buf = buf.slice(at + 2);
       const data = block.split('\n').filter((l) => l.startsWith('data:')).map((l) => l.slice(5).replace(/^ /, '')).join('\n');
       if (data) onData(data);
     }
-    if (buf.length > MAX_BODY) buf = '';
+    if (Buffer.byteLength(buf, 'utf8') > MAX_EVENT) {
+      failed = true;
+      buf = '';
+      onOverflow();
+    }
   };
 }
 
@@ -105,7 +137,7 @@ function registerBridge(ipcMain) {
       }
       send('bridge:events-state', 'open');
       res.setEncoding('utf8');
-      res.on('data', sseParser((data) => send('bridge:event', data)));
+      res.on('data', sseParser((data) => send('bridge:event', data), fail));
       res.on('end', fail);
       res.on('error', fail);
     });
@@ -123,4 +155,4 @@ function registerBridge(ipcMain) {
   ipcMain.on('bridge:events-close', (event) => closeStream(event.sender.id));
 }
 
-module.exports = { registerBridge, sseParser, PATHS };
+module.exports = { registerBridge, request, sseParser, PATHS, MAX_BODY, MAX_SNAPSHOT, MAX_RESPONSE, MAX_EVENT };

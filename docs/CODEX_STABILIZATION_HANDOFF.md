@@ -22,7 +22,7 @@ No version bump or release is included in these stabilization commits. Keep them
 Verification: 1,601 Vitest tests passed at this checkpoint, including new recovery/profile/file cases; build and data validation passed; Java testClasses passed. The full browser UI smoke passed, including six new assertions through the actual StoreProvider.
 Native source Electron E2E was attempted in a disposable home but the process exited before its debugging endpoint was available (`2147483651`). This is NOT a successful native/portable check. Do not report live-game verification.
 
-Remaining T01 follow-up: exercise explicit import/reset and cross-window corruption through the UI; verify recovery on a packaged executable and storage-write error reporting. Do not infer completion of every data-integrity issue from parser tests.
+Follow-up browser acceptance passed: explicit compatible import resumes saving while retaining the original recovery copy; reset saves a fresh state; an unsupported cross-window event preserves the working file and pauses saving. The native E2E now also exercises corrupted-browser/valid-file recovery, but that new native case has not passed locally. Remaining T01: packaged verification and storage-write error reporting. Do not infer completion of every data-integrity issue from parser tests.
 
 ## T02: update-cache integrity
 
@@ -45,12 +45,27 @@ Remaining T01 follow-up: exercise explicit import/reset and cross-window corrupt
 - Explicit header disclosure is respected while travelling and at the Exchange. Default disclosure, position, typography and the single-overlay layout are retained.
 - The full Java suite passed (587 tests). Closed/open render fixtures were generated; these are test images, not live-game screenshots. Saved placement, Alt-drag and click hit regions still need live acceptance.
 
+## T08: bridge payload limits (partial)
+
+- The desktop now matches the plugin's existing UTF-8 request limits: 64 KiB for small commands, 384 KiB for the complete `/prep-plan` snapshot. The small-command bound was not relaxed.
+- An oversized request or response returns 413 with a size explanation instead of status 0 (unreachable). The guide shows one explanation per failing content key; its snapshot rejection does not turn a reachable plugin offline.
+- Desktop responses and individual SSE blocks have a bounded 384 KiB budget. Large bank events can cross the old 64 KiB boundary. Complete and fragmented event blocks follow the same byte limit; overflow closes the stream for normal reconnection instead of discarding a prefix and interpreting a tail as fresh data. Split CRLF separators are handled.
+- Tests cover matching Java constants, exact/one-byte-over request boundaries, Unicode, every real route target through an HTTP transport, a large status response and fragmented/oversized events. The plugin HTTP test also accepts exactly 384 KiB and rejects one more byte without applying it.
+- Verification at this checkpoint: all 1,616 Vitest tests, build, data checks and 588 Java tests passed. The focused browser recovery/size-refusal scenarios passed. No live RuneLite check is claimed.
+- Still open in T08: accepted-vs-applied sequence ordering and session lifetime. T09 Java SSE backpressure also remains open. The new desktop buffer bound does not solve slow-client writes on the game thread.
+
+## T15: release verification gates (pending CI)
+
+- Pull requests now have a Windows job that builds the real portable EXE and runs the existing native E2E against an isolated copy, alone in a disposable runner directory.
+- Release now gates publication on the full Java suite, browser UI smoke, source Electron E2E and packaged EXE E2E. The helper verifies that the source/candidate digest matches and the publication artifact has not changed during its test.
+- These workflow additions do not publish anything on this branch and do not bump the version. Native source execution was blocked locally before window startup; the Windows CI result is required before calling portable acceptance passed.
+
 ## Still open
 
 - Block 2b: Path simplification, ownership semantics, stale async responses and logout/account lifecycle.
 - Block 3: combat plan candidates, complete costs, bones/XP ordering and meaningful equipment preparation.
 - Block 4: Skills availability, funding batch limits and complete acquisition plans.
 - Block 5: final release gates, packaged-artifact verification, live acceptance and review package.
-- Other independent-audit findings: exact Java/TS item quantities, notes vs usable items, shared reserves, prerequisites vs skips, bridge limits/order/backpressure and dependency advisories.
+- Other independent-audit findings: exact Java/TS item quantities, notes vs usable items, shared reserves, prerequisites vs skips, bridge ordering/backpressure and dependency advisories.
 
 Record each follow-up here with its actual verification scope. Automated, browser, native and live-game checks are different evidence levels.

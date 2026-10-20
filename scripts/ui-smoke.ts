@@ -24,6 +24,8 @@ interface Mock {
   market?: boolean;
   /** The plugin does not answer (RuneLite is not running). */
   offline?: boolean;
+  /** A reachable bridge rejects the guide snapshot for its size. */
+  oversizedSnapshot?: boolean;
   /** Windows display scaling (1.25 = 125%): the device pixel ratio; the viewport width passed is then in CSS pixels. */
   scale?: number;
 }
@@ -64,6 +66,7 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
           if (m.offline) return { ok: false, status: 0, data: null };
           // __status: what a scenario changes in the plugin's answer after the page has loaded (the quest cursor moving on).
           if (path === '/status') return { ok: true, status: 200, data: { status: 'ok', inGame: true, activeStepId: null, shortestPath: true, ...(m.status ?? {}), ...((w.__status as Record<string, unknown>) ?? {}) } };
+          if (path === '/prep-plan' && m.oversizedSnapshot) return { ok: false, status: 413, data: { error: 'body too large' } };
           return { ok: true, status: 200, data: { ok: true } };
         },
         openEvents: (onEvent: (d: string) => void, onState: (s: string) => void) => {
@@ -169,8 +172,46 @@ async function run(browser: Browser) {
     expect(await page.locator('.progress-storage-warning').isVisible(), 'progress recovery: unsupported file shows a saving-paused warning');
     expect(await page.evaluate(() => (window as unknown as { __saved?: string }).__saved === undefined), 'progress recovery: an unsupported save is not automatically overwritten');
     expect(!errors.length, 'progress recovery: unsupported format does not crash the page');
+    await page.getByRole('tab', { name: 'Progress and copies', exact: true }).click();
+    const imported = progressBefore('S4-03', { notes: { 'S4-03': 'explicit compatible import' } });
+    await page.locator('input[type="file"]').setInputFiles({ name: 'recovery.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(imported)) });
+    await page.getByRole('button', { name: 'Replace', exact: true }).click();
+    await page.waitForTimeout(400);
+    expect(await page.locator('.progress-storage-warning').count() === 0, 'progress recovery: explicit compatible import resumes saving');
+    expect(await page.evaluate(() => JSON.parse((window as unknown as { __saved: string }).__saved).notes['S4-03']) === 'explicit compatible import', 'progress recovery: the explicitly imported progress is saved');
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress:recovery:file')!).version) === 99, 'progress recovery: explicit import retains the unsupported original');
+    await page.getByRole('button', { name: 'Reset progress', exact: true }).click();
+    await page.getByRole('button', { name: 'Yes, reset everything', exact: true }).click();
+    await page.waitForTimeout(400);
+    expect(await page.evaluate(() => Object.keys(JSON.parse((window as unknown as { __saved: string }).__saved).steps).length) === 0, 'progress recovery: explicit reset saves a fresh state after recovery');
+    expect(!errors.length, 'progress recovery: import and reset have no page errors');
     await page.context().close();
   }
+  {
+    const { page, errors } = await open(browser, 1280, { offline: true, progress: progressBefore('S3-05') }, '#/settings');
+    const before = await page.evaluate(() => (window as unknown as { __saved: string }).__saved);
+    await page.evaluate(() => {
+      const bad = JSON.stringify({ version: 99, steps: {} });
+      localStorage.setItem('osrs-put:progress', bad);
+      window.dispatchEvent(new StorageEvent('storage', { key: 'osrs-put:progress', newValue: bad }));
+    });
+    await page.waitForTimeout(400);
+    expect(await page.locator('.progress-storage-warning').isVisible(), 'progress recovery: an unsupported cross-window update pauses saving');
+    expect(await page.evaluate(() => (window as unknown as { __saved: string }).__saved) === before, 'progress recovery: cross-window corruption cannot overwrite the working file');
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress:recovery:local')!).version) === 99 && !errors.length, 'progress recovery: the cross-window source is preserved without a crash');
+    await page.context().close();
+  }
+  {
+    const { page, errors } = await open(browser, 1280, {
+      oversizedSnapshot: true, progress: progressBefore('S3-05'), status: { protocol: 6, pluginVersion: '2.74.0', activeStepId: 'S3-05' },
+      localStorage: { 'osrs-put:active-step': 'S3-05' },
+    }, '#/step/S3-05');
+    await page.getByText(/The game guide could not sync: its data exceeds/).waitFor({ timeout: 5000 });
+    expect(await page.locator('.bridge-indicator.is-online').count() === 1, 'bridge limits: snapshot 413 does not mark a reachable game offline');
+    expect(!errors.length, 'bridge limits: snapshot refusal has an explanation without a page crash');
+    await page.context().close();
+  }
+  if (process.env.UI_ONLY === 'stabilization') return;
   if (process.env.UI_ONLY === 'funding') { await fundingScenarios(browser); return; }
   if (process.env.UI_ONLY === 'combat') { await combatRouteScenarios(browser); return; }
   if (process.env.UI_ONLY === 'shopping') { await shoppingScenarios(browser); return; }

@@ -11,6 +11,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -170,6 +171,20 @@ public class PrepSnapshotTest
 			huge.append('x');
 		}
 		assertEquals(413, post(huge.append("\"}}").toString()).statusCode());
+	}
+
+	@Test
+	public void snapshotLimitIsUtf8BytesAndIncludesTheBoundary() throws Exception
+	{
+		String prefix = "{\"v\":6,\"seq\":400,\"padding\":\"食🙂";
+		String suffix = "\"}";
+		int overhead = (prefix + suffix).getBytes(StandardCharsets.UTF_8).length;
+		String exact = prefix + "x".repeat(BridgeServer.MAX_SNAPSHOT - overhead) + suffix;
+		assertEquals(BridgeServer.MAX_SNAPSHOT, exact.getBytes(StandardCharsets.UTF_8).length);
+		assertEquals(200, post(exact).statusCode());
+		assertEquals(1, received.size());
+		assertEquals(413, post(exact + " ").statusCode());
+		assertEquals("an oversized snapshot never reaches the listener", 1, received.size());
 	}
 
 	@Test

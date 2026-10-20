@@ -342,6 +342,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
   /** Already handled auto-marks: one event does not mark a step twice and does not move the route twice. */
   const handled = useRef(new Set<string>());
   const nonce = useRef(0);
+  const oversizedSnapshotKey = useRef<string | null>(null);
 
   /** Send the snapshot now. true — the plugin received it (or already had the same). */
   const flushSnapshot = useCallback(async (): Promise<boolean> => {
@@ -352,7 +353,18 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     const seq = nextSeq(sn.seq);
     sn.seq = seq;
     const r = await postPrepPlan(buildEnvelope(sn.parts, seq));
-    if (!r.ok) { if (sn.seq === seq) sn.sentKey = null; return false; }
+    if (!r.ok) {
+      if (sn.seq === seq) {
+        sn.sentKey = null;
+        if (r.status === 413 && oversizedSnapshotKey.current !== key) {
+          oversizedSnapshotKey.current = key;
+          logEvent(eventLog.current, { type: 'SNAPSHOT_REJECTED_413' });
+          latest.current.notify('The game guide could not sync: its data exceeds the bridge size limit. Your game connection is still being checked normally.');
+        }
+      }
+      return false;
+    }
+    oversizedSnapshotKey.current = null;
     // The answer of a late snapshot must not overwrite what was sent after it.
     if (sn.seq === seq) sn.sentKey = key;
     return true;
