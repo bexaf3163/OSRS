@@ -21,6 +21,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -433,6 +434,71 @@ public class BridgeServerTest
 	}
 
 	/** Open /events and put the data: lines into a queue. */
+	@Test public void pendingCurrentCompletionIsReplayedButOldTargetsAndCharactersAreNot() throws Exception
+	{
+		server.setInGame(true);
+		server.setPlayer("Stream Test");
+		String step = "{\"stepId\":\"S1-03\",\"title\":\"Cook\"}";
+		assertEquals(200, post("/active-step", step, BridgeServer.HEADER, "1").statusCode());
+		server.stepCompleted("S1-03");
+		server.setInGame(false);
+		server.setPlayer(null);
+		server.setInGame(true);
+		server.setPlayer("Stream Test");
+		BlockingQueue<String> first = new LinkedBlockingQueue<>();
+		try (Socket ignored = openEvents(first))
+		{
+			assertTrue(first.poll(3, TimeUnit.SECONDS).contains("STATUS"));
+			assertEquals("{\"type\":\"STEP_AUTO_COMPLETED\",\"stepId\":\"S1-03\"}", first.poll(3, TimeUnit.SECONDS));
+		}
+		assertEquals(200, post("/active-step", step.replace("S1-03", "S1-04"), BridgeServer.HEADER, "1").statusCode());
+		BlockingQueue<String> next = new LinkedBlockingQueue<>();
+		try (Socket ignored = openEvents(next))
+		{
+			assertTrue(next.poll(3, TimeUnit.SECONDS).contains("STATUS"));
+			assertNull(next.poll(200, TimeUnit.MILLISECONDS));
+		}
+		server.stepCompleted("S1-04");
+		server.setPlayer("Other Hero");
+		BlockingQueue<String> other = new LinkedBlockingQueue<>();
+		try (Socket ignored = openEvents(other))
+		{
+			assertTrue(other.poll(3, TimeUnit.SECONDS).contains("Other Hero"));
+			assertNull(other.poll(200, TimeUnit.MILLISECONDS));
+		}
+	}
+
+	@Test
+	public void stalledEventReaderDoesNotBlockTheBroadcastCaller() throws Exception
+	{
+		Socket socket = new Socket();
+		socket.setReceiveBufferSize(1024);
+		socket.connect(new java.net.InetSocketAddress(InetAddress.getLoopbackAddress(), server.getPort()));
+		java.util.concurrent.ExecutorService producer = java.util.concurrent.Executors.newSingleThreadExecutor();
+		try
+		{
+			socket.getOutputStream().write(("GET /events HTTP/1.1\r\nHost: 127.0.0.1:" + server.getPort() + "\r\n\r\n").getBytes(StandardCharsets.US_ASCII));
+			socket.getOutputStream().flush();
+			long until = System.nanoTime() + TimeUnit.SECONDS.toNanos(3);
+			while (server.streamCount() == 0 && System.nanoTime() < until) Thread.sleep(5);
+			assertEquals(1, server.streamCount());
+			List<Map<String, Object>> rows = new java.util.ArrayList<>();
+			for (int i = 0; i < 512; i++) rows.add(Map.of("name", "A bounded test inventory item " + i, "carried", 1, "noted", 0, "bank", 0));
+			long started = System.nanoTime();
+			java.util.concurrent.Future<?> sends = producer.submit(() -> {
+				for (int i = 0; i < 256; i++) server.owned(true, (long) i, rows);
+			});
+			try { sends.get(4, TimeUnit.SECONDS); }
+			catch (java.util.concurrent.TimeoutException e) { throw new AssertionError("A stalled SSE reader blocked the broadcast caller", e); }
+			System.out.println("Stalled-reader producer: 256 bounded inventory broadcasts in " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - started) + " ms");
+		}
+		finally
+		{
+			socket.close();
+			producer.shutdownNow();
+		}
+	}
+
 	private Socket openEvents(BlockingQueue<String> lines) throws IOException
 	{
 		Socket s = new Socket(InetAddress.getLoopbackAddress(), server.getPort());
