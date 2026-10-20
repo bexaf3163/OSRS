@@ -60,7 +60,7 @@ function pageTitle(page: Page, param?: string): string {
 
 export function App() {
   const route = useRoute();
-  const { mode } = useStore();
+  const { mode, persistenceWarning } = useStore();
   const [searchOpen, setSearchOpen] = useState(false);
 
   // "/" opens the search if the focus is not in an input field.
@@ -165,6 +165,7 @@ export function App() {
       <main id="main" tabIndex={-1} className={compact ? 'is-compact' : undefined}>
         <UpdateBanner />
         <ProfileBanner />
+        {persistenceWarning && <div className="plaque plaque-warning progress-storage-warning" role="alert">{persistenceWarning} <a href="#/settings">Settings</a></div>}
         <PageBoundary resetKey={`${route.page}/${route.param ?? ''}`}><SectionShell key={route.page} page={route.page} param={route.param}>{content}</SectionShell></PageBoundary>
       </main>
         </div>

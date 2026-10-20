@@ -95,6 +95,7 @@ export interface Normalized {
 /** Brings something that looks like progress to the current shape. null if it is not progress at all. */
 export function normalizeProgress(raw: unknown, known: Known): Normalized | null {
   if (!isObject(raw)) return null;
+  if (raw.version !== undefined && raw.version !== 1 && raw.version !== 2 && raw.version !== PROGRESS_VERSION) return null;
   if (!isObject(raw.steps) && !isObject(raw.levels) && !isObject(raw.notes)) return null;
   const p = emptyProgress();
   let dropped = 0;
@@ -158,7 +159,9 @@ export function normalizeProgress(raw: unknown, known: Known): Normalized | null
       const ticks: Record<string, true> = {};
       for (const [key, v] of Object.entries(raw.tasksDone)) {
         const m = /^(S\d-\d{2}):[a-z0-9-]{1,40}$/.exec(key);
-        if (v === true && m && known.stepIds.has(m[1])) ticks[key] = true;
+        if (!m || v !== true) continue;
+        const id = fromV2 ? V3_FROM_V2[m[1]] ?? m[1] : m[1];
+        if (known.stepIds.has(id)) ticks[`${id}${key.slice(m[1].length)}`] = true;
       }
       if (Object.keys(ticks).length) p.tasksDone = ticks;
     }

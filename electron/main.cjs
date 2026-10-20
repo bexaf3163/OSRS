@@ -161,7 +161,7 @@ if (!app.requestSingleInstanceLock()) {
   });
   ipcMain.on('progress:load', (e, profileId) => {
     flushProgress();
-    e.returnValue = readProgress(app.getPath('userData'), new Date(), progressFile(profileId));
+    e.returnValue = readProgress(app.getPath('userData'), new Date(), progressFile(profileId), true);
   });
   ipcMain.on('progress:save', (_e, json, profileId) => {
     pending.set(progressFile(profileId), json);

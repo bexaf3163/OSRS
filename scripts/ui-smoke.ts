@@ -154,6 +154,23 @@ const text = async (page: Page, sel: string) => {
 };
 
 async function run(browser: Browser) {
+  // Recovery uses the real StoreProvider: a parser test alone would not catch its automatic save overwriting a valid source.
+  {
+    const progress = progressBefore('S3-05', { notes: { 'S3-05': 'recovered from disk' } });
+    const { page, errors } = await open(browser, 1280, { offline: true, progress, localStorage: { 'osrs-put:progress': '{broken' } }, '#/settings');
+    const saved = await page.evaluate(() => JSON.parse((window as unknown as { __saved: string }).__saved));
+    expect(saved.notes['S3-05'] === 'recovered from disk', 'progress recovery: damaged browser storage cannot beat the valid file');
+    expect(await page.evaluate(() => localStorage.getItem('osrs-put:progress:recovery:local')) === '{broken', 'progress recovery: the damaged source is kept');
+    expect(await page.locator('.progress-storage-warning').count() === 0 && !errors.length, 'progress recovery: recovered progress saves normally without errors');
+    await page.context().close();
+  }
+  {
+    const { page, errors } = await open(browser, 1280, { offline: true, progress: { ...progressBefore('S3-05'), version: 99 } }, '#/settings');
+    expect(await page.locator('.progress-storage-warning').isVisible(), 'progress recovery: unsupported file shows a saving-paused warning');
+    expect(await page.evaluate(() => (window as unknown as { __saved?: string }).__saved === undefined), 'progress recovery: an unsupported save is not automatically overwritten');
+    expect(!errors.length, 'progress recovery: unsupported format does not crash the page');
+    await page.context().close();
+  }
   if (process.env.UI_ONLY === 'funding') { await fundingScenarios(browser); return; }
   if (process.env.UI_ONLY === 'combat') { await combatRouteScenarios(browser); return; }
   if (process.env.UI_ONLY === 'shopping') { await shoppingScenarios(browser); return; }

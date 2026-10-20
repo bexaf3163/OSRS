@@ -1015,3 +1015,8 @@ Not done yet (block 2b): the audit ledger of every combat stage, mandatory quest
 - **App**: `Step.combatPlan` carries `now` (an item phase: "Collect 50 Big bones from Hill Giants") and `next` (the following phase without "Then: ");
   `stepGuide()` sends them as `guide.plan`; the plugin validates them (`ActiveTarget.Plan`). The training phase is told by the pace, not by `now`.
 - **Not verified in 2.74.0 yet**: see the live-check list in the release report.
+
+## Stabilization after 2.74.0
+
+Read `docs/CODEX_STABILIZATION_HANDOFF.md` before continuing repair blocks 2b–5. It records the owner's authorized continuation, baseline, focused changes,
+regression evidence and remaining work. Do not rerun the old prompts over already repaired code, and do not assume that a unit test is a live-game check.

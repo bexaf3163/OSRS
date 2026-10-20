@@ -122,16 +122,26 @@ export const gateAllows = (g: ProfileGate): boolean => g.kind === 'unknown' || g
 let cache: ProfilesState | null = null;
 const listeners = new Set<() => void>();
 
+function validProfileText(raw: string | null): boolean {
+  try { return raw !== null && Array.isArray((JSON.parse(raw) as { list?: unknown } | null)?.list); }
+  catch { return false; }
+}
+
 export function readProfiles(): ProfilesState {
   if (!cache) {
     let raw: string | null = null;
     try { raw = localStorage.getItem(PROFILES_KEY); } catch { /* no storage */ }
     // The window's storage is empty (a fresh install): the list comes back from the file next to the progress.
-    if (!raw) {
+    if (!validProfileText(raw)) {
+      if (raw !== null) {
+        try {
+          if (localStorage.getItem(`${PROFILES_KEY}:recovery`) === null) localStorage.setItem(`${PROFILES_KEY}:recovery`, raw);
+        } catch { /* keep the original source; reading never writes a fallback over it */ }
+      }
       try { raw = desktop()?.loadProfilesFile?.() ?? null; } catch { /* no desktop app */ }
     } else {
       // Profiles saved before the file existed: it is written once, so the copies carry the list too.
-      try { desktop()?.saveProfilesFile?.(raw); } catch { /* no desktop app */ }
+      try { desktop()?.saveProfilesFile?.(JSON.stringify(parseProfiles(raw))); } catch { /* no desktop app */ }
     }
     cache = parseProfiles(raw);
   }

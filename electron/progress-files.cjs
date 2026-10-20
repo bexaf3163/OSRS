@@ -19,8 +19,9 @@ function parses(text) {
 /**
  * The progress file text or null if there is no file or it is broken. A broken file is not deleted: its copy
  * stays nearby as progress.broken-<time>.json (the last three are kept).
+ * includeInvalid lets the renderer distinguish damage from an absent file and pause automatic saves; the original text is returned unchanged.
  */
-function readProgress(dir, now = new Date(), name = 'progress.json') {
+function readProgress(dir, now = new Date(), name = 'progress.json', includeInvalid = false) {
   const target = path.join(dir, name);
   let text;
   try {
@@ -38,7 +39,7 @@ function readProgress(dir, now = new Date(), name = 'progress.json') {
   } catch {
     // The copy failed — the file stays in place until the next write.
   }
-  return null;
+  return includeInvalid ? text : null;
 }
 
 /** A copy of the whole progress file before the first write of the session: progress.bak.json. A broken file does not become the copy. */

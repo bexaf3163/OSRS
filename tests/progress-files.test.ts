@@ -6,7 +6,7 @@ import { afterEach, describe, expect, it } from 'vitest';
 
 const { backupProgress, readProgress } = createRequire(import.meta.url)('../electron/progress-files.cjs') as {
   backupProgress: (dir: string) => void;
-  readProgress: (dir: string, now?: Date) => string | null;
+  readProgress: (dir: string, now?: Date, name?: string, includeInvalid?: boolean) => string | null;
 };
 
 const dirs: string[] = [];
@@ -14,6 +14,16 @@ const tmp = () => { const d = mkdtempSync(join(tmpdir(), 'osrs-progress-')); dir
 afterEach(() => { for (const d of dirs.splice(0)) rmSync(d, { recursive: true, force: true }); });
 
 describe('the progress file', () => {
+  it('the renderer can distinguish a damaged file from a new installation without losing its recovery copy', () => {
+    const d = tmp();
+    const raw = '{"version":3,"steps":';
+    writeFileSync(join(d, 'progress.json'), raw);
+    const at = new Date('2026-10-20T10:00:00Z');
+    expect(readProgress(d, at, 'progress.json', true)).toBe(raw);
+    expect(readFileSync(join(d, 'progress.json'), 'utf8')).toBe(raw);
+    expect(readFileSync(join(d, 'progress.broken-20261020T100000.json'), 'utf8')).toBe(raw);
+    expect(readProgress(tmp(), at, 'progress.json', true)).toBeNull();
+  });
   it('a whole file is read as is, a missing one — null', () => {
     const d = tmp();
     expect(readProgress(d)).toBeNull();

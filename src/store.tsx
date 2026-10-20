@@ -4,12 +4,13 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import type { GameMode, Progress, Stage, Step, StepStatus } from './types';
 import { BASE_QP, known, maxQpFor, stagesFor, stepById, stepsFor } from './data';
 import {
-  emptyProgress, gameModeOf, loadProgress, normalizeProgress, saveProgress, STORAGE_KEY,
+  emptyProgress, gameModeOf, saveProgress, STORAGE_KEY,
   withGameMode, withLevel, withLevels, withNote, withReactivated, withReviewed, withStep, withUpgradeDismissed, withOwnedManual, withSellRestrictions, withTaskDone,
 } from './lib/progress';
 import { profileStorageKey, readProfiles } from './lib/profiles';
 import { questPoints } from './lib/qp';
 import { desktop } from './lib/desktop';
+import { readProgressText, restoreProgress, type RestoredProgress } from './lib/progressStorage';
 import { samePicks } from './lib/methodPick';
 import { withTrainingMethod } from './lib/methodStep';
 import { sameFoodPicks, withFoodPlan, type FoodPick } from './lib/foodPlan';
@@ -23,6 +24,7 @@ export interface Toast {
 
 interface StoreValue {
   progress: Progress;
+  persistenceWarning: string | null;
   mode: GameMode;
   /** The steps and stages visible in the current mode. */
   steps: Step[];
@@ -72,19 +74,8 @@ function storage(): Storage | undefined {
 }
 
 /** localStorage or the desktop app's file — whichever is fresher. The file saves things if the browser storage is gone. */
-function initialProgress(): Progress {
-  const ls = storage();
-  let hasLocal = false;
-  try { hasLocal = Boolean(ls?.getItem(progressKey())); } catch { /* no storage */ }
-  const local = loadProgress(ls, known, progressKey());
-  try {
-    const text = desktop()?.loadProgressFile(readProfiles().active);
-    const fromFile = text ? normalizeProgress(JSON.parse(text), known)?.progress : undefined;
-    if (fromFile && (!hasLocal || Date.parse(fromFile.updatedAt) > Date.parse(local.updatedAt))) return fromFile;
-  } catch {
-    // A broken file — we stay on localStorage.
-  }
-  return local;
+function initialProgress(): RestoredProgress {
+  return restoreProgress(storage(), known, progressKey(), () => desktop()?.loadProgressFile(readProfiles().active) ?? null);
 }
 
 /** The progress key of the active profile: the main one keeps the old key. */
@@ -104,7 +95,11 @@ function persist(p: Progress) {
 const qpOf = (id: string) => stepById.get(id)?.qp ?? 0;
 
 export function StoreProvider({ children }: { children: ReactNode }) {
-  const [progress, setProgress] = useState<Progress>(initialProgress);
+  const [restored] = useState(initialProgress);
+  const [progress, setProgress] = useState<Progress>(restored.progress);
+  const canPersist = useRef(restored.writable);
+  const preserved = useRef(restored.preserved);
+  const [persistenceWarning, setPersistenceWarning] = useState(restored.warning);
   const [toast, setToast] = useState<Toast | null>(null);
   const current = useRef(progress);
   current.current = progress;
@@ -116,14 +111,24 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const fromOtherTab = useRef(false);
   useEffect(() => {
     if (fromOtherTab.current) fromOtherTab.current = false;
-    else persist(progress);
+    else if (canPersist.current) persist(progress);
   }, [progress]);
 
   useEffect(() => {
     const onStorage = (e: StorageEvent) => {
       if (e.key !== progressKey()) return;
+      const incoming = readProgressText(e.newValue, known);
+      if (incoming.kind !== 'valid') {
+        if (incoming.kind !== 'missing') {
+          const recovery = initialProgress();
+          preserved.current = recovery.preserved;
+          canPersist.current = false;
+          setPersistenceWarning(recovery.warning ?? 'Automatic saving is paused: saved progress changed in another window. Restore a backup in Settings.');
+        }
+        return;
+      }
       fromOtherTab.current = true;
-      setProgress(loadProgress(storage(), known, progressKey()));
+      setProgress(incoming.progress);
     };
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
@@ -187,6 +192,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const replace = useCallback((p: Progress, message: string) => {
+    if (!canPersist.current && !preserved.current) {
+      show('Progress could not be replaced safely. Export it and make a copy of the original data first.');
+      return;
+    }
+    canPersist.current = true;
+    setPersistenceWarning(null);
     const before = current.current;
     setProgress(p);
     show(message, before);
@@ -195,11 +206,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const reset = useCallback(() => {
     const before = current.current;
     // The game mode and the sale restrictions' answer are settings, not progress: a reset does not touch them.
-    setProgress({
+    replace({
       ...emptyProgress(), ...(before.gameMode ? { gameMode: before.gameMode } : {}), ...(before.sellRestrictions ? { sellRestrictions: before.sellRestrictions } : {}),
-    });
-    show('Progress reset', before);
-  }, [show]);
+    }, 'Progress reset');
+  }, [replace]);
 
   const undo = useCallback(() => {
     const t = toastRef.current;
@@ -232,10 +242,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const value = useMemo<StoreValue>(
     () => ({
       progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, setFoodPicks, setCombatPicks, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
-      toast, notify, undo, dismissToast,
+      toast, notify, undo, dismissToast, persistenceWarning,
     }),
     [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, setFoodPicks, setCombatPicks, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
-      toast, notify, undo, dismissToast],
+      toast, notify, undo, dismissToast, persistenceWarning],
   );
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }
