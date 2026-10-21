@@ -9,3 +9,5 @@ Plan comparison keeps its existing expandable risk disclosure. It distinguishes 
 Verification: four regression cases (the unknown-row cases failed before the fix); full Vitest 1,724 tests across 131 files; production build/TypeScript; check-data; Java testClasses; focused browser comparison checks at 390/1280 px, including the real folded warning. All passed locally. Clean cumulative CI is tracked by the draft PR. No live-game verification is claimed.
 
 Remaining: food alternatives and other legacy consumers still need per-row completeness review; a collection ceiling is not proof of missing stock. This does not complete the whole combat, inventory-packing or route audit.
+
+Clean cumulative CI passed at 0a1c7b7e2bbe8716d7025b2f5f46d58af0569d03, run 39606623250, including the full browser/Java and actual isolated Windows EXE gates.
