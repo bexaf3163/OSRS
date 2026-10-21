@@ -175,6 +175,7 @@ const text = async (page: Page, sel: string) => {
 
 async function run(browser: Browser) {
   if (process.env.UI_ONLY === 'item-food') { await retainedCombatFoodScenario(browser); return; }
+  if (process.env.UI_ONLY === 'stock-certainty') { await combatRouteScenarios(browser); return; }
   // Recovery uses the real StoreProvider: a parser test alone would not catch its automatic save overwriting a valid source.
   {
     const progress = progressBefore('S3-05', { notes: { 'S3-05': 'recovered from disk' } });
@@ -1954,6 +1955,7 @@ async function combatRouteScenarios(browser: Browser) {
     expect(await fold.evaluate((d) => (d as HTMLDetailsElement).open), `combat route (${width} px): the status line's "Why this plan?" opens the comparison itself`);
     const rows = await page.locator('.combat-plan-row').count();
     expect(rows >= 6, `combat route (${width} px): the folded comparison includes both collection orders (${rows})`);
+    expect(/Big bones bank quantity is not checked/.test(await text(page, '.combat-route')), `combat route (${width} px): an unreported item quantity is disclosed even when the bank was opened`);
     expect(!/drops sold about/.test(await text(page, '.combat-route')) && /Optional drops are not counted as income/.test(await text(page, '.combat-route')), `combat route (${width} px): XP-only plans do not advertise unscheduled loot sales`);
     expect(/Compared: .*Cow/.test(await text(page, '.combat-route')), `combat route (${width} px): it says what was compared`);
     if (process.env.UI_SHOTS) await page.locator('.combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-open-${width}.png` }).catch(() => {});

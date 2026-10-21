@@ -3,6 +3,7 @@ import type { Step } from '../types';
 import { nameKey, type OwnedState } from './checklist';
 import { estimateStep, foeVariants, stepGoals, type CombatEstimate, type StepEstimateContext } from './combatEstimate';
 import { GUARANTEED_DROPS } from './combatRoute/spots';
+import { heldExact } from './playerState';
 import { levelForXp, xpForLevel } from './xp';
 
 type Goal = ReturnType<typeof stepGoals>[number];
@@ -55,9 +56,10 @@ export function itemGoal(step: Pick<Step, 'foes' | 'inGame'>, owned: OwnedState 
   for (const it of trig) {
     const name = it.names.find(n => drops.some(d => nameKey(d) === nameKey(n)));
     if (!name) continue;
-    const o = owned?.items.get(nameKey(name));
-    const held = o && owned?.bankSeen ? o.carried + o.noted + (o.bank ?? 0) : o && !owned?.bankSeen ? o.carried + o.noted : null;
-    return { name, count: it.count, missing: Math.max(0, it.count - (held ?? 0)), held, unread: !owned?.bankSeen };
+    const stock = heldExact({ owned, bankSeen: owned?.bankSeen === true, equipment: {}, manual: {} }, name);
+    // Positive known stock reduces the ceiling; only this row's known bank count completes the observation.
+    const held = stock.total;
+    return { name, count: it.count, missing: Math.max(0, it.count - (held ?? 0)), held, unread: stock.bank === null };
   }
   return null;
 }
