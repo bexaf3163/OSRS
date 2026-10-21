@@ -62,3 +62,45 @@ jobs:
       - name: Verify the isolated portable executable
         shell: pwsh
         run: ./.github/scripts/test-portable.ps1
+      - name: Preserve the verified audit preview
+        if: github.head_ref == 'codex/audit-test-build' && github.event.pull_request.head.repo.full_name == github.repository
+        uses: actions/upload-artifact@v4
+        with:
+          name: audit-preview-portable
+          path: release/*.exe
+          if-no-files-found: error
+          retention-days: 14
+
+  audit-preview:
+    if: github.event_name == 'pull_request' && github.head_ref == 'codex/audit-test-build' && github.event.pull_request.head.repo.full_name == github.repository
+    needs: [checks, runelite-bridge, portable]
+    runs-on: windows-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: audit-preview-portable
+          path: audit-candidate
+      - name: Publish a separate test download after every gate passes
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          SOURCE_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $files = @(Get-ChildItem -LiteralPath audit-candidate -Filter '*.exe')
+          if ($files.Count -ne 1) { throw 'Expected exactly one verified portable EXE.' }
+          if ($env:SOURCE_SHA -notmatch '^[0-9a-f]{40}$') { throw 'Invalid source SHA.' }
+          $short = $env:SOURCE_SHA.Substring(0, 8)
+          $tag = "audit-test-$short"
+          $name = "OSRS-Path-audit-test-$short.exe"
+          $candidate = Join-Path audit-candidate $name
+          Move-Item -LiteralPath $files[0].FullName -Destination $candidate
+          $hash = (Get-FileHash -LiteralPath $candidate -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  $name" | Set-Content -LiteralPath audit-candidate/SHA256SUMS.txt -Encoding utf8
+          & gh release create $tag $candidate audit-candidate/SHA256SUMS.txt --prerelease --latest=false --target $env:SOURCE_SHA --title "OSRS Path audit test $short" --notes-file docs/CODEX_AUDIT_PREVIEW.md
+          if ($LASTEXITCODE -ne 0) { throw 'Audit preview publication failed.' }
