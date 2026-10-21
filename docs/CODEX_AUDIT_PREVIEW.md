@@ -1,6 +1,6 @@
 # OSRS Path audit preview — test build, audit still in progress
 
-This third portable preview includes cumulative repairs through draft PR #27 (remaining collection combat in food/shopping projections). The app's internal version remains **2.74.0**; the EXE filename and this prerelease identify the audit revision. This is not a completed audit or a replacement for the stable release. Stable auto-updates ignore prereleases. The first `audit-test-978cb6d6` preview predates PRs #15–27; the second `audit-test-3174b90e` predates PRs #24–27.
+This fourth portable preview includes cumulative repairs through draft PR #33: required-loot/food stock certainty, conflicting profile-source protection and confirmed profile writes/reloads. The app's internal version remains **2.74.0**; the EXE filename and this prerelease identify the audit revision. This is not a completed audit or a replacement for the stable release. Stable auto-updates ignore prereleases. The third preview `audit-test-402222c9` includes through #27 and excludes #30–33; the first two previews are older again.
 
 ## Included
 
@@ -21,6 +21,9 @@ This third portable preview includes cumulative repairs through draft PR #27 (re
 - Native profile-source protection before mirroring/binding, with one conditional recovery warning and preserved compatible browser recovery.
 - Contextual route explanations replace the universal amulet and wasted-Defence-reward claims.
 - Food/shopping keeps the required Hill Giant collection workload after Attack 40; known bone stock reduces remaining kills without adding a new visible skill goal.
+- Required combat loot and food alternatives preserve unreported per-item bank quantities. Confirmed stock reduces the goal or covers a trip; an unknown remainder cannot justify a purchase.
+- Supported but conflicting profile lists are preserved rather than silently mirrored. One conditional warning pauses unsafe profile-list changes and game sync pending recovery review.
+- Rare profile edits confirm the physical native write before publication/reload, retain failed edits for retry and reload Main correctly after deleting the active alternate profile. Frequent progress writes retain their existing debounced contract.
 - Claude's single expandable game guide is retained. This is primarily a correctness preview, not the final Path/Skills/Gear redesign.
 
 ## Test safely
@@ -35,6 +38,6 @@ The preview's Windows CI runs TypeScript/build, data validation, all Vitest test
 
 ## Still open
 
-Full combat trainer coverage, complete joint food/potion/loot packing, acquisition/travel and gear budgets; verified skill unlock/rate/budget coverage, compound Fishing/Cooking handover and actual combat-style Gear comparison; all route steps as a continuous progression; compatible-but-divergent profile sources, profile write receipts and remaining phase/unknown-state edge cases; Path simplification; residual dependency advisories; real-game screenshots and lifecycle/update acceptance. Automated estimates are not measured live combat timings. See `docs/CODEX_AUDIT_BACKLOG.md` and the individual handoffs in the source tree.
+Full combat trainer coverage, complete joint food/potion/loot packing, acquisition/travel and gear budgets; verified skill unlock/rate/budget coverage, compound Fishing/Cooking handover and actual combat-style Gear comparison; all route steps as a continuous progression; supported profile-conflict recovery UX, native read/secondary-backup errors and remaining phase/unknown-state edge cases; Path simplification; residual dependency advisories; real-game screenshots and lifecycle/update acceptance. Automated estimates are not measured live combat timings. Profile receipts are not a transaction across native/browser storage or a power-loss guarantee. See `docs/CODEX_AUDIT_BACKLOG.md` and the individual handoffs in the source tree.
 
 No claim of zero regressions or completion is made. Local native execution was blocked before window startup and local packaging hit an EPERM restriction; the separate Windows runner supplies artifact verification.
