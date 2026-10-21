@@ -67,6 +67,8 @@ export interface DesktopBridge {
   /** The profile list as a file: the window's storage can be lost, the file is read when it is empty. */
   loadProfilesFile?(): string | null;
   saveProfilesFile?(json: string): void;
+  /** Rare profile edits wait for the physical write before accepting a switch/reload. */
+  saveProfilesFileChecked?(json: string): { ok: boolean; error: string | null };
   /** A scheduled copy of progress (once a day into the chosen folder). Older builds do not have it. */
   backup?: {
     get(): Promise<BackupState>;

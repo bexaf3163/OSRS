@@ -130,7 +130,23 @@ export const guardedProfileGate = (s: ProfilesState, player: string | null): Pro
 let cache: ProfilesState | null = null;
 let sourceProtected = false;
 let sourceConflict = false;
+let saveError: string | null = null;
+let pendingSave: ProfilesState | null = null;
 const listeners = new Set<() => void>();
+const notify = () => { for (const l of listeners) l(); };
+
+function saveNativeProfiles(raw: string): boolean {
+  try {
+    const api = desktop();
+    if (api?.saveProfilesFileChecked) {
+      if (api.saveProfilesFileChecked(raw)?.ok !== true) throw Error('Native write failed');
+    } else api?.saveProfilesFile?.(raw);
+    return true;
+  } catch {
+    saveError = 'The profile file could not be saved. The current profile stays open; retry before switching or restarting.';
+    return false;
+  }
+}
 
 function preserveProfiles(key: string, raw: string): boolean {
   try {
@@ -164,23 +180,36 @@ export function readProfiles(): ProfilesState {
     const preserved = !damagedLocal || preserveProfiles(`${PROFILES_KEY}:recovery`, raw!);
     if (damagedFile || sourceConflict) preserveProfiles(`${PROFILES_KEY}:recovery:file`, file!);
     sourceProtected ||= sourceConflict || damagedFile || versionedProfiles(raw) || !preserved || (!localValid && !fileValid && damagedLocal);
+    cache = parseProfiles(localValid ? raw : fileValid ? file : null);
     if (localValid && !sourceProtected) {
       // Profiles saved before the file existed: it is written once, so the copies carry the list too.
-      try { desktop()?.saveProfilesFile?.(JSON.stringify(parseProfiles(raw))); } catch { /* no desktop app */ }
+      if (!saveNativeProfiles(JSON.stringify(cache))) pendingSave = cache;
     }
-    cache = parseProfiles(localValid ? raw : fileValid ? file : null);
   }
   return cache;
 }
 
-/** Whether the edit was accepted; physical native write receipts are a separate contract. */
+/** Publish after persistent sources accept the edit; an accepted active-profile change then reloads its progress. */
 export function writeProfiles(s: ProfilesState): boolean {
   readProfiles();
   if (sourceProtected) return false;
+  const changedActive = cache!.active !== s.active;
+  pendingSave = s;
+  const raw = JSON.stringify(s);
+  if (!saveNativeProfiles(raw)) { notify(); return false; }
+  try { localStorage.setItem(PROFILES_KEY, raw); }
+  catch {
+    saveError = 'The browser profile copy could not be saved. The current profile stays open; retry before switching or restarting.';
+    notify();
+    return false;
+  }
   cache = s;
-  try { localStorage.setItem(PROFILES_KEY, JSON.stringify(s)); } catch { /* it is remembered until restart */ }
-  try { desktop()?.saveProfilesFile?.(JSON.stringify(s)); } catch { /* no desktop app */ }
-  for (const l of listeners) l();
+  pendingSave = null;
+  saveError = null;
+  notify();
+  if (changedActive) {
+    try { location.reload(); } catch { /* there is no reload in tests */ }
+  }
   return true;
 }
 
@@ -193,10 +222,17 @@ export function useProfiles(): ProfilesState {
   return useSyncExternalStore(subscribeProfiles, readProfiles, readProfiles);
 }
 
+export const profileSaveError = (): string | null => saveError;
+export const useProfileSaveError = (): string | null => useSyncExternalStore(subscribeProfiles, profileSaveError, profileSaveError);
+
+export function retryProfileSave(): void {
+  const next = pendingSave ?? readProfiles();
+  writeProfiles(next);
+}
+
 /** Switch the profile: the window reloads, and progress is read again from the key and file of the new profile. */
 export function switchProfile(id: string): void {
   const s = readProfiles();
   if (!s.list.some((p) => p.id === id) || s.active === id) return;
-  if (!writeProfiles({ ...s, active: id })) return;
-  try { location.reload(); } catch { /* there is no reload in tests */ }
+  writeProfiles({ ...s, active: id });
 }

@@ -165,6 +165,10 @@ if (!app.requestSingleInstanceLock()) {
   ipcMain.on('profiles:save', (_e, json) => {
     progressWriter.queue('profiles.json', json);
   });
+  ipcMain.on('profiles:save-checked', (e, json) => {
+    try { e.returnValue = progressWriter.saveNow('profiles.json', String(json)); }
+    catch { e.returnValue = { ok: false, error: 'WRITE_FAILED' }; }
+  });
 
   // Progress copies: every hour into a folder outside the app (automatic) and into the folder chosen by the player (the app settings).
   const backupState = (error = null) => ({ dir: ui.backupDir || null, autoDir: ui.backupOff === true ? null : autoCopyDir, last: ui.backupLast || null, error });

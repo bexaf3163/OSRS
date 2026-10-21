@@ -201,10 +201,28 @@ try {
   expect(await page.evaluate(() => localStorage.getItem('osrs-put:progress:recovery:local')) === '{broken', 'progress recovery: the damaged native browser record is preserved');
   expect(await page.locator('.progress-storage-warning').count() === 0, 'progress recovery: valid native file recovery leaves saving enabled');
 
+  // Confirm a failed physical profile rename cannot be accepted by the actual preload.
+  // Only this run's disposable temporary path is blocked.
+  const profilesFile = join(dataDir, 'profiles.json');
+  const priorProfiles = readFileSync(profilesFile, 'utf8');
+  await page.evaluate(() => { location.hash = '#/settings'; });
+  await page.getByRole('tab', { name: 'Progress and copies', exact: true }).click();
+  mkdirSync(`${profilesFile}.tmp`);
+  try {
+    await page.locator('.profile-list').getByRole('button', { name: 'Rename', exact: true }).first().click();
+    await page.getByRole('textbox', { name: 'Profile name', exact: true }).fill('Confirmed native profile');
+    await page.locator('.profile-list').getByRole('button', { name: 'Save', exact: true }).click();
+    await page.waitForSelector('.profile-write-warning');
+    expect(readFileSync(profilesFile, 'utf8') === priorProfiles, 'profile write failure: physical refusal retains original native bytes');
+    expect(await page.getByRole('textbox', { name: 'Profile name', exact: true }).count() === 1, 'profile write failure: the unsaved rename stays editable');
+  } finally { rmdirSync(`${profilesFile}.tmp`); }
+  await page.getByRole('button', { name: 'Retry profile save', exact: true }).click();
+  await page.waitForFunction(() => !document.querySelector('.profile-write-warning'));
+  expect(JSON.parse(readFileSync(profilesFile, 'utf8')).list[0].name === 'Confirmed native profile', 'profile write retry: physical confirmation persists the intended rename');
+
   // A syntactically valid list with broken rows must not normalize into Main and overwrite
   // a valid native list containing another character. All paths belong to this disposable run.
   await page.evaluate(() => (window as unknown as { osrsDesktop: { loadProfilesFile(): string | null } }).osrsDesktop.loadProfilesFile());
-  const profilesFile = join(dataDir, 'profiles.json');
   const profiles = { active: 'main', list: [
     { id: 'main', name: 'Main', player: 'E2E Tester' },
     { id: 'nativealt', name: 'Native recovery alt', player: 'Alt tester' },

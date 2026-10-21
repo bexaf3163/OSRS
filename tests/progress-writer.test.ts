@@ -3,11 +3,28 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 type Result = { ok: boolean; error: string | null };
 const { createProgressWriter } = createRequire(import.meta.url)('../electron/progress-writer.cjs') as {
-  createProgressWriter(o: { write: (name: string, json: string) => Result; backup: (name: string) => void; afterFlush: () => void }): { queue: (name: string, json: string) => void; save: (name: string, json: string) => Promise<Result>; flush: () => void };
+  createProgressWriter(o: { write: (name: string, json: string) => Result; backup: (name: string) => void; afterFlush: () => void }): { queue: (name: string, json: string) => void; save: (name: string, json: string) => Promise<Result>; saveNow: (name: string, json: string) => Result; flush: () => void };
 };
 afterEach(() => vi.useRealTimers());
 
 describe('debounced physical save receipts', () => {
+  it('a checked profile write replaces queued older profile data and cannot be overwritten by its timer', async () => {
+    vi.useFakeTimers();
+    const write = vi.fn(() => ({ ok: true, error: null }));
+    const writer = createProgressWriter({ write, backup: vi.fn(), afterFlush: vi.fn() });
+    writer.queue('profiles.json', 'old');
+    expect(writer.saveNow('profiles.json', 'new')).toEqual({ ok: true, error: null });
+    expect(write.mock.calls).toEqual([['profiles.json', 'new']]);
+    await vi.runAllTimersAsync();
+    expect(write).toHaveBeenCalledOnce();
+  });
+
+  it('a checked profile write reports its physical failure rather than another pending file result', () => {
+    vi.useFakeTimers();
+    const writer = createProgressWriter({ write: name => ({ ok: name !== 'profiles.json', error: name === 'profiles.json' ? 'ENOSPC' : null }), backup: vi.fn(), afterFlush: vi.fn() });
+    writer.queue('progress.json', 'progress');
+    expect(writer.saveNow('profiles.json', 'profiles')).toEqual({ ok: false, error: 'ENOSPC' });
+  });
   it('coalesces rapid edits without acknowledging until the latest edit is written', async () => {
     vi.useFakeTimers();
     const write = vi.fn(() => ({ ok: true, error: null }));
