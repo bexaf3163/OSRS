@@ -63,7 +63,7 @@ jobs:
         shell: pwsh
         run: ./.github/scripts/test-portable.ps1
       - name: Preserve the verified audit preview
-        if: (github.head_ref == 'codex/audit-test-build' || github.head_ref == 'codex/audit-test-build-2' || github.head_ref == 'codex/audit-test-build-3' || github.head_ref == 'codex/audit-test-build-4') && github.event.pull_request.head.repo.full_name == github.repository
+        if: (github.head_ref == 'codex/audit-test-build' || github.head_ref == 'codex/audit-test-build-2' || github.head_ref == 'codex/audit-test-build-3' || github.head_ref == 'codex/audit-test-build-4' || github.head_ref == 'codex/audit-test-build-5') && github.event.pull_request.head.repo.full_name == github.repository
         uses: actions/upload-artifact@v4
         with:
           name: audit-preview-portable
@@ -72,7 +72,7 @@ jobs:
           retention-days: 14
 
   audit-preview:
-    if: github.event_name == 'pull_request' && (github.head_ref == 'codex/audit-test-build' || github.head_ref == 'codex/audit-test-build-2' || github.head_ref == 'codex/audit-test-build-3' || github.head_ref == 'codex/audit-test-build-4') && github.event.pull_request.head.repo.full_name == github.repository
+    if: github.event_name == 'pull_request' && (github.head_ref == 'codex/audit-test-build' || github.head_ref == 'codex/audit-test-build-2' || github.head_ref == 'codex/audit-test-build-3' || github.head_ref == 'codex/audit-test-build-4' || github.head_ref == 'codex/audit-test-build-5') && github.event.pull_request.head.repo.full_name == github.repository
     needs: [checks, runelite-bridge, portable]
     runs-on: windows-latest
     timeout-minutes: 10
@@ -102,5 +102,7 @@ jobs:
           Move-Item -LiteralPath $files[0].FullName -Destination $candidate
           $hash = (Get-FileHash -LiteralPath $candidate -Algorithm SHA256).Hash.ToLowerInvariant()
           "$hash  $name" | Set-Content -LiteralPath audit-candidate/SHA256SUMS.txt -Encoding utf8
-          & gh release create $tag $candidate audit-candidate/SHA256SUMS.txt --prerelease --latest=false --target $env:SOURCE_SHA --title "OSRS Path audit test $short" --notes-file docs/CODEX_AUDIT_PREVIEW.md
+          $handoff = Join-Path audit-candidate 'CLAUDE_NEXT_SESSION.md'
+          Copy-Item -LiteralPath docs/CLAUDE_NEXT_SESSION.md -Destination $handoff
+          & gh release create $tag $candidate audit-candidate/SHA256SUMS.txt $handoff --prerelease --latest=false --target $env:SOURCE_SHA --title "OSRS Path audit test $short" --notes-file docs/CODEX_AUDIT_PREVIEW.md
           if ($LASTEXITCODE -ne 0) { throw 'Audit preview publication failed.' }
