@@ -285,6 +285,27 @@ async function run(browser: Browser) {
   }
   if (process.env.UI_ONLY === 'skills') return;
   {
+    const stats = { crafting: 31, woodcutting: 36, attack: 40, strength: 40, defence: 33 };
+    const { page, errors } = await open(browser, 1280, {
+      zen: true, progress: progressBefore('S9-01', { gameMode: 'members', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S9-01' }, status: { protocol: 6, stats, activeStepId: 'S9-01' },
+      events: [{ type: 'STATS', stats }, { type: 'OWNED', bankSeen: true, items: [
+        { name: 'Knife', carried: 1, noted: 0, bank: 0 }, { name: 'Bronze axe', carried: 0, noted: 0, bank: 1 },
+      ] }],
+    }, '#/step/S9-01');
+    const plan = await page.evaluate(() => {
+      const posts = (window as unknown as { __posts: { path: string; body?: { plan?: {
+        lines: { name: string; timing: string; action?: string }[]; bankWithdrawals?: { itemName: string }[];
+      } } }[] }).__posts;
+      return posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.plan;
+    });
+    expect(plan?.lines.find(l => l.name === 'Bronze axe')?.timing === 'IN_STEP', 'Entrana: the game snapshot keeps the dungeon axe as an acquired-during-quest item');
+    expect(!plan?.bankWithdrawals?.some(l => l.itemName === 'Bronze axe'), 'Entrana: departure withdrawals do not tell the player to take the banked axe');
+    expect(await noOverflow(page) && !errors.length, 'Entrana: no overflow or console errors');
+    await page.context().close();
+  }
+  if (process.env.UI_ONLY === 'entrana') return;
+  {
     const { page, errors } = await open(browser, 1280, {
       zen: true, progress: progressBefore('S8-02'),
       status: { protocol: 6, questsDone: [], questPoints: 60 },
