@@ -347,6 +347,20 @@ async function run(browser: Browser) {
     expect(await noOverflow(page) && !errors.length, 'prerequisites: no overflow or page errors');
     await page.context().close();
   }
+  for (const width of [390, 1280]) {
+    const progress = progressBefore('S7-05', { gameMode: 'members', levels: { agility: 24 } });
+    progress.steps['S7-04'] = 'skipped';
+    const { page, errors } = await open(browser, width, {
+      progress, status: { protocol: 6, stats: { agility: 24 } }, events: [{ type: 'STATS', stats: { agility: 24 } }],
+    }, '#/step/S7-05');
+    expect((await page.locator('main').innerText()).includes('First S7-04'), `skill dependency (${width}): skipping below the goal does not unlock the quest`);
+    await page.evaluate(() => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'STATS', stats: { agility: 25 } }));
+    await page.waitForTimeout(900);
+    expect(!(await page.locator('main').innerText()).includes('First S7-04'), `skill dependency (${width}): reaching the actual level removes the redundant training blocker`);
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}').steps?.['S7-04']) === 'skipped', `skill dependency (${width}): the original skip mark is preserved`);
+    expect(await noOverflow(page) && !errors.length, `skill dependency (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
   if (process.env.UI_ONLY === 'prerequisites') return;
   {
     const oldGear = { equipment: [{ id: 1329, name: 'Mithril scimitar', slot: 'weapon' }], inventory: [], coins: 100, bankCoins: 200 };

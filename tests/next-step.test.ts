@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { GameMode, Progress, Step, StepStatus } from '../src/types';
 import { BASE_QP, stepsFor } from '../src/data';
-import { blockersOf, currentStage, nextStep, openAfter, questDependencyFacts } from '../src/lib/next-step';
+import { blockersOf, currentStage, nextStep, openAfter, questDependencyFacts, dependencyFacts } from '../src/lib/next-step';
 import { emptyProgress } from '../src/lib/progress';
 import { questPoints } from '../src/lib/qp';
 
@@ -94,6 +94,32 @@ describe('"What to do now"', () => {
   it('a partial quest milestone cannot be inferred from a completed quest list', () => {
     const partial = step({ id: 'P', inGame: { completionTrigger: { type: 'VARBIT_CHANGED', varbitId: 1, targetValue: 10 } } });
     expect(questDependencyFacts([partial], [])('P')).toBeUndefined();
+  });
+
+  it('only complete known level evidence can satisfy a skipped pure training producer', () => {
+    const a = step({ id: 'A', type: 'skill', inGame: { completionTrigger: { type: 'SKILL_LEVEL', levels: [{ skill: 'agility', level: 25 }, { skill: 'prayer', level: 43 }] } } });
+    const b = step({ id: 'B', requires: ['A'] });
+    const list = [a, b];
+    const p = progressWith({ A: 'skipped' });
+    for (const levels of [{ agility: 25 }, { agility: 25, prayer: 42 }, { agility: 25, prayer: NaN }]) {
+      const fact = dependencyFacts(list, null, skill => (levels as Record<string, number>)[skill]);
+      expect(fact('A')).toBeUndefined();
+      expect(blockersOf(b, p, 0, fact)?.steps).toEqual(['A']);
+    }
+    const fact = dependencyFacts(list, null, skill => ({ agility: 25, prayer: 43 } as Record<string, number>)[skill]);
+    expect(nextStep(list, p, 0, fact)?.id).toBe('B');
+    expect(openAfter(list, p, 'A', 0, fact)?.id).toBe('B');
+    expect(p.steps.A).toBe('skipped');
+  });
+
+  it('levels do not prove item-bearing training, carryover, partial quest milestones or real quest completion', () => {
+    const training = step({ id: 'T', type: 'skill', inGame: { completionTrigger: { type: 'SKILL_LEVEL', levels: [{ skill: 'attack', level: 40 }], items: [{ names: ['Big bones'], count: 50 }] } } });
+    const carrying: Step = { ...training, id: 'C', inGame: { completionTrigger: { type: 'SKILL_LEVEL', levels: [{ skill: 'attack', level: 40 }] } }, carryover: [{ item: 'Big bones', count: 50, forStep: 'B', where: 'bank', why: 'Retain the required objective.' }] };
+    const partial = step({ id: 'P', inGame: { completionTrigger: { type: 'VARBIT_CHANGED', varbitId: 1, targetValue: 40 } } });
+    const quest = step({ id: 'Q', inGame: { completionTrigger: { type: 'QUEST_COMPLETED', questName: 'Test Quest' } } });
+    const fact = dependencyFacts([training, carrying, partial, quest], [], () => 99);
+    expect(fact('T')).toBeUndefined(); expect(fact('C')).toBeUndefined(); expect(fact('P')).toBeUndefined();
+    expect(fact('Q')).toBe(false);
   });
 
   it('when everything is closed — null; the last F2P stage is 6, Members — 9', () => {
