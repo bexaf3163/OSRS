@@ -343,7 +343,7 @@ export function fixChainOf(
         if (seen.has(id)) continue;
         seen.add(id);
         const s = ctx.steps.find((x) => x.id === id);
-        if (s && !(fact(id) ?? isCompleted(ctx.progress, id))) visit(s, depth + 1);
+        if (s && !(fact(id, cur) ?? isCompleted(ctx.progress, id))) visit(s, depth + 1);
       }
     }
     if (cur.id !== step.id) {

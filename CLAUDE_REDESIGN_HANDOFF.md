@@ -1,3 +1,5 @@
+Consumer-specific skill prerequisites: [docs/CODEX_CONSUMER_SKILL_HANDOFF.md](docs/CODEX_CONSUMER_SKILL_HANDOFF.md). Reached consumer entry skills may satisfy that dependency edge; never turn this into global completion of a multi-skill producer.
+
 Post-fourth-preview Magic follow-up: [docs/CODEX_MAGIC_FUNDING_HANDOFF.md](docs/CODEX_MAGIC_FUNDING_HANDOFF.md). Preserve sale/coin uncertainty, owned elemental staff alternatives and honest comparison labels; this is not a net spell-supply planner.
 
 Latest repair checkpoint: [docs/CODEX_REPAIR_CHECKPOINT.md](docs/CODEX_REPAIR_CHECKPOINT.md), with source-only next route cases in [docs/CODEX_ROUTE_CONTINUATION_REVIEW.md](docs/CODEX_ROUTE_CONTINUATION_REVIEW.md). Follow the cumulative repair branch; do not reset to the earlier preview or interpret test success as all blocks 2b-5 complete.

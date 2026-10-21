@@ -183,6 +183,7 @@ const text = async (page: Page, sel: string) => {
 async function run(browser: Browser) {
   if (process.env.UI_ONLY === 'item-food') { await retainedCombatFoodScenario(browser); return; }
   if (process.env.UI_ONLY === 'magic-funding') { await magicFundingScenarios(browser); return; }
+  if (process.env.UI_ONLY === 'consumer-dependencies') { await consumerDependencyScenarios(browser); return; }
   if (!process.env.UI_ONLY) await magicFundingScenarios(browser);
   if (process.env.UI_ONLY === 'stock-certainty') { await combatRouteScenarios(browser); return; }
   // Recovery uses the real StoreProvider: a parser test alone would not catch its automatic save overwriting a valid source.
@@ -428,6 +429,7 @@ async function run(browser: Browser) {
     expect(await noOverflow(page) && !errors.length, `skill dependency (${width}): no overflow or console errors`);
     await page.context().close();
   }
+  await consumerDependencyScenarios(browser);
   if (process.env.UI_ONLY === 'prerequisites') return;
   {
     const oldGear = { equipment: [{ id: 1329, name: 'Mithril scimitar', slot: 'weapon' }], inventory: [], coins: 100, bankCoins: 200 };
@@ -2180,6 +2182,25 @@ async function gearScenarios(browser: Browser) {
       await shot(page, `connect-${width}`);
       await page.context().close();
     }
+  }
+}
+
+async function consumerDependencyScenarios(browser: Browser) {
+  for (const width of [390, 1280]) {
+    const stats = { crafting: 30, woodcutting: 36, ranged: 1, slayer: 1, cooking: 1 };
+    const progress = progressBefore('S9-01', { gameMode: 'members', levels: stats });
+    progress.steps['S8-04'] = 'skipped';
+    const { page, errors } = await open(browser, width, {
+      progress, localStorage: { 'osrs-put:active-step': 'S9-01' },
+      status: { protocol: 6, inGame: true, stats }, events: [{ type: 'STATS', stats }],
+    }, '#/step/S9-01');
+    expect((await page.locator('main').innerText()).includes('First S8-04'), `consumer skills (${width}): a missing actual entry skill retains the blocker`);
+    await page.evaluate(next => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'STATS', stats: next }), { ...stats, crafting: 31 });
+    await page.waitForTimeout(900);
+    expect(!(await page.locator('main').innerText()).includes('First S8-04'), `consumer skills (${width}): reached Lost City skills do not demand unrelated Ranged/Slayer/Cooking`);
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}').steps?.['S8-04']) === 'skipped', `consumer skills (${width}): the producer remains skipped, not completed`);
+    expect(await noOverflow(page) && !errors.length, `consumer skills (${width}): no overflow or console errors`);
+    await page.context().close();
   }
 }
 
