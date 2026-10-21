@@ -140,6 +140,20 @@ describe('S6-02 follows the training method of the real level', () => {
     expect(methodPoint('fi-fly')).toMatchObject({ x: LOCATIONS['Barbarian Village fishing spots'].x });
   });
 
+  it('a selected method has one matching map point and game tile, rather than future methods mixed into its target', () => {
+    for (const [level, bag] of [[1, {}], [25, {}], [42, { 'Lobster pot': 1 }]] as const) {
+      const r = resolved(level, bag);
+      const at = methodPoint(r.pick!)!;
+      expect(stepPoints(r.step)).toEqual([at]);
+      expect(initialPoint(r.step)).toBe(0);
+      const payload = toInGameTarget(r.step)!;
+      expect(payload.worldPoint).toMatchObject(at);
+      expect(payload.groundTiles).toEqual([at]);
+      expect(payload.completionTrigger).toEqual(step.inGame!.completionTrigger);
+      expect(payload.watchItems).toEqual(expect.arrayContaining(methodToolNames(step)));
+    }
+  });
+
   it('unknown stays unknown: no level keeps the step on its own list; a reached goal asks for no fishing tool', () => {
     const none = resolved(null);
     expect(none.pick).toBeUndefined();
