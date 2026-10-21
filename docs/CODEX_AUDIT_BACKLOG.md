@@ -9,7 +9,7 @@ Current work and evidence are in [the stabilization handoff](CODEX_STABILIZATION
 
 | ID | Priority | Current scope/status |
 | --- | --- | --- |
-| T01 | P1 | Progress recovery/migrations, physical write-error reporting and lossless browser profile-list mirror validation implemented. Packaged progress recovery/write-failure gates passed; new alternate-profile native gate and broader profile/file/backup acceptance remain tracked. |
+| T01 | P1 | Progress recovery/migrations, physical progress write-error reporting, lossless browser profile mirror and supported backup admission implemented. Packaged alternate-profile gate passed on PR20; shared native backup module awaits cumulative CI. Both-source/native profile quarantine, profile write receipts and broader recovery remain open. |
 | T02 | P1 | Update digest verification implemented/tested; a real isolated two-version update remains open. |
 | T03 | P1 | Additive exact counts, conservative legacy tool aggregation and notes/usable separation implemented in the item-contract follow-up. Exact-ID and complete eligibility parity remain open. |
 | T04 | P1 | Fingerprint, logout clearing, profile gating and delayed status/event guards implemented; final native/live lifecycle acceptance remains open. |
