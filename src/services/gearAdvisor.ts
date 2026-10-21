@@ -239,7 +239,9 @@ export interface DefenceBasis {
 
 export type Gain =
   | ({
-    kind: 'dps'; before: MeleeResult; after: MeleeResult; ratio: number; defenceBefore?: number; defenceAfter?: number; shieldLoss?: number;
+    kind: 'dps'; before: MeleeResult; after: MeleeResult;
+    /** Training value averaged over future Strength levels; this is not the current damage ratio. */
+    ratio: number; defenceBefore?: number; defenceAfter?: number; shieldLoss?: number;
     /** The new kit on the style that is best now, when the best style changes with it: "max hit 7 instead of 6 on Aggressive". */
     kept?: MeleeResult;
   } & Partial<DefenceBasis>)
@@ -570,6 +572,8 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
    */
   const worthDoing = (a: GearAction) => {
     const g = a.gain;
+    // A projected future breakpoint must not turn a current offensive downgrade into "do now" advice.
+    if (g.kind === 'dps' && g.after.dps < g.before.dps * 0.999) return false;
     const defenceOnly = g.kind === 'defence' || (g.kind === 'dps' && g.ratio < WORTH.dps);
     return !defenceOnly || g.hitBefore === undefined || g.hitAfter === undefined || g.hitBefore - g.hitAfter >= WORTH.hitDrop;
   };
@@ -768,7 +772,12 @@ export function gainText(a: Pick<GearAction, 'gain' | 'slot' | 'currentName'>): 
   else if (g.after.hitChance - g.before.hitChance >= 0.01) parts.push(`same max hit, more accurate${on(g.after.style)} (hit chance ${pc(g.before.hitChance)} → ${pc(g.after.hitChance)})`);
   // "Faster" only when the attack interval itself changes.
   if (Math.abs(g.after.speed - g.before.speed) > 0.01) parts.push(`one hit every ${g.after.speed.toFixed(1)} s instead of ${g.before.speed.toFixed(1)} s`);
-  if (g.ratio >= 1.01) parts.push(`expected damage +${pct(g.ratio)}`);
+  const currentRatio = g.before.dps > 0 ? g.after.dps / g.before.dps : 1;
+  if (currentRatio >= 1.01) parts.push(`expected damage +${pct(currentRatio)}`);
+  else {
+    if (currentRatio <= 0.99) parts.push(`expected damage ${pct(currentRatio)}`);
+    if (g.ratio >= 1.01) parts.push(`training average +${pct(g.ratio)} over up to ${WINDOW} Strength levels`);
+  }
   if (g.defenceAfter !== undefined && g.defenceBefore !== undefined && g.defenceAfter > g.defenceBefore) parts.push(defenceText(g.defenceAfter - g.defenceBefore, g.style));
   if (g.shieldLoss) parts.push(`but the shield comes off (${defenceText(g.shieldLoss, g.style).replace('+', '−')})`);
   return parts.join(', ') || 'slightly stronger';

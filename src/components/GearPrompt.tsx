@@ -197,7 +197,7 @@ function GearBannerBody() {
   if (!advice.live || !top || (fightStep && progress.upgradeDismissedForSteps?.includes(fightStep.id))) return null;
   return (
     <section className="upgrade gear-banner" aria-label="Stronger in combat">
-      <p className="upgrade-kicker">⚔️ You can hit faster</p>
+      <p className="upgrade-kicker">⚔️ Suggested gear change</p>
       <p className="small"><ActionTitle a={top} /> — {gainText(top)} {foesText(advice.foes)}.</p>
       <div className="upgrade-actions">
         <a className="btn btn-sm" href="#/gear">Gear analysis</a>
