@@ -1,5 +1,11 @@
 # Claude continuation: OSRS Path cumulative repair candidate
 
+## Current block: Gear quest evidence
+
+Continue on `codex/audit-block-gear-quest-proof`, cumulative over the Skills, Shopping and HUD blocks. Gear now passes live quest evidence into its existing advisor via questDependencyFacts. Skipping Prince Ali Rescue no longer waives the toll; a stale manual quest mark cannot unlock gear against live NOT_DONE; live completion works without a route mark. Explicit manual full-quest completion remains a fallback while quests are unread, and partial varbit milestones never become full quests. Seven regressions include five failures reproduced before repair. Local: 1,781 Vitest tests/138 files, build, data 0 errors/warnings and Java testClasses passed. See [CODEX_GEAR_QUEST_PROOF_HANDOFF.md](CODEX_GEAR_QUEST_PROOF_HANDOFF.md); require this block's own CI and portable gates before claiming publication.
+
+Completed earlier block publications: HUD audit-test-9822b71c (run 39649388413) and Shopping audit-test-6d13c9e5 (run 39650233668). Both passed every cumulative gate/publication. Their EXEs exclude later Skills/Gear repairs; this branch includes all their code. Attached handoffs reflect each source snapshot, with newer sections superseding older pending states. Stable main and the original installation are unchanged.
+
 ## Current block: Skills quest-reward proof
 
 Continue on `codex/audit-block-skill-quest-proof`, cumulative over Shopping and HUD blocks. Skills' useQuestDone previously treated a skipped route quest as its reward having been obtained and let a manual done mark override live NOT_DONE. The hook now delegates to questRewardDone in the existing skillGuide module: known live quest names win; only explicit done remains a fallback when quest data is unread. Saved skips/marks, XP, guide data and completion triggers are not changed. Seven regression cases include three failures reproduced before repair; local full suite is 1,774 Vitest tests/137 files, build/data/testClasses passed. Exact-tree browser/portable CI remains required for its own release. See [CODEX_SKILL_QUEST_PROOF_HANDOFF.md](CODEX_SKILL_QUEST_PROOF_HANDOFF.md).

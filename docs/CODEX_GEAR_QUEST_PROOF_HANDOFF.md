@@ -1,0 +1,11 @@
+# Gear: real quest evidence for unlocks and the toll
+
+Partial T05/T11 continuation after the Skills proof block. The old Gear freeToll helper used isClosed on Prince Ali Rescue, so a skip waived its toll. A separate questsDone helper read only manual route done marks, missing live completion and failing to respect live NOT_DONE. This could also misrepresent Dragon Slayer I gear eligibility.
+
+The Gear adapter now calls the existing questDependencyFacts resolver for full QUEST_COMPLETED route entries, with isCompleted as the explicit manual fallback only when the resolver has no game fact. Live full-quest names outside the route are retained. Matching route facts add canonical names for the existing advisor. Free toll is derived from that same completed set. The hook reads the current-character-gated useBridge questsDone and includes it in memo dependencies, so quest-only changes invalidate the input.
+
+Seven regression cases cover skipped Prince Ali Rescue, live NOT_DONE versus manual done, live completion without marks, Dragon Slayer I, unread-game manual fallback, normalized route quest names, and a real partial Fairytale II varbit milestone. Five cases failed against an adapter preserving the old helper behavior before repair. The partial fixture explicitly requires the real route entry rather than silently passing an empty fixture.
+
+Local full Vitest: 1,781 tests in 138 files. Build/TypeScript, check-data 0 errors/warnings, Java testClasses and existing focused Gear browser scenarios passed, including connect/unknown/owned/disclosure and narrow-layout cases. Exact-tree cumulative CI/actual portable gates are required for publication. No updated live account verification is claimed.
+
+No DPS formula, trainer selection, price cache, equipment catalogue, source router, route completion/ID, profile/save data, protocol or interface panel changed. This is the shared current evidence passed to the existing advisor, not another progression engine. Its offline fallback remains a conservative manual-positive set as before; broader per-quest unknown labels, actual style/boost/prayer, multi-style DPS and budget/packing optimization remain open. Historical Skills handoff's pending Gear proof item is addressed here; its other limitations remain.

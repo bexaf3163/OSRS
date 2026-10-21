@@ -1,6 +1,8 @@
 # OSRS Path audit preview — test build, audit still in progress
 
-This cumulative block preview also fixes Skills quest-reward proof. A skipped route quest no longer counts as a received reward; live quest facts override manual marks, and explicit done is retained as an offline fallback. Existing guide data, XP, saved marks and route completion are unchanged. Read docs/CODEX_SKILL_QUEST_PROOF_HANDOFF.md for evidence and limits.
+This cumulative block preview fixes Gear quest evidence as well as retaining all preceding Skills, Shopping and HUD repairs. A skipped Prince Ali Rescue no longer waives the toll, live completed quests unlock their gear without a route mark, and live NOT_DONE overrides stale manual completion. Explicit manual full-quest completion is retained while live facts are unread; partial quest milestones do not unlock full-quest gear. No DPS formula, route completion or saved state changed. Read docs/CODEX_GEAR_QUEST_PROOF_HANDOFF.md for scope and evidence.
+
+The Skills repair is retained: a skipped route quest no longer counts as a received reward; live quest facts override manual marks, and explicit done is retained as an offline fallback. Existing guide data, XP, saved marks and route completion are unchanged. Read docs/CODEX_SKILL_QUEST_PROOF_HANDOFF.md for evidence and limits.
 
 The Shopping scope repair is retained: Stock up replaces the misleading Next trip label; purchase quantities cover the selected steps, not one inventory. Calculated quantities, saved scope, bank withdrawals and exchange payloads are unchanged. No new panel or mode. Read docs/CODEX_SHOPPING_SCOPE_HANDOFF.md for the small wording repair and its limits.
 
