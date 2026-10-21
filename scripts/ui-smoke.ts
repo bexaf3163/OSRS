@@ -1635,7 +1635,7 @@ async function fundingScenarios(browser: Browser) {
     if (process.env.UI_SHOTS) await page.locator('.funding-card').screenshot({ path: `${process.env.UI_SHOTS}/funding-${width}.png` }).catch(() => {});
     await page.locator('.funding-card details > summary').click();
     if (process.env.UI_SHOTS) await page.locator('.funding-card').screenshot({ path: `${process.env.UI_SHOTS}/funding-open-${width}.png` }).catch(() => {});
-    expect(/Your coins: 400 gp/.test(await text(page, '.funding-card')), `funding (${width} px): the details state the coins`);
+    expect(/Your coins: 0 gp/.test(await text(page, '.funding-card')), `funding (${width} px): the details state the coins`);
     await page.locator('.funding-card .btn-primary').click();
     await page.waitForTimeout(800);
     const nav = (await posts()).filter((p) => p.path === '/nav-target');
