@@ -1,3 +1,5 @@
+Post-preview combat stock follow-up: [docs/CODEX_COMBAT_STOCK_HANDOFF.md](docs/CODEX_COMBAT_STOCK_HANDOFF.md). Unreported item bank counts stay unknown; this change is not in preview 402222c9.
+
 Repair checkpoint (2026-10-21): read [docs/CODEX_REPAIR_CHECKPOINT.md](docs/CODEX_REPAIR_CHECKPOINT.md) before resuming the old still-to-do blocks. It identifies the tested repair branch, exact preview and unfinished work; historical notes below are not an all-complete claim.
 
 # OSRS Path — Modern Path redesign handoff

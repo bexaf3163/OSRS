@@ -356,7 +356,10 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
 
   // Unknown is not zero: with the bank unread the player may already hold some of the item, and every plan's item part is then a ceiling.
   if (item && item.missing > 0 && item.unread) {
-    for (const p of plans) p.risks.push(`Your bank has not been read, so ${item.name} you may already hold are not counted`);
+    const note = inp.owned?.bankSeen
+      ? `Your ${item.name} bank quantity is not checked; unseen holdings are not counted`
+      : `Your bank has not been read, so ${item.name} you may already hold are not counted`;
+    for (const p of plans) p.risks.push(note);
   }
 
   const route = plans[0];
