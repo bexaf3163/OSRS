@@ -7,11 +7,9 @@ import { createPortal } from 'react-dom';
 import { guideFor } from '../data/skillGuideRegistry';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
-import { isClosed } from '../lib/next-step';
 import { levelOf } from '../lib/progress';
-import { nameKey } from '../lib/checklist';
 import { formatXp } from '../lib/goals';
-import { bracketsOf, buildPath, currentIndex, type SkillName, type SkillStep } from '../lib/skillGuide';
+import { bracketsOf, buildPath, currentIndex, questRewardDone, type SkillName, type SkillStep } from '../lib/skillGuide';
 import { freeOnlyOf, setTracked, useTracked } from '../lib/skillTrack';
 import { useFeatures } from '../lib/features';
 import { priorityOf } from '../lib/playStyle';
@@ -32,15 +30,12 @@ export function useSkillLevel(skill: SkillName): number {
   return stats?.[skill] ?? (progress.levels[skill] !== undefined ? levelOf(progress, skill) : guide.start);
 }
 
-/** Whether the quest of a quest step is done: the same quest as a route step that is closed, or the game says so. */
+/** Live quest facts win; explicit manual completion is a fallback while they are unread. A skip proves no reward. */
 export function useQuestDone(): (step: SkillStep) => boolean {
   const { questsDone } = useBridge();
   const { progress } = useStore();
   return useCallback((step: SkillStep) => {
-    const r = step.reward;
-    if (!r) return false;
-    if (r.routeStepId && isClosed(progress, r.routeStepId)) return true;
-    return Boolean(questsDone?.some((q) => nameKey(q) === nameKey(r.quest)));
+    return questRewardDone(step, progress, questsDone);
   }, [progress, questsDone]);
 }
 

@@ -1,6 +1,8 @@
 # OSRS Path audit preview — test build, audit still in progress
 
-This cumulative block preview includes the HUD collection-objective fix and a clearer Shopping purchase scope. Stock up replaces the misleading Next trip label: purchase quantities cover the selected steps, not one inventory. Calculated quantities, saved scope, bank withdrawals and exchange payloads are unchanged. No new panel or mode. Read docs/CODEX_SHOPPING_SCOPE_HANDOFF.md for the small wording repair and its limits.
+This cumulative block preview also fixes Skills quest-reward proof. A skipped route quest no longer counts as a received reward; live quest facts override manual marks, and explicit done is retained as an offline fallback. Existing guide data, XP, saved marks and route completion are unchanged. Read docs/CODEX_SKILL_QUEST_PROOF_HANDOFF.md for evidence and limits.
+
+The Shopping scope repair is retained: Stock up replaces the misleading Next trip label; purchase quantities cover the selected steps, not one inventory. Calculated quantities, saved scope, bank withdrawals and exchange payloads are unchanged. No new panel or mode. Read docs/CODEX_SHOPPING_SCOPE_HANDOFF.md for the small wording repair and its limits.
 
 The earlier HUD block is retained: collection shows Collect 50 Big bones instead of its incidental Attack 34 projection. Reaching projected XP cannot announce the next phase while collection is unconfirmed; food preparation still takes priority. Ordinary skill-training cards retain their XP progress. No combat estimate, completion trigger, saved state or protocol changed. Read docs/CODEX_HUD_COLLECTION_HANDOFF.md for reproduction and scope.
 

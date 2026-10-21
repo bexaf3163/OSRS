@@ -1,5 +1,11 @@
 # Claude continuation: OSRS Path cumulative repair candidate
 
+## Current block: Skills quest-reward proof
+
+Continue on `codex/audit-block-skill-quest-proof`, cumulative over Shopping and HUD blocks. Skills' useQuestDone previously treated a skipped route quest as its reward having been obtained and let a manual done mark override live NOT_DONE. The hook now delegates to questRewardDone in the existing skillGuide module: known live quest names win; only explicit done remains a fallback when quest data is unread. Saved skips/marks, XP, guide data and completion triggers are not changed. Seven regression cases include three failures reproduced before repair; local full suite is 1,774 Vitest tests/137 files, build/data/testClasses passed. Exact-tree browser/portable CI remains required for its own release. See [CODEX_SKILL_QUEST_PROOF_HANDOFF.md](CODEX_SKILL_QUEST_PROOF_HANDOFF.md).
+
+The separate HUD block is published as audit-test-9822b71c (all gates/publication green, run 39649388413; EXE SHA-256 acf24e407ec7edfe853a3eabddfaab5e59bebf36f963ccc99b370e6cf9d8fe95). The Shopping block is a later cumulative branch/release, and this Skills block adds to it. None is a stable main merge or full live route playthrough. Each release's attached handoff is its source snapshot; later branch notes supersede historical pending statuses.
+
 ## Next block: Shopping purchase scope
 
 Continue on `codex/audit-block-shopping-stockup`, cumulative over the HUD block. Shopping's old Next trip selector labelled whole-goal purchase reserves as if they were one carried bag. It is now Stock up, with one short clarification in the existing scope line; the copied list says upcoming steps. The saved `trip` key, selected-step window, calculations, quantities, unknown states, actual bank withdrawals and exchange payload are unchanged. No new tab/panel or inventory-packing claim. See [CODEX_SHOPPING_SCOPE_HANDOFF.md](CODEX_SHOPPING_SCOPE_HANDOFF.md). This block requires its own checks and portable release; older published EXEs do not include it.
