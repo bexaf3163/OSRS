@@ -22,7 +22,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S3-08 Strength to 20 and Attack to 30 | training | yes | Minotaur (12) | melee | Minotaur | Salmon 20 | Branch |
 | S4-01 The Corsair Curse | quest-fight | yes | Ithoi the Navigator (35) | melee | Ithoi the Navigator | Salmon 10 | Revised |
 | S4-02 The Ides of Milk | quest-fight | yes | Brutus (30) | melee | Brutus | Trout 5 | Revised |
-| S4-03 Attack to 40 and bank 50 Big bones | training | yes | Hill Giant (28) | melee | Hill Giant | Salmon 25 | Branch |
+| S4-03 Attack to 40 | training | yes | Giant frog (13) | melee | Giant frog | Salmon 25 | Branch |
 | S5-03 Map piece 1: Melzar's Maze | quest-fight | yes | Melzar the Mad (43), Lesser demon (82) | melee | Melzar the Mad | Salmon 10 | Retain |
 | S5-08 The battle with the dragon Elvarg | quest-fight | yes | Elvarg (83) | melee | Elvarg | Lobster 20+ | Retain |
 | S6-01 Ranged to 50 on the Ogress Warriors and Shamans | training | yes | Ogress warrior (82), Ogress shaman (82) | safespot | - | - | Deferred |
@@ -326,13 +326,13 @@ Evidence:
 
 - Step field "Combat"; threats.json (melee 3, special 19).
 
-## S4-03 Attack to 40 and bank 50 Big bones
+## S4-03 Attack to 40
 
-**Branch.** Attack 40 and 50 Big bones on the Hill Giants under Edgeville.
+**Branch.** Attack 40; no mandatory loot quota.
 
 Assumptions:
 
-- At Defence 1 a giant hits about 4 times in 5: the route's plan needs hundreds of pieces of food.
+- Surface level 13 frogs only; current gear and levels drive estimates.
 
 Problems:
 
@@ -340,12 +340,13 @@ Problems:
 
 Alternatives:
 
-- Cows for the Attack goal, then giants only for the bones; Defence 10, 20 or 30 first.
+- Compare cows and level 12 minotaurs; Defence-first includes its training cost.
 
 Changed:
 
 - 2.65.0: the plans are compared and one can be adopted: arrow, food, shopping and the game follow it.
 - 2.65.1: Dragon Slayer I's 18,650 Defence XP is counted before Defence training is recommended.
+- 2.74.2: replace mandatory Hill Giant funding detour with surface Giant frogs; training completes at Attack 40. Funding remains separate.
 
 Evidence:
 

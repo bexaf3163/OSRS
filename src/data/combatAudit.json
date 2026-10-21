@@ -165,16 +165,38 @@
       "evidence": ["Step field \"Combat\"; threats.json (melee 3, special 19)."]
     },
     {
-      "stepId": "S4-03", "kind": "training", "mandatory": true, "method": "melee",
-      "objective": "Attack 40 and 50 Big bones on the Hill Giants under Edgeville.",
-      "enemies": [{ "name": "Hill Giant", "level": 28, "maxHit": 4, "table": true }],
+      "stepId": "S4-03",
+      "kind": "training",
+      "mandatory": true,
+      "method": "melee",
+      "objective": "Attack 40; no mandatory loot quota.",
+      "enemies": [
+        {
+          "name": "Giant frog",
+          "level": 13,
+          "maxHit": 2,
+          "table": true
+        }
+      ],
       "lines": [],
-      "assumptions": ["At Defence 1 a giant hits about 4 times in 5: the route's plan needs hundreds of pieces of food."],
-      "problems": ["Slow and food-hungry for the reported character (Attack 30, Strength 21, Defence 1, HP 24, iron armour)."],
-      "alternatives": ["Cows for the Attack goal, then giants only for the bones; Defence 10, 20 or 30 first."],
+      "assumptions": [
+        "Surface level 13 frogs only; current gear and levels drive estimates."
+      ],
+      "problems": [
+        "Slow and food-hungry for the reported character (Attack 30, Strength 21, Defence 1, HP 24, iron armour)."
+      ],
+      "alternatives": [
+        "Compare cows and level 12 minotaurs; Defence-first includes its training cost."
+      ],
       "decision": "branch",
-      "changed": ["2.65.0: the plans are compared and one can be adopted: arrow, food, shopping and the game follow it.", "2.65.1: Dragon Slayer I's 18,650 Defence XP is counted before Defence training is recommended."],
-      "evidence": ["tests/combatRoute/plans.test.ts, pick.test.ts, later.test.ts; UI smoke (combat)."]
+      "changed": [
+        "2.65.0: the plans are compared and one can be adopted: arrow, food, shopping and the game follow it.",
+        "2.65.1: Dragon Slayer I's 18,650 Defence XP is counted before Defence training is recommended.",
+        "2.74.2: replace mandatory Hill Giant funding detour with surface Giant frogs; training completes at Attack 40. Funding remains separate."
+      ],
+      "evidence": [
+        "tests/combatRoute/plans.test.ts, pick.test.ts, later.test.ts; UI smoke (combat)."
+      ]
     },
     {
       "stepId": "S5-03", "kind": "quest-fight", "mandatory": true, "method": "melee",

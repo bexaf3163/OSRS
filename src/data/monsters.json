@@ -115,6 +115,19 @@
         "crush": 0
       },
       "members": false
+    },
+    {
+      "name": "Giant frog",
+      "version": "Level 13",
+      "combat": 13,
+      "members": false,
+      "hitpoints": 23,
+      "defenceLevel": 6,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0
+      }
     }
   ]
 }

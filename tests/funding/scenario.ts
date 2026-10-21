@@ -1,7 +1,8 @@
 // A whole funding scenario built the way the app builds it: the player state, the one-trip plan, the preparation plan, the money need, the snapshot and the
 // assessment, for a real step of the route. Tests state only what the player has and what the market says; everything else is the production code.
 
-import { stepById, stepsFor } from '../../src/data';
+import legacyCollect from '../combatRoute/legacyCollectStep.json';
+import { stepsFor } from '../../src/data';
 import { gearById } from '../../src/services/gearAdvisor';
 import { nameKey, type OwnedItem, type OwnedState } from '../../src/lib/checklist';
 import { combatPersonaliser } from '../../src/lib/funding/combatAdapter';
@@ -65,8 +66,8 @@ export interface Scenario {
 }
 
 export function scenario(prices: PriceView, o: ScenarioOpts = {}): Scenario {
-  const steps = stepsFor('f2p');
-  const step = stepById.get(o.stepId ?? 'S4-03')!;
+  const steps = stepsFor('f2p').map(s => s.id === 'S4-03' ? legacyCollect as Step : s);
+  const step = steps.find(s => s.id === (o.stepId ?? 'S4-03'))!;
   // The plugin reports every item the route asks about, zero included: a tracked item with nothing is a fact, an untracked one is unknown.
   const tracked = new Set(tripWindow(steps, emptyProgress(), step.id).flatMap((w) => (w.itemsRequired ?? []).map((i) => i.nameEn)));
   const bankSeen = o.bankSeen ?? true;
@@ -94,7 +95,7 @@ export function scenario(prices: PriceView, o: ScenarioOpts = {}): Scenario {
   const prep = buildPrepPlan({ step, steps, progress, state, trip, readiness: readinessOf(step, { steps, progress, qp: 0, mode: 'f2p', state }), detail: o.detail ?? (() => undefined) });
   const need = buildNeed({ step, prep, prices, owned: state.owned, manual: {} });
   const snap = buildSnapshot({
-    state, window: trip.stepIds.map((id) => stepById.get(id)!), questPoints: o.questPoints === undefined ? 30 : o.questPoints,
+    state, window: trip.stepIds.map((id) => steps.find(s => s.id === id)!), questPoints: o.questPoints === undefined ? 30 : o.questPoints,
     totalLevel: o.totalLevel === undefined ? 150 : o.totalLevel, ironman: o.ironman === undefined ? false : o.ironman, sellOverride: o.sellOverride,
   });
   const live = { stats: o.stats ?? HISTORICAL.stats, xp: o.xp ?? HISTORICAL.xp, gear: state.owned ? ({ equipment: worn.map((n) => ({ id: gearId(n), name: n })), inventory: [], coins: 0, bankCoins: 0 } as never) : null, train: o.train === undefined ? 'attack' as const : o.train };

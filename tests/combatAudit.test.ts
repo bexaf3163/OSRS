@@ -34,7 +34,7 @@ describe('the ledger covers the route', () => {
 
   it('the detector finds the fights by their signals, not only by words', () => {
     const by = new Map(detected.map((d) => [d.stepId, d.signals.join('; ')]));
-    expect(by.get('S4-03')).toMatch(/foes: Hill Giant.*pacing: attack/);
+    expect(by.get('S4-03')).toMatch(/foes: Giant frog.*pacing: attack/);
     expect(by.get('S3-04')).toMatch(/threats: Ancient Guardian/);
     expect(by.get('S5-03')).toMatch(/threats: Melzar the Mad, Lesser demon.*safespot.*quest lines/);
     expect(by.has('S1-03')).toBe(false);

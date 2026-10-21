@@ -6,14 +6,14 @@ import { foodPicks, foodPlanApplied, stepResendKey, withFoodPlan } from '../../s
 import { aggregateShopping } from '../../src/lib/shopping';
 import { emptyProgress } from '../../src/lib/progress';
 import { stepGuide, toInGameTarget } from '../../src/services/runeliteBridge';
-import { allSteps, stepById } from '../../src/data';
+import { allSteps } from '../../src/data';
 import { market } from '../funding/market';
 import { gearOf, HISTORICAL, planInput } from './fixture';
 import type { Step } from '../../src/types';
 
 const prices = market();
 const report = (o: Parameters<typeof planInput>[0] = {}) => evaluatePlans({ ...planInput({ foodPrice: prices.buy('Salmon')!.price, ...o }), prices, restriction: 'LIFTED' })!;
-const route = stepById.get('S4-03') as Step;
+const route = planInput().step;
 
 const progress = (xp: number | null, bones: number | null) => ({
   xp: xp === null ? null : { attack: xp, strength: 2000, defence: 0 },
@@ -96,7 +96,7 @@ describe('the step as an adopted plan has it', () => {
     expect(sent[sent.length - 1]).toMatch(/^Fight the Hill Giants until 50 Big bones are in the bank/);
     expect(s.where).toMatch(/cow field/);
     expect(s.routeAsWritten).toEqual({ where: route.where, quickSteps: route.quickSteps, fields: route.fields });
-    expect(s.fields!.every((f) => f.label === 'Your plan' || ['Dangerous', 'Attention', 'Combat'].includes(f.label))).toBe(true);
+    expect(s.fields!.every((f) => f.label === 'Your plan' || ['Dangerous', 'Attention', 'Combat', 'Armour'].includes(f.label))).toBe(true);
   });
 
   it('the second phase leads back to the giants, with no XP pace line (the item is the goal) and the bones to bank', () => {

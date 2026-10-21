@@ -3354,7 +3354,7 @@
     "fields": [
       {
         "label": "How much you need",
-        "text": "Only the Adamant scimitar (S3-07): about 1,400 gp at the prices of 26 Sep 2026, so 2,500 gp is the target with room to spare. The stage 3 quests already give about 5,300 coins (Black Knights' Fortress 2,500, Below Ice Mountain 2,000, Shield of Arrav 600, Doric 180), so you may have it before you mine anything. Armour is skipped on purpose: see S3-08. The 10,000 gp for Wormbrain (S5-05) is paid later, from the stage 4 loot (S4-03)."
+        "text": "Only the Adamant scimitar (S3-07): about 1,400 gp at the prices of 26 Sep 2026, so 2,500 gp is the target with room to spare. The stage 3 quests already give about 5,300 coins (Black Knights' Fortress 2,500, Below Ice Mountain 2,000, Shield of Arrav 600, Doric 180), so you may have it before you mine anything. Armour is skipped on purpose: see S3-08. Use Money to fund Wormbrain and later purchases if short."
       },
       {
         "label": "Price",
@@ -3362,11 +3362,11 @@
       },
       {
         "label": "Other ways",
-        "text": "Cowhides to leather with Ellis in Al Kharid (about 260 gp per leather), and from Attack 40 big bones (Big bones, about 310 gp) from the Hill Giants of step S4-03."
+        "text": "Cowhides to leather with Ellis in Al Kharid (about 260 gp per leather), and methods in Money for your current skills and budget."
       },
       {
         "label": "New account",
-        "text": "A new free-to-play account cannot sell iron ore (or leather) on the Grand Exchange until it has 20 hours of play, 10 quest points and total level 100. The stage 3 quests usually pay the 2,500 gp anyway; if they have not, mine only what the quests need and wait for the big bones of S4-03, which can be sold."
+        "text": "A new free-to-play account cannot sell iron ore (or leather) on the Grand Exchange until it has 20 hours of play, 10 quest points and total level 100. The stage 3 quests usually pay the 2,500 gp anyway; if they have not, mine only what the quests need and use Money to find an available alternative."
       }
     ],
     "doneWhen": "2,500+ coins in the bag or the bank (unsold ore does not count).",
@@ -3864,24 +3864,24 @@
     "id": "S4-03",
     "stage": 4,
     "type": "skill",
-    "title": "Attack to 40 and bank 50 Big bones",
+    "title": "Attack to 40",
     "requires": [],
     "foes": [
-      "Hill Giant"
+      "Giant frog"
     ],
     "pacing": {
       "skill": "attack",
       "targetLevel": 40,
       "targetExp": 37224,
-      "actionName": "giant|giants",
-      "expPerAction": 140
+      "actionName": "giant frog|giant frogs",
+      "expPerAction": 92
     },
-    "where": "The Hill Giants in the Edgeville Dungeon: the trapdoor is in Edgeville, a few steps south-west of the bank, and the giants are in the south-east of the dungeon. If you have a Brass key, the locked door by the giants saves the walk past the skeletons. The Edgeville bank is a minute away: bank the bones there.",
+    "where": "Fight level 13 Giant frogs on the surface of Lumbridge Swamp, south of Lumbridge Castle. Do not enter the caves: those frogs are level 99. Refill food at Lumbridge Castle bank.",
     "mapLocation": {
-      "x": 3097,
-      "y": 3468,
+      "x": 3197,
+      "y": 3166,
       "plane": 0,
-      "label": "The trapdoor to the Edgeville Dungeon"
+      "label": "Lumbridge Swamp: level 13 Giant frogs"
     },
     "itemsRequired": [
       {
@@ -3894,7 +3894,7 @@
       {
         "nameEn": "Salmon",
         "amount": 25,
-        "howToGet": "Buy on the Grand Exchange, about 34 gp each (15 Oct 2026); Trout, Tuna, Lobster or Swordfish count too. About 2 Salmon a giant at Defence 1 (an estimate). One Big bone (about 330 gp) pays for about 10 Salmon.",
+        "howToGet": "Buy on the Grand Exchange if not already owned. Food for one trip; preparation estimates the amount from your equipment and levels. Refill at Lumbridge Castle bank. The full goal may need several trips.",
         "wikiItemId": 329,
         "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
         "heals": 9,
@@ -3925,49 +3925,32 @@
     "fields": [
       {
         "label": "Goals",
-        "text": "Two in one block: Attack 40 with the Adamant scimitar, and at least 50 Big bones banked. A Hill Giant has 35 hit points, about 140 XP a kill, and always drops Big bones."
+        "text": "Train Attack to 40 on Accurate (Chop on a scimitar). Available opponents are compared for your current levels and gear. Big bones are optional loot, not a completion requirement."
       },
       {
         "label": "Money",
-        "text": "Bank the Big bones, do not sell them in the dungeon: 50 of them are about 14,000-16,000 gp at the Grand Exchange (check the price when you sell). This pays for Wormbrain (10,000 gp in S5-05), the ship (2,000 gp in S5-06) and the materials in S4-05; the gap, if the price has moved, is shown by the preparation list. Bones in the bank are not coins until sold."
-      },
-      {
-        "label": "Weapon",
-        "text": "Train with the Adamant scimitar. The Rune scimitar can be wielded only from Attack 40: once you reach it, the gear advice may offer it, it is not part of this step."
+        "text": "Use Money if the next purchase is unaffordable. Funding is separate from training: no mandatory 50-bone quota or Hill Giant detour. Bones are not coins until sold."
       },
       {
         "label": "Food",
-        "text": "At Defence 1 a Hill Giant hits about 4 times in 5 for up to 4, every 3.6 seconds, and with the Adamant scimitar at Strength 20 a fight lasts about a minute: plan about 2 Salmon a giant with a Strength potion, nearly 3 without (an estimate from the wiki stats and the combat formulas). Attack 30 to 40 is about 170 giants, roughly 370 Salmon with potions. The bones pay for it: every giant drops a Big bone, about 330 gp, the price of about 10 Salmon (15 Oct 2026)."
+        "text": "Use the current preparation estimate. Refill before food runs out. Times and food are estimates: competition for spawns and actual combat results can change them."
       },
       {
         "label": "Armour",
-        "text": "No Defence training, so wear what you already have. The Anti-dragon shield (S5-02) stops Elvarg's fire whatever your Defence is, and the 18,650 Defence XP from Dragon Slayer I lifts Defence by itself. Hill Giants hit up to 4 and are aggressive: eat before your health falls to 8 (two hits), and earlier when two of them are on you."
+        "text": "For Defence 10, train on cows using Defensive (Block on a scimitar). Once reached, visit the bank and equip your armour. Use Gear to buy an affordable steel platebody, platelegs or plateskirt, full helm and kiteshield if missing; keep coins for food. Black armour is optional if affordable. The combat estimate uses what you actually wear, so it does not assume a free armour upgrade. A build that keeps Defence at 1 remains respected."
+      },
+      {
+        "label": "Weapon",
+        "text": "Use the Adamant scimitar until Attack 40, then check Gear for an affordable upgrade."
       }
     ],
-    "membersAlternative": "👑 With membership: do not fight mobs by hand: complete Waterfall Quest in 15 minutes and get 30 Attack and 30 Strength at once!",
-    "doneWhen": "Attack 40 and 50+ Big bones in the bank or the bag. Strength and Defence are left alone.",
+    "membersAlternative": "With membership, check quest-driven training before grinding: quest rewards may cover part of the goal.",
+    "doneWhen": "Attack 40. No bone quota or Defence requirement.",
     "inGame": {
       "npcNames": [
-        "Hill Giant"
+        "Giant frog"
       ],
-      "goal": "Edgeville Dungeon: the Hill Giants",
-      "pathWaypoints": [
-        {
-          "x": 3097,
-          "y": 3468,
-          "plane": 0,
-          "label": "The trapdoor to the Edgeville Dungeon: climb down"
-        },
-        {
-          "x": 3111,
-          "y": 9838,
-          "plane": 0,
-          "label": "Edgeville Dungeon: the Hill Giants"
-        }
-      ],
-      "highlightItems": [
-        "Big bones"
-      ],
+      "goal": "Lumbridge Swamp: level 13 Giant frogs",
       "completionTrigger": {
         "type": "SKILL_LEVEL",
         "levels": [
@@ -3975,21 +3958,13 @@
             "skill": "attack",
             "level": 40
           }
-        ],
-        "items": [
-          {
-            "names": [
-              "Big bones"
-            ],
-            "count": 50
-          }
         ]
       }
     },
     "quickSteps": [
-      "Bank in Edgeville: fill the bag with Salmon (or other fish) and take the Strength potions; wield the Adamant scimitar and wear the Amulet of strength.",
-      "Climb down the trapdoor a few steps south-west of the bank; the Hill Giants are in the south-east of the dungeon.",
-      "Fight the Hill Giants on Accurate (Chop) to Attack 40. Eat at 8 health; drink a Strength potion dose every 4-5 minutes. When the food runs out, bank the Big bones in Edgeville and come back."
+      "Take the food shown in preparation; wield your Adamant scimitar and available melee gear.",
+      "Go to the level 13 Giant frogs on the surface of Lumbridge Swamp. Stay above ground.",
+      "Train on Accurate (Chop on a scimitar) to Attack 40. Refill at Lumbridge Castle bank as needed. Big bones are optional."
     ]
   },
   {
@@ -4650,7 +4625,7 @@
       {
         "nameEn": "Coins",
         "amount": 10000,
-        "howToGet": "Wormbrain takes exactly 10,000 coins. The stage 4 loot (the Big bones of the Hill Giants, S4-03) pays for it.",
+        "howToGet": "Wormbrain takes 10,000 coins. Use Money to fund any gap; training drops are not guaranteed cash or required Hill Giant kills.",
         "wikiItemId": 995,
         "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
       }

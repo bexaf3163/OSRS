@@ -71,13 +71,13 @@ describe('S3-08: the food plan', () => {
     expect(combatPlanView(stepById.get('S5-03')!, { stats, xp, gear, owned: null })).toBeNull();
   });
 
-  it('S4-03 Hill Giants get a plan of their own', () => {
+  it('S4-03 surface frogs get a plan of their own', () => {
     const a = combatPlanView(stepById.get('S4-03')!, {
       stats: { attack: 30, strength: 20, defence: 1, hitpoints: 25 }, xp: { attack: 13363, strength: 4470, defence: 0 },
       gear: { ...gear, equipment: [{ id: id('Adamant scimitar'), name: 'Adamant scimitar' }, ...gear.equipment!.slice(1)] }, owned: owned({}),
     })!;
-    expect(a.primary.foe.name).toBe('Hill Giant');
-    expect(a.primary.kills).toBe(Math.ceil((37224 - 13363) / 140));
+    expect(a.primary.foe.name).toBe('Giant frog');
+    expect(a.primary.kills).toBe(Math.ceil((37224 - 13363) / 92));
     expect(a.compare).toEqual([]);
   });
 });

@@ -1,4 +1,10 @@
-# Claude continuation: OSRS Path cumulative repair candidate
+# Claude continuation: OSRS Path cumulative repairs
+
+## Current release: 2.74.2 — training without a bone quota
+
+The owner rejected mandatory Hill Giants plus hundreds of cows and requested a real alternative, considering frogs and early Defence, then affordable armour. Read [CODEX_FROGS_HANDOFF.md](CODEX_FROGS_HANDOFF.md) first. S4-03 now completes at Attack 40 alone; surface level13 frogs enter the existing model/navigation, and early Defence10 can qualify for its food saving. The ranking explicitly values fewer repeated target selections. Keep Defence1 remains respected. Banking/affordable steel advice is manual, uses Gear and preserves food money; the model does not invent a free armour upgrade or include an unmeasured shopping detour. Funding remains in Money and later coin guards are unchanged. Existing IDs/progress are preserved; old collection-plan keys cannot restore the quota.
+
+This supersedes older S4-03 instructions requiring 50 bones. Historical collection test fixtures deliberately retain that old scenario to protect generic reserve/collection behavior; they are not the live route. The earlier 2.74.1 release is already published with green Checks/Release. Require this new source revision's own CI and isolated EXE gates before calling 2.74.2 published. No new live-game training acceptance is claimed. This remains a focused repair, not completion of the full audit.
 
 ## Main publication: 2.74.1
 

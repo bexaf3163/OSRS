@@ -1,3 +1,7 @@
+# 2.74.2 route repair
+
+Latest continuation: docs/CLAUDE_NEXT_SESSION.md and docs/CODEX_FROGS_HANDOFF.md. S4-03 no longer requires 50 bones: Attack40 training compares surface frogs and early Defence, with affordable armour advice. Do not restore the old collection quota from historical notes or fixtures below. No HUD redesign is part of this block.
+
 Start with [docs/CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md) for the current cumulative repair block, source/CI boundaries, per-block portable releases, live evidence and remaining work. Its newest section supersedes older branch references below; do not roll back to an earlier preview.
 
 Non-melee hint context: [docs/CODEX_NONMELEE_HINT_HANDOFF.md](docs/CODEX_NONMELEE_HINT_HANDOFF.md). The selected Magic/Ranged training step must not borrow a future scimitar banner. Preserve the actual melee analysis and existing StyleGear.

@@ -522,6 +522,28 @@
       "maxHit": 3,
       "speedTicks": 4,
       "aggressive": false
+    },
+    {
+      "name": "Giant frog",
+      "version": "Level 13",
+      "combat": 13,
+      "members": false,
+      "hitpoints": 23,
+      "attackLevel": 10,
+      "strengthLevel": 8,
+      "defenceLevel": 6,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 2,
+      "speedTicks": 4,
+      "aggressive": false
     }
   ]
 }

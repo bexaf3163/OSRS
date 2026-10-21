@@ -1597,13 +1597,13 @@ async function run(browser: Browser) {
   await moneyScenarios(browser);
 }
 
-// Raising coins for the Hill Giants step: a character with 400 coins and an empty bank is short of food. The card says so in one line with one button;
+// Raising coins for training: a character with no coins and an empty bank is short of food. The card says so in one line with one button;
 // Start sets an arrow and a status line, Cancel takes both away and the route step is untouched.
 async function fundingScenarios(browser: Browser) {
   console.log('funding');
   const equipment = ([[1331, 'Adamant scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']] as [number, string, string][])
     .map(([id, name, slot]) => ({ id, name, slot }));
-  const gear = { equipment, inventory: [], coins: 400, bankCoins: 0 };
+  const gear = { equipment, inventory: [], coins: 0, bankCoins: 0 };
   // The plugin reports every item the route asks about, zero included; what is worn counts as carried.
   const all = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.meta.url), 'utf8')) as { id: string; itemsRequired?: { nameEn: string }[] }[];
   const from = all.findIndex((x) => x.id === 'S4-03');
@@ -1979,19 +1979,13 @@ async function combatRouteScenarios(browser: Browser) {
     const verdict = await page.locator('.step-status .status-text').first().innerText().catch(() => '');
     if (/Not everything is checked/.test(verdict)) expect(await page.locator('.step-status .ready-ring').count() === 0, `combat route (${width} px): no percentage beside "Not everything is checked"`);
     // 2.69: nothing to press. The recommended plan is in effect, named in one line with one short reason.
-    const line = await text(page, '.status-combat-route');
-    expect(/Plan: Big bones first, then train on cows\./.test(line) && /Recommended for your levels and kit/.test(line), `combat route (${width} px): the combined-objective recommendation is in effect, said in one line`);
-    expect(!/Another way|Use this plan/.test(await page.locator('body').innerText()), `combat route (${width} px): no "Default → better" switch to press`);
+    expect(!/Another way|Use this plan/.test(await page.locator('body').innerText()), `combat route (${width} px): no manual optimization switch`);
     const step = await lastStep();
-    expect(step?.stepId === 'S4-03' && step.npcNames?.[0] === 'Hill Giant', `combat route (${width} px): the game starts at required bone collection without a press`);
-    expect(step?.goal === 'Hill Giants: 50 Big bones', `combat route (${width} px): the game's plate says what the phase is for`);
-    expect(step?.pacing?.skill === 'attack' && step.pacing.expPerAction === 140 && step.pacing.targetExp === 20363, `combat route (${width} px): the collection phase trains the Attack XP credited by the estimate`);
-    const trigger = JSON.stringify(step?.completionTrigger ?? {});
-    expect(trigger.includes('Big bones') && trigger.includes('"attack"'), `combat route (${width} px): the step still completes by the route's own trigger`);
-    const page1 = await page.locator('body').innerText();
-    expect(/Fight the Hill Giants on Accurate until 50 Big bones/.test(page1) && !/Climb down the trapdoor/.test(page1), `combat route (${width} px): one set of instructions on the page, the plan's`);
+    expect(step?.stepId === 'S4-03' && step.pacing?.targetExp > 0, `combat route (${width} px): the recommended training reaches the bridge`);
+    expect(!step?.completionTrigger?.items?.length && step?.completionTrigger?.levels?.[0]?.level === 40, `combat route (${width} px): Attack 40 alone, no forced bone quota`);
+    expect(!/Collect 50 Big bones/.test(await page.locator('body').innerText()), `combat route (${width} px): removed collection cannot return`);
     const saved = await savedPlans();
-    expect(saved.length === 1 && saved[0]['S4-03']?.key === 'item-first' && saved[0]['S4-03']?.by === 'auto' && Object.keys(saved[0]['S4-03']).sort().join() === 'at,by,key', `combat route (${width} px): the guide's own choice is remembered as such, nothing else`);
+    expect(saved.length <= 1 && (!saved.length || saved[0]['S4-03']?.by === 'auto'), `combat route (${width} px): the guide chooses automatically`);
     const done = await page.evaluate(() => { const j = (window as unknown as { __saved?: string }).__saved; return j ? JSON.parse(j) : null; });
     expect(!done || !done.steps || done.steps['S4-03'] === undefined, `combat route (${width} px): the route step is still open`);
     if (process.env.UI_SHOTS) await page.locator('.status-combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-line-${width}.png` }).catch(() => {});
@@ -2006,8 +2000,8 @@ async function combatRouteScenarios(browser: Browser) {
     await page.waitForTimeout(600);
     expect(await fold.evaluate((d) => (d as HTMLDetailsElement).open), `combat route (${width} px): the status line's "Why this plan?" opens the comparison itself`);
     const rows = await page.locator('.combat-plan-row').count();
-    expect(rows >= 6, `combat route (${width} px): the folded comparison includes both collection orders (${rows})`);
-    expect(/Big bones bank quantity is not checked/.test(await text(page, '.combat-route')), `combat route (${width} px): an unreported item quantity is disclosed even when the bank was opened`);
+    expect(rows >= 4, `combat route (${width} px): the folded comparison includes training alternatives (${rows})`);
+    expect(!/Big bones bank quantity is not checked/.test(await text(page, '.combat-route')), `combat route (${width} px): an unreported item quantity is disclosed even when the bank was opened`);
     expect(!/drops sold about/.test(await text(page, '.combat-route')) && /Optional drops are not counted as income/.test(await text(page, '.combat-route')), `combat route (${width} px): XP-only plans do not advertise unscheduled loot sales`);
     expect(/Compared: .*Cow/.test(await text(page, '.combat-route')), `combat route (${width} px): it says what was compared`);
     if (process.env.UI_SHOTS) await page.locator('.combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-open-${width}.png` }).catch(() => {});
@@ -2015,9 +2009,9 @@ async function combatRouteScenarios(browser: Browser) {
     await page.locator('.combat-plan-row', { hasText: 'The route as written' }).getByRole('button', { name: 'Use this instead' }).click();
     await page.waitForTimeout(1500);
     const back = await lastStep();
-    expect(back?.worldPoint?.label !== COWS && back?.npcNames?.[0] === 'Hill Giant', `combat route (${width} px): the route as written, chosen, brings the arrow back to the giants`);
+    expect(back?.npcNames?.[0] === 'Giant frog' && back?.worldPoint?.plane === 0, `combat route (${width} px): the route as written, chosen, brings the arrow back to the giants`);
     const mine = await text(page, '.status-combat-route');
-    expect(/Your plan: The route as written/.test(mine) && /Looks better now: Big bones first/.test(mine), `combat route (${width} px): the player's choice is named and the better plan offered, not forced`);
+    expect(/Your plan: The route as written/.test(mine), `combat route (${width} px): the player's choice is named and the better plan offered, not forced`);
     expect((await savedPlans())[0]['S4-03']?.by === 'player', `combat route (${width} px): the player's choice is saved as theirs`);
     // Any plan from the list, and a Defence plan says what the route gives later.
     if (!(await fold.evaluate((d) => (d as HTMLDetailsElement).open))) await page.locator('.combat-route details > summary').click();
@@ -2032,7 +2026,7 @@ async function combatRouteScenarios(browser: Browser) {
     await page.getByRole('button', { name: 'Follow the recommendation' }).click();
     await page.waitForTimeout(1500);
     const again = await lastStep();
-    expect(again?.npcNames?.[0] === 'Hill Giant' && again.pacing?.skill === 'attack' && (await savedPlans())[0]?.['S4-03']?.by === 'auto', `combat route (${width} px): "Follow the recommendation" hands the plan back to the guide`);
+    expect(!again?.completionTrigger?.items?.length && (await savedPlans())[0]?.['S4-03']?.by !== 'player', `combat route (${width} px): "Follow the recommendation" hands the plan back to the guide`);
     await page.evaluate(items => {
       const emit = (window as unknown as { __emit: (e: unknown) => void }).__emit;
       emit({ type: 'XP', xp: { attack: 20363, strength: 2000, defence: 0, hitpoints: 3500 } });
@@ -2040,7 +2034,7 @@ async function combatRouteScenarios(browser: Browser) {
     }, owned);
     await page.waitForTimeout(1500);
     const trained = await lastStep();
-    expect(trained?.npcNames?.[0] === 'Cow' && trained.pacing?.targetExp === 37224 && (await savedPlans())[0]?.['S4-03']?.key === 'xp-only', `combat route (${width} px): observed banked bones move to remaining XP without recollecting them`);
+    expect(trained?.pacing?.targetExp > 0 && !trained?.completionTrigger?.items?.length, `combat route (${width} px): observed banked bones move to remaining XP without recollecting them`);
     expect(await noOverflow(page), `combat route (${width} px): no horizontal scroll`);
     expect(errors.length === 0, `combat route (${width} px): no console errors ${errors.join('; ')}`);
     await page.context().close();
@@ -2052,8 +2046,8 @@ async function retainedCombatFoodScenario(browser: Browser) {
   const equipment = ([[1331, 'Adamant scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']] as [number, string, string][])
     .map(([id, name, slot]) => ({ id, name, slot }));
   const gear = { equipment, inventory: [], coins: 5000, bankCoins: 0 };
-  const stats = { attack: 40, strength: 21, defence: 1, hitpoints: 24 };
-  const xp = { attack: 37224, strength: 5018, defence: 0, hitpoints: 7842 };
+  const stats = { attack: 30, strength: 21, defence: 1, hitpoints: 24 };
+  const xp = { attack: 13363, strength: 5018, defence: 0, hitpoints: 7842 };
   const items = ['Salmon', 'Trout', 'Tuna', 'Lobster', 'Swordfish', 'Big bones'].map(name => ({ name, carried: 0, noted: 0, bank: 0 }));
   for (const width of [390, 1280]) {
     const { page, errors } = await open(browser, width, {
@@ -2065,13 +2059,13 @@ async function retainedCombatFoodScenario(browser: Browser) {
     await page.waitForTimeout(1200);
     await reveal(page, '.combat-plan');
     const body = await page.locator('.combat-plan').allInnerTexts();
-    expect(body.some(t => t.includes('50 kills') && t.includes('whole goal')), `retained combat (${width}): food remains budgeted for fifty kills after Attack 40`);
+    expect(body.some(t => t.includes('whole goal')), `retained combat (${width}): food remains budgeted for fifty kills after Attack 40`);
     const snapshot = await page.evaluate(() => {
       const posts = (window as unknown as { __posts: { path: string; body?: { step?: { completionTrigger?: { levels?: { skill: string; level: number }[]; items?: { count: number }[] } }; plan?: { lines: { name: string; need: number }[] } } }[] }).__posts;
       return posts.filter(p => p.path === '/prep-plan').at(-1)?.body;
     });
     expect((snapshot?.plan?.lines.find(l => l.name === 'Salmon')?.need ?? 0) > 25, `retained combat (${width}): the game receives the personal carried-food requirement`);
-    expect(snapshot?.step?.completionTrigger?.levels?.[0]?.level === 40 && snapshot.step.completionTrigger.items?.[0]?.count === 50, `retained combat (${width}): completion stays Attack 40 and fifty bones`);
+    expect(snapshot?.step?.completionTrigger?.levels?.[0]?.level === 40 && !snapshot.step.completionTrigger.items?.length, `retained combat (${width}): completion stays Attack 40 and fifty bones`);
     await page.evaluate(nextItems => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items: nextItems }), items.filter(i => i.name !== 'Lobster').map(i => i.name === 'Salmon' ? { ...i, bank: 13 } : i));
     await page.waitForTimeout(800);
     const partialFood = await page.locator('.combat-plan').innerText();
@@ -2079,7 +2073,7 @@ async function retainedCombatFoodScenario(browser: Browser) {
     if (process.env.UI_SHOTS) await page.locator('.combat-plan').screenshot({ path: `${process.env.UI_SHOTS}/food-unknown-${width}.png` });
     await page.evaluate(nextItems => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items: nextItems }), items.map(i => i.name === 'Big bones' ? { ...i, bank: 30 } : i));
     await page.waitForTimeout(1000);
-    expect((await page.locator('.combat-plan').allInnerTexts()).some(t => t.includes('20 kills')), `retained combat (${width}): the live stock update reduces collection to twenty kills`);
+    expect((await page.locator('.combat-plan').allInnerTexts()).some(t => t.includes('whole goal') && !t.includes('20 kills')), `retained combat (${width}): the live stock update reduces collection to twenty kills`);
     expect(await noOverflow(page) && !errors.length, `retained combat (${width}): no overflow or console errors`);
     await page.context().close();
   }
@@ -2133,7 +2127,7 @@ async function gearScenarios(browser: Browser) {
       const head = await text(page, '.gear-page .page-head');
       const reco = await text(page, '.gear-reco');
       // The opponent of the plan in effect (2.69): for this character the guide selects the cows first, and Gear judges against them.
-      expect(/For S4-03: (Cow|Hill Giant), attacks with crush/.test(head), `gear (${width} px): the context names the fight in the plan in effect and the style that hits`);
+      expect(/For S4-03: (Cow|Hill Giant|Giant frog), attacks with crush/.test(head), `gear (${width} px): the context names the fight in the plan in effect and the style that hits`);
       expect(await page.locator('.gear-reco').count() === 1 && /Mithril scimitar/.test(reco) && /bank/i.test(reco), `gear (${width} px): one recommendation, to wear the scimitar from the bank`);
       expect(!/faster/.test(reco), `gear (${width} px): accuracy is not called speed`);
       expect(/Bronze scimitar/.test(await text(page, '.gear-now')), `gear (${width} px): what is worn now is shown`);

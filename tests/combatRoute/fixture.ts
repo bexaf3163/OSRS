@@ -1,3 +1,4 @@
+import legacyCollect from './legacyCollectStep.json';
 // The reported character at S4-03 (Attack 30, Strength 21, Defence 1, 24 hitpoints, an Adamant scimitar and iron armour), built the way the app builds
 // the estimator's inputs. Tests state what differs from it.
 
@@ -39,9 +40,11 @@ export interface Over {
 }
 
 export function planInput(o: Over = {}): PlanInput {
-  const step = stepById.get(o.stepId ?? 'S4-03') as Step;
+  // Historical collection scenario, independent of the current route's XP-only goal.
+  const step = o.stepId && o.stepId !== 'S4-03' ? stepById.get(o.stepId) as Step : legacyCollect as Step;
+  const steps = allSteps.map(s => s.id === 'S4-03' ? legacyCollect as Step : s);
   return {
-    step, steps: allSteps,
+    step, steps,
     ctx: { stats: o.stats ?? HISTORICAL.stats, xp: o.xp ?? HISTORICAL.xp, gear: gearOf(o.worn ?? HISTORICAL.worn), fights: o.fights },
     owned: ownedOf(o.items ?? {}, o.bankSeen ?? true),
     foodPrice: o.foodPrice === undefined ? 33 : o.foodPrice,

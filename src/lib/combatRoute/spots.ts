@@ -24,10 +24,10 @@ export interface Spot {
  * The opponents the plans may train on or collect from. These are the free-to-play opponents the route already uses: the cows of the cow field, the
  * Minotaurs of the Stronghold of Security's first floor and the Hill Giants of the Edgeville Dungeon. A quest boss is never a training target.
  */
-export const TRAINERS: readonly string[] = ['Cow', 'Minotaur', 'Hill Giant'];
+export const TRAINERS: readonly string[] = ['Cow', 'Minotaur', 'Hill Giant', 'Giant frog'];
 
 /** Versions of an opponent that stand at the spot the route sends the player to: the first floor's Minotaurs are level 12 (the level 27 ones are elsewhere). */
-export const TRAINER_LEVELS: Record<string, number[]> = { Minotaur: [12] };
+export const TRAINER_LEVELS: Record<string, number[]> = { Minotaur: [12], 'Giant frog': [13] };
 
 /** The spots of the trainers, from the first route step that names each. */
 export function spotsOf(steps: readonly Step[]): Map<string, Spot> {
@@ -54,8 +54,9 @@ export function spotsOf(steps: readonly Step[]): Map<string, Spot> {
  */
 export const GUARANTEED_DROPS: Record<string, string[]> = {
   'Hill Giant': ['Big bones'],
+  'Giant frog': ['Big bones'],
   'Cow': ['Cowhide', 'Bones', 'Raw beef'],
 };
 
 /** The one drop of a kill worth picking up to sell, a single one each kill: a cow's hide, a Hill Giant's Big bones. Nothing else is counted as income. */
-export const SELL_DROP: Record<string, string> = { 'Cow': 'Cowhide', 'Hill Giant': 'Big bones' };
+export const SELL_DROP: Record<string, string> = { 'Cow': 'Cowhide', 'Hill Giant': 'Big bones', 'Giant frog': 'Big bones' };

@@ -383,10 +383,10 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
-	public void attackFortyAndFiftyBigBonesAreBothNeeded()
+	public void attackFortyFinishesTrainingWithoutALootQuota()
 	{
 		levels.put("attack", 40);
-		assertEquals(List.of(), completedBy("S4-03", Map.of(), Map.of("Big bones", 49)));
+		assertEquals(List.of("S4-03"), completedBy("S4-03", Map.of(), Map.of()));
 		assertEquals(List.of("S4-03"), completedBy("S4-03", Map.of(), Map.of("Big bones", 50)));
 		levels.put("attack", 39);
 		assertEquals("Attack 39 is not enough with the bones", List.of(), completedBy("S4-03", Map.of(), Map.of("Big bones", 50)));

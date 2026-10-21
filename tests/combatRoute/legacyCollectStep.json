@@ -1,0 +1,132 @@
+{
+  "id": "S4-03",
+  "stage": 4,
+  "type": "skill",
+  "title": "Attack to 40 and bank 50 Big bones",
+  "requires": [],
+  "foes": [
+    "Hill Giant"
+  ],
+  "pacing": {
+    "skill": "attack",
+    "targetLevel": 40,
+    "targetExp": 37224,
+    "actionName": "giant|giants",
+    "expPerAction": 140
+  },
+  "where": "The Hill Giants in the Edgeville Dungeon: the trapdoor is in Edgeville, a few steps south-west of the bank, and the giants are in the south-east of the dungeon. If you have a Brass key, the locked door by the giants saves the walk past the skeletons. The Edgeville bank is a minute away: bank the bones there.",
+  "mapLocation": {
+    "x": 3097,
+    "y": 3468,
+    "plane": 0,
+    "label": "The trapdoor to the Edgeville Dungeon"
+  },
+  "itemsRequired": [
+    {
+      "nameEn": "Adamant scimitar",
+      "amount": 1,
+      "wikiItemId": 1331,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_scimitar.png",
+      "howToGet": "From step S3-07. Wear it until Attack 40: the Rune scimitar needs 40 Attack."
+    },
+    {
+      "nameEn": "Salmon",
+      "amount": 25,
+      "howToGet": "Buy on the Grand Exchange, about 34 gp each (15 Oct 2026); Trout, Tuna, Lobster or Swordfish count too. About 2 Salmon a giant at Defence 1 (an estimate). One Big bone (about 330 gp) pays for about 10 Salmon.",
+      "wikiItemId": 329,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
+      "heals": 9,
+      "anyOf": [
+        "Trout",
+        "Tuna",
+        "Lobster",
+        "Swordfish"
+      ]
+    }
+  ],
+  "itemsRecommended": [
+    {
+      "nameEn": "Strength potion(4)",
+      "amount": 4,
+      "howToGet": "Grand Exchange, about 160 gp each (15 Oct 2026). A dose every 4-5 minutes: a higher max hit shortens every fight, so it saves food too.",
+      "wikiItemId": 113,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
+    },
+    {
+      "nameEn": "Amulet of strength",
+      "amount": 1,
+      "howToGet": "From S2-01: wear it (+10 strength).",
+      "wikiItemId": 1725,
+      "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_strength.png"
+    }
+  ],
+  "fields": [
+    {
+      "label": "Goals",
+      "text": "Two in one block: Attack 40 with the Adamant scimitar, and at least 50 Big bones banked. A Hill Giant has 35 hit points, about 140 XP a kill, and always drops Big bones."
+    },
+    {
+      "label": "Money",
+      "text": "Bank the Big bones, do not sell them in the dungeon: 50 of them are about 14,000-16,000 gp at the Grand Exchange (check the price when you sell). This pays for Wormbrain (10,000 gp in S5-05), the ship (2,000 gp in S5-06) and the materials in S4-05; the gap, if the price has moved, is shown by the preparation list. Bones in the bank are not coins until sold."
+    },
+    {
+      "label": "Weapon",
+      "text": "Train with the Adamant scimitar. The Rune scimitar can be wielded only from Attack 40: once you reach it, the gear advice may offer it, it is not part of this step."
+    },
+    {
+      "label": "Food",
+      "text": "At Defence 1 a Hill Giant hits about 4 times in 5 for up to 4, every 3.6 seconds, and with the Adamant scimitar at Strength 20 a fight lasts about a minute: plan about 2 Salmon a giant with a Strength potion, nearly 3 without (an estimate from the wiki stats and the combat formulas). Attack 30 to 40 is about 170 giants, roughly 370 Salmon with potions. The bones pay for it: every giant drops a Big bone, about 330 gp, the price of about 10 Salmon (15 Oct 2026)."
+    },
+    {
+      "label": "Armour",
+      "text": "No Defence training, so wear what you already have. The Anti-dragon shield (S5-02) stops Elvarg's fire whatever your Defence is, and the 18,650 Defence XP from Dragon Slayer I lifts Defence by itself. Hill Giants hit up to 4 and are aggressive: eat before your health falls to 8 (two hits), and earlier when two of them are on you."
+    }
+  ],
+  "membersAlternative": "👑 With membership: do not fight mobs by hand: complete Waterfall Quest in 15 minutes and get 30 Attack and 30 Strength at once!",
+  "doneWhen": "Attack 40 and 50+ Big bones in the bank or the bag. Strength and Defence are left alone.",
+  "inGame": {
+    "npcNames": [
+      "Hill Giant"
+    ],
+    "goal": "Edgeville Dungeon: the Hill Giants",
+    "pathWaypoints": [
+      {
+        "x": 3097,
+        "y": 3468,
+        "plane": 0,
+        "label": "The trapdoor to the Edgeville Dungeon: climb down"
+      },
+      {
+        "x": 3111,
+        "y": 9838,
+        "plane": 0,
+        "label": "Edgeville Dungeon: the Hill Giants"
+      }
+    ],
+    "highlightItems": [
+      "Big bones"
+    ],
+    "completionTrigger": {
+      "type": "SKILL_LEVEL",
+      "levels": [
+        {
+          "skill": "attack",
+          "level": 40
+        }
+      ],
+      "items": [
+        {
+          "names": [
+            "Big bones"
+          ],
+          "count": 50
+        }
+      ]
+    }
+  },
+  "quickSteps": [
+    "Bank in Edgeville: fill the bag with Salmon (or other fish) and take the Strength potions; wield the Adamant scimitar and wear the Amulet of strength.",
+    "Climb down the trapdoor a few steps south-west of the bank; the Hill Giants are in the south-east of the dungeon.",
+    "Fight the Hill Giants on Accurate (Chop) to Attack 40. Eat at 8 health; drink a Strength potion dose every 4-5 minutes. When the food runs out, bank the Big bones in Edgeville and come back."
+  ]
+}

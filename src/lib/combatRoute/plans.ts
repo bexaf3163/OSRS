@@ -80,7 +80,7 @@ export interface EvaluatedPlan {
   notes: string[];
   blockers: string[];
   eligible: boolean;
-  /** Conservative minutes with the penalty for a rough estimate: the number plans are compared by. */
+  /** Conservative time plus estimate uncertainty and repeated-target effort: a ranking score, not elapsed minutes. */
   score: number;
 }
 
@@ -242,7 +242,9 @@ function assemble(id: PlanId, key: string, title: string, phases: PlanPhase[], h
   return {
     id, key, title, phases, minutes, food, foodCost: price === null ? null : Math.round(food.mid * price), income, net: price === null ? null : income.net - Math.round(food.mid * price),
     basis, risks, notes, blockers: all, eligible: all.length === 0,
-    score: minutes.high * BASIS_PENALTY[basis],
+    // Ranking also values fewer repeated target selections. This is an effort weight,
+    // not extra elapsed time (the time estimate already includes target acquisition).
+    score: minutes.high * BASIS_PENALTY[basis] + phases.reduce((n, p) => n + p.kills, 0) * 0.05,
   };
 }
 
@@ -371,7 +373,8 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   };
   // The route gives Defence later for nothing: a Defence plan only helps the fights before that, so it must beat a working route by a clear margin on the
   // middle estimate as well, not only at the slow end.
-  const worthEarly = (p: EvaluatedPlan) => p.id !== 'defence-first' || laterXp === 0 || !route.eligible || (route.minutes.mid - p.minutes.mid) / route.minutes.mid >= MIN_GAIN;
+  const worthEarly = (p: EvaluatedPlan) => p.id !== 'defence-first' || laterXp === 0 || !route.eligible || (route.minutes.mid - p.minutes.mid) / route.minutes.mid >= MIN_GAIN
+    || (p.minutes.mid <= route.minutes.mid * 1.05 && p.food.mid <= route.food.mid * 0.5);
   const best = [...eligible.filter(worthEarly)].sort(byTime)[0] ?? route;
   // Another plan must clearly beat a route that works.
   const fresh = route.eligible && best.id !== 'route' && (route.score - best.score) / route.score < ROUTE_MARGIN ? route : best;
@@ -410,7 +413,7 @@ function comparison(plan: EvaluatedPlan, route: EvaluatedPlan, price: number | n
 
 /** Why this plan, against the route's, in a sentence the player can check. */
 export function reasonOf(plan: EvaluatedPlan, route: EvaluatedPlan, price: number | null): string {
-  if (plan.id === 'route') return route.eligible ? 'The route as written is as good as any plan this model can compare, so it stays.' : 'No plan could be recommended: ' + (route.blockers[0] ?? 'the route\'s plan is not safe for you') + '.';
+  if (plan.id === 'route') return route.eligible ? 'The route as written is competitive for time, supplies and repeated target selections.' : 'No plan could be recommended: ' + (route.blockers[0] ?? 'the route\'s plan is not safe for you') + '.';
   return `${plan.title}: ${comparison(plan, route, price)} than the route as written.`;
 }
 
@@ -423,7 +426,7 @@ export function planWhy(report: PlanReport, key: string, source: 'auto' | 'playe
   const route = report.plans[0];
   if (!plan) return '';
   if (source === 'player') return plan.id === 'route' ? 'You chose the route as written.' : `You chose this plan: ${comparison(plan, route, report.food.price)} than the route as written.`;
-  if (plan.id === 'route') return report.plans.length > 1 ? 'Recommended for your levels and kit: no other plan is clearly better.' : '';
+  if (plan.id === 'route') return report.plans.length > 1 ? 'Recommended for your levels and kit, balancing time, supplies and repeated target selections.' : '';
   return `Recommended for your levels and kit: ${comparison(plan, route, report.food.price)} than the route as written.`;
 }
 

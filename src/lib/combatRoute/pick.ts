@@ -63,7 +63,7 @@ export function currentPhase(plan: EvaluatedPlan, st: Progress): number {
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const STYLE_WORD: Record<MeleeSkill, string> = { attack: 'Accurate', strength: 'Aggressive', defence: 'Defensive' };
-const PLURAL: Record<string, string> = { Cow: 'cows', Minotaur: 'Minotaurs', 'Hill Giant': 'Hill Giants' };
+const PLURAL: Record<string, string> = { Cow: 'cows', 'Giant frog': 'Giant frogs', Minotaur: 'Minotaurs', 'Hill Giant': 'Hill Giants' };
 const plural = (foe: string) => PLURAL[foe] ?? `${foe}s`;
 const goalText = (goals: readonly Goal[]) => goals.map((g) => `${cap(g.skill)} ${levelForXp(g.exp)}`).join(' and ');
 
@@ -72,7 +72,9 @@ export function phaseInstruction(p: PlanPhase): string {
   const where = p.spot.place.label;
   const style = p.goals[0] ? ` on ${STYLE_WORD[p.goals[0].skill]}` : '';
   if (p.kind === 'item' && p.item) return `Fight the ${plural(p.foe.name)}${style} until ${p.item.count} ${p.item.name} are in the bank (about ${p.kills} kills): ${where}.`;
-  return `Fight the ${plural(p.foe.name)}${style} until ${goalText(p.goals)}${p.item ? ` and ${p.item.count} ${p.item.name} are in the bank` : ''} (about ${p.kills} kills): ${where}.`;
+  const armour = p.kind === 'defence' && p.goals.some(g => g.skill === 'defence' && levelForXp(g.exp) === 10)
+    ? ' At Defence 10, bank and equip your armour. If you need upgrades, use Gear to buy affordable steel armour before continuing; keep enough coins for food. The shopping detour is extra.' : '';
+  return `Fight the ${plural(p.foe.name)}${style} until ${goalText(p.goals)}${p.item ? ` and ${p.item.count} ${p.item.name} are in the bank` : ''} (about ${p.kills} kills): ${where}.${armour}`;
 }
 
 /**
@@ -122,7 +124,7 @@ function pacingOf(step: Step, pick: CombatPick): StepPacing | undefined {
 }
 
 /** The fields that stay in view under a plan: the warnings. The route's other notes describe its own way and go to the folded "route as written". */
-const KEEP_FIELDS = new Set(['Dangerous', 'Attention', 'Combat']);
+const KEEP_FIELDS = new Set(['Dangerous', 'Attention', 'Combat', 'Armour']);
 
 /** The one line the game's plate shows for the phase: the opponent and what the phase is for. */
 function plateGoal(pick: CombatPick): string {

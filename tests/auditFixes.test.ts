@@ -31,15 +31,15 @@ const ready = (id: string, o: OwnedState | null, g: GearState | null) => {
   return stepReadiness({ step: step(id), steps: allSteps, progress, qp: 200, mode: 'members', stats: { attack: 40 }, owned: o, gear: g });
 };
 
-describe('S4-03: a weapon that can be wielded, Hill Giants, 50 Big bones', () => {
+describe('S4-03: a weapon that can be wielded, Giant frogs, no mandatory loot', () => {
   it('the step needs the Adamant scimitar and never the Rune scimitar before Attack 40', () => {
     const s = step('S4-03');
     // 2.55.1: the food joined the kit (the combat brief); the weapon is still the Adamant scimitar alone.
     expect(names(s.itemsRequired)).toEqual(['Adamant scimitar', 'Salmon']);
     expect([...names(s.itemsRequired), ...names(s.itemsRecommended)]).not.toContain('Rune scimitar');
-    expect(s.foes).toEqual(['Hill Giant']);
-    expect(s.pacing).toMatchObject({ skill: 'attack', targetLevel: 40, expPerAction: 140 });
-    expect(s.inGame!.npcNames).toEqual(['Hill Giant']);
+    expect(s.foes).toEqual(['Giant frog']);
+    expect(s.pacing).toMatchObject({ skill: 'attack', targetLevel: 40, expPerAction: 92 });
+    expect(s.inGame!.npcNames).toEqual(['Giant frog']);
   });
 
   it('the existing gear rules: at Attack 39 the Adamant scimitar is wearable and the Rune scimitar is not, at 40 it is', () => {
@@ -48,9 +48,9 @@ describe('S4-03: a weapon that can be wielded, Hill Giants, 50 Big bones', () =>
     expect(canWear(piece('Rune scimitar'), lv(40))).toBe(true);
   });
 
-  it('the completion is Attack 40 and 50 Big bones, and Big bones are not coins', () => {
-    expect(step('S4-03').inGame!.completionTrigger).toEqual({ type: 'SKILL_LEVEL', levels: [{ skill: 'attack', level: 40 }], items: [{ names: ['Big bones'], count: 50 }] });
-    expect(step('S4-03').doneWhen).toMatch(/50\+ Big bones in the bank/);
+  it('completion needs Attack 40 alone; optional bones are still not cash', () => {
+    expect(step('S4-03').inGame!.completionTrigger).toEqual({ type: 'SKILL_LEVEL', levels: [{ skill: 'attack', level: 40 }] });
+    expect(step('S4-03').doneWhen).toMatch(/No bone quota/);
     // 50 banked bones leave Wormbrain's 10,000 coins missing: bones are not liquid cash until sold.
     const r = ready('S5-05', owned([['Big bones', 0, 50]]), gearOf(0, 0));
     const coins = r.requirements.find((x) => x.kind === 'coins')!;

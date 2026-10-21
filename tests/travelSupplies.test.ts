@@ -213,7 +213,7 @@ describe('"stock up here" on the game card', () => {
     const ow = owned({ 'Law rune': 0, 'Air rune': 632, 'Fire rune': 0, 'Teleport card': 0, Chronicle: 0 });
     const g = gear(bag(['Chronicle', 1], ['Coins', 2005]));
     const st = buildPlayerState({ mode: 'f2p', stats: null, progress: { levels: {} }, owned: ow, gear: g, questsDone: null, connected: true });
-    const base = { steps: roadSteps(allSteps, () => true, 'S3-05'), levels: { magic: 25, woodcutting: 15 }, members: false, gear: g, owned: ow, spellbook: 0, chronicleCharges: 0, sourceOf: transportSources(st) };
+    const base = { steps: roadSteps(allSteps, () => true, 'S3-05').slice(0, 1), levels: { magic: 25, woodcutting: 15 }, members: false, gear: g, owned: ow, spellbook: 0, chronicleCharges: 0, sourceOf: transportSources(st) };
     const lumbridge = at(3222, 3219);
     const reldo = at(3210, 3494);
     // The drawer's list starts at the player: this leg's Varrock Teleport is part of what to bring.

@@ -161,7 +161,7 @@ describe('auto-mark triggers on the route', () => {
   it('"Done when" with items — the items are in the condition too', () => {
     // Mining 10 is the whole condition: Doric's ore is bought in S2-01.
     expect(step('S1-12').inGame!.completionTrigger).toEqual({ type: 'SKILL_LEVEL', levels: [{ skill: 'mining', level: 10 }] });
-    expect(step('S4-03').inGame!.completionTrigger).toEqual({ type: 'SKILL_LEVEL', levels: [{ skill: 'attack', level: 40 }], items: [{ names: ['Big bones'], count: 50 }] });
+    expect(step('S4-03').inGame!.completionTrigger).toEqual({ type: 'SKILL_LEVEL', levels: [{ skill: 'attack', level: 40 }] });
     expect(step('S4-04').inGame!.completionTrigger!.items).toEqual([{ names: ['Lobster'], count: 20 }]);
     expect(step('S1-13').inGame!.completionTrigger).toEqual({ type: 'ITEM_OWNED', items: [{ names: ['Coins'], count: 12000 }] });
   });

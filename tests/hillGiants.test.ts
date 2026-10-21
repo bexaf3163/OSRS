@@ -1,4 +1,6 @@
 import { describe, expect, it } from 'vitest';
+import legacyCollect from './combatRoute/legacyCollectStep.json';
+import type { Step } from '../src/types';
 import { allSteps, stepById } from '../src/data';
 import { stepReadiness } from '../src/lib/readiness';
 import { emptyProgress } from '../src/lib/progress';
@@ -9,7 +11,7 @@ import { navigationTarget } from '../src/lib/navigation';
 // S4-03 after the combat brief: the food is part of the kit, with the numbers the wiki stats give (Hill Giant: 35 hit points, Attack 18, attack bonus
 // +18, Defence 26, max hit 4, every 6 ticks, aggressive) at Defence 1 in iron armour; what to do in the game; the route into the dungeon.
 
-const s = stepById.get('S4-03')!;
+const s = legacyCollect as Step;
 const FOOD = ['Salmon', 'Trout', 'Tuna', 'Lobster', 'Swordfish'];
 
 function owned(items: Record<string, number>): OwnedState {
