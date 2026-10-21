@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import type { Progress, Step } from '../types';
 import { useStore } from '../store';
 import { useBridge } from '../bridge';
-import { isClosed } from './next-step';
+import { isClosed, isCompleted, questDependencyFacts } from './next-step';
 import { getGePrice } from '../services/pricesApi';
 import { adviseGear, gearData, routeNeeds, stepFoes, type AdvisorInput, type GearAdvice } from '../services/gearAdvisor';
 
@@ -30,18 +30,17 @@ export function meleeHintApplies(step: Step): boolean {
   return !skills.some(skill => skill === 'magic' || skill === 'ranged');
 }
 
-/** Quests marked done on the way (a step's quest auto-tick): they unlock, for example, the Rune platebody. */
-function questsDone(steps: Step[], p: Progress): Set<string> {
-  return new Set(steps.flatMap((s) => {
-    const t = s.inGame?.completionTrigger;
-    return t?.type === 'QUEST_COMPLETED' && t.questName && p.steps[s.id] === 'done' ? [t.questName] : [];
-  }));
-}
-
-/** Passage into Al Kharid is free after Prince Ali Rescue: by name, not by step code. */
-function freeToll(steps: Step[], p: Progress): boolean {
-  const quest = steps.find((s) => s.title === 'Prince Ali Rescue');
-  return Boolean(quest && isClosed(p, quest.id));
+/** Quest evidence passed to the existing gear advisor and shop routing. */
+export function gearQuestEvidence(steps: Step[], progress: Progress, liveQuests: readonly string[] | null): { questsDone: Set<string>; freeToll: boolean } {
+  const fact = questDependencyFacts(steps, liveQuests);
+  const done = new Set(liveQuests ?? []);
+  for (const step of steps) {
+    const trigger = step.inGame?.completionTrigger;
+    if (trigger?.type === 'QUEST_COMPLETED' && trigger.questName && (fact(step.id) ?? isCompleted(progress, step.id))) {
+      done.add(trigger.questName);
+    }
+  }
+  return { questsDone: done, freeToll: done.has('Prince Ali Rescue') };
 }
 
 export interface GearAdviceView {
@@ -56,7 +55,7 @@ export interface GearAdviceView {
 
 export function useGearAdvice(step?: Step | null, opts: { reserve?: number } = {}): GearAdviceView {
   const { progress, mode, steps } = useStore();
-  const { gear, stats, owned } = useBridge();
+  const { gear, stats, owned, questsDone } = useBridge();
   const [prices, setPrices] = useState<ReadonlyMap<number, number>>(new Map());
   const [pricesFailed, setPricesFailed] = useState(false);
 
@@ -76,12 +75,11 @@ export function useGearAdvice(step?: Step | null, opts: { reserve?: number } = {
     owned,
     mode,
     gePrices: prices,
-    freeToll: freeToll(steps, progress),
+    ...gearQuestEvidence(steps, progress, questsDone),
     routeNeeds: routeNeeds(steps, (id) => isClosed(progress, id)),
     foes: fightStep ? stepFoes(fightStep) : [],
-    questsDone: questsDone(steps, progress),
     ...(opts.reserve ? { reserve: opts.reserve } : {}),
-  }), [progress, stats, gear, owned, mode, prices, steps, fightStep, opts.reserve]);
+  }), [progress, stats, gear, owned, mode, prices, steps, fightStep, opts.reserve, questsDone]);
   const advice = useMemo(() => adviseGear(input), [input]);
   return { advice, input, fightStep, pricesReady: prices.size > 0, pricesFailed };
 }

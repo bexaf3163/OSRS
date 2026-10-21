@@ -1,4 +1,4 @@
-Start with [docs/CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md) for the fifth cumulative review candidate, source/CI boundaries, live launch evidence and prioritized remaining work. Earlier notes below are historical; do not roll back to an older preview.
+Start with [docs/CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md) for the current cumulative repair block, source/CI boundaries, per-block portable releases, live evidence and remaining work. Its newest section supersedes older branch references below; do not roll back to an earlier preview.
 
 Non-melee hint context: [docs/CODEX_NONMELEE_HINT_HANDOFF.md](docs/CODEX_NONMELEE_HINT_HANDOFF.md). The selected Magic/Ranged training step must not borrow a future scimitar banner. Preserve the actual melee analysis and existing StyleGear.
 
