@@ -1046,3 +1046,5 @@ Progress write receipts are documented in `docs/CODEX_WRITE_STATUS_HANDOFF.md`. 
 `docs/CODEX_BANK_QUANTITY_HANDOFF.md` preserves per-row unknown bank quantities in ownership, departure checks and all-size potion totals. `bankSeen` alone does not prove a missing field is zero. This follow-up is separate from the first audit preview EXE; complete tool eligibility and aggregate lower-bound parity remain open.
 
 `docs/CODEX_SKILL_AVAILABILITY_HANDOFF.md` separates a repeatable method's suggested upper bracket from availability, keeps selected-leg actions/requirements in sync and removes the ranking advantage of unchecked supplies. Preserve the reviewed S6-02 follow-method regression changes. Exact unlock/rate/budget coverage and Gear remain open; the first preview EXE predates this follow-up.
+
+`docs/CODEX_GEAR_CURRENT_BENEFIT_HANDOFF.md` blocks actionable current-DPS downgrades caused by future Strength averaging and distinguishes current damage copy from the training-window value. Keep the regression matrix and current-percentage assertions. Actual phase/style and broader Gear coverage remain open; no live combat measurement is implied.

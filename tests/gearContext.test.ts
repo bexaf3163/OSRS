@@ -36,6 +36,19 @@ describe('amulets: strength against power, across levels, styles and opponents',
   const WEAPON: Record<number, string> = { 1: 'Iron scimitar', 10: 'Black scimitar', 20: 'Mithril scimitar', 30: 'Adamant scimitar', 40: 'Rune scimitar' };
   const AMULETS = prices({ 'Amulet of strength': 1500, 'Amulet of power': 1500 });
 
+  it('a do-now offensive change cannot reduce current damage to obtain an averaged future gain', () => {
+    const regressions: string[] = [];
+    for (const attack of [1, 10, 20, 30, 40]) for (let strength = 1; strength <= 60; strength++) {
+      for (const neck of ['Amulet of strength', 'Amulet of power']) {
+        const a = adviseGear(input({ levels: { attack, strength, defence: 1 }, gear: wearing([WEAPON[attack], neck], 100_000), foes: [foe('Hill Giant')], gePrices: AMULETS }));
+        for (const action of a.actions) if (action.gain.kind === 'dps' && action.gain.after.dps < action.gain.before.dps * 0.999) {
+          regressions.push(`${attack}/${strength} ${neck} -> ${action.item.name}: ${action.gain.after.dps / action.gain.before.dps}`);
+        }
+      }
+    }
+    expect(regressions.slice(0, 8)).toEqual([]);
+  });
+
   it('the words follow the numbers: a max hit is named only when it changes, accuracy is never called speed, a changed style is named', () => {
     let checked = 0;
     let hitChanged = 0;
@@ -57,6 +70,9 @@ describe('amulets: strength against power, across levels, styles and opponents',
               checked++;
               expect(t, where).not.toMatch(/faster|quicker|speed/);
               expect(t.includes('one hit every'), where).toBe(Math.abs(g.after.speed - g.before.speed) > 0.01);
+              const nowRatio = g.after.dps / g.before.dps;
+              if (nowRatio >= 1.01) expect(t, where).toContain(`expected damage +${Math.round((nowRatio - 1) * 100)}%`);
+              else if (g.ratio >= 1.01) expect(t, where).toContain('training average');
               const moved = g.after.style !== g.before.style;
               const shown = moved && g.kept && g.kept.maxHit > g.before.maxHit ? g.kept.maxHit : g.after.maxHit;
               if (shown !== g.before.maxHit) {

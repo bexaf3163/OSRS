@@ -19,7 +19,7 @@ Current work and evidence are in [the stabilization handoff](CODEX_STABILIZATION
 | T08 | P1 | Payload limits and queued apply ordering/server-lifetime guards implemented/tested; broader wire/account restart acceptance remains open. |
 | T09 | P1 | Real stalled-reader reproduction, bounded async SSE output, expiry and current-completion replay implemented/tested; exact-tree CI passed. Real frame-time and telemetry-cost acceptance remain open. |
 | T10 | P1 user impact | Combined-objective order/XP, item fallback, stock-complete alternatives, dose allocation, mandatory loot-trip minimum and unscheduled-income exclusion implemented. Catalogue, full packing/cost/gear and live comparison remain open. |
-| T11 | P2 | Repeatable skill methods remain available beyond suggested upper brackets; selected-leg actions and unknown-supply ranking repaired. Verified unlock/rate/budget coverage and meaningful Gear comparisons remain open. |
+| T11 | P2 | Skill upper-bracket availability, selected-leg actions and unknown-supply ranking repaired. Gear excludes future-average current-DPS downgrades and labels current versus training benefit. Verified unlock/rate/budget, actual fight style and broader Gear coverage remain open. |
 | T12 | P2 | Separate tool/input preparation, affordable first batches, repeat-trip replenishment and known-total sale observation implemented. GE window modelling, complete travel and live acceptance remain open. |
 | T13 | P2 | Review every route step as a continuous feasible progression: open. |
 | T14 | P2 | Claude's single HUD retained; health/disclosure corrected. Path simplification and live visual acceptance remain open. |
