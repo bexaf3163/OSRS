@@ -1,6 +1,6 @@
 # OSRS Path audit preview — test build, audit still in progress
 
-This second portable preview includes cumulative repairs through draft PR #22 (selected training map consistency). The app's internal version remains **2.74.0**; the EXE filename and this prerelease identify the audit revision. This is not a completed audit or a replacement for the stable release. Stable auto-updates ignore prereleases. The first `audit-test-978cb6d6` preview predates PRs #15–22.
+This third portable preview includes cumulative repairs through draft PR #27 (remaining collection combat in food/shopping projections). The app's internal version remains **2.74.0**; the EXE filename and this prerelease identify the audit revision. This is not a completed audit or a replacement for the stable release. Stable auto-updates ignore prereleases. The first `audit-test-978cb6d6` preview predates PRs #15–27; the second `audit-test-3174b90e` predates PRs #24–27.
 
 ## Included
 
@@ -17,6 +17,10 @@ This second portable preview includes cumulative repairs through draft PR #22 (s
 - Lost City's axe is acquired inside the dungeon, not required before boarding for Entrana.
 - Lossless browser profile-source validation and supported native backup selection, preserving unknown-format originals.
 - Minimal dependency/lockfile repairs, with remaining build-tool advisories documented separately.
+- Reached pure skill goals satisfy their route dependency without changing saved skip marks; quests/items/carryover still need their own proof.
+- Native profile-source protection before mirroring/binding, with one conditional recovery warning and preserved compatible browser recovery.
+- Contextual route explanations replace the universal amulet and wasted-Defence-reward claims.
+- Food/shopping keeps the required Hill Giant collection workload after Attack 40; known bone stock reduces remaining kills without adding a new visible skill goal.
 - Claude's single expandable game guide is retained. This is primarily a correctness preview, not the final Path/Skills/Gear redesign.
 
 ## Test safely
@@ -31,6 +35,6 @@ The preview's Windows CI runs TypeScript/build, data validation, all Vitest test
 
 ## Still open
 
-Full combat trainer coverage, complete travel/food/loot packing and gear budgets; verified skill unlock/rate/budget coverage, compound Fishing/Cooking handover and actual combat-style Gear comparison; all route steps as a continuous progression; remaining profile/phase/unknown-state edge cases; Path simplification; residual dependency advisories; real-game screenshots and lifecycle/update acceptance. Automated estimates are not measured live combat timings. See `docs/CODEX_AUDIT_BACKLOG.md` and the individual handoffs in the source tree.
+Full combat trainer coverage, complete joint food/potion/loot packing, acquisition/travel and gear budgets; verified skill unlock/rate/budget coverage, compound Fishing/Cooking handover and actual combat-style Gear comparison; all route steps as a continuous progression; compatible-but-divergent profile sources, profile write receipts and remaining phase/unknown-state edge cases; Path simplification; residual dependency advisories; real-game screenshots and lifecycle/update acceptance. Automated estimates are not measured live combat timings. See `docs/CODEX_AUDIT_BACKLOG.md` and the individual handoffs in the source tree.
 
 No claim of zero regressions or completion is made. Local native execution was blocked before window startup and local packaging hit an EPERM restriction; the separate Windows runner supplies artifact verification.
