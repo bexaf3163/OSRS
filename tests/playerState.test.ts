@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildPlayerState, coinsOf, diffPlayerState, heldOf, levelOf, questOf, type PlayerStateInput } from '../src/lib/playerState';
+import { buildPlayerState, coinsOf, diffPlayerState, heldExact, heldOf, levelOf, questOf, type PlayerStateInput } from '../src/lib/playerState';
 import { describe as describeReq, evaluate, type Requirement } from '../src/lib/requirements';
 import { nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
 import type { GearState } from '../src/services/runeliteBridge';
@@ -50,6 +50,21 @@ describe('the single player state', () => {
   it('the manual "already have" mark counts when the game knows nothing about the item', () => {
     const s = state({ progress: { levels: {}, ownedManual: { 'name:rope': { count: 2 } } }, owned: owned({}, false) });
     expect(heldOf(s, 'Rope', 'name:rope')).toMatchObject({ presence: 'PRESENT', total: 2, source: 'manual' });
+  });
+
+  it('opening the bank does not establish an unreported item quantity', () => {
+    const unread = state({ owned: owned({ Salmon: { carried: 0 } }, true) });
+    expect(heldExact(unread, 'Salmon')).toMatchObject({ presence: 'UNKNOWN', bank: null, total: null });
+    expect(evaluate({ type: 'item', name: 'Salmon', count: 20 }, unread).state).toBe('UNKNOWN');
+    const partial = state({ owned: owned({ Salmon: { carried: 5, noted: 2 } }, true) });
+    expect(heldExact(partial, 'Salmon')).toMatchObject({ presence: 'PRESENT', bag: 5, noted: 2, bank: null, total: 7 });
+    expect(evaluate({ type: 'item', name: 'Salmon', count: 20 }, partial).state).toBe('UNKNOWN');
+    expect(evaluate({ type: 'item', name: 'Salmon', count: 5 }, partial).state).toBe('OK');
+    const marked = state({ owned: owned({ Salmon: {} }, true), progress: { levels: {}, ownedManual: { 'name:salmon': { count: 20 } } } });
+    expect(heldExact(marked, 'Salmon', 'name:salmon')).toMatchObject({ presence: 'PRESENT', bank: null, total: 20, source: 'manual' });
+    const knownEmpty = state({ owned: owned({ Salmon: { bank: 0 } }, true) });
+    expect(heldExact(knownEmpty, 'Salmon')).toMatchObject({ presence: 'MISSING', bank: 0, total: 0 });
+    expect(knownEmpty.fingerprint).not.toBe(unread.fingerprint);
   });
 
   it('quests and coins: the unknown stays unknown', () => {
@@ -139,7 +154,7 @@ describe('the unified requirements', () => {
 
   it('a group of alternatives: trout 5 + salmon 10 with 20 needed — 15 held, 5 short', () => {
     const food: Requirement = { type: 'alternative', requiredCount: 20, alternatives: [{ name: 'Trout' }, { name: 'Salmon' }] };
-    const s = state({ owned: owned({ Trout: { carried: 5 }, Salmon: { carried: 10 } }, true) });
+    const s = state({ owned: owned({ Trout: { carried: 5, bank: 0 }, Salmon: { carried: 10, bank: 0 } }, true) });
     expect(evaluate(food, s)).toMatchObject({ state: 'PARTIAL', have: 15, missing: 5 });
     expect(ev(food, state({ owned: owned({ Trout: { carried: 20 } }, false) }))).toBe('OK');
     expect(ev(food, state({ owned: owned({ Trout: { carried: 5 } }, false) }))).toBe('UNKNOWN');

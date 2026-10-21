@@ -98,6 +98,16 @@ describe('the spec case: the plan needs 4 doses', () => {
 });
 
 describe('every source, no double counting, unknown is not none', () => {
+  it('all dose names without all bank quantities cannot establish a shortage', () => {
+    const incomplete = strength({ 4: [0, null] });
+    const h = heldUnits(state(incomplete), 'Strength potion(4)');
+    expect(h).toMatchObject({ presence: 'UNKNOWN', bank: null, total: null });
+    expect(potionRow(rowsOf(ONE_FOUR, incomplete)).channel).toBe('unknown');
+    expect(evaluatePreflight(preflightItems(ONE_FOUR[0]), incomplete).rows[0]).toMatchObject({ inBank: null, state: 'MISSING_FROM_BAG' });
+    const complete = strength({});
+    expect(heldUnits(state(complete), 'Strength potion(4)')).toMatchObject({ presence: 'MISSING', bank: 0, total: 0 });
+    expect(evaluatePreflight(preflightItems(ONE_FOUR[0]), complete).rows[0].state).toBe('NOT_FOUND_IN_BANK');
+  });
   it('the bag, banknotes and the bank add up in doses', () => {
     const o = strength({ 4: [1, 2], 2: [0, 3] });
     o.items.get(nameKey('Strength potion(3)'))!.noted = 2;

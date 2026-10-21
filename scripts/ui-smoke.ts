@@ -258,6 +258,14 @@ async function run(browser: Browser) {
     await page.evaluate(() => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 26, noted: 14, bank: 0, exactCarried: 26, exactNoted: 14, exactBank: 0 }] }));
     await page.waitForTimeout(800);
     expect(!(await page.locator('main').innerText()).includes('Unnote at bank'), `notes (${width}): unnoting clears the action after the live ownership update`);
+    await page.evaluate(() => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 0 }] }));
+    await page.waitForTimeout(800);
+    const unreported = await page.evaluate(() => {
+      const posts = (window as unknown as { __posts: { path: string; body?: { plan?: { lines: { name: string; where: string; action?: string }[] } } }[] }).__posts;
+      return posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.plan?.lines.find(l => l.name === 'Salmon');
+    });
+    expect(unreported?.where === 'UNKNOWN' && !/^(Buy|Withdraw) /i.test(unreported.action ?? ''), `bank quantity (${width}): an unreported bank count stays unknown in the game payload`);
+    expect(await noOverflow(page) && !errors.length, `bank quantity (${width}): no overflow or console errors`);
     await page.context().close();
   }
   if (process.env.UI_ONLY === 'items') return;

@@ -36,6 +36,7 @@ export interface ReqResult {
 const gp = (n: number) => Math.round(n).toLocaleString('en-US');
 
 export function evaluate(req: Requirement, s: PlayerState): ReqResult {
+  const bankUnknown = s.bankSeen ? 'bank quantity not checked' : 'the bank was not opened';
   switch (req.type) {
     case 'skill': {
       const lv = levelOf(s, req.skill);
@@ -53,7 +54,7 @@ export function evaluate(req: Requirement, s: PlayerState): ReqResult {
         const bag = h.bag ?? 0;
         // Enough in the bag: it is known; otherwise the rest could be in the bank.
         return bag >= count ? { state: 'OK', have: bag, need: count, missing: 0, detail: 'in the bag' }
-          : { state: 'UNKNOWN', have: bag, need: count, detail: bag ? `${bag}${u} in the bag, the bank was not opened` : 'the bank was not opened' };
+          : { state: 'UNKNOWN', have: bag, need: count, detail: bag ? `${bag}${u} in the bag, ${bankUnknown}` : bankUnknown };
       }
       const bag = h.bag ?? 0;
       const total = h.total ?? bag;
@@ -65,7 +66,7 @@ export function evaluate(req: Requirement, s: PlayerState): ReqResult {
       if (bag >= count) return { state: 'OK', have: bag, need: count, missing: 0, detail: 'in the bag' };
       if (bag + h.noted >= count) return { state: 'BANK', have: total, need: count, missing: 0, detail: `${h.noted}${u} as banknotes: unnote them at a bank before use` };
       // The bank was not opened: the rest could be there, that is "unknown", not "short".
-      if (h.bank === null && h.source === 'game') return { state: 'UNKNOWN', have: bag, need: count, detail: `${bag}${u} in the bag, the bank was not opened` };
+      if (h.bank === null && h.source === 'game') return { state: 'UNKNOWN', have: bag, need: count, detail: `${bag}${u} in the bag, ${bankUnknown}` };
       if (total >= count) return { state: 'BANK', have: total, need: count, missing: 0, detail: `${bag}${u} in the bag, the rest in the bank` };
       if (total > 0) return { state: 'PARTIAL', have: total, need: count, missing: count - total, detail: `have ${total}${u}, ${count - total} short` };
       return { state: 'MISSING', have: 0, need: count, missing: count, detail: 'in neither the bag nor the bank' };
@@ -76,7 +77,7 @@ export function evaluate(req: Requirement, s: PlayerState): ReqResult {
       if (!s.connected) return { state: 'UNKNOWN', need: 1, detail: 'no connection to the game' };
       const h = heldOf(s, req.name);
       if (h.presence === 'PRESENT') return { state: 'BANK', have: 1, need: 1, missing: 0, detail: (h.bag ?? 0) > 0 ? 'in the bag: wear it' : 'in the bank: take it and wear it' };
-      return h.presence === 'MISSING' ? { state: 'MISSING', have: 0, need: 1, missing: 1, detail: 'none' } : { state: 'UNKNOWN', need: 1, detail: 'the bank was not opened' };
+      return h.presence === 'MISSING' ? { state: 'MISSING', have: 0, need: 1, missing: 1, detail: 'none' } : { state: 'UNKNOWN', need: 1, detail: bankUnknown };
     }
     case 'quest': {
       const q = questOf(s, req.quest);
@@ -106,7 +107,7 @@ export function evaluate(req: Requirement, s: PlayerState): ReqResult {
       }
       if (bag >= req.requiredCount) return { state: 'OK', have: bag, need: req.requiredCount, missing: 0, detail: 'in the bag' };
       if (total >= req.requiredCount) return { state: 'BANK', have: total, need: req.requiredCount, missing: 0, detail: 'withdraw or unnote the remaining items at a bank before use' };
-      if (unknownAny) return { state: 'UNKNOWN', have: total, need: req.requiredCount, detail: 'the bank was not opened' };
+      if (unknownAny) return { state: 'UNKNOWN', have: total, need: req.requiredCount, detail: bankUnknown };
       const missing = req.requiredCount - total;
       return { state: total > 0 ? 'PARTIAL' : 'MISSING', have: total, need: req.requiredCount, missing, detail: `have ${total} of ${req.requiredCount}, ${missing} short` };
     }

@@ -57,14 +57,15 @@ export function heldUnits(
   const records = DOSE_SIZES.map((size) => ({ size, o: s.owned?.items.get(nameKey(doseName(kind.base, size))) }));
   // The game reports every size together (ItemCounts.report); a size it did not report is not "none" but "not counted".
   const reported = records.every((r) => r.o !== undefined);
+  const bankReported = s.bankSeen && records.every((r) => r.o?.bank !== undefined);
   const sizes: DoseSize[] = records.map(({ size, o }) => ({
-    size, bag: o?.carried ?? 0, noted: o?.noted ?? 0, bank: s.bankSeen && reported ? o?.bank ?? 0 : null,
+    size, bag: o?.carried ?? 0, noted: o?.noted ?? 0, bank: bankReported ? o!.bank! : null,
   }));
   const bag = sizes.reduce((a, x) => a + x.size * x.bag, 0);
   const noted = sizes.reduce((a, x) => a + x.size * x.noted, 0);
   const anyRecord = records.some((r) => r.o !== undefined);
   const base = { equipped: 0, unit: 'dose' as const, sizes };
-  if (reported && s.bankSeen) {
+  if (reported && bankReported) {
     const bank = sizes.reduce((a, x) => a + x.size * (x.bank ?? 0), 0);
     const total = bag + noted + bank;
     return { ...base, presence: total > 0 ? 'PRESENT' : 'MISSING', bag, noted, bank, total, source: 'game' };

@@ -40,7 +40,7 @@ describe('one trip: the window and the reserve', () => {
   });
 
   it('food adds up, a tool is taken once, what is owned is assigned to the nearest steps', () => {
-    const plan = planOneTrip(steps, emptyProgress(), 'A1', st(owned({ Lobster: { carried: 13 }, Hammer: { carried: 1 } }, true)));
+    const plan = planOneTrip(steps, emptyProgress(), 'A1', st(owned({ Lobster: { carried: 13, bank: 0 }, Hammer: { carried: 1, bank: 0 } }, true)));
     const lobster = plan.lines.find((l) => l.line.nameEn === 'Lobster')!;
     expect(lobster.line.count).toBe(40);
     expect(lobster.toGet).toBe(27);
