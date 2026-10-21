@@ -32,7 +32,7 @@ const RANGE_KEY = 'osrs-put:shopping-range';
 const SCOPE_KEY = 'osrs-put:shopping-scope';
 
 const SCOPES: { id: ScopeKind; label: string }[] = [
-  { id: 'trip', label: 'Next trip' },
+  { id: 'trip', label: 'Stock up' },
   { id: 'step', label: 'This step' },
   { id: 'range', label: 'Stages' },
 ];
@@ -216,7 +216,7 @@ export function ShoppingPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [planKey, link, syncPlan]);
 
-  const scopeName = scope === 'trip' ? 'the next trip' : scope === 'step' ? 'this step' : `stage${range.from === range.to ? ` ${range.from}` : `s ${range.from}–${range.to}`}`;
+  const scopeName = scope === 'trip' ? 'the upcoming steps' : scope === 'step' ? 'this step' : `stage${range.from === range.to ? ` ${range.from}` : `s ${range.from}–${range.to}`}`;
   const scopeLine = scope === 'range'
     ? `Stages ${range.from}–${range.to}${range.openOnly ? ', unfinished steps' : ''}: ${selected.length} ${plural(selected.length, 'step', 'steps')}.`
     : current
@@ -325,7 +325,7 @@ export function ShoppingPage() {
         </div>
       )}
       {/* Offline and waiting are said once, by their own card. */}
-      <p className="muted small shop-scope-line">{scopeLine ? `For ${scopeLine} ` : ''}{empty === 'offline' || empty === 'not-loaded' ? '' : sync}</p>
+      <p className="muted small shop-scope-line">{scopeLine ? `For ${scopeLine} ` : ''}{empty === 'offline' || empty === 'not-loaded' ? '' : sync}{listShown && purchase && ' Purchase quantities cover the selected steps, not one inventory. See Path for what to carry now.'}</p>
 
       {empty !== null && emptyView(empty)}
 

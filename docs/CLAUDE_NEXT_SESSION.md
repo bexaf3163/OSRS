@@ -1,5 +1,9 @@
 # Claude continuation: OSRS Path cumulative repair candidate
 
+## Next block: Shopping purchase scope
+
+Continue on `codex/audit-block-shopping-stockup`, cumulative over the HUD block. Shopping's old Next trip selector labelled whole-goal purchase reserves as if they were one carried bag. It is now Stock up, with one short clarification in the existing scope line; the copied list says upcoming steps. The saved `trip` key, selected-step window, calculations, quantities, unknown states, actual bank withdrawals and exchange payload are unchanged. No new tab/panel or inventory-packing claim. See [CODEX_SHOPPING_SCOPE_HANDOFF.md](CODEX_SHOPPING_SCOPE_HANDOFF.md). This block requires its own checks and portable release; older published EXEs do not include it.
+
 ## New block after the fifth candidate: HUD collection objective
 
 Continue on `codex/audit-block-hud-collection`; it includes the documentation-only live-review branch and all earlier repairs. The block's exact published revision is the release tag/EXE source SHA, with SHA256SUMS.txt alongside it. See [CODEX_HUD_COLLECTION_HANDOFF.md](CODEX_HUD_COLLECTION_HANDOFF.md). Explicit collection objectives now lead over incidental XP pacing; XP reaching its projected level does not advance a collection phase, and XP percentage is not presented as collected-item progress. Food/preflight, quest stages, ordinary training, current/next-phase transport, route completion, calculations and saves retain their contracts.
