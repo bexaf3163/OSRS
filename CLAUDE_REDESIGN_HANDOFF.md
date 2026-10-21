@@ -1,3 +1,5 @@
+Latest repair checkpoint: [docs/CODEX_REPAIR_CHECKPOINT.md](docs/CODEX_REPAIR_CHECKPOINT.md), with source-only next route cases in [docs/CODEX_ROUTE_CONTINUATION_REVIEW.md](docs/CODEX_ROUTE_CONTINUATION_REVIEW.md). Follow the cumulative repair branch; do not reset to the earlier preview or interpret test success as all blocks 2b-5 complete.
+
 Post-preview profile write receipts: [docs/CODEX_PROFILE_WRITE_HANDOFF.md](docs/CODEX_PROFILE_WRITE_HANDOFF.md). Rare metadata edits confirm the native write before publication/reload; retain the old progress writer and source protections.
 
 Post-preview profile conflict protection: [docs/CODEX_PROFILE_CONFLICT_HANDOFF.md](docs/CODEX_PROFILE_CONFLICT_HANDOFF.md). Supported but differing lists are retained and require recovery review; do not mirror one over the other.

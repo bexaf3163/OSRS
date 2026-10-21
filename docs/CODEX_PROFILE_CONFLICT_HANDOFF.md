@@ -11,3 +11,5 @@ Formatting, implicit Main normalization and list order alone do not count as con
 Evidence: four conflict reproductions failed before repair. Full local Vitest passed 1,736 tests in 132 files before the additional matching-source-restart case; final focused profile suite passed 27 tests. Production build/TypeScript, check-data, Java testClasses and browser protection scenarios at 390/1280 px passed. Both warning screenshots were exported; the wide image was visually inspected. Actual-EXE E2E adds a third native-file case containing a supported disk-only character; fresh cumulative CI must verify it. No local native or real RuneLite success is claimed.
 
 Open: physical profile write receipts, reload after failed accepted writes, native read errors collapsed to absence, failures after startup and a user-facing supported conflict resolver. Existing manual progress changes are separate from profile-list protection. This is not completion of T01 or of the project audit.
+
+Clean cumulative CI passed at 89b74043cb2695f4aeeca964ce5431395c3e86f6, run 39608597131. The additional supported conflicting-source scenario passed in the actual isolated Windows EXE.

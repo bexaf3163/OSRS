@@ -5,7 +5,8 @@ This is a continuation handoff, not a completed-project audit or a zero-regressi
 ## Source and test builds
 
 - Main remains Claude's 2.74.0, `4be6f94f20489a2bf711be45570f7cf168e8c6d4` (last checked on 2026-10-21). No audit PR has been merged.
-- The application repair stack is draft PRs #1–28 in bexaf3163/OSRS; #29 contains this documentation-only checkpoint. Each new package is based on the previous package; review/apply in order rather than cherry-picking only a late dependent PR onto main.
+- The repair stack is draft PRs #1–34 in bexaf3163/OSRS; #29 and the checkpoint continuation contain documentation only. Each package is based on the previous package; review/apply in order rather than cherry-picking a dependent late PR onto main.
+- Latest published fourth preview: branch `codex/audit-test-build-4`, remote source `09a6b956e65c201cc008952f75d73b8b8b1eb37c`, includes application repairs through #33. [Download OSRS-Path-audit-test-09a6b956.exe](https://github.com/bexaf3163/OSRS/releases/download/audit-test-09a6b956/OSRS-Path-audit-test-09a6b956.exe). All cumulative gates/publication passed in run 39610205457. The published GitHub asset digest matches the actual isolated EXE test: SHA-256 `c48aee8c8380dadaab2877d0c8388a3f0ecff8ab0384f0dda60504f75735d68d`, size 101842257 bytes. It remains a prerelease and keeps internal app version 2.74.0.
 - Third preview source: branch `codex/audit-test-build-3`, remote commit `402222c9672cfafecb6d128121b22263d58d06e2`. Includes application repairs through #27. Its filename is `OSRS-Path-audit-test-402222c9.exe`; all CI gates passed and the separate prerelease is published: [download the verified portable EXE](https://github.com/bexaf3163/OSRS/releases/download/audit-test-402222c9/OSRS-Path-audit-test-402222c9.exe). SHA-256: `06333d32f54aead72de743b95b279b2d2234c7cac28077de5badcff913f7a0e0`.
 - Earlier preview `audit-test-3174b90e` includes through #22 and excludes #24–27. Preview `audit-test-978cb6d6` is older again. All keep internal app version 2.74.0; identify the test revision by filename/SHA.
 - Original portable installation and player data have not been replaced. Test in a separate directory and retain the working EXE/data folder. Prereleases do not replace stable auto-updates.
@@ -20,21 +21,28 @@ This is a continuation handoff, not a completed-project audit or a zero-regressi
 | #25 | Both profile sources inspected before mirroring; native/future/two-source damage pauses unsafe profile edits and game sync with one conditional warning. | Compatible divergent lists, physical profile write receipts and later failures remain open. |
 | #26 | Route text no longer claims strength amulets always win or early Defence wastes the quest reward; stocking advice follows the selected plan. | Does not implement full gear-cost/Defence-detour comparison. |
 | #27 | Food and Shopping include remaining required collection after Attack 40; fifty missing bones means fifty Hill Giant fights, thirty owned means twenty. | Full joint food/potion/loot packing and complete banking/travel cost remain open. |
+| #30 | Required combat loot uses per-row bank certainty; confirmed stock reduces the collection ceiling and unread item counts remain disclosed. | A collection ceiling is not proof the stock is missing. |
+| #31 | Confirmed food stock is counted while unknown alternatives cannot justify buying more; next-trip withdrawals/notes remain usable evidence. | Remaining legacy consumers and complete inventory packing are broader work. |
+| #32 | Supported conflicting profile lists are preserved before mirroring, with one conditional warning and paused unsafe sync. | No automatic source selection or conflict-resolution UI. |
+| #33 | Rare profile edits confirm the physical write before publication/reload, retain failed edits for retry and reload Main after active-profile deletion. | Not a transaction across native/browser storage or a power-loss fsync guarantee. |
 
 Earlier packages cover progress recovery/write reporting, update digests, exact item/notes/doses, prerequisites, session freshness, snapshot ordering, bounded SSE output, shared reserves, executable funding batches, Waterfall phase preparation, combat objective order and required loot-trip minimums, dependency fixes and contextual Gear benefit. The exact scopes and limitations are in the individual CODEX_*_HANDOFF documents.
 
 ## Evidence
 
-- Latest local application suite: 1,720 Vitest tests in 130 files; TypeScript/Vite build; data validator 0 errors/warnings; Java testClasses. Earlier full Java suite has 601 tests and the cumulative CI runs the full suite again.
+- Latest local application suite: 1,745 Vitest tests in 133 files; TypeScript/Vite build; data validator 0 errors/warnings; Java testClasses. Earlier full Java suite has 601 tests and cumulative CI runs the full suite again.
 - Narrow/wide retained-combat browser tests verify the real protocol-6 prep snapshot, food after Attack 40, unchanged completion and a live fixture stock update from 0 to 30 bones. Existing item-only instructions/visible pace tests remain intact; the internal estimation skill is not serialized to the game.
 - #24, #25 and #26 clean CI passed. #25's actual isolated EXE retained future/syntax-damaged native profile bytes, displayed protection and did not import changed fixture-game Magic levels.
 - #27/#28 cumulative clean CI passed at their own commits, runs 39602704028 and 39602935795. The published third-preview digest matches the actual-EXE test digest. Browser fixtures and actual-EXE fixture tests are different from a live RuneLite session.
+- #30–33 clean cumulative CI passed: runs 39606623250, 39607713585, 39608597131 and 39609958018. #33's real EXE retained original profile bytes after a physical temporary-path write failure, retained the unsaved rename and persisted it on retry; supported conflicting native lists also survived and blocked fixture-game import.
 - Local native execution has not succeeded: source startup failed before a window, packaging hit EPERM, and a downloaded EXE's native spawn returned UNKNOWN. Do not rewrite these as passes. Computer Use launch of newly downloaded software requires its separate action-time confirmation.
 - No real game screenshots, current account stats, replayed completed quests or measured live combat rates are claimed. The historical Attack 30 / Strength 21 / Defence 1 / 24 HP fixture is a reproduction case, not a fresh account reading.
 
 ## Resume without duplicating or undoing work
 
 Read `CLAUDE_REDESIGN_HANDOFF.md`, `docs/CODEX_AUDIT_BACKLOG.md` and the linked handoffs on the repair branch. The backlog includes T01–T17 and dispositions of all 30 Gemini finding groups; it deliberately rejects stale or mismatched proposed patches. The 64 KiB concern was not solved by removing all limits: small commands retain 64 KiB, complete snapshots have a bounded 384 KiB contract, and refusal/reconnection behavior is tested.
+
+The targeted source continuation in [CODEX_ROUTE_CONTINUATION_REVIEW.md](CODEX_ROUTE_CONTINUATION_REVIEW.md) records concrete next cases for Magic funding, compound skill handovers, consumer-specific dependency subsets and encounter phases. It is deliberately not a completed 67-step playthrough.
 
 Keep the single expandable `OsrsPathGuideOverlay`; do not restore the old text plate, dock bar or duplicate need card. Preserve IDs, completion triggers, notes, profile keys, selected plans, unknown-state semantics and owned/manual stock. Use one current action and disclosure for details; do not add more dashboard panels or switches to expose an engine fix.
 
@@ -44,7 +52,7 @@ Important unfinished work remains:
 2. S6-01 Ranged should not lead a level-1 account straight into the static Ogress plan without a coherent trainer/ammunition/gear/safespot projection. S6-02 needs a real Cooking supplies/location handover after Fishing. S6-03 needs continuous Mining/Woodcutting unlocks/tools; S6-04 needs spell-appropriate inputs. Simply adding followsMethod leaves stale targets/instructions.
 3. Combat trainer catalogue beyond Cow/Minotaur/Hill Giant, full simultaneous inventory packing, travel/acquisition/banking/gear costs, actual fight style and measured rates. Required loot is not imaginary sale income. Whole-goal food purchases are not the same as one carried bag.
 4. Remaining quest/loadout phases, non-monotonic Monkey Madness returns, Lost City spell/food/escape supplies, Demon Slayer's separate inventory phases, Tanglefoot's special damage rules and equivalent acquisition dependencies.
-5. Per-row bank completeness throughout remaining legacy views, profile write receipts/reload after failure, compatible-source divergence, secondary-backup error reporting and a real isolated two-version update.
+5. Per-row bank completeness throughout remaining legacy views, native read errors, supported profile-conflict resolution, secondary-backup error reporting and a real isolated two-version update. The profile receipt/reload and startup conflicting-source protections above must be preserved.
 6. Path simplification and complete desktop/HUD acceptance across DPI, zoom, themes, fonts, long text, offline/unknown/ready/missing and actual click/Alt-drag regions. Test renders are not game screenshots.
 7. Final KNOWN-ISSUES, review package and stable release only after their actual acceptance. Remaining build-tool dependency advisories are documented; do not run a forced audit fix or downgrade the builder.
 

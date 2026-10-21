@@ -9,3 +9,5 @@ A whole-goal purchase deficit requires complete food quantities, unless the conf
 Seven regression cases reproduced the previous behavior. Existing complete-snapshot fixtures now explicitly report zero for absent accepted fish; their original purchase assertions are retained. Validation: 1,731 Vitest tests in 132 files; production build/TypeScript; check-data 0 errors/warnings; Java testClasses; browser checks at 390/1280 px, including an OWNED update with an omitted alternative and partial known bank stock. Focused UI passed after the final copy simplification. Both food-line screenshots were visually reviewed before removing repeated same-food healing text. Cumulative clean CI is tracked on the PR.
 
 This does not establish that every legacy readiness/Shopping consumer uses complete per-row observations, nor complete simultaneous food/potion/loot packing, gear/travel costs, actual account rates or live RuneLite acceptance. The all-67-step audit remains open.
+
+Clean cumulative CI passed at 30ad2840a3767fc25de725b8bf13d5eddc50934e, run 39607713585, including the full browser/Java and actual isolated Windows EXE gates.
