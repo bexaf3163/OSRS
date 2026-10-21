@@ -5,10 +5,11 @@
 import type { Step } from '../types';
 import { nameKey, type OwnedState } from './checklist';
 import {
-  CALIBRATED_KILLS, estimateStep, foeLabel, healsOf, observedFor, type Basis, type CombatEstimate, type Fights, type Range, type StepEstimateContext,
+  CALIBRATED_KILLS, foeLabel, healsOf, observedFor, stepGoals, type Basis, type CombatEstimate, type Fights, type Range, type StepEstimateContext,
 } from './combatEstimate';
 import { durationText } from './splits';
 import { heldUnits } from './doses';
+import { currentXp, itemGoal, objectiveEstimates } from './combatObjectives';
 
 export const BASIS_LABEL: Record<Basis, string> = {
   formula: 'estimate from the combat formulas',
@@ -179,11 +180,17 @@ export function chooseVariant(list: CombatEstimate[], fights?: Fights[] | null):
 }
 
 export function combatPlanView(
-  step: Pick<Step, 'pacing' | 'foes' | 'itemsRequired' | 'itemsRecommended'>,
+  step: Pick<Step, 'pacing' | 'foes' | 'itemsRequired' | 'itemsRecommended' | 'inGame' | 'combatPlan'>,
   ctx: StepEstimateContext & { owned: OwnedState | null; reserved?: FoodReservations },
 ): CombatPlanView | null {
   const doses = strengthDoses(ctx.owned);
-  const list = estimateStep(step, { ...ctx, strengthDoses: doses });
+  const skill = step.combatPlan?.trainingSkill;
+  const explicit = stepGoals(step);
+  const goals = explicit.length ? explicit : skill ? [{ skill, exp: currentXp(ctx, skill) }] : [];
+  const foe = step.foes?.[0];
+  const remaining = itemGoal(step, ctx.owned)?.missing ?? 0;
+  const project = (strengthDoses: number) => goals.length && foe ? objectiveEstimates(step, foe, goals, remaining, { ...ctx, strengthDoses }) : [];
+  const list = project(doses);
   const primary = chooseVariant(list, ctx.fights);
   const item = (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
   if (!primary || !item) return null;
@@ -204,7 +211,7 @@ export function combatPlanView(
   let potion: string | null = null;
   const tryDoses = doses || recommendedDoses(step);
   if (tryDoses) {
-    const same = (n: number) => estimateStep(step, { ...ctx, strengthDoses: n }).find((e) => e.foe === primary.foe);
+    const same = (n: number) => project(n).find((e) => e.foe === primary.foe);
     const without = same(0);
     const withP = same(tryDoses);
     if (without && withP) {

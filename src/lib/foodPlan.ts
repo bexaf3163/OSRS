@@ -80,7 +80,7 @@ export function foodPicks(steps: Step[], progress: Progress, live: Live): Record
   const out: Record<string, FoodPick> = {};
   for (const s of steps) {
     if (isClosed(progress, s.id)) continue;
-    if (!stepGoals(s).length) {
+    if (!stepGoals(s).length && !s.combatPlan?.trainingSkill) {
       const p = fightPick(s, steps, progress, live);
       if (p) out[s.id] = p;
       continue;

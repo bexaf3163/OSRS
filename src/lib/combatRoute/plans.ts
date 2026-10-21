@@ -19,14 +19,15 @@ import type { Step } from '../../types';
 import type { OwnedState } from '../checklist';
 import { nameKey } from '../checklist';
 import {
-  DEFAULT_FOOD_SLOTS, estimateStep, foeLabel, foeVariants, stepGoals, type Basis, type CombatEstimate, type CombatFoe, type Range, type StepEstimateContext,
+  DEFAULT_FOOD_SLOTS, estimateStep, foeLabel, stepGoals, type Basis, type CombatEstimate, type CombatFoe, type Range, type StepEstimateContext,
 } from '../combatEstimate';
 import { chooseVariant, strengthDoses } from '../combatPlan';
+import { asked, currentXp, dropEstimates, itemGoal, objectiveEstimates } from '../combatObjectives';
 import { levelForXp, xpForLevel } from '../xp';
 import type { PriceView } from '../funding/quotes';
 import type { TradeRestriction } from '../tradeRestriction';
 import { laterDefence, type LaterDefence } from './later';
-import { GUARANTEED_DROPS, SELL_DROP, spotsOf, TRAINER_LEVELS, TRAINERS, type Spot } from './spots';
+import { SELL_DROP, spotsOf, TRAINER_LEVELS, TRAINERS, type Spot } from './spots';
 
 export type MeleeSkill = 'attack' | 'strength' | 'defence';
 export interface Goal { skill: MeleeSkill; exp: number }
@@ -154,19 +155,6 @@ function assumeXp(base: StepEstimateContext['assume'], extra: Partial<Record<Mel
   return { xp, ...(base && base.weapon !== undefined ? { weapon: base.weapon } : {}) };
 }
 
-/** The step with the goals and opponent the estimator should be asked about; the food is the step's own. */
-function asked(step: Step, foe: string, goals: readonly Goal[]): Pick<Step, 'pacing' | 'foes' | 'itemsRequired'> {
-  const [first, ...rest] = goals;
-  return {
-    foes: [foe],
-    ...(step.itemsRequired ? { itemsRequired: step.itemsRequired } : {}),
-    pacing: {
-      skill: first.skill, targetLevel: levelForXp(first.exp), targetExp: first.exp, actionName: 'kill', expPerAction: 1,
-      ...(rest.length ? { also: rest.map((g) => g.skill), goals: Object.fromEntries(rest.map((g) => [g.skill, { level: levelForXp(g.exp), exp: g.exp }])) } : {}),
-    },
-  };
-}
-
 function phaseOf(kind: PlanPhase['kind'], e: CombatEstimate, spot: Spot, goals: Goal[], text: string, item?: PlanPhase['item'], killsOverride?: number, remainingItems?: number): PlanPhase {
   // An item phase stops at the number of kills the item needs, not at the XP the estimate was asked for.
   const k = killsOverride ?? e.kills;
@@ -194,52 +182,9 @@ const goalsOf = (step: Step): Goal[] => stepGoals(step).map((g) => ({ skill: g.s
 
 const goalText = (goals: readonly Goal[]) => goals.map((g) => `${cap(g.skill)} to ${levelForXp(g.exp)}`).join(' and ');
 
-/** What the step asks to be collected from its opponent: the items of its game trigger that the opponent always drops, and how many are still missing. */
-function itemGoal(step: Step, owned: OwnedState | null): { name: string; count: number; missing: number; held: number | null; unread: boolean } | null {
-  const foe = step.foes?.[0];
-  const trig = step.inGame?.completionTrigger?.items;
-  if (!foe || !trig?.length) return null;
-  const drops = GUARANTEED_DROPS[foe] ?? [];
-  for (const it of trig) {
-    const name = it.names.find((n) => drops.some((d) => nameKey(d) === nameKey(n)));
-    if (!name) continue;
-    const o = owned?.items.get(nameKey(name));
-    // Unknown holdings are not zero: without a read of the bag and bank the whole count is still to collect, and the plan says so.
-    const held = o && owned?.bankSeen ? o.carried + o.noted + (o.bank ?? 0) : o && !owned?.bankSeen ? o.carried + o.noted : null;
-    return { name, count: it.count, missing: Math.max(0, it.count - (held ?? 0)), held, unread: !owned?.bankSeen };
-  }
-  return null;
-}
-
 /** The estimates of one opponent for some goals, with every free version of it; each is a candidate. */
 function estimates(step: Step, foe: string, goals: Goal[], ctx: StepEstimateContext): CombatEstimate[] {
   return estimateStep(asked(step, foe, goals), ctx);
-}
-
-function currentXp(ctx: StepEstimateContext, skill: MeleeSkill): number {
-  return Math.max(ctx.xp?.[skill] ?? xpForLevel(ctx.stats?.[skill] ?? 1), ctx.assume?.xp?.[skill] ?? 0);
-}
-
-/** Item collection still needs an estimate after the XP goal has already been reached. */
-function dropEstimates(step: Step, foe: string, count: number, skill: MeleeSkill, ctx: StepEstimateContext): CombatEstimate[] {
-  if (count <= 0) return [];
-  return foeVariants(foe).flatMap(v => estimates(step, foe, [{ skill, exp: currentXp(ctx, skill) + count * 4 * v.hitpoints }], ctx)
-    .filter(e => e.foe.combat === v.combat && e.foe.version === v.version));
-}
-
-/** Estimate enough actual combat for both objectives. Scaling a one-kill estimate
- * repeats its initial free-health buffer and can incorrectly make fifty kills food-free. */
-function objectiveEstimates(step: Step, foe: string, goals: Goal[], count: number, ctx: StepEstimateContext): CombatEstimate[] {
-  const base = estimates(step, foe, goals, ctx);
-  if (count <= 0) return base;
-  return foeVariants(foe).flatMap(v => {
-    const first = base.find(e => e.foe.combat === v.combat && e.foe.version === v.version);
-    if (first && first.kills >= count) return [first];
-    const extra = Math.max(0, count - (first?.kills ?? 0));
-    const main = goals[0];
-    const extended = [{ ...main, exp: Math.max(main.exp, currentXp(ctx, main.skill)) + extra * 4 * v.hitpoints }, ...goals.slice(1)];
-    return estimates(step, foe, extended, ctx).filter(e => e.foe.combat === v.combat && e.foe.version === v.version);
-  });
 }
 
 function afterPhase(ctx: StepEstimateContext, first: CombatEstimate, xp: Partial<Record<MeleeSkill, number>>): StepEstimateContext {
