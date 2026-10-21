@@ -84,19 +84,21 @@ function armourCheck(gear: GearState | null, e: CombatEstimate): CombatReadiness
 function foodCheck(v: CombatPlanView, bankSeen: boolean): CombatFood {
   const trip = v.nextTrip;
   const carried = v.owned ? v.owned.carriedEq : null;
-  const bank = v.owned && bankSeen ? v.owned.bankEq : null;
+  const bank = v.owned && bankSeen && v.owned.bankComplete ? v.owned.bankEq : null;
   const short = carried === null ? trip : Math.max(0, trip - carried);
   const unnote = Math.min(short, v.owned?.notedEq ?? 0);
-  const fromBank = bank === null ? 0 : Math.min(short - unnote, bank);
-  const toBuy = short === unnote ? 0 : bank === null ? null : short - unnote - fromBank;
+  const fromBank = Math.min(short - unnote, bankSeen ? v.owned?.bankEq ?? 0 : 0);
+  const toBuy = short === unnote + fromBank ? 0 : bank === null ? null : short - unnote - fromBank;
   const f = v.food;
   let text: string;
   if (trip <= 0) text = `The estimate needs no ${f} for a trip: your health comes back faster than they hit. Carry a few anyway for bad luck and the walk.`;
   else if (carried === null) text = `Carry ${trip} ${f} (or food that heals as much) for the next trip. The bag is counted when the game is linked.`;
   else if (short === 0) text = `${carried} ${f} by healing with you: enough for the next trip of ${trip}.`;
   else if (unnote > 0) text = `Bank: unnote ${unnote} ${f} by healing before fighting${fromBank > 0 ? `; withdraw ${fromBank} more` : ''}${toBuy ? `; buy about ${toBuy} more` : toBuy === null ? '; open the bank to check the remaining food' : ''}. Banknotes cannot be eaten.`;
-  else if (bank === null) text = `Carry ${trip} ${f} for the next trip; you have ${carried} with you. Open a bank once so the app can count the rest.`;
   else if (toBuy === 0) text = `Bank: withdraw ${fromBank} ${f} (or food that heals as much) for the next trip of ${trip}.`;
+  else if (bank === null) text = fromBank > 0
+    ? `Bank: withdraw ${fromBank} ${f} by healing; check the remaining food before buying more.`
+    : `Carry ${trip} ${f} for the next trip; you have ${carried} with you. Open the bank to check the remaining food quantities.`;
   else if (fromBank > 0) text = `Bank: withdraw ${fromBank} ${f}, then buy about ${toBuy} more for the next trip of ${trip}.`;
   else text = `Buy about ${toBuy} ${f} (or food that heals as much) for the next trip of ${trip}: you have ${carried} with you and none in the bank.`;
   return { name: f, trip, carried, bank, short, fromBank, toBuy, unnote, text };
