@@ -1,7 +1,9 @@
 // The skill leveling guides (src/data/skills/<skill>.json, built by tools/skill-guides from the OSRS Wiki): the step schema, the path for a filter, and what goes to
 // the game. A path is a list of level brackets in the order to train them: quest XP skips first, then the methods. Pure logic: the registry loads the files.
 
-import type { Step } from '../types';
+import type { Progress, Step } from '../types';
+import { isCompleted } from './next-step';
+import { nameKey } from './checklist';
 
 export const SKILL_NAMES = [
   'attack', 'strength', 'defence', 'ranged', 'prayer', 'magic', 'runecraft', 'construction', 'hitpoints', 'agility', 'herblore', 'thieving', 'crafting',
@@ -57,6 +59,14 @@ export interface SkillGuideFile {
   /** The highest level a free account reaches by this guide; 0 means a members-only skill. */
   f2pCap: number;
   steps: SkillStep[];
+}
+
+/** Shared by the roadmap hook and followed-plan projection. */
+export function questRewardDone(step: Pick<SkillStep, 'reward'>, progress: Progress, quests: readonly string[] | null): boolean {
+  const reward = step.reward;
+  if (!reward) return false;
+  if (quests !== null) return quests.some(q => nameKey(q) === nameKey(reward.quest));
+  return Boolean(reward.routeStepId && isCompleted(progress, reward.routeStepId));
 }
 
 const MAX_LEVEL = 99;
