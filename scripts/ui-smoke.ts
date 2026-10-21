@@ -182,6 +182,8 @@ const text = async (page: Page, sel: string) => {
 
 async function run(browser: Browser) {
   if (process.env.UI_ONLY === 'item-food') { await retainedCombatFoodScenario(browser); return; }
+  if (process.env.UI_ONLY === 'magic-funding') { await magicFundingScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await magicFundingScenarios(browser);
   if (process.env.UI_ONLY === 'stock-certainty') { await combatRouteScenarios(browser); return; }
   // Recovery uses the real StoreProvider: a parser test alone would not catch its automatic save overwriting a valid source.
   {
@@ -1016,7 +1018,7 @@ async function run(browser: Browser) {
       await waitFor(page, '.magic-plan table', 6000);
       const t = await text(page, '.magic-plan');
       expect(t.includes('Wind Strike only') && t.includes('staff of fire') && t.includes('Magic 25'), 'S2-04: the magic calculation — the options and the staff of fire');
-      expect(t.includes('hides'), 'S2-04: how many hides pay back the runes');
+      expect(t.includes('Only a completed sale') && t.includes('runes you already own are not deducted') && !t.includes('twice as fast'), 'S2-04: comparison assumptions are explicit and future hides are not coins');
       await reveal(page, '.money-plan summary');
       await page.locator('.money-plan summary').click();
       const m = await text(page, '.money-plan');
@@ -2178,6 +2180,30 @@ async function gearScenarios(browser: Browser) {
       await shot(page, `connect-${width}`);
       await page.context().close();
     }
+  }
+}
+
+async function magicFundingScenarios(browser: Browser) {
+  const prices = { 556: 6, 558: 3, 555: 6, 557: 6, 554: 6, 563: 120, 1381: 1542, 1383: 1500, 1385: 1500, 1387: 940, 1739: 125 };
+  for (const width of [390, 1280]) for (const sale of ['restricted', 'unknown', 'lifted']) {
+    const gear = { equipment: [], inventory: [], coins: sale === 'lifted' ? 100000 : 50, bankCoins: sale === 'restricted' ? null : 0 };
+    const stats = { magic: 10 };
+    const { page, errors } = await open(browser, width, {
+      progress: progressBefore('S2-04', { gameMode: 'f2p', ...(sale === 'lifted' ? { sellRestrictions: 'lifted' } : {}) }), prices,
+      status: { protocol: 6, inGame: true, stats, ...gear, questPoints: sale === 'restricted' ? 1 : 30, totalLevel: sale === 'restricted' ? 20 : 150 },
+      events: [{ type: 'GEAR', gear }, { type: 'STATS', stats }, { type: 'XP', xp: { magic: 1200 } }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Staff of fire', carried: 0, noted: 0, bank: 1 }] }],
+    }, '#/step/S2-04');
+    await reveal(page, '.magic-plan');
+    await page.locator('.magic-plan table').waitFor();
+    const body = await page.locator('.magic-plan').innerText();
+    expect(body.includes('Cast XP only') && body.includes('Full rune replacement cost') && !/fastest|twice as fast|buy it with the first hides/i.test(body), `Magic (${width}, ${sale}): the comparison does not claim measured speed or guaranteed loot funding`);
+    expect(body.includes(sale === 'restricted' ? 'cannot fund rune purchases' : sale === 'unknown' ? 'Cowhide sales are unconfirmed' : 'Only a completed sale'), `Magic (${width}, ${sale}): funding follows the shared sale eligibility state`);
+    const fireRow = page.locator('.magic-plan tbody tr').filter({ hasText: 'The best strike + Staff of fire' });
+    expect((await fireRow.locator('td').nth(3).innerText()) === '—' && body.includes('You already own it'), `Magic (${width}, ${sale}): the confirmed banked staff is not bought again`);
+    expect(body.includes(sale === 'restricted' ? 'Check the bank before judging affordability' : sale === 'lifted' ? 'That covers the lowest full cost' : 'not a deficit after owned supplies'), `Magic (${width}, ${sale}): partial coins are not a definite funding shortfall`);
+    expect(await noOverflow(page) && !errors.length, `Magic (${width}, ${sale}): no overflow or console errors`);
+    if (process.env.UI_SHOTS && sale === 'restricted') await page.locator('.magic-plan').screenshot({ path: `${process.env.UI_SHOTS}/magic-funding-${width}.png` });
+    await page.context().close();
   }
 }
 

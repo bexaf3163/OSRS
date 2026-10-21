@@ -25,7 +25,7 @@ describe('the magic plan', () => {
     expect(castCost(spell('wind-strike'), 'air', prices)).toBe(3);
     expect(castCost(spell('fire-strike'), undefined, new Map())).toBeNull();
   });
-  it('from level 10 to 25: Fire Strike is twice as fast as Wind Strike, the fire staff is cheaper than runes', () => {
+  it('from level 10 to 25: higher listed cast XP takes fewer casts, and the fire staff replaces paid runes', () => {
     const from = xpForLevel(10);
     const wind = planFor(opt('wind'), from, 25, prices)!;
     const best = planFor(opt('best'), from, 25, prices)!;
