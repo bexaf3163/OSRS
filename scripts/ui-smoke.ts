@@ -383,7 +383,7 @@ async function run(browser: Browser) {
   }
   if (process.env.UI_ONLY === 'phase') return;
   if (process.env.UI_ONLY === 'funding') { await fundingScenarios(browser); return; }
-  if (process.env.UI_ONLY === 'combat') { await combatRouteScenarios(browser); return; }
+  if (process.env.UI_ONLY === 'combat') { await combatRouteScenarios(browser); await xpOnlyCombatScenario(browser); return; }
   if (process.env.UI_ONLY === 'shopping') { await shoppingScenarios(browser); return; }
   if (process.env.UI_ONLY === 'gear') { await gearScenarios(browser); return; }
   if (process.env.UI_ONLY === 'money') { await moneyScenarios(browser); return; }
@@ -612,8 +612,8 @@ async function run(browser: Browser) {
       await page.context().close();
     }
 
-    // The food plan of a combat training step (S3-08) from the game data: the next trip, the whole goal, what to buy; the level 27
-    // Minotaur and the potions behind "Details".
+    // Explicitly choose the written Minotaur route to retain its food/variant coverage.
+    // Automatic trainer selection is exercised separately in combatRouteScenarios.
     {
       const equipment = [[1329, 'Mithril scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']]
         .map(([id, name, slot]) => ({ id, name, slot }));
@@ -622,7 +622,7 @@ async function run(browser: Browser) {
       const xp = { attack: 5624, strength: 2746, defence: 0, hitpoints: 2400 };
       const { page, errors } = await open(browser, width, {
         progress: progressBefore('S3-08'),
-        localStorage: { 'osrs-put:active-step': 'S3-08' },
+        localStorage: { 'osrs-put:active-step': 'S3-08', 'osrs-put:combat-plans:main:-': '{"S3-08":{"key":"route","at":1,"by":"player"}}' },
         status: { protocol: 5, ...gear, stats, xp, activeStepId: 'S3-08' },
         events: [{ type: 'STATS', stats }, { type: 'XP', xp }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 0, bank: 13 }] }],
       }, '#/step/S3-08');
@@ -642,7 +642,7 @@ async function run(browser: Browser) {
       const zen = await open(browser, width, {
         zen: true,
         progress: progressBefore('S3-08'),
-        localStorage: { 'osrs-put:active-step': 'S3-08' },
+        localStorage: { 'osrs-put:active-step': 'S3-08', 'osrs-put:combat-plans:main:-': '{"S3-08":{"key":"route","at":1,"by":"player"}}' },
         status: { protocol: 5, ...gear, stats, xp, activeStepId: 'S3-08' },
         // As the plugin reports it: the step's fish alternatives are counted too (0 here).
         events: [{ type: 'STATS', stats }, { type: 'XP', xp }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [
@@ -1431,6 +1431,7 @@ async function run(browser: Browser) {
 
   await fundingScenarios(browser);
   await combatRouteScenarios(browser);
+  await xpOnlyCombatScenario(browser);
   await shoppingScenarios(browser);
   await gearScenarios(browser);
   await moneyScenarios(browser);
@@ -1883,6 +1884,28 @@ async function combatRouteScenarios(browser: Browser) {
     expect(errors.length === 0, `combat route (${width} px): no console errors ${errors.join('; ')}`);
     await page.context().close();
   }
+}
+
+// An XP-only step must also adopt the better trainer without a manual mode switch.
+async function xpOnlyCombatScenario(browser: Browser) {
+  const stats = { attack: 22, strength: 16, defence: 1, hitpoints: 22 };
+  const xp = { attack: 5624, strength: 2746, defence: 0, hitpoints: 2400 };
+  const gear = { equipment: [
+    { id: 1329, name: 'Mithril scimitar', slot: 'weapon' }, { id: 1153, name: 'Iron full helm', slot: 'head' },
+    { id: 1115, name: 'Iron platebody', slot: 'body' }, { id: 1081, name: 'Iron plateskirt', slot: 'legs' }, { id: 1191, name: 'Iron kiteshield', slot: 'shield' },
+  ], inventory: [], coins: 3500, bankCoins: 0 };
+  const { page, errors } = await open(browser, 1280, {
+    progress: progressBefore('S3-08', { gameMode: 'f2p' }), localStorage: { 'osrs-put:active-step': 'S3-08' }, market: true,
+    status: { protocol: 6, player: 'XP Test', activeStepId: 'S3-08', ...gear, stats, xp },
+    events: [{ type: 'XP', xp }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 0, bank: 13 }] }],
+  }, '#/step/S3-08');
+  await page.waitForTimeout(1500);
+  const snapshots = await page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan'));
+  const step = snapshots.at(-1)?.body?.step;
+  expect(/Plan: Train on cows/.test(await text(page, '.status-combat-route')) && step?.npcNames?.[0] === 'Cow', 'XP-only training: the default trainer is adopted in the app and game payload');
+  expect(step?.pacing?.skill === 'strength' && step?.pacing?.targetExp === 4470 && JSON.stringify(step?.completionTrigger).includes('"attack"'), 'XP-only training: training order and the original combined completion goals are retained');
+  expect(await noOverflow(page) && !errors.length, 'XP-only training: no overflow or console errors');
+  await page.context().close();
 }
 
 // The Gear page in its four states (2.68): one recommendation from what is owned, no worthwhile change, offline with the last known gear of
