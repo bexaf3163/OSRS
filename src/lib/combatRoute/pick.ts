@@ -139,6 +139,8 @@ export function withCombatPlan(step: Step, pick: CombatPick | undefined): Step {
   else delete inGame.pathWaypoints;
   delete inGame.worldPoint;
   const pacing = pacingOf(step, pick);
+  const skill = step.pacing?.skill;
+  const trainingSkill = pick.kind === 'item' && !pacing && (skill === 'attack' || skill === 'strength' || skill === 'defence') ? skill : undefined;
   const note: Field = {
     label: pick.source === 'player' ? 'Your plan' : 'Plan',
     text: `${pick.title}${pick.phases > 1 ? ` (part ${pick.phase} of ${pick.phases})` : ''}: ${pick.text}.${pick.why ? ` ${pick.why}` : ''}`,
@@ -153,6 +155,7 @@ export function withCombatPlan(step: Step, pick: CombatPick | undefined): Step {
   return {
     ...rest, combatPlan: {
       key: pick.key, phase: pick.phase, source: pick.source,
+      ...(trainingSkill ? { trainingSkill } : {}),
       ...(pick.kind === 'item' && pick.item ? { now: `Collect ${pick.item.count} ${pick.item.name} from ${cap(plural(pick.foe))}${pick.goals[0] ? ` on ${STYLE_WORD[pick.goals[0].skill]}` : ''}` } : {}),
       ...(pick.steps[1] ? { next: cap(pick.steps[1].replace(/^Then: /, '')) } : {}),
     }, foes: [pick.foe], mapLocation: { ...pick.spot.place }, inGame,

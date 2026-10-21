@@ -11,3 +11,5 @@ This is a wording repair only: no IDs, order, triggers, quantities, prices, item
 Initial checks caught two affected copy assertions and a Gear search-ranking regression from an added keyword. Keep the existing estimate disclosure, update the old automatic-buy wording assertion to selected-plan/whole-goal/one-trip semantics, and preserve the Gear search contract. Final full acceptance and cumulative CI are recorded with the PR. No gameplay measurement or local native success is claimed.
 
 Final local acceptance passed: 1,715 Vitest tests in 129 files, build/TypeScript, check-data (0 errors/warnings) and Java testClasses. The existing Gear navigation search test remains unchanged and passed. Fresh cumulative browser/native CI remains required for this text revision.
+
+Clean-install cumulative CI passed on remote commit `62e8397fe19c050cdeff7223f405f32f871fc305`, run `39600261475`, including full browser, Java and actual isolated Windows EXE. No live-game verification is implied.

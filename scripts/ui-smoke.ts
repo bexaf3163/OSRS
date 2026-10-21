@@ -174,6 +174,7 @@ const text = async (page: Page, sel: string) => {
 };
 
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'item-food') { await retainedCombatFoodScenario(browser); return; }
   // Recovery uses the real StoreProvider: a parser test alone would not catch its automatic save overwriting a valid source.
   {
     const progress = progressBefore('S3-05', { notes: { 'S3-05': 'recovered from disk' } });
@@ -488,7 +489,7 @@ async function run(browser: Browser) {
   }
   if (process.env.UI_ONLY === 'phase') return;
   if (process.env.UI_ONLY === 'funding') { await fundingScenarios(browser); return; }
-  if (process.env.UI_ONLY === 'combat') { await combatRouteScenarios(browser); await xpOnlyCombatScenario(browser); return; }
+  if (process.env.UI_ONLY === 'combat') { await combatRouteScenarios(browser); await xpOnlyCombatScenario(browser); await retainedCombatFoodScenario(browser); return; }
   if (process.env.UI_ONLY === 'shopping') { await shoppingScenarios(browser); return; }
   if (process.env.UI_ONLY === 'gear') { await gearScenarios(browser); return; }
   if (process.env.UI_ONLY === 'money') { await moneyScenarios(browser); return; }
@@ -1537,6 +1538,7 @@ async function run(browser: Browser) {
   await fundingScenarios(browser);
   await combatRouteScenarios(browser);
   await xpOnlyCombatScenario(browser);
+  await retainedCombatFoodScenario(browser);
   await shoppingScenarios(browser);
   await gearScenarios(browser);
   await moneyScenarios(browser);
@@ -1992,6 +1994,38 @@ async function combatRouteScenarios(browser: Browser) {
 }
 
 // An XP-only step must also adopt the better trainer without a manual mode switch.
+async function retainedCombatFoodScenario(browser: Browser) {
+  const equipment = ([[1331, 'Adamant scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']] as [number, string, string][])
+    .map(([id, name, slot]) => ({ id, name, slot }));
+  const gear = { equipment, inventory: [], coins: 5000, bankCoins: 0 };
+  const stats = { attack: 40, strength: 21, defence: 1, hitpoints: 24 };
+  const xp = { attack: 37224, strength: 5018, defence: 0, hitpoints: 7842 };
+  const items = ['Salmon', 'Trout', 'Tuna', 'Lobster', 'Swordfish', 'Big bones'].map(name => ({ name, carried: 0, noted: 0, bank: 0 }));
+  for (const width of [390, 1280]) {
+    const { page, errors } = await open(browser, width, {
+      progress: progressBefore('S4-03', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S4-03', 'osrs-put:features': JSON.stringify({ keepDefenceOne: true }) },
+      status: { protocol: 6, inGame: true, activeStepId: 'S4-03', ...gear, stats, xp },
+      events: [{ type: 'STATS', stats }, { type: 'XP', xp }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
+    }, '#/step/S4-03');
+    await page.waitForTimeout(1200);
+    await reveal(page, '.combat-plan');
+    const body = await page.locator('.combat-plan').allInnerTexts();
+    expect(body.some(t => t.includes('50 kills') && t.includes('whole goal')), `retained combat (${width}): food remains budgeted for fifty kills after Attack 40`);
+    const snapshot = await page.evaluate(() => {
+      const posts = (window as unknown as { __posts: { path: string; body?: { step?: { completionTrigger?: { levels?: { skill: string; level: number }[]; items?: { count: number }[] } }; plan?: { lines: { name: string; need: number }[] } } }[] }).__posts;
+      return posts.filter(p => p.path === '/prep-plan').at(-1)?.body;
+    });
+    expect((snapshot?.plan?.lines.find(l => l.name === 'Salmon')?.need ?? 0) > 25, `retained combat (${width}): the game receives the personal carried-food requirement`);
+    expect(snapshot?.step?.completionTrigger?.levels?.[0]?.level === 40 && snapshot.step.completionTrigger.items?.[0]?.count === 50, `retained combat (${width}): completion stays Attack 40 and fifty bones`);
+    await page.evaluate(nextItems => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items: nextItems }), items.map(i => i.name === 'Big bones' ? { ...i, bank: 30 } : i));
+    await page.waitForTimeout(1000);
+    expect((await page.locator('.combat-plan').allInnerTexts()).some(t => t.includes('20 kills')), `retained combat (${width}): the live stock update reduces collection to twenty kills`);
+    expect(await noOverflow(page) && !errors.length, `retained combat (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
 async function xpOnlyCombatScenario(browser: Browser) {
   const stats = { attack: 22, strength: 16, defence: 1, hitpoints: 22 };
   const xp = { attack: 5624, strength: 2746, defence: 0, hitpoints: 2400 };

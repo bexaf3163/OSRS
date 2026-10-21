@@ -374,6 +374,8 @@ export interface Step {
     now?: string;
     /** The instruction of the phase after it (without "Then: "); absent for the last. */
     next?: string;
+    /** Internal food/time projection for an item-only combat phase; never a new skill completion goal. */
+    trainingSkill?: 'attack' | 'strength' | 'defence';
   };
   /** Set at run time with combatPlan: the route's own instructions the plan replaced, shown folded as "the route as written". Never in the data. */
   routeAsWritten?: { where?: string; how?: string; quickSteps?: string[]; fields?: Field[] };
