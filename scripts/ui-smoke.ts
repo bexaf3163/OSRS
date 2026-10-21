@@ -291,7 +291,7 @@ async function run(browser: Browser) {
     const { page, errors } = await open(browser, width, {
       progress: progressBefore('S6-02', { gameMode: 'f2p', levels: { fishing: 45 } }),
       localStorage: { 'osrs-put:features': JSON.stringify({ efficient: true }) },
-      status: { stats: { fishing: 45 } }, events: [{ type: 'STATS', stats: { fishing: 45 } }],
+      status: { protocol: 6, stats: { fishing: 45 } }, events: [{ type: 'STATS', stats: { fishing: 45 } }],
     }, '#/skills/FI');
     await waitFor(page, '.training', 5000);
     const recommendation = await page.locator('.training-method .training-now').innerText();
@@ -299,6 +299,17 @@ async function run(browser: Browser) {
     expect(recommendation.includes('fly fishing'), `skill bracket (${width}): an unlocked faster method remains selectable after its suggested range`);
     expect(/\bto 50\b/.test(content) && !content.includes('to level 40') && !/≈ 0 more/.test(content), `skill bracket (${width}): the card retains the future route goal without an expired action target`);
     expect(await noOverflow(page) && !errors.length, `skill bracket (${width}): no overflow or console errors`);
+    await page.evaluate(() => { location.hash = '#/step/S6-02'; });
+    await page.waitForTimeout(800);
+    expect(!(await page.locator('.spot-switch').allTextContents()).join(' ').includes('Musa Point'), `method map (${width}): the current method does not offer a future climb spot`);
+    await (await stepButton(page, '🧭 Show in the game')).first().click();
+    await page.waitForTimeout(800);
+    const target = await page.evaluate(() => {
+      const posts = (window as unknown as { __posts: { path: string; body?: { step?: { worldPoint?: { x: number; y: number }; groundTiles?: { x: number; y: number }[] } } }[] }).__posts;
+      return posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.step;
+    });
+    expect(target?.worldPoint?.x === 3107 && target.worldPoint.y === 3429 && target.groundTiles?.length === 1 && target.groundTiles[0].y === 3429, `method map (${width}): the actual game target and single ground tile agree on Barbarian Village`);
+    expect(await noOverflow(page) && !errors.length, `method map (${width}): no overflow or console errors`);
     await page.context().close();
   }
   if (process.env.UI_ONLY === 'skills') return;

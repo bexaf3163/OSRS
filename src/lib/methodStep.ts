@@ -76,7 +76,12 @@ export function withTrainingMethod(step: Step, pick: string | undefined): Step {
   return {
     ...step,
     itemsRequired,
-    ...(at ? { mapLocation: at } : {}),
-    ...(step.inGame ? { inGame: { ...step.inGame, highlightItems: itemsRequired.map((i) => i.nameEn) } } : {}),
+    // The static climb contains future places. Once a method is selected, map and plugin use only its point.
+    ...(at ? { mapLocation: at, resourceSpots: [at] } : {}),
+    ...(step.inGame ? { inGame: {
+      ...step.inGame,
+      ...(at ? { worldPoint: at, groundTiles: [at], goal: at.label, pathWaypoints: undefined } : {}),
+      highlightItems: itemsRequired.map((i) => i.nameEn),
+    } } : {}),
   };
 }
