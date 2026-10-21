@@ -70,11 +70,24 @@ jobs:
         shell: pwsh
         run: ./.github/scripts/test-portable.ps1
       - if: steps.v.outputs.exists == 'false'
+        name: Attach the continuation handoff and verified EXE digest
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $files = @(Get-ChildItem -LiteralPath release -Filter '*.exe')
+          if ($files.Count -ne 1) { throw 'Expected one verified portable EXE.' }
+          $hash = (Get-FileHash -LiteralPath $files[0].FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+          "$hash  $($files[0].Name)" | Set-Content -LiteralPath release/SHA256SUMS.txt -Encoding utf8
+          Copy-Item -LiteralPath docs/CLAUDE_NEXT_SESSION.md -Destination release/CLAUDE_NEXT_SESSION.md
+      - if: steps.v.outputs.exists == 'false'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.v.outputs.version }}
           target_commitish: ${{ github.sha }}
           name: OSRS Path ${{ steps.v.outputs.version }}
           body_path: release-notes/v${{ steps.v.outputs.version }}.md
-          files: release/*.exe
+          files: |
+            release/*.exe
+            release/SHA256SUMS.txt
+            release/CLAUDE_NEXT_SESSION.md
           fail_on_unmatched_files: true

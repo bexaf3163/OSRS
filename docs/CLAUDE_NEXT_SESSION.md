@@ -1,5 +1,17 @@
 # Claude continuation: OSRS Path cumulative repair candidate
 
+## Main publication: 2.74.1
+
+The owner explicitly requested pushing the cumulative repairs to main. This publication candidate is based on the complete Gear block (`2b7130f969afb216126f0b1ae73a8b57c5f94102`), containing all earlier source, handoffs and four recent blocks. Main was checked as its ancestor with zero divergent commits; only a non-forced fast-forward is authorized here. No old commit is reset or omitted. Older statements below saying main is unchanged are historical.
+
+Current owner workflow supersedes the earlier preview-only policy: finish each block, update this handoff, pass checks, then publish the work to main with a portable release. Review branches are useful but are not the final destination. Keep the main update non-forced and compare any intervening commits; increment the coordinated app/plugin version for a new regular portable rather than overwriting an existing release. Never promote a failed block to save tokens.
+
+Version 2.74.1 synchronizes package.json, lock metadata and BridgeServer.PLUGIN_VERSION. It adds release-notes/v2.74.1.md, this handoff and SHA256SUMS.txt to the existing gated Windows Release workflow. No additional application behavior is changed by the publication commit. Check main's Checks and Release conclusions before declaring the regular portable published; branch previews remain available if release acceptance fails. The release digest must match the actual isolated EXE gate. CI fixtures are not newer live-account acceptance.
+
+The coordinated 2.74.1 metadata tree passed local build/TypeScript, all 1,781 Vitest tests/138 files, data validation 0 errors/warnings and the full 604-test Java suite. The main workflow still runs its own browser, source E2E and isolated portable gates before attaching artifacts. Read their actual verdict, not the older preview's green status.
+
+This ships completed stabilization work, not a claim that T01–T17 or all old blocks 2b–5 are finished. The outstanding route/trainer catalogue, joint inventory packing, full skill/quest phases, broader source recovery and real-game/update acceptance are still listed below and in CODEX_AUDIT_BACKLOG.md. Resume from main after this publication succeeds; do not overwrite it from the original Claude checkout or cherry-pick dependent branch patches again.
+
 ## Current block: Gear quest evidence
 
 Continue on `codex/audit-block-gear-quest-proof`, cumulative over the Skills, Shopping and HUD blocks. Gear now passes live quest evidence into its existing advisor via questDependencyFacts. Skipping Prince Ali Rescue no longer waives the toll; a stale manual quest mark cannot unlock gear against live NOT_DONE; live completion works without a route mark. Explicit manual full-quest completion remains a fallback while quests are unread, and partial varbit milestones never become full quests. Seven regressions include five failures reproduced before repair. Local: 1,781 Vitest tests/138 files, build, data 0 errors/warnings and Java testClasses passed. See [CODEX_GEAR_QUEST_PROOF_HANDOFF.md](CODEX_GEAR_QUEST_PROOF_HANDOFF.md); require this block's own CI and portable gates before claiming publication.
