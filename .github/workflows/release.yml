@@ -3,6 +3,7 @@ name: Release
 # A new version in package.json on main → GitHub builds the portable exe on Windows (together with the RuneLite plugin jar),
 # sets the tag vX.Y.Z and publishes a release with the description from release-notes/vX.Y.Z.md. A version that already has a release
 # is not built again. To run it by hand — Actions → "Release" → Run workflow.
+# An unreleased version can be corrected and rebuilt; an existing release is never overwritten.
 on:
   push:
     branches: [main]

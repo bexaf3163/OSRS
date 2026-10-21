@@ -1678,8 +1678,8 @@ async function moneyScenarios(browser: Browser) {
   const worn = new Set(equipment.map((e) => e.name));
   const asked = [...new Set(all.slice(from, from + 8).flatMap((x) => (x.itemsRequired ?? []).map((i) => i.nameEn)))];
   const stats = { attack: 30, strength: 21, defence: 1, hitpoints: 24 };
-  const hero = (o: { bankSeen?: boolean; offline?: boolean } = {}): Mock => {
-    const gear = { equipment, inventory: [], coins: 400, bankCoins: o.bankSeen === false ? null : 0 };
+  const hero = (o: { bankSeen?: boolean; offline?: boolean; coins?: number } = {}): Mock => {
+    const gear = { equipment, inventory: [], coins: o.coins ?? 400, bankCoins: o.bankSeen === false ? null : 0 };
     const owned = asked.map((name) => ({ name, carried: worn.has(name) ? 1 : 0, noted: 0, ...(o.bankSeen === false ? {} : { bank: 0 }) }));
     return {
       progress: progressBefore('S4-03', { gameMode: 'f2p' }),
@@ -1823,7 +1823,7 @@ async function moneyScenarios(browser: Browser) {
 
   // The coin card leads here.
   {
-    const { page, errors } = await open(browser, 1440, hero(), '#/step/S4-03');
+    const { page, errors } = await open(browser, 1440, hero({ coins: 0 }), '#/step/S4-03');
     await reveal(page, '.one-trip');
     await page.waitForTimeout(1500);
     const card = (await page.locator('.funding-card .funding-line').first().innerText()).trim();

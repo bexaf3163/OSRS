@@ -14,3 +14,5 @@ Owner requested replacing mandatory giants plus hundreds of cows, considering su
 - Browser tests cover real route recommendation, player alternatives, automatic following, bridge target/completion, food uncertainty and layout at narrow/wide widths. No new live RuneLite acceptance is claimed.
 
 Limitations: not an exhaustive trainer catalogue, no joint armour-purchase optimizer, crowding is not measured live, no promise that a theoretical ranking is globally optimal. Do not restore the old quota or hide unknown supplies to make the guide seem ready.
+
+Release acceptance follow-up: the first 2.74.2 runs stopped in the Money browser scenario, which expected a shortage card for an account with 400 coins. The smaller first training phase is already affordable at that balance, so no card is correct. Both shortage-link scenarios now explicitly use zero coins; the remaining Money scenarios retain their 400-coin baseline. No production affordability logic or test gates were loosened. Require the corrected revision's full Checks/Release results.
