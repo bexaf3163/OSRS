@@ -22,7 +22,7 @@ import { tripWindow } from './lib/oneTrip';
 import type { MoveEvent } from './lib/recovery';
 import { stageBankItemIds } from './lib/bankTags';
 import { useFeatures } from './lib/features';
-import { isClosed, openAfter, questDependencyFacts } from './lib/next-step';
+import { isClosed, openAfter, dependencyFacts } from './lib/next-step';
 import { BridgeFreshness, type StatusTicket } from './lib/bridgeFreshness';
 import { stepResendKey } from './lib/foodPlan';
 import { withKillEstimate } from './services/gearAdvisor';
@@ -444,7 +444,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     // The game has a different character than this profile — its quests and levels are not written here.
     if (liveIdentity.current.inGame === false || !gateAllows(profileGate(readProfiles(), liveIdentity.current.player))) return;
     const epoch = sessionEpoch.current;
-    const plan = planAutoComplete(list, p, id, active, handled.current, latest.current.qp, questDependencyFacts(list, latest.current.questsDone));
+    const plan = planAutoComplete(list, p, id, active, handled.current, latest.current.qp, dependencyFacts(list, latest.current.questsDone, skill => latest.current.stats?.[skill] ?? p.levels[skill]));
     handled.current.add(id);
     if (!plan.mark) return;
     const intent = ++stepIntent.current;
@@ -701,7 +701,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     if (!activeStepId) return;
     if (!isClosed(progress, activeStepId)) { activeWasOpen.current = activeStepId; return; }
     if (activeWasOpen.current !== activeStepId || handled.current.has(activeStepId)) return;
-    const next = openAfter(steps, progress, activeStepId, qp, questDependencyFacts(steps, questsDone));
+    const next = openAfter(steps, progress, activeStepId, qp, dependencyFacts(steps, questsDone, skill => stats?.[skill] ?? progress.levels[skill]));
     const branch = next ? chosenBranch(next, latest.current.branchChoice) : undefined;
     if (!next || !toInGameTarget(next, branch)) {
       void clearStep();
@@ -711,7 +711,7 @@ export function BridgeProvider({ children }: { children: ReactNode }) {
     handled.current.delete(next.id);
     setActiveStepId(next.id);
     void sendStep(next, branch);
-  }, [activeStepId, progress, steps, sendStep, clearStep, qp, questsDone]);
+  }, [activeStepId, progress, steps, sendStep, clearStep, qp, questsDone, stats]);
 
   // A step that follows a training method asks for different tools, and leads to another place, when the level (or what is carried) moves the player to
   // another method: the game gets the new list and place without a press. The first sight of a step is not a change: whoever activated it sent it.

@@ -28,6 +28,26 @@ export function questDependencyFacts(steps: readonly Step[], quests: readonly st
   };
 }
 
+/** Pure level goals may already be reached without following their training step. Never infer items or quest stages from levels. */
+export function dependencyFacts(steps: readonly Step[], quests: readonly string[] | null, level: (skill: string) => number | undefined): DependencyFact {
+  const quest = questDependencyFacts(steps, quests);
+  const training = new Map(steps.flatMap(s => {
+    const t = s.inGame?.completionTrigger;
+    return s.type === 'skill' && t?.type === 'SKILL_LEVEL' && t.levels?.length && !t.items?.length && !s.carryover?.length
+      ? [[s.id, t.levels] as const] : [];
+  }));
+  return id => {
+    const q = quest(id);
+    if (q !== undefined) return q;
+    const goals = training.get(id);
+    if (!goals) return undefined;
+    const values = goals.map(g => ({ target: g.level, have: level(g.skill) }));
+    // Add positive equivalence only. Consumer entry requirements still check its actual levels;
+    // incomplete snapshots must not revoke the existing explicit-done fallback for a training step.
+    return values.every(v => v.have !== undefined && Number.isFinite(v.have) && v.have >= v.target) ? true : undefined;
+  };
+}
+
 /**
  * Where a step stands for the route: done, knowingly skipped by the player, or not decided. An optional step nobody has visited is "open",
  * never "skipped": only the player's own mark skips it.

@@ -15,6 +15,20 @@ const input = (s: string, over: Partial<ReadinessInput> = {}): ReadinessInput =>
 });
 
 describe('the single readiness engine', () => {
+  it.each<{ consumer: string; producer: string; stats: Record<string, number> }>([
+    { consumer: 'S7-05', producer: 'S7-04', stats: { agility: 25 } },
+    { consumer: 'S8-05', producer: 'S8-04', stats: { ranged: 30, slayer: 18, crafting: 31, woodcutting: 36, cooking: 10 } },
+    { consumer: 'S9-04', producer: 'S8-06', stats: { prayer: 43 } },
+  ])('known reached levels satisfy skipped pure training dependency $producer for $consumer', ({ consumer, producer, stats }) => {
+    const inp = input(consumer, { stats });
+    inp.progress = withStep(inp.progress, producer, 'skipped');
+    const engine = createReadinessEngine(contextOf(inp));
+    expect(engine.dependencies(producer)).toBe(true);
+    expect(engine.readiness(step(consumer)).problems.some(p => p.kind === 'step' && p.label.includes(producer))).toBe(false);
+    expect(inp.progress.steps[producer]).toBe('skipped');
+    expect(engine.chain(step(consumer)).some(link => link.step.id === producer)).toBe(false);
+  });
+
   it('computes a step once and returns the same answer on repeated requests', () => {
     const ctx = contextOf(input('S9-01'));
     const e = createReadinessEngine(ctx);

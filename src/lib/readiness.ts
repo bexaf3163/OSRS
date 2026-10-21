@@ -7,11 +7,11 @@
 import type { GameMode, PlayerStats, Progress, Step } from '../types';
 import { levelById } from '../data';
 import locationsJson from '../data/majorLocations.json';
-import { isCompleted, blockersOf, questDependencyFacts } from './next-step';
+import { isCompleted, blockersOf, dependencyFacts } from './next-step';
 import { nameKey, preflightItems, type OwnedState } from './checklist';
 import type { GearState, NavTargetPayload } from '../services/runeliteBridge';
 import { plural } from './shopping';
-import { buildPlayerState, coinsOf, heldOf, questOf, unusableTools, type Held, type PlayerState } from './playerState';
+import { buildPlayerState, coinsOf, heldOf, levelOf, questOf, unusableTools, type Held, type PlayerState } from './playerState';
 import { evaluate } from './requirements';
 import { toolFamilyOf } from './toolTiers';
 import { doseKind, heldUnits, needUnits } from './doses';
@@ -149,7 +149,7 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
   if (step.membersOnly && mode === 'f2p') {
     reqs.push({ kind: 'mode', label: 'Members only', state: 'MISSING', hard: true, detail: 'A Members step: it is not needed in F2P mode.', source: 'route' });
   }
-  const b = blockersOf(step, p, qp, questDependencyFacts(steps, state.quests.known ? state.quests.value : null));
+  const b = blockersOf(step, p, qp, dependencyFacts(steps, state.quests.known ? state.quests.value : null, skill => levelOf(state, skill)));
   for (const id of b?.steps ?? []) {
     const s = steps.find((x) => x.id === id);
     reqs.push({
@@ -333,6 +333,7 @@ export function fixChainOf(
   readiness: (s: Step) => StepReadiness = (s) => readinessOf(s, ctx),
 ): ChainLink[] {
   const seen = new Set<string>([step.id]);
+  const fact = dependencyFacts(ctx.steps, ctx.state.quests.known ? ctx.state.quests.value : null, skill => levelOf(ctx.state, skill));
   const out: ChainLink[] = [];
   const visit = (cur: Step, depth: number) => {
     const r = readiness(cur);
@@ -342,7 +343,7 @@ export function fixChainOf(
         if (seen.has(id)) continue;
         seen.add(id);
         const s = ctx.steps.find((x) => x.id === id);
-        if (s && (!isCompleted(ctx.progress, id) || questDependencyFacts(ctx.steps, ctx.state.quests.known ? ctx.state.quests.value : null)(id) === false)) visit(s, depth + 1);
+        if (s && !(fact(id) ?? isCompleted(ctx.progress, id))) visit(s, depth + 1);
       }
     }
     if (cur.id !== step.id) {
