@@ -217,10 +217,11 @@ try {
   expect(JSON.stringify(JSON.parse(readFileSync(profilesFile, 'utf8'))) === JSON.stringify(profiles), 'profile recovery: damaged browser rows cannot overwrite the native alternate-character list');
   expect(await page.evaluate(() => localStorage.getItem('osrs-put:profiles:recovery')) === damagedProfiles, 'profile recovery: the damaged browser list is retained for recovery');
 
-  // Native file damage/future formats must survive a valid browser mirror and a normal live-status poll.
+  // Native damage/future formats and valid conflicting lists survive mirroring and a normal live-status poll.
   // These are disposable native files; no installed profile or real plugin is contacted.
   status.stats.magic = 99;
-  for (const raw of ['{"version":99,"list":[]}', '{broken native profiles']) {
+  const conflictingProfiles = { ...profiles, list: [...profiles.list, { id: 'onlydisk', name: 'Disk-only character', player: 'Disk tester' }] };
+  for (const raw of ['{"version":99,"list":[]}', '{broken native profiles', JSON.stringify(conflictingProfiles)]) {
     await page.evaluate(() => (window as unknown as { osrsDesktop: { loadProfilesFile(): string | null } }).osrsDesktop.loadProfilesFile());
     writeFileSync(profilesFile, raw, 'utf8');
     await page.evaluate(savedProfiles => localStorage.setItem('osrs-put:profiles', JSON.stringify(savedProfiles)), profiles);
