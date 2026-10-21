@@ -1,0 +1,52 @@
+# Claude continuation: OSRS Path cumulative repair candidate
+
+2026-10-21. Start here. This is an engineering handoff, not a claim that the full audit is finished.
+
+## Resume from the correct source
+
+Use branch `codex/audit-test-build-5` (review PR #39) in `bexaf3163/OSRS`. Its application parent is PR #38, remote commit `653fdc18f412fee40f0c366b3bf1564b992af2ee`, tree `afb4140fb8846bed7945e8e6c6e6029bec91dcc8`. The preview publication commit adds release/documentation only. The filename/tag `audit-test-<8-character source SHA>` identifies the exact source; the internal app version is still 2.74.0. Read the release assets' SHA256SUMS.txt and CI before distributing it.
+
+Main was Claude's original 2.74.0 (`4be6f94f20489a2bf711be45570f7cf168e8c6d4`) when this stack began. Repairs are cumulative draft PRs #1–39, not 39 independent branches to cherry-pick onto main. All earlier application changes are ancestors of the fifth candidate. Do not overwrite the repair branch with the old main checkout. If main has changed meanwhile, compare before integration. No audit PR was merged when this handoff was written. Preserve original saves and the working portable EXE. The separate RuneLite Optimizer repository is out of scope.
+
+## What is implemented
+
+The precise scopes and test evidence are in `docs/CODEX_REPAIR_CHECKPOINT.md`, `docs/CODEX_AUDIT_BACKLOG.md` and individual `CODEX_*_HANDOFF.md` files. The backlog records all T01–T17 items and all 30 Gemini finding groups, including stale/rejected proposals. Partial means unfinished.
+
+- Progress/backup format admission, lossless source protection, physical save-error reporting, supported conflicting-profile quarantine and profile-write receipts/retry/reload. Preserve damaged/future originals; never mirror over them merely because a source is newer.
+- SHA-256 update checks; additive exact container quantities; carried/noted/bank separation; unknown per-row bank facts; recipe deficits and physical potion doses/slots.
+- Skip versus real prerequisites, partial Fairytale II milestones, current-session fingerprints, logout clearing, delayed snapshot guards and server-lifetime apply ordering.
+- Bounded asynchronous SSE with slow-reader expiry and completion replay. Small commands retain 64 KiB; complete snapshots allow bounded 384 KiB. Do not remove limits to fix Gemini's 64 KiB concern.
+- Selected-route shared reserves/cleanup protection, affordable funding batches, separate tools/inputs and honest sale observation.
+- Waterfall phase preparation; combat objective sequencing/XP credit, conservative dose carryover, required loot-bank trip minimums, food/shopping after the XP target, confirmed loot/food stock without imaginary drop income.
+- Repeatable skill methods remain available beyond suggested brackets; selected Fishing map/tiles project one current destination. Gear no longer accepts a current-DPS loss because of a future average; current and training-window benefits are distinct.
+- Lost City axe is acquired in the dungeon. Universal strength-amulet superiority and wasted-Defence-XP claims were removed.
+- #36: S2-04 no longer guarantees cowhide-funded runes on a trade-restricted/unknown account. Existing elemental staves satisfy ownership; gross cast-cost comparison is labelled honestly. This is not a new complete spell-supply planner.
+- #37: a shared multi-skill producer may satisfy a specific consumer dependency when all that consumer's explicit skills are known and reached. Lost City does not require unrelated Ranged/Slayer/Cooking goals. Never globally complete S8-04 or infer quest/item acquisition from skills.
+- #38: selected Magic/Ranged steps do not borrow future melee scimitar banners. Existing melee advice, StyleGear and Gear page remain. This does not implement full Magic/Ranged DPS.
+
+## Evidence and boundaries
+
+Latest application suite: 1,767 Vitest tests/136 files; TypeScript/build; check-data 0 errors/warnings; Java testClasses. The earlier full Java suite has 601 tests, and cumulative CI runs all Java tests again. Focused Magic browser scenarios pass at 390/1280 px for restricted/unknown/lifted trade states, owned elemental staves and incomplete coin knowledge; the unwanted melee-banner assertion failed before #38 and passes after it. Consumer prerequisite tests cover Lost City/Animal Magnetism and a browser Crafting threshold transition without losing saved skip marks.
+
+#36 and #37 cumulative CI passed (39613895522, 39615172107). #38 and the fifth preview require their own completed CI verdict; consult Actions rather than copying a prior green status. Preview publication is gated on the full browser suite, all Java tests, build/data/Vitest and isolated packaged-EXE E2E. The released EXE must be the same artifact and digest tested on Windows. Packaged bridge fixtures are not real gameplay.
+
+Live check on 2026-10-21 used the separately approved THIRD preview `402222c9`, not this fifth candidate. OSRS Path successfully launched RuneLite. World 316 and Play were selected without credentials. `/status` returned inGame=true, protocol=6, pluginVersion=2.74.0, Attack 30, Strength 21, Defence 1, HP 24, Magic 25, Fishing 32; the desktop showed Connected and 43 QP. Player progress was not copied into the test folder. The fresh test profile consequently starts at S1-01; do not interpret that as loss of the original save. This confirms launch/connection only. Do not claim later source fixes, fights, quest phases, complete HUD interaction, banking or timings were verified live from this.
+
+## What must remain intact
+
+Keep Claude's single expandable `OsrsPathGuideOverlay`/`HudModel`; never restore duplicate top-left plates, dock bars or need cards. Preserve route IDs, completion triggers, notes, profiles, manual/owned stock, selected plans and unknown-state semantics. One current action, one conditional warning, details on demand. No mandatory speed-mode switches, new dashboard panels, or wiki-length default cards. Read root `CLAUDE_REDESIGN_HANDOFF.md` and project rules.
+
+## Prioritized remaining work
+
+1. Finish real desktop/HUD acceptance on the fifth candidate: selected plan/current phase matches app, one guide only, header expand/collapse, saved position and Alt-drag, safe prep warning priorities, fonts/DPI/zoom/long text/compact view, reconnect/logout/world-hop freshness. Do not automate combat, movement, spending or skilling. Keep authentication and the player's only saves untouched.
+2. Full continuous route feasibility remains OPEN. The 67 IDs were enumerated, not played end-to-end. Review fresh/poor F2P, Members and partial-quest scenarios. Do not renumber IDs or silently apply the deferred Doric/Knight's Sword reorder (`docs/route-reorder-proposal.md`).
+3. Fix coherent skill handovers: S6-01 has static Ogress metadata without level-1 Ranged gear/ammo planning; S6-02 needs Cooking supplies/location after Fishing 50; S6-03 needs accessible Mining/Woodcutting trainers/tools and separate completion of each half; S6-04 needs spell-appropriate rune/input batches. S6 is already optional Bond preparation and hidden for Members. Merely setting followsMethod leaves stale NPCs/maps/threats/supplies. The generic method requirement converter currently ignores tool needs; address that with exact ownership/eligibility tests before extending it.
+4. Combat catalogue remains Cow/Minotaur/Hill Giant. Compare verified accessible trainers, actual style/boost/prayer, attainable Defence+armour and purchase detours, simultaneous food/potion/loot inventory slots, travel/banking and total remaining objectives. Do not replace 725 cows with another fixed mob count without total-time/cash/risk evidence. Required bones may need a buy-versus-collect comparison. Food for one bag is not food for the whole goal; estimates are not measured live rates.
+5. Quest phase safety: Lost City spells/food/exit/Entrana rules; Demon Slayer bone collection versus fight kit; Monkey Madness non-monotonic returns and feasible per-phase slots; Tanglefoot special damage. Verify current primary sources; preserve intentionally safer route choices while distinguishing them from game prerequisites.
+6. Remaining persistence/exact-item gaps: native read errors versus absence; conflict-resolution UX; secondary-backup failures; runtime external changes; exact-ID and remaining legacy ownership consumers. Do not weaken existing quarantine or change unknown to missing.
+7. Funding: GE window/batch constraints, full acquisition/shop/rune/travel costs, live proceeds. Current Magic labels do not solve net supplies. Gear needs verified multi-style comparison, not arbitrary total-stat scores. Avoid duplicate engines.
+8. Real isolated two-version updater acceptance, frame-time/telemetry cost, residual eight moderate build-tool advisories, final KNOWN-ISSUES/review package/stable promotion. No forced npm audit fix or builder downgrade. Local installed Vite previously lagged the patched lock; clean CI is the patched dependency evidence.
+
+## Next-session working procedure
+
+Reproduce one remaining issue on the cumulative candidate, make a small change, add meaningful regression coverage, run relevant checks, then the cumulative release gates. Update this ledger with implemented/automated/packaged/live/open evidence separately. Do not rewrite passing ownership/saving/HUD contracts while improving route advice. Publish a separate verified preview until live acceptance supports stable promotion. No zero-regression promise or claim that old blocks 2b–5 are all finished.

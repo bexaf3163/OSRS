@@ -1,3 +1,5 @@
+Start with [docs/CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md) for the fifth cumulative review candidate, source/CI boundaries, live launch evidence and prioritized remaining work. Earlier notes below are historical; do not roll back to an older preview.
+
 Non-melee hint context: [docs/CODEX_NONMELEE_HINT_HANDOFF.md](docs/CODEX_NONMELEE_HINT_HANDOFF.md). The selected Magic/Ranged training step must not borrow a future scimitar banner. Preserve the actual melee analysis and existing StyleGear.
 
 Consumer-specific skill prerequisites: [docs/CODEX_CONSUMER_SKILL_HANDOFF.md](docs/CODEX_CONSUMER_SKILL_HANDOFF.md). Reached consumer entry skills may satisfy that dependency edge; never turn this into global completion of a multi-skill producer.
