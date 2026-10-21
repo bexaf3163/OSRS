@@ -1052,3 +1052,5 @@ Progress write receipts are documented in `docs/CODEX_WRITE_STATUS_HANDOFF.md`. 
 `docs/CODEX_DEPENDENCY_HANDOFF.md` records the minimal source-map/cache/Vite lock updates, fresh-install CI acceptance and residual sprintf-js build-tool advisory. Do not apply npm's suggested builder downgrade or claim local tests used new dependencies when their installed versions did not change. The first audit preview predates these updates.
 
 `docs/CODEX_ENTRANA_PREPARATION_HANDOFF.md` fixes Lost City's contradictory departure axe requirement using the existing inStep contract. Preserve the reviewed checklist/readiness fixtures; broader Tree Spirit supplies, entry restrictions and live quest acceptance remain open.
+
+`docs/CODEX_PROFILE_SOURCE_HANDOFF.md` rejects lossy/unsupported browser profile sources before mirroring and preserves a valid native alternate-character list. Keep its actual-EXE recovery gate distinct from local native spawn failure. Native/both-source quarantine, backup semantics and physical profile-write receipts remain open.
