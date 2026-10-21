@@ -1,3 +1,5 @@
+Repair checkpoint (2026-10-21): read [docs/CODEX_REPAIR_CHECKPOINT.md](docs/CODEX_REPAIR_CHECKPOINT.md) before resuming the old still-to-do blocks. It identifies the tested repair branch, exact preview and unfinished work; historical notes below are not an all-complete claim.
+
 # OSRS Path — Modern Path redesign handoff
 
 Read this before modifying desktop presentation, RuneLite overlays, or packaging. It supplements `PROJECT_GUIDELINES.md`; it does not replace the existing architecture or the user's current instructions.
