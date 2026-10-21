@@ -1,3 +1,5 @@
+Non-melee hint context: [docs/CODEX_NONMELEE_HINT_HANDOFF.md](docs/CODEX_NONMELEE_HINT_HANDOFF.md). The selected Magic/Ranged training step must not borrow a future scimitar banner. Preserve the actual melee analysis and existing StyleGear.
+
 Consumer-specific skill prerequisites: [docs/CODEX_CONSUMER_SKILL_HANDOFF.md](docs/CODEX_CONSUMER_SKILL_HANDOFF.md). Reached consumer entry skills may satisfy that dependency edge; never turn this into global completion of a multi-skill producer.
 
 Post-fourth-preview Magic follow-up: [docs/CODEX_MAGIC_FUNDING_HANDOFF.md](docs/CODEX_MAGIC_FUNDING_HANDOFF.md). Preserve sale/coin uncertainty, owned elemental staff alternatives and honest comparison labels; this is not a net spell-supply planner.

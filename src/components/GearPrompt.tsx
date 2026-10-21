@@ -9,7 +9,7 @@ import { useBridge } from '../bridge';
 import { useFeatures } from '../lib/features';
 import { isClosed } from '../lib/next-step';
 import { formatGp } from '../lib/shopping';
-import { useGearAdvice } from '../lib/gearAdvice';
+import { meleeHintApplies, useGearAdvice } from '../lib/gearAdvice';
 import { actionNav, gainText, missingText, sourceText, type GearAction, type GearAdvice, type Source } from '../services/gearAdvisor';
 import type { Foe } from '../types';
 import { NavigateButton } from './NavigateButton';
@@ -91,7 +91,7 @@ export function GearPrompt({ step }: { step: Step }) {
   const { upgradeRouter } = useFeatures();
   const { progress } = useStore();
   // Cheap checks — before the analysis: it is needed only for an expanded unfinished combat step.
-  if (!upgradeRouter || !step.foes?.length || isClosed(progress, step.id) || progress.upgradeDismissedForSteps?.includes(step.id)) return null;
+  if (!upgradeRouter || !meleeHintApplies(step) || !step.foes?.length || isClosed(progress, step.id) || progress.upgradeDismissedForSteps?.includes(step.id)) return null;
   return <GearPromptBody step={step} />;
 }
 
@@ -183,10 +183,10 @@ const capital = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
  * A banner on "Path": the gear is visible from the game and there is something to do — the main advice and a link to the analysis.
  * It hides together with the advice of the nearest combat step ("✕ Skip").
  */
-export function GearBanner() {
+export function GearBanner({ step }: { step: Step }) {
   const { upgradeRouter } = useFeatures();
   const { gear } = useBridge();
-  if (!upgradeRouter || !gear) return null;
+  if (!upgradeRouter || !gear || !meleeHintApplies(step)) return null;
   return <GearBannerBody />;
 }
 

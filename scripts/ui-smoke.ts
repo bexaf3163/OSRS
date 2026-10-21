@@ -2216,6 +2216,7 @@ async function magicFundingScenarios(browser: Browser) {
     }, '#/step/S2-04');
     await reveal(page, '.magic-plan');
     await page.locator('.magic-plan table').waitFor();
+    expect(await page.locator('.gear-banner').count() === 0, `Magic (${width}, ${sale}): the current spell-training page does not borrow a future melee purchase banner`);
     const body = await page.locator('.magic-plan').innerText();
     expect(body.includes('Cast XP only') && body.includes('Full rune replacement cost') && !/fastest|twice as fast|buy it with the first hides/i.test(body), `Magic (${width}, ${sale}): the comparison does not claim measured speed or guaranteed loot funding`);
     expect(body.includes(sale === 'restricted' ? 'cannot fund rune purchases' : sale === 'unknown' ? 'Cowhide sales are unconfirmed' : 'Only a completed sale'), `Magic (${width}, ${sale}): funding follows the shared sale eligibility state`);
