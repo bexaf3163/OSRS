@@ -126,7 +126,7 @@ export interface Held {
   /** In the bag and on the character (banknotes separately). */
   bag: number | null;
   noted: number;
-  /** null means the bank was not opened in this session. */
+  /** null means this item's bank quantity has not been established in this session. */
   bank: number | null;
   /** Of which worn (for display only: it is already included in bag). */
   equipped: number;
@@ -189,10 +189,10 @@ export function heldExact(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' 
   const o = s.owned?.items.get(nameKey(nameEn));
   const equipped = Object.values(s.equipment).filter((n) => nameKey(n) === nameKey(nameEn)).length;
   const manual = manualKey ? s.manual[manualKey] : undefined;
-  // The game knows everything, both the bag and the bank: the player's marks are not needed.
-  if (o && s.bankSeen) {
+  // A global bank observation does not prove every tracked row's quantity. A new/unreported row remains unknown.
+  if (o && s.bankSeen && o.bank !== undefined) {
     const bag = o.carried;
-    const bank = o.bank ?? 0;
+    const bank = o.bank;
     const total = bag + o.noted + bank;
     return { presence: total > 0 ? 'PRESENT' : 'MISSING', bag, noted: o.noted, bank, equipped, total, source: 'game' };
   }

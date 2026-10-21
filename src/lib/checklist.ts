@@ -104,7 +104,7 @@ export function evaluatePreflight(items: PreflightItem[], owned: OwnedState, lev
     const legacy = Boolean(toolFamilyOf(item.nameEn)) && all.some(({ o }) => o?.legacyToolCount);
     const count = (where: 'carried' | 'bank') => legacy ? Math.max(0, ...all.map(({ o }) => o?.[where] ?? 0)) : all.reduce((s, { o, w }) => s + (o?.[where] ?? 0) * w, 0);
     const have = count('carried');
-    const inBank = owned.bankSeen && all.every(({ o }) => o !== undefined) ? count('bank') : null;
+    const inBank = owned.bankSeen && all.every(({ o }) => o?.bank !== undefined) ? count('bank') : null;
     let state: PreflightState;
     if (have >= need) state = 'IN_BAG_READY';
     else if (inBank === null || have + inBank >= need) state = 'MISSING_FROM_BAG';

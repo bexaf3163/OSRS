@@ -66,8 +66,13 @@ describe('the departure check', () => {
   });
 
   it('none, and not in the bank', () => {
-    const r = evaluatePreflight(items, owned(true, [{ name: 'Rope', carried: 0 }]));
+    const r = evaluatePreflight(items, owned(true, [{ name: 'Rope', carried: 0, bank: 0 }]));
     expect(r.rows[0]).toMatchObject({ inBank: 0, state: 'NOT_FOUND_IN_BANK' });
+  });
+
+  it('a reported bag row with an unreported bank quantity is not a proven shortage', () => {
+    const r = evaluatePreflight(items, owned(true, [{ name: 'Rope', carried: 0 }]));
+    expect(r.rows[0]).toMatchObject({ have: 0, inBank: null, state: 'MISSING_FROM_BAG' });
   });
 
   it('the bank was not opened — we do not claim "not in the bank"', () => {
@@ -139,7 +144,8 @@ describe('quick options by stats', () => {
     expect(evaluateCondition(chronicle, ctx(null)).status).toBe('unknown');
     expect(evaluateCondition(chronicle, ctx(null, { owned: owned(true, [{ name: 'Chronicle', bank: 1 }]) })).status).toBe('available');
     expect(evaluateCondition(chronicle, ctx(null, { owned: owned(false, [{ name: 'Chronicle' }]) })).status).toBe('unknown');
-    expect(evaluateCondition(chronicle, ctx(null, { owned: owned(true, [{ name: 'Chronicle' }]) })).status).toBe('locked');
+    expect(evaluateCondition(chronicle, ctx(null, { owned: owned(true, [{ name: 'Chronicle' }]) })).status).toBe('unknown');
+    expect(evaluateCondition(chronicle, ctx(null, { owned: owned(true, [{ name: 'Chronicle', bank: 0 }]) })).status).toBe('locked');
   });
 
   it('levels from the bridge: only sensible numbers', () => {
