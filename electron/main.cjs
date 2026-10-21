@@ -160,7 +160,7 @@ if (!app.requestSingleInstanceLock()) {
   // The list of profiles lives in the window's storage; a file beside the progress keeps it if the storage is gone.
   ipcMain.on('profiles:load', (e) => {
     flushProgress();
-    e.returnValue = readProgress(app.getPath('userData'), new Date(), 'profiles.json');
+    e.returnValue = readProgress(app.getPath('userData'), new Date(), 'profiles.json', true);
   });
   ipcMain.on('profiles:save', (_e, json) => {
     progressWriter.queue('profiles.json', json);

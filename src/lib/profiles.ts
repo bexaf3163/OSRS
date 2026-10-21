@@ -95,6 +95,8 @@ export function linkPlayer(s: ProfilesState, id: string, player: string | null):
 
 /** What to do when the game reported a character's name. */
 export type ProfileGate =
+  /** Saved character data needs recovery before binding or writing live progress. */
+  | { kind: 'protected' }
   /** The name is unknown (not in the game, an old plugin): nothing hinders. */
   | { kind: 'unknown' }
   /** The active profile belongs to this character. */
@@ -118,37 +120,58 @@ export function profileGate(s: ProfilesState, player: string | null): ProfileGat
 /** Can levels and marks from the game be written to the active profile? */
 export const gateAllows = (g: ProfileGate): boolean => g.kind === 'unknown' || g.kind === 'ok' || g.kind === 'link';
 
+/** Storage protection is separate from the pure character-matching rule above. */
+export const guardedProfileGate = (s: ProfilesState, player: string | null): ProfileGate => sourceProtected ? { kind: 'protected' } : profileGate(s, player);
+
 // ---- Window storage ----
 
 let cache: ProfilesState | null = null;
+let sourceProtected = false;
 const listeners = new Set<() => void>();
+
+function preserveProfiles(key: string, raw: string): boolean {
+  try {
+    const previous = localStorage.getItem(key);
+    if (previous === null) localStorage.setItem(key, raw);
+    return localStorage.getItem(key) === raw;
+  } catch { return false; }
+}
+
+function versionedProfiles(raw: string | null): boolean {
+  try { const data: unknown = JSON.parse(raw ?? 'null'); return Boolean(data && typeof data === 'object' && Object.hasOwn(data, 'version')); }
+  catch { return false; }
+}
 
 export function readProfiles(): ProfilesState {
   if (!cache) {
-    let raw: string | null = null;
-    try { raw = localStorage.getItem(PROFILES_KEY); } catch { /* no storage */ }
-    // The window's storage is empty (a fresh install): the list comes back from the file next to the progress.
-    if (!validProfileText(raw)) {
-      if (raw !== null) {
-        try {
-          if (localStorage.getItem(`${PROFILES_KEY}:recovery`) === null) localStorage.setItem(`${PROFILES_KEY}:recovery`, raw);
-        } catch { /* keep the original source; reading never writes a fallback over it */ }
-      }
-      try { raw = desktop()?.loadProfilesFile?.() ?? null; } catch { /* no desktop app */ }
-    } else {
+    let raw: string | null = null, file: string | null = null;
+    try { raw = localStorage.getItem(PROFILES_KEY); } catch { sourceProtected = true; }
+    // Inspect both sources before a valid browser list is allowed to mirror over the native file.
+    try { file = desktop()?.loadProfilesFile?.() ?? null; } catch { sourceProtected = true; }
+    const localValid = validProfileText(raw), fileValid = validProfileText(file);
+    const damagedLocal = raw !== null && !localValid;
+    const damagedFile = file !== null && !fileValid;
+    const preserved = !damagedLocal || preserveProfiles(`${PROFILES_KEY}:recovery`, raw!);
+    if (damagedFile) preserveProfiles(`${PROFILES_KEY}:recovery:file`, file!);
+    sourceProtected ||= damagedFile || versionedProfiles(raw) || !preserved || (!localValid && !fileValid && damagedLocal);
+    if (localValid && !sourceProtected) {
       // Profiles saved before the file existed: it is written once, so the copies carry the list too.
       try { desktop()?.saveProfilesFile?.(JSON.stringify(parseProfiles(raw))); } catch { /* no desktop app */ }
     }
-    cache = parseProfiles(raw);
+    cache = parseProfiles(localValid ? raw : fileValid ? file : null);
   }
   return cache;
 }
 
-export function writeProfiles(s: ProfilesState): void {
+/** Whether the edit was accepted; physical native write receipts are a separate contract. */
+export function writeProfiles(s: ProfilesState): boolean {
+  readProfiles();
+  if (sourceProtected) return false;
   cache = s;
   try { localStorage.setItem(PROFILES_KEY, JSON.stringify(s)); } catch { /* it is remembered until restart */ }
   try { desktop()?.saveProfilesFile?.(JSON.stringify(s)); } catch { /* no desktop app */ }
   for (const l of listeners) l();
+  return true;
 }
 
 export function subscribeProfiles(l: () => void): () => void {
@@ -164,6 +187,6 @@ export function useProfiles(): ProfilesState {
 export function switchProfile(id: string): void {
   const s = readProfiles();
   if (!s.list.some((p) => p.id === id) || s.active === id) return;
-  writeProfiles({ ...s, active: id });
+  if (!writeProfiles({ ...s, active: id })) return;
   try { location.reload(); } catch { /* there is no reload in tests */ }
 }

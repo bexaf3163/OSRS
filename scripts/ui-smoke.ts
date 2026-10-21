@@ -258,6 +258,24 @@ async function run(browser: Browser) {
     expect(await noOverflow(page) && !errors.length, 'profile recovery: no overflow or console errors');
     await page.context().close();
   }
+  for (const width of [390, 1280]) {
+    const profiles = { active: 'main', list: [{ id: 'main', name: 'Main', player: 'Profile test' }] };
+    const { page, errors } = await open(browser, width, {
+      profileFile: { version: 99, list: [] },
+      localStorage: { 'osrs-put:profiles': JSON.stringify(profiles) },
+      progress: progressBefore('S3-08', { levels: { attack: 30 } }),
+      status: { protocol: 6, player: 'Profile test', stats: { attack: 99 } },
+      events: [{ type: 'STATS', stats: { attack: 99 } }],
+    }, '#/settings');
+    expect(await page.locator('.profile-storage-warning').count() === 1, `profile protection (${width}): one actionable recovery warning`);
+    await page.getByRole('tab', { name: 'Progress and copies', exact: true }).click();
+    expect(await page.getByRole('textbox', { name: 'New profile name', exact: true }).isDisabled(), `profile protection (${width}): unsafe profile edits are disabled`);
+    expect(await page.evaluate(() => (window as unknown as { __savedProfiles?: string }).__savedProfiles === undefined), `profile protection (${width}): the valid browser source does not overwrite the unknown native format`);
+    expect(await page.evaluate(() => JSON.parse((window as unknown as { __saved?: string }).__saved ?? localStorage.getItem('osrs-put:progress') ?? '{}').levels?.attack !== 99), `profile protection (${width}): game levels are not imported into a protected profile`);
+    expect(await noOverflow(page) && !errors.length, `profile protection (${width}): no overflow or console errors`);
+    if (process.env.UI_ONLY === 'stabilization') await page.screenshot({ path: `audit-temp/profile-protected-${width}.png` });
+    await page.context().close();
+  }
   if (process.env.UI_ONLY === 'stabilization') return;
   for (const width of [390, 1280]) {
     const equipment = [[1329, 'Mithril scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']]
