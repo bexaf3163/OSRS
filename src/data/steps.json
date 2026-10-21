@@ -3423,15 +3423,15 @@
       },
       {
         "label": "Armour",
-        "text": "No armour is bought here. Adamant armour needs 30 Defence, and Defence is left alone on purpose (see S3-08): Dragon Slayer I gives 18,650 Defence XP, which is level 33 from level 1. Wear what you already have."
+        "text": "Use armour your current Defence allows; Adamant armour requires 30 Defence. Compare an upgrade's cost with the food and banking it could save. Training Defence earlier does not remove Dragon Slayer I's later XP reward."
       },
       {
         "label": "Amulet",
-        "text": "A second amulet is not needed: by the damage formulas the Amulet of strength from S2-01 hits faster than the Amulet of power in every combat step (strength +10 against +6). Take the Amulet of power (+6 to accuracy, strength and defence) only if you have no Amulet of strength: almost the same speed and a little defence."
+        "text": "Keep your current amulet unless Gear shows a worthwhile change for your levels and opponent. Strength can improve max hit; power adds accuracy and defence. Neither is always faster: max-hit breakpoints and the target's defence matter."
       },
       {
         "label": "Food and potions",
-        "text": "Buy the Minotaur food and Strength potions for S3-08 in the same trip, so you go straight to the Stronghold. With the game linked, the Shopping list buys the whole goal from your own plan (Food and time on S3-08 shows it); without it, about 80 Salmon and 3 Strength potion(4) from Attack 22 and Strength 16."
+        "text": "Prepare food and Strength potions for the selected S3-08 combat plan in the same shopping trip. Shopping estimates the whole goal; the food you carry is one bank trip. Confirm your levels, kit and bank stock before relying on the quantity."
       }
     ],
     "doneWhen": "The Adamant scimitar is bought and is in the bank.",
@@ -3535,7 +3535,7 @@
       "label": "The Stronghold of Security entrance, Barbarian Village mine"
     },
     "where": "The Stronghold of Security, floor 1 (the Vault of War): the level 12 Minotaurs (the level 27 ones are further in). The entrance is in the Barbarian Village mine, the same place as S1-09. There is no bank on the floor: bank in Edgeville first.",
-    "how": "Strength first: the Aggressive style (Slash on a scimitar) until Strength 20, then Accurate (Chop) until Attack 30. With a Strength potion dose active, this order is about 10 minutes faster over the step than Attack first (an estimate from the combat formulas at Attack 22 and Strength 16); without potions both orders take about the same. Defence is not trained: Dragon Slayer I (S5-08) gives 18,650 Defence XP, which is level 33 from level 1, so grinding it now would waste the reward.",
+    "how": "Train Strength to 20 on Aggressive (Slash on a scimitar), then Attack to 30 on Accurate (Chop). Follow the selected combat plan if it uses a different order or opponent. Dragon Slayer I later gives 18,650 Defence XP; training Defence earlier does not remove that reward. Compare extra training time with the food and banking it could save before changing the plan. Food and time are an estimate until measured in game.",
     "membersAlternative": "👑 With membership: do not fight mobs by hand: complete Waterfall Quest in 15 minutes and get 30 Attack and 30 Strength at once!",
     "doneWhen": "Strength 20 and Attack 30. Defence is left alone.",
     "itemsRequired": [

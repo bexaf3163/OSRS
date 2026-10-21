@@ -31,7 +31,10 @@ describe('quest bosses: food and a potion dose as advice, the numbers in the tex
   });
 
   it('S3-07 stocks up for S3-08 in the same trip', () => {
-    expect(stepById.get('S3-07')!.fields!.find((f) => f.label === 'Food and potions')!.text).toMatch(/Shopping list buys the whole goal/);
+    const text = stepById.get('S3-07')!.fields!.find((f) => f.label === 'Food and potions')!.text;
+    expect(text).toMatch(/selected S3-08 combat plan/);
+    expect(text).toMatch(/Shopping estimates the whole goal/);
+    expect(text).toMatch(/one bank trip/);
   });
 });
 
