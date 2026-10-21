@@ -1,6 +1,7 @@
 // Choose valid saved sources before constructing an empty fallback. Invalid data has no timestamp and must never win by being read last.
 import type { Progress } from '../types';
-import { emptyProgress, EXPORT_APP, normalizeProgress, PROGRESS_VERSION, type Known } from './progress';
+import { emptyProgress, normalizeProgress, type Known } from './progress';
+import { inspectProgress } from '../../electron/saved-data.mjs';
 
 export type ProgressSource =
   | { kind: 'missing' | 'invalid' | 'unsupported' }
@@ -10,10 +11,9 @@ export function readProgressText(text: string | null, known: Known): ProgressSou
   if (text === null) return { kind: 'missing' };
   try {
     const raw: unknown = JSON.parse(text);
-    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return { kind: 'invalid' };
+    const kind = inspectProgress(raw);
+    if (kind !== 'valid') return { kind };
     const data = raw as Record<string, unknown>;
-    if (data.app !== undefined && data.app !== EXPORT_APP) return { kind: 'invalid' };
-    if (data.version !== undefined && data.version !== 1 && data.version !== 2 && data.version !== PROGRESS_VERSION) return { kind: 'unsupported' };
     const n = normalizeProgress(data, known);
     if (!n) return { kind: 'invalid' };
     const at = typeof data.updatedAt === 'string' ? Date.parse(data.updatedAt) : NaN;

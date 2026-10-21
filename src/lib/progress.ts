@@ -1,11 +1,11 @@
 // Progress: storage, JSON export and import, migration of old saves, pure updates.
-// No relative value imports: the module is used by both the tests and the app.
+// Shared format constants also protect native backup selection.
 
 import type { GameMode, ManualOwned, Progress, StepStatus } from '../types/index.ts';
+import { EXPORT_APP, PROGRESS_VERSION } from '../../electron/saved-data.mjs';
 
 export const STORAGE_KEY = 'osrs-put:progress';
-export const EXPORT_APP = 'osrs-put';
-export const PROGRESS_VERSION = 3;
+export { EXPORT_APP, PROGRESS_VERSION };
 const MAX_NOTE = 5000;
 
 export interface Known {

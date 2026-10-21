@@ -47,12 +47,12 @@ describe('the progress file', () => {
     const d = tmp();
     backupProgress(d);
     expect(existsSync(join(d, 'progress.bak.json'))).toBe(false);
-    writeFileSync(join(d, 'progress.json'), '{"version":3,"ok":1}');
+    writeFileSync(join(d, 'progress.json'), '{"version":3,"steps":{},"ok":1}');
     backupProgress(d);
-    expect(readFileSync(join(d, 'progress.bak.json'), 'utf8')).toBe('{"version":3,"ok":1}');
+    expect(readFileSync(join(d, 'progress.bak.json'), 'utf8')).toBe('{"version":3,"steps":{},"ok":1}');
     writeFileSync(join(d, 'progress.json'), '{"version":');
     backupProgress(d);
-    expect(readFileSync(join(d, 'progress.bak.json'), 'utf8')).toBe('{"version":3,"ok":1}');
+    expect(readFileSync(join(d, 'progress.bak.json'), 'utf8')).toBe('{"version":3,"steps":{},"ok":1}');
   });
 });
 
@@ -71,23 +71,23 @@ describe('profiles and the scheduled copy', () => {
     writeFileSync(join(d, 'progress-ab12.json'), '{"x":');
     expect(api.readProgress(d, new Date(Date.UTC(2026, 9, 2, 1, 2, 3)), 'progress-ab12.json')).toBeNull();
     expect(readdirSync(d).filter((n) => n.includes('broken'))).toEqual(['progress-ab12.broken-20261002T010203.json']);
-    writeFileSync(join(d, 'progress-ab12.json'), '{"x":2}');
+    writeFileSync(join(d, 'progress-ab12.json'), '{"steps":{},"x":2}');
     api.backupProgress(d, 'progress-ab12.json');
-    expect(readFileSync(join(d, 'progress-ab12.bak.json'), 'utf8')).toBe('{"x":2}');
+    expect(readFileSync(join(d, 'progress-ab12.bak.json'), 'utf8')).toBe('{"steps":{},"x":2}');
   });
 
   it('scheduled copy: once a day, one file per profile, today\'s is not overwritten, 14 are kept', () => {
     const d = tmp();
     const out = join(tmp(), 'copies');
-    writeFileSync(join(d, 'progress.json'), '{"a":1}');
-    writeFileSync(join(d, 'progress-xy.json'), '{"b":2}');
+    writeFileSync(join(d, 'progress.json'), '{"steps":{},"a":1}');
+    writeFileSync(join(d, 'progress-xy.json'), '{"steps":{},"b":2}');
     writeFileSync(join(d, 'progress.bak.json'), '{"old":1}');
     writeFileSync(join(d, 'ui.json'), '{}');
     expect(api.dailyBackup(d, out, new Date(2026, 9, 2))).toBe(2);
     expect(readdirSync(out).sort()).toEqual(['osrs-put-progress-20261002.json', 'osrs-put-progress-xy-20261002.json']);
-    writeFileSync(join(d, 'progress.json'), '{"a":99}');
+    writeFileSync(join(d, 'progress.json'), '{"steps":{},"a":99}');
     expect(api.dailyBackup(d, out, new Date(2026, 9, 2))).toBe(0);
-    expect(readFileSync(join(out, 'osrs-put-progress-20261002.json'), 'utf8')).toBe('{"a":1}');
+    expect(readFileSync(join(out, 'osrs-put-progress-20261002.json'), 'utf8')).toBe('{"steps":{},"a":1}');
     for (let day = 3; day <= 20; day++) api.dailyBackup(d, out, new Date(2026, 9, day));
     const main = readdirSync(out).filter((n) => /^osrs-put-progress-\d{8}\.json$/.test(n));
     expect(main).toHaveLength(14);
@@ -108,21 +108,113 @@ describe('copies outside the app and the restore of a fresh data folder', () => 
   };
   const at = (s: string) => JSON.stringify({ updatedAt: s, steps: { a: 'done' } });
 
+  it.each(['null', '[]', '{"unrelated":true}', '{"version":99,"steps":{}}', '{"app":"another-app","steps":{}}'])('invalid/unsupported progress cannot replace backup copies: %s', raw => {
+    const d = tmp();
+    const out = tmp();
+    const good = at('2026-10-05T10:00:00Z');
+    writeFileSync(join(d, 'progress.json'), good);
+    backupProgress(d);
+    api.latestCopy(d, out);
+    writeFileSync(join(d, 'progress.json'), raw);
+    backupProgress(d);
+    api.latestCopy(d, out);
+    expect(api.dailyBackup(d, out, new Date(2026, 9, 6))).toBe(0);
+    expect(readFileSync(join(d, 'progress.bak.json'), 'utf8')).toBe(good);
+    expect(readFileSync(join(out, 'osrs-put-progress-latest.json'), 'utf8')).toBe(good);
+    expect(readFileSync(join(d, 'progress.json'), 'utf8')).toBe(raw);
+  });
+
+  it('unknown existing latest/session copies are retained for explicit recovery', () => {
+    const d = tmp();
+    const out = tmp();
+    const future = '{"version":99,"steps":{}}';
+    writeFileSync(join(d, 'progress.json'), at('2026-10-05T10:00:00Z'));
+    writeFileSync(join(d, 'progress.bak.json'), future);
+    writeFileSync(join(out, 'osrs-put-progress-latest.json'), future);
+    backupProgress(d);
+    api.latestCopy(d, out);
+    expect(readFileSync(join(d, 'progress.bak.json'), 'utf8')).toBe(future);
+    expect(readFileSync(join(out, 'osrs-put-progress-latest.json'), 'utf8')).toBe(future);
+    expect(api.dailyBackup(d, out, new Date(2026, 9, 6))).toBe(1);
+    expect(readFileSync(join(out, 'osrs-put-progress-20261006.json'), 'utf8')).toBe(at('2026-10-05T10:00:00Z'));
+  });
+
+  it('malformed profile rows do not replace good latest copies or create dated copies', () => {
+    const d = tmp();
+    const out = tmp();
+    const good = '{"active":"alt","list":[{"id":"main"},{"id":"alt","player":"Alt tester"}]}';
+    const bad = '{"active":"alt","list":[null]}';
+    writeFileSync(join(d, 'profiles.json'), good);
+    api.latestCopy(d, out);
+    writeFileSync(join(d, 'profiles.json'), bad);
+    api.latestCopy(d, out);
+    expect(api.dailyBackup(d, out)).toBe(0);
+    expect(readFileSync(join(out, 'osrs-put-profiles-latest.json'), 'utf8')).toBe(good);
+    expect(readFileSync(join(d, 'profiles.json'), 'utf8')).toBe(bad);
+  });
+
+  it('daily rotation retains unknown old copies while bounding supported dated copies', () => {
+    const d = tmp();
+    const out = tmp();
+    const future = '{"version":99,"steps":{}}';
+    writeFileSync(join(out, 'osrs-put-progress-20260901.json'), future);
+    writeFileSync(join(d, 'progress.json'), at('2026-10-05T10:00:00Z'));
+    for (let day = 1; day <= 20; day++) api.dailyBackup(d, out, new Date(2026, 9, day));
+    expect(readFileSync(join(out, 'osrs-put-progress-20260901.json'), 'utf8')).toBe(future);
+    expect(readdirSync(out).filter(n => /^osrs-put-progress-202610\d{2}\.json$/.test(n))).toHaveLength(14);
+  });
+
+  it.each(['null', '[]', '{"unrelated":true}', '{"version":99,"steps":{},"updatedAt":"2099-01-01T00:00:00Z"}', '{"app":"another-app","version":3,"steps":{}}'])('does not restore a newer JSON record which is not supported progress: %s', raw => {
+    const source = tmp();
+    const good = at('2026-10-05T10:00:00Z');
+    writeFileSync(join(source, 'osrs-put-progress-20261005.json'), good);
+    writeFileSync(join(source, 'osrs-put-progress-latest.json'), raw);
+    const destination = tmp();
+    expect(api.restoreFromCopies(destination, source)).toEqual(['progress.json']);
+    expect(readFileSync(join(destination, 'progress.json'), 'utf8')).toBe(good);
+    expect(readFileSync(join(source, 'osrs-put-progress-latest.json'), 'utf8')).toBe(raw);
+    const invalidOnly = tmp();
+    writeFileSync(join(invalidOnly, 'osrs-put-progress-latest.json'), raw);
+    const empty = tmp();
+    expect(api.restoreFromCopies(empty, invalidOnly)).toEqual([]);
+    expect(existsSync(join(empty, 'progress.json'))).toBe(false);
+  });
+
+  it('does not normalize a malformed copied profile list over a valid older one', () => {
+    const source = tmp();
+    const good = JSON.stringify({ active: 'alt', list: [{ id: 'main', name: 'Main' }, { id: 'alt', name: 'Alt' }] });
+    writeFileSync(join(source, 'osrs-put-profiles-20261005.json'), good);
+    writeFileSync(join(source, 'osrs-put-profiles-latest.json'), '{"active":"alt","list":[null]}');
+    const destination = tmp();
+    expect(api.restoreFromCopies(destination, source)).toEqual(['profiles.json']);
+    expect(readFileSync(join(destination, 'profiles.json'), 'utf8')).toBe(good);
+  });
+
+  it('a fresh-folder refresh cannot overwrite an existing unsupported source', () => {
+    const source = tmp();
+    writeFileSync(join(source, 'osrs-put-progress-latest.json'), at('2026-10-05T10:00:00Z'));
+    const destination = tmp();
+    const future = '{"version":99,"steps":{},"updatedAt":"2026-10-01T00:00:00Z"}';
+    writeFileSync(join(destination, 'progress.json'), future);
+    expect(api.restoreFromCopies(destination, source, true)).toEqual([]);
+    expect(readFileSync(join(destination, 'progress.json'), 'utf8')).toBe(future);
+  });
+
   it('the latest copy follows the source during the day, a broken source does not overwrite it, the profile list is copied', () => {
     const d = tmp();
     const out = join(tmp(), 'copies');
-    writeFileSync(join(d, 'progress.json'), '{"a":1}');
-    writeFileSync(join(d, 'profiles.json'), '{"active":"main"}');
+    writeFileSync(join(d, 'progress.json'), '{"steps":{},"a":1}');
+    writeFileSync(join(d, 'profiles.json'), '{"active":"main","list":[{"id":"main","name":"Main"}]}');
     api.dailyBackup(d, out, new Date(2026, 9, 2));
     api.latestCopy(d, out);
-    writeFileSync(join(d, 'progress.json'), '{"a":2}');
+    writeFileSync(join(d, 'progress.json'), '{"steps":{},"a":2}');
     api.latestCopy(d, out);
-    expect(readFileSync(join(out, 'osrs-put-progress-latest.json'), 'utf8')).toBe('{"a":2}');
-    expect(readFileSync(join(out, 'osrs-put-progress-20261002.json'), 'utf8')).toBe('{"a":1}');
-    expect(readFileSync(join(out, 'osrs-put-profiles-20261002.json'), 'utf8')).toBe('{"active":"main"}');
+    expect(readFileSync(join(out, 'osrs-put-progress-latest.json'), 'utf8')).toBe('{"steps":{},"a":2}');
+    expect(readFileSync(join(out, 'osrs-put-progress-20261002.json'), 'utf8')).toBe('{"steps":{},"a":1}');
+    expect(readFileSync(join(out, 'osrs-put-profiles-20261002.json'), 'utf8')).toBe('{"active":"main","list":[{"id":"main","name":"Main"}]}');
     writeFileSync(join(d, 'progress.json'), '{"a":');
     api.latestCopy(d, out);
-    expect(readFileSync(join(out, 'osrs-put-progress-latest.json'), 'utf8')).toBe('{"a":2}');
+    expect(readFileSync(join(out, 'osrs-put-progress-latest.json'), 'utf8')).toBe('{"steps":{},"a":2}');
   });
 
   it('a new data folder is filled from the freshest valid copy, existing files stay as they are', () => {
@@ -132,14 +224,14 @@ describe('copies outside the app and the restore of a fresh data folder', () => 
     writeFileSync(join(src, 'osrs-put-progress-latest.json'), at('2026-10-04T10:00:00Z'));
     writeFileSync(join(src, 'osrs-put-progress-ab12-20261002.json'), '{"updatedAt":');
     writeFileSync(join(src, 'osrs-put-progress-ab12-20261001.json'), at('2026-10-01T09:00:00Z'));
-    writeFileSync(join(src, 'osrs-put-profiles-20261003.json'), '{"active":"ab12"}');
+    writeFileSync(join(src, 'osrs-put-profiles-20261003.json'), '{"active":"ab12","list":[{"id":"main","name":"Main"},{"id":"ab12","name":"Alt"}]}');
     writeFileSync(join(src, 'notes.txt'), 'x');
     const d = tmp();
     writeFileSync(join(d, 'progress-zz.json'), 'mine');
     expect(api.restoreFromCopies(d, src).sort()).toEqual(['profiles.json', 'progress-ab12.json', 'progress.json']);
     expect(JSON.parse(readFileSync(join(d, 'progress.json'), 'utf8')).updatedAt).toBe('2026-10-04T10:00:00Z');
     expect(JSON.parse(readFileSync(join(d, 'progress-ab12.json'), 'utf8')).updatedAt).toBe('2026-10-01T09:00:00Z');
-    expect(readFileSync(join(d, 'profiles.json'), 'utf8')).toBe('{"active":"ab12"}');
+    expect(readFileSync(join(d, 'profiles.json'), 'utf8')).toBe('{"active":"ab12","list":[{"id":"main","name":"Main"},{"id":"ab12","name":"Alt"}]}');
     // The second launch changes nothing, and a missing copies folder is not an error.
     expect(api.restoreFromCopies(d, src)).toEqual([]);
     expect(api.restoreFromCopies(d, join(src, 'nope'))).toEqual([]);

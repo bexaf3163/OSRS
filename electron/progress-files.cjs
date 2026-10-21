@@ -4,6 +4,7 @@
 
 const fs = require('node:fs');
 const path = require('node:path');
+const { validSavedText } = require('./saved-data.mjs');
 
 const BROKEN_KEEP = 3;
 
@@ -46,7 +47,11 @@ function readProgress(dir, now = new Date(), name = 'progress.json', includeInva
 function backupProgress(dir, name = 'progress.json') {
   const target = path.join(dir, name);
   try {
-    if (parses(fs.readFileSync(target, 'utf8'))) fs.copyFileSync(target, path.join(dir, name.replace(/\.json$/, '.bak.json')));
+    const out = path.join(dir, name.replace(/\.json$/, '.bak.json'));
+    if (!validSavedText(name, fs.readFileSync(target, 'utf8'))) return;
+    // Preserve an unknown or damaged previous copy for explicit recovery.
+    if (fs.existsSync(out) && !validSavedText(name, fs.readFileSync(out, 'utf8'))) return;
+    fs.copyFileSync(target, out);
   } catch {
     // There is no file yet — there is nothing to copy.
   }
@@ -71,10 +76,13 @@ function dailyBackup(dir, target, now = new Date()) {
     const out = path.join(target, `osrs-put-${base}-${today}.json`);
     let text;
     try { text = fs.readFileSync(path.join(dir, name), 'utf8'); } catch { continue; }
-    if (!parses(text)) continue;
+    if (!validSavedText(name, text)) continue;
     if (!fs.existsSync(out)) { fs.writeFileSync(out, text); made++; }
     const mine = fs.readdirSync(target).filter((n) => n.startsWith(`osrs-put-${base}-`) && n.length === `osrs-put-${base}-`.length + 13 && /^\d{8}\.json$/.test(n.slice(-13))).sort();
-    for (const old of mine.slice(0, Math.max(0, mine.length - DAY_KEEP))) fs.rmSync(path.join(target, old), { force: true });
+    const supported = mine.filter(n => {
+      try { return validSavedText(name, fs.readFileSync(path.join(target, n), 'utf8')); } catch { return false; }
+    });
+    for (const old of supported.slice(0, Math.max(0, supported.length - DAY_KEEP))) fs.rmSync(path.join(target, old), { force: true });
   }
   return made;
 }
@@ -98,11 +106,12 @@ function latestCopy(dir, target) {
   for (const name of fs.readdirSync(dir).filter((n) => COPIED.test(n))) {
     let text;
     try { text = fs.readFileSync(path.join(dir, name), 'utf8'); } catch { continue; }
-    if (!parses(text)) continue;
+    if (!validSavedText(name, text)) continue;
     const out = path.join(target, `osrs-put-${name.replace(/\.json$/, '')}-latest.json`);
     let old = null;
-    try { old = fs.readFileSync(out, 'utf8'); } catch { /* no copy yet */ }
+    try { old = fs.readFileSync(out, 'utf8'); } catch { if (fs.existsSync(out)) continue; }
     if (old === text) continue;
+    if (old !== null && !validSavedText(name, old)) continue;
     const mine = updatedAtOf(text);
     const theirs = old === null ? null : updatedAtOf(old);
     if (mine !== null && theirs !== null && mine < theirs) continue;
@@ -132,7 +141,8 @@ function restoreFromCopies(dir, source, replaceOlder = false) {
     const m = COPY_NAME.exec(n);
     if (!m) continue;
     let text;
-    try { text = fs.readFileSync(path.join(source, n), 'utf8'); JSON.parse(text); } catch { continue; }
+    try { text = fs.readFileSync(path.join(source, n), 'utf8'); } catch { continue; }
+    if (!validSavedText(`${m[1]}.json`, text)) continue;
     const at = updatedAtOf(text) ?? -1;
     const rank = m[2] === 'latest' ? 1 : 0;
     const key = [at, m[2] === 'latest' ? 99999999 : Number(m[2]), rank];
@@ -145,7 +155,11 @@ function restoreFromCopies(dir, source, replaceOlder = false) {
     if (fs.existsSync(target)) {
       if (!replaceOlder) continue;
       let have = null;
-      try { have = updatedAtOf(fs.readFileSync(target, 'utf8')); } catch { /* unreadable: replace it */ }
+      try {
+        const original = fs.readFileSync(target, 'utf8');
+        if (!validSavedText(`${base}.json`, original)) continue;
+        have = updatedAtOf(original);
+      } catch { continue; } // An unreadable source must not be replaced automatically.
       const fresh = updatedAtOf(text);
       if (have !== null && (fresh === null || fresh <= have)) continue;
     }
