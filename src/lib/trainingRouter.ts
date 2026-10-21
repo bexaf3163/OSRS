@@ -157,12 +157,18 @@ export function practicalRate(m: TrainingMethod): number | null {
  * ones last. Relaxed (the old "Calm"): first the ready ones, without risk, with fewer clicks, not at a loss — speed only on a tie. Fastest (the old
  * "Efficient"): first the ready ones, then by speed (for methods without a speed — by entry level).
  */
-function compare(priority: MethodPriority, xpLeft?: number) {
+function compare(priority: MethodPriority, xpLeft?: number, level?: number) {
   return (a: MethodView, b: MethodView): number => {
-    const s = STATUS_RANK[a.status] - STATUS_RANK[b.status];
+    // Unchecked supplies must not beat a confirmed preparation step merely by being labelled READY.
+    // Keep them available and disclose their uncertainty; do not invent missing quantities.
+    const rank = (v: MethodView) => STATUS_RANK[v.status] + (v.status === 'READY' && v.unchecked.length ? 1 : 0);
+    const s = rank(a) - rank(b);
     const ra = rateLow(a.method);
     const rb = rateLow(b.method);
-    const byRate = (rb ?? -1) - (ra ?? -1);
+    // Without comparable rates, retain the authored bracket as a preference, never as an availability ban.
+    const suggested = (m: TrainingMethod) => level === undefined || m.to === null || level < m.to;
+    const byBracket = Number(suggested(b.method)) - Number(suggested(a.method));
+    const byRate = ((ra === null || rb === null) ? byBracket : 0) || (rb ?? -1) - (ra ?? -1);
     const byEntry = b.method.from - a.method.from;
     if (priority === 'balanced') {
       if (a.status === 'LOCKED' || b.status === 'LOCKED') { if (s) return s; }
@@ -174,6 +180,7 @@ function compare(priority: MethodPriority, xpLeft?: number) {
         if (Math.abs(ha - hb) > Math.min(ha, hb) * 0.05) return ha - hb;
       } else {
         if (s) return s;
+        if ((pa === null || pb === null) && byBracket) return byBracket;
         if ((pa ?? -1) !== (pb ?? -1)) return (pb ?? -1) - (pa ?? -1);
       }
       return s || EFFORT_RANK[a.method.effort] - EFFORT_RANK[b.method.effort] || COST_RANK[a.method.cost] - COST_RANK[b.method.cost] || byRate || byEntry;
@@ -193,7 +200,7 @@ export const methodsFor = (skill: string, methods: readonly TrainingMethod[] = t
   methods.filter((m) => m.skills.includes(skill));
 
 const availableAt = (m: TrainingMethod, level: number, mode: GameMode): boolean =>
-  m.kind === 'method' && m.from <= level && (m.to === null || level < m.to) && (mode === 'members' || !m.members);
+  m.kind === 'method' && m.from <= level && (mode === 'members' || !m.members);
 
 export interface PathLeg {
   method: TrainingMethod;
@@ -223,6 +230,8 @@ export interface TrainingAdvice {
   xpLeft: number | null;
   /** How many more actions with the best method to the end of its leg; null — the XP per action is unknown. */
   actionsLeft: number | null;
+  /** The end of the actual selected first leg, not the authored method's suggested upper bracket. */
+  actionTarget: number | null;
   time: TimeEstimate | null;
   /** One phrase "why this method". */
   reason: string;
@@ -273,14 +282,14 @@ function reasonFor(v: MethodView, priority: MethodPriority, level: number): stri
  * The best method on each leg of the path to the goal: identical consecutive ones merge. Except for "fastest", a new unlock replaces the method in hand
  * only when it is clearly better in practice (SWITCH_GAIN): changing method for a sliver costs a trip and a new setup.
  */
-function buildPath(skill: string, level: number, target: number, input: AdviceInput, cmp: ReturnType<typeof compare>, priority: MethodPriority): PathLeg[] {
+function buildPath(skill: string, level: number, target: number, input: AdviceInput, priority: MethodPriority, first: TrainingMethod | null): PathLeg[] {
   const methods = input.methods ?? trainingMethods;
   const legs: PathLeg[] = [];
   for (let lv = level; lv < target; lv++) {
     // For future levels the item requirements are not counted: "what will be needed", not "what there is now".
     const cands = methodsFor(skill, methods).filter((m) => availableAt(m, lv, input.mode)).map((m) => viewMethod(m, input.state)).filter((v) => v.status !== 'LOCKED' || v.missing.every((x) => x.kind === 'skill'));
-    cands.sort(cmp);
-    let pick = cands[0]?.method;
+    cands.sort(compare(priority, undefined, lv));
+    let pick = (lv === level ? cands.find(c => c.method.id === first?.id)?.method : undefined) ?? cands[0]?.method;
     if (!pick) continue;
     const last = legs[legs.length - 1];
     if (priority !== 'fastest' && last && last.method.id !== pick.id && cands.some((c) => c.method.id === last.method.id)) {
@@ -298,24 +307,25 @@ export function adviseTraining(input: AdviceInput): TrainingAdvice {
   const { skill, target, state, mode, style } = input;
   const methods = input.methods ?? trainingMethods;
   const level = levelOf(state, skill) ?? null;
-  const empty: TrainingAdvice = { skill, level, target, best: null, others: [], quests: [], path: [], xpLeft: null, actionsLeft: null, time: null, reason: '', style };
+  const empty: TrainingAdvice = { skill, level, target, best: null, others: [], quests: [], path: [], xpLeft: null, actionsLeft: null, actionTarget: null, time: null, reason: '', style };
   if (level === null) return { ...empty, reason: 'Level unknown: log in to the game with RuneLite or enter it on the skill page.' };
   if (level >= target) return { ...empty, reason: 'The goal is already reached.' };
 
   const priority: MethodPriority = input.priority ?? (style === 'efficient' ? 'fastest' : 'relaxed');
   const xpNow0 = input.xp ?? xpForLevel(level);
-  const cmp = compare(priority, Math.max(0, xpForLevel(target) - xpNow0));
+  const cmp = compare(priority, Math.max(0, xpForLevel(target) - xpNow0), level);
   const views = methodsFor(skill, methods).filter((m) => availableAt(m, level, mode)).map((m) => viewMethod(m, state)).sort(cmp);
   const best = views.find((v) => v.status !== 'LOCKED') ?? null;
   const others = views.filter((v) => v !== best).slice(0, 3);
   const quests = methodsFor(skill, methods).filter((m) => m.kind === 'quest' && m.from <= level && (m.to === null || level < m.to) && (mode === 'members' || !m.members));
-  const path = buildPath(skill, level, target, input, compare(priority), priority);
+  const path = buildPath(skill, level, target, input, priority, best?.method ?? null);
 
   const xpNow = input.xp ?? xpForLevel(level);
   const xpLeft = Math.max(0, xpForLevel(target) - xpNow);
   let actionsLeft: number | null = null;
+  const actionTarget = best ? path.find(l => l.fromLevel === level && l.method.id === best.method.id)?.toLevel ?? target : null;
   if (best?.method.xpa) {
-    const legEnd = Math.min(target, best.method.to ?? target);
+    const legEnd = actionTarget ?? target;
     actionsLeft = Math.ceil(Math.max(0, xpForLevel(legEnd) - xpNow) / best.method.xpa);
   }
   let time: TimeEstimate | null = null;
@@ -326,7 +336,7 @@ export function adviseTraining(input: AdviceInput): TrainingAdvice {
     time = { source: 'wiki', minHours: xpLeft / best.method.xph[1], maxHours: xpLeft / best.method.xph[0] };
   }
   return {
-    ...empty, best, others, quests, path, xpLeft, actionsLeft, time,
+    ...empty, best, others, quests, path, xpLeft, actionsLeft, actionTarget, time,
     reason: best ? reasonFor(best, priority, level) : 'There is no method in the list for this level and mode: see the skill training plan.',
   };
 }
