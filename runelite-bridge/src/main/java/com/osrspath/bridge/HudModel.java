@@ -211,7 +211,7 @@ final class HudModel
 		Hud.State state;
 		/** The pace of a training step; null for a step without one. */
 		Pace pace;
-		/** The selected plan's phase in a few words ("Collect 50 Big bones from Hill Giants") when it has no pace; null otherwise. */
+		/** The selected plan's explicit objective ("Collect 50 Big bones from Hill Giants"), ahead of incidental XP pacing; null otherwise. */
 		String planNow;
 		/** The plan's next phase; null when this is the last. */
 		String planNext;
@@ -350,6 +350,12 @@ final class HudModel
 		if (stage != null)
 		{
 			stageActivity(a, v, s);
+		}
+		else if (in.getPlanNow() != null)
+		{
+			// An explicit collection objective is not completed by its incidental XP projection.
+			// The app advances this phase from item evidence; XP alone must not show the next phase or collection progress.
+			stepActivity(a, in, null);
 		}
 		else if (p != null && !p.isDone())
 		{

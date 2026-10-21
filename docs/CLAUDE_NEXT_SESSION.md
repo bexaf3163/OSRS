@@ -1,5 +1,13 @@
 # Claude continuation: OSRS Path cumulative repair candidate
 
+## New block after the fifth candidate: HUD collection objective
+
+Continue on `codex/audit-block-hud-collection`; it includes the documentation-only live-review branch and all earlier repairs. The block's exact published revision is the release tag/EXE source SHA, with SHA256SUMS.txt alongside it. See [CODEX_HUD_COLLECTION_HANDOFF.md](CODEX_HUD_COLLECTION_HANDOFF.md). Explicit collection objectives now lead over incidental XP pacing; XP reaching its projected level does not advance a collection phase, and XP percentage is not presented as collected-item progress. Food/preflight, quest stages, ordinary training, current/next-phase transport, route completion, calculations and saves retain their contracts.
+
+Three new semantic cases reproduced failures before the fix and passed in the full local Java suite (604 tests). All 1,767 Vitest tests, TypeScript/build and check-data (0 errors/warnings) passed locally. The collection card was added to the existing width/scale/height render matrix and exported for visual review. Exact-tree cumulative CI and packaged EXE are required for publication; do not substitute the prior fifth-candidate pass. This newer plugin has not been checked live; the linked real-PC report is still third-preview evidence.
+
+Owner policy: each completed repair block publishes a separate portable prerelease after its gates, and updates this file. The same-repository `codex/audit-block-` workflow prefix enables that; all browser, Java and actual EXE gates still apply, and stable auto-updates still ignore prereleases. Do not publish an untested intermediate change to save tokens. Historical continuation instructions below refer to older snapshots.
+
 2026-10-21. Start here. This is an engineering handoff, not a claim that the full audit is finished. The documentation-only `codex/live-review-handoff` branch continues the exact fifth candidate application tree and adds the [real-PC review supplement](CODEX_LIVE_REVIEW_2026_10_21.md). Use that branch for the latest handoff; it does not require replaying all earlier patches.
 
 ## Resume from the correct source
