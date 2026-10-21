@@ -278,6 +278,26 @@ async function run(browser: Browser) {
     if (process.env.UI_ONLY === 'stabilization') await page.screenshot({ path: `audit-temp/profile-protected-${width}.png` });
     await page.context().close();
   }
+  for (const width of [390, 1280]) {
+    const browserProfiles = { active: 'main', list: [{ id: 'main', name: 'Main', player: 'Profile test' }] };
+    const nativeProfiles = { ...browserProfiles, list: [...browserProfiles.list, { id: 'alt', name: 'Native only', player: 'Other hero' }] };
+    const { page, errors } = await open(browser, width, {
+      profileFile: nativeProfiles,
+      localStorage: { 'osrs-put:profiles': JSON.stringify(browserProfiles) },
+      progress: progressBefore('S3-08', { levels: { attack: 30 } }),
+      status: { protocol: 6, player: 'Profile test', stats: { attack: 99 } },
+      events: [{ type: 'STATS', stats: { attack: 99 } }],
+    }, '#/settings');
+    expect(await page.locator('.profile-storage-warning').count() === 1 && (await text(page, '.profile-storage-warning')).includes('saved profile lists disagree'), `profile conflict (${width}): one warning explains the conflict between supported lists`);
+    await page.getByRole('tab', { name: 'Progress and copies', exact: true }).click();
+    expect(await page.getByRole('textbox', { name: 'New profile name', exact: true }).isDisabled(), `profile conflict (${width}): profile edits stay paused`);
+    expect(await page.evaluate(() => (window as unknown as { __savedProfiles?: string }).__savedProfiles === undefined), `profile conflict (${width}): no supported list overwrites the other`);
+    expect(await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:profiles:recovery:file')!).list.some((p: { id: string }) => p.id === 'alt')), `profile conflict (${width}): the native-only character is preserved`);
+    expect(await page.evaluate(() => JSON.parse((window as unknown as { __saved?: string }).__saved ?? localStorage.getItem('osrs-put:progress') ?? '{}').levels?.attack !== 99), `profile conflict (${width}): game levels cannot write into an unresolved account`);
+    expect(await noOverflow(page) && !errors.length, `profile conflict (${width}): no overflow or console errors`);
+    if (process.env.UI_ONLY === 'stabilization') await page.screenshot({ path: `audit-temp/profile-conflict-${width}.png` });
+    await page.context().close();
+  }
   if (process.env.UI_ONLY === 'stabilization') return;
   for (const width of [390, 1280]) {
     const equipment = [[1329, 'Mithril scimitar', 'weapon'], [1153, 'Iron full helm', 'head'], [1115, 'Iron platebody', 'body'], [1081, 'Iron plateskirt', 'legs'], [1191, 'Iron kiteshield', 'shield']]

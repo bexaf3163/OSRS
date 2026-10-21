@@ -96,7 +96,7 @@ export function linkPlayer(s: ProfilesState, id: string, player: string | null):
 /** What to do when the game reported a character's name. */
 export type ProfileGate =
   /** Saved character data needs recovery before binding or writing live progress. */
-  | { kind: 'protected' }
+  | { kind: 'protected'; reason?: 'conflict' }
   /** The name is unknown (not in the game, an old plugin): nothing hinders. */
   | { kind: 'unknown' }
   /** The active profile belongs to this character. */
@@ -121,12 +121,15 @@ export function profileGate(s: ProfilesState, player: string | null): ProfileGat
 export const gateAllows = (g: ProfileGate): boolean => g.kind === 'unknown' || g.kind === 'ok' || g.kind === 'link';
 
 /** Storage protection is separate from the pure character-matching rule above. */
-export const guardedProfileGate = (s: ProfilesState, player: string | null): ProfileGate => sourceProtected ? { kind: 'protected' } : profileGate(s, player);
+export const guardedProfileGate = (s: ProfilesState, player: string | null): ProfileGate => sourceProtected
+  ? { kind: 'protected', ...(sourceConflict ? { reason: 'conflict' as const } : {}) }
+  : profileGate(s, player);
 
 // ---- Window storage ----
 
 let cache: ProfilesState | null = null;
 let sourceProtected = false;
+let sourceConflict = false;
 const listeners = new Set<() => void>();
 
 function preserveProfiles(key: string, raw: string): boolean {
@@ -142,6 +145,12 @@ function versionedProfiles(raw: string | null): boolean {
   catch { return false; }
 }
 
+/** Compare supported lists by identity/content, not object formatting or display order. */
+function profileContents(raw: string | null): string {
+  const s = parseProfiles(raw);
+  return JSON.stringify({ active: s.active, list: [...s.list].sort((a, b) => a.id.localeCompare(b.id)) });
+}
+
 export function readProfiles(): ProfilesState {
   if (!cache) {
     let raw: string | null = null, file: string | null = null;
@@ -151,9 +160,10 @@ export function readProfiles(): ProfilesState {
     const localValid = validProfileText(raw), fileValid = validProfileText(file);
     const damagedLocal = raw !== null && !localValid;
     const damagedFile = file !== null && !fileValid;
+    sourceConflict = localValid && fileValid && profileContents(raw) !== profileContents(file);
     const preserved = !damagedLocal || preserveProfiles(`${PROFILES_KEY}:recovery`, raw!);
-    if (damagedFile) preserveProfiles(`${PROFILES_KEY}:recovery:file`, file!);
-    sourceProtected ||= damagedFile || versionedProfiles(raw) || !preserved || (!localValid && !fileValid && damagedLocal);
+    if (damagedFile || sourceConflict) preserveProfiles(`${PROFILES_KEY}:recovery:file`, file!);
+    sourceProtected ||= sourceConflict || damagedFile || versionedProfiles(raw) || !preserved || (!localValid && !fileValid && damagedLocal);
     if (localValid && !sourceProtected) {
       // Profiles saved before the file existed: it is written once, so the copies carry the list too.
       try { desktop()?.saveProfilesFile?.(JSON.stringify(parseProfiles(raw))); } catch { /* no desktop app */ }

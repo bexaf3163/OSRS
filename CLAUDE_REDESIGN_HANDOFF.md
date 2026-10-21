@@ -1,3 +1,5 @@
+Post-preview profile conflict protection: [docs/CODEX_PROFILE_CONFLICT_HANDOFF.md](docs/CODEX_PROFILE_CONFLICT_HANDOFF.md). Supported but differing lists are retained and require recovery review; do not mirror one over the other.
+
 Post-preview food certainty: [docs/CODEX_COMBAT_FOOD_CERTAINTY_HANDOFF.md](docs/CODEX_COMBAT_FOOD_CERTAINTY_HANDOFF.md). Known stock is usable evidence; unreported alternatives cannot authorize a purchase deficit.
 
 Post-preview combat stock follow-up: [docs/CODEX_COMBAT_STOCK_HANDOFF.md](docs/CODEX_COMBAT_STOCK_HANDOFF.md). Unreported item bank counts stay unknown; this change is not in preview 402222c9.

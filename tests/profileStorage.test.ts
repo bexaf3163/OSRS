@@ -14,6 +14,50 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllGlobals());
 
 describe('profile list recovery', () => {
+  it.each([
+    { ...good, active: 'main' },
+    { ...good, list: good.list.map(p => p.id === 'alt' ? { ...p, name: 'Other name' } : p) },
+    { ...good, list: good.list.map(p => p.id === 'alt' ? { ...p, player: 'Other hero' } : p) },
+    { ...good, list: [...good.list, { id: 'third', name: 'Native only' }] },
+  ])('retains two supported but conflicting lists instead of mirroring one over the other: %j', async native => {
+    const browserRaw = JSON.stringify(good), nativeRaw = JSON.stringify(native);
+    data.set(key, browserRaw); shell.loadProfilesFile.mockReturnValue(nativeRaw);
+    const { readProfiles, writeProfiles, guardedProfileGate, gateAllows, switchProfile } = await import('../src/lib/profiles');
+    const reload = vi.fn(); vi.stubGlobal('location', { reload });
+    expect(readProfiles()).toEqual(good);
+    expect(guardedProfileGate(good, 'Tester')).toEqual({ kind: 'protected', reason: 'conflict' });
+    expect(gateAllows(guardedProfileGate(good, 'Tester'))).toBe(false);
+    expect(writeProfiles({ ...good, active: 'main' })).toBe(false);
+    switchProfile('main');
+    expect(reload).not.toHaveBeenCalled();
+    expect(shell.saveProfilesFile).not.toHaveBeenCalled();
+    expect(data.get(key)).toBe(browserRaw);
+    expect(data.get(`${key}:recovery:file`)).toBe(nativeRaw);
+  });
+
+  it('normalization and list order alone do not create a profile-source conflict', async () => {
+    data.set(key, JSON.stringify({ active: 'alt', list: [good.list[1]] }));
+    shell.loadProfilesFile.mockReturnValue(JSON.stringify({ ...good, list: [...good.list].reverse() }));
+    const { readProfiles, guardedProfileGate } = await import('../src/lib/profiles');
+    expect(readProfiles()).toEqual(good);
+    expect(guardedProfileGate(good, 'Tester').kind).toBe('ok');
+    expect(shell.saveProfilesFile).toHaveBeenCalledOnce();
+  });
+
+  it('a deliberate restore of matching sources releases protection on the next startup', async () => {
+    data.set(key, JSON.stringify(good));
+    shell.loadProfilesFile.mockReturnValue(JSON.stringify({ ...good, active: 'main' }));
+    const before = await import('../src/lib/profiles');
+    before.readProfiles();
+    expect(before.guardedProfileGate(good, 'Tester').kind).toBe('protected');
+    // Simulate an explicit matching-source restore followed by restarting the renderer.
+    shell.loadProfilesFile.mockReturnValue(JSON.stringify(good));
+    vi.resetModules();
+    const after = await import('../src/lib/profiles');
+    expect(after.readProfiles()).toEqual(good);
+    expect(after.guardedProfileGate(good, 'Tester').kind).toBe('ok');
+  });
+
   it.each(['{broken', '{"version":99,"list":[]}', '{"active":"alt","list":[null]}'])('protects a damaged or future native profile source even when the browser is valid: %s', async raw => {
     data.set(key, JSON.stringify(good)); shell.loadProfilesFile.mockReturnValue(raw);
     const { readProfiles, writeProfiles, guardedProfileGate, gateAllows } = await import('../src/lib/profiles');
