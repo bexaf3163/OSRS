@@ -217,7 +217,7 @@ export function PathWide({ focusStep, focusKey }: { focusStep?: string; focusKey
         <TrackedSkillCard />
 
         {/* A combat step has its own advice in the card — the banner does not repeat it. */}
-        {!selected.foes?.length && <GearBanner />}
+        {!selected.foes?.length && <GearBanner step={selected} />}
         <article className={`step-view ${selected.membersOnly ? 'is-members' : ''}`} key={selected.id}>
           <CockpitWorkspace step={selected} suggested={selected.id === suggested.id} onDone={complete} nextId={upcoming?.id} />
           <footer className="step-view-nav">
