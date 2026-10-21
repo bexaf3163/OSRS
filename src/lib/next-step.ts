@@ -13,7 +13,7 @@ export function isCompleted(p: Progress, id: string): boolean {
 }
 
 /** Known game facts override route marks; undefined leaves the explicit done mark as the manual fallback. */
-export type DependencyFact = (id: string) => boolean | undefined;
+export type DependencyFact = (id: string, consumer?: Step) => boolean | undefined;
 
 /** Only actual quest completion is inferred here; a partial varbit milestone is not a finished quest. */
 export function questDependencyFacts(steps: readonly Step[], quests: readonly string[] | null): DependencyFact {
@@ -36,7 +36,7 @@ export function dependencyFacts(steps: readonly Step[], quests: readonly string[
     return s.type === 'skill' && t?.type === 'SKILL_LEVEL' && t.levels?.length && !t.items?.length && !s.carryover?.length
       ? [[s.id, t.levels] as const] : [];
   }));
-  return id => {
+  return (id, consumer) => {
     const q = quest(id);
     if (q !== undefined) return q;
     const goals = training.get(id);
@@ -44,7 +44,17 @@ export function dependencyFacts(steps: readonly Step[], quests: readonly string[
     const values = goals.map(g => ({ target: g.level, have: level(g.skill) }));
     // Add positive equivalence only. Consumer entry requirements still check its actual levels;
     // incomplete snapshots must not revoke the existing explicit-done fallback for a training step.
-    return values.every(v => v.have !== undefined && Number.isFinite(v.have) && v.have >= v.target) ? true : undefined;
+    if (values.every(v => v.have !== undefined && Number.isFinite(v.have) && v.have >= v.target)) return true;
+    // A shared training entry may prepare several later quests. Its unrelated goals are
+    // not a hard requirement of a consumer with explicit, already-reached entry skills.
+    // This proof belongs to this edge only: callers without a consumer get no completion fact.
+    if (!consumer?.requires.includes(id)) return undefined;
+    const needs = consumer.requirements?.filter(r => r.type === 'skill') ?? [];
+    if (!needs.some(r => goals.some(g => g.skill === r.skill))) return undefined;
+    return needs.length > 0 && needs.every(r => {
+      const have = level(r.skill);
+      return have !== undefined && Number.isFinite(have) && have >= r.min;
+    }) ? true : undefined;
   };
 }
 
@@ -71,7 +81,7 @@ export interface Blockers {
 
 /** What prevents starting the step. null means nothing, the step is available. */
 export function blockersOf(step: Step, p: Progress, qp: number, fact?: DependencyFact): Blockers | null {
-  const steps = step.requires.filter((id) => !(fact?.(id) ?? isCompleted(p, id)));
+  const steps = step.requires.filter((id) => !(fact?.(id, step) ?? isCompleted(p, id)));
   const needQp = step.minQp !== undefined && qp < step.minQp;
   if (!steps.length && !needQp) return null;
   return { steps, ...(needQp ? { qp: { need: step.minQp!, have: qp } } : {}) };
