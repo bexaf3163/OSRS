@@ -53,6 +53,31 @@ describe('balanced, on the real catalogue', () => {
 });
 
 describe('balanced counts the setup and does not switch for a sliver', () => {
+  it('a suggested upper bracket does not lock an unlocked faster method or truncate its action goal', () => {
+    const older = method({ id: 'still-useful', from: 20, to: 40, xph: [30_000, 35_000], xpa: 50, act: 'catch|catches' });
+    const later = method({ id: 'newer-slower', from: 40, xph: [12_000, 15_000], xpa: 80 });
+    const r = adviseTraining({ skill: 'fishing', target: 55, state: stateAt('fishing', 50), mode: 'f2p', style: 'chill', priority: 'balanced', methods: [older, later] });
+    expect(r.best?.method.id).toBe('still-useful');
+    expect(r.path.map(l => [l.method.id, l.fromLevel, l.toLevel])).toEqual([['still-useful', 50, 55]]);
+    expect(r.actionsLeft).toBe(Math.ceil((xpForLevel(55) - xpForLevel(50)) / 50));
+    expect(r.actionTarget).toBe(55);
+  });
+
+  it('retaining an older bracket does not bypass entry, mode or known quest requirements', () => {
+    const available = method({ id: 'fallback', xph: [1_000, 1_000] });
+    const gated = [
+      method({ id: 'future', from: 60, xph: [100_000, 100_000] }),
+      method({ id: 'members', from: 20, to: 40, members: true, xph: [100_000, 100_000] }),
+      method({ id: 'quest', from: 20, to: 40, needs: [{ type: 'quest', quest: 'Swan Song' }], xph: [100_000, 100_000] }),
+    ];
+    const state = { ...stateAt('fishing', 50), quests: { known: true as const, source: 'game' as const, value: [] } };
+    const r = adviseTraining({ skill: 'fishing', target: 55, state, mode: 'f2p', style: 'efficient', methods: [available, ...gated] });
+    expect(r.best?.method.id).toBe('fallback');
+    expect(r.path.every(l => l.method.id === 'fallback')).toBe(true);
+    expect(r.others.find(v => v.method.id === 'quest')?.status).toBe('LOCKED');
+    expect(r.others.some(v => ['members', 'future'].includes(v.method.id))).toBe(false);
+  });
+
   const ready = method({ id: 'ready-slow', xph: [10_000, 10_000] });
   const better = method({ id: 'needs-a-rod', xph: [30_000, 30_000], needs: [{ type: 'item', name: 'Fly fishing rod' }] });
 

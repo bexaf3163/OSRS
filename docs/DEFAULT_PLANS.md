@@ -23,10 +23,18 @@ older save stays as "Fastest"; "Relaxed" keeps the old calm order.
 | S6-02 Fishing to 50 and Cooking to 50 | fishing 1 (F2P) | Shrimp and anchovies with a net | Shrimp and anchovies with a net | ≈ 2k–8k XP per hour; few clicks |
 | S6-02 Fishing to 50 and Cooking to 50 | fishing 20 (F2P) | Trout and salmon with fly fishing | Trout and salmon with fly fishing | ≈ 13k–50k XP per hour; almost no clicks |
 | S6-02 Fishing to 50 and Cooking to 50 | fishing 30 (F2P) | Trout and salmon with fly fishing | Trout and salmon with fly fishing | ≈ 13k–50k XP per hour; almost no clicks |
-| S6-02 Fishing to 50 and Cooking to 50 | fishing 40 (F2P) | Lobsters in pots | Lobsters in pots | ≈ 13k–17k XP per hour; few clicks |
+| S6-02 Fishing to 50 and Cooking to 50 | fishing 40 (F2P) | Trout and salmon with fly fishing | Trout and salmon with fly fishing | ≈ 13k–50k XP per hour; almost no clicks |
+| Skills page: cooking | level 40 → 50 (F2P) | Trout | Wine (a jug with grapes) | few clicks; material costs |
+| Skills page: cooking | level 50 → 60 (F2P) | Trout | Wine (a jug with grapes) | few clicks; material costs |
+| Skills page: crafting | level 50 → 60 (F2P) | Cutting gems (sapphires from 20, emeralds from 27, rubies from 34) | Gold jewellery | ≈ 20k–41k XP per hour; steady clicking; can end in profit |
+| Skills page: fishing | level 50 → 60 (F2P) | Trout and salmon with fly fishing | Tuna and swordfish with a harpoon | ≈ 17k–21k XP per hour; few clicks |
 | Skills page: magic | level 30 → 40 (F2P) | Splash: spells on weak monsters | Low Level Alchemy | ≈ 31k–60k XP per hour; steady clicking; material costs |
 | Skills page: magic | level 40 → 50 (F2P) | Splash: spells on weak monsters | Low Level Alchemy | ≈ 31k–60k XP per hour; steady clicking; material costs |
 | Skills page: magic | level 50 → 60 (F2P) | Splash: spells on weak monsters | Superheat Item (iron ore) | ≈ 97k XP per hour; steady clicking; material costs |
+| Skills page: mining | level 20 → 30 (F2P) | Copper and tin | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
+| Skills page: mining | level 30 → 40 (F2P) | Copper and tin | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
+| Skills page: mining | level 40 → 50 (F2P) | Copper and tin | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
+| Skills page: mining | level 50 → 60 (F2P) | Copper and tin | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
 
 Steps that follow a training method: S6-02. Combat training stages: S3-08, S4-03 (the only steps with an opponent and a melee XP goal).
 Travel variants (canoe, teleports) are not training plans and are unchanged: they still need a press.

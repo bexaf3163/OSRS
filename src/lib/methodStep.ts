@@ -45,11 +45,10 @@ function requirement(n: RawNeed, m: RawMethod): StepItemRequirement | null {
   if (n.type !== 'item' || !n.name) return null;
   const known = ITEMS.get(n.name.toLowerCase());
   const shop = known?.buyLocations?.find((b) => !b.members);
-  const range = m.to === null ? `from level ${m.from}` : `levels ${m.from}-${m.to}`;
   return {
     nameEn: n.name,
     amount: n.count ?? 1,
-    howToGet: `For ${m.name.charAt(0).toLowerCase()}${m.name.slice(1)} (${range}).${shop ? ` ${shop.shopName}, ${shop.location}.` : ''}`,
+    howToGet: `For ${m.name.charAt(0).toLowerCase()}${m.name.slice(1)}.${shop ? ` ${shop.shopName}, ${shop.location}.` : ''}`,
     ...(known ? { wikiItemId: known.id, iconUrl: known.iconUrl } : {}),
   };
 }

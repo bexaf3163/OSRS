@@ -269,6 +269,21 @@ async function run(browser: Browser) {
     await page.context().close();
   }
   if (process.env.UI_ONLY === 'items') return;
+  for (const width of [390, 1280]) {
+    const { page, errors } = await open(browser, width, {
+      progress: progressBefore('S6-02', { gameMode: 'f2p', levels: { fishing: 45 } }),
+      localStorage: { 'osrs-put:features': JSON.stringify({ efficient: true }) },
+      status: { stats: { fishing: 45 } }, events: [{ type: 'STATS', stats: { fishing: 45 } }],
+    }, '#/skills/FI');
+    await waitFor(page, '.training', 5000);
+    const recommendation = await page.locator('.training-method .training-now').innerText();
+    const content = await page.locator('.training').innerText();
+    expect(recommendation.includes('fly fishing'), `skill bracket (${width}): an unlocked faster method remains selectable after its suggested range`);
+    expect(/\bto 50\b/.test(content) && !content.includes('to level 40') && !/≈ 0 more/.test(content), `skill bracket (${width}): the card retains the future route goal without an expired action target`);
+    expect(await noOverflow(page) && !errors.length, `skill bracket (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+  if (process.env.UI_ONLY === 'skills') return;
   {
     const { page, errors } = await open(browser, 1280, {
       zen: true, progress: progressBefore('S8-02'),

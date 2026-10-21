@@ -73,7 +73,7 @@ export function TrainingCard({ skill, target }: { skill: string; target: number 
   if (!advice || advice.level === null || advice.level >= target) return null;
   const { best } = advice;
   const nav = best ? methodNav(best) : null;
-  const legEnd = best ? Math.min(target, best.method.to ?? target) : target;
+  const legEnd = advice.actionTarget ?? target;
   const count = advice.actionsLeft;
   const showOthers = advice.others.length > 0;
   return (

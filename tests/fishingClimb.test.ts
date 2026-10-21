@@ -88,15 +88,15 @@ describe('S6-02 follows the training method of the real level', () => {
     expect(readyOf(1, { 'Small fishing net': 1 }).status).toBe('READY');
   });
 
-  it('the requirement follows the level: net, then rod and bait or net, then fly rod and feathers, then the lobster pot', () => {
+  it('the requirement follows the selected unlocked method, retaining useful fly fishing beyond 40', () => {
     expect(needs(resolved(4).step)).toEqual(['Small fishing net']);
     // From 5 the router's own pick with nothing carried is the bait method; with a net in the bag the net method is ready and wins.
     expect(resolved(10).pick).toBe('fi-bait');
     expect(needs(resolved(10).step)).toEqual(['Fishing rod', 'Fishing bait x100']);
     expect(resolved(10, { 'Small fishing net': 1 }).pick).toBe('fi-shrimp');
     expect(needs(resolved(25).step)).toEqual(['Fly fishing rod', 'Feather x100']);
-    expect(needs(resolved(40).step)).toEqual(['Lobster pot']);
-    expect(needs(resolved(49).step)).toEqual(['Lobster pot']);
+    expect(needs(resolved(40).step)).toEqual(['Fly fishing rod', 'Feather x100']);
+    expect(needs(resolved(49).step)).toEqual(['Fly fishing rod', 'Feather x100']);
   });
 
   it('quantities count: a few feathers are not enough for the fly fishing level', () => {
@@ -117,7 +117,7 @@ describe('S6-02 follows the training method of the real level', () => {
         const r = resolved(level, {}, style);
         const m = trainingMethods.find((x) => x.id === r.pick)!;
         expect(m, `level ${level}`).toBeDefined();
-        expect(m.from <= level && (m.to === null || level < m.to), `${style} ${level}: ${m.id} covers the level`).toBe(true);
+        expect(m.from <= level, `${style} ${level}: ${m.id} is unlocked`).toBe(true);
         const here = order.indexOf(m.place!);
         expect(here, `${style} ${level}`).toBeGreaterThanOrEqual(0);
         expect(here, `${style} ${level}: moved back`).toBeGreaterThanOrEqual(at);
@@ -126,16 +126,17 @@ describe('S6-02 follows the training method of the real level', () => {
         expect({ x: p.x, y: p.y }, `${style} ${level}`).toEqual({ x: LOCATIONS[m.place!].x, y: LOCATIONS[m.place!].y });
         expect(r.step.inGame?.highlightItems).toEqual((r.step.itemsRequired ?? []).map((i) => i.nameEn));
       }
-      expect(at).toBe(2);
+      // A newer unlock need not replace a faster already-unlocked method.
+      expect(at).toBe(1);
     }
   });
 
-  it('the places switch at 20 and 40', () => {
+  it('the place switches at 20 and remains at useful fly fishing after 40', () => {
     const at = (l: number) => resolved(l).step.mapLocation!.label;
     expect(at(19)).toContain('Draynor Village');
     expect(at(20)).toContain('Barbarian Village');
     expect(at(39)).toContain('Barbarian Village');
-    expect(at(40)).toContain('Musa Point');
+    expect(at(40)).toContain('Barbarian Village');
     expect(methodPoint('fi-fly')).toMatchObject({ x: LOCATIONS['Barbarian Village fishing spots'].x });
   });
 
@@ -175,7 +176,7 @@ describe('S6-02 follows the training method of the real level', () => {
     return picks;
   }
 
-  it('with every tool tracked the pick settles at once and stays; tracking only the picked tools could flip it (why the list exists)', () => {
+  it('the pick settles with every tool tracked; unchecked stock no longer wins by pretending to be ready', () => {
     const bags: Record<string, number>[] = [{}, { 'Small fishing net': 1 }, { 'Fishing rod': 1, 'Fishing bait': 300 }, { 'Fly fishing rod': 1, Feather: 400 }, { 'Lobster pot': 1 }, { Harpoon: 1, 'Lobster pot': 1 }];
     let hazard = 0;
     for (const style of ['chill', 'efficient'] as const) {
@@ -188,8 +189,9 @@ describe('S6-02 follows the training method of the real level', () => {
         }
       }
     }
-    // The unguarded loop does flip for some bags: that is the bug the watch list prevents.
-    expect(hazard).toBeGreaterThan(0);
+    // The old regression counted positive hazards here. Unchecked supplies no longer gain READY priority.
+    // Keep watching every method: the additional information is still required for correct preparation.
+    expect(hazard).toBe(0);
   });
 
   it('a step that does not follow a method is the same object whatever the pick says', () => {
