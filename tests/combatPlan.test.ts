@@ -20,6 +20,9 @@ const stats = { attack: 22, strength: 16, defence: 1, hitpoints: 22 };
 const xp = { attack: 5624, strength: 2746, defence: 0, hitpoints: 2000 };
 function owned(items: Record<string, [number, number]>, bankSeen = true): OwnedState {
   const map = new Map<string, OwnedItem>();
+  // These fixtures represent a complete tracked-food response, including explicit absent alternatives.
+  const food = s.itemsRequired!.find(i => i.heals)!;
+  for (const n of [food.nameEn, ...(food.anyOf ?? [])]) map.set(nameKey(n), { name: n, carried: 0, noted: 0, bank: bankSeen ? 0 : undefined });
   for (const [n, [carried, bank]] of Object.entries(items)) map.set(nameKey(n), { name: n, carried, noted: 0, bank });
   return { bankSeen, items: map };
 }

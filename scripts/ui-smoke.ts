@@ -731,7 +731,10 @@ async function run(browser: Browser) {
         progress: progressBefore('S3-08'),
         localStorage: { 'osrs-put:active-step': 'S3-08', 'osrs-put:combat-plans:main:-': '{"S3-08":{"key":"route","at":1,"by":"player"}}' },
         status: { protocol: 5, ...gear, stats, xp, activeStepId: 'S3-08' },
-        events: [{ type: 'STATS', stats }, { type: 'XP', xp }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 0, bank: 13 }] }],
+        events: [{ type: 'STATS', stats }, { type: 'XP', xp }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [
+          { name: 'Salmon', carried: 0, noted: 0, bank: 13 },
+          ...['Trout', 'Tuna', 'Lobster', 'Swordfish'].map(name => ({ name, carried: 0, noted: 0, bank: 0 })),
+        ] }],
       }, '#/step/S3-08');
       await waitFor(page, '.combat-plan', 8000);
       const t = await text(page, '.combat-plan');
@@ -2020,6 +2023,11 @@ async function retainedCombatFoodScenario(browser: Browser) {
     });
     expect((snapshot?.plan?.lines.find(l => l.name === 'Salmon')?.need ?? 0) > 25, `retained combat (${width}): the game receives the personal carried-food requirement`);
     expect(snapshot?.step?.completionTrigger?.levels?.[0]?.level === 40 && snapshot.step.completionTrigger.items?.[0]?.count === 50, `retained combat (${width}): completion stays Attack 40 and fifty bones`);
+    await page.evaluate(nextItems => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items: nextItems }), items.filter(i => i.name !== 'Lobster').map(i => i.name === 'Salmon' ? { ...i, bank: 13 } : i));
+    await page.waitForTimeout(800);
+    const partialFood = await page.locator('.combat-plan').innerText();
+    expect(partialFood.includes('Confirmed food: 13 Salmon') && partialFood.includes('check the remaining quantities') && !partialFood.includes('buy about'), `retained combat (${width}): incomplete food counts show confirmed stock without an invented purchase or bag location`);
+    if (process.env.UI_SHOTS) await page.locator('.combat-plan').screenshot({ path: `${process.env.UI_SHOTS}/food-unknown-${width}.png` });
     await page.evaluate(nextItems => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items: nextItems }), items.map(i => i.name === 'Big bones' ? { ...i, bank: 30 } : i));
     await page.waitForTimeout(1000);
     expect((await page.locator('.combat-plan').allInnerTexts()).some(t => t.includes('20 kills')), `retained combat (${width}): the live stock update reduces collection to twenty kills`);

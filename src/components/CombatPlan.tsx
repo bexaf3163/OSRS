@@ -31,7 +31,10 @@ function OwnedLine({ v }: { v: CombatPlanView }) {
   const have = v.owned.equivalent
     ? `You have ${v.owned.equivalent} ${v.food}${v.owned.text !== `${v.owned.equivalent} ${v.food}` ? ` by healing (${v.owned.text})` : ''}`
     : `You have no ${v.food} or other listed fish`;
-  if (v.buy === null) return <p className="small">{have} in the bag. Open the bank once to count the rest.</p>;
+  if (v.buy === null) return <p className="small">
+    {v.owned.equivalent ? `Confirmed food: ${v.owned.text}${v.owned.text === `${v.owned.equivalent} ${v.food}` ? '' : ` (${v.owned.equivalent} ${v.food} by healing)`}.` : 'Your available food is not fully checked.'}
+    {' '}Open the bank to check the remaining quantities before buying more.
+  </p>;
   return (
     <p className="small">
       {have}{v.buy > 0 ? <> — <strong>buy about {v.buy}</strong> for the whole goal.</> : ' — enough for the whole goal.'}

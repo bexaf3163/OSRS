@@ -26,6 +26,9 @@ const xp = { attack: 5624, strength: 2746, defence: 0, hitpoints: 2000 };
 
 function owned(items: Record<string, [number, number]>, bankSeen = true, bankSavedAt?: number): OwnedState {
   const map = new Map<string, OwnedItem>();
+  // Complete tracked-food snapshots report zero for absent alternatives rather than omitting them.
+  const food = s308.itemsRequired!.find(i => i.heals)!;
+  for (const n of [food.nameEn, ...(food.anyOf ?? [])]) map.set(nameKey(n), { name: n, carried: 0, noted: 0, bank: bankSeen ? 0 : undefined });
   for (const [n, [carried, bank]] of Object.entries(items)) map.set(nameKey(n), { name: n, carried, noted: 0, bank });
   return { bankSeen, ...(bankSavedAt ? { bankSavedAt } : {}), items: map };
 }

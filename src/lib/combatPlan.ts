@@ -9,6 +9,7 @@ import {
 } from './combatEstimate';
 import { durationText } from './splits';
 import { heldUnits } from './doses';
+import { heldExact } from './playerState';
 import { currentXp, itemGoal, objectiveEstimates } from './combatObjectives';
 
 export const BASIS_LABEL: Record<Basis, string> = {
@@ -27,8 +28,10 @@ export interface OwnedFood {
   carriedEq: number;
   /** Owned as banknotes, in equivalent healing units; cannot be eaten before unnoting. */
   notedEq?: number;
-  /** What the bank holds, the same way; 0 when the bank was not seen. */
+  /** Confirmed bank stock by healing; a lower bound while bankComplete is false. */
   bankEq: number;
+  /** Every accepted food's bank quantity was reported in this session. */
+  bankComplete: boolean;
   /** Edible items a later quest needs, kept out of the count: "2 Cooked meat for S1-05". */
   reserved: string[];
   /** "13 Salmon, 2 Lobster". */
@@ -70,7 +73,7 @@ export interface CombatPlanView {
   /** What to have for the whole goal: the high end (the expected plus the reserve). */
   plan: number;
   owned: OwnedFood | null;
-  /** Pieces to buy for the whole goal; null — the bank has not been seen, the deficit is unknown. */
+  /** Pieces to buy; null means unreported food quantities could cover the deficit. */
   buy: number | null;
   time: string;
   trips: string;
@@ -108,17 +111,21 @@ export function ownedFood(step: Pick<Step, 'itemsRequired'>, owned: OwnedState |
   let carriedHealing = 0;
   let bankHealing = 0;
   let notedHealing = 0;
+  let bankComplete = true;
   const parts: string[] = [];
   const kept: string[] = [];
   for (const name of [...new Map([item.nameEn, ...(item.anyOf ?? [])].map((n) => [nameKey(n), n])).values()]) {
     const o = owned.items.get(nameKey(name));
     const heals = name === item.nameEn ? item.heals! : healsOf(name);
-    if (!o || heals === null) continue;
+    if (heals === null) continue;
+    const held = heldExact({ owned, bankSeen: owned.bankSeen, equipment: {}, manual: {} }, name);
+    if (held.bank === null) bankComplete = false;
+    if (!o) continue;
     // A quest's pieces come out of the bag first: they must not be counted as food for the trip.
     let hold = reserved.get(nameKey(name))?.count ?? 0;
     let inBag = o.carried;
     let inNotes = o.noted;
-    let inBank = o.bank ?? 0;
+    let inBank = held.bank ?? 0;
     const fromBag = Math.min(hold, inBag);
     inBag -= fromBag;
     hold -= fromBag;
@@ -126,8 +133,8 @@ export function ownedFood(step: Pick<Step, 'itemsRequired'>, owned: OwnedState |
     inNotes -= fromNotes;
     hold -= fromNotes;
     inBank -= Math.min(hold, inBank);
-    const held = o.carried + o.noted + (o.bank ?? 0) - inBag - inNotes - inBank;
-    if (held > 0) kept.push(`${held} ${name} for ${reserved.get(nameKey(name))!.stepId}`);
+    const keptCount = o.carried + o.noted + (held.bank ?? 0) - inBag - inNotes - inBank;
+    if (keptCount > 0) kept.push(`${keptCount} ${name} for ${reserved.get(nameKey(name))!.stepId}`);
     const n = inBag + inNotes + inBank;
     if (!n) continue;
     carried += inBag;
@@ -140,7 +147,7 @@ export function ownedFood(step: Pick<Step, 'itemsRequired'>, owned: OwnedState |
   }
   return {
     carried, bank, equivalent: Math.floor(healing / item.heals!), carriedEq: Math.floor(carriedHealing / item.heals!),
-    bankEq: Math.floor(bankHealing / item.heals!), notedEq: Math.floor(notedHealing / item.heals!), reserved: kept, text: parts.join(', '),
+    bankEq: Math.floor(bankHealing / item.heals!), bankComplete, notedEq: Math.floor(notedHealing / item.heals!), reserved: kept, text: parts.join(', '),
   };
 }
 
@@ -197,7 +204,7 @@ export function combatPlanView(
   const food = item.nameEn;
   const total = roundPieces(primary.food);
   const owned = ownedFood(step, ctx.owned, ctx.reserved);
-  const buy = owned && ctx.owned?.bankSeen ? Math.max(0, total.high - owned.equivalent) : null;
+  const buy = owned && (owned.equivalent >= total.high || owned.bankComplete) ? Math.max(0, total.high - owned.equivalent) : null;
 
   const phases = primary.phases.map((p) =>
     `${p.skill[0].toUpperCase()}${p.skill.slice(1)} ${p.fromLevel} → ${p.toLevel} (${p.style[0].toUpperCase()}${p.style.slice(1)}): ${p.kills} kills, about ${durationText(p.seconds)} of fighting`);
