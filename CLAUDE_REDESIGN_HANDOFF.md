@@ -1050,3 +1050,5 @@ Progress write receipts are documented in `docs/CODEX_WRITE_STATUS_HANDOFF.md`. 
 `docs/CODEX_GEAR_CURRENT_BENEFIT_HANDOFF.md` blocks actionable current-DPS downgrades caused by future Strength averaging and distinguishes current damage copy from the training-window value. Keep the regression matrix and current-percentage assertions. Actual phase/style and broader Gear coverage remain open; no live combat measurement is implied.
 
 `docs/CODEX_DEPENDENCY_HANDOFF.md` records the minimal source-map/cache/Vite lock updates, fresh-install CI acceptance and residual sprintf-js build-tool advisory. Do not apply npm's suggested builder downgrade or claim local tests used new dependencies when their installed versions did not change. The first audit preview predates these updates.
+
+`docs/CODEX_ENTRANA_PREPARATION_HANDOFF.md` fixes Lost City's contradictory departure axe requirement using the existing inStep contract. Preserve the reviewed checklist/readiness fixtures; broader Tree Spirit supplies, entry restrictions and live quest acceptance remain open.

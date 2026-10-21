@@ -6501,6 +6501,7 @@
         "nameEn": "Bronze axe",
         "amount": 1,
         "howToGet": "Drops from the zombies in the Entrana dungeon: do not take an axe with you.",
+        "inStep": true,
         "wikiItemId": 1351,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
       }
