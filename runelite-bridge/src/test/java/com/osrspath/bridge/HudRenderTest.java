@@ -46,6 +46,11 @@ public class HudRenderTest
 		HudModel.Input training = HudModelTest.with(HudModelTest.input(HudModelTest.view(s403, null, scimitar, salmonBag), HudModelTest.quiet(), HudModelTest.attack(30)),
 			"planNext", "Fight the Hill Giants until 50 Big bones are in the bank: Edgeville Dungeon.");
 		out.put("training", HudModel.build(training));
+		HudModel.Input collection = HudModelTest.with(training, "planNow", "Collect 50 Big bones from Hill Giants on Accurate");
+		collection = HudModelTest.with(collection, "view", new StepGuide.View(s403, null, Arrays.asList(scimitar, salmonBag),
+			Collections.singletonList(new StepGuide.PlaceLine("The trapdoor to the Edgeville Dungeon", 0, false, null, false)), null, null, null, null));
+		collection = HudModelTest.with(collection, "planNext", "Train Attack to 40 on cows");
+		out.put("collection", HudModel.build(collection));
 		PrepPlan food = HudModelTest.plan(HudModelTest.line("Salmon", 21, "BANK", "CRITICAL", "NOW", "CRITICAL", "Take from the bank ×21"),
 			HudModelTest.line("Iron chainbody", 1, "BANK", "OPTIMIZATION", "NOW", null, "Take from the bank"));
 		StepGuide.ItemLine chain = HudModelTest.item("Iron chainbody", StepGuide.Have.BANK, 0, 1, 1, 0, null, false);

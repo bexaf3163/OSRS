@@ -146,6 +146,44 @@ public class HudModelTest
 	}
 
 	@Test
+	public void collectionObjectiveLeadsInsteadOfItsIncidentalXpProjection()
+	{
+		HudModel.Pace projected = new HudModel.Pace("Attack", 30, 34, "Accurate", false, 50, "giants", "~37 min", false, 0.6, false, "Attack 34");
+		HudModel.Input in = with(input(view(S403, null), state("~229 tiles", 229), projected), "planNow", "Collect 50 Big bones from Hill Giants on Accurate");
+		in = with(in, "planNext", "Train Attack to 40 on cows");
+		HudModel.Card c = HudModel.build(in);
+		assertEquals("Collect 50 Big bones from Hill Giants on Accurate", c.getHeadline());
+		assertNull("XP percentage is not collection progress", c.getProgress());
+		assertTrue(c.getStatus(), c.getStatus().contains("~229 tiles"));
+		assertFalse(collapsed(c), collapsed(c).contains("Attack 34"));
+		assertTrue(expanded(c), expanded(c).contains("Next\nTrain Attack to 40 on cows"));
+	}
+
+	@Test
+	public void reachedProjectedXpCannotAdvanceAnUnconfirmedCollection()
+	{
+		HudModel.Pace done = new HudModel.Pace("Attack", 34, 34, "Accurate", false, 0, "giants", null, false, 1, true, "Attack 34");
+		HudModel.Input in = with(input(view(S403, null), quiet(), done), "planNow", "Collect 50 Big bones from Hill Giants on Accurate");
+		in = with(in, "planNext", "Train Attack to 40 on cows");
+		HudModel.Card c = HudModel.build(in);
+		assertEquals("Collect 50 Big bones from Hill Giants on Accurate", c.getHeadline());
+		assertEquals(HudModel.Icon.TRAIN, c.getIcon());
+		assertNull(c.getProgress());
+		assertFalse(collapsed(c), collapsed(c).contains("reached"));
+	}
+
+	@Test
+	public void collectionStillWaitsForRequiredFood()
+	{
+		PrepPlan p = plan(line("Salmon", 21, "BANK", "CRITICAL", "NOW", "CRITICAL", "Take from the bank ×21"));
+		HudModel.Input in = with(input(view(S403, p, salmon(StepGuide.Have.BANK, 0, 30)), quiet(), attack(30)), "planNow", "Collect 50 Big bones from Hill Giants");
+		HudModel.Card c = HudModel.build(in);
+		assertEquals("Withdraw food", c.getHeadline());
+		assertEquals("Then: collect 50 Big bones from Hill Giants", c.getThen());
+		assertNull(c.getProgress());
+	}
+
+	@Test
 	public void theNextSkillOfTheStepAsksToSwitchTheStyle()
 	{
 		HudModel.Pace next = new HudModel.Pace("Strength", 18, 20, "Aggressive", true, 40, "minotaurs", null, false, 0.9, false, "Strength 20, Attack 30");

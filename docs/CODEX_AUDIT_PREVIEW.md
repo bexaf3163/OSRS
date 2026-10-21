@@ -1,6 +1,8 @@
 # OSRS Path audit preview — test build, audit still in progress
 
-This fifth portable preview includes cumulative application repairs through draft PR #38. It adds honest Magic funding/ownership labels, consumer-specific skill prerequisites and suppression of unrelated melee hints during Magic/Ranged training to the fourth preview's required-loot/food certainty and profile protections. The app's internal version remains **2.74.0**; identify this revision by the EXE filename/SHA. This is a working review candidate, not a completed audit or a replacement for the stable release. Stable auto-updates ignore prereleases. Read docs/CLAUDE_NEXT_SESSION.md in this release's source before continuing development.
+This cumulative block preview includes all fifth-candidate repairs plus the HUD collection-objective fix. The collection phase now shows Collect 50 Big bones instead of its incidental Attack 34 projection. Reaching projected XP cannot announce the next phase while collection is unconfirmed; food preparation still takes priority. Ordinary skill-training cards retain their XP progress. No combat estimate, completion trigger, saved state or protocol changed. Read docs/CODEX_HUD_COLLECTION_HANDOFF.md for reproduction and scope.
+
+The app's internal version remains **2.74.0**; identify this revision by the EXE filename/SHA. This is a working review candidate, not a completed audit or a replacement for the stable release. Stable auto-updates ignore prereleases. Read the attached CLAUDE_NEXT_SESSION.md before continuing development. Every codex/audit-block- branch in this repository publishes its separate portable EXE only after all existing gates pass, as requested by the owner; fork branches cannot publish.
 
 ## Included
 
