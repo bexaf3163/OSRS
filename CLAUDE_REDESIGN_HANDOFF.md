@@ -1040,3 +1040,5 @@ Progress write receipts are documented in `docs/CODEX_WRITE_STATUS_HANDOFF.md`. 
 `docs/CODEX_COMBAT_SEQUENCE_HANDOFF.md` covers combined combat objectives: compare both collection orders with earned XP, retain XP alternatives when stock is complete, and require the remaining item goal in Defence plans. Keep phase style, food projection, original completion and manual/bank-trip choice guards consistent. This is partial combat acceptance; catalogue, loot capacity, acquisition/gear costs and live timing remain open.
 
 `docs/CODEX_COMBAT_LOOT_HANDOFF.md` excludes unscheduled drop sales from XP-plan income and adds a minimum on required loot banking. Estimate the full combined fight; scaling a one-kill free-health buffer is invalid. Minimum loot trips do not establish full simultaneous food/loot capacity or actual travel time.
+
+`docs/CODEX_UI_SCENARIO_HANDOFF.md` records the full-CI food-fixture conflict after XP-only default selection changed. Keep the explicit Minotaur/manual-route assertions and separate automatic-selection scenario; the final cumulative CI must pass before release.
