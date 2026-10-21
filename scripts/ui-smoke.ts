@@ -1716,7 +1716,7 @@ async function moneyScenarios(browser: Browser) {
     expect(await page.locator('a[href="#/money"]').count() >= 1, `money (${width} px): it is in the navigation`);
     const best = (await page.locator('.money-reco-head strong').innerText()).trim();
     expect(best.length > 0 && await page.locator('.money-reco .btn-primary').count() === 1, `money (${width} px): one recommendation with one primary button (${best})`);
-    expect(/Ranked by the time to cover the [\d,]+ gp S4-03 is short/.test(await page.locator('.money-context').innerText()), `money (${width} px): ranked for the step's shortfall, as the coin card`);
+    expect(/Ranked by the time to make [\d,]+ more coins/.test(await page.locator('.money-context').innerText()), `money (${width} px): an already funded step does not invent a shortfall`);
     const rows = page.locator('.money-row');
     expect(await rows.count() >= 3 && await rows.count() <= 6, `money (${width} px): a compact list, ${await rows.count()} rows before "Show more"`);
     expect(await page.locator('.money-row .money-details').count() === 0, `money (${width} px): the details are folded`);
@@ -1760,7 +1760,7 @@ async function moneyScenarios(browser: Browser) {
     // Start: the goal, then the coin card's plan everywhere.
     await page.locator('.money-reco').getByRole('button', { name: 'Start…' }).click();
     const goal = page.locator('.money-reco .money-goal');
-    expect(await goal.count() === 1 && /Cover the [\d,]+ gp S4-03 is short/.test(await goal.innerText()), `money (${width} px): Start asks for the goal and offers the step's shortfall`);
+    expect(await goal.count() === 1 && /more coins/.test(await goal.innerText()) && !/S4-03 is short/.test(await goal.innerText()), `money (${width} px): Start offers a savings goal without a fake step shortfall`);
     await goal.locator('.money-goal-option', { hasText: 'more coins' }).locator('input[type=radio]').check();
     await goal.locator('.money-amount').fill('2,000');
     await goal.getByRole('button', { name: 'Start' }).click();
@@ -1832,6 +1832,8 @@ async function moneyScenarios(browser: Browser) {
     await page.waitForTimeout(1500);
     const best = (await page.locator('.money-reco-head strong').innerText()).trim();
     expect(card === best, `money: the coin card and the Money section recommend the same method (${card} / ${best})`);
+    await page.locator('.money-reco').getByRole('button', { name: 'Start…' }).click();
+    expect(/Cover the [\d,]+ gp S4-03 is short/.test(await page.locator('.money-reco .money-goal').innerText()), 'money: the zero-coin account still gets its real step-shortfall goal');
     expect(errors.length === 0, `money (card link): no console errors ${errors.join('; ')}`);
     await page.context().close();
   }
