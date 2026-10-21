@@ -24,7 +24,7 @@ Current work and evidence are in [the stabilization handoff](CODEX_STABILIZATION
 | T13 | P2 | Review every route step as a continuous feasible progression: open. |
 | T14 | P2 | Claude's single HUD retained; health/disclosure corrected. Path simplification and live visual acceptance remain open. |
 | T15 | P1 | Java/browser/packaged-EXE gates added; actual Windows packaged E2E passed. Full release/live acceptance remains broader. |
-| T16 | P2 | Dependency advisory assessment/minimal updates: open. |
+| T16 | P2 | Compatible source-map/cache/Vite lock updates and advisory exposure assessment implemented; fresh-install artifact CI is required. Eight propagated moderate builder entries remain tracked with no upstream sprintf-js patch. |
 | T17 | P2 | This ledger and handoff added; broader docs/shared regression coverage remain open. |
 
 P1 is a stabilization priority, not a claim of a reproduced P0 exploit. Large items must be split into small changes with specific acceptance evidence.
