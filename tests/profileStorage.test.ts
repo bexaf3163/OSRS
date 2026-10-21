@@ -14,6 +14,68 @@ beforeEach(() => {
 afterEach(() => vi.unstubAllGlobals());
 
 describe('profile list recovery', () => {
+  it.each(['{broken', '{"version":99,"list":[]}', '{"active":"alt","list":[null]}'])('protects a damaged or future native profile source even when the browser is valid: %s', async raw => {
+    data.set(key, JSON.stringify(good)); shell.loadProfilesFile.mockReturnValue(raw);
+    const { readProfiles, writeProfiles, guardedProfileGate, gateAllows } = await import('../src/lib/profiles');
+    expect(readProfiles()).toEqual(good);
+    expect(shell.saveProfilesFile).not.toHaveBeenCalled();
+    expect(writeProfiles({ ...good, active: 'main' })).toBe(false);
+    expect(data.get(key)).toBe(JSON.stringify(good));
+    expect(gateAllows(guardedProfileGate(good, 'Tester'))).toBe(false);
+    expect(shell.saveProfilesFile).not.toHaveBeenCalled();
+  });
+
+  it('cannot serialize a Main fallback over two damaged profile sources or reload it', async () => {
+    data.set(key, '{browser broken'); shell.loadProfilesFile.mockReturnValue('{file broken');
+    const reload = vi.fn(); vi.stubGlobal('location', { reload });
+    const { readProfiles, writeProfiles, switchProfile, guardedProfileGate, gateAllows } = await import('../src/lib/profiles');
+    const recovered = readProfiles();
+    expect(writeProfiles({ ...recovered, list: [...recovered.list, { id: 'new', name: 'New' }] })).toBe(false);
+    switchProfile('new');
+    expect(reload).not.toHaveBeenCalled();
+    expect(data.get(key)).toBe('{browser broken');
+    expect(shell.saveProfilesFile).not.toHaveBeenCalled();
+    expect(gateAllows(guardedProfileGate(recovered, 'Tester'))).toBe(false);
+  });
+
+  it('an unsupported browser format stays protected alongside a compatible native fallback', async () => {
+    const future = '{"version":99,"list":[]}'; data.set(key, future);
+    const { readProfiles, writeProfiles, guardedProfileGate } = await import('../src/lib/profiles');
+    expect(readProfiles()).toEqual(good);
+    expect(guardedProfileGate(good, null).kind).toBe('protected');
+    expect(writeProfiles(good)).toBe(false);
+    expect(data.get(key)).toBe(future);
+    expect(shell.saveProfilesFile).not.toHaveBeenCalled();
+  });
+
+  it('a failed native read cannot authorize mirroring or profile edits', async () => {
+    data.set(key, JSON.stringify(good)); shell.loadProfilesFile.mockImplementation(() => { throw Error('read failed'); });
+    const { readProfiles, writeProfiles } = await import('../src/lib/profiles');
+    expect(readProfiles()).toEqual(good);
+    expect(writeProfiles(good)).toBe(false);
+    expect(shell.saveProfilesFile).not.toHaveBeenCalled();
+  });
+
+  it('a conflicting recovery copy is preserved and cannot authorize a lossy recovery', async () => {
+    data.set(key, '{new damage'); data.set(`${key}:recovery`, '{older damage');
+    const { readProfiles, writeProfiles } = await import('../src/lib/profiles');
+    expect(readProfiles()).toEqual(good);
+    expect(writeProfiles(good)).toBe(false);
+    expect(data.get(key)).toBe('{new damage');
+    expect(data.get(`${key}:recovery`)).toBe('{older damage');
+    expect(shell.saveProfilesFile).not.toHaveBeenCalled();
+  });
+
+  it('a preserved damaged browser source can use the valid native list without leaving profiles locked', async () => {
+    data.set(key, '{broken');
+    const { readProfiles, writeProfiles, guardedProfileGate, gateAllows } = await import('../src/lib/profiles');
+    expect(readProfiles()).toEqual(good);
+    expect(gateAllows(guardedProfileGate(good, 'Tester'))).toBe(true);
+    expect(writeProfiles(good)).toBe(true);
+    expect(data.get(`${key}:recovery`)).toBe('{broken');
+    expect(data.get(key)).toBe(JSON.stringify(good));
+  });
+
   it.each([
     JSON.stringify({ active: 'alt', list: [null] }),
     JSON.stringify({ active: 'alt', list: [{ id: 'main', name: 'Main' }, { id: 'alt', name: 'First' }, { id: 'alt', name: 'Second' }] }),
@@ -35,7 +97,7 @@ describe('profile list recovery', () => {
     data.set(key, JSON.stringify({ active: 'alt', list: [good.list[1]] }));
     const { readProfiles } = await import('../src/lib/profiles');
     expect(readProfiles()).toEqual(good);
-    expect(shell.loadProfilesFile).not.toHaveBeenCalled();
+    expect(shell.loadProfilesFile).toHaveBeenCalledOnce();
     expect(JSON.parse(shell.saveProfilesFile.mock.calls[0][0])).toEqual(good);
   });
 
@@ -51,7 +113,7 @@ describe('profile list recovery', () => {
     data.set(key, JSON.stringify(good));
     const { readProfiles } = await import('../src/lib/profiles');
     expect(readProfiles()).toEqual(good);
-    expect(shell.loadProfilesFile).not.toHaveBeenCalled();
+    expect(shell.loadProfilesFile).toHaveBeenCalledOnce();
     expect(JSON.parse(shell.saveProfilesFile.mock.calls[0][0])).toEqual(good);
   });
   it('does not write defaults into a damaged file while reading', async () => {

@@ -33,6 +33,7 @@ export function ProfilesSection() {
         Each character has its own progress. The app recognises the character by the name from the game and offers to switch; the levels and marks
         from the game are written only into that character's profile. The first character seen is bound to a profile by itself.
       </p>
+      <fieldset disabled={gate.kind === 'protected'} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
       <ul className="profile-list">
         {profiles.list.map((p) => {
           const active = p.id === profiles.active;
@@ -61,6 +62,7 @@ export function ProfilesSection() {
         <input aria-label="New profile name" placeholder="New profile name" value={name} maxLength={30} onChange={(e) => setName(e.target.value)} />
         <button type="submit" className="btn" disabled={profiles.list.length >= 8}>Create</button>
       </form>
+      </fieldset>
       {player && <p className="muted small">In the game now: {player}{gate.kind === 'ok' ? ' ✓ the profile matches' : ''}.</p>}
     </section>
   );

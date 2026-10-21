@@ -5,6 +5,12 @@ import { addProfile, readProfiles, switchProfile, writeProfiles } from '../lib/p
 
 export function ProfileBanner() {
   const { gate } = useBridge();
+  if (gate.kind === 'protected') return (
+    <div className="plaque plaque-warning profile-storage-warning" role="alert">
+      <p><strong>Character data is protected</strong></p>
+      <p className="small">Profile saving and game sync are paused. Restore a compatible profiles.json backup, or use the app version that supports your saved format, then restart. Original sources are retained.</p>
+    </div>
+  );
   if (gate.kind !== 'switch' && gate.kind !== 'new') return null;
   const create = () => {
     const r = addProfile(readProfiles(), gate.player, gate.player);

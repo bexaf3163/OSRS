@@ -217,6 +217,20 @@ try {
   expect(JSON.stringify(JSON.parse(readFileSync(profilesFile, 'utf8'))) === JSON.stringify(profiles), 'profile recovery: damaged browser rows cannot overwrite the native alternate-character list');
   expect(await page.evaluate(() => localStorage.getItem('osrs-put:profiles:recovery')) === damagedProfiles, 'profile recovery: the damaged browser list is retained for recovery');
 
+  // Native file damage/future formats must survive a valid browser mirror and a normal live-status poll.
+  // These are disposable native files; no installed profile or real plugin is contacted.
+  status.stats.magic = 99;
+  for (const raw of ['{"version":99,"list":[]}', '{broken native profiles']) {
+    await page.evaluate(() => (window as unknown as { osrsDesktop: { loadProfilesFile(): string | null } }).osrsDesktop.loadProfilesFile());
+    writeFileSync(profilesFile, raw, 'utf8');
+    await page.evaluate(savedProfiles => localStorage.setItem('osrs-put:profiles', JSON.stringify(savedProfiles)), profiles);
+    await page.reload();
+    await page.waitForTimeout(2500);
+    expect(readFileSync(profilesFile, 'utf8') === raw, 'profile protection: the native original survives browser mirroring and status sync');
+    expect(await page.locator('.profile-storage-warning').count() === 1, 'profile protection: the actual EXE shows the recovery warning');
+    expect(JSON.parse(readFileSync(join(dataDir, 'progress.json'), 'utf8')).levels?.magic !== 99, 'profile protection: live levels do not enter a protected character profile');
+  }
+
   expect(!errors.length, `console: no errors ${errors.join('; ')}`);
   if (exe) {
     // A normal close: the window closes, the app quits and the launcher exits by itself.

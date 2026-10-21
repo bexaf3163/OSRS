@@ -66,7 +66,7 @@ export function AccountSync({ compact = false }: { compact?: boolean }) {
       </p>
       {state !== 'online' && <p className="muted small">No link with RuneLite — start the game with the plugin.</p>}
       {old && <p className="notice small">Plugin 2.12 (protocol 5) is needed: restart RuneLite from the app.</p>}
-      {state === 'online' && !old && !gateAllows(gate) && <p className="notice small">The game has a different character than this profile — choose the profile above.</p>}
+      {state === 'online' && !old && !gateAllows(gate) && <p className="notice small">{gate.kind === 'protected' ? 'Game sync is paused to protect saved character data.' : 'The game has a different character than this profile — choose the profile above.'}</p>}
       {state === 'online' && !old && gateAllows(gate) && (questsDone === null
         ? <p className="muted small">The quests have not come from the game yet — log in to the game (data sending must be turned on in the plugin).</p>
         : (

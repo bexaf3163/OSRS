@@ -19,3 +19,5 @@ Player-state known levels can come from the live game or the existing profile fa
 Local full Vitest passed 1,707 tests in 129 files. Focused cases cover all three real producer edges, incomplete/low/NaN levels, all-goal conjunction, unchanged skip marks, next-step/chain parity and excluded quest/item/carryover types. Build/TypeScript, check-data (0 errors/warnings), Java testClasses and narrow/wide prerequisite browser scenarios passed. Cumulative clean-install/native CI remains the next acceptance gate.
 
 Still open: equivalent acquisition for non-skill producers, distinguishing real prerequisites from convenience-only authored edges, consumer-specific subsets of a multi-skill preparation step, partial quest/cursor/carryover behavior and live RuneLite lifecycle. This does not certify all 67 route entries as feasible or optimally ordered.
+
+Clean-install cumulative CI passed on remote commit `018b03dbe2542e09f03876eb93a4122a2b2f1040`, run `39565826825`, including full browser, Java and actual isolated Windows EXE. This follow-up was not published in either audit preview.

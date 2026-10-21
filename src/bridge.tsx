@@ -8,7 +8,7 @@ import type { PlayerStats, Step, StepBranch } from './types';
 import { levelById } from './data';
 import { XpTracker } from './lib/xpRate';
 import type { SessionBase } from './lib/session';
-import { gateAllows, linkPlayer, profileGate, readProfiles, useProfiles, writeProfiles, type ProfileGate } from './lib/profiles';
+import { gateAllows, linkPlayer, guardedProfileGate as profileGate, readProfiles, useProfiles, writeProfiles, type ProfileGate } from './lib/profiles';
 import { useStore } from './store';
 import { desktop, type RuneliteLaunch } from './lib/desktop';
 import {
