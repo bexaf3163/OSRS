@@ -13,6 +13,8 @@ const steps = JSON.parse(readFileSync(new URL('../src/data/steps.json', import.m
 
 interface Mock {
   progress?: unknown;
+  /** The native profile list, independent of a damaged browser list. */
+  profileFile?: unknown;
   status?: Record<string, unknown>;
   events?: unknown[];
   localStorage?: Record<string, string>;
@@ -60,6 +62,8 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
       getZoom: async () => ({ zoom: 1, autoZoom: false, effective: 1, alwaysOnTop: false }),
       setZoom() {}, setAlwaysOnTop() {}, onZoom: () => () => {},
       loadProgressFile: () => progress,
+      loadProfilesFile: () => m.profileFile ? JSON.stringify(m.profileFile) : null,
+      saveProfilesFile: (json: string) => { w.__savedProfiles = json; },
       saveProgressFile: (j: string) => { progress = j; w.__saved = j; },
       saveProgressFileChecked: async (j: string) => {
         if (w.__holdSave) return new Promise(resolve => { w.__releaseSave = () => resolve({ ok: false, error: 'ENOSPC' }); });
@@ -238,6 +242,20 @@ async function run(browser: Browser) {
     await page.waitForTimeout(200);
     expect(await page.locator('.progress-storage-warning').count() === 0, 'save retry: an old delayed failure cannot overwrite the newer successful write');
     expect(await noOverflow(page) && !errors.length, 'save failure/retry: no overflow or console errors');
+    await page.context().close();
+  }
+  {
+    const damaged = '{"active":"alt","list":[null]}';
+    const { page, errors } = await open(browser, 1280, {
+      offline: true, localStorage: { 'osrs-put:profiles': damaged },
+      profileFile: { active: 'main', list: [{ id: 'main', name: 'Main' }, { id: 'alt', name: 'Recovered alt', player: 'Alt tester' }] },
+    }, '#/settings');
+    await page.getByRole('tab', { name: 'Progress and copies', exact: true }).click();
+    const names = await page.locator('.profile-list strong').allInnerTexts();
+    expect(names.includes('Recovered alt'), 'profile recovery: a valid native alternate profile survives damaged browser rows');
+    expect(await page.evaluate(() => (window as unknown as { __savedProfiles?: string }).__savedProfiles === undefined), 'profile recovery: reading the damaged source does not mirror a default over the native file');
+    expect(await page.evaluate(() => localStorage.getItem('osrs-put:profiles:recovery')) === damaged, 'profile recovery: damaged browser rows are retained');
+    expect(await noOverflow(page) && !errors.length, 'profile recovery: no overflow or console errors');
     await page.context().close();
   }
   if (process.env.UI_ONLY === 'stabilization') return;

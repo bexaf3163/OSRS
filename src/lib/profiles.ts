@@ -123,8 +123,24 @@ let cache: ProfilesState | null = null;
 const listeners = new Set<() => void>();
 
 function validProfileText(raw: string | null): boolean {
-  try { return raw !== null && Array.isArray((JSON.parse(raw) as { list?: unknown } | null)?.list); }
-  catch { return false; }
+  try {
+    const data = raw === null ? null : JSON.parse(raw) as { list?: unknown; active?: unknown; version?: unknown } | null;
+    // This legacy format has no version field. Never normalize a future format into a writable current list.
+    if (!data || typeof data !== 'object' || Object.hasOwn(data, 'version') || !Array.isArray(data.list) || data.list.length > MAX_PROFILES) return false;
+    const normalized = parseProfiles(raw);
+    const seen = new Set<string>();
+    for (const row of data.list) {
+      if (!row || typeof row !== 'object') return false;
+      const p = row as { id?: unknown; name?: unknown; player?: unknown };
+      if (typeof p.id !== 'string' || !ID.test(p.id) || seen.has(p.id)) return false;
+      seen.add(p.id);
+      if (p.name !== undefined && typeof p.name !== 'string') return false;
+      if (p.player !== undefined && (typeof p.player !== 'string' || clean(p.player, 12) !== p.player)) return false;
+      // An implicit Main must not push the last existing profile beyond the cap.
+      if (!normalized.list.some(n => n.id === p.id)) return false;
+    }
+    return data.active === undefined || (typeof data.active === 'string' && normalized.active === data.active);
+  } catch { return false; }
 }
 
 export function readProfiles(): ProfilesState {

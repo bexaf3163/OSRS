@@ -6,7 +6,7 @@
 // looks at a stub on a free port (OSRS_PUT_BRIDGE_PORT) — it does not go to the player's real plugin.
 
 import { spawn, spawnSync, type ChildProcess } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmdirSync, rmSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmdirSync, rmSync, writeFileSync } from 'node:fs';
 import http from 'node:http';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
@@ -200,6 +200,22 @@ try {
   expect(Object.entries(saved.steps ?? {}).every(([id, value]) => recovered.steps?.[id] === value), 'progress recovery: a damaged browser record cannot erase the native file marks');
   expect(await page.evaluate(() => localStorage.getItem('osrs-put:progress:recovery:local')) === '{broken', 'progress recovery: the damaged native browser record is preserved');
   expect(await page.locator('.progress-storage-warning').count() === 0, 'progress recovery: valid native file recovery leaves saving enabled');
+
+  // A syntactically valid list with broken rows must not normalize into Main and overwrite
+  // a valid native list containing another character. All paths belong to this disposable run.
+  await page.evaluate(() => (window as unknown as { osrsDesktop: { loadProfilesFile(): string | null } }).osrsDesktop.loadProfilesFile());
+  const profilesFile = join(dataDir, 'profiles.json');
+  const profiles = { active: 'main', list: [
+    { id: 'main', name: 'Main', player: 'E2E Tester' },
+    { id: 'nativealt', name: 'Native recovery alt', player: 'Alt tester' },
+  ] };
+  writeFileSync(profilesFile, JSON.stringify(profiles), 'utf8');
+  const damagedProfiles = '{"active":"nativealt","list":[null]}';
+  await page.evaluate(raw => localStorage.setItem('osrs-put:profiles', raw), damagedProfiles);
+  await page.reload();
+  await page.waitForTimeout(2500);
+  expect(JSON.stringify(JSON.parse(readFileSync(profilesFile, 'utf8'))) === JSON.stringify(profiles), 'profile recovery: damaged browser rows cannot overwrite the native alternate-character list');
+  expect(await page.evaluate(() => localStorage.getItem('osrs-put:profiles:recovery')) === damagedProfiles, 'profile recovery: the damaged browser list is retained for recovery');
 
   expect(!errors.length, `console: no errors ${errors.join('; ')}`);
   if (exe) {
