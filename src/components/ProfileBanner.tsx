@@ -1,10 +1,11 @@
 // The game has a different character than the active profile: levels and marks from the game are not written until the player chooses.
 
 import { useBridge } from '../bridge';
-import { addProfile, readProfiles, switchProfile, writeProfiles } from '../lib/profiles';
+import { addProfile, readProfiles, retryProfileSave, switchProfile, useProfileSaveError, writeProfiles } from '../lib/profiles';
 
 export function ProfileBanner() {
   const { gate } = useBridge();
+  const saveError = useProfileSaveError();
   if (gate.kind === 'protected') return (
     <div className="plaque plaque-warning profile-storage-warning" role="alert">
       <p><strong>Character data is protected</strong></p>
@@ -13,11 +14,18 @@ export function ProfileBanner() {
         : 'Profile saving and game sync are paused. Restore a compatible profiles.json backup, or use the app version that supports your saved format, then restart. Original sources are retained.'}</p>
     </div>
   );
+  if (saveError) return (
+    <div className="plaque plaque-warning profile-write-warning" role="alert">
+      <p><strong>Profile change was not saved</strong></p>
+      <p className="small">{saveError}</p>
+      <button type="button" className="btn btn-sm" onClick={retryProfileSave}>Retry profile save</button>
+    </div>
+  );
   if (gate.kind !== 'switch' && gate.kind !== 'new') return null;
   const create = () => {
     const r = addProfile(readProfiles(), gate.player, gate.player);
     if (!r) return;
-    writeProfiles(r.state);
+    if (!writeProfiles(r.state)) return;
     switchProfile(r.id);
   };
   return (

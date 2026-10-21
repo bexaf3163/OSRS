@@ -1,3 +1,5 @@
+Post-preview profile write receipts: [docs/CODEX_PROFILE_WRITE_HANDOFF.md](docs/CODEX_PROFILE_WRITE_HANDOFF.md). Rare metadata edits confirm the native write before publication/reload; retain the old progress writer and source protections.
+
 Post-preview profile conflict protection: [docs/CODEX_PROFILE_CONFLICT_HANDOFF.md](docs/CODEX_PROFILE_CONFLICT_HANDOFF.md). Supported but differing lists are retained and require recovery review; do not mirror one over the other.
 
 Post-preview food certainty: [docs/CODEX_COMBAT_FOOD_CERTAINTY_HANDOFF.md](docs/CODEX_COMBAT_FOOD_CERTAINTY_HANDOFF.md). Known stock is usable evidence; unreported alternatives cannot authorize a purchase deficit.

@@ -19,6 +19,7 @@ contextBridge.exposeInMainWorld('osrsDesktop', {
   // The profile list as a file next to the progress (the window's storage can be lost).
   loadProfilesFile: () => ipcRenderer.sendSync('profiles:load'),
   saveProfilesFile: (json) => ipcRenderer.send('profiles:save', String(json)),
+  saveProfilesFileChecked: (json) => ipcRenderer.sendSync('profiles:save-checked', String(json)),
   // Progress copies: automatic (outside the app folder) and into the chosen folder.
   backup: {
     get: () => ipcRenderer.invoke('backup:get'),

@@ -8,6 +8,7 @@ function createProgressWriter({ write, backup, afterFlush, delay = 400 }) {
   function flush() {
     clearTimeout(timer);
     timer = null;
+    const results = new Map();
     for (const [name, json] of pending) {
       if (!backedUp.has(name)) {
         backedUp.add(name);
@@ -16,11 +17,13 @@ function createProgressWriter({ write, backup, afterFlush, delay = 400 }) {
       let result;
       try { result = write(name, json); }
       catch { result = { ok: false, error: 'WRITE_FAILED' }; }
+      results.set(name, result);
       for (const resolve of acknowledgements.get(name) ?? []) resolve(result);
       acknowledgements.delete(name);
     }
     pending.clear();
     afterFlush();
+    return results;
   }
   function queue(name, json) {
     pending.set(name, json);
@@ -33,7 +36,12 @@ function createProgressWriter({ write, backup, afterFlush, delay = 400 }) {
       queue(name, json);
     });
   }
-  return { queue, save, flush };
+  // Profile switching is rare and needs a physical receipt before the renderer can reload.
+  function saveNow(name, json) {
+    queue(name, json);
+    return flush().get(name);
+  }
+  return { queue, save, saveNow, flush };
 }
 
 module.exports = { createProgressWriter };

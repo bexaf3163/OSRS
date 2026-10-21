@@ -21,7 +21,7 @@ export function ProfilesSection() {
   const add = () => {
     const r = addProfile(readProfiles(), name);
     if (!r) return;
-    writeProfiles(r.state);
+    if (!writeProfiles(r.state)) return;
     setName('');
     switchProfile(r.id);
   };
@@ -41,7 +41,7 @@ export function ProfilesSection() {
             <li key={p.id} className={`profile ${active ? 'is-active' : ''}`}>
               {renaming?.id === p.id
                 ? (
-                  <form onSubmit={(e) => { e.preventDefault(); writeProfiles(renameProfile(readProfiles(), p.id, renaming.name)); setRenaming(null); }}>
+                  <form onSubmit={(e) => { e.preventDefault(); if (writeProfiles(renameProfile(readProfiles(), p.id, renaming.name))) setRenaming(null); }}>
                     <input aria-label="Profile name" value={renaming.name} maxLength={30} autoFocus onChange={(e) => setRenaming({ id: p.id, name: e.target.value })} />
                     <button type="submit" className="btn btn-sm">Save</button>
                   </form>
@@ -51,7 +51,7 @@ export function ProfilesSection() {
                 {!active && <button type="button" className="btn btn-sm" onClick={() => switchProfile(p.id)}>Open</button>}
                 <button type="button" className="btn btn-sm btn-ghost" onClick={() => setRenaming({ id: p.id, name: p.name })}>Rename</button>
                 {p.id !== MAIN_ID && (confirm === p.id
-                  ? <button type="button" className="btn btn-sm btn-danger" onClick={() => { writeProfiles(removeProfile(readProfiles(), p.id)); setConfirm(null); if (active) switchProfile(MAIN_ID); }}>Delete for sure (the progress stays in the file)</button>
+                  ? <button type="button" className="btn btn-sm btn-danger" onClick={() => { if (!writeProfiles(removeProfile(readProfiles(), p.id))) return; setConfirm(null); if (active) switchProfile(MAIN_ID); }}>Delete for sure (the progress stays in the file)</button>
                   : <button type="button" className="btn btn-sm btn-ghost" onClick={() => setConfirm(p.id)}>Delete</button>)}
               </span>
             </li>

@@ -30,6 +30,7 @@ interface Mock {
   oversizedSnapshot?: boolean;
   /** A physical file-save failure, independent of working browser storage. */
   fileWriteFailure?: boolean;
+  profileWriteFailure?: boolean;
   /** Windows display scaling (1.25 = 125%): the device pixel ratio; the viewport width passed is then in CSS pixels. */
   scale?: number;
 }
@@ -57,6 +58,7 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
     const posts: unknown[] = [];
     w.__posts = posts;
     w.__fileWriteFailure = !!m.fileWriteFailure;
+    w.__profileWriteFailure = !!m.profileWriteFailure;
     let progress = m.progress ? JSON.stringify(m.progress) : null;
     w.osrsDesktop = {
       getZoom: async () => ({ zoom: 1, autoZoom: false, effective: 1, alwaysOnTop: false }),
@@ -64,6 +66,11 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
       loadProgressFile: () => progress,
       loadProfilesFile: () => m.profileFile ? JSON.stringify(m.profileFile) : null,
       saveProfilesFile: (json: string) => { w.__savedProfiles = json; },
+      saveProfilesFileChecked: (json: string) => {
+        if (w.__profileWriteFailure) return { ok: false, error: 'ENOSPC' };
+        w.__savedProfiles = json;
+        return { ok: true, error: null };
+      },
       saveProgressFile: (j: string) => { progress = j; w.__saved = j; },
       saveProgressFileChecked: async (j: string) => {
         if (w.__holdSave) return new Promise(resolve => { w.__releaseSave = () => resolve({ ok: false, error: 'ENOSPC' }); });
@@ -296,6 +303,24 @@ async function run(browser: Browser) {
     expect(await page.evaluate(() => JSON.parse((window as unknown as { __saved?: string }).__saved ?? localStorage.getItem('osrs-put:progress') ?? '{}').levels?.attack !== 99), `profile conflict (${width}): game levels cannot write into an unresolved account`);
     expect(await noOverflow(page) && !errors.length, `profile conflict (${width}): no overflow or console errors`);
     if (process.env.UI_ONLY === 'stabilization') await page.screenshot({ path: `audit-temp/profile-conflict-${width}.png` });
+    await page.context().close();
+  }
+  for (const width of [390, 1280]) {
+    const profiles = { active: 'main', list: [{ id: 'main', name: 'Main' }] };
+    const { page, errors } = await open(browser, width, {
+      offline: true, profileFile: profiles, profileWriteFailure: true,
+      localStorage: { 'osrs-put:profiles': JSON.stringify(profiles) },
+    }, '#/settings');
+    await page.getByRole('tab', { name: 'Progress and copies', exact: true }).click();
+    await page.getByRole('textbox', { name: 'New profile name', exact: true }).fill('Unsaved alt');
+    await page.getByRole('button', { name: 'Create', exact: true }).click();
+    expect(await page.locator('.profile-write-warning').count() === 1 && (await page.locator('.profile-list strong').allInnerTexts()).length === 1, `profile write (${width}): failed native create shows one warning without accepting or switching the profile`);
+    expect(await page.getByRole('textbox', { name: 'New profile name', exact: true }).inputValue() === 'Unsaved alt', `profile write (${width}): failed creation retains the player's input`);
+    await page.evaluate(() => { (window as unknown as Record<string, unknown>).__profileWriteFailure = false; });
+    await page.getByRole('button', { name: 'Retry profile save', exact: true }).click();
+    expect(await page.locator('.profile-write-warning').count() === 0 && (await page.locator('.profile-list strong').allInnerTexts()).includes('Unsaved alt'), `profile write (${width}): retry confirms and publishes the intended profile`);
+    expect(await noOverflow(page) && !errors.length, `profile write (${width}): no overflow or console errors`);
+    if (process.env.UI_ONLY === 'stabilization') await page.screenshot({ path: `audit-temp/profile-write-retry-${width}.png` });
     await page.context().close();
   }
   if (process.env.UI_ONLY === 'stabilization') return;
