@@ -1700,7 +1700,7 @@
     "title": "Magic to 25 (Varrock Teleport)",
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Varrock_Teleport",
-    "how": "After Imp Catcher (875 XP) and Witch's Potion (325) you have Magic 10 without a single spell. After that, cast combat strike spells on the cows in Lumbridge: a cow has 8 health and every one drops a hide, so the XP comes together with money. Spells of the same tier hit equally hard and equally accurately; they differ in XP and runes: Wind Strike (Magic 1) 5.5 XP, Water Strike (5) 7.5, Earth Strike (9) 9.5, Fire Strike (13) 11.5. The XP goes to both Magic and Hitpoints.",
+    "how": "After Imp Catcher (875 XP) and Witch's Potion (325) you have Magic 10 without a single spell. After that, cast combat strike spells on the cows in Lumbridge: a cow has 8 health and every one drops a hide, so hides can be collected alongside the XP; selling them is a separate step that may be restricted. Spells of the same tier hit equally hard and equally accurately; they differ in XP and runes: Wind Strike (Magic 1) 5.5 XP, Water Strike (5) 7.5, Earth Strike (9) 9.5, Fire Strike (13) 11.5. The XP goes to both Magic and Hitpoints.",
     "itemsRecommended": [
       {
         "nameEn": "Staff of fire",
@@ -1742,7 +1742,7 @@
       },
       {
         "label": "If you are short of money",
-        "text": "Start with what you have: a couple of hundred runes and an ordinary Staff cost less than 1,500 gp. The hides from the cows you train on pay the costs back: a hide is about 120 gp on the Grand Exchange. After that comes the \"How to make up the money\" block below with tips for your levels."
+        "text": "Start with an affordable batch of runes and a usable staff you already own. Cowhides are not available coins, and a new account may be unable to sell them. Check Money for methods that suit your levels, supplies and account selling limits before funding the next batch."
       }
     ],
     "doneWhen": "Magic 25.",
@@ -1806,12 +1806,18 @@
         "amount": 1,
         "howToGet": "Buy from Zaff in Zaff's Superior Staffs (Varrock) for about 15 gp: with a staff the spell can be set to autocast. A Staff of fire (below) works instead.",
         "wikiItemId": 1379,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Staff.png"
+        "iconUrl": "https://oldschool.runescape.wiki/images/Staff.png",
+        "anyOf": [
+          "Staff of air",
+          "Staff of water",
+          "Staff of earth",
+          "Staff of fire"
+        ]
       },
       {
         "nameEn": "Air rune",
         "amount": "300+",
-        "howToGet": "Needed for every cast (1-2 each). In Aubury's Rune Shop (Varrock) it is 4 gp, about 6 gp on the Grand Exchange. Take 300 to start, buy more later with the hide money.",
+        "howToGet": "Needed for every cast unless a staff supplies air. Take an affordable batch to start; check your remaining runes and coins before buying more. Cowhide sales must actually be available before they can fund another batch.",
         "wikiItemId": 556,
         "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
       },
@@ -1829,7 +1835,7 @@
       "Wield the staff, open the combat tab (Combat Options), click the spell button and choose the autocast spell: Wind Strike first.",
       "Go to the cow field near Lumbridge and hit the cows: each has 8 health, and a hide (Cowhide) always drops. Pick up the hides; a full inventory goes to the bank or the exchange.",
       "Change the autocast spell with your level: Magic 5 Water Strike, 9 Earth Strike, 13 Fire Strike. Fire Strike gives the most XP per cast.",
-      "Continue to Magic 25: Varrock Teleport unlocks. Buy more runes with the money from the hides."
+      "Continue to Magic 25: Varrock Teleport unlocks. Replenish runes from confirmed coins or an available earning method in Money; do not rely on unsold hides."
     ],
     "magicPlan": {
       "target": 25,
