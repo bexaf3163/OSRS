@@ -1,5 +1,7 @@
 # 2.74.2 route repair
 
+Latest source continuation: [S6-02 Fishing/Cooking handover](docs/CODEX_SKILL_HANDOVER_HANDOFF.md). Pricing sourcee5c5e9a4 passed all automated/portable gates; the newer handover still needs cumulative CI/live acceptance. Start with the first current section of [CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md) and continue remaining T11/T01–T17 work without repeating completed migrations.
+
 Unreleased2.74.3 owner armour/shared-prices/date source: start with the **Current cumulative pricing source** section in [docs/CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md). It records implemented migrations, final-CI/live boundaries and remaining T01–T17 work. Keep one HUD and the canonical readiness pipeline; do not restore fixed GE prices or the50-bone quota. Stable publication remains batched until current gates pass.
 
 Latest continuation: docs/CLAUDE_NEXT_SESSION.md and docs/CODEX_FROGS_HANDOFF.md. S4-03 no longer requires 50 bones: Attack40 training compares surface frogs and early Defence, with affordable armour advice. Do not restore the old collection quota from historical notes or fixtures below. No HUD redesign is part of this block.

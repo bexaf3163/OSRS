@@ -1,5 +1,13 @@
 # Claude continuation — start here
 
+## Current continuation: S6-02 source; pricing CI verified
+
+Pricing source **e5c5e9a4d5da9d158c49be2060d1135b87bd345d** (local a5e67ee exact tree) passed [Checks40040613686](https://github.com/bexaf3163/OSRS/actions/runs/40040613686): all1,867 Vitest/148files, TypeScript/build/data0errors/warnings, full Java, complete Chromium smoke and isolated actual portable. [Test portable](https://github.com/bexaf3163/OSRS/releases/download/audit-test-e5c5e9a4/OSRS-Path-audit-test-e5c5e9a4.exe), SHA256 **23c808aad1147329ecdf586ce2e2c8f882c8be46c14ea0fd35e0951234034e5d**, matches the test log and asset digest. The prior six Shopping failures are fixed; no browser assertions were removed. Stable/main remains batched; live gameplay acceptance is still open.
+
+Newer S6-02 source is described in [CODEX_SKILL_HANDOVER_HANDOFF.md](CODEX_SKILL_HANDOVER_HANDOFF.md): Fishing50 now hands over to unfinished Cooking with real inputs/destination through the same engine/HUD. Unknown second levels cannot complete/claim readiness or keep an old arrow. Owned recipes are preferred before unmeasured new purchases; starter bags are not full-goal estimates. Current source has1,874/1,880 local tests passing (six known sandbox failures), plus TS/build/data. Final Java/browser/portable CI for this newer block is pending; do not apply the pricing portable's acceptance to it.
+
+Next T11 cases: S6-03 Mining/Woodcutting handovers, S6-01 low Ranged and S6-04 spell batches. Broader T01–T17, joint budgets and live acceptance remain open. Earlier sections below are historical evidence; this section is current.
+
 ## Current cumulative pricing source (acceptance pending)
 
 CI follow-up: a2e54e5b/Checks40039220620 passed Java and actual portable but finished with six Shopping failures. Missing quote/catalogue metadata incorrectly made Energy potion/Clay ineligible for market planning. The newest repair restores the existing known-route-ID eligibility (explicit gear tradeability still wins), without restoring baked prices, and keeps all six browser assertions. Search labels now wrap with an internal row-overflow check. bc1ce847/Checks40040218696 predates this newest correction. Final corrected cumulative CI remains required.

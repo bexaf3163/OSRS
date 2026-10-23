@@ -15,8 +15,9 @@ import type { MethodNeed } from './trainingRouter';
 
 /** The stored pick when the skill's goal is already reached: no tool of that skill is asked for. */
 export const GOAL_REACHED = 'goal-reached';
+export const UNKNOWN_GOAL_PREFIX = 'goal-unknown:';
 
-interface RawMethod { id: string; skills: string[]; name: string; from: number; to: number | null; needs?: MethodNeed[]; place?: string; where: string }
+interface RawMethod { id: string; skills: string[]; name: string; from: number; to: number | null; needs?: MethodNeed[]; place?: string; where: string; note?: string }
 
 const RAW: RawMethod[] = (methodsJson as unknown as { methods: (Omit<RawMethod, 'skills'> & { skill: string | string[] })[] }).methods
   .map((m) => ({ ...m, skills: Array.isArray(m.skill) ? m.skill : [m.skill] }));
@@ -24,7 +25,7 @@ const METHODS = new Map(RAW.map((m) => [m.id, m]));
 const ITEMS = new Map(itemData.map((i) => [i.nameEn.toLowerCase(), i]));
 
 function needNames(need: MethodNeed): readonly string[] {
-  if (need.type === 'item') return [need.name];
+  if (need.type === 'item') return [need.name, ...need.anyOf ?? []];
   if (need.type === 'tool') return need.skill === 'mining' ? PICKAXES : AXES;
   return [];
 }
@@ -38,13 +39,22 @@ export function followedGoal(step: Pick<Step, 'followsMethod' | 'inGame'>): { sk
   return row ? { skill, target: row.level } : null;
 }
 
+/** One ordered set of goals from the unchanged completion trigger; the declared primary skill goes first. */
+export function followedGoals(step: Pick<Step, 'followsMethod' | 'inGame'>): { skill: string; target: number }[] {
+  const primary = followedGoal(step);
+  const trigger = step.inGame?.completionTrigger;
+  if (!primary || trigger?.type !== 'SKILL_LEVEL') return [];
+  return [primary, ...(trigger.levels ?? []).filter(g => g.skill !== primary.skill).map(g => ({ skill: g.skill, target: g.level }))];
+}
+
 /** Every tool any method of the followed skill asks for. The game must report all of them, not only the picked method's: an item that is not
  * tracked reads as unknown, which ranks a method as ready, so the pick would flip between two methods forever. */
-export function methodToolNames(step: Pick<Step, 'followsMethod'>): string[] {
-  const skill = step.followsMethod;
-  if (!skill) return [];
+export function methodToolNames(step: Pick<Step, 'followsMethod' | 'inGame'>): string[] {
+  const goals = followedGoals(step);
+  const skills = goals.length ? goals.map(g => g.skill) : step.followsMethod ? [step.followsMethod] : [];
+  if (!skills.length) return [];
   const names = new Set<string>();
-  for (const m of RAW) if (m.skills.includes(skill)) for (const need of m.needs ?? []) for (const name of needNames(need)) names.add(name);
+  for (const m of RAW) if (m.skills.some(skill => skills.includes(skill))) for (const need of m.needs ?? []) for (const name of needNames(need)) names.add(name);
   return [...names];
 }
 
@@ -67,7 +77,7 @@ function requirement(n: MethodNeed, m: RawMethod): StepItemRequirement | null {
 export function methodPoint(methodId: string): MapLocation | null {
   const m = METHODS.get(methodId);
   const p = m?.place ? matchStrict(m.place) : null;
-  return m && p ? { x: p.x, y: p.y, plane: p.plane, label: `${m.name} — ${p.label}` } : null;
+  return m && p ? { x: p.x, y: p.y, plane: p.plane, label: `${m.skills.includes('cooking') ? 'Cooking: ' : ''}${m.name} — ${p.label}` } : null;
 }
 
 /**
@@ -76,21 +86,45 @@ export function methodPoint(methodId: string): MapLocation | null {
  */
 export function withTrainingMethod(step: Step, pick: string | undefined): Step {
   if (!step.followsMethod || !pick) return step;
+  if (pick.startsWith(UNKNOWN_GOAL_PREFIX)) {
+    const skill = pick.slice(UNKNOWN_GOAL_PREFIX.length);
+    if (!followedGoals(step).some(g => g.skill === skill)) return step;
+    const message = `Check your ${skill} level in RuneLite or Skills before choosing its training method.`;
+    return { ...step, followsMethod: skill, itemsRequired: [], itemsRecommended: [], mapLocation: undefined, resourceSpots: [],
+      requirements: [...step.requirements ?? [], { type: 'skill', skill, min: 1 }],
+      warning: message, how: message, where: 'Training level not checked', quickSteps: [message], pacing: undefined, foes: undefined, threats: undefined,
+      ...(step.inGame ? { inGame: { ...step.inGame, worldPoint: undefined, groundTiles: [], pathWaypoints: undefined,
+        npcNames: [], objectNames: [], highlightItems: [], goal: message } } : {}),
+    };
+  }
   if (pick === GOAL_REACHED) {
-    return { ...step, itemsRequired: [], ...(step.inGame ? { inGame: { ...step.inGame, highlightItems: [] } } : {}) };
+    return { ...step, itemsRequired: [], itemsRecommended: [], mapLocation: undefined, resourceSpots: [],
+      ...(step.inGame ? { inGame: { ...step.inGame, worldPoint: undefined, groundTiles: [], pathWaypoints: undefined,
+        npcNames: [], objectNames: [], highlightItems: [], goal: 'Training goals reached' } } : {}),
+    };
   }
   const m = METHODS.get(pick);
-  if (!m || !m.skills.includes(step.followsMethod)) return step;
+  const goals = followedGoals(step);
+  const goal = goals.find(g => m?.skills.includes(g.skill));
+  if (!m || !goal) return step;
   const itemsRequired = (m.needs ?? []).map((n) => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null);
   const at = methodPoint(pick);
   return {
     ...step,
+    followsMethod: goal.skill,
     itemsRequired,
+    ...(goal.skill !== step.followsMethod ? {
+      itemsRecommended: [], foes: undefined, threats: undefined, pacing: undefined,
+      where: m.where, how: `Train ${goal.skill} to ${goal.target}: ${m.name}. ${m.note ?? ''}`.trim(),
+      quickSteps: ['Bank finished-skill tools and surplus supplies before withdrawing the current batch.', `Prepare the listed supplies for ${m.name}.`, `Train ${goal.skill} to ${goal.target} at ${m.where}. ${m.note ?? ''}`.trim()],
+    } : {}),
     // The static climb contains future places. Once a method is selected, map and plugin use only its point.
-    ...(at ? { mapLocation: at, resourceSpots: [at] } : {}),
+    mapLocation: at ?? undefined, resourceSpots: at ? [at] : [],
     ...(step.inGame ? { inGame: {
       ...step.inGame,
-      ...(at ? { worldPoint: at, groundTiles: [at], goal: at.label, pathWaypoints: undefined } : {}),
+      worldPoint: at ?? undefined, groundTiles: at ? [at] : [], pathWaypoints: undefined,
+      goal: at?.label ?? `${m.name}: ${m.where}`,
+      ...(goal.skill !== step.followsMethod ? { npcNames: [], objectNames: [] } : {}),
       highlightItems: itemsRequired.map((i) => i.nameEn),
     } } : {}),
   };

@@ -191,6 +191,8 @@ const text = async (page: Page, sel: string) => {
 };
 
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'skill-handover') { await skillHandoverScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await skillHandoverScenarios(browser);
   if (process.env.UI_ONLY === 'shopping-quotes') { await shoppingQuoteScenarios(browser); return; }
   if (!process.env.UI_ONLY) await shoppingQuoteScenarios(browser);
   if (process.env.UI_ONLY === 'journal-quotes') { await journalQuoteScenarios(browser); return; }
@@ -2414,6 +2416,38 @@ async function styleQuoteScenarios(browser: Browser) {
     expect(!(await text(page, '.style-gear')).includes('not sold at the exchange'), `style quotes (${width}): an unavailable quote cannot invent trade restrictions`);
     expect((await text(page, '.magic-plan')).includes('Price unavailable for a complete option'), `Magic quotes (${width}, unavailable=${unavailable}): missing rune quotes keep the requirements visible`);
     expect(await noOverflow(page) && !errors.length, `style quotes (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function skillHandoverScenarios(browser: Browser) {
+  for (const width of [390, 1280]) {
+    const stats = { fishing: 49, cooking: 30 };
+    const names = ['Small fishing net', 'Fishing rod', 'Fishing bait', 'Fly fishing rod', 'Feather', 'Lobster pot', 'Harpoon', 'Raw beef', 'Raw chicken', 'Raw trout', 'Raw tuna', 'Grapes', 'Jug of water'];
+    const items = names.map(name => ({ name, carried: 0, noted: 0, bank: name === 'Raw tuna' ? 26 : name === 'Grapes' || name === 'Jug of water' ? 13 : 0 }));
+    const { page, errors } = await open(browser, width, {
+      market: true, progress: progressBefore('S6-02', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-02' },
+      status: { protocol: 6, inGame: true, player: 'Skill Handover', activeStepId: 'S6-02', stats, coins: 1000, bankCoins: 0, equipment: [], inventory: [] },
+      events: [{ type: 'STATS', stats }, { type: 'OWNED', bankSeen: true, items }],
+    }, '#/step/S6-02');
+    const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
+    const setLevels = async (levels: Record<string, number>) => {
+      await page.evaluate(s => { const w = window as unknown as { __emit: (e: unknown) => void; __status: Record<string, unknown> }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, levels);
+      await page.waitForTimeout(1300);
+    };
+    await setLevels({ fishing: 50, cooking: 30 });
+    const cooking = await snapshot();
+    expect(cooking?.step?.worldPoint?.label?.includes('Cooking: Tuna') && cooking.step.worldPoint.label.includes('Barbarian Village') && cooking.step.checklist?.some((r: any) => r.name === 'Raw tuna' && r.count === 26), `skill handover (${width}): completing Fishing projects Cooking supplies and destination into the game`);
+    expect(!cooking?.step?.npcNames?.includes('Fishing spot') && !cooking?.step?.checklist?.some((r: any) => /fishing net|fishing rod|harpoon/i.test(r.name)), `skill handover (${width}): no obsolete Fishing targets or tools`);
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}'));
+    expect(saved.steps?.['S6-02'] !== 'done', `skill handover (${width}): Fishing alone cannot complete the combined goal`);
+    await reveal(page, '.training:visible');
+    expect((await text(page, '.training:visible')).includes('Cooking'), `skill handover (${width}): the visible method follows the same remaining skill`);
+    await setLevels({ fishing: 50, cooking: 35 });
+    const wine = await snapshot();
+    expect(wine?.step?.worldPoint?.label?.includes('Edgeville Bank') && wine.step.checklist?.some((r: any) => r.name === 'Grapes' && r.count === 13) && wine.step.checklist?.some((r: any) => r.name === 'Jug of water' && r.count === 13), `skill handover (${width}): wine uses actual ingredient pairs at a bank`);
+    expect(await noOverflow(page) && !errors.length, `skill handover (${width}): no overflow or console errors`);
     await page.context().close();
   }
 }

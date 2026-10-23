@@ -22,7 +22,7 @@ export type Risk = 'none' | 'low' | 'high';
 export type { PlayStyle };
 
 export type MethodNeed =
-  | { type: 'item'; name: string; count?: number }
+  | { type: 'item'; name: string; count?: number; anyOf?: string[] }
   /** Any axe / pickaxe of at least the suitable tier — taken from toolProgression.json. */
   | { type: 'tool'; skill: 'woodcutting' | 'mining' }
   | { type: 'quest'; quest: string }
@@ -103,7 +103,8 @@ function needStatus(n: MethodNeed, state: PlayerState): NeedStatus {
     return { kind: 'tool', label: n.skill === 'woodcutting' ? 'Axe' : 'Pickaxe', state: r.state, detail: r.detail };
   }
   const count = n.count ?? 1;
-  const r = evaluate({ type: 'item', name: n.name, count }, state);
+  const r = evaluate(n.anyOf?.length ? { type: 'alternative', requiredCount: count, alternatives: [n.name, ...n.anyOf].map(name => ({ name })) }
+    : { type: 'item', name: n.name, count }, state);
   return { kind: 'item', label: `${n.name}${count > 1 ? ` ×${count}` : ''}`, state: r.state, detail: r.detail };
 }
 
@@ -180,6 +181,10 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number) {
         if (Math.abs(ha - hb) > Math.min(ha, hb) * 0.05) return ha - hb;
       } else {
         if (s) return s;
+        // Without comparable pace evidence, do not buy a new recipe merely because its suggested bracket is newer.
+        const supplied = (v: MethodView) => ![...v.missing, ...v.unchecked].some(n =>
+          (n.kind === 'item' || n.kind === 'tool') && n.state !== 'BANK' && n.state !== 'OK');
+        if ((pa === null || pb === null) && supplied(a) !== supplied(b)) return Number(supplied(b)) - Number(supplied(a));
         if ((pa === null || pb === null) && byBracket) return byBracket;
         if ((pa ?? -1) !== (pb ?? -1)) return (pb ?? -1) - (pa ?? -1);
       }

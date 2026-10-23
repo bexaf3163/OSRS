@@ -26,16 +26,16 @@ const bagOf = (rows: Record<string, number>): { bankSeen: boolean; items: Map<st
   items: new Map(Object.entries({ ...Object.fromEntries(WATCHED.map((n) => [n, 0])), ...rows }).map(([name, carried]) => [nameKey(name), { name, carried, noted: 0, bank: 0 } as OwnedItem])),
 });
 
-function stateAt(fishing: number | null, bag: Record<string, number> = {}) {
+function stateAt(fishing: number | null, bag: Record<string, number> = {}, cooking = 30) {
   return buildPlayerState({
-    mode: 'f2p', stats: fishing === null ? null : { fishing, cooking: 30 }, progress: emptyProgress(), gear: null, questsDone: null,
+    mode: 'f2p', stats: fishing === null ? null : { fishing, cooking }, progress: emptyProgress(), gear: null, questsDone: null,
     owned: fishing === null ? null : bagOf(bag), connected: fishing !== null,
   });
 }
 
 /** The step as the store would give it for this level, bag and style. */
-function resolved(fishing: number | null, bag: Record<string, number> = {}, style: PlayStyle = 'chill') {
-  const state = stateAt(fishing, bag);
+function resolved(fishing: number | null, bag: Record<string, number> = {}, style: PlayStyle = 'chill', cooking = 30) {
+  const state = stateAt(fishing, bag, cooking);
   const picks = pickMethods([step], state, 'f2p', style);
   return { state, pick: picks[step.id] as string | undefined, step: withTrainingMethod(step, picks[step.id]) };
 }
@@ -159,7 +159,10 @@ describe('S6-02 follows the training method of the real level', () => {
     expect(none.pick).toBeUndefined();
     expect(none.step).toBe(step);
     expect(needs(none.step)).toEqual(['Small fishing net']);
-    const done = resolved(50);
+    const cooking = resolved(50);
+    expect(cooking.pick).toBe('ck-tuna');
+    expect(needs(cooking.step)).toEqual(['Raw tuna x26']);
+    const done = resolved(50, {}, 'chill', 50);
     expect(done.pick).toBe(GOAL_REACHED);
     expect(needs(done.step)).toEqual([]);
     expect(withTrainingMethod(step, 'no-such-method')).toBe(step);

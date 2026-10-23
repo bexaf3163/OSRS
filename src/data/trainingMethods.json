@@ -466,14 +466,16 @@
       "to": 20,
       "name": "Raw beef and chicken",
       "members": false,
+      "needs": [{ "type": "item", "name": "Raw beef", "count": 26, "anyOf": ["Raw chicken"] }],
       "xpa": 30,
       "act": "portion|portions",
       "effort": "low",
-      "cost": "free",
+      "cost": "cost",
       "risk": "none",
-      "where": "The Lumbridge Castle kitchen (meat from the farms)",
+      "where": "The permanent fire west of the Barbarian Village fishing spots",
+      "note": "Withdraw owned raw meat first; 26 pieces is one starter bag, not the whole goal. The existing fire needs no logs or tinderbox. Burnt food gives no XP; buying refills needs confirmed coins.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
-      "place": "Lumbridge Castle"
+      "place": "Barbarian Village fishing spots"
     },
     {
       "id": "ck-trout",
@@ -482,15 +484,16 @@
       "to": 30,
       "name": "Trout",
       "members": false,
+      "needs": [{ "type": "item", "name": "Raw trout", "count": 26 }],
       "xpa": 70,
       "act": "fish",
       "effort": "low",
-      "cost": "free",
+      "cost": "cost",
       "risk": "none",
-      "where": "The range in Barbarian Village, Al Kharid or the Lumbridge kitchen",
-      "note": "Trout comes from those training Fishing; your own fish is free.",
+      "where": "The permanent fire west of the Barbarian Village fishing spots",
+      "note": "Use banked raw trout first; 26 is one starter bag. Recheck supplies after each batch; burnt fish gives no XP. Buying refills needs confirmed coins.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
-      "place": "Barbarian Village"
+      "place": "Barbarian Village fishing spots"
     },
     {
       "id": "ck-tuna",
@@ -500,20 +503,17 @@
       "name": "Tuna",
       "members": false,
       "needs": [
-        {
-          "type": "skill",
-          "skill": "fishing",
-          "min": 35
-        }
+        { "type": "item", "name": "Raw tuna", "count": 26 }
       ],
       "xpa": 100,
       "act": "fish",
       "effort": "low",
-      "cost": "free",
+      "cost": "cost",
       "risk": "none",
-      "where": "Musa Point on Karamja",
+      "where": "The permanent fire west of the Barbarian Village fishing spots; withdraw raw tuna first",
+      "note": "Use owned raw tuna first; 26 is one starter bag, not a whole-goal quantity. Burnt fish gives no XP. Buying refills needs confirmed coins.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
-      "place": "Musa Point"
+      "place": "Barbarian Village fishing spots"
     },
     {
       "id": "ck-wine",
@@ -523,6 +523,8 @@
       "name": "Wine (a jug with grapes)",
       "members": false,
       "needs": [
+        { "type": "item", "name": "Grapes", "count": 13 },
+        { "type": "item", "name": "Jug of water", "count": 13 },
         {
           "type": "skill",
           "skill": "cooking",
@@ -534,10 +536,10 @@
       "effort": "low",
       "cost": "cost",
       "risk": "none",
-      "where": "A bank next to a range (Al Kharid, Cooks' Guild)",
-      "note": "The fastest, but it costs money: the grapes and jugs are bought.",
+      "where": "At Edgeville Bank; no range or guild access is needed",
+      "note": "Combine 13 grapes with 13 jugs of water per starter bag. Withdraw owned ingredients first. Wait 12 seconds after the batch for fermentation and XP. Below Cooking 68, bad wine gives no XP; recheck your level and budget before another batch.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
-      "place": "Cooks' Guild"
+      "place": "Edgeville Bank"
     },
     {
       "id": "fm-normal",
