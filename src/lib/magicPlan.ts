@@ -11,7 +11,6 @@ export const SPELLS = spellsJson.spells as unknown as Spell[];
 export const RUNE_IDS = spellsJson.runeIds as Record<string, number>;
 export const STAFFS = spellsJson.staffs as Record<string, Staff>;
 export const COWHIDE_ID = spellsJson.cowhideId;
-export const SPELLS_CHECKED = spellsJson.checked;
 
 /** Prices by item ID (the exchange, instant buy). */
 export type PriceMap = ReadonlyMap<number, number>;

@@ -14,7 +14,7 @@ import { useTradeRestriction } from '../lib/useTradeRestriction';
 import { xpForLevel } from '../lib/xp';
 import { getGePrice } from '../services/pricesApi';
 import {
-  OPTIONS, planFor, PLAN_PRICE_IDS, SPELLS, SPELLS_CHECKED, STAFFS, staffPayback, type PlanResult, type PriceMap,
+  OPTIONS, planFor, PLAN_PRICE_IDS, SPELLS, STAFFS, staffPayback, type PlanResult, type PriceMap,
 } from '../lib/magicPlan';
 
 /** The Magic level the user needs, from the step's goal. */
@@ -75,7 +75,7 @@ export function MagicPlan({ step }: { step: Step }) {
       <h4 className="subhead">🔮 What it costs to reach Magic {target}</h4>
       <p className="muted small">
         From here: {basis}. {Math.max(0, xpForLevel(target) - fromXp).toLocaleString('en-US')} XP more is needed.
-        Prices — the exchange now; spells — the wiki cards (checked {SPELLS_CHECKED}).
+        Exchange price estimates; spells from the OSRS Wiki.
         {' '}Cast XP only: damage XP is not counted. These are comparison estimates, not measured training times.
       </p>
       <div className="table-wrap">

@@ -4,7 +4,7 @@ Full requested specification: [OWNER_ARMOUR_PRICING_DATES_REQUEST.md](OWNER_ARMO
 
 ## Date presentation — source implemented, final CI pending
 
-Removed calendar/snapshot dates from Gear's last-known header, Settings progress/import preview, backup metadata, Journal/Money totals, Money method verification, combat/food references, StyleGear, travel reference metadata and Wiki item price timestamps. Source links, stale/offline Gear disclosure, counts and requirements remain. The backup action uses the existing toast to confirm success rather than displaying a date. No new panels.
+Removed calendar/snapshot dates from Gear's last-known header, Settings progress/import preview, backup metadata, Journal/Money totals, Money method verification, combat/food/spell references, StyleGear, travel reference metadata and Wiki item price timestamps. Source links, stale/offline Gear disclosure, counts and requirements remain. The backup action uses the existing toast to confirm success rather than displaying a date. No new panels.
 
 Internal timestamps remain unchanged: progress ordering/import/export, profiles, last-known gear selection, price-side freshness/cache/backoff, journal windows, backups, logs, native telemetry/screenshot filenames and build/data provenance. Date-based exported backup filenames serve recovery/version identification and remain functional. Diagnostic event times remain troubleshooting data. The Java guide contains no calendar-date formatter; the discovered native formatters name diagnostic screenshots/telemetry files, and were retained.
 
