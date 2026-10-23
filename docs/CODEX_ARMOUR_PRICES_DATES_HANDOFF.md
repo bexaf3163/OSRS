@@ -12,9 +12,21 @@ Dead display-only date exports and the Wiki drawer's date-formatting helper were
 
 Browser regressions cover the real Settings save/import views at 390/1280px, confirm dates are absent while internal ordering timestamps/notes remain intact, and retain Gear's stale snapshot disclosure without its calendar date. No live-game acceptance is claimed.
 
+## Shared preparation pricing — source implemented, final CI pending
+
+The existing quote store now feeds the shared readiness engine. Required-item chips, current sub-step items, preparation rows and the protocol-6 plan use a common market estimate. Physical quantities multiply the actual ID quote; cached/old-side and opposite-side estimates are labelled. Database planning fallbacks cannot appear as current quotes. Identified tradeable items without quotes say "Price unavailable"; unidentified/untradeable items receive no invented GE value. Potion doses remain priced as actual bottle packages by Shopping, not multiplied as bottles here.
+
+Preparation source selection receives an explicit missing quote instead of falling back to the card's baked GE price. Fixed NPC prices/tolls remain fixed. Existing ownership UNKNOWN/withdrawal semantics are unchanged. A new engine snapshot updates costs and its per-item acquisition advice without spending GP. This is not a new aggregate affordability optimizer.
+
+The app sends an optional bounded price label in each preparation line. Java validates it and displays supporting costs only in expanded preparation/hover details, keeping the collapsed single HUD unchanged. There is no Java network provider and no protocol bump; old clients ignore the additive optional field.
+
+Historical calendar dates and dated GE-price claims were also removed from route prose. Fixed quest cash rewards, tanning fees, training quantities, route IDs/triggers/requirements/pacing/carryover and all internal timestamps remain. Five generated active-target fixture descriptions were refreshed from production; structural comparison confirms only acquisition text changed. Undated hardcoded GE-price prose elsewhere still needs classification/migration.
+
+Validation: TypeScript/build and data checks pass (zero data errors/warnings). Local full suite: 1,824 pass / 1,830, with only the six known sandbox loopback/temporary-rename failures; maxWorkers=4 avoids an unrelated overloaded-worker import timeout seen on the first run. The Java suite is locally blocked by the same Gradle daemon loopback restriction. New pricing/engine/envelope focused coverage passes; browser scenarios at 390/1280px cover quantity costs, missing quotes, actual bridge parity and overflow. Final-tree GitHub Java/browser/portable gates remain required. No live game test is claimed.
+
 ## Remaining required work
 
-Pricing foundation follow-up: the shared quote store now marks retained boards stale after an offline response or thrown refresh, preserving quote timestamps and allowing recovery back to live. Previously it kept a live label after both failures. Explicit item-ID pricing can also read a valid quote when the separate name-mapping request is unavailable. Three focused pricing suites pass (35 tests), with before-fix reproductions. This is a correctness repair to the existing provider, not completion of all price consumers or the Java presentation.
+Pricing foundation follow-up: the shared quote store now marks retained boards stale after an offline response or thrown refresh, preserving quote timestamps and allowing recovery back to live. Previously it kept a live label after both failures. Explicit item-ID pricing can also read a valid quote when the separate name-mapping request is unavailable. Three focused pricing suites pass (35 tests), with before-fix reproductions. This is a correctness repair to the existing provider, not completion of all price consumers. The later preparation/Java presentation block is described above.
 
 Local foundation validation: TypeScript/build and data checks pass; 1,814 of 1,820 tests pass, with only the same six independently reproduced sandbox network/rename failures. This pricing follow-up is newer than the tool/date CI revision and must receive final-tree CI before publication. Existing deliberately labelled baked planning estimates are not yet removed from all consumers; do not present them as live prices.
 

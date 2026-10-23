@@ -1081,7 +1081,7 @@
       },
       {
         "label": "Price",
-        "text": "A hide is about 110 gp on the Grand Exchange (prices of 26 Sep 2026): 28 hides are about 3,000 gp. Leather costs about 260 gp: after Prince Ali Rescue take the hides to the tanner Ellis in Al Kharid (1 gp each), which earns about twice as much."
+        "text": "Use Money for current hide and leather sale estimates. After Prince Ali Rescue, Ellis in Al Kharid tans cowhides for 1 gp each. Compare the net proceeds after tanning and travel before choosing."
       },
       {
         "label": "Bonus",
@@ -1133,7 +1133,7 @@
       "plane": 0,
       "label": "The Grand Exchange"
     },
-    "how": "Teleport with the Chronicle book (right-click the book, Teleport) to Champions' Guild and go north to the Grand Exchange, away from the stone circle of dark wizards to the north-east. Sell the hides first, then buy. The prices are approximate, of 26 Sep 2026; the inspector (click an item) shows the exact price.",
+    "how": "Teleport with the Chronicle book (right-click the book, Teleport) to Champions' Guild and go north to the Grand Exchange, away from the stone circle of dark wizards to the north-east. Sell the hides first, then buy. Check the current GE estimates in Shopping before placing offers; execution prices can differ.",
     "itemsRequired": [
       {
         "nameEn": "Red bead",
@@ -2256,7 +2256,7 @@
       {
         "nameEn": "Strength potion(4)",
         "amount": 1,
-        "howToGet": "Grand Exchange, about 160 gp (15 Oct 2026). One dose just before the fight: Count Draynor has 35 hit points, so a higher max hit ends it sooner.",
+        "howToGet": "Grand Exchange; check the current acquisition estimate. One dose just before the fight: Count Draynor has 35 hit points, so a higher max hit ends it sooner.",
         "wikiItemId": 113,
         "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
       }
@@ -3354,11 +3354,11 @@
     "fields": [
       {
         "label": "How much you need",
-        "text": "Only the Adamant scimitar (S3-07): about 1,400 gp at the prices of 26 Sep 2026, so 2,500 gp is the target with room to spare. The stage 3 quests already give about 5,300 coins (Black Knights' Fortress 2,500, Below Ice Mountain 2,000, Shield of Arrav 600, Doric 180), so you may have it before you mine anything. Armour is skipped on purpose: see S3-08. Use Money to fund Wormbrain and later purchases if short."
+        "text": "This funds the Adamant scimitar (S3-07). The route uses a 2,500 gp savings target; check its current market estimate before buying. The stage 3 quests already give about 5,300 coins (Black Knights' Fortress 2,500, Below Ice Mountain 2,000, Shield of Arrav 600, Doric 180), so you may have it before you mine anything. Armour is skipped on purpose: see S3-08. Use Money to fund Wormbrain and later purchases if short."
       },
       {
         "label": "Price",
-        "text": "Iron ore is about 73 gp on 26 Sep 2026: 25 ores are about 1,800 gp and 30 about 2,200 gp. If you do not need the ore for quests, sell it at once."
+        "text": "Check Money for current iron-ore proceeds. Unsold ore is not cash. Keep the ore still required by your route."
       },
       {
         "label": "Other ways",
@@ -3425,7 +3425,7 @@
       },
       {
         "label": "Budget",
-        "text": "About 1,400 gp at the prices of 26 Sep 2026."
+        "text": "Use the current acquisition estimate in Preparation or Shopping."
       },
       {
         "label": "Armour",
@@ -3555,7 +3555,7 @@
       {
         "nameEn": "Salmon",
         "amount": 20,
-        "howToGet": "Buy on the Grand Exchange, about 34 gp each (15 Oct 2026); Trout (about 22 gp, heals 7), Tuna, Lobster or Swordfish count too. About 1 Salmon every 3 kills at Defence 1. Or catch and cook your own at Barbarian Village (fly fishing, Fishing 30 for salmon).",
+        "howToGet": "Buy on the Grand Exchange; check the current acquisition estimate; Trout (about 22 gp, heals 7), Tuna, Lobster or Swordfish count too. Preparation estimates the food for your current levels and worn gear. Or catch and cook your own at Barbarian Village (fly fishing, Fishing 30 for salmon).",
         "wikiItemId": 329,
         "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
         "heals": 9,
@@ -3571,7 +3571,7 @@
       {
         "nameEn": "Strength potion(4)",
         "amount": 3,
-        "howToGet": "Grand Exchange, about 160 gp each (15 Oct 2026). A dose about every 5 minutes; 3 potions (12 doses) are about an hour. Potions with fewer doses left count the same.",
+        "howToGet": "Grand Exchange; check the current acquisition estimate. A dose about every 5 minutes; 3 potions (12 doses) are about an hour. Potions with fewer doses left count the same.",
         "wikiItemId": 113,
         "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
       },
@@ -3689,7 +3689,7 @@
       {
         "nameEn": "Strength potion(4)",
         "amount": 1,
-        "howToGet": "Grand Exchange, about 160 gp (15 Oct 2026). One dose before the fight: Ithoi has 55 hit points.",
+        "howToGet": "Grand Exchange; check the current acquisition estimate. One dose before the fight: Ithoi has 55 hit points.",
         "wikiItemId": 113,
         "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
       }
@@ -3754,7 +3754,7 @@
           "Lobster",
           "Swordfish"
         ],
-        "howToGet": "Buy on the Grand Exchange, about 34 gp each (15 Oct 2026); Trout, Tuna, Lobster or Swordfish count too. For Ithoi the Navigator (hits up to 6 with magic): eat before your health falls to 12. Preparation sizes the amount for your levels and armour."
+        "howToGet": "Buy on the Grand Exchange; check the current acquisition estimate; Trout, Tuna, Lobster or Swordfish count too. For Ithoi the Navigator (hits up to 6 with magic): eat before your health falls to 12. Preparation sizes the amount for your levels and armour."
       }
     ]
   },
@@ -3792,7 +3792,7 @@
       {
         "nameEn": "Strength potion(4)",
         "amount": 1,
-        "howToGet": "Grand Exchange, about 160 gp (15 Oct 2026). One dose before the fight: Brutus has 58 hit points.",
+        "howToGet": "Grand Exchange; check the current acquisition estimate. One dose before the fight: Brutus has 58 hit points.",
         "wikiItemId": 113,
         "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
       }
@@ -3910,7 +3910,7 @@
       {
         "nameEn": "Strength potion(4)",
         "amount": 4,
-        "howToGet": "Grand Exchange, about 160 gp each (15 Oct 2026). A dose every 4-5 minutes: a higher max hit shortens every fight, so it saves food too.",
+        "howToGet": "Grand Exchange; check the current acquisition estimate. A dose every 4-5 minutes: a higher max hit shortens every fight, so it saves food too.",
         "wikiItemId": 113,
         "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
       },
@@ -3984,7 +3984,7 @@
       {
         "nameEn": "Lobster",
         "amount": 20,
-        "howToGet": "Buy cooked Lobster on the Grand Exchange for about 105 gp each (20 of them about 2,100). Heals 12.",
+        "howToGet": "Buy cooked Lobster on the Grand Exchange. Preparation shows the quantity cost. Heals 12.",
         "wikiItemId": 379,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
         "heals": 12
@@ -4013,7 +4013,7 @@
         ]
       }
     },
-    "how": "Buy 20 cooked Lobster on the Grand Exchange: about 105 gp each, about 2,100 gp for 20 at the prices of 26 Sep 2026 (keep up to 4,000 gp in mind if the price moves). This replaces the old Karamja cage-fishing loop: lobsters need Fishing 40 and Cooking 40 and a boat each way, hours of work that add nothing to the fight. Any lobsters that drop on the way count towards the 20."
+    "how": "Buy 20 cooked Lobster on the Grand Exchange. Preparation and Shopping show the current quantity cost; check the offer before buying. This replaces the old Karamja cage-fishing loop: lobsters need Fishing 40 and Cooking 40 and a boat each way, hours of work that add nothing to the fight. Any lobsters that drop on the way count towards the 20."
   },
   {
     "id": "S4-05",
@@ -4369,7 +4369,7 @@
       {
         "nameEn": "Salmon",
         "amount": 10,
-        "howToGet": "Buy on the Grand Exchange, about 34 gp each (15 Oct 2026); Trout, Tuna, Lobster or Swordfish count too. For the rooms and Melzar the Mad (hits up to 5); the demon is fought from the safespot.",
+        "howToGet": "Buy on the Grand Exchange; check the current acquisition estimate; Trout, Tuna, Lobster or Swordfish count too. For the rooms and Melzar the Mad (hits up to 5); the demon is fought from the safespot.",
         "wikiItemId": 329,
         "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
         "heals": 9,
@@ -4432,7 +4432,7 @@
       {
         "nameEn": "Staff of air",
         "amount": 1,
-        "howToGet": "Grand Exchange, about 1,050 gp (15 Oct 2026). Gives the Air runes and lets you autocast Water Strike; any staff is enough to autocast if you bring Air runes.",
+        "howToGet": "Grand Exchange; check the current acquisition estimate. Gives the Air runes and lets you autocast Water Strike; any staff is enough to autocast if you bring Air runes.",
         "wikiItemId": 1381,
         "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_air.png"
       },
@@ -5204,12 +5204,12 @@
       "plane": 0,
       "label": "The Grand Exchange"
     },
-    "how": "An Old School Bond costs about 11.5 million gp (price of 26 Sep 2026, the live price is in the app) and gives 14 days of membership. For F2P that is a lot: save up on the ogresses, yews and swordfish of this stage, or pay for membership with money: progress does not depend on the method. When membership is active, switch the app to Members mode: that opens the Members route.",
+    "how": "An Old School Bond gives 14 days of membership; check its current GE estimate before saving or buying. For F2P that is a lot: save up on the ogresses, yews and swordfish of this stage, or pay for membership with money: progress does not depend on the method. When membership is active, switch the app to Members mode: that opens the Members route.",
     "itemsRequired": [
       {
         "nameEn": "Old school bond",
         "amount": 1,
-        "howToGet": "Buy on the Grand Exchange (about 11.5 million gp on 26 Sep 2026, check the live price). It gives 14 days of membership: use it on yourself.",
+        "howToGet": "Buy on the Grand Exchange; check the current GE estimate before placing an offer. It gives 14 days of membership: use it on yourself.",
         "wikiItemId": 13190,
         "iconUrl": "https://oldschool.runescape.wiki/images/Old_school_bond.png",
         "inStep": true
@@ -5473,21 +5473,21 @@
       {
         "nameEn": "Staff of fire",
         "amount": 1,
-        "howToGet": "Grand Exchange, about 900 gp (15 Oct 2026). Wield it and autocast Fire Bolt: the staff gives the Fire runes.",
+        "howToGet": "Grand Exchange; check the current acquisition estimate. Wield it and autocast Fire Bolt: the staff gives the Fire runes.",
         "wikiItemId": 1387,
         "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
       },
       {
         "nameEn": "Chaos rune",
         "amount": 60,
-        "howToGet": "Fire Bolt (Magic 35): 1 Chaos and 3 Air runes a cast with the Staff of fire. 60 casts with a margin for misses. Grand Exchange, about 106 gp each (15 Oct 2026).",
+        "howToGet": "Fire Bolt (Magic 35): 1 Chaos and 3 Air runes a cast with the Staff of fire. 60 casts with a margin for misses. Grand Exchange; check the current acquisition estimate.",
         "wikiItemId": 562,
         "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_rune.png"
       },
       {
         "nameEn": "Air rune",
         "amount": 180,
-        "howToGet": "Fire Bolt: 3 a cast. Grand Exchange, about 5 gp each (15 Oct 2026).",
+        "howToGet": "Fire Bolt: 3 a cast. Grand Exchange; check the current acquisition estimate.",
         "wikiItemId": 556,
         "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
       }
@@ -5581,21 +5581,21 @@
       {
         "nameEn": "Staff of fire",
         "amount": 1,
-        "howToGet": "Grand Exchange, about 900 gp (15 Oct 2026). Wield it and autocast Fire Bolt: the staff gives the Fire runes.",
+        "howToGet": "Grand Exchange; check the current acquisition estimate. Wield it and autocast Fire Bolt: the staff gives the Fire runes.",
         "wikiItemId": 1387,
         "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
       },
       {
         "nameEn": "Chaos rune",
         "amount": 50,
-        "howToGet": "Fire Bolt (Magic 35): 1 Chaos and 3 Air runes a cast with the Staff of fire. 50 casts with a margin for misses. Grand Exchange, about 106 gp each (15 Oct 2026).",
+        "howToGet": "Fire Bolt (Magic 35): 1 Chaos and 3 Air runes a cast with the Staff of fire. 50 casts with a margin for misses. Grand Exchange; check the current acquisition estimate.",
         "wikiItemId": 562,
         "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_rune.png"
       },
       {
         "nameEn": "Air rune",
         "amount": 150,
-        "howToGet": "Fire Bolt: 3 a cast. Grand Exchange, about 5 gp each (15 Oct 2026).",
+        "howToGet": "Fire Bolt: 3 a cast. Grand Exchange; check the current acquisition estimate.",
         "wikiItemId": 556,
         "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
       }
@@ -5731,21 +5731,21 @@
       {
         "nameEn": "Staff of fire",
         "amount": 1,
-        "howToGet": "Grand Exchange, about 900 gp (15 Oct 2026). Wield it and autocast Fire Bolt: the staff gives the Fire runes.",
+        "howToGet": "Grand Exchange; check the current acquisition estimate. Wield it and autocast Fire Bolt: the staff gives the Fire runes.",
         "wikiItemId": 1387,
         "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
       },
       {
         "nameEn": "Chaos rune",
         "amount": 50,
-        "howToGet": "Fire Bolt (Magic 35): 1 Chaos and 3 Air runes a cast with the Staff of fire. 50 casts with a margin for misses. Grand Exchange, about 106 gp each (15 Oct 2026).",
+        "howToGet": "Fire Bolt (Magic 35): 1 Chaos and 3 Air runes a cast with the Staff of fire. 50 casts with a margin for misses. Grand Exchange; check the current acquisition estimate.",
         "wikiItemId": 562,
         "iconUrl": "https://oldschool.runescape.wiki/images/Chaos_rune.png"
       },
       {
         "nameEn": "Air rune",
         "amount": 150,
-        "howToGet": "Fire Bolt: 3 a cast. Grand Exchange, about 5 gp each (15 Oct 2026).",
+        "howToGet": "Fire Bolt: 3 a cast. Grand Exchange; check the current acquisition estimate.",
         "wikiItemId": 556,
         "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
       }
@@ -6060,7 +6060,7 @@
       },
       {
         "label": "Ranged 30",
-        "text": "Shoot cows in the Lumbridge pasture from a distance with a bow and arrows set to the Accurate style. Use the best bow your level allows: Oak shortbow (level 5), Willow shortbow (level 20), Maple shortbow (level 30), with Iron or Steel arrows first, Mithril arrows from 20. Bring 200-300 arrows and the bow you will use, and pick the arrows up as you go. Faster, as this is a members world: darts on the Rapid style, a throw every 2 ticks against 3 for a shortbow on Rapid (wiki attack speeds: dart 3, shortbow 4, Rapid one less). Steel darts from Ranged 5, Mithril darts from 20, about 5-6 gp each on the Grand Exchange (15 Oct 2026); bring about 500 and pick them up, they reach only 3 tiles. Stop at 30 for Animal Magnetism; train to 50 only if you want Ava's accumulator (the S8-05 tip)."
+        "text": "Shoot cows in the Lumbridge pasture from a distance with a bow and arrows set to the Accurate style. Use the best bow your level allows: Oak shortbow (level 5), Willow shortbow (level 20), Maple shortbow (level 30), with Iron or Steel arrows first, Mithril arrows from 20. Bring 200-300 arrows and the bow you will use, and pick the arrows up as you go. Faster, as this is a members world: darts on the Rapid style, a throw every 2 ticks against 3 for a shortbow on Rapid (wiki attack speeds: dart 3, shortbow 4, Rapid one less). Steel darts from Ranged 5, Mithril darts from 20, bought on the Grand Exchange at the current market price; bring about 500 and pick them up, they reach only 3 tiles. Stop at 30 for Animal Magnetism; train to 50 only if you want Ava's accumulator (the S8-05 tip)."
       },
       {
         "label": "Slayer 18",

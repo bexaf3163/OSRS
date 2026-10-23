@@ -18,6 +18,7 @@ import { doseKind, heldUnits, needUnits } from './doses';
 import { currentLoadoutStep, loadoutPhase } from './loadoutPhase';
 import { npcSpot } from './stepPlaces';
 import type { QuestInstruction } from '../services/runeliteBridge';
+import type { PriceView } from './funding/quotes';
 
 export type ReadinessStatus =
   | 'READY'
@@ -114,6 +115,8 @@ const gp = (n: number) => Math.round(n).toLocaleString('en-US');
 
 /** Everything the readiness calculation needs: the route, the marks and the single player state (playerState.ts). */
 export interface ReadinessContext {
+  /** Shared market board, never an independently fetched copy. */
+  prices?: PriceView | null;
   steps: Step[];
   progress: Progress;
   qp: number;

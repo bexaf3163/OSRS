@@ -53,6 +53,7 @@ function Row({ l, showWhy = true }: { l: PrepLine; showWhy?: boolean }) {
     <li className={`prep-line is-${l.where.toLowerCase()} p-${l.priority.toLowerCase()}`}>
       <span className="prep-where" aria-hidden="true">{w.icon}</span>
       <strong>{l.name}{countOf(l)}</strong>
+      {l.marketPrice && <span className="muted small" title={l.marketPrice.detail}> · {l.marketPrice.text}</span>}
       <span className="muted"> — {part ?? w.text}</span>
       {l.supply && <span className={`prep-supply is-${l.supply.toLowerCase()}`}> · {SUPPLY[l.supply]}</span>}
       {l.action && l.where !== 'UNKNOWN' && <> · <Action a={l.action} /></>}

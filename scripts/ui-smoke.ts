@@ -25,6 +25,8 @@ interface Mock {
   prices?: Record<number, number>;
   /** The exchange as captured on 2026-10-18 (tests/funding/fixtures), with its times moved to now: latest, hourly and the item reference. */
   market?: boolean;
+  /** The item catalogue is available but market quotes are missing. */
+  marketUnavailable?: boolean;
   /** The plugin does not answer (RuneLite is not running). */
   offline?: boolean;
   /** A reachable bridge rejects the guide snapshot for its size. */
@@ -118,7 +120,7 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
       const kind = /\/osrs\/(latest|1h|mapping)/.exec(r.request().url())![1];
       const now = Math.floor(Date.now() / 1000);
       if (kind === 'mapping') return r.fulfill({ json: Object.entries(rows).map(([name, x]) => ({ id: x.id, name, limit: x.limit ?? undefined, members: false })) });
-      if (kind === 'latest') return r.fulfill({ json: { data: Object.fromEntries(Object.values(rows).map((x) => [x.id, { high: x.high, highTime: x.high === null ? null : now - 90, low: x.low, lowTime: x.low === null ? null : now - 120 }])) } });
+      if (kind === 'latest') return r.fulfill({ json: { data: mock.marketUnavailable ? {} : Object.fromEntries(Object.values(rows).map((x) => [x.id, { high: x.high, highTime: x.high === null ? null : now - 90, low: x.low, lowTime: x.low === null ? null : now - 120 }])) } });
       return r.fulfill({ json: { timestamp: now, data: Object.fromEntries(Object.values(rows).map((x) => [x.id, { avgHighPrice: x.avgHigh, highPriceVolume: x.highVolume, avgLowPrice: x.avgLow, lowPriceVolume: x.lowVolume }])) } });
     });
   }
@@ -182,6 +184,8 @@ const text = async (page: Page, sel: string) => {
 };
 
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'market-preparation') { await marketPreparationScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await marketPreparationScenarios(browser);
   if (process.env.UI_ONLY === 'date-proof') { await dateFreeSettingsScenarios(browser); return; }
   if (!process.env.UI_ONLY) await dateFreeSettingsScenarios(browser);
   if (process.env.UI_ONLY === 'tool-proof') { await toolProofScenarios(browser); return; }
@@ -2259,6 +2263,32 @@ async function dateFreeSettingsScenarios(browser: Browser) {
     const saved = await page.evaluate(() => JSON.parse((window as unknown as { __saved: string }).__saved));
     expect(saved.updatedAt === progress.updatedAt && saved.notes['S1-01'] === 'Keep this note', `dates (${width}): internal save ordering metadata and notes remain intact`);
     expect(await noOverflow(page) && !errors.length, `dates (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function marketPreparationScenarios(browser: Browser) {
+  for (const width of [390, 1280]) for (const unavailable of [false, true]) {
+    const { page, errors } = await open(browser, width, {
+      zen: true, market: true, marketUnavailable: unavailable,
+      progress: progressBefore('S4-04', { gameMode: 'f2p' }),
+      localStorage: { 'osrs-put:active-step': 'S4-04' },
+      status: { protocol: 6, activeStepId: 'S4-04', coins: 10000, bankCoins: 0 },
+      events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Lobster', carried: 0, noted: 0, bank: 0 }] }],
+    }, '#/step/S4-04');
+    const supplies = page.locator('.quest-supply-list');
+    await supplies.getByText(unavailable ? 'Price unavailable' : 'GE estimate: ≈ 2,060 gp (103 each)', { exact: true }).waitFor({ timeout: 6000 });
+    expect(await supplies.getByText(unavailable ? 'Price unavailable' : 'GE estimate: ≈ 2,060 gp (103 each)', { exact: true }).count() === 1,
+      'market preparation (' + width + ', unavailable=' + unavailable + '): one supporting estimate, multiplied from the current quote');
+    await page.waitForTimeout(800);
+    const price = await page.evaluate(() => {
+      const w = window as unknown as { __posts: { path: string; body?: { plan?: { lines: { name: string; price?: string }[] } } }[] };
+      return w.__posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.plan?.lines.find(l => l.name === 'Lobster')?.price;
+    });
+    expect(unavailable ? price === 'Price unavailable' : !!price?.startsWith('GE estimate: ≈ 2,060 gp'),
+      'market preparation (' + width + ', unavailable=' + unavailable + '): the game receives the same estimate or honest absence');
+    expect(!(await page.locator('main').innerText()).includes('26 Sep 2026'), 'market preparation (' + width + '): no historical route price date');
+    expect(await noOverflow(page) && !errors.length, 'market preparation (' + width + '): no overflow or console errors');
     await page.context().close();
   }
 }

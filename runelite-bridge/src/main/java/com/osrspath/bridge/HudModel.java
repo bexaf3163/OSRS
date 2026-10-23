@@ -700,6 +700,10 @@ final class HudModel
 				}
 				b.now.add(l);
 			}
+			if (plan != null && plan.getPrice() != null)
+			{
+				b.now.add(Line.small(Icon.DOT, plan.getPrice(), Tone.MUTED));
+			}
 			if (i.isSubstitutes())
 			{
 				b.now.add(Line.small(Icon.DOT, "Other items the step accepts count too.", Tone.MUTED));
@@ -905,6 +909,10 @@ final class HudModel
 			String how = plan != null && plan.getAction() != null && !plan.getAction().isEmpty() ? plan.getAction() : i.getWhere();
 			String right = i.getCount() < 0 ? i.getTag() : i.getCount() + " / " + i.getNeed();
 			String text = PrepPlan.rawName(i.getName()) + " · " + whereWord(i, in);
+			if (plan != null && plan.getPrice() != null)
+			{
+				how = (how == null ? "" : how + ". ") + plan.getPrice();
+			}
 			GuideList.Action action = i.getPlace() >= 0 && h != StepGuide.Have.BANK ? GuideList.Action.place(i.getPlace()) : GuideList.Action.NONE;
 			todo.add(new Line(icon, text, right, tone, true, action, (how == null ? text : text + ". " + how)
 				+ (action.isClickable() ? " Click for the arrow and path there." : "")));

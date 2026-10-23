@@ -43,6 +43,8 @@ import { overviewOf } from '../lib/subStep';
 import { CarryNote, LoadoutsCard, RewardChoice } from './RouteNotes';
 import { QuestPreparation } from './QuestPreparation';
 import { TravelTip } from './TravelTip';
+import { ItemMarketPrice } from './ItemMarketPrice';
+import { parseAmount } from '../lib/checklist';
 
 const WARN_LABELS = new Set(['Dangerous', 'Attention', 'Combat']);
 
@@ -65,6 +67,7 @@ function ItemChip({ item }: { item: StepItemRequirement }) {
           <span className="item-chip-lens" aria-hidden="true">🔍</span>
         </span>
         {item.howToGet && <span className="item-chip-how"><Inline text={item.howToGet} /></span>}
+        <ItemMarketPrice name={item.nameEn} id={item.wikiItemId} quantity={parseAmount(item.amount)} />
       </button>
     </li>
   );

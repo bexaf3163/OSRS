@@ -11,6 +11,7 @@ import type { StepReadiness } from './lib/readiness';
 import { useRecoveryTracker, type ActiveRecovery } from './lib/useRecoveryTracker';
 import { useBridge } from './bridge';
 import type { QuestInstruction } from './services/runeliteBridge';
+import { usePriceView } from './lib/funding/usePriceView';
 
 const Ctx = createContext<ReadinessEngine | null>(null);
 const RecoveryCtx = createContext<{ active: ActiveRecovery | null; dismiss: () => void }>({ active: null, dismiss: () => {} });
@@ -19,6 +20,7 @@ export function ReadinessProvider({ children }: { children: ReactNode }) {
   const { progress, mode, steps } = useStore();
   const qp = useQuestPoints();
   const { state } = usePlayerState();
+  const prices = usePriceView(true);
   const recovery = useRecoveryTracker();
   const bridge = useBridge();
   const cursor = useRef<{ player: string | null; step: string; instruction: QuestInstruction } | null>(null);
@@ -28,8 +30,8 @@ export function ReadinessProvider({ children }: { children: ReactNode }) {
   }
   const questInstruction = cursor.current?.instruction ?? null;
   const engine = useMemo(
-    () => createReadinessEngine({ steps, progress, qp, mode, state, recovery: recovery.active, questInstruction }),
-    [steps, progress, qp, mode, state, recovery.active, questInstruction],
+    () => createReadinessEngine({ steps, progress, qp, mode, state, prices, recovery: recovery.active, questInstruction }),
+    [steps, progress, qp, mode, state, prices, recovery.active, questInstruction],
   );
   return (
     <Ctx.Provider value={engine}>

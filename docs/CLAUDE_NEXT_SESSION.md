@@ -1,6 +1,6 @@
 # Claude continuation — start here
 
-## Current unreleased blocks: 2.74.3 — progress proof, native reads and tool requirements
+## Current unreleased blocks: 2.74.3 — progress proof, native reads, tools and preparation prices
 
 The next separate repair projects generic method tool needs into the existing checklist/watch pipeline and preserves UNKNOWN for unreported usable tool tiers. It also rejects cross-skill method picks. See [CODEX_METHOD_TOOLS_HANDOFF.md](CODEX_METHOD_TOOLS_HANDOFF.md). Local focused tests pass (136); full local run has 1,811 passing and six known sandbox failures out of 1,817. Build/data checks pass. This newer code still requires its own final-tree GitHub gates; the CI evidence below applies to the earlier progress/native-read revision only.
 
@@ -62,7 +62,7 @@ Keep Claude's single expandable `OsrsPathGuideOverlay`/`HudModel`; never restore
 
 Owner queued [armour progression, shared live prices and removal of unnecessary displayed dates](OWNER_ARMOUR_PRICING_DATES_REQUEST.md) after the current tool-requirement repair (2026-10-23). This is a requested implementation specification, not completed work. Trace the existing structured route/combat plan and price service first; preserve real game prerequisites versus route recommendations, saved IDs and the single minimal HUD. Internal timestamps remain necessary. Do this queued request before expanding unrelated audit work.
 
-The date-presentation portion is source-implemented as a separate block, with browser coverage pending final CI. See [CODEX_ARMOUR_PRICES_DATES_HANDOFF.md](CODEX_ARMOUR_PRICES_DATES_HANDOFF.md). Black-kit/Defence10 progression and comprehensive live-price presentation are still pending; the existing bulk price service must be reused. Do not describe those two features as completed.
+Date presentation and shared preparation market estimates are source-implemented as separate blocks, with final-tree GitHub coverage pending. Required-item/sub-step chips, preparation and the existing expanded HUD share bounded current/cached/unavailable prices. Route prose no longer displays historical quote dates. Local full run: 1,824 pass and six known sandbox failures out of 1,830; TypeScript/build/data pass. See [CODEX_ARMOUR_PRICES_DATES_HANDOFF.md](CODEX_ARMOUR_PRICES_DATES_HANDOFF.md). Black-kit/Defence10 progression and the remaining price consumers (Gear/StyleGear, Magic, item dossier/Alchemy, Journal, undated GE prose and full quantity budgets) are still pending; the existing bulk price service must be reused. Do not describe those two features as completed.
 
 The existing quote provider's stale-on-refresh-failure and ID-without-name-mapping defects are repaired in a separate local pricing-foundation commit. Focused pricing suites pass (35); local full suite has 1,814 passing and six known sandbox failures out of 1,820; build/data pass. This newer follow-up is not covered by the earlier tool/date CI revision. Owner decision: accept owned equivalent/better armour and buy only needed upgrades. Do not force a four-piece Black purchase when suitable owned equipment covers those slots.
 

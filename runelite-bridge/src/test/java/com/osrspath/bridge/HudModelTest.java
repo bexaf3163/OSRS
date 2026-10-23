@@ -115,6 +115,18 @@ public class HudModelTest
 	}
 
 	// ---------- The headline is the selected plan's current subtask ----------
+	@Test
+	public void marketPricesStayInExpandedPreparationAndCannotReplaceTheAction()
+	{
+		PrepPlan p = plan(line("Salmon", 21, "MISSING", "CRITICAL", "NOW", null, "Buy at the Grand Exchange"));
+		p.getLines().get(0).setPrice("Cached GE estimate: 420 gp (20 each)");
+		HudModel.Card card = HudModel.build(input(view(S403, p, salmon(StepGuide.Have.NONE, 0, 0)), quiet(), attack(30)));
+		assertFalse(collapsed(card).contains("GE estimate"));
+		assertTrue(expanded(card).contains("Cached GE estimate: 420 gp"));
+		assertTrue(expanded(card).contains("Buy at the Grand Exchange"));
+		p.getLines().get(0).setPrice(new String(new char[1001]).replace('\0', 'x'));
+		assertNotNull(p.prepare());
+	}
 
 	@Test
 	public void trainingOnCows_theHeadlineIsTheTraining_notTheRouteStepTitle()

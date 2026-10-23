@@ -29,6 +29,8 @@ import { questItemKeys } from './questItems';
 import { recoverySteps, type Recovery, type RecoveryStep } from './recovery';
 import { loadoutNeed, loadoutPhase } from './loadoutPhase';
 import type { QuestInstruction } from '../services/runeliteBridge';
+import type { PriceView } from './funding/quotes';
+import { itemPrice, marketItemPrice, type ItemPrice } from './itemPrice';
 
 /** Critical: the step cannot be done without it; important: better to prepare before leaving; an improvement saves time or money; optional is a convenience. */
 export type PrepPriority = 'CRITICAL' | 'IMPORTANT' | 'OPTIMIZATION' | 'OPTIONAL';
@@ -52,6 +54,8 @@ export interface PrepAction {
 }
 
 export interface PrepLine {
+  /** Market cost for physical items; doses are priced by their actual package in Shopping. */
+  marketPrice?: ItemPrice;
   key: string;
   /** The English name as in the bag, the bank and at the exchange. */
   name: string;
@@ -136,6 +140,7 @@ export interface PrepPlan {
 }
 
 export interface PrepPlanInput {
+  prices?: PriceView | null;
   step: Step;
   steps: Step[];
   progress: Progress;
@@ -360,7 +365,9 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
         // Doses, not potions: the shortfall and the sizes that cover it; Shopping prices every size and names the package.
         action = { kind: 'BUY', label: shortText(t.line.nameEn, g.missing), href: '#/shopping' };
       } else if (where === 'MISSING') {
-        const plan = planSources({ name: t.line.nameEn, need: g.missing, detail: t.line.id !== undefined ? detail(t.line.id) : undefined, manualKey: t.line.key }, state);
+        const plan = planSources({ name: t.line.nameEn, need: g.missing, detail: t.line.id !== undefined ? detail(t.line.id) : undefined, manualKey: t.line.key,
+          ...(i.prices !== undefined ? { gePrice: itemPrice(i.prices, t.line.nameEn, t.line.id, g.missing).unit } : {}),
+        }, state);
         // No source the player can surely use (only a guild shop behind an unconfirmed door, say): the route's own way to get it, the shop as an "or".
         const maybe = plan.alternatives.find((o) => o.kind === 'shop' && o.access !== 'open');
         action = !plan.primary && maybe && t.line.howToGet
@@ -397,6 +404,16 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
 
   // Made items: if one is missing, its ingredients are planned too.
   for (const l of [...lines]) lines.push(...recipeLines(l, step, state));
+
+  // Price physical quantities once for every consumer. Unknown/untradeable items get no fabricated GE value.
+  if (i.prices !== undefined) for (const l of lines) {
+    if (l.unit === 'dose' || l.name.toLowerCase() === 'coins') continue;
+    const row = trip.lines.find(t => t.line.nameEn === l.name);
+    const id = row?.line.id;
+    const d = id !== undefined ? detail(id) : undefined;
+    const price = marketItemPrice(i.prices, l.name, id, l.count, Boolean(d?.gePrice));
+    if (price) l.marketPrice = price;
+  }
 
   // Recommended: not needed for the step but it saves time; we do not force it: that is an "improvement".
   const window = tripWindow(i.steps, i.progress, step.id, Math.max(0, ids.length - 1));
