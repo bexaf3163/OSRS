@@ -3,9 +3,9 @@
 import type { Step } from '../types';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
-import { foodInBag, foodsCovering, threatKeys, THREATS_DATE, viewThreat } from '../lib/foodAdvice';
+import { foodInBag, foodsCovering, threatKeys, viewThreat } from '../lib/foodAdvice';
 import { estimateStepFights, fightLine, OTHER_METHOD } from '../lib/fightEstimate';
-import { COMBAT_FOES_DATE, foeLabel } from '../lib/combatEstimate';
+import { foeLabel } from '../lib/combatEstimate';
 import { CombatPlan, useCombatPlan } from './CombatPlan';
 import { CombatRoute } from './CombatRoute';
 
@@ -45,7 +45,7 @@ export function FoodAdvice({ step }: { step: Step }) {
               ))}
             </ul>
             <p className="small muted">
-              Your levels and worn gear from the game against the wiki stats ({COMBAT_FOES_DATE}), with the combat formulas; one fight at your
+              Your levels and worn gear from the game against the wiki stats, with the combat formulas; one fight at your
               current levels; the range holds about 9 outcomes in 10. The health above two of its max hits is counted before food. No kit guarantees survival.
             </p>
           </details>
@@ -69,7 +69,7 @@ export function FoodAdvice({ step }: { step: Step }) {
       ) : (
         <p className="muted small">Food that covers the max hit ({worst}): {covering.slice(0, 4).map((f) => `${f.name} (+${f.heals})`).join(', ') || '—'}.</p>
       )}
-      <p className="muted small">Hits and healing — the wiki as of {THREATS_DATE}. The "two hits" threshold is a margin for two hits in a row.</p>
+      <p className="muted small">Hits and healing from the OSRS Wiki. The "two hits" threshold is a margin for two hits in a row.</p>
     </section>
   );
 }

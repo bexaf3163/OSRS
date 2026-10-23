@@ -62,7 +62,7 @@ export function StyleGear({ step }: { step: Step }) {
             ))}
           </ul>
         )}
-      <p className="muted small">OSRS Wiki recommendations ({STYLE_GEAR.generatedAt}), prices — the exchange now. This is a list for the free version: for Members the armor and weapons are different.</p>
+      <p className="muted small">OSRS Wiki recommendations. This is a list for the free version: for Members the armor and weapons are different.</p>
     </details>
   );
 }

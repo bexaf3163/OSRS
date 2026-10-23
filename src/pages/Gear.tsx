@@ -233,7 +233,7 @@ export function GearPage() {
         </section>
       ) : snapshot && staleWorn ? (
         <section className="gear-now" aria-label="Last known">
-          <h2 className="subhead">Last known <span className="muted">· {snapshot.player}, {new Date(snapshot.at).toLocaleString('en-US')}</span></h2>
+          <h2 className="subhead">Last known <span className="muted">· {snapshot.player}</span></h2>
           <WornList equipped={staleWorn} stale />
           <p className="small muted">Not live: {state === 'online' ? 'log in to the game' : 'connect RuneLite'} to compare what you wear now.</p>
         </section>

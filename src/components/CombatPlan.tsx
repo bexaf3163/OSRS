@@ -7,7 +7,7 @@ import { useStore } from '../store';
 import { assumptionsFor } from '../lib/foodPlan';
 import { combatPlanView, foodReservations, type CombatPlanView } from '../lib/combatPlan';
 import { isClosed } from '../lib/next-step';
-import { foeLabel, COMBAT_FOES_DATE } from '../lib/combatEstimate';
+import { foeLabel } from '../lib/combatEstimate';
 
 export function useCombatPlan(step: Step): CombatPlanView | null {
   const { stats, xp, gear, owned, combatLog } = useBridge();
@@ -66,7 +66,7 @@ export function CombatPlan({ v }: { v: CombatPlanView }) {
           {v.measured && <li>{v.measured}</li>}
         </ul>
         <p className="small muted">
-          Why: your levels, XP and worn gear from the game against the wiki stats of the {foeLabel(e.foe)} ({COMBAT_FOES_DATE}), with the combat formulas,
+          Why: your levels, XP and worn gear from the game against the wiki stats of the {foeLabel(e.foe)}, with the combat formulas,
           level ups on the way, 1 health a minute regenerating, finding the next target and walking to the bank. The range holds about 9 outcomes in 10.
           {v.assumed.length ? ` Assumed: ${v.assumed.join('; ')}.` : ''}
         </p>

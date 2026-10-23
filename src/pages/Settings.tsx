@@ -127,7 +127,7 @@ export function SettingsPage() {
               <code className="code code-path">{bridge.dataDir()}</code>
             </p>
           )}
-          <p className="small">Now: {done} {plural(done, 'step done', 'steps done')}, changed {new Date(progress.updatedAt).toLocaleString('en-US')}.</p>
+          <p className="small">Now: {done} {plural(done, 'step done', 'steps done')}.</p>
           <div className="actions">
             <button type="button" className="btn btn-primary" onClick={() => download(exportFileName(), exportProgress(progress))}>
               Export progress
@@ -141,7 +141,7 @@ export function SettingsPage() {
             <div className="notice" role="alert">
               <p>
                 In the file: {pending.stats.done} done, {pending.stats.skipped} skipped, {pending.stats.levels} levels,
-                {pending.stats.notes} notes; saved {new Date(pending.progress.updatedAt).toLocaleString('en-US')}.
+                {pending.stats.notes} notes.
                 {pending.stats.migrated && ' A file from the first version of the route — the marks were carried over to V2, the old ones are kept inside.'}
                 {pending.stats.dropped > 0 && ` Unknown entries dropped: ${pending.stats.dropped}.`}
               </p>

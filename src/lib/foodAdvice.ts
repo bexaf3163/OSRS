@@ -10,7 +10,6 @@ export interface Food { name: string; heals: number }
 
 export const THREATS = threatsJson.threats as unknown as Record<string, Threat>;
 export const FOODS = threatsJson.foods as Food[];
-export const THREATS_DATE = threatsJson.generatedAt;
 
 /** The names of the step's opponents: foes and threats; those with no wiki data (a cow) are skipped. */
 export function threatKeys(step: Pick<Step, 'foes' | 'threats'>): string[] {

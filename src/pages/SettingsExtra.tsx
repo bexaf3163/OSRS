@@ -69,6 +69,7 @@ export function ProfilesSection() {
 }
 
 export function BackupSection() {
+  const { notify } = useStore();
   const api = desktop()?.backup;
   const [state, setState] = useState<BackupState | null>(null);
   useEffect(() => {
@@ -89,12 +90,11 @@ export function BackupSection() {
       <p className="small">
         {state?.autoDir ? <>Automatic folder: <code className="code">{state.autoDir}</code></> : 'The automatic copy is off.'}
         {state?.dir && <><br />Your folder: <code className="code">{state.dir}</code></>}
-        {state?.last && <><br />Last copy: {new Date(state.last).toLocaleString('en-US')}.</>}
       </p>
       {state?.error && <p className="notice is-error small" role="alert">Could not write to the folder ({state.error}). Choose another.</p>}
       <div className="actions">
         <button type="button" className="btn" onClick={() => run(api.choose)}>{state?.dir ? 'Change my folder' : 'Also copy to my folder'}</button>
-        {(state?.dir || state?.autoDir) && <button type="button" className="btn" onClick={() => run(api.now)}>Make a copy now</button>}
+        {(state?.dir || state?.autoDir) && <button type="button" className="btn" onClick={() => void api.now().then(s => { setState(s); if (!s.error) notify('Progress copy saved'); })}>Make a copy now</button>}
         {state?.dir && <button type="button" className="btn btn-ghost" onClick={() => run(api.clear)}>Stop copying to my folder</button>}
         {state && <button type="button" className="btn btn-ghost" onClick={() => run(() => api.setAuto(!state.autoDir))}>{state.autoDir ? 'Turn off the automatic copy' : 'Turn on the automatic copy'}</button>}
       </div>
@@ -128,7 +128,7 @@ export function SessionSection() {
 
 /** The resource journal: kept between sessions (30 days) separately for each character; here it can be cleared. */
 function LedgerBlock() {
-  const { summary, session, since, clearLedger } = usePlayerState();
+  const { summary, session, clearLedger } = usePlayerState();
   const [confirm, setConfirm] = useState(false);
   if (!summary.entries) {
     return <p className="muted small">The resource journal is empty: it fills while RuneLite is connected and is kept between sessions.</p>;
@@ -136,7 +136,7 @@ function LedgerBlock() {
   return (
     <div className="ledger-block">
       <p className="small">
-        <strong>Resource journal</strong> — entries {summary.entries}{since !== null ? `, since ${new Date(since).toLocaleDateString('en-US')}` : ''}. Coins +{formatGp(summary.coinsEarned)}, spent {formatGp(summary.coinsSpent)}
+        <strong>Resource journal</strong> — entries {summary.entries}. Coins +{formatGp(summary.coinsEarned)}, spent {formatGp(summary.coinsSpent)}
         {summary.estimatedLootValue > 0 ? `, loot ≈${formatGp(summary.estimatedLootValue)} gp (an estimate, not money)` : ''}.
         {session.entries > 0 && summary.entries > session.entries ? ` This session — ${session.entries}.` : ''}
       </p>

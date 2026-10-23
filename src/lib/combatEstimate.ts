@@ -40,7 +40,6 @@ export interface CombatFoe {
 }
 
 export const COMBAT_FOES = (combatFoesJson as { foes: CombatFoe[] }).foes;
-export const COMBAT_FOES_DATE = (combatFoesJson as { generatedAt: string }).generatedAt;
 /** Two inventory cells kept for potions/other supplies in the default training estimate. */
 export const DEFAULT_FOOD_SLOTS = 26;
 

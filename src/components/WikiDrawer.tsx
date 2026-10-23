@@ -175,14 +175,6 @@ function WikiDrawer({ target, onClose, onPin }: { target: Target | null; onClose
   );
 }
 
-function timeAgo(iso: string): string {
-  const min = Math.round((Date.now() - Date.parse(iso)) / 60000);
-  if (min < 1) return 'just now';
-  if (min < 60) return `${min} min ago`;
-  const h = Math.round(min / 60);
-  return h < 24 ? `${h} h ago` : new Date(iso).toLocaleDateString('en-US');
-}
-
 const gp = (n: number) => `${formatXp(n)} gp`;
 
 function ItemView({ query, label }: { query: string | number; label?: string }) {
@@ -232,7 +224,6 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
             <>
               <span className="tile-value">{gp(item.gePrice.buyPrice)}</span>
               <span className="tile-sub">buy · sell {gp(item.gePrice.sellPrice)}</span>
-              <span className="tile-sub">updated {timeAgo(item.gePrice.updatedAt)}</span>
             </>
           ) : (
             <span className="tile-sub">{status === 'loading' ? 'Loading the price…' : status === 'offline' || item.priceUnavailable ? 'No connection — the price is unavailable' : 'Not sold on the exchange'}</span>

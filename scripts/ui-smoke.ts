@@ -182,6 +182,8 @@ const text = async (page: Page, sel: string) => {
 };
 
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'date-proof') { await dateFreeSettingsScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await dateFreeSettingsScenarios(browser);
   if (process.env.UI_ONLY === 'tool-proof') { await toolProofScenarios(browser); return; }
   if (!process.env.UI_ONLY) await toolProofScenarios(browser);
   if (process.env.UI_ONLY === 'sync-proof') { await accountSyncProofScenarios(browser); return; }
@@ -2169,14 +2171,15 @@ async function gearScenarios(browser: Browser) {
       await shot(page, `none-${width}`);
       await page.context().close();
     }
-    // Offline with a snapshot: the last known gear of the character, with its time; no recommendation built on it.
+    // Offline with a snapshot: keep the character and stale-state disclosure, without rendering its internal timestamp.
     {
       const at = Date.now() - 3 * 3600_000;
       const snap = { byPlayer: { 'gear test': { at, player: 'Gear Test', gear: { equipment: [RUNE, STRENGTH], inventory: [], coins: 120, bankCoins: 4000 } } } };
       const { page, errors } = await open(browser, width, { offline: true, progress: progressBefore('S4-03'), localStorage: { 'osrs-put:active-step': 'S4-03', 'osrs-put:last-gear': JSON.stringify(snap) } }, '#/gear');
       await page.waitForTimeout(1200);
       const now = await text(page, '.gear-now');
-      expect(/Last known/.test(now) && /Gear Test/.test(now) && /Rune scimitar/.test(now) && /Amulet of strength/.test(now), `gear offline (${width} px): the last known gear, named and timed`);
+      expect(/Last known/.test(now) && /Gear Test/.test(now) && /Rune scimitar/.test(now) && /Amulet of strength/.test(now), `gear offline (${width} px): the last known gear is named`);
+      expect(!/\b\d{1,2}\/\d{1,2}\/\d{4}\b/.test(now), `gear offline (${width} px): the snapshot date is not rendered`);
       expect(await page.locator('.gear-worn-list.is-stale').count() === 1, `gear offline (${width} px): the snapshot looks like one`);
       expect(await page.locator('.gear-reco').count() === 0 && await page.locator('.gear-connect').count() === 0, `gear offline (${width} px): no recommendation from old data, no second notice`);
       expect(await noOverflow(page), `gear offline (${width} px): no horizontal scroll`);
@@ -2242,13 +2245,31 @@ async function magicFundingScenarios(browser: Browser) {
   }
 }
 
+async function dateFreeSettingsScenarios(browser: Browser) {
+  for (const width of [390, 1280]) {
+    const progress = { version: 3, steps: { 'S1-01': 'done' }, levels: {}, notes: { 'S1-01': 'Keep this note' }, updatedAt: '2001-02-03T04:05:06.000Z', gameMode: 'f2p' };
+    const { page, errors } = await open(browser, width, { offline: true, progress, localStorage: { 'osrs-put-settings-tab': 'progress' } }, '#/settings');
+    const transfer = page.locator('section').filter({ has: page.getByRole('button', { name: 'Export progress', exact: true }) });
+    expect(!/2001|changed \d/.test(await transfer.innerText()), `dates (${width}): the normal progress view omits its saved date`);
+    await page.locator('input[type="file"]').setInputFiles({ name: 'progress.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({ app: 'osrs-put', ...progress })) });
+    const preview = page.locator('.notice').filter({ hasText: 'In the file:' });
+    await preview.waitFor();
+    expect((await preview.innerText()).includes('1 done') && !/2001|saved \d/.test(await preview.innerText()), `dates (${width}): import still previews contents without exposing its date`);
+    await preview.getByRole('button', { name: 'Cancel', exact: true }).click();
+    const saved = await page.evaluate(() => JSON.parse((window as unknown as { __saved: string }).__saved));
+    expect(saved.updatedAt === progress.updatedAt && saved.notes['S1-01'] === 'Keep this note', `dates (${width}): internal save ordering metadata and notes remain intact`);
+    expect(await noOverflow(page) && !errors.length, `dates (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
 async function toolProofScenarios(browser: Browser) {
   for (const width of [390, 1280]) {
     const rows = PICKAXES.map(name => ({ name, carried: 0, noted: 0, bank: 0, exactCarried: 0, exactNoted: 0, exactBank: 0 }));
     const { page, errors } = await open(browser, width, {
       zen: true, progress: progressBefore('S1-12', { gameMode: 'f2p' }),
-      status: { protocol: 6, stats: { mining: 1 }, activeStepId: 'S1-12' },
-      events: [{ type: 'STATS', stats: { mining: 1 } }, { type: 'OWNED', bankSeen: true, items: [rows[0]] }],
+      status: { protocol: 6, stats: { mining: 6 }, activeStepId: 'S1-12' },
+      events: [{ type: 'STATS', stats: { mining: 6 } }, { type: 'OWNED', bankSeen: true, items: [rows[0]] }],
     }, '#/step/S1-12');
     const line = () => page.evaluate(() => {
       const posts = (window as unknown as { __posts: { path: string; body?: { plan?: { lines: { name: string; where: string; action?: string }[] } } }[] }).__posts;
@@ -2257,6 +2278,10 @@ async function toolProofScenarios(browser: Browser) {
     await page.waitForTimeout(900);
     const unreported = await line();
     expect(unreported?.where === 'UNKNOWN' && !/^(Buy|Withdraw) /i.test(unreported.action ?? ''), `tool proof (${width}): an absent bronze tier cannot invent a purchase while another usable tier is unread`);
+    const banked = [rows[0], { ...rows[1], bank: 1, exactBank: 1 }];
+    await page.evaluate(items => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items }), banked);
+    await page.waitForTimeout(900);
+    expect((await line())?.where === 'BANK', `tool proof (${width}): confirmed banked stock can cover the goal without checking every other tier`);
     await page.evaluate(items => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items }), rows);
     await page.waitForTimeout(900);
     expect((await line())?.where === 'MISSING', `tool proof (${width}): checking every eligible tier establishes a genuine shortage`);
