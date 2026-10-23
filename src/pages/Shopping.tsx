@@ -153,7 +153,9 @@ export function ShoppingPage() {
   }, [tracked, trackedLevel, questDone]);
 
   const built = useMemo(() => {
-    const onGe = (l: ShoppingLine) => l.id !== undefined && (gearById.get(l.id)?.tradeable ?? (Boolean(itemById.get(l.id)?.gePrice) || prices.idOf(l.nameEn) !== undefined));
+    // Missing prices/catalogue metadata cannot turn a known route item into "not sold".
+    // Explicit gear tradeability still wins; acquisition routing handles quest/free/in-step items.
+    const onGe = (l: ShoppingLine) => l.id !== undefined && (gearById.get(l.id)?.tradeable ?? true);
     try {
       const selected = [...(followed && scope !== 'range' ? [followed] : []), ...scopeSteps(scope, steps, progress, current, range)];
       const { list, trip } = scopeList(selected);

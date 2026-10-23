@@ -2469,6 +2469,7 @@ async function dossierQuoteScenarios(browser: Browser) {
     const row = page.locator('.search-hit.is-item').filter({ has: page.getByText('Lobster', { exact: true }) }).first();
     await row.waitFor({ state: 'visible' });
     const searchQuote = await row.locator('.search-hit-price').innerText();
+    expect(await row.evaluate(el => el.scrollWidth <= el.clientWidth + 1), `search quotes (${width}, ${quoteState}): labels fit inside the result row`);
     expect(unavailable ? searchQuote.includes('Price unavailable') : searchQuote.includes('GE estimate'), `search quotes (${width}, unavailable=${unavailable}): shared quote certainty`);
     if (quoteState === 'cached') expect(searchQuote.includes('Cached GE estimate'), `search quotes (${width}): old sides are explicitly cached`);
     await row.click();

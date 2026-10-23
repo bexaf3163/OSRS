@@ -4,6 +4,10 @@ Full requested specification: [OWNER_ARMOUR_PRICING_DATES_REQUEST.md](OWNER_ARMO
 
 Current source/evidence is summarized first in [CLAUDE_NEXT_SESSION.md](CLAUDE_NEXT_SESSION.md). Earlier CI receipts below remain historical boundaries; do not interpret their older pending-consumer lists as the current implementation state.
 
+### Shopping catalogue regression found by CI
+
+Checks40039220620 completed with six real Shopping failures at390/1440px: Energy potion packages and Clay stopped being purchase rows when mapping/quote metadata was unavailable. The migrated onGe fallback had mistaken unknown metadata for untradeability. Known route item IDs now retain market planning eligibility unless gear explicitly says untradeable; quest/free/in-step acquisition still uses the existing source router. Missing prices remain unavailable. The existing potion-dose/manual ownership and bridge purchase-count assertions are unchanged. Search price labels also wrap, and the browser checks internal result-row overflow. This source follows bc1ce847 and requires cumulative CI; no failed run is claimed green.
+
 ## Route price prose cleanup — source implemented
 
 Classified/removed historical GE unit prices and totals from81 nonempty route/quest/reference text fields. Fixed NPC prices, ship fees, tanning fees, quest rewards and currency goals remain. Removed fixed hide/ore quantities and claims that Magic training or a reward balance necessarily funds later purchases; existing Shopping/Money provide current quotes and confirmed cash instead. Alchemy copy includes all consumed rune costs. The generated active-step fixture was refreshed (72 prose fields across21 target rows); structural comparison proves route IDs, quantities, prerequisites, triggers and non-prose target fields are unchanged.
