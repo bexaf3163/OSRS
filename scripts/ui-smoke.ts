@@ -6,7 +6,7 @@
 import { spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { chromium, type Browser, type Page } from 'playwright';
-import { PICKAXES } from '../src/lib/toolTiers';
+import { PICKAXES } from '../src/lib/toolTiers.ts';
 
 const PORT = 4179;
 const BASE = `http://127.0.0.1:${PORT}/`;
