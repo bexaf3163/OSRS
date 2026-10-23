@@ -46,6 +46,8 @@ export interface UpgradeRecommendation {
   approxCost?: number;
   shopPrice?: number;
   gePrice?: number;
+  geQuote?: import('../lib/itemPrice').ItemPrice;
+  priceLabel?: string;
   efficiencyBoost?: string;
   npc?: string;
   shop?: string;
@@ -64,6 +66,7 @@ export interface RouterInput {
   gear: GearState | null;
   dismissed?: readonly string[];
   gePrices?: ReadonlyMap<number, number>;
+  geQuotes?: ReadonlyMap<number, import('../lib/itemPrice').ItemPrice>;
   data?: ToolProgression;
   item?: (id: number) => WikiItemDetail | undefined;
 }
@@ -148,10 +151,17 @@ export function recommendFor(category: UpgradeCategory, input: RouterInput): Upg
     const price = shopPrice(target, item);
     if (price !== undefined) rec.shopPrice = price;
   }
-  const ge = target.itemId !== undefined ? input.gePrices?.get(target.itemId) : undefined;
+  const quote = target.itemId !== undefined ? input.geQuotes?.get(target.itemId) : undefined;
+  if (quote) rec.geQuote = quote;
+  const ge = input.geQuotes ? quote?.unit ?? undefined : target.itemId !== undefined ? input.gePrices?.get(target.itemId) : undefined;
   if (ge !== undefined) rec.gePrice = ge;
   const costs = [rec.shopPrice, rec.gePrice].filter((c): c is number => c !== undefined);
   if (costs.length) rec.approxCost = Math.min(...costs);
+  // Cost, seller and navigation must describe the same purchase.
+  if (ge !== undefined && (rec.shopPrice === undefined || ge < rec.shopPrice)) {
+    delete rec.shop; delete rec.npc; delete rec.city; delete rec.coords;
+    rec.priceLabel = quote?.label ?? 'GE estimate';
+  } else if (rec.shopPrice !== undefined) rec.priceLabel = 'NPC price';
 
   const coins = (input.gear.coins ?? 0) + (input.gear.bankCoins ?? 0);
   rec.coins = coins;

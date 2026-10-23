@@ -475,8 +475,9 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       key: `upgrade:${up.recommendedItem}`, name: up.recommendedItem, count: 1, exact: true,
       where: 'MISSING', have: { bag: null, noted: 0, bank: null, equipped: 0 }, toGet: 1, priority: 'OPTIMIZATION', timing: 'NOW',
       action: afford
-        ? { kind: 'UPGRADE', label: `Buy ${up.recommendedItem}${up.npc ? ` from ${up.npc}` : ''}${cost ? `, ~${gp(cost)} gp` : ''}`, ...(cost ? { price: cost } : {}), ...(nav ? { nav } : {}) }
-        : { kind: 'EARN', label: `${up.recommendedItem}: ~${gp(cost ?? 0)} gp needed, not enough yet` },
+        ? { kind: 'UPGRADE', label: `Buy ${up.recommendedItem}${up.npc ? ` from ${up.npc}` : ''}${cost ? `, ~${gp(cost)} gp${up.priceLabel ? ` (${up.priceLabel})` : ''}` : ', Price unavailable'}`, ...(cost ? { price: cost } : {}), ...(nav ? { nav } : {}) }
+        : { kind: 'EARN', label: `${up.recommendedItem}: ~${gp(cost ?? 0)} gp needed${up.priceLabel ? ` (${up.priceLabel})` : ''}, not enough yet` },
+      ...(!up.shop && up.geQuote ? { marketPrice: up.geQuote } : {}),
       why: [up.currentItem ? `Better than ${up.currentItem}` : '', up.reason ?? ''].filter(Boolean).join(' · ') || 'Faster than the current tool',
       usedIn: [step.id],
     });

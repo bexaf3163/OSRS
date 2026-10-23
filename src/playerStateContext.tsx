@@ -18,6 +18,7 @@ import { selectPlan, type PlanSelection } from './lib/combatRoute/selection';
 import { stepGoals } from './lib/combatEstimate';
 import { usePriceView } from './lib/funding/usePriceView';
 import type { PriceView } from './lib/funding/quotes';
+import { itemPrice } from './lib/itemPrice';
 import { useTradeRestriction } from './lib/useTradeRestriction';
 import type { Step } from './types';
 import { isClosed } from './lib/next-step';
@@ -27,7 +28,6 @@ import { nameKey } from './lib/checklist';
 import { buildPlayerState, diffPlayerState, heldOf, type PlayerState, type StateChange } from './lib/playerState';
 import { entriesFor, summarize, type LedgerEntry, type LedgerSummary } from './lib/ledger';
 import { buildPriceBook, reprice, type PriceBook } from './lib/priceBook';
-import { getAllPrices, getMapping, PRICE_TTL_MS } from './services/pricesApi';
 
 interface PlayerStateValue {
   state: PlayerState;
@@ -68,37 +68,19 @@ function foodOf(step: Step) {
 
 function foodPriceOf(step: Step, prices: PriceView): number | null {
   const food = foodOf(step);
-  return food ? prices.buy(food.nameEn)?.price ?? null : null;
+  return food ? itemPrice(prices, food.nameEn, food.wikiItemId, 1).unit : null;
 }
 
 const Ctx = createContext<PlayerStateValue | null>(null);
 
-/** The sell price by name: from the project item database (an estimate, not a fresh exchange price). */
-const SELL_PRICE = new Map<string, number>(items.flatMap((i) => (i.gePrice ? [[nameKey(i.nameEn), i.gePrice.sellPrice] as [string, number]] : [])));
-const BAKED = buildPriceBook(null, null, SELL_PRICE);
+const ITEM_IDS = new Map(items.map(i => [nameKey(i.nameEn), i.id]));
 
 /**
- * Fresh exchange prices: loaded when loot appears in the journal and refreshed every 5 minutes while the window is open. No network — the
- * project database prices stay (with a mark), and earlier fresh prices do not vanish after one failed attempt.
+ * The journal and travel read the shared board; they do not run a separate refresh loop.
  */
 function useLivePrices(needed: boolean): PriceBook {
-  const [book, setBook] = useState<PriceBook>(BAKED);
-  useEffect(() => {
-    // While there is no loot, fresh prices are not needed by anyone: we do not load ~1.5 MB for nothing.
-    if (!needed) return;
-    let dead = false;
-    const load = async () => {
-      if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return;
-      try {
-        const [live, mapping] = await Promise.all([getAllPrices(), getMapping()]);
-        if (!dead) setBook(buildPriceBook(live, mapping, SELL_PRICE));
-      } catch { /* the exchange is unavailable: the earlier prices stay */ }
-    };
-    void load();
-    const t = setInterval(() => void load(), PRICE_TTL_MS);
-    return () => { dead = true; clearInterval(t); };
-  }, [needed]);
-  return book;
+  const board = usePriceView(needed);
+  return useMemo(() => buildPriceBook(board, name => ITEM_IDS.get(nameKey(name))), [board]);
 }
 
 const SESSION_START = Date.now();
@@ -127,7 +109,7 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
   const [book, setBook] = useState<{ key: string; entries: LedgerEntry[] }>(() => ({ key, entries: loadLedger(ls(), key, Date.now()) }));
   if (book.key !== key) setBook({ key, entries: loadLedger(ls(), key, Date.now()) });
   const ledger = book.key === key ? book.entries : [];
-  const prices = useLivePrices(ledger.some((e) => e.name !== 'Coins' && (e.reason === 'LOOT' || e.reason === 'PICKUP')));
+  const prices = useLivePrices(state.connected || ledger.some((e) => e.name !== 'Coins' && (e.reason === 'LOOT' || e.reason === 'PICKUP')));
   const priceRef = useRef(prices);
   priceRef.current = prices;
   const prev = useRef<PlayerState | null>(null);

@@ -52,7 +52,7 @@ export function InventoryCleanup() {
           {actionable.length === 0 && <p className="muted small">Nothing in the bag stands out: everything is needed, always carried, or already handled.</p>}
           {actionable.length > 0 && (
             <>
-              {result.proceeds > 0 && <p className="small">If you sell every “Sell” line: about <strong>{formatGp(result.proceeds)} gp</strong> (an estimate from exchange prices, before tax).</p>}
+              {result.proceeds > 0 && <p className="small">If you sell every “Sell” line: about <strong>{formatGp(result.proceeds)} gp</strong> (current/cached GE sell estimates, before tax).</p>}
               <ul className="cleanup-list">{actionable.map(row)}</ul>
             </>
           )}

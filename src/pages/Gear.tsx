@@ -156,7 +156,7 @@ function Recommendation({ advice, stepId, onShow, priceUnknown, pricesFailed }: 
   }
   const next = advice.goals[0];
   const lock = advice.locked[0];
-  const why = priceUnknown
+  const why = advice.reserveUnknown ? 'Supply prices or ownership are not fully checked. Confirm Preparation before spending on upgrades.' : priceUnknown
     ? (pricesFailed ? 'The exchange prices did not load, so purchases cannot be judged against your money.' : 'The exchange prices are still loading.')
     : next
       ? (advice.reserve > 0 && advice.coins.total !== null && advice.coins.total < advice.reserve
@@ -193,7 +193,7 @@ export function GearPage() {
     return supplyReserve(rows, list.coins);
   }, [steps, progress, effectiveQp, dependencies, player, prices]);
 
-  const { advice, fightStep, pricesReady, pricesFailed } = useGearAdvice(null, { reserve });
+  const { advice, fightStep, pricesReady, pricesFailed } = useGearAdvice(null, { reserve: reserve.amount, reserveUnknown: !reserve.complete });
   const priceUnknown = !pricesReady && advice.goals.length > 0;
   const places = usePlaceMap();
   const lv = advice.levels;

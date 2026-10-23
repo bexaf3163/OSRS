@@ -29,6 +29,7 @@ interface Mock {
   marketUnavailable?: boolean;
   /** Scenario-specific quotes added to the recorded market fixture. */
   marketQuotes?: Record<string, { id: number; price: number }>;
+  marketAgeMinutes?: number;
   /** The plugin does not answer (RuneLite is not running). */
   offline?: boolean;
   /** A reachable bridge rejects the guide snapshot for its size. */
@@ -124,8 +125,9 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
     await page.route(/prices\.runescape\.wiki\/api\/v2\/osrs\/(latest|1h|mapping)/, (r) => {
       const kind = /\/osrs\/(latest|1h|mapping)/.exec(r.request().url())![1];
       const now = Math.floor(Date.now() / 1000);
+      const age = (mock.marketAgeMinutes ?? 1.5) * 60;
       if (kind === 'mapping') return r.fulfill({ json: Object.entries(rows).map(([name, x]) => ({ id: x.id, name, limit: x.limit ?? undefined, members: false })) });
-      if (kind === 'latest') return r.fulfill({ json: { data: mock.marketUnavailable ? {} : Object.fromEntries(Object.values(rows).map((x) => [x.id, { high: x.high, highTime: x.high === null ? null : now - 90, low: x.low, lowTime: x.low === null ? null : now - 120 }])) } });
+      if (kind === 'latest') return r.fulfill({ json: { data: mock.marketUnavailable ? {} : Object.fromEntries(Object.values(rows).map((x) => [x.id, { high: x.high, highTime: x.high === null ? null : now - age, low: x.low, lowTime: x.low === null ? null : now - age - 30 }])) } });
       return r.fulfill({ json: { timestamp: now, data: Object.fromEntries(Object.values(rows).map((x) => [x.id, { avgHighPrice: x.avgHigh, highPriceVolume: x.highVolume, avgLowPrice: x.avgLow, lowPriceVolume: x.lowVolume }])) } });
     });
   }
@@ -189,6 +191,10 @@ const text = async (page: Page, sel: string) => {
 };
 
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'shopping-quotes') { await shoppingQuoteScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await shoppingQuoteScenarios(browser);
+  if (process.env.UI_ONLY === 'journal-quotes') { await journalQuoteScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await journalQuoteScenarios(browser);
   if (process.env.UI_ONLY === 'dossier-quotes') { await dossierQuoteScenarios(browser); return; }
   if (!process.env.UI_ONLY) await dossierQuoteScenarios(browser);
   if (process.env.UI_ONLY === 'style-quotes') { await styleQuoteScenarios(browser); return; }
@@ -2406,18 +2412,66 @@ async function styleQuoteScenarios(browser: Browser) {
     expect(prices.length > 0 && (unavailable ? prices.every(p => p.includes('Price unavailable')) : prices.some(p => p.includes('GE estimate:'))),
       `style quotes (${width}, unavailable=${unavailable}): shared market estimates or honest quote absence`);
     expect(!(await text(page, '.style-gear')).includes('not sold at the exchange'), `style quotes (${width}): an unavailable quote cannot invent trade restrictions`);
+    expect((await text(page, '.magic-plan')).includes('Price unavailable for a complete option'), `Magic quotes (${width}, unavailable=${unavailable}): missing rune quotes keep the requirements visible`);
     expect(await noOverflow(page) && !errors.length, `style quotes (${width}): no overflow or console errors`);
     await page.context().close();
   }
 }
 
-async function dossierQuoteScenarios(browser: Browser) {
-  for (const width of [390, 1280]) for (const unavailable of [false, true]) {
+async function shoppingQuoteScenarios(browser: Browser) {
+  for (const width of [390, 1280]) for (const state of ['current', 'cached', 'missing']) {
     const { page, errors } = await open(browser, width, {
-      market: true, marketUnavailable: unavailable, progress: progressBefore('S4-04'),
+      market: true, marketUnavailable: state === 'missing', marketAgeMinutes: state === 'cached' ? 120 : undefined,
+      progress: progressBefore('S4-04'), localStorage: { 'osrs-put:active-step': 'S4-04', 'osrs-put:shopping-scope': 'step' },
+      status: { protocol: 6, inGame: true, player: 'Shopping Quotes', activeStepId: 'S4-04', coins: 100000, bankCoins: 0, equipment: [], inventory: [] },
+      events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Lobster', carried: 0, noted: 0, bank: 0 }] }],
+    }, '#/shopping');
+    const row = page.locator('.shop-item-row').filter({ has: page.getByText('Lobster', { exact: true }) }).first();
+    await row.waitFor({ state: 'visible' });
+    await page.waitForTimeout(700);
+    const quote = await row.locator('.shop-cost').innerText();
+    expect(state === 'missing' ? quote === 'Price unavailable' : quote.includes(state === 'cached' ? 'Cached GE estimate' : 'GE estimate'), `shopping quotes (${width}, ${state}): quantities use labelled market costs`);
+    if (state === 'missing') expect((await text(page, '.shop-page')).includes('without a price'), `shopping quotes (${width}): excluded costs are disclosed`);
+    expect(await noOverflow(page) && !errors.length, `shopping quotes (${width}, ${state}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function journalQuoteScenarios(browser: Browser) {
+  for (const width of [390, 1280]) for (const state of ['current', 'cached', 'missing']) {
+    const stamp = Date.now() - 60_000;
+    const rows = [{ name: 'Cowhide', quantityDelta: 10, reason: 'LOOT', timestamp: stamp, estimatedGpValue: 99999 }];
+    const { page, errors } = await open(browser, width, {
+      market: true, marketUnavailable: state === 'missing', marketAgeMinutes: state === 'cached' ? 120 : undefined,
+      localStorage: { 'osrs-put:profiles': JSON.stringify({ active: 'main', list: [{ id: 'main', name: 'Main', player: 'Alpha One' }] }),
+        'osrs-put:ledger:main:alpha one': JSON.stringify(rows) },
+      status: { protocol: 6, inGame: true, player: 'Alpha One' },
+    }, '#/journal/session');
+    await page.locator('.ledger-block').waitFor();
+    await page.waitForTimeout(700);
+    const body = await text(page, '.ledger-block');
+    expect(state === 'missing' ? body.includes('Price unavailable') && !body.includes('loot ≈') : body.includes('loot ≈') && body.includes('GE sell estimates'), `journal quotes (${width}, ${state}): quote certainty and no saved-value fallback`);
+    if (state === 'cached') expect(body.includes('cached'), `journal quotes (${width}): old side certainty is visible`);
+    expect(!/\d{2}:\d{2}|99,999/.test(body), `journal quotes (${width}, ${state}): no quote clock or stale recorded value`);
+    expect(await noOverflow(page) && !errors.length, `journal quotes (${width}, ${state}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function dossierQuoteScenarios(browser: Browser) {
+  for (const width of [390, 1280]) for (const quoteState of ['current', 'cached', 'missing']) {
+    const unavailable = quoteState === 'missing';
+    const { page, errors } = await open(browser, width, {
+      market: true, marketUnavailable: unavailable, marketAgeMinutes: quoteState === 'cached' ? 120 : undefined, progress: progressBefore('S4-04'),
     }, '#/step/S4-04');
-    await reveal(page, '.item-chip');
-    await page.locator('.item-chip', { hasText: 'Lobster' }).first().click();
+    await page.getByRole('button', { name: 'Search', exact: true }).click();
+    await page.locator('.search-input').fill('Lobster');
+    const row = page.locator('.search-hit.is-item').filter({ has: page.getByText('Lobster', { exact: true }) }).first();
+    await row.waitFor({ state: 'visible' });
+    const searchQuote = await row.locator('.search-hit-price').innerText();
+    expect(unavailable ? searchQuote.includes('Price unavailable') : searchQuote.includes('GE estimate'), `search quotes (${width}, unavailable=${unavailable}): shared quote certainty`);
+    if (quoteState === 'cached') expect(searchQuote.includes('Cached GE estimate'), `search quotes (${width}): old sides are explicitly cached`);
+    await row.click();
     const drawer = page.locator('dialog.drawer[open]');
     await drawer.waitFor({ timeout: 6000 });
     await page.waitForTimeout(700);
@@ -2425,6 +2479,7 @@ async function dossierQuoteScenarios(browser: Browser) {
     expect(unavailable ? quote.includes('Price unavailable') && !quote.includes(' gp') : quote.includes('GE estimate') && quote.includes('GE sell estimate'),
       `dossier quotes (${width}, unavailable=${unavailable}): current sides or quote absence, never a database fallback`);
     expect(!quote.includes('Not sold on the exchange'), `dossier quotes (${width}): no invented trade restriction`);
+    if (quoteState === 'cached') expect(quote.includes('Cached GE estimate') && quote.includes('Cached GE sell estimate'), `dossier quotes (${width}): cached buy and sell labels`);
     if (unavailable) expect(await drawer.locator('.alch-margin').count() === 0, `dossier quotes (${width}): no alchemy margin without the input prices`);
     expect(await noOverflow(page) && !errors.length, `dossier quotes (${width}): no overflow or console errors`);
     await page.context().close();

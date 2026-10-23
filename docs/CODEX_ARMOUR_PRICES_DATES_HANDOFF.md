@@ -52,6 +52,30 @@ Verified production source **9f37646ffdd373e65b4e5083d56b036717ecd8e3**: [Checks
 
 ## Remaining required work
 
+### Shopping quote and incomplete-budget follow-up (source implemented)
+
+Shopping now uses canonical shared quotes for items and actual potion packages, labels cached/indicative estimates, and shows unavailable quotes without a fabricated cost. Its catalogue knowledge follows the shared view/local tradeability metadata, not a private mount-only mapping request. GE costs cannot borrow an NPC price or revive baked values after a missing quote. Fixed verified NPC costs remain separate.
+
+Unknown ownership/unpriced required purchases cannot produce an "enough" budget. Gear page supply reserves now carry completeness; purchase recommendations wait while that reserve is unknown, while usable owned upgrades remain available. This guards the existing Gear page budget; default step/HUD gear hints still do not share a complete joint food/gear acquisition optimizer. Keep that broader T10 work open.
+
+Verification:71 focused tests plus TypeScript/build/data pass; full local1,860/1,866 with only six established sandbox failures. Six390/1280px Shopping cases cover current/cached/missing quotes and quantity costs. Final cumulative CI/live acceptance remains required.
+
+### Journal, cleanup and transport quote consumers (source implemented)
+
+The Journal and inventory cleanup now use the shared quote store rather than independent mount/refresh loops. Loot uses sell estimates; transport procurement uses separate buy estimates. Missing quotes exclude old recorded/database values; cached sale labels reach cleanup rows and the existing bounded HUD reason. The Journal discloses unpriced records and no longer displays a quote clock; internal ledger/quote timestamps remain. Local canonical item IDs work without a mapping response. Overflowing loot estimates are excluded. Combat food quotes also reject baked fallback values.
+
+Verification:95 focused tests; TypeScript/build/data pass. Full local1,857/1,863 pass with only six established sandbox failures. Six390/1280px Journal scenarios cover current/cached/missing quotes and no old saved-value fallback. Remote cumulative gates and real-game acceptance remain required. No changes to Java/network protocol, sale automation, route IDs or saves.
+
+### Search and tool-upgrade pricing (source implemented)
+
+Search subscribes only while open and uses the common quote labels. Tool upgrades share ID quotes instead of a private fetch loop. A cheaper GE estimate now also chooses the GE seller/navigation; previously affordability could use the GE price while the arrow still led to the dearer NPC. Fixed NPC costs remain fixed. Cached labels and market metadata reach the existing optional preparation action; preparation memoization includes the complete recommendation, so an unchanged numeric price cannot retain an obsolete source/label. No new panels were added.
+
+Verification:72 focused tests, TypeScript/build/data pass; cumulative local1,854/1,860 pass with only six established sandbox failures. Six search/dossier cases cover390/1280px current/cached/missing quotes. The previous CI43753ff8 browser attempt timed out clicking a hidden item chip; the scenario now opens the dossier through the real visible Search result and checks Search prices as well. No forced click or production visibility workaround was added. Remote cumulative acceptance remains pending.
+
+### Magic comparison pricing (source implemented)
+
+MagicPlan now subscribes to the shared quote board. Baked guide costs are rejected, cached estimates disclosed, and ranking is explicitly limited to completely quoted options. Missing rune/staff prices retain a visible explanation and spell requirements instead of silently hiding the calculation. Existing gross rune replacement costs, confirmed staff ownership and partial-cash caveats remain; this does not implement per-trip Magic supply batches. Unsafe/overflowing calculator inputs are rejected.39 focused tests plus TypeScript/build/data pass; browser missing-quote checks are added to the existing390/1280px scenarios. Cumulative CI and live acceptance remain required.
+
 ### Gear advice quote migration (source implemented)
 
 The gear input hook now subscribes to the shared board instead of fetching each gear item once on mount. Canonical ID acquisition quotes retain current/cached/indicative/unavailable labels through source selection, the existing Gear/step views and the single HUD hint. Missing quotes cannot borrow legacy numeric inputs or baked database prices; fixed NPC prices/tolls remain available. Gear's supply reserve also rejects baked market values. The existing melee analysis, ownership and quest proof, budget and ranking remain unchanged; this is not a full joint gear/food optimizer or a claim that every supply quote is known.

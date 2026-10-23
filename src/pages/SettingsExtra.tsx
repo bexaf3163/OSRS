@@ -9,6 +9,7 @@ import { sessionSummary } from '../lib/session';
 import { useStore } from '../store';
 import { usePlayerState } from '../playerStateContext';
 import { formatGp } from '../lib/shopping';
+import { priceNote } from '../lib/priceBook';
 import { percent, useUpdates } from '../lib/useUpdates';
 
 export function ProfilesSection() {
@@ -128,7 +129,7 @@ export function SessionSection() {
 
 /** The resource journal: kept between sessions (30 days) separately for each character; here it can be cleared. */
 function LedgerBlock() {
-  const { summary, session, clearLedger } = usePlayerState();
+  const { summary, session, clearLedger, prices } = usePlayerState();
   const [confirm, setConfirm] = useState(false);
   if (!summary.entries) {
     return <p className="muted small">The resource journal is empty: it fills while RuneLite is connected and is kept between sessions.</p>;
@@ -137,7 +138,8 @@ function LedgerBlock() {
     <div className="ledger-block">
       <p className="small">
         <strong>Resource journal</strong> — entries {summary.entries}. Coins +{formatGp(summary.coinsEarned)}, spent {formatGp(summary.coinsSpent)}
-        {summary.estimatedLootValue > 0 ? `, loot ≈${formatGp(summary.estimatedLootValue)} gp (an estimate, not money)` : ''}.
+        {summary.estimatedLootValue > 0 ? `, loot ≈${formatGp(summary.estimatedLootValue)} gp (an estimate, not money; ${priceNote(prices)})` : ''}.
+        {summary.unpricedLoot > 0 ? ` ${summary.unpricedLoot} loot records unpriced (Price unavailable).` : ''}
         {session.entries > 0 && summary.entries > session.entries ? ` This session — ${session.entries}.` : ''}
       </p>
       {confirm ? (

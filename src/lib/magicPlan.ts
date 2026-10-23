@@ -43,8 +43,9 @@ export function castCost(spell: Spell, staff: string | undefined, prices: PriceM
   for (const [rune, qty] of Object.entries(spell.runes)) {
     if (staff && rune === staff) continue;
     const p = prices.get(RUNE_IDS[rune]);
-    if (p === undefined) return null;
+    if (p === undefined || !Number.isSafeInteger(p) || p < 0) return null;
     sum += p * qty;
+    if (!Number.isSafeInteger(sum)) return null;
   }
   return sum;
 }
@@ -65,11 +66,13 @@ export interface PlanResult {
  * variant. null means a price of some rune (or the staff) is missing or there is nothing to hit with.
  */
 export function planFor(opt: PlanOption, fromXp: number, toLevel: number, prices: PriceMap, ownsStaff = false): PlanResult | null {
+  if (!Number.isFinite(fromXp) || !Number.isInteger(toLevel) || toLevel < 1 || toLevel > 99) return null;
   const target = xpForLevel(toLevel);
   const pool = SPELLS.filter((s) => opt.spells.includes(s.id)).sort((a, b) => a.level - b.level);
   const staff = opt.staff ? STAFFS[opt.staff] : undefined;
   const staffPrice = staff ? prices.get(staff.id) : 0;
   if (staff && staffPrice === undefined && !ownsStaff) return null;
+  if (!ownsStaff && staffPrice !== undefined && (!Number.isSafeInteger(staffPrice) || staffPrice < 0)) return null;
   let xp = Math.max(0, fromXp);
   const steps: PlanStep[] = [];
   let runesCost = 0;
@@ -85,12 +88,14 @@ export function planFor(opt: PlanOption, fromXp: number, toLevel: number, prices
     const c = castCost(spell, opt.staff, prices);
     if (c === null) return null;
     runesCost += c * n;
+    if (!Number.isSafeInteger(runesCost)) return null;
     casts += n;
     xp += n * spell.xp;
     const last = steps[steps.length - 1];
     if (last && last.spell.id === spell.id) last.casts += n; else steps.push({ spell, casts: n });
   }
   const staffCost = ownsStaff ? 0 : (staffPrice ?? 0);
+  if (!Number.isSafeInteger(runesCost + staffCost)) return null;
   return { option: opt, casts, steps, runesCost: Math.round(runesCost), staffCost, total: Math.round(runesCost) + staffCost, xpNeeded: Math.max(0, target - Math.max(0, fromXp)) };
 }
 
@@ -100,9 +105,9 @@ export function staffPayback(staffKey: string, spell: Spell, prices: PriceMap): 
   const price = prices.get(staff.id);
   const rune = prices.get(RUNE_IDS[staffKey]);
   const qty = spell.runes[staffKey];
-  if (price === undefined || rune === undefined || !qty) return null;
+  if (price === undefined || rune === undefined || !Number.isSafeInteger(price) || price < 0 || !Number.isSafeInteger(rune) || rune < 0 || !qty) return null;
   const perCast = rune * qty;
-  return perCast > 0 ? { perCast, casts: Math.ceil(price / perCast) } : null;
+  return Number.isSafeInteger(perCast) && perCast > 0 ? { perCast, casts: Math.ceil(price / perCast) } : null;
 }
 
 /** How many hides must be sold to cover the sum. */

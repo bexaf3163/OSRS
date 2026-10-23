@@ -298,6 +298,7 @@ export interface GearAdvice {
   coins: { bag: number | null; bank: number | null; total: number | null };
   /** Coins kept for the next steps' supplies, not spent on gear. */
   reserve: number;
+  reserveUnknown?: boolean;
   /** The attack of the first opponent, when the table knows it: defence is judged against its style. */
   incoming: FoeAttack | null;
   /** What the weapon was compared with: the step's opponents or a cow. */
@@ -338,6 +339,7 @@ export interface AdvisorInput {
   questsDone?: ReadonlySet<string>;
   /** Coins kept for the supplies the next steps need (food, runes): gear is bought only from what is left. */
   reserve?: number;
+  reserveUnknown?: boolean;
   data?: GearData;
 }
 
@@ -631,15 +633,15 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
     const top = choose(buys);
     // "Missing" — from the money to the purchase in this slot: a cheap sword now does not make the goal more expensive.
     const budget = left;
-    const affordable = total === null ? [] : buys.filter((b) => b.cost !== null && b.cost <= budget);
+    const affordable = total === null || input.reserveUnknown ? [] : buys.filter((b) => b.cost !== null && b.cost <= budget);
     const pick = affordable.length ? choose(affordable) : null;
     if (pick) {
       (slot === 'weapon' || slot === 'neck' ? actions : armour).push(pick);
       left -= pick.cost!;
     }
-    const topAffordable = top.cost !== null && total !== null && top.cost <= budget;
+    const topAffordable = !input.reserveUnknown && top.cost !== null && total !== null && top.cost <= budget;
     if (!topAffordable && (!pick || better(top, pick))) {
-      goals.push({ ...top, ...(top.cost !== null && total !== null ? { short: top.cost - budget } : {}) });
+      goals.push({ ...top, ...(!input.reserveUnknown && top.cost !== null && total !== null ? { short: top.cost - budget } : {}) });
     }
   }
 
@@ -705,6 +707,7 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
     equipped,
     coins: { bag, bank, total },
     reserve,
+    ...(input.reserveUnknown ? { reserveUnknown: true } : {}),
     incoming,
     foes,
     weaponNow,

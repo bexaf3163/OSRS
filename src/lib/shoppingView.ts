@@ -48,6 +48,7 @@ export interface ShopRow {
   action: string;
   unitPrice: number | null;
   cost: number | null;
+  priceLabel?: string;
   optional: boolean;
   reusable: boolean;
   /** Sold at the exchange: only these go into the exchange list. */
@@ -122,6 +123,7 @@ export interface RowContext {
   trip?: ReadonlyMap<string, number>;
   /** The exchange's buy side for one item by name: the sizes of a potion are priced one by one. Absent: only the line's own price is known. */
   priceOf?: (name: string) => number | null;
+  priceLabel?: (name: string, id?: number) => string;
   /** The game's quest points, for the guild shops (shopAccess.ts); absent or null: not known, such a shop is only "if …". */
   qp?: number | null;
 }
@@ -174,7 +176,7 @@ function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: R
   const detail = line.id !== undefined ? ctx.detail(line.id) : undefined;
   const plan = planSources({
     name: line.nameEn, need: missing, manualKey: line.key, ...(detail ? { detail } : {}),
-    ...(tradeable && ctx.gePrice(line) !== null ? { gePrice: ctx.gePrice(line)! } : {}), kinds: ['shop', 'ge', 'free', 'drop'], qp: ctx.qp ?? null,
+    gePrice: tradeable ? ctx.gePrice(line) : null, kinds: ['shop', 'ge', 'free', 'drop'], qp: ctx.qp ?? null,
   }, ctx.state);
   const src = plan.primary;
   const geOption = [plan.primary, ...plan.alternatives].find((o) => o?.kind === 'ge');
@@ -194,7 +196,7 @@ function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: R
   const maybe = [plan.primary, ...plan.alternatives].find((o) => o?.kind === 'shop' && o.access !== 'open');
   const orMaybe = maybe ? ` · or ${maybe.label}` : '';
   if (tradeable && src?.kind !== 'free') {
-    const unit = ctx.gePrice(line) ?? (src?.kind === 'shop' && src.access !== 'open' ? null : src?.price ?? null);
+    const unit = ctx.gePrice(line);
     return { ...base, qty: missing, channel: 'ge', action: `Buy at the Grand Exchange${also}`, unitPrice: unit, cost: unit === null ? null : unit * missing };
   }
   // A monster's drop table is a way to get an item, not a checked one (the item data does not say where the monster lives or whether a free account
@@ -266,7 +268,12 @@ function doseRow(line: ShoppingLine, optional: boolean, ctx: RowContext): ShopRo
 export function shopRows(list: ShoppingList, ctx: RowContext): ShopRow[] {
   // What every required line needs of its own item: an alternative stack serves another line only beyond that.
   const reserved = new Map(list.required.map((l) => [nameKey(l.nameEn), l.count]));
-  return [...list.required.map((l) => row(l, false, ctx, reserved)), ...list.recommended.map((l) => row(l, true, ctx, reserved))];
+  return [...list.required.map((l) => row(l, false, ctx, reserved)), ...list.recommended.map((l) => row(l, true, ctx, reserved))].map(r => {
+    if (!ctx.priceLabel || !r.tradeable || (r.channel !== 'ge' && r.channel !== 'unknown')) return r;
+    const labels = r.package ? r.package.lines.map(p => ctx.priceLabel!(p.name)) : [ctx.priceLabel(r.name, r.id)];
+    const priceLabel = r.cost === null ? 'Price unavailable' : labels.find(l => l.startsWith('Cached')) ?? labels.find(l => l.startsWith('Indicative')) ?? 'GE estimate';
+    return { ...r, priceLabel };
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -349,7 +356,7 @@ export function budgetOf(rows: readonly ShopRow[], coinsForSteps: number, coins:
   const funds = coins.bag !== null && coins.bank !== null ? coins.bag + coins.bank : coins.bag !== null && coins.bag >= need ? coins.bag : null;
   return {
     required, unpriced, unknownRows: unknown.length, unknownMax: unknown.reduce((a, r) => a + (r.cost ?? 0), 0), optional, coinsForSteps, funds,
-    shortfall: funds === null ? null : Math.max(0, need - funds),
+    shortfall: funds === null || ((unpriced > 0 || unknown.length > 0) && funds >= need) ? null : Math.max(0, need - funds),
   };
 }
 
@@ -440,8 +447,10 @@ export function geListText(title: string, rows: readonly ShopRow[], coinsForStep
  * Coins to keep for the supplies of a scope (food, runes, materials): the required purchases that are not worn gear. Gear advice spends only what
  * is left, so a marginal upgrade never takes the money for the food.
  */
-export function supplyReserve(rows: readonly ShopRow[], coinsForSteps = 0): number {
-  return coinsForSteps + rows
-    .filter((r) => !r.optional && (r.channel === 'ge' || r.channel === 'shop') && !wearable.has(nameKey(r.name)))
-    .reduce((a, r) => a + (r.cost ?? 0), 0);
+export function supplyReserve(rows: readonly ShopRow[], coinsForSteps = 0): { amount: number; complete: boolean } {
+  const supplies = rows.filter(r => !r.optional && !wearable.has(nameKey(r.name)) && (r.channel === 'ge' || r.channel === 'shop' || r.channel === 'unknown'));
+  return {
+    amount: coinsForSteps + supplies.filter(r => r.channel !== 'unknown').reduce((a, r) => a + (r.cost ?? 0), 0),
+    complete: supplies.every(r => r.channel !== 'unknown' && r.cost !== null),
+  };
 }

@@ -54,7 +54,7 @@ export interface GearAdviceView {
   pricesFailed: boolean;
 }
 
-export function useGearAdvice(step?: Step | null, opts: { reserve?: number } = {}): GearAdviceView {
+export function useGearAdvice(step?: Step | null, opts: { reserve?: number; reserveUnknown?: boolean } = {}): GearAdviceView {
   const { progress, mode, steps } = useStore();
   const { gear, stats, owned, questsDone } = useBridge();
   const board = usePriceView(true);
@@ -72,7 +72,8 @@ export function useGearAdvice(step?: Step | null, opts: { reserve?: number } = {
     routeNeeds: routeNeeds(steps, (id) => isClosed(progress, id)),
     foes: fightStep ? stepFoes(fightStep) : [],
     ...(opts.reserve ? { reserve: opts.reserve } : {}),
-  }), [progress, stats, gear, owned, mode, prices, steps, fightStep, opts.reserve, questsDone]);
+    ...(opts.reserveUnknown ? { reserveUnknown: true } : {}),
+  }), [progress, stats, gear, owned, mode, prices, steps, fightStep, opts.reserve, opts.reserveUnknown, questsDone]);
   const advice = useMemo(() => adviseGear(input), [input]);
   return { advice, input, fightStep, pricesReady: [...prices.values()].some(p => p.unit !== null), pricesFailed: board.status === 'offline' || board.status === 'baked' };
 }

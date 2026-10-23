@@ -104,7 +104,7 @@ export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
     plan(step, opts = {}) {
       const up = opts.upgrade;
       const rec = ctx.recovery && ctx.recovery.stepId === step.id ? ctx.recovery.recovery : null;
-      const key = `${step.id}:${opts.ahead ?? ''}:${up ? `${up.status}/${up.recommendedItem ?? ''}/${up.approxCost ?? ''}` : '-'}:${rec ? `${rec.reason}/${rec.since}` : '-'}`;
+      const key = `${step.id}:${opts.ahead ?? ''}:${up ? JSON.stringify(up) : '-'}:${rec ? `${rec.reason}/${rec.since}` : '-'}`;
       const hit = planMemo.get(key);
       if (hit) return hit;
       computed.plan++;

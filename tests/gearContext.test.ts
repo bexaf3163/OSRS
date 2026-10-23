@@ -30,6 +30,17 @@ const owned = (bank: Record<string, number>): OwnedState => ({
 });
 const all = (a: ReturnType<typeof adviseGear>): GearAction[] => [...a.actions, ...a.armour, ...a.goals];
 const spent = (a: ReturnType<typeof adviseGear>) => [...a.actions, ...a.armour].reduce((s, x) => s + (x.cost ?? 0), 0);
+
+it('holds purchases when supply costs are unknown but still recommends genuinely owned upgrades', () => {
+  const base = input({ levels: { attack: 5, strength: 5, defence: 1 }, gear: wearing(['Bronze sword'], 10000, 0), reserveUnknown: true });
+  const result = adviseGear(base);
+  expect(result.actions.filter(a => a.how === 'buy')).toEqual([]);
+  expect(result.armour.filter(a => a.how === 'buy')).toEqual([]);
+  expect(result.goals.length).toBeGreaterThan(0);
+  expect(result.goals.every(a => a.short === undefined)).toBe(true);
+  const hasUpgrade = adviseGear({ ...base, owned: owned({ 'Steel scimitar': 1 }) });
+  expect(hasUpgrade.actions.some(a => a.how === 'wear' && a.item.name === 'Steel scimitar')).toBe(true);
+});
 const prices = (list: Record<string, number>) => new Map(Object.entries(list).map(([n, p]) => [byName(n).id, p]));
 
 describe('amulets: strength against power, across levels, styles and opponents', () => {

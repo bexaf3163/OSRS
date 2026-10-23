@@ -2,7 +2,7 @@
 // Fixtures are built by hand from the route's own items (S3-08's Salmon, S4-05's tools) and a player state the game could send.
 
 import { describe, expect, it } from 'vitest';
-import { budgetOf, emptyStateOf, exchangePlan, geListText, ownershipOf, scopeList, scopeSteps, shopRows, syncLine, type ShopRow } from '../src/lib/shoppingView';
+import { budgetOf, budgetSum, emptyStateOf, exchangePlan, geListText, ownershipOf, scopeList, scopeSteps, shopRows, supplyReserve, syncLine, type ShopRow } from '../src/lib/shoppingView';
 import { aggregateShopping, type ShoppingLine } from '../src/lib/shopping';
 import { buildPlayerState } from '../src/lib/playerState';
 import { nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
@@ -119,6 +119,24 @@ describe('quantities across steps', () => {
 });
 
 describe('the budget', () => {
+  it('cannot replace a missing GE quote with a fixed NPC price or a baked item value', () => {
+    const rows = rowsOf([step('A', [item('Hammer', 1, { wikiItemId: 2347 })])], state(owned({ Hammer: [0, 0] })), {
+      gePrice: () => null, priceLabel: () => 'Price unavailable', detail: () => ({ ...itemById.get(2347)!, freeSpawns: [], dropSources: [] }),
+    });
+    expect(rows[0]).toMatchObject({ channel: 'ge', cost: null, unitPrice: null, priceLabel: 'Price unavailable' });
+    const budget = budgetOf(rows, 0, { bag: 10000, bank: 0 });
+    expect(budget).toMatchObject({ required: 0, unpriced: 1, shortfall: null });
+    expect(budgetSum(budget)).toBeNull();
+    expect(supplyReserve(rows)).toEqual({ amount: 0, complete: false });
+  });
+  it('keeps cached package prices labelled and unknown ownership out of a confirmed reserve', () => {
+    const rows = rowsOf([step('A', [item('Strength potion(4)', 1, { wikiItemId: 113 })])], state(owned({ 'Strength potion(4)': [0, 0], 'Strength potion(3)': [0, 0], 'Strength potion(2)': [0, 0], 'Strength potion(1)': [0, 0] })), { gePrice: () => 100, priceOf: () => 100, priceLabel: () => 'Cached GE estimate' });
+    expect(rows[0]).toMatchObject({ channel: 'ge', cost: 100, priceLabel: 'Cached GE estimate' });
+    expect(supplyReserve(rows)).toEqual({ amount: 100, complete: true });
+    const unchecked = rows.map(r => ({ ...r, channel: 'unknown' as const }));
+    expect(supplyReserve(unchecked)).toEqual({ amount: 0, complete: false });
+    expect(budgetOf(unchecked, 0, { bag: 10000, bank: 0 }).shortfall).toBeNull();
+  });
   const rows = rowsOf([step('A', [item('Salmon', 20, SALMON)], [item('Strength potion(4)', 1, { wikiItemId: 113 })])], state(owned({ Salmon: [0, 0], 'Strength potion(4)': [0, 0], 'Strength potion(3)': [0, 0], 'Strength potion(2)': [0, 0], 'Strength potion(1)': [0, 0] })));
 
   it('required and optional costs are apart; the shortfall needs both bag and bank coins', () => {
