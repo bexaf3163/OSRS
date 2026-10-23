@@ -2,7 +2,7 @@
 
 Full requested specification: [OWNER_ARMOUR_PRICING_DATES_REQUEST.md](OWNER_ARMOUR_PRICING_DATES_REQUEST.md). This follows the tool-requirement repair. It is not a claim that all three features are done.
 
-## Date presentation — source implemented, final CI pending
+## Date presentation — implemented and CI verified
 
 Removed calendar/snapshot dates from Gear's last-known header, Settings progress/import preview, backup metadata, Journal/Money totals, Money method verification, combat/food/spell references, StyleGear, travel reference metadata and Wiki item price timestamps. Source links, stale/offline Gear disclosure, counts and requirements remain. The backup action uses the existing toast to confirm success rather than displaying a date. No new panels.
 
@@ -12,7 +12,7 @@ Dead display-only date exports and the Wiki drawer's date-formatting helper were
 
 Browser regressions cover the real Settings save/import views at 390/1280px, confirm dates are absent while internal ordering timestamps/notes remain intact, and retain Gear's stale snapshot disclosure without its calendar date. No live-game acceptance is claimed.
 
-## Shared preparation pricing — source implemented, final CI pending
+## Shared preparation pricing — implemented and CI verified
 
 The existing quote store now feeds the shared readiness engine. Required-item chips, current sub-step items, preparation rows and the protocol-6 plan use a common market estimate. Physical quantities multiply the actual ID quote; cached/old-side and opposite-side estimates are labelled. Database planning fallbacks cannot appear as current quotes. Identified tradeable items without quotes say "Price unavailable"; unidentified/untradeable items receive no invented GE value. Potion doses remain priced as actual bottle packages by Shopping, not multiplied as bottles here.
 
@@ -23,6 +23,10 @@ The app sends an optional bounded price label in each preparation line. Java val
 Historical calendar dates and dated GE-price claims were also removed from route prose. Fixed quest cash rewards, tanning fees, training quantities, route IDs/triggers/requirements/pacing/carryover and all internal timestamps remain. Five generated active-target fixture descriptions were refreshed from production; structural comparison confirms only acquisition text changed. Undated hardcoded GE-price prose elsewhere still needs classification/migration.
 
 Validation: TypeScript/build and data checks pass (zero data errors/warnings). Local full suite: 1,824 pass / 1,830, with only the six known sandbox loopback/temporary-rename failures; maxWorkers=4 avoids an unrelated overloaded-worker import timeout seen on the first run. The Java suite is locally blocked by the same Gradle daemon loopback restriction. New pricing/engine/envelope focused coverage passes; browser scenarios at 390/1280px cover quantity costs, missing quotes, actual bridge parity and overflow. Final-tree GitHub Java/browser/portable gates remain required. No live game test is claimed.
+
+## Cumulative verification
+
+Verified production source **9f37646ffdd373e65b4e5083d56b036717ecd8e3**: [Checks run 40000648722](https://github.com/bexaf3163/OSRS/actions/runs/40000648722) passed all 1,830 Vitest tests/143 files, TypeScript/build, data validation (zero errors/warnings), full Java, complete Chromium smoke and isolated actual portable EXE checks. The 390/1280px price/absence, date-preservation and tool-uncertainty browser scenarios all passed. [Test portable](https://github.com/bexaf3163/OSRS/releases/download/audit-test-9f37646f/OSRS-Path-audit-test-9f37646f.exe), internal version2.74.3, SHA-256 **3f81d98d0dc4a542393cac622c32930311b5862ace36ad83320803f887b62ca3**; the asset digest matches the actual isolated-EXE test log. Stable/main publication remains held. This is automated/packaged verification, not live gameplay or completion of the broader audit. Later documentation-only corrections do not change that verified production tree.
 
 ## Remaining required work
 
@@ -35,3 +39,9 @@ Owner decision: accept owned equivalent/better armour and buy only needed upgrad
 1. Armour + Defence10: inspect the actual selected route/combat phase. Current Defence-first advice says affordable steel armour, with black optional; there is no verified mandatory black kit yet. Do not misrepresent a route recommendation as an OSRS quest prerequisite. Implement the owner's chosen black-kit preparation through existing structured goals/equipability/acquisition/bridge systems, preserving saved IDs, alternative owned gear, affordability and explicit restricted-build preferences. Resolve the exact pieces from the current plan before adding quantities; do not silently invent a full set.
 2. Prices: reuse `src/services/pricesApi.ts`. It already batches latest/mapping/hour feeds, caches, deduplicates concurrent calls, backs off after failures and retains side-specific quote timestamps. `buyPrice` can substitute an unavailable opposite side; full quote boards preserve actual missing sides. Audit every consumer before promising live acquisition costs. Distinguish GE estimates, fixed NPC shop prices/fees, planning assumptions and untradeable values. Keep current stock/unknown semantics and avoid new Java network fetches.
 3. Complete all requested app/bridge/HUD scenarios and cumulative CI, including stale/missing price behavior, affordability, below/at10Defence and preservation of internal timestamps. Stable release remains batched.
+
+## Armour continuation constraints
+
+The baseline slots discussed with the owner are head/body/legs/shield, with owned equivalent/better gear accepted. Existing gear.json supplies Black full helm 1165, Black platebody 1125, Black platelegs 1077 or plateskirt 1089, and Black kiteshield 1195, all requiring Defence10. Reuse those records and existing canWear/missingRequirements/relevantDefence checks rather than duplicating bonuses or unlocks. The OSRS Wiki Black equipment page confirms the Defence requirement: https://oldschool.runescape.wiki/w/Black_equipment. These are route preparation choices, not a game quest prerequisite.
+
+Do not satisfy an equipment phase from ownership alone: notes, banked gear, an unknown equipment snapshot or an unequipable higher tier are not worn protection. Train Defence before the equip phase, retain keepDefenceOne, preserve completed Attack goals/IDs/saves, and use current actually worn gear for combat estimates. The existing combat-plan phases, readiness engine and one snapshot/HUD must share the preparation action. Include acquisition/food-budget limits honestly; do not silently credit the benefit of unbought armour. This integration is not implemented yet.
