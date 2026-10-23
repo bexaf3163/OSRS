@@ -16,6 +16,10 @@ Unreadable progress pauses automatic progress writes while retaining any valid b
 - Full local thread-pool run: 1,798 passed, six failed out of 1,804. Four bridgeLimits failures are denied loopback connections; two existing atomic-write tests receive EPERM on temporary-file replacement, also reproduced by running that unchanged suite alone. Data validation has no errors/warnings. Preserve the gates and use CI to establish final native/browser acceptance.
 - The earlier sync-only CI passed Java and isolated portable gates, but the Ubuntu browser job timed out downloading fonts from its apt mirror. That is not browser acceptance for either block.
 
+## Final CI acceptance
+
+Final-code CI subsequently passed on c979e51380b28dcb3faf9fdf414ac3a10e21cad2: https://github.com/bexaf3163/OSRS/actions/runs/39990054347. All 1,804 Vitest tests, data validation, build/TypeScript, full Java, browser UI and isolated portable E2E passed. The actual EXE retained both unreadable native fixtures, attempted no replacement write, displayed the existing warnings and resumed normally after restoring readable files/reloading. Portable test digest: beaeee259daa5a436755963d36db72a0ef7c47086514f544b003e62719742f2e. Earlier local/first-run limitations above are historical, not unresolved CI failures. Stable publication is held for batching in draft PR #44.
+
 ## Still open
 
-Runtime changes to already-loaded native files, supported conflict-resolution UX, secondary-backup error reporting and broader T01 recovery remain open. No user save, installed app or live account was used for these tests. Batch publication is now permitted by the owner; do not label this revision released until its final-tree checks and portable release actually pass.
+Runtime changes to already-loaded native files, supported conflict-resolution UX, secondary-backup error reporting and broader T01 recovery remain open. No user save, installed app or live account was used for these tests. Batch publication is now permitted by the owner; do not label this revision a stable release until main publication and the regular portable release gates actually pass.

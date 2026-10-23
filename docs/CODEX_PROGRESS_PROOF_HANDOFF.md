@@ -14,4 +14,6 @@ Browser regression covers a fresh Goblin Diplomacy account at 390/1280px: only t
 
 ## Scope
 
+Final-code CI passed on c979e51380b28dcb3faf9fdf414ac3a10e21cad2: https://github.com/bexaf3163/OSRS/actions/runs/39990054347. All 1,804 Vitest tests/141 files, build/data/Java, browser and isolated portable gates passed. The real browser confirmed direct-only sync, preserved notes/skips and the dependency labels at both widths. Native read protection was added in a separate commit; see CODEX_NATIVE_READ_HANDOFF.md. Main/stable publication remains batched in draft PR #44; no live-account sync is claimed.
+
 No live-account progress was synchronized, no existing marks were rewritten or cleared, and no new in-game acceptance is claimed. Full native read-error handling, conflict resolution, runtime source changes and broader route/skill work remain open in the consolidated backlog. Keep the single HUD and minimal UI.
