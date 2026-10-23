@@ -2037,7 +2037,11 @@ async function combatRouteScenarios(browser: Browser) {
     await page.waitForTimeout(600);
     expect(await fold.evaluate((d) => (d as HTMLDetailsElement).open), `combat route (${width} px): the status line's "Why this plan?" opens the comparison itself`);
     const rows = await page.locator('.combat-plan-row').count();
-    expect(rows >= 4, `combat route (${width} px): the folded comparison includes training alternatives (${rows})`);
+    expect(rows >= 3 && await page.locator('.combat-plan-row', { hasText: 'The route as written' }).count() === 1
+      && await page.locator('.combat-plan-row', { hasText: 'Defence 20 first' }).count() === 1
+      && await page.locator('.combat-plan-row', { hasText: 'Defence 30 first' }).count() === 1
+      && await page.locator('.combat-plan-row', { hasText: 'Defence 10 first' }).count() === 0,
+      `combat route (${width} px): baseline and higher-Defence alternatives remain; common Defence 10 preparation is not duplicated (${rows})`);
     expect(!/Big bones bank quantity is not checked/.test(await text(page, '.combat-route')), `combat route (${width} px): an unreported item quantity is disclosed even when the bank was opened`);
     expect(!/drops sold about/.test(await text(page, '.combat-route')) && /Optional drops are not counted as income/.test(await text(page, '.combat-route')), `combat route (${width} px): XP-only plans do not advertise unscheduled loot sales`);
     expect(/Compared: .*Cow/.test(await text(page, '.combat-route')), `combat route (${width} px): it says what was compared`);

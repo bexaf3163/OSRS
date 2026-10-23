@@ -2,6 +2,8 @@
 
 ## Latest source follow-up: style gear prices (CI pending)
 
+Follow-up CI6d73dcc8 / run40009660396 passed full Java and isolated portable gates, and completed the entire browser suite. Only two assertions remained: the test still demanded at least4 comparison rows although the new common Defence10 prefix correctly removes the duplicate Defence10-first alternative, leaving the baseline and Defence20/30 alternatives. The test now checks those actual controls and explicitly rejects a duplicated Defence10-first row. Final cumulative CI is still required for this correction and the newer StyleGear block.
+
 Magic/Ranged gear now uses the shared quote board and current/cached/unavailable labels, with no private per-item fetch loop. A missing quote no longer claims an item is untradeable. Shared quest proof and physical-item eligibility are retained. The folded existing slot heuristic is unchanged; no full style DPS, complete bank comparison or ammunition budget is claimed. Read the Style gear quote integration section in [CODEX_ARMOUR_PRICES_DATES_HANDOFF.md](CODEX_ARMOUR_PRICES_DATES_HANDOFF.md). Local TS/build/data and35 focused tests pass; full local Vitest has1,830/1,836 passing with six known sandbox failures. New browser cases and final-tree CI/portable acceptance remain pending.
 
 ## Latest local source: structured armour preparation (acceptance pending)
