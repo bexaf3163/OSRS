@@ -14,6 +14,14 @@ Owned usable equivalents precede purchases. Current shared quotes can choose the
 
 Local verification: TypeScript/build and data checks pass (0 errors/warnings). Full Vitest: 1,830 pass of1,836; only the six established sandbox loopback/temporary-rename failures remain. Final equip-task follow-up: 21 focused tests and TypeScript pass. All production Java sources compile directly against cached dependencies; Checklist/HudModel focused JUnit tests pass (50). Full Gradle remains blocked by daemon loopback permissions. New 390/1280px browser scenarios cover carried equipment, actual snapshot flags, wear-to-training advancement and overflow; they still require execution in final CI, alongside the full Java/browser/isolated portable gates. No live gameplay verified. This source block is NOT in the previously linked9f37646f portable.
 
+## Style gear quote integration — source implemented, CI pending
+
+The existing Magic/Ranged equipment fold now reads the shared quote board through usePriceView and itemPrice. Its separate mount-only mapping/per-item fetch loop is gone; board refreshes update advice and displayed prices. Missing quotes do not revive database planning prices or claim the item is untradeable. Current/cached/unavailable estimates are labelled per item, including cached alternatives. The summary includes known purchases only, one item per slot; it is not a complete ammunition or trip budget.
+
+The fold also reuses gearQuestEvidence: a live incomplete quest overrides a stale route mark. Banknotes no longer count as wearable bag gear. The existing slot heuristic and fold remain; this is not full Magic/Ranged DPS, complete bank gear comparison or a new loadout planner. No HUD or save/protocol change.
+
+Local validation:35 focused style/price/quest-evidence tests pass, TypeScript/build and data checks pass (0 errors/warnings). Full Vitest:1,830/1,836 pass, with only the same six sandbox loopback/temporary-rename failures. Four browser scenarios cover390/1280px current/missing quotes and overflow; final browser/portable CI remains required. No live acceptance claimed.
+
 ## Date presentation — implemented and CI verified
 
 Removed calendar/snapshot dates from Gear's last-known header, Settings progress/import preview, backup metadata, Journal/Money totals, Money method verification, combat/food/spell references, StyleGear, travel reference metadata and Wiki item price timestamps. Source links, stale/offline Gear disclosure, counts and requirements remain. The backup action uses the existing toast to confirm success rather than displaying a date. No new panels.

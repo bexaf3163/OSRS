@@ -184,6 +184,8 @@ const text = async (page: Page, sel: string) => {
 };
 
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'style-quotes') { await styleQuoteScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await styleQuoteScenarios(browser);
   if (process.env.UI_ONLY === 'armour') { await armourPreparationScenarios(browser); return; }
   if (!process.env.UI_ONLY) await armourPreparationScenarios(browser);
   if (process.env.UI_ONLY === 'market-preparation') { await marketPreparationScenarios(browser); return; }
@@ -2373,6 +2375,26 @@ async function armourPreparationScenarios(browser: Browser) {
     expect(trained?.step?.pacing?.targetExp > 0 && !trained.step.checklist?.some((i: any) => i.equip), `armour (${width}): confirmed worn gear advances to training`);
     expect(trained?.step?.completionTrigger?.levels?.[0]?.level === 40 && !trained.step.completionTrigger?.items?.length, `armour (${width}): saved route completion remains Attack 40 only`);
     expect(await noOverflow(page) && !errors.length, `armour (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function styleQuoteScenarios(browser: Browser) {
+  for (const width of [390, 1280]) for (const unavailable of [false, true]) {
+    const stats = { magic: 10, attack: 1, defence: 1, ranged: 1 };
+    const { page, errors } = await open(browser, width, {
+      market: true, marketUnavailable: unavailable, progress: progressBefore('S2-04', { levels: stats }),
+      status: { protocol: 6, inGame: true, stats, coins: 10000, bankCoins: 0, equipment: [], inventory: [] },
+      events: [{ type: 'STATS', stats }],
+    }, '#/step/S2-04');
+    await reveal(page, '.style-gear summary');
+    await page.locator('.style-gear summary').click();
+    await page.waitForTimeout(800);
+    const prices = await page.locator('.style-market-price').allTextContents();
+    expect(prices.length > 0 && (unavailable ? prices.every(p => p.includes('Price unavailable')) : prices.some(p => p.includes('GE estimate:'))),
+      `style quotes (${width}, unavailable=${unavailable}): shared market estimates or honest quote absence`);
+    expect(!(await text(page, '.style-gear')).includes('not sold at the exchange'), `style quotes (${width}): an unavailable quote cannot invent trade restrictions`);
+    expect(await noOverflow(page) && !errors.length, `style quotes (${width}): no overflow or console errors`);
     await page.context().close();
   }
 }

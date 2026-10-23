@@ -91,7 +91,7 @@ export function adviseStyle(inp: StyleInput): SlotPick[] {
       const have = o.names.find((n) => inp.worn.has(n)) ?? o.names.find((n) => inp.bag.has(n));
       if (have) { chosen = { slot, name: have, status: inp.worn.has(have) ? 'worn' : 'bag', price: null }; break; }
       const priced = o.names.map((n) => ({ name: n, price: inp.price(n) })).filter((x): x is { name: string; price: number } => x.price !== null);
-      if (!priced.length) { chosen = { slot, name: o.names[0], status: 'find', price: null, note: 'not sold at the exchange: obtained in the game' }; break; }
+      if (!priced.length) { chosen = { slot, name: o.names[0], status: 'find', price: null, note: 'No market quote: check the price or acquisition details before buying' }; break; }
       let best = priced.reduce((a, b) => (b.price < a.price ? b : a));
       // With Fire Strike (Magic 13) the staff of fire replaces three fire runes per cast — we take it if affordable, not the cheapest of the four.
       const fire = priced.find((x) => x.name === 'Staff of fire');

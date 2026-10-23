@@ -83,6 +83,8 @@ describe('equipment advisor', () => {
   it('an item without an exchange price — "find", not "buy"', () => {
     const picks = adviseStyle(base({ style: 'magic', levels: { magic: 40, attack: 40 }, price: () => null }));
     expect(pick(picks, 'weapon')).toMatchObject({ name: "Bryophyta's staff", status: 'find' });
+    expect(pick(picks, 'weapon').note).toContain('No market quote');
+    expect(pick(picks, 'weapon').note).not.toContain('not sold');
   });
   it('magic 30 but attack 10 — we do not advise Bryophyta\'s staff', () => {
     const picks = adviseStyle(base({ style: 'magic', levels: { magic: 30, attack: 10 } }));

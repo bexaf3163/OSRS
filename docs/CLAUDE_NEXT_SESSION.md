@@ -1,5 +1,9 @@
 # Claude continuation — start here
 
+## Latest source follow-up: style gear prices (CI pending)
+
+Magic/Ranged gear now uses the shared quote board and current/cached/unavailable labels, with no private per-item fetch loop. A missing quote no longer claims an item is untradeable. Shared quest proof and physical-item eligibility are retained. The folded existing slot heuristic is unchanged; no full style DPS, complete bank comparison or ammunition budget is claimed. Read the Style gear quote integration section in [CODEX_ARMOUR_PRICES_DATES_HANDOFF.md](CODEX_ARMOUR_PRICES_DATES_HANDOFF.md). Local TS/build/data and35 focused tests pass; full local Vitest has1,830/1,836 passing with six known sandbox failures. New browser cases and final-tree CI/portable acceptance remain pending.
+
 ## Latest local source: structured armour preparation (acceptance pending)
 
 CI receipt for source06d450325d42c84bebb157faef696bce3ecd49e1: run40006124537 passed all1,836 Vitest tests, TypeScript/build/data, full Java and the actual isolated portable EXE. Browser checks passed the wear-to-training transitions at390/1280px, but failed two scope assertions (upcoming supplies were counted as current armour) and stopped at an assumed default-plan status link. The follow-up scopes the assertion to NOW armour, verifies no armour withdrawal, and explicitly chooses an alternative when testing the intentionally hidden baseline banner. Full corrected CI remains required; no gate was removed and no production behavior was changed for these test assumptions.
