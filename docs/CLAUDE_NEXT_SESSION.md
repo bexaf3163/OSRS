@@ -93,6 +93,8 @@ The existing quote provider's stale-on-refresh-failure and ID-without-name-mappi
 
 ## Concrete follow-ups to reproduce before fixing
 
+- Dossier/alchemy source now shares market quotes and labels cached/missing values; no baked GE fallback, private dossier price loop or invented complete alchemy profit. See CODEX_ARMOUR_PRICES_DATES_HANDOFF.md for exact scope and outstanding browser acceptance. Gear advice, MagicPlan and the other price consumers still require migration.
+
 - Account Sync inference and StepCard prerequisite coloring are repaired in the 2.74.3 proof block; consult CODEX_PROGRESS_PROOF_HANDOFF.md and its exact CI/release evidence before treating publication as accepted. Broader native progress recovery remains open.
 - Generic skill-method tool conversion and family uncertainty are repaired in the unreleased tool block; consult CODEX_METHOD_TOOLS_HANDOFF.md and its final CI status before extending Mining/Woodcutting handovers. Special-tool eligibility remains open.
 - A remaining GearHintSync non-melee mismatch is only a candidate; require a real non-melee step with foes before calling it a confirmed defect.

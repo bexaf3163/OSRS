@@ -2,18 +2,19 @@
 // Grand Exchange prices, whether the Al Kharid gate is free, what the route will still buy and who the step fights. The analysis itself is a
 // pure function adviseGear; here is only the gathering of inputs.
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import type { Progress, Step } from '../types';
 import { useStore } from '../store';
 import { useBridge } from '../bridge';
 import { isClosed, isCompleted, questDependencyFacts } from './next-step';
-import { getGePrice } from '../services/pricesApi';
+import { usePriceView } from './funding/usePriceView';
+import type { PriceView } from './funding/quotes';
+import { itemPrice, type ItemPrice } from './itemPrice';
 import { adviseGear, gearData, routeNeeds, stepFoes, type AdvisorInput, type GearAdvice } from '../services/gearAdvisor';
 
-/** The Grand Exchange prices of all gear items. The price service downloads them as one file and keeps them for 5 minutes. */
-async function loadGearPrices(): Promise<Map<number, number>> {
-  const rows = await Promise.all(gearData.items.filter((i) => i.tradeable).map(async (i) => [i.id, (await getGePrice(i.id))?.buyPrice] as const));
-  return new Map(rows.filter((r): r is readonly [number, number] => typeof r[1] === 'number' && r[1] > 0));
+/** Keep quote certainty with each canonical gear ID; database planning values are not acquisition quotes. */
+export function gearMarketPrices(board: PriceView): ReadonlyMap<number, ItemPrice> {
+  return new Map(gearData.items.filter(i => i.tradeable).map(i => [i.id, itemPrice(board, i.name, i.id, 1)]));
 }
 
 /** Who to compare weapons against: a step with opponents uses its own; otherwise the nearest unfinished combat step; otherwise nobody (a cow). */
@@ -56,16 +57,8 @@ export interface GearAdviceView {
 export function useGearAdvice(step?: Step | null, opts: { reserve?: number } = {}): GearAdviceView {
   const { progress, mode, steps } = useStore();
   const { gear, stats, owned, questsDone } = useBridge();
-  const [prices, setPrices] = useState<ReadonlyMap<number, number>>(new Map());
-  const [pricesFailed, setPricesFailed] = useState(false);
-
-  useEffect(() => {
-    let alive = true;
-    loadGearPrices()
-      .then((m) => { if (alive) { setPrices(m); setPricesFailed(false); } })
-      .catch(() => { if (alive) setPricesFailed(true); });
-    return () => { alive = false; };
-  }, []);
+  const board = usePriceView(true);
+  const prices = useMemo(() => gearMarketPrices(board), [board]);
 
   const fightStep = fightStepFor(steps, progress, step);
   const input = useMemo<AdvisorInput>(() => ({
@@ -74,12 +67,12 @@ export function useGearAdvice(step?: Step | null, opts: { reserve?: number } = {
     gear,
     owned,
     mode,
-    gePrices: prices,
+    geQuotes: prices,
     ...gearQuestEvidence(steps, progress, questsDone),
     routeNeeds: routeNeeds(steps, (id) => isClosed(progress, id)),
     foes: fightStep ? stepFoes(fightStep) : [],
     ...(opts.reserve ? { reserve: opts.reserve } : {}),
   }), [progress, stats, gear, owned, mode, prices, steps, fightStep, opts.reserve, questsDone]);
   const advice = useMemo(() => adviseGear(input), [input]);
-  return { advice, input, fightStep, pricesReady: prices.size > 0, pricesFailed };
+  return { advice, input, fightStep, pricesReady: [...prices.values()].some(p => p.unit !== null), pricesFailed: board.status === 'offline' || board.status === 'baked' };
 }

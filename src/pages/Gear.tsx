@@ -14,6 +14,7 @@ import { useGearAdvice } from '../lib/gearAdvice';
 import { nextStep } from '../lib/next-step';
 import { scopeList, scopeSteps, shopRows, supplyReserve } from '../lib/shoppingView';
 import { usePriceView } from '../lib/funding/usePriceView';
+import { itemPrice } from '../lib/itemPrice';
 import { itemById } from '../data';
 import {
   actionNav, equippedBySlot, gainText, gearData, SLOT_LABEL, SLOTS, statsText, type Equipped, type GearAction, type GearAdvice,
@@ -187,7 +188,7 @@ export function GearPage() {
     const { list, trip } = scopeList(scopeSteps('trip', steps, progress, current, { from: 1, to: 1, openOnly: true }));
     const rows = shopRows(list, {
       state: player, trip, detail: (id) => itemById.get(id),
-      onGe: (l: ShoppingLine) => l.id !== undefined, gePrice: (l) => prices.buy(l.nameEn, l.id)?.price ?? null,
+      onGe: (l: ShoppingLine) => l.id !== undefined, gePrice: (l) => itemPrice(prices, l.nameEn, l.id, 1).unit,
     });
     return supplyReserve(rows, list.coins);
   }, [steps, progress, effectiveQp, dependencies, player, prices]);

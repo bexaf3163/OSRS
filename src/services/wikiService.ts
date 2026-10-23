@@ -1,5 +1,5 @@
 // An item and NPC dossier for the built-in wiki inspector.
-// First the local database (f2p-items.json), then a live wiki search. Exchange prices are always live.
+// First the local database (f2p-items.json), then a wiki search. UI market estimates use the shared quote board.
 
 import type { WikiItemDetail } from '../types';
 import { itemById, items } from '../data';
@@ -19,20 +19,21 @@ export function findLocalItem(query: string | number): WikiItemDetail | undefine
 
 /** A dossier with the exchange price. No price because it is not traded and no price because there is no connection are different things. */
 async function withPrice(d: WikiItemDetail): Promise<WikiItemDetail> {
+  const { gePrice: _referencePrice, priceUnavailable: _previousFailure, ...metadata } = d;
   try {
     const p = await getGePrice(d.id);
-    return p ? { ...d, gePrice: p } : d;
+    return p ? { ...metadata, gePrice: p } : { ...metadata, priceUnavailable: true };
   } catch {
-    return { ...d, priceUnavailable: true };
+    return { ...metadata, priceUnavailable: true };
   }
 }
 
 const remote = new Map<string, Promise<WikiItemDetail | null>>();
 
 /** An item dossier: the local database + a fresh price, otherwise a live wiki search. */
-export async function getItemDetail(query: string | number): Promise<WikiItemDetail | null> {
+export async function getItemDetail(query: string | number, opts: { prices?: boolean } = {}): Promise<WikiItemDetail | null> {
   const local = findLocalItem(query);
-  if (local) return withPrice(local);
+  if (local) return opts.prices === false ? local : withPrice(local);
   if (typeof query === 'number') return null;
   const key = fold(query.trim());
   if (!remote.has(key)) {
@@ -46,7 +47,7 @@ export async function getItemDetail(query: string | number): Promise<WikiItemDet
     remote.set(key, p);
   }
   const d = await remote.get(key)!;
-  return d ? withPrice(d) : null;
+  return d ? opts.prices === false ? d : withPrice(d) : null;
 }
 
 const npcs = new Map<string, Promise<NpcInfo | null>>();

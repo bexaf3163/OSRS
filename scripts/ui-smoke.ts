@@ -27,6 +27,8 @@ interface Mock {
   market?: boolean;
   /** The item catalogue is available but market quotes are missing. */
   marketUnavailable?: boolean;
+  /** Scenario-specific quotes added to the recorded market fixture. */
+  marketQuotes?: Record<string, { id: number; price: number }>;
   /** The plugin does not answer (RuneLite is not running). */
   offline?: boolean;
   /** A reachable bridge rejects the guide snapshot for its size. */
@@ -116,6 +118,9 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
   if (mock.market) {
     type Row = { id: number; limit: number | null; high: number | null; low: number | null; avgHigh: number | null; avgLow: number | null; highVolume: number; lowVolume: number };
     const rows = (JSON.parse(readFileSync(new URL('../tests/funding/fixtures/market-2026-10-18.json', import.meta.url), 'utf8')) as { items: Record<string, Row> }).items;
+    for (const [name, quote] of Object.entries(mock.marketQuotes ?? {})) rows[name] = {
+      id: quote.id, limit: 100, high: quote.price, low: quote.price, avgHigh: quote.price, avgLow: quote.price, highVolume: 1000, lowVolume: 1000,
+    };
     await page.route(/prices\.runescape\.wiki\/api\/v2\/osrs\/(latest|1h|mapping)/, (r) => {
       const kind = /\/osrs\/(latest|1h|mapping)/.exec(r.request().url())![1];
       const now = Math.floor(Date.now() / 1000);
@@ -184,6 +189,8 @@ const text = async (page: Page, sel: string) => {
 };
 
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'dossier-quotes') { await dossierQuoteScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await dossierQuoteScenarios(browser);
   if (process.env.UI_ONLY === 'style-quotes') { await styleQuoteScenarios(browser); return; }
   if (!process.env.UI_ONLY) await styleQuoteScenarios(browser);
   if (process.env.UI_ONLY === 'armour') { await armourPreparationScenarios(browser); return; }
@@ -2388,6 +2395,7 @@ async function styleQuoteScenarios(browser: Browser) {
     const stats = { magic: 10, attack: 1, defence: 1, ranged: 1 };
     const { page, errors } = await open(browser, width, {
       market: true, marketUnavailable: unavailable, progress: progressBefore('S2-04', { levels: stats }),
+      marketQuotes: { 'Staff of fire': { id: 1387, price: 1500 }, 'Amulet of magic': { id: 1727, price: 700 } },
       status: { protocol: 6, inGame: true, stats, coins: 10000, bankCoins: 0, equipment: [], inventory: [] },
       events: [{ type: 'STATS', stats }],
     }, '#/step/S2-04');
@@ -2399,6 +2407,26 @@ async function styleQuoteScenarios(browser: Browser) {
       `style quotes (${width}, unavailable=${unavailable}): shared market estimates or honest quote absence`);
     expect(!(await text(page, '.style-gear')).includes('not sold at the exchange'), `style quotes (${width}): an unavailable quote cannot invent trade restrictions`);
     expect(await noOverflow(page) && !errors.length, `style quotes (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function dossierQuoteScenarios(browser: Browser) {
+  for (const width of [390, 1280]) for (const unavailable of [false, true]) {
+    const { page, errors } = await open(browser, width, {
+      market: true, marketUnavailable: unavailable, progress: progressBefore('S4-04'),
+    }, '#/step/S4-04');
+    await reveal(page, '.item-chip');
+    await page.locator('.item-chip', { hasText: 'Lobster' }).first().click();
+    const drawer = page.locator('dialog.drawer[open]');
+    await drawer.waitFor({ timeout: 6000 });
+    await page.waitForTimeout(700);
+    const quote = await drawer.locator('.tile-ge').innerText();
+    expect(unavailable ? quote.includes('Price unavailable') && !quote.includes(' gp') : quote.includes('GE estimate') && quote.includes('GE sell estimate'),
+      `dossier quotes (${width}, unavailable=${unavailable}): current sides or quote absence, never a database fallback`);
+    expect(!quote.includes('Not sold on the exchange'), `dossier quotes (${width}): no invented trade restriction`);
+    if (unavailable) expect(await drawer.locator('.alch-margin').count() === 0, `dossier quotes (${width}): no alchemy margin without the input prices`);
+    expect(await noOverflow(page) && !errors.length, `dossier quotes (${width}): no overflow or console errors`);
     await page.context().close();
   }
 }

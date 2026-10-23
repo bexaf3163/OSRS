@@ -52,6 +52,18 @@ Verified production source **9f37646ffdd373e65b4e5083d56b036717ecd8e3**: [Checks
 
 ## Remaining required work
 
+### Gear advice quote migration (source implemented)
+
+The gear input hook now subscribes to the shared board instead of fetching each gear item once on mount. Canonical ID acquisition quotes retain current/cached/indicative/unavailable labels through source selection, the existing Gear/step views and the single HUD hint. Missing quotes cannot borrow legacy numeric inputs or baked database prices; fixed NPC prices/tolls remain available. Gear's supply reserve also rejects baked market values. The existing melee analysis, ownership and quest proof, budget and ranking remain unchanged; this is not a full joint gear/food optimizer or a claim that every supply quote is known.
+
+Verification:73 focused tests, TypeScript/build/data pass; full local1,844/1,850 pass with only the six established sandbox failures. Cumulative CI40035960809 passed full Java and isolated portable, but browser had two new StyleGear fixture failures: the recorded market contains no magic equipment quotes. Scenario-specific Staff of fire/Amulet of magic quotes now exercise actual current prices; assertions remain unchanged. Final cumulative browser/portable gates are still required.
+
+### Item dossier and alchemy follow-up (source implemented)
+
+WikiDrawer uses the shared quote board for buy and sell estimates; metadata loading no longer fetches a private price. Sell estimates disclose tax exclusion. Missing quotes never fall back to the database's old GE values or mean an item is untradeable. The legacy metadata enrichment also discards baked values after a failed lookup. Alchemy displays a margin only when both item and Nature-rune costs are known, labels cached inputs, and explicitly excludes fire-rune costs. Invalid/unsafe numeric inputs cannot generate a margin. No new panels or Java provider were added.
+
+Verification: 43 focused tests pass; TypeScript/build/data pass (zero data errors/warnings). Full local suite: 1,841/1,847 pass; only the six established sandbox loopback/rename failures remain. Four browser scenarios cover the dossier at390/1280px with current/missing quotes; these require remote CI. No live-game acceptance is claimed.
+
 Pricing foundation follow-up: the shared quote store now marks retained boards stale after an offline response or thrown refresh, preserving quote timestamps and allowing recovery back to live. Previously it kept a live label after both failures. Explicit item-ID pricing can also read a valid quote when the separate name-mapping request is unavailable. Three focused pricing suites pass (35 tests), with before-fix reproductions. This is a correctness repair to the existing provider, not completion of all price consumers. The later preparation/Java presentation block is described above.
 
 Local foundation validation: TypeScript/build and data checks pass; 1,814 of 1,820 tests pass, with only the same six independently reproduced sandbox network/rename failures. This pricing follow-up is newer than the tool/date CI revision and must receive final-tree CI before publication. Existing deliberately labelled baked planning estimates are not yet removed from all consumers; do not present them as live prices.

@@ -10,7 +10,7 @@ import { useFeatures } from '../lib/features';
 import { isClosed } from '../lib/next-step';
 import { formatGp } from '../lib/shopping';
 import { meleeHintApplies, useGearAdvice } from '../lib/gearAdvice';
-import { actionNav, gainText, missingText, sourceText, type GearAction, type GearAdvice, type Source } from '../services/gearAdvisor';
+import { actionNav, gainText, missingText, sourceText, type GearAction, type GearAdvice } from '../services/gearAdvisor';
 import type { Foe } from '../types';
 import { NavigateButton } from './NavigateButton';
 import { PlaceButton, PlaceMapView, usePlaceMap } from './PlaceMap';
@@ -51,14 +51,14 @@ export function ActionSource({ a, onShow }: { a: GearAction; onShow: ReturnType<
           {s.toll ? <span className="muted"> (+{s.toll} gp toll into Al Kharid)</span> : null}
         </>
       ) : (
-        <>Grand Exchange{s.kind === 'ge' && s.price !== undefined ? <> · ~{formatGp(s.price)} gp</> : <span className="muted"> · the price did not load</span>}</>
+        <span title={s.kind === 'ge' ? s.priceDetail : undefined}>{sourceText(s)}</span>
       )}
       {alt && <span className="muted"> · or {altText(alt)}</span>}
     </>
   );
 }
 
-const altText = (s: Source) => (s.kind === 'ge' ? (s.price !== undefined ? `on the exchange ~${formatGp(s.price)} gp` : 'on the exchange') : sourceText(s));
+const altText = sourceText;
 
 /** Marks: the item is bought on the route anyway, a two-handed weapon. */
 export function ActionNotes({ a }: { a: GearAction }) {
