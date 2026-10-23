@@ -3,7 +3,7 @@
 Audit baseline: 2.73.0, `0b9e2a2262166898efe40d9fe374591869d32819`. Implementation baseline: Claude's 2.74.0, `4be6f94f20489a2bf711be45570f7cf168e8c6d4`.
 This is the English implementation ledger for the independent audit and comparison of all 30 Gemini finding groups. It is not a command to apply Gemini's proposed patches verbatim. Reproduce each finding against the current tree before changing it.
 
-Current work and evidence are in [the stabilization handoff](CODEX_STABILIZATION_HANDOFF.md). **Partial means acceptance remains open.** No entry promises zero regressions.
+Current baseline/evidence and next actions are in [CLAUDE_NEXT_SESSION.md](CLAUDE_NEXT_SESSION.md); older implementation details remain in [the stabilization handoff](CODEX_STABILIZATION_HANDOFF.md). Release2.74.2 is published: S4-03 is Attack40 without a bone quota, surface frogs/early Defence are compared, and Gear/Skills quest evidence, Shopping scope and HUD collection semantics are repaired. Broader work below remains partial; do not resurrect closed S4-03 goals from historical examples. **Partial means acceptance remains open.** No entry promises zero regressions.
 
 ## Work items
 
