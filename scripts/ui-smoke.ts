@@ -2268,6 +2268,7 @@ async function toolProofScenarios(browser: Browser) {
     const rows = PICKAXES.map(name => ({ name, carried: 0, noted: 0, bank: 0, exactCarried: 0, exactNoted: 0, exactBank: 0 }));
     const { page, errors } = await open(browser, width, {
       zen: true, progress: progressBefore('S1-12', { gameMode: 'f2p' }),
+      localStorage: { 'osrs-put:active-step': 'S1-12' },
       status: { protocol: 6, stats: { mining: 6 }, activeStepId: 'S1-12' },
       events: [{ type: 'STATS', stats: { mining: 6 } }, { type: 'OWNED', bankSeen: true, items: [rows[0]] }],
     }, '#/step/S1-12');
@@ -2277,6 +2278,7 @@ async function toolProofScenarios(browser: Browser) {
     });
     await page.waitForTimeout(900);
     const unreported = await line();
+    if (!unreported) console.log('tool proof: missing snapshot line', await page.evaluate(() => (window as unknown as { __posts: unknown[] }).__posts.slice(-8)));
     expect(unreported?.where === 'UNKNOWN' && !/^(Buy|Withdraw) /i.test(unreported.action ?? ''), `tool proof (${width}): an absent bronze tier cannot invent a purchase while another usable tier is unread`);
     const banked = [rows[0], { ...rows[1], bank: 1, exactBank: 1 }];
     await page.evaluate(items => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items }), banked);
