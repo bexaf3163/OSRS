@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { createQuoteStore } from '../../src/lib/funding/quoteStore';
 import type { MappingRow, QuoteBoard } from '../../src/services/pricesApi';
+import { buildPriceView } from '../../src/lib/funding/quotes';
 
 const board = (status: QuoteBoard['status'], tag = 0): QuoteBoard => ({ at: 1_000 + tag, hourAt: 1_000 + tag, quotes: new Map(), status });
 const mapping = new Map<number, MappingRow>();
@@ -66,8 +67,30 @@ describe('the shared quote board: one fetch loop for every screen', () => {
     const off = store.subscribe(() => undefined);
     await flush();
     await vi.advanceTimersByTimeAsync(300_000);
-    expect(store.getState().board?.status).toBe('live');
+    expect(store.getState().board?.status).toBe('stale');
     expect(store.getState().board?.at).toBe(1_001);
+    off();
+  });
+
+  it('a thrown refresh marks retained quotes stale and recovery restores live confidence', async () => {
+    const first: QuoteBoard = { ...board('live', 1), quotes: new Map([[1, {
+      id: 1, high: { price: 100, at: 1_001 }, low: { price: 95, at: 1_001 }, hour: null,
+    }]]) };
+    const { loader } = loaderOf([first, new Error('network'), { ...first, at: 2_000 }]);
+    const store = createQuoteStore(loader, 300_000, () => true);
+    const off = store.subscribe(() => undefined);
+    await flush();
+    await vi.advanceTimersByTimeAsync(300_000);
+    const cached = store.getState().board!;
+    expect(cached.status).toBe('stale');
+    expect(cached.at).toBe(first.at);
+    expect(cached.quotes).toBe(first.quotes);
+    expect(first.status).toBe('live');
+    const view = buildPriceView({ board: cached, mapping: new Map([[1, { name: 'Test item' }]]), baked: new Map(), now: 1_001 });
+    expect(view.buy('Test item', 1)).toMatchObject({ price: 100, confidence: 'LOW' });
+    expect(view.buy('Test item', 1)?.notes.join(' ')).toContain('earlier prices');
+    await vi.advanceTimersByTimeAsync(300_000);
+    expect(store.getState().board?.status).toBe('live');
     off();
   });
 

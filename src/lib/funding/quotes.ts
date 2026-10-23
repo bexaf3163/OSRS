@@ -196,7 +196,7 @@ export function buildPriceView(i: ViewInput): PriceView {
       if (!have || limit > have.limit) byName.set(k, { id, limit });
     }
   }
-  const usable = i.board !== null && i.board.status !== 'offline' && i.board.quotes.size > 0 && i.mapping !== null;
+  const usable = i.board !== null && i.board.status !== 'offline' && i.board.quotes.size > 0;
   const status: PriceStatus = usable ? i.board!.status : 'baked';
   const bakedOf = (name: string, side: 'buy' | 'sell'): UnitPrice | null => {
     const b = i.baked.get(nameKey(name));

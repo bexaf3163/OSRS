@@ -36,10 +36,13 @@ export function createQuoteStore(loader: Loader = real, ttl = PRICE_TTL_MS, visi
         loader.board({ volumes: true }),
         state.mapping ? Promise.resolve(state.mapping) : loader.mapping().catch(() => null),
       ]);
-      // A failed refresh keeps the earlier board (marked stale by the service) instead of replacing it with an empty one.
-      const keep = board.status === 'offline' && state.board && state.board.status !== 'offline' ? state.board : board;
+      // Preserve quotes and their original age, but never keep a live label after a failed refresh.
+      const keep = board.status === 'offline' && state.board && state.board.status !== 'offline'
+        ? { ...state.board, status: 'stale' as const, error: board.error ?? 'Prices unavailable' } : board;
       set({ board: keep, mapping: mapping ?? state.mapping, loading: false });
-    })().catch(() => set({ ...state, loading: false })).finally(() => { inflight = null; });
+    })().catch(() => set({ ...state, loading: false, board: state.board && state.board.status !== 'offline'
+      ? { ...state.board, status: 'stale', error: 'Prices unavailable' } : state.board,
+    })).finally(() => { inflight = null; });
     return inflight;
   }
 
