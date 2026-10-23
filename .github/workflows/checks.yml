@@ -8,7 +8,9 @@ on:
 jobs:
   checks:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    # Chromium dependencies can consume ten minutes on a slow apt mirror.
+    # Leave time for the full browser suite after installation; no gate is skipped.
+    timeout-minutes: 25
     env:
       # Electron is not needed for the checks — we do not download its binary.
       ELECTRON_SKIP_BINARY_DOWNLOAD: '1'
