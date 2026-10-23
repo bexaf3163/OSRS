@@ -6,7 +6,7 @@
 // looks at a stub on a free port (OSRS_PUT_BRIDGE_PORT) — it does not go to the player's real plugin.
 
 import { spawn, spawnSync, type ChildProcess } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmdirSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, renameSync, rmdirSync, rmSync, writeFileSync } from 'node:fs';
 import http from 'node:http';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
@@ -248,6 +248,41 @@ try {
     expect(readFileSync(profilesFile, 'utf8') === raw, 'profile protection: the native original survives browser mirroring and status sync');
     expect(await page.locator('.profile-storage-warning').count() === 1, 'profile protection: the actual EXE shows the recovery warning');
     expect(JSON.parse(readFileSync(join(dataDir, 'progress.json'), 'utf8')).levels?.magic !== 99, 'profile protection: live levels do not enter a protected character profile');
+  }
+
+  // An existing unreadable native source must not look like a fresh install. A directory
+  // at the file path causes a real EISDIR on both CI platforms without altering user ACLs.
+  // Every path below is inside this run's disposable data directory.
+  status.stats.magic = 25;
+  writeFileSync(profilesFile, JSON.stringify(profiles), 'utf8');
+  await page.evaluate(savedProfiles => localStorage.setItem('osrs-put:profiles', JSON.stringify(savedProfiles)), profiles);
+  await page.reload();
+  await page.waitForTimeout(2500);
+  for (const target of [file, profilesFile]) {
+    const held = `${target}.read-test`;
+    if (dirname(resolve(target)) !== resolve(dataDir) || existsSync(held)) throw new Error('Unsafe native read fixture path');
+    await page.evaluate(() => (window as unknown as { osrsDesktop: { loadProgressFile(): string | null } }).osrsDesktop.loadProgressFile());
+    const original = readFileSync(target, 'utf8');
+    renameSync(target, held);
+    mkdirSync(target);
+    const marker = join(target, 'preserved.txt');
+    writeFileSync(marker, 'Do not replace this unreadable source');
+    try {
+      await page.reload();
+      await page.waitForTimeout(2500);
+      const warning = target === file ? '.progress-storage-warning' : '.profile-storage-warning';
+      expect(await page.locator(warning).count() === 1, `native read failure (${basename(target)}): the real shell pauses saving`);
+      expect(readFileSync(marker, 'utf8') === 'Do not replace this unreadable source', `native read failure (${basename(target)}): the unreadable original is untouched`);
+      expect(readFileSync(held, 'utf8') === original, `native read failure (${basename(target)}): the fixture preserves all saved bytes`);
+      expect(!existsSync(`${target}.tmp`), `native read failure (${basename(target)}): no replacement write is attempted`);
+    } finally {
+      rmSync(marker);
+      rmdirSync(target);
+      renameSync(held, target);
+    }
+    await page.reload();
+    await page.waitForTimeout(2500);
+    expect(await page.locator('.progress-storage-warning, .profile-storage-warning').count() === 0, `native read recovery (${basename(target)}): readable sources resume normally after reload`);
   }
 
   expect(!errors.length, `console: no errors ${errors.join('; ')}`);

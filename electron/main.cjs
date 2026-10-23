@@ -9,7 +9,7 @@ const path = require('node:path');
 const { registerBridge } = require('./runelite-bridge.cjs');
 const { createLauncher } = require('./runelite-launcher.cjs');
 const { createUpdater } = require('./updater.cjs');
-const { backupProgress, dailyBackup, latestCopy, readProgress, restoreFromCopies } = require('./progress-files.cjs');
+const { backupProgress, dailyBackup, latestCopy, readProgressResult, restoreFromCopies } = require('./progress-files.cjs');
 const { atomicWrite } = require('./atomic-write.cjs');
 const { createProgressWriter } = require('./progress-writer.cjs');
 
@@ -148,7 +148,7 @@ if (!app.requestSingleInstanceLock()) {
   });
   ipcMain.on('progress:load', (e, profileId) => {
     flushProgress();
-    e.returnValue = readProgress(app.getPath('userData'), new Date(), progressFile(profileId), true);
+    e.returnValue = readProgressResult(app.getPath('userData'), new Date(), progressFile(profileId));
   });
   ipcMain.on('progress:save', (_e, json, profileId) => {
     progressWriter.queue(progressFile(profileId), json);
@@ -160,7 +160,7 @@ if (!app.requestSingleInstanceLock()) {
   // The list of profiles lives in the window's storage; a file beside the progress keeps it if the storage is gone.
   ipcMain.on('profiles:load', (e) => {
     flushProgress();
-    e.returnValue = readProgress(app.getPath('userData'), new Date(), 'profiles.json', true);
+    e.returnValue = readProgressResult(app.getPath('userData'), new Date(), 'profiles.json');
   });
   ipcMain.on('profiles:save', (_e, json) => {
     progressWriter.queue('profiles.json', json);

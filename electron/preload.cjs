@@ -3,6 +3,16 @@
 
 const { contextBridge, ipcRenderer } = require('electron');
 
+function loadSaved(channel, ...args) {
+  const result = ipcRenderer.sendSync(channel, ...args);
+  // Retain the old successful string/null contract; new handlers send a physical read receipt.
+  if (result === null || typeof result === 'string') return result;
+  if (result?.ok !== true || !(result.text === null || typeof result.text === 'string')) {
+    throw new Error('The saved data file could not be read. Automatic saving must stay paused.');
+  }
+  return result.text;
+}
+
 contextBridge.exposeInMainWorld('osrsDesktop', {
   getZoom: () => ipcRenderer.invoke('zoom:get'),
   setZoom: (settings) => ipcRenderer.send('zoom:set', { zoom: Number(settings.zoom), autoZoom: Boolean(settings.autoZoom) }),
@@ -13,11 +23,11 @@ contextBridge.exposeInMainWorld('osrsDesktop', {
     return () => ipcRenderer.removeListener('zoom:changed', listener);
   },
   // Synchronous: the progress is needed before the first render, otherwise an empty one would flash.
-  loadProgressFile: (profileId) => ipcRenderer.sendSync('progress:load', String(profileId ?? 'main')),
+  loadProgressFile: (profileId) => loadSaved('progress:load', String(profileId ?? 'main')),
   saveProgressFile: (json, profileId) => ipcRenderer.send('progress:save', String(json), String(profileId ?? 'main')),
   saveProgressFileChecked: (json, profileId) => ipcRenderer.invoke('progress:save-checked', String(json), String(profileId ?? 'main')),
   // The profile list as a file next to the progress (the window's storage can be lost).
-  loadProfilesFile: () => ipcRenderer.sendSync('profiles:load'),
+  loadProfilesFile: () => loadSaved('profiles:load'),
   saveProfilesFile: (json) => ipcRenderer.send('profiles:save', String(json)),
   saveProfilesFileChecked: (json) => ipcRenderer.sendSync('profiles:save-checked', String(json)),
   // Progress copies: automatic (outside the app folder) and into the chosen folder.

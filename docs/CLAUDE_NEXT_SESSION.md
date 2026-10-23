@@ -1,8 +1,10 @@
 # Claude continuation — start here
 
-## Current block: 2.74.3 — progress proof
+## Current unreleased blocks: 2.74.3 — progress proof and native reads
 
 Account Sync no longer promotes convenience-route ancestors to game-confirmed completion. Mixed item/retained-stock goals remain unverified; pure finite level goals still sync. StepCard dependency labels use the same evidence as blockers, including live quest precedence and consumer-specific skill equivalence. Notes, skips, saves and the separate explicit manual-review option remain intact. See [CODEX_PROGRESS_PROOF_HANDOFF.md](CODEX_PROGRESS_PROOF_HANDOFF.md). The stable baseline below remains 2.74.2 until this revision passes CI and portable publication.
+
+Native progress/profile read errors now reach the existing recovery guards instead of looking like missing files; only ENOENT authorizes a fresh source. See [CODEX_NATIVE_READ_HANDOFF.md](CODEX_NATIVE_READ_HANDOFF.md). Focused native/recovery/profile tests pass (91); new packaged read-error scenarios await CI. The earlier sync-only CI passed Java/portable but its browser-dependency download timed out. Do not claim full acceptance from that run.
 
 ## Verified baseline and working policy (updated 2026-10-23)
 
@@ -14,7 +16,7 @@ Resume from the latest remote main in bexaf3163/OSRS. Verified application relea
 - Release: https://github.com/bexaf3163/OSRS/actions/runs/39689971634 — success.
 - Acceptance: 1,783 Vitest tests/139 files, TypeScript/build, data validation 0 errors/warnings, full Java suite (604 tests), browser UI, source Electron E2E and isolated portable EXE gates passed. Automated fixtures are not live gameplay.
 
-Owner policy: complete one small repair, update this file, pass relevant tests and cumulative release gates, then publish to main without force and with a new coordinated portable version when application/plugin behavior changes. Do not overwrite an existing release. Documentation-only handoff corrections do not require rebuilding the application. Keep implemented, automated, packaged, live and open evidence separate. No claim that all T01–T17 or old blocks 2b–5 are complete.
+Owner policy: make small repairs in separate commits, update this file and pass relevant tests and cumulative release gates. The owner now permits batching publication while work continues to reduce overhead. Publish to main without force and with a new coordinated portable version when application/plugin behavior changes; do not overwrite an existing release. Documentation-only handoff corrections do not require rebuilding the application. Keep implemented, automated, packaged, live and open evidence separate. No claim that all T01–T17 or old blocks 2b–5 are complete.
 
 This main document supersedes older attached release handoff snapshots. Read project rules and root CLAUDE_REDESIGN_HANDOFF.md; consult individual handoffs as needed rather than rereading every historical branch.
 

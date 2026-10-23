@@ -21,14 +21,16 @@ function parses(text) {
  * The progress file text or null if there is no file or it is broken. A broken file is not deleted: its copy
  * stays nearby as progress.broken-<time>.json (the last three are kept).
  * includeInvalid lets the renderer distinguish damage from an absent file and pause automatic saves; the original text is returned unchanged.
+ * Read errors other than ENOENT are thrown; they never prove that a source is missing.
  */
 function readProgress(dir, now = new Date(), name = 'progress.json', includeInvalid = false) {
   const target = path.join(dir, name);
   let text;
   try {
     text = fs.readFileSync(target, 'utf8');
-  } catch {
-    return null;
+  } catch (error) {
+    if (error.code === 'ENOENT') return null;
+    throw error; // An unreadable source is unknown, not permission to start saving over it.
   }
   if (parses(text)) return text;
   try {
@@ -41,6 +43,12 @@ function readProgress(dir, now = new Date(), name = 'progress.json', includeInva
     // The copy failed — the file stays in place until the next write.
   }
   return includeInvalid ? text : null;
+}
+
+/** IPC cannot reliably propagate thrown synchronous handler errors. Keep failure distinct from a missing file. */
+function readProgressResult(dir, now = new Date(), name = 'progress.json') {
+  try { return { ok: true, text: readProgress(dir, now, name, true) }; }
+  catch { return { ok: false, error: 'READ_FAILED' }; }
 }
 
 /** A copy of the whole progress file before the first write of the session: progress.bak.json. A broken file does not become the copy. */
@@ -168,4 +176,4 @@ function restoreFromCopies(dir, source, replaceOlder = false) {
   return done;
 }
 
-module.exports = { readProgress, backupProgress, dailyBackup, latestCopy, restoreFromCopies };
+module.exports = { readProgress, readProgressResult, backupProgress, dailyBackup, latestCopy, restoreFromCopies };
