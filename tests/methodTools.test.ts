@@ -4,7 +4,8 @@ import { AXES, PICKAXES } from '../src/lib/toolTiers';
 import { methodToolNames, withTrainingMethod } from '../src/lib/methodStep';
 import { preflightItems, nameKey, type OwnedState } from '../src/lib/checklist';
 import { emptyProgress } from '../src/lib/progress';
-import { stepReadiness } from '../src/lib/readiness';
+import { contextOf, stepReadiness } from '../src/lib/readiness';
+import { createReadinessEngine } from '../src/lib/readinessEngine';
 import { toInGameTarget } from '../src/services/runeliteBridge';
 import type { Step } from '../src/types';
 
@@ -55,6 +56,23 @@ describe('generic training tool requirements', () => {
   });
   it('unreported alternatives remain unknown even when the bronze tool is confirmed absent', () => {
     expect(toolRow('mining', 41, null, 'carried', false)?.state).toBe('UNKNOWN');
+  });
+  it('the shared preparation plan can withdraw a confirmed banked tier but cannot buy an unverified remainder', () => {
+    const selected = withTrainingMethod(training('mining'), 'mi-ore');
+    const owned: OwnedState = { bankSeen: true, items: new Map([
+      ['bronze pickaxe', { name: 'Bronze pickaxe', carried: 0, noted: 0, bank: 0 }],
+      ['rune pickaxe', { name: 'Rune pickaxe', carried: 0, noted: 0, bank: 1 }],
+    ]) };
+    for (const count of [1, 2]) {
+      const step = { ...selected, itemsRequired: selected.itemsRequired!.map(r => ({ ...r, amount: count })) };
+      const engine = createReadinessEngine(contextOf({ step, steps: [step], progress: emptyProgress(), qp: 100,
+        mode: 'f2p', stats: { mining: 41, attack: 1 }, owned, gear: null }));
+      const line = engine.plan(step).lines.find(l => l.name === 'Bronze pickaxe')!;
+      expect(line.where).toBe(count === 1 ? 'BANK' : 'UNKNOWN');
+      expect(line.have.bank).toBeNull(); // The full family total remains unknown; one observed tool still covers this trip.
+      expect(line.toGet).toBe(count === 1 ? 1 : null);
+      expect(line.action?.kind).toBe(count === 1 ? 'TAKE' : 'CONNECT');
+    }
   });
   it('a method from another skill cannot replace the authored step requirements or destination', () => {
     const step = training('woodcutting');

@@ -328,11 +328,13 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       notedPool -= fromNotes;
       rest -= fromNotes;
       let fromBank = 0;
-      if (rest > 0 && known && bankKnown) {
+      if (rest > 0 && known) {
         fromBank = Math.min(bankPool, rest);
         bankPool -= fromBank;
         rest -= fromBank;
-        g.missing += rest;
+        // Spend the confirmed lower bound even when other tiers/sources are unread.
+        if (bankKnown) g.missing += rest;
+        else g.unknown += rest;
       } else if (rest > 0) {
         g.unknown += rest;
       }
