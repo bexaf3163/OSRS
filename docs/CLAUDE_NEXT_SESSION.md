@@ -1,6 +1,8 @@
 # Claude continuation — start here
 
-## Current unreleased blocks: 2.74.3 — progress proof and native reads
+## Current unreleased blocks: 2.74.3 — progress proof, native reads and tool requirements
+
+The next separate repair projects generic method tool needs into the existing checklist/watch pipeline and preserves UNKNOWN for unreported usable tool tiers. It also rejects cross-skill method picks. See [CODEX_METHOD_TOOLS_HANDOFF.md](CODEX_METHOD_TOOLS_HANDOFF.md). Local focused tests pass (136); full local run has 1,811 passing and six known sandbox failures out of 1,817. Build/data checks pass. This newer code still requires its own final-tree GitHub gates; the CI evidence below applies to the earlier progress/native-read revision only.
 
 Account Sync no longer promotes convenience-route ancestors to game-confirmed completion. Mixed item/retained-stock goals remain unverified; pure finite level goals still sync. StepCard dependency labels use the same evidence as blockers, including live quest precedence and consumer-specific skill equivalence. Notes, skips, saves and the separate explicit manual-review option remain intact. See [CODEX_PROGRESS_PROOF_HANDOFF.md](CODEX_PROGRESS_PROOF_HANDOFF.md). The stable baseline below remains 2.74.2 until this revision passes CI and portable publication.
 
@@ -58,19 +60,21 @@ Keep Claude's single expandable `OsrsPathGuideOverlay`/`HudModel`; never restore
 
 ## Prioritized remaining work
 
+Owner queued [armour progression, shared live prices and removal of unnecessary displayed dates](OWNER_ARMOUR_PRICING_DATES_REQUEST.md) after the current tool-requirement repair (2026-10-23). This is a requested implementation specification, not completed work. Trace the existing structured route/combat plan and price service first; preserve real game prerequisites versus route recommendations, saved IDs and the single minimal HUD. Internal timestamps remain necessary. Do this queued request before expanding unrelated audit work.
+
 1. Finish real desktop/HUD acceptance on the latest verified main release: selected plan/current phase matches app, one guide only, header expand/collapse, saved position and Alt-drag, safe prep warning priorities, fonts/DPI/zoom/long text/compact view, reconnect/logout/world-hop freshness. Do not automate combat, movement, spending or skilling. Keep authentication and the player's only saves untouched.
 2. Full continuous route feasibility remains OPEN. The 67 IDs were enumerated, not played end-to-end. Review fresh/poor F2P, Members and partial-quest scenarios. Do not renumber IDs or silently apply the deferred Doric/Knight's Sword reorder (`docs/route-reorder-proposal.md`).
 3. Fix coherent skill handovers: S6-01 has static Ogress metadata without level-1 Ranged gear/ammo planning; S6-02 needs Cooking supplies/location after Fishing 50; S6-03 needs accessible Mining/Woodcutting trainers/tools and separate completion of each half; S6-04 needs spell-appropriate rune/input batches. S6 is already optional Bond preparation and hidden for Members. Merely setting followsMethod leaves stale NPCs/maps/threats/supplies. The generic method requirement converter currently ignores tool needs; address that with exact ownership/eligibility tests before extending it.
 4. Combat catalogue now includes surface level13 Giant frogs; it is still limited. Compare verified accessible trainers, actual style/boost/prayer, attainable Defence+armour and purchase detours, simultaneous food/potion/loot inventory slots, travel/banking and total remaining objectives. Do not replace 725 cows with another fixed mob count without total-time/cash/risk evidence. S4-03 no longer requires bones; do not restore that quota. Other genuine item objectives need their own acquisition comparisons. Food for one bag is not food for the whole goal; estimates are not measured live rates.
 5. Quest phase safety: Lost City spells/food/exit/Entrana rules; Demon Slayer bone collection versus fight kit; Monkey Madness non-monotonic returns and feasible per-phase slots; Tanglefoot special damage. Verify current primary sources; preserve intentionally safer route choices while distinguishing them from game prerequisites.
-6. Remaining persistence/exact-item gaps: native read errors versus absence; conflict-resolution UX; secondary-backup failures; runtime external changes; exact-ID and remaining legacy ownership consumers. Do not weaken existing quarantine or change unknown to missing.
+6. Remaining persistence/exact-item gaps: conflict-resolution UX; secondary-backup failures; runtime external changes; exact-ID and remaining legacy ownership consumers. Native read errors versus absence are repaired/tested in the unreleased block above. Do not weaken existing quarantine or change unknown to missing.
 7. Funding: GE window/batch constraints, full acquisition/shop/rune/travel costs, live proceeds. Current Magic labels do not solve net supplies. Gear needs verified multi-style comparison, not arbitrary total-stat scores. Avoid duplicate engines.
 8. Real isolated two-version updater acceptance, frame-time/telemetry cost, residual eight moderate build-tool advisories, final KNOWN-ISSUES/review package and outstanding live acceptance. No forced npm audit fix or builder downgrade. Local installed Vite previously lagged the patched lock; clean CI is the patched dependency evidence.
 
 ## Concrete follow-ups to reproduce before fixing
 
 - Account Sync inference and StepCard prerequisite coloring are repaired in the 2.74.3 proof block; consult CODEX_PROGRESS_PROOF_HANDOFF.md and its exact CI/release evidence before treating publication as accepted. Broader native progress recovery remains open.
-- Generic skill-method conversion ignores some tool needs: verify exact tool ownership and equip/use eligibility before extending Mining/Woodcutting handovers.
+- Generic skill-method tool conversion and family uncertainty are repaired in the unreleased tool block; consult CODEX_METHOD_TOOLS_HANDOFF.md and its final CI status before extending Mining/Woodcutting handovers. Special-tool eligibility remains open.
 - A remaining GearHintSync non-melee mismatch is only a candidate; require a real non-melee step with foes before calling it a confirmed defect.
 
 ## Next-session procedure

@@ -6,6 +6,7 @@
 import { spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { chromium, type Browser, type Page } from 'playwright';
+import { PICKAXES } from '../src/lib/toolTiers';
 
 const PORT = 4179;
 const BASE = `http://127.0.0.1:${PORT}/`;
@@ -181,6 +182,8 @@ const text = async (page: Page, sel: string) => {
 };
 
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'tool-proof') { await toolProofScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await toolProofScenarios(browser);
   if (process.env.UI_ONLY === 'sync-proof') { await accountSyncProofScenarios(browser); return; }
   if (!process.env.UI_ONLY) await accountSyncProofScenarios(browser);
   if (process.env.UI_ONLY === 'item-food') { await retainedCombatFoodScenario(browser); return; }
@@ -2235,6 +2238,33 @@ async function magicFundingScenarios(browser: Browser) {
     expect(body.includes(sale === 'restricted' ? 'Check the bank before judging affordability' : sale === 'lifted' ? 'That covers the lowest full cost' : 'not a deficit after owned supplies'), `Magic (${width}, ${sale}): partial coins are not a definite funding shortfall`);
     expect(await noOverflow(page) && !errors.length, `Magic (${width}, ${sale}): no overflow or console errors`);
     if (process.env.UI_SHOTS && sale === 'restricted') await page.locator('.magic-plan').screenshot({ path: `${process.env.UI_SHOTS}/magic-funding-${width}.png` });
+    await page.context().close();
+  }
+}
+
+async function toolProofScenarios(browser: Browser) {
+  for (const width of [390, 1280]) {
+    const rows = PICKAXES.map(name => ({ name, carried: 0, noted: 0, bank: 0, exactCarried: 0, exactNoted: 0, exactBank: 0 }));
+    const { page, errors } = await open(browser, width, {
+      zen: true, progress: progressBefore('S1-12', { gameMode: 'f2p' }),
+      status: { protocol: 6, stats: { mining: 1 }, activeStepId: 'S1-12' },
+      events: [{ type: 'STATS', stats: { mining: 1 } }, { type: 'OWNED', bankSeen: true, items: [rows[0]] }],
+    }, '#/step/S1-12');
+    const line = () => page.evaluate(() => {
+      const posts = (window as unknown as { __posts: { path: string; body?: { plan?: { lines: { name: string; where: string; action?: string }[] } } }[] }).__posts;
+      return posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.plan?.lines.find(l => l.name === 'Bronze pickaxe');
+    });
+    await page.waitForTimeout(900);
+    const unreported = await line();
+    expect(unreported?.where === 'UNKNOWN' && !/^(Buy|Withdraw) /i.test(unreported.action ?? ''), `tool proof (${width}): an absent bronze tier cannot invent a purchase while another usable tier is unread`);
+    await page.evaluate(items => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items }), rows);
+    await page.waitForTimeout(900);
+    expect((await line())?.where === 'MISSING', `tool proof (${width}): checking every eligible tier establishes a genuine shortage`);
+    const held = rows.map(r => r.name === 'Iron pickaxe' ? { ...r, carried: 1, exactCarried: 1 } : r);
+    await page.evaluate(items => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items }), held);
+    await page.waitForTimeout(900);
+    expect((await line())?.where === 'INVENTORY', `tool proof (${width}): the owned usable tier clears the preparation action`);
+    expect(await noOverflow(page) && !errors.length, `tool proof (${width}): no overflow or console errors`);
     await page.context().close();
   }
 }

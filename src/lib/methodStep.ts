@@ -10,17 +10,24 @@ import type { MapLocation, Step, StepItemRequirement } from '../types';
 import methodsJson from '../data/trainingMethods.json';
 import { items as itemData } from '../data';
 import { matchStrict } from '../services/locationResolver';
+import { AXES, PICKAXES } from './toolTiers';
+import type { MethodNeed } from './trainingRouter';
 
 /** The stored pick when the skill's goal is already reached: no tool of that skill is asked for. */
 export const GOAL_REACHED = 'goal-reached';
 
-interface RawNeed { type: string; name?: string; count?: number }
-interface RawMethod { id: string; skills: string[]; name: string; from: number; to: number | null; needs?: RawNeed[]; place?: string; where: string }
+interface RawMethod { id: string; skills: string[]; name: string; from: number; to: number | null; needs?: MethodNeed[]; place?: string; where: string }
 
 const RAW: RawMethod[] = (methodsJson as unknown as { methods: (Omit<RawMethod, 'skills'> & { skill: string | string[] })[] }).methods
   .map((m) => ({ ...m, skills: Array.isArray(m.skill) ? m.skill : [m.skill] }));
 const METHODS = new Map(RAW.map((m) => [m.id, m]));
 const ITEMS = new Map(itemData.map((i) => [i.nameEn.toLowerCase(), i]));
+
+function needNames(need: MethodNeed): readonly string[] {
+  if (need.type === 'item') return [need.name];
+  if (need.type === 'tool') return need.skill === 'mining' ? PICKAXES : AXES;
+  return [];
+}
 
 /** The skill and the level the step's own completion check asks for, or null when the step has no such goal. */
 export function followedGoal(step: Pick<Step, 'followsMethod' | 'inGame'>): { skill: string; target: number } | null {
@@ -37,19 +44,22 @@ export function methodToolNames(step: Pick<Step, 'followsMethod'>): string[] {
   const skill = step.followsMethod;
   if (!skill) return [];
   const names = new Set<string>();
-  for (const m of RAW) if (m.skills.includes(skill)) for (const n of m.needs ?? []) if (n.type === 'item' && n.name) names.add(n.name);
+  for (const m of RAW) if (m.skills.includes(skill)) for (const need of m.needs ?? []) for (const name of needNames(need)) names.add(name);
   return [...names];
 }
 
-function requirement(n: RawNeed, m: RawMethod): StepItemRequirement | null {
-  if (n.type !== 'item' || !n.name) return null;
-  const known = ITEMS.get(n.name.toLowerCase());
+function requirement(n: MethodNeed, m: RawMethod): StepItemRequirement | null {
+  const names = needNames(n);
+  const name = names[0];
+  if (!name) return null;
+  const known = ITEMS.get(name.toLowerCase());
   const shop = known?.buyLocations?.find((b) => !b.members);
   return {
-    nameEn: n.name,
-    amount: n.count ?? 1,
+    nameEn: name,
+    amount: n.type === 'item' ? n.count ?? 1 : 1,
     howToGet: `For ${m.name.charAt(0).toLowerCase()}${m.name.slice(1)}.${shop ? ` ${shop.shopName}, ${shop.location}.` : ''}`,
     ...(known ? { wikiItemId: known.id, iconUrl: known.iconUrl } : {}),
+    ...(names.length > 1 ? { anyOf: names.slice(1) } : {}),
   };
 }
 
@@ -70,7 +80,7 @@ export function withTrainingMethod(step: Step, pick: string | undefined): Step {
     return { ...step, itemsRequired: [], ...(step.inGame ? { inGame: { ...step.inGame, highlightItems: [] } } : {}) };
   }
   const m = METHODS.get(pick);
-  if (!m) return step;
+  if (!m || !m.skills.includes(step.followsMethod)) return step;
   const itemsRequired = (m.needs ?? []).map((n) => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null);
   const at = methodPoint(pick);
   return {

@@ -146,22 +146,26 @@ export function heldOf(
   const family = toolFamilyOf(nameEn);
   if (!family) return base;
   // "Bronze pickaxe" in a route step means "a pickaxe": a better tier does the same job, so a better tier that is seen counts.
-  // A tier that is not seen proves nothing: without one the answer is exactly what it was for the name itself.
+  // Unreported usable tiers keep the family total unknown, even when the named bronze tier is confirmed absent.
   // A tier the player's level cannot use does not do the job: a Rune pickaxe at Mining 10 is not "a pickaxe" for the step.
   const parts = family
     .filter((n) => usableAt(n, (skill) => levelValue(s, skill)))
     .map((n) => (nameKey(n) === nameKey(nameEn) ? base : heldExact(s, n)));
-  if (!parts.some((p) => p !== base && p.presence === 'PRESENT')) return base;
+  if (!parts.length) return base;
+  // Explicit manual ownership keeps its existing fallback when no other tier is positively observed.
+  if (base.source === 'manual' && !parts.some((p) => p !== base && p.presence === 'PRESENT')) return base;
   const legacy = family.some((n) => s.owned?.items.get(nameKey(n))?.legacyToolCount);
   const sum = (pick: (h: Held) => number | null): number | null => {
     const known = parts.map(pick).filter((v): v is number => v !== null);
     return known.length ? legacy ? Math.max(...known) : known.reduce((a, b) => a + b, 0) : null;
   };
   const presence: Presence = parts.some((p) => p.presence === 'PRESENT') ? 'PRESENT' : parts.every((p) => p.presence === 'MISSING') ? 'MISSING' : 'UNKNOWN';
+  const bankKnown = parts.every((p) => p.bank !== null);
+  const total = sum((p) => p.total);
   const source = parts.find((p) => p.source === 'game')?.source ?? parts.find((p) => p.source === 'manual')?.source ?? parts[0].source;
   return {
-    presence, bag: sum((p) => p.bag), noted: sum((p) => p.noted) ?? 0, bank: sum((p) => p.bank),
-    equipped: parts.reduce((a, p) => a + p.equipped, 0), total: sum((p) => p.total), source,
+    presence, bag: sum((p) => p.bag), noted: sum((p) => p.noted) ?? 0, bank: bankKnown ? sum((p) => p.bank) : null,
+    equipped: parts.reduce((a, p) => a + p.equipped, 0), total: presence === 'UNKNOWN' ? null : total, source,
   };
 }
 

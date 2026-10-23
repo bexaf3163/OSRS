@@ -65,9 +65,9 @@ export function evaluate(req: Requirement, s: PlayerState): ReqResult {
       }
       if (bag >= count) return { state: 'OK', have: bag, need: count, missing: 0, detail: 'in the bag' };
       if (bag + h.noted >= count) return { state: 'BANK', have: total, need: count, missing: 0, detail: `${h.noted}${u} as banknotes: unnote them at a bank before use` };
-      // The bank was not opened: the rest could be there, that is "unknown", not "short".
-      if (h.bank === null && h.source === 'game') return { state: 'UNKNOWN', have: bag, need: count, detail: `${bag}${u} in the bag, ${bankUnknown}` };
       if (total >= count) return { state: 'BANK', have: total, need: count, missing: 0, detail: `${bag}${u} in the bag, the rest in the bank` };
+      // A known lower bound can cover the goal; an unread remainder can never prove a shortage.
+      if (h.bank === null && h.source === 'game') return { state: 'UNKNOWN', have: bag, need: count, detail: `${bag}${u} in the bag, ${bankUnknown}` };
       if (total > 0) return { state: 'PARTIAL', have: total, need: count, missing: count - total, detail: `have ${total}${u}, ${count - total} short` };
       return { state: 'MISSING', have: 0, need: count, missing: count, detail: 'in neither the bag nor the bank' };
     }

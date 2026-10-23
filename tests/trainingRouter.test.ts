@@ -101,7 +101,7 @@ describe('method choice', () => {
   it('any axe fits: the player has an Iron axe — we do not ask for an "axe"', () => {
     const a = advise({ skill: 'woodcutting', target: 30, state: levels({ woodcutting: 20 }, { 'Iron axe': { carried: 1 } }, true), mode: 'f2p' });
     expect(a.best?.status).toBe('READY');
-    const none = advise({ skill: 'woodcutting', target: 30, state: levels({ woodcutting: 20 }, { 'Iron axe': { carried: 0, bank: 0 }, 'Bronze axe': { carried: 0, bank: 0 }, 'Steel axe': { carried: 0, bank: 0 } }, true), mode: 'f2p' });
+    const none = advise({ skill: 'woodcutting', target: 30, state: levels({ woodcutting: 20 }, { 'Iron axe': { carried: 0, bank: 0 }, 'Bronze axe': { carried: 0, bank: 0 }, 'Steel axe': { carried: 0, bank: 0 }, 'Black axe': { carried: 0, bank: 0 } }, true), mode: 'f2p' });
     expect(none.best?.status).toBe('PREP');
     expect(none.best?.missing[0].label).toBe('Axe');
   });

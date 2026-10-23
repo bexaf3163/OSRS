@@ -5,6 +5,7 @@ import { contextOf, nearestBank, readinessOf, stepReadiness, type ReadinessInput
 import { buildPlayerState } from '../src/lib/playerState';
 import { validate } from '../scripts/validate';
 import type { Progress, Step } from '../src/types';
+import { alternativesOf } from '../src/lib/toolTiers';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;
 const done = (ids: string[], p: Progress = emptyProgress()) => ids.reduce((acc, id) => withStep(acc, id, 'done'), p);
@@ -95,7 +96,7 @@ describe('step readiness', () => {
     expect(row.state).toBe('BANK');
     expect(row.action).toMatchObject({ kind: 'nav', target: { itemName: it.nameEn, stepId: s.id } });
     expect(inBank.status).toBe('MINOR_PREP');
-    const none = stepReadiness(input(s, { gear, owned: owned({ ...others, [it.nameEn]: { carried: 0, bank: 0 } }) }));
+    const none = stepReadiness(input(s, { gear, owned: owned({ ...Object.fromEntries(alternativesOf(it.nameEn, it.anyOf).map(n => [n, { carried: 0, bank: 0 }])), ...others, [it.nameEn]: { carried: 0, bank: 0 } }) }));
     expect(none.status).toBe('MISSING_ITEM');
     expect(none.problems[0].action).toMatchObject({ href: '#/shopping' });
   });

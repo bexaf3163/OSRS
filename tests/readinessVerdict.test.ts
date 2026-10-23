@@ -207,7 +207,7 @@ describe('tools by level: a tier the player cannot use does not do the job', () 
   };
 
   it('a Rune pickaxe at Mining 10 is not a pickaxe for the step, and the row says why', () => {
-    const r = row({ mining: 10 }, owned({ 'Rune pickaxe': [1, 0], 'Bronze pickaxe': [0, 0] }));
+    const r = row({ mining: 10 }, owned({ 'Rune pickaxe': [1, 0], 'Bronze pickaxe': [0, 0], 'Iron pickaxe': [0, 0], 'Steel pickaxe': [0, 0] }));
     expect(r.state).toBe('MISSING');
     expect(r.detail).toContain('Rune pickaxe (needs Mining 41): too high for your level yet');
   });
