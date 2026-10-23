@@ -4,7 +4,7 @@
 import { useMemo, useState } from 'react';
 import { stepById } from '../data';
 import { useBridge } from '../bridge';
-import { earlierUnverified, syncCandidates, withRequired } from '../lib/accountSync';
+import { earlierUnverified, syncCandidates } from '../lib/accountSync';
 import { gateAllows } from '../lib/profiles';
 import { withReviewed, withStep } from '../lib/progress';
 import { useStore } from '../store';
@@ -15,7 +15,7 @@ export function AccountSync({ compact = false }: { compact?: boolean }) {
   const { state, plugin, questsDone, stats, gate } = useBridge();
   const [hidden, setHidden] = useState(false);
   const allowed = gateAllows(gate);
-  const list = useMemo(() => (allowed ? withRequired(steps, syncCandidates(steps, progress, questsDone, stats), progress) : []), [allowed, steps, progress, questsDone, stats]);
+  const list = useMemo(() => (allowed ? syncCandidates(steps, progress, questsDone, stats) : []), [allowed, steps, progress, questsDone, stats]);
 
   // Steps before the game's furthest confirmed one that nothing in the game can confirm: offered separately, not in the compact plaque.
   const unverified = useMemo(() => (allowed ? earlierUnverified(steps, progress, list, questsDone, stats) : []), [allowed, steps, progress, list, questsDone, stats]);
@@ -42,7 +42,7 @@ export function AccountSync({ compact = false }: { compact?: boolean }) {
     if (state !== 'online' || hidden || !list.length) return null;
     return (
       <div className="plaque plaque-tip" role="note">
-        <p><strong>🎮 The game knows you have already completed {list.length} {list.length === 1 ? 'step' : 'steps'}</strong> (including the steps they need)</p>
+        <p><strong>🎮 The game knows you have already completed {list.length} {list.length === 1 ? 'step' : 'steps'}</strong></p>
         <details>
           <summary className="small">Which ones</summary>
           <ul className="small">{list.map((c) => <li key={c.step.id}><code className="code">{c.step.id}</code> {c.step.title} — {c.why}</li>)}</ul>
@@ -61,8 +61,8 @@ export function AccountSync({ compact = false }: { compact?: boolean }) {
       <h2 className="card-title">Account sync</h2>
       <p className="muted small">
         The plugin reports which quests are completed and which levels are reached. Steps with such an auto-mark can be closed at once without doing
-        them again, together with the steps they require (those were done on the way). Use it to restore a lost progress. Quest steps that also need items
-        are not touched, and notes cannot be read back from the game. It only marks, it removes nothing.
+        them again. Prerequisite links do not prove other steps were completed. Goals that also need items or retained stock stay unverified here,
+        and notes cannot be read back from the game. It only marks, it removes nothing.
       </p>
       {state !== 'online' && <p className="muted small">No link with RuneLite — start the game with the plugin.</p>}
       {old && <p className="notice small">Plugin 2.12 (protocol 5) is needed: restart RuneLite from the app.</p>}

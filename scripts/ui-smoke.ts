@@ -181,6 +181,8 @@ const text = async (page: Page, sel: string) => {
 };
 
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'sync-proof') { await accountSyncProofScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await accountSyncProofScenarios(browser);
   if (process.env.UI_ONLY === 'item-food') { await retainedCombatFoodScenario(browser); return; }
   if (process.env.UI_ONLY === 'magic-funding') { await magicFundingScenarios(browser); return; }
   if (process.env.UI_ONLY === 'consumer-dependencies') { await consumerDependencyScenarios(browser); return; }
@@ -409,9 +411,15 @@ async function run(browser: Browser) {
       events: [{ type: 'QUESTS', done: [] }],
     }, '#/step/S8-02');
     expect((await page.locator('.step-blocked').allInnerTexts()).some(t => t.includes('S8-01')), 'prerequisites: live unfinished quest overrides an old route done mark');
+    await reveal(page, '.requires .step-ref[href="#/step/S8-01"]');
+    expect(await page.locator('.requires .step-ref.is-met[href="#/step/S8-01"]').count() === 0, 'prerequisites: a contradicted done mark is not shown as met');
+    await page.keyboard.press('Escape');
     await page.evaluate(() => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'QUESTS', done: ['Priest in Peril', 'The Restless Ghost'] }));
     await page.waitForTimeout(500);
     expect(await page.locator('.step-blocked').count() === 0, 'prerequisites: live completion clears the hard blocker without changing route marks');
+    await reveal(page, '.requires .step-ref[href="#/step/S8-01"]');
+    expect(await page.locator('.requires .step-ref.is-met[href="#/step/S8-01"]').count() === 1, 'prerequisites: the dependency label follows the same live proof as its blocker');
+    await page.keyboard.press('Escape');
     expect(await noOverflow(page) && !errors.length, 'prerequisites: no overflow or page errors');
     await page.context().close();
   }
@@ -422,9 +430,15 @@ async function run(browser: Browser) {
       progress, status: { protocol: 6, stats: { agility: 24 } }, events: [{ type: 'STATS', stats: { agility: 24 } }],
     }, '#/step/S7-05');
     expect((await page.locator('main').innerText()).includes('First S7-04'), `skill dependency (${width}): skipping below the goal does not unlock the quest`);
+    await reveal(page, '.requires .step-ref[href="#/step/S7-04"]');
+    expect(await page.locator('.requires .step-ref.is-met[href="#/step/S7-04"]').count() === 0, `skill dependency (${width}): a skipped training step is not labelled met`);
+    await page.keyboard.press('Escape');
     await page.evaluate(() => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'STATS', stats: { agility: 25 } }));
     await page.waitForTimeout(900);
     expect(!(await page.locator('main').innerText()).includes('First S7-04'), `skill dependency (${width}): reaching the actual level removes the redundant training blocker`);
+    await reveal(page, '.requires .step-ref[href="#/step/S7-04"]');
+    expect(await page.locator('.requires .step-ref.is-met[href="#/step/S7-04"]').count() === 1, `skill dependency (${width}): reached levels satisfy the displayed dependency without rewriting the skip`);
+    await page.keyboard.press('Escape');
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}').steps?.['S7-04']) === 'skipped', `skill dependency (${width}): the original skip mark is preserved`);
     expect(await noOverflow(page) && !errors.length, `skill dependency (${width}): no overflow or console errors`);
     await page.context().close();
@@ -2221,6 +2235,30 @@ async function magicFundingScenarios(browser: Browser) {
     expect(body.includes(sale === 'restricted' ? 'Check the bank before judging affordability' : sale === 'lifted' ? 'That covers the lowest full cost' : 'not a deficit after owned supplies'), `Magic (${width}, ${sale}): partial coins are not a definite funding shortfall`);
     expect(await noOverflow(page) && !errors.length, `Magic (${width}, ${sale}): no overflow or console errors`);
     if (process.env.UI_SHOTS && sale === 'restricted') await page.locator('.magic-plan').screenshot({ path: `${process.env.UI_SHOTS}/magic-funding-${width}.png` });
+    await page.context().close();
+  }
+}
+
+async function accountSyncProofScenarios(browser: Browser) {
+  for (const width of [390, 1280]) {
+    const { page, errors } = await open(browser, width, {
+      progress: { version: 3, steps: { 'S1-04': 'skipped' }, levels: {}, notes: { 'S1-01': 'Keep this note' }, gameMode: 'f2p' },
+      localStorage: { 'osrs-put-settings-tab': 'progress' },
+      status: { protocol: 6, inGame: true, player: 'Sync Proof', questsDone: ['Goblin Diplomacy'] },
+      events: [{ type: 'QUESTS', done: ['Goblin Diplomacy'] }],
+    }, '#/settings');
+    await page.waitForTimeout(900);
+    const card = page.locator('section').filter({ has: page.getByRole('heading', { name: 'Account sync', exact: true }) });
+    const automatic = await card.locator(':scope > ul > li code').allTextContents();
+    expect(automatic.join(',') === 'S2-12', `sync proof (${width}): only the observed quest is game-confirmed`);
+    const manual = await card.locator('details ul').textContent();
+    expect(!!manual?.includes('S2-01') && !manual?.includes('S2-10'), `sync proof (${width}): shopping stays unverified and the contradicted quest is excluded`);
+    await card.getByRole('button', { name: /^Mark \d+ steps$/ }).click();
+    await page.waitForTimeout(500);
+    const saved = await page.evaluate(() => JSON.parse((window as unknown as { __saved: string }).__saved));
+    expect(saved.steps['S2-12'] === 'done' && !saved.steps['S2-10'] && !saved.steps['S2-01'], `sync proof (${width}): applying sync cannot mark inferred ancestors`);
+    expect(saved.steps['S1-04'] === 'skipped' && saved.notes['S1-01'] === 'Keep this note', `sync proof (${width}): existing skips and notes remain intact`);
+    expect(await noOverflow(page) && !errors.length, `sync proof (${width}): no overflow or console errors`);
     await page.context().close();
   }
 }

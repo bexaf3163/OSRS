@@ -1,5 +1,9 @@
 # Claude continuation — start here
 
+## Current block: 2.74.3 — progress proof
+
+Account Sync no longer promotes convenience-route ancestors to game-confirmed completion. Mixed item/retained-stock goals remain unverified; pure finite level goals still sync. StepCard dependency labels use the same evidence as blockers, including live quest precedence and consumer-specific skill equivalence. Notes, skips, saves and the separate explicit manual-review option remain intact. See [CODEX_PROGRESS_PROOF_HANDOFF.md](CODEX_PROGRESS_PROOF_HANDOFF.md). The stable baseline below remains 2.74.2 until this revision passes CI and portable publication.
+
 ## Verified baseline and working policy (updated 2026-10-23)
 
 Resume from the latest remote main in bexaf3163/OSRS. Verified application release: **2.74.2**, source **95ad7b21b214133ea51513237e8722b94d764bfc**. Check for intervening owner/Claude commits before editing; do not reset them, restore an old checkout or cherry-pick the already included stacked PRs again. Historical branch instructions elsewhere are evidence, not the current starting point.
@@ -63,8 +67,7 @@ Keep Claude's single expandable `OsrsPathGuideOverlay`/`HudModel`; never restore
 
 ## Concrete follow-ups to reproduce before fixing
 
-- StepCard prerequisite coloring still used isClosed while dependency blockers use stronger completion evidence. Reproduce a skipped/stale quest before changing labels; do not infer a blocker solely from a color.
-- AccountSync.withRequired can include route ancestors of a confirmed quest without proving each item/training task. It is an offered user-confirmed list, not established automatic save corruption. Separate real quest proof from convenience-route inference and retain reconciliation safeguards.
+- Account Sync inference and StepCard prerequisite coloring are repaired in the 2.74.3 proof block; consult CODEX_PROGRESS_PROOF_HANDOFF.md and its exact CI/release evidence before treating publication as accepted. Broader native progress recovery remains open.
 - Generic skill-method conversion ignores some tool needs: verify exact tool ownership and equip/use eligibility before extending Mining/Woodcutting handovers.
 - A remaining GearHintSync non-melee mismatch is only a candidate; require a real non-melee step with foes before calling it a confirmed defect.
 

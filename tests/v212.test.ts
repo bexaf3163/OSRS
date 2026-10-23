@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { etaMinutes, etaText, XpTracker } from '../src/lib/xpRate';
 import { sessionSummary } from '../src/lib/session';
-import { earlierUnverified, questKey, syncCandidates, withRequired } from '../src/lib/accountSync';
+import { earlierUnverified, questKey, syncCandidates } from '../src/lib/accountSync';
 import { addProfile, defaultProfiles, gateAllows, linkPlayer, MAIN_ID, parseProfiles, profileFileName, profileGate, profileStorageKey, removeProfile, renameProfile } from '../src/lib/profiles';
 import { parsePlayer, parsePos, parseQuests, parseXp } from '../src/services/runeliteBridge';
 import { emptyProgress } from '../src/lib/progress';
@@ -62,9 +62,9 @@ describe('accountSync', () => {
     const c = syncCandidates([quest, withItems, lvl], emptyProgress(), ['Cooks Assistant', 'Imp Catcher'], { attack: 5 });
     expect(c.map((x) => x.step.id)).toEqual(['Q1', 'L1']);
   });
-  it('a level goal closes the step even when items are listed with it: the levels prove the training', () => {
+  it('a reached level does not prove the remaining item objective', () => {
     const train = { id: 'T1', inGame: { completionTrigger: { type: 'SKILL_LEVEL', levels: [{ skill: 'mining', level: 15 }], items: [{ names: ['Copper ore'], count: 5 }] } } } as unknown as Step;
-    expect(syncCandidates([train], emptyProgress(), [], { mining: 15 }).map((x) => x.step.id)).toEqual(['T1']);
+    expect(syncCandidates([train], emptyProgress(), [], { mining: 15 })).toEqual([]);
     expect(syncCandidates([train], emptyProgress(), [], { mining: 14 })).toEqual([]);
   });
   it('earlier steps the game cannot confirm are offered, the ones it contradicts are not', () => {
@@ -91,19 +91,7 @@ describe('accountSync', () => {
     expect(syncCandidates([quest], emptyProgress(), null, null)).toEqual([]);
     expect(questKey("Cook's Assistant")).toBe(questKey('cooks assistant'));
   });
-  it('restoring: what a confirmed step requires is added, in route order, once, closed ones are skipped', () => {
-    const mk = (id: string, requires: string[]) => ({ id, requires } as unknown as Step);
-    const a = mk('A', []);
-    const b = mk('B', ['A']);
-    const c = mk('C', ['A', 'B']);
-    const d = mk('D', ['C', 'MISSING']);
-    const confirmed = [{ step: d, why: 'quest' }];
-    expect(withRequired([a, b, c, d], confirmed, emptyProgress()).map((x) => x.step.id)).toEqual(['D', 'A', 'B', 'C']);
-    const p = { ...emptyProgress(), steps: { B: 'done' as const } };
-    // B is closed, but what B itself requires is still followed: A was needed for it.
-    expect(withRequired([a, b, c, d], confirmed, p).map((x) => x.step.id)).toEqual(['D', 'A', 'C']);
-    expect(withRequired([a, b, c, d], [], emptyProgress())).toEqual([]);
-  });
+
 });
 
 describe('profiles', () => {
