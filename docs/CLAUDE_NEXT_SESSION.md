@@ -1,5 +1,13 @@
 # Claude continuation — start here
 
+## Current cumulative pricing source (acceptance pending)
+
+Local source through ac84ec7 plus the following route-prose cleanup implements the queued structured armour, shared runtime market pricing and date-presentation changes. See [CODEX_ARMOUR_PRICES_DATES_HANDOFF.md](CODEX_ARMOUR_PRICES_DATES_HANDOFF.md) for scope/evidence. S4-03 trains Defence10, equips usable owned Black/equivalent pieces and then trains Attack; no bone quota. One engine and one HUD remain. Gear/StyleGear, required items/preparation, Magic, dossiers/alchemy, Search, tool upgrades, Shopping, Journal/cleanup and transport now consume the shared quote board. No private UI quote loops or runtime baked GE fallback remain. Missing quotes are unavailable; retained quotes are labelled cached. Fixed NPC fees and internal timestamps remain.
+
+Shopping excludes missing costs and cannot confirm an incomplete budget. Gear page reserves carry completeness and hold purchases while supplies are unchecked; owned usable upgrades remain available. This is not a complete joint gear/food acquisition optimizer, nor full multi-style DPS. Default step/HUD gear hints still need the broader T10 reserve review. Magic remains a gross replacement-cost comparison, not per-trip batch planning. Route copy no longer fixes GE prices or promises that a fixed number of hides/ore will fund shopping; use current Shopping/Money instead. Prose changes preserve route IDs, quantities, requirements and triggers.
+
+Current draft source a2e54e5b13396335f6c1aec730a32bfb2d76b2ae (exact local f489ab8 tree) is running Checks40039220620; Java120706076592 and isolated actual portable120706076821 passed, browser/checks120706076865 pending. Newer strict-runtime/prose follow-ups still need cumulative CI. Latest local TypeScript/build/data pass;1,861/1,867 Vitest pass with only six established sandbox loopback/rename failures. Real-game acceptance remains open; fixtures are not gameplay. Stable/main2.74.2 remains held for the batched release. Preserve all valid commits; do not reset to the historical receipts below.
+
 ## Latest source follow-up: style gear prices (CI pending)
 
 Follow-up CI6d73dcc8 / run40009660396 passed full Java and isolated portable gates, and completed the entire browser suite. Only two assertions remained: the test still demanded at least4 comparison rows although the new common Defence10 prefix correctly removes the duplicate Defence10-first alternative, leaving the baseline and Defence20/30 alternatives. The test now checks those actual controls and explicitly rejects a duplicated Defence10-first row. Final cumulative CI is still required for this correction and the newer StyleGear block.
@@ -78,7 +86,7 @@ Keep Claude's single expandable `OsrsPathGuideOverlay`/`HudModel`; never restore
 
 Owner queued [armour progression, shared live prices and removal of unnecessary displayed dates](OWNER_ARMOUR_PRICING_DATES_REQUEST.md) after the current tool-requirement repair (2026-10-23). This is a requested implementation specification, not completed work. Trace the existing structured route/combat plan and price service first; preserve real game prerequisites versus route recommendations, saved IDs and the single minimal HUD. Internal timestamps remain necessary. Do this queued request before expanding unrelated audit work.
 
-Date presentation and shared preparation market estimates are source-implemented as separate blocks, with cumulative GitHub gates passed on 9f37646f (see above). Required-item/sub-step chips, preparation and the existing expanded HUD share bounded current/cached/unavailable prices. Route prose no longer displays historical quote dates. Local full run: 1,824 pass and six known sandbox failures out of 1,830; TypeScript/build/data pass. See [CODEX_ARMOUR_PRICES_DATES_HANDOFF.md](CODEX_ARMOUR_PRICES_DATES_HANDOFF.md). Black-kit/Defence10 progression and the remaining price consumers (Gear/StyleGear, Magic, item dossier/Alchemy, Journal, undated GE prose and full quantity budgets) are still pending; the existing bulk price service must be reused. Do not describe those two features as completed.
+The queued armour/price/date source is now implemented to the scope in the current cumulative section above. The9f37646f receipt below verifies only the earlier preparation/date block; it does not prove acceptance of later source. Full joint budgets, final cumulative CI and real-game acceptance remain open.
 
 The existing quote provider's stale-on-refresh-failure and ID-without-name-mapping defects are repaired in a separate local pricing-foundation commit. Focused pricing suites pass (35); local full suite has 1,814 passing and six known sandbox failures out of 1,820; build/data pass. It is included in the cumulative verified 9f37646f source. Owner decision: accept owned equivalent/better armour and buy only needed upgrades. Do not force a four-piece Black purchase when suitable owned equipment covers those slots.
 
@@ -93,7 +101,7 @@ The existing quote provider's stale-on-refresh-failure and ID-without-name-mappi
 
 ## Concrete follow-ups to reproduce before fixing
 
-- Dossier/alchemy source now shares market quotes and labels cached/missing values; no baked GE fallback, private dossier price loop or invented complete alchemy profit. See CODEX_ARMOUR_PRICES_DATES_HANDOFF.md for exact scope and outstanding browser acceptance. Gear advice, MagicPlan and the other price consumers still require migration.
+- Dossier/alchemy and the other listed consumers now share runtime quotes. See the current cumulative section and detailed handoff; retain stated scope limits instead of reimplementing completed migrations.
 
 - Account Sync inference and StepCard prerequisite coloring are repaired in the 2.74.3 proof block; consult CODEX_PROGRESS_PROOF_HANDOFF.md and its exact CI/release evidence before treating publication as accepted. Broader native progress recovery remains open.
 - Generic skill-method tool conversion and family uncertainty are repaired in the unreleased tool block; consult CODEX_METHOD_TOOLS_HANDOFF.md and its final CI status before extending Mining/Woodcutting handovers. Special-tool eligibility remains open.

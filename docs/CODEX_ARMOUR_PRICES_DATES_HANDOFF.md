@@ -2,6 +2,14 @@
 
 Full requested specification: [OWNER_ARMOUR_PRICING_DATES_REQUEST.md](OWNER_ARMOUR_PRICING_DATES_REQUEST.md). This follows the tool-requirement repair. It is not a claim that all three features are done.
 
+Current source/evidence is summarized first in [CLAUDE_NEXT_SESSION.md](CLAUDE_NEXT_SESSION.md). Earlier CI receipts below remain historical boundaries; do not interpret their older pending-consumer lists as the current implementation state.
+
+## Route price prose cleanup — source implemented
+
+Classified/removed historical GE unit prices and totals from81 nonempty route/quest/reference text fields. Fixed NPC prices, ship fees, tanning fees, quest rewards and currency goals remain. Removed fixed hide/ore quantities and claims that Magic training or a reward balance necessarily funds later purchases; existing Shopping/Money provide current quotes and confirmed cash instead. Alchemy copy includes all consumed rune costs. The generated active-step fixture was refreshed (72 prose fields across21 target rows); structural comparison proves route IDs, quantities, prerequisites, triggers and non-prose target fields are unchanged.
+
+Verification:59 targeted route/funding/fixture tests, TypeScript/build/data pass; full local1,861/1,867 with only six established sandbox failures. The initial stale generated-fixture failure was repaired by regeneration, not by weakening parity. Full Java/browser/portable gates and live acceptance remain required for this newer resource tree.
+
 ## Structured armour preparation — source implemented, acceptance pending
 
 Follow-up CI6d73dcc8 / run40009660396 passed full Java and isolated portable gates, and completed the entire browser suite. Only two assertions remained: the test still demanded at least4 comparison rows although the new common Defence10 prefix correctly removes the duplicate Defence10-first alternative, leaving the baseline and Defence20/30 alternatives. The test now checks those actual controls and explicitly rejects a duplicated Defence10-first row. Final cumulative CI is still required for this correction and the newer StyleGear block.
@@ -51,6 +59,12 @@ Validation: TypeScript/build and data checks pass (zero data errors/warnings). L
 Verified production source **9f37646ffdd373e65b4e5083d56b036717ecd8e3**: [Checks run 40000648722](https://github.com/bexaf3163/OSRS/actions/runs/40000648722) passed all 1,830 Vitest tests/143 files, TypeScript/build, data validation (zero errors/warnings), full Java, complete Chromium smoke and isolated actual portable EXE checks. The 390/1280px price/absence, date-preservation and tool-uncertainty browser scenarios all passed. [Test portable](https://github.com/bexaf3163/OSRS/releases/download/audit-test-9f37646f/OSRS-Path-audit-test-9f37646f.exe), internal version2.74.3, SHA-256 **3f81d98d0dc4a542393cac622c32930311b5862ace36ad83320803f887b62ca3**; the asset digest matches the actual isolated-EXE test log. Stable/main publication remains held. This is automated/packaged verification, not live gameplay or completion of the broader audit. Later documentation-only corrections do not change that verified production tree.
 
 ## Remaining required work
+
+### Runtime funding fallback policy (source implemented)
+
+The shared React price view no longer injects the database's historical GE values. Funding and other raw PriceView consumers therefore see unavailable quotes instead of calculating acquisition/profit estimates from baked values. Retained real quotes remain available with their cached certainty. The pure quote builder still supports explicitly supplied LOW-confidence planning values for legacy/offline callers; an empty fallback now correctly reports offline. Fixed NPC fees/source prices remain valid. The funding note no longer claims every side is a few minutes old.
+
+Verification:204 focused pricing/funding tests; TypeScript/build/data pass. Full local1,861/1,867 pass with six established sandbox failures only. The former offline assessment test had only a vacuous LOW-confidence loop; it now proves unpriced requirements produce UNKNOWN with no recommendation. Final cumulative browser/portable acceptance remains required. Historical GP claims in route prose still need classification/removal.
 
 ### Shopping quote and incomplete-budget follow-up (source implemented)
 

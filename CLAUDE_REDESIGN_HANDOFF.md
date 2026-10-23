@@ -1,5 +1,7 @@
 # 2.74.2 route repair
 
+Unreleased2.74.3 owner armour/shared-prices/date source: start with the **Current cumulative pricing source** section in [docs/CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md). It records implemented migrations, final-CI/live boundaries and remaining T01–T17 work. Keep one HUD and the canonical readiness pipeline; do not restore fixed GE prices or the50-bone quota. Stable publication remains batched until current gates pass.
+
 Latest continuation: docs/CLAUDE_NEXT_SESSION.md and docs/CODEX_FROGS_HANDOFF.md. S4-03 no longer requires 50 bones: Attack40 training compares surface frogs and early Defence, with affordable armour advice. Do not restore the old collection quota from historical notes or fixtures below. No HUD redesign is part of this block.
 
 Start with [docs/CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md) for the current cumulative repair block, source/CI boundaries, per-block portable releases, live evidence and remaining work. Its newest section supersedes older branch references below; do not roll back to an earlier preview.

@@ -147,10 +147,12 @@ describe('prices that are old, thin or missing', () => {
     else expect(a.notOffered.length + a.alternatives.length).toBeGreaterThan(0);
   });
 
-  it("with the exchange down the route's own planning prices stand in, marked LOW, and the price status says so", () => {
+  it('an offline market without a supplied fallback leaves the required cost unknown', () => {
     const { assessment: a } = scenario(market({}, 'offline'), { bagCoins: 400, bankCoins: 0 });
-    expect(a.need.priceStatus).toBe('baked');
-    for (const l of a.need.minimum.lines.filter((x) => x.cost !== null)) expect(l.confidence).toBe('LOW');
+    expect(a.need.priceStatus).toBe('offline');
+    expect(a.need.minimum.unpriced).toBeGreaterThan(0);
+    expect(a.state).toBe('UNKNOWN');
+    expect(a.recommendation).toBeNull();
   });
 
   it('an old price still prices the shortage, marked LOW, when the exchange stops answering', () => {

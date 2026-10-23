@@ -128,6 +128,12 @@ describe('the price view', () => {
     expect(v.at).toBeNull();
     expect(v.sell('Big bones')).toMatchObject({ price: 290, confidence: 'LOW', basis: 'baked' });
   });
+  it('a runtime view without planning fallbacks remains offline with no buy or sale estimate', () => {
+    const v = buildPriceView({ board: null, mapping, baked: new Map(), now: NOW });
+    expect(v.status).toBe('offline');
+    expect(v.buy('Big bones', 532)).toBeNull();
+    expect(v.sell('Big bones', 532)).toBeNull();
+  });
 
   it('a stale board is capped at LOW even for a deep market', () => {
     const v = buildPriceView({ board: board('stale', [bigBones]), mapping, baked, now: NOW });

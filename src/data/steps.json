@@ -10,7 +10,7 @@
     "fields": [
       {
         "label": "Starting money",
-        "text": "After Tutorial Island you have only about 25 coins. The first real money comes from Stronghold of Security (10,000) and cowhides (S1-13), so do not buy anything until then."
+        "text": "After Tutorial Island your starting coins are limited. Stronghold of Security offers 10,000 coins; use Money for other eligible methods. Check Preparation before spending, and do not count unsold cowhides as cash."
       }
     ],
     "doneWhen": "The Quest Helper panel is visible in the right-hand tab of the client and two-factor authentication is on."
@@ -470,7 +470,7 @@
       {
         "nameEn": "Cooked chicken",
         "amount": 5,
-        "howToGet": "Cross the bridge east of Lumbridge Castle and head north along the river to the farm's chicken coop (Lumbridge East Farm). Kill chickens (level 1, they barely hit), pick up the Raw chicken and cook it on the castle kitchen's range (Cook's range): after Cook's Assistant food burns less often there. Bring a couple more chickens than you need: at Cooking level 1 some of it will burn. Pick up the Feathers too. About 65 gp on the Grand Exchange.",
+        "howToGet": "Cross the bridge east of Lumbridge Castle and head north along the river to the farm's chicken coop (Lumbridge East Farm). Kill chickens (level 1, they barely hit), pick up the Raw chicken and cook it on the castle kitchen's range (Cook's range): after Cook's Assistant food burns less often there. Bring a couple more chickens than you need: at Cooking level 1 some of it will burn. Pick up the Feathers too. Check the current GE estimate.",
         "wikiItemId": 2140,
         "iconUrl": "https://oldschool.runescape.wiki/images/Cooked_chicken.png",
         "heals": 3
@@ -478,7 +478,7 @@
       {
         "nameEn": "Shrimps",
         "amount": 5,
-        "howToGet": "Instead of chicken: catch fish with a Small fishing net on the shore of Lumbridge Swamp by the Fishing tutor (on the Lumbridge Swamp shore by the Fishing tutor) and cook them on the castle range or on a fire (axe + tinderbox). About 23 gp on the Grand Exchange.",
+        "howToGet": "Instead of chicken: catch fish with a Small fishing net on the shore of Lumbridge Swamp by the Fishing tutor (on the Lumbridge Swamp shore by the Fishing tutor) and cook them on the castle range or on a fire (axe + tinderbox). Check the current GE estimate.",
         "wikiItemId": 315,
         "iconUrl": "https://oldschool.runescape.wiki/images/Shrimps.png",
         "heals": 3
@@ -751,7 +751,7 @@
       {
         "nameEn": "Cooked chicken",
         "amount": "15–20",
-        "howToGet": "Cross the bridge east of Lumbridge Castle and head north along the river to the farm's chicken coop (Lumbridge East Farm). Kill chickens (level 1, they barely hit), pick up the Raw chicken and cook it on the castle kitchen's range (Cook's range): after Cook's Assistant food burns less often there. Bring a couple more chickens than you need: at Cooking level 1 some of it will burn. Pick up the Feathers too. About 65 gp on the Grand Exchange.",
+        "howToGet": "Cross the bridge east of Lumbridge Castle and head north along the river to the farm's chicken coop (Lumbridge East Farm). Kill chickens (level 1, they barely hit), pick up the Raw chicken and cook it on the castle kitchen's range (Cook's range): after Cook's Assistant food burns less often there. Bring a couple more chickens than you need: at Cooking level 1 some of it will burn. Pick up the Feathers too. Check the current GE estimate.",
         "wikiItemId": 2140,
         "iconUrl": "https://oldschool.runescape.wiki/images/Cooked_chicken.png",
         "heals": 3
@@ -759,7 +759,7 @@
       {
         "nameEn": "Shrimps",
         "amount": "15–20",
-        "howToGet": "Instead of chicken: catch fish with a Small fishing net on the shore of Lumbridge Swamp by the Fishing tutor (on the Lumbridge Swamp shore by the Fishing tutor) and cook them on the castle range or on a fire (axe + tinderbox). About 23 gp on the Grand Exchange.",
+        "howToGet": "Instead of chicken: catch fish with a Small fishing net on the shore of Lumbridge Swamp by the Fishing tutor (on the Lumbridge Swamp shore by the Fishing tutor) and cook them on the castle range or on a fire (axe + tinderbox). Check the current GE estimate.",
         "wikiItemId": 315,
         "iconUrl": "https://oldschool.runescape.wiki/images/Shrimps.png",
         "heals": 3
@@ -948,7 +948,7 @@
       },
       {
         "label": "Budget",
-        "text": "About 1,900 gp: the book 300, each card from 150 (Diango's price rises if you buy many at once). The money comes from Stronghold of Security (S1-09)."
+        "text": "The book costs 300 gp; cards start at 150 gp each, and Diango's price rises if you buy many at once. Buy only the charges you need and check the actual shop total. Stronghold of Security (S1-09) provides the initial funds."
       }
     ],
     "doneWhen": "The Chronicle is charged with 10 cards and is in your inventory.",
@@ -1077,7 +1077,7 @@
     "fields": [
       {
         "label": "How much you need",
-        "text": "The S2-01 shopping costs about 10,500 gp. After Stronghold and Chronicle you have about 8,500: top it up with 40-60 hides and sell them. The Magic training in S2-04 pays for itself with the hides of the cows you train on."
+        "text": "Use Shopping to price the required S2-01 materials from current quotes and confirmed ownership. Keep quest essentials ahead of optional upgrades. If coins are short, use Money; do not assume cowhides or Magic training will cover purchases before an eligible sale completes."
       },
       {
         "label": "Price",
@@ -1089,7 +1089,7 @@
       },
       {
         "label": "New account",
-        "text": "A new free-to-play account cannot sell cowhides or leather on the Grand Exchange until it has 20 hours of play, 10 quest points and total level 100. Then the hides are not money: after Stronghold and the Chronicle you have about 8,500 gp, which already covers the S2-01 quest materials, the Imp Catcher beads and the first scimitars (about 8,000 gp). Skip the hide grind, kill cows only for combat levels and bones, and let the amulet, the potions and the mithril scimitar wait for money from quests (Below Ice Mountain gives 2,000) or from items that can be sold."
+        "text": "A new free-to-play account cannot sell cowhides or leather on the Grand Exchange until it has 20 hours of play, 10 quest points and total level 100. Do not count unsold hides as coins. Check Shopping for the current required cost and Money for eligible funding; keep optional upgrades behind quest essentials."
       }
     ],
     "doneWhen": "12,000+ coins in the bag or the bank (together with what is left from Stronghold). Unsold hides are not coins.",
@@ -1138,7 +1138,7 @@
       {
         "nameEn": "Red bead",
         "amount": 1,
-        "howToGet": "For Imp Catcher, about 2,000 gp.",
+        "howToGet": "For Imp Catcher.",
         "wikiItemId": 1470,
         "iconUrl": "https://oldschool.runescape.wiki/images/Red_bead.png",
         "inStep": true,
@@ -1148,7 +1148,7 @@
       {
         "nameEn": "Yellow bead",
         "amount": 1,
-        "howToGet": "For Imp Catcher, about 900 gp.",
+        "howToGet": "For Imp Catcher.",
         "wikiItemId": 1472,
         "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_bead.png",
         "inStep": true,
@@ -1158,7 +1158,7 @@
       {
         "nameEn": "Black bead",
         "amount": 1,
-        "howToGet": "For Imp Catcher, about 1,200 gp.",
+        "howToGet": "For Imp Catcher.",
         "wikiItemId": 1474,
         "iconUrl": "https://oldschool.runescape.wiki/images/Black_bead.png",
         "inStep": true,
@@ -1168,7 +1168,7 @@
       {
         "nameEn": "White bead",
         "amount": 1,
-        "howToGet": "For Imp Catcher, about 1,150 gp.",
+        "howToGet": "For Imp Catcher.",
         "wikiItemId": 1476,
         "iconUrl": "https://oldschool.runescape.wiki/images/White_bead.png",
         "inStep": true,
@@ -1178,7 +1178,7 @@
       {
         "nameEn": "Amulet of strength",
         "amount": 1,
-        "howToGet": "+10 strength bonus: you hit harder and melee levels much faster. About 1,350 gp.",
+        "howToGet": "+10 Strength bonus; its value depends on your current max-hit breakpoint. Compare Gear for the current fight.",
         "wikiItemId": 1725,
         "iconUrl": "https://oldschool.runescape.wiki/images/Amulet_of_strength.png",
         "inStep": true,
@@ -1188,7 +1188,7 @@
       {
         "nameEn": "Iron scimitar",
         "amount": 1,
-        "howToGet": "Can be worn at once. About 60 gp.",
+        "howToGet": "Can be worn at once.",
         "wikiItemId": 1323,
         "iconUrl": "https://oldschool.runescape.wiki/images/Iron_scimitar.png",
         "inStep": true,
@@ -1198,7 +1198,7 @@
       {
         "nameEn": "Steel scimitar",
         "amount": 1,
-        "howToGet": "Wear it from Attack 5. About 100 gp.",
+        "howToGet": "Wear it from Attack 5.",
         "wikiItemId": 1325,
         "iconUrl": "https://oldschool.runescape.wiki/images/Steel_scimitar.png",
         "inStep": true,
@@ -1208,7 +1208,7 @@
       {
         "nameEn": "Mithril scimitar",
         "amount": 1,
-        "howToGet": "Wear it from Attack 20, after Vampyre Slayer. About 400 gp.",
+        "howToGet": "Wear it from Attack 20, after Vampyre Slayer.",
         "wikiItemId": 1329,
         "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_scimitar.png",
         "inStep": true,
@@ -1218,7 +1218,7 @@
       {
         "nameEn": "Energy potion(4)",
         "amount": 5,
-        "howToGet": "Restores run energy during quests, about 170 gp.",
+        "howToGet": "Restores run energy during quests.",
         "wikiItemId": 3008,
         "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png",
         "inStep": true,
@@ -1228,7 +1228,7 @@
       {
         "nameEn": "Redberry pie",
         "amount": 1,
-        "howToGet": "For The Knight's Sword, about 70 gp.",
+        "howToGet": "For The Knight's Sword.",
         "wikiItemId": 2325,
         "iconUrl": "https://oldschool.runescape.wiki/images/Redberry_pie.png",
         "inStep": true,
@@ -1238,7 +1238,7 @@
       {
         "nameEn": "Iron bar",
         "amount": 2,
-        "howToGet": "For The Knight's Sword, about 200 gp each.",
+        "howToGet": "For The Knight's Sword.",
         "wikiItemId": 2351,
         "iconUrl": "https://oldschool.runescape.wiki/images/Iron_bar.png",
         "inStep": true,
@@ -1248,7 +1248,7 @@
       {
         "nameEn": "Clay",
         "amount": 7,
-        "howToGet": "6 for Doric's Quest, 1 to soak in water for Prince Ali Rescue. About 80 gp each.",
+        "howToGet": "6 for Doric's Quest, 1 to soak in water for Prince Ali Rescue.",
         "wikiItemId": 434,
         "iconUrl": "https://oldschool.runescape.wiki/images/Clay.png",
         "inStep": true,
@@ -1259,7 +1259,7 @@
         "inStep": true,
         "nameEn": "Copper ore",
         "amount": 4,
-        "howToGet": "For Doric's Quest, about 30 gp each.",
+        "howToGet": "For Doric's Quest.",
         "wikiItemId": 436,
         "iconUrl": "https://oldschool.runescape.wiki/images/Copper_ore.png",
         "gp": 30,
@@ -1269,7 +1269,7 @@
         "inStep": true,
         "nameEn": "Iron ore",
         "amount": 2,
-        "howToGet": "For Doric's Quest, about 70 gp each.",
+        "howToGet": "For Doric's Quest.",
         "wikiItemId": 440,
         "iconUrl": "https://oldschool.runescape.wiki/images/Iron_ore.png",
         "gp": 70,
@@ -1278,7 +1278,7 @@
       {
         "nameEn": "Redberries",
         "amount": 1,
-        "howToGet": "For the paste in Prince Ali Rescue, about 50 gp.",
+        "howToGet": "For the paste in Prince Ali Rescue.",
         "wikiItemId": 1951,
         "iconUrl": "https://oldschool.runescape.wiki/images/Redberries.png",
         "inStep": true,
@@ -1288,7 +1288,7 @@
       {
         "nameEn": "Yellow dye",
         "amount": 2,
-        "howToGet": "One for the wig in Prince Ali Rescue, the other for the orange dye in Goblin Diplomacy. About 230 gp.",
+        "howToGet": "One for the wig in Prince Ali Rescue, the other for the orange dye in Goblin Diplomacy.",
         "wikiItemId": 1765,
         "iconUrl": "https://oldschool.runescape.wiki/images/Yellow_dye.png",
         "inStep": true,
@@ -1298,7 +1298,7 @@
       {
         "nameEn": "Red dye",
         "amount": 1,
-        "howToGet": "Mix with yellow to make orange for Goblin Diplomacy, about 290 gp.",
+        "howToGet": "Mix with yellow to make orange for Goblin Diplomacy.",
         "wikiItemId": 1763,
         "iconUrl": "https://oldschool.runescape.wiki/images/Red_dye.png",
         "inStep": true,
@@ -1308,7 +1308,7 @@
       {
         "nameEn": "Blue dye",
         "amount": 1,
-        "howToGet": "For Goblin Diplomacy, about 290 gp.",
+        "howToGet": "For Goblin Diplomacy.",
         "wikiItemId": 1767,
         "iconUrl": "https://oldschool.runescape.wiki/images/Blue_dye.png",
         "inStep": true,
@@ -1330,11 +1330,11 @@
     "fields": [
       {
         "label": "Budget",
-        "text": "About 10,500 gp, of which about 5,300 is the beads for Imp Catcher. To save: buy the pink skirt from Thessalia in Varrock for 2 gp and make the dyes with the witch Aggie in Draynor (5 gp + 2 onions, 3 redberries or 2 Woad leaves)."
+        "text": "Use the current Shopping total for missing supplies; it changes with prices and confirmed stock. To save, the pink skirt is sold by Thessalia in Varrock for 2 gp. Compare making dyes at Aggie with buying them; preserve coins for quest essentials before optional gear or potions."
       },
       {
         "label": "New account",
-        "text": "A new free-to-play account cannot sell cowhides (or leather, iron ore, clay, copper or tin ore, coal, steel bars, oak or yew logs, lobsters, ashes, feathers, the low runes and a few more) on the Grand Exchange until it has 20 hours of play, 10 quest points and total level 100; buying is not restricted. Without selling, buy in this order: the quest materials (about 2,400 gp), then the Imp Catcher beads and the iron and steel scimitars (about 5,400 gp), then, as coins allow, the mithril scimitar, the amulet of strength and the energy potions. Do not skip the first two groups for the third."
+        "text": "A new free-to-play account cannot sell cowhides (or leather, iron ore, clay, copper or tin ore, coal, steel bars, oak or yew logs, lobsters, ashes, feathers, the low runes and a few more) on the Grand Exchange until it has 20 hours of play, 10 quest points and total level 100; buying is not restricted. Without selling, buy in this order: the quest materials, then the Imp Catcher beads and the iron and steel scimitars, then, as coins allow, the mithril scimitar, the amulet of strength and the energy potions. Do not skip the first two groups for the third."
       }
     ],
     "doneWhen": "All the items are bought and are in your Grand Exchange bank.",
@@ -1705,7 +1705,7 @@
       {
         "nameEn": "Staff of fire",
         "amount": 1,
-        "howToGet": "Instead of an ordinary Staff: it replaces the fire runes for Fire Strike (3 runes per cast). In Zaff's Superior Staffs about 1,500 gp, about 940 gp on the Grand Exchange. It pays for itself: see the calculation below.",
+        "howToGet": "Instead of an ordinary Staff: it replaces the fire runes for Fire Strike (3 runes per cast). Compare Zaff's shop with the current GE estimate. Check the payback calculation for your planned casts; do not buy it again if you already own one.",
         "wikiItemId": 1387,
         "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_fire.png"
       },
@@ -1830,7 +1830,7 @@
       }
     ],
     "quickSteps": [
-      "Buy Air and Mind runes in Aubury's Rune Shop in Varrock (300 each to start): in the shop they are 4 and 3 gp, Air is about 6 gp on the Grand Exchange.",
+      "Buy Air and Mind runes in Aubury's Rune Shop in Varrock (300 each to start): in the shop they are 4 and 3 gp. Compare the current GE estimates before buying.",
       "Buy a staff from Zaff in Zaff's Superior Staffs (Varrock): an ordinary Staff is about 15 gp, which is enough to autocast a spell. A Staff of fire costs more but replaces the fire runes.",
       "Wield the staff, open the combat tab (Combat Options), click the spell button and choose the autocast spell: Wind Strike first.",
       "Go to the cow field near Lumbridge and hit the cows: each has 8 health, and a hide (Cowhide) always drops. Pick up the hides; a full inventory goes to the bank or the exchange.",
@@ -2117,7 +2117,7 @@
       {
         "nameEn": "Trout",
         "amount": 10,
-        "howToGet": "Buy on the Grand Exchange for about 24 gp each. Or 8 Salmon instead (about 30 gp each): to catch them yourself you need Fishing 30 and Cooking 25, fly fishing in the same place as the trout (Barbarian Village).",
+        "howToGet": "Buy on the Grand Exchange. Or 8 Salmon instead: to catch them yourself you need Fishing 30 and Cooking 25, fly fishing in the same place as the trout (Barbarian Village).",
         "wikiItemId": 333,
         "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
         "heals": 7,
@@ -2240,7 +2240,7 @@
       {
         "nameEn": "Trout",
         "amount": 10,
-        "howToGet": "Buy on the Grand Exchange for about 24 gp each. Or 8 Salmon instead (about 30 gp each): to catch them yourself you need Fishing 30 and Cooking 25, fly fishing in the same place as the trout (Barbarian Village).",
+        "howToGet": "Buy on the Grand Exchange. Or 8 Salmon instead: to catch them yourself you need Fishing 30 and Cooking 25, fly fishing in the same place as the trout (Barbarian Village).",
         "wikiItemId": 333,
         "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
         "heals": 7,
@@ -2857,7 +2857,7 @@
       {
         "nameEn": "Trout",
         "amount": 5,
-        "howToGet": "Buy on the Grand Exchange for about 24 gp. Salmon, Tuna, Lobster or Swordfish count too. The Black Knights (level 33) inside attack: eat before your health falls low.",
+        "howToGet": "Buy on the Grand Exchange. Salmon, Tuna, Lobster or Swordfish count too. The Black Knights (level 33) inside attack: eat before your health falls low.",
         "wikiItemId": 333,
         "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
         "heals": 7,
@@ -3057,7 +3057,7 @@
       {
         "nameEn": "Trout",
         "amount": 5,
-        "howToGet": "Buy on the Grand Exchange for about 24 gp each. For the dark wizards at the stone circle: they attack on sight and hit up to 6 with magic.",
+        "howToGet": "Buy on the Grand Exchange. For the dark wizards at the stone circle: they attack on sight and hit up to 6 with magic.",
         "wikiItemId": 333,
         "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
         "heals": 7
@@ -3127,7 +3127,7 @@
       {
         "nameEn": "Trout",
         "amount": 10,
-        "howToGet": "10-15 Trout or Salmon (about 30 gp each on the Grand Exchange), or better food you already own. For the Ancient Guardian, which keeps attacking while you mine.",
+        "howToGet": "10-15 Trout or Salmon, or better food you already own. For the Ancient Guardian, which keeps attacking while you mine.",
         "wikiItemId": 333,
         "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
         "heals": 7,
@@ -3350,7 +3350,7 @@
     },
     "floor": "Ground floor",
     "where": "The mine south-east of Varrock (3 iron veins) or the Al Kharid mine (free passage after Prince Ali). The bank is Varrock East or Al Kharid.",
-    "how": "Mine 25 to 30 iron ore (Mining 15: mine copper and tin up to 15 first) and sell it on the Grand Exchange. Stop as soon as you have 2,500 gp in coins: ore in the bag is not cash until it is sold. This step pays only for the Adamant scimitar, not for a whole armour set. Mining levels along the way: you will need level 60 in S6-03.",
+    "how": "Reach the 2,500 gp coin target for the Adamant scimitar using an eligible method from Money. If iron mining is selected, Mining 15 is required; mine copper/tin first if needed. Use the current sale estimate to choose the batch, and stop when confirmed coins meet the target. Unsold ore is not cash; this target does not fund an entire armour set.",
     "fields": [
       {
         "label": "How much you need",
@@ -3362,7 +3362,7 @@
       },
       {
         "label": "Other ways",
-        "text": "Cowhides to leather with Ellis in Al Kharid (about 260 gp per leather), and methods in Money for your current skills and budget."
+        "text": "Compare tanning eligible cowhides with other available methods in Money. Include purchase/tanning costs and the current net sale estimate; do not rely on a fixed leather price."
       },
       {
         "label": "New account",
@@ -3412,7 +3412,7 @@
       {
         "nameEn": "Adamant scimitar",
         "amount": 1,
-        "howToGet": "Needs 30 Attack. About 1,400 gp.",
+        "howToGet": "Needs 30 Attack.",
         "wikiItemId": 1331,
         "iconUrl": "https://oldschool.runescape.wiki/images/Adamant_scimitar.png",
         "inStep": true
@@ -3555,7 +3555,7 @@
       {
         "nameEn": "Salmon",
         "amount": 20,
-        "howToGet": "Buy on the Grand Exchange; check the current acquisition estimate; Trout (about 22 gp, heals 7), Tuna, Lobster or Swordfish count too. Preparation estimates the food for your current levels and worn gear. Or catch and cook your own at Barbarian Village (fly fishing, Fishing 30 for salmon).",
+        "howToGet": "Buy on the Grand Exchange; check the current acquisition estimate; Trout (heals 7), Tuna, Lobster or Swordfish count too. Preparation estimates the food for your current levels and worn gear. Or catch and cook your own at Barbarian Village (fly fishing, Fishing 30 for salmon).",
         "wikiItemId": 329,
         "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
         "heals": 9,
@@ -3681,7 +3681,7 @@
       {
         "nameEn": "Salmon",
         "amount": 10,
-        "howToGet": "Buy on the Grand Exchange for about 30 gp.",
+        "howToGet": "Buy on the Grand Exchange.",
         "wikiItemId": 329,
         "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
         "heals": 9
@@ -3784,7 +3784,7 @@
       {
         "nameEn": "Salmon",
         "amount": 5,
-        "howToGet": "Buy on the Grand Exchange for about 30 gp.",
+        "howToGet": "Buy on the Grand Exchange.",
         "wikiItemId": 329,
         "iconUrl": "https://oldschool.runescape.wiki/images/Salmon.png",
         "heals": 9
@@ -3856,7 +3856,7 @@
           "Lobster",
           "Swordfish"
         ],
-        "howToGet": "Buy on the Grand Exchange for about 24 gp each; Salmon, Tuna, Lobster or Swordfish count too. In the quest his plain hits leave you at 1 health, but a special that lands (up to 19) can kill: keep your health above it. Food cannot stop a special once it lands."
+        "howToGet": "Buy on the Grand Exchange; Salmon, Tuna, Lobster or Swordfish count too. In the quest his plain hits leave you at 1 health, but a special that lands (up to 19) can kill: keep your health above it. Food cannot stop a special once it lands."
       }
     ]
   },
@@ -4029,12 +4029,12 @@
       "plane": 0,
       "label": "The Grand Exchange"
     },
-    "how": "Do not forge nails by hand (it needs Smithing 34)! Buy everything on the Grand Exchange: it comes to about 5,000 gp together with the 2,000 coins for the ship.",
+    "how": "Forging steel nails needs Smithing 34. Compare the current Shopping cost of the required materials, and keep the separate 2,000 coins for the ship. Buy only what is still missing.",
     "itemsRequired": [
       {
         "nameEn": "Steel nails",
         "amount": 90,
-        "howToGet": "30 nails for each plank, about 30 gp each.",
+        "howToGet": "30 nails for each plank.",
         "wikiItemId": 1539,
         "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png",
         "inStep": true
@@ -4042,7 +4042,7 @@
       {
         "nameEn": "Plank",
         "amount": 3,
-        "howToGet": "Only ordinary planks, about 140 gp.",
+        "howToGet": "Only ordinary planks.",
         "wikiItemId": 960,
         "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png",
         "inStep": true
@@ -4085,7 +4085,7 @@
       {
         "nameEn": "Lobster pot",
         "amount": 1,
-        "howToGet": "Buy from Gerrant in Port Sarim for 20 gp (more expensive on the Grand Exchange, about 500 gp). Needed for the Oracle (S5-04).",
+        "howToGet": "Buy from Gerrant in Port Sarim for 20 gp (compare the current GE estimate). Needed for the Oracle (S5-04).",
         "from": "Gerrant",
         "wikiItemId": 301,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster_pot.png",
@@ -4440,21 +4440,21 @@
       {
         "nameEn": "Mind rune",
         "amount": 50,
-        "howToGet": "Water Strike: 1 Mind, 1 Air and 1 Water rune a cast (Magic 5). About 45 casts kill the demon. Grand Exchange, about 4 gp each.",
+        "howToGet": "Water Strike: 1 Mind, 1 Air and 1 Water rune a cast (Magic 5). About 45 casts kill the demon. Grand Exchange; check the current rune estimate.",
         "wikiItemId": 558,
         "iconUrl": "https://oldschool.runescape.wiki/images/Mind_rune.png"
       },
       {
         "nameEn": "Air rune",
         "amount": 50,
-        "howToGet": "Water Strike: 1 a cast; not needed with the Staff of air. Grand Exchange, about 6 gp each.",
+        "howToGet": "Water Strike: 1 a cast; not needed with the Staff of air. Grand Exchange; check the current rune estimate.",
         "wikiItemId": 556,
         "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
       },
       {
         "nameEn": "Water rune",
         "amount": 50,
-        "howToGet": "Water Strike: 1 a cast. Grand Exchange, about 6 gp each.",
+        "howToGet": "Water Strike: 1 a cast. Grand Exchange; check the current rune estimate.",
         "wikiItemId": 555,
         "iconUrl": "https://oldschool.runescape.wiki/images/Water_rune.png"
       }
@@ -4502,7 +4502,7 @@
       {
         "nameEn": "Unfired bowl",
         "amount": 1,
-        "howToGet": "From S4-05: on the Grand Exchange for about 135 gp.",
+        "howToGet": "From S4-05: on the Grand Exchange.",
         "wikiItemId": 1791,
         "iconUrl": "https://oldschool.runescape.wiki/images/Unfired_bowl.png"
       },
@@ -4665,14 +4665,14 @@
       {
         "nameEn": "Plank",
         "amount": 3,
-        "howToGet": "From S4-05: on the Grand Exchange for about 145 gp each.",
+        "howToGet": "From S4-05: on the Grand Exchange.",
         "wikiItemId": 960,
         "iconUrl": "https://oldschool.runescape.wiki/images/Plank.png"
       },
       {
         "nameEn": "Steel nails",
         "amount": 90,
-        "howToGet": "From S4-05: on the Grand Exchange for about 30 gp each.",
+        "howToGet": "From S4-05: on the Grand Exchange.",
         "wikiItemId": 1539,
         "iconUrl": "https://oldschool.runescape.wiki/images/Steel_nails.png"
       },
@@ -4785,7 +4785,7 @@
       {
         "nameEn": "Lobster",
         "amount": "20+",
-        "howToGet": "From step S4-04, or buy more on the Grand Exchange for about 105 gp each. The more lobsters, the lower the risk.",
+        "howToGet": "From step S4-04, or buy more on the Grand Exchange. The more lobsters, the lower the risk.",
         "wikiItemId": 379,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
         "heals": 12
@@ -4844,21 +4844,21 @@
       {
         "nameEn": "Rune sword",
         "amount": 1,
-        "howToGet": "Optional: a stab attack on the Stab style (about 12,000 gp, Attack 40). Your Adamant scimitar works without it.",
+        "howToGet": "Optional: a stab attack on the Stab style (Attack 40). Your Adamant scimitar works without it.",
         "wikiItemId": 1289,
         "iconUrl": "https://oldschool.runescape.wiki/images/Rune_sword.png"
       },
       {
         "nameEn": "Energy potion(4)",
         "amount": 1,
-        "howToGet": "Optional: restores run energy on the climb to the volcano. From S2-01 or on the Grand Exchange for about 170 gp.",
+        "howToGet": "Optional: restores run energy on the climb to the volcano. From S2-01 or on the Grand Exchange.",
         "wikiItemId": 3008,
         "iconUrl": "https://oldschool.runescape.wiki/images/Energy_potion(4).png"
       },
       {
         "nameEn": "Strength potion(4)",
         "amount": 1,
-        "howToGet": "Optional: one dose before you enter Elvarg's lair. Buy on the Grand Exchange for about 100 gp.",
+        "howToGet": "Optional: one dose before you enter Elvarg's lair. Buy on the Grand Exchange.",
         "wikiItemId": 113,
         "iconUrl": "https://oldschool.runescape.wiki/images/Strength_potion(4).png"
       }
@@ -4946,7 +4946,7 @@
       {
         "nameEn": "Lobster",
         "amount": 20,
-        "howToGet": "Buy on the Grand Exchange for about 105 gp (20 of them about 2,100). Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
+        "howToGet": "Buy on the Grand Exchange. Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
         "wikiItemId": 379,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
         "heals": 12
@@ -5121,7 +5121,7 @@
       },
       {
         "label": "Woodcutting",
-        "text": "Up to 60: willows (Willow, from 30) by Draynor Village. Yews (Yew) can only be chopped from 60: by Edgeville, Varrock Palace and south of Falador. Yew logs are about 105 gp: a good passive income."
+        "text": "Up to 60: willows (Willow, from 30) by Draynor Village. Yews (Yew) can only be chopped from 60: by Edgeville, Varrock Palace and south of Falador. Compare the current net return and gathering pace in Money before choosing yews for income."
       },
       {
         "label": "Optional",
@@ -5166,7 +5166,7 @@
       {
         "nameEn": "Nature rune",
         "amount": "As many as casts",
-        "howToGet": "About 140 gp each. The High Level Alchemy value of the item minus the item's price minus this rune must stay above zero: check the live prices in the app before you cast.",
+        "howToGet": "Compare the item's alchemy value with its acquisition cost and all consumed rune costs, including fire runes not supplied by equipment. Check the current estimates before casting.",
         "wikiItemId": 561,
         "iconUrl": "https://oldschool.runescape.wiki/images/Nature_rune.png"
       }
@@ -5251,7 +5251,7 @@
       {
         "nameEn": "Rope",
         "amount": 1,
-        "howToGet": "Buy from Ned in Draynor Village for 16 gp or on the Grand Exchange for about 65 gp.",
+        "howToGet": "Buy from Ned in Draynor Village for 16 gp or on the Grand Exchange.",
         "from": "Ned",
         "wikiItemId": 954,
         "iconUrl": "https://oldschool.runescape.wiki/images/Rope.png"
@@ -5295,7 +5295,7 @@
       {
         "nameEn": "Lobster",
         "amount": 10,
-        "howToGet": "Buy on the Grand Exchange (about 105 gp each). Take a few into the tomb too, the rest for the dungeon.",
+        "howToGet": "Buy on the Grand Exchange. Take a few into the tomb too, the rest for the dungeon.",
         "wikiItemId": 379,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
         "heals": 12,
@@ -5466,7 +5466,7 @@
       {
         "nameEn": "Lobster",
         "amount": 10,
-        "howToGet": "Buy on the Grand Exchange for about 105 gp (20 of them about 2,100). Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
+        "howToGet": "Buy on the Grand Exchange. Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
         "wikiItemId": 379,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
         "heals": 12
@@ -5779,7 +5779,7 @@
       {
         "nameEn": "Rune essence",
         "amount": 50,
-        "howToGet": "Mine from Aubury in Varrock (after Rune Mysteries) or buy on the Grand Exchange (about 12 gp). You can carry it in parts.",
+        "howToGet": "Mine from Aubury in Varrock (after Rune Mysteries) or buy on the Grand Exchange. You can carry it in parts.",
         "from": "Aubury",
         "wikiItemId": 1436,
         "iconUrl": "https://oldschool.runescape.wiki/images/Rune_essence.png"
@@ -5875,7 +5875,7 @@
       {
         "nameEn": "Silver sickle",
         "amount": 1,
-        "howToGet": "Buy on the Grand Exchange (about 150-250 gp) or cast from a silver bar in the Sickle mould (Crafting 18).",
+        "howToGet": "Buy on the Grand Exchange or cast from a silver bar in the Sickle mould (Crafting 18).",
         "wikiItemId": 2961,
         "iconUrl": "https://oldschool.runescape.wiki/images/Silver_sickle.png",
         "inStep": true
@@ -5898,14 +5898,14 @@
           "Tuna",
           "Salmon"
         ],
-        "howToGet": "Your own catch from S6-02, or the Grand Exchange for about 105 gp each. Ghasts turn food in your inventory into rot, so bring spares: three ghasts must be killed."
+        "howToGet": "Your own catch from S6-02, or buy on the Grand Exchange. Ghasts turn food in your inventory into rot, so bring spares: three ghasts must be killed."
       }
     ],
     "itemsRecommended": [
       {
         "nameEn": "Lobster",
         "amount": 15,
-        "howToGet": "Buy on the Grand Exchange for about 105 gp (20 of them about 2,100). Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
+        "howToGet": "Buy on the Grand Exchange. Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
         "wikiItemId": 379,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
         "heals": 12
@@ -6230,7 +6230,7 @@
       {
         "nameEn": "Mithril axe",
         "amount": 1,
-        "howToGet": "Only a mithril one: no other axe will do. About 150 gp.",
+        "howToGet": "Only a mithril one: no other axe will do.",
         "wikiItemId": 1355,
         "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_axe.png"
       },
@@ -6259,7 +6259,7 @@
       {
         "nameEn": "Holy symbol",
         "amount": 1,
-        "howToGet": "About 170 gp on the Grand Exchange.",
+        "howToGet": "Check the current GE estimate.",
         "wikiItemId": 1718,
         "iconUrl": "https://oldschool.runescape.wiki/images/Holy_symbol.png"
       },
@@ -6274,7 +6274,7 @@
       {
         "nameEn": "Hard leather",
         "amount": 1,
-        "howToGet": "Have a cowhide tanned by the tanner (3 gp) or buy one (about 180 gp).",
+        "howToGet": "Have a cowhide tanned by the tanner (3 gp) or buy one.",
         "wikiItemId": 1743,
         "iconUrl": "https://oldschool.runescape.wiki/images/Hard_leather.png"
       },
@@ -6598,7 +6598,7 @@
       {
         "nameEn": "Lobster",
         "amount": 10,
-        "howToGet": "Buy on the Grand Exchange for about 105 gp (20 of them about 2,100). Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
+        "howToGet": "Buy on the Grand Exchange. Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
         "wikiItemId": 379,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
         "heals": 12
@@ -7055,7 +7055,7 @@
       {
         "nameEn": "Greenman's ale",
         "amount": 1,
-        "howToGet": "Buy in the Dragon Inn pub in Yanille or on the Grand Exchange (about 150 gp).",
+        "howToGet": "Buy in the Dragon Inn pub in Yanille or on the Grand Exchange.",
         "wikiItemId": 1909,
         "iconUrl": "https://oldschool.runescape.wiki/images/Greenman's_ale.png"
       },
