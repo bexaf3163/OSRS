@@ -214,6 +214,20 @@ export function heldExact(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' 
 
 export type QuestPresence = 'DONE' | 'NOT_DONE' | 'UNKNOWN';
 
+/** Physical interchangeable equipment. Positive stock is a lower bound; unread alternatives cannot prove a shortage. */
+export function heldEquipment(s: PlayerState, names: readonly string[]): Held {
+  const parts = [...new Set(names.map(nameKey))].map(n => heldExact(s, n));
+  const bagKnown = parts.some(p => p.bag !== null || p.equipped > 0);
+  const bag = bagKnown ? parts.reduce((n, p) => n + Math.max(p.bag ?? 0, p.equipped), 0) : null;
+  const noted = parts.reduce((n, p) => n + p.noted, 0);
+  const bankKnown = parts.every(p => p.bank !== null);
+  const bankBound = parts.reduce((n, p) => n + (p.bank ?? 0), 0);
+  const lower = (bag ?? 0) + noted + bankBound;
+  return { bag, noted, bank: bankKnown ? bankBound : null, equipped: parts.reduce((n, p) => n + p.equipped, 0),
+    total: lower > 0 || bankKnown ? lower : null,
+    presence: lower > 0 ? 'PRESENT' : bankKnown ? 'MISSING' : 'UNKNOWN', source: bagKnown || bankKnown || lower > 0 ? 'game' : 'none' };
+}
+
 /** A quest is counted in the game; the list is unknown means UNKNOWN. */
 export function questOf(s: PlayerState, quest: string): QuestPresence {
   if (!s.quests.known) return 'UNKNOWN';

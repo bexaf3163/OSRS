@@ -22,7 +22,7 @@ function Row({ step, l, quiet = false, linked = true }: { step: Step; l: PrepLin
       <span className="quest-supply-name">{l.name}{lineAmount(l)}{!quiet && l.marketPrice && <><br /><span className="muted small" title={l.marketPrice.detail}>{l.marketPrice.text}</span></>}</span>
       {quiet
         ? <span className="quest-supply-state">Handled</span>
-        : <span className="quest-supply-state"><span aria-hidden="true">{l.where === 'UNKNOWN' ? '○' : l.where === 'MISSING' ? '!' : l.where === 'BANK' ? '↗' : '✓'}</span> {l.unnote ? 'Unnote at bank' : l.where === 'UNKNOWN' && !linked ? 'Bring' : LABEL[l.where]}</span>}
+        : <span className="quest-supply-state"><span aria-hidden="true">{l.where === 'UNKNOWN' ? '○' : l.where === 'MISSING' ? '!' : l.where === 'BANK' || l.equip && l.where === 'INVENTORY' ? '↗' : '✓'}</span> {l.equip && l.where === 'INVENTORY' ? 'Equip' : l.unnote ? 'Unnote at bank' : l.where === 'UNKNOWN' && !linked ? 'Bring' : LABEL[l.where]}</span>}
     </li>
   );
 }

@@ -54,6 +54,8 @@ export interface PrepAction {
 }
 
 export interface PrepLine {
+  /** The item must be worn, not merely carried. */
+  equip?: boolean;
   /** Market cost for physical items; doses are priced by their actual package in Shopping. */
   marketPrice?: ItemPrice;
   key: string;
@@ -86,6 +88,8 @@ export interface PrepLine {
   /** Additional usable units allocated to this deadline; the same bag stock cannot cover another deadline again. */
   bagShortfall?: number;
 }
+
+export const prepSatisfied = (l: { where: string; equip?: boolean }) => l.where === 'EQUIPPED' || (l.where === 'INVENTORY' && !l.equip);
 
 export interface PrepScore {
   /** Done out of what can be checked; null means there is nothing to check with yet (no data from the game). */
@@ -402,6 +406,30 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
     }
   }
 
+  for (const l of lines) {
+    const required = step.itemsRequired?.find(r => r.equip && r.nameEn === l.name);
+    if (!required || !l.usedIn.includes(step.id)) continue;
+    l.equip = true;
+    const accepted = new Set([required.nameEn, ...(required.anyOf ?? [])].map(n => n.toLowerCase()));
+    const worn = state.connected && state.equipmentKnown && Object.values(state.equipment).some(n => accepted.has(n.toLowerCase()));
+    if (worn) {
+      l.where = 'EQUIPPED';
+      l.have.equipped = 1;
+      l.toGet = 0;
+      l.bagShortfall = 0;
+      delete l.action;
+      delete l.unnote;
+    } else if (l.where !== 'INVENTORY' && l.where !== 'EQUIPPED') {
+      continue;
+    } else if (!state.connected || !state.equipmentKnown) {
+      l.where = 'UNKNOWN';
+      l.action = { kind: 'CONNECT', label: 'Connect RuneLite so equipped armour can be checked', href: '#/settings' };
+    } else {
+      l.where = 'INVENTORY';
+      l.action = { kind: 'UPGRADE', label: `Equip ${l.name}` };
+    }
+  }
+
   // Made items: if one is missing, its ingredients are planned too.
   for (const l of [...lines]) lines.push(...recipeLines(l, step, state));
 
@@ -471,7 +499,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
 
   const stepOrder = (l: PrepLine) => (l.usedIn[0] ? ids.indexOf(l.usedIn[0]) : 99);
   lines.sort((a, b) => ORDER[a.priority] - ORDER[b.priority] || TIMING[a.timing] - TIMING[b.timing] || stepOrder(a) - stepOrder(b) || (a.key < b.key ? -1 : 1));
-  const satisfiedOf = (l: PrepLine) => l.where === 'INVENTORY' || l.where === 'EQUIPPED';
+  const satisfiedOf = prepSatisfied;
   const now = lines.filter((l) => l.timing === 'NOW' && !satisfiedOf(l));
   const soon = lines.filter((l) => l.timing === 'SOON' && !satisfiedOf(l));
   const byTheWay = lines.filter((l) => l.timing === 'IN_STEP');

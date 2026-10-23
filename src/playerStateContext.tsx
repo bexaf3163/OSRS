@@ -191,7 +191,7 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
       const stored = adopted[s.id];
       const live = { stats: knownStats, xp: xp as Partial<Record<string, number>> | null, gear: knownGear, combatLog };
       const report = evaluatePlans({
-        step: s, steps: base, ctx: estimateContext(s, live, base, progress), owned, prices: planPrices, foodPrice: foodPriceOf(s, planPrices),
+        step: s, steps: base, ctx: estimateContext(s, live, base, progress), owned, prices: planPrices, foodPrice: foodPriceOf(s, planPrices), state,
         keepDefenceOne, adopted: stored?.key ?? null, restriction: trade.state, done: (id) => isClosed(progress, id),
       });
       if (!report) continue;
@@ -223,12 +223,13 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
       const pick = resolvePick(e.report, key, {
         xp: xp as Partial<Record<'attack' | 'strength' | 'defence', number>> | null,
         held: (name) => { const h = heldOf(state, name); return h.total; },
+        state, prices: planPrices,
       }, source, planWhy(e.report, key, source));
       if (pick) out[id] = pick;
     }
     return out;
     // state carries what the player holds.
-  }, [combatPlans, xp, state]);
+  }, [combatPlans, xp, state, planPrices]);
   useEffect(() => { setCombatPicks(combat); }, [combat, setCombatPicks]);
 
   // The food of the combat training steps from this player's estimate: readiness asks for one trip, the shopping list buys the whole goal.

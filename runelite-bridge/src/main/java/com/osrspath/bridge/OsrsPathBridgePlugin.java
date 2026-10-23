@@ -3868,13 +3868,13 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			}
 			items = kept;
 		}
-		checklist = Checklist.evaluate(items, carried, bank);
+		checklist = Checklist.evaluate(items, carried, bank, worn);
 		Set<Integer> ids = new HashSet<>();
 		Set<String> names = new HashSet<>();
 		for (int i = 0; i < checklist.getRows().size(); i++)
 		{
 			Checklist.Row row = checklist.getRows().get(i);
-			if (row.getState() != Checklist.State.IN_BAG_READY && row.getInBank() != 0)
+			if (row.getState() != Checklist.State.IN_BAG_READY && row.getState() != Checklist.State.NOT_EQUIPPED && row.getInBank() != 0)
 			{
 				ActiveTarget.ChecklistItem item = items.get(i);
 				if (item.getId() != null)

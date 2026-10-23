@@ -3865,6 +3865,7 @@
     "stage": 4,
     "type": "skill",
     "title": "Attack to 40",
+    "combatArmour": [1165, 1125, 1077, 1195],
     "requires": [],
     "foes": [
       "Giant frog"
@@ -3937,7 +3938,7 @@
       },
       {
         "label": "Armour",
-        "text": "For Defence 10, train on cows using Defensive (Block on a scimitar). Once reached, visit the bank and equip your armour. Use Gear to buy an affordable steel platebody, platelegs or plateskirt, full helm and kiteshield if missing; keep coins for food. Black armour is optional if affordable. The combat estimate uses what you actually wear, so it does not assume a free armour upgrade. A build that keeps Defence at 1 remains respected."
+        "text": "Before Attack training, reach Defence 10 on cows using Defensive (Block on a scimitar). Then equip a Black full helm, Black platebody, Black platelegs or plateskirt, and Black kiteshield, or usable equivalent/better pieces you already own. Black armour requires 10 Defence. Withdraw owned pieces first; buy only needed upgrades on the Grand Exchange, checking current preparation prices and keeping coins for food. Estimates use actual worn gear; purchase costs and the shopping detour are extra. An explicit Defence 1 build bypasses this preparation."
       },
       {
         "label": "Weapon",

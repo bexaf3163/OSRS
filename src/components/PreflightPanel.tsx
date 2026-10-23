@@ -8,7 +8,7 @@ import { nameKey } from '../lib/checklist';
 import { evaluatePreflight, preflightItems } from '../lib/checklist';
 
 export function PreflightPanel({ step }: { step: Step }) {
-  const { state, inGame, activeStepId, owned, questsDone, stats } = useBridge();
+  const { state, inGame, activeStepId, owned, questsDone, stats, gear } = useBridge();
   const { progress } = useStore();
   const items = preflightItems(step);
   if (items.length === 0 || state !== 'online') return null;
@@ -25,7 +25,7 @@ export function PreflightPanel({ step }: { step: Step }) {
   } else if (!inGame || !owned) {
     body = <p className="muted small">Log in to the game in RuneLite — the bag will be checked by itself.</p>;
   } else {
-    const r = evaluatePreflight(items, owned, { ...progress.levels, ...(stats ?? {}) });
+    const r = evaluatePreflight(items, owned, { ...progress.levels, ...(stats ?? {}) }, gear?.equipment);
     body = (
       <>
         {/* All ready: the list folds to one line, so it does not repeat what the status above already says. */}
@@ -40,7 +40,7 @@ export function PreflightPanel({ step }: { step: Step }) {
                 {item.heals ? <span className="badge badge-heal">+{item.heals} HP</span> : null}
               </span>
               <span className="preflight-count">
-                {have}/{item.doses ?? item.count}{item.exact ? '' : '+'}{item.doses !== undefined ? ' doses' : ''}
+                {have}/{item.doses ?? item.count}{item.exact ? '' : '+'}{item.doses !== undefined ? ' doses' : item.equip ? ' worn' : ''}{s === 'NOT_EQUIPPED' ? ' · equip it' : ''}
                 {s !== 'IN_BAG_READY' && inBank !== null && (
                   <span className="muted"> · {inBank > 0 ? `in the bank ${inBank}` : 'not in the bank'}</span>
                 )}

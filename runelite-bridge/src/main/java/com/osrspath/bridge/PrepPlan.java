@@ -98,6 +98,8 @@ public class PrepPlan
 	@Data
 	public static class Line
 	{
+		/** Optional: carrying the item is not enough; it must be worn. */
+		private Boolean equip;
 		/** The English name, as in the bag. */
 		private String name;
 		private int need;

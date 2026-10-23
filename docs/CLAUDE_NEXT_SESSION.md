@@ -1,5 +1,11 @@
 # Claude continuation — start here
 
+## Latest local source: structured armour preparation (acceptance pending)
+
+Read [CODEX_ARMOUR_PRICES_DATES_HANDOFF.md](CODEX_ARMOUR_PRICES_DATES_HANDOFF.md), section Structured armour preparation. S4-03 now has Defence10 → equip owned usable Black/equivalent armour → selected trainer phases through the existing readiness, Shopping, checklist, bridge and single HUD. KeepDefenceOne and Attack40-only completion remain. Owned/unworn is an Equip action, not a new purchase or bank detour; unknown equipment cannot complete it. Price selection uses the shared board; hypothetical gear benefit and a full acquisition/food budget optimizer are not claimed. Source is newer than the green9f37646f preview below. Local TS/build/data, 1,830/1,836 Vitest (six known sandbox failures), and 50 focused Java tests pass as detailed in the handoff. Final full CI/browser/isolated portable and live acceptance remain pending. Stable/main remains held.
+
+HDOS was a feasibility question only. No HDOS implementation was requested or added. Full bridge/HUD parity depends on confirming supported integration with its adapted plugin system.
+
 ## Current unreleased blocks: 2.74.3 — progress proof, native reads, tools and preparation prices
 
 Verified production source **9f37646ffdd373e65b4e5083d56b036717ecd8e3**: [Checks run 40000648722](https://github.com/bexaf3163/OSRS/actions/runs/40000648722) passed all 1,830 Vitest tests/143 files, TypeScript/build, data validation (zero errors/warnings), full Java, complete Chromium smoke and isolated actual portable EXE checks. The 390/1280px price/absence, date-preservation and tool-uncertainty browser scenarios all passed. [Test portable](https://github.com/bexaf3163/OSRS/releases/download/audit-test-9f37646f/OSRS-Path-audit-test-9f37646f.exe), internal version2.74.3, SHA-256 **3f81d98d0dc4a542393cac622c32930311b5862ace36ad83320803f887b62ca3**; the asset digest matches the actual isolated-EXE test log. Stable/main publication remains held. This is automated/packaged verification, not live gameplay or completion of the broader audit. Later documentation-only corrections do not change that verified production tree.

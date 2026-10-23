@@ -23,6 +23,21 @@ public class HudModelTest
 	private static final Gson GSON = new Gson();
 	private static final String S403 = "[S4-03] Attack to 40 and bank 50 Big bones";
 
+	@Test
+	public void requiredArmourInBagSaysEquipAndLiveWornStateClearsTheBlock()
+	{
+		PrepPlan p = plan(line("Black full helm", 1, "INVENTORY", "CRITICAL", "NOW", null, "Equip Black full helm"));
+		p.line("Black full helm").setEquip(true);
+		StepGuide.ItemLine helm = item("Black full helm", StepGuide.Have.BAG, 1, 1, 0, 0, null, true);
+		HudModel.Input in = input(view(S403, p, helm), quiet(), null);
+		assertTrue(HudModel.blocks(helm, p, in));
+		assertEquals("Equip Black full helm", HudModel.build(in).getHeadline());
+		assertFalse(HudModel.prepareLines(in, null).stream().anyMatch(l -> l.getText().contains("with you")));
+		StepGuide.ItemLine worn = item("Black full helm", StepGuide.Have.BAG, 1, 1, 0, 1, null, true);
+		assertFalse(HudModel.blocks(worn, p, in));
+		assertNull(HudModel.block(input(view(S403, p, worn), quiet(), null)));
+	}
+
 	// ---------- Builders ----------
 
 	/** An item with its live figures: name, state, with you, needed, in the bank (-1 not seen), worn, healing (food), substitutes. */

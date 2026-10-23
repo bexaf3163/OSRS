@@ -215,6 +215,7 @@ export interface BridgeTransport {
 
 /** An item for the departure check at the bank. */
 export interface ChecklistPayloadItem {
+  equip?: boolean;
   name: string;
   id?: number;
   count: number;
@@ -386,6 +387,7 @@ export function toInGameTarget(step: Step, branch?: StepBranch, extraWatch: stri
   const goal = alt ? (alt.label.startsWith(branch!.label) ? alt.label : `${branch!.label}: ${alt.label}`) : g.goal ?? worldPoint?.label;
   if (goal) payload.goal = goal;
   const checklist = preflightItems(step).map((i) => ({
+    ...(i.equip ? { equip: true } : {}),
     name: i.nameEn, id: i.id, count: i.count, heals: i.heals, ...(i.alt?.length ? { alt: i.alt } : {}), ...(i.doses !== undefined ? { doses: i.doses } : {}),
   }));
   if (checklist.length) payload.checklist = checklist;

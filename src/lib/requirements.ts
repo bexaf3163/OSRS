@@ -14,7 +14,7 @@ export type ItemRef = { name: string; id?: number; /** The manual "already have"
 export type Requirement =
   | { type: 'skill'; skill: string; min: number }
   | ({ type: 'item'; count: number } & ItemRef)
-  | { type: 'equipment'; name: string; slot?: string }
+  | { type: 'equipment'; name: string; slot?: string; anyOf?: string[] }
   | { type: 'quest'; quest: string }
   | { type: 'money'; amount: number }
   | { type: 'gameMode'; mode: GameMode }
@@ -72,12 +72,14 @@ export function evaluate(req: Requirement, s: PlayerState): ReqResult {
       return { state: 'MISSING', have: 0, need: count, missing: count, detail: 'in neither the bag nor the bank' };
     }
     case 'equipment': {
-      const worn = Object.entries(s.equipment).some(([slot, n]) => (!req.slot || slot === req.slot) && nameKey(n) === nameKey(req.name));
+      const names = new Set([req.name, ...(req.anyOf ?? [])].map(nameKey));
+      const worn = Object.entries(s.equipment).some(([slot, n]) => (!req.slot || slot === req.slot) && names.has(nameKey(n)));
       if (worn) return { state: 'OK', have: 1, need: 1, missing: 0, detail: 'worn' };
       if (!s.connected) return { state: 'UNKNOWN', need: 1, detail: 'no connection to the game' };
-      const h = heldOf(s, req.name);
-      if (h.presence === 'PRESENT') return { state: 'BANK', have: 1, need: 1, missing: 0, detail: (h.bag ?? 0) > 0 ? 'in the bag: wear it' : 'in the bank: take it and wear it' };
-      return h.presence === 'MISSING' ? { state: 'MISSING', have: 0, need: 1, missing: 1, detail: 'none' } : { state: 'UNKNOWN', need: 1, detail: bankUnknown };
+      const held = [...names].map(n => heldOf(s, n));
+      const h = held.find(h => h.presence === 'PRESENT');
+      if (h) return { state: 'BANK', have: 1, need: 1, missing: 0, detail: (h.bag ?? 0) > 0 ? 'in the bag: wear it' : 'in the bank: take it and wear it' };
+      return held.every(h => h.presence === 'MISSING') ? { state: 'MISSING', have: 0, need: 1, missing: 1, detail: 'none' } : { state: 'UNKNOWN', need: 1, detail: bankUnknown };
     }
     case 'quest': {
       const q = questOf(s, req.quest);

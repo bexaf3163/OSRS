@@ -184,6 +184,8 @@ const text = async (page: Page, sel: string) => {
 };
 
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'armour') { await armourPreparationScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await armourPreparationScenarios(browser);
   if (process.env.UI_ONLY === 'market-preparation') { await marketPreparationScenarios(browser); return; }
   if (!process.env.UI_ONLY) await marketPreparationScenarios(browser);
   if (process.env.UI_ONLY === 'date-proof') { await dateFreeSettingsScenarios(browser); return; }
@@ -2030,11 +2032,12 @@ async function combatRouteScenarios(browser: Browser) {
     expect(!/drops sold about/.test(await text(page, '.combat-route')) && /Optional drops are not counted as income/.test(await text(page, '.combat-route')), `combat route (${width} px): XP-only plans do not advertise unscheduled loot sales`);
     expect(/Compared: .*Cow/.test(await text(page, '.combat-route')), `combat route (${width} px): it says what was compared`);
     if (process.env.UI_SHOTS) await page.locator('.combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-open-${width}.png` }).catch(() => {});
-    // The player's own choice: the route as written. The arrow goes back to the giants, the choice is kept, and the better plan is offered.
+    // A trainer choice cannot bypass common preparation: Defence 10 still comes before the armour and Attack phase.
     await page.locator('.combat-plan-row', { hasText: 'The route as written' }).getByRole('button', { name: 'Use this instead' }).click();
     await page.waitForTimeout(1500);
     const back = await lastStep();
-    expect(back?.npcNames?.[0] === 'Giant frog' && back?.worldPoint?.plane === 0, `combat route (${width} px): the route as written, chosen, brings the arrow back to the giants`);
+    expect(back?.npcNames?.[0] === 'Cow' && back?.pacing?.skill === 'defence' && back?.pacing?.targetLevel === 10 && back?.worldPoint?.plane === 0,
+      `combat route (${width} px): selecting the route keeps Defence 10 preparation on surface cows`);
     const mine = await text(page, '.status-combat-route');
     expect(/Your plan: The route as written/.test(mine), `combat route (${width} px): the player's choice is named and the better plan offered, not forced`);
     expect((await savedPlans())[0]['S4-03']?.by === 'player', `combat route (${width} px): the player's choice is saved as theirs`);
@@ -2322,6 +2325,44 @@ async function toolProofScenarios(browser: Browser) {
     await page.waitForTimeout(900);
     expect((await line())?.where === 'INVENTORY', `tool proof (${width}): the owned usable tier clears the preparation action`);
     expect(await noOverflow(page) && !errors.length, `tool proof (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function armourPreparationScenarios(browser: Browser) {
+  const pieces = ([[1165, 'Black full helm', 'head'], [1125, 'Black platebody', 'body'], [1077, 'Black platelegs', 'legs'], [1195, 'Black kiteshield', 'shield']] as [number, string, string][])
+    .map(([id, name, slot]) => ({ id, name, slot }));
+  const weapon = { id: 1331, name: 'Adamant scimitar', slot: 'weapon' };
+  const stats = { attack: 30, strength: 21, defence: 10, hitpoints: 24 };
+  const xp = { attack: 13363, strength: 2000, defence: 1154, hitpoints: 3500 };
+  const items = [...pieces.map(p => ({ name: p.name, carried: 1, noted: 0, bank: 0 })), { name: 'Black plateskirt', carried: 0, noted: 0, bank: 0 }];
+  const gear = { equipment: [weapon], inventory: pieces, coins: 10000, bankCoins: 0 };
+  for (const width of [390, 1280]) {
+    const { page, errors } = await open(browser, width, {
+      progress: progressBefore('S4-03', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S4-03' }, market: true,
+      status: { protocol: 6, inGame: true, player: 'Armour Test', activeStepId: 'S4-03', stats, xp, ...gear },
+      events: [{ type: 'STATS', stats }, { type: 'XP', xp }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
+    }, '#/step/S4-03');
+    const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
+    await page.waitForTimeout(1500);
+    const prep = await snapshot();
+    expect(prep?.step?.goal?.includes('10 Defence required') && prep.step.checklist?.length === 4 && prep.step.checklist.every((i: any) => i.equip),
+      `armour (${width}): the same four-piece equip requirement and Defence level reach the game`);
+    expect(prep?.plan?.lines?.length === 4 && prep.plan.lines.every((i: any) => i.equip && i.where === 'INVENTORY' && /^Equip /.test(i.action)),
+      `armour (${width}): carried armour requires equipping, with no duplicate purchase or withdrawal`);
+    expect(await page.locator('.quest-supply-state').filter({ hasText: /^↗ Equip$/ }).count() === 4, `armour (${width}): each current supply says Equip`);
+    const worn = { ...gear, equipment: [weapon, ...pieces], inventory: [] };
+    await page.evaluate(g => {
+      const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void };
+      w.__status = { ...w.__status, ...g };
+      w.__emit({ type: 'GEAR', gear: g });
+    }, worn);
+    await page.waitForTimeout(1500);
+    const trained = await snapshot();
+    expect(trained?.step?.pacing?.targetExp > 0 && !trained.step.checklist?.some((i: any) => i.equip), `armour (${width}): confirmed worn gear advances to training`);
+    expect(trained?.step?.completionTrigger?.levels?.[0]?.level === 40 && !trained.step.completionTrigger?.items?.length, `armour (${width}): saved route completion remains Attack 40 only`);
+    expect(await noOverflow(page) && !errors.length, `armour (${width}): no overflow or console errors`);
     await page.context().close();
   }
 }

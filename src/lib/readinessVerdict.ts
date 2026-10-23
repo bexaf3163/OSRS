@@ -105,6 +105,7 @@ export function bankFreshness(connected: boolean, owned: OwnedState | null, now 
 const count = (l: PrepLine, n = l.count) => `${l.name}${l.unit === 'dose' ? lineAmount(l, n) : n > 1 ? ` ×${n}` : ''}`;
 
 function lineReason(l: PrepLine, group: ReasonGroup): Reason {
+  if (l.equip && l.where === 'INVENTORY') return { group, state: 'bank', text: `${count(l)}: with you; equip it before training.` };
   const bag = l.have.bag ?? 0;
   switch (l.where) {
     case 'EQUIPPED':
@@ -221,6 +222,8 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
 
 /** The next action when something is to be taken or got: the bank first (it is already yours), then what to get, food named as food. */
 function prepHeadline(plan: PrepPlan, combat: CombatReadiness | null, isFood: (n: string) => boolean): string {
+  const equip = plan.now.find(l => l.equip && l.where === 'INVENTORY');
+  if (equip) return `Equip ${equip.name} before training — it is in your bag.`;
   if (combat?.food.unnote) return combat.food.text;
   const notes = plan.lines.find((l) => l.timing === 'NOW' && l.unnote && l.priority !== 'OPTIONAL');
   if (notes) return `Bank: unnote ${count(notes, notes.unnote)} before using it${isFood(notes.name) ? ' as food' : ''}.`;

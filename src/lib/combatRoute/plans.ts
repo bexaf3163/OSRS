@@ -28,6 +28,9 @@ import type { PriceView } from '../funding/quotes';
 import type { TradeRestriction } from '../tradeRestriction';
 import { laterDefence, type LaterDefence } from './later';
 import { SELL_DROP, spotsOf, TRAINER_LEVELS, TRAINERS, type Spot } from './spots';
+import { armourDefence, armourReady } from './armour';
+import type { PlayerState } from '../playerState';
+import { nearestBank } from '../readiness';
 
 export type MeleeSkill = 'attack' | 'strength' | 'defence';
 export interface Goal { skill: MeleeSkill; exp: number }
@@ -36,7 +39,9 @@ export type PlanId = 'route' | 'split' | 'item-first' | 'xp-only' | 'defence-fir
 
 export interface PlanPhase {
   /** train: the XP goals; item: the drops; defence: Defence first; route: the step as written. */
-  kind: 'train' | 'item' | 'defence' | 'route';
+  kind: 'train' | 'item' | 'defence' | 'armour' | 'route';
+  /** Baseline catalogue IDs for a preparation phase; completion requires actual worn equivalents. */
+  armour?: number[];
   foe: CombatFoe;
   spot: Spot;
   /** The XP the phase ends at, per skill (empty for an item phase). */
@@ -103,6 +108,7 @@ export interface PlanReport {
 }
 
 export interface PlanInput {
+  state?: PlayerState;
   /** The step as the route writes it (not as an adopted plan changes it). */
   step: Step;
   steps: readonly Step[];
@@ -200,6 +206,7 @@ function risksOf(phases: PlanPhase[], hp: number): { risks: string[]; blockers: 
   const risks: string[] = [];
   const blockers: string[] = [];
   for (const p of phases) {
+    if (p.kind === 'armour') continue;
     const name = foeLabel(p.foe);
     if (p.foe.maxHit * 2 >= hp) blockers.push(`${name} can hit for ${p.foe.maxHit}, more than half of your ${hp} health`);
     else if (p.foe.aggressive) risks.push(`${name} is aggressive: you cannot choose when to fight`);
@@ -264,9 +271,24 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   const hp = ctx.stats.hitpoints;
   const price = inp.foodPrice ?? null;
   const doses = strengthDoses(inp.owned);
-  const live: StepEstimateContext = { ...ctx, strengthDoses: doses };
+  let live: StepEstimateContext = { ...ctx, strengthDoses: doses };
   const item = itemGoal(step, inp.owned);
   const objective = [goalText(goals), item ? `${item.count} ${item.name}` : null].filter(Boolean).join(', ');
+
+  // Route preparation is common to every trainer choice. It is not a quest prerequisite and restricted builds retain their route.
+  const kit = !inp.keepDefenceOne && goals.some(g => currentXp(live, g.skill) < g.exp) ? step.combatArmour : undefined;
+  const kitDefence = kit?.length ? armourDefence(kit) : 1;
+  const preparation: PlanPhase[] = [];
+  if (kit?.length && kitDefence > 1) {
+    if (typeof ctx.stats.defence !== 'number') return null;
+    if (ctx.stats.defence < kitDefence) {
+      const train = bestOf(estimates(step, 'Cow', [{ skill: 'defence', exp: xpForLevel(kitDefence) }], live).filter(e => e.foe.maxHit * 2 < hp));
+      const spot = spots.get('Cow');
+      if (!train || !spot) return null;
+      preparation.push({ ...phaseOf('defence', train, spot, [{ skill: 'defence', exp: xpForLevel(kitDefence) }], `Cows: Defence to ${kitDefence} (${train.kills} kills)`), armour: kit });
+      live = afterPhase(live, train, { defence: xpForLevel(kitDefence) });
+    }
+  }
 
   // --- The route as written
   const routeEst = chooseVariant(objectiveEstimates(step, foe, goals, item?.missing ?? 0, live), ctx.fights);
@@ -276,8 +298,22 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
     `${foeLabel(routeEst.foe)}: ${goalText(goals)}${item && item.missing > 0 ? ` and ${item.count} ${item.name}` : ''} (${Math.max(routeEst.kills, itemKills)} kills)`, item && item.missing > 0 ? { name: item.name, count: item.count } : undefined, Math.max(routeEst.kills, itemKills), item?.missing);
   // What the step asks to be banked is reserved: it is never counted as something to sell.
   const reserve = item && item.missing > 0 ? { name: item.name, qty: item.missing } : null;
-  const make = (id: PlanId, key: string, title: string, phases: PlanPhase[], extra: string[] = [], notes: string[] = []) =>
-    assemble(id, key, title, phases, hp, price, incomeOf(phases, reserve, inp.prices, inp.restriction), extra, notes);
+  const make = (id: PlanId, key: string, title: string, phases: PlanPhase[], extra: string[] = [], notes: string[] = []) => {
+    let all = phases;
+    if (kit?.length) {
+      const first = phases[0];
+      const bank = nearestBank(step);
+      const ready = armourReady(kit, first.foe.attackStyle, inp.state);
+      const armour: PlanPhase = { ...first, kind: 'armour', armour: kit, goals: [], item: undefined, kills: 0,
+        requiredLootTrips: undefined, minutes: { ...ZERO }, food: { ...ZERO }, killsPerTrip: Infinity,
+        basis: ready ? first.basis : 'basic', text: `Equip Black armour or equivalent/better (${kitDefence} Defence required)`,
+        spot: { ...first.spot, ...(bank ? { place: bank, goal: bank.label, where: `Prepare at ${bank.label}; equipment must be worn before training.` } : {}), npcNames: [], waypoints: undefined },
+      };
+      all = [...preparation, armour, ...phases];
+      if (!ready) notes = [...notes, 'Training estimates use current worn equipment. Armour purchases and their shopping detour are not timed; keep enough coins for food.'];
+    }
+    return assemble(id, key, title, all, hp, price, incomeOf(all, reserve, inp.prices, inp.restriction), extra, notes);
+  };
   const plans: EvaluatedPlan[] = [make('route', 'route', 'The route\'s plan', [routePhase])];
   const compared = new Set<string>([foeLabel(routeEst.foe)]);
 
@@ -337,7 +373,7 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   }
 
   // --- Defence first
-  const defenceNow = ctx.xp && typeof ctx.xp.defence === 'number' ? ctx.xp.defence : xpForLevel(ctx.stats.defence ?? 1);
+  const defenceNow = Math.max(ctx.xp && typeof ctx.xp.defence === 'number' ? ctx.xp.defence : xpForLevel(ctx.stats.defence ?? 1), kit?.length ? xpForLevel(kitDefence) : 0);
   const later = laterDefence(inp.steps, step.id, inp.done);
   const laterXp = later.reduce((a, l) => a + l.xp, 0);
   const defenceTrainer = (n: number) => bestOf(estimates(step, 'Cow', [{ skill: 'defence', exp: xpForLevel(n) }], live).filter((e) => e.foe.maxHit * 2 < hp));

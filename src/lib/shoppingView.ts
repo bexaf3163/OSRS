@@ -5,7 +5,7 @@
 
 import type { Progress, Step, WikiItemDetail } from '../types';
 import { aggregateShopping, formatGp, type ShoppingLine, type ShoppingList, type ShoppingSource } from './shopping';
-import { heldOf, type PlayerState } from './playerState';
+import { heldEquipment, heldOf, type PlayerState } from './playerState';
 import { carryOf, doseKind, dosePackage, heldUnits, takeFromBank, type Carry, type DosePackage, type DoseSize } from './doses';
 import { legacyKeys } from './oneTrip';
 import { planSources } from './sourceRouter';
@@ -75,8 +75,13 @@ const wearable = new Set(gearData.items.filter((p) => p.slot).map((p) => nameKey
  * list need of an alternative (the Lobsters a step asks for are not also the Salmon of another): only the rest of that stack counts here.
  */
 export function ownershipOf(
-  state: PlayerState, line: Pick<ShoppingLine, 'nameEn' | 'key' | 'anyOf' | 'heals'> & Partial<Pick<ShoppingLine, 'dose' | 'id'>>, reserved?: ReadonlyMap<string, number>,
+  state: PlayerState, line: Pick<ShoppingLine, 'nameEn' | 'key' | 'anyOf' | 'heals'> & Partial<Pick<ShoppingLine, 'dose' | 'id' | 'equip'>>, reserved?: ReadonlyMap<string, number>,
 ): Ownership {
+  if (line.equip) {
+    const h = heldEquipment(state, [line.nameEn, ...(line.anyOf ?? [])]);
+    return { total: h.total, withYou: h.bag === null ? null : h.bag + h.noted, bank: h.bank, worn: h.equipped,
+      source: h.source === 'game' ? h.bank === null ? 'bag' : 'game' : 'none', viaAlternatives: 0 };
+  }
   // A potion is counted in doses across its sizes (doses.ts), as the step's readiness and preparation count it.
   const base = heldUnits(state, line.nameEn, line.key, legacyKeys({ dose: line.dose, id: line.id, nameEn: line.nameEn }));
   // Worn is with you even when the game was not asked to count the item.

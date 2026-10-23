@@ -41,6 +41,8 @@ export type ReadinessAction =
   | { kind: 'nav'; label: string; target: NavTargetPayload };
 
 export interface RequirementStatus {
+  /** An owned item in the bag still needs to be worn. */
+  equip?: boolean;
   kind: 'step' | 'qp' | 'mode' | 'skill' | 'quest' | 'item' | 'coins';
   label: string;
   state: RequirementState;
@@ -241,7 +243,7 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     // Any of several items does the job (S3-08's food: Salmon, or Trout, Tuna...): they count together, as the plugin's guide counts them. A tool
     // family (every pickaxe tier) is counted by heldOf already.
     const alt = it.alt?.length && !toolFamilyOf(it.nameEn) ? it.alt : null;
-    const res = alt
+    const res = it.equip ? evaluate({ type: 'equipment', name: it.nameEn, anyOf: it.alt }, state) : alt
       ? evaluate({
         type: 'alternative', requiredCount: it.count,
         alternatives: [{ name: it.nameEn, manualKey: key, ...(it.id !== undefined ? { id: it.id } : {}) }, ...alt.map((n) => ({ name: n, manualKey: `name:${nameKey(n)}` }))],
@@ -265,18 +267,21 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     if (res.state === 'OK') {
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: 'OK', hard: true, source,
-        detail: manual ? `marked "already have: ${state.manual[key]}"` : 'in the bag',
+        detail: it.equip ? 'worn' : manual ? `marked "already have: ${state.manual[key]}"` : 'in the bag',
       });
     } else if (res.state === 'BANK') {
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: 'BANK', hard: true, source: 'game',
-        detail: h.noted > 0 ? `${h.bag ?? 0}${u} usable, ${h.noted}${u} as banknotes: unnote at a bank before use`
+        ...(it.equip && (h.bag ?? 0) > 0 ? { equip: true } : {}),
+        detail: it.equip && (h.bag ?? 0) > 0 ? 'in your bag: equip it before training'
+          : h.noted > 0 ? `${h.bag ?? 0}${u} usable, ${h.noted}${u} as banknotes: unnote at a bank before use`
           : `${h.bag ?? 0}${u} in the bag, ${h.bank ?? 0} in the bank: take it from the bank${whole((h.bag ?? 0) + (h.bank ?? 0))}`,
-        ...(bank ? { action: bankNav(bank, step, it.nameEn) } : {}),
+        ...(!(it.equip && (h.bag ?? 0) > 0) && bank ? { action: bankNav(bank, step, it.nameEn) } : {}),
       });
     } else if (res.state === 'UNKNOWN') {
       reqs.push({
         kind: 'item', label, item: it.nameEn, state: 'UNKNOWN', hard: true,
+        ...(it.equip ? { equip: true } : {}),
         detail: (h.bag !== null ? `${h.bag + h.noted}${u} in the bag; the bank was not opened in this session` : 'not checked: it needs a RuneLite connection or an "already have" mark in shopping') + tooHigh(it.nameEn),
       });
     } else {
