@@ -2020,6 +2020,14 @@ async function combatRouteScenarios(browser: Browser) {
     await reveal(page, '.combat-route');
     const fold = page.locator('.combat-route details');
     expect(await fold.count() === 1 && !(await fold.evaluate((d) => (d as HTMLDetailsElement).open)), `combat route (${width} px): the comparison is folded under "Why this plan?"`);
+    // A competitive automatic baseline deliberately has no extra status banner.
+    // Choose an alternative to exercise that banner's link without requiring a different recommendation.
+    if (await page.locator('.status-combat-route:visible').count() === 0) {
+      await fold.locator(':scope > summary').click();
+      await page.locator('.combat-plan-row').getByRole('button', { name: 'Use this instead' }).first().click();
+      await page.waitForTimeout(800);
+      expect((await savedPlans())[0]['S4-03']?.by === 'player', `combat route (${width} px): an explicit alternative exposes its status action`);
+    }
     // The status line's link opens the comparison itself, not only the view it is in (2.72). The view opened above is closed first, as a player would.
     await page.keyboard.press('Escape');
     await page.waitForTimeout(300);
@@ -2349,7 +2357,9 @@ async function armourPreparationScenarios(browser: Browser) {
     const prep = await snapshot();
     expect(prep?.step?.goal?.includes('10 Defence required') && prep.step.checklist?.length === 4 && prep.step.checklist.every((i: any) => i.equip),
       `armour (${width}): the same four-piece equip requirement and Defence level reach the game`);
-    expect(prep?.plan?.lines?.length === 4 && prep.plan.lines.every((i: any) => i.equip && i.where === 'INVENTORY' && /^Equip /.test(i.action)),
+    const currentArmour = prep?.plan?.lines?.filter((i: any) => i.equip && i.timing === 'NOW') ?? [];
+    expect(currentArmour.length === 4 && currentArmour.every((i: any) => i.where === 'INVENTORY' && /^Equip /.test(i.action))
+      && !prep.plan.bankWithdrawals?.some((i: any) => pieces.some(p => p.id === i.itemId)),
       `armour (${width}): carried armour requires equipping, with no duplicate purchase or withdrawal`);
     expect(await page.locator('.quest-supply-state').filter({ hasText: /^↗ Equip$/ }).count() === 4, `armour (${width}): each current supply says Equip`);
     const worn = { ...gear, equipment: [weapon, ...pieces], inventory: [] };
