@@ -257,3 +257,6 @@
 .money-amount { width: 7.5em; min-height: 30px; padding: 2px 8px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--surface); color: var(--text); font: inherit; font-variant-numeric: tabular-nums; }
 .money-blocker { color: var(--warn); }
 .money-empty p { margin: 0; }
+
+/* The verdict line sits inside the preparation panel, not as a card of its own above it. */
+:root .cockpit .cockpit-bag .quest-preparation .step-status { border:0; background:transparent; padding:0 0 4px; box-shadow:none; }

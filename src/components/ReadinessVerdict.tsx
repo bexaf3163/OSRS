@@ -39,13 +39,14 @@ export function useReadinessVerdict(step: Step): { verdict: ReadinessVerdict; co
 const ORDER: ReasonGroup[] = ['access', 'equipment', 'safety', 'unknown', 'optional'];
 const MARK = { ok: '✓', bank: '↗', missing: '!', unknown: '○', caution: '⚠' } as const;
 
-export function ReadinessVerdictCard({ step }: { step: Step }) {
+/** noPill: the panel's own status line above already names the level ("Preparation required"); the pill would say it a second time. */
+export function ReadinessVerdictCard({ step, noPill = false }: { step: Step; noPill?: boolean }) {
   const { verdict: v, combat } = useReadinessVerdict(step);
   const groups = ORDER.map((g) => ({ g, rows: v.reasons.filter((r) => r.group === g) })).filter((x) => x.rows.length);
   return (
     <section className={`readiness-verdict is-${v.level.toLowerCase()}`} aria-label="Readiness">
       <p className="verdict-head" role="status">
-        <span className="verdict-pill">{v.label}</span>
+        {!noPill && <span className="verdict-pill">{v.label}</span>}
         <span className="verdict-line">{v.headline}</span>
       </p>
       {combat?.variant && <p className="small verdict-variant">{combat.variant}</p>}

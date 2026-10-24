@@ -67,7 +67,6 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId }: { step: St
         <header className="quest-panel-heading"><h3>Where</h3></header>
         <TravelTip step={step} />
         <StepMap step={step} />
-        <button type="button" className="btn btn-sm" onClick={() => setView('travel')}>Travel and directions</button>
       </section>
     )}
     <QuestReward step={step} />
@@ -108,8 +107,8 @@ export function CockpitWorkspace({ step, suggested, onDone, nextId }: { step: St
       </div>
 
       <div className="cockpit-bag">
-        {!recovery && <StepStatus step={step} headline noStart quiet onPrep={() => setView('prep')} />}
-        <QuestSupplies step={step} onReview={() => setView('prep')} />
+        {/* One panel: the verdict line, why, and the list. Preparation, Travel and Details open from the row under the current action (P, T, D). */}
+        <QuestSupplies step={step} status={!recovery ? <StepStatus step={step} headline noStart quiet onPrep={() => setView('prep')} /> : undefined} />
       </div>
 
       <div className="cockpit-where">{where}</div>

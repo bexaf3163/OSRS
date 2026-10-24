@@ -321,7 +321,7 @@ export function ShoppingPage() {
         </div>
       )}
       {/* Offline and waiting are said once, by their own card. */}
-      <p className="muted small shop-scope-line">{scopeLine ? `For ${scopeLine} ` : ''}{empty === 'offline' || empty === 'not-loaded' ? '' : sync}{listShown && purchase && ' Purchase quantities cover the selected steps, not one inventory. See Path for what to carry now.'}</p>
+      <p className="muted small shop-scope-line">{scopeLine ? `For ${scopeLine} ` : ''}{empty === 'offline' || empty === 'not-loaded' ? '' : sync}</p>
 
       {empty !== null && emptyView(empty)}
 
@@ -352,15 +352,19 @@ export function ShoppingPage() {
               {budget.shortfall !== null && budget.shortfall > 0 && <> · <strong className="warn-text">short {formatGp(budget.shortfall)} gp</strong></>}
             </p>
           )}
-          {/* The figures added up, with what the coins kept for the steps pay for, so the shortfall can be checked against them. */}
-          {sum ? <p className="small muted">{split ? 'All of it: ' : ''}{sum}</p> : <p className="small muted">Your coins are not known yet: open your bank in RuneLite.</p>}
+          {!sum && <p className="small muted">Your coins are not known yet: open your bank in RuneLite.</p>}
           {total.unpriced > 0 && <p className="small muted">{total.unpriced} without a price, not counted.</p>}
-          {total.unknownRows > 0 && <p className="small muted">{total.unknownRows} not confirmed{total.unknownMax > 0 ? `: up to ${formatGp(total.unknownMax)} gp more if none of them is owned` : ''}.</p>}
-          {total.optional > 0 && <p className="small muted">Optional extras ≈ {formatGp(total.optional)} gp, not counted above.</p>}
           {total.shortfall !== null && total.shortfall > 0 && current && (
             <p className="small"><a href={backHref}>Raise the coins</a> <span className="muted">— the step's coin plan picks a way that suits your account.</span> <a href="#/money">Browse earning methods</a></p>
           )}
-          <p className="small muted">GE estimates are not offers. Cached prices are labelled; unpriced costs are excluded. NPC prices are separate.</p>
+          {/* The figures added up, so the shortfall can be checked against them: one click away, not a wall of numbers above the list. */}
+          <details className="zen-more shop-budget-how">
+            <summary className="small">How this is counted</summary>
+            {sum && <p className="small muted">{split ? 'All of it: ' : ''}{sum}</p>}
+            {total.unknownRows > 0 && <p className="small muted">{total.unknownRows} not confirmed{total.unknownMax > 0 ? `: up to ${formatGp(total.unknownMax)} gp more if none of them is owned` : ''}.</p>}
+            {total.optional > 0 && <p className="small muted">Optional extras ≈ {formatGp(total.optional)} gp, not counted above.</p>}
+            <p className="small muted">Purchase quantities cover the selected steps, not one inventory; see Path for what to carry now. GE estimates are not offers. Cached prices are labelled; unpriced costs are excluded. NPC prices are separate.</p>
+          </details>
         </div>
       )}
 

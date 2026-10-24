@@ -1,5 +1,6 @@
 // A concise current-step view of the existing preparation plan; full actions remain in Preparation.
 // The list is the stage's own once the game confirms the line the player is on: what the quest used up earlier is folded away, not listed as missing.
+import type { ReactNode } from 'react';
 import type { Step } from '../types';
 import { useReadinessEngine } from '../readinessContext';
 import { useBridge } from '../bridge';
@@ -28,7 +29,8 @@ function Row({ step, l, quiet = false, linked = true }: { step: Step; l: PrepLin
 }
 
 /** The list of what the step (or the stage of the quest) asks for now, with the button that opens the whole preparation. */
-export function QuestSupplies({ step, onReview }: { step: Step; onReview?: () => void }) {
+/** status: the step's verdict line (ring, Fix), shown at the top of this one panel instead of a card of its own above it. */
+export function QuestSupplies({ step, onReview, status }: { step: Step; onReview?: () => void; status?: ReactNode }) {
   const plan = useReadinessEngine().plan(step, { ahead: 0 });
   const scope = useStageScope(step);
   // Without RuneLite nothing can be checked: "Not checked" on every line says nothing, so the list is simply what to bring.
@@ -38,14 +40,15 @@ export function QuestSupplies({ step, onReview }: { step: Step; onReview?: () =>
   const handled = all.filter((l) => isOutOfStage(scope, l.name));
   const unknown = lines.filter((l) => l.where === 'UNKNOWN').length;
   // Nothing to bring, no budget and no blocker: no empty box; Preparation stays one click away.
-  if (!all.length && plan.coins.need <= 0 && plan.blockers.length === 0) return null;
+  if (!all.length && plan.coins.need <= 0 && plan.blockers.length === 0) return status ? <>{status}</> : null;
   return (
     <section className="quest-panel quest-preparation">
       <header className="quest-panel-heading">
         <h3>{scope ? 'Needed for this stage' : `Prepare for this ${step.type === 'quest' ? 'quest' : 'step'}`}</h3>
         {linked && unknown > 0 && <span className="badge">{unknown} unverified</span>}
       </header>
-      <ReadinessVerdictCard step={step} />
+      {status}
+      <ReadinessVerdictCard step={step} noPill={!!status} />
       {lines.length > 0 || plan.coins.need > 0 ? (
         <ul className="quest-supply-list">
           {lines.map((l) => <Row key={l.key} step={step} l={l} linked={linked} />)}
