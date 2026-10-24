@@ -42,6 +42,13 @@
   .cockpit-grid { grid-template-columns:minmax(0,1.4fr) minmax(0,1fr) minmax(0,.95fr); grid-template-areas:"now bag where" "walk bag where"; }
   .cockpit .quest-walkthrough .overview-list { max-height:max(16rem,calc(100dvh - 42rem)); min-height:0; }
 }
+/* A list cut by its box fades out at the bottom until it is scrolled to the end: a half-hidden line read as the last one (S5-08 showed 4 of 8). */
+@property --overview-fade { syntax:'<length>'; inherits:false; initial-value:0px; }
+@keyframes overview-fade { from, 92% { --overview-fade:2.5rem; } to { --overview-fade:0px; } }
+.cockpit .quest-walkthrough .overview-list { mask-image:linear-gradient(to bottom, #000 calc(100% - var(--overview-fade)), transparent); }
+@supports (animation-timeline: scroll()) {
+  .cockpit .quest-walkthrough .overview-list { animation:overview-fade linear both; animation-timeline:scroll(self); }
+}
 
 /* ---------- The step drawers (Preparation, Travel, Details) ---------- */
 .drawer.step-drawer { width:min(52rem,100vw); }
