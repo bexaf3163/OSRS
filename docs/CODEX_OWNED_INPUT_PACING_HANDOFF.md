@@ -1,5 +1,7 @@
 # Owned inputs and GE replenishment pace — partial T12
 
+Cumulative acceptance is now complete for this bounded repair: sourcecc3a0659 passed [Checks40089273395](https://github.com/bexaf3163/OSRS/actions/runs/40089273395), all1,944 Vitest/build/data/fullJava/Chromium/actualportable. Main merge7ba9aee has the same tree. Earlier pending statements below are historical. Current release and Claude takeover: CLAUDE_NEXT_SESSION.md; actual market-window/live-profit work remains open.
+
 Reproduced: a500-gp pie-shell target with14 already-owned dishes/dough took an estimated7.525 minutes only because the evaluator applied the dish purchase cap to production. The same inputs without that bottleneck took1.234 minutes. Owning the inputs does not require buying them again.
 
 The existing cash/trip/sale simulation now separates work/sale pace from input replenishment pace. Each trip only receives a purchase penalty for limited inputs it actually needs to buy; owned quantities are consumed normally, then replenishment pacing resumes. Output liquidity still caps production, including owned-stock bursts. Explicit fast/typical/slow selection avoids collapsing a range when all steady-state figures share the same buy cap.

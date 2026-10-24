@@ -1,14 +1,10 @@
-# OSRS Path audit preview — test build, audit still in progress
+# OSRS Path audit preview — historical test download
 
-This cumulative preview includes direct progress proof, native read-error protection, usable-tool preparation and shared preparation market estimates. Required-item costs reach the expanded single HUD; cached or unavailable quotes are labelled, and historical dated market claims are removed. Armour/Defence10 progression and the remaining price consumers are still pending. Gear quest evidence and earlier Skills, Shopping and HUD repairs are retained. A skipped Prince Ali Rescue no longer waives the toll, live completed quests unlock their gear without a route mark, and live NOT_DONE overrides stale manual completion. Explicit manual full-quest completion is retained while live facts are unread; partial quest milestones do not unlock full-quest gear. No DPS formula, route completion or saved state changed. Read docs/CODEX_GEAR_QUEST_PROOF_HANDOFF.md for scope and evidence.
+For the current main/release, completed repairs, source-specific verification and remaining work, start with [CLAUDE_NEXT_SESSION.md](CLAUDE_NEXT_SESSION.md). Identify historical previews by filename/source/SHA256; their internal app version alone does not identify a revision. Stable auto-updates ignore prereleases.
 
-The Skills repair is retained: a skipped route quest no longer counts as a received reward; live quest facts override manual marks, and explicit done is retained as an offline fallback. Existing guide data, XP, saved marks and route completion are unchanged. Read docs/CODEX_SKILL_QUEST_PROOF_HANDOFF.md for evidence and limits.
+The2.74.3 repair batch includes progress proof, native read/copy diagnostics, tool/armour preparation, shared market estimates, combined skill handovers, usable Ranged/Magic supplies and owned-input GE pacing. Earlier pending lists below are historical scope records, not current instructions. All in-game acceptance is assigned to Claude; no complete whole-project audit or guaranteed combat/profit result is claimed.
 
-The Shopping scope repair is retained: Stock up replaces the misleading Next trip label; purchase quantities cover the selected steps, not one inventory. Calculated quantities, saved scope, bank withdrawals and exchange payloads are unchanged. No new panel or mode. Read docs/CODEX_SHOPPING_SCOPE_HANDOFF.md for the small wording repair and its limits.
-
-The earlier HUD block is retained: collection shows Collect 50 Big bones instead of its incidental Attack 34 projection. Reaching projected XP cannot announce the next phase while collection is unconfirmed; food preparation still takes priority. Ordinary skill-training cards retain their XP progress. No combat estimate, completion trigger, saved state or protocol changed. Read docs/CODEX_HUD_COLLECTION_HANDOFF.md for reproduction and scope.
-
-Identify the exact revision by its EXE filename and SHA-256; the application title shows its coordinated app/plugin version. This is a working review candidate, not a completed audit or a replacement for the stable release. Stable auto-updates ignore prereleases. Read the attached CLAUDE_NEXT_SESSION.md before continuing development. Every codex/audit-block- branch in this repository publishes its separate portable EXE only after all existing gates pass, as requested by the owner; fork branches cannot publish.
+S4-03 is Attack40 without a mandatory bone quota/Hill Giant detour. Genuine collection/reserve tests elsewhere retain their own item objectives. Preserve the single guide and existing IDs/saves/unknown-state semantics.
 
 ## Included
 

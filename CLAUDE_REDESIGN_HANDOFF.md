@@ -1,36 +1,8 @@
-# 2.74.2 route repair
+# Current delivery — 2.74.3
 
-Newest source: [Magic route supplies](docs/CODEX_MAGIC_ROUTE_HANDOFF.md); actual S6-04 recipes replace its Nature-only placeholder. Latest verified preview463d6356 includes prior Ranged/Superheat fixes, not this newer route block. Start with docs/CLAUDE_NEXT_SESSION.md; do not apply earlier portable acceptance to later changes.
+Start with [Claude takeover](docs/CLAUDE_NEXT_SESSION.md) for implemented repairs, exact release/evidence and remaining T01–T17. It supersedes historical pending/branch references below. The accepted design history remains for implementation context.
 
-Newest source: [Ranged preparation](docs/CODEX_RANGED_PREPARATION_HANDOFF.md), current F2P trainers and compatible owned bow/ammunition. Current-tree acceptance pending; earlier receipts are source-specific. Continue from docs/CLAUDE_NEXT_SESSION.md.
-
-Newest source: [equipped quantity parity](docs/CODEX_EQUIPMENT_QUANTITY_HANDOFF.md), with actual stack counts and UNKNOWN preserved across readiness/preparation/checklist. Combined skill handovers now pass complete automated/portable gates on e6a37913; newer quantity source needs final browser/packaged acceptance. Start with the current section of [CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md).
-
-Latest source continuation: [combined skill handovers](docs/CODEX_SKILL_HANDOVER_HANDOFF.md). S6-02 source81c707a0 passed all automated/portable gates; the newer S6-03 Mining/Woodcutting source still needs cumulative acceptance. Live gameplay remains unverified. Start with the first current section of [CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md) and continue remaining T11/T01–T17 work without repeating completed migrations.
-
-Unreleased2.74.3 owner armour/shared-prices/date source: start with the **Current cumulative pricing source** section in [docs/CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md). It records implemented migrations, final-CI/live boundaries and remaining T01–T17 work. Keep one HUD and the canonical readiness pipeline; do not restore fixed GE prices or the50-bone quota. Stable publication remains batched until current gates pass.
-
-Latest continuation: docs/CLAUDE_NEXT_SESSION.md and docs/CODEX_FROGS_HANDOFF.md. S4-03 no longer requires 50 bones: Attack40 training compares surface frogs and early Defence, with affordable armour advice. Do not restore the old collection quota from historical notes or fixtures below. No HUD redesign is part of this block.
-
-Start with [docs/CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md) for the current cumulative repair block, source/CI boundaries, per-block portable releases, live evidence and remaining work. Its newest section supersedes older branch references below; do not roll back to an earlier preview.
-
-Non-melee hint context: [docs/CODEX_NONMELEE_HINT_HANDOFF.md](docs/CODEX_NONMELEE_HINT_HANDOFF.md). The selected Magic/Ranged training step must not borrow a future scimitar banner. Preserve the actual melee analysis and existing StyleGear.
-
-Consumer-specific skill prerequisites: [docs/CODEX_CONSUMER_SKILL_HANDOFF.md](docs/CODEX_CONSUMER_SKILL_HANDOFF.md). Reached consumer entry skills may satisfy that dependency edge; never turn this into global completion of a multi-skill producer.
-
-Post-fourth-preview Magic follow-up: [docs/CODEX_MAGIC_FUNDING_HANDOFF.md](docs/CODEX_MAGIC_FUNDING_HANDOFF.md). Preserve sale/coin uncertainty, owned elemental staff alternatives and honest comparison labels; this is not a net spell-supply planner.
-
-Latest repair checkpoint: [docs/CODEX_REPAIR_CHECKPOINT.md](docs/CODEX_REPAIR_CHECKPOINT.md), with source-only next route cases in [docs/CODEX_ROUTE_CONTINUATION_REVIEW.md](docs/CODEX_ROUTE_CONTINUATION_REVIEW.md). Follow the cumulative repair branch; do not reset to the earlier preview or interpret test success as all blocks 2b-5 complete.
-
-Post-preview profile write receipts: [docs/CODEX_PROFILE_WRITE_HANDOFF.md](docs/CODEX_PROFILE_WRITE_HANDOFF.md). Rare metadata edits confirm the native write before publication/reload; retain the old progress writer and source protections.
-
-Post-preview profile conflict protection: [docs/CODEX_PROFILE_CONFLICT_HANDOFF.md](docs/CODEX_PROFILE_CONFLICT_HANDOFF.md). Supported but differing lists are retained and require recovery review; do not mirror one over the other.
-
-Post-preview food certainty: [docs/CODEX_COMBAT_FOOD_CERTAINTY_HANDOFF.md](docs/CODEX_COMBAT_FOOD_CERTAINTY_HANDOFF.md). Known stock is usable evidence; unreported alternatives cannot authorize a purchase deficit.
-
-Post-preview combat stock follow-up: [docs/CODEX_COMBAT_STOCK_HANDOFF.md](docs/CODEX_COMBAT_STOCK_HANDOFF.md). Unreported item bank counts stay unknown; this change is not in preview 402222c9.
-
-Repair checkpoint (2026-10-21): read [docs/CODEX_REPAIR_CHECKPOINT.md](docs/CODEX_REPAIR_CHECKPOINT.md) before resuming the old still-to-do blocks. It identifies the tested repair branch, exact preview and unfinished work; historical notes below are not an all-complete claim.
+All in-game acceptance belongs to Claude: [checklist](docs/CLAUDE_IN_GAME_ACCEPTANCE.md). Keep one expandable guide and the canonical readiness/preparation pipeline. No restored50-bone quota, compulsory cow grind, fixed GE quotes or duplicate HUDs.
 
 # OSRS Path — Modern Path redesign handoff
 

@@ -1,5 +1,7 @@
 # Secondary-copy error reporting — partial T01
 
+Final cumulative acceptance: sourcecc3a0659dfeae41cb083341e174d086e4bf2af77 passed [Checks40089273395](https://github.com/bexaf3163/OSRS/actions/runs/40089273395): all1,944 Vitest/153files, build/data0errors, fullJava, completeChromium and isolated actualportable. All eight backup/partial-copy failure/retry assertions passed through real native IPC. [Verified preview](https://github.com/bexaf3163/OSRS/releases/download/audit-test-cc3a0659/OSRS-Path-audit-test-cc3a0659.exe), SHA256 **de71c95ebd0d680f34dd71c0673e4660987c6222b24fed70c0112b2d777819b7**, matches actual test log and asset. Main merge7ba9aee has the exact same tree. Older pending-CI wording below is historical; stable release evidence is in CLAUDE_NEXT_SESSION.md. No in-game acceptance is claimed.
+
 Source-confirmed defect: automatic latest-copy failures were swallowed; a manual copy failure was returned once but backup:get rebuilt a state with error=null. Opening Settings could therefore erase the failure report.
 
 The native shell now retains per-session errors by configured target and phase. An automatic latest-copy success only clears that phase; it cannot erase a failed scheduled/dated-copy attempt. A successful complete retry clears that target. Disabled/removed targets do not keep contributing errors. Existing BackupState/error UI is reused; no new panel or primary-save failure state.

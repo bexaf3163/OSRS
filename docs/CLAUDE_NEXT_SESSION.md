@@ -2,9 +2,17 @@
 
 Updated2026-10-24. This replaces the rolling historical status entries. Start from the latest remote main, not an old local branch/chat prompt. Check for subsequent owner/Claude commits before editing. Do not reset them or replay included stacked commits.
 
+## Published delivery — verified 2.74.3
+
+- Stable source/main merge: **7ba9aeeade91b4b8de359be478bb4a431d2741d0**, exact tree **f5aa4d7696e94ad1151d13031125b288e804bb84**, identical to tested PR head **cc3a0659dfeae41cb083341e174d086e4bf2af77**. Subsequent handoff-only commits do not change the application.
+- [Portable EXE](https://github.com/bexaf3163/OSRS/releases/download/v2.74.3/OSRS-Put-2.74.3-portable.exe), **101,849,619 bytes**. SHA256: **6d3dc9b504080e389b6d69b8a477d1aa923674639795ec69c6d9ed52ac2c124f**, matched the actual isolated portable test log against GitHub's published asset digest.
+- [Release40090017964](https://github.com/bexaf3163/OSRS/actions/runs/40090017964) and [main Checks40090017967](https://github.com/bexaf3163/OSRS/actions/runs/40090017967) succeeded: **1,944 Vitest tests/153 files**, TypeScript/build, data **0 errors/warnings**, full Java, complete browser UI, source Electron E2E and actual isolated portable E2E. The Java suite contains608 tests; no Java production changes followed its final verified source.
+- All eight new backup failure/partial-copy/retry assertions passed in BOTH source Electron and the release EXE. Native read protection/profile recovery and existing UI gates also passed. No in-game PASS is implied.
+- PR44 is merged; stable release is published, not pending. Current takeover is this file on main. The release-attached handoff is the build-time snapshot; its pending-publication wording is superseded by this receipt. No installed player app/data was replaced during this delivery.
+
 ## Delivery and decisions
 
-Current batch: coordinated app/plugin **2.74.3**, protocol6, cumulative PR44. Owner requested finishing this batch, pushing main and handing remaining work to Claude. Publication remains in progress until the regular Release/artifact gates finish; an audit preview is not a stable release.
+Current batch: coordinated app/plugin **2.74.3**, protocol6, cumulative PR44. Owner requested finishing this batch, pushing main and handing remaining work to Claude. Main publication and the regular Release/artifact gates are complete; use the stable portable and receipt above.
 
 **All in-game tests belong to Claude**, by explicit owner decision. Read [CLAUDE_IN_GAME_ACCEPTANCE.md](CLAUDE_IN_GAME_ACCEPTANCE.md). Automated/native evidence is separate. Launch RuneLite through OSRS Path; preserve player-controlled gameplay, saves and credentials. Unreachable/completed encounters stay unverified.
 
@@ -28,7 +36,7 @@ Original Claude checkout and RuneLite Optimizer were not edited. HDOS implementa
 
 ## Verification boundaries
 
-Current partial-copy source: **1,944 Vitest/153files, TypeScript/build and data0errors/warnings pass locally**. Fresh cumulative browser/fullJava/actualportable CI is required before publication, including both new actual IPC backup failure/retry scenarios.
+Final partial-copy source passed all cumulative gates and is published: see the delivery receipt above. All1,944 local tests/build/data also passed before publication. Both real native backup failure/retry scenarios passed in the source app and published EXE.
 
 Preceding source8591a78949a0f014f9a204a7c4426eaae8c51d04 passed [Checks40087680050](https://github.com/bexaf3163/OSRS/actions/runs/40087680050):1,941Vitest/build/data/fullJava/completeChromium/isolated actualportable. [Preview](https://github.com/bexaf3163/OSRS/releases/download/audit-test-8591a789/OSRS-Path-audit-test-8591a789.exe), SHA256 **0bc84b20f5f66a3bd617bb71c27c147a4e147bf0af91c1a641d32823854c2968**, matches log/asset, but predates both backup fixes. Earlier Magic87d856ff passed Checks40086397787 with1,937Vitest/Java608/browser/portable. Previous stable2.74.2 passed Checks39689971665/Release39689971634 with1,783Vitest/Java604/browser/sourceElectron/portable. Older receipts do not verify newer source.
 
