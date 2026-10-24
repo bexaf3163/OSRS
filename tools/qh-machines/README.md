@@ -12,7 +12,7 @@ The Quest Helper license (BSD 2-Clause) is in `THIRD_PARTY_NOTICES.md` in the re
 
 | File | Purpose |
 |---|---|
-| `qhm/quests.py` | The route quests: a route step → the Quest Helper class, the kind and number of the variable |
+| `qhm/quests.py` | The route quests: a route step → the Quest Helper class, the kind and number of the variable; `PARTS` — a step that covers only part of a quest (the variable values, or the Quest Helper step that is its root: S5-03 is `getMelzarPiece` of Dragon Slayer I); `KEPT` — machines kept as they are in the file (S9-03, cut by hand) |
 | `qhm/fetch_qh.py` | Clones Quest Helper (`--depth 1`, only `src/main/java`) and lays the quest sources out in `work/` |
 | `qhm/dump_consts.py` | Dumps the RuneLite API constants (`ItemID.GARLIC`, `NpcID.MORGAN`, `InterfaceID.Questjournal.TITLE`…) into `work/consts/` |
 | `qhm/jparse.py`, `qhm/interp.py` | A parser of the Java subset and the "symbolic" execution of each quest's `loadSteps()`: the result is a tree of steps with conditions |
@@ -51,4 +51,6 @@ What the generator cannot do (in these places the plugin says "unknown", not "no
 conditions in the data now; when they appear, extend `interp.py` (`make_dialog`) and `qeval.py`/`QhMachine.java`.
 
 `build_machines.py --check` on a fresh Quest Helper clone (commit `75b623a`, 16.09.2026) and a fresh constants dump (runelite-api 1.12.39) gives a file
-byte-for-byte equal to the one in the repository: this is how the generator was checked to be reproducible.
+byte-for-byte equal to the one in the repository: this is how the generator was checked to be reproducible. `fetch_qh.py` clones the newest commit;
+to reproduce, fetch and check out `75b623a6bc14237831fddc10b44765c0910a4eb0` in `work/quest-helper` and lay the sources out again (2026-10-24, with
+S5-03 added and S9-03 kept: the check passes).

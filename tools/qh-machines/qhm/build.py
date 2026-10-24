@@ -176,7 +176,76 @@ def build_quest(step_id):
     for n, st in sorted(stages.items()):
         if isinstance(st, Step):
             out_stages[str(n)] = em.node_ref(st)
-    return {'cls': cls, 'stages': out_stages, 'nodes': em.nodes, 'reqs': em.reqs, 'alias': alias_table(stages), 'unknown': em.unknown}
+    q = {'cls': cls, 'stages': out_stages, 'nodes': em.nodes, 'reqs': em.reqs, 'alias': alias_table(stages), 'unknown': em.unknown}
+    part = C.PARTS.get(step_id)
+    return take_part(q, part, step_id) if part is not None else q
+
+
+def node_refs(nodes, ref):
+    """The node a stage or child reference leads to, as a list (a leaf {'s': ...} leads to none)."""
+    return [ref] if isinstance(ref, str) and ref in nodes else []
+
+
+def req_refs(r, out):
+    """Adds the shared condition keys ("rN") a condition uses, nested ones included."""
+    if isinstance(r, str):
+        out.add(r)
+    elif isinstance(r, dict):
+        for a in r.get('a', []):
+            req_refs(a, out)
+
+
+def take_part(q, part, step_id):
+    """
+    The part of a quest one route step covers (quests.PARTS): a list of variable values keeps those stages; a Quest Helper step name makes
+    that step the root of every stage it is reached from. Nodes and conditions nothing reaches any more are dropped; the keys of the rest stay
+    as emitted from the whole quest.
+    """
+    nodes, reqs = q['nodes'], q['reqs']
+    if isinstance(part, str):
+        named = [k for k, n in nodes.items() if n.get('n') == part]
+        if len(named) != 1:
+            raise ValueError('%s: Quest Helper step %s found %d time(s)' % (step_id, part, len(named)))
+        stages = {}
+        for value, ref in q['stages'].items():
+            todo, seen = node_refs(nodes, ref), set()
+            while todo:
+                k = todo.pop()
+                if k not in seen:
+                    seen.add(k)
+                    todo += [c for _, ch in nodes[k]['c'] for c in node_refs(nodes, ch)] + node_refs(nodes, nodes[k]['d'])
+            if named[0] in seen:
+                stages[value] = named[0]
+    else:
+        stages = {v: ref for v, ref in q['stages'].items() if int(v) in part}
+    if not stages:
+        raise ValueError('%s: the part %r leaves no stage' % (step_id, part))
+    keep_nodes, keep_reqs = set(), set()
+    locks = [ref['l'] for ref in stages.values() if isinstance(ref, dict) and 'l' in ref]
+    todo = [k for ref in stages.values() for k in node_refs(nodes, ref)]
+    while todo:
+        k = todo.pop()
+        if k in keep_nodes:
+            continue
+        keep_nodes.add(k)
+        n = nodes[k]
+        for cond, ch in n['c'] + [[None, n['d']]]:
+            req_refs(cond, keep_reqs)
+            todo += node_refs(nodes, ch)
+            if isinstance(ch, dict) and 'l' in ch:
+                locks.append(ch['l'])
+        if 'l' in n:
+            locks.append(n['l'])
+    for lock in locks:
+        req_refs(lock, keep_reqs)
+    grew = True
+    while grew:  # shared conditions made of other shared conditions
+        before = len(keep_reqs)
+        for k in list(keep_reqs):
+            req_refs(reqs.get(k), keep_reqs)
+        grew = len(keep_reqs) != before
+    return dict(q, stages=stages, nodes={k: n for k, n in nodes.items() if k in keep_nodes},
+                reqs={k: r for k, r in reqs.items() if k in keep_reqs})
 
 
 def main():

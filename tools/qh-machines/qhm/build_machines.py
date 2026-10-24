@@ -15,7 +15,12 @@ from paths import MACHINES  # noqa: E402
 
 def render():
     machines = {}
+    current = json.load(open(MACHINES, encoding='utf-8'))['quests'] if C.KEPT else {}
     for sid in C.QUESTS:
+        if sid in C.KEPT:
+            machines[sid] = current[sid]
+            print('%-6s kept as it is in questMachines.json' % sid)
+            continue
         q = build.build_quest(sid)
         machines[sid] = {'stages': dict(q['stages']), 'nodes': q['nodes'], 'reqs': q['reqs'], 'alias': q['alias']}
         unknown = sum(q['unknown'].values())

@@ -15236,20 +15236,20 @@
     {
      "title": "Ground floor: the red key",
      "steps": [
-      "Enter Melzar's Maze north of Rimmington with the Maze key.",
-      "Kill the marked zombie rat for the red key and go through the red door, then up the ladder."
+      "Enter Melzar's Maze north of Rimmington with the Maze key. Each coloured key opens one door and then crumbles, a wrong door too.",
+      "Kill the marked zombie rat for the red Key, open the red door with the floor tile (west wall, north end), then climb the ladder."
      ]
     },
     {
      "title": "First floor: the orange key",
      "steps": [
-      "Kill the marked ghost for the orange key, go through the orange door and up the ladder."
+      "Kill the marked ghost for the orange Key, open the orange door with the floor tile (east wall, second from the north), then climb the ladder."
      ]
     },
     {
      "title": "Second floor: the yellow key",
      "steps": [
-      "Kill the marked skeleton for the yellow key, go through the yellow door, then down the ladders to the ground floor and into the basement."
+      "Kill the marked skeleton for the yellow Key, open the yellow door with the floor tile (south wall, furthest west), then take the ladders down to the basement."
      ]
     },
     {
@@ -15264,7 +15264,7 @@
      "at": 0,
      "do": [
       {
-       "t": "Enter Melzar's Maze north of Rimmington. Be ready to fight up to a level 82 lesser demon. The Maze key opens the front door.",
+       "t": "Open the front door of Melzar's Maze north of Rimmington with the Maze key. Inside, each floor has one right door; the guide marks it with a floor tile. Each coloured key opens one door and then crumbles, a wrong door too. Be ready for a level 82 lesser demon in the basement.",
        "s": "Melzar's Maze: open the door (Maze key)",
        "at": [
         2941,
@@ -15280,8 +15280,8 @@
        "k": "enterMelzarsMaze"
       },
       {
-       "t": "Kill the marked zombie rat for the red key.",
-       "s": "Ground floor: kill the marked zombie rat (red key)",
+       "t": "In the room with the rats, kill the zombie rat the guide marks (level 3, long tail): it drops the red Key.",
+       "s": "Rat room: kill the marked zombie rat (red Key)",
        "at": [
         2933,
         3250,
@@ -15296,8 +15296,8 @@
        "k": "killRat"
       },
       {
-       "t": "Go through the north-west red door with the red key.",
-       "s": "Ground floor: red door",
+       "t": "Open the red door with the guide's floor tile: on the room's west wall, at its north end. The other red doors are dead ends and use up the key. \"The door is locked\" means you have no red Key: kill the marked rat again.",
+       "s": "Rat room: the red door with the floor tile",
        "at": [
         2926,
         3253,
@@ -15311,8 +15311,8 @@
        "k": "openRedDoor"
       },
       {
-       "t": "Climb up the ladder to the first floor.",
-       "s": "Ground floor: ladder up",
+       "t": "Climb the ladder just behind the red door up to the first floor.",
+       "s": "Behind the red door: ladder up",
        "at": [
         2928,
         3256,
@@ -15326,8 +15326,8 @@
        "k": "goUpRatLadder"
       },
       {
-       "t": "Kill the marked ghost for the orange key.",
-       "s": "First floor: kill the marked ghost (orange key)",
+       "t": "On the first floor, kill the ghost the guide marks (level 19, hooded, no cape): it drops the orange Key.",
+       "s": "First floor: kill the marked ghost (orange Key)",
        "at": [
         2927,
         3253,
@@ -15342,8 +15342,8 @@
        "k": "killGhost"
       },
       {
-       "t": "Go through the orange door (the second one from the north).",
-       "s": "First floor: orange door",
+       "t": "Open the orange door with the guide's floor tile: on the room's east wall, the second door from the north. The other orange doors use up the key. \"The door is locked\" means you have no orange Key: kill the marked ghost again.",
+       "s": "First floor: the orange door with the floor tile",
        "at": [
         2931,
         3253,
@@ -15357,8 +15357,8 @@
        "k": "openOrangeDoor"
       },
       {
-       "t": "Climb up the ladder to the second floor.",
-       "s": "First floor: ladder up",
+       "t": "Climb the ladder behind the orange door up to the second floor.",
+       "s": "Behind the orange door: ladder up",
        "at": [
         2934,
         3254,
@@ -15372,8 +15372,8 @@
        "k": "goUpGhostLadder"
       },
       {
-       "t": "Kill the marked skeleton for the yellow key.",
-       "s": "Second floor: kill the marked skeleton (yellow key)",
+       "t": "On the second floor, kill the skeleton the guide marks (level 22, small round shield): it drops the yellow Key.",
+       "s": "Second floor: kill the marked skeleton (yellow Key)",
        "at": [
         2927,
         3253,
@@ -15388,8 +15388,8 @@
        "k": "killSkeleton"
       },
       {
-       "t": "Go through the south-west yellow door.",
-       "s": "Second floor: yellow door",
+       "t": "Open the yellow door with the guide's floor tile: on the south wall, the one furthest west. The other yellow doors use up the key. \"The door is locked\" means you have no yellow Key: kill the marked skeleton again.",
+       "s": "Second floor: the yellow door with the floor tile",
        "at": [
         2924,
         3249,
@@ -15403,8 +15403,8 @@
        "k": "openYellowDoor"
       },
       {
-       "t": "Climb down the ladder.",
-       "s": "Second floor: ladder down",
+       "t": "Follow the corridor behind the yellow door to the ladder and climb down.",
+       "s": "Behind the yellow door: ladder down",
        "at": [
         2940,
         3240,
@@ -15418,8 +15418,8 @@
        "k": "goDownSkeletonLadder"
       },
       {
-       "t": "Climb down again.",
-       "s": "First floor: ladder down",
+       "t": "Climb down the next ladder, right where you land.",
+       "s": "First floor: next ladder down",
        "at": [
         2937,
         3240,
@@ -15448,8 +15448,8 @@
        "k": "goDownBasementEntryLadder"
       },
       {
-       "t": "Kill the marked zombie for the blue key.",
-       "s": "Basement: kill the marked zombie (blue key)",
+       "t": "In the basement, kill the zombie the guide marks (level 24): it drops the blue Key. The brown door here leads out of the maze, not on.",
+       "s": "Basement: kill the marked zombie (blue Key)",
        "at": [
         2932,
         9643,
@@ -15464,8 +15464,8 @@
        "k": "killZombie"
       },
       {
-       "t": "Go through the blue door in the north-west corner.",
-       "s": "Basement: blue door",
+       "t": "Open the blue door with the blue Key: there is only one.",
+       "s": "Basement: the blue door",
        "at": [
         2931,
         9644,
@@ -15495,8 +15495,8 @@
        "k": "killMelzar"
       },
       {
-       "t": "Go through the magenta door.",
-       "s": "Basement: magenta door",
+       "t": "Open the magenta (purple) door with the magenta Key.",
+       "s": "Basement: the magenta door",
        "at": [
         2929,
         9652,
@@ -15526,8 +15526,8 @@
        "k": "killLesserDemon"
       },
       {
-       "t": "Go through the green door.",
-       "s": "Basement: green door",
+       "t": "Open the green door with the green Key.",
+       "s": "Basement: the green door",
        "at": [
         2936,
         9655,
@@ -15629,7 +15629,7 @@
        "k": "goIntoDwarvenMine"
       },
       {
-       "t": "Go to the north-east of the Dwarven Mine and use the silk on the magic door.",
+       "t": "Head to the square room in the north-east corner of the Dwarven Mine: the magic door is there. Use the Silk on the door.",
        "s": "Dwarven Mine: use Silk on the magic door",
        "at": [
         3050,
@@ -15890,7 +15890,7 @@
        "k": "goDownShipLadder"
       },
       {
-       "t": "Use a plank on the hole in the hull (it takes 30 steel nails and a hammer). Repeat 3 times.",
+       "t": "Use a Plank on the hole in the hull. Each plank takes 30 Steel nails, and a Hammer must be in the bag: 3 planks and 90 nails in all.",
        "s": "Hull: repair the hole, plank 1 of 3",
        "at": [
         3047,
@@ -15908,7 +15908,7 @@
         ]
        },
        "need": "Plank",
-       "pre": [{"item": "Plank", "id": 960}, {"item": "Steel nails", "id": 1539}, {"item": "Hammer", "id": 2347}],
+       "pre": [{"item": "Plank", "id": 960}, {"item": "Steel nails", "id": 1539, "n": 30}, {"item": "Hammer", "id": 2347}],
        "k": "repairShip"
       },
       {
@@ -15930,7 +15930,7 @@
         ]
        },
        "need": "Plank",
-       "pre": [{"item": "Plank", "id": 960}, {"item": "Steel nails", "id": 1539}, {"item": "Hammer", "id": 2347}],
+       "pre": [{"item": "Plank", "id": 960}, {"item": "Steel nails", "id": 1539, "n": 30}, {"item": "Hammer", "id": 2347}],
        "k": "repairShip2"
       },
       {
@@ -15952,7 +15952,7 @@
         ]
        },
        "need": "Plank",
-       "pre": [{"item": "Plank", "id": 960}, {"item": "Steel nails", "id": 1539}, {"item": "Hammer", "id": 2347}],
+       "pre": [{"item": "Plank", "id": 960}, {"item": "Steel nails", "id": 1539, "n": 30}, {"item": "Hammer", "id": 2347}],
        "k": "repairShip3"
       }
      ],

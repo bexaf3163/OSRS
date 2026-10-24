@@ -449,6 +449,13 @@ describe('F2P route audit: the multi-floor and underground quests, one by one', 
     const keyCounts = lines('S5-03').map((l) => Number(/^Key x(\d)$/.exec(l.has ?? '')?.[1] ?? 0)).filter(Boolean);
     expect(keyCounts).toEqual([2, 3, 4, 5, 6]);
     expect(lines('S5-03').filter((l) => l.has === 'Key')).toHaveLength(1);
+    // A key crumbles on the door it opens, a wrong one too: each coloured door line names its door by the guide's floor tile and says what
+    // "The door is locked" means. Quest Helper's room-and-key logic (questMachines S5-03) sends the list back to the monster for a new key.
+    for (const k of ['openRedDoor', 'openOrangeDoor', 'openYellowDoor']) {
+      const door = lines('S5-03').find((l) => l.k === k)!;
+      expect(door.t, k).toMatch(/floor tile/);
+      expect(door.t, k).toMatch(/The door is locked/);
+    }
   });
 
   it('Crandor: the way is ship deck, the hole, the dungeon wall shortcut, the lair and the kill, each on its own tile, so the arrow always has a distance to cover', () => {

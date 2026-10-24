@@ -81,7 +81,7 @@ class OsrsPathWorldOverlay extends Overlay
 		for (Map.Entry<TileObject, String> e : plugin.getObjects().entrySet())
 		{
 			TileObject o = e.getKey();
-			if (o.getPlane() != wv.getPlane())
+			if (o.getPlane() != wv.getPlane() || !plugin.objectShown(o))
 			{
 				continue;
 			}

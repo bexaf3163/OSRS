@@ -415,9 +415,23 @@ public class ActiveTarget
 		final Set<Integer> objectIds = new HashSet<>();
 		final Set<String> objectNames = new HashSet<>();
 		final Set<String> itemNames = new HashSet<>();
+		/** The line's tile: of several objects with one of objectIds only the nearest to it is the line's (the maze's same-coloured doors). */
+		final boolean hasPoint;
+		final int x;
+		final int y;
+		final int plane;
 
 		LineHighlight(Highlight h)
 		{
+			this(h, null);
+		}
+
+		LineHighlight(Highlight h, StageLine at)
+		{
+			hasPoint = at != null && at.hasPoint();
+			x = hasPoint ? at.getX() : 0;
+			y = hasPoint ? at.getY() : 0;
+			plane = hasPoint ? at.getPlane() : 0;
 			if (h == null)
 			{
 				return;
@@ -437,6 +451,12 @@ public class ActiveTarget
 		boolean isEmpty()
 		{
 			return npcIds.isEmpty() && objectIds.isEmpty() && objectNames.isEmpty() && itemNames.isEmpty();
+		}
+
+		/** How far an object stands from the line's tile, in tiles; another floor counts as farther than any tile. */
+		int distance(int ox, int oy, int oplane)
+		{
+			return oplane != plane ? Integer.MAX_VALUE / 2 : Math.max(Math.abs(ox - x), Math.abs(oy - y));
 		}
 	}
 

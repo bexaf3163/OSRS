@@ -1689,7 +1689,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		// The quest is complete: stage steps are no longer moved or checked against the bag, "Beer is still in your bag" at the moment of handing in the quest is a false alarm.
 		if (questDone(target))
 		{
-			applyLineHighlight(null, null);
+			applyLineHighlight(null, null, null);
 			return;
 		}
 		Integer value = stageValue(st);
@@ -1722,7 +1722,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		QhVia.Via via = blocked == null ? currentVia(target, lines.get(at)) : null;
 		stageVia = via;
 		applyLineHighlight(target.getStepId() + "#" + idx + "@" + at + (blocked == null ? "" : "!" + blocked.key()) + (via == null ? "" : "~" + via.getLeaf()),
-			blocked != null ? null : via != null ? via.highlight() : lines.get(at).getHl());
+			blocked != null ? null : via != null ? via.highlight() : lines.get(at).getHl(), blocked != null || via != null ? null : lines.get(at));
 	}
 
 	private Preflight.Block lastPreBlock;
@@ -3031,15 +3031,15 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return lineHl.itemNames.contains(nameKey);
 	}
 
-	/** The cursor moved to another step: that step's highlight; the previous one goes out. Client thread. */
-	private void applyLineHighlight(String key, ActiveTarget.Highlight hl)
+	/** The cursor moved to another step: that step's highlight; the previous one goes out. at is the line whose tile picks its object, or null. Client thread. */
+	private void applyLineHighlight(String key, ActiveTarget.Highlight hl, ActiveTarget.StageLine at)
 	{
 		if (Objects.equals(key, lineHlKey))
 		{
 			return;
 		}
 		lineHlKey = key;
-		lineHl = hl == null ? ActiveTarget.LineHighlight.NONE : new ActiveTarget.LineHighlight(hl);
+		lineHl = hl == null ? ActiveTarget.LineHighlight.NONE : new ActiveTarget.LineHighlight(hl, at);
 		tel("highlight", "key", key, "npc", hl == null ? null : hl.getNpc(), "obj", hl == null ? null : hl.getObj(), "on", hl == null ? null : hl.getOn(),
 			"item", hl == null ? null : hl.getItem());
 		rescan();
@@ -3109,6 +3109,35 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	private void untrack(TileObject o)
 	{
 		objects.remove(o);
+	}
+
+	/**
+	 * Whether to draw a tracked object. Of several objects that share an ID of the current line (the three red doors in Melzar's Maze's rat room)
+	 * only the one(s) nearest the line's tile are the line's, as Quest Helper marks the object on its step's tile: the rest are wrong doors.
+	 * Objects the step itself names stay. Client thread; a few objects, so it is counted per frame.
+	 */
+	boolean objectShown(TileObject o)
+	{
+		ActiveTarget.LineHighlight line = lineHl;
+		ActiveTarget step = target;
+		if (!line.hasPoint || !line.objectIds.contains(o.getId()) || (step != null && step.getObjectIdSet().contains(o.getId())))
+		{
+			return true;
+		}
+		WorldPoint w = o.getWorldLocation();
+		int d = line.distance(w.getX(), w.getY(), o.getPlane());
+		for (TileObject p : objects.keySet())
+		{
+			if (p != o && p.getId() == o.getId())
+			{
+				WorldPoint q = p.getWorldLocation();
+				if (line.distance(q.getX(), q.getY(), p.getPlane()) < d)
+				{
+					return false;
+				}
+			}
+		}
+		return true;
 	}
 
 	/** An NPC appeared or changed its look: into its own list, whether the step's, the temporary target's or a dangerous one. */
