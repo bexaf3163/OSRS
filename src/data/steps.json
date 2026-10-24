@@ -6524,6 +6524,34 @@
         "inStep": true,
         "wikiItemId": 1351,
         "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_axe.png"
+      },
+      {
+        "nameEn": "Fire rune",
+        "amount": 195,
+        "howToGet": "No weapons or armour are allowed on Entrana, so the zombies and the Tree spirit (level 101) are fought with magic. Fire Strike (Magic 13) uses 3 Fire, 2 Air and 1 Mind rune a cast; the spirit is weak to fire. The wiki suggests about 65 casts. Grand Exchange; check the current rune estimate.",
+        "wikiItemId": 554,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Fire_rune.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 130,
+        "howToGet": "Fire Strike: 2 a cast, about 65 casts. Grand Exchange; check the current rune estimate.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      },
+      {
+        "nameEn": "Mind rune",
+        "amount": 65,
+        "howToGet": "Fire Strike: 1 a cast, about 65 casts. Grand Exchange; check the current rune estimate.",
+        "wikiItemId": 558,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mind_rune.png"
+      },
+      {
+        "nameEn": "Lumbridge teleport",
+        "amount": 1,
+        "howToGet": "The Entrana dungeon has no way out on foot (the magic door leads to level 32 Wilderness): the wiki asks for an instant teleport. A tablet needs no Magic level. Grand Exchange.",
+        "wikiItemId": 8008,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lumbridge_teleport_(tablet).png"
       }
     ],
     "fields": [
@@ -6533,10 +6561,14 @@
       },
       {
         "label": "Entrana",
-        "text": "You cannot take weapons or armour to the island of Entrana: only food and runes for magic. Leave the axe in the bank: you will find a knife and an axe along the way."
+        "text": "You cannot take weapons or armour to the island of Entrana: only food, runes, teleports and jewellery. Leave the axe in the bank: the zombies drop a bronze axe. Fight with magic: Fire Strike (Magic 13) with about 65 casts of runes. Keep the Lumbridge teleport for the way out."
+      },
+      {
+        "label": "Dungeon",
+        "text": "Zombies (level 25): kill them with Fire Strike until one drops a bronze axe (about 2 kills in 5). Run past the greater demons to the south to reach the Dramen tree; do not go through the magic door to the east (level 32 Wilderness)."
       }
     ],
-    "safespot": "The Tree spirit (level 101) can be killed by hiding behind a mushroom and using a bow or magic.",
+    "safespot": "Chop the Dramen tree from the south; when the Tree spirit (level 101, 85 hit points, hits up to 10) appears, step between the mushrooms to the south-west and cast Fire Strike: it cannot reach you there. The wiki says the bronze axe is too weak against it.",
     "reward": "3 QP, access to the hidden city of Zanaris (Dramen staff), the right to wear the Dragon dagger and Dragon longsword (with 60 Attack), Cosmic rune crafting.",
     "doneWhen": "The quest is green.",
     "inGame": {
@@ -6861,7 +6893,7 @@
         "text": "Monkey Zombies hit up to 7, Monkey Skeletons up to 12, and the spikes, rock traps and falling rocks of the dungeon take a share of your current health: move through the dungeon with Protect from Melee on and eat before each room."
       }
     ],
-    "safespot": "The Jungle demon (level 195) hits in melee and with magic: turn on Protect from Magic, stay three or more squares away so its melee cannot reach you, and hit it with Ranged (it is weakest to Ranged) from the far side.",
+    "safespot": "The Jungle demon (level 195, 170 hit points, hits up to 32 with melee and magic) is a ranged fight. When the fight starts, stand still: it does not come closer until you move. Turn on Protect from Magic, stay three or more squares away (its melee reaches two), and let the gnomes wear it down; shoot it with your bow, and finish it yourself, because a killing blow from the gnomes heals it (wiki strategy). Melee is not recommended: it then hits you with both styles.",
     "reward": "3 QP, 10,000 Coins, 3 diamonds, Daero's training (choose: 35,000 XP in Attack and Defence plus 20,000 in Strength and Hitpoints, or the other way round) and the right to wear the Dragon scimitar with 60 Attack.",
     "doneWhen": "The quest is green and a Dragon scimitar is bought.",
     "inGame": {
@@ -6921,6 +6953,24 @@
         "howToGet": "Thieving shop or the Grand Exchange. It opens your jail cell on the island.",
         "wikiItemId": 1523,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lockpick.png"
+      },
+      {
+        "nameEn": "Maple shortbow",
+        "amount": 1,
+        "equip": true,
+        "howToGet": "For the Jungle demon (level 195): it is finished with Ranged from three or more squares away. Its ranged defence is +0, against +50 for magic and slash. The bow you trained Ranged with in S8-04; a Maple shortbow needs Ranged 30. Grand Exchange.",
+        "wikiItemId": 853,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Maple_shortbow.png",
+        "anyOf": ["Maple longbow", "Willow shortbow", "Willow longbow", "Oak shortbow", "Oak longbow"]
+      },
+      {
+        "nameEn": "Mithril arrow",
+        "amount": 100,
+        "equip": true,
+        "howToGet": "For the Jungle demon. Mithril arrows fit a Willow or Maple bow; Adamant arrows need Ranged 30 and a Maple bow. Grand Exchange; check the current estimate.",
+        "wikiItemId": 888,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_arrow_1.png",
+        "anyOf": ["Adamant arrow", "Steel arrow"]
       }
     ],
     "loadouts": [
@@ -7019,9 +7069,19 @@
             "nameEn": "Lobster",
             "amount": 10,
             "note": "or better food"
+          },
+          {
+            "nameEn": "Maple shortbow",
+            "amount": 1,
+            "note": "or the best bow you can wield, worn"
+          },
+          {
+            "nameEn": "Mithril arrow",
+            "amount": 100,
+            "note": "or Adamant or Steel arrows, worn"
           }
         ],
-        "note": "Protect from Magic, and stay three or more squares away: its melee reaches two squares. It hits up to 32 and is weakest to Ranged. Do not use any teleport on the walk back for the audience with Awowogei."
+        "note": "Protect from Magic, and stay three or more squares away: its melee reaches two squares. It hits up to 32; shoot it with the bow, its ranged defence is +0. Do not use any teleport on the walk back for the audience with Awowogei."
       }
     ],
     "tasks": [

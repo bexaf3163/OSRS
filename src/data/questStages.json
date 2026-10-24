@@ -12834,9 +12834,9 @@
      "steps": [
       "Bank all weapons and armour you have (including the axe), go to Port Sarim and take the boat to Entrana.",
       "Climb down the ladder on the north side of the island. Once you go down, you can only escape via teleport. Dialogue: “Well that is a risk I will have to take”.",
-      "Kill zombies until one drops an axe.",
-      "Attempt to cut a branch from the Dramen tree. Be prepared for a Tree Spirit (level 101) to appear, which you can safespot behind nearby fungus.",
-      "Kill the Tree Spirit. It can be safespotted behind the fungi to the east.",
+      "Kill the zombies (level 25) with Fire Strike until one drops a bronze axe.",
+      "Run past the greater demons to the south and chop the Dramen tree from its south side: a Tree Spirit (level 101) appears.",
+      "Kill the Tree Spirit with Fire Strike from between the mushrooms to the south-west.",
       "Cut at least one branch from the Dramen tree. It's recommended you cut at least 4 branches so you don't have to return in future quests.",
       "Teleport away with the branches, preferably to Lumbridge."
      ]
@@ -12922,7 +12922,7 @@
      "at": 2,
      "do": [
       {
-       "t": "Bank all weapons and armour you have (including the axe), and go to Port Sarim to get a boat to Entrana.",
+       "t": "Bank all weapons and armour you have (including the axe), and go to Port Sarim to get a boat to Entrana. Take food, Fire Strike runes for about 65 casts (the zombies and the Tree spirit are a magic fight) and a Lumbridge teleport: the dungeon has no way out on foot.",
        "s": "Bank: all weapons and armour; sail to Entrana (Port Sarim)",
        "at": [
         3047,
@@ -12934,6 +12934,7 @@
          1167
         ]
        },
+       "pre": [{"item": "Fire rune", "id": 554, "n": 195, "t": "Fire Strike for the zombies and the Tree spirit: no weapons are allowed on Entrana"}, {"item": "Air rune", "id": 556, "n": 130}, {"item": "Mind rune", "id": 558, "n": 65}, {"item": "Lumbridge teleport", "id": 8008, "n": 1, "t": "The only way out of the Entrana dungeon"}],
        "k": "goToEntrana"
       },
       {
@@ -12949,11 +12950,12 @@
          2408
         ]
        },
+       "pre": [{"item": "Lumbridge teleport", "id": 8008, "n": 1, "t": "The only way out of the Entrana dungeon"}, {"item": "Fire rune", "id": 554, "n": 30, "t": "Fire Strike for the zombies"}, {"item": "Air rune", "id": 556, "n": 20}, {"item": "Mind rune", "id": 558, "n": 10}],
        "k": "goDownHole"
       },
       {
-       "t": "Kill zombies until one drops an axe.",
-       "s": "Kill zombies until one drops a bronze axe",
+       "t": "Kill the zombies (level 25) with Fire Strike until one drops a bronze axe (about 2 kills in 5).",
+       "s": "Kill zombies (Fire Strike) until one drops a bronze axe",
        "at": [
         2843,
         9760,
@@ -12962,8 +12964,8 @@
        "k": "getAxe"
       },
       {
-       "t": "Attempt to cut a branch from the Dramen tree. Be prepared for a Tree Spirit (level 101) to appear, which you can safespot behind nearby fungus.",
-       "s": "Chop a Dramen branch: Tree Spirit (level 101), hide behind the fungi",
+       "t": "Run past the greater demons to the south (not through the magic door to the east: level 32 Wilderness). Chop the Dramen tree from its south side: a Tree Spirit (level 101) appears.",
+       "s": "Chop the Dramen tree from the south: Tree Spirit (level 101)",
        "at": [
         2861,
         9735,
@@ -12977,8 +12979,8 @@
        "k": "attemptToCutDramen"
       },
       {
-       "t": "Kill the Tree Spirit. They can be safespotted behind nearby fungi to the east.",
-       "s": "Kill the Tree Spirit from a safespot (fungi to the east)",
+       "t": "Magic only: step between the mushrooms to the south-west, where the Tree Spirit cannot reach you, and cast Fire Strike (it is weak to fire; 85 hit points, hits up to 10). The bronze axe is too weak. It disappears after about 10 minutes, so keep casting.",
+       "s": "Tree Spirit: Fire Strike from the mushrooms to the south-west",
        "at": [
         2859,
         9734,
@@ -13015,11 +13017,12 @@
          2408
         ]
        },
+       "pre": [{"item": "Lumbridge teleport", "id": 8008, "n": 1, "t": "The only way out of the Entrana dungeon"}, {"item": "Fire rune", "id": 554, "n": 30, "t": "Fire Strike for the zombies"}, {"item": "Air rune", "id": 556, "n": 20}, {"item": "Mind rune", "id": 558, "n": 10}],
        "k": "goDownHole"
       },
       {
-       "t": "Kill zombies until one drops an axe.",
-       "s": "Kill zombies until one drops a bronze axe",
+       "t": "Kill the zombies (level 25) with Fire Strike until one drops a bronze axe (about 2 kills in 5).",
+       "s": "Kill zombies (Fire Strike) until one drops a bronze axe",
        "at": [
         2843,
         9760,
@@ -13811,8 +13814,8 @@
     {
      "title": "Defeat the demon",
      "steps": [
-      "Prepare to fight the Jungle Demon. Once you're ready, equip the 10th squad sigil.",
-      "Kill the Jungle Demon. Use Protect from Magic and keep your distance to kill it safely.",
+      "Prepare to fight the Jungle Demon: wear your bow and arrows. Once you're ready, equip the 10th squad sigil.",
+      "Kill the Jungle Demon with Ranged: stand still at the start, Protect from Magic, stay three or more squares away, and land the last hit yourself.",
       "Return to King Narnode Shareen in the Tree Gnome Stronghold to finish the quest."
      ]
     }
@@ -14819,14 +14822,14 @@
        "k": "talkToGarkorForSigil"
       },
       {
-       "t": "Prepare to fight the Jungle Demon. Once you're ready, equip the 10th squad sigil.",
+       "t": "Prepare to fight the Jungle Demon: wear your bow and arrows (it is a ranged fight), drink a Prayer potion and have food. Once you're ready, equip the 10th squad sigil.",
        "s": "Prepare for the Jungle Demon; equip the 10th squad sigil",
-       "pre": [{"item": "Lobster", "id": 379, "n": 15, "alt": ["Trout", "Salmon", "Tuna", "Swordfish", "Monkfish", "Shark"], "t": "The Jungle Demon hits up to 32 and there is no bank on the island"}],
+       "pre": [{"item": "Lobster", "id": 379, "n": 15, "alt": ["Trout", "Salmon", "Tuna", "Swordfish", "Monkfish", "Shark"], "t": "The Jungle Demon hits up to 32 and there is no bank on the island"}, {"item": "Maple shortbow", "id": 853, "n": 1, "alt": ["Maple longbow", "Willow shortbow", "Willow longbow", "Oak shortbow", "Oak longbow"], "t": "The Jungle Demon is a ranged fight: its ranged defence is +0"}, {"item": "Mithril arrow", "id": 888, "n": 100, "alt": ["Adamant arrow", "Steel arrow"]}],
        "k": "prepareForBattle"
       },
       {
-       "t": "Kill the Jungle Demon. Use Protect from Magic and keep your distance to kill it safely.",
-       "s": "Kill the Jungle Demon: Protect from Magic, keep your distance",
+       "t": "Kill the Jungle Demon with Ranged. Stand still when the fight starts (it does not come closer until you move), turn on Protect from Magic, stay three or more squares away and shoot it while the gnomes wear it down. Land the last hit yourself: a killing blow from the gnomes heals it.",
+       "s": "Jungle Demon: Protect from Magic, stay 3+ squares away, shoot it",
        "k": "killDemon"
       }
      ],

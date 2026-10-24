@@ -305,14 +305,15 @@
     },
     {
       "stepId": "S9-01", "kind": "quest-fight", "mandatory": true, "method": "safespot",
-      "objective": "Kill zombies until one drops an axe, then the Tree Spirit (101) from behind the fungi with a bow or magic.",
-      "enemies": [{ "name": "Zombie" }, { "name": "Tree spirit", "level": 101 }],
+      "objective": "Kill zombies (25) with Fire Strike until one drops an axe, then the Tree Spirit (101, 85 hit points, hits up to 10) with Fire Strike from between the mushrooms to the south-west.",
+      "enemies": [{ "name": "Zombie", "level": 25 }, { "name": "Tree spirit", "level": 101, "maxHit": 10 }],
       "lines": ["2.2", "2.4"],
-      "assumptions": ["The safespot behind the mushroom holds."],
-      "problems": ["No food in the item list and no numbers for the Tree Spirit in the app."],
-      "alternatives": [],
-      "decision": "defer",
-      "evidence": ["Quest stage lines 2.2 and 2.4; safespot text."]
+      "assumptions": ["The safespot between the south-west mushrooms holds."],
+      "problems": ["No weapons or armour are allowed on Entrana, so the fight is magic only, but no runes were in the kit; the instant teleport the wiki asks for to leave the dungeon was missing; no food in the item list and no numbers for the Tree Spirit in the app."],
+      "alternatives": ["Melee with a Ring of recoil and a Prayer potion (wiki quick guide); the bronze axe is too weak."],
+      "decision": "revise",
+      "changed": ["2.74.6: Fire Strike runes for about 65 casts (195 Fire, 130 Air, 65 Mind) and a Lumbridge teleport are required items and are checked on the Entrana line; the lines name the south-west mushroom safespot, the greater demons to run past and the Wilderness door."],
+      "evidence": ["OSRS Wiki Lost City, Lost City/Quick guide and Tree spirit (Lost City), read 2026-10-24; quest stage lines 2.2 and 2.4."]
     },
     {
       "stepId": "S9-02", "kind": "quest-fight", "mandatory": true, "method": "other",
@@ -331,10 +332,11 @@
       "enemies": [{ "name": "Jungle demon", "level": 195, "maxHit": 32 }, { "name": "Monkey zombie", "maxHit": 7 }, { "name": "Gorilla" }],
       "lines": ["7.0", "8.1", "8.2", "8.3", "8.4", "11.0", "11.1"],
       "assumptions": ["Prayer 43 and the loadouts' lobsters (15, 15, 10)."],
-      "problems": [],
-      "alternatives": ["Ranged from the far side: the demon is weakest to Ranged."],
-      "decision": "retain",
-      "evidence": ["Step fields \"Requirements\" and \"Dangers\"; safespot text; loadouts karamja, atoll, final."]
+      "problems": ["The step said to hit the demon with Ranged, but no bow or arrows were in the kit or the final loadout."],
+      "alternatives": ["The gnome method without Protect from Magic (wiki strategy); a Dwarf multicannon."],
+      "decision": "revise",
+      "changed": ["2.74.6: a bow (Maple shortbow or the best one the player can wield) and 100 arrows are required items, in the final loadout and checked before the fight; the fight line follows the wiki strategy (stand still, Protect from Magic, three squares away, last hit yourself)."],
+      "evidence": ["Step fields \"Requirements\" and \"Dangers\"; safespot text; loadouts karamja, atoll, final; OSRS Wiki Jungle demon (ranged defence +0, magic +50, slash +50), read 2026-10-24."]
     }
   ]
 }

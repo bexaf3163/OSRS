@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/combatAudit.json` (revisio
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-27 stages: 12 retained, 9 revised, 2 with a branch, 4 deferred.
+27 stages: 11 retained, 11 revised, 2 with a branch, 3 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -32,9 +32,9 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S7-05 The Grand Tree | quest-fight | yes | Black demon (172) | safespot | - | - | Retain |
 | S8-01 Priest in Peril | quest-fight | yes | Temple Guardian (30), Monk of Zamorak (30) | melee | Temple Guardian | Trout 5 | Revised |
 | S8-02 Nature Spirit | quest-fight | yes | Ghast (30) | melee | Ghast | Lobster 15 | Revised |
-| S9-01 Lost City | quest-fight | yes | Zombie, Tree spirit (101) | safespot | - | - | Deferred |
+| S9-01 Lost City | quest-fight | yes | Zombie (25), Tree spirit (101) | safespot | - | - | Revised |
 | S9-02 Fairytale I - Growing Pains | quest-fight | yes | Tanglefoot (111) | other | - | - | Deferred |
-| S9-04 Monkey Madness I | quest-fight | yes | Jungle demon (195), Monkey zombie, Gorilla | safespot | - | - | Retain |
+| S9-04 Monkey Madness I | quest-fight | yes | Jungle demon (195), Monkey zombie, Gorilla | safespot | - | - | Revised |
 
 ## S1-06 The Restless Ghost
 
@@ -554,21 +554,29 @@ Evidence:
 
 ## S9-01 Lost City
 
-**Deferred.** Kill zombies until one drops an axe, then the Tree Spirit (101) from behind the fungi with a bow or magic.
+**Revised.** Kill zombies (25) with Fire Strike until one drops an axe, then the Tree Spirit (101, 85 hit points, hits up to 10) with Fire Strike from between the mushrooms to the south-west.
 
 Quest stage lines: 2.2, 2.4.
 
 Assumptions:
 
-- The safespot behind the mushroom holds.
+- The safespot between the south-west mushrooms holds.
 
 Problems:
 
-- No food in the item list and no numbers for the Tree Spirit in the app.
+- No weapons or armour are allowed on Entrana, so the fight is magic only, but no runes were in the kit; the instant teleport the wiki asks for to leave the dungeon was missing; no food in the item list and no numbers for the Tree Spirit in the app.
+
+Alternatives:
+
+- Melee with a Ring of recoil and a Prayer potion (wiki quick guide); the bronze axe is too weak.
+
+Changed:
+
+- 2.74.6: Fire Strike runes for about 65 casts (195 Fire, 130 Air, 65 Mind) and a Lumbridge teleport are required items and are checked on the Entrana line; the lines name the south-west mushroom safespot, the greater demons to run past and the Wilderness door.
 
 Evidence:
 
-- Quest stage lines 2.2 and 2.4; safespot text.
+- OSRS Wiki Lost City, Lost City/Quick guide and Tree spirit (Lost City), read 2026-10-24; quest stage lines 2.2 and 2.4.
 
 ## S9-02 Fairytale I - Growing Pains
 
@@ -590,7 +598,7 @@ Evidence:
 
 ## S9-04 Monkey Madness I
 
-**Retain.** Monkey Madness I: monkeys for bones (optional), and the Jungle Demon (195, hits up to 32) with Protect from Magic from three squares away.
+**Revised.** Monkey Madness I: monkeys for bones (optional), and the Jungle Demon (195, hits up to 32) with Protect from Magic from three squares away.
 
 Quest stage lines: 7.0, 8.1, 8.2, 8.3, 8.4, 11.0, 11.1.
 
@@ -598,11 +606,19 @@ Assumptions:
 
 - Prayer 43 and the loadouts' lobsters (15, 15, 10).
 
+Problems:
+
+- The step said to hit the demon with Ranged, but no bow or arrows were in the kit or the final loadout.
+
 Alternatives:
 
-- Ranged from the far side: the demon is weakest to Ranged.
+- The gnome method without Protect from Magic (wiki strategy); a Dwarf multicannon.
+
+Changed:
+
+- 2.74.6: a bow (Maple shortbow or the best one the player can wield) and 100 arrows are required items, in the final loadout and checked before the fight; the fight line follows the wiki strategy (stand still, Protect from Magic, three squares away, last hit yourself).
 
 Evidence:
 
-- Step fields "Requirements" and "Dangers"; safespot text; loadouts karamja, atoll, final.
+- Step fields "Requirements" and "Dangers"; safespot text; loadouts karamja, atoll, final; OSRS Wiki Jungle demon (ranged defence +0, magic +50, slash +50), read 2026-10-24.
 

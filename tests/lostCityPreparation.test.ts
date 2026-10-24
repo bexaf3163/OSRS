@@ -9,7 +9,8 @@ const step = stepById.get('S9-01')!;
 
 describe('Lost City departure versus dungeon acquisition', () => {
   it('does not require the axe the guide explicitly obtains after boarding Entrana', () => {
-    expect(preflightItems(step).map(i => i.nameEn)).toEqual(['Knife']);
+    // The magic kit and the way out are carried in (no weapons or armour on Entrana); the axe is found there.
+    expect(preflightItems(step).map(i => i.nameEn)).toEqual(['Knife', 'Fire rune', 'Air rune', 'Mind rune', 'Lumbridge teleport']);
     expect(step.itemsRequired?.find(i => i.nameEn === 'Bronze axe')).toMatchObject({ inStep: true });
     for (const bankAxe of [0, 1]) {
       const progress = { ...emptyProgress(), steps: { 'S8-04': 'done' as const } };
@@ -29,5 +30,13 @@ describe('Lost City departure versus dungeon acquisition', () => {
       expect(axe?.action?.kind).not.toBe('BUY');
       expect(axe?.action?.kind).not.toBe('TAKE');
     }
+  });
+
+  it('carries Fire Strike runes and an instant teleport: the fight is magic only and the dungeon has no way out on foot', () => {
+    const need = new Map((step.itemsRequired ?? []).map(i => [i.nameEn, i.amount]));
+    // Fire Strike: 3 Fire, 2 Air, 1 Mind a cast; the wiki suggests about 65 casts.
+    expect([need.get('Fire rune'), need.get('Air rune'), need.get('Mind rune')]).toEqual([195, 130, 65]);
+    expect(need.get('Lumbridge teleport')).toBe(1);
+    expect(step.safespot).toMatch(/south-west.*Fire Strike/);
   });
 });

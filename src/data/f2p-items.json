@@ -7621,6 +7621,17 @@
     "wikiUrl": "https://oldschool.runescape.wiki/w/Logs"
   },
   {
+    "id": 8008,
+    "nameEn": "Lumbridge teleport",
+    "examine": "A teleport to Lumbridge.",
+    "members": true,
+    "iconUrl": "https://oldschool.runescape.wiki/images/Lumbridge_teleport_(tablet).png",
+    "value": 1,
+    "highAlch": 1,
+    "lowAlch": 1,
+    "wikiUrl": "https://oldschool.runescape.wiki/w/Lumbridge_teleport_(tablet)"
+  },
+  {
     "id": 1517,
     "nameEn": "Maple logs",
     "examine": "Logs cut from a maple tree.",
