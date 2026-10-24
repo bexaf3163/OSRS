@@ -63,8 +63,18 @@ export interface Shot {
   why: string;
 }
 
+/** The client's frame rate and what our overlays cost a frame, from the heartbeats (plugin 2.74.14+); null for older journals. */
+export interface FrameCost {
+  beats: number;
+  fpsMedian: number;
+  fpsLow: number;
+  drawAvgUs: number;
+  drawWorstUs: number;
+}
+
 export interface Report {
   session: SessionInfo;
+  frames: FrameCost | null;
   counts: Record<string, number>;
   steps: StepSummary[];
   slowLines: SlowLine[];
@@ -280,7 +290,21 @@ export function analyze(events: TelemetryEvent[], badLines = 0): Report {
   slowLines.length = Math.min(slowLines.length, 8);
   const order: Record<Severity, number> = { bad: 0, warn: 1, info: 2 };
   findings.sort((a, b) => order[a.severity] - order[b.severity] || (a.at ?? 0) - (b.at ?? 0));
-  return { session, counts, steps, slowLines, shots, findings, badLines };
+  return { session, frames: frameCost(events), counts, steps, slowLines, shots, findings, badLines };
+}
+
+/** T09 acceptance from a real session: the median and the 5th-percentile FPS, our average draw time per frame and the worst single frame. */
+export function frameCost(events: TelemetryEvent[]): FrameCost | null {
+  const beats = events.filter((e) => e.kind === 'beat' && num(e.fps) !== null && num(e.drawUs) !== null);
+  if (!beats.length) return null;
+  const fps = beats.map((e) => num(e.fps)!).sort((a, b) => a - b);
+  const at = (q: number) => fps[Math.floor(q * (fps.length - 1))];
+  const draw = beats.map((e) => num(e.drawUs)!);
+  return {
+    beats: beats.length, fpsMedian: at(0.5), fpsLow: at(0.05),
+    drawAvgUs: Math.round(draw.reduce((a, b) => a + b, 0) / draw.length),
+    drawWorstUs: Math.max(...beats.map((e) => num(e.drawMaxUs) ?? 0)),
+  };
 }
 
 const MARK: Record<Severity, string> = { bad: '✗', warn: '⚠', info: '·' };
@@ -293,6 +317,10 @@ export function formatReport(r: Report): string {
   out.push(`Lasted ${formatDuration(s.durationMs)}, ${s.events} events${s.ended ? '' : ' (end not recorded)'}${s.truncated ? ', journal truncated' : ''}`);
   const kinds = Object.entries(r.counts).sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k}:${n}`).join(' ');
   out.push(`Events: ${kinds || '—'}`);
+  if (r.frames) {
+    const f = r.frames;
+    out.push(`Frames: ${f.fpsMedian} FPS median, ${f.fpsLow} at the slowest 5%; our overlays ${(f.drawAvgUs / 1000).toFixed(2)} ms a frame on average, the worst frame ${(f.drawWorstUs / 1000).toFixed(1)} ms (${f.beats} heartbeats)`);
+  }
   const bad = r.findings.filter((f) => f.severity === 'bad').length;
   const warn = r.findings.filter((f) => f.severity === 'warn').length;
   out.push('');

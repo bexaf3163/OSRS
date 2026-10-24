@@ -925,8 +925,11 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		{
 			lastBeat = now;
 			WorldPoint p = me.getWorldLocation();
+			long[] cost = RenderCost.take();
 			t.event("beat", "step", target == null ? null : target.getStepId(), "stage", lastStageKey, "cursor", lastStageCursor,
-				"pos", new int[] {p.getX(), p.getY(), p.getPlane()}, "tick", tickCount, "hud", guideOnScreen, "guide", guideOnScreen);
+				"pos", new int[] {p.getX(), p.getY(), p.getPlane()}, "tick", tickCount, "hud", guideOnScreen, "guide", guideOnScreen,
+				// T09: the client's frame rate beside what our overlays cost a frame (average and worst since the last beat, microseconds).
+				"fps", client.getFPS(), "drawUs", cost[0], "drawMaxUs", cost[1]);
 		}
 		if (t != null && tickCount % WATCH_TICKS == 0)
 		{

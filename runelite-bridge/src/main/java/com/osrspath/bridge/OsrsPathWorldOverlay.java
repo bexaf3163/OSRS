@@ -50,6 +50,19 @@ class OsrsPathWorldOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D g)
 	{
+		long started = System.nanoTime();
+		try
+		{
+			return draw(g);
+		}
+		finally
+		{
+			RenderCost.add(System.nanoTime() - started, false);
+		}
+	}
+
+	private Dimension draw(Graphics2D g)
+	{
 		WorldView wv = client.getTopLevelWorldView();
 		NavTarget nav = plugin.getNavTarget();
 		g.setFont(OverlayText.font(g.getFont(), 1f));

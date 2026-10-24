@@ -55,6 +55,19 @@ class OsrsPathArrowOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D g)
 	{
+		long started = System.nanoTime();
+		try
+		{
+			return draw(g);
+		}
+		finally
+		{
+			RenderCost.add(System.nanoTime() - started, false);
+		}
+	}
+
+	private Dimension draw(Graphics2D g)
+	{
 		WorldPoint target = config.bigArrow() ? plugin.arrowTarget() : null;
 		Player me = client.getLocalPlayer();
 		// The world map is open: the arrow is drawn over the windows and would lie on the map, where the target is shown by the marker.

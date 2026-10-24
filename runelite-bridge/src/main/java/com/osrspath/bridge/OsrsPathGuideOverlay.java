@@ -168,6 +168,19 @@ class OsrsPathGuideOverlay extends Overlay
 	@Override
 	public Dimension render(Graphics2D g)
 	{
+		long started = System.nanoTime();
+		try
+		{
+			return draw(g);
+		}
+		finally
+		{
+			RenderCost.add(System.nanoTime() - started, true);
+		}
+	}
+
+	private Dimension draw(Graphics2D g)
+	{
 		HudModel.Card card = plugin.getHudCard();
 		if (card == null || !config.showGuide() || client.getGameState() != GameState.LOGGED_IN)
 		{
