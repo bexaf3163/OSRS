@@ -33,15 +33,15 @@ export function SkillDetailPage({ id }: { id: string }) {
   return <SkillView skill={skill} />;
 }
 
-type SkillTab = 'overview' | 'roadmap' | 'calculator' | 'reference';
+type SkillTab = 'guide' | 'calculator' | 'reference';
 
 function SkillView({ skill }: { skill: Skill }) {
   const { progress, steps, stages, mode } = useStore();
   const { xp } = useBridge();
-  const [tab, setTab] = useState<SkillTab>('overview');
+  const [tab, setTab] = useState<SkillTab>('guide');
   const guides = roadmapSkills(skill);
   const tabs: [SkillTab, string][] = [
-    ['overview', 'Overview'], ...(guides.length > 0 ? [['roadmap', 'Roadmap'] as [SkillTab, string]] : []), ['calculator', 'Calculator'], ['reference', 'Reference'],
+    ['guide', 'Training guide'], ['calculator', 'Calculator'], ['reference', 'Reference'],
   ];
   /** "Now by the plan" leads to the training plan row, which lives in the Reference tab. */
   const showPlan = () => {
@@ -64,8 +64,8 @@ function SkillView({ skill }: { skill: Skill }) {
         <SkillGlyph skill={skill.levelSkills[0]} size={48} />
         <h1>{skill.name}<span className="skill-level-goal">Level {level} → Goal {focus.target}</span>{skill.membersOnly && <> <span className="badge badge-members">Members</span></>}</h1>
         <p className="muted">
-          {skill.nameEn ?? skill.subtitle}
-          {skill.wiki && <> · <a href={skill.wiki} target="_blank" rel="noopener noreferrer">Wiki <IconExternal /></a></>}
+          {(skill.nameEn ?? skill.subtitle) !== skill.name && <>{skill.nameEn ?? skill.subtitle} · </>}
+          {skill.wiki && <a href={skill.wiki} target="_blank" rel="noopener noreferrer">Wiki <IconExternal /></a>}
         </p>
       </header>
       {skill.membersOnly && mode === 'f2p' && (
@@ -80,8 +80,13 @@ function SkillView({ skill }: { skill: Skill }) {
         ))}
       </nav>
 
-      {tab === 'overview' && (
+      {tab === 'guide' && (
       <>
+      <ReachedNote skill={skill} stage={stage} focus={focus} />
+      <FocusNote focus={focus} />
+      <TrainingCard skill={focus.skill} target={focus.target} />
+      {guides.length > 0 && <section className="card skill-guide-roadmap" aria-label="Leveling roadmap"><RoadmapPane skills={guides} label={skill.name} /></section>}
+
       <details className="card skill-level-editor" open={skill.levelSkills.some(id => xp?.[id] != null)}><summary>Levels and live experience</summary>
       <section className="levels-card" aria-label="Levels">
         <div className="levels-row">
@@ -99,17 +104,6 @@ function SkillView({ skill }: { skill: Skill }) {
         )}
       </section>
       </details>
-
-      <ReachedNote skill={skill} stage={stage} focus={focus} />
-      <FocusNote focus={focus} />
-      <TrainingCard skill={focus.skill} target={focus.target} />
-      <section className="skill-milestones" aria-label="Training milestones"><h3>Skill roadmap</h3><div className="milestone-track">
-        {skill.plan.ranges.slice(Math.max(0, (hit?.index ?? 0) - 1), Math.max(0, (hit?.index ?? 0) - 1) + 3).map(range => (
-          <button key={range.code} type="button" className={`skill-milestone ${range === hit?.range ? 'is-current' : ''}`} onClick={showPlan}>
-            <span className="milestone-node"><SkillGlyph skill={skill.levelSkills[0]} size={36} /></span><strong>{range.what}</strong><span>{range.levels}</span>
-          </button>
-        ))}
-      </div></section>
 
       {related.length > 0 && (
         <details className="section skill-related">
@@ -131,8 +125,6 @@ function SkillView({ skill }: { skill: Skill }) {
 
       </>
       )}
-
-      {tab === 'roadmap' && <RoadmapPane skills={guides} label={skill.name} />}
 
       {tab === 'calculator' && <Calculator levelIds={skill.levelSkills} suggest={(lid, level, stage) => defaultTarget(skill, lid, level, stage)} />}
 

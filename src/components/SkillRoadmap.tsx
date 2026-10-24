@@ -1,9 +1,8 @@
 // The leveling roadmap of a skill: a timeline of level groups with the steps in the order to train them, and "Follow this plan", which hands the path to the
 // game. Two separate questions since 2.70, not three mixed filters: the priority (Fastest, with quest XP skips first, or Low effort) and, for a free account,
-// whether members steps are shown as a preview. The priority starts from Settings → Training choices. Shown in a drawer from the Skills page.
+// whether members steps are shown as a preview. The priority starts from Settings → Training choices. Shown in place on the skill page's Training guide.
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { useCallback, useMemo, useState } from 'react';
 import { guideFor } from '../data/skillGuideRegistry';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
@@ -13,14 +12,12 @@ import { bracketsOf, buildPath, currentIndex, questRewardDone, type SkillName, t
 import { freeOnlyOf, setTracked, useTracked } from '../lib/skillTrack';
 import { useFeatures } from '../lib/features';
 import { priorityOf } from '../lib/playStyle';
-import { IconClose } from './Icons';
 
 type Lane = 'fast' | 'afk';
 const LANE_LABEL: Record<Lane, string> = { fast: 'Fastest', afk: 'Low effort' };
 /** The roadmap's two priorities, by name, for the card on the Path screen too. */
 export const laneLabel = (mode: string): string => (mode === 'afk' ? LANE_LABEL.afk : LANE_LABEL.fast);
 const TYPE_LABEL = { QUEST: 'Quest', GATHER: 'Gather', CRAFT: 'Craft', COMBAT: 'Combat', MINIGAME: 'Minigame' } as const;
-const CLOSE_MS = 180;
 
 /** The real level of a skill: live from the game when it is connected, otherwise what the player entered. */
 export function useSkillLevel(skill: SkillName): number {
@@ -39,30 +36,7 @@ export function useQuestDone(): (step: SkillStep) => boolean {
   }, [progress, questsDone]);
 }
 
-export function SkillRoadmapDrawer({ skills, label, onClose }: { skills: SkillName[]; label: string; onClose: () => void }) {
-  const dialog = useRef<HTMLDialogElement>(null);
-  const [closing, setClosing] = useState(false);
-  useEffect(() => { if (dialog.current && !dialog.current.open) dialog.current.showModal(); }, []);
-  const close = useCallback(() => {
-    const d = dialog.current;
-    if (!d?.open) return;
-    setClosing(true);
-    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    window.setTimeout(() => { d.close(); onClose(); }, reduce ? 0 : CLOSE_MS);
-  }, [onClose]);
-  return createPortal(
-    <dialog ref={dialog} className={`drawer skill-drawer ${closing ? 'is-closing' : ''}`} aria-label={`${label} leveling roadmap`}
-      onCancel={(e) => { e.preventDefault(); close(); }} onClick={(e) => { if (e.target === dialog.current) close(); }}>
-      <div className="drawer-panel">
-        <button type="button" className="icon-btn drawer-close" onClick={close} aria-label="Close"><IconClose /></button>
-        <Roadmap skills={skills} label={label} />
-      </div>
-    </dialog>,
-    document.body,
-  );
-}
-
-/** The roadmap as a page section (the skill workspace's Roadmap tab); the drawer on the Skills page shows the same thing. */
+/** The roadmap as a page section: the skill page's Training guide, under what to train now. */
 export function RoadmapPane({ skills, label }: { skills: SkillName[]; label: string }) {
   return <Roadmap skills={skills} label={label} />;
 }

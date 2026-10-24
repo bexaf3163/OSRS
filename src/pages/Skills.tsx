@@ -1,5 +1,4 @@
-// The list of skills: the free and the members ones with their training plans, and the leveling roadmap of each.
-import { useState } from 'react';
+// The list of skills: what to train now in each, and the way into each skill's training guide (its method, place and leveling roadmap).
 import { goals, levelById, membersGuide, membersSkills, reference, skills, xpData } from '../data';
 import { useStore } from '../store';
 import { currentStage } from '../lib/next-step';
@@ -12,7 +11,8 @@ import { IconCheck, IconChevron } from '../components/Icons';
 import { Inline } from '../components/Inline';
 import { LevelInput } from '../components/LevelInput';
 import { Table } from '../components/Table';
-import { SkillRoadmapDrawer } from '../components/SkillRoadmap';
+import { SkillGlyph } from '../components/SectionShell';
+import { useBridge } from '../bridge';
 import { SKILL_NAMES, type SkillName } from '../lib/skillGuide';
 import { useTracked } from '../lib/skillTrack';
 
@@ -23,7 +23,7 @@ export function SkillsPage() {
     <div className="page">
       <header className="page-head">
         <h1>Skills</h1>
-        <p className="muted">Enter your current levels — the tracker will highlight the plan row and compare with the goal of stage {stage}.</p>
+        <p className="muted">What to train in each skill now; a card opens its training guide. Goals are for stage {stage}.</p>
       </header>
 
       <details className="disclosure card">
@@ -71,20 +71,23 @@ export function roadmapSkills(skill: Skill): SkillName[] {
   return ids.filter((id): id is SkillName => (SKILL_NAMES as readonly string[]).includes(id));
 }
 
+/** A skill card leads with what to train now and opens the skill's guide; the level is a number while the game reports it, a field to type into while it does not. */
 function SkillCard({ skill, stage }: { skill: Skill; stage: number }) {
   const { progress } = useStore();
+  const { state, stats } = useBridge();
   const hit = skillRange(skill, progress);
   const many = skill.levelSkills.length > 1;
-  const [roadmap, setRoadmap] = useState(false);
   const tracked = useTracked();
   const guides = roadmapSkills(skill);
   const isTracked = tracked !== null && guides.includes(tracked.skill);
+  const live = state === 'online' && skill.levelSkills.every((id) => stats?.[id as keyof typeof stats] != null);
   return (
-    <article className={`skill-card card ${skill.membersOnly ? 'is-members' : ''}`}>
+    <article className={`skill-card card ${skill.membersOnly ? 'is-members' : ''} ${isTracked ? 'is-tracked' : ''}`}>
       <a className="skill-card-link" href={`#/skills/${skill.id}`}>
+        <SkillGlyph skill={skill.levelSkills[0]} size={28} />
         <span>
           <span className="skill-name">{skill.name}</span>
-          {(skill.nameEn ?? skill.subtitle) !== skill.name && <span className="skill-en">{skill.nameEn ?? skill.subtitle}</span>}
+          {many && <span className="skill-en">{skill.levelSkills.map((id) => levelById.get(id)!.name).join(', ')}</span>}
         </span>
         <IconChevron className="chevron" />
       </a>
@@ -95,7 +98,9 @@ function SkillCard({ skill, stage }: { skill: Skill; stage: number }) {
           const name = levelById.get(id)!.name;
           return (
             <div key={id} className="skill-level">
-              <LevelInput id={id} label={many ? name : `Level: ${name}`} hideLabel={!many} compact />
+              {live
+                ? <span className="skill-level-now">{many && <span className="skill-level-name">{name}</span>}<strong>{levelOf(progress, id)}</strong></span>
+                : <LevelInput id={id} label={many ? name : `Level: ${name}`} hideLabel={!many} compact />}
               {goal && (
                 <span className={`goal-chip ${reached ? 'is-reached' : ''}`}>
                   {goal.kind === 'optional' ? 'optional ' : ''}goal {goal.raw}{reached && <IconCheck />}
@@ -106,18 +111,11 @@ function SkillCard({ skill, stage }: { skill: Skill; stage: number }) {
           );
         })}
       </div>
-      {hit && (
-        <p className="skill-range">
-          <code className="code">{hit.range.code}</code> <Inline text={hit.range.what} />
-        </p>
-      )}
-      {guides.length > 0 && (
-        <p className="skill-roadmap-open">
-          <button type="button" className="btn btn-ghost btn-sm" onClick={() => setRoadmap(true)}>🗺 Leveling roadmap</button>
-          {isTracked && <span className="badge badge-now">tracking</span>}
-        </p>
-      )}
-      {roadmap && <SkillRoadmapDrawer skills={guides} label={skill.name} onClose={() => setRoadmap(false)} />}
+      {hit && <p className="skill-range"><span className="muted">Now:</span> <Inline text={hit.range.what} /></p>}
+      <p className="skill-card-actions">
+        <a className="btn btn-sm skill-guide-link" href={`#/skills/${skill.id}`}>Training guide</a>
+        {isTracked && <span className="badge badge-now">followed in the game</span>}
+      </p>
     </article>
   );
 }

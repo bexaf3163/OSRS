@@ -174,7 +174,7 @@ const SHOTS: Shot[] = [
   {
     name: 'skill-roadmap', area: 'T5', caption: 'Mining roadmap: priority and members preview as separate controls, groups labelled by the levels they cover', width: 1440,
     hash: '#/skills/MI', mock: skiller(SKILLER),
-    act: async (p) => { await p.getByRole('tab', { name: 'Roadmap' }).click(); await p.waitForTimeout(300); },
+    act: async (p) => { await p.locator('.skill-guide-roadmap').scrollIntoViewIfNeeded(); await p.waitForTimeout(300); },
   },
   { name: 'skill-magic', area: 'T4', caption: 'Magic 33: the balanced default picks a method that is not the slowest AFK one', width: 1440, hash: '#/skills/MA', mock: skiller(SKILLER) },
   { name: 'settings', area: 'T8', caption: 'Settings', width: 1440, hash: '#/settings', mock: hillGiants() },

@@ -962,12 +962,14 @@ async function run(browser: Browser) {
       await fresh.page.context().close();
     }
 
-    // 2.42/2.70: the leveling roadmap drawer opens from the Skills page, the priority changes the path, "Follow this plan" pins the skill to the Path card and
+    // 2.42/2.70: the leveling roadmap is in the skill's Training guide (2.74.13: in place, not a drawer from the Skills page), the priority changes the path,
+    // "Follow this plan" pins the skill to the Path card and
     // "Back to the quest route" stops it. A group's label covers its steps (no "Levels 30–40" over "Lvl 30 → 60").
     {
       const { page, errors } = await open(browser, width, { progress: progressBefore('S9-01') }, '#/skills');
-      await page.getByRole('button', { name: /Leveling roadmap/ }).first().click();
-      await waitFor(page, 'dialog.skill-drawer[open] .skill-timeline', 5000);
+      await page.getByRole('link', { name: 'Training guide' }).first().click();
+      await waitFor(page, '.skill-guide-roadmap .skill-timeline', 5000);
+      expect(await page.getByRole('tab', { name: 'Training guide' }).getAttribute('aria-selected') === 'true', 'roadmap: the skill opens on its Training guide');
       const before = await text(page, '.skill-timeline');
       expect(/Levels \d+/.test(before), 'roadmap: the level brackets are shown');
       expect(await noOverflow(page), 'roadmap: no horizontal scrolling');
@@ -984,8 +986,6 @@ async function run(browser: Browser) {
       await page.getByRole('button', { name: /Follow this plan/ }).click();
       const tracked = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:skill-track') ?? 'null') as { mode?: string } | null);
       expect(tracked?.mode === 'afk', 'roadmap: the followed plan was remembered with its priority');
-      await page.keyboard.press('Escape');
-      await page.waitForTimeout(400);
       await page.evaluate(() => { location.hash = '#/step/S9-01'; });
       await waitFor(page, '.tracked-skill', 5000);
       await page.getByRole('button', { name: /Back to the quest route/ }).click();

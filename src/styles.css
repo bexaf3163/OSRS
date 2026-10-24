@@ -580,6 +580,18 @@ main {
 .goal-chip.is-reached { background: var(--done-soft); border-color: transparent; color: var(--done); }
 .goal-chip .icon { width: 14px; height: 14px; }
 .skill-range { font-size: 0.875rem; color: var(--muted); padding-top: 10px; border-top: 1px solid var(--border); }
+/* The card leads with what to train: the glyph and name, the level as a number while the game reports it, "Now: …" and the guide. */
+.skill-card-link > span { flex: 1; min-width: 0; }
+.skill-card.is-tracked { border-color: var(--accent); }
+.skill-level-now { display: inline-flex; align-items: baseline; gap: 6px; }
+.skill-level-now strong { font-size: 1.6rem; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.skill-level-name { font-size: 0.8rem; color: var(--muted); }
+.skill-levels .skill-level:has(.skill-level-now) { align-items: center; }
+.skill-levels .skill-level:has(.skill-level-now) .goal-chip { margin-bottom: 0; }
+.skill-card .skill-range { color: var(--text); margin-top: auto; }
+.skill-card-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.skill-guide-roadmap { padding: 0; margin: 16px 0; }
+.skill-guide-roadmap .skill-roadmap { padding: 18px; }
 
 .levels-card { display: flex; flex-direction: column; gap: 12px; }
 .levels-row { display: flex; flex-wrap: wrap; gap: 12px 20px; }
@@ -1691,7 +1703,6 @@ select option { background: var(--surface); color: var(--text); }
 
 /* ---- Skill leveling roadmap (Skills → "Leveling roadmap") and the tracked skill card ---- */
 .skill-roadmap-open { display: flex; align-items: center; gap: 8px; margin: 4px 0 0; }
-.skill-drawer .drawer-panel { max-width: min(720px, 100vw); }
 .skill-roadmap-head { display: flex; flex-direction: column; gap: 6px; padding-right: 44px; }
 .skill-roadmap-head h2 { font-size: 1.3rem; }
 .skill-seg { display: inline-flex; flex-wrap: wrap; gap: 4px; }

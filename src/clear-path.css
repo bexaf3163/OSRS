@@ -109,10 +109,6 @@ main:has(.section-shell) { padding-top:8px; }
 .skill-detail .page-head > .skill-glyph { grid-row:1 / 3; }
 .skill-detail .page-head h1,.skill-detail .page-head p { margin:0; }
 .skill-level-goal { display:block; margin-top:8px; font-size:1rem; color:var(--muted); font-weight:400; letter-spacing:0; }
-.skill-milestones { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; margin:24px 0; }
-.skill-milestone { padding:18px; text-align:left; border:1px solid var(--border); border-radius:var(--radius); background:var(--surface); color:var(--text); font:inherit; cursor:pointer; }
-.skill-milestone span { display:block; margin-top:8px; color:var(--muted); font-size:.85rem; }
-.skill-milestone.is-current { border-color:var(--accent); background:var(--accent-soft); }
 .settings-layout { display:grid; grid-template-columns:210px minmax(0,1fr); gap:28px; }
 .settings-layout .settings-tabs { display:flex; flex-direction:column; align-self:start; background:transparent; gap:5px; border:0; }
 .settings-layout .settings-tabs button { text-align:left; padding:14px 16px; border-radius:6px; }
@@ -173,7 +169,6 @@ main:has(.section-shell) { padding-top:8px; }
  .section-rail nav,.settings-layout .settings-tabs { display:flex; flex-direction:row; overflow-x:auto; }
  .section-nav-item { width:auto; flex-shrink:0; padding:9px 12px; }
  .section-content > .page { padding:12px; }
- .skill-milestones { grid-template-columns:minmax(0,1fr); }
  .training-recommendation { grid-template-columns:minmax(0,1fr); }
  .quest-workspace .quest-list { max-height:480px; }
 }
@@ -219,14 +214,6 @@ main:has(.section-shell) { padding-top:8px; }
 .training-mode > span { display:block; font-size:.85rem; font-weight:600; margin-bottom:12px; }
 .training-mode-buttons { display:flex; gap:8px; }
 .training-mode-buttons .btn { flex:1; }
-.skill-milestones { display:block; padding:18px; border:1px solid var(--border); border-radius:6px; background:var(--surface-3); margin:8px 0 16px; }
-.skill-milestones h3 { margin:0 0 18px; font-size:1rem; }
-.milestone-track { display:flex; position:relative; gap:12px; }
-.milestone-track::before { content:''; position:absolute; left:16%; right:16%; top:29px; border-top:2px dotted var(--border-strong); }
-.skill-milestone,.skill-milestone.is-current { flex:1; display:flex; flex-direction:column; align-items:center; background:transparent; border:0; padding:0 8px; text-align:center; position:relative; min-width:0; }
-.skill-milestone span { margin-top:6px; }
-.skill-milestone .milestone-node { display:grid; place-items:center; width:58px; height:58px; background:var(--surface-3); border:3px solid transparent; border-radius:50%; margin:0 0 10px; }
-.skill-milestone.is-current .milestone-node { border-color:var(--accent); box-shadow:0 0 0 4px var(--surface-3); }
 .search-result-glyph { display:grid; place-items:center; width:40px; height:40px; flex-shrink:0; color:var(--muted); }
 .search-result-glyph .icon { width:32px; height:32px; }
 .search-hit-head { align-items:center; }
@@ -244,9 +231,6 @@ main:has(.section-shell) { padding-top:8px; }
  .appearance-workspace .setting { grid-template-columns:minmax(0,1fr); }
  .settings-content .setting > * { grid-column:1; }
  .appearance-workspace .setting > .style-toggle { grid-column:1; }
- .milestone-track { gap:4px; }
- .skill-milestone { padding:0 3px; font-size:.8rem; }
- .milestone-node { transform:scale(.85); }
 }
 .launch-runelite { display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
 @media(max-width:700px) { .launch-runelite .launch-label { display:none; } }
