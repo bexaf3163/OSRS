@@ -25,7 +25,10 @@
       "risk": "none",
       "where": "Anywhere ordinary trees grow (for example by Lumbridge Castle)",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Woodcutting_training",
-      "place": "Lumbridge"
+      "place": "Lumbridge",
+      "objectNames": [
+        "Tree"
+      ]
     },
     {
       "id": "wc-oak",
@@ -47,7 +50,10 @@
       "risk": "none",
       "where": "By the Draynor bank, west of the Varrock bank, Port Sarim, Rimmington",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Woodcutting_training",
-      "place": "Draynor Bank"
+      "place": "Draynor Bank",
+      "objectNames": [
+        "Oak tree"
+      ]
     },
     {
       "id": "wc-willow",
@@ -71,10 +77,13 @@
       "effort": "afk",
       "cost": "free",
       "risk": "none",
-      "where": "Draynor Village (a bank nearby), Port Sarim, Edgeville",
-      "note": "The speed depends on the axe and the world; dark wizards wander near the Draynor willows.",
+      "where": "Port Sarim: willow trees east of the Rusty Anchor Inn",
+      "note": "Use the nearby dock deposit box for useful logs, or drop unwanted logs. The arrow marks the Port Sarim area; look east of the inn for Willow trees. Draynor is an alternative near a bank, but dark wizards there can attack low-level players. Rates depend on your axe, level and competition.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Woodcutting_training",
-      "place": "Draynor Village"
+      "place": "Port Sarim",
+      "objectNames": [
+        "Willow tree"
+      ]
     },
     {
       "id": "wc-oak-p2p",
@@ -337,7 +346,12 @@
       "risk": "none",
       "where": "The swamp south-east of Lumbridge, the Dwarven Mine",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Mining_training",
-      "place": "East Lumbridge Swamp mine"
+      "place": "East Lumbridge Swamp mine",
+      "objectNames": [
+        "Copper rocks",
+        "Tin rocks"
+      ],
+      "note": "Mine copper or tin until Mining 15. Keep ore you need for Smithing; drop only unwanted ore. A usable pickaxe can stay in your bag."
     },
     {
       "id": "mi-iron",
@@ -361,10 +375,13 @@
       "effort": "medium",
       "cost": "free",
       "risk": "none",
-      "where": "Al Kharid, south-east Varrock, Rimmington",
-      "note": "Three close rocks, drop the ore; a Rune pickaxe speeds it up from 41.",
+      "where": "South-east Varrock mine; use the iron rocks.",
+      "note": "Drop unwanted ore for XP or bank it if you need the materials. Use a pickaxe your Mining level allows; it can stay in your bag. This default avoids the aggressive scorpions in Al Kharid mine.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Mining_training",
-      "place": "Al Kharid mine"
+      "place": "South-east Varrock mine",
+      "objectNames": [
+        "Iron rocks"
+      ]
     },
     {
       "id": "mi-motherlode",

@@ -5089,53 +5089,34 @@
     "title": "Mining to 60 (Mining Guild) and Woodcutting to 60 (yews)",
     "requires": [],
     "mapLocation": {
-      "x": 3286,
-      "y": 3365,
+      "x": 3229,
+      "y": 3146,
       "plane": 0,
-      "label": "Iron ore — the mine south-east of Varrock"
+      "label": "Copper and tin — East Lumbridge Swamp mine (Mining 1-15)"
     },
-    "resourceSpots": [
-      {
-        "x": 3286,
-        "y": 3365,
-        "plane": 0,
-        "label": "Iron ore — the mine south-east of Varrock (Mining up to 60)"
-      },
-      {
-        "x": 3298,
-        "y": 3293,
-        "plane": 0,
-        "label": "Iron ore — Al Kharid mine (Mining up to 60)"
-      },
-      {
-        "x": 3103,
-        "y": 3265,
-        "plane": 0,
-        "label": "Willow trees — Draynor Village (Woodcutting 30-60)"
-      }
-    ],
     "fields": [
       {
         "label": "Mining",
-        "text": "Up to 60: iron in the mine south-east of Varrock or in Al Kharid (from 30, coal in Barbarian Village). From 60 the Mining Guild under Falador opens: lots of coal and mithril."
+        "text": "Train Mining with the selected method and a usable pickaxe: copper or tin from 1, then iron from 15. Mining 60 unlocks the Mining Guild; coal and mithril are not required for this climb."
       },
       {
         "label": "Woodcutting",
-        "text": "Up to 60: willows (Willow, from 30) by Draynor Village. Yews (Yew) can only be chopped from 60: by Edgeville, Varrock Palace and south of Falador. Compare the current net return and gathering pace in Money before choosing yews for income."
+        "text": "After Mining 60, follow the Woodcutting method with a usable axe: regular trees from 1, oaks from 15 and willows from 30. Keep clear of dark wizards near Draynor. Yews unlock at 60; compare current Money estimates before using them for income."
       },
       {
         "label": "Optional",
         "text": "One of the ways to earn towards a Bond. Skip it if another way pays you better."
+      },
+      {
+        "label": "Requirements",
+        "text": "Mining 1. The selected method names its current tool and location; train Mining and Woodcutting in turn."
       }
     ],
     "doneWhen": "Mining 60, Woodcutting 60.",
     "inGame": {
       "objectNames": [
-        "Iron rocks",
-        "Coal rocks",
-        "Mithril rocks",
-        "Willow tree",
-        "Yew tree"
+        "Copper rocks",
+        "Tin rocks"
       ],
       "completionTrigger": {
         "type": "SKILL_LEVEL",
@@ -5152,7 +5133,31 @@
       }
     },
     "bondBranch": true,
-    "optional": true
+    "optional": true,
+    "followsMethod": "mining",
+    "requirements": [
+      {
+        "type": "skill",
+        "skill": "mining",
+        "min": 1
+      }
+    ],
+    "itemsRequired": [
+      {
+        "nameEn": "Bronze pickaxe",
+        "amount": 1,
+        "anyOf": [
+          "Iron pickaxe",
+          "Steel pickaxe",
+          "Mithril pickaxe",
+          "Adamant pickaxe",
+          "Rune pickaxe"
+        ],
+        "wikiItemId": 1265,
+        "howToGet": "Use an owned pickaxe that your Mining level allows; withdraw it first. Only buy a tool when no usable owned alternative is available.",
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_pickaxe.png"
+      }
+    ]
   },
   {
     "id": "S6-04",

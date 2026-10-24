@@ -193,6 +193,8 @@ const text = async (page: Page, sel: string) => {
 async function run(browser: Browser) {
   if (process.env.UI_ONLY === 'skill-handover') { await skillHandoverScenarios(browser); return; }
   if (!process.env.UI_ONLY) await skillHandoverScenarios(browser);
+  if (process.env.UI_ONLY === 'mining-handover') { await miningHandoverScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await miningHandoverScenarios(browser);
   if (process.env.UI_ONLY === 'shopping-quotes') { await shoppingQuoteScenarios(browser); return; }
   if (!process.env.UI_ONLY) await shoppingQuoteScenarios(browser);
   if (process.env.UI_ONLY === 'journal-quotes') { await journalQuoteScenarios(browser); return; }
@@ -2448,6 +2450,37 @@ async function skillHandoverScenarios(browser: Browser) {
     const wine = await snapshot();
     expect(wine?.step?.worldPoint?.label?.includes('Edgeville Bank') && wine.step.checklist?.some((r: any) => r.name === 'Grapes' && r.count === 13) && wine.step.checklist?.some((r: any) => r.name === 'Jug of water' && r.count === 13), `skill handover (${width}): wine uses actual ingredient pairs at a bank`);
     expect(await noOverflow(page) && !errors.length, `skill handover (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function miningHandoverScenarios(browser: Browser) {
+  for (const width of [390, 1280]) {
+    const stats = { mining: 59, woodcutting: 1 };
+    const names = ['Bronze pickaxe', 'Iron pickaxe', 'Steel pickaxe', 'Mithril pickaxe', 'Adamant pickaxe', 'Rune pickaxe', 'Bronze axe', 'Iron axe', 'Steel axe', 'Mithril axe', 'Adamant axe', 'Rune axe'];
+    const items = names.map(name => ({ name, carried: name === 'Rune pickaxe' ? 1 : 0, noted: 0, bank: name === 'Bronze axe' ? 1 : 0 }));
+    const { page, errors } = await open(browser, width, {
+      market: true, progress: progressBefore('S6-03', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-03' },
+      status: { protocol: 6, inGame: true, player: 'Mining Handover', activeStepId: 'S6-03', stats, coins: 1000, bankCoins: 0, equipment: [], inventory: [] },
+      events: [{ type: 'STATS', stats }, { type: 'OWNED', bankSeen: true, items }],
+    }, '#/step/S6-03');
+    const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
+    const mining = await snapshot();
+    expect(mining?.step?.worldPoint?.label?.includes('South-east Varrock mine') && JSON.stringify(mining.step.objectNames) === JSON.stringify(['Iron rocks']), `Mining handover (${width}): current Mining task has only iron scenery`);
+    for (const [level, object, place] of [[1, 'Tree', 'Lumbridge'], [15, 'Oak tree', 'Draynor Bank'], [30, 'Willow tree', 'Port Sarim']] as const) {
+      await page.evaluate(s => { const w = window as unknown as { __emit: (e: unknown) => void; __status: Record<string, unknown> }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { mining: 60, woodcutting: level });
+      await page.waitForTimeout(1300);
+      const current = await snapshot();
+      expect(current?.step?.worldPoint?.label?.includes(place) && JSON.stringify(current.step.objectNames) === JSON.stringify([object]), `Mining handover (${width}, WC${level}): one current Woodcutting scene and destination`);
+      expect(current?.step?.checklist?.length === 1 && current.step.checklist[0].name === 'Bronze axe', `Mining handover (${width}, WC${level}): axe replaces pickaxe preparation`);
+      expect(current?.step?.completionTrigger?.levels?.some((r: any) => r.skill === 'mining' && r.level === 60) && current.step.completionTrigger.levels.some((r: any) => r.skill === 'woodcutting' && r.level === 60), `Mining handover (${width}, WC${level}): both original goals remain`);
+    }
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}'));
+    expect(saved.steps?.['S6-03'] !== 'done', `Mining handover (${width}): Mining alone cannot complete this step`);
+    await reveal(page, '.training:visible');
+    expect((await text(page, '.training:visible')).includes('Woodcutting'), `Mining handover (${width}): desktop method and game payload agree`);
+    expect(await noOverflow(page) && !errors.length, `Mining handover (${width}): no overflow or console errors`);
     await page.context().close();
   }
 }

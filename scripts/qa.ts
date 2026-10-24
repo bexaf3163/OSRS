@@ -14,7 +14,7 @@ export interface QaInput {
     stages: { at: number; do: { t: string; s?: string; k?: string; at?: number[]; has?: string; need?: string; hl?: { npc?: unknown; obj?: unknown; on?: unknown; item?: unknown } }[]; go?: unknown; items?: { name: string }[] }[];
   }> };
   /** The training methods (src/data/trainingMethods.json) and the place dictionary — for the method router rules. If absent — the rules are not applied. */
-  training?: { methods: { id: string; skill: string | string[]; from: number; to?: number | null; name: string; where: string; place?: string; url: string; xph?: number[]; xpa?: number; kind?: string; xpTotal?: number }[] };
+  training?: { methods: { id: string; skill: string | string[]; from: number; to?: number | null; name: string; where: string; place?: string; objectNames?: string[]; url: string; xph?: number[]; xpa?: number; kind?: string; xpTotal?: number }[] };
   places?: { locations: Record<string, unknown> };
   /** The skill identifiers with levels (levels.json + the members skills). */
   skillIds?: string[];
@@ -168,6 +168,7 @@ export function qa(input: QaInput): QaIssue[] {
       if (m.kind === 'quest' && !(m.xpTotal && m.xpTotal > 0)) add('training-rate', m.id, 'a quest without an XP reward');
       if (!/^https:\/\/oldschool\.runescape\.wiki\/w\//.test(m.url)) add('training-url', m.id, `the link is not to the wiki: ${m.url}`);
       if (input.places && m.place && !(m.place in input.places.locations)) add('training-place', m.id, `the place "${m.place}" is not in the place dictionary`);
+      if (m.objectNames !== undefined && (!Array.isArray(m.objectNames) || m.objectNames.length > 8 || m.objectNames.some(n => typeof n !== 'string' || !n.trim() || n.length > 200))) add('training-scene', m.id, 'invalid method scenery names');
       const c = firstChar(m.name);
       if (!c || c !== c.toUpperCase() || !m.where.trim()) add('text', m.id, `the method name or place: "${m.name.slice(0, 40)}"`);
     }

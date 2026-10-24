@@ -1,6 +1,6 @@
 # 2.74.2 route repair
 
-Latest source continuation: [S6-02 Fishing/Cooking handover](docs/CODEX_SKILL_HANDOVER_HANDOFF.md). Pricing sourcee5c5e9a4 passed all automated/portable gates; the newer handover still needs cumulative CI/live acceptance. Start with the first current section of [CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md) and continue remaining T11/T01–T17 work without repeating completed migrations.
+Latest source continuation: [combined skill handovers](docs/CODEX_SKILL_HANDOVER_HANDOFF.md). S6-02 source81c707a0 passed all automated/portable gates; the newer S6-03 Mining/Woodcutting source still needs cumulative acceptance. Live gameplay remains unverified. Start with the first current section of [CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md) and continue remaining T11/T01–T17 work without repeating completed migrations.
 
 Unreleased2.74.3 owner armour/shared-prices/date source: start with the **Current cumulative pricing source** section in [docs/CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md). It records implemented migrations, final-CI/live boundaries and remaining T01–T17 work. Keep one HUD and the canonical readiness pipeline; do not restore fixed GE prices or the50-bone quota. Stable publication remains batched until current gates pass.
 

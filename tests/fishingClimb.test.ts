@@ -212,7 +212,8 @@ describe('S6-02 follows the training method of the real level', () => {
   });
 
   it('a step that does not follow a method is the same object whatever the pick says', () => {
-    const other = stepById.get('S6-03')!;
+    const other = stepById.get('S1-01')!;
+    expect(other.followsMethod).toBeUndefined();
     expect(withTrainingMethod(other, 'fi-fly')).toBe(other);
   });
 

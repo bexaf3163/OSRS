@@ -1,6 +1,20 @@
-# Skill handover repair — S6-02
+# Skill handover repair — S6-02 and S6-03
 
-Source implemented; final cumulative CI and live acceptance pending. This follows the fully CI-verified pricing source e5c5e9a4. It does not complete every T11 case.
+S6-02 source81c707a0 passed all1,880 Vitest tests, build/data, full Java, complete browser smoke and the isolated portable in [Checks40042642412](https://github.com/bexaf3163/OSRS/actions/runs/40042642412). [Verified test portable](https://github.com/bexaf3163/OSRS/releases/download/audit-test-81c707a0/OSRS-Path-audit-test-81c707a0.exe), SHA256 **f8da121059775089a60613da84acddb63cddd1bcc3ca068a2c0a7cc0bd0e96fe**, matches the actual test log and asset digest. Newer S6-03 source below still needs final acceptance. Neither block has live-game acceptance; T11 remains partial.
+
+## S6-03 current source
+
+The optional combined Mining60/Woodcutting60 step now uses the same ordered-goal projection. Mining starts with copper/tin from1, then iron from15; Mining60 switches to regular trees/oaks/willows at the actual Woodcutting level. A usable pickaxe or axe is required through the existing tool-family checks; banked/noted stock remains preparation and an unusable tier cannot make the step ready. Both tool families are watched before switching. Unknown levels cannot complete the combined goal. Original ID, optional flag and completion trigger are unchanged.
+
+Only the selected method's verified scenery, tool and dictionary point are sent. Coal, mithril and yews no longer clutter this climb's current highlights. Unknown/completed projections clear stale object/NPC IDs as well as names and points. Temporary training navigation retains the same optional scenery names, already supported by Java NavTarget; protocol6 is unchanged. Catalogue validation checks their count and string bounds.
+
+The iron default uses the existing South-east Varrock mine point rather than exposing a low-level account to Al Kharid's aggressive scorpions. Willows use the existing Port Sarim area point, with explicit directions east of the Rusty Anchor Inn and the nearby dock deposit box. This is an area marker, not a newly surveyed tree tile. Draynor is described as an alternative with dark-wizard risk. No new coordinates, object IDs, guaranteed rates or market numbers were invented.
+
+Source checks: [Iron rocks/locations](https://oldschool.runescape.wiki/w/Iron_rocks), [Al Kharid mine hazards](https://oldschool.runescape.wiki/w/Al_Kharid_mine), [F2P Woodcutting locations](https://oldschool.runescape.wiki/w/Free-to-play_Woodcutting_training), [Copper rocks](https://oldschool.runescape.wiki/w/Copper_rocks), [Tin rocks](https://oldschool.runescape.wiki/w/Tin_rocks), [Tree](https://oldschool.runescape.wiki/w/Tree), [Oak tree](https://oldschool.runescape.wiki/w/Oak_tree), [Willow tree](https://oldschool.runescape.wiki/w/Willow_tree). Readable search extracts establish names/unlocks/locations; this is not live verification.
+
+Twelve new domain cases cover Mining1/14/15/59, Woodcutting1/15/30/59, bank withdrawal, unknown levels, completion, watch bounds and navigation scenery. New browser scenarios at390/1280px exercise Mining59→60 and Woodcutting1→15→30 through SSE, checking the desktop and game snapshot together. Generated readiness/active-target/default-plan fixtures are refreshed deliberately. Final cumulative checks are recorded in the continuation handoff; do not apply the older portable's acceptance to unverified newer source.
+
+Local S6-03 verification: all1,892 Vitest/149files, build, data0errors/warnings and all607 Java tests pass. The six readiness fixture changes are only S6-03's newly explicit tool/unknown skill guard. Network permission plus a workspace-local TEMP/TMP folder resolved the prior loopback and atomic-rename sandbox failures without production changes. Browser acceptance is still pending: Playwright's download/extraction hit a sandbox realpath error, and installed Edge crashed during headless startup before running assertions. No browser test was skipped or weakened; remote Chromium and actual portable gates remain required.
 
 ## Behavior
 

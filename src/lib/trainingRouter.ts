@@ -50,6 +50,8 @@ export interface TrainingMethod {
   where: string;
   /** The key of the place in the place dictionary (majorLocations.json) — for the in-game arrow; none — words only. */
   place?: string;
+  /** Verified in-game scenery names for this method only; no future-resource highlights. */
+  objectNames?: string[];
   note?: string;
   url: string;
   /** A quest with a one-time XP reward: it does not become the "best method", it is shown separately. */
@@ -60,7 +62,7 @@ export interface TrainingMethod {
 interface Raw {
   id: string; skill: string | string[]; from: number; to: number | null; name: string; members: boolean;
   needs?: MethodNeed[]; xph?: [number, number]; xpa?: number; act?: string; effort: Effort; cost: MethodCost; risk: Risk;
-  where: string; place?: string; note?: string; url: string; kind?: 'method' | 'quest'; xpTotal?: number;
+  where: string; place?: string; objectNames?: string[]; note?: string; url: string; kind?: 'method' | 'quest'; xpTotal?: number;
 }
 
 export const trainingMethods: TrainingMethod[] = (methodsJson as unknown as { methods: Raw[] }).methods.map((m) => ({
@@ -70,6 +72,7 @@ export const trainingMethods: TrainingMethod[] = (methodsJson as unknown as { me
   needs: m.needs ?? [], xph: m.xph ?? null, xpa: m.xpa ?? null, act: m.act ?? null,
   effort: m.effort, cost: m.cost, risk: m.risk, where: m.where, ...(m.place ? { place: m.place } : {}), ...(m.note ? { note: m.note } : {}), url: m.url,
   kind: m.kind ?? 'method', xpTotal: m.xpTotal ?? null,
+  ...(m.objectNames ? { objectNames: m.objectNames } : {}),
 }));
 
 interface Tier { tier: string; levelReq: number }

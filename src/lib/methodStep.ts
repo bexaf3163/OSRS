@@ -17,7 +17,7 @@ import type { MethodNeed } from './trainingRouter';
 export const GOAL_REACHED = 'goal-reached';
 export const UNKNOWN_GOAL_PREFIX = 'goal-unknown:';
 
-interface RawMethod { id: string; skills: string[]; name: string; from: number; to: number | null; needs?: MethodNeed[]; place?: string; where: string; note?: string }
+interface RawMethod { id: string; skills: string[]; name: string; from: number; to: number | null; needs?: MethodNeed[]; place?: string; objectNames?: string[]; where: string; note?: string }
 
 const RAW: RawMethod[] = (methodsJson as unknown as { methods: (Omit<RawMethod, 'skills'> & { skill: string | string[] })[] }).methods
   .map((m) => ({ ...m, skills: Array.isArray(m.skill) ? m.skill : [m.skill] }));
@@ -94,13 +94,13 @@ export function withTrainingMethod(step: Step, pick: string | undefined): Step {
       requirements: [...step.requirements ?? [], { type: 'skill', skill, min: 1 }],
       warning: message, how: message, where: 'Training level not checked', quickSteps: [message], pacing: undefined, foes: undefined, threats: undefined,
       ...(step.inGame ? { inGame: { ...step.inGame, worldPoint: undefined, groundTiles: [], pathWaypoints: undefined,
-        npcNames: [], objectNames: [], highlightItems: [], goal: message } } : {}),
+        npcNames: [], npcIds: [], objectNames: [], objectIds: [], highlightItems: [], goal: message } } : {}),
     };
   }
   if (pick === GOAL_REACHED) {
     return { ...step, itemsRequired: [], itemsRecommended: [], mapLocation: undefined, resourceSpots: [],
       ...(step.inGame ? { inGame: { ...step.inGame, worldPoint: undefined, groundTiles: [], pathWaypoints: undefined,
-        npcNames: [], objectNames: [], highlightItems: [], goal: 'Training goals reached' } } : {}),
+        npcNames: [], npcIds: [], objectNames: [], objectIds: [], highlightItems: [], goal: 'Training goals reached' } } : {}),
     };
   }
   const m = METHODS.get(pick);
@@ -113,7 +113,7 @@ export function withTrainingMethod(step: Step, pick: string | undefined): Step {
     ...step,
     followsMethod: goal.skill,
     itemsRequired,
-    ...(goal.skill !== step.followsMethod ? {
+    ...(goal.skill !== step.followsMethod || goal.skill === 'mining' || goal.skill === 'woodcutting' ? {
       itemsRecommended: [], foes: undefined, threats: undefined, pacing: undefined,
       where: m.where, how: `Train ${goal.skill} to ${goal.target}: ${m.name}. ${m.note ?? ''}`.trim(),
       quickSteps: ['Bank finished-skill tools and surplus supplies before withdrawing the current batch.', `Prepare the listed supplies for ${m.name}.`, `Train ${goal.skill} to ${goal.target} at ${m.where}. ${m.note ?? ''}`.trim()],
@@ -124,7 +124,8 @@ export function withTrainingMethod(step: Step, pick: string | undefined): Step {
       ...step.inGame,
       worldPoint: at ?? undefined, groundTiles: at ? [at] : [], pathWaypoints: undefined,
       goal: at?.label ?? `${m.name}: ${m.where}`,
-      ...(goal.skill !== step.followsMethod ? { npcNames: [], objectNames: [] } : {}),
+      objectNames: m.objectNames ?? [], objectIds: [],
+      ...(goal.skill !== step.followsMethod ? { npcNames: [], npcIds: [] } : {}),
       highlightItems: itemsRequired.map((i) => i.nameEn),
     } } : {}),
   };

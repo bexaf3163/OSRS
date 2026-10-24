@@ -1,5 +1,13 @@
 # Claude continuation — start here
 
+## Current continuation: S6-03 source; S6-02 automated gates verified
+
+S6-02 source81c707a00cccc972419bf0aa4ca51a825a76bf2f passed [Checks40042642412](https://github.com/bexaf3163/OSRS/actions/runs/40042642412):1,880 Vitest, build/data, full Java, complete Chromium smoke and isolated actual portable. [Test EXE](https://github.com/bexaf3163/OSRS/releases/download/audit-test-81c707a0/OSRS-Path-audit-test-81c707a0.exe), SHA256 **f8da121059775089a60613da84acddb63cddd1bcc3ca068a2c0a7cc0bd0e96fe**, matches the test log and release asset. Live-game acceptance remains open.
+
+Newer Mining/Woodcutting source and its limits are in [CODEX_SKILL_HANDOVER_HANDOFF.md](CODEX_SKILL_HANDOVER_HANDOFF.md). S6-03 now projects the current skill's usable tool, method, point and scenery, retaining both completion goals. Safe default locations reuse the existing dictionary; no future coal/mithril/yew highlights or guessed tiles. Final cumulative acceptance for this newer source remains required. Stable/main remains held for batching; continue T11 low Ranged/spell batches and the broader T01–T17 backlog. Earlier sections below are historical receipts.
+
+Local newer-source gates:1,892/1,892 Vitest and607/607 Java tests, TypeScript/build/data0errors/warnings. An isolated workspace TEMP/TMP folder avoids the Windows sandbox's rename failures; granted network access permits loopback/Gradle. Browser headless startup is still blocked locally before assertions. Require remote Chromium and packaged portable checks; do not treat this as a live-game receipt.
+
 ## Current continuation: S6-02 source; pricing CI verified
 
 Pricing source **e5c5e9a4d5da9d158c49be2060d1135b87bd345d** (local a5e67ee exact tree) passed [Checks40040613686](https://github.com/bexaf3163/OSRS/actions/runs/40040613686): all1,867 Vitest/148files, TypeScript/build/data0errors/warnings, full Java, complete Chromium smoke and isolated actual portable. [Test portable](https://github.com/bexaf3163/OSRS/releases/download/audit-test-e5c5e9a4/OSRS-Path-audit-test-e5c5e9a4.exe), SHA256 **23c808aad1147329ecdf586ce2e2c8f882c8be46c14ea0fd35e0951234034e5d**, matches the test log and asset digest. The prior six Shopping failures are fixed; no browser assertions were removed. Stable/main remains batched; live gameplay acceptance is still open.

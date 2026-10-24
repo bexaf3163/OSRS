@@ -98,9 +98,11 @@ describe('data consistency check', () => {
         { ...ok, id: 'x5', url: 'https://example.com/guide' },
         { ...ok, id: 'x6', name: 'lowercase start' },
         { ...ok, id: 'x7', kind: 'quest' },
+        { ...ok, id: 'x8', objectNames: [''] },
+        { ...ok, id: 'x9', objectNames: Array(9).fill('Tree') },
       ],
     };
     const rules = qa({ ...base, training: bad }).map((i) => i.rule);
-    expect(rules).toEqual(expect.arrayContaining(['training-id', 'training-range', 'training-rate', 'training-place', 'training-skill', 'training-url', 'text']));
+    expect(rules).toEqual(expect.arrayContaining(['training-id', 'training-range', 'training-rate', 'training-place', 'training-skill', 'training-url', 'training-scene', 'text']));
   });
 });

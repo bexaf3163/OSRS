@@ -7,11 +7,13 @@ import { pickMethods } from '../src/lib/methodPick';
 import { followedGoal, GOAL_REACHED, methodToolNames, UNKNOWN_GOAL_PREFIX, withTrainingMethod } from '../src/lib/methodStep';
 import { contextOf } from '../src/lib/readiness';
 import { createReadinessEngine } from '../src/lib/readinessEngine';
-import { toInGameTarget } from '../src/services/runeliteBridge';
+import { parseNavTarget, toInGameTarget } from '../src/services/runeliteBridge';
 import { trainingMethods, viewMethod } from '../src/lib/trainingRouter';
+import { trainingNav } from '../src/lib/trainingNav';
+import type { Step } from '../src/types';
 
 const base = stepById.get('S6-02')!;
-function scenario(stats: Record<string, number>, stock: Record<string, { carried?: number; bank?: number }> = {}) {
+function scenario(stats: Record<string, number>, stock: Record<string, { carried?: number; bank?: number }> = {}, base: Step = stepById.get('S6-02')!) {
   const names = [...new Set([...methodToolNames(base), ...Object.keys(stock)])];
   const owned = { bankSeen: true, items: new Map(names.map(name => [nameKey(name), { name, carried: stock[name]?.carried ?? 0, noted: 0, bank: stock[name]?.bank ?? 0 }])) };
   const progress = emptyProgress();
@@ -90,5 +92,70 @@ describe('one coherent Fishing/Cooking handover', () => {
     const s = scenario({ fishing: 25, cooking: 1 });
     expect(s.payload.watchItems).toEqual(expect.arrayContaining(['Raw beef', 'Raw chicken', 'Raw trout', 'Raw tuna', 'Grapes', 'Jug of water']));
     expect(s.payload.watchItems!.length).toBeLessThanOrEqual(40);
+  });
+});
+
+describe('one coherent Mining/Woodcutting handover', () => {
+  const mining = stepById.get('S6-03')!;
+  it.each([1, 14, 15, 59])('Mining%s projects only the unlocked mining resource and usable tool family', level => {
+    const s = scenario({ mining: level, woodcutting: 1 }, { 'Bronze pickaxe': { carried: 1 } }, mining);
+    expect(s.pick).toBe(level < 15 ? 'mi-ore' : 'mi-iron');
+    expect(s.payload.objectNames).toEqual(level < 15 ? ['Copper rocks', 'Tin rocks'] : ['Iron rocks']);
+    expect(s.step.itemsRequired?.map(r => r.nameEn)).toEqual(['Bronze pickaxe']);
+    expect(s.step.how).toContain(level < 15 ? 'Copper and tin' : 'Iron, dropping');
+    expect(s.payload.worldPoint?.label).toContain(level < 15 ? 'East Lumbridge Swamp mine' : 'South-east Varrock mine');
+    expect(s.payload.groundTiles).toHaveLength(1);
+    expect(s.payload.completionTrigger).toEqual(mining.inGame!.completionTrigger);
+    expect(s.engine.readiness(s.step).requirements.find(r => r.item === 'Bronze pickaxe')?.state).toBe('OK');
+  });
+  it.each([[1, 'wc-tree', 'Tree'], [15, 'wc-oak', 'Oak tree'], [30, 'wc-willow', 'Willow tree'], [59, 'wc-willow', 'Willow tree']] as const)(
+    'Mining60/Woodcutting%s switches supplies, scene and task together', (level, pick, object) => {
+      const s = scenario({ mining: 60, woodcutting: level }, { 'Bronze axe': { bank: 1 }, 'Rune pickaxe': { carried: 1 } }, mining);
+      expect(s.pick).toBe(pick);
+      expect(followedGoal(s.step)).toEqual({ skill: 'woodcutting', target: 60 });
+      expect(s.payload.objectNames).toEqual([object]);
+      expect(s.payload.checklist?.map(r => r.name)).toEqual(['Bronze axe']);
+      expect(s.engine.plan(s.step).now.find(r => r.name === 'Bronze axe')?.action?.kind).toBe('TAKE');
+      expect(s.step.quickSteps?.[0]).toContain('Bank finished-skill tools');
+      expect(s.payload.worldPoint?.label).not.toMatch(/mine|ore/i);
+      expect(s.payload.completionTrigger).toEqual(mining.inGame!.completionTrigger);
+      if (level >= 30) {
+        expect(s.payload.worldPoint?.label).toContain('Port Sarim');
+        expect(s.step.how).toContain('dark wizards');
+      }
+    });
+  it('does not treat an unread primary skill as ready or complete', () => {
+    const s = scenario({ woodcutting: 60 }, { 'Bronze pickaxe': { carried: 1 } }, mining);
+    expect(s.pick).toBeUndefined();
+    expect(s.engine.readiness(s.step).requirements.some(r => r.kind === 'skill' && r.state === 'UNKNOWN')).toBe(true);
+    expect(s.engine.readiness(s.step).status).not.toBe('READY');
+    expect(s.payload.objectNames).toEqual(['Copper rocks', 'Tin rocks']);
+  });
+  it('clears all scene IDs and points when the remaining skill is unknown or both goals are reached', () => {
+    const withOldIds = { ...mining, inGame: { ...mining.inGame!, npcIds: [123], objectIds: [456] } };
+    const states: Record<string, number>[] = [{ mining: 60 }, { mining: 60, woodcutting: 60 }];
+    for (const stats of states) {
+      const s = scenario(stats, {}, withOldIds);
+      expect(s.pick).toBe('woodcutting' in stats ? GOAL_REACHED : `${UNKNOWN_GOAL_PREFIX}woodcutting`);
+      expect(s.payload.worldPoint).toBeUndefined();
+      expect(s.payload.npcIds).toEqual([]);
+      expect(s.payload.objectIds).toEqual([]);
+      expect(s.payload.objectNames).toEqual([]);
+    }
+  });
+  it('watches both complete tool families before switching, within the existing protocol bound', () => {
+    const s = scenario({ mining: 59, woodcutting: 1 }, {}, mining);
+    expect(s.payload.watchItems).toEqual(expect.arrayContaining(['Bronze pickaxe', 'Rune pickaxe', 'Bronze axe', 'Rune axe']));
+    expect(s.payload.watchItems!.length).toBeLessThanOrEqual(40);
+  });
+  it('temporary method navigation preserves the same verified scenery and validates incoming names', () => {
+    for (const id of ['mi-ore', 'mi-iron', 'wc-tree', 'wc-oak', 'wc-willow']) {
+      const m = trainingMethods.find(m => m.id === id)!;
+      const nav = trainingNav(m)!;
+      expect(nav.objectNames).toEqual(m.objectNames);
+      expect(parseNavTarget(nav)?.objectNames).toEqual(m.objectNames);
+      expect(parseNavTarget({ ...nav, objectNames: [5] })?.objectNames).toBeUndefined();
+      expect(parseNavTarget({ ...nav, objectNames: Array(9).fill('Tree') })?.objectNames).toBeUndefined();
+    }
   });
 });
