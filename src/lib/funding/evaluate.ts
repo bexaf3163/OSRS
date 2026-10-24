@@ -156,7 +156,7 @@ function planTool(req: Extract<Requirement, { kind: 'item' }>, ctx: EvalContext)
   const { snap, prices } = ctx;
   const tiers = req.family === 'pickaxe' ? [...PICKAXES] : req.family === 'axe' ? [...AXES] : req.any.map((a) => a.name);
   const skillOf = req.family === 'pickaxe' ? 'mining' : req.family === 'axe' ? 'woodcutting' : null;
-  const usable = tiers.filter((n) => usableAt(n, (sk) => snap.level(sk) ?? null));
+  const usable = tiers.filter((n) => usableAt(n, (sk) => snap.level(sk) ?? null, snap.members));
   const heldTiers = usable.filter((n) => snap.held(n).presence === 'PRESENT');
   if (heldTiers.length) return { name: heldTiers[heldTiers.length - 1], owned: true, cost: 0, unknown: false };
   const allUnknown = usable.length > 0 && usable.every((n) => snap.held(n).presence === 'UNKNOWN');

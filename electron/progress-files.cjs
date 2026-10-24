@@ -51,18 +51,27 @@ function readProgressResult(dir, now = new Date(), name = 'progress.json') {
   catch { return { ok: false, error: 'READ_FAILED' }; }
 }
 
-/** A copy of the whole progress file before the first write of the session: progress.bak.json. A broken file does not become the copy. */
+/**
+ * A copy of the whole progress file before the first write of the session: progress.bak.json. A broken file does not become the copy, and a
+ * damaged or unknown previous copy is kept for explicit recovery. Returns what happened ('copied', 'none' without a file yet, 'skipped' for a
+ * source that is not a whole save, 'kept' for a previous copy that is not one); an I/O failure is thrown, so the caller can report it.
+ */
 function backupProgress(dir, name = 'progress.json') {
   const target = path.join(dir, name);
-  try {
-    const out = path.join(dir, name.replace(/\.json$/, '.bak.json'));
-    if (!validSavedText(name, fs.readFileSync(target, 'utf8'))) return;
-    // Preserve an unknown or damaged previous copy for explicit recovery.
-    if (fs.existsSync(out) && !validSavedText(name, fs.readFileSync(out, 'utf8'))) return;
-    fs.copyFileSync(target, out);
-  } catch {
-    // There is no file yet — there is nothing to copy.
+  const out = path.join(dir, name.replace(/\.json$/, '.bak.json'));
+  let text;
+  try { text = fs.readFileSync(target, 'utf8'); }
+  catch (error) {
+    if (error.code === 'ENOENT') return 'none';
+    throw error;
   }
+  if (!validSavedText(name, text)) return 'skipped';
+  let previous = null;
+  try { previous = fs.readFileSync(out, 'utf8'); }
+  catch (error) { if (error.code !== 'ENOENT') throw error; }
+  if (previous !== null && !validSavedText(name, previous)) return 'kept';
+  fs.copyFileSync(target, out);
+  return 'copied';
 }
 
 const DAY_KEEP = 14;

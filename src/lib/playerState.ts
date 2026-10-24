@@ -150,16 +150,17 @@ export interface Held {
  * are counted and the bag does not refute them; otherwise if it is in the bag it is known "have", and if not it is UNKNOWN, not MISSING.
  */
 export function heldOf(
-  s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'> & { levels?: PlayerState['levels'] }, nameEn: string, manualKey?: string,
+  s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'> & { levels?: PlayerState['levels']; mode?: PlayerState['mode'] }, nameEn: string, manualKey?: string,
 ): Held {
   const base = heldExact(s, nameEn, manualKey);
   const family = toolFamilyOf(nameEn);
   if (!family) return base;
   // "Bronze pickaxe" in a route step means "a pickaxe": a better tier does the same job, so a better tier that is seen counts.
   // Unreported usable tiers keep the family total unknown, even when the named bronze tier is confirmed absent.
-  // A tier the player's level cannot use does not do the job: a Rune pickaxe at Mining 10 is not "a pickaxe" for the step.
+  // A tier the player's level cannot use does not do the job: a Rune pickaxe at Mining 10 is not "a pickaxe" for the step; nor does a
+  // members tier on a free-to-play account (a Dragon pickaxe kept from an old membership).
   const parts = family
-    .filter((n) => usableAt(n, (skill) => levelValue(s, skill)))
+    .filter((n) => usableAt(n, (skill) => levelValue(s, skill), membersOf(s)))
     .map((n) => (nameKey(n) === nameKey(nameEn) ? base : heldExact(s, n)));
   if (!parts.length) return base;
   // Explicit manual ownership keeps its existing fallback when no other tier is positively observed.
@@ -179,21 +180,41 @@ export function heldOf(
   };
 }
 
+/**
+ * A count the game confirms the player has at least (bag, notes, bank, worn) for dependency proofs; null when the game confirms nothing.
+ * A lower bound is enough for "owns N"; manual marks do not count.
+ */
+export function ownedCountOf(s: PlayerState): (nameEn: string) => number | null {
+  return (nameEn) => {
+    const h = heldExact(s, nameEn);
+    if (h.source === 'game' && h.total !== null) return h.total + h.equipped;
+    return h.equipped > 0 ? h.equipped : null;
+  };
+}
+
+/** false on a free-to-play account, null while the mode is not part of the state. */
+const membersOf = (s: { mode?: PlayerState['mode'] }): boolean | null => (s.mode ? s.mode === 'members' : null);
+
 function levelValue(s: { levels?: PlayerState['levels'] }, skill: string): number | null {
   const l = s.levels?.[skill];
   return l && l.known ? l.value : null;
 }
 
-/** Tiers of the tool the player holds but cannot use yet: "Rune pickaxe (needs Mining 41)". Empty when none or the level is unknown. */
-export function unusableTools(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen' | 'levels'>, nameEn: string): string[] {
+/**
+ * Tiers of the tool the player holds but cannot use: "Rune pickaxe (needs Mining 41)", "Dragon pickaxe (members only)". Empty when none or
+ * the level is unknown.
+ */
+export function unusableTools(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen' | 'levels'> & { mode?: PlayerState['mode'] }, nameEn: string): string[] {
   const family = toolFamilyOf(nameEn);
   if (!family) return [];
   const out: string[] = [];
   for (const n of family) {
     const u = toolUse(n);
-    const lv = u ? levelValue(s, u.skill) : null;
-    if (!u || lv === null || lv >= u.level) continue;
-    if (heldExact(s, n).presence === 'PRESENT') out.push(`${n} (needs ${u.skill === 'mining' ? 'Mining' : 'Woodcutting'} ${u.level})`);
+    if (!u || heldExact(s, n).presence !== 'PRESENT') continue;
+    if (u.members && membersOf(s) === false) { out.push(`${n} (members only)`); continue; }
+    const lv = levelValue(s, u.skill);
+    if (lv === null || lv >= u.level) continue;
+    out.push(`${n} (needs ${u.skill === 'mining' ? 'Mining' : 'Woodcutting'} ${u.level})`);
   }
   return out;
 }

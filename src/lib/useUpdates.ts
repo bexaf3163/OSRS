@@ -7,6 +7,8 @@ export interface UpdatesApi {
   state: UpdateState;
   check: () => void;
   download: () => void;
+  /** null: this shell cannot cancel a download. */
+  cancel: (() => void) | null;
   install: () => void;
   setAuto: (on: boolean) => void;
 }
@@ -24,12 +26,14 @@ export function useUpdates(): UpdatesApi | null {
   }, [api]);
   const check = useCallback(() => { void api?.check().then(setState).catch(() => undefined); }, [api]);
   const download = useCallback(() => { void api?.download().then(setState).catch(() => undefined); }, [api]);
+  const cancelDownload = useCallback(() => { void api?.cancel?.().then(setState).catch(() => undefined); }, [api]);
+  const cancel = api?.cancel ? cancelDownload : null;
   const install = useCallback(() => { void api?.install(); }, [api]);
   const setAuto = useCallback((on: boolean) => {
     api?.setAuto(on);
     setState((s) => (s ? { ...s, auto: on } : s));
   }, [api]);
-  return api && state ? { state, check, download, install, setAuto } : null;
+  return api && state ? { state, check, download, cancel, install, setAuto } : null;
 }
 
 /** How many percent are downloaded — as a whole number. */

@@ -54,6 +54,25 @@ describe('the progress file', () => {
     backupProgress(d);
     expect(readFileSync(join(d, 'progress.bak.json'), 'utf8')).toBe('{"version":3,"steps":{},"ok":1}');
   });
+
+  // T01: the first-write copy reported nothing when it failed; the shell now records what happened and shows a failure in Settings.
+  it('says what the first-write copy did, and throws an I/O failure instead of hiding it', () => {
+    const api = createRequire(import.meta.url)('../electron/progress-files.cjs') as { backupProgress: (dir: string) => string };
+    const d = tmp();
+    expect(api.backupProgress(d)).toBe('none');
+    writeFileSync(join(d, 'progress.json'), '{"version":');
+    expect(api.backupProgress(d)).toBe('skipped');
+    writeFileSync(join(d, 'progress.json'), '{"version":3,"steps":{}}');
+    writeFileSync(join(d, 'progress.bak.json'), '{damaged earlier copy');
+    expect(api.backupProgress(d)).toBe('kept');
+    expect(readFileSync(join(d, 'progress.bak.json'), 'utf8')).toBe('{damaged earlier copy');
+    rmSync(join(d, 'progress.bak.json'));
+    expect(api.backupProgress(d)).toBe('copied');
+    // A folder where the copy should be: the copy cannot be written, and the caller hears about it.
+    rmSync(join(d, 'progress.bak.json'));
+    mkdirSync(join(d, 'progress.bak.json'));
+    expect(() => api.backupProgress(d)).toThrow();
+  });
 });
 
 describe('profiles and the scheduled copy', () => {

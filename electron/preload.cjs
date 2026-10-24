@@ -45,6 +45,7 @@ contextBridge.exposeInMainWorld('osrsDesktop', {
     get: () => ipcRenderer.invoke('update:get'),
     check: () => ipcRenderer.invoke('update:check'),
     download: () => ipcRenderer.invoke('update:download'),
+    cancel: () => ipcRenderer.invoke('update:cancel'),
     install: () => ipcRenderer.invoke('update:install'),
     setAuto: (on) => ipcRenderer.send('update:auto', Boolean(on)),
     onState: (callback) => {
