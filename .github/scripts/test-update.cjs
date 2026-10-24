@@ -1,5 +1,5 @@
 // T02: a real update between two published portable EXEs (update-test.yml), on a CI runner only, never a player's machine: the apps it starts
-// show windows and error dialogs on the desktop they run on. USERPROFILE, APPDATA and LOCALAPPDATA point into the run folder (no RuneLite is
+// show windows and error dialogs on the desktop they run on. USERPROFILE, HOME, APPDATA, LOCALAPPDATA and OSRS_PUT_E2E_ROOT point into the run folder (no RuneLite is
 // found, no installed progress is copied), the bridge uses a free port. The old app marks a step done through its own UI, finds the newer
 // release on GitHub, downloads and verifies it, and hands over; the new app must start by itself, remove the old exe and keep the save.
 // Usage: node test-update.cjs <old exe> <new version> <new sha256> <work folder>
@@ -37,21 +37,25 @@ function stopAll() {
 }
 
 function env(bridgePort) {
-  // On this machine the portable launcher stops at once with 0x80000003 when HOME is moved together with USERPROFILE, APPDATA and
-  // LOCALAPPDATA (any three of them start fine); Windows programs take the home from USERPROFILE, so HOME is left alone.
-  const e = { ...process.env, USERPROFILE: home, APPDATA: path.join(home, 'appdata'), LOCALAPPDATA: home, OSRS_PUT_BRIDGE_PORT: String(bridgePort) };
-  delete e.PORTABLE_EXECUTABLE_DIR; delete e.PORTABLE_EXECUTABLE_FILE; delete e.OSRS_PUT_E2E_ROOT;
+  // As the release's packaged E2E (scripts/e2e-electron.ts) starts the portable exe on the same runner: the home folders and OSRS_PUT_E2E_ROOT
+  // point into the run folder, so Electron's own paths are set before the app reads them. The portable launcher sets PORTABLE_EXECUTABLE_* itself.
+  const e = { ...process.env, USERPROFILE: home, HOME: home, APPDATA: path.join(home, 'appdata'), LOCALAPPDATA: home, OSRS_PUT_E2E_ROOT: home,
+    OSRS_PUT_BRIDGE_PORT: String(bridgePort) };
+  delete e.PORTABLE_EXECUTABLE_DIR; delete e.PORTABLE_EXECUTABLE_FILE;
   return e;
 }
 
 async function launch(exeName, bridgePort) {
   const cdp = await freePort();
-  const child = spawn(path.join(appDir, exeName), [`--remote-debugging-port=${cdp}`], { cwd: appDir, env: env(bridgePort), stdio: 'ignore', detached: false });
+  const child = spawn(path.join(appDir, exeName), [`--remote-debugging-port=${cdp}`], { cwd: appDir, env: env(bridgePort), stdio: ['ignore', 'pipe', 'pipe'], detached: false });
+  let log = '';
+  child.stdout.on('data', (d) => { log += String(d); });
+  child.stderr.on('data', (d) => { log += String(d); });
   let up = false;
   for (let i = 0; i < 240 && !up; i++) {
     try { up = (await fetch(`http://127.0.0.1:${cdp}/json/version`)).ok; } catch { await sleep(500); }
   }
-  if (!up) throw new Error(`${exeName} did not come up`);
+  if (!up) throw new Error(`${exeName} did not come up (exit ${child.exitCode}): ${log.slice(-3000)}`);
   const browser = await chromium.connectOverCDP(`http://127.0.0.1:${cdp}`);
   let page;
   for (let i = 0; i < 60 && !page; i++) {
