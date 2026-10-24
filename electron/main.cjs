@@ -123,16 +123,29 @@ if (!app.requestSingleInstanceLock()) {
   // The progress is written on every change (a note — on every letter), so with a delay.
   /** A profile's progress file: the main one keeps the old progress.json. The identifier is letters and digits only. */
   const progressFile = (id) => (/^[a-z0-9]{1,12}$/.test(String(id)) && id !== 'main' ? `progress-${id}.json` : 'progress.json');
-  // Secondary copy failures must remain observable without rejecting a successful primary save.
-  const copyErrors = new Map();
+  // Secondary copy failures must remain observable without rejecting a successful primary save. They outlive a restart (ui.json) until the
+  // same copy succeeds, so closing the app cannot hide an unreported failure.
+  const copyErrors = new Map(Object.entries(ui.copyErrors && typeof ui.copyErrors === 'object' ? ui.copyErrors : {}));
+  const keepCopyErrors = () => {
+    const kept = Object.fromEntries(copyErrors);
+    if (JSON.stringify(kept) === JSON.stringify(ui.copyErrors ?? {})) return;
+    ui.copyErrors = kept;
+    saveUi();
+  };
   const recordCopyError = (target, phase, err) => {
     const errors = { ...copyErrors.get(target), [phase]: err ? String(err.code || 'write error') : null };
     if (Object.values(errors).some(Boolean)) copyErrors.set(target, errors);
     else copyErrors.delete(target);
+    keepCopyErrors();
   };
+  // The copy beside the save before the session's first write (progress.bak.json) is in the data folder itself.
+  const BAK = 'first-write copy';
   const progressWriter = createProgressWriter({
     write: writeAtomic,
-    backup: name => backupProgress(app.getPath('userData'), name),
+    backup: name => {
+      try { backupProgress(app.getPath('userData'), name); recordCopyError(BAK, name, null); }
+      catch (err) { recordCopyError(BAK, name, err); }
+    },
     afterFlush: () => {
       // The freshest copy follows every change, so a deleted folder loses seconds, not an hour.
       if (ui.backupOff !== true) {
@@ -181,7 +194,8 @@ if (!app.requestSingleInstanceLock()) {
   // Progress copies: every hour into a folder outside the app (automatic) and into the folder chosen by the player (the app settings).
   const backupTargets = () => [...new Set([ui.backupOff === true ? null : autoCopyDir, ui.backupDir || null].filter(Boolean))];
   const backupState = () => ({ dir: ui.backupDir || null, autoDir: ui.backupOff === true ? null : autoCopyDir, last: ui.backupLast || null,
-    error: [...new Set(backupTargets().flatMap(target => Object.values(copyErrors.get(target) || {})).filter(Boolean))].join('; ') || null });
+    error: [...new Set([BAK, ...backupTargets()].flatMap(target => Object.entries(copyErrors.get(target) || {})
+      .filter(([, code]) => code).map(([phase, code]) => (target === BAK ? `${code} (copy of ${phase} before the first save)` : code))))].join('; ') || null });
   function runBackup() {
     const targets = backupTargets();
     if (!targets.length) return backupState();
@@ -191,6 +205,7 @@ if (!app.requestSingleInstanceLock()) {
         dailyBackup(app.getPath('userData'), target);
         latestCopy(app.getPath('userData'), target);
         copyErrors.delete(target);
+        keepCopyErrors();
         ui.backupLast = new Date().toISOString();
       } catch (err) {
         recordCopyError(target, 'scheduled', err);
