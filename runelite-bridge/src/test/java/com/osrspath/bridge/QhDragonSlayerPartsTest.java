@@ -71,6 +71,23 @@ public class QhDragonSlayerPartsTest
 	}
 
 	@Test
+	public void afterADeathAtElvarg_backThroughTheVolcanoShortcut()
+	{
+		// Live session: killed by Elvarg, respawned in Lumbridge; the list stayed on "kill Elvarg" with nothing about the way back.
+		final int sailed = 8;
+		QhFakeGame g = at(3221, 3220, 0);
+		g.varps.put(176, sailed);
+		g.varps.put(177, 1 << 6);
+		assertEquals("the shortcut is open: the Karamja volcano", line("S5-08", "goDownIntoKaramjaVolcano"), pick("S5-08", sailed, g));
+		g.pos = new int[] {2840, 9580, 0};
+		assertEquals("in the volcano: through the wall", line("S5-08", "returnThroughShortcut"), pick("S5-08", sailed, g));
+		g.pos = new int[] {2840, 9610, 0};
+		assertEquals("back in the Crandor dungeon: Elvarg's lair", line("S5-08", "enterElvargArea"), pick("S5-08", sailed, g));
+		g.pos = new int[] {2855, 9637, 0};
+		assertEquals(line("S5-08", "killElvarg"), pick("S5-08", sailed, g));
+	}
+
+	@Test
 	public void theGuildmastersQuestionsOneByOne()
 	{
 		// Each question clears its bit of varp 177: 14 the ship, 15 the shield, 11 Melzar, 12 Thalzar, 13 Lozar. All five lines stand by the Guildmaster.

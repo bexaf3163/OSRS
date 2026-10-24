@@ -16215,6 +16215,40 @@
        "k": "unlockShortcut"
       },
       {
+       "t": "After a death: get ready again (Anti-dragon shield worn, food, combat gear), go to the Karamja volcano south of Brimhaven (boat from Port Sarim to Musa Point, then walk west) and climb in. The ship is wrecked, but the shortcut you opened leads back to Crandor.",
+       "s": "After a death: Karamja volcano (south of Brimhaven), climb in",
+       "at": [
+        2857,
+        3169,
+        0
+       ],
+       "hl": {
+        "obj": [
+         11441
+        ],
+        "item": [
+         "Anti-dragon shield"
+        ]
+       },
+       "pre": [{"item": "Anti-dragon shield", "id": 1540, "t": "Wear the Anti-dragon shield before you go back to Elvarg"}, {"item": "Lobster", "id": 379, "n": 20, "alt": ["Swordfish", "Shark", "Monkfish", "Tuna"], "t": "Take 20 or more lobsters or other good food: there is no bank on the way"}],
+       "k": "goDownIntoKaramjaVolcano"
+      },
+      {
+       "t": "In the volcano, go north through the wall you opened from the Crandor side, back into the Crandor dungeon.",
+       "s": "Volcano: north through the wall shortcut back to Crandor",
+       "at": [
+        2836,
+        9600,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2606
+        ]
+       },
+       "k": "returnThroughShortcut"
+      },
+      {
        "t": "Equip the Anti-dragon shield, then climb into Elvarg's area. Pick the Stab style on the sword, eat below 20 health, and never take the shield off.",
        "s": "Crandor dungeon: enter Elvarg's lair (shield worn!)",
        "at": [

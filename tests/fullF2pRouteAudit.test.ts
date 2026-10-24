@@ -481,7 +481,9 @@ describe('F2P route audit: the multi-floor and underground quests, one by one', 
       expect(a[0] !== b[0] || a[1] !== b[1] || a[2] !== b[2], `the arrow between "${at[i - 1].k}" and "${at[i].k}" is zero`).toBe(true);
     }
     expect(regionOf({ x: at[2].at![0], y: at[2].at![1], plane: at[2].at![2] })).toBe('crandor');
-    expect(at.slice(3).every((l) => ug(l.at!))).toBe(true);
+    // After the hole everything is underground, except the way back after a death: the Karamja volcano entrance on the surface (Quest Helper's goDownIntoKaramjaVolcano).
+    expect(at.slice(3).filter((l) => l.k !== 'goDownIntoKaramjaVolcano').every((l) => ug(l.at!))).toBe(true);
+    expect(lines('S5-08').map((l) => l.k)).toEqual(expect.arrayContaining(['goDownIntoKaramjaVolcano', 'returnThroughShortcut']));
     expect(lines('S5-08').some((l) => /shortcut|wall/i.test(l.t) && l.at && ug(l.at))).toBe(true);
   });
 
