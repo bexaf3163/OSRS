@@ -13,7 +13,7 @@ import type { PlayStyle } from './playStyle';
 import { buildPrepPlan, type PrepPlan } from './prepPlan';
 import type { UpgradeRecommendation } from '../services/gearUpgradeRouter';
 import { dependencyFacts, type DependencyFact } from './next-step';
-import { levelOf } from './playerState';
+import { levelOf, ownedCountOf } from './playerState';
 
 export interface ReadinessEngine {
   readonly ctx: ReadinessContext;
@@ -77,7 +77,7 @@ export function createReadinessEngine(ctx: ReadinessContext): ReadinessEngine {
   };
 
   return {
-    dependencies: dependencyFacts(ctx.steps, ctx.state.quests.known ? ctx.state.quests.value : null, skill => levelOf(ctx.state, skill)),
+    dependencies: dependencyFacts(ctx.steps, ctx.state.quests.known ? ctx.state.quests.value : null, skill => levelOf(ctx.state, skill), ownedCountOf(ctx.state)),
     ctx,
     readiness,
     prep,

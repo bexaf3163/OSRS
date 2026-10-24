@@ -180,6 +180,18 @@ export function heldOf(
   };
 }
 
+/**
+ * A count the game confirms the player has at least (bag, notes, bank, worn) for dependency proofs; null when the game confirms nothing.
+ * A lower bound is enough for "owns N"; manual marks do not count.
+ */
+export function ownedCountOf(s: PlayerState): (nameEn: string) => number | null {
+  return (nameEn) => {
+    const h = heldExact(s, nameEn);
+    if (h.source === 'game' && h.total !== null) return h.total + h.equipped;
+    return h.equipped > 0 ? h.equipped : null;
+  };
+}
+
 /** false on a free-to-play account, null while the mode is not part of the state. */
 const membersOf = (s: { mode?: PlayerState['mode'] }): boolean | null => (s.mode ? s.mode === 'members' : null);
 

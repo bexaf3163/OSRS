@@ -11,7 +11,7 @@ import { isCompleted, blockersOf, dependencyFacts } from './next-step';
 import { nameKey, preflightItems, type OwnedState } from './checklist';
 import type { GearState, NavTargetPayload } from '../services/runeliteBridge';
 import { plural } from './shopping';
-import { buildPlayerState, coinsOf, heldOf, levelOf, questOf, unusableTools, type Held, type PlayerState } from './playerState';
+import { buildPlayerState, coinsOf, heldOf, levelOf, ownedCountOf, questOf, unusableTools, type Held, type PlayerState } from './playerState';
 import { evaluate } from './requirements';
 import { toolFamilyOf } from './toolTiers';
 import { doseKind, heldUnits, needUnits } from './doses';
@@ -154,7 +154,7 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
   if (step.membersOnly && mode === 'f2p') {
     reqs.push({ kind: 'mode', label: 'Members only', state: 'MISSING', hard: true, detail: 'A Members step: it is not needed in F2P mode.', source: 'route' });
   }
-  const b = blockersOf(step, p, qp, dependencyFacts(steps, state.quests.known ? state.quests.value : null, skill => levelOf(state, skill)));
+  const b = blockersOf(step, p, qp, dependencyFacts(steps, state.quests.known ? state.quests.value : null, skill => levelOf(state, skill), ownedCountOf(state)));
   for (const id of b?.steps ?? []) {
     const s = steps.find((x) => x.id === id);
     reqs.push({
@@ -341,7 +341,7 @@ export function fixChainOf(
   readiness: (s: Step) => StepReadiness = (s) => readinessOf(s, ctx),
 ): ChainLink[] {
   const seen = new Set<string>([step.id]);
-  const fact = dependencyFacts(ctx.steps, ctx.state.quests.known ? ctx.state.quests.value : null, skill => levelOf(ctx.state, skill));
+  const fact = dependencyFacts(ctx.steps, ctx.state.quests.known ? ctx.state.quests.value : null, skill => levelOf(ctx.state, skill), ownedCountOf(ctx.state));
   const out: ChainLink[] = [];
   const visit = (cur: Step, depth: number) => {
     const r = readiness(cur);

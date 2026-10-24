@@ -28,9 +28,39 @@ export function questDependencyFacts(steps: readonly Step[], quests: readonly st
   };
 }
 
-/** Pure level goals may already be reached without following their training step. Never infer items or quest stages from levels. */
-export function dependencyFacts(steps: readonly Step[], quests: readonly string[] | null, level: (skill: string) => number | undefined): DependencyFact {
+/** How many of an item the game confirms the player owns (bag, notes, bank, worn); null while that is not known. */
+export type OwnedCount = (nameEn: string) => number | null;
+
+type ItemTrigger = NonNullable<NonNullable<Step['inGame']>['completionTrigger']>;
+
+/**
+ * Whether the items an acquisition step exists for are owned now. An item named with an ID is not provable by its name (the three Crandor map
+ * pieces share one name), and an unread count proves nothing.
+ */
+function acquiredNow(t: ItemTrigger, owned: OwnedCount): boolean {
+  const items = t.items ?? [];
+  const held = items.map((it) => {
+    if (it.id !== undefined) return false;
+    const counts = it.names.map((n) => owned(n));
+    if (counts.some((c) => c === null)) return false;
+    return (counts as number[]).reduce((a, b) => a + b, 0) >= (it.count ?? 1);
+  });
+  return items.length > 0 && (t.anyOf ? held.some(Boolean) : held.every(Boolean));
+}
+
+/**
+ * Pure level goals may already be reached without following their training step. Never infer items or quest stages from levels.
+ * owned: a step that exists to acquire items (its completion is owning them) is met for the steps after it when the game confirms they are
+ * owned now. Positive only: a missing or unread item never revokes the player's own done mark.
+ */
+export function dependencyFacts(
+  steps: readonly Step[], quests: readonly string[] | null, level: (skill: string) => number | undefined, owned?: OwnedCount,
+): DependencyFact {
   const quest = questDependencyFacts(steps, quests);
+  const acquisitions = new Map(steps.flatMap((s) => {
+    const t = s.inGame?.completionTrigger;
+    return t?.type === 'ITEM_OWNED' && t.items?.length && !s.carryover?.length ? [[s.id, t] as const] : [];
+  }));
   const training = new Map(steps.flatMap(s => {
     const t = s.inGame?.completionTrigger;
     return s.type === 'skill' && t?.type === 'SKILL_LEVEL' && t.levels?.length && !t.items?.length && !s.carryover?.length
@@ -39,6 +69,8 @@ export function dependencyFacts(steps: readonly Step[], quests: readonly string[
   return (id, consumer) => {
     const q = quest(id);
     if (q !== undefined) return q;
+    const acquisition = owned ? acquisitions.get(id) : undefined;
+    if (acquisition && acquiredNow(acquisition, owned!)) return true;
     const goals = training.get(id);
     if (!goals) return undefined;
     const values = goals.map(g => ({ target: g.level, have: level(g.skill) }));
