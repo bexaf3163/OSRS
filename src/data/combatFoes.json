@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/build-combat-foes.ts)",
-  "generatedAt": "2026-10-18",
+  "generatedAt": "2026-10-24",
   "foes": [
     {
       "name": "Minotaur",
@@ -17,7 +17,8 @@
         "stab": -21,
         "slash": -21,
         "crush": -21,
-        "magic": -21
+        "magic": -21,
+        "ranged": -21
       },
       "attackStyle": "crush",
       "maxHit": 2,
@@ -39,7 +40,8 @@
         "stab": -10,
         "slash": -10,
         "crush": -10,
-        "magic": -21
+        "magic": -21,
+        "ranged": -10
       },
       "attackStyle": "crush",
       "maxHit": 3,
@@ -61,12 +63,59 @@
         "stab": 0,
         "slash": 0,
         "crush": 0,
-        "magic": 0
+        "magic": 0,
+        "ranged": 0
       },
       "attackStyle": "crush",
       "maxHit": 4,
       "speedTicks": 6,
       "aggressive": true
+    },
+    {
+      "name": "Giant frog",
+      "version": "Level 13",
+      "combat": 13,
+      "members": false,
+      "hitpoints": 23,
+      "attackLevel": 10,
+      "strengthLevel": 8,
+      "defenceLevel": 6,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 2,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Giant frog",
+      "version": "Level 99",
+      "combat": 99,
+      "members": true,
+      "hitpoints": 100,
+      "attackLevel": 100,
+      "strengthLevel": 80,
+      "defenceLevel": 65,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 9,
+      "speedTicks": 4,
+      "aggressive": false
     },
     {
       "name": "Cow",
@@ -83,7 +132,8 @@
         "stab": -21,
         "slash": -21,
         "crush": -21,
-        "magic": -21
+        "magic": -21,
+        "ranged": -21
       },
       "attackStyle": "crush",
       "maxHit": 1,
@@ -105,7 +155,8 @@
         "stab": -21,
         "slash": -21,
         "crush": -21,
-        "magic": -21
+        "magic": -21,
+        "ranged": -21
       },
       "attackStyle": "crush",
       "maxHit": 1,
@@ -127,7 +178,8 @@
         "stab": 15,
         "slash": 15,
         "crush": 15,
-        "magic": 15
+        "magic": 15,
+        "ranged": 15
       },
       "attackStyle": "slash",
       "maxHit": 1,
@@ -149,7 +201,8 @@
         "stab": 15,
         "slash": 15,
         "crush": 15,
-        "magic": 15
+        "magic": 15,
+        "ranged": 15
       },
       "attackStyle": "slash",
       "maxHit": 1,
@@ -171,7 +224,8 @@
         "stab": 15,
         "slash": 15,
         "crush": 15,
-        "magic": 15
+        "magic": 15,
+        "ranged": 15
       },
       "attackStyle": "slash",
       "maxHit": 1,
@@ -193,7 +247,8 @@
         "stab": 0,
         "slash": 0,
         "crush": 0,
-        "magic": 0
+        "magic": 0,
+        "ranged": 0
       },
       "attackStyle": "crush",
       "maxHit": 6,
@@ -215,7 +270,8 @@
         "stab": 0,
         "slash": 0,
         "crush": 0,
-        "magic": 0
+        "magic": 0,
+        "ranged": 0
       },
       "attackStyle": "crush",
       "maxHit": 6,
@@ -237,7 +293,8 @@
         "stab": 0,
         "slash": 0,
         "crush": 0,
-        "magic": 0
+        "magic": 0,
+        "ranged": 0
       },
       "attackStyle": "crush",
       "maxHit": 6,
@@ -258,7 +315,8 @@
         "stab": 2,
         "slash": 1,
         "crush": 3,
-        "magic": 0
+        "magic": 0,
+        "ranged": 0
       },
       "attackStyle": "crush",
       "maxHit": 3,
@@ -279,7 +337,8 @@
         "stab": 0,
         "slash": 0,
         "crush": 0,
-        "magic": 0
+        "magic": 0,
+        "ranged": 0
       },
       "attackStyle": "magic",
       "maxHit": 6,
@@ -300,7 +359,8 @@
         "stab": -7,
         "slash": -7,
         "crush": -7,
-        "magic": -3
+        "magic": -3,
+        "ranged": -7
       },
       "attackStyle": "crush",
       "maxHit": 3,
@@ -321,7 +381,8 @@
         "stab": 20,
         "slash": 40,
         "crush": 40,
-        "magic": 30
+        "magic": 30,
+        "ranged": 20
       },
       "attackStyle": "slash",
       "maxHit": 8,
@@ -342,7 +403,8 @@
         "stab": 0,
         "slash": 0,
         "crush": 0,
-        "magic": 0
+        "magic": 0,
+        "ranged": 0
       },
       "attackStyle": "magic",
       "maxHit": 5,
@@ -364,7 +426,8 @@
         "stab": 0,
         "slash": 0,
         "crush": 0,
-        "magic": -10
+        "magic": -10,
+        "ranged": 0
       },
       "attackStyle": "slash",
       "maxHit": 8,
@@ -386,7 +449,8 @@
         "stab": 0,
         "slash": 0,
         "crush": 0,
-        "magic": -10
+        "magic": -10,
+        "ranged": 0
       },
       "attackStyle": "slash",
       "maxHit": 8,
@@ -408,7 +472,8 @@
         "stab": 0,
         "slash": 0,
         "crush": 0,
-        "magic": -10
+        "magic": -10,
+        "ranged": 0
       },
       "attackStyle": "slash",
       "maxHit": 8,
@@ -430,7 +495,8 @@
         "stab": 0,
         "slash": 0,
         "crush": 0,
-        "magic": -10
+        "magic": -10,
+        "ranged": 0
       },
       "attackStyle": "slash",
       "maxHit": 9,
@@ -452,7 +518,8 @@
         "stab": 73,
         "slash": 76,
         "crush": 70,
-        "magic": -11
+        "magic": -11,
+        "ranged": 72
       },
       "attackStyle": "slash",
       "maxHit": 4,
@@ -474,7 +541,8 @@
         "stab": 40,
         "slash": 40,
         "crush": 0,
-        "magic": 5
+        "magic": 5,
+        "ranged": 30
       },
       "attackStyle": "crush",
       "maxHit": 7,
@@ -495,7 +563,8 @@
         "stab": 0,
         "slash": 0,
         "crush": 0,
-        "magic": 0
+        "magic": 0,
+        "ranged": 0
       },
       "attackStyle": "stab",
       "maxHit": 3,
@@ -516,7 +585,8 @@
         "stab": 0,
         "slash": 0,
         "crush": 0,
-        "magic": 0
+        "magic": 0,
+        "ranged": 0
       },
       "attackStyle": "slash",
       "maxHit": 3,
@@ -524,24 +594,94 @@
       "aggressive": false
     },
     {
-      "name": "Giant frog",
-      "version": "Level 13",
-      "combat": 13,
+      "name": "Seagull",
+      "version": "Level 2",
+      "combat": 2,
       "members": false,
-      "hitpoints": 23,
-      "attackLevel": 10,
-      "strengthLevel": 8,
-      "defenceLevel": 6,
+      "hitpoints": 6,
+      "attackLevel": 1,
+      "strengthLevel": 1,
+      "defenceLevel": 1,
+      "magicLevel": 1,
+      "attackBonus": -47,
+      "defence": {
+        "stab": -42,
+        "slash": -42,
+        "crush": -42,
+        "magic": -42,
+        "ranged": -42
+      },
+      "attackStyle": "crush",
+      "maxHit": 0,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Seagull",
+      "version": "Level 3",
+      "combat": 3,
+      "members": false,
+      "hitpoints": 10,
+      "attackLevel": 1,
+      "strengthLevel": 1,
+      "defenceLevel": 1,
+      "magicLevel": 1,
+      "attackBonus": -47,
+      "defence": {
+        "stab": -42,
+        "slash": -42,
+        "crush": -42,
+        "magic": -42,
+        "ranged": -42
+      },
+      "attackStyle": "crush",
+      "maxHit": 0,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Monk",
+      "version": "Level 3",
+      "combat": 3,
+      "members": true,
+      "hitpoints": 5,
+      "attackLevel": 2,
+      "strengthLevel": 2,
+      "defenceLevel": 3,
       "magicLevel": 1,
       "attackBonus": 0,
       "defence": {
         "stab": 0,
         "slash": 0,
         "crush": 0,
-        "magic": 0
+        "magic": 0,
+        "ranged": 0
       },
       "attackStyle": "crush",
-      "maxHit": 2,
+      "maxHit": 1,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Monk",
+      "version": "Level 5",
+      "combat": 5,
+      "members": false,
+      "hitpoints": 15,
+      "attackLevel": 2,
+      "strengthLevel": 2,
+      "defenceLevel": 3,
+      "magicLevel": 1,
+      "attackBonus": 0,
+      "defence": {
+        "stab": 0,
+        "slash": 0,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "crush",
+      "maxHit": 1,
       "speedTicks": 4,
       "aggressive": false
     }

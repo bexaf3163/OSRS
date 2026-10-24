@@ -16,7 +16,9 @@ const PAGES = ['Minotaur', 'Hill Giant', 'Giant frog', 'Cow', 'Flesh Crawler', '
   // The quest fights of the route (2.63.0): one fight each, with the kit the player has (lib/fightEstimate.ts).
   'Count Draynor', 'Ithoi the Navigator', 'Brutus', 'Delrith', 'Elvarg', 'Melzar the Mad', 'Lesser demon', 'Black Knight', 'Ancient Guardian',
   // Members quest fights the route cannot avoid (2.66.0, combat audit): Priest in Peril's Temple Guardian, Nature Spirit's ghasts.
-  'Temple Guardian', 'Ghast'];
+  'Temple Guardian', 'Ghast',
+  // The Ranged trainers of stage 6 (2.74.18, the whole-goal arrow count): level 3 Seagulls at Port Sarim, the Edgeville monks.
+  'Seagull', 'Monk'];
 
 let last = 0;
 async function wikitext(page: string): Promise<string> {
@@ -56,7 +58,8 @@ export interface CombatFoe {
   defenceLevel: number;
   magicLevel: number;
   attackBonus: number;
-  defence: { stab: number; slash: number; crush: number; magic: number };
+  /** ranged: the standard ranged defence, what arrows roll against (OSRS Wiki, Ranged: "Standard: Arrows…"); absent when the infobox has none. */
+  defence: { stab: number; slash: number; crush: number; magic: number; ranged?: number };
   /** Melee type of its attack: crush, slash or stab; anything else (magic, ranged) is written as is. */
   attackStyle: string;
   maxHit: number;
@@ -84,10 +87,12 @@ for (const page of PAGES) {
     const missing = Object.entries(row).filter(([, v]) => v === null).map(([k]) => k);
     if (missing.length) { problems.push(`${page}${version ? ` (${version})` : ''}: no ${missing.join(', ')}`); continue; }
     const members = /yes/i.test(at('members', i) ?? '');
+    // Since the 2024 split the infobox gives dlight/dstandard/dheavy; older articles still have one drange.
+    const ranged = num(at('dstandard', i)) ?? num(at('drange', i));
     const foe: CombatFoe = {
       name: page, ...(version ? { version } : {}), combat: row.combat!, members, hitpoints: row.hitpoints!,
       attackLevel: row.attackLevel!, strengthLevel: row.strengthLevel!, defenceLevel: row.defenceLevel!, magicLevel: row.magicLevel!, attackBonus: row.attackBonus!,
-      defence: { stab: row.stab!, slash: row.slash!, crush: row.crush!, magic: row.magic! },
+      defence: { stab: row.stab!, slash: row.slash!, crush: row.crush!, magic: row.magic!, ...(ranged !== null ? { ranged } : {}) },
       attackStyle: plain(at('attack style', i)).toLowerCase().split(/[,\s]+/)[0], maxHit: row.maxHit!, speedTicks: row.speedTicks!,
       aggressive: /yes/i.test(at('aggressive', i) ?? ''),
     };

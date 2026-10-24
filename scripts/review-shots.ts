@@ -176,6 +176,7 @@ const SHOTS: Shot[] = [
     hash: '#/skills/MI', mock: skiller(SKILLER),
     act: async (p) => { await p.locator('.skill-guide-roadmap').scrollIntoViewIfNeeded(); await p.waitForTimeout(300); },
   },
+  { name: 'skill-ranged', area: 'T11', caption: 'Ranged: the training card with the arrows for the whole goal', width: 1440, hash: '#/skills/RA', mock: skiller(SKILLER) },
   { name: 'skill-magic', area: 'T4', caption: 'Magic 33: the balanced default picks a method that is not the slowest AFK one', width: 1440, hash: '#/skills/MA', mock: skiller(SKILLER) },
   { name: 'settings', area: 'T8', caption: 'Settings', width: 1440, hash: '#/settings', mock: hillGiants() },
   { name: 'funding-card', area: 'T1', caption: 'The coin card on S4-03: the shortfall, one way to raise it, Start, and the link to the Money section', width: 1440, hash: '#/step/S4-03', mock: hillGiants(), act: prepView, sel: '.funding-card' },
@@ -203,6 +204,7 @@ const SHOTS: Shot[] = [
   },
   { name: 'money-offline', area: 'T2', caption: 'Money: RuneLite not connected: published figures, nothing confirmed', width: 1440, hash: '#/money', mock: { ...hillGiants(), offline: true } },
   { name: 'money-390', area: 'T2', caption: 'Money at phone width', width: 390, hash: '#/money', mock: hillGiants() },
+  { name: 'journal', area: 'T14', caption: 'Journal as it opens for the reported character', width: 1440, hash: '#/journal', mock: hillGiants() },
 ];
 
 async function main(browser: Browser) {

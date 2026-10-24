@@ -32,7 +32,8 @@ export interface CombatFoe {
   defenceLevel: number;
   magicLevel: number;
   attackBonus: number;
-  defence: { stab: number; slash: number; crush: number; magic: number };
+  /** ranged: the standard ranged defence (arrows); absent when the infobox has none. */
+  defence: { stab: number; slash: number; crush: number; magic: number; ranged?: number };
   attackStyle: string;
   maxHit: number;
   speedTicks: number;

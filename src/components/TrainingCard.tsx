@@ -14,6 +14,8 @@ import { adviseTraining, formatHours, type MethodView, type TrainingAdvice } fro
 import { actionForm } from '../lib/pacing';
 import { levelOf } from '../lib/playerState';
 import { trainingNav } from '../lib/trainingNav';
+import { goalArrows } from '../lib/rangedAmmo';
+import { xpForLevel } from '../lib/xp';
 import type { NavTargetPayload } from '../services/runeliteBridge';
 import { NavigateButton } from './NavigateButton';
 
@@ -71,6 +73,15 @@ export function TrainingCard({ skill, target }: { skill: string; target: number 
   const advice = useTrainingAdvice(skill, target);
   const features = useFeatures();
   const profile = styleOf(features);
+  const { state } = usePlayerState();
+  const { xp } = useBridge();
+  // T11: the arrows for the whole goal, leg by leg against each leg's opponent, with the bow and arrows the kit picks now.
+  const arrows = useMemo(() => {
+    if (skill !== 'ranged' || !advice?.best || advice.level === null) return null;
+    const legs = advice.path.length ? advice.path : [{ method: advice.best.method, fromLevel: advice.level, toLevel: target }];
+    // Without the live XP the count starts at the beginning of the level: a little more than needed, never less.
+    return goalArrows(legs, state, xp?.ranged ?? xpForLevel(advice.level));
+  }, [skill, advice, state, xp, target]);
   if (!advice || advice.level === null || advice.level >= target) return null;
   const { best } = advice;
   const nav = best ? methodNav(best) : null;
@@ -90,6 +101,13 @@ export function TrainingCard({ skill, target }: { skill: string; target: number 
           </div>
           {count !== null && best.method.act && (
             <p className="small">≈ {count.toLocaleString('en-US')} more {actionForm(best.method.act, count)}{legEnd < target ? ` to level ${legEnd}` : ` to level ${target}`}.</p>
+          )}
+          {arrows && arrows.shots.mid > 0 && (
+            <p className="small ranged-arrows">
+              🏹 To level {arrows.goalLevel} with {arrows.bow} and {arrows.arrow}: about {arrows.shots.mid.toLocaleString('en-US')} shots
+              ({arrows.shots.low.toLocaleString('en-US')}–{arrows.shots.high.toLocaleString('en-US')}). Picking arrows up, about {arrows.lostPickingUp.mid.toLocaleString('en-US')} break;
+              left on the ground, every shot costs one.{arrows.notCounted.length > 0 && ` Accuracy leaves out ${arrows.notCounted.join(', ')} (no ranged data).`}
+            </p>
           )}
           {profile.showTime && advice.time && (
             <p className="small">⏱ {formatHours(advice.time)} to {target}{advice.time.source === 'wiki' ? ' (by the wiki speed — a guide)' : ' (at your pace)'}.</p>

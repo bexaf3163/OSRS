@@ -153,7 +153,8 @@ export function StepStatus({ step, headline = false, noStart = false, quiet = fa
         <span className="status-actions">
           {prep && !recovering && canFix && (
             <button type="button" className="btn btn-primary btn-sm" onClick={() => void fix()} disabled={underway}>
-              {underway ? '⚡ Preparation underway' : '▶ Fix'}
+              {/* The status beside it already says "Preparation required": the running state needs no second "Preparation". */}
+              {underway ? '⚡ Underway' : '▶ Fix'}
             </button>
           )}
           {!noStart && !prep && !recovering && hasTarget && (ready || r.status === 'UNKNOWN') && (
