@@ -3061,6 +3061,60 @@
         "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png",
         "heals": 7
       }
+    ],
+    "loadouts": [
+      {
+        "id": "keys",
+        "title": "Aris, Prysin, Rovin and the drain",
+        "take": [
+          {
+            "nameEn": "Coins",
+            "amount": 1,
+            "note": "for the gypsy Aris"
+          },
+          {
+            "nameEn": "Bucket of water",
+            "amount": 1,
+            "note": "poured into the drain by the Varrock Palace kitchen"
+          }
+        ],
+        "note": "Nothing here needs a fight kit. The washed-out key lies in Varrock Sewer: the manhole is south-east of Varrock Castle."
+      },
+      {
+        "id": "bones",
+        "fromLine": "talkToTraiborn",
+        "title": "Wizard Traiborn: 25 bones",
+        "take": [
+          {
+            "nameEn": "Bones",
+            "amount": 25,
+            "note": "can be handed in in parts"
+          }
+        ],
+        "leave": [
+          "food",
+          "spare items"
+        ],
+        "note": "25 bones take almost the whole bag: bank the rest first. Traiborn is on the first floor of the Wizards' Tower."
+      },
+      {
+        "id": "fight",
+        "fromLine": "killDelrithStep",
+        "title": "Delrith at the stone circle",
+        "take": [
+          {
+            "nameEn": "Silverlight",
+            "amount": 1,
+            "note": "from Sir Prysin, wield it"
+          },
+          {
+            "nameEn": "Trout",
+            "amount": 5,
+            "note": "or any food"
+          }
+        ],
+        "note": "Only Silverlight can finish Delrith. The dark wizards around the circle attack on sight."
+      }
     ]
   },
   {
