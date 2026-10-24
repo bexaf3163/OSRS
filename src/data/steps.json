@@ -4385,6 +4385,27 @@
           "Lobster",
           "Swordfish"
         ]
+      },
+      {
+        "nameEn": "Water rune",
+        "amount": 50,
+        "howToGet": "For the lesser demon (level 82): it is killed with magic from the safespot, where melee cannot reach it. Water Strike (Magic 5) uses 1 Water, 1 Air and 1 Mind rune a cast; the demon is weak to water. Grand Exchange; check the current rune estimate.",
+        "wikiItemId": 555,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Water_rune.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 50,
+        "howToGet": "Water Strike: 1 a cast, for the lesser demon. Grand Exchange; check the current rune estimate.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      },
+      {
+        "nameEn": "Mind rune",
+        "amount": 50,
+        "howToGet": "Water Strike: 1 a cast, for the lesser demon. Grand Exchange; check the current rune estimate.",
+        "wikiItemId": 558,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mind_rune.png"
       }
     ],
     "imageUrl": "https://oldschool.runescape.wiki/images/Melzar%27s_Maze_map.png",
@@ -4396,14 +4417,14 @@
       },
       {
         "label": "Lesser demon",
-        "text": "It hits up to 8 and is aggressive, so do not melee it at Defence 1: from the spot one square east of the magenta door (the right side, looking north) it cannot reach you. It has 79 hit points, Magic 1 and is weak to water, so Water Strike is the cheap way: about 45 casts. Take the iron armour off in the safespot first: helmet, platebody, plateskirt and kiteshield cut magic accuracy to about a fifth (wiki magic attack bonuses, -65 together); without them about 9 casts in 10 hit (an estimate from the combat formulas at Magic 25)."
+        "text": "This is a magic fight: bring the runes before you enter the maze. It hits up to 8, is aggressive and has Defence 71, so melee at low levels loses. From the spot one square east of the magenta door it cannot reach you, and melee cannot reach it either. It has 79 hit points, Magic 1 and a 40% weakness to water (wiki), so Water Strike is the cheap way: up to about 45 casts. From Magic 23, Water Bolt (2 Air, 2 Water, 1 Chaos rune a cast, max hit 10 before the weakness) needs about half the casts. Take any metal armour off in the safespot first: helmet, platebody, platelegs or plateskirt and kiteshield cut magic accuracy to about a fifth (wiki magic attack bonuses); without them about 9 casts in 10 hit (an estimate from the combat formulas at Magic 25)."
       },
       {
         "label": "Melzar the Mad",
         "text": "Level 43, hits up to 5: melee him and eat before your health falls to 10 (two of his hits)."
       }
     ],
-    "safespot": "Shoot the Lesser demon from a distance with magic or a bow from behind the corner of the purple door!",
+    "safespot": "Cast at the Lesser demon from the spot one square east of the magenta (purple) door: it cannot reach you there, so melee does not work.",
     "doneWhen": "Melzar's map piece (item 1535) is taken from the chest, or the pieces are already joined into the Crandor map.",
     "inGame": {
       "highlightItems": [
@@ -4433,36 +4454,6 @@
     "threats": [
       "Melzar the Mad",
       "Lesser demon"
-    ],
-    "itemsRecommended": [
-      {
-        "nameEn": "Staff of air",
-        "amount": 1,
-        "howToGet": "Grand Exchange; check the current acquisition estimate. Gives the Air runes and lets you autocast Water Strike; any staff is enough to autocast if you bring Air runes.",
-        "wikiItemId": 1381,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Staff_of_air.png"
-      },
-      {
-        "nameEn": "Mind rune",
-        "amount": 50,
-        "howToGet": "Water Strike: 1 Mind, 1 Air and 1 Water rune a cast (Magic 5). About 45 casts kill the demon. Grand Exchange; check the current rune estimate.",
-        "wikiItemId": 558,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Mind_rune.png"
-      },
-      {
-        "nameEn": "Air rune",
-        "amount": 50,
-        "howToGet": "Water Strike: 1 a cast; not needed with the Staff of air. Grand Exchange; check the current rune estimate.",
-        "wikiItemId": 556,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
-      },
-      {
-        "nameEn": "Water rune",
-        "amount": 50,
-        "howToGet": "Water Strike: 1 a cast. Grand Exchange; check the current rune estimate.",
-        "wikiItemId": 555,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Water_rune.png"
-      }
     ]
   },
   {
@@ -4500,7 +4491,7 @@
       {
         "nameEn": "Wizard's mind bomb",
         "amount": 1,
-        "howToGet": "Do not drink it!",
+        "howToGet": "From S4-05: the Rising Sun Inn in Falador, 3 gp. Use it on the magic door; do not drink it!",
         "wikiItemId": 1907,
         "iconUrl": "https://oldschool.runescape.wiki/images/Wizard's_mind_bomb.png"
       },

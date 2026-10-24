@@ -26,7 +26,7 @@ import type { Step } from '../src/types';
 //   6. every required item has an origin, remote-zone items are on the plan before the player leaves, and the bank is used before a shop
 // `AUDIT_REPORT=1 npx vitest run tests/fullF2pRouteAudit.test.ts` prints the summary.
 
-type Line = { t: string; s?: string; at?: number[]; has?: string; need?: string; k?: string };
+type Line = { t: string; s?: string; at?: number[]; has?: string; need?: string; k?: string; pre?: { item: string; n?: number }[] };
 type Row = { at: number; do: Line[] };
 type Quest = { var: [string, number]; stages: Row[] };
 const quests = (stagesFile as unknown as { quests: Record<string, Quest> }).quests;
@@ -435,6 +435,21 @@ describe('F2P route audit: where things come from and when the plan says so', ()
 describe('F2P route audit: the multi-floor and underground quests, one by one', () => {
   const lines = (id: string) => flat(quests[id]).map((e) => e.line);
   const planes = (id: string) => lines(id).filter((l) => l.at).map((l) => l.at![2]);
+
+  it("Melzar's lesser demon is a magic fight: the runes are required, checked before the maze and at the demon, and the lines say so", () => {
+    const step = stepById.get('S5-03')!;
+    const runes = ['Water rune', 'Air rune', 'Mind rune'];
+    for (const r of runes) expect(step.itemsRequired?.find((i) => i.nameEn === r)?.amount, r).toBe(50);
+    expect(step.itemsRecommended ?? []).toEqual([]);
+    const enter = lines('S5-03').find((l) => l.k === 'enterMelzarsMaze')!;
+    const demon = lines('S5-03').find((l) => l.k === 'killLesserDemon')!;
+    for (const r of runes) {
+      expect(enter.pre?.find((p) => p.item === r)?.n, `entry ${r}`).toBe(50);
+      expect(demon.pre?.some((p) => p.item === r), `demon ${r}`).toBe(true);
+    }
+    expect(demon.t).toMatch(/^Magic only/);
+    expect(enter.t).toMatch(/magic fight/);
+  });
 
   it("Melzar's Maze: ground, first and second floor, then back down into the basement at y 9600+ on plane 0, one key more at each door", () => {
     const at = lines('S5-03').filter((l) => l.at);

@@ -71,9 +71,12 @@ describe('S5-03: Melzar the Mad and the lesser demon', () => {
   const m = stepById.get('S5-03')!;
   const lines = m.questStages!.stages.flatMap((st) => st.do);
 
-  it('food is part of the kit; the staff, runes are advice', () => {
-    expect((m.itemsRequired ?? []).map((i) => i.nameEn)).toEqual(['Maze key', 'Salmon']);
-    expect((m.itemsRecommended ?? []).map((i) => i.nameEn)).toEqual(['Staff of air', 'Mind rune', 'Air rune', 'Water rune']);
+  // Live, 2026-10-24: with the runes only "advice", Prepare showed ready, the player reached the demon without runes and could not melee it
+  // (Defence 71; the safespot also stops melee). The Water Strike runes are part of the kit; the staff is dropped, since nothing lets a worn
+  // staff replace a required rune yet.
+  it('food and the Water Strike runes are part of the kit', () => {
+    expect((m.itemsRequired ?? []).map((i) => i.nameEn)).toEqual(['Maze key', 'Salmon', 'Water rune', 'Air rune', 'Mind rune']);
+    expect(m.itemsRecommended ?? []).toEqual([]);
   });
 
   it('the maze door has a food guard of five pieces of any listed fish', () => {

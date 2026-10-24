@@ -279,6 +279,18 @@ describe('a quest fight in the verdict', () => {
     expect(v.level).toBe('READY');
     expect(v.reasons.find((r) => r.text.startsWith('Count Draynor'))).toMatchObject({ state: 'ok' });
   });
+
+  it('a fight whose average takes a whole bag of food is not ready, whatever is carried (Elvarg at Attack 40, Defence 10)', () => {
+    const elvarg = { line: 'Elvarg: …', foodHigh: 49, foodMid: 28, foodName: 'Lobster', foe: 'Elvarg' };
+    const v = readinessVerdict({ ...base, fights: [elvarg], carriedFood: 28 });
+    expect(v.level).toBe('PREP_NEEDED');
+    expect(v.headline).toBe('Preparation needed: Elvarg is too strong for your current levels and gear; see the fight line.');
+    expect(v.reasons.find((r) => r.text.startsWith('Elvarg'))).toMatchObject({ group: 'safety', state: 'missing' });
+    expect(v.reasons.find((r) => r.text.startsWith('Elvarg'))!.text).toMatch(/about 28 Lobster on average, a whole bag of food/);
+    // Below a bag on average, the old rule holds: a caution when the high end is not carried.
+    const w = readinessVerdict({ ...base, fights: [{ ...elvarg, foodMid: 16 }], carriedFood: 20 });
+    expect(w.level).toBe('READY_CAUTIONS');
+  });
 });
 
 describe('a quest fight that cannot be judged is never Ready (combat audit, 2.66.0)', () => {

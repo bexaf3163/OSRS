@@ -29,7 +29,7 @@ export function useReadinessVerdict(step: Step): { verdict: ReadinessVerdict; co
     const worn = w ? { weapon: w.name, twoHanded: Boolean(w.piece?.twoHanded) } : null;
     // A quest fight: one fight with the kit worn now, and the step's food carried, counted by healing.
     const fights = estimateStepFights(step, stats as Partial<Record<string, number>> | null, gear)
-      .map((f) => ({ line: fightLine(f), foodHigh: f.food.high, foodName: f.foodName, foe: foeLabel(f.foe), name: f.foe.name }));
+      .map((f) => ({ line: fightLine(f), foodHigh: f.food.high, foodMid: f.food.mid, foodName: f.foodName, foe: foeLabel(f.foe), name: f.foe.name }));
     const fightNames = stepFightNames(step).map((name) => ({ name, known: COMBAT_FOES.some((f) => f.name === name) }));
     const carriedFood = ownedFood(step, owned)?.carriedEq ?? null;
     return { verdict: readinessVerdict({ plan, connected, owned, isFood, combat, worn, fights, fightNames, carriedFood }), combat };

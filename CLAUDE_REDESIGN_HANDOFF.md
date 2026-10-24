@@ -1,4 +1,4 @@
-# Current delivery — 2.74.4
+# Current delivery — 2.74.5
 
 Start with [Claude takeover](docs/CLAUDE_NEXT_SESSION.md) for implemented repairs, exact release/evidence and remaining T01–T17. It supersedes historical pending/branch references below. The accepted design history remains for implementation context.
 

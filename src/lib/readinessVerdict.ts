@@ -6,7 +6,7 @@
 // shown, counts checked items in place and is never a chance of survival; no kit is promised to keep anyone alive.
 
 import type { OwnedState } from './checklist';
-import { SAFETY, lineAmount, safetyBlockers, unitsOf, type PrepLine, type PrepPlan } from './prepPlan';
+import { BAG_SLOTS, SAFETY, lineAmount, safetyBlockers, unitsOf, type PrepLine, type PrepPlan } from './prepPlan';
 import type { CombatReadiness } from './combatReadiness';
 
 export type ReadinessLevel = 'READY' | 'READY_CAUTIONS' | 'PREP_NEEDED' | 'NOT_MET' | 'UNKNOWN';
@@ -65,8 +65,11 @@ export interface VerdictInput {
   /** Food for this step: its line is judged by healing in the kit check, not by pieces. */
   isFood: (name: string) => boolean;
   combat?: CombatReadiness | null;
-  /** One quest fight each with the player's kit (fightEstimate.ts): its line, and the food it may take at the high end. */
-  fights?: { line: string; foodHigh: number; foodName: string; foe: string; name?: string }[];
+  /**
+   * One quest fight each with the player's kit (fightEstimate.ts): its line, and the food it may take on average and at the high end. A fight whose
+   * average already fills a whole bag with food is not a supply problem but a mismatch of levels and kit: it is not ready (Elvarg at Defence 10).
+   */
+  fights?: { line: string; foodHigh: number; foodMid?: number; foodName: string; foe: string; name?: string }[];
   /**
    * The step's quest fights by name (fightEstimate.stepFightNames). One without an estimate is not assessed: the game has not given the levels and the
    * worn gear, or the app has no numbers for that opponent. Never "ok".
@@ -162,10 +165,16 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
     reasons.push({ group: 'safety', state: combat.armour.empty.length ? 'caution' : 'ok', text: combat.armour.text });
     cautions.push(...combat.cautions.filter((c) => c !== combat.weapon.text));
   }
+  const overmatched: string[] = [];
   for (const f of i.fights ?? []) {
     // Food the fight needs, with the bag not read: unknown, not fine.
     const unread = f.foodHigh > 0 && (i.carriedFood === null || i.carriedFood === undefined);
     const short = !unread && f.foodHigh > 0 && i.carriedFood! < f.foodHigh;
+    if ((f.foodMid ?? 0) >= BAG_SLOTS) {
+      overmatched.push(f.foe);
+      reasons.push({ group: 'safety', state: 'missing', text: `${f.foe}: with your levels and worn gear this fight takes about ${f.foodMid} ${f.foodName} on average, a whole bag of food (an estimate). Raise Attack, Strength and Defence or use the step's safer method before you go.` });
+      continue;
+    }
     if (unread) reasons.push({ group: 'unknown', state: 'unknown', text: `${f.line} The food in your bag has not been read.` });
     else reasons.push({ group: 'safety', state: short ? 'caution' : 'ok', text: f.line });
     if (short) cautions.push(`${f.foe} may take up to ${f.foodHigh} ${f.foodName} with your kit (an estimate); you carry ${i.carriedFood}.`);
@@ -206,7 +215,9 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
     headline = `Preparation needed: ${safetyBlocks[0].label}.`;
   } else if (banked.length || missing.length) {
     level = 'PREP_NEEDED';
-    headline = prepHeadline(plan, combat ?? null, i.isFood);
+    headline = overmatched.length
+      ? `Preparation needed: ${overmatched[0]} is too strong for your current levels and gear; see the fight line.`
+      : prepHeadline(plan, combat ?? null, i.isFood);
   } else if (unknown.length) {
     level = 'UNKNOWN';
     headline = bank.state === 'never' ? 'Bank contents have not been checked; visit a bank to assess owned supplies.' : `Cannot assess yet: ${unknown[0].text}`;

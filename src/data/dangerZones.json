@@ -83,8 +83,8 @@
       "radius": 7,
       "warningRadius": 12,
       "severity": "HIGH",
-      "message": "The lesser demon (level 82) behind the magenta door hits hard. Safespot it with ranged or magic from the spot east of the magenta door.",
-      "hud": "Lesser demon (level 82): safespot it from the east of the magenta door.",
+      "message": "The lesser demon (level 82) behind the magenta door hits hard and has Defence 71: it is a magic fight. Stand on the spot one square east of the magenta door, where it cannot reach you, and cast Water Strike; melee cannot reach it from there. No runes? Leave the maze and buy them first.",
+      "hud": "Lesser demon: magic only, from the spot east of the magenta door.",
       "npcNames": ["Lesser demon"],
       "onlySteps": ["S5-03"],
       "source": "Quest Helper Dragon Slayer I: killLesserDemon 2936,9652 (safespottable)"

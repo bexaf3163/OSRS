@@ -15264,7 +15264,7 @@
      "at": 0,
      "do": [
       {
-       "t": "Open the front door of Melzar's Maze north of Rimmington with the Maze key. Inside, each floor has one right door; the guide marks it with a floor tile. Each coloured key opens one door and then crumbles, a wrong door too. Be ready for a level 82 lesser demon in the basement.",
+       "t": "Open the front door of Melzar's Maze north of Rimmington with the Maze key. Inside, each floor has one right door; the guide marks it with a floor tile. Each coloured key opens one door and then crumbles, a wrong door too. The level 82 lesser demon in the basement is a magic fight: bring the Water, Air and Mind runes.",
        "s": "Melzar's Maze: open the door (Maze key)",
        "at": [
         2941,
@@ -15276,7 +15276,7 @@
          2595
         ]
        },
-       "pre": [{"item": "Salmon", "id": 329, "n": 5, "alt": ["Trout", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"]}],
+       "pre": [{"item": "Salmon", "id": 329, "n": 5, "alt": ["Trout", "Tuna", "Lobster", "Swordfish", "Monkfish", "Shark"]}, {"item": "Water rune", "id": 555, "n": 50, "t": "Runes for the lesser demon: it is a magic fight"}, {"item": "Air rune", "id": 556, "n": 50}, {"item": "Mind rune", "id": 558, "n": 50}],
        "k": "enterMelzarsMaze"
       },
       {
@@ -15510,7 +15510,7 @@
        "k": "openMagntaDoor"
       },
       {
-       "t": "Kill the lesser demon (level 82) for the green key from the spot one square east of the magenta door, where it cannot reach you. Cast Water Strike (it is weak to water) with the iron armour off: armour cuts magic accuracy to about a fifth.",
+       "t": "Magic only: stand on the spot one square east of the magenta door. The lesser demon (level 82) cannot reach you there, and melee cannot reach it. Cast Water Strike (Water Bolt from Magic 23 is faster; it is weak to water) with your metal armour off: armour cuts magic accuracy to about a fifth. No runes with you? Leave the maze and buy them first.",
        "s": "Basement: kill the lesser demon (green key)",
        "at": [
         2936,
@@ -15523,6 +15523,7 @@
         ]
        },
        "has": "Key x6",
+       "pre": [{"item": "Water rune", "id": 555, "t": "No runes: leave the maze and buy Water, Air and Mind runes"}, {"item": "Air rune", "id": 556}, {"item": "Mind rune", "id": 558}],
        "k": "killLesserDemon"
       },
       {
@@ -15573,6 +15574,24 @@
        "id": 379,
        "where": "Food for the fights: up to a level 82 lesser demon.",
        "count": 10
+      },
+      {
+       "name": "Water rune",
+       "id": 555,
+       "where": "Water Strike for the lesser demon (magic only, from the safespot).",
+       "count": 50
+      },
+      {
+       "name": "Air rune",
+       "id": 556,
+       "where": "Water Strike: 1 a cast.",
+       "count": 50
+      },
+      {
+       "name": "Mind rune",
+       "id": 558,
+       "where": "Water Strike: 1 a cast.",
+       "count": 50
       }
      ]
     }
@@ -16198,7 +16217,7 @@
        "k": "enterElvargArea"
       },
       {
-       "t": "Kill Elvarg (level 83). When she dies her head lands in your inventory.",
+       "t": "Kill Elvarg (level 83, 80 hit points, Defence 70). At low Defence she out-damages melee: check the app's fight estimate before you sail. The wiki's safer way at lower levels: flinch her in the south-east corner of her cave, a long but safe fight. Keep the Anti-dragon shield worn. When she dies her head lands in your inventory.",
        "s": "Elvarg's lair: kill Elvarg (her head drops into the bag)",
        "at": [
         2855,
