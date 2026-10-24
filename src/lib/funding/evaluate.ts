@@ -181,7 +181,8 @@ function planTool(req: Extract<Requirement, { kind: 'item' }>, ctx: EvalContext)
 // The simulation: trips, sales, a small target
 
 interface SimInput {
-  secPerUnit: number;
+  /** Work/sale pace without input replenishment caps; owned inputs do not need a new GE allowance. */
+  workSecPerUnit: number;
   unitsPerTrip: number;
   tripSeconds: number;
   firstLegSeconds: number;
@@ -190,7 +191,7 @@ interface SimInput {
   /** Cash to start with; Infinity for the working-capital dry run. */
   cash: number;
   target: number;
-  inputs: { price: number; perUnit: number; owned: number }[];
+  inputs: { price: number; perUnit: number; owned: number; buySecPerUnit?: number }[];
   coinsPerUnit: number;
   outputs: { netEach: number; perUnit: number; reserve: number }[];
   minUnits: number;
@@ -231,10 +232,12 @@ function simulate(p: SimInput): SimResult {
       return { ok: false, seconds, trips, units, peakOut, reason: MONEY_RUNS_OUT };
     }
     const spend = cashFor(u);
+    const secPerUnit = p.inputs.reduce((pace, i, k) => Math.max(pace,
+      i.perUnit * u > owned[k] ? i.buySecPerUnit ?? 0 : 0), p.workSecPerUnit);
     cash -= spend;
     peakOut = Math.max(peakOut, start - cash);
     p.inputs.forEach((i, k) => { owned[k] = Math.max(0, owned[k] - i.perUnit * u); });
-    seconds += p.tripSeconds + u * p.secPerUnit;
+    seconds += p.tripSeconds + u * secPerUnit;
     cash += p.coinsPerUnit * u;
     p.outputs.forEach((o, k) => {
       const made = o.perUnit * u;
@@ -354,7 +357,8 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
   if (m.marketDependence) { cautions.push(m.marketDependence); cap('LOW', 'depends on other players or the market'); }
 
   // --- Flows
-  const inputs: { flow: Flow; price: number; per: number; owned: number; opp: number }[] = [];
+  const workSec = { ...sec };
+  const inputs: { flow: Flow; price: number; per: number; owned: number; opp: number; buySecPerUnit?: number }[] = [];
   let inputCashPerUnit = 0;
   let coinsPerUnit = 0;
   let coinsUpsidePerUnit = 0;
@@ -367,9 +371,10 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
     if (CONFIDENCE_RANK[price.confidence] < CONFIDENCE_RANK[confidence]) cap(price.confidence, `${f.item.name} price: ${price.notes[0] ?? 'low confidence'}`);
     const h = snap.held(f.item.name);
     const spare = h.total === null ? 0 : Math.max(0, h.total - protectedQty(snap, f.item.name));
-    inputs.push({ flow: f, price: price.price, per, owned: spare, opp: (prices.sell(f.item.name, f.item.id)?.price ?? price.price) });
-    inputCashPerUnit += price.price * per;
     const lim = prices.limitOf(f.item.name, f.item.id);
+    inputs.push({ flow: f, price: price.price, per, owned: spare, opp: (prices.sell(f.item.name, f.item.id)?.price ?? price.price),
+      ...(lim !== undefined ? { buySecPerUnit: 14400 * per / lim } : {}) });
+    inputCashPerUnit += price.price * per;
     if (lim !== undefined) {
       const capUnitsPerHour = (lim / 4) / per;
       const floor = 3600 / capUnitsPerHour;
@@ -411,7 +416,8 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
       saleGrossPerUnit += sellEach * per;
       taxPerUnit += taxEach * per;
       if (CONFIDENCE_RANK[price.confidence] < CONFIDENCE_RANK[confidence]) cap(price.confidence, `${f.item.name} price: ${price.notes[0] ?? 'low confidence'}`);
-      const a = absorbs(price, per * (3600 / sec.typical));
+      // Owned inputs can remove a purchase bottleneck; their faster production must still respect sale liquidity.
+      const a = absorbs(price, per * (3600 / workSec.typical));
       if (a.plausible === false && price.volumePerHour !== null) {
         const capUnits = (ABSORB_SHARE * price.volumePerHour) / per;
         marketCapPerHour = Math.min(marketCapPerHour, capUnits);
@@ -436,6 +442,9 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
   if (Number.isFinite(marketCapPerHour) && marketCapPerHour > 0) {
     const floor = 3600 / marketCapPerHour;
     sec = { fast: Math.max(sec.fast, floor), typical: Math.max(sec.typical, floor), slow: Math.max(sec.slow, floor) };
+    workSec.fast = Math.max(workSec.fast, floor);
+    workSec.typical = Math.max(workSec.typical, floor);
+    workSec.slow = Math.max(workSec.slow, floor);
   }
 
   // --- The bag and the way
@@ -506,10 +515,11 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
 
   // --- Time to the target
   const target = Math.max(0, ctx.target);
-  const baseSim = (secPerUnit: number, haircut: number, cash: number): SimInput => ({
-    secPerUnit, unitsPerTrip, tripSeconds: m.trip.overheadSeconds, firstLegSeconds: firstLegSeconds + (setup > 0 ? saleSeconds : 0),
+  const baseSim = (pace: keyof Range3, haircut: number, cash: number): SimInput => ({
+    unitsPerTrip, tripSeconds: m.trip.overheadSeconds, firstLegSeconds: firstLegSeconds + (setup > 0 ? saleSeconds : 0),
+    workSecPerUnit: workSec[pace],
     saleSeconds, faresPerTrip, cash: cash - setup, target,
-    inputs: inputs.map((i) => ({ price: i.price, perUnit: i.per, owned: i.owned })),
+    inputs: inputs.map((i) => ({ price: i.price, perUnit: i.per, owned: i.owned, buySecPerUnit: i.buySecPerUnit })),
     coinsPerUnit,
     outputs: outs.filter((o) => o.dependable && o.sellable).map((o) => ({ netEach: o.netEach * (1 - haircut), perUnit: o.per, reserve: o.reserve })),
     minUnits: MIN_BATCH_UNITS,
@@ -520,9 +530,9 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
   if (ctx.mode === 'earn') {
     if (blockers.length === 0 && spendable !== null) {
       const runs = [
-        simulate(baseSim(sec.fast, 0, spendable)),
-        simulate(baseSim(sec.typical, 0, spendable)),
-        simulate(baseSim(sec.slow, sellHaircut, spendable)),
+        simulate(baseSim('fast', 0, spendable)),
+        simulate(baseSim('typical', 0, spendable)),
+        simulate(baseSim('slow', sellHaircut, spendable)),
       ];
       if (runs.every((r) => r.ok)) minutes = { fast: runs[0].seconds / 60, typical: runs[1].seconds / 60, slow: runs[2].seconds / 60 };
       else minutesReason = runs.find((r) => !r.ok)?.reason;
@@ -549,7 +559,7 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
   // --- Working capital: the most the method has out before it turns around, with unlimited cash and the protected items filled first.
   let workingCapital: number | null = null;
   if (ctx.mode === 'earn' && blockers.every((b) => b.kind === 'capital')) {
-    const dry = simulate({ ...baseSim(sec.typical, 0, 1e12), cash: 1e12, target: Math.max(target, 1), sellEveryTrip: true });
+    const dry = simulate({ ...baseSim('typical', 0, 1e12), cash: 1e12, target: Math.max(target, 1), sellEveryTrip: true });
     workingCapital = Math.round(dry.peakOut) + setup;
     // Only when the run with the player's own coins does not get there, as the badge says. When smaller first batches do (the time
     // already counts them), "Can do now" next to "is out before it pays for itself" read as a contradiction (2.72.1, live: pie shells).

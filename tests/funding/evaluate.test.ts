@@ -273,6 +273,34 @@ describe('the market limits the pace', () => {
     expect(e.notes.join(' ')).toMatch(/buy limit on Pie dish caps this at about 125 an hour/);
   });
 
+  it.each([11069, 1000])('owned inputs bypass purchase pacing but retain sale liquidity: volume=%s', volume => {
+    const quote = { 'Pastry dough': { buy: 186, volume: 6039, limit: 13000 }, 'Pie dish': { buy: 5, volume: 4665, limit: 500 }, 'Pie shell': { sell: 313, volume } };
+    const snap = fakeSnap({ position: { x: 3165, y: 3490, plane: 0 }, items: { 'Pastry dough': 14, 'Pie dish': 14 } });
+    const limited = evaluate(pie, ctxOf({ prices: fakePrices(quote), snap, cash: 100_000, target: 500 }));
+    const unconstrained = evaluate(pie, ctxOf({ prices: fakePrices({ ...quote, 'Pie dish': { ...quote['Pie dish'], limit: 13000 } }), snap, cash: 100_000, target: 500 }));
+    expect(limited.minutes).not.toBeNull();
+    for (const pace of ['fast', 'typical', 'slow'] as const) expect(limited.minutes![pace]).toBeCloseTo(unconstrained.minutes![pace], 8);
+    expect(limited.unitsPerHour.typical).toBeLessThanOrEqual(125);
+  });
+
+  it('reapplies replenishment pacing after owned stock runs out', () => {
+    const prices = fakePrices({ 'Pastry dough': { buy: 186, volume: 6039, limit: 13000 }, 'Pie dish': { buy: 5, volume: 4665, limit: 500 }, 'Pie shell': { sell: 313, volume: 11069 } });
+    const run = (count: number) => evaluate(pie, ctxOf({ prices, snap: fakeSnap({ position: { x: 3165, y: 3490, plane: 0 }, items: { 'Pastry dough': count, 'Pie dish': count } }), cash: 100_000, target: 5000 }));
+    const exhausted = run(14);
+    const stocked = run(28);
+    expect(exhausted.minutes).not.toBeNull();
+    expect(stocked.minutes).not.toBeNull();
+    expect(exhausted.minutes!.typical).toBeGreaterThan(stocked.minutes!.typical + 5);
+  });
+
+  it('still applies a missing input limit when another input is owned', () => {
+    const table = { 'Pastry dough': { buy: 186, volume: 6039, limit: 500 }, 'Pie dish': { buy: 5, volume: 4665, limit: 500 }, 'Pie shell': { sell: 313, volume: 11069 } };
+    const snap = fakeSnap({ position: { x: 3165, y: 3490, plane: 0 }, items: { 'Pie dish': 14 } });
+    const missing = evaluate(pie, ctxOf({ prices: fakePrices(table), snap, cash: 100_000, target: 500 }));
+    const allOwned = evaluate(pie, ctxOf({ prices: fakePrices(table), snap: fakeSnap({ position: { x: 3165, y: 3490, plane: 0 }, items: { 'Pie dish': 14, 'Pastry dough': 14 } }), cash: 100_000, target: 500 }));
+    expect(missing.minutes!.typical).toBeGreaterThan(allOwned.minutes!.typical + 5);
+  });
+
   it('a low-confidence price (an old or one-sided quote) lowers the method confidence', () => {
     const prices = fakePrices({ 'Iron ore': IRON, Coal: COAL, 'Steel bar': { ...BAR, conf: 'LOW', notes: ['The sell side was last seen 9 h ago'] } });
     const e = evaluate(steel, ctxOf({ prices, snap: fakeSnap(smither), cash: 5000 }));

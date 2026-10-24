@@ -1,5 +1,17 @@
 # Claude continuation — start here
 
+## Latest verified Magic preview; newer owned-input fix pending CI
+
+Magic source87d856ff187c498ac210efed2906ab7c43200bfd (localc368233, exacttree9d52efcf935d5caae07e9c6cc4b515579c777318) passed [Checks40086397787](https://github.com/bexaf3163/OSRS/actions/runs/40086397787):1,937 Vitest, TypeScript/build/data0errors/warnings, Java608, complete Chromium including all new Magic390/1280 scenarios, and isolated actual portable. [Verified test EXE](https://github.com/bexaf3163/OSRS/releases/download/audit-test-87d856ff/OSRS-Path-audit-test-87d856ff.exe), SHA256 **59ae33add8ba3ee97a58076a5e110fd91acf926308eeee4d56b3b99fea9b5f85**, matches actual test log and GitHub asset digest. The newer owned-input timing repair a55a8cb passes all1,941 local tests/build/data and still needs cumulative browser/portable CI. No game testing is claimed or required from the owner; Claude owns that checklist.
+
+## Newer source: owned input pacing
+
+[CODEX_OWNED_INPUT_PACING_HANDOFF.md](CODEX_OWNED_INPUT_PACING_HANDOFF.md): already-owned ingredients no longer wait for their GE purchase replenishment cap; exhausted/missing inputs and sale liquidity remain constrained. All1,941 Vitest/153files, build/data pass locally. Full purchase windows/shared allowance/history and acquisition travel remain open. This source is newer than Magic draft87d856ff187c498ac210efed2906ab7c43200bfd, which is completing Checks40086397787. No later source inherits an earlier EXE's acceptance.
+
+## Owner scope update — in-game testing belongs to Claude
+
+On2026-10-24 the owner explicitly assigned all in-game tests to Claude. Codex continues implementation and automated/portable verification; no game action is required from the owner now. Use [CLAUDE_IN_GAME_ACCEPTANCE.md](CLAUDE_IN_GAME_ACCEPTANCE.md) for the exact checklist and evidence rules. Deferred cases stay unverified; they are not a reason to claim the whole audit complete or request the owner to launch RuneLite for Codex.
+
 ## Newest source: actual S6-04 Magic preparation
 
 Final target-clear follow-up also checks a previously projected combat step: switching it to Superheat clears old Cow highlights. All1,937 Vitest/153files, TypeScript/build and data0errors/warnings pass after that fix; full Java608 passed with the updated native fixture. Fresh cumulative browser/portable acceptance is still required.
