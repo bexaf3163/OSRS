@@ -5012,6 +5012,10 @@
         "text": "Follow the selected current trainer, compatible bow and ammunition. Start with level 3 Seagulls; Monks offer free healing, and later methods ask for food. Required starter batches are not a promise of enough supplies for the whole goal."
       },
       {
+        "label": "Arrows",
+        "text": "One shot in five loses its arrow (OSRS Wiki, Arrows); the rest land under the target. Pick them up between kills and a stack lasts about five times longer; nothing collects them for you without an Ava's device, which needs membership."
+      },
+      {
         "label": "Ogresses later",
         "text": "Ogresses are a later income choice, not a Ranged 1-50 default. At 50 they are still slow; compare Money with your actual gear, supplies and current market before choosing them. The Corsair Curse opens their dungeon."
       }
