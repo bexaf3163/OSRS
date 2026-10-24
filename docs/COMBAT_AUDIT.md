@@ -12,7 +12,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S1-07 Misthalin Mystery | not-combat | yes | - | none | - | - | Retain |
 | S1-13 Money for the shopping: cowhides | incidental | no | Cow (2) | melee | Cow | - | Retain |
 | S2-03 Witch's Potion | incidental | yes | Rat (1), Giant rat (3) | melee | - | - | Retain |
-| S2-07 The Knight's Sword | avoid | yes | Ice giant (53), Ice warrior (57) | run | - | - | Deferred |
+| S2-07 The Knight's Sword | avoid | yes | Ice giant (53), Ice warrior (57) | run | - | Trout 10 | Deferred |
 | S2-08 Vampyre Slayer | quest-fight | yes | Count Draynor (34) | melee | Count Draynor | Trout 10 | Revised |
 | S2-09 Pirate's Treasure | incidental | yes | Gardener (4) | melee | - | - | Retain |
 | S3-02 Black Knights' Fortress | avoid | yes | Black Knight (33) | run | - | Trout 5 | Revised |
@@ -33,7 +33,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S8-01 Priest in Peril | quest-fight | yes | Temple Guardian (30), Monk of Zamorak (30) | melee | Temple Guardian | Trout 5 | Revised |
 | S8-02 Nature Spirit | quest-fight | yes | Ghast (30) | melee | Ghast | Lobster 15 | Revised |
 | S9-01 Lost City | quest-fight | yes | Zombie (25), Tree spirit (101) | safespot | - | - | Revised |
-| S9-02 Fairytale I - Growing Pains | quest-fight | yes | Tanglefoot (111) | other | - | - | Deferred |
+| S9-02 Fairytale I - Growing Pains | quest-fight | yes | Tanglefoot (111) | other | - | Lobster 10 | Deferred |
 | S9-04 Monkey Madness I | quest-fight | yes | Jungle demon (195), Monkey zombie, Gorilla | safespot | - | - | Revised |
 
 ## S1-06 The Restless Ghost
@@ -122,6 +122,10 @@ Problems:
 Alternatives:
 
 - None in the route: blurite is only mined there.
+
+Changed:
+
+- 2.74.8: Trout ×10 (or Salmon) is a required item: the dungeon entry line already checks it in the bag.
 
 Evidence:
 
@@ -611,7 +615,11 @@ Assumptions:
 
 Problems:
 
-- The 10 lobsters the step asks for are recommended only; no estimate (the secateurs are not in the gear data as a weapon).
+- The 10 lobsters the in-game line checks before Zanaris were recommended only; no estimate (the secateurs are not in the gear data as a weapon).
+
+Changed:
+
+- 2.74.8: Lobster ×10 (or similar food) is a required item, as the line's bag check already demanded; the fight estimate stays open.
 
 Evidence:
 

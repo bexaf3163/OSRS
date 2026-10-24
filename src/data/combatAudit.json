@@ -55,6 +55,7 @@
       "problems": ["No in-game danger zone for the dungeon: the route has no surveyed area for it, so the game does not warn on entry.", "The app has no numbers for ice giants or ice warriors, so the food is not sized to the kit."],
       "alternatives": ["None in the route: blurite is only mined there."],
       "decision": "defer",
+      "changed": ["2.74.8: Trout ×10 (or Salmon) is a required item: the dungeon entry line already checks it in the bag."],
       "evidence": ["Step field \"Dangerous\" and quest stage line 3.0.", "dangerZones.json has no entry for the Asgarnian Ice Dungeon."]
     },
     {
@@ -324,7 +325,8 @@
       "enemies": [{ "name": "Tanglefoot", "level": 111 }],
       "lines": ["4.0", "4.2"],
       "assumptions": ["It can be flinched on a corner."],
-      "problems": ["The 10 lobsters the step asks for are recommended only; no estimate (the secateurs are not in the gear data as a weapon)."],
+      "problems": ["The 10 lobsters the in-game line checks before Zanaris were recommended only; no estimate (the secateurs are not in the gear data as a weapon)."],
+      "changed": ["2.74.8: Lobster ×10 (or similar food) is a required item, as the line's bag check already demanded; the fight estimate stays open."],
       "alternatives": [],
       "decision": "defer",
       "evidence": ["Step field \"Combat\"; quest stage lines 4.0 and 4.2."]

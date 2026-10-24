@@ -195,8 +195,8 @@ describe('Quest Helper state machines', () => {
         for (const p of out) if (!namesOf(m, p).some((n) => keys.has(n))) gaps.add(`${id}:${p[p.length - 1]}`);
       }
     }
-    // Known holes: detours by stairs and basement steps of secondary branches; new holes must not appear (21 after the 2.74.8 audit added Marim's gate and the secateurs).
-    expect(gaps.size, [...gaps].join(', ')).toBeLessThanOrEqual(21);
+    // Known holes: detours by stairs and basement steps of secondary branches; new holes must not appear (22 after the 2.74.8 audit added Marim's gate; picking up the secateurs is folded into the Tanglefoot line, which waits for them in the bag).
+    expect(gaps.size, [...gaps].join(', ')).toBeLessThanOrEqual(22);
   });
 
   it('the tile and highlight of a line match the Quest Helper step (from its sources)', () => {

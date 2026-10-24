@@ -13459,8 +13459,8 @@
        "k": "enterTanglefootRoom"
       },
       {
-       "t": "Kill the large Tanglefoot with the Magic Secateurs. You can flinch it on a corner.",
-       "s": "Kill the Tanglefoot with the magic secateurs only",
+       "t": "Kill the large Tanglefoot with the Magic Secateurs. You can flinch it on a corner. Then pick up the queen's secateurs it drops: you need them to finish the quest.",
+       "s": "Kill the Tanglefoot (magic secateurs), pick up the queen's secateurs",
        "at": [
         2375,
         4385,
@@ -13471,18 +13471,8 @@
          5848
         ]
        },
-       "k": "killTanglefoot"
-      },
-      {
-       "t": "Pick up the queen's secateurs from the floor: they drop when the Tanglefoot dies, and you need them to finish the quest.",
-       "s": "Pick up the queen's secateurs from the floor",
-       "at": [
-        2375,
-        4385,
-        0
-       ],
        "has": "Queen's secateurs",
-       "k": "pickUpSecateurs"
+       "k": "killTanglefoot"
       }
      ],
      "go": {

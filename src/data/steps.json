@@ -2111,9 +2111,7 @@
         "wikiItemId": 668,
         "iconUrl": "https://oldschool.runescape.wiki/images/Blurite_ore.png",
         "inStep": true
-      }
-    ],
-    "itemsRecommended": [
+      },
       {
         "nameEn": "Trout",
         "amount": 10,
@@ -2126,6 +2124,7 @@
         ]
       }
     ],
+    "itemsRecommended": [],
     "fields": [
       {
         "label": "Requirement",
@@ -6719,18 +6718,25 @@
         "howToGet": "From Lost City.",
         "wikiItemId": 772,
         "iconUrl": "https://oldschool.runescape.wiki/images/Dramen_staff.png"
-      }
-    ],
-    "itemsRecommended": [
+      },
       {
         "nameEn": "Lobster",
         "amount": 10,
-        "howToGet": "Buy on the Grand Exchange. Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
+        "howToGet": "For the Tanglefoot (level 111): the guide checks 10 lobsters before Zanaris. Buy on the Grand Exchange. Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
         "wikiItemId": 379,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
-        "heals": 12
+        "heals": 12,
+        "anyOf": [
+          "Trout",
+          "Salmon",
+          "Tuna",
+          "Swordfish",
+          "Monkfish",
+          "Shark"
+        ]
       }
     ],
+    "itemsRecommended": [],
     "fields": [
       {
         "label": "Requirements",
