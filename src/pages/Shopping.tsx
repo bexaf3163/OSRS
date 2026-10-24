@@ -63,8 +63,14 @@ function loadRange(): Partial<StageRange> {
   }
 }
 
+/** A buy row's action when it says nothing beyond the place: the exchange group names the place once, in its heading. */
+const PLAIN_GE = 'Buy at the Grand Exchange';
+/** The group's heading and whether its rows can leave out the plain exchange action. */
+const groupHead = (title: string): { title: string; plain: boolean } => ({ title, plain: title === PLAIN_GE });
+
 const GROUPS: { channels: Channel[]; title: string }[] = [
-  { channels: ['ge', 'shop'], title: 'Buy' },
+  { channels: ['ge'], title: PLAIN_GE },
+  { channels: ['shop'], title: 'Buy in shops' },
   { channels: ['bank'], title: 'Take from the bank' },
   { channels: ['equip'], title: 'Put on' },
   { channels: ['unknown'], title: 'Not confirmed' },
@@ -225,7 +231,7 @@ export function ShoppingPage() {
   };
   const backHref = current ? `#/step/${current}` : '#/';
 
-  const rowView = (r: ShopRow) => {
+  const rowView = (r: ShopRow, plain = false) => {
     const live = r.own.source === 'game';
     const single = r.required === 1 || r.reusable;
     const setManual = (n: number | null) => setOwnedManual(r.key, n);
@@ -241,7 +247,7 @@ export function ShoppingPage() {
             {r.cost !== null && r.channel !== 'have' && <span className="muted small shop-cost">{r.channel === 'unknown' ? 'up to ' : '≈ '}{formatGp(r.cost)} gp{r.priceLabel ? ` (${r.priceLabel})` : r.channel === 'shop' ? ' (NPC price)' : ''}</span>}
             {r.priceLabel === 'Price unavailable' && <span className="muted small shop-cost">Price unavailable</span>}
           </p>
-          <p className="small shop-action">{r.action}</p>
+          {!(plain && r.action === PLAIN_GE) && <p className="small shop-action">{r.action}</p>}
           <details className="shop-why">
             <summary className="small muted">Why and what you have</summary>
             <p className="small muted">For {r.why}{r.reusable && r.sources.length > 1 ? ' (one is enough for all of them)' : ''}.{r.unit === 'dose' ? ` The steps need ${r.required} doses in all.` : r.required !== r.qty && r.channel !== 'have' ? ` The steps need ${formatGp(r.required)} in all.` : ''}</p>
@@ -372,11 +378,12 @@ export function ShoppingPage() {
       {listShown && GROUPS.map((g) => {
         const items = required.filter((r) => g.channels.includes(r.channel));
         if (!items.length) return null;
+        const head = groupHead(g.title);
         return (
           <section key={g.title} className={`shop-group-v2 is-${g.channels[0]}`}>
-            <h2 className="subhead">{g.title} <span className="muted">· {items.length}</span></h2>
+            <h2 className="subhead">{head.title} <span className="muted">· {items.length}</span></h2>
             {g.channels.includes('unknown') && <p className="small muted">{connected ? 'Open your bank in RuneLite to refresh: these may already be yours.' : 'Ownership not confirmed: these may already be yours.'}</p>}
-            <ul className="shop-items">{items.map(rowView)}</ul>
+            <ul className="shop-items">{items.map((r) => rowView(r, head.plain))}</ul>
           </section>
         );
       })}
@@ -387,10 +394,11 @@ export function ShoppingPage() {
           <p className="small muted">Not needed for {current}. Buy them now only if you are at the exchange anyway.</p>
           {GROUPS.map((g) => {
             const items = ahead.filter((r) => g.channels.includes(r.channel));
+            const head = groupHead(g.title);
             return items.length ? (
               <section key={g.title} className={`is-${g.channels[0]}`}>
-                <h3 className="small muted">{g.title} · {items.length}</h3>
-                <ul className="shop-items">{items.map(rowView)}</ul>
+                <h3 className="small muted">{head.title} · {items.length}</h3>
+                <ul className="shop-items">{items.map((r) => rowView(r, head.plain))}</ul>
               </section>
             ) : null;
           })}
@@ -399,13 +407,13 @@ export function ShoppingPage() {
       {listShown && have.length > 0 && (
         <details className="shop-group-v2 is-have">
           <summary className="subhead">Already have <span className="muted">· {have.length}</span></summary>
-          <ul className="shop-items">{have.map(rowView)}</ul>
+          <ul className="shop-items">{have.map((r) => rowView(r))}</ul>
         </details>
       )}
       {listShown && optional.length > 0 && (
         <details className="shop-group-v2 is-optional">
           <summary className="subhead">Optional <span className="muted">· {optional.length}</span></summary>
-          <ul className="shop-items">{optional.map(rowView)}</ul>
+          <ul className="shop-items">{optional.map((r) => rowView(r))}</ul>
         </details>
       )}
 

@@ -1942,7 +1942,7 @@ async function shoppingScenarios(browser: Browser) {
       const { page, errors } = await open(browser, width, base({ items: [{ name: 'Mithril scimitar', carried: 0, noted: 0, bank: 0 }, { name: 'Salmon', carried: 0, noted: 0, bank: 5 }] }), '#/shopping');
       await page.waitForTimeout(1200);
       const body = await text(page, '.shop-page');
-      expect(/Buy · 2/.test(body) && /Salmon[^]*×15/.test(body) && /5 more in the bank/.test(body), `shopping (${width} px): the buy list with the bank stock named`);
+      expect(/Buy (at the Grand Exchange|in shops) · [12]/.test(body) && /Salmon[^]*×15/.test(body) && /5 more in the bank/.test(body), `shopping (${width} px): the buy list with the bank stock named`);
       expect(/short [\d,]+ gp/.test(body) && await page.getByRole('link', { name: 'Raise the coins' }).count() === 1, `shopping (${width} px): the shortfall links to the coin plan`);
       expect(await page.getByRole('button', { name: /Copy the exchange list/ }).count() === 1, `shopping (${width} px): one copy button for the exchange purchases`);
       expect(!/Still open|Partly owned|Unverified/.test(body), `shopping (${width} px): no status filter bar`);
@@ -1968,7 +1968,7 @@ async function shoppingScenarios(browser: Browser) {
       const { page } = await open(browser, width, base({ worn: true, items: [{ name: 'Mithril scimitar', carried: 1, noted: 0, bank: 0 }, { name: 'Salmon', carried: 0, noted: 0, bank: 30 }] }), '#/shopping');
       await page.waitForTimeout(1200);
       const body = await text(page, '.shop-page');
-      expect(/Take from the bank · 1/.test(body) && /Take 20 from the bank/.test(body) && !/Buy · /.test(body), `shopping bank (${width} px): a withdrawal, not a purchase`);
+      expect(/Take from the bank · 1/.test(body) && /Take 20 from the bank/.test(body) && !/Buy (at the Grand Exchange|in shops) · /.test(body), `shopping bank (${width} px): a withdrawal, not a purchase`);
       expect(await page.getByRole('button', { name: /Copy the exchange list/ }).count() === 0, `shopping bank (${width} px): a withdrawal is not in the exchange list`);
       await page.context().close();
     }
