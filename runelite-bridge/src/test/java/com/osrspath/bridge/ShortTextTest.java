@@ -110,4 +110,32 @@ public class ShortTextTest
 		}
 		assertTrue("the route has dialogue lines", seen > 50);
 	}
+
+	/** The card shows a line's whole text under its headline: a paragraph there pushed the rest of the card off screen (Elvarg, 328 characters). */
+	@Test
+	public void everyRouteLineFitsTheCard()
+	{
+		int seen = 0;
+		for (ActiveStepsTest.Sent s : ActiveStepsTest.all())
+		{
+			if (s.target.getGuide() == null || s.target.getGuide().getStage() == null)
+			{
+				continue;
+			}
+			for (ActiveTarget.StageStep st : s.target.getGuide().getStage().getStages())
+			{
+				for (ActiveTarget.StageLine l : st.getSteps())
+				{
+					if (l.getT() == null)
+					{
+						continue;
+					}
+					seen++;
+					String card = ShortText.withoutDialogue(l.getT());
+					assertTrue(s.target.getStepId() + " " + l.getK() + " (" + card.length() + "): " + card, card.length() <= 225);
+				}
+			}
+		}
+		assertTrue("the route has lines", seen > 500);
+	}
 }

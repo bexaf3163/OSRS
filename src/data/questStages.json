@@ -7140,7 +7140,7 @@
      "at": 35,
      "do": [
       {
-       "t": "Defeat the level 25 Ancient Guardian (40 hit points, hits up to 7 about every 3 seconds). Recommended: with Mining 10 and any pickaxe, use Mine on the four Structural pillars in the corners of the room; each one breaks and hurts the Guardian. It keeps attacking while you mine, so eat before each pillar. These are not ore rocks. Fallback: lure it to the east side of the chamber and retreat into the entrance passage, it gets stuck on the corner; then use Ranged or Magic.",
+       "t": "Ancient Guardian (level 25, hits up to 7). Recommended: with Mining 10 and a pickaxe, mine the four Structural pillars (corners, not ore rocks); eat before each. Fallback: lure it to the east side, then Ranged or Magic.",
        "s": "Defeat the Ancient Guardian: recommended, mine 4 Structural pillars",
        "hl": {
         "npc": [
@@ -7335,7 +7335,7 @@
      "at": 3,
      "do": [
       {
-       "t": "This quest needs two players, one in each gang, to swap the certificate halves: the chat channel “OSRS SOA” finds a partner (alone you can do your half and then skip the quest: it is optional). Phoenix Gang: ask Baraek in Varrock Square where to find the gang (20 coins). Do not buy his furs. Dialogue: “Can you tell me where I can find the Phoenix Gang?” → “Okay. Have 20 gold coins.”.",
+       "t": "Finishing needs a partner in the other gang (chat channel “OSRS SOA”); alone, do your half and skip the rest. Phoenix Gang: ask Baraek in Varrock Square where the gang is (20 coins); do not buy furs. Dialogue: “Can you tell me where I can find the Phoenix Gang?” → “Okay. Have 20 gold coins.”.",
        "s": "Phoenix: ask Baraek about the gang (20 coins, no furs)",
        "at": [
         3218,
@@ -7519,7 +7519,7 @@
        "k": "talkToHaig"
       },
       {
-       "t": "You hold half of the certificate; the other half is with a player of the other gang. Trade halves with them (if trading is blocked, use your half on them to drop it at their feet), then use the two halves together. Alone: you need a partner or a second account; otherwise skip the quest, it is optional (1 quest point, 600 coins).",
+       "t": "Trade certificate halves with a player of the other gang (trading blocked: use your half on them to drop it), then use the two halves together. No partner or second account: skip it, it is optional.",
        "s": "Swap halves with the other gang's player (alone: skip)",
        "has": "Certificate",
        "k": "combineCertificate"
@@ -7720,7 +7720,7 @@
        "k": "talkToHaig"
       },
       {
-       "t": "You hold half of the certificate; the other half is with a player of the other gang. Trade halves with them (if trading is blocked, use your half on them to drop it at their feet), then use the two halves together. Alone: you need a partner or a second account; otherwise skip the quest, it is optional (1 quest point, 600 coins).",
+       "t": "Trade certificate halves with a player of the other gang (trading blocked: use your half on them to drop it), then use the two halves together. No partner or second account: skip it, it is optional.",
        "s": "Swap halves with the other gang's player (alone: skip)",
        "has": "Certificate",
        "k": "combineCertificate"
@@ -12922,7 +12922,7 @@
      "at": 2,
      "do": [
       {
-       "t": "Bank all weapons and armour you have (including the axe), and go to Port Sarim to get a boat to Entrana. Take food, Fire Strike runes for about 65 casts (the zombies and the Tree spirit are a magic fight) and a Lumbridge teleport: the dungeon has no way out on foot.",
+       "t": "Bank all weapons and armour (the axe too), then take the boat to Entrana at Port Sarim. Bring food, Fire Strike runes for about 65 casts and a Lumbridge teleport: the dungeon has no exit on foot.",
        "s": "Bank: all weapons and armour; sail to Entrana (Port Sarim)",
        "at": [
         3047,
@@ -12979,7 +12979,7 @@
        "k": "attemptToCutDramen"
       },
       {
-       "t": "Magic only: step between the mushrooms to the south-west, where the Tree Spirit cannot reach you, and cast Fire Strike (it is weak to fire; 85 hit points, hits up to 10). The bronze axe is too weak. It disappears after about 10 minutes, so keep casting.",
+       "t": "Magic only: stand between the mushrooms to the south-west, out of the Tree Spirit's reach, and cast Fire Strike (85 hit points, hits up to 10). It vanishes after about 10 minutes: keep casting.",
        "s": "Tree Spirit: Fire Strike from the mushrooms to the south-west",
        "at": [
         2859,
@@ -13192,7 +13192,7 @@
      "at": 10,
      "do": [
       {
-       "t": "Talk to 5 farmers, then return to Martin in Draynor Village. The recommended 5 are: Frizzy Yimshaw in Port Sarim, Elstan north-west of Draynor, Heskel in Falador Park, Treznor south of Varrock Castle and Dreven south of Varrock by the Champions' Guild. You can buy secateurs from Sarah at the farm south of Falador. Dialogue: “Are you a member of the Group of Advanced Gardeners?”.",
+       "t": "Talk to 5 farmers, then return to Martin: Frizzy Yimshaw (Port Sarim), Elstan (north-west of Draynor), Heskel (Falador Park), Treznor (south of Varrock Castle), Dreven (Champions' Guild). Secateurs: Sarah, south of Falador. Dialogue: “Are you a member of the Group of Advanced Gardeners?”.",
        "s": "Talk to five farmers (secateurs from Sarah)",
        "hl": {
         "npc": [
@@ -14847,7 +14847,7 @@
        "k": "prepareForBattle"
       },
       {
-       "t": "Kill the Jungle Demon with Ranged. Stand still when the fight starts (it does not come closer until you move), turn on Protect from Magic, stay three or more squares away and shoot it while the gnomes wear it down. Land the last hit yourself: a killing blow from the gnomes heals it.",
+       "t": "Kill the Jungle Demon with Ranged: stand still at the start (it waits until you move), turn on Protect from Magic and shoot from three or more squares. Land the last hit yourself: a gnome's killing blow heals it.",
        "s": "Jungle Demon: Protect from Magic, stay 3+ squares away, shoot it",
        "k": "killDemon"
       }
@@ -15286,7 +15286,7 @@
      "at": 0,
      "do": [
       {
-       "t": "Open the front door of Melzar's Maze north of Rimmington with the Maze key. Inside, each floor has one right door; the guide marks it with a floor tile. Each coloured key opens one door and then crumbles, a wrong door too. The level 82 lesser demon in the basement is a magic fight: bring the Water, Air and Mind runes.",
+       "t": "Open Melzar's Maze (north of Rimmington) with the Maze key. One right door per floor, marked by a floor tile; a key crumbles in any door it opens. Bring Water, Air and Mind runes: the basement demon is a magic fight.",
        "s": "Melzar's Maze: open the door (Maze key)",
        "at": [
         2941,
@@ -15364,7 +15364,7 @@
        "k": "killGhost"
       },
       {
-       "t": "Open the orange door with the guide's floor tile: on the room's east wall, the second door from the north. The other orange doors use up the key. \"The door is locked\" means you have no orange Key: kill the marked ghost again.",
+       "t": "Open the orange door marked by the floor tile: east wall, second door from the north. Other orange doors use up the key. \"The door is locked\": no orange key, kill the marked ghost again.",
        "s": "First floor: the orange door with the floor tile",
        "at": [
         2931,
@@ -15532,7 +15532,7 @@
        "k": "openMagntaDoor"
       },
       {
-       "t": "Magic only: stand on the spot one square east of the magenta door. The lesser demon (level 82) cannot reach you there, and melee cannot reach it. Cast Water Strike (Water Bolt from Magic 23 is faster; it is weak to water) with your metal armour off: armour cuts magic accuracy to about a fifth. No runes with you? Leave the maze and buy them first.",
+       "t": "Magic only: stand one square east of the magenta door, where the lesser demon cannot reach you. Cast Water Strike (Water Bolt from Magic 23) with metal armour off: it cuts magic accuracy to about a fifth.",
        "s": "Basement: kill the lesser demon (green key)",
        "at": [
         2936,
@@ -16200,7 +16200,7 @@
        "k": "enterCrandorHole"
       },
       {
-       "t": "Go all the way south and through the wall to unlock the shortcut back to the Karamja volcano. Lesser demons (level 82) can attack down here: keep moving and eat when low. If you die later, come back through the volcano at Karamja (south of Brimhaven) and through this wall.",
+       "t": "Go all the way south and through the wall to unlock the shortcut to the Karamja volcano. Lesser demons (level 82) roam here: keep moving, eat when low. After a death, this is your way back.",
        "s": "Crandor dungeon: go south and through the wall (shortcut)",
        "at": [
         2836,
@@ -16215,7 +16215,7 @@
        "k": "unlockShortcut"
       },
       {
-       "t": "After a death: get ready again (Anti-dragon shield worn, food, combat gear), go to the Karamja volcano south of Brimhaven (boat from Port Sarim to Musa Point, then walk west) and climb in. The ship is wrecked, but the shortcut you opened leads back to Crandor.",
+       "t": "After a death: re-equip (Anti-dragon shield worn, food, gear), sail from Port Sarim to Musa Point, walk west to the Karamja volcano and climb in. Your shortcut leads back to Crandor.",
        "s": "After a death: Karamja volcano (south of Brimhaven), climb in",
        "at": [
         2857,
@@ -16267,7 +16267,7 @@
        "k": "enterElvargArea"
       },
       {
-       "t": "Kill Elvarg (level 83, 80 hit points, Defence 70). At low Defence she out-damages melee: check the app's fight estimate before you sail. The wiki's safer way at lower levels: flinch her in the south-east corner of her cave, a long but safe fight. Keep the Anti-dragon shield worn. When she dies her head lands in your inventory.",
+       "t": "Kill Elvarg (level 83) with the Anti-dragon shield worn. At low levels the wiki's safer way: flinch her from the south-east corner of her cave. Her head drops into your inventory.",
        "s": "Elvarg's lair: kill Elvarg (her head drops into the bag)",
        "at": [
         2855,
