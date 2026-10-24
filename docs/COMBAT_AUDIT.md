@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/combatAudit.json` (revisio
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-27 stages: 11 retained, 11 revised, 2 with a branch, 3 deferred.
+27 stages: 8 retained, 14 revised, 2 with a branch, 3 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -27,9 +27,9 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S5-08 The battle with the dragon Elvarg | quest-fight | yes | Elvarg (83) | melee | Elvarg | Lobster 20+ | Retain |
 | S6-01 Ranged to 50 with a prepared ranged loadout | training | no | Seagull (3), Monk, Giant frog | other | - | - | Revised |
 | S6-04 Magic to 55 (High Level Alchemy) | training | no | Cow, Chicken | other | - | Trout 5 | Revised |
-| S7-02 Fight Arena | quest-fight | yes | Khazard Ogre (63), Khazard scorpion (44), Bouncer (137) | safespot | - | - | Retain |
-| S7-03 Tree Gnome Village | quest-fight | yes | Khazard warlord (112) | safespot | - | - | Retain |
-| S7-05 The Grand Tree | quest-fight | yes | Black demon (172) | safespot | - | - | Retain |
+| S7-02 Fight Arena | quest-fight | yes | Khazard Ogre (63), Khazard scorpion (44), Bouncer (137) | safespot | - | Lobster 10 | Revised |
+| S7-03 Tree Gnome Village | quest-fight | yes | Khazard warlord (112) | safespot | - | Lobster 10 | Revised |
+| S7-05 The Grand Tree | quest-fight | yes | Black demon (172) | safespot | - | Lobster 10 | Revised |
 | S8-01 Priest in Peril | quest-fight | yes | Temple Guardian (30), Monk of Zamorak (30) | melee | Temple Guardian | Trout 5 | Revised |
 | S8-02 Nature Spirit | quest-fight | yes | Ghast (30) | melee | Ghast | Lobster 15 | Revised |
 | S9-01 Lost City | quest-fight | yes | Zombie (25), Tree spirit (101) | safespot | - | - | Revised |
@@ -451,7 +451,7 @@ Evidence:
 
 ## S7-02 Fight Arena
 
-**Retain.** Fight Arena: the Khazard Ogre (63), the scorpion (44) and Bouncer (137), each from behind a skeleton with Fire Bolt.
+**Revised.** Fight Arena: the Khazard Ogre (63), the scorpion (44) and Bouncer (137), each from behind a skeleton with Fire Bolt.
 
 Quest stage lines: 1.1, 1.2, 1.5, 1.6.
 
@@ -461,11 +461,16 @@ Assumptions:
 
 Problems:
 
-- No melee estimate applies; the food (Lobster 10) is recommended only.
+- No melee estimate applies.
+- The in-game line before the fight checks 10 lobsters, but the food was recommended only: readiness could say ready while the arrow stopped for food.
 
 Alternatives:
 
 - A bow from the same cover.
+
+Changed:
+
+- 2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded.
 
 Evidence:
 
@@ -473,7 +478,7 @@ Evidence:
 
 ## S7-03 Tree Gnome Village
 
-**Retain.** Defeat the Khazard warlord (112, 170 hit points, hits up to 10) from the safespot by the dead tree with Fire Bolt.
+**Revised.** Defeat the Khazard warlord (112, 170 hit points, hits up to 10) from the safespot by the dead tree with Fire Bolt.
 
 Quest stage lines: 2.2, 2.3.
 
@@ -481,13 +486,21 @@ Assumptions:
 
 - He gets caught between the wall and the tree; about 31 casts, 50 brought.
 
+Problems:
+
+- The in-game line before the fight checks 10 lobsters, but the food was not in the kit: readiness could say ready while the arrow stopped for food.
+
+Changed:
+
+- 2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded.
+
 Evidence:
 
 - Step field "Magic from a safespot" (wiki quick guide).
 
 ## S7-05 The Grand Tree
 
-**Retain.** Kill the Black demon (172, 157 hit points, hits up to 16) from the spot north of the entrance ladder.
+**Revised.** Kill the Black demon (172, 157 hit points, hits up to 16) from the spot north of the entrance ladder.
 
 Quest stage lines: 2.0, 3.1, 5.0, 5.1.
 
@@ -495,9 +508,17 @@ Assumptions:
 
 - The safespot holds for the whole fight; Water Bolt hits it harder.
 
+Problems:
+
+- The in-game line before the fight checks 10 lobsters, but the food was not in the kit: readiness could say ready while the arrow stopped for food.
+
 Alternatives:
 
 - Ranged or a halberd from the same spot.
+
+Changed:
+
+- 2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded.
 
 Evidence:
 

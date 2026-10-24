@@ -252,9 +252,10 @@
       "enemies": [{ "name": "Khazard Ogre", "level": 63, "maxHit": 8 }, { "name": "Khazard scorpion", "level": 44 }, { "name": "Bouncer", "level": 137 }],
       "lines": ["1.1", "1.2", "1.5", "1.6"],
       "assumptions": ["All of them fight only up close, so the safespot holds."],
-      "problems": ["No melee estimate applies; the food (Lobster 10) is recommended only."],
+      "problems": ["No melee estimate applies.","The in-game line before the fight checks 10 lobsters, but the food was recommended only: readiness could say ready while the arrow stopped for food."],
       "alternatives": ["A bow from the same cover."],
-      "decision": "retain",
+      "decision": "revise",
+      "changed": ["2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded."],
       "evidence": ["Step field \"Magic from a safespot\" and the safespot text (wiki quick guide)."]
     },
     {
@@ -263,9 +264,10 @@
       "enemies": [{ "name": "Khazard warlord", "level": 112, "maxHit": 10 }],
       "lines": ["2.2", "2.3"],
       "assumptions": ["He gets caught between the wall and the tree; about 31 casts, 50 brought."],
-      "problems": [],
+      "problems": ["The in-game line before the fight checks 10 lobsters, but the food was not in the kit: readiness could say ready while the arrow stopped for food."],
       "alternatives": [],
-      "decision": "retain",
+      "decision": "revise",
+      "changed": ["2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded."],
       "evidence": ["Step field \"Magic from a safespot\" (wiki quick guide)."]
     },
     {
@@ -274,9 +276,10 @@
       "enemies": [{ "name": "Black demon", "level": 172, "maxHit": 16 }],
       "lines": ["2.0", "3.1", "5.0", "5.1"],
       "assumptions": ["The safespot holds for the whole fight; Water Bolt hits it harder."],
-      "problems": [],
+      "problems": ["The in-game line before the fight checks 10 lobsters, but the food was not in the kit: readiness could say ready while the arrow stopped for food."],
       "alternatives": ["Ranged or a halberd from the same spot."],
-      "decision": "retain",
+      "decision": "revise",
+      "changed": ["2.74.7: Lobster ×10 (or similar food) is a required item, as the fight line's bag check already demanded."],
       "evidence": ["Step field \"Magic from a safespot\"; lines 2.0 and 3.1 are dialogue and an optional choice."]
     },
     {

@@ -5513,17 +5513,25 @@
         "howToGet": "For the Khali brew for the guard.",
         "wikiItemId": 995,
         "iconUrl": "https://oldschool.runescape.wiki/images/Coins_1.png"
-      }
-    ],
-    "itemsRecommended": [
+      },
       {
         "nameEn": "Lobster",
         "amount": 10,
         "howToGet": "Buy on the Grand Exchange. Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
         "wikiItemId": 379,
         "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
-        "heals": 12
-      },
+        "heals": 12,
+        "anyOf": [
+          "Trout",
+          "Salmon",
+          "Tuna",
+          "Swordfish",
+          "Monkfish",
+          "Shark"
+        ]
+      }
+    ],
+    "itemsRecommended": [
       {
         "nameEn": "Staff of fire",
         "amount": 1,
@@ -5605,6 +5613,22 @@
         "howToGet": "For the gnome ballista. Chop near the maze.",
         "wikiItemId": 1511,
         "iconUrl": "https://oldschool.runescape.wiki/images/Logs.png"
+      },
+      {
+        "nameEn": "Lobster",
+        "amount": 10,
+        "howToGet": "For the Khazard warlord (level 112, hits up to 10): there is no bank nearby, and the guide checks 10 lobsters before the fight. Buy on the Grand Exchange. Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
+        "heals": 12,
+        "anyOf": [
+          "Trout",
+          "Salmon",
+          "Tuna",
+          "Swordfish",
+          "Monkfish",
+          "Shark"
+        ]
       }
     ],
     "safespot": "The boss Khazard warlord (level 112) can be stuck behind the trees and shot with magic.",
@@ -5802,6 +5826,24 @@
         "howToGet": "Fire Bolt: 3 a cast. Grand Exchange; check the current acquisition estimate.",
         "wikiItemId": 556,
         "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      }
+    ],
+    "itemsRequired": [
+      {
+        "nameEn": "Lobster",
+        "amount": 10,
+        "howToGet": "For the Black demon (level 172, hits up to 16) under the trap door: the guide checks 10 lobsters before you go down. Buy on the Grand Exchange. Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
+        "wikiItemId": 379,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
+        "heals": 12,
+        "anyOf": [
+          "Trout",
+          "Salmon",
+          "Tuna",
+          "Swordfish",
+          "Monkfish",
+          "Shark"
+        ]
       }
     ]
   },
