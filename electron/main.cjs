@@ -255,6 +255,7 @@ if (!app.requestSingleInstanceLock()) {
   ipcMain.handle('update:get', () => ({ ...updater.state, auto: ui.autoUpdate !== false }));
   ipcMain.handle('update:check', () => updater.check());
   ipcMain.handle('update:download', () => updater.download());
+  ipcMain.handle('update:cancel', () => updater.cancel());
   ipcMain.handle('update:install', () => updater.install());
   ipcMain.on('update:auto', (_e, on) => {
     ui.autoUpdate = Boolean(on);

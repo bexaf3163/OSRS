@@ -112,16 +112,37 @@ function fetchRelease() {
   });
 }
 
-/** Download into dest through .part, check the size and sha256; the result is a whole file or an error (a partial one is deleted). */
-function download(rel, dest, onProgress) {
+const cancelled = () => Object.assign(new Error('The download was cancelled.'), { code: 'CANCELLED' });
+
+/**
+ * Download into dest through .part, check the size and sha256; the result is a whole file or an error (a partial one is deleted, dest is
+ * never touched by a failed or cancelled download). signal cancels it; getter replaces the network for tests.
+ */
+function download(rel, dest, onProgress, { signal, getter = get } = {}) {
   if (!rel.sha256) return Promise.reject(new Error('The release has no SHA-256 checksum. Automatic installation is unavailable.'));
+  if (signal && signal.aborted) return Promise.reject(cancelled());
   const part = `${dest}.part`;
   return new Promise((resolve, reject) => {
+    let done = false;
+    let req = null;
+    let response = null;
+    let out = null;
     const fail = (err) => {
-      try { fs.rmSync(part, { force: true }); } catch { /* not a problem */ }
-      reject(err);
+      if (done) return;
+      done = true;
+      if (signal) signal.removeEventListener('abort', onAbort);
+      try { if (response) response.destroy(); } catch { /* already closed */ }
+      try { if (req) req.destroy(); } catch { /* already closed */ }
+      // The stream must close before Windows lets the partial file go, and the caller hears of the failure only after it is gone: a retry
+      // started at once must not have its own new .part removed by this one's late cleanup.
+      const remove = () => { try { fs.rmSync(part, { force: true }); } catch { /* not a problem */ } reject(err); };
+      if (out && !out.closed) { out.once('close', remove); out.destroy(); } else remove();
     };
-    get(rel.url, {}, (res) => {
+    function onAbort() { fail(cancelled()); }
+    if (signal) signal.addEventListener('abort', onAbort, { once: true });
+    req = getter(rel.url, {}, (res) => {
+      response = res;
+      if (done) { res.resume(); return; }
       if (res.statusCode !== 200) {
         res.resume();
         fail(new Error(`the server answered ${res.statusCode}`));
@@ -130,7 +151,7 @@ function download(rel, dest, onProgress) {
       const hash = crypto.createHash('sha256');
       let got = 0;
       let last = 0;
-      const out = fs.createWriteStream(part);
+      out = fs.createWriteStream(part);
       res.on('data', (chunk) => {
         got += chunk.length;
         hash.update(chunk);
@@ -138,14 +159,19 @@ function download(rel, dest, onProgress) {
         const now = Date.now();
         if (now - last > 250) { last = now; onProgress(got / rel.size); }
       });
-      res.on('error', (err) => { out.destroy(); fail(err); });
+      res.on('error', fail);
+      // A connection that closes early ends the stream without an error: the size check below catches it.
+      res.on('aborted', () => fail(new Error('the connection was interrupted')));
       out.on('error', fail);
       res.pipe(out);
       out.on('finish', () => {
+        if (done) return;
         if (got !== rel.size) { fail(new Error('the file size did not match')); return; }
         if (hash.digest('hex') !== rel.sha256) { fail(new Error('the checksum did not match')); return; }
         try {
           fs.renameSync(part, dest);
+          done = true;
+          if (signal) signal.removeEventListener('abort', onAbort);
           onProgress(1);
           resolve();
         } catch (err) {
@@ -173,6 +199,7 @@ function createUpdater({ version, env, userData, onState, quit, fetchRelease: fe
   let rel = null;
   let busy = false;
   let timer = null;
+  let downloading = null;
 
   const set = (patch) => {
     state = { ...state, ...patch };
@@ -229,18 +256,30 @@ function createUpdater({ version, env, userData, onState, quit, fetchRelease: fe
     if (busy || !rel || !canInstall) return state;
     busy = true;
     set({ state: 'downloading', progress: 0, error: null });
+    const controller = new AbortController();
+    downloading = controller;
     try {
       const file = target();
       if (!await matchesRelease(file, rel)) {
-        await downloader(rel, file, (p) => set({ progress: p }));
+        await downloader(rel, file, (p) => { if (!controller.signal.aborted) set({ progress: p }); }, { signal: controller.signal });
       }
+      if (controller.signal.aborted) throw cancelled();
       if (!await matchesRelease(file, rel)) throw new Error('The downloaded file checksum did not match. Please download the update again.');
       set({ state: 'ready', progress: 1 });
     } catch (err) {
-      set({ state: 'error', error: String(err && err.message ? err.message : err) });
+      // A cancel is the player's choice, not a failure: the update is offered again as before.
+      if (controller.signal.aborted || (err && err.code === 'CANCELLED')) set({ state: 'available', progress: 0, error: null });
+      else set({ state: 'error', error: String(err && err.message ? err.message : err) });
     } finally {
+      downloading = null;
       busy = false;
     }
+    return state;
+  }
+
+  /** Stop a download in progress; its partial file is removed and the update stays available. */
+  function cancel() {
+    if (downloading) downloading.abort();
     return state;
   }
 
@@ -323,7 +362,7 @@ function createUpdater({ version, env, userData, onState, quit, fetchRelease: fe
     timer.unref();
   }
 
-  return { check, download: fetchUpdate, install, cleanup, sweepOld, schedule, get state() { return state; } };
+  return { check, download: fetchUpdate, cancel, install, cleanup, sweepOld, schedule, get state() { return state; } };
 }
 
 module.exports = { createUpdater, download, fetchRelease, pickRelease, parseVersion, isNewer, safeForCmd, ASSET_RE, DOWNLOAD_RE, REPO };
