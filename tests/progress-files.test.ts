@@ -1,4 +1,4 @@
-import { mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync, existsSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, readFileSync, readdirSync, rmdirSync, rmSync, writeFileSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { createRequire } from 'node:module';
@@ -107,6 +107,40 @@ describe('copies outside the app and the restore of a fresh data folder', () => 
     restoreFromCopies: (dir: string, source: string, replaceOlder?: boolean) => string[];
   };
   const at = (s: string) => JSON.stringify({ updatedAt: s, steps: { a: 'done' } });
+
+  it.each(['dailyBackup', 'latestCopy'] as const)('%s reports unreadable sources while still copying healthy profiles, then recovers', method => {
+    const d = tmp();
+    const out = tmp();
+    const good = at('2026-10-24T10:00:00Z');
+    const blocked = join(d, 'progress-alt.json');
+    mkdirSync(blocked); // Portable real-filesystem read failure without changing ACLs.
+    writeFileSync(join(d, 'progress.json'), good);
+    expect(() => api[method](d, out)).toThrow(expect.objectContaining({ code: 'COPY_INCOMPLETE' }));
+    const copied = readdirSync(out).filter(n => n.startsWith('osrs-put-progress-'));
+    expect(copied).toHaveLength(1);
+    expect(readFileSync(join(out, copied[0]), 'utf8')).toBe(good);
+    expect(existsSync(blocked)).toBe(true);
+    rmdirSync(blocked); // Empty disposable directory only.
+    writeFileSync(blocked, good);
+    expect(() => api[method](d, out)).not.toThrow();
+    expect(readdirSync(out).filter(n => n.startsWith('osrs-put-progress-alt-'))).toHaveLength(1);
+  });
+
+  it('an unreadable latest destination is retained and reported without preventing another profile copy', () => {
+    const d = tmp();
+    const out = tmp();
+    const good = at('2026-10-24T10:00:00Z');
+    writeFileSync(join(d, 'progress.json'), good);
+    writeFileSync(join(d, 'progress-alt.json'), good);
+    const blocked = join(out, 'osrs-put-progress-latest.json');
+    mkdirSync(blocked);
+    expect(() => api.latestCopy(d, out)).toThrow(expect.objectContaining({ code: 'COPY_INCOMPLETE' }));
+    expect(readFileSync(join(out, 'osrs-put-progress-alt-latest.json'), 'utf8')).toBe(good);
+    expect(existsSync(blocked)).toBe(true);
+    rmdirSync(blocked);
+    expect(() => api.latestCopy(d, out)).not.toThrow();
+    expect(readFileSync(blocked, 'utf8')).toBe(good);
+  });
 
   it.each(['null', '[]', '{"unrelated":true}', '{"version":99,"steps":{}}', '{"app":"another-app","steps":{}}'])('invalid/unsupported progress cannot replace backup copies: %s', raw => {
     const d = tmp();

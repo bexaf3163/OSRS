@@ -311,6 +311,24 @@ try {
   const afterRetry = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
   expect(retried.error === null && afterRetry.error === null, 'backup recovery: a successful retry clears the copy error');
 
+  // An unreadable individual profile must not be silently skipped or stop healthy profile copies.
+  const badProfile = join(dirname(file), 'progress-copytest.json');
+  if (existsSync(badProfile)) throw new Error('Per-profile backup fixture already exists');
+  mkdirSync(badProfile);
+  try {
+    const prior = readFileSync(file, 'utf8');
+    const receipt = await page.evaluate(json => (window as unknown as { osrsDesktop: { saveProgressFileChecked(json: string): Promise<{ ok: boolean }> } }).osrsDesktop.saveProgressFileChecked(json), prior);
+    const automatic = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+    expect(receipt.ok && automatic.error === 'COPY_INCOMPLETE', 'partial backup: unreadable profile is reported independently of primary save success');
+    expect(readFileSync(join(copyDir, `osrs-put-${basename(file, '.json')}-latest.json`), 'utf8') === prior, 'partial backup: the readable active profile is still copied');
+    const manual = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { now(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.now());
+    expect(manual.error === 'COPY_INCOMPLETE', 'partial backup: a manual attempt does not report complete success');
+  } finally {
+    rmdirSync(badProfile);
+  }
+  const copiesRecovered = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { now(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.now());
+  expect(copiesRecovered.error === null, 'partial backup recovery: restoring readable sources clears the failure');
+
   expect(!errors.length, `console: no errors ${errors.join('; ')}`);
   if (exe) {
     // A normal close: the window closes, the app quits and the launcher exits by itself.

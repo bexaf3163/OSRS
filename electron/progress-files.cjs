@@ -70,6 +70,14 @@ const DAY_KEEP = 14;
 const COPIED = /^(progress(-[a-z0-9]{1,12})?|profiles)\.json$/;
 const stampOf = (d) => `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
 
+// Finish copying readable profiles, but do not report a complete backup after an I/O failure.
+function throwCopyErrors(errors) {
+  if (!errors.length) return;
+  const failure = new AggregateError(errors, 'Some progress files could not be copied');
+  failure.code = 'COPY_INCOMPLETE';
+  throw failure;
+}
+
 /**
  * A scheduled copy: once a day every progress file (progress.json and progress-<profile>.json) is copied into
  * the chosen folder as osrs-put-<name>-YYYYMMDD.json. Today's copy is not overwritten; the last
@@ -79,19 +87,24 @@ function dailyBackup(dir, target, now = new Date()) {
   fs.mkdirSync(target, { recursive: true });
   const today = stampOf(now);
   let made = 0;
+  const errors = [];
   for (const name of fs.readdirSync(dir).filter((n) => COPIED.test(n))) {
-    const base = name.replace(/\.json$/, '');
-    const out = path.join(target, `osrs-put-${base}-${today}.json`);
-    let text;
-    try { text = fs.readFileSync(path.join(dir, name), 'utf8'); } catch { continue; }
-    if (!validSavedText(name, text)) continue;
-    if (!fs.existsSync(out)) { fs.writeFileSync(out, text); made++; }
-    const mine = fs.readdirSync(target).filter((n) => n.startsWith(`osrs-put-${base}-`) && n.length === `osrs-put-${base}-`.length + 13 && /^\d{8}\.json$/.test(n.slice(-13))).sort();
-    const supported = mine.filter(n => {
-      try { return validSavedText(name, fs.readFileSync(path.join(target, n), 'utf8')); } catch { return false; }
-    });
-    for (const old of supported.slice(0, Math.max(0, supported.length - DAY_KEEP))) fs.rmSync(path.join(target, old), { force: true });
+    try {
+      const base = name.replace(/\.json$/, '');
+      const out = path.join(target, `osrs-put-${base}-${today}.json`);
+      let text;
+      try { text = fs.readFileSync(path.join(dir, name), 'utf8'); }
+      catch (error) { if (error.code === 'ENOENT') continue; throw error; }
+      if (!validSavedText(name, text)) continue;
+      if (!fs.existsSync(out)) { fs.writeFileSync(out, text); made++; }
+      const mine = fs.readdirSync(target).filter((n) => n.startsWith(`osrs-put-${base}-`) && n.length === `osrs-put-${base}-`.length + 13 && /^\d{8}\.json$/.test(n.slice(-13))).sort();
+      const supported = mine.filter(n => {
+        try { return validSavedText(name, fs.readFileSync(path.join(target, n), 'utf8')); } catch { return false; }
+      });
+      for (const old of supported.slice(0, Math.max(0, supported.length - DAY_KEEP))) fs.rmSync(path.join(target, old), { force: true });
+    } catch (error) { errors.push(error); }
   }
+  throwCopyErrors(errors);
   return made;
 }
 
@@ -111,20 +124,26 @@ const updatedAtOf = (text) => {
  */
 function latestCopy(dir, target) {
   fs.mkdirSync(target, { recursive: true });
+  const errors = [];
   for (const name of fs.readdirSync(dir).filter((n) => COPIED.test(n))) {
-    let text;
-    try { text = fs.readFileSync(path.join(dir, name), 'utf8'); } catch { continue; }
-    if (!validSavedText(name, text)) continue;
-    const out = path.join(target, `osrs-put-${name.replace(/\.json$/, '')}-latest.json`);
-    let old = null;
-    try { old = fs.readFileSync(out, 'utf8'); } catch { if (fs.existsSync(out)) continue; }
-    if (old === text) continue;
-    if (old !== null && !validSavedText(name, old)) continue;
-    const mine = updatedAtOf(text);
-    const theirs = old === null ? null : updatedAtOf(old);
-    if (mine !== null && theirs !== null && mine < theirs) continue;
-    fs.writeFileSync(out, text);
+    try {
+      let text;
+      try { text = fs.readFileSync(path.join(dir, name), 'utf8'); }
+      catch (error) { if (error.code === 'ENOENT') continue; throw error; }
+      if (!validSavedText(name, text)) continue;
+      const out = path.join(target, `osrs-put-${name.replace(/\.json$/, '')}-latest.json`);
+      let old = null;
+      try { old = fs.readFileSync(out, 'utf8'); }
+      catch (error) { if (error.code !== 'ENOENT') throw error; }
+      if (old === text) continue;
+      if (old !== null && !validSavedText(name, old)) continue;
+      const mine = updatedAtOf(text);
+      const theirs = old === null ? null : updatedAtOf(old);
+      if (mine !== null && theirs !== null && mine < theirs) continue;
+      fs.writeFileSync(out, text);
+    } catch (error) { errors.push(error); }
   }
+  throwCopyErrors(errors);
 }
 
 /** Lexicographic "a is newer than b" for the [updatedAt, date, rank] keys. */
