@@ -409,7 +409,8 @@ final class HudModel
 		String place = far(s) ? s.getDistance() : null;
 		a.status = join(stage.isPeeking() ? "Viewing an earlier line" : stageLabel(stage), place);
 		// The whole line when the headline is shorter (its recipe, the other way); otherwise the other way alone.
-		String full = GuideList.withoutDoneErrands(v, line.getT() == null ? line.shown() : line.getT()).trim();
+		// The dialogue answers are highlighted in the game's own chat box; on the card they only pushed the instruction past its line limit.
+		String full = ShortText.withoutDialogue(GuideList.withoutDoneErrands(v, line.getT() == null ? line.shown() : line.getT()));
 		if (!full.isEmpty() && (!GuideList.concise(full).equals(full) || full.length() > shown.length() + 12))
 		{
 			a.now.add(Line.small(Icon.DOT, full, Tone.MUTED).withHint(line.getT()));
