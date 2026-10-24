@@ -285,6 +285,32 @@ try {
     expect(await page.locator('.progress-storage-warning, .profile-storage-warning').count() === 0, `native read recovery (${basename(target)}): readable sources resume normally after reload`);
   }
 
+  // A secondary-copy failure must be visible on the next Settings query, while the primary save still succeeds.
+  const copyDir = (await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ autoDir: string | null }> } } }).osrsDesktop.backup.get())).autoDir;
+  if (!copyDir || dirname(resolve(copyDir)) !== resolve(join(home, 'appdata', 'OSRS Path'))) throw new Error('Unsafe backup error fixture path');
+  const heldCopies = `${copyDir}.backup-test`;
+  if (existsSync(heldCopies)) throw new Error('Backup fixture already exists');
+  mkdirSync(dirname(copyDir), { recursive: true });
+  const hadCopies = existsSync(copyDir);
+  if (hadCopies) renameSync(copyDir, heldCopies);
+  writeFileSync(copyDir, 'This disposable file blocks only the test copy directory', { flag: 'wx' });
+  try {
+    const prior = readFileSync(file, 'utf8');
+    const receipt = await page.evaluate(json => (window as unknown as { osrsDesktop: { saveProgressFileChecked(json: string): Promise<{ ok: boolean }> } }).osrsDesktop.saveProgressFileChecked(json), prior);
+    expect(receipt.ok && readFileSync(file, 'utf8') === prior, 'backup failure: the physical primary save still succeeds and retains its bytes');
+    const automatic = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+    expect(Boolean(automatic.error), 'backup failure: an automatic copy error survives the Settings state query');
+    const manual = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { now(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.now());
+    const later = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+    expect(Boolean(manual.error) && manual.error === later.error, 'backup failure: a manual error is not silently cleared by backup:get');
+  } finally {
+    rmSync(copyDir, { force: true });
+    if (hadCopies) renameSync(heldCopies, copyDir);
+  }
+  const retried = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { now(): Promise<{ error: string | null }>; get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.now());
+  const afterRetry = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+  expect(retried.error === null && afterRetry.error === null, 'backup recovery: a successful retry clears the copy error');
+
   expect(!errors.length, `console: no errors ${errors.join('; ')}`);
   if (exe) {
     // A normal close: the window closes, the app quits and the launcher exits by itself.

@@ -1,5 +1,9 @@
 # Claude continuation — start here
 
+## Newest source: secondary backup errors
+
+[CODEX_BACKUP_ERROR_HANDOFF.md](CODEX_BACKUP_ERROR_HANDOFF.md): backup errors remain observable through Settings queries while successful primary writes remain successful. Per-target/phase tracking prevents one successful latest copy from hiding a dated-copy failure. All1,941 local Vitest/build/data pass; the new isolated native EXE scenario still requires fresh CI. No game testing is involved. Broader T01 remains open.
+
 ## Latest verified Magic preview; newer owned-input fix pending CI
 
 Magic source87d856ff187c498ac210efed2906ab7c43200bfd (localc368233, exacttree9d52efcf935d5caae07e9c6cc4b515579c777318) passed [Checks40086397787](https://github.com/bexaf3163/OSRS/actions/runs/40086397787):1,937 Vitest, TypeScript/build/data0errors/warnings, Java608, complete Chromium including all new Magic390/1280 scenarios, and isolated actual portable. [Verified test EXE](https://github.com/bexaf3163/OSRS/releases/download/audit-test-87d856ff/OSRS-Path-audit-test-87d856ff.exe), SHA256 **59ae33add8ba3ee97a58076a5e110fd91acf926308eeee4d56b3b99fea9b5f85**, matches actual test log and GitHub asset digest. The newer owned-input timing repair a55a8cb passes all1,941 local tests/build/data and still needs cumulative browser/portable CI. No game testing is claimed or required from the owner; Claude owns that checklist.
