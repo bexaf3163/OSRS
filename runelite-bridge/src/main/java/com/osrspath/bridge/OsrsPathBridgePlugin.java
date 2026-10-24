@@ -3115,30 +3115,55 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	/**
 	 * Whether to draw a tracked object. Of several objects that share an ID of the current line (the three red doors in Melzar's Maze's rat room)
 	 * only the one(s) nearest the line's tile are the line's, as Quest Helper marks the object on its step's tile: the rest are wrong doors.
-	 * Objects the step itself names stay. Client thread; a few objects, so it is counted per frame.
+	 * Objects the step itself names stay. A line with no tile of its own (a Quest Helper step that spans several places, such as "climb the ladder,
+	 * then search the cupboard") keeps the one nearest the player instead: a common ladder ID would otherwise outline every ladder in view.
+	 * Client thread; a few objects, so it is counted per frame.
 	 */
 	boolean objectShown(TileObject o)
 	{
 		ActiveTarget.LineHighlight line = lineHl;
 		ActiveTarget step = target;
-		if (!line.hasPoint || !line.objectIds.contains(o.getId()) || (step != null && step.getObjectIdSet().contains(o.getId())))
+		if (!line.objectIds.contains(o.getId()) || (step != null && step.getObjectIdSet().contains(o.getId())))
 		{
 			return true;
 		}
-		WorldPoint w = o.getWorldLocation();
-		int d = line.distance(w.getX(), w.getY(), o.getPlane());
-		for (TileObject p : objects.keySet())
+		int[] ref = line.hasPoint ? new int[] {line.x, line.y, line.plane} : playerPoint();
+		if (ref == null)
 		{
-			if (p != o && p.getId() == o.getId())
+			return true;
+		}
+		return nearestOfItsId(o, objects.keySet(), ref);
+	}
+
+	/** Whether no other tracked object with the same ID is nearer the reference tile (another floor counts as far). */
+	static boolean nearestOfItsId(TileObject o, Iterable<TileObject> tracked, int[] ref)
+	{
+		int d = tileDistance(o, ref);
+		for (TileObject p : tracked)
+		{
+			if (p != o && p.getId() == o.getId() && tileDistance(p, ref) < d)
 			{
-				WorldPoint q = p.getWorldLocation();
-				if (line.distance(q.getX(), q.getY(), p.getPlane()) < d)
-				{
-					return false;
-				}
+				return false;
 			}
 		}
 		return true;
+	}
+
+	private static int tileDistance(TileObject o, int[] ref)
+	{
+		WorldPoint w = o.getWorldLocation();
+		return o.getPlane() != ref[2] ? Integer.MAX_VALUE / 2 : Math.max(Math.abs(w.getX() - ref[0]), Math.abs(w.getY() - ref[1]));
+	}
+
+	private int[] playerPoint()
+	{
+		Player me = client.getLocalPlayer();
+		if (me == null)
+		{
+			return null;
+		}
+		WorldPoint w = me.getWorldLocation();
+		return new int[] {w.getX(), w.getY(), w.getPlane()};
 	}
 
 	/** An NPC appeared or changed its look: into its own list, whether the step's, the temporary target's or a dangerous one. */
