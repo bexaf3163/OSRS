@@ -274,6 +274,9 @@ public class HudModelTest
 		String open = expanded(c);
 		assertTrue(open, open.contains("Take from the bank ×21"));
 		assertTrue("the training is what comes next: " + open, open.contains("Next\nTrain Attack to 40"));
+		assertFalse("the open card says it once, under Next: " + open, open.contains("Then: train Attack to 40"));
+		assertTrue("the closed card keeps Then", c.plain(false, false).contains("Then: train Attack to 40"));
+		assertTrue(c.thenInNext());
 	}
 
 	@Test

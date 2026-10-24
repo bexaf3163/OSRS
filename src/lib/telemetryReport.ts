@@ -92,6 +92,8 @@ export const WALKED_TILES = 10;
 export const BACK_CLICKS = 3;
 /** A line longer than this is no longer "short" on screen. */
 export const MAX_UI_LINE = 90;
+/** A warning keeps its whole reason on the card (up to seven lines); longer than this it no longer fits. */
+export const MAX_WARNING_LINE = 220;
 
 const str = (v: unknown): string | null => (typeof v === 'string' ? v : null);
 const num = (v: unknown): number | null => (typeof v === 'number' && Number.isFinite(v) ? v : null);
@@ -247,7 +249,8 @@ export function analyze(events: TelemetryEvent[], badLines = 0): Report {
       case 'ui': {
         const text = str(e.text) ?? '';
         for (const l of text.split('\n')) {
-          if (l.length > MAX_UI_LINE) {
+          // A warning ("! …") is shown whole on purpose (2.74.15): only a very long one is a finding.
+          if (l.length > (l.startsWith('! ') ? MAX_WARNING_LINE : MAX_UI_LINE)) {
             add({ severity: 'warn', code: 'UI_LONG', at: e.t, step: stepId, text: `A long line on screen (${l.length} characters) — "${l.slice(0, 60)}…"` });
             break;
           }

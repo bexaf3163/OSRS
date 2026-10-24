@@ -271,7 +271,7 @@ class OsrsPathGuideOverlay extends Overlay
 				null, GuideList.Action.NONE, null));
 			y += 4;
 		}
-		if (c.getThen() != null)
+		if (c.getThen() != null && !(expanded && c.thenInNext()))
 		{
 			y += 3;
 			List<String> th = clip(OverlayText.wrap(c.getThen(), sm, bodyW), 2, sm, bodyW);
@@ -285,7 +285,7 @@ class OsrsPathGuideOverlay extends Overlay
 			HudModel.Line w = c.getWarning();
 			int wx = PAD_X + ICON + ICON_GAP;
 			int ww = width - wx - PAD_X - 4;
-			List<String> wl = clip(OverlayText.wrap(w.getText(), sm, ww), 3, sm, ww);
+			List<String> wl = clip(OverlayText.wrap(w.getText(), sm, ww), WARNING_LINES, sm, ww);
 			int wh = wl.size() * sm.getHeight() + 10;
 			rows.add(new Row(Part.WARNING, new Rectangle(PAD_X - 4, y, width - 2 * PAD_X + 8, wh), wx, wl, null, small, TEXT, w.getIcon(), toneColor(w.getTone()),
 				GuideList.Action.NONE, w.getHint()));
@@ -372,7 +372,7 @@ class OsrsPathGuideOverlay extends Overlay
 		}
 	}
 
-	private static Row lineRow(Part part, HudModel.Line l, FontMetrics fm, FontMetrics sm, Font font, Font small, int width, int y)
+	static Row lineRow(Part part, HudModel.Line l, FontMetrics fm, FontMetrics sm, Font font, Font small, int width, int y)
 	{
 		boolean isSmall = l.isSmall() || part != Part.LINE;
 		FontMetrics m = isSmall ? sm : fm;
@@ -380,7 +380,9 @@ class OsrsPathGuideOverlay extends Overlay
 		int textX = PAD_X + (icon ? ICON + 5 : 0);
 		int rightW = l.getRight() == null ? 0 : m.stringWidth(l.getRight()) + 8;
 		int textW = width - textX - PAD_X - rightW;
-		int max = part == Part.STEP ? 2 : isSmall ? 3 : 2;
+		// A warning is read whole: "Do not board the ship without it: Elvarg's fire hits…" lost the reason on the screen (2.74.14 session).
+		boolean warning = l.getTone() == HudModel.Tone.CAUTION || l.getTone() == HudModel.Tone.DANGER;
+		int max = part == Part.STEP ? 2 : warning ? WARNING_LINES : isSmall ? 3 : 2;
 		List<String> wrapped = OverlayText.wrap(l.getText(), m, textW);
 		List<String> texts = clip(wrapped, max, m, textW);
 		int h = texts.size() * m.getHeight();
@@ -391,6 +393,9 @@ class OsrsPathGuideOverlay extends Overlay
 		return new Row(part, new Rectangle(PAD_X - 4, y, width - 2 * PAD_X + 8, h + 2), textX, texts, l.getRight(), isSmall ? small : font, color, l.getIcon(),
 			toneColor(l.getTone()), l.getAction(), hint);
 	}
+
+	/** A warning keeps up to this many lines: its reason is the point, and the safety texts are written to fit. */
+	static final int WARNING_LINES = 7;
 
 	/** At most max lines: the last is cut with an ellipsis, the whole text stays in the hover hint. */
 	static List<String> clip(List<String> lines, int max, FontMetrics fm, int width)

@@ -17,3 +17,12 @@ describe('frame cost from heartbeats', () => {
     expect(formatReport(analyze(events))).not.toMatch(/Frames:/);
   });
 });
+
+describe('long lines on screen', () => {
+  const ui = (text: string): TelemetryEvent => ({ t: 1, kind: 'ui', text } as TelemetryEvent);
+  it('a warning shown whole is not a finding; an ordinary long line still is', () => {
+    const warning = `! No Anti-dragon shield with you — Do not board the ship without it: Elvarg's fire hits up to 70. Duke Horacio gives it free.`;
+    expect(analyze([ui(warning)]).findings.some((f) => f.code === 'UI_LONG')).toBe(false);
+    expect(analyze([ui('x'.repeat(120))]).findings.some((f) => f.code === 'UI_LONG')).toBe(true);
+  });
+});

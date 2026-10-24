@@ -57,10 +57,19 @@ function pickRelease(rel) {
     if (!d || d[1] !== tag || d[2] !== a.name) continue;
     if (!Number.isInteger(a.size) || a.size < MIN_SIZE || a.size > MAX_SIZE) continue;
     const digest = typeof a.digest === 'string' ? /^sha256:([0-9a-f]{64})$/.exec(a.digest) : null;
-    const notes = typeof rel.body === 'string' ? rel.body.split('\n')[0].replace(/\*\*/g, '').trim().slice(0, 300) : '';
+    const notes = typeof rel.body === 'string' ? notesLine(rel.body) : '';
     return { version: tag, name: a.name, url, size: a.size, sha256: digest ? digest[1] : null, notes };
   }
   return null;
+}
+
+/**
+ * The banner's one line from the release notes: the first line of text, not a heading ("# OSRS Path 2.74.14" said nothing new), without list
+ * markers or bold marks.
+ */
+function notesLine(body) {
+  const line = body.split('\n').map((l) => l.trim()).find((l) => l && !/^#/.test(l)) ?? '';
+  return line.replace(/^[-*]\s+/, '').replace(/\*\*/g, '').trim().slice(0, 300);
 }
 
 /** An ordinary GET over https with redirects; only own hosts. onResponse(res) receives the final response. */

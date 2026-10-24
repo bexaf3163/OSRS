@@ -61,6 +61,16 @@ describe('the router never sends the player where they cannot go', () => {
     expect(unknown.alternatives.find((o) => o.label.startsWith('Oziach'))?.label).toContain('(once Dragon Slayer I is done)');
   });
 
+  // Live 2.74.14: after a death at Elvarg the card said "Buy: Grand Exchange, 120 gp" while its own warning said Duke Horacio gives it free.
+  it('a lost Anti-dragon shield comes free from Duke Horacio, before the exchange, even from Karamja', () => {
+    const far = planSources({ name: 'Anti-dragon shield', need: 1, detail: detail(1540), gePrice: 120 }, state({ position: { x: 2853, y: 3168, plane: 0 } }));
+    expect(far.primary).toMatchObject({ kind: 'free', price: 0, point: { x: 3210, y: 3221, plane: 1 } });
+    expect(far.primary?.label).toBe('Free: Duke Horacio, Lumbridge Castle');
+    expect(far.alternatives.some((o) => o.kind === 'ge')).toBe(true);
+    // Other items keep their own sources: the giver table names the shield only.
+    expect(planSources({ name: 'Rune sword', need: 1, detail: detail(1289), gePrice: 20_000 }, state()).primary?.kind).not.toBe('free');
+  });
+
   it("a guild shop with unknown quest points comes after the exchange, labelled with its condition", () => {
     const plan = planSources({ name: 'Rune sword', need: 1, detail: detail(1289), gePrice: 20_000 }, state({ position: { x: 3190, y: 3360, plane: 0 } }));
     expect(plan.primary?.kind).toBe('ge');

@@ -112,13 +112,25 @@ final class HudModel
 			return (int) advice.stream().filter(l -> l.getIcon() != Icon.NONE).count();
 		}
 
+		/**
+		 * The open card's "Next" starts with the activity "Then:" names, so the open card says it once, under "Next" (both repeated the same line in the
+		 * 2.74.14 session).
+		 */
+		boolean thenInNext()
+		{
+			return then != null && !next.isEmpty() && then.equals(thenOf(next.get(0).getText()));
+		}
+
 		/** What the player reads, for the debug log and tests: the collapsed card, then (expanded) the sections. */
 		String plain(boolean expanded, boolean adviceOpen)
 		{
 			List<String> out = new ArrayList<>();
 			out.add(headline);
 			add(out, status);
-			add(out, then);
+			if (!expanded || !thenInNext())
+			{
+				add(out, then);
+			}
 			if (warning != null)
 			{
 				out.add("! " + warning.getText());

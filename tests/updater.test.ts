@@ -50,6 +50,11 @@ describe('versions', () => {
 });
 
 describe('what to download from a GitHub release', () => {
+  it('the banner line skips headings, list markers and bold marks', () => {
+    const r = m.pickRelease(release('2.25.0', { body: '# OSRS Path 2.25.0\n\n## Your saves\n\n- **Two profile lists** no longer pause saving.\n- more' }));
+    expect(r?.notes).toBe('Two profile lists no longer pause saving.');
+  });
+
   it('a normal release: version, file, address, size, checksum, the first line of the description', () => {
     const r = m.pickRelease(release('2.25.0'));
     expect(r).toMatchObject({ version: '2.25.0', name: 'OSRS-Put-2.25.0-portable.exe', size: SIZE, sha256: DIGEST, notes: 'Window by the bank and more' });

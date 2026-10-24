@@ -10,6 +10,7 @@ import { heldOf, levelOf, type PlayerState, type WorldPoint } from './playerStat
 import { SHOP_TOWN, accessSuffix, shopAccess, shopKey, spawnAccess, type AccessState } from './shopAccess';
 import { nameKey } from './checklist';
 import locationsJson from '../data/majorLocations.json';
+import stepsJson from '../data/steps.json';
 
 export type SourceKind = 'bag' | 'bank' | 'free' | 'shop' | 'ge' | 'drop';
 
@@ -24,6 +25,8 @@ export interface SourceOption {
   note?: string;
   /** A shop: whether the player may walk in (shopAccess.ts). Only an open shop is ever the primary source. */
   access?: AccessState;
+  /** An NPC who gives the item for free (FREE_GIVERS): first after what the player already has, whatever the distance. */
+  giver?: boolean;
 }
 
 export interface SourcePlan {
@@ -76,6 +79,26 @@ export function unusableSpawn(spawn: string, mode: 'f2p' | 'members'): boolean {
   return spawnAccess(spawn, { mode, quests: { known: false }, qp: null, level: () => null }).state === 'blocked';
 }
 
+/**
+ * Items an NPC hands out for free, from the route step that already sends the player to that NPC (its place is the step's, never a second copy):
+ * Duke Horacio gives the Anti-dragon shield during Dragon Slayer I and after it (OSRS Wiki, "Duke Horacio", "Anti-dragon shield"). Lumbridge is also
+ * where the free Home Teleport lands, so the giver comes before any shop or the exchange however far the player is.
+ */
+const FREE_GIVERS: Record<string, { stepId: string; note: string }> = {
+  'anti-dragon shield': { stepId: 'S5-02', note: 'during or after Dragon Slayer I; Home Teleport takes you to Lumbridge' },
+};
+
+function freeGiver(name: string, here: WorldPoint | undefined): SourceOption | null {
+  const g = FREE_GIVERS[nameKey(name)];
+  const step = g && (stepsJson as { id: string; mapLocation?: WorldPoint & { label: string } }[]).find((x) => x.id === g.stepId);
+  if (!g || !step?.mapLocation) return null;
+  const p = step.mapLocation;
+  return {
+    kind: 'free', label: `Free: ${p.label}`, price: 0, note: g.note, giver: true,
+    point: { x: p.x, y: p.y, plane: p.plane, label: p.label }, ...(here ? { distance: dist(p, here) } : {}),
+  };
+}
+
 /** A shop price at or above this is the item data's "not sold here" placeholder, not a price. */
 const NOT_SOLD_PRICE = 1e9;
 
@@ -119,6 +142,8 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
       ...(p ? { point: { x: p.x, y: p.y, plane: p.plane, label: p.label }, distance: here ? dist(p, here) : undefined } : {}),
     });
   }
+  const giver = freeGiver(input.name, here);
+  if (giver) out.push(giver);
   const shops: SourceOption[] = [];
   for (const b of d?.buyLocations ?? []) {
     if (b.members && s.mode === 'f2p') continue;
@@ -157,7 +182,7 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
   // "Free nearby" is no farther than FREE_NEAR tiles; farther, the free one goes on a par with the shop and the exchange.
   const rank = (o: SourceOption): number =>
     o.kind === 'bag' || o.kind === 'bank' ? 0 : o.access !== undefined && o.access !== 'open' ? 2.6
-      : o.kind === 'free' ? (o.distance === undefined || o.distance <= FREE_NEAR ? 1 : 2.5) : o.kind === 'drop' ? 3 : 2;
+      : o.kind === 'free' ? (o.giver || o.distance === undefined || o.distance <= FREE_NEAR ? 1 : 2.5) : o.kind === 'drop' ? 3 : 2;
   const ordered = out
     .filter((o) => !input.kinds || input.kinds.includes(o.kind))
     .map((o, i) => ({ o, i }))
