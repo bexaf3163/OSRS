@@ -25,7 +25,7 @@ const rel: Rel = { version: '2.99.0', name: 'OSRS-Put-2.99.0-portable.exe', url:
 function scripted(parts: Buffer[], end: 'end' | 'error' | 'hang', status = 200): Getter & { started: Promise<void> } {
   let started!: () => void;
   const ready = new Promise<void>((r) => { started = r; });
-  const g = ((_url, _h, onResponse) => {
+  const g = ((_url: string, _h: unknown, onResponse: (res: PassThrough & { statusCode: number }) => void) => {
     const res = Object.assign(new PassThrough(), { statusCode: status });
     setImmediate(() => {
       onResponse(res);
@@ -40,7 +40,7 @@ function scripted(parts: Buffer[], end: 'end' | 'error' | 'hang', status = 200):
       next();
     });
     return { destroy() { /* the response is destroyed by the downloader */ } };
-  }) as Getter & { started: Promise<void> };
+  }) as unknown as Getter & { started: Promise<void> };
   g.started = ready;
   return g;
 }
