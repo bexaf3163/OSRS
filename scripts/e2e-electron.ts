@@ -201,6 +201,58 @@ try {
   expect(await page.evaluate(() => localStorage.getItem('osrs-put:progress:recovery:local')) === '{broken', 'progress recovery: the damaged native browser record is preserved');
   expect(await page.locator('.progress-storage-warning').count() === 0, 'progress recovery: valid native file recovery leaves saving enabled');
 
+  // T01, the other native cases, all in this run's disposable data folder: a damaged file beside a valid browser copy, both damaged, and a save
+  // from a newer version. Each ends with a valid file and browser copy again, so the checks below start from a clean save.
+  const validText = readFileSync(file, 'utf8');
+  const markedIds = Object.entries(recovered.steps ?? {}).filter(([, v]) => v === 'done').map(([id]) => id);
+  const clearRecovery = () => page.evaluate(() => {
+    for (const k of Object.keys(localStorage)) if (k.startsWith('osrs-put:progress:recovery')) localStorage.removeItem(k);
+  });
+  const reloadWith = async (fileText: string, local: string) => {
+    writeFileSync(file, fileText, 'utf8');
+    await clearRecovery();
+    await page.evaluate(raw => localStorage.setItem('osrs-put:progress', raw), local);
+    await page.reload();
+    await page.waitForTimeout(2500);
+  };
+  const doneButtons = page.getByRole('button', { name: /^(Done|Mark as done|Mark as manually completed)/ });
+  const tryMark = async () => {
+    await page.evaluate(() => { location.hash = '#/'; });
+    await page.waitForTimeout(800);
+    if (await doneButtons.count()) await doneButtons.first().click();
+    await page.waitForTimeout(2500);
+  };
+  const warning = page.locator('.progress-storage-warning');
+
+  await reloadWith('{broken native file', validText);
+  expect(await page.evaluate(() => localStorage.getItem('osrs-put:progress:recovery:file')) === '{broken native file', 'progress recovery (damaged file): the damaged native file is kept as a recovery copy');
+  expect(await warning.count() === 0, 'progress recovery (damaged file): the valid browser copy keeps saving enabled');
+  expect(readdirSync(dataDir).some((n) => n.startsWith('progress.broken-') && readFileSync(join(dataDir, n), 'utf8') === '{broken native file'), 'progress recovery (damaged file): the native reader keeps the damaged bytes as progress.broken-<time>.json');
+  await tryMark();
+  let rewritten: { steps?: Record<string, string> } | null = null;
+  try { rewritten = JSON.parse(readFileSync(file, 'utf8')) as { steps?: Record<string, string> }; } catch { rewritten = null; }
+  expect(markedIds.length > 0 && !!rewritten && markedIds.every((id) => rewritten!.steps?.[id] === 'done'), 'progress recovery (damaged file): the next save writes a valid native file with the earlier marks');
+
+  await reloadWith('{broken native file', '{broken browser copy');
+  expect(await warning.count() === 1 && (await warning.innerText()).includes('Automatic saving is paused'), 'progress recovery (both damaged): saving is paused with a warning');
+  const afterLoad = readFileSync(file, 'utf8');
+  expect(afterLoad === '{broken native file', `progress recovery (both damaged): loading does not overwrite the damaged native file (got ${afterLoad.slice(0, 80)})`);
+  await tryMark();
+  const afterMark = readFileSync(file, 'utf8');
+  expect(afterMark === '{broken native file', `progress recovery (both damaged): the damaged native file is not overwritten (got ${afterMark.slice(0, 80)}; files ${readdirSync(dataDir).join(', ')})`);
+  expect(await page.evaluate(() => localStorage.getItem('osrs-put:progress:recovery:local')) === '{broken browser copy', 'progress recovery (both damaged): the damaged browser copy is kept');
+
+  const future = JSON.stringify({ ...JSON.parse(validText), version: 99 });
+  await reloadWith(future, validText);
+  expect(await warning.count() === 1 && (await warning.innerText()).includes('not supported'), 'progress recovery (newer version): a save from a newer version is reported as not supported');
+  await tryMark();
+  expect(readFileSync(file, 'utf8') === future, 'progress recovery (newer version): the newer save is never migrated or overwritten');
+
+  // Back to a clean, valid save for the rest of the run.
+  await reloadWith(validText, validText);
+  await page.waitForFunction(() => !document.querySelector('.progress-storage-warning'));
+  expect(await warning.count() === 0, 'progress recovery: a valid save again clears the warning');
+
   // Confirm a failed physical profile rename cannot be accepted by the actual preload.
   // Only this run's disposable temporary path is blocked.
   const profilesFile = join(dataDir, 'profiles.json');

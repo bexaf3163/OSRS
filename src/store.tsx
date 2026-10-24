@@ -55,6 +55,9 @@ interface StoreValue {
   dismissUpgrade: (stepId: string, dismissed?: boolean) => void;
   /** "I already have it" in the bulk shopping: a quantity or null — remove the mark. */
   setOwnedManual: (key: string, count: number | null) => void;
+  /** Several marks at once with one undo (the steps the game confirms). An ordinary edit: while saving is paused it stays paused. */
+  markSteps: (p: Progress, message: string) => void;
+  /** An explicit import: the only edit (with reset) that may write over preserved damaged sources and resume saving. */
   replace: (p: Progress, message: string) => void;
   reset: () => void;
   toast: Toast | null;
@@ -190,6 +193,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setProgress((p) => withOwnedManual(p, key, count));
   }, []);
 
+  const markSteps = useCallback((p: Progress, message: string) => {
+    const before = current.current;
+    setProgress(p);
+    show(message, before);
+  }, [show]);
+
   const replace = useCallback((p: Progress, message: string) => {
     if (!canPersist.current && !preserved.current) {
       show('Progress could not be replaced safely. Export it and make a copy of the original data first.');
@@ -240,10 +249,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
 
   const value = useMemo<StoreValue>(
     () => ({
-      progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, setFoodPicks, setCombatPicks, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
+      progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, setFoodPicks, setCombatPicks, review, reactivate, dismissUpgrade, setOwnedManual, markSteps, replace, reset,
       toast, notify, undo, dismissToast, persistenceWarning,
     }),
-    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, setFoodPicks, setCombatPicks, review, reactivate, dismissUpgrade, setOwnedManual, replace, reset,
+    [progress, mode, steps, stages, qp, maxQp, setStep, setLevel, setLevels, setNote, setMode, setSellRestrictions, setTaskDone, setMethodPicks, setFoodPicks, setCombatPicks, review, reactivate, dismissUpgrade, setOwnedManual, markSteps, replace, reset,
       toast, notify, undo, dismissToast, persistenceWarning],
   );
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;

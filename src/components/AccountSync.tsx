@@ -11,7 +11,7 @@ import { useStore } from '../store';
 
 /** compact — a plaque at the top of "Path" (hidden if there is nothing to mark); otherwise a card in settings. */
 export function AccountSync({ compact = false }: { compact?: boolean }) {
-  const { steps, progress, replace } = useStore();
+  const { steps, progress, markSteps } = useStore();
   const { state, plugin, questsDone, stats, gate } = useBridge();
   const [hidden, setHidden] = useState(false);
   const allowed = gateAllows(gate);
@@ -26,7 +26,7 @@ export function AccountSync({ compact = false }: { compact?: boolean }) {
       p = withStep(p, c.step.id, 'done', { stamp: false });
       if (stepById.get(c.step.id)?.updatedInV2) p = withReviewed(p, [c.step.id]);
     }
-    replace(p, `Earlier steps marked: ${unverified.length}`);
+    markSteps(p, `Earlier steps marked: ${unverified.length}`);
   };
 
   const apply = () => {
@@ -35,7 +35,7 @@ export function AccountSync({ compact = false }: { compact?: boolean }) {
       p = withStep(p, c.step.id, 'done', { stamp: false });
       if (stepById.get(c.step.id)?.updatedInV2) p = withReviewed(p, [c.step.id]);
     }
-    replace(p, `🎮 Steps marked from the game: ${list.length}`);
+    markSteps(p, `🎮 Steps marked from the game: ${list.length}`);
   };
 
   if (compact) {
