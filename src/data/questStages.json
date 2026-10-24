@@ -13472,6 +13472,17 @@
         ]
        },
        "k": "killTanglefoot"
+      },
+      {
+       "t": "Pick up the queen's secateurs from the floor: they drop when the Tanglefoot dies, and you need them to finish the quest.",
+       "s": "Pick up the queen's secateurs from the floor",
+       "at": [
+        2375,
+        4385,
+        0
+       ],
+       "has": "Queen's secateurs",
+       "k": "pickUpSecateurs"
       }
      ],
      "go": {
@@ -14718,6 +14729,24 @@
         ]
        },
        "k": "goUpToDaeroForTalkingToAwow"
+      },
+      {
+       "t": "Equip the Karamjan monkey greegree and wear the M'speak amulet, then enter the gate to Marim. The monkeys do not attack you while you hold the greegree.",
+       "s": "Marim gate: enter wearing the greegree and the M'speak amulet",
+       "at": [
+        2722,
+        2766,
+        0
+       ],
+       "hl": {
+        "obj": [
+         4788
+        ],
+        "item": [
+         "Karamjan monkey greegree"
+        ]
+       },
+       "k": "enterGate"
       },
       {
        "t": "Talk to Garkor.",

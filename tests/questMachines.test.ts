@@ -195,8 +195,8 @@ describe('Quest Helper state machines', () => {
         for (const p of out) if (!namesOf(m, p).some((n) => keys.has(n))) gaps.add(`${id}:${p[p.length - 1]}`);
       }
     }
-    // Known holes (30): detours by stairs and basement steps of secondary branches; new holes must not appear.
-    expect(gaps.size, [...gaps].join(', ')).toBeLessThanOrEqual(30);
+    // Known holes: detours by stairs and basement steps of secondary branches; new holes must not appear (21 after the 2.74.8 audit added Marim's gate and the secateurs).
+    expect(gaps.size, [...gaps].join(', ')).toBeLessThanOrEqual(21);
   });
 
   it('the tile and highlight of a line match the Quest Helper step (from its sources)', () => {
