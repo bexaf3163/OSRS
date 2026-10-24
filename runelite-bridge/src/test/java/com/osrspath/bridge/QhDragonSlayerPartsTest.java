@@ -33,7 +33,8 @@ public class QhDragonSlayerPartsTest
 
 	private static List<ActiveTarget.StageLine> lines(String step)
 	{
-		return target(step).getGuide().getStage().getStages().get(0).getSteps();
+		List<ActiveTarget.StageStep> stages = target(step).getGuide().getStage().getStages();
+		return stages.get(stages.size() - 1).getSteps();
 	}
 
 	/** The list line (from one) that the machine chose; 0 means the machine does not decide or decided by default. */
@@ -67,6 +68,19 @@ public class QhDragonSlayerPartsTest
 		QhFakeGame g = new QhFakeGame();
 		g.pos = new int[] {x, y, plane};
 		return g;
+	}
+
+	@Test
+	public void theGuildmastersQuestionsOneByOne()
+	{
+		// Each question clears its bit of varp 177: 14 the ship, 15 the shield, 11 Melzar, 12 Thalzar, 13 Lozar. All five lines stand by the Guildmaster.
+		QhFakeGame g = at(3190, 3360, 0);
+		g.varps.put(177, (1 << 11) | (1 << 12) | (1 << 13) | (1 << 15));
+		assertEquals("the ship asked: the shield next", line("S5-01", "askAboutShield"), pick("S5-01", GATHERING, g));
+		g.varps.put(177, (1 << 12) | (1 << 13));
+		assertEquals("Melzar asked (the Maze key came with it): Thalzar next, not the next step", line("S5-01", "askAboutThalzar"), pick("S5-01", GATHERING, g));
+		g.varps.put(177, 1 << 13);
+		assertEquals(line("S5-01", "askAboutLozar"), pick("S5-01", GATHERING, g));
 	}
 
 	@Test
