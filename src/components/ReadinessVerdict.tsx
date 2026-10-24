@@ -50,7 +50,7 @@ export function ReadinessVerdictCard({ step, noPill = false }: { step: Step; noP
         <span className="verdict-line">{v.headline}</span>
       </p>
       {combat?.variant && <p className="small verdict-variant">{combat.variant}</p>}
-      <p className="small muted verdict-bank">{v.bank.text}</p>
+      {!v.bankInHeadline && <p className="small muted verdict-bank">{v.bank.text}</p>}
       {(groups.length > 0 || v.cautions.length > 0) && (
         <details className="zen-more verdict-why">
           <summary className="small">Why</summary>

@@ -145,6 +145,7 @@ describe('the readiness verdict', () => {
     expect(v.level).toBe('UNKNOWN');
     expect(v.headline).toBe('Bank contents have not been checked; visit a bank to assess owned supplies.');
     expect(v.bank.state).toBe('never');
+    expect(v.bankInHeadline, 'the bank line under the headline would say it twice').toBe(true);
     expect(v.reasons.find((r) => r.text.startsWith('Trout'))).toMatchObject({ group: 'unknown', state: 'unknown' });
   });
 

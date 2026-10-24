@@ -13,6 +13,9 @@ describe('the in-game bag checks match the step kit', () => {
   // Food the audit left recommended on purpose (docs/COMBAT_AUDIT.md): at the start the bag holds the step's other items (S3-03: 25 bones for
   // Traiborn), so requiring the food there would not fit; the line checks it later, when the bag is free.
   const RECOMMENDED_ON_PURPOSE = new Set(['S3-03 Trout']);
+  // Needed only after a death before the volcano shortcut was opened (S5-08 repairShipAgainAndSail, OSRS Wiki: the hull is repaired again with
+  // 3 planks, 90 steel nails and a hammer). Every player would otherwise be told to bring them; the line itself checks them when it applies.
+  const ONLY_AFTER_A_DEATH = new Set(['S5-08 Plank', 'S5-08 Steel nails', 'S5-08 Hammer']);
 
   it('every brought item a line checks is a required item of the step', () => {
     const missing: string[] = [];
@@ -26,7 +29,7 @@ describe('the in-game bag checks match the step kit', () => {
         for (const line of st.do) {
           for (const p of line.pre ?? []) {
             if (p.at || got.has(key(p.item)) || listed.has(key(p.item)) || (p.alt ?? []).some((a) => listed.has(key(a)))) continue;
-            if (RECOMMENDED_ON_PURPOSE.has(`${step.id} ${p.item}`)) continue;
+            if (RECOMMENDED_ON_PURPOSE.has(`${step.id} ${p.item}`) || ONLY_AFTER_A_DEATH.has(`${step.id} ${p.item}`)) continue;
             missing.push(`${step.id} ${st.at}:${line.k} ${p.item}`);
           }
           if (line.has) got.add(key(line.has));

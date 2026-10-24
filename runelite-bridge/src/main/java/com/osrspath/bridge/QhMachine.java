@@ -332,7 +332,14 @@ final class QhMachine
 		return stages.has(String.valueOf(varValue));
 	}
 
-	/** The machine's pick for a quest variable value. */
+	/**
+	 * "By default" steps that are an answer, not a fallback: every condition before them was read and is false. Dragon Slayer I after sailing: not
+	 * on Crandor, not in the volcano and no shortcut opened means the ship must be repaired again (OSRS Wiki; a live death at Elvarg showed
+	 * "climb down the hole" instead).
+	 */
+	private static final java.util.Set<String> DECISIVE_DEFAULTS = java.util.Collections.singleton("repairShipAgainAndSail");
+
+	/** The machine's pick for a quest variable value, exactly as Quest Helper decides it (the golden reference). */
 	Verdict resolve(int varValue, Facts facts, Session session)
 	{
 		JsonElement root = stages.get(String.valueOf(varValue));
@@ -341,6 +348,17 @@ final class QhMachine
 			return Verdict.UNDECIDED;
 		}
 		return resolveNode(root, facts, session, new ArrayList<String>(), false, 0);
+	}
+
+	/** What the guide follows: resolve, with a decisive "by default" step taken as an answer. */
+	Verdict decide(int varValue, Facts facts, Session session)
+	{
+		Verdict v = resolve(varValue, facts, session);
+		if (!v.isStrong() && !v.isUndecided() && DECISIVE_DEFAULTS.contains(v.getLeaf()))
+		{
+			return new Verdict(v.getLeaf(), v.getPath(), true, false);
+		}
+		return v;
 	}
 
 	/** The steps the leaf "enters": itself and the parents from addSubSteps. */

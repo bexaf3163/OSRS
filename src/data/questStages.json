@@ -16215,6 +16215,28 @@
        "k": "unlockShortcut"
       },
       {
+       "t": "After a death before the shortcut was opened: board Lady Lumbridge in Port Sarim, repair the hole in the hull again (3 Planks, 90 Steel nails, a Hammer), then talk to Ned on deck to sail.",
+       "s": "After a death: repair the hull again and sail with Ned",
+       "at": [
+        3047,
+        3205,
+        0
+       ],
+       "hl": {
+        "obj": [
+         2593
+        ],
+        "item": [
+         "Plank",
+         "Steel nails",
+         "Hammer",
+         "Anti-dragon shield"
+        ]
+       },
+       "pre": [{"item": "Plank", "id": 960, "n": 3, "t": "Take 3 Planks: the hull needs repairing again"}, {"item": "Steel nails", "id": 1539, "n": 90, "t": "Take 90 Steel nails for the hull"}, {"item": "Hammer", "id": 2347, "t": "Take a Hammer for the hull"}, {"item": "Anti-dragon shield", "id": 1540, "at": [3211, 3223, 1], "t": "Get the Anti-dragon shield from Duke Horacio in Lumbridge Castle", "npc": "Duke Horacio"}, {"item": "Lobster", "id": 379, "n": 20, "alt": ["Swordfish", "Shark", "Monkfish", "Tuna"], "t": "Take 20 or more lobsters or other good food: there is no bank on Crandor"}],
+       "k": "repairShipAgainAndSail"
+      },
+      {
        "t": "After a death: re-equip (Anti-dragon shield worn, food, gear), sail from Port Sarim to Musa Point, walk west to the Karamja volcano and climb in. Your shortcut leads back to Crandor.",
        "s": "After a death: Karamja volcano (south of Brimhaven), climb in",
        "at": [

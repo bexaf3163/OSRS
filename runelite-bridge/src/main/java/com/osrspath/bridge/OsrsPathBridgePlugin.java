@@ -1564,7 +1564,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		QhMachine.Verdict v;
 		try
 		{
-			v = m.resolve(value, qhFacts(), qhSession);
+			v = m.decide(value, qhFacts(), qhSession);
 		}
 		catch (RuntimeException ex)
 		{

@@ -42,7 +42,7 @@ public class QhDragonSlayerPartsTest
 	{
 		QhMachine m = QhMachine.all().get(step);
 		assertNotNull("no machine " + step, m);
-		QhMachine.Verdict v = m.resolve(value, game, new QhMachine.Session());
+		QhMachine.Verdict v = m.decide(value, game, new QhMachine.Session());
 		if (v.isUndecided() || !v.isStrong())
 		{
 			return 0;
@@ -85,6 +85,19 @@ public class QhDragonSlayerPartsTest
 		assertEquals("back in the Crandor dungeon: Elvarg's lair", line("S5-08", "enterElvargArea"), pick("S5-08", sailed, g));
 		g.pos = new int[] {2855, 9637, 0};
 		assertEquals(line("S5-08", "killElvarg"), pick("S5-08", sailed, g));
+	}
+
+	@Test
+	public void afterADeathWithoutTheShortcut_repairTheShipAgain()
+	{
+		// Live 2.74.15 session: killed by Elvarg before opening the wall, respawned near Lumbridge; the card said "Crandor: climb down the hole".
+		final int sailed = 8;
+		QhFakeGame g = at(3203, 3173, 0);
+		g.varps.put(176, sailed);
+		g.varps.put(177, 0);
+		assertEquals("no shortcut: the hull again and Ned", line("S5-08", "repairShipAgainAndSail"), pick("S5-08", sailed, g));
+		g.pos = new int[] {2834, 3256, 0};
+		assertEquals("back on Crandor: the hole", line("S5-08", "enterCrandorHole"), pick("S5-08", sailed, g));
 	}
 
 	@Test

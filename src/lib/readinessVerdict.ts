@@ -46,6 +46,8 @@ export interface Reason {
   text: string;
 }
 
+const BANK_NEVER = 'Bank contents have not been checked; visit a bank to assess owned supplies.';
+
 export interface ReadinessVerdict {
   level: ReadinessLevel;
   label: string;
@@ -54,6 +56,8 @@ export interface ReadinessVerdict {
   reasons: Reason[];
   cautions: string[];
   bank: BankFreshness;
+  /** The headline already says the bank was never opened: the bank line under it would repeat it (seen live in 2.74.14). */
+  bankInHeadline: boolean;
   /** What the plan's percent measures, when it is shown. */
   percentNote: string;
 }
@@ -220,7 +224,7 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
       : prepHeadline(plan, combat ?? null, i.isFood);
   } else if (unknown.length) {
     level = 'UNKNOWN';
-    headline = bank.state === 'never' ? 'Bank contents have not been checked; visit a bank to assess owned supplies.' : `Cannot assess yet: ${unknown[0].text}`;
+    headline = bank.state === 'never' ? BANK_NEVER : `Cannot assess yet: ${unknown[0].text}`;
   } else if (cautions.length) {
     level = 'READY_CAUTIONS';
     headline = `Ready with cautions: ${cautions[0]}`;
@@ -228,7 +232,7 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
     level = 'READY';
     headline = combat ? `Ready: your kit and food suit ${combat.foe}.` : 'Ready: everything this step needs is with you.';
   }
-  return { level, label: LEVEL_LABEL[level], headline, reasons, cautions, bank, percentNote: PERCENT_NOTE };
+  return { level, label: LEVEL_LABEL[level], headline, reasons, cautions, bank, bankInHeadline: headline === BANK_NEVER, percentNote: PERCENT_NOTE };
 }
 
 /** The next action when something is to be taken or got: the bank first (it is already yours), then what to get, food named as food. */
