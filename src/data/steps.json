@@ -3865,7 +3865,12 @@
     "stage": 4,
     "type": "skill",
     "title": "Attack to 40",
-    "combatArmour": [1165, 1125, 1077, 1195],
+    "combatArmour": [
+      1165,
+      1125,
+      1077,
+      1195
+    ],
     "requires": [],
     "foes": [
       "Giant frog"
@@ -5169,14 +5174,35 @@
     "title": "Magic to 55 (High Level Alchemy)",
     "requires": [],
     "wikiUrl": "https://oldschool.runescape.wiki/w/High_Level_Alchemy",
-    "how": "Up to 43: combat spells on monsters: Fire Strike, from 35 Fire Bolt. From 43, Superheat Item on iron ore: a bar always comes out and Smithing levels along the way. At 55 High Level Alchemy opens: turn unneeded rune loot from the ogresses into coins.",
+    "how": "Follow the current spell and its listed supplies. Strike spells are the budget fallback; at Magic 43 and Smithing 15, compare a prepared Superheat Item batch. Alchemy requires chosen expendable targets and verified costs; it is not an automatic unfunded default. Magic 55 unlocks High Level Alchemy but does not guarantee profit.",
     "itemsRequired": [
       {
-        "nameEn": "Nature rune",
-        "amount": "As many as casts",
-        "howToGet": "Compare the item's alchemy value with its acquisition cost and all consumed rune costs, including fire runes not supplied by equipment. Check the current estimates before casting.",
-        "wikiItemId": 561,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Nature_rune.png"
+        "nameEn": "Mind rune",
+        "amount": 100,
+        "howToGet": "Starter Wind Strike batch; the current method replaces this with its actual supplies.",
+        "wikiItemId": 558,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Mind_rune.png"
+      },
+      {
+        "nameEn": "Air rune",
+        "amount": 100,
+        "howToGet": "Wind Strike uses one air per cast; an equipped owned Staff of air can replace it.",
+        "wikiItemId": 556,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Air_rune.png"
+      },
+      {
+        "nameEn": "Trout",
+        "amount": 5,
+        "anyOf": [
+          "Salmon",
+          "Tuna",
+          "Lobster",
+          "Swordfish"
+        ],
+        "heals": 7,
+        "howToGet": "Starter combat food, not the whole goal. Bank when supplies run out.",
+        "wikiItemId": 333,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Trout.png"
       }
     ],
     "doneWhen": "Magic 55.",
@@ -5197,8 +5223,21 @@
       {
         "label": "Optional",
         "text": "One of the ways to earn towards a Bond. Skip it if another way pays you better."
+      },
+      {
+        "label": "Requirements",
+        "text": "Magic 1. The current method checks its actual spell and Smithing unlocks."
       }
-    ]
+    ],
+    "followsMethod": "magic",
+    "requirements": [
+      {
+        "type": "skill",
+        "skill": "magic",
+        "min": 1
+      }
+    ],
+    "where": "The current method supplies its location after your Magic level is checked."
   },
   {
     "id": "S6-05",

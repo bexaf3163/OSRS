@@ -3,7 +3,7 @@
 
 import spellsJson from '../data/spells.json';
 import { levelForXp, xpForLevel } from './xp';
-import { heldExact, wornItemsOf, type PlayerState } from './playerState';
+import { heldExact, levelOf, wornItemsOf, type PlayerState } from './playerState';
 import { countWorn } from './equipmentCount';
 import type { MethodNeed } from './trainingRouter';
 
@@ -16,6 +16,29 @@ export const STAFFS = spellsJson.staffs as Record<string, Staff>;
 export const COWHIDE_ID = spellsJson.cowhideId;
 
 export const SUPERHEAT_WATCH = ['Nature rune', 'Fire rune', 'Iron ore', STAFFS.fire.name];
+export const STRIKE_WATCH = ['Mind rune', 'Air rune', 'Water rune', 'Earth rune', 'Fire rune', ...Object.values(STAFFS).map(s => s.name), 'Trout', 'Salmon', 'Tuna', 'Lobster', 'Swordfish'];
+
+/** Prefer a higher unlocked Strike only when its actual ingredients are already confirmed.
+ * Otherwise Wind Strike is the inexpensive fallback; no unavailable price is treated as an affordable upgrade.
+ */
+export function strikeRecipe(state: PlayerState): { spell: Spell; needs: MethodNeed[] } {
+  const worn = wornItemsOf(state);
+  const staves = Object.entries(STAFFS);
+  const staff = staves.find(([, s]) => countWorn(worn, n => n.toLowerCase() === s.name.toLowerCase()).count > 0)
+    ?? staves.find(([, s]) => (heldExact(state, s.name).total ?? 0) > 0);
+  const pool = SPELLS.filter(s => s.id.endsWith('-strike') && s.level <= (levelOf(state, 'magic') ?? 1));
+  const spent = (s: Spell) => Object.entries(s.runes).filter(([element]) => element !== staff?.[0]);
+  const spell = [...pool].reverse().find(s => spent(s).every(([element, qty]) => (heldExact(state, `${element[0].toUpperCase()}${element.slice(1)} rune`).total ?? 0) >= qty * 20)) ?? pool[0];
+  const batch = spent(spell).every(([element, qty]) => (heldExact(state, `${element[0].toUpperCase()}${element.slice(1)} rune`).total ?? 0) >= qty * 20) ? 20 : 100;
+  const foods = ['Trout', 'Salmon', 'Tuna', 'Lobster', 'Swordfish'];
+  const foodCount = foods.some(name => (heldExact(state, name).bag ?? 0) > 0) ? 1 : 5;
+  return { spell, needs: [
+    { type: 'skill', skill: 'magic', min: spell.level },
+    ...spent(spell).map(([element, qty]): MethodNeed => ({ type: 'item', name: `${element[0].toUpperCase()}${element.slice(1)} rune`, count: qty * batch })),
+    ...(staff ? [{ type: 'item' as const, name: staff[1].name, equip: true }] : []),
+    { type: 'item', name: foods[0], count: foodCount, anyOf: foods.slice(1) },
+  ] };
+}
 
 /** A physical starter bag: 25 unnoted iron ore + two rune stacks fit in 28 slots.
  * OSRS Wiki: Superheat Item uses one nature/four fire per ore, Magic43/Smithing15.

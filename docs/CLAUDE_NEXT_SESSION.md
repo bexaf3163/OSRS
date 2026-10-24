@@ -1,5 +1,13 @@
 # Claude continuation — start here
 
+## Newest source: actual S6-04 Magic preparation
+
+Final target-clear follow-up also checks a previously projected combat step: switching it to Superheat clears old Cow highlights. All1,937 Vitest/153files, TypeScript/build and data0errors/warnings pass after that fix; full Java608 passed with the updated native fixture. Fresh cumulative browser/portable acceptance is still required.
+
+[CODEX_MAGIC_ROUTE_HANDOFF.md](CODEX_MAGIC_ROUTE_HANDOFF.md) supersedes the Nature-only fallback and Superheat-only scope below. Current spell, runes, owned equipped staff, food and actual unlocks now project through the canonical method path; unverified alchemy/splash setups remain manual alternatives. Existing Magic55/IDs/optional branch are retained. All1,936 Vitest/153files, TypeScript/build, data0errors/warnings and Java608 pass locally. Fresh Chromium/actual portable acceptance remains required. This newer code is not in the verified preview below.
+
+Verified cumulative source463d635671c8f224b818cc8fc54027b4b8909e09 (localfb1118e, exacttree83f7bc76bc72014070813c36d3128b0ab89ffe28) passed [Checks40085079335](https://github.com/bexaf3163/OSRS/actions/runs/40085079335): all1,923 Vitest, build/data, full Java, complete Chromium and isolated actual portable. [Test EXE](https://github.com/bexaf3163/OSRS/releases/download/audit-test-463d6356/OSRS-Path-audit-test-463d6356.exe), SHA256 **1a5d8ed91c250069af9627c331572ad2256534696bf7a943d0762cb9338d7313**, matches actual test log and GitHub asset digest. All six prior Ranged browser failures are resolved with original assertions retained. Main/stable remain batched; live gameplay acceptance and broader T01–T17 remain open.
+
 ## Current cumulative local gates — 8f247f1
 
 All1,923 Vitest/152files, TypeScript/build and data0errors/warnings pass after the Ranged banked-food and Superheat consumed-bag repairs. Last full Java608 passed; no Java changes since. This source still requires a fresh Chromium/actual portable CI run. Source640370b mapped exactly to remote569bc7c9/tree03dcdb438b022ea81b3173cce62dbdd038ca89aa, but that older run failed the six browser assertions below; its portable success is not full release acceptance. Continue the open S6-04 progression/budget work after fresh acceptance; do not call T11 or the full audit complete.

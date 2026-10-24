@@ -217,6 +217,8 @@ async function run(browser: Browser) {
   if (!process.env.UI_ONLY) await accountSyncProofScenarios(browser);
   if (process.env.UI_ONLY === 'item-food') { await retainedCombatFoodScenario(browser); return; }
   if (process.env.UI_ONLY === 'magic-funding') { await magicFundingScenarios(browser); return; }
+  if (process.env.UI_ONLY === 'magic-route') { await magicRouteScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await magicRouteScenarios(browser);
   if (process.env.UI_ONLY === 'consumer-dependencies') { await consumerDependencyScenarios(browser); return; }
   if (!process.env.UI_ONLY) await magicFundingScenarios(browser);
   if (process.env.UI_ONLY === 'stock-certainty') { await combatRouteScenarios(browser); return; }
@@ -2256,6 +2258,39 @@ async function consumerDependencyScenarios(browser: Browser) {
     expect(!(await page.locator('main').innerText()).includes('First S8-04'), `consumer skills (${width}): reached Lost City skills do not demand unrelated Ranged/Slayer/Cooking`);
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}').steps?.['S8-04']) === 'skipped', `consumer skills (${width}): the producer remains skipped, not completed`);
     expect(await noOverflow(page) && !errors.length, `consumer skills (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function magicRouteScenarios(browser: Browser) {
+  for (const width of [390, 1280]) {
+    const names = ['Mind rune', 'Air rune', 'Water rune', 'Earth rune', 'Fire rune', 'Nature rune', 'Iron ore', 'Staff of air', 'Staff of water', 'Staff of earth', 'Staff of fire', 'Trout', 'Salmon', 'Tuna', 'Lobster', 'Swordfish'];
+    const stock = (counts: Record<string, number>) => names.map(name => ({ name, carried: counts[name] ?? 0, noted: 0, bank: 0 }));
+    const stats = { magic: 1, smithing: 15 };
+    const gear = { equipment: [], inventory: [], coins: 0, bankCoins: 0 };
+    const { page, errors } = await open(browser, width, {
+      market: true, progress: progressBefore('S6-04', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-04' },
+      status: { protocol: 6, inGame: true, activeStepId: 'S6-04', player: 'Magic Supplies', stats, ...gear },
+      events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: stock({}) }],
+    }, '#/step/S6-04');
+    const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
+    const initial = await snapshot();
+    expect(initial?.step?.checklist?.some((r: any) => r.name === 'Mind rune' && r.count === 100) && !initial.step.checklist.some((r: any) => r.name === 'Nature rune'), `magic (${width}): a beginner gets actual Strike inputs instead of a nature-only placeholder`);
+    const nextStats = { magic: 43, smithing: 15 };
+    await page.evaluate(({ stats, items }) => { const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void }; w.__status = { ...w.__status, stats }; w.__emit({ type: 'STATS', stats }); w.__emit({ type: 'OWNED', bankSeen: true, items }); }, { stats: nextStats, items: stock({ 'Nature rune': 25, 'Iron ore': 25, 'Fire rune': 100 }) });
+    await page.waitForTimeout(1500);
+    const utility = await snapshot();
+    expect(utility?.step?.checklist?.some((r: any) => r.name === 'Iron ore' && r.count === 25) && utility.step.checklist.some((r: any) => r.name === 'Fire rune' && r.count === 100) && !(utility.step.npcNames?.length), `magic (${width}): an unlocked supplied Superheat batch replaces the combat inputs and NPCs`);
+    const staffGear = { ...gear, equipment: [{ id: 1387, name: 'Staff of fire', slot: 'weapon', count: 1 }] };
+    await page.evaluate(({ gear, items }) => { const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void }; w.__status = { ...w.__status, ...gear }; w.__emit({ type: 'GEAR', gear }); w.__emit({ type: 'OWNED', bankSeen: true, items }); }, { gear: staffGear, items: stock({ 'Nature rune': 24, 'Iron ore': 24, 'Staff of fire': 1 }) });
+    await page.waitForTimeout(1500);
+    const remaining = await snapshot();
+    expect(remaining?.step?.checklist?.some((r: any) => r.name === 'Staff of fire' && r.equip) && remaining.step.checklist.some((r: any) => r.name === 'Iron ore' && r.count === 24) && !remaining.step.checklist.some((r: any) => r.name === 'Fire rune'), `magic (${width}): worn staff substitution and the remaining castable bag reach one snapshot`);
+    await reveal(page, '.training:visible');
+    expect((await text(page, '.training:visible')).includes('Superheat Item') && !(await text(page, '.training-recommendation')).includes('Alchemy'), `magic (${width}): desktop and game share the usable method`);
+    expect(Boolean((await page.locator('.training details').textContent())?.includes('manual setup')), `magic (${width}): unverified alternatives remain disclosed behind details`);
+    expect(await noOverflow(page) && !errors.length, `magic (${width}): no overflow or runtime errors`);
     await page.context().close();
   }
 }

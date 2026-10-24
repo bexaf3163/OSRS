@@ -13,13 +13,14 @@ import { matchStrict } from '../services/locationResolver';
 import { AXES, PICKAXES } from './toolTiers';
 import type { MethodNeed } from './trainingRouter';
 import { RANGED_WATCH } from './rangedLoadout';
-import { SUPERHEAT_WATCH } from './magicPlan';
+import { STRIKE_WATCH, SUPERHEAT_WATCH } from './magicPlan';
+import { healsOf } from './combatEstimate';
 
 /** The stored pick when the skill's goal is already reached: no tool of that skill is asked for. */
 export const GOAL_REACHED = 'goal-reached';
 export const UNKNOWN_GOAL_PREFIX = 'goal-unknown:';
 /** Resolved supplies travel with the method pick, as combat/food projections already do; the store never rebuilds a loadout from stale state. */
-export type TrainingPick = string | { methodId: string; needs: MethodNeed[] };
+export type TrainingPick = string | { methodId: string; needs: MethodNeed[]; name?: string };
 
 interface RawMethod { id: string; skills: string[]; name: string; from: number; to: number | null; needs?: MethodNeed[]; place?: string; objectNames?: string[]; npcNames?: string[]; where: string; note?: string }
 
@@ -60,6 +61,7 @@ export function methodToolNames(step: Pick<Step, 'followsMethod' | 'inGame'>): s
   const names = new Set<string>();
   if (skills.includes('ranged')) for (const name of RANGED_WATCH) names.add(name);
   if (skills.includes('magic')) for (const name of SUPERHEAT_WATCH) names.add(name);
+  if (skills.includes('magic')) for (const name of STRIKE_WATCH) names.add(name);
   for (const m of RAW) if (m.skills.some(skill => skills.includes(skill))) for (const need of m.needs ?? []) for (const name of needNames(need)) names.add(name);
   return [...names];
 }
@@ -77,6 +79,7 @@ function requirement(n: MethodNeed, m: RawMethod): StepItemRequirement | null {
     ...(known ? { wikiItemId: known.id, iconUrl: known.iconUrl } : {}),
     ...(names.length > 1 ? { anyOf: names.slice(1) } : {}),
     ...(n.type === 'item' && n.equip ? { equip: true } : {}),
+    ...(healsOf(name) !== null ? { heals: healsOf(name)! } : {}),
   };
 }
 
@@ -111,19 +114,22 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
         npcNames: [], npcIds: [], objectNames: [], objectIds: [], highlightItems: [], goal: 'Training goals reached' } } : {}),
     };
   }
-  const m = METHODS.get(id);
+  const raw = METHODS.get(id);
+  const m = raw && typeof pick !== 'string' && pick.name ? { ...raw, name: pick.name } : raw;
   const goals = followedGoals(step);
   const goal = goals.find(g => m?.skills.includes(g.skill));
   if (!m || !goal) return step;
   const needs = typeof pick === 'string' ? m.needs ?? [] : pick.needs;
+  const gates = needs.filter((n): n is Extract<MethodNeed, { type: 'skill' | 'quest' }> => n.type === 'skill' || n.type === 'quest');
+  const requirements = [...(step.requirements ?? []).filter(r => r.type !== 'skill' || !gates.some(n => n.type === 'skill' && n.skill === r.skill && n.min >= r.min)), ...gates];
   const itemsRequired = needs.map((n) => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null);
   const at = methodPoint(id);
   return {
     ...step,
     followsMethod: goal.skill,
     itemsRequired,
-    requirements: [...step.requirements ?? [], ...needs.filter((n): n is Extract<MethodNeed, { type: 'skill' | 'quest' }> => n.type === 'skill' || n.type === 'quest')],
-    ...(goal.skill !== step.followsMethod || goal.skill === 'mining' || goal.skill === 'woodcutting' || goal.skill === 'ranged' ? {
+    requirements,
+    ...(goal.skill !== step.followsMethod || goal.skill === 'mining' || goal.skill === 'woodcutting' || goal.skill === 'ranged' || goal.skill === 'magic' ? {
       itemsRecommended: [], foes: undefined, threats: undefined, pacing: undefined,
       where: m.where, how: `Train ${goal.skill} to ${goal.target}: ${m.name}. ${m.note ?? ''}`.trim(),
       quickSteps: ['Bank finished-skill tools and surplus supplies before withdrawing the current batch.', `Prepare the listed supplies for ${m.name}.`, `Train ${goal.skill} to ${goal.target} at ${m.where}. ${m.note ?? ''}`.trim()],
@@ -135,7 +141,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
       worldPoint: at ?? undefined, groundTiles: at ? [at] : [], pathWaypoints: undefined,
       goal: at?.label ?? `${m.name}: ${m.where}`,
       objectNames: m.objectNames ?? [], objectIds: [],
-      ...(m.npcNames || goal.skill !== step.followsMethod || goal.skill === 'ranged' ? { npcNames: m.npcNames ?? [], npcIds: [] } : {}),
+      ...(m.npcNames || goal.skill !== step.followsMethod || goal.skill === 'ranged' || goal.skill === 'magic' ? { npcNames: m.npcNames ?? [], npcIds: [] } : {}),
       highlightItems: itemsRequired.map((i) => i.nameEn),
     } } : {}),
   };

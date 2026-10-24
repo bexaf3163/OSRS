@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/combatAudit.json` (revisio
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-26 stages: 12 retained, 8 revised, 2 with a branch, 4 deferred.
+27 stages: 12 retained, 9 revised, 2 with a branch, 4 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -26,6 +26,7 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S5-03 Map piece 1: Melzar's Maze | quest-fight | yes | Melzar the Mad (43), Lesser demon (82) | melee | Melzar the Mad | Salmon 10 | Retain |
 | S5-08 The battle with the dragon Elvarg | quest-fight | yes | Elvarg (83) | melee | Elvarg | Lobster 20+ | Retain |
 | S6-01 Ranged to 50 with a prepared ranged loadout | training | no | Seagull (3), Monk, Giant frog | other | - | - | Revised |
+| S6-04 Magic to 55 (High Level Alchemy) | training | no | Cow, Chicken | other | - | Trout 5 | Revised |
 | S7-02 Fight Arena | quest-fight | yes | Khazard Ogre (63), Khazard scorpion (44), Bouncer (137) | safespot | - | - | Retain |
 | S7-03 Tree Gnome Village | quest-fight | yes | Khazard warlord (112) | safespot | - | - | Retain |
 | S7-05 The Grand Tree | quest-fight | yes | Black demon (172) | safespot | - | - | Retain |
@@ -418,6 +419,35 @@ Evidence:
 - https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training
 - https://oldschool.runescape.wiki/w/Ranged_bows
 - tests/rangedPreparation.test.ts
+
+## S6-04 Magic to 55 (High Level Alchemy)
+
+**Revised.** Optional Magic55 using spell-dependent supplies: budget Strikes or an actually usable Superheat iron batch.
+
+Assumptions:
+
+- Select the named spell; equipped elemental staff substitution is explicit.
+- Remove metal armour and verify actual combat damage/XP; no full Magic attack/weakness simulation is claimed.
+
+Problems:
+
+- Full-goal costs, complete magic equipment/weakness modelling and measured combat rates remain open.
+- Alchemy targets and splash setup are not automatically verified; those methods remain manual alternatives.
+
+Alternatives:
+
+- Prepared Superheat iron needs Magic43 and Smithing15.
+- Known higher Strike ingredients can replace the Wind Strike fallback.
+
+Changed:
+
+- Unreleased2.74.3: canonical method projection replaces the Nature-only fallback and unverified automatic alchemy/splash selection.
+
+Evidence:
+
+- https://oldschool.runescape.wiki/w/Free-to-play_Magic_training
+- https://oldschool.runescape.wiki/w/Superheat_Item
+- tests/magicRouteSupplies.test.ts
 
 ## S7-02 Fight Arena
 

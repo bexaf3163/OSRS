@@ -24,7 +24,7 @@ export function pickMethods(steps: readonly Step[], state: PlayerState, mode: Ga
       continue;
     }
     const best = adviseTraining({ skill: goal.skill, target: goal.target, state, mode, style, priority }).best;
-    if (best) picks[step.id] = best.method.kit ? { methodId: best.method.id, needs: methodNeeds(best.method, state) } : best.method.id;
+    if (best) picks[step.id] = best.method.kit ? { methodId: best.method.id, needs: methodNeeds(best.method, state), name: best.method.name } : best.method.id;
   }
   return picks;
 }

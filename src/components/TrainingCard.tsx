@@ -46,7 +46,8 @@ function Alternative({ v }: { v: MethodView }) {
     <li>
       <strong>{m.name}</strong>
       <span className="muted"> — {m.where}{m.xph ? `; ≈ ${m.xph[0] === m.xph[1] ? m.xph[0].toLocaleString('en-US') : `${m.xph[0].toLocaleString('en-US')}–${m.xph[1].toLocaleString('en-US')}`} XP per hour (wiki)` : ''}</span>
-      {v.status === 'PREP' && <span className="muted"> · first: {v.missing.map((x) => x.label).join(', ')}</span>}
+      {v.status === 'PREP' && v.missing.length > 0 && <span className="muted"> · first: {v.missing.map((x) => x.label).join(', ')}</span>}
+      {m.manualSetup && <span className="muted"> · manual setup: {m.manualSetup}</span>}
       {v.status === 'LOCKED' && <span className="muted"> · locked: {v.missing.map((x) => x.label).join(', ')}</span>}
     </li>
   );

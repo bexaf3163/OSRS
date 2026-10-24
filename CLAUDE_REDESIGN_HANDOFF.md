@@ -1,5 +1,7 @@
 # 2.74.2 route repair
 
+Newest source: [Magic route supplies](docs/CODEX_MAGIC_ROUTE_HANDOFF.md); actual S6-04 recipes replace its Nature-only placeholder. Latest verified preview463d6356 includes prior Ranged/Superheat fixes, not this newer route block. Start with docs/CLAUDE_NEXT_SESSION.md; do not apply earlier portable acceptance to later changes.
+
 Newest source: [Ranged preparation](docs/CODEX_RANGED_PREPARATION_HANDOFF.md), current F2P trainers and compatible owned bow/ammunition. Current-tree acceptance pending; earlier receipts are source-specific. Continue from docs/CLAUDE_NEXT_SESSION.md.
 
 Newest source: [equipped quantity parity](docs/CODEX_EQUIPMENT_QUANTITY_HANDOFF.md), with actual stack counts and UNKNOWN preserved across readiness/preparation/checklist. Combined skill handovers now pass complete automated/portable gates on e6a37913; newer quantity source needs final browser/packaged acceptance. Start with the current section of [CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md).

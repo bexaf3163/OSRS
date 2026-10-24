@@ -16,7 +16,7 @@ import { levelOf, type PlayerState } from './playerState';
 import { xpForLevel } from './xp';
 import type { MethodPriority, PlayStyle } from './playStyle';
 import { rangedNeeds, RANGED_WATCH } from './rangedLoadout';
-import { superheatNeeds } from './magicPlan';
+import { strikeRecipe, superheatNeeds } from './magicPlan';
 
 export type Effort = 'afk' | 'low' | 'medium' | 'high';
 export type MethodCost = 'free' | 'profit' | 'cost';
@@ -42,7 +42,9 @@ export interface TrainingMethod {
   name: string;
   members: boolean;
   needs: MethodNeed[];
-  kit?: 'f2p-bow' | 'superheat-iron';
+  kit?: 'f2p-bow' | 'superheat-iron' | 'strike-spell';
+  /** Visible manual alternative; never an automatic default until this setup is modelled/verified. */
+  manualSetup?: string;
   /** XP per hour per the wiki: [from, to] — a guide. */
   xph: [number, number] | null;
   /** XP per single action — the game's exact value. */
@@ -67,7 +69,7 @@ export interface TrainingMethod {
 
 interface Raw {
   id: string; skill: string | string[]; from: number; suggestedFrom?: number; to: number | null; name: string; members: boolean;
-  needs?: MethodNeed[]; kit?: 'f2p-bow' | 'superheat-iron'; xph?: [number, number]; xpa?: number; act?: string; effort: Effort; cost: MethodCost; risk: Risk;
+  needs?: MethodNeed[]; kit?: TrainingMethod['kit']; manualSetup?: string; xph?: [number, number]; xpa?: number; act?: string; effort: Effort; cost: MethodCost; risk: Risk;
   where: string; place?: string; objectNames?: string[]; npcNames?: string[]; note?: string; url: string; kind?: 'method' | 'quest'; xpTotal?: number;
 }
 
@@ -82,6 +84,7 @@ export const trainingMethods: TrainingMethod[] = (methodsJson as unknown as { me
   ...(m.npcNames ? { npcNames: m.npcNames } : {}),
   ...(m.suggestedFrom !== undefined ? { suggestedFrom: m.suggestedFrom } : {}),
   ...(m.kit ? { kit: m.kit } : {}),
+  ...(m.manualSetup ? { manualSetup: m.manualSetup } : {}),
 }));
 
 interface Tier { tier: string; levelReq: number }
@@ -132,15 +135,18 @@ export interface MethodView {
 }
 
 export function viewMethod(m: TrainingMethod, state: PlayerState): MethodView {
+  if (m.kit === 'strike-spell') m = { ...m, name: `${strikeRecipe(state).spell.name} on cows and chickens` };
   const needs = methodNeeds(m, state).map((n) => needStatus(n, state));
+  if (m.manualSetup) needs.push({ kind: 'item', label: m.manualSetup, state: 'UNKNOWN', detail: 'Manual setup has not been verified.' });
   if (m.kit === 'f2p-bow' && state.mode !== 'f2p') needs.push({ kind: 'item', label: 'Members ranged loadout', state: 'UNKNOWN', detail: 'This starter kit models ordinary F2P bows only; check your Members weapon and ammunition separately.' });
   const locked = needs.filter((n) => (n.kind === 'quest' || n.kind === 'skill') && n.state === 'MISSING');
   const prep = needs.filter((n) => (n.kind === 'item' || n.kind === 'tool') && (n.state === 'MISSING' || n.state === 'PARTIAL' || n.state === 'BANK'));
   const unchecked = needs.filter((n) => n.state === 'UNKNOWN');
-  return { method: m, status: locked.length ? 'LOCKED' : prep.length ? 'PREP' : 'READY', missing: [...locked, ...prep], unchecked };
+  return { method: m, status: locked.length ? 'LOCKED' : prep.length || m.manualSetup ? 'PREP' : 'READY', missing: [...locked, ...prep], unchecked };
 }
 
 export function methodNeeds(m: TrainingMethod, state: PlayerState): MethodNeed[] {
+  if (m.kit === 'strike-spell') return strikeRecipe(state).needs;
   if (m.kit === 'superheat-iron') return superheatNeeds(state);
   // Stage 6 is F2P-only. Do not demand a weaker F2P bow from Members using an unmodelled weapon.
   if (m.kit === 'f2p-bow' && state.mode !== 'f2p') return m.needs.filter(n => n.type !== 'item' || !RANGED_WATCH.includes(n.name));
@@ -181,6 +187,9 @@ export function practicalRate(m: TrainingMethod): number | null {
  */
 function compare(priority: MethodPriority, xpLeft?: number, level?: number) {
   return (a: MethodView, b: MethodView): number => {
+    if (Boolean(a.method.manualSetup) !== Boolean(b.method.manualSetup)) return Number(Boolean(a.method.manualSetup)) - Number(Boolean(b.method.manualSetup));
+    const uncheckedEntry = (v: MethodView) => v.unchecked.some(n => n.kind === 'skill' || n.kind === 'quest');
+    if (uncheckedEntry(a) !== uncheckedEntry(b)) return Number(uncheckedEntry(a)) - Number(uncheckedEntry(b));
     // Unchecked supplies must not beat a confirmed preparation step merely by being labelled READY.
     // Keep them available and disclose their uncertainty; do not invent missing quantities.
     // The same ranged kit should not drop back to an earlier trainer after equipping its arrows merely because owned food needs withdrawal.
@@ -319,7 +328,7 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
   const legs: PathLeg[] = [];
   for (let lv = level; lv < target; lv++) {
     // For future levels the item requirements are not counted: "what will be needed", not "what there is now".
-    const cands = methodsFor(skill, methods).filter((m) => availableAt(m, lv, input.mode)).map((m) => viewMethod(m, input.state)).filter((v) => v.status !== 'LOCKED' || v.missing.every((x) => x.kind === 'skill'));
+    const cands = methodsFor(skill, methods).filter((m) => !m.manualSetup && availableAt(m, lv, input.mode)).map((m) => viewMethod(m, input.state)).filter((v) => v.status !== 'LOCKED' || v.missing.every((x) => x.kind === 'skill'));
     cands.sort(compare(priority, undefined, lv));
     let pick = (lv === level ? cands.find(c => c.method.id === first?.id)?.method : undefined) ?? cands[0]?.method;
     if (!pick) continue;
@@ -347,7 +356,7 @@ export function adviseTraining(input: AdviceInput): TrainingAdvice {
   const xpNow0 = input.xp ?? xpForLevel(level);
   const cmp = compare(priority, Math.max(0, xpForLevel(target) - xpNow0), level);
   const views = methodsFor(skill, methods).filter((m) => availableAt(m, level, mode)).map((m) => viewMethod(m, state)).sort(cmp);
-  const best = views.find((v) => v.status !== 'LOCKED') ?? null;
+  const best = views.find((v) => !v.method.manualSetup && v.status !== 'LOCKED') ?? null;
   const others = views.filter((v) => v !== best).slice(0, 3);
   const quests = methodsFor(skill, methods).filter((m) => m.kind === 'quest' && m.from <= level && (m.to === null || level < m.to) && (mode === 'members' || !m.members));
   const path = buildPath(skill, level, target, input, priority, best?.method ?? null);

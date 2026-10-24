@@ -29,17 +29,20 @@ describe('the preference', () => {
 });
 
 describe('balanced, on the real catalogue', () => {
-  it('Magic 30 (F2P): balanced and fastest pick alching; only relaxed keeps the slow AFK splashing first', () => {
+  it('Magic 30 does not auto-select unverified alchemy targets or splash equipment', () => {
     const at = (priority: 'balanced' | 'fastest' | 'relaxed') => adviseTraining({ skill: 'magic', target: 40, state: stateAt('magic', 30), mode: 'f2p', style: 'chill', priority }).best?.method.id;
-    expect(at('balanced')).toBe('ma-alch');
-    expect(at('fastest')).toBe('ma-alch');
-    expect(at('relaxed')).toBe('ma-splash');
+    expect(at('balanced')).toBe('ma-strike');
+    expect(at('fastest')).toBe('ma-strike');
+    expect(at('relaxed')).toBe('ma-strike');
   });
 
-  it('a high-attention method is not the default when a calmer one is about as fast: Magic 1 splashes rather than strikes', () => {
+  it('an unchecked splash setup remains a manual alternative instead of an automatic beginner default', () => {
     const r = adviseTraining({ skill: 'magic', target: 10, state: stateAt('magic', 1), mode: 'f2p', style: 'chill', priority: 'balanced' });
-    expect(r.best?.method.effort).not.toBe('high');
-    expect(r.reason).toMatch(/clicks|attention/);
+    expect(r.best?.method.id).toBe('ma-strike');
+    const splash = r.others.find(v => v.method.id === 'ma-splash')!;
+    expect(splash.status).toBe('PREP');
+    expect(splash.unchecked.some(n => n.state === 'UNKNOWN' && /-64/.test(n.label))).toBe(true);
+    expect(r.path.every(l => !l.method.manualSetup)).toBe(true);
   });
 
   it('every skill and level gets an answer from the same catalogue, never a locked method as the best', () => {

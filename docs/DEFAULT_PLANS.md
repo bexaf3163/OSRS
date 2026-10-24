@@ -32,11 +32,12 @@ older save stays as "Fastest"; "Relaxed" keeps the old calm order.
 | S6-03 Mining to 60 (Mining Guild) and Woodcutting to 60 (yews) | mining 20 (F2P) | Copper and tin | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
 | S6-03 Mining to 60 (Mining Guild) and Woodcutting to 60 (yews) | mining 30 (F2P) | Copper and tin | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
 | S6-03 Mining to 60 (Mining Guild) and Woodcutting to 60 (yews) | mining 40 (F2P) | Copper and tin | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
+| S6-04 Magic to 55 (High Level Alchemy) | magic 1 (F2P) | Wind Strike on cows and chickens | Wind Strike on cows and chickens | needs full attention; small risk; material costs |
+| S6-04 Magic to 55 (High Level Alchemy) | magic 20 (F2P) | Wind Strike on cows and chickens | Wind Strike on cows and chickens | needs full attention; small risk; material costs |
+| S6-04 Magic to 55 (High Level Alchemy) | magic 30 (F2P) | Wind Strike on cows and chickens | Wind Strike on cows and chickens | needs full attention; small risk; material costs |
+| S6-04 Magic to 55 (High Level Alchemy) | magic 40 (F2P) | Wind Strike on cows and chickens | Wind Strike on cows and chickens | needs full attention; small risk; material costs |
 | Skills page: crafting | level 50 → 60 (F2P) | Cutting gems (sapphires from 20, emeralds from 27, rubies from 34) | Gold jewellery | ≈ 20k–41k XP per hour; steady clicking; can end in profit |
 | Skills page: fishing | level 50 → 60 (F2P) | Trout and salmon with fly fishing | Tuna and swordfish with a harpoon | ≈ 17k–21k XP per hour; few clicks |
-| Skills page: magic | level 30 → 40 (F2P) | Splash: spells on weak monsters | Low Level Alchemy | ≈ 31k–60k XP per hour; steady clicking; material costs |
-| Skills page: magic | level 40 → 50 (F2P) | Splash: spells on weak monsters | Low Level Alchemy | ≈ 31k–60k XP per hour; steady clicking; material costs |
-| Skills page: magic | level 50 → 60 (F2P) | Splash: spells on weak monsters | Superheat Item (iron ore) | ≈ 97k XP per hour; steady clicking; material costs |
 | Skills page: mining | level 20 → 30 (F2P) | Copper and tin | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
 | Skills page: mining | level 30 → 40 (F2P) | Copper and tin | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
 | Skills page: mining | level 40 → 50 (F2P) | Copper and tin | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
@@ -46,5 +47,5 @@ older save stays as "Fastest"; "Relaxed" keeps the old calm order.
 | Skills page: ranged | level 40 → 50 (F2P) | Seagulls at Port Sarim | Giant frogs | steady clicking; small risk; material costs |
 | Skills page: ranged | level 50 → 60 (F2P) | Seagulls at Port Sarim | Giant frogs | steady clicking; small risk; material costs |
 
-Steps that follow a training method: S6-01, S6-02, S6-03. Combat training stages: S3-08, S4-03 (the only steps with an opponent and a melee XP goal).
+Steps that follow a training method: S6-01, S6-02, S6-03, S6-04. Combat training stages: S3-08, S4-03 (the only steps with an opponent and a melee XP goal).
 Travel variants (canoe, teleports) are not training plans and are unchanged: they still need a press.

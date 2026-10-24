@@ -483,7 +483,16 @@
       "to": 20,
       "name": "Raw beef and chicken",
       "members": false,
-      "needs": [{ "type": "item", "name": "Raw beef", "count": 26, "anyOf": ["Raw chicken"] }],
+      "needs": [
+        {
+          "type": "item",
+          "name": "Raw beef",
+          "count": 26,
+          "anyOf": [
+            "Raw chicken"
+          ]
+        }
+      ],
       "xpa": 30,
       "act": "portion|portions",
       "effort": "low",
@@ -501,7 +510,13 @@
       "to": 30,
       "name": "Trout",
       "members": false,
-      "needs": [{ "type": "item", "name": "Raw trout", "count": 26 }],
+      "needs": [
+        {
+          "type": "item",
+          "name": "Raw trout",
+          "count": 26
+        }
+      ],
       "xpa": 70,
       "act": "fish",
       "effort": "low",
@@ -520,7 +535,11 @@
       "name": "Tuna",
       "members": false,
       "needs": [
-        { "type": "item", "name": "Raw tuna", "count": 26 }
+        {
+          "type": "item",
+          "name": "Raw tuna",
+          "count": 26
+        }
       ],
       "xpa": 100,
       "act": "fish",
@@ -540,8 +559,16 @@
       "name": "Wine (a jug with grapes)",
       "members": false,
       "needs": [
-        { "type": "item", "name": "Grapes", "count": 13 },
-        { "type": "item", "name": "Jug of water", "count": 13 },
+        {
+          "type": "item",
+          "name": "Grapes",
+          "count": 13
+        },
+        {
+          "type": "item",
+          "name": "Jug of water",
+          "count": 13
+        },
         {
           "type": "skill",
           "skill": "cooking",
@@ -778,19 +805,48 @@
       "skill": "magic",
       "from": 1,
       "to": 17,
-      "name": "Wind Strike on cows and chickens",
+      "name": "Strike spells on cows and chickens",
       "members": false,
-      "xph": [
-        7200,
-        7200
-      ],
       "effort": "high",
-      "cost": "profit",
-      "risk": "none",
+      "cost": "cost",
+      "risk": "low",
       "where": "The farms by Lumbridge",
-      "note": "Cow hides can be sold.",
+      "note": "Use the spell named by the plan and select its autocast setting if your staff supports it; otherwise cast manually. A confirmed owned elemental staff must be equipped to replace its rune type. Higher Strikes are selected only when at least 20 casts are already supplied; otherwise Wind Strike is the budget fallback. Refill a low rune supply with a starter batch of 100 casts. Remove metal armour and verify that damage and Magic XP are arriving. Bring the listed starter food, eat before health is low and bank when supplies run out. This is not a whole-goal budget, guaranteed profit or measured fastest method; confirmed completed sales alone fund purchases.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
-      "place": "Lumbridge"
+      "place": "Lumbridge",
+      "kit": "strike-spell",
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "magic",
+          "min": 1
+        },
+        {
+          "type": "item",
+          "name": "Mind rune",
+          "count": 100
+        },
+        {
+          "type": "item",
+          "name": "Air rune",
+          "count": 100
+        },
+        {
+          "type": "item",
+          "name": "Trout",
+          "count": 5,
+          "anyOf": [
+            "Salmon",
+            "Tuna",
+            "Lobster",
+            "Swordfish"
+          ]
+        }
+      ],
+      "npcNames": [
+        "Cow",
+        "Chicken"
+      ]
     },
     {
       "id": "ma-splash",
@@ -807,8 +863,9 @@
       "cost": "cost",
       "risk": "none",
       "where": "Goblins/other harmless monsters",
-      "note": "You need runes and a negative Magic attack bonus; no damage to the target. Most often sessions of about 20 minutes without clicks.",
-      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training"
+      "note": "Manual alternative only until the worn Magic attack bonus and location are verified. Bring runes for the chosen spell; monitor actual XP and do not assume zero damage from ordinary combat equipment.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
+      "manualSetup": "Verify Magic attack -64 or lower and a location outside the Lumbridge no-XP area."
     },
     {
       "id": "ma-alch",
@@ -822,6 +879,16 @@
           "type": "skill",
           "skill": "magic",
           "min": 21
+        },
+        {
+          "type": "item",
+          "name": "Nature rune",
+          "count": 25
+        },
+        {
+          "type": "item",
+          "name": "Fire rune",
+          "count": 75
         }
       ],
       "xph": [
@@ -832,7 +899,8 @@
       "cost": "cost",
       "risk": "none",
       "where": "Anywhere",
-      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training"
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
+      "manualSetup": "Choose expendable target items and verify all rune costs and actual coin margin first."
     },
     {
       "id": "ma-superheat",
@@ -895,6 +963,16 @@
           "type": "skill",
           "skill": "magic",
           "min": 55
+        },
+        {
+          "type": "item",
+          "name": "Nature rune",
+          "count": 25
+        },
+        {
+          "type": "item",
+          "name": "Fire rune",
+          "count": 125
         }
       ],
       "xph": [
@@ -906,7 +984,8 @@
       "risk": "none",
       "where": "Anywhere",
       "note": "The loss or profit depends on the items: calculate by Grand Exchange prices.",
-      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training"
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
+      "manualSetup": "Choose expendable target items and verify all rune costs and actual coin margin first."
     },
     {
       "id": "pr-ghost",

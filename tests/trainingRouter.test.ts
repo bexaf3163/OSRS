@@ -66,16 +66,16 @@ describe('method choice', () => {
     expect(a.reason).toContain('already reached');
   });
 
-  it('the calm style chooses without clicks, the efficient one — faster', () => {
+  it('both styles retain manual alternatives without presenting unchecked Magic setups as the default', () => {
     const state = levels({ magic: 25 });
     const chill = advise({ skill: 'magic', target: 40, state, mode: 'f2p', style: 'chill' });
     const fast = advise({ skill: 'magic', target: 40, state, mode: 'f2p', style: 'efficient' });
-    expect(chill.best?.method.id).toBe('ma-splash');
-    expect(chill.best?.method.effort).toBe('afk');
-    expect(fast.best?.method.id).toBe('ma-alch');
-    expect(fast.best?.method.xph?.[0]).toBeGreaterThan(chill.best?.method.xph?.[0] ?? 0);
-    expect(chill.reason).toContain('no risk');
-    expect(fast.reason).toContain('XP per hour');
+    expect(chill.best?.method.id).toBe('ma-strike');
+    expect(fast.best?.method.id).toBe('ma-strike');
+    expect(chill.others.some(v => v.method.id === 'ma-splash' && v.unchecked.length > 0)).toBe(true);
+    expect(fast.others.some(v => v.method.id === 'ma-alch' && v.unchecked.length > 0)).toBe(true);
+    expect(chill.time).toBeNull();
+    expect(fast.time).toBeNull();
   });
 
   it('at equal speed the calm one takes the quiet method, the efficient one — the later entry', () => {

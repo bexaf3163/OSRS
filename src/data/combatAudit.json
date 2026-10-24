@@ -235,6 +235,18 @@
       "evidence": ["https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training", "https://oldschool.runescape.wiki/w/Ranged_bows", "tests/rangedPreparation.test.ts"]
     },
     {
+      "stepId": "S6-04", "kind": "training", "mandatory": false, "method": "other",
+      "objective": "Optional Magic55 using spell-dependent supplies: budget Strikes or an actually usable Superheat iron batch.",
+      "enemies": [{ "name": "Cow" }, { "name": "Chicken" }],
+      "lines": [],
+      "assumptions": ["Select the named spell; equipped elemental staff substitution is explicit.", "Remove metal armour and verify actual combat damage/XP; no full Magic attack/weakness simulation is claimed."],
+      "problems": ["Full-goal costs, complete magic equipment/weakness modelling and measured combat rates remain open.", "Alchemy targets and splash setup are not automatically verified; those methods remain manual alternatives."],
+      "alternatives": ["Prepared Superheat iron needs Magic43 and Smithing15.", "Known higher Strike ingredients can replace the Wind Strike fallback."],
+      "decision": "revise",
+      "changed": ["Unreleased2.74.3: canonical method projection replaces the Nature-only fallback and unverified automatic alchemy/splash selection."],
+      "evidence": ["https://oldschool.runescape.wiki/w/Free-to-play_Magic_training", "https://oldschool.runescape.wiki/w/Superheat_Item", "tests/magicRouteSupplies.test.ts"]
+    },
+    {
       "stepId": "S7-02", "kind": "quest-fight", "mandatory": true, "method": "safespot",
       "objective": "Fight Arena: the Khazard Ogre (63), the scorpion (44) and Bouncer (137), each from behind a skeleton with Fire Bolt.",
       "enemies": [{ "name": "Khazard Ogre", "level": 63, "maxHit": 8 }, { "name": "Khazard scorpion", "level": 44 }, { "name": "Bouncer", "level": 137 }],
