@@ -3,6 +3,9 @@
 
 import spellsJson from '../data/spells.json';
 import { levelForXp, xpForLevel } from './xp';
+import { heldExact, wornItemsOf, type PlayerState } from './playerState';
+import { countWorn } from './equipmentCount';
+import type { MethodNeed } from './trainingRouter';
 
 export interface Spell { id: string; name: string; level: number; xp: number; runes: Record<string, number>; element: string }
 export interface Staff { name: string; id: number }
@@ -11,6 +14,29 @@ export const SPELLS = spellsJson.spells as unknown as Spell[];
 export const RUNE_IDS = spellsJson.runeIds as Record<string, number>;
 export const STAFFS = spellsJson.staffs as Record<string, Staff>;
 export const COWHIDE_ID = spellsJson.cowhideId;
+
+export const SUPERHEAT_WATCH = ['Nature rune', 'Fire rune', 'Iron ore', STAFFS.fire.name];
+
+/** A physical starter bag: 25 unnoted iron ore + two rune stacks fit in 28 slots.
+ * OSRS Wiki: Superheat Item uses one nature/four fire per ore, Magic43/Smithing15.
+ * Owned fire staff only substitutes runes when preparation also requires it worn.
+ */
+export function superheatNeeds(state: PlayerState): MethodNeed[] {
+  const fireStaff = STAFFS.fire.name;
+  const hasStaff = countWorn(wornItemsOf(state), name => name.toLowerCase() === fireStaff.toLowerCase()).count > 0
+    || (heldExact(state, fireStaff).total ?? 0) > 0;
+  // Finish a castable bag before asking for a new starter batch; spending one rune/ore must not flip the method after every cast.
+  const inBag = Math.min(25, heldExact(state, 'Iron ore').bag ?? 0, heldExact(state, 'Nature rune').bag ?? 0,
+    hasStaff ? 25 : Math.floor((heldExact(state, 'Fire rune').bag ?? 0) / 4));
+  const batch = inBag > 0 ? inBag : 25;
+  return [
+    { type: 'skill', skill: 'magic', min: 43 },
+    { type: 'skill', skill: 'smithing', min: 15 },
+    { type: 'item', name: 'Nature rune', count: batch },
+    { type: 'item', name: 'Iron ore', count: batch },
+    hasStaff ? { type: 'item', name: fireStaff, equip: true } : { type: 'item', name: 'Fire rune', count: batch * 4 },
+  ];
+}
 
 /** Prices by item ID (the exchange, instant buy). */
 export type PriceMap = ReadonlyMap<number, number>;

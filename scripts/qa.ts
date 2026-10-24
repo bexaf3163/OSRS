@@ -164,7 +164,7 @@ export function qa(input: QaInput): QaIssue[] {
       if (!Number.isInteger(m.from) || m.from < 1 || m.from > 98) add('training-range', m.id, `the entry level ${m.from}`);
       if (m.to !== null && m.to !== undefined && (!Number.isInteger(m.to) || m.to <= m.from || m.to > 99)) add('training-range', m.id, `the range ${m.from}–${m.to}`);
       if (m.suggestedFrom !== undefined && (!Number.isInteger(m.suggestedFrom) || m.suggestedFrom < m.from || m.suggestedFrom >= (m.to ?? 100))) add('training-range', m.id, 'invalid suggested starting level');
-      if (m.kit !== undefined && m.kit !== 'f2p-bow') add('training-kit', m.id, 'unknown preparation kit');
+      if (m.kit !== undefined && m.kit !== 'f2p-bow' && m.kit !== 'superheat-iron') add('training-kit', m.id, 'unknown preparation kit');
       if (m.xph && (m.xph.length !== 2 || !(m.xph[0] > 0) || m.xph[1] < m.xph[0])) add('training-rate', m.id, `the speed ${JSON.stringify(m.xph)}`);
       if (m.xpa !== undefined && !(m.xpa > 0)) add('training-rate', m.id, `the XP per action ${m.xpa}`);
       if (m.kind === 'quest' && !(m.xpTotal && m.xpTotal > 0)) add('training-rate', m.id, 'a quest without an XP reward');

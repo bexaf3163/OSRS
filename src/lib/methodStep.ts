@@ -13,6 +13,7 @@ import { matchStrict } from '../services/locationResolver';
 import { AXES, PICKAXES } from './toolTiers';
 import type { MethodNeed } from './trainingRouter';
 import { RANGED_WATCH } from './rangedLoadout';
+import { SUPERHEAT_WATCH } from './magicPlan';
 
 /** The stored pick when the skill's goal is already reached: no tool of that skill is asked for. */
 export const GOAL_REACHED = 'goal-reached';
@@ -58,6 +59,7 @@ export function methodToolNames(step: Pick<Step, 'followsMethod' | 'inGame'>): s
   if (!skills.length) return [];
   const names = new Set<string>();
   if (skills.includes('ranged')) for (const name of RANGED_WATCH) names.add(name);
+  if (skills.includes('magic')) for (const name of SUPERHEAT_WATCH) names.add(name);
   for (const m of RAW) if (m.skills.some(skill => skills.includes(skill))) for (const need of m.needs ?? []) for (const name of needNames(need)) names.add(name);
   return [...names];
 }

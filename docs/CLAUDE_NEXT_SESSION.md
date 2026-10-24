@@ -1,5 +1,17 @@
 # Claude continuation — start here
 
+## Current cumulative local gates — 8f247f1
+
+All1,923 Vitest/152files, TypeScript/build and data0errors/warnings pass after the Ranged banked-food and Superheat consumed-bag repairs. Last full Java608 passed; no Java changes since. This source still requires a fresh Chromium/actual portable CI run. Source640370b mapped exactly to remote569bc7c9/tree03dcdb438b022ea81b3173cce62dbdd038ca89aa, but that older run failed the six browser assertions below; its portable success is not full release acceptance. Continue the open S6-04 progression/budget work after fresh acceptance; do not call T11 or the full audit complete.
+
+## Browser regression follow-up — supersedes running status below
+
+Draft569bc7c9 Checks40083718613 passed domain/Java/isolated portable but failed six Ranged browser assertions. Current repair aligns banked owned food with the same kit and retains the latest usable earlier trainer when food is absent; a new domain case reproduces the combination. Original browser checks are retained. Fresh cumulative acceptance is required before publishing a new test download. Superheat local commit cc6d0d7 is also newer than that failed draft. WikiDrawer already labels its alchemy margin as before fire-rune costs; do not duplicate a purported fix there.
+
+## Newer source: partial Superheat recipe repair
+
+[CODEX_SUPERHEAT_HANDOFF.md](CODEX_SUPERHEAT_HANDOFF.md): existing Skills Superheat method now checks real ore/rune batches and equipped owned fire staff substitution. All1,921 Vitest/build/data pass locally. This is not complete S6-04 spell progression: its route fallback, net supply budget, other spell setups and live acceptance remain open. Ranged source569bc7c9 (local640370b, tree03dcdb438b022ea81b3173cce62dbdd038ca89aa) is separately running Checks40083718613; Java/actual portable passed, Chromium pending. Do not apply its EXE acceptance to newer Superheat source.
+
 ## Current source: equipped quantities and Ranged preparation
 
 Local quantity c2a12bb and newer S6-01 repair: [CODEX_RANGED_PREPARATION_HANDOFF.md](CODEX_RANGED_PREPARATION_HANDOFF.md). Current F2P trainer and compatible owned bow/ammunition use canonical preparation. Original IDs/goals/UNKNOWN semantics remain. All1,912 Vitest, build/data and608 Java tests pass locally; current browser/portable acceptance pending. Worn20+ arrows keep training; below20 requests a100-arrow refill. Earlier receipts apply only to their named source. Continue S6-04 Magic batches and T01–T17 after current gates; ranged consumption/other weapons/live acceptance remain open.

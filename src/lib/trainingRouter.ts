@@ -16,6 +16,7 @@ import { levelOf, type PlayerState } from './playerState';
 import { xpForLevel } from './xp';
 import type { MethodPriority, PlayStyle } from './playStyle';
 import { rangedNeeds, RANGED_WATCH } from './rangedLoadout';
+import { superheatNeeds } from './magicPlan';
 
 export type Effort = 'afk' | 'low' | 'medium' | 'high';
 export type MethodCost = 'free' | 'profit' | 'cost';
@@ -41,7 +42,7 @@ export interface TrainingMethod {
   name: string;
   members: boolean;
   needs: MethodNeed[];
-  kit?: 'f2p-bow';
+  kit?: 'f2p-bow' | 'superheat-iron';
   /** XP per hour per the wiki: [from, to] — a guide. */
   xph: [number, number] | null;
   /** XP per single action — the game's exact value. */
@@ -66,7 +67,7 @@ export interface TrainingMethod {
 
 interface Raw {
   id: string; skill: string | string[]; from: number; suggestedFrom?: number; to: number | null; name: string; members: boolean;
-  needs?: MethodNeed[]; kit?: 'f2p-bow'; xph?: [number, number]; xpa?: number; act?: string; effort: Effort; cost: MethodCost; risk: Risk;
+  needs?: MethodNeed[]; kit?: 'f2p-bow' | 'superheat-iron'; xph?: [number, number]; xpa?: number; act?: string; effort: Effort; cost: MethodCost; risk: Risk;
   where: string; place?: string; objectNames?: string[]; npcNames?: string[]; note?: string; url: string; kind?: 'method' | 'quest'; xpTotal?: number;
 }
 
@@ -140,6 +141,7 @@ export function viewMethod(m: TrainingMethod, state: PlayerState): MethodView {
 }
 
 export function methodNeeds(m: TrainingMethod, state: PlayerState): MethodNeed[] {
+  if (m.kit === 'superheat-iron') return superheatNeeds(state);
   // Stage 6 is F2P-only. Do not demand a weaker F2P bow from Members using an unmodelled weapon.
   if (m.kit === 'f2p-bow' && state.mode !== 'f2p') return m.needs.filter(n => n.type !== 'item' || !RANGED_WATCH.includes(n.name));
   return m.kit === 'f2p-bow' && m.kind === 'method'
@@ -181,7 +183,10 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number) {
   return (a: MethodView, b: MethodView): number => {
     // Unchecked supplies must not beat a confirmed preparation step merely by being labelled READY.
     // Keep them available and disclose their uncertainty; do not invent missing quantities.
-    const rank = (v: MethodView) => STATUS_RANK[v.status] + (v.status === 'READY' && v.unchecked.length ? 1 : 0)
+    // The same ranged kit should not drop back to an earlier trainer after equipping its arrows merely because owned food needs withdrawal.
+    // Missing/unread supplies still lose to a supplied safer method; this only covers confirmed bank/wear preparation.
+    const bankedRanged = (v: MethodView) => v.method.kit === 'f2p-bow' && v.status === 'PREP' && v.missing.every(n => n.state === 'BANK');
+    const rank = (v: MethodView) => (bankedRanged(v) ? 0 : STATUS_RANK[v.status]) + (v.status === 'READY' && v.unchecked.length ? 1 : 0)
       + (v.unchecked.some(n => n.kind === 'skill' || n.kind === 'quest') ? 2 : 0);
     const s = rank(a) - rank(b);
     const ra = rateLow(a.method);
@@ -190,7 +195,8 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number) {
     const suggested = (m: TrainingMethod) => level === undefined || ((m.suggestedFrom ?? m.from) <= level && (m.to === null || level < m.to));
     const byBracket = Number(suggested(b.method)) - Number(suggested(a.method));
     const byRate = ((ra === null || rb === null) ? byBracket : 0) || (rb ?? -1) - (ra ?? -1);
-    const byEntry = b.method.from - a.method.from;
+    const preferredEntry = (m: TrainingMethod) => m.suggestedFrom !== undefined && level !== undefined && m.suggestedFrom <= level ? m.suggestedFrom : m.from;
+    const byEntry = preferredEntry(b.method) - preferredEntry(a.method);
     if (priority === 'balanced') {
       if (a.status === 'LOCKED' || b.status === 'LOCKED') { if (s) return s; }
       const pa = practicalRate(a.method);
@@ -206,6 +212,7 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number) {
           (n.kind === 'item' || n.kind === 'tool') && n.state !== 'BANK' && n.state !== 'OK');
         if ((pa === null || pb === null) && supplied(a) !== supplied(b)) return Number(supplied(b)) - Number(supplied(a));
         if ((pa === null || pb === null) && byBracket) return byBracket;
+        if (pa === null && pb === null && a.method.kit === 'f2p-bow' && b.method.kit === 'f2p-bow' && byEntry) return byEntry;
         if ((pa ?? -1) !== (pb ?? -1)) return (pb ?? -1) - (pa ?? -1);
       }
       return s || EFFORT_RANK[a.method.effort] - EFFORT_RANK[b.method.effort] || COST_RANK[a.method.cost] - COST_RANK[b.method.cost] || byRate || byEntry;

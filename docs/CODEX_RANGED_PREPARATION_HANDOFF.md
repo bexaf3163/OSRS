@@ -8,6 +8,8 @@ Resolved needs travel through the existing TrainingPick/store/readiness/preparat
 
 All1,912 Vitest/151files, TypeScript/production build, data0errors/warnings and608 Java tests pass locally. Final browser/portable acceptance pending. Browser scenarios390/1280 check GEAR-only quantities and trainer transitions. Real gameplay remains unverified. Earlier preview receipts apply only to their named source.
 
+Draft569bc7c9 CI40083718613 passed all domain/Java/actual portable checks but failed six browser assertions: with arrows equipped, banked frog food lost to a supplied earlier trainer. New source treats confirmed bank/wear preparation for the same ranged kit consistently and preserves the latest past recommendation when missing food requires a safer fallback. The regression now checks both banked-food frogs and absent-food monks. The original browser assertions remain unchanged; a fresh cumulative CI run is required. No accepted new portable was published from the failed run.
+
 This bounded starter kit does not model ranged DPS, whole-goal consumption, crossbows, thrown weapons, Training bows or Members weapons. A worn stack of at least20 keeps training; below20 the refill target becomes100, preventing a bank request after every shot. These are app preparation thresholds, not predicted consumption or survival guarantees. Observed consumption remains open.
 
 Sources: https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training ; https://oldschool.runescape.wiki/w/Ranged_bows ; https://oldschool.runescape.wiki/w/Ranged/Level_up_table . Existing dictionary areas and StyleGear are reused; no prices, rates, IDs or coordinates invented.

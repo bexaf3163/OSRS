@@ -38,6 +38,13 @@ describe('S6-01 actual ranged preparation', () => {
     expect(low.step.itemsRequired?.find(r => r.nameEn === 'Bronze arrow')?.amount).toBe(100);
     expect(low.engine.readiness(low.step).status).not.toBe('READY');
   });
+  it('keeps the level-26 trainer when equipped arrows settle and its food is already banked', () => {
+    const s = scenario(26, [piece('Shortbow'), piece('Bronze arrow', 100)], { Salmon: { bank: 10 } });
+    expect(s.pick).toMatchObject({ methodId: 'ra-frog' });
+    expect(s.engine.plan(s.step).lines.find(r => r.name === 'Salmon')?.where).toBe('BANK');
+    const absentFood = scenario(26, [piece('Shortbow'), piece('Bronze arrow', 100)]);
+    expect(absentFood.pick).toMatchObject({ methodId: 'ra-monk' });
+  });
   it.each([[1, 'ra-lumb', 'Seagull'], [20, 'ra-monk', 'Monk'], [26, 'ra-frog', 'Giant frog'], [49, 'ra-frog', 'Giant frog']] as const)(
     'Ranged%s gets its current trainer, kit and unchanged goal', (level, id, npc) => {
       const s = scenario(level);

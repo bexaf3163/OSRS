@@ -836,6 +836,7 @@
     },
     {
       "id": "ma-superheat",
+      "kit": "superheat-iron",
       "skill": "magic",
       "from": 43,
       "to": 99,
@@ -851,6 +852,21 @@
           "type": "skill",
           "skill": "smithing",
           "min": 15
+        },
+        {
+          "type": "item",
+          "name": "Nature rune",
+          "count": 25
+        },
+        {
+          "type": "item",
+          "name": "Fire rune",
+          "count": 100
+        },
+        {
+          "type": "item",
+          "name": "Iron ore",
+          "count": 25
         }
       ],
       "xph": [
@@ -864,7 +880,8 @@
       "risk": "none",
       "where": "By a bank",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
-      "place": "Varrock West Bank"
+      "place": "Varrock West Bank",
+      "note": "Starter batch: 25 unnoted iron ore, 25 nature runes and 100 fire runes, or equip an owned Staff of fire instead of the fire runes. Bank surplus items to leave 25 ore slots plus rune stacks. Keep coal in the bank to make iron bars. Cast manually on each ore, then bank the bars and refill. This is one starter bag, not the full-goal cost; rate and profit are not guaranteed."
     },
     {
       "id": "ma-halch",
