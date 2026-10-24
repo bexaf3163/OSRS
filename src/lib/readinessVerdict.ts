@@ -47,6 +47,7 @@ export interface Reason {
 }
 
 const BANK_NEVER = 'Bank contents have not been checked; visit a bank to assess owned supplies.';
+const OFFLINE = 'Cannot assess yet: connect RuneLite so the app can check your bag and bank.';
 
 export interface ReadinessVerdict {
   level: ReadinessLevel;
@@ -56,7 +57,7 @@ export interface ReadinessVerdict {
   reasons: Reason[];
   cautions: string[];
   bank: BankFreshness;
-  /** The headline already says the bank was never opened: the bank line under it would repeat it (seen live in 2.74.14). */
+  /** The headline already says what the bank line would (never opened, or no game connected): the line under it would repeat it (seen live). */
   bankInHeadline: boolean;
   /** What the plan's percent measures, when it is shown. */
   percentNote: string;
@@ -213,7 +214,7 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
     headline = `Requirements not met: ${access[0].label}.`;
   } else if (!i.connected) {
     level = 'UNKNOWN';
-    headline = 'Cannot assess yet: connect RuneLite so the app can check your bag and bank.';
+    headline = OFFLINE;
   } else if (safetyBlocks.length) {
     level = 'PREP_NEEDED';
     headline = `Preparation needed: ${safetyBlocks[0].label}.`;
@@ -232,7 +233,7 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
     level = 'READY';
     headline = combat ? `Ready: your kit and food suit ${combat.foe}.` : 'Ready: everything this step needs is with you.';
   }
-  return { level, label: LEVEL_LABEL[level], headline, reasons, cautions, bank, bankInHeadline: headline === BANK_NEVER, percentNote: PERCENT_NOTE };
+  return { level, label: LEVEL_LABEL[level], headline, reasons, cautions, bank, bankInHeadline: headline === BANK_NEVER || headline === OFFLINE, percentNote: PERCENT_NOTE };
 }
 
 /** The next action when something is to be taken or got: the bank first (it is already yours), then what to get, food named as food. */

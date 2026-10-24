@@ -153,6 +153,7 @@ describe('the readiness verdict', () => {
     const v = verdict(guardian, null);
     expect(v.level).toBe('UNKNOWN');
     expect(v.headline).toMatch(/^Cannot assess yet: connect RuneLite/);
+    expect(v.bankInHeadline, '"The game is not connected" under it would say it twice').toBe(true);
     expect(v.bank.state).toBe('offline');
   });
 

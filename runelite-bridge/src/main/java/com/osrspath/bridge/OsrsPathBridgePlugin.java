@@ -354,6 +354,13 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		return configManager.getConfig(OsrsPathBridgeConfig.class);
 	}
 
+	/** Whether the game window is the active window; null when it cannot be told. */
+	private Boolean windowFocused()
+	{
+		java.awt.Window w = client.getCanvas() == null ? null : javax.swing.SwingUtilities.getWindowAncestor(client.getCanvas());
+		return w == null ? null : w.isFocused();
+	}
+
 	@Override
 	protected void startUp()
 	{
@@ -929,7 +936,8 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 			t.event("beat", "step", target == null ? null : target.getStepId(), "stage", lastStageKey, "cursor", lastStageCursor,
 				"pos", new int[] {p.getX(), p.getY(), p.getPlane()}, "tick", tickCount, "hud", guideOnScreen, "guide", guideOnScreen,
 				// T09: the client's frame rate beside what our overlays cost a frame (average and worst since the last beat, microseconds).
-				"fps", client.getFPS(), "drawUs", cost[0], "drawMaxUs", cost[1]);
+				// focus: RuneLite can limit the frame rate of a window in the background (a live session read "5 FPS"); the report leaves those out.
+				"fps", client.getFPS(), "drawUs", cost[0], "drawMaxUs", cost[1], "focus", windowFocused());
 		}
 		if (t != null && tickCount % WATCH_TICKS == 0)
 		{

@@ -70,6 +70,10 @@ export interface FrameCost {
   fpsLow: number;
   drawAvgUs: number;
   drawWorstUs: number;
+  /** Heartbeats with the game window in the background (plugin 2.74.17+), left out of the figures above: RuneLite may limit their frame rate. */
+  background: number;
+  /** Every heartbeat was in the background: the figures are from those, and the frame rate says nothing about the guide. */
+  onlyBackground: boolean;
 }
 
 export interface Report {
@@ -298,8 +302,10 @@ export function analyze(events: TelemetryEvent[], badLines = 0): Report {
 
 /** T09 acceptance from a real session: the median and the 5th-percentile FPS, our average draw time per frame and the worst single frame. */
 export function frameCost(events: TelemetryEvent[]): FrameCost | null {
-  const beats = events.filter((e) => e.kind === 'beat' && num(e.fps) !== null && num(e.drawUs) !== null);
-  if (!beats.length) return null;
+  const all = events.filter((e) => e.kind === 'beat' && num(e.fps) !== null && num(e.drawUs) !== null);
+  if (!all.length) return null;
+  const front = all.filter((e) => e.focus !== false);
+  const beats = front.length ? front : all;
   const fps = beats.map((e) => num(e.fps)!).sort((a, b) => a - b);
   const at = (q: number) => fps[Math.floor(q * (fps.length - 1))];
   const draw = beats.map((e) => num(e.drawUs)!);
@@ -307,6 +313,7 @@ export function frameCost(events: TelemetryEvent[]): FrameCost | null {
     beats: beats.length, fpsMedian: at(0.5), fpsLow: at(0.05),
     drawAvgUs: Math.round(draw.reduce((a, b) => a + b, 0) / draw.length),
     drawWorstUs: Math.max(...beats.map((e) => num(e.drawMaxUs) ?? 0)),
+    background: all.length - front.length, onlyBackground: !front.length,
   };
 }
 
@@ -322,7 +329,9 @@ export function formatReport(r: Report): string {
   out.push(`Events: ${kinds || '—'}`);
   if (r.frames) {
     const f = r.frames;
-    out.push(`Frames: ${f.fpsMedian} FPS median, ${f.fpsLow} at the slowest 5%; our overlays ${(f.drawAvgUs / 1000).toFixed(2)} ms a frame on average, the worst frame ${(f.drawWorstUs / 1000).toFixed(1)} ms (${f.beats} heartbeats)`);
+    const where = f.onlyBackground ? ', all with the game window in the background, where RuneLite may limit the frame rate'
+      : f.background ? `; ${f.background} with the window in the background left out` : '';
+    out.push(`Frames: ${f.fpsMedian} FPS median, ${f.fpsLow} at the slowest 5%; our overlays ${(f.drawAvgUs / 1000).toFixed(2)} ms a frame on average, the worst frame ${(f.drawWorstUs / 1000).toFixed(1)} ms (${f.beats} heartbeats${where})`);
   }
   const bad = r.findings.filter((f) => f.severity === 'bad').length;
   const warn = r.findings.filter((f) => f.severity === 'warn').length;
