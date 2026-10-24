@@ -235,8 +235,11 @@ try {
 
   await reloadWith('{broken native file', '{broken browser copy');
   expect(await warning.count() === 1 && (await warning.innerText()).includes('Automatic saving is paused'), 'progress recovery (both damaged): saving is paused with a warning');
+  const afterLoad = readFileSync(file, 'utf8');
+  expect(afterLoad === '{broken native file', `progress recovery (both damaged): loading does not overwrite the damaged native file (got ${afterLoad.slice(0, 80)})`);
   await tryMark();
-  expect(readFileSync(file, 'utf8') === '{broken native file', 'progress recovery (both damaged): the damaged native file is not overwritten');
+  const afterMark = readFileSync(file, 'utf8');
+  expect(afterMark === '{broken native file', `progress recovery (both damaged): the damaged native file is not overwritten (got ${afterMark.slice(0, 80)}; files ${readdirSync(dataDir).join(', ')})`);
   expect(await page.evaluate(() => localStorage.getItem('osrs-put:progress:recovery:local')) === '{broken browser copy', 'progress recovery (both damaged): the damaged browser copy is kept');
 
   const future = JSON.stringify({ ...JSON.parse(validText), version: 99 });
