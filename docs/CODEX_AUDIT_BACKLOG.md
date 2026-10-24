@@ -10,7 +10,7 @@ Current baseline/evidence and next actions are in [CLAUDE_NEXT_SESSION.md](CLAUD
 | ID | Priority | Current scope/status |
 | --- | --- | --- |
 | T01 | P1 | Progress recovery/migrations, physical write/read-error reporting, profile validation/conflict quarantine and supported backup admission implemented/tested. Native refusal/retry, supported conflicts and unreadable-source EXE cases passed. Secondary-copy status retention and per-file I/O diagnostics pass full CI40089273395, including both actualportable failure/retry scenarios (CODEX_BACKUP_ERROR_HANDOFF.md). Conflict-resolution UX, first-write/session-history diagnostics and broader recovery remain open. |
-| T02 | P1 | Update digest verification implemented/tested; a real isolated two-version update remains open. |
+| T02 | P1 | Update digest verification implemented/tested. Real isolated two-version update **passed** (Claude, 2026-10-24): published 2.74.4 → 2.74.5 on a disposable Windows runner, [run 40103727432](https://github.com/bexaf3163/OSRS/actions/runs/40103727432), `update-test.yml` + `.github/scripts/test-update.cjs`, 13/13 checks. Cancellation/partial-download/retry paths beyond the unit tests remain open. |
 | T03 | P1 | Additive exact counts, conservative legacy tool aggregation, notes/usable separation and per-row combat loot/food bank certainty implemented/tested. Unreleased tool block projects method tool needs and preserves uncertainty for unreported usable family tiers; cumulative 1,830-test/browser/Java/portable CI passes on 9f37646f (CODEX_METHOD_TOOLS_HANDOFF.md). Exact-ID, remaining legacy consumers and complete eligibility parity remain open. |
 | T04 | P1 | Fingerprint, logout clearing, profile gating and delayed status/event guards implemented; final native/live lifecycle acceptance remains open. |
 | T05 | P1 | Skip vs hard prerequisite, live quest precedence, eligible next-step selection, Fairytale II partial scope and reached pure-skill producer equivalence implemented/tested. Unreleased 2.74.3 removes Account Sync's unproven ancestor expansion and aligns dependency labels with blockers; final-code browser/unit/Java/portable CI passes (CODEX_PROGRESS_PROOF_HANDOFF.md). Equivalent acquisitions, consumer-specific subsets, cursor/branch and live acceptance remain open. |
@@ -38,6 +38,8 @@ Acceptance: corrupt browser/valid file; corrupt file/valid browser; both corrupt
 ### T02 — update integrity
 
 Verify trusted SHA-256 for new and cached bytes and immediately before handoff. Size alone is insufficient. Explicitly handle missing digests, partial downloads, cache replacement, retry and cancellation. Preserve delayed portable startup, path validation and data location. Test an update between isolated EXEs before claiming the real update flow verified.
+
+Done (Claude, 2026-10-24): `Update test` workflow (started by hand, `from` input) downloads the older published portable EXE and checks it against its published digest. The older app marks a step through its own UI, finds the latest release, downloads it and verifies the SHA-256, then installs and hands over. The newer app must start by itself, delete the old EXE and `update-cleanup.json`, keep `progress.json` byte-identical, report its version, offer no further update and leave no quarantined files. First green run: 2.74.4 → 2.74.5, run 40103727432. Never run it on a player machine: the apps show windows and dialogs on that desktop.
 
 ### T03 — exact items and usable requirements
 
