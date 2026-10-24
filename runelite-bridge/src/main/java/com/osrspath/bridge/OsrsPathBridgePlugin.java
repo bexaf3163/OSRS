@@ -3299,10 +3299,14 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		if (state == GameState.LOGGED_IN)
 		{
 			loginTick = tickCount;
+			// A Dragon pickaxe or axe is a members item: on a free world it does not stand in for the tool the step names.
+			ItemCounts.setMembersWorld(client.getWorldType().contains(net.runelite.api.WorldType.MEMBERS));
+			ownedDirty = true;
 			updateHud();
 		}
 		else if (state == GameState.LOGIN_SCREEN || state == GameState.HOPPING)
 		{
+			ItemCounts.setMembersWorld(null);
 			npcs.clear();
 			navNpcs.clear();
 			dangerNpcs.clear();

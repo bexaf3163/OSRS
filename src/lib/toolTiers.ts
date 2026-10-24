@@ -23,19 +23,27 @@ const TIER_LEVEL: Record<string, number> = {
   bronze: 1, iron: 1, steel: 6, black: 11, mithril: 21, adamant: 31, rune: 41, gilded: 41, dragon: 61, infernal: 61, '3rd age': 61, crystal: 71,
 };
 
-/** What a pickaxe or axe tier needs: the skill and the level; null for anything else. */
-export function toolUse(nameEn: string): { skill: 'mining' | 'woodcutting'; level: number } | null {
+/** Tiers that are members items: on a free-to-play world they cannot be used at all, whatever the level (OSRS Wiki, "Pickaxe" and "Axe"). */
+const MEMBERS_TIERS = new Set(['dragon', 'infernal', '3rd age', 'crystal', 'gilded']);
+
+/** What a pickaxe or axe tier needs: the skill, the level and whether it is a members item; null for anything else. */
+export function toolUse(nameEn: string): { skill: 'mining' | 'woodcutting'; level: number; members: boolean } | null {
   const k = key(nameEn);
   const kind = k.endsWith(' pickaxe') ? 'pickaxe' : k.endsWith(' axe') ? 'axe' : null;
   if (!kind) return null;
-  const level = TIER_LEVEL[k.slice(0, k.length - kind.length - 1)];
-  return level === undefined ? null : { skill: kind === 'pickaxe' ? 'mining' : 'woodcutting', level };
+  const tier = k.slice(0, k.length - kind.length - 1);
+  const level = TIER_LEVEL[tier];
+  return level === undefined ? null : { skill: kind === 'pickaxe' ? 'mining' : 'woodcutting', level, members: MEMBERS_TIERS.has(tier) };
 }
 
-/** Whether the player can use this tool for its skill; an unknown level counts as able (unknown is not missing). */
-export function usableAt(nameEn: string, levelOf: (skill: string) => number | null): boolean {
+/**
+ * Whether the player can use this tool for its skill; an unknown level counts as able (unknown is not missing). members: false on a
+ * free-to-play account, where a members tier does not do the job; null or absent while unknown.
+ */
+export function usableAt(nameEn: string, levelOf: (skill: string) => number | null, members?: boolean | null): boolean {
   const u = toolUse(nameEn);
   if (!u) return true;
+  if (u.members && members === false) return false;
   const lv = levelOf(u.skill);
   return lv === null || lv >= u.level;
 }

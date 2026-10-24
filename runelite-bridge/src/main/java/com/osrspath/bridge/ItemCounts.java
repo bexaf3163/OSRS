@@ -66,6 +66,10 @@ final class ItemCounts
 	/** The player's real Mining and Woodcutting levels; 0 while unknown, and then every tier counts (unknown is not missing). */
 	private static volatile int miningLevel;
 	private static volatile int woodcuttingLevel;
+	/** Tiers that are members items (the same set as toolTiers.ts): on a free-to-play world they do not do the job at any level. */
+	private static final java.util.Set<String> MEMBERS_TIERS = java.util.Set.of("dragon");
+	/** False on a free-to-play world, null while no world is known (then every tier counts: unknown is not missing). */
+	private static volatile Boolean membersWorld;
 
 	/** A better tier the player cannot use yet (a Rune pickaxe at Mining 10) does not stand in for the named one. Set from the game's levels. */
 	static void setToolLevels(int mining, int woodcutting)
@@ -74,7 +78,13 @@ final class ItemCounts
 		woodcuttingLevel = woodcutting;
 	}
 
-	/** Whether the player can use this item for its skill: false only for a pickaxe or axe tier above a known level. */
+	/** The world the player is on: true for a members world, false for a free one, null while not logged in. */
+	static void setMembersWorld(Boolean members)
+	{
+		membersWorld = members;
+	}
+
+	/** Whether the player can use this item for its skill: false for a pickaxe or axe tier above a known level, or a members tier on a free world. */
 	static boolean usable(String name)
 	{
 		String key = ActiveTarget.nameKey(name);
@@ -82,7 +92,12 @@ final class ItemCounts
 		{
 			if (key.endsWith(kind))
 			{
-				int i = java.util.Arrays.asList(TIERS).indexOf(key.substring(0, key.length() - kind.length()));
+				String tier = key.substring(0, key.length() - kind.length());
+				if (MEMBERS_TIERS.contains(tier) && Boolean.FALSE.equals(membersWorld))
+				{
+					return false;
+				}
+				int i = java.util.Arrays.asList(TIERS).indexOf(tier);
 				int level = " pickaxe".equals(kind) ? miningLevel : woodcuttingLevel;
 				return i < 0 || level <= 0 || TIER_LEVEL[i] <= level;
 			}
@@ -237,7 +252,7 @@ final class ItemCounts
 			int total = 0;
 			for (int i = from; i < TIERS.length; i++)
 			{
-				if (i > from && level > 0 && TIER_LEVEL[i] > level)
+				if (i > from && ((level > 0 && TIER_LEVEL[i] > level) || (MEMBERS_TIERS.contains(TIERS[i]) && Boolean.FALSE.equals(membersWorld))))
 				{
 					continue;
 				}

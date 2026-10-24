@@ -20,6 +20,7 @@ public class ToolLevelTest
 	public void unknownAgain()
 	{
 		ItemCounts.setToolLevels(0, 0);
+		ItemCounts.setMembersWorld(null);
 	}
 
 	private static ItemCounts bag(Object... idNameCount)
@@ -42,6 +43,23 @@ public class ToolLevelTest
 		assertEquals(1, bag(1275, "Rune pickaxe", 1, 1267, "Iron pickaxe", 1).count(1265, "Bronze pickaxe"));
 		ItemCounts.setToolLevels(41, 1);
 		assertEquals(1, rune.count(1265, "Bronze pickaxe"));
+	}
+
+	/** T03: a Dragon pickaxe kept from an old membership does not do the job on a free world, at any level; unknown world: it counts. */
+	@Test
+	public void aMembersTierIsNotTheToolOnAFreeWorld()
+	{
+		ItemCounts dragon = bag(11920, "Dragon pickaxe", 1);
+		ItemCounts.setToolLevels(70, 70);
+		assertEquals("no world yet: it counts", 1, dragon.count(1265, "Bronze pickaxe"));
+		ItemCounts.setMembersWorld(false);
+		assertEquals(0, dragon.count(1265, "Bronze pickaxe"));
+		assertFalse(ItemCounts.usable("Dragon pickaxe"));
+		assertFalse(ItemCounts.usable("Dragon axe"));
+		assertTrue(ItemCounts.usable("Rune pickaxe"));
+		assertEquals("a usable tier beside it still counts", 1, bag(11920, "Dragon pickaxe", 1, 1275, "Rune pickaxe", 1).count(1265, "Bronze pickaxe"));
+		ItemCounts.setMembersWorld(true);
+		assertEquals(1, dragon.count(1265, "Bronze pickaxe"));
 	}
 
 	@Test
