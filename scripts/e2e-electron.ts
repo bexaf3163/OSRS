@@ -13,6 +13,7 @@ import { tmpdir } from 'node:os';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { chromium } from 'playwright';
+import { jarEntry } from './jarEntry.ts';
 
 const require = createRequire(import.meta.url);
 const electronPath = require('electron') as unknown as string;
@@ -141,6 +142,13 @@ try {
   await page.waitForTimeout(2500);
 
   expect((await page.title()).includes('OSRS Path'), 'window: the title "OSRS Path"');
+  // T15: the plugin RuneLite is launched with is the one inside this artifact; it must be this release's build, not a stale jar.
+  if (exe) {
+    const jar = unpacked ? join(unpacked, 'resources', 'runelite-bridge', 'osrs-path-bridge.jar') : null;
+    const server = jar && existsSync(jar) ? jarEntry(jar, 'com/osrspath/bridge/BridgeServer.class') : null;
+    expect(!!server && server.readUInt32BE(0) === 0xcafebabe && server.includes(Buffer.from(packageVersion)),
+      `release: the bundled plugin jar is version ${packageVersion} (${jar ?? 'unpacked folder not found'})`);
+  }
   const api = await page.evaluate(() => Object.keys((window as unknown as { osrsDesktop?: object }).osrsDesktop ?? {}).sort());
   expect(['backup', 'bridge', 'loadProgressFile', 'saveProgressFile', 'saveProgressFileChecked'].every((k) => api.includes(k)), `window: the shell API is in place (${api.length} methods)`);
   const localFont = await page.evaluate(async () => {
