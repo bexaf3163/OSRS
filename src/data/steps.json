@@ -4921,60 +4921,41 @@
     "id": "S6-01",
     "stage": 6,
     "type": "skill",
-    "title": "Ranged to 50 on the Ogress Warriors and Shamans",
+    "title": "Ranged to 50 with a prepared ranged loadout",
     "requires": [
       "S4-01"
     ],
     "wikiUrl": "https://oldschool.runescape.wiki/w/Corsair_Cove_Dungeon",
-    "mapUrl": "https://oldschool.runescape.wiki/w/World_map#/m=2012,9004,0",
     "mapLocation": {
-      "x": 2012,
-      "y": 9004,
+      "x": 3029,
+      "y": 3221,
       "plane": 0,
-      "label": "Corsair Cove Dungeon"
+      "label": "Port Sarim docks — level 3 Seagulls (Ranged starter)"
     },
-    "where": "The Corsair Cove Dungeon cave (open after the quest The Corsair Curse).",
-    "itemsRecommended": [
-      {
-        "nameEn": "Swordfish",
-        "amount": 20,
-        "howToGet": "Catch with a harpoon from Fishing 50 at Musa Point (step S6-02) or buy on the Grand Exchange.",
-        "wikiItemId": 373,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Swordfish.png",
-        "heals": 14
-      },
-      {
-        "nameEn": "Lobster",
-        "amount": 20,
-        "howToGet": "Buy on the Grand Exchange. Or catch them yourself from Fishing 40 with a Lobster pot (20 gp in the shop Gerrant's Fishy Business in Port Sarim) at the Musa Point dock on Karamja (boat from Port Sarim, 30 gp) and cook them from Cooking 40 on the range in Al Kharid.",
-        "wikiItemId": 379,
-        "iconUrl": "https://oldschool.runescape.wiki/images/Lobster.png",
-        "heals": 12
-      }
-    ],
+    "where": "Port Sarim docks: select level 3 Seagulls when starting Ranged.",
+    "itemsRecommended": [],
     "fields": [
       {
         "label": "Optional branch",
         "text": "This whole stage is only the way to a Bond for an account without membership. Nothing in it is required for the Members route. If you already have membership, switch the app to Members mode: stage 6 disappears and Waterfall Quest comes next. Do the parts that pay best for you, in any order."
       },
       {
-        "label": "Why",
-        "text": "One of the best places in F2P for money while you train Ranged: ogresses (level 82) drop a Rune med helm, a Rune battleaxe, nature runes and gems."
+        "label": "Requirements",
+        "text": "Ranged 1. The selected method checks current equipment and supplies; later methods carry their own requirements."
       },
       {
-        "label": "How",
-        "text": "Ogresses hit hard (up to 8) and you train only Ranged here: shoot them from a safespot with a bow and keep melee out of it. Use the best bow your Ranged allows with the best arrows you can afford, and 20 lobsters or swordfish for the walk back."
+        "label": "Training",
+        "text": "Follow the selected current trainer, compatible bow and ammunition. Start with level 3 Seagulls; Monks offer free healing, and later methods ask for food. Required starter batches are not a promise of enough supplies for the whole goal."
       },
       {
-        "label": "Magic instead",
-        "text": "To train Magic on the same ogresses, use step S6-04: it is a separate goal."
+        "label": "Ogresses later",
+        "text": "Ogresses are a later income choice, not a Ranged 1-50 default. At 50 they are still slow; compare Money with your actual gear, supplies and current market before choosing them. The Corsair Curse opens their dungeon."
       }
     ],
     "doneWhen": "Ranged 50.",
     "inGame": {
       "npcNames": [
-        "Ogress Warrior",
-        "Ogress Shaman"
+        "Seagull"
       ],
       "completionTrigger": {
         "type": "SKILL_LEVEL",
@@ -4986,12 +4967,34 @@
         ]
       }
     },
-    "threats": [
-      "Ogress warrior",
-      "Ogress shaman"
-    ],
     "bondBranch": true,
-    "optional": true
+    "optional": true,
+    "followsMethod": "ranged",
+    "requirements": [
+      {
+        "type": "skill",
+        "skill": "ranged",
+        "min": 1
+      }
+    ],
+    "itemsRequired": [
+      {
+        "nameEn": "Shortbow",
+        "amount": 1,
+        "equip": true,
+        "wikiItemId": 841,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Shortbow.png",
+        "howToGet": "A compatible equipped bow and starter arrow stack. Withdraw owned usable supplies first; do not buy replacements for an adequate owned loadout."
+      },
+      {
+        "nameEn": "Bronze arrow",
+        "amount": 100,
+        "equip": true,
+        "wikiItemId": 882,
+        "iconUrl": "https://oldschool.runescape.wiki/images/Bronze_arrow_1.png",
+        "howToGet": "A compatible equipped bow and starter arrow stack. Withdraw owned usable supplies first; do not buy replacements for an adequate owned loadout."
+      }
+    ]
   },
   {
     "id": "S6-02",

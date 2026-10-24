@@ -17,12 +17,13 @@ import { npcSpot } from './stepPlaces';
 import type { NavTargetPayload } from '../services/runeliteBridge';
 import { upgradeNav, type UpgradeRecommendation } from '../services/gearUpgradeRouter';
 import { aggregateShopping, plural, type ShoppingLine } from './shopping';
-import { heldOf, type PlayerState } from './playerState';
+import { heldOf, wornItemsOf, type PlayerState } from './playerState';
+import { countWorn } from './equipmentCount';
 import { carryOf, displayName, doseKind, heldUnits, shortText, takeFromBank } from './doses';
 import { nearestBank, type StepReadiness } from './readiness';
 import { planSources, type SourceOption } from './sourceRouter';
 import { tripWindow, type OneTripPlan } from './oneTrip';
-import { preflightItems } from './checklist';
+import { nameKey, preflightItems } from './checklist';
 import { weightAdvice, type WeightAdvice } from './weight';
 import { carryoverOf } from './carryover';
 import { questItemKeys } from './questItems';
@@ -406,24 +407,25 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
     }
   }
 
+  const equipmentNeeds = preflightItems(step).filter(r => r.equip);
   for (const l of lines) {
-    const required = step.itemsRequired?.find(r => r.equip && r.nameEn === l.name);
+    const required = equipmentNeeds.find(r => r.nameEn === l.name);
     if (!required || !l.usedIn.includes(step.id)) continue;
     l.equip = true;
-    const accepted = new Set([required.nameEn, ...(required.anyOf ?? [])].map(n => n.toLowerCase()));
-    const worn = state.connected && state.equipmentKnown && Object.values(state.equipment).some(n => accepted.has(n.toLowerCase()));
-    if (worn) {
+    const accepted = new Set([required.nameEn, ...(required.alt ?? [])].map(nameKey));
+    const worn = countWorn(wornItemsOf(state), n => accepted.has(nameKey(n)));
+    if (state.connected && state.equipmentKnown && worn.count >= required.count) {
       l.where = 'EQUIPPED';
-      l.have.equipped = 1;
+      l.have.equipped = worn.count;
       l.toGet = 0;
       l.bagShortfall = 0;
       delete l.action;
       delete l.unnote;
+    } else if (!state.connected || !state.equipmentKnown || !worn.known) {
+      l.where = 'UNKNOWN';
+      l.action = { kind: 'CONNECT', label: 'Refresh RuneLite equipment so worn quantities can be checked', href: '#/settings' };
     } else if (l.where !== 'INVENTORY' && l.where !== 'EQUIPPED') {
       continue;
-    } else if (!state.connected || !state.equipmentKnown) {
-      l.where = 'UNKNOWN';
-      l.action = { kind: 'CONNECT', label: 'Connect RuneLite so equipped armour can be checked', href: '#/settings' };
     } else {
       l.where = 'INVENTORY';
       l.action = { kind: 'UPGRADE', label: `Equip ${l.name}` };

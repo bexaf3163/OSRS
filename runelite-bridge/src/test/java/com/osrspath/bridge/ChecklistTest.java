@@ -34,6 +34,23 @@ public class ChecklistTest
 	private static final ActiveTarget.ChecklistItem ROPE = item("Rope", 954, 1, null);
 
 	@Test
+	public void equippedAmmunitionRequiresTheActualStackQuantity()
+	{
+		ActiveTarget.ChecklistItem arrows = item("Bronze arrow", 882, 100, null);
+		arrows.setEquip(true);
+		List<ActiveTarget.ChecklistItem> items = Collections.singletonList(arrows);
+		ItemCounts carried = counts(882, "Bronze arrow", 100);
+		Checklist.Result oneWorn = Checklist.evaluate(items, carried, counts(), counts(882, "Bronze arrow", 1));
+		assertFalse(oneWorn.isReady());
+		assertEquals(Checklist.State.NOT_EQUIPPED, oneWorn.getRows().get(0).getState());
+		assertEquals(1, oneWorn.getRows().get(0).getHave());
+		Checklist.Result stackWorn = Checklist.evaluate(items, carried, counts(), carried);
+		assertTrue(stackWorn.isReady());
+		assertEquals(100, stackWorn.getRows().get(0).getHave());
+		assertFalse(Checklist.evaluate(items, carried, counts(), null).isReady());
+	}
+
+	@Test
 	public void requiredArmourMustBeWornAndOwnedAlternativesCount()
 	{
 		ActiveTarget.ChecklistItem helm = item("Black full helm", 1165, 1, null);

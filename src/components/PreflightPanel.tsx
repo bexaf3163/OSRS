@@ -33,15 +33,15 @@ export function PreflightPanel({ step }: { step: Step }) {
           <summary className="small">{r.rows.filter((x) => x.state === 'IN_BAG_READY').length} of {r.rows.length} items in the bag</summary>
         <ul className="preflight-list">
           {r.rows.map(({ item, have, inBank, state: s }) => (
-            <li key={item.nameEn} className={`preflight-row is-${s === 'IN_BAG_READY' ? 'ok' : s === 'MISSING_FROM_BAG' ? 'missing' : 'absent'}`}>
-              <span className="preflight-mark" aria-hidden="true">{s === 'IN_BAG_READY' ? '✓' : '✗'}</span>
+            <li key={item.nameEn} className={`preflight-row is-${s === 'IN_BAG_READY' ? 'ok' : s === 'UNKNOWN' ? 'unknown' : s === 'MISSING_FROM_BAG' ? 'missing' : 'absent'}`}>
+              <span className="preflight-mark" aria-hidden="true">{s === 'IN_BAG_READY' ? '✓' : s === 'UNKNOWN' ? '?' : '✗'}</span>
               <span className="preflight-name">
                 {item.nameEn}
                 {item.heals ? <span className="badge badge-heal">+{item.heals} HP</span> : null}
               </span>
               <span className="preflight-count">
-                {have}/{item.doses ?? item.count}{item.exact ? '' : '+'}{item.doses !== undefined ? ' doses' : item.equip ? ' worn' : ''}{s === 'NOT_EQUIPPED' ? ' · equip it' : ''}
-                {s !== 'IN_BAG_READY' && inBank !== null && (
+                {s === 'UNKNOWN' ? 'Worn quantity not checked' : <>{have}/{item.doses ?? item.count}{item.exact ? '' : '+'}{item.doses !== undefined ? ' doses' : item.equip ? ' worn' : ''}{s === 'NOT_EQUIPPED' ? ' · equip it' : ''}</>}
+                {s !== 'IN_BAG_READY' && s !== 'UNKNOWN' && inBank !== null && (
                   <span className="muted"> · {inBank > 0 ? `in the bank ${inBank}` : 'not in the bank'}</span>
                 )}
               </span>
@@ -51,6 +51,7 @@ export function PreflightPanel({ step }: { step: Step }) {
         </details>
         <p className={`preflight-verdict ${r.ready ? 'is-ready' : ''}`} role="status">
           {r.ready ? '🟢 All ready — you can go'
+            : r.rows.some(x => x.state === 'UNKNOWN') ? 'Not checked: refresh RuneLite equipment before setting off.'
             : owned.bankSeen ? `Not ready to set off: ${r.missing} missing${owned.bankSavedAt ? '. The bank is from a record of an earlier session: open it to refresh.' : ''}`
               : `Not ready to set off: ${r.missing} missing. Open the bank — I will show what is there and highlight what is needed.`}
         </p>

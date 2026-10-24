@@ -186,6 +186,7 @@ describe('S6-02 follows the training method of the real level', () => {
       const owned = { bankSeen: true, items: new Map(tracked.map((n) => [nameKey(n), { name: n, carried: bag[n] ?? 0, noted: 0, bank: 0 } as OwnedItem])) };
       const state = buildPlayerState({ mode: 'f2p', stats: { fishing: level, cooking: 30 }, progress: emptyProgress(), gear: null, questsDone: null, owned, connected: true });
       const pick = pickMethods([step], state, 'f2p', style)[step.id];
+      if (pick !== undefined && typeof pick !== 'string') throw new Error('Fishing unexpectedly received a ranged loadout');
       picks.push(pick);
       const r = withTrainingMethod(step, pick);
       tracked = [...(r.itemsRequired ?? []).map((x) => x.nameEn), ...(alsoTrackEveryMethod ? methodToolNames(step) : [])];

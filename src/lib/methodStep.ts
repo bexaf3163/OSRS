@@ -12,12 +12,15 @@ import { items as itemData } from '../data';
 import { matchStrict } from '../services/locationResolver';
 import { AXES, PICKAXES } from './toolTiers';
 import type { MethodNeed } from './trainingRouter';
+import { RANGED_WATCH } from './rangedLoadout';
 
 /** The stored pick when the skill's goal is already reached: no tool of that skill is asked for. */
 export const GOAL_REACHED = 'goal-reached';
 export const UNKNOWN_GOAL_PREFIX = 'goal-unknown:';
+/** Resolved supplies travel with the method pick, as combat/food projections already do; the store never rebuilds a loadout from stale state. */
+export type TrainingPick = string | { methodId: string; needs: MethodNeed[] };
 
-interface RawMethod { id: string; skills: string[]; name: string; from: number; to: number | null; needs?: MethodNeed[]; place?: string; objectNames?: string[]; where: string; note?: string }
+interface RawMethod { id: string; skills: string[]; name: string; from: number; to: number | null; needs?: MethodNeed[]; place?: string; objectNames?: string[]; npcNames?: string[]; where: string; note?: string }
 
 const RAW: RawMethod[] = (methodsJson as unknown as { methods: (Omit<RawMethod, 'skills'> & { skill: string | string[] })[] }).methods
   .map((m) => ({ ...m, skills: Array.isArray(m.skill) ? m.skill : [m.skill] }));
@@ -54,6 +57,7 @@ export function methodToolNames(step: Pick<Step, 'followsMethod' | 'inGame'>): s
   const skills = goals.length ? goals.map(g => g.skill) : step.followsMethod ? [step.followsMethod] : [];
   if (!skills.length) return [];
   const names = new Set<string>();
+  if (skills.includes('ranged')) for (const name of RANGED_WATCH) names.add(name);
   for (const m of RAW) if (m.skills.some(skill => skills.includes(skill))) for (const need of m.needs ?? []) for (const name of needNames(need)) names.add(name);
   return [...names];
 }
@@ -70,6 +74,7 @@ function requirement(n: MethodNeed, m: RawMethod): StepItemRequirement | null {
     howToGet: `For ${m.name.charAt(0).toLowerCase()}${m.name.slice(1)}.${shop ? ` ${shop.shopName}, ${shop.location}.` : ''}`,
     ...(known ? { wikiItemId: known.id, iconUrl: known.iconUrl } : {}),
     ...(names.length > 1 ? { anyOf: names.slice(1) } : {}),
+    ...(n.type === 'item' && n.equip ? { equip: true } : {}),
   };
 }
 
@@ -84,10 +89,11 @@ export function methodPoint(methodId: string): MapLocation | null {
  * The step as the player needs it now: the tools of the picked method, its place, and its tools to highlight in the game. A step without
  * followsMethod, no pick, or a pick that names no known method comes back unchanged (the same object).
  */
-export function withTrainingMethod(step: Step, pick: string | undefined): Step {
+export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): Step {
   if (!step.followsMethod || !pick) return step;
-  if (pick.startsWith(UNKNOWN_GOAL_PREFIX)) {
-    const skill = pick.slice(UNKNOWN_GOAL_PREFIX.length);
+  const id = typeof pick === 'string' ? pick : pick.methodId;
+  if (id.startsWith(UNKNOWN_GOAL_PREFIX)) {
+    const skill = id.slice(UNKNOWN_GOAL_PREFIX.length);
     if (!followedGoals(step).some(g => g.skill === skill)) return step;
     const message = `Check your ${skill} level in RuneLite or Skills before choosing its training method.`;
     return { ...step, followsMethod: skill, itemsRequired: [], itemsRecommended: [], mapLocation: undefined, resourceSpots: [],
@@ -97,23 +103,25 @@ export function withTrainingMethod(step: Step, pick: string | undefined): Step {
         npcNames: [], npcIds: [], objectNames: [], objectIds: [], highlightItems: [], goal: message } } : {}),
     };
   }
-  if (pick === GOAL_REACHED) {
+  if (id === GOAL_REACHED) {
     return { ...step, itemsRequired: [], itemsRecommended: [], mapLocation: undefined, resourceSpots: [],
       ...(step.inGame ? { inGame: { ...step.inGame, worldPoint: undefined, groundTiles: [], pathWaypoints: undefined,
         npcNames: [], npcIds: [], objectNames: [], objectIds: [], highlightItems: [], goal: 'Training goals reached' } } : {}),
     };
   }
-  const m = METHODS.get(pick);
+  const m = METHODS.get(id);
   const goals = followedGoals(step);
   const goal = goals.find(g => m?.skills.includes(g.skill));
   if (!m || !goal) return step;
-  const itemsRequired = (m.needs ?? []).map((n) => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null);
-  const at = methodPoint(pick);
+  const needs = typeof pick === 'string' ? m.needs ?? [] : pick.needs;
+  const itemsRequired = needs.map((n) => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null);
+  const at = methodPoint(id);
   return {
     ...step,
     followsMethod: goal.skill,
     itemsRequired,
-    ...(goal.skill !== step.followsMethod || goal.skill === 'mining' || goal.skill === 'woodcutting' ? {
+    requirements: [...step.requirements ?? [], ...needs.filter((n): n is Extract<MethodNeed, { type: 'skill' | 'quest' }> => n.type === 'skill' || n.type === 'quest')],
+    ...(goal.skill !== step.followsMethod || goal.skill === 'mining' || goal.skill === 'woodcutting' || goal.skill === 'ranged' ? {
       itemsRecommended: [], foes: undefined, threats: undefined, pacing: undefined,
       where: m.where, how: `Train ${goal.skill} to ${goal.target}: ${m.name}. ${m.note ?? ''}`.trim(),
       quickSteps: ['Bank finished-skill tools and surplus supplies before withdrawing the current batch.', `Prepare the listed supplies for ${m.name}.`, `Train ${goal.skill} to ${goal.target} at ${m.where}. ${m.note ?? ''}`.trim()],
@@ -125,7 +133,7 @@ export function withTrainingMethod(step: Step, pick: string | undefined): Step {
       worldPoint: at ?? undefined, groundTiles: at ? [at] : [], pathWaypoints: undefined,
       goal: at?.label ?? `${m.name}: ${m.where}`,
       objectNames: m.objectNames ?? [], objectIds: [],
-      ...(goal.skill !== step.followsMethod ? { npcNames: [], npcIds: [] } : {}),
+      ...(m.npcNames || goal.skill !== step.followsMethod || goal.skill === 'ranged' ? { npcNames: m.npcNames ?? [], npcIds: [] } : {}),
       highlightItems: itemsRequired.map((i) => i.nameEn),
     } } : {}),
   };

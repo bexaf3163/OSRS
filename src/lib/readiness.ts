@@ -243,7 +243,7 @@ export function readinessOf(step: Step, ctx: ReadinessContext): StepReadiness {
     // Any of several items does the job (S3-08's food: Salmon, or Trout, Tuna...): they count together, as the plugin's guide counts them. A tool
     // family (every pickaxe tier) is counted by heldOf already.
     const alt = it.alt?.length && !toolFamilyOf(it.nameEn) ? it.alt : null;
-    const res = it.equip ? evaluate({ type: 'equipment', name: it.nameEn, anyOf: it.alt }, state) : alt
+    const res = it.equip ? evaluate({ type: 'equipment', name: it.nameEn, anyOf: it.alt, count: it.count }, state) : alt
       ? evaluate({
         type: 'alternative', requiredCount: it.count,
         alternatives: [{ name: it.nameEn, manualKey: key, ...(it.id !== undefined ? { id: it.id } : {}) }, ...alt.map((n) => ({ name: n, manualKey: `name:${nameKey(n)}` }))],

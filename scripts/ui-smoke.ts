@@ -195,6 +195,8 @@ async function run(browser: Browser) {
   if (!process.env.UI_ONLY) await skillHandoverScenarios(browser);
   if (process.env.UI_ONLY === 'mining-handover') { await miningHandoverScenarios(browser); return; }
   if (!process.env.UI_ONLY) await miningHandoverScenarios(browser);
+  if (process.env.UI_ONLY === 'ranged-preparation') { await rangedPreparationScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await rangedPreparationScenarios(browser);
   if (process.env.UI_ONLY === 'shopping-quotes') { await shoppingQuoteScenarios(browser); return; }
   if (!process.env.UI_ONLY) await shoppingQuoteScenarios(browser);
   if (process.env.UI_ONLY === 'journal-quotes') { await journalQuoteScenarios(browser); return; }
@@ -2481,6 +2483,43 @@ async function miningHandoverScenarios(browser: Browser) {
     await reveal(page, '.training:visible');
     expect((await text(page, '.training:visible')).includes('Woodcutting'), `Mining handover (${width}): desktop method and game payload agree`);
     expect(await noOverflow(page) && !errors.length, `Mining handover (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function rangedPreparationScenarios(browser: Browser) {
+  for (const width of [390, 1280]) {
+    const stats = { ranged: 1, defence: 1 };
+    const weapon = { id: 841, name: 'Shortbow', slot: 'weapon', count: 1 };
+    const arrow = { id: 882, name: 'Bronze arrow', slot: 'ammo', count: 1 };
+    const gear = { equipment: [weapon, arrow], inventory: [], coins: 1000, bankCoins: 0 };
+    const names = ['Maple shortbow', 'Maple longbow', 'Willow shortbow', 'Willow longbow', 'Oak shortbow', 'Oak longbow', 'Shortbow', 'Longbow', 'Adamant arrow', 'Mithril arrow', 'Steel arrow', 'Iron arrow', 'Bronze arrow', 'Salmon', 'Tuna', 'Lobster', 'Swordfish'];
+    const items = names.map(name => ({ name, carried: name === 'Shortbow' ? 1 : name === 'Bronze arrow' ? 100 : 0, noted: 0, bank: name === 'Salmon' ? 10 : 0 }));
+    const { page, errors } = await open(browser, width, {
+      market: true, progress: progressBefore('S6-01', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-01' },
+      status: { protocol: 6, inGame: true, player: 'Ranged Preparation', activeStepId: 'S6-01', stats, ...gear },
+      events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
+    }, '#/step/S6-01');
+    const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
+    const initial = await snapshot();
+    expect(initial?.step?.npcNames?.includes('Seagull') && initial.step.worldPoint?.label?.includes('Port Sarim'), `ranged (${width}): a beginner gets the current surface trainer, not ogresses`);
+    expect(initial?.step?.checklist?.some((r: any) => r.name === 'Bronze arrow' && r.count === 100 && r.equip) && initial.plan?.lines?.find((r: any) => r.name === 'Bronze arrow')?.where !== 'EQUIPPED', `ranged (${width}): one worn arrow cannot satisfy the starter stack`);
+    const equipped = { ...gear, equipment: [weapon, { ...arrow, count: 100 }] };
+    await page.evaluate(g => { const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void }; w.__status = { ...w.__status, ...g }; w.__emit({ type: 'GEAR', gear: g }); }, equipped);
+    await page.waitForTimeout(1500);
+    const ready = await snapshot();
+    expect(ready?.plan?.lines?.find((r: any) => r.name === 'Bronze arrow')?.where === 'EQUIPPED', `ranged (${width}): a GEAR-only quantity update reaches the canonical preparation snapshot`);
+    for (const [level, npc] of [[20, 'Monk'], [26, 'Giant frog']] as const) {
+      await page.evaluate(s => { const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { ranged: level, defence: 1 });
+      await page.waitForTimeout(1500);
+      const current = await snapshot();
+      expect(JSON.stringify(current?.step?.npcNames) === JSON.stringify([npc]) && !current?.step?.worldPoint?.label?.includes('Corsair'), `ranged (${width}, level${level}): method, scenery and destination advance together`);
+      if (level === 26) expect(current?.step?.checklist?.some((r: any) => r.name === 'Salmon' && r.count === 10) && current.plan?.lines?.find((r: any) => r.name === 'Salmon')?.where === 'BANK', `ranged (${width}): the later combat method asks for owned banked food`);
+    }
+    await reveal(page, '.training:visible');
+    expect((await text(page, '.training:visible')).includes('Giant frogs'), `ranged (${width}): the visible desktop advice matches the game target`);
+    expect(await noOverflow(page) && !errors.length, `ranged (${width}): no overflow or runtime errors`);
     await page.context().close();
   }
 }

@@ -74,6 +74,7 @@ export function detectCombatStages(steps: readonly Step[], quests: QuestStages):
     if (s.threats?.length) signals.push(`threats: ${s.threats.join(', ')}`);
     if (s.pacing && COMBAT_SKILLS.has(s.pacing.skill)) signals.push(`pacing: ${s.pacing.skill}`);
     if (s.safespot) signals.push('safespot');
+    if (s.followsMethod === 'ranged') signals.push('training: ranged');
     const lines = fightLines(quests[s.id]);
     if (lines.length) signals.push('quest lines');
     if (signals.length) out.push({ stepId: s.id, signals, lines });

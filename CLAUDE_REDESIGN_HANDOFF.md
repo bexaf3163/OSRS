@@ -1,5 +1,9 @@
 # 2.74.2 route repair
 
+Newest source: [Ranged preparation](docs/CODEX_RANGED_PREPARATION_HANDOFF.md), current F2P trainers and compatible owned bow/ammunition. Current-tree acceptance pending; earlier receipts are source-specific. Continue from docs/CLAUDE_NEXT_SESSION.md.
+
+Newest source: [equipped quantity parity](docs/CODEX_EQUIPMENT_QUANTITY_HANDOFF.md), with actual stack counts and UNKNOWN preserved across readiness/preparation/checklist. Combined skill handovers now pass complete automated/portable gates on e6a37913; newer quantity source needs final browser/packaged acceptance. Start with the current section of [CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md).
+
 Latest source continuation: [combined skill handovers](docs/CODEX_SKILL_HANDOVER_HANDOFF.md). S6-02 source81c707a0 passed all automated/portable gates; the newer S6-03 Mining/Woodcutting source still needs cumulative acceptance. Live gameplay remains unverified. Start with the first current section of [CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md) and continue remaining T11/T01–T17 work without repeating completed migrations.
 
 Unreleased2.74.3 owner armour/shared-prices/date source: start with the **Current cumulative pricing source** section in [docs/CLAUDE_NEXT_SESSION.md](docs/CLAUDE_NEXT_SESSION.md). It records implemented migrations, final-CI/live boundaries and remaining T01–T17 work. Keep one HUD and the canonical readiness pipeline; do not restore fixed GE prices or the50-bone quota. Stable publication remains batched until current gates pass.

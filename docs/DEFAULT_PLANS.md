@@ -20,6 +20,10 @@ older save stays as "Fastest"; "Relaxed" keeps the old calm order.
 | S4-03 Attack 40 and 50 Big bones (Hill Giants) | As the first, an older save with no choice (the old automatic default) | The route as written | Big bones first, then train on cows | Recommended for your levels and kit: about 45 min faster and 305 fewer pieces of food (about 10,098 gp) than the route as written. |
 | S4-03 Attack 40 and 50 Big bones (Hill Giants) | As the first, in the middle of a trip at the giants (food in the bag, fighting) | The route as written | The route as written; from the next bank trip: Big bones first, then train on cows | Recommended for your levels and kit: about 45 min faster and 305 fewer pieces of food (about 10,098 gp) than the route as written. |
 | S3-08 Strength 20 and Attack 30 (Minotaurs) | Attack 22, Strength 16, Defence 1, 22 HP, Mithril scimitar, iron armour | The route as written | Train on cows | Recommended for your levels and kit: about 15 min faster and 75 fewer pieces of food (about 2,442 gp) than the route as written. |
+| S6-01 Ranged to 50 with a prepared ranged loadout | ranged 1 (F2P) | Seagulls at Port Sarim | Seagulls at Port Sarim | steady clicking; material costs |
+| S6-01 Ranged to 50 with a prepared ranged loadout | ranged 20 (F2P) | Seagulls at Port Sarim | The monks of Edgeville Monastery | steady clicking; small risk; material costs |
+| S6-01 Ranged to 50 with a prepared ranged loadout | ranged 30 (F2P) | Seagulls at Port Sarim | Giant frogs | steady clicking; small risk; material costs |
+| S6-01 Ranged to 50 with a prepared ranged loadout | ranged 40 (F2P) | Seagulls at Port Sarim | Giant frogs | steady clicking; small risk; material costs |
 | S6-02 Fishing to 50 and Cooking to 50 | fishing 1 (F2P) | Shrimp and anchovies with a net | Shrimp and anchovies with a net | ≈ 2k–8k XP per hour; few clicks |
 | S6-02 Fishing to 50 and Cooking to 50 | fishing 20 (F2P) | Trout and salmon with fly fishing | Trout and salmon with fly fishing | ≈ 13k–50k XP per hour; almost no clicks |
 | S6-02 Fishing to 50 and Cooking to 50 | fishing 30 (F2P) | Trout and salmon with fly fishing | Trout and salmon with fly fishing | ≈ 13k–50k XP per hour; almost no clicks |
@@ -37,6 +41,10 @@ older save stays as "Fastest"; "Relaxed" keeps the old calm order.
 | Skills page: mining | level 30 → 40 (F2P) | Copper and tin | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
 | Skills page: mining | level 40 → 50 (F2P) | Copper and tin | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
 | Skills page: mining | level 50 → 60 (F2P) | Copper and tin | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
+| Skills page: ranged | level 20 → 30 (F2P) | Seagulls at Port Sarim | The monks of Edgeville Monastery | steady clicking; small risk; material costs |
+| Skills page: ranged | level 30 → 40 (F2P) | Seagulls at Port Sarim | Giant frogs | steady clicking; small risk; material costs |
+| Skills page: ranged | level 40 → 50 (F2P) | Seagulls at Port Sarim | Giant frogs | steady clicking; small risk; material costs |
+| Skills page: ranged | level 50 → 60 (F2P) | Seagulls at Port Sarim | Giant frogs | steady clicking; small risk; material costs |
 
-Steps that follow a training method: S6-02, S6-03. Combat training stages: S3-08, S4-03 (the only steps with an opponent and a melee XP goal).
+Steps that follow a training method: S6-01, S6-02, S6-03. Combat training stages: S3-08, S4-03 (the only steps with an opponent and a melee XP goal).
 Travel variants (canoe, teleports) are not training plans and are unchanged: they still need a press.

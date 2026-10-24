@@ -1062,59 +1062,114 @@
       "skill": "ranged",
       "from": 1,
       "to": 20,
-      "name": "Chickens, cows and goblins by Lumbridge",
+      "name": "Seagulls at Port Sarim",
       "members": false,
       "needs": [
         {
           "type": "item",
-          "name": "Shortbow"
+          "name": "Shortbow",
+          "equip": true
         },
         {
           "type": "item",
-          "name": "Bronze arrow"
+          "name": "Bronze arrow",
+          "count": 100,
+          "equip": true
         }
       ],
       "effort": "medium",
-      "cost": "free",
-      "risk": "low",
-      "where": "The farms around Lumbridge",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Port Sarim docks: select the level 3 Seagulls",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
-      "place": "Lumbridge"
+      "place": "Port Sarim",
+      "suggestedFrom": 1,
+      "kit": "f2p-bow",
+      "npcNames": [
+        "Seagull"
+      ],
+      "note": "Level 3 Seagulls cannot damage you; check the target level. Equip a compatible bow and arrow stack. Use Accurate while starting, then Rapid after Ranged 5. Pick up reusable arrows when safe; bank before ammunition runs out. This is a starter stack, not a whole-goal estimate."
     },
     {
       "id": "ra-monk",
       "skill": "ranged",
-      "from": 5,
-      "to": 25,
+      "from": 1,
+      "to": 26,
       "name": "The monks of Edgeville Monastery",
       "members": false,
       "effort": "medium",
-      "cost": "free",
+      "cost": "cost",
       "risk": "low",
       "where": "Edgeville Monastery",
-      "note": "The monks heal, so it is safer.",
+      "note": "Talk to a non-combat monk for free healing; leave combat before doing so. Equip the listed compatible bow and arrows; use Rapid after Ranged 5. Avoid Longrange if preserving Defence. Refill ammunition when low.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
-      "place": "Edgeville Monastery"
+      "place": "Edgeville Monastery",
+      "suggestedFrom": 20,
+      "kit": "f2p-bow",
+      "needs": [
+        {
+          "type": "item",
+          "name": "Shortbow",
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Bronze arrow",
+          "count": 100,
+          "equip": true
+        }
+      ],
+      "npcNames": [
+        "Monk"
+      ]
     },
     {
       "id": "ra-frog",
       "skill": "ranged",
-      "from": 26,
+      "from": 1,
       "to": 56,
       "name": "Giant frogs",
       "members": false,
       "effort": "medium",
-      "cost": "free",
+      "cost": "cost",
       "risk": "low",
       "where": "Lumbridge Swamp",
-      "note": "Bones for Prayer along the way.",
+      "note": "Equip the compatible bow and arrows and use Rapid; avoid Longrange if preserving Defence. Ten food is a starter trip, not a guarantee for the goal. Bank while food or ammunition is low; do not wait until none remains.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
-      "place": "Lumbridge Swamp"
+      "place": "Lumbridge Swamp",
+      "suggestedFrom": 26,
+      "kit": "f2p-bow",
+      "needs": [
+        {
+          "type": "item",
+          "name": "Shortbow",
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Bronze arrow",
+          "count": 100,
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Salmon",
+          "count": 10,
+          "anyOf": [
+            "Tuna",
+            "Lobster",
+            "Swordfish"
+          ]
+        }
+      ],
+      "npcNames": [
+        "Giant frog"
+      ]
     },
     {
       "id": "ra-crawler",
       "skill": "ranged",
-      "from": 40,
+      "from": 1,
       "to": 99,
       "name": "Flesh Crawlers",
       "members": false,
@@ -1123,14 +1178,40 @@
           "type": "skill",
           "skill": "defence",
           "min": 40
+        },
+        {
+          "type": "item",
+          "name": "Shortbow",
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Bronze arrow",
+          "count": 100,
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Salmon",
+          "count": 10,
+          "anyOf": [
+            "Tuna",
+            "Lobster",
+            "Swordfish"
+          ]
         }
       ],
       "effort": "afk",
       "cost": "cost",
       "risk": "low",
-      "where": "Stronghold of Security",
-      "note": "Windows of about 10 minutes without clicks.",
-      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training"
+      "where": "Stronghold of Security, second level: Flesh Crawlers",
+      "note": "Requires Defence 40 in this recommendation. Check your ranged armour and food before entering; do not assume a ten-minute unattended window is safe. This is a starter trip; bank when food or ammunition is low. No verified method tile is available, so follow the written location rather than an old arrow.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
+      "suggestedFrom": 40,
+      "kit": "f2p-bow",
+      "npcNames": [
+        "Flesh Crawler"
+      ]
     },
     {
       "id": "me-cow",

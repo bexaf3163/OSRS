@@ -63,7 +63,9 @@ describe('readiness and the unified requirements give one answer', () => {
           const row = r.requirements.find((x) => x.kind === 'item' && x.label.startsWith(it.nameEn));
           if (!row) continue;
           const alt = ownAlternatives(it);
-          const req: Requirement = alt
+          const req: Requirement = it.equip
+            ? { type: 'equipment', name: it.nameEn, anyOf: it.alt, count: it.count }
+            : alt
             ? { type: 'alternative', requiredCount: it.count, alternatives: [it.nameEn, ...alt].map((name) => ({ name })) }
             : { type: 'item', name: it.nameEn, count: it.count };
           const got = evaluate(req, ps).state;

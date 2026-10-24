@@ -223,15 +223,16 @@
       "zones": ["crandor-boarding", "elvarg-lair"]
     },
     {
-      "stepId": "S6-01", "kind": "training", "mandatory": true, "method": "safespot",
-      "objective": "Ranged to 50 on the ogresses (82, hit up to 8) from a safespot.",
-      "enemies": [{ "name": "Ogress warrior", "level": 82, "maxHit": 8 }, { "name": "Ogress shaman", "level": 82 }],
+      "stepId": "S6-01", "kind": "training", "mandatory": false, "method": "other",
+      "objective": "Optional Ranged to 50 using a level-appropriate F2P bow, one equipped arrow stack and the current trainer.",
+      "enemies": [{ "name": "Seagull", "level": 3 }, { "name": "Monk" }, { "name": "Giant frog" }],
       "lines": [],
-      "assumptions": ["Ranged only, from a safespot: no melee plan applies, and Ranged is never offered in place of Attack XP."],
-      "problems": ["The combat estimate is melee only: the Ranged time and the food for the walk back (20 lobsters or swordfish, recommended) are not sized to the player."],
-      "alternatives": [],
-      "decision": "defer",
-      "evidence": ["Step fields \"Why\" and \"How\"; threats.json."]
+      "assumptions": ["The starter seagull must be the level-3 variant; generic name highlights cannot distinguish it.", "Rapid after Ranged 5; do not use Longrange when preserving Defence."],
+      "problems": ["Ranged DPS, whole-goal ammunition consumption and food are not simulated; 100 arrows and the later food quantity are starter supplies, not a survival guarantee.", "Crossbows, thrown weapons and Members loadouts are not covered by this F2P bow planner."],
+      "alternatives": ["Monks provide healing between fights; Giant frogs require food.", "Flesh crawlers retain their Defence 40 guard and written directions only.", "Compare ogresses as a later income option, not the level-1 default."],
+      "decision": "revise",
+      "changed": ["Unreleased 2.74.3: canonical trainer, equipped bow/ammunition and supply projection replace the fixed ogress route."],
+      "evidence": ["https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training", "https://oldschool.runescape.wiki/w/Ranged_bows", "tests/rangedPreparation.test.ts"]
     },
     {
       "stepId": "S7-02", "kind": "quest-fight", "mandatory": true, "method": "safespot",

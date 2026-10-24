@@ -1,5 +1,15 @@
 # Claude continuation — start here
 
+## Current source: equipped quantities and Ranged preparation
+
+Local quantity c2a12bb and newer S6-01 repair: [CODEX_RANGED_PREPARATION_HANDOFF.md](CODEX_RANGED_PREPARATION_HANDOFF.md). Current F2P trainer and compatible owned bow/ammunition use canonical preparation. Original IDs/goals/UNKNOWN semantics remain. All1,912 Vitest, build/data and608 Java tests pass locally; current browser/portable acceptance pending. Worn20+ arrows keep training; below20 requests a100-arrow refill. Earlier receipts apply only to their named source. Continue S6-04 Magic batches and T01–T17 after current gates; ranged consumption/other weapons/live acceptance remain open.
+
+## Current continuation: equipped quantities; combined skill handovers verified
+
+Mining/Woodcutting sourcee6a3791316f0360983cd1e52db82c493d2ee2b87 (exact local3bea460 tree0352245d4511d9a6848d2b0835534dbef3e4939b) passed [Checks40069903948](https://github.com/bexaf3163/OSRS/actions/runs/40069903948): all1,892 Vitest, build/data, full Java, complete Chromium smoke and isolated actual portable. [Verified test EXE](https://github.com/bexaf3163/OSRS/releases/download/audit-test-e6a37913/OSRS-Path-audit-test-e6a37913.exe), SHA256 **e917728974774a2ef7d85780657d14f2f2321b0b63eb36ae249ecc633d39957f**, matches its actual test log and asset digest. Live-game acceptance remains open; stable/main is held for batching.
+
+Newer source fixes desktop equipped-stack quantities and their fingerprint/unknown-state handling, a prerequisite for honest ranged supply preparation. See [CODEX_EQUIPMENT_QUANTITY_HANDOFF.md](CODEX_EQUIPMENT_QUANTITY_HANDOFF.md). All1,899 Vitest, build/data and full Java pass locally; final browser/packaged acceptance for this newer tree remains required. No route or protocol changes in the quantity block. Continue S6-01 ranged kits/early trainers, S6-04 spells and the broader T01–T17 backlog; do not claim these are already implemented. Earlier sections are historical receipts.
+
 ## Current continuation: S6-03 source; S6-02 automated gates verified
 
 S6-02 source81c707a00cccc972419bf0aa4ca51a825a76bf2f passed [Checks40042642412](https://github.com/bexaf3163/OSRS/actions/runs/40042642412):1,880 Vitest, build/data, full Java, complete Chromium smoke and isolated actual portable. [Test EXE](https://github.com/bexaf3163/OSRS/releases/download/audit-test-81c707a0/OSRS-Path-audit-test-81c707a0.exe), SHA256 **f8da121059775089a60613da84acddb63cddd1bcc3ca068a2c0a7cc0bd0e96fe**, matches the test log and release asset. Live-game acceptance remains open.

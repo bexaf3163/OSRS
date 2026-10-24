@@ -8,6 +8,7 @@ import type { GameMode, PlayerStats, Progress } from '../types';
 import type { GearState } from '../services/runeliteBridge';
 import { nameKey, type OwnedState } from './checklist';
 import { toolFamilyOf, toolUse, usableAt } from './toolTiers';
+import { countWorn, type WornItem } from './equipmentCount';
 
 export type StateSource = 'game' | 'profile' | 'manual';
 
@@ -38,6 +39,8 @@ export interface PlayerState {
   bankSeen: boolean;
   /** What is worn: slot to name. */
   equipment: Record<string, string>;
+  /** Exact worn quantities when supplied; null means the container was not read. Older hand-built states may omit it. */
+  equipmentItems?: readonly WornItem[] | null;
   /** The worn items were read from the game; false means unknown, not "nothing is worn". Absent in a hand-built state is read as unknown. */
   equipmentKnown?: boolean;
   /** The manual "I already have it" marks from shopping (the list row key to the quantity). */
@@ -93,6 +96,7 @@ export function buildPlayerState(i: PlayerStateInput): PlayerState {
     position: live && i.position ? known(i.position, 'game') : unknown,
     bankSeen: owned?.bankSeen === true,
     equipment,
+    equipmentItems: gear?.equipment ?? null,
     equipmentKnown: Array.isArray(gear?.equipment),
     manual,
     owned,
@@ -108,15 +112,21 @@ function fingerprintOf(s: PlayerState): string {
   const c = (k: Known<number>) => (k.known ? k.value : '?');
   const q = s.quests.known ? JSON.stringify([...new Set(s.quests.value.map(nameKey))].sort()) : '?';
   const eq = Object.entries(s.equipment).map(([k, v]) => `${k}=${v}`).sort().join(',');
+  const eqCounts = s.equipmentItems?.map(i => `${nameKey(i.name)}:${i.count ?? '?'}`).sort().join(',') ?? '?';
   const man = Object.entries(s.manual).map(([k, v]) => `${k}=${v}`).sort().join(',');
   const pos = s.position.known ? `${s.position.value.x},${s.position.value.y},${s.position.value.plane}` : '?';
-  return [s.mode, s.connected ? 1 : 0, s.bankSeen ? 1 : 0, JSON.stringify(s.player), s.equipmentKnown ? 1 : 0, pos, lv, c(s.coins.bag), c(s.coins.bank), c(s.bagSlots), c(s.weight), s.bagItems.known ? s.bagItems.value.map((b) => `${b.name}:${b.count}`).sort().join(',') : '?', q, eq, man, items].join('|');
+  return [s.mode, s.connected ? 1 : 0, s.bankSeen ? 1 : 0, JSON.stringify(s.player), s.equipmentKnown ? 1 : 0, pos, lv, c(s.coins.bag), c(s.coins.bank), c(s.bagSlots), c(s.weight), s.bagItems.known ? s.bagItems.value.map((b) => `${b.name}:${b.count}`).sort().join(',') : '?', q, eq, eqCounts, man, items].join('|');
 }
 
 /** The skill's level; undefined means unknown. */
 export function levelOf(s: PlayerState, skill: string): number | undefined {
   const l = s.levels[skill];
   return l?.known ? l.value : undefined;
+}
+
+/** Preserve legacy name-only states without inventing an ammunition stack size. */
+export function wornItemsOf(s: Pick<PlayerState, 'equipment' | 'equipmentItems'>): readonly WornItem[] | null {
+  return s.equipmentItems === undefined ? Object.values(s.equipment).map(name => ({ name })) : s.equipmentItems;
 }
 
 export type Presence = 'PRESENT' | 'MISSING' | 'UNKNOWN';
@@ -189,9 +199,9 @@ export function unusableTools(s: Pick<PlayerState, 'owned' | 'equipment' | 'manu
 }
 
 /** Physical named stock, without generic tool substitution. Allocation must not spend one Rune pickaxe through several tier names. */
-export function heldExact(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'>, nameEn: string, manualKey?: string): Held {
+export function heldExact(s: Pick<PlayerState, 'owned' | 'equipment' | 'equipmentItems' | 'manual' | 'bankSeen'>, nameEn: string, manualKey?: string): Held {
   const o = s.owned?.items.get(nameKey(nameEn));
-  const equipped = Object.values(s.equipment).filter((n) => nameKey(n) === nameKey(nameEn)).length;
+  const equipped = countWorn(wornItemsOf(s), n => nameKey(n) === nameKey(nameEn)).count;
   const manual = manualKey ? s.manual[manualKey] : undefined;
   // A global bank observation does not prove every tracked row's quantity. A new/unreported row remains unknown.
   if (o && s.bankSeen && o.bank !== undefined) {
