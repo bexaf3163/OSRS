@@ -359,6 +359,7 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 	{
 		completion = new AutoCompletionManager(this::isQuestFinished, stats::get, this::ownedCount, this::onStepCompleted);
 		completion.setVarbitReader(id -> client.getGameState() == GameState.LOGGED_IN ? client.getVarbitValue(id) : null);
+		completion.setVarpReader(id -> client.getGameState() == GameState.LOGGED_IN ? client.getVarpValue(id) : null);
 		radar = DangerRadar.load(gson);
 		startTelemetry();
 		startServer();

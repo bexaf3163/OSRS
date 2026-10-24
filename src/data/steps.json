@@ -4694,7 +4694,7 @@
         "text": "Go down into the hold with 3 planks (Plank), 90 nails (Steel nails) and a hammer. Click the hole in the hull three times."
       }
     ],
-    "doneWhen": "The hole is plugged.",
+    "doneWhen": "All three holes in the hull are repaired (the game marks the ship as fixed).",
     "inGame": {
       "npcNames": [
         "Klarense"
@@ -4707,7 +4707,13 @@
         "Plank",
         "Steel nails",
         "Hammer"
-      ]
+      ],
+      "completionTrigger": {
+        "type": "VARBIT_CHANGED",
+        "varbitId": 1837,
+        "targetValue": 1,
+        "atLeast": true
+      }
     }
   },
   {
@@ -4736,7 +4742,7 @@
       "wikiUrl": "https://oldschool.runescape.wiki/w/Ned"
     },
     "how": "Give Ned the Crandor map: he agrees to sail the ship.",
-    "doneWhen": "Ned has boarded the Lady Lumbridge.",
+    "doneWhen": "Ned agrees to be your captain: the quest moves on to sailing to Crandor.",
     "inGame": {
       "npcNames": [
         "Ned"
@@ -4746,7 +4752,13 @@
       ],
       "highlightItems": [
         "Crandor map"
-      ]
+      ],
+      "completionTrigger": {
+        "type": "VARBIT_CHANGED",
+        "varpId": 176,
+        "targetValue": 7,
+        "atLeast": true
+      }
     },
     "quickSteps": [
       "Make sure you have the Crandor map in your bag (all three pieces joined).",
@@ -6961,7 +6973,13 @@
         "howToGet": "For the Jungle demon (level 195): it is finished with Ranged from three or more squares away. Its ranged defence is +0, against +50 for magic and slash. The bow you trained Ranged with in S8-04; a Maple shortbow needs Ranged 30. Grand Exchange.",
         "wikiItemId": 853,
         "iconUrl": "https://oldschool.runescape.wiki/images/Maple_shortbow.png",
-        "anyOf": ["Maple longbow", "Willow shortbow", "Willow longbow", "Oak shortbow", "Oak longbow"]
+        "anyOf": [
+          "Maple longbow",
+          "Willow shortbow",
+          "Willow longbow",
+          "Oak shortbow",
+          "Oak longbow"
+        ]
       },
       {
         "nameEn": "Mithril arrow",
@@ -6970,7 +6988,10 @@
         "howToGet": "For the Jungle demon. Mithril arrows fit a Willow or Maple bow; Adamant arrows need Ranged 30 and a Maple bow. Grand Exchange; check the current estimate.",
         "wikiItemId": 888,
         "iconUrl": "https://oldschool.runescape.wiki/images/Mithril_arrow_1.png",
-        "anyOf": ["Adamant arrow", "Steel arrow"]
+        "anyOf": [
+          "Adamant arrow",
+          "Steel arrow"
+        ]
       }
     ],
     "loadouts": [

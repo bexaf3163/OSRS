@@ -167,6 +167,42 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
+	public void varpMilestoneReadsTheVarpNotAVarbitOfTheSameNumber()
+	{
+		// S5-07: Dragon Slayer's quest variable (varp 176) reaches 7 when Ned agrees to sail; varbit 176 is something else.
+		java.util.Map<Integer, Integer> varps = new java.util.HashMap<>();
+		manager.setVarbitReader(id -> 99);
+		manager.setVarpReader(varps::get);
+		ActiveTarget t = target("S5-07", "VARBIT_CHANGED");
+		t.getCompletionTrigger().setVarpId(176);
+		t.getCompletionTrigger().setTargetValue(7);
+		t.getCompletionTrigger().setAtLeast(true);
+		manager.setTarget(t);
+		varps.put(176, 6);
+		manager.onVarbitChanged(176, 99);
+		manager.onGameTick();
+		assertTrue("an event of a varbit with the same number does not fire it", completed.isEmpty());
+		varps.put(176, 7);
+		manager.onVarbitChanged(-1, 7);
+		manager.onGameTick();
+		assertEquals(List.of("S5-07"), completed);
+	}
+
+	@Test
+	public void aVarpNeedsTheMilestoneForm()
+	{
+		ActiveTarget t = target("S5-07", "VARBIT_CHANGED");
+		t.getCompletionTrigger().setVarpId(176);
+		t.getCompletionTrigger().setTargetValue(7);
+		manager.setTarget(t);
+		assertFalse("a varp is read as a milestone only", manager.isArmed());
+		t.getCompletionTrigger().setAtLeast(true);
+		t.getCompletionTrigger().setVarbitId(1837);
+		manager.setTarget(t);
+		assertFalse("not both a varbit and a varp", manager.isArmed());
+	}
+
+	@Test
 	public void aNewTargetArmsAgain()
 	{
 		ActiveTarget t = target("S2-04", "CHAT_MESSAGE");

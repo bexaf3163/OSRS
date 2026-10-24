@@ -355,7 +355,8 @@ export function validate(d: GuideData | null, route: Route): Report {
       try { new RegExp(t.chatPattern ?? ''); } catch { badGame.push(`${s.id}: chatPattern is not a regular expression`); }
       if (!t.chatPattern) badGame.push(`${s.id}: no chatPattern`);
     }
-    if (t.type === 'VARBIT_CHANGED' && (!Number.isInteger(t.varbitId) || !Number.isInteger(t.targetValue))) badGame.push(`${s.id}: varbitId and targetValue are required`);
+    if (t.type === 'VARBIT_CHANGED' && (Number.isInteger(t.varbitId) === Number.isInteger(t.varpId) || !Number.isInteger(t.targetValue))) badGame.push(`${s.id}: one of varbitId and varpId, and targetValue, are required`);
+    if (t.type === 'VARBIT_CHANGED' && t.varpId !== undefined && !t.atLeast) badGame.push(`${s.id}: a varp milestone needs atLeast`);
   }
   const withGame = steps.filter((s) => s.inGame);
   const auto = withGame.filter((s) => s.inGame!.completionTrigger);

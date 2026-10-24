@@ -8,7 +8,8 @@ QUESTS = {
     'S2-10': ('PrinceAliRescue', 'varp', 273), 'S2-11': ('ErnestTheChicken', 'varp', 32), 'S2-12': ('GoblinDiplomacy', 'varbit', 2378),
     'S3-01': ('DoricsQuest', 'varp', 31), 'S3-02': ('BlackKnightFortress', 'varp', 130), 'S3-03': ('DemonSlayer', 'varbit', 2561),
     'S3-04': ('BelowIceMountain', 'varbit', 12063), 'S4-01': ('TheCorsairCurse', 'varbit', 6071), 'S4-02': ('TheIdesOfMilk', 'varbit', 20106),
-    'S5-03': ('DragonSlayer', 'varp', 176),
+    'S5-03': ('DragonSlayer', 'varp', 176), 'S5-04': ('DragonSlayer', 'varp', 176), 'S5-06': ('DragonSlayer', 'varp', 176),
+    'S5-07': ('DragonSlayer', 'varp', 176),
     'S7-01': ('WaterfallQuest', 'varp', 65), 'S7-02': ('FightArena', 'varp', 17), 'S7-03': ('TreeGnomeVillage', 'varp', 111),
     'S7-05': ('TheGrandTree', 'varp', 150), 'S8-01': ('PriestInPeril', 'varp', 302), 'S8-02': ('NatureSpirit', 'varp', 307),
     'S8-05': ('AnimalMagnetism', 'varbit', 3185), 'S9-01': ('LostCity', 'varp', 147), 'S9-02': ('FairytaleI', 'varbit', 1803),
@@ -19,7 +20,7 @@ QUESTS = {
 # the root of the step's part. Dragon Slayer I is split over S5-01...S5-09; S5-03 is Melzar's Maze, whose lines follow Quest Helper's
 # room-and-key logic: the nearest tile alone cannot tell the maze's rooms apart through a wall.
 PARTS = {
-    'S5-03': 'getMelzarPiece',
+    'S5-03': 'getMelzarPiece', 'S5-04': 'getThalzarPiece', 'S5-06': 'getBoat', 'S5-07': 'getCaptain',
 }
 
 # Machines kept as they are in questMachines.json instead of regenerated: S9-03 was cut by hand to the part of Fairytale II the route leads

@@ -15837,12 +15837,6 @@
        "id": 995,
        "where": "Wormbrain takes exactly 10,000 coins.",
        "count": 10000
-      },
-      {
-       "name": "Map part",
-       "id": 1535,
-       "where": "The other two map pieces (Melzar's and Thalzar's): the three merge into the Crandor map.",
-       "count": 3
       }
      ]
     }

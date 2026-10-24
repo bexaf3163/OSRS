@@ -143,10 +143,13 @@ describe('auto-mark triggers on the route', () => {
     expect(step('S5-05').inGame!.dialogChoices ?? []).toEqual([]);
   });
 
-  it('VARBIT_CHANGED is used only for a verified milestone: Fairytale II permission, Quest Helper value 40', () => {
+  it('VARBIT_CHANGED is used only for verified milestones: the Lady Lumbridge fixed, Ned agreeing to sail, Fairytale II permission', () => {
     const varbits = triggers.filter(({ t }) => t.type === 'VARBIT_CHANGED');
-    expect(varbits.map(({ s }) => s.id)).toEqual(['S9-03']);
-    expect(varbits[0].t).toMatchObject({ varbitId: 2326, targetValue: 40, atLeast: true });
+    expect(varbits.map(({ s }) => s.id)).toEqual(['S5-06', 'S5-07', 'S9-03']);
+    // Quest Helper: fullyRepairedHull is varbit 1837 = 1; varp 176 is 7 from goToCrandor on (Ned has agreed); Fairytale II value 40.
+    expect(varbits[0].t).toEqual({ type: 'VARBIT_CHANGED', varbitId: 1837, targetValue: 1, atLeast: true });
+    expect(varbits[1].t).toEqual({ type: 'VARBIT_CHANGED', varpId: 176, targetValue: 7, atLeast: true });
+    expect(varbits[2].t).toMatchObject({ varbitId: 2326, targetValue: 40, atLeast: true });
   });
 
   it('levels are counted by the real levels, exactly the targets from the step title', () => {

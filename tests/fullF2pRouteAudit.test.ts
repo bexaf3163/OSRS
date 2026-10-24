@@ -205,7 +205,7 @@ describe('F2P route audit: continuity between places', () => {
 
 describe('F2P route audit: completion signals', () => {
   /** Steps with no automatic completion: the player ticks them, and the text says when. A new one must be added here on purpose. */
-  const MANUAL = ['S1-01', 'S1-02', 'S1-10', 'S5-06', 'S5-07'];
+  const MANUAL = ['S1-01', 'S1-02', 'S1-10'];
 
   it('every route step is finished by a signal the plugin can read, or is on the short list of manual steps', () => {
     const none = route.filter((s) => !s.inGame?.completionTrigger).map((s) => s.id);

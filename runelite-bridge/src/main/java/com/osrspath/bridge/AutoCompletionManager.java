@@ -16,7 +16,8 @@ import lombok.extern.slf4j.Slf4j;
  * <li>ITEM_OWNED: the player has the items: in the bag, worn, as notes and in the bank together;</li>
  * <li>CHAT_MESSAGE: a game message matched the step's regular expression;</li>
  * <li>VARBIT_CHANGED: the varbit with this number took exactly this value; with atLeast it is a milestone: this value or above, also when
- * it was already reached before the step was shown (a route milestone earlier than the end of a quest).</li>
+ * it was already reached before the step was shown (a route milestone earlier than the end of a quest). With varpId instead it reads a varp,
+ * as a milestone only (the Dragon Slayer variable reaching 7 when Ned agrees to sail).</li>
  * </ul>
  * QUEST_COMPLETED and SKILL_LEVEL may also have items: "quest complete and a Dragon scimitar bought",
  * "Fishing 20 and 50 shrimps". Such conditions are the game state: they are checked at once on arming, after
@@ -61,6 +62,8 @@ public class AutoCompletionManager
 	private final ItemChecker items;
 	private final Consumer<String> onCompleted;
 	private VarbitReader varbits = id -> null;
+	/** Where the quest varps are read from: a milestone with varpId reads a varp, not a varbit. */
+	private VarbitReader varps = id -> null;
 
 	private String stepId;
 	private String type;
@@ -71,6 +74,8 @@ public class AutoCompletionManager
 	private boolean anyItem;
 	private Pattern chatPattern;
 	private int varbitId;
+	/** VARBIT_CHANGED: varbitId is a varp (Dragon Slayer's quest variable 176), read as a milestone only. */
+	private boolean varp;
 	private int targetValue;
 	private boolean atLeast;
 	private boolean fired;
@@ -101,6 +106,7 @@ public class AutoCompletionManager
 		needItems = Collections.emptyList();
 		anyItem = false;
 		chatPattern = null;
+		varp = false;
 		atLeast = false;
 		fired = false;
 		ticks = 0;
@@ -150,11 +156,13 @@ public class AutoCompletionManager
 				}
 				break;
 			case "VARBIT_CHANGED":
-				if (t.getVarbitId() == null || t.getTargetValue() == null)
+				// Exactly one of the two variables; a varp is a milestone only (its change event carries no varbit number to compare).
+				if ((t.getVarbitId() == null) == (t.getVarpId() == null) || t.getTargetValue() == null || (t.getVarpId() != null && !t.isAtLeast()))
 				{
 					return;
 				}
-				varbitId = t.getVarbitId();
+				varp = t.getVarpId() != null;
+				varbitId = varp ? t.getVarpId() : t.getVarbitId();
 				targetValue = t.getTargetValue();
 				atLeast = t.isAtLeast();
 				break;
@@ -210,8 +218,8 @@ public class AutoCompletionManager
 		}
 		if ("VARBIT_CHANGED".equals(type))
 		{
-			Integer now = atLeast ? varbits.value(varbitId) : null;
-			out.add("Varbit(" + varbitId + (atLeast ? " >= " : " == ") + targetValue + ") = "
+			Integer now = atLeast ? (varp ? varps : varbits).value(varbitId) : null;
+			out.add((varp ? "Varp(" : "Varbit(") + varbitId + (atLeast ? " >= " : " == ") + targetValue + ") = "
 				+ (atLeast ? (now == null ? "?" : now >= targetValue ? "TRUE" : "FALSE (" + now + ")") : "waiting"));
 		}
 		return out;
@@ -227,6 +235,12 @@ public class AutoCompletionManager
 	public void setVarbitReader(VarbitReader reader)
 	{
 		this.varbits = reader == null ? id -> null : reader;
+	}
+
+	/** Where the milestone varps are read from (the plugin gives the client). */
+	public void setVarpReader(VarbitReader reader)
+	{
+		this.varps = reader == null ? id -> null : reader;
 	}
 
 	/** A game message (GAMEMESSAGE, SPAM). Colour tags are removed before comparing. */
@@ -247,7 +261,7 @@ public class AutoCompletionManager
 	{
 		// Any variable change may mean the quest moved on.
 		dirty = true;
-		if (isArmed() && "VARBIT_CHANGED".equals(type) && changedVarbitId == varbitId && (atLeast ? value >= targetValue : value == targetValue))
+		if (isArmed() && "VARBIT_CHANGED".equals(type) && !varp && changedVarbitId == varbitId && (atLeast ? value >= targetValue : value == targetValue))
 		{
 			fire();
 		}
@@ -275,7 +289,7 @@ public class AutoCompletionManager
 		if ("VARBIT_CHANGED".equals(type))
 		{
 			// A milestone is a state: read it now (it may have been reached before the step was shown).
-			Integer now = varbits.value(varbitId);
+			Integer now = (varp ? varps : varbits).value(varbitId);
 			if (now != null && now >= targetValue)
 			{
 				fire();

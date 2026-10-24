@@ -192,6 +192,8 @@ export interface CompletionTrigger {
   anyOf?: boolean;
   chatPattern?: string;
   varbitId?: number;
+  /** VARBIT_CHANGED with atLeast: a varp instead of a varbit (Dragon Slayer's quest variable 176). Exactly one of varbitId and varpId. */
+  varpId?: number;
   targetValue?: number;
   /**
    * VARBIT_CHANGED: the milestone is reached at this value or above (and is also checked when the step is shown), instead of exactly at the value.

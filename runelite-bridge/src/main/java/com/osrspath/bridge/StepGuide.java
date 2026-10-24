@@ -436,8 +436,15 @@ final class StepGuide
 		for (ActiveTarget.GuideItem i : source)
 		{
 			ItemLine line = remembered(item(i, places, carried, bank, worn), i.getName(), got);
-			// The stage has no list of its own, so the quest's whole list stands in: what the finished lines used up (wool for the wig) is not "needed now".
-			if (stageView != null && !questDone && cur.getItems() == null && spentByEarlierLines(line, i.getName(), stageView.getSteps(), stageView.getCursor()))
+			// Once the stage is under way, an item a line still to come guards with its own bag check is counted by that line, for what that line uses
+			// (one plank and 30 nails of the hull's three for each repair), not by the stage's starting total.
+			if (stageView != null && !questDone && line.getHave() != Have.BAG && guardedByLinesAhead(i.getName(), stageView.getSteps(), stageView.getCursor()))
+			{
+				line = line.as("checked by the list's line when it is needed", Have.IN_STEP, "on the line");
+			}
+			// What the finished lines used up (wool for the wig, the silk on Thalzar's door, the map parts joined into the Crandor map) is not "needed now",
+			// whether the list is the stage's own or the quest's whole list standing in.
+			else if (stageView != null && !questDone && spentByEarlierLines(line, i.getName(), stageView.getSteps(), stageView.getCursor()))
 			{
 				line = line.as("✓ already handled - handed in or used", Have.DONE, "done");
 			}
@@ -500,6 +507,32 @@ final class StepGuide
 			before = true;
 		}
 		return before;
+	}
+
+	/** Whether the stage is under way (past its first line) and the current or a later line checks this item in the bag before it goes on. */
+	static boolean guardedByLinesAhead(String rawName, List<ActiveTarget.StageLine> lines, int cursor)
+	{
+		if (cursor <= 0)
+		{
+			return false;
+		}
+		String key = ActiveTarget.nameKey(PrepPlan.rawName(rawName));
+		for (int i = cursor; i < lines.size(); i++)
+		{
+			List<ActiveTarget.Pre> pre = lines.get(i).getPre();
+			if (pre == null)
+			{
+				continue;
+			}
+			for (ActiveTarget.Pre p : pre)
+			{
+				if (p != null && p.getItem() != null && ActiveTarget.nameKey(p.getItem()).equals(key))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/** Whether a stage line names the item, in its full or its short text; "Pot of flour" is also named by "flour" (a container is not what the line is about). */

@@ -774,6 +774,8 @@ public class ActiveTarget
 		private boolean anyOf;
 		private String chatPattern;
 		private Integer varbitId;
+		/** VARBIT_CHANGED with atLeast: a varp instead of a varbit (a quest variable such as Dragon Slayer's 176). Exactly one of varbitId and varpId. */
+		private Integer varpId;
 		private Integer targetValue;
 		/** VARBIT_CHANGED: the milestone counts from this value upwards (and is also read when the step is shown), not only at exactly the value. */
 		private boolean atLeast;
