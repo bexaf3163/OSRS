@@ -194,6 +194,8 @@ export interface CompletionTrigger {
   varbitId?: number;
   /** VARBIT_CHANGED with atLeast: a varp instead of a varbit (Dragon Slayer's quest variable 176). Exactly one of varbitId and varpId. */
   varpId?: number;
+  /** VARBIT_CHANGED: only these bits count and must equal targetValue, read as a state (Dragon Slayer clears bits 11-15 of varp 177 as each question is asked). */
+  bitMask?: number;
   targetValue?: number;
   /**
    * VARBIT_CHANGED: the milestone is reached at this value or above (and is also checked when the step is shown), instead of exactly at the value.

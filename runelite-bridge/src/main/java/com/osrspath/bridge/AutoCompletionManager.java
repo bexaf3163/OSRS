@@ -76,6 +76,8 @@ public class AutoCompletionManager
 	private int varbitId;
 	/** VARBIT_CHANGED: varbitId is a varp (Dragon Slayer's quest variable 176), read as a milestone only. */
 	private boolean varp;
+	/** VARBIT_CHANGED: only these bits count and must equal targetValue (a state); 0 means the whole value. */
+	private int bitMask;
 	private int targetValue;
 	private boolean atLeast;
 	private boolean fired;
@@ -107,6 +109,7 @@ public class AutoCompletionManager
 		anyItem = false;
 		chatPattern = null;
 		varp = false;
+		bitMask = 0;
 		atLeast = false;
 		fired = false;
 		ticks = 0;
@@ -156,12 +159,16 @@ public class AutoCompletionManager
 				}
 				break;
 			case "VARBIT_CHANGED":
-				// Exactly one of the two variables; a varp is a milestone only (its change event carries no varbit number to compare).
-				if ((t.getVarbitId() == null) == (t.getVarpId() == null) || t.getTargetValue() == null || (t.getVarpId() != null && !t.isAtLeast()))
+				// Exactly one of the two variables; a varp is read as a state only (its change event carries no varbit number to compare): a milestone or
+				// masked bits. Items, when given, must be held as well (the Maze key together with the five questions asked).
+				if ((t.getVarbitId() == null) == (t.getVarpId() == null) || t.getTargetValue() == null || (t.getBitMask() != null && t.getBitMask() <= 0)
+					|| (t.getVarpId() != null && !t.isAtLeast() && t.getBitMask() == null))
 				{
 					return;
 				}
 				varp = t.getVarpId() != null;
+				bitMask = t.getBitMask() == null ? 0 : t.getBitMask();
+				needItems = it;
 				varbitId = varp ? t.getVarpId() : t.getVarbitId();
 				targetValue = t.getTargetValue();
 				atLeast = t.isAtLeast();
@@ -218,9 +225,9 @@ public class AutoCompletionManager
 		}
 		if ("VARBIT_CHANGED".equals(type))
 		{
-			Integer now = atLeast ? (varp ? varps : varbits).value(varbitId) : null;
-			out.add((varp ? "Varp(" : "Varbit(") + varbitId + (atLeast ? " >= " : " == ") + targetValue + ") = "
-				+ (atLeast ? (now == null ? "?" : now >= targetValue ? "TRUE" : "FALSE (" + now + ")") : "waiting"));
+			Integer now = state() ? (varp ? varps : varbits).value(varbitId) : null;
+			out.add((varp ? "Varp(" : "Varbit(") + varbitId + (bitMask != 0 ? " & " + bitMask + " == " : atLeast ? " >= " : " == ") + targetValue + ") = "
+				+ (state() ? (now == null ? "?" : varMet(now) ? "TRUE" : "FALSE (" + now + ")") : "waiting"));
 		}
 		return out;
 	}
@@ -228,7 +235,18 @@ public class AutoCompletionManager
 	/** The condition is a game state (quest, levels, items), not an event. */
 	private boolean stateful()
 	{
-		return "QUEST_COMPLETED".equals(type) || "SKILL_LEVEL".equals(type) || "ITEM_OWNED".equals(type) || ("VARBIT_CHANGED".equals(type) && atLeast);
+		return "QUEST_COMPLETED".equals(type) || "SKILL_LEVEL".equals(type) || "ITEM_OWNED".equals(type) || ("VARBIT_CHANGED".equals(type) && state());
+	}
+
+	/** A variable condition read as a state (a milestone or masked bits), not waited for as a change event. */
+	private boolean state()
+	{
+		return atLeast || bitMask != 0;
+	}
+
+	private boolean varMet(int value)
+	{
+		return bitMask != 0 ? (value & bitMask) == targetValue : atLeast ? value >= targetValue : value == targetValue;
 	}
 
 	/** Where the milestone varbits are read from (the plugin gives the client). Without a reader a milestone can only fire from the change event. */
@@ -261,7 +279,7 @@ public class AutoCompletionManager
 	{
 		// Any variable change may mean the quest moved on.
 		dirty = true;
-		if (isArmed() && "VARBIT_CHANGED".equals(type) && !varp && changedVarbitId == varbitId && (atLeast ? value >= targetValue : value == targetValue))
+		if (isArmed() && "VARBIT_CHANGED".equals(type) && !varp && changedVarbitId == varbitId && varMet(value) && itemsMet())
 		{
 			fire();
 		}
@@ -290,7 +308,7 @@ public class AutoCompletionManager
 		{
 			// A milestone is a state: read it now (it may have been reached before the step was shown).
 			Integer now = (varp ? varps : varbits).value(varbitId);
-			if (now != null && now >= targetValue)
+			if (now != null && varMet(now) && itemsMet())
 			{
 				fire();
 			}

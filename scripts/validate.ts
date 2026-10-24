@@ -345,7 +345,8 @@ export function validate(d: GuideData | null, route: Route): Report {
       for (const l of t.levels ?? []) if (!(l.level >= 2 && l.level <= 99) || !/^[a-z]+$/.test(l.skill)) badGame.push(`${s.id}: invalid level on a quest trigger: ${l.skill} ${l.level}`);
     }
     if (t.type === 'ITEM_OWNED' && !t.items?.length) badGame.push(`${s.id}: ITEM_OWNED without items`);
-    if (t.items && !['QUEST_COMPLETED', 'SKILL_LEVEL', 'ITEM_OWNED'].includes(t.type)) badGame.push(`${s.id}: items exist only for state conditions`);
+    const varState = t.type === 'VARBIT_CHANGED' && (t.atLeast || t.bitMask !== undefined);
+    if (t.items && !['QUEST_COMPLETED', 'SKILL_LEVEL', 'ITEM_OWNED'].includes(t.type) && !varState) badGame.push(`${s.id}: items exist only for state conditions`);
     for (const i of t.items ?? []) {
       if (!i.names?.length || i.names.some((n) => !n.trim())) badGame.push(`${s.id}: an auto-mark item without a name`);
       if (!Number.isInteger(i.count) || i.count < 1) badGame.push(`${s.id}: the quantity ${i.names?.join('/')} — ${i.count}`);
@@ -356,7 +357,8 @@ export function validate(d: GuideData | null, route: Route): Report {
       if (!t.chatPattern) badGame.push(`${s.id}: no chatPattern`);
     }
     if (t.type === 'VARBIT_CHANGED' && (Number.isInteger(t.varbitId) === Number.isInteger(t.varpId) || !Number.isInteger(t.targetValue))) badGame.push(`${s.id}: one of varbitId and varpId, and targetValue, are required`);
-    if (t.type === 'VARBIT_CHANGED' && t.varpId !== undefined && !t.atLeast) badGame.push(`${s.id}: a varp milestone needs atLeast`);
+    if (t.type === 'VARBIT_CHANGED' && t.varpId !== undefined && !t.atLeast && t.bitMask === undefined) badGame.push(`${s.id}: a varp is read as a state: atLeast or bitMask`);
+    if (t.type === 'VARBIT_CHANGED' && t.bitMask !== undefined && (!Number.isInteger(t.bitMask) || t.bitMask <= 0 || ((t.targetValue ?? 0) & ~t.bitMask) !== 0)) badGame.push(`${s.id}: bitMask must be positive and cover targetValue`);
   }
   const withGame = steps.filter((s) => s.inGame);
   const auto = withGame.filter((s) => s.inGame!.completionTrigger);

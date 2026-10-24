@@ -189,6 +189,38 @@ public class AutoCompletionManagerTest
 	}
 
 	@Test
+	public void allFiveQuestionsAndTheMazeKey()
+	{
+		// S5-01: the Guildmaster's five questions clear bits 11-15 of varp 177; they are clear before the questions too, so the key must be held.
+		java.util.Map<Integer, Integer> varps = new java.util.HashMap<>();
+		int[] keys = {0};
+		AutoCompletionManager m = new AutoCompletionManager(name -> null, skill -> null, need -> keys[0], completed::add);
+		m.setVarpReader(varps::get);
+		ActiveTarget t = target("S5-01", "VARBIT_CHANGED");
+		t.getCompletionTrigger().setVarpId(177);
+		t.getCompletionTrigger().setBitMask(0xf800);
+		t.getCompletionTrigger().setTargetValue(0);
+		ActiveTarget.ItemNeed key = new ActiveTarget.ItemNeed();
+		key.setNames(List.of("Maze key"));
+		key.setCount(1);
+		t.getCompletionTrigger().setItems(List.of(key));
+		m.setTarget(t);
+		varps.put(177, 0);
+		m.onGameTick();
+		assertTrue("before the questions the bits are clear, but there is no key", completed.isEmpty());
+		// The ship, shield and Melzar questions asked (the key came with Melzar's); Thalzar's and Lozar's still set.
+		varps.put(177, (1 << 12) | (1 << 13) | (1 << 17));
+		keys[0] = 1;
+		m.onStateChanged();
+		m.onGameTick();
+		assertTrue("two questions are left", completed.isEmpty());
+		varps.put(177, 1 << 17);
+		m.onStateChanged();
+		m.onGameTick();
+		assertEquals("other bits of the variable do not count", List.of("S5-01"), completed);
+	}
+
+	@Test
 	public void aVarpNeedsTheMilestoneForm()
 	{
 		ActiveTarget t = target("S5-07", "VARBIT_CHANGED");

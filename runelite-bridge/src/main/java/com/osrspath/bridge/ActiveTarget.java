@@ -776,6 +776,11 @@ public class ActiveTarget
 		private Integer varbitId;
 		/** VARBIT_CHANGED with atLeast: a varp instead of a varbit (a quest variable such as Dragon Slayer's 176). Exactly one of varbitId and varpId. */
 		private Integer varpId;
+		/**
+		 * VARBIT_CHANGED: only these bits of the variable count, and they must equal targetValue, read as a state (Dragon Slayer clears bits 11-15
+		 * of varp 177 as each of the Guildmaster's five questions is asked). null means the whole value.
+		 */
+		private Integer bitMask;
 		private Integer targetValue;
 		/** VARBIT_CHANGED: the milestone counts from this value upwards (and is also read when the step is shown), not only at exactly the value. */
 		private boolean atLeast;

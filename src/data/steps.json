@@ -4248,7 +4248,7 @@
         "text": "Combat level 45+, Prayer 37 for Protect from Magic: the dragon hits with magic too."
       }
     ],
-    "doneWhen": "You have the Maze key.",
+    "doneWhen": "All five of the Guildmaster's questions are asked (the ship, the shield and the three map pieces) and you have the Maze key.",
     "inGame": {
       "npcNames": [
         "Guildmaster",
@@ -4273,7 +4273,10 @@
         "Maze key"
       ],
       "completionTrigger": {
-        "type": "ITEM_OWNED",
+        "type": "VARBIT_CHANGED",
+        "varpId": 177,
+        "bitMask": 63488,
+        "targetValue": 0,
         "items": [
           {
             "names": [

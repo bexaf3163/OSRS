@@ -132,7 +132,9 @@ describe('auto-mark triggers on the route', () => {
   });
 
   it('Dragon Slayer I stages — by their own items, map pieces by ID', () => {
-    expect(step('S5-01').inGame!.completionTrigger).toEqual({ type: 'ITEM_OWNED', items: [{ names: ['Maze key'], count: 1 }] });
+    // Not the Maze key alone: it comes with the third of the Guildmaster's five questions. Quest Helper's askedAllQuestions is bits 11-15 of
+    // varp 177 cleared; before the questions they are clear too, so the key must be held as well.
+    expect(step('S5-01').inGame!.completionTrigger).toEqual({ type: 'VARBIT_CHANGED', varpId: 177, bitMask: 0xf800, targetValue: 0, items: [{ names: ['Maze key'], count: 1 }] });
     // Each piece by its own item ID, or the joined map (which holds all three).
     expect(step('S5-03').inGame!.completionTrigger!.items).toEqual([{ names: ['Map part'], id: 1535, count: 1 }, { names: ['Crandor map'], count: 1 }]);
     expect(step('S5-04').inGame!.completionTrigger!.items).toEqual([{ names: ['Map part'], id: 1537, count: 1 }, { names: ['Crandor map'], count: 1 }]);
@@ -143,8 +145,9 @@ describe('auto-mark triggers on the route', () => {
     expect(step('S5-05').inGame!.dialogChoices ?? []).toEqual([]);
   });
 
-  it('VARBIT_CHANGED is used only for verified milestones: the Lady Lumbridge fixed, Ned agreeing to sail, Fairytale II permission', () => {
-    const varbits = triggers.filter(({ t }) => t.type === 'VARBIT_CHANGED');
+  it('VARBIT_CHANGED is used only for verified milestones: the Guildmaster questions, the Lady Lumbridge fixed, Ned agreeing to sail, Fairytale II permission', () => {
+    const varbits = triggers.filter(({ t }) => t.type === 'VARBIT_CHANGED' && t.bitMask === undefined);
+    expect(triggers.filter(({ t }) => t.bitMask !== undefined).map(({ s }) => s.id)).toEqual(['S5-01']);
     expect(varbits.map(({ s }) => s.id)).toEqual(['S5-06', 'S5-07', 'S9-03']);
     // Quest Helper: fullyRepairedHull is varbit 1837 = 1; varp 176 is 7 from goToCrandor on (Ned has agreed); Fairytale II value 40.
     expect(varbits[0].t).toEqual({ type: 'VARBIT_CHANGED', varbitId: 1837, targetValue: 1, atLeast: true });
