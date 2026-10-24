@@ -79,6 +79,15 @@ describe('what each row says to do', () => {
     const rows = rowsOf([step('A', [item('Salmon', 742, SALMON)])], state(owned({ Salmon: [0, 0] }), {}), { gePrice: () => 40 });
     expect(byName(rows, 'Salmon').channel).toBe('ge');
   });
+
+  // T12: one batch above the exchange's four-hour limit is several rounds of buying, said on the row; an unknown limit says nothing.
+  it('a batch above the four-hour buy limit says how many rounds it takes', () => {
+    const at = (geLimit?: () => number | undefined) => byName(rowsOf([step('A', [item('Salmon', 742, SALMON)])], state(owned({ Salmon: [0, 0] }), {}), { gePrice: () => 40, ...(geLimit ? { geLimit } : {}) }), 'Salmon').action;
+    expect(at(() => 300)).toMatch(/^Buy at the Grand Exchange \(at most 300 every 4 hours: 3 rounds\)/);
+    expect(at(() => 10000)).not.toMatch(/every 4 hours/);
+    expect(at(() => undefined)).not.toMatch(/every 4 hours/);
+    expect(at()).not.toMatch(/every 4 hours/);
+  });
 });
 
 describe('quantities across steps', () => {

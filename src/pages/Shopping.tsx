@@ -162,6 +162,7 @@ export function ShoppingPage() {
       const rows = shopRows(list, {
         state: player, onGe, detail: (id) => itemById.get(id), trip,
         gePrice: (l) => itemPrice(prices, l.nameEn, l.id, 1).unit,
+        geLimit: (l) => prices?.limitOf(l.nameEn, l.id),
         priceOf: (name) => itemPrice(prices, name, findLocalItem(name)?.id, 1).unit,
         priceLabel: (name, id) => itemPrice(prices, name, id ?? findLocalItem(name)?.id, 1).label,
         qp: questPoints,

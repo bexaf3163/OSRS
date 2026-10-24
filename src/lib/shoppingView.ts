@@ -119,6 +119,8 @@ export interface RowContext {
   detail: (id: number) => WikiItemDetail | undefined;
   /** The exchange's buy side for one piece; null means no price. */
   gePrice: (line: ShoppingLine) => number | null;
+  /** The exchange's buy limit for four hours; absent or undefined: not known, nothing is said about it. */
+  geLimit?: (line: ShoppingLine) => number | undefined;
   /** Pieces the next trip needs, by line key: a long training step buys the whole goal but takes one bag at a time. */
   trip?: ReadonlyMap<string, number>;
   /** The exchange's buy side for one item by name: the sizes of a potion are priced one by one. Absent: only the line's own price is known. */
@@ -197,7 +199,10 @@ function row(line: ShoppingLine, optional: boolean, ctx: RowContext, reserved: R
   const orMaybe = maybe ? ` · or ${maybe.label}` : '';
   if (tradeable && src?.kind !== 'free') {
     const unit = ctx.gePrice(line);
-    return { ...base, qty: missing, channel: 'ge', action: `Buy at the Grand Exchange${also}`, unitPrice: unit, cost: unit === null ? null : unit * missing };
+    // One batch can be more than the exchange sells in four hours: the purchase then takes several rounds, which is time, not a shortage.
+    const limit = ctx.geLimit?.(line);
+    const rounds = limit !== undefined && limit > 0 && missing > limit ? ` (at most ${limit} every 4 hours: ${Math.ceil(missing / limit)} rounds)` : '';
+    return { ...base, qty: missing, channel: 'ge', action: `Buy at the Grand Exchange${rounds}${also}`, unitPrice: unit, cost: unit === null ? null : unit * missing };
   }
   // A monster's drop table is a way to get an item, not a checked one (the item data does not say where the monster lives or whether a free account
   // can reach it: Steel nails 'dropped by Zombie (Tarn's Lair)'): the route's own instruction comes first.
