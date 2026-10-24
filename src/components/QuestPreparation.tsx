@@ -59,7 +59,8 @@ export function QuestSupplies({ step, onReview, status }: { step: Step; onReview
           </li>}
         </ul>
       ) : <p className="muted quest-empty">{scope ? 'Nothing more to bring for this stage.' : 'No preparation items listed for this step.'}</p>}
-      {plan.blockers.length > 0 && <ul className="quest-blockers">{plan.blockers.map((b) => <li key={b.label}>{b.label}</li>)}</ul>}
+      {/* On the step page the lock line above the action and the verdict already name what comes first. */}
+      {!status && plan.blockers.length > 0 && <ul className="quest-blockers">{plan.blockers.map((b) => <li key={b.label}>{b.label}</li>)}</ul>}
       {handled.length > 0 && (
         <details className="quest-handled">
           <summary>Used earlier in this quest · {handled.length}</summary>

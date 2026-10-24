@@ -155,6 +155,7 @@ const prepView = async (p: Page) => {
 
 const SHOTS: Shot[] = [
   { name: 'hill-giants-step', area: 'T4', caption: 'S4-03 step as the guide opens it for the reported character', width: 1440, hash: '#/step/S4-03', mock: hillGiants() },
+  { name: 'quest-step-elvarg', area: 'T4', caption: 'S5-08, a quest step with stages, as the guide opens it', width: 1440, hash: '#/step/S5-08', mock: hillGiants() },
   { name: 'hill-giants-step-390', area: 'T4', caption: 'S4-03 step at phone width', width: 390, hash: '#/step/S4-03', mock: hillGiants() },
   { name: 'shopping', area: 'T7', caption: 'Shopping for the next trip', width: 1440, hash: '#/shopping', mock: hillGiants() },
   {

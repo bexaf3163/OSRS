@@ -43,3 +43,13 @@ Owner decision,2026-10-24: Codex finishes implementation and automated verificat
 ## Evidence and handoff
 
 For each scenario record exact source/EXE/plugin versions, initial real state, actions taken, expected versus observed result, screenshot/log location and PASS/FAIL/NOT REACHABLE. Separate automated, fixture-rendered, actual desktop and actual RuneLite evidence. Restore reversible settings/active step. Report regressions with a minimal reproduction and fix/retest before marking that scenario passed. Never turn an unobserved case into PASS because unit tests passed.
+
+## Results log
+
+### 2026-10-24 — setup record and live-session evidence (Claude)
+
+- **Setup (item 1), observed:** the player ran OSRS-Put 2.74.5 portable from Downloads, after an in-app update from 2.74.4 at 16:41. Plugin 2.74.5, protocol 6, Java 17.0.19, Windows 11. Saves read only: 44 steps done, last S5-07, active S5-08; Strength 24 during the Elvarg fight. No settings, saves or items were changed.
+- **Source:** plugin telemetry `~/.runelite/osrs-path-telemetry/session-20261024-164144.jsonl` (`npm run telemetry`), plus the player's screenshots. This is actual RuneLite evidence, not a fixture.
+- **FAIL, fixed afterwards, re-test pending:** list stalls on S5-04 (Oracle), S5-05 (Wormbrain line 14 min 31 s, the "Map part ×3" stage item), S5-06 (no completion signal; manual close recorded), S5-07 (no completion signal), S5-08 (33 min on "kill Elvarg" after a death, no way back). Fixed in 2.74.6 (S5-04..S5-07) and 2.74.9 (S5-08 return route).
+- **Observed, not a PASS claim:** Elvarg fight warnings and food. Dragonfire was absorbed by the worn shield; lobsters were eaten. The player died once, respawned in Lumbridge, and was back in the Crandor dungeon at 17:34 (plugin shot `shot-20261024-173457-stage_cursor_3.jpg`, collapsed one-card HUD).
+- **Open (needs the player in game):** Ranged/Magic preparation, travel and teleports, HUD expanded states and long text (telemetry flags lines of 107–201 characters), and the login/logout/world-hop lifecycle. None of these has been observed yet.
