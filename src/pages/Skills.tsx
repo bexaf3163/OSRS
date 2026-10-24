@@ -113,7 +113,7 @@ function SkillCard({ skill, stage }: { skill: Skill; stage: number }) {
       )}
       {guides.length > 0 && (
         <p className="skill-roadmap-open">
-          <button type="button" className="btn btn-sm" onClick={() => setRoadmap(true)}>🗺 Leveling roadmap</button>
+          <button type="button" className="btn btn-ghost btn-sm" onClick={() => setRoadmap(true)}>🗺 Leveling roadmap</button>
           {isTracked && <span className="badge badge-now">tracking</span>}
         </p>
       )}
