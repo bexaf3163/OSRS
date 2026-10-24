@@ -1,0 +1,56 @@
+name: Update test
+
+# T02: a real update between two published portable releases on a disposable Windows runner. The older exe marks a step done through its own
+# UI, finds the latest release on GitHub, downloads it, checks its SHA-256 and hands over; the newer one must start by itself, remove the
+# older exe and keep the save (.github/scripts/test-update.cjs). Started by hand; it never runs on a player's machine.
+on:
+  workflow_dispatch:
+    inputs:
+      from:
+        description: 'Older version to update from (empty: the release before the latest)'
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - id: v
+        name: Pick the versions and verify the older exe
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FROM: ${{ inputs.from }}
+        run: |
+          set -euo pipefail
+          latest=$(gh release view --repo "$GITHUB_REPOSITORY" --json tagName --jq .tagName)
+          latest=${latest#v}
+          from=${FROM:-}
+          if [ -z "$from" ]; then
+            from=$(gh release list --repo "$GITHUB_REPOSITORY" --exclude-pre-releases --limit 20 --json tagName --jq '.[].tagName' | sed 's/^v//' | grep -vx "$latest" | head -1)
+          fi
+          [ "$from" != "$latest" ] || { echo "Nothing to update: $from is the latest"; exit 1; }
+          newsha=$(gh release view "v$latest" --repo "$GITHUB_REPOSITORY" --json assets --jq ".assets[] | select(.name==\"OSRS-Put-$latest-portable.exe\") | .digest" | sed 's/^sha256://')
+          oldsha=$(gh release view "v$from" --repo "$GITHUB_REPOSITORY" --json assets --jq ".assets[] | select(.name==\"OSRS-Put-$from-portable.exe\") | .digest" | sed 's/^sha256://')
+          [ -n "$newsha" ] && [ -n "$oldsha" ] || { echo "A release has no exe digest"; exit 1; }
+          mkdir -p "$RUNNER_TEMP/old"
+          gh release download "v$from" --repo "$GITHUB_REPOSITORY" -p "OSRS-Put-$from-portable.exe" -D "$RUNNER_TEMP/old"
+          got=$(sha256sum "$RUNNER_TEMP/old/OSRS-Put-$from-portable.exe" | cut -d' ' -f1)
+          [ "$got" = "$oldsha" ] || { echo "The older exe does not match its published digest"; exit 1; }
+          echo "from=$from" >> "$GITHUB_OUTPUT"
+          echo "latest=$latest" >> "$GITHUB_OUTPUT"
+          echo "newsha=$newsha" >> "$GITHUB_OUTPUT"
+          echo "Updating $from -> $latest (new SHA-256 $newsha)" >> "$GITHUB_STEP_SUMMARY"
+      - name: Update the older exe to the latest release
+        shell: bash
+        run: node .github/scripts/test-update.cjs "$RUNNER_TEMP/old/OSRS-Put-${{ steps.v.outputs.from }}-portable.exe" "${{ steps.v.outputs.latest }}" "${{ steps.v.outputs.newsha }}" "$RUNNER_TEMP"
