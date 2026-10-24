@@ -45,7 +45,7 @@ jobs:
           [ -n "$newsha" ] && [ -n "$oldsha" ] || { echo "A release has no exe digest"; exit 1; }
           mkdir -p "$RUNNER_TEMP/old"
           gh release download "v$from" --repo "$GITHUB_REPOSITORY" -p "OSRS-Put-$from-portable.exe" -D "$RUNNER_TEMP/old"
-          got=$(sha256sum "$RUNNER_TEMP/old/OSRS-Put-$from-portable.exe" | cut -d' ' -f1)
+          got=$(sha256sum < "$RUNNER_TEMP/old/OSRS-Put-$from-portable.exe" | cut -d' ' -f1)  # from stdin: for a path with backslashes sha256sum prints a backslash before the hash
           [ "$got" = "$oldsha" ] || { echo "The older exe does not match its published digest"; exit 1; }
           echo "from=$from" >> "$GITHUB_OUTPUT"
           echo "latest=$latest" >> "$GITHUB_OUTPUT"
