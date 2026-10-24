@@ -23,6 +23,21 @@ public class HudModelTest
 	private static final Gson GSON = new Gson();
 	private static final String S403 = "[S4-03] Attack to 40 and bank 50 Big bones";
 
+	@Test
+	public void requiredArmourInBagSaysEquipAndLiveWornStateClearsTheBlock()
+	{
+		PrepPlan p = plan(line("Black full helm", 1, "INVENTORY", "CRITICAL", "NOW", null, "Equip Black full helm"));
+		p.line("Black full helm").setEquip(true);
+		StepGuide.ItemLine helm = item("Black full helm", StepGuide.Have.BAG, 1, 1, 0, 0, null, true);
+		HudModel.Input in = input(view(S403, p, helm), quiet(), null);
+		assertTrue(HudModel.blocks(helm, p, in));
+		assertEquals("Equip Black full helm", HudModel.build(in).getHeadline());
+		assertFalse(HudModel.prepareLines(in, null).stream().anyMatch(l -> l.getText().contains("with you")));
+		StepGuide.ItemLine worn = item("Black full helm", StepGuide.Have.BAG, 1, 1, 0, 1, null, true);
+		assertFalse(HudModel.blocks(worn, p, in));
+		assertNull(HudModel.block(input(view(S403, p, worn), quiet(), null)));
+	}
+
 	// ---------- Builders ----------
 
 	/** An item with its live figures: name, state, with you, needed, in the bank (-1 not seen), worn, healing (food), substitutes. */
@@ -115,6 +130,18 @@ public class HudModelTest
 	}
 
 	// ---------- The headline is the selected plan's current subtask ----------
+	@Test
+	public void marketPricesStayInExpandedPreparationAndCannotReplaceTheAction()
+	{
+		PrepPlan p = plan(line("Salmon", 21, "MISSING", "CRITICAL", "NOW", null, "Buy at the Grand Exchange"));
+		p.getLines().get(0).setPrice("Cached GE estimate: 420 gp (20 each)");
+		HudModel.Card card = HudModel.build(input(view(S403, p, salmon(StepGuide.Have.NONE, 0, 0)), quiet(), attack(30)));
+		assertFalse(collapsed(card).contains("GE estimate"));
+		assertTrue(expanded(card).contains("Cached GE estimate: 420 gp"));
+		assertTrue(expanded(card).contains("Buy at the Grand Exchange"));
+		p.getLines().get(0).setPrice(new String(new char[1001]).replace('\0', 'x'));
+		assertNotNull(p.prepare());
+	}
 
 	@Test
 	public void trainingOnCows_theHeadlineIsTheTraining_notTheRouteStepTitle()

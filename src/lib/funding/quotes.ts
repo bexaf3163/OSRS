@@ -181,7 +181,7 @@ export interface ViewInput {
   /** The item reference (id to name) from the exchange; without it names cannot be priced from the board. */
   mapping: Map<number, { name: string; limit?: number }> | null;
   /** The project database prices by name key: an estimate from the build date, used only when the board has nothing. */
-  baked: Map<string, BakedPrice>;
+  baked: ReadonlyMap<string, BakedPrice>;
   now: number;
 }
 
@@ -196,8 +196,8 @@ export function buildPriceView(i: ViewInput): PriceView {
       if (!have || limit > have.limit) byName.set(k, { id, limit });
     }
   }
-  const usable = i.board !== null && i.board.status !== 'offline' && i.board.quotes.size > 0 && i.mapping !== null;
-  const status: PriceStatus = usable ? i.board!.status : 'baked';
+  const usable = i.board !== null && i.board.status !== 'offline' && i.board.quotes.size > 0;
+  const status: PriceStatus = usable ? i.board!.status : i.baked.size > 0 ? 'baked' : 'offline';
   const bakedOf = (name: string, side: 'buy' | 'sell'): UnitPrice | null => {
     const b = i.baked.get(nameKey(name));
     if (!b) return null;

@@ -151,7 +151,7 @@ function Details({ e, m }: { e: MethodEvaluation; m: MoneyScreen }) {
           {pu.upside > 0 && <li>Rare drops worth about {gp(pu.upside)} per {method.rate.unit} on average are not counted.</li>}
           {e.notes.map((n) => <li key={n}>{n}.</li>)}
           {method.assumptions.map((a) => <li key={a} className="muted">{a}</li>)}
-          <li className="muted">Checked {method.verifiedAt}. {method.sources.map((src, i) => (
+          <li className="muted">{method.sources.map((src, i) => (
             <span key={src.url}>{i > 0 && ', '}<a href={src.url} target="_blank" rel="noreferrer">{src.title}</a></span>
           ))}</li>
         </ul>

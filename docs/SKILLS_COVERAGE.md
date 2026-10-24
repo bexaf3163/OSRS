@@ -15,7 +15,7 @@ Not done: cost per hour is not modelled per method (the catalogue says free / co
 | attack | free to 99, members to 99 | 10 steps (4 free), levels 1-99 | 2 (1 free) | free route 40, whole route 49 | no catalogue method for free levels 20-98 | automated data checks; not verified in the game |
 | strength | free to 99, members to 99 | 9 steps (5 free), levels 1-99 | 2 (1 free) | free route 35, whole route 39 | no catalogue method for free levels 20-98 | automated data checks; not verified in the game |
 | defence | free to 99, members to 99 | 7 steps (4 free), levels 1-99 | 2 (1 free) | free route 33, whole route 34 | no catalogue method for free levels 20-98 | automated data checks; not verified in the game |
-| ranged | free to 99, members to 99 | 6 steps (3 free), levels 1-99 | 4 (4 free) | free route 50, whole route 50 | no catalogue method for free levels 25-25 | automated data checks; not verified in the game |
+| ranged | free to 99, members to 99 | 6 steps (3 free), levels 1-99 | 4 (4 free) | free route 50, whole route 50 | none | automated data checks; not verified in the game |
 | prayer | free to 99, members to 99 | 5 steps (4 free), levels 1-99 | 2 (2 free) | free route 15, whole route 43 | none | automated data checks; not verified in the game |
 | magic | free to 99, members to 99 | 6 steps (5 free), levels 1-99 | 5 (5 free) | free route 55, whole route 55 | none | automated data checks; not verified in the game |
 | runecraft | free to 44, members to 99 | 7 steps (4 free), levels 1-99 | 4 (4 free) | not asked | none | automated data checks; not verified in the game |

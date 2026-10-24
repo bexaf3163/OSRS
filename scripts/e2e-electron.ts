@@ -6,7 +6,7 @@
 // looks at a stub on a free port (OSRS_PUT_BRIDGE_PORT) — it does not go to the player's real plugin.
 
 import { spawn, spawnSync, type ChildProcess } from 'node:child_process';
-import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmdirSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, renameSync, rmdirSync, rmSync, writeFileSync } from 'node:fs';
 import http from 'node:http';
 import { createRequire } from 'node:module';
 import { tmpdir } from 'node:os';
@@ -249,6 +249,85 @@ try {
     expect(await page.locator('.profile-storage-warning').count() === 1, 'profile protection: the actual EXE shows the recovery warning');
     expect(JSON.parse(readFileSync(join(dataDir, 'progress.json'), 'utf8')).levels?.magic !== 99, 'profile protection: live levels do not enter a protected character profile');
   }
+
+  // An existing unreadable native source must not look like a fresh install. A directory
+  // at the file path causes a real EISDIR on both CI platforms without altering user ACLs.
+  // Every path below is inside this run's disposable data directory.
+  status.stats.magic = 25;
+  writeFileSync(profilesFile, JSON.stringify(profiles), 'utf8');
+  await page.evaluate(savedProfiles => localStorage.setItem('osrs-put:profiles', JSON.stringify(savedProfiles)), profiles);
+  await page.reload();
+  await page.waitForTimeout(2500);
+  for (const target of [file, profilesFile]) {
+    const held = `${target}.read-test`;
+    if (dirname(resolve(target)) !== resolve(dataDir) || existsSync(held)) throw new Error('Unsafe native read fixture path');
+    await page.evaluate(() => (window as unknown as { osrsDesktop: { loadProgressFile(): string | null } }).osrsDesktop.loadProgressFile());
+    const original = readFileSync(target, 'utf8');
+    renameSync(target, held);
+    mkdirSync(target);
+    const marker = join(target, 'preserved.txt');
+    writeFileSync(marker, 'Do not replace this unreadable source');
+    try {
+      await page.reload();
+      await page.waitForTimeout(2500);
+      const warning = target === file ? '.progress-storage-warning' : '.profile-storage-warning';
+      expect(await page.locator(warning).count() === 1, `native read failure (${basename(target)}): the real shell pauses saving`);
+      expect(readFileSync(marker, 'utf8') === 'Do not replace this unreadable source', `native read failure (${basename(target)}): the unreadable original is untouched`);
+      expect(readFileSync(held, 'utf8') === original, `native read failure (${basename(target)}): the fixture preserves all saved bytes`);
+      expect(!existsSync(`${target}.tmp`), `native read failure (${basename(target)}): no replacement write is attempted`);
+    } finally {
+      rmSync(marker);
+      rmdirSync(target);
+      renameSync(held, target);
+    }
+    await page.reload();
+    await page.waitForTimeout(2500);
+    expect(await page.locator('.progress-storage-warning, .profile-storage-warning').count() === 0, `native read recovery (${basename(target)}): readable sources resume normally after reload`);
+  }
+
+  // A secondary-copy failure must be visible on the next Settings query, while the primary save still succeeds.
+  const copyDir = (await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ autoDir: string | null }> } } }).osrsDesktop.backup.get())).autoDir;
+  if (!copyDir || dirname(resolve(copyDir)) !== resolve(join(home, 'appdata', 'OSRS Path'))) throw new Error('Unsafe backup error fixture path');
+  const heldCopies = `${copyDir}.backup-test`;
+  if (existsSync(heldCopies)) throw new Error('Backup fixture already exists');
+  mkdirSync(dirname(copyDir), { recursive: true });
+  const hadCopies = existsSync(copyDir);
+  if (hadCopies) renameSync(copyDir, heldCopies);
+  writeFileSync(copyDir, 'This disposable file blocks only the test copy directory', { flag: 'wx' });
+  try {
+    const prior = readFileSync(file, 'utf8');
+    const receipt = await page.evaluate(json => (window as unknown as { osrsDesktop: { saveProgressFileChecked(json: string): Promise<{ ok: boolean }> } }).osrsDesktop.saveProgressFileChecked(json), prior);
+    expect(receipt.ok && readFileSync(file, 'utf8') === prior, 'backup failure: the physical primary save still succeeds and retains its bytes');
+    const automatic = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+    expect(Boolean(automatic.error), 'backup failure: an automatic copy error survives the Settings state query');
+    const manual = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { now(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.now());
+    const later = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+    expect(Boolean(manual.error) && manual.error === later.error, 'backup failure: a manual error is not silently cleared by backup:get');
+  } finally {
+    rmSync(copyDir, { force: true });
+    if (hadCopies) renameSync(heldCopies, copyDir);
+  }
+  const retried = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { now(): Promise<{ error: string | null }>; get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.now());
+  const afterRetry = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+  expect(retried.error === null && afterRetry.error === null, 'backup recovery: a successful retry clears the copy error');
+
+  // An unreadable individual profile must not be silently skipped or stop healthy profile copies.
+  const badProfile = join(dirname(file), 'progress-copytest.json');
+  if (existsSync(badProfile)) throw new Error('Per-profile backup fixture already exists');
+  mkdirSync(badProfile);
+  try {
+    const prior = readFileSync(file, 'utf8');
+    const receipt = await page.evaluate(json => (window as unknown as { osrsDesktop: { saveProgressFileChecked(json: string): Promise<{ ok: boolean }> } }).osrsDesktop.saveProgressFileChecked(json), prior);
+    const automatic = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { get(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.get());
+    expect(receipt.ok && automatic.error === 'COPY_INCOMPLETE', 'partial backup: unreadable profile is reported independently of primary save success');
+    expect(readFileSync(join(copyDir, `osrs-put-${basename(file, '.json')}-latest.json`), 'utf8') === prior, 'partial backup: the readable active profile is still copied');
+    const manual = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { now(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.now());
+    expect(manual.error === 'COPY_INCOMPLETE', 'partial backup: a manual attempt does not report complete success');
+  } finally {
+    rmdirSync(badProfile);
+  }
+  const copiesRecovered = await page.evaluate(() => (window as unknown as { osrsDesktop: { backup: { now(): Promise<{ error: string | null }> } } }).osrsDesktop.backup.now());
+  expect(copiesRecovered.error === null, 'partial backup recovery: restoring readable sources clears the failure');
 
   expect(!errors.length, `console: no errors ${errors.join('; ')}`);
   if (exe) {

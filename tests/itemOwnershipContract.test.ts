@@ -7,6 +7,7 @@ import { ownedFood, combatPlanView } from '../src/lib/combatPlan';
 import { combatReadiness } from '../src/lib/combatReadiness';
 import { stepById } from '../src/data';
 import { gearById } from '../src/services/gearAdvisor';
+import { PICKAXES } from '../src/lib/toolTiers';
 
 const cases = JSON.parse(readFileSync(new URL('../runelite-bridge/src/test/resources/item-ownership.json', import.meta.url), 'utf8')) as {
   name: string; mining: number; bank: unknown[] | null; rows: Record<string, unknown>[];
@@ -20,7 +21,9 @@ describe('the shared Java to TS ownership contract', () => {
     const s = state(cases[0].rows);
     expect(heldOf(s, 'Bronze pickaxe')).toMatchObject({ bag: 1, total: 1 });
     expect(heldOf(s, 'Rune pickaxe')).toMatchObject({ bag: 1, total: 1 });
-    expect(evaluate({ type: 'item', name: 'Bronze pickaxe', count: 2 }, s).state).toBe('PARTIAL');
+    expect(evaluate({ type: 'item', name: 'Bronze pickaxe', count: 2 }, s).state).toBe('UNKNOWN'); // Unwatched tiers cannot prove a shortage.
+    const complete = state([...PICKAXES.map(name => ({ name, carried: 0, noted: 0, bank: 0, exactCarried: 0, exactNoted: 0, exactBank: 0 })), ...cases[0].rows]);
+    expect(evaluate({ type: 'item', name: 'Bronze pickaxe', count: 2 }, complete).state).toBe('PARTIAL');
     expect(evaluatePreflight([{ nameEn: 'Bronze pickaxe', count: 2, exact: true, alt: ['Iron pickaxe', 'Steel pickaxe', 'Rune pickaxe'] }], s.owned!).ready).toBe(false);
   });
 

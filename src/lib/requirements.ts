@@ -6,7 +6,8 @@
 
 import type { GameMode } from '../types';
 import { nameKey } from './checklist';
-import { coinsOf, heldOf, levelOf, questOf, type PlayerState } from './playerState';
+import { coinsOf, heldOf, levelOf, questOf, wornItemsOf, type PlayerState } from './playerState';
+import { countWorn } from './equipmentCount';
 import { heldUnits, needUnits } from './doses';
 
 export type ItemRef = { name: string; id?: number; /** The manual "already have" mark key. */ manualKey?: string };
@@ -14,7 +15,7 @@ export type ItemRef = { name: string; id?: number; /** The manual "already have"
 export type Requirement =
   | { type: 'skill'; skill: string; min: number }
   | ({ type: 'item'; count: number } & ItemRef)
-  | { type: 'equipment'; name: string; slot?: string }
+  | { type: 'equipment'; name: string; slot?: string; anyOf?: string[]; count?: number }
   | { type: 'quest'; quest: string }
   | { type: 'money'; amount: number }
   | { type: 'gameMode'; mode: GameMode }
@@ -65,19 +66,24 @@ export function evaluate(req: Requirement, s: PlayerState): ReqResult {
       }
       if (bag >= count) return { state: 'OK', have: bag, need: count, missing: 0, detail: 'in the bag' };
       if (bag + h.noted >= count) return { state: 'BANK', have: total, need: count, missing: 0, detail: `${h.noted}${u} as banknotes: unnote them at a bank before use` };
-      // The bank was not opened: the rest could be there, that is "unknown", not "short".
-      if (h.bank === null && h.source === 'game') return { state: 'UNKNOWN', have: bag, need: count, detail: `${bag}${u} in the bag, ${bankUnknown}` };
       if (total >= count) return { state: 'BANK', have: total, need: count, missing: 0, detail: `${bag}${u} in the bag, the rest in the bank` };
+      // A known lower bound can cover the goal; an unread remainder can never prove a shortage.
+      if (h.bank === null && h.source === 'game') return { state: 'UNKNOWN', have: bag, need: count, detail: `${bag}${u} in the bag, ${bankUnknown}` };
       if (total > 0) return { state: 'PARTIAL', have: total, need: count, missing: count - total, detail: `have ${total}${u}, ${count - total} short` };
       return { state: 'MISSING', have: 0, need: count, missing: count, detail: 'in neither the bag nor the bank' };
     }
     case 'equipment': {
-      const worn = Object.entries(s.equipment).some(([slot, n]) => (!req.slot || slot === req.slot) && nameKey(n) === nameKey(req.name));
-      if (worn) return { state: 'OK', have: 1, need: 1, missing: 0, detail: 'worn' };
-      if (!s.connected) return { state: 'UNKNOWN', need: 1, detail: 'no connection to the game' };
-      const h = heldOf(s, req.name);
-      if (h.presence === 'PRESENT') return { state: 'BANK', have: 1, need: 1, missing: 0, detail: (h.bag ?? 0) > 0 ? 'in the bag: wear it' : 'in the bank: take it and wear it' };
-      return h.presence === 'MISSING' ? { state: 'MISSING', have: 0, need: 1, missing: 1, detail: 'none' } : { state: 'UNKNOWN', need: 1, detail: bankUnknown };
+      const names = new Set([req.name, ...(req.anyOf ?? [])].map(nameKey));
+      const need = req.count ?? 1;
+      if (!s.connected || s.equipmentKnown === false) return { state: 'UNKNOWN', need, detail: 'equipped items not checked' };
+      const slotName = req.slot ? s.equipment[req.slot] : undefined;
+      const worn = countWorn(wornItemsOf(s), n => names.has(nameKey(n)) && (!req.slot || n === slotName));
+      if (worn.count >= need) return { state: 'OK', have: worn.count, need, missing: 0, detail: 'worn' };
+      if (!worn.known) return { state: 'UNKNOWN', have: worn.count, need, detail: 'equipped quantity not checked' };
+      const held = evaluate({ type: 'alternative', requiredCount: need, alternatives: [...names].map(name => ({ name })) }, s);
+      return held.state === 'OK' || held.state === 'BANK'
+        ? { ...held, state: 'BANK', detail: need === 1 ? held.state === 'OK' ? 'in the bag: wear it' : 'in the bank: take it and wear it'
+          : `take and equip ${need} before training` } : held;
     }
     case 'quest': {
       const q = questOf(s, req.quest);

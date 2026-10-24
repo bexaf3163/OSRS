@@ -62,7 +62,7 @@ export function MoneyGoal({ step }: { step: Step }) {
   // The journal is kept between sessions: if it has earlier days too, the all-time total goes on a separate line.
   const total = from !== null && summary.entries > now.entries && (summary.coinsEarned > 0 || summary.estimatedLootValue > 0) ? (
     <p className="small muted">
-      Since {new Date(from).toLocaleDateString('en-US')}: coins +{formatGp(summary.coinsEarned)}{summary.estimatedLootValue > 0 ? <>, loot ≈{formatGp(summary.estimatedLootValue)} gp</> : null}.
+      Total coins +{formatGp(summary.coinsEarned)}{summary.estimatedLootValue > 0 ? <>, loot ≈{formatGp(summary.estimatedLootValue)} gp</> : null}.
     </p>
   ) : null;
   return (

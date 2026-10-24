@@ -46,6 +46,7 @@ export interface ShoppingSource {
 }
 
 export interface ShoppingLine {
+  equip?: boolean;
   key: string;
   nameEn: string;
   id?: number;
@@ -131,6 +132,7 @@ function collect(
         acc.line.id ??= item.wikiItemId;
       }
       acc.line.iconUrl ??= item.iconUrl;
+      if (item.equip) acc.line.equip = true;
       if (item.heals !== undefined) acc.line.heals ??= item.heals;
       if (item.anyOf?.length) acc.line.anyOf = [...new Set([...(acc.line.anyOf ?? []), ...item.anyOf])].filter((n) => nameKey(n) !== name);
       byName.set(name, acc);

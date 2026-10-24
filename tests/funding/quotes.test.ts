@@ -109,6 +109,13 @@ describe('the price view', () => {
     expect(v.idOf('big BONES')).toBe(532);
     expect(v.sell('Nothing named this')).toBeNull();
   });
+  it('a known item ID can use its real quote even when the name mapping is unavailable', () => {
+    const v = buildPriceView({ board: board('live', [bigBones]), mapping: null, baked, now: NOW });
+    expect(v.status).toBe('live');
+    expect(v.buy('Different display label', 532)).toMatchObject({ price: 334, basis: 'side' });
+    expect(v.buy('Big bones')).toMatchObject({ basis: 'baked' });
+    expect(v.idOf('Big bones')).toBeUndefined();
+  });
 
   it('a name the board does not know falls back to the guide database, marked LOW', () => {
     const v = buildPriceView({ board: board('live', [bigBones]), mapping, baked, now: NOW });
@@ -120,6 +127,12 @@ describe('the price view', () => {
     expect(v.status).toBe('baked');
     expect(v.at).toBeNull();
     expect(v.sell('Big bones')).toMatchObject({ price: 290, confidence: 'LOW', basis: 'baked' });
+  });
+  it('a runtime view without planning fallbacks remains offline with no buy or sale estimate', () => {
+    const v = buildPriceView({ board: null, mapping, baked: new Map(), now: NOW });
+    expect(v.status).toBe('offline');
+    expect(v.buy('Big bones', 532)).toBeNull();
+    expect(v.sell('Big bones', 532)).toBeNull();
   });
 
   it('a stale board is capped at LOW even for a deep market', () => {

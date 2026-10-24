@@ -11,7 +11,7 @@ export type Urgency = 'NOW' | 'SOON' | 'LATER';
 /** Mandatory, recommended, optional: the player cannot be forced to do the optional. */
 export type Need = 'REQUIRED' | 'RECOMMENDED' | 'OPTIONAL';
 
-export type TaskKind = 'block' | 'quest' | 'stat' | 'buy' | 'money' | 'bank';
+export type TaskKind = 'block' | 'quest' | 'stat' | 'buy' | 'money' | 'bank' | 'equip';
 
 export interface PrepTask {
   /** A stable key: the same task has the same id at any recount. */
@@ -65,7 +65,9 @@ export function buildPrepRoute(r: StepReadiness, step: Pick<Step, 'id'>): PrepRo
   const bank: RequirementStatus[] = [];
   const buy: RequirementStatus[] = [];
   for (const p of r.problems) {
-    if (p.state === 'BANK') {
+    if (p.equip) {
+      tasks.push({ id: `equip:${p.item}`, kind: 'equip', label: `Equip ${p.item}`, detail: p.detail, priority: 3, need: 'REQUIRED', urgency: 'NOW', from: [p] });
+    } else if (p.state === 'BANK') {
       bank.push(p);
     } else if (p.kind === 'item' && p.hard) {
       buy.push(p);
@@ -117,7 +119,7 @@ export function openTaskIds(r: StepReadiness, step: Pick<Step, 'id'>): Set<strin
   const ids = new Set(buildPrepRoute(r, step).tasks.map((t) => t.id));
   for (const u of r.unknown) {
     if (u.kind === 'skill') ids.add(`stat:${u.label.toLowerCase()}`);
-    else if (u.kind === 'item') { ids.add('buy'); ids.add('bank'); }
+    else if (u.kind === 'item') { ids.add('buy'); ids.add('bank'); if (u.equip) ids.add(`equip:${u.item}`); }
     else if (u.kind === 'coins') { ids.add('money'); ids.add('bank'); }
     else ids.add(`${u.kind}:${u.label.toLowerCase()}`);
   }

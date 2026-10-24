@@ -9,12 +9,18 @@
 //
 // Since 2.69 the plan's own instructions replace the route's on the page: one set of instructions, the route's text folded as "the route as written".
 
-import type { Field, InGameTarget, Step, StepPacing } from '../../types';
+import type { Field, InGameTarget, Step, StepPacing, StepItemRequirement } from '../../types';
 import { levelForXp } from '../xp';
 import type { EvaluatedPlan, Goal, MeleeSkill, PlanPhase, PlanReport } from './plans';
 import type { Spot } from './spots';
+import { armourDefence, armourItems, armourReady } from './armour';
+import { gearById } from '../../services/gearAdvisor';
+import type { PlayerState } from '../playerState';
+import type { PriceView } from '../funding/quotes';
 
 export interface CombatPick {
+  kit?: StepItemRequirement[];
+  kitDefence?: number;
   /** The plan's key: "split", "defence-first:20". */
   key: string;
   title: string;
@@ -39,6 +45,8 @@ export interface CombatPick {
 }
 
 export interface Progress {
+  state?: PlayerState;
+  prices?: PriceView;
   xp: Partial<Record<MeleeSkill, number>> | null;
   /** How many of an item the player holds (bag and bank); null - not known. */
   held: (name: string) => number | null;
@@ -46,6 +54,7 @@ export interface Progress {
 
 /** Whether a phase has what it set out to get, by what the game shows. Unknown is not done. */
 export function phaseDone(p: PlanPhase, st: Progress): boolean {
+  if (p.kind === 'armour') return armourReady(p.armour ?? [], p.foe.attackStyle, st.state);
   const haveItem = p.item ? st.held(p.item.name) : null;
   if (p.item && (haveItem === null || haveItem < p.item.count)) return false;
   if (p.kind === 'item') {
@@ -69,10 +78,11 @@ const goalText = (goals: readonly Goal[]) => goals.map((g) => `${cap(g.skill)} $
 
 /** What to do in one phase, in one sentence the page and the game can show. */
 export function phaseInstruction(p: PlanPhase): string {
+  if (p.kind === 'armour') return `At ${armourDefence(p.armour ?? [])} Defence, equip ${p.armour?.map(id => gearById.get(id)?.name).filter(Boolean).join(', ')} or usable equivalent/better armour. Withdraw what you own; buy only needed upgrades, keeping coins for food.`;
   const where = p.spot.place.label;
   const style = p.goals[0] ? ` on ${STYLE_WORD[p.goals[0].skill]}` : '';
   if (p.kind === 'item' && p.item) return `Fight the ${plural(p.foe.name)}${style} until ${p.item.count} ${p.item.name} are in the bank (about ${p.kills} kills): ${where}.`;
-  const armour = p.kind === 'defence' && p.goals.some(g => g.skill === 'defence' && levelForXp(g.exp) === 10)
+  const armour = !p.armour && p.kind === 'defence' && p.goals.some(g => g.skill === 'defence' && levelForXp(g.exp) === 10)
     ? ' At Defence 10, bank and equip your armour. If you need upgrades, use Gear to buy affordable steel armour before continuing; keep enough coins for food. The shopping detour is extra.' : '';
   return `Fight the ${plural(p.foe.name)}${style} until ${goalText(p.goals)}${p.item ? ` and ${p.item.count} ${p.item.name} are in the bank` : ''} (about ${p.kills} kills): ${where}.${armour}`;
 }
@@ -82,9 +92,9 @@ export function phaseInstruction(p: PlanPhase): string {
  * conditions changed: the bones are already in hand) or not safe.
  */
 export function resolvePick(report: PlanReport | null, key: string | null | undefined, st: Progress, source: 'auto' | 'player' = 'player', why = ''): CombatPick | null {
-  if (!report || !key || key === 'route') return null;
+  if (!report || !key) return null;
   const plan = report.plans.find((p) => p.key === key);
-  if (!plan || !plan.eligible || plan.id === 'route') return null;
+  if (!plan || !plan.eligible || (plan.id === 'route' && !plan.phases.some(p => p.kind === 'armour'))) return null;
   const i = currentPhase(plan, st);
   const ph = plan.phases[i];
   const steps = plan.phases.slice(i).map((p, n) => {
@@ -94,6 +104,7 @@ export function resolvePick(report: PlanReport | null, key: string | null | unde
   return {
     key: plan.key, title: plan.title, source, why, phase: i + 1, phases: plan.phases.length, kind: ph.kind, foe: ph.foe.name, xpPerKill: 4 * ph.foe.hitpoints, spot: ph.spot, goals: ph.goals,
     ...(ph.item ? { item: ph.item } : {}), text: ph.text, steps,
+    ...(ph.kind === 'armour' && ph.armour && st.state ? { kit: armourItems(ph.armour, ph.foe.attackStyle, st.state, st.prices), kitDefence: armourDefence(ph.armour) } : {}),
   };
 }
 
@@ -101,7 +112,7 @@ export function samePicks(a: Record<string, CombatPick>, b: Record<string, Comba
   const ka = Object.keys(a);
   return ka.length === Object.keys(b).length
     && ka.every((k) => b[k] && a[k].key === b[k].key && a[k].phase === b[k].phase && a[k].foe === b[k].foe && a[k].text === b[k].text
-      && a[k].source === b[k].source && a[k].why === b[k].why && a[k].steps.join('|') === b[k].steps.join('|'));
+      && a[k].source === b[k].source && a[k].why === b[k].why && a[k].steps.join('|') === b[k].steps.join('|') && JSON.stringify(a[k].kit) === JSON.stringify(b[k].kit));
 }
 
 /** The combat model follows the phase's XP/style; an item phase with explicit training has a projection too. The guide's current action remains its item goal. */
@@ -128,6 +139,7 @@ const KEEP_FIELDS = new Set(['Dangerous', 'Attention', 'Combat', 'Armour']);
 
 /** The one line the game's plate shows for the phase: the opponent and what the phase is for. */
 function plateGoal(pick: CombatPick): string {
+  if (pick.kind === 'armour') return pick.text;
   const what = pick.kind === 'item' && pick.item ? `${pick.item.count} ${pick.item.name}` : `${goalText(pick.goals)}${pick.item ? ` and ${pick.item.count} ${pick.item.name}` : ''}`;
   return `${cap(plural(pick.foe))}: ${what}`;
 }
@@ -158,9 +170,10 @@ export function withCombatPlan(step: Step, pick: CombatPick | undefined): Step {
     ...rest, combatPlan: {
       key: pick.key, phase: pick.phase, source: pick.source,
       ...(trainingSkill ? { trainingSkill } : {}),
-      ...(pick.kind === 'item' && pick.item ? { now: `Collect ${pick.item.count} ${pick.item.name} from ${cap(plural(pick.foe))}${pick.goals[0] ? ` on ${STYLE_WORD[pick.goals[0].skill]}` : ''}` } : {}),
+      ...(pick.kind === 'armour' ? { now: pick.text } : pick.kind === 'item' && pick.item ? { now: `Collect ${pick.item.count} ${pick.item.name} from ${cap(plural(pick.foe))}${pick.goals[0] ? ` on ${STYLE_WORD[pick.goals[0].skill]}` : ''}` } : {}),
       ...(pick.steps[1] ? { next: cap(pick.steps[1].replace(/^Then: /, '')) } : {}),
-    }, foes: [pick.foe], mapLocation: { ...pick.spot.place }, inGame,
+    }, foes: pick.kind === 'armour' ? [] : [pick.foe], mapLocation: { ...pick.spot.place }, inGame,
+    ...(pick.kind === 'armour' && pick.kit ? { itemsRequired: pick.kit, itemsRecommended: [], requirements: [...(step.requirements ?? []), { type: 'skill' as const, skill: 'defence', min: pick.kitDefence ?? 10 }] } : {}),
     // The reason is said once, in the step status line (CombatRouteLine); the route's own how-to is folded with the rest of its text.
     where: pick.spot.where || step.where, quickSteps: pick.steps,
     ...(pacing ? { pacing } : {}),

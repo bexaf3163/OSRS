@@ -1,8 +1,5 @@
-// "Sync with the account": the game knows which quests are complete and which levels are reached, so the route steps
-// with such an auto-tick can be closed at once, without waiting for the player to go through them with the plugin on.
-// Steps where the auto-tick also needs items (a quest plus a bought Dragon scimitar) are left alone: a quest
-// cannot tell that the item has been bought. A level goal is different: the levels prove the training was done,
-// and the items listed with it (food, ore) are consumed or sold on the way, so they do not hold the step back.
+// Account sync only offers goals directly proved by current quest/level facts.
+// Ownership and carryover goals need separate evidence and remain unverified here.
 
 import type { PlayerStats, Progress, Step } from '../types';
 import { isClosed } from './next-step';
@@ -22,39 +19,18 @@ export function syncCandidates(steps: readonly Step[], p: Progress, questsDone: 
   for (const step of steps) {
     if (isClosed(p, step.id)) continue;
     const t = step.inGame?.completionTrigger;
-    if (!t || (t.items?.length && t.type !== 'SKILL_LEVEL')) continue;
+    if (!t || t.items?.length || (t.type === 'SKILL_LEVEL' && step.carryover?.length)) continue;
+    const levelsMet = (goals: NonNullable<typeof t.levels>) => !!levels && goals.every(l =>
+      Number.isFinite(levels[l.skill]) && levels[l.skill] >= l.level);
     if (t.type === 'QUEST_COMPLETED' && t.questName && done.has(questKey(t.questName))) {
       // A quest that also names a level (the lamp used on Prayer) is closed only when the level proves it.
-      if (t.levels?.length && !(levels && t.levels.every((l) => (levels[l.skill] ?? 0) >= l.level))) continue;
+      if (t.levels?.length && !levelsMet(t.levels)) continue;
       out.push({ step, why: `quest ${t.questName} complete` });
-    } else if (t.type === 'SKILL_LEVEL' && levels && t.levels?.length && t.levels.every((l) => (levels[l.skill] ?? 0) >= l.level)) {
+    } else if (t.type === 'SKILL_LEVEL' && t.levels?.length && levelsMet(t.levels)) {
       out.push({ step, why: 'the required levels are already reached' });
     }
   }
   return out;
-}
-
-/**
- * Restoring a lost progress: a step the game confirms could only be reached through the steps it requires, so those
- * were done too — even the ones with no in-game signal. They come after the confirmed steps, in route order, and
- * only unclosed ones are returned.
- */
-export function withRequired(steps: readonly Step[], confirmed: readonly SyncCandidate[], p: Progress): SyncCandidate[] {
-  const byId = new Map(steps.map((s) => [s.id, s]));
-  const seen = new Set(confirmed.map((c) => c.step.id));
-  const queue = confirmed.map((c) => c.step);
-  const implied = new Map<string, SyncCandidate>();
-  for (let step = queue.shift(); step; step = queue.shift()) {
-    for (const id of step.requires) {
-      const need = byId.get(id);
-      if (!need || seen.has(id)) continue;
-      seen.add(id);
-      queue.push(need);
-      if (!isClosed(p, id)) implied.set(id, { step: need, why: `required before ${step.id}, which the game confirms` });
-    }
-  }
-  const order = new Map(steps.map((s, i) => [s.id, i]));
-  return [...confirmed, ...[...implied.values()].sort((a, b) => (order.get(a.step.id) ?? 0) - (order.get(b.step.id) ?? 0))];
 }
 
 /**

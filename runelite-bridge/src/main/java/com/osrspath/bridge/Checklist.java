@@ -19,6 +19,8 @@ final class Checklist
 		MISSING_FROM_BAG,
 		/** Missing even with the bank. */
 		NOT_FOUND_IN_BANK,
+		/** With you, but required equipment is not confirmed worn. */
+		NOT_EQUIPPED,
 	}
 
 	@Value
@@ -94,6 +96,10 @@ final class Checklist
 		}
 		if (names.size() == 1)
 		{
+			if (only.getState() == State.NOT_EQUIPPED)
+			{
+				return "Equip " + names.get(0) + " before training";
+			}
 			return only.getState() == State.MISSING_FROM_BAG && only.getInBank() > 0
 				? "Bag: " + names.get(0) + " - take it from the bank"
 				: "Bag: missing " + names.get(0);
@@ -109,6 +115,11 @@ final class Checklist
 	/** bank == null means the bank's contents are unknown (the bank was not opened in this session). */
 	static Result evaluate(List<ActiveTarget.ChecklistItem> items, ItemCounts carried, ItemCounts bank)
 	{
+		return evaluate(items, carried, bank, null);
+	}
+
+	static Result evaluate(List<ActiveTarget.ChecklistItem> items, ItemCounts carried, ItemCounts bank, ItemCounts worn)
+	{
 		if (items == null || items.isEmpty())
 		{
 			return NONE;
@@ -120,14 +131,20 @@ final class Checklist
 			// A potion is counted in doses of every size (the app sends them): a (3) and a (1) cover a "Strength potion(4)".
 			boolean dose = item.getDoses() != null && item.getDoses() > 0 && ItemCounts.doseBase(item.getName()) != null;
 			int need = dose ? item.getDoses() : Math.max(1, item.getCount());
-			int have = dose ? carried.doses(item.getName()) : ActiveTarget.countWithAlt(carried, item.getId(), item.getName(), item.getAlt());
+			int onHand = dose ? carried.doses(item.getName()) : ActiveTarget.countWithAlt(carried, item.getId(), item.getName(), item.getAlt());
+			boolean equip = Boolean.TRUE.equals(item.getEquip());
+			int have = equip ? worn == null ? 0 : ActiveTarget.countWithAlt(worn, item.getId(), item.getName(), item.getAlt()) : onHand;
 			int inBank = bank == null ? -1 : dose ? bank.doses(item.getName()) : ActiveTarget.countWithAlt(bank, item.getId(), item.getName(), item.getAlt());
 			State state;
 			if (have >= need)
 			{
 				state = State.IN_BAG_READY;
 			}
-			else if (bank == null || have + inBank >= need)
+			else if (equip && onHand >= need)
+			{
+				state = State.NOT_EQUIPPED;
+			}
+			else if (bank == null || onHand + inBank >= need)
 			{
 				state = State.MISSING_FROM_BAG;
 			}

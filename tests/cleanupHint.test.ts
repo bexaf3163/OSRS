@@ -13,6 +13,14 @@ const input = (over: Partial<CleanupInput>): CleanupInput => ({
 });
 
 describe('inventory cleanup for the game', () => {
+  it('keeps cached sale certainty in the existing bounded HUD reason', () => {
+    const result = cleanupAdvice(input({ bag: [{ id: 1522, name: 'Oak logs', count: 40, noted: true }], priceLabel: () => 'Cached GE sell estimate' }));
+    const line = cleanupHintPayload(result, 'Bexqq')!.lines[0];
+    expect(result.recs[0].priceLabel).toBe('Cached GE sell estimate');
+    expect(line.why).toContain('Cached GE sell estimate');
+    expect(line.why.length).toBeLessThanOrEqual(60);
+    expect(line.proceeds).toBe(3600);
+  });
   it('a surplus sale goes with its id, count, short reason and estimate; what is kept never goes', () => {
     const r = cleanupAdvice(input({ openSteps: open('S2-10'), bag: [{ id: 1759, name: 'Ball of wool', count: 23 }, { id: 590, name: 'Tinderbox', count: 1 }] }));
     const p = cleanupHintPayload(r, 'Bexqq')!;

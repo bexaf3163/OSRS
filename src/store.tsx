@@ -12,7 +12,7 @@ import { questPoints } from './lib/qp';
 import { desktop } from './lib/desktop';
 import { readProgressText, restoreProgress, type RestoredProgress } from './lib/progressStorage';
 import { samePicks } from './lib/methodPick';
-import { withTrainingMethod } from './lib/methodStep';
+import { withTrainingMethod, type TrainingPick } from './lib/methodStep';
 import { sameFoodPicks, withFoodPlan, type FoodPick } from './lib/foodPlan';
 import { samePicks as sameCombatPicks, withCombatPlan, type CombatPick } from './lib/combatRoute/pick';
 import { persistProgress } from './lib/persistProgress';
@@ -44,7 +44,7 @@ interface StoreValue {
   /** Ticks or unticks a step's task that has no game check (key "<stepId>:<taskId>"). */
   setTaskDone: (key: string, done: boolean) => void;
   /** The training method each skill step that follows one is on now (step id -> method id): set by the provider that owns the player state. */
-  setMethodPicks: (picks: Record<string, string>) => void;
+  setMethodPicks: (picks: Record<string, TrainingPick>) => void;
   /** The food of combat training steps from this player's estimate (lib/foodPlan.ts): one trip for readiness, the whole goal for shopping. */
   setFoodPicks: (picks: Record<string, FoodPick>) => void;
   /** The combat plans the player adopted, in the phase they are in now (lib/combatRoute/pick.ts): the step is fought where and against what the plan says. */
@@ -220,8 +220,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const notify = useCallback((message: string) => show(message), [show]);
 
   const mode = gameModeOf(progress);
-  const [methodPicks, setPicks] = useState<Record<string, string>>({});
-  const setMethodPicks = useCallback((p: Record<string, string>) => setPicks((prev) => (samePicks(prev, p) ? prev : p)), []);
+  const [methodPicks, setPicks] = useState<Record<string, TrainingPick>>({});
+  const setMethodPicks = useCallback((p: Record<string, TrainingPick>) => setPicks((prev) => (samePicks(prev, p) ? prev : p)), []);
   const [foodPicks, setFood] = useState<Record<string, FoodPick>>({});
   const setFoodPicks = useCallback((p: Record<string, FoodPick>) => setFood((prev) => (sameFoodPicks(prev, p) ? prev : p)), []);
   const [combatPicks, setCombat] = useState<Record<string, CombatPick>>({});

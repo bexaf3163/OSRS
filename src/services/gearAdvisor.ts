@@ -226,7 +226,7 @@ export type Source =
   | { kind: 'bag' }
   | { kind: 'bank' }
   | { kind: 'shop'; shop: string; location: string; price: number; npc?: string; coords?: { x: number; y: number; plane: number }; toll?: number }
-  | { kind: 'ge'; price?: number };
+  | { kind: 'ge'; price?: number; priceLabel?: string; priceDetail?: string };
 
 /** The defence numbers of a gain: of one style (the opponent's) or "every melee style" when it is not known. */
 export interface DefenceBasis {
@@ -298,6 +298,7 @@ export interface GearAdvice {
   coins: { bag: number | null; bank: number | null; total: number | null };
   /** Coins kept for the next steps' supplies, not spent on gear. */
   reserve: number;
+  reserveUnknown?: boolean;
   /** The attack of the first opponent, when the table knows it: defence is judged against its style. */
   incoming: FoeAttack | null;
   /** What the weapon was compared with: the step's opponents or a cow. */
@@ -326,6 +327,8 @@ export interface AdvisorInput {
   mode: GameMode;
   /** Exchange prices by ID. */
   gePrices?: ReadonlyMap<number, number>;
+  /** Shared acquisition quotes, including cached/indicative labels; preferred over legacy numeric inputs. */
+  geQuotes?: ReadonlyMap<number, import('../lib/itemPrice').ItemPrice>;
   /** The Al Kharid toll gate is free (Prince Ali Rescue is done). */
   freeToll?: boolean;
   /** Which items the route still buys: nameKey → step code. */
@@ -336,6 +339,7 @@ export interface AdvisorInput {
   questsDone?: ReadonlySet<string>;
   /** Coins kept for the supplies the next steps need (food, runes): gear is bought only from what is left. */
   reserve?: number;
+  reserveUnknown?: boolean;
   data?: GearData;
 }
 
@@ -444,7 +448,11 @@ function sourcesOf(p: GearPiece, input: AdvisorInput): Source[] {
   const bank = input.owned?.items.get(nameKey(p.name))?.bank;
   if (bank && bank > 0) out.push({ kind: 'bank' });
   const shops = shopsOf(p, input);
-  const ge: Source[] = p.tradeable ? [{ kind: 'ge', ...(input.gePrices?.has(p.id) ? { price: input.gePrices.get(p.id) } : {}) }] : [];
+  const quote = input.geQuotes?.get(p.id);
+  const price = input.geQuotes ? quote?.unit ?? undefined : input.gePrices?.get(p.id);
+  const ge: Source[] = p.tradeable ? [{ kind: 'ge', ...(price !== undefined ? { price } : {}),
+    ...(quote ? { priceLabel: quote.label, priceDetail: quote.detail } : {}),
+  }] : [];
   const priced = [...shops, ...ge].sort((a, b) => priceOf(a, Infinity) - priceOf(b, Infinity));
   // A shop slightly dearer than the exchange — the shop first: the price is exact, there is no waiting for a deal, and at the start of the route
   // it is usually near (Zeke — by the cow pen beyond the Al Kharid gate, the exchange — in Varrock). The exchange stays as "or …".
@@ -625,15 +633,15 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
     const top = choose(buys);
     // "Missing" — from the money to the purchase in this slot: a cheap sword now does not make the goal more expensive.
     const budget = left;
-    const affordable = total === null ? [] : buys.filter((b) => b.cost !== null && b.cost <= budget);
+    const affordable = total === null || input.reserveUnknown ? [] : buys.filter((b) => b.cost !== null && b.cost <= budget);
     const pick = affordable.length ? choose(affordable) : null;
     if (pick) {
       (slot === 'weapon' || slot === 'neck' ? actions : armour).push(pick);
       left -= pick.cost!;
     }
-    const topAffordable = top.cost !== null && total !== null && top.cost <= budget;
+    const topAffordable = !input.reserveUnknown && top.cost !== null && total !== null && top.cost <= budget;
     if (!topAffordable && (!pick || better(top, pick))) {
-      goals.push({ ...top, ...(top.cost !== null && total !== null ? { short: top.cost - budget } : {}) });
+      goals.push({ ...top, ...(!input.reserveUnknown && top.cost !== null && total !== null ? { short: top.cost - budget } : {}) });
     }
   }
 
@@ -699,6 +707,7 @@ export function adviseGear(input: AdvisorInput): GearAdvice {
     equipped,
     coins: { bag, bank, total },
     reserve,
+    ...(input.reserveUnknown ? { reserveUnknown: true } : {}),
     incoming,
     foes,
     weaponNow,
@@ -801,7 +810,7 @@ export function statsText(a: Pick<GearAction, 'gain' | 'slot' | 'item'>): string
 export function sourceText(s: Source): string {
   if (s.kind === 'bag') return 'already in the bag';
   if (s.kind === 'bank') return 'in the bank';
-  if (s.kind === 'ge') return s.price !== undefined ? `on the exchange ~${gp(s.price)} gp` : 'on the exchange (the price did not load)';
+  if (s.kind === 'ge') return s.price !== undefined ? `on the exchange ~${gp(s.price)} gp (${s.priceLabel ?? 'GE estimate'})` : 'on the exchange (Price unavailable)';
   return `${s.npc ? `from ${s.npc} at ` : 'at '}${s.shop} (${s.location}) — ${gp(s.price)} gp${s.toll ? ` + ${s.toll} gp toll into Al Kharid` : ''}`;
 }
 
@@ -810,7 +819,7 @@ export function hudHint(a: GearAction): string {
   if (a.how === 'wear') return `⚡ Wear ${a.item.name} — ${a.source.kind === 'bank' ? 'it is in the bank' : 'it is in the bag'}`;
   const s = a.source;
   if (s.kind === 'shop') return `⚡ Stronger: ${a.item.name} from ${s.npc ?? s.shop} (${s.location}), ${gp(s.price)} gp`;
-  return `⚡ Stronger: ${a.item.name} on the exchange${s.kind === 'ge' && s.price !== undefined ? `, ~${gp(s.price)} gp` : ''}`;
+  return `⚡ Stronger: ${a.item.name} ${sourceText(s)}`;
 }
 
 /** Where to lead the arrow for a purchase: a shop (the seller is highlighted) or the exchange. For "wear" — nowhere. */

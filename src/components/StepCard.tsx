@@ -43,6 +43,8 @@ import { overviewOf } from '../lib/subStep';
 import { CarryNote, LoadoutsCard, RewardChoice } from './RouteNotes';
 import { QuestPreparation } from './QuestPreparation';
 import { TravelTip } from './TravelTip';
+import { ItemMarketPrice } from './ItemMarketPrice';
+import { parseAmount } from '../lib/checklist';
 
 const WARN_LABELS = new Set(['Dangerous', 'Attention', 'Combat']);
 
@@ -65,6 +67,7 @@ function ItemChip({ item }: { item: StepItemRequirement }) {
           <span className="item-chip-lens" aria-hidden="true">🔍</span>
         </span>
         {item.howToGet && <span className="item-chip-how"><Inline text={item.howToGet} /></span>}
+        <ItemMarketPrice name={item.nameEn} id={item.wikiItemId} quantity={parseAmount(item.amount)} />
       </button>
     </li>
   );
@@ -103,7 +106,8 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
   const recovering = engine.ctx.recovery?.stepId === step.id;
   const sub = useSubStep(step);
   const status = progress.steps[step.id];
-  const blockers = isClosed(progress, step.id) ? null : blockersOf(step, progress, qp, engine.dependencies);
+  const dependencyBlockers = blockersOf(step, progress, qp, engine.dependencies);
+  const blockers = isClosed(progress, step.id) ? null : dependencyBlockers;
   const suggested = isClosed(progress, step.id) ? [] : suggestedBefore(step, progress);
   const reviewing = needsReview(step, progress);
   const links = [
@@ -265,8 +269,8 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
           {step.requires.map((r, i) => (
             <span key={r}>
               {i > 0 && ', '}
-              <a href={`#/step/${r}`} className={`step-ref ${isClosed(progress, r) ? 'is-met' : ''}`}>{r}</a>
-              {isClosed(progress, r) && <span className="visually-hidden"> (done)</span>}
+              <a href={`#/step/${r}`} className={`step-ref ${!dependencyBlockers?.steps.includes(r) ? 'is-met' : ''}`}>{r}</a>
+              {!dependencyBlockers?.steps.includes(r) && <span className="visually-hidden"> (met)</span>}
             </span>
           ))}
           {step.minQp !== undefined && (

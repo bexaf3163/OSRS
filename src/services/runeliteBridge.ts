@@ -175,6 +175,8 @@ export interface NavTargetPayload {
   y: number;
   plane: number;
   npcNames?: string[];
+  /** Verified scenery at the temporary destination; supported by the existing plugin protocol. */
+  objectNames?: string[];
   /** The item we are going for: the target is cleared when it is in the bag or worn. */
   itemName?: string;
   itemId?: number;
@@ -215,6 +217,7 @@ export interface BridgeTransport {
 
 /** An item for the departure check at the bank. */
 export interface ChecklistPayloadItem {
+  equip?: boolean;
   name: string;
   id?: number;
   count: number;
@@ -386,6 +389,7 @@ export function toInGameTarget(step: Step, branch?: StepBranch, extraWatch: stri
   const goal = alt ? (alt.label.startsWith(branch!.label) ? alt.label : `${branch!.label}: ${alt.label}`) : g.goal ?? worldPoint?.label;
   if (goal) payload.goal = goal;
   const checklist = preflightItems(step).map((i) => ({
+    ...(i.equip ? { equip: true } : {}),
     name: i.nameEn, id: i.id, count: i.count, heals: i.heals, ...(i.alt?.length ? { alt: i.alt } : {}), ...(i.doses !== undefined ? { doses: i.doses } : {}),
   }));
   if (checklist.length) payload.checklist = checklist;
@@ -626,6 +630,7 @@ export function parseNavTarget(raw: unknown): NavTargetPayload | null {
   if (typeof r.label !== 'string' || !r.label || r.label.length > 200 || !int(r.x) || !int(r.y) || !int(r.plane)) return null;
   const out: NavTargetPayload = { label: r.label, x: r.x as number, y: r.y as number, plane: r.plane as number };
   if (Array.isArray(r.npcNames) && r.npcNames.every((n) => typeof n === 'string')) out.npcNames = r.npcNames as string[];
+  if (Array.isArray(r.objectNames) && r.objectNames.length <= 8 && r.objectNames.every(n => typeof n === 'string' && n.length > 0 && n.length <= 200)) out.objectNames = r.objectNames as string[];
   if (typeof r.itemName === 'string') out.itemName = r.itemName;
   if (int(r.itemId)) out.itemId = r.itemId as number;
   if (typeof r.stepId === 'string') out.stepId = r.stepId;

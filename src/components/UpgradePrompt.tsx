@@ -4,15 +4,16 @@
 // window. When the item is in the bag or worn, the target is cleared by itself and the arrow leads to the step again.
 // It buys and spends nothing — only hints. "✕ Skip" hides the hint on this step.
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import type { Step } from '../types';
 import { useStore } from '../store';
 import { useBridge } from '../bridge';
 import { useFeatures } from '../lib/features';
 import { isClosed } from '../lib/next-step';
 import { formatGp } from '../lib/shopping';
-import { getGePrice } from '../services/pricesApi';
-import { recommendUpgrade, showsPrompt, stepUpgradeCategories, upgradeNav, type UpgradeRecommendation } from '../services/gearUpgradeRouter';
+import { usePriceView } from '../lib/funding/usePriceView';
+import { itemPrice } from '../lib/itemPrice';
+import { recommendUpgrade, showsPrompt, stepUpgradeCategories, toolProgression, upgradeNav, type UpgradeRecommendation } from '../services/gearUpgradeRouter';
 import { NavigateButton } from './NavigateButton';
 import { PlaceButton, PlaceMapView, usePlaceMap } from './PlaceMap';
 
@@ -23,26 +24,18 @@ export function useUpgradeRecommendation(step: Step): UpgradeRecommendation | nu
   const { upgradeRouter } = useFeatures();
   const { progress, mode } = useStore();
   const { gear, stats } = useBridge();
-  const [prices, setPrices] = useState<ReadonlyMap<number, number>>(new Map());
   const relevant = upgradeRouter && stepUpgradeCategories(step).length > 0 && !isClosed(progress, step.id);
+  const board = usePriceView(relevant);
+  const prices = useMemo(() => new Map([...toolProgression.woodcutting, ...toolProgression.mining]
+    .flatMap(t => t.itemId === undefined ? [] : [[t.itemId, itemPrice(board, t.tier, t.itemId, 1)] as const])), [board]);
 
   const rec = useMemo(() => {
     if (!relevant) return null;
     // The levels from the game outrank the hand-entered ones: they are exact and fresh.
     const levels: Record<string, number | undefined> = { ...progress.levels, ...(stats ?? {}) };
-    return recommendUpgrade({ step, mode, levels, gear, dismissed: progress.upgradeDismissedForSteps, gePrices: prices });
+    return recommendUpgrade({ step, mode, levels, gear, dismissed: progress.upgradeDismissedForSteps, geQuotes: prices });
   }, [relevant, step, mode, progress.levels, progress.upgradeDismissedForSteps, stats, gear, prices]);
 
-  // The exchange price — once per item; without a network the shop price stays.
-  const wantPrice = rec?.recommendedItemId;
-  useEffect(() => {
-    if (!wantPrice || prices.has(wantPrice)) return;
-    let alive = true;
-    getGePrice(wantPrice).then((p) => {
-      if (alive && p?.buyPrice) setPrices((m) => new Map(m).set(wantPrice, p.buyPrice));
-    }).catch(() => {});
-    return () => { alive = false; };
-  }, [wantPrice, prices]);
   return rec;
 }
 
@@ -75,15 +68,15 @@ export function UpgradePrompt({ step }: { step: Step }) {
           ? <PlaceButton query={{ kind: 'shop', location: rec.city ?? '', shop: rec.shop, npc: rec.npc }} onShow={places.show}>{where}</PlaceButton>
           : where}
         {rec.npc && <span className="muted"> · seller {rec.npc}</span>}
-        {rec.approxCost !== undefined && <> · ~{formatGp(rec.approxCost)} gp</>}
+        {rec.approxCost !== undefined ? <span title={!rec.shop ? rec.geQuote?.detail : undefined}> · ~{formatGp(rec.approxCost)} gp ({rec.priceLabel ?? (rec.shop ? 'NPC price' : 'GE estimate')})</span> : <> · Price unavailable</>}
         {rec.shopPrice !== undefined && rec.gePrice !== undefined && rec.gePrice < rec.shopPrice && (
-          <span className="muted"> (exchange ~{formatGp(rec.gePrice)} gp, shop {formatGp(rec.shopPrice)} gp)</span>
+          <span className="muted"> (shop {formatGp(rec.shopPrice)} gp)</span>
         )}
       </p>
 
       {rec.status === 'UPGRADE_NOT_AFFORDABLE' ? (
         <div className="upgrade-cash">
-          <p className="small"><strong>💰 Not enough coins:</strong> ~{formatGp(rec.approxCost ?? 0)} gp needed, you have {formatGp(rec.coins ?? 0)} gp with the bank. It is too early to go to the shop.</p>
+          <p className="small"><strong>💰 Not enough coins:</strong> ~{formatGp(rec.approxCost ?? 0)} gp needed ({rec.priceLabel ?? 'estimate'}), you have {formatGp(rec.coins ?? 0)} gp with the bank. It is too early to go to the shop.</p>
           <p className="small muted">How to make it up quickly — guidelines, not a promised income:</p>
           <ul className="small">
             {s1_09 && <li>Complete <a href="#/step/S1-09">Stronghold of Security (S1-09)</a> — it gives 10,000 coins from the chests.</li>}

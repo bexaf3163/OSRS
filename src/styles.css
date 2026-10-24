@@ -714,8 +714,8 @@ a.quest-link:hover { border-color: var(--border-strong); }
   display: flex; flex-direction: column; gap: 1px; padding: 10px 12px; border-radius: var(--radius-sm); cursor: pointer;
 }
 .search-hit.is-active { background: var(--accent-soft); }
-.search-hit-head { display: flex; align-items: baseline; gap: 8px; }
-.search-hit-title { font-weight: 600; }
+.search-hit-head { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; min-width: 0; }
+.search-hit-title { font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
 .search-hit-sub { font-size: 0.78rem; color: var(--muted); }
 .search-hit-snippet { font-size: 0.85rem; color: var(--muted); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
 .search-dialog > .empty { padding: 20px 16px; }
@@ -917,7 +917,7 @@ a.quest-link:hover { border-color: var(--border-strong); }
   text-transform: uppercase; color: var(--muted);
 }
 .search-hit-head { align-items: center; }
-.search-hit-price { margin-left: auto; font-size: 0.8rem; font-weight: 600; color: var(--gold-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.search-hit-price { margin-left: auto; max-width: 100%; font-size: 0.8rem; font-weight: 600; color: var(--gold-ink); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
 .search-hit.is-item .search-hit-sub { padding-left: 28px; }
 
 /* ---------- Settings: appearance ---------- */

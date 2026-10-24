@@ -4,7 +4,7 @@ Written by `tests/combatAudit.test.ts` from `src/data/combatAudit.json` (revisio
 
 Every stage of the route where the player fights or can be attacked, checked against the route text, the quest stage lines (Quest Helper), the OSRS Wiki infoboxes in combatFoes.json and the danger zones. The rule for a fight the quest cannot go on without: its food is a required item (readiness and the game check it before leaving), the app estimates it with the player's kit where it has the opponent's numbers, and an unread kit or bag is reported as not checked, never as ready.
 
-26 stages: 12 retained, 7 revised, 2 with a branch, 5 deferred.
+27 stages: 12 retained, 9 revised, 2 with a branch, 4 deferred.
 
 | Step | Kind | Mandatory | Opponents | Method | Estimate | Food in the item list | Decision |
 |---|---|---|---|---|---|---|---|
@@ -25,7 +25,8 @@ Every stage of the route where the player fights or can be attacked, checked aga
 | S4-03 Attack to 40 | training | yes | Giant frog (13) | melee | Giant frog | Salmon 25 | Branch |
 | S5-03 Map piece 1: Melzar's Maze | quest-fight | yes | Melzar the Mad (43), Lesser demon (82) | melee | Melzar the Mad | Salmon 10 | Retain |
 | S5-08 The battle with the dragon Elvarg | quest-fight | yes | Elvarg (83) | melee | Elvarg | Lobster 20+ | Retain |
-| S6-01 Ranged to 50 on the Ogress Warriors and Shamans | training | yes | Ogress warrior (82), Ogress shaman (82) | safespot | - | - | Deferred |
+| S6-01 Ranged to 50 with a prepared ranged loadout | training | no | Seagull (3), Monk, Giant frog | other | - | - | Revised |
+| S6-04 Magic to 55 (High Level Alchemy) | training | no | Cow, Chicken | other | - | Trout 5 | Revised |
 | S7-02 Fight Arena | quest-fight | yes | Khazard Ogre (63), Khazard scorpion (44), Bouncer (137) | safespot | - | - | Retain |
 | S7-03 Tree Gnome Village | quest-fight | yes | Khazard warlord (112) | safespot | - | - | Retain |
 | S7-05 The Grand Tree | quest-fight | yes | Black demon (172) | safespot | - | - | Retain |
@@ -389,21 +390,64 @@ Evidence:
 
 In-game danger zones: crandor-boarding, elvarg-lair.
 
-## S6-01 Ranged to 50 on the Ogress Warriors and Shamans
+## S6-01 Ranged to 50 with a prepared ranged loadout
 
-**Deferred.** Ranged to 50 on the ogresses (82, hit up to 8) from a safespot.
+**Revised.** Optional Ranged to 50 using a level-appropriate F2P bow, one equipped arrow stack and the current trainer.
 
 Assumptions:
 
-- Ranged only, from a safespot: no melee plan applies, and Ranged is never offered in place of Attack XP.
+- The starter seagull must be the level-3 variant; generic name highlights cannot distinguish it.
+- Rapid after Ranged 5; do not use Longrange when preserving Defence.
 
 Problems:
 
-- The combat estimate is melee only: the Ranged time and the food for the walk back (20 lobsters or swordfish, recommended) are not sized to the player.
+- Ranged DPS, whole-goal ammunition consumption and food are not simulated; 100 arrows and the later food quantity are starter supplies, not a survival guarantee.
+- Crossbows, thrown weapons and Members loadouts are not covered by this F2P bow planner.
+
+Alternatives:
+
+- Monks provide healing between fights; Giant frogs require food.
+- Flesh crawlers retain their Defence 40 guard and written directions only.
+- Compare ogresses as a later income option, not the level-1 default.
+
+Changed:
+
+- Unreleased 2.74.3: canonical trainer, equipped bow/ammunition and supply projection replace the fixed ogress route.
 
 Evidence:
 
-- Step fields "Why" and "How"; threats.json.
+- https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training
+- https://oldschool.runescape.wiki/w/Ranged_bows
+- tests/rangedPreparation.test.ts
+
+## S6-04 Magic to 55 (High Level Alchemy)
+
+**Revised.** Optional Magic55 using spell-dependent supplies: budget Strikes or an actually usable Superheat iron batch.
+
+Assumptions:
+
+- Select the named spell; equipped elemental staff substitution is explicit.
+- Remove metal armour and verify actual combat damage/XP; no full Magic attack/weakness simulation is claimed.
+
+Problems:
+
+- Full-goal costs, complete magic equipment/weakness modelling and measured combat rates remain open.
+- Alchemy targets and splash setup are not automatically verified; those methods remain manual alternatives.
+
+Alternatives:
+
+- Prepared Superheat iron needs Magic43 and Smithing15.
+- Known higher Strike ingredients can replace the Wind Strike fallback.
+
+Changed:
+
+- Unreleased2.74.3: canonical method projection replaces the Nature-only fallback and unverified automatic alchemy/splash selection.
+
+Evidence:
+
+- https://oldschool.runescape.wiki/w/Free-to-play_Magic_training
+- https://oldschool.runescape.wiki/w/Superheat_Item
+- tests/magicRouteSupplies.test.ts
 
 ## S7-02 Fight Arena
 

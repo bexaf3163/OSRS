@@ -584,6 +584,7 @@ public class ActiveTarget
 	@Data
 	public static class ChecklistItem
 	{
+		private Boolean equip;
 		private String name;
 		private Integer id;
 		private int count;

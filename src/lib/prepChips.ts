@@ -11,6 +11,7 @@ const STATE: Record<PrepWhere, ChipState> = { EQUIPPED: 'ok', INVENTORY: 'ok', B
 const SUFFIX: Record<ChipState, string> = { ok: '', bank: ' · in the bank', missing: ' · missing', unknown: ' · not checked' };
 
 export function chipOf(l: PrepLine): Chip {
+  if (l.equip && l.where === 'INVENTORY') return { key: l.key, text: `Equip ${l.name}`, state: 'bank' };
   const state = STATE[l.where];
   const count = lineAmount(l);
   return { key: l.key, text: `${l.name}${count}${SUFFIX[state]}`, state };

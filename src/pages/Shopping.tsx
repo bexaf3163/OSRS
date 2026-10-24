@@ -16,9 +16,10 @@ import {
 } from '../lib/shoppingView';
 import { MAX_OWNED } from '../lib/progress';
 import { itemById } from '../data';
-import { getMapping } from '../services/pricesApi';
 import { gearById } from '../services/gearAdvisor';
 import { usePriceView } from '../lib/funding/usePriceView';
+import { itemPrice } from '../lib/itemPrice';
+import { findLocalItem } from '../services/wikiService';
 import { ItemIcon } from '../components/WikiDrawer';
 import { copyText as copy } from '../lib/clipboard';
 import { RoadSupplies } from '../components/RoadSupplies';
@@ -139,15 +140,6 @@ export function ShoppingPage() {
     return started ?? nextStep(steps, progress, effectiveQp, dependencies)?.id ?? null;
   }, [activeStepId, steps, progress, effectiveQp, dependencies]);
 
-  // What the exchange sells: the price service's item list. Until it answers (offline), worn gear says it itself and anything else of the route is
-  // taken as sold, as before; an item without an id is never an exchange item.
-  const [mapping, setMapping] = useState<Set<number> | null>(null);
-  useEffect(() => {
-    let alive = true;
-    getMapping().then((m) => { if (alive) setMapping(new Set(m.keys())); }).catch(() => { /* the item database decides */ });
-    return () => { alive = false; };
-  }, []);
-
   // A followed skill plan (Skills → Follow this plan) leads the game instead of the quest route: its current step's tools come first in the list.
   const tracked = useTracked();
   const trackedLevel = useSkillLevel(tracked?.skill ?? 'attack');
@@ -161,21 +153,24 @@ export function ShoppingPage() {
   }, [tracked, trackedLevel, questDone]);
 
   const built = useMemo(() => {
-    const onGe = (l: ShoppingLine) => (l.id === undefined ? false : mapping ? mapping.has(l.id) : gearById.get(l.id)?.tradeable ?? true);
+    // Missing prices/catalogue metadata cannot turn a known route item into "not sold".
+    // Explicit gear tradeability still wins; acquisition routing handles quest/free/in-step items.
+    const onGe = (l: ShoppingLine) => l.id !== undefined && (gearById.get(l.id)?.tradeable ?? true);
     try {
       const selected = [...(followed && scope !== 'range' ? [followed] : []), ...scopeSteps(scope, steps, progress, current, range)];
       const { list, trip } = scopeList(selected);
       const rows = shopRows(list, {
         state: player, onGe, detail: (id) => itemById.get(id), trip,
-        gePrice: (l) => prices.buy(l.nameEn, l.id)?.price ?? null,
-        priceOf: (name) => prices.buy(name)?.price ?? null,
+        gePrice: (l) => itemPrice(prices, l.nameEn, l.id, 1).unit,
+        priceOf: (name) => itemPrice(prices, name, findLocalItem(name)?.id, 1).unit,
+        priceLabel: (name, id) => itemPrice(prices, name, id ?? findLocalItem(name)?.id, 1).label,
         qp: questPoints,
       });
       return { selected, list, rows, error: false };
     } catch {
       return { selected: [], list: { required: [], recommended: [], coins: 0 }, rows: [] as ShopRow[], error: true };
     }
-  }, [scope, steps, progress, current, range, player, mapping, prices, followed, questPoints]);
+  }, [scope, steps, progress, current, range, player, prices, followed, questPoints]);
   const { selected, list, rows, error } = built;
 
   const connected = link === 'online';
@@ -242,7 +237,8 @@ export function ShoppingPage() {
             {r.channel !== 'have' && r.qty > 0 && (r.unit === 'dose'
               ? <span className="shop-qty">{r.qty} {r.qty === 1 ? 'dose' : 'doses'}{r.channel === 'bank' ? '' : ' short'}</span>
               : <span className="shop-qty">×{formatGp(r.qty)}{r.exact ? '' : '+'}</span>)}
-            {r.cost !== null && r.channel !== 'have' && <span className="muted small shop-cost">{r.channel === 'unknown' ? 'up to ' : '≈ '}{formatGp(r.cost)} gp</span>}
+            {r.cost !== null && r.channel !== 'have' && <span className="muted small shop-cost">{r.channel === 'unknown' ? 'up to ' : '≈ '}{formatGp(r.cost)} gp{r.priceLabel ? ` (${r.priceLabel})` : r.channel === 'shop' ? ' (NPC price)' : ''}</span>}
+            {r.priceLabel === 'Price unavailable' && <span className="muted small shop-cost">Price unavailable</span>}
           </p>
           <p className="small shop-action">{r.action}</p>
           <details className="shop-why">
@@ -364,7 +360,7 @@ export function ShoppingPage() {
           {total.shortfall !== null && total.shortfall > 0 && current && (
             <p className="small"><a href={backHref}>Raise the coins</a> <span className="muted">— the step's coin plan picks a way that suits your account.</span> <a href="#/money">Browse earning methods</a></p>
           )}
-          <p className="small muted">Prices are estimates from the exchange's recent trades, not offers.</p>
+          <p className="small muted">GE estimates are not offers. Cached prices are labelled; unpriced costs are excluded. NPC prices are separate.</p>
         </div>
       )}
 

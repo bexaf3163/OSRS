@@ -8,6 +8,7 @@ import type { Step } from '../types';
 import type { QuestInstruction } from '../services/runeliteBridge';
 import { nameKey } from './checklist';
 import type { RequirementStatus, StepReadiness } from './readiness';
+import { prepSatisfied } from './prepPlan';
 
 export interface StageScope {
   stageAt: number;
@@ -52,13 +53,13 @@ export function isOutOfStage(scope: StageScope | null, name: string): boolean {
 }
 
 /** "Done out of what can be checked" for the lines the stage still asks for (the engine's score counts the whole quest list). */
-export function scopedPercent(lines: readonly { name: string; where: string; timing: string }[], scope: StageScope | null, fallback: number | null): number | null {
+export function scopedPercent(lines: readonly { name: string; where: string; timing: string; equip?: boolean }[], scope: StageScope | null, fallback: number | null): number | null {
   if (!scope) return fallback;
   const mine = lines.filter((l) => l.timing === 'NOW' && !scope.out.has(nameKey(l.name)));
   if (!mine.length) return 100;
   const checkable = mine.filter((l) => l.where !== 'UNKNOWN');
   if (!checkable.length) return null;
-  return Math.round((100 * checkable.filter((l) => l.where === 'INVENTORY' || l.where === 'EQUIPPED').length) / checkable.length);
+  return Math.round((100 * checkable.filter(prepSatisfied).length) / checkable.length);
 }
 
 /** The readiness without the quest items this stage no longer asks for; the same object when nothing is dropped. */

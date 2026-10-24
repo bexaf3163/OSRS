@@ -6,7 +6,7 @@ import { contextOf, type ReadinessInput } from '../src/lib/readiness';
 import { createReadinessEngine } from '../src/lib/readinessEngine';
 import { decideAuto, RENAV_GAP_MS, buildQueue, type AutoInput, type PrepQueue } from '../src/lib/prepQueue';
 import { emptyPrep, navKeyOf, reconcile, staleArrows, startDetour, type PrepState } from '../src/lib/prepRoute';
-import { preflightItems } from '../src/lib/checklist';
+import { preflightItems, type OwnedState } from '../src/lib/checklist';
 
 const step = (id: string) => allSteps.find((s) => s.id === id)!;
 const done = (ids: string[]) => ids.reduce((p, id) => withStep(p, id, 'done'), emptyProgress());
@@ -18,10 +18,12 @@ const needed = preflightItems(itemStep).find((i) => i.id !== 995 && i.count === 
 const others = Object.fromEntries(preflightItems(itemStep).filter((i) => i !== needed).map((i) => [i.nameEn.toLowerCase(), { name: i.nameEn, carried: 1000, noted: 0, bank: 0 }]));
 
 function engineFor(over: Partial<ReadinessInput> & { item?: { carried: number; bank?: number } | null; bankSeen?: boolean } = {}) {
-  const owned = over.item === null ? null : {
+  const owned: OwnedState | null = over.item === null ? null : {
     bankSeen: over.bankSeen ?? true,
     items: new Map([...Object.entries(others), [needed.nameEn.toLowerCase(), { name: needed.nameEn, carried: over.item?.carried ?? 0, noted: 0, ...(over.item?.bank !== undefined ? { bank: over.item.bank } : { bank: 0 }) }]]),
   };
+  // A confirmed-empty generic tool means every usable tracked tier was checked, not just bronze.
+  for (const name of needed.alt ?? []) owned?.items.set(name.toLowerCase(), { name, carried: 0, noted: 0, ...(owned.bankSeen ? { bank: 0 } : {}) });
   const input: ReadinessInput = {
     step: itemStep, steps: allSteps, progress: before(itemStep.id), qp: 200, mode: 'members', stats: { attack: 99 }, owned,
     gear: { equipment: [], inventory: [], coins: 1_000_000, bankCoins: 0 }, ...over,

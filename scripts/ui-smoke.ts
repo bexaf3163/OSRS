@@ -6,6 +6,7 @@
 import { spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { chromium, type Browser, type Page } from 'playwright';
+import { PICKAXES } from '../src/lib/toolTiers.ts';
 
 const PORT = 4179;
 const BASE = `http://127.0.0.1:${PORT}/`;
@@ -24,6 +25,11 @@ interface Mock {
   prices?: Record<number, number>;
   /** The exchange as captured on 2026-10-18 (tests/funding/fixtures), with its times moved to now: latest, hourly and the item reference. */
   market?: boolean;
+  /** The item catalogue is available but market quotes are missing. */
+  marketUnavailable?: boolean;
+  /** Scenario-specific quotes added to the recorded market fixture. */
+  marketQuotes?: Record<string, { id: number; price: number }>;
+  marketAgeMinutes?: number;
   /** The plugin does not answer (RuneLite is not running). */
   offline?: boolean;
   /** A reachable bridge rejects the guide snapshot for its size. */
@@ -113,11 +119,15 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
   if (mock.market) {
     type Row = { id: number; limit: number | null; high: number | null; low: number | null; avgHigh: number | null; avgLow: number | null; highVolume: number; lowVolume: number };
     const rows = (JSON.parse(readFileSync(new URL('../tests/funding/fixtures/market-2026-10-18.json', import.meta.url), 'utf8')) as { items: Record<string, Row> }).items;
+    for (const [name, quote] of Object.entries(mock.marketQuotes ?? {})) rows[name] = {
+      id: quote.id, limit: 100, high: quote.price, low: quote.price, avgHigh: quote.price, avgLow: quote.price, highVolume: 1000, lowVolume: 1000,
+    };
     await page.route(/prices\.runescape\.wiki\/api\/v2\/osrs\/(latest|1h|mapping)/, (r) => {
       const kind = /\/osrs\/(latest|1h|mapping)/.exec(r.request().url())![1];
       const now = Math.floor(Date.now() / 1000);
+      const age = (mock.marketAgeMinutes ?? 1.5) * 60;
       if (kind === 'mapping') return r.fulfill({ json: Object.entries(rows).map(([name, x]) => ({ id: x.id, name, limit: x.limit ?? undefined, members: false })) });
-      if (kind === 'latest') return r.fulfill({ json: { data: Object.fromEntries(Object.values(rows).map((x) => [x.id, { high: x.high, highTime: x.high === null ? null : now - 90, low: x.low, lowTime: x.low === null ? null : now - 120 }])) } });
+      if (kind === 'latest') return r.fulfill({ json: { data: mock.marketUnavailable ? {} : Object.fromEntries(Object.values(rows).map((x) => [x.id, { high: x.high, highTime: x.high === null ? null : now - age, low: x.low, lowTime: x.low === null ? null : now - age - 30 }])) } });
       return r.fulfill({ json: { timestamp: now, data: Object.fromEntries(Object.values(rows).map((x) => [x.id, { avgHighPrice: x.avgHigh, highPriceVolume: x.highVolume, avgLowPrice: x.avgLow, lowPriceVolume: x.lowVolume }])) } });
     });
   }
@@ -181,8 +191,34 @@ const text = async (page: Page, sel: string) => {
 };
 
 async function run(browser: Browser) {
+  if (process.env.UI_ONLY === 'skill-handover') { await skillHandoverScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await skillHandoverScenarios(browser);
+  if (process.env.UI_ONLY === 'mining-handover') { await miningHandoverScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await miningHandoverScenarios(browser);
+  if (process.env.UI_ONLY === 'ranged-preparation') { await rangedPreparationScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await rangedPreparationScenarios(browser);
+  if (process.env.UI_ONLY === 'shopping-quotes') { await shoppingQuoteScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await shoppingQuoteScenarios(browser);
+  if (process.env.UI_ONLY === 'journal-quotes') { await journalQuoteScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await journalQuoteScenarios(browser);
+  if (process.env.UI_ONLY === 'dossier-quotes') { await dossierQuoteScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await dossierQuoteScenarios(browser);
+  if (process.env.UI_ONLY === 'style-quotes') { await styleQuoteScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await styleQuoteScenarios(browser);
+  if (process.env.UI_ONLY === 'armour') { await armourPreparationScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await armourPreparationScenarios(browser);
+  if (process.env.UI_ONLY === 'market-preparation') { await marketPreparationScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await marketPreparationScenarios(browser);
+  if (process.env.UI_ONLY === 'date-proof') { await dateFreeSettingsScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await dateFreeSettingsScenarios(browser);
+  if (process.env.UI_ONLY === 'tool-proof') { await toolProofScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await toolProofScenarios(browser);
+  if (process.env.UI_ONLY === 'sync-proof') { await accountSyncProofScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await accountSyncProofScenarios(browser);
   if (process.env.UI_ONLY === 'item-food') { await retainedCombatFoodScenario(browser); return; }
   if (process.env.UI_ONLY === 'magic-funding') { await magicFundingScenarios(browser); return; }
+  if (process.env.UI_ONLY === 'magic-route') { await magicRouteScenarios(browser); return; }
+  if (!process.env.UI_ONLY) await magicRouteScenarios(browser);
   if (process.env.UI_ONLY === 'consumer-dependencies') { await consumerDependencyScenarios(browser); return; }
   if (!process.env.UI_ONLY) await magicFundingScenarios(browser);
   if (process.env.UI_ONLY === 'stock-certainty') { await combatRouteScenarios(browser); return; }
@@ -409,9 +445,15 @@ async function run(browser: Browser) {
       events: [{ type: 'QUESTS', done: [] }],
     }, '#/step/S8-02');
     expect((await page.locator('.step-blocked').allInnerTexts()).some(t => t.includes('S8-01')), 'prerequisites: live unfinished quest overrides an old route done mark');
+    await reveal(page, '.requires .step-ref[href="#/step/S8-01"]');
+    expect(await page.locator('.requires .step-ref.is-met[href="#/step/S8-01"]').count() === 0, 'prerequisites: a contradicted done mark is not shown as met');
+    await page.keyboard.press('Escape');
     await page.evaluate(() => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'QUESTS', done: ['Priest in Peril', 'The Restless Ghost'] }));
     await page.waitForTimeout(500);
     expect(await page.locator('.step-blocked').count() === 0, 'prerequisites: live completion clears the hard blocker without changing route marks');
+    await reveal(page, '.requires .step-ref[href="#/step/S8-01"]');
+    expect(await page.locator('.requires .step-ref.is-met[href="#/step/S8-01"]').count() === 1, 'prerequisites: the dependency label follows the same live proof as its blocker');
+    await page.keyboard.press('Escape');
     expect(await noOverflow(page) && !errors.length, 'prerequisites: no overflow or page errors');
     await page.context().close();
   }
@@ -422,9 +464,15 @@ async function run(browser: Browser) {
       progress, status: { protocol: 6, stats: { agility: 24 } }, events: [{ type: 'STATS', stats: { agility: 24 } }],
     }, '#/step/S7-05');
     expect((await page.locator('main').innerText()).includes('First S7-04'), `skill dependency (${width}): skipping below the goal does not unlock the quest`);
+    await reveal(page, '.requires .step-ref[href="#/step/S7-04"]');
+    expect(await page.locator('.requires .step-ref.is-met[href="#/step/S7-04"]').count() === 0, `skill dependency (${width}): a skipped training step is not labelled met`);
+    await page.keyboard.press('Escape');
     await page.evaluate(() => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'STATS', stats: { agility: 25 } }));
     await page.waitForTimeout(900);
     expect(!(await page.locator('main').innerText()).includes('First S7-04'), `skill dependency (${width}): reaching the actual level removes the redundant training blocker`);
+    await reveal(page, '.requires .step-ref[href="#/step/S7-04"]');
+    expect(await page.locator('.requires .step-ref.is-met[href="#/step/S7-04"]').count() === 1, `skill dependency (${width}): reached levels satisfy the displayed dependency without rewriting the skip`);
+    await page.keyboard.press('Escape');
     expect(await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}').steps?.['S7-04']) === 'skipped', `skill dependency (${width}): the original skip mark is preserved`);
     expect(await noOverflow(page) && !errors.length, `skill dependency (${width}): no overflow or console errors`);
     await page.context().close();
@@ -1995,6 +2043,14 @@ async function combatRouteScenarios(browser: Browser) {
     await reveal(page, '.combat-route');
     const fold = page.locator('.combat-route details');
     expect(await fold.count() === 1 && !(await fold.evaluate((d) => (d as HTMLDetailsElement).open)), `combat route (${width} px): the comparison is folded under "Why this plan?"`);
+    // A competitive automatic baseline deliberately has no extra status banner.
+    // Choose an alternative to exercise that banner's link without requiring a different recommendation.
+    if (await page.locator('.status-combat-route:visible').count() === 0) {
+      await fold.locator(':scope > summary').click();
+      await page.locator('.combat-plan-row').getByRole('button', { name: 'Use this instead' }).first().click();
+      await page.waitForTimeout(800);
+      expect((await savedPlans())[0]['S4-03']?.by === 'player', `combat route (${width} px): an explicit alternative exposes its status action`);
+    }
     // The status line's link opens the comparison itself, not only the view it is in (2.72). The view opened above is closed first, as a player would.
     await page.keyboard.press('Escape');
     await page.waitForTimeout(300);
@@ -2002,16 +2058,21 @@ async function combatRouteScenarios(browser: Browser) {
     await page.waitForTimeout(600);
     expect(await fold.evaluate((d) => (d as HTMLDetailsElement).open), `combat route (${width} px): the status line's "Why this plan?" opens the comparison itself`);
     const rows = await page.locator('.combat-plan-row').count();
-    expect(rows >= 4, `combat route (${width} px): the folded comparison includes training alternatives (${rows})`);
+    expect(rows >= 3 && await page.locator('.combat-plan-row', { hasText: 'The route as written' }).count() === 1
+      && await page.locator('.combat-plan-row', { hasText: 'Defence 20 first' }).count() === 1
+      && await page.locator('.combat-plan-row', { hasText: 'Defence 30 first' }).count() === 1
+      && await page.locator('.combat-plan-row', { hasText: 'Defence 10 first' }).count() === 0,
+      `combat route (${width} px): baseline and higher-Defence alternatives remain; common Defence 10 preparation is not duplicated (${rows})`);
     expect(!/Big bones bank quantity is not checked/.test(await text(page, '.combat-route')), `combat route (${width} px): an unreported item quantity is disclosed even when the bank was opened`);
     expect(!/drops sold about/.test(await text(page, '.combat-route')) && /Optional drops are not counted as income/.test(await text(page, '.combat-route')), `combat route (${width} px): XP-only plans do not advertise unscheduled loot sales`);
     expect(/Compared: .*Cow/.test(await text(page, '.combat-route')), `combat route (${width} px): it says what was compared`);
     if (process.env.UI_SHOTS) await page.locator('.combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-open-${width}.png` }).catch(() => {});
-    // The player's own choice: the route as written. The arrow goes back to the giants, the choice is kept, and the better plan is offered.
+    // A trainer choice cannot bypass common preparation: Defence 10 still comes before the armour and Attack phase.
     await page.locator('.combat-plan-row', { hasText: 'The route as written' }).getByRole('button', { name: 'Use this instead' }).click();
     await page.waitForTimeout(1500);
     const back = await lastStep();
-    expect(back?.npcNames?.[0] === 'Giant frog' && back?.worldPoint?.plane === 0, `combat route (${width} px): the route as written, chosen, brings the arrow back to the giants`);
+    expect(back?.npcNames?.[0] === 'Cow' && back?.pacing?.skill === 'defence' && back?.pacing?.targetLevel === 10 && back?.worldPoint?.plane === 0,
+      `combat route (${width} px): selecting the route keeps Defence 10 preparation on surface cows`);
     const mine = await text(page, '.status-combat-route');
     expect(/Your plan: The route as written/.test(mine), `combat route (${width} px): the player's choice is named and the better plan offered, not forced`);
     expect((await savedPlans())[0]['S4-03']?.by === 'player', `combat route (${width} px): the player's choice is saved as theirs`);
@@ -2152,14 +2213,15 @@ async function gearScenarios(browser: Browser) {
       await shot(page, `none-${width}`);
       await page.context().close();
     }
-    // Offline with a snapshot: the last known gear of the character, with its time; no recommendation built on it.
+    // Offline with a snapshot: keep the character and stale-state disclosure, without rendering its internal timestamp.
     {
       const at = Date.now() - 3 * 3600_000;
       const snap = { byPlayer: { 'gear test': { at, player: 'Gear Test', gear: { equipment: [RUNE, STRENGTH], inventory: [], coins: 120, bankCoins: 4000 } } } };
       const { page, errors } = await open(browser, width, { offline: true, progress: progressBefore('S4-03'), localStorage: { 'osrs-put:active-step': 'S4-03', 'osrs-put:last-gear': JSON.stringify(snap) } }, '#/gear');
       await page.waitForTimeout(1200);
       const now = await text(page, '.gear-now');
-      expect(/Last known/.test(now) && /Gear Test/.test(now) && /Rune scimitar/.test(now) && /Amulet of strength/.test(now), `gear offline (${width} px): the last known gear, named and timed`);
+      expect(/Last known/.test(now) && /Gear Test/.test(now) && /Rune scimitar/.test(now) && /Amulet of strength/.test(now), `gear offline (${width} px): the last known gear is named`);
+      expect(!/\b\d{1,2}\/\d{1,2}\/\d{4}\b/.test(now), `gear offline (${width} px): the snapshot date is not rendered`);
       expect(await page.locator('.gear-worn-list.is-stale').count() === 1, `gear offline (${width} px): the snapshot looks like one`);
       expect(await page.locator('.gear-reco').count() === 0 && await page.locator('.gear-connect').count() === 0, `gear offline (${width} px): no recommendation from old data, no second notice`);
       expect(await noOverflow(page), `gear offline (${width} px): no horizontal scroll`);
@@ -2200,6 +2262,39 @@ async function consumerDependencyScenarios(browser: Browser) {
   }
 }
 
+async function magicRouteScenarios(browser: Browser) {
+  for (const width of [390, 1280]) {
+    const names = ['Mind rune', 'Air rune', 'Water rune', 'Earth rune', 'Fire rune', 'Nature rune', 'Iron ore', 'Staff of air', 'Staff of water', 'Staff of earth', 'Staff of fire', 'Trout', 'Salmon', 'Tuna', 'Lobster', 'Swordfish'];
+    const stock = (counts: Record<string, number>) => names.map(name => ({ name, carried: counts[name] ?? 0, noted: 0, bank: 0 }));
+    const stats = { magic: 1, smithing: 15 };
+    const gear = { equipment: [], inventory: [], coins: 0, bankCoins: 0 };
+    const { page, errors } = await open(browser, width, {
+      market: true, progress: progressBefore('S6-04', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-04' },
+      status: { protocol: 6, inGame: true, activeStepId: 'S6-04', player: 'Magic Supplies', stats, ...gear },
+      events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: stock({}) }],
+    }, '#/step/S6-04');
+    const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
+    const initial = await snapshot();
+    expect(initial?.step?.checklist?.some((r: any) => r.name === 'Mind rune' && r.count === 100) && !initial.step.checklist.some((r: any) => r.name === 'Nature rune'), `magic (${width}): a beginner gets actual Strike inputs instead of a nature-only placeholder`);
+    const nextStats = { magic: 43, smithing: 15 };
+    await page.evaluate(({ stats, items }) => { const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void }; w.__status = { ...w.__status, stats }; w.__emit({ type: 'STATS', stats }); w.__emit({ type: 'OWNED', bankSeen: true, items }); }, { stats: nextStats, items: stock({ 'Nature rune': 25, 'Iron ore': 25, 'Fire rune': 100 }) });
+    await page.waitForTimeout(1500);
+    const utility = await snapshot();
+    expect(utility?.step?.checklist?.some((r: any) => r.name === 'Iron ore' && r.count === 25) && utility.step.checklist.some((r: any) => r.name === 'Fire rune' && r.count === 100) && !(utility.step.npcNames?.length), `magic (${width}): an unlocked supplied Superheat batch replaces the combat inputs and NPCs`);
+    const staffGear = { ...gear, equipment: [{ id: 1387, name: 'Staff of fire', slot: 'weapon', count: 1 }] };
+    await page.evaluate(({ gear, items }) => { const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void }; w.__status = { ...w.__status, ...gear }; w.__emit({ type: 'GEAR', gear }); w.__emit({ type: 'OWNED', bankSeen: true, items }); }, { gear: staffGear, items: stock({ 'Nature rune': 24, 'Iron ore': 24, 'Staff of fire': 1 }) });
+    await page.waitForTimeout(1500);
+    const remaining = await snapshot();
+    expect(remaining?.step?.checklist?.some((r: any) => r.name === 'Staff of fire' && r.equip) && remaining.step.checklist.some((r: any) => r.name === 'Iron ore' && r.count === 24) && !remaining.step.checklist.some((r: any) => r.name === 'Fire rune'), `magic (${width}): worn staff substitution and the remaining castable bag reach one snapshot`);
+    await reveal(page, '.training:visible');
+    expect((await text(page, '.training:visible')).includes('Superheat Item') && !(await text(page, '.training-recommendation')).includes('Alchemy'), `magic (${width}): desktop and game share the usable method`);
+    expect(Boolean((await page.locator('.training details').textContent())?.includes('manual setup')), `magic (${width}): unverified alternatives remain disclosed behind details`);
+    expect(await noOverflow(page) && !errors.length, `magic (${width}): no overflow or runtime errors`);
+    await page.context().close();
+  }
+}
+
 async function magicFundingScenarios(browser: Browser) {
   const prices = { 556: 6, 558: 3, 555: 6, 557: 6, 554: 6, 563: 120, 1381: 1542, 1383: 1500, 1385: 1500, 1387: 940, 1739: 125 };
   for (const width of [390, 1280]) for (const sale of ['restricted', 'unknown', 'lifted']) {
@@ -2221,6 +2316,338 @@ async function magicFundingScenarios(browser: Browser) {
     expect(body.includes(sale === 'restricted' ? 'Check the bank before judging affordability' : sale === 'lifted' ? 'That covers the lowest full cost' : 'not a deficit after owned supplies'), `Magic (${width}, ${sale}): partial coins are not a definite funding shortfall`);
     expect(await noOverflow(page) && !errors.length, `Magic (${width}, ${sale}): no overflow or console errors`);
     if (process.env.UI_SHOTS && sale === 'restricted') await page.locator('.magic-plan').screenshot({ path: `${process.env.UI_SHOTS}/magic-funding-${width}.png` });
+    await page.context().close();
+  }
+}
+
+async function dateFreeSettingsScenarios(browser: Browser) {
+  for (const width of [390, 1280]) {
+    const progress = { version: 3, steps: { 'S1-01': 'done' }, levels: {}, notes: { 'S1-01': 'Keep this note' }, updatedAt: '2001-02-03T04:05:06.000Z', gameMode: 'f2p' };
+    const { page, errors } = await open(browser, width, { offline: true, progress, localStorage: { 'osrs-put-settings-tab': 'progress' } }, '#/settings');
+    const transfer = page.locator('section').filter({ has: page.getByRole('button', { name: 'Export progress', exact: true }) });
+    expect(!/2001|changed \d/.test(await transfer.innerText()), `dates (${width}): the normal progress view omits its saved date`);
+    await page.locator('input[type="file"]').setInputFiles({ name: 'progress.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify({ app: 'osrs-put', ...progress })) });
+    const preview = page.locator('.notice').filter({ hasText: 'In the file:' });
+    await preview.waitFor();
+    expect((await preview.innerText()).includes('1 done') && !/2001|saved \d/.test(await preview.innerText()), `dates (${width}): import still previews contents without exposing its date`);
+    await preview.getByRole('button', { name: 'Cancel', exact: true }).click();
+    const saved = await page.evaluate(() => JSON.parse((window as unknown as { __saved: string }).__saved));
+    expect(saved.updatedAt === progress.updatedAt && saved.notes['S1-01'] === 'Keep this note', `dates (${width}): internal save ordering metadata and notes remain intact`);
+    expect(await noOverflow(page) && !errors.length, `dates (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function marketPreparationScenarios(browser: Browser) {
+  for (const width of [390, 1280]) for (const unavailable of [false, true]) {
+    const { page, errors } = await open(browser, width, {
+      zen: true, market: true, marketUnavailable: unavailable,
+      progress: progressBefore('S4-04', { gameMode: 'f2p' }),
+      localStorage: { 'osrs-put:active-step': 'S4-04' },
+      status: { protocol: 6, activeStepId: 'S4-04', coins: 10000, bankCoins: 0 },
+      events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Lobster', carried: 0, noted: 0, bank: 0 }] }],
+    }, '#/step/S4-04');
+    const supplies = page.locator('.quest-supply-list');
+    await supplies.getByText(unavailable ? 'Price unavailable' : 'GE estimate: ≈ 2,060 gp (103 each)', { exact: true }).waitFor({ timeout: 6000 });
+    expect(await supplies.getByText(unavailable ? 'Price unavailable' : 'GE estimate: ≈ 2,060 gp (103 each)', { exact: true }).count() === 1,
+      'market preparation (' + width + ', unavailable=' + unavailable + '): one supporting estimate, multiplied from the current quote');
+    await page.waitForTimeout(800);
+    const price = await page.evaluate(() => {
+      const w = window as unknown as { __posts: { path: string; body?: { plan?: { lines: { name: string; price?: string }[] } } }[] };
+      return w.__posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.plan?.lines.find(l => l.name === 'Lobster')?.price;
+    });
+    expect(unavailable ? price === 'Price unavailable' : !!price?.startsWith('GE estimate: ≈ 2,060 gp'),
+      'market preparation (' + width + ', unavailable=' + unavailable + '): the game receives the same estimate or honest absence');
+    expect(!(await page.locator('main').innerText()).includes('26 Sep 2026'), 'market preparation (' + width + '): no historical route price date');
+    expect(await noOverflow(page) && !errors.length, 'market preparation (' + width + '): no overflow or console errors');
+    await page.context().close();
+  }
+}
+
+async function toolProofScenarios(browser: Browser) {
+  for (const width of [390, 1280]) {
+    const rows = PICKAXES.map(name => ({ name, carried: 0, noted: 0, bank: 0, exactCarried: 0, exactNoted: 0, exactBank: 0 }));
+    const { page, errors } = await open(browser, width, {
+      zen: true, progress: progressBefore('S1-12', { gameMode: 'f2p' }),
+      localStorage: { 'osrs-put:active-step': 'S1-12' },
+      status: { protocol: 6, stats: { mining: 6 }, activeStepId: 'S1-12' },
+      events: [{ type: 'STATS', stats: { mining: 6 } }, { type: 'OWNED', bankSeen: true, items: [rows[0]] }],
+    }, '#/step/S1-12');
+    const line = () => page.evaluate(() => {
+      const posts = (window as unknown as { __posts: { path: string; body?: { plan?: { lines: { name: string; where: string; action?: string }[] } } }[] }).__posts;
+      return posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.plan?.lines.find(l => l.name === 'Bronze pickaxe');
+    });
+    await page.waitForTimeout(900);
+    const unreported = await line();
+    if (!unreported) console.log('tool proof: missing snapshot line', await page.evaluate(() => (window as unknown as { __posts: unknown[] }).__posts.slice(-8)));
+    expect(unreported?.where === 'UNKNOWN' && !/^(Buy|Withdraw) /i.test(unreported.action ?? ''), `tool proof (${width}): an absent bronze tier cannot invent a purchase while another usable tier is unread`);
+    const banked = [rows[0], { ...rows[1], bank: 1, exactBank: 1 }];
+    await page.evaluate(items => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items }), banked);
+    await page.waitForTimeout(900);
+    expect((await line())?.where === 'BANK', `tool proof (${width}): confirmed banked stock can cover the goal without checking every other tier`);
+    await page.evaluate(items => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items }), rows);
+    await page.waitForTimeout(900);
+    expect((await line())?.where === 'MISSING', `tool proof (${width}): checking every eligible tier establishes a genuine shortage`);
+    const held = rows.map(r => r.name === 'Iron pickaxe' ? { ...r, carried: 1, exactCarried: 1 } : r);
+    await page.evaluate(items => (window as unknown as { __emit: (e: unknown) => void }).__emit({ type: 'OWNED', bankSeen: true, items }), held);
+    await page.waitForTimeout(900);
+    expect((await line())?.where === 'INVENTORY', `tool proof (${width}): the owned usable tier clears the preparation action`);
+    expect(await noOverflow(page) && !errors.length, `tool proof (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function armourPreparationScenarios(browser: Browser) {
+  const pieces = ([[1165, 'Black full helm', 'head'], [1125, 'Black platebody', 'body'], [1077, 'Black platelegs', 'legs'], [1195, 'Black kiteshield', 'shield']] as [number, string, string][])
+    .map(([id, name, slot]) => ({ id, name, slot }));
+  const weapon = { id: 1331, name: 'Adamant scimitar', slot: 'weapon' };
+  const stats = { attack: 30, strength: 21, defence: 10, hitpoints: 24 };
+  const xp = { attack: 13363, strength: 2000, defence: 1154, hitpoints: 3500 };
+  const items = [...pieces.map(p => ({ name: p.name, carried: 1, noted: 0, bank: 0 })), { name: 'Black plateskirt', carried: 0, noted: 0, bank: 0 }];
+  const gear = { equipment: [weapon], inventory: pieces, coins: 10000, bankCoins: 0 };
+  for (const width of [390, 1280]) {
+    const { page, errors } = await open(browser, width, {
+      progress: progressBefore('S4-03', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S4-03' }, market: true,
+      status: { protocol: 6, inGame: true, player: 'Armour Test', activeStepId: 'S4-03', stats, xp, ...gear },
+      events: [{ type: 'STATS', stats }, { type: 'XP', xp }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
+    }, '#/step/S4-03');
+    const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
+    await page.waitForTimeout(1500);
+    const prep = await snapshot();
+    expect(prep?.step?.goal?.includes('10 Defence required') && prep.step.checklist?.length === 4 && prep.step.checklist.every((i: any) => i.equip),
+      `armour (${width}): the same four-piece equip requirement and Defence level reach the game`);
+    const currentArmour = prep?.plan?.lines?.filter((i: any) => i.equip && i.timing === 'NOW') ?? [];
+    expect(currentArmour.length === 4 && currentArmour.every((i: any) => i.where === 'INVENTORY' && /^Equip /.test(i.action))
+      && !prep.plan.bankWithdrawals?.some((i: any) => pieces.some(p => p.id === i.itemId)),
+      `armour (${width}): carried armour requires equipping, with no duplicate purchase or withdrawal`);
+    expect(await page.locator('.quest-supply-state').filter({ hasText: /^↗ Equip$/ }).count() === 4, `armour (${width}): each current supply says Equip`);
+    const worn = { ...gear, equipment: [weapon, ...pieces], inventory: [] };
+    await page.evaluate(g => {
+      const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void };
+      w.__status = { ...w.__status, ...g };
+      w.__emit({ type: 'GEAR', gear: g });
+    }, worn);
+    await page.waitForTimeout(1500);
+    const trained = await snapshot();
+    expect(trained?.step?.pacing?.targetExp > 0 && !trained.step.checklist?.some((i: any) => i.equip), `armour (${width}): confirmed worn gear advances to training`);
+    expect(trained?.step?.completionTrigger?.levels?.[0]?.level === 40 && !trained.step.completionTrigger?.items?.length, `armour (${width}): saved route completion remains Attack 40 only`);
+    expect(await noOverflow(page) && !errors.length, `armour (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function styleQuoteScenarios(browser: Browser) {
+  for (const width of [390, 1280]) for (const unavailable of [false, true]) {
+    const stats = { magic: 10, attack: 1, defence: 1, ranged: 1 };
+    const { page, errors } = await open(browser, width, {
+      market: true, marketUnavailable: unavailable, progress: progressBefore('S2-04', { levels: stats }),
+      marketQuotes: { 'Staff of fire': { id: 1387, price: 1500 }, 'Amulet of magic': { id: 1727, price: 700 } },
+      status: { protocol: 6, inGame: true, stats, coins: 10000, bankCoins: 0, equipment: [], inventory: [] },
+      events: [{ type: 'STATS', stats }],
+    }, '#/step/S2-04');
+    await reveal(page, '.style-gear summary');
+    await page.locator('.style-gear summary').click();
+    await page.waitForTimeout(800);
+    const prices = await page.locator('.style-market-price').allTextContents();
+    expect(prices.length > 0 && (unavailable ? prices.every(p => p.includes('Price unavailable')) : prices.some(p => p.includes('GE estimate:'))),
+      `style quotes (${width}, unavailable=${unavailable}): shared market estimates or honest quote absence`);
+    expect(!(await text(page, '.style-gear')).includes('not sold at the exchange'), `style quotes (${width}): an unavailable quote cannot invent trade restrictions`);
+    expect((await text(page, '.magic-plan')).includes('Price unavailable for a complete option'), `Magic quotes (${width}, unavailable=${unavailable}): missing rune quotes keep the requirements visible`);
+    expect(await noOverflow(page) && !errors.length, `style quotes (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function skillHandoverScenarios(browser: Browser) {
+  for (const width of [390, 1280]) {
+    const stats = { fishing: 49, cooking: 30 };
+    const names = ['Small fishing net', 'Fishing rod', 'Fishing bait', 'Fly fishing rod', 'Feather', 'Lobster pot', 'Harpoon', 'Raw beef', 'Raw chicken', 'Raw trout', 'Raw tuna', 'Grapes', 'Jug of water'];
+    const items = names.map(name => ({ name, carried: 0, noted: 0, bank: name === 'Raw tuna' ? 26 : name === 'Grapes' || name === 'Jug of water' ? 13 : 0 }));
+    const { page, errors } = await open(browser, width, {
+      market: true, progress: progressBefore('S6-02', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-02' },
+      status: { protocol: 6, inGame: true, player: 'Skill Handover', activeStepId: 'S6-02', stats, coins: 1000, bankCoins: 0, equipment: [], inventory: [] },
+      events: [{ type: 'STATS', stats }, { type: 'OWNED', bankSeen: true, items }],
+    }, '#/step/S6-02');
+    const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
+    const setLevels = async (levels: Record<string, number>) => {
+      await page.evaluate(s => { const w = window as unknown as { __emit: (e: unknown) => void; __status: Record<string, unknown> }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, levels);
+      await page.waitForTimeout(1300);
+    };
+    await setLevels({ fishing: 50, cooking: 30 });
+    const cooking = await snapshot();
+    expect(cooking?.step?.worldPoint?.label?.includes('Cooking: Tuna') && cooking.step.worldPoint.label.includes('Barbarian Village') && cooking.step.checklist?.some((r: any) => r.name === 'Raw tuna' && r.count === 26), `skill handover (${width}): completing Fishing projects Cooking supplies and destination into the game`);
+    expect(!cooking?.step?.npcNames?.includes('Fishing spot') && !cooking?.step?.checklist?.some((r: any) => /fishing net|fishing rod|harpoon/i.test(r.name)), `skill handover (${width}): no obsolete Fishing targets or tools`);
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}'));
+    expect(saved.steps?.['S6-02'] !== 'done', `skill handover (${width}): Fishing alone cannot complete the combined goal`);
+    await reveal(page, '.training:visible');
+    expect((await text(page, '.training:visible')).includes('Cooking'), `skill handover (${width}): the visible method follows the same remaining skill`);
+    await setLevels({ fishing: 50, cooking: 35 });
+    const wine = await snapshot();
+    expect(wine?.step?.worldPoint?.label?.includes('Edgeville Bank') && wine.step.checklist?.some((r: any) => r.name === 'Grapes' && r.count === 13) && wine.step.checklist?.some((r: any) => r.name === 'Jug of water' && r.count === 13), `skill handover (${width}): wine uses actual ingredient pairs at a bank`);
+    expect(await noOverflow(page) && !errors.length, `skill handover (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function miningHandoverScenarios(browser: Browser) {
+  for (const width of [390, 1280]) {
+    const stats = { mining: 59, woodcutting: 1 };
+    const names = ['Bronze pickaxe', 'Iron pickaxe', 'Steel pickaxe', 'Mithril pickaxe', 'Adamant pickaxe', 'Rune pickaxe', 'Bronze axe', 'Iron axe', 'Steel axe', 'Mithril axe', 'Adamant axe', 'Rune axe'];
+    const items = names.map(name => ({ name, carried: name === 'Rune pickaxe' ? 1 : 0, noted: 0, bank: name === 'Bronze axe' ? 1 : 0 }));
+    const { page, errors } = await open(browser, width, {
+      market: true, progress: progressBefore('S6-03', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-03' },
+      status: { protocol: 6, inGame: true, player: 'Mining Handover', activeStepId: 'S6-03', stats, coins: 1000, bankCoins: 0, equipment: [], inventory: [] },
+      events: [{ type: 'STATS', stats }, { type: 'OWNED', bankSeen: true, items }],
+    }, '#/step/S6-03');
+    const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
+    const mining = await snapshot();
+    expect(mining?.step?.worldPoint?.label?.includes('South-east Varrock mine') && JSON.stringify(mining.step.objectNames) === JSON.stringify(['Iron rocks']), `Mining handover (${width}): current Mining task has only iron scenery`);
+    for (const [level, object, place] of [[1, 'Tree', 'Lumbridge'], [15, 'Oak tree', 'Draynor Bank'], [30, 'Willow tree', 'Port Sarim']] as const) {
+      await page.evaluate(s => { const w = window as unknown as { __emit: (e: unknown) => void; __status: Record<string, unknown> }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { mining: 60, woodcutting: level });
+      await page.waitForTimeout(1300);
+      const current = await snapshot();
+      expect(current?.step?.worldPoint?.label?.includes(place) && JSON.stringify(current.step.objectNames) === JSON.stringify([object]), `Mining handover (${width}, WC${level}): one current Woodcutting scene and destination`);
+      expect(current?.step?.checklist?.length === 1 && current.step.checklist[0].name === 'Bronze axe', `Mining handover (${width}, WC${level}): axe replaces pickaxe preparation`);
+      expect(current?.step?.completionTrigger?.levels?.some((r: any) => r.skill === 'mining' && r.level === 60) && current.step.completionTrigger.levels.some((r: any) => r.skill === 'woodcutting' && r.level === 60), `Mining handover (${width}, WC${level}): both original goals remain`);
+    }
+    const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('osrs-put:progress') ?? '{}'));
+    expect(saved.steps?.['S6-03'] !== 'done', `Mining handover (${width}): Mining alone cannot complete this step`);
+    await reveal(page, '.training:visible');
+    expect((await text(page, '.training:visible')).includes('Woodcutting'), `Mining handover (${width}): desktop method and game payload agree`);
+    expect(await noOverflow(page) && !errors.length, `Mining handover (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function rangedPreparationScenarios(browser: Browser) {
+  for (const width of [390, 1280]) {
+    const stats = { ranged: 1, defence: 1 };
+    const weapon = { id: 841, name: 'Shortbow', slot: 'weapon', count: 1 };
+    const arrow = { id: 882, name: 'Bronze arrow', slot: 'ammo', count: 1 };
+    const gear = { equipment: [weapon, arrow], inventory: [], coins: 1000, bankCoins: 0 };
+    const names = ['Maple shortbow', 'Maple longbow', 'Willow shortbow', 'Willow longbow', 'Oak shortbow', 'Oak longbow', 'Shortbow', 'Longbow', 'Adamant arrow', 'Mithril arrow', 'Steel arrow', 'Iron arrow', 'Bronze arrow', 'Salmon', 'Tuna', 'Lobster', 'Swordfish'];
+    const items = names.map(name => ({ name, carried: name === 'Shortbow' ? 1 : name === 'Bronze arrow' ? 100 : 0, noted: 0, bank: name === 'Salmon' ? 10 : 0 }));
+    const { page, errors } = await open(browser, width, {
+      market: true, progress: progressBefore('S6-01', { gameMode: 'f2p', levels: stats }),
+      localStorage: { 'osrs-put:active-step': 'S6-01' },
+      status: { protocol: 6, inGame: true, player: 'Ranged Preparation', activeStepId: 'S6-01', stats, ...gear },
+      events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items }],
+    }, '#/step/S6-01');
+    const snapshot = () => page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan').at(-1)?.body);
+    const initial = await snapshot();
+    expect(initial?.step?.npcNames?.includes('Seagull') && initial.step.worldPoint?.label?.includes('Port Sarim'), `ranged (${width}): a beginner gets the current surface trainer, not ogresses`);
+    expect(initial?.step?.checklist?.some((r: any) => r.name === 'Bronze arrow' && r.count === 100 && r.equip) && initial.plan?.lines?.find((r: any) => r.name === 'Bronze arrow')?.where !== 'EQUIPPED', `ranged (${width}): one worn arrow cannot satisfy the starter stack`);
+    const equipped = { ...gear, equipment: [weapon, { ...arrow, count: 100 }] };
+    await page.evaluate(g => { const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void }; w.__status = { ...w.__status, ...g }; w.__emit({ type: 'GEAR', gear: g }); }, equipped);
+    await page.waitForTimeout(1500);
+    const ready = await snapshot();
+    expect(ready?.plan?.lines?.find((r: any) => r.name === 'Bronze arrow')?.where === 'EQUIPPED', `ranged (${width}): a GEAR-only quantity update reaches the canonical preparation snapshot`);
+    for (const [level, npc] of [[20, 'Monk'], [26, 'Giant frog']] as const) {
+      await page.evaluate(s => { const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { ranged: level, defence: 1 });
+      await page.waitForTimeout(1500);
+      const current = await snapshot();
+      expect(JSON.stringify(current?.step?.npcNames) === JSON.stringify([npc]) && !current?.step?.worldPoint?.label?.includes('Corsair'), `ranged (${width}, level${level}): method, scenery and destination advance together`);
+      if (level === 26) expect(current?.step?.checklist?.some((r: any) => r.name === 'Salmon' && r.count === 10) && current.plan?.lines?.find((r: any) => r.name === 'Salmon')?.where === 'BANK', `ranged (${width}): the later combat method asks for owned banked food`);
+    }
+    await reveal(page, '.training:visible');
+    expect((await text(page, '.training:visible')).includes('Giant frogs'), `ranged (${width}): the visible desktop advice matches the game target`);
+    expect(await noOverflow(page) && !errors.length, `ranged (${width}): no overflow or runtime errors`);
+    await page.context().close();
+  }
+}
+
+async function shoppingQuoteScenarios(browser: Browser) {
+  for (const width of [390, 1280]) for (const state of ['current', 'cached', 'missing']) {
+    const { page, errors } = await open(browser, width, {
+      market: true, marketUnavailable: state === 'missing', marketAgeMinutes: state === 'cached' ? 120 : undefined,
+      progress: progressBefore('S4-04'), localStorage: { 'osrs-put:active-step': 'S4-04', 'osrs-put:shopping-scope': 'step' },
+      status: { protocol: 6, inGame: true, player: 'Shopping Quotes', activeStepId: 'S4-04', coins: 100000, bankCoins: 0, equipment: [], inventory: [] },
+      events: [{ type: 'OWNED', bankSeen: true, items: [{ name: 'Lobster', carried: 0, noted: 0, bank: 0 }] }],
+    }, '#/shopping');
+    const row = page.locator('.shop-item-row').filter({ has: page.getByText('Lobster', { exact: true }) }).first();
+    await row.waitFor({ state: 'visible' });
+    await page.waitForTimeout(700);
+    const quote = await row.locator('.shop-cost').innerText();
+    expect(state === 'missing' ? quote === 'Price unavailable' : quote.includes(state === 'cached' ? 'Cached GE estimate' : 'GE estimate'), `shopping quotes (${width}, ${state}): quantities use labelled market costs`);
+    if (state === 'missing') expect((await text(page, '.shop-page')).includes('without a price'), `shopping quotes (${width}): excluded costs are disclosed`);
+    expect(await noOverflow(page) && !errors.length, `shopping quotes (${width}, ${state}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function journalQuoteScenarios(browser: Browser) {
+  for (const width of [390, 1280]) for (const state of ['current', 'cached', 'missing']) {
+    const stamp = Date.now() - 60_000;
+    const rows = [{ name: 'Cowhide', quantityDelta: 10, reason: 'LOOT', timestamp: stamp, estimatedGpValue: 99999 }];
+    const { page, errors } = await open(browser, width, {
+      market: true, marketUnavailable: state === 'missing', marketAgeMinutes: state === 'cached' ? 120 : undefined,
+      localStorage: { 'osrs-put:profiles': JSON.stringify({ active: 'main', list: [{ id: 'main', name: 'Main', player: 'Alpha One' }] }),
+        'osrs-put:ledger:main:alpha one': JSON.stringify(rows) },
+      status: { protocol: 6, inGame: true, player: 'Alpha One' },
+    }, '#/journal/session');
+    await page.locator('.ledger-block').waitFor();
+    await page.waitForTimeout(700);
+    const body = await text(page, '.ledger-block');
+    expect(state === 'missing' ? body.includes('Price unavailable') && !body.includes('loot ≈') : body.includes('loot ≈') && body.includes('GE sell estimates'), `journal quotes (${width}, ${state}): quote certainty and no saved-value fallback`);
+    if (state === 'cached') expect(body.includes('cached'), `journal quotes (${width}): old side certainty is visible`);
+    expect(!/\d{2}:\d{2}|99,999/.test(body), `journal quotes (${width}, ${state}): no quote clock or stale recorded value`);
+    expect(await noOverflow(page) && !errors.length, `journal quotes (${width}, ${state}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function dossierQuoteScenarios(browser: Browser) {
+  for (const width of [390, 1280]) for (const quoteState of ['current', 'cached', 'missing']) {
+    const unavailable = quoteState === 'missing';
+    const { page, errors } = await open(browser, width, {
+      market: true, marketUnavailable: unavailable, marketAgeMinutes: quoteState === 'cached' ? 120 : undefined, progress: progressBefore('S4-04'),
+    }, '#/step/S4-04');
+    await page.getByRole('button', { name: 'Search', exact: true }).click();
+    await page.locator('.search-input').fill('Lobster');
+    const row = page.locator('.search-hit.is-item').filter({ has: page.getByText('Lobster', { exact: true }) }).first();
+    await row.waitFor({ state: 'visible' });
+    const searchQuote = await row.locator('.search-hit-price').innerText();
+    expect(await row.evaluate(el => el.scrollWidth <= el.clientWidth + 1), `search quotes (${width}, ${quoteState}): labels fit inside the result row`);
+    expect(unavailable ? searchQuote.includes('Price unavailable') : searchQuote.includes('GE estimate'), `search quotes (${width}, unavailable=${unavailable}): shared quote certainty`);
+    if (quoteState === 'cached') expect(searchQuote.includes('Cached GE estimate'), `search quotes (${width}): old sides are explicitly cached`);
+    await row.click();
+    const drawer = page.locator('dialog.drawer[open]');
+    await drawer.waitFor({ timeout: 6000 });
+    await page.waitForTimeout(700);
+    const quote = await drawer.locator('.tile-ge').innerText();
+    expect(unavailable ? quote.includes('Price unavailable') && !quote.includes(' gp') : quote.includes('GE estimate') && quote.includes('GE sell estimate'),
+      `dossier quotes (${width}, unavailable=${unavailable}): current sides or quote absence, never a database fallback`);
+    expect(!quote.includes('Not sold on the exchange'), `dossier quotes (${width}): no invented trade restriction`);
+    if (quoteState === 'cached') expect(quote.includes('Cached GE estimate') && quote.includes('Cached GE sell estimate'), `dossier quotes (${width}): cached buy and sell labels`);
+    if (unavailable) expect(await drawer.locator('.alch-margin').count() === 0, `dossier quotes (${width}): no alchemy margin without the input prices`);
+    expect(await noOverflow(page) && !errors.length, `dossier quotes (${width}): no overflow or console errors`);
+    await page.context().close();
+  }
+}
+
+async function accountSyncProofScenarios(browser: Browser) {
+  for (const width of [390, 1280]) {
+    const { page, errors } = await open(browser, width, {
+      progress: { version: 3, steps: { 'S1-04': 'skipped' }, levels: {}, notes: { 'S1-01': 'Keep this note' }, gameMode: 'f2p' },
+      localStorage: { 'osrs-put-settings-tab': 'progress' },
+      status: { protocol: 6, inGame: true, player: 'Sync Proof', questsDone: ['Goblin Diplomacy'] },
+      events: [{ type: 'QUESTS', done: ['Goblin Diplomacy'] }],
+    }, '#/settings');
+    await page.waitForTimeout(900);
+    const card = page.locator('section').filter({ has: page.getByRole('heading', { name: 'Account sync', exact: true }) });
+    const automatic = await card.locator(':scope > ul > li code').allTextContents();
+    expect(automatic.join(',') === 'S2-12', `sync proof (${width}): only the observed quest is game-confirmed`);
+    const manual = await card.locator('details ul').textContent();
+    expect(!!manual?.includes('S2-01') && !manual?.includes('S2-10'), `sync proof (${width}): shopping stays unverified and the contradicted quest is excluded`);
+    await card.getByRole('button', { name: /^Mark \d+ steps$/ }).click();
+    await page.waitForTimeout(500);
+    const saved = await page.evaluate(() => JSON.parse((window as unknown as { __saved: string }).__saved));
+    expect(saved.steps['S2-12'] === 'done' && !saved.steps['S2-10'] && !saved.steps['S2-01'], `sync proof (${width}): applying sync cannot mark inferred ancestors`);
+    expect(saved.steps['S1-04'] === 'skipped' && saved.notes['S1-01'] === 'Keep this note', `sync proof (${width}): existing skips and notes remain intact`);
+    expect(await noOverflow(page) && !errors.length, `sync proof (${width}): no overflow or console errors`);
     await page.context().close();
   }
 }

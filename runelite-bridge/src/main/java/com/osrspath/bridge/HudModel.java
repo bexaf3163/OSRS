@@ -679,6 +679,11 @@ final class HudModel
 			b.status = figure(i) + " · " + whereWord(i, in);
 			b.key = ActiveTarget.nameKey(name);
 			PrepPlan.Line plan = prep == null ? null : prep.line(i.getName());
+			if (plan != null && Boolean.TRUE.equals(plan.getEquip()) && i.getWorn() == 0 && i.getHave() == StepGuide.Have.BAG)
+			{
+				b.headline = "Equip " + noun;
+				b.status = "In your bag · not worn";
+			}
 			if (plan != null && plan.getUnnote() != null && plan.getUnnote() > 0)
 			{
 				b.headline = "Unnote " + noun;
@@ -700,6 +705,10 @@ final class HudModel
 				}
 				b.now.add(l);
 			}
+			if (plan != null && plan.getPrice() != null)
+			{
+				b.now.add(Line.small(Icon.DOT, plan.getPrice(), Tone.MUTED));
+			}
 			if (i.isSubstitutes())
 			{
 				b.now.add(Line.small(Icon.DOT, "Other items the step accepts count too.", Tone.MUTED));
@@ -713,6 +722,11 @@ final class HudModel
 	static boolean blocks(StepGuide.ItemLine i, PrepPlan prep, Input in)
 	{
 		StepGuide.Have h = i.getHave();
+		PrepPlan.Line required = prep == null ? null : prep.line(i.getName());
+		if (required != null && Boolean.TRUE.equals(required.getEquip()) && "CRITICAL".equals(required.getPriority()) && "NOW".equals(required.getTiming()) && h == StepGuide.Have.BAG)
+		{
+			return i.getWorn() == 0;
+		}
 		if (h == StepGuide.Have.BAG || h == StepGuide.Have.DONE || h == StepGuide.Have.IN_STEP)
 		{
 			return false;
@@ -882,7 +896,9 @@ final class HudModel
 		{
 			String key = ActiveTarget.nameKey(PrepPlan.rawName(i.getName()));
 			StepGuide.Have h = i.getHave();
-			if (h == StepGuide.Have.BAG)
+			PrepPlan.Line required = prep == null ? null : prep.line(i.getName());
+			boolean needsWear = required != null && Boolean.TRUE.equals(required.getEquip()) && i.getWorn() == 0;
+			if (h == StepGuide.Have.BAG && !needsWear)
 			{
 				ready++;
 				readyNames.add(PrepPlan.rawName(i.getName()) + (i.getWorn() > 0 ? " (worn)" : ""));
@@ -904,7 +920,11 @@ final class HudModel
 			Tone tone = h == StepGuide.Have.NONE ? Tone.CAUTION : Tone.TEXT;
 			String how = plan != null && plan.getAction() != null && !plan.getAction().isEmpty() ? plan.getAction() : i.getWhere();
 			String right = i.getCount() < 0 ? i.getTag() : i.getCount() + " / " + i.getNeed();
-			String text = PrepPlan.rawName(i.getName()) + " · " + whereWord(i, in);
+			String text = PrepPlan.rawName(i.getName()) + " · " + (needsWear && h == StepGuide.Have.BAG ? "equip it" : whereWord(i, in));
+			if (plan != null && plan.getPrice() != null)
+			{
+				how = (how == null ? "" : how + ". ") + plan.getPrice();
+			}
 			GuideList.Action action = i.getPlace() >= 0 && h != StepGuide.Have.BANK ? GuideList.Action.place(i.getPlace()) : GuideList.Action.NONE;
 			todo.add(new Line(icon, text, right, tone, true, action, (how == null ? text : text + ". " + how)
 				+ (action.isClickable() ? " Click for the arrow and path there." : "")));

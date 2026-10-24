@@ -2,12 +2,12 @@
 // The results are in groups: the walkthrough steps, the item database (with the exchange price), skills and the reference, the OSRS Wiki.
 
 import { Fragment, useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
-import { items, membersSkills, plugins, reference, skills } from '../data';
+import { itemById, items, membersSkills, plugins, reference, skills } from '../data';
 import { useStore } from '../store';
 import { buildIndex, search, type SearchHit, type SearchKind } from '../lib/search';
-import { formatXp } from '../lib/goals';
 import { go } from '../lib/router';
-import { getGePrice } from '../services/pricesApi';
+import { usePriceView } from '../lib/funding/usePriceView';
+import { marketItemPrice } from '../lib/itemPrice';
 import { IconBook, IconClose, IconJournal, IconSearch, IconSkills, TYPE_LABEL } from './Icons';
 import { ItemIcon, useWiki } from './WikiDrawer';
 
@@ -36,7 +36,7 @@ export function SearchBox({ open, onClose }: { open: boolean; onClose: () => voi
   const input = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);
-  const [prices, setPrices] = useState<Record<number, number | null>>({});
+  const prices = usePriceView(open);
   const listId = useId();
   // Members skills are searched only in Members mode — like the steps of stages 7–9.
   const index = useMemo(() => buildIndex({
@@ -67,17 +67,6 @@ export function SearchBox({ open, onClose }: { open: boolean; onClose: () => voi
   }, [open]);
 
   useEffect(() => setActive(0), [query]);
-
-  // The exchange prices for found items: one shared request, then a 5-minute cache.
-  useEffect(() => {
-    let alive = true;
-    const ids = flat.map((h) => h.item.itemId).filter((id): id is number => id !== undefined && !(id in prices));
-    if (!ids.length) return;
-    Promise.all(ids.map((id) => getGePrice(id).then((p) => [id, p?.buyPrice ?? null] as const).catch(() => [id, null] as const)))
-      .then((pairs) => alive && setPrices((old) => ({ ...old, ...Object.fromEntries(pairs) })));
-    return () => { alive = false; };
-    // prices is not in the dependencies: otherwise every update would start another round.
-  }, [groups]);
 
   const pick = (hit: SearchHit | typeof WIKI_ROW) => {
     onClose();
@@ -119,7 +108,7 @@ export function SearchBox({ open, onClose }: { open: boolean; onClose: () => voi
             <li role="presentation" className="search-group">{g.title}</li>
             {g.hits.map((h) => {
               const i = ++n;
-              const price = h.item.itemId !== undefined ? prices[h.item.itemId] : undefined;
+              const price = h.item.itemId !== undefined ? marketItemPrice(prices, h.item.title, h.item.itemId, 1, Boolean(itemById.get(h.item.itemId)?.gePrice)) : undefined;
               return (
                 <li key={`${h.item.href}-${h.item.code ?? h.item.title}`} id={`${listId}-${i}`} role="option" aria-selected={i === active}
                   className={`search-hit ${h.item.kind === 'item' ? 'is-item' : ''} ${i === active ? 'is-active' : ''}`}
@@ -129,7 +118,7 @@ export function SearchBox({ open, onClose }: { open: boolean; onClose: () => voi
                     {h.item.code && <code className="code">{h.item.code}</code>}
                     <span className="search-hit-title">{h.item.title}</span>
                     {h.item.kind === 'item' && (
-                      <span className="search-hit-price">{price ? `${formatXp(price)} gp` : price === null ? '—' : ''}</span>
+                      <span className="search-hit-price" title={price?.detail}>{price?.text}</span>
                     )}
                   </span>
                   <span className="search-hit-sub">{h.item.kind === 'item' ? h.item.subtitle : `${KIND_LABEL[h.item.kind]} · ${h.item.subtitle}`}</span>

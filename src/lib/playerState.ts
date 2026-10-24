@@ -8,6 +8,7 @@ import type { GameMode, PlayerStats, Progress } from '../types';
 import type { GearState } from '../services/runeliteBridge';
 import { nameKey, type OwnedState } from './checklist';
 import { toolFamilyOf, toolUse, usableAt } from './toolTiers';
+import { countWorn, type WornItem } from './equipmentCount';
 
 export type StateSource = 'game' | 'profile' | 'manual';
 
@@ -38,6 +39,8 @@ export interface PlayerState {
   bankSeen: boolean;
   /** What is worn: slot to name. */
   equipment: Record<string, string>;
+  /** Exact worn quantities when supplied; null means the container was not read. Older hand-built states may omit it. */
+  equipmentItems?: readonly WornItem[] | null;
   /** The worn items were read from the game; false means unknown, not "nothing is worn". Absent in a hand-built state is read as unknown. */
   equipmentKnown?: boolean;
   /** The manual "I already have it" marks from shopping (the list row key to the quantity). */
@@ -93,6 +96,7 @@ export function buildPlayerState(i: PlayerStateInput): PlayerState {
     position: live && i.position ? known(i.position, 'game') : unknown,
     bankSeen: owned?.bankSeen === true,
     equipment,
+    equipmentItems: gear?.equipment ?? null,
     equipmentKnown: Array.isArray(gear?.equipment),
     manual,
     owned,
@@ -108,15 +112,21 @@ function fingerprintOf(s: PlayerState): string {
   const c = (k: Known<number>) => (k.known ? k.value : '?');
   const q = s.quests.known ? JSON.stringify([...new Set(s.quests.value.map(nameKey))].sort()) : '?';
   const eq = Object.entries(s.equipment).map(([k, v]) => `${k}=${v}`).sort().join(',');
+  const eqCounts = s.equipmentItems?.map(i => `${nameKey(i.name)}:${i.count ?? '?'}`).sort().join(',') ?? '?';
   const man = Object.entries(s.manual).map(([k, v]) => `${k}=${v}`).sort().join(',');
   const pos = s.position.known ? `${s.position.value.x},${s.position.value.y},${s.position.value.plane}` : '?';
-  return [s.mode, s.connected ? 1 : 0, s.bankSeen ? 1 : 0, JSON.stringify(s.player), s.equipmentKnown ? 1 : 0, pos, lv, c(s.coins.bag), c(s.coins.bank), c(s.bagSlots), c(s.weight), s.bagItems.known ? s.bagItems.value.map((b) => `${b.name}:${b.count}`).sort().join(',') : '?', q, eq, man, items].join('|');
+  return [s.mode, s.connected ? 1 : 0, s.bankSeen ? 1 : 0, JSON.stringify(s.player), s.equipmentKnown ? 1 : 0, pos, lv, c(s.coins.bag), c(s.coins.bank), c(s.bagSlots), c(s.weight), s.bagItems.known ? s.bagItems.value.map((b) => `${b.name}:${b.count}`).sort().join(',') : '?', q, eq, eqCounts, man, items].join('|');
 }
 
 /** The skill's level; undefined means unknown. */
 export function levelOf(s: PlayerState, skill: string): number | undefined {
   const l = s.levels[skill];
   return l?.known ? l.value : undefined;
+}
+
+/** Preserve legacy name-only states without inventing an ammunition stack size. */
+export function wornItemsOf(s: Pick<PlayerState, 'equipment' | 'equipmentItems'>): readonly WornItem[] | null {
+  return s.equipmentItems === undefined ? Object.values(s.equipment).map(name => ({ name })) : s.equipmentItems;
 }
 
 export type Presence = 'PRESENT' | 'MISSING' | 'UNKNOWN';
@@ -146,22 +156,26 @@ export function heldOf(
   const family = toolFamilyOf(nameEn);
   if (!family) return base;
   // "Bronze pickaxe" in a route step means "a pickaxe": a better tier does the same job, so a better tier that is seen counts.
-  // A tier that is not seen proves nothing: without one the answer is exactly what it was for the name itself.
+  // Unreported usable tiers keep the family total unknown, even when the named bronze tier is confirmed absent.
   // A tier the player's level cannot use does not do the job: a Rune pickaxe at Mining 10 is not "a pickaxe" for the step.
   const parts = family
     .filter((n) => usableAt(n, (skill) => levelValue(s, skill)))
     .map((n) => (nameKey(n) === nameKey(nameEn) ? base : heldExact(s, n)));
-  if (!parts.some((p) => p !== base && p.presence === 'PRESENT')) return base;
+  if (!parts.length) return base;
+  // Explicit manual ownership keeps its existing fallback when no other tier is positively observed.
+  if (base.source === 'manual' && !parts.some((p) => p !== base && p.presence === 'PRESENT')) return base;
   const legacy = family.some((n) => s.owned?.items.get(nameKey(n))?.legacyToolCount);
   const sum = (pick: (h: Held) => number | null): number | null => {
     const known = parts.map(pick).filter((v): v is number => v !== null);
     return known.length ? legacy ? Math.max(...known) : known.reduce((a, b) => a + b, 0) : null;
   };
   const presence: Presence = parts.some((p) => p.presence === 'PRESENT') ? 'PRESENT' : parts.every((p) => p.presence === 'MISSING') ? 'MISSING' : 'UNKNOWN';
+  const bankKnown = parts.every((p) => p.bank !== null);
+  const total = sum((p) => p.total);
   const source = parts.find((p) => p.source === 'game')?.source ?? parts.find((p) => p.source === 'manual')?.source ?? parts[0].source;
   return {
-    presence, bag: sum((p) => p.bag), noted: sum((p) => p.noted) ?? 0, bank: sum((p) => p.bank),
-    equipped: parts.reduce((a, p) => a + p.equipped, 0), total: sum((p) => p.total), source,
+    presence, bag: sum((p) => p.bag), noted: sum((p) => p.noted) ?? 0, bank: bankKnown ? sum((p) => p.bank) : null,
+    equipped: parts.reduce((a, p) => a + p.equipped, 0), total: presence === 'UNKNOWN' ? null : total, source,
   };
 }
 
@@ -185,9 +199,9 @@ export function unusableTools(s: Pick<PlayerState, 'owned' | 'equipment' | 'manu
 }
 
 /** Physical named stock, without generic tool substitution. Allocation must not spend one Rune pickaxe through several tier names. */
-export function heldExact(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' | 'bankSeen'>, nameEn: string, manualKey?: string): Held {
+export function heldExact(s: Pick<PlayerState, 'owned' | 'equipment' | 'equipmentItems' | 'manual' | 'bankSeen'>, nameEn: string, manualKey?: string): Held {
   const o = s.owned?.items.get(nameKey(nameEn));
-  const equipped = Object.values(s.equipment).filter((n) => nameKey(n) === nameKey(nameEn)).length;
+  const equipped = countWorn(wornItemsOf(s), n => nameKey(n) === nameKey(nameEn)).count;
   const manual = manualKey ? s.manual[manualKey] : undefined;
   // A global bank observation does not prove every tracked row's quantity. A new/unreported row remains unknown.
   if (o && s.bankSeen && o.bank !== undefined) {
@@ -209,6 +223,20 @@ export function heldExact(s: Pick<PlayerState, 'owned' | 'equipment' | 'manual' 
 }
 
 export type QuestPresence = 'DONE' | 'NOT_DONE' | 'UNKNOWN';
+
+/** Physical interchangeable equipment. Positive stock is a lower bound; unread alternatives cannot prove a shortage. */
+export function heldEquipment(s: PlayerState, names: readonly string[]): Held {
+  const parts = [...new Set(names.map(nameKey))].map(n => heldExact(s, n));
+  const bagKnown = parts.some(p => p.bag !== null || p.equipped > 0);
+  const bag = bagKnown ? parts.reduce((n, p) => n + Math.max(p.bag ?? 0, p.equipped), 0) : null;
+  const noted = parts.reduce((n, p) => n + p.noted, 0);
+  const bankKnown = parts.every(p => p.bank !== null);
+  const bankBound = parts.reduce((n, p) => n + (p.bank ?? 0), 0);
+  const lower = (bag ?? 0) + noted + bankBound;
+  return { bag, noted, bank: bankKnown ? bankBound : null, equipped: parts.reduce((n, p) => n + p.equipped, 0),
+    total: lower > 0 || bankKnown ? lower : null,
+    presence: lower > 0 ? 'PRESENT' : bankKnown ? 'MISSING' : 'UNKNOWN', source: bagKnown || bankKnown || lower > 0 ? 'game' : 'none' };
+}
 
 /** A quest is counted in the game; the list is unknown means UNKNOWN. */
 export function questOf(s: PlayerState, quest: string): QuestPresence {

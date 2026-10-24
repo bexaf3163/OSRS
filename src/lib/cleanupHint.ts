@@ -37,7 +37,7 @@ function line(r: CleanupRec): CleanupHintLine {
     qty: Math.min(r.qty, 2_147_483_647),
     ...(r.noted ? { noted: true } : {}),
     action,
-    why: clipText(r.short || r.reason, 60),
+    why: clipText([r.priceLabel, r.short || r.reason].filter(Boolean).join(' · '), 60),
     ...(r.action === 'sell' && r.proceeds !== null && r.proceeds > 0 ? { proceeds: Math.round(r.proceeds) } : {}),
   };
 }

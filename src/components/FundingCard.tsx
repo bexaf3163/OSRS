@@ -20,9 +20,9 @@ const gp = (n: number) => `${formatGp(Math.round(n))} gp`;
 
 export function PriceNote({ prices }: { prices: PriceView }) {
   const text = prices.status === 'live'
-    ? 'Prices: from the Grand Exchange, a few minutes old.'
+    ? 'Prices: GE estimates; older quotes have lower confidence.'
     : prices.status === 'stale'
-      ? 'Prices: the exchange did not answer, so these are earlier prices.'
+      ? 'Prices: cached GE estimates; check offers before buying or selling.'
       : prices.status === 'baked'
         ? 'Prices: the exchange is not reachable, so these are rough estimates from the guide.'
         : 'Prices: not available.';

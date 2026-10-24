@@ -14,6 +14,7 @@ import { useGearAdvice } from '../lib/gearAdvice';
 import { nextStep } from '../lib/next-step';
 import { scopeList, scopeSteps, shopRows, supplyReserve } from '../lib/shoppingView';
 import { usePriceView } from '../lib/funding/usePriceView';
+import { itemPrice } from '../lib/itemPrice';
 import { itemById } from '../data';
 import {
   actionNav, equippedBySlot, gainText, gearData, SLOT_LABEL, SLOTS, statsText, type Equipped, type GearAction, type GearAdvice,
@@ -155,7 +156,7 @@ function Recommendation({ advice, stepId, onShow, priceUnknown, pricesFailed }: 
   }
   const next = advice.goals[0];
   const lock = advice.locked[0];
-  const why = priceUnknown
+  const why = advice.reserveUnknown ? 'Supply prices or ownership are not fully checked. Confirm Preparation before spending on upgrades.' : priceUnknown
     ? (pricesFailed ? 'The exchange prices did not load, so purchases cannot be judged against your money.' : 'The exchange prices are still loading.')
     : next
       ? (advice.reserve > 0 && advice.coins.total !== null && advice.coins.total < advice.reserve
@@ -187,12 +188,12 @@ export function GearPage() {
     const { list, trip } = scopeList(scopeSteps('trip', steps, progress, current, { from: 1, to: 1, openOnly: true }));
     const rows = shopRows(list, {
       state: player, trip, detail: (id) => itemById.get(id),
-      onGe: (l: ShoppingLine) => l.id !== undefined, gePrice: (l) => prices.buy(l.nameEn, l.id)?.price ?? null,
+      onGe: (l: ShoppingLine) => l.id !== undefined, gePrice: (l) => itemPrice(prices, l.nameEn, l.id, 1).unit,
     });
     return supplyReserve(rows, list.coins);
   }, [steps, progress, effectiveQp, dependencies, player, prices]);
 
-  const { advice, fightStep, pricesReady, pricesFailed } = useGearAdvice(null, { reserve });
+  const { advice, fightStep, pricesReady, pricesFailed } = useGearAdvice(null, { reserve: reserve.amount, reserveUnknown: !reserve.complete });
   const priceUnknown = !pricesReady && advice.goals.length > 0;
   const places = usePlaceMap();
   const lv = advice.levels;
@@ -233,7 +234,7 @@ export function GearPage() {
         </section>
       ) : snapshot && staleWorn ? (
         <section className="gear-now" aria-label="Last known">
-          <h2 className="subhead">Last known <span className="muted">· {snapshot.player}, {new Date(snapshot.at).toLocaleString('en-US')}</span></h2>
+          <h2 className="subhead">Last known <span className="muted">· {snapshot.player}</span></h2>
           <WornList equipped={staleWorn} stale />
           <p className="small muted">Not live: {state === 'online' ? 'log in to the game' : 'connect RuneLite'} to compare what you wear now.</p>
         </section>

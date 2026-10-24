@@ -47,12 +47,13 @@ function partOf(l: PrepLine): string | null {
 }
 
 function Row({ l, showWhy = true }: { l: PrepLine; showWhy?: boolean }) {
-  const w = l.unnote ? { icon: '🏦', text: 'banknotes: unnote first' } : WHERE[l.where];
+  const w = l.equip && l.where === 'INVENTORY' ? { icon: '↗', text: 'in your bag: equip it' } : l.unnote ? { icon: '🏦', text: 'banknotes: unnote first' } : WHERE[l.where];
   const part = partOf(l);
   return (
     <li className={`prep-line is-${l.where.toLowerCase()} p-${l.priority.toLowerCase()}`}>
       <span className="prep-where" aria-hidden="true">{w.icon}</span>
       <strong>{l.name}{countOf(l)}</strong>
+      {l.marketPrice && <span className="muted small" title={l.marketPrice.detail}> · {l.marketPrice.text}</span>}
       <span className="muted"> — {part ?? w.text}</span>
       {l.supply && <span className={`prep-supply is-${l.supply.toLowerCase()}`}> · {SUPPLY[l.supply]}</span>}
       {l.action && l.where !== 'UNKNOWN' && <> · <Action a={l.action} /></>}

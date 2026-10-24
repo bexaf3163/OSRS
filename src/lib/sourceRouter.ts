@@ -56,7 +56,7 @@ export interface SourceInput {
   /** An item card from the database (shops, spawns, drops, the exchange price). */
   detail?: WikiItemDetail;
   /** The exchange price, if fresher than the one in the card. */
-  gePrice?: number;
+  gePrice?: number | null;
   manualKey?: string;
   /** The Al Kharid toll gate is free. */
   freeToll?: boolean;
@@ -95,9 +95,10 @@ export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
     });
   }
   const d = input.detail;
-  const ge = input.gePrice ?? d?.gePrice?.buyPrice;
+  // null explicitly means that the current market has no usable quote: never revive the baked card price.
+  const ge = input.gePrice === null ? undefined : input.gePrice ?? d?.gePrice?.buyPrice;
   const geAt = matchStrict('Grand Exchange');
-  const geOption: SourceOption | null = d?.gePrice || input.gePrice !== undefined
+  const geOption: SourceOption | null = d?.gePrice || typeof input.gePrice === 'number'
     ? {
       kind: 'ge', label: 'Grand Exchange', ...(ge !== undefined ? { price: ge } : {}),
       ...(geAt ? { point: { x: geAt.x, y: geAt.y, plane: geAt.plane, label: geAt.label }, distance: here ? dist(geAt, here) : undefined } : {}),

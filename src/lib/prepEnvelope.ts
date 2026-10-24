@@ -33,7 +33,7 @@ const MAX_TEXT = 200;
 export interface PrepPlanPayload {
   stepId: string;
   score: { percent: number | null; verdict: 'READY' | 'NOT_READY' | 'UNKNOWN'; critical: number; important: number; optimizations: number; unknown: number };
-  lines: { name: string; need: number; where: PrepWhere; priority: PrepPriority; timing: PrepTiming; supply?: Exclude<Supply, 'ENOUGH'>; action?: string; unnote?: number }[];
+  lines: { name: string; need: number; where: PrepWhere; priority: PrepPriority; timing: PrepTiming; supply?: Exclude<Supply, 'ENOUGH'>; action?: string; price?: string; unnote?: number; equip?: boolean }[];
   /** "Do not take now": what will be needed later. */
   later: string[];
   recovery?: { title: string; steps: string[] };
@@ -166,10 +166,12 @@ export function planPayload(plan: PrepPlan, extras: PlanExtras = {}): PrepPlanPa
       name: clipText(l.name),
       need: Math.max(0, Math.min(l.count, 10_000_000)),
       where: l.where,
+      ...(l.equip ? { equip: true } : {}),
       priority: l.priority,
       timing: l.timing,
       ...(l.supply && l.supply !== 'ENOUGH' ? { supply: l.supply } : {}),
       ...(l.action ? { action: clipText(l.action.label, 90) } : {}),
+      ...(l.marketPrice ? { price: clipText(l.marketPrice.text, 120) } : {}),
       ...(l.unnote ? { unnote: l.unnote } : {}),
     }));
   const weight = weightText(plan);

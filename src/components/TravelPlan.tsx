@@ -111,7 +111,7 @@ export function TravelPlan({ step }: { step: Step }) {
               </li>
             ))}
           </ul>
-          <p className="muted small">Points and conditions — the wiki (checked {TRANSPORT.checked}). The distance is in a straight line: the app does not know the obstacles, in combat and at low energy it takes longer.</p>
+          <p className="muted small">Points and conditions from the OSRS Wiki. The distance is in a straight line: the app does not know the obstacles, in combat and at low energy it takes longer.</p>
         </>
       )}
       {pos && options.length === 1 && (

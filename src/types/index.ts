@@ -35,6 +35,8 @@ export type GameMode = 'f2p' | 'members';
 
 /** An item to take, or worth taking, for a step. */
 export interface StepItemRequirement {
+  /** Preparation requires this item to be worn, not merely owned or carried. */
+  equip?: boolean;
   nameEn: string;
   /** 1 or "23 (20 to hand in, 3 for the bank)". */
   amount: string | number;
@@ -328,6 +330,8 @@ export interface Step {
   floor?: string;
   itemsRequired?: StepItemRequirement[];
   itemsRecommended?: StepItemRequirement[];
+  /** Canonical baseline armour IDs for the route's combat preparation; usable owned equivalents are accepted. */
+  combatArmour?: number[];
   /** Inventories of the quest's phases, in order; the first is the one before the step starts. */
   loadouts?: Loadout[];
   /** What this step keeps for a later one (see CarryItem). */

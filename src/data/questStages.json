@@ -8913,7 +8913,7 @@
       {
        "name": "Rope",
        "id": 954,
-       "where": "Buy from Ned in Draynor Village for 16 gp or on the Grand Exchange for about 65 gp."
+       "where": "Buy from Ned in Draynor Village for 16 gp or on the Grand Exchange."
       }
      ]
     },
@@ -9011,7 +9011,7 @@
       {
        "name": "Rope",
        "id": 954,
-       "where": "Buy from Ned in Draynor Village for 16 gp or on the Grand Exchange for about 65 gp."
+       "where": "Buy from Ned in Draynor Village for 16 gp or on the Grand Exchange."
       }
      ]
     },
@@ -11944,7 +11944,7 @@
       {
        "name": "Silver sickle",
        "id": 2961,
-       "where": "Buy on the Grand Exchange (about 150–250 gp) or cast it from a silver bar in a sickle mould (Crafting 18).",
+       "where": "Buy on the Grand Exchange or cast it from a silver bar in a sickle mould (Crafting 18).",
        "inStep": true
       }
      ]
@@ -12013,7 +12013,7 @@
       {
        "name": "Silver sickle",
        "id": 2961,
-       "where": "Buy on the Grand Exchange (about 150–250 gp) or cast it from a silver bar in a sickle mould (Crafting 18).",
+       "where": "Buy on the Grand Exchange or cast it from a silver bar in a sickle mould (Crafting 18).",
        "inStep": true
       }
      ]
@@ -12041,7 +12041,7 @@
       {
        "name": "Silver sickle",
        "id": 2961,
-       "where": "Buy on the Grand Exchange (about 150–250 gp) or cast it from a silver bar in a sickle mould (Crafting 18).",
+       "where": "Buy on the Grand Exchange or cast it from a silver bar in a sickle mould (Crafting 18).",
        "inStep": true
       }
      ]
@@ -12617,7 +12617,7 @@
       {
        "name": "Mithril axe",
        "id": 1355,
-       "where": "Mithril only; no other axe works. About 150 gp."
+       "where": "Mithril only; no other axe works."
       }
      ]
     },
@@ -12651,12 +12651,12 @@
       {
        "name": "Mithril axe",
        "id": 1355,
-       "where": "Mithril only; no other axe works. About 150 gp."
+       "where": "Mithril only; no other axe works."
       },
       {
        "name": "Holy symbol",
        "id": 1718,
-       "where": "About 170 gp on the Grand Exchange."
+       "where": "Check the current GE estimate."
       }
      ]
     },
@@ -12772,7 +12772,7 @@
       {
        "name": "Hard leather",
        "id": 1743,
-       "where": "Tan a cowhide at a tanner (3 gp) or buy it (about 180 gp)."
+       "where": "Tan a cowhide at a tanner (3 gp) or buy it."
       },
       {
        "name": "Polished buttons",

@@ -25,7 +25,10 @@
       "risk": "none",
       "where": "Anywhere ordinary trees grow (for example by Lumbridge Castle)",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Woodcutting_training",
-      "place": "Lumbridge"
+      "place": "Lumbridge",
+      "objectNames": [
+        "Tree"
+      ]
     },
     {
       "id": "wc-oak",
@@ -47,7 +50,10 @@
       "risk": "none",
       "where": "By the Draynor bank, west of the Varrock bank, Port Sarim, Rimmington",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Woodcutting_training",
-      "place": "Draynor Bank"
+      "place": "Draynor Bank",
+      "objectNames": [
+        "Oak tree"
+      ]
     },
     {
       "id": "wc-willow",
@@ -71,10 +77,13 @@
       "effort": "afk",
       "cost": "free",
       "risk": "none",
-      "where": "Draynor Village (a bank nearby), Port Sarim, Edgeville",
-      "note": "The speed depends on the axe and the world; dark wizards wander near the Draynor willows.",
+      "where": "Port Sarim: willow trees east of the Rusty Anchor Inn",
+      "note": "Use the nearby dock deposit box for useful logs, or drop unwanted logs. The arrow marks the Port Sarim area; look east of the inn for Willow trees. Draynor is an alternative near a bank, but dark wizards there can attack low-level players. Rates depend on your axe, level and competition.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Woodcutting_training",
-      "place": "Draynor Village"
+      "place": "Port Sarim",
+      "objectNames": [
+        "Willow tree"
+      ]
     },
     {
       "id": "wc-oak-p2p",
@@ -337,7 +346,12 @@
       "risk": "none",
       "where": "The swamp south-east of Lumbridge, the Dwarven Mine",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Mining_training",
-      "place": "East Lumbridge Swamp mine"
+      "place": "East Lumbridge Swamp mine",
+      "objectNames": [
+        "Copper rocks",
+        "Tin rocks"
+      ],
+      "note": "Mine copper or tin until Mining 15. Keep ore you need for Smithing; drop only unwanted ore. A usable pickaxe can stay in your bag."
     },
     {
       "id": "mi-iron",
@@ -361,10 +375,13 @@
       "effort": "medium",
       "cost": "free",
       "risk": "none",
-      "where": "Al Kharid, south-east Varrock, Rimmington",
-      "note": "Three close rocks, drop the ore; a Rune pickaxe speeds it up from 41.",
+      "where": "South-east Varrock mine; use the iron rocks.",
+      "note": "Drop unwanted ore for XP or bank it if you need the materials. Use a pickaxe your Mining level allows; it can stay in your bag. This default avoids the aggressive scorpions in Al Kharid mine.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Mining_training",
-      "place": "Al Kharid mine"
+      "place": "South-east Varrock mine",
+      "objectNames": [
+        "Iron rocks"
+      ]
     },
     {
       "id": "mi-motherlode",
@@ -466,14 +483,25 @@
       "to": 20,
       "name": "Raw beef and chicken",
       "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Raw beef",
+          "count": 26,
+          "anyOf": [
+            "Raw chicken"
+          ]
+        }
+      ],
       "xpa": 30,
       "act": "portion|portions",
       "effort": "low",
-      "cost": "free",
+      "cost": "cost",
       "risk": "none",
-      "where": "The Lumbridge Castle kitchen (meat from the farms)",
+      "where": "The permanent fire west of the Barbarian Village fishing spots",
+      "note": "Withdraw owned raw meat first; 26 pieces is one starter bag, not the whole goal. The existing fire needs no logs or tinderbox. Burnt food gives no XP; buying refills needs confirmed coins.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
-      "place": "Lumbridge Castle"
+      "place": "Barbarian Village fishing spots"
     },
     {
       "id": "ck-trout",
@@ -482,15 +510,22 @@
       "to": 30,
       "name": "Trout",
       "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Raw trout",
+          "count": 26
+        }
+      ],
       "xpa": 70,
       "act": "fish",
       "effort": "low",
-      "cost": "free",
+      "cost": "cost",
       "risk": "none",
-      "where": "The range in Barbarian Village, Al Kharid or the Lumbridge kitchen",
-      "note": "Trout comes from those training Fishing; your own fish is free.",
+      "where": "The permanent fire west of the Barbarian Village fishing spots",
+      "note": "Use banked raw trout first; 26 is one starter bag. Recheck supplies after each batch; burnt fish gives no XP. Buying refills needs confirmed coins.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
-      "place": "Barbarian Village"
+      "place": "Barbarian Village fishing spots"
     },
     {
       "id": "ck-tuna",
@@ -501,19 +536,20 @@
       "members": false,
       "needs": [
         {
-          "type": "skill",
-          "skill": "fishing",
-          "min": 35
+          "type": "item",
+          "name": "Raw tuna",
+          "count": 26
         }
       ],
       "xpa": 100,
       "act": "fish",
       "effort": "low",
-      "cost": "free",
+      "cost": "cost",
       "risk": "none",
-      "where": "Musa Point on Karamja",
+      "where": "The permanent fire west of the Barbarian Village fishing spots; withdraw raw tuna first",
+      "note": "Use owned raw tuna first; 26 is one starter bag, not a whole-goal quantity. Burnt fish gives no XP. Buying refills needs confirmed coins.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
-      "place": "Musa Point"
+      "place": "Barbarian Village fishing spots"
     },
     {
       "id": "ck-wine",
@@ -523,6 +559,16 @@
       "name": "Wine (a jug with grapes)",
       "members": false,
       "needs": [
+        {
+          "type": "item",
+          "name": "Grapes",
+          "count": 13
+        },
+        {
+          "type": "item",
+          "name": "Jug of water",
+          "count": 13
+        },
         {
           "type": "skill",
           "skill": "cooking",
@@ -534,10 +580,10 @@
       "effort": "low",
       "cost": "cost",
       "risk": "none",
-      "where": "A bank next to a range (Al Kharid, Cooks' Guild)",
-      "note": "The fastest, but it costs money: the grapes and jugs are bought.",
+      "where": "At Edgeville Bank; no range or guild access is needed",
+      "note": "Combine 13 grapes with 13 jugs of water per starter bag. Withdraw owned ingredients first. Wait 12 seconds after the batch for fermentation and XP. Below Cooking 68, bad wine gives no XP; recheck your level and budget before another batch.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Cooking_training",
-      "place": "Cooks' Guild"
+      "place": "Edgeville Bank"
     },
     {
       "id": "fm-normal",
@@ -759,19 +805,48 @@
       "skill": "magic",
       "from": 1,
       "to": 17,
-      "name": "Wind Strike on cows and chickens",
+      "name": "Strike spells on cows and chickens",
       "members": false,
-      "xph": [
-        7200,
-        7200
-      ],
       "effort": "high",
-      "cost": "profit",
-      "risk": "none",
+      "cost": "cost",
+      "risk": "low",
       "where": "The farms by Lumbridge",
-      "note": "Cow hides can be sold.",
+      "note": "Use the spell named by the plan and select its autocast setting if your staff supports it; otherwise cast manually. A confirmed owned elemental staff must be equipped to replace its rune type. Higher Strikes are selected only when at least 20 casts are already supplied; otherwise Wind Strike is the budget fallback. Refill a low rune supply with a starter batch of 100 casts. Remove metal armour and verify that damage and Magic XP are arriving. Bring the listed starter food, eat before health is low and bank when supplies run out. This is not a whole-goal budget, guaranteed profit or measured fastest method; confirmed completed sales alone fund purchases.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
-      "place": "Lumbridge"
+      "place": "Lumbridge",
+      "kit": "strike-spell",
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "magic",
+          "min": 1
+        },
+        {
+          "type": "item",
+          "name": "Mind rune",
+          "count": 100
+        },
+        {
+          "type": "item",
+          "name": "Air rune",
+          "count": 100
+        },
+        {
+          "type": "item",
+          "name": "Trout",
+          "count": 5,
+          "anyOf": [
+            "Salmon",
+            "Tuna",
+            "Lobster",
+            "Swordfish"
+          ]
+        }
+      ],
+      "npcNames": [
+        "Cow",
+        "Chicken"
+      ]
     },
     {
       "id": "ma-splash",
@@ -788,8 +863,9 @@
       "cost": "cost",
       "risk": "none",
       "where": "Goblins/other harmless monsters",
-      "note": "You need runes and a negative Magic attack bonus; no damage to the target. Most often sessions of about 20 minutes without clicks.",
-      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training"
+      "note": "Manual alternative only until the worn Magic attack bonus and location are verified. Bring runes for the chosen spell; monitor actual XP and do not assume zero damage from ordinary combat equipment.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
+      "manualSetup": "Verify Magic attack -64 or lower and a location outside the Lumbridge no-XP area."
     },
     {
       "id": "ma-alch",
@@ -803,6 +879,16 @@
           "type": "skill",
           "skill": "magic",
           "min": 21
+        },
+        {
+          "type": "item",
+          "name": "Nature rune",
+          "count": 25
+        },
+        {
+          "type": "item",
+          "name": "Fire rune",
+          "count": 75
         }
       ],
       "xph": [
@@ -813,10 +899,12 @@
       "cost": "cost",
       "risk": "none",
       "where": "Anywhere",
-      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training"
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
+      "manualSetup": "Choose expendable target items and verify all rune costs and actual coin margin first."
     },
     {
       "id": "ma-superheat",
+      "kit": "superheat-iron",
       "skill": "magic",
       "from": 43,
       "to": 99,
@@ -832,6 +920,21 @@
           "type": "skill",
           "skill": "smithing",
           "min": 15
+        },
+        {
+          "type": "item",
+          "name": "Nature rune",
+          "count": 25
+        },
+        {
+          "type": "item",
+          "name": "Fire rune",
+          "count": 100
+        },
+        {
+          "type": "item",
+          "name": "Iron ore",
+          "count": 25
         }
       ],
       "xph": [
@@ -845,7 +948,8 @@
       "risk": "none",
       "where": "By a bank",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
-      "place": "Varrock West Bank"
+      "place": "Varrock West Bank",
+      "note": "Starter batch: 25 unnoted iron ore, 25 nature runes and 100 fire runes, or equip an owned Staff of fire instead of the fire runes. Bank surplus items to leave 25 ore slots plus rune stacks. Keep coal in the bank to make iron bars. Cast manually on each ore, then bank the bars and refill. This is one starter bag, not the full-goal cost; rate and profit are not guaranteed."
     },
     {
       "id": "ma-halch",
@@ -859,6 +963,16 @@
           "type": "skill",
           "skill": "magic",
           "min": 55
+        },
+        {
+          "type": "item",
+          "name": "Nature rune",
+          "count": 25
+        },
+        {
+          "type": "item",
+          "name": "Fire rune",
+          "count": 125
         }
       ],
       "xph": [
@@ -870,7 +984,8 @@
       "risk": "none",
       "where": "Anywhere",
       "note": "The loss or profit depends on the items: calculate by Grand Exchange prices.",
-      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training"
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
+      "manualSetup": "Choose expendable target items and verify all rune costs and actual coin margin first."
     },
     {
       "id": "pr-ghost",
@@ -1043,59 +1158,114 @@
       "skill": "ranged",
       "from": 1,
       "to": 20,
-      "name": "Chickens, cows and goblins by Lumbridge",
+      "name": "Seagulls at Port Sarim",
       "members": false,
       "needs": [
         {
           "type": "item",
-          "name": "Shortbow"
+          "name": "Shortbow",
+          "equip": true
         },
         {
           "type": "item",
-          "name": "Bronze arrow"
+          "name": "Bronze arrow",
+          "count": 100,
+          "equip": true
         }
       ],
       "effort": "medium",
-      "cost": "free",
-      "risk": "low",
-      "where": "The farms around Lumbridge",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Port Sarim docks: select the level 3 Seagulls",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
-      "place": "Lumbridge"
+      "place": "Port Sarim",
+      "suggestedFrom": 1,
+      "kit": "f2p-bow",
+      "npcNames": [
+        "Seagull"
+      ],
+      "note": "Level 3 Seagulls cannot damage you; check the target level. Equip a compatible bow and arrow stack. Use Accurate while starting, then Rapid after Ranged 5. Pick up reusable arrows when safe; bank before ammunition runs out. This is a starter stack, not a whole-goal estimate."
     },
     {
       "id": "ra-monk",
       "skill": "ranged",
-      "from": 5,
-      "to": 25,
+      "from": 1,
+      "to": 26,
       "name": "The monks of Edgeville Monastery",
       "members": false,
       "effort": "medium",
-      "cost": "free",
+      "cost": "cost",
       "risk": "low",
       "where": "Edgeville Monastery",
-      "note": "The monks heal, so it is safer.",
+      "note": "Talk to a non-combat monk for free healing; leave combat before doing so. Equip the listed compatible bow and arrows; use Rapid after Ranged 5. Avoid Longrange if preserving Defence. Refill ammunition when low.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
-      "place": "Edgeville Monastery"
+      "place": "Edgeville Monastery",
+      "suggestedFrom": 20,
+      "kit": "f2p-bow",
+      "needs": [
+        {
+          "type": "item",
+          "name": "Shortbow",
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Bronze arrow",
+          "count": 100,
+          "equip": true
+        }
+      ],
+      "npcNames": [
+        "Monk"
+      ]
     },
     {
       "id": "ra-frog",
       "skill": "ranged",
-      "from": 26,
+      "from": 1,
       "to": 56,
       "name": "Giant frogs",
       "members": false,
       "effort": "medium",
-      "cost": "free",
+      "cost": "cost",
       "risk": "low",
       "where": "Lumbridge Swamp",
-      "note": "Bones for Prayer along the way.",
+      "note": "Equip the compatible bow and arrows and use Rapid; avoid Longrange if preserving Defence. Ten food is a starter trip, not a guarantee for the goal. Bank while food or ammunition is low; do not wait until none remains.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
-      "place": "Lumbridge Swamp"
+      "place": "Lumbridge Swamp",
+      "suggestedFrom": 26,
+      "kit": "f2p-bow",
+      "needs": [
+        {
+          "type": "item",
+          "name": "Shortbow",
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Bronze arrow",
+          "count": 100,
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Salmon",
+          "count": 10,
+          "anyOf": [
+            "Tuna",
+            "Lobster",
+            "Swordfish"
+          ]
+        }
+      ],
+      "npcNames": [
+        "Giant frog"
+      ]
     },
     {
       "id": "ra-crawler",
       "skill": "ranged",
-      "from": 40,
+      "from": 1,
       "to": 99,
       "name": "Flesh Crawlers",
       "members": false,
@@ -1104,14 +1274,40 @@
           "type": "skill",
           "skill": "defence",
           "min": 40
+        },
+        {
+          "type": "item",
+          "name": "Shortbow",
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Bronze arrow",
+          "count": 100,
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Salmon",
+          "count": 10,
+          "anyOf": [
+            "Tuna",
+            "Lobster",
+            "Swordfish"
+          ]
         }
       ],
       "effort": "afk",
       "cost": "cost",
       "risk": "low",
-      "where": "Stronghold of Security",
-      "note": "Windows of about 10 minutes without clicks.",
-      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training"
+      "where": "Stronghold of Security, second level: Flesh Crawlers",
+      "note": "Requires Defence 40 in this recommendation. Check your ranged armour and food before entering; do not assume a ten-minute unattended window is safe. This is a starter trip; bank when food or ammunition is low. No verified method tile is available, so follow the written location rather than an old arrow.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
+      "suggestedFrom": 40,
+      "kit": "f2p-bow",
+      "npcNames": [
+        "Flesh Crawler"
+      ]
     },
     {
       "id": "me-cow",

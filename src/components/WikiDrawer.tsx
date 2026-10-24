@@ -11,25 +11,21 @@ import { findLocalItem, getItemDetail, getNpcDetail } from '../services/wikiServ
 import type { NpcInfo } from '../services/wikiApi';
 import { formatXp } from '../lib/goals';
 import { alchMargin, NATURE_RUNE_ID } from '../lib/alchemy';
-import { getGePrice } from '../services/pricesApi';
+import { usePriceView } from '../lib/funding/usePriceView';
+import { itemPrice, type ItemPrice } from '../lib/itemPrice';
 import { IconClose, IconExternal } from './Icons';
 import iconAssets from '../data/iconAssets.json';
 import { useFeatures } from '../lib/features';
 import { PlaceButton, PlaceMapView, PlaceNavButton, usePlaceMap, type PlaceQuery } from './PlaceMap';
 
-/** The real margin of a High Alchemy cast: the Nature rune is part of the cost. Nothing is shown while a price is unknown. */
-function AlchProfit({ highAlch, price }: { highAlch?: number; price?: number }) {
-  const [nature, setNature] = useState<number | undefined>(undefined);
-  useEffect(() => {
-    let live = true;
-    void getGePrice(NATURE_RUNE_ID).then((p) => { if (live && p) setNature(p.buyPrice); }).catch(() => undefined);
-    return () => { live = false; };
-  }, []);
-  const m = alchMargin(highAlch, price, nature);
+/** Margin after the Nature rune, before fire costs. Unknown quotes cannot imply a profit. */
+function AlchProfit({ highAlch, price, nature }: { highAlch?: number; price: ItemPrice; nature: ItemPrice }) {
+  const m = alchMargin(highAlch, price.unit ?? undefined, nature.unit ?? undefined);
   if (!m) return null;
+  const cached = price.state === 'cached' || nature.state === 'cached';
   return (
-    <span className={`tile-sub ${m.worth ? 'is-good' : 'is-bad'}`}>
-      {m.worth ? 'Profit' : 'Loss'} per cast {gp(Math.abs(m.profit))} after the Nature rune ({gp(nature ?? 0)})
+    <span className={`tile-sub alch-margin ${m.worth ? 'is-good' : 'is-bad'}`}>
+      {cached ? 'Cached estimate' : 'Estimated margin'}: {m.profit < 0 ? '−' : '+'}{gp(Math.abs(m.profit))} per cast after the Nature rune ({gp(nature.unit!)}), before fire-rune costs
     </span>
   );
 }
@@ -175,14 +171,6 @@ function WikiDrawer({ target, onClose, onPin }: { target: Target | null; onClose
   );
 }
 
-function timeAgo(iso: string): string {
-  const min = Math.round((Date.now() - Date.parse(iso)) / 60000);
-  if (min < 1) return 'just now';
-  if (min < 60) return `${min} min ago`;
-  const h = Math.round(min / 60);
-  return h < 24 ? `${h} h ago` : new Date(iso).toLocaleDateString('en-US');
-}
-
 const gp = (n: number) => `${formatXp(n)} gp`;
 
 function ItemView({ query, label }: { query: string | number; label?: string }) {
@@ -191,10 +179,11 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
   const [status, setStatus] = useState<'loading' | 'ready' | 'offline' | 'missing'>('loading');
   const places = usePlaceMap();
   const { autoLocation } = useFeatures();
+  const prices = usePriceView(true);
 
   useEffect(() => {
     let alive = true;
-    getItemDetail(query)
+    getItemDetail(query, { prices: false })
       .then((d) => {
         if (!alive) return;
         if (d) { setItem(d); setStatus('ready'); } else setStatus(local ? 'offline' : 'missing');
@@ -214,6 +203,9 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
     );
   }
 
+  const buy = itemPrice(prices, item.nameEn, item.id, 1);
+  const sell = itemPrice(prices, item.nameEn, item.id, 1, 'sell');
+  const nature = itemPrice(prices, 'Nature rune', NATURE_RUNE_ID, 1);
   return (
     <div className="drawer-body">
       <header className="drawer-hero">
@@ -228,21 +220,15 @@ function ItemView({ query, label }: { query: string | number; label?: string }) 
       <div className="tiles">
         <div className="tile tile-ge">
           <span className="tile-label">💰 Grand Exchange</span>
-          {item.gePrice ? (
-            <>
-              <span className="tile-value">{gp(item.gePrice.buyPrice)}</span>
-              <span className="tile-sub">buy · sell {gp(item.gePrice.sellPrice)}</span>
-              <span className="tile-sub">updated {timeAgo(item.gePrice.updatedAt)}</span>
-            </>
-          ) : (
-            <span className="tile-sub">{status === 'loading' ? 'Loading the price…' : status === 'offline' || item.priceUnavailable ? 'No connection — the price is unavailable' : 'Not sold on the exchange'}</span>
-          )}
+          <span className="tile-value">{buy.unit === null ? '—' : gp(buy.unit)}</span>
+          <span className="tile-sub" title={buy.detail}>{buy.label}{buy.unit !== null ? ' (buy)' : ''}</span>
+          <span className="tile-sub" title={sell.detail}>{sell.unit === null ? 'Sell price unavailable' : sell.text}</span>
         </div>
         <div className="tile">
           <span className="tile-label">⚗️ High Alchemy</span>
           <span className="tile-value">{item.highAlch !== undefined ? gp(item.highAlch) : '—'}</span>
           {item.lowAlch !== undefined && <span className="tile-sub">Low Alchemy {gp(item.lowAlch)}</span>}
-          <AlchProfit highAlch={item.highAlch} price={item.gePrice?.buyPrice} />
+          <AlchProfit highAlch={item.highAlch} price={buy} nature={nature} />
         </div>
         <div className="tile">
           <span className="tile-label">🏪 Store value</span>

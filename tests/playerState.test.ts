@@ -17,6 +17,26 @@ function state(over: Partial<PlayerStateInput> = {}) {
 }
 
 describe('the single player state', () => {
+  it('an absent bronze tool does not prove an unreported usable tier is missing', () => {
+    const s = state({ stats: { mining: 41 }, owned: owned({ 'Bronze pickaxe': { bank: 0 } }, true) });
+    expect(heldOf(s, 'Bronze pickaxe')).toMatchObject({ presence: 'UNKNOWN', bank: null, total: null });
+    expect(evaluate({ type: 'item', name: 'Bronze pickaxe', count: 1 }, s).state).toBe('UNKNOWN');
+  });
+  it('known carried tools prove the amount in hand, but not a larger unknown family total', () => {
+    const s = state({ stats: { mining: 41 }, owned: owned({ 'Bronze pickaxe': { carried: 1, bank: 0 } }, true) });
+    expect(evaluate({ type: 'item', name: 'Bronze pickaxe', count: 1 }, s).state).toBe('OK');
+    expect(evaluate({ type: 'item', name: 'Bronze pickaxe', count: 2 }, s).state).toBe('UNKNOWN');
+  });
+  it('a confirmed banked tier can cover a goal without guessing unreported alternatives', () => {
+    const s = state({ stats: { mining: 41 }, owned: owned({ 'Bronze pickaxe': { bank: 0 }, 'Rune pickaxe': { bank: 1 } }, true) });
+    expect(evaluate({ type: 'item', name: 'Bronze pickaxe', count: 1 }, s).state).toBe('BANK');
+    expect(evaluate({ type: 'item', name: 'Bronze pickaxe', count: 2 }, s).state).toBe('UNKNOWN');
+  });
+  it('explicit manual generic-tool ownership remains a fallback when no tier was observed', () => {
+    const s = state();
+    s.manual['name:axe'] = 1;
+    expect(evaluate({ type: 'item', name: 'Axe', count: 1, manualKey: 'name:axe' }, s).state).toBe('OK');
+  });
   it('explicitly disconnected facts cannot be treated as live gear, money, bank, quests or position', () => {
     const s = state({ connected: false, stats: { attack: 80 }, progress: { levels: { attack: 30 } },
       gear: gear({ coins: 900, bankCoins: 500, equipment: [{ id: 1333, name: 'Rune scimitar', slot: 'weapon' }], inventorySlots: 10 }),

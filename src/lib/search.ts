@@ -90,7 +90,7 @@ export function buildIndex({ steps, skills, reference, plugins, items = [], type
   }
   out.push(item('ref', reference.training.title, 'Skills', '#/skills', blocksText(reference.training.blocks)));
   // Gear analysis is an app page, not a guide section: it is found by the words people search it with.
-  out.push(item('ref', 'Gear: weapon, amulet, armour', 'What to wear and buy to hit faster', '#/gear',
+  out.push(item('ref', 'Gear: weapon, amulet, armour, equipment, upgrades', 'What to wear and buy to hit faster', '#/gear',
     'Gear analysis: weapon, amulet, armour, equipment, upgrade, boost. Scimitar, sword, amulet of strength: '
     + 'what is better at your levels, where to buy, how much to save. Equipment, gear, weapon, armour, upgrade.'));
   for (const g of plugins.groups) {

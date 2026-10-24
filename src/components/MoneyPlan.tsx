@@ -7,7 +7,7 @@ import { useStore } from '../store';
 import { nameKey } from '../lib/checklist';
 import { formatGp } from '../lib/shopping';
 import { wealthOf } from '../lib/wealth';
-import { adviseMoney, hoursToCover, MONEY, reqText, type MethodView } from '../lib/moneyAdvisor';
+import { adviseMoney, hoursToCover, reqText, type MethodView } from '../lib/moneyAdvisor';
 import { RESTRICTED_METHOD_IDS } from '../lib/tradeRestriction';
 import { useTradeRestriction } from '../lib/useTradeRestriction';
 
@@ -89,7 +89,7 @@ export function MoneyPlan({ step }: { step: Step }) {
         </>
       )}
       <p className="muted small">
-        The revenue is an OSRS Wiki estimate at exchange prices on {MONEY.generatedAt} with good play: lower for a beginner, prices change. Some methods
+        The revenue is an OSRS Wiki estimate with good play: lower for a beginner, prices change. Some methods
         need an investment or a stock of items — read the method's article. Here is only what the game and the wiki confirm for the free version.
       </p>
     </details>

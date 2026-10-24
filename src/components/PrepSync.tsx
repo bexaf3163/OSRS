@@ -58,8 +58,8 @@ function StepPlan({ step }: { step: Step }) {
   // The road ahead: this step and the next open ones, for the supplies the teleports on it need.
   const road = roadSteps(steps, (id) => !isClosed(progress, id), step.id);
   const roadKey = road.map((s) => s.id).join(',');
-  const bagRef = useRef({ levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress), questsDone, state: engine.ctx.state, priceOf: prices.priceOf, questInstruction, nextStep, road });
-  bagRef.current = { levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress), questsDone, state: engine.ctx.state, priceOf: prices.priceOf, questInstruction, nextStep, road };
+  const bagRef = useRef({ levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress), questsDone, state: engine.ctx.state, priceOf: prices.buyPriceOf, questInstruction, nextStep, road });
+  bagRef.current = { levels: progress.levels, stats, gear, owned, mode, fairyRings: fairyRingsUnlocked(progress), oneTimeUsed: oneTimeUsedOf(progress), questsDone, state: engine.ctx.state, priceOf: prices.buyPriceOf, questInstruction, nextStep, road };
   // The objective: the quest line the game confirms (never a temporary arrow), otherwise the step's own place.
   const to = transportTarget(step, questInstruction)?.point;
   // A teleport or a boat ride is a jump: the way is judged again at once from where the player landed, not at the next poll.

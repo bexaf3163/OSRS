@@ -10,13 +10,19 @@ import { emptyProgress, withStep } from '../src/lib/progress';
 import { nameKey, preflightItems, type OwnedItem, type OwnedState } from '../src/lib/checklist';
 import type { GearState } from '../src/services/runeliteBridge';
 import type { Step } from '../src/types';
+import { toolFamilyOf } from '../src/lib/toolTiers';
 
 const FILE = new URL('./fixtures/readiness.golden.json', import.meta.url);
 
 const gearOf = (coins: number | null, bankCoins: number | null): GearState => ({ equipment: [], inventory: [], coins, bankCoins });
 function ownedFor(s: Step, mk: (need: number) => Partial<OwnedItem>, bankSeen: boolean): OwnedState {
   const map = new Map<string, OwnedItem>();
-  for (const it of preflightItems(s)) map.set(nameKey(it.nameEn), { name: it.nameEn, id: it.id, carried: 0, noted: 0, ...mk(it.count) });
+  for (const it of preflightItems(s)) {
+    for (const name of toolFamilyOf(it.nameEn) ?? []) if (!map.has(nameKey(name))) {
+      map.set(nameKey(name), { name, carried: 0, noted: 0, ...(bankSeen ? { bank: 0 } : {}) });
+    }
+    map.set(nameKey(it.nameEn), { name: it.nameEn, id: it.id, carried: 0, noted: 0, ...mk(it.count) });
+  }
   return { bankSeen, items: map };
 }
 const all99 = Object.fromEntries(['attack', 'strength', 'defence', 'ranged', 'magic', 'prayer', 'mining', 'smithing', 'fishing', 'cooking', 'firemaking', 'woodcutting', 'agility', 'crafting', 'runecraft', 'herblore', 'thieving', 'fletching', 'slayer', 'farming', 'construction', 'hunter'].map((k) => [k, 99]));

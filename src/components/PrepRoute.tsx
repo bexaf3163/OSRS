@@ -19,7 +19,7 @@ import { isClosed, nextStep } from '../lib/next-step';
 import { useReadinessEngine } from '../readinessContext';
 import { NavigateButton } from './NavigateButton';
 
-const KIND_ICON: Record<PrepTask['kind'], string> = { block: '🔒', quest: '📜', stat: '⚡', buy: '🛒', money: '💰', bank: '🏦' };
+const KIND_ICON: Record<PrepTask['kind'], string> = { block: '🔒', quest: '📜', stat: '⚡', buy: '🛒', money: '💰', bank: '🏦', equip: '🛡' };
 
 function TaskAction({ a }: { a: ReadinessAction }) {
   if (a.kind === 'nav') return <NavigateButton target={a.target} label={a.label} />;

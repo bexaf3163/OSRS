@@ -26,6 +26,12 @@ const owned = (rows: Record<string, number>, bankSeen = true): OwnedState => {
 const gear = (rows: [string, number][], coins = 0, bankCoins: number | null = 0): GearState =>
   ({ equipment: [], inventory: rows.map(([name, count], i) => ({ id: i + 1, name, count })), coins, bankCoins } as unknown as GearState);
 
+it('transport procurement cannot revive a baked Law-rune cost after the shared quote is missing', () => {
+  const state = buildPlayerState({ mode: 'f2p', stats: { magic: 25 }, progress: emptyProgress(), gear: gear([], 1000), owned: owned({}), questsDone: [] });
+  expect(transportSources(state, () => undefined)('Law rune', 1)).toMatchObject({ kind: 'exchange', price: null });
+  expect(transportSources(state, () => 123)('Law rune', 1)).toMatchObject({ kind: 'exchange', price: 123 });
+});
+
 function decide(o: { pos: { x: number; y: number; plane: number } | null; step: string; bag: [string, number][]; bank: Record<string, number> | null; magic?: number; instruction?: QuestInstruction | null; extra?: Partial<TransportInput> }) {
   const g = gear(o.bag, 0, o.bank ? 0 : null);
   const ow = o.bank ? owned(o.bank) : owned({}, false);

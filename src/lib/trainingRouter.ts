@@ -15,6 +15,8 @@ import { evaluate, type ReqState, type Requirement } from './requirements';
 import { levelOf, type PlayerState } from './playerState';
 import { xpForLevel } from './xp';
 import type { MethodPriority, PlayStyle } from './playStyle';
+import { rangedNeeds, RANGED_WATCH } from './rangedLoadout';
+import { strikeRecipe, superheatNeeds } from './magicPlan';
 
 export type Effort = 'afk' | 'low' | 'medium' | 'high';
 export type MethodCost = 'free' | 'profit' | 'cost';
@@ -22,7 +24,7 @@ export type Risk = 'none' | 'low' | 'high';
 export type { PlayStyle };
 
 export type MethodNeed =
-  | { type: 'item'; name: string; count?: number }
+  | { type: 'item'; name: string; count?: number; anyOf?: string[]; equip?: boolean }
   /** Any axe / pickaxe of at least the suitable tier — taken from toolProgression.json. */
   | { type: 'tool'; skill: 'woodcutting' | 'mining' }
   | { type: 'quest'; quest: string }
@@ -33,11 +35,16 @@ export interface TrainingMethod {
   /** The skills the method trains (combat — all three). */
   skills: string[];
   from: number;
+  /** Suggested training bracket; unlike from, this does not invent a game unlock requirement. */
+  suggestedFrom?: number;
   /** Up to which level (exclusive) the method is the best; null — to the end. */
   to: number | null;
   name: string;
   members: boolean;
   needs: MethodNeed[];
+  kit?: 'f2p-bow' | 'superheat-iron' | 'strike-spell';
+  /** Visible manual alternative; never an automatic default until this setup is modelled/verified. */
+  manualSetup?: string;
   /** XP per hour per the wiki: [from, to] — a guide. */
   xph: [number, number] | null;
   /** XP per single action — the game's exact value. */
@@ -50,6 +57,9 @@ export interface TrainingMethod {
   where: string;
   /** The key of the place in the place dictionary (majorLocations.json) — for the in-game arrow; none — words only. */
   place?: string;
+  /** Verified in-game scenery names for this method only; no future-resource highlights. */
+  objectNames?: string[];
+  npcNames?: string[];
   note?: string;
   url: string;
   /** A quest with a one-time XP reward: it does not become the "best method", it is shown separately. */
@@ -58,9 +68,9 @@ export interface TrainingMethod {
 }
 
 interface Raw {
-  id: string; skill: string | string[]; from: number; to: number | null; name: string; members: boolean;
-  needs?: MethodNeed[]; xph?: [number, number]; xpa?: number; act?: string; effort: Effort; cost: MethodCost; risk: Risk;
-  where: string; place?: string; note?: string; url: string; kind?: 'method' | 'quest'; xpTotal?: number;
+  id: string; skill: string | string[]; from: number; suggestedFrom?: number; to: number | null; name: string; members: boolean;
+  needs?: MethodNeed[]; kit?: TrainingMethod['kit']; manualSetup?: string; xph?: [number, number]; xpa?: number; act?: string; effort: Effort; cost: MethodCost; risk: Risk;
+  where: string; place?: string; objectNames?: string[]; npcNames?: string[]; note?: string; url: string; kind?: 'method' | 'quest'; xpTotal?: number;
 }
 
 export const trainingMethods: TrainingMethod[] = (methodsJson as unknown as { methods: Raw[] }).methods.map((m) => ({
@@ -70,6 +80,11 @@ export const trainingMethods: TrainingMethod[] = (methodsJson as unknown as { me
   needs: m.needs ?? [], xph: m.xph ?? null, xpa: m.xpa ?? null, act: m.act ?? null,
   effort: m.effort, cost: m.cost, risk: m.risk, where: m.where, ...(m.place ? { place: m.place } : {}), ...(m.note ? { note: m.note } : {}), url: m.url,
   kind: m.kind ?? 'method', xpTotal: m.xpTotal ?? null,
+  ...(m.objectNames ? { objectNames: m.objectNames } : {}),
+  ...(m.npcNames ? { npcNames: m.npcNames } : {}),
+  ...(m.suggestedFrom !== undefined ? { suggestedFrom: m.suggestedFrom } : {}),
+  ...(m.kit ? { kit: m.kit } : {}),
+  ...(m.manualSetup ? { manualSetup: m.manualSetup } : {}),
 }));
 
 interface Tier { tier: string; levelReq: number }
@@ -103,7 +118,8 @@ function needStatus(n: MethodNeed, state: PlayerState): NeedStatus {
     return { kind: 'tool', label: n.skill === 'woodcutting' ? 'Axe' : 'Pickaxe', state: r.state, detail: r.detail };
   }
   const count = n.count ?? 1;
-  const r = evaluate({ type: 'item', name: n.name, count }, state);
+  const r = evaluate(n.equip ? { type: 'equipment', name: n.name, count, anyOf: n.anyOf } : n.anyOf?.length ? { type: 'alternative', requiredCount: count, alternatives: [n.name, ...n.anyOf].map(name => ({ name })) }
+    : { type: 'item', name: n.name, count }, state);
   return { kind: 'item', label: `${n.name}${count > 1 ? ` ×${count}` : ''}`, state: r.state, detail: r.detail };
 }
 
@@ -119,11 +135,23 @@ export interface MethodView {
 }
 
 export function viewMethod(m: TrainingMethod, state: PlayerState): MethodView {
-  const needs = m.needs.map((n) => needStatus(n, state));
+  if (m.kit === 'strike-spell') m = { ...m, name: `${strikeRecipe(state).spell.name} on cows and chickens` };
+  const needs = methodNeeds(m, state).map((n) => needStatus(n, state));
+  if (m.manualSetup) needs.push({ kind: 'item', label: m.manualSetup, state: 'UNKNOWN', detail: 'Manual setup has not been verified.' });
+  if (m.kit === 'f2p-bow' && state.mode !== 'f2p') needs.push({ kind: 'item', label: 'Members ranged loadout', state: 'UNKNOWN', detail: 'This starter kit models ordinary F2P bows only; check your Members weapon and ammunition separately.' });
   const locked = needs.filter((n) => (n.kind === 'quest' || n.kind === 'skill') && n.state === 'MISSING');
   const prep = needs.filter((n) => (n.kind === 'item' || n.kind === 'tool') && (n.state === 'MISSING' || n.state === 'PARTIAL' || n.state === 'BANK'));
   const unchecked = needs.filter((n) => n.state === 'UNKNOWN');
-  return { method: m, status: locked.length ? 'LOCKED' : prep.length ? 'PREP' : 'READY', missing: [...locked, ...prep], unchecked };
+  return { method: m, status: locked.length ? 'LOCKED' : prep.length || m.manualSetup ? 'PREP' : 'READY', missing: [...locked, ...prep], unchecked };
+}
+
+export function methodNeeds(m: TrainingMethod, state: PlayerState): MethodNeed[] {
+  if (m.kit === 'strike-spell') return strikeRecipe(state).needs;
+  if (m.kit === 'superheat-iron') return superheatNeeds(state);
+  // Stage 6 is F2P-only. Do not demand a weaker F2P bow from Members using an unmodelled weapon.
+  if (m.kit === 'f2p-bow' && state.mode !== 'f2p') return m.needs.filter(n => n.type !== 'item' || !RANGED_WATCH.includes(n.name));
+  return m.kit === 'f2p-bow' && m.kind === 'method'
+    ? [...m.needs.filter(n => n.type !== 'item' || !RANGED_WATCH.includes(n.name)), ...rangedNeeds(state)] : m.needs;
 }
 
 // ---------------------------------------------------------------------------
@@ -159,17 +187,25 @@ export function practicalRate(m: TrainingMethod): number | null {
  */
 function compare(priority: MethodPriority, xpLeft?: number, level?: number) {
   return (a: MethodView, b: MethodView): number => {
+    if (Boolean(a.method.manualSetup) !== Boolean(b.method.manualSetup)) return Number(Boolean(a.method.manualSetup)) - Number(Boolean(b.method.manualSetup));
+    const uncheckedEntry = (v: MethodView) => v.unchecked.some(n => n.kind === 'skill' || n.kind === 'quest');
+    if (uncheckedEntry(a) !== uncheckedEntry(b)) return Number(uncheckedEntry(a)) - Number(uncheckedEntry(b));
     // Unchecked supplies must not beat a confirmed preparation step merely by being labelled READY.
     // Keep them available and disclose their uncertainty; do not invent missing quantities.
-    const rank = (v: MethodView) => STATUS_RANK[v.status] + (v.status === 'READY' && v.unchecked.length ? 1 : 0);
+    // The same ranged kit should not drop back to an earlier trainer after equipping its arrows merely because owned food needs withdrawal.
+    // Missing/unread supplies still lose to a supplied safer method; this only covers confirmed bank/wear preparation.
+    const bankedRanged = (v: MethodView) => v.method.kit === 'f2p-bow' && v.status === 'PREP' && v.missing.every(n => n.state === 'BANK');
+    const rank = (v: MethodView) => (bankedRanged(v) ? 0 : STATUS_RANK[v.status]) + (v.status === 'READY' && v.unchecked.length ? 1 : 0)
+      + (v.unchecked.some(n => n.kind === 'skill' || n.kind === 'quest') ? 2 : 0);
     const s = rank(a) - rank(b);
     const ra = rateLow(a.method);
     const rb = rateLow(b.method);
     // Without comparable rates, retain the authored bracket as a preference, never as an availability ban.
-    const suggested = (m: TrainingMethod) => level === undefined || m.to === null || level < m.to;
+    const suggested = (m: TrainingMethod) => level === undefined || ((m.suggestedFrom ?? m.from) <= level && (m.to === null || level < m.to));
     const byBracket = Number(suggested(b.method)) - Number(suggested(a.method));
     const byRate = ((ra === null || rb === null) ? byBracket : 0) || (rb ?? -1) - (ra ?? -1);
-    const byEntry = b.method.from - a.method.from;
+    const preferredEntry = (m: TrainingMethod) => m.suggestedFrom !== undefined && level !== undefined && m.suggestedFrom <= level ? m.suggestedFrom : m.from;
+    const byEntry = preferredEntry(b.method) - preferredEntry(a.method);
     if (priority === 'balanced') {
       if (a.status === 'LOCKED' || b.status === 'LOCKED') { if (s) return s; }
       const pa = practicalRate(a.method);
@@ -180,7 +216,12 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number) {
         if (Math.abs(ha - hb) > Math.min(ha, hb) * 0.05) return ha - hb;
       } else {
         if (s) return s;
+        // Without comparable pace evidence, do not buy a new recipe merely because its suggested bracket is newer.
+        const supplied = (v: MethodView) => ![...v.missing, ...v.unchecked].some(n =>
+          (n.kind === 'item' || n.kind === 'tool') && n.state !== 'BANK' && n.state !== 'OK');
+        if ((pa === null || pb === null) && supplied(a) !== supplied(b)) return Number(supplied(b)) - Number(supplied(a));
         if ((pa === null || pb === null) && byBracket) return byBracket;
+        if (pa === null && pb === null && a.method.kit === 'f2p-bow' && b.method.kit === 'f2p-bow' && byEntry) return byEntry;
         if ((pa ?? -1) !== (pb ?? -1)) return (pb ?? -1) - (pa ?? -1);
       }
       return s || EFFORT_RANK[a.method.effort] - EFFORT_RANK[b.method.effort] || COST_RANK[a.method.cost] - COST_RANK[b.method.cost] || byRate || byEntry;
@@ -287,7 +328,7 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
   const legs: PathLeg[] = [];
   for (let lv = level; lv < target; lv++) {
     // For future levels the item requirements are not counted: "what will be needed", not "what there is now".
-    const cands = methodsFor(skill, methods).filter((m) => availableAt(m, lv, input.mode)).map((m) => viewMethod(m, input.state)).filter((v) => v.status !== 'LOCKED' || v.missing.every((x) => x.kind === 'skill'));
+    const cands = methodsFor(skill, methods).filter((m) => !m.manualSetup && availableAt(m, lv, input.mode)).map((m) => viewMethod(m, input.state)).filter((v) => v.status !== 'LOCKED' || v.missing.every((x) => x.kind === 'skill'));
     cands.sort(compare(priority, undefined, lv));
     let pick = (lv === level ? cands.find(c => c.method.id === first?.id)?.method : undefined) ?? cands[0]?.method;
     if (!pick) continue;
@@ -315,7 +356,7 @@ export function adviseTraining(input: AdviceInput): TrainingAdvice {
   const xpNow0 = input.xp ?? xpForLevel(level);
   const cmp = compare(priority, Math.max(0, xpForLevel(target) - xpNow0), level);
   const views = methodsFor(skill, methods).filter((m) => availableAt(m, level, mode)).map((m) => viewMethod(m, state)).sort(cmp);
-  const best = views.find((v) => v.status !== 'LOCKED') ?? null;
+  const best = views.find((v) => !v.method.manualSetup && v.status !== 'LOCKED') ?? null;
   const others = views.filter((v) => v !== best).slice(0, 3);
   const quests = methodsFor(skill, methods).filter((m) => m.kind === 'quest' && m.from <= level && (m.to === null || level < m.to) && (mode === 'members' || !m.members));
   const path = buildPath(skill, level, target, input, priority, best?.method ?? null);

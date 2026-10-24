@@ -1,7 +1,7 @@
 // "Magic to the goal: how many spells and what it costs" — for steps with `magicPlan` (S2-04). Prices — from the exchange, XP —
 // from the game (or by level); without prices and the game link the calculation is still shown, but marked approximate.
 
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 import type { Step } from '../types';
 import { useBridge } from '../bridge';
 import { useStore } from '../store';
@@ -12,9 +12,11 @@ import { liquidOf } from '../lib/funding/snapshot';
 import { gapFor } from '../lib/funding/budget';
 import { useTradeRestriction } from '../lib/useTradeRestriction';
 import { xpForLevel } from '../lib/xp';
-import { getGePrice } from '../services/pricesApi';
+import { usePriceView } from '../lib/funding/usePriceView';
+import { itemPrice } from '../lib/itemPrice';
+import { itemById } from '../data';
 import {
-  OPTIONS, planFor, PLAN_PRICE_IDS, SPELLS, SPELLS_CHECKED, STAFFS, staffPayback, type PlanResult, type PriceMap,
+  OPTIONS, planFor, PLAN_PRICE_IDS, SPELLS, STAFFS, staffPayback, type PlanResult, type PriceMap,
 } from '../lib/magicPlan';
 
 /** The Magic level the user needs, from the step's goal. */
@@ -27,18 +29,11 @@ export function MagicPlan({ step }: { step: Step }) {
   const { xp, stats, gear, owned } = useBridge();
   const { state } = usePlayerState();
   const restriction = useTradeRestriction();
-  const [prices, setPrices] = useState<PriceMap | null>(null);
-  const [failed, setFailed] = useState(false);
   const plan = step.magicPlan;
-
-  useEffect(() => {
-    if (!plan) return undefined;
-    let alive = true;
-    void Promise.all(PLAN_PRICE_IDS.map(async (id) => [id, (await getGePrice(id))?.buyPrice] as const))
-      .then((rows) => { if (alive) setPrices(new Map(rows.filter((r): r is readonly [number, number] => typeof r[1] === 'number'))); })
-      .catch(() => { if (alive) setFailed(true); });
-    return () => { alive = false; };
-  }, [plan]);
+  const board = usePriceView(Boolean(plan));
+  const quotes = useMemo(() => PLAN_PRICE_IDS.map(id => ({ id, quote: itemPrice(board, itemById.get(id)?.nameEn ?? '', id, 1) })), [board]);
+  const prices = useMemo<PriceMap>(() => new Map(quotes.flatMap(({ id, quote }) => quote.unit === null ? [] : [[id, quote.unit]])), [quotes]);
+  const cached = quotes.some(({ quote }) => quote.state === 'cached');
 
   if (!plan) return null;
   const target = targetLevel(step);
@@ -52,18 +47,17 @@ export function MagicPlan({ step }: { step: Step }) {
   const has = (name: string) => [...(gear?.equipment ?? []), ...(gear?.inventory ?? [])].some((i) => i.name === name)
     || (heldExact({ owned, bankSeen: owned?.bankSeen === true, equipment: {}, manual: {} }, name).total ?? 0) > 0;
 
-  if (!prices) {
+  const results = OPTIONS.map((o) => planFor(o, fromXp, target, prices, o.staff ? has(STAFFS[o.staff].name) : false)).filter((r): r is PlanResult => r !== null);
+  if (!results.length) {
     return (
       <section className="step-section magic-plan" aria-label="Magic calculation">
         <h4 className="subhead">🔮 What it costs to reach Magic {target}</h4>
-        <p className="muted small">{failed ? 'The exchange prices are unavailable. The cached spell table is available below; no current cost comparison can be shown.' : 'Loading the exchange prices…'}</p>
+        <p className="muted small">Price unavailable for a complete option. Check the exchange before buying; spell requirements remain available below.</p>
         <SpellTable />
       </section>
     );
   }
 
-  const results = OPTIONS.map((o) => planFor(o, fromXp, target, prices, o.staff ? has(STAFFS[o.staff].name) : false)).filter((r): r is PlanResult => r !== null);
-  if (!results.length) return null;
   const cheapest = results.reduce((a, b) => (b.total < a.total ? b : a));
   const fewest = results.reduce((a, b) => (b.casts < a.casts ? b : a));
   const gap = gapFor(cheapest.total, liquid);
@@ -75,7 +69,7 @@ export function MagicPlan({ step }: { step: Step }) {
       <h4 className="subhead">🔮 What it costs to reach Magic {target}</h4>
       <p className="muted small">
         From here: {basis}. {Math.max(0, xpForLevel(target) - fromXp).toLocaleString('en-US')} XP more is needed.
-        Prices — the exchange now; spells — the wiki cards (checked {SPELLS_CHECKED}).
+        {cached ? 'Cached GE estimates; check offers before buying.' : 'GE estimates, not guaranteed offer prices.'} Spells from the OSRS Wiki.
         {' '}Cast XP only: damage XP is not counted. These are comparison estimates, not measured training times.
       </p>
       <div className="table-wrap">
@@ -84,7 +78,7 @@ export function MagicPlan({ step }: { step: Step }) {
           <tbody>
             {results.map((r) => (
               <tr key={r.option.id} className={r === cheapest ? 'is-current' : ""}>
-                <td>{r.option.label}{r === cheapest && ' · lowest full cost'}{r === fewest && r !== cheapest && ' · fewest casts'}</td>
+                <td>{r.option.label}{r === cheapest && ' · lowest full cost among quoted options'}{r === fewest && r !== cheapest && ' · fewest casts'}</td>
                 <td>{r.casts.toLocaleString('en-US')}</td>
                 <td>{formatGp(r.runesCost)}</td>
                 <td>{r.staffCost ? formatGp(r.staffCost) : '—'}</td>
@@ -94,7 +88,7 @@ export function MagicPlan({ step }: { step: Step }) {
           </tbody>
         </table>
       </div>
-      <p className="small muted">Full rune replacement cost; runes you already own are not deducted. A confirmed owned elemental staff is not purchased again. Use Preparation for the current supplies.</p>
+      <p className="small muted">Full rune replacement cost; runes you already own are not deducted. A confirmed owned elemental staff is not purchased again. Options without complete quotes are omitted. Use Preparation for the current supplies.</p>
       {cash !== null && (
         <p className="small">
           Confirmed coins: {formatGp(cash)} gp{!liquid.complete ? ' (the full coin total is not checked)' : ''}.{' '}

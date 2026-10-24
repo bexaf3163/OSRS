@@ -11,6 +11,8 @@ import { findSubStep, instructionSubStep, itemStatus, subStepItems, type ItemSta
 import { Inline } from './Inline';
 import { NavigateButton } from './NavigateButton';
 import { ItemIcon } from './WikiDrawer';
+import { ItemMarketPrice } from './ItemMarketPrice';
+import { findLocalItem } from '../services/wikiService';
 
 /** The sub-step the arrow is on for this step; null while closed, offline, or on a detour. */
 export function useSubStep(step: Step): SubStep | null {
@@ -69,7 +71,7 @@ export function SubStepItems({ step, sub }: { step: Step; sub: SubStep }) {
         return (
           <li key={it.name} className={`sub-item is-${status}`}>
             <ItemIcon src={it.iconUrl} alt="" size={24} />
-            <span className="sub-item-name">{it.name}{it.count > 1 ? ` ×${it.count}` : ''}</span>
+            <span className="sub-item-name">{it.name}{it.count > 1 ? ` ×${it.count}` : ''}<br /><ItemMarketPrice name={it.name} id={step.itemsRequired?.find(r => r.nameEn === it.name)?.wikiItemId ?? findLocalItem(it.name)?.id} quantity={it.count} /></span>
             <span className={`sub-item-badge is-${status}`}>{STATUS_TEXT[status]}</span>
           </li>
         );

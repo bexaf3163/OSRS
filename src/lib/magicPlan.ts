@@ -3,6 +3,9 @@
 
 import spellsJson from '../data/spells.json';
 import { levelForXp, xpForLevel } from './xp';
+import { heldExact, levelOf, wornItemsOf, type PlayerState } from './playerState';
+import { countWorn } from './equipmentCount';
+import type { MethodNeed } from './trainingRouter';
 
 export interface Spell { id: string; name: string; level: number; xp: number; runes: Record<string, number>; element: string }
 export interface Staff { name: string; id: number }
@@ -11,7 +14,52 @@ export const SPELLS = spellsJson.spells as unknown as Spell[];
 export const RUNE_IDS = spellsJson.runeIds as Record<string, number>;
 export const STAFFS = spellsJson.staffs as Record<string, Staff>;
 export const COWHIDE_ID = spellsJson.cowhideId;
-export const SPELLS_CHECKED = spellsJson.checked;
+
+export const SUPERHEAT_WATCH = ['Nature rune', 'Fire rune', 'Iron ore', STAFFS.fire.name];
+export const STRIKE_WATCH = ['Mind rune', 'Air rune', 'Water rune', 'Earth rune', 'Fire rune', ...Object.values(STAFFS).map(s => s.name), 'Trout', 'Salmon', 'Tuna', 'Lobster', 'Swordfish'];
+
+/** Prefer a higher unlocked Strike only when its actual ingredients are already confirmed.
+ * Otherwise Wind Strike is the inexpensive fallback; no unavailable price is treated as an affordable upgrade.
+ */
+export function strikeRecipe(state: PlayerState): { spell: Spell; needs: MethodNeed[] } {
+  const worn = wornItemsOf(state);
+  const staves = Object.entries(STAFFS);
+  const staff = staves.find(([, s]) => countWorn(worn, n => n.toLowerCase() === s.name.toLowerCase()).count > 0)
+    ?? staves.find(([, s]) => (heldExact(state, s.name).total ?? 0) > 0);
+  const pool = SPELLS.filter(s => s.id.endsWith('-strike') && s.level <= (levelOf(state, 'magic') ?? 1));
+  const spent = (s: Spell) => Object.entries(s.runes).filter(([element]) => element !== staff?.[0]);
+  const spell = [...pool].reverse().find(s => spent(s).every(([element, qty]) => (heldExact(state, `${element[0].toUpperCase()}${element.slice(1)} rune`).total ?? 0) >= qty * 20)) ?? pool[0];
+  const batch = spent(spell).every(([element, qty]) => (heldExact(state, `${element[0].toUpperCase()}${element.slice(1)} rune`).total ?? 0) >= qty * 20) ? 20 : 100;
+  const foods = ['Trout', 'Salmon', 'Tuna', 'Lobster', 'Swordfish'];
+  const foodCount = foods.some(name => (heldExact(state, name).bag ?? 0) > 0) ? 1 : 5;
+  return { spell, needs: [
+    { type: 'skill', skill: 'magic', min: spell.level },
+    ...spent(spell).map(([element, qty]): MethodNeed => ({ type: 'item', name: `${element[0].toUpperCase()}${element.slice(1)} rune`, count: qty * batch })),
+    ...(staff ? [{ type: 'item' as const, name: staff[1].name, equip: true }] : []),
+    { type: 'item', name: foods[0], count: foodCount, anyOf: foods.slice(1) },
+  ] };
+}
+
+/** A physical starter bag: 25 unnoted iron ore + two rune stacks fit in 28 slots.
+ * OSRS Wiki: Superheat Item uses one nature/four fire per ore, Magic43/Smithing15.
+ * Owned fire staff only substitutes runes when preparation also requires it worn.
+ */
+export function superheatNeeds(state: PlayerState): MethodNeed[] {
+  const fireStaff = STAFFS.fire.name;
+  const hasStaff = countWorn(wornItemsOf(state), name => name.toLowerCase() === fireStaff.toLowerCase()).count > 0
+    || (heldExact(state, fireStaff).total ?? 0) > 0;
+  // Finish a castable bag before asking for a new starter batch; spending one rune/ore must not flip the method after every cast.
+  const inBag = Math.min(25, heldExact(state, 'Iron ore').bag ?? 0, heldExact(state, 'Nature rune').bag ?? 0,
+    hasStaff ? 25 : Math.floor((heldExact(state, 'Fire rune').bag ?? 0) / 4));
+  const batch = inBag > 0 ? inBag : 25;
+  return [
+    { type: 'skill', skill: 'magic', min: 43 },
+    { type: 'skill', skill: 'smithing', min: 15 },
+    { type: 'item', name: 'Nature rune', count: batch },
+    { type: 'item', name: 'Iron ore', count: batch },
+    hasStaff ? { type: 'item', name: fireStaff, equip: true } : { type: 'item', name: 'Fire rune', count: batch * 4 },
+  ];
+}
 
 /** Prices by item ID (the exchange, instant buy). */
 export type PriceMap = ReadonlyMap<number, number>;
@@ -44,8 +92,9 @@ export function castCost(spell: Spell, staff: string | undefined, prices: PriceM
   for (const [rune, qty] of Object.entries(spell.runes)) {
     if (staff && rune === staff) continue;
     const p = prices.get(RUNE_IDS[rune]);
-    if (p === undefined) return null;
+    if (p === undefined || !Number.isSafeInteger(p) || p < 0) return null;
     sum += p * qty;
+    if (!Number.isSafeInteger(sum)) return null;
   }
   return sum;
 }
@@ -66,11 +115,13 @@ export interface PlanResult {
  * variant. null means a price of some rune (or the staff) is missing or there is nothing to hit with.
  */
 export function planFor(opt: PlanOption, fromXp: number, toLevel: number, prices: PriceMap, ownsStaff = false): PlanResult | null {
+  if (!Number.isFinite(fromXp) || !Number.isInteger(toLevel) || toLevel < 1 || toLevel > 99) return null;
   const target = xpForLevel(toLevel);
   const pool = SPELLS.filter((s) => opt.spells.includes(s.id)).sort((a, b) => a.level - b.level);
   const staff = opt.staff ? STAFFS[opt.staff] : undefined;
   const staffPrice = staff ? prices.get(staff.id) : 0;
   if (staff && staffPrice === undefined && !ownsStaff) return null;
+  if (!ownsStaff && staffPrice !== undefined && (!Number.isSafeInteger(staffPrice) || staffPrice < 0)) return null;
   let xp = Math.max(0, fromXp);
   const steps: PlanStep[] = [];
   let runesCost = 0;
@@ -86,12 +137,14 @@ export function planFor(opt: PlanOption, fromXp: number, toLevel: number, prices
     const c = castCost(spell, opt.staff, prices);
     if (c === null) return null;
     runesCost += c * n;
+    if (!Number.isSafeInteger(runesCost)) return null;
     casts += n;
     xp += n * spell.xp;
     const last = steps[steps.length - 1];
     if (last && last.spell.id === spell.id) last.casts += n; else steps.push({ spell, casts: n });
   }
   const staffCost = ownsStaff ? 0 : (staffPrice ?? 0);
+  if (!Number.isSafeInteger(runesCost + staffCost)) return null;
   return { option: opt, casts, steps, runesCost: Math.round(runesCost), staffCost, total: Math.round(runesCost) + staffCost, xpNeeded: Math.max(0, target - Math.max(0, fromXp)) };
 }
 
@@ -101,9 +154,9 @@ export function staffPayback(staffKey: string, spell: Spell, prices: PriceMap): 
   const price = prices.get(staff.id);
   const rune = prices.get(RUNE_IDS[staffKey]);
   const qty = spell.runes[staffKey];
-  if (price === undefined || rune === undefined || !qty) return null;
+  if (price === undefined || rune === undefined || !Number.isSafeInteger(price) || price < 0 || !Number.isSafeInteger(rune) || rune < 0 || !qty) return null;
   const perCast = rune * qty;
-  return perCast > 0 ? { perCast, casts: Math.ceil(price / perCast) } : null;
+  return Number.isSafeInteger(perCast) && perCast > 0 ? { perCast, casts: Math.ceil(price / perCast) } : null;
 }
 
 /** How many hides must be sold to cover the sum. */

@@ -21,14 +21,16 @@ function parses(text) {
  * The progress file text or null if there is no file or it is broken. A broken file is not deleted: its copy
  * stays nearby as progress.broken-<time>.json (the last three are kept).
  * includeInvalid lets the renderer distinguish damage from an absent file and pause automatic saves; the original text is returned unchanged.
+ * Read errors other than ENOENT are thrown; they never prove that a source is missing.
  */
 function readProgress(dir, now = new Date(), name = 'progress.json', includeInvalid = false) {
   const target = path.join(dir, name);
   let text;
   try {
     text = fs.readFileSync(target, 'utf8');
-  } catch {
-    return null;
+  } catch (error) {
+    if (error.code === 'ENOENT') return null;
+    throw error; // An unreadable source is unknown, not permission to start saving over it.
   }
   if (parses(text)) return text;
   try {
@@ -41,6 +43,12 @@ function readProgress(dir, now = new Date(), name = 'progress.json', includeInva
     // The copy failed — the file stays in place until the next write.
   }
   return includeInvalid ? text : null;
+}
+
+/** IPC cannot reliably propagate thrown synchronous handler errors. Keep failure distinct from a missing file. */
+function readProgressResult(dir, now = new Date(), name = 'progress.json') {
+  try { return { ok: true, text: readProgress(dir, now, name, true) }; }
+  catch { return { ok: false, error: 'READ_FAILED' }; }
 }
 
 /** A copy of the whole progress file before the first write of the session: progress.bak.json. A broken file does not become the copy. */
@@ -62,6 +70,14 @@ const DAY_KEEP = 14;
 const COPIED = /^(progress(-[a-z0-9]{1,12})?|profiles)\.json$/;
 const stampOf = (d) => `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
 
+// Finish copying readable profiles, but do not report a complete backup after an I/O failure.
+function throwCopyErrors(errors) {
+  if (!errors.length) return;
+  const failure = new AggregateError(errors, 'Some progress files could not be copied');
+  failure.code = 'COPY_INCOMPLETE';
+  throw failure;
+}
+
 /**
  * A scheduled copy: once a day every progress file (progress.json and progress-<profile>.json) is copied into
  * the chosen folder as osrs-put-<name>-YYYYMMDD.json. Today's copy is not overwritten; the last
@@ -71,19 +87,24 @@ function dailyBackup(dir, target, now = new Date()) {
   fs.mkdirSync(target, { recursive: true });
   const today = stampOf(now);
   let made = 0;
+  const errors = [];
   for (const name of fs.readdirSync(dir).filter((n) => COPIED.test(n))) {
-    const base = name.replace(/\.json$/, '');
-    const out = path.join(target, `osrs-put-${base}-${today}.json`);
-    let text;
-    try { text = fs.readFileSync(path.join(dir, name), 'utf8'); } catch { continue; }
-    if (!validSavedText(name, text)) continue;
-    if (!fs.existsSync(out)) { fs.writeFileSync(out, text); made++; }
-    const mine = fs.readdirSync(target).filter((n) => n.startsWith(`osrs-put-${base}-`) && n.length === `osrs-put-${base}-`.length + 13 && /^\d{8}\.json$/.test(n.slice(-13))).sort();
-    const supported = mine.filter(n => {
-      try { return validSavedText(name, fs.readFileSync(path.join(target, n), 'utf8')); } catch { return false; }
-    });
-    for (const old of supported.slice(0, Math.max(0, supported.length - DAY_KEEP))) fs.rmSync(path.join(target, old), { force: true });
+    try {
+      const base = name.replace(/\.json$/, '');
+      const out = path.join(target, `osrs-put-${base}-${today}.json`);
+      let text;
+      try { text = fs.readFileSync(path.join(dir, name), 'utf8'); }
+      catch (error) { if (error.code === 'ENOENT') continue; throw error; }
+      if (!validSavedText(name, text)) continue;
+      if (!fs.existsSync(out)) { fs.writeFileSync(out, text); made++; }
+      const mine = fs.readdirSync(target).filter((n) => n.startsWith(`osrs-put-${base}-`) && n.length === `osrs-put-${base}-`.length + 13 && /^\d{8}\.json$/.test(n.slice(-13))).sort();
+      const supported = mine.filter(n => {
+        try { return validSavedText(name, fs.readFileSync(path.join(target, n), 'utf8')); } catch { return false; }
+      });
+      for (const old of supported.slice(0, Math.max(0, supported.length - DAY_KEEP))) fs.rmSync(path.join(target, old), { force: true });
+    } catch (error) { errors.push(error); }
   }
+  throwCopyErrors(errors);
   return made;
 }
 
@@ -103,20 +124,26 @@ const updatedAtOf = (text) => {
  */
 function latestCopy(dir, target) {
   fs.mkdirSync(target, { recursive: true });
+  const errors = [];
   for (const name of fs.readdirSync(dir).filter((n) => COPIED.test(n))) {
-    let text;
-    try { text = fs.readFileSync(path.join(dir, name), 'utf8'); } catch { continue; }
-    if (!validSavedText(name, text)) continue;
-    const out = path.join(target, `osrs-put-${name.replace(/\.json$/, '')}-latest.json`);
-    let old = null;
-    try { old = fs.readFileSync(out, 'utf8'); } catch { if (fs.existsSync(out)) continue; }
-    if (old === text) continue;
-    if (old !== null && !validSavedText(name, old)) continue;
-    const mine = updatedAtOf(text);
-    const theirs = old === null ? null : updatedAtOf(old);
-    if (mine !== null && theirs !== null && mine < theirs) continue;
-    fs.writeFileSync(out, text);
+    try {
+      let text;
+      try { text = fs.readFileSync(path.join(dir, name), 'utf8'); }
+      catch (error) { if (error.code === 'ENOENT') continue; throw error; }
+      if (!validSavedText(name, text)) continue;
+      const out = path.join(target, `osrs-put-${name.replace(/\.json$/, '')}-latest.json`);
+      let old = null;
+      try { old = fs.readFileSync(out, 'utf8'); }
+      catch (error) { if (error.code !== 'ENOENT') throw error; }
+      if (old === text) continue;
+      if (old !== null && !validSavedText(name, old)) continue;
+      const mine = updatedAtOf(text);
+      const theirs = old === null ? null : updatedAtOf(old);
+      if (mine !== null && theirs !== null && mine < theirs) continue;
+      fs.writeFileSync(out, text);
+    } catch (error) { errors.push(error); }
   }
+  throwCopyErrors(errors);
 }
 
 /** Lexicographic "a is newer than b" for the [updatedAt, date, rank] keys. */
@@ -168,4 +195,4 @@ function restoreFromCopies(dir, source, replaceOlder = false) {
   return done;
 }
 
-module.exports = { readProgress, backupProgress, dailyBackup, latestCopy, restoreFromCopies };
+module.exports = { readProgress, readProgressResult, backupProgress, dailyBackup, latestCopy, restoreFromCopies };

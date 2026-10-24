@@ -17,18 +17,21 @@ import { npcSpot } from './stepPlaces';
 import type { NavTargetPayload } from '../services/runeliteBridge';
 import { upgradeNav, type UpgradeRecommendation } from '../services/gearUpgradeRouter';
 import { aggregateShopping, plural, type ShoppingLine } from './shopping';
-import { heldOf, type PlayerState } from './playerState';
+import { heldOf, wornItemsOf, type PlayerState } from './playerState';
+import { countWorn } from './equipmentCount';
 import { carryOf, displayName, doseKind, heldUnits, shortText, takeFromBank } from './doses';
 import { nearestBank, type StepReadiness } from './readiness';
 import { planSources, type SourceOption } from './sourceRouter';
 import { tripWindow, type OneTripPlan } from './oneTrip';
-import { preflightItems } from './checklist';
+import { nameKey, preflightItems } from './checklist';
 import { weightAdvice, type WeightAdvice } from './weight';
 import { carryoverOf } from './carryover';
 import { questItemKeys } from './questItems';
 import { recoverySteps, type Recovery, type RecoveryStep } from './recovery';
 import { loadoutNeed, loadoutPhase } from './loadoutPhase';
 import type { QuestInstruction } from '../services/runeliteBridge';
+import type { PriceView } from './funding/quotes';
+import { itemPrice, marketItemPrice, type ItemPrice } from './itemPrice';
 
 /** Critical: the step cannot be done without it; important: better to prepare before leaving; an improvement saves time or money; optional is a convenience. */
 export type PrepPriority = 'CRITICAL' | 'IMPORTANT' | 'OPTIMIZATION' | 'OPTIONAL';
@@ -52,6 +55,10 @@ export interface PrepAction {
 }
 
 export interface PrepLine {
+  /** The item must be worn, not merely carried. */
+  equip?: boolean;
+  /** Market cost for physical items; doses are priced by their actual package in Shopping. */
+  marketPrice?: ItemPrice;
   key: string;
   /** The English name as in the bag, the bank and at the exchange. */
   name: string;
@@ -82,6 +89,8 @@ export interface PrepLine {
   /** Additional usable units allocated to this deadline; the same bag stock cannot cover another deadline again. */
   bagShortfall?: number;
 }
+
+export const prepSatisfied = (l: { where: string; equip?: boolean }) => l.where === 'EQUIPPED' || (l.where === 'INVENTORY' && !l.equip);
 
 export interface PrepScore {
   /** Done out of what can be checked; null means there is nothing to check with yet (no data from the game). */
@@ -136,6 +145,7 @@ export interface PrepPlan {
 }
 
 export interface PrepPlanInput {
+  prices?: PriceView | null;
   step: Step;
   steps: Step[];
   progress: Progress;
@@ -328,11 +338,13 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       notedPool -= fromNotes;
       rest -= fromNotes;
       let fromBank = 0;
-      if (rest > 0 && known && bankKnown) {
+      if (rest > 0 && known) {
         fromBank = Math.min(bankPool, rest);
         bankPool -= fromBank;
         rest -= fromBank;
-        g.missing += rest;
+        // Spend the confirmed lower bound even when other tiers/sources are unread.
+        if (bankKnown) g.missing += rest;
+        else g.unknown += rest;
       } else if (rest > 0) {
         g.unknown += rest;
       }
@@ -358,7 +370,9 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
         // Doses, not potions: the shortfall and the sizes that cover it; Shopping prices every size and names the package.
         action = { kind: 'BUY', label: shortText(t.line.nameEn, g.missing), href: '#/shopping' };
       } else if (where === 'MISSING') {
-        const plan = planSources({ name: t.line.nameEn, need: g.missing, detail: t.line.id !== undefined ? detail(t.line.id) : undefined, manualKey: t.line.key }, state);
+        const plan = planSources({ name: t.line.nameEn, need: g.missing, detail: t.line.id !== undefined ? detail(t.line.id) : undefined, manualKey: t.line.key,
+          ...(i.prices !== undefined ? { gePrice: itemPrice(i.prices, t.line.nameEn, t.line.id, g.missing).unit } : {}),
+        }, state);
         // No source the player can surely use (only a guild shop behind an unconfirmed door, say): the route's own way to get it, the shop as an "or".
         const maybe = plan.alternatives.find((o) => o.kind === 'shop' && o.access !== 'open');
         action = !plan.primary && maybe && t.line.howToGet
@@ -393,8 +407,43 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
     }
   }
 
+  const equipmentNeeds = preflightItems(step).filter(r => r.equip);
+  for (const l of lines) {
+    const required = equipmentNeeds.find(r => r.nameEn === l.name);
+    if (!required || !l.usedIn.includes(step.id)) continue;
+    l.equip = true;
+    const accepted = new Set([required.nameEn, ...(required.alt ?? [])].map(nameKey));
+    const worn = countWorn(wornItemsOf(state), n => accepted.has(nameKey(n)));
+    if (state.connected && state.equipmentKnown && worn.count >= required.count) {
+      l.where = 'EQUIPPED';
+      l.have.equipped = worn.count;
+      l.toGet = 0;
+      l.bagShortfall = 0;
+      delete l.action;
+      delete l.unnote;
+    } else if (!state.connected || !state.equipmentKnown || !worn.known) {
+      l.where = 'UNKNOWN';
+      l.action = { kind: 'CONNECT', label: 'Refresh RuneLite equipment so worn quantities can be checked', href: '#/settings' };
+    } else if (l.where !== 'INVENTORY' && l.where !== 'EQUIPPED') {
+      continue;
+    } else {
+      l.where = 'INVENTORY';
+      l.action = { kind: 'UPGRADE', label: `Equip ${l.name}` };
+    }
+  }
+
   // Made items: if one is missing, its ingredients are planned too.
   for (const l of [...lines]) lines.push(...recipeLines(l, step, state));
+
+  // Price physical quantities once for every consumer. Unknown/untradeable items get no fabricated GE value.
+  if (i.prices !== undefined) for (const l of lines) {
+    if (l.unit === 'dose' || l.name.toLowerCase() === 'coins') continue;
+    const row = trip.lines.find(t => t.line.nameEn === l.name);
+    const id = row?.line.id;
+    const d = id !== undefined ? detail(id) : undefined;
+    const price = marketItemPrice(i.prices, l.name, id, l.count, Boolean(d?.gePrice));
+    if (price) l.marketPrice = price;
+  }
 
   // Recommended: not needed for the step but it saves time; we do not force it: that is an "improvement".
   const window = tripWindow(i.steps, i.progress, step.id, Math.max(0, ids.length - 1));
@@ -428,8 +477,9 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
       key: `upgrade:${up.recommendedItem}`, name: up.recommendedItem, count: 1, exact: true,
       where: 'MISSING', have: { bag: null, noted: 0, bank: null, equipped: 0 }, toGet: 1, priority: 'OPTIMIZATION', timing: 'NOW',
       action: afford
-        ? { kind: 'UPGRADE', label: `Buy ${up.recommendedItem}${up.npc ? ` from ${up.npc}` : ''}${cost ? `, ~${gp(cost)} gp` : ''}`, ...(cost ? { price: cost } : {}), ...(nav ? { nav } : {}) }
-        : { kind: 'EARN', label: `${up.recommendedItem}: ~${gp(cost ?? 0)} gp needed, not enough yet` },
+        ? { kind: 'UPGRADE', label: `Buy ${up.recommendedItem}${up.npc ? ` from ${up.npc}` : ''}${cost ? `, ~${gp(cost)} gp${up.priceLabel ? ` (${up.priceLabel})` : ''}` : ', Price unavailable'}`, ...(cost ? { price: cost } : {}), ...(nav ? { nav } : {}) }
+        : { kind: 'EARN', label: `${up.recommendedItem}: ~${gp(cost ?? 0)} gp needed${up.priceLabel ? ` (${up.priceLabel})` : ''}, not enough yet` },
+      ...(!up.shop && up.geQuote ? { marketPrice: up.geQuote } : {}),
       why: [up.currentItem ? `Better than ${up.currentItem}` : '', up.reason ?? ''].filter(Boolean).join(' · ') || 'Faster than the current tool',
       usedIn: [step.id],
     });
@@ -452,7 +502,7 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
 
   const stepOrder = (l: PrepLine) => (l.usedIn[0] ? ids.indexOf(l.usedIn[0]) : 99);
   lines.sort((a, b) => ORDER[a.priority] - ORDER[b.priority] || TIMING[a.timing] - TIMING[b.timing] || stepOrder(a) - stepOrder(b) || (a.key < b.key ? -1 : 1));
-  const satisfiedOf = (l: PrepLine) => l.where === 'INVENTORY' || l.where === 'EQUIPPED';
+  const satisfiedOf = prepSatisfied;
   const now = lines.filter((l) => l.timing === 'NOW' && !satisfiedOf(l));
   const soon = lines.filter((l) => l.timing === 'SOON' && !satisfiedOf(l));
   const byTheWay = lines.filter((l) => l.timing === 'IN_STEP');
