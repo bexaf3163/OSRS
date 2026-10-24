@@ -110,6 +110,8 @@
  .shop-cell::before { display:block; content:attr(data-label); font-size:.75rem; font-weight:600; color:var(--muted); }
  .shop-item::before,.shop-actions::before { display:none; }
 }
+/* Settings has one entry: the sidebar's while it is shown, the top bar's gear when it is not (compact view, narrow window). */
+@media(min-width:1000px) { :root .app-shell:not(.is-compact) .topbar-actions > .topbar-settings { display:none; } }
 .app-shell.is-compact { display:block; }
 .app-shell.is-compact .app-sidebar { display:none; }
 .app-shell.is-compact .mobile-brand,.app-shell.is-compact .mobile-mode { display:flex; }

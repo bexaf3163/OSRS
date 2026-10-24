@@ -154,7 +154,7 @@ export function App() {
               <span className="search-trigger-text">Search</span>
               <kbd>/</kbd>
             </button>
-            <a href="#/settings" className={`icon-btn ${route.page === 'settings' ? 'is-active' : ''}`} aria-label="Settings"
+            <a href="#/settings" className={`icon-btn topbar-settings ${route.page === 'settings' ? 'is-active' : ''}`} aria-label="Settings"
               aria-current={route.page === 'settings' ? 'page' : undefined}>
               <IconSettings /><span className="settings-link-label">Settings</span>
             </a>
