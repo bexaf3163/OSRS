@@ -148,6 +148,18 @@ Still open in the brief:
 - (d) Calibration against a real session (NOT REACHABLE while the owner is away).
 - (e) Processing: Smithing/Cooking/Crafting done in 2.79.0, Money smelting on the engine in 2.79.1. Left: Firemaking, Runecraft, Prayer, Magic utility, wine. Cook-on-the-spot done in 2.80.0.
 
+**Next actions, in order (state at 2.80.0; Claude's weekly limit is nearly used up, so Codex may continue from here):**
+1. **Firemaking on the processing engine.** The wiki has a `{{Skilling success chart}}` "Firemaking success chance" (Normal: low 64, high 512) on the Firemaking page, but no `{{Recipe}}` for lighting logs. Verify the lighting action length on the wiki ("Game tick/Action lengths" or "Free-to-play Firemaking training") before modelling it; never assume it. Burning in lines by a bank is facility-free, like gem cutting. Then map fm-* methods in `scripts/processing.defs.json`.
+2. **Combat gear upgrade variant (block a).** Apply `trainingRouter.toolUpgrade`'s rule to weapons: the hours saved by a better weapon vs its price, using `supplyPrice`. Check `services/gearAdvisor` first, so as not to duplicate the Gear page's upgrade advice.
+3. **Cash before suggesting a purchase:** the tool/weapon upgrade line should say when the player's known coins (`state.coins`) cannot cover the price, and say nothing when the coins are unknown.
+4. **Runecraft, Prayer, Magic utility, wine:** add them to the processing registry the same way (wiki `{{Recipe}}` + defs), never per-method code.
+5. **Ranged/melee "bankedRanged" special case** in `trainingRouter.compare` (`rank()`) predates `BANK_SETUP_HOURS`. Check whether the general bank-only setup rule now covers it, and remove the special case only if every ranged test stays green.
+6. **Calibration (d)** needs a real play session with the owner (NOT REACHABLE).
+
+Watch-outs:
+- `fishingClimb` "the pick settles…" is an exhaustive test with an explicit 20 s timeout. Do not lower it.
+- Releases: a `package.json` version push to main triggers Release. Wait for one Release run to finish before pushing the next version.
+
 ## 5b. What each engine knows, assumes and does not support
 
 | Engine | Verified game facts (source) | Player observations | Model assumptions (bounded, disclosed) | Unknown / unsupported |
