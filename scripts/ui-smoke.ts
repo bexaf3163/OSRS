@@ -131,9 +131,41 @@ async function open(browser: Browser, width: number, mock: Mock, hash: string): 
       return r.fulfill({ json: { timestamp: now, data: Object.fromEntries(Object.values(rows).map((x) => [x.id, { avgHighPrice: x.avgHigh, highPriceVolume: x.highVolume, avgLowPrice: x.avgLow, lowPriceVolume: x.lowVolume }])) } });
     });
   }
-  await page.goto(BASE + hash);
+  await gotoServed(page, BASE + hash);
   await page.waitForTimeout(1200);
   return { page, errors };
+}
+
+// The address is set explicitly: without --host the server on some machines (GitHub CI) listens on IPv6 ::1 only, and 127.0.0.1 does not answer.
+// On the release runner the preview server has twice died mid-run (every later page: ERR_CONNECTION_FAILED): open() starts it again once and says
+// what the server printed, instead of failing every scenario after it.
+let server: ReturnType<typeof spawn> | null = null;
+let serverLog = '';
+async function startServer() {
+  server = spawn(process.execPath, ['node_modules/vite/bin/vite.js', 'preview', '--host', '127.0.0.1', '--port', String(PORT), '--strictPort'], { stdio: ['ignore', 'pipe', 'pipe'] });
+  const keep = (b: Buffer) => { serverLog = (serverLog + b.toString()).slice(-4000); };
+  server.stdout?.on('data', keep);
+  server.stderr?.on('data', keep);
+  let up = false;
+  for (let i = 0; i < 150 && !up; i++) {
+    up = await fetch(BASE).then((r) => r.ok).catch(() => false);
+    if (!up) await new Promise((r) => setTimeout(r, 200));
+  }
+  if (!up) throw new Error(`The preview server did not come up on ${BASE} — run npm run build first`);
+}
+function stopServer() { server?.kill(); }
+let restarts = 0;
+async function gotoServed(page: Page, url: string) {
+  try {
+    await page.goto(url);
+  } catch (e) {
+    if (!/ERR_CONNECTION_(FAILED|REFUSED|RESET)/.test(String(e)) || restarts >= 2) throw e;
+    restarts++;
+    console.log(`  (the preview server stopped answering; restarting it. Its last output: ${serverLog.trim().slice(-600) || 'none'}; exit code ${server?.exitCode ?? 'running'})`);
+    server?.kill();
+    await startServer();
+    await page.goto(url);
+  }
 }
 
 const failures: string[] = [];
@@ -2652,15 +2684,8 @@ async function accountSyncProofScenarios(browser: Browser) {
   }
 }
 
-// The address is set explicitly: without --host the server on some machines (GitHub CI) listens on IPv6 ::1 only, and 127.0.0.1 does not answer.
-const server = spawn(process.execPath, ['node_modules/vite/bin/vite.js', 'preview', '--host', '127.0.0.1', '--port', String(PORT), '--strictPort'], { stdio: 'ignore' });
 try {
-  let up = false;
-  for (let i = 0; i < 150 && !up; i++) {
-    up = await fetch(BASE).then((r) => r.ok).catch(() => false);
-    if (!up) await new Promise((r) => setTimeout(r, 200));
-  }
-  if (!up) throw new Error(`The preview server did not come up on ${BASE} — run npm run build first`);
+  await startServer();
   const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
   try {
     await run(browser);
@@ -2668,7 +2693,7 @@ try {
     await browser.close();
   }
 } finally {
-  server.kill();
+  stopServer();
 }
 console.log(failures.length ? `\nTotal: ${failures.length} failed` : '\nTotal: everything passed');
 process.exit(failures.length ? 1 : 0);
