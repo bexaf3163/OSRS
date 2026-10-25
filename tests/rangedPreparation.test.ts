@@ -10,7 +10,7 @@ import { createReadinessEngine } from '../src/lib/readinessEngine';
 import { toInGameTarget, type GearItem } from '../src/services/runeliteBridge';
 import { trainingMethods, viewMethod } from '../src/lib/trainingRouter';
 import { market } from './funding/market';
-import type { Market } from '../src/lib/combatRates';
+import type { Market } from '../src/lib/methodRates';
 
 const base = stepById.get('S6-01')!;
 function scenario(level: number, equipment: GearItem[] = [], stock: Record<string, { carried?: number; bank?: number }> = {}, defence: number | null = 1, complete = true, trade: Market = {}) {

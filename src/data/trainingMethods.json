@@ -78,7 +78,7 @@
       "cost": "free",
       "risk": "none",
       "where": "Port Sarim: willow trees east of the Rusty Anchor Inn",
-      "note": "Use the nearby dock deposit box for useful logs, or drop unwanted logs. The arrow marks the Port Sarim area; look east of the inn for Willow trees. Draynor is an alternative near a bank, but dark wizards there can attack low-level players. Rates depend on your axe, level and competition.",
+      "note": "Bank useful logs or drop unwanted ones. With your levels and axe known, the app picks the willow spot and says whether the bank walk pays. Rates depend on your axe, level and competition.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Woodcutting_training",
       "place": "Port Sarim",
       "objectNames": [
@@ -402,7 +402,7 @@
       "cost": "free",
       "risk": "none",
       "where": "South-east Varrock mine; use the iron rocks.",
-      "note": "Drop unwanted ore for XP or bank it if you need the materials. Use a pickaxe your Mining level allows; it can stay in your bag. This default avoids the aggressive scorpions in Al Kharid mine.",
+      "note": "Drop unwanted ore for XP or bank it if you need the materials. Use a pickaxe your Mining level allows; it can stay in your bag. The app avoids a mine whose monsters would attack you (the scorpions of Al Kharid mine attack combat level 28 or lower).",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Mining_training",
       "place": "South-east Varrock mine",
       "objectNames": [

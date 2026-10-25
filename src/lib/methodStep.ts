@@ -20,7 +20,11 @@ import { healsOf } from './combatEstimate';
 export const GOAL_REACHED = 'goal-reached';
 export const UNKNOWN_GOAL_PREFIX = 'goal-unknown:';
 /** Resolved supplies travel with the method pick, as combat/food projections already do; the store never rebuilds a loadout from stale state. */
-export type TrainingPick = string | { methodId: string; needs: MethodNeed[]; name?: string };
+/** A picked method: its id, or with what the player needs for it, a name for this player, and the spot the gathering engine chose (methodRates.ts). */
+export type TrainingPick = string | { methodId: string; needs: MethodNeed[]; name?: string; spot?: { label: string; x: number; y: number; plane: number }; where?: string; warning?: string };
+
+/** The method a pick names, whatever its form. */
+export const pickedMethodId = (pick: TrainingPick): string => (typeof pick === 'string' ? pick : pick.methodId);
 
 interface RawMethod { id: string; skills: string[]; name: string; from: number; to: number | null; needs?: MethodNeed[]; place?: string; objectNames?: string[]; npcNames?: string[]; where: string; note?: string }
 
@@ -96,7 +100,7 @@ export function methodPoint(methodId: string): MapLocation | null {
  */
 export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): Step {
   if (!step.followsMethod || !pick) return step;
-  const id = typeof pick === 'string' ? pick : pick.methodId;
+  const id = pickedMethodId(pick);
   if (id.startsWith(UNKNOWN_GOAL_PREFIX)) {
     const skill = id.slice(UNKNOWN_GOAL_PREFIX.length);
     if (!followedGoals(step).some(g => g.skill === skill)) return step;
@@ -115,7 +119,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
     };
   }
   const raw = METHODS.get(id);
-  const m = raw && typeof pick !== 'string' && pick.name ? { ...raw, name: pick.name } : raw;
+  const m = raw && typeof pick !== 'string' ? { ...raw, ...(pick.name ? { name: pick.name } : {}), ...(pick.where ? { where: pick.where } : {}) } : raw;
   const goals = followedGoals(step);
   const goal = goals.find(g => m?.skills.includes(g.skill));
   if (!m || !goal) return step;
@@ -123,7 +127,8 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
   const gates = needs.filter((n): n is Extract<MethodNeed, { type: 'skill' | 'quest' }> => n.type === 'skill' || n.type === 'quest');
   const requirements = [...(step.requirements ?? []).filter(r => r.type !== 'skill' || !gates.some(n => n.type === 'skill' && n.skill === r.skill && n.min >= r.min)), ...gates];
   const itemsRequired = needs.map((n) => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null);
-  const at = methodPoint(id);
+  const chosen = typeof pick !== 'string' ? pick.spot : undefined;
+  const at = chosen ? { x: chosen.x, y: chosen.y, plane: chosen.plane, label: `${m.name} — ${chosen.label}` } : methodPoint(id);
   return {
     ...step,
     followsMethod: goal.skill,
@@ -134,6 +139,8 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
       where: m.where, how: `Train ${goal.skill} to ${goal.target}: ${m.name}. ${m.note ?? ''}`.trim(),
       quickSteps: ['Bank finished-skill tools and surplus supplies before withdrawing the current batch.', `Prepare the listed supplies for ${m.name}.`, `Train ${goal.skill} to ${goal.target} at ${m.where}. ${m.note ?? ''}`.trim()],
     } : {}),
+    // The engine's one safety line for its spot (aggressive NPCs that attack this player) joins the step's own warning.
+    ...(typeof pick !== 'string' && pick.warning ? { warning: [step.warning, pick.warning].filter(Boolean).join(' ') } : {}),
     // The static climb contains future places. Once a method is selected, map and plugin use only its point.
     mapLocation: at ?? undefined, resourceSpots: at ? [at] : [],
     ...(step.inGame ? { inGame: {

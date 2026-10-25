@@ -6,9 +6,10 @@ import { buildPlayerState } from '../src/lib/playerState';
 import { emptyProgress } from '../src/lib/progress';
 import { nameKey, type OwnedItem } from '../src/lib/checklist';
 import { stepReadiness } from '../src/lib/readiness';
-import { GOAL_REACHED, followedGoal, methodPoint, methodToolNames, withTrainingMethod } from '../src/lib/methodStep';
+import { GOAL_REACHED, followedGoal, methodPoint, methodToolNames, pickedMethodId, withTrainingMethod } from '../src/lib/methodStep';
 import { toInGameTarget } from '../src/services/runeliteBridge';
 import { pickMethods, samePicks } from '../src/lib/methodPick';
+import { SKILLING } from '../src/lib/skillingRates';
 import { trainingMethods } from '../src/lib/trainingRouter';
 import type { PlayStyle } from '../src/lib/playStyle';
 
@@ -37,7 +38,8 @@ function stateAt(fishing: number | null, bag: Record<string, number> = {}, cooki
 function resolved(fishing: number | null, bag: Record<string, number> = {}, style: PlayStyle = 'chill', cooking = 30) {
   const state = stateAt(fishing, bag, cooking);
   const picks = pickMethods([step], state, 'f2p', style);
-  return { state, pick: picks[step.id] as string | undefined, step: withTrainingMethod(step, picks[step.id]) };
+  const raw = picks[step.id];
+  return { state, pick: raw === undefined ? undefined : pickedMethodId(raw), raw, step: withTrainingMethod(step, raw) };
 }
 
 const needs = (s: typeof step) => (s.itemsRequired ?? []).map((i) => `${i.nameEn}${typeof i.amount === 'number' && i.amount > 1 ? ` x${i.amount}` : ''}`);
@@ -122,8 +124,10 @@ describe('S6-02 follows the training method of the real level', () => {
         expect(here, `${style} ${level}`).toBeGreaterThanOrEqual(0);
         expect(here, `${style} ${level}: moved back`).toBeGreaterThanOrEqual(at);
         at = here;
+        // The target is a spot of the method's own resources (skilling.json), within a few tiles of the method's place.
         const p = r.step.mapLocation!;
-        expect({ x: p.x, y: p.y }, `${style} ${level}`).toEqual({ x: LOCATIONS[m.place!].x, y: LOCATIONS[m.place!].y });
+        expect(SKILLING.spots.some((sp) => SKILLING.methods[m.id].includes(sp.resource) && sp.place.x === p.x && sp.place.y === p.y), `${style} ${level}`).toBe(true);
+
         expect(r.step.inGame?.highlightItems).toEqual((r.step.itemsRequired ?? []).map((i) => i.nameEn));
       }
       // A newer unlock need not replace a faster already-unlocked method.
@@ -133,7 +137,8 @@ describe('S6-02 follows the training method of the real level', () => {
 
   it('the place switches at 20 and remains at useful fly fishing after 40', () => {
     const at = (l: number) => resolved(l).step.mapLocation!.label;
-    expect(at(19)).toContain('Draynor Village');
+    // A net or bait spot. While the combat level is unknown, never the one among the Draynor dark wizards (they attack combat 14 or lower).
+    expect(at(19)).toMatch(/Lumbridge Swamp|Al Kharid/);
     expect(at(20)).toContain('Barbarian Village');
     expect(at(39)).toContain('Barbarian Village');
     expect(at(40)).toContain('Barbarian Village');
@@ -143,12 +148,14 @@ describe('S6-02 follows the training method of the real level', () => {
   it('a selected method has one matching map point and game tile, rather than future methods mixed into its target', () => {
     for (const [level, bag] of [[1, {}], [25, {}], [42, { 'Lobster pot': 1 }]] as const) {
       const r = resolved(level, bag);
-      const at = methodPoint(r.pick!)!;
-      expect(stepPoints(r.step)).toEqual([at]);
+      // One point: the spot the gathering engine chose for this player, else the method's own place.
+      const spot = typeof r.raw === 'object' ? r.raw.spot : undefined;
+      const at = spot ? { x: spot.x, y: spot.y, plane: spot.plane } : methodPoint(r.pick!)!;
+      expect(stepPoints(r.step)).toMatchObject([at]);
       expect(initialPoint(r.step)).toBe(0);
       const payload = toInGameTarget(r.step)!;
       expect(payload.worldPoint).toMatchObject(at);
-      expect(payload.groundTiles).toEqual([at]);
+      expect(payload.groundTiles).toMatchObject([at]);
       expect(payload.completionTrigger).toEqual(step.inGame!.completionTrigger);
       expect(payload.watchItems).toEqual(expect.arrayContaining(methodToolNames(step)));
     }
@@ -186,8 +193,9 @@ describe('S6-02 follows the training method of the real level', () => {
       const owned = { bankSeen: true, items: new Map(tracked.map((n) => [nameKey(n), { name: n, carried: bag[n] ?? 0, noted: 0, bank: 0 } as OwnedItem])) };
       const state = buildPlayerState({ mode: 'f2p', stats: { fishing: level, cooking: 30 }, progress: emptyProgress(), gear: null, questsDone: null, owned, connected: true });
       const pick = pickMethods([step], state, 'f2p', style)[step.id];
-      if (pick !== undefined && typeof pick !== 'string') throw new Error('Fishing unexpectedly received a ranged loadout');
-      picks.push(pick);
+      // A fishing pick carries its spot (skillingRates.ts), never a ranged loadout's kit.
+      if (pick !== undefined && typeof pick !== 'string' && pick.needs.some((n) => n.type === 'item' && /arrow|bow/i.test(n.name))) throw new Error('Fishing unexpectedly received a ranged loadout');
+      picks.push(pick === undefined ? undefined : pickedMethodId(pick));
       const r = withTrainingMethod(step, pick);
       tracked = [...(r.itemsRequired ?? []).map((x) => x.nameEn), ...(alsoTrackEveryMethod ? methodToolNames(step) : [])];
     }

@@ -5,7 +5,9 @@ import { navPayload } from './places';
 import type { NavTargetPayload } from '../services/runeliteBridge';
 import type { TrainingMethod } from './trainingRouter';
 
-export function trainingNav(m: Pick<TrainingMethod, 'place' | 'objectNames'>): NavTargetPayload | null {
+export function trainingNav(m: Pick<TrainingMethod, 'place' | 'objectNames' | 'spot'>): NavTargetPayload | null {
+  // The spot the gathering engine picked for this player wins over the method's general place (both are wiki-checked points).
+  if (m.spot) return { label: m.spot.label, x: m.spot.place.x, y: m.spot.place.y, plane: m.spot.place.plane, ...(m.objectNames ? { objectNames: m.objectNames } : {}) };
   if (!m.place) return null;
   const p = matchStrict(m.place);
   return p ? { ...navPayload({ kind: 'city', location: m.place }, p), ...(m.objectNames ? { objectNames: m.objectNames } : {}) } : null;

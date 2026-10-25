@@ -4,7 +4,7 @@
 import { describe, expect, it } from 'vitest';
 import { buildPlayerState, type PlayerState } from '../src/lib/playerState';
 import { adviseTraining, trainingMethods, type TrainingMethod } from '../src/lib/trainingRouter';
-import { methodRate } from '../src/lib/combatRates';
+import { methodRate } from '../src/lib/methodRates';
 import { attacksToKill } from '../src/lib/combatEstimate';
 import { TRAINER_SPOTS } from '../src/lib/combatRoute/spots';
 import { market } from './funding/market';

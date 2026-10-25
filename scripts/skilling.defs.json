@@ -1,0 +1,409 @@
+{
+  "about": "The gathering spots of the non-combat skills, read by scripts/build-skilling.ts against the OSRS Wiki. A resource names its wiki object (spawns), the page with its skilling success chart, its products (XP and level from the products' info templates) and its tool; a spot names one spawn group of the object's ObjectLocLines (exact location text) and the bank players use from it (a majorLocations.json bank), or no bank (drop only). A method of trainingMethods.json lists the resources it trains. Members content is added the same way: members spawn groups are skipped on a free account by the engine, not here.",
+  "reach": 60,
+  "hostiles": {
+    "about": "Aggressive NPCs checked at every spot: each page's {{Infobox Monster}} must say aggressive, and every one of its free {{LocLine}} groups within range tiles of a spot is attached to that spot with its levels. Add a page here and rebuild; the engine applies the wiki's aggression rule (combat level at most twice the NPC's) to every spot.",
+    "range": 15,
+    "pages": [
+      "Scorpion",
+      "Dark wizard"
+    ]
+  },
+  "actionLengths": {
+    "page": "Game tick/Action lengths",
+    "woodcutting": {
+      "ticks": 4,
+      "evidence": "Chance of cutting a log from any type of tree"
+    },
+    "net": {
+      "ticks": 6,
+      "evidence": "anchovies, shrimp"
+    },
+    "bait": {
+      "ticks": 5,
+      "evidence": "herring, sardine"
+    },
+    "fly": {
+      "ticks": 5,
+      "evidence": "Trout, salmon, pike"
+    },
+    "cage": {
+      "ticks": 6,
+      "evidence": "Lobsters, tuna, swordfish"
+    },
+    "harpoon": {
+      "ticks": 6,
+      "evidence": "Lobsters, tuna, swordfish"
+    }
+  },
+  "tools": {
+    "axe": {
+      "skill": "woodcutting",
+      "page": "Axe",
+      "tiers": [
+        "Bronze axe",
+        "Iron axe",
+        "Steel axe",
+        "Black axe",
+        "Mithril axe",
+        "Adamant axe",
+        "Rune axe",
+        "Dragon axe"
+      ]
+    },
+    "pickaxe": {
+      "skill": "mining",
+      "page": "Pickaxe",
+      "tiers": [
+        "Bronze pickaxe",
+        "Iron pickaxe",
+        "Steel pickaxe",
+        "Black pickaxe",
+        "Mithril pickaxe",
+        "Adamant pickaxe",
+        "Rune pickaxe",
+        "Dragon pickaxe"
+      ]
+    }
+  },
+  "resources": [
+    {
+      "id": "tree",
+      "skill": "woodcutting",
+      "object": "Tree",
+      "chart": "Tree",
+      "products": [
+        "Logs"
+      ],
+      "tool": "axe",
+      "ticks": "woodcutting"
+    },
+    {
+      "id": "oak",
+      "skill": "woodcutting",
+      "object": "Oak tree",
+      "chart": "Oak tree",
+      "products": [
+        "Oak logs"
+      ],
+      "tool": "axe",
+      "ticks": "woodcutting"
+    },
+    {
+      "id": "willow",
+      "skill": "woodcutting",
+      "object": "Willow tree",
+      "chart": "Willow tree",
+      "products": [
+        "Willow logs"
+      ],
+      "tool": "axe",
+      "ticks": "woodcutting"
+    },
+    {
+      "id": "yew",
+      "skill": "woodcutting",
+      "object": "Yew tree",
+      "chart": "Yew tree",
+      "products": [
+        "Yew logs"
+      ],
+      "tool": "axe",
+      "ticks": "woodcutting"
+    },
+    {
+      "id": "copper",
+      "skill": "mining",
+      "object": "Copper rocks",
+      "chart": "Copper rocks",
+      "products": [
+        "Copper ore"
+      ],
+      "tool": "pickaxe"
+    },
+    {
+      "id": "tin",
+      "skill": "mining",
+      "object": "Tin rocks",
+      "chart": "Tin rocks",
+      "products": [
+        "Tin ore"
+      ],
+      "tool": "pickaxe"
+    },
+    {
+      "id": "iron",
+      "skill": "mining",
+      "object": "Iron rocks",
+      "chart": "Iron rocks",
+      "products": [
+        "Iron ore"
+      ],
+      "tool": "pickaxe"
+    },
+    {
+      "id": "net",
+      "skill": "fishing",
+      "object": "Fishing spot (small net, bait)",
+      "chart": "Raw shrimps",
+      "products": [
+        "Raw anchovies",
+        "Raw shrimps"
+      ],
+      "tool": "Small fishing net",
+      "ticks": "net"
+    },
+    {
+      "id": "bait",
+      "skill": "fishing",
+      "object": "Fishing spot (small net, bait)",
+      "chart": "Raw sardine",
+      "products": [
+        "Raw herring",
+        "Raw sardine"
+      ],
+      "tool": "Fishing rod",
+      "bait": "Fishing bait",
+      "ticks": "bait"
+    },
+    {
+      "id": "fly",
+      "skill": "fishing",
+      "object": "Rod Fishing spot (lure, bait)",
+      "chart": "Raw trout",
+      "products": [
+        "Raw salmon",
+        "Raw trout"
+      ],
+      "tool": "Fly fishing rod",
+      "bait": "Feather",
+      "ticks": "fly"
+    },
+    {
+      "id": "cage",
+      "skill": "fishing",
+      "object": "Fishing spot (cage, harpoon)",
+      "chart": "Raw lobster",
+      "products": [
+        "Raw lobster"
+      ],
+      "tool": "Lobster pot",
+      "ticks": "cage"
+    },
+    {
+      "id": "harpoon",
+      "skill": "fishing",
+      "object": "Fishing spot (cage, harpoon)",
+      "chart": "Raw tuna",
+      "products": [
+        "Raw swordfish",
+        "Raw tuna"
+      ],
+      "tool": "Harpoon",
+      "ticks": "harpoon"
+    }
+  ],
+  "spots": [
+    {
+      "resource": "tree",
+      "near": "Lumbridge",
+      "why": "Normal trees grow everywhere (the wiki lists no spawns): cut and drop, or burn."
+    },
+    {
+      "resource": "oak",
+      "near": "Draynor Bank",
+      "why": "Oak trees grow in most towns (the wiki lists no spawns): cut and drop."
+    },
+    {
+      "resource": "willow",
+      "location": "[[Draynor Village]]",
+      "bank": "Draynor Bank"
+    },
+    {
+      "resource": "willow",
+      "location": "[[Edgeville]]",
+      "bank": "Edgeville Bank"
+    },
+    {
+      "resource": "willow",
+      "location": "Southern [[Port Sarim]]",
+      "bank": "Draynor Bank"
+    },
+    {
+      "resource": "willow",
+      "location": "[[Lumbridge]]",
+      "bank": "Lumbridge Bank"
+    },
+    {
+      "resource": "yew",
+      "location": "[[Edgeville]]",
+      "bank": "Edgeville Bank"
+    },
+    {
+      "resource": "yew",
+      "location": "In the grounds behind the [[Varrock Palace]]",
+      "bank": "Grand Exchange bank"
+    },
+    {
+      "resource": "yew",
+      "location": "South of [[Falador]]",
+      "bank": "Falador East Bank"
+    },
+    {
+      "resource": "yew",
+      "location": "Next to the [[Lumberyard]]",
+      "bank": "Varrock East Bank"
+    },
+    {
+      "resource": "yew",
+      "location": "West of [[Lumbridge]]",
+      "bank": "Draynor Bank"
+    },
+    {
+      "resource": "copper",
+      "location": "[[South-east Varrock mine]]",
+      "bank": "Varrock East Bank"
+    },
+    {
+      "resource": "copper",
+      "location": "[[East Lumbridge Swamp mine]]",
+      "bank": "Lumbridge Bank"
+    },
+    {
+      "resource": "copper",
+      "location": "[[Al Kharid mine]]",
+      "bank": "Al Kharid Bank"
+    },
+    {
+      "resource": "copper",
+      "location": "[[Rimmington mine]]",
+      "bank": "Falador East Bank"
+    },
+    {
+      "resource": "tin",
+      "location": "[[South-east Varrock mine]]",
+      "bank": "Varrock East Bank"
+    },
+    {
+      "resource": "tin",
+      "location": "[[East Lumbridge Swamp mine]]",
+      "bank": "Lumbridge Bank"
+    },
+    {
+      "resource": "tin",
+      "location": "[[South-west Varrock mine]]",
+      "bank": "Varrock West Bank"
+    },
+    {
+      "resource": "tin",
+      "location": "[[Barbarian Village mine]]",
+      "bank": "Edgeville Bank"
+    },
+    {
+      "resource": "iron",
+      "location": "[[South-east Varrock mine]]",
+      "bank": "Varrock East Bank"
+    },
+    {
+      "resource": "iron",
+      "location": "[[Al Kharid mine]]",
+      "bank": "Al Kharid Bank"
+    },
+    {
+      "resource": "iron",
+      "location": "[[South-west Varrock mine]]",
+      "bank": "Varrock West Bank"
+    },
+    {
+      "resource": "iron",
+      "location": "[[Rimmington mine]]",
+      "bank": "Falador East Bank"
+    },
+    {
+      "resource": "net",
+      "location": "[[Draynor Village]]",
+      "bank": "Draynor Bank"
+    },
+    {
+      "resource": "net",
+      "location": "[[Al Kharid]]",
+      "bank": "Al Kharid Bank"
+    },
+    {
+      "resource": "net",
+      "location": "[[Lumbridge Swamp]]",
+      "bank": "Lumbridge Bank"
+    },
+    {
+      "resource": "bait",
+      "location": "[[Draynor Village]]",
+      "bank": "Draynor Bank"
+    },
+    {
+      "resource": "bait",
+      "location": "[[Al Kharid]]",
+      "bank": "Al Kharid Bank"
+    },
+    {
+      "resource": "bait",
+      "location": "[[Lumbridge Swamp]]",
+      "bank": "Lumbridge Bank"
+    },
+    {
+      "resource": "fly",
+      "location": "[[Barbarian Village]]",
+      "bank": "Edgeville Bank"
+    },
+    {
+      "resource": "fly",
+      "location": "[[Lumbridge]] in the river Lum",
+      "bank": "Lumbridge Bank"
+    },
+    {
+      "resource": "cage",
+      "location": "[[Musa Point]]",
+      "why": "No bank on foot from Karamja: the boat and the Port Sarim deposit box are not modelled yet, so the catch is dropped."
+    },
+    {
+      "resource": "harpoon",
+      "location": "[[Musa Point]]",
+      "why": "No bank on foot from Karamja: the boat and the Port Sarim deposit box are not modelled yet, so the catch is dropped."
+    }
+  ],
+  "methods": {
+    "wc-tree": [
+      "tree"
+    ],
+    "wc-oak": [
+      "oak"
+    ],
+    "wc-willow": [
+      "willow"
+    ],
+    "wc-yew": [
+      "yew"
+    ],
+    "fi-shrimp": [
+      "net"
+    ],
+    "fi-bait": [
+      "bait"
+    ],
+    "fi-fly": [
+      "fly"
+    ],
+    "fi-lobster": [
+      "cage"
+    ],
+    "fi-harpoon": [
+      "harpoon"
+    ],
+    "mi-ore": [
+      "copper",
+      "tin"
+    ],
+    "mi-iron": [
+      "iron"
+    ]
+  }
+}

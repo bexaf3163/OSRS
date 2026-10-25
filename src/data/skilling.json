@@ -1,0 +1,1028 @@
+{
+  "source": "scripts/skilling.defs.json checked against the OSRS Wiki (skilling success charts, info templates, tool tables, action lengths, ObjectLocLine spawns) by scripts/build-skilling.ts",
+  "generatedAt": "2026-10-25",
+  "tools": {
+    "axe": {
+      "skill": "woodcutting",
+      "tiers": [
+        {
+          "item": "Bronze axe",
+          "level": 1,
+          "wield": 1
+        },
+        {
+          "item": "Iron axe",
+          "level": 1,
+          "wield": 1
+        },
+        {
+          "item": "Steel axe",
+          "level": 6,
+          "wield": 5
+        },
+        {
+          "item": "Black axe",
+          "level": 11,
+          "wield": 10
+        },
+        {
+          "item": "Mithril axe",
+          "level": 21,
+          "wield": 20
+        },
+        {
+          "item": "Adamant axe",
+          "level": 31,
+          "wield": 30
+        },
+        {
+          "item": "Rune axe",
+          "level": 41,
+          "wield": 40
+        },
+        {
+          "item": "Dragon axe",
+          "level": 61,
+          "wield": 60
+        }
+      ]
+    },
+    "pickaxe": {
+      "skill": "mining",
+      "tiers": [
+        {
+          "item": "Bronze pickaxe",
+          "level": 1,
+          "wield": 1,
+          "ticks": 8
+        },
+        {
+          "item": "Iron pickaxe",
+          "level": 1,
+          "wield": 1,
+          "ticks": 7
+        },
+        {
+          "item": "Steel pickaxe",
+          "level": 6,
+          "wield": 5,
+          "ticks": 6
+        },
+        {
+          "item": "Black pickaxe",
+          "level": 11,
+          "wield": 10,
+          "ticks": 5
+        },
+        {
+          "item": "Mithril pickaxe",
+          "level": 21,
+          "wield": 20,
+          "ticks": 5
+        },
+        {
+          "item": "Adamant pickaxe",
+          "level": 31,
+          "wield": 30,
+          "ticks": 4
+        },
+        {
+          "item": "Rune pickaxe",
+          "level": 41,
+          "wield": 40,
+          "ticks": 3
+        },
+        {
+          "item": "Dragon pickaxe",
+          "level": 61,
+          "wield": 60,
+          "ticks": 2.83
+        }
+      ]
+    }
+  },
+  "resources": [
+    {
+      "id": "tree",
+      "skill": "woodcutting",
+      "object": "Tree",
+      "tool": "axe",
+      "ticks": 4,
+      "cascade": false,
+      "products": [
+        {
+          "name": "Logs",
+          "level": 1,
+          "xp": 25,
+          "respawn": [
+            35.4,
+            58.8
+          ]
+        }
+      ],
+      "byTool": {
+        "Bronze axe": {
+          "low": 64,
+          "high": 200
+        },
+        "Iron axe": {
+          "low": 96,
+          "high": 300
+        },
+        "Steel axe": {
+          "low": 128,
+          "high": 400
+        },
+        "Black axe": {
+          "low": 144,
+          "high": 450
+        },
+        "Mithril axe": {
+          "low": 160,
+          "high": 500
+        },
+        "Adamant axe": {
+          "low": 192,
+          "high": 600
+        },
+        "Rune axe": {
+          "low": 224,
+          "high": 700
+        },
+        "Dragon axe": {
+          "low": 240,
+          "high": 750
+        }
+      },
+      "lifetime": "one",
+      "source": "https://oldschool.runescape.wiki/w/Tree"
+    },
+    {
+      "id": "oak",
+      "skill": "woodcutting",
+      "object": "Oak tree",
+      "tool": "axe",
+      "ticks": 4,
+      "cascade": false,
+      "products": [
+        {
+          "name": "Oak logs",
+          "level": 15,
+          "xp": 37.5,
+          "respawn": [
+            8.4,
+            8.4
+          ]
+        }
+      ],
+      "byTool": {
+        "Bronze axe": {
+          "low": 32,
+          "high": 100
+        },
+        "Iron axe": {
+          "low": 48,
+          "high": 150
+        },
+        "Steel axe": {
+          "low": 64,
+          "high": 200
+        },
+        "Black axe": {
+          "low": 72,
+          "high": 225
+        },
+        "Mithril axe": {
+          "low": 80,
+          "high": 250
+        },
+        "Adamant axe": {
+          "low": 96,
+          "high": 300
+        },
+        "Rune axe": {
+          "low": 112,
+          "high": 350
+        },
+        "Dragon axe": {
+          "low": 120,
+          "high": 375
+        }
+      },
+      "lifetime": 45,
+      "source": "https://oldschool.runescape.wiki/w/Oak_tree"
+    },
+    {
+      "id": "willow",
+      "skill": "woodcutting",
+      "object": "Willow tree",
+      "tool": "axe",
+      "ticks": 4,
+      "cascade": false,
+      "products": [
+        {
+          "name": "Willow logs",
+          "level": 30,
+          "xp": 67.5,
+          "respawn": [
+            8.4,
+            8.4
+          ]
+        }
+      ],
+      "byTool": {
+        "Bronze axe": {
+          "low": 16,
+          "high": 50
+        },
+        "Iron axe": {
+          "low": 24,
+          "high": 75
+        },
+        "Steel axe": {
+          "low": 32,
+          "high": 100
+        },
+        "Black axe": {
+          "low": 36,
+          "high": 112
+        },
+        "Mithril axe": {
+          "low": 40,
+          "high": 125
+        },
+        "Adamant axe": {
+          "low": 48,
+          "high": 150
+        },
+        "Rune axe": {
+          "low": 56,
+          "high": 175
+        },
+        "Dragon axe": {
+          "low": 60,
+          "high": 187
+        }
+      },
+      "lifetime": 50,
+      "source": "https://oldschool.runescape.wiki/w/Willow_tree"
+    },
+    {
+      "id": "yew",
+      "skill": "woodcutting",
+      "object": "Yew tree",
+      "tool": "axe",
+      "ticks": 4,
+      "cascade": false,
+      "products": [
+        {
+          "name": "Yew logs",
+          "level": 60,
+          "xp": 175,
+          "respawn": [
+            59.4,
+            59.4
+          ]
+        }
+      ],
+      "byTool": {
+        "Bronze axe": {
+          "low": 4,
+          "high": 12
+        },
+        "Iron axe": {
+          "low": 6,
+          "high": 19
+        },
+        "Steel axe": {
+          "low": 8,
+          "high": 25
+        },
+        "Black axe": {
+          "low": 9,
+          "high": 28
+        },
+        "Mithril axe": {
+          "low": 10,
+          "high": 31
+        },
+        "Adamant axe": {
+          "low": 12,
+          "high": 37
+        },
+        "Rune axe": {
+          "low": 14,
+          "high": 44
+        },
+        "Dragon axe": {
+          "low": 15,
+          "high": 47
+        }
+      },
+      "lifetime": 190,
+      "source": "https://oldschool.runescape.wiki/w/Yew_tree"
+    },
+    {
+      "id": "copper",
+      "skill": "mining",
+      "object": "Copper rocks",
+      "tool": "pickaxe",
+      "cascade": false,
+      "products": [
+        {
+          "name": "Copper ore",
+          "level": 1,
+          "xp": 17.5,
+          "low": 100,
+          "high": 350,
+          "respawn": [
+            2.4,
+            2.4
+          ]
+        }
+      ],
+      "source": "https://oldschool.runescape.wiki/w/Copper_rocks"
+    },
+    {
+      "id": "tin",
+      "skill": "mining",
+      "object": "Tin rocks",
+      "tool": "pickaxe",
+      "cascade": false,
+      "products": [
+        {
+          "name": "Tin ore",
+          "level": 1,
+          "xp": 17.5,
+          "low": 100,
+          "high": 350,
+          "respawn": [
+            2.4,
+            2.4
+          ]
+        }
+      ],
+      "source": "https://oldschool.runescape.wiki/w/Tin_rocks"
+    },
+    {
+      "id": "iron",
+      "skill": "mining",
+      "object": "Iron rocks",
+      "tool": "pickaxe",
+      "cascade": false,
+      "products": [
+        {
+          "name": "Iron ore",
+          "level": 15,
+          "xp": 35,
+          "low": 96,
+          "high": 350,
+          "respawn": [
+            5.4,
+            5.4
+          ]
+        }
+      ],
+      "source": "https://oldschool.runescape.wiki/w/Iron_rocks"
+    },
+    {
+      "id": "net",
+      "skill": "fishing",
+      "object": "Fishing spot (small net, bait)",
+      "tool": "Small fishing net",
+      "ticks": 6,
+      "cascade": true,
+      "products": [
+        {
+          "name": "Raw anchovies",
+          "level": 15,
+          "xp": 40,
+          "low": 24,
+          "high": 128
+        },
+        {
+          "name": "Raw shrimps",
+          "level": 1,
+          "xp": 10,
+          "low": 48,
+          "high": 256
+        }
+      ],
+      "source": "https://oldschool.runescape.wiki/w/Raw_shrimps"
+    },
+    {
+      "id": "bait",
+      "skill": "fishing",
+      "object": "Fishing spot (small net, bait)",
+      "tool": "Fishing rod",
+      "bait": "Fishing bait",
+      "ticks": 5,
+      "cascade": true,
+      "products": [
+        {
+          "name": "Raw herring",
+          "level": 10,
+          "xp": 30,
+          "low": 24,
+          "high": 128
+        },
+        {
+          "name": "Raw sardine",
+          "level": 5,
+          "xp": 20,
+          "low": 32,
+          "high": 192
+        }
+      ],
+      "source": "https://oldschool.runescape.wiki/w/Raw_sardine"
+    },
+    {
+      "id": "fly",
+      "skill": "fishing",
+      "object": "Rod Fishing spot (lure, bait)",
+      "tool": "Fly fishing rod",
+      "bait": "Feather",
+      "ticks": 5,
+      "cascade": true,
+      "products": [
+        {
+          "name": "Raw salmon",
+          "level": 30,
+          "xp": 70,
+          "low": 16,
+          "high": 96
+        },
+        {
+          "name": "Raw trout",
+          "level": 20,
+          "xp": 50,
+          "low": 32,
+          "high": 192
+        }
+      ],
+      "source": "https://oldschool.runescape.wiki/w/Raw_trout"
+    },
+    {
+      "id": "cage",
+      "skill": "fishing",
+      "object": "Fishing spot (cage, harpoon)",
+      "tool": "Lobster pot",
+      "ticks": 6,
+      "cascade": false,
+      "products": [
+        {
+          "name": "Raw lobster",
+          "level": 40,
+          "xp": 90,
+          "low": 6,
+          "high": 95
+        }
+      ],
+      "source": "https://oldschool.runescape.wiki/w/Raw_lobster"
+    },
+    {
+      "id": "harpoon",
+      "skill": "fishing",
+      "object": "Fishing spot (cage, harpoon)",
+      "tool": "Harpoon",
+      "ticks": 6,
+      "cascade": true,
+      "products": [
+        {
+          "name": "Raw swordfish",
+          "level": 50,
+          "xp": 100,
+          "low": 4,
+          "high": 48
+        },
+        {
+          "name": "Raw tuna",
+          "level": 35,
+          "xp": 80,
+          "low": 8,
+          "high": 64
+        }
+      ],
+      "source": "https://oldschool.runescape.wiki/w/Raw_tuna"
+    }
+  ],
+  "spots": [
+    {
+      "resource": "tree",
+      "label": "Lumbridge",
+      "place": {
+        "x": 3188,
+        "y": 3220,
+        "plane": 0,
+        "label": "Lumbridge"
+      },
+      "members": false,
+      "why": "Normal trees grow everywhere (the wiki lists no spawns): cut and drop, or burn."
+    },
+    {
+      "resource": "oak",
+      "label": "Draynor Bank",
+      "place": {
+        "x": 3093,
+        "y": 3243,
+        "plane": 0,
+        "label": "Draynor Bank"
+      },
+      "members": false,
+      "why": "Oak trees grow in most towns (the wiki lists no spawns): cut and drop.",
+      "hostiles": [
+        {
+          "npc": "Dark wizard",
+          "levels": [
+            7
+          ],
+          "count": 2
+        }
+      ]
+    },
+    {
+      "resource": "willow",
+      "label": "Draynor Village",
+      "place": {
+        "x": 3088,
+        "y": 3234,
+        "plane": 0,
+        "label": "Draynor Village"
+      },
+      "count": 5,
+      "members": false,
+      "bank": "Draynor Bank",
+      "hostiles": [
+        {
+          "npc": "Dark wizard",
+          "levels": [
+            7
+          ],
+          "count": 2
+        }
+      ]
+    },
+    {
+      "resource": "willow",
+      "label": "Edgeville",
+      "place": {
+        "x": 3111,
+        "y": 3487,
+        "plane": 0,
+        "label": "Edgeville"
+      },
+      "count": 2,
+      "members": false,
+      "bank": "Edgeville Bank"
+    },
+    {
+      "resource": "willow",
+      "label": "Southern Port Sarim",
+      "place": {
+        "x": 3027,
+        "y": 3176,
+        "plane": 0,
+        "label": "Southern Port Sarim"
+      },
+      "count": 22,
+      "members": false,
+      "bank": "Draynor Bank"
+    },
+    {
+      "resource": "willow",
+      "label": "Lumbridge",
+      "place": {
+        "x": 3233,
+        "y": 3244,
+        "plane": 0,
+        "label": "Lumbridge"
+      },
+      "count": 2,
+      "members": false,
+      "bank": "Lumbridge Bank"
+    },
+    {
+      "resource": "yew",
+      "label": "Edgeville",
+      "place": {
+        "x": 3085,
+        "y": 3468,
+        "plane": 0,
+        "label": "Edgeville"
+      },
+      "count": 2,
+      "members": false,
+      "bank": "Edgeville Bank"
+    },
+    {
+      "resource": "yew",
+      "label": "In the grounds behind the Varrock Palace",
+      "place": {
+        "x": 3209,
+        "y": 3499,
+        "plane": 0,
+        "label": "In the grounds behind the Varrock Palace"
+      },
+      "count": 3,
+      "members": false,
+      "bank": "Grand Exchange bank"
+    },
+    {
+      "resource": "yew",
+      "label": "South of Falador",
+      "place": {
+        "x": 3019,
+        "y": 3315,
+        "plane": 0,
+        "label": "South of Falador"
+      },
+      "count": 4,
+      "members": false,
+      "bank": "Falador East Bank"
+    },
+    {
+      "resource": "yew",
+      "label": "Next to the Lumberyard",
+      "place": {
+        "x": 3270,
+        "y": 3470,
+        "plane": 0,
+        "label": "Next to the Lumberyard"
+      },
+      "count": 3,
+      "members": false,
+      "bank": "Varrock East Bank"
+    },
+    {
+      "resource": "yew",
+      "label": "West of Lumbridge",
+      "place": {
+        "x": 3151,
+        "y": 3230,
+        "plane": 0,
+        "label": "West of Lumbridge"
+      },
+      "count": 4,
+      "members": false,
+      "bank": "Draynor Bank"
+    },
+    {
+      "resource": "copper",
+      "label": "South-east Varrock mine",
+      "place": {
+        "x": 3286,
+        "y": 3364,
+        "plane": 0,
+        "label": "South-east Varrock mine"
+      },
+      "count": 9,
+      "members": false,
+      "bank": "Varrock East Bank"
+    },
+    {
+      "resource": "copper",
+      "label": "East Lumbridge Swamp mine",
+      "place": {
+        "x": 3229,
+        "y": 3145,
+        "plane": 0,
+        "label": "East Lumbridge Swamp mine"
+      },
+      "count": 5,
+      "members": false,
+      "bank": "Lumbridge Bank"
+    },
+    {
+      "resource": "copper",
+      "label": "Al Kharid mine",
+      "place": {
+        "x": 3297,
+        "y": 3315,
+        "plane": 0,
+        "label": "Al Kharid mine"
+      },
+      "count": 3,
+      "members": false,
+      "bank": "Al Kharid Bank",
+      "hostiles": [
+        {
+          "npc": "Scorpion",
+          "levels": [
+            14
+          ],
+          "count": 9
+        }
+      ]
+    },
+    {
+      "resource": "copper",
+      "label": "Rimmington mine",
+      "place": {
+        "x": 2977,
+        "y": 3247,
+        "plane": 0,
+        "label": "Rimmington mine"
+      },
+      "count": 5,
+      "members": false,
+      "bank": "Falador East Bank"
+    },
+    {
+      "resource": "tin",
+      "label": "South-east Varrock mine",
+      "place": {
+        "x": 3282,
+        "y": 3364,
+        "plane": 0,
+        "label": "South-east Varrock mine"
+      },
+      "count": 6,
+      "members": false,
+      "bank": "Varrock East Bank"
+    },
+    {
+      "resource": "tin",
+      "label": "East Lumbridge Swamp mine",
+      "place": {
+        "x": 3224,
+        "y": 3146,
+        "plane": 0,
+        "label": "East Lumbridge Swamp mine"
+      },
+      "count": 5,
+      "members": false,
+      "bank": "Lumbridge Bank"
+    },
+    {
+      "resource": "tin",
+      "label": "South-west Varrock mine",
+      "place": {
+        "x": 3176,
+        "y": 3369,
+        "plane": 0,
+        "label": "South-west Varrock mine"
+      },
+      "count": 8,
+      "members": false,
+      "bank": "Varrock West Bank"
+    },
+    {
+      "resource": "tin",
+      "label": "Barbarian Village mine",
+      "place": {
+        "x": 3080,
+        "y": 3420,
+        "plane": 0,
+        "label": "Barbarian Village mine"
+      },
+      "count": 5,
+      "members": false,
+      "bank": "Edgeville Bank"
+    },
+    {
+      "resource": "iron",
+      "label": "South-east Varrock mine",
+      "place": {
+        "x": 3286,
+        "y": 3369,
+        "plane": 0,
+        "label": "South-east Varrock mine"
+      },
+      "count": 4,
+      "members": false,
+      "bank": "Varrock East Bank"
+    },
+    {
+      "resource": "iron",
+      "label": "Al Kharid mine",
+      "place": {
+        "x": 3304,
+        "y": 3301,
+        "plane": 0,
+        "label": "Al Kharid mine"
+      },
+      "count": 9,
+      "members": false,
+      "bank": "Al Kharid Bank",
+      "hostiles": [
+        {
+          "npc": "Scorpion",
+          "levels": [
+            14
+          ],
+          "count": 9
+        }
+      ]
+    },
+    {
+      "resource": "iron",
+      "label": "South-west Varrock mine",
+      "place": {
+        "x": 3175,
+        "y": 3368,
+        "plane": 0,
+        "label": "South-west Varrock mine"
+      },
+      "count": 3,
+      "members": false,
+      "bank": "Varrock West Bank"
+    },
+    {
+      "resource": "iron",
+      "label": "Rimmington mine",
+      "place": {
+        "x": 2971,
+        "y": 3237,
+        "plane": 0,
+        "label": "Rimmington mine"
+      },
+      "count": 6,
+      "members": false,
+      "bank": "Falador East Bank"
+    },
+    {
+      "resource": "net",
+      "label": "Draynor Village",
+      "place": {
+        "x": 3086,
+        "y": 3227,
+        "plane": 0,
+        "label": "Draynor Village"
+      },
+      "count": 2,
+      "members": false,
+      "bank": "Draynor Bank",
+      "hostiles": [
+        {
+          "npc": "Dark wizard",
+          "levels": [
+            7
+          ],
+          "count": 2
+        }
+      ]
+    },
+    {
+      "resource": "net",
+      "label": "Al Kharid",
+      "place": {
+        "x": 3267,
+        "y": 3148,
+        "plane": 0,
+        "label": "Al Kharid"
+      },
+      "count": 2,
+      "members": false,
+      "bank": "Al Kharid Bank"
+    },
+    {
+      "resource": "net",
+      "label": "Lumbridge Swamp",
+      "place": {
+        "x": 3244,
+        "y": 3150,
+        "plane": 0,
+        "label": "Lumbridge Swamp"
+      },
+      "count": 5,
+      "members": false,
+      "bank": "Lumbridge Bank"
+    },
+    {
+      "resource": "bait",
+      "label": "Draynor Village",
+      "place": {
+        "x": 3086,
+        "y": 3227,
+        "plane": 0,
+        "label": "Draynor Village"
+      },
+      "count": 2,
+      "members": false,
+      "bank": "Draynor Bank",
+      "hostiles": [
+        {
+          "npc": "Dark wizard",
+          "levels": [
+            7
+          ],
+          "count": 2
+        }
+      ]
+    },
+    {
+      "resource": "bait",
+      "label": "Al Kharid",
+      "place": {
+        "x": 3267,
+        "y": 3148,
+        "plane": 0,
+        "label": "Al Kharid"
+      },
+      "count": 2,
+      "members": false,
+      "bank": "Al Kharid Bank"
+    },
+    {
+      "resource": "bait",
+      "label": "Lumbridge Swamp",
+      "place": {
+        "x": 3244,
+        "y": 3150,
+        "plane": 0,
+        "label": "Lumbridge Swamp"
+      },
+      "count": 5,
+      "members": false,
+      "bank": "Lumbridge Bank"
+    },
+    {
+      "resource": "fly",
+      "label": "Barbarian Village",
+      "place": {
+        "x": 3104,
+        "y": 3424,
+        "plane": 0,
+        "label": "Barbarian Village"
+      },
+      "count": 2,
+      "members": false,
+      "bank": "Edgeville Bank"
+    },
+    {
+      "resource": "fly",
+      "label": "Lumbridge in the river Lum",
+      "place": {
+        "x": 3238,
+        "y": 3252,
+        "plane": 0,
+        "label": "Lumbridge in the river Lum"
+      },
+      "count": 2,
+      "members": false,
+      "bank": "Lumbridge Bank"
+    },
+    {
+      "resource": "cage",
+      "label": "Musa Point",
+      "place": {
+        "x": 2925,
+        "y": 3181,
+        "plane": 0,
+        "label": "Musa Point"
+      },
+      "count": 3,
+      "members": false,
+      "why": "No bank on foot from Karamja: the boat and the Port Sarim deposit box are not modelled yet, so the catch is dropped."
+    },
+    {
+      "resource": "harpoon",
+      "label": "Musa Point",
+      "place": {
+        "x": 2925,
+        "y": 3181,
+        "plane": 0,
+        "label": "Musa Point"
+      },
+      "count": 3,
+      "members": false,
+      "why": "No bank on foot from Karamja: the boat and the Port Sarim deposit box are not modelled yet, so the catch is dropped."
+    }
+  ],
+  "methods": {
+    "wc-tree": [
+      "tree"
+    ],
+    "wc-oak": [
+      "oak"
+    ],
+    "wc-willow": [
+      "willow"
+    ],
+    "wc-yew": [
+      "yew"
+    ],
+    "fi-shrimp": [
+      "net"
+    ],
+    "fi-bait": [
+      "bait"
+    ],
+    "fi-fly": [
+      "fly"
+    ],
+    "fi-lobster": [
+      "cage"
+    ],
+    "fi-harpoon": [
+      "harpoon"
+    ],
+    "mi-ore": [
+      "copper",
+      "tin"
+    ],
+    "mi-iron": [
+      "iron"
+    ]
+  }
+}

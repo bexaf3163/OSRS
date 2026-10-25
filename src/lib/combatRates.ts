@@ -16,7 +16,6 @@ import { allSteps } from '../data';
 import { attacksToKill, estimateCombat, foeVariants, hitChance, unsafe, xpPerKill, type CombatFoe } from './combatEstimate';
 import { spotsOf, termsFor, TRAINER_LEVELS } from './combatRoute/spots';
 import { coinsPerMinute, dropValue, lootSecondsPerKill } from './lootValue';
-import type { TradeRestriction } from './tradeRestriction';
 import { methodFoe, rangedHit } from './rangedAmmo';
 import { rangedNeeds } from './rangedLoadout';
 import { STAFFS, strikeRecipe } from './magicPlan';
@@ -26,24 +25,9 @@ import { gearPieceByName } from '../services/gearAdvisor';
 import { nameKey } from './checklist';
 import { xpForLevel } from './xp';
 import type { PriceView } from './funding/quotes';
+import type { Market, ModelRate } from './methodRates';
 import type { TrainingMethod } from './trainingRouter';
 import type { GearPiece } from '../types';
-
-export interface ModelRate {
-  /** XP per hour in the trained skill now: the slow and the fast end. */
-  xph: [number, number];
-  /** Coins an hour the training uses up (arrows broken, runes), at exchange prices; null - no price, or nothing is used up. */
-  costPerHour: number | null;
-  /** What it was worked out for, in a few words: "Shortbow, Bronze arrows". */
-  basis: string;
-  /** Coins an hour from the drop banked and sold, when it pays for its time; then xph already has its pickups and bank trips in it. */
-  lootPerHour?: number;
-  /** The drop banked: "Big bones". */
-  loot?: string;
-}
-
-/** What the trade allows: the plans' and the Skills page's view of the exchange and the account. */
-export interface Market { prices?: PriceView | null; restriction?: TradeRestriction['state'] }
 
 const TICK = 0.6;
 /** Seconds to the next target when the spot says nothing else (combatEstimate's BETWEEN_KILLS). */
@@ -63,8 +47,8 @@ const MAX_HIT = (spellsJson as unknown as { maxHit: Record<'strike' | 'bolt', [n
 
 const MELEE = new Set(['attack', 'strength', 'defence']);
 
-/** The rate of one method for this player in this skill, or null when the model has nothing honest to say. */
-export function methodRate(m: TrainingMethod, skill: string, state: PlayerState, market: Market = {}): ModelRate | null {
+/** The rate of one combat method for this player in this skill, or null when the model has nothing honest to say (methodRates.ts dispatches here). */
+export function combatRate(m: TrainingMethod, skill: string, state: PlayerState, market: Market = {}): ModelRate | null {
   if (m.kind !== 'method' || !m.npcNames?.length || state.equipmentKnown !== true) return null;
   if (MELEE.has(skill) && m.skills.includes(skill)) return withLoot(meleeRate(m.npcNames[0], skill as 'attack' | 'strength' | 'defence', state), m.npcNames[0], market);
   if (skill === 'ranged' && m.kit === 'f2p-bow') return withLoot(rangedRate(m, state, market.prices), methodFoe(m)?.name ?? m.npcNames[0], market);
@@ -79,7 +63,7 @@ function withLoot(r: (ModelRate & { secondsPerKill: number }) | null, foe: strin
   const spot = spotsOf(allSteps).get(foe);
   const each = spot?.sell ? dropValue(spot.sell, market.prices, market.restriction) : null;
   const trip = termsOf(foe).tripMinutes;
-  const extra = each !== null && spot?.sell ? lootSecondsPerKill(each, trip ? (trip[0] + trip[1]) / 2 : 4.5, coinsPerMinute(market.prices)) : null;
+  const extra = each !== null && spot?.sell ? lootSecondsPerKill(each, trip ? (trip[0] + trip[1]) / 2 : 4.5, coinsPerMinute(market.prices), market.objective) : null;
   if (extra === null || each === null) return rate;
   const slower = secondsPerKill / (secondsPerKill + extra);
   return { ...rate, xph: [rate.xph[0] * slower, rate.xph[1] * slower], lootPerHour: (3600 / (secondsPerKill + extra)) * each, loot: spot!.sell };

@@ -24,10 +24,10 @@ older save stays as "Fastest"; "Relaxed" keeps the old calm order.
 | S6-01 Ranged to 50 with a prepared ranged loadout | ranged 20 (F2P) | The monks of Edgeville Monastery | The monks of Edgeville Monastery | steady clicking; small risk; material costs |
 | S6-01 Ranged to 50 with a prepared ranged loadout | ranged 30 (F2P) | Giant frogs | Giant frogs | steady clicking; small risk; material costs |
 | S6-01 Ranged to 50 with a prepared ranged loadout | ranged 40 (F2P) | Giant frogs | Giant frogs | steady clicking; small risk; material costs |
-| S6-02 Fishing to 50 and Cooking to 50 | fishing 1 (F2P) | Shrimp and anchovies with a net | Shrimp and anchovies with a net | ≈ 2k–8k XP per hour; few clicks |
-| S6-02 Fishing to 50 and Cooking to 50 | fishing 20 (F2P) | Trout and salmon with fly fishing | Trout and salmon with fly fishing | ≈ 13k–50k XP per hour; almost no clicks |
-| S6-02 Fishing to 50 and Cooking to 50 | fishing 30 (F2P) | Trout and salmon with fly fishing | Trout and salmon with fly fishing | ≈ 13k–50k XP per hour; almost no clicks |
-| S6-02 Fishing to 50 and Cooking to 50 | fishing 40 (F2P) | Trout and salmon with fly fishing | Trout and salmon with fly fishing | ≈ 13k–50k XP per hour; almost no clicks |
+| S6-02 Fishing to 50 and Cooking to 50 | fishing 1 (F2P) | Shrimp and anchovies with a net | Shrimp and anchovies with a net | ≈ 2k XP per hour for you; few clicks; drop when full |
+| S6-02 Fishing to 50 and Cooking to 50 | fishing 20 (F2P) | Trout and salmon with fly fishing | Trout and salmon with fly fishing | ≈ 12k–15k XP per hour for you; almost no clicks; drop when full |
+| S6-02 Fishing to 50 and Cooking to 50 | fishing 30 (F2P) | Trout and salmon with fly fishing | Trout and salmon with fly fishing | ≈ 23k–28k XP per hour for you; almost no clicks; drop when full |
+| S6-02 Fishing to 50 and Cooking to 50 | fishing 40 (F2P) | Trout and salmon with fly fishing | Trout and salmon with fly fishing | ≈ 27k–33k XP per hour for you; almost no clicks; drop when full |
 | S6-03 Mining to 60 (Mining Guild) and Woodcutting to 60 (yews) | mining 1 (F2P) | Copper and tin | Copper and tin | ≈ 15k–20k XP per hour; almost no clicks |
 | S6-03 Mining to 60 (Mining Guild) and Woodcutting to 60 (yews) | mining 20 (F2P) | Iron, dropping the ore | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
 | S6-03 Mining to 60 (Mining Guild) and Woodcutting to 60 (yews) | mining 30 (F2P) | Iron, dropping the ore | Iron, dropping the ore | ≈ 45k–55k XP per hour; steady clicking |
@@ -38,7 +38,6 @@ older save stays as "Fastest"; "Relaxed" keeps the old calm order.
 | S6-04 Magic to 55 (High Level Alchemy) | magic 40 (F2P) | Wind Strike on cows and chickens | Wind Strike on cows and chickens | needs full attention; small risk; material costs |
 | Skills page: attack | level 10 → 20 (F2P) | Chickens and cows | Al Kharid warriors | steady clicking; small risk |
 | Skills page: defence | level 10 → 20 (F2P) | Chickens and cows | Al Kharid warriors | steady clicking; small risk |
-| Skills page: fishing | level 50 → 60 (F2P) | Trout and salmon with fly fishing | Tuna and swordfish with a harpoon | ≈ 17k–21k XP per hour; few clicks |
 | Skills page: strength | level 10 → 20 (F2P) | Chickens and cows | Al Kharid warriors | steady clicking; small risk |
 
 Steps that follow a training method: S6-01, S6-02, S6-03, S6-04. Combat training stages: S3-08, S4-03 (the only steps with an opponent and a melee XP goal).

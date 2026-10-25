@@ -445,7 +445,10 @@ async function run(browser: Browser) {
       const posts = (window as unknown as { __posts: { path: string; body?: { step?: { worldPoint?: { x: number; y: number }; groundTiles?: { x: number; y: number }[] } } }[] }).__posts;
       return posts.filter(p => p.path === '/prep-plan').at(-1)?.body?.step;
     });
-    expect(target?.worldPoint?.x === 3107 && target.worldPoint.y === 3429 && target.groundTiles?.length === 1 && target.groundTiles[0].y === 3429, `method map (${width}): the actual game target and single ground tile agree on Barbarian Village`);
+    // The gathering engine's spot (skilling.json): the wiki spawn tile of the Barbarian Village fly fishing spots, not the area's label point.
+    const fly = (JSON.parse(readFileSync(new URL('../src/data/skilling.json', import.meta.url), 'utf8')) as { spots: { resource: string; label: string; place: { x: number; y: number } }[] }).spots
+      .find((sp) => sp.resource === 'fly' && sp.label === 'Barbarian Village')!.place;
+    expect(target?.worldPoint?.x === fly.x && target.worldPoint.y === fly.y && target.groundTiles?.length === 1 && target.groundTiles[0].y === fly.y, `method map (${width}): the actual game target and single ground tile agree on Barbarian Village`);
     expect(await noOverflow(page) && !errors.length, `method map (${width}): no overflow or console errors`);
     await page.context().close();
   }

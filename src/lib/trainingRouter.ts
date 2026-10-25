@@ -17,9 +17,9 @@ import { xpForLevel } from './xp';
 import type { MethodPriority, PlayStyle } from './playStyle';
 import { rangedNeeds, RANGED_WATCH } from './rangedLoadout';
 import { strikeRecipe, superheatNeeds } from './magicPlan';
-import { methodRate } from './combatRates';
+import { methodRate, rateKeyOf, type RateSpot } from './methodRates';
 import type { PriceView } from './funding/quotes';
-import { coinsPerMinute } from './lootValue';
+import { coinsPerMinute, coinTimeShare } from './lootValue';
 import type { TradeRestriction } from './tradeRestriction';
 
 export type Effort = 'afk' | 'low' | 'medium' | 'high';
@@ -51,8 +51,14 @@ export interface TrainingMethod {
   manualSetup?: string;
   /** XP per hour per the wiki: [from, to] — a guide; for a combat method the model's figure for this player when it has one (rateSource). */
   xph: [number, number] | null;
-  /** model - xph is the combat model's for this player's levels and gear (combatRates.ts), not the wiki's guide. */
+  /** model - xph is the model's for this player's levels and gear (methodRates.ts: the combat or the gathering engine), not the wiki's guide. */
   rateSource?: 'model';
+  /** The spot the gathering engine picked among the method's candidates, and whether a full bag is banked or dropped there. */
+  spot?: RateSpot;
+  /** One safety line from the model: aggressive NPCs at the picked spot. */
+  rateWarning?: string;
+  /** What the model's cost is spent on: "feathers"; absent - arrows, or runes for Magic. */
+  costName?: string;
   /** Coins an hour the model's method uses up (arrows, runes) at exchange prices; null - not known. */
   costPerHour?: number | null;
   /** Coins an hour the model's method banks from its drop when that pays for its time, and the drop. */
@@ -232,7 +238,7 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number, coin
       if (pa && pb && xpLeft && xpLeft > 0) {
         // The hours to the goal, less what the banked drops are worth in hours (lootValue.ts: the same rule as the fight plans).
         const hours = (v: MethodView, p: number) => xpLeft / p + (v.status === 'PREP' ? SETUP_HOURS : 0);
-        const worth = (v: MethodView, h: number) => (coinRate && v.method.lootPerHour ? (h * v.method.lootPerHour) / (coinRate * 60) : 0);
+        const worth = (v: MethodView, h: number) => h * coinTimeShare(v.method.lootPerHour, coinRate);
         const ra0 = hours(a, pa);
         const rb0 = hours(b, pb);
         const ha = ra0 - worth(a, ra0);
@@ -328,16 +334,19 @@ const rateCache = new Map<string, TrainingMethod>();
  * The methods of a skill with the combat model's own rate for this player where it has one (combatRates.ts): melee, Ranged and Magic training is then
  * ranked by what it gives this character, not by the wiki's guide for everyone. Other methods stay as they are.
  */
-export function personalize(methods: readonly TrainingMethod[], skill: string, state: PlayerState, prices?: PriceView | null, restriction?: TradeRestriction['state']): TrainingMethod[] {
+export function personalize(methods: readonly TrainingMethod[], skill: string, state: PlayerState, prices?: PriceView | null, restriction?: TradeRestriction['state'], objective?: MethodPriority): TrainingMethod[] {
   return methods.map((m) => {
-    if (!m.skills.includes(skill) || !m.npcNames?.length) return m;
-    const key = `${m.id}|${skill}|${state.fingerprint}|${prices?.at ?? '-'}|${restriction ?? '-'}`;
+    if (!m.skills.includes(skill) || m.kind !== 'method') return m;
+    const key = `${m.id}|${skill}|${rateKeyOf(state)}|${prices?.at ?? '-'}|${prices?.status ?? '-'}|${restriction ?? '-'}|${objective ?? '-'}`;
     const hit = rateCache.get(key);
     if (hit) return hit;
-    const r = methodRate(m, skill, state, { prices, restriction });
+    const r = methodRate(m, skill, state, { prices, restriction, objective });
     const out: TrainingMethod = r ? {
       ...m, xph: [Math.round(r.xph[0]), Math.round(r.xph[1])], rateSource: 'model', costPerHour: r.costPerHour,
       ...(r.lootPerHour ? { lootPerHour: r.lootPerHour, lootName: r.loot } : {}),
+      ...(r.costName ? { costName: r.costName } : {}),
+      ...(r.warning ? { rateWarning: r.warning } : {}),
+      ...(r.spot ? { spot: r.spot, where: r.spot.how === 'bank' && r.spot.bank ? `${r.spot.label} (bank at ${r.spot.bank})` : r.spot.label } : {}),
     } : m;
     if (rateCache.size > 500) rateCache.clear();
     rateCache.set(key, out);
@@ -350,7 +359,7 @@ const fmtK = (n: number) => (n >= 1000 ? `${Math.round(n / 1000)}k` : String(n))
 /** "≈ 8k–11k XP per hour", "for you" when it is the model's figure for this player. */
 const rateText = (m: TrainingMethod) => {
   const r = m.xph!;
-  return `${r[0] === r[1] ? `≈ ${fmtK(r[0])}` : `≈ ${fmtK(r[0])}–${fmtK(r[1])}`} XP per hour${m.rateSource === 'model' ? ' for you' : ''}`;
+  return `${fmtK(r[0]) === fmtK(r[1]) ? `≈ ${fmtK(r[0])}` : `≈ ${fmtK(r[0])}–${fmtK(r[1])}`} XP per hour${m.rateSource === 'model' ? ' for you' : ''}`;
 };
 
 function reasonFor(v: MethodView, priority: MethodPriority, level: number): string {
@@ -369,7 +378,9 @@ function reasonFor(v: MethodView, priority: MethodPriority, level: number): stri
     parts.push('the best method for this level');
   }
   if (m.lootPerHour && m.lootName) parts.push(`${m.lootName} ≈ +${fmtK(Math.round(m.lootPerHour / 100) * 100)} gp per hour`);
-  if (m.costPerHour) parts.push(`${m.skills.includes('magic') ? 'runes' : 'arrows'} ≈ ${fmtK(Math.round(m.costPerHour / 100) * 100)} gp per hour`);
+  if (m.spot?.how === 'drop') parts.push('drop when full');
+  if (m.rateWarning) parts.push(m.rateWarning);
+  if (m.costPerHour) parts.push(`${m.costName ?? (m.skills.includes('magic') ? 'runes' : 'arrows')} ≈ ${fmtK(Math.round(m.costPerHour / 100) * 100)} gp per hour`);
   else if (m.cost === 'cost') parts.push('material costs');
   else if (m.cost === 'profit') parts.push('can end in profit');
   if (v.status === 'PREP') parts.push(`first: ${v.missing.map((x) => x.label).join(', ')}`);
@@ -406,14 +417,15 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
 
 export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const { skill, target, state, mode, style } = input0;
-  const methods = personalize(input0.methods ?? trainingMethods, skill, state, input0.prices, input0.restriction);
+  const objective: MethodPriority = input0.priority ?? (style === 'efficient' ? 'fastest' : 'relaxed');
+  const methods = personalize(input0.methods ?? trainingMethods, skill, state, input0.prices, input0.restriction, objective);
   const input = { ...input0, methods };
   const level = levelOf(state, skill) ?? null;
   const empty: TrainingAdvice = { skill, level, target, best: null, others: [], quests: [], path: [], xpLeft: null, actionsLeft: null, actionTarget: null, time: null, reason: '', style };
   if (level === null) return { ...empty, reason: 'Level unknown: log in to the game with RuneLite or enter it on the skill page.' };
   if (level >= target) return { ...empty, reason: 'The goal is already reached.' };
 
-  const priority: MethodPriority = input.priority ?? (style === 'efficient' ? 'fastest' : 'relaxed');
+  const priority = objective;
   const xpNow0 = input.xp ?? xpForLevel(level);
   const cmp = compare(priority, Math.max(0, xpForLevel(target) - xpNow0), level, coinsPerMinute(input.prices));
   const views = methodsFor(skill, methods).filter((m) => availableAt(m, level, mode)).map((m) => viewMethod(m, state)).sort(cmp);

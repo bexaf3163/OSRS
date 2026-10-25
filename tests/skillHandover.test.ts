@@ -4,7 +4,8 @@ import { emptyProgress } from '../src/lib/progress';
 import { buildPlayerState } from '../src/lib/playerState';
 import { nameKey } from '../src/lib/checklist';
 import { pickMethods } from '../src/lib/methodPick';
-import { followedGoal, GOAL_REACHED, methodToolNames, UNKNOWN_GOAL_PREFIX, withTrainingMethod } from '../src/lib/methodStep';
+import { SKILLING } from '../src/lib/skillingRates';
+import { followedGoal, GOAL_REACHED, methodToolNames, UNKNOWN_GOAL_PREFIX, withTrainingMethod, pickedMethodId } from '../src/lib/methodStep';
 import { contextOf } from '../src/lib/readiness';
 import { createReadinessEngine } from '../src/lib/readinessEngine';
 import { parseNavTarget, toInGameTarget } from '../src/services/runeliteBridge';
@@ -18,12 +19,17 @@ function scenario(stats: Record<string, number>, stock: Record<string, { carried
   const owned = { bankSeen: true, items: new Map(names.map(name => [nameKey(name), { name, carried: stock[name]?.carried ?? 0, noted: 0, bank: stock[name]?.bank ?? 0 }])) };
   const progress = emptyProgress();
   const state = buildPlayerState({ mode: 'f2p', stats, progress, owned, gear: null, questsDone: ["Cook's Assistant"], connected: true });
-  const pick = pickMethods([base], state, 'f2p', 'chill', 'balanced')[base.id];
-  const step = withTrainingMethod(base, pick);
+  const raw = pickMethods([base], state, 'f2p', 'chill', 'balanced')[base.id];
+  const pick = raw === undefined ? undefined : pickedMethodId(raw);
+  const step = withTrainingMethod(base, raw);
   const steps = allSteps.map(s => s.id === step.id ? step : s);
   const engine = createReadinessEngine({ ...contextOf({ step, steps, progress, mode: 'f2p', qp: 100, owned, gear: null, stats }), state });
   return { state, pick, step, engine, payload: toInGameTarget(step)! };
 }
+
+/** The target names one of the registry's spots for the method's resources (skilling.json), as the engine picked it. */
+const chosenSpotOf = (methodId: string, label: string | undefined) =>
+  SKILLING.spots.some((sp) => SKILLING.methods[methodId]?.includes(sp.resource) && label?.endsWith(`— ${sp.label}`));
 
 describe('one coherent Fishing/Cooking handover', () => {
   it.each([1, 20, 30, 35, 49])('Fishing50/Cooking%s uses the remaining skill, its supplies and one destination', cooking => {
@@ -103,7 +109,8 @@ describe('one coherent Mining/Woodcutting handover', () => {
     expect(s.payload.objectNames).toEqual(level < 15 ? ['Copper rocks', 'Tin rocks'] : ['Iron rocks']);
     expect(s.step.itemsRequired?.map(r => r.nameEn)).toEqual(['Bronze pickaxe']);
     expect(s.step.how).toContain(level < 15 ? 'Copper and tin' : 'Iron, dropping');
-    expect(s.payload.worldPoint?.label).toContain(level < 15 ? 'East Lumbridge Swamp mine' : 'South-east Varrock mine');
+    // The gathering engine picks the mine (skilling.json spots): one of the method's own spots, the most XP for this player.
+    expect(chosenSpotOf(s.pick!, s.payload.worldPoint?.label)).toBe(true);
     expect(s.payload.groundTiles).toHaveLength(1);
     expect(s.payload.completionTrigger).toEqual(mining.inGame!.completionTrigger);
     expect(s.engine.readiness(s.step).requirements.find(r => r.item === 'Bronze pickaxe')?.state).toBe('OK');
@@ -119,9 +126,9 @@ describe('one coherent Mining/Woodcutting handover', () => {
       expect(s.step.quickSteps?.[0]).toContain('Bank finished-skill tools');
       expect(s.payload.worldPoint?.label).not.toMatch(/mine|ore/i);
       expect(s.payload.completionTrigger).toEqual(mining.inGame!.completionTrigger);
+      expect(chosenSpotOf(s.pick!, s.payload.worldPoint?.label)).toBe(true);
       if (level >= 30) {
-        expect(s.payload.worldPoint?.label).toContain('Port Sarim');
-        expect(s.step.how).toContain('dark wizards');
+        expect(s.step.how).toContain('Willow trees');
       }
     });
   it('does not treat an unread primary skill as ready or complete', () => {
