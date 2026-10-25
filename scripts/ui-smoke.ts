@@ -401,7 +401,8 @@ async function run(browser: Browser) {
     const stats = { attack: 22, strength: 16, defence: 1, hitpoints: 22 };
     const gear = { equipment, inventory: [{ id: 330, name: 'Salmon', count: 40, noted: true }], coins: 500, bankCoins: 3000 };
     const { page, errors } = await open(browser, width, {
-      zen: true, progress: progressBefore('S3-08'), localStorage: { 'osrs-put:active-step': 'S3-08' },
+      // The route's own plan, chosen: noted Salmon is what is tested here, not which spot needs the least food (2.75: the monks need none).
+      zen: true, progress: progressBefore('S3-08'), localStorage: { 'osrs-put:active-step': 'S3-08', 'osrs-put:combat-plans:main:-': '{"S3-08":{"key":"route","at":1,"by":"player"}}' },
       status: { protocol: 6, ...gear, stats, activeStepId: 'S3-08' },
       events: [{ type: 'STATS', stats }, { type: 'GEAR', gear }, { type: 'OWNED', bankSeen: true, items: [{ name: 'Salmon', carried: 0, noted: 40, bank: 0, exactCarried: 0, exactNoted: 40, exactBank: 0 }] }],
     }, '#/step/S3-08');
@@ -2075,47 +2076,47 @@ async function combatRouteScenarios(browser: Browser) {
     await reveal(page, '.combat-route');
     const fold = page.locator('.combat-route details');
     expect(await fold.count() === 1 && !(await fold.evaluate((d) => (d as HTMLDetailsElement).open)), `combat route (${width} px): the comparison is folded under "Why this plan?"`);
-    // A competitive automatic baseline deliberately has no extra status banner.
-    // Choose an alternative to exercise that banner's link without requiring a different recommendation.
-    if (await page.locator('.status-combat-route:visible').count() === 0) {
-      await fold.locator(':scope > summary').click();
-      await page.locator('.combat-plan-row').getByRole('button', { name: 'Use this instead' }).first().click();
-      await page.waitForTimeout(800);
-      expect((await savedPlans())[0]['S4-03']?.by === 'player', `combat route (${width} px): an explicit alternative exposes its status action`);
-    }
+    // 2.75: the status line always says where and why ("go here, because"), the route's own plan too, whenever other plans were compared.
+    expect(await page.locator('.status-combat-route:visible').count() > 0, `combat route (${width} px): the status line names the plan and why`);
     // The status line's link opens the comparison itself, not only the view it is in (2.72). The view opened above is closed first, as a player would.
     await page.keyboard.press('Escape');
     await page.waitForTimeout(300);
     await page.locator('.status-combat-route:visible').getByRole('button', { name: 'Why this plan?' }).first().click();
     await page.waitForTimeout(600);
     expect(await fold.evaluate((d) => (d as HTMLDetailsElement).open), `combat route (${width} px): the status line's "Why this plan?" opens the comparison itself`);
+    // A few rows, not a table of everything: the plan in use, the best, the route's own and the next best; the rest is one line.
     const rows = await page.locator('.combat-plan-row').count();
-    expect(rows >= 3 && await page.locator('.combat-plan-row', { hasText: 'The route as written' }).count() === 1
-      && await page.locator('.combat-plan-row', { hasText: 'Defence 20 first' }).count() === 1
-      && await page.locator('.combat-plan-row', { hasText: 'Defence 30 first' }).count() === 1
-      && await page.locator('.combat-plan-row', { hasText: 'Defence 10 first' }).count() === 0,
-      `combat route (${width} px): baseline and higher-Defence alternatives remain; common Defence 10 preparation is not duplicated (${rows})`);
-    expect(!/Big bones bank quantity is not checked/.test(await text(page, '.combat-route')), `combat route (${width} px): an unreported item quantity is disclosed even when the bank was opened`);
-    expect(!/drops sold about/.test(await text(page, '.combat-route')) && /Optional drops are not counted as income/.test(await text(page, '.combat-route')), `combat route (${width} px): XP-only plans do not advertise unscheduled loot sales`);
-    expect(/Compared: .*Cow/.test(await text(page, '.combat-route')), `combat route (${width} px): it says what was compared`);
+    const all = await text(page, '.combat-route');
+    expect(rows >= 3 && rows <= 4 && await page.locator('.combat-plan-row', { hasText: '(the route)' }).count() === 1 && !/Defence 10 first/.test(all),
+      `combat route (${width} px): three or four rows with the route's own; the common Defence 10 preparation is not a plan of its own (${rows})`);
+    expect(!/Big bones bank quantity is not checked/.test(all), `combat route (${width} px): an unreported item quantity is disclosed even when the bank was opened`);
+    expect(/\+\d[\d,k]* gp/.test(all) && /Big bones/.test(await text(page, '.combat-verdict')), `combat route (${width} px): the loot is counted and the verdict says what it brings`);
+    expect(/Also compared: .*(Cows|Monks|Barbarians)/.test(all), `combat route (${width} px): it says what else was compared`);
+    expect(await page.locator('.combat-plan-row.is-now .cpr-figs').count() === 1, `combat route (${width} px): the plan in use has its time, food and coins`);
     if (process.env.UI_SHOTS) await page.locator('.combat-route').screenshot({ path: `${process.env.UI_SHOTS}/combat-route-open-${width}.png` }).catch(() => {});
     // A trainer choice cannot bypass common preparation: Defence 10 still comes before the armour and Attack phase.
-    await page.locator('.combat-plan-row', { hasText: 'The route as written' }).getByRole('button', { name: 'Use this instead' }).click();
+    const other = page.locator('.combat-plan-row:not(.is-now)', { has: page.getByRole('button', { name: 'Use' }) }).first();
+    const otherName = await other.locator('.cpr-name').innerText();
+    await other.getByRole('button', { name: 'Use' }).click();
     await page.waitForTimeout(1500);
     const back = await lastStep();
     expect(back?.npcNames?.[0] === 'Cow' && back?.pacing?.skill === 'defence' && back?.pacing?.targetLevel === 10 && back?.worldPoint?.plane === 0,
-      `combat route (${width} px): selecting the route keeps Defence 10 preparation on surface cows`);
+      `combat route (${width} px): another plan keeps the Defence 10 preparation on surface cows first (${otherName})`);
     const mine = await text(page, '.status-combat-route');
-    expect(/Your plan: The route as written/.test(mine), `combat route (${width} px): the player's choice is named and the better plan offered, not forced`);
+    expect(/Your plan: /.test(mine), `combat route (${width} px): the player's choice is named as theirs`);
     expect((await savedPlans())[0]['S4-03']?.by === 'player', `combat route (${width} px): the player's choice is saved as theirs`);
     // Any plan from the list, and a Defence plan says what the route gives later.
     if (!(await fold.evaluate((d) => (d as HTMLDetailsElement).open))) await page.locator('.combat-route details > summary').click();
     const d20 = page.locator('.combat-plan-row', { hasText: 'Defence 20 first' });
-    expect(/S5-09 .Triumph at Oziach. gives 18,650 Defence XP/.test(await d20.innerText()), `combat route (${width} px): a Defence plan names the Defence the route gives later`);
-    await d20.getByRole('button', { name: 'Use this instead' }).click();
-    await page.waitForTimeout(1500);
-    const dstep = await lastStep();
-    expect(dstep?.worldPoint?.label === COWS && dstep.pacing?.skill === 'defence', `combat route (${width} px): a plan picked from the list leads the game (Defence on the cows)`);
+    if (await d20.count()) {
+      await d20.getByRole('button', { name: 'Use' }).click();
+      await page.waitForTimeout(1500);
+      if (!(await fold.evaluate((d) => (d as HTMLDetailsElement).open))) await page.locator('.combat-route details > summary').click();
+      // Its note is shown once it is the plan in use: what the route gives later.
+      expect(/S5-09 .Triumph at Oziach. gives 18,650 Defence XP/.test(await page.locator('.combat-plan-row.is-now').innerText()), `combat route (${width} px): a Defence plan names the Defence the route gives later`);
+      const dstep = await lastStep();
+      expect(dstep?.worldPoint?.label === COWS && dstep.pacing?.skill === 'defence', `combat route (${width} px): a plan picked from the list leads the game (Defence on the cows)`);
+    } else expect(/Defence 20 first/.test(await text(page, '.combat-route')), `combat route (${width} px): Defence 20 first is compared`);
     // Back to the recommendation.
     if (!(await fold.evaluate((d) => (d as HTMLDetailsElement).open))) await page.locator('.combat-route details > summary').click();
     await page.getByRole('button', { name: 'Follow the recommendation' }).click();
@@ -2189,7 +2190,11 @@ async function xpOnlyCombatScenario(browser: Browser) {
   await page.waitForTimeout(1500);
   const snapshots = await page.evaluate(() => (window as unknown as { __posts: { path: string; body: any }[] }).__posts.filter(p => p.path === '/prep-plan'));
   const step = snapshots.at(-1)?.body?.step;
-  expect(/Plan: Train on cows/.test(await text(page, '.status-combat-route')) && step?.npcNames?.[0] === 'Cow', 'XP-only training: the default trainer is adopted in the app and game payload');
+  // Whichever spot wins (2.75 compares every spot of the registry), the line names it and the game gets its NPC.
+  const trainers = (JSON.parse(readFileSync(new URL('../src/data/trainers.json', import.meta.url), 'utf8')) as { trainers: { name: string; foe: string }[] }).trainers;
+  const named = /Plan: Train on ([^.]+)\./.exec(await text(page, '.status-combat-route'))?.[1];
+  const spot = trainers.find((t) => t.name === named);
+  expect(!!spot && step?.npcNames?.[0] === spot.foe, `XP-only training: the default trainer is adopted in the app and game payload (${named})`);
   expect(step?.pacing?.skill === 'strength' && step?.pacing?.targetExp === 4470 && JSON.stringify(step?.completionTrigger).includes('"attack"'), 'XP-only training: training order and the original combined completion goals are retained');
   expect(await noOverflow(page) && !errors.length, 'XP-only training: no overflow or console errors');
   await page.context().close();

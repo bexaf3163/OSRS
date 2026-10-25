@@ -189,13 +189,16 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
   // The guide's own choice is remembered, so it stays put unless another plan becomes clearly better (and a change waits for a bank trip). The route's
   // plan needs no entry: it is what a step without one has. The player's own choice is never written over.
   useEffect(() => {
+    // Not before the exchange has answered (2.75): without prices the loot is worth nothing, and a choice remembered then would be held against the
+    // plans the prices make better. The recommendation applies meanwhile; it is only not remembered.
+    if (planPrices.status === 'offline') return;
     for (const [id, e] of Object.entries(combatPlans)) {
       const stored = adopted[id];
       if (stored?.by === 'player' || e.selection.source !== 'auto') continue;
       if (e.selection.key === 'route') { if (stored) adoptPlan(adoptKey, id, null); }
       else if (stored?.key !== e.selection.key) adoptPlan(adoptKey, id, e.selection.key, 'auto');
     }
-  }, [combatPlans, adopted, adoptKey]);
+  }, [combatPlans, adopted, adoptKey, planPrices.status]);
   const choosePlan = useCallback((stepId: string, key: string | null) => adoptPlan(adoptKey, stepId, key, 'player'), [adoptKey]);
 
   const combat = useMemo(() => {

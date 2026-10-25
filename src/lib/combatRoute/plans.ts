@@ -121,6 +121,10 @@ export interface PlanReport {
   confidence: 'HIGH' | 'MEDIUM' | 'LOW';
   /** Opponents compared (for "compared against ..." in the details). */
   compared: string[];
+  /** The plans' keys from the best to the worst, the eligible ones first, the way the recommendation ranks them. */
+  order: string[];
+  /** Spots not offered now and why, in a few words: "Brutus: after The Ides of Milk", "Hill Giants: hit too hard for 24 health". */
+  locked: { name: string; why: string }[];
   food: { name: string; heals: number; price: number | null };
 }
 
@@ -355,7 +359,9 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   // The spots the player may use now: a spot that needs a quest only when the game counts it done or its route step is closed.
   const questDone = (quest: string) => (inp.state ? questOf(inp.state, quest) === 'DONE' : false)
     || (() => { const q = questStepOf(inp.steps as Step[], quest); return q ? inp.done?.(q.id) === true : false; })();
-  const spots = new Map([...spotsOf(inp.steps)].filter(([name, s]) => name === foe || !s.requires || questDone(s.requires.quest)));
+  const allSpots = spotsOf(inp.steps);
+  const spots = new Map([...allSpots].filter(([name, s]) => name === foe || !s.requires || questDone(s.requires.quest)));
+  const locked: PlanReport['locked'] = [...allSpots.values()].filter((s) => !spots.has(s.foe)).map((s) => ({ name: s.name, why: `after ${s.requires!.quest}` }));
   const routeSpot = spots.get(foe);
   const foodItem = (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
   if (!routeSpot || !foodItem || !ctx.stats || typeof ctx.stats.hitpoints !== 'number') return null;
@@ -407,7 +413,7 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
         spot: { ...first.spot, ...(bank ? { place: bank, goal: bank.label, where: `Prepare at ${bank.label}; equipment must be worn before training.` } : {}), npcNames: [], waypoints: undefined },
       };
       all = [...preparation, armour, ...phases];
-      if (!ready) notes = [...notes, 'Training estimates use current worn equipment. Armour purchases and their shopping detour are not timed; keep enough coins for food.'];
+      if (!ready) notes = [...notes, 'The times are for the armour you wear now; buying the new set is not timed. Keep coins for food.'];
     }
     return assemble(id, key, title, all, hp, price, incomeOf(all, reserve, inp.prices, inp.restriction), extra, notes, rate);
   };
@@ -425,6 +431,9 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
     }
   }
   const safe = candidates.filter((e) => !unsafe(e.foe, spots.get(e.foe.name), hp));
+  for (const name of new Set(candidates.map((e) => e.foe.name))) {
+    if (name !== routeEst.foe.name && !safe.some((e) => e.foe.name === name)) locked.push({ name: spots.get(name)!.name, why: `too dangerous with ${hp} health` });
+  }
   const trainer = bestOf(safe);
   const trainPhase = (e: CombatEstimate, g: Goal[]) => looted(phaseOf('train', e, spots.get(e.foe.name)!, g, `${foeLabel(e.foe)}: ${goalText(g)} (${e.kills} kills)`), e);
 
@@ -524,6 +533,7 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   const confidence: PlanReport['confidence'] = recommended.basis === 'calibrated' ? 'HIGH' : recommended.basis === 'formula' ? 'MEDIUM' : 'LOW';
   return {
     stepId: step.id, objective, plans, recommended: recommended.key, fresh: fresh.key, confidence, compared: [...compared],
+    order: [recommended, ...[...eligible].sort(byTime).filter((p) => p !== recommended), ...plans.filter((p) => !p.eligible)].map((p) => p.key), locked,
     reason: held ? heldReason(held, route, later) : reasonOf(recommended, route, price, plans),
     food: { name: foodItem.nameEn, heals: foodItem.heals!, price },
   };
