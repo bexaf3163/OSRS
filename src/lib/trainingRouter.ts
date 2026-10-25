@@ -190,6 +190,14 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number) {
     if (Boolean(a.method.manualSetup) !== Boolean(b.method.manualSetup)) return Number(Boolean(a.method.manualSetup)) - Number(Boolean(b.method.manualSetup));
     const uncheckedEntry = (v: MethodView) => v.unchecked.some(n => n.kind === 'skill' || n.kind === 'quest');
     if (uncheckedEntry(a) !== uncheckedEntry(b)) return Number(uncheckedEntry(a)) - Number(uncheckedEntry(b));
+    // A method the level has outgrown (cows at Attack 45, seagulls at Ranged 60) does not beat a ready method made for this level just because the
+    // newer one's supplies are unread or it is riskier. Where speed ranks (balanced, fastest), known speeds still decide; an outgrown method with
+    // its supplies at hand still beats a new one that needs buying first.
+    const outgrown = (v: MethodView) => level !== undefined && v.method.to !== null && level >= v.method.to;
+    const bySpeed = priority !== 'relaxed' && rateLow(a.method) !== null && rateLow(b.method) !== null;
+    if (outgrown(a) !== outgrown(b) && (outgrown(a) ? b : a).status === 'READY' && !bySpeed) {
+      return Number(outgrown(a)) - Number(outgrown(b));
+    }
     // Unchecked supplies must not beat a confirmed preparation step merely by being labelled READY.
     // Keep them available and disclose their uncertainty; do not invent missing quantities.
     // The same ranged kit should not drop back to an earlier trainer after equipping its arrows merely because owned food needs withdrawal.

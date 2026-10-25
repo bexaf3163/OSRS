@@ -219,7 +219,7 @@
       "id": "fi-fly",
       "skill": "fishing",
       "from": 20,
-      "to": 40,
+      "to": null,
       "name": "Trout and salmon with fly fishing",
       "members": false,
       "needs": [
@@ -413,7 +413,7 @@
       "id": "mi-motherlode",
       "skill": "mining",
       "from": 30,
-      "to": 75,
+      "to": null,
       "name": "Motherlode Mine",
       "members": true,
       "needs": [
@@ -501,6 +501,166 @@
       "where": "Karamja (Brimhaven)",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Agility_training",
       "place": "Brimhaven"
+    },
+    {
+      "id": "ag-canifis",
+      "skill": "agility",
+      "from": 40,
+      "to": 50,
+      "name": "The Canifis rooftops",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "agility",
+          "min": 40
+        },
+        {
+          "type": "quest",
+          "quest": "Priest in Peril"
+        }
+      ],
+      "xph": [
+        14000,
+        17000
+      ],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "low",
+      "where": "Canifis",
+      "note": "Low XP, but the most Marks of Grace for the level: the course for the Graceful set.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Agility_training",
+      "place": "Canifis"
+    },
+    {
+      "id": "ag-falador",
+      "skill": "agility",
+      "from": 50,
+      "to": 60,
+      "name": "The Falador rooftops",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "agility",
+          "min": 50
+        }
+      ],
+      "xph": [
+        29000,
+        34000
+      ],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "low",
+      "where": "Falador",
+      "note": "Marks of Grace drop; falls are possible.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Agility_training",
+      "place": "Falador"
+    },
+    {
+      "id": "ag-seers",
+      "skill": "agility",
+      "from": 60,
+      "to": 70,
+      "name": "The Seers' Village rooftops",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "agility",
+          "min": 60
+        }
+      ],
+      "xph": [
+        40000,
+        56000
+      ],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "low",
+      "where": "Seers' Village",
+      "note": "Faster with Camelot Teleport set to the course (the hard Kandarin diary).",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Agility_training",
+      "place": "Seers' Village"
+    },
+    {
+      "id": "ag-pollnivneach",
+      "skill": "agility",
+      "from": 70,
+      "to": 80,
+      "name": "The Pollnivneach rooftops",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "agility",
+          "min": 70
+        }
+      ],
+      "xph": [
+        47000,
+        58000
+      ],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "low",
+      "where": "Pollnivneach",
+      "note": "The hard Desert diary raises the pace.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Agility_training",
+      "place": "Pollnivneach"
+    },
+    {
+      "id": "ag-rellekka",
+      "skill": "agility",
+      "from": 80,
+      "to": 90,
+      "name": "The Rellekka rooftops",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "agility",
+          "min": 80
+        }
+      ],
+      "xph": [
+        50000,
+        63000
+      ],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "low",
+      "where": "Rellekka",
+      "note": "The hard Fremennik diary raises the pace.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Agility_training",
+      "place": "Rellekka"
+    },
+    {
+      "id": "ag-ardougne",
+      "skill": "agility",
+      "from": 90,
+      "to": null,
+      "name": "The Ardougne rooftops",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "agility",
+          "min": 90
+        }
+      ],
+      "xph": [
+        66000,
+        70000
+      ],
+      "effort": "low",
+      "cost": "profit",
+      "risk": "low",
+      "where": "East Ardougne",
+      "note": "Marks of Grace pile up on one tile and do not vanish while you run.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Agility_training",
+      "place": "East Ardougne"
     },
     {
       "id": "ck-meat",
@@ -1486,6 +1646,48 @@
       ]
     },
     {
+      "id": "ra-moss",
+      "skill": "ranged",
+      "from": 1,
+      "suggestedFrom": 57,
+      "to": null,
+      "name": "Moss giants from a safespot",
+      "members": false,
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "low",
+      "where": "Varrock Sewers, the far end (or the south side of Crandor): Moss giants from a safespot",
+      "note": "The wiki's best free Ranged XP after Brutus. A knife or slash weapon cuts the web in the sewers; stand where they cannot reach you and pick up your arrows between kills. Big bones on every kill. This is a starter trip; bank when food or ammunition is low.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Ranged_training",
+      "kit": "f2p-bow",
+      "needs": [
+        {
+          "type": "item",
+          "name": "Shortbow",
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Bronze arrow",
+          "count": 100,
+          "equip": true
+        },
+        {
+          "type": "item",
+          "name": "Salmon",
+          "count": 10,
+          "anyOf": [
+            "Tuna",
+            "Lobster",
+            "Swordfish"
+          ]
+        }
+      ],
+      "npcNames": [
+        "Moss giant"
+      ]
+    },
+    {
       "id": "me-cow",
       "skill": [
         "attack",
@@ -1718,6 +1920,33 @@
       "place": "East Ardougne"
     },
     {
+      "id": "th-fruit",
+      "skill": "thieving",
+      "from": 25,
+      "to": 50,
+      "name": "Fruit stalls in Hosidius",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "thieving",
+          "min": 25
+        }
+      ],
+      "xph": [
+        34200,
+        42750
+      ],
+      "xpa": 28.5,
+      "act": "theft|thefts",
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "none",
+      "where": "Hosidius, Great Kourend: the house by the beach with two stalls side by side",
+      "note": "Drop the fruit as you go; strange fruit restores run energy.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Thieving_training"
+    },
+    {
       "id": "th-blackjack",
       "skill": "thieving",
       "from": 45,
@@ -1740,6 +1969,37 @@
       "where": "Pollnivneach",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Thieving_training",
       "place": "Pollnivneach"
+    },
+    {
+      "id": "th-knights",
+      "skill": "thieving",
+      "from": 55,
+      "to": null,
+      "name": "Pickpocketing Ardougne knights",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "thieving",
+          "min": 55
+        }
+      ],
+      "xph": [
+        86000,
+        240000
+      ],
+      "xpa": 84.3,
+      "act": "pickpocket|pickpockets",
+      "effort": "high",
+      "cost": "profit",
+      "risk": "low",
+      "where": "The East Ardougne market",
+      "note": "Wear a Dodgy necklace and bring food; the medium Ardougne diary adds 10% success. Open the coin pouches before they fill.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Thieving_training",
+      "place": "East Ardougne",
+      "npcNames": [
+        "Knight of Ardougne"
+      ]
     },
     {
       "id": "fl-shaft",
@@ -1787,7 +2047,7 @@
       "id": "fl-oak-willow",
       "skill": "fletching",
       "from": 20,
-      "to": 40,
+      "to": 50,
       "name": "Oak and willow bows",
       "members": true,
       "needs": [
@@ -1804,6 +2064,93 @@
       "cost": "cost",
       "risk": "none",
       "where": "By a bank",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fletching_training"
+    },
+    {
+      "id": "fl-maple",
+      "skill": "fletching",
+      "from": 50,
+      "to": 65,
+      "name": "Maple bows",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Knife"
+        },
+        {
+          "type": "skill",
+          "skill": "fletching",
+          "min": 50
+        }
+      ],
+      "xph": [
+        90000,
+        157400
+      ],
+      "effort": "afk",
+      "cost": "profit",
+      "risk": "none",
+      "where": "By a bank",
+      "note": "Cut maple logs into unstrung longbows (shortbows first where the longbow is not open yet); stringing them is faster XP for more clicks.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fletching_training"
+    },
+    {
+      "id": "fl-yew",
+      "skill": "fletching",
+      "from": 65,
+      "to": 80,
+      "name": "Yew bows",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Knife"
+        },
+        {
+          "type": "skill",
+          "skill": "fletching",
+          "min": 65
+        }
+      ],
+      "xph": [
+        121500,
+        202500
+      ],
+      "effort": "afk",
+      "cost": "profit",
+      "risk": "none",
+      "where": "By a bank",
+      "note": "Cut yew logs into unstrung longbows (shortbows first where the longbow is not open yet); stringing them is faster XP for more clicks.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fletching_training"
+    },
+    {
+      "id": "fl-magic",
+      "skill": "fletching",
+      "from": 80,
+      "to": null,
+      "name": "Magic bows",
+      "members": true,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Knife"
+        },
+        {
+          "type": "skill",
+          "skill": "fletching",
+          "min": 80
+        }
+      ],
+      "xph": [
+        149900,
+        247000
+      ],
+      "effort": "afk",
+      "cost": "profit",
+      "risk": "none",
+      "where": "By a bank",
+      "note": "Cut magic logs into unstrung longbows (shortbows first where the longbow is not open yet); stringing them is faster XP for more clicks. Magic shortbows (80) lose a little; magic longbows (85) pay.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Fletching_training"
     },
     {
@@ -1846,6 +2193,31 @@
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Herblore_training"
     },
     {
+      "id": "he-high",
+      "skill": "herblore",
+      "from": 60,
+      "to": null,
+      "name": "High potions (Super restore, Saradomin brew, Super combat)",
+      "members": true,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "Druidic Ritual"
+        },
+        {
+          "type": "skill",
+          "skill": "herblore",
+          "min": 60
+        }
+      ],
+      "effort": "low",
+      "cost": "cost",
+      "risk": "none",
+      "where": "By a bank",
+      "note": "Super restores from 63, Zamorak brews from 78, Saradomin brews from 81, Super combat potions from 90; the cheaper potion of a level band is often the better buy. Mastering Mixology (Children of the Sun) is the calm alternative from 60.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Herblore_training"
+    },
+    {
       "id": "fa-allot",
       "skill": "farming",
       "from": 1,
@@ -1861,6 +2233,28 @@
       "risk": "none",
       "where": "The patches at Falador, Catherby, Ardougne, Port Phasmatys",
       "note": "It grows in real time: you plant and come back.",
+      "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Farming_training",
+      "place": "Falador"
+    },
+    {
+      "id": "fa-trees",
+      "skill": "farming",
+      "from": 15,
+      "to": null,
+      "name": "Tree and fruit tree runs",
+      "members": true,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "farming",
+          "min": 15
+        }
+      ],
+      "effort": "low",
+      "cost": "cost",
+      "risk": "none",
+      "where": "Tree patches at Lumbridge, Varrock, Falador and Taverley; fruit trees at the Tree Gnome Stronghold, Catherby and Brimhaven",
+      "note": "Oaks from 15, willows from 30, apple trees from 27 and banana trees from 33; pay the gardener to protect them. A tree run every few hours is most of the Farming XP; herb runs add money.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Farming_training",
       "place": "Falador"
     },
