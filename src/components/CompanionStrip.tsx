@@ -25,20 +25,24 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'more', label: 'More' },
 ];
 
-/** The next lines after the current one: from the walkthrough when the game confirms the line, otherwise its first lines. */
+/**
+ * The next lines: from the line the game confirms, otherwise from the first. The line the headline above already shows (CurrentAction: the
+ * confirmed line, "Talk to <NPC>", or the first line as the starting point) is not repeated as the list's first entry.
+ */
 function Next({ step }: { step: Step }) {
   const sub = useSubStep(step);
   const lines = overviewOf(step);
   const cur = overviewCurrent(lines, sub);
-  const quick = step.quickSteps ?? [];
-  const next = lines.length
-    ? lines.slice(cur === null ? 0 : cur, (cur === null ? 0 : cur) + 3).map((l) => l.title)
-    : quick.slice(0, 3);
+  const all = lines.length ? lines.map((l) => l.title) : step.quickSteps ?? [];
+  const headline = sub ? sub.title : step.npc ? `Talk to ${step.npc.nameEn}` : all[0];
+  const from = cur ?? 0;
+  const next = all.map((t, i) => ({ t, n: i + 1 })).slice(from).filter((x) => x.t !== headline).slice(0, 3);
   if (!next.length) return null;
+  const shown = all.slice(from).some((t) => t === headline);
   return (
     <section className="strip-next" aria-label="Next">
-      <h3 className="strip-h">{cur === null ? 'The first lines' : 'Next'}</h3>
-      <ol>{next.map((t, i) => <li key={i}><span className="strip-n">{(cur ?? 0) + i + 1}</span><span>{t}</span></li>)}</ol>
+      <h3 className="strip-h">{cur !== null || shown ? 'Next' : 'The first lines'}</h3>
+      <ol>{next.map((x) => <li key={x.n}><span className="strip-n">{x.n}</span><span>{x.t}</span></li>)}</ol>
     </section>
   );
 }
@@ -84,7 +88,8 @@ export function CompanionStrip({ step, suggested, onDone, nextId, onSelect }: {
           <>
             <StepStatus step={step} headline noStart onPrep={() => setTab('bag')} />
             <QuestSupplies step={step} />
-            <StepBody step={step} onDone={onDone} nextId={nextId} tab="prep" onPrep={() => setTab('bag')} safetyShown statusAbove />
+            {/* QuestSupplies above carries the verdict card: the preparation view below does not repeat it. */}
+            <StepBody step={step} onDone={onDone} nextId={nextId} tab="prep" onPrep={() => setTab('bag')} safetyShown statusAbove verdictShown />
           </>
         )}
 

@@ -587,6 +587,577 @@
         "The wiki notes the method pays only while feathers sell for 3 coins or more; the evaluator reads the live sell side and turns negative when it is lower.",
         "The shop tile is approximate."
       ]
+    },
+    {
+      "id": "giant-frogs",
+      "title": "Kill Giant frogs",
+      "family": "combat",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Big bones on every kill from the level 13 Giant frogs of Lumbridge Swamp; they hit for at most 2.",
+      "requirements": [],
+      "inputs": [],
+      "outputs": [
+        { "item": { "id": 532, "name": "Big bones" }, "qty": 1 }
+      ],
+      "rate": {
+        "unit": "kill",
+        "perHour": { "slow": 152, "typical": 175, "fast": 206 },
+        "basis": "combat-model",
+        "assumes": "The wiki publishes no pace for this method. These figures are the combat model's own for Attack and Strength 40, Defence 20, an Adamant scimitar and an Amulet of strength (the same model gives 109 Hill Giant kills an hour for that kit, the wiki guide's published 110). With your gear the model gives the pace; these figures are used only when it cannot run."
+      },
+      "trip": {
+        "bagSlots": 28,
+        "overheadSeconds": 120,
+        "note": "The Lumbridge bank is on the castle roof: stairs both ways, a short walk south to the swamp."
+      },
+      "spot": { "x": 3197, "y": 3180, "plane": 0, "label": "Giant frogs, Lumbridge Swamp" },
+      "bank": { "x": 3208, "y": 3220, "plane": 2, "label": "Lumbridge Bank" },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "moderate",
+      "marketDependence": "Big bones sell steadily at the Grand Exchange; the evaluator reads the live sell side.",
+      "combat": {
+        "foe": "Giant frog",
+        "versions": ["Level 13"],
+        "food": ["Trout", "Salmon", "Tuna", "Lobster"]
+      },
+      "guide": [
+        { "kind": "prepare", "text": "Take a few pieces of food from the bank. Keep the Big bones the route needs." },
+        { "kind": "travel", "text": "Go south of Lumbridge Castle to the level 13 Giant frogs in the swamp." },
+        { "kind": "perform", "text": "Kill frogs and pick up the Big bones until the bag is full." },
+        { "kind": "bank", "text": "Bank the bones on the Lumbridge Castle roof." },
+        { "kind": "sell", "text": "Sell the Big bones you do not need to keep at the Grand Exchange." },
+        { "kind": "restock", "text": "Buy the supplies you were short of, then go back to your step." }
+      ],
+      "sources": [
+        { "url": "https://oldschool.runescape.wiki/w/Giant_frog", "title": "Giant frog", "revision": 15353449, "revisedAt": "2026-09-23", "retrievedAt": "2026-10-25", "used": "level 13 drops (Big bones always), location pins in Lumbridge Swamp, free-to-play" },
+        { "url": "https://oldschool.runescape.wiki/w/Big_bones", "title": "Big bones", "revision": 15297558, "revisedAt": "2026-08-13", "retrievedAt": "2026-10-25", "used": "the item sold" }
+      ],
+      "verifiedAt": "2026-10-25",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Beginner clues (1/64) and the members-only Long and Curved bones are not counted.",
+        "The spot is the middle of the wiki's eight location pins; other players at busy hours are not modelled.",
+        "The wiki has no money-making guide for this method: the pace comes from the combat model, the price from the live market."
+      ]
+    },
+    {
+      "id": "jug-packs",
+      "title": "Buy jug packs",
+      "family": "shop",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Buy empty jug packs at Fortunato's Wine Shop in Draynor and sell the jugs.",
+      "requirements": [],
+      "inputs": [
+        { "item": { "id": 995, "name": "Coins" }, "qty": 145.2, "stack": true, "note": "Five packs at a time average 145.2 coins a pack" }
+      ],
+      "outputs": [
+        { "item": { "id": 1935, "name": "Jug" }, "qty": 100, "stack": true }
+      ],
+      "rate": {
+        "unit": "pack",
+        "perHour": { "slow": 825, "typical": 1200, "fast": 1500 },
+        "basis": "wiki-guide",
+        "assumes": "1,500 packs an hour is the published figure. Slow is 55% and typical 80% of it."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 20, "note": "A pack opens into 100 noted jugs; the Draynor bank is next to the shop." },
+      "spot": { "x": 3085, "y": 3252, "plane": 0, "label": "Fortunato's Wine Shop, Draynor Village" },
+      "bank": { "x": 3093, "y": 3243, "plane": 0, "label": "Draynor Bank" },
+      "saleSeconds": 40,
+      "risk": "low",
+      "intensity": "low",
+      "marketDependence": "Jugs pay only while they sell for about 2 coins or more; the evaluator reads the live sell side and turns negative when they do not.",
+      "guide": [
+        { "kind": "prepare", "text": "Take coins from the bank." },
+        { "kind": "travel", "text": "Go to Fortunato's Wine Shop in Draynor Village." },
+        { "kind": "perform", "text": "Buy five jug packs at a time and open them; hop worlds when the price climbs." },
+        { "kind": "bank", "text": "Bank the noted jugs." },
+        { "kind": "sell", "text": "Sell the jugs at the Grand Exchange." },
+        { "kind": "restock", "text": "Buy the supplies you were short of, then go back to your step." }
+      ],
+      "sources": [
+        { "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_jug_packs", "title": "Money making guide/Buying jug packs", "revision": 14391610, "retrievedAt": "2026-10-25", "used": "price per pack (five at a time), 100 jugs a pack, packs an hour, break-even note" },
+        { "url": "https://oldschool.runescape.wiki/w/Empty_jug_pack", "title": "Empty jug pack", "revision": 15215060, "retrievedAt": "2026-10-25", "used": "a pack holds 100 noted jugs" },
+        { "url": "https://oldschool.runescape.wiki/w/Fortunato", "title": "Fortunato", "revision": 15353412, "retrievedAt": "2026-10-25", "used": "the shop tile (wiki map)" }
+      ],
+      "verifiedAt": "2026-10-25",
+      "confidence": "LOW",
+      "assumptions": [
+        "The shop's price rises as its stock falls; the guide's five-pack average is used.",
+        "A 300,000 coin bankroll is recommended by the guide: the evaluator offers it only when the first batch is affordable."
+      ]
+    },
+    {
+      "id": "kebabs-al-kharid",
+      "title": "Buy kebabs in Al Kharid",
+      "family": "shop",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Buy kebabs from Karim north of the Al Kharid bank and sell them.",
+      "requirements": [
+        { "kind": "fare", "coins": 20, "reason": "The Al Kharid toll gate, both ways", "unlessQuest": "Prince Ali Rescue" }
+      ],
+      "inputs": [
+        { "item": { "id": 995, "name": "Coins" }, "qty": 1, "stack": true, "note": "Karim sells a kebab for 1 coin" }
+      ],
+      "outputs": [
+        { "item": { "id": 1971, "name": "Kebab" }, "qty": 1 }
+      ],
+      "rate": {
+        "unit": "kebab",
+        "perHour": { "slow": 605, "typical": 880, "fast": 1100 },
+        "basis": "wiki-guide",
+        "assumes": "1,100 kebabs an hour is the published figure (about 1 minute 24 seconds a bag). Slow is 55% and typical 80% of it."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 30, "note": "Karim's house is just north of the Al Kharid bank." },
+      "spot": { "x": 3274, "y": 3181, "plane": 0, "label": "Karim, Al Kharid" },
+      "bank": { "x": 3269, "y": 3167, "plane": 0, "label": "Al Kharid Bank" },
+      "saleSeconds": 60,
+      "risk": "low",
+      "intensity": "high",
+      "marketDependence": "Kebabs sell slowly and often under the guide price; the evaluator reads the live sell side.",
+      "guide": [
+        { "kind": "prepare", "text": "Take coins from the bank." },
+        { "kind": "travel", "text": "Go to Karim, in the building just north of the Al Kharid bank." },
+        { "kind": "perform", "text": "Talk to Karim and buy a kebab, again and again, until the bag is full." },
+        { "kind": "bank", "text": "Bank the kebabs in Al Kharid." },
+        { "kind": "sell", "text": "Sell the kebabs at the Grand Exchange." },
+        { "kind": "restock", "text": "Buy the supplies you were short of, then go back to your step." }
+      ],
+      "sources": [
+        { "url": "https://oldschool.runescape.wiki/w/Money_making_guide/Buying_kebabs_in_Al_Kharid", "title": "Money making guide/Buying kebabs in Al Kharid", "revision": 14380680, "retrievedAt": "2026-10-25", "used": "the dialogue, kebabs an hour, the round trip" },
+        { "url": "https://oldschool.runescape.wiki/w/Karim", "title": "Karim", "revision": 15358428, "retrievedAt": "2026-10-25", "used": "the shop tile (wiki map)" },
+        { "url": "https://oldschool.runescape.wiki/w/Kebab", "title": "Kebab", "revision": 15357940, "retrievedAt": "2026-10-25", "used": "item id, tradeable" }
+      ],
+      "verifiedAt": "2026-10-25",
+      "confidence": "LOW",
+      "assumptions": [
+        "Each kebab is bought through the same short dialogue; misclicks are inside the slow figure.",
+        "The toll is counted once a trip unless Prince Ali Rescue is complete."
+      ]
+    },
+    {
+      "id": "fill-jugs-falador",
+      "title": "Fill jugs with water",
+      "family": "processing",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Fill empty jugs at the Falador waterpump next to the west bank and sell the jugs of water.",
+      "requirements": [],
+      "inputs": [
+        {"item": {"id": 1935, "name": "Jug"}, "qty": 1}
+      ],
+      "outputs": [
+        {"item": {"id": 1937, "name": "Jug of water"}, "qty": 1}
+      ],
+      "rate": {
+        "unit": "jug",
+        "perHour": { "slow": 1540, "typical": 2240, "fast": 2800 },
+        "basis": "wiki-guide",
+        "assumes": "2,800 jugs an hour is the published figure. Slow is 55% and typical 80% of it."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 30, "note": "The waterpump is a few steps north of the Falador west bank; one use fills the whole bag." },
+      "spot": {"x": 2947, "y": 3382, "plane": 0, "label": "Waterpump, Falador"},
+      "bank": {"x": 2947, "y": 3366, "plane": 0, "label": "Falador West Bank"},
+      "saleSeconds": 40,
+      "risk": "low",
+      "intensity": "low",
+      "marketDependence": "The price of a jug of water swings with supply; the evaluator reads the live sell side.",
+      "guide": [
+        {"kind": "prepare", "text": "Buy empty jugs (the jug-pack method makes them)."},
+        {"kind": "travel", "text": "Go to the Falador west bank."},
+        {"kind": "perform", "text": "Withdraw 28 jugs and use one on the waterpump north of the bank: the rest fill by themselves."},
+        {"kind": "bank", "text": "Bank the jugs of water."},
+        {"kind": "sell", "text": "Sell the products at the Grand Exchange."},
+        {"kind": "restock", "text": "Buy the supplies you were short of, then go back to your step."}
+      ],
+      "sources": [
+        {"url": "https://oldschool.runescape.wiki/w/Money_making_guide/Filling_water_containers", "title": "Money making guide/Filling water containers", "revision": 14207581, "retrievedAt": "2026-10-25", "used": "jugs an hour, the waterpump next to the Falador west bank"},
+        {"url": "https://oldschool.runescape.wiki/w/Waterpump_(Falador)", "title": "Waterpump (Falador)", "revision": 14434501, "retrievedAt": "2026-10-25", "used": "the pump tile (wiki map)"}
+      ],
+      "verifiedAt": "2026-10-25",
+      "confidence": "LOW",
+      "assumptions": [
+        "Jugs of water have a volatile price; the guide advises holding stock when the price dips.",
+        "The margin is thin and moves with the market: the evaluator re-reads both sides of the trade every time and drops the method when it does not pay."
+      ]
+    },
+    {
+      "id": "pizza-bases",
+      "title": "Make pizza bases",
+      "family": "production",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Mix jugs of water with pots of flour into pizza bases at the Grand Exchange.",
+      "requirements": [],
+      "inputs": [
+        {"item": {"id": 1937, "name": "Jug of water"}, "qty": 1},
+        {"item": {"id": 1933, "name": "Pot of flour"}, "qty": 1}
+      ],
+      "outputs": [
+        {"item": {"id": 2283, "name": "Pizza base"}, "qty": 1},
+        {"item": {"id": 1935, "name": "Jug"}, "qty": 1},
+        {"item": {"id": 1931, "name": "Pot"}, "qty": 1}
+      ],
+      "rate": {
+        "unit": "base",
+        "perHour": { "slow": 1320, "typical": 1920, "fast": 2400 },
+        "basis": "wiki-guide",
+        "assumes": "2,400 bases an hour is the published figure, nine an inventory. Slow is 55% and typical 80% of it."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 8, "note": "Nine jugs and nine pots of flour a bag; the bank booths are beside the counters." },
+      "spot": {"x": 3165, "y": 3490, "plane": 0, "label": "Grand Exchange"},
+      "bank": {"x": 3164, "y": 3489, "plane": 0, "label": "Grand Exchange bank"},
+      "saleSeconds": 40,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {"kind": "prepare", "text": "Buy jugs of water and pots of flour at the Grand Exchange."},
+        {"kind": "perform", "text": "Withdraw 9 of each, use a jug on a pot of flour and choose the pizza base."},
+        {"kind": "bank", "text": "Bank the bases, jugs and pots."},
+        {"kind": "sell", "text": "Sell the products at the Grand Exchange."},
+        {"kind": "restock", "text": "Buy the supplies you were short of, then go back to your step."}
+      ],
+      "sources": [
+        {"url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_pizza_bases", "title": "Money making guide/Making pizza bases", "revision": 14380735, "retrievedAt": "2026-10-25", "used": "the recipe, nine an inventory, bases an hour; the empty jugs and pots are sold too"}
+      ],
+      "verifiedAt": "2026-10-25",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "Bases, empty jugs and pots rarely sell instantly at the shown price.",
+        "The margin is thin and moves with the market: the evaluator re-reads both sides of the trade every time and drops the method when it does not pay.",
+        "Item ids from the wiki infoboxes, retrieved 2026-10-25."
+      ]
+    },
+    {
+      "id": "berry-pies",
+      "title": "Make uncooked berry pies",
+      "family": "production",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Put redberries into pie shells at the Grand Exchange and sell the uncooked pies.",
+      "requirements": [
+        {"kind": "level", "skill": "cooking", "level": 10}
+      ],
+      "inputs": [
+        {"item": {"id": 2315, "name": "Pie shell"}, "qty": 1},
+        {"item": {"id": 1951, "name": "Redberries"}, "qty": 1}
+      ],
+      "outputs": [
+        {"item": {"id": 2321, "name": "Uncooked berry pie"}, "qty": 1}
+      ],
+      "rate": {
+        "unit": "pie",
+        "perHour": { "slow": 1348, "typical": 1960, "fast": 2450 },
+        "basis": "wiki-guide",
+        "assumes": "2,450 pies an hour is the published figure, fourteen an inventory. Slow is 55% and typical 80% of it."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 8, "note": "Fourteen shells and fourteen fillings a bag; the bank booths are beside the counters." },
+      "spot": {"x": 3165, "y": 3490, "plane": 0, "label": "Grand Exchange"},
+      "bank": {"x": 3164, "y": 3489, "plane": 0, "label": "Grand Exchange bank"},
+      "saleSeconds": 40,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {"kind": "prepare", "text": "Buy pie shells and redberries at the Grand Exchange."},
+        {"kind": "perform", "text": "Withdraw 14 of each and use the redberries on the shells."},
+        {"kind": "bank", "text": "Bank the pies."},
+        {"kind": "sell", "text": "Sell the products at the Grand Exchange."},
+        {"kind": "restock", "text": "Buy the supplies you were short of, then go back to your step."}
+      ],
+      "sources": [
+        {"url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_uncooked_berry_pies", "title": "Money making guide/Making uncooked berry pies", "revision": 14380786, "retrievedAt": "2026-10-25", "used": "Cooking 10, the recipe, pies an hour"}
+      ],
+      "verifiedAt": "2026-10-25",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide recommends a large bankroll; the evaluator offers it only when the first batch is affordable.",
+        "The margin is thin and moves with the market: the evaluator re-reads both sides of the trade every time and drops the method when it does not pay.",
+        "Item ids from the wiki infoboxes, retrieved 2026-10-25."
+      ]
+    },
+    {
+      "id": "meat-pies",
+      "title": "Make uncooked meat pies",
+      "family": "production",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Put cooked meat into pie shells at the Grand Exchange and sell the uncooked pies.",
+      "requirements": [
+        {"kind": "level", "skill": "cooking", "level": 20}
+      ],
+      "inputs": [
+        {"item": {"id": 2315, "name": "Pie shell"}, "qty": 1},
+        {"item": {"id": 2142, "name": "Cooked meat"}, "qty": 1}
+      ],
+      "outputs": [
+        {"item": {"id": 2319, "name": "Uncooked meat pie"}, "qty": 1}
+      ],
+      "rate": {
+        "unit": "pie",
+        "perHour": { "slow": 1348, "typical": 1960, "fast": 2450 },
+        "basis": "wiki-guide",
+        "assumes": "2,450 pies an hour is the published figure, fourteen an inventory. Slow is 55% and typical 80% of it."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 8, "note": "Fourteen shells and fourteen fillings a bag; the bank booths are beside the counters." },
+      "spot": {"x": 3165, "y": 3490, "plane": 0, "label": "Grand Exchange"},
+      "bank": {"x": 3164, "y": 3489, "plane": 0, "label": "Grand Exchange bank"},
+      "saleSeconds": 40,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {"kind": "prepare", "text": "Buy pie shells and cooked meat at the Grand Exchange."},
+        {"kind": "perform", "text": "Withdraw 14 of each and use the cooked meat on the shells."},
+        {"kind": "bank", "text": "Bank the pies."},
+        {"kind": "sell", "text": "Sell the products at the Grand Exchange."},
+        {"kind": "restock", "text": "Buy the supplies you were short of, then go back to your step."}
+      ],
+      "sources": [
+        {"url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_uncooked_meat_pies", "title": "Money making guide/Making uncooked meat pies", "revision": 14929687, "retrievedAt": "2026-10-25", "used": "Cooking 20, the recipe, pies an hour"}
+      ],
+      "verifiedAt": "2026-10-25",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide recommends a large bankroll; the evaluator offers it only when the first batch is affordable.",
+        "The margin is thin and moves with the market: the evaluator re-reads both sides of the trade every time and drops the method when it does not pay.",
+        "Item ids from the wiki infoboxes, retrieved 2026-10-25."
+      ]
+    },
+    {
+      "id": "apple-pies",
+      "title": "Make uncooked apple pies",
+      "family": "production",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Put cooking apple into pie shells at the Grand Exchange and sell the uncooked pies.",
+      "requirements": [
+        {"kind": "level", "skill": "cooking", "level": 30}
+      ],
+      "inputs": [
+        {"item": {"id": 2315, "name": "Pie shell"}, "qty": 1},
+        {"item": {"id": 1955, "name": "Cooking apple"}, "qty": 1}
+      ],
+      "outputs": [
+        {"item": {"id": 2317, "name": "Uncooked apple pie"}, "qty": 1}
+      ],
+      "rate": {
+        "unit": "pie",
+        "perHour": { "slow": 1348, "typical": 1960, "fast": 2450 },
+        "basis": "wiki-guide",
+        "assumes": "2,450 pies an hour is the published figure, fourteen an inventory. Slow is 55% and typical 80% of it."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 8, "note": "Fourteen shells and fourteen fillings a bag; the bank booths are beside the counters." },
+      "spot": {"x": 3165, "y": 3490, "plane": 0, "label": "Grand Exchange"},
+      "bank": {"x": 3164, "y": 3489, "plane": 0, "label": "Grand Exchange bank"},
+      "saleSeconds": 40,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {"kind": "prepare", "text": "Buy pie shells and cooking apple at the Grand Exchange."},
+        {"kind": "perform", "text": "Withdraw 14 of each and use the cooking apple on the shells."},
+        {"kind": "bank", "text": "Bank the pies."},
+        {"kind": "sell", "text": "Sell the products at the Grand Exchange."},
+        {"kind": "restock", "text": "Buy the supplies you were short of, then go back to your step."}
+      ],
+      "sources": [
+        {"url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_uncooked_apple_pies", "title": "Money making guide/Making uncooked apple pies", "revision": 14023227, "retrievedAt": "2026-10-25", "used": "Cooking 30, the recipe, pies an hour"}
+      ],
+      "verifiedAt": "2026-10-25",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide recommends a large bankroll; the evaluator offers it only when the first batch is affordable.",
+        "The margin is thin and moves with the market: the evaluator re-reads both sides of the trade every time and drops the method when it does not pay.",
+        "Item ids from the wiki infoboxes, retrieved 2026-10-25."
+      ]
+    },
+    {
+      "id": "smelt-silver-bars",
+      "title": "Smelt silver bars",
+      "family": "processing",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Buy silver ore, smelt it at the Edgeville furnace and sell the bars.",
+      "requirements": [
+        {"kind": "level", "skill": "smithing", "level": 20}
+      ],
+      "inputs": [
+        {"item": {"id": 442, "name": "Silver ore"}, "qty": 1}
+      ],
+      "outputs": [
+        {"item": {"id": 2355, "name": "Silver bar"}, "qty": 1}
+      ],
+      "rate": {
+        "unit": "bar",
+        "perHour": { "slow": 539, "typical": 784, "fast": 980 },
+        "basis": "wiki-guide",
+        "assumes": "980 bars an hour is the published figure at the Edgeville furnace. Slow is 55% and typical 80% of it."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 10, "note": "The Edgeville furnace is a few steps from the bank." },
+      "spot": {"x": 3109, "y": 3499, "plane": 0, "label": "Edgeville furnace"},
+      "bank": {"x": 3093, "y": 3495, "plane": 0, "label": "Edgeville Bank"},
+      "saleSeconds": 40,
+      "risk": "low",
+      "intensity": "moderate",
+      "guide": [
+        {"kind": "prepare", "text": "Buy silver ore at the Grand Exchange."},
+        {"kind": "travel", "text": "Go to the Edgeville bank."},
+        {"kind": "perform", "text": "Withdraw 28 ore and smelt it at the furnace."},
+        {"kind": "bank", "text": "Bank the bars."},
+        {"kind": "sell", "text": "Sell the products at the Grand Exchange."},
+        {"kind": "restock", "text": "Buy the supplies you were short of, then go back to your step."}
+      ],
+      "sources": [
+        {"url": "https://oldschool.runescape.wiki/w/Money_making_guide/Smelting_silver_bars", "title": "Money making guide/Smelting silver bars", "revision": 15260367, "retrievedAt": "2026-10-25", "used": "Smithing 20, the Edgeville furnace, bars an hour"}
+      ],
+      "verifiedAt": "2026-10-25",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The margin is thin and moves with the market: the evaluator re-reads both sides of the trade every time and drops the method when it does not pay.",
+        "Item ids from the wiki infoboxes, retrieved 2026-10-25."
+      ]
+    },
+    {
+      "id": "grind-chocolate",
+      "title": "Grind chocolate bars",
+      "family": "production",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Cut chocolate bars into chocolate dust with a knife and sell the dust.",
+      "requirements": [
+        {"kind": "item", "role": "tool", "any": [{"id": 946, "name": "Knife"}], "note": "The pestle and mortar is members-only; a knife does the same on free worlds."}
+      ],
+      "inputs": [
+        {"item": {"id": 1973, "name": "Chocolate bar"}, "qty": 1}
+      ],
+      "outputs": [
+        {"item": {"id": 1975, "name": "Chocolate dust"}, "qty": 1}
+      ],
+      "rate": {
+        "unit": "bar",
+        "perHour": { "slow": 4950, "typical": 7200, "fast": 9000 },
+        "basis": "wiki-guide",
+        "assumes": "9,000 bars an hour is the guide's high-intensity figure (1,800 when left to grind by itself). Slow is 55% and typical 80% of it."
+      },
+      "trip": { "bagSlots": 27, "overheadSeconds": 8, "note": "The knife takes one slot; the bank booths are beside the counters." },
+      "spot": {"x": 3165, "y": 3490, "plane": 0, "label": "Grand Exchange"},
+      "bank": {"x": 3164, "y": 3489, "plane": 0, "label": "Grand Exchange bank"},
+      "saleSeconds": 40,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {"kind": "prepare", "text": "Buy chocolate bars at the Grand Exchange; keep a knife in the bag."},
+        {"kind": "perform", "text": "Use the knife on the bars until all are dust."},
+        {"kind": "bank", "text": "Bank the dust."},
+        {"kind": "sell", "text": "Sell the products at the Grand Exchange."},
+        {"kind": "restock", "text": "Buy the supplies you were short of, then go back to your step."}
+      ],
+      "sources": [
+        {"url": "https://oldschool.runescape.wiki/w/Money_making_guide/Grinding_chocolate_bars", "title": "Money making guide/Grinding chocolate bars", "revision": 14608518, "retrievedAt": "2026-10-25", "used": "bars an hour (idle and high-intensity), knife or pestle and mortar"},
+        {"url": "https://oldschool.runescape.wiki/w/Pestle_and_mortar", "title": "Pestle and mortar", "retrievedAt": "2026-10-25", "used": "members-only: the knife is the free-world tool"}
+      ],
+      "verifiedAt": "2026-10-25",
+      "confidence": "LOW",
+      "assumptions": [
+        "The guide advises grinding one bar first to test the market.",
+        "The margin is thin and moves with the market: the evaluator re-reads both sides of the trade every time and drops the method when it does not pay.",
+        "Item ids from the wiki infoboxes, retrieved 2026-10-25."
+      ]
+    },
+    {
+      "id": "chocolate-cakes",
+      "title": "Make chocolate cakes",
+      "family": "production",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Add chocolate bar to cakes at the Grand Exchange and sell the chocolate cakes; it gives Cooking XP too.",
+      "requirements": [
+        {"kind": "level", "skill": "cooking", "level": 50}
+      ],
+      "inputs": [
+        {"item": {"id": 1891, "name": "Cake"}, "qty": 1},
+        {"item": {"id": 1973, "name": "Chocolate bar"}, "qty": 1}
+      ],
+      "outputs": [
+        {"item": {"id": 1897, "name": "Chocolate cake"}, "qty": 1}
+      ],
+      "rate": {
+        "unit": "item",
+        "perHour": { "slow": 1375, "typical": 2000, "fast": 2500 },
+        "basis": "wiki-guide",
+        "assumes": "2,500 an hour is the published figure, fourteen an inventory in about 20 seconds. Slow is 55% and typical 80% of it."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 8, "note": "Fourteen of each a bag; the bank booths are beside the counters." },
+      "spot": {"x": 3165, "y": 3490, "plane": 0, "label": "Grand Exchange"},
+      "bank": {"x": 3164, "y": 3489, "plane": 0, "label": "Grand Exchange bank"},
+      "saleSeconds": 40,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {"kind": "prepare", "text": "Buy cakes and chocolate bar at the Grand Exchange."},
+        {"kind": "perform", "text": "Withdraw 14 of each and use one on the other; take care not to eat them."},
+        {"kind": "bank", "text": "Bank the chocolate cakes."},
+        {"kind": "sell", "text": "Sell the products at the Grand Exchange."},
+        {"kind": "restock", "text": "Buy the supplies you were short of, then go back to your step."}
+      ],
+      "sources": [
+        {"url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_chocolate_cake", "title": "Money making guide/Making chocolate cake", "revision": 14380732, "retrievedAt": "2026-10-25", "used": "Cooking 50, the recipe, an hour's count"}
+      ],
+      "verifiedAt": "2026-10-25",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide advises a test batch before buying in bulk.",
+        "The margin is thin and moves with the market: the evaluator re-reads both sides of the trade every time and drops the method when it does not pay.",
+        "Item ids from the wiki infoboxes, retrieved 2026-10-25."
+      ]
+    },
+    {
+      "id": "anchovy-pizzas",
+      "title": "Make anchovy pizzas",
+      "family": "production",
+      "access": "f2p",
+      "repeatable": true,
+      "summary": "Add anchovies to plain pizzas at the Grand Exchange and sell the anchovy pizzas; it gives Cooking XP too.",
+      "requirements": [
+        {"kind": "level", "skill": "cooking", "level": 55}
+      ],
+      "inputs": [
+        {"item": {"id": 2289, "name": "Plain pizza"}, "qty": 1},
+        {"item": {"id": 319, "name": "Anchovies"}, "qty": 1}
+      ],
+      "outputs": [
+        {"item": {"id": 2297, "name": "Anchovy pizza"}, "qty": 1}
+      ],
+      "rate": {
+        "unit": "item",
+        "perHour": { "slow": 1375, "typical": 2000, "fast": 2500 },
+        "basis": "wiki-guide",
+        "assumes": "2,500 an hour is the published figure, fourteen an inventory in about 20 seconds. Slow is 55% and typical 80% of it."
+      },
+      "trip": { "bagSlots": 28, "overheadSeconds": 8, "note": "Fourteen of each a bag; the bank booths are beside the counters." },
+      "spot": {"x": 3165, "y": 3490, "plane": 0, "label": "Grand Exchange"},
+      "bank": {"x": 3164, "y": 3489, "plane": 0, "label": "Grand Exchange bank"},
+      "saleSeconds": 40,
+      "risk": "low",
+      "intensity": "high",
+      "guide": [
+        {"kind": "prepare", "text": "Buy plain pizzas and anchovies at the Grand Exchange."},
+        {"kind": "perform", "text": "Withdraw 14 of each and use one on the other; take care not to eat them."},
+        {"kind": "bank", "text": "Bank the anchovy pizzas."},
+        {"kind": "sell", "text": "Sell the products at the Grand Exchange."},
+        {"kind": "restock", "text": "Buy the supplies you were short of, then go back to your step."}
+      ],
+      "sources": [
+        {"url": "https://oldschool.runescape.wiki/w/Money_making_guide/Making_anchovy_pizzas", "title": "Money making guide/Making anchovy pizzas", "revision": 14199425, "retrievedAt": "2026-10-25", "used": "Cooking 55, the recipe, an hour's count"}
+      ],
+      "verifiedAt": "2026-10-25",
+      "confidence": "MEDIUM",
+      "assumptions": [
+        "The guide advises a test batch before buying in bulk.",
+        "The margin is thin and moves with the market: the evaluator re-reads both sides of the trade every time and drops the method when it does not pay.",
+        "Item ids from the wiki infoboxes, retrieved 2026-10-25."
+      ]
     }
   ]
 }

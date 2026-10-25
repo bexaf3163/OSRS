@@ -204,6 +204,12 @@ const SHOTS: Shot[] = [
   },
   { name: 'money-offline', area: 'T2', caption: 'Money: RuneLite not connected: published figures, nothing confirmed', width: 1440, hash: '#/money', mock: { ...hillGiants(), offline: true } },
   { name: 'money-390', area: 'T2', caption: 'Money at phone width', width: 390, hash: '#/money', mock: hillGiants() },
+  { name: 'compact', area: 'T14', caption: 'Compact Path view (Settings: compact) in a narrow window beside the game', width: 560, hash: '#/', mock: hillGiants({ storage: { 'osrs-put:features': JSON.stringify({ compact: true }) } }) },
+  ...(['Bag', 'Route', 'More'] as const).map((tab) => ({
+    name: `compact-${tab.toLowerCase()}`, area: 'T14', caption: `Compact Path view, the ${tab} tab`, width: 560, hash: '#/',
+    mock: hillGiants({ storage: { 'osrs-put:features': JSON.stringify({ compact: true }) } }),
+    act: async (p: Page) => { await p.locator('.strip').getByRole('tab', { name: tab }).click(); await p.waitForTimeout(400); },
+  })),
   { name: 'journal', area: 'T14', caption: 'Journal as it opens for the reported character', width: 1440, hash: '#/journal', mock: hillGiants() },
 ];
 

@@ -61,7 +61,7 @@
       "id": "crafting-diamond-jewellery",
       "status": "unsupported",
       "family": "production",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "reason": "The product is whichever recipe pays most at the moment: one fixed output cannot model it"
     },
     {
       "id": "smelting-runite-bars",
@@ -73,7 +73,7 @@
       "id": "crafting-ruby-jewellery",
       "status": "unsupported",
       "family": "production",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "reason": "The product is whichever recipe pays most at the moment: one fixed output cannot model it"
     },
     {
       "id": "collecting-anti-dragon-shields-free-to-play",
@@ -91,15 +91,17 @@
     },
     {
       "id": "grinding-chocolate-bars",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "grind-chocolate"
+      ]
     },
     {
       "id": "crafting-emerald-jewellery",
       "status": "unsupported",
       "family": "production",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "reason": "The product is whichever recipe pays most at the moment: one fixed output cannot model it"
     },
     {
       "id": "buying-feather-packs",
@@ -111,9 +113,11 @@
     },
     {
       "id": "buying-jug-packs",
-      "status": "unsupported",
+      "status": "supported",
       "family": "shop",
-      "reason": "Shop run: same model as the supported shop methods, not curated yet"
+      "methods": [
+        "jug-packs"
+      ]
     },
     {
       "id": "casting-bones-to-bananas",
@@ -133,7 +137,7 @@
       "id": "crafting-sapphire-jewellery",
       "status": "unsupported",
       "family": "production",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "reason": "The product is whichever recipe pays most at the moment: one fixed output cannot model it"
     },
     {
       "id": "collecting-steel-platebodies",
@@ -157,7 +161,7 @@
       "id": "making-pastry-dough",
       "status": "unsupported",
       "family": "processing",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "reason": "The product is whichever recipe pays most at the moment: one fixed output cannot model it"
     },
     {
       "id": "buying-team-capes",
@@ -213,13 +217,15 @@
       "id": "crafting-gold-jewellery",
       "status": "unsupported",
       "family": "production",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "reason": "The product is whichever recipe pays most at the moment: one fixed output cannot model it"
     },
     {
       "id": "making-uncooked-apple-pies",
-      "status": "unsupported",
+      "status": "supported",
       "family": "production",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "methods": [
+        "apple-pies"
+      ]
     },
     {
       "id": "collecting-monk-s-robes",
@@ -245,19 +251,23 @@
       "id": "making-dyes",
       "status": "unsupported",
       "family": "processing",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "reason": "The product is whichever recipe pays most at the moment: one fixed output cannot model it"
     },
     {
       "id": "making-uncooked-berry-pies",
-      "status": "unsupported",
+      "status": "supported",
       "family": "production",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "methods": [
+        "berry-pies"
+      ]
     },
     {
       "id": "making-anchovy-pizzas",
-      "status": "unsupported",
+      "status": "supported",
       "family": "production",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "methods": [
+        "anchovy-pizzas"
+      ]
     },
     {
       "id": "smelting-iron-bars",
@@ -267,9 +277,11 @@
     },
     {
       "id": "making-pizza-bases",
-      "status": "unsupported",
-      "family": "processing",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "status": "supported",
+      "family": "production",
+      "methods": [
+        "pizza-bases"
+      ]
     },
     {
       "id": "killing-ogress-warriors",
@@ -287,7 +299,7 @@
       "id": "buying-ale-from-the-rising-sun-inn",
       "status": "unsupported",
       "family": "shop",
-      "reason": "Shop run: same model as the supported shop methods, not curated yet"
+      "reason": "The product is whichever of three drinks pays most at the moment: one fixed output cannot model it"
     },
     {
       "id": "collecting-and-tanning-cowhide",
@@ -303,9 +315,11 @@
     },
     {
       "id": "making-chocolate-cake",
-      "status": "unsupported",
+      "status": "supported",
       "family": "production",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "methods": [
+        "chocolate-cakes"
+      ]
     },
     {
       "id": "killing-cows-and-tanning-cowhide",
@@ -356,9 +370,11 @@
     },
     {
       "id": "smelting-silver-bars",
-      "status": "unsupported",
+      "status": "supported",
       "family": "processing",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "methods": [
+        "smelt-silver-bars"
+      ]
     },
     {
       "id": "collecting-air-talismans",
@@ -392,9 +408,11 @@
     },
     {
       "id": "buying-kebabs-in-al-kharid",
-      "status": "unsupported",
+      "status": "supported",
       "family": "shop",
-      "reason": "Shop run: same model as the supported shop methods, not curated yet"
+      "methods": [
+        "kebabs-al-kharid"
+      ]
     },
     {
       "id": "making-dough-at-cooks-guild",
@@ -464,9 +482,11 @@
     },
     {
       "id": "making-uncooked-meat-pies",
-      "status": "unsupported",
+      "status": "supported",
       "family": "production",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "methods": [
+        "meat-pies"
+      ]
     },
     {
       "id": "stealing-wydin-s-bananas",
@@ -476,9 +496,11 @@
     },
     {
       "id": "filling-water-containers",
-      "status": "unsupported",
+      "status": "supported",
       "family": "processing",
-      "reason": "Needs a large bankroll for a thin margin; the engine can model it, but it is not curated yet"
+      "methods": [
+        "fill-jugs-falador"
+      ]
     },
     {
       "id": "mining-coal-free-to-play",
@@ -576,6 +598,15 @@
     }
   ],
   "extras": [
+    {
+      "id": "giant-frogs",
+      "status": "supported",
+      "family": "combat",
+      "note": "Not a wiki money-making guide: Big bones from the level 13 Giant frogs of Lumbridge Swamp (Giant frog and Big bones articles), paced by the combat model.",
+      "methods": [
+        "giant-frogs"
+      ]
+    },
     {
       "id": "sell-surplus",
       "status": "supported",

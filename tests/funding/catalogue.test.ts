@@ -18,8 +18,10 @@ describe('the method catalogue', () => {
 
   it('has the methods the audit promised, with stable ids', () => {
     expect(METHODS.map((m) => m.id).sort()).toEqual([
-      'chop-oak-draynor', 'chop-yew-edgeville', 'collect-iron-al-kharid', 'cows-cowhide', 'feather-packs', 'fish-lobster-musa', 'hill-giants',
-      'mine-coal-dwarven', 'mine-iron-dwarven', 'oziach-shields', 'pie-shells', 'smelt-steel-bars',
+      'anchovy-pizzas', 'apple-pies', 'berry-pies', 'chocolate-cakes', 'chop-oak-draynor', 'chop-yew-edgeville', 'collect-iron-al-kharid',
+      'cows-cowhide', 'feather-packs', 'fill-jugs-falador', 'fish-lobster-musa', 'giant-frogs', 'grind-chocolate', 'hill-giants', 'jug-packs',
+      'kebabs-al-kharid', 'meat-pies', 'mine-coal-dwarven', 'mine-iron-dwarven', 'oziach-shields', 'pie-shells', 'pizza-bases', 'smelt-silver-bars',
+      'smelt-steel-bars',
     ]);
     expect(methodById('hill-giants')?.combat?.foe).toBe('Hill Giant');
     expect(methodById('nothing')).toBeUndefined();
@@ -96,12 +98,14 @@ describe('the coverage ledger', () => {
         expect((e as { reason?: string }).reason, e.id).toBeTruthy();
       }
     }
+    // A method that is no wiki guide (Giant frogs, 2.74.19) is covered by an extra that names it.
+    for (const x of coverageJson.extras as { status: string; methods?: string[] }[]) if (x.status === 'supported') for (const id of x.methods ?? []) covered.add(id);
     expect([...covered].sort()).toEqual(METHODS.map((m) => m.id).sort());
   });
 
   it('names the families that are not wiki rows too, and says no to one-time rewards as a plan', () => {
     const extra = coverageJson.extras;
-    expect(extra.map((e) => e.family).sort()).toEqual(['one-time', 'self-supply', 'surplus-sale']);
+    expect(extra.map((e) => e.family).sort()).toEqual(['combat', 'one-time', 'self-supply', 'surplus-sale']);
     expect(extra.find((e) => e.family === 'one-time')?.status).toBe('unsupported');
   });
 });

@@ -12,9 +12,9 @@ Not done: cost per hour is not modelled per method (the catalogue says free / co
 
 | Skill | Account | Guide | Methods | Route asks | Gaps and problems | Verification |
 |---|---|---|---|---|---|---|
-| attack | free to 99, members to 99 | 10 steps (4 free), levels 1-99 | 2 (1 free) | free route 40, whole route 49 | no catalogue method for free levels 20-98 | automated data checks; not verified in the game |
-| strength | free to 99, members to 99 | 9 steps (5 free), levels 1-99 | 2 (1 free) | free route 35, whole route 39 | no catalogue method for free levels 20-98 | automated data checks; not verified in the game |
-| defence | free to 99, members to 99 | 7 steps (4 free), levels 1-99 | 2 (1 free) | free route 33, whole route 34 | no catalogue method for free levels 20-98 | automated data checks; not verified in the game |
+| attack | free to 99, members to 99 | 10 steps (4 free), levels 1-99 | 7 (6 free) | free route 40, whole route 49 | none | automated data checks; not verified in the game |
+| strength | free to 99, members to 99 | 9 steps (5 free), levels 1-99 | 7 (6 free) | free route 35, whole route 39 | none | automated data checks; not verified in the game |
+| defence | free to 99, members to 99 | 7 steps (4 free), levels 1-99 | 7 (6 free) | free route 33, whole route 34 | none | automated data checks; not verified in the game |
 | ranged | free to 99, members to 99 | 6 steps (3 free), levels 1-99 | 4 (4 free) | free route 50, whole route 50 | none | automated data checks; not verified in the game |
 | prayer | free to 99, members to 99 | 5 steps (4 free), levels 1-99 | 2 (2 free) | free route 15, whole route 43 | none | automated data checks; not verified in the game |
 | magic | free to 99, members to 99 | 6 steps (5 free), levels 1-99 | 5 (5 free) | free route 55, whole route 55 | none | automated data checks; not verified in the game |
@@ -24,16 +24,16 @@ Not done: cost per hour is not modelled per method (the catalogue says free / co
 | agility | members only | 14 steps (0 free), levels 1-99 | 3 (0 free) | free route -, whole route 31 | none | automated data checks; not verified in the game |
 | herblore | members only | 4 steps (0 free), levels 1-99 | 1 (0 free) | not asked | none | automated data checks; not verified in the game |
 | thieving | members only | 5 steps (0 free), levels 1-99 | 3 (0 free) | not asked | none | automated data checks; not verified in the game |
-| crafting | free to 43, members to 99 | 5 steps (2 free), levels 1-99 | 3 (3 free) | free route 8, whole route 31 | none | automated data checks; not verified in the game |
+| crafting | free to 43, members to 99 | 5 steps (2 free), levels 1-99 | 4 (4 free) | free route 8, whole route 31 | none | automated data checks; not verified in the game |
 | fletching | members only | 8 steps (0 free), levels 1-99 | 3 (0 free) | not asked | none | automated data checks; not verified in the game |
 | slayer | members only | 3 steps (0 free), levels 1-99 | none: the card shows the training plan row | free route -, whole route 20 | none | automated data checks; not verified in the game |
 | hunter | members only | 10 steps (0 free), levels 1-99 | none: the card shows the training plan row | not asked | none | automated data checks; not verified in the game |
 | mining | free to 99, members to 99 | 6 steps (3 free), levels 1-99 | 3 (2 free) | free route 60, whole route 60 | none | automated data checks; not verified in the game |
-| smithing | free to 99, members to 99 | 6 steps (4 free), levels 1-99 | 3 (3 free) | free route 29, whole route 29 | no catalogue method for free levels 1-17; no catalogue method for free levels 68-98 | automated data checks; not verified in the game |
+| smithing | free to 99, members to 99 | 6 steps (4 free), levels 1-99 | 6 (6 free) | free route 29, whole route 29 | none | automated data checks; not verified in the game |
 | fishing | free to 99, members to 99 | 8 steps (4 free), levels 1-99 | 7 (5 free) | free route 50, whole route 50 | none | automated data checks; not verified in the game |
 | cooking | free to 99, members to 99 | 5 steps (4 free), levels 1-99 | 4 (4 free) | free route 50, whole route 50 | none | automated data checks; not verified in the game |
 | firemaking | free to 99, members to 99 | 6 steps (5 free), levels 1-99 | 5 (5 free) | free route 15, whole route 15 | none | automated data checks; not verified in the game |
-| woodcutting | free to 99, members to 99 | 8 steps (4 free), levels 1-99 | 5 (3 free) | free route 60, whole route 60 | no catalogue method for free levels 60-98 | automated data checks; not verified in the game |
+| woodcutting | free to 99, members to 99 | 8 steps (4 free), levels 1-99 | 6 (4 free) | free route 60, whole route 60 | none | automated data checks; not verified in the game |
 | farming | members only | 3 steps (0 free), levels 1-99 | 2 (0 free) | not asked | none | automated data checks; not verified in the game |
 
-Catalogue: 61 entries. Skills with no catalogue method fall back to the training plan row of the skill page; they are said so, not shown as a full plan.
+Catalogue: 72 entries. Skills with no catalogue method fall back to the training plan row of the skill page; they are said so, not shown as a full plan.

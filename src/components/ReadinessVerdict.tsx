@@ -46,7 +46,8 @@ export function ReadinessVerdictCard({ step, noPill = false }: { step: Step; noP
   return (
     <section className={`readiness-verdict is-${v.level.toLowerCase()}`} aria-label="Readiness">
       <p className="verdict-head" role="status">
-        {!noPill && <span className="verdict-pill">{v.label}</span>}
+        {/* "Preparation needed: bring food…" already starts with the level: the pill would say it twice (seen in the compact view). */}
+        {!noPill && !v.headline.startsWith(v.label) && <span className="verdict-pill">{v.label}</span>}
         <span className="verdict-line">{v.headline}</span>
       </p>
       {combat?.variant && <p className="small verdict-variant">{combat.variant}</p>}

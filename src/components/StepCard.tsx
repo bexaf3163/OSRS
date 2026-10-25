@@ -96,8 +96,8 @@ function FieldRow({ field }: { field: Field }) {
 /** The four views of the Path workspace; without one, StepBody renders the whole card (the narrow list). */
 export type StepTab = 'steps' | 'prep' | 'travel' | 'details';
 
-/** The step details. nextId — which step opens after the mark (the caption on the button in the wide layout). tab — one view of the workspace. noAside — the workspace shows the preparation list in its own column, Steps does not repeat it. statusAbove — the verdict is on a status line above, so Preparation does not say it again. */
-export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = false, noAside = false, statusAbove = false, noManual = false }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab | 'safety'; onPrep?: () => void; safetyShown?: boolean; noAside?: boolean; statusAbove?: boolean; noManual?: boolean }) {
+/** The step details. nextId — which step opens after the mark (the caption on the button in the wide layout). tab — one view of the workspace. noAside — the workspace shows the preparation list in its own column, Steps does not repeat it. statusAbove — the verdict is on a status line above, so Preparation does not say it again. verdictShown — a panel above already shows the readiness verdict card (the compact Bag tab's QuestSupplies). */
+export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = false, noAside = false, statusAbove = false, noManual = false, verdictShown = false }: { step: Step; onDone: (id: string) => void; nextId?: string; tab?: StepTab | 'safety'; onPrep?: () => void; safetyShown?: boolean; noAside?: boolean; statusAbove?: boolean; noManual?: boolean; verdictShown?: boolean }) {
   const { progress, mode, setStep, review, reactivate } = useStore();
   const qp = useQuestPoints();
   const { openNpc } = useWiki();
@@ -382,7 +382,7 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
       return (
         <div className="step-details is-tab">
           {/* The status line above already says when nothing is checked, and the list below names every thing once. */}
-          <ReadinessVerdictCard step={step} />
+          {!verdictShown && <ReadinessVerdictCard step={step} />}
           <ReadinessPanel step={step} bare={statusAbove && !recovering} />
           <LoadoutsCard step={step} />
           <CarryNote step={step} />

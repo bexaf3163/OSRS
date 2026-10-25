@@ -59,7 +59,7 @@
       "id": "wc-willow",
       "skill": "woodcutting",
       "from": 30,
-      "to": 60,
+      "to": null,
       "name": "Willow trees",
       "members": false,
       "needs": [
@@ -83,6 +83,32 @@
       "place": "Port Sarim",
       "objectNames": [
         "Willow tree"
+      ]
+    },
+    {
+      "id": "wc-yew",
+      "skill": "woodcutting",
+      "from": 60,
+      "to": null,
+      "name": "Yew trees",
+      "members": false,
+      "needs": [
+        {
+          "type": "tool",
+          "skill": "woodcutting"
+        }
+      ],
+      "xpa": 175,
+      "act": "log|logs",
+      "effort": "afk",
+      "cost": "profit",
+      "risk": "none",
+      "where": "South of the Edgeville bank: two yew trees close to the bank",
+      "note": "Slower XP than willows; the guide uses yews for the money the logs fetch. Other free yews stand behind Varrock Palace and south of the Falador east bank.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Woodcutting_training",
+      "place": "Edgeville Bank",
+      "objectNames": [
+        "Yew tree"
       ]
     },
     {
@@ -666,6 +692,47 @@
       "place": "Grand Exchange"
     },
     {
+      "id": "sm-knight",
+      "skill": "smithing",
+      "from": 1,
+      "to": 29,
+      "name": "The quest The Knight's Sword",
+      "members": false,
+      "kind": "quest",
+      "xpTotal": 12725,
+      "effort": "low",
+      "cost": "free",
+      "risk": "none",
+      "where": "Falador (route step S2-07)",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training",
+      "place": "Falador"
+    },
+    {
+      "id": "sm-bronze-items",
+      "skill": "smithing",
+      "from": 1,
+      "to": 18,
+      "name": "Bronze axes, scimitars and warhammers",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Hammer"
+        }
+      ],
+      "xph": [
+        13500,
+        36000
+      ],
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "The anvil by the west Varrock bank",
+      "note": "Bronze axes (1 bar, 12.5 XP) to 5, scimitars (2 bars, 25 XP) to 9, warhammers (3 bars, 37.5 XP) to 18; then bronze platebodies.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training",
+      "place": "Varrock West Bank"
+    },
+    {
       "id": "sm-bronze",
       "skill": "smithing",
       "from": 18,
@@ -728,6 +795,52 @@
       "cost": "cost",
       "risk": "none",
       "where": "The anvil by the west Varrock bank",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training",
+      "place": "Varrock West Bank"
+    },
+    {
+      "id": "sm-mithril",
+      "skill": "smithing",
+      "from": 68,
+      "to": 88,
+      "name": "Mithril platebodies",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Hammer"
+        }
+      ],
+      "xpa": 250,
+      "act": "platebody|platebodies",
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "The anvil by the west Varrock bank",
+      "note": "Five mithril bars a platebody.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training",
+      "place": "Varrock West Bank"
+    },
+    {
+      "id": "sm-adamant",
+      "skill": "smithing",
+      "from": 88,
+      "to": null,
+      "name": "Adamant platebodies",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Hammer"
+        }
+      ],
+      "xpa": 312.5,
+      "act": "platebody|platebodies",
+      "effort": "medium",
+      "cost": "cost",
+      "risk": "none",
+      "where": "The anvil by the west Varrock bank",
+      "note": "Five adamantite bars a platebody. A dwarven stout boosts 87 to 88; the guide's last step is rune platebodies at 99 (98 boosted).",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Smithing_training",
       "place": "Varrock West Bank"
     },
@@ -797,6 +910,29 @@
       "cost": "cost",
       "risk": "none",
       "where": "By a bank",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Crafting_training",
+      "place": "Grand Exchange"
+    },
+    {
+      "id": "cr-diamond",
+      "skill": "crafting",
+      "from": 43,
+      "to": null,
+      "name": "Cutting diamonds",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Chisel"
+        }
+      ],
+      "xpa": 107.5,
+      "act": "gem|gems",
+      "effort": "low",
+      "cost": "cost",
+      "risk": "none",
+      "where": "By a bank",
+      "note": "The guide's fastest free Crafting from 43; every cut loses money at exchange prices, so check the budget first.",
       "url": "https://oldschool.runescape.wiki/w/Free-to-play_Crafting_training",
       "place": "Grand Exchange"
     },
@@ -1327,6 +1463,157 @@
       "note": "Bones and hides drop along the way.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Melee_training",
       "place": "Lumbridge"
+    },
+    {
+      "id": "me-monk",
+      "skill": [
+        "attack",
+        "strength",
+        "defence"
+      ],
+      "from": 1,
+      "to": 20,
+      "name": "The monks of Edgeville Monastery",
+      "members": false,
+      "effort": "medium",
+      "cost": "free",
+      "risk": "none",
+      "where": "Edgeville Monastery",
+      "note": "Level 5 monks; talk to a non-combat monk for free healing, so no food is needed. They drop only bones.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_melee_training",
+      "place": "Edgeville Monastery",
+      "npcNames": [
+        "Monk"
+      ]
+    },
+    {
+      "id": "me-frog",
+      "skill": [
+        "attack",
+        "strength",
+        "defence"
+      ],
+      "from": 1,
+      "suggestedFrom": 20,
+      "to": 40,
+      "name": "Giant frogs",
+      "members": false,
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "low",
+      "where": "Lumbridge Swamp: level 13 Giant frogs",
+      "note": "Every kill drops Big bones: sell them or bury them for Prayer. They hit at most 2, so food is optional; an axe and a tinderbox let you cook on the spot. The swamp can be crowded.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_melee_training",
+      "place": "Lumbridge Swamp",
+      "npcNames": [
+        "Giant frog"
+      ]
+    },
+    {
+      "id": "me-hill",
+      "skill": [
+        "attack",
+        "strength",
+        "defence"
+      ],
+      "from": 1,
+      "suggestedFrom": 40,
+      "to": 60,
+      "name": "Hill Giants",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Salmon",
+          "count": 10,
+          "anyOf": [
+            "Trout",
+            "Tuna",
+            "Lobster",
+            "Swordfish"
+          ]
+        }
+      ],
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "low",
+      "where": "Edgeville Dungeon: Hill Giants",
+      "note": "Big bones on every kill, plus limpwurt roots and runes. Bring food that heals well; a Brass key saves the walk past the skeletons. Very crowded at busy hours.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_melee_training",
+      "place": "Edgeville Dungeon",
+      "npcNames": [
+        "Hill Giant"
+      ]
+    },
+    {
+      "id": "me-moss",
+      "skill": [
+        "attack",
+        "strength",
+        "defence"
+      ],
+      "from": 1,
+      "suggestedFrom": 60,
+      "to": 80,
+      "name": "Moss giants",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Salmon",
+          "count": 15,
+          "anyOf": [
+            "Trout",
+            "Tuna",
+            "Lobster",
+            "Swordfish"
+          ]
+        }
+      ],
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "low",
+      "where": "Varrock Sewers (or Crandor): Moss giants",
+      "note": "Big bones, runes and items to alch. Bring a slash weapon for the webs in the sewers and food: they hit hard on low Defence, and the bank is far.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_melee_training",
+      "npcNames": [
+        "Moss giant"
+      ]
+    },
+    {
+      "id": "me-demon",
+      "skill": [
+        "attack",
+        "strength",
+        "defence"
+      ],
+      "from": 1,
+      "suggestedFrom": 80,
+      "to": null,
+      "name": "Lesser demons",
+      "members": false,
+      "needs": [
+        {
+          "type": "item",
+          "name": "Salmon",
+          "count": 20,
+          "anyOf": [
+            "Trout",
+            "Tuna",
+            "Lobster",
+            "Swordfish"
+          ]
+        }
+      ],
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "high",
+      "where": "Karamja Volcano dungeon (or Crandor): Lesser demons",
+      "note": "They hit up to 8; bring swordfish or better. Fire runes and vile ashes drop.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_melee_training",
+      "npcNames": [
+        "Lesser demon"
+      ]
     },
     {
       "id": "me-gc",
