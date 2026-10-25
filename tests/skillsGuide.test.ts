@@ -4,7 +4,7 @@ import { skillGuides } from '../src/data/skillGuideRegistry';
 import locationsJson from '../src/data/majorLocations.json';
 import { membersSkills } from '../src/data';
 import {
-  SKILL_NAMES, bracketsOf, buildPath, chipText, currentIndex, f2pCovered, followedShoppingStep, onStatChanged, skillPathPayload,
+  SKILL_NAMES, alternativesFor, bracketsOf, buildPath, chipText, currentIndex, f2pCovered, followedShoppingStep, onStatChanged, skillPathPayload,
   type GuideMode, type SkillGuideFile, type SkillStep,
 } from '../src/lib/skillGuide';
 import { aggregateShopping } from '../src/lib/shopping';
@@ -13,7 +13,7 @@ import { parseTracked, freeOnlyOf } from '../src/lib/skillTrack';
 // The 23 skill guides (src/data/skills/*.json): the schema, the coverage of every filter, the quest skips first, and the StatChanged rule the plugin follows.
 
 const METHODS = ['QUEST', 'GATHER', 'CRAFT', 'COMBAT', 'MINIGAME'];
-const LANES = ['fast', 'afk', 'both'];
+const LANES = ['fast', 'afk', 'both', 'alt'];
 const MODES: GuideMode[] = ['fast', 'afk', 'f2p'];
 const places = (locationsJson as unknown as { locations: Record<string, { x: number; y: number; plane: number }> }).locations;
 const isInt = (n: unknown): n is number => typeof n === 'number' && Number.isInteger(n);
@@ -166,9 +166,24 @@ describe('skill guides: the paths', () => {
 
   it('the free filter of a members skill is empty, and f2pCovered says how far a free account gets', () => {
     expect(buildPath(skillGuides.agility, 'f2p')).toEqual([]);
-    expect(f2pCovered(skillGuides.crafting)).toBe(43);
-    expect(f2pCovered(skillGuides.runecraft)).toBe(44);
+    // Diamonds and body runes are free to 99 (the wiki's free-to-play guides train them all the way).
+    expect(f2pCovered(skillGuides.crafting)).toBe(99);
+    expect(f2pCovered(skillGuides.runecraft)).toBe(99);
     expect(f2pCovered(skillGuides.mining)).toBe(99);
+  });
+
+  it('melee from 20 is giant frogs, and the other options sit under the step they overlap, never on a path', () => {
+    for (const sk of ['attack', 'strength', 'defence'] as const) {
+      const path = buildPath(skillGuides[sk], 'f2p');
+      expect(path.map((s) => s.title), sk).toContain('Giant frogs');
+      expect(path.filter((s) => s.methodType !== 'QUEST' && s.targetLevel > 20).map((s) => s.title), sk).not.toContain('Cows near Lumbridge');
+      for (const mode of MODES) expect(buildPath(skillGuides[sk], mode).some((s) => s.lane === 'alt'), `${sk}/${mode}`).toBe(false);
+    }
+    const frogs = skillGuides.attack.steps.find((s) => s.title === 'Giant frogs')!;
+    const alts = alternativesFor(skillGuides.attack, frogs, true).map((s) => s.title);
+    expect(alts).toEqual(expect.arrayContaining(['Al Kharid warriors', 'Barbarians', 'Brutus']));
+    expect(alts).not.toContain('Ogresses');
+    expect(alternativesFor(skillGuides.attack, skillGuides.attack.steps.find((s) => s.methodType === 'QUEST')!, true)).toEqual([]);
   });
 
   it('the timeline groups the path, and a group is labelled by the levels its steps really cover (no "Levels 30-40" over "Lvl 30 → 60")', () => {

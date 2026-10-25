@@ -1723,6 +1723,10 @@ select option { background: var(--surface); color: var(--text); }
 .skill-step-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 0 0 4px; }
 .skill-step-range { margin-left: auto; font-variant-numeric: tabular-nums; color: var(--muted); font-size: 0.85rem; }
 .skill-step-text { margin: 0 0 4px; font-size: 0.9rem; }
+.skill-step-alts { margin-top: 4px; }
+.skill-step-alts summary { cursor: pointer; color: var(--muted, inherit); }
+.skill-step-alts ul { margin: 6px 0 0; padding-left: 18px; display: grid; gap: 6px; }
+.skill-step-alts .badge { margin-left: 6px; }
 .tracked-skill { display: flex; flex-direction: column; gap: 6px; border-color: color-mix(in srgb, var(--accent) 55%, var(--border)); }
 
 /* ---------- Clear Path: state labels (a word and a mark, never colour alone) ---------- */

@@ -13,7 +13,8 @@ export type SkillName = (typeof SKILL_NAMES)[number];
 
 export type SkillMethodType = 'QUEST' | 'GATHER' | 'CRAFT' | 'COMBAT' | 'MINIGAME';
 /** fast: quest skips and the fastest methods; afk: low-effort methods; both: fits either. */
-export type GuideLane = 'fast' | 'afk' | 'both';
+/** 'alt': another way to train the same levels (the wiki guide's other methods); never on a path, shown under the step it overlaps. */
+export type GuideLane = 'fast' | 'afk' | 'both' | 'alt';
 /**
  * The roadmap's priority: 'fast' (quest XP skips and the fastest methods) or 'afk' (low effort). 'f2p' is the pre-2.70 third filter, the fast lane
  * without members steps; it is still read from older saves. Eligibility (free account or members) is a separate flag since 2.70 (`freeOnly`).
@@ -111,6 +112,16 @@ export function buildPath(guide: SkillGuideFile, mode: GuideMode, isDone: (step:
     level = end;
   }
   return out;
+}
+
+/**
+ * The other ways to train a step's levels: the guide's 'alt' steps whose bracket overlaps the step's, free ones only on a free filter, in the guide's
+ * order. A quest skip has none (it is not a method to swap).
+ */
+export function alternativesFor(guide: SkillGuideFile, step: SkillStep, freeOnly: boolean): SkillStep[] {
+  if (step.methodType === 'QUEST') return [];
+  const [lo, hi] = step.levelRange;
+  return guide.steps.filter((s) => s.lane === 'alt' && s.id !== step.id && (!freeOnly || !s.members) && s.levelRange[0] < hi && s.levelRange[1] > lo);
 }
 
 /** The index of the step the player is on: the first whose target level is above the real level; path.length when the whole path is done. */

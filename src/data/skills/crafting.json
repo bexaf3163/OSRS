@@ -1,7 +1,7 @@
 {
   "skill": "crafting",
   "start": 1,
-  "f2pCap": 43,
+  "f2pCap": 99,
   "steps": [
     {
       "id": "crafting-01",
@@ -75,14 +75,14 @@
       "skill": "crafting",
       "levelRange": [
         43,
-        62
+        99
       ],
       "methodType": "CRAFT",
       "title": "Cutting diamonds",
-      "description": "Keep cutting diamonds with a chisel until level 62.",
-      "targetLevel": 62,
-      "lane": "fast",
-      "members": true,
+      "description": "Keep cutting diamonds with a chisel: the fastest free Crafting, at a loss on every cut.",
+      "targetLevel": 99,
+      "lane": "both",
+      "members": false,
       "location": {
         "name": "Grand Exchange",
         "tile": [
@@ -141,6 +141,73 @@
         "tile": [
           3080,
           3492,
+          0
+        ]
+      }
+    },
+    {
+      "id": "crafting-06",
+      "skill": "crafting",
+      "levelRange": [
+        5,
+        43
+      ],
+      "methodType": "CRAFT",
+      "title": "Gold jewellery",
+      "description": "At the Edgeville furnace: unstrung gold amulets from 8 usually pay a little, then sapphire and emerald amulets.",
+      "targetLevel": 43,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Edgeville",
+        "tile": [
+          3080,
+          3492,
+          0
+        ],
+        "objectName": "Furnace"
+      }
+    },
+    {
+      "id": "crafting-07",
+      "skill": "crafting",
+      "levelRange": [
+        8,
+        99
+      ],
+      "methodType": "CRAFT",
+      "title": "Bowls",
+      "description": "The wheel and oven in Barbarian Village: cheap XP from clay.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Barbarian Village",
+        "tile": [
+          3080,
+          3427,
+          0
+        ]
+      }
+    },
+    {
+      "id": "crafting-08",
+      "skill": "crafting",
+      "levelRange": [
+        28,
+        99
+      ],
+      "methodType": "CRAFT",
+      "title": "Hardleather bodies",
+      "description": "About 90 thousand XP an hour, but every hide costs money.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Al Kharid Bank",
+        "tile": [
+          3269,
+          3167,
           0
         ]
       }

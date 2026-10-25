@@ -1004,6 +1004,46 @@
       "manualSetup": "Verify Magic attack -64 or lower and a location outside the Lumbridge no-XP area."
     },
     {
+      "id": "ma-enchant",
+      "skill": "magic",
+      "from": 7,
+      "to": null,
+      "name": "Enchanting sapphire amulets (then emerald from 27, ruby from 49)",
+      "members": false,
+      "needs": [
+        {
+          "type": "skill",
+          "skill": "magic",
+          "min": 7
+        },
+        {
+          "type": "item",
+          "name": "Cosmic rune",
+          "count": 27
+        },
+        {
+          "type": "item",
+          "name": "Water rune",
+          "count": 27
+        },
+        {
+          "type": "item",
+          "name": "Sapphire amulet",
+          "count": 27
+        }
+      ],
+      "xpa": 17.5,
+      "act": "cast|casts",
+      "effort": "medium",
+      "cost": "profit",
+      "risk": "none",
+      "where": "By a bank",
+      "note": "Lvl-1 Enchant turns a sapphire amulet into an Amulet of magic; a Staff of water replaces the water runes. Lvl-2 Enchant (27) takes emerald amulets and air runes, Lvl-3 (49) ruby amulets and fire runes. The margin moves with the market: check both prices before buying a batch.",
+      "url": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
+      "place": "Grand Exchange",
+      "manualSetup": "Check the amulet and the Amulet of magic prices first: the margin moves with the market."
+    },
+    {
       "id": "ma-alch",
       "skill": "magic",
       "from": 21,

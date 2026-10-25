@@ -176,6 +176,14 @@ const SHOTS: Shot[] = [
     hash: '#/skills/MI', mock: skiller(SKILLER),
     act: async (p) => { await p.locator('.skill-guide-roadmap').scrollIntoViewIfNeeded(); await p.waitForTimeout(300); },
   },
+  {
+    name: 'skill-melee', area: 'T5', caption: 'Melee reference: giant frogs from 20, the other options under the plan', width: 1440, hash: '#/skills/ME', mock: skiller(SKILLER),
+    act: async (p) => { await p.getByRole('tab', { name: 'Reference' }).or(p.getByRole('button', { name: 'Reference' })).first().click(); await p.waitForTimeout(400); },
+  },
+  {
+    name: 'skill-melee-roadmap', area: 'T5', caption: 'Attack roadmap: the giant frogs step with its other options opened', width: 1440, hash: '#/skills/ME', mock: skiller(SKILLER),
+    act: async (p) => { const d = p.locator('.skill-step-alts').first(); await d.locator('summary').click(); await d.scrollIntoViewIfNeeded(); await p.waitForTimeout(300); }, sel: '.skill-guide-roadmap',
+  },
   { name: 'skill-ranged', area: 'T11', caption: 'Ranged: the training card with the arrows for the whole goal', width: 1440, hash: '#/skills/RA', mock: skiller(SKILLER) },
   { name: 'skill-magic', area: 'T4', caption: 'Magic 33: the balanced default picks a method that is not the slowest AFK one', width: 1440, hash: '#/skills/MA', mock: skiller(SKILLER) },
   { name: 'settings', area: 'T8', caption: 'Settings', width: 1440, hash: '#/settings', mock: hillGiants() },

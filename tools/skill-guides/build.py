@@ -26,7 +26,7 @@ SKILLS = ['attack', 'strength', 'defence', 'ranged', 'prayer', 'magic', 'runecra
           'fletching', 'slayer', 'hunter', 'mining', 'smithing', 'fishing', 'cooking', 'firemaking', 'woodcutting', 'farming']
 START = {'hitpoints': 10}
 # The highest level a free account reaches by this guide (0: members only).
-F2P_CAP = {'attack': 99, 'strength': 99, 'defence': 99, 'hitpoints': 99, 'ranged': 99, 'prayer': 99, 'magic': 99, 'runecraft': 44, 'crafting': 43, 'mining': 99,
+F2P_CAP = {'attack': 99, 'strength': 99, 'defence': 99, 'hitpoints': 99, 'ranged': 99, 'prayer': 99, 'magic': 99, 'runecraft': 99, 'crafting': 99, 'mining': 99,
            'smithing': 99, 'fishing': 99, 'cooking': 99, 'firemaking': 99, 'woodcutting': 99}
 
 

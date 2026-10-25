@@ -91,16 +91,34 @@
                 "WC-4",
                 "45–60",
                 "Willows or maples",
-                "Willows in the same place; maples only in the Corsair Cove Resource Area after Dragon Slayer I",
+                "Willows in the same place; maples only in the Corsair Cove Resource Area (Dragon Slayer I and the start of The Corsair Curse)",
                 "~3,100 willows or ~2,100 maples"
               ],
               [
                 "WC-5",
                 "60+",
-                "Yews (for money)",
+                "Yews (for money) or willows on (XP)",
                 "South of the Edgeville bank, north of Varrock Palace, south of the east Falador bank",
                 "—"
               ]
+            ]
+          },
+          {
+            "t": "p",
+            "text": "**Other options** for the same levels, from the OSRS Wiki free-to-play guide:"
+          },
+          {
+            "t": "ul",
+            "items": [
+              {
+                "text": "**Forestry events** with a Forestry kit on a busy tree: on a full world they can beat plain chopping."
+              },
+              {
+                "text": "**Maples at Corsair Cove** (45+): about a third less XP than willows, but the calmest chopping."
+              },
+              {
+                "text": "**Oaks to 60** if you drop the logs: as quick as willows when dropping."
+              }
             ]
           },
           {
@@ -214,13 +232,13 @@
           "to": 60,
           "levels": "45–60",
           "what": "Willows or maples",
-          "where": "Willows in the same place; maples only in the Corsair Cove Resource Area after Dragon Slayer I",
+          "where": "Willows in the same place; maples only in the Corsair Cove Resource Area (Dragon Slayer I and the start of The Corsair Curse)",
           "amount": "~3,100 willows or ~2,100 maples",
           "cells": [
             "WC-4",
             "45–60",
             "Willows or maples",
-            "Willows in the same place; maples only in the Corsair Cove Resource Area after Dragon Slayer I",
+            "Willows in the same place; maples only in the Corsair Cove Resource Area (Dragon Slayer I and the start of The Corsair Curse)",
             "~3,100 willows or ~2,100 maples"
           ]
         },
@@ -229,12 +247,13 @@
           "from": 60,
           "to": null,
           "levels": "60+",
-          "what": "Yews (for money)",
+          "what": "Yews (for money) or willows on (XP)",
           "where": "South of the Edgeville bank, north of Varrock Palace, south of the east Falador bank",
+          "amount": "—",
           "cells": [
             "WC-5",
             "60+",
-            "Yews (for money)",
+            "Yews (for money) or willows on (XP)",
             "South of the Edgeville bank, north of Varrock Palace, south of the east Falador bank",
             "—"
           ]
@@ -556,7 +575,7 @@
               [
                 "FI-1",
                 "1–20",
-                "Shrimps, anchovies from 15",
+                "Shrimps, anchovies from 15; sardines and herring with a rod and bait from 5 (faster)",
                 "The swamp south of Lumbridge, the shore by Draynor",
                 "~350"
               ],
@@ -577,10 +596,28 @@
               [
                 "FI-4",
                 "50+",
-                "Swordfish and tuna",
+                "Swordfish and tuna (food and money; fly fishing stays faster XP)",
                 "Karamja, Musa Point",
                 "—"
               ]
+            ]
+          },
+          {
+            "t": "p",
+            "text": "**Other options** for the same levels, from the OSRS Wiki free-to-play guide:"
+          },
+          {
+            "t": "ul",
+            "items": [
+              {
+                "text": "**Shrimps and anchovies at Draynor** (15–39): bank the dearer fish for a small profit."
+              },
+              {
+                "text": "**Camdozaal** (after Below Ice Mountain): guppies, cavefish and tetras to offer for Prayer."
+              },
+              {
+                "text": "**Cook as you go** at the permanent fire at Barbarian Village: Fishing and Cooking together."
+              }
             ]
           },
           {
@@ -635,13 +672,13 @@
           "from": 1,
           "to": 20,
           "levels": "1–20",
-          "what": "Shrimps, anchovies from 15",
+          "what": "Shrimps, anchovies from 15; sardines and herring with a rod and bait from 5 (faster)",
           "where": "The swamp south of Lumbridge, the shore by Draynor",
           "amount": "~350",
           "cells": [
             "FI-1",
             "1–20",
-            "Shrimps, anchovies from 15",
+            "Shrimps, anchovies from 15; sardines and herring with a rod and bait from 5 (faster)",
             "The swamp south of Lumbridge, the shore by Draynor",
             "~350"
           ]
@@ -683,12 +720,13 @@
           "from": 50,
           "to": null,
           "levels": "50+",
-          "what": "Swordfish and tuna",
+          "what": "Swordfish and tuna (food and money; fly fishing stays faster XP)",
           "where": "Karamja, Musa Point",
+          "amount": "—",
           "cells": [
             "FI-4",
             "50+",
-            "Swordfish and tuna",
+            "Swordfish and tuna (food and money; fly fishing stays faster XP)",
             "Karamja, Musa Point",
             "—"
           ]
@@ -756,6 +794,12 @@
                 "10"
               ],
               [
+                "35",
+                "Jug of wine",
+                "200",
+                "11"
+              ],
+              [
                 "40",
                 "Lobster",
                 "120",
@@ -787,38 +831,55 @@
               [
                 "CO-1",
                 "1–15",
-                "Shrimps, meat from the farms",
+                "Shrimps, meat from the farms (Cook's Assistant first)",
                 "The range in the Lumbridge Castle kitchen",
                 "~80"
               ],
               [
                 "CO-2",
-                "15–25",
-                "Trout",
+                "15–30",
+                "Trout, salmon from 25",
                 "The range in Al Kharid by the bank",
-                "~80"
+                "~160"
               ],
               [
                 "CO-3",
-                "25–40",
-                "Salmon, tuna from 30",
+                "30–35",
+                "Tuna or salmon",
                 "Al Kharid",
-                "~330"
+                "~100"
               ],
               [
                 "CO-4",
-                "40–45",
-                "Lobsters",
-                "Al Kharid",
-                "~200"
-              ],
-              [
-                "CO-5",
-                "45–50",
-                "Swordfish",
-                "Al Kharid",
-                "~285"
+                "35+",
+                "Jugs of wine (grapes + a jug of water)",
+                "Any bank: no range needed",
+                "—"
               ]
+            ]
+          },
+          {
+            "t": "p",
+            "text": "**Other options** for the same levels, from the OSRS Wiki free-to-play guide:"
+          },
+          {
+            "t": "ul",
+            "items": [
+              {
+                "text": "**Your own lobsters (40) and swordfish (45)**: slower, but the food you take into combat."
+              },
+              {
+                "text": "**Pies and pizzas**: redberry pie (10), meat pie (20), apple pie (30), plain pizza (35), anchovy pizza (55); they sell well."
+              },
+              {
+                "text": "**The Cooks' Guild** (32, a Chef's hat): free ingredients for pies and wine inside."
+              },
+              {
+                "text": "**The burn-free way** (50+): cook only fish you can no longer burn; slower, about even on money."
+              },
+              {
+                "text": "**Camdozaal** (after Below Ice Mountain): prepare the fish you catch there and offer it for Prayer."
+              }
             ]
           }
         ]
@@ -858,7 +919,7 @@
                 "text": "**How much food to take into combat?** As much as fits after the gear: usually 15–20 pieces of the best fish you can cook."
               },
               {
-                "text": "**With membership:** far more recipes, pies, pizza, wine and ranges next to the bank."
+                "text": "**With membership:** monkfish, karambwans, sharks and ranges right next to a bank."
               }
             ]
           }
@@ -879,13 +940,13 @@
           "from": 1,
           "to": 15,
           "levels": "1–15",
-          "what": "Shrimps, meat from the farms",
+          "what": "Shrimps, meat from the farms (Cook's Assistant first)",
           "where": "The range in the Lumbridge Castle kitchen",
           "amount": "~80",
           "cells": [
             "CO-1",
             "1–15",
-            "Shrimps, meat from the farms",
+            "Shrimps, meat from the farms (Cook's Assistant first)",
             "The range in the Lumbridge Castle kitchen",
             "~80"
           ]
@@ -893,65 +954,49 @@
         {
           "code": "CO-2",
           "from": 15,
-          "to": 25,
-          "levels": "15–25",
-          "what": "Trout",
+          "to": 30,
+          "levels": "15–30",
+          "what": "Trout, salmon from 25",
           "where": "The range in Al Kharid by the bank",
-          "amount": "~80",
+          "amount": "~160",
           "cells": [
             "CO-2",
-            "15–25",
-            "Trout",
+            "15–30",
+            "Trout, salmon from 25",
             "The range in Al Kharid by the bank",
-            "~80"
+            "~160"
           ]
         },
         {
           "code": "CO-3",
-          "from": 25,
-          "to": 40,
-          "levels": "25–40",
-          "what": "Salmon, tuna from 30",
+          "from": 30,
+          "to": 35,
+          "levels": "30–35",
+          "what": "Tuna or salmon",
           "where": "Al Kharid",
-          "amount": "~330",
+          "amount": "~100",
           "cells": [
             "CO-3",
-            "25–40",
-            "Salmon, tuna from 30",
+            "30–35",
+            "Tuna or salmon",
             "Al Kharid",
-            "~330"
+            "~100"
           ]
         },
         {
           "code": "CO-4",
-          "from": 40,
-          "to": 45,
-          "levels": "40–45",
-          "what": "Lobsters",
-          "where": "Al Kharid",
-          "amount": "~200",
+          "from": 35,
+          "to": null,
+          "levels": "35+",
+          "what": "Jugs of wine (grapes + a jug of water)",
+          "where": "Any bank: no range needed",
+          "amount": "—",
           "cells": [
             "CO-4",
-            "40–45",
-            "Lobsters",
-            "Al Kharid",
-            "~200"
-          ]
-        },
-        {
-          "code": "CO-5",
-          "from": 45,
-          "to": 50,
-          "levels": "45–50",
-          "what": "Swordfish",
-          "where": "Al Kharid",
-          "amount": "~285",
-          "cells": [
-            "CO-5",
-            "45–50",
-            "Swordfish",
-            "Al Kharid",
-            "~285"
+            "35+",
+            "Jugs of wine (grapes + a jug of water)",
+            "Any bank: no range needed",
+            "—"
           ]
         }
       ],
@@ -1054,15 +1099,15 @@
               [
                 "MI-1",
                 "1–15",
-                "Copper and tin",
+                "Copper and tin (Doric's Quest gives 1–10)",
                 "The mine in the swamp south-east of Lumbridge, the mine south-east of Varrock",
-                "~140"
+                "~70"
               ],
               [
                 "MI-2",
                 "15–30",
                 "Iron, dropping the ore",
-                "Al Kharid, south-east of Varrock, Rimmington",
+                "Al Kharid (three rocks round one tile), south-east of Varrock, Rimmington",
                 "~310"
               ],
               [
@@ -1077,15 +1122,36 @@
                 "45–60",
                 "Iron or calm mining in Camdozaal",
                 "Camdozaal opens with the quest Below Ice Mountain",
-                "~6,100 iron"
+                "~6,060 iron"
               ],
               [
                 "MI-5",
                 "60+",
-                "Coal and mithril",
+                "Iron (XP), or coal and mithril (money)",
                 "The Mining Guild under Falador (from Mining 60)",
                 "—"
               ]
+            ]
+          },
+          {
+            "t": "p",
+            "text": "**Other options** for the same levels, from the OSRS Wiki free-to-play guide:"
+          },
+          {
+            "t": "ul",
+            "items": [
+              {
+                "text": "**Rune essence** (after Rune Mysteries): slow but AFK, and it feeds Runecraft."
+              },
+              {
+                "text": "**Crashed stars** (10+): the most AFK way, about one click in seven minutes; a star-finding plugin helps."
+              },
+              {
+                "text": "**Adamantite** (70+, the Mining Guild): two rocks; hop worlds instead of waiting."
+              },
+              {
+                "text": "**Runite** (85, the Lava Maze in the Wilderness): the only free runite, slow and dangerous."
+              }
             ]
           }
         ]
@@ -1136,15 +1202,15 @@
           "from": 1,
           "to": 15,
           "levels": "1–15",
-          "what": "Copper and tin",
+          "what": "Copper and tin (Doric's Quest gives 1–10)",
           "where": "The mine in the swamp south-east of Lumbridge, the mine south-east of Varrock",
-          "amount": "~140",
+          "amount": "~70",
           "cells": [
             "MI-1",
             "1–15",
-            "Copper and tin",
+            "Copper and tin (Doric's Quest gives 1–10)",
             "The mine in the swamp south-east of Lumbridge, the mine south-east of Varrock",
-            "~140"
+            "~70"
           ]
         },
         {
@@ -1153,13 +1219,13 @@
           "to": 30,
           "levels": "15–30",
           "what": "Iron, dropping the ore",
-          "where": "Al Kharid, south-east of Varrock, Rimmington",
+          "where": "Al Kharid (three rocks round one tile), south-east of Varrock, Rimmington",
           "amount": "~310",
           "cells": [
             "MI-2",
             "15–30",
             "Iron, dropping the ore",
-            "Al Kharid, south-east of Varrock, Rimmington",
+            "Al Kharid (three rocks round one tile), south-east of Varrock, Rimmington",
             "~310"
           ]
         },
@@ -1186,13 +1252,13 @@
           "levels": "45–60",
           "what": "Iron or calm mining in Camdozaal",
           "where": "Camdozaal opens with the quest Below Ice Mountain",
-          "amount": "~6,100 iron",
+          "amount": "~6,060 iron",
           "cells": [
             "MI-4",
             "45–60",
             "Iron or calm mining in Camdozaal",
             "Camdozaal opens with the quest Below Ice Mountain",
-            "~6,100 iron"
+            "~6,060 iron"
           ]
         },
         {
@@ -1200,12 +1266,13 @@
           "from": 60,
           "to": null,
           "levels": "60+",
-          "what": "Coal and mithril",
+          "what": "Iron (XP), or coal and mithril (money)",
           "where": "The Mining Guild under Falador (from Mining 60)",
+          "amount": "—",
           "cells": [
             "MI-5",
             "60+",
-            "Coal and mithril",
+            "Iron (XP), or coal and mithril (money)",
             "The Mining Guild under Falador (from Mining 60)",
             "—"
           ]
@@ -1438,7 +1505,7 @@
               "Code",
               "Levels",
               "What to do",
-              "XP per log",
+              "XP each",
               "How much"
             ],
             "rows": [
@@ -1454,7 +1521,7 @@
                 "29–33",
                 "Bronze platebodies",
                 "62,5",
-                "~90 platebodies (~445 bars)"
+                "~100 platebodies"
               ],
               [
                 "SM-3",
@@ -1475,8 +1542,33 @@
                 "68–88",
                 "Mithril platebodies",
                 "250",
-                "~15,100 platebodies"
+                "~15,120 platebodies"
+              ],
+              [
+                "SM-6",
+                "88+",
+                "Adamant platebodies (a Dwarven stout boosts 87 to 88)",
+                "312,5",
+                "—"
               ]
+            ]
+          },
+          {
+            "t": "p",
+            "text": "**Other options** for the same levels, from the OSRS Wiki free-to-play guide:"
+          },
+          {
+            "t": "ul",
+            "items": [
+              {
+                "text": "**Smelting bars** at the Edgeville furnace: almost AFK, and steel, mithril and adamantite bars often sell above their ore."
+              },
+              {
+                "text": "**Superheat Item** (Magic 43): bars anywhere, Magic XP along the way."
+              },
+              {
+                "text": "**Barronite deposits** (Mining and Smithing 14, after Below Ice Mountain): crush them in Camdozaal; very slow but calm."
+              }
             ]
           },
           {
@@ -1517,7 +1609,7 @@
         "Code",
         "Levels",
         "What to do",
-        "XP per log",
+        "XP each",
         "How much"
       ],
       "ranges": [
@@ -1542,13 +1634,13 @@
           "to": 33,
           "levels": "29–33",
           "what": "Bronze platebodies",
-          "amount": "~90 platebodies (~445 bars)",
+          "amount": "~100 platebodies",
           "cells": [
             "SM-2",
             "29–33",
             "Bronze platebodies",
             "62,5",
-            "~90 platebodies (~445 bars)"
+            "~100 platebodies"
           ]
         },
         {
@@ -1587,13 +1679,28 @@
           "to": 88,
           "levels": "68–88",
           "what": "Mithril platebodies",
-          "amount": "~15,100 platebodies",
+          "amount": "~15,120 platebodies",
           "cells": [
             "SM-5",
             "68–88",
             "Mithril platebodies",
             "250",
-            "~15,100 platebodies"
+            "~15,120 platebodies"
+          ]
+        },
+        {
+          "code": "SM-6",
+          "from": 88,
+          "to": null,
+          "levels": "88+",
+          "what": "Adamant platebodies (a Dwarven stout boosts 87 to 88)",
+          "amount": "—",
+          "cells": [
+            "SM-6",
+            "88+",
+            "Adamant platebodies (a Dwarven stout boosts 87 to 88)",
+            "312,5",
+            "—"
           ]
         }
       ],
@@ -1643,7 +1750,7 @@
               ],
               [
                 "9",
-                "Coif",
+                "Leather cowl",
                 "18,5"
               ],
               [
@@ -1729,15 +1836,15 @@
             "rows": [
               [
                 "CR-1",
-                "1–7",
-                "The quests Sheep Shearer and Misthalin Mystery",
+                "1–8",
+                "The quests Sheep Shearer, Goblin Diplomacy and Misthalin Mystery",
                 "—",
-                "2 quests"
+                "3 quests"
               ],
               [
                 "CR-2",
-                "7–14",
-                "Boots, coifs, vambraces",
+                "8–14",
+                "Boots, cowls, vambraces",
                 "Anywhere, leather from Al Kharid",
                 "~100 hides"
               ],
@@ -1746,28 +1853,28 @@
                 "14–20",
                 "Leather bodies",
                 "Anywhere",
-                "~95 hides"
+                "~90 hides"
               ],
               [
                 "CR-4",
                 "20–27",
                 "Cutting sapphires",
                 "Anywhere, gems from the GE",
-                "~105"
+                "~110"
               ],
               [
                 "CR-5",
                 "27–34",
                 "Cutting emeralds",
                 "Anywhere",
-                "~155"
+                "~160"
               ],
               [
                 "CR-6",
                 "34–43",
                 "Cutting rubies",
                 "Anywhere",
-                "~355"
+                "~350"
               ],
               [
                 "CR-7",
@@ -1776,6 +1883,30 @@
                 "The Crafting Guild (from 40)",
                 "—"
               ]
+            ]
+          },
+          {
+            "t": "p",
+            "text": "**Other options** for the same levels, from the OSRS Wiki free-to-play guide:"
+          },
+          {
+            "t": "ul",
+            "items": [
+              {
+                "text": "**Gold jewellery** (5+, the Edgeville furnace): unstrung gold amulets from 8 usually pay a little, then sapphire and emerald amulets."
+              },
+              {
+                "text": "**Bowls** (8+, the wheel and oven in Barbarian Village): cheap XP from clay."
+              },
+              {
+                "text": "**Hardleather bodies** (28+): 90 thousand XP an hour, but every hide costs money."
+              },
+              {
+                "text": "**Tiaras** (23+, a silver bar at a furnace): slow and a small loss."
+              },
+              {
+                "text": "**Stringing amulets** with a ball of wool: very little XP, sometimes a profit."
+              }
             ]
           }
         ]
@@ -1824,30 +1955,31 @@
         {
           "code": "CR-1",
           "from": 1,
-          "to": 7,
-          "levels": "1–7",
-          "what": "The quests Sheep Shearer and Misthalin Mystery",
-          "amount": "2 quests",
+          "to": 8,
+          "levels": "1–8",
+          "what": "The quests Sheep Shearer, Goblin Diplomacy and Misthalin Mystery",
+          "where": "—",
+          "amount": "3 quests",
           "cells": [
             "CR-1",
-            "1–7",
-            "The quests Sheep Shearer and Misthalin Mystery",
+            "1–8",
+            "The quests Sheep Shearer, Goblin Diplomacy and Misthalin Mystery",
             "—",
-            "2 quests"
+            "3 quests"
           ]
         },
         {
           "code": "CR-2",
-          "from": 7,
+          "from": 8,
           "to": 14,
-          "levels": "7–14",
-          "what": "Boots, coifs, vambraces",
+          "levels": "8–14",
+          "what": "Boots, cowls, vambraces",
           "where": "Anywhere, leather from Al Kharid",
           "amount": "~100 hides",
           "cells": [
             "CR-2",
-            "7–14",
-            "Boots, coifs, vambraces",
+            "8–14",
+            "Boots, cowls, vambraces",
             "Anywhere, leather from Al Kharid",
             "~100 hides"
           ]
@@ -1859,13 +1991,13 @@
           "levels": "14–20",
           "what": "Leather bodies",
           "where": "Anywhere",
-          "amount": "~95 hides",
+          "amount": "~90 hides",
           "cells": [
             "CR-3",
             "14–20",
             "Leather bodies",
             "Anywhere",
-            "~95 hides"
+            "~90 hides"
           ]
         },
         {
@@ -1875,13 +2007,13 @@
           "levels": "20–27",
           "what": "Cutting sapphires",
           "where": "Anywhere, gems from the GE",
-          "amount": "~105",
+          "amount": "~110",
           "cells": [
             "CR-4",
             "20–27",
             "Cutting sapphires",
             "Anywhere, gems from the GE",
-            "~105"
+            "~110"
           ]
         },
         {
@@ -1891,13 +2023,13 @@
           "levels": "27–34",
           "what": "Cutting emeralds",
           "where": "Anywhere",
-          "amount": "~155",
+          "amount": "~160",
           "cells": [
             "CR-5",
             "27–34",
             "Cutting emeralds",
             "Anywhere",
-            "~155"
+            "~160"
           ]
         },
         {
@@ -1907,13 +2039,13 @@
           "levels": "34–43",
           "what": "Cutting rubies",
           "where": "Anywhere",
-          "amount": "~355",
+          "amount": "~350",
           "cells": [
             "CR-6",
             "34–43",
             "Cutting rubies",
             "Anywhere",
-            "~355"
+            "~350"
           ]
         },
         {
@@ -1923,6 +2055,7 @@
           "levels": "43+",
           "what": "Cutting diamonds or diamond jewellery",
           "where": "The Crafting Guild (from 40)",
+          "amount": "—",
           "cells": [
             "CR-7",
             "43+",
@@ -2057,45 +2190,84 @@
               [
                 "ME-1",
                 "1–10",
-                "Chickens, cows",
+                "Cows or chickens",
                 "The farms around Lumbridge",
-                "Safe, bones and hides"
+                "No food needed; cowhides and feathers sell"
               ],
               [
                 "ME-2",
                 "10–20",
-                "Goblins, then barbarians",
-                "East of Lumbridge, Barbarian Village",
-                "They hit weakly"
+                "Monks (Monk) or giant rats (Giant rat)",
+                "Edgeville Monastery, the Lumbridge swamp",
+                "A monk heals you for free when you talk to him"
               ],
               [
                 "ME-3",
-                "20–30",
-                "Al Kharid warriors (Al Kharid warrior)",
-                "The Al Kharid palace",
-                "A bank nearby, lots of monsters"
+                "20–40",
+                "Giant frogs (Giant frog), level 13",
+                "The Lumbridge swamp",
+                "Big bones on every kill: sell them or bury them. They hit at most 2"
               ],
               [
                 "ME-4",
-                "30–40",
-                "Flesh Crawler",
-                "The Stronghold of Security, the second floor",
-                "They hit often, but weakly"
+                "40–60",
+                "Hill giants (Hill Giant)",
+                "Edgeville Dungeon (a Brass key saves the walk)",
+                "Big bones, limpwurt roots and runes; often crowded"
               ],
               [
                 "ME-5",
-                "40–50",
-                "Moss giants (Moss giant), giant frogs (Giant frog)",
-                "The Varrock sewers, the Lumbridge swamp",
-                "Big bones for Prayer"
+                "60–80",
+                "Moss giants (Moss giant)",
+                "The Varrock sewers or Crandor",
+                "Big bones and items to alch; a slash weapon cuts the webs"
               ],
               [
                 "ME-6",
-                "50–60",
-                "Hill giants (Hill giant), moss giants",
-                "Edgeville Dungeon, the Varrock sewers",
-                "The entrance to the hill giants is on the wiki"
+                "80+",
+                "Lesser demons (Lesser demon)",
+                "The Karamja volcano dungeon or Crandor",
+                "Vile ashes and fire runes; they hit up to 8"
               ]
+            ]
+          },
+          {
+            "t": "p",
+            "text": "**Other options** for the same levels, from the OSRS Wiki free-to-play guide:"
+          },
+          {
+            "t": "ul",
+            "items": [
+              {
+                "text": "**Brutus** (from about 20, after The Ides of Milk): double combat XP in his own pen in the Lumbridge cow field; bull bones and a T-bone steak every kill. His charges hurt at low levels."
+              },
+              {
+                "text": "**Barbarians** (20–40, Barbarian Village): runes, arrows and gems; cooked meat in the long hall. Close to the Grand Exchange."
+              },
+              {
+                "text": "**Al Kharid warriors** (20–30, the Al Kharid palace): a bank next door and kebabs for 1 coin, but the whole room joins in when you attack one."
+              },
+              {
+                "text": "**Minotaurs** (10–20, the first floor of the Stronghold of Security, Defence 15+): iron arrows, essence and ore."
+              },
+              {
+                "text": "**Flesh Crawlers and zombies** (40–60, the second floor of the Stronghold of Security): always aggressive, so they can be left running; no bones or money."
+              },
+              {
+                "text": "**Giant spiders** (60+, the third floor of the Stronghold of Security): the AFK way to 99, nothing to pick up."
+              },
+              {
+                "text": "**Hobgoblins** (30–50, Edgeville Dungeon or west of the Crafting Guild): when the hill giants are crowded; limpwurt roots."
+              },
+              {
+                "text": "**Ice giants** (50–70, the Asgarnian Ice Dungeon): big bones and adamant arrows, a long way from a bank."
+              },
+              {
+                "text": "**Body golems** (50+, the Ruins of Camdozaal after Below Ice Mountain): close to a bank; the Barronite mace hits them hardest."
+              },
+              {
+                "text": "**Ogresses** (80+, the Corsair Cove dungeon): the best free drops (rune helms), but they need Protect from Magic and Protect from Melee."
+              }
             ]
           }
         ]
@@ -2140,15 +2312,15 @@
           "from": 1,
           "to": 10,
           "levels": "1–10",
-          "what": "Chickens, cows",
+          "what": "Cows or chickens",
           "where": "The farms around Lumbridge",
-          "notes": "Safe, bones and hides",
+          "notes": "No food needed; cowhides and feathers sell",
           "cells": [
             "ME-1",
             "1–10",
-            "Chickens, cows",
+            "Cows or chickens",
             "The farms around Lumbridge",
-            "Safe, bones and hides"
+            "No food needed; cowhides and feathers sell"
           ]
         },
         {
@@ -2156,79 +2328,79 @@
           "from": 10,
           "to": 20,
           "levels": "10–20",
-          "what": "Goblins, then barbarians",
-          "where": "East of Lumbridge, Barbarian Village",
-          "notes": "They hit weakly",
+          "what": "Monks (Monk) or giant rats (Giant rat)",
+          "where": "Edgeville Monastery, the Lumbridge swamp",
+          "notes": "A monk heals you for free when you talk to him",
           "cells": [
             "ME-2",
             "10–20",
-            "Goblins, then barbarians",
-            "East of Lumbridge, Barbarian Village",
-            "They hit weakly"
+            "Monks (Monk) or giant rats (Giant rat)",
+            "Edgeville Monastery, the Lumbridge swamp",
+            "A monk heals you for free when you talk to him"
           ]
         },
         {
           "code": "ME-3",
           "from": 20,
-          "to": 30,
-          "levels": "20–30",
-          "what": "Al Kharid warriors (Al Kharid warrior)",
-          "where": "The Al Kharid palace",
-          "notes": "A bank nearby, lots of monsters",
+          "to": 40,
+          "levels": "20–40",
+          "what": "Giant frogs (Giant frog), level 13",
+          "where": "The Lumbridge swamp",
+          "notes": "Big bones on every kill: sell them or bury them. They hit at most 2",
           "cells": [
             "ME-3",
-            "20–30",
-            "Al Kharid warriors (Al Kharid warrior)",
-            "The Al Kharid palace",
-            "A bank nearby, lots of monsters"
+            "20–40",
+            "Giant frogs (Giant frog), level 13",
+            "The Lumbridge swamp",
+            "Big bones on every kill: sell them or bury them. They hit at most 2"
           ]
         },
         {
           "code": "ME-4",
-          "from": 30,
-          "to": 40,
-          "levels": "30–40",
-          "what": "Flesh Crawler",
-          "where": "The Stronghold of Security, the second floor",
-          "notes": "They hit often, but weakly",
+          "from": 40,
+          "to": 60,
+          "levels": "40–60",
+          "what": "Hill giants (Hill Giant)",
+          "where": "Edgeville Dungeon (a Brass key saves the walk)",
+          "notes": "Big bones, limpwurt roots and runes; often crowded",
           "cells": [
             "ME-4",
-            "30–40",
-            "Flesh Crawler",
-            "The Stronghold of Security, the second floor",
-            "They hit often, but weakly"
+            "40–60",
+            "Hill giants (Hill Giant)",
+            "Edgeville Dungeon (a Brass key saves the walk)",
+            "Big bones, limpwurt roots and runes; often crowded"
           ]
         },
         {
           "code": "ME-5",
-          "from": 40,
-          "to": 50,
-          "levels": "40–50",
-          "what": "Moss giants (Moss giant), giant frogs (Giant frog)",
-          "where": "The Varrock sewers, the Lumbridge swamp",
-          "notes": "Big bones for Prayer",
+          "from": 60,
+          "to": 80,
+          "levels": "60–80",
+          "what": "Moss giants (Moss giant)",
+          "where": "The Varrock sewers or Crandor",
+          "notes": "Big bones and items to alch; a slash weapon cuts the webs",
           "cells": [
             "ME-5",
-            "40–50",
-            "Moss giants (Moss giant), giant frogs (Giant frog)",
-            "The Varrock sewers, the Lumbridge swamp",
-            "Big bones for Prayer"
+            "60–80",
+            "Moss giants (Moss giant)",
+            "The Varrock sewers or Crandor",
+            "Big bones and items to alch; a slash weapon cuts the webs"
           ]
         },
         {
           "code": "ME-6",
-          "from": 50,
-          "to": 60,
-          "levels": "50–60",
-          "what": "Hill giants (Hill giant), moss giants",
-          "where": "Edgeville Dungeon, the Varrock sewers",
-          "notes": "The entrance to the hill giants is on the wiki",
+          "from": 80,
+          "to": null,
+          "levels": "80+",
+          "what": "Lesser demons (Lesser demon)",
+          "where": "The Karamja volcano dungeon or Crandor",
+          "notes": "Vile ashes and fire runes; they hit up to 8",
           "cells": [
             "ME-6",
-            "50–60",
-            "Hill giants (Hill giant), moss giants",
-            "Edgeville Dungeon, the Varrock sewers",
-            "The entrance to the hill giants is on the wiki"
+            "80+",
+            "Lesser demons (Lesser demon)",
+            "The Karamja volcano dungeon or Crandor",
+            "Vile ashes and fire runes; they hit up to 8"
           ]
         }
       ],
@@ -2336,21 +2508,57 @@
               [
                 "RA-1",
                 "1–20",
-                "Chickens, cows, goblins",
-                "The farms by Lumbridge"
+                "Level 3 seagulls (Seagull): they never hit back",
+                "The Port Sarim docks"
               ],
               [
                 "RA-2",
-                "20–40",
-                "Flesh Crawler, Al Kharid warriors",
-                "The Stronghold of Security, the Al Kharid palace"
+                "20–26",
+                "Monks (Monk) or level 10 barbarians",
+                "Edgeville Monastery; Barbarian Village (safespot by the rocks and the torch)"
               ],
               [
                 "RA-3",
-                "40+",
-                "Moss giants from behind an obstacle",
-                "The Varrock sewers"
+                "26–57",
+                "Giant frogs (Giant frog)",
+                "The Lumbridge swamp"
+              ],
+              [
+                "RA-4",
+                "57+",
+                "Moss giants (Moss giant) from a safespot",
+                "Crandor (the south side) or the far end of the Varrock sewers"
               ]
+            ]
+          },
+          {
+            "t": "p",
+            "text": "**Other options** for the same levels, from the OSRS Wiki free-to-play guide:"
+          },
+          {
+            "t": "ul",
+            "items": [
+              {
+                "text": "**Cows** (1–20, Lumbridge): safe across the fence, and the hides sell."
+              },
+              {
+                "text": "**Wizards** (9–69, the Wizards' Tower south of Draynor): they stand still, so the arrows land in one spot, and they drop runes."
+              },
+              {
+                "text": "**Brutus** (15+, after The Ides of Milk): the best free XP thanks to the double multiplier, but many clicks; bring a stock of arrows."
+              },
+              {
+                "text": "**Flesh Crawlers** (40s–50s, the Stronghold of Security): about the XP of giant frogs and they can be left running; Defence 40+ helps."
+              },
+              {
+                "text": "**Hill giants** (Edgeville Dungeon): a safespot and good drops, slower than moss giants."
+              },
+              {
+                "text": "**Lesser demons** (65+, the Karamja volcano or Crandor): a safespot, AFK after the first ten minutes; vile ashes."
+              },
+              {
+                "text": "**Ogress shamans** (60+, the Corsair Cove dungeon): the best drops and XP from 70; a safespot with a shortbow."
+              }
             ]
           }
         ]
@@ -2388,41 +2596,55 @@
           "from": 1,
           "to": 20,
           "levels": "1–20",
-          "what": "Chickens, cows, goblins",
-          "where": "The farms by Lumbridge",
+          "what": "Level 3 seagulls (Seagull): they never hit back",
+          "where": "The Port Sarim docks",
           "cells": [
             "RA-1",
             "1–20",
-            "Chickens, cows, goblins",
-            "The farms by Lumbridge"
+            "Level 3 seagulls (Seagull): they never hit back",
+            "The Port Sarim docks"
           ]
         },
         {
           "code": "RA-2",
           "from": 20,
-          "to": 40,
-          "levels": "20–40",
-          "what": "Flesh Crawler, Al Kharid warriors",
-          "where": "The Stronghold of Security, the Al Kharid palace",
+          "to": 26,
+          "levels": "20–26",
+          "what": "Monks (Monk) or level 10 barbarians",
+          "where": "Edgeville Monastery; Barbarian Village (safespot by the rocks and the torch)",
           "cells": [
             "RA-2",
-            "20–40",
-            "Flesh Crawler, Al Kharid warriors",
-            "The Stronghold of Security, the Al Kharid palace"
+            "20–26",
+            "Monks (Monk) or level 10 barbarians",
+            "Edgeville Monastery; Barbarian Village (safespot by the rocks and the torch)"
           ]
         },
         {
           "code": "RA-3",
-          "from": 40,
-          "to": null,
-          "levels": "40+",
-          "what": "Moss giants from behind an obstacle",
-          "where": "The Varrock sewers",
+          "from": 26,
+          "to": 57,
+          "levels": "26–57",
+          "what": "Giant frogs (Giant frog)",
+          "where": "The Lumbridge swamp",
           "cells": [
             "RA-3",
-            "40+",
-            "Moss giants from behind an obstacle",
-            "The Varrock sewers"
+            "26–57",
+            "Giant frogs (Giant frog)",
+            "The Lumbridge swamp"
+          ]
+        },
+        {
+          "code": "RA-4",
+          "from": 57,
+          "to": null,
+          "levels": "57+",
+          "what": "Moss giants (Moss giant) from a safespot",
+          "where": "Crandor (the south side) or the far end of the Varrock sewers",
+          "cells": [
+            "RA-4",
+            "57+",
+            "Moss giants (Moss giant) from a safespot",
+            "Crandor (the south side) or the far end of the Varrock sewers"
           ]
         }
       ],
@@ -2470,6 +2692,12 @@
                 "Stronger strikes"
               ],
               [
+                "7",
+                "Lvl-1 Enchant",
+                "17,5",
+                "A sapphire amulet into an Amulet of magic"
+              ],
+              [
                 "17–35",
                 "Wind, Water, Earth, Fire Bolt",
                 "13,5–22,5",
@@ -2488,6 +2716,12 @@
                 "Teleport to Varrock"
               ],
               [
+                "27",
+                "Lvl-2 Enchant",
+                "37",
+                "Emerald jewellery"
+              ],
+              [
                 "31",
                 "Lumbridge Teleport",
                 "41",
@@ -2497,7 +2731,7 @@
                 "33",
                 "Telekinetic Grab",
                 "43",
-                "Pick up an item from afar (needed for Dragon Slayer I)"
+                "Pick up an item from afar (one way to the Wormbrain map piece in Dragon Slayer I)"
               ],
               [
                 "37",
@@ -2518,10 +2752,22 @@
                 "A bar from ore without a furnace, iron always succeeds"
               ],
               [
+                "49",
+                "Lvl-3 Enchant",
+                "59",
+                "Ruby jewellery"
+              ],
+              [
                 "55",
                 "High Level Alchemy",
                 "65",
                 "An item into gold pays better"
+              ],
+              [
+                "57",
+                "Lvl-4 Enchant",
+                "67",
+                "Diamond jewellery"
               ]
             ]
           }
@@ -2542,46 +2788,72 @@
             "rows": [
               [
                 "MA-1",
-                "1–13",
-                "Strikes on chickens and cows, change to every new spell at once",
+                "1–7",
+                "Wind Strike on cows or chickens",
                 "The farms by Lumbridge",
-                "Imp Catcher and Witch's Potion give about level 10"
+                "Witch's Potion and Imp Catcher give about level 10"
               ],
               [
                 "MA-2",
-                "13–25",
-                "Fire Strike on monsters",
-                "Where convenient",
-                "With a Staff of fire you do not need fire runes"
+                "7–27",
+                "Lvl-1 Enchant on sapphire amulets",
+                "By a bank",
+                "A cosmic rune and a Staff of water; it usually pays a little"
               ],
               [
                 "MA-3",
-                "25–33",
-                "Teleports to Varrock",
-                "Anywhere",
-                "~300 teleports, convenient for getting around along the way"
+                "27–49",
+                "Lvl-2 Enchant on emerald amulets",
+                "By a bank",
+                "A cosmic rune and a Staff of air"
               ],
               [
                 "MA-4",
-                "33–43",
-                "Teleports to Lumbridge and Falador",
-                "Anywhere",
-                "Law runes are the main expense"
+                "49–57",
+                "Lvl-3 Enchant on ruby amulets",
+                "By a bank",
+                "A cosmic rune and a Staff of fire"
               ],
               [
                 "MA-5",
-                "43–55",
-                "Superheat Item on iron ore",
-                "Anywhere",
-                "Trains Smithing along the way"
-              ],
-              [
-                "MA-6",
-                "55+",
-                "High Level Alchemy",
-                "Anywhere",
+                "57+",
+                "Lvl-4 Enchant on diamond amulets, or High Level Alchemy",
+                "By a bank",
                 "Check the profit with the Item Prices plugin"
               ]
+            ]
+          },
+          {
+            "t": "p",
+            "text": "**Other options** for the same levels, from the OSRS Wiki free-to-play guide:"
+          },
+          {
+            "t": "ul",
+            "items": [
+              {
+                "text": "**Splashing Curse** (19+, on a weak monster wearing armour that blocks your magic): about 34 thousand XP an hour, almost AFK."
+              },
+              {
+                "text": "**Strike and Bolt spells** on monsters: the same XP plus Hitpoints, and you train combat."
+              },
+              {
+                "text": "**Low Level Alchemy** (21–55, iron platebodies): slow, but it can be cast while you do other things."
+              },
+              {
+                "text": "**Teleports** (Varrock 25, Lumbridge 31, Falador 37): fast but about 3 coins an XP; they double as travel."
+              },
+              {
+                "text": "**Superheat Item** (43+, iron ore): trains Smithing too and never fails on iron."
+              },
+              {
+                "text": "**Telekinetic Grab** (33+): the Wine of Zamorak in the Asgarnian Chaos Temple, or nature runes in the Wilderness (dangerous)."
+              },
+              {
+                "text": "**Fire Blast** (59+, ice giants in the Asgarnian Ice Dungeon from a safespot): combat Magic with High Level Alchemy between casts."
+              },
+              {
+                "text": "**Brutus** (after The Ides of Milk): double combat XP, weak to earth spells."
+              }
             ]
           }
         ]
@@ -2618,96 +2890,80 @@
         {
           "code": "MA-1",
           "from": 1,
-          "to": 13,
-          "levels": "1–13",
-          "what": "Strikes on chickens and cows, change to every new spell at once",
+          "to": 7,
+          "levels": "1–7",
+          "what": "Wind Strike on cows or chickens",
           "where": "The farms by Lumbridge",
-          "notes": "Imp Catcher and Witch's Potion give about level 10",
+          "notes": "Witch's Potion and Imp Catcher give about level 10",
           "cells": [
             "MA-1",
-            "1–13",
-            "Strikes on chickens and cows, change to every new spell at once",
+            "1–7",
+            "Wind Strike on cows or chickens",
             "The farms by Lumbridge",
-            "Imp Catcher and Witch's Potion give about level 10"
+            "Witch's Potion and Imp Catcher give about level 10"
           ]
         },
         {
           "code": "MA-2",
-          "from": 13,
-          "to": 25,
-          "levels": "13–25",
-          "what": "Fire Strike on monsters",
-          "where": "Where convenient",
-          "notes": "With a Staff of fire you do not need fire runes",
+          "from": 7,
+          "to": 27,
+          "levels": "7–27",
+          "what": "Lvl-1 Enchant on sapphire amulets",
+          "where": "By a bank",
+          "notes": "A cosmic rune and a Staff of water; it usually pays a little",
           "cells": [
             "MA-2",
-            "13–25",
-            "Fire Strike on monsters",
-            "Where convenient",
-            "With a Staff of fire you do not need fire runes"
+            "7–27",
+            "Lvl-1 Enchant on sapphire amulets",
+            "By a bank",
+            "A cosmic rune and a Staff of water; it usually pays a little"
           ]
         },
         {
           "code": "MA-3",
-          "from": 25,
-          "to": 33,
-          "levels": "25–33",
-          "what": "Teleports to Varrock",
-          "where": "Anywhere",
-          "notes": "~300 teleports, convenient for getting around along the way",
+          "from": 27,
+          "to": 49,
+          "levels": "27–49",
+          "what": "Lvl-2 Enchant on emerald amulets",
+          "where": "By a bank",
+          "notes": "A cosmic rune and a Staff of air",
           "cells": [
             "MA-3",
-            "25–33",
-            "Teleports to Varrock",
-            "Anywhere",
-            "~300 teleports, convenient for getting around along the way"
+            "27–49",
+            "Lvl-2 Enchant on emerald amulets",
+            "By a bank",
+            "A cosmic rune and a Staff of air"
           ]
         },
         {
           "code": "MA-4",
-          "from": 33,
-          "to": 43,
-          "levels": "33–43",
-          "what": "Teleports to Lumbridge and Falador",
-          "where": "Anywhere",
-          "notes": "Law runes are the main expense",
+          "from": 49,
+          "to": 57,
+          "levels": "49–57",
+          "what": "Lvl-3 Enchant on ruby amulets",
+          "where": "By a bank",
+          "notes": "A cosmic rune and a Staff of fire",
           "cells": [
             "MA-4",
-            "33–43",
-            "Teleports to Lumbridge and Falador",
-            "Anywhere",
-            "Law runes are the main expense"
+            "49–57",
+            "Lvl-3 Enchant on ruby amulets",
+            "By a bank",
+            "A cosmic rune and a Staff of fire"
           ]
         },
         {
           "code": "MA-5",
-          "from": 43,
-          "to": 55,
-          "levels": "43–55",
-          "what": "Superheat Item on iron ore",
-          "where": "Anywhere",
-          "notes": "Trains Smithing along the way",
-          "cells": [
-            "MA-5",
-            "43–55",
-            "Superheat Item on iron ore",
-            "Anywhere",
-            "Trains Smithing along the way"
-          ]
-        },
-        {
-          "code": "MA-6",
-          "from": 55,
+          "from": 57,
           "to": null,
-          "levels": "55+",
-          "what": "High Level Alchemy",
-          "where": "Anywhere",
+          "levels": "57+",
+          "what": "Lvl-4 Enchant on diamond amulets, or High Level Alchemy",
+          "where": "By a bank",
           "notes": "Check the profit with the Item Prices plugin",
           "cells": [
-            "MA-6",
-            "55+",
-            "High Level Alchemy",
-            "Anywhere",
+            "MA-5",
+            "57+",
+            "Lvl-4 Enchant on diamond amulets, or High Level Alchemy",
+            "By a bank",
             "Check the profit with the Item Prices plugin"
           ]
         }
@@ -2748,9 +3004,24 @@
                 "Almost any monsters: chickens, cows, goblins"
               ],
               [
+                "Fiendish ashes",
+                "10",
+                "Imps (scatter them)"
+              ],
+              [
                 "Big (Big bones)",
                 "15",
-                "Giants: moss and hill"
+                "Giant frogs, hill, moss and ice giants"
+              ],
+              [
+                "Vile ashes",
+                "25",
+                "Lesser demons"
+              ],
+              [
+                "Bull bones",
+                "40",
+                "Brutus, after The Ides of Milk (bury only)"
               ]
             ]
           }
@@ -2778,20 +3049,41 @@
                 "PR-2",
                 "11–25",
                 "Bury all the bones from combat; the lamp from The Ides of Milk goes into Prayer too",
-                "~1,400 regular bones"
+                "~1,440 regular bones"
               ],
               [
                 "PR-3",
                 "25–37",
-                "Big bones from giants or from the GE",
-                "~1,250 big bones"
+                "Big bones from giant frogs (the fastest to kill) or from the GE",
+                "~1,310 big bones"
               ],
               [
                 "PR-4",
                 "37–43",
-                "Big bones",
-                "~1,525 big bones"
+                "Big bones, or vile ashes from lesser demons (25 XP each)",
+                "~1,520 big bones"
               ]
+            ]
+          },
+          {
+            "t": "p",
+            "text": "**Other options** for the same levels, from the OSRS Wiki free-to-play guide:"
+          },
+          {
+            "t": "ul",
+            "items": [
+              {
+                "text": "**Camdozaal fish offerings** (after Below Ice Mountain, Fishing and Cooking 7): slow, about 2 thousand XP an hour, but it trains Fishing and Cooking at the same time."
+              },
+              {
+                "text": "**Bones left on the ground** at the cows, chickens and Lumbridge swamp: other players leave plenty."
+              },
+              {
+                "text": "**Buying big bones and vile ashes** on the GE: the fastest free way, and the most expensive."
+              },
+              {
+                "text": "**The Bone Yard** in the Wilderness (level 20+): free bones, but skeletons and other players attack."
+              }
             ]
           }
         ]
@@ -2894,12 +3186,12 @@
           "to": 25,
           "levels": "11–25",
           "what": "Bury all the bones from combat; the lamp from The Ides of Milk goes into Prayer too",
-          "amount": "~1,400 regular bones",
+          "amount": "~1,440 regular bones",
           "cells": [
             "PR-2",
             "11–25",
             "Bury all the bones from combat; the lamp from The Ides of Milk goes into Prayer too",
-            "~1,400 regular bones"
+            "~1,440 regular bones"
           ]
         },
         {
@@ -2907,13 +3199,13 @@
           "from": 25,
           "to": 37,
           "levels": "25–37",
-          "what": "Big bones from giants or from the GE",
-          "amount": "~1,250 big bones",
+          "what": "Big bones from giant frogs (the fastest to kill) or from the GE",
+          "amount": "~1,310 big bones",
           "cells": [
             "PR-3",
             "25–37",
-            "Big bones from giants or from the GE",
-            "~1,250 big bones"
+            "Big bones from giant frogs (the fastest to kill) or from the GE",
+            "~1,310 big bones"
           ]
         },
         {
@@ -2921,13 +3213,13 @@
           "from": 37,
           "to": 43,
           "levels": "37–43",
-          "what": "Big bones",
-          "amount": "~1,525 big bones",
+          "what": "Big bones, or vile ashes from lesser demons (25 XP each)",
+          "amount": "~1,520 big bones",
           "cells": [
             "PR-4",
             "37–43",
-            "Big bones",
-            "~1,525 big bones"
+            "Big bones, or vile ashes from lesser demons (25 XP each)",
+            "~1,520 big bones"
           ]
         }
       ],
@@ -3022,13 +3314,13 @@
                 "RC-1",
                 "1–9",
                 "Air runes",
-                "~195"
+                "~190"
               ],
               [
                 "RC-2",
                 "9–14",
                 "Earth runes: the altar is close to Aubury's mine and the Varrock bank",
-                "~175"
+                "~180"
               ],
               [
                 "RC-3",
@@ -3038,10 +3330,28 @@
               ],
               [
                 "RC-4",
-                "20–30",
-                "Fire or body runes",
-                "~1 270"
+                "20+",
+                "Body runes: the best XP per essence and the only way that pays at high levels",
+                "—"
               ]
+            ]
+          },
+          {
+            "t": "p",
+            "text": "**Other options** for the same levels, from the OSRS Wiki free-to-play guide:"
+          },
+          {
+            "t": "ul",
+            "items": [
+              {
+                "text": "**Tiaras** (earth, water or body, Magic 25–31 for teleports): 25–47 thousand XP an hour, much faster, but every tiara loses money."
+              },
+              {
+                "text": "**Energy potions** add 30–50% to any essence method: running all the way matters."
+              },
+              {
+                "text": "**Buy pure essence** on the GE: it is cheaper than rune essence and free-to-play accounts cannot mine it."
+              }
             ]
           }
         ]
@@ -3083,12 +3393,12 @@
           "to": 9,
           "levels": "1–9",
           "what": "Air runes",
-          "amount": "~195",
+          "amount": "~190",
           "cells": [
             "RC-1",
             "1–9",
             "Air runes",
-            "~195"
+            "~190"
           ]
         },
         {
@@ -3097,12 +3407,12 @@
           "to": 14,
           "levels": "9–14",
           "what": "Earth runes: the altar is close to Aubury's mine and the Varrock bank",
-          "amount": "~175",
+          "amount": "~180",
           "cells": [
             "RC-2",
             "9–14",
             "Earth runes: the altar is close to Aubury's mine and the Varrock bank",
-            "~175"
+            "~180"
           ]
         },
         {
@@ -3122,15 +3432,15 @@
         {
           "code": "RC-4",
           "from": 20,
-          "to": 30,
-          "levels": "20–30",
-          "what": "Fire or body runes",
-          "amount": "~1 270",
+          "to": null,
+          "levels": "20+",
+          "what": "Body runes: the best XP per essence and the only way that pays at high levels",
+          "amount": "—",
           "cells": [
             "RC-4",
-            "20–30",
-            "Fire or body runes",
-            "~1 270"
+            "20+",
+            "Body runes: the best XP per essence and the only way that pays at high levels",
+            "—"
           ]
         }
       ],

@@ -1,7 +1,7 @@
 {
   "skill": "runecraft",
   "start": 1,
-  "f2pCap": 44,
+  "f2pCap": 99,
   "steps": [
     {
       "id": "runecraft-01",
@@ -78,12 +78,12 @@
       "skill": "runecraft",
       "levelRange": [
         20,
-        44
+        99
       ],
       "methodType": "GATHER",
       "title": "Body runes",
-      "description": "Body runes give the best XP per essence in the early game. Craft them on the body altar.",
-      "targetLevel": 44,
+      "description": "Body runes give the best free XP per essence and the only profit at high levels. Craft them on the body altar; Falador Teleport back to the bank.",
+      "targetLevel": 99,
       "lane": "both",
       "members": false,
       "location": {
@@ -173,6 +173,29 @@
         "questIds": [
           "Temple of the Eye"
         ]
+      }
+    },
+    {
+      "id": "runecraft-08",
+      "skill": "runecraft",
+      "levelRange": [
+        20,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Tiaras",
+      "description": "Earth, water or body tiaras from a plain tiara and a talisman: 25 to 47 thousand XP an hour, but every tiara loses money.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Body altar",
+        "tile": [
+          2522,
+          4839,
+          0
+        ],
+        "objectName": "Altar"
       }
     }
   ]

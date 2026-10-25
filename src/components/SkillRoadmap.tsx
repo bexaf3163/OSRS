@@ -8,7 +8,7 @@ import { useBridge } from '../bridge';
 import { useStore } from '../store';
 import { levelOf } from '../lib/progress';
 import { formatXp } from '../lib/goals';
-import { bracketsOf, buildPath, currentIndex, questRewardDone, type SkillName, type SkillStep } from '../lib/skillGuide';
+import { alternativesFor, bracketsOf, buildPath, currentIndex, questRewardDone, type SkillName, type SkillStep } from '../lib/skillGuide';
 import { freeOnlyOf, setTracked, useTracked } from '../lib/skillTrack';
 import { useFeatures } from '../lib/features';
 import { priorityOf } from '../lib/playStyle';
@@ -105,7 +105,7 @@ function Roadmap({ skills, label }: { skills: SkillName[]; label: string }) {
           <li key={`${g.from}-${g.to}`} className="skill-bracket">
             <h3>Levels {g.from}–{g.to}</h3>
             <ol>
-              {g.steps.map((s) => <StepRow key={s.id} step={s} state={path.indexOf(s) < at ? 'done' : path.indexOf(s) === at ? 'now' : 'next'} level={level} />)}
+              {g.steps.map((s) => <StepRow key={s.id} step={s} state={path.indexOf(s) < at ? 'done' : path.indexOf(s) === at ? 'now' : 'next'} level={level} alternatives={alternativesFor(guide, s, freeOnly)} />)}
             </ol>
           </li>
         ))}
@@ -114,7 +114,7 @@ function Roadmap({ skills, label }: { skills: SkillName[]; label: string }) {
   );
 }
 
-function StepRow({ step, state, level }: { step: SkillStep; state: 'done' | 'now' | 'next'; level: number }) {
+function StepRow({ step, state, level, alternatives }: { step: SkillStep; state: 'done' | 'now' | 'next'; level: number; alternatives: SkillStep[] }) {
   return (
     <li className={`skill-step is-${state}`}>
       <p className="skill-step-head">
@@ -133,6 +133,20 @@ function StepRow({ step, state, level }: { step: SkillStep; state: 'done' | 'now
         {step.reward && <> · reward {formatXp(step.reward.xp)} xp</>}
         {step.prerequisites?.questIds && <> · needs {step.prerequisites.questIds.join(', ')}</>}
       </p>
+      {/* The wiki guide's other methods for these levels: folded, so the plan stays one line per bracket. */}
+      {alternatives.length > 0 && (
+        <details className="skill-step-alts">
+          <summary className="small">Other options · {alternatives.length}</summary>
+          <ul>
+            {alternatives.map((a) => (
+              <li key={a.id} className="small">
+                <strong>{a.title}</strong>{a.members && <span className="badge badge-members">Members</span>} <span className="muted">Lvl {a.levelRange[0]} → {a.targetLevel}</span>
+                <br />{a.description} <span className="muted">📍 {a.location.name}</span>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
     </li>
   );
 }

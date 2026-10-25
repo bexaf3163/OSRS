@@ -150,6 +150,56 @@
         ],
         "objectName": "Bar dispenser"
       }
+    },
+    {
+      "id": "smithing-07",
+      "skill": "smithing",
+      "levelRange": [
+        1,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Smelting bars at Edgeville",
+      "description": "Almost AFK at the furnace next to the bank; steel, mithril and adamantite bars often sell above their ore.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Edgeville",
+        "tile": [
+          3080,
+          3492,
+          0
+        ],
+        "objectName": "Furnace"
+      }
+    },
+    {
+      "id": "smithing-08",
+      "skill": "smithing",
+      "levelRange": [
+        14,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Barronite deposits",
+      "description": "Crush deposits in Camdozaal after Below Ice Mountain: very slow, very calm.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Ruins of Camdozaal",
+        "tile": [
+          2968,
+          5808,
+          0
+        ]
+      },
+      "prerequisites": {
+        "questIds": [
+          "Below Ice Mountain"
+        ]
+      }
     }
   ]
 }

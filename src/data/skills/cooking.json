@@ -81,18 +81,17 @@
       ],
       "methodType": "GATHER",
       "title": "Jugs of wine",
-      "description": "Make wine in the Cooks' Guild: use grapes on a jug of water, then the range. It trains Cooking fast and costs little (free to play).",
+      "description": "Use grapes on jugs of water by any bank: the wine ferments by itself, no range needed. The fastest free Cooking, and it costs little.",
       "targetLevel": 99,
       "lane": "both",
       "members": false,
       "location": {
-        "name": "Cooks' Guild",
+        "name": "Grand Exchange",
         "tile": [
-          3144,
-          3450,
+          3165,
+          3490,
           0
-        ],
-        "objectName": "Range"
+        ]
       }
     },
     {
@@ -113,6 +112,75 @@
         "tile": [
           1762,
           3598,
+          0
+        ],
+        "objectName": "Range"
+      }
+    },
+    {
+      "id": "cooking-06",
+      "skill": "cooking",
+      "levelRange": [
+        10,
+        60
+      ],
+      "methodType": "GATHER",
+      "title": "Pies and pizzas",
+      "description": "Redberry (10), meat (20) and apple pies (30), plain (35) and anchovy pizzas (55): slower, and they sell well.",
+      "targetLevel": 60,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Al Kharid",
+        "tile": [
+          3290,
+          3185,
+          0
+        ],
+        "objectName": "Range"
+      }
+    },
+    {
+      "id": "cooking-07",
+      "skill": "cooking",
+      "levelRange": [
+        40,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Your own lobsters and swordfish",
+      "description": "Cook your own catch: slower, but the food you take into combat.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Al Kharid",
+        "tile": [
+          3290,
+          3185,
+          0
+        ],
+        "objectName": "Range"
+      }
+    },
+    {
+      "id": "cooking-08",
+      "skill": "cooking",
+      "levelRange": [
+        32,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "The Cooks' Guild",
+      "description": "Cooking 32 and a Chef's hat: free ingredients for pies and wine inside.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Cooks' Guild",
+        "tile": [
+          3144,
+          3450,
           0
         ],
         "objectName": "Range"

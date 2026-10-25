@@ -8,12 +8,12 @@
       "skill": "defence",
       "levelRange": [
         1,
-        30
+        20
       ],
       "methodType": "COMBAT",
       "title": "Cows near Lumbridge (Defence style)",
-      "description": "Kill cows on the Defence style. Slow, but the free way at the start.",
-      "targetLevel": 30,
+      "description": "Kill cows on the Defence style: they hit weakly, and the hides sell.",
+      "targetLevel": 20,
       "lane": "both",
       "members": false,
       "location": {
@@ -57,23 +57,23 @@
       "id": "defence-03",
       "skill": "defence",
       "levelRange": [
-        30,
-        60
+        20,
+        40
       ],
       "methodType": "COMBAT",
-      "title": "Hill giants",
-      "description": "Hill giants in the Edgeville Dungeon on the Defence style.",
-      "targetLevel": 60,
+      "title": "Giant frogs",
+      "description": "Level 13 frogs in the Lumbridge Swamp: about 90 XP a kill, Big bones on every kill (sell or bury them), and they hit at most 2.",
+      "targetLevel": 40,
       "lane": "both",
       "members": false,
       "location": {
-        "name": "Edgeville Dungeon",
+        "name": "Lumbridge Swamp",
         "tile": [
-          3116,
-          9908,
+          3197,
+          3166,
           0
         ],
-        "npcName": "Hill Giant"
+        "npcName": "Giant frog"
       }
     },
     {
@@ -166,6 +166,305 @@
           0
         ],
         "npcName": "Dominic Onion"
+      }
+    },
+    {
+      "id": "defence-08",
+      "skill": "defence",
+      "levelRange": [
+        1,
+        20
+      ],
+      "methodType": "COMBAT",
+      "title": "Monks of Edgeville",
+      "description": "Level 5 monks: talk to a non-combat monk and he heals you for free, so no food is needed. Bones only.",
+      "targetLevel": 20,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Edgeville Monastery",
+        "tile": [
+          3052,
+          3490,
+          0
+        ],
+        "npcName": "Monk"
+      }
+    },
+    {
+      "id": "defence-09",
+      "skill": "defence",
+      "levelRange": [
+        1,
+        20
+      ],
+      "methodType": "COMBAT",
+      "title": "Giant rats",
+      "description": "Lumbridge Swamp rats: every kill drops raw rat meat to cook for food.",
+      "targetLevel": 20,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Lumbridge Swamp",
+        "tile": [
+          3197,
+          3166,
+          0
+        ],
+        "npcName": "Giant rat"
+      }
+    },
+    {
+      "id": "defence-10",
+      "skill": "defence",
+      "levelRange": [
+        10,
+        20
+      ],
+      "methodType": "COMBAT",
+      "title": "Minotaurs",
+      "description": "On the first floor of the Stronghold of Security (Defence 15+): iron arrows, essence and ore drops.",
+      "targetLevel": 20,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Barbarian Village",
+        "tile": [
+          3080,
+          3427,
+          0
+        ],
+        "npcName": "Minotaur"
+      }
+    },
+    {
+      "id": "defence-11",
+      "skill": "defence",
+      "levelRange": [
+        20,
+        40
+      ],
+      "methodType": "COMBAT",
+      "title": "Brutus",
+      "description": "After The Ides of Milk: double combat XP in his own pen by the Lumbridge cows, bull bones every kill. His charges hurt at low levels.",
+      "targetLevel": 40,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Lumbridge",
+        "tile": [
+          3188,
+          3220,
+          0
+        ],
+        "npcName": "Brutus"
+      }
+    },
+    {
+      "id": "defence-12",
+      "skill": "defence",
+      "levelRange": [
+        20,
+        40
+      ],
+      "methodType": "COMBAT",
+      "title": "Barbarians",
+      "description": "Barbarian Village: runes, arrows and gems, cooked meat in the long hall, close to the Grand Exchange.",
+      "targetLevel": 40,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Barbarian Village",
+        "tile": [
+          3080,
+          3427,
+          0
+        ],
+        "npcName": "Barbarian"
+      }
+    },
+    {
+      "id": "defence-13",
+      "skill": "defence",
+      "levelRange": [
+        20,
+        30
+      ],
+      "methodType": "COMBAT",
+      "title": "Al Kharid warriors",
+      "description": "The palace warriors: a bank next door and 1-coin kebabs, but the whole room joins in when you attack one.",
+      "targetLevel": 30,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Al Kharid",
+        "tile": [
+          3290,
+          3185,
+          0
+        ],
+        "npcName": "Al Kharid warrior"
+      }
+    },
+    {
+      "id": "defence-14",
+      "skill": "defence",
+      "levelRange": [
+        30,
+        50
+      ],
+      "methodType": "COMBAT",
+      "title": "Hobgoblins",
+      "description": "Edgeville Dungeon or west of the Crafting Guild: when the hill giants are crowded. Limpwurt roots.",
+      "targetLevel": 50,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Edgeville Dungeon",
+        "tile": [
+          3116,
+          9908,
+          0
+        ],
+        "npcName": "Hobgoblin"
+      }
+    },
+    {
+      "id": "defence-15",
+      "skill": "defence",
+      "levelRange": [
+        40,
+        60
+      ],
+      "methodType": "COMBAT",
+      "title": "Flesh Crawlers",
+      "description": "The second floor of the Stronghold of Security: always aggressive, so they can be left running. No bones or money.",
+      "targetLevel": 60,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Barbarian Village",
+        "tile": [
+          3080,
+          3427,
+          0
+        ],
+        "npcName": "Flesh Crawler"
+      }
+    },
+    {
+      "id": "defence-16",
+      "skill": "defence",
+      "levelRange": [
+        50,
+        70
+      ],
+      "methodType": "COMBAT",
+      "title": "Ice giants",
+      "description": "The Asgarnian Ice Dungeon: big bones and adamant arrows, a long walk from a bank.",
+      "targetLevel": 70,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Asgarnian Ice Dungeon",
+        "tile": [
+          3008,
+          3150,
+          0
+        ],
+        "npcName": "Ice giant"
+      }
+    },
+    {
+      "id": "defence-17",
+      "skill": "defence",
+      "levelRange": [
+        50,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Body golems",
+      "description": "The Ruins of Camdozaal after Below Ice Mountain: close to a bank; a Barronite mace hits them hardest.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Ruins of Camdozaal",
+        "tile": [
+          2968,
+          5808,
+          0
+        ],
+        "npcName": "Body golem"
+      }
+    },
+    {
+      "id": "defence-18",
+      "skill": "defence",
+      "levelRange": [
+        60,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Giant spiders",
+      "description": "The third floor of the Stronghold of Security: the AFK way to 99, nothing to pick up.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Barbarian Village",
+        "tile": [
+          3080,
+          3427,
+          0
+        ],
+        "npcName": "Giant spider"
+      }
+    },
+    {
+      "id": "defence-19",
+      "skill": "defence",
+      "levelRange": [
+        80,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Ogresses",
+      "description": "The Corsair Cove dungeon: the best free drops (rune helms), but they need Protect from Magic and Protect from Melee.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Corsair Cove",
+        "tile": [
+          2573,
+          2856,
+          0
+        ],
+        "npcName": "Ogress Warrior"
+      }
+    },
+    {
+      "id": "defence-20",
+      "skill": "defence",
+      "levelRange": [
+        40,
+        60
+      ],
+      "methodType": "COMBAT",
+      "title": "Hill giants",
+      "description": "Hill giants in the Edgeville Dungeon on the Defence style: big bones and limpwurt roots.",
+      "targetLevel": 60,
+      "lane": "both",
+      "members": false,
+      "location": {
+        "name": "Edgeville Dungeon",
+        "tile": [
+          3116,
+          9908,
+          0
+        ],
+        "npcName": "Hill Giant"
       }
     }
   ]

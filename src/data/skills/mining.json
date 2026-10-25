@@ -150,6 +150,124 @@
         ],
         "objectName": "Granite rocks"
       }
+    },
+    {
+      "id": "mining-07",
+      "skill": "mining",
+      "levelRange": [
+        1,
+        30
+      ],
+      "methodType": "GATHER",
+      "title": "Rune essence",
+      "description": "After Rune Mysteries: slow but AFK, and it feeds Runecraft.",
+      "targetLevel": 30,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Aubury",
+        "tile": [
+          3253,
+          3402,
+          0
+        ],
+        "npcName": "Aubury"
+      }
+    },
+    {
+      "id": "mining-08",
+      "skill": "mining",
+      "levelRange": [
+        14,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Barronite in Camdozaal",
+      "description": "After Below Ice Mountain: very calm mining, shards for the shard shop.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Ruins of Camdozaal",
+        "tile": [
+          2968,
+          5808,
+          0
+        ]
+      },
+      "prerequisites": {
+        "questIds": [
+          "Below Ice Mountain"
+        ]
+      }
+    },
+    {
+      "id": "mining-09",
+      "skill": "mining",
+      "levelRange": [
+        10,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Crashed stars",
+      "description": "The most AFK way, about one click in seven minutes; a star-finding plugin helps.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Varrock",
+        "tile": [
+          3210,
+          3448,
+          0
+        ]
+      }
+    },
+    {
+      "id": "mining-10",
+      "skill": "mining",
+      "levelRange": [
+        30,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Coal for steel",
+      "description": "Barbarian Village coal: slower XP, but steel bars sell.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Barbarian Village mine",
+        "tile": [
+          3080,
+          3430,
+          0
+        ],
+        "objectName": "Coal rocks"
+      }
+    },
+    {
+      "id": "mining-11",
+      "skill": "mining",
+      "levelRange": [
+        70,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Adamantite in the Mining Guild",
+      "description": "Two rocks: hop worlds instead of waiting.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Mining Guild",
+        "tile": [
+          3032,
+          9728,
+          0
+        ],
+        "objectName": "Adamantite rocks"
+      }
     }
   ]
 }

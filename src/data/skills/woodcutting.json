@@ -196,6 +196,74 @@
         ],
         "objectName": "Yew tree"
       }
+    },
+    {
+      "id": "woodcutting-09",
+      "skill": "woodcutting",
+      "levelRange": [
+        45,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Maples at Corsair Cove",
+      "description": "The Corsair Cove Resource Area (Dragon Slayer I and the start of The Corsair Curse): about a third less XP than willows, the calmest chopping.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Corsair Cove",
+        "tile": [
+          2573,
+          2856,
+          0
+        ],
+        "objectName": "Maple tree"
+      }
+    },
+    {
+      "id": "woodcutting-10",
+      "skill": "woodcutting",
+      "levelRange": [
+        30,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Willows on to 99",
+      "description": "For XP the guide keeps chopping willows; yews are for the money the logs fetch.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Draynor Village",
+        "tile": [
+          3103,
+          3265,
+          0
+        ],
+        "objectName": "Willow tree"
+      }
+    },
+    {
+      "id": "woodcutting-11",
+      "skill": "woodcutting",
+      "levelRange": [
+        15,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Forestry events",
+      "description": "Chop a busy tree with a Forestry kit: on a full world the events can beat plain chopping.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Draynor Village",
+        "tile": [
+          3103,
+          3265,
+          0
+        ]
+      }
     }
   ]
 }

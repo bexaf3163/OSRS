@@ -64,14 +64,14 @@
       "skill": "magic",
       "levelRange": [
         7,
-        21
+        27
       ],
       "methodType": "GATHER",
-      "title": "Lvl-1 Enchant",
-      "description": "Enchant sapphire or opal jewellery with the Lvl-1 Enchant spell: around 250 casts take you from level 7 to 21.",
-      "targetLevel": 21,
+      "title": "Enchant sapphire amulets",
+      "description": "Cast Lvl-1 Enchant on sapphire amulets by a bank: a cosmic rune and a Staff of water each cast, and the Amulets of magic usually sell for a little more.",
+      "targetLevel": 27,
       "lane": "fast",
-      "members": true,
+      "members": false,
       "location": {
         "name": "Grand Exchange",
         "tile": [
@@ -146,6 +146,161 @@
           3490,
           0
         ]
+      }
+    },
+    {
+      "id": "magic-07",
+      "skill": "magic",
+      "levelRange": [
+        27,
+        49
+      ],
+      "methodType": "GATHER",
+      "title": "Enchant emerald amulets",
+      "description": "Cast Lvl-2 Enchant on emerald amulets by a bank: a cosmic rune and a Staff of air each cast.",
+      "targetLevel": 49,
+      "lane": "fast",
+      "members": false,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "magic-08",
+      "skill": "magic",
+      "levelRange": [
+        49,
+        57
+      ],
+      "methodType": "GATHER",
+      "title": "Enchant ruby amulets",
+      "description": "Cast Lvl-3 Enchant on ruby amulets by a bank: a cosmic rune and a Staff of fire each cast.",
+      "targetLevel": 57,
+      "lane": "fast",
+      "members": false,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "magic-09",
+      "skill": "magic",
+      "levelRange": [
+        19,
+        59
+      ],
+      "methodType": "COMBAT",
+      "title": "Splash Curse",
+      "description": "Cast Curse on a weak monster while wearing armour that blocks your magic: about 34 thousand XP an hour, almost AFK.",
+      "targetLevel": 59,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Varrock",
+        "tile": [
+          3210,
+          3448,
+          0
+        ]
+      }
+    },
+    {
+      "id": "magic-10",
+      "skill": "magic",
+      "levelRange": [
+        25,
+        43
+      ],
+      "methodType": "GATHER",
+      "title": "Teleports",
+      "description": "Varrock (25), Lumbridge (31) and Falador (37) Teleport: fast, about 3 coins an XP, and they double as travel.",
+      "targetLevel": 43,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Varrock",
+        "tile": [
+          3210,
+          3448,
+          0
+        ]
+      }
+    },
+    {
+      "id": "magic-11",
+      "skill": "magic",
+      "levelRange": [
+        43,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Superheat Item",
+      "description": "Superheat iron ore with a Staff of fire: it never fails on iron and trains Smithing too.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Grand Exchange",
+        "tile": [
+          3165,
+          3490,
+          0
+        ]
+      }
+    },
+    {
+      "id": "magic-12",
+      "skill": "magic",
+      "levelRange": [
+        33,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Telekinetic Grab",
+      "description": "Grab the Wine of Zamorak in the Asgarnian Chaos Temple (it hurts; the monks attack), or nature runes in the Wilderness (dangerous).",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Chaos Temple (Asgarnia)",
+        "tile": [
+          2934,
+          3516,
+          0
+        ]
+      }
+    },
+    {
+      "id": "magic-13",
+      "skill": "magic",
+      "levelRange": [
+        59,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Fire Blast on ice giants",
+      "description": "From a safespot in the Asgarnian Ice Dungeon; cast High Level Alchemy between the casts.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Asgarnian Ice Dungeon",
+        "tile": [
+          3008,
+          3150,
+          0
+        ],
+        "npcName": "Ice giant"
       }
     }
   ]

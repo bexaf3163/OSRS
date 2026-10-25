@@ -194,6 +194,102 @@
         ],
         "npcName": "Fishing spot"
       }
+    },
+    {
+      "id": "fishing-09",
+      "skill": "fishing",
+      "levelRange": [
+        5,
+        20
+      ],
+      "methodType": "GATHER",
+      "title": "Sardines and herring",
+      "description": "A fishing rod and bait at the Lumbridge Swamp spots: faster than the net up to 20.",
+      "targetLevel": 20,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Lumbridge Swamp fishing spots",
+        "tile": [
+          3243,
+          3150,
+          0
+        ],
+        "npcName": "Fishing spot"
+      }
+    },
+    {
+      "id": "fishing-10",
+      "skill": "fishing",
+      "levelRange": [
+        15,
+        40
+      ],
+      "methodType": "GATHER",
+      "title": "Shrimps and anchovies for money",
+      "description": "Net at Draynor and bank the dearer of the two fish.",
+      "targetLevel": 40,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Draynor Village fishing spots",
+        "tile": [
+          3086,
+          3229,
+          0
+        ],
+        "npcName": "Fishing spot"
+      }
+    },
+    {
+      "id": "fishing-11",
+      "skill": "fishing",
+      "levelRange": [
+        40,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Fly fishing on to 99",
+      "description": "Trout and salmon stay the fastest and calmest free XP; lobsters and swordfish are for food and money.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Barbarian Village fishing spots",
+        "tile": [
+          3107,
+          3429,
+          0
+        ],
+        "npcName": "Fishing spot"
+      }
+    },
+    {
+      "id": "fishing-12",
+      "skill": "fishing",
+      "levelRange": [
+        7,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Camdozaal fish",
+      "description": "After Below Ice Mountain: guppies, cavefish and tetras to prepare and offer for Prayer.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Ruins of Camdozaal",
+        "tile": [
+          2968,
+          5808,
+          0
+        ]
+      },
+      "prerequisites": {
+        "questIds": [
+          "Below Ice Mountain"
+        ]
+      }
     }
   ]
 }

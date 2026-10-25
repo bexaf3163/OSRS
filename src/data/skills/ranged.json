@@ -11,19 +11,19 @@
         20
       ],
       "methodType": "COMBAT",
-      "title": "Cows with a shortbow",
-      "description": "Shoot cows near Lumbridge with a shortbow and bronze arrows. Pick up the arrows after the fight.",
+      "title": "Seagulls at Port Sarim",
+      "description": "Shoot the level 3 seagulls on the Port Sarim docks: they never hit back, so no food is needed. Pick up your arrows.",
       "targetLevel": 20,
       "lane": "both",
       "members": false,
       "location": {
-        "name": "Lumbridge",
+        "name": "Port Sarim",
         "tile": [
-          3188,
-          3220,
+          3029,
+          3221,
           0
         ],
-        "npcName": "Cow"
+        "npcName": "Seagull"
       }
     },
     {
@@ -31,12 +31,12 @@
       "skill": "ranged",
       "levelRange": [
         20,
-        40
+        57
       ],
       "methodType": "COMBAT",
       "title": "Giant frogs",
-      "description": "Giant frogs in the Lumbridge Swamp: easy targets. Pick up your arrows.",
-      "targetLevel": 40,
+      "description": "Giant frogs in the Lumbridge Swamp: the fastest free XP to the high 50s, and Big bones on every kill. Pick up your arrows.",
+      "targetLevel": 57,
       "lane": "both",
       "members": false,
       "location": {
@@ -53,23 +53,23 @@
       "id": "ranged-03",
       "skill": "ranged",
       "levelRange": [
-        40,
+        57,
         99
       ],
       "methodType": "COMBAT",
-      "title": "Flesh crawlers",
-      "description": "Flesh crawlers in the Stronghold of Security (free to play). Bring arrows and food.",
+      "title": "Moss giants from a safespot",
+      "description": "Shoot moss giants from a safespot on the south side of Crandor or at the far end of the Varrock Sewers: the best free XP after Brutus. Bring adamant arrows.",
       "targetLevel": 99,
       "lane": "both",
       "members": false,
       "location": {
-        "name": "Flesh Crawler",
+        "name": "Crandor",
         "tile": [
-          1917,
-          5141,
+          2836,
+          3271,
           0
         ],
-        "npcName": "Flesh Crawler"
+        "npcName": "Moss giant"
       }
     },
     {
@@ -139,6 +139,190 @@
           0
         ],
         "npcName": "Dominic Onion"
+      }
+    },
+    {
+      "id": "ranged-07",
+      "skill": "ranged",
+      "levelRange": [
+        1,
+        20
+      ],
+      "methodType": "COMBAT",
+      "title": "Cows across the fence",
+      "description": "Shoot the Lumbridge cows from behind the fence: safe, and the hides sell.",
+      "targetLevel": 20,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Lumbridge",
+        "tile": [
+          3188,
+          3220,
+          0
+        ],
+        "npcName": "Cow"
+      }
+    },
+    {
+      "id": "ranged-08",
+      "skill": "ranged",
+      "levelRange": [
+        20,
+        26
+      ],
+      "methodType": "COMBAT",
+      "title": "Monks or barbarians",
+      "description": "The Edgeville monks heal you for free; the level 10 barbarians are faster from the safespot by the rocks and the torch.",
+      "targetLevel": 26,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Edgeville Monastery",
+        "tile": [
+          3052,
+          3490,
+          0
+        ],
+        "npcName": "Monk"
+      }
+    },
+    {
+      "id": "ranged-09",
+      "skill": "ranged",
+      "levelRange": [
+        9,
+        69
+      ],
+      "methodType": "COMBAT",
+      "title": "Wizards at the Wizards' Tower",
+      "description": "The level 9 wizards stand still, so your arrows land in one spot, and they drop runes.",
+      "targetLevel": 69,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Wizards' Tower",
+        "tile": [
+          3109,
+          3160,
+          0
+        ],
+        "npcName": "Wizard"
+      }
+    },
+    {
+      "id": "ranged-10",
+      "skill": "ranged",
+      "levelRange": [
+        15,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Brutus",
+      "description": "After The Ides of Milk: the best free XP thanks to the double multiplier, but many clicks. Bring a stock of arrows.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Lumbridge",
+        "tile": [
+          3188,
+          3220,
+          0
+        ],
+        "npcName": "Brutus"
+      }
+    },
+    {
+      "id": "ranged-11",
+      "skill": "ranged",
+      "levelRange": [
+        40,
+        57
+      ],
+      "methodType": "COMBAT",
+      "title": "Flesh Crawlers",
+      "description": "The Stronghold of Security: about the XP of giant frogs and they can be left running. Defence 40+ helps.",
+      "targetLevel": 57,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Barbarian Village",
+        "tile": [
+          3080,
+          3427,
+          0
+        ],
+        "npcName": "Flesh Crawler"
+      }
+    },
+    {
+      "id": "ranged-12",
+      "skill": "ranged",
+      "levelRange": [
+        57,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Hill giants",
+      "description": "Edgeville Dungeon from a safespot: slower than moss giants, good drops and giant keys.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Edgeville Dungeon",
+        "tile": [
+          3116,
+          9908,
+          0
+        ],
+        "npcName": "Hill Giant"
+      }
+    },
+    {
+      "id": "ranged-13",
+      "skill": "ranged",
+      "levelRange": [
+        65,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Lesser demons",
+      "description": "The Karamja volcano or Crandor from a safespot: AFK after the first ten minutes, vile ashes.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Crandor",
+        "tile": [
+          2836,
+          3271,
+          0
+        ],
+        "npcName": "Lesser demon"
+      }
+    },
+    {
+      "id": "ranged-14",
+      "skill": "ranged",
+      "levelRange": [
+        60,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Ogress shamans",
+      "description": "The Corsair Cove dungeon: the best drops and XP from 70; safespot them with a shortbow.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Corsair Cove",
+        "tile": [
+          2573,
+          2856,
+          0
+        ],
+        "npcName": "Ogress Shaman"
       }
     }
   ]

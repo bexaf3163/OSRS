@@ -118,19 +118,19 @@
         40
       ],
       "methodType": "COMBAT",
-      "title": "Al Kharid warriors",
-      "description": "The warriors in the Al Kharid palace hit weakly and give steady XP. Bring food.",
+      "title": "Giant frogs",
+      "description": "Level 13 frogs in the Lumbridge Swamp: about 90 XP a kill, Big bones on every kill (sell or bury them), and they hit at most 2.",
       "targetLevel": 40,
       "lane": "both",
       "members": false,
       "location": {
-        "name": "Al Kharid",
+        "name": "Lumbridge Swamp",
         "tile": [
-          3290,
-          3185,
+          3197,
+          3166,
           0
         ],
-        "npcName": "Al Kharid warrior"
+        "npcName": "Giant frog"
       }
     },
     {
@@ -246,6 +246,282 @@
           0
         ],
         "npcName": "Dominic Onion"
+      }
+    },
+    {
+      "id": "attack-11",
+      "skill": "attack",
+      "levelRange": [
+        1,
+        20
+      ],
+      "methodType": "COMBAT",
+      "title": "Monks of Edgeville",
+      "description": "Level 5 monks: talk to a non-combat monk and he heals you for free, so no food is needed. Bones only.",
+      "targetLevel": 20,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Edgeville Monastery",
+        "tile": [
+          3052,
+          3490,
+          0
+        ],
+        "npcName": "Monk"
+      }
+    },
+    {
+      "id": "attack-12",
+      "skill": "attack",
+      "levelRange": [
+        1,
+        20
+      ],
+      "methodType": "COMBAT",
+      "title": "Giant rats",
+      "description": "Lumbridge Swamp rats: every kill drops raw rat meat to cook for food.",
+      "targetLevel": 20,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Lumbridge Swamp",
+        "tile": [
+          3197,
+          3166,
+          0
+        ],
+        "npcName": "Giant rat"
+      }
+    },
+    {
+      "id": "attack-13",
+      "skill": "attack",
+      "levelRange": [
+        10,
+        20
+      ],
+      "methodType": "COMBAT",
+      "title": "Minotaurs",
+      "description": "On the first floor of the Stronghold of Security (Defence 15+): iron arrows, essence and ore drops.",
+      "targetLevel": 20,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Barbarian Village",
+        "tile": [
+          3080,
+          3427,
+          0
+        ],
+        "npcName": "Minotaur"
+      }
+    },
+    {
+      "id": "attack-14",
+      "skill": "attack",
+      "levelRange": [
+        20,
+        40
+      ],
+      "methodType": "COMBAT",
+      "title": "Brutus",
+      "description": "After The Ides of Milk: double combat XP in his own pen by the Lumbridge cows, bull bones every kill. His charges hurt at low levels.",
+      "targetLevel": 40,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Lumbridge",
+        "tile": [
+          3188,
+          3220,
+          0
+        ],
+        "npcName": "Brutus"
+      }
+    },
+    {
+      "id": "attack-15",
+      "skill": "attack",
+      "levelRange": [
+        20,
+        40
+      ],
+      "methodType": "COMBAT",
+      "title": "Barbarians",
+      "description": "Barbarian Village: runes, arrows and gems, cooked meat in the long hall, close to the Grand Exchange.",
+      "targetLevel": 40,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Barbarian Village",
+        "tile": [
+          3080,
+          3427,
+          0
+        ],
+        "npcName": "Barbarian"
+      }
+    },
+    {
+      "id": "attack-16",
+      "skill": "attack",
+      "levelRange": [
+        20,
+        30
+      ],
+      "methodType": "COMBAT",
+      "title": "Al Kharid warriors",
+      "description": "The palace warriors: a bank next door and 1-coin kebabs, but the whole room joins in when you attack one.",
+      "targetLevel": 30,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Al Kharid",
+        "tile": [
+          3290,
+          3185,
+          0
+        ],
+        "npcName": "Al Kharid warrior"
+      }
+    },
+    {
+      "id": "attack-17",
+      "skill": "attack",
+      "levelRange": [
+        30,
+        50
+      ],
+      "methodType": "COMBAT",
+      "title": "Hobgoblins",
+      "description": "Edgeville Dungeon or west of the Crafting Guild: when the hill giants are crowded. Limpwurt roots.",
+      "targetLevel": 50,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Edgeville Dungeon",
+        "tile": [
+          3116,
+          9908,
+          0
+        ],
+        "npcName": "Hobgoblin"
+      }
+    },
+    {
+      "id": "attack-18",
+      "skill": "attack",
+      "levelRange": [
+        40,
+        60
+      ],
+      "methodType": "COMBAT",
+      "title": "Flesh Crawlers",
+      "description": "The second floor of the Stronghold of Security: always aggressive, so they can be left running. No bones or money.",
+      "targetLevel": 60,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Barbarian Village",
+        "tile": [
+          3080,
+          3427,
+          0
+        ],
+        "npcName": "Flesh Crawler"
+      }
+    },
+    {
+      "id": "attack-19",
+      "skill": "attack",
+      "levelRange": [
+        50,
+        70
+      ],
+      "methodType": "COMBAT",
+      "title": "Ice giants",
+      "description": "The Asgarnian Ice Dungeon: big bones and adamant arrows, a long walk from a bank.",
+      "targetLevel": 70,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Asgarnian Ice Dungeon",
+        "tile": [
+          3008,
+          3150,
+          0
+        ],
+        "npcName": "Ice giant"
+      }
+    },
+    {
+      "id": "attack-20",
+      "skill": "attack",
+      "levelRange": [
+        50,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Body golems",
+      "description": "The Ruins of Camdozaal after Below Ice Mountain: close to a bank; a Barronite mace hits them hardest.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Ruins of Camdozaal",
+        "tile": [
+          2968,
+          5808,
+          0
+        ],
+        "npcName": "Body golem"
+      }
+    },
+    {
+      "id": "attack-21",
+      "skill": "attack",
+      "levelRange": [
+        60,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Giant spiders",
+      "description": "The third floor of the Stronghold of Security: the AFK way to 99, nothing to pick up.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Barbarian Village",
+        "tile": [
+          3080,
+          3427,
+          0
+        ],
+        "npcName": "Giant spider"
+      }
+    },
+    {
+      "id": "attack-22",
+      "skill": "attack",
+      "levelRange": [
+        80,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Ogresses",
+      "description": "The Corsair Cove dungeon: the best free drops (rune helms), but they need Protect from Magic and Protect from Melee.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Corsair Cove",
+        "tile": [
+          2573,
+          2856,
+          0
+        ],
+        "npcName": "Ogress Warrior"
       }
     }
   ]

@@ -123,6 +123,97 @@
           0
         ]
       }
+    },
+    {
+      "id": "prayer-06",
+      "skill": "prayer",
+      "levelRange": [
+        20,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Big bones from giant frogs",
+      "description": "Giant frogs in the Lumbridge Swamp are the fastest Big bones to kill (15 XP each), and you train combat too.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Lumbridge Swamp",
+        "tile": [
+          3197,
+          3166,
+          0
+        ],
+        "npcName": "Giant frog"
+      }
+    },
+    {
+      "id": "prayer-07",
+      "skill": "prayer",
+      "levelRange": [
+        30,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Bull bones from Brutus",
+      "description": "After The Ides of Milk: 40 XP a kill (bury only).",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Lumbridge",
+        "tile": [
+          3188,
+          3220,
+          0
+        ],
+        "npcName": "Brutus"
+      }
+    },
+    {
+      "id": "prayer-08",
+      "skill": "prayer",
+      "levelRange": [
+        40,
+        99
+      ],
+      "methodType": "COMBAT",
+      "title": "Vile ashes from lesser demons",
+      "description": "Scatter vile ashes for 25 XP each: Karamja volcano or Crandor.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Crandor",
+        "tile": [
+          2836,
+          3271,
+          0
+        ],
+        "npcName": "Lesser demon"
+      }
+    },
+    {
+      "id": "prayer-09",
+      "skill": "prayer",
+      "levelRange": [
+        1,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Bones left on the ground",
+      "description": "Other players leave plenty of bones at the cows, chickens and the Lumbridge Swamp.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Lumbridge",
+        "tile": [
+          3188,
+          3220,
+          0
+        ]
+      }
     }
   ]
 }

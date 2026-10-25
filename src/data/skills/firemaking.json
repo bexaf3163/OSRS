@@ -136,6 +136,28 @@
         "npcName": "Wintertodt"
       },
       "recommendedXpRate": "~100k xp/hr"
+    },
+    {
+      "id": "firemaking-07",
+      "skill": "firemaking",
+      "levelRange": [
+        1,
+        99
+      ],
+      "methodType": "GATHER",
+      "title": "Forester's campfire",
+      "description": "Light a campfire by the tree and feed it logs: far fewer clicks, about half the XP.",
+      "targetLevel": 99,
+      "lane": "alt",
+      "members": false,
+      "location": {
+        "name": "Draynor Village",
+        "tile": [
+          3103,
+          3265,
+          0
+        ]
+      }
     }
   ]
 }
