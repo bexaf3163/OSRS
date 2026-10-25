@@ -17,11 +17,12 @@ import { heldOf, levelOf, type PlayerState } from './playerState';
 import { toolUse } from './toolTiers';
 import type { Market, ModelRate, RateSpot } from './methodRates';
 import type { TrainingMethod } from './trainingRouter';
-import type { Point } from './travel';
 import { attacksPlayer, hostileText } from './aggression';
 import { matchStrict } from '../services/locationResolver';
 import { combatLevel } from './moneyAdvisor';
 import { supplyPrice } from './sourceRouter';
+import { PROCESSING, type ProcessingRegistry } from './processingRates';
+import { TILES_PER_SECOND, type Point } from './travel';
 
 interface Tier { item: string; level: number; wield: number; ticks?: number }
 interface Product { name: string; level: number; xp: number; low?: number; high?: number; respawn?: [number, number] }
@@ -248,4 +249,75 @@ export function gatherPace(product: string, near: Point & { plane?: number }, st
   const fast = pace.atSpot(0) / share;
   const slow = (pace.atSpot(1) * (1 + MARGIN)) / share;
   return { seconds: { fast, typical: (fast + slow) / 2, slow }, tool: tool.name, spot: spot.label };
+}
+
+/** A station this close to a gathering spot is used without leaving it (the fire beside the Barbarian Village fishing spots), tiles. */
+const ALONG_REACH = 15;
+
+/** Gathering and processing the same catches at once: the XP of both skills an hour, the spot, the station beside it and what is done with the result. */
+export interface AlongRate {
+  /** XP an hour in the gathering skill and in the processing skill, from the same catches: the slow and the fast end. */
+  gather: [number, number];
+  process: [number, number];
+  spot: RateSpot;
+  station: Point & { label: string };
+  /** The products made there ("Trout", "Salmon"). */
+  products: string[];
+}
+
+/**
+ * The gathering method with each catch processed at a station beside its spot (fish cooked on the fire by the fishing spots), when the processing
+ * registry has a recipe of that skill for a product and a station of its kind within ALONG_REACH tiles: per catch the gathering time, the recipe's
+ * ticks, the walk to the station once a bag, and the bank trip or the drop of the result (the shared keep rule, at the processed product's value; a
+ * failed one is worth nothing). null when there is no such station, or a level is not known.
+ */
+export function alongRate(m: TrainingMethod, gatherSkill: string, processSkill: string, state: PlayerState, market: Market = {},
+  reg: SkillingRegistry = SKILLING, preg: ProcessingRegistry = PROCESSING): AlongRate | null {
+  const ids = reg.methods[m.id];
+  if (!ids || m.kind !== 'method' || !m.skills.includes(gatherSkill)) return null;
+  const level = levelOf(state, gatherSkill);
+  const plevel = levelOf(state, processSkill);
+  if (level === undefined || plevel === undefined) return null;
+  const coinRate = coinsPerMinute(market.prices);
+  const usable = <T extends { members?: boolean }>(x: T) => !(x.members && state.mode !== 'members');
+  let best: AlongRate | null = null;
+  for (const id of ids) {
+    const r = reg.resources.find((x) => x.id === id);
+    if (!r || r.skill !== gatherSkill) continue;
+    const recipes = r.products.map((p) => preg.recipes.find((x) => x.skill === processSkill && x.facility && usable(x) && plevel >= x.level
+      && x.inputs.length === 1 && x.inputs[0].qty === 1 && x.inputs[0].name === p.name) ?? null);
+    if (!recipes.some(Boolean)) continue;
+    const kinds = new Set(recipes.flatMap((x) => (x ? [x.facility] : [])));
+    for (const spot of reg.spots) {
+      if (spot.resource !== id || !usable(spot)) continue;
+      const near = preg.stations.filter((s) => kinds.has(s.kind) && usable(s) && s.place.plane === spot.place.plane)
+        .map((s) => ({ s, far: Math.max(Math.abs(s.place.x - spot.place.x), Math.abs(s.place.y - spot.place.y)) }))
+        .filter((x) => x.far <= ALONG_REACH).sort((a, b) => a.far - b.far)[0];
+      const tool = near ? toolFor(r, level, state, reg) : null;
+      const pace = tool ? paceAt(r, spot, level, tool) : null;
+      if (!near || !tool || !pace) continue;
+      const share = pace.chances.map((c) => c / pace.any);
+      const success = recipes.map((x) => (!x ? 0 : x.success ? skillChance(x.success.low, x.success.high, plevel) : x.chance ?? 1));
+      const sum = (f: (k: number) => number) => r.products.reduce((a, _p, k) => a + share[k] * f(k), 0);
+      const gatherXp = sum((k) => r.products[k].xp);
+      const processXp = sum((k) => (recipes[k] ? success[k] * recipes[k]!.xp : 0));
+      const work = sum((k) => (recipes[k] ? recipes[k]!.ticks * TICK : 0));
+      const valueEach = sum((k) => (recipes[k] ? success[k] * (dropValue(recipes[k]!.output.name, market.prices, market.restriction) ?? 0)
+        : dropValue(r.products[k].name, market.prices, market.restriction) ?? 0));
+      const slots = BAG - (tool.wielded ? 0 : 1) - (r.bait ? 1 : 0);
+      const walk = (2 * near.far) / TILES_PER_SECOND / slots;
+      const trip = spot.bank ? bankTrip({ place: spot.place, bank: spot.bank, ...(spot.waypoints ? { waypoints: spot.waypoints } : {}) }) : null;
+      const bankPer = (i: 0 | 1) => (trip ? (trip.minutes[i] * 60) / slots : Infinity);
+      const banks = trip !== null && bankingPays(valueEach, (bankPer(0) + bankPer(1)) / 2 - (DROP[0] + DROP[1]) / 2, coinRate, market.objective);
+      const perItem = (i: 0 | 1) => pace.atSpot(i) + work + walk + (banks ? bankPer(i) : DROP[i]);
+      const rate = (xp: number): [number, number] => [(xp * 3600) / perItem(1) / (1 + MARGIN), (xp * 3600) / perItem(0)];
+      const option: AlongRate = {
+        gather: rate(gatherXp), process: rate(processXp),
+        spot: { label: spot.label, place: spot.place, how: banks ? 'bank' : 'drop', ...(banks && trip ? { bank: trip.bank.label } : {}), ...(spot.waypoints ? { waypoints: spot.waypoints } : {}) },
+        station: near.s.place, products: recipes.flatMap((x) => (x ? [x.output.name] : [])),
+      };
+      if (!best || option.gather[0] + option.gather[1] > best.gather[0] + best.gather[1]) best = option;
+    }
+  }
+  return best;
 }

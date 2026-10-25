@@ -127,6 +127,12 @@
       "facility": "fire"
     },
     {
+      "id": "salmon",
+      "page": "Salmon",
+      "skill": "cooking",
+      "facility": "fire"
+    },
+    {
       "id": "tuna",
       "page": "Tuna",
       "skill": "cooking",

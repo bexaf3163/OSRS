@@ -439,6 +439,31 @@
       "source": "https://oldschool.runescape.wiki/w/Trout"
     },
     {
+      "id": "salmon",
+      "skill": "cooking",
+      "level": 25,
+      "xp": 90,
+      "ticks": 4,
+      "facility": "fire",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Raw salmon",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Salmon",
+        "qty": 1
+      },
+      "success": {
+        "low": 68,
+        "high": 392
+      },
+      "source": "https://oldschool.runescape.wiki/w/Salmon"
+    },
+    {
       "id": "tuna",
       "skill": "cooking",
       "level": 30,

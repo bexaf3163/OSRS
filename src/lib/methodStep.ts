@@ -25,6 +25,8 @@ export type TrainingPick = string | {
   methodId: string; needs: MethodNeed[]; name?: string; where?: string; warning?: string;
   /** The spot the engine picked; waypoints - the way in of a spot under the ground, entrance first. */
   spot?: { label: string; x: number; y: number; plane: number; waypoints?: { x: number; y: number; plane: number; label?: string }[] };
+  /** The step's next skill trained on the same catches at a station beside the spot (fish cooked on the fire there), and what is done with them. */
+  along?: { skill: string; station: { label: string; x: number; y: number; plane: number }; products: string[]; how: 'bank' | 'drop' };
 };
 
 /** The method a pick names, whatever its form. */
@@ -135,6 +137,9 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
   const requirements = [...(step.requirements ?? []).filter(r => r.type !== 'skill' || !gates.some(n => n.type === 'skill' && n.skill === r.skill && n.min >= r.min)), ...gates];
   const itemsRequired = needs.map((n) => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null);
   const chosen = typeof pick !== 'string' ? pick.spot : undefined;
+  const along = typeof pick !== 'string' ? pick.along : undefined;
+  // One line for the station beside the spot: the catches are processed there before they are banked or dropped.
+  const alongLine = along ? `${along.skill === 'cooking' ? 'Cook' : 'Make'} the ${along.products.join(' and ').toLowerCase()} on the ${along.station.label} beside the spot, then ${along.how === 'bank' ? 'bank them' : 'drop them'}: ${along.skill} trains at the same time.` : null;
   const at = chosen ? { x: chosen.x, y: chosen.y, plane: chosen.plane, label: pointLabel(m, chosen.label) } : methodPoint(id);
   return {
     ...step,
@@ -146,6 +151,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
       where: m.where, how: `Train ${goal.skill} to ${goal.target}: ${m.name}. ${m.note ?? ''}`.trim(),
       quickSteps: ['Bank finished-skill tools and surplus supplies before withdrawing the current batch.', `Prepare the listed supplies for ${m.name}.`, `Train ${goal.skill} to ${goal.target} at ${m.where}. ${m.note ?? ''}`.trim()],
     } : {}),
+    ...(alongLine ? { quickSteps: [...(goal.skill !== step.followsMethod || goal.skill === 'mining' || goal.skill === 'woodcutting' ? [] : step.quickSteps ?? []), alongLine] } : {}),
     // The engine's one safety line for its spot (aggressive NPCs that attack this player) joins the step's own warning.
     ...(typeof pick !== 'string' && pick.warning ? { warning: [step.warning, pick.warning].filter(Boolean).join(' ') } : {}),
     // The static climb contains future places. Once a method is selected, map and plugin use only its point.
@@ -154,7 +160,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
       ...step.inGame,
       worldPoint: at ?? undefined, groundTiles: at ? [at] : [], pathWaypoints: chosen?.waypoints?.length ? chosen.waypoints.map((p) => ({ x: p.x, y: p.y, plane: p.plane })) : undefined,
       goal: at?.label ?? `${m.name}: ${m.where}`,
-      objectNames: m.objectNames ?? [], objectIds: [],
+      objectNames: [...m.objectNames ?? [], ...(along ? ['Fire'] : [])], objectIds: [],
       ...(m.npcNames || goal.skill !== step.followsMethod || goal.skill === 'ranged' || goal.skill === 'magic' ? { npcNames: m.npcNames ?? [], npcIds: [] } : {}),
       highlightItems: itemsRequired.map((i) => i.nameEn),
     } } : {}),
