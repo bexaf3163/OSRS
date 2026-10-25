@@ -218,7 +218,8 @@ describe('S6-02 follows the training method of the real level', () => {
     // The old regression counted positive hazards here. Unchecked supplies no longer gain READY priority.
     // Keep watching every method: the additional information is still required for correct preparation.
     expect(hazard).toBe(0);
-  });
+    // Exhaustive (2 styles x 8 levels x 6 bags, several rounds each): about 2 s alone, over vitest's 5 s default when the whole suite runs in parallel.
+  }, 20_000);
 
   it('a step that does not follow a method is the same object whatever the pick says', () => {
     const other = stepById.get('S1-01')!;

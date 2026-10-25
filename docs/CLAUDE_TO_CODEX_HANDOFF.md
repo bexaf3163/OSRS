@@ -112,6 +112,13 @@ Read this first. Claude keeps this file current after every release. It says wha
     - One label rule for a method's point (`methodStep.pointLabel`): "Cooking: Tuna — Barbarian Village fire" whether the place is the catalogue's or a station the engine picked.
     - Test premise updated: `skillHandover` "owned banked recipe": 100 banked trout at Cooking 30 cover 7k of 88k XP, and tuna is now measured faster, so tuna is picked; at 25 the banked trout are taken.
 
+- **2.79.1, Money ↔ Skills for processing:**
+  - **Engine:** `funding/processAdapter.ts` → `processingRates.processPace`. A funding method of family `processing`/`production` with one certain output that the registry makes, at a registry station within 30 tiles of the method's `spot` (or no facility), is timed by the recipe: ticks / (success chance × output), slow end +10%. The evaluator keeps its own trips and sale time. `fundingContext` composes combat ?? gather ?? process.
+  - **Data:** smelting recipes added from the wiki: bronze, iron (50% chance from the recipe note), silver, steel (1 iron ore + 2 coal), gold. Matched now: smelt-steel-bars and smelt-silver-bars at the Edgeville furnace.
+  - **Effect (Smithing 40, test prices):** steel 565 bars/h vs 373 on the published pace (both include the evaluator's trips and sales).
+  - **Unchanged:** the pie, pizza, chocolate, jug and shop methods (no skill recipe in the registry) keep the published pace.
+  - **Tests:** `tests/funding/processAdapter.test.ts`.
+
 ## 5. In progress (Claude)
 
 **Hardening pass (owner brief of 2026-10-25, after 2.78.0)**, in small verified blocks. The order:
@@ -121,7 +128,7 @@ Still open in the brief:
 - (b) Done in 2.78.1 (see the reserves entry above).
 - (c) Done (2.78.1 gathering adapter, 2.78.2 Dwarven Mine spots). Combat already shared `estimateStep`.
 - (d) Calibration against a real session (NOT REACHABLE while the owner is away).
-- (e) Processing: Smithing/Cooking/Crafting done in 2.79.0. Left: Money page processing methods on the engine; Firemaking, Runecraft, Prayer, Magic utility, wine; cook-on-the-spot.
+- (e) Processing: Smithing/Cooking/Crafting done in 2.79.0, Money smelting on the engine in 2.79.1. Left: Firemaking, Runecraft, Prayer, Magic utility, wine; cook-on-the-spot.
 
 ## 5b. What each engine knows, assumes and does not support
 
@@ -169,3 +176,4 @@ Release receipts (Checks and Release both green; the portable EXE's sha256 as pu
 |---|---|---|---|
 | 2.78.0 | a45a7b6 | OSRS-Put-2.78.0-portable.exe, 102,063,235 B | e341aaee0d314f215e2af6db3388554d9d9be3f1d9e58468b8ba6ce85878da1d |
 | 2.78.1 | 6a95df7 | OSRS-Put-2.78.1-portable.exe, 102,063,845 B | 4720cb99da427d0e6051f212cbeee87a7a747df03e0883e0bb73c01fdf4e5fa3 |
+| 2.78.2 | b130ddf | OSRS-Put-2.78.2-portable.exe, 102,065,776 B | bd0193ee97e1f40b18fc0ca7cfb1e5b5a0f77255926620ebfa45278f150f0eb3 |

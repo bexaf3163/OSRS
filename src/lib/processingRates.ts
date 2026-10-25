@@ -111,3 +111,29 @@ export function processRate(m: TrainingMethod, skill: string, state: PlayerState
   return best?.rate ?? null;
 }
 
+/** A station further than this from the place another engine names is not that place's station, tiles. */
+const SAME_PLACE = 30;
+
+/**
+ * The pace of one product of the registry at the station of the place another engine names (the money methods: "Smelt steel bars" at the Edgeville
+ * furnace), for this player's level, so the Money and Skills pages time the same work the same way. Seconds per unit at the station, without banking
+ * (the caller has its own trips); a recipe made by a bank needs no station. null when no free recipe makes the product, the account may not use it, the
+ * level is not known or too low, or no station of its kind is at the place.
+ */
+export function processPace(product: string, near: Point, state: PlayerState, reg: ProcessingRegistry = PROCESSING):
+  { seconds: { fast: number; typical: number; slow: number }; recipe: string; station: string | null } | null {
+  const r = reg.recipes.find((x) => x.output.name.toLowerCase() === product.toLowerCase() && !(x.members && state.mode !== 'members'));
+  if (!r) return null;
+  const level = levelOf(state, r.skill);
+  if (level === undefined || level < r.level) return null;
+  const station = r.facility
+    ? reg.stations.filter((s) => s.kind === r.facility && !(s.members && state.mode !== 'members') && s.place.plane === near.plane)
+      .map((s) => ({ s, far: Math.max(Math.abs(s.place.x - near.x), Math.abs(s.place.y - near.y)) })).filter((x) => x.far <= SAME_PLACE)
+      .sort((a, b) => a.far - b.far)[0]?.s ?? null
+    : null;
+  if (r.facility && !station) return null;
+  const chance = r.success ? skillChance(r.success.low, r.success.high, level) : r.chance ?? 1;
+  const fast = (r.ticks * TICK) / (chance * r.output.qty);
+  const slow = fast * (1 + MARGIN);
+  return { seconds: { fast, typical: (fast + slow) / 2, slow }, recipe: r.output.name, station: station?.label ?? null };
+}

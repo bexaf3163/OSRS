@@ -64,6 +64,122 @@
   ],
   "recipes": [
     {
+      "id": "bronze-bar",
+      "skill": "smithing",
+      "level": 1,
+      "xp": 6.2,
+      "ticks": 5,
+      "facility": "furnace",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Copper ore",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Tin ore",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Bronze bar",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Bronze_bar"
+    },
+    {
+      "id": "iron-bar",
+      "skill": "smithing",
+      "level": 15,
+      "xp": 12.5,
+      "ticks": 4,
+      "facility": "furnace",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Iron ore",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Iron bar",
+        "qty": 1
+      },
+      "chance": 0.5,
+      "source": "https://oldschool.runescape.wiki/w/Iron_bar"
+    },
+    {
+      "id": "silver-bar",
+      "skill": "smithing",
+      "level": 20,
+      "xp": 13.7,
+      "ticks": 4,
+      "facility": "furnace",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Silver ore",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Silver bar",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Silver_bar"
+    },
+    {
+      "id": "steel-bar",
+      "skill": "smithing",
+      "level": 30,
+      "xp": 17.5,
+      "ticks": 4,
+      "facility": "furnace",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Iron ore",
+          "qty": 1,
+          "stacks": false
+        },
+        {
+          "name": "Coal",
+          "qty": 2,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Steel bar",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Steel_bar"
+    },
+    {
+      "id": "gold-bar",
+      "skill": "smithing",
+      "level": 40,
+      "xp": 22.5,
+      "ticks": 5,
+      "facility": "furnace",
+      "tools": [],
+      "inputs": [
+        {
+          "name": "Gold ore",
+          "qty": 1,
+          "stacks": false
+        }
+      ],
+      "output": {
+        "name": "Gold bar",
+        "qty": 1
+      },
+      "source": "https://oldschool.runescape.wiki/w/Gold_bar"
+    },
+    {
       "id": "bronze-axe",
       "skill": "smithing",
       "level": 1,
