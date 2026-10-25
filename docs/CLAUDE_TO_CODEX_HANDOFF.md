@@ -119,6 +119,15 @@ Read this first. Claude keeps this file current after every release. It says wha
   - **Unchanged:** the pie, pizza, chocolate, jug and shop methods (no skill recipe in the registry) keep the published pace.
   - **Tests:** `tests/funding/processAdapter.test.ts`.
 
+- **2.79.2, live report fixes (owner, 2026-10-25):**
+  - **(1) "Buy Anti-dragon shield" while training Defence.** Cause: `PrepAuto` led the arrow for the next *quest* step's preparation even while a tracked skill plan led the game. Fix in the shared decision: `prepQueue.decideAuto` takes `routeWaits` (a tracked plan, `useTracked`). It then sets no arrow, and returns `release` for an arrow a detour frame set itself (`frame.nav === navKeyOf(standing)`). `PrepAuto` calls `releaseNav`; the player's own arrow is never touched. Test: `tests/prepQueue.test.ts` "while a skill plan leads the game".
+  - **(2) The card ignored the followed plan; other methods showed no coins.**
+    - `trainingRouter.methodOfGuideStep` links a guide step to its catalogue method by what is trained: a combat NPC ↔ `npcNames`, a gathering object ↔ `objectNames`, same skill, overlapping levels. It is null when ambiguous (fishing spots).
+    - `adviseTraining({ followed })` returns `followed` (that method's view with this player's reason). Every shown `MethodView` carries `reason` from the one formatter `reasonFor`.
+    - `SkillDetail` passes the tracked plan's current step (`SkillRoadmap.useTrackedStep`) to `TrainingCard`. The card leads with "Your plan (the game follows it)" plus one "Recommended for you" line; the pick's count/time lines are hidden then.
+    - "Other methods" prints `v.reason` (rate, gp/h, costs, first/locked).
+    - Test: `tests/followedPlan.test.ts`.
+
 ## 5. In progress (Claude)
 
 **Hardening pass (owner brief of 2026-10-25, after 2.78.0)**, in small verified blocks. The order:

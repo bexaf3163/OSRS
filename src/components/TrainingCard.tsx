@@ -22,7 +22,7 @@ import { usePriceView } from '../lib/funding/usePriceView';
 import { useTradeRestriction } from '../lib/useTradeRestriction';
 
 /** Skill advice from the shared player state; recomputed when levels, items, mode or style change. */
-export function useTrainingAdvice(skill: string | null, target: number): TrainingAdvice | null {
+export function useTrainingAdvice(skill: string | null, target: number, followed: string | null = null): TrainingAdvice | null {
   const { mode } = useStore();
   const { state } = usePlayerState();
   const { xp, xpRate } = useBridge();
@@ -35,8 +35,8 @@ export function useTrainingAdvice(skill: string | null, target: number): Trainin
   const prices = usePriceView(true);
   const trade = useTradeRestriction();
   return useMemo(
-    () => (skill ? adviseTraining({ skill, target, state, mode, style, priority, xp: have, measuredXph: measured, prices, restriction: trade.state }) : null),
-    [skill, target, state, mode, style, priority, have, measured, prices, trade.state],
+    () => (skill ? adviseTraining({ skill, target, state, mode, style, priority, xp: have, measuredXph: measured, prices, restriction: trade.state, followed }) : null),
+    [skill, target, state, mode, style, priority, have, measured, prices, trade.state, followed],
   );
 }
 
@@ -52,10 +52,9 @@ function Alternative({ v }: { v: MethodView }) {
   return (
     <li>
       <strong>{m.name}</strong>
-      <span className="muted"> — {m.where}{m.xph ? `; ≈ ${m.xph[0] === m.xph[1] ? m.xph[0].toLocaleString('en-US') : `${m.xph[0].toLocaleString('en-US')}–${m.xph[1].toLocaleString('en-US')}`} XP per hour ${m.rateSource === 'model' ? 'for you' : '(wiki)'}` : ''}</span>
-      {v.status === 'PREP' && v.missing.length > 0 && <span className="muted"> · first: {v.missing.map((x) => x.label).join(', ')}</span>}
+      {/* The same summary as the recommendation (adviseTraining's one formatter): rate, coins an hour, what to get first. */}
+      <span className="muted"> — {m.where}{v.reason ? `; ${v.reason}` : ''}</span>
       {m.manualSetup && <span className="muted"> · manual setup: {m.manualSetup}</span>}
-      {v.status === 'LOCKED' && <span className="muted"> · locked: {v.missing.map((x) => x.label).join(', ')}</span>}
     </li>
   );
 }
@@ -74,8 +73,8 @@ function GuideRow({ skill, level, fallback }: { skill: string; level: number; fa
   );
 }
 
-export function TrainingCard({ skill, target }: { skill: string; target: number }) {
-  const advice = useTrainingAdvice(skill, target);
+export function TrainingCard({ skill, target, followed = null }: { skill: string; target: number; followed?: string | null }) {
+  const advice = useTrainingAdvice(skill, target, followed);
   const features = useFeatures();
   const profile = styleOf(features);
   const { state } = usePlayerState();
@@ -89,7 +88,9 @@ export function TrainingCard({ skill, target }: { skill: string; target: number 
   }, [skill, advice, state, xp, target]);
   if (!advice || advice.level === null || advice.level >= target) return null;
   const { best } = advice;
-  const nav = best ? methodNav(best) : null;
+  // The method the game follows (a tracked plan) leads the card with this player's figures; the pick, when it differs, is one line under it.
+  const shown = advice.followed ?? best;
+  const nav = shown ? methodNav(shown) : null;
   const legEnd = advice.actionTarget ?? target;
   const count = advice.actionsLeft;
   const showOthers = advice.others.length > 0;
@@ -101,9 +102,14 @@ export function TrainingCard({ skill, target }: { skill: string; target: number 
       {best ? (
         <>
           <div className="training-recommendation">
-            <div className="training-method"><h3>Recommended method</h3><p className="training-now"><strong>{best.method.name}</strong></p><p className="small muted">{advice.reason}</p></div>
-            <div className="training-location"><h3>Location</h3><p>{best.method.where}</p>{nav && <NavigateButton target={nav} label={`To the place: ${nav.label}`} />}</div>
+            <div className="training-method">
+              <h3>{advice.followed ? 'Your plan (the game follows it)' : 'Recommended method'}</h3>
+              <p className="training-now"><strong>{shown!.method.name}</strong></p><p className="small muted">{shown!.reason}</p>
+            </div>
+            <div className="training-location"><h3>Location</h3><p>{shown!.method.where}</p>{nav && <NavigateButton target={nav} label={`To the place: ${nav.label}`} />}</div>
           </div>
+          {advice.followed && <p className="small">Recommended for you: <strong>{best.method.name}</strong> — {advice.reason}</p>}
+          {!advice.followed && (<>
           {count !== null && best.method.act && (
             <p className="small">≈ {count.toLocaleString('en-US')} more {actionForm(best.method.act, count)}{legEnd < target ? ` to level ${legEnd}` : ` to level ${target}`}.</p>
           )}
@@ -122,6 +128,7 @@ export function TrainingCard({ skill, target }: { skill: string; target: number 
           )}
           {best.unchecked.length > 0 && <p className="small muted">Not checked: {best.unchecked.map((x) => x.label).join(', ')} — open the bank in the game.</p>}
           {best.method.note && <p className="small muted">{best.method.note}</p>}
+          </>)}
           <div className="actions">
             <a className="btn btn-ghost btn-sm" href={best.method.url} target="_blank" rel="noopener noreferrer">Wiki ↗</a>
           </div>

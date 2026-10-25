@@ -78,6 +78,8 @@ export interface AutoInput {
   recent: ReadonlyMap<string, number>;
   /** The player's refusals in this session: "step:task". */
   declined: ReadonlySet<string>;
+  /** A tracked skill plan leads the game (skillTrack.ts): the quest route waits, and so does its preparation — no arrow to its purchases. */
+  routeWaits?: boolean;
 }
 
 export type AutoDecision =
@@ -88,7 +90,9 @@ export type AutoDecision =
   /** The arrow standing is this detour's own, but its task now points elsewhere (the step's requirement changed with the level): move the arrow. */
   | { kind: 'retarget'; task: QueueTask; key: string; frame: DetourFrame }
   /** The next task without a place: just say what is next. */
-  | { kind: 'announce'; task: QueueTask; key: string };
+  | { kind: 'announce'; task: QueueTask; key: string }
+  /** A skill plan took over the game while a detour's own arrow stands: take that arrow down (the player's own arrow is never touched). */
+  | { kind: 'release'; frame: DetourFrame };
 
 export const RENAV_GAP_MS = 60_000;
 
@@ -96,6 +100,10 @@ const targetKey = (a: ReadinessAction | null): string => (a?.kind === 'nav' ? `$
 
 export function decideAuto(i: AutoInput): AutoDecision | null {
   const { queue, stepId } = i;
+  if (i.routeWaits) {
+    const own = i.standing ? i.prep.stack.find((f) => f.nav !== undefined && f.nav === navKeyOf(i.standing!)) : undefined;
+    return own ? { kind: 'release', frame: own } : null;
+  }
   if (!i.enabled || !i.online || !queue || queue.stepId !== stepId || queue.ready) return null;
   const mine = i.prep.stack.filter((f) => f.sourceStepId === stepId);
   if (mine.some((f) => f.paused)) return null;

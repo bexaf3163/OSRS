@@ -95,6 +95,19 @@ describe('the preparation auto-queue', () => {
     expect(decideAuto(base(q, { prep: paused }))).toBeNull();
   });
 
+  it('while a skill plan leads the game the quest route waits: no purchase arrow, and an arrow a detour set itself is taken down', () => {
+    // The live report (2.78.2): Defence tracked on the frogs, and the game said "Buy Anti-dragon shield" for the next quest step.
+    const q = engineFor({ item: { carried: 0, bank: 0 } }).queue(itemStep, 'chill');
+    expect(decideAuto(base(q, { routeWaits: true }))).toBeNull();
+    const started = startDetour(emptyPrep(), { sourceStepId: itemStep.id, detourId: 'buy', reason: 'x', startedAt: 1, returnCondition: 'y' });
+    if (!started.ok) throw new Error('did not start');
+    const target = q.tasks.find((t) => t.kind === 'buy')!.guide as { kind: 'nav'; target: { x: number; y: number; plane: number; label: string; itemName?: string } };
+    const own = { ...started.state, stack: started.state.stack.map((f) => ({ ...f, nav: navKeyOf(target.target) })) };
+    expect(decideAuto(base(q, { routeWaits: true, prep: own, navActive: true, standing: target.target }))?.kind).toBe('release');
+    // The player's own arrow (somewhere else) stays.
+    expect(decideAuto(base(q, { routeWaits: true, prep: own, navActive: true, standing: { x: 1, y: 2 } }))).toBeNull();
+  });
+
   it('a detour is running, the plugin removed the arrow, the task is open — we set it again, but no more than once a minute', () => {
     const q = engineFor({ item: { carried: 0, bank: 5 } }).queue(itemStep, 'chill');
     const started = startDetour(emptyPrep(), { sourceStepId: itemStep.id, detourId: 'bank', reason: 'x', startedAt: 1, returnCondition: 'y' });

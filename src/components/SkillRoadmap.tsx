@@ -36,6 +36,20 @@ export function useQuestDone(): (step: SkillStep) => boolean {
   }, [progress, questsDone]);
 }
 
+/** The step the game follows now: the tracked plan's current step, its skill and level; null while no plan is tracked or it is complete. */
+export function useTrackedStep(): { skill: SkillName; step: SkillStep; level: number } | null {
+  const tracked = useTracked();
+  const done = useQuestDone();
+  const level = useSkillLevel(tracked?.skill ?? 'attack');
+  return useMemo(() => {
+    if (!tracked) return null;
+    const guide = guideFor(tracked.skill);
+    const path = buildPath(guide, tracked.mode, done, guide.start, freeOnlyOf(tracked));
+    const step = path[currentIndex(path, level)];
+    return step ? { skill: tracked.skill, step, level } : null;
+  }, [tracked, done, level]);
+}
+
 /** The roadmap as a page section: the skill page's Training guide, under what to train now. */
 export function RoadmapPane({ skills, label }: { skills: SkillName[]; label: string }) {
   return <Roadmap skills={skills} label={label} />;

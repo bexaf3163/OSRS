@@ -147,6 +147,8 @@ export type MethodStatus = 'READY' | 'PREP' | 'LOCKED';
 export interface MethodView {
   method: TrainingMethod;
   status: MethodStatus;
+  /** One phrase for this player (rate, coins, what to get first): set by adviseTraining for every method it shows, one formatter for all. */
+  reason?: string;
   /** What is missing (items, a tool) or what closes the method (a quest, a skill level). */
   missing: NeedStatus[];
   /** What cannot be checked: not "no" but "I don't know". */
@@ -322,6 +324,8 @@ export interface TrainingAdvice {
   style: PlayStyle;
   /** The better tool worth buying for the XP left (toolUpgrade), when there is one. */
   upgrade?: ToolUpgrade | null;
+  /** The method the game follows (input followed), when it is open at this level and is not the pick itself. */
+  followed?: MethodView | null;
 }
 
 export interface AdviceInput {
@@ -337,6 +341,8 @@ export interface AdviceInput {
   /** XP per hour from the player's measurements. */
   measuredXph?: number | null;
   methods?: readonly TrainingMethod[];
+  /** The method the game follows now (a tracked leveling plan's step, methodOfGuideStep): shown with this player's figures beside the pick. */
+  followed?: string | null;
   /** The exchange, for what arrows and runes cost and the drops bring an hour; without it neither is said nor counted. */
   prices?: PriceView | null;
   /** Whether the account may sell yet: a drop it cannot sell is not counted. */
@@ -394,6 +400,22 @@ const rateText = (m: TrainingMethod) => {
   const r = m.xph!;
   return `${fmtK(r[0]) === fmtK(r[1]) ? `≈ ${fmtK(r[0])}` : `≈ ${fmtK(r[0])}–${fmtK(r[1])}`} XP per hour${m.rateSource === 'model' ? ' for you' : ''}`;
 };
+
+/**
+ * The catalogue method a leveling-guide step is: the same skill, the same opponent (a combat step's NPC) or object (a tree, a rock), overlapping
+ * levels. The roadmap and the engine then name one activity once, so a followed plan is shown with this player's figures. null when none or more
+ * than one fits (a fishing spot is not told apart by its NPC).
+ */
+export function methodOfGuideStep(step: { skill: string; levelRange: readonly [number, number]; location: { npcName?: string; objectName?: string } },
+  methods: readonly TrainingMethod[] = trainingMethods): TrainingMethod | null {
+  const key = (n: string) => n.trim().toLowerCase();
+  const npc = step.location.npcName ? key(step.location.npcName) : null;
+  const obj = step.location.objectName ? key(step.location.objectName) : null;
+  const hits = methods.filter((m) => m.kind === 'method' && m.skills.includes(step.skill)
+    && m.from <= step.levelRange[1] && (m.to === null || m.to > step.levelRange[0])
+    && ((npc !== null && (m.npcNames ?? []).some((n) => key(n) === npc)) || (obj !== null && (m.objectNames ?? []).some((o) => key(o) === obj))));
+  return hits.length === 1 ? hits[0] : null;
+}
 
 export interface ToolUpgrade { tool: string; price: number; hours: number }
 /** Hours a better tool must save to the goal to be worth a line. */
@@ -500,8 +522,11 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const coinRate = coinsPerMinute(input.prices);
   const cmp = compare(priority, Math.max(0, xpForLevel(target) - xpNow0), level, coinRate);
   const views = methodsFor(skill, methods).filter((m) => availableAt(m, level, mode)).map((m) => viewMethod(m, state)).sort(cmp);
-  const best = views.find((v) => !v.method.manualSetup && v.status !== 'LOCKED') ?? null;
-  const others = views.filter((v) => v !== best).slice(0, 3);
+  const pickV = views.find((v) => !v.method.manualSetup && v.status !== 'LOCKED') ?? null;
+  const said = (v: MethodView): MethodView => ({ ...v, reason: reasonFor(v, priority, level) });
+  const followedV = input0.followed ? views.find((v) => v.method.id === input0.followed && v !== pickV) ?? null : null;
+  const others = views.filter((v) => v !== pickV && v !== followedV).slice(0, 3).map(said);
+  const best = pickV;
   const quests = methodsFor(skill, methods).filter((m) => m.kind === 'quest' && m.from <= level && (m.to === null || level < m.to) && (mode === 'members' || !m.members));
   const path = buildPath(skill, level, target, input, priority, best?.method ?? null, input0.methods ?? trainingMethods);
 
@@ -521,9 +546,10 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
     time = { source: best.method.rateSource ?? 'wiki', minHours: xpLeft / best.method.xph[1], maxHours: xpLeft / best.method.xph[0] };
   }
   const upgrade = best ? toolUpgrade(best.method, xpLeft, priority, coinRate) : null;
+  const reason = best ? reasonFor(best, priority, level, upgrade) : 'There is no method in the list for this level and mode: see the skill training plan.';
   return {
-    ...empty, best, others, quests, path, xpLeft, actionsLeft, actionTarget, time, upgrade,
-    reason: best ? reasonFor(best, priority, level, upgrade) : 'There is no method in the list for this level and mode: see the skill training plan.',
+    ...empty, best: best ? { ...best, reason } : null, others, quests, path, xpLeft, actionsLeft, actionTarget, time, upgrade, reason,
+    followed: followedV ? said(followedV) : null,
   };
 }
 

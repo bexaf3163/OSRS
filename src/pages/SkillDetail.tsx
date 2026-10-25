@@ -15,7 +15,8 @@ import { LevelInput } from '../components/LevelInput';
 import { Table } from '../components/Table';
 import { LiveXp } from '../components/LiveXp';
 import { TrainingCard } from '../components/TrainingCard';
-import { RoadmapPane } from '../components/SkillRoadmap';
+import { RoadmapPane, useTrackedStep } from '../components/SkillRoadmap';
+import { methodOfGuideStep } from '../lib/trainingRouter';
 import { roadmapSkills } from './Skills';
 import { trainingFocus, type TrainingFocus } from '../lib/skillFocus';
 
@@ -58,6 +59,12 @@ function SkillView({ skill }: { skill: Skill }) {
   // The level and plan row of the skill being trained (Melee: the one with a goal ahead, not a Defence kept at 1).
   const { level, hit } = focusRange(skill, progress, goals, stage, stages[stages.length - 1]?.id);
   const focusName = skill.levelSkills.length > 1 ? levelById.get(focus.skill)?.name : undefined;
+  // A tracked plan of this page's skills leads the game: the card shows that skill and the plan's method, so the card and the game agree.
+  const trackedStep = useTrackedStep();
+  const follow = trackedStep && skill.levelSkills.includes(trackedStep.skill) ? trackedStep : null;
+  const card = follow
+    ? { skill: follow.skill, target: focus.skill === follow.skill ? focus.target : follow.step.targetLevel, followed: methodOfGuideStep(follow.step)?.id ?? null }
+    : { skill: focus.skill, target: focus.target, followed: null };
 
   return (
     <div className="page skill-detail">
@@ -85,7 +92,7 @@ function SkillView({ skill }: { skill: Skill }) {
       <>
       <ReachedNote skill={skill} stage={stage} focus={focus} />
       <FocusNote focus={focus} />
-      <TrainingCard skill={focus.skill} target={focus.target} />
+      <TrainingCard skill={card.skill} target={card.target} followed={card.followed} />
       {guides.length > 0 && <section className="card skill-guide-roadmap" aria-label="Leveling roadmap"><RoadmapPane skills={guides} label={skill.name} /></section>}
 
       <details className="card skill-level-editor" open={skill.levelSkills.some(id => xp?.[id] != null)}><summary>Levels and live experience</summary>

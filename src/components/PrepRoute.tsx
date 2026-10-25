@@ -18,6 +18,7 @@ import { styleOf } from '../lib/playStyle';
 import { isClosed, nextStep } from '../lib/next-step';
 import { useReadinessEngine } from '../readinessContext';
 import { NavigateButton } from './NavigateButton';
+import { useTracked } from '../lib/skillTrack';
 
 const KIND_ICON: Record<PrepTask['kind'], string> = { block: '🔒', quest: '📜', stat: '⚡', buy: '🛒', money: '💰', bank: '🏦', equip: '🛡' };
 
@@ -185,13 +186,15 @@ export function PrepAuto() {
   const profile = styleOf(features);
   const { steps, progress, notify } = useStore();
   const qp = useQuestPoints();
-  const { activeStepId, navTarget, navigate, state: link, userClearedAt } = useBridge();
+  const { activeStepId, navTarget, navigate, releaseNav, state: link, userClearedAt } = useBridge();
   const engine = useReadinessEngine();
   const { prep, set } = usePrep();
   const recent = useRef(new Map<string, number>());
   const announced = useRef(new Set<string>());
   const seenClear = useRef(userClearedAt);
   const renavs = useRef(new Map<string, number>());
+  // While a skill plan leads the game the quest route waits (TrackedSkillCard): its preparation does not take the arrow either.
+  const tracked = useTracked();
 
   const focus = (activeStepId ? steps.find((s) => s.id === activeStepId && !isClosed(progress, s.id)) : undefined) ?? nextStep(steps, progress, qp, engine.dependencies);
 
@@ -209,9 +212,14 @@ export function PrepAuto() {
     const now = Date.now();
     const d = decideAuto({
       queue, stepId: focus.id, prep, enabled: features.autoPrep, online: link === 'online' && engine.ctx.state.connected,
-      navActive: navTarget !== null, standing: navTarget, announce: profile.announce, now, recent: recent.current, declined,
+      navActive: navTarget !== null, standing: navTarget, announce: profile.announce, now, recent: recent.current, declined, routeWaits: tracked !== null,
     });
     if (!d) return;
+    if (d.kind === 'release') {
+      void releaseNav();
+      set({ ...prep, stack: prep.stack.map((f) => (f === d.frame ? { ...f, nav: undefined } : f)) });
+      return;
+    }
     if (d.kind === 'start') {
       set(d.state);
       if (d.task.guide?.kind === 'nav') {
@@ -234,6 +242,6 @@ export function PrepAuto() {
       announced.current.add(d.key);
       notify(`➡️ Next in the preparation for ${focus.id}: ${d.task.label}.`);
     }
-  }, [focus, engine, prep, set, navTarget, navigate, features.autoPrep, profile, link, userClearedAt, notify]);
+  }, [focus, engine, prep, set, navTarget, navigate, releaseNav, features.autoPrep, profile, link, userClearedAt, notify, tracked]);
   return null;
 }
