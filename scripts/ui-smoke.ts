@@ -2582,7 +2582,8 @@ async function rangedPreparationScenarios(browser: Browser) {
     await page.waitForTimeout(1500);
     const ready = await snapshot();
     expect(ready?.plan?.lines?.find((r: any) => r.name === 'Bronze arrow')?.where === 'EQUIPPED', `ranged (${width}): a GEAR-only quantity update reaches the canonical preparation snapshot`);
-    for (const [level, npc] of [[20, 'Monk'], [26, 'Giant frog']] as const) {
+    // 2.76: the market prices the Big bones, so the frogs (not the monks) already pay at Ranged 20 (tests/rangedPreparation.test.ts).
+    for (const [level, npc] of [[20, 'Giant frog'], [26, 'Giant frog']] as const) {
       await page.evaluate(s => { const w = window as unknown as { __status: Record<string, unknown>; __emit: (e: unknown) => void }; w.__status = { ...w.__status, stats: s }; w.__emit({ type: 'STATS', stats: s }); }, { ranged: level, defence: 1 });
       await page.waitForTimeout(1500);
       const current = await snapshot();

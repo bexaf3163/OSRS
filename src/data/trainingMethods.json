@@ -1704,7 +1704,11 @@
       "where": "The farms around Lumbridge",
       "note": "Bones and hides drop along the way.",
       "url": "https://oldschool.runescape.wiki/w/Pay-to-play_Melee_training",
-      "place": "Lumbridge"
+      "place": "Lumbridge",
+      "npcNames": [
+        "Cow",
+        "Chicken"
+      ]
     },
     {
       "id": "me-monk",
@@ -1726,6 +1730,104 @@
       "place": "Edgeville Monastery",
       "npcNames": [
         "Monk"
+      ]
+    },
+    {
+      "id": "me-alkharid",
+      "skill": [
+        "attack",
+        "strength",
+        "defence"
+      ],
+      "from": 1,
+      "suggestedFrom": 10,
+      "to": 30,
+      "name": "Al Kharid warriors",
+      "members": false,
+      "effort": "medium",
+      "cost": "free",
+      "risk": "low",
+      "where": "The Al Kharid palace: level 9 warriors",
+      "note": "When you attack one, the others nearby join in: pull one aside first. The Al Kharid bank is just west of the palace.",
+      "url": "https://oldschool.runescape.wiki/w/Al_Kharid_warrior",
+      "place": "Al Kharid",
+      "npcNames": [
+        "Al Kharid warrior"
+      ]
+    },
+    {
+      "id": "me-barbarian",
+      "skill": [
+        "attack",
+        "strength",
+        "defence"
+      ],
+      "from": 1,
+      "suggestedFrom": 10,
+      "to": 30,
+      "name": "Barbarians",
+      "members": false,
+      "effort": "medium",
+      "cost": "free",
+      "risk": "low",
+      "where": "Barbarian Village: the barbarians (mostly level 10)",
+      "note": "None attack first. Bank in Edgeville, north along the road.",
+      "url": "https://oldschool.runescape.wiki/w/Barbarian",
+      "place": "Barbarian Village",
+      "npcNames": [
+        "Barbarian"
+      ]
+    },
+    {
+      "id": "me-brutus",
+      "skill": [
+        "attack",
+        "strength",
+        "defence"
+      ],
+      "from": 1,
+      "suggestedFrom": 20,
+      "to": 60,
+      "name": "Brutus",
+      "members": false,
+      "needs": [
+        {
+          "type": "quest",
+          "quest": "The Ides of Milk"
+        }
+      ],
+      "effort": "medium",
+      "cost": "free",
+      "risk": "low",
+      "where": "Brutus's pen in the cow field east of Lumbridge",
+      "note": "Double combat XP. Step aside when he winds up a charge or a stomp: they hit up to 19. He comes back about 22 seconds after each kill.",
+      "url": "https://oldschool.runescape.wiki/w/Brutus",
+      "place": "Lumbridge",
+      "npcNames": [
+        "Brutus"
+      ]
+    },
+    {
+      "id": "me-minotaur",
+      "skill": [
+        "attack",
+        "strength",
+        "defence"
+      ],
+      "from": 1,
+      "suggestedFrom": 10,
+      "to": 30,
+      "name": "Minotaurs",
+      "members": false,
+      "effort": "medium",
+      "cost": "free",
+      "risk": "low",
+      "where": "Stronghold of Security, floor 1 (the Vault of War): the level 12 Minotaurs",
+      "note": "The entrance is in the Barbarian Village mine; there is no bank on the floor, so bank in Edgeville first.",
+      "url": "https://oldschool.runescape.wiki/w/Minotaur",
+      "place": "Barbarian Village mine",
+      "npcNames": [
+        "Minotaur"
       ]
     },
     {

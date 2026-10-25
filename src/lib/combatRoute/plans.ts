@@ -24,7 +24,7 @@ import type { Step } from '../../types';
 import type { OwnedState } from '../checklist';
 import { nameKey } from '../checklist';
 import {
-  DEFAULT_FOOD_SLOTS, estimateStep, foeLabel, stepGoals, xpPerKill, type Basis, type CombatEstimate, type CombatFoe, type Range, type StepEstimateContext,
+  DEFAULT_FOOD_SLOTS, estimateStep, foeLabel, stepGoals, unsafe, xpPerKill, type Basis, type CombatEstimate, type CombatFoe, type Range, type StepEstimateContext,
 } from '../combatEstimate';
 import { chooseVariant, strengthDoses } from '../combatPlan';
 import { asked, currentXp, dropEstimates, itemGoal, objectiveEstimates } from '../combatObjectives';
@@ -33,9 +33,7 @@ import type { PriceView } from '../funding/quotes';
 import type { TradeRestriction } from '../tradeRestriction';
 import { laterDefence, type LaterDefence } from './later';
 import { SELL_DROP, spotsOf, spotTerms, TRAINER_LEVELS, TRAINERS, type Spot } from './spots';
-import fundingJson from '../../data/fundingMethods.json';
-import { netEach } from '../funding/ge';
-import { isRestrictedItem } from '../tradeRestriction';
+import { coinsPerMinute, dropValue, LOOT_SLOTS, PICKUP_SECONDS } from '../lootValue';
 import { questOf } from '../playerState';
 import { questStepOf } from '../readiness';
 import { armourDefence, armourReady } from './armour';
@@ -169,22 +167,6 @@ const FEW_KILLS = 5;
 /** Scores this close are a tie: the net cost decides. */
 const TIE_BAND = 0.05;
 
-/** Seconds to pick one drop up: the click and a step or two, the fast and the slow end. */
-const PICKUP_SECONDS: [number, number] = [1.2, 3];
-/** Bag cells a loot trip fills: the weapon is worn, two cells for potions or a few pieces of food. */
-const LOOT_SLOTS = 26;
-const COWHIDE_METHOD = (fundingJson as unknown as { methods: { id: string; rate: { perHour: { typical: number } } }[] }).methods.find((m) => m.id === 'cows-cowhide');
-
-/**
- * What a minute is worth in coins: the simplest way to earn them, killing cows for their hides (funding's cows-cowhide rate) at the exchange's price after
- * the tax. Null without a price: then no loot is planned.
- */
-export function coinsPerMinute(prices: PriceView | null | undefined): number | null {
-  const hide = prices?.sell('Cowhide')?.price;
-  if (!hide || !COWHIDE_METHOD) return null;
-  return (COWHIDE_METHOD.rate.perHour.typical * netEach(hide, 'Cowhide')) / 60;
-}
-
 const sum = (a: Range, b: Range): Range => ({ low: a.low + b.low, mid: a.mid + b.mid, high: a.high + b.high });
 /**
  * A stored plan key as the plans have it now: before 2.75 the one "xp-only" plan was the best training spot, now each spot has its own
@@ -249,14 +231,6 @@ function bestOf(list: CombatEstimate[]): CombatEstimate | null {
   return [...list].sort((a, b) => a.totalMinutes.high - b.totalMinutes.high || a.food.mid - b.food.mid || (a.foe.combat - b.foe.combat))[0] ?? null;
 }
 
-/** Why an opponent is not safe for this much health: a hit of more than half of it, or a special attack and a hit together. Null - safe. */
-export function unsafe(foe: CombatFoe, spot: Pick<Spot, 'specialMaxHit'> | undefined, hp: number): string | null {
-  const name = foeLabel(foe);
-  if (foe.maxHit * 2 >= hp) return `${name} can hit for ${foe.maxHit}, more than half of your ${hp} health`;
-  const special = spot?.specialMaxHit;
-  if (special && special + foe.maxHit >= hp) return `${name}'s special attack hits up to ${special}: with ${hp} health one you do not dodge can kill`;
-  return null;
-}
 
 function risksOf(phases: PlanPhase[], hp: number): { risks: string[]; blockers: string[] } {
   const risks: string[] = [];
@@ -284,12 +258,9 @@ export function lootOf(p: PlanPhase, e: Pick<CombatEstimate, 'foodSlots' | 'bank
   restriction: TradeRestriction['state'] | undefined, rate: number | null): PlanPhase['loot'] | null {
   const name = p.spot.sell;
   if (!name || !rate || p.kind === 'armour') return null;
-  if (restriction === 'RESTRICTED' && isRestrictedItem(name)) return null;
-  const price = prices?.sell(name)?.price;
-  if (!price) return null;
+  const each = dropValue(name, prices, restriction);
   const qty = Math.max(0, p.kills - reserved);
-  const each = netEach(price, name);
-  if (qty <= 0 || each <= 0) return null;
+  if (qty <= 0 || each === null) return null;
   const bank = e.bankTripMinutes ?? { low: 3, mid: 4.5, high: 6 };
   const minutes = {} as Range;
   for (const [i, bound] of (['low', 'mid', 'high'] as const).entries()) {

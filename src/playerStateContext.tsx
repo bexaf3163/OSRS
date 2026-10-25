@@ -147,7 +147,11 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
   // The training method of the steps that follow one: the card's own answer, given to the store so the steps ask for that method's tools.
   const style = styleOf(features).style;
   const priority = priorityOf(features);
-  const picks = useMemo(() => pickMethods(stepsFor(mode), state, mode, style, priority), [state, mode, style, priority]);
+  // The exchange and the trade restriction weigh a combat method's drops the way the fight plans do (2.76): one answer on the card and the step.
+  const methodPrices = usePriceView(true);
+  const methodTrade = useTradeRestriction();
+  const picks = useMemo(() => pickMethods(stepsFor(mode), state, mode, style, priority, { prices: methodPrices, restriction: methodTrade.state }),
+    [state, mode, style, priority, methodPrices, methodTrade.state]);
   useEffect(() => { setMethodPicks(picks); }, [picks, setMethodPicks]);
 
   // The combat plan in effect for every open combat training step (2.69): the guide's recommendation unless the player chose one (lib/combatRoute/

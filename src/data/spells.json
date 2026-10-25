@@ -2,6 +2,45 @@
   "source": "https://oldschool.runescape.wiki/w/Free-to-play_Magic_training",
   "checked": "2026-10-03",
   "note": "Level, XP and runes come from the wiki spell cards (Infobox Spell). Spells of the same tier hit equally hard, and the choice does not affect accuracy. The Varrock and Lumbridge teleports also come from the wiki's spell cards (Infobox Spell): 35 and 41 XP per cast.",
+  "maxHit": {
+    "source": "OSRS Wiki, Wind Strike and Wind Bolt: Damage (checked 2026-10-25). Every spell of a tier has the base max hit of the highest spell of that tier the Magic level unlocks.",
+    "strike": [
+      [
+        1,
+        2
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        9,
+        6
+      ],
+      [
+        13,
+        8
+      ]
+    ],
+    "bolt": [
+      [
+        17,
+        9
+      ],
+      [
+        23,
+        10
+      ],
+      [
+        29,
+        11
+      ],
+      [
+        35,
+        12
+      ]
+    ]
+  },
   "spells": [
     {
       "id": "wind-strike",

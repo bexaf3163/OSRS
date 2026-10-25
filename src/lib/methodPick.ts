@@ -10,8 +10,9 @@ import { followedGoals, GOAL_REACHED, UNKNOWN_GOAL_PREFIX, type TrainingPick } f
 import { levelOf, type PlayerState } from './playerState';
 import type { MethodPriority, PlayStyle } from './playStyle';
 import { adviseTraining, methodNeeds } from './trainingRouter';
+import type { Market } from './combatRates';
 
-export function pickMethods(steps: readonly Step[], state: PlayerState, mode: GameMode, style: PlayStyle, priority?: MethodPriority): Record<string, TrainingPick> {
+export function pickMethods(steps: readonly Step[], state: PlayerState, mode: GameMode, style: PlayStyle, priority?: MethodPriority, market: Market = {}): Record<string, TrainingPick> {
   const picks: Record<string, TrainingPick> = {};
   for (const step of steps) {
     const goals = followedGoals(step);
@@ -23,7 +24,7 @@ export function pickMethods(steps: readonly Step[], state: PlayerState, mode: Ga
       if (goal.skill !== step.followsMethod) picks[step.id] = `${UNKNOWN_GOAL_PREFIX}${goal.skill}`;
       continue;
     }
-    const best = adviseTraining({ skill: goal.skill, target: goal.target, state, mode, style, priority }).best;
+    const best = adviseTraining({ skill: goal.skill, target: goal.target, state, mode, style, priority, ...market }).best;
     if (best) picks[step.id] = best.method.kit ? { methodId: best.method.id, needs: methodNeeds(best.method, state), name: best.method.name } : best.method.id;
   }
   return picks;

@@ -36,7 +36,10 @@ older save stays as "Fastest"; "Relaxed" keeps the old calm order.
 | S6-04 Magic to 55 (High Level Alchemy) | magic 20 (F2P) | Wind Strike on cows and chickens | Wind Strike on cows and chickens | needs full attention; small risk; material costs |
 | S6-04 Magic to 55 (High Level Alchemy) | magic 30 (F2P) | Wind Strike on cows and chickens | Wind Strike on cows and chickens | needs full attention; small risk; material costs |
 | S6-04 Magic to 55 (High Level Alchemy) | magic 40 (F2P) | Wind Strike on cows and chickens | Wind Strike on cows and chickens | needs full attention; small risk; material costs |
+| Skills page: attack | level 10 → 20 (F2P) | Chickens and cows | Al Kharid warriors | steady clicking; small risk |
+| Skills page: defence | level 10 → 20 (F2P) | Chickens and cows | Al Kharid warriors | steady clicking; small risk |
 | Skills page: fishing | level 50 → 60 (F2P) | Trout and salmon with fly fishing | Tuna and swordfish with a harpoon | ≈ 17k–21k XP per hour; few clicks |
+| Skills page: strength | level 10 → 20 (F2P) | Chickens and cows | Al Kharid warriors | steady clicking; small risk |
 
 Steps that follow a training method: S6-01, S6-02, S6-03, S6-04. Combat training stages: S3-08, S4-03 (the only steps with an opponent and a melee XP goal).
 Travel variants (canoe, teleports) are not training plans and are unchanged: they still need a press.

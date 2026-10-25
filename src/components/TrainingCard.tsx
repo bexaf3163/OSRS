@@ -18,6 +18,8 @@ import { goalArrows } from '../lib/rangedAmmo';
 import { xpForLevel } from '../lib/xp';
 import type { NavTargetPayload } from '../services/runeliteBridge';
 import { NavigateButton } from './NavigateButton';
+import { usePriceView } from '../lib/funding/usePriceView';
+import { useTradeRestriction } from '../lib/useTradeRestriction';
 
 /** Skill advice from the shared player state; recomputed when levels, items, mode or style change. */
 export function useTrainingAdvice(skill: string | null, target: number): TrainingAdvice | null {
@@ -29,9 +31,12 @@ export function useTrainingAdvice(skill: string | null, target: number): Trainin
   const priority = priorityOf(features);
   const have = skill ? xp?.[skill] ?? null : null;
   const measured = skill ? xpRate(skill) : null;
+  // The exchange and the trade restriction: what a combat method's arrows, runes and drops are worth, as on the route's steps.
+  const prices = usePriceView(true);
+  const trade = useTradeRestriction();
   return useMemo(
-    () => (skill ? adviseTraining({ skill, target, state, mode, style, priority, xp: have, measuredXph: measured }) : null),
-    [skill, target, state, mode, style, priority, have, measured],
+    () => (skill ? adviseTraining({ skill, target, state, mode, style, priority, xp: have, measuredXph: measured, prices, restriction: trade.state }) : null),
+    [skill, target, state, mode, style, priority, have, measured, prices, trade.state],
   );
 }
 
@@ -47,7 +52,7 @@ function Alternative({ v }: { v: MethodView }) {
   return (
     <li>
       <strong>{m.name}</strong>
-      <span className="muted"> — {m.where}{m.xph ? `; ≈ ${m.xph[0] === m.xph[1] ? m.xph[0].toLocaleString('en-US') : `${m.xph[0].toLocaleString('en-US')}–${m.xph[1].toLocaleString('en-US')}`} XP per hour (wiki)` : ''}</span>
+      <span className="muted"> — {m.where}{m.xph ? `; ≈ ${m.xph[0] === m.xph[1] ? m.xph[0].toLocaleString('en-US') : `${m.xph[0].toLocaleString('en-US')}–${m.xph[1].toLocaleString('en-US')}`} XP per hour ${m.rateSource === 'model' ? 'for you' : '(wiki)'}` : ''}</span>
       {v.status === 'PREP' && v.missing.length > 0 && <span className="muted"> · first: {v.missing.map((x) => x.label).join(', ')}</span>}
       {m.manualSetup && <span className="muted"> · manual setup: {m.manualSetup}</span>}
       {v.status === 'LOCKED' && <span className="muted"> · locked: {v.missing.map((x) => x.label).join(', ')}</span>}
@@ -110,7 +115,7 @@ export function TrainingCard({ skill, target }: { skill: string; target: number 
             </p>
           )}
           {profile.showTime && advice.time && (
-            <p className="small">⏱ {formatHours(advice.time)} to {target}{advice.time.source === 'wiki' ? ' (by the wiki speed — a guide)' : ' (at your pace)'}.</p>
+            <p className="small">⏱ {formatHours(advice.time)} to {target}{advice.time.source === 'wiki' ? ' (by the wiki speed — a guide)' : advice.time.source === 'model' ? ' (for your levels and gear)' : ' (at your pace)'}.</p>
           )}
           {best.status === 'PREP' && (
             <p className="small">First: <strong>{best.missing.map((x) => x.label).join(', ')}</strong> <a href="#/shopping">To the shopping list</a></p>

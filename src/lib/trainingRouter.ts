@@ -17,6 +17,10 @@ import { xpForLevel } from './xp';
 import type { MethodPriority, PlayStyle } from './playStyle';
 import { rangedNeeds, RANGED_WATCH } from './rangedLoadout';
 import { strikeRecipe, superheatNeeds } from './magicPlan';
+import { methodRate } from './combatRates';
+import type { PriceView } from './funding/quotes';
+import { coinsPerMinute } from './lootValue';
+import type { TradeRestriction } from './tradeRestriction';
 
 export type Effort = 'afk' | 'low' | 'medium' | 'high';
 export type MethodCost = 'free' | 'profit' | 'cost';
@@ -45,8 +49,15 @@ export interface TrainingMethod {
   kit?: 'f2p-bow' | 'superheat-iron' | 'strike-spell';
   /** Visible manual alternative; never an automatic default until this setup is modelled/verified. */
   manualSetup?: string;
-  /** XP per hour per the wiki: [from, to] — a guide. */
+  /** XP per hour per the wiki: [from, to] — a guide; for a combat method the model's figure for this player when it has one (rateSource). */
   xph: [number, number] | null;
+  /** model - xph is the combat model's for this player's levels and gear (combatRates.ts), not the wiki's guide. */
+  rateSource?: 'model';
+  /** Coins an hour the model's method uses up (arrows, runes) at exchange prices; null - not known. */
+  costPerHour?: number | null;
+  /** Coins an hour the model's method banks from its drop when that pays for its time, and the drop. */
+  lootPerHour?: number;
+  lootName?: string;
   /** XP per single action — the game's exact value. */
   xpa: number | null;
   /** The word forms "log|logs" for "how many more". */
@@ -185,7 +196,7 @@ export function practicalRate(m: TrainingMethod): number | null {
  * ones last. Relaxed (the old "Calm"): first the ready ones, without risk, with fewer clicks, not at a loss — speed only on a tie. Fastest (the old
  * "Efficient"): first the ready ones, then by speed (for methods without a speed — by entry level).
  */
-function compare(priority: MethodPriority, xpLeft?: number, level?: number) {
+function compare(priority: MethodPriority, xpLeft?: number, level?: number, coinRate: number | null = null) {
   return (a: MethodView, b: MethodView): number => {
     if (Boolean(a.method.manualSetup) !== Boolean(b.method.manualSetup)) return Number(Boolean(a.method.manualSetup)) - Number(Boolean(b.method.manualSetup));
     const uncheckedEntry = (v: MethodView) => v.unchecked.some(n => n.kind === 'skill' || n.kind === 'quest');
@@ -219,9 +230,14 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number) {
       const pa = practicalRate(a.method);
       const pb = practicalRate(b.method);
       if (pa && pb && xpLeft && xpLeft > 0) {
-        const ha = xpLeft / pa + (a.status === 'PREP' ? SETUP_HOURS : 0);
-        const hb = xpLeft / pb + (b.status === 'PREP' ? SETUP_HOURS : 0);
-        if (Math.abs(ha - hb) > Math.min(ha, hb) * 0.05) return ha - hb;
+        // The hours to the goal, less what the banked drops are worth in hours (lootValue.ts: the same rule as the fight plans).
+        const hours = (v: MethodView, p: number) => xpLeft / p + (v.status === 'PREP' ? SETUP_HOURS : 0);
+        const worth = (v: MethodView, h: number) => (coinRate && v.method.lootPerHour ? (h * v.method.lootPerHour) / (coinRate * 60) : 0);
+        const ra0 = hours(a, pa);
+        const rb0 = hours(b, pb);
+        const ha = ra0 - worth(a, ra0);
+        const hb = rb0 - worth(b, rb0);
+        if (Math.abs(ha - hb) > Math.min(ra0, rb0) * 0.05) return ha - hb;
       } else {
         if (s) return s;
         // Without comparable pace evidence, do not buy a new recipe merely because its suggested bracket is newer.
@@ -232,7 +248,8 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number) {
         if (pa === null && pb === null && a.method.kit === 'f2p-bow' && b.method.kit === 'f2p-bow' && byEntry) return byEntry;
         if ((pa ?? -1) !== (pb ?? -1)) return (pb ?? -1) - (pa ?? -1);
       }
-      return s || EFFORT_RANK[a.method.effort] - EFFORT_RANK[b.method.effort] || COST_RANK[a.method.cost] - COST_RANK[b.method.cost] || byRate || byEntry;
+      // Within a few percent the method made for this level wins (the wiki's bracket), then the easier and cheaper one.
+      return s || byBracket || EFFORT_RANK[a.method.effort] - EFFORT_RANK[b.method.effort] || COST_RANK[a.method.cost] - COST_RANK[b.method.cost] || byRate || byEntry;
     }
     if (s) return s;
     if (priority === 'relaxed') {
@@ -258,8 +275,8 @@ export interface PathLeg {
 }
 
 export interface TimeEstimate {
-  /** measured — from the player's measurements, wiki — from the wiki speed (a range, a guide). */
-  source: 'measured' | 'wiki';
+  /** measured — from the player's measurements, model — the combat model for this player, wiki — from the wiki speed (a range, a guide). */
+  source: 'measured' | 'model' | 'wiki';
   minHours: number;
   maxHours: number;
 }
@@ -300,26 +317,60 @@ export interface AdviceInput {
   /** XP per hour from the player's measurements. */
   measuredXph?: number | null;
   methods?: readonly TrainingMethod[];
+  /** The exchange, for what arrows and runes cost and the drops bring an hour; without it neither is said nor counted. */
+  prices?: PriceView | null;
+  /** Whether the account may sell yet: a drop it cannot sell is not counted. */
+  restriction?: TradeRestriction['state'];
+}
+
+const rateCache = new Map<string, TrainingMethod>();
+/**
+ * The methods of a skill with the combat model's own rate for this player where it has one (combatRates.ts): melee, Ranged and Magic training is then
+ * ranked by what it gives this character, not by the wiki's guide for everyone. Other methods stay as they are.
+ */
+export function personalize(methods: readonly TrainingMethod[], skill: string, state: PlayerState, prices?: PriceView | null, restriction?: TradeRestriction['state']): TrainingMethod[] {
+  return methods.map((m) => {
+    if (!m.skills.includes(skill) || !m.npcNames?.length) return m;
+    const key = `${m.id}|${skill}|${state.fingerprint}|${prices?.at ?? '-'}|${restriction ?? '-'}`;
+    const hit = rateCache.get(key);
+    if (hit) return hit;
+    const r = methodRate(m, skill, state, { prices, restriction });
+    const out: TrainingMethod = r ? {
+      ...m, xph: [Math.round(r.xph[0]), Math.round(r.xph[1])], rateSource: 'model', costPerHour: r.costPerHour,
+      ...(r.lootPerHour ? { lootPerHour: r.lootPerHour, lootName: r.loot } : {}),
+    } : m;
+    if (rateCache.size > 500) rateCache.clear();
+    rateCache.set(key, out);
+    return out;
+  });
 }
 
 const fmtK = (n: number) => (n >= 1000 ? `${Math.round(n / 1000)}k` : String(n));
+
+/** "≈ 8k–11k XP per hour", "for you" when it is the model's figure for this player. */
+const rateText = (m: TrainingMethod) => {
+  const r = m.xph!;
+  return `${r[0] === r[1] ? `≈ ${fmtK(r[0])}` : `≈ ${fmtK(r[0])}–${fmtK(r[1])}`} XP per hour${m.rateSource === 'model' ? ' for you' : ''}`;
+};
 
 function reasonFor(v: MethodView, priority: MethodPriority, level: number): string {
   const m = v.method;
   const parts: string[] = [];
   if (priority === 'balanced') {
-    if (m.xph) parts.push(m.xph[0] === m.xph[1] ? `≈ ${fmtK(m.xph[0])} XP per hour` : `≈ ${fmtK(m.xph[0])}–${fmtK(m.xph[1])} XP per hour`);
+    if (m.xph) parts.push(rateText(m));
     parts.push(m.effort === 'afk' ? 'almost no clicks' : m.effort === 'low' ? 'few clicks' : m.effort === 'medium' ? 'steady clicking' : 'needs full attention');
     if (m.risk !== 'none') parts.push(m.risk === 'high' ? 'risky' : 'small risk');
   } else if (priority === 'relaxed') {
     const quiet = m.effort === 'afk' ? 'almost no clicks' : m.effort === 'low' ? 'few clicks' : m.effort === 'medium' ? 'relaxed pace' : 'needs attention';
     parts.push(m.risk === 'none' ? `no risk, ${quiet}` : `${quiet}, small risk`);
   } else if (m.xph) {
-    parts.push(m.xph[0] === m.xph[1] ? `≈ ${fmtK(m.xph[0])} XP per hour` : `≈ ${fmtK(m.xph[0])}–${fmtK(m.xph[1])} XP per hour`);
+    parts.push(rateText(m));
   } else {
     parts.push('the best method for this level');
   }
-  if (m.cost === 'cost') parts.push('material costs');
+  if (m.lootPerHour && m.lootName) parts.push(`${m.lootName} ≈ +${fmtK(Math.round(m.lootPerHour / 100) * 100)} gp per hour`);
+  if (m.costPerHour) parts.push(`${m.skills.includes('magic') ? 'runes' : 'arrows'} ≈ ${fmtK(Math.round(m.costPerHour / 100) * 100)} gp per hour`);
+  else if (m.cost === 'cost') parts.push('material costs');
   else if (m.cost === 'profit') parts.push('can end in profit');
   if (v.status === 'PREP') parts.push(`first: ${v.missing.map((x) => x.label).join(', ')}`);
   if (v.status === 'LOCKED') parts.push(`locked: ${v.missing.map((x) => x.label).join(', ')}`);
@@ -337,7 +388,8 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
   for (let lv = level; lv < target; lv++) {
     // For future levels the item requirements are not counted: "what will be needed", not "what there is now".
     const cands = methodsFor(skill, methods).filter((m) => !m.manualSetup && availableAt(m, lv, input.mode)).map((m) => viewMethod(m, input.state)).filter((v) => v.status !== 'LOCKED' || v.missing.every((x) => x.kind === 'skill'));
-    cands.sort(compare(priority, undefined, lv));
+    // Each level is weighed as the first one is (adviseTraining): the hours from here to the goal, less what the banked drops are worth.
+    cands.sort(compare(priority, Math.max(0, xpForLevel(target) - xpForLevel(lv)), lv, coinsPerMinute(input.prices)));
     let pick = (lv === level ? cands.find(c => c.method.id === first?.id)?.method : undefined) ?? cands[0]?.method;
     if (!pick) continue;
     const last = legs[legs.length - 1];
@@ -352,9 +404,10 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
   return legs.slice(0, 6);
 }
 
-export function adviseTraining(input: AdviceInput): TrainingAdvice {
-  const { skill, target, state, mode, style } = input;
-  const methods = input.methods ?? trainingMethods;
+export function adviseTraining(input0: AdviceInput): TrainingAdvice {
+  const { skill, target, state, mode, style } = input0;
+  const methods = personalize(input0.methods ?? trainingMethods, skill, state, input0.prices, input0.restriction);
+  const input = { ...input0, methods };
   const level = levelOf(state, skill) ?? null;
   const empty: TrainingAdvice = { skill, level, target, best: null, others: [], quests: [], path: [], xpLeft: null, actionsLeft: null, actionTarget: null, time: null, reason: '', style };
   if (level === null) return { ...empty, reason: 'Level unknown: log in to the game with RuneLite or enter it on the skill page.' };
@@ -362,7 +415,7 @@ export function adviseTraining(input: AdviceInput): TrainingAdvice {
 
   const priority: MethodPriority = input.priority ?? (style === 'efficient' ? 'fastest' : 'relaxed');
   const xpNow0 = input.xp ?? xpForLevel(level);
-  const cmp = compare(priority, Math.max(0, xpForLevel(target) - xpNow0), level);
+  const cmp = compare(priority, Math.max(0, xpForLevel(target) - xpNow0), level, coinsPerMinute(input.prices));
   const views = methodsFor(skill, methods).filter((m) => availableAt(m, level, mode)).map((m) => viewMethod(m, state)).sort(cmp);
   const best = views.find((v) => !v.method.manualSetup && v.status !== 'LOCKED') ?? null;
   const others = views.filter((v) => v !== best).slice(0, 3);
@@ -382,7 +435,7 @@ export function adviseTraining(input: AdviceInput): TrainingAdvice {
     const h = xpLeft / input.measuredXph;
     time = { source: 'measured', minHours: h, maxHours: h };
   } else if (best?.method.xph) {
-    time = { source: 'wiki', minHours: xpLeft / best.method.xph[1], maxHours: xpLeft / best.method.xph[0] };
+    time = { source: best.method.rateSource ?? 'wiki', minHours: xpLeft / best.method.xph[1], maxHours: xpLeft / best.method.xph[0] };
   }
   return {
     ...empty, best, others, quests, path, xpLeft, actionsLeft, actionTarget, time,
@@ -393,6 +446,6 @@ export function adviseTraining(input: AdviceInput): TrainingAdvice {
 /** "about 3–4 h" / "≈ 2 h"; under an hour — in minutes. */
 export function formatHours(t: TimeEstimate): string {
   const f = (h: number) => (h < 1 ? `${Math.max(1, Math.round(h * 60))} min` : `${h < 10 ? Math.round(h * 10) / 10 : Math.round(h)} h`);
-  if (t.minHours === t.maxHours || f(t.minHours) === f(t.maxHours)) return `${t.source === 'wiki' ? 'about' : '≈'} ${f(t.maxHours)}`;
+  if (t.minHours === t.maxHours || f(t.minHours) === f(t.maxHours)) return `${t.source === 'measured' ? '≈' : 'about'} ${f(t.maxHours)}`;
   return `about ${f(t.minHours)}–${f(t.maxHours)}`;
 }

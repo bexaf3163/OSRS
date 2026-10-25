@@ -59,34 +59,54 @@ function rangedAttackOf(name: string): number | null {
   return g ? g.attack.ranged : null;
 }
 
-export function arrowsForGoal(inp: AmmoInput): AmmoEstimate | null {
-  const bow = ranged(inp.bow);
-  const arrow = ranged(inp.arrow);
-  const rdef = inp.foe.defence.ranged;
-  if (!bow || !arrow || rdef === undefined || inp.foe.hitpoints <= 0) return null;
-  const goalXp = xpForLevel(inp.goalLevel);
-  if (inp.xp >= goalXp) return { shots: { low: 0, mid: 0, high: 0 }, lostPickingUp: { low: 0, mid: 0, high: 0 }, kills: 0, notCounted: [] };
+export interface RangedHit {
+  maxHit: number;
+  chance: number;
+  /** Ticks between shots in the style used (rapid is a tick faster). */
+  speedTicks: number;
+  /** Worn items with no known ranged bonus: left out of the accuracy. */
+  notCounted: string[];
+}
+
+/**
+ * One shot at this Ranged level with this bow, arrows and worn items against the opponent: the max hit, the hit chance and the ticks between shots.
+ * null - a bow or arrow without data, or an opponent without a ranged defence.
+ */
+export function rangedHit(level: number, bowName: string, arrowName: string, worn: readonly string[], foe: CombatFoe, styleName: RangedStyle = 'rapid'): RangedHit | null {
+  const bow = ranged(bowName);
+  const arrow = ranged(arrowName);
+  const rdef = foe.defence.ranged;
+  if (!bow || !arrow || rdef === undefined) return null;
   const notCounted: string[] = [];
   let armour = 0;
-  for (const w of inp.worn) {
+  for (const w of worn) {
     const b = rangedAttackOf(w);
     if (b === null) notCounted.push(w);
     else armour += b;
   }
-  const attackBonus = bow.rangedAttack + arrow.rangedAttack + armour;
-  const strengthBonus = bow.rangedStrength + arrow.rangedStrength;
-  const defRoll = (inp.foe.defenceLevel + 9) * (rdef + 64);
-  const style = STYLE_BONUS[inp.style ?? 'rapid'];
+  const effective = level + STYLE_BONUS[styleName] + 8;
+  const maxHit = Math.floor(0.5 + (effective * (bow.rangedStrength + arrow.rangedStrength + 64)) / 640);
+  const chance = hitChanceOf(effective * (bow.rangedAttack + arrow.rangedAttack + armour + 64), (foe.defenceLevel + 9) * (rdef + 64));
+  // OSRS Wiki, Ranged: the rapid style shoots one tick faster.
+  const speedTicks = Math.max(1, (bow.speed ?? 4) - (styleName === 'rapid' ? 1 : 0));
+  return { maxHit, chance, speedTicks, notCounted };
+}
+
+export function arrowsForGoal(inp: AmmoInput): AmmoEstimate | null {
+  if (!rangedHit(1, inp.bow, inp.arrow, inp.worn, inp.foe, inp.style) || inp.foe.hitpoints <= 0) return null;
+  const goalXp = xpForLevel(inp.goalLevel);
+  if (inp.xp >= goalXp) return { shots: { low: 0, mid: 0, high: 0 }, lostPickingUp: { low: 0, mid: 0, high: 0 }, kills: 0, notCounted: [] };
   const hp = inp.foe.hitpoints;
   let mean = 0;
   let variance = 0;
   let kills = 0;
+  let notCounted: string[] = [];
   for (let xp = inp.xp; xp < goalXp;) {
     const level = levelForXp(xp);
     const until = Math.min(goalXp, xpForLevel(level + 1));
-    const effective = level + style + 8;
-    const maxHit = Math.floor(0.5 + (effective * (strengthBonus + 64)) / 640);
-    const per = attacksToKill(hp, maxHit, hitChanceOf(effective * (attackBonus + 64), defRoll));
+    const hit = rangedHit(level, inp.bow, inp.arrow, inp.worn, inp.foe, inp.style)!;
+    notCounted = hit.notCounted;
+    const per = attacksToKill(hp, hit.maxHit, hit.chance);
     if (!Number.isFinite(per.mean)) return null;
     const k = (until - xp) / XP_PER_DAMAGE / hp;
     kills += k;

@@ -21,6 +21,8 @@ import type { GearState, NavTargetPayload } from './runeliteBridge';
 export const gearData = gearJson as GearData;
 export const gearById = new Map(gearData.items.map((i) => [i.id, i]));
 const gearByName = new Map(gearData.items.map((i) => [nameKey(i.name), i]));
+/** A piece of gear by its name, as the game writes it; null - the gear data does not know it. */
+export const gearPieceByName = (name: string): GearPiece | null => gearByName.get(nameKey(name)) ?? null;
 
 export const SLOTS: GearSlot[] = ['weapon', 'neck', 'head', 'body', 'legs', 'shield'];
 export const SLOT_LABEL: Record<GearSlot, string> = {

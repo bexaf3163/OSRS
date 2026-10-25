@@ -71,6 +71,15 @@ export function foeVariants(name: string): CombatFoe[] {
   return COMBAT_FOES.filter((f) => f.name === name && !f.members);
 }
 
+/** Why an opponent is not safe for this much health: a hit of more than half of it, or a special attack and a hit together. Null - safe. */
+export function unsafe(foe: CombatFoe, spot: { specialMaxHit?: number } | undefined, hp: number): string | null {
+  const name = foeLabel(foe);
+  if (foe.maxHit * 2 >= hp) return `${name} can hit for ${foe.maxHit}, more than half of your ${hp} health`;
+  const special = spot?.specialMaxHit;
+  if (special && special + foe.maxHit >= hp) return `${name}'s special attack hits up to ${special}: with ${hp} health one you do not dodge can kill`;
+  return null;
+}
+
 /** "Minotaur (level 12)"; one version — the name alone. */
 export function foeLabel(f: CombatFoe): string {
   return foeVariants(f.name).length > 1 ? `${f.name} (level ${f.combat})` : f.name;
@@ -89,19 +98,27 @@ export function hitChance(attRoll: number, defRoll: number): number {
   return attRoll > defRoll ? 1 - (defRoll + 2) / (2 * (attRoll + 1)) : attRoll / (2 * (defRoll + 1));
 }
 
-/** The player's damage on a successful hit: 0..max with equal chance, a 0 counted as 1 (as gearAdvisor's average assumes). */
-function playerHitDistribution(maxHit: number): number[] {
+/**
+ * The player's damage on a successful hit: 0..max with equal chance, a 0 counted as 1 (as gearAdvisor's average assumes). A spell that lands can deal 0:
+ * for it (`zeroIsOne` false) the chance is that of landing a hit above 0, and such a hit is 1..max with equal chance.
+ */
+function playerHitDistribution(maxHit: number, zeroIsOne = true): number[] {
   if (maxHit <= 0) return [0, 1];
+  if (!zeroIsOne) return [0, ...new Array<number>(maxHit).fill(1 / maxHit)];
   const q = new Array<number>(maxHit + 1).fill(1 / (maxHit + 1));
   q[0] = 0;
   q[1] = 2 / (maxHit + 1);
   return q;
 }
 
+/** The chance an attack moves the fight on: a spell's landed 0 does not (see playerHitDistribution). */
+const progressChance = (chance: number, maxHit: number, zeroIsOne: boolean) => (zeroIsOne || maxHit <= 0 ? chance : chance * (maxHit / (maxHit + 1)));
+
 /** Attacks to kill an opponent with `hp` hit points: mean and variance. Infinity when nothing can hit. */
-export function attacksToKill(hp: number, maxHit: number, chance: number): { mean: number; variance: number } {
-  if (!(chance > 0)) return { mean: Infinity, variance: Infinity };
-  const q = playerHitDistribution(maxHit);
+export function attacksToKill(hp: number, maxHit: number, landChance: number, zeroIsOne = true): { mean: number; variance: number } {
+  const chance = progressChance(landChance, maxHit, zeroIsOne);
+  if (!(chance > 0) || (!zeroIsOne && maxHit <= 0)) return { mean: Infinity, variance: Infinity };
+  const q = playerHitDistribution(maxHit, zeroIsOne);
   const mean = [0];
   const square = [0];
   for (let r = 1; r <= hp; r++) {

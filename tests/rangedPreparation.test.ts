@@ -9,9 +9,11 @@ import { contextOf } from '../src/lib/readiness';
 import { createReadinessEngine } from '../src/lib/readinessEngine';
 import { toInGameTarget, type GearItem } from '../src/services/runeliteBridge';
 import { trainingMethods, viewMethod } from '../src/lib/trainingRouter';
+import { market } from './funding/market';
+import type { Market } from '../src/lib/combatRates';
 
 const base = stepById.get('S6-01')!;
-function scenario(level: number, equipment: GearItem[] = [], stock: Record<string, { carried?: number; bank?: number }> = {}, defence: number | null = 1, complete = true) {
+function scenario(level: number, equipment: GearItem[] = [], stock: Record<string, { carried?: number; bank?: number }> = {}, defence: number | null = 1, complete = true, trade: Market = {}) {
   const progress = emptyProgress();
   for (const s of allSteps) { if (s.id === base.id) break; progress.steps[s.id] = 'done'; }
   const names = [...new Set([...methodToolNames(base), ...Object.keys(stock)])].filter(n => complete || n === 'Shortbow' || n === 'Bronze arrow');
@@ -19,7 +21,7 @@ function scenario(level: number, equipment: GearItem[] = [], stock: Record<strin
   const stats = { ranged: level, ...(defence === null ? {} : { defence }) };
   const gear = { equipment, inventory: [], coins: 0, bankCoins: 0 };
   const state = buildPlayerState({ mode: 'f2p', stats, progress, owned, gear, questsDone: ['The Corsair Curse'], connected: true });
-  const picks = pickMethods([base], state, 'f2p', 'chill', 'balanced');
+  const picks = pickMethods([base], state, 'f2p', 'chill', 'balanced', trade);
   const pick = picks[base.id];
   const step = withTrainingMethod(base, pick);
   const engine = createReadinessEngine({ ...contextOf({ step, steps: allSteps.map(s => s.id === step.id ? step : s), progress, mode: 'f2p', qp: 44, gear, owned, stats }), state });
@@ -42,8 +44,10 @@ describe('S6-01 actual ranged preparation', () => {
     const s = scenario(26, [piece('Shortbow'), piece('Bronze arrow', 100)], { Salmon: { bank: 10 } });
     expect(s.pick).toMatchObject({ methodId: 'ra-frog' });
     expect(s.engine.plan(s.step).lines.find(r => r.name === 'Salmon')?.where).toBe('BANK');
+    // 2.76: the frogs give this character clearly more XP an hour than the monks (the combat model), so ten food to buy does not send them back.
     const absentFood = scenario(26, [piece('Shortbow'), piece('Bronze arrow', 100)]);
-    expect(absentFood.pick).toMatchObject({ methodId: 'ra-monk' });
+    expect(absentFood.pick).toMatchObject({ methodId: 'ra-frog' });
+    expect(absentFood.engine.plan(absentFood.step).lines.find(r => r.name === 'Salmon')?.where).not.toBe('BANK');
   });
   it.each([[1, 'ra-lumb', 'Seagull'], [20, 'ra-monk', 'Monk'], [26, 'ra-frog', 'Giant frog'], [49, 'ra-frog', 'Giant frog']] as const)(
     'Ranged%s gets its current trainer, kit and unchanged goal', (level, id, npc) => {
@@ -54,6 +58,11 @@ describe('S6-01 actual ranged preparation', () => {
       expect(s.payload.checklist).toEqual(expect.arrayContaining([expect.objectContaining({ name: 'Shortbow', equip: true }), expect.objectContaining({ name: 'Bronze arrow', count: 100, equip: true })]));
       expect(s.payload.completionTrigger).toEqual(base.inGame!.completionTrigger);
     });
+  it('with exchange prices the Big bones count: at Ranged 20 the frogs pay for their bank trips and beat the monks', () => {
+    const s = scenario(20, [], {}, 1, true, { prices: market(), restriction: 'LIFTED' });
+    expect(s.pick).toMatchObject({ methodId: 'ra-frog' });
+    expect(s.payload.npcNames).toEqual(['Giant frog']);
+  });
   it('recognizes a usable owned bow and compatible banked ammunition before buying replacements', () => {
     const s = scenario(30, [piece('Maple shortbow')], { 'Adamant arrow': { bank: 100 }, Salmon: { bank: 10 } });
     expect(s.step.itemsRequired?.some(r => r.nameEn === 'Maple shortbow')).toBe(true);
