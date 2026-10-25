@@ -2,9 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { combatPlanView } from '../../src/lib/combatPlan';
 import { evaluatePlans, KEEP_MARGIN, MIN_GAIN } from '../../src/lib/combatRoute/plans';
 import { spotsOf, TRAINERS } from '../../src/lib/combatRoute/spots';
-import { allSteps } from '../../src/data';
+import { allSteps, stepById } from '../../src/data';
 import { market } from '../funding/market';
-import { HISTORICAL, planInput } from './fixture';
+import { HISTORICAL, gearOf, ownedOf, planInput } from './fixture';
 
 const prices = market();
 const withMarket = (o: Parameters<typeof planInput>[0] = {}, restriction: 'LIFTED' | 'RESTRICTED' | 'UNKNOWN' = 'LIFTED') =>
@@ -216,6 +216,15 @@ describe('where the plans can lead', () => {
     }
     expect(spots.has('Giant frog')).toBe(true);
     expect(spotsOf(planInput().steps).get('Hill Giant')!.waypoints!.length).toBeGreaterThan(1);
+  });
+
+  it('the live route (S4-03 is Giant frogs since 2.74.2) still compares the Hill Giants, from the spot that step used to give', () => {
+    const live = spotsOf(allSteps).get('Hill Giant')!;
+    expect(live.waypoints?.[0].label).toMatch(/trapdoor/);
+    const r = evaluatePlans({ step: stepById.get('S4-03')!, steps: allSteps, ctx: { stats: HISTORICAL.stats, gear: gearOf(HISTORICAL.worn) } as never, owned: ownedOf({}), foodPrice: 33 })!;
+    expect(r.compared).toEqual(expect.arrayContaining(['Giant frog', 'Cow', 'Minotaur (level 12)', 'Hill Giant']));
+    // Frogs are the wiki's 20-40 method, and the model agrees for this character.
+    expect(r.recommended).toBe('route');
   });
 });
 
