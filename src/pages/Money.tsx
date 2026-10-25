@@ -121,12 +121,15 @@ function GoalChooser({ e, m, step, onClose }: { e: MethodEvaluation; m: MoneyScr
   );
 }
 
-/** Everything about one method, the long parts folded: why, what it needs and what the player has, where and how, the money, the risks, the sources. */
-function Details({ e, m }: { e: MethodEvaluation; m: MoneyScreen }) {
+/**
+ * Everything about one method, the long parts folded: why, what it needs and what the player has, where and how, the money, the risks, the sources.
+ * whyShown: the recommendation card already says why right above, so the details do not repeat it.
+ */
+function Details({ e, m, whyShown = false }: { e: MethodEvaluation; m: MoneyScreen; whyShown?: boolean }) {
   const method = e.method;
   const pu = e.perUnit;
   const guide = method.guide.filter((g) => g.kind !== 'restock');
-  const why = whyOf(e, m.ranking, m.rankedFor);
+  const why = whyShown ? '' : whyOf(e, m.ranking, m.rankedFor);
   return (
     <div className="money-details">
       <p className="small">{method.summary}</p>
@@ -245,7 +248,7 @@ function MoneyBody({ step }: { step: Step }) {
               </button>
             </p>
           )}
-          {open === best.method.id && <Details e={best} m={m} />}
+          {open === best.method.id && <Details e={best} m={m} whyShown />}
           {starting === best.method.id && <GoalChooser e={best} m={m} step={step} onClose={() => setStarting(null)} />}
         </section>
       ) : (
