@@ -91,11 +91,14 @@ function requirement(n: MethodNeed, m: RawMethod): StepItemRequirement | null {
   };
 }
 
+/** The label of a method's point, one rule for the catalogue place and the spot an engine picked: "Cooking: Tuna — Barbarian Village fire". */
+const pointLabel = (m: { name: string; skills: readonly string[] }, place: string) => `${m.skills.includes('cooking') ? 'Cooking: ' : ''}${m.name} — ${place}`;
+
 /** The place of a method as a step point, from the place dictionary only (no guessing from the text); null when it has none. */
 export function methodPoint(methodId: string): MapLocation | null {
   const m = METHODS.get(methodId);
   const p = m?.place ? matchStrict(m.place) : null;
-  return m && p ? { x: p.x, y: p.y, plane: p.plane, label: `${m.skills.includes('cooking') ? 'Cooking: ' : ''}${m.name} — ${p.label}` } : null;
+  return m && p ? { x: p.x, y: p.y, plane: p.plane, label: pointLabel(m, p.label) } : null;
 }
 
 /**
@@ -132,7 +135,7 @@ export function withTrainingMethod(step: Step, pick: TrainingPick | undefined): 
   const requirements = [...(step.requirements ?? []).filter(r => r.type !== 'skill' || !gates.some(n => n.type === 'skill' && n.skill === r.skill && n.min >= r.min)), ...gates];
   const itemsRequired = needs.map((n) => requirement(n, m)).filter((r): r is StepItemRequirement => r !== null);
   const chosen = typeof pick !== 'string' ? pick.spot : undefined;
-  const at = chosen ? { x: chosen.x, y: chosen.y, plane: chosen.plane, label: `${m.name} — ${chosen.label}` } : methodPoint(id);
+  const at = chosen ? { x: chosen.x, y: chosen.y, plane: chosen.plane, label: pointLabel(m, chosen.label) } : methodPoint(id);
   return {
     ...step,
     followsMethod: goal.skill,

@@ -10,6 +10,7 @@ import type { Point } from './travel';
 import type { MethodPriority } from './playStyle';
 import { combatRate } from './combatRates';
 import { gatherRate } from './skillingRates';
+import { processRate } from './processingRates';
 
 /** Where a modelled method is done: the spot the engine picked among the candidates, and what happens with a full bag there. */
 export interface RateSpot {
@@ -48,7 +49,7 @@ export interface Market { prices?: PriceView | null; restriction?: TradeRestrict
 
 /** The rate of one method for this player in this skill, or null when no engine has anything honest to say. */
 export function methodRate(m: TrainingMethod, skill: string, state: PlayerState, market: Market = {}): ModelRate | null {
-  return combatRate(m, skill, state, market) ?? gatherRate(m, skill, state, market);
+  return combatRate(m, skill, state, market) ?? gatherRate(m, skill, state, market) ?? processRate(m, skill, state, market);
 }
 
 /** What the rates depend on, without the position (a step on the map must not recompute every method): levels, mode, items, worn gear. */

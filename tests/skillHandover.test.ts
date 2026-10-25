@@ -53,10 +53,14 @@ describe('one coherent Fishing/Cooking handover', () => {
     expect(raw.where).toBe('BANK');
     expect(raw.action?.kind).toBe('TAKE');
   });
-  it('uses an owned banked recipe before unmeasured new purchases', () => {
+  it('owned banked food is taken, never bought again; a recipe the processing engine measures faster for the whole goal may still win', () => {
+    // 100 trout cover about 7,000 of the 88,000 XP to Cooking 50: most food is bought either way, and tuna is measured faster from 30.
     const s = scenario({ fishing: 50, cooking: 30 }, { 'Raw trout': { bank: 100 } });
-    expect(s.pick).toBe('ck-trout');
-    expect(s.engine.plan(s.step).now.find(i => i.name === 'Raw trout')?.action?.kind).toBe('TAKE');
+    expect(s.pick).toBe('ck-tuna');
+    // Below tuna's level the banked trout are the recipe, taken from the bank.
+    const t = scenario({ fishing: 50, cooking: 25 }, { 'Raw trout': { bank: 100 } });
+    expect(t.pick).toBe('ck-trout');
+    expect(t.engine.plan(t.step).now.find(i => i.name === 'Raw trout')?.action?.kind).toBe('TAKE');
   });
   it('cooking owned tuna does not invent a Fishing prerequisite', () => {
     const s = scenario({ fishing: 1, cooking: 30 }, { 'Raw tuna': { carried: 26 } });

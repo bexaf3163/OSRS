@@ -188,8 +188,15 @@ const rateLow = (m: TrainingMethod): number | null => (m.xph ? m.xph[0] : null);
 const EFFORT_FACTOR: Record<Effort, number> = { afk: 1, low: 1, medium: 0.9, high: 0.6 };
 const COST_FACTOR: Record<MethodCost, number> = { profit: 1, free: 1, cost: 0.85 };
 const RISK_FACTOR: Record<Risk, number> = { none: 1, low: 0.95, high: 0.5 };
-/** Hours a method whose items are missing loses to getting them (a bank or exchange stop). */
+/** Hours a method whose items are missing loses to getting them: the trip to a shop or the exchange and the wait for the offers. */
 export const SETUP_HOURS = 0.25;
+/**
+ * Hours a method loses when everything it lacks is in the bank: a bank stop, shorter than buying (a model assumption, the acquisition detour of the
+ * hardening brief), so supplies the player owns are used before new purchases when the speeds are close.
+ */
+export const BANK_SETUP_HOURS = 0.1;
+const setupHours = (v: MethodView): number =>
+  v.status !== 'PREP' ? 0 : v.missing.every((n) => n.state === 'BANK') ? BANK_SETUP_HOURS : SETUP_HOURS;
 /** A later method replaces the one in hand on the path only when it is this much better in practice. */
 export const SWITCH_GAIN = 1.1;
 
@@ -239,7 +246,7 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number, coin
       const pb = practicalRate(b.method);
       if (pa && pb && xpLeft && xpLeft > 0) {
         // The hours to the goal, less what the banked drops are worth in hours (lootValue.ts: the same rule as the fight plans).
-        const hours = (v: MethodView, p: number) => xpLeft / p + (v.status === 'PREP' ? SETUP_HOURS : 0);
+        const hours = (v: MethodView, p: number) => xpLeft / p + setupHours(v);
         const coinsA = netCoinsPerHour(a.method);
         const coinsB = netCoinsPerHour(b.method);
         // Coins on both sides or on neither: a method whose cost is not known is never compared as free.
@@ -336,7 +343,8 @@ export interface AdviceInput {
   restriction?: TradeRestriction['state'];
 }
 
-const rateCache = new Map<string, TrainingMethod>();
+// Per method object (a custom list may reuse an id with other figures), then per state, prices and rules.
+const rateCache = new WeakMap<TrainingMethod, Map<string, TrainingMethod>>();
 /** Each price snapshot by its own identity: two views that share a timestamp but not their prices are never confused. */
 const priceIds = new WeakMap<PriceView, number>();
 let nextPriceId = 1;
@@ -354,7 +362,9 @@ export function personalize(methods: readonly TrainingMethod[], skill: string, s
   return methods.map((m) => {
     if (!m.skills.includes(skill) || m.kind !== 'method') return m;
     const key = `${m.id}|${skill}|${rateKeyOf(state)}|${priceKeyOf(prices)}|${restriction ?? '-'}|${objective ?? '-'}`;
-    const hit = rateCache.get(key);
+    const cache = rateCache.get(m) ?? new Map<string, TrainingMethod>();
+    if (!rateCache.has(m)) rateCache.set(m, cache);
+    const hit = cache.get(key);
     if (hit) return hit;
     const r = methodRate(m, skill, state, { prices, restriction, objective });
     const out: TrainingMethod = r ? {
@@ -365,8 +375,8 @@ export function personalize(methods: readonly TrainingMethod[], skill: string, s
       ...(r.upgrades?.length ? { upgrades: r.upgrades } : {}),
       ...(r.spot ? { spot: r.spot, where: r.spot.how === 'bank' && r.spot.bank ? `${r.spot.label} (bank at ${r.spot.bank})` : r.spot.label } : {}),
     } : m;
-    if (rateCache.size > 500) rateCache.clear();
-    rateCache.set(key, out);
+    if (cache.size > 50) cache.clear();
+    cache.set(key, out);
     return out;
   });
 }

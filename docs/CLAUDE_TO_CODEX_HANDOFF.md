@@ -32,6 +32,7 @@ Read this first. Claude keeps this file current after every release. It says wha
 | Fight plan (route combat steps) | `combatRoute/plans.ts`, `pick.ts`, `selection.ts`; UI `CombatRoute.tsx` (verdict + ≤4 rows) | scoring: time × penalty + kills − loot/rate; `gainOver` margins |
 | Method rates (one entry) | `methodRates.ts` `methodRate` → `combatRates.combatRate` or `skillingRates.gatherRate`; shared `ModelRate`/`Market` (prices, restriction, objective); `rateKeyOf` cache key without position | — |
 | Gathering (WC/Fishing/Mining) | `skillingRates.ts` (`gatherRate`, best of all spots, `toolFor`, aggression), `skillChance.ts` (wiki formula + cascade), `bankTrip.ts` (shared with combat), `aggression.ts` | `scripts/skilling.defs.json` → `npm run build-skilling` (`scripts/build-skilling.ts`, uses `scripts/wiki.ts`) → `skilling.json`; tests/skillingRates.test.ts (wiki examples, synthetic registry, catalogue sync) |
+| Processing (Smithing/Cooking/Crafting) | `processingRates.ts` (`processRate`: best recipe open at the level × best station; bag = whole actions; ticks at the Make-X pace; success chart or flat chance; materials cost / product gain by `supplyPrice` / `dropValue`), `bankTrip.tripMinutes` (shared trip rule, `BANK_VISIT` for a processing visit) | `scripts/processing.defs.json` → `npm run build-processing` (`scripts/build-processing.ts`: wiki `{{Recipe}}`, success charts, Infobox stackable, Furnace/Anvil location tables via `wikitables`/`mapPoint`, Fire ObjectLocLines) → `processing.json`; tests/processingRates.test.ts (wiki guide calibration, synthetic registry) |
 | Skills page ranking | `trainingRouter.ts` (`personalize`, `compare`, `buildPath`, `adviseTraining`), `methodPick.ts` (picks carry the engine's `spot`/`where`/`warning`; `pickedMethodId`) | `trainingMethods.json`. Combat methods get model rates from `combatRates.ts` (melee/ranged/magic + loot + arrow/rune cost). Sync test: every trainer spot has a Skills method and vice versa |
 | Ranged arrows | `rangedAmmo.ts` (`rangedHit`, `arrowsForGoal`) | `rangedGear.json` |
 | Travel | `travel.ts`, `travelInput.ts` (`networkUnlocked`), `detours.ts` (GE priority by place) | `transport.json` (`unlocks`, `oneTime` checked against the route by a test), `transportNet.json` |
@@ -96,6 +97,20 @@ Read this first. Claude keeps this file current after every release. It says wha
   - **Approximation:** the only Dwarven Mine way in in the place data is the Ice Mountain ladder (3018,3450), so the Falador East Bank trip is long. Adding the Falador staircase to majorLocations.json (wiki-verified) and using it as the entrance would shorten it.
   - **Tests:** `tests/skillingRates.test.ts` "a spot under the ground (synthetic)"; `tests/funding/gatherAdapter.test.ts`.
 
+- **2.79.0, the processing engine (block e, first part):** Smithing, Cooking and Crafting methods get per-player rates and a station, the same way as gathering.
+  - **Registry:** `processing.json` is built from the wiki by `build-processing`. It holds 21 recipes for 13 catalogue methods: bronze axe/scimitar/warhammer, bronze–adamant platebodies, chicken/beef/trout/tuna, leather gloves/boots, gold ring/necklace/amulet, sapphire–diamond. Stations: Edgeville/Al Kharid/Falador furnaces and the Varrock anvil building, each with the wiki's tiles to the bank, plus the Barbarian Village fire → Edgeville Bank.
+  - **Builder checks:** the recipe's facility matches the station kind, every material says stackable yes/no, a cooking recipe has a fire-or-range chart line, and the methods are in sync with the catalogue and its skill.
+  - **Engine:** `processRate`, wired as the third engine in `methodRate`. Rate = whole actions a bag allows (tools and stackables take a slot each) × ticks + one bank trip per bag (`tripMinutes(bankTiles, 0, BANK_VISIT)` or `bankTrip(fire, BANK_VISIT)`), × success chance.
+  - **Coins:** materials at `supplyPrice` (cost); the product at `dropValue` (gain, after tax; 0 when restricted). Either unknown → `costPerHour` null and no gain shown.
+  - **Score:** same as gathering — time per XP less `coinTimeShare`, nothing on Fastest. Ties go to the station nearest the method's place.
+  - **Calibration (tests):** the wiki guide rates (bronze axe 13.5k … adamant platebody 250k at Varrock West; gold items 1,350/h at Edgeville) lie within the model's range, with the fast end within 10%.
+  - **Shared rule change:** `bankTrip`/`tripMinutes` take the bank seconds as a parameter. Combat keeps its 20–45 s, processing uses 3–15 s.
+  - **Not yet:** Money page processing methods (smelt-steel-bars, pies…) on this engine; Firemaking (lines and moving), Runecraft, Prayer, Magic utility, wine; cook-on-the-spot (fishing + fire as one plan).
+  - **Ranking fixes found by it (`trainingRouter`):**
+    - Setup time by what is missing: a stop that only takes from the bank costs `BANK_SETUP_HOURS` (0.1 h); anything to buy costs `SETUP_HOURS` (0.25 h, unchanged). Owned supplies win at close speeds (`tests/trainingPriority.test.ts`).
+    - The rate cache is keyed by the method object, then the state/prices/rules key. A custom list reusing an id no longer reads another method's rate.
+    - One label rule for a method's point (`methodStep.pointLabel`): "Cooking: Tuna — Barbarian Village fire" whether the place is the catalogue's or a station the engine picked.
+    - Test premise updated: `skillHandover` "owned banked recipe": 100 banked trout at Cooking 30 cover 7k of 88k XP, and tuna is now measured faster, so tuna is picked; at 25 the banked trout are taken.
 
 ## 5. In progress (Claude)
 
@@ -106,7 +121,7 @@ Still open in the brief:
 - (b) Done in 2.78.1 (see the reserves entry above).
 - (c) Done (2.78.1 gathering adapter, 2.78.2 Dwarven Mine spots). Combat already shared `estimateStep`.
 - (d) Calibration against a real session (NOT REACHABLE while the owner is away).
-- (e) Processing skills on the engine.
+- (e) Processing: Smithing/Cooking/Crafting done in 2.79.0. Left: Money page processing methods on the engine; Firemaking, Runecraft, Prayer, Magic utility, wine; cook-on-the-spot.
 
 ## 5b. What each engine knows, assumes and does not support
 
@@ -115,6 +130,7 @@ Still open in the brief:
 | Combat estimate (`combatEstimate.ts`) | Monster stats, max hits, attack speeds, XP bonus (wiki infobox via build-combat-foes); food heals (wiki) | levels, worn gear, measured pace (combat log) | time between kills `[2,6]` s, eat threshold `max(2×maxHit, special+1)`, 15% slow-end margin, competition not modelled | prayer flicking, safespot pathing beyond the listed ones, manual special-attack avoidance, multi-combat beyond `groupAggro` |
 | Combat spots / fight plans (`combatRoute/*`) | spawns (LocLine), always-drops, named banks, quest gates (wiki + route) | bank contents, quests done, adopted plan | bank trip = straight line (fast) / ×1.4 walking (slow) + 20–45 s banking + ladders; `SWITCH_MINUTES` 6; coins valued at the cowhide baseline, credited at most half the time; food priced at its buy price even when owned | travel by teleports for bank trips, loot beyond the sell drop, boss respawn variance beyond the listed range |
 | Gathering (`skillingRates.ts`) | success low/high per tool (Skilling success chart), roll ticks (Action lengths), XP/level/respawn (info templates), tree despawn timers, spot spawns and counts, aggressive NPCs' levels and spawns (wiki, build-skilling) | levels, tools owned (bag/worn/bank), combat level for aggression | moving between trees 2.4–6 s, rocks 0.6–1.8 s, fishing spot moves every 250–530 ticks costing 3–8 s, drop 0.3–0.6 s an item, 10% slow-end margin, tool worn when Attack allows | competition and Forestry events, the Al Kharid toll and Port Sarim deposit boxes, banking by boat (Musa Point is drop-only), oak/normal trees without wiki spawns (drop-only), aggression tolerance after 10 min, cook-on-the-spot (next) |
+| Processing (`processingRates.ts`) | recipe level/XP/ticks/tools/materials/output ({{Recipe}}), burn chart (cooking), smelt chance note, material stackability, furnace/anvil map point and the wiki's distance from the bank, fire spawns (wiki, build-processing) | levels, account mode, prices, restriction, objective | bank visit 3–15 s (calibrated: the wiki guide figures lie within the range, fast end within 10%), walking pace/winding at the slow end (shared), 10% slow-end margin, thread counted one per item (the wiki recipe; really 1 per 5) | ranges in kitchens (no wiki coordinates: cooking uses the Barbarian Village fire), wine and pies (not in the registry yet), Firemaking, Runecraft, Prayer, Magic utility, cook-on-the-spot after fishing, tools' ownership (prep lists them; speed does not depend on them) |
 | Ranking (`trainingRouter.ts`) | catalogue brackets from the wiki guides | measured XP/h overrides | the 5% band as a tie on hours; `SWITCH_GAIN`; future path legs re-rated every 5 levels (`FORECAST_STEP`), with today's gear and tools | gear bought on the way (an upgrade's time saved is not ranked yet) |
 | Preparation / safety (`prepPlan.ts`, `readinessVerdict.ts`) | hazards from threats.json hit labels; items/quantities from the route | bag/bank/worn/noted from the plugin; untracked rows stay UNKNOWN | — | hazards other than dragonfire need a new `SAFETY_RULES` entry (a new mechanic, not data) |
 | Value of coins (`lootValue.ts`) | GE prices and tax (live board, `netEach`), trade restriction list | restriction state | cowhide baseline: `fundingMethods.json` typical 260 hides/h × net hide price; it is NOT this character's best earning method, so it is capped (`COIN_SHARE_CAP` 0.5) and never used on the fastest objective | the cost of buying tools or gear is not yet in the ranking (open, block 1 continuation) |
@@ -146,3 +162,10 @@ cd runelite-bridge && JAVA_HOME=<jdk17> ./gradlew -q test
 npm run test:ui            # long; the browser UI suite
 ```
 Fixture docs: `UPDATE_FIXTURES=1 npx vitest run tests/defaultPlans.test.ts tests/skillsCoverage.test.ts`. A release is a `package.json` version push to main. Bump `package.json`, `package-lock.json` (2 places), line 1 of `CLAUDE_REDESIGN_HANDOFF.md` and `BridgeServer.PLUGIN_VERSION`. Add `release-notes/vX.md`. Then watch the Checks and Release workflows.
+
+Release receipts (Checks and Release both green; the portable EXE's sha256 as published):
+
+| Version | Commit | Portable EXE | sha256 |
+|---|---|---|---|
+| 2.78.0 | a45a7b6 | OSRS-Put-2.78.0-portable.exe, 102,063,235 B | e341aaee0d314f215e2af6db3388554d9d9be3f1d9e58468b8ba6ce85878da1d |
+| 2.78.1 | 6a95df7 | OSRS-Put-2.78.1-portable.exe, 102,063,845 B | 4720cb99da427d0e6051f212cbeee87a7a747df03e0883e0bb73c01fdf4e5fa3 |

@@ -2,7 +2,7 @@
 // material cost - instead of the old "Calm" default that put AFK methods first. An explicit "Efficient" from an older save stays as "Fastest".
 
 import { describe, expect, it } from 'vitest';
-import { adviseTraining, practicalRate, SETUP_HOURS, type TrainingMethod } from '../src/lib/trainingRouter';
+import { adviseTraining, BANK_SETUP_HOURS, practicalRate, SETUP_HOURS, type TrainingMethod } from '../src/lib/trainingRouter';
 import { buildPlayerState } from '../src/lib/playerState';
 import { priorityOf } from '../src/lib/playStyle';
 import { DEFAULT_FEATURES, parseFeatures } from '../src/lib/features';
@@ -99,6 +99,20 @@ describe('balanced counts the setup and does not switch for a sliver', () => {
     const hoursBetter = 300 / practicalRate(better)! + SETUP_HOURS;
     expect(hoursReady).toBeLessThan(hoursBetter);
     expect(r.best?.method.id).toBe('ready-slow');
+  });
+
+  it('supplies in the bank beat supplies to buy at the same speed: a bank stop (BANK_SETUP_HOURS) is shorter than buying', () => {
+    const bank: OwnedState = { bankSeen: true, items: new Map([
+      ['raw trout', { name: 'Raw trout', carried: 0, noted: 0, bank: 5000 }], ['raw pike', { name: 'Raw pike', carried: 0, noted: 0, bank: 0 }],
+    ]) };
+    const banked = method({ id: 'banked', xph: [20_000, 20_000], needs: [{ type: 'item', name: 'Raw trout', count: 26 }] });
+    const bought = method({ id: 'bought', xph: [20_500, 20_500], needs: [{ type: 'item', name: 'Raw pike', count: 26 }] });
+    const r = adviseTraining({ skill: 'fishing', target: 40, state: stateAt('fishing', 20, bank), mode: 'f2p', style: 'chill', priority: 'balanced', methods: [bought, banked] });
+    expect(r.best?.method.id).toBe('banked');
+    // A clearly faster method still wins: the detour is a fixed cost, not a ban.
+    const faster = method({ id: 'bought', xph: [40_000, 40_000], needs: [{ type: 'item', name: 'Raw pike', count: 26 }] });
+    expect(adviseTraining({ skill: 'fishing', target: 40, state: stateAt('fishing', 20, bank), mode: 'f2p', style: 'chill', priority: 'balanced', methods: [faster, banked] }).best?.method.id).toBe('bought');
+    expect(BANK_SETUP_HOURS).toBeLessThan(SETUP_HOURS);
   });
 
   it('the path keeps the method in hand when a new unlock is barely better, and switches when it is clearly better', () => {
