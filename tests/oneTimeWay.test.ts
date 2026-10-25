@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { TRANSPORT, travelOptions, type TravelInput } from '../src/lib/travel';
-import { oneTimeUsedOf, travelInputOf } from '../src/lib/travelInput';
+import { fairyRingsUnlocked, networkUnlocked, oneTimeUsedOf, travelInputOf } from '../src/lib/travelInput';
+import { stepById } from '../src/data';
 import { judgeTransport, recommendedTransport } from '../src/lib/transport';
 
 // Count Check: one free teleport from the Lumbridge graveyard to the Stronghold of Security entrance, once, only if it was never entered.
@@ -63,5 +64,20 @@ describe('Count Check as a way to the Stronghold', () => {
     const opts = travelOptions(base({ to: at(3213, 3424), levels: { magic: 25 }, carried, bankSeen: true }));
     const { best } = judgeTransport(opts);
     expect(best?.id).not.toBe('count-check');
+  });
+});
+
+describe('route steps named by the transport data', () => {
+  it('every one-time way and every network unlock points at a real route step: a renumbered or retired step fails here, not in the game', () => {
+    const named = [...(TRANSPORT.oneTime ?? []).map((w) => [w.id, w.usedAfter]), ...Object.entries(TRANSPORT.unlocks ?? {}).map(([k, u]) => [k, u.afterStep])];
+    expect(named.length).toBeGreaterThan(1);
+    for (const [what, step] of named) expect(stepById.has(step), `${what}: ${step}`).toBe(true);
+  });
+
+  it('the fairy rings open only when their step is done', () => {
+    const at = TRANSPORT.unlocks!.fairyRings.afterStep;
+    expect(fairyRingsUnlocked({ steps: { [at]: 'done' } })).toBe(true);
+    expect(fairyRingsUnlocked({ steps: { [at]: 'skipped' } })).toBe(false);
+    expect(networkUnlocked('no-such-network', { steps: { [at]: 'done' } })).toBe(false);
   });
 });

@@ -90,10 +90,12 @@ export interface TravelInputSources {
 export const oneTimeUsedOf = (progress: { steps: Record<string, string | undefined> }): string[] =>
   (TRANSPORT.oneTime ?? []).filter((w) => progress.steps[w.usedAfter] === 'done' || progress.steps[w.usedAfter] === 'skipped').map((w) => w.id);
 
-/** The route unlocks the fairy rings at the completed S9-03 milestone; skipping is not an unlock. */
-export const FAIRY_RING_STEP = 'S9-03';
-export const fairyRingsUnlocked = (progress: { steps: Record<string, string | undefined> }): boolean =>
-  progress.steps[FAIRY_RING_STEP] === 'done';
+/** Whether a route step has opened a network (transport.json "unlocks"): its step done; skipping is not an unlock, an unknown network is closed. */
+export const networkUnlocked = (network: string, progress: { steps: Record<string, string | undefined> }): boolean => {
+  const at = TRANSPORT.unlocks?.[network]?.afterStep;
+  return at !== undefined && progress.steps[at] === 'done';
+};
+export const fairyRingsUnlocked = (progress: { steps: Record<string, string | undefined> }): boolean => networkUnlocked('fairyRings', progress);
 
 export function travelInputOf(s: TravelInputSources): TravelInput {
   const carried = s.gear && (s.gear.equipment || s.gear.inventory) ? [...(s.gear.equipment ?? []), ...(s.gear.inventory ?? [])] : null;

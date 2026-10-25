@@ -34,9 +34,10 @@ export const DETOUR_MAX_EXTRA_TILES = 60;
 export const DETOUR_NEAR_TILES = 30;
 /** A later separate trip must be at least this many tiles longer than the stop now, or it saves nothing worth a line. */
 export const DETOUR_MIN_SAVING_TILES = 40;
-/** The steps where buying in bulk at the exchange comes first: the Varrock shopping stages. */
-export const GE_PRIORITY_STEPS: ReadonlySet<string> = new Set(['S2-01', 'S2-05']);
-/** Within this many tiles of the exchange its stop gets the priority on those steps. */
+/**
+ * A step that takes place within this many tiles of the exchange, with the player as close to it, buys there first and in bulk: the exchange sells
+ * everything, so one stop. By place, not by step: every step in or by Varrock gets it, a new one included.
+ */
 export const GE_PRIORITY_TILES = 90;
 /** Time at the counter: the walk in, the trade, the walk out. Counted once per stop. */
 export const STOP_SECONDS = 20;
@@ -80,7 +81,7 @@ export type DetourTravel = Pick<TravelInput, 'levels' | 'carried' | 'bankSeen' |
 
 /**
  * The best stop on the way, or null. from/to: where the player is and where the step goes; coins: what the bag holds (null: unknown).
- * stepId: the Varrock shopping steps give the exchange priority and an item of the current step is a blocker. travel: the bag, for the teleports.
+ * stepId: an item of the current step is a blocker; a step by the exchange gives it priority (GE_PRIORITY_TILES). travel: the bag, for the teleports.
  */
 export function procurementDetour(i: {
   plan: Pick<PrepPlan, 'now' | 'soon'>; stepId: string; from: Point; to: Point; coins: number | null; travel?: DetourTravel; onDecision?: (d: DetourDecision) => void;
@@ -124,7 +125,7 @@ export function procurementDetour(i: {
     // A blocker is an item of the current step that has to be in the bag before it can be done. For it the question is time: buying beats making it by hand.
     const blockers = g.items.filter((c) => c.line.priority === 'CRITICAL' && c.line.timing === 'NOW' && c.line.usedIn[0] === i.stepId);
     const manual = blockers.reduce((s, c) => s + (MANUAL[c.line.name]?.manualSeconds ?? 0), 0);
-    const bulk = GE_PRIORITY_STEPS.has(i.stepId) && exchange && toStop <= GE_PRIORITY_TILES;
+    const bulk = exchange && toStop <= GE_PRIORITY_TILES && dist(i.to, EXCHANGE) <= GE_PRIORITY_TILES;
     const extraSec = seconds(extra) + STOP_SECONDS;
     let savedSec = seconds(later - extra);
     if (manual > 0) {
@@ -150,7 +151,7 @@ export function procurementDetour(i: {
     const list = `${names.slice(0, 3).join(', ')}${names.length > 3 ? ` and ${names.length - 3} more` : ''}`;
     const tail = `(+${round10(extra)} tiles${reach.via ? `, by ${reach.via}` : ''}, saves ~${timeText(savedSec)})`;
     const text = actionType === 'WITHDRAW' ? `Bank: Withdraw ${list} at ${place} ${tail}` : `Detour: ${kinds.length === 1 ? VERB[kinds[0]] : 'Get'} ${list} at ${place} ${tail}`;
-    // The Varrock shopping steps put the exchange first when it is close; a blocker next; otherwise the cheapest extra walk, then the most items.
+    // A step by the exchange puts it first when it is close; a blocker next; otherwise the cheapest extra walk, then the most items.
     const score = (bulk ? 1_000_000 : 0) + (blockers.length ? 100_000 : 0) + g.items.length * 100 - extra;
     if (!best || score > best.score) best = { detour: { text, stop: g.stop, items: names, extraTiles: extra, actionType, ...(reach.via ? { via: reach.via } : {}) }, score };
   }

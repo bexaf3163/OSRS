@@ -41,9 +41,6 @@ export interface StyleInput {
   price: (name: string) => number | null;
 }
 
-/** Quests that go in the route as a step under another name: the game writes "Dragon Slayer I", the step is "The battle with the dragon Elvarg". */
-export const QUEST_STEP: Readonly<Record<string, string>> = { 'Dragon Slayer I': 'S5-08' };
-
 const cap = (s: string) => `${s[0].toUpperCase()}${s.slice(1)}`;
 
 /** What the option lacks by the known levels and quests. */

@@ -81,6 +81,8 @@ export const TRANSPORT = transportJson as unknown as {
   checked: string;
   teleports: Teleport[];
   oneTime?: OneTimeWay[];
+  /** Networks a route step opens, by the step that opens them (done, not skipped): data, so a new network or a moved milestone needs no code. */
+  unlocks?: Record<string, { afterStep: string; note?: string }>;
   boats: Boat[];
   staves: { list: RuneStaff[] };
   canoe: { stations: CanoeStation[]; types: CanoeType[]; axes: string[] };

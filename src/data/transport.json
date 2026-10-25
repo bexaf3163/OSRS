@@ -124,6 +124,12 @@
       { "item": "Kodai wand", "runes": ["water"], "members": true }
     ]
   },
+  "unlocks": {
+    "fairyRings": {
+      "afterStep": "S9-03",
+      "note": "The route opens the fairy rings at its Fairytale II milestone (the quest started, a Dramen staff in hand); a skipped step unlocks nothing."
+    }
+  },
   "oneTime": [
     {
       "id": "count-check",

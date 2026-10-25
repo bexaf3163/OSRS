@@ -6,7 +6,7 @@
 // shown, counts checked items in place and is never a chance of survival; no kit is promised to keep anyone alive.
 
 import type { OwnedState } from './checklist';
-import { BAG_SLOTS, SAFETY, lineAmount, safetyBlockers, unitsOf, type PrepLine, type PrepPlan } from './prepPlan';
+import { BAG_SLOTS, lineAmount, safetyBlockers, safetyRulesOf, unitsOf, type PrepLine, type PrepPlan } from './prepPlan';
 import type { CombatReadiness } from './combatReadiness';
 
 export type ReadinessLevel = 'READY' | 'READY_CAUTIONS' | 'PREP_NEEDED' | 'NOT_MET' | 'UNKNOWN';
@@ -141,7 +141,7 @@ export function readinessVerdict(i: VerdictInput): ReadinessVerdict {
   const access = plan.blockers.filter((b) => !safetyLabels.has(b.label));
   const safetyBlocks = plan.blockers.filter((b) => safetyLabels.has(b.label));
   // A shield the rule needs is carried, but a two-handed weapon is worn: it cannot be worn with it, so it protects nothing.
-  const shieldRule = (SAFETY[plan.stepId] ?? []).find((r) => r.names.some((n) => /shield|ward/i.test(n)));
+  const shieldRule = safetyRulesOf(plan.stepId).map((r) => r.rule).find((r) => r.names.some((n) => /shield|ward/i.test(n)));
   if (shieldRule && i.worn?.twoHanded && !safetyBlocks.length) {
     safetyBlocks.push({
       label: `${i.worn.weapon ?? 'Your weapon'} is two-handed: it leaves no room for the ${shieldRule.names[0]}`,

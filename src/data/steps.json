@@ -2874,7 +2874,7 @@
         "text": "Wear the iron chainbody and the bronze helm: the guard will let you into the fortress. The Black Knights (level 33) inside attack: bring 5 trout."
       }
     ],
-    "reward": "3 QP, 2 500 Coins.",
+    "reward": "3 QP, 2,500 Coins.",
     "doneWhen": "The quest is green.",
     "inGame": {
       "npcNames": [
@@ -5612,7 +5612,7 @@
       }
     ],
     "safespot": "All the opponents, the scorpion (44), the ogre (63) and the Bouncer (137), can be hit from cover with a bow or magic: they all fight only up close. General Khazard (142) is optional: you do not need to kill him for the quest.",
-    "reward": "2 QP, 12 175 XP Attack, 2 175 XP Thieving, 1 000 Coins.",
+    "reward": "2 QP, 12,175 XP Attack, 2,175 XP Thieving, 1,000 Coins.",
     "doneWhen": "The quest is green.",
     "inGame": {
       "npcNames": [

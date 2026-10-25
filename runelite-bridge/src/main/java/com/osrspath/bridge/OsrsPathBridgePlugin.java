@@ -1482,11 +1482,12 @@ public class OsrsPathBridgePlugin extends Plugin implements BridgeServer.Listene
 		SwingUtilities.invokeLater(() -> p.show(shown));
 	}
 
-	/** Demon Slayer, the fight with Delrith: the words to say in order, read from the account's own varbits (they are random per account). */
+	/** Demon Slayer, the fight with Delrith: the words to say in order, read from the account's own varbits (they are random per account). Keyed by the quest stage
+	 * (killDelrithStep), not by a route step code, so a renumbered or moved step keeps it. */
 	private String incantationHint(StepGuide.View v)
 	{
 		StepGuide.StageView sv = v.getStage();
-		if (target == null || !"S3-03".equals(target.getStepId()) || sv == null || sv.getSteps() == null || sv.getCursor() < 0 || sv.getCursor() >= sv.getSteps().size()
+		if (target == null || sv == null || sv.getSteps() == null || sv.getCursor() < 0 || sv.getCursor() >= sv.getSteps().size()
 			|| !"killDelrithStep".equals(sv.getSteps().get(sv.getCursor()).getK()) || client.getGameState() != GameState.LOGGED_IN)
 		{
 			return null;

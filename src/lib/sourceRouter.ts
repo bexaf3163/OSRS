@@ -84,13 +84,17 @@ export function unusableSpawn(spawn: string, mode: 'f2p' | 'members'): boolean {
  * Duke Horacio gives the Anti-dragon shield during Dragon Slayer I and after it (OSRS Wiki, "Duke Horacio", "Anti-dragon shield"). Lumbridge is also
  * where the free Home Teleport lands, so the giver comes before any shop or the exchange however far the player is.
  */
-const FREE_GIVERS: Record<string, { stepId: string; note: string }> = {
-  'anti-dragon shield': { stepId: 'S5-02', note: 'during or after Dragon Slayer I; Home Teleport takes you to Lumbridge' },
+export const FREE_GIVERS: Record<string, { npc: string; note: string }> = {
+  'anti-dragon shield': { npc: 'Duke Horacio', note: 'during or after Dragon Slayer I; Home Teleport takes you to Lumbridge' },
 };
+
+/** The route step that visits an NPC: the first whose own NPC it is. */
+export const giverStepOf = (npc: string) =>
+  (stepsJson as { id: string; npc?: { nameEn?: string }; mapLocation?: WorldPoint & { label: string } }[]).find((x) => x.npc?.nameEn === npc && x.mapLocation);
 
 function freeGiver(name: string, here: WorldPoint | undefined): SourceOption | null {
   const g = FREE_GIVERS[nameKey(name)];
-  const step = g && (stepsJson as { id: string; mapLocation?: WorldPoint & { label: string } }[]).find((x) => x.id === g.stepId);
+  const step = g && giverStepOf(g.npc);
   if (!g || !step?.mapLocation) return null;
   const p = step.mapLocation;
   return {

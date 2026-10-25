@@ -10,6 +10,8 @@ import { useStore } from '../store';
 import { useBridge } from '../bridge';
 import { useFeatures } from '../lib/features';
 import { isClosed } from '../lib/next-step';
+import { coinRewardAhead } from '../lib/stepRewards';
+import { allSteps } from '../data';
 import { formatGp } from '../lib/shopping';
 import { usePriceView } from '../lib/funding/usePriceView';
 import { itemPrice } from '../lib/itemPrice';
@@ -51,7 +53,7 @@ export function UpgradePrompt({ step }: { step: Step }) {
   const level = (stats ?? {})[rec.skill] ?? progress.levels[rec.skill];
   const skillName = SKILL_LABEL[rec.skill];
   const where = rec.shop ? `${rec.shop} • ${rec.city}` : 'Grand Exchange';
-  const s1_09 = step.stage === 1 && !isClosed(progress, 'S1-09');
+  const coinStep = coinRewardAhead(allSteps, step.stage, (id) => isClosed(progress, id));
 
   return (
     <section className={`upgrade ${rec.status === 'UPGRADE_NOT_AFFORDABLE' ? 'is-poor' : ''}`} aria-label="Speed upgrade">
@@ -79,7 +81,7 @@ export function UpgradePrompt({ step }: { step: Step }) {
           <p className="small"><strong>💰 Not enough coins:</strong> ~{formatGp(rec.approxCost ?? 0)} gp needed ({rec.priceLabel ?? 'estimate'}), you have {formatGp(rec.coins ?? 0)} gp with the bank. It is too early to go to the shop.</p>
           <p className="small muted">How to make it up quickly — guidelines, not a promised income:</p>
           <ul className="small">
-            {s1_09 && <li>Complete <a href="#/step/S1-09">Stronghold of Security (S1-09)</a> — it gives 10,000 coins from the chests.</li>}
+            {coinStep && <li>Complete <a href={`#/step/${coinStep.step.id}`}>{coinStep.step.title}</a> — it gives {formatGp(coinStep.coins)} coins.</li>}
             <li>Collect feathers from the chickens at the Lumbridge farm and sell them on the Grand Exchange.</li>
             <li>Sell on the Grand Exchange what you will not need on the route.</li>
           </ul>

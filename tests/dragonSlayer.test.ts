@@ -6,7 +6,9 @@ import { buildPlayerState } from '../src/lib/playerState';
 import { createReadinessEngine } from '../src/lib/readinessEngine';
 import { emptyProgress } from '../src/lib/progress';
 import { nameKey, type OwnedItem, type OwnedState } from '../src/lib/checklist';
-import { safetyBlockers, SAFETY, type PrepPlan } from '../src/lib/prepPlan';
+import { safetyBlockers, safetyRulesOf, SAFETY_RULES, type PrepPlan } from '../src/lib/prepPlan';
+import { stepFightNames } from '../src/lib/fightEstimate';
+import { THREATS } from '../src/lib/foodAdvice';
 
 // Dragon Slayer I (S5-01..S5-09): the stage data, the 32-QP gate, the shield check before the ship, the map pieces.
 
@@ -95,7 +97,7 @@ describe('Dragon Slayer I: the checks before the quest and before the ship', () 
 
   it('boarding without the Anti-dragon shield is a hard block, in the bank it says so, in the bag or unknown it does not block', () => {
     const none = planFor('S5-08', { 'Anti-dragon shield': { carried: 0, bank: 0 } });
-    const safety = (p: PrepPlan) => p.blockers.filter((b) => b.detail?.startsWith('Do not board'));
+    const safety = (p: PrepPlan) => p.blockers.filter((b) => b.detail?.startsWith('Do not go without it'));
     expect(safety(none)).toHaveLength(1);
     const inBank = planFor('S5-08', { 'Anti-dragon shield': { carried: 0, bank: 1 } });
     expect(safety(inBank)[0].label).toMatch(/in the bank/);
@@ -104,12 +106,23 @@ describe('Dragon Slayer I: the checks before the quest and before the ship', () 
     expect(safety(planFor('S5-08', {}, { bankSeen: false }))).toEqual([]);
   });
 
-  it('the rule holds only for the voyage step, and any dragonfire shield satisfies it', () => {
-    expect(Object.keys(SAFETY)).toEqual(['S5-08']);
+  it('the rule follows the opponent, not a step: any fight whose attack the wiki labels dragonfire, and any dragonfire shield satisfies it', () => {
+    expect(allSteps.filter((s) => safetyRulesOf(s.id).length).map((s) => s.id)).toEqual(['S5-08']);
+    expect(safetyRulesOf('S5-08')[0].detail).toBe("Do not go without it: Elvarg's dragonfire hits up to 70. Duke Horacio in Lumbridge Castle gives it free.");
     const line = (name: string, where: 'MISSING' | 'INVENTORY') => ({ name, where }) as never;
     expect(safetyBlockers('S5-07', [line('Anti-dragon shield', 'MISSING')])).toEqual([]);
     expect(safetyBlockers('S5-08', [line('Dragonfire shield', 'INVENTORY')])).toEqual([]);
     expect(safetyBlockers('S5-08', [line('Anti-dragon shield', 'MISSING')])).toHaveLength(1);
+  });
+
+  it('every step that meets a hazard asks for its protection: a new dragon fight without a shield in its items fails here', () => {
+    for (const step of allSteps) {
+      for (const rule of SAFETY_RULES) {
+        const hazard = stepFightNames(step).some((f) => (THREATS[f]?.hits ?? []).some((h) => rule.hazard.test(h.label)));
+        if (!hazard) continue;
+        expect(step.itemsRequired?.some((i) => rule.names.includes(i.nameEn)), `${step.id} needs one of ${rule.names.join(', ')}`).toBe(true);
+      }
+    }
   });
 
   it('the recommended loadout is on the step: weapon, food, energy and strength potions', () => {

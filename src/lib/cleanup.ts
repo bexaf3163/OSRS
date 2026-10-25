@@ -11,6 +11,8 @@ import type { Step } from '../types';
 import { nameKey } from './checklist';
 import { FOODS } from './foodAdvice';
 import { questUsing } from './questItems';
+import { questStepOf } from './questSteps';
+import { allSteps } from '../data';
 import { aggregateShopping, REUSABLE, type ShoppingLine } from './shopping';
 import { isRestrictedItem } from './tradeRestriction';
 
@@ -114,21 +116,21 @@ export interface Obsolete {
   action: 'drop' | 'destroy';
   why: string;
   recovery: string;
-  /** The route steps (quests) that must be closed first: before them the item may still be needed. */
-  after: string[];
+  /** The quests that must be done first, by the game's name (lib/questSteps.ts finds their route steps): before them the item may still be needed. */
+  afterQuests: string[];
   /** Where it was checked. */
   source: string;
 }
 export const OBSOLETE: Readonly<Record<string, Obsolete>> = {
   // OSRS Wiki, "Research package": untradeable, "Destroy" option, only used to be delivered to Aubury in Rune Mysteries.
   'research package': {
-    action: 'destroy', after: ['S2-06'], source: 'OSRS Wiki: Research package',
+    action: 'destroy', afterQuests: ['Rune Mysteries'], source: 'OSRS Wiki: Research package',
     why: 'Only used in Rune Mysteries, which is done; it cannot be traded or sold.',
     recovery: "Archmage Sedridor at the Wizards' Tower gives another.",
   },
   // OSRS Wiki, "Ghost's skull": untradeable, "used only in The Restless Ghost"; dropping it destroys it.
   "ghost's skull": {
-    action: 'drop', after: ['S1-06'], source: "OSRS Wiki: Ghost's skull",
+    action: 'drop', afterQuests: ['The Restless Ghost'], source: "OSRS Wiki: Ghost's skull",
     why: 'Only used in The Restless Ghost, which is done; it cannot be traded or sold. Dropping it destroys it.',
     recovery: 'It cannot be picked up again after the quest, and nothing else uses it.',
   },
@@ -288,7 +290,7 @@ export function cleanupAdvice(i: CleanupInput): CleanupResult {
     }
     const gone = OBSOLETE[key];
     if (gone && keepQty === 0) {
-      if (gone.after.every((id) => i.closedSteps?.has(id))) {
+      if (gone.afterQuests.every((q) => { const s = questStepOf(allSteps, q); return s !== undefined && i.closedSteps?.has(s.id) === true; })) {
         stacks.forEach((s) => recs.push(make(s, { action: 'drop', reason: `${gone.why}${gone.action === 'destroy' ? ' Use Destroy.' : ' Drop it.'}`, recovery: gone.recovery, short: 'its quest is done, no other use' })));
       } else {
         reviewAll('A quest item: its quest is not finished in your route, so it may still be needed.', 'its quest is not done yet');

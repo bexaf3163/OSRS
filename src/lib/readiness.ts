@@ -19,6 +19,7 @@ import { currentLoadoutStep, loadoutPhase } from './loadoutPhase';
 import { npcSpot } from './stepPlaces';
 import type { QuestInstruction } from '../services/runeliteBridge';
 import type { PriceView } from './funding/quotes';
+import { questStepOf } from './questSteps';
 
 export type ReadinessStatus =
   | 'READY'
@@ -99,10 +100,7 @@ export function nearestBank(step: Step): Place | null {
 }
 const dist = (a: { x: number; y: number }, b: { x: number; y: number }) => (a.x - b.x) ** 2 + (a.y - b.y) ** 2;
 
-/** The step where a quest is counted (the auto-tick QUEST_COMPLETED by the quest name). */
-export function questStepOf(steps: Step[], quest: string): Step | undefined {
-  return steps.find((s) => s.inGame?.completionTrigger?.type === 'QUEST_COMPLETED' && s.inGame.completionTrigger.questName === quest);
-}
+export { questStepOf } from './questSteps';
 
 /** A skill's level from the single state: from the game, otherwise the one entered in the profile, otherwise unknown. */
 function levelFrom(state: PlayerState, skill: string): { level: number; source: 'game' | 'profile' } | null {

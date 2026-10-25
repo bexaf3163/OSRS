@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { allSteps } from '../src/data';
 import { cleanupAdvice, emptyCleanupPrefs, OBSOLETE, recLabel, type CleanupInput, type CleanupPrefs } from '../src/lib/cleanup';
 import type { Step } from '../src/types';
+import { questStepOf } from '../src/lib/questSteps';
 
 const open = (...ids: string[]): Step[] => ids.map((id) => allSteps.find((s) => s.id === id)!);
 const PRICES: Record<string, number> = { 'Ball of wool': 60, 'Oak logs': 90, 'Bronze bar': 30, 'Cowhide': 150, 'Yew logs': 300 };
@@ -194,7 +195,10 @@ describe('inventory cleanup', () => {
   it('only checked items are ever advised to drop; the table is a verified subset', () => {
     for (const [k, v] of Object.entries(OBSOLETE)) {
       expect(k).toBe(k.toLowerCase());
-      expect(v.after.length).toBeGreaterThan(0);
+      // Each names its quests by the game's name, and every one of them is a quest the route counts (lib/questSteps.ts): a typo or a quest
+      // the route lacks would keep the item forever, so it fails here instead.
+      expect(v.afterQuests.length).toBeGreaterThan(0);
+      for (const q of v.afterQuests) expect(questStepOf(allSteps, q), `${k}: ${q} is a route quest`).toBeDefined();
       expect(v.source).toMatch(/Wiki/);
       expect(v.why.length).toBeGreaterThan(10);
       expect(v.recovery.length).toBeGreaterThan(3);

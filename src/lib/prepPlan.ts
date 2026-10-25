@@ -11,7 +11,9 @@
 // It buys nothing: the player decides and confirms.
 
 import type { Progress, Step, WikiItemDetail } from '../types';
-import { itemById } from '../data';
+import { itemById, stepById } from '../data';
+import { THREATS } from './foodAdvice';
+import { stepFightNames } from './fightEstimate';
 import recipesJson from '../data/recipes.json';
 import { npcSpot } from './stepPlaces';
 import type { NavTargetPayload } from '../services/runeliteBridge';
@@ -238,16 +240,31 @@ function sourceAction(src: SourceOption | null, name: string, toGet: number, coi
   };
 }
 
-/** An item the step must not start without: not a level or a quest, but a death or a lost trip when missing. */
-interface SafetyRule { names: string[]; label: string; detail: string }
-export const SAFETY: Record<string, SafetyRule[]> = {
-  // Boarding the ship for Crandor: Elvarg's fire hits up to 70 without the shield.
-  'S5-08': [{
-    names: ['Anti-dragon shield', 'Dragonfire shield', 'Dragonfire ward', 'Ancient wyvern shield'],
-    label: 'No Anti-dragon shield with you',
-    detail: "Do not board the ship without it: Elvarg's fire hits up to 70. Duke Horacio in Lumbridge Castle gives it free.",
-  }],
-};
+/**
+ * An item no fight of a certain kind may start without: not a level or a quest, but a death when missing. A rule is keyed by the hazard, as the wiki
+ * labels the opponent's attack (threats.json, build-threats), never by a step: every step whose fight has that attack gets it, a new one included.
+ */
+interface SafetyRule { hazard: RegExp; names: string[]; label: string; detail: (foe: string, hit: number) => string }
+export const SAFETY_RULES: readonly SafetyRule[] = [{
+  hazard: /dragonfire/i,
+  names: ['Anti-dragon shield', 'Dragonfire shield', 'Dragonfire ward', 'Ancient wyvern shield'],
+  label: 'No Anti-dragon shield with you',
+  detail: (foe, hit) => `Do not go without it: ${foe}'s dragonfire hits up to ${hit}. Duke Horacio in Lumbridge Castle gives it free.`,
+}];
+
+/** The safety rules a step's fights call for, each with the opponent and its hardest hit of that kind. */
+export function safetyRulesOf(stepId: string): { rule: SafetyRule; detail: string }[] {
+  const step = stepById.get(stepId);
+  if (!step) return [];
+  const out: { rule: SafetyRule; detail: string }[] = [];
+  for (const rule of SAFETY_RULES) {
+    for (const foe of stepFightNames(step)) {
+      const hit = Math.max(0, ...(THREATS[foe]?.hits ?? []).filter((h) => rule.hazard.test(h.label)).map((h) => h.n));
+      if (hit > 0) { out.push({ rule, detail: rule.detail(foe, hit) }); break; }
+    }
+  }
+  return out;
+}
 
 /**
  * The safety blockers of a step: a rule is broken only when the plan SAW the item missing or in the bank (not in the bag or worn). An item that was not
@@ -255,10 +272,10 @@ export const SAFETY: Record<string, SafetyRule[]> = {
  */
 export function safetyBlockers(stepId: string, lines: readonly PrepLine[]): { label: string; detail?: string }[] {
   const out: { label: string; detail?: string }[] = [];
-  for (const rule of SAFETY[stepId] ?? []) {
+  for (const { rule, detail } of safetyRulesOf(stepId)) {
     const mine = lines.filter((l) => rule.names.includes(l.name));
     if (!mine.length || mine.some((l) => l.where === 'INVENTORY' || l.where === 'EQUIPPED' || l.where === 'UNKNOWN')) continue;
-    out.push({ label: mine.some((l) => l.where === 'BANK') ? `${rule.names[0]} is in the bank, not with you` : rule.label, detail: rule.detail });
+    out.push({ label: mine.some((l) => l.where === 'BANK') ? `${rule.names[0]} is in the bank, not with you` : rule.label, detail });
   }
   return out;
 }

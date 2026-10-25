@@ -16,6 +16,7 @@ import { scopeList, scopeSteps, shopRows, supplyReserve } from '../lib/shoppingV
 import { usePriceView } from '../lib/funding/usePriceView';
 import { itemPrice } from '../lib/itemPrice';
 import { itemById } from '../data';
+import { questStepOf } from '../lib/questSteps';
 import {
   actionNav, equippedBySlot, gainText, gearData, SLOT_LABEL, SLOTS, statsText, type Equipped, type GearAction, type GearAdvice,
 } from '../services/gearAdvisor';
@@ -57,9 +58,8 @@ function ActionRow({ a, stepId, live, onShow }: { a: GearAction; stepId?: string
   );
 }
 
-export function questStep(steps: Step[], quest: string): Step | undefined {
-  return steps.find((s) => s.inGame?.completionTrigger?.type === 'QUEST_COMPLETED' && s.inGame.completionTrigger.questName === quest);
-}
+/** The route step of a quest: the shared resolver (lib/questSteps.ts). */
+export const questStep = questStepOf;
 
 function Metric({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (

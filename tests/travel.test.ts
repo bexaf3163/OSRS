@@ -192,7 +192,7 @@ describe('purchase detours: a thing the next steps need, near where the player i
     expect(DETOUR_MAX_EXTRA_TILES).toBeGreaterThan(0);
   });
 
-  it('the Varrock shopping steps put the exchange first when it is close, with all the items at that stop', () => {
+  it('a step by the exchange puts it first when it is close, with all the items at that stop: by place, whatever the step', () => {
     const ge = { x: 3165, y: 3487, plane: 0 };
     const buy = (name: string, price: number) => ({
       key: name, name, count: 1, exact: true, where: 'MISSING' as const, have: none, toGet: 1, priority: 'CRITICAL' as const, timing: 'NOW' as const,
@@ -203,9 +203,12 @@ describe('purchase detours: a thing the next steps need, near where the player i
       action: { kind: 'GATHER' as const, label: 'Aggie', nav: { label: 'Aggie: Red dye', x: 3180, y: 3470, plane: 0, itemName: 'Red dye' } }, why: '', usedIn: ['S2-01'],
     };
     const plan = { now: [buy('Pot', 1), buy('Bucket', 2), buy('Rope', 18), aggie], soon: [] };
-    const d = procurementDetour({ plan, stepId: 'S2-01', from: at(3190, 3470), to: at(3213, 3424), coins: 500 });
-    expect(d?.stop.x).toBe(ge.x);
-    expect(d?.items).toEqual(['Pot', 'Bucket', 'Rope']);
+    // The same in Varrock Square for any step, a later or a new one included: the rule reads the place, not a list of step codes.
+    for (const stepId of ['S2-01', 'S3-03', 'S8-01', 'S99-01']) {
+      const d = procurementDetour({ plan, stepId, from: at(3190, 3470), to: at(3213, 3424), coins: 500 });
+      expect(d?.stop.x, stepId).toBe(ge.x);
+      expect(d?.items, stepId).toEqual(['Pot', 'Bucket', 'Rope']);
+    }
   });
 
   it('an unpriced purchase, one we cannot afford, and a thing with no place are each dropped with their own reason', () => {
