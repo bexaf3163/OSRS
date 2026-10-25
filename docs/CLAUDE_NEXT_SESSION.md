@@ -1,5 +1,7 @@
 # Claude continuation — authoritative takeover
 
+**Start with [CLAUDE_TO_CODEX_HANDOFF.md](CLAUDE_TO_CODEX_HANDOFF.md): the owner rules, the engine map, what Claude changed since 2.74.3, what is in progress and open, and what must not come back.**
+
 Updated2026-10-24. This replaces the rolling historical status entries. Start from the latest remote main, not an old local branch/chat prompt. Check for subsequent owner/Claude commits before editing. Do not reset them or replay included stacked commits.
 
 ## Published delivery — verified 2.74.3
