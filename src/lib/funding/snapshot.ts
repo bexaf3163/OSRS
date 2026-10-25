@@ -73,7 +73,8 @@ export function protectionsFor(window: readonly Step[], state?: PlayerState): Ma
   };
   // Use the same demand ledger as Shopping: independent consumables add, tools reuse,
   // and a carried stock from a selected producer is not bought again for its consumer.
-  const list = aggregateShopping(window.map(s => ({ ...s, itemsRequired: s.itemsRequired?.filter(i => !i.inStep) })));
+  // The exchange list's quantities (food for the whole planned goal, not one trip): what Shopping has the player buy is never surplus to sell.
+  const list = aggregateShopping(window.map(s => ({ ...s, itemsRequired: s.itemsRequired?.filter(i => !i.inStep) })), { wholeGoal: true });
   const used = new Map<string, number>();
   const heals = new Map(FOODS.map(f => [nameKey(f.name), f.heals]));
   const stock = (name: string, key?: string) => state ? heldExact(state, name, key).total ?? 0 : 0;

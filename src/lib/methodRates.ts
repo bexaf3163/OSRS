@@ -23,7 +23,7 @@ export interface RateSpot {
 export interface ModelRate {
   /** XP per hour in the trained skill now: the slow and the fast end. */
   xph: [number, number];
-  /** Coins an hour the training uses up (arrows broken, runes, bait), at exchange prices; null - no price, or nothing is used up. */
+  /** Coins an hour the training uses up (arrows broken, runes, bait, food), at exchange prices; 0 - nothing is used up; null - used up, price unknown. */
   costPerHour: number | null;
   /** What the cost is spent on, when it is not arrows (Ranged) or runes (Magic): "feathers". */
   costName?: string;

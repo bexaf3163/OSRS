@@ -253,7 +253,8 @@ describe('the verdict in the snapshot and the cleanup beside it', () => {
 
 describe('a shield the fight needs, displaced by a two-handed weapon', () => {
   it('Elvarg: the Anti-dragon shield is carried, but a 2h sword is worn, so it protects nothing', () => {
-    const ship = mk('S5-08', [item('Anti-dragon shield', 1)]);
+    // The rule comes from the fight (Elvarg's dragonfire), not from the step's code: a step with this fight under any code gets it.
+    const ship = mk('S99-01', [item('Anti-dragon shield', 1)], { threats: ['Elvarg'] });
     const o = owned({ 'Anti-dragon shield': [1, 0] });
     const base = { plan: planFor(ship, o), connected: true, owned: o, isFood };
     expect(readinessVerdict(base).level).toBe('READY');

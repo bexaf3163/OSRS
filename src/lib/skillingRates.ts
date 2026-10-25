@@ -21,6 +21,7 @@ import type { Point } from './travel';
 import { attacksPlayer, hostileText } from './aggression';
 import { matchStrict } from '../services/locationResolver';
 import { combatLevel } from './moneyAdvisor';
+import { supplyPrice } from './sourceRouter';
 
 interface Tier { item: string; level: number; wield: number; ticks?: number }
 interface Product { name: string; level: number; xp: number; low?: number; high?: number; respawn?: [number, number] }
@@ -85,9 +86,13 @@ function better(a: SpotRate, b: SpotRate, home: Point | null): boolean {
   return far(a) < far(b);
 }
 
-function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerState, market: Market, coinRate: number | null, reg: SkillingRegistry): SpotRate | null {
-  const tool = toolFor(r, level, state, reg);
-  if (!tool) return null;
+type ToolUse = { tier: Tier | null; name: string; wielded: boolean };
+
+/**
+ * The chance of each product a roll and the seconds per item at the spot (the fast and the slow end): the rolls, moving on, and waiting when the spot's
+ * rocks or trees are all used. Banking and dropping are not in it. null when no roll can succeed or the roll length is not known.
+ */
+function paceAt(r: Resource, spot: SkillSpot, level: number, tool: ToolUse): { chances: number[]; any: number; atSpot: (i: 0 | 1) => number } | null {
   const lines = r.products.map((p) => {
     const c = r.byTool && tool.tier ? r.byTool[tool.tier.item] : { low: p.low ?? 0, high: p.high ?? 0 };
     return { low: c.low, high: c.high, level: p.level };
@@ -95,16 +100,11 @@ function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerStat
   const chances = r.cascade ? cascade(lines, level) : lines.map((l) => (level >= l.level ? skillChance(l.low, l.high, level) : 0));
   const any = chances.reduce((a, p) => a + p, 0);
   if (any <= 0) return null;
-  const xpEach = r.products.reduce((a, p, i) => a + chances[i] * p.xp, 0) / any;
-  const values = r.products.map((p) => dropValue(p.name, market.prices, market.restriction) ?? 0);
-  const valueEach = r.products.reduce((a, _p, i) => a + chances[i] * values[i], 0) / any;
   const ticks = r.ticks ?? tool.tier?.ticks;
   if (!ticks) return null;
   const roll = ticks * TICK;
   const gather = roll / any;
   const respawn = r.products[0].respawn ? (r.products[0].respawn[0] + r.products[0].respawn[1]) / 2 : 0;
-
-  // Seconds per item at the spot, the fast and the slow end: the rolls, moving on, and waiting when the spot's rocks or trees are all used.
   const atSpot = (i: 0 | 1): number => {
     if (r.skill === 'woodcutting') {
       if (r.lifetime === 'one' || r.lifetime === undefined) {
@@ -122,6 +122,18 @@ function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerStat
     }
     return gather + (SPOT_MOVE[i] * gather) / SPOT_LIFE[i];
   };
+  return { chances, any, atSpot };
+}
+
+function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerState, market: Market, coinRate: number | null, reg: SkillingRegistry): SpotRate | null {
+  const tool = toolFor(r, level, state, reg);
+  if (!tool) return null;
+  const pace = paceAt(r, spot, level, tool);
+  if (!pace) return null;
+  const { chances, any, atSpot } = pace;
+  const xpEach = r.products.reduce((a, p, i) => a + chances[i] * p.xp, 0) / any;
+  const values = r.products.map((p) => dropValue(p.name, market.prices, market.restriction) ?? 0);
+  const valueEach = r.products.reduce((a, _p, i) => a + chances[i] * values[i], 0) / any;
   const slots = BAG - (tool.wielded ? 0 : 1) - (r.bait ? 1 : 0);
   const trip = spot.bank ? bankTrip({ place: spot.place, bank: spot.bank }) : null;
   const bankPer = (i: 0 | 1) => (trip ? (trip.minutes[i] * 60) / slots : Infinity);
@@ -131,17 +143,18 @@ function spotRate(r: Resource, spot: SkillSpot, level: number, state: PlayerStat
   const perHour = (i: 0 | 1) => 3600 / perItem(i);
   const xph: [number, number] = [(xpEach * perHour(1)) / (1 + MARGIN), xpEach * perHour(0)];
   const items = mid(perHour);
-  const baitPrice = r.bait ? market.prices?.buy(r.bait)?.price ?? null : null;
+  const baitPrice = r.bait ? supplyPrice(r.bait, market.prices, state.mode) : null;
   const lootPerHour = banks ? valueEach * items : 0;
   const main = r.products.find((_p, i) => chances[i] > 0)!;
   const where: RateSpot = { label: spot.label, place: spot.place, how: banks ? 'bank' : 'drop', ...(banks && trip ? { bank: trip.bank.label } : {}) };
   const rate: ModelRate = {
-    xph, costPerHour: r.bait ? (baitPrice === null ? null : items * baitPrice) : null, basis: tool.name,
+    xph, costPerHour: r.bait ? (baitPrice === null ? null : items * baitPrice) : 0, basis: tool.name,
     ...(r.bait ? { costName: r.bait === 'Feather' ? 'feathers' : r.bait.toLowerCase() } : {}),
     ...(lootPerHour > 0 ? { lootPerHour, loot: main.name } : {}), spot: where,
   };
   // The time per XP, the coins banked counted as the time cows would take to earn them (lootValue.coinsPerMinute).
-  const saved = coinTimeShare(lootPerHour, coinRate);
+  // Coins net of the bait used up; an unknown bait price leaves coins out of the score rather than taking the bait as free.
+  const saved = rate.costPerHour === null ? 0 : coinTimeShare(lootPerHour - (rate.costPerHour ?? 0), coinRate);
   const combat = combatLevel(Object.fromEntries(Object.keys(state.levels).map((k) => [k, levelOf(state, k)])) as never);
   const threat = spot.hostiles?.map((h) => ({ npc: h.npc, level: Math.max(...h.levels) })).find((h) => attacksPlayer(h.level, combat));
   return { rate, score: (1 - saved) / ((xph[0] + xph[1]) / 2), ...(threat ? { danger: hostileText(threat.npc, threat.level) } : {}) };
@@ -166,4 +179,44 @@ export function gatherRate(m: TrainingMethod, skill: string, state: PlayerState,
     }
   }
   return best ? { ...best.rate, ...(best.danger ? { warning: best.danger } : {}) } : null;
+}
+
+/** A spot further than this from the place another engine names is not that place's spot, tiles. */
+const SAME_PLACE = 30;
+
+/**
+ * The pace of one product at the registry spot of the place another engine names (the money methods: "Chop yew logs" at the Edgeville yews), for this
+ * player's level and the tool that engine plans to use (null: the tool the training advice would use), so the Money and Skills pages time the same work
+ * the same way. Seconds per unit of the product at the spot, without banking (the caller has its own trips). null when the registry has no spot of that
+ * product there, the account may not use it, its count is unknown for a resource that runs out, the level is not known or too low, or the tool is unknown.
+ */
+export function gatherPace(product: string, near: Point & { plane?: number }, state: PlayerState, toolName: string | null = null, reg: SkillingRegistry = SKILLING):
+  { seconds: { fast: number; typical: number; slow: number }; tool: string; spot: string } | null {
+  const key = product.toLowerCase();
+  let found: { r: Resource; spot: SkillSpot; far: number } | null = null;
+  for (const r of reg.resources) {
+    if (!r.products.some((p) => p.name.toLowerCase() === key)) continue;
+    for (const spot of reg.spots) {
+      if (spot.resource !== r.id || (spot.members && state.mode !== 'members') || (spot.place.plane ?? 0) !== (near.plane ?? 0)) continue;
+      const far = Math.max(Math.abs(spot.place.x - near.x), Math.abs(spot.place.y - near.y));
+      if (far <= SAME_PLACE && (!found || far < found.far)) found = { r, spot, far };
+    }
+  }
+  if (!found) return null;
+  const { r, spot } = found;
+  // A resource that runs out (a tree falls, a rock empties) is capped by how many the spot has; a spot without a count would be timed as endless.
+  if (r.products[0].respawn && !spot.count) return null;
+  const level = levelOf(state, r.skill);
+  if (level === undefined) return null;
+  const family = reg.tools[r.tool];
+  const named = family && toolName ? family.tiers.find((t) => t.item.toLowerCase() === toolName.toLowerCase() && level >= t.level) : undefined;
+  const attack = levelOf(state, 'attack');
+  const tool = named ? { tier: named, name: named.item, wielded: attack !== undefined && attack >= named.wield } : toolFor(r, level, state, reg);
+  if (!tool) return null;
+  const pace = paceAt(r, spot, level, tool);
+  const share = pace ? pace.chances[r.products.findIndex((p) => p.name.toLowerCase() === key)] / pace.any : 0;
+  if (!pace || share <= 0) return null;
+  const fast = pace.atSpot(0) / share;
+  const slow = (pace.atSpot(1) * (1 + MARGIN)) / share;
+  return { seconds: { fast, typical: (fast + slow) / 2, slow }, tool: tool.name, spot: spot.label };
 }

@@ -65,7 +65,8 @@ export interface EvalContext {
   /** Tiles between two points, with the player's teleports; null — no way is known. */
   reach(from: Point | null, to: Point): number | null;
   exchange: Point;
-  personalise?(m: FundingMethod): Personalised | null;
+  /** The player's own model of the work (combat, gathering); tool: the tool this evaluation plans to use, null when its ownership is unknown. */
+  personalise?(m: FundingMethod, tool?: string | null): Personalised | null;
   observed?: ReadonlyMap<string, ObservedRate>;
   /** The foes and skills of the step being prepared: a method that trains the same thing gets credit for it. */
   active?: { foes?: readonly string[]; skills?: readonly string[] };
@@ -322,7 +323,7 @@ export function evaluate(m: FundingMethod, ctx: EvalContext): MethodEvaluation {
   }
 
   // --- Personal model (combat) and rate
-  const pers = ctx.personalise?.(m) ?? null;
+  const pers = ctx.personalise?.(m, tool && !tool.unknown ? tool.name : null) ?? null;
   if (m.combat && !pers) {
     cautions.push('Not personalised: connect RuneLite so your gear and levels can be checked');
     cap('LOW', 'combat model unavailable');

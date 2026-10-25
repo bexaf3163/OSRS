@@ -9,6 +9,7 @@ import { attacksToKill } from '../src/lib/combatEstimate';
 import { TRAINER_SPOTS } from '../src/lib/combatRoute/spots';
 import { market } from './funding/market';
 import type { PriceView } from '../src/lib/funding/quotes';
+import { supplyPrice } from '../src/lib/sourceRouter';
 
 const prices = market();
 /** A fixed exchange for the costs: every rune 5 gp, every arrow 3 gp (the recorded market has neither). */
@@ -56,7 +57,18 @@ describe('one engine for every combat method', () => {
     // One arrow in five breaks: 3 gp each, a few hundred to a few thousand shots an hour.
     expect(r.costPerHour!).toBeGreaterThan(100);
     expect(r.costPerHour!).toBeLessThan(3 * 0.2 * 2400);
-    expect(methodRate(method('ra-frog'), 'ranged', state({ ranged: 30, hitpoints: 30 }, BOW))!.costPerHour).toBeNull();
+    // No exchange price: the free shop's price of the item data (Lowe's, 1 gp a bronze arrow) - known, cheaper, never free.
+    const shop = methodRate(method('ra-frog'), 'ranged', state({ ranged: 30, hitpoints: 30 }, BOW))!.costPerHour!;
+    expect(shop).toBeCloseTo(r.costPerHour! / 3, 5);
+  });
+
+  it('a used-up supply is priced at the exchange, else at a shop this account may use, else unknown', () => {
+    expect(supplyPrice('Bronze arrow', fixed, 'f2p')).toBe(3);
+    expect(supplyPrice('Bronze arrow', null, 'f2p')).toBe(1);
+    // Salmon is sold only in members shops: unknown on a free account, the shop's price on a members one.
+    expect(supplyPrice('Salmon', null, 'f2p')).toBeNull();
+    expect(supplyPrice('Salmon', null, 'members')).toBeGreaterThan(0);
+    expect(supplyPrice('No such supply', null, 'members')).toBeNull();
   });
 
   it('Magic: every strike hits as hard as the tier allows, a landed 0 does no damage, and the runes are the cost', () => {

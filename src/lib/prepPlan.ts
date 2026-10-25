@@ -11,7 +11,7 @@
 // It buys nothing: the player decides and confirms.
 
 import type { Progress, Step, WikiItemDetail } from '../types';
-import { itemById, stepById } from '../data';
+import { itemById } from '../data';
 import { THREATS } from './foodAdvice';
 import { stepFightNames } from './fightEstimate';
 import recipesJson from '../data/recipes.json';
@@ -137,6 +137,8 @@ export interface PrepPlan {
   optimizations: PrepLine[];
   /** A level, a quest, a closed step: what items cannot fix. */
   blockers: { label: string; detail?: string }[];
+  /** The step's safety rules (safetyRulesOf, from its own fights): what the verdict checks, so no consumer looks a rule up by the step's code. */
+  safety?: StepSafety[];
   /** The recovery mode after a setback: what to do in order; null means no setback. */
   recovery: { recovery: Recovery; steps: RecoveryStep[]; missing: number } | null;
   /** Extra weight on a non-combat step: what to leave in the bank and how much longer running will last. */
@@ -252,15 +254,19 @@ export const SAFETY_RULES: readonly SafetyRule[] = [{
   detail: (foe, hit) => `Do not go without it: ${foe}'s dragonfire hits up to ${hit}. Duke Horacio in Lumbridge Castle gives it free.`,
 }];
 
-/** The safety rules a step's fights call for, each with the opponent and its hardest hit of that kind. */
-export function safetyRulesOf(stepId: string): { rule: SafetyRule; detail: string }[] {
-  const step = stepById.get(stepId);
-  if (!step) return [];
-  const out: { rule: SafetyRule; detail: string }[] = [];
+/** A safety rule a step's fights call for: the items that satisfy it, what to say when none is with the player, and why (the opponent's hit). */
+export interface StepSafety { names: string[]; label: string; detail: string }
+
+/**
+ * The safety rules a step's fights call for, read from the step's own facts (its foes and threats against threats.json), never from its code: a step
+ * renamed or added later with the same fight gets the same rule.
+ */
+export function safetyRulesOf(step: Pick<Step, 'foes' | 'threats' | 'pacing'>): StepSafety[] {
+  const out: StepSafety[] = [];
   for (const rule of SAFETY_RULES) {
     for (const foe of stepFightNames(step)) {
       const hit = Math.max(0, ...(THREATS[foe]?.hits ?? []).filter((h) => rule.hazard.test(h.label)).map((h) => h.n));
-      if (hit > 0) { out.push({ rule, detail: rule.detail(foe, hit) }); break; }
+      if (hit > 0) { out.push({ names: rule.names, label: rule.label, detail: rule.detail(foe, hit) }); break; }
     }
   }
   return out;
@@ -270,12 +276,12 @@ export function safetyRulesOf(stepId: string): { rule: SafetyRule; detail: strin
  * The safety blockers of a step: a rule is broken only when the plan SAW the item missing or in the bank (not in the bag or worn). An item that was not
  * checked (no game connection, bank not opened) is unknown, never a block: the plan does not claim what it does not know.
  */
-export function safetyBlockers(stepId: string, lines: readonly PrepLine[]): { label: string; detail?: string }[] {
+export function safetyBlockers(rules: readonly StepSafety[], lines: readonly PrepLine[]): { label: string; detail?: string }[] {
   const out: { label: string; detail?: string }[] = [];
-  for (const { rule, detail } of safetyRulesOf(stepId)) {
+  for (const rule of rules) {
     const mine = lines.filter((l) => rule.names.includes(l.name));
     if (!mine.length || mine.some((l) => l.where === 'INVENTORY' || l.where === 'EQUIPPED' || l.where === 'UNKNOWN')) continue;
-    out.push({ label: mine.some((l) => l.where === 'BANK') ? `${rule.names[0]} is in the bank, not with you` : rule.label, detail });
+    out.push({ label: mine.some((l) => l.where === 'BANK') ? `${rule.names[0]} is in the bank, not with you` : rule.label, detail: rule.detail });
   }
   return out;
 }
@@ -510,11 +516,12 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   };
 
   // What items cannot fix: levels, quests, a closed step. Then the hard safety checks: an item without which the step ends in a death.
+  const safety = safetyRulesOf(step);
   const blockers = [
     ...i.readiness.problems
       .filter((p) => p.hard && (p.kind === 'skill' || p.kind === 'quest' || p.kind === 'step' || p.kind === 'qp' || p.kind === 'mode'))
       .map((p) => ({ label: p.label, ...(p.detail ? { detail: p.detail } : {}) })),
-    ...safetyBlockers(step.id, lines),
+    ...safetyBlockers(safety, lines),
   ];
 
   const stepOrder = (l: PrepLine) => (l.usedIn[0] ? ids.indexOf(l.usedIn[0]) : 99);
@@ -601,5 +608,5 @@ export function buildPrepPlan(i: PrepPlanInput): PrepPlan {
   const missing = now.length + soon.length;
   const recovery: PrepPlan['recovery'] = i.recovery ? { recovery: i.recovery, steps: recoverySteps(i.recovery, missing, step.id), missing } : null;
 
-  return { stepId: step.id, stepIds: ids, lines, now, soon, byTheWay, have, later, optimizations, blockers, recovery, weight, coins, slots, score };
+  return { stepId: step.id, stepIds: ids, lines, now, soon, byTheWay, have, later, optimizations, blockers, safety, recovery, weight, coins, slots, score };
 }

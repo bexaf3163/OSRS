@@ -20,6 +20,7 @@
 // the extra bank trips - at the rate coins are earned the simplest way (killing cows for their hides, funding's own method and the exchange's price).
 // Then the plan's time includes that work and its score counts the coins as the minutes they save. A restricted account does not count what it cannot sell.
 
+import type { MethodPriority } from '../playStyle';
 import type { Step } from '../../types';
 import type { OwnedState } from '../checklist';
 import { nameKey } from '../checklist';
@@ -33,7 +34,7 @@ import type { PriceView } from '../funding/quotes';
 import type { TradeRestriction } from '../tradeRestriction';
 import { laterDefence, type LaterDefence } from './later';
 import { SELL_DROP, spotsOf, spotTerms, TRAINER_LEVELS, TRAINERS, type Spot } from './spots';
-import { coinsPerMinute, dropValue, LOOT_SLOTS, PICKUP_SECONDS } from '../lootValue';
+import { coinsPerMinute, dropValue, LOOT_SLOTS, PICKUP_SECONDS, COIN_SHARE_CAP } from '../lootValue';
 import { questOf } from '../playerState';
 import { questStepOf } from '../readiness';
 import { armourDefence, armourReady } from './armour';
@@ -145,6 +146,8 @@ export interface PlanInput {
   restriction?: TradeRestriction['state'];
   /** Whether a route step is already closed (its reward is not ahead any more). */
   done?: (stepId: string) => boolean;
+  /** The player's objective: on fastest only time ranks (no loot is picked up for coins, and coins neither credit nor cost); balanced and relaxed weigh coins as time. */
+  objective?: MethodPriority;
 }
 
 /** A Defence plan must beat a working route by this much on the middle estimate while the route still gives Defence XP later (Dragon Slayer I). */
@@ -308,13 +311,19 @@ function assemble(id: PlanId, key: string, title: string, phases: PlanPhase[], h
   const basis = phases.reduce<Basis>((a, p) => worst(a, p.basis), 'calibrated');
   const { risks, blockers } = risksOf(phases, hp);
   const all = [...blockers, ...extraBlockers];
+  const foodCost = price === null ? null : Math.round(food.mid * price);
+  const effort = Math.max(1e-6, minutes.high * BASIS_PENALTY[basis]);
+  // Coins count as the minutes the baseline way would take to earn them (lootValue.coinsPerMinute): the loot banked less the food eaten. Owned food is
+  // still used up, so its price is a cost too. A gain credits at most COIN_SHARE_CAP of the time (the baseline is rough); a cost counts in full.
+  // Without a food price the coins are not counted at all, so an unknown cost is never taken as free.
+  const coins = rate && foodCost !== null ? income.net - foodCost : null;
+  const credit = coins === null ? 0 : coins > 0 ? Math.min(coins / rate!, COIN_SHARE_CAP * effort) : coins / rate!;
   return {
-    id, key, title, phases, minutes, food, foodCost: price === null ? null : Math.round(food.mid * price), income, net: price === null ? null : income.net - Math.round(food.mid * price),
-    basis, risks, notes, blockers: all, eligible: all.length === 0, effort: Math.max(1e-6, minutes.high * BASIS_PENALTY[basis]),
+    id, key, title, phases, minutes, food, foodCost, income, net: foodCost === null ? null : income.net - foodCost,
+    basis, risks, notes, blockers: all, eligible: all.length === 0, effort,
     // Ranking also values fewer repeated target selections. This is an effort weight,
     // not extra elapsed time (the time estimate already includes target acquisition).
-    // The loot's coins count as the minutes the simplest way to earn them would take: a plan that banks Big bones is worth more than one that does not.
-    score: minutes.high * BASIS_PENALTY[basis] + phases.reduce((n, p) => n + p.kills, 0) * 0.05 - (rate ? income.net / rate : 0),
+    score: effort + phases.reduce((n, p) => n + p.kills, 0) * 0.05 - credit,
   };
 }
 
@@ -330,7 +339,8 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   // The spots the player may use now: a spot that needs a quest only when the game counts it done or its route step is closed.
   const questDone = (quest: string) => (inp.state ? questOf(inp.state, quest) === 'DONE' : false)
     || (() => { const q = questStepOf(inp.steps as Step[], quest); return q ? inp.done?.(q.id) === true : false; })();
-  const allSpots = spotsOf(inp.steps);
+  // Members spots only for an account known to be members: an unknown mode is not a membership.
+  const allSpots = spotsOf(inp.steps, inp.state?.mode === 'members');
   const spots = new Map([...allSpots].filter(([name, s]) => name === foe || !s.requires || questDone(s.requires.quest)));
   const locked: PlanReport['locked'] = [...allSpots.values()].filter((s) => !spots.has(s.foe)).map((s) => ({ name: s.name, why: `after ${s.requires!.quest}` }));
   const routeSpot = spots.get(foe);
@@ -340,7 +350,8 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   const price = inp.foodPrice ?? null;
   const doses = strengthDoses(inp.owned);
   let live: StepEstimateContext = { ...ctx, strengthDoses: doses, terms: ctx.terms ?? spotTerms(spots) };
-  const rate = coinsPerMinute(inp.prices);
+  // On the fastest objective coins do not trade against time: no loot is kept for its price, and the food's price is shown but not ranked.
+  const rate = inp.objective === 'fastest' ? null : coinsPerMinute(inp.prices);
   const item = itemGoal(step, inp.owned);
   const objective = [goalText(goals), item ? `${item.count} ${item.name}` : null].filter(Boolean).join(', ');
 

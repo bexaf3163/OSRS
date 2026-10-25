@@ -11,6 +11,7 @@ import { toInGameTarget, type GearItem } from '../src/services/runeliteBridge';
 import { trainingMethods, viewMethod } from '../src/lib/trainingRouter';
 import { market } from './funding/market';
 import type { Market } from '../src/lib/methodRates';
+import type { PriceView } from '../src/lib/funding/quotes';
 
 const base = stepById.get('S6-01')!;
 function scenario(level: number, equipment: GearItem[] = [], stock: Record<string, { carried?: number; bank?: number }> = {}, defence: number | null = 1, complete = true, trade: Market = {}) {
@@ -59,9 +60,14 @@ describe('S6-01 actual ranged preparation', () => {
       expect(s.payload.completionTrigger).toEqual(base.inGame!.completionTrigger);
     });
   it('with exchange prices the Big bones count: at Ranged 20 the frogs pay for their bank trips and beat the monks', () => {
-    const s = scenario(20, [], {}, 1, true, { prices: market(), restriction: 'LIFTED' });
+    // The recorded market has no arrow prices: an exchange that also prices the arrows the training breaks.
+    const base = market();
+    const priced: PriceView = { ...base, buy: (n) => (/ arrow$/i.test(n) ? { price: 3, basis: 'side', confidence: 'HIGH', ageMinutes: 0, volumePerHour: null, notes: [] } : base.buy(n)) };
+    const s = scenario(20, [], {}, 1, true, { prices: priced, restriction: 'LIFTED' });
     expect(s.pick).toMatchObject({ methodId: 'ra-frog' });
     expect(s.payload.npcNames).toEqual(['Giant frog']);
+    // Without an exchange arrow price the free shop's price counts (Lowe's, 1 gp): the cost stays known and the same choice is made.
+    expect(scenario(20, [], {}, 1, true, { prices: base, restriction: 'LIFTED' }).pick).toMatchObject({ methodId: 'ra-frog' });
   });
   it('recognizes a usable owned bow and compatible banked ammunition before buying replacements', () => {
     const s = scenario(30, [piece('Maple shortbow')], { 'Adamant arrow': { bank: 100 }, Salmon: { bank: 10 } });

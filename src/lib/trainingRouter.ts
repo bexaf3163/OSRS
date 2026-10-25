@@ -238,7 +238,10 @@ function compare(priority: MethodPriority, xpLeft?: number, level?: number, coin
       if (pa && pb && xpLeft && xpLeft > 0) {
         // The hours to the goal, less what the banked drops are worth in hours (lootValue.ts: the same rule as the fight plans).
         const hours = (v: MethodView, p: number) => xpLeft / p + (v.status === 'PREP' ? SETUP_HOURS : 0);
-        const worth = (v: MethodView, h: number) => h * coinTimeShare(v.method.lootPerHour, coinRate);
+        const coinsA = netCoinsPerHour(a.method);
+        const coinsB = netCoinsPerHour(b.method);
+        // Coins on both sides or on neither: a method whose cost is not known is never compared as free.
+        const worth = (v: MethodView, h: number) => (coinsA === null || coinsB === null ? 0 : h * coinTimeShare(v === a ? coinsA : coinsB, coinRate));
         const ra0 = hours(a, pa);
         const rb0 = hours(b, pb);
         const ha = ra0 - worth(a, ra0);
@@ -330,6 +333,15 @@ export interface AdviceInput {
 }
 
 const rateCache = new Map<string, TrainingMethod>();
+/** Each price snapshot by its own identity: two views that share a timestamp but not their prices are never confused. */
+const priceIds = new WeakMap<PriceView, number>();
+let nextPriceId = 1;
+function priceKeyOf(prices: PriceView | null | undefined): string {
+  if (!prices) return '-';
+  let id = priceIds.get(prices);
+  if (id === undefined) priceIds.set(prices, (id = nextPriceId++));
+  return String(id);
+}
 /**
  * The methods of a skill with the combat model's own rate for this player where it has one (combatRates.ts): melee, Ranged and Magic training is then
  * ranked by what it gives this character, not by the wiki's guide for everyone. Other methods stay as they are.
@@ -337,7 +349,7 @@ const rateCache = new Map<string, TrainingMethod>();
 export function personalize(methods: readonly TrainingMethod[], skill: string, state: PlayerState, prices?: PriceView | null, restriction?: TradeRestriction['state'], objective?: MethodPriority): TrainingMethod[] {
   return methods.map((m) => {
     if (!m.skills.includes(skill) || m.kind !== 'method') return m;
-    const key = `${m.id}|${skill}|${rateKeyOf(state)}|${prices?.at ?? '-'}|${prices?.status ?? '-'}|${restriction ?? '-'}|${objective ?? '-'}`;
+    const key = `${m.id}|${skill}|${rateKeyOf(state)}|${priceKeyOf(prices)}|${restriction ?? '-'}|${objective ?? '-'}`;
     const hit = rateCache.get(key);
     if (hit) return hit;
     const r = methodRate(m, skill, state, { prices, restriction, objective });
@@ -355,6 +367,12 @@ export function personalize(methods: readonly TrainingMethod[], skill: string, s
 }
 
 const fmtK = (n: number) => (n >= 1000 ? `${Math.round(n / 1000)}k` : String(n));
+
+/** Coins an hour a method nets (banked less used up), or null when what it uses up has no known price. */
+function netCoinsPerHour(m: TrainingMethod): number | null {
+  if (m.costPerHour === null || (m.costPerHour === undefined && m.cost === 'cost')) return null;
+  return (m.lootPerHour ?? 0) - (m.costPerHour ?? 0);
+}
 
 /** "≈ 8k–11k XP per hour", "for you" when it is the model's figure for this player. */
 const rateText = (m: TrainingMethod) => {
@@ -393,10 +411,13 @@ function reasonFor(v: MethodView, priority: MethodPriority, level: number): stri
  * The best method on each leg of the path to the goal: identical consecutive ones merge. Except for "fastest", a new unlock replaces the method in hand
  * only when it is clearly better in practice (SWITCH_GAIN): changing method for a sliver costs a trip and a new setup.
  */
-function buildPath(skill: string, level: number, target: number, input: AdviceInput, priority: MethodPriority, first: TrainingMethod | null): PathLeg[] {
-  const methods = input.methods ?? trainingMethods;
+function buildPath(skill: string, level: number, target: number, input: AdviceInput, priority: MethodPriority, first: TrainingMethod | null, raw: readonly TrainingMethod[]): PathLeg[] {
   const legs: PathLeg[] = [];
   for (let lv = level; lv < target; lv++) {
+    // The model's rates are for the level the leg starts at (every FORECAST_STEP levels), not today's carried forward: a method unlocked later is
+    // then compared on its own model rate, not on the wiki's guide against today's model rates.
+    const at = Math.max(level, lv - (lv % FORECAST_STEP));
+    const methods = at === level ? input.methods ?? trainingMethods : personalize(raw, skill, atLevel(input.state, skill, at), input.prices, input.restriction, priority);
     // For future levels the item requirements are not counted: "what will be needed", not "what there is now".
     const cands = methodsFor(skill, methods).filter((m) => !m.manualSetup && availableAt(m, lv, input.mode)).map((m) => viewMethod(m, input.state)).filter((v) => v.status !== 'LOCKED' || v.missing.every((x) => x.kind === 'skill'));
     // Each level is weighed as the first one is (adviseTraining): the hours from here to the goal, less what the banked drops are worth.
@@ -415,6 +436,12 @@ function buildPath(skill: string, level: number, target: number, input: AdviceIn
   return legs.slice(0, 6);
 }
 
+/** Future legs of the path are re-rated every this many levels. */
+const FORECAST_STEP = 5;
+/** The same player at another level of one skill: what the path forecasts with. */
+const atLevel = (state: PlayerState, skill: string, value: number): PlayerState =>
+  ({ ...state, levels: { ...state.levels, [skill]: { ...(state.levels[skill] ?? { source: 'profile' }), known: true, value } } }) as PlayerState;
+
 export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const { skill, target, state, mode, style } = input0;
   const objective: MethodPriority = input0.priority ?? (style === 'efficient' ? 'fastest' : 'relaxed');
@@ -432,7 +459,7 @@ export function adviseTraining(input0: AdviceInput): TrainingAdvice {
   const best = views.find((v) => !v.method.manualSetup && v.status !== 'LOCKED') ?? null;
   const others = views.filter((v) => v !== best).slice(0, 3);
   const quests = methodsFor(skill, methods).filter((m) => m.kind === 'quest' && m.from <= level && (m.to === null || level < m.to) && (mode === 'members' || !m.members));
-  const path = buildPath(skill, level, target, input, priority, best?.method ?? null);
+  const path = buildPath(skill, level, target, input, priority, best?.method ?? null, input0.methods ?? trainingMethods);
 
   const xpNow = input.xp ?? xpForLevel(level);
   const xpLeft = Math.max(0, xpForLevel(target) - xpNow);

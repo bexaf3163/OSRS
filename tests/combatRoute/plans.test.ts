@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { combatPlanView } from '../../src/lib/combatPlan';
 import { evaluatePlans, gainOver, KEEP_MARGIN, MIN_GAIN } from '../../src/lib/combatRoute/plans';
-import { bankTrip, spotsOf, TRAINER_SPOTS } from '../../src/lib/combatRoute/spots';
+import { bankTrip, spotsOf, termsFor, TRAINER_SPOTS } from '../../src/lib/combatRoute/spots';
 import { netEach } from '../../src/lib/funding/ge';
 import { allSteps, stepById } from '../../src/data';
 import { market } from '../funding/market';
@@ -219,7 +219,7 @@ describe('nothing honest to say', () => {
 
 describe('where the plans can lead', () => {
   it('every trainer has a spot the route knows: its own step, a place a step used to give, or a wiki spawn by a route step', () => {
-    const spots = spotsOf(allSteps);
+    const spots = spotsOf(allSteps, true);
     for (const t of TRAINER_SPOTS) {
       const s = spots.get(t.foe)!;
       expect(s, t.foe).toBeTruthy();
@@ -236,7 +236,7 @@ describe('where the plans can lead', () => {
       // Every spot has a bank trip it can be timed with.
       expect(bankTrip(s)!.minutes[0], t.foe).toBeGreaterThan(0);
     }
-    expect(spotsOf(planInput().steps).get('Hill Giant')!.waypoints!.length).toBeGreaterThan(1);
+    expect(spotsOf(planInput().steps, true).get('Hill Giant')!.waypoints!.length).toBeGreaterThan(1);
   });
 
   it('a spot that needs a quest is offered only once the quest is done', () => {
@@ -260,7 +260,7 @@ describe('where the plans can lead', () => {
   });
 
   it('the live route (S4-03 is Giant frogs since 2.74.2) still compares the Hill Giants, from the spot that step used to give', () => {
-    const live = spotsOf(allSteps).get('Hill Giant')!;
+    const live = spotsOf(allSteps, true).get('Hill Giant')!;
     expect(live.waypoints?.[0].label).toMatch(/trapdoor/);
     const r = evaluatePlans({ step: stepById.get('S4-03')!, steps: allSteps, ctx: { stats: HISTORICAL.stats, gear: gearOf(HISTORICAL.worn) } as never, owned: ownedOf({}), foodPrice: 33 })!;
     expect(r.compared).toEqual(expect.arrayContaining(['Giant frog', 'Cow', 'Minotaur (level 12)', 'Hill Giant', 'Barbarian (level 10)', 'Al Kharid warrior', 'Monk']));
@@ -300,5 +300,17 @@ describe('Defence the route gives later (Dragon Slayer I)', () => {
     expect(evaluatePlans(withMarket({ ...noSplit, adopted: 'defence-first:20' }))!.plans.find(p => p.key === 'defence-first:20')!.eligible).toBe(true);
     const weak = evaluatePlans(withMarket({ stats: { ...HISTORICAL.stats, hitpoints: 8 } }))!;
     expect(weak.reason).not.toMatch(/route as written stays/);
+  });
+});
+
+describe('who may use a spot is explicit', () => {
+  it('a free account is offered no members spot; facts (bank trips, drops) are kept for every spot', () => {
+    const free = spotsOf(allSteps, false);
+    const all = spotsOf(allSteps, true);
+    for (const [foe] of free) expect(all.has(foe)).toBe(true);
+    for (const t of TRAINER_SPOTS.filter((x) => x.members)) expect(free.has(t.foe), `${t.foe} is members only`).toBe(false);
+    // Every spot that a plan may offer has its terms, members ones included.
+    const terms = termsFor(allSteps);
+    for (const [foe] of all) expect(terms[foe], foe).toBeDefined();
   });
 });

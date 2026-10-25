@@ -28,8 +28,11 @@ export function coinsPerMinute(prices: PriceView | null | undefined): number | n
  * pace), not this character's best way to earn; so coins only ever trade against part of the time, and past the cap the XP decides.
  */
 export const COIN_SHARE_CAP = 0.5;
-export function coinTimeShare(lootPerHour: number | undefined, rate: number | null): number {
-  return rate && lootPerHour && lootPerHour > 0 ? Math.min(COIN_SHARE_CAP, lootPerHour / (rate * 60)) : 0;
+/** netPerHour: coins banked less coins used up (arrows, runes, bait, food), an hour. A gain is capped; a cost counts in full (it is real money). */
+export function coinTimeShare(netPerHour: number | undefined, rate: number | null): number {
+  if (!rate || !netPerHour) return 0;
+  const share = netPerHour / (rate * 60);
+  return share > 0 ? Math.min(COIN_SHARE_CAP, share) : share;
 }
 
 /** Coins one drop brings after the tax, or null: no price, nothing after the tax, or an item a restricted account cannot sell. */

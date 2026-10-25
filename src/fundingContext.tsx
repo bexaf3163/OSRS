@@ -22,6 +22,8 @@ import { isClosed } from './lib/next-step';
 import { buildNeed } from './lib/funding/need';
 import { assess, type FundingAssessment, type FundingOption } from './lib/funding/assess';
 import { combatPersonaliser } from './lib/funding/combatAdapter';
+import { gatherPersonaliser } from './lib/funding/gatherAdapter';
+import type { FundingMethod } from './lib/funding/types';
 import { buildSnapshot, type FundingSnapshot } from './lib/funding/snapshot';
 import {
   cancel as cancelPlan, confirm as confirmPlan, GRAND_EXCHANGE, loadPlan, mainOutputOf, NEAR_TILES, pause as pausePlan, planKey,
@@ -413,8 +415,11 @@ function useEvalBase(step: Step | null, snap: FundingSnapshot | null, prices: Pr
       fights: bridge.combatLog?.foes ?? null,
       train: trainingSkill(route, progress, step),
     };
-    return { now: Date.now(), prices, snap, reach, exchange: GRAND_EXCHANGE, personalise: combatPersonaliser(live, prices), observed, active: { foes: step.foes } };
-  }, [step, snap, prices, mode, progress, state.owned, bridge.stats, bridge.xp, bridge.gear, bridge.combatLog, observed]);
+    const combat = combatPersonaliser(live, prices);
+    const gather = gatherPersonaliser(state);
+    const personalise = (m: FundingMethod, tool?: string | null) => combat(m) ?? gather(m, tool);
+    return { now: Date.now(), prices, snap, reach, exchange: GRAND_EXCHANGE, personalise, observed, active: { foes: step.foes } };
+  }, [step, snap, prices, mode, progress, state, bridge.stats, bridge.xp, bridge.gear, bridge.combatLog, observed]);
 }
 
 /**

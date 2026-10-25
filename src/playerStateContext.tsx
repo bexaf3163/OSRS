@@ -178,7 +178,7 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
       const live = { stats: knownStats, xp: xp as Partial<Record<string, number>> | null, gear: knownGear, combatLog };
       const report = evaluatePlans({
         step: s, steps: base, ctx: estimateContext(s, live, base, progress), owned, prices: planPrices, foodPrice: foodPriceOf(s, planPrices), state,
-        keepDefenceOne, adopted: stored?.key ?? null, restriction: trade.state, done: (id) => isClosed(progress, id),
+        keepDefenceOne, adopted: stored?.key ?? null, restriction: trade.state, done: (id) => isClosed(progress, id), objective: priority,
       });
       if (!report) continue;
       // In the middle of a trip on this step (fighting it in the game now, with its food in the bag) a better plan waits for the next bank trip.
@@ -188,7 +188,7 @@ export function PlayerStateProvider({ children }: { children: ReactNode }) {
       out[s.id] = { report, selection: selectPlan(report, stored, { inProgress }), lastKnown };
     }
     return out;
-  }, [combatSteps, adopted, base, progress, stats, xp, gear, combatLog, owned, planPrices, keepDefenceOne, trade.state, state, link, inGame, activeStepId, pacing, bound, lastGears, lastGear]);
+  }, [combatSteps, adopted, base, progress, stats, xp, gear, combatLog, owned, planPrices, keepDefenceOne, trade.state, state, link, inGame, activeStepId, pacing, bound, lastGears, lastGear, priority]);
 
   // The guide's own choice is remembered, so it stays put unless another plan becomes clearly better (and a change waits for a bank trip). The route's
   // plan needs no entry: it is what a step without one has. The player's own choice is never written over.

@@ -107,12 +107,13 @@ describe('Dragon Slayer I: the checks before the quest and before the ship', () 
   });
 
   it('the rule follows the opponent, not a step: any fight whose attack the wiki labels dragonfire, and any dragonfire shield satisfies it', () => {
-    expect(allSteps.filter((s) => safetyRulesOf(s.id).length).map((s) => s.id)).toEqual(['S5-08']);
-    expect(safetyRulesOf('S5-08')[0].detail).toBe("Do not go without it: Elvarg's dragonfire hits up to 70. Duke Horacio in Lumbridge Castle gives it free.");
+    expect(allSteps.filter((s) => safetyRulesOf(s).length).map((s) => s.id)).toEqual(['S5-08']);
+    expect(safetyRulesOf(stepById.get('S5-08')!)[0].detail).toBe("Do not go without it: Elvarg's dragonfire hits up to 70. Duke Horacio in Lumbridge Castle gives it free.");
     const line = (name: string, where: 'MISSING' | 'INVENTORY') => ({ name, where }) as never;
-    expect(safetyBlockers('S5-07', [line('Anti-dragon shield', 'MISSING')])).toEqual([]);
-    expect(safetyBlockers('S5-08', [line('Dragonfire shield', 'INVENTORY')])).toEqual([]);
-    expect(safetyBlockers('S5-08', [line('Anti-dragon shield', 'MISSING')])).toHaveLength(1);
+    const rules = (id: string) => safetyRulesOf(stepById.get(id)!);
+    expect(safetyBlockers(rules('S5-07'), [line('Anti-dragon shield', 'MISSING')])).toEqual([]);
+    expect(safetyBlockers(rules('S5-08'), [line('Dragonfire shield', 'INVENTORY')])).toEqual([]);
+    expect(safetyBlockers(rules('S5-08'), [line('Anti-dragon shield', 'MISSING')])).toHaveLength(1);
   });
 
   it('every step that meets a hazard asks for its protection: a new dragon fight without a shield in its items fails here', () => {

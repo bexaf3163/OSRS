@@ -9,6 +9,8 @@ import { SAVE_GP } from '../services/gearAdvisor';
 import { heldOf, levelOf, type PlayerState, type WorldPoint } from './playerState';
 import { SHOP_TOWN, accessSuffix, shopAccess, shopKey, spawnAccess, type AccessState } from './shopAccess';
 import { nameKey } from './checklist';
+import { items } from '../data';
+import type { PriceView } from './funding/quotes';
 import locationsJson from '../data/majorLocations.json';
 import stepsJson from '../data/steps.json';
 
@@ -105,6 +107,21 @@ function freeGiver(name: string, here: WorldPoint | undefined): SourceOption | n
 
 /** A shop price at or above this is the item data's "not sold here" placeholder, not a price. */
 const NOT_SOLD_PRICE = 1e9;
+
+const DETAIL = new Map(items.map((i) => [nameKey(i.nameEn), i]));
+/**
+ * What one unit of a used-up supply (arrows, runes, bait, food) costs to replace, for the rate models: the exchange buy price, else the cheapest
+ * shop of the item data that sells it for coins to this account (a members shop never on a free one). null when neither is known: unknown,
+ * never free. Travel to the shop is not in it.
+ */
+export function supplyPrice(name: string, prices: PriceView | null | undefined, mode: 'f2p' | 'members'): number | null {
+  const ge = prices?.buy(name)?.price;
+  if (ge !== undefined) return ge;
+  const shop = (DETAIL.get(nameKey(name))?.buyLocations ?? [])
+    .filter((b) => !(b.members && mode === 'f2p') && b.stock !== 0 && b.price < NOT_SOLD_PRICE)
+    .reduce<number | null>((a, b) => (a === null || b.price < a ? b.price : a), null);
+  return shop;
+}
 
 export function planSources(input: SourceInput, s: PlayerState): SourcePlan {
   const here = s.position.known ? s.position.value : undefined;

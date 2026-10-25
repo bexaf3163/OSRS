@@ -182,3 +182,12 @@ describe('the cowhide baseline is bounded', () => {
     expect(coinTimeShare(600, null)).toBe(0);
   });
 });
+
+describe('the path forecasts with the rates of the levels it reaches', () => {
+  it('a later leg is rated by the model at its own level, not by the wiki next to today\'s model rates', () => {
+    const s = stateOf({ woodcutting: 55, attack: 40 }, { 'Rune axe': [1, 0] });
+    const a = adviseTraining({ skill: 'woodcutting', target: 75, state: s, mode: 'f2p', style: 'chill', priority: 'fastest' });
+    expect(a.path.length).toBeGreaterThan(0);
+    for (const leg of a.path) expect(leg.method.rateSource, `${leg.method.id} from ${leg.fromLevel}`).toBe('model');
+  });
+});

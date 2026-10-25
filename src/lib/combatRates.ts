@@ -23,6 +23,7 @@ import { FOODS } from './foodAdvice';
 import { levelOf, type PlayerState } from './playerState';
 import { gearPieceByName } from '../services/gearAdvisor';
 import { nameKey } from './checklist';
+import { supplyPrice } from './sourceRouter';
 import { xpForLevel } from './xp';
 import type { PriceView } from './funding/quotes';
 import type { Market, ModelRate } from './methodRates';
@@ -50,7 +51,7 @@ const MELEE = new Set(['attack', 'strength', 'defence']);
 /** The rate of one combat method for this player in this skill, or null when the model has nothing honest to say (methodRates.ts dispatches here). */
 export function combatRate(m: TrainingMethod, skill: string, state: PlayerState, market: Market = {}): ModelRate | null {
   if (m.kind !== 'method' || !m.npcNames?.length || state.equipmentKnown !== true) return null;
-  if (MELEE.has(skill) && m.skills.includes(skill)) return withLoot(meleeRate(m.npcNames[0], skill as 'attack' | 'strength' | 'defence', state), m.npcNames[0], market);
+  if (MELEE.has(skill) && m.skills.includes(skill)) return withLoot(meleeRate(m.npcNames[0], skill as 'attack' | 'strength' | 'defence', state, market.prices), m.npcNames[0], market);
   if (skill === 'ranged' && m.kit === 'f2p-bow') return withLoot(rangedRate(m, state, market.prices), methodFoe(m)?.name ?? m.npcNames[0], market);
   if (skill === 'magic' && m.kit === 'strike-spell') return magicRate(m, state, market.prices);
   return null;
@@ -60,7 +61,8 @@ export function combatRate(m: TrainingMethod, skill: string, state: PlayerState,
 function withLoot(r: (ModelRate & { secondsPerKill: number }) | null, foe: string, market: Market): ModelRate | null {
   if (!r) return null;
   const { secondsPerKill, ...rate } = r;
-  const spot = spotsOf(allSteps).get(foe);
+  // The method's own catalogue entry decides who may train there (members flag); here only the spot's facts are read.
+  const spot = spotsOf(allSteps, true).get(foe);
   const each = spot?.sell ? dropValue(spot.sell, market.prices, market.restriction) : null;
   const trip = termsOf(foe).tripMinutes;
   const extra = each !== null && spot?.sell ? lootSecondsPerKill(each, trip ? (trip[0] + trip[1]) / 2 : 4.5, coinsPerMinute(market.prices), market.objective) : null;
@@ -89,7 +91,7 @@ function worn(state: PlayerState): { weapon: GearPiece | null; neck: GearPiece |
 const termsOf = (foe: string) => termsFor(allSteps)[foe] ?? {};
 const atLevels = (f: CombatFoe) => !TRAINER_LEVELS[f.name] || TRAINER_LEVELS[f.name].includes(f.combat);
 
-function meleeRate(npc: string, skill: 'attack' | 'strength' | 'defence', state: PlayerState): (ModelRate & { secondsPerKill: number }) | null {
+function meleeRate(npc: string, skill: 'attack' | 'strength' | 'defence', state: PlayerState, prices?: PriceView | null): (ModelRate & { secondsPerKill: number }) | null {
   const lv = { attack: levelOf(state, 'attack'), strength: levelOf(state, 'strength'), defence: levelOf(state, 'defence'), hitpoints: levelOf(state, 'hitpoints') };
   if (Object.values(lv).some((v) => v === undefined)) return null;
   const levels = lv as { attack: number; strength: number; defence: number; hitpoints: number };
@@ -108,8 +110,12 @@ function meleeRate(npc: string, skill: 'attack' | 'strength' | 'defence', state:
   }).sort((a, b) => a.totalMinutes.mid - b.totalMinutes.mid)[0];
   if (!best) return null;
   const xp = to - from;
+  // The food eaten is the cost (owned food is used up too): none eaten is 0; eaten without a known price is unknown, never free.
+  const foodPrice = supplyPrice(food.name, prices, state.mode);
+  const costPerHour = best.food.mid <= 0 ? 0 : foodPrice === null ? null : (best.food.mid * foodPrice * 60) / Math.max(1e-6, best.totalMinutes.mid);
   return {
-    xph: [(xp * 60) / best.totalMinutes.high, (xp * 60) / Math.max(1e-6, best.totalMinutes.low)], costPerHour: null, basis: gear.weapon?.name ?? 'unarmed',
+    xph: [(xp * 60) / best.totalMinutes.high, (xp * 60) / Math.max(1e-6, best.totalMinutes.low)], costPerHour, ...(best.food.mid > 0 ? { costName: food.name.toLowerCase() } : {}),
+    basis: gear.weapon?.name ?? 'unarmed',
     secondsPerKill: (best.totalMinutes.mid * 60) / best.kills,
   };
 }
@@ -134,7 +140,7 @@ function rangedRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | 
   const fast = fight + between[0] + ARROW_PICKUP;
   const slow = fight * (1 + MARGIN) + between[1] + ARROW_PICKUP;
   const perKill = xpPerKill(foe);
-  const price = prices?.buy(arrow)?.price ?? null;
+  const price = supplyPrice(arrow, prices, state.mode);
   const shotsPerHour = (3600 / ((fast + slow) / 2)) * shots;
   return {
     xph: [(3600 * perKill) / slow, (3600 * perKill) / fast],
@@ -165,13 +171,13 @@ function magicRate(m: TrainingMethod, state: PlayerState, prices?: PriceView | n
   const staff = Object.entries(STAFFS).find(([, s]) => Object.values(state.equipment).some((n) => nameKey(n) === nameKey(s.name)))?.[0];
   const runes = Object.entries(spell.runes).filter(([element]) => element !== staff);
   const perCast = runes.reduce<number | null>((a, [element, qty]) => {
-    const p = prices?.buy(`${element[0].toUpperCase()}${element.slice(1)} rune`)?.price;
-    return a === null || p === undefined ? null : a + p * qty;
+    const p = supplyPrice(`${element[0].toUpperCase()}${element.slice(1)} rune`, prices, state.mode);
+    return a === null || p === null ? null : a + p * qty;
   }, 0);
   const castsPerHour = (3600 / ((fast + slow) / 2)) * casts;
   return {
     xph: [(3600 * perKill) / slow, (3600 * perKill) / fast],
-    costPerHour: perCast === null || !prices ? null : castsPerHour * perCast,
+    costPerHour: perCast === null ? null : castsPerHour * perCast,
     basis: spell.name,
   };
 }

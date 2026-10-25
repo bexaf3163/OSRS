@@ -92,7 +92,7 @@ function traits(t: TrainerEntry): Partial<Spot> & { name: string } {
  * older route may name another); else the registry's written place. A spot that needs a quest is never taken from a step: a quest boss's step is the
  * quest, not a place to train. Members spots only for members.
  */
-export function spotsOf(steps: readonly Step[], members = false): Map<string, Spot> {
+export function spotsOf(steps: readonly Step[], members: boolean): Map<string, Spot> {
   const out = new Map<string, Spot>();
   for (const t of TRAINER_SPOTS) {
     if (t.members && !members) continue;
@@ -140,6 +140,7 @@ const termsCache = new WeakMap<readonly Step[], Record<string, SpotTerms>>();
 /** spotTerms of a route's spots, once per route: what the food plan, the plans and the step's estimate all use, so they never disagree. */
 export function termsFor(steps: readonly Step[]): Record<string, SpotTerms> {
   let t = termsCache.get(steps);
-  if (!t) termsCache.set(steps, (t = spotTerms(spotsOf(steps))));
+  // Terms are facts of a place (its bank trip, its respawn), so every spot has them; who may use a spot is decided where spots are offered.
+  if (!t) termsCache.set(steps, (t = spotTerms(spotsOf(steps, true))));
   return t;
 }

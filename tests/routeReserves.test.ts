@@ -51,6 +51,15 @@ describe('selected-route stock reserves', () => {
     expect(cleanup.recs.find(l => l.name === 'Oak logs')).toMatchObject({ action: 'sell', qty: 20, keepQty: 10 });
   });
 
+  it('keeps the food the exchange list buys for the whole plan, not just one trip: cleanup never sells it back', () => {
+    const steps = [step('A', [item('Lobster', 6, { heals: 12, totalAmount: 40 })])];
+    const r = protectionsFor(steps, state({ Lobster: 40 }));
+    expect(r.get('lobster')?.qty).toBe(aggregateShopping(steps, { wholeGoal: true }).required.find(l => l.nameEn === 'Lobster')?.count);
+    expect(r.get('lobster')?.qty).toBe(40);
+    const cleanup = cleanupAdvice({ bag: [{ name: 'Lobster', count: 28 }], openSteps: steps, reserves: r, bankSeen: true, account: 'normal', restriction: 'LIFTED', price: () => 150, tradeable: () => true, prefs: emptyCleanupPrefs() });
+    expect(cleanup.recs.find(l => l.name === 'Lobster' && l.action === 'sell')).toBeUndefined();
+  });
+
   it('completion and carryover describe the same retained stock rather than a second consumption', () => {
     const a = step('A', [item('Big bones', 50)]);
     a.inGame = { completionTrigger: { type: 'ITEM_OWNED', items: [{ names: ['Big bones'], count: 50 }] } };
