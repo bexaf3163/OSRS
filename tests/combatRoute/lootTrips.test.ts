@@ -11,9 +11,12 @@ describe('mandatory retained loot and combat duration', () => {
     expect(base.trips.mid).toBe(1);
     const route = evaluatePlans(input)!.plans[0].phases[0];
     expect(route.requiredLootTrips).toBe(2);
-    expect(route.minutes.mid).toBeCloseTo(base.totalMinutes.mid + 4.5, 8);
-    expect(route.minutes.low).toBeCloseTo(base.totalMinutes.low + 3, 8);
-    expect(route.minutes.high).toBeCloseTo(base.totalMinutes.high + 6, 8);
+    // One more visit to the spot's own bank (the Hill Giants': Edgeville, through the trapdoor).
+    const trip = base.bankTripMinutes!;
+    expect(trip.mid).toBeLessThan(4.5);
+    expect(route.minutes.mid).toBeCloseTo(base.totalMinutes.mid + trip.mid, 8);
+    expect(route.minutes.low).toBeCloseTo(base.totalMinutes.low + trip.low, 8);
+    expect(route.minutes.high).toBeCloseTo(base.totalMinutes.high + trip.high, 8);
   });
 
   it('uses only missing bones and does not add loot trips on top of an already longer food-bank schedule', () => {

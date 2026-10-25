@@ -1,7 +1,7 @@
 // One combat objective projection for plan comparison, food preparation and shopping.
 import type { Step } from '../types';
 import { nameKey, type OwnedState } from './checklist';
-import { estimateStep, foeVariants, stepGoals, type CombatEstimate, type StepEstimateContext } from './combatEstimate';
+import { estimateStep, foeVariants, stepGoals, xpPerKill, type CombatEstimate, type StepEstimateContext } from './combatEstimate';
 import { GUARANTEED_DROPS } from './combatRoute/spots';
 import { heldExact } from './playerState';
 import { levelForXp, xpForLevel } from './xp';
@@ -28,7 +28,7 @@ export function currentXp(ctx: StepEstimateContext, skill: Goal['skill']): numbe
 /** Collection needs a whole-fight estimate even when the route's XP target is already reached. */
 export function dropEstimates(step: EstimatedStep, foe: string, count: number, skill: Goal['skill'], ctx: StepEstimateContext): CombatEstimate[] {
   if (count <= 0) return [];
-  return foeVariants(foe).flatMap(v => estimateStep(asked(step, foe, [{ skill, exp: currentXp(ctx, skill) + count * 4 * v.hitpoints }]), ctx)
+  return foeVariants(foe).flatMap(v => estimateStep(asked(step, foe, [{ skill, exp: currentXp(ctx, skill) + count * xpPerKill(v) }]), ctx)
     .filter(e => e.foe.combat === v.combat && e.foe.version === v.version));
 }
 
@@ -42,7 +42,7 @@ export function objectiveEstimates(step: EstimatedStep, foe: string, goals: Goal
     if (first && first.kills >= count) return [first];
     const extra = Math.max(0, count - (first?.kills ?? 0));
     const main = goals[0];
-    const extended = [{ ...main, exp: Math.max(main.exp, currentXp(ctx, main.skill)) + extra * 4 * v.hitpoints }, ...goals.slice(1)];
+    const extended = [{ ...main, exp: Math.max(main.exp, currentXp(ctx, main.skill)) + extra * xpPerKill(v) }, ...goals.slice(1)];
     return estimateStep(asked(step, foe, extended), ctx).filter(e => e.foe.combat === v.combat && e.foe.version === v.version);
   });
 }

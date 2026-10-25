@@ -153,6 +153,18 @@ const prepView = async (p: Page) => {
   await p.waitForTimeout(400);
 };
 
+/** "Why this plan?": from the status line when a plan other than the route is in effect, else the fold itself (the line is silent then). */
+const openWhy = async (p: Page) => {
+  const line = p.locator('.status-combat-route').getByRole('button', { name: 'Why this plan?' });
+  if (await line.count()) await line.first().click();
+  else {
+    const fold = p.locator('.combat-route-details:visible').first();
+    await fold.scrollIntoViewIfNeeded();
+    await fold.locator('summary').click();
+  }
+  await p.waitForTimeout(600);
+};
+
 const SHOTS: Shot[] = [
   { name: 'hill-giants-step', area: 'T4', caption: 'S4-03 step as the guide opens it for the reported character', width: 1440, hash: '#/step/S4-03', mock: hillGiants() },
   { name: 'quest-step-elvarg', area: 'T4', caption: 'S5-08, a quest step with stages, as the guide opens it', width: 1440, hash: '#/step/S5-08', mock: hillGiants() },
@@ -193,8 +205,12 @@ const SHOTS: Shot[] = [
     act: async (p) => { await prepView(p); await p.locator('.funding-card .btn-primary').click(); await p.waitForTimeout(800); }, sel: '.funding-card',
   },
   {
-    name: 'combat-why', area: 'T3', caption: 'S4-03: "Why this plan?" from the status line opens the comparison of plans', width: 1440, hash: '#/step/S4-03', mock: hillGiants(),
-    act: async (p) => { await p.locator('.status-combat-route').getByRole('button', { name: 'Why this plan?' }).first().click(); await p.waitForTimeout(600); }, sel: '.combat-route',
+    name: 'combat-why', area: 'T3', caption: 'S4-03: "Why this plan?" opens the comparison of plans', width: 1440, hash: '#/step/S4-03', mock: hillGiants(),
+    act: openWhy, sel: '.combat-route',
+  },
+  {
+    name: 'combat-why-390', area: 'T3', caption: 'S4-03: the comparison of plans at phone width', width: 390, hash: '#/step/S4-03', mock: hillGiants(),
+    act: openWhy, sel: '.combat-route',
   },
   { name: 'money', area: 'T2', caption: 'Money: the reported character, 400 gp, S4-03 short of coins: ranked for the shortfall', width: 1440, hash: '#/money', mock: hillGiants() },
   {

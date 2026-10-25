@@ -3,7 +3,7 @@
 // The player's hit is gearAdvisor's (OSRS Wiki "Damage per second/Melee": max hit, accuracy, a successful 0 counted as 1) in the
 // style the step asks for; the opponent's numbers are its own version's infobox (combatFoes.json: the level 12 and the level 27
 // Minotaur are separate). From those:
-//   - kills: 4 XP per point of damage, so a kill gives 4 x its hit points in the trained skill — exact, whatever the hit;
+//   - kills: 4 XP per point of damage (with the opponent's own bonus: Brutus doubles it), so a kill gives 4 x its hit points in the trained skill — exact, whatever the hit;
 //   - attacks per kill: mean and spread over the hit distribution, by recursion over the hit points left;
 //   - damage taken: the opponent swings every speedTicks while the fight lasts; its accuracy against the worn armour's
 //     defence bonus, a hit rolls 0..max;
@@ -38,6 +38,28 @@ export interface CombatFoe {
   maxHit: number;
   speedTicks: number;
   aggressive: boolean;
+  /** The wiki's experience bonus in percent: Brutus +100 (twice the XP for each point of damage). */
+  xpBonus?: number;
+}
+
+/** Combat XP of one kill in the trained skill: 4 per point of damage, with the opponent's own bonus. */
+export const xpPerKill = (f: Pick<CombatFoe, 'hitpoints' | 'xpBonus'>): number => 4 * f.hitpoints * (1 + (f.xpBonus ?? 0) / 100);
+
+/**
+ * What a fighting spot changes in the estimate (lib/combatRoute/spots.ts): the walk to its bank and back, the wait for a lone boss's respawn, healing
+ * that replaces food, a special attack that is eaten for. Absent - the defaults: a 3 to 6 minute bank trip, 2 to 6 seconds to the next target.
+ */
+export interface SpotTerms {
+  /** Minutes to the bank and back, banking included. */
+  tripMinutes?: [number, number];
+  /** Seconds from a kill to the next fight. */
+  betweenKills?: [number, number];
+  /** Healing for the asking (a monk): no food; each heal gives 2 + 20% of the Hitpoints level and takes the talk's seconds. */
+  freeHeal?: boolean;
+  /** A special attack's max hit: health is kept above it. */
+  specialMaxHit?: number;
+  /** Others of the group join when one is attacked: the estimate is less sure, as with an aggressive opponent. */
+  groupAggro?: boolean;
 }
 
 export const COMBAT_FOES = (combatFoesJson as { foes: CombatFoe[] }).foes;
@@ -187,6 +209,14 @@ export interface EstimateInput {
   /** Minutes to the bank and back between trips. */
   tripMinutes?: [number, number];
   observed?: Observed | null;
+  /** Seconds from a kill to the next fight; default BETWEEN_KILLS. */
+  betweenKills?: [number, number];
+  /** Healing for the asking instead of food (SpotTerms.freeHeal). */
+  freeHeal?: boolean;
+  /** A special attack's max hit the player eats for (SpotTerms.specialMaxHit). */
+  specialMaxHit?: number;
+  /** Others join a fight (SpotTerms.groupAggro). */
+  groupAggro?: boolean;
 }
 
 export interface Phase {
@@ -232,6 +262,8 @@ export interface CombatEstimate {
   strengthDosesLeft?: number;
   /** The bank-trip assumptions used in totalMinutes, for a planner that adds required loot trips. */
   bankTripMinutes?: Range;
+  /** Heals asked for instead of food (a monk), mean; absent when food is eaten. */
+  heals?: number;
 }
 
 /** Model margin on top of the luck of the rolls, by how much is known. */
@@ -241,6 +273,8 @@ const Z = 1.65;
 /** Finding and reaching the next target, seconds a kill. */
 const BETWEEN_KILLS: [number, number] = [2, 6];
 const EAT_SECONDS = 3 * TICK;
+/** Asking a monk for healing: walk to one, the talk and its options, seconds. */
+const HEAL_SECONDS: [number, number] = [8, 15];
 /** Natural regeneration: 1 hit point a minute. */
 const REGEN_PER_SECOND = 1 / 60;
 /** Overheal and eating early waste part of each piece. */
@@ -268,7 +302,8 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
   const foeRoll = (foe.attackLevel + 9) * (foe.attackBonus + 64);
   if (inp.unknownPieces) assumed.push(`${inp.unknownPieces} worn item${inp.unknownPieces > 1 ? 's' : ''} without data counted as no armour`);
 
-  const xpPerKill = 4 * foe.hitpoints;
+  const perKill = xpPerKill(foe);
+  const between = inp.betweenKills ?? BETWEEN_KILLS;
   // A Strength potion dose lasts `boost` minutes: it wears off a level a minute, so each boost from the full one down to +1 holds
   // for a minute (the max hit grows in steps, an average boost would hide them).
   const boost = strengthBoost(lv.strength);
@@ -290,7 +325,7 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
       const level = levelForXp(xp[goal.skill]);
       lv[goal.skill] = level;
       const segment = Math.min(goal.exp, level < 99 ? xpForLevel(level + 1) : goal.exp) - xp[goal.skill];
-      let segmentKills = segment / xpPerKill;
+      let segmentKills = segment / perKill;
       // With a potion first while doses last, then without.
       const runs: { kills: number; boost: number }[] = [];
       if (potionSeconds > 0) {
@@ -351,7 +386,7 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
   const obs = inp.observed;
   if (obs && obs.kills >= CALIBRATED_KILLS && obs.seconds > 0) {
     const w = obs.kills / (obs.kills + CALIBRATION_KILLS);
-    const modelPerKill = fightMean / kills + (BETWEEN_KILLS[0] + BETWEEN_KILLS[1]) / 2;
+    const modelPerKill = fightMean / kills + avg(between);
     const ratio = (1 - w) + (w * (obs.seconds / obs.kills)) / modelPerKill;
     fightMean *= ratio;
     fightVar *= ratio ** 2;
@@ -362,46 +397,54 @@ export function estimateCombat(inp: EstimateInput): CombatEstimate | null {
     }
     basis = 'calibrated';
   }
-  const margin = MARGIN[basis] + (foe.aggressive ? 0.1 : 0);
+  // An opponent that picks the fight, or brings its friends, makes the damage and the pace less sure.
+  const margin = MARGIN[basis] + (foe.aggressive || inp.groupAggro ? 0.1 : 0);
 
   const fight = spread(fightMean, fightVar, margin);
-  const regen = (fightMean + kills * avg(BETWEEN_KILLS)) * REGEN_PER_SECOND;
+  const regen = (fightMean + kills * avg(between)) * REGEN_PER_SECOND;
   const maxHp = inp.levels.hitpoints;
   if (inp.currentHp == null) assumed.push('you start at full health');
   const startHp = Math.min(maxHp, inp.currentHp ?? maxHp);
-  // Health below two of its max hits is where you eat; what is above that at the start is free.
-  const buffer = Math.max(0, startHp - 2 * foe.maxHit);
+  // Health below two of its max hits is where you eat (above a special attack's max hit when it has one); what is above that at the start is free.
+  const eatAt = Math.max(2 * foe.maxHit, (inp.specialMaxHit ?? 0) + 1);
+  const buffer = Math.max(0, startHp - eatAt);
   const netMid = Math.max(0, damageMean - regen - buffer);
   const damage = spread(netMid, damageVar, margin);
-  const heals = inp.food.heals;
-  const food: Range = {
+  // A monk's healing replaces the food: 2 + 20% of the Hitpoints level each time it is asked for.
+  const heals = inp.freeHeal ? 2 + Math.floor(maxHp / 5) : inp.food.heals;
+  const asked: Range | null = inp.freeHeal ? {
+    low: Math.max(0, Math.floor(damage.low / heals)), mid: Math.max(0, Math.round(damage.mid / (heals * avg(USABLE)))), high: Math.max(0, Math.ceil(damage.high / (heals * USABLE[0]))),
+  } : null;
+  const food: Range = asked ? { low: 0, mid: 0, high: 0 } : {
     low: Math.max(0, Math.floor(damage.low / (heals * USABLE[1]))),
     mid: Math.max(0, Math.round(damage.mid / (heals * avg(USABLE)))),
     high: Math.max(0, Math.ceil(damage.high / (heals * USABLE[0]))),
   };
   const eatSeconds = (n: number) => n * EAT_SECONDS;
+  const healSeconds: Range = asked ? { low: asked.low * HEAL_SECONDS[0], mid: asked.mid * avg(HEAL_SECONDS), high: asked.high * HEAL_SECONDS[1] } : { low: 0, mid: 0, high: 0 };
 
   const foodSlots = Math.max(1, Math.min(28, inp.foodSlots ?? DEFAULT_FOOD_SLOTS));
   // One bag lasts until its healing and the regeneration on the way are used up.
-  const perKillNet = damageMean / kills - (fightMean / kills + avg(BETWEEN_KILLS)) * REGEN_PER_SECOND;
-  const killsPerTrip = perKillNet > 0 ? (foodSlots * heals * avg(USABLE)) / perKillNet : Infinity;
+  const perKillNet = damageMean / kills - (fightMean / kills + avg(between)) * REGEN_PER_SECOND;
+  const killsPerTrip = !asked && perKillNet > 0 ? (foodSlots * heals * avg(USABLE)) / perKillNet : Infinity;
   const tripsFor = (n: number) => (n <= 0 ? 0 : Math.ceil(n / foodSlots));
   const trips: Range = { low: Math.max(1, tripsFor(food.low)), mid: Math.max(1, tripsFor(food.mid)), high: Math.max(1, tripsFor(food.high)) };
   const trip = inp.tripMinutes ?? [3, 6];
   const minutes = (s: number) => s / 60;
   const combatMinutes = { low: minutes(fight.low), mid: minutes(fight.mid), high: minutes(fight.high) };
   const totalMinutes: Range = {
-    low: minutes(fight.low + kills * BETWEEN_KILLS[0] + eatSeconds(food.low)) + (trips.low - 1) * trip[0],
-    mid: minutes(fight.mid + kills * avg(BETWEEN_KILLS) + eatSeconds(food.mid)) + (trips.mid - 1) * avg(trip),
-    high: minutes(fight.high + kills * BETWEEN_KILLS[1] + eatSeconds(food.high)) + (trips.high - 1) * trip[1],
+    low: minutes(fight.low + kills * between[0] + eatSeconds(food.low) + healSeconds.low) + (trips.low - 1) * trip[0],
+    mid: minutes(fight.mid + kills * avg(between) + eatSeconds(food.mid) + healSeconds.mid) + (trips.mid - 1) * avg(trip),
+    high: minutes(fight.high + kills * between[1] + eatSeconds(food.high) + healSeconds.high) + (trips.high - 1) * trip[1],
   };
 
   return {
     basis, foe, phases, kills, combatMinutes, totalMinutes, damage, food, foodSlots, killsPerTrip, trips,
-    hpPerKill: Math.max(0, perKillNet), secondsPerKill: fightMean / kills + avg(BETWEEN_KILLS),
+    hpPerKill: Math.max(0, perKillNet), secondsPerKill: fightMean / kills + avg(between),
     nextTrip: Math.min(foodSlots, food.high), reserve: food.high - food.mid, assumed,
     strengthDosesLeft: Math.max(0, Math.floor(potionSeconds / (boost * 60))),
     bankTripMinutes: { low: trip[0], mid: avg(trip), high: trip[1] },
+    ...(asked ? { heals: asked.mid } : {}),
   };
 }
 
@@ -447,6 +490,8 @@ export interface StepEstimateContext {
    */
   assume?: { xp?: Partial<Record<MeleeSkill, number>>; weapon?: GearPiece | null } | null;
   data?: GearData;
+  /** What each opponent's fighting spot changes, by the opponent's name (lib/combatRoute/spots.ts spotTerms). */
+  terms?: Readonly<Record<string, SpotTerms>> | null;
 }
 
 /** The recorded fights of one opponent version, as an observation. */
@@ -489,8 +534,11 @@ export function estimateStep(step: Pick<Step, 'pacing' | 'foes' | 'itemsRequired
     if (x !== undefined) levels[k] = Math.max(levels[k]!, levelForXp(x));
   }
   const weapon = ctx.assume?.weapon !== undefined && ctx.assume.weapon !== null ? ctx.assume.weapon : equipped.weapon?.piece ?? null;
+  const terms = ctx.terms?.[name] ?? {};
   return foeVariants(name).flatMap((foe) => {
     const e = estimateCombat({
+      ...(terms.tripMinutes ? { tripMinutes: terms.tripMinutes } : {}), ...(terms.betweenKills ? { betweenKills: terms.betweenKills } : {}),
+      ...(terms.freeHeal ? { freeHeal: true } : {}), ...(terms.specialMaxHit ? { specialMaxHit: terms.specialMaxHit } : {}), ...(terms.groupAggro ? { groupAggro: true } : {}),
       foe, levels: levels as EstimateInput['levels'], goals, food, armour, unknownPieces,
       ...(haveXp ? { xp: { attack: xpOf('attack'), strength: xpOf('strength'), defence: xpOf('defence') } } : {}),
       weapon, neck: equipped.neck?.piece ?? null,

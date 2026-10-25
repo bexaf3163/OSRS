@@ -1,0 +1,205 @@
+{
+  "source": "scripts/trainers.defs.json checked against the OSRS Wiki (LocLine spawns, drop tables) and the route (scripts/build-trainers.ts)",
+  "generatedAt": "2026-10-25",
+  "trainers": [
+    {
+      "foe": "Cow",
+      "name": "cows",
+      "fromStep": "S1-13",
+      "bank": "Lumbridge Bank",
+      "sell": "Cowhide",
+      "always": [
+        "Cowhide",
+        "Raw beef",
+        "Bones"
+      ],
+      "members": false
+    },
+    {
+      "foe": "Minotaur",
+      "name": "Minotaurs",
+      "fromStep": "S3-08",
+      "levels": [
+        12
+      ],
+      "bank": "Edgeville Bank",
+      "always": [
+        "Bones"
+      ],
+      "members": false
+    },
+    {
+      "foe": "Giant frog",
+      "name": "Giant frogs",
+      "fromStep": "S4-03",
+      "levels": [
+        13
+      ],
+      "bank": "Lumbridge Bank",
+      "sell": "Big bones",
+      "always": [
+        "Big bones"
+      ],
+      "members": false
+    },
+    {
+      "foe": "Hill Giant",
+      "name": "Hill Giants",
+      "formerStep": "S4-03",
+      "bank": "Edgeville Bank",
+      "sell": "Big bones",
+      "place": {
+        "x": 3097,
+        "y": 3468,
+        "plane": 0,
+        "label": "The trapdoor to the Edgeville Dungeon"
+      },
+      "waypoints": [
+        {
+          "x": 3097,
+          "y": 3468,
+          "plane": 0,
+          "label": "The trapdoor to the Edgeville Dungeon: climb down"
+        },
+        {
+          "x": 3111,
+          "y": 9838,
+          "plane": 0,
+          "label": "Edgeville Dungeon: the Hill Giants"
+        }
+      ],
+      "npcNames": [
+        "Hill Giant"
+      ],
+      "goal": "Edgeville Dungeon: the Hill Giants",
+      "where": "The Hill Giants in the Edgeville Dungeon: the trapdoor is in Edgeville, a few steps south-west of the bank, and the giants are in the south-east of the dungeon. If you have a Brass key, the locked door by the giants saves the walk past the skeletons. The Edgeville bank is a minute away.",
+      "always": [
+        "Big bones"
+      ],
+      "members": false,
+      "routeStep": "S4-03",
+      "source": "https://oldschool.runescape.wiki/w/Hill_Giant"
+    },
+    {
+      "foe": "Barbarian",
+      "name": "barbarians",
+      "levels": [
+        10
+      ],
+      "bank": "Edgeville Bank",
+      "sell": "Bones",
+      "npcNames": [
+        "Barbarian"
+      ],
+      "goal": "Barbarian Village: the barbarians",
+      "where": "The barbarians of Barbarian Village, around the long hall by the Stronghold of Security entrance. Most are level 10, a few level 17; none attack first. Bank in Edgeville, north along the road.",
+      "always": [
+        "Bones"
+      ],
+      "place": {
+        "x": 3083,
+        "y": 3429,
+        "plane": 0,
+        "label": "Barbarian Village: the barbarians"
+      },
+      "members": false,
+      "spawns": 17,
+      "routeStep": "S1-09",
+      "routeTiles": 9,
+      "source": "https://oldschool.runescape.wiki/w/Barbarian"
+    },
+    {
+      "foe": "Al Kharid warrior",
+      "name": "Al Kharid warriors",
+      "levels": [
+        9
+      ],
+      "bank": "Al Kharid Bank",
+      "npcNames": [
+        "Al Kharid warrior"
+      ],
+      "goal": "Al Kharid palace: the warriors",
+      "where": "The warriors in the Al Kharid palace. When you attack one, the others nearby join in: pull one aside before fighting. The Al Kharid bank is just west of the palace.",
+      "groupAggro": true,
+      "always": [],
+      "place": {
+        "x": 3292,
+        "y": 3169,
+        "plane": 0,
+        "label": "Al Kharid palace: the warriors"
+      },
+      "members": false,
+      "spawns": 9,
+      "routeStep": "S2-10",
+      "routeTiles": 6,
+      "source": "https://oldschool.runescape.wiki/w/Al_Kharid_warrior"
+    },
+    {
+      "foe": "Monk",
+      "name": "monks",
+      "levels": [
+        5
+      ],
+      "bank": "Edgeville Bank",
+      "sell": "Bones",
+      "npcNames": [
+        "Monk"
+      ],
+      "goal": "Edgeville Monastery: the monks",
+      "where": "The monks on the ground floor of Edgeville Monastery, west of Edgeville. Instead of eating, talk to a monk and ask to be healed: 2 + 20% of your Hitpoints each time. Bank in Edgeville.",
+      "freeHeal": true,
+      "always": [
+        "Bones"
+      ],
+      "place": {
+        "x": 3050,
+        "y": 3491,
+        "plane": 0,
+        "label": "Edgeville Monastery: the monks"
+      },
+      "members": false,
+      "spawns": 4,
+      "routeStep": "S5-09",
+      "routeTiles": 26,
+      "source": "https://oldschool.runescape.wiki/w/Monk"
+    },
+    {
+      "foe": "Brutus",
+      "name": "Brutus",
+      "proper": true,
+      "levels": [
+        30
+      ],
+      "bank": "Lumbridge Bank",
+      "sell": "Raw t-bone steak",
+      "npcNames": [
+        "Brutus"
+      ],
+      "goal": "Lumbridge cow field: Brutus",
+      "where": "Brutus in his pen in the north of the cow field east of Lumbridge, open after The Ides of Milk. Step aside when he winds up a charge or a stomp: they hit up to 19. He comes back about 22 seconds after each kill. Bank at Lumbridge Castle.",
+      "requires": {
+        "quest": "The Ides of Milk"
+      },
+      "betweenKills": [
+        21.6,
+        25
+      ],
+      "specialMaxHit": 19,
+      "always": [
+        "Bull bones",
+        "Raw t-bone steak"
+      ],
+      "place": {
+        "x": 3263,
+        "y": 3297,
+        "plane": 0,
+        "label": "Brutus's pen, Lumbridge cow field"
+      },
+      "members": false,
+      "spawns": 1,
+      "routeStep": "S1-13",
+      "routeTiles": 25,
+      "source": "https://oldschool.runescape.wiki/w/Brutus"
+    }
+  ]
+}

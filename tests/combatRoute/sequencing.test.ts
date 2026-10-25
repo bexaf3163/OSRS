@@ -4,7 +4,7 @@ import { currentPhase, phaseDone, phaseInstruction, resolvePick, withCombatPlan 
 import { xpForLevel } from '../../src/lib/xp';
 import { stepById } from '../../src/data';
 import { HISTORICAL, planInput } from './fixture';
-import { estimateStep } from '../../src/lib/combatEstimate';
+import { estimateStep, xpPerKill } from '../../src/lib/combatEstimate';
 
 describe('combined combat objectives', () => {
   it('carries only unused whole Strength doses into the next phase', () => {
@@ -21,9 +21,9 @@ describe('combined combat objectives', () => {
     const split = r.plans.find(p => p.key === 'split')!;
     expect(first.phases[0].item).toEqual({ name: 'Big bones', count: 50 });
     expect(first.phases[0].kills).toBe(50);
-    const earned = 50 * 4 * first.phases[0].foe.hitpoints;
+    const earned = 50 * xpPerKill(first.phases[0].foe);
     expect(first.phases[0].goals[0].exp).toBe(HISTORICAL.xp.attack + earned);
-    expect(first.phases[1].kills).toBe(Math.ceil((xpForLevel(40) - HISTORICAL.xp.attack - earned) / (4 * first.phases[1].foe.hitpoints)));
+    expect(first.phases[1].kills).toBe(Math.ceil((xpForLevel(40) - HISTORICAL.xp.attack - earned) / xpPerKill(first.phases[1].foe)));
     expect(first.phases[1].kills).toBeLessThan(split.phases[0].kills);
     expect(phaseInstruction(first.phases[0])).toContain('on Accurate');
     expect(currentPhase(first, { xp: HISTORICAL.xp, held: () => null })).toBe(0);
@@ -40,11 +40,15 @@ describe('combined combat objectives', () => {
     const partial = evaluatePlans(planInput({ items: { 'Big bones': [0, 30] } }))!;
     expect(partial.plans.find(p => p.key === 'item-first')?.phases[0].kills).toBe(20);
     const owned = evaluatePlans(planInput({ items: { 'Big bones': [0, 50] } }))!;
-    const xp = owned.plans.find(p => p.key === 'xp-only')!;
-    expect(xp.phases).toHaveLength(1);
-    expect(xp.phases[0].item).toBeUndefined();
-    expect(xp.phases[0].foe.name).toBe('Cow');
-    expect(xp.phases[0].goals[0].exp).toBe(xpForLevel(40));
+    const spots = owned.plans.filter(p => p.id === 'xp-only');
+    // Every spot is compared on its own once there is nothing left to collect.
+    expect(spots.map(p => p.phases[0].foe.name)).toEqual(expect.arrayContaining(['Cow', 'Minotaur', 'Barbarian', 'Monk', 'Al Kharid warrior']));
+    for (const xp of spots) {
+      expect(xp.key).toBe(`xp-only:${xp.phases[0].foe.name}`);
+      expect(xp.phases).toHaveLength(1);
+      expect(xp.phases[0].item).toBeUndefined();
+      expect(xp.phases[0].goals[0].exp).toBe(xpForLevel(40));
+    }
   });
 
   it('can estimate the outstanding item objective after Attack 40 is reached', () => {

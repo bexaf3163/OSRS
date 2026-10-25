@@ -28,11 +28,16 @@ export interface Route {
   /** The opponents of the steps (monsters.json): for the combat pace — health, from which the XP per opponent comes. */
   monsters?: FoeData;
   /** Every version of the training opponents with their attack (combatFoes.json): for the time and food estimate. */
-  combatFoes?: { foes: { name: string; version?: string; members: boolean; hitpoints: number; defenceLevel: number; defence: Record<string, number>; maxHit: number; speedTicks: number }[] };
+  combatFoes?: { foes: { name: string; version?: string; combat: number; members: boolean; hitpoints: number; defenceLevel: number; defence: Record<string, number>; maxHit: number; speedTicks: number }[] };
   /** Where the steps' NPCs stand (npcLocations.json) — for "Where to go" and the step map points. */
   npcs?: Record<string, { x: number; y: number; plane: number; area: string; page: string; steps?: string[] }[]>;
   /** The place dictionary (majorLocations.json): shops and places where items come from. */
-  places?: Record<string, { x: number; y: number; plane: number; label: string }>;
+  places?: Record<string, { x: number; y: number; plane: number; label: string; kind?: string }>;
+  /** The training spots of the combat plans (trainers.json, built from scripts/trainers.defs.json). */
+  trainers?: {
+    foe: string; name: string; fromStep?: string; formerStep?: string; levels?: number[]; bank?: string; sell?: string; always: string[];
+    place?: { x: number; y: number; plane: number; label: string }; npcNames?: string[]; goal?: string; where?: string;
+  }[];
 }
 
 export interface Report {
@@ -456,6 +461,26 @@ export function validate(d: GuideData | null, route: Route): Report {
       ];
     });
     check(!badFoes.length, 'The combat estimate has every training opponent, and it agrees with monsters.json', `The combat opponents: ${badFoes.join('; ')}`);
+  }
+  // The training spots (2.75): every entry is usable as it is, and every combat training step's opponent has one, so a new step or spot needs data only.
+  if (route.trainers && route.combatFoes) {
+    const cf = route.combatFoes.foes;
+    const bad = route.trainers.flatMap((t) => {
+      const versions = cf.filter((f) => f.name === t.foe && !f.members);
+      const step = t.fromStep ? steps.find((s) => s.id === t.fromStep) : undefined;
+      return [
+        ...(!versions.length ? [`${t.foe}: no free version in combatFoes.json (npm run build-combat-foes)`] : []),
+        ...(t.levels ?? []).filter((l) => !versions.some((v) => v.combat === l)).map((l) => `${t.foe}: no level ${l} version`),
+        ...(t.bank && route.places?.[t.bank]?.kind !== 'bank' ? [`${t.foe}: ${t.bank} is not a bank`] : []),
+        ...(t.sell && !t.always.includes(t.sell) ? [`${t.foe}: ${t.sell} is not an always-drop`] : []),
+        ...(t.fromStep && step?.foes?.[0] !== t.foe ? [`${t.foe}: ${t.fromStep} does not send the player to it`] : []),
+        ...(!t.fromStep && !(t.place && t.npcNames?.length && t.goal && t.where) ? [`${t.foe}: a written spot needs place, npcNames, goal and where`] : []),
+        ...(!t.name ? [`${t.foe}: no name`] : []),
+      ];
+    });
+    const spotless = steps.filter((s) => s.pacing && COMBAT.has(s.pacing.skill) && s.foes?.[0] && !route.trainers!.some((t) => t.foe === s.foes![0]))
+      .map((s) => `${s.id}: ${s.foes![0]} has no training spot (scripts/trainers.defs.json, npm run build-trainers)`);
+    check(!bad.length && !spotless.length, `The ${route.trainers.length} training spots are complete, and every combat training step's opponent has one`, `Training spots: ${[...bad, ...spotless].join('; ')}`);
   }
   check(!badPacing.length, `The training pace at ${paced} steps: the skill, level and XP agree with the title and the formula`, `The training pace: ${badPacing.join('; ')}`);
 

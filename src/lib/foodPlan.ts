@@ -11,6 +11,7 @@ import { combatPlanView } from './combatPlan';
 import type { OwnedState } from './checklist';
 import { nameKey, parseAmount } from './checklist';
 import { estimateStepFights } from './fightEstimate';
+import { termsFor } from './combatRoute/spots';
 
 export interface FoodPick {
   /** Pieces for the next trip: readiness asks for these. */
@@ -86,7 +87,7 @@ export function foodPicks(steps: Step[], progress: Progress, live: Live): Record
       continue;
     }
     const fights = live.combatLog?.stepId === s.id ? live.combatLog.foes : null;
-    const v = combatPlanView(s, { ...live, fights, assume: assumptionsFor(s, steps, progress) });
+    const v = combatPlanView(s, { ...live, fights, assume: assumptionsFor(s, steps, progress), terms: termsFor(steps) });
     if (v) out[s.id] = { trip: v.nextTrip, total: v.plan, hpPerKill: Math.round(v.primary.hpPerKill * 10) / 10 };
   }
   return out;

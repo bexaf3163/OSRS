@@ -9,7 +9,7 @@
 //  - A plan that is gone (its conditions changed: the bones are already in hand) or not safe gives way at once: safety does not wait for a bank trip.
 
 import type { Adopted } from './adopt';
-import { MIN_GAIN, type EvaluatedPlan, type PlanReport } from './plans';
+import { gainOver, MIN_GAIN, planKeyOf, type EvaluatedPlan, type PlanReport } from './plans';
 
 /** Whether the player is in the middle of a trip on this step: then a better plan waits for the next bank trip instead of moving the arrow. */
 export interface TripState { inProgress: boolean }
@@ -27,8 +27,10 @@ export interface PlanSelection {
   offer?: string;
 }
 
-const usable = (report: PlanReport, key: string | undefined): EvaluatedPlan | undefined =>
-  key ? report.plans.find((p) => p.key === key && p.eligible) : undefined;
+const usable = (report: PlanReport, key: string | undefined): EvaluatedPlan | undefined => {
+  const k = key ? planKeyOf(report.plans, key) : undefined;
+  return k ? report.plans.find((p) => p.key === k && p.eligible) : undefined;
+};
 
 /**
  * The selection for one step. `report` must be evaluated with the stored key as its `adopted` plan, so the recommendation already keeps a plan in
@@ -40,11 +42,11 @@ export function selectPlan(report: PlanReport, stored: Adopted | undefined, trip
   if (stored && chosen) {
     // The guide's own pick is offered when it is clearly better than the player's (MIN_GAIN of the chosen plan's score); otherwise the choice stands quietly.
     const top = usable(report, report.fresh);
-    const better = top && top.key !== chosen.key && (chosen.score - top.score) / chosen.score >= MIN_GAIN;
+    const better = top && top.key !== chosen.key && gainOver(chosen, top) >= MIN_GAIN;
     return { key: chosen.key, source: 'player', recommended: report.fresh, ...(better ? { offer: top.key } : {}) };
   }
   // What applied before this evaluation: the guide's earlier choice, or for a step never chosen the route's own plan (the default before 2.69).
-  const before = stored?.by === 'auto' ? stored.key : 'route';
+  const before = stored?.by === 'auto' ? planKeyOf(report.plans, stored.key) : 'route';
   if (recommended !== before && trip.inProgress && usable(report, before)) {
     return { key: before, source: 'auto', recommended, pending: recommended };
   }

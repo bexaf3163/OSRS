@@ -93,12 +93,14 @@ const md = [
 ].join('\n') + '\n';
 
 describe('docs/DEFAULT_PLANS.md', () => {
-  it('the reported character gets the combined-objective plan by default; better kit keeps the route; choices are kept; a trip is not interrupted', () => {
+  it('the reported character gets the plan worth most for its time by default; choices are kept; a trip is not interrupted', () => {
     const at = (s: string) => rows.find((r) => r.state.startsWith(s))!;
-    expect(at('Attack 30, Strength 21').now).toMatch(/^Big bones first, then train on cows/);
+    // 2.75: the Hill Giants' Big bones are banked and sold on the way, which is worth more than the time faster spots save.
+    expect(at('Attack 30, Strength 21').now).toBe('The route as written');
+    expect(at('Attack 30, Strength 21').why).toMatch(/banking about [\d,]+ gp of Big bones/);
     expect(at('Attack 38, Strength 60').now).toBe('The route as written');
     expect(at('As the first, the player chose "Defence 20').now).toMatch(/kept: the player's choice/);
-    expect(at('As the first, in the middle of a trip').now).toMatch(/^The route as written; from the next bank trip: Big bones first/);
+    expect(at('As the first, in the middle of a trip').now).toMatch(/^The route as written/);
   });
 
   it('is written from the app\'s own functions', () => {

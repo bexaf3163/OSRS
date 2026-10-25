@@ -16,8 +16,11 @@ import { market } from '../funding/market';
 import { gearOf, HISTORICAL, planInput, type Over } from './fixture';
 import type { Step } from '../../src/types';
 
-const prices = market();
+// Selection is about who decides and when, not about money: no cowhide price, so no loot is valued and the plans are told apart by time and food alone.
+const prices = market({ Cowhide: { high: null, low: null, avgHigh: null, avgLow: null } });
 const report = (o: Over = {}): PlanReport => evaluatePlans({ ...planInput({ foodPrice: prices.buy('Salmon')!.price, ...o }), prices, restriction: 'LIFTED' })!;
+/** The best plan that trains on one spot (each spot has its own since 2.75). */
+const bestXpOnly = (r: PlanReport) => r.plans.filter((p) => p.id === 'xp-only' && p.eligible).sort((a, b) => a.score - b.score)[0].key;
 const idle = { inProgress: false };
 const busy = { inProgress: true };
 const auto = (key: string): Adopted => ({ key, at: 1, by: 'auto' });
@@ -50,7 +53,10 @@ describe('a sensible plan is in effect without a press', () => {
   it('the bones already banked: collection is omitted and the XP-only alternative applies', () => {
     const r = report({ items: { 'Big bones': [0, 50] } });
     expect(r.plans.some((p) => p.key === 'split')).toBe(false);
-    expect(selectPlan(r, undefined, idle).key).toBe('xp-only');
+    expect(r.recommended).toMatch(/^xp-only:/);
+    expect(selectPlan(r, undefined, idle).key).toBe(r.recommended);
+    // An older save's "xp-only" is the quickest spot now.
+    expect(selectPlan(r, mine('xp-only'), idle).key).toBe(bestXpOnly(r));
   });
 });
 
@@ -72,7 +78,8 @@ describe('the player\'s own choice', () => {
 
   it('a choice that is no longer possible (the bones are in hand) gives way to the recommendation', () => {
     const r = report({ items: { 'Big bones': [0, 50] }, adopted: 'split' });
-    expect(selectPlan(r, mine('split'), idle)).toMatchObject({ key: 'xp-only', source: 'auto' });
+    expect(selectPlan(r, mine('split'), idle)).toMatchObject({ key: r.recommended, source: 'auto' });
+    expect(r.recommended).toMatch(/^xp-only:/);
   });
 
   it('a Defence 1 build never gets a Defence plan, even one chosen earlier', () => {
@@ -113,7 +120,8 @@ describe('one plan for every screen and the game', () => {
     const pick = resolvePick(r, sel.key, { xp: HISTORICAL.xp, held: () => 0 }, sel.source, planWhy(r, sel.key, sel.source))!;
     const step = withCombatPlan(route, pick);
     // The item phase names the training style so the XP credit is executable; the next phase trains only what remains.
-    expect(step.combatPlan).toEqual({ key: 'item-first', phase: 1, source: 'auto', now: 'Collect 50 Big bones from Hill Giants on Accurate', next: expect.stringMatching(/^Fight the cows on Accurate/) });
+    const then = r.plans.find((p) => p.key === 'item-first')!.phases[1].spot;
+    expect(step.combatPlan).toEqual({ key: 'item-first', phase: 1, source: 'auto', now: 'Collect 50 Big bones from the Hill Giants on Accurate', next: expect.stringMatching(new RegExp(`^Fight the ${then.name} on Accurate`)) });
     expect(stepGuide(step).plan).toEqual({ now: step.combatPlan!.now, next: step.combatPlan!.next });
     expect(step.fields?.[0]).toMatchObject({ label: 'Plan' });
     expect(step.quickSteps?.[0]).toMatch(/^Fight the Hill Giants on Accurate/);
@@ -137,7 +145,7 @@ describe('one plan for every screen and the game', () => {
     const pick = resolvePick(r, plan.key, { xp, held: () => 0 }, 'player')!;
     expect(pick.kind).toBe('item');
     const guide = stepGuide(withCombatPlan(route, pick));
-    expect(guide.plan?.now).toBe(`Collect ${pick.item!.count} ${pick.item!.name} from Hill Giants`);
+    expect(guide.plan?.now).toBe(`Collect ${pick.item!.count} ${pick.item!.name} from the Hill Giants`);
     expect(guide.plan?.now?.length).toBeLessThan(60);
   });
 

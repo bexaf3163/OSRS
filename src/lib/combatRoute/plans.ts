@@ -7,19 +7,24 @@
 //   split          - the XP goals on the opponent the model finds fastest and cheapest in food, then the step's opponent only for what it alone gives
 //                    (the item the step asks to be collected: 50 Big bones). Only when the step has such an item and another opponent is better.
 //   item-first     - collect the required drops on the main skill first; credit that XP before estimating the remaining training.
-//   xp-only        - compare training targets even when the item stock is already complete or there is no item objective.
+//   xp-only        - the XP goals on one training spot, every spot the player may use (xp-only:<opponent>), when there is no item still to collect.
 //   defence-first  - Defence trained first (on the best opponent for it) to a level, then the route: less damage for the rest. Left out when the
 //                    player's build keeps Defence at 1.
 //
-// Two stages, as the funding ranking: eligibility (the opponent cannot kill in one go, a plan with a known blocker is out) and then comparison
-// (the conservative end of the time, with a penalty for a rough estimate). A plan other than the route is recommended only when it is clearly better,
-// and a plan already adopted stays unless another is clearly better than it. The model's numbers are advice for choosing; the player adopts a plan.
+// Two stages, as the funding ranking: eligibility (the opponent cannot kill in one go, a spot's quest is done, a plan with a known blocker is out) and
+// then comparison (the conservative end of the time, with a penalty for a rough estimate, less what the loot is worth in time). A plan other than the
+// route is recommended only when it is clearly better, and a plan already adopted stays unless another is clearly better than it. The model's numbers are
+// advice for choosing; the player adopts a plan.
+//
+// Loot (2.75, T10): the drop of a spot worth selling (spots.ts SELL_DROP) is picked up and banked only where it pays for its own time - the pickups and
+// the extra bank trips - at the rate coins are earned the simplest way (killing cows for their hides, funding's own method and the exchange's price).
+// Then the plan's time includes that work and its score counts the coins as the minutes they save. A restricted account does not count what it cannot sell.
 
 import type { Step } from '../../types';
 import type { OwnedState } from '../checklist';
 import { nameKey } from '../checklist';
 import {
-  DEFAULT_FOOD_SLOTS, estimateStep, foeLabel, stepGoals, type Basis, type CombatEstimate, type CombatFoe, type Range, type StepEstimateContext,
+  DEFAULT_FOOD_SLOTS, estimateStep, foeLabel, stepGoals, xpPerKill, type Basis, type CombatEstimate, type CombatFoe, type Range, type StepEstimateContext,
 } from '../combatEstimate';
 import { chooseVariant, strengthDoses } from '../combatPlan';
 import { asked, currentXp, dropEstimates, itemGoal, objectiveEstimates } from '../combatObjectives';
@@ -27,7 +32,12 @@ import { levelForXp, xpForLevel } from '../xp';
 import type { PriceView } from '../funding/quotes';
 import type { TradeRestriction } from '../tradeRestriction';
 import { laterDefence, type LaterDefence } from './later';
-import { SELL_DROP, spotsOf, TRAINER_LEVELS, TRAINERS, type Spot } from './spots';
+import { SELL_DROP, spotsOf, spotTerms, TRAINER_LEVELS, TRAINERS, type Spot } from './spots';
+import fundingJson from '../../data/fundingMethods.json';
+import { netEach } from '../funding/ge';
+import { isRestrictedItem } from '../tradeRestriction';
+import { questOf } from '../playerState';
+import { questStepOf } from '../readiness';
 import { armourDefence, armourReady } from './armour';
 import type { PlayerState } from '../playerState';
 import { nearestBank } from '../readiness';
@@ -57,6 +67,8 @@ export interface PlanPhase {
   killsPerTrip: number;
   /** Minimum required banking for retained drops; actual combined food/loot capacity can require more. */
   requiredLootTrips?: number;
+  /** The drop picked up and banked to sell, when it pays for its time: how many, coins after the tax, the minutes it adds (in `minutes` already). */
+  loot?: { name: string; qty: number; net: number; minutes: Range };
 }
 
 /** What the plan's drops bring when sold, apart from what the step reserves: an estimate, never counted against the item the step asks to be banked. */
@@ -85,8 +97,13 @@ export interface EvaluatedPlan {
   notes: string[];
   blockers: string[];
   eligible: boolean;
-  /** Conservative time plus estimate uncertainty and repeated-target effort: a ranking score, not elapsed minutes. */
+  /**
+   * Conservative time plus estimate uncertainty and repeated-target effort, less the loot's coins as minutes: a ranking score, not elapsed minutes. It can
+   * fall below zero when the loot is worth more than the time; margins are taken against `effort`.
+   */
   score: number;
+  /** The conservative time with the uncertainty penalty, always positive: what "clearly better by 5%" is a share of. */
+  effort: number;
 }
 
 export interface PlanReport {
@@ -148,7 +165,33 @@ const FEW_KILLS = 5;
 /** Scores this close are a tie: the net cost decides. */
 const TIE_BAND = 0.05;
 
+/** Seconds to pick one drop up: the click and a step or two, the fast and the slow end. */
+const PICKUP_SECONDS: [number, number] = [1.2, 3];
+/** Bag cells a loot trip fills: the weapon is worn, two cells for potions or a few pieces of food. */
+const LOOT_SLOTS = 26;
+const COWHIDE_METHOD = (fundingJson as unknown as { methods: { id: string; rate: { perHour: { typical: number } } }[] }).methods.find((m) => m.id === 'cows-cowhide');
+
+/**
+ * What a minute is worth in coins: the simplest way to earn them, killing cows for their hides (funding's cows-cowhide rate) at the exchange's price after
+ * the tax. Null without a price: then no loot is planned.
+ */
+export function coinsPerMinute(prices: PriceView | null | undefined): number | null {
+  const hide = prices?.sell('Cowhide')?.price;
+  if (!hide || !COWHIDE_METHOD) return null;
+  return (COWHIDE_METHOD.rate.perHour.typical * netEach(hide, 'Cowhide')) / 60;
+}
+
 const sum = (a: Range, b: Range): Range => ({ low: a.low + b.low, mid: a.mid + b.mid, high: a.high + b.high });
+/**
+ * A stored plan key as the plans have it now: before 2.75 the one "xp-only" plan was the best training spot, now each spot has its own
+ * ("xp-only:Cow"); the old key means the best of them.
+ */
+export function planKeyOf(plans: readonly Pick<EvaluatedPlan, 'id' | 'key' | 'score' | 'eligible'>[], key: string): string {
+  if (key !== 'xp-only') return key;
+  return [...plans].filter((p) => p.id === 'xp-only' && p.eligible).sort((a, b) => a.score - b.score)[0]?.key ?? key;
+}
+/** How much better `b` is than `a`, as a share of a's time: (a.score - b.score) / a.effort. */
+export const gainOver = (a: Pick<EvaluatedPlan, 'score' | 'effort'>, b: Pick<EvaluatedPlan, 'score'>): number => (a.score - b.score) / a.effort;
 const ZERO: Range = { low: 0, mid: 0, high: 0 };
 const worst = (a: Basis, b: Basis): Basis => (BASIS_RANK[b] > BASIS_RANK[a] ? b : a);
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -202,42 +245,86 @@ function bestOf(list: CombatEstimate[]): CombatEstimate | null {
   return [...list].sort((a, b) => a.totalMinutes.high - b.totalMinutes.high || a.food.mid - b.food.mid || (a.foe.combat - b.foe.combat))[0] ?? null;
 }
 
+/** Why an opponent is not safe for this much health: a hit of more than half of it, or a special attack and a hit together. Null - safe. */
+export function unsafe(foe: CombatFoe, spot: Pick<Spot, 'specialMaxHit'> | undefined, hp: number): string | null {
+  const name = foeLabel(foe);
+  if (foe.maxHit * 2 >= hp) return `${name} can hit for ${foe.maxHit}, more than half of your ${hp} health`;
+  const special = spot?.specialMaxHit;
+  if (special && special + foe.maxHit >= hp) return `${name}'s special attack hits up to ${special}: with ${hp} health one you do not dodge can kill`;
+  return null;
+}
+
 function risksOf(phases: PlanPhase[], hp: number): { risks: string[]; blockers: string[] } {
   const risks: string[] = [];
   const blockers: string[] = [];
   for (const p of phases) {
     if (p.kind === 'armour') continue;
     const name = foeLabel(p.foe);
-    if (p.foe.maxHit * 2 >= hp) blockers.push(`${name} can hit for ${p.foe.maxHit}, more than half of your ${hp} health`);
-    else if (p.foe.aggressive) risks.push(`${name} is aggressive: you cannot choose when to fight`);
+    const stop = unsafe(p.foe, p.spot, hp);
+    if (stop) blockers.push(stop);
+    else if (p.spot.specialMaxHit) risks.push(`Step aside when ${name} winds up a special attack: it hits up to ${p.spot.specialMaxHit}`);
+    // A lone boss attacks when it comes back: that is the fight, not a surprise.
+    else if (p.foe.aggressive && !p.spot.betweenKills) risks.push(`${name} is aggressive: you cannot choose when to fight`);
+    if (p.spot.groupAggro) risks.push(`Other ${p.spot.name} join when you attack one: pull one aside first`);
     if (Number.isFinite(p.killsPerTrip) && p.killsPerTrip < FEW_KILLS && p.kind !== 'defence') risks.push(`A full bag lasts only about ${Math.max(1, Math.floor(p.killsPerTrip))} ${name} kills`);
   }
   return { risks: [...new Set(risks)], blockers };
 }
 
 /**
- * Potential optional drops, kept separate from the mandatory stock. XP-only instructions do not include pickup and sale work, so their value is not income.
+ * The loot of one phase, when it pays for its time: the spot's sell drop, one a kill, apart from what the step reserves; picked up, banked and sold. Its
+ * minutes are the pickups and the bank trips beyond those the food already needs (one visit serves both). Null - nothing worth it, no price, or an item a
+ * restricted account cannot sell.
  */
-export function incomeOf(phases: readonly PlanPhase[], reserve: { name: string; qty: number } | null, _prices: PriceView | null | undefined, _restriction: TradeRestriction['state'] | undefined): PlanIncome {
-  const dropped = new Map<string, number>();
-  for (const p of phases) {
-    const name = SELL_DROP[p.foe.name];
-    if (name) dropped.set(name, (dropped.get(name) ?? 0) + p.kills);
+export function lootOf(p: PlanPhase, e: Pick<CombatEstimate, 'foodSlots' | 'bankTripMinutes'>, reserved: number, prices: PriceView | null | undefined,
+  restriction: TradeRestriction['state'] | undefined, rate: number | null): PlanPhase['loot'] | null {
+  const name = p.spot.sell;
+  if (!name || !rate || p.kind === 'armour') return null;
+  if (restriction === 'RESTRICTED' && isRestrictedItem(name)) return null;
+  const price = prices?.sell(name)?.price;
+  if (!price) return null;
+  const qty = Math.max(0, p.kills - reserved);
+  const each = netEach(price, name);
+  if (qty <= 0 || each <= 0) return null;
+  const bank = e.bankTripMinutes ?? { low: 3, mid: 4.5, high: 6 };
+  const minutes = {} as Range;
+  for (const [i, bound] of (['low', 'mid', 'high'] as const).entries()) {
+    const foodVisits = Math.max(1, Math.ceil(p.food[bound] / Math.max(1, e.foodSlots)), p.requiredLootTrips ?? 1);
+    const lootVisits = Math.ceil((qty + reserved) / LOOT_SLOTS);
+    const pickup = (qty * (i === 0 ? PICKUP_SECONDS[0] : i === 2 ? PICKUP_SECONDS[1] : avg2(PICKUP_SECONDS))) / 60;
+    minutes[bound] = pickup + Math.max(0, lootVisits - foodVisits) * bank[bound];
   }
+  const net = qty * each;
+  // Worth it only when the coins come faster than the simplest way to earn them.
+  return net / Math.max(1e-6, minutes.mid) >= rate ? { name, qty, net, minutes } : null;
+}
+const avg2 = (r: readonly [number, number]) => (r[0] + r[1]) / 2;
+
+/** What the plan's drops bring: the loot its phases bank and sell (counted), and a drop left on the floor because it does not pay for its time (not counted). */
+export function incomeOf(phases: readonly PlanPhase[], reserve: { name: string; qty: number } | null, _prices: PriceView | null | undefined, _restriction: TradeRestriction['state'] | undefined): PlanIncome {
   const lines: PlanIncome['lines'] = [];
-  for (const [name, total] of dropped) {
-    const kept = reserve && nameKey(reserve.name) === nameKey(name) ? reserve.qty : 0;
-    const qty = Math.max(0, total - kept);
-    if (qty <= 0) continue;
-    // XP instructions do not ask the player to collect, carry and sell every drop.
-    // Keep potential value visible only as uncounted context until that workload
-    // has an executable collection/capacity/sale plan of its own.
-    lines.push({ name, qty, net: 0, counted: false, note: 'Pickup, carrying, banking and sale are not included in this XP plan' });
+  const seen = new Map<string, PlanIncome['lines'][number]>();
+  for (const p of phases) {
+    if (p.kind === 'armour') continue;
+    if (p.loot) {
+      const l = seen.get(p.loot.name);
+      if (l && l.counted) { l.qty += p.loot.qty; l.net += p.loot.net; continue; }
+      const line = { name: p.loot.name, qty: p.loot.qty, net: p.loot.net, counted: true };
+      seen.set(p.loot.name, line);
+      lines.push(line);
+      continue;
+    }
+    const name = SELL_DROP[p.foe.name];
+    const kept = reserve && name && nameKey(reserve.name) === nameKey(name) ? reserve.qty : 0;
+    if (!name || p.kills - kept <= 0 || seen.has(name)) continue;
+    const line = { name, qty: p.kills - kept, net: 0, counted: false, note: 'Not worth the pickups and bank trips at this pace' };
+    seen.set(name, line);
+    lines.push(line);
   }
   return { net: lines.filter((l) => l.counted).reduce((a, l) => a + l.net, 0), lines };
 }
 
-function assemble(id: PlanId, key: string, title: string, phases: PlanPhase[], hp: number, price: number | null, income: PlanIncome, extraBlockers: string[] = [], notes: string[] = []): EvaluatedPlan {
+function assemble(id: PlanId, key: string, title: string, phases: PlanPhase[], hp: number, price: number | null, income: PlanIncome, extraBlockers: string[] = [], notes: string[] = [], rate: number | null = null): EvaluatedPlan {
   // Changing spots costs time too: the walk between them is part of the plan, not free.
   const switches = phases.slice(1).filter((p, i) => p.spot.foe !== phases[i].spot.foe).length;
   const walk = SWITCH_MINUTES * switches;
@@ -248,10 +335,11 @@ function assemble(id: PlanId, key: string, title: string, phases: PlanPhase[], h
   const all = [...blockers, ...extraBlockers];
   return {
     id, key, title, phases, minutes, food, foodCost: price === null ? null : Math.round(food.mid * price), income, net: price === null ? null : income.net - Math.round(food.mid * price),
-    basis, risks, notes, blockers: all, eligible: all.length === 0,
+    basis, risks, notes, blockers: all, eligible: all.length === 0, effort: Math.max(1e-6, minutes.high * BASIS_PENALTY[basis]),
     // Ranking also values fewer repeated target selections. This is an effort weight,
     // not extra elapsed time (the time estimate already includes target acquisition).
-    score: minutes.high * BASIS_PENALTY[basis] + phases.reduce((n, p) => n + p.kills, 0) * 0.05,
+    // The loot's coins count as the minutes the simplest way to earn them would take: a plan that banks Big bones is worth more than one that does not.
+    score: minutes.high * BASIS_PENALTY[basis] + phases.reduce((n, p) => n + p.kills, 0) * 0.05 - (rate ? income.net / rate : 0),
   };
 }
 
@@ -264,14 +352,18 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   const goals = goalsOf(step);
   const foe = step.foes?.[0];
   if (!goals.length || !foe) return null;
-  const spots = spotsOf(inp.steps);
+  // The spots the player may use now: a spot that needs a quest only when the game counts it done or its route step is closed.
+  const questDone = (quest: string) => (inp.state ? questOf(inp.state, quest) === 'DONE' : false)
+    || (() => { const q = questStepOf(inp.steps as Step[], quest); return q ? inp.done?.(q.id) === true : false; })();
+  const spots = new Map([...spotsOf(inp.steps)].filter(([name, s]) => name === foe || !s.requires || questDone(s.requires.quest)));
   const routeSpot = spots.get(foe);
   const foodItem = (step.itemsRequired ?? []).find((i) => typeof i.heals === 'number');
   if (!routeSpot || !foodItem || !ctx.stats || typeof ctx.stats.hitpoints !== 'number') return null;
   const hp = ctx.stats.hitpoints;
   const price = inp.foodPrice ?? null;
   const doses = strengthDoses(inp.owned);
-  let live: StepEstimateContext = { ...ctx, strengthDoses: doses };
+  let live: StepEstimateContext = { ...ctx, strengthDoses: doses, terms: ctx.terms ?? spotTerms(spots) };
+  const rate = coinsPerMinute(inp.prices);
   const item = itemGoal(step, inp.owned);
   const objective = [goalText(goals), item ? `${item.count} ${item.name}` : null].filter(Boolean).join(', ');
 
@@ -282,7 +374,7 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   if (kit?.length && kitDefence > 1) {
     if (typeof ctx.stats.defence !== 'number') return null;
     if (ctx.stats.defence < kitDefence) {
-      const train = bestOf(estimates(step, 'Cow', [{ skill: 'defence', exp: xpForLevel(kitDefence) }], live).filter(e => e.foe.maxHit * 2 < hp));
+      const train = bestOf(estimates(step, 'Cow', [{ skill: 'defence', exp: xpForLevel(kitDefence) }], live).filter(e => !unsafe(e.foe, spots.get('Cow'), hp)));
       const spot = spots.get('Cow');
       if (!train || !spot) return null;
       preparation.push({ ...phaseOf('defence', train, spot, [{ skill: 'defence', exp: xpForLevel(kitDefence) }], `Cows: Defence to ${kitDefence} (${train.kills} kills)`), armour: kit });
@@ -298,6 +390,11 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
     `${foeLabel(routeEst.foe)}: ${goalText(goals)}${item && item.missing > 0 ? ` and ${item.count} ${item.name}` : ''} (${Math.max(routeEst.kills, itemKills)} kills)`, item && item.missing > 0 ? { name: item.name, count: item.count } : undefined, Math.max(routeEst.kills, itemKills), item?.missing);
   // What the step asks to be banked is reserved: it is never counted as something to sell.
   const reserve = item && item.missing > 0 ? { name: item.name, qty: item.missing } : null;
+  // Each training phase banks its loot when that pays for its time (lootOf); the estimate behind a phase gives its bank trips and bag.
+  const looted = (ph: PlanPhase, e: CombatEstimate, reserved = 0): PlanPhase => {
+    const loot = lootOf(ph, e, reserved, inp.prices, inp.restriction, rate);
+    return loot ? { ...ph, loot, minutes: sum(ph.minutes, loot.minutes), text: `${ph.text}, banking the ${lootName(loot.name)}` } : ph;
+  };
   const make = (id: PlanId, key: string, title: string, phases: PlanPhase[], extra: string[] = [], notes: string[] = []) => {
     let all = phases;
     if (kit?.length) {
@@ -312,9 +409,9 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
       all = [...preparation, armour, ...phases];
       if (!ready) notes = [...notes, 'Training estimates use current worn equipment. Armour purchases and their shopping detour are not timed; keep enough coins for food.'];
     }
-    return assemble(id, key, title, all, hp, price, incomeOf(all, reserve, inp.prices, inp.restriction), extra, notes);
+    return assemble(id, key, title, all, hp, price, incomeOf(all, reserve, inp.prices, inp.restriction), extra, notes, rate);
   };
-  const plans: EvaluatedPlan[] = [make('route', 'route', 'The route\'s plan', [routePhase])];
+  const plans: EvaluatedPlan[] = [make('route', 'route', 'The route\'s plan', [looted(routePhase, routeEst, itemKills ? Math.min(itemKills, routePhase.kills) : 0)])];
   const compared = new Set<string>([foeLabel(routeEst.foe)]);
 
   // --- The trainers for the XP goals
@@ -327,13 +424,15 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
       compared.add(foeLabel(e.foe));
     }
   }
-  const safe = candidates.filter((e) => e.foe.maxHit * 2 < hp);
+  const safe = candidates.filter((e) => !unsafe(e.foe, spots.get(e.foe.name), hp));
   const trainer = bestOf(safe);
+  const trainPhase = (e: CombatEstimate, g: Goal[]) => looted(phaseOf('train', e, spots.get(e.foe.name)!, g, `${foeLabel(e.foe)}: ${goalText(g)} (${e.kills} kills)`), e);
 
-  if ((!item || item.missing === 0) && trainer && trainer.foe.name !== routeEst.foe.name) {
-    plans.push(make('xp-only', 'xp-only', `Train on ${trainer.foe.name === 'Cow' ? 'cows' : trainer.foe.name}`, [
-      phaseOf('train', trainer, spots.get(trainer.foe.name)!, goals, `${foeLabel(trainer.foe)}: ${goalText(goals)} (${trainer.kills} kills)`),
-    ]));
+  // Every spot the player may use is a plan of its own: the comparison is the answer to "where do I train?", not one runner-up.
+  if (!item || item.missing === 0) {
+    const byFoe = new Map<string, CombatEstimate>();
+    for (const e of safe) if (e.foe.name !== routeEst.foe.name && (!byFoe.has(e.foe.name) || bestOf([byFoe.get(e.foe.name)!, e]) === e)) byFoe.set(e.foe.name, e);
+    for (const e of byFoe.values()) plans.push(make('xp-only', `xp-only:${e.foe.name}`, `Train on ${spots.get(e.foe.name)!.name}`, [trainPhase(e, goals)]));
   }
 
   // --- Split: the goals on the trainer, the item from the step's opponent
@@ -341,13 +440,13 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
     const after: Partial<Record<MeleeSkill, number>> = {};
     for (const g of goals) after[g.skill] = g.exp;
     const main = goals[0].skill;
-    const perKill = 4 * routeEst.foe.hitpoints;
+    const perKill = xpPerKill(routeEst.foe);
     const collect = estimateStep(asked(step, foe, [{ skill: main, exp: (after[main] ?? 0) + item.missing * perKill }]), afterPhase(live, trainer, after))
       .find((e) => e.foe.combat === routeEst.foe.combat);
     if (collect) {
       const spot = spots.get(trainer.foe.name)!;
-      plans.push(make('split', 'split', `${trainer.foe.name === 'Cow' ? 'Cows' : trainer.foe.name}, then ${routeEst.foe.name} for the ${item.name}`, [
-        phaseOf('train', trainer, spot, goals, `${foeLabel(trainer.foe)}: ${goalText(goals)} (${trainer.kills} kills)`),
+      plans.push(make('split', 'split', `${cap(spot.name)}, then ${routeSpot.name} for the ${item.name}`, [
+        trainPhase(trainer, goals),
         phaseOf('item', collect, routeSpot, [], `${foeLabel(collect.foe)}: ${item.missing} ${item.name} (${item.missing} kills)`, { name: item.name, count: item.count }, item.missing, item.missing),
       ]));
     }
@@ -359,14 +458,14 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
     const main = goals[0].skill;
     const collect = dropEstimates(step, foe, item.missing, main, live).find(e => e.foe.combat === routeEst.foe.combat && e.foe.version === routeEst.foe.version);
     if (collect) {
-      const earned = currentXp(live, main) + item.missing * 4 * collect.foe.hitpoints;
+      const earned = currentXp(live, main) + item.missing * xpPerKill(collect.foe);
       const after = afterPhase(live, collect, { [main]: earned });
       const follow = bestOf(TRAINERS.filter(name => spots.has(name)).flatMap(name => estimates(step, name, goals, after))
-        .filter(e => e.foe.maxHit * 2 < hp && (!TRAINER_LEVELS[e.foe.name] || TRAINER_LEVELS[e.foe.name].includes(e.foe.combat))));
+        .filter(e => !unsafe(e.foe, spots.get(e.foe.name), hp) && (!TRAINER_LEVELS[e.foe.name] || TRAINER_LEVELS[e.foe.name].includes(e.foe.combat))));
       if (follow && follow.foe.name !== routeEst.foe.name) {
-        plans.push(make('item-first', 'item-first', `${item.name} first, then train on ${follow.foe.name === 'Cow' ? 'cows' : follow.foe.name}`, [
+        plans.push(make('item-first', 'item-first', `${item.name} first, then train on ${spots.get(follow.foe.name)!.name}`, [
           phaseOf('item', collect, routeSpot, [{ skill: main, exp: earned }], `${foeLabel(collect.foe)}: collect ${item.missing} ${item.name} and train ${cap(main)} (${item.missing} kills)`, { name: item.name, count: item.count }, item.missing, item.missing),
-          phaseOf('train', follow, spots.get(follow.foe.name)!, goals, `${foeLabel(follow.foe)}: ${goalText(goals)} (${follow.kills} kills)`),
+          trainPhase(follow, goals),
         ]));
       }
     }
@@ -376,7 +475,7 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   const defenceNow = Math.max(ctx.xp && typeof ctx.xp.defence === 'number' ? ctx.xp.defence : xpForLevel(ctx.stats.defence ?? 1), kit?.length ? xpForLevel(kitDefence) : 0);
   const later = laterDefence(inp.steps, step.id, inp.done);
   const laterXp = later.reduce((a, l) => a + l.xp, 0);
-  const defenceTrainer = (n: number) => bestOf(estimates(step, 'Cow', [{ skill: 'defence', exp: xpForLevel(n) }], live).filter((e) => e.foe.maxHit * 2 < hp));
+  const defenceTrainer = (n: number) => bestOf(estimates(step, 'Cow', [{ skill: 'defence', exp: xpForLevel(n) }], live).filter((e) => !unsafe(e.foe, spots.get('Cow'), hp)));
   for (const n of DEFENCE_STEPS) {
     if (xpForLevel(n) <= defenceNow) continue;
     const trainDef = defenceTrainer(n);
@@ -387,8 +486,8 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
     const dSpot = spots.get(trainDef.foe.name);
     if (!dSpot) continue;
     plans.push(make('defence-first', `defence-first:${n}`, `Defence ${n} first, then the route`, [
-      phaseOf('defence', trainDef, dSpot, [{ skill: 'defence', exp: xpForLevel(n) }], `${foeLabel(trainDef.foe)}: Defence to ${n} (${trainDef.kills} kills)`),
-      phaseOf('route', rest, routeSpot, goals, `${foeLabel(rest.foe)}: ${goalText(goals)}${item && item.missing > 0 ? ` and ${item.count} ${item.name}` : ''} (${Math.max(rest.kills, itemKills)} kills)`, item && item.missing > 0 ? { name: item.name, count: item.count } : undefined, Math.max(rest.kills, itemKills), item?.missing),
+      looted(phaseOf('defence', trainDef, dSpot, [{ skill: 'defence', exp: xpForLevel(n) }], `${foeLabel(trainDef.foe)}: Defence to ${n} (${trainDef.kills} kills)`), trainDef),
+      looted(phaseOf('route', rest, routeSpot, goals, `${foeLabel(rest.foe)}: ${goalText(goals)}${item && item.missing > 0 ? ` and ${item.count} ${item.name}` : ''} (${Math.max(rest.kills, itemKills)} kills)`, item && item.missing > 0 ? { name: item.name, count: item.count } : undefined, Math.max(rest.kills, itemKills), item?.missing), rest, itemKills),
     ], inp.keepDefenceOne ? ['Your build keeps Defence at 1'] : [], later.length ? [laterNote(later, defenceNow)] : []));
   }
 
@@ -404,7 +503,7 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
   const eligible = plans.filter((p) => p.eligible);
   // The conservative time decides; plans within a few percent of each other are told apart by what they cost net of what the drops bring.
   const byTime = (a: EvaluatedPlan, b: EvaluatedPlan) => {
-    if (Math.abs(a.score - b.score) <= Math.min(a.score, b.score) * TIE_BAND) return (b.net ?? -b.food.mid) - (a.net ?? -a.food.mid) || a.score - b.score || a.key.localeCompare(b.key);
+    if (Math.abs(a.score - b.score) <= Math.min(a.effort, b.effort) * TIE_BAND) return (b.net ?? -b.food.mid) - (a.net ?? -a.food.mid) || a.score - b.score || a.key.localeCompare(b.key);
     return a.score - b.score;
   };
   // The route gives Defence later for nothing: a Defence plan only helps the fights before that, so it must beat a working route by a clear margin on the
@@ -413,18 +512,19 @@ export function evaluatePlans(inp: PlanInput): PlanReport | null {
     || (p.minutes.mid <= route.minutes.mid * 1.05 && p.food.mid <= route.food.mid * 0.5);
   const best = [...eligible.filter(worthEarly)].sort(byTime)[0] ?? route;
   // Another plan must clearly beat a route that works.
-  const fresh = route.eligible && best.id !== 'route' && (route.score - best.score) / route.score < ROUTE_MARGIN ? route : best;
+  const fresh = route.eligible && best.id !== 'route' && gainOver(route, best) < ROUTE_MARGIN ? route : best;
   let recommended = fresh;
   // The plan the player adopted stays while it is not clearly beaten.
-  const adopted = inp.adopted ? plans.find((p) => p.key === inp.adopted && p.eligible) : undefined;
-  if (adopted && adopted.score <= best.score * KEEP_MARGIN) recommended = adopted;
+  const adoptedKey = inp.adopted ? planKeyOf(plans, inp.adopted) : undefined;
+  const adopted = adoptedKey ? plans.find((p) => p.key === adoptedKey && p.eligible) : undefined;
+  if (adopted && adopted.score - best.score <= best.effort * (KEEP_MARGIN - 1)) recommended = adopted;
   // A Defence plan that looks better at the slow end only: the route's plan stays and the sentence says why.
-  const held = recommended.id === 'route' ? [...eligible].sort(byTime).find((p) => !worthEarly(p) && route.eligible && (route.score - p.score) / route.score >= MIN_GAIN) : undefined;
+  const held = recommended.id === 'route' ? [...eligible].sort(byTime).find((p) => !worthEarly(p) && route.eligible && gainOver(route, p) >= MIN_GAIN) : undefined;
 
   const confidence: PlanReport['confidence'] = recommended.basis === 'calibrated' ? 'HIGH' : recommended.basis === 'formula' ? 'MEDIUM' : 'LOW';
   return {
     stepId: step.id, objective, plans, recommended: recommended.key, fresh: fresh.key, confidence, compared: [...compared],
-    reason: held ? heldReason(held, route, later) : reasonOf(recommended, route, price),
+    reason: held ? heldReason(held, route, later) : reasonOf(recommended, route, price, plans),
     food: { name: foodItem.nameEn, heals: foodItem.heals!, price },
   };
 }
@@ -435,22 +535,52 @@ const durationText = (m: number) => {
   return r >= 120 ? `${Math.floor(r / 60)} h${r % 60 ? ` ${r % 60} min` : ''}` : `${r} min`;
 };
 
-/** How a plan compares with the route's own: "about 10 min faster and 310 fewer pieces of food (about 10,197 gp)". */
+/** Coins rounded for a sentence: "83,000". */
+const roughGp = (n: number) => gpText(n >= 10000 ? Math.round(n / 1000) * 1000 : Math.round(n / 100) * 100);
+/** "Big bones", "Cowhides": what a plan banks, in a sentence. */
+export const lootName = (name: string) => (/s$/i.test(name) ? name : `${name}s`);
+/** The coins a plan's loot brings, in a phrase: "about 83,000 gp of Big bones"; empty without loot. */
+function coinsText(p: EvaluatedPlan): string {
+  const lines = p.income.lines.filter((l) => l.counted && l.net > 0);
+  return lines.length ? `about ${roughGp(p.income.net)} gp of ${lines.map((l) => lootName(l.name)).join(' and ')}` : '';
+}
+
+const andList = (parts: readonly string[]) => (parts.length <= 1 ? parts.join('') : `${parts.slice(0, -1).join(', ')} and ${parts[parts.length - 1]}`);
+
+/**
+ * How a plan compares with the route's own, what it gains first and what it costs after: "about 10 min faster and about 83,000 gp more from drops than the
+ * route as written", "about 34,000 gp more from drops than the route as written, for about 25 min more".
+ */
 function comparison(plan: EvaluatedPlan, route: EvaluatedPlan, price: number | null): string {
   const faster = route.minutes.mid - plan.minutes.mid;
   const fewer = route.food.mid - plan.food.mid;
-  const parts: string[] = [];
-  if (faster >= 5) parts.push(`about ${durationText(faster)} faster`);
-  else if (faster <= -5) parts.push(`about ${durationText(-faster)} slower`);
-  if (fewer >= 5) parts.push(`${Math.round(fewer / 5) * 5} fewer pieces of food${price !== null ? ` (about ${gpText(fewer * price)} gp)` : ''}`);
-  else if (fewer <= -5) parts.push(`${Math.round(-fewer / 5) * 5} more pieces of food`);
-  return parts.length ? parts.join(' and ') : 'about the same time and food';
+  const coins = plan.income.net - route.income.net;
+  const gains: string[] = [];
+  const costs: string[] = [];
+  if (faster >= 5) gains.push(`about ${durationText(faster)} faster`);
+  else if (faster <= -5) costs.push(`about ${durationText(-faster)} more`);
+  if (coins >= 1000) gains.push(`about ${roughGp(coins)} gp more from drops`);
+  else if (coins <= -1000) costs.push(`about ${roughGp(-coins)} gp less from drops`);
+  if (fewer >= 5) gains.push(`${Math.round(fewer / 5) * 5} fewer pieces of food${price !== null ? ` (about ${gpText(fewer * price)} gp)` : ''}`);
+  else if (fewer <= -5) costs.push(`${Math.round(-fewer / 5) * 5} more pieces of food`);
+  if (!gains.length) return `about the same as the route as written${costs.length ? `, for ${andList(costs)}` : ''}`;
+  return `${andList(gains)} than the route as written${costs.length ? `, for ${andList(costs)}` : ''}`;
 }
 
-/** Why this plan, against the route's, in a sentence the player can check. */
-export function reasonOf(plan: EvaluatedPlan, route: EvaluatedPlan, price: number | null): string {
-  if (plan.id === 'route') return route.eligible ? 'The route as written is competitive for time, supplies and repeated target selections.' : 'No plan could be recommended: ' + (route.blockers[0] ?? 'the route\'s plan is not safe for you') + '.';
-  return `${plan.title}: ${comparison(plan, route, price)} than the route as written.`;
+/**
+ * Why this plan, in a sentence the player can check: against the route's own; for the route's own, against the fastest other plan when that one is
+ * faster (what the route's loot or safety is worth over it).
+ */
+export function reasonOf(plan: EvaluatedPlan, route: EvaluatedPlan, price: number | null, plans: readonly EvaluatedPlan[] = []): string {
+  if (plan.id !== 'route') return `${plan.title}: ${comparison(plan, route, price)}.`;
+  if (!route.eligible) return 'No plan could be recommended: ' + (route.blockers[0] ?? 'the route\'s plan is not safe for you') + '.';
+  const quickest = plans.filter((p) => p.eligible && p.id !== 'route').sort((a, b) => a.minutes.mid - b.minutes.mid)[0];
+  const coins = coinsText(route);
+  if (quickest && route.minutes.mid - quickest.minutes.mid >= 5) {
+    const lessCoins = route.income.net - quickest.income.net;
+    return `The route as written${coins ? ` banks ${coins}` : ' is the best balance'}: ${quickest.title.replace(/^Train on/, 'training on')} is about ${durationText(route.minutes.mid - quickest.minutes.mid)} faster${lessCoins >= 1000 ? ` but brings about ${roughGp(lessCoins)} gp less` : ''}.`;
+  }
+  return `The route as written is the quickest for your levels and kit${coins ? `, and it banks ${coins}` : ''}.`;
 }
 
 /**
@@ -461,9 +591,9 @@ export function planWhy(report: PlanReport, key: string, source: 'auto' | 'playe
   const plan = report.plans.find((p) => p.key === key);
   const route = report.plans[0];
   if (!plan) return '';
-  if (source === 'player') return plan.id === 'route' ? 'You chose the route as written.' : `You chose this plan: ${comparison(plan, route, report.food.price)} than the route as written.`;
-  if (plan.id === 'route') return report.plans.length > 1 ? 'Recommended for your levels and kit, balancing time, supplies and repeated target selections.' : '';
-  return `Recommended for your levels and kit: ${comparison(plan, route, report.food.price)} than the route as written.`;
+  if (source === 'player') return plan.id === 'route' ? 'You chose the route as written.' : `You chose this plan: ${comparison(plan, route, report.food.price)}.`;
+  if (plan.id === 'route') return report.plans.length > 1 ? `Best for your levels and kit${coinsText(plan) ? `, banking ${coinsText(plan)}` : ''}.` : '';
+  return `Recommended for your levels and kit: ${comparison(plan, route, report.food.price)}.`;
 }
 
 const levelAfter = (xp: number, grant: number) => levelForXp(xp + grant);

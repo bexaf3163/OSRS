@@ -11,8 +11,11 @@
 
 import type { Field, InGameTarget, Step, StepPacing, StepItemRequirement } from '../../types';
 import { levelForXp } from '../xp';
-import type { EvaluatedPlan, Goal, MeleeSkill, PlanPhase, PlanReport } from './plans';
-import type { Spot } from './spots';
+import { xpPerKill } from '../combatEstimate';
+import { lootName, type EvaluatedPlan, type Goal, type MeleeSkill, type PlanPhase, type PlanReport } from './plans';
+/** Coins rounded for a sentence: "83,000". */
+const gpText = (n: number) => (Math.round(n >= 10000 ? n / 1000 : n / 100) * (n >= 10000 ? 1000 : 100)).toLocaleString('en-US');
+import { themOf, type Spot } from './spots';
 import { armourDefence, armourItems, armourReady } from './armour';
 import { gearById } from '../../services/gearAdvisor';
 import type { PlayerState } from '../playerState';
@@ -72,8 +75,6 @@ export function currentPhase(plan: EvaluatedPlan, st: Progress): number {
 
 const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
 const STYLE_WORD: Record<MeleeSkill, string> = { attack: 'Accurate', strength: 'Aggressive', defence: 'Defensive' };
-const PLURAL: Record<string, string> = { Cow: 'cows', 'Giant frog': 'Giant frogs', Minotaur: 'Minotaurs', 'Hill Giant': 'Hill Giants' };
-const plural = (foe: string) => PLURAL[foe] ?? `${foe}s`;
 const goalText = (goals: readonly Goal[]) => goals.map((g) => `${cap(g.skill)} ${levelForXp(g.exp)}`).join(' and ');
 
 /** What to do in one phase, in one sentence the page and the game can show. */
@@ -81,10 +82,11 @@ export function phaseInstruction(p: PlanPhase): string {
   if (p.kind === 'armour') return `At ${armourDefence(p.armour ?? [])} Defence, equip ${p.armour?.map(id => gearById.get(id)?.name).filter(Boolean).join(', ')} or usable equivalent/better armour. Withdraw what you own; buy only needed upgrades, keeping coins for food.`;
   const where = p.spot.place.label;
   const style = p.goals[0] ? ` on ${STYLE_WORD[p.goals[0].skill]}` : '';
-  if (p.kind === 'item' && p.item) return `Fight the ${plural(p.foe.name)}${style} until ${p.item.count} ${p.item.name} are in the bank (about ${p.kills} kills): ${where}.`;
+  if (p.kind === 'item' && p.item) return `Fight ${themOf(p.spot)}${style} until ${p.item.count} ${p.item.name} are in the bank (about ${p.kills} kills): ${where}.`;
   const armour = !p.armour && p.kind === 'defence' && p.goals.some(g => g.skill === 'defence' && levelForXp(g.exp) === 10)
     ? ' At Defence 10, bank and equip your armour. If you need upgrades, use Gear to buy affordable steel armour before continuing; keep enough coins for food. The shopping detour is extra.' : '';
-  return `Fight the ${plural(p.foe.name)}${style} until ${goalText(p.goals)}${p.item ? ` and ${p.item.count} ${p.item.name} are in the bank` : ''} (about ${p.kills} kills): ${where}.${armour}`;
+  const loot = p.loot ? ` Pick up the ${lootName(p.loot.name)} and bank them with your food trips: about ${gpText(p.loot.net)} gp at the Grand Exchange.` : '';
+  return `Fight ${themOf(p.spot)}${style} until ${goalText(p.goals)}${p.item ? ` and ${p.item.count} ${p.item.name} are in the bank` : ''} (about ${p.kills} kills): ${where}.${armour}${loot}`;
 }
 
 /**
@@ -94,7 +96,7 @@ export function phaseInstruction(p: PlanPhase): string {
 export function resolvePick(report: PlanReport | null, key: string | null | undefined, st: Progress, source: 'auto' | 'player' = 'player', why = ''): CombatPick | null {
   if (!report || !key) return null;
   const plan = report.plans.find((p) => p.key === key);
-  if (!plan || !plan.eligible || (plan.id === 'route' && !plan.phases.some(p => p.kind === 'armour'))) return null;
+  if (!plan || !plan.eligible || (plan.id === 'route' && !plan.phases.some(p => p.kind === 'armour' || p.loot))) return null;
   const i = currentPhase(plan, st);
   const ph = plan.phases[i];
   const steps = plan.phases.slice(i).map((p, n) => {
@@ -102,7 +104,7 @@ export function resolvePick(report: PlanReport | null, key: string | null | unde
     return n === 0 ? line : `Then: ${line.charAt(0).toLowerCase()}${line.slice(1)}`;
   });
   return {
-    key: plan.key, title: plan.title, source, why, phase: i + 1, phases: plan.phases.length, kind: ph.kind, foe: ph.foe.name, xpPerKill: 4 * ph.foe.hitpoints, spot: ph.spot, goals: ph.goals,
+    key: plan.key, title: plan.title, source, why, phase: i + 1, phases: plan.phases.length, kind: ph.kind, foe: ph.foe.name, xpPerKill: xpPerKill(ph.foe), spot: ph.spot, goals: ph.goals,
     ...(ph.item ? { item: ph.item } : {}), text: ph.text, steps,
     ...(ph.kind === 'armour' && ph.armour && st.state ? { kit: armourItems(ph.armour, ph.foe.attackStyle, st.state, st.prices), kitDefence: armourDefence(ph.armour) } : {}),
   };
@@ -123,7 +125,8 @@ function pacingOf(step: Step, pick: CombatPick): StepPacing | undefined {
   const same = pick.foe === step.foes?.[0];
   const base: StepPacing = {
     ...step.pacing, skill: first.skill, targetLevel: levelForXp(first.exp), targetExp: first.exp,
-    actionName: same ? step.pacing.actionName : `${pick.foe.toLowerCase()}|${pick.foe.toLowerCase()}s`, expPerAction: same ? step.pacing.expPerAction : pick.xpPerKill,
+    actionName: same ? step.pacing.actionName : pick.spot.proper ? 'kill|kills' : `${pick.foe.toLowerCase()}|${pick.spot.name.toLowerCase()}`,
+    expPerAction: same ? step.pacing.expPerAction : pick.xpPerKill,
   };
   delete base.also;
   delete base.goals;
@@ -141,7 +144,7 @@ const KEEP_FIELDS = new Set(['Dangerous', 'Attention', 'Combat', 'Armour']);
 function plateGoal(pick: CombatPick): string {
   if (pick.kind === 'armour') return pick.text;
   const what = pick.kind === 'item' && pick.item ? `${pick.item.count} ${pick.item.name}` : `${goalText(pick.goals)}${pick.item ? ` and ${pick.item.count} ${pick.item.name}` : ''}`;
-  return `${cap(plural(pick.foe))}: ${what}`;
+  return `${cap(pick.spot.name)}: ${what}`;
 }
 
 /** The step as the plan in effect has it for the phase in hand. No pick - the same object. */
@@ -170,7 +173,7 @@ export function withCombatPlan(step: Step, pick: CombatPick | undefined): Step {
     ...rest, combatPlan: {
       key: pick.key, phase: pick.phase, source: pick.source,
       ...(trainingSkill ? { trainingSkill } : {}),
-      ...(pick.kind === 'armour' ? { now: pick.text } : pick.kind === 'item' && pick.item ? { now: `Collect ${pick.item.count} ${pick.item.name} from ${cap(plural(pick.foe))}${pick.goals[0] ? ` on ${STYLE_WORD[pick.goals[0].skill]}` : ''}` } : {}),
+      ...(pick.kind === 'armour' ? { now: pick.text } : pick.kind === 'item' && pick.item ? { now: `Collect ${pick.item.count} ${pick.item.name} from ${themOf(pick.spot)}${pick.goals[0] ? ` on ${STYLE_WORD[pick.goals[0].skill]}` : ''}` } : {}),
       ...(pick.steps[1] ? { next: cap(pick.steps[1].replace(/^Then: /, '')) } : {}),
     }, foes: pick.kind === 'armour' ? [] : [pick.foe], mapLocation: { ...pick.spot.place }, inGame,
     ...(pick.kind === 'armour' && pick.kit ? { itemsRequired: pick.kit, itemsRecommended: [], requirements: [...(step.requirements ?? []), { type: 'skill' as const, skill: 'defence', min: pick.kitDefence ?? 10 }] } : {}),

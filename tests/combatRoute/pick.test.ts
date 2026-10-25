@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { adoptStorageKey, loadAdopted, saveAdopted, withAdopted } from '../../src/lib/combatRoute/adopt';
 import { evaluatePlans } from '../../src/lib/combatRoute/plans';
+import { xpPerKill } from '../../src/lib/combatEstimate';
 import { currentPhase, phaseDone, resolvePick, samePicks, withCombatPlan } from '../../src/lib/combatRoute/pick';
 import { foodPicks, foodPlanApplied, stepResendKey, withFoodPlan } from '../../src/lib/foodPlan';
 import { aggregateShopping } from '../../src/lib/shopping';
@@ -11,9 +12,14 @@ import { market } from '../funding/market';
 import { gearOf, HISTORICAL, planInput } from './fixture';
 import type { Step } from '../../src/types';
 
-const prices = market();
+// The mechanics of a picked plan, told apart by time and food: no cowhide price, so no loot is valued (tests/combatRoute/plans.test.ts covers loot).
+const prices = market({ Cowhide: { high: null, low: null, avgHigh: null, avgLow: null } });
 const report = (o: Parameters<typeof planInput>[0] = {}) => evaluatePlans({ ...planInput({ foodPrice: prices.buy('Salmon')!.price, ...o }), prices, restriction: 'LIFTED' })!;
 const route = planInput().step;
+/** The trainer the split plan sends the player to first, whichever spot is best for the reported character. */
+const trainer = report().plans.find((p) => p.id === 'split')!.phases[0];
+const cap = (s: string) => s.charAt(0).toUpperCase() + s.slice(1);
+const esc = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
 const progress = (xp: number | null, bones: number | null) => ({
   xp: xp === null ? null : { attack: xp, strength: 2000, defence: 0 },
@@ -45,7 +51,7 @@ describe('the phase a plan is in, by what the game shows', () => {
     expect(resolvePick(rep, 'nonsense', progress(13363, 0))).toBeNull();
     expect(resolvePick(null, 'split', progress(13363, 0))).toBeNull();
     const pick = resolvePick(rep, 'split', progress(13363, 0))!;
-    expect(pick).toMatchObject({ key: 'split', phase: 1, phases: 2, kind: 'train', foe: 'Cow', xpPerKill: 32 });
+    expect(pick).toMatchObject({ key: 'split', phase: 1, phases: 2, kind: 'train', foe: trainer.foe.name, xpPerKill: xpPerKill(trainer.foe) });
     // The conditions are gone (the bones are in hand): the route's own plan stands.
     expect(resolvePick(report({ items: { 'Big bones': [0, 50] } }), 'split', progress(13363, 50))).toBeNull();
     // Defence 1 build: an adopted Defence plan is not applied.
@@ -77,24 +83,26 @@ describe('the step as an adopted plan has it', () => {
     expect(JSON.stringify(s)).not.toMatch(/"done"|"complete":/);
   });
 
-  it('the first phase leads to the cows, with the cows\' pace line toward the same Attack target', () => {
+  it("the first phase leads to the trainer's spot, with its own pace line toward the same Attack target", () => {
     const s = withCombatPlan(route, pick(13363, 0));
-    expect(s.foes).toEqual(['Cow']);
-    expect(s.mapLocation).toMatchObject({ label: 'The cow field east of Lumbridge' });
-    expect(s.inGame?.npcNames).toEqual(['Cow']);
-    expect(s.inGame?.pathWaypoints).toBeUndefined();
+    const spot = trainer.spot;
+    expect(s.foes).toEqual([trainer.foe.name]);
+    expect(s.mapLocation).toMatchObject({ label: spot.place.label });
+    expect(s.inGame?.npcNames).toEqual(spot.npcNames);
+    expect(s.inGame?.pathWaypoints).toEqual(spot.waypoints);
     expect(s.inGame?.worldPoint).toBeUndefined();
-    expect(s.pacing).toMatchObject({ skill: 'attack', targetLevel: 40, targetExp: 37224, actionName: 'cow|cows', expPerAction: 32 });
+    expect(s.pacing).toMatchObject({ skill: 'attack', targetLevel: 40, targetExp: 37224, actionName: `${trainer.foe.name.toLowerCase()}|${spot.name.toLowerCase()}`, expPerAction: xpPerKill(trainer.foe) });
     expect(s.fields?.[0]).toMatchObject({ label: 'Your plan' });
-    expect(s.fields?.[0].text).toMatch(/Cow: Attack to 40/);
+    expect(s.fields?.[0].text).toContain(trainer.foe.name);
+    expect(s.fields?.[0].text).toMatch(/Attack to 40/);
     // One set of instructions (2.69): the plan's own lead, the route's text is kept folded as "the route as written", never beside it.
-    expect(s.quickSteps?.[0]).toMatch(/^Fight the cows on Accurate until Attack 40 \(about \d+ kills\): The cow field east of Lumbridge\.$/);
+    expect(s.quickSteps?.[0]).toMatch(new RegExp(`^Fight the ${esc(spot.name)} on Accurate until Attack 40 \\(about \\d+ kills\\): ${esc(spot.place.label)}\\.$`));
     expect(s.quickSteps?.[1]).toMatch(/^Then: fight the Hill Giants until 50 Big bones are in the bank/);
     // The game labels the last part "Next: " itself, so the app's "Then: " joiner is not sent ("Next: Then: ..." in the card, live 2.72.1).
     const sent = stepGuide(s).steps ?? [];
     expect(sent.some((q) => q.startsWith('Then: '))).toBe(false);
     expect(sent[sent.length - 1]).toMatch(/^Fight the Hill Giants until 50 Big bones are in the bank/);
-    expect(s.where).toMatch(/cow field/);
+    expect(s.where).toBe(trainer.spot.where);
     expect(s.routeAsWritten).toEqual({ where: route.where, quickSteps: route.quickSteps, fields: route.fields });
     expect(s.fields!.every((f) => f.label === 'Your plan' || ['Dangerous', 'Attention', 'Combat', 'Armour'].includes(f.label))).toBe(true);
   });
@@ -126,13 +134,13 @@ describe('the whole app reads the same step: food, shopping, arrow, game', () =>
   const adopted = withCombatPlan(route, resolvePick(rep, 'split', progress(13363, 0))!);
   const live = { stats: HISTORICAL.stats as Partial<Record<string, number>>, xp: HISTORICAL.xp as Partial<Record<string, number>>, gear: gearOf(HISTORICAL.worn), owned: planInput().owned, combatLog: null };
 
-  it('the food plan is counted for the opponent in hand: a few pieces for the cows, hundreds for the giants', () => {
+  it('the food plan is counted for the opponent in hand: a few dozen pieces for the trainer, hundreds for the giants', () => {
     const base = foodPicks([route], emptyProgress(), live)['S4-03'];
     const cows = foodPicks([adopted], emptyProgress(), live)['S4-03'];
     expect(base.total).toBeGreaterThan(300);
-    expect(cows.total).toBeLessThan(40);
+    expect(cows.total).toBeLessThan(base.total / 4);
     const planned = withFoodPlan(adopted, cows);
-    expect(planned.itemsRequired!.find((i) => i.nameEn === 'Salmon')?.totalAmount ?? 0).toBeLessThan(40);
+    expect(planned.itemsRequired!.find((i) => i.nameEn === 'Salmon')?.totalAmount ?? 0).toBeLessThan(base.total / 4);
   });
 
   it('the game gets the step again once the food plan settles, not when its figures move (live, 2.72.1: the game kept the route’s 25 Salmon)', () => {
@@ -154,16 +162,17 @@ describe('the whole app reads the same step: food, shopping, arrow, game', () =>
     const baseNeed = list(withFoodPlan(route, foodPicks([route], emptyProgress(), live)['S4-03']));
     const planNeed = list(withFoodPlan(adopted, cows));
     expect(baseNeed).toBeGreaterThan(300);
-    expect(planNeed).toBeLessThan(40);
+    expect(planNeed).toBeLessThan(baseNeed / 4);
   });
 
-  it('the arrow and the game get the cows: the place, the NPC, the pace line and the unchanged completion trigger', () => {
+  it('the arrow and the game get the trainer: the place, the NPC, the pace line and the unchanged completion trigger', () => {
     const payload = toInGameTarget(adopted)!;
+    const spot = trainer.spot;
     expect(payload.stepId).toBe('S4-03');
-    expect(payload.worldPoint).toMatchObject({ label: 'The cow field east of Lumbridge' });
-    expect(payload.npcNames).toEqual(['Cow']);
-    expect(payload.goal).toBe('Cows: Attack 40');
-    expect(payload.pacing).toMatchObject({ actionName: 'cow|cows', expPerAction: 32, targetExp: 37224 });
+    expect(payload.worldPoint).toMatchObject({ x: spot.place.x, y: spot.place.y, plane: spot.place.plane });
+    expect(payload.npcNames).toEqual(spot.npcNames);
+    expect(payload.goal).toBe(`${cap(spot.name)}: Attack 40`);
+    expect(payload.pacing).toMatchObject({ actionName: `${trainer.foe.name.toLowerCase()}|${spot.name.toLowerCase()}`, expPerAction: xpPerKill(trainer.foe), targetExp: 37224 });
     expect(payload.completionTrigger).toEqual(toInGameTarget(route)!.completionTrigger);
   });
 

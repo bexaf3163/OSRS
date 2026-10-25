@@ -4,6 +4,7 @@ import type { Progress, Step } from '../../types';
 import type { GearState } from '../../services/runeliteBridge';
 import type { Fights, StepEstimateContext } from '../combatEstimate';
 import { assumptionsFor } from '../foodPlan';
+import { termsFor } from './spots';
 
 export interface LiveCombat {
   stats: Partial<Record<string, number>> | null;
@@ -15,5 +16,5 @@ export interface LiveCombat {
 
 export function estimateContext(step: Step, live: LiveCombat, steps: Step[], progress: Progress): StepEstimateContext {
   const fights = live.combatLog?.stepId === step.id ? live.combatLog.foes : null;
-  return { stats: live.stats, xp: live.xp, gear: live.gear, fights, assume: assumptionsFor(step, steps, progress) };
+  return { stats: live.stats, xp: live.xp, gear: live.gear, fights, assume: assumptionsFor(step, steps, progress), terms: termsFor(steps) };
 }

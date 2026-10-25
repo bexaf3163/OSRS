@@ -11,6 +11,6 @@ export function readRoute(): Route {
   const read = (name: string) => JSON.parse(readFileSync(`${DATA_DIR}/${name}`, 'utf8'));
   return {
     steps: read('steps.json'), stages: read('stages.json'), items: read('f2p-items.json'), monsters: read('monsters.json'), combatFoes: read('combatFoes.json'),
-    npcs: read('npcLocations.json').npcs, places: read('majorLocations.json').locations,
+    npcs: read('npcLocations.json').npcs, places: read('majorLocations.json').locations, trainers: read('trainers.json').trainers,
   };
 }

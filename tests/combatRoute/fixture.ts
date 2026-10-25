@@ -6,6 +6,7 @@ import { allSteps, stepById } from '../../src/data';
 import { gearById } from '../../src/services/gearAdvisor';
 import type { StepEstimateContext } from '../../src/lib/combatEstimate';
 import type { PlanInput } from '../../src/lib/combatRoute/plans';
+import { termsFor } from '../../src/lib/combatRoute/spots';
 import { nameKey, type OwnedItem, type OwnedState } from '../../src/lib/checklist';
 import type { Step } from '../../src/types';
 
@@ -45,9 +46,16 @@ export function planInput(o: Over = {}): PlanInput {
   const steps = allSteps.map(s => s.id === 'S4-03' ? legacyCollect as Step : s);
   return {
     step, steps,
-    ctx: { stats: o.stats ?? HISTORICAL.stats, xp: o.xp ?? HISTORICAL.xp, gear: gearOf(o.worn ?? HISTORICAL.worn), fights: o.fights },
+    // The spots' bank trips and traits, as the app's estimateContext gives them: the plans and the food plan read the same terms.
+    ctx: { stats: o.stats ?? HISTORICAL.stats, xp: o.xp ?? HISTORICAL.xp, gear: gearOf(o.worn ?? HISTORICAL.worn), fights: o.fights, terms: termsFor(steps) },
     owned: ownedOf(o.items ?? {}, o.bankSeen ?? true),
     foodPrice: o.foodPrice === undefined ? 33 : o.foodPrice,
     keepDefenceOne: o.keepDefenceOne, adopted: o.adopted,
   };
+}
+
+/** The live route's step (not the historical collection step), with the live route's spots. */
+export function liveInput(stepId: string, o: Over = {}): PlanInput {
+  const base = planInput({ ...o, stepId });
+  return { ...base, step: stepById.get(stepId) as Step, steps: allSteps, ctx: { ...base.ctx, terms: termsFor(allSteps) } };
 }

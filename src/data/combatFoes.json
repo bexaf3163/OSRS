@@ -1,6 +1,6 @@
 {
   "source": "OSRS Wiki: Infobox Monster of each article, every version (scripts/build-combat-foes.ts)",
-  "generatedAt": "2026-10-24",
+  "generatedAt": "2026-10-25",
   "foes": [
     {
       "name": "Minotaur",
@@ -321,7 +321,8 @@
       "attackStyle": "crush",
       "maxHit": 3,
       "speedTicks": 4,
-      "aggressive": true
+      "aggressive": true,
+      "xpBonus": -97
     },
     {
       "name": "Ithoi the Navigator",
@@ -343,7 +344,8 @@
       "attackStyle": "magic",
       "maxHit": 6,
       "speedTicks": 5,
-      "aggressive": true
+      "aggressive": true,
+      "xpBonus": -97
     },
     {
       "name": "Brutus",
@@ -365,7 +367,8 @@
       "attackStyle": "crush",
       "maxHit": 3,
       "speedTicks": 5,
-      "aggressive": true
+      "aggressive": true,
+      "xpBonus": 100
     },
     {
       "name": "Elvarg",
@@ -682,6 +685,143 @@
       },
       "attackStyle": "crush",
       "maxHit": 1,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Barbarian",
+      "version": "Level 8 (Blue Moon Inn)",
+      "combat": 8,
+      "members": false,
+      "hitpoints": 14,
+      "attackLevel": 6,
+      "strengthLevel": 5,
+      "defenceLevel": 5,
+      "magicLevel": 1,
+      "attackBonus": 8,
+      "defence": {
+        "stab": 1,
+        "slash": 1,
+        "crush": 0,
+        "magic": 0,
+        "ranged": 0
+      },
+      "attackStyle": "stab",
+      "maxHit": 2,
+      "speedTicks": 6,
+      "aggressive": false
+    },
+    {
+      "name": "Barbarian",
+      "version": "Level 9 (Sieglinde)",
+      "combat": 9,
+      "members": false,
+      "hitpoints": 20,
+      "attackLevel": 6,
+      "strengthLevel": 7,
+      "defenceLevel": 3,
+      "magicLevel": 1,
+      "attackBonus": 9,
+      "defence": {
+        "stab": 9,
+        "slash": 10,
+        "crush": 10,
+        "magic": -3,
+        "ranged": 5
+      },
+      "attackStyle": "crush",
+      "maxHit": 2,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Barbarian",
+      "version": "Level 10 (Fafner)",
+      "combat": 10,
+      "members": false,
+      "hitpoints": 18,
+      "attackLevel": 8,
+      "strengthLevel": 7,
+      "defenceLevel": 3,
+      "magicLevel": 1,
+      "attackBonus": 9,
+      "defence": {
+        "stab": 0,
+        "slash": 3,
+        "crush": 2,
+        "magic": -3,
+        "ranged": 2
+      },
+      "attackStyle": "crush",
+      "maxHit": 2,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Barbarian",
+      "version": "Level 15 (Aitan)",
+      "combat": 15,
+      "members": false,
+      "hitpoints": 24,
+      "attackLevel": 15,
+      "strengthLevel": 3,
+      "defenceLevel": 10,
+      "magicLevel": 1,
+      "attackBonus": 9,
+      "defence": {
+        "stab": 0,
+        "slash": 3,
+        "crush": 2,
+        "magic": -3,
+        "ranged": 2
+      },
+      "attackStyle": "ranged",
+      "maxHit": 2,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Barbarian",
+      "version": "Level 17 (Alberich)",
+      "combat": 17,
+      "members": false,
+      "hitpoints": 24,
+      "attackLevel": 15,
+      "strengthLevel": 14,
+      "defenceLevel": 10,
+      "magicLevel": 1,
+      "attackBonus": 9,
+      "defence": {
+        "stab": 0,
+        "slash": 3,
+        "crush": 2,
+        "magic": -3,
+        "ranged": 2
+      },
+      "attackStyle": "crush",
+      "maxHit": 3,
+      "speedTicks": 4,
+      "aggressive": false
+    },
+    {
+      "name": "Al Kharid warrior",
+      "combat": 9,
+      "members": false,
+      "hitpoints": 19,
+      "attackLevel": 7,
+      "strengthLevel": 5,
+      "defenceLevel": 4,
+      "magicLevel": 1,
+      "attackBonus": 10,
+      "defence": {
+        "stab": 12,
+        "slash": 15,
+        "crush": 10,
+        "magic": -1,
+        "ranged": 12
+      },
+      "attackStyle": "slash",
+      "maxHit": 2,
       "speedTicks": 4,
       "aggressive": false
     }

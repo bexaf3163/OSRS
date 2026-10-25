@@ -1,12 +1,12 @@
 import { describe, expect, it } from 'vitest';
-import { allSteps, stepById } from '../../src/data';
+import { stepById } from '../../src/data';
 import { evaluatePlans } from '../../src/lib/combatRoute/plans';
 import { resolvePick, withCombatPlan } from '../../src/lib/combatRoute/pick';
-import { planInput } from './fixture';
+import { liveInput } from './fixture';
 
 describe('the real S4-03 route separates training from funding', () => {
   const step = stepById.get('S4-03')!;
-  const report = () => evaluatePlans({ ...planInput(), step, steps: allSteps })!;
+  const report = () => evaluatePlans(liveInput('S4-03'))!;
   it('finishes at Attack 40 without forcing a quota, banking or a second target', () => {
     expect(step.inGame?.completionTrigger).toEqual({ type: 'SKILL_LEVEL', levels: [{ skill: 'attack', level: 40 }] });
     const r = report();
@@ -36,7 +36,7 @@ describe('the real S4-03 route separates training from funding', () => {
     expect(p.phases.every(ph => ph.foe.name !== 'Hill Giant')).toBe(true);
     expect(p.food.mid).toBeGreaterThanOrEqual(0);
     expect(p.minutes.mid).toBeGreaterThan(0);
-    const pure = evaluatePlans({ ...planInput(), step, steps: allSteps, keepDefenceOne: true })!;
+    const pure = evaluatePlans({ ...liveInput('S4-03'), keepDefenceOne: true })!;
     expect(pure.recommended).toBe('route');
     expect(pure.plans[0].phases[0].foe.name).toBe('Giant frog');
   });

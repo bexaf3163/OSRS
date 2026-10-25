@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { combatPlanView } from '../../src/lib/combatPlan';
-import { evaluatePlans, KEEP_MARGIN, MIN_GAIN } from '../../src/lib/combatRoute/plans';
-import { spotsOf, TRAINERS } from '../../src/lib/combatRoute/spots';
+import { evaluatePlans, gainOver, KEEP_MARGIN, MIN_GAIN } from '../../src/lib/combatRoute/plans';
+import { bankTrip, spotsOf, TRAINER_SPOTS } from '../../src/lib/combatRoute/spots';
+import { netEach } from '../../src/lib/funding/ge';
 import { allSteps, stepById } from '../../src/data';
 import { market } from '../funding/market';
 import { HISTORICAL, gearOf, ownedOf, planInput } from './fixture';
@@ -29,7 +30,8 @@ describe('Hill Giants with the reported character: the plans side by side', () =
     const view = combatPlanView(inp.step, { ...inp.ctx, owned: inp.owned })!;
     expect(route.phases[0].kills).toBe(view.primary.kills);
     expect(route.food.mid).toBeCloseTo(view.primary.food.mid, 6);
-    expect(route.minutes.mid).toBeCloseTo(view.primary.totalMinutes.mid, 6);
+    // The loot's pickups and extra bank trips are the plan's own work on top of the fight the food plan times.
+    expect(route.minutes.mid - (route.phases[0].loot?.minutes.mid ?? 0)).toBeCloseTo(view.primary.totalMinutes.mid, 6);
   });
 
   it('no winner is preselected: each plan is estimated the same way and the best by the conservative time is offered', () => {
@@ -40,16 +42,16 @@ describe('Hill Giants with the reported character: the plans side by side', () =
     expect(eligible.length).toBe(r.plans.length);
     expect(chosen.score).toBeLessThanOrEqual(route.score);
     // It is offered because it clearly beats the route, not because it is a different plan.
-    if (chosen.id !== 'route') expect((route.score - chosen.score) / route.score).toBeGreaterThanOrEqual(MIN_GAIN);
+    if (chosen.id !== 'route') expect(gainOver(route, chosen)).toBeGreaterThanOrEqual(MIN_GAIN);
     expect(r.reason.length).toBeGreaterThan(20);
   });
 
-  it("the food of the cows part is a few pieces, the giants' is hundreds: food is counted for the whole objective, per plan", () => {
+  it("the trainer's part is a few dozen pieces, the giants' is hundreds: food is counted for the whole objective, per plan", () => {
     const r = evaluatePlans(withMarket())!;
     const split = r.plans.find((p) => p.id === 'split')!;
     const route = r.plans[0];
-    expect(split.phases[0].foe.name).toBe('Cow');
-    expect(split.phases[0].food.mid).toBeLessThan(40);
+    expect(split.phases[0].foe.name).not.toBe('Hill Giant');
+    expect(split.phases[0].food.mid).toBeLessThan(route.food.mid / 3);
     expect(route.food.mid).toBeGreaterThan(300);
     expect(split.foodCost!).toBeLessThan(route.foodCost! / 2);
   });
@@ -66,22 +68,31 @@ describe('what the drops bring, and what is never counted', () => {
     expect(split.income.lines.some((l) => l.name === 'Big bones')).toBe(false);
   });
 
-  it('optional cowhides are not income without their pickup and bank workload, even when selling is allowed', () => {
-    for (const state of ['LIFTED', 'RESTRICTED', 'UNKNOWN'] as const) {
-      const s = evaluatePlans(withMarket({}, state))!.plans.find((p) => p.id === 'split')!;
-      const hides = s.income.lines.find((l) => l.name === 'Cowhide')!;
-      expect(hides.counted).toBe(false);
-      expect(s.income.net).toBe(0);
-      expect(hides.note).toMatch(/Pickup, carrying, banking and sale are not included/);
-    }
+  it('loot is income only with its work: the pickups and the extra bank trips are in the plan, the coins are after the exchange tax', () => {
+    const d = evaluatePlans(withMarket())!.plans.find((p) => p.key === 'defence-first:20')!;
+    const cows = d.phases[0];
+    expect(cows.loot).toMatchObject({ name: 'Cowhide', qty: cows.kills });
+    expect(cows.loot!.net).toBe(cows.kills * netEach(prices.sell('Cowhide')!.price, 'Cowhide'));
+    expect(cows.loot!.minutes.mid).toBeGreaterThan(cows.kills * 1.2 / 60);
+    expect(cows.text).toMatch(/banking the Cowhides/);
+    expect(d.income.lines.find((l) => l.name === 'Cowhide')).toMatchObject({ counted: true, net: cows.loot!.net });
   });
 
-  it('a high exchange price cannot turn uncollected drops into funded training', () => {
-    const split = evaluatePlans(withMarket())!.plans.find((p) => p.id === 'split')!;
-    const hides = split.income.lines.find((l) => l.name === 'Cowhide')!;
-    expect(hides.qty).toBeGreaterThan(0);
-    expect(hides.net).toBe(0);
-    expect(split.net).toBe(-split.foodCost!);
+  it('a restricted account does not plan to sell what it cannot sell', () => {
+    for (const state of ['LIFTED', 'UNKNOWN'] as const) expect(evaluatePlans(withMarket({}, state))!.plans.find((p) => p.key === 'defence-first:20')!.phases[0].loot).toBeTruthy();
+    const restricted = evaluatePlans(withMarket({}, 'RESTRICTED'))!.plans.find((p) => p.key === 'defence-first:20')!;
+    expect(restricted.phases[0].loot).toBeUndefined();
+    expect(restricted.income.lines.find((l) => l.name === 'Cowhide')).toMatchObject({ counted: false, net: 0 });
+  });
+
+  it('a drop not worth its pickups stays on the floor: nothing is counted for it', () => {
+    const cheap = market({ 'Big bones': { high: 2, low: 1, avgHigh: 2, avgLow: 1 } });
+    const r = evaluatePlans({ ...planInput({ foodPrice: 33 }), prices: cheap, restriction: 'LIFTED' })!;
+    const route = r.plans[0];
+    expect(route.phases[0].loot).toBeUndefined();
+    const bones = route.income.lines.find((l) => l.name === 'Big bones')!;
+    expect(bones).toMatchObject({ counted: false, net: 0 });
+    expect(route.net).toBe(-route.foodCost!);
   });
 
   it('without prices no income is counted and the food has no cost: nothing is invented', () => {
@@ -155,14 +166,16 @@ describe('choosing, with a steady hand', () => {
 
   it("the plan the player adopted stays while it is not clearly beaten, and the route's own can be chosen back", () => {
     const base = evaluatePlans(withMarket())!;
-    const kept = evaluatePlans(withMarket({ adopted: 'split' }))!;
-    const selected = base.plans.find((p) => p.key === 'split')!;
-    const best = Math.min(...base.plans.map((p) => p.score));
-    expect(selected.score).toBeLessThanOrEqual(best * KEEP_MARGIN);
-    expect(kept.recommended).toBe('split');
-    const changed = evaluatePlans(withMarket({ adopted: 'route' }))!;
-    expect(changed.recommended).toBe('item-first'); // The route is now more than KEEP_MARGIN behind the new candidate.
-    expect(changed.plans.find(p => p.key === 'route')?.eligible).toBe(true); // A player's explicit route choice remains available.
+    // The best the adopted plan is held against: Defence plans that only help before the reward ahead are not it (worthEarly in plans.ts).
+    const best = [...base.plans].filter((p) => p.eligible && p.id !== 'defence-first').sort((a, b) => a.score - b.score)[0];
+    // A plan within KEEP_MARGIN of the best stays once adopted; one further behind gives way.
+    const close = base.plans.filter((p) => p.key !== best.key && p.eligible && p.score - best.score <= best.effort * (KEEP_MARGIN - 1));
+    const far = base.plans.filter((p) => p.eligible && p.score - best.score > best.effort * (KEEP_MARGIN - 1));
+    expect(close.length).toBeGreaterThan(0);
+    for (const p of close) expect(evaluatePlans(withMarket({ adopted: p.key }))!.recommended).toBe(p.key);
+    for (const p of far) expect(evaluatePlans(withMarket({ adopted: p.key }))!.recommended).not.toBe(p.key);
+    const route = evaluatePlans(withMarket({ adopted: 'route' }))!;
+    expect(route.plans.find(p => p.key === 'route')?.eligible).toBe(true); // A player's explicit route choice remains available.
   });
 
   it('a plan that is no longer there (its conditions are gone) is not kept', () => {
@@ -205,24 +218,52 @@ describe('nothing honest to say', () => {
 });
 
 describe('where the plans can lead', () => {
-  it('every trainer has a spot from a route step that already sends the player there, with a way in', () => {
+  it('every trainer has a spot the route knows: its own step, a place a step used to give, or a wiki spawn by a route step', () => {
     const spots = spotsOf(allSteps);
-    for (const foe of TRAINERS.filter(f => allSteps.some(s => s.foes?.[0] === f))) {
-      const s = spots.get(foe)!;
-      expect(s, foe).toBeTruthy();
-      expect(allSteps.find((x) => x.id === s.stepId)?.foes?.[0]).toBe(foe);
-      expect(s.place.label.length).toBeGreaterThan(3);
-      expect(s.npcNames.length).toBeGreaterThan(0);
+    for (const t of TRAINER_SPOTS) {
+      const s = spots.get(t.foe)!;
+      expect(s, t.foe).toBeTruthy();
+      expect(s.place.label.length, t.foe).toBeGreaterThan(3);
+      expect(s.npcNames.length, t.foe).toBeGreaterThan(0);
+      expect(s.where.length, t.foe).toBeGreaterThan(20);
+      if (t.fromStep) expect(allSteps.find((x) => x.id === s.stepId)?.foes?.[0], t.foe).toBe(t.foe);
+      else if (!t.formerStep) {
+        // The route still passes by: a step's place or stop within 30 tiles (the builder's reach), so a changed route cannot strand a spot.
+        const near = allSteps.flatMap((x) => [x.mapLocation, ...(x.inGame?.pathWaypoints ?? [])]).filter((p): p is NonNullable<typeof p> => !!p && p.plane === s.place.plane)
+          .some((p) => Math.max(Math.abs(p.x - s.place.x), Math.abs(p.y - s.place.y)) <= 30);
+        expect(near, t.foe).toBe(true);
+      }
+      // Every spot has a bank trip it can be timed with.
+      expect(bankTrip(s)!.minutes[0], t.foe).toBeGreaterThan(0);
     }
-    expect(spots.has('Giant frog')).toBe(true);
     expect(spotsOf(planInput().steps).get('Hill Giant')!.waypoints!.length).toBeGreaterThan(1);
+  });
+
+  it('a spot that needs a quest is offered only once the quest is done', () => {
+    const live = { step: stepById.get('S4-03')!, steps: allSteps, ctx: { stats: { attack: 30, strength: 30, defence: 20, hitpoints: 35 }, gear: gearOf(HISTORICAL.worn) } as never, owned: ownedOf({}), foodPrice: 33 };
+    expect(evaluatePlans(live)!.plans.some((p) => p.key === 'xp-only:Brutus')).toBe(false);
+    expect(evaluatePlans({ ...live, done: (id) => id === 'S4-02' })!.plans.some((p) => p.key === 'xp-only:Brutus')).toBe(true);
+  });
+
+  it("a special attack is kept above: Brutus's charge with a low health is not offered, and the dodge is said when it is", () => {
+    const at = (hitpoints: number) => evaluatePlans({ step: stepById.get('S4-03')!, steps: allSteps, ctx: { stats: { attack: 30, strength: 30, defence: 20, hitpoints }, gear: gearOf(HISTORICAL.worn) } as never, owned: ownedOf({}), foodPrice: 33, done: () => true })!;
+    expect(at(20).plans.some((p) => p.key === 'xp-only:Brutus')).toBe(false);
+    const ok = at(35).plans.find((p) => p.key === 'xp-only:Brutus')!;
+    expect(ok.risks.join(' ')).toMatch(/special attack: it hits up to 19/);
+  });
+
+  it('the monks heal for the asking: no food, and the healing time is in the plan', () => {
+    const r = evaluatePlans({ step: stepById.get('S4-03')!, steps: allSteps, ctx: { stats: HISTORICAL.stats, xp: HISTORICAL.xp, gear: gearOf(HISTORICAL.worn) } as never, owned: ownedOf({}), foodPrice: 33 })!;
+    const monks = r.plans.find((p) => p.key === 'xp-only:Monk')!;
+    expect(monks.phases.at(-1)!.food.mid).toBe(0);
+    expect(monks.phases.at(-1)!.spot.where).toMatch(/ask to be healed/);
   });
 
   it('the live route (S4-03 is Giant frogs since 2.74.2) still compares the Hill Giants, from the spot that step used to give', () => {
     const live = spotsOf(allSteps).get('Hill Giant')!;
     expect(live.waypoints?.[0].label).toMatch(/trapdoor/);
     const r = evaluatePlans({ step: stepById.get('S4-03')!, steps: allSteps, ctx: { stats: HISTORICAL.stats, gear: gearOf(HISTORICAL.worn) } as never, owned: ownedOf({}), foodPrice: 33 })!;
-    expect(r.compared).toEqual(expect.arrayContaining(['Giant frog', 'Cow', 'Minotaur (level 12)', 'Hill Giant']));
+    expect(r.compared).toEqual(expect.arrayContaining(['Giant frog', 'Cow', 'Minotaur (level 12)', 'Hill Giant', 'Barbarian (level 10)', 'Al Kharid warrior', 'Monk']));
     // Frogs are the wiki's 20-40 method, and the model agrees for this character.
     expect(r.recommended).toBe('route');
   });
@@ -240,21 +281,19 @@ describe('Defence the route gives later (Dragon Slayer I)', () => {
 
   it('a Defence plan that barely beats the original route does not displace the faster XP-only alternative', () => {
     const r = evaluatePlans(withMarket(noSplit))!;
-    const d20 = r.plans.find((p) => p.key === 'defence-first:20')!;
     const route = r.plans[0];
-    // It does look better at the slow end ...
-    expect(d20.score).toBeLessThan(route.score);
-    // ... but by the middle estimate it is under the margin a route that works must be beaten by.
-    expect((route.minutes.mid - d20.minutes.mid) / route.minutes.mid).toBeLessThan(MIN_GAIN);
-    expect(r.recommended).toBe('xp-only');
-    expect(r.plans.find(p => p.key === 'xp-only')!.score).toBeLessThan(d20.score);
-    expect(d20.notes.join(' ')).toContain('18,650 Defence XP');
+    const defence = r.plans.filter((p) => p.id === 'defence-first');
+    // A Defence plan under the middle-estimate margin a working route must be beaten by is never the one recommended.
+    for (const d of defence) if ((route.minutes.mid - d.minutes.mid) / route.minutes.mid < MIN_GAIN) expect(r.recommended).not.toBe(d.key);
+    expect(r.recommended).not.toMatch(/^defence-first/);
+    expect(defence[0].notes.join(' ')).toContain('18,650 Defence XP');
   });
 
   it('with no Defence reward left ahead the faster XP-only alternative is still considered', () => {
     const r = evaluatePlans({ ...withMarket(noSplit), done: closed })!;
     expect(r.plans.every((p) => p.notes.length === 0)).toBe(true);
-    expect(r.recommended).toBe('xp-only');
+    expect(r.plans.filter((p) => p.id === 'xp-only').length).toBeGreaterThan(3);
+    expect(r.recommended).toBe([...r.plans].filter((p) => p.eligible).sort((a, b) => a.score - b.score)[0].key);
   });
 
   it('the player can still adopt it: an adopted Defence plan stays, and a route that is not safe does not hold it back', () => {
