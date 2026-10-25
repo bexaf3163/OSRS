@@ -57,6 +57,9 @@ export function RoadSupplies({ steps, from = null, locate = false, heading, quie
   const open = plan.items.filter((i) => i.buy > 0);
   const known = open.filter((i) => i.cost !== null);
   const total = known.reduce((s, i) => s + (i.cost ?? 0), 0);
+  // Two things from one shop (a Chronicle and its Teleport cards at Diango's) share one "Lead to" button: the first item of that shop carries it.
+  const shopKey = (i: SupplyItem) => (i.source ? `${i.source.point.x},${i.source.point.y},${i.source.point.plane}` : '');
+  const leadOn = new Set(plan.items.filter((i) => i.buy > 0 && i.source).filter((i, n, all) => all.findIndex((j) => shopKey(j) === shopKey(i)) === n).map((i) => i.name));
   return (
     <section className="road-supplies" aria-label={heading}>
       <h3 className="subhead">{heading}</h3>
@@ -77,7 +80,7 @@ export function RoadSupplies({ steps, from = null, locate = false, heading, quie
               {i.buy > 0 && !i.source ? ' · no place to buy it is known' : ''}
             </p>
             {i.use && i.buy > 0 && <p className="muted small">Then {i.use}.</p>}
-            {i.buy > 0 && i.source && connected && (
+            {i.buy > 0 && i.source && connected && leadOn.has(i.name) && (
               <button type="button" className="btn btn-sm" onClick={() => void navigate({ label: i.source!.where, x: i.source!.point.x, y: i.source!.point.y, plane: i.source!.point.plane })}>
                 🧭 Lead to {i.source.where.replace(/ — .*$/, '')}
               </button>

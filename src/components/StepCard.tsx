@@ -383,11 +383,11 @@ export function StepBody({ step, onDone, nextId, tab, onPrep, safetyShown = fals
         <div className="step-details is-tab">
           {/* The status line above already says when nothing is checked, and the list below names every thing once. */}
           {!verdictShown && <ReadinessVerdictCard step={step} />}
-          <ReadinessPanel step={step} bare={statusAbove && !recovering} />
+          <ReadinessPanel step={step} bare={statusAbove && !recovering} itemsListed={verdictShown} />
           <LoadoutsCard step={step} />
           <CarryNote step={step} />
           <StepTasks step={step} />
-          <OneTripCard step={step} inStatus plain />
+          <OneTripCard step={step} inStatus plain nowShown={verdictShown} />
           <TradeRestrictionNote step={step} />
           <MoneyGoal step={step} />
           <StepTraining step={step} />

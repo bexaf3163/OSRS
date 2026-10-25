@@ -74,17 +74,24 @@ function Chain({ step }: { step: Step }) {
   );
 }
 
-/** bare — the status line beside it already says "not everything is checked": that verdict is not repeated. A named problem (levels, items, coins, a quest) always keeps its heading. */
-export function ReadinessPanel({ step, bare = false }: { step: Step; bare?: boolean }) {
+/**
+ * bare — the status line beside it already says "not everything is checked": that verdict is not repeated. A named problem (levels, items, coins, a quest)
+ * always keeps its heading. itemsListed — a card above already lists the step's items with their state (the compact Bag tab): an item row here whose item
+ * is on that list is not repeated; levels, quests and coins stay.
+ */
+export function ReadinessPanel({ step, bare = false, itemsListed = false }: { step: Step; bare?: boolean; itemsListed?: boolean }) {
   const { progress } = useStore();
   const { navTarget, clearNav } = useBridge();
+  const engine = useReadinessEngine();
   const r = useScopedReadiness(step);
   if (!r || isClosed(progress, step.id)) return null;
+  const listed = itemsListed ? engine.plan(step, { ahead: 0 }).lines.filter((l) => l.timing === 'NOW').map((l) => l.name.toLowerCase()) : [];
+  const shown = (x: RequirementStatus) => !(x.kind === 'item' && listed.some((n) => x.label.toLowerCase().startsWith(n)));
   if (r.goalMet && !r.problems.length) return <GoalMet step={step} r={r} />;
   if (!r.requirements.length) return null;
   const s = STATUS_TEXT[r.status];
   const detour = navTarget?.stepId === step.id ? navTarget : null;
-  const ok = r.requirements.filter((x) => x.state === 'OK');
+  const ok = r.requirements.filter((x) => x.state === 'OK' && shown(x));
   return (
     <section className={`readiness is-${r.status.toLowerCase()}`} aria-label="Step readiness">
       {!(bare && r.status === 'UNKNOWN') && <p className="readiness-head" role="status"><span aria-hidden="true">{s.icon}</span> <strong>{s.text}</strong></p>}
@@ -97,12 +104,12 @@ export function ReadinessPanel({ step, bare = false }: { step: Step; bare?: bool
         </p>
       )}
       <PrepRouteBlock step={step} />
-      {r.problems.length > 0 && <ul className="ready-list">{r.problems.map((x) => <Row key={`${x.kind}-${x.label}`} r={x} />)}</ul>}
+      {r.problems.some(shown) && <ul className="ready-list">{r.problems.filter(shown).map((x) => <Row key={`${x.kind}-${x.label}`} r={x} />)}</ul>}
       <Chain step={step} />
-      {r.unknown.length > 0 && (
+      {r.unknown.some(shown) && (
         <details className="ready-unknown">
-          <summary className="small">⚪ Not checked: {r.unknown.length}</summary>
-          <ul className="ready-list">{r.unknown.map((x) => <Row key={`${x.kind}-${x.label}`} r={x} />)}</ul>
+          <summary className="small">⚪ Not checked: {r.unknown.filter(shown).length}</summary>
+          <ul className="ready-list">{r.unknown.filter(shown).map((x) => <Row key={`${x.kind}-${x.label}`} r={x} />)}</ul>
         </details>
       )}
       {ok.length > 4 ? (

@@ -30,7 +30,8 @@ function Row({ step, l, quiet = false, linked = true }: { step: Step; l: PrepLin
 
 /** The list of what the step (or the stage of the quest) asks for now, with the button that opens the whole preparation. */
 /** status: the step's verdict line (ring, Fix), shown at the top of this one panel instead of a card of its own above it. */
-export function QuestSupplies({ step, onReview, status }: { step: Step; onReview?: () => void; status?: ReactNode }) {
+/** statusAbove: a status line right above already names the readiness level, so the verdict card does not open with it again. */
+export function QuestSupplies({ step, onReview, status, statusAbove = false }: { step: Step; onReview?: () => void; status?: ReactNode; statusAbove?: boolean }) {
   const plan = useReadinessEngine().plan(step, { ahead: 0 });
   const scope = useStageScope(step);
   // Without RuneLite nothing can be checked: "Not checked" on every line says nothing, so the list is simply what to bring.
@@ -48,7 +49,7 @@ export function QuestSupplies({ step, onReview, status }: { step: Step; onReview
         {linked && unknown > 0 && <span className="badge">{unknown} unverified</span>}
       </header>
       {status}
-      <ReadinessVerdictCard step={step} noPill={!!status} />
+      <ReadinessVerdictCard step={step} noPill={!!status || statusAbove} />
       {lines.length > 0 || plan.coins.need > 0 ? (
         <ul className="quest-supply-list">
           {lines.map((l) => <Row key={l.key} step={step} l={l} linked={linked} />)}

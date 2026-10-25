@@ -87,7 +87,7 @@ export function CompanionStrip({ step, suggested, onDone, nextId, onSelect }: {
         {tab === 'bag' && (
           <>
             <StepStatus step={step} headline noStart onPrep={() => setTab('bag')} />
-            <QuestSupplies step={step} />
+            <QuestSupplies step={step} statusAbove />
             {/* QuestSupplies above carries the verdict card: the preparation view below does not repeat it. */}
             <StepBody step={step} onDone={onDone} nextId={nextId} tab="prep" onPrep={() => setTab('bag')} safetyShown statusAbove verdictShown />
           </>

@@ -132,8 +132,12 @@ function Section({ title, hint, lines }: { title: string; hint?: string; lines: 
   );
 }
 
-/** inStatus — the recovery mode is already shown above, in the step status (Zen): we do not repeat it here. plain — without the chip summary: the lines below say the same. */
-export function OneTripCard({ step, inStatus = false, plain = false }: { step: Step; inStatus?: boolean; plain?: boolean }) {
+/**
+ * inStatus — the recovery mode is already shown above, in the step status (Zen): we do not repeat it here. plain — without the chip summary: the lines below
+ * say the same. nowShown — a card above already lists this step's items with their state and the way to get them (the compact Bag tab): "Needed now" is not
+ * repeated, the steps ahead stay.
+ */
+export function OneTripCard({ step, inStatus = false, plain = false, nowShown = false }: { step: Step; inStatus?: boolean; plain?: boolean; nowShown?: boolean }) {
   const { progress } = useStore();
   const profile = styleOf(useFeatures());
   const upgrade = useUpgradeRecommendation(step);
@@ -186,7 +190,7 @@ export function OneTripCard({ step, inStatus = false, plain = false }: { step: S
           {plan.blockers.map((b) => <li key={b.label} className="prep-line is-missing p-critical"><span className="prep-where" aria-hidden="true">🔒</span><strong>{b.label}</strong>{b.detail && <span className="muted"> — {b.detail}</span>}</li>)}
         </ul>
       )}
-      <Section title="🔴 Needed now" lines={now} />
+      {!nowShown && <Section title="🔴 Needed now" lines={now} />}
       <Section title="🟡 Meanwhile" hint="will be needed in the next steps" lines={soon} />
       {byTheWay.length > 0 && (
         <p className="small prep-title"><strong>⚪ Along the way:</strong> <span className="muted">{byTheWay.map((l) => `${l.name}${countOf(l)}`).join(', ')} — no need to take them in advance</span></p>
